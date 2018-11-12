@@ -16,7 +16,7 @@
     <Interface>	RespawnController_Vehicle	</Interface>
     <Interface>	SmokeController_Vehicle	</Interface>
     <Interface>	InspireController_Vehicle	</Interface>
-    <Interface>	ZombieVehicle_Vehicle	</Interface>
+    <Interface>	Wheels	</Interface>
   </Implements>
   <LoDLevels>
     <level>	20	  <hyst>	4	</hyst>
@@ -41,10 +41,6 @@
       <Type>	BOOL	</Type>
       <Flags>	ALL_CLIENTS	</Flags>
     </isStrafing>
-    <steeringAngle>
-      <Type>	FLOAT32	</Type>
-      <Flags>	ALL_CLIENTS	</Flags>
-    </steeringAngle>
     <physicsMode>
       <Type>	UINT8	</Type>
       <Flags>	ALL_CLIENTS	</Flags>
@@ -143,7 +139,7 @@
     </arenaBase>
     <botKind>
       <Type>	UINT8	</Type>
-      <Flags>	ALL_CLIENTS	</Flags>
+      <Flags>	CELL_PUBLIC	</Flags>
     </botKind>
     <crewCompactDescrs>
       <Type>	TUPLE	  <of>	STRING	</of>
@@ -224,7 +220,6 @@
     <directVisibility></directVisibility>
     <_ProximityManager__data></_ProximityManager__data>
     <_TimerManager__unpersistedTimers></_TimerManager__unpersistedTimers>
-    <_delayAIInitialization></_delayAIInitialization>
   </TempProperties>
   <ClientMethods>
     <onHealthChanged>
@@ -263,8 +258,6 @@
       <Arg>	VECTOR3	</Arg>
       <Arg>	UINT8	</Arg>
       <Arg>	FLOAT32	</Arg>
-      <Arg>	FLOAT32	</Arg>
-      <Arg>	FLOAT32	</Arg>
       <Arg>	INT8	</Arg>
       <Arg>	UINT16	</Arg>
       <DetailDistance>	100	</DetailDistance>
@@ -298,6 +291,7 @@
     </stopTrackingWithGun>
     <trackVehicleWithGun>
       <Arg>	OBJECT_ID	</Arg>
+      <Arg>	BOOL	</Arg>
     </trackVehicleWithGun>
     <changeSetting>
       <Exposed></Exposed>
@@ -452,15 +446,6 @@
     <requestVisibilityLists>
       <Arg>	MAILBOX	</Arg>
     </requestVisibilityLists>
-    <initAI></initAI>
-    <setHealth>
-      <Arg>	INT32	</Arg>
-      <Arg>	INT32	</Arg>
-      <Arg>	STRING	</Arg>
-    </setHealth>
-    <changeHealthBy>
-      <Arg>	INT32	</Arg>
-    </changeHealthBy>
   </CellMethods>
   <BaseMethods>
     <createCellNearHere>

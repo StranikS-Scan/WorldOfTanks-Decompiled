@@ -9,7 +9,7 @@ MARKERS_COLOR_SCHEME_PREFIX = 'vm_'
 
 class MARKER_SYMBOL_NAME(object):
     VEHICLE_MARKER = 'VehicleMarker'
-    VEHICLE_PVE_MARKER = 'VehiclePveMarker'
+    TARGET_MARKER = 'TargetMarker'
     EQUIPMENT_MARKER = 'FortConsumablesMarker'
     SAFE_ZONE_MARKER = 'SafeZoneIndicatorUI'
     STATIC_OBJECT_MARKER = 'StaticObjectMarker'

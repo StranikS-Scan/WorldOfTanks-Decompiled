@@ -142,21 +142,21 @@ class _VehicleSchema(W2CSchema):
 
 def _buyPriceValidator(value):
     value = value.copy()
-
-    def __validatePrice(tData, errorStr=''):
-        for pKey, pValue in tData.iteritems():
-            if pValue is not None:
-                if isinstance(pValue, dict):
-                    __validatePrice(pValue, 'Field "{}". '.format(pKey))
-                elif not isinstance(pValue, int):
-                    errorStr = '{}Incorrect type of "{}" price value. Int type expected!'.format(errorStr, pKey)
-                    raise SoftException(errorStr)
-
-        return
-
-    __validatePrice(value)
+    _validatePrice(value)
     value.pop('discount', None)
     return Money(**value).isDefined()
+
+
+def _validatePrice(tData, errorStr=''):
+    for pKey, pValue in tData.iteritems():
+        if pValue is not None:
+            if isinstance(pValue, dict):
+                _validatePrice(pValue, 'Field "{}". '.format(pKey))
+            elif not isinstance(pValue, int):
+                errorStr = '{}Incorrect type of "{}" price value. Int type expected!'.format(errorStr, pKey)
+                raise SoftException(errorStr)
+
+    return
 
 
 class _VehiclePreviewSchema(W2CSchema):

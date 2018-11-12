@@ -610,6 +610,51 @@
     </damage>
     <piercingPowerLossFactorByDistance>	0.05	</piercingPowerLossFactorByDistance>
   </_75mm_OCO_mle._1926>
+  <_75mm_OFL_mle_54>
+    <id>	133	</id>
+    <userString>	#france_vehicles:_75mm_OFL_mle_54	</userString>
+    <icon>	ap_cr	</icon>
+    <price>	230	</price>
+    <kind>	ARMOR_PIERCING_CR	</kind>
+    <caliber>	75	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainAPCR	</effects>
+    <damage>
+      <armor>	175	</armor>
+      <devices>	100	</devices>
+    </damage>
+  </_75mm_OFL_mle_54>
+  <_75mm_OCC_mle_54>
+    <id>	134	</id>
+    <userString>	#france_vehicles:_75mm_OCC_mle_54	</userString>
+    <icon>	hc	</icon>
+    <price>	3200	</price>
+    <improved>	true	</improved>
+    <kind>	HOLLOW_CHARGE	</kind>
+    <caliber>	75	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	largeHollowCharge	</effects>
+    <damage>
+      <armor>	175	</armor>
+      <devices>	100	</devices>
+    </damage>
+    <piercingPowerLossFactorByDistance>	0.05	</piercingPowerLossFactorByDistance>
+  </_75mm_OCC_mle_54>
+  <_75mm_OE_mle_54>
+    <id>	135	</id>
+    <userString>	#france_vehicles:_75mm_OE_mle_54	</userString>
+    <icon>	he	</icon>
+    <price>	280	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <caliber>	75	</caliber>
+    <explosionRadius>	1.06	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	mainHighExplosive	</effects>
+    <damage>
+      <armor>	260	</armor>
+      <devices>	100	</devices>
+    </damage>
+  </_75mm_OE_mle_54>
   <_76mm_OEO_mle._1917>
     <id>	17	</id>
     <userString>	#france_vehicles:_76mm_OEO_mle._1917	</userString>
@@ -788,21 +833,6 @@
       <devices>	122	</devices>
     </damage>
   </_90mm_OE_mle_1924>
-  <_90mm_Prf1941_Halloween>
-    <id>	62001	</id>
-    <userString>	#france_vehicles:_90mm_Prf1941_Halloween	</userString>
-    <icon>	ap	</icon>
-    <price>	255	</price>
-    <notInShop>	true	</notInShop>
-    <kind>	ARMOR_PIERCING	</kind>
-    <caliber>	90	</caliber>
-    <isTracer>	true	</isTracer>
-    <effects>	mainArmorPiercing	</effects>
-    <damage>
-      <armor>	790	</armor>
-      <devices>	1	</devices>
-    </damage>
-  </_90mm_Prf1941_Halloween>
   <_90mm_AP_americaine>
     <id>	106	</id>
     <userString>	#france_vehicles:_90mm_AP_americaine	</userString>

@@ -8,23 +8,11 @@
         <postBattle>
           <and>
             <vehicleDamage>
-              <title>
-                <key>	#personal_missions_details:quest_2_3_12_condition_title_fire	</key>
-              </title>
-              <description>
-                <key>	#personal_missions_details:quest_2_3_12_condition_description_fire	</key>
-              </description>
               <fireStarted></fireStarted>
               <eventCount></eventCount>
               <greaterOrEqual>	1	</greaterOrEqual>
             </vehicleDamage>
             <results>
-              <title>
-                <key>	#personal_missions_details:quest_2_3_12_condition_title_damageDealt	</key>
-              </title>
-              <description>
-                <key>	#personal_missions_details:quest_2_3_12_condition_description_damageDealt	</key>
-              </description>
               <key>	damageDealt	</key>
               <greaterOrEqual>	1500	</greaterOrEqual>
             </results>
@@ -75,30 +63,15 @@
         <postBattle>
           <and>
             <vehicleDamage>
-              <title>
-                <key>	#personal_missions_details:quest_2_3_12_condition_title_fire	</key>
-              </title>
-              <description>
-                <key>	#personal_missions_details:quest_2_3_12_condition_description_fire	</key>
-              </description>
               <fireStarted></fireStarted>
               <eventCount></eventCount>
               <greaterOrEqual>	1	</greaterOrEqual>
             </vehicleDamage>
             <results>
-              <title>
-                <key>	#personal_missions_details:quest_2_3_12_condition_title_damageDealt	</key>
-              </title>
-              <description>
-                <key>	#personal_missions_details:quest_2_3_12_condition_description_damageDealt	</key>
-              </description>
               <key>	damageDealt	</key>
               <greaterOrEqual>	1500	</greaterOrEqual>
             </results>
             <results>
-              <description>
-                <key>	#personal_missions_details:quest_2_3_12_condition_description_top_xp	</key>
-              </description>
               <key>	xp	</key>
               <max>	3	</max>
             </results>

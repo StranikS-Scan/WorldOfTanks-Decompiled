@@ -88,7 +88,7 @@
       </slot>
       <slot>
         <slotType>	fixedEmblem	</slotType>
-        <slotId>	2	</slotId>
+        <slotId>	204	</slotId>
         <rayStart>	-0.0413545 0.347731 2.20276	</rayStart>
         <rayEnd>	-0.0413329 0.173883 2.10389	</rayEnd>
         <rayUp>	0.000000 0.000000 -1	</rayUp>
@@ -846,10 +846,11 @@
           <customizationSlots>
             <slot>
               <slotType>	insigniaOnGun	</slotType>
-              <slotId>	6	</slotId>
+              <slotId>	771	</slotId>
               <rayStart>	0.000000 0.0051645 2.79221	</rayStart>
               <rayEnd>	0.0206174 -0.0217366 2.79132	</rayEnd>
-              <rayUp>	0.072 0.071 5	</rayUp>
+              <rayUp>	0.072 0.000000 0.000000	</rayUp>
+              <applyToFabric>	true	</applyToFabric>
               <size>	0.32	</size>
               <hideIfDamaged>	false	</hideIfDamaged>
               <isUVProportional>	true	</isUVProportional>
@@ -882,7 +883,7 @@
       <customizationSlots>
         <slot>
           <slotType>	fixedEmblem	</slotType>
-          <slotId>	3	</slotId>
+          <slotId>	714	</slotId>
           <rayStart>	1.01903 0.609395 -0.340351	</rayStart>
           <rayEnd>	0.830884 0.544481 -0.359997	</rayEnd>
           <rayUp>	-0.00739915 0.996596 0.0821128	</rayUp>
@@ -893,7 +894,7 @@
         </slot>
         <slot>
           <slotType>	fixedInscription	</slotType>
-          <slotId>	4	</slotId>
+          <slotId>	715	</slotId>
           <rayStart>	0.908542 0.608978 0.25097	</rayStart>
           <rayEnd>	0.805821 0.555572 0.219409	</rayEnd>
           <rayUp>	-0.0132425 0.998901 0.0449607	</rayUp>
@@ -904,7 +905,7 @@
         </slot>
         <slot>
           <slotType>	fixedEmblem	</slotType>
-          <slotId>	5	</slotId>
+          <slotId>	716	</slotId>
           <rayStart>	-1.03701 0.452683 -0.254885	</rayStart>
           <rayEnd>	-0.865205 0.353403 -0.229897	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
@@ -939,6 +940,7 @@
       <engines>
         <Continental_AOS-895-3>
           <smplEnginePower>	528.6406	</smplEnginePower>
+          <smplFwMaxSpeed>	72.4	</smplFwMaxSpeed>
         </Continental_AOS-895-3>
       </engines>
       <chassis>

@@ -247,6 +247,9 @@ class EventSquadView(SquadView):
          iconYPadding,
          headerMessageText)
 
+    def _getLeaveBtnTooltip(self):
+        return TOOLTIPS.SQUADWINDOW_BUTTONS_LEAVEEVENTSQUAD
+
 
 class EpicSquadView(SquadView):
 

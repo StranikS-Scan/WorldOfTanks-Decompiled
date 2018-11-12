@@ -2,5 +2,6 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/customization/tooltips/__init__.py
 from element import ElementTooltip
 from element import ElementIconTooltip
+from element import ElementAwardTooltip
 from element import NonHistoricTooltip
-__all__ = ('ElementTooltip', 'ElementIconTooltip', 'NonHistoricTooltip')
+__all__ = ('ElementTooltip', 'ElementIconTooltip', 'ElementAwardTooltip', 'NonHistoricTooltip')

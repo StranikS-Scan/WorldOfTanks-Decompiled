@@ -84,6 +84,7 @@ class VehiclePreview(LobbySelectableView, VehiclePreviewMeta):
         self._disableBuyButton = False
         self.__keepVehicleSelectionEnabled = False
         self._needToResetAppearance = True
+        g_currentPreviewVehicle.selectHeroTank(self.__isHeroTank)
         return
 
     def _populate(self):
@@ -309,7 +310,7 @@ class VehiclePreview(LobbySelectableView, VehiclePreviewMeta):
 
     def __packTabData(self):
         item = g_currentPreviewVehicle.item
-        isPremium = item.isPremium and (not item.isHidden or item.isRentable or item.isRestorePossible())
+        isPremium = item.isPremium and (not item.isHidden or item.isRentable) and not item.isSpecial
         if isPremium:
             info = self.__packDataItem(VEHPREVIEW_CONSTANTS.ELITE_FACT_SHEET_DATA_CLASS_NAME, self.__packEliteFactSheetData())
         else:
@@ -363,7 +364,7 @@ class VehiclePreview(LobbySelectableView, VehiclePreviewMeta):
                 event_dispatcher.showHangar()
         elif self._backAlias == VIEW_ALIAS.LOBBY_STORE:
             if isIngameShopEnabled():
-                showWebShop(url=getBuyVehiclesUrl())
+                showWebShop(getBuyVehiclesUrl())
             else:
                 showOldShop(ctx={'tabId': STORE_TYPES.SHOP,
                  'component': STORE_CONSTANTS.VEHICLE})

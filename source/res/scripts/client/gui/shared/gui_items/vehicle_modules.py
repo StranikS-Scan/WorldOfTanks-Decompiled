@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client/gui/shared/gui_items/vehicle_modules.py
 import BigWorld
 from constants import SHELL_TYPES
+from gui.Scaleform.genConsts.FITTING_TYPES import FITTING_TYPES
 from gui.Scaleform.genConsts.STORE_CONSTANTS import STORE_CONSTANTS
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.RES_SHOP import RES_SHOP
@@ -66,12 +67,29 @@ class VehicleChassis(VehicleModule):
     def isHydraulicChassis(self):
         return g_paramsCache.isChassisHydraulic(self.intCD)
 
+    def isWheeledChassis(self):
+        return g_paramsCache.isChassisWheeled(self.intCD)
+
     @property
     def icon(self):
-        return RES_ICONS.MAPS_ICONS_MODULES_CHASSIS
+        return RES_ICONS.MAPS_ICONS_MODULES_WHEELEDCHASSIS if self.isWheeledChassis() else RES_ICONS.MAPS_ICONS_MODULES_CHASSIS
 
     def getExtraIconInfo(self, _=None):
-        return RES_ICONS.MAPS_ICONS_MODULES_HYDRAULICCHASSISICON if self.isHydraulicChassis() else None
+        if self.isHydraulicChassis():
+            if self.isWheeledChassis():
+                return RES_ICONS.MAPS_ICONS_MODULES_HYDRAULICWHEELEDCHASSISICON
+            return RES_ICONS.MAPS_ICONS_MODULES_HYDRAULICCHASSISICON
+        else:
+            return None
+
+    def getGUIEmblemID(self):
+        return FITTING_TYPES.VEHICLE_WHEELED_CHASSIS if self.isWheeledChassis() else super(VehicleChassis, self).getGUIEmblemID()
+
+    def getShopIcon(self, size=STORE_CONSTANTS.ICON_SIZE_MEDIUM):
+        return RES_SHOP.getModuleIcon(size, FITTING_TYPES.VEHICLE_WHEELED_CHASSIS) if self.isWheeledChassis() else super(VehicleChassis, self).getShopIcon(size)
+
+    def _getShortInfoKey(self):
+        return '#menu:descriptions/{}'.format(FITTING_TYPES.VEHICLE_WHEELED_CHASSIS if self.isWheeledChassis() else self.itemTypeName)
 
 
 class VehicleTurret(VehicleModule):

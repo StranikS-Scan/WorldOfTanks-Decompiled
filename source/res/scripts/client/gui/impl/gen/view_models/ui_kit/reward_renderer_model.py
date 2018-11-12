@@ -23,8 +23,43 @@ class RewardRendererModel(ViewModel):
     def setTooltipId(self, value):
         self._setNumber(2, value)
 
+    def getHighlightType(self):
+        return self._getString(3)
+
+    def setHighlightType(self, value):
+        self._setString(3, value)
+
+    def getOverlayType(self):
+        return self._getString(4)
+
+    def setOverlayType(self, value):
+        self._setString(4, value)
+
+    def getHasCompensation(self):
+        return self._getBool(5)
+
+    def setHasCompensation(self, value):
+        self._setBool(5, value)
+
+    def getLabelAlign(self):
+        return self._getString(6)
+
+    def setLabelAlign(self, value):
+        self._setString(6, value)
+
+    def getIconSize(self):
+        return self._getString(7)
+
+    def setIconSize(self, value):
+        self._setString(7, value)
+
     def _initialize(self):
         super(RewardRendererModel, self)._initialize()
         self._addStringProperty('labelStr', '')
         self._addStringProperty('icon', '')
         self._addNumberProperty('tooltipId', 0)
+        self._addStringProperty('highlightType', '')
+        self._addStringProperty('overlayType', '')
+        self._addBoolProperty('hasCompensation', False)
+        self._addStringProperty('labelAlign', 'center')
+        self._addStringProperty('iconSize', 'small')

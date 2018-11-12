@@ -3,7 +3,6 @@
 from arena_bonus_type_caps import ARENA_BONUS_TYPE_CAPS as BONUS_CAPS
 from helpers.EffectsList import RespawnDestroyEffect
 from debug_utils import LOG_DEBUG_DEV
-from gui.battle_control import avatar_getter
 
 class AvatarRespawnMechanic(object):
     respawnEnabled = property(lambda self: self.__enabled)
@@ -61,8 +60,7 @@ class AvatarRespawnMechanic(object):
             return
 
     def explodeVehicleBeforeRespawn(self, vehID):
-        if avatar_getter.getPlayerVehicleID() != vehID:
-            RespawnDestroyEffect.play(vehID)
+        RespawnDestroyEffect.play(vehID)
 
     def updatePlayerLives(self, lives):
         LOG_DEBUG_DEV('updatePlayerLives', lives)

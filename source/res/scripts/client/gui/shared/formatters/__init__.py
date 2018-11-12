@@ -6,7 +6,7 @@ from gui import makeHtmlString
 from gui.shared.formatters import icons
 from gui.shared.formatters import text_styles
 from gui.shared.formatters import time_formatters
-from gui.shared.formatters.currency import getBWFormatter
+from gui.shared.formatters.currency import getBWFormatter, getStyle
 from gui.shared.gui_items import GUI_ITEM_ECONOMY_CODE
 from gui.shared.money import Money, Currency
 from helpers.i18n import makeString
@@ -14,7 +14,7 @@ from gui.impl.gen.view_models.ui_kit.action_price_model import ActionPriceModel
 _logger = logging.getLogger(__name__)
 __all__ = ('icons', 'text_styles', 'time_formatters')
 
-def formatPrice(price, reverse=False, currency=Currency.CREDITS, useIcon=False):
+def formatPrice(price, reverse=False, currency=Currency.CREDITS, useIcon=False, useStyle=False):
     outPrice = []
     currencies = [ c for c in Currency.ALL if price.get(c) is not None ]
     if not currencies:
@@ -23,6 +23,9 @@ def formatPrice(price, reverse=False, currency=Currency.CREDITS, useIcon=False):
         formatter = getBWFormatter(c)
         value = price.get(c, 0)
         cFormatted = formatter(value) if formatter else value
+        if useStyle:
+            styler = getStyle(c)
+            cFormatted = styler(cFormatted) if styler else cFormatted
         if useIcon:
             cIdentifier = makeHtmlString('html_templates:lobby/iconText', c)
             cSpace = ' ' if reverse else ''

@@ -58,6 +58,9 @@ class TankCarousel(TankCarouselMeta):
     def buySlot(self):
         self.__buySlot()
 
+    def buyRentPromotion(self, intCD):
+        ActionsFactory.doAction(ActionsFactory.BUY_VEHICLE, intCD)
+
     def updateHotFilters(self):
         self.as_setCarouselFilterS({'hotFilters': [ self.filter.get(key) for key in self._usedFilters ]})
 

@@ -21,7 +21,7 @@
   <camouflage>
     <priceFactor>	0.6	</priceFactor>
     <tiling>	1 1 0 0	</tiling>
-    <exclusionMask>	system/maps/null_exclusion_mask.dds	</exclusionMask>
+    <exclusionMask></exclusionMask>
   </camouflage>
   <hull>
     <armor>
@@ -85,7 +85,7 @@
       </slot>
       <slot>
         <slotType>	camouflage	</slotType>
-        <slotId>	12	</slotId>
+        <slotId>	3	</slotId>
         <anchorPosition>	0.000000 0.38393 -1.7332	</anchorPosition>
         <anchorDirection>	0.000000 0.216272 -0.976333	</anchorDirection>
       </slot>
@@ -750,7 +750,7 @@
       <customizationSlots>
         <slot>
           <slotType>	style	</slotType>
-          <slotId>	10	</slotId>
+          <slotId>	257	</slotId>
           <anchorPosition>	0.000131206 2.0166 0.160658	</anchorPosition>
           <anchorDirection>	0.000000 1 -0.000000	</anchorDirection>
         </slot>
@@ -1409,7 +1409,7 @@
       <customizationSlots>
         <slot>
           <slotType>	style	</slotType>
-          <slotId>	11	</slotId>
+          <slotId>	257	</slotId>
           <anchorPosition>	0.000179344 2.0166 0.160597	</anchorPosition>
           <anchorDirection>	0.000000 1 -0.000000	</anchorDirection>
         </slot>
@@ -1498,7 +1498,7 @@
           <customizationSlots>
             <slot>
               <slotType>	camouflage	</slotType>
-              <slotId>	14	</slotId>
+              <slotId>	770	</slotId>
               <anchorPosition>	-0.00942355 0.0196795 0.599153	</anchorPosition>
               <anchorDirection>	-0.000000 0.000000 1	</anchorDirection>
               <applyTo>	4096	</applyTo>
@@ -1556,7 +1556,7 @@
           <customizationSlots>
             <slot>
               <slotType>	camouflage	</slotType>
-              <slotId>	15	</slotId>
+              <slotId>	770	</slotId>
               <anchorPosition>	-0.00263781 0.00733662 0.599153	</anchorPosition>
               <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
               <applyTo>	4096	</applyTo>
@@ -1589,7 +1589,7 @@
       <customizationSlots>
         <slot>
           <slotType>	inscription	</slotType>
-          <slotId>	2	</slotId>
+          <slotId>	546	</slotId>
           <rayStart>	-0.565573 0.28524 0.483738	</rayStart>
           <rayEnd>	-0.407626 0.235785 0.412991	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
@@ -1599,7 +1599,7 @@
         </slot>
         <slot>
           <slotType>	player	</slotType>
-          <slotId>	3	</slotId>
+          <slotId>	514	</slotId>
           <rayStart>	-0.650318 0.436936 0.146745	</rayStart>
           <rayEnd>	-0.482381 0.386247 0.106427	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
@@ -1609,7 +1609,7 @@
         </slot>
         <slot>
           <slotType>	player	</slotType>
-          <slotId>	4	</slotId>
+          <slotId>	515	</slotId>
           <rayStart>	0.438054 0.413602 -0.733523	</rayStart>
           <rayEnd>	0.277626 0.365651 -0.667482	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
@@ -1620,7 +1620,7 @@
         </slot>
         <slot>
           <slotType>	inscription	</slotType>
-          <slotId>	5	</slotId>
+          <slotId>	547	</slotId>
           <rayStart>	0.700412 0.270321 0.3968	</rayStart>
           <rayEnd>	0.526395 0.22505 0.388621	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
@@ -1630,7 +1630,7 @@
         </slot>
         <slot>
           <slotType>	camouflage	</slotType>
-          <slotId>	13	</slotId>
+          <slotId>	513	</slotId>
           <anchorPosition>	0.000000 0.669742 0.000000	</anchorPosition>
           <anchorDirection>	0.000000 1 0.000000	</anchorDirection>
         </slot>
@@ -1721,7 +1721,7 @@
           <customizationSlots>
             <slot>
               <slotType>	camouflage	</slotType>
-              <slotId>	19	</slotId>
+              <slotId>	770	</slotId>
               <anchorPosition>	-0.00263783 0.00733674 0.769359	</anchorPosition>
               <anchorDirection>	-0.000000 0.000000 1	</anchorDirection>
               <applyTo>	4096	</applyTo>
@@ -1774,7 +1774,7 @@
           <customizationSlots>
             <slot>
               <slotType>	camouflage	</slotType>
-              <slotId>	17	</slotId>
+              <slotId>	770	</slotId>
               <anchorPosition>	-0.00263781 0.00733674 0.73275	</anchorPosition>
               <anchorDirection>	-0.000000 0.000000 1	</anchorDirection>
               <applyTo>	4096	</applyTo>
@@ -1807,7 +1807,7 @@
       <customizationSlots>
         <slot>
           <slotType>	inscription	</slotType>
-          <slotId>	6	</slotId>
+          <slotId>	546	</slotId>
           <rayStart>	-0.573223 0.262176 0.483626	</rayStart>
           <rayEnd>	-0.415275 0.212721 0.412879	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
@@ -1817,7 +1817,7 @@
         </slot>
         <slot>
           <slotType>	inscription	</slotType>
-          <slotId>	7	</slotId>
+          <slotId>	547	</slotId>
           <rayStart>	0.702993 0.262987 0.383715	</rayStart>
           <rayEnd>	0.528976 0.217715 0.375536	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
@@ -1827,7 +1827,7 @@
         </slot>
         <slot>
           <slotType>	player	</slotType>
-          <slotId>	8	</slotId>
+          <slotId>	514	</slotId>
           <rayStart>	-0.650917 0.435499 0.147482	</rayStart>
           <rayEnd>	-0.482979 0.38481 0.107165	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
@@ -1837,7 +1837,7 @@
         </slot>
         <slot>
           <slotType>	player	</slotType>
-          <slotId>	9	</slotId>
+          <slotId>	515	</slotId>
           <rayStart>	0.460793 0.386933 -0.71449	</rayStart>
           <rayEnd>	0.29869 0.342847 -0.64986	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
@@ -1848,7 +1848,7 @@
         </slot>
         <slot>
           <slotType>	camouflage	</slotType>
-          <slotId>	16	</slotId>
+          <slotId>	513	</slotId>
           <anchorPosition>	0.000000 0.670421 0.000000	</anchorPosition>
           <anchorDirection>	0.000000 1 0.000000	</anchorDirection>
         </slot>
@@ -1908,12 +1908,15 @@
       <engines>
         <Scania_Vabis_1664>
           <smplEnginePower>	150	</smplEnginePower>
+          <smplFwMaxSpeed>	45	</smplFwMaxSpeed>
         </Scania_Vabis_1664>
         <Scania_Vabis_L_603>
           <smplEnginePower>	180	</smplEnginePower>
+          <smplFwMaxSpeed>	45	</smplFwMaxSpeed>
         </Scania_Vabis_L_603>
         <Ford_317>
           <smplEnginePower>	220	</smplEnginePower>
+          <smplFwMaxSpeed>	45	</smplFwMaxSpeed>
         </Ford_317>
       </engines>
       <chassis>
@@ -1950,6 +1953,7 @@
               </medium>
             </metal>
           </grounds>
+          <axleCount>	5	</axleCount>
         </Chassis_S12_Strv_M40>
         <Chassis_S12_Strv_M40_2>
           <grounds>
@@ -1984,6 +1988,7 @@
               </medium>
             </metal>
           </grounds>
+          <axleCount>	5	</axleCount>
         </Chassis_S12_Strv_M40_2>
       </chassis>
     </detailed>

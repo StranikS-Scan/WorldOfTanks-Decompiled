@@ -85,7 +85,7 @@
       </slot>
       <slot>
         <slotType>	inscription	</slotType>
-        <slotId>	2	</slotId>
+        <slotId>	36	</slotId>
         <rayStart>	-0.685168 0.187826 0.404922	</rayStart>
         <rayEnd>	-0.285169 0.187826 0.404922	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
@@ -95,7 +95,7 @@
       </slot>
       <slot>
         <slotType>	inscription	</slotType>
-        <slotId>	3	</slotId>
+        <slotId>	37	</slotId>
         <rayStart>	0.685168 0.187826 0.404922	</rayStart>
         <rayEnd>	0.285169 0.187826 0.404922	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
@@ -806,7 +806,7 @@
       <customizationSlots>
         <slot>
           <slotType>	player	</slotType>
-          <slotId>	4	</slotId>
+          <slotId>	514	</slotId>
           <rayStart>	-0.690999 0.236423 0.00941993	</rayStart>
           <rayEnd>	-0.298747 0.158351 0.00300072	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
@@ -816,7 +816,7 @@
         </slot>
         <slot>
           <slotType>	player	</slotType>
-          <slotId>	5	</slotId>
+          <slotId>	515	</slotId>
           <rayStart>	0.690999 0.236423 0.00941993	</rayStart>
           <rayEnd>	0.298747 0.158351 0.00300072	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
@@ -842,6 +842,7 @@
       <engines>
         <_Renault_M26_27_bot>
           <smplEnginePower>	47.57765	</smplEnginePower>
+          <smplFwMaxSpeed>	25	</smplFwMaxSpeed>
         </_Renault_M26_27_bot>
       </engines>
       <chassis>

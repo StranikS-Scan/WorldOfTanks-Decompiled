@@ -5,16 +5,12 @@ import weakref
 from functools import partial
 import BigWorld
 import Math
-import ArenaType
-from helpers.EffectsList import EffectsListPlayer, effectsFromSection
-from helpers import newFakeModel
+from helpers.EffectsList import EffectsListPlayer
 from debug_utils import LOG_CODEPOINT_WARNING, LOG_CURRENT_EXCEPTION
-from helpers import i18n, dependency
+from helpers import i18n
 from helpers.EntityExtra import EntityExtra
-from helpers.CallbackDelayer import CallbackDelayer
 import material_kinds
-from skeletons.gui.battle_session import IBattleSessionProvider
-from vehicle_systems.tankStructure import TankPartNames
+from items import vehicles
 
 def reload():
     modNames = (reload.__module__,)
@@ -137,6 +133,18 @@ class DamageMarker(EntityExtra):
                 self.sounds[state] = sound
 
 
+def wheelHealths(name, index, containerName, dataSection, vehType):
+    extras = []
+    maxAxleCount = max((len(c[1]['axleSteeringLockAngles']) for c in vehType.xphysics['chassis'].iteritems()))
+    template = vehicles.makeMultiExtraNameTemplate(name)
+    for number in xrange(maxAxleCount * 2):
+        extraName = template.format(number)
+        wheelHealth = DamageMarker(extraName, number + index, containerName, dataSection)
+        extras.append(wheelHealth)
+
+    return extras
+
+
 class TrackHealth(DamageMarker):
     __slots__ = ('__isLeft',)
 
@@ -215,105 +223,4 @@ class Fire(EntityExtra):
                 del data['_effectsPlayer']
         if not isVehicleUnderwater:
             self.__playEffect(data)
-        return
-
-
-class HalloweenVehicleEffects(EntityExtra):
-    sessionProvider = dependency.descriptor(IBattleSessionProvider)
-    _ZOMBIE_IDLE_EFFECT_OFFSET = Math.Vector3(0.0, 1.0, 0.0)
-    _SOULS_COLLECTOR_SMALL_EFFECT_OFFSET = Math.Vector3(0.0, 0.47, -2.84)
-    _ZOMBIE_VEHICLE_IDLE_LARGE = 'ZombieVehicleIdleLargeEffect'
-    _SMALL_GHOST_COLLECTOR = 'PlayerSmallGhostCollector'
-    _PLAYER_SOUL_PICKUP_EFFECT = 'PlayerSoulPickupEffect'
-
-    def _start(self, data, _):
-        if not data['entity'].isAlive() or data['entity'].health <= 0:
-            return
-        else:
-            self._pickupSettings = ArenaType.g_cache[BigWorld.player().arenaTypeID].eventPointsPickupSettings
-            data['fakeModel'] = self._prepareModel()
-            data['callbackDelayer'] = CallbackDelayer()
-            data['eventPointsCountPrev'] = 0
-            self.__updateHullPosition(data)
-            effectName, modelOffset = self.__getModelName(data['entity'].botKind)
-            translationMatrix = Math.Matrix()
-            translationMatrix.setTranslate(modelOffset)
-            refinedMatrixProvider = Math.MatrixProduct()
-            refinedMatrixProvider.a = translationMatrix
-            refinedMatrixProvider.b = data['hull']
-            data['servo'] = BigWorld.Servo(refinedMatrixProvider)
-            effect = effectsFromSection(self._pickupSettings.epEffects[effectName])
-            pickupEffect = effectsFromSection(self._pickupSettings.epEffects[HalloweenVehicleEffects._PLAYER_SOUL_PICKUP_EFFECT])
-            data['effectsListPlayer'] = EffectsListPlayer(effect.effectsList, effect.keyPoints)
-            data['pickupEffectsListPlayer'] = EffectsListPlayer(pickupEffect.effectsList, pickupEffect.keyPoints)
-            data['effectsListPlayer'].play(data['fakeModel'])
-            if data['servo'] not in data['fakeModel'].motors:
-                data['fakeModel'].addMotor(data['servo'])
-            if not data['entity'].botKind:
-                componentSystem = self.sessionProvider.arenaVisitor.getComponentSystem()
-                eventPointsComp = getattr(componentSystem, 'eventPointsComponent', None)
-                if eventPointsComp is not None:
-                    data['cb'] = partial(self.__onCurrentEventPointsUpdated, data=data)
-                    eventPointsComp.onCurrentEventPointsUpdated += data['cb']
-            return
-
-    def _cleanup(self, data):
-        if not data['entity'].botKind and data.get('cb', None) is not None:
-            componentSystem = self.sessionProvider.arenaVisitor.getComponentSystem()
-            eventPointsComp = getattr(componentSystem, 'eventPointsComponent', None)
-            if eventPointsComp is not None and data.get('cb', None) is not None:
-                eventPointsComp.onCurrentEventPointsUpdated -= data['cb']
-                del data['cb']
-        if data.get('effectsListPlayer', None) is not None:
-            data['effectsListPlayer'].stop(keepPosteffects=True)
-            del data['effectsListPlayer']
-        if data.get('pickupEffectsListPlayer', None) is not None:
-            data['pickupEffectsListPlayer'].stop(keepPosteffects=True)
-            del data['pickupEffectsListPlayer']
-        if data.get('fakeModel', None) is not None:
-            if data.get('servo', None) is not None and data['servo'] in data['fakeModel'].motors:
-                data['fakeModel'].delMotor(data['servo'])
-            if data['fakeModel'].inWorld is True:
-                BigWorld.player().delModel(data['fakeModel'])
-            del data['fakeModel']
-        if data.get('servo', None) is not None:
-            data['servo'].signal = None
-            del data['servo']
-        if data.get('callbackDelayer', None) is not None:
-            data['callbackDelayer'].destroy()
-            del data['callbackDelayer']
-        del data['eventPointsCountPrev']
-        return
-
-    def _prepareModel(self):
-        model = newFakeModel()
-        BigWorld.player().addModel(model)
-        return model
-
-    def __getModelName(self, botKind):
-        if botKind:
-            modelOffset = HalloweenVehicleEffects._ZOMBIE_IDLE_EFFECT_OFFSET
-            effectName = HalloweenVehicleEffects._ZOMBIE_VEHICLE_IDLE_LARGE
-        else:
-            modelOffset = HalloweenVehicleEffects._SOULS_COLLECTOR_SMALL_EFFECT_OFFSET
-            effectName = HalloweenVehicleEffects._SMALL_GHOST_COLLECTOR
-        return (effectName, modelOffset)
-
-    def __onCurrentEventPointsUpdated(self, eventPoints, data):
-        avatar = BigWorld.player()
-        eventPointsCount = eventPoints[avatar.team].get(data['entity'].id, 0)
-        player = data.get('pickupEffectsListPlayer', None)
-        fakeModel = data.get('fakeModel', None)
-        if eventPointsCount != data['eventPointsCountPrev'] and player is not None and not player.isPlaying and fakeModel is not None:
-            player.play(fakeModel)
-            data['eventPointsCountPrev'] = eventPointsCount
-        return
-
-    def __updateHullPosition(self, data):
-        if data.get('hull', None) is None:
-            data['hull'] = Math.Matrix()
-        data['hull'].set(data['entity'].model.node(TankPartNames.HULL))
-        callbackDelayer = data.get('callbackDelayer', None)
-        if callbackDelayer is not None:
-            callbackDelayer.delayCallback(0, partial(self.__updateHullPosition, data))
         return

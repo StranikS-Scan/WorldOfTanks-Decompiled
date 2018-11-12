@@ -8,12 +8,6 @@
         <postBattle>
           <and>
             <vehicleDamage>
-              <title>
-                <key>	#personal_missions_details:quest_common_condition_title_damage_eventCount	</key>
-              </title>
-              <description>
-                <key>	#personal_missions_details:quest_3_1_11_condition_description_damage_eventCount	</key>
-              </description>
               <lvlDiff>	0	</lvlDiff>
               <attackReason>	0	</attackReason>
               <eventCount></eventCount>
@@ -64,22 +58,10 @@
         <postBattle>
           <and>
             <results>
-              <title>
-                <key>	#personal_missions_details:quest_3_1_11_condition_title_damage	</key>
-              </title>
-              <description>
-                <key>	#personal_missions_details:quest_3_1_11_condition_description_damage	</key>
-              </description>
               <key>	damageDealt	</key>
               <greaterOrEqual>	2000	</greaterOrEqual>
             </results>
             <vehicleDamage>
-              <title>
-                <key>	#personal_missions_details:quest_common_condition_title_damage_eventCount	</key>
-              </title>
-              <description>
-                <key>	#personal_missions_details:quest_3_1_11_condition_description_damage_eventCount	</key>
-              </description>
               <lvlDiff>	0	</lvlDiff>
               <attackReason>	0	</attackReason>
               <eventCount></eventCount>

@@ -532,10 +532,9 @@ class _TechTreeDataProvider(object):
             columns = _xml.readInt(xmlCtx, precessed, 'columns')
             nationID = nations.INDICES[nation]
             self.__displaySettings[nationID] = settings
-            nationIndex = self.__availableNations.index(nation)
             hasRoot = settings['hasRoot']
             if hasRoot:
-                coords = self.__makeGridCoordsWithRoot(grid, nationIndex, rows, columns)
+                coords = self.__makeGridCoordsWithRoot(grid, rows, columns)
             else:
                 coords = self.__makeGridCoordsWoRoot(grid, rows, columns)
             getVehicle = vehicles.g_cache.vehicle
@@ -598,14 +597,14 @@ class _TechTreeDataProvider(object):
 
         return
 
-    def __makeGridCoordsWithRoot(self, grid, nationIndex, rows, columns):
-        start = grid['root']['start']
-        step = grid['root']['step']
-        coordinates = [[[start[0], start[1] + step * nationIndex]]]
+    def __makeGridCoordsWithRoot(self, grid, rows, columns):
         start, step = grid['horizontal']
         hRange = xrange(start, start + step * columns, step)
         start, step = grid['vertical']
         vRange = xrange(start, start + step * rows, step)
+        root = grid['root']['start']
+        startRoot = root[1] + step * (rows >> 1)
+        coordinates = [[[root[0], startRoot]]]
         for x in hRange:
             coordinates.append([ (x, y) for y in vRange ])
 

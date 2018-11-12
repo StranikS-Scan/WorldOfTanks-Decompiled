@@ -66,6 +66,7 @@
       <enhancedVertical_elastic_elements_user></enhancedVertical_elastic_elements_user>
       <enhancedHorizontal_elastic_elements_user></enhancedHorizontal_elastic_elements_user>
       <antifragmentationLining_superheavy_user></antifragmentationLining_superheavy_user>
+      <enhancedSuspension_wheeled_user></enhancedSuspension_wheeled_user>
       <lendLeaseVehicle></lendLeaseVehicle>
       <beast></beast>
       <sinai></sinai>
@@ -83,6 +84,8 @@
       <disabledInRoaming></disabledInRoaming>
       <event_battles></event_battles>
       <fallout></fallout>
+      <epic_battles></epic_battles>
+      <rent_promotion></rent_promotion>
       <cannot_be_sold></cannot_be_sold>
       <premiumIGR></premiumIGR>
       <HD></HD>
@@ -95,12 +98,9 @@
       <unrecoverable></unrecoverable>
       <siegeMode></siegeMode>
       <lockCrew></lockCrew>
-      <lockCrewSkills></lockCrewSkills>
       <lockOutfit></lockOutfit>
-      <lockEquipment></lockEquipment>
-      <lockOptionalDevices></lockOptionalDevices>
-      <lockSettings></lockSettings>
-      <hideStats></hideStats>
+      <wheeledVehicle></wheeledVehicle>
+      <burnout></burnout>
     </tags>
   </vehicle>
   <vehicleChassis>
@@ -221,6 +221,15 @@
       <silverVictim></silverVictim>
       <blackVictim></blackVictim>
       <hiddenInUI></hiddenInUI>
+      <direction_any></direction_any>
+      <direction_left_to_right></direction_left_to_right>
+      <direction_right_to_left></direction_right_to_left>
+      <formfactor_any></formfactor_any>
+      <formfactor_square></formfactor_square>
+      <formfactor_rect1x2></formfactor_rect1x2>
+      <formfactor_rect1x3></formfactor_rect1x3>
+      <formfactor_rect1x4></formfactor_rect1x4>
+      <formfactor_rect1x6></formfactor_rect1x6>
     </tags>
   </customizationItem>
 </item_types.xml>

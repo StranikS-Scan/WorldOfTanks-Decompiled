@@ -17,15 +17,15 @@ from gui.Scaleform.locale.PERSONAL_MISSIONS import PERSONAL_MISSIONS
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.server_events.awards_formatters import AWARDS_SIZES, CompletionTokensBonusFormatter
-from gui.server_events.cond_formatters.tooltips import PMTooltipConditionsFormatters
 from gui.server_events.events_helpers import AwardSheetPresenter
-from gui.server_events.personal_progress.formatters import PM2TooltipConditionsFormatters
+from gui.server_events.personal_progress.formatters import PMTooltipConditionsFormatters
 from gui.shared.formatters import text_styles, icons
 from gui.shared.tooltips import TOOLTIP_TYPE, formatters
 from gui.shared.tooltips.common import BlocksTooltipData
 from gui.shared.utils import getPlayerName
 from helpers import dependency
 from helpers.i18n import makeString as _ms
+from helpers.i18n import doesTextExist
 from nations import ALLIANCES_TAGS_ORDER, ALLIANCE_IDS
 from personal_missions import PM_BRANCH
 from potapov_quests import PM_BRANCH_TO_FREE_TOKEN_NAME
@@ -129,17 +129,8 @@ class BadgeTooltipData(BlocksTooltipData):
             vehicle = g_currentVehicle.item
             tooltipData.append(formatters.packBadgeInfoBlockData(badge.getThumbnailIcon(), vehicle.iconContour, text_styles.bonusPreviewText(getPlayerName()), text_styles.bonusPreviewText(vehicle.shortUserName)))
         blocks.append(formatters.packBuildUpBlockData(tooltipData))
-        blocks.append(formatters.packTextBlockData(text_styles.main(self._getDescription())))
+        blocks.append(formatters.packTextBlockData(text_styles.main(TOOLTIPS.PERSONALMISSIONS_BADGE_DESCR)))
         return blocks
-
-    def _getDescription(self):
-        return TOOLTIPS.PERSONALMISSIONS_BADGE_DESCR
-
-
-class HalloweenBadgeTooltipData(BadgeTooltipData):
-
-    def _getDescription(self):
-        return TOOLTIPS.PERSONALMISSIONS_BADGEHALLOWEEN_DESCR
 
 
 def _formatCompleteCount(completedQuestsCount, totalCount):
@@ -297,15 +288,65 @@ class PersonalMissionInfoTooltipData(BlocksTooltipData):
 
     def __init__(self, context):
         super(PersonalMissionInfoTooltipData, self).__init__(context, TOOLTIP_TYPE.PRIVATE_QUESTS)
-        self._setContentMargin(top=20, left=20, bottom=20, right=20)
-        self._setWidth(364)
+        self._setContentMargin(top=20, left=20, bottom=3, right=20)
+        self._setMargins(afterBlock=-11)
+        self._setWidth(389)
+
+    def _getTitleBlock(self, quest):
+        description = quest.getUserDescription()
+        title = text_styles.highTitle(PERSONAL_MISSIONS.DETAILEDVIEW_INFOPANEL_HEADER)
+        if doesTextExist(description):
+            description = '\n\n'.join([_ms(quest.getUserDescription()), _ms(quest.getUserAdvice())])
+            info = text_styles.main(description)
+        else:
+            info = text_styles.main('{}/description'.format(description))
+        titleBlock = formatters.packTextBlockData(title, padding=formatters.packPadding(left=0, right=0, bottom=23))
+        infoBlock = formatters.packTextBlockData(info, padding=formatters.packPadding(left=0, right=0, bottom=17))
+        return formatters.packBuildUpBlockData([titleBlock, infoBlock], gap=-4, padding=formatters.packPadding(left=0, right=0, top=0, bottom=0), stretchBg=False)
+
+    def _getDescriptionBlock(self, localizationKey):
+        blocks = []
+        for i in range(1, 4):
+            keyTitle = '{}/info/{}/title'.format(localizationKey, i)
+            keyDescr = '{}/info/{}/description'.format(localizationKey, i)
+            if doesTextExist(keyTitle) and doesTextExist(keyDescr):
+                blocks.append(formatters.packTextBlockData(text_styles.concatStylesWithSpace(text_styles.middleTitle(keyTitle), text_styles.main(keyDescr)), padding=formatters.packPadding(left=0, right=0, bottom=17)))
+
+        return formatters.packBuildUpBlockData(blocks, gap=-4, padding=formatters.packPadding(left=0, right=0, top=0, bottom=0), stretchBg=False) if blocks else None
+
+    def _getLimiterBlock(self, localizationKey):
+        blocks = []
+        for i in range(1, 3):
+            keyTitle = '{}/limiter/{}/title'.format(localizationKey, i)
+            keyDescr = '{}/limiter/{}/description'.format(localizationKey, i)
+            if doesTextExist(keyTitle) and doesTextExist(keyDescr):
+                blocks.append(formatters.packTextBlockData(text_styles.concatStylesWithSpace(text_styles.alert(keyTitle), text_styles.standard(keyDescr)), padding=formatters.packPadding(left=0, right=0, bottom=17)))
+
+        return formatters.packBuildUpBlockData(blocks, gap=-4, padding=formatters.packPadding(left=0, right=0, top=0, bottom=0), stretchBg=False) if blocks else None
+
+    def _getWarningBlock(self, localizationKey):
+        blocks = []
+        keyWarning = '{}/warning'.format(localizationKey)
+        if doesTextExist(keyWarning):
+            blocks.append(formatters.packImageTextBlockData('', text_styles.alert(keyWarning), RES_ICONS.MAPS_ICONS_LIBRARY_ALERTICON, imgPadding=formatters.packPadding(right=5, top=3), padding=formatters.packPadding(bottom=8)))
+        return formatters.packBuildUpBlockData(blocks, gap=-4, padding=formatters.packPadding(left=0, right=0, top=0, bottom=0), stretchBg=False) if blocks else None
 
     def _packBlocks(self, *args, **kwargs):
+        items = super(PersonalMissionInfoTooltipData, self)._packBlocks()
         eventID = args[0]
         quest = self._eventsCache.getPersonalMissions().getAllQuests()[int(eventID)]
-        description = '\n\n'.join([quest.getUserDescription(), quest.getUserAdvice()])
-        blocks = [formatters.packTextBlockData(text_styles.concatStylesToMultiLine(text_styles.highTitle(PERSONAL_MISSIONS.DETAILEDVIEW_INFOPANEL_HEADER), text_styles.main(description)))]
-        return blocks
+        localizationKey = quest.getUserDescription()
+        items.append(self._getTitleBlock(quest))
+        descBlock = self._getDescriptionBlock(localizationKey)
+        if descBlock:
+            items.append(descBlock)
+        limiterBlock = self._getLimiterBlock(localizationKey)
+        if limiterBlock:
+            items.append(limiterBlock)
+        warningBlock = self._getWarningBlock(localizationKey)
+        if warningBlock:
+            items.append(warningBlock)
+        return items
 
 
 class PersonalMissionsMapRegionTooltipData(BlocksTooltipData):
@@ -329,7 +370,7 @@ class PersonalMissionsMapRegionTooltipData(BlocksTooltipData):
             isMain = None
             if not self.quest.isMainCompleted():
                 isMain = True
-            formatter = self.__getFormatter()
+            formatter = PMTooltipConditionsFormatters()
             conditions = formatter.format(self.quest, isMain)
             orConditions = [ q for q in conditions if q.isInOrGroup ]
             andConditions = [ q for q in conditions if not q.isInOrGroup ]
@@ -432,9 +473,6 @@ class PersonalMissionsMapRegionTooltipData(BlocksTooltipData):
         else:
             text = text_styles.main(TOOLTIPS.PERSONALMISSIONS_MAPREGION_FOOTER_TITLE_AVAILABLE)
         return formatters.packAlignedTextBlockData(text=text, align=BLOCKS_TOOLTIP_TYPES.ALIGN_CENTER, padding=formatters.packPadding(top=-5, bottom=-5))
-
-    def __getFormatter(self):
-        return PM2TooltipConditionsFormatters() if self.quest.hasBattleProgress() else PMTooltipConditionsFormatters()
 
 
 class PersonalMissionPreviewTooltipData(PersonalMissionsMapRegionTooltipData):

@@ -78,9 +78,6 @@ class SimpleBonus(object):
     def getName(self):
         return self._name
 
-    def setName(self, value):
-        self._name = value
-
     def getValue(self):
         return self._value
 
@@ -144,8 +141,8 @@ class SimpleBonus(object):
             itemInfo['itemKey'] = self.getName()
         return [itemInfo]
 
-    def getEpicAwardVOs(self, withDescription=False):
-        itemInfo = self.__getCommonAwardsVOs(iconSize='big')
+    def getEpicAwardVOs(self, withDescription=False, iconSize='big', withCounts=False):
+        itemInfo = self.__getCommonAwardsVOs(iconSize, align=TEXT_ALIGN.CENTER, withCounts=withCounts)
         itemInfo.update(_EPIC_AWARD_STATIC_VO_ENTRIES)
         if withDescription:
             itemInfo['title'] = i18n.makeString(TOOLTIPS.getAwardHeader(self._name))
@@ -452,10 +449,10 @@ class ItemsBonus(SimpleBonus):
 
         return result
 
-    def getEpicAwardVOs(self, withDescription=False):
+    def getEpicAwardVOs(self, withDescription=False, iconSize='big', withCounts=False):
         result = []
         for item, count in self.getItems().iteritems():
-            itemInfo = self.__getCommonAwardsVOs(item, count, iconSize='big')
+            itemInfo = self.__getCommonAwardsVOs(item, count, iconSize, align=TEXT_ALIGN.CENTER, withCounts=withCounts)
             itemInfo.update(_EPIC_AWARD_STATIC_VO_ENTRIES)
             result.append(itemInfo)
 
@@ -552,11 +549,11 @@ class GoodiesBonus(SimpleBonus):
 
         return result
 
-    def getEpicAwardVOs(self, withDescription=False):
+    def getEpicAwardVOs(self, withDescription=False, iconSize='big', withCounts=False):
         result = []
         for booster, count in self.getBoosters().iteritems():
             if booster is not None:
-                itemData = self.__getCommonAwardsVOs(booster, count, iconSize='big')
+                itemData = self.__getCommonAwardsVOs(booster, count, iconSize, align=TEXT_ALIGN.CENTER, withCounts=withCounts)
                 itemData.update(_EPIC_AWARD_STATIC_VO_ENTRIES)
                 result.append(itemData)
 
@@ -664,11 +661,14 @@ class VehiclesBonus(SimpleBonus):
 
         return result
 
-    def getEpicAwardVOs(self, withDescription=False):
+    def getEpicAwardVOs(self, withDescription=False, iconSize='big', withCounts=False):
         result = []
         for vehicle, vehInfo in self.getVehicles():
-            vehicleVO = self.__getCommonAwardsVOs(vehicle, vehInfo, iconSize='big')
+            vehicleVO = self.__getCommonAwardsVOs(vehicle, vehInfo, iconSize, align=TEXT_ALIGN.CENTER, withCounts=withCounts)
             vehicleVO.update(_EPIC_AWARD_STATIC_VO_ENTRIES)
+            if withDescription:
+                vehicleVO['title'] = i18n.makeString(TOOLTIPS.getAwardHeader(self._name))
+                vehicleVO['description'] = i18n.makeString(TOOLTIPS.getAwardBody(self._name))
             result.append(vehicleVO)
 
         return result
@@ -706,6 +706,10 @@ class VehiclesBonus(SimpleBonus):
     @staticmethod
     def getRentWins(vehInfo):
         return vehInfo.get('rent', {}).get('wins')
+
+    @staticmethod
+    def getRentSeason(vehInfo):
+        return vehInfo.get('rent', {}).get('season')
 
     def __getVehicleVO(self, vehicle, vehicleInfo, iconGetter):
         tmanRoleLevel = self.getTmanRoleLevel(vehicleInfo)
@@ -792,10 +796,10 @@ class DossierBonus(SimpleBonus):
 
         return result
 
-    def getEpicAwardVOs(self, withDescription=False):
+    def getEpicAwardVOs(self, withDescription=False, iconSize='big', withCounts=False):
         result = []
         for (block, record), _ in self.getRecords().iteritems():
-            badgeVO = self.__getCommonAwardsVOs(block, record, iconSize='big')
+            badgeVO = self.__getCommonAwardsVOs(block, record, iconSize, withCounts=withCounts)
             if not badgeVO:
                 continue
             badgeVO['align'] = TEXT_ALIGN.CENTER
@@ -1012,10 +1016,10 @@ class CustomizationsBonus(SimpleBonus):
 
         return result
 
-    def getEpicAwardVOs(self, withDescription=False):
+    def getEpicAwardVOs(self, withDescription=False, iconSize='big', withCounts=False):
         result = []
         for item, data in zip(self.getCustomizations(), self.getList()):
-            itemData = self.__getCommonAwardsVOs(item, data, iconSize='big', align=TEXT_ALIGN.CENTER)
+            itemData = self.__getCommonAwardsVOs(item, data, iconSize, align=TEXT_ALIGN.CENTER, withCounts=withCounts)
             itemData.update(_EPIC_AWARD_STATIC_VO_ENTRIES)
             if withDescription:
                 c11nItem = self.__getC11nItem(item)

@@ -2,7 +2,9 @@
 # Embedded file name: scripts/client/gui/customization/service.py
 import math
 import logging
+import typing
 import BigWorld
+import Windowing
 import Event
 from CurrentVehicle import g_currentVehicle
 from helpers import dependency
@@ -133,7 +135,8 @@ class CustomizationService(_ServiceItemShopMixin, _ServiceHelpersMixin, ICustomi
         self._isDraggingInProcess = False
         self._notHandleHighlighterEvent = False
         self.__showCustomizationCallbackId = None
-        self._isRegionSelected = False
+        self._selectedRegion = ApplyArea.NONE
+        self._isHighlighterActive = False
         return
 
     def init(self):
@@ -142,6 +145,7 @@ class CustomizationService(_ServiceItemShopMixin, _ServiceHelpersMixin, ICustomi
         g_currentVehicle.onChangeStarted += self.__onVehicleEntityChange
         self.hangarSpace.onSpaceDestroy += self.__onSpaceDestroy
         self.hangarSpace.onSpaceCreate += self.__onSpaceCreate
+        Windowing.addWindowAccessibilitynHandler(self.__onWindowAccessibilityChanged)
         self._isOver3dScene = False
         self._isDraggingInProcess = False
         self._notHandleHighlighterEvent = False
@@ -152,6 +156,7 @@ class CustomizationService(_ServiceItemShopMixin, _ServiceHelpersMixin, ICustomi
         g_currentVehicle.onChangeStarted -= self.__onVehicleEntityChange
         self.hangarSpace.onSpaceDestroy -= self.__onSpaceDestroy
         self.hangarSpace.onSpaceCreate -= self.__onSpaceCreate
+        Windowing.removeWindowAccessibilityHandler(self.__onWindowAccessibilityChanged)
         self.stopHighlighter()
         self._eventsManager.clear()
         self.__cleanupSuspendHighlighterCallback()
@@ -196,6 +201,7 @@ class CustomizationService(_ServiceItemShopMixin, _ServiceHelpersMixin, ICustomi
             self._helper.setSelectionMode(self._mode)
         else:
             self._helper = BigWorld.PyCustomizationHelper(entity.model, self._mode, self._isOver3dScene, self.__onRegionHighlighted)
+        self._isHighlighterActive = True
 
     def stopHighlighter(self):
         entity = self.hangarSpace.getVehicleEntity()
@@ -204,6 +210,7 @@ class CustomizationService(_ServiceItemShopMixin, _ServiceHelpersMixin, ICustomi
         self._helper = None
         self._needHelperRestart = False
         self._anchorPositions = None
+        self._isHighlighterActive = False
         return
 
     def suspendHighlighter(self):
@@ -213,12 +220,18 @@ class CustomizationService(_ServiceItemShopMixin, _ServiceHelpersMixin, ICustomi
             self._needHelperRestart = self._helper is not None
             self._anchorPositions = None
             self._helper = None
+            self._isHighlighterActive = False
             return
 
     def resumeHighlighter(self):
         if self._needHelperRestart:
             self.startHighlighter(self._mode)
         self._needHelperRestart = False
+        if self._helper is not None:
+            self._helper.setSelectionMode(self._mode)
+            self.selectRegions(self._selectedRegion)
+        self._isHighlighterActive = True
+        return
 
     def getSelectionMode(self):
         return self._mode
@@ -265,10 +278,10 @@ class CustomizationService(_ServiceItemShopMixin, _ServiceHelpersMixin, ICustomi
     def selectRegions(self, regionsMask):
         if self._helper:
             self._helper.selectRegions(regionsMask)
-            self._isRegionSelected = regionsMask != ApplyArea.NONE
+            self._selectedRegion = regionsMask
 
     def isRegionSelected(self):
-        return self._isRegionSelected
+        return self._selectedRegion != ApplyArea.NONE and self._isHighlighterActive
 
     def getHightlighter(self):
         return self._helper
@@ -358,3 +371,7 @@ class CustomizationService(_ServiceItemShopMixin, _ServiceHelpersMixin, ICustomi
         self.__showCustomizationCallbackId = None
         g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.LOBBY_CUSTOMIZATION), scope=EVENT_BUS_SCOPE.LOBBY)
         return
+
+    def __onWindowAccessibilityChanged(self, isAccessible):
+        if self._helper:
+            self._helper.setSelectingEnabled(isAccessible)

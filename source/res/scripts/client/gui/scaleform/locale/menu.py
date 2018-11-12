@@ -5,6 +5,7 @@ from debug_utils import LOG_WARNING
 class MENU(object):
     VEHICLEPREVIEW_TIMELEFT = '#menu:vehiclePreview/timeLeft'
     VEHICLEPREVIEW_TIMELEFTSHORT = '#menu:vehiclePreview/timeLeftShort'
+    VEHICLERESTORE_TIMELEFTSHORT = '#menu:vehicleRestore/timeLeftShort'
     TIME_TIMEVALUE = '#menu:Time/timeValue'
     TIME_TIMEVALUESHORT = '#menu:Time/timeValueShort'
     TIME_TIMEVALUEWITHSECS = '#menu:Time/timeValueWithSecs'
@@ -264,6 +265,10 @@ class MENU(object):
     TANKCAROUSEL_VEHICLESTATES_FALLOUT_REQUIRED = '#menu:tankCarousel/vehicleStates/fallout_required'
     TANKCAROUSEL_VEHICLESTATES_FALLOUT_BROKEN = '#menu:tankCarousel/vehicleStates/fallout_broken'
     TANKCAROUSEL_VEHICLESTATES_RENTALISOVER = '#menu:tankCarousel/vehicleStates/rentalIsOver'
+    TANKCAROUSEL_VEHICLESTATES_RENTABLE = '#menu:tankCarousel/vehicleStates/rentable'
+    TANKCAROUSEL_VEHICLESTATES_RENTABLE_RANKED = '#menu:tankCarousel/vehicleStates/rentable/ranked'
+    TANKCAROUSEL_VEHICLESTATES_RENTABLEAGAIN_RANKED = '#menu:tankCarousel/vehicleStates/rentableAgain/ranked'
+    TANKCAROUSEL_VEHICLESTATES_RENTABLE_HOVER = '#menu:tankCarousel/vehicleStates/rentable/hover'
     TANKCAROUSEL_VEHICLESTATES_IGRRENTALISOVER = '#menu:tankCarousel/vehicleStates/igrRentalIsOver'
     TANKCAROUSEL_VEHICLESTATES_INPREMIUMIGRONLY = '#menu:tankCarousel/vehicleStates/inPremiumIgrOnly'
     TANKCAROUSEL_VEHICLESTATES_BUYTANK = '#menu:tankCarousel/vehicleStates/buyTank'
@@ -289,6 +294,10 @@ class MENU(object):
     STORE_VEHICLESTATES_DESTROYED = '#menu:store/vehicleStates/destroyed'
     STORE_VEHICLESTATES_EXPLODED = '#menu:store/vehicleStates/exploded'
     STORE_VEHICLESTATES_RENTALISOVER = '#menu:store/vehicleStates/rentalIsOver'
+    STORE_VEHICLESTATES_RENTABLE = '#menu:store/vehicleStates/rentable'
+    STORE_VEHICLESTATES_RENTABLE_RANKED = '#menu:store/vehicleStates/rentable/ranked'
+    STORE_VEHICLESTATES_RENTABLEAGAIN = '#menu:store/vehicleStates/rentableAgain'
+    STORE_VEHICLESTATES_RENTABLEAGAIN_RANKED = '#menu:store/vehicleStates/rentableAgain/ranked'
     STORE_VEHICLESTATES_IGRRENTALISOVER = '#menu:store/vehicleStates/igrRentalIsOver'
     STORE_VEHICLESTATES_INPREMIUMIGRONLY = '#menu:store/vehicleStates/inPremiumIgrOnly'
     STORE_VEHICLESTATES_NOTPRESENT = '#menu:store/vehicleStates/notpresent'
@@ -314,6 +323,8 @@ class MENU(object):
     CURRENTVEHICLESTATUS_RENTALISOVER = '#menu:currentVehicleStatus/rentalIsOver'
     CURRENTVEHICLESTATUS_IGRRENTALISOVER = '#menu:currentVehicleStatus/igrRentalIsOver'
     CURRENTVEHICLESTATUS_ISRENTABLE = '#menu:currentVehicleStatus/isRentable'
+    CURRENTVEHICLESTATUS_RENTABLE = '#menu:currentVehicleStatus/rentable'
+    CURRENTVEHICLESTATUS_RENTABLEAGAIN = '#menu:currentVehicleStatus/rentableAgain'
     CURRENTVEHICLESTATUS_INPREMIUMIGRONLY = '#menu:currentVehicleStatus/inPremiumIgrOnly'
     CURRENTVEHICLESTATUS_SERVERRESTRICTION = '#menu:currentVehicleStatus/serverRestriction'
     CURRENTVEHICLESTATUS_LOCKED = '#menu:currentVehicleStatus/locked'
@@ -460,9 +471,13 @@ class MENU(object):
     TANK_PARAMS_ENGINEPOWERPERTON = '#menu:tank_params/enginePowerPerTon'
     TANK_PARAMS_SPEEDLIMITS = '#menu:tank_params/speedLimits'
     TANK_PARAMS_CHASSISROTATIONSPEED = '#menu:tank_params/chassisRotationSpeed'
+    TANK_PARAMS_MAXSTEERINGLOCKANGLE = '#menu:tank_params/maxSteeringLockAngle'
     TANK_PARAMS_SWITCHONTIME = '#menu:tank_params/switchOnTime'
     TANK_PARAMS_SWITCHOFFTIME = '#menu:tank_params/switchOffTime'
+    TANK_PARAMS_WHEELEDSWITCHONTIME = '#menu:tank_params/wheeledSwitchOnTime'
+    TANK_PARAMS_WHEELEDSWITCHOFFTIME = '#menu:tank_params/wheeledSwitchOffTime'
     TANK_PARAMS_SWITCHTIME = '#menu:tank_params/switchTime'
+    TANK_PARAMS_WHEELEDSWITCHTIME = '#menu:tank_params/wheeledSwitchTime'
     TANK_PARAMS_TIMEOFREACHING = '#menu:tank_params/timeOfReaching'
     TANK_PARAMS_ATTAINABLESPEED = '#menu:tank_params/attainableSpeed'
     TANK_PARAMS_HULLARMOR = '#menu:tank_params/hullArmor'
@@ -534,6 +549,7 @@ class MENU(object):
     DESCRIPTIONS_VEHICLETURRET = '#menu:descriptions/vehicleTurret'
     DESCRIPTIONS_VEHICLEENGINE = '#menu:descriptions/vehicleEngine'
     DESCRIPTIONS_VEHICLECHASSIS = '#menu:descriptions/vehicleChassis'
+    DESCRIPTIONS_VEHICLEWHEELEDCHASSIS = '#menu:descriptions/vehicleWheeledChassis'
     DESCRIPTIONS_VEHICLERADIO = '#menu:descriptions/vehicleRadio'
     DESCRIPTIONS_SHELL = '#menu:descriptions/shell'
     DESCRIPTIONS_SHELLFULL = '#menu:descriptions/shellFull'
@@ -578,7 +594,6 @@ class MENU(object):
     HEADERBUTTONS_BATTLE_TYPES_EVENTSQUAD = '#menu:headerButtons/battle/types/eventSquad'
     HEADERBUTTONS_BATTLE_TYPES_TRAININGLEAVE = '#menu:headerButtons/battle/types/trainingLeave'
     HEADERBUTTONS_BATTLE_TYPES_BATTLETEACHING = '#menu:headerButtons/battle/types/battleTeaching'
-    HEADERBUTTONS_BATTLE_TYPES_EVENT = '#menu:headerButtons/battle/types/event'
     HEADERBUTTONS_BATTLE_TYPES_SPEC = '#menu:headerButtons/battle/types/spec'
     HEADERBUTTONS_BATTLE_TYPES_SPEC_DESCR = '#menu:headerButtons/battle/types/spec/descr'
     HEADERBUTTONS_BATTLE_TYPES_LEAVESPEC_DESCR = '#menu:headerButtons/battle/types/leaveSpec/descr'
@@ -892,7 +907,9 @@ class MENU(object):
     MODULEINFO_CLIPGUNLABEL = '#menu:moduleInfo/clipGunLabel'
     MODULEINFO_AUTORELOADGUNLABEL = '#menu:moduleInfo/autoReloadGunLabel'
     MODULEINFO_HYDRAULICCHASSISLABEL = '#menu:moduleInfo/hydraulicChassisLabel'
+    MODULEINFO_HYDRAULICWHEELEDCHASSISLABEL = '#menu:moduleInfo/hydraulicWheeledChassisLabel'
     MODULEINFO_PARAMS_MAXLOAD = '#menu:moduleInfo/params/maxLoad'
+    MODULEINFO_PARAMS_MAXSTEERINGLOCKANGLE = '#menu:moduleInfo/params/maxSteeringLockAngle'
     MODULEINFO_PARAMS_BOMBSNUMBERRANGE = '#menu:moduleInfo/params/bombsNumberRange'
     MODULEINFO_PARAMS_AREASQUARE = '#menu:moduleInfo/params/areaSquare'
     MODULEINFO_PARAMS_FLYDELAYRANGE = '#menu:moduleInfo/params/flyDelayRange'
@@ -943,12 +960,14 @@ class MENU(object):
     MODULEINFO_COMPATIBLE_UNICHARGEDVEHICLES = '#menu:moduleInfo/compatible/uniChargedVehicles'
     MODULEINFO_COMPATIBLE_CLIPVEHICLES = '#menu:moduleInfo/compatible/clipVehicles'
     MODULEINFO_CLOSEBTN = '#menu:moduleInfo/closeBtn'
+    BOOSTERINFO_CLOSEBTN = '#menu:boosterInfo/closeBtn'
     VEHICLEINFO_TITLE = '#menu:vehicleInfo/title'
     VEHICLEINFO_PARAMS_MAXHEALTH = '#menu:vehicleInfo/params/maxHealth'
     VEHICLEINFO_PARAMS_VEHICLEWEIGHT = '#menu:vehicleInfo/params/vehicleWeight'
     VEHICLEINFO_PARAMS_ENGINEPOWER = '#menu:vehicleInfo/params/enginePower'
     VEHICLEINFO_PARAMS_SPEEDLIMITS = '#menu:vehicleInfo/params/speedLimits'
     VEHICLEINFO_PARAMS_CHASSISROTATIONSPEED = '#menu:vehicleInfo/params/chassisRotationSpeed'
+    VEHICLEINFO_PARAMS_MAXSTEERINGLOCKANGLE = '#menu:vehicleInfo/params/maxSteeringLockAngle'
     VEHICLEINFO_PARAMS_HULLARMOR = '#menu:vehicleInfo/params/hullArmor'
     VEHICLEINFO_PARAMS_TURRETARMOR = '#menu:vehicleInfo/params/turretArmor'
     VEHICLEINFO_PARAMS_RELOADTIME = '#menu:vehicleInfo/params/reloadTime'
@@ -974,7 +993,10 @@ class MENU(object):
     VEHICLEINFO_PARAMS_RELOADTIMESECS = '#menu:vehicleInfo/params/reloadTimeSecs'
     VEHICLEINFO_PARAMS_SWITCHONTIME = '#menu:vehicleInfo/params/switchOnTime'
     VEHICLEINFO_PARAMS_SWITCHOFFTIME = '#menu:vehicleInfo/params/switchOffTime'
+    VEHICLEINFO_PARAMS_WHEELEDSWITCHONTIME = '#menu:vehicleInfo/params/wheeledSwitchOnTime'
+    VEHICLEINFO_PARAMS_WHEELEDSWITCHOFFTIME = '#menu:vehicleInfo/params/wheeledSwitchOffTime'
     VEHICLEINFO_PARAMS_SWITCHTIME = '#menu:vehicleInfo/params/switchTime'
+    VEHICLEINFO_PARAMS_WHEELEDSWITCHTIME = '#menu:vehicleInfo/params/wheeledSwitchTime'
     VEHICLEINFO_PARAMS_STUNMAXDURATION = '#menu:vehicleInfo/params/stunMaxDuration'
     VEHICLEINFO_PARAMS_STUNMINDURATION = '#menu:vehicleInfo/params/stunMinDuration'
     VEHICLEINFO_TABS_PROPERTIES = '#menu:vehicleInfo/tabs/properties'
@@ -1651,6 +1673,10 @@ class MENU(object):
     VEHICLEPREVIEW_TIMELEFTSHORT_HOURS = '#menu:vehiclePreview/timeLeftShort/hours'
     VEHICLEPREVIEW_TIMELEFTSHORT_MIN = '#menu:vehiclePreview/timeLeftShort/min'
     VEHICLEPREVIEW_TIMELEFTSHORT_LESSMIN = '#menu:vehiclePreview/timeLeftShort/lessMin'
+    VEHICLERESTORE_TIMELEFTSHORT_DAYS = '#menu:vehicleRestore/timeLeftShort/days'
+    VEHICLERESTORE_TIMELEFTSHORT_HOURS = '#menu:vehicleRestore/timeLeftShort/hours'
+    VEHICLERESTORE_TIMELEFTSHORT_MIN = '#menu:vehicleRestore/timeLeftShort/min'
+    VEHICLERESTORE_TIMELEFTSHORT_LESSMIN = '#menu:vehicleRestore/timeLeftShort/lessMin'
     TIME_TIMEVALUE_DAYS = '#menu:Time/timeValue/days'
     TIME_TIMEVALUE_HOURS = '#menu:Time/timeValue/hours'
     TIME_TIMEVALUE_MIN = '#menu:Time/timeValue/min'
@@ -1694,6 +1720,9 @@ class MENU(object):
     BOOSTERSWINDOW_BOOSTERSTABLE_NOINFO_NOTFOUND_TITLE = '#menu:boostersWindow/boostersTable/noInfo/notFound/title'
     BOOSTERSWINDOW_BOOSTERSTABLE_NOINFO_NOTFOUND_MESSAGE = '#menu:boostersWindow/boostersTable/noInfo/notFound/message'
     BOOSTERSWINDOW_BOOSTERSTABLE_NOINFO_EMPTY_MESSAGE = '#menu:boostersWindow/boostersTable/noInfo/empty/message'
+    BOOSTERS_COMMON_NAME = '#menu:boosters/common/name'
+    BOOSTERS_COMMON_EFFECT_VALUE = '#menu:boosters/common/effect_value'
+    BOOSTERS_COMMON_EFFECT_TIME = '#menu:boosters/common/effect_time'
     BOOSTER_USERNAME_BOOSTER_XP = '#menu:booster/userName/booster_xp'
     BOOSTER_DESCRIPTION_BOOSTER_XP = '#menu:booster/description/booster_xp'
     BOOSTER_BONUS_BOOSTER_XP = '#menu:booster/bonus/booster_xp'
@@ -1768,11 +1797,20 @@ class MENU(object):
     QUOTE = '#menu:quote'
     TECHTREE_ANNOUNCEMENT = '#menu:techtree/Announcement'
     CST_ITEM_CTX_MENU_BUY = '#menu:cst_item_ctx_menu/buy'
+    CST_ITEM_CTX_MENU_BUYMORE = '#menu:cst_item_ctx_menu/buyMore'
     CST_ITEM_CTX_MENU_SELL = '#menu:cst_item_ctx_menu/sell'
     CST_ITEM_CTX_MENU_REMOVEFROMTANK = '#menu:cst_item_ctx_menu/removeFromTank'
+    CST_ITEM_CTX_MENU_REMOVEFROMTANK_SUMMER = '#menu:cst_item_ctx_menu/removeFromTank/summer'
+    CST_ITEM_CTX_MENU_REMOVEFROMTANK_WINTER = '#menu:cst_item_ctx_menu/removeFromTank/winter'
+    CST_ITEM_CTX_MENU_REMOVEFROMTANK_DESERT = '#menu:cst_item_ctx_menu/removeFromTank/desert'
     CST_ITEM_CTX_MENU_INFORMATION = '#menu:cst_item_ctx_menu/information'
     CST_ITEM_CTX_MENU_PROHIBITSALE = '#menu:cst_item_ctx_menu/prohibitSale'
     CST_ITEM_CTX_MENU_ALLOWSALE = '#menu:cst_item_ctx_menu/allowSale'
+    CST_ITEM_CTX_MENU_ADDTOCOMPARE = '#menu:cst_item_ctx_menu/addToCompare'
+    CST_ITEM_CTX_MENU_SHOWINHANGAR = '#menu:cst_item_ctx_menu/showInHangar'
+    CST_ITEM_CTX_MENU_PREVIEW = '#menu:cst_item_ctx_menu/preview'
+    CST_ITEM_CTX_MENU_RESTORE = '#menu:cst_item_ctx_menu/restore'
+    CST_ITEM_CTX_MENU_ACTIVATE = '#menu:cst_item_ctx_menu/activate'
     VIEWHEADER_BACKBTN_LABEL = '#menu:viewHeader/backBtn/label'
     VIEWHEADER_CLOSEBTN_LABEL = '#menu:viewHeader/closeBtn/label'
     INTERNET_PROVIDER_ROSTELECOM_NAME = '#menu:internet_provider/Rostelecom/name'
@@ -1933,10 +1971,27 @@ class MENU(object):
      DATETIME_MONTHS_SHORT_10,
      DATETIME_MONTHS_SHORT_11,
      DATETIME_MONTHS_SHORT_12)
-    DENUNCIATION_ENUM = (DENUNCIATION_1,
-     DENUNCIATION_2,
-     DENUNCIATION_3,
-     DENUNCIATION_7)
+    LEVELS_ENUM = (LEVELS_1,
+     LEVELS_2,
+     LEVELS_3,
+     LEVELS_4,
+     LEVELS_5,
+     LEVELS_6,
+     LEVELS_7,
+     LEVELS_8,
+     LEVELS_9,
+     LEVELS_10,
+     LEVELS_ROMAN_1,
+     LEVELS_ROMAN_2,
+     LEVELS_ROMAN_3,
+     LEVELS_ROMAN_4,
+     LEVELS_ROMAN_5,
+     LEVELS_ROMAN_6,
+     LEVELS_ROMAN_7,
+     LEVELS_ROMAN_8,
+     LEVELS_ROMAN_9,
+     LEVELS_ROMAN_10,
+     LEVELS_ALL)
     REFERRALREFERRALSINTROWINDOW_TEXT_BLOCK_BODY_ENUM = (REFERRALREFERRALSINTROWINDOW_TEXT_BLOCK_BODY_REFERRALS, REFERRALREFERRALSINTROWINDOW_TEXT_BLOCK_BODY_PHENIX)
     NATIONS_ENUM = (NATIONS_TITLE,
      NATIONS_USSR,
@@ -1971,9 +2026,13 @@ class MENU(object):
      TANK_PARAMS_ENGINEPOWERPERTON,
      TANK_PARAMS_SPEEDLIMITS,
      TANK_PARAMS_CHASSISROTATIONSPEED,
+     TANK_PARAMS_MAXSTEERINGLOCKANGLE,
      TANK_PARAMS_SWITCHONTIME,
      TANK_PARAMS_SWITCHOFFTIME,
+     TANK_PARAMS_WHEELEDSWITCHONTIME,
+     TANK_PARAMS_WHEELEDSWITCHOFFTIME,
      TANK_PARAMS_SWITCHTIME,
+     TANK_PARAMS_WHEELEDSWITCHTIME,
      TANK_PARAMS_TIMEOFREACHING,
      TANK_PARAMS_ATTAINABLESPEED,
      TANK_PARAMS_HULLARMOR,
@@ -2056,6 +2115,7 @@ class MENU(object):
      CLASSES_SHORT_ALLIANCE_USA,
      CLASSES_SHORT_ALLIANCE_FRANCE)
     MODULEINFO_PARAMS_ENUM = (MODULEINFO_PARAMS_MAXLOAD,
+     MODULEINFO_PARAMS_MAXSTEERINGLOCKANGLE,
      MODULEINFO_PARAMS_BOMBSNUMBERRANGE,
      MODULEINFO_PARAMS_AREASQUARE,
      MODULEINFO_PARAMS_FLYDELAYRANGE,
@@ -2150,6 +2210,10 @@ class MENU(object):
      TANKCAROUSEL_VEHICLESTATES_FALLOUT_REQUIRED,
      TANKCAROUSEL_VEHICLESTATES_FALLOUT_BROKEN,
      TANKCAROUSEL_VEHICLESTATES_RENTALISOVER,
+     TANKCAROUSEL_VEHICLESTATES_RENTABLE,
+     TANKCAROUSEL_VEHICLESTATES_RENTABLE_RANKED,
+     TANKCAROUSEL_VEHICLESTATES_RENTABLEAGAIN_RANKED,
+     TANKCAROUSEL_VEHICLESTATES_RENTABLE_HOVER,
      TANKCAROUSEL_VEHICLESTATES_IGRRENTALISOVER,
      TANKCAROUSEL_VEHICLESTATES_INPREMIUMIGRONLY,
      TANKCAROUSEL_VEHICLESTATES_BUYTANK,
@@ -2198,6 +2262,10 @@ class MENU(object):
      TANKMEN_LOCKREASON_INBATTLE,
      TANKMEN_LOCKREASON_PREBATTLE,
      TANKMEN_LOCKREASON_BROKEN)
+    DENUNCIATION_ENUM = (DENUNCIATION_1,
+     DENUNCIATION_2,
+     DENUNCIATION_3,
+     DENUNCIATION_7)
     LOADING_BATTLETYPES_ENUM = (LOADING_BATTLETYPES_0,
      LOADING_BATTLETYPES_DESC_0,
      LOADING_BATTLETYPES_1,
@@ -2242,11 +2310,20 @@ class MENU(object):
      LOADING_BATTLETYPES_DESC_22)
     REFERRALREFERRERINTROWINDOW_TEXTBLOCK_BODY_ENUM = (REFERRALREFERRERINTROWINDOW_TEXTBLOCK_BODY_INVITE_BLOCK, REFERRALREFERRERINTROWINDOW_TEXTBLOCK_BODY_SQUAD_BLOCK, REFERRALREFERRERINTROWINDOW_TEXTBLOCK_BODY_REFERRALS_BLOCK)
     CST_ITEM_CTX_MENU_ENUM = (CST_ITEM_CTX_MENU_BUY,
+     CST_ITEM_CTX_MENU_BUYMORE,
      CST_ITEM_CTX_MENU_SELL,
      CST_ITEM_CTX_MENU_REMOVEFROMTANK,
+     CST_ITEM_CTX_MENU_REMOVEFROMTANK_SUMMER,
+     CST_ITEM_CTX_MENU_REMOVEFROMTANK_WINTER,
+     CST_ITEM_CTX_MENU_REMOVEFROMTANK_DESERT,
      CST_ITEM_CTX_MENU_INFORMATION,
      CST_ITEM_CTX_MENU_PROHIBITSALE,
-     CST_ITEM_CTX_MENU_ALLOWSALE)
+     CST_ITEM_CTX_MENU_ALLOWSALE,
+     CST_ITEM_CTX_MENU_ADDTOCOMPARE,
+     CST_ITEM_CTX_MENU_SHOWINHANGAR,
+     CST_ITEM_CTX_MENU_PREVIEW,
+     CST_ITEM_CTX_MENU_RESTORE,
+     CST_ITEM_CTX_MENU_ACTIVATE)
     HANGAR_HEADER_PERSONAL_QUESTS_LABEL_ENUM = (HANGAR_HEADER_PERSONAL_QUESTS_LABEL_ACTIVE,
      HANGAR_HEADER_PERSONAL_QUESTS_LABEL_EMPTY,
      HANGAR_HEADER_PERSONAL_QUESTS_LABEL_INACTIVE,
@@ -2392,6 +2469,15 @@ class MENU(object):
     def referralreferralsintrowindow_text_block_body(cls, key0):
         outcome = '#menu:ReferralReferralsIntroWindow/text_block/body/{}'.format(key0)
         if outcome not in cls.REFERRALREFERRALSINTROWINDOW_TEXT_BLOCK_BODY_ENUM:
+            LOG_WARNING('Localization key "{}" not found'.format(outcome))
+            return None
+        else:
+            return outcome
+
+    @classmethod
+    def levels(cls, key0):
+        outcome = '#menu:levels/{}'.format(key0)
+        if outcome not in cls.LEVELS_ENUM:
             LOG_WARNING('Localization key "{}" not found'.format(outcome))
             return None
         else:

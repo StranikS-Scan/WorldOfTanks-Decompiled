@@ -15,6 +15,7 @@ from gui.battle_control import avatar_getter
 from shared_utils import CONST_CONTAINER
 from arena_component_system.sector_base_arena_component import ID_TO_BASENAME
 import TriggersManager
+from PlayerEvents import g_playerEvents
 
 class GameNotificationsController(IViewComponentsController, TriggersManager.ITriggerListener):
     __slots__ = ('_notificationMap', 'onGameNotificationRecieved', '__eManager', '__ui', '_sessionProvider')
@@ -64,10 +65,6 @@ class GameNotificationsController(IViewComponentsController, TriggersManager.ITr
         self.__eManager = None
         return
 
-    def onTriggerActivated(self, params):
-        if params['type'] == TriggersManager.TRIGGER_TYPE.VEHICLE_DESTROYED:
-            EPIC_SOUND.PLAY_MSG_RETREAT_SUCCESSFUL = False
-
     def onTriggerDeactivated(self, params):
         pass
 
@@ -98,8 +95,10 @@ class EpicGameNotificationsController(GameNotificationsController):
 
     def __init__(self, setup):
         super(EpicGameNotificationsController, self).__init__(setup)
-        self.__playMsgRetreatSoundSuccessfull = False
-        self.__playMsgRetreatSoundSuccessfull = False
+        self.__playMsgOvertimeTriggered = False
+        self.__shutDownSoundNotifications = False
+        EPIC_SOUND.EPIC_MSG_SOUNDS_ENABLED = True
+        g_playerEvents.onRoundFinished += self.__onEpicRoundFinished
 
     def _setupNotificationMap(self):
         self._notificationMap[GAME_MESSAGES_CONSTS.WIN] = EPIC_NOTIFICATION.END_GAME
@@ -126,8 +125,6 @@ class EpicGameNotificationsController(GameNotificationsController):
         self._notificationMap[GAME_MESSAGES_CONSTS.DEFEND_OBJECTIVE] = EPIC_NOTIFICATION.HQ_ACTIVE
         self._notificationMap[GAME_MESSAGES_CONSTS.CAPTURE_BASE] = EPIC_NOTIFICATION.BASE_ACTIVE
         self._notificationMap[GAME_MESSAGES_CONSTS.DEFEND_BASE] = EPIC_NOTIFICATION.BASE_ACTIVE
-        self.__playMsgRetreatSoundSuccessfull = False
-        self.__playMsgRetreatSoundSuccessfull = False
 
     def startControl(self):
         super(EpicGameNotificationsController, self).startControl()
@@ -136,15 +133,18 @@ class EpicGameNotificationsController(GameNotificationsController):
     def stopControl(self):
         super(EpicGameNotificationsController, self).stopControl()
         TriggersManager.g_manager.delListener(self)
+        g_playerEvents.onRoundFinished -= self.__onEpicRoundFinished
+
+    def __onEpicRoundFinished(self, winnerTeam, reason):
+        EPIC_SOUND.EPIC_MSG_SOUNDS_ENABLED = False
 
     def notify(self, messageID, data):
-        self.onGameNotificationRecieved(self._notificationMap[messageID], data)
+        notifyID = self._notificationMap[messageID]
+        if notifyID != -1:
+            self.onGameNotificationRecieved(self._notificationMap[messageID], data)
         notificationID = self.translateMsgId(messageID)
         bfVoMessage = EPIC_SOUND.BF_EB_VO_MESSAGES.get(messageID, None)
         if notificationID == EPIC_NOTIFICATION.HQ_BATTLE_START:
-            if self.__playMsgRetreatSoundSuccessfull:
-                return
-            self.__playMsgRetreatSoundSuccessfull = True
             componentSystem = self._sessionProvider.arenaVisitor.getComponentSystem()
             sectorBaseComponent = getattr(componentSystem, 'sectorBaseComponent', None)
             if sectorBaseComponent is None:
@@ -156,10 +156,6 @@ class EpicGameNotificationsController(GameNotificationsController):
                 return
             isPlayerLane = sectorBaseComponent.getNumNonCapturedBasesByLane(componentSystem.playerDataComponent.physicalLane) == 0
             bfVoMessage = bfVoMessage[isPlayerLane]
-        elif notificationID == EPIC_NOTIFICATION.RETREAT_SUCCESSFUL:
-            if self.__playMsgRetreatSoundSuccessfull is False:
-                return
-            self.__playMsgRetreatSoundSuccessfull = False
         if bfVoMessage is not None:
             self.__playSound(bfVoMessage)
         return
@@ -173,12 +169,7 @@ class EpicGameNotificationsController(GameNotificationsController):
         componentSystem = self._sessionProvider.arenaVisitor.getComponentSystem()
         notificationID = self._notificationMap[messageID]
         isAttacker = avatar_getter.getPlayerTeam() == EPIC_BATTLE_TEAM_ID.TEAM_ATTACKER
-        if notificationID == EPIC_NOTIFICATION.RETREAT:
-            if not isAttacker:
-                if avatar_getter.isVehicleAlive():
-                    EPIC_SOUND.PLAY_MSG_RETREAT_SUCCESSFUL = True
-            return
-        elif notificationID == EPIC_NOTIFICATION.HQ_DESTROYED:
+        if notificationID == EPIC_NOTIFICATION.HQ_DESTROYED:
             bfVoMessage = self.__selectSoundNotifObjDestroy(componentSystem, messageID, data['id'])
             adType = EPIC_SOUND.BF_EB_HQ_DESTROYED_ATK_OR_DEF.get(messageID, None)
             if adType is None:
@@ -208,14 +199,10 @@ class EpicGameNotificationsController(GameNotificationsController):
                 bfVoMessage += '_' + sectorBaseName
             elif notificationID == EPIC_NOTIFICATION.OVERTIME:
                 self.__playSound(EPIC_OVERTIME_SOUND_NOTIFICATIONS.BF_EB_OVERTIME_START)
-                if self.__playMsgRetreatSoundSuccessfull:
+                if self.__playMsgOvertimeTriggered:
                     return
-                self.__playMsgRetreatSoundSuccessfull = True
+                self.__playMsgOvertimeTriggered = True
                 bfVoMessage = bfVoMessage.get(isAttacker, None)
-            elif notificationID in {EPIC_NOTIFICATION.HQ_BATTLE_START}:
-                if self.__playMsgRetreatSoundSuccessfull:
-                    return
-                self.__playMsgRetreatSoundSuccessfull = True
             if messageID == GAME_MESSAGES_CONSTS.OVERTIME:
                 if data['id'] in OVERTIME_DURATION_WARNINGS:
                     return
@@ -223,7 +210,7 @@ class EpicGameNotificationsController(GameNotificationsController):
             return
 
     def overtimeSoundTriggered(self, val):
-        self.__playMsgRetreatSoundSuccessfull = val
+        self.__playMsgOvertimeTriggered = val
 
     def _isPlayerLaneByBaseId(self, componentSystem, sectorBaseId):
         sector = componentSystem.sectorBaseComponent.getSectorForSectorBase(sectorBaseId)
@@ -251,6 +238,7 @@ class EpicGameNotificationsController(GameNotificationsController):
                 elif leftEntitiesToDestroy == 0:
                     bfVoMessage = BF_EB_MAIN_OBJECTIVES_SOUND_NOTIFICATIONS.ALL_DOWN
                     SoundGroups.g_instance.playSound2D(EPIC_SOUND.BF_EB_STOP_TICKING)
+                    self.__shutDownSoundNotifications = True
             else:
                 LOG_ERROR('Expected DestructibleEntityComponent not present!')
         return bfVoMessage
@@ -262,4 +250,6 @@ class EpicGameNotificationsController(GameNotificationsController):
             soundNotifications = avatar_getter.getSoundNotifications()
             if soundNotifications and hasattr(soundNotifications, 'play'):
                 soundNotifications.play(eventName)
+                if self.__shutDownSoundNotifications:
+                    EPIC_SOUND.EPIC_MSG_SOUNDS_ENABLED = False
             return

@@ -5,7 +5,9 @@ import random
 import weakref
 from collections import namedtuple
 import BigWorld
+import WoT
 import Math
+import NetworkFilters
 import AreaDestructibles
 import ArenaType
 import BattleReplay
@@ -30,8 +32,9 @@ from material_kinds import EFFECT_MATERIAL_INDEXES_BY_NAMES, EFFECT_MATERIALS
 from skeletons.gui.battle_session import IBattleSessionProvider
 from skeletons.gui.lobby_context import ILobbyContext
 from vehicle_systems import appearance_cache
-from vehicle_systems.tankStructure import TankPartNames, TankPartIndexes
+from vehicle_systems.tankStructure import TankPartNames, TankPartIndexes, TankSoundObjectsIndexes
 from vehicle_systems.stricted_loading import loadingPriority
+from vehicle_systems.entity_components.battle_abilities_component import BattleAbilitiesComponent
 from soft_exception import SoftException
 LOW_ENERGY_COLLISION_D = 0.3
 HIGH_ENERGY_COLLISION_D = 0.6
@@ -69,8 +72,9 @@ SegmentCollisionResultExt = namedtuple('SegmentCollisionResultExt', ('dist',
  'hitAngleCos',
  'matInfo',
  'compName'))
+VEHICLE_COMPONENTS = {BattleAbilitiesComponent}
 
-class Vehicle(BigWorld.Entity):
+class Vehicle(BigWorld.Entity, BattleAbilitiesComponent):
     isEnteringWorld = property(lambda self: self.__isEnteringWorld)
     isTurretDetached = property(lambda self: constants.SPECIAL_VEHICLE_HEALTH.IS_TURRET_DETACHED(self.health) and self.__turretDetachmentConfirmed)
     isTurretMarkedForDetachment = property(lambda self: constants.SPECIAL_VEHICLE_HEALTH.IS_TURRET_DETACHED(self.health))
@@ -83,6 +87,32 @@ class Vehicle(BigWorld.Entity):
     def speedInfo(self):
         return self.__speedInfo
 
+    @property
+    def isWheeledTech(self):
+        return 'wheeledVehicle' in self.typeDescriptor.type.tags
+
+    @property
+    def wheelsScrollSmoothed(self):
+        if self.__wheelsScrollFilter is not None:
+            return [ scrollFilter.output(BigWorld.time()) for scrollFilter in self.__wheelsScrollFilter ]
+        else:
+            return
+
+    @property
+    def wheelsScrollFilters(self):
+        return self.__wheelsScrollFilter
+
+    @property
+    def wheelsSteeringSmoothed(self):
+        if self.__wheelsSteeringFilter is not None:
+            return [ steeringFilter.output(BigWorld.time()) for steeringFilter in self.__wheelsSteeringFilter ]
+        else:
+            return
+
+    @property
+    def wheelsSteeringFilters(self):
+        return self.__wheelsSteeringFilter
+
     def getBounds(self, partIdx):
         return self.appearance.getBounds(partIdx) if self.appearance is not None else (Math.Vector3(0.0, 0.0, 0.0), Math.Vector3(0.0, 0.0, 0.0), 0)
 
@@ -91,6 +121,9 @@ class Vehicle(BigWorld.Entity):
 
     def __init__(self):
         global _g_waitingVehicle
+        for comp in VEHICLE_COMPONENTS:
+            comp.__init__(self)
+
         self.proxy = weakref.proxy(self)
         self.extras = {}
         self.typeDescriptor = None
@@ -100,11 +133,14 @@ class Vehicle(BigWorld.Entity):
         self.__isEnteringWorld = False
         self.__turretDetachmentConfirmed = False
         self.__speedInfo = _VehicleSpeedProvider()
-        self.assembler = None
         _g_waitingVehicle[self.id] = weakref.ref(self)
         self.respawnCompactDescr = None
         self.respawnOutfitCompactDescr = None
         self.__prevStunInfo = 0.0
+        self.__burnoutStarted = False
+        self.__handbrakeFired = False
+        self.__wheelsScrollFilter = None
+        self.__wheelsSteeringFilter = None
         return
 
     def __del__(self):
@@ -161,12 +197,31 @@ class Vehicle(BigWorld.Entity):
 
         return
 
+    def __initAdditionalFilters(self):
+        self.__wheelsScrollFilter = None
+        self.__wheelsSteeringFilter = None
+        if self.typeDescriptor.chassis.generalWheelsAnimatorConfig is not None:
+            scrollableWheelsCount = self.typeDescriptor.chassis.generalWheelsAnimatorConfig.getWheelsCount()
+            self.__wheelsScrollFilter = []
+            for _ in range(scrollableWheelsCount):
+                self.__wheelsScrollFilter.append(NetworkFilters.FloatLatencyDelayingFilter())
+                self.__wheelsScrollFilter[-1].input(BigWorld.time(), 0.0)
+
+            steerableWheelsCount = self.typeDescriptor.chassis.generalWheelsAnimatorConfig.getSteerableWheelsCount()
+            self.__wheelsSteeringFilter = []
+            for _ in range(steerableWheelsCount):
+                self.__wheelsSteeringFilter.append(NetworkFilters.FloatLatencyDelayingFilter())
+                self.__wheelsSteeringFilter[-1].input(BigWorld.time(), 0.0)
+
+        return
+
     def onEnterWorld(self, prereqs):
         self.__prereqs = prereqs
         self.__isEnteringWorld = True
         self.__prevDamageStickers = frozenset()
         self.__prevPublicStateModifiers = frozenset()
         self.targetFullBounds = True
+        self.__initAdditionalFilters()
         player = BigWorld.player()
         player.vehicle_onEnterWorld(self)
         if self.isPlayerVehicle:
@@ -204,7 +259,11 @@ class Vehicle(BigWorld.Entity):
             return
         else:
             effectsDescr = vehicles.g_cache.shotEffects[effectsIndex]
-            maxHitEffectCode, decodedPoints, maxDamagedComponent = DamageFromShotDecoder.decodeHitPoints(points, self.appearance.collisions)
+            maxComponentIdx = TankPartIndexes.ALL[-1]
+            wheelsConfig = self.appearance.typeDescriptor.chassis.generalWheelsAnimatorConfig
+            if wheelsConfig:
+                maxComponentIdx = maxComponentIdx + wheelsConfig.getWheelsCount()
+            maxHitEffectCode, decodedPoints, maxDamagedComponent = DamageFromShotDecoder.decodeHitPoints(points, self.appearance.collisions, maxComponentIdx)
             hasPiercedHit = DamageFromShotDecoder.hasDamaged(maxHitEffectCode)
             firstHitDir = Math.Vector3(0)
             if decodedPoints:
@@ -313,6 +372,37 @@ class Vehicle(BigWorld.Entity):
             self.appearance.boundEffects.addNewToNode(TankPartNames.HULL, mat, effectsList[1], effectsList[0], entity=self, damageFactor=damageFactor)
         return
 
+    def set_burnoutLevel(self, prev):
+        attachedVehicle = BigWorld.player().getVehicleAttached()
+        if attachedVehicle is None:
+            return
+        else:
+            isAttachedVehicle = self.id == attachedVehicle.id
+            if self.appearance.detailedEngineState is not None:
+                self.appearance.detailedEngineState.throttle = 1 if self.burnoutLevel > 0.01 else 0
+            if self.burnoutLevel > 0 and not self.__handbrakeFired:
+                if self.getSpeed() > 0.5:
+                    if not self.__burnoutStarted:
+                        soundObject = self.appearance.engineAudition.getSoundObject(TankSoundObjectsIndexes.CHASSIS)
+                        soundObject.play('wheel_vehicle_burnout')
+                        self.__burnoutStarted = True
+            else:
+                self.__burnoutStarted = False
+            if isAttachedVehicle:
+                self.guiSessionProvider.invalidateVehicleState(VEHICLE_VIEW_STATE.BURNOUT, self.burnoutLevel)
+            return
+
+    def set_wheelsState(self, prev):
+        __WHEEL_DESTROYED = 3
+        for i in xrange(0, 8):
+            prevState = prev >> i * 2 & 3
+            newState = self.wheelsState >> i * 2 & 3
+            if prevState != newState:
+                if newState == __WHEEL_DESTROYED:
+                    self.appearance.onChassisDestroySound(False, True, i)
+                elif prevState == __WHEEL_DESTROYED:
+                    self.appearance.onChassisDestroySound(False, False, i)
+
     def set_damageStickers(self, prev=None):
         if self.isStarted:
             prev = self.__prevDamageStickers
@@ -321,8 +411,12 @@ class Vehicle(BigWorld.Entity):
             for sticker in prev.difference(curr):
                 self.appearance.removeDamageSticker(sticker)
 
+            maxComponentIdx = TankPartIndexes.ALL[-1]
+            wheelsConfig = self.appearance.typeDescriptor.chassis.generalWheelsAnimatorConfig
+            if wheelsConfig:
+                maxComponentIdx = maxComponentIdx + wheelsConfig.getWheelsCount()
             for sticker in curr.difference(prev):
-                self.appearance.addDamageSticker(sticker, *DamageFromShotDecoder.decodeSegment(sticker, self.appearance.collisions))
+                self.appearance.addDamageSticker(sticker, *DamageFromShotDecoder.decodeSegment(sticker, self.appearance.collisions, maxComponentIdx))
 
     def set_publicStateModifiers(self, prev=None):
         if self.isStarted:
@@ -365,45 +459,6 @@ class Vehicle(BigWorld.Entity):
         if not self.isPlayerVehicle:
             self.onSiegeStateUpdated(self.siegeState, 0.0)
 
-    def set_inspiringEffect(self, prev=None):
-        if not self.isStarted or self.inspiringEffect == prev:
-            return
-        else:
-            data = self.inspiringEffect
-            componentSystem = self.guiSessionProvider.arenaVisitor.getComponentSystem()
-            if componentSystem is not None:
-                equipmentComp = getattr(componentSystem, 'arenaEquipmentComponent', None)
-                if equipmentComp is not None:
-                    if data:
-                        equipmentComp.updateInspiringSource(self.id, data.startTime, data.endTime, data.inactivationDelay, data.radius)
-                    else:
-                        equipmentComp.updateInspiringSource(self.id, None, None, None, None)
-            return
-
-    def set_inspired(self, prev=None):
-        if not self.isStarted or self.inspired == prev:
-            return
-        else:
-            data = self.inspired
-            componentSystem = self.guiSessionProvider.arenaVisitor.getComponentSystem()
-            if componentSystem is not None:
-                equipmentComp = getattr(componentSystem, 'arenaEquipmentComponent', None)
-                if equipmentComp is not None:
-                    if data is not None:
-                        equipmentComp.updateInspired(self.id, data.startTime, data.endTime, data.inactivationStartTime, data.inactivationEndTime)
-                    else:
-                        equipmentComp.updateInspired(self.id, None, None, None, None)
-            return
-
-    def __removeInspire(self):
-        if self.inspired or self.inspiringEffect:
-            componentSystem = self.guiSessionProvider.arenaVisitor.getComponentSystem()
-            if componentSystem is not None:
-                equipmentComp = getattr(componentSystem, 'arenaEquipmentComponent', None)
-                if equipmentComp is not None:
-                    equipmentComp.removeInspire(self.id)
-        return
-
     def set_isSpeedCapturing(self, prev=None):
         LOG_DEBUG('set_isSpeedCapturing ', self.isSpeedCapturing)
         if not self.isPlayerVehicle:
@@ -418,6 +473,22 @@ class Vehicle(BigWorld.Entity):
             ctrl = self.guiSessionProvider.shared.feedback
             if ctrl is not None:
                 ctrl.invalidatePassiveEngineering(self.id, (False, self.isBlockingCapture))
+        return
+
+    def set_steeringAngles(self, prev=None):
+        if self.__wheelsSteeringFilter is not None:
+            for packedValue, steeringFilter in zip(self.steeringAngles, self.__wheelsSteeringFilter):
+                unpackedValue = WoT.unpackWheelSteering(packedValue)
+                steeringFilter.input(BigWorld.time(), unpackedValue)
+
+        return
+
+    def set_wheelsScroll(self, prev=None):
+        if self.__wheelsScrollFilter is not None:
+            for packedValue, scrollFilter in zip(self.wheelsScroll, self.__wheelsScrollFilter):
+                unpackedValue = WoT.unpackWheelScroll(packedValue)
+                scrollFilter.input(BigWorld.time(), unpackedValue)
+
         return
 
     def onHealthChanged(self, newHealth, attackerID, attackReasonID):
@@ -477,7 +548,7 @@ class Vehicle(BigWorld.Entity):
         else:
             self.showCollisionEffect(point, 'rammingCollisionHeavy')
 
-    def onStaticCollision(self, energy, point, normal, miscFlags, damageHull, damageLeftTrack, damageRightTrack, destrEffectIdx, destrMaxHealth):
+    def onStaticCollision(self, energy, point, normal, miscFlags, damage, destrEffectIdx, destrMaxHealth):
         if not self.isStarted:
             return
         self.appearance.stopSwinging()
@@ -491,17 +562,13 @@ class Vehicle(BigWorld.Entity):
         surfNormal = normal
         matKind = SPT_MATKIND.SOLID
         if destrEffectIdx < 0:
-            if isTrackCollision:
-                damageFactor = damageLeftTrack if damageLeftTrack > damageRightTrack else damageRightTrack
-            else:
-                damageFactor = damageHull
             if not isSptCollision:
                 surfaceMaterial = calcSurfaceMaterialNearPoint(hitPoint, normal, self.spaceID)
                 hitPoint, surfNormal, matKind, effectIdx = surfaceMaterial
             else:
                 effectIdx = EFFECT_MATERIAL_INDEXES_BY_NAMES['wood']
             if matKind != 0:
-                self.__showStaticCollisionEffect(energy, effectIdx, hitPoint, surfNormal, isTrackCollision, damageFactor * 100.0)
+                self.__showStaticCollisionEffect(energy, effectIdx, hitPoint, surfNormal, isTrackCollision, damage * 100.0)
         else:
             self.__showDynamicCollisionEffect(energy, destrMaxHealth, hitPoint, surfNormal)
         if self.isPlayerVehicle:
@@ -601,10 +668,6 @@ class Vehicle(BigWorld.Entity):
         if self.respawnCompactDescr:
             LOG_DEBUG('respawn compact descr is still valid, request reloading of tank resources ', self.id)
             BigWorld.callback(0.0, lambda : Vehicle.respawnVehicle(self.id, self.respawnCompactDescr))
-        arena = getattr(BigWorld.player(), 'arena', None)
-        if arena is not None and arena.bonusType == constants.ARENA_BONUS_TYPE.EVENT_BATTLES:
-            extra = self.typeDescriptor.extrasDict['halloweenVehicleEffects']
-            extra.startFor(self)
         return
 
     def refreshNationalVoice(self):
@@ -623,10 +686,6 @@ class Vehicle(BigWorld.Entity):
     def stopVisual(self, showStipple=False):
         if not self.isStarted:
             raise SoftException('Vehicle is already stopped')
-        arena = getattr(BigWorld.player(), 'arena', None)
-        if arena is not None and arena.bonusType == constants.ARENA_BONUS_TYPE.EVENT_BATTLES:
-            extra = self.typeDescriptor.extrasDict['halloweenVehicleEffects']
-            extra.stopFor(self)
         stippleModel = None
         showStipple = False
         if showStipple:
@@ -705,7 +764,8 @@ class Vehicle(BigWorld.Entity):
         if not hasattr(self.filter, 'setVehiclePhysics'):
             return
         typeDescr = self.typeDescriptor
-        physics = BigWorld.WGVehiclePhysics()
+        isWheeled = 'wheeledVehicle' in self.typeDescriptor.type.tags
+        physics = BigWorld.WGWheeledPhysics() if isWheeled else BigWorld.WGTankPhysics()
         physics_shared.initVehiclePhysicsClient(physics, typeDescr)
         arenaMinBound, arenaMaxBound = (-10000, -10000), (10000, 10000)
         physics.setArenaBounds(arenaMinBound, arenaMaxBound)
@@ -753,16 +813,12 @@ class Vehicle(BigWorld.Entity):
                 LOG_CURRENT_EXCEPTION()
 
     def __onVehicleDeath(self, isDeadStarted=False):
-        arena = getattr(BigWorld.player(), 'arena', None)
-        if arena is not None and arena.bonusType == constants.ARENA_BONUS_TYPE.EVENT_BATTLES:
-            extra = self.typeDescriptor.extrasDict['halloweenVehicleEffects']
-            extra.stopFor(self)
         if not self.isPlayerVehicle:
             ctrl = self.guiSessionProvider.shared.feedback
             if ctrl is not None:
                 ctrl.setVehicleState(self.id, _GUI_EVENT_ID.VEHICLE_DEAD, isDeadStarted)
         TriggersManager.g_manager.fireTrigger(TRIGGER_TYPE.VEHICLE_DESTROYED, vehicleId=self.id)
-        self.__removeInspire()
+        self._removeInspire()
         bwfilter = self.filter
         if hasattr(bwfilter, 'velocityErrorCompensation'):
             bwfilter.velocityErrorCompensation = 100.0
@@ -795,6 +851,18 @@ class Vehicle(BigWorld.Entity):
         super(Vehicle, self).delModel(model)
         if hlEnabled:
             highlighter.highlight(True, hlSimpleEdge)
+
+    def notifyInputKeysDown(self, movementDir, rotationDir, handbrakeFired):
+        self.filter.notifyInputKeysDown(movementDir, rotationDir)
+        self.__handbrakeFired = handbrakeFired
+        if self.appearance.detailedEngineState is not None:
+            self.appearance.detailedEngineState.throttle = movementDir or rotationDir
+        return
+
+    def turnoffThrottle(self):
+        if self.appearance.detailedEngineState is not None:
+            self.appearance.detailedEngineState.throttle = 0
+        return
 
 
 @dependency.replace_none_kwargs(lobbyContext=ILobbyContext)

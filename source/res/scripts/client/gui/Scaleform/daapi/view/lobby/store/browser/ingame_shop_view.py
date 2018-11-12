@@ -17,6 +17,39 @@ from skeletons.gui.shared import IItemsCache
 from sound_constants import INGAMESHOP_SOUND_SPACE
 _logger = logging.getLogger(__name__)
 _logger.addHandler(logging.NullHandler())
+_SESSION_TIMEOUT = 300
+_g_lastSessionInfo = None
+
+def _gelLastSessionInfo():
+    global _g_lastSessionInfo
+    if _g_lastSessionInfo is None:
+        _g_lastSessionInfo = _LastSessionInfo(_SESSION_TIMEOUT)
+    return _g_lastSessionInfo
+
+
+class _LastSessionInfo(object):
+
+    def __init__(self, secondsTimeout):
+        self.__url = ingameshop_helpers.getWebShopURL()
+        self.__lifetime = secondsTimeout
+        self.__nextRefreshTime = BigWorld.time() + self.__lifetime
+
+    @property
+    def url(self):
+        hostUrl = ingameshop_helpers.getWebShopURL()
+        needResetUrl = BigWorld.time() >= self.__nextRefreshTime or not self.__url.startswith(hostUrl)
+        if needResetUrl:
+            self.__url = hostUrl
+        return self.__url
+
+    @url.setter
+    def url(self, urlStr):
+        self.__url = urlStr
+        self.refreshLifetime()
+
+    def refreshLifetime(self):
+        self.__nextRefreshTime = BigWorld.time() + self.__lifetime
+
 
 class IngameShopBase(IngameShopViewMeta):
     browserCtrl = dependency.descriptor(IBrowserController)
@@ -27,6 +60,7 @@ class IngameShopBase(IngameShopViewMeta):
         self.__browser = None
         self.__hasFocus = False
         self.__browserId = 0
+        self.__loadBrowserCbID = None
         self._url = ctx.get('url') if ctx else None
         self._browserParams = (ctx or {}).get('browserParams', makeBrowserParams())
         return
@@ -66,6 +100,7 @@ class IngameShopBase(IngameShopViewMeta):
                 self.__browser.allowRightClick = True
                 self.__browser.useSpecialKeys = False
                 self.__browser.ignoreAltKey = True
+                self.__browser.onLoadStart += self._updateLastUrl
             self.__updateSkipEscape(not self.__hasFocus)
         else:
             _logger.error('ERROR: Browser could not be opened. Invalid URL!')
@@ -77,10 +112,17 @@ class IngameShopBase(IngameShopViewMeta):
         self.as_setBrowserParamsS(self._browserParams)
 
     def _dispose(self):
+        _gelLastSessionInfo().refreshLifetime()
+        if self.__browser:
+            self.__browser.onLoadStart -= self._updateLastUrl
         super(IngameShopBase, self)._dispose()
         if self.__browserId:
             self.browserCtrl.delBrowser(self.__browserId)
         self.fireEvent(events.IngameShopEvent(events.IngameShopEvent.INGAMESHOP_DEACTIVATED), scope=EVENT_BUS_SCOPE.DEFAULT)
+
+    @staticmethod
+    def _updateLastUrl(newUrl):
+        _gelLastSessionInfo().url = newUrl
 
     def __updateSkipEscape(self, skipEscape):
         if self.__browser is not None:
@@ -93,7 +135,12 @@ class IngameShopBase(IngameShopViewMeta):
         self.fireEvent(events.IngameShopEvent(events.IngameShopEvent.INGAMESHOP_DATA_UNAVAILABLE), scope=EVENT_BUS_SCOPE.DEFAULT)
 
     def __showBrowser(self):
-        BigWorld.callback(0.01, self.as_loadBrowserS)
+        self.__loadBrowserCbID = BigWorld.callback(0.01, self.__loadBrowserAS)
+
+    def __loadBrowserAS(self):
+        self.__loadBrowserCbID = None
+        self.as_loadBrowserS()
+        return
 
 
 class IngameShopView(LobbySubView, IngameShopBase):
@@ -103,20 +150,20 @@ class IngameShopView(LobbySubView, IngameShopBase):
     def __init__(self, ctx=None):
         super(IngameShopView, self).__init__(ctx)
         if not self._url:
-            self._url = ingameshop_helpers.getWebShopURL()
+            self._url = _gelLastSessionInfo().url
         self.lobbyContext.getServerSettings().onServerSettingsChange += self.__onServerSettingsChanged
 
     def onEscapePress(self):
         self.fireEvent(events.LoadViewEvent(VIEW_ALIAS.LOBBY_HANGAR), scope=EVENT_BUS_SCOPE.LOBBY)
 
+    def _dispose(self):
+        self.lobbyContext.getServerSettings().onServerSettingsChange -= self.__onServerSettingsChanged
+        super(IngameShopView, self)._dispose()
+
     def __onServerSettingsChanged(self, diff):
         if 'ingameShop' in diff and not isIngameShopEnabled():
             _logger.info('INFO: InGameShop disabled by server settings')
             self.fireEvent(events.LoadViewEvent(VIEW_ALIAS.LOBBY_HANGAR), scope=EVENT_BUS_SCOPE.LOBBY)
-
-    def _dispose(self):
-        self.lobbyContext.getServerSettings().onServerSettingsChange -= self.__onServerSettingsChanged
-        super(IngameShopView, self)._dispose()
 
 
 class IngameShopOverlay(IngameShopBase):

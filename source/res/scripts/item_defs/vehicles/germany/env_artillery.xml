@@ -93,7 +93,7 @@
       </slot>
       <slot>
         <slotType>	player	</slotType>
-        <slotId>	2	</slotId>
+        <slotId>	4	</slotId>
         <rayStart>	-1.30419 0.999523 -1.65247	</rayStart>
         <rayEnd>	-1.24638 0.983444 -1.65247	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
@@ -103,7 +103,7 @@
       </slot>
       <slot>
         <slotType>	inscription	</slotType>
-        <slotId>	3	</slotId>
+        <slotId>	36	</slotId>
         <rayStart>	-1.29636 1.02755 -0.555693	</rayStart>
         <rayEnd>	-1.23855 1.01147 -0.555695	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
@@ -113,7 +113,7 @@
       </slot>
       <slot>
         <slotType>	player	</slotType>
-        <slotId>	4	</slotId>
+        <slotId>	5	</slotId>
         <rayStart>	1.28669 0.993111 -1.65444	</rayStart>
         <rayEnd>	1.26742 0.987752 -1.65444	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
@@ -124,7 +124,7 @@
       </slot>
       <slot>
         <slotType>	inscription	</slotType>
-        <slotId>	5	</slotId>
+        <slotId>	37	</slotId>
         <rayStart>	1.2995 1.02154 -0.551011	</rayStart>
         <rayEnd>	1.24169 1.00547 -0.551013	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
@@ -470,7 +470,7 @@
           <customizationSlots>
             <slot>
               <slotType>	insigniaOnGun	</slotType>
-              <slotId>	6	</slotId>
+              <slotId>	771	</slotId>
               <rayStart>	-0.000590633 -0.0210966 3.70241	</rayStart>
               <rayEnd>	-0.00767752 -0.0831617 3.70032	</rayEnd>
               <rayUp>	0.11 0.106 4	</rayUp>
@@ -520,6 +520,7 @@
       <engines>
         <Development_Engine>
           <smplEnginePower>	570.9318	</smplEnginePower>
+          <smplFwMaxSpeed>	0.000001	</smplFwMaxSpeed>
         </Development_Engine>
       </engines>
       <chassis>

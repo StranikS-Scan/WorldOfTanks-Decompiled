@@ -10,17 +10,16 @@ from gui.Scaleform.genConsts.BATTLE_VIEW_ALIASES import BATTLE_VIEW_ALIASES
 from gui.Scaleform.locale.INGAME_GUI import INGAME_GUI
 from gui.battle_control.battle_constants import CROSSHAIR_VIEW_ID
 from gui.shared.utils.plugins import PluginsCollection
-from helpers import i18n
+from skeletons.gui.battle_session import IBattleSessionProvider
+from helpers import dependency, i18n
 
 class CrosshairPanelContainer(ExternalFlashComponent, CrosshairPanelContainerMeta):
+    sessionProvider = dependency.descriptor(IBattleSessionProvider)
 
-    def __init__(self, overridePlugins=None):
+    def __init__(self):
         super(CrosshairPanelContainer, self).__init__(ExternalFlashSettings(BATTLE_VIEW_ALIASES.CROSSHAIR_PANEL, settings.CROSSHAIR_CONTAINER_SWF, settings.CROSSHAIR_ROOT_PATH, settings.CROSSHAIR_INIT_CALLBACK))
         self.__plugins = PluginsCollection(self)
-        initPlugins = plugins.createPlugins()
-        initPlugins.update(overridePlugins or {})
-        initPlugins = {key:val for key, val in initPlugins.items() if val is not None}
-        self.__plugins.addPlugins(initPlugins)
+        self.__plugins.addPlugins(plugins.createPlugins())
         self.__gunMarkers = None
         self.__viewID = CROSSHAIR_VIEW_ID.UNDEFINED
         self.__zoomFactor = 0.0

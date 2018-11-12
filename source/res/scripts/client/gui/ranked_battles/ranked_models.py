@@ -11,6 +11,7 @@ from gui.shared.money import Currency
 from helpers import i18n
 from helpers import time_utils
 from shared_utils import CONST_CONTAINER, collapseIntervals, findFirst, first
+from season_common import CycleStatus, GameSeason
 
 class RANK_STATE(CONST_CONTAINER):
     UNDEFINED = 2
@@ -30,12 +31,6 @@ class RANK_STATUS(CONST_CONTAINER):
     LOST = 'lost'
 
 
-class CYCLE_STATUS(CONST_CONTAINER):
-    PAST = 'past'
-    CURRENT = 'current'
-    FUTURE = 'future'
-
-
 class RANK_CHANGE_STATES(object):
     RANK_EARNED = 'rankEarned'
     RANK_LOST = 'rankLost'
@@ -52,82 +47,30 @@ class RankedCycle(namedtuple('RankedCycle', 'ID, status, startDate, endDate, ord
         return cmp(self.ID, other.ID)
 
 
-class RankedSeason(object):
+class RankedSeason(GameSeason):
 
     def __init__(self, seasonInfo, seasonData, stats=None, points=0):
-        self.__cycleStartDate, self.__cycleEndDate, self.__seasonId, self.__cycleID = seasonInfo
-        self.__data = seasonData
-        self.__cycles = None
+        super(RankedSeason, self).__init__(seasonInfo, seasonData)
         self.__stats = stats or {}
         self.__currCyclePoints = points
-        return
-
-    def getSeasonID(self):
-        return self.__seasonId
-
-    def getCycleID(self):
-        return self.__cycleID
-
-    def getStartDate(self):
-        return self.__data['startSeason']
-
-    def getEndDate(self):
-        return self.__data['endSeason']
-
-    def getAllCycles(self):
-        if self.__cycles is None:
-            self.__buildCycles()
-        return self.__cycles
-
-    def getCycleInfo(self):
-        return self.getAllCycles()[self.getCycleID()]
-
-    def getCycleStartDate(self):
-        return self.__cycleStartDate
-
-    def getCycleEndDate(self):
-        return self.__cycleEndDate
-
-    def getCycleOrdinalNumber(self):
-        return self.getCycleInfo().ordinalNumber
-
-    def getPassedCyclesNumber(self):
-        return sum((1 for cycle in self.getAllCycles().values() if cycle.status == CYCLE_STATUS.PAST))
-
-    def getNumber(self):
-        return self.__data.get('number')
-
-    def getUserName(self):
-        return str(self.getNumber())
 
     def getPoints(self):
-        dossierData = self.__stats.get((self.__seasonId, 0))
+        dossierData = self.__stats.get((self.getSeasonID(), 0))
         if dossierData:
             _, _, _, points, _ = dossierData
         else:
             points = sum(map(attrgetter('points'), self.getAllCycles().values()))
         return points
 
-    def __buildCycles(self):
-        cycles = self.__data.get('cycles', {})
-        currID = self.getCycleID()
-        self.__cycles = {}
-        for number, idx in enumerate(sorted(cycles.keys()), 1):
-            cycleRawData = cycles[idx]
-            points = 0
-            if idx < currID or currID is None:
-                status = CYCLE_STATUS.PAST
-                cycleStats = self.__stats.get((self.__seasonId, idx))
-                if cycleStats is not None:
-                    _, _, _, points, _ = cycleStats
-            elif idx == currID:
-                status = CYCLE_STATUS.CURRENT
-                points = self.__currCyclePoints
-            else:
-                status = CYCLE_STATUS.FUTURE
-            self.__cycles[idx] = RankedCycle(idx, status, cycleRawData['start'], cycleRawData['end'], number, points)
-
-        return
+    def _buildCycle(self, idx, status, start, end, number):
+        points = 0
+        if status == CycleStatus.PAST:
+            cycleStats = self.__stats.get((self.getSeasonID(), idx))
+            if cycleStats is not None:
+                _, _, _, points, _ = cycleStats
+        elif status == CycleStatus.CURRENT:
+            points = self.__currCyclePoints
+        return RankedCycle(idx, status, start, end, number, points)
 
 
 class RankStep(object):

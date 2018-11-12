@@ -12,14 +12,18 @@ from gui.Scaleform.daapi.view.lobby.header.LobbyHeader import HeaderMenuVisibili
 from gui.Scaleform.daapi.view.lobby.store.browser.ingameshop_helpers import isIngameShopEnabled
 from gui.Scaleform.daapi.view.meta.CustomizationBuyWindowMeta import CustomizationBuyWindowMeta
 from gui.Scaleform.framework import ViewTypes
+from gui.Scaleform.genConsts.CUSTOMIZATION_DIALOGS import CUSTOMIZATION_DIALOGS
+from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.VEHICLE_CUSTOMIZATION import VEHICLE_CUSTOMIZATION
+from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.ingame_shop import showBuyGoldForCustomization
 from gui.shared.formatters import text_styles, icons, getItemPricesVO
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.events import LobbyHeaderMenuEvent
 from gui.shared.event_bus import EVENT_BUS_SCOPE
 from gui.shared.money import Currency
+from gui.shared.utils.graphics import isRendererPipelineDeferred
 from helpers import dependency
 from helpers.i18n import makeString as _ms
 from items.components.c11n_constants import SeasonType
@@ -99,8 +103,22 @@ class PurchaseWindow(CustomizationBuyWindowMeta):
                 meta = ExchangeCreditsMultiItemsMeta(itemsCDs, CartInfoItem())
             yield DialogsInterface.showDialog(meta)
             return
-        self.__ctx.applyItems(self.__purchaseItems)
-        self.close()
+        if self.containsVehicleBound(self.__purchaseItems):
+            DialogsInterface.showI18nConfirmDialog(CUSTOMIZATION_DIALOGS.CUSTOMIZATION_INSTALL_BOUND_BASKET_NOTIFICATION, self.onBuyConfirmed)
+            return
+        self.onBuyConfirmed(True)
+
+    def onBuyConfirmed(self, isOk):
+        if isOk:
+            self.__ctx.applyItems(self.__purchaseItems)
+            self.close()
+
+    def containsVehicleBound(self, purchaseItems):
+        for purchaseItem in purchaseItems:
+            if not purchaseItem.isDismantling and purchaseItem.item.isVehicleBound:
+                return True
+
+        return False
 
     def onWindowClose(self):
         self.close()
@@ -111,7 +129,6 @@ class PurchaseWindow(CustomizationBuyWindowMeta):
 
     def _populate(self):
         super(PurchaseWindow, self)._populate()
-        self.service.suspendHighlighter()
         self.lobbyContext.getServerSettings().onServerSettingsChange += self.__onServerSettingChanged
         self.__c11nView = self.app.containerManager.getContainer(ViewTypes.LOBBY_SUB).getView()
         self.__ctx = self.service.getCtx()
@@ -158,8 +175,8 @@ class PurchaseWindow(CustomizationBuyWindowMeta):
         seasonTitlesText = {season:_ms(_CUSTOMIZATION_SEASON_TITLES[season]) for season in SeasonType.COMMON_SEASONS}
         if self.__isStyle:
             item = self.__ctx.getPurchaseItems()[0].item
-            titleTemplate = '{} {}'.format(item.userType, item.userName)
-            bigTitleTemplate = '{}\n{}'.format(item.userType, text_styles.heroTitle(item.userName))
+            titleTemplate = _ms(TOOLTIPS.VEHICLEPREVIEW_BOXTOOLTIP_STYLE_HEADER, group=item.userType, value=item.userName)
+            bigTitleTemplate = _ms(VEHICLE_CUSTOMIZATION.CUSTOMIZATION_INFOTYPE_TYPE_STYLE_MULTILINE, group=item.userType, value=text_styles.heroTitle(item.userName))
         else:
             totalCount = 0
             for season in SeasonType.COMMON_SEASONS:
@@ -202,14 +219,15 @@ class PurchaseWindow(CustomizationBuyWindowMeta):
                 self.__moneyState = _MoneyForPurchase.ENOUGH_WITH_EXCHANGE
             else:
                 self.__moneyState = _MoneyForPurchase.NOT_ENOUGH
-        validTransaction = self.__moneyState != _MoneyForPurchase.NOT_ENOUGH or Currency.GOLD in shortage.getCurrency() and isIngameShopEnabled()
+        inGameShopOn = Currency.GOLD in shortage.getCurrency() and isIngameShopEnabled()
+        validTransaction = self.__moneyState != _MoneyForPurchase.NOT_ENOUGH or inGameShopOn
         self.as_setTotalDataS({'totalLabel': text_styles.highTitle(_ms(VEHICLE_CUSTOMIZATION.WINDOW_PURCHASE_TOTALCOST, selected=cart.numSelected, total=cart.numApplying)),
          'enoughMoney': validTransaction,
          'inFormationAlert': inFormationAlert,
          'totalPrice': totalPriceVO[0]})
-        self.__setBuyButtonState(validTransaction)
+        self.__setBuyButtonState(validTransaction, inGameShopOn)
 
-    def __setBuyButtonState(self, validTransaction):
+    def __setBuyButtonState(self, validTransaction, inGameShopOn):
         purchase = 1 if self.__isStyle else 0
         purchase += sum([ self.__counters[season][0] for season in SeasonType.COMMON_SEASONS ])
         inventory = sum([ self.__counters[season][1] for season in SeasonType.COMMON_SEASONS ])
@@ -222,7 +240,7 @@ class PurchaseWindow(CustomizationBuyWindowMeta):
         if not isAnySelected:
             label = ''
             tooltip = VEHICLE_CUSTOMIZATION.CUSTOMIZATION_NOTSELECTEDITEMS
-        self.as_setBuyBtnStateS(validTransaction and isAnySelected, label, tooltip)
+        self.as_setBuyBtnStateS(validTransaction and isAnySelected, label, tooltip, inGameShopOn)
 
     def __onServerSettingChanged(self, diff):
         if 'isCustomizationEnabled' in diff and not diff.get('isCustomizationEnabled', True):
@@ -269,7 +287,11 @@ class _BasePurchaseDescription(object):
 
     @staticmethod
     def _buildCustomizationItemData(item):
-        return buildCustomizationItemDataVO(item, None, True, False, True, addExtraName=False)
+        if item.itemTypeID == GUI_ITEM_TYPE.MODIFICATION:
+            showUnsupportedAlert = not isRendererPipelineDeferred()
+        else:
+            showUnsupportedAlert = False
+        return buildCustomizationItemDataVO(item, None, True, False, True, showUnsupportedAlert=showUnsupportedAlert, addExtraName=False)
 
 
 class _StubItemPurchaseDescription(_BasePurchaseDescription):
@@ -283,7 +305,8 @@ class _StubItemPurchaseDescription(_BasePurchaseDescription):
     def getVO(self):
         itemVO = super(_StubItemPurchaseDescription, self).getVO()
         itemVO.update({'itemImg': self.itemData,
-         'isLock': True})
+         'isLock': True,
+         'tooltip': TOOLTIPS_CONSTANTS.TECH_CUSTOMIZATION_ITEM})
         return itemVO
 
     @staticmethod
@@ -308,7 +331,8 @@ class _SeparateItemPurchaseDescription(_BasePurchaseDescription):
         itemVO = super(_SeparateItemPurchaseDescription, self).getVO()
         itemVO.update({'compoundPrice': getItemPricesVO(self.compoundPrice)[0],
          'isFromStorage': self.isFromInventory,
-         'selected': self.selected})
+         'selected': self.selected,
+         'tooltip': TOOLTIPS_CONSTANTS.TECH_CUSTOMIZATION_ITEM})
         return itemVO
 
     def __generateID(self, item):
@@ -320,7 +344,8 @@ class _StyleItemPurchaseDescription(_BasePurchaseDescription):
     def getVO(self):
         itemVO = super(_StyleItemPurchaseDescription, self).getVO()
         itemVO.update({'isFromStorage': False,
-         'isLock': True})
+         'isLock': True,
+         'tooltip': TOOLTIPS_CONSTANTS.TECH_CUSTOMIZATION_ITEM_ICON})
         return itemVO
 
 
@@ -330,7 +355,8 @@ class _SeasonPurchaseInfo(object):
      GUI_ITEM_TYPE.PAINT,
      GUI_ITEM_TYPE.CAMOUFLAGE,
      GUI_ITEM_TYPE.PROJECTION_DECAL,
-     GUI_ITEM_TYPE.EMBLEM)
+     GUI_ITEM_TYPE.EMBLEM,
+     GUI_ITEM_TYPE.STYLE)
 
     def __init__(self, keyFunc=None):
         self.__buckets = {key:{} for key in self._ORDERED_KEYS}
@@ -415,10 +441,17 @@ class _StyleItemsProcessor(_ItemsProcessor):
     def _process(self, style):
         itemsInfo = {}
         for season in SeasonType.COMMON_SEASONS:
+            showStyleInsteadItems = True
             outfit = style.item.getOutfit(season)
             seasonInfo = itemsInfo.setdefault(season, _SeasonPurchaseInfo())
             for item in outfit.items():
-                itemDescription = _StyleItemPurchaseDescription(item)
-                seasonInfo.add(itemDescription, item.itemTypeID)
+                if not item.isHiddenInUI():
+                    showStyleInsteadItems = False
+                    itemDescription = _StyleItemPurchaseDescription(item)
+                    seasonInfo.add(itemDescription, item.itemTypeID)
+
+            if showStyleInsteadItems:
+                styleDescription = _StyleItemPurchaseDescription(style.item)
+                seasonInfo.add(styleDescription, GUI_ITEM_TYPE.STYLE)
 
         return itemsInfo

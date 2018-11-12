@@ -6,7 +6,7 @@ from gui.Scaleform.locale.COMMON import COMMON
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.Scaleform.managers.UtilsManager import UtilsManager
-from gui.ranked_battles.ranked_models import CYCLE_STATUS
+from gui.ranked_battles.ranked_models import CycleStatus
 from helpers import i18n, dependency
 from gui.Scaleform.daapi.view.meta.RankedBattlesCalendarPopoverMeta import RankedBattlesCalendarPopoverMeta
 from gui.Scaleform.locale.RANKED_BATTLES import RANKED_BATTLES
@@ -64,7 +64,7 @@ class RankedBattlesCalendarPopover(RankedBattlesCalendarPopoverMeta):
         cycles = self.__seasonInfo.getAllCycles()
         result = []
         for cycle in sorted(cycles.values()):
-            formatter = text_styles.main if cycle.status == CYCLE_STATUS.CURRENT else text_styles.standard
+            formatter = text_styles.main if cycle.status == CycleStatus.CURRENT else text_styles.standard
             startDate = time_utils.getTimeStructInLocal(cycle.startDate)
             endDate = time_utils.getTimeStructInLocal(cycle.endDate)
             result.append(formatter(i18n.makeString(key, cycleNumber=self.__currentCycle, day0='{:02d}'.format(startDate.tm_mday), month0='{:02d}'.format(startDate.tm_mon), day1='{:02d}'.format(endDate.tm_mday), month1='{:02d}'.format(endDate.tm_mon))))
@@ -92,7 +92,7 @@ class RankedBattlesCalendarPopover(RankedBattlesCalendarPopoverMeta):
         key = RANKED_BATTLES.RANKEDBATTLEVIEW_STATUSBLOCK_CALENDARPOPOVER_CYCLEITEM
         cycles = self.__seasonInfo.getAllCycles()
         for cycle in sorted(cycles.values()):
-            if cycle.status == CYCLE_STATUS.CURRENT:
+            if cycle.status == CycleStatus.CURRENT:
                 formatter = text_styles.main
                 startDate = time_utils.getTimeStructInLocal(cycle.startDate)
                 endDate = time_utils.getTimeStructInLocal(cycle.endDate)

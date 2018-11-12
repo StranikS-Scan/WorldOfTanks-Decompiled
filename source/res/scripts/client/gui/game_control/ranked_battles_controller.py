@@ -6,7 +6,7 @@ from operator import itemgetter
 import BigWorld
 import Event
 import constants
-import ranked_common
+import season_common
 from adisp import async, process
 from constants import ARENA_BONUS_TYPE, EVENT_TYPE
 from gui.Scaleform.genConsts.BLOCKS_TOOLTIP_TYPES import BLOCKS_TOOLTIP_TYPES
@@ -36,8 +36,9 @@ from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
 from gui.shared.utils.scheduled_notifications import Notifiable, SimpleNotifier
 from predefined_hosts import g_preDefinedHosts, HOST_AVAILABILITY
+from season_provider import SeasonProvider
 
-class RankedBattlesController(IRankedBattlesController, Notifiable):
+class RankedBattlesController(IRankedBattlesController, Notifiable, SeasonProvider):
     eventsCache = dependency.descriptor(IEventsCache)
     itemsCache = dependency.descriptor(IItemsCache)
     battleResultsService = dependency.descriptor(IBattleResultsService)
@@ -46,6 +47,7 @@ class RankedBattlesController(IRankedBattlesController, Notifiable):
 
     def __init__(self):
         super(RankedBattlesController, self).__init__()
+        self._setSeasonSettingsProvider(self.__getSettings)
         self.onUpdated = Event.Event()
         self.onPrimeTimeStatusUpdated = Event.Event()
         self.__arenaBattleResultsWasShown = set()
@@ -92,71 +94,8 @@ class RankedBattlesController(IRankedBattlesController, Notifiable):
     def hasAnySeason(self):
         return bool(self.__getSettings().seasons)
 
-    def getCurrentCycleID(self):
-        isCurrent, seasonInfo = ranked_common.getRankedSeason(self.__getSettings().asDict())
-        if isCurrent:
-            _, _, _, cycleID = seasonInfo
-            return cycleID
-        else:
-            return None
-
-    def getSeasonPassed(self):
-        now = time_utils.getServerRegionalTime()
-        settings = self.__getSettings()
-        seasonsPassed = []
-        for seasonID, season in settings.seasons.iteritems():
-            endSeason = season['endSeason']
-            if now > endSeason:
-                seasonsPassed.append((seasonID, endSeason))
-
-        return seasonsPassed
-
-    def getPreviousSeason(self):
-        seasonsPassed = self.getSeasonPassed()
-        if seasonsPassed:
-            seasonID, _ = max(seasonsPassed, key=operator.itemgetter(1))
-            return self.getSeason(seasonID)
-        else:
-            return None
-
-    def getCurrentSeason(self):
-        settings = self.__getSettings()
-        isCurrent, seasonInfo = ranked_common.getRankedSeason(settings.asDict())
-        if isCurrent:
-            _, _, seasonID, _ = seasonInfo
-            currPoints = self.getLadderPoints()
-            return RankedSeason(seasonInfo, settings.seasons.get(seasonID, {}), self.__getRankedDossier(), currPoints)
-        else:
-            return None
-
     def getLadderPoints(self):
         return self.itemsCache.items.ranked.ladderPoints
-
-    def getNextSeason(self):
-        now = time_utils.getServerRegionalTime()
-        settings = self.__getSettings()
-        seasonsComing = []
-        for seasonID, season in settings.seasons.iteritems():
-            startSeason = season['startSeason']
-            if now < startSeason:
-                seasonsComing.append((seasonID, startSeason))
-
-        if seasonsComing:
-            seasonID, _ = min(seasonsComing, key=operator.itemgetter(1))
-            return self.getSeason(seasonID)
-        else:
-            return None
-
-    def getSeason(self, seasonID):
-        seasonData = self.__getSettings().seasons.get(seasonID, {})
-        if seasonData:
-            cycleInfo = (None,
-             None,
-             seasonID,
-             None)
-            return RankedSeason(cycleInfo, seasonData, self.__getRankedDossier())
-        else:
-            return
 
     def getRank(self, rankID, vehicle=None):
         return self.getAllRanksChain(vehicle)[rankID]
@@ -242,7 +181,8 @@ class RankedBattlesController(IRankedBattlesController, Notifiable):
         return
 
     def getLeagueAwards(self):
-        isCurrent, seasonInfo = ranked_common.getRankedSeason(self.__getSettings().asDict())
+        now = time_utils.getServerRegionalTime()
+        isCurrent, seasonInfo = season_common.getSeason(self.__getSettings().asDict(), now)
         result = []
         percentTotal = 0
         if isCurrent:
@@ -420,6 +360,16 @@ class RankedBattlesController(IRankedBattlesController, Notifiable):
         else:
             state = RANK_CHANGE_STATES.NOTHING_CHANGED
         return state
+
+    def getCurrentSeason(self):
+        settings = self.__getSettings()
+        now = time_utils.getServerRegionalTime()
+        isCycleActive, seasonInfo = season_common.getSeason(settings.asDict(), now)
+        if isCycleActive:
+            _, _, seasonID, _ = seasonInfo
+            return self._createSeason(seasonInfo, settings.seasons.get(seasonID, {}))
+        else:
+            return None
 
     def getPrimeTimes(self):
         lobbyContext = dependency.instance(ILobbyContext)
@@ -683,6 +633,9 @@ class RankedBattlesController(IRankedBattlesController, Notifiable):
             self.__fakeWebLeague = {'league': league,
              'position': position}
 
+    def _createSeason(self, cycleInfo, seasonData):
+        return RankedSeason(cycleInfo, seasonData, self._getRankedDossier(), self.getLadderPoints())
+
     def __clear(self):
         lobbyContext = dependency.instance(ILobbyContext)
         lobbyContext.getServerSettings().onServerSettingsChange -= self.__updateRankedSettings
@@ -694,7 +647,8 @@ class RankedBattlesController(IRankedBattlesController, Notifiable):
         lobbyContext = dependency.instance(ILobbyContext)
         generalSettings = lobbyContext.getServerSettings().rankedBattles
         if cycleID is None:
-            _, cycleInfo = ranked_common.getRankedSeason(generalSettings.asDict())
+            now = time_utils.getServerRegionalTime()
+            _, cycleInfo = season_common.getSeason(generalSettings.asDict(), now)
             if cycleInfo:
                 _, _, _, cycleID = cycleInfo
         for season in generalSettings.seasons.values():
@@ -779,7 +733,7 @@ class RankedBattlesController(IRankedBattlesController, Notifiable):
         season = self.getCurrentSeason()
         return None if season is None else first(self.eventsCache.getRankedQuests(lambda q: q.getRank() == rankId and q.isHidden() and q.isProcessedAtCycleEnd() and q.getSeasonID() == season.getSeasonID() and q.getCycleID() == season.getCycleID()).values())
 
-    def __getRankedDossier(self):
+    def _getRankedDossier(self):
         return self.itemsCache.items.getAccountDossier().getDossierDescr()['rankedSeasons']
 
     def __getDossierForCycle(self, cycleID, seasonID=None):
@@ -788,7 +742,7 @@ class RankedBattlesController(IRankedBattlesController, Notifiable):
             season = self.getCurrentSeason()
             if season is not None:
                 seasonID = season.getSeasonID()
-        dossier = self.__getRankedDossier()
+        dossier = self._getRankedDossier()
         if seasonID is not None:
             cycleDossier = dossier.get((seasonID, cycleID))
         return RankedDossier(*(cycleDossier or RankedDossier.defaults()))

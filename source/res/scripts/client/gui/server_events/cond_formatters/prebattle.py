@@ -2,17 +2,15 @@
 # Embedded file name: scripts/client/gui/server_events/cond_formatters/prebattle.py
 from constants import ARENA_BONUS_TYPE
 from gui.Scaleform.locale.QUESTS import QUESTS
-from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.server_events import formatters
 from gui.server_events.cond_formatters import packSimpleTitle, packDescriptionField
-from personal_missions_constants import CONDITION_ICON
 from gui.server_events.cond_formatters.formatters import ConditionFormatter, MissionsBattleConditionsFormatter, SimpleMissionsFormatter
-from gui.server_events.cond_formatters.postbattle import PersonalMissionsConditionsFormatter
 from gui.shared.formatters import icons, text_styles
 from gui.shared.utils.functions import makeTooltip
 from helpers import i18n
 from items.vehicles import CAMOUFLAGE_KINDS
+from personal_missions_constants import CONDITION_ICON
 from shared_utils import findFirst
 from soft_exception import SoftException
 ICON_SIZE = 32
@@ -53,9 +51,8 @@ class _BattleBonusTypeFormatter(ConditionFormatter):
     def _format(self, condition, event):
         result = []
         if not event.isGuiDisabled():
-            isHalloweenEvent = event.getID().startswith('halloween')
             bonusTypes = condition.getValue()
-            labelKey = MENU.LOADING_BATTLETYPES_7 if isHalloweenEvent else QUESTS.MISSIONDETAILS_CONDITIONS_BATTLEBONUSTYPE
+            labelKey = QUESTS.MISSIONDETAILS_CONDITIONS_BATTLEBONUSTYPE
             data = formatters.packMissionBonusTypeElements(bonusTypes)
             iconsList = ''.join([ iconData.icon for iconData in data ])
             if len(bonusTypes) == 1 and findFirst(None, bonusTypes) in (ARENA_BONUS_TYPE.REGULAR, ARENA_BONUS_TYPE.RANKED):
@@ -195,10 +192,3 @@ class _CorrespondedCamouflageFormatter(SimpleMissionsFormatter):
     @classmethod
     def _getTitle(cls, *args, **kwargs):
         return packSimpleTitle(QUESTS.DETAILS_CONDITIONS_INSTALLEDCAMOUFLAGE_TITLE)
-
-
-class PersonalMissionsVehicleConditionsFormatter(PersonalMissionsConditionsFormatter):
-
-    def __init__(self):
-        super(PersonalMissionsVehicleConditionsFormatter, self).__init__({'installedModules': _InstalledModulesGroupFormatter(),
-         'correspondedCamouflage': _CorrespondedCamouflageFormatter()})

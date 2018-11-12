@@ -3444,7 +3444,7 @@
     <userString>	#vehicle_customization:emblem/clan_content	</userString>
     <season>	ALL	</season>
     <historical>	false	</historical>
-    <priceGroup>	emblems notInShop	</priceGroup>
+    <priceGroup>	legacy notInShop	</priceGroup>
     <type>	EMBLEM	</type>
     <decal>
       <id>	605	</id>
@@ -7895,8 +7895,8 @@
     <type>	INSCRIPTION	</type>
     <decal>
       <id>	549	</id>
-      <texture>	gui/maps/vehicles/decals/inscriptions/special/inscription_196.dds	</texture>
-      <userString>	#vehicle_customization:inscription/special/special_196	</userString>
+      <texture>	gui/maps/vehicles/decals/inscriptions/special/inscription_197.dds	</texture>
+      <userString>	#vehicle_customization:inscription/special/special_197	</userString>
       <mirror>	false	</mirror>
     </decal>
   </itemGroup>
@@ -7909,8 +7909,22 @@
     <type>	INSCRIPTION	</type>
     <decal>
       <id>	628	</id>
-      <texture>	gui/maps/vehicles/decals/inscriptions/special/inscription_215.dds	</texture>
-      <userString>	#vehicle_customization:inscription/special/special_215	</userString>
+      <texture>	gui/maps/vehicles/decals/inscriptions/special/inscription_214.dds	</texture>
+      <userString>	#vehicle_customization:inscription/special/special_214	</userString>
+      <mirror>	false	</mirror>
+    </decal>
+  </itemGroup>
+  <itemGroup>
+    <name>	WGFEST	</name>
+    <userString>	#vehicle_customization:inscription/special	</userString>
+    <season>	ALL	</season>
+    <historical>	false	</historical>
+    <priceGroup>	legacy notInShop	</priceGroup>
+    <type>	INSCRIPTION	</type>
+    <decal>
+      <id>	631	</id>
+      <texture>	gui/maps/vehicles/decals/inscriptions/special/inscription_130.dds	</texture>
+      <userString>	#vehicle_customization:inscription/special/special_130	</userString>
       <mirror>	false	</mirror>
     </decal>
   </itemGroup>

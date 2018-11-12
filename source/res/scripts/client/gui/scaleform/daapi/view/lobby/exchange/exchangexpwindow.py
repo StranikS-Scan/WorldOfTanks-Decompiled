@@ -78,7 +78,7 @@ class ExchangeXPWindow(ExchangeXpWindowMeta):
                  'xpStrValue': BigWorld.wg_getIntegralFormat(vehicle.xp),
                  'isSelectCandidate': vehicle.isFullyElite,
                  'vehicleIco': vehicle.iconSmall,
-                 'nationIco': getNationsAssetPath(vehicle, namePrefix=NATION_ICON_PREFIX_131x31)})
+                 'nationIco': getNationsAssetPath(vehicle.nationID, namePrefix=NATION_ICON_PREFIX_131x31)})
             except Exception:
                 continue
 

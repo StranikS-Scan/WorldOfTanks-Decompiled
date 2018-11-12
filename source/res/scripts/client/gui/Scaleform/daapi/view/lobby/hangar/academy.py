@@ -30,7 +30,7 @@ class Academy(LobbySubView, AcademyViewMeta):
         if browser is not None:
             url = yield self.encyclopediaCtrl.buildUrl()
             if url:
-                browser.doNavigate(url)
+                browser.navigate(url)
         else:
             yield lambda callback: callback(True)
         self.encyclopediaCtrl.resetHasNew()

@@ -37,6 +37,7 @@ _MINI_MINIMAP_SIZE = 46
 _ZOOM_MODE_MIN = 1
 _ZOOM_MODE_MAX = 3
 _ZOOM_MODE_STEP = 0.5
+_ZOOM_MULTIPLIER_TEXT = 'x'
 EPIC_MINIMAP_HIT_AREA = 210
 EPIC_1KM_IN_PX = 210
 
@@ -85,7 +86,7 @@ class EpicMinimapComponent(EpicMinimapMeta):
         if mode != self.__mode:
             self.__mode = mode
             self.changeMinimapZoom(self.__mode)
-            self.as_setZoomModeS(self.__mode)
+            self.as_setZoomModeS(self.__mode, self.__zoomText())
 
     def onZoomModeChanged(self, change):
         mode = self.__mode + change * _ZOOM_MODE_STEP
@@ -144,6 +145,9 @@ class EpicMinimapComponent(EpicMinimapMeta):
 
     def _getMinimapTexture(self, arenaVisitor):
         return _IMAGE_PATH_FORMATTER.format(arenaVisitor.type.getMinimapTexture())
+
+    def __zoomText(self):
+        return str(round(self.__mode, 1)) + _ZOOM_MULTIPLIER_TEXT
 
 
 class RecoveringVehiclesPlugin(ArenaVehiclesPlugin):
@@ -228,14 +232,6 @@ class CenteredPersonalEntriesPlugin(RespawningPersonalEntriesPlugin):
         self.__savedEntry = -1
         self.__mode = None
         return
-
-    def start(self):
-        super(CenteredPersonalEntriesPlugin, self).start()
-        self.sessionProvider.addArenaCtrl(self)
-
-    def stop(self):
-        super(CenteredPersonalEntriesPlugin, self).stop()
-        self.sessionProvider.removeArenaCtrl(self)
 
     def initControlMode(self, mode, available):
         super(CenteredPersonalEntriesPlugin, self).initControlMode(mode, available)

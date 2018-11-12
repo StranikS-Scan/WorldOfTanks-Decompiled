@@ -151,7 +151,7 @@ class ClanInvitesWindow(ClanInvitesWindowMeta, ClanListener, ClanEmblemsHelper):
     def _updateClanInfo(self):
         self.as_setClanInfoS({'name': self.clanProfile.getClanFullName(),
          'bgIcon': RES_ICONS.MAPS_ICONS_CLANS_INVITESWINDOW_CC_HEADER_BACK,
-         'creationDate': i18n.makeString(CLANS.CLAN_HEADER_CREATIONDATE, creationDate=BigWorld.wg_getLongDateFormat(self.clanProfile.getJoinedAt()))})
+         'creationDate': i18n.makeString(CLANS.CLAN_HEADER_CREATIONDATE, creationDate=BigWorld.wg_getLongDateFormat(self.clanInfo.getCreatedAt()))})
 
     def _updateHeaderState(self):
         freePlaces = self.clanInfo.getFreePlaces()

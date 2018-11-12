@@ -326,8 +326,8 @@ class _DamageIndicator(DamageIndicatorMeta, IHitIndicator):
         self.component.heightMode = 'PIXEL'
         self.component.widthMode = 'PIXEL'
         self.movie.scaleMode = 'NoScale'
-        self._isBlind = bool(self.settingsCore.getSetting(GRAPHICS.COLOR_BLIND))
-        self._setUpVOBuilderFactoryAndUpdateMethod(_DEFAULT_DAMAGE_INDICATOR_TYPE)
+        self.__isBlind = bool(self.settingsCore.getSetting(GRAPHICS.COLOR_BLIND))
+        self.__setUpVOBuilderFactoryAndUpdateMethod(_DEFAULT_DAMAGE_INDICATOR_TYPE)
         self.settingsCore.interfaceScale.onScaleChanged += self.__setMarkersScale
         ctrl = self.sessionProvider.shared.crosshair
         if ctrl is not None:
@@ -362,14 +362,14 @@ class _DamageIndicator(DamageIndicatorMeta, IHitIndicator):
 
     def invalidateSettings(self):
         getter = self.settingsCore.getSetting
-        self._isBlind = bool(getter(GRAPHICS.COLOR_BLIND))
+        self.__isBlind = bool(getter(GRAPHICS.COLOR_BLIND))
         indicatorType = getter(DAMAGE_INDICATOR.TYPE)
-        self._setUpVOBuilderFactoryAndUpdateMethod(indicatorType)
+        self.__setUpVOBuilderFactoryAndUpdateMethod(indicatorType)
         self.as_updateSettingsS(isStandard=indicatorType == DAMAGE_INDICATOR_TYPE.STANDARD, isWithTankInfo=bool(getter(DAMAGE_INDICATOR.VEHICLE_INFO)), isWithAnimation=bool(getter(DAMAGE_INDICATOR.ANIMATION)), isWithValue=bool(getter(DAMAGE_INDICATOR.DAMAGE_VALUE)))
 
     def showHitDirection(self, idx, hitData, timeLeft):
         self.as_setYawS(idx, hitData.getYaw())
-        markerData = _MarkerData(idx=idx, timeLeft=timeLeft, hitData=hitData, isBlind=self._isBlind)
+        markerData = _MarkerData(idx=idx, timeLeft=timeLeft, hitData=hitData, isBlind=self.__isBlind)
         vo = self.__voBuilderFactory.buildMarkerVO(markerData)
         LOG_DEBUG_DEV('showHitDirection hit={}, vo={}'.format(hitData, vo))
         self.__updateMethod(**vo)
@@ -380,7 +380,7 @@ class _DamageIndicator(DamageIndicatorMeta, IHitIndicator):
     def __onCrosshairPositionChanged(self, posX, posY):
         self.as_setPosition(posX, posY)
 
-    def _setUpVOBuilderFactoryAndUpdateMethod(self, indicatorType):
+    def __setUpVOBuilderFactoryAndUpdateMethod(self, indicatorType):
         if indicatorType == DAMAGE_INDICATOR_TYPE.EXTENDED:
             isIndicatorSizeDynamic = bool(self.settingsCore.getSetting(DAMAGE_INDICATOR.DYNAMIC_INDICATOR))
             self.__voBuilderFactory = _ExtendedMarkerVOBuilderFactory(isIndicatorSizeDynamic)
@@ -565,7 +565,7 @@ class SiegeModeIndicator(SiegeModeIndicatorMeta):
         vStateCtrl = self.sessionProvider.shared.vehicleState
         vTypeDesc = vehicle.typeDescriptor
         vType = vTypeDesc.type
-        if vehicle.isAlive() and vTypeDesc.hasSiegeMode:
+        if vehicle.isAlive() and vTypeDesc.hasSiegeMode and not vTypeDesc.isWheeledVehicle:
             siegeModeParams = vType.siegeModeParams
             self._switchTimeTable.update({_SIEGE_STATE.DISABLED: siegeModeParams[_SIEGE_STATE.SWITCHING_ON],
              _SIEGE_STATE.SWITCHING_ON: siegeModeParams[_SIEGE_STATE.SWITCHING_ON],

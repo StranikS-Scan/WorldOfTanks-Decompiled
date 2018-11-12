@@ -146,8 +146,6 @@ def init(preloadEverything, pricesToCollect=None):
     avatars.init()
     from items import tankmen
     tankmen.init(preloadEverything)
-    from . import qualifiers
-    qualifiers.init()
     return
 
 
@@ -250,3 +248,23 @@ def _readItemTypes():
     tagSection = None
     ResMgr.purge(xmlPath, True)
     return res
+
+
+def decodeEnum(value, enum):
+    result = []
+    splitted = value.split()
+    for item in splitted:
+        try:
+            itemValue = int(item)
+        except:
+            itemValue = getattr(enum, item, None)
+            if not isinstance(itemValue, int):
+                raise SoftException("Invalid item '{0}'".format(item))
+            if itemValue is None or itemValue not in enum.RANGE:
+                raise SoftException("Unsupported item '{0}'".format(item))
+
+        if itemValue in result:
+            raise SoftException('Duplicated item {0} with value {1}'.format(item, itemValue))
+        result.append(itemValue)
+
+    return (reduce(int.__or__, result, 0), tuple(splitted))

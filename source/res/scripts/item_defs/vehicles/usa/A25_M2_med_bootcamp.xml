@@ -24,7 +24,7 @@
   <camouflage>
     <priceFactor>	0.4	</priceFactor>
     <tiling>	1 1 0 0	</tiling>
-    <exclusionMask>	vehicles/american/A25_M2_med/M2_med_hull_01_AM.dds	</exclusionMask>
+    <exclusionMask></exclusionMask>
   </camouflage>
   <hull>
     <variants></variants>
@@ -97,7 +97,7 @@
       </slot>
       <slot>
         <slotType>	inscription	</slotType>
-        <slotId>	2	</slotId>
+        <slotId>	36	</slotId>
         <rayStart>	-1.57083 0.469667 -1.32795	</rayStart>
         <rayEnd>	-0.970838 0.469666 -1.32795	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
@@ -107,7 +107,7 @@
       </slot>
       <slot>
         <slotType>	inscription	</slotType>
-        <slotId>	3	</slotId>
+        <slotId>	37	</slotId>
         <rayStart>	1.57083 0.469667 -1.32795	</rayStart>
         <rayEnd>	0.970838 0.469666 -1.32795	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
@@ -985,7 +985,7 @@
       <customizationSlots>
         <slot>
           <slotType>	player	</slotType>
-          <slotId>	4	</slotId>
+          <slotId>	514	</slotId>
           <rayStart>	-0.0106821 0.696509 0.400766	</rayStart>
           <rayEnd>	-0.010682 0.502183 0.353463	</rayEnd>
           <rayUp>	0.000000 0.000000 -1	</rayUp>
@@ -1013,6 +1013,7 @@
       <engines>
         <Wright_Continental_R-975C2_bootcamp>
           <smplEnginePower>	359.4756	</smplEnginePower>
+          <smplFwMaxSpeed>	43	</smplFwMaxSpeed>
         </Wright_Continental_R-975C2_bootcamp>
       </engines>
       <chassis>

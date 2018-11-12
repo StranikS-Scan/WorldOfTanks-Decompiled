@@ -775,10 +775,11 @@
           <customizationSlots>
             <slot>
               <slotType>	insigniaOnGun	</slotType>
-              <slotId>	3	</slotId>
+              <slotId>	771	</slotId>
               <rayStart>	0.00919999 0.00203466 2.32	</rayStart>
               <rayEnd>	-0.042598 -0.00872579 2.36021	</rayEnd>
-              <rayUp>	0.116 0.116 5	</rayUp>
+              <rayUp>	0.116 0.000000 0.000000	</rayUp>
+              <applyToFabric>	true	</applyToFabric>
               <size>	0.35	</size>
               <hideIfDamaged>	false	</hideIfDamaged>
               <isUVProportional>	true	</isUVProportional>
@@ -808,7 +809,7 @@
       <customizationSlots>
         <slot>
           <slotType>	fixedEmblem	</slotType>
-          <slotId>	2	</slotId>
+          <slotId>	714	</slotId>
           <rayStart>	-0.732268 0.359852 1.22704	</rayStart>
           <rayEnd>	-0.560108 0.283171 1.1601	</rayEnd>
           <rayUp>	0.0433704 0.991699 0.121049	</rayUp>
@@ -841,10 +842,12 @@
       <engines>
         <Nameless_Engine>
           <smplEnginePower>	570	</smplEnginePower>
+          <smplFwMaxSpeed>	50	</smplFwMaxSpeed>
         </Nameless_Engine>
       </engines>
       <chassis>
         <Chassis_J29_Nameless>
+          <axleCount>	5	</axleCount>
           <grounds>
             <ground>
               <medium>

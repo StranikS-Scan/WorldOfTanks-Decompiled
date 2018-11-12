@@ -7,25 +7,9 @@
       <conditions>
         <postBattle>
           <and>
-            <or>
-              <unit>
-                <unitVehicleKills>
-                  <title>
-                    <key>	#personal_missions_details:quest_1_3_14_condition_title_vehicleKills	</key>
-                  </title>
-                  <description>
-                    <key>	#personal_missions_details:quest_1_3_14_condition_description_vehicleKills	</key>
-                  </description>
-                  <greaterOrEqual>	3	</greaterOrEqual>
-                </unitVehicleKills>
-              </unit>
-              <and>
-                <vehicleKills>
-                  <hideInGui></hideInGui>
-                  <greaterOrEqual>	3	</greaterOrEqual>
-                </vehicleKills>
-              </and>
-            </or>
+            <vehicleKills>
+              <greaterOrEqual>	3	</greaterOrEqual>
+            </vehicleKills>
           </and>
         </postBattle>
       </conditions>
@@ -70,44 +54,12 @@
       <conditions>
         <postBattle>
           <and>
-            <or>
-              <unit>
-                <unitVehicleKills>
-                  <title>
-                    <key>	#personal_missions_details:quest_1_3_14_condition_title_vehicleKills	</key>
-                  </title>
-                  <description>
-                    <key>	#personal_missions_details:quest_1_3_14_condition_description_vehicleKills	</key>
-                  </description>
-                  <greaterOrEqual>	3	</greaterOrEqual>
-                </unitVehicleKills>
-              </unit>
-              <and>
-                <vehicleKills>
-                  <hideInGui></hideInGui>
-                  <greaterOrEqual>	3	</greaterOrEqual>
-                </vehicleKills>
-              </and>
-            </or>
-            <or>
-              <unit>
-                <unitVehicleDamage>
-                  <title>
-                    <key>	#personal_missions_details:quest_1_3_14_condition_title_vehicleDamage	</key>
-                  </title>
-                  <description>
-                    <key>	#personal_missions_details:quest_1_3_14_condition_description_vehicleDamage	</key>
-                  </description>
-                  <greaterOrEqual>	1500	</greaterOrEqual>
-                </unitVehicleDamage>
-              </unit>
-              <and>
-                <vehicleDamage>
-                  <hideInGui></hideInGui>
-                  <greaterOrEqual>	1500	</greaterOrEqual>
-                </vehicleDamage>
-              </and>
-            </or>
+            <vehicleKills>
+              <greaterOrEqual>	3	</greaterOrEqual>
+            </vehicleKills>
+            <vehicleDamage>
+              <greaterOrEqual>	1500	</greaterOrEqual>
+            </vehicleDamage>
           </and>
         </postBattle>
       </conditions>
@@ -138,32 +90,12 @@
         </preBattle>
         <postBattle>
           <and>
-            <or>
-              <unit>
-                <unitVehicleKills>
-                  <greaterOrEqual>	3	</greaterOrEqual>
-                </unitVehicleKills>
-              </unit>
-              <and>
-                <vehicleKills>
-                  <hideInGui></hideInGui>
-                  <greaterOrEqual>	3	</greaterOrEqual>
-                </vehicleKills>
-              </and>
-            </or>
-            <or>
-              <unit>
-                <unitVehicleDamage>
-                  <greaterOrEqual>	1500	</greaterOrEqual>
-                </unitVehicleDamage>
-              </unit>
-              <and>
-                <vehicleDamage>
-                  <hideInGui></hideInGui>
-                  <greaterOrEqual>	1500	</greaterOrEqual>
-                </vehicleDamage>
-              </and>
-            </or>
+            <vehicleKills>
+              <greaterOrEqual>	3	</greaterOrEqual>
+            </vehicleKills>
+            <vehicleDamage>
+              <greaterOrEqual>	1500	</greaterOrEqual>
+            </vehicleDamage>
           </and>
         </postBattle>
       </conditions>

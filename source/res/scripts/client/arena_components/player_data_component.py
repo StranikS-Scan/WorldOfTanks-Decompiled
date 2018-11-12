@@ -11,6 +11,7 @@ from constants import ARENA_SYNC_OBJECTS, PLAYER_RANK
 class PlayerDataComponent(ClientArenaComponent):
     playerGroups = property(lambda self: self.__getPlayerGroups())
     playerRank = property(lambda self: self.__getPlayerRank())
+    playerGroupsEnabled = property(lambda self: self.__playerGroupsEnabled)
 
     def __init__(self, componentSystem):
         ClientArenaComponent.__init__(self, componentSystem)
@@ -49,6 +50,13 @@ class PlayerDataComponent(ClientArenaComponent):
                     xpTresholdForRanks.append(rankSettings.threshold)
 
             return xpTresholdForRanks
+
+    def getPlayerGroupForVehicle(self, vId):
+        playerGroups = self.__getPlayerGroups()
+        return playerGroups.get(vId, 1)
+
+    def getPlayerGroupForPlayer(self):
+        return self.getPlayerGroupForVehicle(avatar_getter.getPlayerVehicleID())
 
     def _vehiclePlayerGroupsUpdated(self, args):
         arena = avatar_getter.getArena()

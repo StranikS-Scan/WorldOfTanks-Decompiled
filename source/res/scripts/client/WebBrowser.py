@@ -97,7 +97,6 @@ class WebBrowser(object):
         self.__browserSize = size
         self.__startFocused = isFocused
         self.__browser = None
-        self.__delayedUrls = []
         self.__isNavigationComplete = False
         self.__isFocused = False
         self.__navigationFilters = handlers or set()
@@ -255,12 +254,6 @@ class WebBrowser(object):
         if self.hasBrowser:
             self.__browser.resize(size[0], size[1])
 
-    def __processDelayedNavigation(self):
-        if self.__isNavigationComplete and self.__delayedUrls:
-            self.doNavigate(self.__delayedUrls.pop(0))
-            return True
-        return False
-
     def destroy(self):
         self.__eventMgr.clear()
         self.__eventMgr = None
@@ -301,22 +294,16 @@ class WebBrowser(object):
             self.onNavigate(self.__browser.url)
 
     def navigate(self, url):
-        lastIsSame = self.__delayedUrls and self.__delayedUrls[-1] == url
-        if not lastIsSame:
-            self.__delayedUrls.append(url)
-        self.__processDelayedNavigation()
-
-    def sendMessage(self, message):
-        if self.hasBrowser:
-            self.__browser.sendMessage(message)
-
-    def doNavigate(self, url):
-        _logger.debug('doNavigate %s', url)
+        _logger.debug('navigate %s', url)
         self.__baseUrl = url
         if self.hasBrowser:
             self.__browser.script.newNavigation()
             self.__browser.loadURL(url)
             self.onNavigate(url)
+
+    def sendMessage(self, message):
+        if self.hasBrowser:
+            self.__browser.sendMessage(message)
 
     def navigateBack(self):
         if self.hasBrowser:
@@ -498,9 +485,8 @@ class WebBrowser(object):
         if url == self.__browser.url:
             self.__isNavigationComplete = True
             self.__successfulLoad = isLoaded
-            if not self.__processDelayedNavigation():
-                _logger.debug('onLoadEnd %s - %r - %r', self.__browser.url, isLoaded, httpStatusCode)
-                self.onLoadEnd(self.__browser.url, isLoaded, httpStatusCode)
+            _logger.debug('onLoadEnd %s - %r - %r', self.__browser.url, isLoaded, httpStatusCode)
+            self.onLoadEnd(self.__browser.url, isLoaded, httpStatusCode)
 
     def __onLoadingStateChange(self, isLoading):
         _logger.debug('onLoadingStateChange %r - %r', isLoading, self.__allowAutoLoadingScreenChange)

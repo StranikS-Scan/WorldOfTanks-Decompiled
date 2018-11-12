@@ -13,13 +13,14 @@ from gui.server_events.events_helpers import EventInfoModel
 from gui.server_events.formatters import formatStrDiscount, formatPercentValue, formatMultiplierValue, formatGoldPriceNormalCard, formatCreditPriceNormalCard, DECORATION_SIZES, formatGoldPrice, formatGoldPriceBig, formatCreditPrice, formatCreditPriceBig, formatVehicleLevel, DISCOUNT_TYPE
 from gui.shared.formatters import icons
 from gui.server_events import settings as quest_settings
+from gui.shared.utils import MAX_STEERING_LOCK_ANGLE, WHEELED_SWITCH_ON_TIME, WHEELED_SWITCH_OFF_TIME
 from helpers import i18n, dependency, time_utils
 from skeletons.gui.game_control import IMarathonEventsController
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.shared.gui_items import GUI_ITEM_TYPE_NAMES
-from gui.shared.gui_items.Vehicle import getTypeBigIconPath, VEHICLE_CLASS_NAME
+from gui.shared.gui_items.Vehicle import getTypeBigIconPath, VEHICLE_CLASS_NAME, getTypeSmallIconPath
 from gui.shared.money import MONEY_UNDEFINED, Currency, Money
 from gui.shared.tooltips.common import CURRENCY_SETTINGS, _getCurrencySetting
 from gui.Scaleform.genConsts.SLOT_HIGHLIGHT_TYPES import SLOT_HIGHLIGHT_TYPES
@@ -417,12 +418,8 @@ class VehPriceActionInfo(ActionInfo):
         result = []
         for item in self._sortVehicles():
             veh = item.discountName
-            if veh.isPremium or veh.isElite:
-                iconFunc = RES_ICONS.maps_icons_vehicletypes_elite
-            else:
-                iconFunc = RES_ICONS.maps_icons_vehicletypes
             item = {'icon': _VEHICLE_NATION_ICON_PATH % nations.NAMES[veh.nationID],
-             'additionalIcon': iconFunc(''.join((veh.type, '.png'))),
+             'additionalIcon': getTypeSmallIconPath(veh.type, veh.isPremium or veh.isElite),
              'title': ' '.join((i18n.makeString(TOOLTIPS.level(veh.level)), veh.shortUserName)),
              'discount': formatStrDiscount(item),
              'price': self._getPrice(veh, False)}
@@ -534,7 +531,13 @@ class VehPriceActionInfo(ActionInfo):
         return block
 
     def __getCommonStatsBlock(self, vehicle):
-        _params = {VEHICLE_CLASS_NAME.LIGHT_TANK: ('enginePowerPerTon', 'speedLimits', 'chassisRotationSpeed', 'circularVisionRadius'),
+        _params = {VEHICLE_CLASS_NAME.LIGHT_TANK: ('enginePowerPerTon',
+                                         'speedLimits',
+                                         'chassisRotationSpeed',
+                                         'circularVisionRadius',
+                                         MAX_STEERING_LOCK_ANGLE,
+                                         WHEELED_SWITCH_ON_TIME,
+                                         WHEELED_SWITCH_OFF_TIME),
          VEHICLE_CLASS_NAME.MEDIUM_TANK: ('avgDamagePerMinute', 'enginePowerPerTon', 'speedLimits', 'chassisRotationSpeed'),
          VEHICLE_CLASS_NAME.HEAVY_TANK: ('avgDamage', 'avgPiercingPower', 'hullArmor', 'turretArmor'),
          VEHICLE_CLASS_NAME.SPG: ('avgDamage', 'stunMinDuration', 'stunMaxDuration', 'reloadTimeSecs', 'aimingTime', 'explosionRadius'),

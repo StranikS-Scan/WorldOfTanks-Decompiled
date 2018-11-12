@@ -4,8 +4,9 @@ from items import _xml
 from constants import IS_CLIENT, IS_BOT
 import importlib
 from debug_utils import LOG_DEBUG
+import collections
 
-def readExtras(xmlCtx, section, subsectionName, moduleName):
+def readExtras(xmlCtx, section, subsectionName, moduleName, **kwargs):
     try:
         mod = importlib.import_module(moduleName)
     except ImportError:
@@ -24,9 +25,14 @@ def readExtras(xmlCtx, section, subsectionName, moduleName):
         classObj = getattr(mod, className, None)
         if classObj is None:
             _xml.raiseWrongXml(ctx, '', "class '%s' is not found in '%s'" % (className, mod.__name__))
-        extra = classObj(extraName, len(extras), xmlCtx[1], extraSection)
-        extras.append(extra)
-        extrasDict[extraName] = extra
+        classExtras = classObj(extraName, len(extras), xmlCtx[1], extraSection, **kwargs)
+        if isinstance(classExtras, collections.Iterable):
+            for extra in classExtras:
+                extrasDict[extra.name] = extra
+
+            extras.extend(classExtras)
+        extras.append(classExtras)
+        extrasDict[extraName] = classExtras
 
     if len(extras) > 200:
         _xml.raiseWrongXml(xmlCtx, subsectionName, 'too many extras')

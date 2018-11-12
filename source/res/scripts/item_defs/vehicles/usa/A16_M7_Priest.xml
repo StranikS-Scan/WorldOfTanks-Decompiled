@@ -92,7 +92,7 @@
       </slot>
       <slot>
         <slotType>	player	</slotType>
-        <slotId>	2	</slotId>
+        <slotId>	4	</slotId>
         <rayStart>	1.68382 1.13919 0.673895	</rayStart>
         <rayEnd>	1.48459 1.13919 0.656463	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
@@ -103,7 +103,7 @@
       </slot>
       <slot>
         <slotType>	inscription	</slotType>
-        <slotId>	3	</slotId>
+        <slotId>	36	</slotId>
         <rayStart>	1.44567 0.521603 -1.49774	</rayStart>
         <rayEnd>	1.32567 0.521603 -1.49774	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
@@ -113,7 +113,7 @@
       </slot>
       <slot>
         <slotType>	inscription	</slotType>
-        <slotId>	4	</slotId>
+        <slotId>	37	</slotId>
         <rayStart>	0.546655 0.530323 1.94769	</rayStart>
         <rayEnd>	0.546655 0.3734 1.91645	</rayEnd>
         <rayUp>	0.000000 0.000000 -1	</rayUp>
@@ -133,7 +133,7 @@
       </slot>
       <slot>
         <slotType>	camouflage	</slotType>
-        <slotId>	8	</slotId>
+        <slotId>	3	</slotId>
         <anchorPosition>	0.000000 0.986486 -1.36198	</anchorPosition>
         <anchorDirection>	0.000000 0.586598 -0.809878	</anchorDirection>
       </slot>
@@ -1010,7 +1010,7 @@
       <customizationSlots>
         <slot>
           <slotType>	style	</slotType>
-          <slotId>	10	</slotId>
+          <slotId>	257	</slotId>
           <anchorPosition>	0.000000 2.28591 -0.000000	</anchorPosition>
           <anchorDirection>	0.000000 1 0.000000	</anchorDirection>
         </slot>
@@ -1879,7 +1879,7 @@
       <customizationSlots>
         <slot>
           <slotType>	style	</slotType>
-          <slotId>	7	</slotId>
+          <slotId>	257	</slotId>
           <anchorPosition>	0.000125572 2.28592 0.000001	</anchorPosition>
           <anchorDirection>	0.000000 1 0.000000	</anchorDirection>
         </slot>
@@ -1960,7 +1960,7 @@
           <customizationSlots>
             <slot>
               <slotType>	camouflage	</slotType>
-              <slotId>	12	</slotId>
+              <slotId>	770	</slotId>
               <anchorPosition>	0.251085 0.184676 0.997974	</anchorPosition>
               <anchorDirection>	-0.000000 0.000000 1	</anchorDirection>
               <applyTo>	4096	</applyTo>
@@ -2011,7 +2011,7 @@
           <customizationSlots>
             <slot>
               <slotType>	camouflage	</slotType>
-              <slotId>	6	</slotId>
+              <slotId>	770	</slotId>
               <anchorPosition>	0.254659 0.182367 1.35328	</anchorPosition>
               <anchorDirection>	-0.000000 0.000000 1	</anchorDirection>
               <applyTo>	4096	</applyTo>
@@ -2044,7 +2044,7 @@
       <customizationSlots>
         <slot>
           <slotType>	camouflage	</slotType>
-          <slotId>	9	</slotId>
+          <slotId>	513	</slotId>
           <anchorPosition>	0.000000 0.589895 0.152767	</anchorPosition>
           <anchorDirection>	0.000000 1 0.000000	</anchorDirection>
         </slot>
@@ -2088,12 +2088,15 @@
       <engines>
         <Wright_Continental_R-975C1>
           <smplEnginePower>	422.9124	</smplEnginePower>
+          <smplFwMaxSpeed>	38.6	</smplFwMaxSpeed>
         </Wright_Continental_R-975C1>
         <Wright_Continental_R-975C4>
           <smplEnginePower>	486.3493	</smplEnginePower>
+          <smplFwMaxSpeed>	38.6	</smplFwMaxSpeed>
         </Wright_Continental_R-975C4>
         <Ford_GAA_R>
           <smplEnginePower>	528.6406	</smplEnginePower>
+          <smplFwMaxSpeed>	38.6	</smplFwMaxSpeed>
         </Ford_GAA_R>
       </engines>
       <chassis>

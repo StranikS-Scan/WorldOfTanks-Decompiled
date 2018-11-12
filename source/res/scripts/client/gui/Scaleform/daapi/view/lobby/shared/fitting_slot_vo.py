@@ -26,12 +26,15 @@ class FittingSlotVO(dict):
             ttType = ''
         else:
             ttType = tooltipType or TOOLTIPS_CONSTANTS.PREVIEW_MODULE
+        vehicleModule = self._prepareModule(modulesData, vehicle, slotType, slotId)
+        if slotType == FITTING_TYPES.VEHICLE_CHASSIS:
+            if vehicleModule and vehicleModule.isWheeledChassis():
+                slotType = FITTING_TYPES.VEHICLE_WHEELED_CHASSIS
         self['tooltip'] = ''
         self['name'] = ''
         self['tooltipType'] = ttType
         self['slotType'] = slotType
         self['removable'] = True
-        vehicleModule = self._prepareModule(modulesData, vehicle, slotType, slotId)
         if vehicleModule is None:
             self['id'] = _SlotVOConstants.UNRESOLVED_LIST_INDEX
             self['tooltipType'] = TOOLTIPS_CONSTANTS.COMPLEX

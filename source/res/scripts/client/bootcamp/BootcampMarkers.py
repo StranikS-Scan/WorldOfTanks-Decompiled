@@ -145,13 +145,9 @@ class _AimMarker(_IMarker):
         return
 
     def setVisible(self, isVisible):
-        if self.__marker3D is not None:
-            self.__marker3D.setVisible(isVisible)
-        if self.__marker2D is not None:
-            self.__marker2D.setVisible(isVisible)
-        if self.__dIndicator is not None:
-            self.__dIndicator.setVisible(isVisible)
-        return
+        self.__marker3D.setVisible(isVisible)
+        self.__marker2D.setVisible(isVisible)
+        self.__dIndicator.setVisible(isVisible)
 
 
 class _AreaMarker(_AimMarker):
@@ -165,15 +161,11 @@ class _AreaMarker(_AimMarker):
 
     def attachGUI(self, markers2D, minimap):
         super(_AreaMarker, self).attachGUI(markers2D, minimap)
-        if self.__minimapMarker is not None:
-            self.__minimapMarker.attachGUI(minimap)
-        return
+        self.__minimapMarker.attachGUI(minimap)
 
     def detachGUI(self):
         super(_AreaMarker, self).detachGUI()
-        if self.__minimapMarker is not None:
-            self.__minimapMarker.detachGUI()
-        return
+        self.__minimapMarker.detachGUI()
 
     def clear(self):
         if self.__groundMarker is not None:
@@ -191,11 +183,8 @@ class _AreaMarker(_AimMarker):
 
     def setVisible(self, isVisible):
         super(_AreaMarker, self).setVisible(isVisible)
-        if self.__groundMarker is not None:
-            self.__groundMarker.setVisible(isVisible)
-        if self.__minimapMarker is not None:
-            self.__minimapMarker.setVisible(isVisible)
-        return
+        self.__groundMarker.setVisible(isVisible)
+        self.__minimapMarker.setVisible(isVisible)
 
 
 class _StaticWorldMarker2D(_IMarker):

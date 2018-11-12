@@ -3,7 +3,7 @@
 from collections import defaultdict
 from gui import TANKMEN_ROLES_ORDER_DICT
 from gui.battle_control import avatar_getter
-from gui.battle_control.battle_constants import VEHICLE_DEVICES, VEHICLE_GUI_ITEMS, VEHICLE_COMPLEX_ITEMS, VEHICLE_INDICATOR_TYPE, AUTO_ROTATION_FLAG
+from gui.battle_control.battle_constants import VEHICLE_DEVICES, VEHICLE_GUI_ITEMS, VEHICLE_COMPLEX_ITEMS, VEHICLE_INDICATOR_TYPE, AUTO_ROTATION_FLAG, WHEELED_VEHICLE_DEVICES, WHEELED_VEHICLE_GUI_ITEMS
 _COATED_OPTICS_TAG = 'coatedOptics'
 
 def hasTurretRotator(vDesc):
@@ -16,6 +16,10 @@ def hasTurretRotator(vDesc):
             if vDesc.gun.turretYawLimits is not None and vDesc.hull.fakeTurrets.get('battle', ()):
                 result = False
         return result
+
+
+def isWheeledTech(vDesc):
+    return False if vDesc is None else 'wheeledVehicle' in vDesc.type.tags
 
 
 def getYawLimits(vDesc):
@@ -129,7 +133,7 @@ class VehicleDeviceStatesIterator(object):
         super(VehicleDeviceStatesIterator, self).__init__()
         self._states = defaultdict(lambda : 'normal', states or {})
         self._hasTurret = hasTurretRotator(vDesc)
-        self._devices = list(devices or VEHICLE_DEVICES)
+        self._devices = list(devices or (WHEELED_VEHICLE_DEVICES if isWheeledTech(vDesc) else VEHICLE_DEVICES))
 
     def __iter__(self):
         return self
@@ -152,7 +156,7 @@ class VehicleDeviceStatesIterator(object):
 class VehicleGUIItemStatesIterator(VehicleDeviceStatesIterator):
 
     def __init__(self, states=None, vDesc=None):
-        super(VehicleGUIItemStatesIterator, self).__init__(states, vDesc, VEHICLE_GUI_ITEMS)
+        super(VehicleGUIItemStatesIterator, self).__init__(states, vDesc, WHEELED_VEHICLE_GUI_ITEMS if isWheeledTech(vDesc) else VEHICLE_GUI_ITEMS)
 
     def next(self):
         itemName, deviceState = super(VehicleGUIItemStatesIterator, self).next()

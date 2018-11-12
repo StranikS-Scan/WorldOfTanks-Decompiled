@@ -8,12 +8,11 @@ from gui.shared.formatters import text_styles
 from gui.shared.tooltips import TOOLTIP_TYPE
 from gui.shared.tooltips import formatters
 from gui.shared.tooltips.common import BlocksTooltipData
+from gui.shared.tooltips.battle_ability_tooltip_params import g_battleAbilityTooltipMgr
 from helpers import dependency, i18n, int2roman
 from skeletons.gui.game_control import IEpicBattleMetaGameController
-from gui.Scaleform.daapi.view.lobby.epicBattle.battle_ability_tooltip_params import g_battleAbilityParamsRenderers
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.genConsts.SLOT_HIGHLIGHT_TYPES import SLOT_HIGHLIGHT_TYPES
-from items import vehicles
 _TOOLTIP_MIN_WIDTH = 400
 
 class EpicSkillBaseTooltipData(BlocksTooltipData):
@@ -40,8 +39,9 @@ class EpicSkillBaseTooltipData(BlocksTooltipData):
         txtOffset = 85
         highlightPath = None
         overlayPath = None
-        padding = formatters.packPadding(top=SLOT_HIGHLIGHT_TYPES.EQUIPMENT_PLUS_PADDING_TOP, left=SLOT_HIGHLIGHT_TYPES.EQUIPMENT_PLUS_PADDING_LEFT)
-        block.append(formatters.packItemTitleDescBlockData(title=text_styles.highTitle(title), desc=text_styles.standard(desc), img=RES_ICONS.getEpicBattlesSkillIcon('43x43', icon), imgPadding=formatters.packPadding(left=imgPaddingLeft, top=imgPaddingTop), txtGap=-3, txtOffset=txtOffset, padding=formatters.packPadding(top=0, bottom=0), overlayPath=overlayPath, overlayPadding=padding, highlightPath=highlightPath, highlightPadding=padding))
+        overlayPadding = formatters.packPadding(top=SLOT_HIGHLIGHT_TYPES.TOOLTIP_OVERLAY_PADDING_TOP, left=SLOT_HIGHLIGHT_TYPES.TOOLTIP_OVERLAY_PADDING_LEFT)
+        highlightPadding = formatters.packPadding(top=SLOT_HIGHLIGHT_TYPES.TOOLTIP_HIGHLIGHT_PADDING_TOP, left=SLOT_HIGHLIGHT_TYPES.TOOLTIP_HIGHLIGHT_PADDING_LEFT)
+        block.append(formatters.packItemTitleDescBlockData(title=text_styles.highTitle(title), desc=text_styles.standard(desc), img=RES_ICONS.getEpicBattlesSkillIcon('43x43', icon), imgPadding=formatters.packPadding(left=imgPaddingLeft, top=imgPaddingTop), txtGap=-3, txtOffset=txtOffset, padding=formatters.packPadding(top=0, bottom=0), overlayPath=overlayPath, overlayPadding=overlayPadding, highlightPath=highlightPath, highlightPadding=highlightPadding))
         block.append(formatters.packTextBlockData(text_styles.standard(skillLevel.shortDescr), padding=formatters.packPadding(left=txtOffset, top=0)))
         return
 
@@ -53,16 +53,8 @@ class EpicSkillExtendedTooltip(EpicSkillBaseTooltipData):
         skillInfo = self._epicMetaGameCtrl.getSkillInformation()[skillID]
         currentLvl = self._epicMetaGameCtrl.getSkillLevels().get(skillID, 1)
         specLevel = clamp(1, skillInfo.maxLvl, int(specLevel) if specLevel else currentLvl)
-        eqs = vehicles.g_cache.equipments()
-        levels = skillInfo.levels
-        curLvlEq = eqs[levels[currentLvl].eqID]
-        specLvlEq = eqs[levels[specLevel].eqID]
         bodyBlocks = [formatters.packTextBlockData(text=text_styles.middleTitle('{}{}'.format(i18n.makeString(EPIC_BATTLE.ABILITYINFO_PROPERTIES), i18n.makeString(COMMON.COMMON_COLON))))]
-        for tooltipInfo in eqs[skillInfo.levels[currentLvl].eqID].tooltipInformation:
-            renderer = g_battleAbilityParamsRenderers.get(tooltipInfo.renderer, None)
-            if renderer:
-                renderer(bodyBlocks, curLvlEq, specLvlEq, (eqs[lvl.eqID] for lvl in levels.itervalues()), tooltipInfo.identifier, tooltipInfo.name)
-
+        g_battleAbilityTooltipMgr.createBattleAbilityTooltipRenderers(skillInfo, currentLvl, specLevel, bodyBlocks)
         bodyBlock = formatters.packBuildUpBlockData(bodyBlocks, gap=15)
         headerblocks.append(bodyBlock)
         return headerblocks

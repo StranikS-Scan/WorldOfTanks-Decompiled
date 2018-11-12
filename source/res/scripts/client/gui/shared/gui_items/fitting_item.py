@@ -11,28 +11,52 @@ from gui.shared.gui_items.gui_item import GUIItem, HasIntCD
 from gui.shared.items_parameters import params_helper, formatters
 from gui.shared.money import Money, Currency, MONEY_UNDEFINED
 from gui.shared.utils.functions import getShortDescr, stripColorTagDescrTags
-from helpers import i18n, time_utils
+from skeletons.gui.game_control import ISeasonsController
+from helpers import i18n, time_utils, dependency
 from items import vehicles, getTypeInfoByName
+from rent_common import SeasonRentDuration
 ICONS_MASK = '../maps/icons/%(type)s/%(subtype)s%(unicName)s.png'
-_RentalInfoProvider = namedtuple('RentalInfoProvider', ('rentExpiryTime', 'compensations', 'battlesLeft', 'winsLeft', 'isRented'))
+_RentalInfoProvider = namedtuple('RentalInfoProvider', ('rentExpiryTime', 'compensations', 'battlesLeft', 'winsLeft', 'seasonRent', 'isRented'))
+SeasonRentInfo = namedtuple('SeasonRentInfo', ('seasonType', 'seasonID', 'duration', 'expiryTime'))
 
 class RentalInfoProvider(_RentalInfoProvider):
+    seasonsController = dependency.descriptor(ISeasonsController)
 
     @staticmethod
-    def __new__(cls, additionalData=None, time=0, battles=0, wins=0, isRented=False, *args, **kwargs):
+    def __new__(cls, additionalData=None, time=0, battles=0, wins=0, seasonRent=None, isRented=False, *args, **kwargs):
         additionalData = additionalData or {}
         if 'compensation' in additionalData:
             compensations = Money.makeFromMoneyTuple(additionalData['compensation'])
         else:
             compensations = MONEY_UNDEFINED
-        result = _RentalInfoProvider.__new__(cls, time, compensations, battles, wins, isRented)
+        result = _RentalInfoProvider.__new__(cls, time, compensations, battles, wins, seasonRent or {}, isRented)
         return result
 
+    def getActiveSeasonRent(self):
+        for seasonType, rentType in self.seasonRent.iteritems():
+            rentID, duration = rentType
+            if duration == SeasonRentDuration.ENTIRE_SEASON:
+                if self.seasonsController.isWithinSeasonTime(rentID, seasonType):
+                    seasonByID = self.seasonsController.getSeason(seasonType, rentID)
+                    if seasonByID is not None:
+                        return SeasonRentInfo(seasonType, rentID, duration, seasonByID.getEndDate())
+            if duration == SeasonRentDuration.SEASON_CYCLE:
+                currentSeason = self.seasonsController.getCurrentSeason(seasonType)
+                if currentSeason is not None and currentSeason.getCycleID() == rentID:
+                    return SeasonRentInfo(seasonType, rentID, duration, currentSeason.getCycleEndDate())
+
+        return
+
     def getTimeLeft(self):
-        return float(time_utils.getTimeDeltaFromNow(time_utils.makeLocalServerTime(self.rentExpiryTime))) if self.rentExpiryTime != float('inf') else float('inf')
+        if self.rentExpiryTime != float('inf'):
+            seasonRent = self.getActiveSeasonRent()
+            expiryTime = max(self.rentExpiryTime, seasonRent.expiryTime if seasonRent is not None else 0)
+            return float(time_utils.getTimeDeltaFromNow(time_utils.makeLocalServerTime(expiryTime)))
+        else:
+            return float('inf')
 
     def getExpiryState(self):
-        return self.rentExpiryTime != float('inf') and self.battlesLeft <= 0 and self.winsLeft <= 0 and self.getTimeLeft() <= 0
+        return self.rentExpiryTime != float('inf') and self.battlesLeft <= 0 and self.winsLeft <= 0 and self.getTimeLeft() <= 0 and self.getActiveSeasonRent() is None
 
 
 class FittingItem(GUIItem, HasIntCD):
@@ -47,7 +71,7 @@ class FittingItem(GUIItem, HasIntCD):
         GUIItem.__init__(self, proxy)
         HasIntCD.__init__(self, intCompactDescr)
         self._isBoughtForAltPrice = isBoughtForAltPrice
-        self._rentInfo = RentalInfoProvider()
+        self._rentInfo = RentalInfoProvider(None, None, None, None, None, None)
         self._restoreInfo = None
         self._personalDiscountPrice = None
         self._descriptor = self._getDescriptor()
@@ -162,6 +186,10 @@ class FittingItem(GUIItem, HasIntCD):
         return True
 
     @property
+    def isRentPromotion(self):
+        return False
+
+    @property
     def minRentPrice(self):
         return None
 
@@ -222,7 +250,7 @@ class FittingItem(GUIItem, HasIntCD):
     def getParams(self, vehicle=None):
         return dict(params_helper.get(self, vehicle.descriptor if vehicle is not None else None))
 
-    def getRentPackage(self, days=None):
+    def getRentPackage(self, rentID=None):
         return None
 
     def getGUIEmblemID(self):

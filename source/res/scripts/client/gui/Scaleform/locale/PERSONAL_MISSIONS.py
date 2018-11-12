@@ -89,6 +89,7 @@ class PERSONAL_MISSIONS(object):
     DETAILEDVIEW_TOOLTIPS_HOLDAWARDSHEETBTN_BODY = '#personal_missions:detailedView/tooltips/holdAwardSheetBtn/body'
     DETAILEDVIEW_TOOLTIPS_HOLDAWARDSHEETBTN_DISABLED_HEADER = '#personal_missions:detailedView/tooltips/holdAwardSheetBtn/disabled/header'
     DETAILEDVIEW_TOOLTIPS_HOLDAWARDSHEETBTN_DISABLED_BODY = '#personal_missions:detailedView/tooltips/holdAwardSheetBtn/disabled/body'
+    DETAILEDVIEW_TOOLTIPS_LOCKED = '#personal_missions:detailedView/tooltips/locked'
     STATUSPANEL_STATUS_FREESHEET = '#personal_missions:statusPanel/status/freeSheet'
     STATUSPANEL_STATUS_ALLDONE = '#personal_missions:statusPanel/status/allDone'
     STATUSPANEL_STATUS_ALLEXCELLENTDONE = '#personal_missions:statusPanel/status/allExcellentDone'

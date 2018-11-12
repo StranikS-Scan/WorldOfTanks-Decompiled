@@ -12,10 +12,12 @@ import material_kinds
 import DataLinks
 import Vehicular
 from Event import Event
+from debug_utils import LOG_ERROR
 from CustomEffectManager import EffectSettings
 from helpers.EffectMaterialCalculation import calcEffectMaterialIndex
 from AvatarInputHandler.aih_constants import ShakeReason
 from VehicleStickers import VehicleStickers
+from vehicle_systems.components.terrain_circle_component import TerrainCircleComponent
 from svarog_script.auto_properties import AutoProperty
 from vehicle_systems.components import engine_state
 from vehicle_systems.stricted_loading import makeCallbackWeak, loadingPriority
@@ -30,6 +32,8 @@ from vehicle_systems import camouflages
 from svarog_script.py_component_system import ComponentDescriptor, ComponentSystem
 from vehicle_systems import model_assembler
 from gui.shared.gui_items.customization.outfit import Outfit
+from constants import VEHICLE_SIEGE_STATE
+from VehicleEffects import DamageFromShotDecoder
 _VEHICLE_APPEAR_TIME = 0.2
 _ROOT_NODE_NAME = 'V'
 _GUN_RECOIL_NODE_NAME = 'G'
@@ -75,27 +79,22 @@ class CompoundAppearance(ComponentSystem, CallbackDelayer):
     damageState = property(lambda self: self.__currentDamageState)
     modelsSetParams = property(lambda self: ModelsSetParams(self.__outfit.modelsSet, self.__currentDamageState.modelState))
     frameTimeStamp = 0
-    rightTrackScroll = property(lambda self: self.__rightTrackScroll)
-    leftTrackScroll = property(lambda self: self.__leftTrackScroll)
     splineTracks = property(lambda self: self.__splineTracks)
     activated = property(lambda self: self.__activated)
     isFlying = property(lambda self: self.flyingInfoProvider is not None and self.flyingInfoProvider.isFlying)
     isLeftSideFlying = property(lambda self: self.flyingInfoProvider is not None and self.flyingInfoProvider.isLeftSideFlying)
     isRightSideFlying = property(lambda self: self.flyingInfoProvider is not None and self.flyingInfoProvider.isRightSideFlying)
-
-    @property
-    def rpm(self):
-        return self.detailedEngineState.rpm if self.detailedEngineState is not None else 0.0
-
-    @property
-    def gear(self):
-        return self.detailedEngineState.gearNum if self.detailedEngineState is not None else 0.0
-
     trackScrollController = property(lambda self: self.__trackScrollCtl)
+    wheelsState = property(lambda self: self.__vehicle.wheelsState if self.__vehicle is not None else 0)
+    wheelsSteering = property(lambda self: self.__vehicle.wheelsSteeringSmoothed if self.__vehicle is not None else None)
+    wheelsScroll = property(lambda self: self.__vehicle.wheelsScrollSmoothed if self.__vehicle is not None else None)
+    burnoutLevel = property(lambda self: self.__vehicle.burnoutLevel / 255.0 if self.__vehicle is not None else 0.0)
+    filterRetrievers = property(lambda self: self.__filterRetrievers)
+    allLodCalculators = property(lambda self: self.__allLodCalculators)
     filter = AutoProperty()
     detailedEngineState = ComponentDescriptor()
+    gearbox = ComponentDescriptor()
     engineAudition = ComponentDescriptor()
-    trackCrashAudition = ComponentDescriptor()
     customEffectManager = ComponentDescriptor()
     highlighter = ComponentDescriptor()
     shadowManager = ComponentDescriptor()
@@ -110,7 +109,7 @@ class CompoundAppearance(ComponentSystem, CallbackDelayer):
     frictionAudition = ComponentDescriptor()
     suspension = ComponentDescriptor()
     leveredSuspension = ComponentDescriptor()
-    suspensionController = ComponentDescriptor()
+    hullAimingController = ComponentDescriptor()
     collisions = ComponentDescriptor()
     wheelsAnimator = ComponentDescriptor()
     trackNodesAnimator = ComponentDescriptor()
@@ -123,6 +122,7 @@ class CompoundAppearance(ComponentSystem, CallbackDelayer):
     crashedTrackController = ComponentDescriptor()
     collisionObstaclesCollector = ComponentDescriptor()
     tessellationCollisionSensor = ComponentDescriptor()
+    burnoutProcessor = ComponentDescriptor()
 
     def __init__(self):
         CallbackDelayer.__init__(self)
@@ -144,6 +144,7 @@ class CompoundAppearance(ComponentSystem, CallbackDelayer):
         self.__chassisDecal = VehicleDecal(self)
         self.__splodge = None
         self.__vehicleStickers = None
+        self.__terrainCircle = None
         self.onModelChanged = Event()
         self.__leftTrackScroll = 0.0
         self.__rightTrackScroll = 0.0
@@ -167,6 +168,8 @@ class CompoundAppearance(ComponentSystem, CallbackDelayer):
         self.__inSpeedTreeCollision = False
         self.__isObserver = False
         self.__chassisColisionMatrix = Math.WGAdaptiveMatrixProvider()
+        self.__filterRetrievers = []
+        self.__allLodCalculators = []
         return
 
     def prerequisites(self, typeDescriptor, vID, health, isCrewActive, isTurretDetached, outfitCD):
@@ -197,6 +200,11 @@ class CompoundAppearance(ComponentSystem, CallbackDelayer):
             self.frictionAudition.setVehicleMatrix(vehicle.matrix)
         self.highlighter.setVehicle(vehicle)
         self.__applyVehicleOutfit()
+        fstList = vehicle.wheelsScrollFilters if vehicle.wheelsScrollFilters else []
+        scndList = vehicle.wheelsSteeringFilters if vehicle.wheelsSteeringFilters else []
+        for retriever, floatFilter in zip(self.__filterRetrievers, fstList + scndList):
+            retriever.setupFilter(floatFilter)
+
         return
 
     def __arenaPeriodChanged(self, period, *otherArgs):
@@ -225,7 +233,7 @@ class CompoundAppearance(ComponentSystem, CallbackDelayer):
             self.__filter.isStrafing = self.__vehicle.isStrafing
             self.__filter.vehicleCollisionCallback = player.handleVehicleCollidedVehicle
             if isPlayerVehicle and self.collisions is not None:
-                colliderData = (self.collisions.getColliderID(), (TankPartNames.getIdx(TankPartNames.HULL), TankPartNames.getIdx(TankPartNames.TURRET)))
+                colliderData = (self.collisions.getColliderID(), (TankPartNames.getIdx(TankPartNames.HULL), TankPartNames.getIdx(TankPartNames.TURRET), TankPartNames.getIdx(TankPartNames.GUN)))
                 BigWorld.appendCameraCollider(colliderData)
                 self.__inSpeedTreeCollision = True
                 BigWorld.setSpeedTreeCollisionBody(self.__compoundModel.getBoundsForPart(TankPartIndexes.HULL))
@@ -233,6 +241,7 @@ class CompoundAppearance(ComponentSystem, CallbackDelayer):
             if not self.__isObserver:
                 self.__chassisDecal.attach()
             self.__createAndAttachStickers()
+            self.__createTerrainCircle()
             if self.__currentDamageState.isCurrentModelDamaged:
                 self.__chassisColisionMatrix.target = self.__compoundModel.matrix
                 gunNodeName = 'gun'
@@ -245,8 +254,9 @@ class CompoundAppearance(ComponentSystem, CallbackDelayer):
             if not self.__isObserver:
                 self.__vehicle.filter.enableLagDetection(not self.__currentDamageState.isCurrentModelDamaged)
             self.onModelChanged()
-            if self.lodCalculator is not None:
-                self.lodCalculator.setupPosition(DataLinks.linkMatrixTranslation(self.__compoundModel.matrix))
+            for lodCalculator in self.__allLodCalculators:
+                lodCalculator.setupPosition(DataLinks.linkMatrixTranslation(self.__compoundModel.matrix))
+
             if hasattr(self.filter, 'placingCompensationMatrix') and self.swingingAnimator is not None:
                 self.swingingAnimator.placingCompensationMatrix = self.filter.placingCompensationMatrix
                 self.swingingAnimator.worldMatrix = self.__compoundModel.matrix
@@ -295,6 +305,8 @@ class CompoundAppearance(ComponentSystem, CallbackDelayer):
             self.__filter.reset()
             self.__originalFilter = None
             self.__vehicleStickers.detach()
+            if self.__terrainCircle.isAttached():
+                self.__terrainCircle.detach()
             if stopEffects:
                 self.__stopEffects()
                 self.__boundEffects.stop()
@@ -322,8 +334,8 @@ class CompoundAppearance(ComponentSystem, CallbackDelayer):
                 self.engineAudition.attachToModel(self.__compoundModel)
             if self.peripheralsController is not None:
                 self.peripheralsController.attachToVehicle(self.__vehicle)
-            if self.suspensionController is not None:
-                self.suspensionController.setData(self.__vehicle.filter, self.__vehicle.typeDescriptor)
+            if self.hullAimingController is not None:
+                self.hullAimingController.setData(self.__vehicle.filter, self.__vehicle.typeDescriptor)
             if self.detailedEngineState is not None:
                 self.detailedEngineState.onGearUpCbk = self.__onEngineStateGearUp
             self.delayCallback(_PERIODIC_TIME_DIRT[0][0], self.__onPeriodicTimerDirt)
@@ -371,18 +383,38 @@ class CompoundAppearance(ComponentSystem, CallbackDelayer):
             self.detailedEngineState.onStateChanged = None
         return
 
+    def __processPostmortemComponents(self):
+        if self.wheelsAnimator is not None and self.wheelsAnimator.activePostmortem:
+            self.wheelsAnimator.reattachCompound(self.compoundModel)
+        if self.suspension is not None and self.suspension.activePostmortem:
+            self.suspension.reattachCompound(self.compoundModel)
+        if self.leveredSuspension is not None and self.leveredSuspension.activePostmortem:
+            self.leveredSuspension.reattachCompound(self.compoundModel)
+        if self.vehicleTraces is not None and self.vehicleTraces.activePostmortem:
+            self.vehicleTraces.setCompound(self.compoundModel)
+        if self.collisionObstaclesCollector is not None and self.collisionObstaclesCollector.activePostmortem:
+            self.collisionObstaclesCollector.reattachCompound(self.compoundModel)
+        if self.tessellationCollisionSensor is not None and self.tessellationCollisionSensor.activePostmortem:
+            self.tessellationCollisionSensor.reattachCompound(self.compoundModel)
+        return
+
     def __prepareSystemsForDamagedVehicle(self, vehicle, isTurretDetached):
         if self.flyingInfoProvider is not None:
             self.flyingInfoProvider.setData(vehicle.filter, None)
-        self.vehicleTraces = None
+        if self.vehicleTraces is not None and not self.vehicleTraces.activePostmortem:
+            self.vehicleTraces = None
         self.suspensionSound = None
         self.swingingAnimator = None
+        self.burnoutProcessor = None
         self.gunRecoil = None
         self.gunLinkedNodesAnimator = None
-        self.suspension = None
-        self.leveredSuspension = None
+        if self.suspension is not None and not self.suspension.activePostmortem:
+            self.suspension = None
+        if self.leveredSuspension is not None and not self.leveredSuspension.activePostmortem:
+            self.leveredSuspension = None
         self.trackNodesAnimator = None
-        self.wheelsAnimator = None
+        if self.wheelsAnimator is not None and not self.wheelsAnimator.activePostmortem:
+            self.wheelsAnimator = None
         fashions = VehiclePartsTuple(BigWorld.WGVehicleFashion(True), None, None, None)
         self.__setFashions(fashions, isTurretDetached)
         model_assembler.setupTracksFashion(self.__typeDesc, self.__fashion)
@@ -390,7 +422,6 @@ class CompoundAppearance(ComponentSystem, CallbackDelayer):
         self.customEffectManager = None
         self.__destroyEngineAudition()
         self.detailedEngineState = None
-        self.trackCrashAudition = None
         self.frictionAudition = None
         self.terrainMatKindSensor = None
         self.__splineTracks = None
@@ -399,8 +430,10 @@ class CompoundAppearance(ComponentSystem, CallbackDelayer):
         self.peripheralsController = None
         self.dirtComponent = None
         self.tracks = None
-        self.collisionObstaclesCollector = None
-        self.tessellationCollisionSensor = None
+        if self.collisionObstaclesCollector is not None and not self.collisionObstaclesCollector.activePostmortem:
+            self.collisionObstaclesCollector = None
+        if self.tessellationCollisionSensor is not None and not self.tessellationCollisionSensor.activePostmortem:
+            self.tessellationCollisionSensor = None
         self.siegeEffects = None
         self.__destroySystems()
         return
@@ -416,6 +449,9 @@ class CompoundAppearance(ComponentSystem, CallbackDelayer):
         if self.__boundEffects is not None:
             self.__boundEffects.destroy()
         self.__vehicleStickers = None
+        if self.__terrainCircle is not None:
+            self.__terrainCircle.destroy()
+            self.__terrainCircle = None
         self.onModelChanged = None
         self.__chassisDecal.destroy()
         self.__chassisDecal = None
@@ -449,6 +485,21 @@ class CompoundAppearance(ComponentSystem, CallbackDelayer):
 
     def showStickers(self, show):
         self.__vehicleStickers.show = show
+
+    def showTerrainCircle(self, radius=None, terrainCircleSettings=None):
+        if (radius is None) != (terrainCircleSettings is None):
+            LOG_ERROR('showTerrainCircle: radius or terrainCircleSetting is not set. You need to set both or none of them.')
+            return
+        else:
+            if radius is not None:
+                self.__terrainCircle.configure(radius, terrainCircleSettings)
+            if not self.__terrainCircle.isAttached():
+                self.__attachTerrainCircle()
+            self.__terrainCircle.setVisible()
+            return
+
+    def hideTerrainCircle(self):
+        self.__terrainCircle.setVisible(False)
 
     def updateTurretVisibility(self):
         self.__requestModelsRefresh()
@@ -525,7 +576,7 @@ class CompoundAppearance(ComponentSystem, CallbackDelayer):
         self.__vehicleStickers.delDamageSticker(code)
 
     def addDamageSticker(self, code, componentIdx, stickerID, segStart, segEnd):
-        self.__vehicleStickers.addDamageSticker(code, componentIdx, stickerID, segStart, segEnd)
+        self.__vehicleStickers.addDamageSticker(code, componentIdx, stickerID, segStart, segEnd, self.collisions)
 
     def receiveShotImpulse(self, direction, impulse):
         if BattleReplay.isPlaying() and BattleReplay.g_replayCtrl.isTimeWarpInProgress:
@@ -553,16 +604,27 @@ class CompoundAppearance(ComponentSystem, CallbackDelayer):
         else:
             if self.crashedTracksController is not None:
                 self.crashedTracksController.addTrack(isLeft, self.isLeftSideFlying if isLeft else self.isRightSideFlying)
-            if not self.__vehicle.isEnteringWorld and self.trackCrashAudition:
-                self.trackCrashAudition.playCrashSound(isLeft)
+            self.onChassisDestroySound(isLeft, True)
             return
 
     def delCrashedTrack(self, isLeft):
         if self.crashedTracksController is not None:
             self.crashedTracksController.delTrack(isLeft)
-        if not self.__vehicle.isEnteringWorld and self.trackCrashAudition and self.__vehicle.isPlayerVehicle:
-            self.trackCrashAudition.playCrashSound(isLeft, True)
+        self.onChassisDestroySound(isLeft, False)
         return
+
+    def onChassisDestroySound(self, isLeft, destroy, wheelsIdx=-1):
+        if not self.__vehicle.isEnteringWorld and self.engineAudition:
+            if wheelsIdx == -1:
+                if isLeft:
+                    position = Math.Matrix(self.compoundModel.node(TankNodeNames.TRACK_LEFT_MID)).translation
+                else:
+                    position = Math.Matrix(self.compoundModel.node(TankNodeNames.TRACK_RIGHT_MID)).translation
+                materialType = 0
+            else:
+                position = self.wheelsAnimator.getWheelWorldTransform(wheelsIdx).translation
+                materialType = 0 if self.wheelsAnimator.isWheelDeflatable(wheelsIdx) else 1
+            self.engineAudition.onChassisDestroy(position, destroy, materialType)
 
     def __prepareOutfit(self, outfitCD):
         if self.__outfit:
@@ -577,7 +639,7 @@ class CompoundAppearance(ComponentSystem, CallbackDelayer):
         camouflages.updateFashions(self)
 
     def getBounds(self, partIdx):
-        return self.collisions.getBoundingBox(partIdx) if self.collisions is not None else (Math.Vector3(0.0, 0.0, 0.0), Math.Vector3(0.0, 0.0, 0.0), 0)
+        return self.collisions.getBoundingBox(DamageFromShotDecoder.convertComponentIndex(partIdx)) if self.collisions is not None else (Math.Vector3(0.0, 0.0, 0.0), Math.Vector3(0.0, 0.0, 0.0), 0)
 
     def __requestModelsRefresh(self):
         modelsSetParams = self.modelsSetParams
@@ -599,6 +661,7 @@ class CompoundAppearance(ComponentSystem, CallbackDelayer):
             self.deactivate(False)
             self.shadowManager.reattachCompoundModel(vehicle, self.__compoundModel, newCompoundModel)
             self.__compoundModel = newCompoundModel
+            self.__processPostmortemComponents()
             self.__isTurretDetached = vehicle.isTurretDetached
             self.__prepareSystemsForDamagedVehicle(vehicle, self.__isTurretDetached)
             if isRightSideFlying:
@@ -823,6 +886,16 @@ class CompoundAppearance(ComponentSystem, CallbackDelayer):
         self.__createStickers()
         self.__attachStickers(stickersAlpha, isCurrentModelDamaged)
 
+    def __createTerrainCircle(self):
+        if self.__terrainCircle is not None:
+            return
+        else:
+            self.__terrainCircle = TerrainCircleComponent()
+            return
+
+    def __attachTerrainCircle(self):
+        self.__terrainCircle.attach(self.__vehicle.id)
+
     def __attachSplodge(self, splodge):
         node = self.__compoundModel.node(TankPartNames.HULL)
         if splodge:
@@ -879,12 +952,19 @@ class CompoundAppearance(ComponentSystem, CallbackDelayer):
     def onSiegeStateChanged(self, newState):
         if self.engineAudition is not None:
             self.engineAudition.onSiegeStateChanged(newState)
-        if self.suspensionController is not None:
-            self.suspensionController.onSiegeStateChanged(newState)
+        if self.hullAimingController is not None:
+            self.hullAimingController.onSiegeStateChanged(newState)
         if self.suspensionSound is not None:
             self.__suspensionSound.vehicleState = newState
         if self.siegeEffects is not None:
             self.siegeEffects.onSiegeStateChanged(newState)
+        enabled = newState == VEHICLE_SIEGE_STATE.ENABLED or newState == VEHICLE_SIEGE_STATE.SWITCHING_ON
+        if self.suspension is not None:
+            self.suspension.setLiftMode(enabled)
+        if self.leveredSuspension is not None:
+            self.leveredSuspension.setLiftMode(enabled)
+        if self.vehicleTraces is not None:
+            self.vehicleTraces.setLiftMode(enabled)
         return
 
     def __onCameraChanged(self, cameraName, currentVehicleId=None):
@@ -907,7 +987,7 @@ class CompoundAppearance(ComponentSystem, CallbackDelayer):
     def addCameraCollider(self):
         collider = self.collisions
         if collider is not None:
-            colliderData = (collider.getColliderID(), (TankPartNames.getIdx(TankPartNames.HULL), TankPartNames.getIdx(TankPartNames.TURRET)))
+            colliderData = (collider.getColliderID(), (TankPartNames.getIdx(TankPartNames.HULL), TankPartNames.getIdx(TankPartNames.TURRET), TankPartNames.getIdx(TankPartNames.GUN)))
             BigWorld.appendCameraCollider(colliderData)
         return
 
@@ -916,3 +996,36 @@ class CompoundAppearance(ComponentSystem, CallbackDelayer):
         if collider is not None:
             BigWorld.removeCameraCollider(collider.getColliderID())
         return
+
+    def onEngineDamageRisk(self, risk):
+        if self.engineAudition is not None:
+            self.engineAudition.onEngineDamageRisk(risk)
+        return
+
+    def transmissionScroll(self):
+        wheelsScroll = self.wheelsScroll
+        if wheelsScroll is not None:
+            worldMatrix = Math.Matrix(self.compoundModel.matrix)
+            zAxis = worldMatrix.applyToAxis(2)
+            vehicleSpeed = zAxis.dot(self.filter.velocity)
+            scrolls = 0
+            wheelCount = len(wheelsScroll)
+            skippedWheelsCount = 0
+            for wheelIndex in xrange(0, wheelCount):
+                flying = self.wheelsAnimator.wheelIsFlying(wheelIndex)
+                if not flying:
+                    scrolls += wheelsScroll[wheelIndex] - vehicleSpeed
+                skippedWheelsCount += 1
+
+            return scrolls / max(len(wheelsScroll) - skippedWheelsCount, 1)
+        else:
+            return max(self.__rightTrackScroll, self.__leftTrackScroll)
+
+    def getWheelsSteeringMax(self):
+        if self.wheelsSteering is not None and len(self.wheelsSteering) >= 2:
+            wheelSteeringMax = self.wheelsSteering[0]
+            if math.fabs(self.wheelsSteering[1]) > math.fabs(wheelSteeringMax):
+                wheelSteeringMax = self.wheelsSteering[1]
+            return -wheelSteeringMax
+        else:
+            return 0

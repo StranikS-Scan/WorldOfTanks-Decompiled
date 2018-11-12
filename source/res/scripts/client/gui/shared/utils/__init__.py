@@ -33,6 +33,10 @@ CLIP_VEHICLES_PROP_NAME = 'clipVehicles'
 UNICHARGED_VEHICLES_PROP_NAME = 'uniChargedVehicles'
 VEHICLES_PROP_NAME = 'vehicles'
 CLIP_VEHICLES_CD_PROP_NAME = 'clipVehiclesCD'
+MAX_STEERING_LOCK_ANGLE = 'maxSteeringLockAngle'
+WHEELED_SWITCH_ON_TIME = 'wheeledSwitchOnTime'
+WHEELED_SWITCH_OFF_TIME = 'wheeledSwitchOffTime'
+WHEELED_SWITCH_TIME = 'wheeledSwitchTime'
 GUN_RELOADING_TYPE = 'gunReloadingType'
 GUN_CAN_BE_CLIP = 1
 GUN_CLIP = 2
@@ -261,16 +265,6 @@ def makeSearchableString(inputString):
         return inputString.decode('utf-8').lower()
     except ValueError:
         LOG_ERROR('Given string cannot be decoded from UTF-8', inputString)
-
-
-class QUALIFIER_TYPE(object):
-    ALL = 'all'
-    RADIOMAN = 'radioman'
-    COMMANDER = 'commander'
-    DRIVER = 'driver'
-    GUNNER = 'gunner'
-    LOADER = 'loader'
-    CAMOUFLAGE = 'camouflage'
 
 
 def isPopupsWindowsOpenDisabled():

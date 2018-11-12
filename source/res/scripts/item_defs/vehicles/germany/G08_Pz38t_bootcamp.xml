@@ -22,7 +22,7 @@
   <camouflage>
     <priceFactor>	0.4	</priceFactor>
     <tiling>	1 1 0 0	</tiling>
-    <exclusionMask>	vehicles/german/G08_Pz38t/Pz38t_chassis_01_AM.dds	</exclusionMask>
+    <exclusionMask></exclusionMask>
   </camouflage>
   <hull>
     <armor>
@@ -87,7 +87,7 @@
       </slot>
       <slot>
         <slotType>	inscription	</slotType>
-        <slotId>	2	</slotId>
+        <slotId>	36	</slotId>
         <rayStart>	-0.610133 0.636923 -0.970468	</rayStart>
         <rayEnd>	-0.48513 0.256959 -0.970554	</rayEnd>
         <rayUp>	0.949835 0.312263 -0.0174523	</rayUp>
@@ -928,7 +928,7 @@
       <customizationSlots>
         <slot>
           <slotType>	player	</slotType>
-          <slotId>	3	</slotId>
+          <slotId>	514	</slotId>
           <rayStart>	-0.830619 0.325189 -0.0771469	</rayStart>
           <rayEnd>	-0.436061 0.262997 -0.0557902	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
@@ -938,7 +938,7 @@
         </slot>
         <slot>
           <slotType>	player	</slotType>
-          <slotId>	4	</slotId>
+          <slotId>	515	</slotId>
           <rayStart>	0.830619 0.325189 -0.0771469	</rayStart>
           <rayEnd>	0.436061 0.262997 -0.0557902	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
@@ -950,7 +950,7 @@
       </customizationSlots>
       <camouflage>
         <tiling>	0.76 0.43 0.000000 0.000000	</tiling>
-        <exclusionMask>	vehicles/german/G08_Pz38t/Pz38t_chassis_01_AM.dds	</exclusionMask>
+        <exclusionMask></exclusionMask>
       </camouflage>
     </LT-40_turm_bootcamp>
   </turrets0>
@@ -968,6 +968,7 @@
       <engines>
         <Praga_TNPS_bootcamp>
           <smplEnginePower>	126.8737	</smplEnginePower>
+          <smplFwMaxSpeed>	42	</smplFwMaxSpeed>
         </Praga_TNPS_bootcamp>
       </engines>
       <chassis>

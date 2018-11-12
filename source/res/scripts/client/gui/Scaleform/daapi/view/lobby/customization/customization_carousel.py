@@ -243,4 +243,6 @@ class CustomizationCarouselDataProvider(SortableDAAPIDataProvider):
             self._customizationItems.append(item.intCD)
             self._itemSizeData.append(item.isWide())
 
+        c11nContext = self.service.getCtx()
+        c11nContext.setCarouselItems(self.collection)
         return

@@ -87,7 +87,7 @@
       </slot>
       <slot>
         <slotType>	inscription	</slotType>
-        <slotId>	2	</slotId>
+        <slotId>	36	</slotId>
         <rayStart>	-1.73471 0.504984 -0.180665	</rayStart>
         <rayEnd>	-1.53471 0.504917 -0.180693	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
@@ -97,7 +97,7 @@
       </slot>
       <slot>
         <slotType>	inscription	</slotType>
-        <slotId>	3	</slotId>
+        <slotId>	37	</slotId>
         <rayStart>	1.73471 0.504984 -0.180665	</rayStart>
         <rayEnd>	1.53471 0.504917 -0.180693	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
@@ -865,10 +865,11 @@
           <customizationSlots>
             <slot>
               <slotType>	insigniaOnGun	</slotType>
-              <slotId>	6	</slotId>
+              <slotId>	771	</slotId>
               <rayStart>	-0.000056 0.246871 5.79	</rayStart>
               <rayEnd>	-0.00628333 0.485546 5.72571	</rayEnd>
-              <rayUp>	0.103 0.092 4	</rayUp>
+              <rayUp>	0.103 0.000000 0.000000	</rayUp>
+              <applyToFabric>	true	</applyToFabric>
               <size>	0.47	</size>
               <hideIfDamaged>	false	</hideIfDamaged>
               <isUVProportional>	true	</isUVProportional>
@@ -901,7 +902,7 @@
       <customizationSlots>
         <slot>
           <slotType>	player	</slotType>
-          <slotId>	4	</slotId>
+          <slotId>	514	</slotId>
           <rayStart>	-1.24143 0.352097 -0.049547	</rayStart>
           <rayEnd>	-1.20143 0.352096 -0.0495469	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
@@ -911,13 +912,13 @@
         </slot>
         <slot>
           <slotType>	player	</slotType>
-          <slotId>	5	</slotId>
+          <slotId>	515	</slotId>
           <rayStart>	1.24218 0.350598 -0.0473717	</rayStart>
           <rayEnd>	1.20218 0.350596 -0.0473717	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
+          <isMirrored>	true	</isMirrored>
           <size>	0.26	</size>
           <hideIfDamaged>	true	</hideIfDamaged>
-          <isMirrored>	true	</isMirrored>
           <isUVProportional>	true	</isUVProportional>
         </slot>
       </customizationSlots>
@@ -946,6 +947,7 @@
       <engines>
         <Maybach_HL_210_TRM_P30_A>
           <smplEnginePower>	850	</smplEnginePower>
+          <smplFwMaxSpeed>	60	</smplFwMaxSpeed>
         </Maybach_HL_210_TRM_P30_A>
       </engines>
       <chassis>

@@ -51,6 +51,13 @@ class EpicRespawnsController(RespawnsController):
         self.__onPlayerGroupsChanged(None)
         return
 
+    def updateRespawnInfo(self, respawnInfo):
+        super(EpicRespawnsController, self).updateRespawnInfo(respawnInfo)
+        playerDataComp = getattr(self.sessionProvider.arenaVisitor.getComponentSystem(), 'playerDataComponent', None)
+        if playerDataComp is not None:
+            self.__onFrontlineCenterUpdated(playerDataComp.getFrontlineCenters())
+        return
+
     @staticmethod
     def requestLaneForRespawn(laneID):
         BigWorld.player().base.respawnController_requestRespawnGroupChange(laneID)

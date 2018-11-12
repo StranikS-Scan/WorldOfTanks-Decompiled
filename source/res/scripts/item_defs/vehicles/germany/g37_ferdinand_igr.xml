@@ -88,7 +88,7 @@
     <customizationSlots>
       <slot>
         <slotType>	player	</slotType>
-        <slotId>	1	</slotId>
+        <slotId>	4	</slotId>
         <rayStart>	1.29487 1.32751 -2.06647	</rayStart>
         <rayEnd>	1.13669 1.24162 -2.06618	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
@@ -99,7 +99,7 @@
       </slot>
       <slot>
         <slotType>	player	</slotType>
-        <slotId>	2	</slotId>
+        <slotId>	5	</slotId>
         <rayStart>	-1.36069 1.3548 -2.05143	</rayStart>
         <rayEnd>	-1.01137 1.15992 -2.05141	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
@@ -109,7 +109,7 @@
       </slot>
       <slot>
         <slotType>	clan	</slotType>
-        <slotId>	3	</slotId>
+        <slotId>	1	</slotId>
         <rayStart>	-0.673612 0.581527 2.61925	</rayStart>
         <rayEnd>	-0.673612 0.498581 2.22796	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
@@ -119,7 +119,7 @@
       </slot>
       <slot>
         <slotType>	inscription	</slotType>
-        <slotId>	4	</slotId>
+        <slotId>	36	</slotId>
         <rayStart>	1.36585 1.34441 -0.981524	</rayStart>
         <rayEnd>	1.0159 1.15065 -0.980927	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
@@ -129,7 +129,7 @@
       </slot>
       <slot>
         <slotType>	inscription	</slotType>
-        <slotId>	5	</slotId>
+        <slotId>	37	</slotId>
         <rayStart>	-1.36585 1.34441 -0.981524	</rayStart>
         <rayEnd>	-1.0159 1.15065 -0.980927	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
@@ -995,7 +995,7 @@
           <customizationSlots>
             <slot>
               <slotType>	insigniaOnGun	</slotType>
-              <slotId>	6	</slotId>
+              <slotId>	771	</slotId>
               <rayStart>	0.000000 -0.0358441 4.65264	</rayStart>
               <rayEnd>	-0.0811165 -0.157317 4.65054	</rayEnd>
               <rayUp>	0.11 0.107 4	</rayUp>
@@ -1044,6 +1044,7 @@
       <engines>
         <Porsche_Deutz_Typ180_2_IGR>
           <smplEnginePower>	888.1161	</smplEnginePower>
+          <smplFwMaxSpeed>	30	</smplFwMaxSpeed>
         </Porsche_Deutz_Typ180_2_IGR>
       </engines>
       <chassis>

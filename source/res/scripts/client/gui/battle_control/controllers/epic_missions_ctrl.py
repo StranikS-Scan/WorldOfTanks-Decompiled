@@ -97,7 +97,7 @@ class EpicMissionsController(IViewComponentsController):
         self.__contestedEndTime = [0, 0, 0]
         self.__lastTimeHQDamaged = defaultdict(lambda : 0)
         self.__retreatMissionResults = {}
-        self.__activeMessages = [0] * max(EPIC_NOTIFICATION.ALL())
+        self.__activeMessages = [0] * (max(EPIC_NOTIFICATION.ALL()) + 1)
         self.__eManager = Event.EventManager()
         self.onPlayerMissionUpdated = Event.Event(self.__eManager)
         self.onPlayerMissionReset = Event.Event(self.__eManager)
@@ -487,15 +487,18 @@ class EpicMissionsController(IViewComponentsController):
             if sectorComp is None:
                 LOG_ERROR('Expected SectorComponent not present!')
                 return
+            epicPlayerDataComp = getattr(componentSystem, 'playerDataComponent', None)
+            if epicPlayerDataComp is None:
+                LOG_ERROR('Expected EpicPlayerDataComponent not present!')
+                return
             sectorBase = sectorBaseComp.getSectorForSectorBase(baseId)
             baseLane = sectorBase.playerGroup
             baseSectorId = sectorBase.sectorID
             baseSector = sectorComp.getSectorById(baseSectorId)
             onPlayerLane = baseLane == self.__currentLane
-            settings = avatar_getter.getArena().arenaType.epicSectorSettings
-            seconds = settings.addGameTimePerCapture[baseSector.IDInPlayerGroup - 1]
+            seconds = epicPlayerDataComp.getGameTimeToAddPerCapture(baseSector.IDInPlayerGroup)
             if sectorBaseComp.getNumCapturedBases() == len(sectorBaseComp.sectorBases):
-                seconds += settings.addGameTimeAllCaptured
+                seconds += epicPlayerDataComp.getGameTimeToAddWhenAllCaptured()
             minutes = int(seconds / 60)
             seconds -= minutes * 60
             self.__sendIngameMessage(self.__makeMessageData(GAME_MESSAGES_CONSTS.BASE_CAPTURED_POSITIVE if self.__isAttacker() else GAME_MESSAGES_CONSTS.BASE_CAPTURED, {'baseID': baseId,

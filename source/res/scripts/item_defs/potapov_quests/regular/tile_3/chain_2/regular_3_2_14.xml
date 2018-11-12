@@ -7,27 +7,10 @@
       <conditions>
         <postBattle>
           <and>
-            <or>
-              <unit>
-                <unitVehicleKills>
-                  <title>
-                    <key>	#personal_missions_details:quest_common_condition_title_squad_vehicleKills	</key>
-                  </title>
-                  <description>
-                    <key>	#personal_missions_details:quest_3_2_14_condition_description_vehicleKills	</key>
-                  </description>
-                  <classesDiversity>	3	</classesDiversity>
-                  <greaterOrEqual>	5	</greaterOrEqual>
-                </unitVehicleKills>
-              </unit>
-              <and>
-                <vehicleKills>
-                  <hideInGui></hideInGui>
-                  <classesDiversity>	3	</classesDiversity>
-                  <greaterOrEqual>	5	</greaterOrEqual>
-                </vehicleKills>
-              </and>
-            </or>
+            <vehicleKills>
+              <classesDiversity>	3	</classesDiversity>
+              <greaterOrEqual>	3	</greaterOrEqual>
+            </vehicleKills>
           </and>
         </postBattle>
       </conditions>
@@ -74,27 +57,10 @@
       <conditions>
         <postBattle>
           <and>
-            <or>
-              <unit>
-                <unitVehicleKills>
-                  <title>
-                    <key>	#personal_missions_details:quest_common_condition_title_squad_vehicleKills	</key>
-                  </title>
-                  <description>
-                    <key>	#personal_missions_details:quest_3_2_14_condition_description_vehicleKills	</key>
-                  </description>
-                  <classesDiversity>	3	</classesDiversity>
-                  <greaterOrEqual>	5	</greaterOrEqual>
-                </unitVehicleKills>
-              </unit>
-              <and>
-                <vehicleKills>
-                  <hideInGui></hideInGui>
-                  <classesDiversity>	3	</classesDiversity>
-                  <greaterOrEqual>	5	</greaterOrEqual>
-                </vehicleKills>
-              </and>
-            </or>
+            <vehicleKills>
+              <classesDiversity>	3	</classesDiversity>
+              <greaterOrEqual>	3	</greaterOrEqual>
+            </vehicleKills>
             <isAlive></isAlive>
           </and>
         </postBattle>
@@ -126,21 +92,11 @@
         </preBattle>
         <postBattle>
           <and>
-            <or>
-              <unit>
-                <unitVehicleKills>
-                  <classesDiversity>	3	</classesDiversity>
-                  <greaterOrEqual>	5	</greaterOrEqual>
-                </unitVehicleKills>
-              </unit>
-              <and>
-                <vehicleKills>
-                  <hideInGui></hideInGui>
-                  <classesDiversity>	3	</classesDiversity>
-                  <greaterOrEqual>	5	</greaterOrEqual>
-                </vehicleKills>
-              </and>
-            </or>
+            <vehicleKills>
+              <hideInGui></hideInGui>
+              <classesDiversity>	3	</classesDiversity>
+              <greaterOrEqual>	3	</greaterOrEqual>
+            </vehicleKills>
             <isAlive></isAlive>
           </and>
         </postBattle>

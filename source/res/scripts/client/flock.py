@@ -6,7 +6,6 @@ from AvatarInputHandler import mathUtils
 import BigWorld
 import Math
 import ResMgr
-import BattleReplay
 import SoundGroups
 from debug_utils import LOG_CURRENT_EXCEPTION, LOG_ERROR
 from Math import Vector3
@@ -191,10 +190,10 @@ class Flock(BigWorld.Entity, FlockLike):
         return
 
     def prerequisites(self):
-        return self._getModelsToLoad()
+        return [] if BigWorld.isForwardPipeline() else self._getModelsToLoad()
 
     def onEnterWorld(self, prereqs):
-        if BattleReplay.g_replayCtrl.isPlaying or BigWorld.isForwardPipeline():
+        if BigWorld.isForwardPipeline():
             return
         self._loadModels(prereqs, self.spaceID)
         if self.models:
@@ -216,6 +215,7 @@ class Flock(BigWorld.Entity, FlockLike):
         self.middlePosition = Math.Vector3(self.position)
         newPosition = Math.Vector3(self.position)
         newPosition.y = (self.minHeight + self.maxHeight) / 2.0
+        self.teleport(newPosition, Math.Vector3(self.yaw, self.pitch, self.roll))
         self.__makeDecision()
 
     def onLeaveWorld(self):
@@ -257,9 +257,19 @@ class Flock(BigWorld.Entity, FlockLike):
             if heightFraction >= Flock.CIRCLE_FLIGHT_ABOVE and random.random() <= Flock.CIRCLE_FLIGHT_PROBABILITY:
                 return
             self.filter.speed = self.speedAtBottom + (self.speedAtTop - self.speedAtBottom) * heightFraction
+            randY = self.position.y + random.uniform(-flightZoneHeight * Flock.HEIGHT_DISPERSION_CORRIDOR, flightZoneHeight * Flock.HEIGHT_DISPERSION_CORRIDOR)
+            if randY < self.minHeight:
+                randY = self.minHeight
+            elif randY > self.maxHeight:
+                randY = self.maxHeight
+        randRadius = random.uniform(self.deadZoneRadius, self.radius)
+        randAngle = random.uniform(0.0, 2.0 * math.pi)
+        newPosition = Math.Vector3(self.middlePosition.x + randRadius * math.cos(randAngle), randY, self.middlePosition.z + randRadius * math.sin(randAngle))
+        self.teleport(newPosition, Math.Vector3(self.yaw, self.pitch, self.roll))
 
     def __doAroundCenterFly(self):
-        pass
+        randY = random.uniform(self.minHeight, self.maxHeight)
+        self.teleport(Math.Vector3(self.middlePosition.x, randY, self.middlePosition.z), Math.Vector3(self.yaw, self.pitch, self.roll))
 
     def __makeDecision(self):
         self.__decisionCallbackId = BigWorld.callback(self.decisionTime, self.__makeDecision)

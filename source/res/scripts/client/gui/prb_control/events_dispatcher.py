@@ -132,7 +132,7 @@ class EventDispatcher(object):
         self.__fireShowEvent(RANKEDBATTLES_ALIASES.RANKED_BATTLES_WELCOME_VIEW_ALIAS)
 
     def loadEpicWelcome(self):
-        self.__fireShowEvent(EPICBATTLES_ALIASES.EPIC_BATTLES_INFO_ALIAS)
+        self.__fireShowEvent(EPICBATTLES_ALIASES.EPIC_BATTLES_WELCOME_BACK_ALIAS)
 
     def loadRankedUnreachable(self):
         self.__fireShowEvent(RANKEDBATTLES_ALIASES.RANKED_BATTLES_UNREACHABLE_VIEW_ALIAS)

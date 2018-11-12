@@ -17,7 +17,7 @@ class CONTAINER_NAME(object):
     PERSONAL = 'personal'
     FLAGS = 'flags'
     ZONES = 'zones'
-    PROTECTION_ZONE = 'landing_zone'
+    PROTECTION_ZONE = 'landingZone'
     HQS = 'hqs'
 
 

@@ -139,29 +139,6 @@ def getTillTimeString(timeValue, keyNamespace, isRoundUp=False):
     return i18n.makeString(('%s/%s' % (keyNamespace, fmtKey)), **fmtValues)
 
 
-def getTimeString(timeValue, fmtKey, additionalKeys=None):
-    localtime = time.localtime(timeValue)
-    fmtValues = {'year': localtime.tm_year,
-     'month': localtime.tm_mon,
-     'day': localtime.tm_mday,
-     'hour': localtime.tm_hour,
-     'min': localtime.tm_min,
-     'sec': localtime.tm_sec}
-    if additionalKeys is not None:
-        fmtValues.update(additionalKeys)
-    return i18n.makeString(fmtKey, **fmtValues)
-
-
-def getMonth(timeValue):
-    gmtime = time.gmtime(timeValue)
-    return gmtime.tm_mon
-
-
-def getDay(timeValue):
-    gmtime = time.gmtime(timeValue)
-    return gmtime.tm_mday
-
-
 def getCurrentTimestamp():
     return time.time()
 

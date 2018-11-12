@@ -8,27 +8,10 @@
         <postBattle>
           <and>
             <win></win>
-            <or>
-              <unit>
-                <results>
-                  <title>
-                    <key>	#personal_missions_details:quest_common_condition_title_squad_damage	</key>
-                  </title>
-                  <description>
-                    <key>	#personal_missions_details:quest_4_4_14_condition_description_percentFromTotalTeamDamage	</key>
-                  </description>
-                  <key>	percentFromTotalTeamDamage	</key>
-                  <greaterOrEqual>	35	</greaterOrEqual>
-                </results>
-              </unit>
-              <and>
-                <results>
-                  <hideInGui></hideInGui>
-                  <key>	percentFromTotalTeamDamage	</key>
-                  <greaterOrEqual>	35	</greaterOrEqual>
-                </results>
-              </and>
-            </or>
+            <results>
+              <key>	percentFromTotalTeamDamage	</key>
+              <greaterOrEqual>	25	</greaterOrEqual>
+            </results>
           </and>
         </postBattle>
       </conditions>
@@ -78,27 +61,10 @@
         <postBattle>
           <and>
             <win></win>
-            <or>
-              <unit>
-                <results>
-                  <title>
-                    <key>	#personal_missions_details:quest_common_condition_title_squad_damage	</key>
-                  </title>
-                  <description>
-                    <key>	#personal_missions_details:quest_4_4_14_condition_description_percentFromTotalTeamDamage	</key>
-                  </description>
-                  <key>	percentFromTotalTeamDamage	</key>
-                  <greaterOrEqual>	35	</greaterOrEqual>
-                </results>
-              </unit>
-              <and>
-                <results>
-                  <hideInGui></hideInGui>
-                  <key>	percentFromTotalTeamDamage	</key>
-                  <greaterOrEqual>	35	</greaterOrEqual>
-                </results>
-              </and>
-            </or>
+            <results>
+              <key>	percentFromTotalTeamDamage	</key>
+              <greaterOrEqual>	25	</greaterOrEqual>
+            </results>
             <isAlive></isAlive>
           </and>
         </postBattle>
@@ -131,21 +97,10 @@
         <postBattle>
           <and>
             <win></win>
-            <or>
-              <unit>
-                <results>
-                  <key>	percentFromTotalTeamDamage	</key>
-                  <greaterOrEqual>	35	</greaterOrEqual>
-                </results>
-              </unit>
-              <and>
-                <results>
-                  <hideInGui></hideInGui>
-                  <key>	percentFromTotalTeamDamage	</key>
-                  <greaterOrEqual>	35	</greaterOrEqual>
-                </results>
-              </and>
-            </or>
+            <results>
+              <key>	percentFromTotalTeamDamage	</key>
+              <greaterOrEqual>	25	</greaterOrEqual>
+            </results>
             <isAlive></isAlive>
           </and>
         </postBattle>

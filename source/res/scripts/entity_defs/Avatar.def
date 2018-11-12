@@ -12,7 +12,6 @@
     <Interface>	RecoveryMechanic_Avatar	</Interface>
     <Interface>	DestructibleEntity_Avatar	</Interface>
     <Interface>	RespawnController_Avatar	</Interface>
-    <Interface>	ZombieSpawnPointsController_Avatar	</Interface>
     <Interface>	AvatarEpic	</Interface>
   </Implements>
   <Volatile>
@@ -365,9 +364,6 @@
       <Arg>	ARRAY	  <of>	BATTLE_EVENT	</of>
       </Arg>
     </onBattleEvents>
-    <onEventPointsEvent>
-      <Arg>	PYTHON	</Arg>
-    </onEventPointsEvent>
     <battleEventsSummary>
       <Arg>	BATTLE_EVENTS_SUMMARY	</Arg>
     </battleEventsSummary>
@@ -445,6 +441,7 @@
     <autoAim>
       <Exposed>	OWN_CLIENT	</Exposed>
       <Arg>	OBJECT_ID	</Arg>
+      <Arg>	BOOL	</Arg>
     </autoAim>
     <moveTo>
       <Exposed>	OWN_CLIENT	</Exposed>

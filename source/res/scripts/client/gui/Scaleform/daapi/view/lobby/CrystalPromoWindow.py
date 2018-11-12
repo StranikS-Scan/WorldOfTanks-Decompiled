@@ -35,8 +35,7 @@ class CrystalsPromoWindow(CrystalsPromoWindowMeta):
 
     def onOpenShop(self):
         if isIngameShopEnabled():
-            url = getBonsUrl()
-            showWebShop(url)
+            showWebShop(getBonsUrl())
         else:
             showOldShop(ctx={'tabId': STORE_CONSTANTS.SHOP,
              'component': STORE_CONSTANTS.BATTLE_BOOSTER})

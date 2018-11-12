@@ -277,3 +277,13 @@ class BadgesSelector(Processor):
     def _request(self, callback):
         LOG_DEBUG('Make server request to select badges', self.__badges)
         BigWorld.player().badges.selectBadges(self.__badges, lambda resID, code: self._response(code, callback))
+
+
+class EpicPrestigeTrigger(Processor):
+
+    def _errorHandler(self, code, errStr='', ctx=None):
+        return makeI18nError('epicBattles/prestigeTrigger/error')
+
+    def _request(self, callback):
+        LOG_DEBUG('Make server request to trigger prestige')
+        BigWorld.player().epicMetaGame.triggerEpicMetaGamePrestige(lambda code, errStr: self._response(code, callback, errStr=errStr))

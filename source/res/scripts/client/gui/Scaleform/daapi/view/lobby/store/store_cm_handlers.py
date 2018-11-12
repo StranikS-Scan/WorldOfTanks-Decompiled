@@ -22,7 +22,7 @@ class VehicleContextMenuHandler(CommonContextMenuHandler):
         self.comparisonBasket.addVehicle(self.vehCD)
 
     def _manageStartOptions(self, options, vehicle):
-        options.append(self._makeItem(VEHICLE.INFO, MENU.contextmenu(VEHICLE.INFO), {'enabled': vehicle.isContextMenuEnabled(VEHICLE.INFO)}))
+        options.append(self._makeItem(VEHICLE.INFO, MENU.contextmenu(VEHICLE.INFO)))
         super(VehicleContextMenuHandler, self)._manageStartOptions(options, vehicle)
         if self.comparisonBasket.isEnabled():
             options.append(self._makeItem(VEHICLE.COMPARE, MENU.contextmenu(VEHICLE.COMPARE), {'enabled': self.comparisonBasket.isReadyToAdd(self.itemsCache.items.getItemByCD(self.vehCD))}))

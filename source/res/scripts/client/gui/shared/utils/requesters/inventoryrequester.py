@@ -5,7 +5,7 @@ import BigWorld
 from adisp import async
 from constants import CustomizationInvData
 from items import vehicles, tankmen, getTypeOfCompactDescr, parseIntCompactDescr
-from items.components.c11n_constants import SeasonType, CustomizationType
+from items.components.c11n_constants import SeasonType, CustomizationType, StyleFlags
 from debug_utils import LOG_DEBUG
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.gui_items.customization.outfit import Outfit
@@ -56,7 +56,7 @@ class InventoryRequester(AbstractSyncDataRequester, IInventoryRequester):
                             self.__c11nItemsAppliedCounts[itemCD][vehicleIntCD] = count
 
                         styleId = outfit.id
-                        if styleId != 0:
+                        if styleId != 0 and outfitData.flags & StyleFlags.INSTALLED:
                             styleIntCD = vehicles.makeIntCompactDescrByID('customizationItem', CustomizationType.STYLE, styleId)
                             self.__c11nItemsAppliedCounts[styleIntCD][vehicleIntCD] = 1
 

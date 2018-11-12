@@ -7,25 +7,9 @@
       <conditions>
         <postBattle>
           <and>
-            <or>
-              <unit>
-                <unitVehicleDamage>
-                  <title>
-                    <key>	#personal_missions_details:quest_2_3_13_condition_title_vehicleDamage	</key>
-                  </title>
-                  <description>
-                    <key>	#personal_missions_details:quest_2_3_13_condition_description_vehicleDamage	</key>
-                  </description>
-                  <greaterOrEqual>	4000	</greaterOrEqual>
-                </unitVehicleDamage>
-              </unit>
-              <and>
-                <vehicleDamage>
-                  <hideInGui></hideInGui>
-                  <greaterOrEqual>	4000	</greaterOrEqual>
-                </vehicleDamage>
-              </and>
-            </or>
+            <vehicleDamage>
+              <greaterOrEqual>	2200	</greaterOrEqual>
+            </vehicleDamage>
           </and>
         </postBattle>
       </conditions>
@@ -72,29 +56,10 @@
       <conditions>
         <postBattle>
           <and>
-            <or>
-              <unit>
-                <unitVehicleDamage>
-                  <title>
-                    <key>	#personal_missions_details:quest_2_3_13_condition_title_vehicleDamage	</key>
-                  </title>
-                  <description>
-                    <key>	#personal_missions_details:quest_2_3_13_condition_description_vehicleDamage	</key>
-                  </description>
-                  <greaterOrEqual>	4000	</greaterOrEqual>
-                </unitVehicleDamage>
-              </unit>
-              <and>
-                <vehicleDamage>
-                  <hideInGui></hideInGui>
-                  <greaterOrEqual>	4000	</greaterOrEqual>
-                </vehicleDamage>
-              </and>
-            </or>
+            <vehicleDamage>
+              <greaterOrEqual>	2200	</greaterOrEqual>
+            </vehicleDamage>
             <results>
-              <description>
-                <key>	#personal_missions_details:quest_2_3_13_condition_description_top_xp	</key>
-              </description>
               <key>	xp	</key>
               <max>	5	</max>
             </results>
@@ -128,19 +93,10 @@
         </preBattle>
         <postBattle>
           <and>
-            <or>
-              <unit>
-                <unitVehicleDamage>
-                  <greaterOrEqual>	4000	</greaterOrEqual>
-                </unitVehicleDamage>
-              </unit>
-              <and>
-                <vehicleDamage>
-                  <hideInGui></hideInGui>
-                  <greaterOrEqual>	4000	</greaterOrEqual>
-                </vehicleDamage>
-              </and>
-            </or>
+            <vehicleDamage>
+              <hideInGui></hideInGui>
+              <greaterOrEqual>	2200	</greaterOrEqual>
+            </vehicleDamage>
             <results>
               <key>	xp	</key>
               <max>	5	</max>

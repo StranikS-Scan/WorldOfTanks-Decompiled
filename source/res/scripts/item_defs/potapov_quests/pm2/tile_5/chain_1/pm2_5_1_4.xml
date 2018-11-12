@@ -71,6 +71,7 @@ quest_progress = globals().get('quest_progress')
 filter = globals().get('BattleResults')
 
 PROGRESS_ID_MAIN = 'blockedHits'  # take from personal_missions_config
+ADD_PROGRESS_ID = 'alive'
 PROGRESS_SERIES = 'aliveSeries'  # take from personal_missions_config
 
 def onInit(eventType, eventData, quest, processor):
@@ -85,12 +86,10 @@ def onFinishBattle(eventType, eventData, quest, processor):
     brfilter = filter.BattleResultsFilter(eventData)
     mainCondition = sum(len(shots) for shots in brfilter.filterDamageFrom(hitBlocked=True).itervalues())
     addCondition = brfilter.alive()
-    mod = 2 if addCondition else 1
-    mainProgressCounter = mainCondition * mod
-    addProgressCounter = int(addCondition)
-
-    questProgress.increaseUntilComplete(PROGRESS_ID_MAIN, mainProgressCounter)
-    questProgress.increaseUntilComplete(PROGRESS_SERIES, int(addProgressCounter))
+    if addCondition:
+        questProgress.setCompleted(ADD_PROGRESS_ID)
+        questProgress.increaseUntilComplete(PROGRESS_SERIES, 1)
+    questProgress.increaseUntilComplete(PROGRESS_ID_MAIN, mainCondition)
 
     eventData['results'].update(processor.checkComplete(questProgress, quest.progressID, additionalProgressID=PROGRESS_SERIES))
 

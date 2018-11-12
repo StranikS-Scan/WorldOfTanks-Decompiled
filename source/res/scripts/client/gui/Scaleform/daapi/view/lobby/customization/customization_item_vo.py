@@ -19,16 +19,17 @@ def buildCustomizationItemDataVO(item, count, plainView=False, showDetailItems=T
         extraNames = (text_styles.bonusLocalText(item.userName), text_styles.highTitle(item.userName))
     else:
         extraNames = None
+    imageCached = item.itemTypeID is not GUI_ITEM_TYPE.PROJECTION_DECAL
     rentalInfoText = ''
     if item.isRentable and count <= 0:
         rentalInfoText = text_styles.main(_ms(VEHICLE_CUSTOMIZATION.CAROUSEL_RENTALBATTLES, battlesNum=item.rentCount))
-    return CustomizationCarouselRendererVO(item.intCD, item.itemTypeID, item.isWide(), item.icon, hasBonus, locked, buyPrice, count, item.isRentable, showDetailItems, isNonHistoric, isSpecial, isDarked, isAlreadyUsed, showUnsupportedAlert, extraNames=extraNames, showRareIcon=item.isRare(), isEquipped=isCurrentlyApplied, rentalInfoText=rentalInfoText).asDict()
+    return CustomizationCarouselRendererVO(item.intCD, item.itemTypeID, item.isWide(), item.icon, hasBonus, locked, buyPrice, count, item.isRentable, showDetailItems, isNonHistoric, isSpecial, isDarked, isAlreadyUsed, showUnsupportedAlert, extraNames=extraNames, showRareIcon=item.isRare(), isEquipped=isCurrentlyApplied, rentalInfoText=rentalInfoText, imageCached=imageCached).asDict()
 
 
 class CustomizationCarouselRendererVO(object):
-    __slots__ = ('intCD', 'typeId', 'isWide', 'icon', 'hasBonus', 'locked', 'buyPrice', 'quantity', 'isRental', 'showDetailItems', 'isNonHistoric', 'isSpecial', 'isDarked', 'isAlreadyUsed', 'showAlert', 'buyOperationAllowed', 'extraNames', 'showRareIcon', 'isEquipped', 'rentalInfoText')
+    __slots__ = ('intCD', 'typeId', 'isWide', 'icon', 'hasBonus', 'locked', 'buyPrice', 'quantity', 'isRental', 'showDetailItems', 'isNonHistoric', 'isSpecial', 'isDarked', 'isAlreadyUsed', 'showAlert', 'buyOperationAllowed', 'extraNames', 'showRareIcon', 'isEquipped', 'rentalInfoText', 'imageCached')
 
-    def __init__(self, intCD, typeId, isWide, icon, hasBonus, locked, buyPrice, quantity=None, isRental=False, showDetailItems=True, isNonHistoric=False, isSpecial=False, isDarked=False, isAlreadyUsed=False, showAlert=False, buyOperationAllowed=True, extraNames=None, showRareIcon=False, isEquipped=False, rentalInfoText=''):
+    def __init__(self, intCD, typeId, isWide, icon, hasBonus, locked, buyPrice, quantity=None, isRental=False, showDetailItems=True, isNonHistoric=False, isSpecial=False, isDarked=False, isAlreadyUsed=False, showAlert=False, buyOperationAllowed=True, extraNames=None, showRareIcon=False, isEquipped=False, rentalInfoText='', imageCached=True):
         self.intCD = intCD
         self.typeId = typeId
         self.isWide = isWide
@@ -49,6 +50,7 @@ class CustomizationCarouselRendererVO(object):
         self.showRareIcon = showRareIcon
         self.isEquipped = isEquipped
         self.rentalInfoText = rentalInfoText
+        self.imageCached = imageCached
 
     def asDict(self):
         ret = {'intCD': self.intCD,
@@ -67,7 +69,8 @@ class CustomizationCarouselRendererVO(object):
          'buyOperationAllowed': self.buyOperationAllowed,
          'showRareIcon': self.showRareIcon,
          'isEquipped': self.isEquipped,
-         'rentalInfoText': self.rentalInfoText}
+         'rentalInfoText': self.rentalInfoText,
+         'imageCached': self.imageCached}
         if self.extraNames is not None:
             ret.update(styleName=self.extraNames[0], styleNameSmall=self.extraNames[1])
         if self.quantity:

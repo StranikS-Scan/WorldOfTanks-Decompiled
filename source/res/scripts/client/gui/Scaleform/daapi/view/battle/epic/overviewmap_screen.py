@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/epic/overviewmap_screen.py
+from collections import namedtuple
 import Keys
 import BigWorld
 from debug_utils import LOG_ERROR
@@ -11,6 +12,7 @@ from skeletons.gui.battle_session import IBattleSessionProvider
 from gui.shared import EVENT_BUS_SCOPE, events
 from gui.Scaleform.locale.EPIC_BATTLE import EPIC_BATTLE
 from helpers import i18n
+from gui.Scaleform.locale.READABLE_KEY_NAMES import READABLE_KEY_NAMES
 _MISSION_SECTOR_ID_MAPPING = {1: {0: 4,
      1: 4,
      2: 1},
@@ -20,6 +22,7 @@ _MISSION_SECTOR_ID_MAPPING = {1: {0: 4,
  3: {0: 6,
      1: 6,
      2: 3}}
+EpicOverviewMapScreenVO = namedtuple('EpicOverviewMapScreenVO', ('key1Text', 'key2Text', 'key3Text', 'key4Text', 'key5Text', 'key6Text'))
 
 class OverviewMapScreen(EpicOverviewMapScreenMeta):
     sessionProvider = dependency.descriptor(IBattleSessionProvider)
@@ -36,6 +39,7 @@ class OverviewMapScreen(EpicOverviewMapScreenMeta):
         else:
             LOG_ERROR('Expected SectorBaseComponent not present!')
         self.__updateLaneButtons()
+        self.__setKeyBindings()
         return
 
     def _dispose(self):
@@ -51,6 +55,10 @@ class OverviewMapScreen(EpicOverviewMapScreenMeta):
         key = event.ctx['key']
         if isDown:
             self.__onGlobalMsgRecieved(key)
+
+    def __setKeyBindings(self):
+        data = EpicOverviewMapScreenVO(key1Text=READABLE_KEY_NAMES.KEY_F4, key2Text=READABLE_KEY_NAMES.KEY_F5, key3Text=READABLE_KEY_NAMES.KEY_F6, key4Text=READABLE_KEY_NAMES.KEY_F7, key5Text=READABLE_KEY_NAMES.KEY_F8, key6Text=READABLE_KEY_NAMES.KEY_F9)
+        self.as_setKeyBindingsS(data._asdict())
 
     def __getCurrentZoneNamePerLane(self, lane):
         if lane > 0:

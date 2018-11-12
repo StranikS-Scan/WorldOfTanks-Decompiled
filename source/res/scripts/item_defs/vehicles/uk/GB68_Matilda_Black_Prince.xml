@@ -97,7 +97,7 @@
       </slot>
       <slot>
         <slotType>	inscription	</slotType>
-        <slotId>	2	</slotId>
+        <slotId>	36	</slotId>
         <rayStart>	-1.20097 0.400725 0.342832	</rayStart>
         <rayEnd>	-1.16519 0.38284 0.342832	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
@@ -107,7 +107,7 @@
       </slot>
       <slot>
         <slotType>	camouflage	</slotType>
-        <slotId>	8	</slotId>
+        <slotId>	3	</slotId>
         <anchorPosition>	0.000000 0.479412 -1.83811	</anchorPosition>
         <anchorDirection>	0.000000 0.252375 -0.96763	</anchorDirection>
       </slot>
@@ -772,7 +772,7 @@
       <customizationSlots>
         <slot>
           <slotType>	style	</slotType>
-          <slotId>	7	</slotId>
+          <slotId>	257	</slotId>
           <anchorPosition>	0.000030 2.30672 0.615829	</anchorPosition>
           <anchorDirection>	-0.000000 1 0.000000	</anchorDirection>
         </slot>
@@ -846,7 +846,7 @@
           <customizationSlots>
             <slot>
               <slotType>	insigniaOnGun	</slotType>
-              <slotId>	6	</slotId>
+              <slotId>	771	</slotId>
               <rayStart>	0.0654892 0.0138331 0.983104	</rayStart>
               <rayEnd>	0.0806722 -0.0588348 0.983104	</rayEnd>
               <rayUp>	0.047 0.047 5	</rayUp>
@@ -856,7 +856,7 @@
             </slot>
             <slot>
               <slotType>	camouflage	</slotType>
-              <slotId>	11	</slotId>
+              <slotId>	770	</slotId>
               <anchorPosition>	0.0658547 0.00691652 0.782257	</anchorPosition>
               <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
               <applyTo>	4096	</applyTo>
@@ -889,7 +889,7 @@
       <customizationSlots>
         <slot>
           <slotType>	player	</slotType>
-          <slotId>	3	</slotId>
+          <slotId>	514	</slotId>
           <rayStart>	-0.95408 0.358964 0.616035	</rayStart>
           <rayEnd>	-0.563957 0.358959 0.527697	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
@@ -899,7 +899,7 @@
         </slot>
         <slot>
           <slotType>	inscription	</slotType>
-          <slotId>	4	</slotId>
+          <slotId>	546	</slotId>
           <rayStart>	1.0602 0.379848 0.125479	</rayStart>
           <rayEnd>	0.670021 0.379846 0.0375345	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
@@ -909,7 +909,7 @@
         </slot>
         <slot>
           <slotType>	player	</slotType>
-          <slotId>	5	</slotId>
+          <slotId>	515	</slotId>
           <rayStart>	0.95408 0.358964 0.616035	</rayStart>
           <rayEnd>	0.563957 0.358959 0.527697	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
@@ -920,7 +920,7 @@
         </slot>
         <slot>
           <slotType>	camouflage	</slotType>
-          <slotId>	9	</slotId>
+          <slotId>	513	</slotId>
           <anchorPosition>	0.000000 0.747166 0.000000	</anchorPosition>
           <anchorDirection>	0.000000 1 0.000000	</anchorDirection>
         </slot>
@@ -944,6 +944,7 @@
       <engines>
         <Leyland_V6>
           <smplEnginePower>	200.8834	</smplEnginePower>
+          <smplFwMaxSpeed>	22	</smplFwMaxSpeed>
         </Leyland_V6>
       </engines>
       <chassis>

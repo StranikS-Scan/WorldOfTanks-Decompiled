@@ -66,7 +66,7 @@ class EpicBattleRespawn(EpicRespawnViewMeta, IEpicRespawnView):
         self.__lastRespawnPositions.clear()
         return
 
-    def py_onRespawnBtnClick(self):
+    def onRespawnBtnClick(self):
         LOG_DEBUG('py_onRespawnBtnClick')
         ctrl = self.sessionProvider.dynamic.respawn
         if ctrl is not None:
@@ -77,13 +77,13 @@ class EpicBattleRespawn(EpicRespawnViewMeta, IEpicRespawnView):
             self.__playCountDownSound(False)
         return
 
-    def py_onLaneSelected(self, laneID):
+    def onLaneSelected(self, laneID):
         ctrl = self.sessionProvider.dynamic.respawn
         if ctrl is not None:
             ctrl.requestLaneForRespawn(laneID)
         return
 
-    def py_onDeploymentReady(self):
+    def onDeploymentReady(self):
         self.__playSound(EPIC_SOUND.EB_READY_FOR_DEPLOYMENT_ID[True])
 
     def onRespawnInfoUpdated(self, respawnInfo):

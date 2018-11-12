@@ -7,44 +7,14 @@
       <conditions>
         <postBattle>
           <and>
-            <or>
-              <and>
-                <results>
-                  <title>
-                    <key>	#personal_missions_details:quest_common_condition_title_squad_assistedRadio	</key>
-                  </title>
-                  <description>
-                    <key>	#personal_missions_details:quest_2_1_13_condition_description_damageAssistedRadio	</key>
-                  </description>
-                  <key>	damageAssistedRadio	</key>
-                  <greaterOrEqual>	2000	</greaterOrEqual>
-                </results>
-                <results>
-                  <title>
-                    <key>	#personal_missions_details:quest_2_1_13_condition_title_damage	</key>
-                  </title>
-                  <description>
-                    <key>	#personal_missions_details:quest_2_1_13_condition_description_damage	</key>
-                  </description>
-                  <key>	damageDealt	</key>
-                  <greaterOrEqual>	1500	</greaterOrEqual>
-                </results>
-              </and>
-              <unit>
-                <and>
-                  <results>
-                    <hideInGui></hideInGui>
-                    <key>	damageAssistedRadio	</key>
-                    <greaterOrEqual>	2000	</greaterOrEqual>
-                  </results>
-                  <results>
-                    <hideInGui></hideInGui>
-                    <key>	damageDealt	</key>
-                    <greaterOrEqual>	1500	</greaterOrEqual>
-                  </results>
-                </and>
-              </unit>
-            </or>
+            <results>
+              <key>	damageAssistedRadio	</key>
+              <greaterOrEqual>	1500	</greaterOrEqual>
+            </results>
+            <results>
+              <key>	damageDealt	</key>
+              <greaterOrEqual>	1000	</greaterOrEqual>
+            </results>
           </and>
         </postBattle>
       </conditions>
@@ -91,44 +61,14 @@
       <conditions>
         <postBattle>
           <and>
-            <or>
-              <and>
-                <results>
-                  <title>
-                    <key>	#personal_missions_details:quest_common_condition_title_squad_assistedRadio	</key>
-                  </title>
-                  <description>
-                    <key>	#personal_missions_details:quest_2_1_13_condition_description_damageAssistedRadio	</key>
-                  </description>
-                  <key>	damageAssistedRadio	</key>
-                  <greaterOrEqual>	2000	</greaterOrEqual>
-                </results>
-                <results>
-                  <title>
-                    <key>	#personal_missions_details:quest_2_1_13_condition_title_damage	</key>
-                  </title>
-                  <description>
-                    <key>	#personal_missions_details:quest_2_1_13_condition_description_damage	</key>
-                  </description>
-                  <key>	damageDealt	</key>
-                  <greaterOrEqual>	1500	</greaterOrEqual>
-                </results>
-              </and>
-              <unit>
-                <and>
-                  <results>
-                    <hideInGui></hideInGui>
-                    <key>	damageAssistedRadio	</key>
-                    <greaterOrEqual>	2000	</greaterOrEqual>
-                  </results>
-                  <results>
-                    <hideInGui></hideInGui>
-                    <key>	damageDealt	</key>
-                    <greaterOrEqual>	1500	</greaterOrEqual>
-                  </results>
-                </and>
-              </unit>
-            </or>
+            <results>
+              <key>	damageAssistedRadio	</key>
+              <greaterOrEqual>	1500	</greaterOrEqual>
+            </results>
+            <results>
+              <key>	damageDealt	</key>
+              <greaterOrEqual>	1000	</greaterOrEqual>
+            </results>
             <isAlive></isAlive>
             <win></win>
           </and>
@@ -161,32 +101,14 @@
         </preBattle>
         <postBattle>
           <and>
-            <or>
-              <and>
-                <results>
-                  <key>	damageAssistedRadio	</key>
-                  <greaterOrEqual>	2000	</greaterOrEqual>
-                </results>
-                <results>
-                  <key>	damageDealt	</key>
-                  <greaterOrEqual>	1500	</greaterOrEqual>
-                </results>
-              </and>
-              <unit>
-                <and>
-                  <results>
-                    <hideInGui></hideInGui>
-                    <key>	damageAssistedRadio	</key>
-                    <greaterOrEqual>	2000	</greaterOrEqual>
-                  </results>
-                  <results>
-                    <hideInGui></hideInGui>
-                    <key>	damageDealt	</key>
-                    <greaterOrEqual>	1500	</greaterOrEqual>
-                  </results>
-                </and>
-              </unit>
-            </or>
+            <results>
+              <key>	damageAssistedRadio	</key>
+              <greaterOrEqual>	1500	</greaterOrEqual>
+            </results>
+            <results>
+              <key>	damageDealt	</key>
+              <greaterOrEqual>	1000	</greaterOrEqual>
+            </results>
             <isAlive></isAlive>
             <win></win>
           </and>

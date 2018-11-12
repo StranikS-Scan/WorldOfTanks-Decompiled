@@ -18,12 +18,13 @@ from gui.Scaleform.framework import g_entitiesFactories
 from gui.Scaleform.genConsts.PERSONAL_MISSIONS_ALIASES import PERSONAL_MISSIONS_ALIASES
 from gui.Scaleform.genConsts.VEHPREVIEW_CONSTANTS import VEHPREVIEW_CONSTANTS
 from gui.Scaleform.locale.MENU import MENU
+from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.VEHICLE_PREVIEW import VEHICLE_PREVIEW
 from gui.Scaleform.locale.VEH_COMPARE import VEH_COMPARE
 from gui.hangar_cameras.hangar_camera_common import CameraRelatedEvents, CameraMovementStates
 from gui.shared import event_dispatcher, events, event_bus_handlers, EVENT_BUS_SCOPE
 from gui.shared.event_dispatcher import showWebShop, showOldShop
-from gui.shared.formatters import text_styles
+from gui.shared.gui_items.Vehicle import getTypeSmallIconPath
 from helpers import dependency
 from helpers.i18n import makeString as _ms
 from skeletons.gui.game_control import IVehicleComparisonBasket
@@ -36,6 +37,7 @@ from skeletons.gui.shared.utils import IHangarSpace
 from web_client_api.common import ItemPackTypeGroup
 _BACK_BTN_LABELS = {VIEW_ALIAS.LOBBY_HANGAR: 'hangar',
  VIEW_ALIAS.LOBBY_STORE: 'shop',
+ VIEW_ALIAS.LOBBY_STORAGE: 'storage',
  VIEW_ALIAS.LOBBY_RESEARCH: 'researchTree',
  VIEW_ALIAS.LOBBY_TECHTREE: 'researchTree',
  VIEW_ALIAS.VEHICLE_COMPARE: 'vehicleCompare',
@@ -195,10 +197,12 @@ class VehiclePreview20(LobbySelectableView, VehiclePreview20Meta):
 
     def __getData(self):
         vehicle = g_currentPreviewVehicle.item
-        if vehicle.isElite:
-            vehicleTitle = text_styles.bonusPreviewText('%s %s, %s' % (_ms(MENU.header_vehicletype_elite(vehicle.type)), _ms(VEHICLE_PREVIEW.INFOPANEL_LEVEL, level=_ms(MENU.header_level(vehicle.level))), _ms(MENU.nations(vehicle.nationName))))
+        if vehicle.isPremium:
+            vehicleTitle = '{} {},'.format(_ms(MENU.header_vehicletype_elite(vehicle.type)), _ms(VEHICLE_PREVIEW.INFOPANEL_LEVEL, level=_ms(MENU.header_level(vehicle.level))))
+            vehicleName = makeHtmlString('html_templates:lobby/vehicle_preview', 'vehicleNamePremium', {'name': vehicle.descriptor.type.shortUserString.upper()})
         else:
-            vehicleTitle = text_styles.playerOnline('%s %s, %s' % (_ms(MENU.header_vehicletype(vehicle.type)), _ms(VEHICLE_PREVIEW.INFOPANEL_LEVEL, level=_ms(MENU.header_level(vehicle.level))), _ms(MENU.nations(vehicle.nationName))))
+            vehicleTitle = '{} {},'.format(_ms(MENU.header_vehicletype(vehicle.type)), _ms(VEHICLE_PREVIEW.INFOPANEL_LEVEL, level=_ms(MENU.header_level(vehicle.level))))
+            vehicleName = makeHtmlString('html_templates:lobby/vehicle_preview', 'vehicleNameRegular', {'name': vehicle.descriptor.type.shortUserString.upper()})
         if vehicle.isPremiumIGR:
             vehicleTitle = makeHtmlString('html_templates:igr/premium-vehicle', 'name', {'vehicle': vehicleTitle})
         compareBtnEnabled, compareBtnTooltip = resolveStateTooltip(self.comparisonBasket, vehicle, VEH_COMPARE.STORE_COMPAREVEHICLEBTN_TOOLTIPS_ADDTOCOMPARE, VEH_COMPARE.STORE_COMPAREVEHICLEBTN_TOOLTIPS_DISABLED)
@@ -206,15 +210,17 @@ class VehiclePreview20(LobbySelectableView, VehiclePreview20Meta):
          'backBtnLabel': VEHICLE_PREVIEW.HEADER_BACKBTN_LABEL,
          'backBtnDescrLabel': self.__getBackBtnLabel(),
          'vehicleTitle': vehicleTitle,
-         'vehicleName': vehicle.descriptor.type.shortUserString.upper(),
+         'vehicleTypeIcon': getTypeSmallIconPath(vehicle.type, vehicle.isElite),
+         'nationFlagIcon': RES_ICONS.getFilterNation(vehicle.nationName),
+         'vehicleName': vehicleName,
+         'nationName': MENU.nations(vehicle.nationName),
          'showCloseBtn': self._showCloseBtn,
          'compareBtnTooltip': compareBtnTooltip,
          'showCompareBtn': compareBtnEnabled}
         return result
 
     def __getBackBtnLabel(self):
-        key = _BACK_BTN_LABELS.get(self._backAlias, 'hangar')
-        return '#vehicle_preview:header/backBtn/descrLabel/%s' % key
+        return VEHICLE_PREVIEW.getBackBtnLabel(_BACK_BTN_LABELS[self._backAlias]) if self._backAlias else VEHICLE_PREVIEW.HEADER_BACKBTN_DESCRLABEL_HANGAR
 
     def __onHangarCreateOrRefresh(self):
         self.__keepVehicleSelectionEnabled = True
@@ -239,7 +245,7 @@ class VehiclePreview20(LobbySelectableView, VehiclePreview20Meta):
                 event_dispatcher.showHangar()
         elif self._backAlias == VIEW_ALIAS.LOBBY_STORE:
             if isIngameShopEnabled():
-                showWebShop(url=getBuyVehiclesUrl())
+                showWebShop(getBuyVehiclesUrl())
             else:
                 showOldShop(ctx={'tabId': STORE_TYPES.SHOP,
                  'component': STORE_CONSTANTS.VEHICLE})

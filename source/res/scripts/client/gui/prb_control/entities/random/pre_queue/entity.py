@@ -10,16 +10,12 @@ from debug_utils import LOG_DEBUG
 from gui.prb_control import prb_getters
 from gui.prb_control.events_dispatcher import g_eventDispatcher
 from gui.prb_control.entities.base import vehicleAmmoCheck
-from gui.prb_control.entities.base.pre_queue.entity import PreQueueSubscriber, PreQueueEntryPoint, PreQueueEntity, PreQueueActionsValidator
+from gui.prb_control.entities.base.pre_queue.entity import PreQueueSubscriber, PreQueueEntryPoint, PreQueueEntity
 from gui.prb_control.entities.random.pre_queue.ctx import RandomQueueCtx
 from gui.prb_control.items import SelectResult
 from gui.prb_control.settings import PREBATTLE_ACTION_NAME, FUNCTIONAL_FLAG
 from soft_exception import SoftException
-from gui.prb_control.entities.base.actions_validator import BaseActionsValidator, ActionsValidatorComposite
-from gui.prb_control.settings import PRE_QUEUE_RESTRICTION
-from gui.prb_control.items import ValidationResult
-from skeletons.gui.halloween_controller import IHalloweenController
-from helpers import dependency
+from vehicles_watcher import RandomVehiclesWatcher
 
 class RandomSubscriber(PreQueueSubscriber):
 
@@ -50,9 +46,22 @@ class RandomEntity(PreQueueEntity):
 
     def __init__(self):
         super(RandomEntity, self).__init__(FUNCTIONAL_FLAG.RANDOM, QUEUE_TYPE.RANDOMS, RandomSubscriber())
+        self.__watcher = None
+        return
 
     def isInQueue(self):
-        return prb_getters.isInRandomQueue() or prb_getters.isInEventBattlesQueue()
+        return prb_getters.isInRandomQueue()
+
+    def init(self, ctx=None):
+        self.__watcher = RandomVehiclesWatcher()
+        self.__watcher.start()
+        return super(RandomEntity, self).init(ctx)
+
+    def fini(self, ctx=None, woEvents=False):
+        if self.__watcher is not None:
+            self.__watcher.stop()
+            self.__watcher = None
+        return super(RandomEntity, self).fini(ctx, woEvents)
 
     @vehicleAmmoCheck
     def queue(self, ctx, callback=None):
@@ -62,9 +71,6 @@ class RandomEntity(PreQueueEntity):
         name = action.actionName
         return SelectResult(True) if name == PREBATTLE_ACTION_NAME.RANDOM else super(RandomEntity, self).doSelectAction(action)
 
-    def _createActionsValidator(self):
-        return HalloweenActionsValidator(self)
-
     def _doQueue(self, ctx):
         mapID = ctx.getDemoArenaTypeID()
         if mapID:
@@ -73,12 +79,8 @@ class RandomEntity(PreQueueEntity):
         LOG_DEBUG('Sends request on queuing to the random battle', ctx)
 
     def _doDequeue(self, ctx):
-        if prb_getters.isInEventBattlesQueue():
-            BigWorld.player().dequeueEventBattles()
-            LOG_DEBUG('Sends request on dequeuing from the event battles')
-        else:
-            BigWorld.player().dequeueRandom()
-            LOG_DEBUG('Sends request on dequeuing from the random battle')
+        BigWorld.player().dequeueRandom()
+        LOG_DEBUG('Sends request on dequeuing from the random battle')
 
     def _makeQueueCtxByAction(self, action=None):
         invID = g_currentVehicle.invID
@@ -96,17 +98,3 @@ class RandomEntity(PreQueueEntity):
 
     def _exitFromQueueUI(self):
         g_eventDispatcher.loadHangar()
-
-
-class HalloweenStateValidator(BaseActionsValidator):
-    halloweenController = dependency.descriptor(IHalloweenController)
-
-    def _validate(self):
-        return ValidationResult(False, PRE_QUEUE_RESTRICTION.MODE_DISABLED) if g_currentVehicle.isPresent() and g_currentVehicle.isEvent() and not self.halloweenController.isEnabled() else super(HalloweenStateValidator, self)._validate()
-
-
-class HalloweenActionsValidator(PreQueueActionsValidator):
-
-    def _createStateValidator(self, entity):
-        baseValidator = super(HalloweenActionsValidator, self)._createStateValidator(entity)
-        return ActionsValidatorComposite(entity, [baseValidator, HalloweenStateValidator(entity)])

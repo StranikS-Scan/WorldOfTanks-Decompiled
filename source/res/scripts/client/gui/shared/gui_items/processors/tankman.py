@@ -232,17 +232,23 @@ class TankmanRetraining(ItemProcessor):
 
     def __init__(self, tankman, vehicle, tmanCostTypeIdx):
         hasUndistributedExp = False
-        if tmanCostTypeIdx != 2:
+        isGoldPrice = tmanCostTypeIdx == 2
+        if not isGoldPrice:
             canLearnSkills, lastSkillLevel = tankman.newSkillCount
             hasUndistributedExp = lastSkillLevel > 0 or canLearnSkills > 1
-        super(TankmanRetraining, self).__init__(tankman, (plugins.VehicleValidator(vehicle, False),
-         plugins.TankmanLockedValidator(tankman),
-         plugins.VehicleCrewLockedValidator(vehicle),
-         plugins.MessageConfirmator('tankmanRetraining/unknownVehicle', ctx={'tankname': vehicle.userName}, isEnabled=not vehicle.isInInventory),
-         plugins.MessageConfirmator('tankmanRetraining/undistributedExp', ctx={}, isEnabled=hasUndistributedExp)))
         self.vehicle = vehicle
         self.tmanCostTypeIdx = tmanCostTypeIdx
         self.tmanCost = self._getRecruitPrice(self.tmanCostTypeIdx)
+        ctx = {'tankname': vehicle.userName}
+        if isGoldPrice:
+            ctx['price'] = formatPrice(self.tmanCost, reverse=True, useIcon=True, useStyle=True)
+        super(TankmanRetraining, self).__init__(tankman, (plugins.VehicleValidator(vehicle, False),
+         plugins.TankmanLockedValidator(tankman),
+         plugins.VehicleCrewLockedValidator(vehicle),
+         plugins.MessageConfirmator('tankmanRetraining/knownVehicleByGold', ctx=ctx, isEnabled=vehicle.isInInventory and isGoldPrice),
+         plugins.MessageConfirmator('tankmanRetraining/unknownVehicleByGold', ctx=ctx, isEnabled=not vehicle.isInInventory and isGoldPrice),
+         plugins.MessageConfirmator('tankmanRetraining/unknownVehicle', ctx=ctx, isEnabled=not vehicle.isInInventory),
+         plugins.MessageConfirmator('tankmanRetraining/undistributedExp', ctx=ctx, isEnabled=hasUndistributedExp)))
 
     def _getRecruitPrice(self, tmanCostTypeIdx):
         upgradeCost = self.itemsCache.items.shop.tankmanCost[tmanCostTypeIdx]
@@ -266,21 +272,27 @@ class TankmanCrewRetraining(Processor):
 
     def __init__(self, tmen, vehicle, tmanCostTypeIdx):
         hasUndistributedExp = False
-        if tmanCostTypeIdx != 2:
+        isGoldPrice = tmanCostTypeIdx == 2
+        if not isGoldPrice:
             for tmanInvID in tmen:
                 canLearnSkills, lastSkillLevel = self.itemsCache.items.getTankman(tmanInvID).newSkillCount
                 hasUndistributedExp = lastSkillLevel > 0 or canLearnSkills > 1
                 if hasUndistributedExp:
                     break
 
-        super(TankmanCrewRetraining, self).__init__((plugins.VehicleValidator(vehicle, False),
-         plugins.VehicleCrewLockedValidator(vehicle),
-         plugins.GroupOperationsValidator(tmen, tmanCostTypeIdx),
-         plugins.MessageConfirmator('tankmanRetraining/unknownVehicle', ctx={'tankname': vehicle.userName}, isEnabled=not vehicle.isInInventory),
-         plugins.MessageConfirmator('tankmanRetraining/undistributedExp', ctx={}, isEnabled=hasUndistributedExp)))
         self.tankmen = tmen
         self.vehicle = vehicle
         self.tmanCostTypeIdx = tmanCostTypeIdx
+        ctx = {'tankname': vehicle.userName}
+        if isGoldPrice:
+            ctx['price'] = formatPrice(Money(gold=self.itemsCache.items.shop.tankmanCost[tmanCostTypeIdx]['gold'] * len(self.tankmen)), reverse=True, useIcon=True, useStyle=True)
+        super(TankmanCrewRetraining, self).__init__((plugins.VehicleValidator(vehicle, False),
+         plugins.VehicleCrewLockedValidator(vehicle),
+         plugins.GroupOperationsValidator(tmen, tmanCostTypeIdx),
+         plugins.MessageConfirmator('tankmanRetraining/knownVehicleByGold/pack', ctx=ctx, isEnabled=isGoldPrice and len(tmen) > 1),
+         plugins.MessageConfirmator('tankmanRetraining/knownVehicleByGold', ctx=ctx, isEnabled=isGoldPrice and len(tmen) == 1),
+         plugins.MessageConfirmator('tankmanRetraining/unknownVehicle', ctx=ctx, isEnabled=not vehicle.isInInventory),
+         plugins.MessageConfirmator('tankmanRetraining/undistributedExp', ctx=ctx, isEnabled=hasUndistributedExp)))
 
     def _errorHandler(self, code, errStr='', ctx=None):
         crewMembersCount = len(self.tankmen)

@@ -5,11 +5,7 @@ from arena_bonus_type_caps import ARENA_BONUS_TYPE_CAPS
 from collections import namedtuple
 from collections import Counter
 _DevBonusTypeDefinition = namedtuple('_DevBonusTypeDefinition', ('name', 'bonusType', 'caps'))
-_DEV_BONUS_TYPE_DEFS = (_DevBonusTypeDefinition(name='RESPAWN_TEST', bonusType=127, caps=frozenset((ARENA_BONUS_TYPE_CAPS.RESULTS,
-  ARENA_BONUS_TYPE_CAPS.REPAIR_MECHANICS,
-  ARENA_BONUS_TYPE_CAPS.COMMON_CHAT,
-  ARENA_BONUS_TYPE_CAPS.RESPAWN,
-  ARENA_BONUS_TYPE_CAPS.RESPAWN_TESTING))),)
+_DEV_BONUS_TYPE_DEFS = ()
 
 def initDevBonusTypes():
     __validateDevBonusTypeDefinitions()

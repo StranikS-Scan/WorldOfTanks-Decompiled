@@ -7,7 +7,7 @@ from account_shared import validateCustomizationItem
 from invoices_helpers import checkAccountDossierOperation
 from items import vehicles, tankmen
 from items.components.c11n_constants import SeasonType
-from constants import EVENT_TYPE, DOSSIER_TYPE, IS_DEVELOPMENT
+from constants import DOSSIER_TYPE, IS_DEVELOPMENT, SEASON_TYPE_BY_NAME
 from soft_exception import SoftException
 __all__ = ['getBonusReaders', 'readUTC', 'SUPPORTED_BONUSES']
 
@@ -203,6 +203,24 @@ def __readBonus_tankmen(bonus, vehTypeCompDescr, section):
     return
 
 
+def __readBonus_seasonRent(outRent, section):
+    if section.has_key('season'):
+        try:
+            seasonData = section['season'].asString.split(':', 1)
+            seasonType = SEASON_TYPE_BY_NAME[seasonData[0].strip()]
+            strID = seasonData[1]
+            if strID.startswith('season_'):
+                rentType = 'season'
+            elif strID.startswith('cycle_'):
+                rentType = 'cycle'
+            else:
+                raise SoftException('Invalid season / cycle ID in rent bonus <rent><season>. Expected format: GameSeasonType:season_YYYYMM or                 GameSeasonType:cycle_YYYYMMDD')
+            ID = int(strID.split('_', 1)[1].strip())
+            outRent[rentType] = (seasonType, ID)
+        except (KeyError, ValueError):
+            raise SoftException('Failed to parse season rent bonus for <rent><{type}>. Expected format: GameSeasonType:season_YYYYMM or                 GameSeasonType:cycle_YYYYMMDD')
+
+
 def __readBonus_rent(bonus, _name, section):
     rent = {}
     if section.has_key('time'):
@@ -215,6 +233,7 @@ def __readBonus_rent(bonus, _name, section):
         credits = section['compensation'].readInt('credits', 0)
         gold = section['compensation'].readInt('gold', 0)
         rent['compensation'] = (credits, gold)
+    __readBonus_seasonRent(rent, section)
     bonus['rent'] = rent
 
 

@@ -25,11 +25,14 @@ class ClientEpicMetaGame(object):
     def increaseAbility(self, abilityID, callback=_skipResponse):
         self.__account._doCmdInt3(AccountCommands.CMD_INCREASE_EPIC_META_ABILITY, abilityID, 0, 0, lambda requestID, resultID, errorCode: callback(resultID, errorCode))
 
-    def resetEpicMetaGame(self, callback=_skipResponse):
-        self.__account._doCmdInt3(AccountCommands.CMD_RESET_EPIC_META_GAME, 0, 0, 0, lambda requestID, resultID, errorCode: callback(resultID, errorCode))
+    def resetEpicMetaGame(self, prestigeLevel=0, metaLevel=0, abilityPoints=0, callback=_skipResponse):
+        self.__account._doCmdInt3(AccountCommands.CMD_RESET_EPIC_META_GAME, prestigeLevel, metaLevel, abilityPoints, lambda requestID, resultID, errorCode: callback(resultID, errorCode))
 
     def triggerEpicMetaGamePrestige(self, callback=_skipResponse):
         self.__account._doCmdInt3(AccountCommands.CMD_TRIGGER_EPIC_META_GAME_PRESTIGE, 0, 0, 0, lambda requestID, resultID, errorCode: callback(resultID, errorCode))
+
+    def claimEpicMetaGameMaxPrestigeReward(self, callback=_skipResponse):
+        self.__account._doCmdInt3(AccountCommands.CMD_CLAIM_EPIC_META_MAX_PRESTIGE_REWARD, 0, 0, 0, lambda requestID, resultID, errorCode: callback(resultID, errorCode))
 
     def onAccountBecomePlayer(self):
         self.__ignore = False

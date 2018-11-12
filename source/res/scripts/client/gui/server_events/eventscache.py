@@ -5,7 +5,6 @@ import math
 import sys
 import zlib
 from collections import defaultdict
-import time
 import BigWorld
 import motivation_quests
 import nations
@@ -34,7 +33,6 @@ from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.shared.utils import IRaresCache
 from skeletons.gui.linkedset import ILinkedSetController
-from helpers import time_utils
 
 def _defaultQuestMaker(qID, qData, progress):
     return createQuest(qData.get('type', 0), qID, qData, progress.getQuestProgress(qID), progress.getTokenExpiryTime(qData.get('requiredToken')))
@@ -267,26 +265,6 @@ class EventsCache(IEventsCache):
 
     def isEventEnabled(self):
         return len(self.__getEventBattles()) > 0 and len(self.getEventVehicles()) > 0
-
-    def getHalloweenMaxLevelPrice(self):
-        halloweenData = self.__getHalloweenData()
-        return halloweenData['maxLevelPrice'] if halloweenData and 'maxLevelPrice' in halloweenData else None
-
-    def getHalloweenFinishTime(self):
-        halloweenData = self.__getHalloweenData()
-        return time_utils.makeLocalServerTime(halloweenData['endDate']) if halloweenData and 'endDate' in halloweenData else time.time()
-
-    def getHalloweenFinishTimeLeft(self):
-        finishTime = self.getHalloweenFinishTime()
-        return time_utils.getTimeDeltaFromNowInLocal(finishTime) if finishTime is not None else 0
-
-    def isHalloweenMaxLevelBuyEnabled(self):
-        halloweenData = self.__getHalloweenData()
-        return halloweenData['isMaxLevelBuyEnabled'] and self.isEventEnabled() if halloweenData and 'isMaxLevelBuyEnabled' in halloweenData else False
-
-    def getHalloweenBonusesForSoul(self):
-        halloweenData = self.__getHalloweenData()
-        return halloweenData['bonuses'] if halloweenData and 'bonuses' in halloweenData else {}
 
     @dependency.replace_none_kwargs(itemsCache=IItemsCache)
     def getEventVehicles(self, itemsCache=None):
@@ -530,7 +508,7 @@ class EventsCache(IEventsCache):
         makeTokens = defaultdict(list)
         needTokens = defaultdict(list)
         for qID, q in quests.iteritems():
-            if q.getType() != EVENT_TYPE.GROUP:
+            if q.getType() not in (EVENT_TYPE.GROUP, EVENT_TYPE.PERSONAL_MISSION):
                 tokens = q.getBonuses('tokens')
                 if tokens:
                     for t in tokens[0].getTokens():
@@ -679,9 +657,6 @@ class EventsCache(IEventsCache):
 
     def __getEventBattles(self):
         return self.__getIngameEventsData().get('eventBattles', {})
-
-    def __getHalloweenData(self):
-        return self.__getIngameEventsData().get('halloween', {})
 
     def __getUnitRestrictions(self):
         return self.__getUnitData().get('restrictions', {})

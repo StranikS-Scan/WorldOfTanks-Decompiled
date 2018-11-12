@@ -12,7 +12,7 @@ from gui.Scaleform.locale.PERSONAL_MISSIONS import PERSONAL_MISSIONS
 from gui.Scaleform.locale.QUESTS import QUESTS
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.ranked_battles import ranked_helpers
-from gui.server_events import events_helpers, finders
+from gui.server_events import finders
 from gui.server_events.bonuses import getBonuses, compareBonuses, BoxBonus
 from gui.server_events.events_helpers import isMarathon, isLinkedSet, isRegularQuest
 from gui.server_events.formatters import getLinkedActionID
@@ -58,6 +58,7 @@ class TOKEN_SHOP(object):
 
 class ServerEventAbstract(object):
     __metaclass__ = ABCMeta
+    __slots__ = ('_id', '_data', '_groupID')
     _connectionMgr = dependency.descriptor(IConnectionManager)
 
     def __init__(self, eID, data):
@@ -103,6 +104,12 @@ class ServerEventAbstract(object):
 
     def getType(self):
         return self._data.get('type', 0)
+
+    def getStartTimeRaw(self):
+        return self._data['startTime'] if 'startTime' in self._data else time.time()
+
+    def getFinishTimeRaw(self):
+        return self._data['finishTime'] if 'finishTime' in self._data else time.time()
 
     def getStartTime(self):
         return time_utils.makeLocalServerTime(self._data['startTime']) if 'startTime' in self._data else time.time()
@@ -175,10 +182,6 @@ class ServerEventAbstract(object):
                 return ValidationResult(False, 'invalid_time_interval')
 
         return ValidationResult(False, 'requirements') if not self._checkConditions() else ValidationResult(True, '')
-
-    def isAvailableForVehicle(self, vehicle):
-        result, error = self.isAvailable()
-        return ValidationResult(False, 'requirement') if result and not self._checkVehicleConditions(vehicle) else ValidationResult(result, error)
 
     def isValidVehicleCondition(self, vehicle):
         return self._checkVehicleConditions(vehicle)
@@ -264,6 +267,7 @@ class Group(ServerEventAbstract):
 
 class Quest(ServerEventAbstract):
     itemsCache = dependency.descriptor(IItemsCache)
+    __slots__ = ServerEventAbstract.__slots__ + ('_progress', '_children', '_parents', '_parentsName', 'accountReqs', 'vehicleReqs', 'preBattleCond', 'bonusCond', 'postBattleCond', '__linkedActions')
 
     def __init__(self, qID, data, progress=None):
         super(Quest, self).__init__(qID, data)
@@ -367,11 +371,29 @@ class Quest(ServerEventAbstract):
                 for bonus in getBonuses(self, name, value, isCompensation, ctx=ctx):
                     result.append(self._bonusDecorator(bonus))
 
+                if name == 'vehicles':
+                    stylesData = self.__getVehicleStyleBonuses(value)
+                    for bonus in getBonuses(self, 'customizations', stylesData, isCompensation, ctx=ctx):
+                        result.append(self._bonusDecorator(bonus))
+
         elif bonusName in bonusData:
             for bonus in getBonuses(self, bonusName, bonusData[bonusName], isCompensation, ctx=ctx):
                 result.append(self._bonusDecorator(bonus))
 
         return sorted(result, cmp=compareBonuses, key=operator.methodcaller('getName'))
+
+    def __getVehicleStyleBonuses(self, vehiclesData):
+        stylesData = []
+        for vehData in vehiclesData.itervalues():
+            customization = vehData.get('customization', None)
+            if customization is not None:
+                styleData = {'value': 1,
+                 'custType': 'style',
+                 'id': customization.get('styleId', -1),
+                 'customCompensation': customization.get('customCompensation', None)}
+                stylesData.append(styleData)
+
+        return stylesData
 
     def getCompensation(self):
         compensatedToken = findFirst(lambda t: t.isDisplayable(), self.accountReqs.getTokens())
@@ -450,6 +472,7 @@ class LinkedSetQuest(Quest):
 
 
 class PersonalQuest(Quest):
+    __slots__ = Quest.__slots__ + ('expiryTime',)
 
     def __init__(self, qID, data, progress=None, expiryTime=None):
         super(PersonalQuest, self).__init__(qID, data, progress)
@@ -465,6 +488,7 @@ class PersonalQuest(Quest):
 class RankedQuest(Quest):
     boxIconSizes = {'big': '450x400',
      'small': '100x88'}
+    __slots__ = Quest.__slots__ + ('__rankedData',)
 
     def __init__(self, qID, data, progress=None):
         super(RankedQuest, self).__init__(qID, data, progress)
@@ -532,6 +556,7 @@ class RankedQuest(Quest):
 ActionData = namedtuple('ActionData', 'discountObj priority uiDecoration')
 
 class Action(ServerEventAbstract):
+    __slots__ = ServerEventAbstract.__slots__ + ('__linkedQuests',)
 
     def __init__(self, qID, data):
         super(Action, self).__init__(qID, data)
@@ -597,6 +622,7 @@ class Action(ServerEventAbstract):
 
 
 class PMCampaign(object):
+    __slots__ = ('__id', '__info', '__operations', '__isUnlocked')
 
     def __init__(self, campaignID, info):
         self.__id = campaignID
@@ -634,6 +660,7 @@ class PMCampaign(object):
 
 
 class PMOperation(object):
+    __slots__ = ('__id', '__info', '__quests', '__initialQuests', '__finalQuests', '__isUnlocked', '__hasRequiredVehicles', '__achievements', '__tokens', '__bonuses', '__isAwardAchieved', '__freeTokensCount', '__freeTokensTotalCount', '__branch', '__disabled')
 
     def __init__(self, tileID, info, branch=0):
         self.__id = tileID
@@ -707,7 +734,7 @@ class PMOperation(object):
     def getChainIcon(self, chainID):
         classifier = self.getChainClassifier(chainID).classificationAttr
         if self.__branch == PM_BRANCH.REGULAR:
-            return Vehicle.getTypeBigIconPath(classifier, False)
+            return Vehicle.getTypeBigIconPath(classifier)
         if self.__branch == PM_BRANCH.PERSONAL_MISSION_2:
             allianceId = nations.ALLIANCE_IDS[classifier]
             return RES_ICONS.getAllianceIcon(allianceId)
@@ -915,7 +942,9 @@ class PMOperation(object):
                 self.__finalQuests[quest.getChainID()] = quest
 
 
-class PersonalMission(Quest):
+class PersonalMission(ServerEventAbstract):
+    __slots__ = ServerEventAbstract.__slots__ + ('__pmType', '__pqProgress', '__campaignID', '__hasRequiredVehicles', '__canBePawned', '__conditionsProgress', '__disabled', '__conditionsConfig')
+    ONE_BATTLE_OPERATIONS_IDS = (1, 2, 3, 4, 6)
     _TankmanBonus = namedtuple('_TankmanBonus', ('tankman', 'isMain'))
 
     def __init__(self, qID, pmType, progress=None, campaignID=None):
@@ -937,11 +966,11 @@ class PersonalMission(Quest):
             return ValidationResult(False, 'isLocked')
         return ValidationResult(False, 'noVehicle') if not self.hasRequiredVehicles() else ValidationResult(True, '')
 
-    def hasBattleProgress(self):
-        return self.getQuestBranch() == PM_BRANCH.PERSONAL_MISSION_2
-
     def getDummyHeaderType(self):
-        return DISPLAY_TYPE.NONE if self.getOperationID() == 6 or not self.hasBattleProgress() else DISPLAY_TYPE.SIMPLE
+        return DISPLAY_TYPE.NONE if self.getOperationID() in self.ONE_BATTLE_OPERATIONS_IDS else DISPLAY_TYPE.SIMPLE
+
+    def isOneBattleQuest(self):
+        return self.getOperationID() in self.ONE_BATTLE_OPERATIONS_IDS
 
     def getConditionsProgress(self):
         return self.__conditionsProgress
@@ -996,30 +1025,6 @@ class PersonalMission(Quest):
 
     def getGeneralQuestID(self):
         return self.__pmType.generalQuestID
-
-    def getMainConditions(self):
-        return dict(self.__pmType.mainQuestInfo.get('conditions'))
-
-    def getAdditionalConditions(self):
-        mainQuestConds = self.__pmType.mainQuestInfo.get('conditions')
-        addQuestConds = self.__pmType.addQuestInfo.get('conditions')
-        return dict(events_helpers.getConditionsDiffStructure(addQuestConds, mainQuestConds))
-
-    def getAllConditions(self):
-        return dict(self.__pmType.addQuestInfo.get('conditions'))
-
-    def getConditions(self, isMain=None):
-        if isMain is None:
-            return self.getAllConditions()
-        else:
-            return self.getMainConditions() if isMain else self.getAdditionalConditions()
-
-    def getPostBattleConditions(self, isMain=None):
-        return PostBattleConditions(self.getConditions(isMain=isMain).get('postBattle', []), self.preBattleCond)
-
-    def getVehicleRequirements(self, isMain=None):
-        preBattle = dict(self.getConditions(isMain=isMain).get('preBattle', [('account', []), ('vehicle', []), ('battle', [])]))
-        return VehicleRequirements(preBattle.get('vehicle', []))
 
     def getVehMinLevel(self):
         return self.__pmType.minLevel

@@ -94,7 +94,7 @@
       </slot>
       <slot>
         <slotType>	inscription	</slotType>
-        <slotId>	2	</slotId>
+        <slotId>	36	</slotId>
         <rayStart>	1.0641 0.433362 0.236764	</rayStart>
         <rayEnd>	0.864094 0.43309 0.236804	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
@@ -1044,7 +1044,7 @@
       <customizationSlots>
         <slot>
           <slotType>	player	</slotType>
-          <slotId>	3	</slotId>
+          <slotId>	514	</slotId>
           <rayStart>	0.887819 0.351926 0.54122	</rayStart>
           <rayEnd>	0.707278 0.265889 0.539596	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
@@ -1055,7 +1055,7 @@
         </slot>
         <slot>
           <slotType>	player	</slotType>
-          <slotId>	4	</slotId>
+          <slotId>	515	</slotId>
           <rayStart>	-0.887819 0.351926 0.54122	</rayStart>
           <rayEnd>	-0.707278 0.265889 0.539596	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
@@ -1080,6 +1080,7 @@
       <engines>
         <Maybach_HL_108TR_T>
           <smplEnginePower>	338.33	</smplEnginePower>
+          <smplFwMaxSpeed>	64	</smplFwMaxSpeed>
         </Maybach_HL_108TR_T>
       </engines>
       <chassis>

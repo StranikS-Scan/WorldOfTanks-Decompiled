@@ -96,7 +96,7 @@
       </slot>
       <slot>
         <slotType>	player	</slotType>
-        <slotId>	2	</slotId>
+        <slotId>	4	</slotId>
         <rayStart>	-1.32061 0.833605 0.0223886	</rayStart>
         <rayEnd>	-0.920613 0.833604 0.0223885	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
@@ -106,7 +106,7 @@
       </slot>
       <slot>
         <slotType>	inscription	</slotType>
-        <slotId>	3	</slotId>
+        <slotId>	36	</slotId>
         <rayStart>	1.32061 0.833605 0.0223886	</rayStart>
         <rayEnd>	0.920613 0.833604 0.0223885	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
@@ -340,6 +340,7 @@
       <engines>
         <Ford_GAN_T23>
           <smplEnginePower>	528.6406	</smplEnginePower>
+          <smplFwMaxSpeed>	48	</smplFwMaxSpeed>
         </Ford_GAN_T23>
       </engines>
       <chassis>

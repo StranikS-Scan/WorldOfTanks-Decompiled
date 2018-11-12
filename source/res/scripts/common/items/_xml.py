@@ -2,6 +2,7 @@
 # Embedded file name: scripts/common/items/_xml.py
 from functools import wraps, partial
 from soft_exception import SoftException
+from constants import SEASON_TYPE_BY_NAME, RentType, IS_BASEAPP
 _g_floats = {'count': 0}
 _g_intTuples = {'count': 0}
 _g_floatTuples = {'count': 0}
@@ -112,6 +113,11 @@ def readString(xmlCtx, section, subsectionName):
 def readStringOrNone(xmlCtx, section, subsectionName):
     subsection = section[subsectionName]
     return None if subsection is None else intern(subsection.asString)
+
+
+def readStringOrEmpty(xmlCtx, section, subsectionName):
+    subsection = section[subsectionName]
+    return intern('') if subsection is None else intern(subsection.asString)
 
 
 def readNonEmptyString(xmlCtx, section, subsectionName):
@@ -296,6 +302,18 @@ def readTupleOfNonNegativeInts(xmlCtx, section, subsectionName, count=None):
     return ints
 
 
+def readTupleOfBools(xmlCtx, section, subsectionName, count=None):
+    strings = getSubsection(xmlCtx, section, subsectionName).asString.split()
+    if count is not None and len(strings) != count:
+        raiseWrongXml(xmlCtx, subsectionName, '%d bools expected' % count)
+    try:
+        return tuple(map(lambda s: s.lower() == 'true', strings))
+    except Exception:
+        raiseWrongSection(xmlCtx, subsectionName if subsectionName else section.name)
+
+    return
+
+
 def readPrice(xmlCtx, section, subsectionName):
     key = 'credits'
     if section[subsectionName + '/gold'] is not None:
@@ -306,18 +324,102 @@ def readPrice(xmlCtx, section, subsectionName):
 
 
 def readRentPrice(xmlCtx, section, subsectionName):
-    res = {}
+    rentPrices = {}
+    previousRentDays = []
+    previousSeasonIDs = []
     if section[subsectionName] is not None:
-        for _, subSection in section[subsectionName].items():
-            days = readInt(xmlCtx, subSection, 'days', 1)
-            price = readPrice(xmlCtx, subSection, 'cost')
-            compensation = readPrice(xmlCtx, subSection, 'compensation')
-            if days in res:
-                raiseWrongXml(xmlCtx, '', 'Rent duration is not unique.')
-            res[days] = {'cost': (price.get('credits', 0), price.get('gold', 0)),
-             'compensation': (compensation.get('credits', 0), compensation.get('gold', 0))}
+        for rentPackageName, subSection in section[subsectionName].items():
+            readRentDays(xmlCtx, rentPrices, previousRentDays, subSection, 'days', rentPackageName)
+            readRentSeason(xmlCtx, rentPrices, previousSeasonIDs, subSection, 'season', rentPackageName)
 
-    return res
+    return rentPrices
+
+
+def raiseWrongSeasonID(xmlCtx, rentPackageName, subsectionName):
+    raiseWrongXml(xmlCtx, rentPackageName, '<{}><id> has wrong format. Expected: season_YYYYMMDD.'.format(subsectionName))
+
+
+def raiseWrongSeasonCycleID(xmlCtx, rentPackageName, subsectionName, cycleID):
+    raiseWrongXml(xmlCtx, rentPackageName, '<{}><cycles><{}> has wrong format. Expected: cycle_YYYYMMDD.'.format(subsectionName, cycleID))
+
+
+def readRentDays(xmlCtx, rentPrices, previousRentDays, section, subsectionName, rentPackageName):
+    days = readIntOrNone(xmlCtx, section, subsectionName)
+    if days is not None:
+        if days <= 0:
+            raiseWrongSection(xmlCtx, subsectionName if subsectionName else section.name)
+        elif days in previousRentDays:
+            raiseWrongXml(xmlCtx, rentPackageName, '<days> Rent duration for time rent is not unique.')
+        price = readPrice(xmlCtx, section, 'cost')
+        compensation = readPrice(xmlCtx, section, 'compensation')
+        rentConfig = {'cost': (price.get('credits', 0), price.get('gold', 0)),
+         'compensation': (compensation.get('credits', 0), compensation.get('gold', 0))}
+        previousRentDays.append(days)
+        rentPrices.setdefault(RentType.TIME_RENT, {})[days] = rentConfig
+    return
+
+
+def readRentSeason(xmlCtx, rentPrices, previousSeasonIDs, section, subsectionName, rentPackageName):
+    season = section[subsectionName]
+    if season is not None:
+        seasonID = None
+        seasonIDString = readString(xmlCtx, season, 'id')
+        if not seasonIDString.startswith('season_'):
+            raiseWrongSeasonID(xmlCtx, rentPackageName, subsectionName)
+        try:
+            seasonID = int(seasonIDString[7:])
+        except ValueError:
+            raiseWrongSeasonID(xmlCtx, rentPackageName, subsectionName)
+
+        if seasonID in previousSeasonIDs:
+            raiseWrongXml(xmlCtx, rentPackageName, '<{}><id> Season ID is not unique.'.format(subsectionName))
+        defaultCyclePrice = readPrice(xmlCtx, season, 'cycleCost')
+        defaultCycleCompensation = readPrice(xmlCtx, season, 'cycleCompensation')
+        seasonType = SEASON_TYPE_BY_NAME.get(readString(xmlCtx, season, 'type'), None)
+        if seasonType is None:
+            raiseWrongXml(xmlCtx, rentPackageName, '<season><type> has wrong format. Expected any valid type in constants.SEASON_TYPE_BY_NAME.')
+        cycles = readRentSeasonCycles(xmlCtx, season, 'cycles', defaultCyclePrice, defaultCycleCompensation, seasonType, rentPackageName)
+        seasonPrice = readPrice(xmlCtx, section, 'cost')
+        seasonCompensation = readPrice(xmlCtx, section, 'compensation')
+        seasonRentConfig = {'cost': (seasonPrice.get('credits', 0), seasonPrice.get('gold', 0)),
+         'compensation': (seasonCompensation.get('credits', 0), seasonCompensation.get('gold', 0)),
+         'seasonType': seasonType,
+         'defaultCycleCost': (defaultCyclePrice.get('credits', 0), defaultCyclePrice.get('gold', 0)),
+         'cycles': cycles.keys()}
+        rentPrices.setdefault(RentType.SEASON_CYCLE_RENT, {}).update(cycles)
+        rentPrices.setdefault(RentType.SEASON_RENT, {})[seasonID] = seasonRentConfig
+    return
+
+
+def readRentSeasonCycles(xmlCtx, section, subsectionName, defaultPrice, defaultCompensation, seasonType, packageName):
+    cyclesRentPrices = {}
+    cycles = section[subsectionName]
+    if cycles is not None:
+        for cycleIDString, cycle in cycles.items():
+            if not cycleIDString.startswith('cycle_'):
+                raiseWrongSeasonCycleID(xmlCtx, packageName, subsectionName, cycleIDString)
+            cycleID = None
+            try:
+                cycleID = int(cycleIDString[6:])
+            except ValueError:
+                raiseWrongSeasonCycleID(xmlCtx, packageName, subsectionName, cycleIDString)
+
+            if cycle['cost'] is not None:
+                cyclePrice = readPrice(xmlCtx, cycle, 'cost')
+            else:
+                cyclePrice = defaultPrice
+            if cycle['compensation'] is not None:
+                compensation = readPrice(xmlCtx, cycle, 'compensation')
+            else:
+                compensation = defaultCompensation
+            cycleRentConfig = {'cost': (cyclePrice.get('credits', 0), cyclePrice.get('gold', 0)),
+             'seasonType': seasonType,
+             'compensation': (compensation.get('credits', 0), compensation.get('gold', 0))}
+            cyclesRentPrices[cycleID] = cycleRentConfig
+
+    else:
+        raiseWrongXml(xmlCtx, packageName, '<{}><{}> missing!'.format(subsectionName, subsectionName))
+    return cyclesRentPrices
 
 
 def readIcon(xmlCtx, section, subsectionName):

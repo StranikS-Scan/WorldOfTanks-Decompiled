@@ -367,17 +367,20 @@ class CumulativeOnlyProgressCollector(IDataCollector):
 
 
 class ProgressStorage(object):
-    __slots__ = ('__progresses', '_buildrers', '_wasMultiplied')
+    __slots__ = ('__progresses', '_buildrers', '_wasMultiplied', '_orProgresses')
 
     def __init__(self, questCfg, savedProgresses=None):
         self.__progresses = {}
         self._buildrers = {}
         self._wasMultiplied = None
+        self._orProgresses = {}
         for builder in self._getBuilders():
             self.__addBuilder(builder)
 
         for progressID, configData in questCfg.iteritems():
             self.__progresses[progressID] = self._createProgress(progressID, configData)
+            if hasattr(self.__progresses[progressID], 'isInOrGroup') and self.__progresses[progressID].isInOrGroup():
+                self._orProgresses[progressID] = self.__progresses[progressID].isCompleted()
 
         if savedProgresses:
             self.update(savedProgresses)
@@ -388,6 +391,10 @@ class ProgressStorage(object):
             progress = self.__progresses.get(progressID)
             if progress:
                 progress.updateProgress(progressInfo)
+                if hasattr(progress, 'isInOrGroup') and progress.isInOrGroup():
+                    self._orProgresses[progressID] = progress.isCompleted()
+
+        self.__escapeFailedStateForOrGroup(progressesInfo)
 
     def getProgresses(self):
         return self.__progresses
@@ -422,6 +429,13 @@ class ProgressStorage(object):
 
     def __addBuilder(self, builder):
         self._buildrers[builder.getTemplateID()] = builder
+
+    def __escapeFailedStateForOrGroup(self, progressesInfo):
+        if any(self._orProgresses.values()):
+            for progressID, progressInfo in progressesInfo.iteritems():
+                progress = self.__progresses.get(progressID)
+                if hasattr(progress, 'isInOrGroup') and progress.isInOrGroup() and progressInfo['state'] == QUEST_PROGRESS_STATE.FAILED:
+                    progress.setState(QUEST_PROGRESS_STATE.COMPLETED)
 
 
 class BaseQuestProgress(object):

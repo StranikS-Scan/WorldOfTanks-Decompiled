@@ -87,7 +87,7 @@
       </slot>
       <slot>
         <slotType>	camouflage	</slotType>
-        <slotId>	8	</slotId>
+        <slotId>	3	</slotId>
         <anchorPosition>	0.000000 0.187485 1.83205	</anchorPosition>
         <anchorDirection>	0.000000 0.101804 0.994804	</anchorDirection>
       </slot>
@@ -773,7 +773,7 @@
       <customizationSlots>
         <slot>
           <slotType>	style	</slotType>
-          <slotId>	6	</slotId>
+          <slotId>	257	</slotId>
           <anchorPosition>	0.000083 2.18283 -0.129717	</anchorPosition>
           <anchorDirection>	-0.000000 1 -0.000000	</anchorDirection>
         </slot>
@@ -1451,7 +1451,7 @@
       <customizationSlots>
         <slot>
           <slotType>	style	</slotType>
-          <slotId>	7	</slotId>
+          <slotId>	257	</slotId>
           <anchorPosition>	0.000078 2.18281 -0.12979	</anchorPosition>
           <anchorDirection>	0.000000 1 0.000000	</anchorDirection>
         </slot>
@@ -1546,7 +1546,7 @@
           <customizationSlots>
             <slot>
               <slotType>	camouflage	</slotType>
-              <slotId>	10	</slotId>
+              <slotId>	770	</slotId>
               <anchorPosition>	-0.000081 -0.00330992 0.894719	</anchorPosition>
               <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
               <applyTo>	4096	</applyTo>
@@ -1606,7 +1606,7 @@
           <customizationSlots>
             <slot>
               <slotType>	camouflage	</slotType>
-              <slotId>	9	</slotId>
+              <slotId>	770	</slotId>
               <anchorPosition>	-0.000001 0.0104872 1.20843	</anchorPosition>
               <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
               <applyTo>	4096	</applyTo>
@@ -1636,7 +1636,7 @@
       <customizationSlots>
         <slot>
           <slotType>	player	</slotType>
-          <slotId>	2	</slotId>
+          <slotId>	514	</slotId>
           <rayStart>	-0.751452 0.385476 -1.11331	</rayStart>
           <rayEnd>	-0.692398 0.363091 -1.09414	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
@@ -1646,7 +1646,7 @@
         </slot>
         <slot>
           <slotType>	inscription	</slotType>
-          <slotId>	3	</slotId>
+          <slotId>	546	</slotId>
           <rayStart>	-0.916366 0.506916 -0.038173	</rayStart>
           <rayEnd>	-0.878807 0.493158 -0.0381209	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
@@ -1656,7 +1656,7 @@
         </slot>
         <slot>
           <slotType>	player	</slotType>
-          <slotId>	4	</slotId>
+          <slotId>	515	</slotId>
           <rayStart>	0.664372 0.570312 0.60022	</rayStart>
           <rayEnd>	0.634928 0.555315 0.571166	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
@@ -1667,7 +1667,7 @@
         </slot>
         <slot>
           <slotType>	inscription	</slotType>
-          <slotId>	5	</slotId>
+          <slotId>	547	</slotId>
           <rayStart>	0.916366 0.506916 -0.038173	</rayStart>
           <rayEnd>	0.878807 0.493158 -0.0381209	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
@@ -1677,7 +1677,7 @@
         </slot>
         <slot>
           <slotType>	camouflage	</slotType>
-          <slotId>	12	</slotId>
+          <slotId>	513	</slotId>
           <anchorPosition>	0.000000 0.763912 0.000000	</anchorPosition>
           <anchorDirection>	-0.000000 1 0.000000	</anchorDirection>
         </slot>
@@ -1713,9 +1713,11 @@
       <engines>
         <Maybach_HL62TR>
           <smplEnginePower>	148.0194	</smplEnginePower>
+          <smplFwMaxSpeed>	35	</smplFwMaxSpeed>
         </Maybach_HL62TR>
         <Maybach_HL66P>
           <smplEnginePower>	190.3106	</smplEnginePower>
+          <smplFwMaxSpeed>	35	</smplFwMaxSpeed>
         </Maybach_HL66P>
       </engines>
       <chassis>

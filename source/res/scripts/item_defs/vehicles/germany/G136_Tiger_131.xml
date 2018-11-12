@@ -95,7 +95,7 @@
       </slot>
       <slot>
         <slotType>	fixedEmblem	</slotType>
-        <slotId>	2	</slotId>
+        <slotId>	204	</slotId>
         <rayStart>	-1.71778 0.571478 0.329956	</rayStart>
         <rayEnd>	-1.47778 0.571478 0.329956	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
@@ -106,7 +106,7 @@
       </slot>
       <slot>
         <slotType>	fixedEmblem	</slotType>
-        <slotId>	3	</slotId>
+        <slotId>	205	</slotId>
         <rayStart>	1.71778 0.571478 0.329956	</rayStart>
         <rayEnd>	1.47778 0.571478 0.329956	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
@@ -118,13 +118,13 @@
       </slot>
       <slot>
         <slotType>	paint	</slotType>
-        <slotId>	7	</slotId>
+        <slotId>	2	</slotId>
         <anchorPosition>	0.00201076 0.750968 -2.46361	</anchorPosition>
         <anchorDirection>	-0.000001 0.544492 -0.838766	</anchorDirection>
       </slot>
       <slot>
         <slotType>	camouflage	</slotType>
-        <slotId>	8	</slotId>
+        <slotId>	3	</slotId>
         <anchorPosition>	0.00201076 0.750728 -2.46399	</anchorPosition>
         <anchorDirection>	0.000000 0.544489 -0.838768	</anchorDirection>
       </slot>
@@ -1029,13 +1029,13 @@
       <customizationSlots>
         <slot>
           <slotType>	paint	</slotType>
-          <slotId>	5	</slotId>
+          <slotId>	256	</slotId>
           <anchorPosition>	-1.77349 0.616235 0.0081799	</anchorPosition>
           <anchorDirection>	-0.944592 0.328218 0.00435676	</anchorDirection>
         </slot>
         <slot>
           <slotType>	style	</slotType>
-          <slotId>	6	</slotId>
+          <slotId>	257	</slotId>
           <anchorPosition>	0.000077 2.62056 -0.195612	</anchorPosition>
           <anchorDirection>	0.000000 1 0.000000	</anchorDirection>
         </slot>
@@ -1133,7 +1133,7 @@
           <customizationSlots>
             <slot>
               <slotType>	insigniaOnGun	</slotType>
-              <slotId>	4	</slotId>
+              <slotId>	771	</slotId>
               <rayStart>	0.000037 0.0198594 3.21924	</rayStart>
               <rayEnd>	-0.0374738 -0.0230583 3.21768	</rayEnd>
               <rayUp>	0.07 0.064 5	</rayUp>
@@ -1143,21 +1143,21 @@
             </slot>
             <slot>
               <slotType>	paint	</slotType>
-              <slotId>	11	</slotId>
+              <slotId>	768	</slotId>
               <anchorPosition>	0.000018 0.00992969 2.03738	</anchorPosition>
               <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
               <applyTo>	4096	</applyTo>
             </slot>
             <slot>
               <slotType>	paint	</slotType>
-              <slotId>	12	</slotId>
+              <slotId>	769	</slotId>
               <anchorPosition>	0.000000 0.280546 0.280546	</anchorPosition>
               <anchorDirection>	0.000000 0.707107 0.707107	</anchorDirection>
               <applyTo>	16384	</applyTo>
             </slot>
             <slot>
               <slotType>	camouflage	</slotType>
-              <slotId>	13	</slotId>
+              <slotId>	770	</slotId>
               <anchorPosition>	0.000018 0.00992969 2.03738	</anchorPosition>
               <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
               <applyTo>	4096	</applyTo>
@@ -1190,13 +1190,13 @@
       <customizationSlots>
         <slot>
           <slotType>	paint	</slotType>
-          <slotId>	9	</slotId>
+          <slotId>	512	</slotId>
           <anchorPosition>	0.000000 0.848755 0.000000	</anchorPosition>
           <anchorDirection>	0.000000 1 0.000000	</anchorDirection>
         </slot>
         <slot>
           <slotType>	camouflage	</slotType>
-          <slotId>	10	</slotId>
+          <slotId>	513	</slotId>
           <anchorPosition>	0.000000 0.848755 0.000000	</anchorPosition>
           <anchorDirection>	0.000000 1 0.000000	</anchorDirection>
         </slot>
@@ -1217,6 +1217,7 @@
       <engines>
         <Maybach_HL_210_TRM_P45M>
           <smplEnginePower>	687.2327	</smplEnginePower>
+          <smplFwMaxSpeed>	40	</smplFwMaxSpeed>
         </Maybach_HL_210_TRM_P45M>
       </engines>
       <chassis>

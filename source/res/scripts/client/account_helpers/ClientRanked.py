@@ -4,7 +4,8 @@ from functools import partial
 import AccountCommands
 from shared_utils.account_helpers.diff_utils import synchronizeDicts
 from debug_utils import LOG_DEBUG_DEV
-import ranked_common
+from helpers import time_utils
+import season_common
 
 def _skipResponse(resultID, errorCode):
     LOG_DEBUG_DEV('_skipResponse', resultID, errorCode)
@@ -37,11 +38,11 @@ class ClientRanked(object):
 
     def getSeason(self):
         rankedConfig = self.__account.serverSettings['ranked_config']
-        return ranked_common.getRankedSeason(rankedConfig)
+        return season_common.getSeason(rankedConfig, time_utils.getServerRegionalTime())
 
     def getConfigs(self):
         rankedConfig = self.__account.serverSettings['ranked_config']
-        cycleConfig = ranked_common.getCycleConfig(rankedConfig)
+        cycleConfig = season_common.getActiveCycleConfig(rankedConfig, time_utils.getServerRegionalTime())
         return (rankedConfig, cycleConfig)
 
     def onAccountBecomePlayer(self):

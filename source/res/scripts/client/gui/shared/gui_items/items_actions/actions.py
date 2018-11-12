@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/gui_items/items_actions/actions.py
+from collections import namedtuple
 import BigWorld
 from gui.Scaleform.locale.STORAGE import STORAGE
 from gui.shared.economics import getGUIPrice
@@ -13,17 +14,32 @@ from debug_utils import LOG_ERROR, LOG_DEBUG
 from gui import SystemMessages, DialogsInterface
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared import event_dispatcher as shared_events
-from gui.shared.gui_items.processors.module import getInstallerProcessor, BuyAndInstallItemProcessor, MultipleModulesSeller
-from gui.shared.gui_items.processors.vehicle import tryToLoadDefaultShellsLayout, VehicleLayoutProcessor, VehicleBattleBoosterLayoutProcessor, BuyAndInstallBattleBoosterProcessor, VehicleSlotBuyer
-from gui.shared.gui_items.vehicle_equipment import ShellLayoutHelper, EquipmentLayoutHelper
+from gui.shared.gui_items.processors.module import getInstallerProcessor
+from gui.shared.gui_items.processors.module import BuyAndInstallItemProcessor
+from gui.shared.gui_items.processors.module import ModuleSeller
+from gui.shared.gui_items.processors.module import MultipleModulesSeller
+from gui.shared.gui_items.processors.vehicle import tryToLoadDefaultShellsLayout
+from gui.shared.gui_items.processors.vehicle import VehicleLayoutProcessor
+from gui.shared.gui_items.processors.vehicle import VehicleBattleBoosterLayoutProcessor
+from gui.shared.gui_items.processors.vehicle import BuyAndInstallBattleBoosterProcessor
+from gui.shared.gui_items.processors.vehicle import VehicleSlotBuyer
+from gui.shared.gui_items.vehicle_equipment import EquipmentLayoutHelper
+from gui.shared.gui_items.vehicle_equipment import ShellLayoutHelper
 from gui.Scaleform.Waiting import Waiting
 from gui.Scaleform.daapi.view.lobby.techtree import unlock
-from gui.Scaleform.daapi.view.lobby.techtree.settings import UnlockStats, RequestState
-from gui.Scaleform.daapi.view.dialogs.ConfirmModuleMeta import LocalSellModuleMeta, BuyModuleMeta
-from gui.Scaleform.daapi.view.dialogs.ExchangeDialogMeta import ExchangeXpMeta, ExchangeCreditsSingleItemMeta, RestoreExchangeCreditsMeta
+from gui.Scaleform.daapi.view.lobby.techtree.settings import RequestState
+from gui.Scaleform.daapi.view.lobby.techtree.settings import UnlockStats
+from gui.Scaleform.daapi.view.dialogs.ConfirmModuleMeta import LocalSellModuleMeta
+from gui.Scaleform.daapi.view.dialogs.ConfirmModuleMeta import BuyModuleMeta
+from gui.Scaleform.daapi.view.dialogs.ConfirmModuleMeta import MAX_ITEMS_FOR_OPERATION
+from gui.Scaleform.daapi.view.dialogs.ExchangeDialogMeta import ExchangeXpMeta
+from gui.Scaleform.daapi.view.dialogs.ExchangeDialogMeta import ExchangeCreditsSingleItemMeta
+from gui.Scaleform.daapi.view.dialogs.ExchangeDialogMeta import RestoreExchangeCreditsMeta
+from shared_utils import first, allEqual
 from skeletons.gui.game_control import ITradeInController
 from skeletons.gui.shared import IItemsCache
 from soft_exception import SoftException
+ItemSellSpec = namedtuple('ItemSellSpec', 'typeIdx, intCD, count')
 
 def showMessage(scopeMsg, msg, item, msgType=SystemMessages.SM_TYPE.Error, **kwargs):
     kwargs['userString'] = item.userName
@@ -69,7 +85,7 @@ def getGunCD(item, vehicle, itemsCache=None):
 def processMsg(result):
     if result and result.userMsg:
         SystemMessages.pushI18nMessage(result.userMsg, type=result.sysMsgType)
-    if result and result.auxData:
+    if result and hasattr(result, 'auxData') and not isinstance(result.auxData, dict) and result.auxData:
         for m in result.auxData:
             SystemMessages.pushI18nMessage(m.userMsg, type=m.sysMsgType)
 
@@ -127,15 +143,20 @@ class SellItemAction(CachedItemAction):
 
 
 class SellMultipleItems(IGUIItemAction):
+    itemsCache = dependency.descriptor(IItemsCache)
 
     def __init__(self, itemSellSpecs):
         super(SellMultipleItems, self).__init__()
-        self.__item = itemSellSpecs
+        self.__items = itemSellSpecs
 
     @process
     def doAction(self):
         Waiting.show(STORAGE.FORSELL_WAITING)
-        result = yield MultipleModulesSeller(self.__item).request()
+        if allEqual(self.__items, lambda i: i.intCD):
+            item = self.itemsCache.items.getItemByCD(first(self.__items).intCD)
+            result = yield ModuleSeller(item, min(item.inventoryCount, MAX_ITEMS_FOR_OPERATION)).request()
+        else:
+            result = yield MultipleModulesSeller(self.__items).request()
         if result.userMsg:
             SystemMessages.pushI18nMessage(result.userMsg, type=result.sysMsgType)
         Waiting.hide(STORAGE.FORSELL_WAITING)

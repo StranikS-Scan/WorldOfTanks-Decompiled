@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client/gui/shared/gui_items/processors/vehicle.py
 import BigWorld
 import AccountCommands
+from constants import RentType, SEASON_NAME_BY_TYPE
 from AccountCommands import VEHICLE_SETTINGS_FLAG
 from bootcamp.Bootcamp import g_bootcamp
 from items import EQUIPMENT_TYPES
@@ -10,6 +11,7 @@ from adisp import process, async
 from debug_utils import LOG_DEBUG
 from gui import SystemMessages
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
+from gui.Scaleform.locale.SYSTEM_MESSAGES import SYSTEM_MESSAGES
 from gui.SystemMessages import SM_TYPE, CURRENCY_TO_SM_TYPE
 from gui.shared.formatters import formatPrice, formatGoldPrice, text_styles
 from gui.shared.formatters import icons
@@ -23,6 +25,10 @@ from shared_utils import findFirst
 from skeletons.gui.game_control import IRestoreController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
+from rent_common import parseRentID
+from soft_exception import SoftException
+_SEASON_RENT_DURATION_KEY = {RentType.SEASON_RENT: 'season',
+ RentType.SEASON_CYCLE_RENT: 'cycle'}
 
 def getCrewAndShellsSumPrice(result, vehicle, crewType, buyShells):
     if crewType != -1:
@@ -59,22 +65,26 @@ class VehicleReceiveProcessor(ItemProcessor):
 
 class VehicleBuyer(VehicleReceiveProcessor):
 
-    def __init__(self, vehicle, buySlot, buyShell=False, crewType=-1):
+    def __init__(self, vehicle, buySlot, buyShell=False, crewType=-1, showNotEnoughSlotMsg=True):
         self.buySlot = buySlot
+        self.showNotEnoughSlotMsg = showNotEnoughSlotMsg
         super(VehicleBuyer, self).__init__(vehicle, buyShell=buyShell, crewType=crewType)
 
     def _getPluginsList(self):
-        return (proc_plugs.MoneyValidator(self.price), proc_plugs.VehicleSlotsConfirmator(not self.buySlot), proc_plugs.VehicleFreeLimitConfirmator(self.item, self.crewType))
+        return (proc_plugs.MoneyValidator(self.price), proc_plugs.VehicleSlotsConfirmator(self.showNotEnoughSlotMsg and not self.buySlot), proc_plugs.VehicleFreeLimitConfirmator(self.item, self.crewType))
 
     def _getPrice(self):
         return getCrewAndShellsSumPrice(self.item.buyPrices.itemPrice.price, self.item, self.crewType, self.buyShell)
 
-    def _errorHandler(self, code, errStr='', ctx=None):
+    @dependency.replace_none_kwargs(itemsCache=IItemsCache)
+    def _errorHandler(self, code, errStr='', ctx=None, itemsCache=None):
         if not errStr:
-            msg = 'vehicle_buy/server_error' if code != AccountCommands.RES_CENTER_DISCONNECTED else 'vehicle_buy/server_error_centerDown'
-        else:
-            msg = 'vehicle_buy/%s' % errStr
-        return makeI18nError(msg, defaultSysMsgKey='vehicle_buy/server_error', vehName=self.item.userName)
+            errStr = 'server_error' if code != AccountCommands.RES_CENTER_DISCONNECTED else 'server_error_centerDown'
+        msg = 'vehicle_buy/{}'.format(errStr)
+        slotsEnough = itemsCache.items.inventory.getFreeSlots(itemsCache.items.stats.vehicleSlots) > 0
+        if not self.showNotEnoughSlotMsg and not slotsEnough:
+            errStr = 'slot_error'
+        return makeI18nError(msg, defaultSysMsgKey='vehicle_buy/server_error', auxData={'errStr': errStr}, vehName=self.item.userName)
 
     def _successHandler(self, code, ctx=None):
         return makeI18nSuccess('vehicle_buy/success', vehName=self.item.userName, price=formatPrice(self.price), type=self._getSysMsgType())
@@ -89,9 +99,10 @@ class VehicleBuyer(VehicleReceiveProcessor):
 
 class VehicleRenter(VehicleReceiveProcessor):
 
-    def __init__(self, vehicle, rentPackage, buyShell=False, crewType=-1):
-        self.rentPackage = rentPackage
-        self.rentPrice = self.__getRentPrice(rentPackage, vehicle)
+    def __init__(self, vehicle, rentID, buyShell=False, crewType=-1):
+        self.rentPackageID = rentID
+        self.rentPrice = self.__getRentPrice(rentID, vehicle)
+        self.rentPackage = vehicle.getRentPackage(rentID)
         super(VehicleRenter, self).__init__(vehicle, buyShell, crewType)
 
     def _getPluginsList(self):
@@ -108,18 +119,31 @@ class VehicleRenter(VehicleReceiveProcessor):
         return makeI18nError(msg, defaultSysMsgKey='vehicle_rent/server_error', vehName=self.item.userName)
 
     def _successHandler(self, code, ctx=None):
-        return makeI18nSuccess('vehicle_rent/success', vehName=self.item.userName, days=ctx.get('days', 0), price=formatPrice(self.price), type=self._getSysMsgType())
+        rentType, _ = parseRentID(self.rentPackageID)
+        if rentType == RentType.TIME_RENT:
+            rentPackageName = makeString(SYSTEM_MESSAGES.VEHICLE_RENT_TIMERENT, days=ctx.get('days', 0))
+        elif rentType in (RentType.SEASON_CYCLE_RENT, RentType.SEASON_RENT):
+            seasonName = SEASON_NAME_BY_TYPE[self.rentPackage['seasonType']]
+            durationKey = _SEASON_RENT_DURATION_KEY.get(rentType)
+            rentPackageName = makeString('#system_messages:vehicle_rent/{}/{}'.format(seasonName, durationKey))
+        else:
+            raise SoftException('Unknown rent type [{}]!'.format(rentType))
+        if not self.item.isDisabledForBuy and not self.item.isHidden:
+            buyOption = makeString(SYSTEM_MESSAGES.VEHICLE_RENT_BUYOPTION)
+        else:
+            buyOption = ''
+        return makeI18nSuccess('vehicle_rent/success', vehName=self.item.userName, rentPackageName=rentPackageName, price=formatPrice(self.price), type=self._getSysMsgType(), buyOption=buyOption)
 
     def _request(self, callback):
         LOG_DEBUG('Make request to rent vehicle', self.item, self.crewType, self.buyShell, self.price)
-        BigWorld.player().shop.buyVehicle(self.item.nationID, self.item.innationID, self.buyShell, self.buyCrew, self.crewType, self.rentPackage, lambda code: self._response(code, callback, ctx={'days': self.rentPackage}))
+        BigWorld.player().shop.buyVehicle(self.item.nationID, self.item.innationID, self.buyShell, self.buyCrew, self.crewType, self.rentPackageID, lambda code: self._response(code, callback, ctx={'rentID': self.rentPackageID}))
 
     def _getSysMsgType(self):
         return CURRENCY_TO_SM_TYPE.get(self.rentPrice.getCurrency(byWeight=False), SM_TYPE.Information)
 
-    def __getRentPrice(self, rentPackage, vehicle):
+    def __getRentPrice(self, rentID, vehicle):
         for package in vehicle.rentPackages:
-            if package['days'] == rentPackage:
+            if package['rentID'] == rentID:
                 return package['rentPrice']
 
         return MONEY_UNDEFINED
@@ -230,12 +254,19 @@ class VehicleSeller(ItemProcessor):
     restore = dependency.descriptor(IRestoreController)
     lobbyContext = dependency.descriptor(ILobbyContext)
 
-    def __init__(self, vehicle, shells=None, eqs=None, optDevs=None, inventory=None, isCrewDismiss=False):
+    def __init__(self, vehicle, shells=None, eqs=None, optDevs=None, inventory=None, customizationItems=None, isCrewDismiss=False):
         shells = shells or []
         eqs = eqs or []
         optDevs = optDevs or []
         inventory = inventory or []
-        self.gainMoney, self.spendMoney = self.__getGainSpendMoney(vehicle, shells, eqs, optDevs, inventory)
+        customizationItems = customizationItems or []
+        self.vehicle = vehicle
+        self.shells = shells
+        self.eqs = eqs
+        self.optDevs = optDevs
+        self.inventory = inventory
+        self.customizationItems = customizationItems
+        self.gainMoney, self.spendMoney = self.__getGainSpendMoney(vehicle, shells, eqs, optDevs, inventory, customizationItems)
         barracksBerthsNeeded = len([ item for item in vehicle.crew if item[1] is not None ])
         bufferOverflowCtx = {}
         isBufferOverflowed = False
@@ -257,11 +288,6 @@ class VehicleSeller(ItemProcessor):
          proc_plugs.BarracksSlotsValidator(barracksBerthsNeeded, isEnabled=not isCrewDismiss),
          proc_plugs.BufferOverflowConfirmator(bufferOverflowCtx, isEnabled=isBufferOverflowed),
          _getUniqueVehicleSellConfirmator(vehicle)))
-        self.vehicle = vehicle
-        self.shells = shells
-        self.eqs = eqs
-        self.optDevs = optDevs
-        self.inventory = inventory
         self.isCrewDismiss = isCrewDismiss
         self.isDismantlingForMoney = len(getDismantlingToInventoryDevices(vehicle, optDevs)) > 0
         self.isRemovedAfterRent = vehicle.isRented
@@ -302,6 +328,7 @@ class VehicleSeller(ItemProcessor):
     def _request(self, callback):
         itemsFromVehicle = list()
         itemsFromInventory = list()
+        customizationItems = list()
         isSellShells = len(self.shells) > 0
         for shell in self.shells:
             itemsFromVehicle.append(shell.intCD)
@@ -318,10 +345,14 @@ class VehicleSeller(ItemProcessor):
         for dev in self.optDevs:
             itemsFromVehicle.append(dev.intCD)
 
-        LOG_DEBUG('Make server request:', self.vehicle.invID, isSellShells, isSellEqs, isSellFromInv, isSellOptDevs, self.isDismantlingForMoney, self.isCrewDismiss, itemsFromVehicle, itemsFromInventory)
-        BigWorld.player().inventory.sellVehicle(self.vehicle.invID, self.isCrewDismiss, itemsFromVehicle, itemsFromInventory, lambda code: self._response(code, callback))
+        for custItem in self.customizationItems:
+            customizationItems.append(custItem.intCD)
+            customizationItems.append(custItem.getInstalledOnVehicleCount(self.vehicle.intCD))
 
-    def __getGainSpendMoney(self, vehicle, vehShells, vehEqs, optDevicesToSell, inventory):
+        LOG_DEBUG('Make server request:', self.vehicle.invID, isSellShells, isSellEqs, isSellFromInv, isSellOptDevs, self.isDismantlingForMoney, self.isCrewDismiss, itemsFromVehicle, itemsFromInventory)
+        BigWorld.player().inventory.sellVehicle(self.vehicle.invID, self.isCrewDismiss, itemsFromVehicle, itemsFromInventory, customizationItems, lambda code: self._response(code, callback))
+
+    def __getGainSpendMoney(self, vehicle, vehShells, vehEqs, optDevicesToSell, inventory, customizationItems):
         moneyGain = vehicle.sellPrices.itemPrice.price
         for shell in vehShells:
             moneyGain += shell.sellPrices.itemPrice.price * shell.count
@@ -329,8 +360,11 @@ class VehicleSeller(ItemProcessor):
         for module in vehEqs + optDevicesToSell:
             moneyGain += module.sellPrices.itemPrice.price
 
-        for module in inventory:
+        for module in inventory + customizationItems:
             moneyGain += module.sellPrices.itemPrice.price * module.inventoryCount
+
+        for module in customizationItems:
+            moneyGain += module.sellPrices.itemPrice.price * module.getInstalledOnVehicleCount(self.vehicle.intCD)
 
         dismantlingToInventoryDevices = getDismantlingToInventoryDevices(vehicle, optDevicesToSell)
         moneySpend = calculateSpendMoney(self.itemsCache.items, dismantlingToInventoryDevices)

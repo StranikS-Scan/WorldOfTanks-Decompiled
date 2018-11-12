@@ -19,12 +19,12 @@ else:
 
 
 __all__ = ('MaterialInfo', 'DEFAULT_MATERIAL_INFO', 'EmblemSlot', 'LodSettings', 'NodesAndGroups', 'Camouflage', 'DEFAULT_CAMOUFLAGE', 'SwingingSettings', 'I18nComponent', 'DeviceHealth', 'ModelStatesPaths')
-MaterialInfo = namedtuple('MaterialInfo', ('kind', 'armor', 'extra', 'vehicleDamageFactor', 'useArmorHomogenization', 'useHitAngle', 'useAntifragmentationLining', 'mayRicochet', 'collideOnceOnly', 'checkCaliberForRichet', 'checkCaliberForHitAngleNorm', 'damageKind', 'chanceToHitByProjectile', 'chanceToHitByExplosion', 'continueTraceIfNoHit'))
-DEFAULT_MATERIAL_INFO = MaterialInfo(0, 0, None, 0.0, False, False, False, False, False, False, False, 0, 0.0, 0.0, False)
-EmblemSlot = namedtuple('EmblemSlot', ('rayStart', 'rayEnd', 'rayUp', 'size', 'hideIfDamaged', 'type', 'isMirrored', 'isUVProportional', 'emblemId'))
-SlotsAnchor = namedtuple('SlotsAnchor', ('type', 'slotId', 'anchorPosition', 'anchorDirection', 'applyTo', 'position', 'rotation', 'scale', 'scaleFactors', 'doubleSided', 'showOn'))
+MaterialInfo = namedtuple('MaterialInfo', ('kind', 'armor', 'extra', 'multipleExtra', 'vehicleDamageFactor', 'useArmorHomogenization', 'useHitAngle', 'useAntifragmentationLining', 'mayRicochet', 'collideOnceOnly', 'checkCaliberForRichet', 'checkCaliberForHitAngleNorm', 'damageKind', 'chanceToHitByProjectile', 'chanceToHitByExplosion', 'continueTraceIfNoHit'))
+DEFAULT_MATERIAL_INFO = MaterialInfo(0, 0, None, False, 0.0, False, False, False, False, False, False, False, 0, 0.0, 0.0, False)
+EmblemSlot = namedtuple('EmblemSlot', ('rayStart', 'rayEnd', 'rayUp', 'size', 'hideIfDamaged', 'type', 'isMirrored', 'isUVProportional', 'emblemId', 'slotId', 'applyToFabric'))
+CustomizationSlotDescription = namedtuple('CustomizationSlotDescription', ('type', 'slotId', 'anchorPosition', 'anchorDirection', 'applyTo', 'position', 'rotation', 'scale', 'scaleFactors', 'doubleSided', 'showOn', 'tags', 'parentSlotId', 'clipAngle'))
 LodSettings = namedtuple('LodSettings', ('maxLodDistance', 'maxPriority'))
-NodesAndGroups = namedtuple('NodesAndGroups', ('nodes', 'groups'))
+NodesAndGroups = namedtuple('NodesAndGroups', ('nodes', 'groups', 'activePostmortem', 'lodSettings'))
 Camouflage = namedtuple('Camouflage', ('tiling', 'exclusionMask'))
 DEFAULT_CAMOUFLAGE = Camouflage(None, None)
 SwingingSettings = namedtuple('SwingingSettings', ('lodDist', 'sensitivityToImpulse', 'pitchParams', 'rollParams'))
@@ -134,7 +134,7 @@ class I18nExposedComponent(I18nComponent):
 
 
 class DeviceHealth(object):
-    __slots__ = ('maxHealth', 'repairCost', 'maxRegenHealth', 'healthRegenPerSec', 'healthBurnPerSec', 'chanceToHit', 'hysteresisHealth', 'invulnerable')
+    __slots__ = ('maxHealth', 'repairCost', 'maxRegenHealth', 'healthRegenPerSec', 'healthBurnPerSec', 'chanceToHit', 'hysteresisHealth')
 
     def __init__(self, maxHealth, repairCost=component_constants.ZERO_FLOAT, maxRegenHealth=component_constants.ZERO_INT):
         super(DeviceHealth, self).__init__()
@@ -145,7 +145,6 @@ class DeviceHealth(object):
         self.healthBurnPerSec = component_constants.ZERO_FLOAT
         self.chanceToHit = None
         self.hysteresisHealth = None
-        self.invulnerable = False
         return
 
     def __repr__(self):

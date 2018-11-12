@@ -918,10 +918,11 @@
           <customizationSlots>
             <slot>
               <slotType>	insigniaOnGun	</slotType>
-              <slotId>	6	</slotId>
+              <slotId>	771	</slotId>
               <rayStart>	0.00058829 -0.00538187 1.06258	</rayStart>
               <rayEnd>	0.31654 -0.142643 1.04736	</rayEnd>
-              <rayUp>	0.097 0.086 5	</rayUp>
+              <rayUp>	0.097 0.000000 0.000000	</rayUp>
+              <applyToFabric>	true	</applyToFabric>
               <size>	0.6	</size>
               <hideIfDamaged>	false	</hideIfDamaged>
               <isUVProportional>	true	</isUVProportional>
@@ -951,7 +952,7 @@
       <customizationSlots>
         <slot>
           <slotType>	inscription	</slotType>
-          <slotId>	2	</slotId>
+          <slotId>	546	</slotId>
           <rayStart>	1.19706 0.416277 -0.350682	</rayStart>
           <rayEnd>	1.11162 0.364799 -0.357663	</rayEnd>
           <rayUp>	-0.00305065 0.998993 0.0447648	</rayUp>
@@ -961,7 +962,7 @@
         </slot>
         <slot>
           <slotType>	player	</slotType>
-          <slotId>	3	</slotId>
+          <slotId>	514	</slotId>
           <rayStart>	-0.741121 0.428705 0.898218	</rayStart>
           <rayEnd>	-0.679478 0.374907 0.840721	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
@@ -971,18 +972,18 @@
         </slot>
         <slot>
           <slotType>	player	</slotType>
-          <slotId>	4	</slotId>
+          <slotId>	515	</slotId>
           <rayStart>	0.687328 0.48087 0.876672	</rayStart>
           <rayEnd>	0.633718 0.408149 0.833803	</rayEnd>
           <rayUp>	-0.744689 0.308396 -0.591887	</rayUp>
+          <isMirrored>	true	</isMirrored>
           <size>	0.19	</size>
           <hideIfDamaged>	false	</hideIfDamaged>
-          <isMirrored>	true	</isMirrored>
           <isUVProportional>	true	</isUVProportional>
         </slot>
         <slot>
           <slotType>	inscription	</slotType>
-          <slotId>	5	</slotId>
+          <slotId>	547	</slotId>
           <rayStart>	-1.209 0.400343 -0.346348	</rayStart>
           <rayEnd>	-1.1238 0.348269 -0.351779	</rayEnd>
           <rayUp>	0.00223466 0.999001 0.0446227	</rayUp>
@@ -1013,6 +1014,7 @@
       <engines>
         <NORINCO_12150L_59>
           <smplEnginePower>	650	</smplEnginePower>
+          <smplFwMaxSpeed>	56	</smplFwMaxSpeed>
         </NORINCO_12150L_59>
       </engines>
       <chassis>

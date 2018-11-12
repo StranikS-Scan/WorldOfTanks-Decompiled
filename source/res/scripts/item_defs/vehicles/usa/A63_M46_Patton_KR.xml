@@ -76,7 +76,7 @@
     <customizationSlots>
       <slot>
         <slotType>	clan	</slotType>
-        <slotId>	6	</slotId>
+        <slotId>	1	</slotId>
         <rayStart>	-0.64665 0.0457252 2.57558	</rayStart>
         <rayEnd>	-0.64665 -0.102909 2.44177	</rayEnd>
         <rayUp>	0.000000 0.000000 -1	</rayUp>
@@ -1052,10 +1052,11 @@
           <customizationSlots>
             <slot>
               <slotType>	insigniaOnGun	</slotType>
-              <slotId>	1	</slotId>
+              <slotId>	771	</slotId>
               <rayStart>	0.00422264 0.0036233 1.85853	</rayStart>
               <rayEnd>	-0.000779636 0.000475718 1.8583	</rayEnd>
-              <rayUp>	0.074 0.073 4	</rayUp>
+              <rayUp>	0.074 0.000000 0.000000	</rayUp>
+              <applyToFabric>	true	</applyToFabric>
               <size>	0.5	</size>
               <hideIfDamaged>	false	</hideIfDamaged>
               <isUVProportional>	true	</isUVProportional>
@@ -1104,6 +1105,7 @@
       <engines>
         <Continental_AV_1790_5A>
           <smplEnginePower>	856.3977	</smplEnginePower>
+          <smplFwMaxSpeed>	48.3	</smplFwMaxSpeed>
         </Continental_AV_1790_5A>
       </engines>
       <chassis>

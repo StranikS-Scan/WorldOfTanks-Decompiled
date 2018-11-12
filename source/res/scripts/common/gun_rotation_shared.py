@@ -111,7 +111,7 @@ def isSegmentCollideWithVehicle(vehicle, startPoint, endPoint):
     vehStartPoint = toVehSpace.applyPoint(startPoint)
     vehEndPoint = toVehSpace.applyPoint(endPoint)
     for compDescr, toCompSpace, isAttached in getVehicleComponents(vehicle):
-        if not isAttached or compDescr.itemTypeName == 'vehicleGun':
+        if not isAttached or getattr(compDescr, 'itemTypeName', None) == 'vehicleGun':
             continue
         compStartPoint = toCompSpace.applyPoint(vehStartPoint)
         compEndPoint = toCompSpace.applyPoint(vehEndPoint)

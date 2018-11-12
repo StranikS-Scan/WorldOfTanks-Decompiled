@@ -98,7 +98,7 @@ class StateInBattle(AbstractState):
         self.__weaver.clear()
         return
 
-    def __onCameraChanged(self, cameraName, currentVehicleId):
+    def __onCameraChanged(self, cameraName, currentVehicleId=None):
         if cameraName == 'sniper':
             if not g_bootcamp.isSniperModeUsed():
                 camera = BigWorld.player().inputHandler.ctrl.camera

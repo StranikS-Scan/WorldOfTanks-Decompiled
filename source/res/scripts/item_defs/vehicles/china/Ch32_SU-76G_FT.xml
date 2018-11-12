@@ -97,7 +97,7 @@
       </slot>
       <slot>
         <slotType>	player	</slotType>
-        <slotId>	2	</slotId>
+        <slotId>	4	</slotId>
         <rayStart>	-1.10531 0.84339 -0.969709	</rayStart>
         <rayEnd>	-0.90531 0.84339 -0.969709	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
@@ -107,7 +107,7 @@
       </slot>
       <slot>
         <slotType>	player	</slotType>
-        <slotId>	3	</slotId>
+        <slotId>	5	</slotId>
         <rayStart>	1.10531 0.84339 -0.969709	</rayStart>
         <rayEnd>	0.90531 0.84339 -0.969709	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
@@ -118,7 +118,7 @@
       </slot>
       <slot>
         <slotType>	inscription	</slotType>
-        <slotId>	4	</slotId>
+        <slotId>	36	</slotId>
         <rayStart>	0.343201 0.516298 1.77963	</rayStart>
         <rayEnd>	0.343201 0.375825 1.63726	</rayEnd>
         <rayUp>	0.000000 0.000000 -1	</rayUp>
@@ -128,7 +128,7 @@
       </slot>
       <slot>
         <slotType>	inscription	</slotType>
-        <slotId>	5	</slotId>
+        <slotId>	37	</slotId>
         <rayStart>	1.10476 0.78631 -1.70301	</rayStart>
         <rayEnd>	0.904761 0.78631 -1.70301	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
@@ -138,7 +138,7 @@
       </slot>
       <slot>
         <slotType>	camouflage	</slotType>
-        <slotId>	8	</slotId>
+        <slotId>	3	</slotId>
         <anchorPosition>	0.000000 0.687815 1.25258	</anchorPosition>
         <anchorDirection>	0.000000 0.481325 0.876542	</anchorDirection>
       </slot>
@@ -896,7 +896,7 @@
       <customizationSlots>
         <slot>
           <slotType>	style	</slotType>
-          <slotId>	13	</slotId>
+          <slotId>	257	</slotId>
           <anchorPosition>	0.000000 2.18091 -1.66791	</anchorPosition>
           <anchorDirection>	0.000000 1 0.000000	</anchorDirection>
         </slot>
@@ -1646,7 +1646,7 @@
       <customizationSlots>
         <slot>
           <slotType>	style	</slotType>
-          <slotId>	7	</slotId>
+          <slotId>	257	</slotId>
           <anchorPosition>	0.00101546 2.1812 -1.66786	</anchorPosition>
           <anchorDirection>	0.000000 1 -0.000000	</anchorDirection>
         </slot>
@@ -1729,7 +1729,7 @@
           <customizationSlots>
             <slot>
               <slotType>	camouflage	</slotType>
-              <slotId>	6	</slotId>
+              <slotId>	770	</slotId>
               <anchorPosition>	-0.000063 0.178561 1.70176	</anchorPosition>
               <anchorDirection>	-0.000000 0.000000 1	</anchorDirection>
               <applyTo>	4096	</applyTo>
@@ -1785,7 +1785,7 @@
           <customizationSlots>
             <slot>
               <slotType>	camouflage	</slotType>
-              <slotId>	10	</slotId>
+              <slotId>	770	</slotId>
               <anchorPosition>	0.000000 0.178423 1.56216	</anchorPosition>
               <anchorDirection>	-0.000000 0.000000 1	</anchorDirection>
               <applyTo>	4096	</applyTo>
@@ -1841,7 +1841,7 @@
           <customizationSlots>
             <slot>
               <slotType>	camouflage	</slotType>
-              <slotId>	11	</slotId>
+              <slotId>	770	</slotId>
               <anchorPosition>	0.000029 0.184691 2.18498	</anchorPosition>
               <anchorDirection>	-0.000000 0.000000 1	</anchorDirection>
               <applyTo>	4096	</applyTo>
@@ -1871,7 +1871,7 @@
       <customizationSlots>
         <slot>
           <slotType>	camouflage	</slotType>
-          <slotId>	9	</slotId>
+          <slotId>	513	</slotId>
           <anchorPosition>	0.000000 0.21746 0.000000	</anchorPosition>
           <anchorDirection>	0.000000 1 -0.000000	</anchorDirection>
         </slot>
@@ -1906,13 +1906,16 @@
       <engines>
         <_2x_GAZ_203>
           <smplEnginePower>	270	</smplEnginePower>
+          <smplFwMaxSpeed>	45	</smplFwMaxSpeed>
         </_2x_GAZ_203>
         <_12150L3G>
           <smplEnginePower>	300	</smplEnginePower>
+          <smplFwMaxSpeed>	45	</smplFwMaxSpeed>
         </_12150L3G>
       </engines>
       <chassis>
         <Chassis_Ch32_SU-76G_FT>
+          <axleCount>	5	</axleCount>
           <grounds>
             <ground>
               <medium>
@@ -1947,6 +1950,7 @@
           </grounds>
         </Chassis_Ch32_SU-76G_FT>
         <Chassis_Ch32_SU-76G_FT_2>
+          <axleCount>	5	</axleCount>
           <grounds>
             <ground>
               <medium>

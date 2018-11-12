@@ -19,7 +19,6 @@ from personal_missions import PM_BRANCH
 from shared_utils import CONST_CONTAINER, findFirst
 from skeletons.gui.customization import ICustomizationService
 from skeletons.gui.server_events import IEventsCache
-from gui import makeHtmlString
 
 class AWARDS_SIZES(CONST_CONTAINER):
     SMALL = 'small'
@@ -48,11 +47,7 @@ AWARD_IMAGES = {AWARDS_SIZES.SMALL: {Currency.CREDITS: RES_ICONS.MAPS_ICONS_QUES
                       'tankmenXPFactor': RES_ICONS.MAPS_ICONS_QUESTS_BONUSES_SMALL_TANKMENXP,
                       'xp': RES_ICONS.MAPS_ICONS_QUESTS_BONUSES_SMALL_EXP,
                       'xpFactor': RES_ICONS.MAPS_ICONS_QUESTS_BONUSES_SMALL_EXP,
-                      'dailyXPFactor': RES_ICONS.MAPS_ICONS_QUESTS_BONUSES_SMALL_FREEEXP,
-                      'xpFactorHE': RES_ICONS.MAPS_ICONS_QUESTS_BONUSES_SMALL_EXP,
-                      'creditsFactorHE': RES_ICONS.MAPS_ICONS_QUESTS_BONUSES_SMALL_CREDITS,
-                      'xpFactorEliteHE': RES_ICONS.MAPS_ICONS_QUESTS_BONUSES_SMALL_ELITEXP,
-                      'freeXPFactorHE': RES_ICONS.MAPS_ICONS_QUESTS_BONUSES_SMALL_FREEEXP},
+                      'dailyXPFactor': RES_ICONS.MAPS_ICONS_QUESTS_BONUSES_SMALL_FREEEXP},
  AWARDS_SIZES.BIG: {Currency.CREDITS: RES_ICONS.MAPS_ICONS_QUESTS_BONUSES_BIG_CREDITS,
                     Currency.GOLD: RES_ICONS.MAPS_ICONS_QUESTS_BONUSES_BIG_GOLD,
                     Currency.CRYSTAL: RES_ICONS.MAPS_ICONS_QUESTS_BONUSES_BIG_CRYSTAL,
@@ -63,11 +58,7 @@ AWARD_IMAGES = {AWARDS_SIZES.SMALL: {Currency.CREDITS: RES_ICONS.MAPS_ICONS_QUES
                     'tankmenXPFactor': RES_ICONS.MAPS_ICONS_QUESTS_BONUSES_BIG_TANKMENXP,
                     'xp': RES_ICONS.MAPS_ICONS_QUESTS_BONUSES_BIG_EXP,
                     'xpFactor': RES_ICONS.MAPS_ICONS_QUESTS_BONUSES_BIG_EXP,
-                    'dailyXPFactor': RES_ICONS.MAPS_ICONS_QUESTS_BONUSES_BIG_FREEXP,
-                    'xpFactorHE': RES_ICONS.MAPS_ICONS_QUESTS_BONUSES_BIG_EXP,
-                    'creditsFactorHE': RES_ICONS.MAPS_ICONS_QUESTS_BONUSES_BIG_CREDITS,
-                    'xpFactorEliteHE': RES_ICONS.MAPS_ICONS_QUESTS_BONUSES_BIG_ELITEXP,
-                    'freeXPFactorHE': RES_ICONS.MAPS_ICONS_QUESTS_BONUSES_BIG_FREEXP}}
+                    'dailyXPFactor': RES_ICONS.MAPS_ICONS_QUESTS_BONUSES_BIG_FREEXP}}
 
 def _getMultiplierFormatter(formatter):
 
@@ -155,19 +146,6 @@ def getLinkedSetFormattersMap():
     return mapping
 
 
-def getHalloweenProgressFormattersMap():
-    halloweenCountableBonusFormatter = HalloweenCountableBonusFormatter()
-    mapping = getDefaultFormattersMap()
-    mapping.update({'xpFactorHE': halloweenCountableBonusFormatter,
-     'creditsFactorHE': halloweenCountableBonusFormatter,
-     'freeXPFactorHE': halloweenCountableBonusFormatter,
-     'tankmenXPFactorHE': halloweenCountableBonusFormatter,
-     'xpFactorEliteHE': halloweenCountableBonusFormatter,
-     'customizations': LinkedSetCustomizationsBonusFormatter(),
-     'dossier': HalloweenDossierBonusFormatter()})
-    return mapping
-
-
 def getPackRentVehiclesFormattersMap():
     mapping = getDefaultFormattersMap()
     mapping.update({'vehicles': RentVehiclesBonusFormatter()})
@@ -202,10 +180,6 @@ def getPersonalMissionAwardPacker():
     return AwardsPacker(mapping)
 
 
-def getHalloweenProgressAwardPacker():
-    return AwardsPacker(getHalloweenProgressFormattersMap())
-
-
 def getOperationPacker():
     mapping = getDefaultFormattersMap()
     mapping.update({'customizations': OperationCustomizationsBonusFormatter(),
@@ -215,10 +189,6 @@ def getOperationPacker():
 
 def formatCountLabel(count):
     return 'x{}'.format(count) if count > 1 else ''
-
-
-def formatHalloweenCountLabel(count):
-    return '+{0:g}%'.format((count - 1) * 100 if count else 0)
 
 
 def formatTimeLabel(hours):
@@ -231,7 +201,7 @@ def formatTimeLabel(hours):
     return str(int(time)) + ' ' + timeMetric
 
 
-_PreformattedBonus = namedtuple('_PreformattedBonus', 'bonusName, label userName images tooltip labelFormatter areTokensPawned specialArgs specialAlias isSpecial isCompensation align highlightType overlayType')
+_PreformattedBonus = namedtuple('_PreformattedBonus', 'bonusName, label userName images tooltip labelFormatter areTokensPawned specialArgs specialAlias isSpecial isCompensation align highlightType overlayType highlightIcon overlayIcon')
 
 class PreformattedBonus(_PreformattedBonus):
 
@@ -241,6 +211,22 @@ class PreformattedBonus(_PreformattedBonus):
     def getFormattedLabel(self, formatter=None):
         formatter = formatter or self.labelFormatter
         return formatter(self.label) if formatter else self.label
+
+    def getHighlightType(self, size):
+        types = self.highlightType
+        return types and types.get(size, SLOT_HIGHLIGHT_TYPES.NO_HIGHLIGHT) or SLOT_HIGHLIGHT_TYPES.NO_HIGHLIGHT
+
+    def getOverlayType(self, size):
+        types = self.overlayType
+        return types and types.get(size, SLOT_HIGHLIGHT_TYPES.NO_HIGHLIGHT) or SLOT_HIGHLIGHT_TYPES.NO_HIGHLIGHT
+
+    def getHighlightIcon(self, size):
+        icons = self.highlightIcon
+        return icons and icons.get(size, SLOT_HIGHLIGHT_TYPES.NO_HIGHLIGHT) or SLOT_HIGHLIGHT_TYPES.NO_HIGHLIGHT
+
+    def getOverlayIcon(self, size):
+        icons = self.overlayIcon
+        return icons and icons.get(size, SLOT_HIGHLIGHT_TYPES.NO_HIGHLIGHT) or SLOT_HIGHLIGHT_TYPES.NO_HIGHLIGHT
 
 
 PreformattedBonus.__new__.__defaults__ = (None,
@@ -255,6 +241,8 @@ PreformattedBonus.__new__.__defaults__ = (None,
  False,
  False,
  LABEL_ALIGN.CENTER,
+ None,
+ None,
  None,
  None)
 
@@ -321,7 +309,7 @@ class AwardFormatter(object):
 class SimpleBonusFormatter(AwardFormatter):
 
     def _format(self, bonus):
-        return [PreformattedBonus(bonusName=bonus.getName(), label=self._getLabel(bonus), userName=self._getUserName(bonus), labelFormatter=self._getLabelFormatter(bonus), images=self._getImages(bonus), tooltip=bonus.getTooltip(), align=self._getLabelAlign(bonus), isCompensation=self._isCompensation(bonus))]
+        return [PreformattedBonus(bonusName=bonus.getName(), label=self._getLabel(bonus), userName=self._getUserName(bonus), labelFormatter=self._getLabelFormatter(bonus), images=self._getImages(bonus), tooltip=bonus.getTooltip(), align=self._getLabelAlign(bonus), isCompensation=self._isCompensation(bonus), highlightType=self._getHighlightType(bonus), overlayType=self._getOverlayType(bonus), highlightIcon=self._getHighlightIcon(bonus), overlayIcon=self._getOverlayIcon(bonus))]
 
     @classmethod
     def _getUserName(cls, bonus):
@@ -351,6 +339,22 @@ class SimpleBonusFormatter(AwardFormatter):
     def _isCompensation(cls, bonus):
         return bonus.isCompensation()
 
+    @classmethod
+    def _getHighlightType(cls, item):
+        return {}
+
+    @classmethod
+    def _getOverlayType(cls, item):
+        return {}
+
+    @classmethod
+    def _getHighlightIcon(cls, item):
+        return {}
+
+    @classmethod
+    def _getOverlayIcon(cls, item):
+        return {}
+
 
 class CountableIntegralBonusFormatter(SimpleBonusFormatter):
 
@@ -368,12 +372,6 @@ class CountableIntegralBonusFormatter(SimpleBonusFormatter):
             result[size] = RES_ICONS.getBonusIcon(size, bonus.getName())
 
         return result
-
-
-class HalloweenCountableBonusFormatter(SimpleBonusFormatter):
-
-    def _format(self, bonus):
-        return [PreformattedBonus(bonusName=bonus.getName(), label=formatHalloweenCountLabel(bonus.getValue()), userName=self._getUserName(bonus), labelFormatter=self._getLabelFormatter(bonus), images=self._getImages(bonus), tooltip=bonus.getTooltip(), align=LABEL_ALIGN.RIGHT, isCompensation=self._isCompensation(bonus))]
 
 
 class CompletionTokensBonusFormatter(SimpleBonusFormatter):
@@ -532,17 +530,19 @@ class VehiclesBonusFormatter(SimpleBonusFormatter):
             rentDays = bonus.getRentDays(vehInfo)
             rentBattles = bonus.getRentBattles(vehInfo)
             rentWins = bonus.getRentWins(vehInfo)
+            rentSeason = bonus.getRentSeason(vehInfo)
             if rentDays:
                 rentExpiryTime = time_utils.getCurrentTimestamp()
                 rentExpiryTime += rentDays * time_utils.ONE_DAY
             else:
                 rentExpiryTime = 0
-            isRent = rentDays or rentBattles or rentWins
+            isRent = rentDays or rentBattles or rentWins or rentSeason
             result.append(PreformattedBonus(bonusName=bonus.getName(), label=self._getVehicleLabel(bonus, vehicle, vehInfo), userName=self._getUserName(vehicle), images=self._getImages(vehicle, isRent), isSpecial=True, specialAlias=TOOLTIPS_CONSTANTS.AWARD_VEHICLE, specialArgs=[vehicle.intCD,
              tmanRoleLevel,
              rentExpiryTime,
              rentBattles,
-             rentWins], isCompensation=self._isCompensation(bonus)))
+             rentWins,
+             rentSeason], isCompensation=self._isCompensation(bonus)))
 
         return result
 
@@ -646,15 +646,12 @@ class DossierBonusFormatter(SimpleBonusFormatter):
     def _format(self, bonus):
         result = []
         for achievement in bonus.getAchievements():
-            result.append(PreformattedBonus(bonusName=bonus.getName(), userName=self._getUserName(achievement), images=self._getImages(achievement), isSpecial=True, specialAlias=TOOLTIPS_CONSTANTS.BATTLE_STATS_ACHIEVS, specialArgs=[achievement.getBlock(), achievement.getName(), achievement.getValue()], isCompensation=self._isCompensation(bonus), label=self._formatBonusLabel()))
+            result.append(PreformattedBonus(bonusName=bonus.getName(), userName=self._getUserName(achievement), images=self._getImages(achievement), isSpecial=True, specialAlias=TOOLTIPS_CONSTANTS.BATTLE_STATS_ACHIEVS, specialArgs=[achievement.getBlock(), achievement.getName(), achievement.getValue()], isCompensation=self._isCompensation(bonus)))
 
         for badge in bonus.getBadges():
-            result.append(PreformattedBonus(bonusName=bonus.getName(), userName=self._getUserName(badge), images=self._getImages(badge), isSpecial=True, specialAlias=self._getBadgeTooltipAlias(), specialArgs=[badge.badgeID], isCompensation=self._isCompensation(bonus), label=self._formatBonusLabel()))
+            result.append(PreformattedBonus(bonusName=bonus.getName(), userName=self._getUserName(badge), images=self._getImages(badge), isSpecial=True, specialAlias=self._getBadgeTooltipAlias(), specialArgs=[badge.badgeID], isCompensation=self._isCompensation(bonus)))
 
         return result
-
-    def _formatBonusLabel(self):
-        pass
 
     @classmethod
     def _getUserName(cls, achievement):
@@ -668,16 +665,6 @@ class DossierBonusFormatter(SimpleBonusFormatter):
     @classmethod
     def _getBadgeTooltipAlias(cls):
         return TOOLTIPS_CONSTANTS.BADGE
-
-
-class HalloweenDossierBonusFormatter(DossierBonusFormatter):
-
-    def _formatBonusLabel(self):
-        pass
-
-    @classmethod
-    def _getBadgeTooltipAlias(cls):
-        return TOOLTIPS_CONSTANTS.BADGE_HALLOWEEN
 
 
 class EventBoardsDossierBonusFormatter(DossierBonusFormatter):
@@ -764,7 +751,7 @@ class CustomizationsBonusFormatter(SimpleBonusFormatter):
     def _format(self, bonus):
         result = []
         for item, data in zip(bonus.getCustomizations(), bonus.getList()):
-            result.append(PreformattedBonus(bonusName=bonus.getName(), images=self._getImages(item), userName=self._getUserName(item), isSpecial=True, label=self._formatBonusLabel(item.get('value')), labelFormatter=self._getLabelFormatter(bonus), specialAlias=TOOLTIPS_CONSTANTS.TECH_CUSTOMIZATION_ITEM, specialArgs=[data.get('intCD'), False], align=LABEL_ALIGN.RIGHT, isCompensation=self._isCompensation(bonus)))
+            result.append(PreformattedBonus(bonusName=bonus.getName(), images=self._getImages(item), userName=self._getUserName(item), isSpecial=True, label=self._formatBonusLabel(item.get('value')), labelFormatter=self._getLabelFormatter(bonus), specialAlias=TOOLTIPS_CONSTANTS.TECH_CUSTOMIZATION_ITEM_AWARD, specialArgs=[data.get('intCD'), False], align=LABEL_ALIGN.RIGHT, isCompensation=self._isCompensation(bonus)))
 
         return result
 
@@ -861,12 +848,7 @@ class ItemsBonusFormatter(SimpleBonusFormatter):
                     alias = TOOLTIPS_CONSTANTS.AWARD_BATTLE_BOOSTER
                 else:
                     alias = TOOLTIPS_CONSTANTS.AWARD_MODULE
-                highlightType = None
-                overlayType = None
-                if item.itemTypeName == 'optionalDevice' and item.isDeluxe():
-                    highlightType = SLOT_HIGHLIGHT_TYPES.NO_HIGHLIGHT
-                    overlayType = SLOT_HIGHLIGHT_TYPES.EQUIPMENT_PLUS
-                result.append(PreformattedBonus(bonusName=bonus.getName(), images=self._getImages(item), isSpecial=True, label=self._formatBonusLabel(count), labelFormatter=self._getLabelFormatter(bonus), userName=self._getUserName(item), specialAlias=alias, specialArgs=[item.intCD], align=LABEL_ALIGN.RIGHT, isCompensation=self._isCompensation(bonus), highlightType=highlightType, overlayType=overlayType))
+                result.append(PreformattedBonus(bonusName=bonus.getName(), images=self._getImages(item), isSpecial=True, label=self._formatBonusLabel(count), labelFormatter=self._getLabelFormatter(bonus), userName=self._getUserName(item), specialAlias=alias, specialArgs=[item.intCD], align=LABEL_ALIGN.RIGHT, isCompensation=self._isCompensation(bonus), highlightType=self._getHighlightType(item), overlayType=self._getOverlayType(item), highlightIcon=self._getHighlightIcon(item), overlayIcon=self._getOverlayIcon(item)))
 
         return result
 
@@ -885,29 +867,56 @@ class ItemsBonusFormatter(SimpleBonusFormatter):
 
         return result
 
+    @classmethod
+    def _getHighlightType(cls, item):
+        result = {}
+        for size in AWARDS_SIZES.ALL():
+            result[size] = SLOT_HIGHLIGHT_TYPES.NO_HIGHLIGHT
+
+        if item.itemTypeName == SLOT_HIGHLIGHT_TYPES.BATTLE_BOOSTER_NAME:
+            result[AWARDS_SIZES.BIG] = SLOT_HIGHLIGHT_TYPES.BATTLE_BOOSTER_BIG
+            result[AWARDS_SIZES.SMALL] = SLOT_HIGHLIGHT_TYPES.BATTLE_BOOSTER
+        return result
+
+    @classmethod
+    def _getOverlayType(cls, item):
+        result = {}
+        for size in AWARDS_SIZES.ALL():
+            result[size] = SLOT_HIGHLIGHT_TYPES.NO_HIGHLIGHT
+
+        if item.itemTypeName == SLOT_HIGHLIGHT_TYPES.OPTIONAL_DEVICE_NAME and item.isDeluxe():
+            result[AWARDS_SIZES.BIG] = SLOT_HIGHLIGHT_TYPES.EQUIPMENT_PLUS_BIG
+            result[AWARDS_SIZES.SMALL] = SLOT_HIGHLIGHT_TYPES.EQUIPMENT_PLUS
+        elif item.itemTypeName == SLOT_HIGHLIGHT_TYPES.BATTLE_BOOSTER_NAME:
+            result[AWARDS_SIZES.BIG] = SLOT_HIGHLIGHT_TYPES.BATTLE_BOOSTER_BIG
+            result[AWARDS_SIZES.SMALL] = SLOT_HIGHLIGHT_TYPES.BATTLE_BOOSTER
+        return result
+
+    @classmethod
+    def _getHighlightIcon(cls, item):
+        result = {}
+        for size in AWARDS_SIZES.ALL():
+            if item.itemTypeName == SLOT_HIGHLIGHT_TYPES.BATTLE_BOOSTER_NAME:
+                result[size] = RES_ICONS.getBonusHighlight(size, SLOT_HIGHLIGHT_TYPES.BATTLE_BOOSTER)
+            result[size] = SLOT_HIGHLIGHT_TYPES.NO_HIGHLIGHT
+
+        return result
+
+    @classmethod
+    def _getOverlayIcon(cls, item):
+        result = {}
+        itemTypeName = item.itemTypeName
+        for size in AWARDS_SIZES.ALL():
+            if itemTypeName == SLOT_HIGHLIGHT_TYPES.OPTIONAL_DEVICE_NAME and item.isDeluxe():
+                result[size] = RES_ICONS.getBonusOverlay(size, SLOT_HIGHLIGHT_TYPES.EQUIPMENT_PLUS)
+            if itemTypeName == SLOT_HIGHLIGHT_TYPES.BATTLE_BOOSTER_NAME:
+                result[size] = RES_ICONS.getBonusOverlay(size, SLOT_HIGHLIGHT_TYPES.BATTLE_BOOSTER)
+            result[size] = SLOT_HIGHLIGHT_TYPES.NO_HIGHLIGHT
+
+        return result
+
 
 class LinkedSetItemsBonusFormatter(ItemsBonusFormatter):
 
     def _formatBonusLabel(self, count):
         return 'x{}'.format(count)
-
-
-def getHalloweenHangarGUIData(item):
-    return {'level': item.getLevel(),
-     'bonus': [ _getHalloweenHangarGUIBonusData(bonus) for bonus in getHalloweenProgressAwardPacker().format(item.getBonuses()) ]}
-
-
-_HE_BONUS_NAMES_TO_TEMPLATE = {'creditsFactorHE': ('hangarCreditsFactorTitleTemplate', 'hangarCreditsFactorDescTemplate'),
- 'xpFactorHE': ('hangarXpFactorTitleTemplate', 'hangarXpFactorDescTemplate'),
- 'xpFactorEliteHE': ('hangarEliteXpFactorTitleTemplate', 'hangarEliteXpFactorDescTemplate'),
- 'freeXPFactorHE': ('hangarCreditsFactorTitleTemplate', 'hangarCreditsFactorTitleTemplate')}
-
-def _getHalloweenHangarGUIBonusData(bonus):
-    titleTemplate, descriptionTemplate = _HE_BONUS_NAMES_TO_TEMPLATE.get(bonus.bonusName)
-    return {'value': makeHtmlString('html_templates:lobby/quests/halloween', titleTemplate, {'msg': bonus.label}),
-     'description': makeHtmlString('html_templates:lobby/quests/halloween', descriptionTemplate, {'msg': i18n.makeString(TOOLTIPS.getAwardHeader(bonus.bonusName))}),
-     'icon': bonus.getImage(AWARDS_SIZES.BIG),
-     'tooltip': bonus.tooltip,
-     'specialAlias': bonus.specialAlias,
-     'specialArgs': bonus.specialArgs,
-     'isSpecial': bonus.isSpecial}

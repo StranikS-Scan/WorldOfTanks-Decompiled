@@ -3,7 +3,7 @@
 from collections import namedtuple
 from gui.shared.event_bus import SharedEvent
 from shared_utils import CONST_CONTAINER
-__all__ = ('ArgsEvent', 'LoadEvent', 'ComponentEvent', 'LoadViewEvent', 'ShowDialogEvent', 'LoginEvent', 'LoginCreateEvent', 'LoginEventEx', 'LobbySimpleEvent', 'FightButtonDisablingEvent', 'FightButtonEvent', 'CloseWindowEvent', 'BrowserEvent', 'HangarVehicleEvent', 'HangarCustomizationEvent', 'SettingsWindowEvent', 'IngameHelpWindowEvent')
+__all__ = ('ArgsEvent', 'LoadEvent', 'ComponentEvent', 'LoadViewEvent', 'ShowDialogEvent', 'LoginEvent', 'LoginCreateEvent', 'LoginEventEx', 'LobbySimpleEvent', 'FightButtonDisablingEvent', 'FightButtonEvent', 'CloseWindowEvent', 'BrowserEvent', 'HangarVehicleEvent', 'HangarCustomizationEvent')
 
 class HasCtxEvent(SharedEvent):
 
@@ -33,8 +33,8 @@ class GameEvent(HasCtxEvent):
     SHOW_EXTENDED_INFO = 'game/showExtendedInfo'
     CHOICE_CONSUMABLE = 'game/choiceConsumable'
     HELP = 'game/help'
+    HELP_DETAILED = 'game/helpWheeled'
     MINIMAP_CMD = 'game/minimapCmd'
-    EVENT_MINIMAP_CMD = 'game/eventMinimapCmd'
     RADIAL_MENU_CMD = 'game/radialMenuCmd'
     TOGGLE_GUI = 'game/toggleGUI'
     GUI_VISIBILITY = 'game/guiVisibility'
@@ -52,12 +52,12 @@ class GameEvent(HasCtxEvent):
     SHOW_EXTERNAL_COMPONENTS = 'game/showExternalComponents'
     HIDE_EXTERNAL_COMPONENTS = 'game/hideExternalComponents'
     ON_BACKGROUND_ALPHA_CHANGE = 'game/onBackgroundAlphaChange'
+    HIDE_AUTO_AIM_MARKER = 'game/hideAutoIamMarker'
     BATTLE_LOADING = 'game/battleLoading'
     EPIC_GLOBAL_MSG_CMD = 'game/setGlobalMessageCmd'
+    ADD_AUTO_AIM_MARKER = 'game/addAutoIamMarker'
     SHOW_BTN_HINT = 'game/showBtnHint'
     HIDE_BTN_HINT = 'game/hideBtnHint'
-    HIDE_HUD_COMPONENTS = 'game/hideHudComponents'
-    SHOW_HUD_COMPONENTS = 'game/showHudComponents'
 
 
 class GUICommonEvent(SharedEvent):
@@ -300,6 +300,9 @@ class MissionsEvent(HasCtxEvent):
 class PersonalMissionsEvent(HasCtxEvent):
     ON_DETAILS_VIEW_OPEN = 'onDetailsViewOpen'
     ON_DETAILS_VIEW_CLOSE = 'onDetailsViewClose'
+    ON_AWARD_SCEEN_OPEN = 'onAwardScreenOpen'
+    ON_AWARD_SCEEN_CLOSE = 'onAwardScreenClose'
+    UPDATE_AWARD_SCREEN = 'updateAwardScreen'
 
 
 class TrainingSettingsEvent(HasCtxEvent):
@@ -534,6 +537,7 @@ class OpenLinkEvent(SharedEvent):
     GLOBAL_MAP_PROMO = 'globalMapPromo'
     PREM_SHOP = 'premShopURL'
     TOKEN_SHOP = 'tokenShopUrl'
+    FRONTLINE_CHANGES = 'frontlineChangesURL'
 
     def __init__(self, eventType, url='', title='', params=None):
         super(OpenLinkEvent, self).__init__(eventType)
@@ -618,18 +622,9 @@ class ManualEvent(HasCtxEvent):
 
 class StorageEvent(HasCtxEvent):
     SELECT_MODULE_FOR_SELL = 'storage/forSellView/selectModule'
+    VEHICLE_SELECTED = 'storage/inventory/vehicleSelected'
 
 
 class HangarCustomizationEvent(HasCtxEvent):
     CHANGE_VEHICLE_MODEL_TRANSFORM = 'hangarCustomization/changeVehicleModelTransform'
     RESET_VEHICLE_MODEL_TRANSFORM = 'hangarCustomization/resetVehicleModelTransform'
-
-
-class SettingsWindowEvent(SharedEvent):
-    POPULATE_WINDOW = 'settingsWindowEvent/populateWindow'
-    DISPOSE_WINDOW = 'SettingsWindowEvent/disposeWindow'
-
-
-class IngameHelpWindowEvent(SharedEvent):
-    POPULATE_WINDOW = 'ingameHelpWindowEvent/populateWindow'
-    DISPOSE_WINDOW = 'ingameHelpWindowEvent/disposeWindow'

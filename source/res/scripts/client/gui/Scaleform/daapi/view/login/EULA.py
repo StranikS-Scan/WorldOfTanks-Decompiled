@@ -1,15 +1,14 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/login/EULA.py
-import BigWorld
-from async import async, await
-from gui.impl import dialogs
 from gui.Scaleform.daapi.view.meta.EULAMeta import EULAMeta
 from gui.shared.events import CloseWindowEvent, OpenLinkEvent
 from helpers import dependency
 from skeletons.connection_mgr import IConnectionManager
+from skeletons.gameplay import IGameplayLogic
 
 class EULADlg(EULAMeta):
     connectionMgr = dependency.descriptor(IConnectionManager)
+    gameplay = dependency.descriptor(IGameplayLogic)
 
     def __init__(self, ctx=None):
         super(EULADlg, self).__init__()
@@ -28,7 +27,7 @@ class EULADlg(EULAMeta):
 
     def onWindowClose(self):
         if not self.__applied:
-            self.__showQuitDialog()
+            self.gameplay.goToLoginByRQ()
         else:
             self.destroy()
 
@@ -42,17 +41,6 @@ class EULADlg(EULAMeta):
 
     def onLinkClick(self, url):
         self.fireEvent(OpenLinkEvent(OpenLinkEvent.SPECIFIED, url))
-
-    @async
-    def __showQuitDialog(self):
-        isOk = yield await(dialogs.quitGame(self))
-        if isOk:
-            self.__onQuitOk()
-
-    def __onQuitOk(self):
-        self.__fireEulaClose()
-        self.destroy()
-        BigWorld.quit()
 
     def __fireEulaClose(self):
         self.fireEvent(CloseWindowEvent(CloseWindowEvent.EULA_CLOSED, self.__applied))

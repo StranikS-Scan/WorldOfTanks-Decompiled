@@ -60,11 +60,9 @@ class PageStates(object):
     GAME_OVER = 10
 
 
-_NEVER_HIDE = {BATTLE_VIEW_ALIASES.SIXTH_SENSE,
- BATTLE_VIEW_ALIASES.DEBUG_PANEL,
- BATTLE_VIEW_ALIASES.RIBBONS_PANEL,
- BATTLE_VIEW_ALIASES.DAMAGE_INFO_PANEL}
+_NEVER_HIDE = {BATTLE_VIEW_ALIASES.SIXTH_SENSE, BATTLE_VIEW_ALIASES.RIBBONS_PANEL, BATTLE_VIEW_ALIASES.DAMAGE_INFO_PANEL}
 _GAME_UI = {BATTLE_VIEW_ALIASES.VEHICLE_ERROR_MESSAGES,
+ BATTLE_VIEW_ALIASES.DEBUG_PANEL,
  BATTLE_VIEW_ALIASES.PLAYER_MESSAGES,
  BATTLE_VIEW_ALIASES.VEHICLE_MESSAGES,
  BATTLE_VIEW_ALIASES.CONSUMABLES_PANEL,
@@ -84,12 +82,14 @@ _GAME_UI = {BATTLE_VIEW_ALIASES.VEHICLE_ERROR_MESSAGES,
  BATTLE_VIEW_ALIASES.EPIC_INGAME_RANK,
  BATTLE_VIEW_ALIASES.TEAM_BASES_PANEL}
 _SPECTATOR_UI = {BATTLE_VIEW_ALIASES.EPIC_SPECTATOR_VIEW,
+ BATTLE_VIEW_ALIASES.DEBUG_PANEL,
  BATTLE_VIEW_ALIASES.PLAYER_MESSAGES,
  BATTLE_VIEW_ALIASES.EPIC_SCORE_PANEL,
+ BATTLE_VIEW_ALIASES.GAME_MESSAGES_PANEL,
  BATTLE_VIEW_ALIASES.MINIMAP,
  BATTLE_VIEW_ALIASES.BATTLE_TIMER,
- BATTLE_VIEW_ALIASES.BATTLE_MESSENGER,
- BATTLE_VIEW_ALIASES.SUPER_PLATOON_PANEL}
+ BATTLE_VIEW_ALIASES.SUPER_PLATOON_PANEL,
+ BATTLE_VIEW_ALIASES.BATTLE_MESSENGER}
 _ENABLE_CONTROL_MODE = {PageStates.TABSCREEN,
  PageStates.RESPAWN,
  PageStates.RADIAL,
@@ -100,28 +100,36 @@ _PAGE_STATE_TO_CONTROL_PARAMS = {PageStates.TABSCREEN: (BATTLE_VIEW_ALIASES.FULL
  PageStates.LOADING: (BATTLE_VIEW_ALIASES.BATTLE_LOADING, True, True)}
 _STATE_TO_UI = {PageStates.GAME: _GAME_UI,
  PageStates.LOADING: {BATTLE_VIEW_ALIASES.BATTLE_LOADING, BATTLE_VIEW_ALIASES.EPIC_DEPLOYMENT_MAP},
- PageStates.TABSCREEN: {BATTLE_VIEW_ALIASES.FULL_STATS},
+ PageStates.TABSCREEN: {BATTLE_VIEW_ALIASES.FULL_STATS, BATTLE_VIEW_ALIASES.DEBUG_PANEL, BATTLE_VIEW_ALIASES.GAME_MESSAGES_PANEL},
  PageStates.OVERVIEWMAP: {BATTLE_VIEW_ALIASES.EPIC_DEPLOYMENT_MAP,
                           BATTLE_VIEW_ALIASES.EPIC_OVERVIEW_MAP_SCREEN,
                           BATTLE_VIEW_ALIASES.EPIC_SCORE_PANEL,
                           BATTLE_VIEW_ALIASES.BATTLE_TIMER,
                           BATTLE_VIEW_ALIASES.DEBUG_PANEL,
-                          BATTLE_VIEW_ALIASES.BATTLE_MESSENGER},
+                          BATTLE_VIEW_ALIASES.BATTLE_MESSENGER,
+                          BATTLE_VIEW_ALIASES.GAME_MESSAGES_PANEL},
  PageStates.RADIAL: _GAME_UI.union({BATTLE_VIEW_ALIASES.RADIAL_MENU}),
  PageStates.RESPAWN: {BATTLE_VIEW_ALIASES.EPIC_RESPAWN_VIEW,
+                      BATTLE_VIEW_ALIASES.DEBUG_PANEL,
                       BATTLE_VIEW_ALIASES.EPIC_DEPLOYMENT_MAP,
                       BATTLE_VIEW_ALIASES.BATTLE_MESSENGER,
                       BATTLE_VIEW_ALIASES.BATTLE_TIMER},
  PageStates.COUNTDOWN: _GAME_UI.difference({BATTLE_VIEW_ALIASES.EPIC_REINFORCEMENT_PANEL, BATTLE_VIEW_ALIASES.EPIC_MISSIONS_PANEL, BATTLE_VIEW_ALIASES.GAME_MESSAGES_PANEL}).union({BATTLE_VIEW_ALIASES.PREBATTLE_TIMER}),
- PageStates.SPECTATOR_DEATHCAM: _SPECTATOR_UI.union({BATTLE_VIEW_ALIASES.DAMAGE_PANEL, BATTLE_VIEW_ALIASES.EPIC_REINFORCEMENT_PANEL, BATTLE_VIEW_ALIASES.CONSUMABLES_PANEL}),
- PageStates.SPECTATOR_FREE: _SPECTATOR_UI,
+ PageStates.SPECTATOR_DEATHCAM: _SPECTATOR_UI.union({BATTLE_VIEW_ALIASES.DAMAGE_PANEL,
+                                 BATTLE_VIEW_ALIASES.EPIC_REINFORCEMENT_PANEL,
+                                 BATTLE_VIEW_ALIASES.CONSUMABLES_PANEL,
+                                 BATTLE_VIEW_ALIASES.SUPER_PLATOON_PANEL}),
+ PageStates.SPECTATOR_FREE: _SPECTATOR_UI.union({BATTLE_VIEW_ALIASES.SUPER_PLATOON_PANEL}),
  PageStates.SPECTATOR_FOLLOW: _SPECTATOR_UI.union({BATTLE_VIEW_ALIASES.DAMAGE_PANEL,
                                BATTLE_VIEW_ALIASES.RECOVERY_PANEL,
                                BATTLE_VIEW_ALIASES.SIEGE_MODE_INDICATOR,
                                BATTLE_VIEW_ALIASES.DESTROY_TIMERS_PANEL,
                                BATTLE_VIEW_ALIASES.EPIC_MISSIONS_PANEL,
                                BATTLE_VIEW_ALIASES.GAME_MESSAGES_PANEL}),
- PageStates.GAME_OVER: _GAME_UI.difference({BATTLE_VIEW_ALIASES.EPIC_REINFORCEMENT_PANEL, BATTLE_VIEW_ALIASES.EPIC_MISSIONS_PANEL, BATTLE_VIEW_ALIASES.BATTLE_TIMER})}
+ PageStates.GAME_OVER: _GAME_UI.difference({BATTLE_VIEW_ALIASES.EPIC_REINFORCEMENT_PANEL,
+                        BATTLE_VIEW_ALIASES.EPIC_MISSIONS_PANEL,
+                        BATTLE_VIEW_ALIASES.BATTLE_TIMER,
+                        BATTLE_VIEW_ALIASES.SIEGE_MODE_INDICATOR})}
 _EPIC_EXTERNAL_COMPONENTS = (crosshair.CrosshairPanelContainer, markers2d.EpicMarkersManager)
 
 class EpicBattlePage(EpicBattlePageMeta):
@@ -144,22 +152,34 @@ class EpicBattlePage(EpicBattlePageMeta):
             targetState = self.__pageState
         if targetState == PageStates.NONE or self.__activeState == targetState:
             return
-        if self.__activeState in _ENABLE_CONTROL_MODE and not self.sessionProvider.isReplayPlaying:
-            alias, _, _ = _PAGE_STATE_TO_CONTROL_PARAMS[self.__activeState]
-            self.app.leaveGuiControlMode(alias)
-        self.__activeState = targetState
-        if self.__activeState in _ENABLE_CONTROL_MODE and not self.sessionProvider.isReplayPlaying:
-            alias, p1, p2 = _PAGE_STATE_TO_CONTROL_PARAMS[self.__activeState]
-            self.app.enterGuiControlMode(alias, cursorVisible=p1, enableAiming=p2)
-        visibleUI = _STATE_TO_UI[targetState]
-        currVis = set(self.as_getComponentsVisibilityS())
-        hiddenUI = currVis.difference(visibleUI).difference(_NEVER_HIDE)
-        ctrl = self.sessionProvider.dynamic.maps
-        if ctrl and BATTLE_VIEW_ALIASES.EPIC_OVERVIEW_MAP_SCREEN in visibleUI:
-            ctrl.setOverviewMapScreenVisibility(True)
-        elif ctrl and BATTLE_VIEW_ALIASES.EPIC_OVERVIEW_MAP_SCREEN in hiddenUI:
-            ctrl.setOverviewMapScreenVisibility(False)
-        self._setComponentsVisibility(visible=visibleUI, hidden=hiddenUI)
+        else:
+            if self.__activeState in _ENABLE_CONTROL_MODE and not self.sessionProvider.isReplayPlaying:
+                alias, _, _ = _PAGE_STATE_TO_CONTROL_PARAMS[self.__activeState]
+                self.app.leaveGuiControlMode(alias)
+            self.__activeState = targetState
+            if self.__activeState in _ENABLE_CONTROL_MODE and not self.sessionProvider.isReplayPlaying:
+                alias, p1, p2 = _PAGE_STATE_TO_CONTROL_PARAMS[self.__activeState]
+                self.app.enterGuiControlMode(alias, cursorVisible=p1, enableAiming=p2)
+            visibleUI = _STATE_TO_UI[targetState]
+            currVis = set(self.as_getComponentsVisibilityS())
+            hiddenUI = currVis.difference(visibleUI).difference(_NEVER_HIDE)
+            ctrl = self.sessionProvider.shared.vehicleState
+            vehicle = ctrl.getControllingVehicle()
+            if vehicle is not None:
+                if not vehicle.typeDescriptor.hasSiegeMode:
+                    if BATTLE_VIEW_ALIASES.SIEGE_MODE_INDICATOR in visibleUI:
+                        visibleUI.remove(BATTLE_VIEW_ALIASES.SIEGE_MODE_INDICATOR)
+                        hiddenUI.add(BATTLE_VIEW_ALIASES.SIEGE_MODE_INDICATOR)
+                elif BATTLE_VIEW_ALIASES.SIEGE_MODE_INDICATOR in hiddenUI:
+                    visibleUI.add(BATTLE_VIEW_ALIASES.SIEGE_MODE_INDICATOR)
+                    hiddenUI.remove(BATTLE_VIEW_ALIASES.SIEGE_MODE_INDICATOR)
+            ctrl = self.sessionProvider.dynamic.maps
+            if ctrl and BATTLE_VIEW_ALIASES.EPIC_OVERVIEW_MAP_SCREEN in visibleUI:
+                ctrl.setOverviewMapScreenVisibility(True)
+            elif ctrl and BATTLE_VIEW_ALIASES.EPIC_OVERVIEW_MAP_SCREEN in hiddenUI:
+                ctrl.setOverviewMapScreenVisibility(False)
+            self._setComponentsVisibility(visible=visibleUI, hidden=hiddenUI)
+            return
 
     def _populate(self):
         super(EpicBattlePage, self)._populate()
@@ -246,7 +266,7 @@ class EpicBattlePage(EpicBattlePageMeta):
             self._invalidateState()
             return
 
-    def _toggleFullStats(self, isShown, permanent=None):
+    def _toggleFullStats(self, isShown, permanent=None, tabIndex=None):
         if not isShown and self.__topState == PageStates.TABSCREEN:
             self.__topState = PageStates.NONE
         elif isShown and self.__topState != PageStates.RADIAL:
@@ -318,9 +338,15 @@ class EpicBattlePage(EpicBattlePageMeta):
             self.__checkRadialMenu()
             self.__pageState = PageStates.RESPAWN
             BigWorld.worldDrawEnabled(False)
+            for component in self._external:
+                component.active(False)
+
         elif not isVisible and self.__pageState == PageStates.RESPAWN:
             self.__pageState = PageStates.GAME
             BigWorld.worldDrawEnabled(True)
+            for component in self._external:
+                component.active(True)
+
         else:
             return
         self._invalidateState()

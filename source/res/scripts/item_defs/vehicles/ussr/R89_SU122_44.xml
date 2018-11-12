@@ -94,7 +94,7 @@
       </slot>
       <slot>
         <slotType>	player	</slotType>
-        <slotId>	2	</slotId>
+        <slotId>	4	</slotId>
         <rayStart>	1.4429 0.804299 0.78997	</rayStart>
         <rayEnd>	1.09886 0.600255 0.78997	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
@@ -105,7 +105,7 @@
       </slot>
       <slot>
         <slotType>	inscription	</slotType>
-        <slotId>	3	</slotId>
+        <slotId>	36	</slotId>
         <rayStart>	-1.41317 0.933616 -0.0524099	</rayStart>
         <rayEnd>	-1.06576 0.735345 -0.0524099	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
@@ -115,7 +115,7 @@
       </slot>
       <slot>
         <slotType>	player	</slotType>
-        <slotId>	4	</slotId>
+        <slotId>	5	</slotId>
         <rayStart>	-1.4429 0.804299 0.78997	</rayStart>
         <rayEnd>	-1.09886 0.600255 0.78997	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
@@ -125,7 +125,7 @@
       </slot>
       <slot>
         <slotType>	camouflage	</slotType>
-        <slotId>	9	</slotId>
+        <slotId>	3	</slotId>
         <anchorPosition>	0.000075 0.522576 -2.38522	</anchorPosition>
         <anchorDirection>	0.000000 0.573577 -0.819152	</anchorDirection>
       </slot>
@@ -860,7 +860,7 @@
       <customizationSlots>
         <slot>
           <slotType>	style	</slotType>
-          <slotId>	7	</slotId>
+          <slotId>	257	</slotId>
           <anchorPosition>	-0.000000 2.05222 0.000000	</anchorPosition>
           <anchorDirection>	-0.000000 1 0.000000	</anchorDirection>
         </slot>
@@ -935,7 +935,7 @@
           <customizationSlots>
             <slot>
               <slotType>	insigniaOnGun	</slotType>
-              <slotId>	5	</slotId>
+              <slotId>	771	</slotId>
               <rayStart>	-0.00998969 0.00120457 1.58	</rayStart>
               <rayEnd>	0.244749 -0.0973466 1.38231	</rayEnd>
               <rayUp>	0.097 0.094 5	</rayUp>
@@ -945,7 +945,7 @@
             </slot>
             <slot>
               <slotType>	camouflage	</slotType>
-              <slotId>	8	</slotId>
+              <slotId>	770	</slotId>
               <anchorPosition>	-0.00499487 0.000602365 1.95082	</anchorPosition>
               <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
               <applyTo>	4096	</applyTo>
@@ -991,6 +991,7 @@
       <engines>
         <V-44A>
           <smplEnginePower>	528.6406	</smplEnginePower>
+          <smplFwMaxSpeed>	47.5	</smplFwMaxSpeed>
         </V-44A>
       </engines>
       <chassis>

@@ -108,12 +108,15 @@ class InstalledItemsPopoverDataProvider(SortableDAAPIDataProvider):
                         seasonUnique.add(item.intCD)
                         items.append(item)
 
+                seasonName = SEASON_TYPE_TO_NAME.get(season)
+                seasonTitle = makeHtmlString('html_templates:lobby/customization/PopoverSeasonName', seasonName)
                 if items:
                     items.sort(key=lambda i: TYPES_ORDER.index(i.itemTypeID))
                     itemIcons = list(map(_makeItemIconVO, items))
-                    seasonName = SEASON_TYPE_TO_NAME.get(season)
-                    seasonTitle = makeHtmlString('html_templates:lobby/customization/PopoverSeasonName', seasonName)
                     self._list.append(_CustomizationPopoverKitRendererVO(seasonTitle, itemIcons)._asdict())
+                else:
+                    styleIcon = _makeItemIconVO(appliedStyle)
+                    self._list.append(_CustomizationPopoverKitRendererVO(seasonTitle, [styleIcon])._asdict())
 
     def rebuildList(self):
         self.buildList()

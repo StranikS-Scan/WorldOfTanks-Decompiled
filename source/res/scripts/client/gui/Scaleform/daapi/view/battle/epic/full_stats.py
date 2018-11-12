@@ -11,5 +11,4 @@ class EpicFullStatsComponent(EpicFullStatsMeta):
 
     def _populate(self):
         super(EpicFullStatsComponent, self)._populate()
-        self.as_initializeTextS({'myLaneText': i18n.makeString(EPIC_BATTLE.TAB_SCREEN_SHOW_MY_LANE),
-         'allLanesText': i18n.makeString(EPIC_BATTLE.TAB_SCREEN_SHOW_ALL_LANES)})
+        self.as_initializeTextS(i18n.makeString(EPIC_BATTLE.TAB_SCREEN_SHOW_MY_LANE).upper(), i18n.makeString(EPIC_BATTLE.TAB_SCREEN_SHOW_ALL_LANES).upper())

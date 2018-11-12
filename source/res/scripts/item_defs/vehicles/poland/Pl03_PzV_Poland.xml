@@ -873,7 +873,7 @@
           <customizationSlots>
             <slot>
               <slotType>	insigniaOnGun	</slotType>
-              <slotId>	2	</slotId>
+              <slotId>	771	</slotId>
               <rayStart>	-0.00329885 -0.00569758 1.48	</rayStart>
               <rayEnd>	0.0890514 -0.0354112 3.41937	</rayEnd>
               <rayUp>	0.096 0.092 4	</rayUp>
@@ -925,6 +925,7 @@
       <engines>
         <Maybach_HL_230P30A>
           <smplEnginePower>	740.0968	</smplEnginePower>
+          <smplFwMaxSpeed>	55	</smplFwMaxSpeed>
         </Maybach_HL_230P30A>
       </engines>
       <chassis>
@@ -961,6 +962,7 @@
               </medium>
             </metal>
           </grounds>
+          <axleCount>	5	</axleCount>
         </Chassis_1_Pl03_PzV_Poland>
       </chassis>
     </detailed>

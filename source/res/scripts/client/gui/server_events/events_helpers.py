@@ -15,7 +15,7 @@ from helpers import time_utils, i18n, dependency
 from shared_utils import CONST_CONTAINER
 from skeletons.gui.game_control import IMarathonEventsController
 from skeletons.gui.server_events import IEventsCache
-from gui.server_events.events_constants import LINKEDSET_GROUP_PREFIX, MARATHON_GROUP_PREFIX, HALLOWEEN_GROUP_PREFIX
+from gui.server_events.events_constants import LINKEDSET_GROUP_PREFIX, MARATHON_GROUP_PREFIX
 from helpers.i18n import makeString as _ms
 from gui.Scaleform.locale.LINKEDSET import LINKEDSET
 from gui.server_events.conditions import getProgressFromQuestWithSingleAccumulative
@@ -158,31 +158,6 @@ def missionsSortFunc(a, b):
     return res if res else cmp(a.getUserName(), b.getUserName())
 
 
-def getConditionsDiffStructure(fullConditions, mainConditions):
-    result = []
-    if fullConditions == mainConditions:
-        return result
-    if len(fullConditions) == len(mainConditions):
-        for fKey, fValue in fullConditions:
-            if (fKey, fValue) not in mainConditions:
-                for mKey, mValue in mainConditions:
-                    if (mKey, mValue) not in fullConditions:
-                        if fKey == mKey:
-                            if fValue != mValue:
-                                diffValue = getConditionsDiffStructure(fValue, mValue)
-                                if diffValue and (fKey, diffValue) not in result:
-                                    result.append((fKey, diffValue))
-                        elif (fKey, fValue) not in result:
-                            result.append((fKey, fValue))
-
-        return result
-    for fValue in fullConditions:
-        if fValue not in mainConditions:
-            result.append(fValue)
-
-    return result
-
-
 def hasAnySavedProgresses(savedProgresses):
     return True if savedProgresses else False
 
@@ -231,12 +206,8 @@ def isLinkedSet(eventID):
     return eventID.startswith(LINKEDSET_GROUP_PREFIX)
 
 
-def isHalloween(eventID):
-    return eventID.startswith(HALLOWEEN_GROUP_PREFIX)
-
-
 def isRegularQuest(eventID):
-    return not (isMarathon(eventID) or isLinkedSet(eventID) or isHalloween(eventID))
+    return not (isMarathon(eventID) or isLinkedSet(eventID))
 
 
 def getLocalizedMissionNameForLinkedSet(missionID):

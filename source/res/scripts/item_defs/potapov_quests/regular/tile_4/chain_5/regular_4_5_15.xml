@@ -8,20 +8,11 @@
         <postBattle>
           <and>
             <results>
-              <description>
-                <key>	#personal_missions_details:quest_4_5_15_condition_description_top_xp	</key>
-              </description>
               <key>	xp	</key>
               <max>	1	</max>
               <total></total>
             </results>
             <results>
-              <title>
-                <key>	#personal_missions_details:quest_common_condition_title_stunAssist	</key>
-              </title>
-              <description>
-                <key>	#personal_missions_details:quest_4_5_15_condition_description_complexDamageAssist	</key>
-              </description>
               <plus>
                 <key>	damageAssistedStun	</key>
                 <key>	damageAssistedTrack	</key>
@@ -129,20 +120,11 @@
         <postBattle>
           <and>
             <results>
-              <description>
-                <key>	#personal_missions_details:quest_4_5_15_condition_description_top_xp	</key>
-              </description>
               <key>	xp	</key>
               <max>	1	</max>
               <total></total>
             </results>
             <results>
-              <title>
-                <key>	#personal_missions_details:quest_common_condition_title_stunAssist	</key>
-              </title>
-              <description>
-                <key>	#personal_missions_details:quest_4_5_15_condition_description_complexDamageAssist	</key>
-              </description>
               <plus>
                 <key>	damageAssistedStun	</key>
                 <key>	damageAssistedTrack	</key>
@@ -150,12 +132,6 @@
               <greaterOrEqual>	3500	</greaterOrEqual>
             </results>
             <results>
-              <title>
-                <key>	#personal_missions_details:quest_4_5_15_condition_title_damageDealt	</key>
-              </title>
-              <description>
-                <key>	#personal_missions_details:quest_4_5_15_condition_description_damageDealt	</key>
-              </description>
               <key>	damageDealt	</key>
               <greaterOrEqual>	4000	</greaterOrEqual>
             </results>

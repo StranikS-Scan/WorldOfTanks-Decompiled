@@ -102,8 +102,8 @@ class VehicleTelemetry(object):
         descr = self.avatar.getVehicleAttached().typeDescriptor
         parts = name.split(VehicleTelemetry.NAME_DELIMITER)
         header = VehicleTelemetry.HEADER_TMPL % {'Veh': descr.name,
-         'Eng': descr.engine['name'],
-         'Css': descr.chassis['name'],
+         'Eng': descr.engine.name,
+         'Css': descr.chassis.name,
          'Scn': parts[2],
          'Sec': parts[-2],
          'Phy': parts[-1]}
@@ -186,26 +186,26 @@ class VehicleTelemetry(object):
     def receivePhysicsDebugInfo(self, info, modifDict):
         infoDict = cPickle.loads(zlib.decompress(info))
         cmd = infoDict['cmd']
-        nDict = {}
-        for key, value in modifDict.iteritems():
-            try:
-                index = infoDict['paramNamesMap'][key]
-                nDict[index] = value
-            except Exception:
-                pass
-
-        temp = []
-        ind = 0
-        for inValue in infoDict['snapshots'][0]:
-            mValue = nDict.get(ind, None)
-            if mValue is not None:
-                temp.append(mValue)
-            else:
-                temp.append(inValue)
-            ind += 1
-
-        infoDict['snapshots'][0] = temp
         if cmd == 'telemetry':
+            nDict = {}
+            for key, value in modifDict.iteritems():
+                try:
+                    index = infoDict['paramNamesMap'][key]
+                    nDict[index] = value
+                except Exception:
+                    pass
+
+            temp = []
+            ind = 0
+            for inValue in infoDict['snapshots'][0]:
+                mValue = nDict.get(ind, None)
+                if mValue is not None:
+                    temp.append(mValue)
+                else:
+                    temp.append(inValue)
+                ind += 1
+
+            infoDict['snapshots'][0] = temp
             if self.dynamicsLog:
                 self.__logDynamics(infoDict['paramNamesMap'], infoDict['snapshots'])
             self.__physicsDebugInfo = infoDict

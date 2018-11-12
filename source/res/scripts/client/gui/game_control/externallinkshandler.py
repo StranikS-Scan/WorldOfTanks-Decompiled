@@ -4,7 +4,7 @@ import BigWorld
 from adisp import async, process
 from debug_utils import LOG_ERROR, LOG_CURRENT_EXCEPTION
 from gui import GUI_SETTINGS
-from gui.game_control.links import URLMarcos
+from gui.game_control.links import URLMacros
 from gui.shared import g_eventBus
 from gui.shared.events import OpenLinkEvent
 from skeletons.gui.game_control import IExternalLinksController
@@ -24,17 +24,18 @@ _LISTENERS = {OpenLinkEvent.SPECIFIED: '_handleSpecifiedURL',
  OpenLinkEvent.GLOBAL_MAP_CAP: '_handleGmCapURL',
  OpenLinkEvent.GLOBAL_MAP_PROMO: '_handleGmPromoURL',
  OpenLinkEvent.PREM_SHOP: '_handleOpenPremShopURL',
+ OpenLinkEvent.FRONTLINE_CHANGES: '_handleFrontlineChangesURL',
  OpenLinkEvent.TOKEN_SHOP: '_handleTokenShopURL'}
 
 class ExternalLinksHandler(IExternalLinksController):
 
     def __init__(self):
         super(ExternalLinksHandler, self).__init__()
-        self.__urlMarcos = None
+        self.__urlMacros = None
         return
 
     def init(self):
-        self.__urlMarcos = URLMarcos()
+        self.__urlMacros = URLMacros()
         addListener = g_eventBus.addListener
         for eventType, handlerName in _LISTENERS.iteritems():
             handler = getattr(self, handlerName, None)
@@ -49,9 +50,9 @@ class ExternalLinksHandler(IExternalLinksController):
         return
 
     def fini(self):
-        if self.__urlMarcos is not None:
-            self.__urlMarcos.clear()
-            self.__urlMarcos = None
+        if self.__urlMacros is not None:
+            self.__urlMacros.clear()
+            self.__urlMacros = None
         removeListener = g_eventBus.removeListener
         for eventType, handlerName in _LISTENERS.iteritems():
             handler = getattr(self, handlerName, None)
@@ -76,7 +77,7 @@ class ExternalLinksHandler(IExternalLinksController):
     def getURL(self, name, params=None, callback=lambda *args: None):
         urlSettings = GUI_SETTINGS.lookup(name)
         if urlSettings:
-            url = yield self.__urlMarcos.parse(str(urlSettings), params)
+            url = yield self.__urlMacros.parse(str(urlSettings), params)
         else:
             url = yield lambda callback: callback('')
         callback(url)
@@ -133,6 +134,9 @@ class ExternalLinksHandler(IExternalLinksController):
 
     def _handleOpenPremShopURL(self, _):
         self.__openParsedUrl('premShopURL')
+
+    def _handleFrontlineChangesURL(self, _):
+        self.__openParsedUrl('frontlineChangesURL')
 
     def _handleTokenShopURL(self, event):
         self.__openParsedUrl('tokenShopURL', event.params)

@@ -15,7 +15,8 @@ from skeletons.gui.lobby_context import ILobbyContext
 from gui.shared.formatters import text_styles
 from gui.Scaleform.daapi.view.lobby.epicBattle.epic_meta_level_icon import getEpicMetaIconVODict
 from gui.sounds.epic_sound_constants import EPIC_METAGAME_WWISE_SOUND_EVENTS
-from gui.server_events.bonuses import CreditsBonus, ItemsBonus, GoodiesBonus, PremiumDaysBonus
+from gui.server_events.bonuses import CreditsBonus, CrystalBonus, ItemsBonus, GoodiesBonus, PremiumDaysBonus
+_LEVELUP_TOKEN_TEMPLATE = 'epicmetagame:levelup:%d'
 EpicBattlesAfterBattleViewVO = namedtuple('EpicBattlesAfterBattleViewVO', ('awards', 'progress', 'barText', 'currentPrestigeLevel', 'epicMetaLevelIconData', 'rank', 'rankText', 'rankTextBig', 'rankSubText', 'levelUpText', 'levelUpTextBig', 'backgroundImageSrc', 'maxLevel'))
 
 def _AccumulateBonuses(bonuses):
@@ -25,6 +26,9 @@ def _AccumulateBonuses(bonuses):
 
     def accumulateCredits(bonuses):
         return __accumulateIntegralBonus(CreditsBonus, bonuses)
+
+    def accumulateCrystals(bonuses):
+        return __accumulateIntegralBonus(CrystalBonus, bonuses)
 
     def accumulatePremiumDays(bonuses):
         return __accumulateIntegralBonus(PremiumDaysBonus, bonuses)
@@ -49,6 +53,7 @@ def _AccumulateBonuses(bonuses):
         return GoodiesBonus(bonuses[0].getName(), values)
 
     typeToAccumulator = {CreditsBonus: accumulateCredits,
+     CrystalBonus: accumulateCrystals,
      ItemsBonus: accumulateItems,
      GoodiesBonus: accumulateGoodies,
      PremiumDaysBonus: accumulatePremiumDays}
@@ -100,14 +105,21 @@ class EpicBattlesAfterBattleView(EpicBattlesAfterBattleViewMeta):
         achievedRank = extInfo['playerRank'].get('rank', -1)
         rankName = getattr(EPIC_BATTLE, 'RANK_RANK{}'.format(achievedRank))
         achievedRank += 1
-        questsProgressData = self.__ctx['reusableInfo'].personal.getQuestsProgress()
-        bonuses = sum([ self.eventsCache.getAllQuests().get(q).getBonuses() for q in questsProgressData ], [])
-        bonuses = _AccumulateBonuses(bonuses)
-        awardsVO = self._awardsFormatter.getFormattedBonuses(bonuses, size=AWARDS_SIZES.BIG)
+        awardsVO = self._awardsFormatter.getFormattedBonuses(self._getBonuses(pMetaLevel), size=AWARDS_SIZES.BIG)
         lvlReachedText = EPIC_BATTLE.EPIC_BATTLES_AFTER_BATTLE_LEVEL_UP_MAX_TITLE if pMetaLevel == maxMetaLevel else EPIC_BATTLE.EPIC_BATTLES_AFTER_BATTLE_LEVEL_UP_TITLE
         data = EpicBattlesAfterBattleViewVO(awards=awardsVO, progress=self.__getProgress(pMetaLevel, pFamePts, prevPMetaLevel, prevPFamePts, maxMetaLevel), barText='+' + str(famePointsReceived), currentPrestigeLevel=pPrestigeLevel, epicMetaLevelIconData=getEpicMetaIconVODict(pPrestigeLevel, pMetaLevel), rank=achievedRank, rankText=toUpper(text_styles.heroTitle(rankName)), rankTextBig=toUpper(text_styles.epicTitle(rankName)), rankSubText=text_styles.highTitle(EPIC_BATTLE.EPIC_BATTLES_AFTER_BATTLE_ACHIEVED_RANK), levelUpText=toUpper(text_styles.heroTitle(lvlReachedText)), levelUpTextBig=toUpper(text_styles.epicTitle(lvlReachedText)), backgroundImageSrc=RES_ICONS.MAPS_ICONS_EPICBATTLES_BACKGROUNDS_META_BG, maxLevel=maxMetaLevel)
         self.as_setDataS(data._asdict())
         return
+
+    def _getBonuses(self, level):
+        questsProgressData = self.__ctx['reusableInfo'].personal.getQuestsProgress()
+        currentLevelQuest = self.eventsCache.getAllQuests().get(_LEVELUP_TOKEN_TEMPLATE % level, None)
+        if currentLevelQuest and questsProgressData:
+            bonuses = sum([ self.eventsCache.getAllQuests().get(q).getBonuses() for q in questsProgressData ], [])
+            bonuses = _AccumulateBonuses(bonuses)
+        else:
+            bonuses = []
+        return bonuses
 
     def _dispose(self):
         super(EpicBattlesAfterBattleView, self)._dispose()
@@ -116,6 +128,7 @@ class EpicBattlesAfterBattleView(EpicBattlesAfterBattleViewMeta):
         self.destroy()
 
     def __getProgress(self, curLevel, curFamePoints, prevLevel, prevFamePoints, maxLevel):
-        pLevel = prevLevel + float(prevFamePoints) / float(self.epicMetaGameCtrl.getPointsProgessForLevel(prevLevel)) if prevLevel != maxLevel else maxLevel
-        cLevel = curLevel + float(curFamePoints) / float(self.epicMetaGameCtrl.getPointsProgessForLevel(curLevel)) if curLevel != maxLevel else maxLevel
+        getPointsProgressForLevel = self.epicMetaGameCtrl.getPointsProgressForLevel
+        pLevel = prevLevel + float(prevFamePoints) / float(getPointsProgressForLevel(prevLevel)) if prevLevel != maxLevel else maxLevel
+        cLevel = curLevel + float(curFamePoints) / float(getPointsProgressForLevel(curLevel)) if curLevel != maxLevel else maxLevel
         return (pLevel, cLevel)

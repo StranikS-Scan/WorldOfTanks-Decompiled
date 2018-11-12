@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client/AvatarInputHandler/control_modes.py
 import weakref
 from collections import namedtuple
+import time
 import BigWorld
 import BattleReplay
 import CommandMapping
@@ -22,6 +23,7 @@ from DynamicCameras import SniperCamera, StrategicCamera, ArcadeCamera, ArtyCame
 from PostmortemDelay import PostmortemDelay
 from ProjectileMover import collideDynamicAndStatic
 from AimingSystems import getShotTargetInfo
+from AimingSystems.magnetic_aim import autoAimProcessor, magneticAimProcessor, MagneticAimSettings
 from TriggersManager import TRIGGER_TYPE
 from constants import AIMING_MODE
 from debug_utils import LOG_DEBUG, LOG_CURRENT_EXCEPTION
@@ -30,7 +32,10 @@ from skeletons.gui.battle_session import IBattleSessionProvider
 from constants import VEHICLE_SIEGE_STATE
 from gui import GUI_SETTINGS
 from gui.battle_control import avatar_getter, vehicle_getter
+from gui.battle_control import event_dispatcher as gui_event_dispatcher
+from account_helpers.AccountSettings import AccountSettings, WHEELED_DEATH_DELAY_COUNT
 _ARCADE_CAM_PIVOT_POS = Math.Vector3(0, 4, 3)
+_WHEELED_VEHICLE_POSTMORTEM_DELAY = 3
 
 class IControlMode(object):
 
@@ -138,6 +143,7 @@ class _GunControlMode(IControlMode):
         self._aimingMode = 0
         self._canShot = False
         self._currentMode = mode
+        self._lockedDown = False
         return
 
     @property
@@ -461,6 +467,9 @@ class ArcadeControlMode(_GunControlMode):
         self.__mouseVehicleRotator = _MouseVehicleRotator()
         self.__videoControlModeAvailable = dataSection.readBool('videoModeAvailable', constants.HAS_DEV_RESOURCES)
         self.__videoControlModeAvailable &= BattleReplay.g_replayCtrl.isPlaying or constants.HAS_DEV_RESOURCES
+        self.__lockKeyPressedTime = None
+        self.__lockKeyUpTime = None
+        return
 
     @property
     def curVehicleID(self):
@@ -499,17 +508,30 @@ class ArcadeControlMode(_GunControlMode):
         elif BigWorld.isKeyDown(Keys.KEY_CAPSLOCK) and isDown and key == Keys.KEY_F3 and self.__videoControlModeAvailable:
             self._aih.onControlModeChanged(CTRL_MODE_NAME.VIDEO, prevModeName=CTRL_MODE_NAME.ARCADE, camMatrix=self._cam.camera.matrix)
             return True
+        isWheeledTech = BigWorld.player().vehicle.isWheeledTech
+        if isWheeledTech and cmdMap.isFired(CommandMapping.CMD_CM_LOCK_TARGET, key):
+            if isDown:
+                self.__lockKeyPressedTime = time.time()
+            else:
+                self.__lockKeyUpTime = time.time()
         isFiredFreeCamera = cmdMap.isFired(CommandMapping.CMD_CM_FREE_CAMERA, key)
-        isFiredLockTarget = cmdMap.isFired(CommandMapping.CMD_CM_LOCK_TARGET, key) and isDown
-        if isFiredFreeCamera or isFiredLockTarget:
-            if isFiredFreeCamera:
-                self.setAimingMode(isDown, AIMING_MODE.USER_DISABLED)
-            if isFiredLockTarget:
-                BigWorld.player().autoAim(BigWorld.target())
+        isFiredLockTarget = cmdMap.isFired(CommandMapping.CMD_CM_LOCK_TARGET, key)
+        if isFiredFreeCamera:
+            self.setAimingMode(isDown, AIMING_MODE.USER_DISABLED)
+        if isFiredLockTarget and isDown:
+            if isWheeledTech:
+                gui_event_dispatcher.hideAutoAimMarker()
+                autoAimProcessor(target=BigWorld.target())
+            BigWorld.player().autoAim(BigWorld.target())
+        if isWheeledTech and isFiredLockTarget and not isDown:
+            if self.__lockKeyPressedTime is not None and self.__lockKeyUpTime is not None:
+                if self.__lockKeyUpTime - self.__lockKeyPressedTime <= MagneticAimSettings.KEY_DELAY_SEC:
+                    magneticAimProcessor()
         if cmdMap.isFired(CommandMapping.CMD_CM_SHOOT, key) and isDown:
             BigWorld.player().shoot()
             return True
         elif cmdMap.isFired(CommandMapping.CMD_CM_LOCK_TARGET_OFF, key) and isDown:
+            gui_event_dispatcher.hideAutoAimMarker()
             BigWorld.player().autoAim(None)
             return True
         elif cmdMap.isFired(CommandMapping.CMD_CM_VEHICLE_SWITCH_AUTOROTATION, key) and isDown:
@@ -893,16 +915,20 @@ class SniperControlMode(_GunControlMode):
         cmdMap = CommandMapping.g_instance
         isFiredFreeCamera = cmdMap.isFired(CommandMapping.CMD_CM_FREE_CAMERA, key)
         isFiredLockTarget = cmdMap.isFired(CommandMapping.CMD_CM_LOCK_TARGET, key) and isDown
+        isWheeledTech = BigWorld.player().vehicle.isWheeledTech
         if isFiredFreeCamera or isFiredLockTarget:
             if isFiredFreeCamera:
                 self.setAimingMode(isDown, AIMING_MODE.USER_DISABLED)
             if isFiredLockTarget:
+                if isWheeledTech:
+                    autoAimProcessor(target=BigWorld.target())
                 BigWorld.player().autoAim(BigWorld.target())
         if cmdMap.isFired(CommandMapping.CMD_CM_SHOOT, key) and isDown:
             BigWorld.player().shoot()
             return True
         elif cmdMap.isFired(CommandMapping.CMD_CM_LOCK_TARGET_OFF, key) and isDown:
             BigWorld.player().autoAim(None)
+            gui_event_dispatcher.hideAutoAimMarker()
             return True
         elif cmdMap.isFired(CommandMapping.CMD_CM_ALTERNATE_MODE, key) and isDown:
             self._aih.onControlModeChanged(CTRL_MODE_NAME.ARCADE, preferredPos=self.camera.aimingSystem.getDesiredShotPoint(), turretYaw=self._cam.aimingSystem.turretYaw, gunPitch=self._cam.aimingSystem.gunPitch, aimingMode=self._aimingMode, closesDist=False)
@@ -1056,7 +1082,7 @@ class PostMortemControlMode(IControlMode):
         self.__connectToArena()
         _setCameraFluency(self.__cam.camera, self.__CAM_FLUENCY)
         self.__isEnabled = True
-        BigWorld.player().consistentMatrices.onVehicleMatrixBindingChanged += self.__onMatrixBound
+        BigWorld.player().consistentMatrices.onVehicleMatrixBindingChanged += self._onMatrixBound
         if not BattleReplay.g_replayCtrl.isPlaying:
             if self.__isObserverMode:
                 vehicleID = args.get('vehicleID')
@@ -1065,9 +1091,8 @@ class PostMortemControlMode(IControlMode):
                 else:
                     self.__fakeSwitchToVehicle(vehicleID)
                 return
-            if PostMortemControlMode.getIsPostmortemDelayEnabled() and bool(args.get('bPostmortemDelay')):
-                self.__postmortemDelay = PostmortemDelay(self.__cam, self._onPostmortemDelayStart, self._onPostmortemDelayStop)
-                self.__postmortemDelay.start()
+            if (PostMortemControlMode.getIsPostmortemDelayEnabled() or bool(args.get('respawn', False))) and bool(args.get('bPostmortemDelay')):
+                self.__startPostmortemDelay(self.__selfVehicleID)
             else:
                 self.__switchToVehicle(None)
         arena = BigWorld.player().arena
@@ -1081,6 +1106,22 @@ class PostMortemControlMode(IControlMode):
                 self.__onRespawnInfoUpdated(respawnCtrl.respawnInfo)
         return
 
+    def __startPostmortemDelay(self, vehicleID):
+        initialDelay = self.__calculatePostMortemInitialDelayForVehicle(vehicleID)
+        self.__postmortemDelay = PostmortemDelay(self.__cam, self._onPostmortemDelayStart, self._onPostmortemDelayStop, initialDelay)
+        self.__postmortemDelay.start()
+
+    def __calculatePostMortemInitialDelayForVehicle(self, vehicleID):
+        vehicle = BigWorld.entities.get(vehicleID)
+        if vehicle is None or not vehicle.isWheeledTech:
+            return 0
+        else:
+            wheeledDeathCountLeft = AccountSettings.getSettings(WHEELED_DEATH_DELAY_COUNT)
+            if wheeledDeathCountLeft == 0:
+                return 0
+            AccountSettings.setSettings(WHEELED_DEATH_DELAY_COUNT, max(wheeledDeathCountLeft - 1, 0))
+            return _WHEELED_VEHICLE_POSTMORTEM_DELAY
+
     def disable(self):
         ctrl = self.guiSessionProvider.dynamic.respawn
         if ctrl is not None:
@@ -1090,7 +1131,7 @@ class PostMortemControlMode(IControlMode):
         arena = BigWorld.player().arena
         if arena is not None:
             arena.onVehicleKilled -= self.__onArenaVehicleKilled
-        BigWorld.player().consistentMatrices.onVehicleMatrixBindingChanged -= self.__onMatrixBound
+        BigWorld.player().consistentMatrices.onVehicleMatrixBindingChanged -= self._onMatrixBound
         self.__isEnabled = False
         self._destroyPostmortemDelay()
         self.__disconnectFromArena()
@@ -1163,7 +1204,7 @@ class PostMortemControlMode(IControlMode):
             return
         else:
             self.selectPlayer(None)
-            BigWorld.player().inputHandler.onControlModeChanged(targetMode, prevModeName=CTRL_MODE_NAME.POSTMORTEM, camMatrix=Math.Matrix(self.camera.camera.invViewMatrix), curVehicleID=self.__curVehicleID, transitionDuration=self._cameraTransitionDurations[targetMode])
+            BigWorld.player().inputHandler.onControlModeChanged(targetMode, prevModeName=CTRL_MODE_NAME.POSTMORTEM, camMatrix=Math.Matrix(BigWorld.camera().matrix), curVehicleID=self.__curVehicleID, transitionDuration=self._cameraTransitionDurations[targetMode])
             return
 
     def _destroyPostmortemDelay(self):
@@ -1287,7 +1328,7 @@ class PostMortemControlMode(IControlMode):
         player.arena.onPeriodChange -= self.__onPeriodChange
         player.onVehicleLeaveWorld -= self.__onVehicleLeaveWorld
 
-    def __onMatrixBound(self, isStatic):
+    def _onMatrixBound(self, isStatic):
         if isStatic:
             return
         else:

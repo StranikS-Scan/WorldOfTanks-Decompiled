@@ -42,6 +42,10 @@ class BorderVisual(object):
         if None in (fromPos, toPos):
             return
         else:
+            if not BigWorld.player().arena.isPointInsideArenaBB(fromPos):
+                fromPos = BigWorld.player().arena.getClosestPointOnArenaBB(fromPos)
+            if not BigWorld.player().arena.isPointInsideArenaBB(toPos):
+                toPos = BigWorld.player().arena.getClosestPointOnArenaBB(toPos)
             self.__direction = toPos - fromPos
             self.__length = self.__direction.length
             self.__direction.normalise()

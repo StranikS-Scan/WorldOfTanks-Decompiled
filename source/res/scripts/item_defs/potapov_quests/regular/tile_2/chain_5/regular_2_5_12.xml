@@ -8,22 +8,10 @@
         <postBattle>
           <and>
             <results>
-              <title>
-                <key>	#personal_missions_details:quest_2_5_12_condition_title_stunDuration	</key>
-              </title>
-              <description>
-                <key>	#personal_missions_details:quest_2_5_12_condition_description_stunDuration	</key>
-              </description>
               <key>	stunDuration	</key>
               <greaterOrEqual>	100	</greaterOrEqual>
             </results>
             <results>
-              <title>
-                <key>	#personal_missions_details:quest_common_condition_title_stunAssist	</key>
-              </title>
-              <description>
-                <key>	#personal_missions_details:quest_2_5_12_condition_description_complexKillAssist	</key>
-              </description>
               <plus>
                 <key>	killsAssistedStun	</key>
                 <key>	killsAssistedTrack	</key>
@@ -77,22 +65,10 @@
         <postBattle>
           <and>
             <results>
-              <title>
-                <key>	#personal_missions_details:quest_2_5_12_condition_title_stunDuration	</key>
-              </title>
-              <description>
-                <key>	#personal_missions_details:quest_2_5_12_condition_description_stunDuration	</key>
-              </description>
               <key>	stunDuration	</key>
               <greaterOrEqual>	100	</greaterOrEqual>
             </results>
             <results>
-              <title>
-                <key>	#personal_missions_details:quest_common_condition_title_stunAssist	</key>
-              </title>
-              <description>
-                <key>	#personal_missions_details:quest_2_5_12_condition_description_complexKillAssist	</key>
-              </description>
               <plus>
                 <key>	killsAssistedStun	</key>
                 <key>	killsAssistedTrack	</key>

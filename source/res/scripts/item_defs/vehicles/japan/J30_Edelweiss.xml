@@ -83,7 +83,7 @@
       </slot>
       <slot>
         <slotType>	fixedEmblem	</slotType>
-        <slotId>	2	</slotId>
+        <slotId>	204	</slotId>
         <rayStart>	-1.72505 0.210214 0.965741	</rayStart>
         <rayEnd>	-1.6593 0.209237 0.959979	</rayEnd>
         <rayUp>	-0.00458983 0.99863 -0.0521286	</rayUp>
@@ -94,7 +94,7 @@
       </slot>
       <slot>
         <slotType>	fixedEmblem	</slotType>
-        <slotId>	3	</slotId>
+        <slotId>	205	</slotId>
         <rayStart>	1.7863 0.190632 0.957354	</rayStart>
         <rayEnd>	1.60103 0.187879 0.941114	</rayEnd>
         <rayUp>	0.00612655 0.997565 -0.0694792	</rayUp>
@@ -790,10 +790,11 @@
           <customizationSlots>
             <slot>
               <slotType>	insigniaOnGun	</slotType>
-              <slotId>	5	</slotId>
+              <slotId>	771	</slotId>
               <rayStart>	0.000000 0.000002 1.60107	</rayStart>
               <rayEnd>	0.343085 -0.152283 1.57939	</rayEnd>
-              <rayUp>	0.131 0.124 5	</rayUp>
+              <rayUp>	0.131 0.000000 0.000000	</rayUp>
+              <applyToFabric>	true	</applyToFabric>
               <size>	0.37	</size>
               <hideIfDamaged>	false	</hideIfDamaged>
               <isUVProportional>	true	</isUVProportional>
@@ -823,7 +824,7 @@
       <customizationSlots>
         <slot>
           <slotType>	fixedEmblem	</slotType>
-          <slotId>	4	</slotId>
+          <slotId>	714	</slotId>
           <rayStart>	-0.652515 0.389731 0.914683	</rayStart>
           <rayEnd>	-0.476146 0.311055 0.862676	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
@@ -856,10 +857,12 @@
       <engines>
         <Edelweiss_Engine>
           <smplEnginePower>	800	</smplEnginePower>
+          <smplFwMaxSpeed>	60	</smplFwMaxSpeed>
         </Edelweiss_Engine>
       </engines>
       <chassis>
         <Chassis_J30_Edelweiss>
+          <axleCount>	5	</axleCount>
           <grounds>
             <ground>
               <medium>

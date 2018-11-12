@@ -514,7 +514,7 @@ class ArenaVehiclesPlugin(common.EntriesPlugin, IVehiclesAndPositionsController)
         g_eventBus.addListener(events.GameEvent.SHOW_EXTENDED_INFO, self.__handleShowExtendedInfo, scope=EVENT_BUS_SCOPE.BATTLE)
         ctrl = self.sessionProvider.shared.feedback
         if ctrl is not None:
-            ctrl.onMinimapVehicleAdded += self._onMinimapVehicleAdded
+            ctrl.onMinimapVehicleAdded += self.__onMinimapVehicleAdded
             ctrl.onMinimapVehicleRemoved += self.__onMinimapVehicleRemoved
             ctrl.onMinimapFeedbackReceived += self.__onMinimapFeedbackReceived
         g_playerEvents.onTeamChanged += self.__onTeamChanged
@@ -536,7 +536,7 @@ class ArenaVehiclesPlugin(common.EntriesPlugin, IVehiclesAndPositionsController)
         g_eventBus.removeListener(events.GameEvent.SHOW_EXTENDED_INFO, self.__handleShowExtendedInfo, scope=EVENT_BUS_SCOPE.BATTLE)
         ctrl = self.sessionProvider.shared.feedback
         if ctrl is not None:
-            ctrl.onMinimapVehicleAdded -= self._onMinimapVehicleAdded
+            ctrl.onMinimapVehicleAdded -= self.__onMinimapVehicleAdded
             ctrl.onMinimapVehicleRemoved -= self.__onMinimapVehicleRemoved
             ctrl.onMinimapFeedbackReceived -= self.__onMinimapFeedbackReceived
         g_playerEvents.onTeamChanged -= self.__onTeamChanged
@@ -581,7 +581,7 @@ class ArenaVehiclesPlugin(common.EntriesPlugin, IVehiclesAndPositionsController)
             else:
                 model = self._entries[vehicleID]
             if model is not None:
-                self._setVehicleInfo(vehicleID, model, vInfo, getProps(vehicleID, vInfo.team), isSpotted=False)
+                self.__setVehicleInfo(vehicleID, model, vInfo, getProps(vehicleID, vInfo.team), isSpotted=False)
                 if model.isActive():
                     self.__setInAoI(model, True)
                 self._notifyVehicleAdded(vehicleID)
@@ -600,7 +600,7 @@ class ArenaVehiclesPlugin(common.EntriesPlugin, IVehiclesAndPositionsController)
                 return
             model = self.__addEntryToPool(vehicleID, positions=self._arenaVisitor.getArenaPositions())
             if model is not None:
-                self._setVehicleInfo(vehicleID, model, vInfo, arenaDP.getPlayerGuiProps(vehicleID, vInfo.team), isSpotted=False)
+                self.__setVehicleInfo(vehicleID, model, vInfo, arenaDP.getPlayerGuiProps(vehicleID, vInfo.team), isSpotted=False)
                 if model.isActive():
                     self.__setInAoI(model, True)
                 self._notifyVehicleAdded(vehicleID)
@@ -618,7 +618,7 @@ class ArenaVehiclesPlugin(common.EntriesPlugin, IVehiclesAndPositionsController)
                         self.__setAlive(vehicleID, entry)
                     else:
                         self.__setDestroyed(vehicleID, entry)
-                self._setVehicleInfo(vehicleID, entry, vInfo, arenaDP.getPlayerGuiProps(vehicleID, vInfo.team))
+                self.__setVehicleInfo(vehicleID, entry, vInfo, arenaDP.getPlayerGuiProps(vehicleID, vInfo.team))
 
     def invalidateVehicleStatus(self, flags, vInfo, arenaDP):
         if vInfo.isObserver():
@@ -690,7 +690,7 @@ class ArenaVehiclesPlugin(common.EntriesPlugin, IVehiclesAndPositionsController)
             model.setLocation(location)
         return model
 
-    def _setVehicleInfo(self, vehicleID, entry, vInfo, guiProps, isSpotted=False):
+    def __setVehicleInfo(self, vehicleID, entry, vInfo, guiProps, isSpotted=False):
         vehicleType = vInfo.vehicleType
         classTag = vehicleType.classTag
         name = vehicleType.shortNameWithPrefix
@@ -841,7 +841,7 @@ class ArenaVehiclesPlugin(common.EntriesPlugin, IVehiclesAndPositionsController)
             self._notifyVehicleRemoved(vehicleID)
         return
 
-    def _onMinimapVehicleAdded(self, vProxy, vInfo, guiProps):
+    def __onMinimapVehicleAdded(self, vProxy, vInfo, guiProps):
         vehicleID = vInfo.vehicleID
         if vehicleID == self.__playerVehicleID or vInfo.isObserver() or not vProxy.isAlive():
             return
@@ -850,7 +850,7 @@ class ArenaVehiclesPlugin(common.EntriesPlugin, IVehiclesAndPositionsController)
             if vehicleID not in self._entries:
                 model = self.__addEntryToPool(vehicleID, VEHICLE_LOCATION.AOI)
                 if model is not None:
-                    self._setVehicleInfo(vehicleID, model, vInfo, guiProps, isSpotted=True)
+                    self.__setVehicleInfo(vehicleID, model, vInfo, guiProps, isSpotted=True)
                     self.__setInAoI(model, True)
                     self._notifyVehicleAdded(vehicleID)
             else:

@@ -4,5 +4,8 @@ from gui.Scaleform.daapi.view.battle.classic.base_stats import StatsBase
 
 class EpicFullStatsMeta(StatsBase):
 
-    def as_initializeTextS(self, text_data):
-        return self.flashObject.as_initializeText(text_data) if self._isDAAPIInited() else None
+    def as_initializeTextS(self, myLaneText, allLanesText):
+        return self.flashObject.as_initializeText(myLaneText, allLanesText) if self._isDAAPIInited() else None
+
+    def as_setIsIntaractiveS(self, value):
+        return self.flashObject.as_setIsIntaractive(value) if self._isDAAPIInited() else None

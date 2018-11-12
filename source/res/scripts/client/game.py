@@ -501,6 +501,7 @@ _PYTHON_MACROS = {'p': 'BigWorld.player()',
  'wc': 'from gui.Scaleform.Waiting import Waiting; Waiting.close()',
  'clan': 'from gui.shared.ClanCache import g_clanCache; clan = g_clanCache',
  'camera': 'BigWorld.player().inputHandler.ctrl',
+ 'resetEpic': 'BigWorld.player().epicMetaGame.resetEpicMetaGame',
  'rankedCtrl': 'from helpers import dependency; from skeletons.gui.game_control import IRankedBattlesController;rc = dependency.instance(IRankedBattlesController)',
  'eventsCache': 'from helpers import dependency; from skeletons.gui.server_events import IEventsCache;ec = dependency.instance(IEventsCache)',
  'items': 'from helpers import dependency; from skeletons.gui.shared import IItemsCache;items = dependency.instance(IItemsCache).items'}

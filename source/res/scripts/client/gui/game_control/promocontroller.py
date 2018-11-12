@@ -12,7 +12,7 @@ from gui.Scaleform.framework import ViewTypes
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.app_loader import sf_lobby
 from gui.game_control import gc_constants
-from gui.game_control.links import URLMarcos
+from gui.game_control.links import URLMacros
 from gui.promo.promo_logger import PromoLogSourceType, PromoLogActions, PromoLogSubjectType
 from gui.shared import g_eventBus, events, EVENT_BUS_SCOPE
 from gui.shared.event_dispatcher import showBubbleTooltip
@@ -42,11 +42,10 @@ class PromoController(IPromoController):
     __lobbyContext = dependency.descriptor(ILobbyContext)
     __logger = dependency.descriptor(IPromoLogger)
     __bootcamp = dependency.descriptor(IBootcampController)
-    _CHECK_FREQUENCY_IN_BATTLES = 10
 
     def __init__(self):
         super(PromoController, self).__init__()
-        self.__urlMacros = URLMarcos()
+        self.__urlMacros = URLMacros()
         self.__externalCloseCallback = None
         self.__isLobbyInited = False
         self.__pendingPromo = None
@@ -62,6 +61,7 @@ class PromoController(IPromoController):
         self.__browserWatchers = {}
         self.__isInHangar = False
         self.__isTeaserOpen = False
+        self.__checkIntervalInBattles = GUI_SETTINGS.checkPromoFrequencyInBattles
         self.__em = EventManager()
         self.onNewTeaserReceived = Event(self.__em)
         self.onPromoCountChanged = Event(self.__em)
@@ -91,12 +91,16 @@ class PromoController(IPromoController):
         self.__isLobbyInited = True
         if self.__hasPendingTeaser:
             self.__tryToShowTeaser()
-        elif self.__battlesFromLastTeaser % self._CHECK_FREQUENCY_IN_BATTLES == 0:
+        elif self.__checkIntervalInBattles > 0 and self.__battlesFromLastTeaser % self.__checkIntervalInBattles == 0:
             self.__updateWebBrgData()
         self.eventsNotification.onEventNotificationsChanged += self.__onEventNotification
         if not isPopupsWindowsOpenDisabled():
             self.__processPromo(self.eventsNotification.getEventsNotifications())
         self.app.loaderManager.onViewLoaded += self.__onViewLoaded
+
+    @property
+    def checkIntervalInBattles(self):
+        return self.__checkIntervalInBattles
 
     def setNewTeaserData(self, teaserData):
         timestamp = teaserData['timestamp']

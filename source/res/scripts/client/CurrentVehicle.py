@@ -160,7 +160,7 @@ class _CurrentVehicle(_CachedVehicle):
             self.onChanged()
 
     def refreshModel(self):
-        if g_currentPreviewVehicle.item is not None:
+        if g_currentPreviewVehicle.item is not None and not g_currentPreviewVehicle.isHeroTank:
             return
         else:
             if self.isPresent() and self.isInHangar() and self.item.modelState:
@@ -239,6 +239,12 @@ class _CurrentVehicle(_CachedVehicle):
 
     def isReadyToFight(self):
         return self.isPresent() and self.item.isReadyToFight
+
+    def isUnsuitableToQueue(self):
+        if self.isPresent():
+            state, _ = self.item.getState()
+            return state == Vehicle.VEHICLE_STATE.UNSUITABLE_TO_QUEUE
+        return False
 
     def isAutoLoadFull(self):
         return not self.isPresent() or self.item.isAutoLoadFull()
@@ -364,10 +370,10 @@ class _CurrentPreviewVehicle(_CachedVehicle):
         self.__item = None
         self.__defaultItem = None
         self.__vehAppearance = _RegularPreviewAppearance()
+        self.__isHeroTank = False
         self.onComponentInstalled = Event(self._eManager)
         self.onVehicleUnlocked = Event(self._eManager)
         self.onVehicleInventoryChanged = Event(self._eManager)
-        self.__vehAppearance = _RegularPreviewAppearance()
         return
 
     def destroy(self):
@@ -393,6 +399,13 @@ class _CurrentPreviewVehicle(_CachedVehicle):
 
     def resetAppearance(self, appearance=None):
         self.__vehAppearance = appearance or _RegularPreviewAppearance()
+
+    def selectHeroTank(self, value):
+        self.__isHeroTank = value
+
+    @property
+    def isHeroTank(self):
+        return self.__isHeroTank
 
     @property
     def item(self):

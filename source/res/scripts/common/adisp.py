@@ -2,7 +2,7 @@
 # Embedded file name: scripts/common/adisp.py
 import os
 import types
-from functools import partial
+from functools import partial, wraps
 from debug_utils import LOG_WRAPPED_CURRENT_EXCEPTION, LOG_ERROR
 from soft_exception import SoftException
 CLEAR_TRACE = True
@@ -66,6 +66,7 @@ else:
 
 def process(func, stepCallback=lambda stop: None):
 
+    @wraps(func)
     def wrapper(*args, **kwargs):
         generator = func(*args, **kwargs)
         if not isinstance(generator, types.GeneratorType):

@@ -103,8 +103,9 @@ class HeaderBlockConstructor(BattleBoosterTooltipBlockConstructor):
         imgPaddingTop = 5
         desc = TOOLTIPS.BATTLEBOOSTER_CREW if module.isCrewBooster() else TOOLTIPS.BATTLEBOOSTER_OPTIONALDEVICE
         overlayPath, highlightPath = self.__getOverlayAndHighlight()
-        padding = formatters.packPadding(top=SLOT_HIGHLIGHT_TYPES.BATTLE_BOOSTER_PADDING_TOP, left=SLOT_HIGHLIGHT_TYPES.BATTLE_BOOSTER_PADDING_LEFT)
-        block.append(formatters.packItemTitleDescBlockData(title=text_styles.highTitle(title), desc=text_styles.standard(_ms(desc)), img=module.icon, imgPadding=formatters.packPadding(left=imgPaddingLeft, top=imgPaddingTop), txtGap=-3, txtOffset=90 - self.leftPadding, padding=formatters.packPadding(top=-6), overlayPath=overlayPath, overlayPadding=padding, highlightPath=highlightPath, highlightPadding=padding))
+        overlayPadding = formatters.packPadding(top=SLOT_HIGHLIGHT_TYPES.TOOLTIP_OVERLAY_PADDING_TOP, left=SLOT_HIGHLIGHT_TYPES.TOOLTIP_OVERLAY_PADDING_LEFT)
+        highlightPadding = formatters.packPadding(top=SLOT_HIGHLIGHT_TYPES.TOOLTIP_HIGHLIGHT_PADDING_TOP, left=SLOT_HIGHLIGHT_TYPES.TOOLTIP_HIGHLIGHT_PADDING_LEFT)
+        block.append(formatters.packItemTitleDescBlockData(title=text_styles.highTitle(title), desc=text_styles.standard(_ms(desc)), img=module.icon, imgPadding=formatters.packPadding(left=imgPaddingLeft, top=imgPaddingTop), txtGap=-3, txtOffset=90 - self.leftPadding, padding=formatters.packPadding(top=-6), overlayPath=overlayPath, overlayPadding=overlayPadding, highlightPath=highlightPath, highlightPadding=highlightPadding))
         return block
 
     def __getOverlayAndHighlight(self):
@@ -112,10 +113,10 @@ class HeaderBlockConstructor(BattleBoosterTooltipBlockConstructor):
         if module.isCrewBooster():
             currentVehicle = self.configuration.vehicle
             isLearnt = currentVehicle is None or module.isAffectedSkillLearnt(self.configuration.vehicle)
-            overlayPath = RES_ICONS.MAPS_ICONS_ARTEFACT_BATTLEBOOSTER_OVERLAY if isLearnt else RES_ICONS.MAPS_ICONS_ARTEFACT_BATTLEBOOSTER_REPLACE_OVERLAY
+            overlayPath = RES_ICONS.MAPS_ICONS_QUESTS_BONUSES_SMALL_BATTLEBOOSTER_OVERLAY if isLearnt else RES_ICONS.MAPS_ICONS_QUESTS_BONUSES_SMALL_BATTLEBOOSTERREPLACE_OVERLAY
         else:
-            overlayPath = RES_ICONS.MAPS_ICONS_ARTEFACT_BATTLEBOOSTER_OVERLAY
-        highlightPath = RES_ICONS.MAPS_ICONS_ARTEFACT_BATTLEBOOSTER_HIGHLIGHT
+            overlayPath = RES_ICONS.MAPS_ICONS_QUESTS_BONUSES_SMALL_BATTLEBOOSTER_OVERLAY
+        highlightPath = RES_ICONS.MAPS_ICONS_QUESTS_BONUSES_SMALL_BATTLEBOOSTER_HIGHLIGHT
         return (overlayPath, highlightPath)
 
 

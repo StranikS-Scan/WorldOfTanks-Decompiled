@@ -61,7 +61,7 @@ class CurrentVehicleActionsValidator(BaseActionsValidator):
                 return ValidationResult(False, PREBATTLE_RESTRICTION.VEHICLE_RENTALS_IS_OVER)
             if g_currentVehicle.isRotationGroupLocked():
                 return ValidationResult(False, PREBATTLE_RESTRICTION.VEHICLE_ROTATION_GROUP_LOCKED)
-        return super(CurrentVehicleActionsValidator, self)._validate()
+        return ValidationResult(False, PREBATTLE_RESTRICTION.VEHICLE_NOT_SUPPORTED) if g_currentVehicle.isUnsuitableToQueue() else super(CurrentVehicleActionsValidator, self)._validate()
 
 
 class TutorialActionsValidator(BaseActionsValidator):

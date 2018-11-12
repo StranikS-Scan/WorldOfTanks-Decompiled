@@ -3,7 +3,7 @@
 import BigWorld
 import nations
 from gui import GUI_NATIONS_ORDER_INDEX_REVERSED
-from gui.shared.gui_items.Vehicle import getSmallIconPath, Vehicle, VEHICLE_TABLE_TYPES_ORDER_INDICES_REVERSED
+from gui.shared.gui_items.Vehicle import getSmallIconPath, Vehicle, VEHICLE_TABLE_TYPES_ORDER_INDICES_REVERSED, getTypeSmallIconPath, getTypeBigIconPath
 from helpers import int2roman, dependency
 from helpers.i18n import makeString as _ms
 from debug_utils import LOG_ERROR
@@ -41,8 +41,7 @@ def _vehicleHeaderCreator(vehicleCDStr):
     itemsCache = dependency.instance(IItemsCache)
     vehicle = itemsCache.items.getItemByCD(int(vehicleCDStr))
     title = vehicle.shortUserName
-    iconName = '{type}{elite}.png'.format(type=vehicle.type, elite='_elite' if vehicle.isPremium else '')
-    iconPath = RES_ICONS.maps_icons_vehicletypes_big(iconName)
+    iconPath = getTypeBigIconPath(vehicle.type, vehicle.isPremium)
     txtLevel = int2roman(vehicle.level)
     return (title, iconPath, txtLevel)
 
@@ -268,25 +267,23 @@ def makeCantJoinReasonTextVO(event, playerData):
 
 
 def makeVehicleVO(vehicle):
-    icon = RES_ICONS.maps_icons_vehicletypes_elite if vehicle.isPremium else RES_ICONS.maps_icons_vehicletypes
     return {'id': vehicle.intCD,
      'vehicleName': text_styles.main(vehicle.shortUserName),
      'smallVehicleIconPath': vehicle.iconSmall,
      'nationIconPath': getNationsFilterAssetPath(AVAILABLE_NAMES[vehicle.nationID]),
-     'typeIconPath': icon(vehicle.type + '.png'),
+     'typeIconPath': getTypeSmallIconPath(vehicle.type, vehicle.isPremium),
      'level': vehicle.level,
      'isInHangar': vehicle.isInInventory}
 
 
 def makeVehiclePopoverVO(vehicle):
-    iconFunc = RES_ICONS.maps_icons_vehicletypes_elite if vehicle.isPremium else RES_ICONS.maps_icons_vehicletypes
     return {'dbID': vehicle.intCD,
      'level': vehicle.level,
      'shortUserName': vehicle.shortUserName,
      'smallIconPath': getSmallIconPath(vehicle.name),
      'nationID': vehicle.nationID,
      'type': vehicle.type,
-     'typeIcon': iconFunc(vehicle.type + '.png'),
+     'typeIcon': getTypeSmallIconPath(vehicle.type, vehicle.isPremium),
      'inHangar': vehicle.isInInventory,
      'selected': False}
 

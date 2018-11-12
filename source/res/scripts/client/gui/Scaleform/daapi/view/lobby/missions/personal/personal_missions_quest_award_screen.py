@@ -12,6 +12,8 @@ from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.server_events.events_dispatcher import showTankwomanAward
 from gui.server_events.events_helpers import MISSIONS_STATES
 from gui.server_events.pm_constants import SOUNDS
+from gui.shared import EVENT_BUS_SCOPE
+from gui.shared.events import PersonalMissionsEvent
 from gui.shared.formatters import text_styles
 from gui.shared.gui_items.Vehicle import getTypeShortUserName
 from gui.shared.gui_items.processors import quests as quests_proc
@@ -75,9 +77,11 @@ class PersonalMissionsQuestAwardScreen(PersonalMissionsQuestAwardScreenMeta):
         return
 
     def closeView(self):
+        self.__fireOnClose()
         self.destroy()
 
     def onContinueBtnClick(self):
+        self.__fireOnClose()
         self.destroy()
 
     def onNextQuestLinkClick(self):
@@ -87,17 +91,21 @@ class PersonalMissionsQuestAwardScreen(PersonalMissionsQuestAwardScreenMeta):
             self.__tryGetAward()
         else:
             self._proxyEvent(missionID=self._quest.getID())
+        self.__fireOnClose()
         self.destroy()
 
     def onOkBtnClick(self):
+        self.__fireOnClose()
         self.destroy()
 
     def onRecruitBtnClick(self):
         self.__tryGetAward()
+        self.__fireOnClose()
         self.destroy()
 
     def onNextQuestBtnClick(self):
         self._processMission(self._nextQuest)
+        self.__fireOnClose()
         self.destroy()
 
     def _populate(self):
@@ -109,6 +117,19 @@ class PersonalMissionsQuestAwardScreen(PersonalMissionsQuestAwardScreenMeta):
             self.soundManager.playSound(SOUNDS.WOMAN_AWARD_WINDOW)
         else:
             self.soundManager.playSound(SOUNDS.AWARD_WINDOW)
+
+    def _dispose(self):
+        self._quest = None
+        self._ctx = None
+        self._proxyEvent = None
+        self._operation = None
+        super(PersonalMissionsQuestAwardScreen, self)._dispose()
+        return
+
+    def __fireOnClose(self):
+        if self._quest.isFinal():
+            self.fireEvent(PersonalMissionsEvent(PersonalMissionsEvent.ON_AWARD_SCEEN_CLOSE, ctx={'operationID': self._quest.getOperationID(),
+             'eventID': self._quest.getID()}), EVENT_BUS_SCOPE.LOBBY)
 
     @process('updating')
     def _processMission(self, quest):

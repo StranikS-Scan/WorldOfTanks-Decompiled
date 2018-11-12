@@ -3,6 +3,7 @@
 import nations
 import os
 from items.components import shared_components
+from items.components.c11n_constants import CustomizationType, ProjectionDecalFormTags
 from realm_utils import ResMgr
 import items.vehicles as iv
 import items._xml as ix
@@ -24,6 +25,10 @@ class BaseCustomizationItemXmlReader(object):
             target.id = ix.readInt(xmlCtx, section, 'id', 1)
         if section.has_key('tags'):
             target.tags = iv._readTags(xmlCtx, section, 'tags', 'customizationItem')
+            if target.itemType == CustomizationType.PROJECTION_DECAL:
+                formTags = [ tag for tag in target.tags if tag in ProjectionDecalFormTags.ALL ]
+                if len(formTags) > 1 or ProjectionDecalFormTags.ANY in formTags:
+                    ix.raiseWrongXml(xmlCtx, 'tags', 'wrong formfactor for prjection decal ID%i' % target.id)
         if section.has_key('vehicleFilter'):
             target.filter = self.readVehicleFilterFromXml((xmlCtx, 'vehicleFilter'), section['vehicleFilter'])
         target.season = readEnum(xmlCtx, section, 'season', SeasonType, target.season)
@@ -121,7 +126,7 @@ class DecalXmlReader(BaseCustomizationItemXmlReader):
         if section.has_key('texture'):
             target.texture = section.readString('texture')
         if section.has_key('mirror'):
-            target.isMirrored = ix.readBool(xmlCtx, section, 'mirror')
+            target.canBeMirrored = ix.readBool(xmlCtx, section, 'mirror')
 
 
 class ProjectionDecalXmlReader(BaseCustomizationItemXmlReader):
@@ -129,13 +134,13 @@ class ProjectionDecalXmlReader(BaseCustomizationItemXmlReader):
 
     def _readFromXml(self, target, xmlCtx, section):
         super(ProjectionDecalXmlReader, self)._readFromXml(target, xmlCtx, section)
+        if section.has_key('mirror'):
+            target.canBeMirrored = ix.readBool(xmlCtx, section, 'mirror')
 
     def _readClientOnlyFromXml(self, target, xmlCtx, section):
         super(ProjectionDecalXmlReader, self)._readClientOnlyFromXml(target, xmlCtx, section)
         if section.has_key('texture'):
             target.texture = section.readString('texture')
-        if section.has_key('mirror'):
-            target.isMirrored = ix.readBool(xmlCtx, section, 'mirror')
 
 
 class ModificationXmlReader(BaseCustomizationItemXmlReader):
@@ -238,6 +243,23 @@ class StyleXmlReader(BaseCustomizationItemXmlReader):
             target.modelsSet = section.readString('modelsSet')
 
 
+class InsigniaXmlReader(BaseCustomizationItemXmlReader):
+    __slots__ = ()
+
+    def _readFromXml(self, target, xmlCtx, section):
+        super(InsigniaXmlReader, self)._readFromXml(target, xmlCtx, section)
+
+    def _readClientOnlyFromXml(self, target, xmlCtx, section):
+        super(InsigniaXmlReader, self)._readClientOnlyFromXml(target, xmlCtx, section)
+        if section.has_key('atlas'):
+            target.atlas = section.readString('atlas')
+        if section.has_key('alphabet'):
+            target.alphabet = section.readString('alphabet')
+        if section.has_key('texture'):
+            target.texture = section.readString('texture')
+        target.canBeMirrored = section.readBool('canBeMirrored', False)
+
+
 def readCustomizationCacheFromXml(cache, folder):
 
     def __readItemFolder(itemCls, folder, itemName, storage):
@@ -262,6 +284,7 @@ def readCustomizationCacheFromXml(cache, folder):
     __readItemFolder(cc.DecalItem, folder, 'decal', cache.decals)
     __readItemFolder(cc.ProjectionDecalItem, folder, 'projection_decal', cache.projection_decals)
     __readItemFolder(cc.StyleItem, folder, 'style', cache.styles)
+    __readItemFolder(cc.InsigniaItem, folder, 'insignia', cache.insignias)
     return None
 
 
@@ -370,4 +393,5 @@ __xmlReaders = {cc.PaintItem: PaintXmlReader(),
  cc.ProjectionDecalItem: ProjectionDecalXmlReader(),
  cc.CamouflageItem: CamouflageXmlReader(),
  cc.ModificationItem: ModificationXmlReader(),
- cc.StyleItem: StyleXmlReader()}
+ cc.StyleItem: StyleXmlReader(),
+ cc.InsigniaItem: InsigniaXmlReader()}

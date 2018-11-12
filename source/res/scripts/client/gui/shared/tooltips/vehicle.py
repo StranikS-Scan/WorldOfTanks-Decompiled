@@ -27,6 +27,7 @@ from gui.shared.money import Currency
 from gui.shared.tooltips import formatters, ToolTipBaseData
 from gui.shared.tooltips import getComplexStatus, getUnlockPrice, TOOLTIP_TYPE
 from gui.shared.tooltips.common import BlocksTooltipData, makePriceBlock, CURRENCY_SETTINGS
+from gui.shared.utils import MAX_STEERING_LOCK_ANGLE, WHEELED_SWITCH_TIME
 from helpers import i18n, time_utils, int2roman, dependency
 from helpers.i18n import makeString as _ms
 from skeletons.gui.game_control import ITradeInController
@@ -94,29 +95,25 @@ class VehicleInfoTooltipData(BlocksTooltipData):
         if priceBlock and not shouldBeCut:
             self._setWidth(_TOOLTIP_MAX_WIDTH if invalidWidth else _TOOLTIP_MIN_WIDTH)
             items.append(formatters.packBuildUpBlockData(priceBlock, gap=textGap, padding=blockPadding))
-        halloweenBlock = HalloweenBlockConstructor(vehicle, valueWidth, leftPadding, rightPadding).construct()
-        if halloweenBlock:
-            items.append(formatters.packBuildUpBlockData(halloweenBlock, padding=leftRightPadding))
+        simplifiedStatsBlock = SimplifiedStatsBlockConstructor(vehicle, paramsConfig, leftPadding, rightPadding).construct()
+        if simplifiedStatsBlock:
+            items.append(formatters.packBuildUpBlockData(simplifiedStatsBlock, gap=-4, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_BUILDUP_BLOCK_WHITE_BG_LINKAGE, padding=leftRightPadding))
+        if not vehicle.isRotationGroupLocked:
+            commonStatsBlock = CommonStatsBlockConstructor(vehicle, paramsConfig, valueWidth, leftPadding, rightPadding).construct()
+            if commonStatsBlock:
+                items.append(formatters.packBuildUpBlockData(commonStatsBlock, gap=textGap, padding=blockPadding))
+        footnoteBlock = FootnoteBlockConstructor(vehicle, paramsConfig, leftPadding, rightPadding).construct()
+        if footnoteBlock:
+            items.append(formatters.packBuildUpBlockData(footnoteBlock, gap=textGap, padding=blockPadding))
+        if vehicle.isRotationGroupLocked:
+            statsBlockConstructor = RotationLockAdditionalStatsBlockConstructor
+        elif vehicle.isDisabledInRoaming:
+            statsBlockConstructor = RoamingLockAdditionalStatsBlockConstructor
+        elif vehicle.clanLock and vehicle.clanLock > time_utils.getCurrentTimestamp():
+            statsBlockConstructor = ClanLockAdditionalStatsBlockConstructor
         else:
-            simplifiedStatsBlock = SimplifiedStatsBlockConstructor(vehicle, paramsConfig, leftPadding, rightPadding).construct()
-            if simplifiedStatsBlock:
-                items.append(formatters.packBuildUpBlockData(simplifiedStatsBlock, gap=-4, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_BUILDUP_BLOCK_WHITE_BG_LINKAGE, padding=leftRightPadding))
-            if not vehicle.isRotationGroupLocked:
-                commonStatsBlock = CommonStatsBlockConstructor(vehicle, paramsConfig, valueWidth, leftPadding, rightPadding).construct()
-                if commonStatsBlock:
-                    items.append(formatters.packBuildUpBlockData(commonStatsBlock, gap=textGap, padding=blockPadding))
-            footnoteBlock = FootnoteBlockConstructor(vehicle, paramsConfig, leftPadding, rightPadding).construct()
-            if footnoteBlock:
-                items.append(formatters.packBuildUpBlockData(footnoteBlock, gap=textGap, padding=blockPadding))
-            if vehicle.isRotationGroupLocked:
-                statsBlockConstructor = RotationLockAdditionalStatsBlockConstructor
-            elif vehicle.isDisabledInRoaming:
-                statsBlockConstructor = RoamingLockAdditionalStatsBlockConstructor
-            elif vehicle.clanLock and vehicle.clanLock > time_utils.getCurrentTimestamp():
-                statsBlockConstructor = ClanLockAdditionalStatsBlockConstructor
-            else:
-                statsBlockConstructor = AdditionalStatsBlockConstructor
-            items.append(formatters.packBuildUpBlockData(statsBlockConstructor(vehicle, paramsConfig, self.context.getParams(), valueWidth, leftPadding, rightPadding).construct(), gap=textGap, padding=blockPadding))
+            statsBlockConstructor = AdditionalStatsBlockConstructor
+        items.append(formatters.packBuildUpBlockData(statsBlockConstructor(vehicle, paramsConfig, self.context.getParams(), valueWidth, leftPadding, rightPadding).construct(), gap=textGap, padding=blockPadding))
         if not vehicle.isRotationGroupLocked:
             statusBlock, operationError = StatusBlockConstructor(vehicle, statusConfig).construct()
             if statusBlock and not (operationError and shouldBeCut):
@@ -199,6 +196,7 @@ class BaseVehicleAdvancedParametersTooltipData(BaseVehicleParametersTooltipData)
     def _packBlocks(self, paramName):
         blocks = super(BaseVehicleAdvancedParametersTooltipData, self)._packBlocks(paramName)
         title = text_styles.highTitle(MENU.tank_params(paramName))
+        title += '&nbsp;'
         title += text_styles.middleTitle(param_formatter.MEASURE_UNITS.get(paramName, ''))
         desc = text_styles.main(_ms(TOOLTIPS.tank_params_desc(paramName)))
         if isRelativeParameter(paramName):
@@ -462,21 +460,6 @@ class TelecomBlockConstructor(VehicleTooltipBlockConstructor):
         return []
 
 
-class HalloweenBlockConstructor(VehicleTooltipBlockConstructor):
-
-    def __init__(self, vehicle, valueWidth, leftPadding, rightPadding):
-        super(HalloweenBlockConstructor, self).__init__(vehicle, None, leftPadding, rightPadding)
-        self._valueWidth = valueWidth
-        return
-
-    def construct(self):
-        blocks = []
-        if self.vehicle.isEvent:
-            description = _ms(TOOLTIPS.HALLOWEEN_VEHICLEDESCRIPTION)
-            blocks.append(formatters.packTextBlockData(text_styles.main(description)))
-        return blocks
-
-
 class PriceBlockConstructor(VehicleTooltipBlockConstructor):
 
     def __init__(self, vehicle, configuration, params, valueWidth, leftPadding, rightPadding):
@@ -485,6 +468,7 @@ class PriceBlockConstructor(VehicleTooltipBlockConstructor):
         self._rentExpiryTime = params.get('rentExpiryTime')
         self._rentBattlesLeft = params.get('rentBattlesLeft')
         self._rentWinsLeft = params.get('rentWinsLeft')
+        self._rentSeason = params.get('rentSeason')
 
     def construct(self):
         xp = self.configuration.xp
@@ -555,7 +539,7 @@ class PriceBlockConstructor(VehicleTooltipBlockConstructor):
                     if isInInventory or not isInInventory and not isUnlocked and not isNextToUnlock:
                         neededValue = None
                     block.append(makePriceBlock(buyPriceText, CURRENCY_SETTINGS.getBuySetting(currency), neededValue, oldPrice, actionPrc, valueWidth=self._valueWidth))
-            if sellPrice and not (self.vehicle.isTelecom or self.vehicle.isEvent):
+            if sellPrice and not self.vehicle.isTelecom:
                 sellPrice = self.vehicle.sellPrices.itemPrice.price
                 sellCurrency = sellPrice.getCurrency(byWeight=True)
                 currencyTextFormatter = getattr(text_styles, sellCurrency, text_styles.credits)
@@ -567,7 +551,7 @@ class PriceBlockConstructor(VehicleTooltipBlockConstructor):
                 if minRentPricePackage:
                     minRentPriceValue = minRentPricePackage['rentPrice']
                     minDefaultRentPriceValue = minRentPricePackage['defaultRentPrice']
-                    actionPrc = self.vehicle.getRentPackageActionPrc(minRentPricePackage['days'])
+                    actionPrc = self.vehicle.getRentPackageActionPrc(minRentPricePackage['rentID'])
                     currency = minRentPriceValue.getCurrency()
                     price = minRentPriceValue.getSignValue(currency)
                     oldPrice = minDefaultRentPriceValue.getSignValue(currency)
@@ -578,7 +562,7 @@ class PriceBlockConstructor(VehicleTooltipBlockConstructor):
             if rentals and not self.vehicle.isPremiumIGR:
                 if futureRentals:
                     rentLeftKey = '#tooltips:vehicle/rentLeftFuture/%s'
-                    rentInfo = RentalInfoProvider(time=self._rentExpiryTime, battles=self._rentBattlesLeft, wins=self._rentWinsLeft, isRented=True)
+                    rentInfo = RentalInfoProvider(time=self._rentExpiryTime, battles=self._rentBattlesLeft, wins=self._rentWinsLeft, seasonRent=self._rentSeason, isRented=True)
                 else:
                     rentLeftKey = '#tooltips:vehicle/rentLeft/%s'
                     rentInfo = self.vehicle.rentInfo
@@ -595,7 +579,12 @@ class PriceBlockConstructor(VehicleTooltipBlockConstructor):
 
 
 class CommonStatsBlockConstructor(VehicleTooltipBlockConstructor):
-    PARAMS = {VEHICLE_CLASS_NAME.LIGHT_TANK: ('enginePowerPerTon', 'speedLimits', 'chassisRotationSpeed', 'circularVisionRadius'),
+    PARAMS = {VEHICLE_CLASS_NAME.LIGHT_TANK: ('enginePowerPerTon',
+                                     'speedLimits',
+                                     'chassisRotationSpeed',
+                                     MAX_STEERING_LOCK_ANGLE,
+                                     WHEELED_SWITCH_TIME,
+                                     'circularVisionRadius'),
      VEHICLE_CLASS_NAME.MEDIUM_TANK: ('avgDamagePerMinute', 'enginePowerPerTon', 'speedLimits', 'chassisRotationSpeed'),
      VEHICLE_CLASS_NAME.HEAVY_TANK: ('avgDamage', 'avgPiercingPower', 'hullArmor', 'turretArmor'),
      VEHICLE_CLASS_NAME.SPG: ('avgDamage', 'stunMinDuration', 'stunMaxDuration', 'reloadTimeSecs', 'aimingTime', 'explosionRadius'),
@@ -638,7 +627,11 @@ class SimplifiedStatsBlockConstructor(VehicleTooltipBlockConstructor):
                     buffIconSrc = ''
                     if self.vehicle.isInInventory:
                         buffIconSrc = param_formatter.getGroupPenaltyIcon(paramInfo, comparator)
-                    block.append(formatters.packStatusDeltaBlockData(title=param_formatter.formatVehicleParamName(paramName), valueStr=fmtValue, statusBarData=SimplifiedBarVO(value=paramInfo.value, markerValue=stockParams[paramName]), buffIconSrc=buffIconSrc, padding=formatters.packPadding(left=74, top=8)))
+                    delta = 0
+                    state, diff = paramInfo.state
+                    if state == PARAM_STATE.WORSE:
+                        delta = -abs(diff)
+                    block.append(formatters.packStatusDeltaBlockData(title=param_formatter.formatVehicleParamName(paramName), valueStr=fmtValue, statusBarData=SimplifiedBarVO(value=paramInfo.value, delta=delta, markerValue=stockParams[paramName]), buffIconSrc=buffIconSrc, padding=formatters.packPadding(left=74, top=8)))
 
         if block:
             block.insert(0, formatters.packTextBlockData(text_styles.middleTitle(_ms(TOOLTIPS.VEHICLEPARAMS_SIMPLIFIED_TITLE)), padding=formatters.packPadding(top=-4)))
@@ -713,7 +706,7 @@ class RotationLockAdditionalStatsBlockConstructor(LockAdditionalStatsBlockConstr
         return text_styles.warning(_ms(TOOLTIPS.TANKCARUSEL_LOCK_ROTATION_HEADER, groupNum=self.vehicle.rotationGroupNum))
 
     def _makeLockText(self):
-        return text_styles.main(_ms(TOOLTIPS.TANKCARUSEL_LOCK_ROTATION, battlesToUnlock=text_styles.highlightText(self.vehicle.rotationBattlesLeft), unlockedBy=text_styles.highlightText(', '.join((str(groupNum) for groupNum in self.vehicle.unlockedBy)))))
+        return text_styles.main(_ms(TOOLTIPS.TANKCARUSEL_LOCK_ROTATION, battlesToUnlock=text_styles.stats(self.vehicle.rotationBattlesLeft), unlockedBy=text_styles.stats(', '.join((str(groupNum) for groupNum in self.vehicle.unlockedBy)))))
 
 
 class RoamingLockAdditionalStatsBlockConstructor(LockAdditionalStatsBlockConstructor):
@@ -755,7 +748,7 @@ class StatusBlockConstructor(VehicleTooltipBlockConstructor):
                     headerFormatter = text_styles.critical
                 elif statusLevel == Vehicle.VEHICLE_STATE_LEVEL.WARNING:
                     headerFormatter = text_styles.warning
-                elif statusLevel == Vehicle.VEHICLE_STATE_LEVEL.RENTED:
+                elif statusLevel in (Vehicle.VEHICLE_STATE_LEVEL.RENTED, Vehicle.VEHICLE_STATE_LEVEL.RENTABLE):
                     headerFormatter = text_styles.warning
                 else:
                     LOG_ERROR('Unknown status type "' + statusLevel + '"!')

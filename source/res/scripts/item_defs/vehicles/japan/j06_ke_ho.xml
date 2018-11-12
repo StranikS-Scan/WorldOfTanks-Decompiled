@@ -22,7 +22,7 @@
   <camouflage>
     <priceFactor>	0.8	</priceFactor>
     <tiling>	1 1 0 0	</tiling>
-    <exclusionMask>	vehicles/japan/J06_Ke_Ho/Ke_Ho_chassis_01_AM.dds	</exclusionMask>
+    <exclusionMask></exclusionMask>
   </camouflage>
   <hull>
     <armor>
@@ -91,7 +91,7 @@
       </slot>
       <slot>
         <slotType>	camouflage	</slotType>
-        <slotId>	10	</slotId>
+        <slotId>	3	</slotId>
         <anchorPosition>	0.0016736 0.229726 -1.72423	</anchorPosition>
         <anchorDirection>	0.000000 0.516415 -0.856339	</anchorDirection>
       </slot>
@@ -818,7 +818,7 @@
       <customizationSlots>
         <slot>
           <slotType>	style	</slotType>
-          <slotId>	7	</slotId>
+          <slotId>	257	</slotId>
           <anchorPosition>	0.00197651 1.85699 -0.0365172	</anchorPosition>
           <anchorDirection>	0.000000 1 0.000000	</anchorDirection>
         </slot>
@@ -1537,7 +1537,7 @@
       <customizationSlots>
         <slot>
           <slotType>	style	</slotType>
-          <slotId>	9	</slotId>
+          <slotId>	257	</slotId>
           <anchorPosition>	0.00164586 1.85715 -0.0363314	</anchorPosition>
           <anchorDirection>	0.000000 1 0.000000	</anchorDirection>
         </slot>
@@ -1626,7 +1626,7 @@
           <customizationSlots>
             <slot>
               <slotType>	camouflage	</slotType>
-              <slotId>	12	</slotId>
+              <slotId>	770	</slotId>
               <anchorPosition>	0.0640332 0.00769997 0.828987	</anchorPosition>
               <anchorDirection>	-0.000000 0.000000 1	</anchorDirection>
               <applyTo>	4096	</applyTo>
@@ -1682,7 +1682,7 @@
           <customizationSlots>
             <slot>
               <slotType>	camouflage	</slotType>
-              <slotId>	6	</slotId>
+              <slotId>	770	</slotId>
               <anchorPosition>	0.0491127 -0.0872587 1.04635	</anchorPosition>
               <anchorDirection>	-0.000000 0.000000 1	</anchorDirection>
               <applyTo>	4096	</applyTo>
@@ -1715,7 +1715,7 @@
       <customizationSlots>
         <slot>
           <slotType>	player	</slotType>
-          <slotId>	2	</slotId>
+          <slotId>	514	</slotId>
           <rayStart>	-0.67555 0.327472 -0.713325	</rayStart>
           <rayEnd>	-0.481142 0.29761 -0.677078	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
@@ -1725,7 +1725,7 @@
         </slot>
         <slot>
           <slotType>	inscription	</slotType>
-          <slotId>	3	</slotId>
+          <slotId>	546	</slotId>
           <rayStart>	-0.71426 0.317555 0.293251	</rayStart>
           <rayEnd>	-0.526841 0.280238 0.234245	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
@@ -1735,7 +1735,7 @@
         </slot>
         <slot>
           <slotType>	inscription	</slotType>
-          <slotId>	4	</slotId>
+          <slotId>	547	</slotId>
           <rayStart>	0.71426 0.317555 0.293251	</rayStart>
           <rayEnd>	0.526841 0.280238 0.234245	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
@@ -1745,7 +1745,7 @@
         </slot>
         <slot>
           <slotType>	player	</slotType>
-          <slotId>	5	</slotId>
+          <slotId>	515	</slotId>
           <rayStart>	0.67555 0.327472 -0.713325	</rayStart>
           <rayEnd>	0.481142 0.29761 -0.677078	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
@@ -1756,7 +1756,7 @@
         </slot>
         <slot>
           <slotType>	camouflage	</slotType>
-          <slotId>	8	</slotId>
+          <slotId>	513	</slotId>
           <anchorPosition>	-0.121428 0.547305 -0.0436688	</anchorPosition>
           <anchorDirection>	0.000000 1 0.000000	</anchorDirection>
         </slot>
@@ -1795,6 +1795,7 @@
       <engines>
         <_Type100_V6_Kakyuu>
           <smplEnginePower>	158.5922	</smplEnginePower>
+          <smplFwMaxSpeed>	50	</smplFwMaxSpeed>
         </_Type100_V6_Kakyuu>
       </engines>
       <chassis>

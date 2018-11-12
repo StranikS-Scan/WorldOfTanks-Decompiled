@@ -49,7 +49,8 @@ class EpicMetaGameUnavailableTooltip(BlocksTooltipData):
                 tomorrowStr = self._packPeriods(tomorrowPeriods)
                 timeTableBlocks.append(self._packTimeBlock(message=text_styles.main(EPIC_BATTLE.SELECTORTOOLTIP_EPICBATTLE_DISABLED_TIMETABLE_TOMORROW), timeStr=text_styles.stats(tomorrowStr)))
                 items.append(formatters.packBuildUpBlockData(timeTableBlocks, 7, BLOCKS_TOOLTIP_TYPES.TOOLTIP_BUILDUP_BLOCK_WHITE_BG_LINKAGE))
-            items.append(self._getTillEndBlock(time_utils.getTimeDeltaFromNow(time_utils.makeLocalServerTime(time))))
+            if time is not None:
+                items.append(self._getTillEndBlock(time_utils.getTimeDeltaFromNow(time_utils.makeLocalServerTime(time))))
             return items
 
     def _packHeaderBlock(self):

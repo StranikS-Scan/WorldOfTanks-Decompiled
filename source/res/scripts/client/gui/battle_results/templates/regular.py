@@ -274,7 +274,7 @@ VEHICLE_STATS_BLOCK_VO_META = base.PropertyMeta((('shots', 0, 'shots'),
  ('capturePointsVal', style.SlashedValuesBlock('capturePointsVal'), 'capturePoints'),
  ('mileage', style.MetersToKillometersItem('mileage'), 'mileage')))
 VEHICLE_STATS_BLOCK_VO_META.bind(vehicles.RegularVehicleStatValuesBlock)
-TEAM_ITEM_VO_META_TUPLE = (('achievements', shared.AchievementsBlock(base.ListMeta(), 'achievements'), 'achievements'),
+TEAM_ITEM_VO_META = base.PropertyMeta((('achievements', shared.AchievementsBlock(base.ListMeta(), 'achievements'), 'achievements'),
  ('medalsCount', 0, 'achievementsCount'),
  ('vehicleStateStr', '', 'vehicleState'),
  ('vehicleStatePrefixStr', '', 'vehicleStatePrefix'),
@@ -308,8 +308,7 @@ TEAM_ITEM_VO_META_TUPLE = (('achievements', shared.AchievementsBlock(base.ListMe
  ('badge', 0, 'badge'),
  ('badgeIcon', '', 'badgeIcon'),
  ('playerRank', 0, 'playerRank'),
- ('respawns', 0, 'respawns'))
-TEAM_ITEM_VO_META = base.PropertyMeta(TEAM_ITEM_VO_META_TUPLE)
+ ('respawns', 0, 'respawns')))
 TEAM_ITEM_VO_META.bind(vehicles.RegularVehicleStatsBlock)
 TEAMS_VO_META = base.DictMeta({'team1': [],
  'team2': []})

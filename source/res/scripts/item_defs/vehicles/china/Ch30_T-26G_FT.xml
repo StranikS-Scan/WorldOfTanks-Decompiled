@@ -89,7 +89,7 @@
       </slot>
       <slot>
         <slotType>	player	</slotType>
-        <slotId>	2	</slotId>
+        <slotId>	4	</slotId>
         <rayStart>	-0.886911 0.517083 0.777009	</rayStart>
         <rayEnd>	-0.788504 0.517069 0.77701	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
@@ -99,7 +99,7 @@
       </slot>
       <slot>
         <slotType>	player	</slotType>
-        <slotId>	3	</slotId>
+        <slotId>	5	</slotId>
         <rayStart>	0.886911 0.517083 0.777009	</rayStart>
         <rayEnd>	0.788504 0.517069 0.77701	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
@@ -110,7 +110,7 @@
       </slot>
       <slot>
         <slotType>	inscription	</slotType>
-        <slotId>	4	</slotId>
+        <slotId>	36	</slotId>
         <rayStart>	-0.886972 0.522837 -0.115754	</rayStart>
         <rayEnd>	-0.788565 0.522821 -0.115754	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
@@ -120,7 +120,7 @@
       </slot>
       <slot>
         <slotType>	inscription	</slotType>
-        <slotId>	5	</slotId>
+        <slotId>	37	</slotId>
         <rayStart>	0.886972 0.522837 -0.115754	</rayStart>
         <rayEnd>	0.788565 0.522821 -0.115754	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
@@ -130,7 +130,7 @@
       </slot>
       <slot>
         <slotType>	camouflage	</slotType>
-        <slotId>	8	</slotId>
+        <slotId>	3	</slotId>
         <anchorPosition>	0.000000 0.209696 -0.783791	</anchorPosition>
         <anchorDirection>	-0.000000 0.25845 -0.966024	</anchorDirection>
       </slot>
@@ -1083,7 +1083,7 @@
       <customizationSlots>
         <slot>
           <slotType>	style	</slotType>
-          <slotId>	12	</slotId>
+          <slotId>	257	</slotId>
           <anchorPosition>	0.000000 1.77111 0.000000	</anchorPosition>
           <anchorDirection>	-0.000000 1 0.000000	</anchorDirection>
         </slot>
@@ -2001,7 +2001,7 @@
       <customizationSlots>
         <slot>
           <slotType>	style	</slotType>
-          <slotId>	7	</slotId>
+          <slotId>	257	</slotId>
           <anchorPosition>	0.000195682 1.77066 0.000004	</anchorPosition>
           <anchorDirection>	0.000000 1 -0.000000	</anchorDirection>
         </slot>
@@ -2079,7 +2079,7 @@
           <customizationSlots>
             <slot>
               <slotType>	camouflage	</slotType>
-              <slotId>	10	</slotId>
+              <slotId>	770	</slotId>
               <anchorPosition>	-0.00799375 0.0377419 0.742014	</anchorPosition>
               <anchorDirection>	-0.000000 0.000000 1	</anchorDirection>
               <applyTo>	4096	</applyTo>
@@ -2135,7 +2135,7 @@
           <customizationSlots>
             <slot>
               <slotType>	camouflage	</slotType>
-              <slotId>	6	</slotId>
+              <slotId>	770	</slotId>
               <anchorPosition>	-0.00786858 0.0289909 0.935535	</anchorPosition>
               <anchorDirection>	-0.000000 0.000000 1	</anchorDirection>
               <applyTo>	4096	</applyTo>
@@ -2168,7 +2168,7 @@
       <customizationSlots>
         <slot>
           <slotType>	camouflage	</slotType>
-          <slotId>	9	</slotId>
+          <slotId>	513	</slotId>
           <anchorPosition>	-0.0116127 0.187827 0.380062	</anchorPosition>
           <anchorDirection>	0.000000 0.000075 1	</anchorDirection>
         </slot>
@@ -2198,13 +2198,16 @@
       <engines>
         <T_26>
           <smplEnginePower>	100	</smplEnginePower>
+          <smplFwMaxSpeed>	36	</smplFwMaxSpeed>
         </T_26>
         <T_26M>
           <smplEnginePower>	120	</smplEnginePower>
+          <smplFwMaxSpeed>	36	</smplFwMaxSpeed>
         </T_26M>
       </engines>
       <chassis>
         <Chassis_Ch30_T-26G_FT>
+          <axleCount>	5	</axleCount>
           <grounds>
             <ground>
               <medium>
@@ -2239,6 +2242,7 @@
           </grounds>
         </Chassis_Ch30_T-26G_FT>
         <Chassis_Ch30_T-26G_FT_2>
+          <axleCount>	5	</axleCount>
           <grounds>
             <ground>
               <medium>

@@ -96,7 +96,7 @@
       </slot>
       <slot>
         <slotType>	inscription	</slotType>
-        <slotId>	2	</slotId>
+        <slotId>	36	</slotId>
         <rayStart>	-1.11949 0.964733 -0.791645	</rayStart>
         <rayEnd>	-1.08266 0.949114 -0.791645	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
@@ -106,7 +106,7 @@
       </slot>
       <slot>
         <slotType>	player	</slotType>
-        <slotId>	3	</slotId>
+        <slotId>	4	</slotId>
         <rayStart>	-1.11179 0.982882 -2.01556	</rayStart>
         <rayEnd>	-1.07498 0.967265 -2.01556	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
@@ -116,7 +116,7 @@
       </slot>
       <slot>
         <slotType>	inscription	</slotType>
-        <slotId>	4	</slotId>
+        <slotId>	37	</slotId>
         <rayStart>	1.10933 0.988751 -0.803088	</rayStart>
         <rayEnd>	1.07232 0.973563 -0.803067	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
@@ -137,13 +137,13 @@
       </slot>
       <slot>
         <slotType>	paint	</slotType>
-        <slotId>	10	</slotId>
+        <slotId>	2	</slotId>
         <anchorPosition>	0.000020 0.222984 2.19256	</anchorPosition>
         <anchorDirection>	0.000000 0.772383 0.635157	</anchorDirection>
       </slot>
       <slot>
         <slotType>	camouflage	</slotType>
-        <slotId>	11	</slotId>
+        <slotId>	3	</slotId>
         <anchorPosition>	0.000037 0.222825 2.19222	</anchorPosition>
         <anchorDirection>	0.000028 0.772401 0.635135	</anchorDirection>
       </slot>
@@ -951,13 +951,13 @@
       <customizationSlots>
         <slot>
           <slotType>	paint	</slotType>
-          <slotId>	7	</slotId>
+          <slotId>	256	</slotId>
           <anchorPosition>	-1.41306 0.595644 -0.000705004	</anchorPosition>
           <anchorDirection>	-0.921479 0.388429 -0.000459744	</anchorDirection>
         </slot>
         <slot>
           <slotType>	style	</slotType>
-          <slotId>	9	</slotId>
+          <slotId>	257	</slotId>
           <anchorPosition>	0.000000 2.55958 -0.439925	</anchorPosition>
           <anchorDirection>	0.000000 1 0.000000	</anchorDirection>
         </slot>
@@ -1041,7 +1041,7 @@
           <customizationSlots>
             <slot>
               <slotType>	insigniaOnGun	</slotType>
-              <slotId>	6	</slotId>
+              <slotId>	771	</slotId>
               <rayStart>	0.00836025 0.0140352 3.11	</rayStart>
               <rayEnd>	-0.119873 -0.0586232 3.21597	</rayEnd>
               <rayUp>	0.081 0.078 5	</rayUp>
@@ -1051,21 +1051,21 @@
             </slot>
             <slot>
               <slotType>	paint	</slotType>
-              <slotId>	13	</slotId>
+              <slotId>	768	</slotId>
               <anchorPosition>	0.00418012 0.00701758 2.04899	</anchorPosition>
               <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
               <applyTo>	4096	</applyTo>
             </slot>
             <slot>
               <slotType>	paint	</slotType>
-              <slotId>	14	</slotId>
+              <slotId>	769	</slotId>
               <anchorPosition>	0.000000 0.267908 0.267907	</anchorPosition>
               <anchorDirection>	0.000000 0.707107 0.707107	</anchorDirection>
               <applyTo>	16384	</applyTo>
             </slot>
             <slot>
               <slotType>	camouflage	</slotType>
-              <slotId>	15	</slotId>
+              <slotId>	770	</slotId>
               <anchorPosition>	0.00418012 0.00701758 2.04899	</anchorPosition>
               <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
               <applyTo>	4096	</applyTo>
@@ -1098,7 +1098,7 @@
       <customizationSlots>
         <slot>
           <slotType>	paint	</slotType>
-          <slotId>	12	</slotId>
+          <slotId>	512	</slotId>
           <anchorPosition>	0.000000 0.41188 0.000000	</anchorPosition>
           <anchorDirection>	0.000000 1 0.000000	</anchorDirection>
         </slot>
@@ -1119,6 +1119,7 @@
       <engines>
         <Maybach_HL_120_TR_A>
           <smplEnginePower>	287.5805	</smplEnginePower>
+          <smplFwMaxSpeed>	40	</smplFwMaxSpeed>
         </Maybach_HL_120_TR_A>
       </engines>
       <chassis>

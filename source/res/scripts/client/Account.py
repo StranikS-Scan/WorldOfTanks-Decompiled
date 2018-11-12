@@ -324,7 +324,6 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         elif queueType == QUEUE_TYPE.EVENT_BATTLES:
             self.isInEventBattles = False
             events.onDequeuedEventBattles()
-            events.onDequeuedRandom()
         elif queueType == QUEUE_TYPE.SANDBOX:
             self.isInSandboxQueue = False
             events.onDequeuedSandbox()
@@ -412,6 +411,9 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         elif queueType == QUEUE_TYPE.TUTORIAL:
             self.isInTutorialQueue = False
             events.onKickedFromTutorialQueue()
+        elif queueType == QUEUE_TYPE.BOOTCAMP:
+            self.isInBootcampQueue = False
+            events.onKickedFromBootcampQueue()
         elif queueType == QUEUE_TYPE.UNIT_ASSEMBLER:
             self.isInUnitAssembler = False
             events.onKickedFromUnitAssembler()
@@ -420,7 +422,6 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         elif queueType == QUEUE_TYPE.EVENT_BATTLES:
             self.isInEventBattles = False
             events.onKickedFromEventBattles()
-            events.onKickedFromRandomQueue()
         elif queueType == QUEUE_TYPE.SANDBOX:
             self.isInSandboxQueue = False
             events.onKickedFromSandboxQueue()
@@ -966,14 +967,6 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
             proxy = None
         strArr = [questID.encode('utf8'), rewardID.encode('utf8')]
         self._doCmdIntStrArr(AccountCommands.CMD_CHOOSE_QUEST_REWARD, eventType, strArr, proxy)
-        return
-
-    def buyHalloweenItem(self, gold, callback=None):
-        if callback is not None:
-            proxy = lambda requestID, resultID, errorCode: callback(resultID, errorCode)
-        else:
-            proxy = None
-        self._doCmdStr(AccountCommands.CMD_BUY_HALLOWEEN_ITEM, str(gold), proxy)
         return
 
     def logClientSystem(self, stats):

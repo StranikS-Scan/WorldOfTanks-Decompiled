@@ -9,7 +9,7 @@ from debug_utils import LOG_DEBUG
 from gui.prb_control.prb_getters import isInEventBattlesQueue
 from helpers import dependency
 from skeletons.gui.server_events import IEventsCache
-_SUPPORTED_ENTITIES = ('RandomEntity',)
+_SUPPORTED_ENTITIES = ()
 _PATCHED_METHODS = ('init', 'fini')
 _SWITCHED_METHODS = ('getQueueType', 'isInQueue', '_doQueue', '_doDequeue', '_makeQueueCtxByAction')
 
@@ -35,11 +35,7 @@ class _EventVehicleEntityExtension(object):
         self.__isEventsEnabled = False
         return
 
-    def __del__(self):
-        LOG_DEBUG('Extension has been deleted')
-
     def bound(self, entity):
-        LOG_DEBUG('Bound event extension')
         self.__entity = weakref.proxy(entity)
         self.__originalSubscriber = self.__getSubscriber()
         entity._extension = self
@@ -47,7 +43,6 @@ class _EventVehicleEntityExtension(object):
             self._patchMethod(name)
 
     def unbound(self):
-        LOG_DEBUG('Unbound event extension')
         for k, m in self.__patchedMethods.iteritems():
             setattr(self.__entity, k, m)
 
@@ -57,7 +52,6 @@ class _EventVehicleEntityExtension(object):
         return
 
     def init(self, *args, **kwargs):
-        LOG_DEBUG('Init event extension')
         self.__isEventsEnabled = self.eventsCache.isEventEnabled()
         self._invalidate(resetSubscription=False)
         rv = self._callOriginalMethod('init', *args, **kwargs)
@@ -67,14 +61,12 @@ class _EventVehicleEntityExtension(object):
         return rv
 
     def fini(self, *args, **kwargs):
-        LOG_DEBUG('Fini event extension')
         self.eventsCache.onSyncCompleted -= self._onEventsCacheResync
         if self.__isEventsEnabled:
             g_currentVehicle.onChanged -= self._onCurrentVehicleChanged
         self.__isEventsEnabled = False
         self._invalidate(resetSubscription=True)
         rv = self._callOriginalMethod('fini', *args, **kwargs)
-        self.unbound()
         return rv
 
     def getQueueType(self):

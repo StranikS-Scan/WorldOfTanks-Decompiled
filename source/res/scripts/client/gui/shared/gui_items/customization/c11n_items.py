@@ -8,7 +8,7 @@ from gui.Scaleform.locale.VEHICLE_CUSTOMIZATION import VEHICLE_CUSTOMIZATION
 from gui.shared.gui_items import GUI_ITEM_TYPE_NAMES, GUI_ITEM_TYPE
 from gui.shared.gui_items.fitting_item import FittingItem, RentalInfoProvider
 from helpers import i18n, dependency
-from items.components.c11n_constants import SeasonType, ItemTags
+from items.components.c11n_constants import SeasonType, ItemTags, DirectionTags, ProjectionDecalFormTags
 from shared_utils import first
 from skeletons.gui.server_events import IEventsCache
 _UNBOUND_VEH = 0
@@ -16,9 +16,9 @@ _CAMO_ICON_TEMPLATE = 'img://camouflage,{width},{height},"{texture}","{backgroun
 _CAMO_SWATCH_WIDTH = 128
 _CAMO_SWATCH_HEIGHT = 128
 _CAMO_SWATCH_BACKGROUND = 'gui/maps/vehicles/camouflages/camo_back.dds'
-STYLE_GROUP_ID_TO_GROUP_NAME_MAP = {VEHICLE_CUSTOMIZATION.STYLES_SPECIAL_STYLES: VEHICLE_CUSTOMIZATION.CAROUSEL_SWATCH_STYLE_SPECIAL,
- VEHICLE_CUSTOMIZATION.STYLES_MAIN_STYLES: VEHICLE_CUSTOMIZATION.CAROUSEL_SWATCH_STYLE_MAIN,
- VEHICLE_CUSTOMIZATION.STYLES_RENTED_STYLES: VEHICLE_CUSTOMIZATION.CAROUSEL_SWATCH_STYLE_RENTED}
+STYLE_GROUP_ID_TO_GROUP_NAME_MAP = {VEHICLE_CUSTOMIZATION.STYLES_SPECIAL_STYLES: VEHICLE_CUSTOMIZATION.CUSTOMIZATION_INFOTYPE_TYPE_STYLE_SPECIAL,
+ VEHICLE_CUSTOMIZATION.STYLES_MAIN_STYLES: VEHICLE_CUSTOMIZATION.CUSTOMIZATION_INFOTYPE_TYPE_STYLE_MAIN,
+ VEHICLE_CUSTOMIZATION.STYLES_RENTED_STYLES: VEHICLE_CUSTOMIZATION.CUSTOMIZATION_INFOTYPE_TYPE_STYLE_RENTAL}
 
 def camoIconTemplate(texture, width, height, colors, background=_CAMO_SWATCH_BACKGROUND):
     weights = Math.Vector4(*[ (color >> 24) / 255.0 for color in colors ])
@@ -61,7 +61,7 @@ class ConcealmentBonus(object):
 
 
 class Customization(FittingItem):
-    __slots__ = ('_boundInventoryCount', '_bonus', '_installledVehicles')
+    __slots__ = ('_boundInventoryCount', '_bonus', '_installedVehicles')
     eventsCache = dependency.descriptor(IEventsCache)
 
     def __init__(self, intCompactDescr, proxy=None):
@@ -69,12 +69,12 @@ class Customization(FittingItem):
         self._inventoryCount = 0
         self._boundInventoryCount = {}
         self._bonus = None
-        self._installledVehicles = defaultdict(int)
+        self._installedVehicles = defaultdict(int)
         if proxy is not None and proxy.inventory.isSynced():
             installledVehicles = proxy.inventory.getC11nItemAppliedVehicles(self.intCD)
             invCount = proxy.inventory.getItems(GUI_ITEM_TYPE.CUSTOMIZATION, self.intCD)
             for vehicleCD in installledVehicles:
-                self._installledVehicles[vehicleCD] = proxy.inventory.getC11nItemAppliedOnVehicleCount(self.intCD, vehicleCD)
+                self._installedVehicles[vehicleCD] = proxy.inventory.getC11nItemAppliedOnVehicleCount(self.intCD, vehicleCD)
 
             for vehIntCD, count in invCount.iteritems():
                 self._boundInventoryCount[vehIntCD] = count
@@ -167,10 +167,10 @@ class Customization(FittingItem):
         return self.icon
 
     def getInstalledVehicles(self, vehs=None):
-        return [ vehicleCD for vehicleCD, count in self._installledVehicles.items() if count > 0 ]
+        return [ vehicleCD for vehicleCD, count in self._installedVehicles.items() if count > 0 ]
 
     def getInstalledOnVehicleCount(self, vehicleIntCD):
-        return self._installledVehicles[vehicleIntCD]
+        return self._installedVehicles[vehicleIntCD]
 
     def isHistorical(self):
         return self.descriptor.historical
@@ -305,8 +305,8 @@ class Decal(Customization):
         return self.descriptor.texture
 
     @property
-    def isMirrored(self):
-        return self.descriptor.isMirrored
+    def canBeMirrored(self):
+        return self.descriptor.canBeMirrored
 
 
 class Emblem(Decal):
@@ -326,11 +326,47 @@ class Inscription(Decal):
         return True
 
 
+class Insignia(Customization):
+
+    def __init__(self, *args, **kwargs):
+        super(Insignia, self).__init__(*args, **kwargs)
+        self.itemTypeID = GUI_ITEM_TYPE.INSIGNIA
+
+    @property
+    def atlas(self):
+        return self.descriptor.atlas
+
+    @property
+    def alphabet(self):
+        return self.descriptor.alphabet
+
+    @property
+    def texture(self):
+        return self.descriptor.texture
+
+    @property
+    def canBeMirrored(self):
+        return self.descriptor.canBeMirrored
+
+
 class ProjectionDecal(Decal):
 
     def __init__(self, *args, **kwargs):
         super(ProjectionDecal, self).__init__(*args, **kwargs)
         self.itemTypeID = GUI_ITEM_TYPE.PROJECTION_DECAL
+
+    @property
+    def direction(self):
+        directionTags = (tag for tag in self.tags if tag.startswith('direction_'))
+        return first(directionTags, DirectionTags.ANY)
+
+    @property
+    def formfactor(self):
+        formTags = (tag for tag in self.tags if tag.startswith('formfactor_'))
+        return first(formTags, ProjectionDecalFormTags.ANY)
+
+    def isWide(self):
+        return True
 
 
 class Style(Customization):

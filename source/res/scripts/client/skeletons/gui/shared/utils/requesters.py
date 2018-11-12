@@ -657,6 +657,10 @@ class IEpicMetaGameRequester(IRequester):
         raise NotImplementedError
 
     @property
+    def seasonData(self):
+        raise NotImplementedError
+
+    @property
     def skillPoints(self):
         raise NotImplementedError
 

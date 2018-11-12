@@ -8,12 +8,6 @@
         <postBattle>
           <and>
             <vehicleDamage>
-              <title>
-                <key>	#personal_missions_details:quest_1_3_12_condition_title_fire	</key>
-              </title>
-              <description>
-                <key>	#personal_missions_details:quest_1_3_12_condition_description_fire	</key>
-              </description>
               <fireStarted></fireStarted>
               <eventCount></eventCount>
               <greaterOrEqual>	1	</greaterOrEqual>
@@ -63,20 +57,11 @@
         <postBattle>
           <and>
             <vehicleDamage>
-              <title>
-                <key>	#personal_missions_details:quest_1_3_12_condition_title_fire	</key>
-              </title>
-              <description>
-                <key>	#personal_missions_details:quest_1_3_12_condition_description_fire	</key>
-              </description>
               <fireStarted></fireStarted>
               <eventCount></eventCount>
               <greaterOrEqual>	1	</greaterOrEqual>
             </vehicleDamage>
             <results>
-              <description>
-                <key>	#personal_missions_details:quest_1_3_12_condition_description_top_xp	</key>
-              </description>
               <key>	xp	</key>
               <max>	5	</max>
             </results>

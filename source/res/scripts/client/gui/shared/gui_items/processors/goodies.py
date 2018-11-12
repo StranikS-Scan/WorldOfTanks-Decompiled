@@ -33,13 +33,8 @@ class BoosterProcessor(Processor):
 
     def _errorHandler(self, code, errStr='', ctx=None):
         if not errStr:
-            if code != AccountCommands.RES_CENTER_DISCONNECTED:
-                msg = 'server_error'
-            else:
-                msg = 'server_error_centerDown'
-        else:
-            msg = errStr
-        return makeI18nError(self._formMessage(msg), defaultSysMsgKey=self._formMessage('server_error'), **self._getMsgCtx())
+            errStr = 'server_error' if code != AccountCommands.RES_CENTER_DISCONNECTED else 'server_error_centerDown'
+        return makeI18nError(self._formMessage(errStr), defaultSysMsgKey=self._formMessage('server_error'), auxData={'errStr': errStr}, **self._getMsgCtx())
 
 
 class BoosterActivator(BoosterProcessor):

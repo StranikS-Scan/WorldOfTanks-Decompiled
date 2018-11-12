@@ -113,6 +113,7 @@ class BattleSessionProvider(IBattleSessionProvider):
         ctrl = self.__sharedRepo.equipments
         if ctrl is not None:
             ctrl.clear(False)
+            ctrl.notifyPlayerVehicleSet()
             for intCD, quantity, stage, timeRemaining, totalTime in extraData.orderedEquipment:
                 ctrl.setEquipment(intCD, quantity, stage, timeRemaining, totalTime)
 
@@ -162,7 +163,7 @@ class BattleSessionProvider(IBattleSessionProvider):
         return
 
     def getExitResult(self):
-        if not self.__isReplayPlaying and not self.__arenaVisitor.gui.isTrainingBattle():
+        if not self.__isReplayPlaying and not self.__arenaVisitor.gui.isTrainingBattle() and not self.__arenaVisitor.gui.isEventBattle():
             vInfo = self.__arenaDP.getVehicleInfo()
             vStats = self.__arenaDP.getVehicleStats()
             if self.__arenaVisitor.hasRespawns():
@@ -340,9 +341,7 @@ class BattleSessionProvider(IBattleSessionProvider):
     def __pe_onBattleResultsReceived(self, isActiveVehicle, _):
         if isActiveVehicle and not BattleReplay.g_replayCtrl.isPlaying:
             arenaUniqueID = self.__arenaVisitor.getArenaUniqueID()
-            arenaBonusType = self.__arenaVisitor.getArenaBonusType()
             LOG_DEBUG('Try to exit from arena', arenaUniqueID)
             if arenaUniqueID:
                 self.__ctx.lastArenaUniqueID = arenaUniqueID
-            self.__ctx.lastArenaBonusType = arenaBonusType
             BattleSessionProvider.exit()

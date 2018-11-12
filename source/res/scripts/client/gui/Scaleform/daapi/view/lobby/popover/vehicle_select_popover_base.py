@@ -18,8 +18,10 @@ class VehicleSelectPopoverBase(VehicleSelectPopoverMeta):
             self._isMultiSelect = data.isMultiSelect if data is not None else True
         return
 
-    def setVehicleSelected(self, dbID):
+    def setVehicleSelected(self, dbID, autoClose):
         self._vehDP.toggleSelectionByID(dbID)
+        if autoClose:
+            self.addButtonClicked()
 
     def onWindowClose(self):
         self.destroy()

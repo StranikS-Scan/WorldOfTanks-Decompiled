@@ -13,7 +13,6 @@ class ShopWebApiMixin(object):
     @w2c(_OpenShopScheme, 'shop')
     def openShop(self, cmd):
         if isIngameShopEnabled():
-            event_dispatcher.showWebShop(url=None, customPath=cmd.path)
+            event_dispatcher.showWebShop(path=cmd.path)
         else:
             event_dispatcher.showOldShop()
-        return

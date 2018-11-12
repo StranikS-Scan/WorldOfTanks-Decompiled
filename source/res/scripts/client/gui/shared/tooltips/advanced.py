@@ -4,10 +4,13 @@ from constants import SHELL_TYPES
 from helpers.i18n import makeString
 from helpers import dependency
 from skeletons.account_helpers.settings_core import ISettingsCore
+from CurrentVehicle import g_currentVehicle
 from gui.shared.formatters import text_styles
 from gui.shared.tooltips.common import BlocksTooltipData
 from gui.shared.tooltips import formatters
 from gui.shared.items_parameters import formatters as param_formatter
+from gui.shared.gui_items.vehicle_modules import VehicleChassis
+from gui.shared.gui_items.artefacts import OptionalDevice
 from gui.Scaleform.genConsts.BLOCKS_TOOLTIP_TYPES import BLOCKS_TOOLTIP_TYPES
 from gui.Scaleform.genConsts.STORE_CONSTANTS import STORE_CONSTANTS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
@@ -16,6 +19,7 @@ from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.ITEM_TYPES import ITEM_TYPES
 from gui.prb_control.settings import PREBATTLE_ACTION_NAME
 from helpers import i18n
+DISABLED_ITEMS_IDS = (12793, 37954)
 
 class ComplexTooltip(BlocksTooltipData):
     __settingsCore = dependency.descriptor(ISettingsCore)
@@ -56,6 +60,10 @@ class BaseAdvancedTooltip(BlocksTooltipData):
         LOG_DEBUG('packBlocks::', args, kwargs, self.context)
         self._item = self.context.buildItem(*args, **kwargs)
         items = super(BaseAdvancedTooltip, self)._packBlocks()
+        if self._item is not None and isinstance(self._item, VehicleChassis) or isinstance(self._item, OptionalDevice):
+            disabledForWheeled = g_currentVehicle.item.isWheeledTech and self._item.intCD in DISABLED_ITEMS_IDS
+            if disabledForWheeled:
+                return []
         items.extend(self._getBlocksList(*args, **kwargs))
         return items
 
@@ -125,12 +133,16 @@ class HangarModuleAdvanced(BaseAdvancedTooltip):
             header = self._item.userType
         movieKey = itemId
         descrKey = itemId
+        if movieKey not in _MODULE_MOVIES:
+            movieModule = None
+        else:
+            movieModule = _MODULE_MOVIES[movieKey]
         if isEquipment:
             if itemId in ('lendLeaseOil', 'qualityOil'):
                 descrKey = 'enhancedOil'
             elif item.isStimulator:
                 descrKey = 'ration'
-        return self._packAdvancedBlocks(_MODULE_MOVIES[movieKey], header, descrKey)
+        return self._packAdvancedBlocks(movieModule, header, descrKey)
 
 
 class TankmanPreviewTooltipAdvanced(BaseAdvancedTooltip):

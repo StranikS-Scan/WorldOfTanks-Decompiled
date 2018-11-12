@@ -91,7 +91,7 @@
       </slot>
       <slot>
         <slotType>	inscription	</slotType>
-        <slotId>	2	</slotId>
+        <slotId>	36	</slotId>
         <rayStart>	0.000363119 0.608664 -0.922026	</rayStart>
         <rayEnd>	0.000363119 0.523702 -0.869287	</rayEnd>
         <rayUp>	0.000000 0.896172 0.443706	</rayUp>
@@ -735,7 +735,7 @@
       <customizationSlots>
         <slot>
           <slotType>	player	</slotType>
-          <slotId>	3	</slotId>
+          <slotId>	514	</slotId>
           <rayStart>	0.587636 0.301946 -0.538655	</rayStart>
           <rayEnd>	0.392349 0.258781 -0.538655	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
@@ -746,7 +746,7 @@
         </slot>
         <slot>
           <slotType>	player	</slotType>
-          <slotId>	4	</slotId>
+          <slotId>	515	</slotId>
           <rayStart>	-0.587636 0.301946 -0.538655	</rayStart>
           <rayEnd>	-0.392349 0.258781 -0.538655	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
@@ -774,6 +774,7 @@
       <engines>
         <MS-1_bot>
           <smplEnginePower>	45.46309	</smplEnginePower>
+          <smplFwMaxSpeed>	32	</smplFwMaxSpeed>
         </MS-1_bot>
       </engines>
       <chassis>

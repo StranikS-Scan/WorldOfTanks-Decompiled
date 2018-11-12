@@ -4,11 +4,9 @@ import copy
 from operator import sub
 from constants import IS_CLIENT, VEHICLE_TTC_ASPECTS
 from items import tankmen
-from items.qualifiers import QUALIFIER_TYPE
 from items.tankmen import MAX_SKILL_LEVEL, MIN_ROLE_LEVEL
-from items.vehicles import VEHICLE_ATTRIBUTE_FACTORS, CAMOUFLAGE_KIND_INDICES
+from items.vehicles import VEHICLE_ATTRIBUTE_FACTORS
 from VehicleDescrCrew import VehicleDescrCrew
-from VehicleQualifiersApplier import VehicleQualifiersApplier
 from debug_utils import *
 
 def _makeDefaultVehicleFactors(sample):
@@ -218,8 +216,7 @@ if IS_CLIENT:
             if device is not None:
                 device.updateVehicleAttrFactors(vehicleDescr, factors, aspect)
 
-        mainSkillBonuses = VehicleQualifiersApplier({}, vehicleDescr)[QUALIFIER_TYPE.MAIN_SKILL]
-        vehicleDescrCrew = VehicleDescrCrew(vehicleDescr, crewCompactDescrs, mainSkillBonuses)
+        vehicleDescrCrew = VehicleDescrCrew(vehicleDescr, crewCompactDescrs)
         for eq in eqs:
             if eq is not None and 'crewSkillBattleBooster' in eq.tags:
                 vehicleDescrCrew.boostSkillBy(eq)

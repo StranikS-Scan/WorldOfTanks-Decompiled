@@ -6,7 +6,7 @@ from debug_utils import LOG_ERROR
 from gui import GUI_SETTINGS
 from gui.Scaleform.locale.SYSTEM_MESSAGES import SYSTEM_MESSAGES
 from gui.SystemMessages import pushI18nMessage
-from gui.game_control.links import URLMarcos
+from gui.game_control.links import URLMacros
 from gui.shared.notifications import NotificationPriorityLevel
 from helpers import dependency, getClientLanguage
 from helpers.http.url_formatters import addParamsToUrlQuery
@@ -29,7 +29,7 @@ class EncyclopediaController(IEncyclopediaController):
         self.__activated = False
         self.__recommendations = []
         self.__eventManager = Event.EventManager()
-        self.__urlMacros = URLMarcos()
+        self.__urlMacros = URLMacros()
         self.__isLobbyStarted = False
         self.__hasNewRecommendations = False
         if GUI_SETTINGS.lookup('encyclopedia'):

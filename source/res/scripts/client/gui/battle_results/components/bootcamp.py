@@ -122,7 +122,7 @@ class PlayerVehicleBlock(base.StatsBlock):
     def setRecord(self, result, reusable):
         _, item = first(reusable.personal.getVehicleItemsIterator())
         self.addNextComponent(base.DirectStatsItem('name', item.userName))
-        self.addNextComponent(base.DirectStatsItem('typeIcon', getTypeBigIconPath(item.type, False)))
+        self.addNextComponent(base.DirectStatsItem('typeIcon', getTypeBigIconPath(item.type)))
 
 
 class CreditsBlock(base.StatsBlock):

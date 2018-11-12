@@ -6,7 +6,7 @@ from gui.shared.formatters import text_styles
 from gui.shared.tooltips import TOOLTIP_TYPE
 from gui.shared.tooltips import formatters
 from gui.shared.tooltips.common import BlocksTooltipData
-from gui.ranked_battles.ranked_models import CYCLE_STATUS
+from gui.ranked_battles.ranked_models import CycleStatus
 from helpers import dependency, i18n
 from helpers import time_utils
 from skeletons.connection_mgr import IConnectionManager
@@ -32,7 +32,7 @@ class RankedCalendarStepsTooltip(BlocksTooltipData):
         seasonName = currentSeason.getNumber()
         for cycle in sorted(cycles.values()):
             currentCycle = False
-            if cycle.status == CYCLE_STATUS.CURRENT:
+            if cycle.status == CycleStatus.CURRENT:
                 formatter = text_styles.main
                 currentCycle = True
             else:

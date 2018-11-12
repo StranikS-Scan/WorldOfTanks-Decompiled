@@ -85,7 +85,7 @@
       </slot>
       <slot>
         <slotType>	player	</slotType>
-        <slotId>	2	</slotId>
+        <slotId>	4	</slotId>
         <rayStart>	-1.02271 0.17622 -1.09675	</rayStart>
         <rayEnd>	-0.822709 0.17613 -1.09674	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
@@ -95,7 +95,7 @@
       </slot>
       <slot>
         <slotType>	inscription	</slotType>
-        <slotId>	3	</slotId>
+        <slotId>	36	</slotId>
         <rayStart>	-1.02273 0.178776 0.699843	</rayStart>
         <rayEnd>	-0.822731 0.178736 0.699843	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
@@ -105,7 +105,7 @@
       </slot>
       <slot>
         <slotType>	inscription	</slotType>
-        <slotId>	4	</slotId>
+        <slotId>	37	</slotId>
         <rayStart>	1.02273 0.178776 0.699843	</rayStart>
         <rayEnd>	0.822731 0.178736 0.699843	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
@@ -126,7 +126,7 @@
       </slot>
       <slot>
         <slotType>	camouflage	</slotType>
-        <slotId>	8	</slotId>
+        <slotId>	3	</slotId>
         <anchorPosition>	-0.0030108 0.385524 -1.53216	</anchorPosition>
         <anchorDirection>	-0.000000 0.804133 -0.59445	</anchorDirection>
       </slot>
@@ -942,7 +942,7 @@
       <customizationSlots>
         <slot>
           <slotType>	style	</slotType>
-          <slotId>	10	</slotId>
+          <slotId>	257	</slotId>
           <anchorPosition>	0.000000 1.39734 0.000000	</anchorPosition>
           <anchorDirection>	0.000000 1 0.000000	</anchorDirection>
         </slot>
@@ -1750,7 +1750,7 @@
       <customizationSlots>
         <slot>
           <slotType>	style	</slotType>
-          <slotId>	7	</slotId>
+          <slotId>	257	</slotId>
           <anchorPosition>	0.000049 1.39685 -0.000004	</anchorPosition>
           <anchorDirection>	-0.000000 1 -0.000000	</anchorDirection>
         </slot>
@@ -1826,7 +1826,7 @@
           <customizationSlots>
             <slot>
               <slotType>	camouflage	</slotType>
-              <slotId>	9	</slotId>
+              <slotId>	770	</slotId>
               <anchorPosition>	0.00195405 -0.0651107 0.546539	</anchorPosition>
               <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
               <applyTo>	4096	</applyTo>
@@ -1889,9 +1889,11 @@
       <engines>
         <Ford_V8-220>
           <smplEnginePower>	68.72327	</smplEnginePower>
+          <smplFwMaxSpeed>	48	</smplFwMaxSpeed>
         </Ford_V8-220>
         <Ford_V8-221>
           <smplEnginePower>	89.8689	</smplEnginePower>
+          <smplFwMaxSpeed>	48	</smplFwMaxSpeed>
         </Ford_V8-221>
       </engines>
       <chassis>

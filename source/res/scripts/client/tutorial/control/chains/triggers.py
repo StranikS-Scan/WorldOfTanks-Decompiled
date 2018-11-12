@@ -143,7 +143,8 @@ class CurrentVehicleNeedChangeTrigger(_CurrentVehicleViewStateTrigger):
          Vehicle.VEHICLE_STATE.IGR_RENTAL_IS_OVER,
          Vehicle.VEHICLE_STATE.IN_PREMIUM_IGR_ONLY,
          Vehicle.VEHICLE_STATE.LOCKED,
-         Vehicle.VEHICLE_STATE.RENTAL_IS_OVER)
+         Vehicle.VEHICLE_STATE.RENTAL_IS_OVER,
+         Vehicle.VEHICLE_STATE.RENTABLE_AGAIN)
 
 
 class QueueTrigger(_CurrentVehicleViewStateTrigger):

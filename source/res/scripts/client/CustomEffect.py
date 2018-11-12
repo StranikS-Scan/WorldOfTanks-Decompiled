@@ -597,12 +597,16 @@ class MainCustomSelector(MainSelectorBase):
             model = args[modelName]['model']
             try:
                 node = model.node(nodeName)
+                if node is None and 'wheeledVehicle' in args['vehicleTags']:
+                    continue
                 model.node(nodeName, Math.Matrix(node.localMatrix))
                 drawOrderBase = args.get('drawOrderBase', 0)
                 self._effectNodes[nodeDesc[0]] = EffectNode(model, node, nodeDesc[2], drawOrderBase + nodeDesc[3], nodeDesc[4])
             except Exception:
                 LOG_ERROR('Node %s is not found' % nodeName)
                 continue
+
+        return
 
     def enable(self, effectID, enable):
         node = self._effectNodes.get(effectID[0], None)

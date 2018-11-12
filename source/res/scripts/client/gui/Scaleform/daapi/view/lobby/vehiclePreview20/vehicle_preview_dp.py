@@ -90,7 +90,8 @@ class DefaultVehPreviewDataProvider(IVehPreviewDataProvider):
          'actionTooltipType': TOOLTIPS_CONSTANTS.ACTION_PRICE if isAction else None,
          'actionData': data.action,
          'hasCompensation': compensationData is not None,
-         'compensation': compensationData if compensationData is not None else {}}
+         'compensation': compensationData if compensationData is not None else {},
+         'showCannotResearchWarning': not item.isUnlocked}
 
     def getItemPackBuyingPanelData(self, item, data=None, itemsPack=None):
         isAction = data.action is not None
@@ -111,7 +112,8 @@ class DefaultVehPreviewDataProvider(IVehPreviewDataProvider):
          'actionTooltipType': TOOLTIPS_CONSTANTS.ACTION_PRICE if isAction else None,
          'actionData': data.action,
          'hasCompensation': compensationData is not None,
-         'compensation': compensationData if compensationData is not None else {}}
+         'compensation': compensationData if compensationData is not None else {},
+         'showCannotResearchWarning': False}
 
     def getItemsPackData(self, vehicle, items, vehicleItems):
         vehiclesCount = len(vehicleItems)

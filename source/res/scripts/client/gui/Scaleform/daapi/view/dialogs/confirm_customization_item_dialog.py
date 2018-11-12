@@ -2,8 +2,11 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/dialogs/confirm_customization_item_dialog.py
 from debug_utils import LOG_ERROR
 from PlayerEvents import g_playerEvents
+from gui import DialogsInterface
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform.daapi.view.meta.ConfirmItemWindowMeta import ConfirmItemWindowMeta
+from gui.Scaleform.daapi.view.dialogs.confirm_customization_item_dialog_meta import Types
+from gui.Scaleform.genConsts.CUSTOMIZATION_DIALOGS import CUSTOMIZATION_DIALOGS
 from gui.shared.formatters import getMoneyVO
 from gui.shared.gui_items import GUI_ITEM_TYPE
 
@@ -38,6 +41,17 @@ class ConfirmCustomizationItemDialog(ConfirmItemWindowMeta):
         self.destroy()
 
     def submit(self, count, currency):
+        if self.meta.type == Types.BUY and self.meta.getItem().isVehicleBound:
+
+            def callback(isOk):
+                if isOk:
+                    self.proceedSubmit(count, currency)
+
+            DialogsInterface.showI18nConfirmDialog(CUSTOMIZATION_DIALOGS.CUSTOMIZATION_INSTALL_BOUND_RIGHTCLICK_NOTIFICATION, callback)
+        else:
+            self.proceedSubmit(count, currency)
+
+    def proceedSubmit(self, count, currency):
         self.meta.submit(self.meta.getItem(), count, currency)
         self._callHandler(True, self.meta.getItem(), count, currency)
         self.destroy()

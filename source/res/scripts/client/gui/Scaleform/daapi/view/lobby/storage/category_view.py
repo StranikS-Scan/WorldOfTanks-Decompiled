@@ -23,9 +23,9 @@ class StorageDataProvider(DAAPIDataProvider):
     def emptyItem(self):
         return {}
 
-    def buildList(self, *args):
-        if args != self._list:
-            self._list = args
+    def buildList(self, itemsVoList):
+        if itemsVoList != self._list:
+            self._list = itemsVoList
             self.refresh()
 
     def fini(self):
@@ -76,9 +76,12 @@ class BaseCategoryView(BaseStorageCategoryViewMeta):
     def _makeFilterWarningVO(self, label, btnLabel, btnTooltip):
         return storage_helpers.dummyFormatter(label, btnLabel=btnLabel, btnTooltip=btnTooltip)
 
-    def _formatCountString(self, currentVehiclesCount, totalVehiclesCount):
-        style = text_styles.error if currentVehiclesCount == 0 else text_styles.stats
-        return '{} / {}'.format(style(currentVehiclesCount), text_styles.main(totalVehiclesCount))
+    def _formatCountString(self, currentItemsCount, totalItemsCount):
+        style = text_styles.error if currentItemsCount == 0 else text_styles.stats
+        return '{} / {}'.format(style(currentItemsCount), text_styles.main(totalItemsCount))
+
+    def _formatTotalCountString(self, totalItemsCount):
+        return text_styles.stats(totalItemsCount)
 
 
 class InventoryCategoryView(BaseCategoryView):
@@ -99,7 +102,7 @@ class InventoryCategoryView(BaseCategoryView):
         raise NotImplementedError
 
     def _buildItems(self):
-        self._dataProvider.buildList(*self._getVoList())
+        self._dataProvider.buildList(self._getVoList())
 
     def _getVoList(self):
         criteria = self._getRequestCriteria(self._invVehicles)

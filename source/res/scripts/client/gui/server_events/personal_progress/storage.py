@@ -9,7 +9,8 @@ from personal_missions_constants import VISIBLE_SCOPE, CONTAINER
 
 class ClientProgressStorage(quest_progress.ProgressStorage):
 
-    def __init__(self, generalQuestID, questCfg, savedProgresses):
+    def __init__(self, generalQuestID, questCfg, savedProgresses, hasLockedProgresses):
+        self._hasLockedProgresses = hasLockedProgresses
         super(ClientProgressStorage, self).__init__(questCfg, savedProgresses)
         wrappersVisitors = self._getMetricsVisitors()
         progresses = self.getProgresses()
@@ -20,16 +21,30 @@ class ClientProgressStorage(quest_progress.ProgressStorage):
                 progress.setGeneralQuestID(generalQuestID)
                 progress.acceptWrappersVisitors(wrappersVisitors)
 
+        self._updateLocks()
+
+    def update(self, progressesInfo):
+        if progressesInfo is not None:
+            super(ClientProgressStorage, self).update(progressesInfo)
+            self._updateLocks()
+        return
+
+    def getHeaderProgresses(self, isMain=None):
+        raise NotImplementedError
+
+    def getBodyProgresses(self, isMain=None):
+        raise NotImplementedError
+
     def _createProgress(self, progressID, configData):
         progress = super(ClientProgressStorage, self)._createProgress(progressID, configData)
         if progress.getContainerType() == CONTAINER.HEADER:
             progress.setCurrentScope(self._getCurrentScope())
         return progress
 
-    def update(self, progressesInfo):
-        if progressesInfo is not None:
-            super(ClientProgressStorage, self).update(progressesInfo)
-        return
+    def _updateLocks(self):
+        if self._hasLockedProgresses:
+            for addProgress in self.getBodyProgresses(isMain=False).itervalues():
+                addProgress.setLocked(not addProgress.isCompleted())
 
     @classmethod
     def _getBuilders(cls):
@@ -37,12 +52,6 @@ class ClientProgressStorage(quest_progress.ProgressStorage):
          builders.ValueProgressBuilder,
          builders.VehicleTypesProgressBuilder,
          builders.BiathlonProgressBuilder)
-
-    def getHeaderProgresses(self):
-        raise NotImplementedError
-
-    def getBodyProgresses(self):
-        raise NotImplementedError
 
     @classmethod
     def _getMetricsVisitors(cls):
@@ -67,6 +76,8 @@ class LobbyProgressStorage(ClientProgressStorage):
             if completed:
                 progress.markAsCompleted()
 
+        self._updateLocks()
+
     @classmethod
     def _getMetricsVisitors(cls):
         return (visitors.LobbyValueProgressVisitor, visitors.LimiterProgressVisitor)
@@ -89,9 +100,27 @@ class BattleProgressStorage(ClientProgressStorage):
     def _getMetricsVisitors(cls):
         return (visitors.BinaryProgressVisitor,
          visitors.ValueProgressVisitor,
+         visitors.ValueLikeBinaryProgressVisitor,
          visitors.CounterProgressVisitor,
          visitors.TimerProgressVisitor,
          visitors.LimiterProgressVisitor)
+
+    def _updateLocks(self):
+        if self._hasLockedProgresses:
+            unrelatedProgressCompletion = []
+            orRelatedProgressCompletion = []
+            for progress in self.getBodyProgresses(isMain=True).itervalues():
+                if progress.isInOrGroup():
+                    orRelatedProgressCompletion.append(progress.isCompleted())
+                unrelatedProgressCompletion.append(progress.isCompleted())
+
+            areAllUnrelatedProgressesCompleted = all(unrelatedProgressCompletion)
+            if orRelatedProgressCompletion:
+                isAddSecctionUnlocked = areAllUnrelatedProgressesCompleted and any(orRelatedProgressCompletion)
+            else:
+                isAddSecctionUnlocked = areAllUnrelatedProgressesCompleted
+            for addProgress in self.getBodyProgresses(isMain=False).itervalues():
+                addProgress.setLocked(not isAddSecctionUnlocked)
 
     def getHeaderProgresses(self, isMain=None):
         return self._collectProgressInfo(collectors.BattleHeaderProgressCollector(isMain))

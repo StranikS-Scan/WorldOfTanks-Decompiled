@@ -22,4 +22,4 @@ class StunMarkerTimer(PythonTimer):
 
     def _setViewSnapshot(self, leftTime):
         leftTime = self.finishTime - BigWorld.serverTime()
-        self._viewObject.showStunMarker(self.__vehicleID, self._typeID, self.__stunState, leftTime, False)
+        self._viewObject.updateStunMarker(self._typeID, leftTime, False)

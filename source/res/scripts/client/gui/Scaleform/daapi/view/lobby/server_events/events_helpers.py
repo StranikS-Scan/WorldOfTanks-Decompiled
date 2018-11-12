@@ -243,18 +243,23 @@ class _PersonalMissionInfo(_EventInfo):
     def getPostBattleInfo(self, svrEvents, pCur, pPrev, isProgressReset, isCompleted, progressData):
         info = super(_PersonalMissionInfo, self).getPostBattleInfo(svrEvents, pCur, pPrev, isProgressReset, isCompleted, progressData)
         condFormatter = PostBattleConditionsFormatter(self.event, progressData)
-        statusState, statusText = self._getStatus(pmComplete=isCompleted)
+        if isCompleted.isMainComplete or isCompleted.isAddComplete:
+            failedDescr = ''
+        else:
+            failedDescr = condFormatter.getFailedDescription()
+        statusState, statusText = self._getStatus(pmComplete=isCompleted, failed=failedDescr)
+        descr = failedDescr or condFormatter.getMultiplierDescription()
         info.update({'title': text_styles.highTitle(info.get('title')),
          'linkBtnVisible': statusState == PERSONAL_MISSIONS_ALIASES.POST_BATTLE_STATE_IN_PROGRESS,
          'collapsedToggleBtnVisible': statusState == PERSONAL_MISSIONS_ALIASES.POST_BATTLE_STATE_IN_PROGRESS,
-         'descr': condFormatter.getMultiplierDescription(),
+         'descr': descr,
          'personalInfo': [condFormatter.getConditionsData(isMain=True), condFormatter.getConditionsData(isMain=False)],
          'questState': {'statusState': statusState,
                         'statusText': statusText},
          'awards': []})
         return info
 
-    def _getStatus(self, pCur=None, pmComplete=None):
+    def _getStatus(self, pCur=None, pmComplete=None, failed=None):
         if pmComplete:
             if pmComplete.isAddComplete:
                 msg = text_styles.bonusAppliedText(QUESTS.PERSONALMISSION_STATUS_FULLDONE)
@@ -262,6 +267,9 @@ class _PersonalMissionInfo(_EventInfo):
             if pmComplete.isMainComplete:
                 msg = text_styles.bonusAppliedText(QUESTS.PERSONALMISSION_STATUS_MAINDONE)
                 return (PERSONAL_MISSIONS_ALIASES.POST_BATTLE_STATE_DONE, msg)
+        if failed:
+            msg = text_styles.error(QUESTS.PERSONALMISSION_STATUS_FAILED)
+            return (PERSONAL_MISSIONS_ALIASES.POST_BATTLE_STATE_FAILED, msg)
         msg = text_styles.neutral(QUESTS.PERSONALMISSION_STATUS_INPROGRESS)
         return (PERSONAL_MISSIONS_ALIASES.POST_BATTLE_STATE_IN_PROGRESS, msg)
 

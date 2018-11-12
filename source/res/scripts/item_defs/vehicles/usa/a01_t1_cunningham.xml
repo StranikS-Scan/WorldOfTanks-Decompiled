@@ -3,7 +3,7 @@
   <camouflage>
     <priceFactor>	0.2	</priceFactor>
     <tiling>	1 1 0 0	</tiling>
-    <exclusionMask>	vehicles/american/A01_T1_Cunningham/T1_Cunningham_chassis_01_AM.dds	</exclusionMask>
+    <exclusionMask></exclusionMask>
   </camouflage>
   <hull>
     <armor>
@@ -59,8 +59,8 @@
       <slot>
         <slotType>	clan	</slotType>
         <slotId>	1	</slotId>
-        <rayStart>	0.0262288 0.170632 1.82587	</rayStart>
-        <rayEnd>	0.0262288 0.170608 1.66587	</rayEnd>
+        <rayStart>	0.0262288 0.17062 1.74687	</rayStart>
+        <rayEnd>	0.0262288 0.17062 1.74487	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
         <size>	0.26	</size>
         <hideIfDamaged>	true	</hideIfDamaged>
@@ -68,7 +68,7 @@
       </slot>
       <slot>
         <slotType>	inscription	</slotType>
-        <slotId>	2	</slotId>
+        <slotId>	36	</slotId>
         <rayStart>	0.972806 0.430871 -1.08261	</rayStart>
         <rayEnd>	0.772807 0.430871 -1.08261	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
@@ -78,7 +78,7 @@
       </slot>
       <slot>
         <slotType>	inscription	</slotType>
-        <slotId>	3	</slotId>
+        <slotId>	37	</slotId>
         <rayStart>	-0.972806 0.430871 -1.08261	</rayStart>
         <rayEnd>	-0.772807 0.430871 -1.08261	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
@@ -88,7 +88,7 @@
       </slot>
       <slot>
         <slotType>	camouflage	</slotType>
-        <slotId>	7	</slotId>
+        <slotId>	3	</slotId>
         <anchorPosition>	0.000000 0.38702 0.840626	</anchorPosition>
         <anchorDirection>	0.000000 0.418202 0.908354	</anchorDirection>
       </slot>
@@ -706,7 +706,7 @@
       <customizationSlots>
         <slot>
           <slotType>	style	</slotType>
-          <slotId>	6	</slotId>
+          <slotId>	257	</slotId>
           <anchorPosition>	0.000182517 2.0789 -0.759493	</anchorPosition>
           <anchorDirection>	-0.000000 1 0.000000	</anchorDirection>
         </slot>
@@ -759,7 +759,7 @@
           <customizationSlots>
             <slot>
               <slotType>	camouflage	</slotType>
-              <slotId>	9	</slotId>
+              <slotId>	770	</slotId>
               <anchorPosition>	-0.00577448 -0.026682 0.212939	</anchorPosition>
               <anchorDirection>	-0.000000 0.000000 1	</anchorDirection>
               <applyTo>	4096	</applyTo>
@@ -818,7 +818,7 @@
           <customizationSlots>
             <slot>
               <slotType>	camouflage	</slotType>
-              <slotId>	10	</slotId>
+              <slotId>	770	</slotId>
               <anchorPosition>	-0.00761157 -0.000580549 0.412306	</anchorPosition>
               <anchorDirection>	-0.000000 0.000000 1	</anchorDirection>
               <applyTo>	4096	</applyTo>
@@ -880,7 +880,7 @@
       <customizationSlots>
         <slot>
           <slotType>	player	</slotType>
-          <slotId>	4	</slotId>
+          <slotId>	514	</slotId>
           <rayStart>	-0.587259 0.264652 0.158628	</rayStart>
           <rayEnd>	-0.394735 0.264533 0.104457	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
@@ -890,7 +890,7 @@
         </slot>
         <slot>
           <slotType>	player	</slotType>
-          <slotId>	5	</slotId>
+          <slotId>	515	</slotId>
           <rayStart>	0.580326 0.261399 0.194906	</rayStart>
           <rayEnd>	0.38849 0.261283 0.138344	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
@@ -901,7 +901,7 @@
         </slot>
         <slot>
           <slotType>	camouflage	</slotType>
-          <slotId>	8	</slotId>
+          <slotId>	513	</slotId>
           <anchorPosition>	0.000000 0.524639 0.000000	</anchorPosition>
           <anchorDirection>	0.000000 1 0.000000	</anchorDirection>
         </slot>
@@ -944,6 +944,7 @@
       <engines>
         <Cunningham_type_3>
           <smplEnginePower>	139.5611	</smplEnginePower>
+          <smplFwMaxSpeed>	41	</smplFwMaxSpeed>
         </Cunningham_type_3>
       </engines>
       <chassis>

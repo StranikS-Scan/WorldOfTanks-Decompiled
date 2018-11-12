@@ -149,7 +149,7 @@ class EpicBattleMetaGameController(IEpicBattleMetaGameController, Notifiable, IG
     def getMaxPlayerLevel(self):
         return self.__playerMaxLevel
 
-    def getPointsProgessForLevel(self, level):
+    def getPointsProgressForLevel(self, level):
         return self.__levelProgress[level]
 
     def getPointsForLevel(self, level):
@@ -189,7 +189,7 @@ class EpicBattleMetaGameController(IEpicBattleMetaGameController, Notifiable, IG
         return len(vehs) > 0
 
     def hasAnySeason(self):
-        return bool(self.__getSettingsEpicBattles().season)
+        return bool(self.__getSettingsEpicBattles().seasons)
 
     def isFrozen(self):
         peripheryPrimeTime = self.getPrimeTimes().get(self.connectionMgr.peripheryID)
@@ -199,7 +199,7 @@ class EpicBattleMetaGameController(IEpicBattleMetaGameController, Notifiable, IG
         if not self.hasAnySeason():
             return {}
         epicBattlesConfig = self.lobbyContext.getServerSettings().epicBattles
-        primeTimes = epicBattlesConfig.season.get('primeTimes', {})
+        primeTimes = epicBattlesConfig.seasons.get('primeTimes', {})
         peripheryIDs = epicBattlesConfig.peripheryIDs
         primeTimesPeriods = defaultdict(lambda : defaultdict(list))
         for primeTime in primeTimes:
@@ -289,10 +289,10 @@ class EpicBattleMetaGameController(IEpicBattleMetaGameController, Notifiable, IG
 
     def getSeasonEndTime(self):
         generalSettings = self.lobbyContext.getServerSettings().epicBattles
-        if time_utils.getCurrentLocalServerTimestamp() < generalSettings.season['start']:
-            return (generalSettings.season['start'], False)
+        if time_utils.getCurrentLocalServerTimestamp() < generalSettings.seasons.get('start'):
+            return (generalSettings.seasons.get('start'), False)
         else:
-            return (None, False) if time_utils.getCurrentLocalServerTimestamp() > generalSettings.season['end'] else (generalSettings.season['end'], True)
+            return (None, False) if time_utils.getCurrentLocalServerTimestamp() > generalSettings.seasons.get('end') else (generalSettings.seasons.get('end'), True)
 
     def getAllUnlockedSkillLevels(self):
         return chain.from_iterable((skill.getAllUnlockedSkillLevels() for skill in self.__skillData.itervalues()))

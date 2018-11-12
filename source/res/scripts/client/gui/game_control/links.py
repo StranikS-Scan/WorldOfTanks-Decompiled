@@ -5,11 +5,11 @@ from gui import macroses
 from debug_utils import LOG_ERROR
 from adisp import process, async
 
-class URLMarcos(object):
+class URLMacros(object):
     __MACROS_PREFIX = '$'
 
     def __init__(self):
-        super(URLMarcos, self).__init__()
+        super(URLMacros, self).__init__()
         self.__asyncMacroses = macroses.getAsyncMacroses()
         self.__syncMacroses = macroses.getSyncMacroses()
         macrosKeys = self.__syncMacroses.keys()

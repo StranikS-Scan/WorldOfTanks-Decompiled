@@ -19,6 +19,9 @@ class BattleResultsMeta(AbstractWindowView):
     def showUnlockWindow(self, itemId, unlockType):
         self._printOverrideError('showUnlockWindow')
 
+    def showPremiumView(self, data):
+        self._printOverrideError('showPremiumView')
+
     def as_setDataS(self, data):
         return self.flashObject.as_setData(data) if self._isDAAPIInited() else None
 
@@ -27,3 +30,6 @@ class BattleResultsMeta(AbstractWindowView):
 
     def as_setTeamInfoS(self, uid, iconTag, teamName):
         return self.flashObject.as_setTeamInfo(uid, iconTag, teamName) if self._isDAAPIInited() else None
+
+    def as_openPremiumPopoverS(self, data):
+        return self.flashObject.as_openPremiumPopover(data) if self._isDAAPIInited() else None

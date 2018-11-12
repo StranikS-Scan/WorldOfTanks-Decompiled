@@ -94,6 +94,7 @@ class ClassicPage(SharedPage):
                     if tabIndex is not None:
                         fullStats.setActiveTabIndex(None)
                     self._fsToggling.clear()
+                    fullStats.showQuestProgressAnimation()
                 if self._isInPostmortem:
                     self.as_setPostmortemTipsVisibleS(not isShown)
                     if self.__hideDamageLogPanel():
@@ -156,7 +157,7 @@ class ClassicPage(SharedPage):
         if ctrlMode != CTRL_MODE_NAME.POSTMORTEM:
             ctrl = self.sessionProvider.shared.vehicleState
             vehicle = ctrl.getControllingVehicle()
-            if vehicle and vehicle.typeDescriptor.hasSiegeMode:
+            if vehicle and vehicle.typeDescriptor.hasSiegeMode and not vehicle.typeDescriptor.isWheeledVehicle:
                 components.add(BATTLE_VIEW_ALIASES.SIEGE_MODE_INDICATOR)
         if ctrlMode == CTRL_MODE_NAME.VIDEO:
             self._setComponentsVisibility(hidden=components)

@@ -82,6 +82,16 @@ def collapseIntervals(sequence):
     return result
 
 
+def allEqual(sequence, accessor=None):
+    iterable = iter(sequence)
+    try:
+        first_ = next(iterable)
+    except StopIteration:
+        return True
+
+    return all((accessor(first_) == accessor(rest) for rest in iterable)) if accessor else all((first_ == rest for rest in iterable))
+
+
 class CONST_CONTAINER(object):
     __keyByValue = None
 

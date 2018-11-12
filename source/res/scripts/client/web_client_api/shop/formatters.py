@@ -72,15 +72,18 @@ def _formatImagePaths(item):
 
 
 def _formatVehicleRestore(item):
-    if item.hasLimitedRestore():
+    if item.isRestorePossible():
         restoreInfo = item.restoreInfo
         restorePrice = item.restorePrice
         currency = restorePrice.getCurrency()
-        restoreEndDate = time_utils.timestampToISO(restoreInfo.changedAt + restoreInfo.getRestoreTimeLeft())
+        if item.hasLimitedRestore():
+            restoreEndDate = time_utils.timestampToISO(restoreInfo.changedAt + restoreInfo.getRestoreTimeLeft())
+        else:
+            restoreEndDate = None
         return {'price': {currency: restorePrice.getSignValue(currency)},
          'endDate': restoreEndDate}
     else:
-        return None
+        return
 
 
 Field = namedtuple('Field', ('name', 'getter'))

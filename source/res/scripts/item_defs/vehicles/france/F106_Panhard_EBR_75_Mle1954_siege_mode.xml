@@ -1,0 +1,781 @@
+<F106_Panhard_EBR_75_Mle1954_siege_mode.xml>
+  <xmlns:xmlref>	http://bwt/xmlref	</xmlns:xmlref>
+  <crew>
+    <commander>	loader	</commander>
+    <gunner></gunner>
+    <driver></driver>
+    <radioman></radioman>
+  </crew>
+  <speedLimits>
+    <forward>	65	</forward>
+    <backward>	65	</backward>
+  </speedLimits>
+  <invisibility>
+    <moving>	0.33	</moving>
+    <still>	0.33	</still>
+    <camouflageBonus>	0.03	</camouflageBonus>
+    <camouflageNetBonus>	0.1	</camouflageNetBonus>
+    <firePenalty>	0.496	</firePenalty>
+  </invisibility>
+  <repairCost>	5.7	</repairCost>
+  <premiumVehicleXPFactor>	0.1	</premiumVehicleXPFactor>
+  <crewXpFactor>	1.5	</crewXpFactor>
+  <camouflage>
+    <priceFactor>	1.6	</priceFactor>
+    <tiling>	1 1 0 0	</tiling>
+    <exclusionMask></exclusionMask>
+  </camouflage>
+  <hull>
+    <armor>
+      <armor_1>	40	</armor_1>
+      <armor_3>	16	</armor_3>
+      <armor_4>	40	</armor_4>
+      <armor_5>	10	</armor_5>
+      <armor_6>	20	</armor_6>
+      <armor_8>	0	</armor_8>
+    </armor>
+    <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
+    <weight>	7478	</weight>
+    <maxHealth>	760	</maxHealth>
+    <ammoBayHealth>
+      <maxHealth>	220	</maxHealth>
+      <maxRegenHealth>	150	</maxRegenHealth>
+      <repairCost>	1.0	</repairCost>
+    </ammoBayHealth>
+    <models>
+      <undamaged>	vehicles/french/F106_Panhard_EBR_75_Mle1954/normal/lod0/Hull.model	</undamaged>
+      <destroyed>	vehicles/french/F106_Panhard_EBR_75_Mle1954/crash/lod0/Hull.model	</destroyed>
+      <exploded>	vehicles/french/F106_Panhard_EBR_75_Mle1954/crash/lod0/Hull.model	</exploded>
+    </models>
+    <swinging>
+      <lodDist>	FAR	</lodDist>
+      <pitchParams>	0.34 38.00 0.36 1.00 0.05 0.34	</pitchParams>
+      <rollParams>	1.00 0.34 38.00 0.36 1.00 0.06 0.40	</rollParams>
+      <sensitivityToImpulse>	0.24	</sensitivityToImpulse>
+    </swinging>
+    <exhaust>
+      <pixie>	gas_medium	</pixie>
+      <nodes>	HP_Track_Exhaus_1 HP_Track_Exhaus_4	</nodes>
+    </exhaust>
+    <turretPositions>
+      <turret>	0.000000 0.225994 0.007086	</turret>
+    </turretPositions>
+    <hitTester>
+      <collisionModelServer>	vehicles/french/F106_Panhard_EBR_75_Mle1954/collision/Hull.model	</collisionModelServer>
+      <collisionModelClient>	vehicles/french/F106_Panhard_EBR_75_Mle1954/collision_client/Hull.model	</collisionModelClient>
+    </hitTester>
+    <hangarShadowTexture>	vehicles/french/F106_Panhard_EBR_75_Mle1954/Panhard_EBR_75_Mle1954_HangarShadowMap.dds	</hangarShadowTexture>
+    <burnoutAnimation>
+      <accumulationImpulse>	1.3	</accumulationImpulse>
+      <dischargeImpulse>	5.0	</dischargeImpulse>
+      <timeToAccumulationImpulse>	0.2	</timeToAccumulationImpulse>
+    </burnoutAnimation>
+    <customizationSlots>
+      <slot>
+        <slotType>	clan	</slotType>
+        <slotId>	1	</slotId>
+        <rayStart>	-0.478918 0.173029 1.45774	</rayStart>
+        <rayEnd>	-0.430913 0.00653934 1.35786	</rayEnd>
+        <rayUp>	0.000000 0.000000 -1	</rayUp>
+        <size>	0.25	</size>
+        <hideIfDamaged>	true	</hideIfDamaged>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	paint	</slotType>
+        <slotId>	2	</slotId>
+        <anchorPosition>	0.000000 0.00411797 -1.76931	</anchorPosition>
+        <anchorDirection>	0.000000 0.408758 -0.912643	</anchorDirection>
+      </slot>
+      <slot>
+        <slotType>	camouflage	</slotType>
+        <slotId>	3	</slotId>
+        <anchorPosition>	-0.000000 0.00411797 -1.76931	</anchorPosition>
+        <anchorDirection>	0.000000 0.40881 -0.91262	</anchorDirection>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	68	</slotId>
+        <tags>	formfactor_any	</tags>
+        <position>	-0.00267463 1.1788 1.35038	</position>
+        <rotation>	0.0425773 0.000288847 3.13923	</rotation>
+        <scale>	1.04291 0.688036 1.04291	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.561938	</clipAngle>
+        <anchorPosition>	-0.00207841 0.227467 1.36107	</anchorPosition>
+        <anchorDirection>	0.00237493 0.999091 0.0425636	</anchorDirection>
+      </slot>
+    </customizationSlots>
+    <customization>
+      <customizableVehicleAreas>
+        <paint>	HULL	</paint>
+        <camouflage>	HULL	</camouflage>
+      </customizableVehicleAreas>
+    </customization>
+    <camouflage>
+      <tiling>	1.84 1.84 0.000000 0.000000	</tiling>
+    </camouflage>
+  </hull>
+  <chassis>
+    <Chassis_F106_Panhard_EBR_75_Mle1954>
+      <userString>	#france_vehicles:Chassis_F106_Panhard_EBR_75_Mle1954	</userString>
+      <tags></tags>
+      <level>	8	</level>
+      <price>	30000	</price>
+      <notInShop>	true	</notInShop>
+      <armor>
+        <wheel>	10	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+        </wheel>
+        <armor_9>	5	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+        </armor_9>
+      </armor>
+      <weight>	3000	</weight>
+      <maxLoad>	17000	</maxLoad>
+      <terrainResistance>	1.0 1.35 1.95	</terrainResistance>
+      <brakeForce>	5000	</brakeForce>
+      <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
+      <rotationSpeed>	34	</rotationSpeed>
+      <shotDispersionFactors>
+        <vehicleMovement>	0.08	</vehicleMovement>
+        <vehicleRotation>	0.08	</vehicleRotation>
+      </shotDispersionFactors>
+      <bulkHealthFactor>	3.0	</bulkHealthFactor>
+      <maxHealth>	200	</maxHealth>
+      <maxRegenHealth>	150	</maxRegenHealth>
+      <repairCost>	7.5	</repairCost>
+      <models>
+        <undamaged>	vehicles/french/F106_Panhard_EBR_75_Mle1954/normal/lod0/Chassis.model	</undamaged>
+        <destroyed>	vehicles/french/F106_Panhard_EBR_75_Mle1954/crash/lod0/Chassis.model	</destroyed>
+        <exploded>	vehicles/french/F106_Panhard_EBR_75_Mle1954/crash/lod0/Chassis.model	</exploded>
+      </models>
+      <traces>
+        <lodDist>	MEDIUM	</lodDist>
+        <bufferPrefs>	mediumTank	</bufferPrefs>
+        <textureSet>	usa_04	</textureSet>
+        <size>	0.5 0.4	</size>
+        <activePostmortem>	True	</activePostmortem>
+      </traces>
+      <AODecals>
+        <decal>
+          <transform>
+            <row0>	3.484260 0.000000 0.000000	</row0>
+            <row1>	0.000000 1.302760 0.000000	</row1>
+            <row2>	0.000000 0.000000 5.129350	</row2>
+            <row3>	0.000000 0.000000 0.000001	</row3>
+          </transform>
+        </decal>
+      </AODecals>
+      <wheels>
+        <lodDist>	MEDIUM	</lodDist>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <name>	WD_L0	</name>
+          <radius>	0.617366	</radius>
+          <isLeading>	true	</isLeading>
+          <steeringProcessor>	True	</steeringProcessor>
+          <scrollProcessor>
+            <connectedToEngine>	True	</connectedToEngine>
+          </scrollProcessor>
+          <rollProcessor>
+            <maxDamageAngle>	0.3	</maxDamageAngle>
+          </rollProcessor>
+          <collisionCylinder>
+            <width>	0.34	</width>
+            <xOffset>	-0.145	</xOffset>
+          </collisionCylinder>
+          <hitTester>
+            <collisionModelServer>	vehicles/french/F106_Panhard_EBR_75_Mle1954/collision/Wheel_L_01.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/french/F106_Panhard_EBR_75_Mle1954/collision_client/Wheel_L_01.model	</collisionModelClient>
+          </hitTester>
+          <armor>
+            <wheel>	5	</wheel>
+          </armor>
+        </wheel>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <name>	WD_L1	</name>
+          <radius>	0.617366	</radius>
+          <isLeading>	true	</isLeading>
+          <steeringProcessor>	True	</steeringProcessor>
+          <scrollProcessor>
+            <connectedToEngine>	True	</connectedToEngine>
+          </scrollProcessor>
+          <rollProcessor>
+            <maxDamageAngle>	0.3	</maxDamageAngle>
+          </rollProcessor>
+          <collisionCylinder>
+            <width>	0.34	</width>
+            <xOffset>	-0.145	</xOffset>
+          </collisionCylinder>
+          <hitTester>
+            <collisionModelServer>	vehicles/french/F106_Panhard_EBR_75_Mle1954/collision/Wheel_L_01.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/french/F106_Panhard_EBR_75_Mle1954/collision_client/Wheel_L_01.model	</collisionModelClient>
+          </hitTester>
+          <armor>
+            <wheel>	5	</wheel>
+          </armor>
+        </wheel>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <name>	W_L0	</name>
+          <radius>	0.611721	</radius>
+          <scrollProcessor>
+            <connectedToEngine>	True	</connectedToEngine>
+          </scrollProcessor>
+          <rollProcessor>
+            <maxDamageAngle>	0.3	</maxDamageAngle>
+          </rollProcessor>
+          <collisionCylinder>
+            <width>	0.345	</width>
+          </collisionCylinder>
+          <hitTester>
+            <collisionModelServer>	vehicles/french/F106_Panhard_EBR_75_Mle1954/collision/Wheel_L_02.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/french/F106_Panhard_EBR_75_Mle1954/collision_client/Wheel_L_02.model	</collisionModelClient>
+          </hitTester>
+          <armor>
+            <wheel>	5	</wheel>
+          </armor>
+        </wheel>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <name>	W_L1	</name>
+          <radius>	0.611721	</radius>
+          <scrollProcessor>
+            <connectedToEngine>	True	</connectedToEngine>
+          </scrollProcessor>
+          <rollProcessor>
+            <maxDamageAngle>	0.3	</maxDamageAngle>
+          </rollProcessor>
+          <collisionCylinder>
+            <width>	0.345	</width>
+          </collisionCylinder>
+          <hitTester>
+            <collisionModelServer>	vehicles/french/F106_Panhard_EBR_75_Mle1954/collision/Wheel_L_03.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/french/F106_Panhard_EBR_75_Mle1954/collision_client/Wheel_L_03.model	</collisionModelClient>
+          </hitTester>
+          <armor>
+            <wheel>	5	</wheel>
+          </armor>
+        </wheel>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <name>	WD_R0	</name>
+          <radius>	0.617366	</radius>
+          <isLeading>	true	</isLeading>
+          <steeringProcessor>	True	</steeringProcessor>
+          <scrollProcessor>
+            <connectedToEngine>	True	</connectedToEngine>
+          </scrollProcessor>
+          <rollProcessor>
+            <maxDamageAngle>	0.3	</maxDamageAngle>
+          </rollProcessor>
+          <collisionCylinder>
+            <width>	0.34	</width>
+            <xOffset>	0.145	</xOffset>
+          </collisionCylinder>
+          <hitTester>
+            <collisionModelServer>	vehicles/french/F106_Panhard_EBR_75_Mle1954/collision/Wheel_R_01.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/french/F106_Panhard_EBR_75_Mle1954/collision_client/Wheel_R_01.model	</collisionModelClient>
+          </hitTester>
+          <armor>
+            <wheel>	5	</wheel>
+          </armor>
+        </wheel>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <name>	WD_R1	</name>
+          <radius>	0.617366	</radius>
+          <isLeading>	true	</isLeading>
+          <steeringProcessor>	True	</steeringProcessor>
+          <scrollProcessor>
+            <connectedToEngine>	True	</connectedToEngine>
+          </scrollProcessor>
+          <rollProcessor>
+            <maxDamageAngle>	0.3	</maxDamageAngle>
+          </rollProcessor>
+          <collisionCylinder>
+            <width>	0.34	</width>
+            <xOffset>	0.145	</xOffset>
+          </collisionCylinder>
+          <hitTester>
+            <collisionModelServer>	vehicles/french/F106_Panhard_EBR_75_Mle1954/collision/Wheel_R_01.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/french/F106_Panhard_EBR_75_Mle1954/collision_client/Wheel_R_01.model	</collisionModelClient>
+          </hitTester>
+          <armor>
+            <wheel>	5	</wheel>
+          </armor>
+        </wheel>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <name>	W_R0	</name>
+          <radius>	0.611721	</radius>
+          <scrollProcessor>
+            <connectedToEngine>	True	</connectedToEngine>
+          </scrollProcessor>
+          <rollProcessor>
+            <maxDamageAngle>	0.3	</maxDamageAngle>
+          </rollProcessor>
+          <collisionCylinder>
+            <width>	0.345	</width>
+          </collisionCylinder>
+          <hitTester>
+            <collisionModelServer>	vehicles/french/F106_Panhard_EBR_75_Mle1954/collision/Wheel_R_02.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/french/F106_Panhard_EBR_75_Mle1954/collision_client/Wheel_R_02.model	</collisionModelClient>
+          </hitTester>
+          <armor>
+            <wheel>	5	</wheel>
+          </armor>
+        </wheel>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <name>	W_R1	</name>
+          <radius>	0.611721	</radius>
+          <scrollProcessor>
+            <connectedToEngine>	True	</connectedToEngine>
+          </scrollProcessor>
+          <rollProcessor>
+            <maxDamageAngle>	0.3	</maxDamageAngle>
+          </rollProcessor>
+          <collisionCylinder>
+            <width>	0.345	</width>
+          </collisionCylinder>
+          <hitTester>
+            <collisionModelServer>	vehicles/french/F106_Panhard_EBR_75_Mle1954/collision/Wheel_R_03.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/french/F106_Panhard_EBR_75_Mle1954/collision_client/Wheel_R_03.model	</collisionModelClient>
+          </hitTester>
+          <armor>
+            <wheel>	5	</wheel>
+          </armor>
+        </wheel>
+        <generalWheels>	True	</generalWheels>
+        <activePostmortem>	True	</activePostmortem>
+      </wheels>
+      <hullPosition>	0.000000 1.20215 0.000000	</hullPosition>
+      <drivingWheels>	WD_L0 WD_L1	</drivingWheels>
+      <effects>
+        <lodDist>	MEDIUM	</lodDist>
+        <mud>	medium8WheelsMud	</mud>
+      </effects>
+      <wwsoundPC>	wheels_suspension_pc	</wwsoundPC>
+      <wwsoundNPC>	wheels_suspension_npc	</wwsoundNPC>
+      <hullPosition>	0.000000 1.20215 0.000000	</hullPosition>
+      <hitTester>
+        <collisionModelServer>	vehicles/french/F106_Panhard_EBR_75_Mle1954/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/french/F106_Panhard_EBR_75_Mle1954/collision_client/Chassis.model	</collisionModelClient>
+      </hitTester>
+      <topRightCarryingPoint>	1.02554 2.17156	</topRightCarryingPoint>
+      <maxClimbAngle>	25	</maxClimbAngle>
+      <navmeshGirth>	6.0	</navmeshGirth>
+      <leveredSuspension>
+        <lodSettings>
+          <maxLodDistance>	LEVERED_SUSPENSION	</maxLodDistance>
+          <maxPriority>	5	</maxPriority>
+        </lodSettings>
+        <lever>
+          <startNode>	Lever_Start_L1	</startNode>
+          <jointNode>	Lever_Joint_L1	</jointNode>
+          <trackNode>	Track_L1	</trackNode>
+          <limits>	-5.0 25.0	</limits>
+          <collisionSamplesCount>	5	</collisionSamplesCount>
+          <hasLiftMode>	True	</hasLiftMode>
+          <affectedWheelName>	W_L0	</affectedWheelName>
+        </lever>
+        <lever>
+          <startNode>	Lever_Start_R1	</startNode>
+          <jointNode>	Lever_Joint_R1	</jointNode>
+          <trackNode>	Track_R1	</trackNode>
+          <limits>	-5.0 25.0	</limits>
+          <collisionSamplesCount>	5	</collisionSamplesCount>
+          <hasLiftMode>	True	</hasLiftMode>
+          <affectedWheelName>	W_R0	</affectedWheelName>
+        </lever>
+        <lever>
+          <startNode>	Lever_Start_L2	</startNode>
+          <jointNode>	Lever_Joint_L2	</jointNode>
+          <trackNode>	Track_L2	</trackNode>
+          <limits>	185.0 155.0	</limits>
+          <collisionSamplesCount>	5	</collisionSamplesCount>
+          <hasLiftMode>	True	</hasLiftMode>
+          <affectedWheelName>	W_L1	</affectedWheelName>
+        </lever>
+        <lever>
+          <startNode>	Lever_Start_R2	</startNode>
+          <jointNode>	Lever_Joint_R2	</jointNode>
+          <trackNode>	Track_R2	</trackNode>
+          <limits>	185.0 155.0	</limits>
+          <collisionSamplesCount>	5	</collisionSamplesCount>
+          <hasLiftMode>	True	</hasLiftMode>
+          <affectedWheelName>	W_R1	</affectedWheelName>
+        </lever>
+        <activePostmortem>	True	</activePostmortem>
+      </leveredSuspension>
+      <groundNodes>
+        <lodSettings>
+          <maxLodDistance>	LEVERED_SUSPENSION	</maxLodDistance>
+          <maxPriority>	5	</maxPriority>
+        </lodSettings>
+        <node>
+          <name>	Track_L0	</name>
+          <affectedWheelName>	WD_L0	</affectedWheelName>
+          <collisionSamplesCount>	5	</collisionSamplesCount>
+          <isLeft>	true	</isLeft>
+          <minOffset>	-0.06	</minOffset>
+          <maxOffset>	0.04	</maxOffset>
+        </node>
+        <node>
+          <name>	Track_L3	</name>
+          <affectedWheelName>	WD_L1	</affectedWheelName>
+          <collisionSamplesCount>	5	</collisionSamplesCount>
+          <isLeft>	true	</isLeft>
+          <minOffset>	-0.06	</minOffset>
+          <maxOffset>	0.04	</maxOffset>
+        </node>
+        <node>
+          <name>	Track_R0	</name>
+          <affectedWheelName>	WD_R0	</affectedWheelName>
+          <collisionSamplesCount>	5	</collisionSamplesCount>
+          <isLeft>	false	</isLeft>
+          <minOffset>	-0.06	</minOffset>
+          <maxOffset>	0.04	</maxOffset>
+        </node>
+        <node>
+          <name>	Track_R3	</name>
+          <affectedWheelName>	WD_R1	</affectedWheelName>
+          <collisionSamplesCount>	5	</collisionSamplesCount>
+          <isLeft>	false	</isLeft>
+          <minOffset>	-0.06	</minOffset>
+          <maxOffset>	0.04	</maxOffset>
+        </node>
+        <activePostmortem>	True	</activePostmortem>
+      </groundNodes>
+      <customization>
+        <customizableVehicleAreas>
+          <paint>	CHASSIS	</paint>
+          <camouflage></camouflage>
+        </customizableVehicleAreas>
+      </customization>
+      <customizationSlots>
+        <slot>
+          <slotType>	paint	</slotType>
+          <slotId>	256	</slotId>
+          <anchorPosition>	-1.0405 0.583663 0.0005722	</anchorPosition>
+          <anchorDirection>	-0.769385 0.638785 0.000626087	</anchorDirection>
+        </slot>
+        <slot>
+          <slotType>	style	</slotType>
+          <slotId>	257	</slotId>
+          <anchorPosition>	0.000478063 2.17567 -0.443093	</anchorPosition>
+          <anchorDirection>	-0.000000 1 0.000000	</anchorDirection>
+        </slot>
+      </customizationSlots>
+    </Chassis_F106_Panhard_EBR_75_Mle1954>
+  </chassis>
+  <turrets0>
+    <Turret_1_F106_Panhard_EBR_75_Mle1954>
+      <userString>	#france_vehicles:Turret_1_F106_Panhard_EBR_75_Mle1954	</userString>
+      <tags></tags>
+      <level>	8	</level>
+      <price>	30000	</price>
+      <notInShop>	true	</notInShop>
+      <armor>
+        <armor_1>	30	</armor_1>
+        <armor_2>	20	</armor_2>
+        <armor_3>	20	</armor_3>
+        <armor_4>	20	</armor_4>
+        <armor_5>	10	</armor_5>
+        <armor_6>	10	</armor_6>
+        <armor_7>	20	</armor_7>
+        <armor_8>	0	</armor_8>
+        <armor_9>	40	</armor_9>
+      </armor>
+      <primaryArmor>	armor_9 armor_3 armor_4	</primaryArmor>
+      <weight>	2900	</weight>
+      <maxHealth>	190	</maxHealth>
+      <rotationSpeed>	66	</rotationSpeed>
+      <turretRotatorHealth>
+        <maxHealth>	140	</maxHealth>
+        <maxRegenHealth>	70	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </turretRotatorHealth>
+      <circularVisionRadius>	310	</circularVisionRadius>
+      <surveyingDeviceHealth>
+        <maxHealth>	100	</maxHealth>
+        <maxRegenHealth>	50	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </surveyingDeviceHealth>
+      <guns>
+        <_75mm_SA50_mle_54>	shared	  <maxAmmo>	56	</maxAmmo>
+          <armor>
+            <armor_1>	40	</armor_1>
+            <armor_2>	30	</armor_2>
+            <armor_3>	20	</armor_3>
+            <armor_4>	20	</armor_4>
+            <armor_5>	20	</armor_5>
+            <armor_6>	10	</armor_6>
+            <armor_7>	40	</armor_7>
+            <armor_8>	0	</armor_8>
+            <armor_9>	40	</armor_9>
+            <gun>	20	</gun>
+          </armor>
+          <shotDispersionRadius>	0.36	</shotDispersionRadius>
+          <reloadTime>	10.3	</reloadTime>
+          <aimingTime>	1.2	</aimingTime>
+          <shotDispersionFactors>
+            <turretRotation>	0.04	</turretRotation>
+            <afterShot>	3	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <invisibilityFactorAtShot>	0.234	</invisibilityFactorAtShot>
+          <turretYawLimits>	-180 180	</turretYawLimits>
+          <clip>
+            <count>	2	</count>
+            <rate>	40	</rate>
+          </clip>
+          <pitchLimits>
+            <minPitch>	0 -12 1 -12	</minPitch>
+            <maxPitch>	0 8 1 8	</maxPitch>
+          </pitchLimits>
+          <models>
+            <undamaged>	vehicles/french/F106_Panhard_EBR_75_Mle1954/normal/lod0/Gun_01.model	</undamaged>
+            <destroyed>	vehicles/french/F106_Panhard_EBR_75_Mle1954/crash/lod0/Gun_01.model	</destroyed>
+            <exploded>	vehicles/french/F106_Panhard_EBR_75_Mle1954/crash/lod0/Gun_01.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModelServer>	vehicles/french/F106_Panhard_EBR_75_Mle1954/collision/Gun_01.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/french/F106_Panhard_EBR_75_Mle1954/collision_client/Gun_01.model	</collisionModelClient>
+          </hitTester>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <customizationSlots>
+            <slot>
+              <slotType>	insigniaOnGun	</slotType>
+              <slotId>	771	</slotId>
+              <rayStart>	-0.000418988 -0.000190262 3.0299	</rayStart>
+              <rayEnd>	0.0314061 -0.0115135 3.0284	</rayEnd>
+              <rayUp>	0.072 0.067 5	</rayUp>
+              <size>	0.487	</size>
+              <hideIfDamaged>	false	</hideIfDamaged>
+              <isUVProportional>	true	</isUVProportional>
+            </slot>
+            <slot>
+              <slotType>	paint	</slotType>
+              <slotId>	768	</slotId>
+              <anchorPosition>	0.000290495 -0.000095 2.30484	</anchorPosition>
+              <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+            <slot>
+              <slotType>	paint	</slotType>
+              <slotId>	769	</slotId>
+              <anchorPosition>	0.0011588 0.216589 -0.480325	</anchorPosition>
+              <anchorDirection>	-0.000321389 1 0.000001	</anchorDirection>
+              <applyTo>	16384	</applyTo>
+            </slot>
+            <slot>
+              <slotType>	camouflage	</slotType>
+              <slotId>	770	</slotId>
+              <anchorPosition>	0.000290495 -0.000095 2.30484	</anchorPosition>
+              <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+            <slot>
+              <slotType>	projectionDecal	</slotType>
+              <slotId>	836	</slotId>
+              <tags>	formfactor_any	</tags>
+              <position>	0.0208229 1.77476 -1.00431	</position>
+              <rotation>	-3.1401 -0.000201225 -0.000052	</rotation>
+              <scale>	1.187 0.999998 1.187	</scale>
+              <doubleSided>	false	</doubleSided>
+              <showOn>	4096	</showOn>
+              <clipAngle>	0.000000	</clipAngle>
+              <anchorPosition>	0.0216079 0.255893 -1.04074	</anchorPosition>
+              <anchorDirection>	-0.000052 0.999999 0.00148835	</anchorDirection>
+            </slot>
+          </customizationSlots>
+          <customization>
+            <customizableVehicleAreas>
+              <paint>	GUN GUN_2	</paint>
+              <camouflage>	GUN	</camouflage>
+            </customizableVehicleAreas>
+          </customization>
+          <camouflage>
+            <tiling>	1.12 1.12 0.000000 0.000000	</tiling>
+          </camouflage>
+        </_75mm_SA50_mle_54>
+      </guns>
+      <models>
+        <undamaged>	vehicles/french/F106_Panhard_EBR_75_Mle1954/normal/lod0/Turret_01.model	</undamaged>
+        <destroyed>	vehicles/french/F106_Panhard_EBR_75_Mle1954/crash/lod0/Turret_01.model	</destroyed>
+        <exploded>	vehicles/french/F106_Panhard_EBR_75_Mle1954/crash/lod0/Turret_01.model	</exploded>
+      </models>
+      <hitTester>
+        <collisionModelServer>	vehicles/french/F106_Panhard_EBR_75_Mle1954/collision/Turret_01.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/french/F106_Panhard_EBR_75_Mle1954/collision_client/Turret_01.model	</collisionModelClient>
+      </hitTester>
+      <gunPosition>	-0.000808 0.531103 0.03	</gunPosition>
+      <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
+      <showEmblemsOnGun>	true	</showEmblemsOnGun>
+      <physicsShape>	1.357 -0.401 1.000 0.000 0.844 0.579 0.838 0.708 0.340 0.500 0.000 0.500 0.000 0.500 0.361	</physicsShape>
+      <customizationSlots>
+        <slot>
+          <slotType>	player	</slotType>
+          <slotId>	514	</slotId>
+          <rayStart>	0.445662 -0.0323547 -1.67855	</rayStart>
+          <rayEnd>	0.4456 -0.0323929 -1.47855	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.23	</size>
+          <hideIfDamaged>	true	</hideIfDamaged>
+          <isMirrored>	true	</isMirrored>
+          <isUVProportional>	true	</isUVProportional>
+        </slot>
+        <slot>
+          <slotType>	player	</slotType>
+          <slotId>	515	</slotId>
+          <rayStart>	-0.817089 -0.0440685 -0.361185	</rayStart>
+          <rayEnd>	-0.617211 -0.0444598 -0.354371	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.23	</size>
+          <hideIfDamaged>	false	</hideIfDamaged>
+          <isUVProportional>	true	</isUVProportional>
+        </slot>
+        <slot>
+          <slotType>	inscription	</slotType>
+          <slotId>	546	</slotId>
+          <rayStart>	0.767961 -0.00315042 -1.1387	</rayStart>
+          <rayEnd>	0.568917 -0.00403265 -1.11926	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.771	</size>
+          <hideIfDamaged>	false	</hideIfDamaged>
+          <isUVProportional>	true	</isUVProportional>
+        </slot>
+        <slot>
+          <slotType>	paint	</slotType>
+          <slotId>	512	</slotId>
+          <anchorPosition>	-0.000000 0.32246 0.0988428	</anchorPosition>
+          <anchorDirection>	0.000000 1 -0.000000	</anchorDirection>
+        </slot>
+        <slot>
+          <slotType>	camouflage	</slotType>
+          <slotId>	513	</slotId>
+          <anchorPosition>	-0.000000 0.32246 0.0988428	</anchorPosition>
+          <anchorDirection>	0.000000 1 -0.000000	</anchorDirection>
+        </slot>
+      </customizationSlots>
+      <customization>
+        <customizableVehicleAreas>
+          <paint>	TURRET	</paint>
+          <camouflage>	TURRET	</camouflage>
+        </customizableVehicleAreas>
+      </customization>
+      <camouflage>
+        <tiling>	1 0.445 0.000000 0.000000	</tiling>
+      </camouflage>
+    </Turret_1_F106_Panhard_EBR_75_Mle1954>
+  </turrets0>
+  <engines>
+    <Panhard_12H_6000_54>	shared	</Panhard_12H_6000_54>
+  </engines>
+  <fuelTanks>
+    <Heavy>	shared	</Heavy>
+  </fuelTanks>
+  <radios>
+    <SCR_528_Fr>	shared	</SCR_528_Fr>
+  </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <Panhard_12H_6000_54>
+          <smplEnginePower>	950	</smplEnginePower>
+          <smplFwMaxSpeed>	85	</smplFwMaxSpeed>
+        </Panhard_12H_6000_54>
+      </engines>
+      <chassis>
+        <Chassis_F106_Panhard_EBR_75_Mle1954>
+          <axleCount>	4	</axleCount>
+          <axleSteeringLockAngles>	-20 0 0 20	</axleSteeringLockAngles>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.05	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.05	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.05	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.05	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.05	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.05	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_F106_Panhard_EBR_75_Mle1954>
+      </chassis>
+    </detailed>
+  </physics>
+  <siege_mode>
+    <switchOnTime>	0.5	</switchOnTime>
+    <switchOffTime>	0.5	</switchOffTime>
+    <engineDamageCoeff>	1	</engineDamageCoeff>
+    <soundStateChange>
+      <on>	wheel_vehicle_speed_high	</on>
+      <off>	wheel_vehicle_speed_low	</off>
+    </soundStateChange>
+  </siege_mode>
+  <extras>
+    <wheel_Health>	wheelHealths : WheelHealths	  <sounds>
+        <destroyed></destroyed>
+        <critical></critical>
+        <functional></functional>
+      </sounds>
+      <deviceUserString>	#ingame_gui:devices/wheel	</deviceUserString>
+    </wheel_Health>
+  </extras>
+  <deviceExtras>
+    <devices>
+      <wheel_Health>	track	  <multiple></multiple>
+      </wheel_Health>
+    </devices>
+    <tankmen></tankmen>
+  </deviceExtras>
+  <clientAdjustmentFactors></clientAdjustmentFactors>
+  <effects>
+    <collision></collision>
+    <damagedStateGroup>	medium	</damagedStateGroup>
+    <groundCollisionLight>	groundCollisionWheeledLight	</groundCollisionLight>
+    <groundCollisionHeavy>	groundCollisionWheeledHeavy	</groundCollisionHeavy>
+    <sandCollisionLight>	sandCollisionWheeledLight	</sandCollisionLight>
+    <sandCollisionHeavy>	sandCollisionWheeledHeavy	</sandCollisionHeavy>
+    <snowCollisionLight>	snowCollisionWheeledLight	</snowCollisionLight>
+    <snowCollisionHeavy>	snowCollisionWheeledHeavy	</snowCollisionHeavy>
+    <stoneCollisionLight>	stoneCollisionWheeledLight	</stoneCollisionLight>
+    <stoneCollisionHeavy>	stoneCollisionWheeledHeavy	</stoneCollisionHeavy>
+    <woodCollisionLight>	woodCollisionWheeledLight	</woodCollisionLight>
+    <woodCollisionHeavy>	woodCollisionWheeledHeavy	</woodCollisionHeavy>
+    <metalCollisionLight>	metalCollisionWheeledLight	</metalCollisionLight>
+    <metalCollisionHeavy>	metalCollisionWheeledHeavy	</metalCollisionHeavy>
+    <waterCollisionLight>	waterCollisionLight	</waterCollisionLight>
+    <waterCollisionHeavy>	waterCollisionHeavy	</waterCollisionHeavy>
+  </effects>
+  <emblems>
+    <default>	french_rose	</default>
+    <lodDist>	MEDIUM	</lodDist>
+    <alpha>	0.86	</alpha>
+  </emblems>
+</F106_Panhard_EBR_75_Mle1954_siege_mode.xml>

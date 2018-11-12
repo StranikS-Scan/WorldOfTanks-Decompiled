@@ -8,20 +8,12 @@ from arena_component_system.sectors_arena_component import SectorsArenaComponent
 from arena_component_system.step_repair_point_component import StepRepairPointComponent
 from arena_component_system.epic_random_battle_component_assembler import EpicRandomBattleComponentAssembler
 from arena_component_system.epic_battle_component_assembler import EpicBattleComponentAssembler
-from arena_component_system.event_battle_component_assembler import EventBattleComponentAssembler
 from arena_component_system.protection_zone_component import ProtectionZoneComponent
-from arena_component_system.client_arena_event_points_base_component import EventPointsBaseComponent
-from arena_component_system.client_arena_event_points_component import EventPointsComponent
-from arena_component_system.client_arena_random_event_component import RandomEventComponent
 COMPONENT_ASSEMBLER = {ARENA_BONUS_TYPE.EPIC_RANDOM: EpicRandomBattleComponentAssembler,
  ARENA_BONUS_TYPE.EPIC_RANDOM_TRAINING: EpicRandomBattleComponentAssembler,
- ARENA_BONUS_TYPE.EPIC_BATTLE: EpicBattleComponentAssembler,
- ARENA_BONUS_TYPE.EVENT_BATTLES: EventBattleComponentAssembler}
+ ARENA_BONUS_TYPE.EPIC_BATTLE: EpicBattleComponentAssembler}
 ARENA_BONUS_TYPE_CAP_COMPONENTS = {'sectorBaseComponent': (ARENA_BONUS_TYPE_CAPS.SECTOR_MECHANICS, SectorBaseArenaComponent),
  'sectorComponent': (ARENA_BONUS_TYPE_CAPS.SECTOR_MECHANICS, SectorsArenaComponent),
  'destructibleEntityComponent': (ARENA_BONUS_TYPE_CAPS.DESTRUCTIBLE_ENTITIES, DestructibleEntitiesComponent),
  'stepRepairPointComponent': (ARENA_BONUS_TYPE_CAPS.STEP_REPAIR_MECHANIC, StepRepairPointComponent),
- 'protectionZoneComponent': (ARENA_BONUS_TYPE_CAPS.PROTECTION_ZONE, ProtectionZoneComponent),
- 'eventPointsComponent': (ARENA_BONUS_TYPE_CAPS.EVENT_POINTS_MECHANICS, EventPointsComponent),
- 'eventPointsBaseComponent': (ARENA_BONUS_TYPE_CAPS.EVENT_POINTS_BASE_MECHANICS, EventPointsBaseComponent),
- 'randomEventComponent': (ARENA_BONUS_TYPE_CAPS.RANDOM_EVENT_MECHANICS, RandomEventComponent)}
+ 'protectionZoneComponent': (ARENA_BONUS_TYPE_CAPS.PROTECTION_ZONE, ProtectionZoneComponent)}

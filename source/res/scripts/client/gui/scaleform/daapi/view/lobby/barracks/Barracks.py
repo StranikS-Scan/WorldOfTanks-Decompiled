@@ -45,57 +45,54 @@ _COUNTERS_MAP = {RECRUIT_NOTIFICATIONS: ('locationButtonBar', 5)}
 @dependency.replace_none_kwargs(itemsCache=IItemsCache)
 def _packTankmanData(tankman, itemsCache=None):
     tankmanVehicle = itemsCache.items.getItemByCD(tankman.vehicleNativeDescr.type.compactDescr)
-    if tankmanVehicle.isEvent:
-        return
+    if tankman.isInTank:
+        vehicle = itemsCache.items.getVehicle(tankman.vehicleInvID)
+        if vehicle is None:
+            _logger.error('Cannot find vehicle for tankman: %r %r %r %r %r', tankman, tankman.descriptor.role, tankman.vehicle.name, tankman.firstname, tankman.lastname)
+            return
+        vehicleID = vehicle.invID
+        slot = tankman.vehicleSlotIdx
+        isLocked, msg = _getTankmanLockMessage(vehicle)
+        actionBtnEnabled = not isLocked
+        isInCurrentTank = g_currentVehicle.isPresent() and tankmanVehicle.invID == g_currentVehicle.invID
+        isInSelfVehicle = vehicle.shortUserName == tankmanVehicle.shortUserName
+        isInSelfVehicleType = vehicle.type == tankmanVehicle.type
     else:
-        if tankman.isInTank:
-            vehicle = itemsCache.items.getVehicle(tankman.vehicleInvID)
-            if vehicle is None:
-                _logger.error('Cannot find vehicle for tankman: %r %r %r %r %r', tankman, tankman.descriptor.role, tankman.vehicle.name, tankman.firstname, tankman.lastname)
-                return
-            vehicleID = vehicle.invID
-            slot = tankman.vehicleSlotIdx
-            isLocked, msg = _getTankmanLockMessage(vehicle)
-            actionBtnEnabled = not isLocked
-            isInCurrentTank = g_currentVehicle.isPresent() and tankmanVehicle.invID == g_currentVehicle.invID
-            isInSelfVehicle = vehicle.shortUserName == tankmanVehicle.shortUserName
-            isInSelfVehicleType = vehicle.type == tankmanVehicle.type
-        else:
-            isLocked, msg = False, ''
-            actionBtnEnabled = True
-            isInCurrentTank = False
-            vehicleID = None
-            slot = None
-            isInSelfVehicle = True
-            isInSelfVehicleType = True
-        data = {'firstName': tankman.firstUserName,
-         'lastName': tankman.lastUserName,
-         'rank': tankman.rankUserName,
-         'specializationLevel': tankman.realRoleLevel[0],
-         'role': tankman.roleUserName,
-         'vehicleType': tankmanVehicle.shortUserName,
-         'iconFile': tankman.icon,
-         'rankIconFile': tankman.iconRank,
-         'roleIconFile': Tankman.getRoleBigIconPath(tankman.descriptor.role),
-         'contourIconFile': tankmanVehicle.iconContour,
-         'tankmanID': tankman.invID,
-         'nationID': tankman.nationID,
-         'typeID': tankmanVehicle.innationID,
-         'roleType': tankman.descriptor.role,
-         'tankType': tankmanVehicle.type,
-         'inTank': tankman.isInTank,
-         'compact': str(tankman.invID),
-         'lastSkillLevel': tankman.descriptor.lastSkillLevel,
-         'actionBtnEnabled': actionBtnEnabled,
-         'inCurrentTank': isInCurrentTank,
-         'vehicleID': vehicleID,
-         'slot': slot,
-         'locked': isLocked,
-         'lockMessage': msg,
-         'isInSelfVehicleClass': isInSelfVehicleType,
-         'isInSelfVehicleType': isInSelfVehicle,
-         'notRecruited': False}
-        return data
+        isLocked, msg = False, ''
+        actionBtnEnabled = True
+        isInCurrentTank = False
+        vehicleID = None
+        slot = None
+        isInSelfVehicle = True
+        isInSelfVehicleType = True
+    data = {'firstName': tankman.firstUserName,
+     'lastName': tankman.lastUserName,
+     'rank': tankman.rankUserName,
+     'specializationLevel': tankman.realRoleLevel[0],
+     'role': tankman.roleUserName,
+     'vehicleType': tankmanVehicle.shortUserName,
+     'iconFile': tankman.icon,
+     'rankIconFile': tankman.iconRank,
+     'roleIconFile': Tankman.getRoleBigIconPath(tankman.descriptor.role),
+     'contourIconFile': tankmanVehicle.iconContour,
+     'tankmanID': tankman.invID,
+     'nationID': tankman.nationID,
+     'typeID': tankmanVehicle.innationID,
+     'roleType': tankman.descriptor.role,
+     'tankType': tankmanVehicle.type,
+     'inTank': tankman.isInTank,
+     'compact': str(tankman.invID),
+     'lastSkillLevel': tankman.descriptor.lastSkillLevel,
+     'actionBtnEnabled': actionBtnEnabled,
+     'inCurrentTank': isInCurrentTank,
+     'vehicleID': vehicleID,
+     'slot': slot,
+     'locked': isLocked,
+     'lockMessage': msg,
+     'isInSelfVehicleClass': isInSelfVehicleType,
+     'isInSelfVehicleType': isInSelfVehicle,
+     'notRecruited': False}
+    return data
 
 
 def _packNotRecruitedTankman(recruitInfo):

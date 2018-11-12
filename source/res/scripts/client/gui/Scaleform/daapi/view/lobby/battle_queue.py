@@ -25,7 +25,7 @@ from gui.prb_control.entities.listener import IGlobalListener
 from gui.prb_control.events_dispatcher import g_eventDispatcher
 from gui.shared import events, EVENT_BUS_SCOPE
 from gui.shared.formatters import text_styles
-from gui.shared.gui_items.Vehicle import VEHICLE_CLASS_NAME
+from gui.shared.gui_items.Vehicle import VEHICLE_CLASS_NAME, getTypeBigIconPath
 from gui.shared.view_helpers import ClanEmblemsHelper
 from gui.shared.view_helpers.image_helper import getTextureLinkByID, ImagesFetchCoordinator
 from gui.sounds.ambients import BattleQueueEnv
@@ -35,7 +35,6 @@ from skeletons.gui.lobby_context import ILobbyContext
 from gui.Scaleform.locale.FORTIFICATIONS import FORTIFICATIONS
 from gui.Scaleform.locale.ITEM_TYPES import ITEM_TYPES
 from gui.Scaleform.locale.MENU import MENU
-from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from skeletons.gui.shared import IItemsCache
 TYPES_ORDERED = (('heavyTank', ITEM_TYPES.VEHICLE_TAGS_HEAVY_TANK_NAME),
  ('mediumTank', ITEM_TYPES.VEHICLE_TAGS_MEDIUM_TANK_NAME),
@@ -44,10 +43,6 @@ TYPES_ORDERED = (('heavyTank', ITEM_TYPES.VEHICLE_TAGS_HEAVY_TANK_NAME),
  ('SPG', ITEM_TYPES.VEHICLE_TAGS_SPG_NAME))
 _LONG_WAITING_LEVELS = (9, 10)
 _HTMLTEMP_PLAYERSLABEL = 'html_templates:lobby/queue/playersLabel'
-
-def _getVehicleIconPath(vClass):
-    return RES_ICONS.maps_icons_vehicletypes('big/{}.png'.format(vClass))
-
 
 @dependency.replace_none_kwargs(lobbyContext=ILobbyContext)
 def _needShowLongWaitingWarning(lobbyContext=None):
@@ -129,7 +124,7 @@ class _RandomQueueProvider(_QueueProvider):
             for vClass, message in TYPES_ORDERED:
                 idx = constants.VEHICLE_CLASS_INDICES[vClass]
                 vClassesData.append({'type': message,
-                 'icon': _getVehicleIconPath(vClass),
+                 'icon': getTypeBigIconPath(vClass),
                  'count': vClasses[idx] if idx < vClassesLen else 0})
 
             self._proxy.as_setDPS(vClassesData)
@@ -245,7 +240,7 @@ class BattleQueue(BattleQueueMeta, LobbySubView):
             vehicle = g_currentVehicle.item
             textLabel = self.__provider.getTankInfoLabel()
             tankName = vehicle.shortUserName
-            iconPath = _getVehicleIconPath(vehicle.type)
+            iconPath = getTypeBigIconPath(vehicle.type)
             self.as_setTypeInfoS({'iconLabel': iconlabel,
              'title': title,
              'description': description,

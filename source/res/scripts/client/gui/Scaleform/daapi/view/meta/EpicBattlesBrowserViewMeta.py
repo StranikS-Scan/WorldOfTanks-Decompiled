@@ -7,6 +7,9 @@ class EpicBattlesBrowserViewMeta(View):
     def onEscapePress(self):
         self._printOverrideError('onEscapePress')
 
+    def onCloseBtnClick(self):
+        self._printOverrideError('onCloseBtnClick')
+
     def onFocusChange(self, hasFocus):
         self._printOverrideError('onFocusChange')
 

@@ -8,12 +8,6 @@
         <postBattle>
           <and>
             <results>
-              <title>
-                <key>	#personal_missions_details:quest_common_condition_title_damageAssistedRadio	</key>
-              </title>
-              <description>
-                <key>	#personal_missions_details:quest_1_1_12_condition_description_damageAssistedRadioWhileInvisible	</key>
-              </description>
               <key>	damageAssistedRadioWhileInvisible	</key>
               <greaterOrEqual>	250	</greaterOrEqual>
             </results>
@@ -63,12 +57,6 @@
           <vehicle>
             <and>
               <installedModules>
-                <title>
-                  <key>	#personal_missions_details:quest_common_condition_title_prepare_to_battle	</key>
-                </title>
-                <description>
-                  <key>	#personal_missions_details:quest_1_1_12_condition_description_installedModules	</key>
-                </description>
                 <optionalDevice>	camouflageNet	</optionalDevice>
               </installedModules>
               <correspondedCamouflage>
@@ -80,12 +68,6 @@
         <postBattle>
           <and>
             <results>
-              <title>
-                <key>	#personal_missions_details:quest_common_condition_title_damageAssistedRadio	</key>
-              </title>
-              <description>
-                <key>	#personal_missions_details:quest_1_1_12_condition_description_damageAssistedRadioWhileInvisible	</key>
-              </description>
               <key>	damageAssistedRadioWhileInvisible	</key>
               <greaterOrEqual>	250	</greaterOrEqual>
             </results>

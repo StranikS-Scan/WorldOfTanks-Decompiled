@@ -36,7 +36,7 @@
     <maxStayTime>
       <Type>	FLOAT32	</Type>
       <Flags>	CELL_PUBLIC	</Flags>
-      <Default>	5.0	</Default>
+      <Default>	4.0	</Default>
       <Editable>	true	</Editable>
     </maxStayTime>
     <numberOfTurrets>
@@ -54,19 +54,19 @@
     <minShootingTime>
       <Type>	FLOAT32	</Type>
       <Flags>	CELL_PRIVATE	</Flags>
-      <Default>	15.0	</Default>
+      <Default>	9.0	</Default>
       <Editable>	true	</Editable>
     </minShootingTime>
     <shotDuration>
       <Type>	FLOAT32	</Type>
       <Flags>	CELL_PRIVATE	</Flags>
-      <Default>	1.0	</Default>
+      <Default>	0.8	</Default>
       <Editable>	true	</Editable>
     </shotDuration>
     <shotRadius>
       <Type>	FLOAT32	</Type>
       <Flags>	CELL_PRIVATE	</Flags>
-      <Default>	5.0	</Default>
+      <Default>	2.5	</Default>
       <Editable>	true	</Editable>
     </shotRadius>
     <shotShellNation>
@@ -84,7 +84,7 @@
     <shotPiercingPower>
       <Type>	FLOAT32	</Type>
       <Flags>	CELL_PRIVATE	</Flags>
-      <Default>	45.	</Default>
+      <Default>	5.	</Default>
       <Editable>	true	</Editable>
     </shotPiercingPower>
     <mainDirection>

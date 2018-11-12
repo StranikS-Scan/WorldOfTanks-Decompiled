@@ -155,7 +155,7 @@ class VehicleProgressHelper(object):
         formattedPrice = BigWorld.wg_getIntegralFormat(unlockXp) + icons.xp()
         return {'title': _ms(BATTLE_RESULTS.COMMON_FITTING_RESEARCH),
          'description': text_styles.main(item.userName),
-         'fittingType': item.itemTypeName,
+         'fittingType': item.getGUIEmblemID(),
          'lvlIcon': getLevelIconPath(item.level),
          'price': formatter(formattedPrice),
          'linkEvent': PROGRESS_ACTION.RESEARCH_UNLOCK_TYPE,

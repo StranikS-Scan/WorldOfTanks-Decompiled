@@ -94,7 +94,7 @@
       </slot>
       <slot>
         <slotType>	player	</slotType>
-        <slotId>	2	</slotId>
+        <slotId>	4	</slotId>
         <rayStart>	-1.0104 1.18156 0.0454108	</rayStart>
         <rayEnd>	-0.771233 1.16159 0.0454705	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
@@ -104,7 +104,7 @@
       </slot>
       <slot>
         <slotType>	inscription	</slotType>
-        <slotId>	3	</slotId>
+        <slotId>	36	</slotId>
         <rayStart>	-0.929196 1.19621 0.545567	</rayStart>
         <rayEnd>	-0.849481 1.18946 0.545681	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
@@ -114,7 +114,7 @@
       </slot>
       <slot>
         <slotType>	player	</slotType>
-        <slotId>	4	</slotId>
+        <slotId>	5	</slotId>
         <rayStart>	1.0104 1.18156 0.0454108	</rayStart>
         <rayEnd>	0.771233 1.16159 0.0454705	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
@@ -125,7 +125,7 @@
       </slot>
       <slot>
         <slotType>	inscription	</slotType>
-        <slotId>	5	</slotId>
+        <slotId>	37	</slotId>
         <rayStart>	0.929196 1.19621 0.545567	</rayStart>
         <rayEnd>	0.849481 1.18946 0.545681	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
@@ -1040,7 +1040,7 @@
           <customizationSlots>
             <slot>
               <slotType>	insigniaOnGun	</slotType>
-              <slotId>	6	</slotId>
+              <slotId>	771	</slotId>
               <rayStart>	0.00493779 0.0830801 2.30354	</rayStart>
               <rayEnd>	0.31245 -0.157809 2.28948	</rayEnd>
               <rayUp>	0.094 0.085 5	</rayUp>
@@ -1086,6 +1086,7 @@
       <engines>
         <Somua_S-40Bis_IGR>
           <smplEnginePower>	274.8931	</smplEnginePower>
+          <smplFwMaxSpeed>	37	</smplFwMaxSpeed>
         </Somua_S-40Bis_IGR>
       </engines>
       <chassis>

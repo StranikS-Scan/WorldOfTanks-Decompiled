@@ -4,6 +4,7 @@ from collections import defaultdict
 from arena_components.player_data_component import PlayerDataComponent
 from constants import ARENA_SYNC_OBJECTS, SECTOR_STATE, ARENA_PERIOD
 from PlayerEvents import g_playerEvents
+from debug_utils import LOG_CURRENT_EXCEPTION
 import Event
 import BigWorld
 from gui.battle_control import avatar_getter
@@ -132,6 +133,26 @@ class EpicBattlePlayerDataComponent(PlayerDataComponent):
             self.onPlayerRespawnLaneUpdated(self.__respawnLane)
             self.setPhysicalLane(self.__respawnLane, self.__physicalSectorGroup, force=True)
 
+    def getGameTimeToAddPerCapture(self, idInPlayerGroup):
+        timesToAdd = self.getSyncDataObjectData(ARENA_SYNC_OBJECTS.SECTOR, 'gameTimeToAddPerCapture')
+        if timesToAdd is not None:
+            try:
+                return timesToAdd[idInPlayerGroup - 1]
+            except (TypeError, IndexError, KeyError):
+                LOG_CURRENT_EXCEPTION(["Failed to get 'gameTimeToAddPerCapture' from arena sector sync data for zone '{}'!".format(idInPlayerGroup), timesToAdd])
+
+        return 0.0
+
+    def getGameTimeToAddWhenAllCaptured(self):
+        time = self.getSyncDataObjectData(ARENA_SYNC_OBJECTS.SECTOR, 'gameTimeToAddWhenAllCaptured')
+        return time if time is not None else 0.0
+
+    def getPlayerGroupForVehicle(self, vId):
+        return self.getPhysicalLaneForVehicle(vId)
+
+    def getPlayerGroupForPlayer(self):
+        return self.__physicalLane
+
     def _vehiclePlayerGroupsUpdated(self, args):
         self.__respawnLane = None
         arena = avatar_getter.getArena()
@@ -208,6 +229,7 @@ class EpicBattlePlayerDataComponent(PlayerDataComponent):
                 self.onPlayerPhysicalLaneUpdated(group)
         gameModeStats = dict(((vehID, {'playerGroup': group,
           'physicalSector': sectorID}) for vehID, (sectorID, group) in args.iteritems()))
+        self.onPlayerGroupsUpdated(args)
         arena.onGameModeSpecifcStats(False, gameModeStats)
 
     def __onLivesPerTeamGroupUpdated(self, args):

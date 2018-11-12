@@ -40,8 +40,7 @@ class UtilsManager(UtilsManagerMeta):
         return GUI_NATIONS
 
     def getNationNames(self):
-        names = nations.NAMES + ('event',)
-        return names
+        return nations.NAMES
 
     def getNationIndices(self):
         return nations.INDICES

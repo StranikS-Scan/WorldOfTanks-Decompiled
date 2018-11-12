@@ -10,7 +10,7 @@ from gui.shared.items_parameters import params, RELATIVE_PARAMS, MAX_RELATIVE_VA
 from gui.shared.items_parameters.comparator import VehiclesComparator, ItemsComparator
 from gui.shared.items_parameters.functions import getBasicShell
 from gui.shared.items_parameters.params_cache import g_paramsCache
-from gui.shared.utils import AUTO_RELOAD_PROP_NAME
+from gui.shared.utils import AUTO_RELOAD_PROP_NAME, MAX_STEERING_LOCK_ANGLE, WHEELED_SWITCH_ON_TIME, WHEELED_SWITCH_OFF_TIME
 from helpers import dependency
 from items import vehicles, ITEM_TYPES
 from shared_utils import findFirst, first
@@ -41,7 +41,16 @@ RELATIVE_POWER_PARAMS = ('avgDamage',
  'shotDispersionAngle',
  'avgDamagePerMinute')
 RELATIVE_ARMOR_PARAMS = ('maxHealth', 'hullArmor', 'turretArmor')
-RELATIVE_MOBILITY_PARAMS = ('vehicleWeight', 'enginePower', 'enginePowerPerTon', 'speedLimits', 'chassisRotationSpeed', 'switchOnTime', 'switchOffTime')
+RELATIVE_MOBILITY_PARAMS = ('vehicleWeight',
+ 'enginePower',
+ 'enginePowerPerTon',
+ 'speedLimits',
+ 'chassisRotationSpeed',
+ MAX_STEERING_LOCK_ANGLE,
+ 'switchOnTime',
+ 'switchOffTime',
+ WHEELED_SWITCH_ON_TIME,
+ WHEELED_SWITCH_OFF_TIME)
 RELATIVE_CAMOUFLAGE_PARAMS = ('invisibilityStillFactor', 'invisibilityMovingFactor')
 RELATIVE_VISIBILITY_PARAMS = ('circularVisionRadius', 'radioDistance')
 PARAMS_GROUPS = {'relativePower': RELATIVE_POWER_PARAMS,

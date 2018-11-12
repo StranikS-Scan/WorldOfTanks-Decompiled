@@ -5,6 +5,8 @@ import Math
 from gui.customization.shared import C11nId
 from gui.shared.gui_items.customization.outfit import Area
 from gui.Scaleform.daapi.view.lobby.customization.shared import C11nTabs
+EMBLEM_SCALE_FACTOR = 0.5
+INSCRIPTION_SCALE_FACTOR = 0.25
 
 class VehicleAnchorsUpdater(object):
 
@@ -13,6 +15,9 @@ class VehicleAnchorsUpdater(object):
         self.__ctx = ctx
         self.__vehicleCustomizationAnchors = None
         self.__processedAnchors = {}
+        from gui.ClientHangarSpace import hangarCFG
+        cfg = hangarCFG()
+        self.__vScale = cfg['v_scale'] if 'v_scale' in cfg else 1.0
         return
 
     def startUpdater(self, interfaceScale):
@@ -26,7 +31,7 @@ class VehicleAnchorsUpdater(object):
             self.__vehicleCustomizationAnchors = None
         return
 
-    def setAnchors(self, displayObjects):
+    def setAnchors(self, displayObjects, menuSlotId):
         if self.__vehicleCustomizationAnchors is not None:
             processedObjectIds = {}
             self._delAllAnchors()
@@ -42,6 +47,18 @@ class VehicleAnchorsUpdater(object):
                             if customSlotId.areaId != Area.GUN:
                                 normal.normalise()
                                 anchorWorldPos -= normal * 0.2
+                        elif self.__ctx.currentTab in (C11nTabs.EMBLEM, C11nTabs.INSCRIPTION) and customSlotId != menuSlotId:
+                            rayUp = anchorParams.slotDescriptor.rayUp
+                            rayUp.normalise()
+                            scaleFactor = 0
+                            if self.__ctx.currentTab == C11nTabs.EMBLEM:
+                                scaleFactor = EMBLEM_SCALE_FACTOR
+                            elif self.__ctx.currentTab == C11nTabs.INSCRIPTION:
+                                item = self.__ctx.currentOutfit.getContainer(customSlotId.areaId).slotFor(customSlotId.slotType).getItem(customSlotId.regionIdx)
+                                if item is not None:
+                                    scaleFactor = INSCRIPTION_SCALE_FACTOR
+                            size = anchorParams.slotDescriptor.size
+                            anchorWorldPos += Math.Vector3(rayUp) * size * scaleFactor * self.__vScale
                         scaleformUid = self.__vehicleCustomizationAnchors.addAnchor(anchorWorldPos, normal, displayObject, True, True, True)
                         processedObjectIds[customSlotId] = scaleformUid
 

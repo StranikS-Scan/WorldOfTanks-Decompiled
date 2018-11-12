@@ -106,7 +106,8 @@ class AvatarPositionControl(CallbackDelayer):
             vehicleID = self.__avatar.playerVehicleID
         BigWorld.player().consistentMatrices.notifyPreBind(BigWorld.player())
         if bValue:
-            self.__doBind(vehicleID)
+            if not BigWorld.player().isObserver():
+                self.__doBind(vehicleID)
         else:
             self.__doUnbind(vehicleID)
         return

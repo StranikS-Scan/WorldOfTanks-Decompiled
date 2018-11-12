@@ -90,7 +90,6 @@
     <_4.5inch_SPG_Howitzer_IGR>	60004	</_4.5inch_SPG_Howitzer_IGR>
     <_20pdr_AT_Gun_Type_B_IGR>	60005	</_20pdr_AT_Gun_Type_B_IGR>
     <_120mm_Gun_L1A1_IGR>	60006	</_120mm_Gun_L1A1_IGR>
-    <QF_6_pounder_8cwt_Mk_II_Halloween>	62001	</QF_6_pounder_8cwt_Mk_II_Halloween>
   </ids>
   <shared>
     <_12.7mm_MG_HB_M2>
@@ -1242,51 +1241,6 @@
         </_6pdr_HE_Common>
       </shots>
     </QF_6_pounder_8cwt_Mk_II>
-    <QF_6_pounder_8cwt_Mk_II_Halloween>
-      <userString>	#gb_vehicles:QF_6_pounder_8cwt_Mk_II_Halloween	</userString>
-      <tags></tags>
-      <level>	2	</level>
-      <price>	3000	</price>
-      <notInShop>	true	</notInShop>
-      <impulse>	0.26	</impulse>
-      <recoil>
-        <lodDist>	MEDIUM	</lodDist>
-        <amplitude>	0.35	</amplitude>
-        <recoilEffect>	medium	</recoilEffect>
-      </recoil>
-      <effects>	shot_medium	</effects>
-      <reloadEffect>	reload50_75	</reloadEffect>
-      <pitchLimits>
-        <minPitch>	0.0 -12.0 1.0 -12.0	</minPitch>
-        <maxPitch>	0.0 6.0 1.0 6.0	</maxPitch>
-      </pitchLimits>
-      <turretYawLimits>	-180 180	</turretYawLimits>
-      <rotationSpeed>	43.75	</rotationSpeed>
-      <reloadTime>	2.28571428571429	</reloadTime>
-      <maxAmmo>	92	</maxAmmo>
-      <aimingTime>	2.28571428571429	</aimingTime>
-      <weight>	300	</weight>
-      <maxHealth>	84	</maxHealth>
-      <maxRegenHealth>	42	</maxRegenHealth>
-      <repairCost>	4	</repairCost>
-      <invulnerable>	true	</invulnerable>
-      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
-      <shotDispersionRadius>	0.434285714285714	</shotDispersionRadius>
-      <shotDispersionFactors>
-        <turretRotation>	0.08	</turretRotation>
-        <afterShot>	4.0	</afterShot>
-        <whileGunDamaged>	2.0	</whileGunDamaged>
-      </shotDispersionFactors>
-      <shots>
-        <_6pdr_AP_Steel_HSCT_Halloween>
-          <defaultPortion>	1.0	</defaultPortion>
-          <speed>	200	</speed>
-          <gravity>	9.81	</gravity>
-          <maxDistance>	720	</maxDistance>
-          <piercingPower>	45 32	</piercingPower>
-        </_6pdr_AP_Steel_HSCT_Halloween>
-      </shots>
-    </QF_6_pounder_8cwt_Mk_II_Halloween>
     <QF_6_pounder_8cwt_Mk_II_AT>
       <userString>	#gb_vehicles:QF_6_pounder_8cwt_Mk_II_AT	</userString>
       <tags></tags>

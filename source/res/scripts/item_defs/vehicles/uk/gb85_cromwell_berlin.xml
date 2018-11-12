@@ -95,13 +95,13 @@
       </slot>
       <slot>
         <slotType>	paint	</slotType>
-        <slotId>	7	</slotId>
+        <slotId>	2	</slotId>
         <anchorPosition>	0.000000 0.583513 -2.03634	</anchorPosition>
         <anchorDirection>	0.000000 0.275464 -0.961311	</anchorDirection>
       </slot>
       <slot>
         <slotType>	camouflage	</slotType>
-        <slotId>	8	</slotId>
+        <slotId>	3	</slotId>
         <anchorPosition>	0.000000 0.583513 -2.03634	</anchorPosition>
         <anchorDirection>	0.000000 0.275464 -0.961311	</anchorDirection>
       </slot>
@@ -926,13 +926,13 @@
       <customizationSlots>
         <slot>
           <slotType>	paint	</slotType>
-          <slotId>	5	</slotId>
+          <slotId>	256	</slotId>
           <anchorPosition>	-1.42672 0.53185 0.01034	</anchorPosition>
           <anchorDirection>	-0.93699 0.349289 0.00679072	</anchorDirection>
         </slot>
         <slot>
           <slotType>	style	</slotType>
-          <slotId>	6	</slotId>
+          <slotId>	257	</slotId>
           <anchorPosition>	0.000074 2.22924 0.493923	</anchorPosition>
           <anchorDirection>	0.000000 1 0.000000	</anchorDirection>
         </slot>
@@ -1004,7 +1004,7 @@
           <customizationSlots>
             <slot>
               <slotType>	insigniaOnGun	</slotType>
-              <slotId>	4	</slotId>
+              <slotId>	771	</slotId>
               <rayStart>	0.0736349 -0.0183345 1.18465	</rayStart>
               <rayEnd>	0.474362 -0.274792 1.18464	</rayEnd>
               <rayUp>	0.055 0.055 5	</rayUp>
@@ -1014,21 +1014,21 @@
             </slot>
             <slot>
               <slotType>	paint	</slotType>
-              <slotId>	11	</slotId>
+              <slotId>	768	</slotId>
               <anchorPosition>	0.0368174 -0.00916724 0.994083	</anchorPosition>
               <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
               <applyTo>	4096	</applyTo>
             </slot>
             <slot>
               <slotType>	paint	</slotType>
-              <slotId>	12	</slotId>
+              <slotId>	769	</slotId>
               <anchorPosition>	0.000000 0.0530195 0.0530195	</anchorPosition>
               <anchorDirection>	0.000000 0.707107 0.707107	</anchorDirection>
               <applyTo>	16384	</applyTo>
             </slot>
             <slot>
               <slotType>	camouflage	</slotType>
-              <slotId>	13	</slotId>
+              <slotId>	770	</slotId>
               <anchorPosition>	0.0368174 -0.00916724 0.994083	</anchorPosition>
               <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
               <applyTo>	4096	</applyTo>
@@ -1061,7 +1061,7 @@
       <customizationSlots>
         <slot>
           <slotType>	player	</slotType>
-          <slotId>	2	</slotId>
+          <slotId>	514	</slotId>
           <rayStart>	-0.863371 0.154507 -0.805214	</rayStart>
           <rayEnd>	-0.677909 0.154507 -0.730357	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
@@ -1071,7 +1071,7 @@
         </slot>
         <slot>
           <slotType>	player	</slotType>
-          <slotId>	3	</slotId>
+          <slotId>	515	</slotId>
           <rayStart>	0.96258 0.217572 0.0724518	</rayStart>
           <rayEnd>	0.767705 0.217556 0.0274683	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
@@ -1082,13 +1082,13 @@
         </slot>
         <slot>
           <slotType>	paint	</slotType>
-          <slotId>	9	</slotId>
+          <slotId>	512	</slotId>
           <anchorPosition>	0.000000 0.750204 0.000000	</anchorPosition>
           <anchorDirection>	0.000000 1 0.000000	</anchorDirection>
         </slot>
         <slot>
           <slotType>	camouflage	</slotType>
-          <slotId>	10	</slotId>
+          <slotId>	513	</slotId>
           <anchorPosition>	0.000000 0.750204 0.000000	</anchorPosition>
           <anchorDirection>	0.000000 1 0.000000	</anchorDirection>
         </slot>
@@ -1112,6 +1112,7 @@
       <engines>
         <Rolls_Royse_Meteor_MkIV_A>
           <smplEnginePower>	687.2327	</smplEnginePower>
+          <smplFwMaxSpeed>	64	</smplFwMaxSpeed>
         </Rolls_Royse_Meteor_MkIV_A>
       </engines>
       <chassis>

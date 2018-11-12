@@ -10,8 +10,9 @@ from gui.Scaleform.locale.PERSONAL_MISSIONS import PERSONAL_MISSIONS
 from gui.shared.formatters import text_styles
 from helpers import i18n
 from helpers.time_utils import ONE_MINUTE
-from personal_missions_constants import CONTAINER, DISPLAY_TYPE, MULTIPLIER_TYPE
+from personal_missions_constants import CONTAINER, DISPLAY_TYPE, MULTIPLIER_TYPE, MULTIPLIER_SCOPE
 from shared_utils import first
+from gui.server_events.personal_progress import ORDERED_ICON_IDS
 _logger = logging.getLogger(__name__)
 PARAMS_KEYS = {'vehicleHealthFactor': BigWorld.wg_getNiceNumberFormat,
  'stunSeveralTargets': BigWorld.wg_getIntegralFormat,
@@ -23,19 +24,22 @@ UI_HEADER_TYPES = {DISPLAY_TYPE.BIATHLON: QUEST_PROGRESS_BASE.HEADER_PROGRESS_TY
  DISPLAY_TYPE.NONE: QUEST_PROGRESS_BASE.HEADER_PROGRESS_TYPE_NONE}
 
 class ClientProgress(quest_progress.IProgress):
-    __slots__ = ('_description', '_commonProgress', '_progressGetter')
+    __slots__ = ('_description', '_commonProgress', '_progressGetter', '__isLocked', '__isChanged')
 
     def __init__(self, commonProgress, description):
         self._description = description
         self._commonProgress = commonProgress
         self._progressGetter = None
+        self.__isLocked = False
+        self.__isChanged = False
         return
 
     def isChanged(self):
-        return self._commonProgress.isChanged()
+        return self._commonProgress.isChanged() or self.__isChanged
 
     def markAsVisited(self):
         self._commonProgress.markAsVisited()
+        self.__isChanged = False
 
     def getProgressID(self):
         return self._commonProgress.getProgressID()
@@ -87,18 +91,33 @@ class ClientProgress(quest_progress.IProgress):
     def getDisplayType(self):
         return self._description.displayType
 
-    def getIsInOrGroup(self):
+    def isInOrGroup(self):
         return self._description.isInOrGroup
 
-    def getFormattedMultiplierValue(self, scope='card'):
+    def getFormattedMultiplierValue(self, scope=MULTIPLIER_SCOPE.CARD):
         multiplier = self.getMultiplier()
         if multiplier:
             multiplierValue = first(multiplier['task'].values())
             descr = text_styles.main(i18n.makeString(PERSONAL_MISSIONS.getMultiplierDescr(multiplier['type'], scope), value=multiplierValue))
+            if scope == MULTIPLIER_SCOPE.POST_BATTLE:
+                multiplierScopeStyle = text_styles.neutral
+            else:
+                multiplierScopeStyle = text_styles.warning
             if multiplier['type'] == MULTIPLIER_TYPE.ATTEMPTS:
-                return text_styles.concatStylesToSingleLine(text_styles.neutral(i18n.makeString(PERSONAL_MISSIONS.BONUS_MULTIPLIER_ATTEMPTS)), ' ', descr)
+                return text_styles.concatStylesToSingleLine(multiplierScopeStyle(i18n.makeString(PERSONAL_MISSIONS.BONUS_MULTIPLIER_ATTEMPTS)), ' ', descr)
             if multiplier['type'] == MULTIPLIER_TYPE.PROGRESS:
-                return text_styles.concatStylesToSingleLine(text_styles.neutral(i18n.makeString(PERSONAL_MISSIONS.BONUS_MULTIPLIER_PROGRESS, value=multiplierValue)), ' ', descr)
+                return text_styles.concatStylesToSingleLine(multiplierScopeStyle(i18n.makeString(PERSONAL_MISSIONS.BONUS_MULTIPLIER_PROGRESS, value=multiplierValue)), ' ', descr)
+
+    def isCompleted(self):
+        return self.getState() == QUEST_PROGRESS_STATE.COMPLETED
+
+    def setLocked(self, isLocked):
+        if self.__isLocked != isLocked:
+            self.__isLocked = isLocked
+            self.__isChanged = True
+
+    def isLocked(self):
+        return self.__isLocked
 
     def _getOrderType(self):
         return QUEST_PROGRESS_BASE.MAIN_ORDER_TYPE if self._commonProgress.isMain() else QUEST_PROGRESS_BASE.ADD_ORDER_TYPE
@@ -169,6 +188,7 @@ class BiathlonProgress(HeaderProgress):
 
 class BodyProgress(ClientProgress):
     __slots__ = ClientProgress.__slots__ + ('__metricsWrapper', '__templateID', '_generalQuestID', '__timeLeft', '__limiter', '__headerMultiplier')
+    COMMON_PROGRESS_IDS = ('win', 'alive')
 
     def __init__(self, commonProgress, description, templateID):
         super(BodyProgress, self).__init__(commonProgress, description)
@@ -230,7 +250,8 @@ class BodyProgress(ClientProgress):
         return {'state': self.getState(),
          'goal': self.getGoal(),
          'current': self.getCurrent(),
-         'metrics': self.__metricsWrapper.getMetrics(self)}
+         'metrics': self.__metricsWrapper.getMetrics(self),
+         'isLocked': self.isLocked()}
 
     def getTemplateID(self):
         return self.__templateID
@@ -262,10 +283,13 @@ class BodyProgress(ClientProgress):
         return self._commonProgress.isCumulative()
 
     def getDescription(self):
-        description = self.__localizeDescr()
+        if self.getProgressID() in self.COMMON_PROGRESS_IDS:
+            description = self.__getCommonDescription()
+        else:
+            description = i18n.makeString(('#personal_missions_details:%s_description_%s' % (self._generalQuestID, self.getProgressID())), **self.getLocalizationValues())
         if self.__limiter:
             warningText = i18n.makeString(PERSONAL_MISSIONS.CONDITIONS_LIMITER_LABEL)
-            limiterDescription = self.__localizeLimiter()
+            limiterDescription = i18n.makeString(('#personal_missions_details:%s_description_%s' % (self._generalQuestID, self.__limiter.getProgressID())), **self.__limiter.getLocalizationValues())
             description = '%s\n%s %s' % (description, text_styles.alert(warningText), limiterDescription)
         return description
 
@@ -280,10 +304,14 @@ class BodyProgress(ClientProgress):
          'isInOrGroup': self._description.isInOrGroup}
 
     def getTitle(self):
-        return i18n.makeString('#personal_missions_2_details:%s_title_%s' % (self._generalQuestID, self.getProgressID()))
+        return i18n.makeString('#personal_missions_details:quest_common_condition_title_%s' % self.getProgressID()) if self.getProgressID() in self.COMMON_PROGRESS_IDS else i18n.makeString('#personal_missions_details:%s_title_%s' % (self._generalQuestID, self.getProgressID()))
 
     def getIconID(self):
         return self._description.iconID
+
+    def getPriority(self):
+        key = self.getIconID()
+        return ORDERED_ICON_IDS.index(key) if key in ORDERED_ICON_IDS else len(ORDERED_ICON_IDS)
 
     def getProgressType(self):
         return 'cumulative' if self._commonProgress.isCumulative() else 'regular'
@@ -291,23 +319,8 @@ class BodyProgress(ClientProgress):
     def getMultiplier(self):
         return super(BodyProgress, self).getMultiplier() or self.__headerMultiplier
 
-    def __localizeDescr(self):
-        descr = ''
-        try:
-            descr = i18n.makeString(('#personal_missions_2_details:%s_description_%s' % (self._generalQuestID, self.getProgressID())), **self.getLocalizationValues())
-        except ValueError:
-            _logger.error('Wrong localization key (possible percent sign is not escaped): %s', '#personal_missions_2_details:%s_description_%s' % (self._generalQuestID, self.getProgressID()))
-
-        return descr
-
-    def __localizeLimiter(self):
-        limiter = ''
-        try:
-            limiter = i18n.makeString(('#personal_missions_2_details:%s_description_%s' % (self._generalQuestID, self.__limiter.getProgressID())), **self.__limiter.getLocalizationValues())
-        except ValueError:
-            _logger.error('Wrong localization key (possible percent sign is not escaped): %s', '#personal_missions_2_details:%s_description_%s' % (self._generalQuestID, self.__limiter.getProgressID()))
-
-        return limiter
+    def __getCommonDescription(self):
+        return i18n.makeString('#personal_missions_details:quest_common_condition_description_%s' % 'isNotSpotted') if self.getProgressID() == 'alive' and self._commonProgress.getParam('shouldBeUnspotted') else i18n.makeString('#personal_missions_details:quest_common_condition_description_%s' % self.getProgressID())
 
 
 class AverageProgress(BodyProgress):

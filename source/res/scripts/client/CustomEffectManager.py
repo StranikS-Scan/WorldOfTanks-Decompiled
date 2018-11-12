@@ -41,6 +41,7 @@ class CustomEffectManager(Component):
         args['hull'] = {}
         args['hull']['model'] = appearance.compoundModel
         args['engineTags'] = appearance.typeDescriptor.engine.tags
+        args['vehicleTags'] = appearance.typeDescriptor.type.tags
         args['drawOrderBase'] = CustomEffectManager._DRAW_ORDER_IDX
         for desc in appearance.typeDescriptor.hull.customEffects:
             if desc is not None:
@@ -105,9 +106,6 @@ class CustomEffectManager(Component):
     def __createChassisCenterNodes(self):
         compoundModel = self.__appearance.compoundModel
         self.__trailParticleNodes = [compoundModel.node(TankNodeNames.TRACK_LEFT_MID), compoundModel.node(TankNodeNames.TRACK_RIGHT_MID)]
-
-    def getTrackCenterNode(self, trackIdx):
-        return self.__trailParticleNodes[trackIdx]
 
     def onGearUp(self):
         self.__gearUP = True

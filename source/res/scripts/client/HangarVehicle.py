@@ -15,7 +15,7 @@ class HangarVehicle(ClientSelectableCameraVehicle):
         self.clickSoundName = ''
         self.releaseSoundName = ''
         self.mouseOverSoundName = ''
-        self.edgeMode = 2
+        self.edgeMode = 0
         self.modelName = ''
         self.cameraShift = Math.Vector3(0.0, 0.0, 0.0)
         self.cameraPivot = Math.Vector3(0.0, 0.0, 0.0)

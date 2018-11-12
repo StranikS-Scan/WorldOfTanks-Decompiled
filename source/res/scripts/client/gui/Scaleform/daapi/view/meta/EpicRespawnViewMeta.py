@@ -4,14 +4,14 @@ from gui.Scaleform.framework.entities.BaseDAAPIComponent import BaseDAAPICompone
 
 class EpicRespawnViewMeta(BaseDAAPIComponent):
 
-    def py_onLaneSelected(self, laneID):
-        self._printOverrideError('py_onLaneSelected')
+    def onLaneSelected(self, laneID):
+        self._printOverrideError('onLaneSelected')
 
-    def py_onRespawnBtnClick(self):
-        self._printOverrideError('py_onRespawnBtnClick')
+    def onRespawnBtnClick(self):
+        self._printOverrideError('onRespawnBtnClick')
 
-    def py_onDeploymentReady(self):
-        self._printOverrideError('py_onDeploymentReady')
+    def onDeploymentReady(self):
+        self._printOverrideError('onDeploymentReady')
 
     def as_updateTimerS(self, timeIsOver, mainTimer):
         return self.flashObject.as_updateTimer(timeIsOver, mainTimer) if self._isDAAPIInited() else None

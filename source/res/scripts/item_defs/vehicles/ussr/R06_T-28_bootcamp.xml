@@ -24,7 +24,7 @@
   <camouflage>
     <priceFactor>	0.4	</priceFactor>
     <tiling>	1 1 0 0	</tiling>
-    <exclusionMask>	vehicles/russian/R06_T-28/T-28_hull_01_AM.dds	</exclusionMask>
+    <exclusionMask></exclusionMask>
   </camouflage>
   <hull>
     <armor>
@@ -88,7 +88,7 @@
       </slot>
       <slot>
         <slotType>	inscription	</slotType>
-        <slotId>	2	</slotId>
+        <slotId>	36	</slotId>
         <rayStart>	-1.48035 0.512885 0.106598	</rayStart>
         <rayEnd>	-1.28035 0.512885 0.106598	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
@@ -98,7 +98,7 @@
       </slot>
       <slot>
         <slotType>	inscription	</slotType>
-        <slotId>	3	</slotId>
+        <slotId>	37	</slotId>
         <rayStart>	1.48035 0.530132 0.124393	</rayStart>
         <rayEnd>	1.28035 0.530132 0.124393	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
@@ -1183,7 +1183,7 @@
       <customizationSlots>
         <slot>
           <slotType>	player	</slotType>
-          <slotId>	4	</slotId>
+          <slotId>	514	</slotId>
           <rayStart>	0.804964 0.445527 -0.694605	</rayStart>
           <rayEnd>	0.616031 0.445489 -0.628997	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
@@ -1194,7 +1194,7 @@
         </slot>
         <slot>
           <slotType>	player	</slotType>
-          <slotId>	5	</slotId>
+          <slotId>	515	</slotId>
           <rayStart>	-0.804964 0.445527 -0.694605	</rayStart>
           <rayEnd>	-0.616031 0.445489 -0.628997	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
@@ -1222,6 +1222,7 @@
       <engines>
         <M-5-400_bootcamp>
           <smplEnginePower>	422.9124	</smplEnginePower>
+          <smplFwMaxSpeed>	45	</smplFwMaxSpeed>
         </M-5-400_bootcamp>
       </engines>
       <chassis>

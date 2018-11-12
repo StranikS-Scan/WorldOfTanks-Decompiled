@@ -23,8 +23,8 @@ from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.dialogs import I18PunishmentDialogMeta
 from gui.Scaleform.genConsts.RANKEDBATTLES_ALIASES import RANKEDBATTLES_ALIASES
 from gui.Scaleform.locale.DIALOGS import DIALOGS
-from gui.Scaleform.locale.SYSTEM_MESSAGES import SYSTEM_MESSAGES
 from gui.Scaleform.locale.MESSENGER import MESSENGER
+from gui.Scaleform.locale.SYSTEM_MESSAGES import SYSTEM_MESSAGES
 from gui.gold_fish import isGoldFishActionActive, isTimeToShowGoldFishPromo
 from gui.prb_control.entities.listener import IGlobalListener
 from gui.prb_control.settings import BATTLES_TO_SELECT_RANDOM_MIN_LIMIT
@@ -32,6 +32,7 @@ from gui.ranked_battles import ranked_helpers
 from gui.server_events import events_dispatcher as quests_events, recruit_helper
 from gui.server_events.finders import PM_FINAL_TOKEN_QUEST_IDS_BY_OPERATION_ID, getBranchByOperationId, BRANCH_TO_OPERATION_IDS, CHAMPION_BADGES_BY_BRANCH
 from gui.shared import EVENT_BUS_SCOPE, g_eventBus, events
+from gui.shared.events import PersonalMissionsEvent
 from gui.shared.gui_items.Tankman import Tankman
 from gui.shared.gui_items.Vehicle import Vehicle
 from gui.shared.gui_items.dossier.factories import getAchievementFactory
@@ -197,21 +198,6 @@ class ServiceChannelHandler(AwardHandler):
         return message is not None and message.type == self.__type and message.data is not None
 
 
-class MultiTypeServiceChannelHandler(ServiceChannelHandler):
-
-    def __init__(self, awardCtrl, handledTypes):
-        super(MultiTypeServiceChannelHandler, self).__init__(None, awardCtrl)
-        self.__types = handledTypes
-        return
-
-    def _needToShowAward(self, ctx):
-        _, message = ctx
-        return message is not None and message.type in self.__types and message.data is not None
-
-    def _showAward(self, ctx):
-        pass
-
-
 class EliteWindowHandler(AwardHandler):
 
     def init(self):
@@ -229,10 +215,10 @@ class EliteWindowHandler(AwardHandler):
             g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.ELITE_WINDOW, getViewName(VIEW_ALIAS.ELITE_WINDOW, vehTypeCompDescr), ctx={'vehTypeCompDescr': vehTypeCompDescr}), scope=EVENT_BUS_SCOPE.LOBBY)
 
 
-class PunishWindowHandler(MultiTypeServiceChannelHandler):
+class PunishWindowHandler(ServiceChannelHandler):
 
     def __init__(self, awardCtrl):
-        super(PunishWindowHandler, self).__init__(awardCtrl, (SYS_MESSAGE_TYPE.battleResults.index(), SYS_MESSAGE_TYPE.eventBattleResults.index()))
+        super(PunishWindowHandler, self).__init__(SYS_MESSAGE_TYPE.battleResults.index(), awardCtrl)
 
     def _showAward(self, ctx):
         _, message = ctx
@@ -298,10 +284,10 @@ class PersonalMissionBonusHandler(ServiceChannelHandler):
         return
 
 
-class PersonalMissionWindowAfterBattleHandler(MultiTypeServiceChannelHandler):
+class PersonalMissionWindowAfterBattleHandler(ServiceChannelHandler):
 
     def __init__(self, awardCtrl):
-        super(PersonalMissionWindowAfterBattleHandler, self).__init__(awardCtrl, (SYS_MESSAGE_TYPE.battleResults.index(), SYS_MESSAGE_TYPE.eventBattleResults.index()))
+        super(PersonalMissionWindowAfterBattleHandler, self).__init__(SYS_MESSAGE_TYPE.battleResults.index(), awardCtrl)
 
     def _showAward(self, ctx):
         achievements = []
@@ -369,10 +355,15 @@ class MarkByInvoiceHandler(ServiceChannelHandler):
         SystemMessages.pushI18nMessage(SYSTEM_MESSAGES.TOKENS_NOTIFICATION_MARK_ACQUIRED, count=tokenCount, type=SystemMessages.SM_TYPE.tokenWithMarkAcquired)
 
 
-class MarkByQuestHandler(MultiTypeServiceChannelHandler):
+class MarkByQuestHandler(ServiceChannelHandler):
 
     def __init__(self, awardCtrl):
-        super(MarkByQuestHandler, self).__init__(awardCtrl, (SYS_MESSAGE_TYPE.tokenQuests.index(), SYS_MESSAGE_TYPE.battleResults.index(), SYS_MESSAGE_TYPE.eventBattleResults.index()))
+        super(MarkByQuestHandler, self).__init__(SYS_MESSAGE_TYPE.battleResults.index(), awardCtrl)
+        self.__questTypes = [SYS_MESSAGE_TYPE.battleResults.index(), SYS_MESSAGE_TYPE.tokenQuests.index()]
+
+    def _needToShowAward(self, ctx):
+        _, message = ctx
+        return message is not None and message.type in self.__questTypes and message.data is not None
 
     def _showAward(self, ctx):
         messageData = ctx[1].data
@@ -389,13 +380,15 @@ class MarkByQuestHandler(MultiTypeServiceChannelHandler):
         SystemMessages.pushI18nMessage(SYSTEM_MESSAGES.TOKENS_NOTIFICATION_MARK_ACQUIRED, count=tokenCount, type=SystemMessages.SM_TYPE.tokenWithMarkAcquired)
 
 
-class RecruitHandler(MultiTypeServiceChannelHandler):
+class RecruitHandler(ServiceChannelHandler):
 
     def __init__(self, awardCtrl):
-        super(RecruitHandler, self).__init__(awardCtrl, (SYS_MESSAGE_TYPE.tokenQuests.index(),
-         SYS_MESSAGE_TYPE.invoiceReceived.index(),
-         SYS_MESSAGE_TYPE.battleResults.index(),
-         SYS_MESSAGE_TYPE.eventBattleResults.index()))
+        super(RecruitHandler, self).__init__(SYS_MESSAGE_TYPE.tokenQuests.index(), awardCtrl)
+        self.__questTypes = [SYS_MESSAGE_TYPE.battleResults.index(), SYS_MESSAGE_TYPE.tokenQuests.index(), SYS_MESSAGE_TYPE.invoiceReceived.index()]
+
+    def _needToShowAward(self, ctx):
+        _, message = ctx
+        return message is not None and message.type in self.__questTypes and message.data is not None
 
     def _showAward(self, ctx):
         messageData = ctx[1].data
@@ -418,10 +411,10 @@ class RecruitHandler(MultiTypeServiceChannelHandler):
         SystemMessages.pushMessage(i18n.makeString(MESSENGER.SERVICECHANNELMESSAGES_RECRUITGIFT_TEXT, event=event), SystemMessages.SM_TYPE.RecruitGift, messageData={'header': i18n.makeString(MESSENGER.SERVICECHANNELMESSAGES_RECRUITGIFT_HEADER)})
 
 
-class MotiveQuestsWindowHandler(MultiTypeServiceChannelHandler):
+class MotiveQuestsWindowHandler(ServiceChannelHandler):
 
     def __init__(self, awardCtrl):
-        super(MotiveQuestsWindowHandler, self).__init__(awardCtrl, (SYS_MESSAGE_TYPE.battleResults.index(), SYS_MESSAGE_TYPE.eventBattleResults.index()))
+        super(MotiveQuestsWindowHandler, self).__init__(SYS_MESSAGE_TYPE.battleResults.index(), awardCtrl)
 
     def _showAward(self, ctx):
         data = ctx[1].data
@@ -448,11 +441,11 @@ class QuestBoosterAwardHandler(ServiceChannelHandler):
         return
 
 
-class BoosterAfterBattleAwardHandler(MultiTypeServiceChannelHandler):
+class BoosterAfterBattleAwardHandler(ServiceChannelHandler):
     goodiesCache = dependency.descriptor(IGoodiesCache)
 
     def __init__(self, awardCtrl):
-        super(BoosterAfterBattleAwardHandler, self).__init__(awardCtrl, (SYS_MESSAGE_TYPE.battleResults.index(), SYS_MESSAGE_TYPE.eventBattleResults.index()))
+        super(BoosterAfterBattleAwardHandler, self).__init__(SYS_MESSAGE_TYPE.battleResults.index(), awardCtrl)
 
     def _showAward(self, ctx):
         goodies = ctx[1].data.get('goodies', {})
@@ -464,10 +457,10 @@ class BoosterAfterBattleAwardHandler(MultiTypeServiceChannelHandler):
         return
 
 
-class BattleQuestsAutoWindowHandler(MultiTypeServiceChannelHandler):
+class BattleQuestsAutoWindowHandler(ServiceChannelHandler):
 
     def __init__(self, awardCtrl):
-        super(BattleQuestsAutoWindowHandler, self).__init__(awardCtrl, (SYS_MESSAGE_TYPE.battleResults.index(), SYS_MESSAGE_TYPE.eventBattleResults.index()))
+        super(BattleQuestsAutoWindowHandler, self).__init__(SYS_MESSAGE_TYPE.battleResults.index(), awardCtrl)
 
     def _showAward(self, ctx):
         _, message = ctx
@@ -543,10 +536,6 @@ class PersonalMissionByAwardListHandler(PersonalMissionAutoWindowHandler):
         return False
 
     @staticmethod
-    def _showWindow(quest, context):
-        quests_events.showPersonalMissionAward(quest, context)
-
-    @staticmethod
     def _getContext(uniqueQuestID, completedQuests, completedQuestUniqueIDs):
         if personal_missions.g_cache.isPersonalMission(uniqueQuestID):
             pqType = personal_missions.g_cache.questByUniqueQuestID(uniqueQuestID)
@@ -565,12 +554,29 @@ class PersonalMissionOperationAwardHandler(BattleQuestsAutoWindowHandler):
     def __init__(self, awardCtrl):
         super(PersonalMissionOperationAwardHandler, self).__init__(awardCtrl)
         self.__postponedAwards = []
+        self.__openedOperationsAwards = set()
+        self.__delayedWindows = {}
+
+    def init(self):
+        super(PersonalMissionOperationAwardHandler, self).init()
+        g_eventBus.addListener(PersonalMissionsEvent.ON_AWARD_SCEEN_CLOSE, self.__onAwardScreenClose, EVENT_BUS_SCOPE.LOBBY)
+
+    def fini(self):
+        super(PersonalMissionOperationAwardHandler, self).fini()
+        g_eventBus.removeListener(PersonalMissionsEvent.ON_AWARD_SCEEN_CLOSE, self.__onAwardScreenClose, EVENT_BUS_SCOPE.LOBBY)
+        self.__delayedWindows.clear()
+        self.__postponedAwards = []
+        self.__openedOperationsAwards.clear()
 
     def _needToShowAward(self, ctx):
         _, msg = ctx
         if msg is not None and isinstance(msg.data, types.DictType):
             completedQuestUniqueIDs = msg.data.get('completedQuestIDs', set())
             for uniqueQuestID in completedQuestUniqueIDs:
+                if personal_missions.g_cache.isPersonalMission(uniqueQuestID):
+                    pqType = personal_missions.g_cache.questByUniqueQuestID(uniqueQuestID)
+                    if pqType.isFinal:
+                        self.__openedOperationsAwards.add((pqType.id, pqType.tileID))
                 for operationID, prefixes in PM_FINAL_TOKEN_QUEST_IDS_BY_OPERATION_ID.iteritems():
                     if uniqueQuestID.startswith(prefixes):
                         if uniqueQuestID in self.__CHAMPION_BADGES_IDS:
@@ -607,9 +613,22 @@ class PersonalMissionOperationAwardHandler(BattleQuestsAutoWindowHandler):
 
         return
 
-    @staticmethod
-    def _showWindow(quest, context):
-        quests_events.showPersonalMissionsOperationAwardsScreen(context)
+    def _showWindow(self, quest, context):
+        opId = context['operationID']
+        operations = [ data[1] for data in self.__openedOperationsAwards ]
+        if opId not in operations:
+            quests_events.showPersonalMissionsOperationAwardsScreen(context)
+        else:
+            self.__delayedWindows[opId] = context
+
+    def __onAwardScreenClose(self, event):
+        opID = event.ctx['operationID']
+        eventID = event.ctx['eventID']
+        if (eventID, opID) in self.__openedOperationsAwards:
+            self.__openedOperationsAwards.discard((eventID, opID))
+        operations = [ data[1] for data in self.__openedOperationsAwards ]
+        if opID not in operations and opID in self.__delayedWindows:
+            quests_events.showPersonalMissionsOperationAwardsScreen(self.__delayedWindows.pop(opID))
 
 
 class PersonalMissionOperationUnlockedHandler(BattleQuestsAutoWindowHandler):
@@ -893,6 +912,21 @@ class TelecomHandler(ServiceChannelHandler):
             shared_events.showTelecomAward(vehicleDesrs, hasCrew, hasBrotherhood)
         else:
             LOG_ERROR("Can't show telecom award window!")
+
+
+class MultiTypeServiceChannelHandler(ServiceChannelHandler):
+
+    def __init__(self, awardCtrl, handledTypes):
+        super(MultiTypeServiceChannelHandler, self).__init__(None, awardCtrl)
+        self.__types = handledTypes
+        return
+
+    def _needToShowAward(self, ctx):
+        _, message = ctx
+        return message is not None and message.type in self.__types and message.data is not None
+
+    def _showAward(self, ctx):
+        pass
 
 
 class RankedQuestsHandler(MultiTypeServiceChannelHandler):

@@ -32,7 +32,7 @@ def wrapCurrentValue(progress):
 
 
 def wrapVehiclesValue(progress):
-    return _wrapVehiclesValue(QUESTS.METRICS_TITLE_PROGRESS, progress.getCurrent(), progress.getDoneTargets())
+    return _wrapVehiclesValue(QUESTS.METRICS_TITLE_DONE, progress.getCurrent(), progress.getDoneTargets())
 
 
 def wrapLimiterValue(progress):
@@ -60,9 +60,12 @@ def _wrapSimpleValue(title, value):
 
 
 def _wrapVehiclesValue(title, current, targets):
+    vehTypes = [QUESTSPROGRESS.QP_DOT]
+    if targets:
+        vehTypes = [ QUESTSPROGRESS.getQPOrangeVehicleType(vehType) for vehType in targets ]
     return {'title': title,
      'value': _formatValue(current),
-     'vehicleTypes': [ QUESTSPROGRESS.getQPOrangeVehicleType(vehType) for vehType in targets ],
+     'vehicleTypes': vehTypes,
      'mType': METRICS_TYPES.VEHICLES_VALUE}
 
 

@@ -184,7 +184,8 @@ class Source(object):
             if mainNode.bonusDelayed is not None:
                 questClientData['bonus'].update(mainNode.bonusDelayed)
             questClientData['bonusDelayed'] = deepcopy(mainNode.bonusDelayed)
-            questClientData['conditions'] = mainNode.questClientConditions
+            if eventType != EVENT_TYPE.POTAPOV_QUEST:
+                questClientData['conditions'] = mainNode.questClientConditions
             if mainNode.groupContent:
                 questClientData['groupContent'] = mainNode.groupContent
             self.__stripServerQuestData(questClientData)
@@ -321,13 +322,11 @@ class Source(object):
          'GR': self.__readBattleResultsConditionList,
          'igrType': self.__readCondition_IGRType,
          'premium': self.__readCondition_bool,
-         'elite': self.__readCondition_bool,
          'daily': self.__readCondition_true,
          'bonusLimit': self.__readCondition_int,
          'refSystemRalXPPool': self.__readBattleResultsConditionList,
          'refSystemRalBought10Lvl': self.__readCondition_true,
          'isTutorialCompleted': self.__readCondition_bool,
-         'isEventActive': self.__readCondition_bool,
          'totalBattles': self.__readBattleResultsConditionList,
          'accountPrimaryTypes': self.__readListOfInts,
          'accountSecondaryTypes': self.__readListOfInts}

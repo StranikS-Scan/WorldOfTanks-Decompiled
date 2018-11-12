@@ -27,17 +27,4 @@ class GUN_MARKER_VIEW_CONSTANTS(object):
      6,
      9,
      12]
-    GUN_TAG_SHOT_RESULT_TYPES_EVENT = [0,
-     1,
-     2,
-     3,
-     4,
-     5,
-     6,
-     7,
-     8,
-     9,
-     10,
-     11,
-     12]
     DISPERSION_CIRCLE_RELOADING_TYPES = [0, 1, 2]

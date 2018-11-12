@@ -3,6 +3,7 @@
 from account_helpers import AccountSettings
 from gui.Scaleform.daapi.view.lobby.store.actions_formatters import getActiveActions, getNewActiveActions
 from gui.Scaleform.daapi.view.lobby.store.browser.ingameshop_helpers import isIngameShopEnabled
+from gui.Scaleform.daapi.view.lobby.store.browser.sound_constants import INGAMESHOP_SOUND_SPACE
 from gui.Scaleform.daapi.view.meta.StoreViewMeta import StoreViewMeta
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
@@ -16,6 +17,7 @@ from helpers.i18n import makeString
 from shared_utils import findFirst
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.lobby_context import ILobbyContext
+from gui.Scaleform.daapi import LobbySubView
 _TABS = ({'id': STORE_CONSTANTS.STORE_ACTIONS,
   'label': makeString(MENU.STORETAB_ACTIONS),
   'linkage': STORE_CONSTANTS.STORE_ACTIONS_LINKAGE}, {'id': STORE_CONSTANTS.SHOP,
@@ -29,10 +31,11 @@ def _getTabIndex(tabId):
     return index
 
 
-class StoreView(StoreViewMeta):
+class StoreView(LobbySubView, StoreViewMeta):
     __sound_env__ = ShopEnv
     eventsCache = dependency.descriptor(IEventsCache)
     lobbyContext = dependency.descriptor(ILobbyContext)
+    _COMMON_SOUND_SPACE = INGAMESHOP_SOUND_SPACE
 
     def __init__(self, ctx=None):
         super(StoreView, self).__init__(ctx)

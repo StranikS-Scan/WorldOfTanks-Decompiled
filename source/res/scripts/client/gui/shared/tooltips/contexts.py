@@ -22,7 +22,6 @@ from helpers.i18n import makeString
 from shared_utils import findFirst
 from skeletons.gui.game_control import IRankedBattlesController
 from skeletons.gui.goodies import IGoodiesCache
-from skeletons.gui.halloween_controller import IHalloweenController
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
 
@@ -160,13 +159,15 @@ class AwardContext(ShopContext):
         self._rentExpiryTime = None
         self._rentBattlesLeft = None
         self._rentWinsLeft = None
+        self._rentSeason = None
         return
 
-    def buildItem(self, intCD, tmanCrewLevel=None, rentExpiryTime=None, rentBattles=None, rentWins=None):
+    def buildItem(self, intCD, tmanCrewLevel=None, rentExpiryTime=None, rentBattles=None, rentWins=None, rentSeason=None):
         self._tmanRoleLevel = tmanCrewLevel
         self._rentExpiryTime = rentExpiryTime
         self._rentBattlesLeft = rentBattles
         self._rentWinsLeft = rentWins
+        self._rentSeason = rentSeason
         return self.itemsCache.items.getItemByCD(int(intCD))
 
     def getStatsConfiguration(self, item):
@@ -195,7 +196,8 @@ class AwardContext(ShopContext):
         return {'tmanRoleLevel': self._tmanRoleLevel,
          'rentExpiryTime': self._rentExpiryTime,
          'rentBattlesLeft': self._rentBattlesLeft,
-         'rentWinsLeft': self._rentWinsLeft}
+         'rentWinsLeft': self._rentWinsLeft,
+         'rentSeason': self._rentSeason}
 
 
 class Shop20Context(AwardContext):
@@ -820,18 +822,3 @@ class Shop20BattleBoosterContext(AwardBattleBoosterContext):
         value.inventoryCount = True
         value.vehiclesCount = True
         return value
-
-
-class HalloweenContext(ToolTipContext):
-    halloweenController = dependency.descriptor(IHalloweenController)
-
-    def __init__(self, fieldsToExclude=None):
-        super(HalloweenContext, self).__init__(None, fieldsToExclude)
-        return
-
-    def getProgress(self):
-        return self.halloweenController.getProgress()
-
-    def buildItem(self, level):
-        items = self.getProgress().items
-        return items[level]

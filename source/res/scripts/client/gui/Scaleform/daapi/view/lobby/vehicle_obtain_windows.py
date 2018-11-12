@@ -1,7 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/vehicle_obtain_windows.py
 from collections import namedtuple
+from soft_exception import SoftException
 import constants
+from rent_common import parseRentID, isWithinMaxRentTime
 from debug_utils import LOG_ERROR
 from gui import SystemMessages
 from gui.ClientUpdateManager import g_clientUpdateManager
@@ -28,7 +30,7 @@ from gui.shared.tooltips.formatters import packActionTooltipData
 from gui.shared.tooltips.formatters import packItemActionTooltipData, packItemRentActionTooltipData
 from gui.shared.utils import decorators
 from gui.shared.utils.functions import makeTooltip
-from helpers import i18n, time_utils, dependency
+from helpers import i18n, dependency
 from shared_utils import CONST_CONTAINER
 from skeletons.gui.game_control import IRentalsController, ITradeInController, IRestoreController
 from skeletons.gui.lobby_context import ILobbyContext
@@ -303,14 +305,28 @@ class VehicleBuyWindow(VehicleBuyWindowMeta):
         result = []
         rentPackages = vehicle.rentPackages
         for rentPackage in rentPackages:
-            days = rentPackage['days']
+            rentID = rentPackage['rentID']
+            rentType, packageID = parseRentID(rentID)
+            if rentType == constants.RentType.TIME_RENT:
+                label = i18n.makeString(MENU.SHOP_MENU_VEHICLE_RENT_DAYS, days=packageID)
+                enabled = isWithinMaxRentTime(vehicle.maxRentDuration, vehicle.rentLeftTime, packageID)
+            elif rentType == constants.RentType.SEASON_RENT:
+                seasonType = rentPackage['seasonType']
+                label = i18n.makeString(MENU.SHOP_MENU_VEHICLE_RENT_SEASON, season=packageID, seasonType=seasonType)
+                enabled = True
+            elif rentType == constants.RentType.SEASON_CYCLE_RENT:
+                seasonType = rentPackage['seasonType']
+                label = i18n.makeString(MENU.SHOP_MENU_VEHICLE_RENT_CYCLE, cycle=packageID, seasonType=seasonType)
+                enabled = True
+            else:
+                raise SoftException('Unknown rentType=[{}] in rentPackages ID [{}]!'.format(rentType, rentID))
             actionRentPrice = None
             if rentPackage['rentPrice'] != rentPackage['defaultRentPrice']:
                 actionRentPrice = packItemRentActionTooltipData(vehicle, rentPackage)
-            result.append({'itemId': days,
-             'label': i18n.makeString(MENU.SHOP_MENU_VEHICLE_RENT_DAYS, days=days),
+            result.append({'itemId': rentID,
+             'label': label,
              'price': rentPackage['rentPrice'].toMoneyTuple(),
-             'enabled': vehicle.maxRentDuration - vehicle.rentLeftTime >= days * time_utils.ONE_DAY,
+             'enabled': enabled,
              'actionPrice': actionRentPrice})
 
         result = self._addPriceBlock(result, vehicle, vehiclePricesActionData)

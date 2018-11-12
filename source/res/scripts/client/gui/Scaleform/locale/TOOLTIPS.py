@@ -331,7 +331,9 @@ class TOOLTIPS(object):
     WINDOWHELP_BODY = '#tooltips:windowHelp/body'
     ACTIONPRICE_HEADER = '#tooltips:actionPrice/header'
     ACTIONPRICE_BODY = '#tooltips:actionPrice/body'
+    ACTIONPRICE_BODY_SLOT = '#tooltips:actionPrice/body/slot'
     ACTIONPRICE_ACTIONNAME = '#tooltips:actionPrice/actionName'
+    ACTIONPRICE_ACTIONNAMESLOT = '#tooltips:actionPrice/actionNameSlot'
     ACTIONPRICE_FORACTION = '#tooltips:actionPrice/forAction'
     ACTIONPRICE_SEVERALACTIONS = '#tooltips:actionPrice/severalActions'
     ACTIONPRICE_SEVERALACTIONS_ACTION = '#tooltips:actionPrice/severalActions/action'
@@ -409,8 +411,6 @@ class TOOLTIPS(object):
     COLORFILTER_HEADER = '#tooltips:colorFilter/header'
     COLORFILTER_BODY = '#tooltips:colorFilter/body'
     COLORFILTER_ATTENTION = '#tooltips:colorFilter/attention'
-    DISABLEDPVENOTIFICATION_HEADER = '#tooltips:disabledPveNotification/header'
-    DISABLEDPVENOTIFICATION_BODY = '#tooltips:disabledPveNotification/body'
     GOLD_HEADER = '#tooltips:gold/header'
     GOLD_BODY = '#tooltips:gold/body'
     CREDITS_HEADER = '#tooltips:credits/header'
@@ -986,6 +986,7 @@ class TOOLTIPS(object):
     VEHICLEPARAMS_SPEEDLIMITS = '#tooltips:vehicleParams/speedLimits'
     VEHICLEPARAMS_ENGINEPOWER = '#tooltips:vehicleParams/enginePower'
     VEHICLEPARAMS_CHASSISROTATIONSPEED = '#tooltips:vehicleParams/chassisRotationSpeed'
+    VEHICLEPARAMS_MAXSTEERINGLOCKANGLE = '#tooltips:vehicleParams/maxSteeringLockAngle'
     VEHICLEPARAMS_DAMAGE = '#tooltips:vehicleParams/damage'
     VEHICLEPARAMS_HULLARMOR = '#tooltips:vehicleParams/hullArmor'
     VEHICLEPARAMS_TURRETARMOR = '#tooltips:vehicleParams/turretArmor'
@@ -1659,12 +1660,8 @@ class TOOLTIPS(object):
     AWARDITEM_BERTHS_BODY = '#tooltips:awardItem/berths/body'
     AWARDITEM_CREDITSFACTOR_HEADER = '#tooltips:awardItem/creditsFactor/header'
     AWARDITEM_CREDITSFACTOR_BODY = '#tooltips:awardItem/creditsFactor/body'
-    AWARDITEM_CREDITSFACTORHE_HEADER = '#tooltips:awardItem/creditsFactorHE/header'
-    AWARDITEM_CREDITSFACTORHE_BODY = '#tooltips:awardItem/creditsFactorHE/body'
     AWARDITEM_FREEXPFACTOR_HEADER = '#tooltips:awardItem/freeXPFactor/header'
     AWARDITEM_FREEXPFACTOR_BODY = '#tooltips:awardItem/freeXPFactor/body'
-    AWARDITEM_FREEXPFACTORHE_HEADER = '#tooltips:awardItem/freeXPFactorHE/header'
-    AWARDITEM_FREEXPFACTORHE_BODY = '#tooltips:awardItem/freeXPFactorHE/body'
     AWARDITEM_TANKMENXP_HEADER = '#tooltips:awardItem/tankmenXP/header'
     AWARDITEM_TANKMENXP_BODY = '#tooltips:awardItem/tankmenXP/body'
     AWARDITEM_TANKMENXPFACTOR_HEADER = '#tooltips:awardItem/tankmenXPFactor/header'
@@ -1673,10 +1670,6 @@ class TOOLTIPS(object):
     AWARDITEM_XP_BODY = '#tooltips:awardItem/xp/body'
     AWARDITEM_XPFACTOR_HEADER = '#tooltips:awardItem/xpFactor/header'
     AWARDITEM_XPFACTOR_BODY = '#tooltips:awardItem/xpFactor/body'
-    AWARDITEM_XPFACTORHE_HEADER = '#tooltips:awardItem/xpFactorHE/header'
-    AWARDITEM_XPFACTORHE_BODY = '#tooltips:awardItem/xpFactorHE/body'
-    AWARDITEM_XPFACTORELITEHE_HEADER = '#tooltips:awardItem/xpFactorEliteHE/header'
-    AWARDITEM_XPFACTORELITEHE_BODY = '#tooltips:awardItem/xpFactorEliteHE/body'
     AWARDITEM_SLOTS_HEADER = '#tooltips:awardItem/slots/header'
     AWARDITEM_SLOTS_BODY = '#tooltips:awardItem/slots/body'
     AWARDITEM_FREETOKENS_HEADER = '#tooltips:awardItem/freeTokens/header'
@@ -1790,6 +1783,7 @@ class TOOLTIPS(object):
     TANK_PARAMS_DESC_ENGINEPOWERPERTON = '#tooltips:tank_params/desc/enginePowerPerTon'
     TANK_PARAMS_DESC_SPEEDLIMITS = '#tooltips:tank_params/desc/speedLimits'
     TANK_PARAMS_DESC_CHASSISROTATIONSPEED = '#tooltips:tank_params/desc/chassisRotationSpeed'
+    TANK_PARAMS_DESC_MAXSTEERINGLOCKANGLE = '#tooltips:tank_params/desc/maxSteeringLockAngle'
     TANK_PARAMS_DESC_TIMEOFREACHING = '#tooltips:tank_params/desc/timeOfReaching'
     TANK_PARAMS_DESC_ATTAINABLESPEED = '#tooltips:tank_params/desc/attainableSpeed'
     TANK_PARAMS_DESC_HULLARMOR = '#tooltips:tank_params/desc/hullArmor'
@@ -1825,6 +1819,9 @@ class TOOLTIPS(object):
     TANK_PARAMS_DESC_SWITCHONTIME = '#tooltips:tank_params/desc/switchOnTime'
     TANK_PARAMS_DESC_SWITCHOFFTIME = '#tooltips:tank_params/desc/switchOffTime'
     TANK_PARAMS_DESC_SWITCHTIME = '#tooltips:tank_params/desc/switchTime'
+    TANK_PARAMS_DESC_WHEELEDSWITCHONTIME = '#tooltips:tank_params/desc/wheeledSwitchOnTime'
+    TANK_PARAMS_DESC_WHEELEDSWITCHOFFTIME = '#tooltips:tank_params/desc/wheeledSwitchOffTime'
+    TANK_PARAMS_DESC_WHEELEDSWITCHTIME = '#tooltips:tank_params/desc/wheeledSwitchTime'
     TANK_PARAMS_DESC_STUNMINDURATION = '#tooltips:tank_params/desc/stunMinDuration'
     TANK_PARAMS_DESC_STUNMAXDURATION = '#tooltips:tank_params/desc/stunMaxDuration'
     VEHICLEPARAMS_TITLE_VALUETEMPLATE = '#tooltips:vehicleParams/title/valueTemplate'
@@ -1863,6 +1860,7 @@ class TOOLTIPS(object):
     VEHICLEPREVIEW_CREW_INFLUENCE_AIMINGTIME = '#tooltips:vehiclePreview/crew/influence/aimingTime'
     VEHICLEPREVIEW_CREW_INFLUENCE_MOBILITY = '#tooltips:vehiclePreview/crew/influence/mobility'
     VEHICLEPREVIEW_CREW_INFLUENCE_CHASSISROTATIONSPEED = '#tooltips:vehiclePreview/crew/influence/chassisRotationSpeed'
+    VEHICLEPREVIEW_CREW_INFLUENCE_MAXSTEERINGLOCKANGLE = '#tooltips:vehiclePreview/crew/influence/maxSteeringLockAngle'
     VEHICLEPREVIEW_CREW_INFLUENCE_ENGINEPOWER = '#tooltips:vehiclePreview/crew/influence/enginePower'
     VEHICLEPREVIEW_CREW_INFLUENCE_RADIODISTANCE = '#tooltips:vehiclePreview/crew/influence/radioDistance'
     VEHICLEPREVIEW_CREW_ADDITIONALROLES = '#tooltips:vehiclePreview/crew/additionalRoles'
@@ -1895,7 +1893,7 @@ class TOOLTIPS(object):
     VEHICLEPREVIEW_ELITEBONUS_CREDIT_BODY = '#tooltips:vehiclePreview/eliteBonus/credit/body'
     VEHICLEPREVIEW_HISTORICALREFERENCE_TITLE = '#tooltips:vehiclePreview/historicalReference/title'
     VEHICLEPREVIEW_SHOPPACK_TITLE = '#tooltips:vehiclePreview/shopPack/title'
-    VEHICLEPREVIEW_SHOPPACK_DESC = '#tooltips:vehiclePreview/shopPack/desc'
+    VEHICLEPREVIEW_SHOPPACK_COUNT = '#tooltips:vehiclePreview/shopPack/count'
     VEHICLEPREVIEW_SHOPPACK_DATETIMETOOLTIP_HEADER = '#tooltips:vehiclePreview/shopPack/dateTimeTooltip/header'
     VEHICLEPREVIEW_SHOPPACK_DATETIMETOOLTIP_BODY = '#tooltips:vehiclePreview/shopPack/dateTimeTooltip/body'
     VEHICLEPREVIEW_BOXTOOLTIP_HEADER = '#tooltips:vehiclePreview/boxTooltip/header'
@@ -1907,6 +1905,7 @@ class TOOLTIPS(object):
     VEHICLEPREVIEW_BOXTOOLTIP_INSCRIPTION_HEADER = '#tooltips:vehiclePreview/boxTooltip/inscription/header'
     VEHICLEPREVIEW_BOXTOOLTIP_MODIFICATION_HEADER = '#tooltips:vehiclePreview/boxTooltip/modification/header'
     VEHICLEPREVIEW_BOXTOOLTIP_PAINT_HEADER = '#tooltips:vehiclePreview/boxTooltip/paint/header'
+    VEHICLEPREVIEW_BOXTOOLTIP_PROJECTIONDECAL_HEADER = '#tooltips:vehiclePreview/boxTooltip/projectionDecal/header'
     CONTENTBUYVIEW_SLOTCHECKBOX_NOTENOUGHSLOTS_HEADER = '#tooltips:contentBuyView/slotCheckbox/notEnoughSlots/header'
     CONTENTBUYVIEW_SLOTCHECKBOX_NOTENOUGHSLOTS_BODY = '#tooltips:contentBuyView/slotCheckbox/notEnoughSlots/body'
     SQUADWINDOW_EVENTVEHICLE = '#tooltips:squadWindow/eventVehicle'
@@ -2190,7 +2189,6 @@ class TOOLTIPS(object):
     PERSONALMISSIONS_FREESHEET_NOTENOUGH = '#tooltips:personalMissions/freeSheet/notEnough'
     PERSONALMISSIONS_BADGE_TITLE = '#tooltips:personalMissions/badge/title'
     PERSONALMISSIONS_BADGE_DESCR = '#tooltips:personalMissions/badge/descr'
-    PERSONALMISSIONS_BADGEHALLOWEEN_DESCR = '#tooltips:personalMissions/badgeHalloween/descr'
     PERSONALMISSIONS_OPERATION_TITLE = '#tooltips:personalMissions/operation/title'
     PERSONALMISSIONS_OPERATION_MISSIONS_TITLE = '#tooltips:personalMissions/operation/missions/title'
     PERSONALMISSIONS_OPERATION_AWARDS_TITLE_DONE = '#tooltips:personalMissions/operation/awards/title/done'
@@ -2538,6 +2536,8 @@ class TOOLTIPS(object):
     SHOWDAMAGEICON_BLOCKED = '#tooltips:showDamageIcon/blocked'
     BATTLESESSION_ALERT_HEADER = '#tooltips:battleSession/alert/header'
     BATTLESESSION_ALERT_BODY = '#tooltips:battleSession/alert/body'
+    MARATHON_SUBTITLE = '#tooltips:marathon/subtitle'
+    MARATHON_DATE = '#tooltips:marathon/date'
     KURSK_HEADER = '#tooltips:kursk/header'
     KURSK_BODY = '#tooltips:kursk/body'
     KURSK_PROGRESS = '#tooltips:kursk/progress'
@@ -2560,13 +2560,20 @@ class TOOLTIPS(object):
     XPEXCHANGEWINDOW_GOLD_GOLDAFTEREXCHANGE_BODY = '#tooltips:xpExchangewindow/gold/goldAfterExchange/body'
     STORAGE_FILTER_NORESULTSBTN_HEADER = '#tooltips:storage/filter/noResultsBtn/header'
     STORAGE_FILTER_NORESULTSBTN_BODY = '#tooltips:storage/filter/noResultsBtn/body'
-    STORAGE_FILTER_PERSONALRESERVES_BTNS_LEVEL_SMALL = '#tooltips:storage/filter/personalReserves/btns/level/small'
-    STORAGE_FILTER_PERSONALRESERVES_BTNS_LEVEL_MEDIUM = '#tooltips:storage/filter/personalReserves/btns/level/medium'
-    STORAGE_FILTER_PERSONALRESERVES_BTNS_LEVEL_BIG = '#tooltips:storage/filter/personalReserves/btns/level/big'
+    STORAGE_FILTER_PERSONALRESERVES_BTNS_DURATION = '#tooltips:storage/filter/personalReserves/btns/duration'
     STORAGE_FILTER_PERSONALRESERVES_BTNS_TYPE_VEHICLEEXP = '#tooltips:storage/filter/personalReserves/btns/type/vehicleExp'
     STORAGE_FILTER_PERSONALRESERVES_BTNS_TYPE_CREWEXP = '#tooltips:storage/filter/personalReserves/btns/type/crewExp'
     STORAGE_FILTER_PERSONALRESERVES_BTNS_TYPE_FREEEXP = '#tooltips:storage/filter/personalReserves/btns/type/freeExp'
     STORAGE_FILTER_PERSONALRESERVES_BTNS_TYPE_CREDITS = '#tooltips:storage/filter/personalReserves/btns/type/credits'
+    STORAGE_FILTER_MODULES_BTNS_TYPE_GUNS = '#tooltips:storage/filter/modules/btns/type/guns'
+    STORAGE_FILTER_MODULES_BTNS_TYPE_TOWERS = '#tooltips:storage/filter/modules/btns/type/towers'
+    STORAGE_FILTER_MODULES_BTNS_TYPE_ENGINES = '#tooltips:storage/filter/modules/btns/type/engines'
+    STORAGE_FILTER_MODULES_BTNS_TYPE_CHASSIS = '#tooltips:storage/filter/modules/btns/type/chassis'
+    STORAGE_FILTER_MODULES_BTNS_TYPE_RADIOS = '#tooltips:storage/filter/modules/btns/type/radios'
+    STORAGE_FILTER_SHELLS_BTNS_TYPE_ARMOR_PIERCING = '#tooltips:storage/filter/shells/btns/type/armor_piercing'
+    STORAGE_FILTER_SHELLS_BTNS_TYPE_ARMOR_PIERCING_CR = '#tooltips:storage/filter/shells/btns/type/armor_piercing_cr'
+    STORAGE_FILTER_SHELLS_BTNS_TYPE_HOLLOW_CHARGE = '#tooltips:storage/filter/shells/btns/type/hollow_charge'
+    STORAGE_FILTER_SHELLS_BTNS_TYPE_HIGH_EXPLOSIVE = '#tooltips:storage/filter/shells/btns/type/high_explosive'
     STORAGE_FILTERCOUNTER_CLOSEBUTTON_HEADER = '#tooltips:storage/filterCounter/closeButton/header'
     STORAGE_FILTERCOUNTER_CLOSEBUTTON_BODY = '#tooltips:storage/filterCounter/closeButton/body'
     STORAGE_MAINMENU_FOR_SELL_HEADER = '#tooltips:storage/mainMenu/for_sell/header'
@@ -2594,27 +2601,6 @@ class TOOLTIPS(object):
     QUESTS_AWARDS_VEHICLERENT_RENTLEFT_RENTBATTLES = '#tooltips:quests/awards/vehicleRent/rentLeft/rentBattles'
     QUESTS_AWARDS_VEHICLERENT_RENTLEFT_RENTWINS = '#tooltips:quests/awards/vehicleRent/rentLeft/rentWins'
     QUESTS_AWARDS_VEHICLERENT_BOTTOM = '#tooltips:quests/awards/vehicleRent/bottom'
-    HALLOWEEN_TITLE = '#tooltips:halloween/title'
-    HALLOWEEN_COURAGELEVEL = '#tooltips:halloween/courageLevel'
-    HALLOWEEN_COURAGELEVELMAX = '#tooltips:halloween/courageLevelMax'
-    HALLOWEEN_LEVELAVAILABLE = '#tooltips:halloween/levelAvailable'
-    HALLOWEEN_LEVELISNOTAVAILABLE = '#tooltips:halloween/levelIsNotAvailable'
-    HALLOWEEN_MAXLEVEL = '#tooltips:halloween/maxLevel'
-    HALLOWEEN_CURRENTLEVEL = '#tooltips:halloween/currentLevel'
-    HALLOWEEN_LEVELACHIEVED = '#tooltips:halloween/levelAchieved'
-    HALLOWEEN_LEVELAVAILABILITY = '#tooltips:halloween/levelAvailability'
-    HALLOWEEN_NEXTLEVELAVAILABILITY = '#tooltips:halloween/nextLevelAvailability'
-    HALLOWEEN_SOULSTONEXTLEVEL = '#tooltips:halloween/soulsToNextLevel'
-    HALLOWEEN_BONUSDESCRIPTION = '#tooltips:halloween/bonusDescription'
-    HALLOWEEN_VEHICLEDESCRIPTION = '#tooltips:halloween/vehicleDescription'
-    HALLOWEEN_VICTORYSCREEN_PREMIUMACCOUNT_TITLE = '#tooltips:halloween/victoryScreen/premiumAccount/title'
-    HALLOWEEN_VICTORYSCREEN_PREMIUMACCOUNT_DESC = '#tooltips:halloween/victoryScreen/premiumAccount/desc'
-    HALLOWEEN_VICTORYSCREEN_MAXLEVEL_TITLE = '#tooltips:halloween/victoryScreen/maxLevel/title'
-    HALLOWEEN_VICTORYSCREEN_MAXLEVEL_DESC = '#tooltips:halloween/victoryScreen/maxLevel/desc'
-    HALLOWEEN_VICTORYSCREEN_EXP1_TITLE = '#tooltips:halloween/victoryScreen/exp1/title'
-    HALLOWEEN_VICTORYSCREEN_EXP1_DESC = '#tooltips:halloween/victoryScreen/exp1/desc'
-    HALLOWEEN_VICTORYSCREEN_EXP2_TITLE = '#tooltips:halloween/victoryScreen/exp2/title'
-    HALLOWEEN_VICTORYSCREEN_EXP2_DESC = '#tooltips:halloween/victoryScreen/exp2/desc'
     HEADER_BUTTONS_ALL_CLICKDESC_ENUM = (HEADER_BUTTONS_CRYSTAL_CLICKDESC,
      HEADER_BUTTONS_GOLD_CLICKDESC,
      HEADER_BUTTONS_CREDITS_CLICKDESC,
@@ -2625,7 +2611,8 @@ class TOOLTIPS(object):
      VEHICLEPREVIEW_BOXTOOLTIP_EMBLEM_HEADER,
      VEHICLEPREVIEW_BOXTOOLTIP_INSCRIPTION_HEADER,
      VEHICLEPREVIEW_BOXTOOLTIP_MODIFICATION_HEADER,
-     VEHICLEPREVIEW_BOXTOOLTIP_PAINT_HEADER)
+     VEHICLEPREVIEW_BOXTOOLTIP_PAINT_HEADER,
+     VEHICLEPREVIEW_BOXTOOLTIP_PROJECTIONDECAL_HEADER)
     CUSTOMIZATION_TABS_ALL_BODY_ENUM = (CUSTOMIZATION_TABS_PAINT_BODY,
      CUSTOMIZATION_TABS_CAMOUFLAGE_BODY,
      CUSTOMIZATION_TABS_EMBLEM_BODY,
@@ -2690,15 +2677,11 @@ class TOOLTIPS(object):
      AWARDITEM_BATTLETOKEN_SEVERAL_BODY,
      AWARDITEM_BERTHS_BODY,
      AWARDITEM_CREDITSFACTOR_BODY,
-     AWARDITEM_CREDITSFACTORHE_BODY,
      AWARDITEM_FREEXPFACTOR_BODY,
-     AWARDITEM_FREEXPFACTORHE_BODY,
      AWARDITEM_TANKMENXP_BODY,
      AWARDITEM_TANKMENXPFACTOR_BODY,
      AWARDITEM_XP_BODY,
      AWARDITEM_XPFACTOR_BODY,
-     AWARDITEM_XPFACTORHE_BODY,
-     AWARDITEM_XPFACTORELITEHE_BODY,
      AWARDITEM_SLOTS_BODY,
      AWARDITEM_FREETOKENS_BODY,
      AWARDITEM_COMPLETIONTOKENS_BODY,
@@ -2887,15 +2870,11 @@ class TOOLTIPS(object):
      AWARDITEM_BATTLETOKEN_SEVERAL_HEADER,
      AWARDITEM_BERTHS_HEADER,
      AWARDITEM_CREDITSFACTOR_HEADER,
-     AWARDITEM_CREDITSFACTORHE_HEADER,
      AWARDITEM_FREEXPFACTOR_HEADER,
-     AWARDITEM_FREEXPFACTORHE_HEADER,
      AWARDITEM_TANKMENXP_HEADER,
      AWARDITEM_TANKMENXPFACTOR_HEADER,
      AWARDITEM_XP_HEADER,
      AWARDITEM_XPFACTOR_HEADER,
-     AWARDITEM_XPFACTORHE_HEADER,
-     AWARDITEM_XPFACTORELITEHE_HEADER,
      AWARDITEM_SLOTS_HEADER,
      AWARDITEM_FREETOKENS_HEADER,
      AWARDITEM_TANKMEN_HEADER,
@@ -3085,6 +3064,7 @@ class TOOLTIPS(object):
      TANK_PARAMS_DESC_ENGINEPOWERPERTON,
      TANK_PARAMS_DESC_SPEEDLIMITS,
      TANK_PARAMS_DESC_CHASSISROTATIONSPEED,
+     TANK_PARAMS_DESC_MAXSTEERINGLOCKANGLE,
      TANK_PARAMS_DESC_TIMEOFREACHING,
      TANK_PARAMS_DESC_ATTAINABLESPEED,
      TANK_PARAMS_DESC_HULLARMOR,
@@ -3118,6 +3098,9 @@ class TOOLTIPS(object):
      TANK_PARAMS_DESC_SWITCHONTIME,
      TANK_PARAMS_DESC_SWITCHOFFTIME,
      TANK_PARAMS_DESC_SWITCHTIME,
+     TANK_PARAMS_DESC_WHEELEDSWITCHONTIME,
+     TANK_PARAMS_DESC_WHEELEDSWITCHOFFTIME,
+     TANK_PARAMS_DESC_WHEELEDSWITCHTIME,
      TANK_PARAMS_DESC_STUNMINDURATION,
      TANK_PARAMS_DESC_STUNMAXDURATION)
 

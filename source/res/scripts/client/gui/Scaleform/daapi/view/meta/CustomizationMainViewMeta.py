@@ -40,14 +40,14 @@ class CustomizationMainViewMeta(View):
     def onPressEscBtn(self):
         self._printOverrideError('onPressEscBtn')
 
-    def onPressSelectNextItem(self):
+    def onPressSelectNextItem(self, reverse):
         self._printOverrideError('onPressSelectNextItem')
-
-    def onPressSelectPrevItem(self):
-        self._printOverrideError('onPressSelectPrevItem')
 
     def playCustomSound(self, sound):
         self._printOverrideError('playCustomSound')
+
+    def clearSelectionAndHidePropertySheet(self):
+        self._printOverrideError('clearSelectionAndHidePropertySheet')
 
     def as_hideS(self, value):
         return self.flashObject.as_hide(value) if self._isDAAPIInited() else None
@@ -79,8 +79,8 @@ class CustomizationMainViewMeta(View):
     def as_selectSeasonS(self, value):
         return self.flashObject.as_selectSeason(value) if self._isDAAPIInited() else None
 
-    def as_setAnchorSwitchersVisibleS(self, value, slotId, isNarrowSlot=False):
-        return self.flashObject.as_setAnchorSwitchersVisible(value, slotId, isNarrowSlot) if self._isDAAPIInited() else None
-
     def as_releaseItemS(self):
         return self.flashObject.as_releaseItem() if self._isDAAPIInited() else None
+
+    def as_showCarouselsArrowsNotificationS(self, text):
+        return self.flashObject.as_showCarouselsArrowsNotification(text) if self._isDAAPIInited() else None

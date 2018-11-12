@@ -19,8 +19,6 @@ from gui.battle_control.controllers import hit_direction_ctrl
 from gui.battle_control.controllers import interfaces
 from gui.battle_control.controllers import msgs_ctrl
 from gui.battle_control.controllers import period_ctrl
-from gui.battle_control.controllers import eventpoints_ctrl
-from gui.battle_control.controllers import battle_hints_ctrl
 from gui.battle_control.controllers import personal_efficiency_ctrl
 from gui.battle_control.controllers import respawn_ctrl
 from gui.battle_control.controllers import team_bases_ctrl
@@ -29,7 +27,6 @@ from gui.battle_control.controllers import tmp_ignore_list_ctrl
 from gui.battle_control.controllers import vehicle_state_ctrl
 from gui.battle_control.controllers import view_points_ctrl
 from gui.battle_control.controllers.quest_progress import quest_progress_ctrl
-from gui.battle_control.controllers import event_controller
 from skeletons.gui.battle_session import ISharedControllersLocator, IDynamicControllersLocator
 from gui.battle_control.controllers import epic_respawn_ctrl
 from gui.battle_control.controllers import progress_circle_ctrl
@@ -172,18 +169,6 @@ class SharedControllersLocator(_ControllersLocator, ISharedControllersLocator):
     @property
     def questProgress(self):
         return self._repository.getController(BATTLE_CTRL_ID.QUEST_PROGRESS)
-
-    @property
-    def eventPoints(self):
-        return self._repository.getController(BATTLE_CTRL_ID.EVENTPOINTS_VIEW)
-
-    @property
-    def battleHints(self):
-        return self._repository.getController(BATTLE_CTRL_ID.BATTLE_HINTS)
-
-    @property
-    def eventController(self):
-        return self._repository.getController(BATTLE_CTRL_ID.EVENT_VIEW)
 
 
 class DynamicControllersLocator(_ControllersLocator, IDynamicControllersLocator):
@@ -338,9 +323,6 @@ class SharedControllersRepository(_ControllersRepository):
         repository.addArenaViewController(period_ctrl.createPeriodCtrl(setup), setup)
         repository.addViewController(hit_direction_ctrl.createHitDirectionController(setup), setup)
         repository.addViewController(game_messages_ctrl.createGameMessagesController(setup), setup)
-        repository.addViewController(eventpoints_ctrl.createEventPointsViewController(setup), setup)
-        repository.addViewController(battle_hints_ctrl.createBattleHintsController(setup), setup)
-        repository.addArenaController(event_controller.EventController(setup), setup)
         return repository
 
 

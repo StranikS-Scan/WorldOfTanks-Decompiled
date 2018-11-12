@@ -6,12 +6,12 @@ from gui.Scaleform.locale.MENU import MENU
 from gui.shared.formatters import getItemPricesVO
 from gui.shared.gui_items.gui_item_economics import ITEM_PRICE_EMPTY
 from helpers import dependency
-from items.components.c11n_constants import SeasonType
 from shared_utils import first
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.customization import ICustomizationService
 from gui.shared.tooltips.formatters import packActionTooltipData
 from gui.shared.tooltips import ACTION_TOOLTIPS_TYPE
+from gui.Scaleform.daapi.view.lobby.customization.shared import SEASON_TYPE_TO_NAME
 
 class CustomizationOptions(object):
     BUY = 'buy'
@@ -55,12 +55,13 @@ class CustomizationItemCMHandler(AbstractContextMenuHandler):
         inventoryCount = self.__ctx.getItemInventoryCount(item)
         availableForSale = inventoryCount > 0 and item.getSellPrice() != ITEM_PRICE_EMPTY and not item.isRentable and not item.isHidden
         style = self.__ctx.modifiedStyle
-        removeFromTankEnabled = style.intCD == item.intCD if style is not None else False
-        for outfit in (self.__ctx.getModifiedOutfit(season) for season in SeasonType.COMMON_SEASONS):
-            if outfit.has(item):
-                removeFromTankEnabled = True
-                break
-
+        if style is not None:
+            removeFromTankEnabled = style.intCD == item.intCD
+            removeFromTankText = CustomizationOptions.REMOVE_FROM_TANK
+        else:
+            outfit = self.__ctx.getModifiedOutfit(self.__ctx.currentSeason)
+            removeFromTankEnabled = outfit.has(item)
+            removeFromTankText = '/'.join((CustomizationOptions.REMOVE_FROM_TANK, SEASON_TYPE_TO_NAME.get(self.__ctx.currentSeason)))
         accountMoney = self.itemsCache.items.stats.money
         availableForPurchase = item.buyCount > 0 and not item.getBuyPrice() == ITEM_PRICE_EMPTY and item.getBuyPrice().price <= accountMoney
         showAlert = len(sellPriceVO[0]) > 1
@@ -78,7 +79,7 @@ class CustomizationItemCMHandler(AbstractContextMenuHandler):
           'showAlert': showAlert,
           'tooltipVO': tooltipVO}, None, 'CurrencyContextMenuItem'),
          self._makeSeparator(),
-         self._makeItem(CustomizationOptions.REMOVE_FROM_TANK, MENU.cst_item_ctx_menu(CustomizationOptions.REMOVE_FROM_TANK), {'enabled': removeFromTankEnabled})]
+         self._makeItem(CustomizationOptions.REMOVE_FROM_TANK, MENU.cst_item_ctx_menu(removeFromTankText), {'enabled': removeFromTankEnabled})]
 
     def _initFlashValues(self, ctx):
         self._intCD = ctx.itemID

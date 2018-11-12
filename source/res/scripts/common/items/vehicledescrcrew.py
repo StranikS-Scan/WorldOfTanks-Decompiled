@@ -2,20 +2,18 @@
 # Embedded file name: scripts/common/items/VehicleDescrCrew.py
 import tankmen
 from debug_utils import *
-from qualifiers import CREW_ROLE
 from soft_exception import SoftException
 _DO_DEBUG_LOG = False
 
 class VehicleDescrCrew(object):
 
-    def __init__(self, vehicleDescr, crewCompactDescrs, mainSkillQualifiersApplier, activityFlags=None, isFire=False):
+    def __init__(self, vehicleDescr, crewCompactDescrs, activityFlags=None, isFire=False):
         if activityFlags is None:
             activityFlags = [True] * len(crewCompactDescrs)
         self._vehicleDescr = vehicleDescr
         self._crewCompactDescrs = crewCompactDescrs
         self._activityFlags = activityFlags
         self._isFire = isFire
-        self._mainSkillQualifiersApplier = mainSkillQualifiersApplier
         skills = self._validateAndComputeCrew()
         self._skills = skills
         if _DO_DEBUG_LOG:
@@ -117,14 +115,11 @@ class VehicleDescrCrew(object):
             pass
 
     def _calcLeverIncreaseForNonCommander(self, commonLevelIncrease):
-        applier = self._mainSkillQualifiersApplier
         if not self._activityFlags[self._commanderIdx]:
             levelIncreaseByCommander = 0.0
         else:
             commanderLevel = self._skills['commander'][0][1] + commonLevelIncrease
-            commanderUpdatedLevel = applier[CREW_ROLE.ALL](commanderLevel)
-            commanderUpdatedLevel = applier['commander'](commanderUpdatedLevel)
-            levelIncreaseByCommander = commanderUpdatedLevel / tankmen.COMMANDER_ADDITION_RATIO
+            levelIncreaseByCommander = commanderLevel / tankmen.COMMANDER_ADDITION_RATIO
         result = commonLevelIncrease + levelIncreaseByCommander
         if _DO_DEBUG_LOG:
             LOG_DEBUG('levelIncreaseByCommander={}'.format(levelIncreaseByCommander))
@@ -159,7 +154,6 @@ class VehicleDescrCrew(object):
                 level = level[0][1]
                 universalistAddition = (level + commonLevelIncrease) / numInactive
                 universalistAddition *= skillsConfig.getSkill('commander_universalist').efficiency
-        applier = self._mainSkillQualifiersApplier
         for skillName in tankmen.ROLES:
             if isFire:
                 efficiency = 0.0
@@ -169,9 +163,7 @@ class VehicleDescrCrew(object):
                 baseSummLevel, summLevel, numInactive = self._computeSummSkillLevel(skillData, nonCommanderLevelIncrease=nonCommanderLevelIncrease, commanderLevelIncrease=commonLevelIncrease)
                 summLevel += numInactive * universalistAddition
                 avgLevel = summLevel / len(skillData)
-                avgUpdatedLevel = applier[CREW_ROLE.ALL](avgLevel)
-                avgUpdatedLevel = applier[skillName](avgUpdatedLevel)
-                efficiency = avgUpdatedLevel / MAX_SKILL_LEVEL
+                efficiency = avgLevel / MAX_SKILL_LEVEL
                 baseAvgLevel = baseSummLevel / len(skillData)
             skillEfficiencies.append((skillName, efficiency, baseAvgLevel))
 

@@ -29,17 +29,16 @@ _ANY_ITEM_TYPE = {v for _, v in ItemPackType.getIterator()} - set(ItemPackTypeGr
 _NATIVE_ITEM_TYPE = set(itertools.chain(ItemPackTypeGroup.VEHICLE, ItemPackTypeGroup.ITEM))
 _CUSTOMIZATION_ITEM_TYPE = set(itertools.chain(ItemPackTypeGroup.STYLE, ItemPackTypeGroup.CAMOUFLAGE, ItemPackTypeGroup.PAINT, ItemPackTypeGroup.DECAL, ItemPackTypeGroup.MODIFICATION))
 _CUSTOMIZATION_TYPES_MAP = {ItemPackType.STYLE: CustomizationType.STYLE,
+ ItemPackType.CAMOUFLAGE_ALL: CustomizationType.CAMOUFLAGE,
  ItemPackType.CAMOUFLAGE_SUMMER: CustomizationType.CAMOUFLAGE,
  ItemPackType.CAMOUFLAGE_WINTER: CustomizationType.CAMOUFLAGE,
  ItemPackType.CAMOUFLAGE_DESERT: CustomizationType.CAMOUFLAGE,
- ItemPackType.CAMOUFLAGE: CustomizationType.CAMOUFLAGE,
+ ItemPackType.PAINT_ALL: CustomizationType.PAINT,
  ItemPackType.PAINT_SUMMER: CustomizationType.PAINT,
  ItemPackType.PAINT_WINTER: CustomizationType.PAINT,
  ItemPackType.PAINT_DESERT: CustomizationType.PAINT,
- ItemPackType.PAINT: CustomizationType.PAINT,
  ItemPackType.DECAL_1: CustomizationType.DECAL,
  ItemPackType.DECAL_2: CustomizationType.DECAL,
- ItemPackType.DECAL: CustomizationType.DECAL,
  ItemPackType.MODIFICATION: CustomizationType.MODIFICATION}
 _BOOSTER_ITEM_TYPE = set(ItemPackTypeGroup.GOODIE)
 _UNCOUNTABLE_ITEM_TYPE = {ItemPackType.CUSTOM_PREMIUM,
@@ -50,40 +49,36 @@ _PACK_ITEMS_SORT_ORDER = list(itertools.chain(ItemPackTypeGroup.CUSTOM, ItemPack
 _TOOLTIP_TYPE = {ItemPackType.ITEM_DEVICE: TOOLTIPS_CONSTANTS.SHOP_20_MODULE,
  ItemPackType.ITEM_EQUIPMENT: TOOLTIPS_CONSTANTS.SHOP_20_MODULE,
  ItemPackType.ITEM_SHELL: TOOLTIPS_CONSTANTS.SHOP_20_SHELL,
- ItemPackType.GOODIE: TOOLTIPS_CONSTANTS.SHOP_20_BOOSTER,
  ItemPackType.GOODIE_CREDITS: TOOLTIPS_CONSTANTS.SHOP_20_BOOSTER,
  ItemPackType.GOODIE_EXPERIENCE: TOOLTIPS_CONSTANTS.SHOP_20_BOOSTER,
  ItemPackType.GOODIE_CREW_EXPERIENCE: TOOLTIPS_CONSTANTS.SHOP_20_BOOSTER,
  ItemPackType.GOODIE_FREE_EXPERIENCE: TOOLTIPS_CONSTANTS.SHOP_20_BOOSTER,
- ItemPackType.VEHICLE: TOOLTIPS_CONSTANTS.AWARD_VEHICLE,
  ItemPackType.VEHICLE_MEDIUM: TOOLTIPS_CONSTANTS.AWARD_VEHICLE,
  ItemPackType.VEHICLE_HEAVY: TOOLTIPS_CONSTANTS.AWARD_VEHICLE,
  ItemPackType.VEHICLE_LIGHT: TOOLTIPS_CONSTANTS.AWARD_VEHICLE,
  ItemPackType.VEHICLE_SPG: TOOLTIPS_CONSTANTS.AWARD_VEHICLE,
  ItemPackType.VEHICLE_AT_SPG: TOOLTIPS_CONSTANTS.AWARD_VEHICLE,
  ItemPackType.STYLE: TOOLTIPS_CONSTANTS.SHOP_20_CUSTOMIZATION_ITEM,
- ItemPackType.PAINT: TOOLTIPS_CONSTANTS.SHOP_20_CUSTOMIZATION_ITEM,
+ ItemPackType.PAINT_ALL: TOOLTIPS_CONSTANTS.SHOP_20_CUSTOMIZATION_ITEM,
  ItemPackType.PAINT_DESERT: TOOLTIPS_CONSTANTS.SHOP_20_CUSTOMIZATION_ITEM,
  ItemPackType.PAINT_SUMMER: TOOLTIPS_CONSTANTS.SHOP_20_CUSTOMIZATION_ITEM,
  ItemPackType.PAINT_WINTER: TOOLTIPS_CONSTANTS.SHOP_20_CUSTOMIZATION_ITEM,
- ItemPackType.DECAL: TOOLTIPS_CONSTANTS.SHOP_20_CUSTOMIZATION_ITEM,
  ItemPackType.DECAL_1: TOOLTIPS_CONSTANTS.SHOP_20_CUSTOMIZATION_ITEM,
  ItemPackType.DECAL_2: TOOLTIPS_CONSTANTS.SHOP_20_CUSTOMIZATION_ITEM,
  ItemPackType.MODIFICATION: TOOLTIPS_CONSTANTS.SHOP_20_CUSTOMIZATION_ITEM,
- ItemPackType.CAMOUFLAGE: TOOLTIPS_CONSTANTS.SHOP_20_CUSTOMIZATION_ITEM,
+ ItemPackType.CAMOUFLAGE_ALL: TOOLTIPS_CONSTANTS.SHOP_20_CUSTOMIZATION_ITEM,
  ItemPackType.CAMOUFLAGE_DESERT: TOOLTIPS_CONSTANTS.SHOP_20_CUSTOMIZATION_ITEM,
  ItemPackType.CAMOUFLAGE_SUMMER: TOOLTIPS_CONSTANTS.SHOP_20_CUSTOMIZATION_ITEM,
  ItemPackType.CAMOUFLAGE_WINTER: TOOLTIPS_CONSTANTS.SHOP_20_CUSTOMIZATION_ITEM}
-_ICONS = {ItemPackType.CAMOUFLAGE: RES_SHOP.MAPS_SHOP_REWARDS_48X48_PRIZE_CAMOUFLAGE,
+_ICONS = {ItemPackType.CAMOUFLAGE_ALL: RES_SHOP.MAPS_SHOP_REWARDS_48X48_PRIZE_CAMOUFLAGE,
  ItemPackType.CAMOUFLAGE_WINTER: RES_SHOP.MAPS_SHOP_REWARDS_48X48_PRIZE_CAMOUFLAGE,
  ItemPackType.CAMOUFLAGE_SUMMER: RES_SHOP.MAPS_SHOP_REWARDS_48X48_PRIZE_CAMOUFLAGE,
  ItemPackType.CAMOUFLAGE_DESERT: RES_SHOP.MAPS_SHOP_REWARDS_48X48_PRIZE_CAMOUFLAGE,
  ItemPackType.STYLE: RES_SHOP.MAPS_SHOP_REWARDS_48X48_STYLE_ICON,
- ItemPackType.DECAL: RES_SHOP.MAPS_SHOP_REWARDS_48X48_PRIZE_EMBLEM,
  ItemPackType.DECAL_1: RES_SHOP.MAPS_SHOP_REWARDS_48X48_PRIZE_EMBLEM,
  ItemPackType.DECAL_2: RES_SHOP.MAPS_SHOP_REWARDS_48X48_PRIZE_INSCRIPTION,
  ItemPackType.MODIFICATION: RES_SHOP.MAPS_SHOP_REWARDS_48X48_EFFECT_ICON,
- ItemPackType.PAINT: RES_SHOP.MAPS_SHOP_REWARDS_48X48_PAINT_ICON,
+ ItemPackType.PAINT_ALL: RES_SHOP.MAPS_SHOP_REWARDS_48X48_PAINT_ICON,
  ItemPackType.PAINT_WINTER: RES_SHOP.MAPS_SHOP_REWARDS_48X48_PAINT_ICON,
  ItemPackType.PAINT_SUMMER: RES_SHOP.MAPS_SHOP_REWARDS_48X48_PAINT_ICON,
  ItemPackType.PAINT_DESERT: RES_SHOP.MAPS_SHOP_REWARDS_48X48_PAINT_ICON,
@@ -148,11 +143,11 @@ def getCompensateItemsCount(rawItem, itemsCache):
                 if item.isInInventory:
                     return 1
                 return 0
-            if item.descriptor.maxNumber > 0:
-                inventoryFreeSpace = item.descriptor.maxNumber - item.inventoryCount
-                itemsPackEntryCount = rawItem.count
-                if inventoryFreeSpace < itemsPackEntryCount:
-                    return itemsPackEntryCount - inventoryFreeSpace
+            if item.isLimited:
+                buyCount = max(item.descriptor.maxNumber - item.boundInventoryCount.get(-1, 0), 0)
+                if buyCount > 0:
+                    return rawItem.count - buyCount
+                return rawItem.count
     return 0
 
 
@@ -198,7 +193,7 @@ def getItemTitle(rawItem, item, forBox=False):
         if forBox:
             tooltipKey = TOOLTIPS.getItemBoxTooltip(item.itemTypeName)
             if tooltipKey:
-                title = _ms(tooltipKey, value=item.userName)
+                title = _ms(tooltipKey, group=item.userType, value=item.userName)
                 title = title.replace(_DOUBLE_OPEN_QUOTES, _OPEN_QUOTES).replace(_DOUBLE_CLOSE_QUOTES, _CLOSE_QUOTES)
     elif rawItem.type == ItemPackType.CUSTOM_SLOT:
         title = _ms(key=TOOLTIPS.AWARDITEM_SLOTS_HEADER)
@@ -251,7 +246,7 @@ def showItemTooltip(toolTipMgr, rawItem, item):
     else:
         header = getItemTitle(rawItem, item)
         body = getItemDescription(rawItem, item)
-        tooltip = '{HEADER}%s{/HEADER}{BODY}%s{/BODY}' % (header, body)
+        tooltip = '{{HEADER}}{header}{{/HEADER}}{{BODY}}{body}{{/BODY}}'.format(header=header, body=body)
         toolTipMgr.onCreateComplexTooltip(tooltip, 'INFO')
     return
 
@@ -517,7 +512,7 @@ def addCompensationInfo(itemsVOs, itemsPack, itemsCache=None):
 
     def hasCompensation(itemVO):
         for ci in compensationInfo:
-            if ci['id'] == itemVO['id'] and ci['type'] == itemVO['type']:
+            if ci['id'] == str(itemVO['id']) and ci['type'] == itemVO['type']:
                 return ci['hasCompensation']
 
         return False
@@ -525,5 +520,7 @@ def addCompensationInfo(itemsVOs, itemsPack, itemsCache=None):
     for itemsVO in itemsVOs:
         for vo in itemsVO:
             vo['hasCompensation'] = hasCompensation(vo)
+            for insideBoxVO in vo['rawData']['items'] if vo['rawData'] else []:
+                insideBoxVO['hasCompensation'] = hasCompensation(insideBoxVO)
 
     return itemsVOs

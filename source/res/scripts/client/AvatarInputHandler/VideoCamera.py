@@ -16,7 +16,6 @@ from gui.battle_control import event_dispatcher as gui_event_dispatcher
 from helpers import dependency
 from helpers import isPlayerAvatar
 from helpers.CallbackDelayer import CallbackDelayer, TimeDeltaMeter
-from DynamicCameras import DynamicCameraInterpolator
 from skeletons.gui.battle_session import IBattleSessionProvider
 
 class KeySensor(object):
@@ -247,6 +246,7 @@ class VideoCamera(ICamera, CallbackDelayer, TimeDeltaMeter):
         TimeDeltaMeter.__init__(self, time.clock)
         self._cam = BigWorld.FreeCamera()
         self._cam.invViewProvider = Math.MatrixProduct()
+        self.__cameraTransition = BigWorld.TransitionCamera()
         self.__ypr = Math.Vector3()
         self.__position = Math.Vector3()
         self.__defaultFov = BigWorld.projection().fov
@@ -274,7 +274,6 @@ class VideoCamera(ICamera, CallbackDelayer, TimeDeltaMeter):
         self.__isModeOverride = False
         self.__basisMProv = _VehicleBounder()
         self.__entityPicker = _VehiclePicker()
-        self.__cameraInterpolator = DynamicCameraInterpolator()
         return
 
     def getReasonsAffectCameraDirectly(self):
@@ -289,6 +288,7 @@ class VideoCamera(ICamera, CallbackDelayer, TimeDeltaMeter):
     def destroy(self):
         CallbackDelayer.destroy(self)
         self._cam = None
+        self.__cameraTransition = None
         return
 
     def enable(self, **args):
@@ -298,7 +298,12 @@ class VideoCamera(ICamera, CallbackDelayer, TimeDeltaMeter):
         self._cam.set(camMatrix)
         self._cam.invViewProvider.a = camMatrix
         self._cam.invViewProvider.b = mathUtils.createIdentityMatrix()
-        BigWorld.camera(self._cam)
+        cameraTransitionDuration = args.get('transitionDuration', -1)
+        if cameraTransitionDuration > 0:
+            self.__cameraTransition.start(BigWorld.camera().matrix, self._cam, cameraTransitionDuration)
+            BigWorld.camera(self.__cameraTransition)
+        else:
+            BigWorld.camera(self._cam)
         worldMat = Math.Matrix(self._cam.invViewMatrix)
         self.__ypr = Math.Vector3(worldMat.yaw, worldMat.pitch, worldMat.roll)
         self.__position = worldMat.translation
@@ -311,18 +316,12 @@ class VideoCamera(ICamera, CallbackDelayer, TimeDeltaMeter):
         self._alignerToLand.disable()
         self._cam.speedTreeTarget = self._cam.invViewMatrix
         self.resetMovement()
-        cameraTransitionDuration = args.get('transitionDuration', -1)
-        if cameraTransitionDuration > 0:
-            previousCamMatrix = args.get('camMatrix', None)
-            self.__setupCameraTransition(cameraTransitionDuration, previousCamMatrix)
         if isPlayerAvatar() and self.guiSessionProvider.getCtx().isPlayerObserver():
             BigWorld.player().positionControl.moveTo(self.__position)
             BigWorld.player().positionControl.followCamera(True)
         return
 
     def disable(self):
-        if self.__cameraInterpolator.isInitialized:
-            self.__cameraInterpolator.reset()
         self.stopCallback(self._update)
         BigWorld.projection().fov = self.__defaultFov
         self._alignerToLand.disable()
@@ -390,17 +389,6 @@ class VideoCamera(ICamera, CallbackDelayer, TimeDeltaMeter):
         self._movementSensor.addVelocity(movementShift)
         GUI.mcursor().position = Math.Vector2(0, 0)
 
-    def __setupCameraTransition(self, duration, previousMatrix):
-        self.__position = previousMatrix.translation
-        invView = self._cam.invViewProvider.a
-        self.__ypr = Math.Vector3(invView.yaw, invView.pitch, invView.roll)
-        previousRotation = Math.Vector3(previousMatrix.yaw, previousMatrix.pitch, previousMatrix.roll)
-        rotationInterpolation = DynamicCameraInterpolator.DataProvider(start=lambda startingRotation=previousRotation: previousRotation, end=lambda : self.__ypr, interpolate=None, set=lambda interpolatedRotation: self._cam.invViewProvider.a.setRotateYPR(interpolatedRotation))
-        translationInterpolation = DynamicCameraInterpolator.DataProvider(start=lambda startingPoint=previousMatrix.translation: startingPoint, end=lambda : self.__position, interpolate=None, set=lambda interpolatedPosition: mathUtils.setTranslation(self._cam.invViewProvider.a, interpolatedPosition))
-        self.__cameraInterpolator.setup(duration, (rotationInterpolation, translationInterpolation))
-        self.__cameraInterpolator.start()
-        return
-
     def __calcCurrentDeltaAdjusted(self):
         delta = self.measureDeltaTime()
         if delta > 1.0:
@@ -445,15 +433,13 @@ class VideoCamera(ICamera, CallbackDelayer, TimeDeltaMeter):
         lookAtPosition = self.__basisMProv.lookAtPosition
         if lookAtPosition is not None:
             self.__ypr = self.__getLookAtYPR(lookAtPosition)
-        if self.__cameraInterpolator.active:
+        if BigWorld.camera() == self.__cameraTransition and self.__cameraTransition.isInTransition():
             self.__ypr = self.__clampPR(self.__ypr)
         else:
             self.__ypr = self.__clampYPR(self.__ypr)
         self.__position = self._checkSpaceBounds(prevPos, self.__position)
         self._cam.invViewProvider.a = mathUtils.createRTMatrix(self.__ypr, self.__position)
         self._cam.invViewProvider.b = self.__basisMProv.matrix
-        if self.__cameraInterpolator.active:
-            self.__cameraInterpolator.tick()
         BigWorld.projection().fov = self.__calcFov()
         self.__resetSenses()
         return 0.0

@@ -30,7 +30,6 @@ class EPIC_METAGAME_WWISE_SOUND_EVENTS(object):
 
 class EPIC_SOUND(object):
     EPIC_MSG_SOUNDS_ENABLED = True
-    PLAY_MSG_RETREAT_SUCCESSFUL = False
     BF_EB_ABILITY_LIST = ()
     BF_EB_ABILITY_DEPLOYING = 'eb_ability_deployed'
     BF_EB_ABILITY_INSPIRE_DEPLOYED = 'eb_ability_inspire_deployed'

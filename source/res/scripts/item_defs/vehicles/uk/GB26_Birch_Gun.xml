@@ -24,7 +24,7 @@
   <camouflage>
     <priceFactor>	0.8	</priceFactor>
     <tiling>	1 1 0 0	</tiling>
-    <exclusionMask>	vehicles/british/GB26_Birch_Gun/Birch_Gun_chassis_01_AM.dds	</exclusionMask>
+    <exclusionMask></exclusionMask>
   </camouflage>
   <hull>
     <fakeTurrets>
@@ -93,7 +93,7 @@
       </slot>
       <slot>
         <slotType>	player	</slotType>
-        <slotId>	2	</slotId>
+        <slotId>	4	</slotId>
         <rayStart>	-1.27806 0.385737 -1.09173	</rayStart>
         <rayEnd>	-1.07806 0.385737 -1.09173	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
@@ -103,7 +103,7 @@
       </slot>
       <slot>
         <slotType>	inscription	</slotType>
-        <slotId>	3	</slotId>
+        <slotId>	36	</slotId>
         <rayStart>	0.0177746 0.312099 -2.03956	</rayStart>
         <rayEnd>	0.0177122 0.139426 -1.93864	</rayEnd>
         <rayUp>	0.000315151 0.871271 0.490802	</rayUp>
@@ -113,7 +113,7 @@
       </slot>
       <slot>
         <slotType>	camouflage	</slotType>
-        <slotId>	8	</slotId>
+        <slotId>	3	</slotId>
         <anchorPosition>	0.000086 0.426324 -1.65823	</anchorPosition>
         <anchorDirection>	0.000085 0.72972 -0.683746	</anchorDirection>
       </slot>
@@ -899,7 +899,7 @@
       <customizationSlots>
         <slot>
           <slotType>	style	</slotType>
-          <slotId>	13	</slotId>
+          <slotId>	257	</slotId>
           <anchorPosition>	0.000000 1.47598 -0.000000	</anchorPosition>
           <anchorDirection>	-0.000000 1 0.000000	</anchorDirection>
         </slot>
@@ -1677,7 +1677,7 @@
       <customizationSlots>
         <slot>
           <slotType>	style	</slotType>
-          <slotId>	7	</slotId>
+          <slotId>	257	</slotId>
           <anchorPosition>	0.000200938 1.47568 0.000010	</anchorPosition>
           <anchorDirection>	0.000000 1 0.000000	</anchorDirection>
         </slot>
@@ -1756,7 +1756,7 @@
           <customizationSlots>
             <slot>
               <slotType>	camouflage	</slotType>
-              <slotId>	10	</slotId>
+              <slotId>	770	</slotId>
               <anchorPosition>	0.000171754 0.217941 1.0061	</anchorPosition>
               <anchorDirection>	-0.000000 0.000000 1	</anchorDirection>
               <applyTo>	4096	</applyTo>
@@ -1789,7 +1789,7 @@
       <customizationSlots>
         <slot>
           <slotType>	player	</slotType>
-          <slotId>	4	</slotId>
+          <slotId>	514	</slotId>
           <rayStart>	0.491589 0.714835 1.32131	</rayStart>
           <rayEnd>	0.491589 0.636635 1.13724	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
@@ -1800,7 +1800,7 @@
         </slot>
         <slot>
           <slotType>	camouflage	</slotType>
-          <slotId>	9	</slotId>
+          <slotId>	513	</slotId>
           <anchorPosition>	0.00014642 0.66942 0.592088	</anchorPosition>
           <anchorDirection>	0.000000 0.576778 0.816901	</anchorDirection>
         </slot>
@@ -1881,7 +1881,7 @@
           <customizationSlots>
             <slot>
               <slotType>	camouflage	</slotType>
-              <slotId>	11	</slotId>
+              <slotId>	770	</slotId>
               <anchorPosition>	0.000362087 0.140591 1.01866	</anchorPosition>
               <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
               <applyTo>	4096	</applyTo>
@@ -1914,7 +1914,7 @@
       <customizationSlots>
         <slot>
           <slotType>	player	</slotType>
-          <slotId>	5	</slotId>
+          <slotId>	514	</slotId>
           <rayStart>	0.494315 0.647905 1.3476	</rayStart>
           <rayEnd>	0.494315 0.583661 1.1582	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
@@ -1924,7 +1924,7 @@
         </slot>
         <slot>
           <slotType>	camouflage	</slotType>
-          <slotId>	6	</slotId>
+          <slotId>	513	</slotId>
           <anchorPosition>	-0.0116836 0.642832 0.617171	</anchorPosition>
           <anchorDirection>	0.000000 0.732472 0.680797	</anchorDirection>
         </slot>
@@ -1963,9 +1963,11 @@
       <engines>
         <Vickers-Armstrong>
           <smplEnginePower>	95.1553	</smplEnginePower>
+          <smplFwMaxSpeed>	45	</smplFwMaxSpeed>
         </Vickers-Armstrong>
         <Vickers-Armstrong_MkII>
           <smplEnginePower>	116.3009	</smplEnginePower>
+          <smplFwMaxSpeed>	45	</smplFwMaxSpeed>
         </Vickers-Armstrong_MkII>
       </engines>
       <chassis>

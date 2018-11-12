@@ -87,7 +87,7 @@
       </slot>
       <slot>
         <slotType>	inscription	</slotType>
-        <slotId>	2	</slotId>
+        <slotId>	36	</slotId>
         <rayStart>	0.00260356 -0.0280744 2.04068	</rayStart>
         <rayEnd>	0.00260356 -0.113132 1.85967	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
@@ -97,7 +97,7 @@
       </slot>
       <slot>
         <slotType>	inscription	</slotType>
-        <slotId>	3	</slotId>
+        <slotId>	37	</slotId>
         <rayStart>	0.755149 0.526756 -0.454892	</rayStart>
         <rayEnd>	0.555147 0.526756 -0.454913	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
@@ -107,7 +107,7 @@
       </slot>
       <slot>
         <slotType>	camouflage	</slotType>
-        <slotId>	9	</slotId>
+        <slotId>	3	</slotId>
         <anchorPosition>	0.000000 0.939215 -1.18293	</anchorPosition>
         <anchorDirection>	0.000000 0.621813 -0.783166	</anchorDirection>
       </slot>
@@ -776,7 +776,7 @@
       <customizationSlots>
         <slot>
           <slotType>	style	</slotType>
-          <slotId>	7	</slotId>
+          <slotId>	257	</slotId>
           <anchorPosition>	0.00056288 2.28945 0.432065	</anchorPosition>
           <anchorDirection>	-0.000000 1 -0.000000	</anchorDirection>
         </slot>
@@ -860,7 +860,7 @@
           <customizationSlots>
             <slot>
               <slotType>	camouflage	</slotType>
-              <slotId>	6	</slotId>
+              <slotId>	770	</slotId>
               <anchorPosition>	0.000388402 -0.0255715 0.580703	</anchorPosition>
               <anchorDirection>	-0.000000 0.000000 1	</anchorDirection>
               <applyTo>	4096	</applyTo>
@@ -920,7 +920,7 @@
           <customizationSlots>
             <slot>
               <slotType>	camouflage	</slotType>
-              <slotId>	8	</slotId>
+              <slotId>	770	</slotId>
               <anchorPosition>	0.000006 -0.0212544 0.349038	</anchorPosition>
               <anchorDirection>	-0.000000 0.000000 1	</anchorDirection>
               <applyTo>	4096	</applyTo>
@@ -953,7 +953,7 @@
       <customizationSlots>
         <slot>
           <slotType>	player	</slotType>
-          <slotId>	4	</slotId>
+          <slotId>	514	</slotId>
           <rayStart>	-0.64099 0.294904 0.0162623	</rayStart>
           <rayEnd>	-0.447659 0.246564 -0.000652477	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
@@ -963,7 +963,7 @@
         </slot>
         <slot>
           <slotType>	player	</slotType>
-          <slotId>	5	</slotId>
+          <slotId>	515	</slotId>
           <rayStart>	0.596591 0.262643 0.0301221	</rayStart>
           <rayEnd>	0.499925 0.238474 0.0216646	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
@@ -974,7 +974,7 @@
         </slot>
         <slot>
           <slotType>	camouflage	</slotType>
-          <slotId>	11	</slotId>
+          <slotId>	513	</slotId>
           <anchorPosition>	0.000000 0.585585 0.000000	</anchorPosition>
           <anchorDirection>	-0.000000 1 0.000000	</anchorDirection>
         </slot>
@@ -998,6 +998,7 @@
       <engines>
         <Hanomag_WD_50PS>
           <smplEnginePower>	52.86406	</smplEnginePower>
+          <smplFwMaxSpeed>	25	</smplFwMaxSpeed>
         </Hanomag_WD_50PS>
       </engines>
       <chassis>

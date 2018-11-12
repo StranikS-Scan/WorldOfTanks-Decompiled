@@ -480,7 +480,7 @@ class ShopRequester(AbstractSyncDataRequester, ShopCommonStats, IShopRequester):
     def freeXPConversionWithDiscount(self):
         goody = self.bestGoody(self.personalXPExchangeDiscounts)
         rate = self.freeXPConversion
-        return (getPriceWithDiscount(rate[0], goody.resource), rate[1]) if goody else rate
+        return (rate[0], getPriceWithDiscount(rate[1], goody.resource)) if goody else rate
 
     @property
     def isXPConversionActionActive(self):

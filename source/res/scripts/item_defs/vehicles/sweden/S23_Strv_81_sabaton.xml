@@ -1245,7 +1245,7 @@
           <customizationSlots>
             <slot>
               <slotType>	insigniaOnGun	</slotType>
-              <slotId>	3	</slotId>
+              <slotId>	771	</slotId>
               <rayStart>	0.0708198 0.0180447 3.3192	</rayStart>
               <rayEnd>	-0.0529365 0.00234985 3.31628	</rayEnd>
               <rayUp>	0.078 0.076 5	</rayUp>
@@ -1282,7 +1282,7 @@
       <customizationSlots>
         <slot>
           <slotType>	fixedInscription	</slotType>
-          <slotId>	2	</slotId>
+          <slotId>	714	</slotId>
           <rayStart>	-0.912988 0.995604 -0.658022	</rayStart>
           <rayEnd>	-0.794895 0.836418 -0.631364	</rayEnd>
           <rayUp>	0.695141 0.705913 0.135887	</rayUp>
@@ -1310,10 +1310,12 @@
       <engines>
         <Meteor_Mark_IVB>
           <smplEnginePower>	900	</smplEnginePower>
+          <smplFwMaxSpeed>	50	</smplFwMaxSpeed>
         </Meteor_Mark_IVB>
       </engines>
       <chassis>
         <Chassis_S23_Strv_81_sabaton>
+          <axleCount>	5	</axleCount>
           <grounds>
             <ground>
               <medium>

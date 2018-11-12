@@ -33,7 +33,7 @@ from account_helpers.AccountSettings import AccountSettings, SHOW_OPT_DEVICE_HIN
 from skeletons.gui.game_control import IBootcampController
 from bootcamp.Bootcamp import g_bootcamp
 _PARAMS_LISTS = {GUI_ITEM_TYPE.RADIO: ('radioDistance',),
- GUI_ITEM_TYPE.CHASSIS: ('rotationSpeed', 'maxLoad'),
+ GUI_ITEM_TYPE.CHASSIS: ('rotationSpeed', 'maxSteeringLockAngle', 'maxLoad'),
  GUI_ITEM_TYPE.ENGINE: ('enginePower', 'fireStartingChance'),
  GUI_ITEM_TYPE.TURRET: ('armor', 'rotationSpeed', 'circularVisionRadius'),
  GUI_ITEM_TYPE.GUN: ('avgDamageList', 'avgPiercingPower', 'reloadTime')}
@@ -77,7 +77,8 @@ def _extendByArtefactData(targetData, module, slotIndex):
 
 def _extendByOptionalDeviceData(targetData, module):
     highlight = SLOT_HIGHLIGHT_TYPES.EQUIPMENT_PLUS if module.isDeluxe() else SLOT_HIGHLIGHT_TYPES.NO_HIGHLIGHT
-    _extendHighlightData(targetData, highlight)
+    _extendHighlightData(targetData, highlight, highlight)
+    _extendOverlayData(targetData, highlight)
 
 
 def _extendByBattleBoosterData(targetData, module, vehicle):
@@ -86,15 +87,17 @@ def _extendByBattleBoosterData(targetData, module, vehicle):
         template = g_htmlTemplates['html_templates:lobby/popovers']['crewBattleBooster']
         desc = module.getCrewBoosterDescription(not skillLearnt, template.source)
         targetData['desc'] = text_styles.main(desc)
-        highlight = SLOT_HIGHLIGHT_TYPES.BATTLE_BOOSTER if skillLearnt else SLOT_HIGHLIGHT_TYPES.BATTLE_BOOSTER_CREW_REPLACE
-        _extendHighlightData(targetData, highlight)
+        overlay = SLOT_HIGHLIGHT_TYPES.BATTLE_BOOSTER if skillLearnt else SLOT_HIGHLIGHT_TYPES.BATTLE_BOOSTER_CREW_REPLACE
+        _extendHighlightData(targetData, SLOT_HIGHLIGHT_TYPES.BATTLE_BOOSTER, SLOT_HIGHLIGHT_TYPES.BATTLE_BOOSTER)
+        _extendOverlayData(targetData, overlay)
     else:
         if getattr(BigWorld.player(), 'isLongDisconnectedFromCenter', False):
             targetData['notAffectedTTC'] = False
         else:
             targetData['notAffectedTTC'] = not module.isAffectsOnVehicle(vehicle)
         targetData['desc'] = text_styles.main(module.getOptDeviceBoosterDescription(vehicle, text_styles.bonusAppliedText))
-        _extendHighlightData(targetData, SLOT_HIGHLIGHT_TYPES.BATTLE_BOOSTER)
+        _extendHighlightData(targetData, SLOT_HIGHLIGHT_TYPES.BATTLE_BOOSTER, SLOT_HIGHLIGHT_TYPES.BATTLE_BOOSTER)
+        _extendOverlayData(targetData, SLOT_HIGHLIGHT_TYPES.BATTLE_BOOSTER)
     targetData['count'] = module.inventoryCount
     targetData['removeButtonLabel'] = MENU.BOOSTERFITTINGRENDERER_REMOVEBUTTON
     targetData['buyButtonLabel'] = MENU.BOOSTERFITTINGRENDERER_BUYBUTTON
@@ -111,9 +114,13 @@ def _extendByBattleAbilityData(targetData, ability, slotIndex):
     targetData['changeOrderButtonLabel'] = EPIC_BATTLE.FITTINGSELECTPOPOVER_CHANGEORDER
 
 
-def _extendHighlightData(targetData, highlight):
+def _extendHighlightData(targetData, highlight, bgHighlight):
     targetData['highlightType'] = highlight
-    targetData['bgHighlightType'] = highlight
+    targetData['bgHighlightType'] = bgHighlight
+
+
+def _extendOverlayData(targetData, overlay):
+    targetData['overlayType'] = overlay
 
 
 def _getInstallReason(module, vehicle, reason, slotIdx=None):
@@ -288,7 +295,7 @@ class BattleAbilitySelectPopover(HangarFittingSelectPopover):
     itemsCache = dependency.descriptor(IItemsCache)
 
     def onManageBattleAbilitiesClicked(self):
-        showEpicBattleSkillView()
+        showEpicBattleSkillView(showBackButton=False)
         self.destroy()
 
     def _prepareInitialData(self):

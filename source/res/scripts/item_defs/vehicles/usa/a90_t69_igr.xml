@@ -22,7 +22,7 @@
   <camouflage>
     <priceFactor>	1.6	</priceFactor>
     <tiling>	1 1 0 0	</tiling>
-    <exclusionMask>	vehicles/american/A90_T69/T69_chassis_01_AM.dds	</exclusionMask>
+    <exclusionMask></exclusionMask>
   </camouflage>
   <hull>
     <armor>
@@ -794,7 +794,7 @@
           <customizationSlots>
             <slot>
               <slotType>	insigniaOnGun	</slotType>
-              <slotId>	6	</slotId>
+              <slotId>	771	</slotId>
               <rayStart>	-0.000025 -0.0493455 3.06951	</rayStart>
               <rayEnd>	0.0875754 -0.0953482 3.06695	</rayEnd>
               <rayUp>	0.095 0.089 4	</rayUp>
@@ -830,7 +830,7 @@
       <customizationSlots>
         <slot>
           <slotType>	player	</slotType>
-          <slotId>	2	</slotId>
+          <slotId>	514	</slotId>
           <rayStart>	-1.11749 0.213656 -1.4671	</rayStart>
           <rayEnd>	-0.745138 0.0703055 -1.43872	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
@@ -840,7 +840,7 @@
         </slot>
         <slot>
           <slotType>	inscription	</slotType>
-          <slotId>	3	</slotId>
+          <slotId>	546	</slotId>
           <rayStart>	-1.13888 0.144899 -0.888908	</rayStart>
           <rayEnd>	-0.741298 0.101048 -0.889589	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
@@ -850,7 +850,7 @@
         </slot>
         <slot>
           <slotType>	inscription	</slotType>
-          <slotId>	4	</slotId>
+          <slotId>	547	</slotId>
           <rayStart>	1.13888 0.144899 -0.888908	</rayStart>
           <rayEnd>	0.741298 0.101048 -0.889589	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
@@ -860,7 +860,7 @@
         </slot>
         <slot>
           <slotType>	player	</slotType>
-          <slotId>	5	</slotId>
+          <slotId>	515	</slotId>
           <rayStart>	1.11749 0.213656 -1.4671	</rayStart>
           <rayEnd>	0.745138 0.0703055 -1.43872	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
@@ -889,6 +889,7 @@
       <engines>
         <Continental_AOSI-895-5_IGR>
           <smplEnginePower>	581.5046	</smplEnginePower>
+          <smplFwMaxSpeed>	51.5	</smplFwMaxSpeed>
         </Continental_AOSI-895-5_IGR>
       </engines>
       <chassis>

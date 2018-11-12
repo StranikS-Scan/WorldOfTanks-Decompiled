@@ -48,7 +48,6 @@ class SETTINGS_SECTIONS(CONST_CONTAINER):
     ENCYCLOPEDIA_RECOMMENDATIONS_3 = 'ENCYCLOPEDIA_RECOMMENDATIONS_3'
     UI_STORAGE = 'UI_STORAGE'
     LINKEDSET_QUESTS = 'LINKEDSET_QUESTS'
-    HALLOWEEN_QUESTS = 'HALLOWEEN_QUESTS'
 
 
 class UI_STORAGE_KEYS(CONST_CONTAINER):
@@ -56,11 +55,6 @@ class UI_STORAGE_KEYS(CONST_CONTAINER):
     AUTO_RELOAD_MARK_IS_SHOWN = 'auto_reload_mark_shown'
     DISABLE_ANIMATED_TOOLTIP = 'disable_animated_tooltip'
     FIELD_POST_HINT_IS_SHOWN = 'field_post_hint'
-    HALLOWEEN_AWARD_WAS_SHOWN = 'halloween_award_was_shown'
-
-
-class UI_HELLOWEEN_KEYS(CONST_CONTAINER):
-    AWARD_SHOWN = 'award_shown'
 
 
 class ServerSettingsManager(object):
@@ -248,7 +242,7 @@ class ServerSettingsManager(object):
                                             'isRankedWelcomeViewShowed': 1,
                                             'isRankedWelcomeViewStarted': 2,
                                             'isEpicRandomCheckboxClicked': 3,
-                                            'isEpicWelcomeViewShowed': 5}, offsets={}),
+                                            'isEpicWelcomeViewShowed': 5}, offsets={'lastShownEpicWelcomeScreen': Offset(6, 4194240)}),
      SETTINGS_SECTIONS.EULA_VERSION: Section(masks={}, offsets={'version': Offset(0, 4294967295L)}),
      SETTINGS_SECTIONS.MARKS_ON_GUN: Section(masks={}, offsets={GAME.SHOW_MARKS_ON_GUN: Offset(0, 4294967295L)}),
      SETTINGS_SECTIONS.CONTACTS: Section(masks={CONTACTS.SHOW_OFFLINE_USERS: 0,
@@ -325,8 +319,7 @@ class ServerSettingsManager(object):
                                     UI_STORAGE_KEYS.AUTO_RELOAD_HIGHLIGHTS_COUNTER: Offset(10, 7168)}),
      SETTINGS_SECTIONS.LINKEDSET_QUESTS: Section(masks={}, offsets={'shown': Offset(0, 4294967295L)}),
      SETTINGS_SECTIONS.QUESTS_PROGRESS: Section(masks={}, offsets={QUESTS_PROGRESS.VIEW_TYPE: Offset(0, 3),
-                                         QUESTS_PROGRESS.DISPLAY_TYPE: Offset(2, 12)}),
-     SETTINGS_SECTIONS.HALLOWEEN_QUESTS: Section(masks={UI_HELLOWEEN_KEYS.AWARD_SHOWN: 0}, offsets={})}
+                                         QUESTS_PROGRESS.DISPLAY_TYPE: Offset(2, 12)})}
     AIM_MAPPING = {'net': 1,
      'netType': 1,
      'centralTag': 1,
@@ -419,12 +412,6 @@ class ServerSettingsManager(object):
         mask = self._getMaskForLinkedSetQuest(questID, missionID)
         newValue = self.getSectionSettings(SETTINGS_SECTIONS.LINKEDSET_QUESTS, 'shown', 0) | mask
         return self.setSectionSettings(SETTINGS_SECTIONS.LINKEDSET_QUESTS, {'shown': newValue})
-
-    def getHalloweenStorage(self, defaults=None):
-        return self.getSection(SETTINGS_SECTIONS.HALLOWEEN_QUESTS, defaults)
-
-    def saveInHalloweenStorage(self, fields):
-        return self.setSections([SETTINGS_SECTIONS.HALLOWEEN_QUESTS], fields)
 
     def setQuestProgressSettings(self, settings):
         self.setSectionSettings(SETTINGS_SECTIONS.QUESTS_PROGRESS, settings)

@@ -17,6 +17,11 @@ from items.components.c11n_constants import MAX_ITEMS_FOR_BUY_OPERATION
 from skeletons.gui.shared import IItemsCache
 from helpers import dependency
 
+class Types(object):
+    BUY = 0
+    SELL = 1
+
+
 class ConfirmC11nBuyMeta(IDialogMeta):
     itemsCache = dependency.descriptor(IItemsCache)
 
@@ -25,6 +30,7 @@ class ConfirmC11nBuyMeta(IDialogMeta):
         self.__title = title
         self.__submitLabel = submitBtn
         self.__cancelLabel = cancelBtn
+        self.type = Types.BUY
 
     def destroy(self):
         pass
@@ -90,6 +96,7 @@ class ConfirmC11nSellMeta(ConfirmC11nBuyMeta):
         super(ConfirmC11nSellMeta, self).__init__(itemCD, title, submitBtn, cancelBtn)
         self.__count = count
         self.__handler = handler
+        self.type = Types.SELL
 
     def getEventType(self):
         return events.ShowDialogEvent.SHOW_CONFIRM_C11N_SELL_DIALOG

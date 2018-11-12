@@ -22,7 +22,7 @@
   <camouflage>
     <priceFactor>	0.8	</priceFactor>
     <tiling>	1 1 0 0	</tiling>
-    <exclusionMask>	vehicles/german/G09_Hetzer/Hetzer_chassis_01_AM.dds	</exclusionMask>
+    <exclusionMask></exclusionMask>
   </camouflage>
   <hull>
     <fakeTurrets>
@@ -90,7 +90,7 @@
       </slot>
       <slot>
         <slotType>	player	</slotType>
-        <slotId>	2	</slotId>
+        <slotId>	4	</slotId>
         <rayStart>	1.18002 0.688233 0.363575	</rayStart>
         <rayEnd>	0.873586 0.431139 0.363575	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
@@ -101,7 +101,7 @@
       </slot>
       <slot>
         <slotType>	inscription	</slotType>
-        <slotId>	3	</slotId>
+        <slotId>	36	</slotId>
         <rayStart>	-1.16062 0.711344 0.319466	</rayStart>
         <rayEnd>	-0.854182 0.454247 0.319466	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
@@ -111,7 +111,7 @@
       </slot>
       <slot>
         <slotType>	camouflage	</slotType>
-        <slotId>	6	</slotId>
+        <slotId>	3	</slotId>
         <anchorPosition>	0.000000 0.942224 -0.54941	</anchorPosition>
         <anchorDirection>	0.000000 0.863867 -0.50372	</anchorDirection>
       </slot>
@@ -767,7 +767,7 @@
       <customizationSlots>
         <slot>
           <slotType>	style	</slotType>
-          <slotId>	4	</slotId>
+          <slotId>	257	</slotId>
           <anchorPosition>	-0.000000 1.87706 -0.000000	</anchorPosition>
           <anchorDirection>	-0.000000 1 0.000000	</anchorDirection>
         </slot>
@@ -1418,7 +1418,7 @@
       <customizationSlots>
         <slot>
           <slotType>	style	</slotType>
-          <slotId>	5	</slotId>
+          <slotId>	257	</slotId>
           <anchorPosition>	0.0016051 1.87524 -0.00256385	</anchorPosition>
           <anchorDirection>	0.000000 1 -0.000000	</anchorDirection>
         </slot>
@@ -1494,7 +1494,7 @@
           <customizationSlots>
             <slot>
               <slotType>	camouflage	</slotType>
-              <slotId>	7	</slotId>
+              <slotId>	770	</slotId>
               <anchorPosition>	-0.000128269 -0.00106418 1.36266	</anchorPosition>
               <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
               <applyTo>	4096	</applyTo>
@@ -1541,7 +1541,7 @@
           <customizationSlots>
             <slot>
               <slotType>	camouflage	</slotType>
-              <slotId>	8	</slotId>
+              <slotId>	770	</slotId>
               <anchorPosition>	-0.000000 -0.000639558 1.56829	</anchorPosition>
               <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
               <applyTo>	4096	</applyTo>
@@ -1588,7 +1588,7 @@
           <customizationSlots>
             <slot>
               <slotType>	camouflage	</slotType>
-              <slotId>	9	</slotId>
+              <slotId>	770	</slotId>
               <anchorPosition>	-0.000001 -0.000322819 1.29655	</anchorPosition>
               <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
               <applyTo>	4096	</applyTo>
@@ -1662,15 +1662,19 @@
       <engines>
         <Praga_TN_100>
           <smplEnginePower>	105.7281	</smplEnginePower>
+          <smplFwMaxSpeed>	42	</smplFwMaxSpeed>
         </Praga_TN_100>
         <Praga_TNPS>
           <smplEnginePower>	126.8737	</smplEnginePower>
+          <smplFwMaxSpeed>	42	</smplFwMaxSpeed>
         </Praga_TNPS>
         <Scania_Vabis1664>
           <smplEnginePower>	174.4514	</smplEnginePower>
+          <smplFwMaxSpeed>	42	</smplFwMaxSpeed>
         </Scania_Vabis1664>
         <Tatra_V-103>
           <smplEnginePower>	232.6019	</smplEnginePower>
+          <smplFwMaxSpeed>	42	</smplFwMaxSpeed>
         </Tatra_V-103>
       </engines>
       <chassis>

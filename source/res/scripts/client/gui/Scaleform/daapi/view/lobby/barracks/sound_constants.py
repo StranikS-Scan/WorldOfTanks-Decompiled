@@ -6,8 +6,7 @@ from shared_utils import CONST_CONTAINER
 class SOUNDS(CONST_CONTAINER):
     COMMON_SOUND_SPACE = 'barracks'
     STATE_PLACE = 'STATE_hangar_place'
-    STATE_PLACE_GARAGE = 'STATE_hangar_place_garage'
     STATE_PLACE_BARRACKS = 'STATE_hangar_place_barracks'
 
 
-BARRACKS_SOUND_SPACE = CommonSoundSpaceSettings(name=SOUNDS.COMMON_SOUND_SPACE, entranceStates={SOUNDS.STATE_PLACE: SOUNDS.STATE_PLACE_BARRACKS}, exitStates={SOUNDS.STATE_PLACE: SOUNDS.STATE_PLACE_GARAGE}, persistentSounds=(), stoppableSounds=(), priorities=(), autoStart=True, enterEvent='', exitEvent='')
+BARRACKS_SOUND_SPACE = CommonSoundSpaceSettings(name=SOUNDS.COMMON_SOUND_SPACE, entranceStates={SOUNDS.STATE_PLACE: SOUNDS.STATE_PLACE_BARRACKS}, exitStates={}, persistentSounds=(), stoppableSounds=(), priorities=(), autoStart=True, enterEvent='', exitEvent='')

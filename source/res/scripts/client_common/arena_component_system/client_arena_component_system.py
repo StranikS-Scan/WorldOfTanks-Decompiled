@@ -3,6 +3,7 @@
 import cPickle
 import weakref
 from constants import ARENA_UPDATE, ARENA_SYNC_OBJECT_NAMES
+from debug_utils import LOG_ERROR
 import Event
 from arena_sync_object import ArenaSyncObject
 from svarog_script.py_component import Component
@@ -33,9 +34,6 @@ class ClientArenaComponent(Component):
 
     def getSyncDataObjectData(self, syncDataObjectType, key):
         return self._componentSystem().getSyncDataObjectData(syncDataObjectType, key)
-
-    def hasSyncDataObjectData(self, syncDataObjectType, key):
-        return self._componentSystem().hasSyncDataObjectData(syncDataObjectType, key)
 
 
 class ClientArenaComponentSystem(ComponentSystem):
@@ -79,11 +77,11 @@ class ClientArenaComponentSystem(ComponentSystem):
 
     def getSyncDataObjectData(self, syncDataObjectType, key):
         syncDataObject = self.__syncDataObjects.get(syncDataObjectType, None)
-        return syncDataObject.getData(key) if syncDataObject is not None else None
-
-    def hasSyncDataObjectData(self, syncDataObjectType, key):
-        syncDataObject = self.__syncDataObjects.get(syncDataObjectType, None)
-        return syncDataObject.hasData(key) if syncDataObject is not None else False
+        if syncDataObject is not None:
+            return syncDataObject.getData(key)
+        else:
+            LOG_ERROR("No arena sync data object found for object type '{}:{}'. Returning None.".format(syncDataObjectType, ARENA_SYNC_OBJECT_NAMES.get(syncDataObjectType, '<Unknown>')))
+            return
 
     def __onFullSyncObjectReceived(self, argStr):
         o = cPickle.loads(argStr)

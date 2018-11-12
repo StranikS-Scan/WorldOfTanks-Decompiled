@@ -6,9 +6,8 @@ from gui.Scaleform.genConsts.APP_CONTAINERS_NAMES import APP_CONTAINERS_NAMES
 from shared_utils import CONST_CONTAINER
 import BigWorld
 from async import async, await, AsyncEvent, AsyncReturn, AsyncScope, BrokenPromiseError
-from frameworks.wulf import View, ViewFlags, Window
-from frameworks.wulf.gui_constants import WindowFlags
-from frameworks.wulf.view.array import Array
+from frameworks.wulf import Array, ViewFlags
+from frameworks.wulf import WindowFlags, Window
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.impl.gen import R
 from gui.impl.gen.view_models.ui_kit.currency_item_model import CurrencyItemModel
@@ -40,29 +39,20 @@ class DialogButtons(CONST_CONTAINER):
      RESEARCH)
 
 
-class DialogContent(object):
-    __slots__ = ('__layoutID', '__viewModelClazz')
+class DialogContent(ViewImpl):
+    __slots__ = ()
 
-    def __init__(self, layoutID, viewModelClazz):
-        self.__layoutID = layoutID
-        self.__viewModelClazz = viewModelClazz
-
-    @property
-    def layoutID(self):
-        return self.__layoutID
-
-    @property
-    def viewModelClazz(self):
-        return self.__viewModelClazz
+    def __init__(self, layoutID, viewModelClazz, *args, **kwargs):
+        super(DialogContent, self).__init__(layoutID, ViewFlags.VIEW, viewModelClazz, *args, **kwargs)
 
 
 class DialogWindow(Window):
     __slots__ = ('__blur', '__scope', '__event', '__result', '__currencyAdapter', '__buttons')
 
-    def __init__(self, content=None, bottomContent=None, parent=None, showCurrency=False, enableBlur=True):
-        super(DialogWindow, self).__init__(wndFlags=WindowFlags.DIALOG | WindowFlags.RESIZABLE, decorator=View(R.views.dialogWindow, ViewFlags.WINDOW_DECORATOR, DialogWindowModel), content=ViewImpl(content.layoutID, ViewFlags.COMPONENT, content.viewModelClazz), parent=parent)
+    def __init__(self, content, bottomContent=None, parent=None, showCurrency=False, enableBlur=True):
+        super(DialogWindow, self).__init__(wndFlags=WindowFlags.DIALOG | WindowFlags.RESIZABLE, decorator=ViewImpl(R.views.dialogWindow, ViewFlags.WINDOW_DECORATOR, DialogWindowModel), content=content, parent=parent)
         if bottomContent is not None:
-            self._setBottomContent(ViewImpl(bottomContent.layoutID, ViewFlags.COMPONENT, bottomContent.viewModelClazz))
+            self._setBottomContent(bottomContent)
         self.__blur = WGUIBackgroundBlurSupportImpl()
         self.__scope = AsyncScope()
         self.__event = AsyncEvent(scope=self.__scope)

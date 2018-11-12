@@ -15,6 +15,7 @@ from gui.Scaleform.daapi.view.battle.shared.formatters import getHealthPercent
 from gui.Scaleform.daapi.view.battle.shared.timers_common import PythonTimer
 from gui.Scaleform.genConsts.CROSSHAIR_CONSTANTS import CROSSHAIR_CONSTANTS
 from gui.Scaleform.genConsts.GUN_MARKER_VIEW_CONSTANTS import GUN_MARKER_VIEW_CONSTANTS as _VIEW_CONSTANTS
+from gui.Scaleform.locale.INGAME_GUI import INGAME_GUI
 from gui.battle_control import avatar_getter
 from gui.battle_control.battle_constants import FEEDBACK_EVENT_ID, CROSSHAIR_VIEW_ID, SHELL_QUANTITY_UNKNOWN
 from gui.battle_control.battle_constants import SHELL_SET_RESULT, VEHICLE_VIEW_STATE, NET_TYPE_OVERRIDE
@@ -31,10 +32,12 @@ _SETTINGS_KEY_TO_VIEW_ID = {AIM.ARCADE: CROSSHAIR_VIEW_ID.ARCADE,
  AIM.SNIPER: CROSSHAIR_VIEW_ID.SNIPER}
 _SETTINGS_KEYS = set(_SETTINGS_KEY_TO_VIEW_ID.keys())
 _SETTINGS_VIEWS = set(_SETTINGS_KEY_TO_VIEW_ID.values())
+_DEVICE_ENGINE_NAME = 'engine'
+_DEVICE_REPAIRED = 'repaired'
 _TARGET_UPDATE_INTERVAL = 0.2
 
 def createPlugins():
-    return {'core': CorePlugin,
+    resultPlugins = {'core': CorePlugin,
      'settings': SettingsPlugin,
      'events': EventBusPlugin,
      'ammo': AmmoPlugin,
@@ -43,8 +46,10 @@ def createPlugins():
      'gunMarkerDistance': GunMarkerDistancePlugin,
      'gunMarkersInvalidate': GunMarkersInvalidatePlugin,
      'shotResultIndicator': ShotResultIndicatorPlugin,
-     'siegeMode': SiegeModePlugin,
-     'shotDone': ShotDonePlugin}
+     'shotDone': ShotDonePlugin,
+     'speedometerWheeledTech': SpeedometerWheeledTech,
+     'siegeMode': SiegeModePlugin}
+    return resultPlugins
 
 
 def chooseSetting(viewID):
@@ -355,7 +360,7 @@ class AmmoPlugin(CrosshairPlugin):
 
     def start(self):
         ctrl = self.sessionProvider.shared.ammo
-        self._setup(ctrl, self.bootcampController.isInBootcamp(), self.sessionProvider.isReplayPlaying)
+        self.__setup(ctrl, self.sessionProvider.isReplayPlaying)
         ctrl.onGunSettingsSet += self.__onGunSettingsSet
         ctrl.onGunReloadTimeSet += self.__onGunReloadTimeSet
         ctrl.onGunAutoReloadTimeSet += self.__onGunAutoReloadTimeSet
@@ -377,7 +382,7 @@ class AmmoPlugin(CrosshairPlugin):
             BigWorld.cancelCallback(self.__autoReloadCallbackID)
         super(AmmoPlugin, self).fini()
 
-    def _setup(self, ctrl, hideAmmoCounter=False, isReplayPlaying=False):
+    def __setup(self, ctrl, isReplayPlaying=False):
         if isReplayPlaying:
             self._parentObj.as_setReloadingCounterShownS(False)
             self.__reloadAnimator = _PythonAutoReloadProxy(self._parentObj)
@@ -392,7 +397,7 @@ class AmmoPlugin(CrosshairPlugin):
         self.__setReloadingState(reloadingState)
         if self.__guiSettings.hasAutoReload:
             self.__reloadAnimator.setClipAutoLoading(reloadingState.getActualValue(), reloadingState.getBaseValue(), isStun=False)
-        if hideAmmoCounter:
+        if self.bootcampController.isInBootcamp():
             self._parentObj.as_setNetVisibleS(CROSSHAIR_CONSTANTS.VISIBLE_NET)
 
     def __setReloadingState(self, state):
@@ -709,7 +714,7 @@ class GunMarkersInvalidatePlugin(CrosshairPlugin):
 
 
 class ShotResultIndicatorPlugin(CrosshairPlugin):
-    __slots__ = ('__isEnabled', '__playerTeam', '__cache', '__colors', '__mapping', '__shotResultResolver', '_shotResultTypes')
+    __slots__ = ('__isEnabled', '__playerTeam', '__cache', '__colors', '__mapping', '__shotResultResolver')
 
     def __init__(self, parentObj):
         super(ShotResultIndicatorPlugin, self).__init__(parentObj)
@@ -719,7 +724,6 @@ class ShotResultIndicatorPlugin(CrosshairPlugin):
         self.__cache = defaultdict(str)
         self.__colors = None
         self.__shotResultResolver = gun_marker_ctrl.createShotResultResolver()
-        self._shotResultTypes = _VIEW_CONSTANTS.GUN_TAG_SHOT_RESULT_TYPES
         return
 
     def start(self):
@@ -754,7 +758,7 @@ class ShotResultIndicatorPlugin(CrosshairPlugin):
         for key in keys:
             settings = getter(key)
             if 'gunTagType' in settings:
-                value = settings['gunTagType'] in self._shotResultTypes
+                value = settings['gunTagType'] in _VIEW_CONSTANTS.GUN_TAG_SHOT_RESULT_TYPES
                 self.__mapping[_SETTINGS_KEY_TO_VIEW_ID[key]] = value
 
     def __updateColor(self, markerType, position, collision, direction):
@@ -828,7 +832,7 @@ class SiegeModePlugin(CrosshairPlugin):
         if ctrl.isInPostmortem:
             return
         else:
-            if vTypeDesc.hasSiegeMode:
+            if vTypeDesc.hasSiegeMode and not vTypeDesc.isWheeledVehicle:
                 value = ctrl.getStateValue(VEHICLE_VIEW_STATE.SIEGE_MODE)
                 if value is not None:
                     self.__onVehicleStateUpdated(VEHICLE_VIEW_STATE.SIEGE_MODE, value)
@@ -846,12 +850,18 @@ class SiegeModePlugin(CrosshairPlugin):
             self.__updateView()
 
     def __updateView(self):
-        if self.__siegeState == _SIEGE_STATE.ENABLED:
-            self._parentObj.as_setNetTypeS(NET_TYPE_OVERRIDE.SIEGE_MODE)
-        elif self.__siegeState == _SIEGE_STATE.DISABLED:
-            self._parentObj.as_setNetTypeS(NET_TYPE_OVERRIDE.DISABLED)
-        visibleMask = CROSSHAIR_CONSTANTS.VISIBLE_ALL if self.__siegeState not in _SIEGE_STATE.SWITCHING else 0
-        self._parentObj.as_setNetVisibleS(visibleMask)
+        vStateCtrl = self.sessionProvider.shared.vehicleState
+        vehicle = vStateCtrl.getControllingVehicle()
+        if vehicle is not None and vehicle.typeDescriptor.isWheeledVehicle:
+            return
+        else:
+            if self.__siegeState == _SIEGE_STATE.ENABLED:
+                self._parentObj.as_setNetTypeS(NET_TYPE_OVERRIDE.SIEGE_MODE)
+            elif self.__siegeState == _SIEGE_STATE.DISABLED:
+                self._parentObj.as_setNetTypeS(NET_TYPE_OVERRIDE.DISABLED)
+            visibleMask = CROSSHAIR_CONSTANTS.VISIBLE_ALL if self.__siegeState not in _SIEGE_STATE.SWITCHING else 0
+            self._parentObj.as_setNetVisibleS(visibleMask)
+            return
 
 
 class ShotDonePlugin(CrosshairPlugin):
@@ -870,3 +880,122 @@ class ShotDonePlugin(CrosshairPlugin):
     def __onShotDone(self):
         if self.sessionProvider.shared.ammo.getGunSettings().hasAutoReload():
             self._parentObj.as_showShotS()
+
+
+class SpeedometerWheeledTech(CrosshairPlugin):
+    __slots__ = ('__siegeState', '__burnoutLevelMax', '__burnoutWarningOn', '__viewID')
+
+    def __init__(self, parentObj):
+        super(SpeedometerWheeledTech, self).__init__(parentObj)
+        self.__siegeState = _SIEGE_STATE.DISABLED
+        self.__burnoutLevelMax = 255.0
+        self.__burnoutWarningOn = False
+        self.__viewID = -1
+
+    def start(self):
+        vStateCtrl = self.sessionProvider.shared.vehicleState
+        crosshairCtrl = self.sessionProvider.shared.crosshair
+        if vStateCtrl is not None:
+            vStateCtrl.onVehicleStateUpdated += self.__onVehicleStateUpdated
+            vStateCtrl.onVehicleControlling += self.__onVehicleControlling
+            crosshairCtrl.onCrosshairViewChanged += self.__onCrosshairViewChanged
+            vehicle = vStateCtrl.getControllingVehicle()
+            if vehicle is not None and vehicle.isWheeledTech:
+                self.__onVehicleControlling(vehicle)
+        return
+
+    def stop(self):
+        vStateCtrl = self.sessionProvider.shared.vehicleState
+        crosshairCtrl = self.sessionProvider.shared.crosshair
+        if vStateCtrl is not None:
+            vStateCtrl.onVehicleStateUpdated -= self.__onVehicleStateUpdated
+            vStateCtrl.onVehicleControlling -= self.__onVehicleControlling
+            crosshairCtrl.onCrosshairViewChanged -= self.__onCrosshairViewChanged
+        return
+
+    def __onVehicleControlling(self, vehicle):
+        vStateCtrl = self.sessionProvider.shared.vehicleState
+        vTypeDesc = vehicle.typeDescriptor
+        if vTypeDesc.isWheeledVehicle:
+            self.__addSpedometer(vehicle)
+            self.__updateCurStateSpeedMode(vStateCtrl)
+        else:
+            self.parentObj.as_removeSpeedometerS()
+
+    def __onVehicleStateUpdated(self, stateID, value):
+        if stateID == VEHICLE_VIEW_STATE.SPEED:
+            self.parentObj.as_updateSpeedS(value)
+        elif stateID == VEHICLE_VIEW_STATE.SIEGE_MODE:
+            self.__changeSpeedoType(*value)
+        elif stateID == VEHICLE_VIEW_STATE.BURNOUT:
+            self.__changeBurnoutLevel(value)
+        elif stateID == VEHICLE_VIEW_STATE.REPAIRING:
+            self.__stopEngineDamageWarning()
+        elif stateID == VEHICLE_VIEW_STATE.BURNOUT_WARNING:
+            if value > 0:
+                self.__setEngineDamageWarning()
+            elif self.__burnoutWarningOn:
+                self.__stopEngineDamageWarning()
+        elif stateID == VEHICLE_VIEW_STATE.DEVICES:
+            if _DEVICE_ENGINE_NAME in value and _DEVICE_REPAIRED in value:
+                self.parentObj.as_stopEngineCrushErrorS()
+        elif stateID == VEHICLE_VIEW_STATE.BURNOUT_UNAVAILABLE_DUE_TO_BROKEN_ENGINE:
+            self.parentObj.as_setEngineCrushErrorS(INGAME_GUI.BURNOUT_HINT_ENGINEDAMAGED)
+
+    def __onCrosshairViewChanged(self, viewID):
+        vStateCtrl = self.sessionProvider.shared.vehicleState
+        vehicle = vStateCtrl.getControllingVehicle()
+        if vehicle is None:
+            return
+        else:
+            if vehicle.typeDescriptor.isWheeledVehicle and viewID == CROSSHAIR_VIEW_ID.ARCADE:
+                self.__onVehicleControlling(vehicle)
+                self.__updateCurStateSpeedMode(vStateCtrl)
+            return
+
+    def __updateCurStateSpeedMode(self, vStateCtrl):
+        value = vStateCtrl.getStateValue(VEHICLE_VIEW_STATE.SIEGE_MODE)
+        if value is not None:
+            self.__onVehicleStateUpdated(VEHICLE_VIEW_STATE.SIEGE_MODE, value)
+        else:
+            self.__onVehicleStateUpdated(VEHICLE_VIEW_STATE.SIEGE_MODE, (_SIEGE_STATE.DISABLED, None))
+        return
+
+    def __getMaxSpeeds(self, vehicle):
+        typeDesc = vehicle.typeDescriptor
+        defaultVehicleDescr = typeDesc
+        siegeVehicleDescr = None
+        siegeMaxSpd = None
+        if typeDesc.hasSiegeMode:
+            siegeVehicleDescr = typeDesc.siegeVehicleDescr
+        if siegeVehicleDescr is not None:
+            siegeEngineCfg = siegeVehicleDescr.type.xphysics['engines'][typeDesc.engine.name]
+            siegeMaxSpd = siegeEngineCfg['smplFwMaxSpeed']
+        defaultVehicleCfg = defaultVehicleDescr.type.xphysics['engines'][typeDesc.engine.name]
+        normalMaxSpd = defaultVehicleCfg['smplFwMaxSpeed']
+        return (normalMaxSpd, siegeMaxSpd)
+
+    def __addSpedometer(self, vehicle):
+        normalMaxSpd, siegeMaxSpd = self.__getMaxSpeeds(vehicle)
+        self.parentObj.as_addSpeedometerS(normalMaxSpd, siegeMaxSpd)
+
+    def __changeSpeedoType(self, siegeState, _):
+        if siegeState == _SIEGE_STATE.ENABLED:
+            self.parentObj.as_setSpeedModeS(True)
+        elif siegeState == _SIEGE_STATE.DISABLED:
+            self.parentObj.as_setSpeedModeS(False)
+        self.__siegeState = siegeState
+
+    def __changeBurnoutLevel(self, burnoutLevel):
+        if burnoutLevel is not None and burnoutLevel <= self.__burnoutLevelMax:
+            burnoutLevel = burnoutLevel / self.__burnoutLevelMax
+            self.parentObj.as_updateBurnoutS(burnoutLevel)
+        return
+
+    def __setEngineDamageWarning(self):
+        self.__burnoutWarningOn = True
+        self.parentObj.as_setBurnoutWarningS(INGAME_GUI.BURNOUT_HINT_ENGINEDAMAGEWARNING)
+
+    def __stopEngineDamageWarning(self):
+        self.__burnoutWarningOn = False
+        self.parentObj.as_stopBurnoutWarningS()

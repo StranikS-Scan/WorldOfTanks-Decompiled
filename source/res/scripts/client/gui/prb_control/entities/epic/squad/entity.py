@@ -14,6 +14,8 @@ from skeletons.gui.lobby_context import ILobbyContext
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.prb_control.entities.random.squad.actions_handler import BalancedSquadActionsHandler
 from gui.prb_control.entities.random.squad.actions_validator import SPGForbiddenBalancedSquadActionsValidator
+from gui.prb_control.storages import prequeue_storage_getter
+from gui.prb_control.entities.epic.pre_queue.vehicles_watcher import EpicVehiclesWatcher
 
 class EpicSquadEntryPoint(SquadEntryPoint):
 
@@ -35,14 +37,19 @@ class EpicSquadEntity(SquadEntity):
         self._isBalancedSquad = False
         self._isUseSPGValidateRule = True
         self._maxSpgCount = False
+        self.__watcher = None
         super(EpicSquadEntity, self).__init__(FUNCTIONAL_FLAG.EPIC, PREBATTLE_TYPE.EPIC)
+        return
 
     def init(self, ctx=None):
+        self.storage.release()
         epicSquadEntity = super(EpicSquadEntity, self).init(ctx)
         self._maxSpgCount = self.getMaxSPGCount()
         self.lobbyContext.getServerSettings().onServerSettingsChange += self._onServerSettingChanged
         self.eventsCache.onSyncCompleted += self._onServerSettingChanged
         g_clientUpdateManager.addCallbacks({'inventory.1': self._onInventoryVehiclesUpdated})
+        self.__watcher = EpicVehiclesWatcher()
+        self.__watcher.start()
         return epicSquadEntity
 
     def fini(self, ctx=None, woEvents=False):
@@ -50,6 +57,9 @@ class EpicSquadEntity(SquadEntity):
         self.eventsCache.onSyncCompleted -= self._onServerSettingChanged
         g_clientUpdateManager.removeObjectCallbacks(self, force=True)
         self._isUseSPGValidateRule = False
+        if self.__watcher is not None:
+            self.__watcher.stop()
+            self.__watcher = None
         self.invalidateVehicleStates()
         return super(EpicSquadEntity, self).fini(ctx=ctx, woEvents=woEvents)
 
@@ -85,6 +95,10 @@ class EpicSquadEntity(SquadEntity):
                         enableSPGCount += 1
 
             return enableSPGCount
+
+    @prequeue_storage_getter(QUEUE_TYPE.EPIC)
+    def storage(self):
+        return None
 
     def unit_onUnitVehiclesChanged(self, dbID, vehicles):
         super(EpicSquadEntity, self).unit_onUnitVehiclesChanged(dbID, vehicles)

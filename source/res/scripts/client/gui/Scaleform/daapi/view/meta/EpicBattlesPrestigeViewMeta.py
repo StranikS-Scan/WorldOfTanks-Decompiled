@@ -18,3 +18,6 @@ class EpicBattlesPrestigeViewMeta(WrapperViewMeta):
 
     def as_setDataS(self, data):
         return self.flashObject.as_setData(data) if self._isDAAPIInited() else None
+
+    def as_showSuccessfullPrestigeS(self):
+        return self.flashObject.as_showSuccessfullPrestige() if self._isDAAPIInited() else None

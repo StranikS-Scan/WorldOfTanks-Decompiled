@@ -33,6 +33,8 @@ class VehicleIsValid(IVehicleLimit):
             return (False, PREBATTLE_RESTRICTION.VEHICLE_ROTATION_GROUP_LOCKED)
         if not g_currentVehicle.isReadyToPrebattle():
             return (False, PREBATTLE_RESTRICTION.VEHICLE_NOT_READY)
+        if g_currentVehicle.isUnsuitableToQueue():
+            return (False, PREBATTLE_RESTRICTION.VEHICLE_NOT_SUPPORTED)
         vehicle = g_currentVehicle.item
         shellsList = []
         for shell in vehicle.shells:

@@ -54,7 +54,7 @@
     <customizationSlots>
       <slot>
         <slotType>	clan	</slotType>
-        <slotId>	2	</slotId>
+        <slotId>	1	</slotId>
         <rayStart>	0.61701 0.555871 2.89172	</rayStart>
         <rayEnd>	0.61701 0.41579 2.74897	</rayEnd>
         <rayUp>	0.000000 0.000000 -1	</rayUp>
@@ -853,10 +853,11 @@
           <customizationSlots>
             <slot>
               <slotType>	insigniaOnGun	</slotType>
-              <slotId>	1	</slotId>
+              <slotId>	771	</slotId>
               <rayStart>	0.000024 0.00492865 2.1624	</rayStart>
               <rayEnd>	0.644611 -0.328496 2.1624	</rayEnd>
-              <rayUp>	0.092 0.092 4	</rayUp>
+              <rayUp>	0.092 0.000000 0.000000	</rayUp>
+              <applyToFabric>	true	</applyToFabric>
               <size>	0.6	</size>
               <hideIfDamaged>	false	</hideIfDamaged>
               <isUVProportional>	true	</isUVProportional>
@@ -969,6 +970,7 @@
       <engines>
         <Maybach_HL_234P45A>
           <smplEnginePower>	1057.281	</smplEnginePower>
+          <smplFwMaxSpeed>	40	</smplFwMaxSpeed>
         </Maybach_HL_234P45A>
       </engines>
       <chassis>

@@ -6,7 +6,6 @@ import time
 import types
 from Queue import Queue
 from collections import namedtuple
-from copy import deepcopy
 import ArenaType
 import BigWorld
 import constants
@@ -36,7 +35,7 @@ from gui.server_events.recruit_helper import getSourceIdFromQuest
 from gui.server_events.finders import PERSONAL_MISSION_TOKEN
 from gui.shared import formatters as shared_fmts
 from gui.shared.formatters import text_styles
-from gui.shared.formatters.currency import getBWFormatter
+from gui.shared.formatters.currency import getBWFormatter, getStyle
 from gui.shared.gui_items.Tankman import Tankman
 from gui.shared.gui_items.Vehicle import getUserName, getShortUserName
 from gui.shared.gui_items.dossier.factories import getAchievementFactory
@@ -57,13 +56,9 @@ from skeletons.gui.goodies import IGoodiesCache
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
-from skeletons.gui.halloween_controller import IHalloweenController
 from items import makeIntCompactDescrByID
 from gui.shared.gui_items import GUI_ITEM_TYPE, GUI_ITEM_TYPE_NAMES
 from items.components.c11n_constants import CustomizationType, DecalType
-from gui.shared.formatters.icons import makeImageTag
-from gui.server_events.awards_formatters import AWARDS_SIZES, getHalloweenProgressAwardPacker
-from gui.Scaleform.locale.EVENT import EVENT
 _EOL = '\n'
 _DEFAULT_MESSAGE = 'defaultMessage'
 _RENT_TYPES = {'time': 'rentDays',
@@ -93,6 +88,8 @@ def _getCustomizationItemData(itemId, custType):
         customizationType = CustomizationType.STYLE
     elif custType == 'decal':
         customizationType = CustomizationType.DECAL
+    elif custType == 'projection_decal':
+        customizationType = CustomizationType.PROJECTION_DECAL
     compactDescr = makeIntCompactDescrByID('customizationItem', customizationType, itemId)
     item = itemsCache.items.getItemByCD(compactDescr)
     if custType == 'decal':
@@ -113,18 +110,22 @@ def _extendCustomizationData(newData, extendable, htmlTplPostfix):
         for customizationItem in customizations:
             custType = customizationItem['custType']
             custValue = customizationItem['value']
-            if 'customCompensation' in customizationItem:
-                compStr = InvoiceReceivedFormatter.getCustomizationCompensationString(customizationItem, htmlTplPostfix=htmlTplPostfix)
-                extendable.append(compStr)
             if custValue > 0:
                 operation = 'added'
-            else:
+            elif custValue < 0:
                 operation = 'removed'
-            guiItemType, _ = _getCustomizationItemData(customizationItem['id'], custType)
-            custValue = abs(custValue)
-            if custValue > 1:
-                extendable.append(i18n.makeString('#system_messages:customization/{}/{}Value'.format(operation, guiItemType), custValue))
-            extendable.append(i18n.makeString('#system_messages:customization/{}/{}'.format(operation, guiItemType)))
+            else:
+                operation = None
+            if operation is not None:
+                guiItemType, _ = _getCustomizationItemData(customizationItem['id'], custType)
+                custValue = abs(custValue)
+                if custValue > 1:
+                    extendable.append(i18n.makeString('#system_messages:customization/{}/{}Value'.format(operation, guiItemType), custValue))
+                else:
+                    extendable.append(i18n.makeString('#system_messages:customization/{}/{}'.format(operation, guiItemType)))
+            if 'compensatedNumber' in customizationItem:
+                compStr = InvoiceReceivedFormatter.getCustomizationCompensationString(customizationItem, htmlTplPostfix=htmlTplPostfix)
+                extendable.append(compStr)
 
         return
 
@@ -420,88 +421,6 @@ class BattleResultsFormatter(WaitItemsSyncFormatter):
         return (achievementsBlock, badgesBlock)
 
 
-class EventBattleResultsFormatter(BattleResultsFormatter):
-    _eventsCache = dependency.descriptor(IEventsCache)
-    _RESULT_DATA_DEFAULT = {'arenaName': '',
-     'vehicleName': 'N/A',
-     'freeXP': '0',
-     'xp': '0'}
-    _RESULT_TEMPLATE_NAME = 'eventBattleVictoryResult'
-    _RESULT_QUESTS_TEMPLATE_NAME = 'eventBattleVictoryResultQuests'
-    _SUPPORTED_QUEST_PREFIXES = ['halloween_daily', 'halloween_weekly']
-
-    @async
-    @process
-    def format(self, message, callback):
-        isSynced = yield self._waitForSyncItems()
-        if not message.data or not isSynced:
-            callback([_MessageData(None, None)])
-            return
-        else:
-            battleResults = message.data
-            arenaType = ArenaType.g_cache.get(battleResults.get('arenaTypeID'))
-            arenaCreateTime = battleResults.get('arenaCreateTime', None)
-            if not arenaCreateTime or not arenaType:
-                callback([_MessageData(None, None)])
-                return
-            arenaCreateTime = time_utils.makeLocalServerTime(arenaCreateTime)
-            bgIconSource = None
-            arenaUniqueID = battleResults.get('arenaUniqueID', 0)
-            resultData = self._mergeResultData(deepcopy(self._RESULT_DATA_DEFAULT), self._getArenaDataStrs(battleResults), self._getVehiclesDataStrs(battleResults), self._getXPDataStrs(battleResults))
-            formatted = g_settings.msgTemplates.format(self._RESULT_TEMPLATE_NAME, ctx=resultData, bgIconSource=bgIconSource, data={'timestamp': arenaCreateTime,
-             'savedData': arenaUniqueID})
-            settings = self._getGuiSettings(message, self._RESULT_TEMPLATE_NAME)
-            settings.showAt = BigWorld.time()
-            resultMessages = [_MessageData(formatted, settings)]
-            completedQuestIDs = battleResults.get('completedQuestIDs', set())
-            completedQuestIDs.update(battleResults.get('rewardsGottenQuestIDs', set()))
-            completedQuestIDs = (questID for questID in completedQuestIDs if any((questID.startswith(supportedPrefix) for supportedPrefix in self._SUPPORTED_QUEST_PREFIXES)))
-            for questID in completedQuestIDs:
-                questCtx = self._makeQuestsAchieve(questID)
-                if questCtx is None:
-                    continue
-                formatted = g_settings.msgTemplates.format(self._RESULT_QUESTS_TEMPLATE_NAME, ctx=questCtx, bgIconSource=bgIconSource, data={'timestamp': arenaCreateTime,
-                 'savedData': arenaUniqueID})
-                resultMessages.append(_MessageData(formatted, settings))
-
-            callback(resultMessages)
-            return
-
-    @staticmethod
-    def _getArenaDataStrs(battleResults):
-        arenaType = ArenaType.g_cache.get(battleResults.get('arenaTypeID'))
-        return {'arenaName': i18n.makeString(arenaType.name)}
-
-    def _getVehiclesDataStrs(self, battleResults):
-        vehicles = {intCD:self.itemsCache.items.getItemByCD(intCD) for intCD in battleResults.get('playerVehicles', {}).keys()}
-        return {'vehicleName': ', '.join((vehicle.userName for vehicle in sorted(vehicles.values())))}
-
-    def _getXPDataStrs(self, battleResults):
-        xpData = {'xp': BigWorld.wg_getIntegralFormat(battleResults.get('xp', 0)),
-         'freeXP': BigWorld.wg_getIntegralFormat(battleResults.get('freeXP', 0))}
-        return xpData
-
-    def _makeQuestsAchieve(self, questID):
-        quest = next(self._eventsCache.getQuests(lambda q: q.getID() == questID).itervalues(), None)
-        if quest is None:
-            return
-        else:
-            achieves = ' '.join((bonus.label + makeImageTag(bonus.getImage(AWARDS_SIZES.SMALL)) for bonus in getHalloweenProgressAwardPacker().format(quest.getBonuses())))
-            if not achieves:
-                return
-            desc = i18n.makeString(EVENT.getDailyWeeklyNotificationDesc(questID.split('_')[1]))
-            data = g_settings.htmlTemplates.format('halloweenBattleQuests', {'desc': desc,
-             'achieves': achieves})
-            return {'quests': data}
-
-    @staticmethod
-    def _mergeResultData(src, *dataContainers):
-        for dataContainer in dataContainers:
-            src.update(dataContainer)
-
-        return src
-
-
 class AutoMaintenanceFormatter(ServiceChannelFormatter):
     __messages = {AUTO_MAINTENANCE_RESULT.NOT_ENOUGH_ASSETS: {AUTO_MAINTENANCE_TYPE.REPAIR: '#messenger:serviceChannelMessages/autoRepairError',
                                                  AUTO_MAINTENANCE_TYPE.LOAD_AMMO: '#messenger:serviceChannelMessages/autoLoadError',
@@ -635,7 +554,7 @@ class CurrencyUpdateFormatter(ServiceChannelFormatter):
             xmlKey = 'currencyUpdate'
             formatted = g_settings.msgTemplates.format(xmlKey, ctx={'date': TimeFormatter.getLongDatetimeFormat(transactionTime),
              'currency': ms(MESSENGER.currencyUpdateSelect(operationName='debited' if amountDelta < 0 else 'received', currencyCode=currencyCode)),
-             'amount': abs(amountDelta)}, data={'icon': currencyCode.title() + 'Icon'})
+             'amount': getStyle(currencyCode)(getBWFormatter(currencyCode)(abs(amountDelta)))}, data={'icon': currencyCode.title() + 'Icon'})
             return [_MessageData(formatted, self._getGuiSettings(message, xmlKey))]
         else:
             return [_MessageData(None, None)]
@@ -825,6 +744,24 @@ class InvoiceReceivedFormatter(WaitItemsSyncFormatter):
         return result
 
     @classmethod
+    def _getCustomizationCompensationString(cls, compensationMoney, strItemType, strItemName, amount, htmlTplPostfix):
+        htmlTemplates = g_settings.htmlTemplates
+        values = []
+        result = ''
+        currencies = compensationMoney.getSetCurrencies(byWeight=True)
+        for currency in currencies:
+            formatter = getBWFormatter(currency)
+            key = '{}Compensation'.format(currency)
+            values.append(htmlTemplates.format(key + htmlTplPostfix, ctx={'amount': formatter(compensationMoney.get(currency))}))
+
+        if values:
+            result = htmlTemplates.format('customizationCompensation' + htmlTplPostfix, ctx={'type': strItemType,
+             'name': strItemName,
+             'amount': str(amount),
+             'compensation': ', '.join(values)})
+        return result
+
+    @classmethod
     def getVehiclesCompensationString(cls, vehicles, htmlTplPostfix='InvoiceReceived'):
         htmlTemplates = g_settings.htmlTemplates
         result = []
@@ -853,9 +790,9 @@ class InvoiceReceivedFormatter(WaitItemsSyncFormatter):
         if 'customCompensation' not in customizationItem:
             return result
         customItemData = _getCustomizationItemData(customizationItem['id'], customizationItem['custType'])
-        strItemName = i18n.makeString('#messenger:serviceChannelMessages/invoiceReceived/compensation/{}'.format(customItemData.guiItemType))
+        strItemType = i18n.makeString('#messenger:serviceChannelMessages/invoiceReceived/compensation/{}'.format(customItemData.guiItemType))
         comp = Money.makeFromMoneyTuple(customizationItem['customCompensation'])
-        result = cls._getCompensationString(comp, (strItemName,), htmlTplPostfix)
+        result = cls._getCustomizationCompensationString(comp, strItemType, customItemData.userName, customizationItem['compensatedNumber'], htmlTplPostfix)
         return result
 
     @classmethod
@@ -992,9 +929,19 @@ class InvoiceReceivedFormatter(WaitItemsSyncFormatter):
 
     def _formatData(self, assetType, data):
         operations = self._composeOperations(data)
+        compensation = Money()
+        for customizationData in data['data'].get('customizations', ()):
+            compensation += Money.makeFromMoneyTuple(customizationData.get('customCompensation', (0, 0)))
+
+        if compensation.gold > 0:
+            icon = 'goldIcon'
+        elif compensation.credits > 0:
+            icon = 'creditsIcon'
+        else:
+            icon = 'informationIcon'
         return None if not operations else g_settings.msgTemplates.format(self._getMessageTemplateKey(assetType), ctx={'at': self._getOperationTimeString(data),
          'desc': self.__getL10nDescription(data),
-         'op': '<br/>'.join(operations)})
+         'op': '<br/>'.join(operations)}, data={'icon': icon})
 
     def __getSlotsString(self, slots):
         if slots > 0:
@@ -1973,7 +1920,9 @@ class TokenQuestsFormatter(WaitItemsSyncFormatter):
             messageData = self.__buildMessageData(message, questIDs, withCustomizations=False)
             if messageData is not None:
                 callbackResult.append(messageData)
-            callbackResult.append(_MessageData(_getDefaultMessage(normal=_EOL.join(result)), self._getGuiSettings(message, _DEFAULT_MESSAGE)))
+            data = message.data or {}
+            if not data.get('tankmen'):
+                callbackResult.append(_MessageData(_getDefaultMessage(normal=_EOL.join(result)), self._getGuiSettings(message, _DEFAULT_MESSAGE)))
             callback(callbackResult)
             return True
         else:
@@ -2002,73 +1951,6 @@ class TokenQuestsFormatter(WaitItemsSyncFormatter):
             return _MessageData(formatted, settings)
         else:
             return
-
-
-class HalloweenShopItemFormatter(TokenQuestsFormatter):
-    _halloweenController = dependency.descriptor(IHalloweenController)
-
-    @async
-    @process
-    def format(self, message, callback):
-        isSynced = yield self._waitForSyncItems()
-        formatted, settings = (None, None)
-        data = message.data or {}
-        if isSynced:
-            completedQuestIDs = data.get('completedQuestIDs', set())
-            completedQuestIDs.update(data.get('rewardsGottenQuestIDs', set()))
-            level = next(iter(completedQuestIDs), '')
-            if level:
-                level = int(level.split('_')[-1])
-            if level < 0 or level >= len(self._halloweenController.getProgress().items):
-                callback([_MessageData(None, None)])
-                return
-            levelItem = self._halloweenController.getProgress().items[level]
-            achieves = ' '.join((bonus.label + makeImageTag(bonus.getImage(AWARDS_SIZES.SMALL)) for bonus in getHalloweenProgressAwardPacker().format(levelItem.getBonuses())))
-            settings = self._getGuiSettings(message, self._getTemplateName(completedQuestIDs))
-            formatted = g_settings.msgTemplates.format(self._getTemplateName(completedQuestIDs), {'level': level,
-             'achieves': achieves})
-        callback([_MessageData(formatted, settings)])
-        return
-
-    def _getTemplateName(self, completedQuestIDs=None):
-        pass
-
-
-class HalloweenFinalRewardFormatter(TokenQuestsFormatter):
-    _halloweenController = dependency.descriptor(IHalloweenController)
-
-    @async
-    @process
-    def format(self, message, callback):
-        isSynced = yield self._waitForSyncItems()
-        formatted, settings = (None, None)
-        data = message.data or {}
-        if isSynced:
-            completedQuestIDs = data.get('completedQuestIDs', set())
-            completedQuestIDs.update(data.get('rewardsGottenQuestIDs', set()))
-            settings = self._getGuiSettings(message, self._getTemplateName(completedQuestIDs))
-            achieves = self.formatQuestAchieves(data, asBattleFormatter=False)
-            formatted = g_settings.msgTemplates.format(self._getTemplateName(completedQuestIDs), {'achieves': achieves})
-        callback([_MessageData(formatted, settings)])
-        return None
-
-    def _getTemplateName(self, completedQuestIDs=None):
-        pass
-
-    @classmethod
-    def formatQuestAchieves(cls, data, asBattleFormatter, processCustomizations=True):
-        res = super(HalloweenFinalRewardFormatter, cls).formatQuestAchieves(data, asBattleFormatter, processCustomizations)
-        badges = []
-        for _, records in data.get('dossier', {}).iteritems():
-            for recordName in records:
-                block, name = recordName
-                if block == BADGES_BLOCK:
-                    badges.append(name)
-
-        if badges:
-            badgesStr = ', '.join([ i18n.makeString(BADGE.badgeName(badgeID)) for badgeID in badges ])
-            res += '<br/>' + g_settings.htmlTemplates.format('badgeAchievement', {'badges': badgesStr})
-        return res
 
 
 class NCMessageFormatter(ServiceChannelFormatter):
@@ -2735,3 +2617,11 @@ class PersonalMissionFailedFormatter(WaitItemsSyncFormatter):
         else:
             callback([_MessageData(None, None)])
         return
+
+
+class CustomizationChangedFormatter(ServiceChannelFormatter):
+
+    def format(self, message, *args):
+        text = i18n.makeString('#messenger:serviceChannelMessages/sysMsg/converter/customizations')
+        formatted = g_settings.msgTemplates.format('CustomizationChanged', {'text': text})
+        return [_MessageData(formatted, self._getGuiSettings(message, 'CustomizationChanged'))]

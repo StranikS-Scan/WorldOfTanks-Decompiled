@@ -261,7 +261,7 @@ class PostmortemPanel(_SummaryPostmortemPanel):
                     vTypeInfoVO = vInfoVO.vehicleType
                     vehLvl = int2roman(vTypeInfoVO.level)
                     vehImg = _VEHICLE_SMALL_ICON_RES_PATH.format(vTypeInfoVO.iconName)
-                    vehClass = Vehicle.getTypeBigIconPath(vTypeInfoVO.classTag, False)
+                    vehClass = Vehicle.getTypeBigIconPath(vTypeInfoVO.classTag)
                     vehName = vTypeInfoVO.shortNameWithPrefix
                 else:
                     showVehicle = False

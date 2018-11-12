@@ -73,7 +73,7 @@
       </slot>
       <slot>
         <slotType>	player	</slotType>
-        <slotId>	2	</slotId>
+        <slotId>	4	</slotId>
         <rayStart>	-1.27535 0.557237 -1.39092	</rayStart>
         <rayEnd>	-1.07535 0.557237 -1.39092	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
@@ -83,7 +83,7 @@
       </slot>
       <slot>
         <slotType>	inscription	</slotType>
-        <slotId>	3	</slotId>
+        <slotId>	36	</slotId>
         <rayStart>	-1.21541 0.454385 1.11671	</rayStart>
         <rayEnd>	-1.13541 0.454368 1.11671	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
@@ -93,7 +93,7 @@
       </slot>
       <slot>
         <slotType>	inscription	</slotType>
-        <slotId>	4	</slotId>
+        <slotId>	37	</slotId>
         <rayStart>	1.2283 0.409335 1.23811	</rayStart>
         <rayEnd>	1.1483 0.409282 1.23811	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
@@ -114,7 +114,7 @@
       </slot>
       <slot>
         <slotType>	camouflage	</slotType>
-        <slotId>	8	</slotId>
+        <slotId>	3	</slotId>
         <anchorPosition>	0.00047182 1.14614 -1.42418	</anchorPosition>
         <anchorDirection>	0.000000 0.663393 -0.748271	</anchorDirection>
       </slot>
@@ -993,7 +993,7 @@
       <customizationSlots>
         <slot>
           <slotType>	style	</slotType>
-          <slotId>	13	</slotId>
+          <slotId>	257	</slotId>
           <anchorPosition>	0.000000 1.66564 -0.000000	</anchorPosition>
           <anchorDirection>	-0.000000 1 0.000000	</anchorDirection>
         </slot>
@@ -1864,7 +1864,7 @@
       <customizationSlots>
         <slot>
           <slotType>	style	</slotType>
-          <slotId>	7	</slotId>
+          <slotId>	257	</slotId>
           <anchorPosition>	0.000491757 1.66576 -0.000003	</anchorPosition>
           <anchorDirection>	0.000000 1 0.000000	</anchorDirection>
         </slot>
@@ -1919,7 +1919,7 @@
           <customizationSlots>
             <slot>
               <slotType>	camouflage	</slotType>
-              <slotId>	10	</slotId>
+              <slotId>	770	</slotId>
               <anchorPosition>	0.000002 0.16371 0.890081	</anchorPosition>
               <anchorDirection>	-0.000000 0.000000 1	</anchorDirection>
               <applyTo>	4096	</applyTo>
@@ -1976,7 +1976,7 @@
       <customizationSlots>
         <slot>
           <slotType>	camouflage	</slotType>
-          <slotId>	6	</slotId>
+          <slotId>	513	</slotId>
           <anchorPosition>	0.000000 0.555216 0.000000	</anchorPosition>
           <anchorDirection>	-0.000000 1 -0.000000	</anchorDirection>
         </slot>
@@ -2028,7 +2028,7 @@
           <customizationSlots>
             <slot>
               <slotType>	camouflage	</slotType>
-              <slotId>	11	</slotId>
+              <slotId>	770	</slotId>
               <anchorPosition>	-0.000067 0.000039 0.951664	</anchorPosition>
               <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
               <applyTo>	4096	</applyTo>
@@ -2085,7 +2085,7 @@
       <customizationSlots>
         <slot>
           <slotType>	camouflage	</slotType>
-          <slotId>	9	</slotId>
+          <slotId>	513	</slotId>
           <anchorPosition>	0.000000 0.522804 0.000000	</anchorPosition>
           <anchorDirection>	-0.000000 1 0.000000	</anchorDirection>
         </slot>
@@ -2144,9 +2144,11 @@
       <engines>
         <Continental_W-670>
           <smplEnginePower>	277.0077	</smplEnginePower>
+          <smplFwMaxSpeed>	64	</smplFwMaxSpeed>
         </Continental_W-670>
         <Twin_Cadillac_series_44T4>
           <smplEnginePower>	312.9552	</smplEnginePower>
+          <smplFwMaxSpeed>	64	</smplFwMaxSpeed>
         </Twin_Cadillac_series_44T4>
       </engines>
       <chassis>

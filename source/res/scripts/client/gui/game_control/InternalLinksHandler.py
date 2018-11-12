@@ -3,7 +3,7 @@
 from adisp import async, process
 from debug_utils import LOG_ERROR
 from gui import GUI_SETTINGS
-from gui.game_control.links import URLMarcos
+from gui.game_control.links import URLMacros
 from gui.shared import g_eventBus
 from helpers import dependency
 from skeletons.gui.game_control import IInternalLinksController, IBrowserController
@@ -14,12 +14,12 @@ class InternalLinksHandler(IInternalLinksController):
 
     def __init__(self):
         super(InternalLinksHandler, self).__init__()
-        self.__urlMarcos = None
+        self.__urlMacros = None
         self._browserID = None
         return
 
     def init(self):
-        self.__urlMarcos = URLMarcos()
+        self.__urlMacros = URLMacros()
         addListener = g_eventBus.addListener
         for eventType, handlerName in _LISTENERS.iteritems():
             handler = getattr(self, handlerName, None)
@@ -34,9 +34,9 @@ class InternalLinksHandler(IInternalLinksController):
         return
 
     def fini(self):
-        if self.__urlMarcos is not None:
-            self.__urlMarcos.clear()
-            self.__urlMarcos = None
+        if self.__urlMacros is not None:
+            self.__urlMacros.clear()
+            self.__urlMacros = None
         self._browserID = None
         removeListener = g_eventBus.removeListener
         for eventType, handlerName in _LISTENERS.iteritems():
@@ -52,7 +52,7 @@ class InternalLinksHandler(IInternalLinksController):
     def getURL(self, name, callback):
         urlSettings = GUI_SETTINGS.lookup(name)
         if urlSettings:
-            url = yield self.__urlMarcos.parse(str(urlSettings))
+            url = yield self.__urlMacros.parse(str(urlSettings))
         else:
             url = yield lambda callback: callback('')
         callback(url)

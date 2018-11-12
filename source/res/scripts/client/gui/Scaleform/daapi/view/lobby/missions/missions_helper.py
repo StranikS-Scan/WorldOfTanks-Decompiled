@@ -6,8 +6,8 @@ import BigWorld
 import constants
 from debug_utils import LOG_WARNING
 from gui.Scaleform.daapi.view.lobby.missions import cards_formatters
+from gui.Scaleform.daapi.view.lobby.missions.awards_formatters import CurtailingAwardsComposer, AwardsWindowComposer, DetailedCardAwardComposer, PersonalMissionsAwardComposer, LinkedSetAwardsComposer
 from gui.Scaleform.daapi.view.lobby.server_events.events_helpers import getChainVehTypeAndLevelRestrictions
-from gui.Scaleform.daapi.view.lobby.missions.awards_formatters import CurtailingAwardsComposer, AwardsWindowComposer, DetailedCardAwardComposer, PersonalMissionsAwardComposer, LinkedSetAwardsComposer, HalloweenAwardsComposer
 from gui.Scaleform.genConsts.PERSONAL_MISSIONS_ALIASES import PERSONAL_MISSIONS_ALIASES
 from gui.Scaleform.genConsts.PERSONAL_MISSIONS_BUTTONS import PERSONAL_MISSIONS_BUTTONS
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
@@ -17,7 +17,6 @@ from gui.Scaleform.locale.QUESTS import QUESTS
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.server_events.awards_formatters import AWARDS_SIZES
-from gui.server_events.cond_formatters import mixed_formatters
 from gui.server_events.cond_formatters.prebattle import MissionsPreBattleConditionsFormatter
 from gui.server_events.cond_formatters.requirements import AccountRequirementsFormatter, TQAccountRequirementsFormatter
 from gui.server_events.conditions import GROUP_TYPE
@@ -50,7 +49,6 @@ _detailedCardAwardsFormatter = DetailedCardAwardComposer(DETAILED_CARD_AWARDS_CO
 _awardsWindowBonusFormatter = AwardsWindowComposer(CARD_AWARDS_BIG_COUNT)
 _personalMissionsAwardsFormatter = PersonalMissionsAwardComposer(DETAILED_CARD_AWARDS_COUNT)
 _linkedSetAwardsComposer = LinkedSetAwardsComposer(LINKED_SET_CARD_AWARDS_COUNT)
-_halloweenAwardsComposer = HalloweenAwardsComposer(LINKED_SET_CARD_AWARDS_COUNT)
 HIDE_DONE = 'hideDone'
 HIDE_UNAVAILABLE = 'hideUnavailable'
 PostponedOperationState = namedtuple('PostponedOperationState', ['state', 'postponeTime'])
@@ -624,7 +622,7 @@ class _DetailedPersonalMissionInfo(_MissionInfo):
         return (criteria, extraConditions)
 
     def getAwardScreenConditionsFormatter(self):
-        return mixed_formatters.PM1AwardScreenConditionsFormatterAdapter(self.event) if self.event.getQuestBranch() == PM_BRANCH.REGULAR else formatters.PM2AwardScreenConditionsFormatter(self.event)
+        return formatters.PMAwardScreenConditionsFormatter(self.event)
 
     def getAwards(self, extended=False):
         return self._getAwards(extended=extended)
@@ -693,7 +691,8 @@ class _DetailedPersonalMissionInfo(_MissionInfo):
         operationID = quest.getOperationID()
         operation = operations.get(operationID)
         if not operation.isUnlocked():
-            pmType = quest.getPMType()
+            initialQuest = quests[first(operation.getInitialQuests().iterkeys())]
+            pmType = initialQuest.getPMType()
             prevOperationID = max((quests[qId].getOperationID() for qId in pmType.requiredUnlocks))
             prevOperation = operations.get(prevOperationID)
             statusTooltipData = {'tooltip': makeTooltip(header=TOOLTIPS.PERSONALMISSIONS_STATUS_LOCKEDBYPREVOPERATION_HEADER, body=TOOLTIPS.PERSONALMISSIONS_STATUS_LOCKEDBYPREVOPERATION_BODY)}
@@ -791,11 +790,8 @@ class _DetailedPersonalMissionInfo(_MissionInfo):
         return {'awards': awards,
          'awardsFullyCompleted': awardsFullyCompleted}
 
-    def _getLobbyConditionsFormatter(self):
-        return mixed_formatters.PM1CardConditionsFormatterAdapter(self.event) if self.event.getQuestBranch() == PM_BRANCH.REGULAR else formatters.PM2CardConditionsFormatter(self.event)
-
     def _getConditions(self):
-        formatter = self._getLobbyConditionsFormatter()
+        formatter = formatters.PMCardConditionsFormatter(self.event)
         self.__anyProgress = formatter.hasProgressForReset()
         return {'bodyProgress': formatter.bodyFormat(),
          'headerProgress': formatter.headerFormat()}
@@ -949,14 +945,6 @@ def getMissionAwardsFormatter():
 
 def getLinkedSetBonuses(bonuses):
     result = _linkedSetAwardsComposer.getFormattedBonuses(bonuses, AWARDS_SIZES.BIG)
-    while len(result) % AWARDS_PER_SINGLE_PAGE != 0 and len(result) > AWARDS_PER_SINGLE_PAGE:
-        result.append({})
-
-    return result
-
-
-def getHalloweenBonuses(bonuses):
-    result = _halloweenAwardsComposer.getFormattedBonuses(bonuses, AWARDS_SIZES.BIG)
     while len(result) % AWARDS_PER_SINGLE_PAGE != 0 and len(result) > AWARDS_PER_SINGLE_PAGE:
         result.append({})
 

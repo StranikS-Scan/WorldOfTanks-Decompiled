@@ -21,6 +21,7 @@ class EpicFinishSoundPlayer(FinishSoundPlayer, IViewComponentsCtrlListener):
         super(EpicFinishSoundPlayer, self).__init__()
         self.__soundID = None
         self.__notificationDelayCB = None
+        self.__playEndSoundDelayCB = None
         g_playerEvents.onRoundFinished += self.__onEpicRoundFinished
         return
 
@@ -34,6 +35,8 @@ class EpicFinishSoundPlayer(FinishSoundPlayer, IViewComponentsCtrlListener):
         pass
 
     def _playSoundNotification(self, winnerTeam, reason):
+        if self.__notificationDelayCB is not None:
+            self.__notificationDelayCB = None
         playerTeam = avatar_getter.getPlayerTeam()
         notification = _EPIC_SOUND_NOTIFICATIONS.get(reason, None)
         if notification is None:
@@ -44,6 +47,7 @@ class EpicFinishSoundPlayer(FinishSoundPlayer, IViewComponentsCtrlListener):
             soundNotifications = avatar_getter.getSoundNotifications()
             if soundNotifications and hasattr(soundNotifications, 'play'):
                 soundNotifications.play(notification)
+            EPIC_SOUND.EPIC_MSG_SOUNDS_ENABLED = False
             return
 
     def __onEpicRoundFinished(self, winnerTeam, reason):

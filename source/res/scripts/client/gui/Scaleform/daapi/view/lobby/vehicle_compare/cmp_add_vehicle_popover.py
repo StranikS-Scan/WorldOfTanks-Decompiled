@@ -7,21 +7,20 @@ from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.VEH_COMPARE import VEH_COMPARE
 from gui.game_control.veh_comparison_basket import MAX_VEHICLES_TO_COMPARE_COUNT, getVehicleCriteriaForComparing
 from gui.shared.formatters import text_styles
-from gui.shared.gui_items.Vehicle import getSmallIconPath
+from gui.shared.gui_items.Vehicle import getSmallIconPath, getTypeSmallIconPath
 from helpers import dependency
 from helpers.i18n import makeString as _ms
 from skeletons.gui.game_control import IVehicleComparisonBasket
 from skeletons.gui.shared import IItemsCache
 
 def _makeVehicleCmpVO(vehicle):
-    iconFunc = RES_ICONS.maps_icons_vehicletypes_elite if vehicle.isPremium else RES_ICONS.maps_icons_vehicletypes
     return {'dbID': vehicle.intCD,
      'level': vehicle.level,
      'shortUserName': vehicle.shortUserName,
      'smallIconPath': getSmallIconPath(vehicle.name),
      'nationID': vehicle.nationID,
      'type': vehicle.type,
-     'typeIcon': iconFunc(vehicle.type + '.png'),
+     'typeIcon': getTypeSmallIconPath(vehicle.type, vehicle.isPremium),
      'selected': False,
      'inHangar': vehicle.isInInventory}
 
@@ -47,9 +46,10 @@ class VehicleCompareAddVehiclePopover(VehicleSelectPopoverBase, VehicleSelectorB
         self._vehDP.buildList(vehicles)
         self._updateSortField()
 
-    def setVehicleSelected(self, dbID):
-        super(VehicleCompareAddVehiclePopover, self).setVehicleSelected(dbID)
-        self.updateAddButtonLabel()
+    def setVehicleSelected(self, dbID, autoClose):
+        super(VehicleCompareAddVehiclePopover, self).setVehicleSelected(dbID, autoClose)
+        if not autoClose:
+            self.updateAddButtonLabel()
 
     def updateAddButtonLabel(self):
         selectedCount = len(self._vehDP.getSelected())

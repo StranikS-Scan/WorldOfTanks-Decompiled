@@ -98,7 +98,7 @@
       </slot>
       <slot>
         <slotType>	player	</slotType>
-        <slotId>	2	</slotId>
+        <slotId>	4	</slotId>
         <rayStart>	-1.34044 0.452954 -0.033189	</rayStart>
         <rayEnd>	-0.940434 0.452355 -0.033189	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
@@ -108,7 +108,7 @@
       </slot>
       <slot>
         <slotType>	inscription	</slotType>
-        <slotId>	3	</slotId>
+        <slotId>	36	</slotId>
         <rayStart>	-1.34036 0.43261 0.579	</rayStart>
         <rayEnd>	-0.940356 0.432444 0.578778	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
@@ -118,7 +118,7 @@
       </slot>
       <slot>
         <slotType>	player	</slotType>
-        <slotId>	4	</slotId>
+        <slotId>	5	</slotId>
         <rayStart>	1.34044 0.452954 -0.033189	</rayStart>
         <rayEnd>	0.940434 0.452355 -0.033189	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
@@ -129,7 +129,7 @@
       </slot>
       <slot>
         <slotType>	inscription	</slotType>
-        <slotId>	5	</slotId>
+        <slotId>	37	</slotId>
         <rayStart>	1.34036 0.43261 0.579	</rayStart>
         <rayEnd>	0.940356 0.432444 0.578778	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
@@ -139,7 +139,7 @@
       </slot>
       <slot>
         <slotType>	camouflage	</slotType>
-        <slotId>	8	</slotId>
+        <slotId>	3	</slotId>
         <anchorPosition>	0.000000 0.337698 -0.844405	</anchorPosition>
         <anchorDirection>	0.000000 0.37133 -0.928501	</anchorDirection>
       </slot>
@@ -399,7 +399,7 @@
       <customizationSlots>
         <slot>
           <slotType>	style	</slotType>
-          <slotId>	13	</slotId>
+          <slotId>	257	</slotId>
           <anchorPosition>	0.000000 1.73055 0.000000	</anchorPosition>
           <anchorDirection>	0.000000 1 0.000000	</anchorDirection>
         </slot>
@@ -655,7 +655,7 @@
       <customizationSlots>
         <slot>
           <slotType>	style	</slotType>
-          <slotId>	7	</slotId>
+          <slotId>	257	</slotId>
           <anchorPosition>	0.000043 1.73061 -0.000024	</anchorPosition>
           <anchorDirection>	0.000000 1 -0.000000	</anchorDirection>
         </slot>
@@ -738,7 +738,7 @@
           <customizationSlots>
             <slot>
               <slotType>	camouflage	</slotType>
-              <slotId>	9	</slotId>
+              <slotId>	770	</slotId>
               <anchorPosition>	0.000000 0.147562 0.929812	</anchorPosition>
               <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
               <applyTo>	4096	</applyTo>
@@ -786,7 +786,7 @@
           <customizationSlots>
             <slot>
               <slotType>	camouflage	</slotType>
-              <slotId>	11	</slotId>
+              <slotId>	770	</slotId>
               <anchorPosition>	0.000096 0.000058 0.843266	</anchorPosition>
               <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
               <applyTo>	4096	</applyTo>
@@ -834,7 +834,7 @@
           <customizationSlots>
             <slot>
               <slotType>	camouflage	</slotType>
-              <slotId>	10	</slotId>
+              <slotId>	770	</slotId>
               <anchorPosition>	-0.000002 0.157506 1.16763	</anchorPosition>
               <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
               <applyTo>	4096	</applyTo>
@@ -885,7 +885,7 @@
           <customizationSlots>
             <slot>
               <slotType>	camouflage	</slotType>
-              <slotId>	12	</slotId>
+              <slotId>	770	</slotId>
               <anchorPosition>	0.00027341 0.132303 0.925224	</anchorPosition>
               <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
               <applyTo>	4096	</applyTo>
@@ -918,7 +918,7 @@
       <customizationSlots>
         <slot>
           <slotType>	camouflage	</slotType>
-          <slotId>	14	</slotId>
+          <slotId>	513	</slotId>
           <anchorPosition>	0.00303137 0.449884 0.512621	</anchorPosition>
           <anchorDirection>	0.000000 1 0.000000	</anchorDirection>
         </slot>
@@ -962,9 +962,11 @@
       <engines>
         <Meadows_HOP>
           <smplEnginePower>	171.2795	</smplEnginePower>
+          <smplFwMaxSpeed>	50.5	</smplFwMaxSpeed>
         </Meadows_HOP>
         <Meadows_HOP_OC>
           <smplEnginePower>	190.3106	</smplEnginePower>
+          <smplFwMaxSpeed>	50.5	</smplFwMaxSpeed>
         </Meadows_HOP_OC>
       </engines>
       <chassis>

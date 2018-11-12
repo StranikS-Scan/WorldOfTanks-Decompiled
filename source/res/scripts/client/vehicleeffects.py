@@ -20,19 +20,22 @@ class DamageFromShotDecoder(object):
         return vehicleHitEffectCode >= VEHICLE_HIT_EFFECT.ARMOR_PIERCED
 
     @staticmethod
-    def decodeHitPoints(encodedPoints, collisionComponent):
+    def decodeHitPoints(encodedPoints, collisionComponent, maxComponentIdx=TankPartIndexes.ALL[-1]):
         resultPoints = []
         maxHitEffectCode = None
         maxDamagedComponentName = None
         for encodedPoint in encodedPoints:
-            compIdx, hitEffectCode, startPoint, endPoint = DamageFromShotDecoder.decodeSegment(encodedPoint, collisionComponent)
+            compIdx, hitEffectCode, startPoint, endPoint = DamageFromShotDecoder.decodeSegment(encodedPoint, collisionComponent, maxComponentIdx)
             if startPoint == endPoint or compIdx < 0:
                 continue
+            convertedCompIdx = DamageFromShotDecoder.convertComponentIndex(compIdx)
             if hitEffectCode > maxHitEffectCode:
                 maxHitEffectCode = hitEffectCode
                 maxDamagedComponentName = TankPartIndexes.getName(compIdx)
-            hitTestRes = collisionComponent.collideLocal(compIdx, startPoint, endPoint)
-            bbox = collisionComponent.getBoundingBox(compIdx)
+                if not maxDamagedComponentName:
+                    maxDamagedComponentName = collisionComponent.getPartName(convertedCompIdx)
+            hitTestRes = collisionComponent.collideLocal(convertedCompIdx, startPoint, endPoint)
+            bbox = collisionComponent.getBoundingBox(convertedCompIdx)
             if not hitTestRes or hitTestRes < 0.0:
                 width, height, depth = (bbox[1] - bbox[0]) / 256.0
                 directions = [Math.Vector3(0.0, -height, 0.0),
@@ -42,12 +45,12 @@ class DamageFromShotDecoder(object):
                  Math.Vector3(0.0, 0.0, -depth),
                  Math.Vector3(0.0, 0.0, depth)]
                 for direction in directions:
-                    hitTestRes = collisionComponent.collideLocal(compIdx, startPoint + direction, endPoint + direction)
+                    hitTestRes = collisionComponent.collideLocal(convertedCompIdx, startPoint + direction, endPoint + direction)
                     if hitTestRes >= 0.0:
                         break
 
             if hitTestRes is None or hitTestRes < 0.0:
-                newPoint = collisionComponent.collideLocalPoint(compIdx, startPoint, MAX_FALLBACK_CHECK_DISTANCE)
+                newPoint = collisionComponent.collideLocalPoint(convertedCompIdx, startPoint, MAX_FALLBACK_CHECK_DISTANCE)
                 if newPoint.length > 0.0:
                     hitRay = endPoint - startPoint
                     hitTestRes = hitRay.length
@@ -65,12 +68,22 @@ class DamageFromShotDecoder(object):
             matrix.preMultiply(rot)
             effectGroup = DamageFromShotDecoder.__hitEffectCodeToEffectGroup[hitEffectCode]
             componentName = TankPartIndexes.getName(compIdx)
+            if not componentName:
+                componentName = collisionComponent.getPartName(convertedCompIdx)
             resultPoints.append(DamageFromShotDecoder.ShotPoint(componentName, matrix, effectGroup))
 
         return (maxHitEffectCode, resultPoints, maxDamagedComponentName)
 
     @staticmethod
-    def decodeSegment(segment, collisionComponent):
+    def convertComponentIndex(compIdx):
+        idx = compIdx
+        maxStructuralIndex = TankPartIndexes.ALL[-1]
+        if compIdx > maxStructuralIndex:
+            idx = maxStructuralIndex - compIdx
+        return idx
+
+    @staticmethod
+    def decodeSegment(segment, collisionComponent, maxComponentIdx=TankPartIndexes.ALL[-1]):
         if collisionComponent is None:
             return (-1,
              int(segment & 255),
@@ -78,13 +91,13 @@ class DamageFromShotDecoder(object):
              None)
         else:
             compIdx = segment >> 8 & 255
-            if compIdx > 3:
+            if compIdx > maxComponentIdx:
                 LOG_CODEPOINT_WARNING(compIdx)
                 return (-1,
                  int(segment & 255),
                  None,
                  None)
-            bbox = collisionComponent.getBoundingBox(compIdx)
+            bbox = collisionComponent.getBoundingBox(DamageFromShotDecoder.convertComponentIndex(compIdx))
             minimum = Math.Vector3(bbox[0])
             delta = (bbox[1] - minimum).scale(1.0 / 255.0)
             segStart = minimum + Math.Vector3(delta[0] * (segment >> 16 & 255), delta[1] * (segment >> 24 & 255), delta[2] * (segment >> 32 & 255))

@@ -1,8 +1,10 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/hangar/hangar_header.py
+import BigWorld
 import constants
 import nations
 from CurrentVehicle import g_currentVehicle
+from gui import g_guiResetters
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform.daapi.view.lobby.missions.regular import missions_page
 from gui.Scaleform.daapi.view.meta.HangarHeaderMeta import HangarHeaderMeta
@@ -30,8 +32,6 @@ from gui.prb_control import prb_getters
 from skeletons.gui.lobby_context import ILobbyContext
 from gui.prb_control.entities.listener import IGlobalListener
 from gui.event_boards.listener import IEventBoardsListener
-from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
-from skeletons.gui.halloween_controller import IHalloweenController
 
 class WIDGET_PM_STATE(object):
     DISABLED = 0
@@ -100,6 +100,7 @@ TOOLTIPS_HANGAR_HEADER_PM2 = {WIDGET_PM_STATE.BRANCH_DISABLED: TOOLTIPS.HANGAR_H
  WIDGET_PM_STATE.UNAVAILABLE: TOOLTIPS.HANGAR_HEADER_PERSONALMISSIONS2_UNAVAILABLEFULL,
  WIDGET_PM_STATE.OPERATION_DISABLED: TOOLTIPS.HANGAR_HEADER_PERSONALMISSIONS_OPERATION_DISABLED,
  WIDGET_PM_STATE.DISABLED: None}
+_SCREEN_WIDTH_FOR_MARATHON_GROUP = 1300
 
 def _findPersonalMissionsState(eventsCache, vehicle, branch):
     branchState = WIDGET_PM_STATE.DISABLED
@@ -189,11 +190,11 @@ class HangarHeader(HangarHeaderMeta, IGlobalListener, IEventBoardsListener):
     _connectionMgr = dependency.descriptor(IConnectionManager)
     _lobbyContext = dependency.descriptor(ILobbyContext)
     _marathonsCtrl = dependency.descriptor(IMarathonEventsController)
-    _halloweenController = dependency.descriptor(IHalloweenController)
 
     def __init__(self):
         super(HangarHeader, self).__init__()
         self._currentVehicle = None
+        self.__screenWidth = None
         return
 
     def onQuestBtnClick(self, questType, questID):
@@ -209,24 +210,21 @@ class HangarHeader(HangarHeaderMeta, IGlobalListener, IEventBoardsListener):
                 self.__showAvailablePMOperation(PM_BRANCH.PERSONAL_MISSION_2)
         elif questType == HANGAR_HEADER_QUESTS.QUEST_TYPE_EVENT:
             showMissionsElen(questID)
-        elif questType == HANGAR_HEADER_QUESTS.QUEST_TYPE_MARATHON:
+        elif HANGAR_HEADER_QUESTS.QUEST_TYPE_MARATHON in questType:
             marathonPrefix = questID or DEFAULT_MARATHON_PREFIX
             showMissionsMarathon(marathonPrefix)
-
-    def onProgressClicked(self):
-        self.fireEvent(events.LoadViewEvent(VIEW_ALIAS.EVENT_SHOP), scope=EVENT_BUS_SCOPE.LOBBY)
 
     def onUpdateHangarFlag(self):
         self.update()
 
     def update(self, *args):
         headerVO = self._makeHeaderVO()
-        self._onHalloweenItemsUpdated()
         self.as_setDataS(headerVO)
 
     def _populate(self):
         super(HangarHeader, self)._populate()
         self._currentVehicle = g_currentVehicle
+        self.__screenWidth = BigWorld.screenSize()[0]
         self._eventsCache.onSyncCompleted += self.update
         self._eventsCache.onProgressUpdated += self.update
         g_clientUpdateManager.addCallbacks({'inventory.1': self.update,
@@ -236,8 +234,7 @@ class HangarHeader(HangarHeaderMeta, IGlobalListener, IEventBoardsListener):
         self._marathonsCtrl.onFlagUpdateNotify += self.update
         self.addListener(events.TutorialEvent.SET_HANGAR_HEADER_ENABLED, self.__onSetHangarHeaderEnabled, scope=EVENT_BUS_SCOPE.LOBBY)
         self._lobbyContext.getServerSettings().onServerSettingsChange += self.__onServerSettingChanged
-        self._halloweenController.getProgress().onItemsUpdated += self._onHalloweenItemsUpdated
-        self._onHalloweenItemsUpdated()
+        g_guiResetters.add(self.__onChangeScreenResolution)
 
     def _dispose(self):
         g_clientUpdateManager.removeObjectCallbacks(self)
@@ -245,45 +242,21 @@ class HangarHeader(HangarHeaderMeta, IGlobalListener, IEventBoardsListener):
         self._eventsCache.onSyncCompleted -= self.update
         self._eventsCache.onProgressUpdated -= self.update
         self._currentVehicle = None
+        self.__screenWidth = None
         if self._eventsController:
             self._eventsController.removeListener(self)
         self.removeListener(events.TutorialEvent.SET_HANGAR_HEADER_ENABLED, self.__onSetHangarHeaderEnabled, scope=EVENT_BUS_SCOPE.LOBBY)
         self._lobbyContext.getServerSettings().onServerSettingsChange -= self.__onServerSettingChanged
-        if self._halloweenController.getProgress():
-            self._halloweenController.getProgress().onItemsUpdated -= self._onHalloweenItemsUpdated
+        g_guiResetters.remove(self.__onChangeScreenResolution)
         super(HangarHeader, self)._dispose()
         return
-
-    def _onHalloweenItemsUpdated(self):
-        if not self._halloweenController.isEnabled() or not g_currentVehicle.isPresent():
-            self.as_setBonusVisibleS(False)
-            return
-        else:
-            halloweenProgress = self._halloweenController.getProgress()
-            self.as_setBonusVisibleS(halloweenProgress is not None)
-            if halloweenProgress is not None:
-                currentProgressItem = halloweenProgress.getCurrentProgressItem()
-                if currentProgressItem is not None:
-                    data = dict(currentProgressItem.getGUIBonusData())
-                    data['specialAlias'] = TOOLTIPS_CONSTANTS.HALLOWEEN_HANGAR_TOOLTIP
-                    data['specialArgs'] = (currentProgressItem.getLevel(),)
-                    self.as_setBonusDataS(data)
-            return
 
     def _makeHeaderVO(self):
         if self.app.tutorialManager.hangarHeaderEnabled and self._currentVehicle.isPresent():
             vehicle = self._currentVehicle.item
-            if vehicle.isEvent:
-                tankInfo = text_styles.promoSubTitle(vehicle.shortUserName)
-                if self._halloweenController.isEnabled():
-                    quests = self._getQuestsToHalloweenHeaderVO(vehicle)
-                else:
-                    quests = []
-            else:
-                quests = self._getQuestsToHeaderVO(vehicle)
-                tankInfo = text_styles.concatStylesToMultiLine(text_styles.promoSubTitle(vehicle.shortUserName), text_styles.stats(MENU.levels_roman(vehicle.level)))
+            quests = self._getQuestsToHeaderVO(vehicle)
             headerVO = {'tankType': '{}_elite'.format(vehicle.type) if vehicle.isElite else vehicle.type,
-             'tankInfo': tankInfo,
+             'tankInfo': text_styles.concatStylesToMultiLine(text_styles.promoSubTitle(vehicle.shortUserName), text_styles.stats(MENU.levels_roman(vehicle.level))),
              'isPremIGR': vehicle.isPremiumIGR,
              'isVisible': True,
              'quests': quests}
@@ -291,13 +264,6 @@ class HangarHeader(HangarHeaderMeta, IGlobalListener, IEventBoardsListener):
             headerVO = {'isVisible': False,
              'quests': []}
         return headerVO
-
-    def _getQuestsToHalloweenHeaderVO(self, vehicle):
-        quests = []
-        battleQuests = self.__getBattleQuestsVO(vehicle, RES_ICONS.MAPS_ICONS_LIBRARY_HANGARFLAG_FLAG_HALLOWEEN, RES_ICONS.MAPS_ICONS_LIBRARY_OUTLINE_QUESTS_HE_AVAILABLE, RES_ICONS.MAPS_ICONS_LIBRARY_OUTLINE_QUESTS_HE_DISABLED)
-        if battleQuests:
-            quests.append(battleQuests)
-        return quests
 
     def _getQuestsToHeaderVO(self, vehicle):
         quests = []
@@ -307,9 +273,13 @@ class HangarHeader(HangarHeaderMeta, IGlobalListener, IEventBoardsListener):
         battleQuests = self.__getBattleQuestsVO(vehicle)
         if battleQuests:
             quests.append(battleQuests)
-        marathonQuests = self.__getMarathonQuestsVO(vehicle)
+        isMarathonQuestsGroupped = self.__screenWidth <= _SCREEN_WIDTH_FOR_MARATHON_GROUP
+        marathonQuests = self.__getMarathonQuestsVO(vehicle, isMarathonQuestsGroupped)
         if marathonQuests:
-            quests.append(marathonQuests)
+            if isMarathonQuestsGroupped:
+                quests.append(marathonQuests)
+            else:
+                quests.extend(marathonQuests)
         eventQuests = self.__getElenQuestsVO(vehicle)
         if eventQuests:
             quests.append(eventQuests)
@@ -324,6 +294,10 @@ class HangarHeader(HangarHeaderMeta, IGlobalListener, IEventBoardsListener):
                 return
 
         showPersonalMissionsOperationsMap()
+
+    def __onChangeScreenResolution(self):
+        self.__screenWidth = BigWorld.screenSize()[0]
+        self.update()
 
     def __getPersonalMissionsVO(self, vehicle):
         result = []
@@ -397,7 +371,7 @@ class HangarHeader(HangarHeaderMeta, IGlobalListener, IEventBoardsListener):
         if 'elenSettings' in diff:
             self.update()
 
-    def __getBattleQuestsVO(self, vehicle, flag=None, commonQuestsAvailableIcon=RES_ICONS.MAPS_ICONS_LIBRARY_OUTLINE_QUESTS_AVAILABLE, commonQuestsDisabledIcon=RES_ICONS.MAPS_ICONS_LIBRARY_OUTLINE_QUESTS_DISABLED):
+    def __getBattleQuestsVO(self, vehicle):
         quests = self._questController.getQuestForVehicle(vehicle)
         totalCount = len(quests)
         completedQuests = len([ q for q in quests if q.isCompleted() ])
@@ -406,21 +380,30 @@ class HangarHeader(HangarHeaderMeta, IGlobalListener, IEventBoardsListener):
                 label = _ms(MENU.hangarHeaderBattleQuestsLabel(LABEL_STATE.ACTIVE), total=totalCount - completedQuests)
             else:
                 label = icons.makeImageTag(RES_ICONS.MAPS_ICONS_LIBRARY_OUTLINE_QUESTS_ALL_DONE)
-            commonQuestsIcon = commonQuestsAvailableIcon
+            commonQuestsIcon = RES_ICONS.MAPS_ICONS_LIBRARY_OUTLINE_QUESTS_AVAILABLE
         else:
-            commonQuestsIcon = commonQuestsDisabledIcon
+            commonQuestsIcon = RES_ICONS.MAPS_ICONS_LIBRARY_OUTLINE_QUESTS_DISABLED
             label = ''
-        quests = [self._headerQuestFormaterVo(totalCount > 0, commonQuestsIcon, label, HANGAR_HEADER_QUESTS.QUEST_TYPE_COMMON, tooltip=TOOLTIPS_CONSTANTS.QUESTS_PREVIEW, isTooltipSpecial=True, flag=flag)]
+        quests = [self._headerQuestFormaterVo(totalCount > 0, commonQuestsIcon, label, HANGAR_HEADER_QUESTS.QUEST_TYPE_COMMON, tooltip=TOOLTIPS_CONSTANTS.QUESTS_PREVIEW, isTooltipSpecial=True)]
         return self._wrapQuestGroup(HANGAR_HEADER_QUESTS.QUEST_GROUP_COMMON, '', quests)
 
-    def __getMarathonQuestsVO(self, vehicle):
-        marathonEvent = self._marathonsCtrl.getPrimaryMarathon()
-        if marathonEvent:
-            flagVO = marathonEvent.getMarathonFlagState(vehicle)
-            if flagVO['visible']:
-                quests = [self._headerQuestFormaterVo(flagVO['enable'], flagVO['flagHeaderIcon'], '', HANGAR_HEADER_QUESTS.QUEST_TYPE_MARATHON, flag=flagVO['flagMain'], stateIcon=flagVO['flagStateIcon'], questID=marathonEvent.prefix, tooltip=flagVO['tooltip'], isTooltipSpecial=True)]
-                return self._wrapQuestGroup(HANGAR_HEADER_QUESTS.QUEST_GROUP_MARATHON, '', quests)
-        return None
+    def __getMarathonQuestsVO(self, vehicle, isGroupped=False):
+        marathons = self._marathonsCtrl.getMarathons()
+        if marathons:
+            result = []
+            for index, marathonEvent in enumerate(marathons):
+                flagVO = marathonEvent.getMarathonFlagState(vehicle)
+                if flagVO['visible']:
+                    quest = self._headerQuestFormaterVo(flagVO['enable'], flagVO['flagHeaderIcon'], '', ''.join((HANGAR_HEADER_QUESTS.QUEST_TYPE_MARATHON, str(index))), flag=flagVO['flagMain'], stateIcon=flagVO['flagStateIcon'], questID=marathonEvent.prefix, tooltip=flagVO['tooltip'], isTooltipSpecial=flagVO['enable'])
+                    if not isGroupped:
+                        wrappedGroup = self._wrapQuestGroup(''.join((HANGAR_HEADER_QUESTS.QUEST_GROUP_MARATHON, str(index))), '', [quest])
+                    result.append(quest if isGroupped else wrappedGroup)
+
+            if isGroupped:
+                return self._wrapQuestGroup(HANGAR_HEADER_QUESTS.QUEST_GROUP_MARATHON, RES_ICONS.MAPS_ICONS_QUESTS_HEADERFLAGICONS_MARATHONS, result)
+            return result
+        else:
+            return None
 
     def __getElenQuestsVO(self, vehicle):
         eventsData = self._eventsController.getEventsSettingsData()

@@ -7,27 +7,10 @@
       <conditions>
         <postBattle>
           <and>
-            <or>
-              <unit>
-                <unitVehicleKills>
-                  <title>
-                    <key>	#personal_missions_details:quest_common_condition_title_squad_vehicleKills	</key>
-                  </title>
-                  <description>
-                    <key>	#personal_missions_details:quest_1_2_13_condition_description_vehicleKills	</key>
-                  </description>
-                  <limittedTime>	180	</limittedTime>
-                  <greaterOrEqual>	1	</greaterOrEqual>
-                </unitVehicleKills>
-              </unit>
-              <and>
-                <vehicleKills>
-                  <hideInGui></hideInGui>
-                  <limittedTime>	180	</limittedTime>
-                  <greaterOrEqual>	1	</greaterOrEqual>
-                </vehicleKills>
-              </and>
-            </or>
+            <vehicleKills>
+              <limittedTime>	180	</limittedTime>
+              <greaterOrEqual>	1	</greaterOrEqual>
+            </vehicleKills>
           </and>
         </postBattle>
       </conditions>
@@ -72,27 +55,10 @@
       <conditions>
         <postBattle>
           <and>
-            <or>
-              <unit>
-                <unitVehicleKills>
-                  <title>
-                    <key>	#personal_missions_details:quest_common_condition_title_squad_vehicleKills	</key>
-                  </title>
-                  <description>
-                    <key>	#personal_missions_details:quest_1_2_13_condition_description_vehicleKills	</key>
-                  </description>
-                  <limittedTime>	180	</limittedTime>
-                  <greaterOrEqual>	1	</greaterOrEqual>
-                </unitVehicleKills>
-              </unit>
-              <and>
-                <vehicleKills>
-                  <hideInGui></hideInGui>
-                  <limittedTime>	180	</limittedTime>
-                  <greaterOrEqual>	1	</greaterOrEqual>
-                </vehicleKills>
-              </and>
-            </or>
+            <vehicleKills>
+              <limittedTime>	180	</limittedTime>
+              <greaterOrEqual>	1	</greaterOrEqual>
+            </vehicleKills>
             <isAlive></isAlive>
           </and>
         </postBattle>
@@ -124,21 +90,10 @@
         </preBattle>
         <postBattle>
           <and>
-            <or>
-              <unit>
-                <unitVehicleKills>
-                  <limittedTime>	180	</limittedTime>
-                  <greaterOrEqual>	1	</greaterOrEqual>
-                </unitVehicleKills>
-              </unit>
-              <and>
-                <vehicleKills>
-                  <hideInGui></hideInGui>
-                  <limittedTime>	180	</limittedTime>
-                  <greaterOrEqual>	1	</greaterOrEqual>
-                </vehicleKills>
-              </and>
-            </or>
+            <vehicleKills>
+              <limittedTime>	180	</limittedTime>
+              <greaterOrEqual>	1	</greaterOrEqual>
+            </vehicleKills>
             <isAlive></isAlive>
           </and>
         </postBattle>

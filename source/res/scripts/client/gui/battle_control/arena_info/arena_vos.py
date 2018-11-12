@@ -211,7 +211,7 @@ class VehicleTypeInfoVO(object):
 
 
 class VehicleArenaInfoVO(object):
-    __slots__ = ('vehicleID', 'team', 'player', 'playerStatus', 'vehicleType', 'vehicleStatus', 'prebattleID', 'events', 'squadIndex', 'invitationDeliveryStatus', 'ranked', 'gameModeSpecific', 'eventPoints')
+    __slots__ = ('vehicleID', 'team', 'player', 'playerStatus', 'vehicleType', 'vehicleStatus', 'prebattleID', 'events', 'squadIndex', 'invitationDeliveryStatus', 'ranked', 'gameModeSpecific')
 
     def __init__(self, vehicleID, team=0, isAlive=None, isAvatarReady=None, isTeamKiller=None, prebattleID=None, events=None, forbidInBattleInvitations=False, ranked=None, **kwargs):
         super(VehicleArenaInfoVO, self).__init__()
@@ -357,7 +357,7 @@ class VehicleArenaInfoVO(object):
             if isAlly:
                 return True
             arena = avatar_getter.getArena()
-            if arena is None or arena.guiType not in (ARENA_GUI_TYPE.EVENT_BATTLES, ARENA_GUI_TYPE.RANDOM, ARENA_GUI_TYPE.TRAINING):
+            if arena is None or arena.guiType not in (ARENA_GUI_TYPE.RANDOM, ARENA_GUI_TYPE.TRAINING):
                 return True
         return False
 

@@ -26,7 +26,6 @@ class FullStatsComponent(FullStatsMeta):
     def __init__(self):
         super(FullStatsComponent, self).__init__()
         self.__isProgressTrackingEnabled = False
-        self.__isProgressTrackingAvailable = False
 
     def setActiveTabIndex(self, index):
         if index is not None:
@@ -47,6 +46,11 @@ class FullStatsComponent(FullStatsMeta):
         qProgressCtrl = self.sessionProvider.shared.questProgress
         qProgressCtrl.selectQuest(questID)
         self.__setQuestTrackingData()
+
+    def showQuestProgressAnimation(self):
+        qProgressCtrl = self.sessionProvider.shared.questProgress
+        if qProgressCtrl:
+            qProgressCtrl.showQuestProgressAnimation()
 
     def _populate(self):
         super(FullStatsComponent, self)._populate()
@@ -100,14 +104,12 @@ class FullStatsComponent(FullStatsMeta):
         selectedQuest = questProgress.getSelectedQuest()
         setting = self.settingsCore.getSetting(QUESTS_PROGRESS.VIEW_TYPE)
         self.__isProgressTrackingEnabled = setting == QuestsProgressViewType.TYPE_STANDARD
-        self.__isProgressTrackingAvailable = selectedQuest and selectedQuest.hasBattleProgress()
         trackingData = []
         personalMissions = self.eventsCache.getPersonalMissions()
         for quest in sorted(questProgress.getInProgressQuests().itervalues(), key=lambda q: q.getQuestBranch()):
             isSelected = quest == selectedQuest
             operation = personalMissions.getOperationsForBranch(quest.getQuestBranch())[quest.getOperationID()]
-            trackingData.append({'isTrackingAvailable': quest.hasBattleProgress(),
-             'eyeBtnVisible': self.__isProgressTrackingEnabled and isSelected,
+            trackingData.append({'eyeBtnVisible': self.__isProgressTrackingEnabled and isSelected,
              'selected': isSelected,
              'missionName': makeString(quest.getShortUserName()),
              'fullMissionName': makeString(quest.getUserName()),
@@ -116,14 +118,10 @@ class FullStatsComponent(FullStatsMeta):
              'questID': quest.getID(),
              'onPause': quest.isOnPause})
 
-        progressTracingText = ''
-        if not self.__isProgressTrackingAvailable:
-            progressTracingText = ''.join((icons.makeImageTag(RES_ICONS.MAPS_ICONS_LIBRARY_ALERTBIGICON, 24, 24, -6, 0), text_styles.alert(INGAME_GUI.STATISTICS_TAB_PROGRESSTRACING_NOTAVAILABLE)))
         trackingStatus = ''
         if len(trackingData) > 1:
             trackingStatus = ''.join((icons.makeImageTag(RES_ICONS.MAPS_ICONS_LIBRARY_NOTIFICATIONS_OFF, 16, 16, -2, 0), ' ', text_styles.standard(PERSONAL_MISSIONS.QUESTPROGRESSTRACKING_TRACKINGSTATUS)))
-        self.as_updateProgressTrackingS({'text': progressTracingText,
-         'trackingStatus': trackingStatus,
+        self.as_updateProgressTrackingS({'trackingStatus': trackingStatus,
          'trackingData': trackingData})
 
     def __setNoQuestsDescription(self):

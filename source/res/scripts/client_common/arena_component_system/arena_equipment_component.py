@@ -3,17 +3,32 @@
 from collections import namedtuple
 from functools import partial
 import BigWorld
+import ResMgr
 import Event
-import inspire_area_visual
+from vehicle_systems.components.terrain_circle_component import readTerrainCircleSettings
 from client_arena_component_system import ClientArenaComponent
 from constants import ARENA_SYNC_OBJECTS
-from debug_utils import LOG_ERROR_DEV
+from debug_utils import LOG_ERROR_DEV, LOG_ERROR
 from gui.battle_control.battle_constants import VEHICLE_VIEW_STATE
 from gui.battle_control.matrix_factory import makeVehicleEntityMP
 from helpers import dependency
 from shared_utils import CONST_CONTAINER
 from skeletons.gui.battle_session import IBattleSessionProvider
 from smoke_screen import SmokeScreen
+
+def readInspireVisualSettings():
+    xmlTag = 'InspireAreaVisual'
+    filePath = 'scripts/dynamic_objects.xml'
+    xmlSection = ResMgr.openSection(filePath)
+    if xmlSection is None:
+        LOG_ERROR("initSettings: Could not open section '{}' in file {}".format(xmlTag, filePath))
+        return
+    else:
+        xmlCtx = (None, filePath)
+        return readTerrainCircleSettings(xmlSection, xmlCtx, xmlTag)
+
+
+g_inspireVisualSettings = readInspireVisualSettings()
 
 class InspireData(object):
 
@@ -30,8 +45,13 @@ class InspireData(object):
         self.endTime = endTime
         self.inactivationStartTime = inactivationStartTime
         self.inactivationEndTime = inactivationEndTime
-        self.areaVisual = None
         self.__timerTuple = None
+        return
+
+    def updateTerrainCircle(self, radius):
+        vehicle = BigWorld.entities.get(self.vehicleID)
+        if vehicle is not None:
+            vehicle.appearance.showTerrainCircle(radius, g_inspireVisualSettings)
         return
 
     @property
@@ -57,8 +77,9 @@ class InspireData(object):
         return
 
     def destroy(self):
-        if self.areaVisual is not None:
-            self.areaVisual.destroy()
+        vehicle = BigWorld.entities.get(self.vehicleID)
+        if vehicle is not None:
+            vehicle.appearance.hideTerrainCircle()
         if self.__timerTuple is not None and self.__timerTuple.callbackID is not None:
             BigWorld.cancelCallback(self.__timerTuple.callbackID)
         self.__timerTuple = None
@@ -77,6 +98,8 @@ class InspireData(object):
         func(self, period)
         return
 
+
+InspireArgs = namedtuple('InspireArgs', ('isSourceVehicle', 'isInactivation', 'endTime', 'duration'))
 
 class ArenaEquipmentComponent(ClientArenaComponent):
     sessionProvider = dependency.descriptor(IBattleSessionProvider)
@@ -115,18 +138,15 @@ class ArenaEquipmentComponent(ClientArenaComponent):
             needsRemove |= data.isActive
             data.destroy()
         if needsRemove:
-            noneArgs = {'isSourceVehicle': None,
-             'isInactivation': None,
-             'endTime': None,
-             'duration': None}
+            noneArgs = InspireArgs(None, None, None, None)
             attachedVehicle = BigWorld.player().getVehicleAttached()
             isAttachedVehicle = attachedVehicle and vehicleId == attachedVehicle.id
             if isAttachedVehicle:
-                self.sessionProvider.invalidateVehicleState(VEHICLE_VIEW_STATE.INSPIRE, noneArgs)
+                self.sessionProvider.invalidateVehicleState(VEHICLE_VIEW_STATE.INSPIRE, noneArgs._asdict())
             else:
                 ctrl = self.sessionProvider.shared.feedback
                 if ctrl is not None:
-                    ctrl.invalidateInspire(vehicleId, noneArgs)
+                    ctrl.invalidateInspire(vehicleId, noneArgs._asdict())
         return
 
     def updateInspired(self, vehicleID, startTime, endTime, inactivationStartTime, inactivationEndTime):
@@ -181,31 +201,22 @@ class ArenaEquipmentComponent(ClientArenaComponent):
         args = None
         if period == InspireData.INSPIRE_PERIOD.INSPIRED:
             if not isSourceVehicle:
-                args = {'isSourceVehicle': False,
-                 'isInactivation': False,
-                 'endTime': data.endTime,
-                 'duration': data.endTime - data.startTime}
+                args = InspireArgs(False, False, data.endTime, data.endTime - data.startTime)
                 data.setNextCallback(self.__evaluateInspiredData)
         elif period == InspireData.INSPIRE_PERIOD.INACTIVATION:
-            args = {'isSourceVehicle': False,
-             'isInactivation': True,
-             'endTime': data.inactivationEndTime,
-             'duration': data.inactivationEndTime - data.inactivationStartTime}
+            args = InspireArgs(False, True, data.inactivationEndTime, data.inactivationEndTime - data.inactivationStartTime)
             data.setNextCallback(self.__evaluateInspiredData)
         else:
-            args = {'isSourceVehicle': None,
-             'isInactivation': None,
-             'endTime': None,
-             'duration': None}
+            args = InspireArgs(None, None, None, None)
             data.destroy()
             del self.__inspiredData[data.vehicleID]
         if args:
             if isAttachedVehicle:
-                self.sessionProvider.invalidateVehicleState(VEHICLE_VIEW_STATE.INSPIRE, args)
+                self.sessionProvider.invalidateVehicleState(VEHICLE_VIEW_STATE.INSPIRE, args._asdict())
             else:
                 ctrl = self.sessionProvider.shared.feedback
                 if ctrl is not None:
-                    ctrl.invalidateInspire(vehicleID, args)
+                    ctrl.invalidateInspire(vehicleID, args._asdict())
         return
 
     def __evaluateInspiringSourceData(self, inspireSourceRadius, data, period):
@@ -213,24 +224,16 @@ class ArenaEquipmentComponent(ClientArenaComponent):
         vehicleID = data.vehicleID
         isAttachedVehicle = attachedVehicle and vehicleID == attachedVehicle.id
         if period == InspireData.INSPIRE_PERIOD.INSPIRED:
-            args = {'isSourceVehicle': True,
-             'isInactivation': False,
-             'endTime': data.endTime,
-             'duration': data.endTime - data.startTime}
+            args = InspireArgs(True, False, data.endTime, data.endTime - data.startTime)
             if isAttachedVehicle:
-                self.sessionProvider.invalidateVehicleState(VEHICLE_VIEW_STATE.INSPIRE, args)
+                self.sessionProvider.invalidateVehicleState(VEHICLE_VIEW_STATE.INSPIRE, args._asdict())
             else:
                 ctrl = self.sessionProvider.shared.feedback
                 if ctrl is not None:
-                    ctrl.invalidateInspire(vehicleID, args)
+                    ctrl.invalidateInspire(vehicleID, args._asdict())
             arenaDP = self.sessionProvider.getArenaDP()
             if arenaDP and arenaDP.isAllyTeam(arenaDP.getVehicleInfo(vehicleID).team):
-                visual = data.areaVisual
-                if visual is None:
-                    data.areaVisual = visual = inspire_area_visual.InspireAreaVisual(inspireSourceRadius)
-                visual.setMotor(self.__getMotor(vehicleID))
-                if not visual.isVisible():
-                    visual.setVisible(True)
+                data.updateTerrainCircle(inspireSourceRadius)
             data.setNextCallback(partial(self.__evaluateInspiringSourceData, inspireSourceRadius))
         else:
             data.destroy()
@@ -239,16 +242,13 @@ class ArenaEquipmentComponent(ClientArenaComponent):
             if inspiredData is not None:
                 self.__restartInspireData(inspiredData, isSource=False)
             else:
-                noneArgs = {'isSourceVehicle': None,
-                 'isInactivation': None,
-                 'endTime': None,
-                 'duration': None}
+                noneArgs = InspireArgs(None, None, None, None)
                 if isAttachedVehicle:
-                    self.sessionProvider.invalidateVehicleState(VEHICLE_VIEW_STATE.INSPIRE, noneArgs)
+                    self.sessionProvider.invalidateVehicleState(VEHICLE_VIEW_STATE.INSPIRE, noneArgs._asdict())
                 else:
                     ctrl = self.sessionProvider.shared.feedback
                     if ctrl is not None:
-                        ctrl.invalidateInspire(vehicleID, noneArgs)
+                        ctrl.invalidateInspire(vehicleID, noneArgs._asdict())
         return
 
     def __restartInspireData(self, inspireData, isSource=False, inspireSourceRadius=0, atPeriod=None):

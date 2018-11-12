@@ -7,9 +7,9 @@ from gui.Scaleform.locale.QUESTS import QUESTS
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.server_events import formatters
-from gui.server_events.cond_formatters import FORMATTER_IDS, FormattableField, CONDITION_SIZE, getCondIconBySize
+from gui.server_events.cond_formatters import FORMATTER_IDS, FormattableField, CONDITION_SIZE, getCondIconBySize, postbattle
+from gui.server_events.cond_formatters.bonus import MissionsBonusConditionsFormatter, BattlesCountFormatter
 from gui.server_events.cond_formatters.formatters import ConditionsFormatter
-from gui.server_events.cond_formatters.mixed_formatters import MissionBonusAndPostBattleCondFormatter
 from gui.server_events.cond_formatters.tokens import TokensConditionFormatter
 from gui.server_events.formatters import TOKEN_SIZES
 from gui.shared.formatters import text_styles, icons
@@ -82,6 +82,38 @@ def _packAchievementsTooltipData(data):
     return {'tooltip': tooltip,
      'isSpecial': False,
      'specialArgs': []}
+
+
+class MissionBonusAndPostBattleCondFormatter(ConditionsFormatter):
+
+    def __init__(self):
+        super(MissionBonusAndPostBattleCondFormatter, self).__init__()
+        self.bonusCondFormatter = MissionsBonusConditionsFormatter()
+        self.postBattleCondFormatter = postbattle.MissionsPostBattleConditionsFormatter()
+
+    def format(self, event):
+        result = []
+        bonusConditions = self.bonusCondFormatter.format(event.bonusCond, event)
+        postBattleConditions = self.postBattleCondFormatter.format(event.postBattleCond, event)
+        battleCountCondition = event.bonusCond.getConditions().find('battles')
+        for pCondGroup in postBattleConditions:
+            for bCondGroup in bonusConditions:
+                if battleCountCondition is not None:
+                    conditions = []
+                    conditions.extend(pCondGroup)
+                    conditions.extend(bCondGroup)
+                    conditions.extend(BattlesCountFormatter(bool(pCondGroup)).format(battleCountCondition, event))
+                else:
+                    conditions = pCondGroup + bCondGroup
+                if not conditions:
+                    conditions.append(_packPlayBattleCondition())
+                result.append(conditions)
+
+        return result
+
+    @classmethod
+    def _packSeparator(cls, key):
+        raise NotImplementedError
 
 
 class CardBattleConditionsFormatters(MissionBonusAndPostBattleCondFormatter):
@@ -339,3 +371,9 @@ class DetailedCardTokenConditionFormatter(CardTokenConditionFormatter):
          'rendererLinkage': MISSIONS_ALIASES.TOKEN_CONDITION,
          'data': result,
          'isDetailed': True}
+
+
+def _packPlayBattleCondition():
+    titleArgs = (i18n.makeString(QUESTS.DETAILS_CONDITIONS_PLAYBATTLE_TITLE),)
+    descrArgs = (i18n.makeString(QUESTS.MISSIONDETAILS_CONDITIONS_PLAYBATTLE),)
+    return formatters.packMissionIconCondition(FormattableField(FORMATTER_IDS.SIMPLE_TITLE, titleArgs), MISSIONS_ALIASES.NONE, FormattableField(FORMATTER_IDS.DESCRIPTION, descrArgs), CONDITION_ICON.BATTLES)

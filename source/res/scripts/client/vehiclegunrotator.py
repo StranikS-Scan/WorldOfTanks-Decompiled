@@ -8,11 +8,8 @@ import Math
 from AvatarInputHandler import AimingSystems, mathUtils
 from helpers import dependency
 from helpers.CallbackDelayer import CallbackDelayer
-from constants import SERVER_TICK_LENGTH, SHELL_TRAJECTORY_EPSILON_CLIENT, AIMING_MODE, VEHICLE_SIEGE_STATE
-import ProjectileMover
-from ClientArena import CollisionResult
+from constants import SERVER_TICK_LENGTH, AIMING_MODE, VEHICLE_SIEGE_STATE
 from projectile_trajectory import getShotAngles
-from projectile_trajectory import computeProjectileTrajectory
 import BattleReplay
 from gun_rotation_shared import calcPitchLimitsFromDesc, getLocalAimPoint
 import SoundGroups
@@ -548,62 +545,13 @@ class VehicleGunRotator(object):
     def __getGunMarkerPosition(self, shotPos, shotVec, dispersionAngles):
         shotDescr = self.__avatar.getVehicleDescriptor().shot
         gravity = Math.Vector3(0.0, -shotDescr.gravity, 0.0)
-        maxDist = shotDescr.maxDistance
         testVehicleID = self.getAttachedVehicleID()
-        collideVehiclesAndStaticScene = ProjectileMover.collideDynamicAndStatic
-        collideWithSpaceBB = self.__avatar.arena.collideWithSpaceBB
-        prevPos = shotPos
-        prevVelocity = shotVec
-        dt = 0.0
-        maxDistCheckFlag = False
-        while True:
-            dt += SERVER_TICK_LENGTH
-            checkPoints = computeProjectileTrajectory(prevPos, prevVelocity, gravity, SERVER_TICK_LENGTH, SHELL_TRAJECTORY_EPSILON_CLIENT)
-            prevCheckPoint = prevPos
-            bBreak = False
-            for curCheckPoint in checkPoints:
-                testRes = collideVehiclesAndStaticScene(prevCheckPoint, curCheckPoint, (testVehicleID,))
-                if testRes is not None:
-                    collData = testRes[1]
-                    if collData is not None and not collData.isVehicle():
-                        collData = None
-                    direction = testRes[0] - prevCheckPoint
-                    endPos = testRes[0]
-                    bBreak = True
-                    break
-                collisionResult, intersection = collideWithSpaceBB(prevCheckPoint, curCheckPoint)
-                if collisionResult is CollisionResult.INTERSECTION:
-                    collData = None
-                    maxDistCheckFlag = True
-                    direction = intersection - prevCheckPoint
-                    endPos = intersection
-                    bBreak = True
-                    break
-                elif collisionResult is CollisionResult.OUTSIDE:
-                    collData = None
-                    maxDistCheckFlag = True
-                    direction = prevVelocity
-                    endPos = prevPos + prevVelocity
-                    bBreak = True
-                prevCheckPoint = curCheckPoint
-
-            if bBreak:
-                break
-            prevPos = shotPos + shotVec.scale(dt) + gravity.scale(dt * dt * 0.5)
-            prevVelocity = shotVec + gravity.scale(dt)
-
-        direction.normalise()
-        distance = (endPos - shotPos).length
+        collisionStrategy = AimingSystems.CollisionStrategy.COLLIDE_DYNAMIC_AND_STATIC
+        minBounds, maxBounds = BigWorld.player().arena.getSpaceBB()
+        endPos, direction, collData, usedMaxDistance = AimingSystems.getCappedShotTargetInfos(shotPos, shotVec, gravity, shotDescr, testVehicleID, minBounds, maxBounds, collisionStrategy)
+        distance = shotDescr.maxDistance if usedMaxDistance else (endPos - shotPos).length
         markerDiameter = 2.0 * distance * dispersionAngles[0]
         idealMarkerDiameter = 2.0 * distance * dispersionAngles[1]
-        if maxDistCheckFlag:
-            if endPos.distTo(shotPos) >= maxDist:
-                direction = endPos - shotPos
-                direction.normalise()
-                endPos = shotPos + direction.scale(maxDist)
-                distance = maxDist
-                markerDiameter = 2.0 * distance * dispersionAngles[0]
-                idealMarkerDiameter = 2.0 * distance * dispersionAngles[1]
         replayCtrl = BattleReplay.g_replayCtrl
         if replayCtrl.isPlaying and replayCtrl.isClientReady:
             markerDiameter, endPos, direction = replayCtrl.getGunMarkerParams(endPos, direction)

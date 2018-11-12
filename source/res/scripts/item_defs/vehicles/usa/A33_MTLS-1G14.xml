@@ -84,7 +84,7 @@
       </slot>
       <slot>
         <slotType>	inscription	</slotType>
-        <slotId>	2	</slotId>
+        <slotId>	36	</slotId>
         <rayStart>	1.18987 0.668908 -0.824066	</rayStart>
         <rayEnd>	0.820273 0.523199 -0.777513	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
@@ -94,7 +94,7 @@
       </slot>
       <slot>
         <slotType>	inscription	</slotType>
-        <slotId>	3	</slotId>
+        <slotId>	37	</slotId>
         <rayStart>	-1.19108 0.717404 0.112454	</rayStart>
         <rayEnd>	-0.822793 0.572752 0.0538046	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
@@ -104,7 +104,7 @@
       </slot>
       <slot>
         <slotType>	camouflage	</slotType>
-        <slotId>	7	</slotId>
+        <slotId>	3	</slotId>
         <anchorPosition>	0.000000 0.849184 -1.73821	</anchorPosition>
         <anchorDirection>	0.000000 0.438957 -0.898508	</anchorDirection>
       </slot>
@@ -855,7 +855,7 @@
       <customizationSlots>
         <slot>
           <slotType>	style	</slotType>
-          <slotId>	6	</slotId>
+          <slotId>	257	</slotId>
           <anchorPosition>	0.000178246 2.5506 0.000002	</anchorPosition>
           <anchorDirection>	-0.000000 1 -0.000000	</anchorDirection>
         </slot>
@@ -943,7 +943,7 @@
           <customizationSlots>
             <slot>
               <slotType>	camouflage	</slotType>
-              <slotId>	9	</slotId>
+              <slotId>	770	</slotId>
               <anchorPosition>	0.00214634 0.0285549 0.665902	</anchorPosition>
               <anchorDirection>	-0.000000 0.000000 1	</anchorDirection>
               <applyTo>	4096	</applyTo>
@@ -976,7 +976,7 @@
       <customizationSlots>
         <slot>
           <slotType>	player	</slotType>
-          <slotId>	4	</slotId>
+          <slotId>	514	</slotId>
           <rayStart>	-0.801794 0.227006 0.31242	</rayStart>
           <rayEnd>	-0.617704 0.168278 0.260826	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
@@ -986,7 +986,7 @@
         </slot>
         <slot>
           <slotType>	player	</slotType>
-          <slotId>	5	</slotId>
+          <slotId>	515	</slotId>
           <rayStart>	0.871038 0.235607 -0.108766	</rayStart>
           <rayEnd>	0.680494 0.174838 -0.108766	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
@@ -997,7 +997,7 @@
         </slot>
         <slot>
           <slotType>	camouflage	</slotType>
-          <slotId>	8	</slotId>
+          <slotId>	513	</slotId>
           <anchorPosition>	0.000000 0.756235 0.000000	</anchorPosition>
           <anchorDirection>	0.000000 1 0.000000	</anchorDirection>
         </slot>
@@ -1021,6 +1021,7 @@
       <engines>
         <Hercules_HXE>
           <smplEnginePower>	500	</smplEnginePower>
+          <smplFwMaxSpeed>	55	</smplFwMaxSpeed>
         </Hercules_HXE>
       </engines>
       <chassis>
@@ -1057,6 +1058,7 @@
               </medium>
             </metal>
           </grounds>
+          <axleCount>	5	</axleCount>
         </MTLS_T1>
       </chassis>
     </detailed>

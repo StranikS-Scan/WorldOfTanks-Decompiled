@@ -1060,10 +1060,11 @@
           <customizationSlots>
             <slot>
               <slotType>	insigniaOnGun	</slotType>
-              <slotId>	6	</slotId>
+              <slotId>	771	</slotId>
               <rayStart>	-0.000334027 -0.0111681 2.97111	</rayStart>
               <rayEnd>	-0.04401 -0.0634086 2.96621	</rayEnd>
-              <rayUp>	0.149 0.138 5	</rayUp>
+              <rayUp>	0.149 0.000000 0.000000	</rayUp>
+              <applyToFabric>	true	</applyToFabric>
               <size>	0.9	</size>
               <hideIfDamaged>	false	</hideIfDamaged>
               <isUVProportional>	true	</isUVProportional>
@@ -1096,18 +1097,18 @@
       <customizationSlots>
         <slot>
           <slotType>	player	</slotType>
-          <slotId>	2	</slotId>
+          <slotId>	514	</slotId>
           <rayStart>	1.20552 0.815632 -1.17084	</rayStart>
           <rayEnd>	1.00789 0.796599 -1.14672	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
+          <isMirrored>	true	</isMirrored>
           <size>	0.3	</size>
           <hideIfDamaged>	false	</hideIfDamaged>
-          <isMirrored>	true	</isMirrored>
           <isUVProportional>	true	</isUVProportional>
         </slot>
         <slot>
           <slotType>	player	</slotType>
-          <slotId>	3	</slotId>
+          <slotId>	515	</slotId>
           <rayStart>	-1.17012 0.818005 -1.13947	</rayStart>
           <rayEnd>	-1.07153 0.80635 -1.12742	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
@@ -1117,7 +1118,7 @@
         </slot>
         <slot>
           <slotType>	inscription	</slotType>
-          <slotId>	4	</slotId>
+          <slotId>	546	</slotId>
           <rayStart>	1.35769 0.770281 0.112205	</rayStart>
           <rayEnd>	1.16112 0.752444 0.0799486	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
@@ -1127,7 +1128,7 @@
         </slot>
         <slot>
           <slotType>	inscription	</slotType>
-          <slotId>	5	</slotId>
+          <slotId>	547	</slotId>
           <rayStart>	-1.36082 0.777315 -0.0549563	</rayStart>
           <rayEnd>	-1.16158 0.760157 -0.0513832	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
@@ -1161,6 +1162,7 @@
       <engines>
         <Continental_AV-1790-3A1>
           <smplEnginePower>	856.3977	</smplEnginePower>
+          <smplFwMaxSpeed>	35	</smplFwMaxSpeed>
         </Continental_AV-1790-3A1>
       </engines>
       <chassis>

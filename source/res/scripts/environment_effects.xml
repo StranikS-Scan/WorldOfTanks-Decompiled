@@ -226,11 +226,6 @@
       <wwsound>	ambient_trees_green_comb_small_01	</wwsound>
     </model>
     <model>
-      <modelName>	vegetation/Broadleaves/Shrubs/Rose/Rose_Pink_2m.srt	</modelName>
-      <offset>	0 0 0	</offset>
-      <wwsound>	ambient_trees_green_comb_small_01	</wwsound>
-    </model>
-    <model>
       <modelName>	vegetation/Broadleaves/Shrubs/Rose/Rose_Red_1m.srt	</modelName>
       <offset>	0 0 0	</offset>
       <wwsound>	ambient_trees_green_comb_small_01	</wwsound>
@@ -322,8 +317,8 @@
     </model>
     <model>
       <modelName>	vegetation/Broadleaves/Apple/Apple_7m_Classic_Dry_4.srt	</modelName>
-      <offset>	0 3 0	</offset>
-      <wwsound>	ambient_trees_yellow_soft_comb_mid_01	</wwsound>
+      <offset>	0.000000 3.000000 0.000000	</offset>
+      <wwsound>	ambient_trees_without_foliage_tree_big_02	</wwsound>
     </model>
     <model>
       <modelName>	vegetation/Broadleaves/Apple/Apple_7m_Classic_Dry_5.srt	</modelName>
@@ -941,11 +936,6 @@
       <wwsound>	ambient_bush_yellow_dry_big_01	</wwsound>
     </model>
     <model>
-      <modelName>	vegetation/Misc/Thicket_Dry/Thicket_Dry_cluster_01.srt	</modelName>
-      <offset>	0.000000 0.300000 0.000000	</offset>
-      <wwsound>	ambient_bush_yellow_dry_small_01	</wwsound>
-    </model>
-    <model>
       <modelName>	vegetation/Conifers/Scots_Pine/Scots_Pine_hv3_0.srt	</modelName>
       <offset>	0.000000 15.000000 0.000000	</offset>
       <wwsound>	ambient_bush_yellow_dry_small_01	</wwsound>
@@ -1233,7 +1223,7 @@
     <model>
       <modelName>	vegetation/Conifers/Spruce_Fall/Spruce_Fall_24m.srt	</modelName>
       <offset>	0.000000 10.000000 0.000000	</offset>
-      <wwsound>	ambient_trees_coniferous_comb_big_01	</wwsound>
+      <wwsound>	ambient_trees_dry_comb_big_01	</wwsound>
     </model>
     <model>
       <modelName>	vegetation/Broadleaves/Shrubs/Bush_Wild_Dead/Bush_Wild_Dead_2m.srt	</modelName>
@@ -1268,7 +1258,7 @@
     <model>
       <modelName>	vegetation/Conifers/Spruce_Fall/Spruce_Fall_ragged_top_33m.srt	</modelName>
       <offset>	0.000000 20.000000 0.000000	</offset>
-      <wwsound>	ambient_trees_coniferous_comb_big_01	</wwsound>
+      <wwsound>	ambient_trees_dry_comb_mid_01	</wwsound>
     </model>
     <model>
       <modelName>	vegetation/Broadleaves/Shrubs/Bush_Wild_Autumn/Bush_Wild_Autumn_5m_Big.srt	</modelName>
@@ -1707,8 +1697,8 @@
     </model>
     <model>
       <modelName>	vegetation/Broadleaves/Shrubs/Bush_Wild_Autumn/Bush_Wild_Autumn_10m_Bend.srt	</modelName>
-      <offset>	0.000000 0.000000 0.000000	</offset>
-      <wwsound>	ambient_trees_without_foliage_bush_big_01	</wwsound>
+      <offset>	0.000000 2.000000 0.000000	</offset>
+      <wwsound>	ambient_bush_yellow_dry_big_01	</wwsound>
     </model>
     <model>
       <modelName>	vegetation/Broadleaves/Ivy_Tree_Autumn/Ivy_Tree_Autumn_01.srt	</modelName>
@@ -1746,34 +1736,59 @@
       <wwsound>	ambient_trees_green_comb_mid_01	</wwsound>
     </model>
     <model>
-      <modelName>	vegetation/Broadleaves/Shrubs/Marigold/Marigold_var1.srt	</modelName>
+      <modelName>	content/Railway/hd_rw_UNI_609_BigRailwayProjector/normal/lod0/hd_rw_UNI_609_BigRailwayProjector.model	</modelName>
+      <offset>	0.000000 19.000000 0.000000	</offset>
+      <wwsound>	amb_map_17_munchen_projector	</wwsound>
+    </model>
+    <model>
+      <modelName>	vegetation/Conifers/Black_Pine/Black_Pine_10m.srt	</modelName>
+      <offset>	0.000000 7.000000 0.000000	</offset>
+      <wwsound>	ambient_trees_green_comb_mid_01	</wwsound>
+    </model>
+    <model>
+      <modelName>	vegetation/Broadleaves/Maple_Autumn/Maple_Autumn_12m.srt	</modelName>
+      <offset>	0.000000 7.000000 0.000000	</offset>
+      <wwsound>	ambient_trees_green_comb_mid_01	</wwsound>
+    </model>
+    <model>
+      <modelName>	vegetation/Broadleaves/Maple/Maple_32m.srt	</modelName>
+      <offset>	0.000000 12.000000 0.000000	</offset>
+      <wwsound>	ambient_trees_green_comb_big_01	</wwsound>
+    </model>
+    <model>
+      <modelName>	vegetation/Broadleaves/LyciumArabian_Semydry/LyciumArabian_small.srt	</modelName>
       <offset>	0.000000 0.000000 0.000000	</offset>
-      <wwsound>	ambient_trees_green_comb_small_01	</wwsound>
+      <wwsound>	ambient_trees_yellow_soft_comb_small_01	</wwsound>
     </model>
     <model>
-      <modelName>	vegetation/Broadleaves/Maple/Maple_33m.srt	</modelName>
-      <offset>	0.000000 25.000000 0.000000	</offset>
-      <wwsound>	ambient_trees_green_comb_big_02	</wwsound>
+      <modelName>	vegetation/Misc/GrapeVine/GrapeVine_01.srt	</modelName>
+      <offset>	0.000000 0.000000 0.000000	</offset>
+      <wwsound>	ambient_trees_large_leaves_comb_small_01	</wwsound>
     </model>
     <model>
-      <modelName>	vegetation/Broadleaves/SpookyTree/Spookytree_20m_Wide.srt	</modelName>
-      <offset>	0.000000 14.000000 0.000000	</offset>
-      <wwsound>	ambient_trees_without_foliage_tree_big_02	</wwsound>
+      <modelName>	vegetation/Broadleaves/BrokenTree/BrokenTree_04.srt	</modelName>
+      <offset>	0.000000 4.000000 0.000000	</offset>
+      <wwsound>	ambient_trees_crack	</wwsound>
     </model>
     <model>
-      <modelName>	vegetation/Broadleaves/SpookyTree/SpookyTree_28m.srt	</modelName>
-      <offset>	0.000000 18.000000 0.000000	</offset>
-      <wwsound>	ambient_trees_without_foliage_tree_big_02	</wwsound>
+      <modelName>	vegetation/Broadleaves/BrokenTree/BrokenTree_05.srt	</modelName>
+      <offset>	0.000000 4.000000 0.000000	</offset>
+      <wwsound>	ambient_trees_crack	</wwsound>
     </model>
     <model>
-      <modelName>	vegetation/Conifers/Spruce_Halloween/Spruce_Halloween_20m.srt	</modelName>
-      <offset>	0.000000 12.000000 0.000000	</offset>
-      <wwsound>	ambient_trees_coniferous_comb_big_01	</wwsound>
+      <modelName>	vegetation/Broadleaves/Shrubs/Hawthorn/Hawthorn_08_small.srt	</modelName>
+      <offset>	0.000000 0.800000 0.000000	</offset>
+      <wwsound>	ambient_bush_yellow_dry_small_01	</wwsound>
     </model>
     <model>
-      <modelName>	vegetation/Conifers/Spruce_Halloween/Spruce_Halloween_30m.srt	</modelName>
-      <offset>	0.000000 12.000000 0.000000	</offset>
-      <wwsound>	ambient_trees_coniferous_comb_big_01	</wwsound>
+      <modelName>	vegetation/Broadleaves/Shrubs/Bush_Wild_Dry/Bush_Wild_Dry_6m_Small_Ragged.srt	</modelName>
+      <offset>	0.000000 0.000000 0.000000	</offset>
+      <wwsound>	ambient_trees_without_foliage_bush_big_01	</wwsound>
+    </model>
+    <model>
+      <modelName>	vegetation/Conifers/Scots_Pine/Scots_Pine_hv3_3.srt	</modelName>
+      <offset>	0.000000 20.000000 0.000000	</offset>
+      <wwsound>	ambient_trees_dry_comb_mid_01	</wwsound>
     </model>
   </lightSounds>
   <birds>
@@ -4994,12 +5009,12 @@
         <wwsoundName>	hangar_h04_remday_cannonade	</wwsoundName>
       </channel0>
       <point>
-        <position>	-60.373898 6.347350 246.837204	</position>
+        <position>	-149.415619 6.347349 247.047638	</position>
         <speed0>	3.8	</speed0>
         <oscillation0>	0.500000 0.500000	</oscillation0>
       </point>
       <point>
-        <position>	50.807899 5.692504 246.127869	</position>
+        <position>	-50.688725 5.692511 247.525436	</position>
         <speed0>	3.8	</speed0>
         <oscillation0>	0.500000 0.500000	</oscillation0>
       </point>
@@ -7766,37 +7781,37 @@
         <animAction></animAction>
       </point>
       <point>
-        <position>	1645.611328 131.772705 -392.320557	</position>
+        <position>	1645.611206 162.684662 -392.320526	</position>
         <speed0>	70.000000	</speed0>
         <oscillation0>	0.000000 0.000000	</oscillation0>
         <animAction></animAction>
       </point>
       <point>
-        <position>	1837.019287 122.635803 -482.005829	</position>
+        <position>	1750.380615 163.632614 -540.933655	</position>
         <speed0>	75.000000	</speed0>
         <oscillation0>	0.000000 0.000000	</oscillation0>
         <animAction></animAction>
       </point>
       <point>
-        <position>	1933.397949 116.628120 -641.492676	</position>
+        <position>	1771.579590 170.443924 -722.368347	</position>
         <speed0>	90.000000	</speed0>
         <oscillation0>	0.000000 0.000000	</oscillation0>
         <animAction></animAction>
       </point>
       <point>
-        <position>	2001.527954 112.162506 -851.203857	</position>
+        <position>	1785.868652 172.360138 -938.418213	</position>
         <speed0>	100.000000	</speed0>
         <oscillation0>	0.000000 0.200000	</oscillation0>
         <animAction></animAction>
       </point>
       <point>
-        <position>	2067.970947 107.753738 -1128.072510	</position>
+        <position>	1803.529419 157.131363 -1276.446533	</position>
         <speed0>	120.000000	</speed0>
         <oscillation0>	0.200000 0.150000	</oscillation0>
         <animAction></animAction>
       </point>
       <point>
-        <position>	2147.593018 116.359291 -1584.768677	</position>
+        <position>	1831.797607 116.359253 -1843.859375	</position>
         <speed0>	150.000000	</speed0>
         <oscillation0>	0.200000 0.200000	</oscillation0>
         <animAction></animAction>
@@ -7852,37 +7867,37 @@
         <animAction></animAction>
       </point>
       <point>
-        <position>	1579.116333 123.515984 -403.206940	</position>
+        <position>	1579.115845 145.118073 -378.511230	</position>
         <speed0>	70.000000	</speed0>
         <oscillation0>	0.000000 0.000000	</oscillation0>
         <animAction></animAction>
       </point>
       <point>
-        <position>	1750.992310 130.248810 -472.978149	</position>
+        <position>	1739.209473 160.629181 -431.454132	</position>
         <speed0>	75.000000	</speed0>
         <oscillation0>	0.000000 0.000000	</oscillation0>
         <animAction></animAction>
       </point>
       <point>
-        <position>	1853.067139 122.164391 -621.549377	</position>
+        <position>	1853.066895 155.196899 -621.549255	</position>
         <speed0>	90.000000	</speed0>
         <oscillation0>	0.000000 0.000000	</oscillation0>
         <animAction></animAction>
       </point>
       <point>
-        <position>	1929.252441 108.538597 -867.362000	</position>
+        <position>	1851.039673 171.693069 -860.921326	</position>
         <speed0>	100.000000	</speed0>
         <oscillation0>	0.000000 0.200000	</oscillation0>
         <animAction></animAction>
       </point>
       <point>
-        <position>	1975.255005 118.073746 -1134.991089	</position>
+        <position>	1843.976563 184.269531 -1129.278809	</position>
         <speed0>	120.000000	</speed0>
         <oscillation0>	0.200000 0.150000	</oscillation0>
         <animAction></animAction>
       </point>
       <point>
-        <position>	2040.145142 125.399834 -1584.768066	</position>
+        <position>	1884.694580 125.399834 -1744.319092	</position>
         <speed0>	150.000000	</speed0>
         <oscillation0>	0.200000 0.200000	</oscillation0>
         <animAction></animAction>
@@ -7938,37 +7953,37 @@
         <animAction></animAction>
       </point>
       <point>
-        <position>	1463.857422 112.348427 -403.053772	</position>
+        <position>	1463.857300 125.252251 -403.053741	</position>
         <speed0>	70.000000	</speed0>
         <oscillation0>	0.000000 0.000000	</oscillation0>
         <animAction></animAction>
       </point>
       <point>
-        <position>	1678.051147 115.903519 -479.370972	</position>
+        <position>	1608.218628 142.689743 -502.499664	</position>
         <speed0>	75.000000	</speed0>
         <oscillation0>	0.000000 0.000000	</oscillation0>
         <animAction></animAction>
       </point>
       <point>
-        <position>	1781.892090 120.157646 -638.986572	</position>
+        <position>	1662.827759 144.523590 -642.424133	</position>
         <speed0>	90.000000	</speed0>
         <oscillation0>	0.000000 0.000000	</oscillation0>
         <animAction></animAction>
       </point>
       <point>
-        <position>	1853.732056 110.275764 -866.783813	</position>
+        <position>	1714.014893 152.282455 -934.175293	</position>
         <speed0>	100.000000	</speed0>
         <oscillation0>	0.000000 0.200000	</oscillation0>
         <animAction></animAction>
       </point>
       <point>
-        <position>	1888.953247 108.036049 -1128.926025	</position>
+        <position>	1745.717651 130.919998 -1214.620239	</position>
         <speed0>	120.000000	</speed0>
         <oscillation0>	0.200000 0.150000	</oscillation0>
         <animAction></animAction>
       </point>
       <point>
-        <position>	1931.101440 123.283493 -1596.387817	</position>
+        <position>	1754.151245 138.493866 -1823.159302	</position>
         <speed0>	150.000000	</speed0>
         <oscillation0>	0.200000 0.200000	</oscillation0>
         <animAction></animAction>
@@ -8030,31 +8045,31 @@
         <animAction></animAction>
       </point>
       <point>
-        <position>	1566.012695 109.746635 -472.862000	</position>
+        <position>	1529.448975 128.526321 -513.651672	</position>
         <speed0>	75.000000	</speed0>
         <oscillation0>	0.000000 0.000000	</oscillation0>
         <animAction></animAction>
       </point>
       <point>
-        <position>	1672.874756 115.361717 -604.299744	</position>
+        <position>	1575.847046 141.555740 -629.327820	</position>
         <speed0>	90.000000	</speed0>
         <oscillation0>	0.000000 0.000000	</oscillation0>
         <animAction></animAction>
       </point>
       <point>
-        <position>	1744.475952 111.364990 -900.571777	</position>
+        <position>	1616.906250 131.823532 -900.571594	</position>
         <speed0>	100.000000	</speed0>
         <oscillation0>	0.000000 0.200000	</oscillation0>
         <animAction></animAction>
       </point>
       <point>
-        <position>	1767.685303 102.296326 -1103.118896	</position>
+        <position>	1652.170288 123.799019 -1103.118652	</position>
         <speed0>	120.000000	</speed0>
         <oscillation0>	0.200000 0.150000	</oscillation0>
         <animAction></animAction>
       </point>
       <point>
-        <position>	1798.107422 99.017685 -1584.768433	</position>
+        <position>	1684.703857 99.017670 -1843.464722	</position>
         <speed0>	150.000000	</speed0>
         <oscillation0>	0.200000 0.200000	</oscillation0>
         <animAction></animAction>
@@ -8116,31 +8131,31 @@
         <animAction></animAction>
       </point>
       <point>
-        <position>	1451.166382 101.268791 -469.195343	</position>
+        <position>	1419.228516 101.268791 -484.587128	</position>
         <speed0>	75.000000	</speed0>
         <oscillation0>	0.000000 0.000000	</oscillation0>
         <animAction></animAction>
       </point>
       <point>
-        <position>	1540.199219 111.069580 -602.435669	</position>
+        <position>	1491.313354 111.069572 -619.566895	</position>
         <speed0>	90.000000	</speed0>
         <oscillation0>	0.000000 0.000000	</oscillation0>
         <animAction></animAction>
       </point>
       <point>
-        <position>	1600.350586 106.489700 -825.243591	</position>
+        <position>	1522.912842 106.489677 -838.941895	</position>
         <speed0>	100.000000	</speed0>
         <oscillation0>	0.000000 0.200000	</oscillation0>
         <animAction></animAction>
       </point>
       <point>
-        <position>	1630.726318 103.636032 -1046.586914	</position>
+        <position>	1538.835327 103.636040 -1053.466797	</position>
         <speed0>	120.000000	</speed0>
         <oscillation0>	0.200000 0.150000	</oscillation0>
         <animAction></animAction>
       </point>
       <point>
-        <position>	1675.714355 107.910454 -1584.768799	</position>
+        <position>	1592.879761 107.910446 -1819.569214	</position>
         <speed0>	150.000000	</speed0>
         <oscillation0>	0.200000 0.200000	</oscillation0>
         <animAction></animAction>
@@ -8208,25 +8223,25 @@
         <animAction></animAction>
       </point>
       <point>
-        <position>	1426.130737 82.563995 -595.903992	</position>
+        <position>	1383.049316 82.564018 -626.213745	</position>
         <speed0>	90.000000	</speed0>
         <oscillation0>	0.000000 0.000000	</oscillation0>
         <animAction></animAction>
       </point>
       <point>
-        <position>	1481.319702 84.953804 -811.106995	</position>
+        <position>	1414.496094 98.968773 -876.844727	</position>
         <speed0>	100.000000	</speed0>
         <oscillation0>	0.000000 0.200000	</oscillation0>
         <animAction></animAction>
       </point>
       <point>
-        <position>	1512.143555 82.632195 -1031.235229	</position>
+        <position>	1415.637817 112.876106 -1052.008057	</position>
         <speed0>	120.000000	</speed0>
         <oscillation0>	0.200000 0.150000	</oscillation0>
         <animAction></animAction>
       </point>
       <point>
-        <position>	1593.302124 61.299084 -1584.768311	</position>
+        <position>	1461.903320 105.955200 -1879.155884	</position>
         <speed0>	150.000000	</speed0>
         <oscillation0>	0.200000 0.200000	</oscillation0>
         <animAction></animAction>
@@ -8276,43 +8291,43 @@
         <animAction></animAction>
       </point>
       <point>
-        <position>	1514.764771 98.482269 563.229675	</position>
+        <position>	1536.501953 98.482262 510.577606	</position>
         <speed0>	90.000000	</speed0>
         <oscillation0>	0.000000 0.000000	</oscillation0>
         <animAction></animAction>
       </point>
       <point>
-        <position>	1659.782349 99.976517 580.961243	</position>
+        <position>	1643.786621 99.976494 509.502380	</position>
         <speed0>	70.000000	</speed0>
         <oscillation0>	0.000000 0.000000	</oscillation0>
         <animAction></animAction>
       </point>
       <point>
-        <position>	1798.078247 92.888954 476.771759	</position>
+        <position>	1794.713257 127.601830 459.807861	</position>
         <speed0>	75.000000	</speed0>
         <oscillation0>	0.000000 0.000000	</oscillation0>
         <animAction></animAction>
       </point>
       <point>
-        <position>	1875.939575 90.767097 281.726013	</position>
+        <position>	2001.418823 169.472580 288.973297	</position>
         <speed0>	90.000000	</speed0>
         <oscillation0>	0.000000 0.000000	</oscillation0>
         <animAction></animAction>
       </point>
       <point>
-        <position>	1911.810425 101.249413 1.325499	</position>
+        <position>	2161.334473 204.678482 139.647476	</position>
         <speed0>	100.000000	</speed0>
         <oscillation0>	0.000000 0.200000	</oscillation0>
         <animAction></animAction>
       </point>
       <point>
-        <position>	1943.831665 109.915001 -428.507263	</position>
+        <position>	2398.827148 224.065125 -81.411156	</position>
         <speed0>	120.000000	</speed0>
         <oscillation0>	0.200000 0.150000	</oscillation0>
         <animAction></animAction>
       </point>
       <point>
-        <position>	2058.249268 116.359276 -1584.768433	</position>
+        <position>	2743.946533 237.591263 -431.361328	</position>
         <speed0>	150.000000	</speed0>
         <oscillation0>	0.200000 0.200000	</oscillation0>
         <animAction></animAction>
@@ -8374,31 +8389,31 @@
         <animAction></animAction>
       </point>
       <point>
-        <position>	1659.676025 93.381653 475.942413	</position>
+        <position>	1691.208130 130.732559 572.741150	</position>
         <speed0>	75.000000	</speed0>
         <oscillation0>	0.000000 0.000000	</oscillation0>
         <animAction></animAction>
       </point>
       <point>
-        <position>	1737.626953 94.487488 261.986725	</position>
+        <position>	1992.264038 181.702347 393.172943	</position>
         <speed0>	90.000000	</speed0>
         <oscillation0>	0.000000 0.000000	</oscillation0>
         <animAction></animAction>
       </point>
       <point>
-        <position>	1778.247803 97.061874 -20.902702	</position>
+        <position>	2207.251465 210.483459 201.068420	</position>
         <speed0>	100.000000	</speed0>
         <oscillation0>	0.000000 0.200000	</oscillation0>
         <animAction></animAction>
       </point>
       <point>
-        <position>	1818.175659 97.478798 -431.491241	</position>
+        <position>	2443.330811 202.126938 -5.238814	</position>
         <speed0>	120.000000	</speed0>
         <oscillation0>	0.200000 0.150000	</oscillation0>
         <animAction></animAction>
       </point>
       <point>
-        <position>	1915.941895 125.399826 -1582.628662	</position>
+        <position>	2925.814453 178.315048 -454.804962	</position>
         <speed0>	150.000000	</speed0>
         <oscillation0>	0.200000 0.200000	</oscillation0>
         <animAction></animAction>
@@ -8454,37 +8469,37 @@
         <animAction></animAction>
       </point>
       <point>
-        <position>	1371.170532 79.219505 554.637817	</position>
+        <position>	1362.871948 79.219475 603.673462	</position>
         <speed0>	70.000000	</speed0>
         <oscillation0>	0.000000 0.000000	</oscillation0>
         <animAction></animAction>
       </point>
       <point>
-        <position>	1511.780640 89.133957 462.164429	</position>
+        <position>	1618.602051 89.133965 638.340027	</position>
         <speed0>	75.000000	</speed0>
         <oscillation0>	0.000000 0.000000	</oscillation0>
         <animAction></animAction>
       </point>
       <point>
-        <position>	1614.363037 105.576965 255.321793	</position>
+        <position>	1909.356201 143.550079 550.518799	</position>
         <speed0>	90.000000	</speed0>
         <oscillation0>	0.000000 0.000000	</oscillation0>
         <animAction></animAction>
       </point>
       <point>
-        <position>	1652.814331 115.791611 -28.019642	</position>
+        <position>	2172.234131 173.152374 343.172455	</position>
         <speed0>	100.000000	</speed0>
         <oscillation0>	0.000000 0.200000	</oscillation0>
         <animAction></animAction>
       </point>
       <point>
-        <position>	1680.456299 125.377251 -430.807709	</position>
+        <position>	2434.371582 168.862411 131.323776	</position>
         <speed0>	120.000000	</speed0>
         <oscillation0>	0.200000 0.150000	</oscillation0>
         <animAction></animAction>
       </point>
       <point>
-        <position>	1790.639160 123.283508 -1584.768677	</position>
+        <position>	2980.136475 123.283501 -324.395355	</position>
         <speed0>	150.000000	</speed0>
         <oscillation0>	0.200000 0.200000	</oscillation0>
         <animAction></animAction>
@@ -8504,25 +8519,25 @@
         <wwsoundName>	eb_bomber_engine	</wwsoundName>
       </channel0>
       <point>
-        <position>	940.777344 163.009171 -650.692139	</position>
+        <position>	940.777222 121.562523 -650.692017	</position>
         <speed0>	120.000000	</speed0>
         <oscillation0>	0.200000 0.250000	</oscillation0>
         <animAction></animAction>
       </point>
       <point>
-        <position>	939.060913 145.580460 -399.608063	</position>
+        <position>	939.060791 120.762383 -399.608002	</position>
         <speed0>	135.000000	</speed0>
         <oscillation0>	0.150000 0.150000	</oscillation0>
         <animAction></animAction>
       </point>
       <point>
-        <position>	938.528259 123.274521 -52.314861	</position>
+        <position>	938.528198 113.820717 -52.314857	</position>
         <speed0>	150.000000	</speed0>
         <oscillation0>	0.150000 0.150000	</oscillation0>
         <animAction></animAction>
       </point>
       <point>
-        <position>	972.397705 106.246086 300.964661	</position>
+        <position>	972.397644 94.784538 300.964630	</position>
         <speed0>	120.000000	</speed0>
         <oscillation0>	0.200000 0.150000	</oscillation0>
         <animAction></animAction>
@@ -8540,37 +8555,37 @@
         <animAction></animAction>
       </point>
       <point>
-        <position>	1208.520508 86.299080 550.898987	</position>
+        <position>	1190.386719 86.299065 602.107727	</position>
         <speed0>	70.000000	</speed0>
         <oscillation0>	0.000000 0.000000	</oscillation0>
         <animAction></animAction>
       </point>
       <point>
-        <position>	1383.029907 82.046608 461.208160	</position>
+        <position>	1329.464111 82.046623 670.461182	</position>
         <speed0>	75.000000	</speed0>
         <oscillation0>	0.000000 0.000000	</oscillation0>
         <animAction></animAction>
       </point>
       <point>
-        <position>	1499.973999 82.739769 252.621445	</position>
+        <position>	1565.336548 90.439568 718.942749	</position>
         <speed0>	90.000000	</speed0>
         <oscillation0>	0.000000 0.000000	</oscillation0>
         <animAction></animAction>
       </point>
       <point>
-        <position>	1552.497681 94.073463 -43.240639	</position>
+        <position>	1864.145874 107.526497 648.642944	</position>
         <speed0>	100.000000	</speed0>
         <oscillation0>	0.000000 0.200000	</oscillation0>
         <animAction></animAction>
       </point>
       <point>
-        <position>	1575.224731 105.750023 -432.661560	</position>
+        <position>	2295.538330 155.165878 399.195892	</position>
         <speed0>	120.000000	</speed0>
         <oscillation0>	0.200000 0.150000	</oscillation0>
         <animAction></animAction>
       </point>
       <point>
-        <position>	1662.228027 131.978882 -1584.769043	</position>
+        <position>	2940.134033 162.506332 -78.933998	</position>
         <speed0>	150.000000	</speed0>
         <oscillation0>	0.200000 0.200000	</oscillation0>
         <animAction></animAction>
@@ -8590,13 +8605,13 @@
         <wwsoundName>	eb_bomber_engine	</wwsoundName>
       </channel0>
       <point>
-        <position>	827.551086 172.244736 -632.488953	</position>
+        <position>	827.550903 129.951752 -664.049011	</position>
         <speed0>	120.000000	</speed0>
         <oscillation0>	0.200000 0.250000	</oscillation0>
         <animAction></animAction>
       </point>
       <point>
-        <position>	829.678406 150.156296 -384.733429	</position>
+        <position>	829.678223 123.269081 -384.733337	</position>
         <speed0>	135.000000	</speed0>
         <oscillation0>	0.150000 0.150000	</oscillation0>
         <animAction></animAction>
@@ -8614,49 +8629,49 @@
         <animAction></animAction>
       </point>
       <point>
-        <position>	906.754333 98.865944 453.817352	</position>
+        <position>	934.826843 98.865959 491.314362	</position>
         <speed0>	100.000000	</speed0>
         <oscillation0>	0.200000 0.150000	</oscillation0>
         <animAction></animAction>
       </point>
       <point>
-        <position>	980.998596 95.362587 528.048889	</position>
+        <position>	1035.012817 95.362663 594.147644	</position>
         <speed0>	90.000000	</speed0>
         <oscillation0>	0.000000 0.000000	</oscillation0>
         <animAction></animAction>
       </point>
       <point>
-        <position>	1072.587524 94.155518 552.310486	</position>
+        <position>	1160.734375 94.155510 683.149658	</position>
         <speed0>	70.000000	</speed0>
         <oscillation0>	0.000000 0.000000	</oscillation0>
         <animAction></animAction>
       </point>
       <point>
-        <position>	1272.007202 90.875465 455.147186	</position>
+        <position>	1310.196655 90.875481 752.254089	</position>
         <speed0>	75.000000	</speed0>
         <oscillation0>	0.000000 0.000000	</oscillation0>
         <animAction></animAction>
       </point>
       <point>
-        <position>	1377.178833 89.785683 247.694061	</position>
+        <position>	1557.532227 89.785698 780.510010	</position>
         <speed0>	90.000000	</speed0>
         <oscillation0>	0.000000 0.000000	</oscillation0>
         <animAction></animAction>
       </point>
       <point>
-        <position>	1451.968994 95.220093 -53.611317	</position>
+        <position>	1892.231567 133.072861 736.272705	</position>
         <speed0>	100.000000	</speed0>
         <oscillation0>	0.000000 0.200000	</oscillation0>
         <animAction></animAction>
       </point>
       <point>
-        <position>	1473.310181 103.298088 -430.204193	</position>
+        <position>	2337.949707 171.696121 508.345032	</position>
         <speed0>	120.000000	</speed0>
         <oscillation0>	0.200000 0.150000	</oscillation0>
         <animAction></animAction>
       </point>
       <point>
-        <position>	1537.485596 120.502357 -1584.769165	</position>
+        <position>	2969.065674 120.502312 127.790703	</position>
         <speed0>	150.000000	</speed0>
         <oscillation0>	0.200000 0.200000	</oscillation0>
         <animAction></animAction>
@@ -8676,73 +8691,73 @@
         <wwsoundName>	eb_bomber_engine	</wwsoundName>
       </channel0>
       <point>
-        <position>	-405.901093 173.422501 -637.121521	</position>
+        <position>	2942.925781 125.455841 377.068298	</position>
         <speed0>	120.000000	</speed0>
         <oscillation0>	0.200000 0.250000	</oscillation0>
         <animAction></animAction>
       </point>
       <point>
-        <position>	-376.095612 153.958435 -400.479095	</position>
+        <position>	2364.933594 165.466965 677.676025	</position>
         <speed0>	135.000000	</speed0>
         <oscillation0>	0.150000 0.150000	</oscillation0>
         <animAction></animAction>
       </point>
       <point>
-        <position>	-320.803589 127.024857 -47.076042	</position>
+        <position>	1926.976807 137.318375 871.713928	</position>
         <speed0>	150.000000	</speed0>
         <oscillation0>	0.150000 0.150000	</oscillation0>
         <animAction></animAction>
       </point>
       <point>
-        <position>	-260.665192 113.228584 293.003052	</position>
+        <position>	1560.564819 113.228630 904.790039	</position>
         <speed0>	120.000000	</speed0>
         <oscillation0>	0.200000 0.150000	</oscillation0>
         <animAction></animAction>
       </point>
       <point>
-        <position>	-224.069443 110.365608 432.062347	</position>
+        <position>	1302.159424 110.365593 869.443481	</position>
         <speed0>	100.000000	</speed0>
         <oscillation0>	0.200000 0.150000	</oscillation0>
         <animAction></animAction>
       </point>
       <point>
-        <position>	-180.589371 105.164337 517.163025	</position>
+        <position>	1085.782227 105.164330 783.693604	</position>
         <speed0>	90.000000	</speed0>
         <oscillation0>	0.000000 0.000000	</oscillation0>
         <animAction></animAction>
       </point>
       <point>
-        <position>	-96.912437 102.326897 559.521179	</position>
+        <position>	925.633728 102.326897 674.925781	</position>
         <speed0>	70.000000	</speed0>
         <oscillation0>	0.000000 0.000000	</oscillation0>
         <animAction></animAction>
       </point>
       <point>
-        <position>	68.788620 97.885757 451.767487	</position>
+        <position>	795.961792 97.885735 505.357941	</position>
         <speed0>	75.000000	</speed0>
         <oscillation0>	0.000000 0.000000	</oscillation0>
         <animAction></animAction>
       </point>
       <point>
-        <position>	157.186172 98.109146 250.648300	</position>
+        <position>	720.986572 98.109123 302.103088	</position>
         <speed0>	90.000000	</speed0>
         <oscillation0>	0.000000 0.000000	</oscillation0>
         <animAction></animAction>
       </point>
       <point>
-        <position>	203.030487 106.328972 -34.524044	</position>
+        <position>	692.012512 106.328972 -56.276608	</position>
         <speed0>	100.000000	</speed0>
         <oscillation0>	0.000000 0.200000	</oscillation0>
         <animAction></animAction>
       </point>
       <point>
-        <position>	245.491394 112.378494 -434.424438	</position>
+        <position>	681.376770 112.378532 -426.644684	</position>
         <speed0>	120.000000	</speed0>
         <oscillation0>	0.200000 0.150000	</oscillation0>
         <animAction></animAction>
       </point>
       <point>
-        <position>	1366.376831 131.978882 -1584.769043	</position>
+        <position>	683.110901 131.978867 -704.767883	</position>
         <speed0>	150.000000	</speed0>
         <oscillation0>	0.200000 0.200000	</oscillation0>
         <animAction></animAction>
@@ -9498,7 +9513,7 @@
         <animAction></animAction>
       </point>
       <point>
-        <position>	-375.370544 79.199699 255.321838	</position>
+        <position>	-350.370544 79.199699 255.321838	</position>
         <speed0>	90.000000	</speed0>
         <oscillation0>	0.000000 0.000000	</oscillation0>
         <animAction></animAction>
@@ -9578,13 +9593,13 @@
         <animAction></animAction>
       </point>
       <point>
-        <position>	-653.021729 82.046623 461.208221	</position>
+        <position>	-624.258 82.046623 480.939	</position>
         <speed0>	75.000000	</speed0>
         <oscillation0>	0.000000 0.000000	</oscillation0>
         <animAction></animAction>
       </point>
       <point>
-        <position>	-507.014771 82.739777 252.621460	</position>
+        <position>	-475.411 82.739777 347.801	</position>
         <speed0>	90.000000	</speed0>
         <oscillation0>	0.000000 0.000000	</oscillation0>
         <animAction></animAction>
@@ -9756,7 +9771,7 @@
         <animAction></animAction>
       </point>
       <point>
-        <position>	-813.284180 98.109138 250.648285	</position>
+        <position>	-798.55 98.109138 250.648285	</position>
         <speed0>	90.000000	</speed0>
         <oscillation0>	0.000000 0.000000	</oscillation0>
         <animAction></animAction>

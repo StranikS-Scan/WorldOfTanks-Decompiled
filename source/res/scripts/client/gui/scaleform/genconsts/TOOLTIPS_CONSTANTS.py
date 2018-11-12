@@ -61,6 +61,7 @@ class TOOLTIPS_CONSTANTS(object):
     SETTINGS_BUTTON = 'settingsButton'
     TECH_CUSTOMIZATION_ITEM = 'techCustomizationItem'
     TECH_CUSTOMIZATION_ITEM_ICON = 'techCustomizationItemIcon'
+    TECH_CUSTOMIZATION_ITEM_AWARD = 'techCustomizationItemAward'
     TECH_CUSTOMIZATION_HISTORIC_ITEM = 'techCustomizationHistoricItem'
     VEHICLE_FILTER = 'vehicleFilter'
     LADDER = 'ladder'
@@ -143,7 +144,6 @@ class TOOLTIPS_CONSTANTS(object):
     FREE_SHEET_NOT_ENOUGH = 'freeSheetNotEnough'
     FREE_SHEET_USED = 'freeSheetUsed'
     BADGE = 'badge'
-    BADGE_HALLOWEEN = 'badgeHalloween'
     EVENT_BOARDS_BADGE = 'eventBoardsBadge'
     EVENT_BOARDS_BADGES_GROUP = 'eventBoardsBadgesGroup'
     OPERATION = 'operation'
@@ -250,8 +250,6 @@ class TOOLTIPS_CONSTANTS(object):
     MISSIONS_TOKEN = 'missionsToken'
     MISSIONS_TOKEN_UI = 'ToolTipInblocksDefaultUI'
     BOOTCAMP_AWARD_MEDAL = 'BSTooltipMedalContainer'
-    HALLOWEEN_HANGAR_TOOLTIP = 'HalloweenHangarTooltip'
-    HALLOWEEN_PROGRESS_TOOLTIP = 'HalloweenProgressTooltip'
     PERSONAL_MISSIONS_TANKWOMAN = 'personalMissionsTankwoman'
     PERSONAL_MISSIONS_TANKMODULE = 'personalMissionsTankmodule'
     VEHICLE_ELITE_BONUS = 'vehicleEliteBonus'
@@ -302,6 +300,7 @@ class TOOLTIPS_CONSTANTS(object):
     CUSTOMIZATION_SET = [TECH_CUSTOMIZATION_ITEM,
      TECH_CUSTOMIZATION_HISTORIC_ITEM,
      TECH_CUSTOMIZATION_ITEM_ICON,
+     TECH_CUSTOMIZATION_ITEM_AWARD,
      SHOP_20_CUSTOMIZATION_ITEM]
     CYBER_SPORT_SET = [CYBER_SPORT_SLOT,
      CYBER_SPORT_SLOT_SELECTED,
@@ -326,7 +325,6 @@ class TOOLTIPS_CONSTANTS(object):
      FREE_SHEET_NOT_ENOUGH,
      FREE_SHEET_USED,
      BADGE,
-     BADGE_HALLOWEEN,
      OPERATION,
      PERSONAL_MISSION_INFO,
      PERSONAL_MISSIONS_MAP_REGION,
@@ -407,4 +405,3 @@ class TOOLTIPS_CONSTANTS(object):
      INVENTORY_SHELL,
      TECH_MAIN_SHELL]
     WGM_CURRENCY_SET = [GOLD_STATS, CREDITS_STATS]
-    HALLOWEEN_SET = [HALLOWEEN_HANGAR_TOOLTIP, HALLOWEEN_PROGRESS_TOOLTIP]

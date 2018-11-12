@@ -163,7 +163,7 @@ class ModuleTooltipBlockConstructor(object):
     CLIP_GUN_MODULE_PARAM = 'vehicleClipGun'
     AUTO_RELOAD_GUN_MODULE_PARAM = 'autoReloadGun'
     WEIGHT_MODULE_PARAM = 'weight'
-    MODULE_PARAMS = {GUI_ITEM_TYPE.CHASSIS: ('maxLoad', 'rotationSpeed', 'weight'),
+    MODULE_PARAMS = {GUI_ITEM_TYPE.CHASSIS: ('maxLoad', 'rotationSpeed', 'maxSteeringLockAngle', 'weight'),
      GUI_ITEM_TYPE.TURRET: ('armor', 'rotationSpeed', 'circularVisionRadius', 'weight'),
      GUI_ITEM_TYPE.GUN: (RELOAD_TIME_PROP_NAME,
                          'avgPiercingPower',
@@ -249,14 +249,18 @@ class HeaderBlockConstructor(ModuleTooltipBlockConstructor):
                 block.append(formatters.packImageTextBlockData(title=text_styles.standard(titleKey), desc='', img=extraInfo, imgPadding=formatters.packPadding(top=3), padding=formatters.packPadding(left=108, top=9)))
         elif module.itemTypeID == GUI_ITEM_TYPE.CHASSIS:
             if module.isHydraulicChassis():
-                block.append(formatters.packImageTextBlockData(title=text_styles.standard(MENU.MODULEINFO_HYDRAULICCHASSISLABEL), desc='', img=RES_ICONS.MAPS_ICONS_MODULES_HYDRAULICCHASSISICON, imgPadding=formatters.packPadding(top=3), padding=formatters.packPadding(left=108, top=9)))
+                if module.isWheeledChassis():
+                    title = text_styles.standard(MENU.MODULEINFO_HYDRAULICWHEELEDCHASSISLABEL)
+                else:
+                    title = text_styles.standard(MENU.MODULEINFO_HYDRAULICCHASSISLABEL)
+                block.append(formatters.packImageTextBlockData(title=title, desc='', img=module.getExtraIconInfo(), imgPadding=formatters.packPadding(top=3), padding=formatters.packPadding(left=108, top=9)))
         return block
 
     def __getOverlayData(self):
         blockPadding = formatters.packPadding(top=-6)
         if self.module.itemTypeID == GUI_ITEM_TYPE.OPTIONALDEVICE and self.module.isDeluxe():
-            overlayPath = RES_ICONS.MAPS_ICONS_ARTEFACT_EQUIPMENTPLUS_OVERLAY
-            padding = formatters.packPadding(top=SLOT_HIGHLIGHT_TYPES.EQUIPMENT_PLUS_PADDING_TOP, left=SLOT_HIGHLIGHT_TYPES.EQUIPMENT_PLUS_PADDING_LEFT)
+            overlayPath = RES_ICONS.MAPS_ICONS_QUESTS_BONUSES_SMALL_EQUIPMENTPLUS_OVERLAY
+            padding = formatters.packPadding(top=SLOT_HIGHLIGHT_TYPES.TOOLTIP_OVERLAY_PADDING_TOP, left=SLOT_HIGHLIGHT_TYPES.TOOLTIP_OVERLAY_PADDING_LEFT)
             blockPadding['bottom'] = -12
         else:
             overlayPath = padding = None
@@ -268,7 +272,7 @@ class PriceBlockConstructor(ModuleTooltipBlockConstructor):
     def __init__(self, module, configuration, valueWidth, leftPadding, rightPadding):
         super(PriceBlockConstructor, self).__init__(module, configuration, leftPadding, rightPadding)
         self._valueWidth = valueWidth
-        self._inInventoryBlockData = {'icon': RES_ICONS.MAPS_ICONS_CUSTOMIZATION_STORAGE_ICON,
+        self._inInventoryBlockData = {'icon': RES_ICONS.MAPS_ICONS_LIBRARY_STORAGE_ICON,
          'text': TOOLTIPS.VEHICLE_INVENTORYCOUNT}
         self._onVehicleBlockData = {'icon': RES_ICONS.MAPS_ICONS_CUSTOMIZATION_INSTALLED_ON_TANK_ICON,
          'text': TOOLTIPS.VEHICLE_VEHICLECOUNT}

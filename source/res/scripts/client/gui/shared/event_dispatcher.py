@@ -1,15 +1,16 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/event_dispatcher.py
-import urlparse
+from operator import attrgetter
 from CurrentVehicle import HeroTankPreviewAppearance
 from adisp import process
 from debug_utils import LOG_WARNING
-from gui import SystemMessages
-from constants import ARENA_BONUS_TYPE
+from gui import SystemMessages, DialogsInterface
+from gui.Scaleform import MENU
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
-from gui.Scaleform.daapi.view.dialogs import I18nInfoDialogMeta
+from gui.Scaleform.daapi.view.dialogs import I18nInfoDialogMeta, I18nConfirmDialogMeta, DIALOG_BUTTON_ID
 from gui.Scaleform.daapi.view.lobby.store.browser.ingameshop_helpers import getWebShopURL, isIngameShopEnabled
 from gui.Scaleform.framework.entities.View import ViewKey
+from gui.Scaleform.genConsts.BOOSTER_CONSTANTS import BOOSTER_CONSTANTS
 from gui.Scaleform.genConsts.CLANS_ALIASES import CLANS_ALIASES
 from gui.Scaleform.genConsts.EPICBATTLES_ALIASES import EPICBATTLES_ALIASES
 from gui.Scaleform.genConsts.PERSONAL_MISSIONS_ALIASES import PERSONAL_MISSIONS_ALIASES
@@ -17,15 +18,20 @@ from gui.Scaleform.genConsts.RANKEDBATTLES_ALIASES import RANKEDBATTLES_ALIASES
 from gui.Scaleform.genConsts.STORAGE_CONSTANTS import STORAGE_CONSTANTS
 from gui.Scaleform.locale.MESSENGER import MESSENGER
 from gui.app_loader import g_appLoader
+from gui.game_control.links import URLMacros
 from gui.prb_control.settings import CTRL_ENTITY_TYPE
 from gui.shared import events, g_eventBus, money
 from gui.shared.event_bus import EVENT_BUS_SCOPE
+from gui.shared.formatters import text_styles
+from gui.shared.gui_items.processors.goodies import BoosterActivator
 from gui.shared.notifications import NotificationPriorityLevel
 from gui.shared.utils import isPopupsWindowsOpenDisabled
 from gui.shared.utils.functions import getViewName, getUniqueViewName
+from gui.shared.utils.requesters import REQ_CRITERIA
 from helpers import dependency
 from helpers.i18n import makeString as _ms
 from skeletons.gui.game_control import IHeroTankController
+from skeletons.gui.goodies import IGoodiesCache
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
 from soft_exception import SoftException
@@ -40,9 +46,8 @@ class SETTINGS_TAB_INDEX(object):
     FEEDBACK = 6
 
 
-def showBattleResultsWindow(arenaUniqueID, arenaBonusType):
-    alias = VIEW_ALIAS.EVENT_BATTLE_RESULTS if arenaBonusType == ARENA_BONUS_TYPE.EVENT_BATTLES else VIEW_ALIAS.BATTLE_RESULTS
-    g_eventBus.handleEvent(events.LoadViewEvent(alias, getViewName(alias, str(arenaUniqueID)), {'arenaUniqueID': arenaUniqueID}), EVENT_BUS_SCOPE.LOBBY)
+def showBattleResultsWindow(arenaUniqueID):
+    g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.BATTLE_RESULTS, getViewName(VIEW_ALIAS.BATTLE_RESULTS, str(arenaUniqueID)), {'arenaUniqueID': arenaUniqueID}), EVENT_BUS_SCOPE.LOBBY)
 
 
 def notifyBattleResultsPosted(arenaUniqueID):
@@ -82,6 +87,17 @@ def showModuleInfo(itemCD, vehicleDescr):
     itemCD = int(itemCD)
     g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.MODULE_INFO_WINDOW, getViewName(VIEW_ALIAS.MODULE_INFO_WINDOW, itemCD), {'moduleCompactDescr': itemCD,
      'vehicleDescr': vehicleDescr}), EVENT_BUS_SCOPE.LOBBY)
+
+
+def showStorageModuleInfo(intCD):
+    intCD = int(intCD)
+    g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.MODULE_INFO_WINDOW, getViewName(VIEW_ALIAS.MODULE_INFO_WINDOW, intCD), {'moduleCompactDescr': intCD,
+     'isAdditionalInfoShow': _ms(MENU.MODULEINFO_ADDITIONALINFO)}), EVENT_BUS_SCOPE.LOBBY)
+
+
+def showStorageBoosterInfo(boosterID):
+    boosterID = int(boosterID)
+    g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.BOOSTER_INFO_WINDOW, getViewName(VIEW_ALIAS.BOOSTER_INFO_WINDOW, boosterID), {'boosterID': boosterID}), EVENT_BUS_SCOPE.LOBBY)
 
 
 def showVehicleSellDialog(vehInvID):
@@ -141,17 +157,30 @@ def openManualPage(chapterIndex):
     g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.MANUAL_CHAPTER_VIEW, ctx={'chapterIndex': chapterIndex}), EVENT_BUS_SCOPE.LOBBY)
 
 
-def showWebShop(url=None, customPath=None):
+@process
+def showWebShop(url='', path='', params=None):
+    parse = URLMacros().parse
+    if path:
+        path = yield parse(path, params)
+        if url:
+            url = yield parse(url)
+        else:
+            url = getWebShopURL()
+    else:
+        path = ''
+        if url:
+            url = yield parse(url, params)
+        else:
+            url = getWebShopURL()
+    url = '/'.join((node.strip('/') for node in (url, path)))
     app = g_appLoader.getApp()
-    if url is None:
-        url = getWebShopURL()
-        if customPath is not None:
-            url = urlparse.urljoin(url, customPath)
     if app is not None and app.containerManager is not None:
         viewKey = ViewKey(VIEW_ALIAS.LOBBY_STORE)
         browserWindow = app.containerManager.getViewByKey(viewKey)
         if browserWindow is not None:
-            browserWindow.destroy()
+            browser = browserWindow.getBrowser()
+            browser.navigate(url)
+            return
     g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.LOBBY_STORE, ctx={'url': url}), scope=EVENT_BUS_SCOPE.LOBBY)
     return
 
@@ -172,7 +201,7 @@ def showOldVehiclePreview(vehTypeCompDescr, previewAlias=VIEW_ALIAS.LOBBY_HANGAR
      'previewBackCb': previewBackCb}), scope=EVENT_BUS_SCOPE.LOBBY)
 
 
-def showVehiclePreview(vehTypeCompDescr, previewAlias=VIEW_ALIAS, vehStrCD=None, previewBackCb=None, itemsPack=None, price=money.MONEY_UNDEFINED, oldPrice=None, title='', endTime=None, buyParams=None):
+def showVehiclePreview(vehTypeCompDescr, previewAlias=VIEW_ALIAS.LOBBY_HANGAR, vehStrCD=None, previewBackCb=None, itemsPack=None, price=money.MONEY_UNDEFINED, oldPrice=None, title='', endTime=None, buyParams=None):
     lobbyContext = dependency.instance(ILobbyContext)
     newPreviewEnabled = lobbyContext.getServerSettings().isIngamePreviewEnabled()
     heroTankController = dependency.instance(IHeroTankController)
@@ -314,6 +343,27 @@ def showBoostersWindow(tabID=None):
     return
 
 
+@process
+@dependency.replace_none_kwargs(goodiesCache=IGoodiesCache)
+def showBoosterActivateDialog(boosterIntCD, goodiesCache=None):
+    newBooster = goodiesCache.getBooster(boosterIntCD)
+    criteria = REQ_CRITERIA.BOOSTER.ACTIVE | REQ_CRITERIA.BOOSTER.BOOSTER_TYPES([newBooster.boosterType])
+    activeBoosters = goodiesCache.getBoosters(criteria=criteria).values()
+    curBooster = max(activeBoosters, key=attrgetter('effectValue')) if activeBoosters else None
+    messageCtx = {'newBoosterName': text_styles.middleTitle(newBooster.description)}
+    if curBooster is None:
+        key = BOOSTER_CONSTANTS.BOOSTER_ACTIVATION_CONFORMATION_TEXT_KEY
+    else:
+        key = BOOSTER_CONSTANTS.BOOSTER_REPLACE_CONFORMATION_TEXT_KEY
+        messageCtx['curBoosterName'] = text_styles.middleTitle(curBooster.description)
+    shouldActivate = yield DialogsInterface.showDialog(I18nConfirmDialogMeta(key=key, messageCtx=messageCtx, focusedID=DIALOG_BUTTON_ID.CLOSE))
+    if shouldActivate:
+        result = yield BoosterActivator(newBooster).request()
+        if result.userMsg:
+            SystemMessages.pushI18nMessage(result.userMsg, type=result.sysMsgType)
+    return
+
+
 def stopTutorial():
     g_eventBus.handleEvent(events.TutorialEvent(events.TutorialEvent.STOP_TRAINING), scope=EVENT_BUS_SCOPE.GLOBAL)
 
@@ -341,7 +391,6 @@ def requestProfile(databaseID, userName, successCallback):
             key = 'messenger/userInfoHidden'
         else:
             key = 'messenger/userInfoNotAvailable'
-        from gui import DialogsInterface
         DialogsInterface.showI18nInfoDialog(key, lambda result: None, I18nInfoDialogMeta(key, messageCtx={'userName': userName}))
     else:
         successCallback(databaseID, userName)
@@ -358,8 +407,9 @@ def showVehicleCompare():
     g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.VEHICLE_COMPARE), scope=EVENT_BUS_SCOPE.LOBBY)
 
 
-def showEpicBattleSkillView():
-    g_eventBus.handleEvent(events.LoadViewEvent(EPICBATTLES_ALIASES.EPIC_BATTLES_SKILL_ALIAS), scope=EVENT_BUS_SCOPE.LOBBY)
+def showEpicBattleSkillView(previousPageAlias=VIEW_ALIAS.LOBBY_HANGAR, showBackButton=False):
+    g_eventBus.handleEvent(events.LoadViewEvent(EPICBATTLES_ALIASES.EPIC_BATTLES_SKILL_ALIAS, ctx={'showBackButton': showBackButton,
+     'previousPage': previousPageAlias}), scope=EVENT_BUS_SCOPE.LOBBY)
 
 
 def showCrystalWindow():

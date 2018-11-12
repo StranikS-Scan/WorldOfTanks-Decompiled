@@ -109,7 +109,6 @@
         <fireStopped>	fire_stopped	</fireStopped>
       </sounds>
     </fire>
-    <halloweenVehicleEffects>	HalloweenVehicleEffects : NoneExtra	</halloweenVehicleEffects>
     <stun>	NoneExtra : Stun	</stun>
     <commanderSixthSense>	NoneExtra : CommanderSixthSense	</commanderSixthSense>
     <stereoscope>	NoneExtra : Stereoscope	</stereoscope>
@@ -147,6 +146,7 @@
       </gameplayFactors>
     </overturn>
     <drowning>	NoneExtra : Drowning	</drowning>
+    <burnout>	NoneExtra : Burnout	</burnout>
     <engineHealth>	DamageMarker : EngineHealth	  <sounds>
         <critical>	engine_damaged	</critical>
         <destroyed>	engine_destroyed	</destroyed>
@@ -725,6 +725,22 @@
       <chanceToHitByExplosion>	1.0	</chanceToHitByExplosion>
       <continueTraceIfNoHit>	false	</continueTraceIfNoHit>
     </rightTrack>
+    <wheel>
+      <extra>	wheel_Health	</extra>
+      <multiple>	true	</multiple>
+      <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+      <useArmorHomogenization>	false	</useArmorHomogenization>
+      <useHitAngle>	false	</useHitAngle>
+      <useAntifragmentationLining>	false	</useAntifragmentationLining>
+      <mayRicochet>	false	</mayRicochet>
+      <collideOnceOnly>	true	</collideOnceOnly>
+      <checkCaliberForRichet>	false	</checkCaliberForRichet>
+      <checkCaliberForHitAngleNorm>	false	</checkCaliberForHitAngleNorm>
+      <damageKind>	auto	</damageKind>
+      <chanceToHitByProjectile>	1.0	</chanceToHitByProjectile>
+      <chanceToHitByExplosion>	1.0	</chanceToHitByExplosion>
+      <continueTraceIfNoHit>	false	</continueTraceIfNoHit>
+    </wheel>
     <gun>
       <extra>	gunHealth	</extra>
       <vehicleDamageFactor>	0.0	</vehicleDamageFactor>

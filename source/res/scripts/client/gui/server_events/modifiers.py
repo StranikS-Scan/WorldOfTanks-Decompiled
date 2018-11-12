@@ -484,8 +484,8 @@ class _VehicleRentPrice(_VehiclePrice):
                     item = self._makeResultItem(self._params[paramName])
                     if item is not None:
                         for rentPackage in item.rentPackages:
-                            rentDays = rentPackage['days']
-                            result[item, rentDays] = float(self._params.get(self._getMultName(idx), self.DEFAULT_PRICE_MULT))
+                            rentID = rentPackage['rentID']
+                            result[item, rentID] = float(self._params.get(self._getMultName(idx), self.DEFAULT_PRICE_MULT))
 
         return result
 
@@ -988,11 +988,11 @@ class VehRentPriceCond(VehPriceCond, _VehicleRentPrice, _RentPriceMul):
         for v in self.itemsCache.items.getVehicles(criteria).itervalues():
             for rentPackage in v.rentPackages:
                 rentCost = rentPackage['rentPrice']
-                rentDays = rentPackage['days']
+                rentID = rentPackage['rentID']
                 if rentCost.isSet(Currency.GOLD) and goldPriceMult is not None:
-                    result[v, rentDays] = float(goldPriceMult)
+                    result[v, rentID] = float(goldPriceMult)
                 if rentCost.isSet(Currency.CREDITS) and creditsPriceMult is not None:
-                    result[v, rentDays] = float(creditsPriceMult)
+                    result[v, rentID] = float(creditsPriceMult)
 
         return result
 

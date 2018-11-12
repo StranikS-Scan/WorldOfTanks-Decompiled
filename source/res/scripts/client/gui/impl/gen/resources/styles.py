@@ -4,455 +4,117 @@ from gui.impl.gen_utils import DynAccessor
 
 class Styles(DynAccessor):
     __slots__ = ()
-
-    @property
-    def BtnAbstractDisabledOverlayStyle(self):
-        pass
-
-    @property
-    def ZuricStyleMain(self):
-        pass
-
-    @property
-    def ZuricStylePrimary(self):
-        pass
-
-    @property
-    def ZuricStyleSecondary(self):
-        pass
-
-    @property
-    def TextButtonMainTextStyle(self):
-        pass
-
-    @property
-    def TextButtonAdditionalTextStyle(self):
-        pass
-
-    @property
-    def BtnOrangeBigDisabledOverlayStyle(self):
-        pass
-
-    @property
-    def CheckboxStyle(self):
-        pass
-
-    @property
-    def SBHThumbUpStyle(self):
-        pass
-
-    @property
-    def SBHThumbHoverStyle(self):
-        pass
-
-    @property
-    def SBHThumbPressStyle(self):
-        pass
-
-    @property
-    def SBHThumbDisabledStyle(self):
-        pass
-
-    @property
-    def SBVThumbUpStyle(self):
-        pass
-
-    @property
-    def SBVThumbHoverStyle(self):
-        pass
-
-    @property
-    def SBVThumbPressStyle(self):
-        pass
-
-    @property
-    def SBVThumbDisabledStyle(self):
-        pass
-
-    @property
-    def SBHTrackUpStyle(self):
-        pass
-
-    @property
-    def SBHTrackHoverStyle(self):
-        pass
-
-    @property
-    def SBHTrackPressStyle(self):
-        pass
-
-    @property
-    def SBHTrackDisabledStyle(self):
-        pass
-
-    @property
-    def SBVTrackUpStyle(self):
-        pass
-
-    @property
-    def SBVTrackHoverStyle(self):
-        pass
-
-    @property
-    def SBVTrackPressStyle(self):
-        pass
-
-    @property
-    def SBVTrackDisabledStyle(self):
-        pass
-
-    @property
-    def SBUpBtnUpStyle(self):
-        pass
-
-    @property
-    def SBUpBtnHoverStyle(self):
-        pass
-
-    @property
-    def SBUpBtnPressStyle(self):
-        pass
-
-    @property
-    def SBUpBtnDisabledStyle(self):
-        pass
-
-    @property
-    def SBDownBtnUpStyle(self):
-        pass
-
-    @property
-    def SBDownBtnHoverStyle(self):
-        pass
-
-    @property
-    def SBDownBtnPressStyle(self):
-        pass
-
-    @property
-    def SBDownBtnDisabledStyle(self):
-        pass
-
-    @property
-    def SBLeftBtnUpStyle(self):
-        pass
-
-    @property
-    def SBLeftBtnHoverStyle(self):
-        pass
-
-    @property
-    def SBLeftBtnPressStyle(self):
-        pass
-
-    @property
-    def SBLeftBtnDisabledStyle(self):
-        pass
-
-    @property
-    def SBRightBtnUpStyle(self):
-        pass
-
-    @property
-    def SBRightBtnHoverStyle(self):
-        pass
-
-    @property
-    def SBRightBtnPressStyle(self):
-        pass
-
-    @property
-    def SBRightBtnDisabledStyle(self):
-        pass
-
-    @property
-    def ThumbUpStyle(self):
-        pass
-
-    @property
-    def ThumbHoverStyle(self):
-        pass
-
-    @property
-    def ThumbPressStyle(self):
-        pass
-
-    @property
-    def ThumbDisabledStyle(self):
-        pass
-
-    @property
-    def SlotBtnNormalFadeStyle(self):
-        pass
-
-    @property
-    def SlotBtnSelectedFadeStyle(self):
-        pass
-
-    @property
-    def TabBarContentUpStyle(self):
-        pass
-
-    @property
-    def TabBarContentHoverStyle(self):
-        pass
-
-    @property
-    def TabBarContentPressStyle(self):
-        pass
-
-    @property
-    def TabBarContentDisabledStyle(self):
-        pass
-
-    @property
-    def EpicTitleTextStyle(self):
-        pass
-
-    @property
-    def EpicTitleYellowTextStyle(self):
-        pass
-
-    @property
-    def HeroTitleTextStyle(self):
-        pass
-
-    @property
-    def HeroTitleYellowTextStyle(self):
-        pass
-
-    @property
-    def GrandTitleTextStyle(self):
-        pass
-
-    @property
-    def GrandTitleYellowTextStyle(self):
-        pass
-
-    @property
-    def SuperPromoTitleTextStyle(self):
-        pass
-
-    @property
-    def PromoTitleTextStyle(self):
-        pass
-
-    @property
-    def PromoSubTitleTextStyle(self):
-        pass
-
-    @property
-    def HighTitleTextStyle(self):
-        pass
-
-    @property
-    def MiddleTitleTextStyle(self):
-        pass
-
-    @property
-    def StatusCriticalTextStyle(self):
-        pass
-
-    @property
-    def StatusWarningTextStyle(self):
-        pass
-
-    @property
-    def StatusInfoTextStyle(self):
-        pass
-
-    @property
-    def StatusAttentionTextStyle(self):
-        pass
-
-    @property
-    def StatusAlertTextStyle(self):
-        pass
-
-    @property
-    def VehicleStatusInfoTextStyle(self):
-        pass
-
-    @property
-    def VehicleStatusSimpleTextStyle(self):
-        pass
-
-    @property
-    def VehicleStatusCriticalTextStyle(self):
-        pass
-
-    @property
-    def MainTextStyle(self):
-        pass
-
-    @property
-    def StandardTextStyle(self):
-        pass
-
-    @property
-    def DisabledTextStyle(self):
-        pass
-
-    @property
-    def HighlightTextStyle(self):
-        pass
-
-    @property
-    def SuccessTextStyle(self):
-        pass
-
-    @property
-    def AlertTextStyle(self):
-        pass
-
-    @property
-    def ErrorTextStyle(self):
-        pass
-
-    @property
-    def NeutralTextStyle(self):
-        pass
-
-    @property
-    def GoodPingTextStyle(self):
-        pass
-
-    @property
-    def StandartPingtextStyle(self):
-        pass
-
-    @property
-    def DefresTextStyle(self):
-        pass
-
-    @property
-    def GoldTextStyle(self):
-        pass
-
-    @property
-    def GoldTextBigStyle(self):
-        pass
-
-    @property
-    def CreditsTextStyle(self):
-        pass
-
-    @property
-    def CreditsTextBigStyle(self):
-        pass
-
-    @property
-    def ExpTextStyle(self):
-        pass
-
-    @property
-    def ExpTextBigStyle(self):
-        pass
-
-    @property
-    def ErrCurrencyTextBigStyle(self):
-        pass
-
-    @property
-    def CrystalTextStyle(self):
-        pass
-
-    @property
-    def CrystalTextBigStyle(self):
-        pass
-
-    @property
-    def StatsTextStyle(self):
-        pass
-
-    @property
-    def PlayerOnlineTextStyle(self):
-        pass
-
-    @property
-    def PlayerOfflineTextStyle(self):
-        pass
-
-    @property
-    def CounterTextStyle(self):
-        pass
-
-    @property
-    def BoosterTextStyle(self):
-        pass
-
-    @property
-    def CounterLabelTextStyle(self):
-        pass
-
-    @property
-    def TutorialTextStyle(self):
-        pass
-
-    @property
-    def ButtonTextStyle(self):
-        pass
-
-    @property
-    def ButtonTextDisabledStyle(self):
-        pass
-
-    @property
-    def BonusLocalTextStyle(self):
-        pass
-
-    @property
-    def BonusAppliedTextStyle(self):
-        pass
-
-    @property
-    def BonusPreviewTextStyle(self):
-        pass
-
-    @property
-    def PremiumVehicleNameTextStyle(self):
-        pass
-
-    @property
-    def VehicleNameTextStyle(self):
-        pass
-
-    @property
-    def UnavailableTextStyle(self):
-        pass
-
-    @property
-    def MissionStatusAvailableTextStyle(self):
-        pass
-
-    @property
-    def CheckBoxTexeDisableStyle(self):
-        pass
-
-    @property
-    def ContextMenuItemEnabledStyle(self):
-        pass
-
-    @property
-    def ContextMenuItemDisabledStyle(self):
-        pass
-
-    @property
-    def DropDownMenuStyle(self):
-        pass
-
-    @property
-    def DropDownMenuItemNormalStyle(self):
-        pass
-
-    @property
-    def DropDownMenuItemDownStyle(self):
-        pass
-
-    @property
-    def DropDownMenuItemDisabledStyle(self):
-        pass
-
-    @property
-    def DropDownMenuItemSelectedStyle(self):
-        pass
+    BtnAbstractDisabledOverlayStyle = 9836
+    ZuricStyleMain = 9837
+    ZuricStylePrimary = 9838
+    ZuricStyleSecondary = 9839
+    TextButtonMainTextStyle = 9840
+    TextButtonAdditionalTextStyle = 9841
+    BtnOrangeBigDisabledOverlayStyle = 9842
+    CheckboxStyle = 9843
+    InputDisabledOverlayStyle = 9844
+    SBHThumbUpStyle = 9845
+    SBHThumbHoverStyle = 9846
+    SBHThumbPressStyle = 9847
+    SBHThumbDisabledStyle = 9848
+    SBVThumbUpStyle = 9849
+    SBVThumbHoverStyle = 9850
+    SBVThumbPressStyle = 9851
+    SBVThumbDisabledStyle = 9852
+    SBHTrackUpStyle = 9853
+    SBHTrackHoverStyle = 9854
+    SBHTrackPressStyle = 9855
+    SBHTrackDisabledStyle = 9856
+    SBVTrackUpStyle = 9857
+    SBVTrackHoverStyle = 9858
+    SBVTrackPressStyle = 9859
+    SBVTrackDisabledStyle = 9860
+    SBUpBtnUpStyle = 9861
+    SBUpBtnHoverStyle = 9862
+    SBUpBtnPressStyle = 9863
+    SBUpBtnDisabledStyle = 9864
+    SBDownBtnUpStyle = 9865
+    SBDownBtnHoverStyle = 9866
+    SBDownBtnPressStyle = 9867
+    SBDownBtnDisabledStyle = 9868
+    SBLeftBtnUpStyle = 9869
+    SBLeftBtnHoverStyle = 9870
+    SBLeftBtnPressStyle = 9871
+    SBLeftBtnDisabledStyle = 9872
+    SBRightBtnUpStyle = 9873
+    SBRightBtnHoverStyle = 9874
+    SBRightBtnPressStyle = 9875
+    SBRightBtnDisabledStyle = 9876
+    ThumbUpStyle = 9877
+    ThumbHoverStyle = 9878
+    ThumbPressStyle = 9879
+    ThumbDisabledStyle = 9880
+    SlotBtnNormalFadeStyle = 9881
+    SlotBtnSelectedFadeStyle = 9882
+    TabBarContentUpStyle = 9883
+    TabBarContentHoverStyle = 9884
+    TabBarContentPressStyle = 9885
+    TabBarContentDisabledStyle = 9886
+    EpicTitleTextStyle = 9887
+    EpicTitleYellowTextStyle = 9888
+    HeroTitleTextStyle = 9889
+    HeroTitleYellowTextStyle = 9890
+    GrandTitleTextStyle = 9891
+    GrandTitleYellowTextStyle = 9892
+    SuperPromoTitleTextStyle = 9893
+    PromoTitleTextStyle = 9894
+    PromoSubTitleTextStyle = 9895
+    HighTitleTextStyle = 9896
+    MiddleTitleTextStyle = 9897
+    StatusCriticalTextStyle = 9898
+    StatusWarningTextStyle = 9899
+    StatusInfoTextStyle = 9900
+    StatusAttentionTextStyle = 9901
+    StatusAlertTextStyle = 9902
+    VehicleStatusInfoTextStyle = 9903
+    VehicleStatusSimpleTextStyle = 9904
+    VehicleStatusCriticalTextStyle = 9905
+    MainTextStyle = 9906
+    StandardTextStyle = 9907
+    DisabledTextStyle = 9908
+    HighlightTextStyle = 9909
+    SuccessTextStyle = 9910
+    AlertTextStyle = 9911
+    ErrorTextStyle = 9912
+    NeutralTextStyle = 9913
+    GoodPingTextStyle = 9914
+    StandartPingtextStyle = 9915
+    DefresTextStyle = 9916
+    GoldTextStyle = 9917
+    GoldTextBigStyle = 9918
+    CreditsTextStyle = 9919
+    CreditsTextBigStyle = 9920
+    ExpTextStyle = 9921
+    ExpTextBigStyle = 9922
+    ErrCurrencyTextBigStyle = 9923
+    CrystalTextStyle = 9924
+    CrystalTextBigStyle = 9925
+    StatsTextStyle = 9926
+    PlayerOnlineTextStyle = 9927
+    PlayerOfflineTextStyle = 9928
+    CounterTextStyle = 9929
+    BoosterTextStyle = 9930
+    CounterLabelTextStyle = 9931
+    TutorialTextStyle = 9932
+    ButtonTextStyle = 9933
+    ButtonTextDisabledStyle = 9934
+    BonusLocalTextStyle = 9935
+    BonusAppliedTextStyle = 9936
+    BonusPreviewTextStyle = 9937
+    PremiumVehicleNameTextStyle = 9938
+    VehicleNameTextStyle = 9939
+    UnavailableTextStyle = 9940
+    MissionStatusAvailableTextStyle = 9941
+    CheckBoxTexeDisableStyle = 9942
+    ContextMenuItemEnabledStyle = 9943
+    ContextMenuItemDisabledStyle = 9944
+    DropDownMenuStyle = 9945
+    DropDownMenuItemNormalStyle = 9946
+    DropDownMenuItemDownStyle = 9947
+    DropDownMenuItemDisabledStyle = 9948
+    DropDownMenuItemSelectedStyle = 9949

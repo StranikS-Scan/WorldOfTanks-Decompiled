@@ -11,7 +11,7 @@ from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.app_loader import g_appLoader
 from gui.game_control.browser_filters import getFilters as _getGlobalFilters
 from gui.game_control.gc_constants import BROWSER
-from gui.game_control.links import URLMarcos
+from gui.game_control.links import URLMacros
 from gui.shared import EVENT_BUS_SCOPE, g_eventBus
 from gui.shared.events import LoadViewEvent, BrowserEvent
 from gui.shared.utils.functions import getViewName
@@ -33,7 +33,7 @@ class BrowserController(IBrowserController):
         self.__eventMgr = Event.EventManager()
         self.onBrowserAdded = Event.Event(self.__eventMgr)
         self.onBrowserDeleted = Event.Event(self.__eventMgr)
-        self.__urlMacros = URLMarcos()
+        self.__urlMacros = URLMacros()
         self.__pendingBrowsers = {}
         self.__creatingBrowserID = None
         self.__filters = _getGlobalFilters()

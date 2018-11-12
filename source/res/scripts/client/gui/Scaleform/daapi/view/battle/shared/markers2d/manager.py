@@ -3,6 +3,7 @@
 import logging
 import weakref
 import GUI
+import BattleReplay
 from gui import DEPTH_OF_VehicleMarker, GUI_SETTINGS
 from gui.Scaleform.daapi.view.battle.shared.markers2d import plugins
 from gui.Scaleform.daapi.view.battle.shared.markers2d import settings
@@ -130,7 +131,12 @@ class MarkersManager(ExternalFlashComponent, VehicleMarkersManagerMeta, plugins.
         setup = {'settings': plugins.SettingsPlugin,
          'eventBus': plugins.EventBusPlugin,
          'equipments': plugins.EquipmentsMarkerPlugin,
-         'area': plugins.AreaStaticMarkerPlugin}
+         'area': plugins.AreaStaticMarkerPlugin,
+         'vehiclesTargets': plugins.VehicleMarkerTargetPlugin}
+        if BattleReplay.g_replayCtrl.isPlaying:
+            setup['vehiclesTargets'] = plugins.VehicleMarkerTargetPluginReplayPlaying
+        if BattleReplay.g_replayCtrl.isRecording:
+            setup['vehiclesTargets'] = plugins.VehicleMarkerTargetPluginReplayRecording
         if arenaVisitor.hasRespawns():
             setup['vehicles'] = plugins.RespawnableVehicleMarkerPlugin
         else:

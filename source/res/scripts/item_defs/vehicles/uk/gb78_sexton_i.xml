@@ -100,7 +100,7 @@
       </slot>
       <slot>
         <slotType>	player	</slotType>
-        <slotId>	2	</slotId>
+        <slotId>	4	</slotId>
         <rayStart>	-1.414 1.24995 0.988463	</rayStart>
         <rayEnd>	-1.304 1.24995 0.988463	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
@@ -110,7 +110,7 @@
       </slot>
       <slot>
         <slotType>	inscription	</slotType>
-        <slotId>	3	</slotId>
+        <slotId>	36	</slotId>
         <rayStart>	-1.42532 0.724435 0.67404	</rayStart>
         <rayEnd>	-1.19532 0.724435 0.67404	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
@@ -120,7 +120,7 @@
       </slot>
       <slot>
         <slotType>	inscription	</slotType>
-        <slotId>	4	</slotId>
+        <slotId>	37	</slotId>
         <rayStart>	1.43632 0.724435 0.67404	</rayStart>
         <rayEnd>	1.18432 0.724435 0.67404	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
@@ -141,7 +141,7 @@
       </slot>
       <slot>
         <slotType>	camouflage	</slotType>
-        <slotId>	7	</slotId>
+        <slotId>	3	</slotId>
         <anchorPosition>	0.00217476 0.861866 -2.30095	</anchorPosition>
         <anchorDirection>	0.000000 0.529741 -0.848159	</anchorDirection>
       </slot>
@@ -1009,7 +1009,7 @@
       <customizationSlots>
         <slot>
           <slotType>	style	</slotType>
-          <slotId>	6	</slotId>
+          <slotId>	257	</slotId>
           <anchorPosition>	0.000000 2.16866 0.000000	</anchorPosition>
           <anchorDirection>	0.000000 1 0.000000	</anchorDirection>
         </slot>
@@ -1083,7 +1083,7 @@
           <customizationSlots>
             <slot>
               <slotType>	camouflage	</slotType>
-              <slotId>	9	</slotId>
+              <slotId>	770	</slotId>
               <anchorPosition>	-0.000318274 0.0633585 0.88844	</anchorPosition>
               <anchorDirection>	-0.000000 0.000000 1	</anchorDirection>
               <applyTo>	4096	</applyTo>
@@ -1113,7 +1113,7 @@
       <customizationSlots>
         <slot>
           <slotType>	camouflage	</slotType>
-          <slotId>	8	</slotId>
+          <slotId>	513	</slotId>
           <anchorPosition>	-0.000000 0.869813 0.0504294	</anchorPosition>
           <anchorDirection>	0.000000 1 0.000000	</anchorDirection>
         </slot>
@@ -1137,6 +1137,7 @@
       <engines>
         <Wright_Continental_R-975EC2_A>
           <smplEnginePower>	412.3396	</smplEnginePower>
+          <smplFwMaxSpeed>	40.2	</smplFwMaxSpeed>
         </Wright_Continental_R-975EC2_A>
       </engines>
       <chassis>

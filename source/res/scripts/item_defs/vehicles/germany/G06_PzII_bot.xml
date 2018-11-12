@@ -21,7 +21,7 @@
   <camouflage>
     <priceFactor>	0.4	</priceFactor>
     <tiling>	1 1 0 0	</tiling>
-    <exclusionMask>	vehicles/german/G06_PzII/PzII_turret_01_AM.dds	</exclusionMask>
+    <exclusionMask></exclusionMask>
   </camouflage>
   <hull>
     <armor>
@@ -90,7 +90,7 @@
       </slot>
       <slot>
         <slotType>	inscription	</slotType>
-        <slotId>	2	</slotId>
+        <slotId>	36	</slotId>
         <rayStart>	-0.16511 0.26086 2.17672	</rayStart>
         <rayEnd>	-0.16511 -0.118428 2.04969	</rayEnd>
         <rayUp>	0.000000 0.000000 -1	</rayUp>
@@ -467,7 +467,7 @@
       <customizationSlots>
         <slot>
           <slotType>	player	</slotType>
-          <slotId>	3	</slotId>
+          <slotId>	514	</slotId>
           <rayStart>	-0.73118 0.30574 0.28051	</rayStart>
           <rayEnd>	-0.546821 0.230472 0.261902	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
@@ -477,7 +477,7 @@
         </slot>
       </customizationSlots>
       <camouflage>
-        <exclusionMask>	vehicles/german/G06_PzII/PzII_turret_01_AM.dds	</exclusionMask>
+        <exclusionMask></exclusionMask>
         <tiling>	1 0.49 0.000000 0.000000	</tiling>
       </camouflage>
     </PzII_Standartturm_bot>
@@ -496,6 +496,7 @@
       <engines>
         <Maybach_HL57TR_bot>
           <smplEnginePower>	137.4465	</smplEnginePower>
+          <smplFwMaxSpeed>	40	</smplFwMaxSpeed>
         </Maybach_HL57TR_bot>
       </engines>
       <chassis>

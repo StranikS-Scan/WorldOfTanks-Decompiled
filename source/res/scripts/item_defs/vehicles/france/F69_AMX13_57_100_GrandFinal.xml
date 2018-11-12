@@ -926,7 +926,7 @@
           <customizationSlots>
             <slot>
               <slotType>	insigniaOnGun	</slotType>
-              <slotId>	6	</slotId>
+              <slotId>	771	</slotId>
               <rayStart>	-0.0245862 -0.00185698 4.36811	</rayStart>
               <rayEnd>	0.110729 -0.0285648 4.36517	</rayEnd>
               <rayUp>	0.065 0.062 4	</rayUp>
@@ -962,7 +962,7 @@
       <customizationSlots>
         <slot>
           <slotType>	fixedInscription	</slotType>
-          <slotId>	2	</slotId>
+          <slotId>	714	</slotId>
           <rayStart>	-0.808433 0.00086465 -0.899797	</rayStart>
           <rayEnd>	-0.608565 -0.000167033 -0.892608	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
@@ -973,7 +973,7 @@
         </slot>
         <slot>
           <slotType>	fixedInscription	</slotType>
-          <slotId>	3	</slotId>
+          <slotId>	715	</slotId>
           <rayStart>	0.808433 0.00086465 -0.899797	</rayStart>
           <rayEnd>	0.608565 -0.000167033 -0.892608	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
@@ -984,7 +984,7 @@
         </slot>
         <slot>
           <slotType>	fixedEmblem	</slotType>
-          <slotId>	4	</slotId>
+          <slotId>	716	</slotId>
           <rayStart>	-0.88794 -0.00036098 -1.47048	</rayStart>
           <rayEnd>	-0.488208 -0.00226615 -1.45606	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
@@ -995,7 +995,7 @@
         </slot>
         <slot>
           <slotType>	fixedEmblem	</slotType>
-          <slotId>	5	</slotId>
+          <slotId>	717	</slotId>
           <rayStart>	0.88794 -0.00036098 -1.47048	</rayStart>
           <rayEnd>	0.488208 -0.00226615 -1.45606	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
@@ -1024,6 +1024,7 @@
       <engines>
         <SOFAM_8Gxb_A>
           <smplEnginePower>	380	</smplEnginePower>
+          <smplFwMaxSpeed>	61	</smplFwMaxSpeed>
         </SOFAM_8Gxb_A>
       </engines>
       <chassis>
@@ -1060,6 +1061,7 @@
               </medium>
             </metal>
           </grounds>
+          <axleCount>	5	</axleCount>
         </Chassis_AMX13_57_100_GrandFinal>
       </chassis>
     </detailed>

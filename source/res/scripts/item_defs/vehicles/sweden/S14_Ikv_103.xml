@@ -22,7 +22,7 @@
   <camouflage>
     <priceFactor>	1.0	</priceFactor>
     <tiling>	1 1 0 0	</tiling>
-    <exclusionMask>	system/maps/null_exclusion_mask.dds	</exclusionMask>
+    <exclusionMask></exclusionMask>
   </camouflage>
   <hull>
     <fakeTurrets>
@@ -92,7 +92,7 @@
       </slot>
       <slot>
         <slotType>	player	</slotType>
-        <slotId>	2	</slotId>
+        <slotId>	4	</slotId>
         <rayStart>	-1.01087 0.73585 0.982117	</rayStart>
         <rayEnd>	-0.826983 0.657215 0.982117	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
@@ -102,7 +102,7 @@
       </slot>
       <slot>
         <slotType>	player	</slotType>
-        <slotId>	3	</slotId>
+        <slotId>	5	</slotId>
         <rayStart>	1.01087 0.73585 0.982117	</rayStart>
         <rayEnd>	0.826983 0.657215 0.982117	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
@@ -113,7 +113,7 @@
       </slot>
       <slot>
         <slotType>	inscription	</slotType>
-        <slotId>	4	</slotId>
+        <slotId>	36	</slotId>
         <rayStart>	-1.00936 0.739306 0.377228	</rayStart>
         <rayEnd>	-0.82547 0.660671 0.377228	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
@@ -123,7 +123,7 @@
       </slot>
       <slot>
         <slotType>	inscription	</slotType>
-        <slotId>	5	</slotId>
+        <slotId>	37	</slotId>
         <rayStart>	1.00936 0.739306 0.377228	</rayStart>
         <rayEnd>	0.82547 0.660671 0.377228	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
@@ -133,7 +133,7 @@
       </slot>
       <slot>
         <slotType>	camouflage	</slotType>
-        <slotId>	10	</slotId>
+        <slotId>	3	</slotId>
         <anchorPosition>	0.00143175 0.540449 -0.885727	</anchorPosition>
         <anchorDirection>	0.000000 0.537844 -0.843045	</anchorDirection>
       </slot>
@@ -900,7 +900,7 @@
       <customizationSlots>
         <slot>
           <slotType>	style	</slotType>
-          <slotId>	8	</slotId>
+          <slotId>	257	</slotId>
           <anchorPosition>	-0.000000 1.07665 0.498587	</anchorPosition>
           <anchorDirection>	0.000000 1 0.000000	</anchorDirection>
         </slot>
@@ -1659,7 +1659,7 @@
       <customizationSlots>
         <slot>
           <slotType>	style	</slotType>
-          <slotId>	9	</slotId>
+          <slotId>	257	</slotId>
           <anchorPosition>	0.000186131 1.8295 0.498122	</anchorPosition>
           <anchorDirection>	0.000000 1 -0.000000	</anchorDirection>
         </slot>
@@ -1734,7 +1734,7 @@
           <customizationSlots>
             <slot>
               <slotType>	insigniaOnGun	</slotType>
-              <slotId>	6	</slotId>
+              <slotId>	771	</slotId>
               <rayStart>	-0.000000 -0.00584117 1.2048	</rayStart>
               <rayEnd>	-0.0204273 -0.0190771 1.2048	</rayEnd>
               <rayUp>	0.083 0.081 5	</rayUp>
@@ -1744,7 +1744,7 @@
             </slot>
             <slot>
               <slotType>	camouflage	</slotType>
-              <slotId>	12	</slotId>
+              <slotId>	770	</slotId>
               <anchorPosition>	-0.000000 -0.00292051 0.939627	</anchorPosition>
               <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
               <applyTo>	4096	</applyTo>
@@ -1791,7 +1791,7 @@
           <customizationSlots>
             <slot>
               <slotType>	insigniaOnGun	</slotType>
-              <slotId>	7	</slotId>
+              <slotId>	771	</slotId>
               <rayStart>	-0.000000 -0.00584117 1.216	</rayStart>
               <rayEnd>	-0.00838515 -0.123803 1.216	</rayEnd>
               <rayUp>	0.084 0.081 5	</rayUp>
@@ -1801,7 +1801,7 @@
             </slot>
             <slot>
               <slotType>	camouflage	</slotType>
-              <slotId>	13	</slotId>
+              <slotId>	770	</slotId>
               <anchorPosition>	-0.000000 -0.00292063 0.939628	</anchorPosition>
               <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
               <applyTo>	4096	</applyTo>
@@ -1875,9 +1875,11 @@
       <engines>
         <SFA_B42>
           <smplEnginePower>	110	</smplEnginePower>
+          <smplFwMaxSpeed>	60	</smplFwMaxSpeed>
         </SFA_B42>
         <Ford_391>
           <smplEnginePower>	140	</smplEnginePower>
+          <smplFwMaxSpeed>	60	</smplFwMaxSpeed>
         </Ford_391>
       </engines>
       <chassis>

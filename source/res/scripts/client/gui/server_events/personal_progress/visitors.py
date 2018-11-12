@@ -28,11 +28,22 @@ class BinaryProgressVisitor(WrappersVisitor):
         return [WrapperInfo(metrics_wrappers.wrapSimple, True)]
 
 
+class ValueLikeBinaryProgressVisitor(WrappersVisitor):
+
+    @classmethod
+    def isSuitableForProgress(cls, progress):
+        return progress.getTemplateID() == PROGRESS_TEMPLATE.VALUE and progress.getGoal() == 1
+
+    @classmethod
+    def getWrappers(cls):
+        return [WrapperInfo(metrics_wrappers.wrapSimple, True)]
+
+
 class ValueProgressVisitor(WrappersVisitor):
 
     @classmethod
     def isSuitableForProgress(cls, progress):
-        return progress.getTemplateID() == PROGRESS_TEMPLATE.VALUE
+        return progress.getTemplateID() == PROGRESS_TEMPLATE.VALUE and progress.getGoal() != 1
 
     @classmethod
     def getWrappers(cls):

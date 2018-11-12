@@ -36,13 +36,20 @@ class _AppearanceCache(object):
         self.__spaceLoaded = False
         self.__arena.onNewVehicleListReceived += self.onVehicleListReceived
         self.__arena.onVehicleAdded += self.onVehicleAddedUpdate
+        self.__arena.onVehicleUpdated += self.onVehicleAddedUpdate
+        if getattr(self.__arena.componentSystem, 'playerDataComponent', None):
+            self.__arena.componentSystem.playerDataComponent.onPlayerGroupsUpdated += self.__onPlayerGroupsUpdated
         if _ENABLE_CACHE_TRACKER:
             d_cacheInfo = dict()
+        return
 
     def destroy(self):
         global d_cacheInfo
         self.__arena.onVehicleAdded -= self.onVehicleAddedUpdate
+        self.__arena.onVehicleUpdated -= self.onVehicleAddedUpdate
         self.__arena.onNewVehicleListReceived -= self.onVehicleListReceived
+        if getattr(self.__arena.componentSystem, 'playerDataComponent', None):
+            self.__arena.componentSystem.playerDataComponent.onPlayerGroupsUpdated -= self.__onPlayerGroupsUpdated
         for _, appearance in self.__appearanceCache.iteritems():
             appearance[0].destroy()
 
@@ -56,19 +63,17 @@ class _AppearanceCache(object):
     def onVehicleListReceived(self):
         if not self.__spaceLoaded or not _ENABLE_PRECACHE:
             return
-        for vId, vInfo in self.__arena.vehicles.iteritems():
-            cacheApperance(vId, vInfo)
+        self.__precacheVehicle(self.__arena.vehicles)
 
     def onVehicleAddedUpdate(self, vId):
         if _ENABLE_PRECACHE:
             vInfo = self.__arena.vehicles[vId]
-            cacheApperance(vId, vInfo)
+            self.__precacheVehicle({vId: vInfo})
 
     def onSpaceLoaded(self):
         self.__spaceLoaded = True
         if _ENABLE_PRECACHE:
-            for vId, vInfo in self.__arena.vehicles.iteritems():
-                cacheApperance(vId, vInfo)
+            self.__precacheVehicle(self.__arena.vehicles)
 
     def cacheApperance(self, vId, info):
         if vId in self.__assemblersCache or vId in self.__appearanceCache:
@@ -160,6 +165,35 @@ class _AppearanceCache(object):
     def __validate(self, cachedInfo, newInfo):
         valid = cachedInfo.typeDescr.type.name == newInfo.typeDescr.type.name and cachedInfo.outfitCD == newInfo.outfitCD
         return valid
+
+    def __onPlayerGroupsUpdated(self, vIds):
+        if not _ENABLE_PRECACHE or not self.__arena.vehicles or not self.__spaceLoaded:
+            return
+        else:
+            playerVehicleId = getattr(BigWorld.player(), 'playerVehicleID', 0)
+            if playerVehicleId <= 0:
+                return
+            groupIDs = None
+            if playerVehicleId in vIds:
+                vehicleInfos = self.__arena.vehicles
+            else:
+                vehicleInfos = dict(((vId, self.__arena.vehicles[vId]) for vId in vIds))
+                groupIDs = vIds
+            self.__precacheVehicle(vehicleInfos, groupIDs)
+            return
+
+    def __precacheVehicle(self, vehicleIDs, groupIDs=None):
+        playerGroupId = -1
+        if self.__arena.arenaType.numPlayerGroups > 0 and getattr(self.__arena.componentSystem, 'playerDataComponent', None):
+            playerGroupId = self.__arena.componentSystem.playerDataComponent.getPlayerGroupForPlayer()
+        for vId, vInfo in vehicleIDs.iteritems():
+            if playerGroupId > 0:
+                groupId = groupIDs[vId] if groupIDs else self.__arena.componentSystem.playerDataComponent.getPlayerGroupForVehicle(vId)
+                if groupId != playerGroupId:
+                    continue
+            cacheApperance(vId, vInfo)
+
+        return
 
 
 def _resourceLoaded(resNames, vId, resourceRefs):

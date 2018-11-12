@@ -98,41 +98,53 @@ class BuyVehicleViewModel(ViewModel):
     def setIsRentVisible(self, value):
         self._setBool(15, value)
 
-    def getWithoutCommanderAltText(self):
-        return self._getResource(16)
+    def getIsRentSelected(self):
+        return self._getBool(16)
 
-    def setWithoutCommanderAltText(self, value):
-        self._setResource(16, value)
+    def setIsRentSelected(self, value):
+        self._setBool(16, value)
 
-    def getIsInBootcamp(self):
+    def getIsRestore(self):
         return self._getBool(17)
 
-    def setIsInBootcamp(self, value):
+    def setIsRestore(self, value):
         self._setBool(17, value)
 
-    def getPriceDescription(self):
+    def getWithoutCommanderAltText(self):
         return self._getResource(18)
 
-    def setPriceDescription(self, value):
+    def setWithoutCommanderAltText(self, value):
         self._setResource(18, value)
 
+    def getIsInBootcamp(self):
+        return self._getBool(19)
+
+    def setIsInBootcamp(self, value):
+        self._setBool(19, value)
+
+    def getPriceDescription(self):
+        return self._getResource(20)
+
+    def setPriceDescription(self, value):
+        self._setResource(20, value)
+
     def getNoCrewCheckboxLabel(self):
-        return self._getResource(19)
+        return self._getResource(21)
 
     def setNoCrewCheckboxLabel(self, value):
-        self._setResource(19, value)
+        self._setResource(21, value)
 
     def getIsMovingTextEnabled(self):
-        return self._getBool(20)
+        return self._getBool(22)
 
     def setIsMovingTextEnabled(self, value):
-        self._setBool(20, value)
+        self._setBool(22, value)
 
     def getIsContentHidden(self):
-        return self._getBool(21)
+        return self._getBool(23)
 
     def setIsContentHidden(self, value):
-        self._setBool(21, value)
+        self._setBool(23, value)
 
     def _initialize(self):
         super(BuyVehicleViewModel, self)._initialize()
@@ -152,6 +164,8 @@ class BuyVehicleViewModel(ViewModel):
         self._addBoolProperty('isToggleBtnVisible', False)
         self._addBoolProperty('isElite', False)
         self._addBoolProperty('isRentVisible', False)
+        self._addBoolProperty('isRentSelected', False)
+        self._addBoolProperty('isRestore', False)
         self._addResourceProperty('withoutCommanderAltText', Resource.INVALID)
         self._addBoolProperty('isInBootcamp', False)
         self._addResourceProperty('priceDescription', Resource.INVALID)

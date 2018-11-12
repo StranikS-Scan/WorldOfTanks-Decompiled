@@ -11,7 +11,162 @@
   <xmlns:sweden>	sweden	</xmlns:sweden>
   <xmlns:poland>	poland	</xmlns:poland>
   <itemGroup>
-    <name>	Flags	</name>
+    <name>	Damage	</name>
+    <userString>	#vehicle_customization:projection_decals/damage	</userString>
+    <season>	ALL	</season>
+    <historical>	false	</historical>
+    <priceGroup>	projection_decals	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <levels>	8	</levels>
+        <tags>	premium	</tags>
+      </include>
+      <include>
+        <levels>	10	</levels>
+      </include>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G119_Panzer58_BF germany:G114_Rheinmetall_Skorpian usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <projection_decal>
+      <id>	1	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/damage/projection_decal_01.dds	</texture>
+      <userString>	#vehicle_customization:projection_decals/damage/projection_decal_01	</userString>
+      <tags>	direction_right_to_left formfactor_square	</tags>
+      <mirror>	True	</mirror>
+    </projection_decal>
+  </itemGroup>
+  <itemGroup>
+    <name>	Geometry	</name>
+    <userString>	#vehicle_customization:projection_decals/geometry	</userString>
+    <season>	ALL	</season>
+    <historical>	true	</historical>
+    <priceGroup>	projection_decals	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <levels>	8	</levels>
+        <tags>	premium	</tags>
+      </include>
+      <include>
+        <levels>	10	</levels>
+      </include>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G119_Panzer58_BF germany:G114_Rheinmetall_Skorpian usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <projection_decal>
+      <id>	2	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/geometry/projection_decal_01.dds	</texture>
+      <userString>	#vehicle_customization:projection_decals/geometry/projection_decal_01	</userString>
+      <tags>	direction_right_to_left formfactor_square	</tags>
+      <mirror>	True	</mirror>
+    </projection_decal>
+  </itemGroup>
+  <itemGroup>
+    <name>	Animals	</name>
+    <userString>	#vehicle_customization:projection_decals/animals	</userString>
+    <season>	ALL	</season>
+    <historical>	false	</historical>
+    <priceGroup>	projection_decals	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <levels>	8	</levels>
+        <tags>	premium	</tags>
+      </include>
+      <include>
+        <levels>	10	</levels>
+      </include>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G119_Panzer58_BF germany:G114_Rheinmetall_Skorpian usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <projection_decal>
+      <id>	3	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/animals/projection_decal_01.dds	</texture>
+      <userString>	#vehicle_customization:projection_decals/animals/projection_decal_01	</userString>
+      <tags>	formfactor_square	</tags>
+      <mirror>	False	</mirror>
+    </projection_decal>
+    <projection_decal>
+      <id>	4	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/animals/projection_decal_02.dds	</texture>
+      <userString>	#vehicle_customization:projection_decals/animals/projection_decal_02	</userString>
+      <tags>	formfactor_square	</tags>
+      <mirror>	False	</mirror>
+    </projection_decal>
+    <projection_decal>
+      <id>	5	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/animals/projection_decal_03.dds	</texture>
+      <userString>	#vehicle_customization:projection_decals/animals/projection_decal_03	</userString>
+      <tags>	formfactor_square	</tags>
+      <mirror>	False	</mirror>
+    </projection_decal>
+    <projection_decal>
+      <id>	6	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/animals/projection_decal_04.dds	</texture>
+      <userString>	#vehicle_customization:projection_decals/animals/projection_decal_04	</userString>
+      <tags>	formfactor_square	</tags>
+      <mirror>	False	</mirror>
+    </projection_decal>
+    <projection_decal>
+      <id>	7	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/animals/projection_decal_05.dds	</texture>
+      <userString>	#vehicle_customization:projection_decals/animals/projection_decal_05	</userString>
+      <tags>	direction_left_to_right formfactor_square	</tags>
+      <mirror>	True	</mirror>
+    </projection_decal>
+    <projection_decal>
+      <id>	8	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/animals/projection_decal_06.dds	</texture>
+      <userString>	#vehicle_customization:projection_decals/animals/projection_decal_06	</userString>
+      <tags>	direction_left_to_right formfactor_square	</tags>
+      <mirror>	True	</mirror>
+    </projection_decal>
+    <projection_decal>
+      <id>	10	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/animals/projection_decal_07.dds	</texture>
+      <userString>	#vehicle_customization:projection_decals/animals/projection_decal_07	</userString>
+      <tags>	direction_left_to_right formfactor_square	</tags>
+      <mirror>	True	</mirror>
+    </projection_decal>
+    <projection_decal>
+      <id>	11	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/animals/projection_decal_08.dds	</texture>
+      <userString>	#vehicle_customization:projection_decals/animals/projection_decal_08	</userString>
+      <tags>	formfactor_square	</tags>
+      <mirror>	False	</mirror>
+    </projection_decal>
+    <projection_decal>
+      <id>	12	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/animals/projection_decal_09.dds	</texture>
+      <userString>	#vehicle_customization:projection_decals/animals/projection_decal_09	</userString>
+      <tags>	direction_left_to_right formfactor_square	</tags>
+      <mirror>	True	</mirror>
+    </projection_decal>
+    <projection_decal>
+      <id>	13	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/animals/projection_decal_10.dds	</texture>
+      <userString>	#vehicle_customization:projection_decals/animals/projection_decal_10	</userString>
+      <tags>	formfactor_square	</tags>
+      <mirror>	False	</mirror>
+    </projection_decal>
+    <projection_decal>
+      <id>	14	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/animals/projection_decal_11.dds	</texture>
+      <userString>	#vehicle_customization:projection_decals/animals/projection_decal_11	</userString>
+      <tags>	direction_left_to_right formfactor_square	</tags>
+      <mirror>	True	</mirror>
+    </projection_decal>
+    <projection_decal>
+      <id>	15	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/animals/projection_decal_12.dds	</texture>
+      <userString>	#vehicle_customization:projection_decals/animals/projection_decal_12	</userString>
+      <tags>	direction_left_to_right formfactor_square	</tags>
+      <mirror>	True	</mirror>
+    </projection_decal>
+  </itemGroup>
+  <itemGroup>
+    <name>	Cz Flag	</name>
     <userString>	#vehicle_customization:projection_decals/flags	</userString>
     <season>	ALL	</season>
     <historical>	false	</historical>
@@ -26,6 +181,304 @@
       <id>	9	</id>
       <texture>	gui/maps/vehicles/decals/projection_decals/flags/projection_decal_01.dds	</texture>
       <userString>	#vehicle_customization:projection_decals/flags/projection_decal_01	</userString>
+      <mirror>	False	</mirror>
+    </projection_decal>
+  </itemGroup>
+  <itemGroup>
+    <name>	Cool	</name>
+    <userString>	#vehicle_customization:projection_decals/cool	</userString>
+    <season>	ALL	</season>
+    <historical>	false	</historical>
+    <priceGroup>	projection_decals	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <levels>	8	</levels>
+        <tags>	premium	</tags>
+      </include>
+      <include>
+        <levels>	10	</levels>
+      </include>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G119_Panzer58_BF germany:G114_Rheinmetall_Skorpian usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <projection_decal>
+      <id>	16	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/cool/projection_decal_01.dds	</texture>
+      <userString>	#vehicle_customization:projection_decals/cool/projection_decal_01	</userString>
+      <tags>	direction_left_to_right formfactor_square	</tags>
+      <mirror>	True	</mirror>
+    </projection_decal>
+    <projection_decal>
+      <id>	17	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/cool/projection_decal_02.dds	</texture>
+      <userString>	#vehicle_customization:projection_decals/cool/projection_decal_02	</userString>
+      <tags>	direction_left_to_right formfactor_square	</tags>
+      <mirror>	True	</mirror>
+    </projection_decal>
+    <projection_decal>
+      <id>	18	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/cool/projection_decal_03.dds	</texture>
+      <userString>	#vehicle_customization:projection_decals/cool/projection_decal_03	</userString>
+      <tags>	direction_left_to_right formfactor_square	</tags>
+      <mirror>	True	</mirror>
+    </projection_decal>
+    <projection_decal>
+      <id>	19	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/cool/projection_decal_04.dds	</texture>
+      <userString>	#vehicle_customization:projection_decals/cool/projection_decal_04	</userString>
+      <tags>	direction_left_to_right formfactor_square	</tags>
+      <mirror>	True	</mirror>
+    </projection_decal>
+    <projection_decal>
+      <id>	20	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/cool/projection_decal_05.dds	</texture>
+      <userString>	#vehicle_customization:projection_decals/cool/projection_decal_05	</userString>
+      <tags>	formfactor_square	</tags>
+      <mirror>	False	</mirror>
+    </projection_decal>
+    <projection_decal>
+      <id>	21	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/cool/projection_decal_06.dds	</texture>
+      <userString>	#vehicle_customization:projection_decals/cool/projection_decal_06	</userString>
+      <tags>	formfactor_square	</tags>
+      <mirror>	False	</mirror>
+    </projection_decal>
+    <projection_decal>
+      <id>	22	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/cool/projection_decal_07.dds	</texture>
+      <userString>	#vehicle_customization:projection_decals/cool/projection_decal_07	</userString>
+      <tags>	formfactor_square	</tags>
+      <mirror>	False	</mirror>
+    </projection_decal>
+    <projection_decal>
+      <id>	23	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/cool/projection_decal_08.dds	</texture>
+      <userString>	#vehicle_customization:projection_decals/cool/projection_decal_08	</userString>
+      <tags>	direction_right_to_left formfactor_square	</tags>
+      <mirror>	True	</mirror>
+    </projection_decal>
+    <projection_decal>
+      <id>	24	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/cool/projection_decal_09.dds	</texture>
+      <userString>	#vehicle_customization:projection_decals/cool/projection_decal_09	</userString>
+      <tags>	direction_left_to_right formfactor_square	</tags>
+      <mirror>	True	</mirror>
+    </projection_decal>
+    <projection_decal>
+      <id>	25	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/cool/projection_decal_10.dds	</texture>
+      <userString>	#vehicle_customization:projection_decals/cool/projection_decal_10	</userString>
+      <tags>	direction_right_to_left formfactor_square	</tags>
+      <mirror>	True	</mirror>
+    </projection_decal>
+    <projection_decal>
+      <id>	26	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/cool/projection_decal_11.dds	</texture>
+      <userString>	#vehicle_customization:projection_decals/cool/projection_decal_11	</userString>
+      <tags>	direction_right_to_left formfactor_square	</tags>
+      <mirror>	True	</mirror>
+    </projection_decal>
+    <projection_decal>
+      <id>	27	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/cool/projection_decal_12.dds	</texture>
+      <userString>	#vehicle_customization:projection_decals/cool/projection_decal_12	</userString>
+      <tags>	formfactor_square	</tags>
+      <mirror>	False	</mirror>
+    </projection_decal>
+    <projection_decal>
+      <id>	28	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/cool/projection_decal_13.dds	</texture>
+      <userString>	#vehicle_customization:projection_decals/cool/projection_decal_13	</userString>
+      <tags>	formfactor_square	</tags>
+      <mirror>	False	</mirror>
+    </projection_decal>
+  </itemGroup>
+  <itemGroup>
+    <name>	Armor	</name>
+    <userString>	#vehicle_customization:projection_decals/armor	</userString>
+    <season>	ALL	</season>
+    <historical>	false	</historical>
+    <priceGroup>	projection_decals	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <levels>	8	</levels>
+        <tags>	premium	</tags>
+      </include>
+      <include>
+        <levels>	10	</levels>
+      </include>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G119_Panzer58_BF germany:G114_Rheinmetall_Skorpian usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <projection_decal>
+      <id>	29	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/armor/projection_decal_01.dds	</texture>
+      <userString>	#vehicle_customization:projection_decals/armor/projection_decal_01	</userString>
+      <tags>	formfactor_square	</tags>
+      <mirror>	False	</mirror>
+    </projection_decal>
+    <projection_decal>
+      <id>	30	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/armor/projection_decal_02.dds	</texture>
+      <userString>	#vehicle_customization:projection_decals/armor/projection_decal_02	</userString>
+      <tags>	direction_left_to_right formfactor_square	</tags>
+      <mirror>	True	</mirror>
+    </projection_decal>
+    <projection_decal>
+      <id>	31	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/armor/projection_decal_03.dds	</texture>
+      <userString>	#vehicle_customization:projection_decals/armor/projection_decal_03	</userString>
+      <tags>	formfactor_square	</tags>
+      <mirror>	False	</mirror>
+    </projection_decal>
+    <projection_decal>
+      <id>	32	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/armor/projection_decal_04.dds	</texture>
+      <userString>	#vehicle_customization:projection_decals/armor/projection_decal_04	</userString>
+      <tags>	formfactor_square	</tags>
+      <mirror>	False	</mirror>
+    </projection_decal>
+    <projection_decal>
+      <id>	33	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/armor/projection_decal_05.dds	</texture>
+      <userString>	#vehicle_customization:projection_decals/armor/projection_decal_05	</userString>
+      <tags>	formfactor_square	</tags>
+      <mirror>	False	</mirror>
+    </projection_decal>
+    <projection_decal>
+      <id>	34	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/armor/projection_decal_06.dds	</texture>
+      <userString>	#vehicle_customization:projection_decals/armor/projection_decal_06	</userString>
+      <tags>	formfactor_square	</tags>
+      <mirror>	False	</mirror>
+    </projection_decal>
+    <projection_decal>
+      <id>	35	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/armor/projection_decal_07.dds	</texture>
+      <userString>	#vehicle_customization:projection_decals/armor/projection_decal_07	</userString>
+      <tags>	direction_left_to_right formfactor_square	</tags>
+      <mirror>	True	</mirror>
+    </projection_decal>
+  </itemGroup>
+  <itemGroup>
+    <name>	Signs	</name>
+    <userString>	#vehicle_customization:projection_decals/signs	</userString>
+    <season>	ALL	</season>
+    <historical>	false	</historical>
+    <priceGroup>	projection_decals	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <levels>	8	</levels>
+        <tags>	premium	</tags>
+      </include>
+      <include>
+        <levels>	10	</levels>
+      </include>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G119_Panzer58_BF germany:G114_Rheinmetall_Skorpian usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <projection_decal>
+      <id>	36	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/signs/projection_decal_01.dds	</texture>
+      <userString>	#vehicle_customization:projection_decals/signs/projection_decal_01	</userString>
+      <tags>	formfactor_square	</tags>
+      <mirror>	False	</mirror>
+    </projection_decal>
+    <projection_decal>
+      <id>	37	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/signs/projection_decal_02.dds	</texture>
+      <userString>	#vehicle_customization:projection_decals/signs/projection_decal_02	</userString>
+      <tags>	direction_right_to_left formfactor_square	</tags>
+      <mirror>	True	</mirror>
+    </projection_decal>
+    <projection_decal>
+      <id>	38	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/signs/projection_decal_03.dds	</texture>
+      <userString>	#vehicle_customization:projection_decals/signs/projection_decal_03	</userString>
+      <tags>	formfactor_square	</tags>
+      <mirror>	False	</mirror>
+    </projection_decal>
+    <projection_decal>
+      <id>	39	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/signs/projection_decal_04.dds	</texture>
+      <userString>	#vehicle_customization:projection_decals/signs/projection_decal_04	</userString>
+      <tags>	formfactor_square	</tags>
+      <mirror>	False	</mirror>
+    </projection_decal>
+  </itemGroup>
+  <itemGroup>
+    <name>	Game	</name>
+    <userString>	#vehicle_customization:projection_decals/game	</userString>
+    <season>	ALL	</season>
+    <historical>	false	</historical>
+    <priceGroup>	projection_decals	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <levels>	8	</levels>
+        <tags>	premium	</tags>
+      </include>
+      <include>
+        <levels>	10	</levels>
+      </include>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G119_Panzer58_BF germany:G114_Rheinmetall_Skorpian usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <projection_decal>
+      <id>	40	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/game/projection_decal_01.dds	</texture>
+      <userString>	#vehicle_customization:projection_decals/game/projection_decal_01	</userString>
+      <tags>	formfactor_square	</tags>
+      <mirror>	False	</mirror>
+    </projection_decal>
+  </itemGroup>
+  <itemGroup>
+    <name>	Identity signs	</name>
+    <userString>	#vehicle_customization:projection_decals/identity_signs	</userString>
+    <season>	ALL	</season>
+    <historical>	true	</historical>
+    <priceGroup>	projection_decals	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <levels>	8	</levels>
+        <tags>	premium	</tags>
+      </include>
+      <include>
+        <levels>	10	</levels>
+      </include>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G119_Panzer58_BF germany:G114_Rheinmetall_Skorpian usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <projection_decal>
+      <id>	41	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/identity_signs/projection_decal_01.dds	</texture>
+      <userString>	#vehicle_customization:projection_decals/identity_signs/projection_decal_01	</userString>
+      <tags>	direction_left_to_right formfactor_square	</tags>
+      <mirror>	True	</mirror>
+    </projection_decal>
+    <projection_decal>
+      <id>	42	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/identity_signs/projection_decal_02.dds	</texture>
+      <userString>	#vehicle_customization:projection_decals/identity_signs/projection_decal_02	</userString>
+      <tags>	formfactor_square	</tags>
+      <mirror>	False	</mirror>
+    </projection_decal>
+    <projection_decal>
+      <id>	43	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/identity_signs/projection_decal_03.dds	</texture>
+      <userString>	#vehicle_customization:projection_decals/identity_signs/projection_decal_03	</userString>
+      <tags>	formfactor_square	</tags>
+      <mirror>	False	</mirror>
+    </projection_decal>
+    <projection_decal>
+      <id>	44	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/identity_signs/projection_decal_04.dds	</texture>
+      <userString>	#vehicle_customization:projection_decals/identity_signs/projection_decal_04	</userString>
+      <tags>	formfactor_square	</tags>
       <mirror>	False	</mirror>
     </projection_decal>
   </itemGroup>

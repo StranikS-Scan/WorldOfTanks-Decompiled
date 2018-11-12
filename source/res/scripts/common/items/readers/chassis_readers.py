@@ -5,11 +5,13 @@ import ResMgr
 from items import _xml
 from items.components import chassis_components
 from items.components import component_constants
+from items.components.shared_components import LodSettings
 from items.readers import shared_readers
 
 def readWheelsAndGroups(xmlCtx, section):
     wheelGroups = []
     wheels = []
+    wheelId = 0
     defSyncAngle = section.readFloat('wheels/leadingWheelSyncAngle', 60)
     for sname, subsection in _xml.getChildren(xmlCtx, section, 'wheels'):
         if sname == 'group':
@@ -17,30 +19,45 @@ def readWheelsAndGroups(xmlCtx, section):
             group = chassis_components.WheelGroup(isLeft=_xml.readBool(ctx, subsection, 'isLeft'), template=intern(_xml.readNonEmptyString(ctx, subsection, 'template')), count=_xml.readInt(ctx, subsection, 'count', 1), startIndex=subsection.readInt('startIndex', 0), radius=_xml.readPositiveFloat(ctx, subsection, 'radius'))
             wheelGroups.append(group)
         if sname == 'wheel':
-            ctx = (xmlCtx, 'wheels/wheel')
-            w = chassis_components.Wheel(isLeft=_xml.readBool(ctx, subsection, 'isLeft'), radius=_xml.readPositiveFloat(ctx, subsection, 'radius'), nodeName=intern(_xml.readNonEmptyString(ctx, subsection, 'name')), isLeading=subsection.readBool('isLeading', False), leadingSyncAngle=subsection.readFloat('syncAngle', defSyncAngle))
+            from items.vehicles import _readHitTester, _readArmor
+            ctx = (xmlCtx, 'wheels/wheel[{}]'.format(wheelId))
+            w = chassis_components.Wheel(isLeft=_xml.readBool(ctx, subsection, 'isLeft'), radius=_xml.readPositiveFloat(ctx, subsection, 'radius'), nodeName=intern(_xml.readNonEmptyString(ctx, subsection, 'name')), isLeading=subsection.readBool('isLeading', False), leadingSyncAngle=subsection.readFloat('syncAngle', defSyncAngle), hitTester=_readHitTester(ctx, subsection, 'hitTester', optional=True), materials=_readArmor(ctx, subsection, 'armor', optional=True, index=wheelId))
             wheels.append(w)
+            wheelId += 1
+            tester = _readHitTester(ctx, subsection, 'hitTester', optional=True)
 
     return (tuple(wheelGroups), tuple(wheels))
 
 
-def readGroundNodesAndGroups(xmlCtx, section):
+def readGroundNodesAndGroups(xmlCtx, section, cache):
     if section['groundNodes'] is None:
-        return (component_constants.EMPTY_TUPLE, component_constants.EMPTY_TUPLE)
+        return (component_constants.EMPTY_TUPLE,
+         component_constants.EMPTY_TUPLE,
+         False,
+         None)
     else:
         groundGroups = []
         groundNodes = []
         for sname, subsection in _xml.getChildren(xmlCtx, section, 'groundNodes'):
             if sname == 'group':
                 ctx = (xmlCtx, 'groundNodes/group')
-                group = chassis_components.GroundNodeGroup(isLeft=_xml.readBool(ctx, subsection, 'isLeft'), minOffset=_xml.readFloat(ctx, subsection, 'minOffset'), maxOffset=_xml.readFloat(ctx, subsection, 'maxOffset'), template=intern(_xml.readNonEmptyString(ctx, subsection, 'template')), count=_xml.readInt(ctx, subsection, 'count', 1), startIndex=subsection.readInt('startIndex', 0))
+                group = chassis_components.GroundNodeGroup(isLeft=_xml.readBool(ctx, subsection, 'isLeft'), minOffset=_xml.readFloat(ctx, subsection, 'minOffset'), maxOffset=_xml.readFloat(ctx, subsection, 'maxOffset'), nodesTemplate=intern(_xml.readNonEmptyString(ctx, subsection, 'template')), affectedWheelsTemplate=_xml.readStringOrNone(ctx, subsection, 'affectedWheelsTemplate'), nodesCount=_xml.readInt(ctx, subsection, 'count', 1), startIndex=subsection.readInt('startIndex', 0), collisionSamplesCount=subsection.readInt('collisionSamplesCount', 1), hasLiftMode=_xml.readBool(ctx, subsection, 'hasLiftMode', False))
                 groundGroups.append(group)
             if sname == 'node':
                 ctx = (xmlCtx, 'groundNodes/node')
-                groundNode = chassis_components.GroundNode(name=intern(_xml.readNonEmptyString(ctx, subsection, 'name')), isLeft=_xml.readBool(ctx, subsection, 'isLeft'), minOffset=_xml.readFloat(ctx, subsection, 'minOffset'), maxOffset=_xml.readFloat(ctx, subsection, 'maxOffset'))
+                groundNode = chassis_components.GroundNode(nodeName=intern(_xml.readNonEmptyString(ctx, subsection, 'name')), affectedWheelName=_xml.readStringOrEmpty(ctx, subsection, 'affectedWheelName'), isLeft=_xml.readBool(ctx, subsection, 'isLeft'), minOffset=_xml.readFloat(ctx, subsection, 'minOffset'), maxOffset=_xml.readFloat(ctx, subsection, 'maxOffset'), collisionSamplesCount=_xml.readInt(ctx, subsection, 'collisionSamplesCount', 1), hasLiftMode=_xml.readBool(ctx, subsection, 'hasLiftMode', False))
                 groundNodes.append(groundNode)
 
-        return (tuple(groundGroups), tuple(groundNodes))
+        activePostmortem = _xml.readBool(xmlCtx, section, 'groundNodes/activePostmortem', False)
+        lodSettingsSection = section['groundNodes/lodSettings']
+        if lodSettingsSection is not None:
+            lodSettings = shared_readers.readLodSettings(xmlCtx, section['groundNodes'], cache)
+        else:
+            lodSettings = None
+        return (tuple(groundGroups),
+         tuple(groundNodes),
+         activePostmortem,
+         lodSettings)
 
 
 def readTrackNodes(xmlCtx, section):
@@ -84,11 +101,12 @@ def readTrackParams(xmlCtx, section):
 
 
 def readTraces(xmlCtx, section, centerOffset, cache):
-    return chassis_components.Traces(lodDist=shared_readers.readLodDist(xmlCtx, section, 'traces/lodDist', cache), bufferPrefs=intern(_xml.readNonEmptyString(xmlCtx, section, 'traces/bufferPrefs')), textureSet=intern(_xml.readNonEmptyString(xmlCtx, section, 'traces/textureSet')), centerOffset=centerOffset, size=_xml.readPositiveVector2(xmlCtx, section, 'traces/size'))
+    return chassis_components.Traces(lodDist=shared_readers.readLodDist(xmlCtx, section, 'traces/lodDist', cache), bufferPrefs=intern(_xml.readNonEmptyString(xmlCtx, section, 'traces/bufferPrefs')), textureSet=intern(_xml.readNonEmptyString(xmlCtx, section, 'traces/textureSet')), centerOffset=centerOffset, size=_xml.readPositiveVector2(xmlCtx, section, 'traces/size'), activePostmortem=_xml.readBool(xmlCtx, section, 'traces/activePostmortem', False))
 
 
 def readTrackMaterials(xmlCtx, section, cache):
-    return chassis_components.TrackMaterials(lodDist=shared_readers.readLodDist(xmlCtx, section, 'tracks/lodDist', cache), leftMaterial=intern(_xml.readNonEmptyString(xmlCtx, section, 'tracks/leftMaterial')), rightMaterial=intern(_xml.readNonEmptyString(xmlCtx, section, 'tracks/rightMaterial')), textureScale=_xml.readFloat(xmlCtx, section, 'tracks/textureScale'))
+    tracksSection = section['tracks']
+    return None if tracksSection is None else chassis_components.TrackMaterials(lodDist=shared_readers.readLodDist(xmlCtx, section, 'tracks/lodDist', cache), leftMaterial=intern(_xml.readNonEmptyString(xmlCtx, section, 'tracks/leftMaterial')), rightMaterial=intern(_xml.readNonEmptyString(xmlCtx, section, 'tracks/rightMaterial')), textureScale=_xml.readFloat(xmlCtx, section, 'tracks/textureScale'))
 
 
 def readLeveredSuspension(xmlCtx, section, cache):
@@ -102,11 +120,11 @@ def readLeveredSuspension(xmlCtx, section, cache):
                 continue
             ctx = (xmlCtx, 'leveredSuspension/lever')
             limits = _xml.readVector2(ctx, subsection, 'limits')
-            lever = chassis_components.SuspensionLever(startNodeName=intern(_xml.readNonEmptyString(ctx, subsection, 'startNode')), jointNodeName=intern(_xml.readNonEmptyString(ctx, subsection, 'jointNode')), trackNodeName=intern(_xml.readNonEmptyString(ctx, subsection, 'trackNode')), minAngle=math.radians(limits.x), maxAngle=math.radians(limits.y))
+            lever = chassis_components.SuspensionLever(startNodeName=intern(_xml.readNonEmptyString(ctx, subsection, 'startNode')), jointNodeName=intern(_xml.readNonEmptyString(ctx, subsection, 'jointNode')), trackNodeName=intern(_xml.readNonEmptyString(ctx, subsection, 'trackNode')), minAngle=math.radians(limits.x), maxAngle=math.radians(limits.y), collisionSamplesCount=subsection.readInt('collisionSamplesCount', 1), hasLiftMode=_xml.readBool(ctx, subsection, 'hasLiftMode', False), affectedWheelName=_xml.readStringOrEmpty(ctx, subsection, 'affectedWheelName'))
             levers.append(lever)
 
         ctx = (xmlCtx, 'leveredSuspension')
-        leveredSuspensionConfig = chassis_components.LeveredSuspensionConfig(levers=levers, interpolationSpeedMul=_xml.readFloat(ctx, leveredSection, 'interpolationSpeedMul', 10.0), lodSettings=shared_readers.readLodSettings(ctx, leveredSection, cache))
+        leveredSuspensionConfig = chassis_components.LeveredSuspensionConfig(levers=levers, interpolationSpeedMul=_xml.readFloat(ctx, leveredSection, 'interpolationSpeedMul', 10.0), lodSettings=shared_readers.readLodSettings(ctx, leveredSection, cache), activePostmortem=_xml.readBool(ctx, leveredSection, 'activePostmortem', False))
         return leveredSuspensionConfig
 
 

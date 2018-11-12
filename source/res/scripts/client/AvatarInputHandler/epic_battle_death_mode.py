@@ -67,11 +67,14 @@ class EpicVideoCamera(VideoCamera):
         movementMappings[getattr(Keys, configDataSec.readString('keyMoveForward', 'KEY_W'))] = Math.Vector3(0, 0, 1)
         movementMappings[getattr(Keys, configDataSec.readString('keyMoveBackward', 'KEY_S'))] = Math.Vector3(0, 0, -1)
         linearSensitivity = configDataSec.readFloat('linearVelocity', 40.0)
-        linearSensitivityAcc = configDataSec.readFloat('linearVelocityAcceleration', 30.0)
-        linearIncDecKeys = (getattr(Keys, configDataSec.readString('keyLinearVelocityIncrement', 'KEY_I')), getattr(Keys, configDataSec.readString('keyLinearVelocityDecrement', 'KEY_K')))
-        self._movementSensor = KeySensor(movementMappings, linearSensitivity, linearIncDecKeys, linearSensitivityAcc)
-        self._verticalMovementSensor = KeySensor({}, linearSensitivity, linearIncDecKeys, linearSensitivityAcc)
+        self._movementSensor = KeySensor(movementMappings, linearSensitivity)
+        self._verticalMovementSensor = KeySensor({}, linearSensitivity)
         self._movementSensor.currentVelocity = Math.Vector3()
+
+    def _readRotationSettings(self, configDataSec, rotationMappings):
+        rotationSensitivity = configDataSec.readFloat('angularVelocity', 0.7)
+        self._rotationSensor = KeySensor(rotationMappings, rotationSensitivity)
+        self._rotationSensor.currentVelocity = Math.Vector3()
 
     def _checkSpaceBounds(self, startPos, endPos):
         if not isPlayerAvatar():
@@ -161,7 +164,7 @@ class DeathFreeCamMode(VideoCameraControlMode):
         else:
             if vehicleDesc['isAlive'] and vehicleDesc['team'] == BigWorld.player().team:
                 targetMode = CTRL_MODE_NAME.POSTMORTEM
-                BigWorld.player().inputHandler.onControlModeChanged(targetMode, postmortemParams=None, newVehicleID=toId, bPostmortemDelay=False, respawn=True, camMatrix=Math.Matrix(self._cam._cam.invViewProvider), transitionDuration=self._cameraTransitionDurations[targetMode])
+                BigWorld.player().inputHandler.onControlModeChanged(targetMode, postmortemParams=None, newVehicleID=toId, bPostmortemDelay=False, respawn=True, camMatrix=BigWorld.camera().matrix, transitionDuration=self._cameraTransitionDurations[targetMode])
                 BigWorld.player().inputHandler.onCameraChanged(targetMode, toId)
                 self.guiSessionProvider.switchToPostmortem(False)
             return
@@ -169,7 +172,7 @@ class DeathFreeCamMode(VideoCameraControlMode):
     def __onRespawnInfoUpdated(self, respawnInfo):
         if respawnInfo is not None:
             self.selectPlayer(None)
-            BigWorld.player().inputHandler.onControlModeChanged(CTRL_MODE_NAME.RESPAWN_DEATH, prevModeName=CTRL_MODE_NAME.POSTMORTEM, camMatrix=Math.Matrix(self._cam._cam.invViewProvider), curVehicleID=self.curVehicleID, transitionDuration=self._cameraTransitionDurations[CTRL_MODE_NAME.RESPAWN_DEATH])
+            BigWorld.player().inputHandler.onControlModeChanged(CTRL_MODE_NAME.RESPAWN_DEATH, prevModeName=CTRL_MODE_NAME.POSTMORTEM, camMatrix=BigWorld.camera().matrix, curVehicleID=self.curVehicleID, transitionDuration=self._cameraTransitionDurations[CTRL_MODE_NAME.RESPAWN_DEATH])
         return
 
     def overridePose(self, pos, rot):
@@ -183,8 +186,12 @@ class DeathTankFollowMode(PostMortemControlMode):
 
     def handleKeyEvent(self, isDown, key, mods, event=None):
         cmdMap = CommandMapping.g_instance
-        if cmdMap.isFired(CommandMapping.CMD_CM_POSTMORTEM_NEXT_VEHICLE, key) and isDown and self.curPostmortemDelay is None:
+        if cmdMap.isFired(CommandMapping.CMD_CM_POSTMORTEM_SELF_VEHICLE, key) and isDown and self.curPostmortemDelay is None:
+            self.selectPlayer(None)
             self._switchToCtrlMode(CTRL_MODE_NAME.DEATH_FREE_CAM)
+            return True
+        elif cmdMap.isFired(CommandMapping.CMD_CM_POSTMORTEM_NEXT_VEHICLE, key) and isDown and self.curPostmortemDelay is None and BigWorld.player().target is not None:
+            self.selectPlayer(BigWorld.player().target.id)
             return True
         elif cmdMap.isFiredList((CommandMapping.CMD_CM_CAMERA_ROTATE_LEFT,
          CommandMapping.CMD_CM_CAMERA_ROTATE_RIGHT,
@@ -210,9 +217,15 @@ class DeathTankFollowMode(PostMortemControlMode):
         else:
             return False
 
+    def _onMatrixBound(self, isStatic):
+        super(DeathTankFollowMode, self)._onMatrixBound(isStatic)
+        cameraTransitionDuration = self._cameraTransitionDurations.get(CTRL_MODE_NAME.POSTMORTEM, -1)
+        if cameraTransitionDuration > 0:
+            self.camera.restartCameraTransition(cameraTransitionDuration)
+
     def enable(self, **args):
         self.altTargetMode = CTRL_MODE_NAME.DEATH_FREE_CAM
-        PostMortemControlMode.enable(self, **args)
+        super(DeathTankFollowMode, self).enable(**args)
         SoundGroups.g_instance.changePlayMode(0)
         specCtrl = self.guiSessionProvider.dynamic.spectator
         if specCtrl is not None:
@@ -222,6 +235,3 @@ class DeathTankFollowMode(PostMortemControlMode):
         if vehicleID is not None:
             self.selectPlayer(vehicleID)
         return
-
-    def disable(self):
-        PostMortemControlMode.disable(self)

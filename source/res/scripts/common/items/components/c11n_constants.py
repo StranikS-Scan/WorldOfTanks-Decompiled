@@ -13,6 +13,7 @@ MAX_USERS_PROJECTION_DECALS = 2
 PROJECTION_DECALS_SCALE_ID_VALUES = (0, 1, 2, 3)
 DEFAULT_DECAL_SCALE_FACTORS = (0.6, 0.8, 1.0)
 DEFAULT_SCALE_FACTOR_ID = 3
+DEFAULT_DECAL_CLIP_ANGLE = 0.0
 
 class CustomizationType(object):
     PAINT = 1
@@ -22,13 +23,15 @@ class CustomizationType(object):
     MODIFICATION = 5
     ITEM_GROUP = 6
     PROJECTION_DECAL = 7
+    INSIGNIA = 8
     RANGE = {PAINT,
      CAMOUFLAGE,
      DECAL,
      STYLE,
      MODIFICATION,
      ITEM_GROUP,
-     PROJECTION_DECAL}
+     PROJECTION_DECAL,
+     INSIGNIA}
     _APPLIED_TO_TYPES = (PAINT, CAMOUFLAGE, DECAL)
     _INT_TYPES = (STYLE, MODIFICATION, PROJECTION_DECAL)
 
@@ -41,6 +44,29 @@ class ItemTags(object):
     IGR = 'IGR'
     RARE = 'rare'
     HIDDEN_IN_UI = 'hiddenInUI'
+
+
+class DirectionTags:
+    ANY = 'direction_any'
+    LEFT_TO_RIGHT = 'direction_left_to_right'
+    RIGHT_TO_LEFT = 'direction_right_to_left'
+    ALL = (ANY, LEFT_TO_RIGHT, RIGHT_TO_LEFT)
+
+
+class ProjectionDecalFormTags:
+    PREFIX = 'formfactor_'
+    ANY = PREFIX + 'any'
+    SQUARE = PREFIX + 'square'
+    RECT1X2 = PREFIX + 'rect1x2'
+    RECT1X3 = PREFIX + 'rect1x3'
+    RECT1X4 = PREFIX + 'rect1x4'
+    RECT1X6 = PREFIX + 'rect1x6'
+    ALL = (ANY,
+     SQUARE,
+     RECT1X2,
+     RECT1X3,
+     RECT1X4,
+     RECT1X6)
 
 
 class ApplyArea(object):
@@ -76,6 +102,7 @@ class ApplyArea(object):
     HULL_EMBLEM_REGIONS = (HULL, HULL_1)
     HULL_INSCRIPTION_REGIONS = (HULL_2, HULL_3)
     HULL_PROJECTION_DECAL_REGIONS = (HULL, HULL_1)
+    HULL_INSIGNIA_REGIONS = (HULL, HULL_1)
     TURRET_REGIONS = (TURRET,
      TURRET_1,
      TURRET_2,
@@ -85,6 +112,7 @@ class ApplyArea(object):
     TURRET_EMBLEM_REGIONS = (TURRET, TURRET_1)
     TURRET_INSCRIPTION_REGIONS = (TURRET_2, TURRET_3)
     TURRET_PROJECTION_DECAL_REGIONS = (TURRET, TURRET_1)
+    TURRET_INSIGNIA_REGIONS = (TURRET, TURRET_1)
     GUN_REGIONS = (GUN,
      GUN_1,
      GUN_2,
@@ -94,6 +122,7 @@ class ApplyArea(object):
     GUN_EMBLEM_REGIONS = (GUN, GUN_1)
     GUN_INSCRIPTION_REGIONS = (GUN_2, GUN_3)
     GUN_PROJECTION_DECAL_REGIONS = (GUN, GUN_1)
+    GUN_INSIGNIA_REGIONS = (GUN, GUN_1)
     RANGE = {HULL,
      HULL_1,
      HULL_2,
@@ -127,6 +156,10 @@ class ApplyArea(object):
     EMBLEM_REGIONS_VALUE = reduce(int.__or__, EMBLEM_REGIONS)
     INSCRIPTION_REGIONS_VALUE = reduce(int.__or__, INSCRIPTION_REGIONS)
     PROJECTION_DECAL_REGIONS_VALUE = reduce(int.__or__, PROJECTION_DECAL_REGIONS)
+    CHASSIS_REGIONS_VALUE = reduce(int.__or__, CHASSIS_REGIONS)
+    GUN_REGIONS_VALUE = reduce(int.__or__, GUN_REGIONS)
+    HULL_REGIONS_VALUE = reduce(int.__or__, HULL_REGIONS)
+    TURRET_REGIONS_VALUE = reduce(int.__or__, TURRET_REGIONS)
 
 
 class SeasonType(object):
@@ -181,9 +214,49 @@ class StyleFlags(object):
     ACTIVE = ENABLED | INSTALLED
 
 
+class Options:
+    NONE = 0
+    MIRRORED = 1
+    RANGE = (NONE, MIRRORED)
+    PROJECTION_DECALS_ALLOWED_OPTIONS = (MIRRORED,)
+    PROJECTION_DECALS_ALLOWED_OPTIONS_VALUE = reduce(int.__or__, PROJECTION_DECALS_ALLOWED_OPTIONS)
+
+
 NO_OUTFIT_DATA = ('', StyleFlags.EMPTY)
 C11N_MAX_REGION_NUM = 3
 C11N_GUN_REGION = 0
 C11N_MASK_REGION = 2
 C11N_GUN_APPLY_REGIONS = {'GUN': C11N_GUN_REGION,
  'GUN_2': C11N_MASK_REGION}
+customizationSlotIds = {'hull': {'clan': (1, 1),
+          'paint': (2, 2),
+          'camouflage': (3, 3),
+          'player': (4, 35),
+          'inscription': (36, 67),
+          'projectionDecal': (68, 195),
+          'insignia': (196, 203),
+          'fixedEmblem': (204, 255),
+          'fixedInscription': (204, 255)},
+ 'chassis': {'paint': (256, 256),
+             'style': (257, 257),
+             'insignia': (258, 265),
+             'fixedEmblem': (266, 319),
+             'fixedInscription': (266, 319)},
+ 'turret': {'clan': (1, 1),
+            'paint': (512, 512),
+            'camouflage': (513, 513),
+            'player': (514, 545),
+            'inscription': (546, 577),
+            'projectionDecal': (578, 705),
+            'insignia': (706, 713),
+            'fixedEmblem': (714, 767),
+            'fixedInscription': (714, 767)},
+ 'gun': {'paint': (768, 769),
+         'camouflage': (770, 770),
+         'insigniaOnGun': (771, 771),
+         'player': (772, 803),
+         'inscription': (804, 835),
+         'projectionDecal': (836, 963),
+         'insignia': (964, 971),
+         'fixedEmblem': (972, 1023),
+         'fixedInscription': (972, 1023)}}

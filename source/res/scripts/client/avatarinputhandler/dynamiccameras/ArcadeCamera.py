@@ -2,7 +2,6 @@
 # Embedded file name: scripts/client/AvatarInputHandler/DynamicCameras/ArcadeCamera.py
 import math
 from collections import namedtuple
-from functools import partial
 import BattleReplay
 import BigWorld
 import GUI
@@ -20,7 +19,6 @@ from Math import Vector2, Vector3, Vector4, Matrix
 from debug_utils import LOG_WARNING, LOG_ERROR
 from helpers import dependency
 from helpers.CallbackDelayer import CallbackDelayer, TimeDeltaMeter
-from AvatarInputHandler.DynamicCameras import DynamicCameraInterpolator
 from skeletons.account_helpers.settings_core import ISettingsCore
 
 def getCameraAsSettingsHolder(settingsDataSec):
@@ -120,11 +118,7 @@ class ArcadeCamera(ICamera, CallbackDelayer, TimeDeltaMeter):
             self.__cam.aimPointProvider.a = prevAimRel
         baseTranslation = Matrix(refinedVehicleMProv).translation
         relativePosition = self.__aimingSystem.matrix.translation - baseTranslation
-        if self.__cameraInterpolator.active:
-            self.setYawPitch(self.__previousAimVector.yaw, -self.__previousAimVector.pitch)
-            self.__transitionYawDirty = True
-        else:
-            self.__setCameraPosition(relativePosition)
+        self.__setCameraPosition(relativePosition)
         return
 
     camera = property(lambda self: self.__cam)
@@ -151,6 +145,7 @@ class ArcadeCamera(ICamera, CallbackDelayer, TimeDeltaMeter):
         self.__focalPointDist = 1.0
         self.__autoUpdateDxDyDz = Vector3(0.0)
         self.__updatedByKeyboard = False
+        self.__isCamInTransition = False
         if defaultOffset is not None:
             self.__defaultAimOffset = defaultOffset
             self.__cam = BigWorld.HomingCamera(self.__adCfg['enable'])
@@ -163,8 +158,7 @@ class ArcadeCamera(ICamera, CallbackDelayer, TimeDeltaMeter):
         else:
             self.__defaultAimOffset = Vector2()
             self.__cam = None
-        self.__cameraInterpolator = DynamicCameraInterpolator()
-        self.__resetCameraTransition()
+        self.__cameraTransition = BigWorld.TransitionCamera()
         return
 
     def create(self, pivotPos, onChangeControlMode=None, postmortemMode=False):
@@ -207,6 +201,7 @@ class ArcadeCamera(ICamera, CallbackDelayer, TimeDeltaMeter):
         self.disable()
         self.__onChangeControlMode = None
         self.__cam = None
+        self.__cameraTransition = None
         if self.__aimingSystem is not None:
             self.__aimingSystem.destroy()
             self.__aimingSystem = None
@@ -269,21 +264,32 @@ class ArcadeCamera(ICamera, CallbackDelayer, TimeDeltaMeter):
             self.setCameraDistance(camDist)
         else:
             self.__inputInertia.teleport(self.__calcRelativeDist())
-        if camTransitionParams is not None:
-            cameraTransitionDuration = camTransitionParams.get('cameraTransitionDuration', -1)
-            if cameraTransitionDuration > 0:
-                previousCamMatrix = camTransitionParams.get('camMatrix', None)
-                self.__setupCameraTransition(cameraTransitionDuration, previousCamMatrix)
         self.vehicleMProv = vehicleMProv
         self.__setDynamicCollisions(True)
-        BigWorld.camera(self.__cam)
         self.__aimingSystem.enable(preferredPos, turretYaw, gunPitch)
         self.__aimingSystem.aimMatrix = self.__calcAimMatrix()
+        if camTransitionParams is not None and BigWorld.camera() is not self.__cam:
+            cameraTransitionDuration = camTransitionParams.get('cameraTransitionDuration', -1)
+            if cameraTransitionDuration > 0:
+                self.__setupCameraTransition(cameraTransitionDuration)
+            else:
+                BigWorld.camera(self.__cam)
+        else:
+            BigWorld.camera(self.__cam)
         self.__cameraUpdate()
         self.delayCallback(0.0, self.__cameraUpdate)
         from gui import g_guiResetters
         g_guiResetters.add(self.__onRecreateDevice)
         return
+
+    def __setupCameraTransition(self, duration):
+        self.__cameraTransition.start(BigWorld.camera().matrix, self.__cam, duration)
+        BigWorld.camera(self.__cameraTransition)
+        invMatrix = Math.Matrix()
+        invMatrix.set(BigWorld.camera().invViewMatrix)
+        previousAimVector = invMatrix.applyToAxis(2)
+        self.setYawPitch(previousAimVector.yaw, -previousAimVector.pitch)
+        self.__isCamInTransition = True
 
     def __handleSettingsChange(self, diff):
         if 'fov' in diff or 'dynamicFov' in diff:
@@ -297,37 +303,11 @@ class ArcadeCamera(ICamera, CallbackDelayer, TimeDeltaMeter):
             kMin = 1.0
         return MinMax(kMin, 1.0)
 
-    def __setupCameraTransition(self, duration, previousMatrix):
-        self.__endCamPosition = previousMatrix.translation - Math.Vector3(self.__cam.cameraPositionProvider.b.value[0:3])
-        self.__lastTransitionEndAimYaw = 0
-        positionInterpolation = DynamicCameraInterpolator.DataProvider(start=lambda worldStartingPoint=previousMatrix.translation: worldStartingPoint - Math.Vector3(self.__cam.cameraPositionProvider.b.value[0:3]), end=lambda : self.__endCamPosition, interpolate=None, set=lambda interpolatedPosition: self.__setCameraPosition(interpolatedPosition))
-        previousWorldAimPoint = previousMatrix.translation + previousMatrix.applyToAxis(2) * 100
-        self.__previousAimVector = previousMatrix.applyToAxis(2)
-        self.__targetAimVector = previousWorldAimPoint - Math.Vector3(self.__cam.cameraPositionProvider.b.value[0:3])
-        aimInterpolation = DynamicCameraInterpolator.DataProvider(start=lambda startingWorldAim=previousWorldAimPoint: startingWorldAim, end=lambda : self.__targetAimVector + Math.Vector3(self.__cam.cameraPositionProvider.b.value[0:3]), interpolate=partial(self.__interpolateAim, previousMatrix.translation, lambda : self.__endCamPosition + Math.Vector3(self.__cam.cameraPositionProvider.b.value[0:3])), set=lambda interpolatedAim: self.__setCameraAimPoint(interpolatedAim - Math.Vector3(self.__cam.cameraPositionProvider.b.value[0:3])))
-        pivotMatrix = Math.Matrix()
-        self.__cam.pivotPositionProvider = Math.Vector4Translation(pivotMatrix)
-        pivotInterpolation = DynamicCameraInterpolator.DataProvider(start=lambda startingPivot=(previousMatrix.translation + previousWorldAimPoint) * 0.5: startingPivot, end=lambda : Math.Vector3(self.__cam.pivotPositionProvider.value[0:3]), interpolate=None, set=lambda interpolatedPivot, matrix=pivotMatrix: mathUtils.setTranslation(pivotMatrix, interpolatedPivot))
-        self.__cameraInterpolator.setup(duration, (positionInterpolation, aimInterpolation, pivotInterpolation))
-        self.__cameraInterpolator.start()
+    def restartCameraTransition(self, duration):
+        if self.__cam is not None and not self.__cameraTransition.isInTransition():
+            self.__isCamInTransition = True
+            self.__cameraTransition.start(BigWorld.camera().matrix, self.__cam, duration)
         return
-
-    def __interpolateAim(self, worldStartPosition, worldEndPositionGetter, worldStartAim, worldEndAim, t):
-        relativeStartAim = worldStartAim - worldStartPosition
-        relativeEndAim = worldEndAim - worldEndPositionGetter()
-        deltaAngle = self.__lastTransitionEndAimYaw - relativeEndAim.yaw
-        if math.fabs(deltaAngle) > math.pi and not self.__transitionYawDirty:
-            self.__tansitionYawRevolutions += math.copysign(1, deltaAngle)
-            self.__lastTransitionEndAimYaw = self.__lastTransitionEndAimYaw - deltaAngle + math.copysign(math.pi, deltaAngle)
-        else:
-            self.__lastTransitionEndAimYaw = relativeEndAim.yaw
-            self.__transitionYawDirty = False
-        targetYaw = self.__lastTransitionEndAimYaw + self.__tansitionYawRevolutions * 2 * math.pi
-        angles = mathUtils.lerp(Math.Vector2(relativeStartAim.pitch, relativeStartAim.yaw), Math.Vector2(relativeEndAim.pitch, targetYaw), t)
-        result = Math.Vector3()
-        result.setPitchYaw(angles.x, angles.y)
-        result = result.scale(1000)
-        return Math.Vector3(self.__cam.cameraPositionProvider.value[0:3]) + result
 
     def __refineVehicleMProv(self, vehicleMProv):
         vehicleTranslationOnly = Math.WGTranslationOnlyMP()
@@ -363,7 +343,6 @@ class ArcadeCamera(ICamera, CallbackDelayer, TimeDeltaMeter):
             g_guiResetters.remove(self.__onRecreateDevice)
         self.__setDynamicCollisions(False)
         self.__cam.speedTreeTarget = None
-        self.__resetCameraTransition()
         if self.__shiftKeySensor is not None:
             self.__shiftKeySensor.reset(Math.Vector3())
         self.stopCallback(self.__cameraUpdate)
@@ -427,17 +406,6 @@ class ArcadeCamera(ICamera, CallbackDelayer, TimeDeltaMeter):
     def calcYawPitchDelta(self, dx, dy):
         return (dx * self.__curSense * (-1 if self.__cfg['horzInvert'] else 1), dy * self.__curSense * (-1 if self.__cfg['vertInvert'] else 1))
 
-    def __resetCameraTransition(self):
-        if self.__cameraInterpolator.isInitialized:
-            self.__cameraInterpolator.reset()
-        self.__endCamPosition = None
-        self.__targetAimVector = None
-        self.__previousAimVector = None
-        self.__lastTransitionEndAimYaw = 0
-        self.__tansitionYawRevolutions = 0
-        self.__transitionYawDirty = False
-        return
-
     def __updateAngles(self, dx, dy):
         yawDelta, pitchDelta = self.calcYawPitchDelta(dx, dy)
         self.__aimingSystem.handleMovement(yawDelta, -pitchDelta)
@@ -448,6 +416,8 @@ class ArcadeCamera(ICamera, CallbackDelayer, TimeDeltaMeter):
             return
         else:
             prevPos = self.__inputInertia.calcWorldPos(self.__aimingSystem.matrix)
+            if self.__isCamInTransition:
+                self.__isCamInTransition = self.__cameraTransition.isInTransition()
             distChanged = False
             if zoomMode and dz != 0:
                 prevDist = self.__aimingSystem.distanceFromFocus
@@ -466,7 +436,7 @@ class ArcadeCamera(ICamera, CallbackDelayer, TimeDeltaMeter):
                         if self.__onChangeControlMode is not None:
                             self.__onChangeControlMode()
                             return
-            if rotateMode:
+            if rotateMode and not self.__isCamInTransition:
                 self.__updateAngles(dx, dy)
             if ENABLE_INPUT_ROTATION_INERTIA and not distChanged:
                 self.__aimingSystem.update(0.0)
@@ -513,14 +483,8 @@ class ArcadeCamera(ICamera, CallbackDelayer, TimeDeltaMeter):
         relTranslation = relCamPosMatrix.translation
         shotPoint = self.__calcFocalPoint(virginShotPoint, deltaTime)
         vehToShotPoint = shotPoint - vehiclePos
-        if self.__cameraInterpolator.active:
-            self.__targetAimVector = vehToShotPoint
-            self.__endCamPosition = relTranslation
-            if not self.__cameraInterpolator.tick():
-                self.__cam.pivotPositionProvider = self.__aimingSystem.positionAboveVehicleProv
-        else:
-            self.__setCameraAimPoint(vehToShotPoint)
-            self.__setCameraPosition(relTranslation)
+        self.__setCameraAimPoint(vehToShotPoint)
+        self.__setCameraPosition(relTranslation)
         replayCtrl = BattleReplay.g_replayCtrl
         if replayCtrl.isPlaying and replayCtrl.isControllingCamera:
             aimOffset = replayCtrl.getAimClipPosition()

@@ -5,11 +5,11 @@ from gui.sounds.ambients import BattleResultsEnv
 from gui.Scaleform.daapi.view.lobby.missions.missions_helper import getLinkedSetBonuses
 from gui.server_events.bonuses import mergeBonuses
 
-class BaseHintsView(LinkedSetHintsViewMeta):
+class LinkedSetHintsView(LinkedSetHintsViewMeta):
     __sound_env__ = BattleResultsEnv
 
     def __init__(self, ctx):
-        super(BaseHintsView, self).__init__()
+        super(LinkedSetHintsView, self).__init__()
         self.ctx = ctx
         self._messagesLeft = ctx['messages']
         self._currentMessage = self._messagesLeft.pop(0)
@@ -28,7 +28,7 @@ class BaseHintsView(LinkedSetHintsViewMeta):
         return
 
     def _populate(self):
-        super(BaseHintsView, self)._populate()
+        super(LinkedSetHintsView, self)._populate()
         self._updateView()
 
     def _updateView(self):
@@ -47,18 +47,8 @@ class BaseHintsView(LinkedSetHintsViewMeta):
          'awards': self._getAwards(message.get('bonuses', []))}
 
     def _getAwards(self, bonuses):
-        formatter = self._getFormatter()
         return [ {'icon': award['imgSource'],
          'value': award['label'],
          'tooltip': award.get('tooltip', None),
          'specialAlias': award.get('specialAlias', None),
-         'specialArgs': award.get('specialArgs', None)} for award in formatter(mergeBonuses(bonuses)) if award ]
-
-    def _getFormatter(self):
-        raise NotImplementedError
-
-
-class LinkedSetHintsView(BaseHintsView):
-
-    def _getFormatter(self):
-        return getLinkedSetBonuses
+         'specialArgs': award.get('specialArgs', None)} for award in getLinkedSetBonuses(mergeBonuses(bonuses)) if award ]

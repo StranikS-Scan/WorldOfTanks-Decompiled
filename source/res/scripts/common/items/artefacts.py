@@ -480,32 +480,21 @@ class SharedCooldownConsumableConfigReader(object):
         return cooldownFactors
 
 
-class ConsumableTooltipEntry(object):
-    __slots__ = ('identifier', 'name', 'renderer')
-
-    def __init__(self, identifier, name, renderer):
-        self.identifier = identifier
-        self.name = name
-        self.renderer = renderer
-
-
 class TooltipConfigReader(object):
-    _SHARED_TOOLTIPS_CONSUMABLE_SLOTS = ('shortDescription', 'longDescription', 'tooltipInformation')
+    _SHARED_TOOLTIPS_CONSUMABLE_SLOTS = ('shortDescription', 'longDescription', 'tooltipIdentifiers')
 
     def initTooltipInformation(self):
         self.shortDescription = component_constants.EMPTY_STRING
         self.longDescription = component_constants.EMPTY_STRING
-        self.tooltipInformation = []
+        self.tooltipIdentifiers = []
 
     def readTooltipInformation(self, xmlCtx, section):
-        self.shortDescription = _xml.readString(xmlCtx, section, 'shortDescription')
-        self.longDescription = _xml.readString(xmlCtx, section, 'longDescription')
-        tooltipsSection = _xml.getSubsection(xmlCtx, section, 'tooltips')
-        if tooltipsSection is not None:
-            for item in tooltipsSection.values():
-                entry = ConsumableTooltipEntry(_xml.readString(xmlCtx, item, 'identifier'), _xml.readString(xmlCtx, item, 'name'), _xml.readString(xmlCtx, item, 'renderer'))
-                self.tooltipInformation.append(entry)
-
+        if IS_CLIENT:
+            self.shortDescription = _xml.readString(xmlCtx, section, 'shortDescription')
+            self.longDescription = _xml.readString(xmlCtx, section, 'longDescription')
+            tooltipsString = _xml.readStringOrNone(xmlCtx, section, 'tooltips')
+            if tooltipsString is not None:
+                self.tooltipIdentifiers = tooltipsString.split()
         return
 
 

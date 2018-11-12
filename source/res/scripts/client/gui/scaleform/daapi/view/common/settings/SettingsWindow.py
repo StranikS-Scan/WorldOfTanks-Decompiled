@@ -131,7 +131,6 @@ class SettingsWindow(SettingsWindowMeta):
 
     def _populate(self):
         super(SettingsWindow, self)._populate()
-        self.fireEvent(events.SettingsWindowEvent(events.SettingsWindowEvent.POPULATE_WINDOW))
         dataVO = [{'label': SETTINGS.FEEDBACK_TAB_DAMAGEINDICATOR,
           'linkage': VIEW_ALIAS.FEEDBACK_DAMAGE_INDICATOR},
          {'label': SETTINGS.FEEDBACK_TAB_EVENTSINFO,
@@ -167,7 +166,6 @@ class SettingsWindow(SettingsWindowMeta):
     def _dispose(self):
         if self.__redefinedKeyModeEnabled:
             BigWorld.wg_setRedefineKeysMode(False)
-        self.fireEvent(events.SettingsWindowEvent(events.SettingsWindowEvent.DISPOSE_WINDOW))
         g_guiResetters.discard(self.onRecreateDevice)
         BigWorld.wg_setAdapterOrdinalNotifyCallback(None)
         self.stopVoicesPreview()

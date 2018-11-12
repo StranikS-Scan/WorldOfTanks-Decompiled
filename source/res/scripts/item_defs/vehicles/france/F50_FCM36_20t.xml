@@ -95,7 +95,7 @@
       </slot>
       <slot>
         <slotType>	inscription	</slotType>
-        <slotId>	2	</slotId>
+        <slotId>	36	</slotId>
         <rayStart>	-0.00710648 0.155113 2.05942	</rayStart>
         <rayEnd>	-0.0082937 -0.101186 1.96836	</rayEnd>
         <rayUp>	0.000000 0.000000 -1	</rayUp>
@@ -105,7 +105,7 @@
       </slot>
       <slot>
         <slotType>	inscription	</slotType>
-        <slotId>	3	</slotId>
+        <slotId>	37	</slotId>
         <rayStart>	0.741902 0.545636 0.656426	</rayStart>
         <rayEnd>	0.600464 0.404233 0.656426	</rayEnd>
         <rayUp>	-0.707019 0.707194 0.000000	</rayUp>
@@ -115,7 +115,7 @@
       </slot>
       <slot>
         <slotType>	camouflage	</slotType>
-        <slotId>	8	</slotId>
+        <slotId>	3	</slotId>
         <anchorPosition>	0.000000 0.452068 -1.20113	</anchorPosition>
         <anchorDirection>	0.000000 0.352246 -0.935907	</anchorDirection>
       </slot>
@@ -973,7 +973,7 @@
       <customizationSlots>
         <slot>
           <slotType>	style	</slotType>
-          <slotId>	6	</slotId>
+          <slotId>	257	</slotId>
           <anchorPosition>	0.00161425 2.181 0.579881	</anchorPosition>
           <anchorDirection>	0.000000 1 -0.000000	</anchorDirection>
         </slot>
@@ -1823,7 +1823,7 @@
       <customizationSlots>
         <slot>
           <slotType>	style	</slotType>
-          <slotId>	7	</slotId>
+          <slotId>	257	</slotId>
           <anchorPosition>	0.00181309 2.18099 0.57983	</anchorPosition>
           <anchorDirection>	-0.000000 1 0.000000	</anchorDirection>
         </slot>
@@ -1910,7 +1910,7 @@
           <customizationSlots>
             <slot>
               <slotType>	camouflage	</slotType>
-              <slotId>	13	</slotId>
+              <slotId>	770	</slotId>
               <anchorPosition>	0.0489177 0.00625312 0.335962	</anchorPosition>
               <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
               <applyTo>	4096	</applyTo>
@@ -1963,7 +1963,7 @@
           <customizationSlots>
             <slot>
               <slotType>	camouflage	</slotType>
-              <slotId>	10	</slotId>
+              <slotId>	770	</slotId>
               <anchorPosition>	0.0983845 0.00566864 0.65361	</anchorPosition>
               <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
               <applyTo>	4096	</applyTo>
@@ -2014,7 +2014,7 @@
           <customizationSlots>
             <slot>
               <slotType>	camouflage	</slotType>
-              <slotId>	11	</slotId>
+              <slotId>	770	</slotId>
               <anchorPosition>	0.0989701 0.00113344 0.584398	</anchorPosition>
               <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
               <applyTo>	4096	</applyTo>
@@ -2047,7 +2047,7 @@
       <customizationSlots>
         <slot>
           <slotType>	player	</slotType>
-          <slotId>	4	</slotId>
+          <slotId>	514	</slotId>
           <rayStart>	-0.552223 0.290864 0.153606	</rayStart>
           <rayEnd>	-0.378885 0.1911 0.153202	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
@@ -2057,7 +2057,7 @@
         </slot>
         <slot>
           <slotType>	player	</slotType>
-          <slotId>	5	</slotId>
+          <slotId>	515	</slotId>
           <rayStart>	0.552223 0.290864 0.153606	</rayStart>
           <rayEnd>	0.378885 0.1911 0.153202	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
@@ -2068,7 +2068,7 @@
         </slot>
         <slot>
           <slotType>	camouflage	</slotType>
-          <slotId>	9	</slotId>
+          <slotId>	513	</slotId>
           <anchorPosition>	0.000000 0.728199 0.000000	</anchorPosition>
           <anchorDirection>	0.000000 1 0.000000	</anchorDirection>
         </slot>
@@ -2097,9 +2097,11 @@
       <engines>
         <Berliet_MDPA>
           <smplEnginePower>	96.21259	</smplEnginePower>
+          <smplFwMaxSpeed>	24	</smplFwMaxSpeed>
         </Berliet_MDPA>
         <Berliet_Ricardo>
           <smplEnginePower>	111.0145	</smplEnginePower>
+          <smplFwMaxSpeed>	24	</smplFwMaxSpeed>
         </Berliet_Ricardo>
       </engines>
       <chassis>

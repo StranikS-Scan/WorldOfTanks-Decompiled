@@ -22,7 +22,7 @@
   <camouflage>
     <priceFactor>	1.4	</priceFactor>
     <tiling>	1 1 0 0	</tiling>
-    <exclusionMask>	system/maps/null_exclusion_mask.dds	</exclusionMask>
+    <exclusionMask></exclusionMask>
   </camouflage>
   <hull>
     <armor>
@@ -92,7 +92,7 @@
       </slot>
       <slot>
         <slotType>	inscription	</slotType>
-        <slotId>	2	</slotId>
+        <slotId>	36	</slotId>
         <rayStart>	-1.55341 0.439737 -0.467712	</rayStart>
         <rayEnd>	-1.35341 0.439737 -0.467712	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
@@ -102,7 +102,7 @@
       </slot>
       <slot>
         <slotType>	player	</slotType>
-        <slotId>	3	</slotId>
+        <slotId>	4	</slotId>
         <rayStart>	-1.55343 0.434087 -1.68509	</rayStart>
         <rayEnd>	-1.35343 0.434087 -1.68509	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
@@ -112,7 +112,7 @@
       </slot>
       <slot>
         <slotType>	inscription	</slotType>
-        <slotId>	4	</slotId>
+        <slotId>	37	</slotId>
         <rayStart>	1.55341 0.439737 -0.467712	</rayStart>
         <rayEnd>	1.35341 0.439737 -0.467712	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
@@ -133,7 +133,7 @@
       </slot>
       <slot>
         <slotType>	camouflage	</slotType>
-        <slotId>	10	</slotId>
+        <slotId>	3	</slotId>
         <anchorPosition>	-0.000000 0.4177 1.26505	</anchorPosition>
         <anchorDirection>	0.000000 0.313534 0.949577	</anchorDirection>
       </slot>
@@ -883,7 +883,7 @@
       <customizationSlots>
         <slot>
           <slotType>	style	</slotType>
-          <slotId>	8	</slotId>
+          <slotId>	257	</slotId>
           <anchorPosition>	0.000000 2.03747 -1.30115	</anchorPosition>
           <anchorDirection>	0.000000 1 0.000000	</anchorDirection>
         </slot>
@@ -1625,7 +1625,7 @@
       <customizationSlots>
         <slot>
           <slotType>	style	</slotType>
-          <slotId>	9	</slotId>
+          <slotId>	257	</slotId>
           <anchorPosition>	0.000754329 2.03713 -1.3008	</anchorPosition>
           <anchorDirection>	0.000000 1 0.000000	</anchorDirection>
         </slot>
@@ -1700,7 +1700,7 @@
           <customizationSlots>
             <slot>
               <slotType>	insigniaOnGun	</slotType>
-              <slotId>	6	</slotId>
+              <slotId>	771	</slotId>
               <rayStart>	0.000154353 -0.000788728 2.96293	</rayStart>
               <rayEnd>	-0.0163072 -0.0393298 2.96293	</rayEnd>
               <rayUp>	0.062 0.06 4	</rayUp>
@@ -1710,7 +1710,7 @@
             </slot>
             <slot>
               <slotType>	camouflage	</slotType>
-              <slotId>	12	</slotId>
+              <slotId>	770	</slotId>
               <anchorPosition>	0.000077 -0.000394344 2.19841	</anchorPosition>
               <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
               <applyTo>	4096	</applyTo>
@@ -1753,7 +1753,7 @@
           <customizationSlots>
             <slot>
               <slotType>	insigniaOnGun	</slotType>
-              <slotId>	7	</slotId>
+              <slotId>	771	</slotId>
               <rayStart>	0.000075 -0.000083 2.37849	</rayStart>
               <rayEnd>	0.0175794 -0.0875289 2.37614	</rayEnd>
               <rayUp>	0.08 0.073 5	</rayUp>
@@ -1763,7 +1763,7 @@
             </slot>
             <slot>
               <slotType>	camouflage	</slotType>
-              <slotId>	13	</slotId>
+              <slotId>	770	</slotId>
               <anchorPosition>	0.000037 -0.000041 1.94438	</anchorPosition>
               <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
               <applyTo>	4096	</applyTo>
@@ -1839,9 +1839,11 @@
       <engines>
         <Volvo_TD_100_A>
           <smplEnginePower>	250	</smplEnginePower>
+          <smplFwMaxSpeed>	65	</smplFwMaxSpeed>
         </Volvo_TD_100_A>
         <Volvo_THD_100_B>
           <smplEnginePower>	270	</smplEnginePower>
+          <smplFwMaxSpeed>	65	</smplFwMaxSpeed>
         </Volvo_THD_100_B>
       </engines>
       <chassis>

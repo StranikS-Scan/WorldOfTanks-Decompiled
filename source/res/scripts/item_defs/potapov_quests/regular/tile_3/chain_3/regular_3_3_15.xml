@@ -8,12 +8,6 @@
         <postBattle>
           <and>
             <vehicleDamage>
-              <title>
-                <key>	#personal_missions_details:quest_3_3_15_condition_title_vehicleDamage	</key>
-              </title>
-              <description>
-                <key>	#personal_missions_details:quest_3_3_15_condition_description_vehicleDamage	</key>
-              </description>
               <classes>	AT-SPG	</classes>
               <greaterOrEqual>	2500	</greaterOrEqual>
             </vehicleDamage>
@@ -118,22 +112,10 @@
         <postBattle>
           <and>
             <vehicleDamage>
-              <title>
-                <key>	#personal_missions_details:quest_3_3_15_condition_title_vehicleDamage	</key>
-              </title>
-              <description>
-                <key>	#personal_missions_details:quest_3_3_15_condition_description_vehicleDamage	</key>
-              </description>
               <classes>	AT-SPG	</classes>
               <greaterOrEqual>	2500	</greaterOrEqual>
             </vehicleDamage>
             <results>
-              <title>
-                <key>	#personal_missions_details:quest_3_3_15_condition_title_damaged	</key>
-              </title>
-              <description>
-                <key>	#personal_missions_details:quest_3_3_15_condition_description_damaged	</key>
-              </description>
               <key>	damaged	</key>
               <greaterOrEqual>	7	</greaterOrEqual>
             </results>

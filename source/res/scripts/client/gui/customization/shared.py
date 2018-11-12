@@ -10,6 +10,7 @@ from vehicle_systems.tankStructure import TankPartIndexes, TankPartNames
 from CurrentVehicle import g_currentVehicle
 from gui.shared.utils.requesters import REQ_CRITERIA
 from gui.shared.gui_items.customization.outfit import Area, scaffold
+from gui.shared.gui_items.customization.slots import SLOT_TYPE_TO_ANCHOR_TYPE_MAP
 _logger = logging.getLogger(__name__)
 C11nId = namedtuple('C11nId', ('areaId', 'slotType', 'regionIdx'))
 C11nId.__new__.__defaults__ = (-1, -1, -1)
@@ -41,14 +42,6 @@ REGIONS_BY_AREA_ID = {Area.CHASSIS: ApplyArea.CHASSIS_REGIONS,
  Area.GUN: ApplyArea.GUN_REGIONS}
 AREA_ID_BY_REGION = {region:areaId for areaId, regions in REGIONS_BY_AREA_ID.iteritems() for region in regions}
 QUANTITY_LIMITED_CUSTOMIZATION_TYPES = {GUI_ITEM_TYPE.PROJECTION_DECAL: MAX_USERS_PROJECTION_DECALS}
-ANCHOR_TYPE_TO_SLOT_TYPE_MAP = {'inscription': GUI_ITEM_TYPE.INSCRIPTION,
- 'player': GUI_ITEM_TYPE.EMBLEM,
- 'paint': GUI_ITEM_TYPE.PAINT,
- 'camouflage': GUI_ITEM_TYPE.CAMOUFLAGE,
- 'projectionDecal': GUI_ITEM_TYPE.PROJECTION_DECAL,
- 'style': GUI_ITEM_TYPE.STYLE,
- 'effect': GUI_ITEM_TYPE.MODIFICATION}
-SLOT_TYPE_TO_ANCHOR_TYPE_MAP = {v:k for k, v in ANCHOR_TYPE_TO_SLOT_TYPE_MAP.iteritems()}
 
 class CustomizationTankPartNames(TankPartNames):
     MASK = 'mask'
@@ -64,52 +57,49 @@ def chooseMode(itemTypeID, vehicle):
 
 
 def getAppliedRegionsForCurrentHangarVehicle(areaId, slotId):
-    outfit = g_currentVehicle.item.getCustomOutfit(SeasonType.SUMMER)
-    area = outfit.getContainer(areaId)
-    if area:
-        slot = area.slotFor(slotId)
-        if slot:
-            if slotId in (GUI_ITEM_TYPE.INSCRIPTION, GUI_ITEM_TYPE.EMBLEM):
-                descriptor = g_currentVehicle.item.descriptor
-                allDecalesSlots = ()
-                if areaId == TankPartIndexes.HULL:
-                    allDecalesSlots = descriptor.hull.emblemSlots + descriptor.hull.slotsAnchors
-                elif areaId == TankPartIndexes.TURRET and not descriptor.turret.showEmblemsOnGun or areaId == TankPartIndexes.GUN and descriptor.turret.showEmblemsOnGun:
-                    allDecalesSlots = descriptor.turret.emblemSlots + descriptor.turret.slotsAnchors
-                slotType = SLOT_TYPE_TO_ANCHOR_TYPE_MAP.get(slotId, None)
-                if slotType is not None:
-                    decalesSlots = tuple((slt for slt in allDecalesSlots if slt.type == slotType))
-                    return tuple(range(min(len(decalesSlots), len(slot.getRegions()))))
-                _logger.warning('slotId=%d does not have matched value', slotId)
-                return ()
-            if slotId in (GUI_ITEM_TYPE.PROJECTION_DECAL,):
-                descriptor = g_currentVehicle.item.descriptor
-                vehSlotsCounter = 0
-                slotTypeName = GUI_ITEM_TYPE_NAMES[slotId]
-                for vehiclePartSlots in (descriptor.hull.slotsAnchors,
-                 descriptor.chassis.slotsAnchors,
-                 descriptor.turret.slotsAnchors,
-                 descriptor.gun.slotsAnchors):
-                    for vehicleSlot in vehiclePartSlots:
-                        if vehicleSlot.type == slotTypeName:
-                            vehSlotsCounter += 1
+    if not g_currentVehicle.isPresent():
+        return ()
+    else:
+        outfit = g_currentVehicle.item.getCustomOutfit(SeasonType.SUMMER)
+        area = outfit.getContainer(areaId)
+        if area:
+            slot = area.slotFor(slotId)
+            if slot:
+                if slotId in (GUI_ITEM_TYPE.INSCRIPTION, GUI_ITEM_TYPE.EMBLEM):
+                    descriptor = g_currentVehicle.item.descriptor
+                    allDecalesSlots = ()
+                    if areaId == TankPartIndexes.HULL:
+                        allDecalesSlots = descriptor.hull.emblemSlots + descriptor.hull.slotsAnchors
+                    elif areaId == TankPartIndexes.TURRET and not descriptor.turret.showEmblemsOnGun or areaId == TankPartIndexes.GUN and descriptor.turret.showEmblemsOnGun:
+                        allDecalesSlots = descriptor.turret.emblemSlots + descriptor.turret.slotsAnchors
+                    slotType = SLOT_TYPE_TO_ANCHOR_TYPE_MAP.get(slotId, None)
+                    if slotType is not None:
+                        decalesSlots = tuple((slt for slt in allDecalesSlots if slt.type == slotType))
+                        return tuple(range(min(len(decalesSlots), len(slot.getRegions()))))
+                    _logger.warning('slotId=%d does not have matched value', slotId)
+                    return ()
+                if slotId in (GUI_ITEM_TYPE.PROJECTION_DECAL,):
+                    availableSlots = []
+                    for regionIdx, anchor in g_currentVehicle.item.getAnchors(slotId, Area.MISC).iteritems():
+                        if anchor.isParent:
+                            availableSlots.append(regionIdx)
 
-                return tuple(range(vehSlotsCounter))
-            if slotId in (GUI_ITEM_TYPE.PAINT, GUI_ITEM_TYPE.CAMOUFLAGE):
-                customizableAreas = []
-                vehiclePart = getVehiclePartByIdx(g_currentVehicle.item, areaId)
-                if vehiclePart is not None:
-                    if areaId == TankPartIndexes.GUN:
-                        return tuple((C11N_GUN_APPLY_REGIONS[area] for area in vehiclePart.customizableVehicleAreas[GUI_ITEM_TYPE_NAMES[slotId]]))
-                    customizableAreas = vehiclePart.customizableVehicleAreas[GUI_ITEM_TYPE_NAMES[slotId]]
-                return tuple(range(len(customizableAreas)))
-            if slotId in (GUI_ITEM_TYPE.MODIFICATION,):
-                return (0,)
-    return ()
+                    return tuple(availableSlots)
+                if slotId in (GUI_ITEM_TYPE.PAINT, GUI_ITEM_TYPE.CAMOUFLAGE):
+                    customizableAreas = []
+                    vehiclePart = getVehiclePartByIdx(g_currentVehicle.item, areaId)
+                    if vehiclePart is not None:
+                        if areaId == TankPartIndexes.GUN:
+                            return tuple((C11N_GUN_APPLY_REGIONS[area] for area in vehiclePart.customizableVehicleAreas[GUI_ITEM_TYPE_NAMES[slotId]][1]))
+                        customizableAreas = vehiclePart.customizableVehicleAreas[GUI_ITEM_TYPE_NAMES[slotId]][1]
+                    return tuple(range(len(customizableAreas)))
+                if slotId in (GUI_ITEM_TYPE.MODIFICATION,):
+                    return (0,)
+        return ()
 
 
 def __isTurretCustomizable(vhicleDescriptor):
-    return 'TURRET' in vhicleDescriptor.turret.customizableVehicleAreas['camouflage']
+    return bool(ApplyArea.TURRET & vhicleDescriptor.turret.customizableVehicleAreas['camouflage'][0])
 
 
 def getCustomizationTankPartName(areaId, regionIdx):
@@ -124,22 +114,6 @@ def createCustomizationBaseRequestCriteria(vehicle, progress, appliedItems, seas
 
 def isOutfitVisuallyEmpty(oufit):
     return isEmpty((item for item in oufit.items() if not item.isHiddenInUI()))
-
-
-ProjectionDecalSlotParams = namedtuple('ProjectionDecalSlotParams', ('position', 'rotation', 'scale', 'showOn'))
-
-def getVehicleProjectionDecalSlotParams(vehicleDescr, vehicleSlotId):
-    slotTypeName = GUI_ITEM_TYPE_NAMES[GUI_ITEM_TYPE.PROJECTION_DECAL]
-    for vehiclePartSlots in (vehicleDescr.hull.slotsAnchors,
-     vehicleDescr.chassis.slotsAnchors,
-     vehicleDescr.turret.slotsAnchors,
-     vehicleDescr.gun.slotsAnchors):
-        for vehicleSlot in vehiclePartSlots:
-            if vehicleSlot.type != slotTypeName or vehicleSlot.slotId != vehicleSlotId:
-                continue
-            return ProjectionDecalSlotParams(vehicleSlot.position, vehicleSlot.rotation, vehicleSlot.scale, vehicleSlot.showOn)
-
-    return None
 
 
 def fromWorldCoordsToHangarVehicle(worldCoords):

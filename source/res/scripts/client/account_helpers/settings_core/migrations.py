@@ -403,6 +403,10 @@ def _migrateTo42(core, data, initialized):
     data['uiStorage'][PM_TUTOR_FIELDS.GREETING_SCREEN_SHOWN] = False
 
 
+def _migrateTo43(core, data, initialized):
+    data['delete'].extend((91,))
+
+
 _versions = ((1,
   _initializeDefaultSettings,
   True,
@@ -565,6 +569,10 @@ _versions = ((1,
   False),
  (42,
   _migrateTo42,
+  False,
+  False),
+ (43,
+  _migrateTo43,
   False,
   False))
 

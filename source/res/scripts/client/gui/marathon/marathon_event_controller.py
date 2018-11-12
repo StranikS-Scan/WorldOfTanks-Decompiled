@@ -6,17 +6,18 @@ import constants
 from adisp import process, async
 from debug_utils import LOG_ERROR
 from gui import GUI_SETTINGS
+from gui.Scaleform import MENU
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
-from gui.game_control.links import URLMarcos
-from gui.marathon.marathon_constants import MARATHONS_DATA, MARATHON_STATE, MAP_FLAG_HEADER_ICON, MARATHON_WARNING, PROGRESS_TOOLTIP_HEADER, COUNTDOWN_TOOLTIP_HEADER, ZERO_TIME
+from gui.game_control.links import URLMacros
+from gui.marathon.marathon_constants import MARATHONS_DATA, MARATHON_STATE, MARATHON_WARNING, PROGRESS_TOOLTIP_HEADER, COUNTDOWN_TOOLTIP_HEADER, ZERO_TIME, TEXT_TOOLTIP_HEADER
 from gui.prb_control import prbEntityProperty
 from gui.shared.formatters import text_styles
 from gui.shared.utils.scheduled_notifications import Notifiable, PeriodicNotifier
-from helpers import dependency
+from helpers import dependency, i18n
 from helpers.i18n import makeString as _ms
-from helpers.time_utils import ONE_DAY, ONE_HOUR
+from helpers.time_utils import ONE_DAY, ONE_HOUR, getTimeStructInLocal
 from skeletons.gui.game_control import IMarathonEventsController, IBootcampController
 from skeletons.gui.server_events import IEventsCache
 
@@ -144,7 +145,7 @@ class MarathonEvent(object):
         self.__suspendFlag = False
         self.__quest = None
         self.__group = None
-        self.__urlMacros = URLMarcos()
+        self.__urlMacros = URLMacros()
         self.__baseUrl = GUI_SETTINGS.lookup(data.url)
         return
 
@@ -208,8 +209,9 @@ class MarathonEvent(object):
     def getTooltipHeader(self):
         if self.data.tooltipHeaderType == PROGRESS_TOOLTIP_HEADER:
             return self.getFormattedDaysStatus()
-        else:
-            return self.getFormattedRemainingTime() if self.data.tooltipHeaderType == COUNTDOWN_TOOLTIP_HEADER else None
+        if self.data.tooltipHeaderType == COUNTDOWN_TOOLTIP_HEADER:
+            return self.getFormattedRemainingTime()
+        return self.getFormattedStartFinishText() if self.data.tooltipHeaderType == TEXT_TOOLTIP_HEADER else ('', '')
 
     def getMarathonFlagState(self, vehicle):
         return {'flagHeaderIcon': self.__getHangarFlagHeaderIcon(),
@@ -219,9 +221,12 @@ class MarathonEvent(object):
          'enable': self.isAvailable(),
          'visible': self.isEnabled()}
 
-    def checkForWarnings(self, _):
+    def checkForWarnings(self, vehicle):
         wrongBattleType = self.prbEntity.getEntityType() != constants.ARENA_GUI_TYPE.RANDOM
-        return MARATHON_WARNING.WRONG_BATTLE_TYPE if wrongBattleType else ''
+        if wrongBattleType:
+            return MARATHON_WARNING.WRONG_BATTLE_TYPE
+        wrongVehicleLevel = vehicle.level < self.data.minVehicleLevel
+        return MARATHON_WARNING.WRONG_VEH_TYPE if wrongVehicleLevel else ''
 
     def isVehicleObtained(self):
         return self.__vehInInventory
@@ -249,6 +254,15 @@ class MarathonEvent(object):
             icon = RES_ICONS.MAPS_ICONS_LIBRARY_INPROGRESSICON
             text = text_styles.main(_ms(TOOLTIPS.MARATHON_STATE_COMPLETE))
         return (icon, text)
+
+    def getFormattedStartFinishText(self):
+        startDate, finishDate = self.__getGroupStartFinishTime()
+        startDateStruct = getTimeStructInLocal(startDate)
+        finishDateStruct = getTimeStructInLocal(finishDate)
+        startDateText = text_styles.main(_ms(TOOLTIPS.MARATHON_DATE, day=startDateStruct.tm_mday, month=i18n.makeString(MENU.datetime_months(startDateStruct.tm_mon)), hour=startDateStruct.tm_hour, minutes=i18n.makeString('%02d', startDateStruct.tm_min)))
+        finishDateText = text_styles.main(_ms(TOOLTIPS.MARATHON_DATE, day=finishDateStruct.tm_mday, month=i18n.makeString(MENU.datetime_months(finishDateStruct.tm_mon)), hour=finishDateStruct.tm_hour, minutes=i18n.makeString('%02d', finishDateStruct.tm_min)))
+        text = text_styles.main(_ms(TOOLTIPS.MARATHON_SUBTITLE, startDate=startDateText, finishDate=finishDateText))
+        return ('', text)
 
     def getExtraDaysToBuy(self):
         if self.__state == MARATHON_STATE.FINISHED:
@@ -299,7 +313,8 @@ class MarathonEvent(object):
         self.__suspendFlag = False
         quests = self._eventsCache.getHiddenQuests(self.__marathonFilterFunc)
         if quests:
-            sortedIndexList = sorted(quests)
+            tokenPrefixLen = len(self.data.tokenPrefix)
+            sortedIndexList = sorted(quests, key=lambda questName: int(filter(str.isdigit, str(questName[tokenPrefixLen:]))))
             for q in sortedIndexList:
                 if self.data.suspend in q:
                     self.__suspendFlag = True
@@ -339,7 +354,9 @@ class MarathonEvent(object):
         return progress
 
     def __getHangarFlagHeaderIcon(self):
-        for key, imgPath in MAP_FLAG_HEADER_ICON.iteritems():
+        if not self.data.showFlagIcons:
+            return ''
+        for key, imgPath in self.data.icons.mapFlagHeaderIcon.iteritems():
             if self.__state in key:
                 return imgPath
 
@@ -347,6 +364,8 @@ class MarathonEvent(object):
         return self.data.icons.mainHangarFlag
 
     def __getHangarFlagStateIcon(self, vehicle):
+        if not self.data.showFlagIcons:
+            return ''
         if self.__state not in MARATHON_STATE.ENABLED_STATE:
             return ''
         if self.__vehInInventory:
@@ -400,13 +419,10 @@ class MarathonEvent(object):
         return self.__group.getTimeFromStartTillNow() if self.__group else ZERO_TIME
 
     def __getGroupTimeInterval(self):
-        if self.__group:
-            return (self.__group.getStartTimeLeft(), self.__group.getFinishTimeLeft())
-        zeroTime = ZERO_TIME
-        return (zeroTime, zeroTime)
+        return (self.__group.getStartTimeLeft(), self.__group.getFinishTimeLeft()) if self.__group else (ZERO_TIME, ZERO_TIME)
 
     def __getQuestTimeInterval(self):
-        if self.__quest:
-            return (self.__quest.getStartTimeLeft(), self.__quest.getFinishTimeLeft())
-        zeroTime = ZERO_TIME
-        return (zeroTime, zeroTime)
+        return (self.__quest.getStartTimeLeft(), self.__quest.getFinishTimeLeft()) if self.__quest else (ZERO_TIME, ZERO_TIME)
+
+    def __getGroupStartFinishTime(self):
+        return (self.__group.getStartTimeRaw(), self.__group.getFinishTimeRaw()) if self.__group else (ZERO_TIME, ZERO_TIME)

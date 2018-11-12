@@ -8,12 +8,6 @@
         <postBattle>
           <and>
             <results>
-              <title>
-                <key>	#personal_missions_details:quest_common_condition_title_complex	</key>
-              </title>
-              <description>
-                <key>	#personal_missions_details:quest_3_5_10_condition_description_complexDamageAssist	</key>
-              </description>
               <plus>
                 <key>	damageDealt	</key>
                 <key>	damageAssistedStun	</key>
@@ -76,12 +70,6 @@
         <postBattle>
           <and>
             <results>
-              <title>
-                <key>	#personal_missions_details:quest_common_condition_title_complex	</key>
-              </title>
-              <description>
-                <key>	#personal_missions_details:quest_3_5_10_condition_description_complexDamageAssist	</key>
-              </description>
               <plus>
                 <key>	damageDealt	</key>
                 <key>	damageAssistedStun	</key>
@@ -90,12 +78,6 @@
               <greaterOrEqual>	3000	</greaterOrEqual>
             </results>
             <results>
-              <title>
-                <key>	#personal_missions_details:quest_common_condition_title_complexAssist	</key>
-              </title>
-              <description>
-                <key>	#personal_missions_details:quest_3_5_10_condition_description_complexKillAssist	</key>
-              </description>
               <plus>
                 <key>	killsAssistedStun	</key>
                 <key>	killsAssistedTrack	</key>

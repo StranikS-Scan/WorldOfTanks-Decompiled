@@ -2,14 +2,14 @@
 # Embedded file name: scripts/client/gui/battle_control/controllers/quest_progress/quest_progress_ctrl.py
 import logging
 import BigWorld
-import CommandMapping
 from Event import EventManager, Event
+from account_helpers import AccountSettings
+from account_helpers.AccountSettings import LAST_SELECTED_PM_BRANCH
 from constants import ARENA_PERIOD
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.battle_control.arena_info.interfaces import IArenaPeriodController, IArenaVehiclesController
 from gui.battle_control.arena_info.settings import ARENA_LISTENER_SCOPE as _SCOPE
 from gui.battle_control.battle_constants import BATTLE_CTRL_ID
-from gui.server_events.cond_formatters.mixed_formatters import PM1BattleConditionsFormatterAdapter
 from gui.server_events.personal_progress.formatters import DetailedProgressFormatter
 from gui.server_events.personal_progress.storage import BattleProgressStorage
 from helpers import dependency
@@ -17,9 +17,6 @@ from personal_missions import PM_STATE
 from shared_utils import first
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
-from gui.Scaleform.locale.PREBATTLE import PREBATTLE
-from helpers.i18n import makeString as _ms
-from gui.shared.utils.key_mapping import getReadableKey
 _logger = logging.getLogger(__name__)
 
 class QuestProgressController(IArenaPeriodController, IArenaVehiclesController):
@@ -38,10 +35,13 @@ class QuestProgressController(IArenaPeriodController, IArenaVehiclesController):
         self.__battleCtx = None
         self.__isInited = False
         self.__inProgressQuests = {}
+        self.__needToShowAnimation = False
         self.onConditionProgressUpdate = Event(self.__eManager)
         self.onHeaderProgressesUpdate = Event(self.__eManager)
         self.onFullConditionsUpdate = Event(self.__eManager)
         self.onQuestProgressInited = Event(self.__eManager)
+        self.onShowAnimation = Event(self.__eManager)
+        self.__lastSelectedQuestID = 0
         return
 
     def getInProgressQuests(self):
@@ -58,11 +58,15 @@ class QuestProgressController(IArenaPeriodController, IArenaVehiclesController):
 
     def selectQuest(self, missionID):
         self.__selectedQuest = self.__inProgressQuests.get(missionID)
+        AccountSettings.setSettings(LAST_SELECTED_PM_BRANCH, self.__selectedQuest.getPMType().branch)
+        if self.__selectedQuest:
+            self.__needToShowAnimation = self.__lastSelectedQuestID != self.__selectedQuest.getID()
         self.onFullConditionsUpdate()
 
     def invalidateArenaInfo(self):
         isPersonalMissionsEnabled = self.lobbyContext.getServerSettings().isPersonalMissionsEnabled
         if not self.__isInited:
+            lastSelectedBranch = AccountSettings.getSettings(LAST_SELECTED_PM_BRANCH)
             personalMissions = self.eventsCache.getPersonalMissions()
             selectedMissionsIDs = self.__battleCtx.getSelectedQuestIDs()
             selectedMissionsInfo = self.__battleCtx.getSelectedQuestInfo() or {}
@@ -74,15 +78,17 @@ class QuestProgressController(IArenaPeriodController, IArenaVehiclesController):
                         pqState = selectedMissionsInfo.get(missionID, (0, PM_STATE.NONE))[1]
                         mission.updatePqStateInBattle(pqState)
                         self.__inProgressQuests[missionID] = mission
-                        if mission.hasBattleProgress():
-                            generalQuestID = mission.getGeneralQuestID()
+                        generalQuestID = mission.getGeneralQuestID()
+                        if mission.getPMType().branch == lastSelectedBranch:
                             self.__selectedQuest = mission
-                            self.__storage[generalQuestID] = BattleProgressStorage(generalQuestID, mission.getConditionsConfig(), mission.getConditionsProgress())
+                        self.__storage[generalQuestID] = BattleProgressStorage(generalQuestID, mission.getConditionsConfig(), mission.getConditionsProgress(), mission.isOneBattleQuest())
 
                 if self.__selectedQuest is None:
                     self.__selectedQuest = first(self.__inProgressQuests.itervalues())
                 self.__updateTimerConditions(sendDiff=False)
             self.__isInited = True
+            if self.__selectedQuest:
+                self.__lastSelectedQuestID = self.__selectedQuest.getID()
             self.onQuestProgressInited()
         return
 
@@ -119,7 +125,6 @@ class QuestProgressController(IArenaPeriodController, IArenaVehiclesController):
              'questID': selectedQuest.getID(),
              'questIndexStr': str(selectedQuest.getInternalID()),
              'questIcon': RES_ICONS.getAllianceGoldIcon(selectedQuest.getMajorTag()),
-             'questHint': _ms(PREBATTLE.BATTLEPROGRESS_HINT, hintKey=getReadableKey(CommandMapping.CMD_QUEST_PROGRESS_SHOW)),
              'headerProgress': formatter.headerFormat(),
              'bodyProgress': formatter.bodyFormat()}
         return {}
@@ -134,7 +139,7 @@ class QuestProgressController(IArenaPeriodController, IArenaVehiclesController):
         else:
             _logger.error('Storage for quest:%s is not found.', questID)
         selectedQuest = self.__selectedQuest
-        if selectedQuest is not None and selectedQuest.hasBattleProgress():
+        if selectedQuest is not None:
             storage = self.__storage[selectedQuest.getGeneralQuestID()]
             needHeaderResync = False
             for headerProgress in storage.getHeaderProgresses().itervalues():
@@ -155,6 +160,13 @@ class QuestProgressController(IArenaPeriodController, IArenaVehiclesController):
 
     def getCtrlScope(self):
         return _SCOPE.PERIOD | _SCOPE.VEHICLES
+
+    def showQuestProgressAnimation(self):
+        if self.__needToShowAnimation:
+            self.onShowAnimation()
+            self.__needToShowAnimation = False
+            if self.__selectedQuest:
+                self.__lastSelectedQuestID = self.__selectedQuest.getID()
 
     def __updatePeriodInfo(self, period, endTime, length):
         self._period = period
@@ -180,8 +192,7 @@ class QuestProgressController(IArenaPeriodController, IArenaVehiclesController):
 
     def __updateTimerConditions(self, sendDiff=True):
         selectedQuest = self.__selectedQuest
-        hasProgress = selectedQuest and selectedQuest.hasBattleProgress()
-        if self._period == ARENA_PERIOD.BATTLE and hasProgress:
+        if self._period == ARENA_PERIOD.BATTLE and selectedQuest:
             startTime = self._endTime - self._length
             timesGoneFromStart = BigWorld.serverTime() - startTime
             timerConditions = self.__storage[selectedQuest.getGeneralQuestID()].getTimerConditions()
@@ -192,7 +203,7 @@ class QuestProgressController(IArenaPeriodController, IArenaVehiclesController):
                     self.onConditionProgressUpdate(progressID, condProgress.getProgress())
 
     def __getFormatter(self, selectedQuest):
-        return DetailedProgressFormatter(self.__storage.get(selectedQuest.getGeneralQuestID()), selectedQuest) if selectedQuest.hasBattleProgress() else PM1BattleConditionsFormatterAdapter(selectedQuest)
+        return DetailedProgressFormatter(self.__storage.get(selectedQuest.getGeneralQuestID()), selectedQuest)
 
 
 def createQuestProgressController():

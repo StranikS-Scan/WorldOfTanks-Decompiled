@@ -2,6 +2,7 @@
 # Embedded file name: scripts/common/items/readers/shared_readers.py
 import ResMgr
 from constants import IS_CLIENT, IS_BOT
+from debug_utils import LOG_ERROR
 from items import _xml
 from items.components import component_constants
 from items.components import shared_components
@@ -10,11 +11,13 @@ _ALLOWED_EMBLEM_SLOTS = component_constants.ALLOWED_EMBLEM_SLOTS
 _ALLOWED_SLOTS_ANCHORS = component_constants.ALLOWED_SLOTS_ANCHORS
 
 def _readEmblemSlot(ctx, subsection, slotType):
-    descr = shared_components.EmblemSlot(_xml.readVector3(ctx, subsection, 'rayStart'), _xml.readVector3(ctx, subsection, 'rayEnd'), _xml.readVector3(ctx, subsection, 'rayUp'), _xml.readPositiveFloat(ctx, subsection, 'size'), subsection.readBool('hideIfDamaged', False), slotType, subsection.readBool('isMirrored', False), subsection.readBool('isUVProportional', True), _xml.readIntOrNone(ctx, subsection, 'emblemId'))
+    slotId = _xml.readInt(ctx, subsection, 'slotId')
+    _verifySlotId(ctx, slotType, slotId)
+    descr = shared_components.EmblemSlot(_xml.readVector3(ctx, subsection, 'rayStart'), _xml.readVector3(ctx, subsection, 'rayEnd'), _xml.readVector3(ctx, subsection, 'rayUp'), _xml.readPositiveFloat(ctx, subsection, 'size'), subsection.readBool('hideIfDamaged', False), slotType, subsection.readBool('isMirrored', False), subsection.readBool('isUVProportional', True), _xml.readIntOrNone(ctx, subsection, 'emblemId'), slotId, subsection.readBool('applyToFabric', True))
     return descr
 
 
-def _readSlotsAnchor(ctx, subsection, slotType):
+def _readCustomizationSlot(ctx, subsection, slotType):
     applyTo = _xml.readIntOrNone(ctx, subsection, 'applyTo')
     if applyTo is not None:
         if applyTo not in c11n_constants.ApplyArea.RANGE:
@@ -24,8 +27,64 @@ def _readSlotsAnchor(ctx, subsection, slotType):
         availableShowOnRegions = c11n_constants.ApplyArea.HULL | c11n_constants.ApplyArea.TURRET | c11n_constants.ApplyArea.GUN
         if showOn | availableShowOnRegions != availableShowOnRegions:
             _xml.raiseWrongSection(ctx, 'showOn')
-    descr = shared_components.SlotsAnchor(type=slotType, anchorPosition=_xml.readVector3(ctx, subsection, 'anchorPosition'), anchorDirection=_xml.readVector3(ctx, subsection, 'anchorDirection'), applyTo=applyTo, slotId=_xml.readInt(ctx, subsection, 'slotId'), position=_xml.readVector3OrNone(ctx, subsection, 'position'), rotation=_xml.readVector3OrNone(ctx, subsection, 'rotation'), scale=_xml.readVector3OrNone(ctx, subsection, 'scale'), scaleFactors=_xml.readVector3OrNone(ctx, subsection, 'scaleFactors'), doubleSided=_xml.readBool(ctx, subsection, 'doubleSided', False), showOn=showOn)
+    availableTags = c11n_constants.DirectionTags.ALL + c11n_constants.ProjectionDecalFormTags.ALL
+    tags = readTagsOrEmpty(ctx, subsection, availableTags)
+    slotId = _xml.readInt(ctx, subsection, 'slotId')
+    parentSlotId = _xml.readIntOrNone(ctx, subsection, 'parentSlotId')
+    if slotType == 'projectionDecal' and parentSlotId is None:
+        formTags = [ tag for tag in tags if tag in c11n_constants.ProjectionDecalFormTags.ALL ]
+        if formTags and formTags != [c11n_constants.ProjectionDecalFormTags.ANY]:
+            _xml.raiseWrongXml(ctx, 'tags', 'wrong formfactor for slot ID%i' % slotId)
+    slotId = _xml.readInt(ctx, subsection, 'slotId')
+    _verifySlotId(ctx, slotType, slotId)
+    descr = shared_components.CustomizationSlotDescription(type=slotType, anchorPosition=_xml.readVector3(ctx, subsection, 'anchorPosition'), anchorDirection=_xml.readVector3(ctx, subsection, 'anchorDirection'), applyTo=applyTo, slotId=slotId, position=_xml.readVector3OrNone(ctx, subsection, 'position'), rotation=_xml.readVector3OrNone(ctx, subsection, 'rotation'), scale=_xml.readVector3OrNone(ctx, subsection, 'scale'), scaleFactors=_xml.readVector3OrNone(ctx, subsection, 'scaleFactors'), doubleSided=_xml.readBool(ctx, subsection, 'doubleSided', False), showOn=showOn, tags=tags, parentSlotId=parentSlotId, clipAngle=_xml.readFloat(ctx, subsection, 'clipAngle', 0.0))
     return descr
+
+
+def _verifySlotId(ctx, slotType, slotId):
+    tankPart = ctx[0][1]
+    if tankPart == 'hull':
+        tankArea = tankPart
+    elif tankPart.startswith('gun'):
+        tankArea = 'gun'
+    elif tankPart.startswith('turret'):
+        tankArea = 'turret'
+    elif tankPart.startswith('chassis'):
+        tankArea = 'chassis'
+    else:
+        return
+    minSlotId, maxSlotId = c11n_constants.customizationSlotIds[tankArea][slotType]
+    if not minSlotId <= slotId <= maxSlotId:
+        xmlContext, fileName = ctx
+        while xmlContext is not None:
+            xmlContext, fileName = xmlContext
+
+        LOG_ERROR('Wrong customization slot ID{} for {}'.format(slotId, fileName))
+    return
+
+
+def readTags(xmlCtx, section, allowedTagNames, subsectionName='tags'):
+    tagNames = _xml.readString(xmlCtx, section, subsectionName).split()
+    res = set()
+    for tagName in tagNames:
+        if tagName not in allowedTagNames:
+            _xml.raiseWrongXml(xmlCtx, subsectionName, "unknown tag '%s'" % tagName)
+        res.add(intern(tagName))
+
+    return frozenset(res)
+
+
+def readTagsOrEmpty(xmlCtx, section, allowedTagNames, subsectionName='tags'):
+    tags = _xml.readStringOrNone(xmlCtx, section, subsectionName)
+    res = set()
+    if tags is not None:
+        tagNames = tags.split()
+        for tagName in tagNames:
+            if tagName not in allowedTagNames:
+                _xml.raiseWrongXml(xmlCtx, subsectionName, "unknown tag '%s'" % tagName)
+            res.add(intern(tagName))
+
+    return frozenset(res)
 
 
 def readCustomizationSlots(xmlCtx, section, subsectionName):
@@ -41,7 +100,7 @@ def readCustomizationSlots(xmlCtx, section, subsectionName):
             descr = _readEmblemSlot(ctx, subsection, slotType)
             slots.append(descr)
         if slotType in component_constants.ALLOWED_SLOTS_ANCHORS:
-            descr = _readSlotsAnchor(ctx, subsection, slotType)
+            descr = _readCustomizationSlot(ctx, subsection, slotType)
             anchors.append(descr)
         _xml.raiseWrongXml(xmlCtx, 'customizationSlots/{}/{}'.format(sname, slotType), 'expected value is {}'.format(_ALLOWED_EMBLEM_SLOTS + _ALLOWED_SLOTS_ANCHORS))
 
@@ -113,7 +172,6 @@ def readDeviceHealthParams(xmlCtx, section, subsectionName='', withHysteresis=Tr
             if hysteresisHealth > component.maxRegenHealth:
                 _xml.raiseWrongSection(xmlCtx, 'hysteresisHealth')
             component.hysteresisHealth = hysteresisHealth
-        component.invulnerable = _xml.readBool(xmlCtx, section, 'invulnerable', False)
     return component
 
 

@@ -59,59 +59,77 @@ class EquipmentBlockModel(ViewModel):
     def setBuyVehicleIntCD(self, value):
         self._setNumber(9, value)
 
-    def getSelectedRentTerm(self):
+    def getSelectedRentID(self):
         return self._getNumber(10)
 
-    def setSelectedRentTerm(self, value):
+    def setSelectedRentID(self, value):
         self._setNumber(10, value)
 
+    def getSelectedRentDays(self):
+        return self._getNumber(11)
+
+    def setSelectedRentDays(self, value):
+        self._setNumber(11, value)
+
+    def getSelectedRentType(self):
+        return self._getNumber(12)
+
+    def setSelectedRentType(self, value):
+        self._setNumber(12, value)
+
+    def getSelectedRentSeason(self):
+        return self._getNumber(13)
+
+    def setSelectedRentSeason(self, value):
+        self._setNumber(13, value)
+
     def getEmtySlotAvailable(self):
-        return self._getBool(11)
+        return self._getBool(14)
 
     def setEmtySlotAvailable(self, value):
-        self._setBool(11, value)
+        self._setBool(14, value)
 
     def getIsRestore(self):
-        return self._getBool(12)
+        return self._getBool(15)
 
     def setIsRestore(self, value):
-        self._setBool(12, value)
+        self._setBool(15, value)
 
     def getIsSlotAnimPlaying(self):
-        return self._getBool(13)
-
-    def setIsSlotAnimPlaying(self, value):
-        self._setBool(13, value)
-
-    def getBuyBtnLabel(self):
-        return self._getResource(14)
-
-    def setBuyBtnLabel(self, value):
-        self._setResource(14, value)
-
-    def getConfirmGoldPrice(self):
-        return self._getNumber(15)
-
-    def setConfirmGoldPrice(self, value):
-        self._setNumber(15, value)
-
-    def getPopoverIsAvailable(self):
         return self._getBool(16)
 
-    def setPopoverIsAvailable(self, value):
+    def setIsSlotAnimPlaying(self, value):
         self._setBool(16, value)
 
+    def getBuyBtnLabel(self):
+        return self._getResource(17)
+
+    def setBuyBtnLabel(self, value):
+        self._setResource(17, value)
+
+    def getConfirmGoldPrice(self):
+        return self._getNumber(18)
+
+    def setConfirmGoldPrice(self, value):
+        self._setNumber(18, value)
+
+    def getPopoverIsAvailable(self):
+        return self._getBool(19)
+
+    def setPopoverIsAvailable(self, value):
+        self._setBool(19, value)
+
     def getShowBuyBootcampAnim(self):
-        return self._getBool(17)
+        return self._getBool(20)
 
     def setShowBuyBootcampAnim(self, value):
-        self._setBool(17, value)
+        self._setBool(20, value)
 
     def getIsRentVisible(self):
-        return self._getBool(18)
+        return self._getBool(21)
 
     def setIsRentVisible(self, value):
-        self._setBool(18, value)
+        self._setBool(21, value)
 
     def _initialize(self):
         super(EquipmentBlockModel, self)._initialize()
@@ -125,7 +143,10 @@ class EquipmentBlockModel(ViewModel):
         self._addBoolProperty('tradeInIsEnabled', False)
         self._addNumberProperty('tradeOffVehicleIntCD', -1)
         self._addNumberProperty('buyVehicleIntCD', 0)
-        self._addNumberProperty('selectedRentTerm', 0)
+        self._addNumberProperty('selectedRentID', 0)
+        self._addNumberProperty('selectedRentDays', 0)
+        self._addNumberProperty('selectedRentType', 0)
+        self._addNumberProperty('selectedRentSeason', 0)
         self._addBoolProperty('emtySlotAvailable', False)
         self._addBoolProperty('isRestore', False)
         self._addBoolProperty('isSlotAnimPlaying', False)

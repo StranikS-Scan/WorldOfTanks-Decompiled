@@ -92,5 +92,5 @@ class BoosterTooltipData(BlocksTooltipData):
                 showDelimiter = True
 
         if showInventoryCount:
-            block.append(formatters.packTitleDescParameterWithIconBlockData(title=text_styles.main(TOOLTIPS.VEHICLE_INVENTORYCOUNT), value=text_styles.stats(booster.count), icon=RES_ICONS.MAPS_ICONS_CUSTOMIZATION_STORAGE_ICON, padding=formatters.packPadding(left=49), titlePadding=formatters.packPadding(), iconPadding=formatters.packPadding(top=-2, left=-2)))
+            block.append(formatters.packTitleDescParameterWithIconBlockData(title=text_styles.main(TOOLTIPS.VEHICLE_INVENTORYCOUNT), value=text_styles.stats(booster.count), icon=RES_ICONS.MAPS_ICONS_LIBRARY_STORAGE_ICON, padding=formatters.packPadding(left=49), titlePadding=formatters.packPadding(), iconPadding=formatters.packPadding(top=-2, left=-2)))
         return block

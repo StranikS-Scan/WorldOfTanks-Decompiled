@@ -6,7 +6,7 @@ from account_helpers.AccountSettings import AccountSettings, LAST_CALENDAR_SHOW_
 from adisp import process
 from gui import GUI_SETTINGS
 from gui.Scaleform import MENU
-from gui.game_control.links import URLMarcos
+from gui.game_control.links import URLMacros
 from gui.server_events.modifiers import CalendarSplashModifier
 from gui.shared import g_eventBus, events, EVENT_BUS_SCOPE
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
@@ -47,7 +47,7 @@ class CalendarController(ICalendarController):
         super(CalendarController, self).__init__()
         self.__browserID = None
         self.__showOnSplash = False
-        self.__urlMacros = URLMarcos()
+        self.__urlMacros = URLMacros()
         return
 
     def onLobbyInited(self, event):

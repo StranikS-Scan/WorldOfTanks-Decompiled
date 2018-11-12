@@ -54,9 +54,9 @@ class _SquadBonusInfo(object):
 
 
 class _PersonalAvatarInfo(object):
-    __slots__ = ('__accountDBID', '__clanDBID', '__team', '__isPrematureLeave', '__fairplayViolations', '__squadBonusInfo', '__winnerIfDraw', '__eligibleForCrystalRewards', '__extInfo', '__eventPoints')
+    __slots__ = ('__accountDBID', '__clanDBID', '__team', '__isPrematureLeave', '__fairplayViolations', '__squadBonusInfo', '__winnerIfDraw', '__eligibleForCrystalRewards', '__extInfo')
 
-    def __init__(self, accountDBID=0, clanDBID=0, team=0, isPrematureLeave=False, fairplayViolations=None, squadBonusInfo=None, winnerIfDraw=0, eligibleForCrystalRewards=False, eventPoints=0, **kwargs):
+    def __init__(self, accountDBID=0, clanDBID=0, team=0, isPrematureLeave=False, fairplayViolations=None, squadBonusInfo=None, winnerIfDraw=0, eligibleForCrystalRewards=False, **kwargs):
         super(_PersonalAvatarInfo, self).__init__()
         self.__accountDBID = accountDBID
         self.__clanDBID = clanDBID
@@ -208,12 +208,6 @@ class _EconomicsRecordsChains(object):
     def getPremiumXPRecords(self):
         return self._premiumXP
 
-    def getBaseFreeXPRecords(self):
-        return self._baseFreeXP
-
-    def getPremiumFreeXPRecords(self):
-        return self._premiumFreeXP
-
     def getMoneyRecords(self):
         return itertools.izip(self._baseCredits, self._premiumCredits, self._goldRecords, self._autoRecords)
 
@@ -242,7 +236,7 @@ class _EconomicsRecordsChains(object):
                 replay['appliedPremiumCreditsFactor10'] = FACTOR_VALUE.BASE_CREDITS_FACTOR
             self._baseCredits.addRecords(_CreditsReplayRecords(replay, results['originalCreditsToDraw'], results['achievementCredits']))
             if 'appliedPremiumCreditsFactor10' in replay:
-                replay['appliedPremiumCreditsFactor10'] = FACTOR_VALUE.PREMUIM_CREDITS_FACTOR
+                replay['appliedPremiumCreditsFactor10'] = results['premiumCreditsFactor10']
             self._premiumCredits.addRecords(_CreditsReplayRecords(replay, results['originalCreditsToDraw'], results['achievementCredits']))
         else:
             LOG_ERROR('Credits replay is not found', results)
@@ -262,7 +256,7 @@ class _EconomicsRecordsChains(object):
                 replay['appliedPremiumXPFactor10'] = FACTOR_VALUE.BASE_XP_FACTOR
             self._baseXP.addRecords(_XPReplayRecords(replay, isHighScope, results['achievementXP']))
             if 'appliedPremiumXPFactor10' in replay:
-                replay['appliedPremiumXPFactor10'] = FACTOR_VALUE.PREMUIM_XP_FACTOR
+                replay['appliedPremiumXPFactor10'] = results['premiumXPFactor10']
             self._premiumXP.addRecords(_XPReplayRecords(replay, isHighScope, results['achievementXP']))
         else:
             LOG_ERROR('XP replay is not found', results)
@@ -272,7 +266,7 @@ class _EconomicsRecordsChains(object):
                 replay['appliedPremiumXPFactor10'] = FACTOR_VALUE.BASE_XP_FACTOR
             self._baseFreeXP.addRecords(_FreeXPReplayRecords(replay, results['achievementFreeXP']))
             if 'appliedPremiumXPFactor10' in replay:
-                replay['appliedPremiumXPFactor10'] = FACTOR_VALUE.PREMUIM_XP_FACTOR
+                replay['appliedPremiumXPFactor10'] = results['premiumXPFactor10']
             self._premiumFreeXP.addRecords(_FreeXPReplayRecords(replay, results['achievementFreeXP']))
         else:
             LOG_ERROR('Free XP replay is not found', results)
@@ -399,12 +393,6 @@ class PersonalInfo(shared.UnpackedInfo):
 
     def getPremiumXPRecords(self):
         return self.__economicsRecords.getPremiumXPRecords()
-
-    def getBaseFreeXPRecords(self):
-        return self.__economicsRecords.getBaseFreeXPRecords()
-
-    def getPremiumFreeXPRecords(self):
-        return self.__economicsRecords.getPremiumFreeXPRecords()
 
     def getXPRecords(self):
         return self.__economicsRecords.getXPRecords()

@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/wrappers/user_list_model.py
+import typing
 import logging
 import Event
 from gui.impl.gen.view_models.ui_kit.list_model import ListModel
@@ -16,38 +17,38 @@ class UserListModel(ListModel):
     def addNumber(self, value, isSelected=False):
         self.getItems().addNumber(value)
         if isSelected:
-            self.setSelectedIndex(self.getItemsLength() - 1)
+            self.addSelectedIndex(self.getItemsLength() - 1)
 
     def addReal(self, value, isSelected=False):
         self.getItems().addReal(value)
         if isSelected:
-            self.setSelectedIndex(self.getItemsLength() - 1)
+            self.addSelectedIndex(self.getItemsLength() - 1)
 
     def addBool(self, value, isSelected=False):
         self.getItems().addBool(value)
         if isSelected:
-            self.setSelectedIndex(self.getItemsLength() - 1)
+            self.addSelectedIndex(self.getItemsLength() - 1)
 
     def addString(self, value, isSelected=False):
         self.getItems().addString(value)
         if isSelected:
-            self.setSelectedIndex(self.getItemsLength() - 1)
+            self.addSelectedIndex(self.getItemsLength() - 1)
 
     def addViewModel(self, value, isSelected=False):
         self.getItems().addViewModel(value)
         if isSelected:
-            self.setSelectedIndex(self.getItemsLength() - 1)
+            self.addSelectedIndex(self.getItemsLength() - 1)
 
     def addArray(self, value, isSelected=False):
         self.getItems().addArray(value)
         if isSelected:
-            self.setSelectedIndex(self.getItemsLength() - 1)
+            self.addSelectedIndex(self.getItemsLength() - 1)
 
     def getItem(self, index):
         try:
             return self.getItems()[index]
         except IndexError:
-            _logger.error('Index %d is out of rage', self.getSelectedIndex())
+            _logger.error('Index %d is out of range', index)
             return None
 
         return None
@@ -59,7 +60,35 @@ class UserListModel(ListModel):
         return len(self.getItems())
 
     def getSelectedItem(self):
-        return self.getItem(self.getSelectedIndex())
+        selectedItemsIndices = self.getSelectedIndices()
+        return self.getItem(selectedItemsIndices[0]) if selectedItemsIndices else None
+
+    def getSelectedItems(self):
+        result = []
+        selectedItemsIndices = self.getSelectedIndices()
+        for index in selectedItemsIndices:
+            result.append(self.getItem(index))
+
+        return result
+
+    def addSelectedIndex(self, index):
+        self.getSelectedIndices().addNumber(index)
+
+    def removeItemByIndex(self, index):
+        self.getItems().remove(index)
+
+    def removeItemByIndexes(self, indexes):
+        self.getItems().removeValues(indexes)
+
+    def removeSelectedIndexes(self):
+        selectedItems = self.getSelectedIndices()
+        if selectedItems:
+            self.removeItemByIndexes(selectedItems)
+        else:
+            _logger.error('There are no selected items in list')
+
+    def invalidate(self):
+        self.getItems().invalidate()
 
     def _initialize(self):
         super(UserListModel, self)._initialize()
@@ -73,10 +102,14 @@ class UserListModel(ListModel):
         self.onUserItemClicked.clear()
         super(UserListModel, self)._finalize()
 
-    def __onSelectionChanged(self):
-        item = self.getSelectedItem()
-        if item is not None:
-            self.onUserSelectionChanged(item)
+    def __onSelectionChanged(self, args=None):
+        if 'selectedIndex' not in args or 'unselectedIndex' not in args:
+            _logger.error('%r: Arguments "selectedIndex" or "unselectedIndex" is not defined in %r', self, args)
+        index = args['selectedIndex']
+        if index is not None and index >= 0:
+            item = self.getItem(index)
+            if item is not None:
+                self.onUserSelectionChanged(item)
         return
 
     def __onItemClicked(self, args=None):

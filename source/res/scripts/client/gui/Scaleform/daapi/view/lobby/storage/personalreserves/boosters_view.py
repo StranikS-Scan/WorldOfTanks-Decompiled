@@ -1,16 +1,11 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/storage/personalreserves/boosters_view.py
-from operator import attrgetter
-from adisp import process
 from goodies.goodie_constants import GOODIE_RESOURCE_TYPE
-from gui import SystemMessages, DialogsInterface
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
-from gui.Scaleform.daapi.view.dialogs import I18nConfirmDialogMeta, DIALOG_BUTTON_ID
 from gui.Scaleform.daapi.view.lobby.storage.storage_helpers import createStorageDefVO
 from gui.Scaleform.daapi.view.lobby.store.browser.ingameshop_helpers import getBuyBoostersUrl
-from gui.Scaleform.daapi.view.meta.StorageCategoryPersonalReservesViewMeta import StorageCategoryPersonalReservesViewMeta
-from gui.Scaleform.genConsts.BOOSTER_CONSTANTS import BOOSTER_CONSTANTS as BC
+from gui.Scaleform.genConsts.CONTEXT_MENU_HANDLER_TYPE import CONTEXT_MENU_HANDLER_TYPE
 from gui.Scaleform.genConsts.STORE_CONSTANTS import STORE_CONSTANTS
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.STORAGE import STORAGE
@@ -18,47 +13,61 @@ from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.goodies.goodie_items import BOOSTERS_ORDERS, BOOSTER_QUALITY_NAMES, MAX_ACTIVE_BOOSTERS_COUNT
 from gui.shared.event_dispatcher import showWebShop
 from gui.shared.formatters import text_styles, getItemPricesVO
-from gui.shared.gui_items.processors.goodies import BoosterActivator
-from gui.shared.utils import decorators
 from gui.shared.utils.requesters.ItemsRequester import REQ_CRITERIA
 from helpers import dependency, int2roman
+from helpers.time_utils import ONE_HOUR
 from helpers.i18n import makeString as _ms
 from shared_utils import CONST_CONTAINER
 from skeletons.gui.goodies import IGoodiesCache
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.game_control import IBoostersController
 from gui.shared.utils.functions import makeTooltip
+from gui.shared import event_dispatcher as shared_events
+from gui.Scaleform.daapi.view.meta.StorageCategoryPersonalReservesViewMeta import StorageCategoryPersonalReservesViewMeta
 
 class _FilterBit(CONST_CONTAINER):
-    QUALITY_SMALL = 1
-    QUALITY_MEDIUM = 2
-    QUALITY_BIG = 4
-    XP = 8
-    CREW_XP = 16
-    FREE_XP = 32
-    CREDITS = 64
+    XP = 1
+    CREW_XP = 2
+    FREE_XP = 4
+    CREDITS = 8
+    ONE = 16
+    TWO = 32
+    FOUR = 64
+    SIX = 128
 
 
 _TYPE_BIT_TO_RESOURCE_TYPE_MAP = {_FilterBit.XP: GOODIE_RESOURCE_TYPE.XP,
  _FilterBit.CREW_XP: GOODIE_RESOURCE_TYPE.CREW_XP,
  _FilterBit.FREE_XP: GOODIE_RESOURCE_TYPE.FREE_XP,
  _FilterBit.CREDITS: GOODIE_RESOURCE_TYPE.CREDITS}
-_QUALITY_BIT_TO_QUALITY_NAME_MAP = {_FilterBit.QUALITY_BIG: BOOSTER_QUALITY_NAMES.BIG,
- _FilterBit.QUALITY_MEDIUM: BOOSTER_QUALITY_NAMES.MEDIUM,
- _FilterBit.QUALITY_SMALL: BOOSTER_QUALITY_NAMES.SMALL}
+_DURATION_BIT_TO_DURATION_VALUE = {_FilterBit.ONE: 1,
+ _FilterBit.TWO: 2,
+ _FilterBit.FOUR: 4,
+ _FilterBit.SIX: 6}
+
+def getDurationInSeconds(hour):
+    return hour * ONE_HOUR
+
+
 _QUALITY_NAME_TO_LEVEL_MAP = {BOOSTER_QUALITY_NAMES.SMALL: 1,
  BOOSTER_QUALITY_NAMES.MEDIUM: 2,
  BOOSTER_QUALITY_NAMES.BIG: 3}
-_QUALITY_FILTER_ITEMS = [{'filterValue': _FilterBit.QUALITY_SMALL,
+_DURATION_FILTER_ITEMS = [{'filterValue': _FilterBit.ONE,
   'selected': False,
-  'tooltip': makeTooltip(body=TOOLTIPS.STORAGE_FILTER_PERSONALRESERVES_BTNS_LEVEL_SMALL),
-  'icon': RES_ICONS.MAPS_ICONS_FILTERS_LEVELS_LEVEL_1}, {'filterValue': _FilterBit.QUALITY_MEDIUM,
+  'tooltip': makeTooltip(body=_ms(TOOLTIPS.STORAGE_FILTER_PERSONALRESERVES_BTNS_DURATION, durTime=_DURATION_BIT_TO_DURATION_VALUE.get(_FilterBit.ONE))),
+  'label': _ms(STORAGE.PERSONALRESERVES_DURATIONFILTER_BTN_LABEL, durTime=_DURATION_BIT_TO_DURATION_VALUE.get(_FilterBit.ONE))},
+ {'filterValue': _FilterBit.TWO,
   'selected': False,
-  'tooltip': makeTooltip(body=TOOLTIPS.STORAGE_FILTER_PERSONALRESERVES_BTNS_LEVEL_MEDIUM),
-  'icon': RES_ICONS.MAPS_ICONS_FILTERS_LEVELS_LEVEL_2}, {'filterValue': _FilterBit.QUALITY_BIG,
+  'tooltip': makeTooltip(body=_ms(TOOLTIPS.STORAGE_FILTER_PERSONALRESERVES_BTNS_DURATION, durTime=_DURATION_BIT_TO_DURATION_VALUE.get(_FilterBit.TWO))),
+  'label': _ms(STORAGE.PERSONALRESERVES_DURATIONFILTER_BTN_LABEL, durTime=_DURATION_BIT_TO_DURATION_VALUE.get(_FilterBit.TWO))},
+ {'filterValue': _FilterBit.FOUR,
   'selected': False,
-  'tooltip': makeTooltip(body=TOOLTIPS.STORAGE_FILTER_PERSONALRESERVES_BTNS_LEVEL_BIG),
-  'icon': RES_ICONS.MAPS_ICONS_FILTERS_LEVELS_LEVEL_3}]
+  'tooltip': makeTooltip(body=_ms(TOOLTIPS.STORAGE_FILTER_PERSONALRESERVES_BTNS_DURATION, durTime=_DURATION_BIT_TO_DURATION_VALUE.get(_FilterBit.FOUR))),
+  'label': _ms(STORAGE.PERSONALRESERVES_DURATIONFILTER_BTN_LABEL, durTime=_DURATION_BIT_TO_DURATION_VALUE.get(_FilterBit.FOUR))},
+ {'filterValue': _FilterBit.SIX,
+  'selected': False,
+  'tooltip': makeTooltip(body=_ms(TOOLTIPS.STORAGE_FILTER_PERSONALRESERVES_BTNS_DURATION, durTime=_DURATION_BIT_TO_DURATION_VALUE.get(_FilterBit.SIX))),
+  'label': _ms(STORAGE.PERSONALRESERVES_DURATIONFILTER_BTN_LABEL, durTime=_DURATION_BIT_TO_DURATION_VALUE.get(_FilterBit.SIX))}]
 _TYPE_FILTER_ITEMS = [{'filterValue': _FilterBit.XP,
   'selected': False,
   'tooltip': makeTooltip(body=TOOLTIPS.STORAGE_FILTER_PERSONALRESERVES_BTNS_TYPE_VEHICLEEXP),
@@ -78,9 +87,9 @@ _TYPE_FILTER_ITEMS = [{'filterValue': _FilterBit.XP,
 
 def getCriteriaFromFilterMask(filterMask):
     criteria = REQ_CRITERIA.EMPTY
-    qualitySet = {_QUALITY_BIT_TO_QUALITY_NAME_MAP[bit] for bit in _QUALITY_BIT_TO_QUALITY_NAME_MAP.iterkeys() if filterMask & bit}
-    if qualitySet:
-        criteria |= REQ_CRITERIA.BOOSTER.QUALITY(qualitySet)
+    durationSet = {getDurationInSeconds(_DURATION_BIT_TO_DURATION_VALUE[bit]) for bit in _DURATION_BIT_TO_DURATION_VALUE.iterkeys() if filterMask & bit}
+    if durationSet:
+        criteria |= REQ_CRITERIA.BOOSTER.DURATION(durationSet)
     typesSet = {_TYPE_BIT_TO_RESOURCE_TYPE_MAP[bit] for bit in _TYPE_BIT_TO_RESOURCE_TYPE_MAP.iterkeys() if filterMask & bit}
     if typesSet:
         criteria |= REQ_CRITERIA.BOOSTER.BOOSTER_TYPES(typesSet)
@@ -113,25 +122,8 @@ class StorageCategoryPersonalReservesView(StorageCategoryPersonalReservesViewMet
         self.__filterMask = filterMask
         self.__onUpdateBoosters()
 
-    @process
     def activateReserve(self, boosterID):
-        newBooster = self.goodiesCache.getBooster(boosterID)
-        curBooster = self.__getActiveBoosterByType(newBooster.boosterType)
-        shouldActivate = False
-        if curBooster is None:
-            shouldActivate |= (yield self.__canActivate(newBooster.description))
-        else:
-            shouldActivate |= (yield self.__canReplace(curBooster.description, newBooster.description))
-        if shouldActivate:
-            self.__activateBoosterRequest(newBooster)
-        return
-
-    def __canActivate(self, newBoosterDescription):
-        return DialogsInterface.showDialog(I18nConfirmDialogMeta(BC.BOOSTER_ACTIVATION_CONFORMATION_TEXT_KEY, messageCtx={'newBoosterName': text_styles.middleTitle(newBoosterDescription)}, focusedID=DIALOG_BUTTON_ID.CLOSE))
-
-    def __canReplace(self, curBoosterDescription, newBoosterDescription):
-        return DialogsInterface.showDialog(I18nConfirmDialogMeta(BC.BOOSTER_REPLACE_CONFORMATION_TEXT_KEY, messageCtx={'newBoosterName': text_styles.middleTitle(newBoosterDescription),
-         'curBoosterName': text_styles.middleTitle(curBoosterDescription)}, focusedID=DIALOG_BUTTON_ID.CLOSE))
+        shared_events.showBoosterActivateDialog(boosterID)
 
     def _onRegisterFlashComponent(self, viewPy, alias):
         super(StorageCategoryPersonalReservesView, self)._onRegisterFlashComponent(viewPy, alias)
@@ -176,7 +168,7 @@ class StorageCategoryPersonalReservesView(StorageCategoryPersonalReservesViewMet
             for booster in sorted(boosters, cmp=self.__sort):
                 mainText = text_styles.main(booster.getBonusDescription(valueFormatter=text_styles.neutral))
                 romanLvl = getQualityLevel(booster.quality)
-                vo = createStorageDefVO(booster.boosterID, mainText, mainText, booster.count, getItemPricesVO(booster.getSellPrice())[0], booster.getShopIcon(STORE_CONSTANTS.ICON_SIZE_SMALL), booster.getShopIcon(), 'altimage', enabled=booster.isReadyToActivate, level=int2roman(romanLvl) if romanLvl is not None else '')
+                vo = createStorageDefVO(booster.boosterID, mainText, mainText, booster.count, getItemPricesVO(booster.getSellPrice())[0], booster.getShopIcon(STORE_CONSTANTS.ICON_SIZE_SMALL), booster.getShopIcon(), 'altimage', enabled=booster.isReadyToActivate, level=int2roman(romanLvl) if romanLvl is not None else '', contextMenuId=CONTEXT_MENU_HANDLER_TYPE.STORAGE_PERSONAL_RESERVE_ITEM)
                 dataProviderValues.append(vo)
                 filteredBoostersCount += booster.count
 
@@ -184,7 +176,7 @@ class StorageCategoryPersonalReservesView(StorageCategoryPersonalReservesViewMet
             showDummyScreen = True
         else:
             filterWarningVO = self._makeFilterWarningVO(STORAGE.FILTER_WARNINGMESSAGE, STORAGE.FILTER_NORESULTSBTN_LABEL, TOOLTIPS.STORAGE_FILTER_NORESULTSBTN)
-        self._dataProvider.buildList(*dataProviderValues)
+        self._dataProvider.buildList(dataProviderValues)
         self.__updateFilterCounter(filteredBoostersCount, totalBoostersCount)
         self.__updateActiveBoostersCounter(activeBoostersCount, totalBoostersCount)
         self.as_showFilterWarningS(filterWarningVO)
@@ -197,34 +189,23 @@ class StorageCategoryPersonalReservesView(StorageCategoryPersonalReservesViewMet
     def __sort(self, a, b):
         return cmp(a.quality, b.quality) or cmp(BOOSTERS_ORDERS[a.boosterType], BOOSTERS_ORDERS[b.boosterType]) or cmp(b.effectValue, a.effectValue) or cmp(b.effectTime, a.effectTime)
 
-    @classmethod
-    def __getActiveBoosterByType(cls, bType):
-        criteria = REQ_CRITERIA.BOOSTER.ACTIVE | REQ_CRITERIA.BOOSTER.BOOSTER_TYPES([bType])
-        activeBoosters = cls.goodiesCache.getBoosters(criteria=criteria).values()
-        return max(activeBoosters, key=attrgetter('effectValue')) if activeBoosters else None
-
-    @decorators.process('loadStats')
-    def __activateBoosterRequest(self, booster):
-        result = yield BoosterActivator(booster).request()
-        if result.userMsg:
-            SystemMessages.pushI18nMessage(result.userMsg, type=result.sysMsgType)
-
     def __updateActiveBoostersCounter(self, active, total):
         self.as_initS({'activeText': text_styles.main(_ms(STORAGE.PERSONALRESERVES_ACTIVECOUNTLABEL, activeCount=text_styles.error(active) if active == 0 else text_styles.stats(active), totalCount=MAX_ACTIVE_BOOSTERS_COUNT)),
-         'totalText': text_styles.main(_ms(STORAGE.PERSONALRESERVES_TOTALCOUNTLABEL, totalCount=text_styles.error(total) if total == 0 else text_styles.stats(total))),
          'hasActiveReserve': active != 0})
 
     def __initFilter(self):
-        qualityFilters = {'items': _QUALITY_FILTER_ITEMS,
+        durationFilters = {'items': _DURATION_FILTER_ITEMS,
          'minSelectedItems': 0}
         typeFilters = {'items': _TYPE_FILTER_ITEMS,
          'minSelectedItems': 0}
-        data = {'qualityFiltersLabel': STORAGE.PERSONALRESERVES_QUALITYFILTER_LABEL,
-         'typeFiltersLabel': STORAGE.PERSONALRESERVES_TYPEFILTER_LABEL,
-         'qualityFilters': qualityFilters,
-         'typeFilters': typeFilters}
-        self.as_initFilterS(data)
+        self.as_initFilterS(typeFilters, durationFilters)
 
     def __updateFilterCounter(self, count, total):
-        drawAttention = count == 0
-        self.as_updateCounterS(self.__filterMask != 0, self._formatCountString(count, total), drawAttention)
+        shouldShow = self.__filterMask != 0
+        if shouldShow and total > 0:
+            countString = self._formatCountString(count, total)
+            drawAttention = count == 0
+            self.as_updateCounterS(shouldShow, countString, drawAttention)
+        else:
+            countString = self._formatTotalCountString(total)
+            self.as_updateCounterS(False, countString, False)

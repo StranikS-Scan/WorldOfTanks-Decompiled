@@ -338,7 +338,7 @@ class DroneMusicPlayer(IBattleFieldListener, IAbstractPeriodView, ITeamBasesList
         self.__isArenaLoadingCompleted = False
         arenaType = self.sessionProvider.arenaVisitor.getArenaType()
         self.__guiTypeName = ARENA_GUI_TYPE_LABEL.LABELS[self.sessionProvider.arenaVisitor.getArenaGuiType()]
-        self.__gameplayName = arenaType.gameplayName
+        self.__gameplayName = self.sessionProvider.arenaVisitor.type.getGamePlayName()
         self._musicSetup = self._initializeMusicData(arenaType)
         self._conditions = []
         if self._musicSetup is not None:
@@ -405,11 +405,11 @@ class DroneMusicPlayer(IBattleFieldListener, IAbstractPeriodView, ITeamBasesList
         return
 
     def _initializeMusicData(self, arenaType):
-        wwSetup = arenaType.wwmusicSetup
-        if wwSetup is None:
-            return
+        wwSetup = arenaType and arenaType.wwmusicSetup or {}
+        outcome = {}
+        if not wwSetup:
+            return outcome
         else:
-            outcome = {}
             for tagName in _MusicID.ALL():
                 musicID = wwSetup.get(tagName)
                 if musicID is None:
@@ -419,8 +419,10 @@ class DroneMusicPlayer(IBattleFieldListener, IAbstractPeriodView, ITeamBasesList
             return outcome
 
     def _initializeConditionsData(self, arena_type):
-        wwmusicDroneSetup = arena_type.wwmusicDroneSetup
+        wwmusicDroneSetup = arena_type and arena_type.wwmusicDroneSetup or {}
         outcome = []
+        if not wwmusicDroneSetup:
+            return outcome
         for settingName, conditionsData in self._SETTING_TO_CONDITION_MAPPING.iteritems():
             setting = wwmusicDroneSetup.get(settingName)
             if setting:

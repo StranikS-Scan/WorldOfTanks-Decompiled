@@ -10,6 +10,9 @@ class EpicBattlesSkillViewMeta(WrapperViewMeta):
     def onBackBtnClick(self):
         self._printOverrideError('onBackBtnClick')
 
+    def onCloseBtnClick(self):
+        self._printOverrideError('onCloseBtnClick')
+
     def onSelectSkillBtnClick(self, skillID):
         self._printOverrideError('onSelectSkillBtnClick')
 

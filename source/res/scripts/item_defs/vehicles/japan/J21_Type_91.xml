@@ -84,7 +84,7 @@
       </slot>
       <slot>
         <slotType>	inscription	</slotType>
-        <slotId>	2	</slotId>
+        <slotId>	36	</slotId>
         <rayStart>	-1.44307 0.429865 0.726518	</rayStart>
         <rayEnd>	-1.24308 0.429865 0.727618	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
@@ -94,7 +94,7 @@
       </slot>
       <slot>
         <slotType>	inscription	</slotType>
-        <slotId>	3	</slotId>
+        <slotId>	37	</slotId>
         <rayStart>	1.4434 0.421776 0.715371	</rayStart>
         <rayEnd>	1.2434 0.421266 0.715533	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
@@ -104,7 +104,7 @@
       </slot>
       <slot>
         <slotType>	camouflage	</slotType>
-        <slotId>	8	</slotId>
+        <slotId>	3	</slotId>
         <anchorPosition>	0.000000 0.631357 -1.84154	</anchorPosition>
         <anchorDirection>	-0.000000 0.324312 -0.94595	</anchorDirection>
       </slot>
@@ -760,7 +760,7 @@
       <customizationSlots>
         <slot>
           <slotType>	style	</slotType>
-          <slotId>	6	</slotId>
+          <slotId>	257	</slotId>
           <anchorPosition>	0.000209654 2.67641 0.582791	</anchorPosition>
           <anchorDirection>	0.000000 1 -0.000000	</anchorDirection>
         </slot>
@@ -1408,7 +1408,7 @@
       <customizationSlots>
         <slot>
           <slotType>	style	</slotType>
-          <slotId>	7	</slotId>
+          <slotId>	257	</slotId>
           <anchorPosition>	0.000211755 2.67641 0.582764	</anchorPosition>
           <anchorDirection>	0.000000 1 0.000000	</anchorDirection>
         </slot>
@@ -1495,7 +1495,7 @@
           <customizationSlots>
             <slot>
               <slotType>	camouflage	</slotType>
-              <slotId>	12	</slotId>
+              <slotId>	770	</slotId>
               <anchorPosition>	-0.000021 0.0518346 0.342746	</anchorPosition>
               <anchorDirection>	-0.000000 0.000000 1	</anchorDirection>
               <applyTo>	4096	</applyTo>
@@ -1548,7 +1548,7 @@
           <customizationSlots>
             <slot>
               <slotType>	camouflage	</slotType>
-              <slotId>	11	</slotId>
+              <slotId>	770	</slotId>
               <anchorPosition>	0.000001 0.0492361 0.852039	</anchorPosition>
               <anchorDirection>	-0.000000 0.000000 1	</anchorDirection>
               <applyTo>	4096	</applyTo>
@@ -1581,7 +1581,7 @@
       <customizationSlots>
         <slot>
           <slotType>	player	</slotType>
-          <slotId>	4	</slotId>
+          <slotId>	514	</slotId>
           <rayStart>	-0.823218 0.276188 0.0930816	</rayStart>
           <rayEnd>	-0.627372 0.238939 0.0770743	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
@@ -1591,7 +1591,7 @@
         </slot>
         <slot>
           <slotType>	player	</slotType>
-          <slotId>	5	</slotId>
+          <slotId>	515	</slotId>
           <rayStart>	0.790585 0.325975 0.213332	</rayStart>
           <rayEnd>	0.599805 0.289366 0.165765	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
@@ -1602,7 +1602,7 @@
         </slot>
         <slot>
           <slotType>	camouflage	</slotType>
-          <slotId>	9	</slotId>
+          <slotId>	513	</slotId>
           <anchorPosition>	0.000000 0.57671 -0.000000	</anchorPosition>
           <anchorDirection>	-0.000000 1 0.000000	</anchorDirection>
         </slot>
@@ -1645,9 +1645,11 @@
       <engines>
         <BMW_IV>
           <smplEnginePower>	236.831	</smplEnginePower>
+          <smplFwMaxSpeed>	25	</smplFwMaxSpeed>
         </BMW_IV>
         <BMW_IV_Kai>
           <smplEnginePower>	264.3203	</smplEnginePower>
+          <smplFwMaxSpeed>	25	</smplFwMaxSpeed>
         </BMW_IV_Kai>
       </engines>
       <chassis>

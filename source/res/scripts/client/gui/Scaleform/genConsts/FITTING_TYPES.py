@@ -22,6 +22,7 @@ class FITTING_TYPES(object):
     VEHICLE_GUN = 'vehicleGun'
     VEHICLE_TURRET = 'vehicleTurret'
     VEHICLE_CHASSIS = 'vehicleChassis'
+    VEHICLE_WHEELED_CHASSIS = 'vehicleWheeledChassis'
     VEHICLE_ENGINE = 'vehicleEngine'
     VEHICLE_RADIO = 'vehicleRadio'
     MANDATORY_SLOTS = [VEHICLE_GUN,
@@ -29,6 +30,8 @@ class FITTING_TYPES(object):
      VEHICLE_CHASSIS,
      VEHICLE_ENGINE,
      VEHICLE_RADIO]
+    VEHICLE_CHASSIS_OVERRIDE = [VEHICLE_CHASSIS, VEHICLE_WHEELED_CHASSIS]
+    MANDATORY_SLOTS_OVERRIDES = [VEHICLE_CHASSIS_OVERRIDE]
     RESERVE_SLOT1 = 'reserveSlot1'
     RESERVE_SLOT2 = 'reserveSlot2'
     RESERVE_SLOT3 = 'reserveSlot3'

@@ -23,7 +23,7 @@
   <camouflage>
     <priceFactor>	0.4	</priceFactor>
     <tiling>	1 1 0 0	</tiling>
-    <exclusionMask>	system/maps/null_exclusion_mask.dds	</exclusionMask>
+    <exclusionMask></exclusionMask>
   </camouflage>
   <hull>
     <armor>
@@ -88,7 +88,7 @@
       </slot>
       <slot>
         <slotType>	inscription	</slotType>
-        <slotId>	2	</slotId>
+        <slotId>	36	</slotId>
         <rayStart>	-0.383194 0.245075 1.55507	</rayStart>
         <rayEnd>	-0.383194 -0.0381797 1.45624	</rayEnd>
         <rayUp>	0.000000 0.000000 -1	</rayUp>
@@ -98,7 +98,7 @@
       </slot>
       <slot>
         <slotType>	camouflage	</slotType>
-        <slotId>	8	</slotId>
+        <slotId>	3	</slotId>
         <anchorPosition>	-0.0507201 0.28274 -1.67047	</anchorPosition>
         <anchorDirection>	-0.000007 0.573575 -0.819153	</anchorDirection>
       </slot>
@@ -961,7 +961,7 @@
       <customizationSlots>
         <slot>
           <slotType>	style	</slotType>
-          <slotId>	5	</slotId>
+          <slotId>	257	</slotId>
           <anchorPosition>	-0.302933 1.82389 -0.287447	</anchorPosition>
           <anchorDirection>	0.000000 1 0.000000	</anchorDirection>
         </slot>
@@ -1043,7 +1043,7 @@
           <customizationSlots>
             <slot>
               <slotType>	camouflage	</slotType>
-              <slotId>	9	</slotId>
+              <slotId>	770	</slotId>
               <anchorPosition>	0.159137 0.0377462 0.906494	</anchorPosition>
               <anchorDirection>	-0.000000 0.000000 1	</anchorDirection>
               <applyTo>	4096	</applyTo>
@@ -1077,7 +1077,7 @@
       <customizationSlots>
         <slot>
           <slotType>	player	</slotType>
-          <slotId>	3	</slotId>
+          <slotId>	514	</slotId>
           <rayStart>	-0.518005 0.347383 -0.433377	</rayStart>
           <rayEnd>	-0.335534 0.271166 -0.403454	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
@@ -1087,7 +1087,7 @@
         </slot>
         <slot>
           <slotType>	player	</slotType>
-          <slotId>	4	</slotId>
+          <slotId>	515	</slotId>
           <rayStart>	0.518005 0.347383 -0.433377	</rayStart>
           <rayEnd>	0.335534 0.271166 -0.403454	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
@@ -1098,7 +1098,7 @@
         </slot>
         <slot>
           <slotType>	camouflage	</slotType>
-          <slotId>	7	</slotId>
+          <slotId>	513	</slotId>
           <anchorPosition>	0.000000 0.504326 0.000000	</anchorPosition>
           <anchorDirection>	0.000000 1 0.000000	</anchorDirection>
         </slot>
@@ -1122,6 +1122,7 @@
       <engines>
         <ZiS-16_A>
           <smplEnginePower>	89.8689	</smplEnginePower>
+          <smplFwMaxSpeed>	40.515	</smplFwMaxSpeed>
         </ZiS-16_A>
       </engines>
       <chassis>

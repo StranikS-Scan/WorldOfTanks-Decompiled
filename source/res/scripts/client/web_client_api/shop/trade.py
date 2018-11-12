@@ -58,7 +58,7 @@ class TradeWebApiMixin(object):
                 buyer = BoosterBuyer(item, spec.count, currency)
             elif spec.type == ShopItemType.VEHICLE:
                 item = items.getItemByCD(spec.id)
-                buyer = VehicleBuyer(item, buySlot=False)
+                buyer = VehicleBuyer(item, buySlot=False, showNotEnoughSlotMsg=False)
             elif spec.type == ShopItemType.PREMIUM:
                 daysCount = spec.count
                 buyer = PremiumAccountBuyer(daysCount, price=items.shop.getPremiumCostWithDiscount()[daysCount], requireConfirm=False)
@@ -74,14 +74,20 @@ class TradeWebApiMixin(object):
             status = response['success']
             if status and status.userMsg:
                 SystemMessages.pushI18nMessage(status.userMsg, type=status.sysMsgType)
-                results.append(self.__makeResult(response['type'], response['id'], status.success))
+                statusData = status.auxData
+                if statusData is None or 'errStr' not in statusData or not statusData['errStr']:
+                    result = 'success'
+                else:
+                    result = statusData['errStr']
+                results.append(self.__makeResult(response['type'], response['id'], status.success, result))
             results.append(self.__makeResult(response['type'], response['id'], False))
 
         yield results
         return
 
     @staticmethod
-    def __makeResult(itemType, itemId, success):
+    def __makeResult(itemType, itemId, success, result='error'):
         return {'type': itemType,
          'id': itemId,
-         'success': success}
+         'success': success,
+         'result': result}

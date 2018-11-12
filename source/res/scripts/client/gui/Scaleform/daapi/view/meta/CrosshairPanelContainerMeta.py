@@ -64,9 +64,6 @@ class CrosshairPanelContainerMeta(DAAPISimpleContainerMeta):
     def as_setNetTypeS(self, netType):
         return self.flashObject.as_setNetType(netType) if self._isDAAPIInited() else None
 
-    def as_setNetColorS(self, netColor):
-        return self.flashObject.as_setNetColor(netColor) if self._isDAAPIInited() else None
-
     def as_autoloaderUpdateS(self, timeLeft, baseTime, isPause=False, isStun=False, isTimerOn=False):
         return self.flashObject.as_autoloaderUpdate(timeLeft, baseTime, isPause, isStun, isTimerOn) if self._isDAAPIInited() else None
 
@@ -81,3 +78,30 @@ class CrosshairPanelContainerMeta(DAAPISimpleContainerMeta):
 
     def as_setAutoloaderPercentS(self, percent, sec, isTimerOn):
         return self.flashObject.as_setAutoloaderPercent(percent, sec, isTimerOn) if self._isDAAPIInited() else None
+
+    def as_setSpeedModeS(self, value):
+        return self.flashObject.as_setSpeedMode(value) if self._isDAAPIInited() else None
+
+    def as_updateSpeedS(self, value):
+        return self.flashObject.as_updateSpeed(value) if self._isDAAPIInited() else None
+
+    def as_updateBurnoutS(self, value):
+        return self.flashObject.as_updateBurnout(value) if self._isDAAPIInited() else None
+
+    def as_addSpeedometerS(self, maxSpeedNormalMode, maxSpeedSpeedMode):
+        return self.flashObject.as_addSpeedometer(maxSpeedNormalMode, maxSpeedSpeedMode) if self._isDAAPIInited() else None
+
+    def as_removeSpeedometerS(self):
+        return self.flashObject.as_removeSpeedometer() if self._isDAAPIInited() else None
+
+    def as_setBurnoutWarningS(self, value):
+        return self.flashObject.as_setBurnoutWarning(value) if self._isDAAPIInited() else None
+
+    def as_stopBurnoutWarningS(self):
+        return self.flashObject.as_stopBurnoutWarning() if self._isDAAPIInited() else None
+
+    def as_setEngineCrushErrorS(self, value):
+        return self.flashObject.as_setEngineCrushError(value) if self._isDAAPIInited() else None
+
+    def as_stopEngineCrushErrorS(self):
+        return self.flashObject.as_stopEngineCrushError() if self._isDAAPIInited() else None

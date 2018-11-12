@@ -15,7 +15,6 @@ class BattleContext(IBattleContext):
         self.__lastArenaWinStatus = None
         self.__playerFormatter = player_format.PlayerFullNameFormatter()
         self.lastArenaUniqueID = None
-        self.lastArenaBonusType = None
         self.isInBattle = False
         self.wasInBattle = False
         return

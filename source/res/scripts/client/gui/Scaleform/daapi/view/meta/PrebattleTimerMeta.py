@@ -15,3 +15,6 @@ class PrebattleTimerMeta(BaseDAAPIComponent):
 
     def as_setWinConditionTextS(self, winCondition):
         return self.flashObject.as_setWinConditionText(winCondition) if self._isDAAPIInited() else None
+
+    def as_setQuestHintS(self, questHint):
+        return self.flashObject.as_setQuestHint(questHint) if self._isDAAPIInited() else None

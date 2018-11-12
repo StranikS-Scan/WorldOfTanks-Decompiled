@@ -12,7 +12,7 @@ from gui.battle_results.components import style
 from gui.battle_results.settings import BATTLE_RESULTS_RECORD as _RECORD
 regular.FINISH_RESULT_VO_META.bind(common.EpicBattleBattleFinishResultBlock)
 _EPIC_TABS_VO_META = base.ListMeta([{'label': i18n.makeString(MENU.FINALSTATISTIC_TABS_EPICSTATS),
-  'linkage': 'EpicStats',
+  'linkage': 'EpicStatsUI',
   'showWndBg': False}, {'label': i18n.makeString(MENU.FINALSTATISTIC_TABS_TEAMSTATS),
   'linkage': 'TeamStatsUI',
   'showWndBg': False}, {'label': i18n.makeString(MENU.FINALSTATISTIC_TABS_DETAILSSTATS),

@@ -138,7 +138,7 @@ class VehiclePreviewBuyingPanel(VehiclePreviewBuyingPanelMeta):
         if itemType == BOX_TYPE:
             header = i18n.makeString(TOOLTIPS.VEHICLEPREVIEW_BOXTOOLTIP_HEADER)
             body = i18n.makeString(TOOLTIPS.VEHICLEPREVIEW_BOXTOOLTIP_BODY)
-            tooltip = '{HEADER}%s{/HEADER}{BODY}%s{/BODY}' % (header, body)
+            tooltip = '{{HEADER}}{header}{{/HEADER}}{{BODY}}{body}{{/BODY}}'.format(header=header, body=body)
             toolTipMgr.onCreateComplexTooltip(tooltip, 'INFO')
             return
         try:

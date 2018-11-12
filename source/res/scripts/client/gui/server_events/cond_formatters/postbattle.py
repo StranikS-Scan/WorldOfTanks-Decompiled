@@ -1,6 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/server_events/cond_formatters/postbattle.py
-from collections import namedtuple
 from constants import ATTACK_REASON
 from debug_utils import LOG_WARNING, LOG_ERROR
 from dossiers2.custom.records import DB_ID_TO_RECORD
@@ -10,13 +9,11 @@ from gui.Scaleform.locale.QUESTS import QUESTS
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.server_events import formatters as events_fmts
 from gui.server_events.cond_formatters import POSSIBLE_BATTLE_RESUTLS_KEYS, BATTLE_RESULTS_KEYS, BATTLE_RESULTS_AGGREGATED_KEYS, FORMATTER_IDS, FormattableField, packDescriptionField, packSimpleTitle, TOP_RANGE_LOWEST, getResultsData
-from personal_missions_constants import CONDITION_ICON
-from gui.server_events.cond_formatters.formatters import ConditionFormatter, ConditionsFormatter, SimpleMissionsFormatter, MissionsVehicleListFormatter, GroupFormatter, MissionsBattleConditionsFormatter
-from gui.server_events.conditions import GROUP_TYPE
+from gui.server_events.cond_formatters.formatters import ConditionFormatter, SimpleMissionsFormatter, MissionsVehicleListFormatter, MissionsBattleConditionsFormatter
 from gui.server_events.formatters import RELATIONS_SCHEME
 from gui.shared.gui_items.dossier import factories
 from helpers import i18n
-from soft_exception import SoftException
+from personal_missions_constants import CONDITION_ICON
 
 def _packAchieveElement(achieveRecordID):
     _, achieveName = DB_ID_TO_RECORD[achieveRecordID]
@@ -316,83 +313,3 @@ class _CritsFormatter(ConditionFormatter):
                     result.extend(critFormatter.format(c, event))
 
         return result
-
-
-class PersonalMissionsConditionsFormatter(ConditionsFormatter):
-
-    def __init__(self, formatters):
-        super(PersonalMissionsConditionsFormatter, self).__init__(formatters)
-        self.__groupConditionsFormatters = {GROUP_TYPE.AND: PersonalAndGroupFormatter(self),
-         GROUP_TYPE.OR: PersonalOrGroupFormatter(self)}
-
-    def getConditionFormatter(self, conditionName):
-        return self.__groupConditionsFormatters[conditionName] if conditionName in self.__groupConditionsFormatters else super(PersonalMissionsConditionsFormatter, self).getConditionFormatter(conditionName)
-
-    def format(self, conditions, event):
-        result = []
-        condition = conditions.getConditions()
-        groupFormatter = self.getConditionFormatter(condition.getName())
-        if groupFormatter:
-            result.extend(groupFormatter.format(condition, event))
-        return result
-
-    def _packCondition(self, *args, **kwargs):
-        raise SoftException('This method should not be reached in this context')
-
-    def _getFormattedField(self, *args, **kwargs):
-        raise SoftException('This method should not be reached in this context')
-
-    def _packConditions(self, *args, **kwargs):
-        raise SoftException('This method should not be reached in this context')
-
-
-class PersonalMissionsPostBattleConditionsFormatter(PersonalMissionsConditionsFormatter):
-
-    def __init__(self):
-        super(PersonalMissionsPostBattleConditionsFormatter, self).__init__({'vehicleKills': VehiclesKillFormatter(),
-         'vehicleDamage': VehiclesDamageFormatter(),
-         'vehicleStun': VehiclesStunFormatter(),
-         'win': _PMWinFormatter(),
-         'isAlive': _PMSurviveFormatter(),
-         'achievements': _AchievementsFormatter(),
-         'clanKills': _ClanKillsFormatter(),
-         'results': _BattleResultsFormatter(),
-         'unitResults': _UnitResultsFormatter(),
-         'crits': _CritsFormatter(),
-         'multiStunEvent': _MultiStunEventFormatter()})
-
-
-GroupResult = namedtuple('GroupResult', 'isOrGroup, results')
-
-class PersonalOrGroupFormatter(GroupFormatter):
-
-    def _format(self, condition, event):
-        totalResult = []
-        conditions = condition.getSortedItems()
-        orLists = []
-        for cond in conditions:
-            if not cond.isHidden():
-                formatter = self.getConditionFormatter(cond.getName())
-                if formatter:
-                    orLists.append(formatter.format(cond, event))
-
-        hasAlternativeConditions = len(orLists) > 1
-        if orLists:
-            for results in orLists:
-                totalResult.extend(results)
-
-        return [GroupResult(hasAlternativeConditions, totalResult)] if len(totalResult) > 1 else totalResult
-
-
-class PersonalAndGroupFormatter(GroupFormatter):
-
-    def _format(self, condition, event):
-        result = []
-        conditions = condition.getSortedItems()
-        for cond in conditions:
-            if not cond.isHidden():
-                formatter = self.getConditionFormatter(cond.getName())
-                if formatter:
-                    result.extend(formatter.format(cond, event))
-
-        return [GroupResult(False, result)] if len(result) > 1 else result

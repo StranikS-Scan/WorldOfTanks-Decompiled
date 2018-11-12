@@ -8,12 +8,24 @@ import Math
 from Math import Vector3
 from AvatarInputHandler import mathUtils
 from AvatarInputHandler.mathUtils import MatrixProviders
-from constants import SERVER_TICK_LENGTH, SHELL_TRAJECTORY_EPSILON_CLIENT
-from ProjectileMover import collideDynamicAndStatic, collideVehiclesAndStaticScene
-from projectile_trajectory import computeProjectileTrajectory
+from ProjectileMover import collideDynamicAndStatic, collideVehiclesAndStaticScene, EntityCollisionData
 from vehicle_systems.tankStructure import TankPartNames
-from ClientArena import CollisionResult
 _logger = logging.getLogger(__name__)
+
+class CollisionStrategy(object):
+    COLLIDE_DYNAMIC_AND_STATIC = 0
+    COLLIDE_VEHICLES_AND_STATIC_SCENE = 1
+
+    @classmethod
+    def getCollisionFunction(cls, collisionStrategy):
+        if collisionStrategy == CollisionStrategy.COLLIDE_DYNAMIC_AND_STATIC:
+            return collideDynamicAndStatic
+        elif collisionStrategy == CollisionStrategy.COLLIDE_VEHICLES_AND_STATIC_SCENE:
+            return collideVehiclesAndStaticScene
+        else:
+            _logger.error('CollisionStrategy: getCollisionFunction: Unknown strategy %i.', collisionStrategy)
+            return None
+
 
 class IAimingSystem(object):
     matrix = property(lambda self: self._matrix)
@@ -202,53 +214,21 @@ def _trackcalls(func):
 
 def getShotTargetInfo(vehicle, preferredTargetPoint, gunRotator):
     shotPos, shotVec, gravity = gunRotator.getShotParams(preferredTargetPoint, True)
-    typeDescriptor = vehicle.typeDescriptor
-    shotDescriptor = typeDescriptor.shot
-    maxDist = shotDescriptor.maxDistance
-    collideWithArenaBB = BigWorld.player().arena.collideWithArenaBB
-    prevPos = shotPos
-    prevVelocity = shotVec
-    dt = 0.0
-    maxDistCheckFlag = False
-    while True:
-        dt += SERVER_TICK_LENGTH
-        checkPoints = computeProjectileTrajectory(prevPos, prevVelocity, gravity, SERVER_TICK_LENGTH, SHELL_TRAJECTORY_EPSILON_CLIENT)
-        prevCheckPoint = prevPos
-        bBreak = False
-        for curCheckPoint in checkPoints:
-            testRes = collideVehiclesAndStaticScene(prevCheckPoint, curCheckPoint, (vehicle.id,))
-            if testRes is not None:
-                dir_ = testRes[0] - prevCheckPoint
-                endPos = testRes[0]
-                bBreak = True
-                break
-            collisionResult, intersection = collideWithArenaBB(prevCheckPoint, curCheckPoint)
-            if collisionResult is CollisionResult.INTERSECTION:
-                maxDistCheckFlag = True
-                dir_ = intersection - prevCheckPoint
-                endPos = intersection
-                bBreak = True
-                break
-            elif collisionResult is CollisionResult.OUTSIDE:
-                maxDistCheckFlag = True
-                dir_ = prevVelocity
-                endPos = prevPos + prevVelocity
-                bBreak = True
-                break
-            prevCheckPoint = curCheckPoint
+    minBounds, maxBounds = BigWorld.player().arena.getArenaBB()
+    endPos, direction, _, _ = getCappedShotTargetInfos(shotPos, shotVec, gravity, vehicle.typeDescriptor.shot, vehicle.id, minBounds, maxBounds, CollisionStrategy.COLLIDE_VEHICLES_AND_STATIC_SCENE)
+    return (endPos, direction)
 
-        if bBreak:
-            break
-        prevPos = shotPos + shotVec.scale(dt) + gravity.scale(dt * dt * 0.5)
-        prevVelocity = shotVec + gravity.scale(dt)
 
-    dir_.normalise()
-    if maxDistCheckFlag:
-        if endPos.distTo(shotPos) >= maxDist:
-            dir_ = endPos - shotPos
-            dir_.normalise()
-            endPos = shotPos + dir_.scale(maxDist)
-    return (endPos, dir_)
+def getCappedShotTargetInfos(shotPos, shotVec, gravity, shotDescr, vehicleID, minBounds, maxBounds, collisionStrategy):
+    endPos, direction, collData, usedMaxDistance = BigWorld.wg_getCappedShotTargetInfos(BigWorld.player().spaceID, shotPos, shotVec, gravity, shotDescr.maxDistance, vehicleID, minBounds, maxBounds, collisionStrategy)
+    if collData != 0:
+        collData = EntityCollisionData(*collData)
+    else:
+        collData = None
+    return (endPos,
+     direction,
+     collData,
+     usedMaxDistance)
 
 
 @_trackcalls

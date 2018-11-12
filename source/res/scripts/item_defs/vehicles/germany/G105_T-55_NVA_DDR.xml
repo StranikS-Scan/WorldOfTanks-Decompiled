@@ -31,18 +31,18 @@
       <armor_2>	100	</armor_2>
       <armor_3>	80	</armor_3>
       <armor_4>	45	</armor_4>
-      <armor_5>	15	</armor_5>
+      <armor_5>	30	</armor_5>
       <armor_6>	20	</armor_6>
-      <armor_7>	30	</armor_7>
+      <armor_7>	60	</armor_7>
       <armor_8>	0	</armor_8>
-      <armor_9>	20	</armor_9>
-      <armor_10>	60	</armor_10>
-      <armor_11>	30	</armor_11>
-      <armor_12>	20	</armor_12>
+      <armor_9>	15	</armor_9>
+      <armor_10>	20	</armor_10>
+      <armor_11>	20	</armor_11>
+      <armor_12>	120	</armor_12>
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	17030	</weight>
-    <maxHealth>	1360	</maxHealth>
+    <maxHealth>	1400	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	200	</maxHealth>
       <maxRegenHealth>	135	</maxRegenHealth>
@@ -90,13 +90,13 @@
       </slot>
       <slot>
         <slotType>	paint	</slotType>
-        <slotId>	7	</slotId>
+        <slotId>	2	</slotId>
         <anchorPosition>	0.000000 0.520647 -2.54649	</anchorPosition>
         <anchorDirection>	0.000000 0.200312 -0.979732	</anchorDirection>
       </slot>
       <slot>
         <slotType>	camouflage	</slotType>
-        <slotId>	8	</slotId>
+        <slotId>	3	</slotId>
         <anchorPosition>	0.000000 0.520647 -2.54649	</anchorPosition>
         <anchorDirection>	0.000000 0.200312 -0.979732	</anchorDirection>
       </slot>
@@ -780,13 +780,13 @@
       <customizationSlots>
         <slot>
           <slotType>	paint	</slotType>
-          <slotId>	5	</slotId>
+          <slotId>	256	</slotId>
           <anchorPosition>	-1.62293 0.543962 0.0364499	</anchorPosition>
           <anchorDirection>	-0.947944 0.317725 0.0212902	</anchorDirection>
         </slot>
         <slot>
           <slotType>	style	</slotType>
-          <slotId>	6	</slotId>
+          <slotId>	257	</slotId>
           <anchorPosition>	0.000108473 2.17157 -0.000000	</anchorPosition>
           <anchorDirection>	-0.000000 1 -0.000000	</anchorDirection>
         </slot>
@@ -801,27 +801,26 @@
       <price>	50000	</price>
       <notInShop>	true	</notInShop>
       <armor>
-        <armor_1>	180	</armor_1>
-        <armor_2>	150	</armor_2>
-        <armor_3>	160	</armor_3>
+        <armor_1>	220	</armor_1>
+        <armor_2>	171	</armor_2>
+        <armor_3>	180	</armor_3>
         <armor_4>	57	</armor_4>
         <armor_5>	48	</armor_5>
         <armor_6>	107	</armor_6>
         <armor_7>	121	</armor_7>
         <armor_8>	0	</armor_8>
         <armor_9>	65	</armor_9>
-        <armor_10>	200	</armor_10>
+        <armor_10>	240	</armor_10>
         <armor_11>	48	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
         </armor_11>
         <armor_12>	30	</armor_12>
-        <armor_13>	30	</armor_13>
-        <armor_14>	48	</armor_14>
+        <armor_13>	86	</armor_13>
         <armor_15>	130	</armor_15>
         <armor_16>	86	</armor_16>
       </armor>
       <primaryArmor>	armor_10 armor_3 armor_9	</primaryArmor>
       <weight>	9500	</weight>
-      <maxHealth>	340	</maxHealth>
+      <maxHealth>	350	</maxHealth>
       <rotationSpeed>	46	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	150	</maxHealth>
@@ -837,16 +836,18 @@
       <guns>
         <_100mm_Typ_D-10T2S>	shared	  <maxAmmo>	43	</maxAmmo>
           <armor>
-            <armor_1>	200	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_1>	240	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_1>
-            <armor_2>	150	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_2>	120	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_2>
-            <armor_3>	100	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_3>	60	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_3>
-            <armor_4>	100	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_4>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_4>
-            <armor_9>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_9>
+            <armor_5>	180	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_5>
+            <armor_6>	240	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_6>
             <gun>	40	</gun>
           </armor>
           <invisibilityFactorAtShot>	0.209	</invisibilityFactorAtShot>
@@ -857,11 +858,11 @@
           <shotDispersionRadius>	0.33	</shotDispersionRadius>
           <reloadTime>	7.7	</reloadTime>
           <shotDispersionFactors>
-            <turretRotation>	0.12	</turretRotation>
+            <turretRotation>	0.1	</turretRotation>
             <afterShot>	3.5	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
-          <aimingTime>	2.1	</aimingTime>
+          <aimingTime>	2	</aimingTime>
           <turretYawLimits>	-180 180	</turretYawLimits>
           <models>
             <undamaged>	vehicles/german/G105_T-55_NVA_DDR/normal/lod0/Gun_01.model	</undamaged>
@@ -882,7 +883,7 @@
           <customizationSlots>
             <slot>
               <slotType>	insigniaOnGun	</slotType>
-              <slotId>	4	</slotId>
+              <slotId>	771	</slotId>
               <rayStart>	0.0487208 -0.00470715 3.31577	</rayStart>
               <rayEnd>	0.0735696 -0.0717935 3.3153	</rayEnd>
               <rayUp>	0.082 0.08 4	</rayUp>
@@ -892,21 +893,21 @@
             </slot>
             <slot>
               <slotType>	paint	</slotType>
-              <slotId>	11	</slotId>
+              <slotId>	768	</slotId>
               <anchorPosition>	0.0243604 -0.00235358 2.20034	</anchorPosition>
               <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
               <applyTo>	4096	</applyTo>
             </slot>
             <slot>
               <slotType>	paint	</slotType>
-              <slotId>	12	</slotId>
+              <slotId>	769	</slotId>
               <anchorPosition>	0.000000 0.253212 0.253212	</anchorPosition>
               <anchorDirection>	0.000000 0.707107 0.707107	</anchorDirection>
               <applyTo>	16384	</applyTo>
             </slot>
             <slot>
               <slotType>	camouflage	</slotType>
-              <slotId>	13	</slotId>
+              <slotId>	770	</slotId>
               <anchorPosition>	0.0243604 -0.00235358 2.20034	</anchorPosition>
               <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
               <applyTo>	4096	</applyTo>
@@ -939,7 +940,7 @@
       <customizationSlots>
         <slot>
           <slotType>	player	</slotType>
-          <slotId>	2	</slotId>
+          <slotId>	514	</slotId>
           <rayStart>	-0.65169 0.304805 1.11244	</rayStart>
           <rayEnd>	-0.589411 0.259804 1.04844	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
@@ -949,7 +950,7 @@
         </slot>
         <slot>
           <slotType>	player	</slotType>
-          <slotId>	3	</slotId>
+          <slotId>	515	</slotId>
           <rayStart>	1.24856 0.262103 -0.545154	</rayStart>
           <rayEnd>	1.15486 0.230316 -0.530689	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
@@ -960,13 +961,13 @@
         </slot>
         <slot>
           <slotType>	paint	</slotType>
-          <slotId>	9	</slotId>
+          <slotId>	512	</slotId>
           <anchorPosition>	0.000000 0.752951 0.000000	</anchorPosition>
           <anchorDirection>	0.000000 1 0.000000	</anchorDirection>
         </slot>
         <slot>
           <slotType>	camouflage	</slotType>
-          <slotId>	10	</slotId>
+          <slotId>	513	</slotId>
           <anchorPosition>	0.000000 0.752951 0.000000	</anchorPosition>
           <anchorDirection>	0.000000 1 0.000000	</anchorDirection>
         </slot>
@@ -989,7 +990,8 @@
     <detailed>
       <engines>
         <W-55>
-          <smplEnginePower>	613.2231	</smplEnginePower>
+          <smplEnginePower>	750	</smplEnginePower>
+          <smplFwMaxSpeed>	50	</smplFwMaxSpeed>
         </W-55>
       </engines>
       <chassis>

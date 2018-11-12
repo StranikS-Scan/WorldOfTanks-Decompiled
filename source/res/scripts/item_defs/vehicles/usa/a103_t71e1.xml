@@ -89,7 +89,7 @@
       </slot>
       <slot>
         <slotType>	inscription	</slotType>
-        <slotId>	2	</slotId>
+        <slotId>	36	</slotId>
         <rayStart>	-0.435142 0.354125 1.85988	</rayStart>
         <rayEnd>	-0.385226 0.186584 1.76273	</rayEnd>
         <rayUp>	0.132538 0.0340335 -0.990593	</rayUp>
@@ -99,7 +99,7 @@
       </slot>
       <slot>
         <slotType>	camouflage	</slotType>
-        <slotId>	9	</slotId>
+        <slotId>	3	</slotId>
         <anchorPosition>	0.0024813 0.324419 -1.83009	</anchorPosition>
         <anchorDirection>	0.000000 0.762801 -0.646634	</anchorDirection>
       </slot>
@@ -754,7 +754,7 @@
       <customizationSlots>
         <slot>
           <slotType>	style	</slotType>
-          <slotId>	11	</slotId>
+          <slotId>	257	</slotId>
           <anchorPosition>	0.000000 2.11564 0.000000	</anchorPosition>
           <anchorDirection>	0.000000 1 0.000000	</anchorDirection>
         </slot>
@@ -1404,7 +1404,7 @@
       <customizationSlots>
         <slot>
           <slotType>	style	</slotType>
-          <slotId>	8	</slotId>
+          <slotId>	257	</slotId>
           <anchorPosition>	0.000080 2.11581 0.000002	</anchorPosition>
           <anchorDirection>	-0.000000 1 0.000000	</anchorDirection>
         </slot>
@@ -1498,7 +1498,7 @@
           <customizationSlots>
             <slot>
               <slotType>	insigniaOnGun	</slotType>
-              <slotId>	5	</slotId>
+              <slotId>	771	</slotId>
               <rayStart>	-0.000078 0.0174203 2.89333	</rayStart>
               <rayEnd>	-0.168537 -0.509339 2.8847	</rayEnd>
               <rayUp>	0.078 0.073 3	</rayUp>
@@ -1508,7 +1508,7 @@
             </slot>
             <slot>
               <slotType>	camouflage	</slotType>
-              <slotId>	10	</slotId>
+              <slotId>	770	</slotId>
               <anchorPosition>	-0.000039 0.00871027 2.58513	</anchorPosition>
               <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
               <applyTo>	4096	</applyTo>
@@ -1573,7 +1573,7 @@
           <customizationSlots>
             <slot>
               <slotType>	insigniaOnGun	</slotType>
-              <slotId>	6	</slotId>
+              <slotId>	771	</slotId>
               <rayStart>	-0.000000 0.0174983 2.99931	</rayStart>
               <rayEnd>	-0.414085 -0.0980266 2.99756	</rayEnd>
               <rayUp>	0.078 0.074 3	</rayUp>
@@ -1583,7 +1583,7 @@
             </slot>
             <slot>
               <slotType>	camouflage	</slotType>
-              <slotId>	7	</slotId>
+              <slotId>	770	</slotId>
               <anchorPosition>	-0.000000 0.0283536 2.52497	</anchorPosition>
               <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
               <applyTo>	4096	</applyTo>
@@ -1616,7 +1616,7 @@
       <customizationSlots>
         <slot>
           <slotType>	player	</slotType>
-          <slotId>	3	</slotId>
+          <slotId>	514	</slotId>
           <rayStart>	-1.25047 0.237326 -0.362313	</rayStart>
           <rayEnd>	-0.883703 0.18835 -0.210392	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
@@ -1626,7 +1626,7 @@
         </slot>
         <slot>
           <slotType>	player	</slotType>
-          <slotId>	4	</slotId>
+          <slotId>	515	</slotId>
           <rayStart>	1.25047 0.237326 -0.362313	</rayStart>
           <rayEnd>	0.883703 0.18835 -0.210392	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
@@ -1637,7 +1637,7 @@
         </slot>
         <slot>
           <slotType>	camouflage	</slotType>
-          <slotId>	13	</slotId>
+          <slotId>	513	</slotId>
           <anchorPosition>	0.000000 0.502231 0.000000	</anchorPosition>
           <anchorDirection>	0.000000 1 0.000000	</anchorDirection>
         </slot>
@@ -1671,9 +1671,11 @@
       <engines>
         <Continental_AOI-628-1>
           <smplEnginePower>	350	</smplEnginePower>
+          <smplFwMaxSpeed>	64	</smplFwMaxSpeed>
         </Continental_AOI-628-1>
         <Continental_AOI-628-2>
           <smplEnginePower>	420	</smplEnginePower>
+          <smplFwMaxSpeed>	64	</smplFwMaxSpeed>
         </Continental_AOI-628-2>
       </engines>
       <chassis>

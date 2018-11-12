@@ -858,7 +858,7 @@
     <maxLevel>	10	</maxLevel>
     <requiredUnlocks>	15 30 45 60 75	</requiredUnlocks>
     <userString>	#personal_missions_details:quest_1_3	</userString>
-    <userString>	#personal_missions_details:quest_1_3_short	</userString>
+    <shortUserString>	#personal_missions_details:quest_1_3_short	</shortUserString>
     <description>	#personal_missions_details:quest_1_3_descr	</description>
     <advice>	#personal_missions_details:quest_1_3_advise	</advice>
   </regular_2_1_3>
@@ -1057,7 +1057,7 @@
     <maxLevel>	10	</maxLevel>
     <requiredUnlocks>	15 30 45 60 75	</requiredUnlocks>
     <userString>	#personal_missions_details:quest_2_6	</userString>
-    <userString>	#personal_missions_details:quest_2_6_short	</userString>
+    <shortUserString>	#personal_missions_details:quest_2_6_short	</shortUserString>
     <description>	#personal_missions_details:quest_2_6_descr	</description>
     <advice>	#personal_missions_details:quest_2_6_advise	</advice>
   </regular_2_2_6>
@@ -1090,7 +1090,7 @@
     <maxLevel>	10	</maxLevel>
     <requiredUnlocks>	15 30 45 60 75	</requiredUnlocks>
     <userString>	#personal_missions_details:quest_2_9	</userString>
-    <userString>	#personal_missions_details:quest_2_9_short	</userString>
+    <shortUserString>	#personal_missions_details:quest_2_9_short	</shortUserString>
     <description>	#personal_missions_details:quest_2_9_descr	</description>
     <advice>	#personal_missions_details:quest_2_9_advise	</advice>
   </regular_2_2_9>
@@ -3325,9 +3325,9 @@
     <minLevel>	6	</minLevel>
     <maxLevel>	10	</maxLevel>
     <requiredUnlocks></requiredUnlocks>
-    <userString>	#personal_missions_2_details:pm2_5_1_1	</userString>
-    <shortUserString>	#personal_missions_2_details:pm2_5_1_1_short	</shortUserString>
-    <description>	#personal_missions_2_details:quest_result_descr_SPG	</description>
+    <userString>	#personal_missions_details:pm2_5_1_1	</userString>
+    <shortUserString>	#personal_missions_details:pm2_5_1_1_short	</shortUserString>
+    <description>	#personal_missions_details:quest/advice/resultSPGLimiter	</description>
     <advice></advice>
   </pm2_5_1_1>
   <pm2_5_1_2>
@@ -3336,9 +3336,9 @@
     <minLevel>	6	</minLevel>
     <maxLevel>	10	</maxLevel>
     <requiredUnlocks></requiredUnlocks>
-    <userString>	#personal_missions_2_details:pm2_5_1_2	</userString>
-    <shortUserString>	#personal_missions_2_details:pm2_5_1_2_short	</shortUserString>
-    <description>	#personal_missions_2_details:quest_result_descr	</description>
+    <userString>	#personal_missions_details:pm2_5_1_2	</userString>
+    <shortUserString>	#personal_missions_details:pm2_5_1_2_short	</shortUserString>
+    <description>	#personal_missions_details:quest/advice/result	</description>
     <advice></advice>
   </pm2_5_1_2>
   <pm2_5_1_3>
@@ -3347,9 +3347,9 @@
     <minLevel>	6	</minLevel>
     <maxLevel>	10	</maxLevel>
     <requiredUnlocks></requiredUnlocks>
-    <userString>	#personal_missions_2_details:pm2_5_1_3	</userString>
-    <shortUserString>	#personal_missions_2_details:pm2_5_1_3_short	</shortUserString>
-    <description>	#personal_missions_2_details:quest_result_descr	</description>
+    <userString>	#personal_missions_details:pm2_5_1_3	</userString>
+    <shortUserString>	#personal_missions_details:pm2_5_1_3_short	</shortUserString>
+    <description>	#personal_missions_details:quest/advice/result	</description>
     <advice></advice>
   </pm2_5_1_3>
   <pm2_5_1_4>
@@ -3358,9 +3358,9 @@
     <minLevel>	6	</minLevel>
     <maxLevel>	10	</maxLevel>
     <requiredUnlocks></requiredUnlocks>
-    <userString>	#personal_missions_2_details:pm2_5_1_4	</userString>
-    <shortUserString>	#personal_missions_2_details:pm2_5_1_4_short	</shortUserString>
-    <description>	#personal_missions_2_details:quest_result_descr	</description>
+    <userString>	#personal_missions_details:pm2_5_1_4	</userString>
+    <shortUserString>	#personal_missions_details:pm2_5_1_4_short	</shortUserString>
+    <description>	#personal_missions_details:quest/advice/result	</description>
     <advice></advice>
   </pm2_5_1_4>
   <pm2_5_1_5>
@@ -3369,9 +3369,9 @@
     <minLevel>	6	</minLevel>
     <maxLevel>	10	</maxLevel>
     <requiredUnlocks></requiredUnlocks>
-    <userString>	#personal_missions_2_details:pm2_5_1_5	</userString>
-    <shortUserString>	#personal_missions_2_details:pm2_5_1_5_short	</shortUserString>
-    <description>	#personal_missions_2_details:quest_result_descr	</description>
+    <userString>	#personal_missions_details:pm2_5_1_5	</userString>
+    <shortUserString>	#personal_missions_details:pm2_5_1_5_short	</shortUserString>
+    <description>	#personal_missions_details:quest/advice/result	</description>
     <advice></advice>
   </pm2_5_1_5>
   <pm2_5_1_6>
@@ -3380,9 +3380,9 @@
     <minLevel>	6	</minLevel>
     <maxLevel>	10	</maxLevel>
     <requiredUnlocks></requiredUnlocks>
-    <userString>	#personal_missions_2_details:pm2_5_1_6	</userString>
-    <shortUserString>	#personal_missions_2_details:pm2_5_1_6_short	</shortUserString>
-    <description>	#personal_missions_2_details:quest_result_descr_SPG	</description>
+    <userString>	#personal_missions_details:pm2_5_1_6	</userString>
+    <shortUserString>	#personal_missions_details:pm2_5_1_6_short	</shortUserString>
+    <description>	#personal_missions_details:quest/advice/resultSPGLimiter	</description>
     <advice></advice>
   </pm2_5_1_6>
   <pm2_5_1_7>
@@ -3391,9 +3391,9 @@
     <minLevel>	6	</minLevel>
     <maxLevel>	10	</maxLevel>
     <requiredUnlocks></requiredUnlocks>
-    <userString>	#personal_missions_2_details:pm2_5_1_7	</userString>
-    <shortUserString>	#personal_missions_2_details:pm2_5_1_7_short	</shortUserString>
-    <description>	#personal_missions_2_details:quest_result_descr	</description>
+    <userString>	#personal_missions_details:pm2_5_1_7	</userString>
+    <shortUserString>	#personal_missions_details:pm2_5_1_7_short	</shortUserString>
+    <description>	#personal_missions_details:quest/advice/result	</description>
     <advice></advice>
   </pm2_5_1_7>
   <pm2_5_1_8>
@@ -3402,9 +3402,9 @@
     <minLevel>	6	</minLevel>
     <maxLevel>	10	</maxLevel>
     <requiredUnlocks></requiredUnlocks>
-    <userString>	#personal_missions_2_details:pm2_5_1_8	</userString>
-    <shortUserString>	#personal_missions_2_details:pm2_5_1_8_short	</shortUserString>
-    <description>	#personal_missions_2_details:quest_result_descr_SPG	</description>
+    <userString>	#personal_missions_details:pm2_5_1_8	</userString>
+    <shortUserString>	#personal_missions_details:pm2_5_1_8_short	</shortUserString>
+    <description>	#personal_missions_details:quest/advice/resultSPGLimiter	</description>
     <advice></advice>
   </pm2_5_1_8>
   <pm2_5_1_9>
@@ -3413,9 +3413,9 @@
     <minLevel>	6	</minLevel>
     <maxLevel>	10	</maxLevel>
     <requiredUnlocks></requiredUnlocks>
-    <userString>	#personal_missions_2_details:pm2_5_1_9	</userString>
-    <shortUserString>	#personal_missions_2_details:pm2_5_1_9_short	</shortUserString>
-    <description>	#personal_missions_2_details:quest_success_descr	</description>
+    <userString>	#personal_missions_details:pm2_5_1_9	</userString>
+    <shortUserString>	#personal_missions_details:pm2_5_1_9_short	</shortUserString>
+    <description>	#personal_missions_details:quest/advice/success	</description>
     <advice></advice>
   </pm2_5_1_9>
   <pm2_5_1_10>
@@ -3424,9 +3424,9 @@
     <minLevel>	6	</minLevel>
     <maxLevel>	10	</maxLevel>
     <requiredUnlocks></requiredUnlocks>
-    <userString>	#personal_missions_2_details:pm2_5_1_10	</userString>
-    <shortUserString>	#personal_missions_2_details:pm2_5_1_10_short	</shortUserString>
-    <description>	#personal_missions_2_details:quest_success_descr	</description>
+    <userString>	#personal_missions_details:pm2_5_1_10	</userString>
+    <shortUserString>	#personal_missions_details:pm2_5_1_10_short	</shortUserString>
+    <description>	#personal_missions_details:quest/advice/success	</description>
     <advice></advice>
   </pm2_5_1_10>
   <pm2_5_1_11>
@@ -3435,9 +3435,9 @@
     <minLevel>	6	</minLevel>
     <maxLevel>	10	</maxLevel>
     <requiredUnlocks></requiredUnlocks>
-    <userString>	#personal_missions_2_details:pm2_5_1_11	</userString>
-    <shortUserString>	#personal_missions_2_details:pm2_5_1_11_short	</shortUserString>
-    <description>	#personal_missions_2_details:quest_success_descr	</description>
+    <userString>	#personal_missions_details:pm2_5_1_11	</userString>
+    <shortUserString>	#personal_missions_details:pm2_5_1_11_short	</shortUserString>
+    <description>	#personal_missions_details:quest/advice/success	</description>
     <advice></advice>
   </pm2_5_1_11>
   <pm2_5_1_12>
@@ -3446,9 +3446,9 @@
     <minLevel>	6	</minLevel>
     <maxLevel>	10	</maxLevel>
     <requiredUnlocks></requiredUnlocks>
-    <userString>	#personal_missions_2_details:pm2_5_1_12	</userString>
-    <shortUserString>	#personal_missions_2_details:pm2_5_1_12_short	</shortUserString>
-    <description>	#personal_missions_2_details:quest_success_descr	</description>
+    <userString>	#personal_missions_details:pm2_5_1_12	</userString>
+    <shortUserString>	#personal_missions_details:pm2_5_1_12_short	</shortUserString>
+    <description>	#personal_missions_details:quest/advice/success	</description>
     <advice></advice>
   </pm2_5_1_12>
   <pm2_5_1_13>
@@ -3457,9 +3457,9 @@
     <minLevel>	6	</minLevel>
     <maxLevel>	10	</maxLevel>
     <requiredUnlocks></requiredUnlocks>
-    <userString>	#personal_missions_2_details:pm2_5_1_13	</userString>
-    <shortUserString>	#personal_missions_2_details:pm2_5_1_13_short	</shortUserString>
-    <description>	#personal_missions_2_details:quest_result_descr	</description>
+    <userString>	#personal_missions_details:pm2_5_1_13	</userString>
+    <shortUserString>	#personal_missions_details:pm2_5_1_13_short	</shortUserString>
+    <description>	#personal_missions_details:quest/advice/result	</description>
     <advice></advice>
   </pm2_5_1_13>
   <pm2_5_1_14>
@@ -3468,9 +3468,9 @@
     <minLevel>	6	</minLevel>
     <maxLevel>	10	</maxLevel>
     <requiredUnlocks></requiredUnlocks>
-    <userString>	#personal_missions_2_details:pm2_5_1_14	</userString>
-    <shortUserString>	#personal_missions_2_details:pm2_5_1_14_short	</shortUserString>
-    <description>	#personal_missions_2_details:quest_result_descr	</description>
+    <userString>	#personal_missions_details:pm2_5_1_14	</userString>
+    <shortUserString>	#personal_missions_details:pm2_5_1_14_short	</shortUserString>
+    <description>	#personal_missions_details:quest/advice/result	</description>
     <advice></advice>
   </pm2_5_1_14>
   <pm2_5_1_15>
@@ -3480,9 +3480,9 @@
     <maxLevel>	10	</maxLevel>
     <requiredUnlocks>	301 302 303 304 305 306 307 308 309 310 311 312 313 314	</requiredUnlocks>
     <rewardByDemand>	1	</rewardByDemand>
-    <userString>	#personal_missions_2_details:pm2_5_1_15	</userString>
-    <shortUserString>	#personal_missions_2_details:pm2_5_1_15_short	</shortUserString>
-    <description>	#personal_missions_2_details:quest_success_descr	</description>
+    <userString>	#personal_missions_details:pm2_5_1_15	</userString>
+    <shortUserString>	#personal_missions_details:pm2_5_1_15_short	</shortUserString>
+    <description>	#personal_missions_details:quest/advice/success	</description>
     <advice></advice>
   </pm2_5_1_15>
   <pm2_5_2_1>
@@ -3491,9 +3491,9 @@
     <minLevel>	6	</minLevel>
     <maxLevel>	10	</maxLevel>
     <requiredUnlocks></requiredUnlocks>
-    <userString>	#personal_missions_2_details:pm2_5_2_1	</userString>
-    <shortUserString>	#personal_missions_2_details:pm2_5_2_1_short	</shortUserString>
-    <description>	#personal_missions_2_details:quest_result_descr	</description>
+    <userString>	#personal_missions_details:pm2_5_2_1	</userString>
+    <shortUserString>	#personal_missions_details:pm2_5_2_1_short	</shortUserString>
+    <description>	#personal_missions_details:quest/advice/result	</description>
     <advice></advice>
   </pm2_5_2_1>
   <pm2_5_2_2>
@@ -3502,9 +3502,9 @@
     <minLevel>	6	</minLevel>
     <maxLevel>	10	</maxLevel>
     <requiredUnlocks></requiredUnlocks>
-    <userString>	#personal_missions_2_details:pm2_5_2_2	</userString>
-    <shortUserString>	#personal_missions_2_details:pm2_5_2_2_short	</shortUserString>
-    <description>	#personal_missions_2_details:quest_success_descr	</description>
+    <userString>	#personal_missions_details:pm2_5_2_2	</userString>
+    <shortUserString>	#personal_missions_details:pm2_5_2_2_short	</shortUserString>
+    <description>	#personal_missions_details:quest/advice/success	</description>
     <advice></advice>
   </pm2_5_2_2>
   <pm2_5_2_3>
@@ -3513,9 +3513,9 @@
     <minLevel>	6	</minLevel>
     <maxLevel>	10	</maxLevel>
     <requiredUnlocks></requiredUnlocks>
-    <userString>	#personal_missions_2_details:pm2_5_2_3	</userString>
-    <shortUserString>	#personal_missions_2_details:pm2_5_2_3_short	</shortUserString>
-    <description>	#personal_missions_2_details:quest_result_descr	</description>
+    <userString>	#personal_missions_details:pm2_5_2_3	</userString>
+    <shortUserString>	#personal_missions_details:pm2_5_2_3_short	</shortUserString>
+    <description>	#personal_missions_details:quest/advice/result	</description>
     <advice></advice>
   </pm2_5_2_3>
   <pm2_5_2_4>
@@ -3524,9 +3524,9 @@
     <minLevel>	6	</minLevel>
     <maxLevel>	10	</maxLevel>
     <requiredUnlocks></requiredUnlocks>
-    <userString>	#personal_missions_2_details:pm2_5_2_4	</userString>
-    <shortUserString>	#personal_missions_2_details:pm2_5_2_4_short	</shortUserString>
-    <description>	#personal_missions_2_details:quest_result_descr_SPG	</description>
+    <userString>	#personal_missions_details:pm2_5_2_4	</userString>
+    <shortUserString>	#personal_missions_details:pm2_5_2_4_short	</shortUserString>
+    <description>	#personal_missions_details:quest/advice/resultSPGLimiter	</description>
     <advice></advice>
   </pm2_5_2_4>
   <pm2_5_2_5>
@@ -3535,9 +3535,9 @@
     <minLevel>	6	</minLevel>
     <maxLevel>	10	</maxLevel>
     <requiredUnlocks></requiredUnlocks>
-    <userString>	#personal_missions_2_details:pm2_5_2_5	</userString>
-    <shortUserString>	#personal_missions_2_details:pm2_5_2_5_short	</shortUserString>
-    <description>	#personal_missions_2_details:quest_result_descr	</description>
+    <userString>	#personal_missions_details:pm2_5_2_5	</userString>
+    <shortUserString>	#personal_missions_details:pm2_5_2_5_short	</shortUserString>
+    <description>	#personal_missions_details:quest/advice/result	</description>
     <advice></advice>
   </pm2_5_2_5>
   <pm2_5_2_6>
@@ -3546,9 +3546,9 @@
     <minLevel>	6	</minLevel>
     <maxLevel>	10	</maxLevel>
     <requiredUnlocks></requiredUnlocks>
-    <userString>	#personal_missions_2_details:pm2_5_2_6	</userString>
-    <shortUserString>	#personal_missions_2_details:pm2_5_2_6_short	</shortUserString>
-    <description>	#personal_missions_2_details:quest_result_descr	</description>
+    <userString>	#personal_missions_details:pm2_5_2_6	</userString>
+    <shortUserString>	#personal_missions_details:pm2_5_2_6_short	</shortUserString>
+    <description>	#personal_missions_details:quest/advice/result	</description>
     <advice></advice>
   </pm2_5_2_6>
   <pm2_5_2_7>
@@ -3557,9 +3557,9 @@
     <minLevel>	6	</minLevel>
     <maxLevel>	10	</maxLevel>
     <requiredUnlocks></requiredUnlocks>
-    <userString>	#personal_missions_2_details:pm2_5_2_7	</userString>
-    <shortUserString>	#personal_missions_2_details:pm2_5_2_7_short	</shortUserString>
-    <description>	#personal_missions_2_details:quest_success_with_limit_descr	</description>
+    <userString>	#personal_missions_details:pm2_5_2_7	</userString>
+    <shortUserString>	#personal_missions_details:pm2_5_2_7_short	</shortUserString>
+    <description>	#personal_missions_details:quest/advice/successLimiter	</description>
     <advice></advice>
   </pm2_5_2_7>
   <pm2_5_2_8>
@@ -3568,9 +3568,9 @@
     <minLevel>	6	</minLevel>
     <maxLevel>	10	</maxLevel>
     <requiredUnlocks></requiredUnlocks>
-    <userString>	#personal_missions_2_details:pm2_5_2_8	</userString>
-    <shortUserString>	#personal_missions_2_details:pm2_5_2_8_short	</shortUserString>
-    <description>	#personal_missions_2_details:quest_success_descr	</description>
+    <userString>	#personal_missions_details:pm2_5_2_8	</userString>
+    <shortUserString>	#personal_missions_details:pm2_5_2_8_short	</shortUserString>
+    <description>	#personal_missions_details:quest/advice/success	</description>
     <advice></advice>
   </pm2_5_2_8>
   <pm2_5_2_9>
@@ -3579,9 +3579,9 @@
     <minLevel>	6	</minLevel>
     <maxLevel>	10	</maxLevel>
     <requiredUnlocks></requiredUnlocks>
-    <userString>	#personal_missions_2_details:pm2_5_2_9	</userString>
-    <shortUserString>	#personal_missions_2_details:pm2_5_2_9_short	</shortUserString>
-    <description>	#personal_missions_2_details:quest_result_descr_SPG	</description>
+    <userString>	#personal_missions_details:pm2_5_2_9	</userString>
+    <shortUserString>	#personal_missions_details:pm2_5_2_9_short	</shortUserString>
+    <description>	#personal_missions_details:quest/advice/resultSPGLimiter	</description>
     <advice></advice>
   </pm2_5_2_9>
   <pm2_5_2_10>
@@ -3590,9 +3590,9 @@
     <minLevel>	6	</minLevel>
     <maxLevel>	10	</maxLevel>
     <requiredUnlocks></requiredUnlocks>
-    <userString>	#personal_missions_2_details:pm2_5_2_10	</userString>
-    <shortUserString>	#personal_missions_2_details:pm2_5_2_10_short	</shortUserString>
-    <description>	#personal_missions_2_details:quest_result_descr	</description>
+    <userString>	#personal_missions_details:pm2_5_2_10	</userString>
+    <shortUserString>	#personal_missions_details:pm2_5_2_10_short	</shortUserString>
+    <description>	#personal_missions_details:quest/advice/result	</description>
     <advice></advice>
   </pm2_5_2_10>
   <pm2_5_2_11>
@@ -3601,9 +3601,9 @@
     <minLevel>	6	</minLevel>
     <maxLevel>	10	</maxLevel>
     <requiredUnlocks></requiredUnlocks>
-    <userString>	#personal_missions_2_details:pm2_5_2_11	</userString>
-    <shortUserString>	#personal_missions_2_details:pm2_5_2_11_short	</shortUserString>
-    <description>	#personal_missions_2_details:quest_result_descr	</description>
+    <userString>	#personal_missions_details:pm2_5_2_11	</userString>
+    <shortUserString>	#personal_missions_details:pm2_5_2_11_short	</shortUserString>
+    <description>	#personal_missions_details:quest/advice/result	</description>
     <advice></advice>
   </pm2_5_2_11>
   <pm2_5_2_12>
@@ -3612,9 +3612,9 @@
     <minLevel>	6	</minLevel>
     <maxLevel>	10	</maxLevel>
     <requiredUnlocks></requiredUnlocks>
-    <userString>	#personal_missions_2_details:pm2_5_2_12	</userString>
-    <shortUserString>	#personal_missions_2_details:pm2_5_2_12_short	</shortUserString>
-    <description>	#personal_missions_2_details:quest_success_with_limit_descr	</description>
+    <userString>	#personal_missions_details:pm2_5_2_12	</userString>
+    <shortUserString>	#personal_missions_details:pm2_5_2_12_short	</shortUserString>
+    <description>	#personal_missions_details:quest/advice/successLimiter	</description>
     <advice></advice>
   </pm2_5_2_12>
   <pm2_5_2_13>
@@ -3623,9 +3623,9 @@
     <minLevel>	6	</minLevel>
     <maxLevel>	10	</maxLevel>
     <requiredUnlocks></requiredUnlocks>
-    <userString>	#personal_missions_2_details:pm2_5_2_13	</userString>
-    <shortUserString>	#personal_missions_2_details:pm2_5_2_13_short	</shortUserString>
-    <description>	#personal_missions_2_details:quest_success_descr	</description>
+    <userString>	#personal_missions_details:pm2_5_2_13	</userString>
+    <shortUserString>	#personal_missions_details:pm2_5_2_13_short	</shortUserString>
+    <description>	#personal_missions_details:quest/advice/success	</description>
     <advice></advice>
   </pm2_5_2_13>
   <pm2_5_2_14>
@@ -3634,9 +3634,9 @@
     <minLevel>	6	</minLevel>
     <maxLevel>	10	</maxLevel>
     <requiredUnlocks></requiredUnlocks>
-    <userString>	#personal_missions_2_details:pm2_5_2_14	</userString>
-    <shortUserString>	#personal_missions_2_details:pm2_5_2_14_short	</shortUserString>
-    <description>	#personal_missions_2_details:quest_success_descr	</description>
+    <userString>	#personal_missions_details:pm2_5_2_14	</userString>
+    <shortUserString>	#personal_missions_details:pm2_5_2_14_short	</shortUserString>
+    <description>	#personal_missions_details:quest/advice/success	</description>
     <advice></advice>
   </pm2_5_2_14>
   <pm2_5_2_15>
@@ -3646,9 +3646,9 @@
     <maxLevel>	10	</maxLevel>
     <requiredUnlocks>	316 317 318 319 320 321 322 323 324 325 326 327 328 329	</requiredUnlocks>
     <rewardByDemand>	1	</rewardByDemand>
-    <userString>	#personal_missions_2_details:pm2_5_2_15	</userString>
-    <shortUserString>	#personal_missions_2_details:pm2_5_2_15_short	</shortUserString>
-    <description>	#personal_missions_2_details:quest_result_descr	</description>
+    <userString>	#personal_missions_details:pm2_5_2_15	</userString>
+    <shortUserString>	#personal_missions_details:pm2_5_2_15_short	</shortUserString>
+    <description>	#personal_missions_details:quest/advice/result	</description>
     <advice></advice>
   </pm2_5_2_15>
   <pm2_5_3_1>
@@ -3657,9 +3657,9 @@
     <minLevel>	6	</minLevel>
     <maxLevel>	10	</maxLevel>
     <requiredUnlocks></requiredUnlocks>
-    <userString>	#personal_missions_2_details:pm2_5_3_1	</userString>
-    <shortUserString>	#personal_missions_2_details:pm2_5_3_1_short	</shortUserString>
-    <description>	#personal_missions_2_details:quest_result_descr	</description>
+    <userString>	#personal_missions_details:pm2_5_3_1	</userString>
+    <shortUserString>	#personal_missions_details:pm2_5_3_1_short	</shortUserString>
+    <description>	#personal_missions_details:quest/advice/result	</description>
     <advice></advice>
   </pm2_5_3_1>
   <pm2_5_3_2>
@@ -3668,9 +3668,9 @@
     <minLevel>	6	</minLevel>
     <maxLevel>	10	</maxLevel>
     <requiredUnlocks></requiredUnlocks>
-    <userString>	#personal_missions_2_details:pm2_5_3_2	</userString>
-    <shortUserString>	#personal_missions_2_details:pm2_5_3_2_short	</shortUserString>
-    <description>	#personal_missions_2_details:quest_result_descr	</description>
+    <userString>	#personal_missions_details:pm2_5_3_2	</userString>
+    <shortUserString>	#personal_missions_details:pm2_5_3_2_short	</shortUserString>
+    <description>	#personal_missions_details:quest/advice/result	</description>
     <advice></advice>
   </pm2_5_3_2>
   <pm2_5_3_3>
@@ -3679,9 +3679,9 @@
     <minLevel>	6	</minLevel>
     <maxLevel>	10	</maxLevel>
     <requiredUnlocks></requiredUnlocks>
-    <userString>	#personal_missions_2_details:pm2_5_3_3	</userString>
-    <shortUserString>	#personal_missions_2_details:pm2_5_3_3_short	</shortUserString>
-    <description>	#personal_missions_2_details:quest_result_descr	</description>
+    <userString>	#personal_missions_details:pm2_5_3_3	</userString>
+    <shortUserString>	#personal_missions_details:pm2_5_3_3_short	</shortUserString>
+    <description>	#personal_missions_details:quest/advice/result	</description>
     <advice></advice>
   </pm2_5_3_3>
   <pm2_5_3_4>
@@ -3690,9 +3690,9 @@
     <minLevel>	6	</minLevel>
     <maxLevel>	10	</maxLevel>
     <requiredUnlocks></requiredUnlocks>
-    <userString>	#personal_missions_2_details:pm2_5_3_4	</userString>
-    <shortUserString>	#personal_missions_2_details:pm2_5_3_4_short	</shortUserString>
-    <description>	#personal_missions_2_details:quest_result_descr	</description>
+    <userString>	#personal_missions_details:pm2_5_3_4	</userString>
+    <shortUserString>	#personal_missions_details:pm2_5_3_4_short	</shortUserString>
+    <description>	#personal_missions_details:quest/advice/result	</description>
     <advice></advice>
   </pm2_5_3_4>
   <pm2_5_3_5>
@@ -3701,9 +3701,9 @@
     <minLevel>	6	</minLevel>
     <maxLevel>	10	</maxLevel>
     <requiredUnlocks></requiredUnlocks>
-    <userString>	#personal_missions_2_details:pm2_5_3_5	</userString>
-    <shortUserString>	#personal_missions_2_details:pm2_5_3_5_short	</shortUserString>
-    <description>	#personal_missions_2_details:quest_result_descr	</description>
+    <userString>	#personal_missions_details:pm2_5_3_5	</userString>
+    <shortUserString>	#personal_missions_details:pm2_5_3_5_short	</shortUserString>
+    <description>	#personal_missions_details:quest/advice/result	</description>
     <advice></advice>
   </pm2_5_3_5>
   <pm2_5_3_6>
@@ -3712,9 +3712,9 @@
     <minLevel>	6	</minLevel>
     <maxLevel>	10	</maxLevel>
     <requiredUnlocks></requiredUnlocks>
-    <userString>	#personal_missions_2_details:pm2_5_3_6	</userString>
-    <shortUserString>	#personal_missions_2_details:pm2_5_3_6_short	</shortUserString>
-    <description>	#personal_missions_2_details:quest_result_descr	</description>
+    <userString>	#personal_missions_details:pm2_5_3_6	</userString>
+    <shortUserString>	#personal_missions_details:pm2_5_3_6_short	</shortUserString>
+    <description>	#personal_missions_details:quest/advice/result	</description>
     <advice></advice>
   </pm2_5_3_6>
   <pm2_5_3_7>
@@ -3723,9 +3723,9 @@
     <minLevel>	6	</minLevel>
     <maxLevel>	10	</maxLevel>
     <requiredUnlocks></requiredUnlocks>
-    <userString>	#personal_missions_2_details:pm2_5_3_7	</userString>
-    <shortUserString>	#personal_missions_2_details:pm2_5_3_7_short	</shortUserString>
-    <description>	#personal_missions_2_details:quest_result_descr	</description>
+    <userString>	#personal_missions_details:pm2_5_3_7	</userString>
+    <shortUserString>	#personal_missions_details:pm2_5_3_7_short	</shortUserString>
+    <description>	#personal_missions_details:quest/advice/result	</description>
     <advice></advice>
   </pm2_5_3_7>
   <pm2_5_3_8>
@@ -3734,9 +3734,9 @@
     <minLevel>	6	</minLevel>
     <maxLevel>	10	</maxLevel>
     <requiredUnlocks></requiredUnlocks>
-    <userString>	#personal_missions_2_details:pm2_5_3_8	</userString>
-    <shortUserString>	#personal_missions_2_details:pm2_5_3_8_short	</shortUserString>
-    <description>	#personal_missions_2_details:quest_result_descr	</description>
+    <userString>	#personal_missions_details:pm2_5_3_8	</userString>
+    <shortUserString>	#personal_missions_details:pm2_5_3_8_short	</shortUserString>
+    <description>	#personal_missions_details:quest/advice/result	</description>
     <advice></advice>
   </pm2_5_3_8>
   <pm2_5_3_9>
@@ -3745,9 +3745,9 @@
     <minLevel>	6	</minLevel>
     <maxLevel>	10	</maxLevel>
     <requiredUnlocks></requiredUnlocks>
-    <userString>	#personal_missions_2_details:pm2_5_3_9	</userString>
-    <shortUserString>	#personal_missions_2_details:pm2_5_3_9_short	</shortUserString>
-    <description>	#personal_missions_2_details:quest_result_descr	</description>
+    <userString>	#personal_missions_details:pm2_5_3_9	</userString>
+    <shortUserString>	#personal_missions_details:pm2_5_3_9_short	</shortUserString>
+    <description>	#personal_missions_details:quest/advice/result	</description>
     <advice></advice>
   </pm2_5_3_9>
   <pm2_5_3_10>
@@ -3756,9 +3756,9 @@
     <minLevel>	6	</minLevel>
     <maxLevel>	10	</maxLevel>
     <requiredUnlocks></requiredUnlocks>
-    <userString>	#personal_missions_2_details:pm2_5_3_10	</userString>
-    <shortUserString>	#personal_missions_2_details:pm2_5_3_10_short	</shortUserString>
-    <description>	#personal_missions_2_details:quest_result_descr_SPG	</description>
+    <userString>	#personal_missions_details:pm2_5_3_10	</userString>
+    <shortUserString>	#personal_missions_details:pm2_5_3_10_short	</shortUserString>
+    <description>	#personal_missions_details:quest/advice/resultSPGLimiter	</description>
     <advice></advice>
   </pm2_5_3_10>
   <pm2_5_3_11>
@@ -3767,9 +3767,9 @@
     <minLevel>	6	</minLevel>
     <maxLevel>	10	</maxLevel>
     <requiredUnlocks></requiredUnlocks>
-    <userString>	#personal_missions_2_details:pm2_5_3_11	</userString>
-    <shortUserString>	#personal_missions_2_details:pm2_5_3_11_short	</shortUserString>
-    <description>	#personal_missions_2_details:quest_success_with_limit_descr	</description>
+    <userString>	#personal_missions_details:pm2_5_3_11	</userString>
+    <shortUserString>	#personal_missions_details:pm2_5_3_11_short	</shortUserString>
+    <description>	#personal_missions_details:quest/advice/successLimiter	</description>
     <advice></advice>
   </pm2_5_3_11>
   <pm2_5_3_12>
@@ -3778,9 +3778,9 @@
     <minLevel>	6	</minLevel>
     <maxLevel>	10	</maxLevel>
     <requiredUnlocks></requiredUnlocks>
-    <userString>	#personal_missions_2_details:pm2_5_3_12	</userString>
-    <shortUserString>	#personal_missions_2_details:pm2_5_3_12_short	</shortUserString>
-    <description>	#personal_missions_2_details:quest_success_descr	</description>
+    <userString>	#personal_missions_details:pm2_5_3_12	</userString>
+    <shortUserString>	#personal_missions_details:pm2_5_3_12_short	</shortUserString>
+    <description>	#personal_missions_details:quest/advice/success	</description>
     <advice></advice>
   </pm2_5_3_12>
   <pm2_5_3_13>
@@ -3789,9 +3789,9 @@
     <minLevel>	6	</minLevel>
     <maxLevel>	10	</maxLevel>
     <requiredUnlocks></requiredUnlocks>
-    <userString>	#personal_missions_2_details:pm2_5_3_13	</userString>
-    <shortUserString>	#personal_missions_2_details:pm2_5_3_13_short	</shortUserString>
-    <description>	#personal_missions_2_details:quest_result_with_limit_descr	</description>
+    <userString>	#personal_missions_details:pm2_5_3_13	</userString>
+    <shortUserString>	#personal_missions_details:pm2_5_3_13_short	</shortUserString>
+    <description>	#personal_missions_details:quest/advice/resultLimiter	</description>
     <advice></advice>
   </pm2_5_3_13>
   <pm2_5_3_14>
@@ -3800,9 +3800,9 @@
     <minLevel>	6	</minLevel>
     <maxLevel>	10	</maxLevel>
     <requiredUnlocks></requiredUnlocks>
-    <userString>	#personal_missions_2_details:pm2_5_3_14	</userString>
-    <shortUserString>	#personal_missions_2_details:pm2_5_3_14_short	</shortUserString>
-    <description>	#personal_missions_2_details:quest_result_descr	</description>
+    <userString>	#personal_missions_details:pm2_5_3_14	</userString>
+    <shortUserString>	#personal_missions_details:pm2_5_3_14_short	</shortUserString>
+    <description>	#personal_missions_details:quest/advice/result	</description>
     <advice></advice>
   </pm2_5_3_14>
   <pm2_5_3_15>
@@ -3812,9 +3812,9 @@
     <maxLevel>	10	</maxLevel>
     <requiredUnlocks>	331 332 333 334 335 336 337 338 339 340 341 342 343 344	</requiredUnlocks>
     <rewardByDemand>	1	</rewardByDemand>
-    <userString>	#personal_missions_2_details:pm2_5_3_15	</userString>
-    <shortUserString>	#personal_missions_2_details:pm2_5_3_15_short	</shortUserString>
-    <description>	#personal_missions_2_details:quest_success_descr	</description>
+    <userString>	#personal_missions_details:pm2_5_3_15	</userString>
+    <shortUserString>	#personal_missions_details:pm2_5_3_15_short	</shortUserString>
+    <description>	#personal_missions_details:quest/advice/success	</description>
     <advice></advice>
   </pm2_5_3_15>
   <pm2_5_4_1>
@@ -3823,9 +3823,9 @@
     <minLevel>	6	</minLevel>
     <maxLevel>	10	</maxLevel>
     <requiredUnlocks></requiredUnlocks>
-    <userString>	#personal_missions_2_details:pm2_5_4_1	</userString>
-    <shortUserString>	#personal_missions_2_details:pm2_5_4_1_short	</shortUserString>
-    <description>	#personal_missions_2_details:quest_result_descr	</description>
+    <userString>	#personal_missions_details:pm2_5_4_1	</userString>
+    <shortUserString>	#personal_missions_details:pm2_5_4_1_short	</shortUserString>
+    <description>	#personal_missions_details:quest/advice/result	</description>
     <advice></advice>
   </pm2_5_4_1>
   <pm2_5_4_2>
@@ -3834,9 +3834,9 @@
     <minLevel>	6	</minLevel>
     <maxLevel>	10	</maxLevel>
     <requiredUnlocks></requiredUnlocks>
-    <userString>	#personal_missions_2_details:pm2_5_4_2	</userString>
-    <shortUserString>	#personal_missions_2_details:pm2_5_4_2_short	</shortUserString>
-    <description>	#personal_missions_2_details:quest_result_descr	</description>
+    <userString>	#personal_missions_details:pm2_5_4_2	</userString>
+    <shortUserString>	#personal_missions_details:pm2_5_4_2_short	</shortUserString>
+    <description>	#personal_missions_details:quest/advice/result	</description>
     <advice></advice>
   </pm2_5_4_2>
   <pm2_5_4_3>
@@ -3845,9 +3845,9 @@
     <minLevel>	6	</minLevel>
     <maxLevel>	10	</maxLevel>
     <requiredUnlocks></requiredUnlocks>
-    <userString>	#personal_missions_2_details:pm2_5_4_3	</userString>
-    <shortUserString>	#personal_missions_2_details:pm2_5_4_3_short	</shortUserString>
-    <description>	#personal_missions_2_details:quest_result_descr	</description>
+    <userString>	#personal_missions_details:pm2_5_4_3	</userString>
+    <shortUserString>	#personal_missions_details:pm2_5_4_3_short	</shortUserString>
+    <description>	#personal_missions_details:quest/advice/result	</description>
     <advice></advice>
   </pm2_5_4_3>
   <pm2_5_4_4>
@@ -3856,9 +3856,9 @@
     <minLevel>	6	</minLevel>
     <maxLevel>	10	</maxLevel>
     <requiredUnlocks></requiredUnlocks>
-    <userString>	#personal_missions_2_details:pm2_5_4_4	</userString>
-    <shortUserString>	#personal_missions_2_details:pm2_5_4_4_short	</shortUserString>
-    <description>	#personal_missions_2_details:quest_result_descr_SPG	</description>
+    <userString>	#personal_missions_details:pm2_5_4_4	</userString>
+    <shortUserString>	#personal_missions_details:pm2_5_4_4_short	</shortUserString>
+    <description>	#personal_missions_details:quest/advice/resultSPGLimiter	</description>
     <advice></advice>
   </pm2_5_4_4>
   <pm2_5_4_5>
@@ -3867,9 +3867,9 @@
     <minLevel>	6	</minLevel>
     <maxLevel>	10	</maxLevel>
     <requiredUnlocks></requiredUnlocks>
-    <userString>	#personal_missions_2_details:pm2_5_4_5	</userString>
-    <shortUserString>	#personal_missions_2_details:pm2_5_4_5_short	</shortUserString>
-    <description>	#personal_missions_2_details:quest_result_descr	</description>
+    <userString>	#personal_missions_details:pm2_5_4_5	</userString>
+    <shortUserString>	#personal_missions_details:pm2_5_4_5_short	</shortUserString>
+    <description>	#personal_missions_details:quest/advice/result	</description>
     <advice></advice>
   </pm2_5_4_5>
   <pm2_5_4_6>
@@ -3878,9 +3878,9 @@
     <minLevel>	6	</minLevel>
     <maxLevel>	10	</maxLevel>
     <requiredUnlocks></requiredUnlocks>
-    <userString>	#personal_missions_2_details:pm2_5_4_6	</userString>
-    <shortUserString>	#personal_missions_2_details:pm2_5_4_6_short	</shortUserString>
-    <description>	#personal_missions_2_details:quest_result_descr	</description>
+    <userString>	#personal_missions_details:pm2_5_4_6	</userString>
+    <shortUserString>	#personal_missions_details:pm2_5_4_6_short	</shortUserString>
+    <description>	#personal_missions_details:quest/advice/result	</description>
     <advice></advice>
   </pm2_5_4_6>
   <pm2_5_4_7>
@@ -3889,9 +3889,9 @@
     <minLevel>	6	</minLevel>
     <maxLevel>	10	</maxLevel>
     <requiredUnlocks></requiredUnlocks>
-    <userString>	#personal_missions_2_details:pm2_5_4_7	</userString>
-    <shortUserString>	#personal_missions_2_details:pm2_5_4_7_short	</shortUserString>
-    <description>	#personal_missions_2_details:quest_result_descr	</description>
+    <userString>	#personal_missions_details:pm2_5_4_7	</userString>
+    <shortUserString>	#personal_missions_details:pm2_5_4_7_short	</shortUserString>
+    <description>	#personal_missions_details:quest/advice/result	</description>
     <advice></advice>
   </pm2_5_4_7>
   <pm2_5_4_8>
@@ -3900,9 +3900,9 @@
     <minLevel>	6	</minLevel>
     <maxLevel>	10	</maxLevel>
     <requiredUnlocks></requiredUnlocks>
-    <userString>	#personal_missions_2_details:pm2_5_4_8	</userString>
-    <shortUserString>	#personal_missions_2_details:pm2_5_4_8_short	</shortUserString>
-    <description>	#personal_missions_2_details:quest_result_descr_SPG	</description>
+    <userString>	#personal_missions_details:pm2_5_4_8	</userString>
+    <shortUserString>	#personal_missions_details:pm2_5_4_8_short	</shortUserString>
+    <description>	#personal_missions_details:quest/advice/resultSPGLimiter	</description>
     <advice></advice>
   </pm2_5_4_8>
   <pm2_5_4_9>
@@ -3911,9 +3911,9 @@
     <minLevel>	6	</minLevel>
     <maxLevel>	10	</maxLevel>
     <requiredUnlocks></requiredUnlocks>
-    <userString>	#personal_missions_2_details:pm2_5_4_9	</userString>
-    <shortUserString>	#personal_missions_2_details:pm2_5_4_9_short	</shortUserString>
-    <description>	#personal_missions_2_details:quest_result_with_limit_descr	</description>
+    <userString>	#personal_missions_details:pm2_5_4_9	</userString>
+    <shortUserString>	#personal_missions_details:pm2_5_4_9_short	</shortUserString>
+    <description>	#personal_missions_details:quest/advice/resultLimiter	</description>
     <advice></advice>
   </pm2_5_4_9>
   <pm2_5_4_10>
@@ -3922,9 +3922,9 @@
     <minLevel>	6	</minLevel>
     <maxLevel>	10	</maxLevel>
     <requiredUnlocks></requiredUnlocks>
-    <userString>	#personal_missions_2_details:pm2_5_4_10	</userString>
-    <shortUserString>	#personal_missions_2_details:pm2_5_4_10_short	</shortUserString>
-    <description>	#personal_missions_2_details:quest_success_descr	</description>
+    <userString>	#personal_missions_details:pm2_5_4_10	</userString>
+    <shortUserString>	#personal_missions_details:pm2_5_4_10_short	</shortUserString>
+    <description>	#personal_missions_details:quest/advice/success	</description>
     <advice></advice>
   </pm2_5_4_10>
   <pm2_5_4_11>
@@ -3933,9 +3933,9 @@
     <minLevel>	6	</minLevel>
     <maxLevel>	10	</maxLevel>
     <requiredUnlocks></requiredUnlocks>
-    <userString>	#personal_missions_2_details:pm2_5_4_11	</userString>
-    <shortUserString>	#personal_missions_2_details:pm2_5_4_11_short	</shortUserString>
-    <description>	#personal_missions_2_details:quest_result_descr	</description>
+    <userString>	#personal_missions_details:pm2_5_4_11	</userString>
+    <shortUserString>	#personal_missions_details:pm2_5_4_11_short	</shortUserString>
+    <description>	#personal_missions_details:quest/advice/result	</description>
     <advice></advice>
   </pm2_5_4_11>
   <pm2_5_4_12>
@@ -3944,9 +3944,9 @@
     <minLevel>	6	</minLevel>
     <maxLevel>	10	</maxLevel>
     <requiredUnlocks></requiredUnlocks>
-    <userString>	#personal_missions_2_details:pm2_5_4_12	</userString>
-    <shortUserString>	#personal_missions_2_details:pm2_5_4_12_short	</shortUserString>
-    <description>	#personal_missions_2_details:quest_result_descr	</description>
+    <userString>	#personal_missions_details:pm2_5_4_12	</userString>
+    <shortUserString>	#personal_missions_details:pm2_5_4_12_short	</shortUserString>
+    <description>	#personal_missions_details:quest/advice/result	</description>
     <advice></advice>
   </pm2_5_4_12>
   <pm2_5_4_13>
@@ -3955,9 +3955,9 @@
     <minLevel>	6	</minLevel>
     <maxLevel>	10	</maxLevel>
     <requiredUnlocks></requiredUnlocks>
-    <userString>	#personal_missions_2_details:pm2_5_4_13	</userString>
-    <shortUserString>	#personal_missions_2_details:pm2_5_4_13_short	</shortUserString>
-    <description>	#personal_missions_2_details:quest_result_descr	</description>
+    <userString>	#personal_missions_details:pm2_5_4_13	</userString>
+    <shortUserString>	#personal_missions_details:pm2_5_4_13_short	</shortUserString>
+    <description>	#personal_missions_details:quest/advice/result	</description>
     <advice></advice>
   </pm2_5_4_13>
   <pm2_5_4_14>
@@ -3966,9 +3966,9 @@
     <minLevel>	6	</minLevel>
     <maxLevel>	10	</maxLevel>
     <requiredUnlocks></requiredUnlocks>
-    <userString>	#personal_missions_2_details:pm2_5_4_14	</userString>
-    <shortUserString>	#personal_missions_2_details:pm2_5_4_14_short	</shortUserString>
-    <description>	#personal_missions_2_details:quest_success_with_limit_descr	</description>
+    <userString>	#personal_missions_details:pm2_5_4_14	</userString>
+    <shortUserString>	#personal_missions_details:pm2_5_4_14_short	</shortUserString>
+    <description>	#personal_missions_details:quest/advice/successLimiter	</description>
     <advice></advice>
   </pm2_5_4_14>
   <pm2_5_4_15>
@@ -3978,9 +3978,9 @@
     <maxLevel>	10	</maxLevel>
     <requiredUnlocks>	346 347 348 349 350 351 352 353 354 355 356 357 358 359	</requiredUnlocks>
     <rewardByDemand>	1	</rewardByDemand>
-    <userString>	#personal_missions_2_details:pm2_5_4_15	</userString>
-    <shortUserString>	#personal_missions_2_details:pm2_5_4_15_short	</shortUserString>
-    <description>	#personal_missions_2_details:quest_result_descr	</description>
+    <userString>	#personal_missions_details:pm2_5_4_15	</userString>
+    <shortUserString>	#personal_missions_details:pm2_5_4_15_short	</shortUserString>
+    <description>	#personal_missions_details:quest/advice/result	</description>
     <advice></advice>
   </pm2_5_4_15>
   <pm2_6_1_1>
@@ -3989,9 +3989,9 @@
     <minLevel>	7	</minLevel>
     <maxLevel>	10	</maxLevel>
     <requiredUnlocks>	315 330 345 360	</requiredUnlocks>
-    <userString>	#personal_missions_2_details:pm2_6_1_1	</userString>
-    <shortUserString>	#personal_missions_2_details:pm2_6_1_1_short	</shortUserString>
-    <description>	#personal_missions_2_details:quest_standart_descr	</description>
+    <userString>	#personal_missions_details:pm2_6_1_1	</userString>
+    <shortUserString>	#personal_missions_details:pm2_6_1_1_short	</shortUserString>
+    <description>	#personal_missions_details:quest/advice/standard	</description>
     <advice></advice>
   </pm2_6_1_1>
   <pm2_6_1_2>
@@ -4000,9 +4000,9 @@
     <minLevel>	7	</minLevel>
     <maxLevel>	10	</maxLevel>
     <requiredUnlocks>	315 330 345 360	</requiredUnlocks>
-    <userString>	#personal_missions_2_details:pm2_6_1_2	</userString>
-    <shortUserString>	#personal_missions_2_details:pm2_6_1_2_short	</shortUserString>
-    <description>	#personal_missions_2_details:quest_standart_descr	</description>
+    <userString>	#personal_missions_details:pm2_6_1_2	</userString>
+    <shortUserString>	#personal_missions_details:pm2_6_1_2_short	</shortUserString>
+    <description>	#personal_missions_details:quest/advice/standard	</description>
     <advice></advice>
   </pm2_6_1_2>
   <pm2_6_1_3>
@@ -4011,9 +4011,9 @@
     <minLevel>	7	</minLevel>
     <maxLevel>	10	</maxLevel>
     <requiredUnlocks>	315 330 345 360	</requiredUnlocks>
-    <userString>	#personal_missions_2_details:pm2_6_1_3	</userString>
-    <shortUserString>	#personal_missions_2_details:pm2_6_1_3_short	</shortUserString>
-    <description>	#personal_missions_2_details:quest_standart_descr	</description>
+    <userString>	#personal_missions_details:pm2_6_1_3	</userString>
+    <shortUserString>	#personal_missions_details:pm2_6_1_3_short	</shortUserString>
+    <description>	#personal_missions_details:quest/advice/standard	</description>
     <advice></advice>
   </pm2_6_1_3>
   <pm2_6_1_4>
@@ -4022,9 +4022,9 @@
     <minLevel>	7	</minLevel>
     <maxLevel>	10	</maxLevel>
     <requiredUnlocks>	315 330 345 360	</requiredUnlocks>
-    <userString>	#personal_missions_2_details:pm2_6_1_4	</userString>
-    <shortUserString>	#personal_missions_2_details:pm2_6_1_4_short	</shortUserString>
-    <description>	#personal_missions_2_details:quest_standart_descr	</description>
+    <userString>	#personal_missions_details:pm2_6_1_4	</userString>
+    <shortUserString>	#personal_missions_details:pm2_6_1_4_short	</shortUserString>
+    <description>	#personal_missions_details:quest/advice/standard	</description>
     <advice></advice>
   </pm2_6_1_4>
   <pm2_6_1_5>
@@ -4033,9 +4033,9 @@
     <minLevel>	7	</minLevel>
     <maxLevel>	10	</maxLevel>
     <requiredUnlocks>	315 330 345 360	</requiredUnlocks>
-    <userString>	#personal_missions_2_details:pm2_6_1_5	</userString>
-    <shortUserString>	#personal_missions_2_details:pm2_6_1_5_short	</shortUserString>
-    <description>	#personal_missions_2_details:quest_standart_descr	</description>
+    <userString>	#personal_missions_details:pm2_6_1_5	</userString>
+    <shortUserString>	#personal_missions_details:pm2_6_1_5_short	</shortUserString>
+    <description>	#personal_missions_details:quest/advice/standard	</description>
     <advice></advice>
   </pm2_6_1_5>
   <pm2_6_1_6>
@@ -4044,9 +4044,9 @@
     <minLevel>	7	</minLevel>
     <maxLevel>	10	</maxLevel>
     <requiredUnlocks>	315 330 345 360	</requiredUnlocks>
-    <userString>	#personal_missions_2_details:pm2_6_1_6	</userString>
-    <shortUserString>	#personal_missions_2_details:pm2_6_1_6_short	</shortUserString>
-    <description>	#personal_missions_2_details:quest_standart_descr	</description>
+    <userString>	#personal_missions_details:pm2_6_1_6	</userString>
+    <shortUserString>	#personal_missions_details:pm2_6_1_6_short	</shortUserString>
+    <description>	#personal_missions_details:quest/advice/standard	</description>
     <advice></advice>
   </pm2_6_1_6>
   <pm2_6_1_7>
@@ -4055,9 +4055,9 @@
     <minLevel>	7	</minLevel>
     <maxLevel>	10	</maxLevel>
     <requiredUnlocks>	315 330 345 360	</requiredUnlocks>
-    <userString>	#personal_missions_2_details:pm2_6_1_7	</userString>
-    <shortUserString>	#personal_missions_2_details:pm2_6_1_7_short	</shortUserString>
-    <description>	#personal_missions_2_details:quest_standart_descr	</description>
+    <userString>	#personal_missions_details:pm2_6_1_7	</userString>
+    <shortUserString>	#personal_missions_details:pm2_6_1_7_short	</shortUserString>
+    <description>	#personal_missions_details:quest/advice/standard	</description>
     <advice></advice>
   </pm2_6_1_7>
   <pm2_6_1_8>
@@ -4066,9 +4066,9 @@
     <minLevel>	7	</minLevel>
     <maxLevel>	10	</maxLevel>
     <requiredUnlocks>	315 330 345 360	</requiredUnlocks>
-    <userString>	#personal_missions_2_details:pm2_6_1_8	</userString>
-    <shortUserString>	#personal_missions_2_details:pm2_6_1_8_short	</shortUserString>
-    <description>	#personal_missions_2_details:quest_standart_descr	</description>
+    <userString>	#personal_missions_details:pm2_6_1_8	</userString>
+    <shortUserString>	#personal_missions_details:pm2_6_1_8_short	</shortUserString>
+    <description>	#personal_missions_details:quest/advice/standard	</description>
     <advice></advice>
   </pm2_6_1_8>
   <pm2_6_1_9>
@@ -4077,9 +4077,9 @@
     <minLevel>	7	</minLevel>
     <maxLevel>	10	</maxLevel>
     <requiredUnlocks>	315 330 345 360	</requiredUnlocks>
-    <userString>	#personal_missions_2_details:pm2_6_1_9	</userString>
-    <shortUserString>	#personal_missions_2_details:pm2_6_1_9_short	</shortUserString>
-    <description>	#personal_missions_2_details:quest_standart_descr	</description>
+    <userString>	#personal_missions_details:pm2_6_1_9	</userString>
+    <shortUserString>	#personal_missions_details:pm2_6_1_9_short	</shortUserString>
+    <description>	#personal_missions_details:quest/advice/standard	</description>
     <advice></advice>
   </pm2_6_1_9>
   <pm2_6_1_10>
@@ -4088,9 +4088,9 @@
     <minLevel>	7	</minLevel>
     <maxLevel>	10	</maxLevel>
     <requiredUnlocks>	315 330 345 360	</requiredUnlocks>
-    <userString>	#personal_missions_2_details:pm2_6_1_10	</userString>
-    <shortUserString>	#personal_missions_2_details:pm2_6_1_10_short	</shortUserString>
-    <description>	#personal_missions_2_details:quest_standart_descr	</description>
+    <userString>	#personal_missions_details:pm2_6_1_10	</userString>
+    <shortUserString>	#personal_missions_details:pm2_6_1_10_short	</shortUserString>
+    <description>	#personal_missions_details:quest/advice/standard	</description>
     <advice></advice>
   </pm2_6_1_10>
   <pm2_6_1_11>
@@ -4099,9 +4099,9 @@
     <minLevel>	7	</minLevel>
     <maxLevel>	10	</maxLevel>
     <requiredUnlocks>	315 330 345 360	</requiredUnlocks>
-    <userString>	#personal_missions_2_details:pm2_6_1_11	</userString>
-    <shortUserString>	#personal_missions_2_details:pm2_6_1_11_short	</shortUserString>
-    <description>	#personal_missions_2_details:quest_standart_descr	</description>
+    <userString>	#personal_missions_details:pm2_6_1_11	</userString>
+    <shortUserString>	#personal_missions_details:pm2_6_1_11_short	</shortUserString>
+    <description>	#personal_missions_details:quest/advice/standard	</description>
     <advice></advice>
   </pm2_6_1_11>
   <pm2_6_1_12>
@@ -4110,9 +4110,9 @@
     <minLevel>	7	</minLevel>
     <maxLevel>	10	</maxLevel>
     <requiredUnlocks>	315 330 345 360	</requiredUnlocks>
-    <userString>	#personal_missions_2_details:pm2_6_1_12	</userString>
-    <shortUserString>	#personal_missions_2_details:pm2_6_1_12_short	</shortUserString>
-    <description>	#personal_missions_2_details:quest_standart_descr	</description>
+    <userString>	#personal_missions_details:pm2_6_1_12	</userString>
+    <shortUserString>	#personal_missions_details:pm2_6_1_12_short	</shortUserString>
+    <description>	#personal_missions_details:quest/advice/standard	</description>
     <advice></advice>
   </pm2_6_1_12>
   <pm2_6_1_13>
@@ -4121,9 +4121,9 @@
     <minLevel>	7	</minLevel>
     <maxLevel>	10	</maxLevel>
     <requiredUnlocks>	315 330 345 360	</requiredUnlocks>
-    <userString>	#personal_missions_2_details:pm2_6_1_13	</userString>
-    <shortUserString>	#personal_missions_2_details:pm2_6_1_13_short	</shortUserString>
-    <description>	#personal_missions_2_details:quest_standart_descr	</description>
+    <userString>	#personal_missions_details:pm2_6_1_13	</userString>
+    <shortUserString>	#personal_missions_details:pm2_6_1_13_short	</shortUserString>
+    <description>	#personal_missions_details:quest/advice/standard	</description>
     <advice></advice>
   </pm2_6_1_13>
   <pm2_6_1_14>
@@ -4132,9 +4132,9 @@
     <minLevel>	7	</minLevel>
     <maxLevel>	10	</maxLevel>
     <requiredUnlocks>	315 330 345 360	</requiredUnlocks>
-    <userString>	#personal_missions_2_details:pm2_6_1_14	</userString>
-    <shortUserString>	#personal_missions_2_details:pm2_6_1_14_short	</shortUserString>
-    <description>	#personal_missions_2_details:quest_standart_descr	</description>
+    <userString>	#personal_missions_details:pm2_6_1_14	</userString>
+    <shortUserString>	#personal_missions_details:pm2_6_1_14_short	</shortUserString>
+    <description>	#personal_missions_details:quest/advice/standard	</description>
     <advice></advice>
   </pm2_6_1_14>
   <pm2_6_1_15>
@@ -4144,9 +4144,9 @@
     <maxLevel>	10	</maxLevel>
     <requiredUnlocks>	361 362 363 364 365 366 367 368 369 370 371 372 373 374	</requiredUnlocks>
     <rewardByDemand>	1	</rewardByDemand>
-    <userString>	#personal_missions_2_details:pm2_6_1_15	</userString>
-    <shortUserString>	#personal_missions_2_details:pm2_6_1_15_short	</shortUserString>
-    <description>	#personal_missions_2_details:quest_standart_descr	</description>
+    <userString>	#personal_missions_details:pm2_6_1_15	</userString>
+    <shortUserString>	#personal_missions_details:pm2_6_1_15_short	</shortUserString>
+    <description>	#personal_missions_details:quest/advice/standard	</description>
     <advice></advice>
   </pm2_6_1_15>
   <pm2_6_2_1>
@@ -4155,9 +4155,9 @@
     <minLevel>	7	</minLevel>
     <maxLevel>	10	</maxLevel>
     <requiredUnlocks>	315 330 345 360	</requiredUnlocks>
-    <userString>	#personal_missions_2_details:pm2_6_2_1	</userString>
-    <shortUserString>	#personal_missions_2_details:pm2_6_2_1_short	</shortUserString>
-    <description>	#personal_missions_2_details:quest_standart_descr	</description>
+    <userString>	#personal_missions_details:pm2_6_2_1	</userString>
+    <shortUserString>	#personal_missions_details:pm2_6_2_1_short	</shortUserString>
+    <description>	#personal_missions_details:quest/advice/standard	</description>
     <advice></advice>
   </pm2_6_2_1>
   <pm2_6_2_2>
@@ -4166,9 +4166,9 @@
     <minLevel>	7	</minLevel>
     <maxLevel>	10	</maxLevel>
     <requiredUnlocks>	315 330 345 360	</requiredUnlocks>
-    <userString>	#personal_missions_2_details:pm2_6_2_2	</userString>
-    <shortUserString>	#personal_missions_2_details:pm2_6_2_2_short	</shortUserString>
-    <description>	#personal_missions_2_details:quest_standart_descr	</description>
+    <userString>	#personal_missions_details:pm2_6_2_2	</userString>
+    <shortUserString>	#personal_missions_details:pm2_6_2_2_short	</shortUserString>
+    <description>	#personal_missions_details:quest/advice/standard	</description>
     <advice></advice>
   </pm2_6_2_2>
   <pm2_6_2_3>
@@ -4177,9 +4177,9 @@
     <minLevel>	7	</minLevel>
     <maxLevel>	10	</maxLevel>
     <requiredUnlocks>	315 330 345 360	</requiredUnlocks>
-    <userString>	#personal_missions_2_details:pm2_6_2_3	</userString>
-    <shortUserString>	#personal_missions_2_details:pm2_6_2_3_short	</shortUserString>
-    <description>	#personal_missions_2_details:quest_standart_descr	</description>
+    <userString>	#personal_missions_details:pm2_6_2_3	</userString>
+    <shortUserString>	#personal_missions_details:pm2_6_2_3_short	</shortUserString>
+    <description>	#personal_missions_details:quest/advice/standard	</description>
     <advice></advice>
   </pm2_6_2_3>
   <pm2_6_2_4>
@@ -4188,9 +4188,9 @@
     <minLevel>	7	</minLevel>
     <maxLevel>	10	</maxLevel>
     <requiredUnlocks>	315 330 345 360	</requiredUnlocks>
-    <userString>	#personal_missions_2_details:pm2_6_2_4	</userString>
-    <shortUserString>	#personal_missions_2_details:pm2_6_2_4_short	</shortUserString>
-    <description>	#personal_missions_2_details:quest_standart_descr	</description>
+    <userString>	#personal_missions_details:pm2_6_2_4	</userString>
+    <shortUserString>	#personal_missions_details:pm2_6_2_4_short	</shortUserString>
+    <description>	#personal_missions_details:quest/advice/standard	</description>
     <advice></advice>
   </pm2_6_2_4>
   <pm2_6_2_5>
@@ -4199,9 +4199,9 @@
     <minLevel>	7	</minLevel>
     <maxLevel>	10	</maxLevel>
     <requiredUnlocks>	315 330 345 360	</requiredUnlocks>
-    <userString>	#personal_missions_2_details:pm2_6_2_5	</userString>
-    <shortUserString>	#personal_missions_2_details:pm2_6_2_5_short	</shortUserString>
-    <description>	#personal_missions_2_details:quest_standart_descr	</description>
+    <userString>	#personal_missions_details:pm2_6_2_5	</userString>
+    <shortUserString>	#personal_missions_details:pm2_6_2_5_short	</shortUserString>
+    <description>	#personal_missions_details:quest/advice/standard	</description>
     <advice></advice>
   </pm2_6_2_5>
   <pm2_6_2_6>
@@ -4210,9 +4210,9 @@
     <minLevel>	7	</minLevel>
     <maxLevel>	10	</maxLevel>
     <requiredUnlocks>	315 330 345 360	</requiredUnlocks>
-    <userString>	#personal_missions_2_details:pm2_6_2_6	</userString>
-    <shortUserString>	#personal_missions_2_details:pm2_6_2_6_short	</shortUserString>
-    <description>	#personal_missions_2_details:quest_standart_descr	</description>
+    <userString>	#personal_missions_details:pm2_6_2_6	</userString>
+    <shortUserString>	#personal_missions_details:pm2_6_2_6_short	</shortUserString>
+    <description>	#personal_missions_details:quest/advice/standard	</description>
     <advice></advice>
   </pm2_6_2_6>
   <pm2_6_2_7>
@@ -4221,9 +4221,9 @@
     <minLevel>	7	</minLevel>
     <maxLevel>	10	</maxLevel>
     <requiredUnlocks>	315 330 345 360	</requiredUnlocks>
-    <userString>	#personal_missions_2_details:pm2_6_2_7	</userString>
-    <shortUserString>	#personal_missions_2_details:pm2_6_2_7_short	</shortUserString>
-    <description>	#personal_missions_2_details:quest_standart_descr	</description>
+    <userString>	#personal_missions_details:pm2_6_2_7	</userString>
+    <shortUserString>	#personal_missions_details:pm2_6_2_7_short	</shortUserString>
+    <description>	#personal_missions_details:quest/advice/standard	</description>
     <advice></advice>
   </pm2_6_2_7>
   <pm2_6_2_8>
@@ -4232,9 +4232,9 @@
     <minLevel>	7	</minLevel>
     <maxLevel>	10	</maxLevel>
     <requiredUnlocks>	315 330 345 360	</requiredUnlocks>
-    <userString>	#personal_missions_2_details:pm2_6_2_8	</userString>
-    <shortUserString>	#personal_missions_2_details:pm2_6_2_8_short	</shortUserString>
-    <description>	#personal_missions_2_details:quest_standart_descr	</description>
+    <userString>	#personal_missions_details:pm2_6_2_8	</userString>
+    <shortUserString>	#personal_missions_details:pm2_6_2_8_short	</shortUserString>
+    <description>	#personal_missions_details:quest/advice/standard	</description>
     <advice></advice>
   </pm2_6_2_8>
   <pm2_6_2_9>
@@ -4243,9 +4243,9 @@
     <minLevel>	7	</minLevel>
     <maxLevel>	10	</maxLevel>
     <requiredUnlocks>	315 330 345 360	</requiredUnlocks>
-    <userString>	#personal_missions_2_details:pm2_6_2_9	</userString>
-    <shortUserString>	#personal_missions_2_details:pm2_6_2_9_short	</shortUserString>
-    <description>	#personal_missions_2_details:quest_standart_descr	</description>
+    <userString>	#personal_missions_details:pm2_6_2_9	</userString>
+    <shortUserString>	#personal_missions_details:pm2_6_2_9_short	</shortUserString>
+    <description>	#personal_missions_details:quest/advice/standard	</description>
     <advice></advice>
   </pm2_6_2_9>
   <pm2_6_2_10>
@@ -4254,9 +4254,9 @@
     <minLevel>	7	</minLevel>
     <maxLevel>	10	</maxLevel>
     <requiredUnlocks>	315 330 345 360	</requiredUnlocks>
-    <userString>	#personal_missions_2_details:pm2_6_2_10	</userString>
-    <shortUserString>	#personal_missions_2_details:pm2_6_2_10_short	</shortUserString>
-    <description>	#personal_missions_2_details:quest_standart_descr	</description>
+    <userString>	#personal_missions_details:pm2_6_2_10	</userString>
+    <shortUserString>	#personal_missions_details:pm2_6_2_10_short	</shortUserString>
+    <description>	#personal_missions_details:quest/advice/standard	</description>
     <advice></advice>
   </pm2_6_2_10>
   <pm2_6_2_11>
@@ -4265,9 +4265,9 @@
     <minLevel>	7	</minLevel>
     <maxLevel>	10	</maxLevel>
     <requiredUnlocks>	315 330 345 360	</requiredUnlocks>
-    <userString>	#personal_missions_2_details:pm2_6_2_11	</userString>
-    <shortUserString>	#personal_missions_2_details:pm2_6_2_11_short	</shortUserString>
-    <description>	#personal_missions_2_details:quest_standart_descr	</description>
+    <userString>	#personal_missions_details:pm2_6_2_11	</userString>
+    <shortUserString>	#personal_missions_details:pm2_6_2_11_short	</shortUserString>
+    <description>	#personal_missions_details:quest/advice/standard	</description>
     <advice></advice>
   </pm2_6_2_11>
   <pm2_6_2_12>
@@ -4276,9 +4276,9 @@
     <minLevel>	7	</minLevel>
     <maxLevel>	10	</maxLevel>
     <requiredUnlocks>	315 330 345 360	</requiredUnlocks>
-    <userString>	#personal_missions_2_details:pm2_6_2_12	</userString>
-    <shortUserString>	#personal_missions_2_details:pm2_6_2_12_short	</shortUserString>
-    <description>	#personal_missions_2_details:quest_standart_descr	</description>
+    <userString>	#personal_missions_details:pm2_6_2_12	</userString>
+    <shortUserString>	#personal_missions_details:pm2_6_2_12_short	</shortUserString>
+    <description>	#personal_missions_details:quest/advice/standard	</description>
     <advice></advice>
   </pm2_6_2_12>
   <pm2_6_2_13>
@@ -4287,9 +4287,9 @@
     <minLevel>	7	</minLevel>
     <maxLevel>	10	</maxLevel>
     <requiredUnlocks>	315 330 345 360	</requiredUnlocks>
-    <userString>	#personal_missions_2_details:pm2_6_2_13	</userString>
-    <shortUserString>	#personal_missions_2_details:pm2_6_2_13_short	</shortUserString>
-    <description>	#personal_missions_2_details:quest_standart_descr	</description>
+    <userString>	#personal_missions_details:pm2_6_2_13	</userString>
+    <shortUserString>	#personal_missions_details:pm2_6_2_13_short	</shortUserString>
+    <description>	#personal_missions_details:quest/advice/standard	</description>
     <advice></advice>
   </pm2_6_2_13>
   <pm2_6_2_14>
@@ -4298,9 +4298,9 @@
     <minLevel>	7	</minLevel>
     <maxLevel>	10	</maxLevel>
     <requiredUnlocks>	315 330 345 360	</requiredUnlocks>
-    <userString>	#personal_missions_2_details:pm2_6_2_14	</userString>
-    <shortUserString>	#personal_missions_2_details:pm2_6_2_14_short	</shortUserString>
-    <description>	#personal_missions_2_details:quest_standart_descr	</description>
+    <userString>	#personal_missions_details:pm2_6_2_14	</userString>
+    <shortUserString>	#personal_missions_details:pm2_6_2_14_short	</shortUserString>
+    <description>	#personal_missions_details:quest/advice/standard	</description>
     <advice></advice>
   </pm2_6_2_14>
   <pm2_6_2_15>
@@ -4310,9 +4310,9 @@
     <maxLevel>	10	</maxLevel>
     <requiredUnlocks>	376 377 378 379 380 381 382 383 384 385 386 387 388 389	</requiredUnlocks>
     <rewardByDemand>	1	</rewardByDemand>
-    <userString>	#personal_missions_2_details:pm2_6_2_15	</userString>
-    <shortUserString>	#personal_missions_2_details:pm2_6_2_15_short	</shortUserString>
-    <description>	#personal_missions_2_details:quest_standart_descr	</description>
+    <userString>	#personal_missions_details:pm2_6_2_15	</userString>
+    <shortUserString>	#personal_missions_details:pm2_6_2_15_short	</shortUserString>
+    <description>	#personal_missions_details:quest/advice/standard	</description>
     <advice></advice>
   </pm2_6_2_15>
   <pm2_6_3_1>
@@ -4321,9 +4321,9 @@
     <minLevel>	7	</minLevel>
     <maxLevel>	10	</maxLevel>
     <requiredUnlocks>	315 330 345 360	</requiredUnlocks>
-    <userString>	#personal_missions_2_details:pm2_6_3_1	</userString>
-    <shortUserString>	#personal_missions_2_details:pm2_6_3_1_short	</shortUserString>
-    <description>	#personal_missions_2_details:quest_standart_descr	</description>
+    <userString>	#personal_missions_details:pm2_6_3_1	</userString>
+    <shortUserString>	#personal_missions_details:pm2_6_3_1_short	</shortUserString>
+    <description>	#personal_missions_details:quest/advice/standard	</description>
     <advice></advice>
   </pm2_6_3_1>
   <pm2_6_3_2>
@@ -4332,9 +4332,9 @@
     <minLevel>	7	</minLevel>
     <maxLevel>	10	</maxLevel>
     <requiredUnlocks>	315 330 345 360	</requiredUnlocks>
-    <userString>	#personal_missions_2_details:pm2_6_3_2	</userString>
-    <shortUserString>	#personal_missions_2_details:pm2_6_3_2_short	</shortUserString>
-    <description>	#personal_missions_2_details:quest_standart_descr	</description>
+    <userString>	#personal_missions_details:pm2_6_3_2	</userString>
+    <shortUserString>	#personal_missions_details:pm2_6_3_2_short	</shortUserString>
+    <description>	#personal_missions_details:quest/advice/standard	</description>
     <advice></advice>
   </pm2_6_3_2>
   <pm2_6_3_3>
@@ -4343,9 +4343,9 @@
     <minLevel>	7	</minLevel>
     <maxLevel>	10	</maxLevel>
     <requiredUnlocks>	315 330 345 360	</requiredUnlocks>
-    <userString>	#personal_missions_2_details:pm2_6_3_3	</userString>
-    <shortUserString>	#personal_missions_2_details:pm2_6_3_3_short	</shortUserString>
-    <description>	#personal_missions_2_details:quest_standart_descr	</description>
+    <userString>	#personal_missions_details:pm2_6_3_3	</userString>
+    <shortUserString>	#personal_missions_details:pm2_6_3_3_short	</shortUserString>
+    <description>	#personal_missions_details:quest/advice/standard	</description>
     <advice></advice>
   </pm2_6_3_3>
   <pm2_6_3_4>
@@ -4354,9 +4354,9 @@
     <minLevel>	7	</minLevel>
     <maxLevel>	10	</maxLevel>
     <requiredUnlocks>	315 330 345 360	</requiredUnlocks>
-    <userString>	#personal_missions_2_details:pm2_6_3_4	</userString>
-    <shortUserString>	#personal_missions_2_details:pm2_6_3_4_short	</shortUserString>
-    <description>	#personal_missions_2_details:quest_standart_descr	</description>
+    <userString>	#personal_missions_details:pm2_6_3_4	</userString>
+    <shortUserString>	#personal_missions_details:pm2_6_3_4_short	</shortUserString>
+    <description>	#personal_missions_details:quest/advice/standard	</description>
     <advice></advice>
   </pm2_6_3_4>
   <pm2_6_3_5>
@@ -4365,9 +4365,9 @@
     <minLevel>	7	</minLevel>
     <maxLevel>	10	</maxLevel>
     <requiredUnlocks>	315 330 345 360	</requiredUnlocks>
-    <userString>	#personal_missions_2_details:pm2_6_3_5	</userString>
-    <shortUserString>	#personal_missions_2_details:pm2_6_3_5_short	</shortUserString>
-    <description>	#personal_missions_2_details:quest_standart_descr	</description>
+    <userString>	#personal_missions_details:pm2_6_3_5	</userString>
+    <shortUserString>	#personal_missions_details:pm2_6_3_5_short	</shortUserString>
+    <description>	#personal_missions_details:quest/advice/standard	</description>
     <advice></advice>
   </pm2_6_3_5>
   <pm2_6_3_6>
@@ -4376,9 +4376,9 @@
     <minLevel>	7	</minLevel>
     <maxLevel>	10	</maxLevel>
     <requiredUnlocks>	315 330 345 360	</requiredUnlocks>
-    <userString>	#personal_missions_2_details:pm2_6_3_6	</userString>
-    <shortUserString>	#personal_missions_2_details:pm2_6_3_6_short	</shortUserString>
-    <description>	#personal_missions_2_details:quest_standart_descr	</description>
+    <userString>	#personal_missions_details:pm2_6_3_6	</userString>
+    <shortUserString>	#personal_missions_details:pm2_6_3_6_short	</shortUserString>
+    <description>	#personal_missions_details:quest/advice/standard	</description>
     <advice></advice>
   </pm2_6_3_6>
   <pm2_6_3_7>
@@ -4387,9 +4387,9 @@
     <minLevel>	7	</minLevel>
     <maxLevel>	10	</maxLevel>
     <requiredUnlocks>	315 330 345 360	</requiredUnlocks>
-    <userString>	#personal_missions_2_details:pm2_6_3_7	</userString>
-    <shortUserString>	#personal_missions_2_details:pm2_6_3_7_short	</shortUserString>
-    <description>	#personal_missions_2_details:quest_standart_descr	</description>
+    <userString>	#personal_missions_details:pm2_6_3_7	</userString>
+    <shortUserString>	#personal_missions_details:pm2_6_3_7_short	</shortUserString>
+    <description>	#personal_missions_details:quest/advice/standard	</description>
     <advice></advice>
   </pm2_6_3_7>
   <pm2_6_3_8>
@@ -4398,9 +4398,9 @@
     <minLevel>	7	</minLevel>
     <maxLevel>	10	</maxLevel>
     <requiredUnlocks>	315 330 345 360	</requiredUnlocks>
-    <userString>	#personal_missions_2_details:pm2_6_3_8	</userString>
-    <shortUserString>	#personal_missions_2_details:pm2_6_3_8_short	</shortUserString>
-    <description>	#personal_missions_2_details:quest_standart_descr	</description>
+    <userString>	#personal_missions_details:pm2_6_3_8	</userString>
+    <shortUserString>	#personal_missions_details:pm2_6_3_8_short	</shortUserString>
+    <description>	#personal_missions_details:quest/advice/standard	</description>
     <advice></advice>
   </pm2_6_3_8>
   <pm2_6_3_9>
@@ -4409,9 +4409,9 @@
     <minLevel>	7	</minLevel>
     <maxLevel>	10	</maxLevel>
     <requiredUnlocks>	315 330 345 360	</requiredUnlocks>
-    <userString>	#personal_missions_2_details:pm2_6_3_9	</userString>
-    <shortUserString>	#personal_missions_2_details:pm2_6_3_9_short	</shortUserString>
-    <description>	#personal_missions_2_details:quest_standart_descr	</description>
+    <userString>	#personal_missions_details:pm2_6_3_9	</userString>
+    <shortUserString>	#personal_missions_details:pm2_6_3_9_short	</shortUserString>
+    <description>	#personal_missions_details:quest/advice/standard	</description>
     <advice></advice>
   </pm2_6_3_9>
   <pm2_6_3_10>
@@ -4420,9 +4420,9 @@
     <minLevel>	7	</minLevel>
     <maxLevel>	10	</maxLevel>
     <requiredUnlocks>	315 330 345 360	</requiredUnlocks>
-    <userString>	#personal_missions_2_details:pm2_6_3_10	</userString>
-    <shortUserString>	#personal_missions_2_details:pm2_6_3_10_short	</shortUserString>
-    <description>	#personal_missions_2_details:quest_standart_descr	</description>
+    <userString>	#personal_missions_details:pm2_6_3_10	</userString>
+    <shortUserString>	#personal_missions_details:pm2_6_3_10_short	</shortUserString>
+    <description>	#personal_missions_details:quest/advice/standard	</description>
     <advice></advice>
   </pm2_6_3_10>
   <pm2_6_3_11>
@@ -4431,9 +4431,9 @@
     <minLevel>	7	</minLevel>
     <maxLevel>	10	</maxLevel>
     <requiredUnlocks>	315 330 345 360	</requiredUnlocks>
-    <userString>	#personal_missions_2_details:pm2_6_3_11	</userString>
-    <shortUserString>	#personal_missions_2_details:pm2_6_3_11_short	</shortUserString>
-    <description>	#personal_missions_2_details:quest_standart_descr	</description>
+    <userString>	#personal_missions_details:pm2_6_3_11	</userString>
+    <shortUserString>	#personal_missions_details:pm2_6_3_11_short	</shortUserString>
+    <description>	#personal_missions_details:quest/advice/standard	</description>
     <advice></advice>
   </pm2_6_3_11>
   <pm2_6_3_12>
@@ -4442,9 +4442,9 @@
     <minLevel>	7	</minLevel>
     <maxLevel>	10	</maxLevel>
     <requiredUnlocks>	315 330 345 360	</requiredUnlocks>
-    <userString>	#personal_missions_2_details:pm2_6_3_12	</userString>
-    <shortUserString>	#personal_missions_2_details:pm2_6_3_12_short	</shortUserString>
-    <description>	#personal_missions_2_details:quest_standart_descr	</description>
+    <userString>	#personal_missions_details:pm2_6_3_12	</userString>
+    <shortUserString>	#personal_missions_details:pm2_6_3_12_short	</shortUserString>
+    <description>	#personal_missions_details:quest/advice/standard	</description>
     <advice></advice>
   </pm2_6_3_12>
   <pm2_6_3_13>
@@ -4453,9 +4453,9 @@
     <minLevel>	7	</minLevel>
     <maxLevel>	10	</maxLevel>
     <requiredUnlocks>	315 330 345 360	</requiredUnlocks>
-    <userString>	#personal_missions_2_details:pm2_6_3_13	</userString>
-    <shortUserString>	#personal_missions_2_details:pm2_6_3_13_short	</shortUserString>
-    <description>	#personal_missions_2_details:quest_standart_descr	</description>
+    <userString>	#personal_missions_details:pm2_6_3_13	</userString>
+    <shortUserString>	#personal_missions_details:pm2_6_3_13_short	</shortUserString>
+    <description>	#personal_missions_details:quest/advice/standard	</description>
     <advice></advice>
   </pm2_6_3_13>
   <pm2_6_3_14>
@@ -4464,9 +4464,9 @@
     <minLevel>	7	</minLevel>
     <maxLevel>	10	</maxLevel>
     <requiredUnlocks>	315 330 345 360	</requiredUnlocks>
-    <userString>	#personal_missions_2_details:pm2_6_3_14	</userString>
-    <shortUserString>	#personal_missions_2_details:pm2_6_3_14_short	</shortUserString>
-    <description>	#personal_missions_2_details:quest_standart_descr_SPG	</description>
+    <userString>	#personal_missions_details:pm2_6_3_14	</userString>
+    <shortUserString>	#personal_missions_details:pm2_6_3_14_short	</shortUserString>
+    <description>	#personal_missions_details:quest/advice/standardSPGLimiter	</description>
     <advice></advice>
   </pm2_6_3_14>
   <pm2_6_3_15>
@@ -4476,9 +4476,9 @@
     <maxLevel>	10	</maxLevel>
     <requiredUnlocks>	391 392 393 394 395 396 397 398 399 400 401 402 403 404	</requiredUnlocks>
     <rewardByDemand>	1	</rewardByDemand>
-    <userString>	#personal_missions_2_details:pm2_6_3_15	</userString>
-    <shortUserString>	#personal_missions_2_details:pm2_6_3_15_short	</shortUserString>
-    <description>	#personal_missions_2_details:quest_standart_descr	</description>
+    <userString>	#personal_missions_details:pm2_6_3_15	</userString>
+    <shortUserString>	#personal_missions_details:pm2_6_3_15_short	</shortUserString>
+    <description>	#personal_missions_details:quest/advice/standard	</description>
     <advice></advice>
   </pm2_6_3_15>
   <pm2_6_4_1>
@@ -4487,9 +4487,9 @@
     <minLevel>	7	</minLevel>
     <maxLevel>	10	</maxLevel>
     <requiredUnlocks>	315 330 345 360	</requiredUnlocks>
-    <userString>	#personal_missions_2_details:pm2_6_4_1	</userString>
-    <shortUserString>	#personal_missions_2_details:pm2_6_4_1_short	</shortUserString>
-    <description>	#personal_missions_2_details:quest_standart_descr	</description>
+    <userString>	#personal_missions_details:pm2_6_4_1	</userString>
+    <shortUserString>	#personal_missions_details:pm2_6_4_1_short	</shortUserString>
+    <description>	#personal_missions_details:quest/advice/standard	</description>
     <advice></advice>
   </pm2_6_4_1>
   <pm2_6_4_2>
@@ -4498,9 +4498,9 @@
     <minLevel>	7	</minLevel>
     <maxLevel>	10	</maxLevel>
     <requiredUnlocks>	315 330 345 360	</requiredUnlocks>
-    <userString>	#personal_missions_2_details:pm2_6_4_2	</userString>
-    <shortUserString>	#personal_missions_2_details:pm2_6_4_2_short	</shortUserString>
-    <description>	#personal_missions_2_details:quest_standart_descr	</description>
+    <userString>	#personal_missions_details:pm2_6_4_2	</userString>
+    <shortUserString>	#personal_missions_details:pm2_6_4_2_short	</shortUserString>
+    <description>	#personal_missions_details:quest/advice/standard	</description>
     <advice></advice>
   </pm2_6_4_2>
   <pm2_6_4_3>
@@ -4509,9 +4509,9 @@
     <minLevel>	7	</minLevel>
     <maxLevel>	10	</maxLevel>
     <requiredUnlocks>	315 330 345 360	</requiredUnlocks>
-    <userString>	#personal_missions_2_details:pm2_6_4_3	</userString>
-    <shortUserString>	#personal_missions_2_details:pm2_6_4_3_short	</shortUserString>
-    <description>	#personal_missions_2_details:quest_standart_descr	</description>
+    <userString>	#personal_missions_details:pm2_6_4_3	</userString>
+    <shortUserString>	#personal_missions_details:pm2_6_4_3_short	</shortUserString>
+    <description>	#personal_missions_details:quest/advice/standard	</description>
     <advice></advice>
   </pm2_6_4_3>
   <pm2_6_4_4>
@@ -4520,9 +4520,9 @@
     <minLevel>	7	</minLevel>
     <maxLevel>	10	</maxLevel>
     <requiredUnlocks>	315 330 345 360	</requiredUnlocks>
-    <userString>	#personal_missions_2_details:pm2_6_4_4	</userString>
-    <shortUserString>	#personal_missions_2_details:pm2_6_4_4_short	</shortUserString>
-    <description>	#personal_missions_2_details:quest_standart_descr	</description>
+    <userString>	#personal_missions_details:pm2_6_4_4	</userString>
+    <shortUserString>	#personal_missions_details:pm2_6_4_4_short	</shortUserString>
+    <description>	#personal_missions_details:quest/advice/standard	</description>
     <advice></advice>
   </pm2_6_4_4>
   <pm2_6_4_5>
@@ -4531,9 +4531,9 @@
     <minLevel>	7	</minLevel>
     <maxLevel>	10	</maxLevel>
     <requiredUnlocks>	315 330 345 360	</requiredUnlocks>
-    <userString>	#personal_missions_2_details:pm2_6_4_5	</userString>
-    <shortUserString>	#personal_missions_2_details:pm2_6_4_5_short	</shortUserString>
-    <description>	#personal_missions_2_details:quest_standart_descr	</description>
+    <userString>	#personal_missions_details:pm2_6_4_5	</userString>
+    <shortUserString>	#personal_missions_details:pm2_6_4_5_short	</shortUserString>
+    <description>	#personal_missions_details:quest/advice/standard	</description>
     <advice></advice>
   </pm2_6_4_5>
   <pm2_6_4_6>
@@ -4542,9 +4542,9 @@
     <minLevel>	7	</minLevel>
     <maxLevel>	10	</maxLevel>
     <requiredUnlocks>	315 330 345 360	</requiredUnlocks>
-    <userString>	#personal_missions_2_details:pm2_6_4_6	</userString>
-    <shortUserString>	#personal_missions_2_details:pm2_6_4_6_short	</shortUserString>
-    <description>	#personal_missions_2_details:quest_standart_descr	</description>
+    <userString>	#personal_missions_details:pm2_6_4_6	</userString>
+    <shortUserString>	#personal_missions_details:pm2_6_4_6_short	</shortUserString>
+    <description>	#personal_missions_details:quest/advice/standard	</description>
     <advice></advice>
   </pm2_6_4_6>
   <pm2_6_4_7>
@@ -4553,9 +4553,9 @@
     <minLevel>	7	</minLevel>
     <maxLevel>	10	</maxLevel>
     <requiredUnlocks>	315 330 345 360	</requiredUnlocks>
-    <userString>	#personal_missions_2_details:pm2_6_4_7	</userString>
-    <shortUserString>	#personal_missions_2_details:pm2_6_4_7_short	</shortUserString>
-    <description>	#personal_missions_2_details:quest_standart_descr	</description>
+    <userString>	#personal_missions_details:pm2_6_4_7	</userString>
+    <shortUserString>	#personal_missions_details:pm2_6_4_7_short	</shortUserString>
+    <description>	#personal_missions_details:quest/advice/standard	</description>
     <advice></advice>
   </pm2_6_4_7>
   <pm2_6_4_8>
@@ -4564,9 +4564,9 @@
     <minLevel>	7	</minLevel>
     <maxLevel>	10	</maxLevel>
     <requiredUnlocks>	315 330 345 360	</requiredUnlocks>
-    <userString>	#personal_missions_2_details:pm2_6_4_8	</userString>
-    <shortUserString>	#personal_missions_2_details:pm2_6_4_8_short	</shortUserString>
-    <description>	#personal_missions_2_details:quest_standart_descr	</description>
+    <userString>	#personal_missions_details:pm2_6_4_8	</userString>
+    <shortUserString>	#personal_missions_details:pm2_6_4_8_short	</shortUserString>
+    <description>	#personal_missions_details:quest/advice/standard	</description>
     <advice></advice>
   </pm2_6_4_8>
   <pm2_6_4_9>
@@ -4575,9 +4575,9 @@
     <minLevel>	7	</minLevel>
     <maxLevel>	10	</maxLevel>
     <requiredUnlocks>	315 330 345 360	</requiredUnlocks>
-    <userString>	#personal_missions_2_details:pm2_6_4_9	</userString>
-    <shortUserString>	#personal_missions_2_details:pm2_6_4_9_short	</shortUserString>
-    <description>	#personal_missions_2_details:quest_standart_descr	</description>
+    <userString>	#personal_missions_details:pm2_6_4_9	</userString>
+    <shortUserString>	#personal_missions_details:pm2_6_4_9_short	</shortUserString>
+    <description>	#personal_missions_details:quest/advice/standard	</description>
     <advice></advice>
   </pm2_6_4_9>
   <pm2_6_4_10>
@@ -4586,9 +4586,9 @@
     <minLevel>	7	</minLevel>
     <maxLevel>	10	</maxLevel>
     <requiredUnlocks>	315 330 345 360	</requiredUnlocks>
-    <userString>	#personal_missions_2_details:pm2_6_4_10	</userString>
-    <shortUserString>	#personal_missions_2_details:pm2_6_4_10_short	</shortUserString>
-    <description>	#personal_missions_2_details:quest_standart_descr	</description>
+    <userString>	#personal_missions_details:pm2_6_4_10	</userString>
+    <shortUserString>	#personal_missions_details:pm2_6_4_10_short	</shortUserString>
+    <description>	#personal_missions_details:quest/advice/standard	</description>
     <advice></advice>
   </pm2_6_4_10>
   <pm2_6_4_11>
@@ -4597,9 +4597,9 @@
     <minLevel>	7	</minLevel>
     <maxLevel>	10	</maxLevel>
     <requiredUnlocks>	315 330 345 360	</requiredUnlocks>
-    <userString>	#personal_missions_2_details:pm2_6_4_11	</userString>
-    <shortUserString>	#personal_missions_2_details:pm2_6_4_11_short	</shortUserString>
-    <description>	#personal_missions_2_details:quest_standart_descr	</description>
+    <userString>	#personal_missions_details:pm2_6_4_11	</userString>
+    <shortUserString>	#personal_missions_details:pm2_6_4_11_short	</shortUserString>
+    <description>	#personal_missions_details:quest/advice/standard	</description>
     <advice></advice>
   </pm2_6_4_11>
   <pm2_6_4_12>
@@ -4608,9 +4608,9 @@
     <minLevel>	7	</minLevel>
     <maxLevel>	10	</maxLevel>
     <requiredUnlocks>	315 330 345 360	</requiredUnlocks>
-    <userString>	#personal_missions_2_details:pm2_6_4_12	</userString>
-    <shortUserString>	#personal_missions_2_details:pm2_6_4_12_short	</shortUserString>
-    <description>	#personal_missions_2_details:quest_standart_descr	</description>
+    <userString>	#personal_missions_details:pm2_6_4_12	</userString>
+    <shortUserString>	#personal_missions_details:pm2_6_4_12_short	</shortUserString>
+    <description>	#personal_missions_details:quest/advice/standard	</description>
     <advice></advice>
   </pm2_6_4_12>
   <pm2_6_4_13>
@@ -4619,9 +4619,9 @@
     <minLevel>	7	</minLevel>
     <maxLevel>	10	</maxLevel>
     <requiredUnlocks>	315 330 345 360	</requiredUnlocks>
-    <userString>	#personal_missions_2_details:pm2_6_4_13	</userString>
-    <shortUserString>	#personal_missions_2_details:pm2_6_4_13_short	</shortUserString>
-    <description>	#personal_missions_2_details:quest_standart_descr	</description>
+    <userString>	#personal_missions_details:pm2_6_4_13	</userString>
+    <shortUserString>	#personal_missions_details:pm2_6_4_13_short	</shortUserString>
+    <description>	#personal_missions_details:quest/advice/standard	</description>
     <advice></advice>
   </pm2_6_4_13>
   <pm2_6_4_14>
@@ -4630,9 +4630,9 @@
     <minLevel>	7	</minLevel>
     <maxLevel>	10	</maxLevel>
     <requiredUnlocks>	315 330 345 360	</requiredUnlocks>
-    <userString>	#personal_missions_2_details:pm2_6_4_14	</userString>
-    <shortUserString>	#personal_missions_2_details:pm2_6_4_14_short	</shortUserString>
-    <description>	#personal_missions_2_details:quest_standart_descr	</description>
+    <userString>	#personal_missions_details:pm2_6_4_14	</userString>
+    <shortUserString>	#personal_missions_details:pm2_6_4_14_short	</shortUserString>
+    <description>	#personal_missions_details:quest/advice/standard	</description>
     <advice></advice>
   </pm2_6_4_14>
   <pm2_6_4_15>
@@ -4642,9 +4642,9 @@
     <maxLevel>	10	</maxLevel>
     <requiredUnlocks>	406 407 408 409 410 411 412 413 414 415 416 417 418 419	</requiredUnlocks>
     <rewardByDemand>	1	</rewardByDemand>
-    <userString>	#personal_missions_2_details:pm2_6_4_15	</userString>
-    <shortUserString>	#personal_missions_2_details:pm2_6_4_15_short	</shortUserString>
-    <description>	#personal_missions_2_details:quest_standart_descr_SPG	</description>
+    <userString>	#personal_missions_details:pm2_6_4_15	</userString>
+    <shortUserString>	#personal_missions_details:pm2_6_4_15_short	</shortUserString>
+    <description>	#personal_missions_details:quest/advice/standardSPGLimiter	</description>
     <advice></advice>
   </pm2_6_4_15>
   <pm2_7_1_1>
@@ -4653,9 +4653,9 @@
     <minLevel>	8	</minLevel>
     <maxLevel>	10	</maxLevel>
     <requiredUnlocks>	375 390 405 420	</requiredUnlocks>
-    <userString>	#personal_missions_2_details:pm2_7_1_1	</userString>
-    <shortUserString>	#personal_missions_2_details:pm2_7_1_1_short	</shortUserString>
-    <description>	#personal_missions_2_details:quest_sum_with_limit_descr_SPG	</description>
+    <userString>	#personal_missions_details:pm2_7_1_1	</userString>
+    <shortUserString>	#personal_missions_details:pm2_7_1_1_short	</shortUserString>
+    <description>	#personal_missions_details:quest/advice/sumLimiters	</description>
     <advice></advice>
   </pm2_7_1_1>
   <pm2_7_1_2>
@@ -4664,9 +4664,9 @@
     <minLevel>	8	</minLevel>
     <maxLevel>	10	</maxLevel>
     <requiredUnlocks>	375 390 405 420	</requiredUnlocks>
-    <userString>	#personal_missions_2_details:pm2_7_1_2	</userString>
-    <shortUserString>	#personal_missions_2_details:pm2_7_1_2_short	</shortUserString>
-    <description>	#personal_missions_2_details:quest_every_descr	</description>
+    <userString>	#personal_missions_details:pm2_7_1_2	</userString>
+    <shortUserString>	#personal_missions_details:pm2_7_1_2_short	</shortUserString>
+    <description>	#personal_missions_details:quest/advice/every	</description>
     <advice></advice>
   </pm2_7_1_2>
   <pm2_7_1_3>
@@ -4675,9 +4675,9 @@
     <minLevel>	8	</minLevel>
     <maxLevel>	10	</maxLevel>
     <requiredUnlocks>	375 390 405 420	</requiredUnlocks>
-    <userString>	#personal_missions_2_details:pm2_7_1_3	</userString>
-    <shortUserString>	#personal_missions_2_details:pm2_7_1_3_short	</shortUserString>
-    <description>	#personal_missions_2_details:quest_sum_descr	</description>
+    <userString>	#personal_missions_details:pm2_7_1_3	</userString>
+    <shortUserString>	#personal_missions_details:pm2_7_1_3_short	</shortUserString>
+    <description>	#personal_missions_details:quest/advice/sum	</description>
     <advice></advice>
   </pm2_7_1_3>
   <pm2_7_1_4>
@@ -4686,9 +4686,9 @@
     <minLevel>	8	</minLevel>
     <maxLevel>	10	</maxLevel>
     <requiredUnlocks>	375 390 405 420	</requiredUnlocks>
-    <userString>	#personal_missions_2_details:pm2_7_1_4	</userString>
-    <shortUserString>	#personal_missions_2_details:pm2_7_1_4_short	</shortUserString>
-    <description>	#personal_missions_2_details:quest_sum_with_limit_descr	</description>
+    <userString>	#personal_missions_details:pm2_7_1_4	</userString>
+    <shortUserString>	#personal_missions_details:pm2_7_1_4_short	</shortUserString>
+    <description>	#personal_missions_details:quest/advice/sumLimiter	</description>
     <advice></advice>
   </pm2_7_1_4>
   <pm2_7_1_5>
@@ -4697,9 +4697,9 @@
     <minLevel>	8	</minLevel>
     <maxLevel>	10	</maxLevel>
     <requiredUnlocks>	375 390 405 420	</requiredUnlocks>
-    <userString>	#personal_missions_2_details:pm2_7_1_5	</userString>
-    <shortUserString>	#personal_missions_2_details:pm2_7_1_5_short	</shortUserString>
-    <description>	#personal_missions_2_details:quest_every_descr	</description>
+    <userString>	#personal_missions_details:pm2_7_1_5	</userString>
+    <shortUserString>	#personal_missions_details:pm2_7_1_5_short	</shortUserString>
+    <description>	#personal_missions_details:quest/advice/every	</description>
     <advice></advice>
   </pm2_7_1_5>
   <pm2_7_1_6>
@@ -4708,9 +4708,9 @@
     <minLevel>	8	</minLevel>
     <maxLevel>	10	</maxLevel>
     <requiredUnlocks>	375 390 405 420	</requiredUnlocks>
-    <userString>	#personal_missions_2_details:pm2_7_1_6	</userString>
-    <shortUserString>	#personal_missions_2_details:pm2_7_1_6_short	</shortUserString>
-    <description>	#personal_missions_2_details:quest_biathlon_with_limit_extended_descr	</description>
+    <userString>	#personal_missions_details:pm2_7_1_6	</userString>
+    <shortUserString>	#personal_missions_details:pm2_7_1_6_short	</shortUserString>
+    <description>	#personal_missions_details:quest/advice/biathlonAdditionalLimiter	</description>
     <advice></advice>
   </pm2_7_1_6>
   <pm2_7_1_7>
@@ -4719,9 +4719,9 @@
     <minLevel>	8	</minLevel>
     <maxLevel>	10	</maxLevel>
     <requiredUnlocks>	375 390 405 420	</requiredUnlocks>
-    <userString>	#personal_missions_2_details:pm2_7_1_7	</userString>
-    <shortUserString>	#personal_missions_2_details:pm2_7_1_7_short	</shortUserString>
-    <description>	#personal_missions_2_details:quest_every_descr	</description>
+    <userString>	#personal_missions_details:pm2_7_1_7	</userString>
+    <shortUserString>	#personal_missions_details:pm2_7_1_7_short	</shortUserString>
+    <description>	#personal_missions_details:quest/advice/every	</description>
     <advice></advice>
   </pm2_7_1_7>
   <pm2_7_1_8>
@@ -4730,9 +4730,9 @@
     <minLevel>	8	</minLevel>
     <maxLevel>	10	</maxLevel>
     <requiredUnlocks>	375 390 405 420	</requiredUnlocks>
-    <userString>	#personal_missions_2_details:pm2_7_1_8	</userString>
-    <shortUserString>	#personal_missions_2_details:pm2_7_1_8_short	</shortUserString>
-    <description>	#personal_missions_2_details:quest_sum_descr	</description>
+    <userString>	#personal_missions_details:pm2_7_1_8	</userString>
+    <shortUserString>	#personal_missions_details:pm2_7_1_8_short	</shortUserString>
+    <description>	#personal_missions_details:quest/advice/sum	</description>
     <advice></advice>
   </pm2_7_1_8>
   <pm2_7_1_9>
@@ -4741,9 +4741,9 @@
     <minLevel>	8	</minLevel>
     <maxLevel>	10	</maxLevel>
     <requiredUnlocks>	375 390 405 420	</requiredUnlocks>
-    <userString>	#personal_missions_2_details:pm2_7_1_9	</userString>
-    <shortUserString>	#personal_missions_2_details:pm2_7_1_9_short	</shortUserString>
-    <description>	#personal_missions_2_details:quest_every_descr	</description>
+    <userString>	#personal_missions_details:pm2_7_1_9	</userString>
+    <shortUserString>	#personal_missions_details:pm2_7_1_9_short	</shortUserString>
+    <description>	#personal_missions_details:quest/advice/every	</description>
     <advice></advice>
   </pm2_7_1_9>
   <pm2_7_1_10>
@@ -4752,9 +4752,9 @@
     <minLevel>	8	</minLevel>
     <maxLevel>	10	</maxLevel>
     <requiredUnlocks>	375 390 405 420	</requiredUnlocks>
-    <userString>	#personal_missions_2_details:pm2_7_1_10	</userString>
-    <shortUserString>	#personal_missions_2_details:pm2_7_1_10_short	</shortUserString>
-    <description>	#personal_missions_2_details:quest_sum_descr	</description>
+    <userString>	#personal_missions_details:pm2_7_1_10	</userString>
+    <shortUserString>	#personal_missions_details:pm2_7_1_10_short	</shortUserString>
+    <description>	#personal_missions_details:quest/advice/sum	</description>
     <advice></advice>
   </pm2_7_1_10>
   <pm2_7_1_11>
@@ -4763,9 +4763,9 @@
     <minLevel>	8	</minLevel>
     <maxLevel>	10	</maxLevel>
     <requiredUnlocks>	375 390 405 420	</requiredUnlocks>
-    <userString>	#personal_missions_2_details:pm2_7_1_11	</userString>
-    <shortUserString>	#personal_missions_2_details:pm2_7_1_11_short	</shortUserString>
-    <description>	#personal_missions_2_details:quest_sum_descr	</description>
+    <userString>	#personal_missions_details:pm2_7_1_11	</userString>
+    <shortUserString>	#personal_missions_details:pm2_7_1_11_short	</shortUserString>
+    <description>	#personal_missions_details:quest/advice/sum	</description>
     <advice></advice>
   </pm2_7_1_11>
   <pm2_7_1_12>
@@ -4774,9 +4774,9 @@
     <minLevel>	8	</minLevel>
     <maxLevel>	10	</maxLevel>
     <requiredUnlocks>	375 390 405 420	</requiredUnlocks>
-    <userString>	#personal_missions_2_details:pm2_7_1_12	</userString>
-    <shortUserString>	#personal_missions_2_details:pm2_7_1_12_short	</shortUserString>
-    <description>	#personal_missions_2_details:quest_sum_with_limit_descr_SPG	</description>
+    <userString>	#personal_missions_details:pm2_7_1_12	</userString>
+    <shortUserString>	#personal_missions_details:pm2_7_1_12_short	</shortUserString>
+    <description>	#personal_missions_details:quest/advice/sumLimiters	</description>
     <advice></advice>
   </pm2_7_1_12>
   <pm2_7_1_13>
@@ -4785,9 +4785,9 @@
     <minLevel>	8	</minLevel>
     <maxLevel>	10	</maxLevel>
     <requiredUnlocks>	375 390 405 420	</requiredUnlocks>
-    <userString>	#personal_missions_2_details:pm2_7_1_13	</userString>
-    <shortUserString>	#personal_missions_2_details:pm2_7_1_13_short	</shortUserString>
-    <description>	#personal_missions_2_details:quest_sum_descr	</description>
+    <userString>	#personal_missions_details:pm2_7_1_13	</userString>
+    <shortUserString>	#personal_missions_details:pm2_7_1_13_short	</shortUserString>
+    <description>	#personal_missions_details:quest/advice/sum	</description>
     <advice></advice>
   </pm2_7_1_13>
   <pm2_7_1_14>
@@ -4796,9 +4796,9 @@
     <minLevel>	8	</minLevel>
     <maxLevel>	10	</maxLevel>
     <requiredUnlocks>	375 390 405 420	</requiredUnlocks>
-    <userString>	#personal_missions_2_details:pm2_7_1_14	</userString>
-    <shortUserString>	#personal_missions_2_details:pm2_7_1_14_short	</shortUserString>
-    <description>	#personal_missions_2_details:quest_sum_descr	</description>
+    <userString>	#personal_missions_details:pm2_7_1_14	</userString>
+    <shortUserString>	#personal_missions_details:pm2_7_1_14_short	</shortUserString>
+    <description>	#personal_missions_details:quest/advice/sum	</description>
     <advice></advice>
   </pm2_7_1_14>
   <pm2_7_1_15>
@@ -4808,9 +4808,9 @@
     <maxLevel>	10	</maxLevel>
     <requiredUnlocks>	421 422 423 424 425 426 427 428 429 430 431 432 433 434	</requiredUnlocks>
     <rewardByDemand>	1	</rewardByDemand>
-    <userString>	#personal_missions_2_details:pm2_7_1_15	</userString>
-    <shortUserString>	#personal_missions_2_details:pm2_7_1_15_short	</shortUserString>
-    <description>	#personal_missions_2_details:quest_biathlon_descr	</description>
+    <userString>	#personal_missions_details:pm2_7_1_15	</userString>
+    <shortUserString>	#personal_missions_details:pm2_7_1_15_short	</shortUserString>
+    <description>	#personal_missions_details:quest/advice/biathlon	</description>
     <advice></advice>
   </pm2_7_1_15>
   <pm2_7_2_1>
@@ -4819,9 +4819,9 @@
     <minLevel>	8	</minLevel>
     <maxLevel>	10	</maxLevel>
     <requiredUnlocks>	375 390 405 420	</requiredUnlocks>
-    <userString>	#personal_missions_2_details:pm2_7_2_1	</userString>
-    <shortUserString>	#personal_missions_2_details:pm2_7_2_1_short	</shortUserString>
-    <description>	#personal_missions_2_details:quest_every_descr	</description>
+    <userString>	#personal_missions_details:pm2_7_2_1	</userString>
+    <shortUserString>	#personal_missions_details:pm2_7_2_1_short	</shortUserString>
+    <description>	#personal_missions_details:quest/advice/every	</description>
     <advice></advice>
   </pm2_7_2_1>
   <pm2_7_2_2>
@@ -4830,9 +4830,9 @@
     <minLevel>	8	</minLevel>
     <maxLevel>	10	</maxLevel>
     <requiredUnlocks>	375 390 405 420	</requiredUnlocks>
-    <userString>	#personal_missions_2_details:pm2_7_2_2	</userString>
-    <shortUserString>	#personal_missions_2_details:pm2_7_2_2_short	</shortUserString>
-    <description>	#personal_missions_2_details:quest_sum_descr	</description>
+    <userString>	#personal_missions_details:pm2_7_2_2	</userString>
+    <shortUserString>	#personal_missions_details:pm2_7_2_2_short	</shortUserString>
+    <description>	#personal_missions_details:quest/advice/sum	</description>
     <advice></advice>
   </pm2_7_2_2>
   <pm2_7_2_3>
@@ -4841,9 +4841,9 @@
     <minLevel>	8	</minLevel>
     <maxLevel>	10	</maxLevel>
     <requiredUnlocks>	375 390 405 420	</requiredUnlocks>
-    <userString>	#personal_missions_2_details:pm2_7_2_3	</userString>
-    <shortUserString>	#personal_missions_2_details:pm2_7_2_3_short	</shortUserString>
-    <description>	#personal_missions_2_details:quest_biathlon_descr	</description>
+    <userString>	#personal_missions_details:pm2_7_2_3	</userString>
+    <shortUserString>	#personal_missions_details:pm2_7_2_3_short	</shortUserString>
+    <description>	#personal_missions_details:quest/advice/biathlon	</description>
     <advice></advice>
   </pm2_7_2_3>
   <pm2_7_2_4>
@@ -4852,9 +4852,9 @@
     <minLevel>	8	</minLevel>
     <maxLevel>	10	</maxLevel>
     <requiredUnlocks>	375 390 405 420	</requiredUnlocks>
-    <userString>	#personal_missions_2_details:pm2_7_2_4	</userString>
-    <shortUserString>	#personal_missions_2_details:pm2_7_2_4_short	</shortUserString>
-    <description>	#personal_missions_2_details:quest_every_descr_SPG	</description>
+    <userString>	#personal_missions_details:pm2_7_2_4	</userString>
+    <shortUserString>	#personal_missions_details:pm2_7_2_4_short	</shortUserString>
+    <description>	#personal_missions_details:quest/advice/everySPGLimiter	</description>
     <advice></advice>
   </pm2_7_2_4>
   <pm2_7_2_5>
@@ -4863,9 +4863,9 @@
     <minLevel>	8	</minLevel>
     <maxLevel>	10	</maxLevel>
     <requiredUnlocks>	375 390 405 420	</requiredUnlocks>
-    <userString>	#personal_missions_2_details:pm2_7_2_5	</userString>
-    <shortUserString>	#personal_missions_2_details:pm2_7_2_5_short	</shortUserString>
-    <description>	#personal_missions_2_details:quest_sum_with_limit_descr	</description>
+    <userString>	#personal_missions_details:pm2_7_2_5	</userString>
+    <shortUserString>	#personal_missions_details:pm2_7_2_5_short	</shortUserString>
+    <description>	#personal_missions_details:quest/advice/sumLimiter	</description>
     <advice></advice>
   </pm2_7_2_5>
   <pm2_7_2_6>
@@ -4874,9 +4874,9 @@
     <minLevel>	8	</minLevel>
     <maxLevel>	10	</maxLevel>
     <requiredUnlocks>	375 390 405 420	</requiredUnlocks>
-    <userString>	#personal_missions_2_details:pm2_7_2_6	</userString>
-    <shortUserString>	#personal_missions_2_details:pm2_7_2_6_short	</shortUserString>
-    <description>	#personal_missions_2_details:quest_every_descr	</description>
+    <userString>	#personal_missions_details:pm2_7_2_6	</userString>
+    <shortUserString>	#personal_missions_details:pm2_7_2_6_short	</shortUserString>
+    <description>	#personal_missions_details:quest/advice/every	</description>
     <advice></advice>
   </pm2_7_2_6>
   <pm2_7_2_7>
@@ -4885,9 +4885,9 @@
     <minLevel>	8	</minLevel>
     <maxLevel>	10	</maxLevel>
     <requiredUnlocks>	375 390 405 420	</requiredUnlocks>
-    <userString>	#personal_missions_2_details:pm2_7_2_7	</userString>
-    <shortUserString>	#personal_missions_2_details:pm2_7_2_7_short	</shortUserString>
-    <description>	#personal_missions_2_details:quest_biathlon_with_limit_extended_descr	</description>
+    <userString>	#personal_missions_details:pm2_7_2_7	</userString>
+    <shortUserString>	#personal_missions_details:pm2_7_2_7_short	</shortUserString>
+    <description>	#personal_missions_details:quest/advice/biathlonAdditionalLimiter	</description>
     <advice></advice>
   </pm2_7_2_7>
   <pm2_7_2_8>
@@ -4896,9 +4896,9 @@
     <minLevel>	8	</minLevel>
     <maxLevel>	10	</maxLevel>
     <requiredUnlocks>	375 390 405 420	</requiredUnlocks>
-    <userString>	#personal_missions_2_details:pm2_7_2_8	</userString>
-    <shortUserString>	#personal_missions_2_details:pm2_7_2_8_short	</shortUserString>
-    <description>	#personal_missions_2_details:quest_every_descr	</description>
+    <userString>	#personal_missions_details:pm2_7_2_8	</userString>
+    <shortUserString>	#personal_missions_details:pm2_7_2_8_short	</shortUserString>
+    <description>	#personal_missions_details:quest/advice/every	</description>
     <advice></advice>
   </pm2_7_2_8>
   <pm2_7_2_9>
@@ -4907,9 +4907,9 @@
     <minLevel>	8	</minLevel>
     <maxLevel>	10	</maxLevel>
     <requiredUnlocks>	375 390 405 420	</requiredUnlocks>
-    <userString>	#personal_missions_2_details:pm2_7_2_9	</userString>
-    <shortUserString>	#personal_missions_2_details:pm2_7_2_9_short	</shortUserString>
-    <description>	#personal_missions_2_details:quest_sum_descr_SPG	</description>
+    <userString>	#personal_missions_details:pm2_7_2_9	</userString>
+    <shortUserString>	#personal_missions_details:pm2_7_2_9_short	</shortUserString>
+    <description>	#personal_missions_details:quest/advice/sumSPGLimiter	</description>
     <advice></advice>
   </pm2_7_2_9>
   <pm2_7_2_10>
@@ -4918,9 +4918,9 @@
     <minLevel>	8	</minLevel>
     <maxLevel>	10	</maxLevel>
     <requiredUnlocks>	375 390 405 420	</requiredUnlocks>
-    <userString>	#personal_missions_2_details:pm2_7_2_10	</userString>
-    <shortUserString>	#personal_missions_2_details:pm2_7_2_10_short	</shortUserString>
-    <description>	#personal_missions_2_details:quest_sum_descr	</description>
+    <userString>	#personal_missions_details:pm2_7_2_10	</userString>
+    <shortUserString>	#personal_missions_details:pm2_7_2_10_short	</shortUserString>
+    <description>	#personal_missions_details:quest/advice/sum	</description>
     <advice></advice>
   </pm2_7_2_10>
   <pm2_7_2_11>
@@ -4929,9 +4929,9 @@
     <minLevel>	8	</minLevel>
     <maxLevel>	10	</maxLevel>
     <requiredUnlocks>	375 390 405 420	</requiredUnlocks>
-    <userString>	#personal_missions_2_details:pm2_7_2_11	</userString>
-    <shortUserString>	#personal_missions_2_details:pm2_7_2_11_short	</shortUserString>
-    <description>	#personal_missions_2_details:quest_every_descr	</description>
+    <userString>	#personal_missions_details:pm2_7_2_11	</userString>
+    <shortUserString>	#personal_missions_details:pm2_7_2_11_short	</shortUserString>
+    <description>	#personal_missions_details:quest/advice/every	</description>
     <advice></advice>
   </pm2_7_2_11>
   <pm2_7_2_12>
@@ -4940,9 +4940,9 @@
     <minLevel>	8	</minLevel>
     <maxLevel>	10	</maxLevel>
     <requiredUnlocks>	375 390 405 420	</requiredUnlocks>
-    <userString>	#personal_missions_2_details:pm2_7_2_12	</userString>
-    <shortUserString>	#personal_missions_2_details:pm2_7_2_12_short	</shortUserString>
-    <description>	#personal_missions_2_details:quest_biathlon_with_limit_descr	</description>
+    <userString>	#personal_missions_details:pm2_7_2_12	</userString>
+    <shortUserString>	#personal_missions_details:pm2_7_2_12_short	</shortUserString>
+    <description>	#personal_missions_details:quest/advice/biathlonLimiter	</description>
     <advice></advice>
   </pm2_7_2_12>
   <pm2_7_2_13>
@@ -4951,9 +4951,9 @@
     <minLevel>	8	</minLevel>
     <maxLevel>	10	</maxLevel>
     <requiredUnlocks>	375 390 405 420	</requiredUnlocks>
-    <userString>	#personal_missions_2_details:pm2_7_2_13	</userString>
-    <shortUserString>	#personal_missions_2_details:pm2_7_2_13_short	</shortUserString>
-    <description>	#personal_missions_2_details:quest_sum_with_limit_descr	</description>
+    <userString>	#personal_missions_details:pm2_7_2_13	</userString>
+    <shortUserString>	#personal_missions_details:pm2_7_2_13_short	</shortUserString>
+    <description>	#personal_missions_details:quest/advice/sumLimiter	</description>
     <advice></advice>
   </pm2_7_2_13>
   <pm2_7_2_14>
@@ -4962,9 +4962,9 @@
     <minLevel>	8	</minLevel>
     <maxLevel>	10	</maxLevel>
     <requiredUnlocks>	375 390 405 420	</requiredUnlocks>
-    <userString>	#personal_missions_2_details:pm2_7_2_14	</userString>
-    <shortUserString>	#personal_missions_2_details:pm2_7_2_14_short	</shortUserString>
-    <description>	#personal_missions_2_details:quest_biathlon_descr	</description>
+    <userString>	#personal_missions_details:pm2_7_2_14	</userString>
+    <shortUserString>	#personal_missions_details:pm2_7_2_14_short	</shortUserString>
+    <description>	#personal_missions_details:quest/advice/biathlon	</description>
     <advice></advice>
   </pm2_7_2_14>
   <pm2_7_2_15>
@@ -4974,9 +4974,9 @@
     <maxLevel>	10	</maxLevel>
     <requiredUnlocks>	436 437 438 439 440 441 442 443 444 445 446 447 448 449	</requiredUnlocks>
     <rewardByDemand>	1	</rewardByDemand>
-    <userString>	#personal_missions_2_details:pm2_7_2_15	</userString>
-    <shortUserString>	#personal_missions_2_details:pm2_7_2_15_short	</shortUserString>
-    <description>	#personal_missions_2_details:quest_biathlon_descr	</description>
+    <userString>	#personal_missions_details:pm2_7_2_15	</userString>
+    <shortUserString>	#personal_missions_details:pm2_7_2_15_short	</shortUserString>
+    <description>	#personal_missions_details:quest/advice/biathlon	</description>
     <advice></advice>
   </pm2_7_2_15>
   <pm2_7_3_1>
@@ -4985,9 +4985,9 @@
     <minLevel>	8	</minLevel>
     <maxLevel>	10	</maxLevel>
     <requiredUnlocks>	375 390 405 420	</requiredUnlocks>
-    <userString>	#personal_missions_2_details:pm2_7_3_1	</userString>
-    <shortUserString>	#personal_missions_2_details:pm2_7_3_1_short	</shortUserString>
-    <description>	#personal_missions_2_details:quest_biathlon_descr	</description>
+    <userString>	#personal_missions_details:pm2_7_3_1	</userString>
+    <shortUserString>	#personal_missions_details:pm2_7_3_1_short	</shortUserString>
+    <description>	#personal_missions_details:quest/advice/biathlon	</description>
     <advice></advice>
   </pm2_7_3_1>
   <pm2_7_3_2>
@@ -4996,9 +4996,9 @@
     <minLevel>	8	</minLevel>
     <maxLevel>	10	</maxLevel>
     <requiredUnlocks>	375 390 405 420	</requiredUnlocks>
-    <userString>	#personal_missions_2_details:pm2_7_3_2	</userString>
-    <shortUserString>	#personal_missions_2_details:pm2_7_3_2_short	</shortUserString>
-    <description>	#personal_missions_2_details:quest_every_descr	</description>
+    <userString>	#personal_missions_details:pm2_7_3_2	</userString>
+    <shortUserString>	#personal_missions_details:pm2_7_3_2_short	</shortUserString>
+    <description>	#personal_missions_details:quest/advice/every	</description>
     <advice></advice>
   </pm2_7_3_2>
   <pm2_7_3_3>
@@ -5007,9 +5007,9 @@
     <minLevel>	8	</minLevel>
     <maxLevel>	10	</maxLevel>
     <requiredUnlocks>	375 390 405 420	</requiredUnlocks>
-    <userString>	#personal_missions_2_details:pm2_7_3_3	</userString>
-    <shortUserString>	#personal_missions_2_details:pm2_7_3_3_short	</shortUserString>
-    <description>	#personal_missions_2_details:quest_sum_with_limit_descr_SPG	</description>
+    <userString>	#personal_missions_details:pm2_7_3_3	</userString>
+    <shortUserString>	#personal_missions_details:pm2_7_3_3_short	</shortUserString>
+    <description>	#personal_missions_details:quest/advice/sumLimiters	</description>
     <advice></advice>
   </pm2_7_3_3>
   <pm2_7_3_4>
@@ -5018,9 +5018,9 @@
     <minLevel>	8	</minLevel>
     <maxLevel>	10	</maxLevel>
     <requiredUnlocks>	375 390 405 420	</requiredUnlocks>
-    <userString>	#personal_missions_2_details:pm2_7_3_4	</userString>
-    <shortUserString>	#personal_missions_2_details:pm2_7_3_4_short	</shortUserString>
-    <description>	#personal_missions_2_details:quest_sum_descr	</description>
+    <userString>	#personal_missions_details:pm2_7_3_4	</userString>
+    <shortUserString>	#personal_missions_details:pm2_7_3_4_short	</shortUserString>
+    <description>	#personal_missions_details:quest/advice/sum	</description>
     <advice></advice>
   </pm2_7_3_4>
   <pm2_7_3_5>
@@ -5029,9 +5029,9 @@
     <minLevel>	8	</minLevel>
     <maxLevel>	10	</maxLevel>
     <requiredUnlocks>	375 390 405 420	</requiredUnlocks>
-    <userString>	#personal_missions_2_details:pm2_7_3_5	</userString>
-    <shortUserString>	#personal_missions_2_details:pm2_7_3_5_short	</shortUserString>
-    <description>	#personal_missions_2_details:quest_sum_descr	</description>
+    <userString>	#personal_missions_details:pm2_7_3_5	</userString>
+    <shortUserString>	#personal_missions_details:pm2_7_3_5_short	</shortUserString>
+    <description>	#personal_missions_details:quest/advice/sum	</description>
     <advice></advice>
   </pm2_7_3_5>
   <pm2_7_3_6>
@@ -5040,9 +5040,9 @@
     <minLevel>	8	</minLevel>
     <maxLevel>	10	</maxLevel>
     <requiredUnlocks>	375 390 405 420	</requiredUnlocks>
-    <userString>	#personal_missions_2_details:pm2_7_3_6	</userString>
-    <shortUserString>	#personal_missions_2_details:pm2_7_3_6_short	</shortUserString>
-    <description>	#personal_missions_2_details:quest_biathlon_descr	</description>
+    <userString>	#personal_missions_details:pm2_7_3_6	</userString>
+    <shortUserString>	#personal_missions_details:pm2_7_3_6_short	</shortUserString>
+    <description>	#personal_missions_details:quest/advice/biathlon	</description>
     <advice></advice>
   </pm2_7_3_6>
   <pm2_7_3_7>
@@ -5051,9 +5051,9 @@
     <minLevel>	8	</minLevel>
     <maxLevel>	10	</maxLevel>
     <requiredUnlocks>	375 390 405 420	</requiredUnlocks>
-    <userString>	#personal_missions_2_details:pm2_7_3_7	</userString>
-    <shortUserString>	#personal_missions_2_details:pm2_7_3_7_short	</shortUserString>
-    <description>	#personal_missions_2_details:quest_sum_with_limit_descr	</description>
+    <userString>	#personal_missions_details:pm2_7_3_7	</userString>
+    <shortUserString>	#personal_missions_details:pm2_7_3_7_short	</shortUserString>
+    <description>	#personal_missions_details:quest/advice/sumLimiter	</description>
     <advice></advice>
   </pm2_7_3_7>
   <pm2_7_3_8>
@@ -5062,9 +5062,9 @@
     <minLevel>	8	</minLevel>
     <maxLevel>	10	</maxLevel>
     <requiredUnlocks>	375 390 405 420	</requiredUnlocks>
-    <userString>	#personal_missions_2_details:pm2_7_3_8	</userString>
-    <shortUserString>	#personal_missions_2_details:pm2_7_3_8_short	</shortUserString>
-    <description>	#personal_missions_2_details:quest_sum_descr	</description>
+    <userString>	#personal_missions_details:pm2_7_3_8	</userString>
+    <shortUserString>	#personal_missions_details:pm2_7_3_8_short	</shortUserString>
+    <description>	#personal_missions_details:quest/advice/sum	</description>
     <advice></advice>
   </pm2_7_3_8>
   <pm2_7_3_9>
@@ -5073,9 +5073,9 @@
     <minLevel>	8	</minLevel>
     <maxLevel>	10	</maxLevel>
     <requiredUnlocks>	375 390 405 420	</requiredUnlocks>
-    <userString>	#personal_missions_2_details:pm2_7_3_9	</userString>
-    <shortUserString>	#personal_missions_2_details:pm2_7_3_9_short	</shortUserString>
-    <description>	#personal_missions_2_details:quest_sum_descr	</description>
+    <userString>	#personal_missions_details:pm2_7_3_9	</userString>
+    <shortUserString>	#personal_missions_details:pm2_7_3_9_short	</shortUserString>
+    <description>	#personal_missions_details:quest/advice/sum	</description>
     <advice></advice>
   </pm2_7_3_9>
   <pm2_7_3_10>
@@ -5084,9 +5084,9 @@
     <minLevel>	8	</minLevel>
     <maxLevel>	10	</maxLevel>
     <requiredUnlocks>	375 390 405 420	</requiredUnlocks>
-    <userString>	#personal_missions_2_details:pm2_7_3_10	</userString>
-    <shortUserString>	#personal_missions_2_details:pm2_7_3_10_short	</shortUserString>
-    <description>	#personal_missions_2_details:quest_biathlon_descr	</description>
+    <userString>	#personal_missions_details:pm2_7_3_10	</userString>
+    <shortUserString>	#personal_missions_details:pm2_7_3_10_short	</shortUserString>
+    <description>	#personal_missions_details:quest/advice/biathlon	</description>
     <advice></advice>
   </pm2_7_3_10>
   <pm2_7_3_11>
@@ -5095,9 +5095,9 @@
     <minLevel>	8	</minLevel>
     <maxLevel>	10	</maxLevel>
     <requiredUnlocks>	375 390 405 420	</requiredUnlocks>
-    <userString>	#personal_missions_2_details:pm2_7_3_11	</userString>
-    <shortUserString>	#personal_missions_2_details:pm2_7_3_11_short	</shortUserString>
-    <description>	#personal_missions_2_details:quest_biathlon_descr	</description>
+    <userString>	#personal_missions_details:pm2_7_3_11	</userString>
+    <shortUserString>	#personal_missions_details:pm2_7_3_11_short	</shortUserString>
+    <description>	#personal_missions_details:quest/advice/biathlon	</description>
     <advice></advice>
   </pm2_7_3_11>
   <pm2_7_3_12>
@@ -5106,9 +5106,9 @@
     <minLevel>	8	</minLevel>
     <maxLevel>	10	</maxLevel>
     <requiredUnlocks>	375 390 405 420	</requiredUnlocks>
-    <userString>	#personal_missions_2_details:pm2_7_3_12	</userString>
-    <shortUserString>	#personal_missions_2_details:pm2_7_3_12_short	</shortUserString>
-    <description>	#personal_missions_2_details:quest_biathlon_with_limit_descr	</description>
+    <userString>	#personal_missions_details:pm2_7_3_12	</userString>
+    <shortUserString>	#personal_missions_details:pm2_7_3_12_short	</shortUserString>
+    <description>	#personal_missions_details:quest/advice/biathlonLimiter	</description>
     <advice></advice>
   </pm2_7_3_12>
   <pm2_7_3_13>
@@ -5117,9 +5117,9 @@
     <minLevel>	8	</minLevel>
     <maxLevel>	10	</maxLevel>
     <requiredUnlocks>	375 390 405 420	</requiredUnlocks>
-    <userString>	#personal_missions_2_details:pm2_7_3_13	</userString>
-    <shortUserString>	#personal_missions_2_details:pm2_7_3_13_short	</shortUserString>
-    <description>	#personal_missions_2_details:quest_every_descr	</description>
+    <userString>	#personal_missions_details:pm2_7_3_13	</userString>
+    <shortUserString>	#personal_missions_details:pm2_7_3_13_short	</shortUserString>
+    <description>	#personal_missions_details:quest/advice/every	</description>
     <advice></advice>
   </pm2_7_3_13>
   <pm2_7_3_14>
@@ -5128,9 +5128,9 @@
     <minLevel>	8	</minLevel>
     <maxLevel>	10	</maxLevel>
     <requiredUnlocks>	375 390 405 420	</requiredUnlocks>
-    <userString>	#personal_missions_2_details:pm2_7_3_14	</userString>
-    <shortUserString>	#personal_missions_2_details:pm2_7_3_14_short	</shortUserString>
-    <description>	#personal_missions_2_details:quest_sum_descr	</description>
+    <userString>	#personal_missions_details:pm2_7_3_14	</userString>
+    <shortUserString>	#personal_missions_details:pm2_7_3_14_short	</shortUserString>
+    <description>	#personal_missions_details:quest/advice/sum	</description>
     <advice></advice>
   </pm2_7_3_14>
   <pm2_7_3_15>
@@ -5140,9 +5140,9 @@
     <maxLevel>	10	</maxLevel>
     <requiredUnlocks>	451 452 453 454 455 456 457 458 459 460 461 462 463 464	</requiredUnlocks>
     <rewardByDemand>	1	</rewardByDemand>
-    <userString>	#personal_missions_2_details:pm2_7_3_15	</userString>
-    <shortUserString>	#personal_missions_2_details:pm2_7_3_15_short	</shortUserString>
-    <description>	#personal_missions_2_details:quest_biathlon_descr	</description>
+    <userString>	#personal_missions_details:pm2_7_3_15	</userString>
+    <shortUserString>	#personal_missions_details:pm2_7_3_15_short	</shortUserString>
+    <description>	#personal_missions_details:quest/advice/biathlon	</description>
     <advice></advice>
   </pm2_7_3_15>
   <pm2_7_4_1>
@@ -5151,9 +5151,9 @@
     <minLevel>	8	</minLevel>
     <maxLevel>	10	</maxLevel>
     <requiredUnlocks>	375 390 405 420	</requiredUnlocks>
-    <userString>	#personal_missions_2_details:pm2_7_4_1	</userString>
-    <shortUserString>	#personal_missions_2_details:pm2_7_4_1_short	</shortUserString>
-    <description>	#personal_missions_2_details:quest_biathlon_descr	</description>
+    <userString>	#personal_missions_details:pm2_7_4_1	</userString>
+    <shortUserString>	#personal_missions_details:pm2_7_4_1_short	</shortUserString>
+    <description>	#personal_missions_details:quest/advice/biathlon	</description>
     <advice></advice>
   </pm2_7_4_1>
   <pm2_7_4_2>
@@ -5162,9 +5162,9 @@
     <minLevel>	8	</minLevel>
     <maxLevel>	10	</maxLevel>
     <requiredUnlocks>	375 390 405 420	</requiredUnlocks>
-    <userString>	#personal_missions_2_details:pm2_7_4_2	</userString>
-    <shortUserString>	#personal_missions_2_details:pm2_7_4_2_short	</shortUserString>
-    <description>	#personal_missions_2_details:quest_every_descr	</description>
+    <userString>	#personal_missions_details:pm2_7_4_2	</userString>
+    <shortUserString>	#personal_missions_details:pm2_7_4_2_short	</shortUserString>
+    <description>	#personal_missions_details:quest/advice/every	</description>
     <advice></advice>
   </pm2_7_4_2>
   <pm2_7_4_3>
@@ -5173,9 +5173,9 @@
     <minLevel>	8	</minLevel>
     <maxLevel>	10	</maxLevel>
     <requiredUnlocks>	375 390 405 420	</requiredUnlocks>
-    <userString>	#personal_missions_2_details:pm2_7_4_3	</userString>
-    <shortUserString>	#personal_missions_2_details:pm2_7_4_3_short	</shortUserString>
-    <description>	#personal_missions_2_details:quest_sum_descr	</description>
+    <userString>	#personal_missions_details:pm2_7_4_3	</userString>
+    <shortUserString>	#personal_missions_details:pm2_7_4_3_short	</shortUserString>
+    <description>	#personal_missions_details:quest/advice/sum	</description>
     <advice></advice>
   </pm2_7_4_3>
   <pm2_7_4_4>
@@ -5184,9 +5184,9 @@
     <minLevel>	8	</minLevel>
     <maxLevel>	10	</maxLevel>
     <requiredUnlocks>	375 390 405 420	</requiredUnlocks>
-    <userString>	#personal_missions_2_details:pm2_7_4_4	</userString>
-    <shortUserString>	#personal_missions_2_details:pm2_7_4_4_short	</shortUserString>
-    <description>	#personal_missions_2_details:quest_sum_descr	</description>
+    <userString>	#personal_missions_details:pm2_7_4_4	</userString>
+    <shortUserString>	#personal_missions_details:pm2_7_4_4_short	</shortUserString>
+    <description>	#personal_missions_details:quest/advice/sum	</description>
     <advice></advice>
   </pm2_7_4_4>
   <pm2_7_4_5>
@@ -5195,9 +5195,9 @@
     <minLevel>	8	</minLevel>
     <maxLevel>	10	</maxLevel>
     <requiredUnlocks>	375 390 405 420	</requiredUnlocks>
-    <userString>	#personal_missions_2_details:pm2_7_4_5	</userString>
-    <shortUserString>	#personal_missions_2_details:pm2_7_4_5_short	</shortUserString>
-    <description>	#personal_missions_2_details:quest_sum_descr	</description>
+    <userString>	#personal_missions_details:pm2_7_4_5	</userString>
+    <shortUserString>	#personal_missions_details:pm2_7_4_5_short	</shortUserString>
+    <description>	#personal_missions_details:quest/advice/sum	</description>
     <advice></advice>
   </pm2_7_4_5>
   <pm2_7_4_6>
@@ -5206,9 +5206,9 @@
     <minLevel>	8	</minLevel>
     <maxLevel>	10	</maxLevel>
     <requiredUnlocks>	375 390 405 420	</requiredUnlocks>
-    <userString>	#personal_missions_2_details:pm2_7_4_6	</userString>
-    <shortUserString>	#personal_missions_2_details:pm2_7_4_6_short	</shortUserString>
-    <description>	#personal_missions_2_details:quest_sum_descr	</description>
+    <userString>	#personal_missions_details:pm2_7_4_6	</userString>
+    <shortUserString>	#personal_missions_details:pm2_7_4_6_short	</shortUserString>
+    <description>	#personal_missions_details:quest/advice/sum	</description>
     <advice></advice>
   </pm2_7_4_6>
   <pm2_7_4_7>
@@ -5217,9 +5217,9 @@
     <minLevel>	8	</minLevel>
     <maxLevel>	10	</maxLevel>
     <requiredUnlocks>	375 390 405 420	</requiredUnlocks>
-    <userString>	#personal_missions_2_details:pm2_7_4_7	</userString>
-    <shortUserString>	#personal_missions_2_details:pm2_7_4_7_short	</shortUserString>
-    <description>	#personal_missions_2_details:quest_every_descr	</description>
+    <userString>	#personal_missions_details:pm2_7_4_7	</userString>
+    <shortUserString>	#personal_missions_details:pm2_7_4_7_short	</shortUserString>
+    <description>	#personal_missions_details:quest/advice/every	</description>
     <advice></advice>
   </pm2_7_4_7>
   <pm2_7_4_8>
@@ -5228,9 +5228,9 @@
     <minLevel>	8	</minLevel>
     <maxLevel>	10	</maxLevel>
     <requiredUnlocks>	375 390 405 420	</requiredUnlocks>
-    <userString>	#personal_missions_2_details:pm2_7_4_8	</userString>
-    <shortUserString>	#personal_missions_2_details:pm2_7_4_8_short	</shortUserString>
-    <description>	#personal_missions_2_details:quest_biathlon_descr	</description>
+    <userString>	#personal_missions_details:pm2_7_4_8	</userString>
+    <shortUserString>	#personal_missions_details:pm2_7_4_8_short	</shortUserString>
+    <description>	#personal_missions_details:quest/advice/biathlon	</description>
     <advice></advice>
   </pm2_7_4_8>
   <pm2_7_4_9>
@@ -5239,9 +5239,9 @@
     <minLevel>	8	</minLevel>
     <maxLevel>	10	</maxLevel>
     <requiredUnlocks>	375 390 405 420	</requiredUnlocks>
-    <userString>	#personal_missions_2_details:pm2_7_4_9	</userString>
-    <shortUserString>	#personal_missions_2_details:pm2_7_4_9_short	</shortUserString>
-    <description>	#personal_missions_2_details:quest_sum_with_limit_descr	</description>
+    <userString>	#personal_missions_details:pm2_7_4_9	</userString>
+    <shortUserString>	#personal_missions_details:pm2_7_4_9_short	</shortUserString>
+    <description>	#personal_missions_details:quest/advice/sumLimiter	</description>
     <advice></advice>
   </pm2_7_4_9>
   <pm2_7_4_10>
@@ -5250,9 +5250,9 @@
     <minLevel>	8	</minLevel>
     <maxLevel>	10	</maxLevel>
     <requiredUnlocks>	375 390 405 420	</requiredUnlocks>
-    <userString>	#personal_missions_2_details:pm2_7_4_10	</userString>
-    <shortUserString>	#personal_missions_2_details:pm2_7_4_10_short	</shortUserString>
-    <description>	#personal_missions_2_details:quest_every_descr_SPG	</description>
+    <userString>	#personal_missions_details:pm2_7_4_10	</userString>
+    <shortUserString>	#personal_missions_details:pm2_7_4_10_short	</shortUserString>
+    <description>	#personal_missions_details:quest/advice/everySPGLimiter	</description>
     <advice></advice>
   </pm2_7_4_10>
   <pm2_7_4_11>
@@ -5261,9 +5261,9 @@
     <minLevel>	8	</minLevel>
     <maxLevel>	10	</maxLevel>
     <requiredUnlocks>	375 390 405 420	</requiredUnlocks>
-    <userString>	#personal_missions_2_details:pm2_7_4_11	</userString>
-    <shortUserString>	#personal_missions_2_details:pm2_7_4_11_short	</shortUserString>
-    <description>	#personal_missions_2_details:quest_biathlon_with_limit_extended_descr	</description>
+    <userString>	#personal_missions_details:pm2_7_4_11	</userString>
+    <shortUserString>	#personal_missions_details:pm2_7_4_11_short	</shortUserString>
+    <description>	#personal_missions_details:quest/advice/biathlonAdditionalLimiter	</description>
     <advice></advice>
   </pm2_7_4_11>
   <pm2_7_4_12>
@@ -5272,9 +5272,9 @@
     <minLevel>	8	</minLevel>
     <maxLevel>	10	</maxLevel>
     <requiredUnlocks>	375 390 405 420	</requiredUnlocks>
-    <userString>	#personal_missions_2_details:pm2_7_4_12	</userString>
-    <shortUserString>	#personal_missions_2_details:pm2_7_4_12_short	</shortUserString>
-    <description>	#personal_missions_2_details:quest_sum_descr	</description>
+    <userString>	#personal_missions_details:pm2_7_4_12	</userString>
+    <shortUserString>	#personal_missions_details:pm2_7_4_12_short	</shortUserString>
+    <description>	#personal_missions_details:quest/advice/sum	</description>
     <advice></advice>
   </pm2_7_4_12>
   <pm2_7_4_13>
@@ -5283,9 +5283,9 @@
     <minLevel>	8	</minLevel>
     <maxLevel>	10	</maxLevel>
     <requiredUnlocks>	375 390 405 420	</requiredUnlocks>
-    <userString>	#personal_missions_2_details:pm2_7_4_13	</userString>
-    <shortUserString>	#personal_missions_2_details:pm2_7_4_13_short	</shortUserString>
-    <description>	#personal_missions_2_details:quest_biathlon_descr	</description>
+    <userString>	#personal_missions_details:pm2_7_4_13	</userString>
+    <shortUserString>	#personal_missions_details:pm2_7_4_13_short	</shortUserString>
+    <description>	#personal_missions_details:quest/advice/biathlon	</description>
     <advice></advice>
   </pm2_7_4_13>
   <pm2_7_4_14>
@@ -5294,9 +5294,9 @@
     <minLevel>	8	</minLevel>
     <maxLevel>	10	</maxLevel>
     <requiredUnlocks>	375 390 405 420	</requiredUnlocks>
-    <userString>	#personal_missions_2_details:pm2_7_4_14	</userString>
-    <shortUserString>	#personal_missions_2_details:pm2_7_4_14_short	</shortUserString>
-    <description>	#personal_missions_2_details:quest_biathlon_descr	</description>
+    <userString>	#personal_missions_details:pm2_7_4_14	</userString>
+    <shortUserString>	#personal_missions_details:pm2_7_4_14_short	</shortUserString>
+    <description>	#personal_missions_details:quest/advice/biathlon	</description>
     <advice></advice>
   </pm2_7_4_14>
   <pm2_7_4_15>
@@ -5306,9 +5306,9 @@
     <maxLevel>	10	</maxLevel>
     <requiredUnlocks>	466 467 468 469 470 471 472 473 474 475 476 477 478 479	</requiredUnlocks>
     <rewardByDemand>	1	</rewardByDemand>
-    <userString>	#personal_missions_2_details:pm2_7_4_15	</userString>
-    <shortUserString>	#personal_missions_2_details:pm2_7_4_15_short	</shortUserString>
-    <description>	#personal_missions_2_details:quest_biathlon_descr	</description>
+    <userString>	#personal_missions_details:pm2_7_4_15	</userString>
+    <shortUserString>	#personal_missions_details:pm2_7_4_15_short	</shortUserString>
+    <description>	#personal_missions_details:quest/advice/biathlon	</description>
     <advice></advice>
   </pm2_7_4_15>
 </list.xml>

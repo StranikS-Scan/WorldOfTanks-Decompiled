@@ -45,12 +45,7 @@ __all__ = ('standard',
  'heroTitle',
  'heroTitleYellow',
  'grandTitle',
- 'grandTitleYellow',
- 'successSimple',
- 'failedSimple',
- 'eventLevelBannerTitle',
- 'eventLevelBannerText',
- 'eventObjectiveStatus')
+ 'grandTitleYellow')
 
 def _getStyle(style, ctx=None):
     if ctx is None:
@@ -182,14 +177,6 @@ def alert(text):
 
 def success(text):
     return _formatText('successText', text)
-
-
-def successSimple(text):
-    return _formatText('successSimpleText', text)
-
-
-def failedSimple(text):
-    return _formatText('failedSimpleText', text)
 
 
 def error(text):
@@ -334,16 +321,8 @@ def grandTitleYellow(text):
     return _formatText('grandTitleYellow', text)
 
 
-def eventLevelBannerText(text):
-    return _formatText('eventLevelBannerText', text)
-
-
-def eventLevelBannerTitle(text):
-    return _formatText('eventLevelBannerTitle', text)
-
-
-def eventObjectiveStatus(text):
-    return _formatText('eventObjectiveStatusText', text)
+def failedStatusText(text):
+    return _formatText('failedStatusText', text)
 
 
 def getRawStyles(names):
@@ -373,10 +352,6 @@ def concatStylesToMultiLine(*styles):
 
 def concatStylesWithSpace(*styles):
     return ' '.join(map(_processStyle, styles))
-
-
-def concatStylesWithDelimiter(delimiter, *styles):
-    return delimiter.join(map(_processStyle, styles))
 
 
 class _StylesBuilder(object):

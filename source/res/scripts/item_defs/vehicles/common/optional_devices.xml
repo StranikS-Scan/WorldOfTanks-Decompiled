@@ -1604,4 +1604,32 @@
       </mul>
     </kpi>
   </deluxEnhancedAimDrives>
+  <enhancedSuspension_wheeled>
+    <id>	49	</id>
+    <userString>	#artefacts:enhancedSuspension_wheeled/name	</userString>
+    <description>	#artefacts:enhancedSuspension_wheeled/descr	</description>
+    <shortDescriptionSpecial>	#artefacts:enhancedSuspension_wheeled/short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#artefacts:enhancedSuspension_wheeled/long_special	</longDescriptionSpecial>
+    <icon>	../maps/icons/artefact/steelRollers.png 0 0	</icon>
+    <price>	300000	</price>
+    <removable>	false	</removable>
+    <tags>	enhancedSuspension armor	</tags>
+    <vehicleFilter>
+      <include>
+        <vehicle>
+          <tags>	enhancedSuspension_wheeled_user	</tags>
+        </vehicle>
+      </include>
+    </vehicleFilter>
+    <script>	EnhancedSuspension	  <chassisMaxLoadFactor>	1.0	</chassisMaxLoadFactor>
+      <chassisHealthFactor>	1.5	</chassisHealthFactor>
+      <vehicleByChassisDamageFactor>	1.0	</vehicleByChassisDamageFactor>
+    </script>
+    <kpi>
+      <mul>
+        <name>	vehicleChassisStrength	</name>
+        <value>	1.5	</value>
+      </mul>
+    </kpi>
+  </enhancedSuspension_wheeled>
 </optional_devices.xml>

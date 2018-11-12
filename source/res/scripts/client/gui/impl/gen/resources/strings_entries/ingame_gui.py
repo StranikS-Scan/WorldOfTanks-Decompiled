@@ -11,9 +11,9 @@ class IngameGui(DynAccessor):
 
     class attackReason(DynAccessor):
         __slots__ = ()
-        artilleryProtection = 1630
-        artillery_sector = 1631
-        bombers = 1632
+        artilleryProtection = 1631
+        artillery_sector = 1632
+        bombers = 1633
 
     class battleEndWarning(DynAccessor):
         __slots__ = ()
@@ -48,106 +48,113 @@ class IngameGui(DynAccessor):
 
         class hint(DynAccessor):
             __slots__ = ()
-            description = 1639
-            noBindingKey = 1658
-            press = 1638
+            description = 1640
+            noBindingKey = 1659
+            press = 1639
+
+    class burnout(DynAccessor):
+        __slots__ = ()
+
+        class hint(DynAccessor):
+            __slots__ = ()
+            engineDamageWarning = 1662
 
     class chat_example(DynAccessor):
         __slots__ = ()
-        attack = 1166
-        attack_enemy = 1171
-        attention_to_cell = 1170
-        back_to_base = 1167
-        follow_me = 1165
+        attack = 1163
+        attack_enemy = 1168
+        attention_to_cell = 1167
+        back_to_base = 1164
+        follow_me = 1162
 
         class global_msg(DynAccessor):
             __slots__ = ()
 
             class atk(DynAccessor):
                 __slots__ = ()
-                focus_hq = 1153
-                save_tanks = 1147
-                time = 1148
+                focus_hq = 1150
+                save_tanks = 1144
+                time = 1145
 
             class c_def(DynAccessor):
                 __slots__ = ()
-                focus_hq = 1154
-                save_tanks = 1145
-                time = 1149
+                focus_hq = 1151
+                save_tanks = 1142
+                time = 1146
 
             class lane(DynAccessor):
                 __slots__ = ()
-                center = 1151
-                east = 1152
-                west = 1150
+                center = 1148
+                east = 1149
+                west = 1147
 
-        help_me = 1163
-        help_me_ex = 1164
-        negative = 1169
-        positive = 1168
-        reloading_cassette = 1157
-        reloading_gun = 1156
-        reloading_ready = 1158
-        reloading_ready_cassette = 1160
-        reloading_unavailable = 1161
-        spg_aim_area = 1172
-        stop = 1162
-        support_me_with_fire = 1155
-        turn_back = 1159
+        help_me = 1160
+        help_me_ex = 1161
+        negative = 1166
+        positive = 1165
+        reloading_cassette = 1154
+        reloading_gun = 1153
+        reloading_ready = 1155
+        reloading_ready_cassette = 1157
+        reloading_unavailable = 1158
+        spg_aim_area = 1169
+        stop = 1159
+        support_me_with_fire = 1152
+        turn_back = 1156
 
     class chat_shortcuts(DynAccessor):
         __slots__ = ()
-        attack = 1122
-        attack_enemy = 1143
-        attack_enemy_reloading = 1144
-        attention_to_base_atk = 1132
-        attention_to_base_def = 1133
-        attention_to_cell = 1126
-        attention_to_objective_atk = 1130
-        attention_to_objective_def = 1131
-        attention_to_position = 1129
-        back_to_base = 1123
-        follow_me = 1121
+        attack = 1119
+        attack_enemy = 1140
+        attack_enemy_reloading = 1141
+        attention_to_base_atk = 1129
+        attention_to_base_def = 1130
+        attention_to_cell = 1123
+        attention_to_objective_atk = 1127
+        attention_to_objective_def = 1128
+        attention_to_position = 1126
+        back_to_base = 1120
+        follow_me = 1118
 
         class global_msg(DynAccessor):
             __slots__ = ()
 
             class atk(DynAccessor):
                 __slots__ = ()
-                focus_hq = 1141
-                save_tanks = 1134
-                time = 1136
+                focus_hq = 1138
+                save_tanks = 1131
+                time = 1133
 
             class c_def(DynAccessor):
                 __slots__ = ()
-                focus_hq = 1142
-                save_tanks = 1135
-                time = 1137
+                focus_hq = 1139
+                save_tanks = 1132
+                time = 1134
 
             class lane(DynAccessor):
                 __slots__ = ()
-                center = 1139
-                east = 1140
-                west = 1138
+                center = 1136
+                east = 1137
+                west = 1135
 
-        help_me = 1119
-        help_me_ex = 1120
-        negative = 1125
-        positive = 1124
-        reloading_cassette = 1114
-        reloading_gun = 1113
-        reloading_ready = 1115
-        reloading_ready_cassette = 1116
-        reloading_unavailable = 1117
-        spg_aim_area = 1127
-        spg_aim_area_reloading = 1128
-        stop = 1118
-        support_me_with_fire = 1112
-        turn_back = 1111
+        help_me = 1116
+        help_me_ex = 1117
+        negative = 1122
+        positive = 1121
+        reloading_cassette = 1111
+        reloading_gun = 1110
+        reloading_ready = 1112
+        reloading_ready_cassette = 1113
+        reloading_unavailable = 1114
+        spg_aim_area = 1124
+        spg_aim_area_reloading = 1125
+        stop = 1115
+        support_me_with_fire = 1109
+        turn_back = 1108
 
     class colorSettingsTipPanel(DynAccessor):
         __slots__ = ()
-        btnLabel = 1640
+        btnLabel = 1641
 
     class consumables_panel(DynAccessor):
         __slots__ = ()
@@ -235,21 +242,21 @@ class IngameGui(DynAccessor):
 
             class ammoBay(DynAccessor):
                 __slots__ = ()
-                critical = 1245
-                destroyed = 1246
-                normal = 1244
+                critical = 1242
+                destroyed = 1243
+                normal = 1241
 
             class chassis(DynAccessor):
                 __slots__ = ()
-                critical = 1251
-                destroyed = 1252
-                normal = 1250
+                critical = 1248
+                destroyed = 1249
+                normal = 1247
 
             class engine(DynAccessor):
                 __slots__ = ()
-                critical = 1239
-                destroyed = 1240
-                normal = 1238
+                critical = 1236
+                destroyed = 1237
+                normal = 1235
 
             class fuelTank(DynAccessor):
                 __slots__ = ()
@@ -259,9 +266,9 @@ class IngameGui(DynAccessor):
 
             class gun(DynAccessor):
                 __slots__ = ()
-                critical = 1242
-                destroyed = 1243
-                normal = 1241
+                critical = 1239
+                destroyed = 1240
+                normal = 1238
 
             class radio(DynAccessor):
                 __slots__ = ()
@@ -277,28 +284,35 @@ class IngameGui(DynAccessor):
 
             class track(DynAccessor):
                 __slots__ = ()
-                critical = 1248
-                destroyed = 1249
-                normal = 1247
+                critical = 1245
+                destroyed = 1246
+                normal = 1244
 
             class turretRotator(DynAccessor):
                 __slots__ = ()
-                critical = 1236
-                destroyed = 1237
-                normal = 1235
+                critical = 1233
+                destroyed = 1234
+                normal = 1232
+
+            class wheel(DynAccessor):
+                __slots__ = ()
+                critical = 1251
+                destroyed = 1252
+                normal = 1250
 
     class devices(DynAccessor):
         __slots__ = ()
-        ammo_bay = 1044
-        chassis = 1052
-        engine = 1043
-        fuel_tank = 1045
-        gun = 1049
-        left_track = 1047
-        radio = 1046
-        right_track = 1048
-        surveing_device = 1051
-        turret_rotator = 1050
+        ammo_bay = 1038
+        chassis = 1046
+        engine = 1037
+        fuel_tank = 1039
+        gun = 1043
+        left_track = 1041
+        radio = 1040
+        right_track = 1042
+        surveing_device = 1045
+        turret_rotator = 1044
+        wheel = 1047
 
     class distance(DynAccessor):
         __slots__ = ()
@@ -326,7 +340,7 @@ class IngameGui(DynAccessor):
     class efficiencyRibbons(DynAccessor):
         __slots__ = ()
         armor = 1542
-        assistByAbility = 1626
+        assistByAbility = 1627
         assistSpot = 1551
         assistTrack = 1550
         burn = 1546
@@ -334,11 +348,11 @@ class IngameGui(DynAccessor):
         crits = 1552
         damage = 1544
         defence = 1547
-        defenderBonus = 1625
-        destructibleDamaged = 1622
-        destructibleDestroyed = 1623
-        destructiblesDefended = 1624
-        enemySectorCaptured = 1621
+        defenderBonus = 1626
+        destructibleDamaged = 1623
+        destructibleDestroyed = 1624
+        destructiblesDefended = 1625
+        enemySectorCaptured = 1622
         kill = 1548
         ram = 1545
         receivedBurn = 1556
@@ -405,6 +419,20 @@ class IngameGui(DynAccessor):
             __slots__ = ()
             postfix = 1539
 
+    class helpScreen(DynAccessor):
+        __slots__ = ()
+
+        class hint(DynAccessor):
+            __slots__ = ()
+            press = 1660
+
+    class helpscreen(DynAccessor):
+        __slots__ = ()
+
+        class hint(DynAccessor):
+            __slots__ = ()
+            description = 1661
+
     class hitMarker(DynAccessor):
         __slots__ = ()
         blocked = 1567
@@ -413,7 +441,7 @@ class IngameGui(DynAccessor):
 
     class marker(DynAccessor):
         __slots__ = ()
-        meters = 1146
+        meters = 1143
 
     class personalMissions(DynAccessor):
         __slots__ = ()
@@ -433,50 +461,50 @@ class IngameGui(DynAccessor):
 
         class cant_move(DynAccessor):
             __slots__ = ()
-            chassis_damaged = 1060
-            crew_inactive = 1058
-            engine_damaged = 1059
+            chassis_damaged = 1055
+            crew_inactive = 1053
+            engine_damaged = 1054
 
         class cant_shoot(DynAccessor):
             __slots__ = ()
-            crew_inactive = 1062
-            gun_damaged = 1064
-            gun_locked = 1066
-            gun_reload = 1065
-            no_ammo = 1063
-            vehicle_destroyed = 1061
+            crew_inactive = 1057
+            gun_damaged = 1059
+            gun_locked = 1061
+            gun_reload = 1060
+            no_ammo = 1058
+            vehicle_destroyed = 1056
 
         class cant_switch(DynAccessor):
             __slots__ = ()
-            engine_destroyed = 1067
+            engine_destroyed = 1062
 
         class equipment(DynAccessor):
             __slots__ = ()
-            alreadyActivated = 1068
+            alreadyActivated = 1063
 
             class extinguisher(DynAccessor):
                 __slots__ = ()
-                doesNotActivated = 1074
+                doesNotActivated = 1069
 
-            isInCooldown = 1069
+            isInCooldown = 1064
 
             class medkit(DynAccessor):
                 __slots__ = ()
-                allTankmenAreSafe = 1071
-                tankmanIsSafe = 1070
+                allTankmenAreSafe = 1066
+                tankmanIsSafe = 1065
 
             class order(DynAccessor):
                 __slots__ = ()
-                notReady = 1075
+                notReady = 1070
 
             class repairkit(DynAccessor):
                 __slots__ = ()
-                allDevicesAreNotDamaged = 1073
-                deviceIsNotDamaged = 1072
+                allDevicesAreNotDamaged = 1068
+                deviceIsNotDamaged = 1067
 
     class player_messages(DynAccessor):
         __slots__ = ()
-        ALLY_HIT = 1088
+        ALLY_HIT = 1085
         COMBAT_EQUIPMENT_READY_ARTILLERY = 1436
         COMBAT_EQUIPMENT_READY_BOMBER = 1437
         COMBAT_EQUIPMENT_READY_INSPIRE = 1440
@@ -608,47 +636,46 @@ class IngameGui(DynAccessor):
         DESTRUCTIBLE_DESTROYED_ALLY = 1613
         DESTRUCTIBLE_DESTROYED_ENEMY = 1614
         DESTRUCTIBLE_DESTROYED_SELF = 1612
-        DEVICE_CRITICAL_AT_FIRE = 1080
-        DEVICE_CRITICAL_AT_SHOT = 1076
-        DEVICE_DESTROYED_AT_FIRE = 1083
-        DEVICE_DESTROYED_AT_SHOT = 1077
-        DEVICE_REPAIRED = 1087
-        DEVICE_REPAIRED_TO_CRITICAL = 1084
-        DEVICE_STARTED_FIRE_AT_SHOT = 1078
-        ENGINE_CRITICAL_AT_UNLIMITED_RPM = 1081
-        ENGINE_DESTROYED_AT_UNLIMITED_RPM = 1082
-        FIRE_STOPPED = 1085
-        TANKMAN_HIT_AT_SHOT = 1079
-        TANKMAN_RESTORED = 1086
-        allied_team_name = 1096
-        ally_base_captured_by_notification = 1092
-        ally_base_captured_notification = 1089
-        base_capture_blocked = 1095
-        base_captured_by_notification = 1094
-        base_captured_notification = 1091
-        enemy_base_captured_by_notification = 1093
-        enemy_base_captured_notification = 1090
-        enemy_team_name = 1097
-        halloweenBliss = 1661
-        halloweenSalvation = 1660
-        halloweenSin = 1659
-        loader_intuition_was_used = 1110
+        DEVICE_CRITICAL_AT_FIRE = 1075
+        DEVICE_CRITICAL_AT_SHOT = 1071
+        DEVICE_DESTROYED_AT_FIRE = 1080
+        DEVICE_DESTROYED_AT_SHOT = 1072
+        DEVICE_REPAIRED = 1084
+        DEVICE_REPAIRED_TO_CRITICAL = 1081
+        DEVICE_STARTED_FIRE_AT_SHOT = 1073
+        ENGINE_CRITICAL_AT_BURNOUT = 1078
+        ENGINE_CRITICAL_AT_UNLIMITED_RPM = 1076
+        ENGINE_DESTROYED_AT_BURNOUT = 1079
+        ENGINE_DESTROYED_AT_UNLIMITED_RPM = 1077
+        FIRE_STOPPED = 1082
+        TANKMAN_HIT_AT_SHOT = 1074
+        TANKMAN_RESTORED = 1083
+        allied_team_name = 1093
+        ally_base_captured_by_notification = 1089
+        ally_base_captured_notification = 1086
+        base_capture_blocked = 1092
+        base_captured_by_notification = 1091
+        base_captured_notification = 1088
+        enemy_base_captured_by_notification = 1090
+        enemy_base_captured_notification = 1087
+        enemy_team_name = 1094
+        loader_intuition_was_used = 1107
 
         class postmortem_caption(DynAccessor):
             __slots__ = ()
-            other = 1100
-            self = 1099
+            other = 1097
+            self = 1096
 
-        postmortem_caption_ = 1098
-        postmortem_userNoHasAmmo = 1101
-        replayControlsHelp1 = 1107
-        replayControlsHelp2 = 1108
-        replayControlsHelp3 = 1109
-        replayFreeCameraActivated = 1103
-        replayPaused = 1106
-        replaySavedCameraActivated = 1104
-        replaySpeedChange = 1105
-        tank_in_fire = 1102
+        postmortem_caption_ = 1095
+        postmortem_userNoHasAmmo = 1098
+        replayControlsHelp1 = 1104
+        replayControlsHelp2 = 1105
+        replayControlsHelp3 = 1106
+        replayFreeCameraActivated = 1100
+        replayPaused = 1103
+        replaySavedCameraActivated = 1101
+        replaySpeedChange = 1102
+        tank_in_fire = 1099
 
     class players_panel(DynAccessor):
         __slots__ = ()
@@ -739,9 +766,9 @@ class IngameGui(DynAccessor):
 
     class recovery(DynAccessor):
         __slots__ = ()
-        cooldown = 1629
-        hint1 = 1627
-        hint2 = 1628
+        cooldown = 1630
+        hint1 = 1628
+        hint2 = 1629
 
     class repairPoint(DynAccessor):
         __slots__ = ()
@@ -766,33 +793,33 @@ class IngameGui(DynAccessor):
 
         class base(DynAccessor):
             __slots__ = ()
-            btnLabel = 1645
-            descText = 1644
-            headerText = 1643
-            subHeaderText = 1642
+            btnLabel = 1646
+            descText = 1645
+            headerText = 1644
+            subHeaderText = 1643
 
         class twitch0(DynAccessor):
             __slots__ = ()
-            btnLabel = 1649
-            descText = 1648
-            headerText = 1646
-            subHeaderText = 1647
+            btnLabel = 1650
+            descText = 1649
+            headerText = 1647
+            subHeaderText = 1648
 
         class twitch1(DynAccessor):
             __slots__ = ()
-            btnLabel = 1653
-            descText = 1652
-            headerText = 1650
-            subHeaderText = 1651
+            btnLabel = 1654
+            descText = 1653
+            headerText = 1651
+            subHeaderText = 1652
 
         class twitch2(DynAccessor):
             __slots__ = ()
-            btnLabel = 1657
-            descText = 1656
-            headerText = 1654
-            subHeaderText = 1655
+            btnLabel = 1658
+            descText = 1657
+            headerText = 1655
+            subHeaderText = 1656
 
-        winHeaderText = 1641
+        winHeaderText = 1642
 
     class scorePanel(DynAccessor):
         __slots__ = ()
@@ -802,13 +829,13 @@ class IngameGui(DynAccessor):
 
     class shells_kinds(DynAccessor):
         __slots__ = ()
-        ARMOR_PIERCING = 1230
-        ARMOR_PIERCING_CR = 1232
-        ARMOR_PIERCING_HE = 1231
-        HIGH_EXPLOSIVE = 1229
-        HOLLOW_CHARGE = 1228
-        params = 1233
-        stunParams = 1234
+        ARMOR_PIERCING = 1227
+        ARMOR_PIERCING_CR = 1229
+        ARMOR_PIERCING_HE = 1228
+        HIGH_EXPLOSIVE = 1226
+        HOLLOW_CHARGE = 1225
+        params = 1230
+        stunParams = 1231
 
     class siegeMode(DynAccessor):
         __slots__ = ()
@@ -825,132 +852,133 @@ class IngameGui(DynAccessor):
 
             noBinding = 1620
             press = 1615
+            wheeled = 1621
 
     class statistics(DynAccessor):
         __slots__ = ()
-        exit = 1197
+        exit = 1194
 
         class final(DynAccessor):
             __slots__ = ()
-            heroes = 1220
+            heroes = 1217
 
             class lifeInfo(DynAccessor):
                 __slots__ = ()
-                alive = 1221
-                dead = 1222
+                alive = 1218
+                dead = 1219
 
             class personal(DynAccessor):
                 __slots__ = ()
-                capturePoints = 1218
-                damaged = 1213
-                directHits = 1216
-                directHitsReceived = 1217
-                droppedCapturePoints = 1219
-                killed = 1212
-                postmortem = 1211
-                shots = 1215
-                spotted = 1214
+                capturePoints = 1215
+                damaged = 1210
+                directHits = 1213
+                directHitsReceived = 1214
+                droppedCapturePoints = 1216
+                killed = 1209
+                postmortem = 1208
+                shots = 1212
+                spotted = 1211
 
             class reasons(DynAccessor):
                 __slots__ = ()
-                reason0 = 1201
-                reason1lose = 1203
-                reason1tie = 1204
-                reason1win = 1202
-                reason2 = 1205
-                reason3 = 1206
+                reason0 = 1198
+                reason1lose = 1200
+                reason1tie = 1201
+                reason1win = 1199
+                reason2 = 1202
+                reason3 = 1203
 
             class stats(DynAccessor):
                 __slots__ = ()
-                credits = 1209
-                experience = 1208
-                multipliedExp = 1207
-                repair = 1210
+                credits = 1206
+                experience = 1205
+                multipliedExp = 1204
+                repair = 1207
 
             class status(DynAccessor):
                 __slots__ = ()
-                lose = 1200
-                tie = 1198
-                win = 1199
+                lose = 1197
+                tie = 1195
+                win = 1196
 
-        header = 1185
+        header = 1182
 
         class headers(DynAccessor):
             __slots__ = ()
-            header0 = 1189
-            header1 = 1190
-            header2 = 1191
-            header3 = 1192
-            header4 = 1193
+            header0 = 1186
+            header1 = 1187
+            header2 = 1188
+            header3 = 1189
+            header4 = 1190
 
         class playerState(DynAccessor):
             __slots__ = ()
-            c_0 = 1223
-            c_1 = 1225
-            c_2 = 1224
-            c_3 = 1226
-            c_4 = 1227
+            c_0 = 1220
+            c_1 = 1222
+            c_2 = 1221
+            c_3 = 1223
+            c_4 = 1224
 
         class tab(DynAccessor):
             __slots__ = ()
 
             class line_up(DynAccessor):
                 __slots__ = ()
-                header = 1173
-                title = 1174
+                header = 1170
+                title = 1171
 
             class progressTracing(DynAccessor):
                 __slots__ = ()
-                notAvailable = 1186
+                notAvailable = 1183
 
             class quests(DynAccessor):
                 __slots__ = ()
-                header = 1175
+                header = 1172
 
                 class notAvailable(DynAccessor):
                     __slots__ = ()
-                    title = 1184
+                    title = 1181
 
                 class nothingToPerform(DynAccessor):
                     __slots__ = ()
-                    descr = 1182
-                    title = 1181
+                    descr = 1179
+                    title = 1178
 
                 class status(DynAccessor):
                     __slots__ = ()
-                    done = 1179
-                    fullDone = 1180
-                    inProgress = 1176
-                    increaseResult = 1178
-                    onPause = 1177
+                    done = 1176
+                    fullDone = 1177
+                    inProgress = 1173
+                    increaseResult = 1175
+                    onPause = 1174
 
                 class switchOff(DynAccessor):
                     __slots__ = ()
-                    title = 1183
+                    title = 1180
 
         class tabs(DynAccessor):
             __slots__ = ()
-            group = 1194
-            heroes = 1196
-            personal = 1195
+            group = 1191
+            heroes = 1193
+            personal = 1192
 
-        team1title = 1187
-        team2title = 1188
+        team1title = 1184
+        team2title = 1185
 
     class stun(DynAccessor):
         __slots__ = ()
-        indicator = 1636
-        seconds = 1637
+        indicator = 1637
+        seconds = 1638
 
     tabStatsHint = 1598
 
     class tankmen(DynAccessor):
         __slots__ = ()
-        commander = 1053
-        driver = 1054
-        gunner = 1056
-        loader = 1057
-        radioman = 1055
+        commander = 1048
+        driver = 1049
+        gunner = 1051
+        loader = 1052
+        radioman = 1050
 
     class timer(DynAccessor):
         __slots__ = ()
@@ -964,9 +992,9 @@ class IngameGui(DynAccessor):
 
         class hint(DynAccessor):
             __slots__ = ()
-            alternateModeLeft = 1634
-            alternateModeRight = 1635
-            noBindingKey = 1633
+            alternateModeLeft = 1635
+            alternateModeRight = 1636
+            noBindingKey = 1634
 
     class vehicle_messages(DynAccessor):
         __slots__ = ()

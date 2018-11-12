@@ -95,7 +95,7 @@
       </slot>
       <slot>
         <slotType>	player	</slotType>
-        <slotId>	2	</slotId>
+        <slotId>	4	</slotId>
         <rayStart>	-1.06206 1.00571 0.115554	</rayStart>
         <rayEnd>	-0.662077 1.0039 0.115591	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
@@ -105,7 +105,7 @@
       </slot>
       <slot>
         <slotType>	inscription	</slotType>
-        <slotId>	3	</slotId>
+        <slotId>	36	</slotId>
         <rayStart>	0.000753086 0.258828 2.18772	</rayStart>
         <rayEnd>	0.000753079 -0.115455 2.04661	</rayEnd>
         <rayUp>	0.000000 0.000000 -1	</rayUp>
@@ -115,7 +115,7 @@
       </slot>
       <slot>
         <slotType>	inscription	</slotType>
-        <slotId>	4	</slotId>
+        <slotId>	37	</slotId>
         <rayStart>	-1.27033 0.690607 0.544479	</rayStart>
         <rayEnd>	-1.18338 0.300183 0.544479	</rayEnd>
         <rayUp>	0.976085 0.21739 -0.000001	</rayUp>
@@ -136,7 +136,7 @@
       </slot>
       <slot>
         <slotType>	camouflage	</slotType>
-        <slotId>	15	</slotId>
+        <slotId>	3	</slotId>
         <anchorPosition>	0.000033 0.550075 -1.76788	</anchorPosition>
         <anchorDirection>	0.000000 0.766045 -0.642788	</anchorDirection>
       </slot>
@@ -822,7 +822,7 @@
       <customizationSlots>
         <slot>
           <slotType>	style	</slotType>
-          <slotId>	13	</slotId>
+          <slotId>	257	</slotId>
           <anchorPosition>	0.000000 2.20907 -0.000000	</anchorPosition>
           <anchorDirection>	-0.000000 1 0.000000	</anchorDirection>
         </slot>
@@ -1500,7 +1500,7 @@
       <customizationSlots>
         <slot>
           <slotType>	style	</slotType>
-          <slotId>	10	</slotId>
+          <slotId>	257	</slotId>
           <anchorPosition>	0.000091 2.20884 0.000000	</anchorPosition>
           <anchorDirection>	0.000000 1 -0.000000	</anchorDirection>
         </slot>
@@ -1587,7 +1587,7 @@
           <customizationSlots>
             <slot>
               <slotType>	insigniaOnGun	</slotType>
-              <slotId>	6	</slotId>
+              <slotId>	771	</slotId>
               <rayStart>	0.000000 -0.010821 0.845435	</rayStart>
               <rayEnd>	0.0435422 -0.00637427 0.845435	</rayEnd>
               <rayUp>	0.056 0.056 5	</rayUp>
@@ -1597,7 +1597,7 @@
             </slot>
             <slot>
               <slotType>	camouflage	</slotType>
-              <slotId>	12	</slotId>
+              <slotId>	770	</slotId>
               <anchorPosition>	0.000000 -0.00541031 0.894277	</anchorPosition>
               <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
               <applyTo>	4096	</applyTo>
@@ -1662,7 +1662,7 @@
           <customizationSlots>
             <slot>
               <slotType>	insigniaOnGun	</slotType>
-              <slotId>	7	</slotId>
+              <slotId>	771	</slotId>
               <rayStart>	0.000317952 -0.0199037 0.78381	</rayStart>
               <rayEnd>	-0.0420927 -0.0550582 0.78381	</rayEnd>
               <rayUp>	0.075 0.075 5	</rayUp>
@@ -1672,7 +1672,7 @@
             </slot>
             <slot>
               <slotType>	camouflage	</slotType>
-              <slotId>	9	</slotId>
+              <slotId>	770	</slotId>
               <anchorPosition>	0.000158986 -0.00595188 0.819234	</anchorPosition>
               <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
               <applyTo>	4096	</applyTo>
@@ -1735,7 +1735,7 @@
           <customizationSlots>
             <slot>
               <slotType>	insigniaOnGun	</slotType>
-              <slotId>	8	</slotId>
+              <slotId>	771	</slotId>
               <rayStart>	0.00273041 -0.0114161 1.01375	</rayStart>
               <rayEnd>	-0.00987776 -0.0379587 1.01375	</rayEnd>
               <rayUp>	0.056 0.056 5	</rayUp>
@@ -1745,7 +1745,7 @@
             </slot>
             <slot>
               <slotType>	camouflage	</slotType>
-              <slotId>	14	</slotId>
+              <slotId>	770	</slotId>
               <anchorPosition>	0.00136522 -0.00570786 0.990624	</anchorPosition>
               <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
               <applyTo>	4096	</applyTo>
@@ -1809,9 +1809,11 @@
       <engines>
         <Nuffield_liberty_MKII>
           <smplEnginePower>	359.4756	</smplEnginePower>
+          <smplFwMaxSpeed>	20	</smplFwMaxSpeed>
         </Nuffield_liberty_MKII>
         <Nuffield_liberty_MKIV>
           <smplEnginePower>	417.626	</smplEnginePower>
+          <smplFwMaxSpeed>	20	</smplFwMaxSpeed>
         </Nuffield_liberty_MKIV>
       </engines>
       <chassis>

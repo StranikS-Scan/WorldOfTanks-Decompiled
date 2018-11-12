@@ -1,6 +1,6 @@
 <engine_config.xml>
   <personality>	game	</personality>
-  <preferences>	preferences.xml	</preferences>
+  <preferences>	preferences_ct.xml	</preferences>
   <enableBalanceCPU>	true	</enableBalanceCPU>
   <enableServerTimeSync>	true	</enableServerTimeSync>
   <lod>
@@ -137,7 +137,7 @@
     <PS_PERFORMANCE_LOD_MULT>	1.2	</PS_PERFORMANCE_LOD_MULT>
   </ParticleSystem>
   <debug>
-    <fullDump>	true	</fullDump>
+    <fullDump>	false	</fullDump>
     <dxdiag>	true	</dxdiag>
     <framesCount>	0	</framesCount>
     <enableServers>	false	</enableServers>
@@ -175,7 +175,7 @@
         <lowEnginePool>	10	</lowEnginePool>
         <streamingPool>	2	</streamingPool>
         <IOPoolSize>	4	</IOPoolSize>
-        <IOGranularity>	64	</IOGranularity>
+        <IOGranularity>	16	</IOGranularity>
       </memoryManager>
       <soundRender>
         <use_config>	false	</use_config>
@@ -217,6 +217,9 @@
         </project>
         <project>
           <name>	eng_gaz_aa.pck	</name>
+        </project>
+        <project>
+          <name>	eng_cadillac_s42.pck	</name>
         </project>
         <project>
           <name>	eng_hetzer.pck	</name>
@@ -271,6 +274,9 @@
         </project>
         <project>
           <name>	music_interactive.pck	</name>
+        </project>
+        <project>
+          <name>	wheel_vehicle_GUI.pck	</name>
         </project>
         <project>
           <name>	plugin_media.bnk	</name>
@@ -345,6 +351,9 @@
           <name>	eng_gaz_aa.bnk	</name>
         </project>
         <project>
+          <name>	eng_cadillac_s42.bnk	</name>
+        </project>
+        <project>
           <name>	treads_pc.bnk	</name>
         </project>
         <project>
@@ -373,6 +382,9 @@
         </project>
         <project>
           <name>	mechanisms.bnk	</name>
+        </project>
+        <project>
+          <name>	wheel_vehicle_GUI.bnk	</name>
         </project>
       </SFX_soundbanks_arena>
       <SFX_soundbanks_editor>
@@ -565,7 +577,7 @@
     </file>
   </logging>
   <webBrowser>
-    <processExePath>	cef/cef_browser_process.exe	</processExePath>
+    <processExePath>	cef/cef_browser_process	</processExePath>
     <userAgent>	Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.95 Safari/537.36 WOWS/1.0	</userAgent>
     <cachePath>	profile/cef_cache	</cachePath>
     <hardwareAcceleration>	false	</hardwareAcceleration>

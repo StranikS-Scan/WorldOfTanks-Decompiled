@@ -60,7 +60,7 @@ class EpicBattlesPrimeTimeView(PrimeTimeViewBase):
         primeTime = self.epicController.getPrimeTimes().get(pID)
         if not primeTime:
             return 0
-        seasonEnd, _ = self.epicController.getSeasonEndTime()
+        seasonEnd, _ = self.epicController.getCurrentCycleInfo()
         _, timeLeft = primeTime.getAvailability(time_utils.getCurrentLocalServerTimestamp(), seasonEnd)
         return timeLeft
 

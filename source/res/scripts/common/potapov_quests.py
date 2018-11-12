@@ -288,8 +288,8 @@ class PQCache(object):
             if IS_CLIENT or IS_WEB:
                 basicInfo['userString'] = i18n.makeString(qsection.readString('userString'))
                 basicInfo['shortUserString'] = i18n.makeString(qsection.readString('shortUserString'))
-                basicInfo['description'] = i18n.makeString(qsection.readString('description'))
-                basicInfo['advice'] = i18n.makeString(qsection.readString('advice'))
+                basicInfo['description'] = qsection.readString('description')
+                basicInfo['advice'] = qsection.readString('advice')
             questPath = ''.join([POTAPOV_QUEST_XML_PATH,
              '/',
              questBranchName,

@@ -99,7 +99,7 @@
       </slot>
       <slot>
         <slotType>	player	</slotType>
-        <slotId>	2	</slotId>
+        <slotId>	4	</slotId>
         <rayStart>	-1.21222 1.56948 -0.34541	</rayStart>
         <rayEnd>	-1.01411 1.54558 -0.331934	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
@@ -109,7 +109,7 @@
       </slot>
       <slot>
         <slotType>	inscription	</slotType>
-        <slotId>	3	</slotId>
+        <slotId>	36	</slotId>
         <rayStart>	-0.258052 0.640904 1.75175	</rayStart>
         <rayEnd>	-0.258052 0.484816 1.6267	</rayEnd>
         <rayUp>	0.000000 0.000000 -1	</rayUp>
@@ -119,7 +119,7 @@
       </slot>
       <slot>
         <slotType>	player	</slotType>
-        <slotId>	4	</slotId>
+        <slotId>	5	</slotId>
         <rayStart>	0.554604 1.58371 -0.390581	</rayStart>
         <rayEnd>	0.355874 1.56478 -0.402739	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
@@ -130,7 +130,7 @@
       </slot>
       <slot>
         <slotType>	camouflage	</slotType>
-        <slotId>	7	</slotId>
+        <slotId>	3	</slotId>
         <anchorPosition>	0.00279005 0.829022 -2.14589	</anchorPosition>
         <anchorDirection>	0.000074 0.778671 -0.627432	</anchorDirection>
       </slot>
@@ -924,7 +924,7 @@
       <customizationSlots>
         <slot>
           <slotType>	style	</slotType>
-          <slotId>	5	</slotId>
+          <slotId>	257	</slotId>
           <anchorPosition>	0.000000 2.84404 -0.491087	</anchorPosition>
           <anchorDirection>	-0.000000 1 -0.000000	</anchorDirection>
         </slot>
@@ -1730,7 +1730,7 @@
       <customizationSlots>
         <slot>
           <slotType>	style	</slotType>
-          <slotId>	6	</slotId>
+          <slotId>	257	</slotId>
           <anchorPosition>	0.00083412 2.84428 -0.490621	</anchorPosition>
           <anchorDirection>	0.000000 1 0.000000	</anchorDirection>
         </slot>
@@ -1800,7 +1800,7 @@
           <customizationSlots>
             <slot>
               <slotType>	camouflage	</slotType>
-              <slotId>	8	</slotId>
+              <slotId>	770	</slotId>
               <anchorPosition>	0.0123919 -0.000166178 0.91761	</anchorPosition>
               <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
               <applyTo>	4096	</applyTo>
@@ -1847,7 +1847,7 @@
           <customizationSlots>
             <slot>
               <slotType>	camouflage	</slotType>
-              <slotId>	10	</slotId>
+              <slotId>	770	</slotId>
               <anchorPosition>	0.0123919 -0.000218502 1.06979	</anchorPosition>
               <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
               <applyTo>	4096	</applyTo>
@@ -1880,7 +1880,7 @@
       <customizationSlots>
         <slot>
           <slotType>	camouflage	</slotType>
-          <slotId>	11	</slotId>
+          <slotId>	513	</slotId>
           <anchorPosition>	0.000000 0.424947 0.000000	</anchorPosition>
           <anchorDirection>	-0.000000 1 -0.000000	</anchorDirection>
         </slot>
@@ -1920,9 +1920,11 @@
       <engines>
         <Wright_R-975EC2>
           <smplEnginePower>	422.9124	</smplEnginePower>
+          <smplFwMaxSpeed>	38	</smplFwMaxSpeed>
         </Wright_R-975EC2>
         <Crysler_A57>
           <smplEnginePower>	465.2037	</smplEnginePower>
+          <smplFwMaxSpeed>	38	</smplFwMaxSpeed>
         </Crysler_A57>
       </engines>
       <chassis>

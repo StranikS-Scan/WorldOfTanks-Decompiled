@@ -6,7 +6,7 @@ import constants
 import TriggersManager
 from TriggersManager import TRIGGER_TYPE
 import FlockManager
-from vehicle_systems.tankStructure import TankPartNames, TankNodeNames
+from vehicle_systems.tankStructure import TankPartNames, TankNodeNames, ColliderTypes
 from helpers import gEffectsDisabled
 
 def ownVehicleGunPositionGetter():
@@ -225,7 +225,7 @@ def collideDynamicAndStatic(startPoint, endPoint, exceptIDs, collisionFlags=128,
     ignoreDynamicID = 0
     if exceptIDs:
         ignoreDynamicID = exceptIDs[0]
-    testRes = BigWorld.wg_collideDynamicStatic(BigWorld.player().spaceID, startPoint, endPoint, collisionFlags, ignoreDynamicID, skipGun)
+    testRes = BigWorld.wg_collideDynamicStatic(BigWorld.player().spaceID, startPoint, endPoint, collisionFlags, ignoreDynamicID, -1 if skipGun else TankPartNames.getIdx(TankPartNames.GUN))
     if testRes is not None:
         if testRes[1]:
             return (testRes[0], EntityCollisionData(testRes[2], testRes[3], testRes[4], True))
@@ -240,7 +240,8 @@ def collideDynamic(startPoint, endPoint, exceptIDs, skipGun=False):
         ignoreID = exceptIDs[0]
     res = BigWorld.wg_collideDynamic(BigWorld.player().spaceID, startPoint, endPoint, ignoreID, -1 if skipGun else TankPartNames.getIdx(TankPartNames.GUN))
     if res is not None:
-        res = (res[0], EntityCollisionData(res[3], res[4], res[5], res[2] == 0))
+        isVehicle = res[2] == ColliderTypes.VEHICLE_COLLIDER
+        res = (res[0], EntityCollisionData(res[3], res[4], res[5], isVehicle))
     return res
 
 
@@ -256,4 +257,4 @@ def collideVehiclesAndStaticScene(startPoint, endPoint, vehicles, collisionFlags
         distStatic = 1000000.0
         if testResStatic is not None:
             distStatic = (testResStatic.closestPoint - startPoint).length
-        return (startPoint + (endPoint - startPoint) * distDynamic, testResDynamic[0]) if distDynamic <= distStatic else (testResStatic.closestPoint, None)
+        return (startPoint + (endPoint - startPoint) * distDynamic, testResDynamic[1]) if distDynamic <= distStatic else (testResStatic.closestPoint, None)

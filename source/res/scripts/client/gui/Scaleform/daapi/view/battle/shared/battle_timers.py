@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/shared/battle_timers.py
 import BigWorld
 import SoundGroups
+import CommandMapping
 from constants import ARENA_PERIOD
 from gui.Scaleform.daapi.view.meta.BattleTimerMeta import BattleTimerMeta
 from gui.Scaleform.daapi.view.meta.PrebattleTimerMeta import PrebattleTimerMeta
@@ -12,6 +13,9 @@ from gui.battle_control.controllers.period_ctrl import IAbstractPeriodView
 from helpers import dependency
 from helpers import i18n
 from skeletons.gui.battle_session import IBattleSessionProvider
+from gui.Scaleform.locale.PREBATTLE import PREBATTLE
+from gui.shared.utils.key_mapping import getReadableKey
+from helpers.i18n import makeString as _ms
 _TIMER_ANIMATION_SHIFT = 0.4
 
 class _WWISE_EVENTS(object):
@@ -34,7 +38,6 @@ class PreBattleTimer(PrebattleTimerMeta, IAbstractPeriodView, IArenaVehiclesCont
         self.__timeLeft = None
         self.__callbackID = None
         self.__arenaPeriod = None
-        self.__notReadyCount = 0
         super(PreBattleTimer, self).__init__()
         return
 
@@ -59,12 +62,9 @@ class PreBattleTimer(PrebattleTimerMeta, IAbstractPeriodView, IArenaVehiclesCont
             self.as_setMessageS(self._getMessage())
         if state == COUNTDOWN_STATE.WAIT:
             self.__clearTimeShiftCallback()
-            self.as_setTimerS(self.__notReadyCount)
+            self.as_setTimerS(0)
         else:
             self.__setTimeShitCallback()
-
-    def invalidateVehicleStatus(self, flags, vo, arenaDP):
-        pass
 
     def hideCountdown(self, state, speed):
         self.as_setMessageS(i18n.makeString(_STATE_TO_MESSAGE[state]))
@@ -81,10 +81,13 @@ class PreBattleTimer(PrebattleTimerMeta, IAbstractPeriodView, IArenaVehiclesCont
     def _populate(self):
         super(PreBattleTimer, self)._populate()
         self.sessionProvider.addArenaCtrl(self)
+        CommandMapping.g_instance.onMappingChanged += self.__onMappingChanged
+        self.__onMappingChanged()
 
     def _dispose(self):
         self.sessionProvider.removeArenaCtrl(self)
         self.__clearTimeShiftCallback()
+        CommandMapping.g_instance.onMappingChanged -= self.__onMappingChanged
         super(PreBattleTimer, self)._dispose()
 
     def __setTimeShitCallback(self):
@@ -102,6 +105,9 @@ class PreBattleTimer(PrebattleTimerMeta, IAbstractPeriodView, IArenaVehiclesCont
             BigWorld.cancelCallback(self.__callbackID)
             self.__callbackID = None
         return
+
+    def __onMappingChanged(self, *args):
+        self.as_setQuestHintS(_ms(PREBATTLE.BATTLEPROGRESS_HINT, hintKey=getReadableKey(CommandMapping.CMD_QUEST_PROGRESS_SHOW)))
 
 
 class BattleTimer(BattleTimerMeta, IAbstractPeriodView):

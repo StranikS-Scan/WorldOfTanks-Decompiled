@@ -4,7 +4,7 @@ from gui.Scaleform.daapi.view.meta.PackItemsPopoverMeta import PackItemsPopoverM
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.shared.formatters import text_styles
 from gui.shared.utils import flashObject2Dict
-from helpers.i18n import makeString
+from helpers.i18n import makeString as _ms
 
 class PackItemsPopover(PackItemsPopoverMeta):
 
@@ -15,16 +15,18 @@ class PackItemsPopover(PackItemsPopoverMeta):
     def _populate(self):
         super(PackItemsPopover, self)._populate()
         pack = flashObject2Dict(self.__rawData)
-        title = '{}\n{}'.format(text_styles.highTitle(pack.get('title', TOOLTIPS.VEHICLEPREVIEW_SHOPPACK_TITLE)), text_styles.main(makeString(pack.get('desc', TOOLTIPS.VEHICLEPREVIEW_SHOPPACK_DESC), count=pack.get('count'))))
+        title = text_styles.highTitle(pack.get('title', TOOLTIPS.VEHICLEPREVIEW_SHOPPACK_TITLE))
         items = []
         for item in pack.get('items'):
             item = flashObject2Dict(item)
-            items.append({'value': item.get('count'),
+            count = item.get('count', 0)
+            items.append({'value': _ms(TOOLTIPS.VEHICLEPREVIEW_SHOPPACK_COUNT, count=count) if count > 1 else None,
              'icon': item.get('icon'),
              'description': item.get('desc'),
              'hasCompensation': item.get('hasCompensation', False)})
 
         self.as_setItemsS(title, items)
+        return
 
     def _dispose(self):
         self.__rawData = None

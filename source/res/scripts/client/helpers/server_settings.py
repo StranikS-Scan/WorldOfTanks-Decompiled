@@ -261,7 +261,7 @@ class _RankedBattlesConfig(namedtuple('_RankedBattlesConfig', ('isEnabled', 'per
         return cls()
 
 
-class _EpicMetaGameConfig(namedtuple('_EpicMetaGameConfig', ['maxCombatReserveLevel', 'metaLevel', 'rewards'])):
+class _EpicMetaGameConfig(namedtuple('_EpicMetaGameConfig', ('maxCombatReserveLevel', 'metaLevel', 'rewards'))):
 
     def asDict(self):
         return self._asdict()
@@ -274,10 +274,7 @@ class _EpicMetaGameConfig(namedtuple('_EpicMetaGameConfig', ['maxCombatReserveLe
 
 _EpicMetaGameConfig.__new__.__defaults__ = (0, 0, {})
 
-class _EpicGameConfig(namedtuple('_EpicGameConfig', ['enabled',
- 'validVehicleLevels',
- 'season',
- 'peripheryIDs'])):
+class _EpicGameConfig(namedtuple('_EpicGameConfig', ('isEnabled', 'validVehicleLevels', 'seasons', 'peripheryIDs'))):
 
     def asDict(self):
         return self._asdict()
@@ -288,8 +285,8 @@ class _EpicGameConfig(namedtuple('_EpicGameConfig', ['enabled',
         return self._replace(**dataToUpdate)
 
 
-_EpicGameConfig.__new__.__defaults__ = (1,
- [10],
+_EpicGameConfig.__new__.__defaults__ = (False,
+ [],
  {},
  {})
 
@@ -477,7 +474,7 @@ class ServerSettings(object):
         return self.__telecomConfig
 
     def isEpicBattleEnabled(self):
-        return self.epicBattles.enabled > 0
+        return self.epicBattles.isEnabled
 
     def isPersonalMissionsEnabled(self, branch=None):
         if branch == PM_BRANCH.REGULAR:

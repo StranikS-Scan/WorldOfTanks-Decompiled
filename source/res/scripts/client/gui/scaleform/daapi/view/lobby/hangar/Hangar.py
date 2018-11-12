@@ -1,6 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/hangar/Hangar.py
-import BigWorld
 from CurrentVehicle import g_currentVehicle
 from account_helpers.settings_core.ServerSettingsManager import SETTINGS_SECTIONS
 from constants import QUEUE_TYPE, PREBATTLE_TYPE
@@ -16,11 +15,9 @@ from gui.Scaleform.framework.entities.View import CommonSoundSpaceSettings
 from gui.Scaleform.genConsts.HANGAR_ALIASES import HANGAR_ALIASES
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
-from gui.Scaleform.daapi.view.lobby.customization.sound_constants import SOUNDS as customizationSounds
 from gui.prb_control.ctrl_events import g_prbCtrlEvents
 from gui.promo.hangar_teaser_widget import TeaserViewer
 from gui.shared import events, EVENT_BUS_SCOPE
-from gui.shared.formatters import text_styles
 from gui.shared.items_cache import CACHE_SYNC_REASON
 from gui.shared.events import LobbySimpleEvent
 from gui.shared.gui_items import GUI_ITEM_TYPE
@@ -39,19 +36,18 @@ from gui.ranked_battles.constants import PRIME_TIME_STATUS
 from skeletons.gui.shared.utils import IHangarSpace
 from skeletons.helpers.statistics import IStatisticsCollector
 from gui.hangar_cameras.hangar_camera_common import CameraRelatedEvents, CameraMovementStates
+import BigWorld
 from HeroTank import HeroTank
-from gui.game_control.links import URLMarcos
-from gui.app_loader import g_appLoader
-from skeletons.gui.halloween_controller import IHalloweenController
-from gui.Scaleform.locale.EVENT import EVENT
-from helpers import time_utils
+from gui.game_control.links import URLMacros
 
 class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
+    _SOUND_STATE_PLACE = 'STATE_hangar_place'
+    _SOUND_STATE_PLACE_GARAGE = 'STATE_hangar_place_garage'
     __background_alpha__ = 0.0
-    __SOUND_SETTINGS = CommonSoundSpaceSettings(name='hangar', entranceStates={customizationSounds.STATE_PLACE: customizationSounds.STATE_PLACE_GARAGE,
+    __SOUND_SETTINGS = CommonSoundSpaceSettings(name='hangar', entranceStates={_SOUND_STATE_PLACE: _SOUND_STATE_PLACE_GARAGE,
      STATE_HANGAR_FILTERED: '{}_off'.format(STATE_HANGAR_FILTERED)}, exitStates={}, persistentSounds=(), stoppableSounds=(), priorities=(), autoStart=True, enterEvent='', exitEvent='')
     rankedController = dependency.descriptor(IRankedBattlesController)
-    epicSkillsController = dependency.descriptor(IEpicBattleMetaGameController)
+    epicController = dependency.descriptor(IEpicBattleMetaGameController)
     itemsCache = dependency.descriptor(IItemsCache)
     igrCtrl = dependency.descriptor(IIGRController)
     lobbyContext = dependency.descriptor(ILobbyContext)
@@ -59,7 +55,6 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
     _settingsCore = dependency.descriptor(ISettingsCore)
     hangarSpace = dependency.descriptor(IHangarSpace)
     _promoController = dependency.descriptor(IPromoController)
-    halloweenController = dependency.descriptor(IHalloweenController)
     _COMMON_SOUND_SPACE = __SOUND_SETTINGS
 
     def __init__(self, _=None):
@@ -68,7 +63,7 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
         self.__isSpaceReadyForC11n = False
         self.__isVehicleReadyForC11n = False
         self.__isVehicleCameraReadyForC11n = False
-        self.__urlMacros = URLMarcos()
+        self.__urlMacros = URLMacros()
         self.__teaser = None
         return
 
@@ -84,9 +79,6 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
 
     def onTeaserClick(self):
         self._promoController.showLastTeaserPromo()
-
-    def onPveBannerClick(self):
-        self.fireEvent(events.LoadViewEvent(VIEW_ALIAS.EVENT_SHOP), scope=EVENT_BUS_SCOPE.LOBBY)
 
     def showHelpLayout(self):
         containerManager = self.app.containerManager
@@ -118,8 +110,8 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
         self.itemsCache.onSyncCompleted += self.onCacheResync
         self.rankedController.onUpdated += self.onRankedUpdate
         self.rankedController.onPrimeTimeStatusUpdated += self.__onRankedPrimeStatusUpdate
-        self.epicSkillsController.onUpdated += self.__onEpicSkillsUpdate
-        self.epicSkillsController.onPrimeTimeStatusUpdated += self.__onEpicSkillsUpdate
+        self.epicController.onUpdated += self.__onEpicSkillsUpdate
+        self.epicController.onPrimeTimeStatusUpdated += self.__onEpicSkillsUpdate
         self._promoController.onNewTeaserReceived += self.__onTeaserReceived
         self.hangarSpace.setVehicleSelectable(True)
         g_prbCtrlEvents.onVehicleClientStateChanged += self.__onVehicleClientStateChanged
@@ -134,8 +126,6 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
         self.addListener(CameraRelatedEvents.CAMERA_ENTITY_UPDATED, self.__handleSelectedEntityUpdated)
         self._onPopulateEnd()
         self.statsCollector.noteHangarLoadingState(HANGAR_LOADING_STATE.HANGAR_UI_READY, showSummaryNow=True)
-        self.halloweenController.getProgress().onItemsUpdated += self._onHalloweenItemsUpdated
-        self._onHalloweenItemsUpdated()
 
     def _dispose(self):
         self.removeListener(LobbySimpleEvent.WAITING_SHOWN, self.__onWaitingShown, EVENT_BUS_SCOPE.LOBBY)
@@ -151,8 +141,8 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
         self.igrCtrl.onIgrTypeChanged -= self.__onIgrTypeChanged
         self.rankedController.onUpdated -= self.onRankedUpdate
         self.rankedController.onPrimeTimeStatusUpdated -= self.__onRankedPrimeStatusUpdate
-        self.epicSkillsController.onUpdated -= self.__onEpicSkillsUpdate
-        self.epicSkillsController.onPrimeTimeStatusUpdated -= self.__onEpicSkillsUpdate
+        self.epicController.onUpdated -= self.__onEpicSkillsUpdate
+        self.epicController.onPrimeTimeStatusUpdated -= self.__onEpicSkillsUpdate
         self._promoController.onNewTeaserReceived -= self.__onTeaserReceived
         if self.__teaser is not None:
             self.__teaser.stop()
@@ -163,29 +153,7 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
         self.lobbyContext.getServerSettings().onServerSettingsChange -= self.__onServerSettingChanged
         self.closeHelpLayout()
         self.stopGlobalListening()
-        if self.halloweenController.getProgress():
-            self.halloweenController.getProgress().onItemsUpdated -= self._onHalloweenItemsUpdated
         LobbySelectableView._dispose(self)
-        return
-
-    def _onHalloweenItemsUpdated(self):
-        halloweenProgress = self.halloweenController.getProgress()
-        if halloweenProgress is not None:
-            currentProgressItem = halloweenProgress.getCurrentProgressItem()
-            if currentProgressItem:
-                data = dict(currentProgressItem.getGUIBonusData())
-                data['soulsLeft'] = halloweenProgress.getSoulsLeftToNextLevel()
-                if not data['soulsLeft']:
-                    if halloweenProgress.isCompleted():
-                        data['status'] = text_styles.eventLevelBannerTitle(_ms(EVENT.WIDGET_REACHED_MAX_LEVEL))
-                        data['lastLevel'] = True
-                    else:
-                        nextLevel = halloweenProgress.items[currentProgressItem.getLevel() + 1]
-                        data['status'] = '{}\n{}'.format(text_styles.eventLevelBannerTitle(time_utils.getTimeString(nextLevel.getStartTime(), EVENT.WIDGET_NEW_LEVEL_UNLOCK_DATE)), text_styles.eventLevelBannerText(_ms(EVENT.WIDGET_NEW_LEVEL_UNLOCK_DESC)))
-                data['specialAlias'] = TOOLTIPS_CONSTANTS.HALLOWEEN_HANGAR_TOOLTIP
-                data['specialArgs'] = (currentProgressItem.getLevel(),)
-                self.as_setBonusDataS(data)
-        self.__updateEventWidget()
         return
 
     def __onViewAddedToContainer(self, _, pyEntity):
@@ -389,7 +357,6 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
         self.__updateHeaderWidget()
         self.__updateCrew()
         self.__updateAlertMessage()
-        self.__updateEventWidget()
         Waiting.hide('updateVehicle')
 
     def __onCurrentVehicleChanged(self):
@@ -400,7 +367,6 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
         self.__updateVehicleInResearchPanel()
         self.__updateHeaderWidget()
         self.__updateCrew()
-        self.__updateEventWidget()
         Waiting.hide('updateVehicle')
 
     def __onSpaceRefresh(self):
@@ -466,21 +432,3 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
         else:
             self.__isVehicleCameraReadyForC11n = vehicleEntity.state == CameraMovementStates.ON_OBJECT
             return
-
-    def __updateEventWidget(self):
-        if not g_currentVehicle.isPresent():
-            self.as_showPveEventS(False, False)
-            self._updateComponentVisibility(True)
-            return
-        isEventVehicle = g_currentVehicle.item.isEvent
-        if self.halloweenController.isEnabled():
-            self.as_showPveEventS(isEventVehicle, not isEventVehicle)
-        else:
-            self.as_showPveEventS(False, False)
-        self._updateComponentVisibility(not isEventVehicle)
-
-    def _updateComponentVisibility(self, visible):
-        tutorialManager = g_appLoader.getApp().tutorialManager
-        COMPONENT_IDS_TO_HIDE = ('CrewBG', 'VehicleResearchPanelBG', 'AmmunitionPanel', 'CrewOperationBtn', 'CrewPanel', 'TmenXpPanel', 'HangarParams', 'VehicleResearchPanel')
-        for component in COMPONENT_IDS_TO_HIDE:
-            tutorialManager.setComponentProps(component, {'visible': visible})

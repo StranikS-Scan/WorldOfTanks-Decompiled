@@ -7,25 +7,9 @@
       <conditions>
         <postBattle>
           <and>
-            <or>
-              <unit>
-                <unitVehicleKills>
-                  <title>
-                    <key>	#personal_missions_details:quest_4_4_13_condition_title_vehicleKills	</key>
-                  </title>
-                  <description>
-                    <key>	#personal_missions_details:quest_4_4_13_condition_description_vehicleKills	</key>
-                  </description>
-                  <greaterOrEqual>	6	</greaterOrEqual>
-                </unitVehicleKills>
-              </unit>
-              <and>
-                <vehicleKills>
-                  <hideInGui></hideInGui>
-                  <greaterOrEqual>	6	</greaterOrEqual>
-                </vehicleKills>
-              </and>
-            </or>
+            <vehicleKills>
+              <greaterOrEqual>	5	</greaterOrEqual>
+            </vehicleKills>
           </and>
         </postBattle>
       </conditions>
@@ -74,25 +58,9 @@
       <conditions>
         <postBattle>
           <and>
-            <or>
-              <unit>
-                <unitVehicleKills>
-                  <title>
-                    <key>	#personal_missions_details:quest_4_4_13_condition_title_vehicleKills	</key>
-                  </title>
-                  <description>
-                    <key>	#personal_missions_details:quest_4_4_13_condition_description_vehicleKills	</key>
-                  </description>
-                  <greaterOrEqual>	6	</greaterOrEqual>
-                </unitVehicleKills>
-              </unit>
-              <and>
-                <vehicleKills>
-                  <hideInGui></hideInGui>
-                  <greaterOrEqual>	6	</greaterOrEqual>
-                </vehicleKills>
-              </and>
-            </or>
+            <vehicleKills>
+              <greaterOrEqual>	5	</greaterOrEqual>
+            </vehicleKills>
             <isAlive></isAlive>
           </and>
         </postBattle>
@@ -124,19 +92,10 @@
         </preBattle>
         <postBattle>
           <and>
-            <or>
-              <unit>
-                <unitVehicleKills>
-                  <greaterOrEqual>	6	</greaterOrEqual>
-                </unitVehicleKills>
-              </unit>
-              <and>
-                <vehicleKills>
-                  <hideInGui></hideInGui>
-                  <greaterOrEqual>	6	</greaterOrEqual>
-                </vehicleKills>
-              </and>
-            </or>
+            <vehicleKills>
+              <hideInGui></hideInGui>
+              <greaterOrEqual>	5	</greaterOrEqual>
+            </vehicleKills>
             <isAlive></isAlive>
           </and>
         </postBattle>

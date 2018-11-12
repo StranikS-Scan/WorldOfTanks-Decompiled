@@ -76,7 +76,7 @@
     <customizationSlots>
       <slot>
         <slotType>	inscription	</slotType>
-        <slotId>	1	</slotId>
+        <slotId>	36	</slotId>
         <rayStart>	-0.30183 0.387704 2.32047	</rayStart>
         <rayEnd>	-0.30183 0.0181761 2.10454	</rayEnd>
         <rayUp>	0.000000 0.000000 -1	</rayUp>
@@ -86,7 +86,7 @@
       </slot>
       <slot>
         <slotType>	clan	</slotType>
-        <slotId>	2	</slotId>
+        <slotId>	1	</slotId>
         <rayStart>	0.540716 0.673679 2.39796	</rayStart>
         <rayEnd>	0.540716 -0.189717 1.89344	</rayEnd>
         <rayUp>	0.000000 0.000000 -1	</rayUp>
@@ -97,7 +97,7 @@
       </slot>
       <slot>
         <slotType>	camouflage	</slotType>
-        <slotId>	8	</slotId>
+        <slotId>	3	</slotId>
         <anchorPosition>	0.000000 0.575544 -1.63958	</anchorPosition>
         <anchorDirection>	0.000000 0.331217 -0.943555	</anchorDirection>
       </slot>
@@ -714,7 +714,7 @@
       <customizationSlots>
         <slot>
           <slotType>	style	</slotType>
-          <slotId>	7	</slotId>
+          <slotId>	257	</slotId>
           <anchorPosition>	0.000127239 2.17703 0.090566	</anchorPosition>
           <anchorDirection>	0.000000 1 -0.000000	</anchorDirection>
         </slot>
@@ -795,7 +795,7 @@
           <customizationSlots>
             <slot>
               <slotType>	insigniaOnGun	</slotType>
-              <slotId>	6	</slotId>
+              <slotId>	771	</slotId>
               <rayStart>	0.000125708 -0.0576991 1.83708	</rayStart>
               <rayEnd>	-0.139881 -0.0744219 1.83708	</rayEnd>
               <rayUp>	0.076 0.074 4	</rayUp>
@@ -805,7 +805,7 @@
             </slot>
             <slot>
               <slotType>	camouflage	</slotType>
-              <slotId>	11	</slotId>
+              <slotId>	770	</slotId>
               <anchorPosition>	0.000063 -0.0774254 1.84668	</anchorPosition>
               <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
               <applyTo>	4096	</applyTo>
@@ -838,7 +838,7 @@
       <customizationSlots>
         <slot>
           <slotType>	inscription	</slotType>
-          <slotId>	3	</slotId>
+          <slotId>	546	</slotId>
           <rayStart>	-1.21731 0.362862 0.0253699	</rayStart>
           <rayEnd>	-0.691632 0.0824749 -0.0260641	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
@@ -848,7 +848,7 @@
         </slot>
         <slot>
           <slotType>	player	</slotType>
-          <slotId>	4	</slotId>
+          <slotId>	514	</slotId>
           <rayStart>	-1.02181 0.616839 0.0339778	</rayStart>
           <rayEnd>	-0.587564 0.385216 -0.00851089	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
@@ -858,7 +858,7 @@
         </slot>
         <slot>
           <slotType>	player	</slotType>
-          <slotId>	5	</slotId>
+          <slotId>	515	</slotId>
           <rayStart>	1.2494 0.533805 0.0241816	</rayStart>
           <rayEnd>	0.76219 0.465177 -0.0199549	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
@@ -869,7 +869,7 @@
         </slot>
         <slot>
           <slotType>	camouflage	</slotType>
-          <slotId>	9	</slotId>
+          <slotId>	513	</slotId>
           <anchorPosition>	0.000000 0.753578 0.000000	</anchorPosition>
           <anchorDirection>	0.000000 1 0.000000	</anchorDirection>
         </slot>
@@ -893,6 +893,7 @@
       <engines>
         <Continental_AOI-628-1_A>
           <smplEnginePower>	359.4756	</smplEnginePower>
+          <smplFwMaxSpeed>	64	</smplFwMaxSpeed>
         </Continental_AOI-628-1_A>
       </engines>
       <chassis>

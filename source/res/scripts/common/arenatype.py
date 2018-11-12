@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/ArenaType.py
+from collections import defaultdict
 import ResMgr
 from constants import IS_BOT, IS_WEB, IS_CLIENT, ARENA_TYPE_XML_PATH, ARENA_GUI_TYPE_LABEL
 from constants import ARENA_GAMEPLAY_IDS, TEAMS_IN_ARENA, ARENA_GAMEPLAY_NAMES, IS_DEVELOPMENT
@@ -13,10 +14,7 @@ from typing import Dict
 from soft_exception import SoftException
 from collections import defaultdict
 from data_structures import DictObj
-from EventPointsPickupSettings import EventPointsPickupSettings
-from zombie_settings import ZombieSettings
 from Math import Vector2
-from collections import OrderedDict
 if IS_CLIENT:
     from helpers import i18n
     import WWISE
@@ -195,18 +193,6 @@ def __readGameplayCfg(gameplayName, section, defaultXml, geometryCfg):
 
         if gameplayName == 'nations':
             raise SoftException('national battles are disabled')
-        if __hasKey('eventPointsPickupSettings', section, defaultXml):
-            cfg['eventPointsPickupSettings'] = __readEventPointsPickupSettings(section['eventPointsPickupSettings'])
-        else:
-            cfg['eventPointsPickupSettings'] = None
-        if __hasKey('zombieSettings', section, defaultXml):
-            cfg['zombieSettings'] = __readZombieSettings(section['zombieSettings'])
-        else:
-            cfg['zombieSettings'] = None
-        if __hasKey('halloweenEffects', section, defaultXml):
-            cfg['halloweenEffectsSettings'] = __readHalloweenEffectsSettings(section['halloweenEffects'])
-        else:
-            cfg['halloweenEffects'] = None
         cfg.update(__readCommonCfg(section, defaultXml, False, geometryCfg))
     except Exception as e:
         LOG_CURRENT_EXCEPTION()
@@ -862,67 +848,3 @@ def __readGameplayPoints(section, geometryCfg):
 
 def __readWinPoints(section):
     return {'winPointsSettings': section.readString('winPoints', 'DEFAULT')}
-
-
-def __readEventPointsPickupSettings(section):
-    return EventPointsPickupSettings(__readEventPointsPickupRadiusSettings(section['epPickupRadiusSettings']), section.readFloat('epPickupDuration'), ResMgr.openSection('scripts/dynamic_objects.xml'))
-
-
-def __readEventPointsPickupRadiusSettings(section):
-    settings = {}
-    for value in section.values():
-        rewardAmount = value.readInt('rewardAmount')
-        radius = value.readFloat('radius')
-        settings[rewardAmount] = radius
-
-    sortedSettings = OrderedDict(sorted(settings.items(), key=lambda t: t[0]))
-    return sortedSettings
-
-
-def __readZombieSettings(section):
-    settings = ZombieSettings()
-    if section.has_key('zombieRadius'):
-        settings.setZombieRadius(section.readFloat('zombieRadius'))
-    if section.has_key('zombieSleepRadius'):
-        settings.setZombieSleepRadius(section.readFloat('zombieSleepRadius'))
-    if section.has_key('zombieSleepDelay'):
-        settings.setZombieSleepDelay(section.readFloat('zombieSleepDelay'))
-    return settings
-
-
-def __readHalloweenEffectsSettings(section):
-    settings = {}
-    for value in section.values():
-        eventPoints = int(value.readString('eventPoints'))
-        idleEffectName, idleEffectverticalOffset = __readEffectParams(value, 'idleEffect')
-        zombieDeathEffect, deathVerticalOffset = __readEffectParams(value, 'zombieDeathEffect')
-        soulsPickupEffect, pickupVerticalOffset = __readEffectParams(value, 'soulsPickupEffect')
-        soulsPickupSilentEffect = value['soulsPickupEffect'].readString('nameSilent')
-        idleStaticEffect = __readIdleStaticEffect(value, 'idleStaticEffect')
-        settings[eventPoints] = {'idleEffect': {'name': idleEffectName,
-                        'verticalOffset': idleEffectverticalOffset},
-         'zombieDeathEffect': {'name': zombieDeathEffect,
-                               'verticalOffset': deathVerticalOffset},
-         'soulsPickupEffect': {'name': soulsPickupEffect,
-                               'nameSilent': soulsPickupSilentEffect,
-                               'verticalOffset': pickupVerticalOffset},
-         'idleStaticEffect': idleStaticEffect}
-
-    return settings
-
-
-def __readEffectParams(section, effect):
-    effectSection = section[effect]
-    return (effectSection.readString('name'), effectSection.readFloat('verticalOffset'))
-
-
-def __readIdleStaticEffect(section, effect):
-    effectSection = section[effect]
-    modelName = effectSection.readString('modelName')
-    startDelay = effectSection.readFloat('startDelay')
-    modelScale = effectSection.readVector3('modelScale')
-    verticalOffset = effectSection.readFloat('verticalOffset')
-    return {'modelName': modelName,
-     'startDelay': startDelay,
-     'modelScale': modelScale,
-     'verticalOffset': verticalOffset}

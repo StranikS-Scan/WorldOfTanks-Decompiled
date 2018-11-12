@@ -120,7 +120,7 @@
       </slot>
       <slot>
         <slotType>	player	</slotType>
-        <slotId>	2	</slotId>
+        <slotId>	4	</slotId>
         <rayStart>	-0.866369 1.22461 0.0228949	</rayStart>
         <rayEnd>	-0.681771 1.22458 -0.05407	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
@@ -130,7 +130,7 @@
       </slot>
       <slot>
         <slotType>	player	</slotType>
-        <slotId>	3	</slotId>
+        <slotId>	5	</slotId>
         <rayStart>	0.0398631 1.19413 -0.00839242	</rayStart>
         <rayEnd>	-0.157022 1.1941 -0.0435282	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
@@ -141,7 +141,7 @@
       </slot>
       <slot>
         <slotType>	inscription	</slotType>
-        <slotId>	4	</slotId>
+        <slotId>	36	</slotId>
         <rayStart>	-1.2168 0.604276 -0.495248	</rayStart>
         <rayEnd>	-1.0168 0.604238 -0.495248	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
@@ -151,7 +151,7 @@
       </slot>
       <slot>
         <slotType>	inscription	</slotType>
-        <slotId>	5	</slotId>
+        <slotId>	37	</slotId>
         <rayStart>	1.21801 0.605204 -0.138545	</rayStart>
         <rayEnd>	1.01802 0.605166 -0.138545	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
@@ -161,7 +161,7 @@
       </slot>
       <slot>
         <slotType>	camouflage	</slotType>
-        <slotId>	21	</slotId>
+        <slotId>	3	</slotId>
         <anchorPosition>	-0.0331198 0.66789 -1.6888	</anchorPosition>
         <anchorDirection>	0.000057 0.47926 -0.877673	</anchorDirection>
       </slot>
@@ -848,7 +848,7 @@
       <customizationSlots>
         <slot>
           <slotType>	style	</slotType>
-          <slotId>	16	</slotId>
+          <slotId>	257	</slotId>
           <anchorPosition>	-0.396711 2.37463 -0.233379	</anchorPosition>
           <anchorDirection>	-0.000000 1 -0.000000	</anchorDirection>
         </slot>
@@ -1530,7 +1530,7 @@
       <customizationSlots>
         <slot>
           <slotType>	style	</slotType>
-          <slotId>	17	</slotId>
+          <slotId>	257	</slotId>
           <anchorPosition>	-0.396618 2.37497 -0.233743	</anchorPosition>
           <anchorDirection>	0.000000 1 0.000000	</anchorDirection>
         </slot>
@@ -1606,7 +1606,7 @@
           <customizationSlots>
             <slot>
               <slotType>	camouflage	</slotType>
-              <slotId>	22	</slotId>
+              <slotId>	770	</slotId>
               <anchorPosition>	0.00405586 0.265093 0.489918	</anchorPosition>
               <anchorDirection>	-0.000000 0.000000 1	</anchorDirection>
               <applyTo>	4096	</applyTo>
@@ -1704,7 +1704,7 @@
           <customizationSlots>
             <slot>
               <slotType>	camouflage	</slotType>
-              <slotId>	18	</slotId>
+              <slotId>	770	</slotId>
               <anchorPosition>	0.109722 0.0742654 0.708419	</anchorPosition>
               <anchorDirection>	-0.000000 0.000000 1	</anchorDirection>
               <applyTo>	4096	</applyTo>
@@ -1803,7 +1803,7 @@
           <customizationSlots>
             <slot>
               <slotType>	camouflage	</slotType>
-              <slotId>	23	</slotId>
+              <slotId>	770	</slotId>
               <anchorPosition>	0.0118314 0.106713 0.768327	</anchorPosition>
               <anchorDirection>	-0.000000 0.000000 1	</anchorDirection>
               <applyTo>	4096	</applyTo>
@@ -1851,9 +1851,11 @@
       <engines>
         <Continental_W-670>
           <smplEnginePower>	277.0077	</smplEnginePower>
+          <smplFwMaxSpeed>	72.4	</smplFwMaxSpeed>
         </Continental_W-670>
         <Continental_W-670-12>
           <smplEnginePower>	304.497	</smplEnginePower>
+          <smplFwMaxSpeed>	72.4	</smplFwMaxSpeed>
         </Continental_W-670-12>
       </engines>
       <chassis>

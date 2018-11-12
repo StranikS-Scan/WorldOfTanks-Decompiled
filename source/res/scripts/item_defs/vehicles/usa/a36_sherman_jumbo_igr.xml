@@ -96,7 +96,7 @@
       </slot>
       <slot>
         <slotType>	inscription	</slotType>
-        <slotId>	2	</slotId>
+        <slotId>	36	</slotId>
         <rayStart>	1.5586 0.630507 1.12595	</rayStart>
         <rayEnd>	1.1586 0.630507 1.12595	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
@@ -106,7 +106,7 @@
       </slot>
       <slot>
         <slotType>	inscription	</slotType>
-        <slotId>	3	</slotId>
+        <slotId>	37	</slotId>
         <rayStart>	-1.5586 0.630507 1.12595	</rayStart>
         <rayEnd>	-1.1586 0.630507 1.12595	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
@@ -1172,7 +1172,7 @@
           <customizationSlots>
             <slot>
               <slotType>	insigniaOnGun	</slotType>
-              <slotId>	6	</slotId>
+              <slotId>	771	</slotId>
               <rayStart>	-0.000001 0.00232685 1.72266	</rayStart>
               <rayEnd>	0.050596 -0.032321 1.72014	</rayEnd>
               <rayUp>	0.076 0.071 3	</rayUp>
@@ -1208,7 +1208,7 @@
       <customizationSlots>
         <slot>
           <slotType>	player	</slotType>
-          <slotId>	4	</slotId>
+          <slotId>	514	</slotId>
           <rayStart>	1.21346 0.453333 0.281757	</rayStart>
           <rayEnd>	0.627597 0.426436 0.155096	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
@@ -1219,7 +1219,7 @@
         </slot>
         <slot>
           <slotType>	player	</slotType>
-          <slotId>	5	</slotId>
+          <slotId>	515	</slotId>
           <rayStart>	-1.21346 0.453333 0.281757	</rayStart>
           <rayEnd>	-0.627597 0.426436 0.155096	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
@@ -1247,6 +1247,7 @@
       <engines>
         <Ford_GAA_IGR>
           <smplEnginePower>	549.7862	</smplEnginePower>
+          <smplFwMaxSpeed>	35	</smplFwMaxSpeed>
         </Ford_GAA_IGR>
       </engines>
       <chassis>

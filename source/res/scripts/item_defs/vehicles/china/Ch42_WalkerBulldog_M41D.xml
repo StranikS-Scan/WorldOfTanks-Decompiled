@@ -1,0 +1,1010 @@
+<Ch42_WalkerBulldog_M41D.xml>
+  <xmlns:xmlref>	http://bwt/xmlref	</xmlns:xmlref>
+  <crew>
+    <commander>	radioman	</commander>
+    <driver></driver>
+    <gunner></gunner>
+    <loader></loader>
+  </crew>
+  <speedLimits>
+    <forward>	65	</forward>
+    <backward>	22	</backward>
+  </speedLimits>
+  <invisibility>
+    <moving>	0.249	</moving>
+    <still>	0.249	</still>
+    <camouflageBonus>	0.03	</camouflageBonus>
+    <camouflageNetBonus>	0.1	</camouflageNetBonus>
+    <firePenalty>	0.374	</firePenalty>
+  </invisibility>
+  <repairCost>	5.7	</repairCost>
+  <premiumVehicleXPFactor>	0.1	</premiumVehicleXPFactor>
+  <crewXpFactor>	1.5	</crewXpFactor>
+  <camouflage>
+    <priceFactor>	1.6	</priceFactor>
+    <tiling>	1 1 0 0	</tiling>
+    <exclusionMask></exclusionMask>
+  </camouflage>
+  <hull>
+    <armor>
+      <armor_1>	25.4	</armor_1>
+      <armor_2>	31.8	</armor_2>
+      <armor_3>	25.4	</armor_3>
+      <armor_4>	12.7	</armor_4>
+      <armor_5>	19.1	</armor_5>
+      <armor_6>	9.5	</armor_6>
+      <armor_7>	19.1	</armor_7>
+      <armor_8>	0	</armor_8>
+      <armor_9>	5	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+      </armor_9>
+      <armor_10>	38.1	</armor_10>
+    </armor>
+    <primaryArmor>	armor_1 armor_3 armor_7	</primaryArmor>
+    <weight>	11662	</weight>
+    <maxHealth>	840	</maxHealth>
+    <ammoBayHealth>
+      <maxHealth>	200	</maxHealth>
+      <maxRegenHealth>	135	</maxRegenHealth>
+      <repairCost>	2.0	</repairCost>
+    </ammoBayHealth>
+    <models>
+      <undamaged>	vehicles/chinese/Ch42_WalkerBulldog_M41D/normal/lod0/Hull.model	</undamaged>
+      <destroyed>	vehicles/chinese/Ch42_WalkerBulldog_M41D/crash/lod0/Hull.model	</destroyed>
+      <exploded>	vehicles/chinese/Ch42_WalkerBulldog_M41D/crash/lod0/Hull.model	</exploded>
+    </models>
+    <swinging>
+      <lodDist>	FAR	</lodDist>
+      <pitchParams>	0.34 38.00 0.36 1.00 0.05 0.34	</pitchParams>
+      <rollParams>	1.00 0.34 38.00 0.36 1.00 0.06 0.40	</rollParams>
+      <sensitivityToImpulse>	0.34	</sensitivityToImpulse>
+    </swinging>
+    <exhaust>
+      <pixie>	diesel_medium	</pixie>
+      <nodes>	HP_Track_Exhaus_1	</nodes>
+    </exhaust>
+    <turretPositions>
+      <turret>	0.000000 0.525289 0.2733	</turret>
+    </turretPositions>
+    <hitTester>
+      <collisionModelServer>	vehicles/chinese/Ch42_WalkerBulldog_M41D/collision/Hull.model	</collisionModelServer>
+      <collisionModelClient>	vehicles/chinese/Ch42_WalkerBulldog_M41D/collision_client/Hull.model	</collisionModelClient>
+    </hitTester>
+    <hangarShadowTexture>	vehicles/chinese/Ch42_WalkerBulldog_M41D/WalkerBulldog_M41D_HangarShadowMap.dds	</hangarShadowTexture>
+    <customizationSlots>
+      <slot>
+        <slotType>	clan	</slotType>
+        <slotId>	1	</slotId>
+        <rayStart>	-0.014076 0.33409 2.22859	</rayStart>
+        <rayEnd>	-0.0140283 0.160005 2.13013	</rayEnd>
+        <rayUp>	0.000000 0.000000 -1	</rayUp>
+        <size>	0.394	</size>
+        <hideIfDamaged>	false	</hideIfDamaged>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	inscription	</slotType>
+        <slotId>	36	</slotId>
+        <rayStart>	0.603844 0.432297 2.05524	</rayStart>
+        <rayEnd>	0.603807 0.258309 1.95661	</rayEnd>
+        <rayUp>	0.000000 0.000000 -1	</rayUp>
+        <size>	0.629	</size>
+        <hideIfDamaged>	false	</hideIfDamaged>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	paint	</slotType>
+        <slotId>	2	</slotId>
+        <anchorPosition>	0.000000 0.233581 2.20317	</anchorPosition>
+        <anchorDirection>	0.000000 0.10543 0.994427	</anchorDirection>
+      </slot>
+      <slot>
+        <slotType>	camouflage	</slotType>
+        <slotId>	3	</slotId>
+        <anchorPosition>	0.000000 0.233581 2.20317	</anchorPosition>
+        <anchorDirection>	0.000000 0.10543 0.994427	</anchorDirection>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	68	</slotId>
+        <tags>	formfactor_any	</tags>
+        <position>	-0.000100 0.890813 1.74113	</position>
+        <rotation>	0.626798 -0.000029 -3.11957	</rotation>
+        <scale>	1.23779 1.23779 1.23779	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	1.30376	</clipAngle>
+        <anchorPosition>	-0.0122353 0.337221 2.064	</anchorPosition>
+        <anchorDirection>	-0.0220414 0.809713 0.586412	</anchorDirection>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	69	</slotId>
+        <tags>	formfactor_any	</tags>
+        <position>	0.000013 1.85443 -1.98312	</position>
+        <rotation>	2.96033 -0.000007 -0.000001	</rotation>
+        <scale>	1.88465 0.999998 1.88465	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.714712	</clipAngle>
+        <anchorPosition>	0.000013 0.60969 -1.93815	</anchorPosition>
+        <anchorDirection>	0.000001 0.983617 -0.18027	</anchorDirection>
+      </slot>
+    </customizationSlots>
+    <customization>
+      <customizableVehicleAreas>
+        <paint>	HULL	</paint>
+        <camouflage>	HULL	</camouflage>
+      </customizableVehicleAreas>
+    </customization>
+    <camouflage>
+      <tiling>	2.1 2.1 0.000000 0.000000	</tiling>
+    </camouflage>
+  </hull>
+  <chassis>
+    <Chassis_Ch42_WalkerBulldog_M41D>
+      <userString>	#china_vehicles:Chassis_Ch42_WalkerBulldog_M41D	</userString>
+      <tags></tags>
+      <level>	8	</level>
+      <price>	30000	</price>
+      <notInShop>	true	</notInShop>
+      <armor>
+        <leftTrack>	20	</leftTrack>
+        <rightTrack>	20	</rightTrack>
+      </armor>
+      <weight>	6000	</weight>
+      <maxLoad>	28000	</maxLoad>
+      <terrainResistance>	0.6 0.7 1.2	</terrainResistance>
+      <brakeForce>	28000	</brakeForce>
+      <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
+      <rotationSpeed>	54	</rotationSpeed>
+      <shotDispersionFactors>
+        <vehicleMovement>	0.14	</vehicleMovement>
+        <vehicleRotation>	0.14	</vehicleRotation>
+      </shotDispersionFactors>
+      <bulkHealthFactor>	3.0	</bulkHealthFactor>
+      <maxHealth>	220	</maxHealth>
+      <maxRegenHealth>	165	</maxRegenHealth>
+      <repairCost>	7.5	</repairCost>
+      <models>
+        <undamaged>	vehicles/chinese/Ch42_WalkerBulldog_M41D/normal/lod0/Chassis.model	</undamaged>
+        <destroyed>	vehicles/chinese/Ch42_WalkerBulldog_M41D/crash/lod0/Chassis.model	</destroyed>
+        <exploded>	vehicles/chinese/Ch42_WalkerBulldog_M41D/crash/lod0/Chassis.model	</exploded>
+      </models>
+      <traces>
+        <lodDist>	MEDIUM	</lodDist>
+        <bufferPrefs>	mediumTank	</bufferPrefs>
+        <textureSet>	usa_03	</textureSet>
+        <size>	0.4 0.7	</size>
+      </traces>
+      <tracks>
+        <lodDist>	MEDIUM_TRACK	</lodDist>
+        <leftMaterial>	track_mat_L_skinned	</leftMaterial>
+        <rightMaterial>	track_mat_R_skinned	</rightMaterial>
+        <textureScale>	-2.6	</textureScale>
+      </tracks>
+      <AODecals>
+        <decal>
+          <transform>
+            <row0>	4.030480 0.000000 0.000000	</row0>
+            <row1>	0.000000 1.342020 0.000000	</row1>
+            <row2>	0.000000 0.000000 5.052850	</row2>
+            <row3>	0.000000 0.000000 0.000000	</row3>
+          </transform>
+        </decal>
+      </AODecals>
+      <wheels>
+        <lodDist>	MEDIUM	</lodDist>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R0	</name>
+          <radius>	0.290768	</radius>
+          <syncAngle>	24	</syncAngle>
+        </wheel>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R4	</name>
+          <radius>	0.324296	</radius>
+          <syncAngle>	30	</syncAngle>
+        </wheel>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L0	</name>
+          <radius>	0.290768	</radius>
+          <syncAngle>	24	</syncAngle>
+        </wheel>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L4	</name>
+          <radius>	0.324296	</radius>
+          <syncAngle>	30	</syncAngle>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	WD_R	</template>
+          <radius>	0.135927	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	3	</count>
+        </group>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	W_R	</template>
+          <radius>	0.329889	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	5	</count>
+        </group>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	WD_L	</template>
+          <radius>	0.135927	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	3	</count>
+        </group>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	W_L	</template>
+          <radius>	0.329889	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	5	</count>
+        </group>
+      </wheels>
+      <drivingWheels>	WD_L0 WD_L4	</drivingWheels>
+      <effects>
+        <lodDist>	MEDIUM	</lodDist>
+        <mud>	mediumTankMud	</mud>
+      </effects>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
+      <wwsoundNPC>	trds_med_npc	</wwsoundNPC>
+      <hullPosition>	0.000000 0.999411 0.000000	</hullPosition>
+      <hitTester>
+        <collisionModelServer>	vehicles/chinese/Ch42_WalkerBulldog_M41D/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/chinese/Ch42_WalkerBulldog_M41D/collision_client/Chassis.model	</collisionModelClient>
+      </hitTester>
+      <topRightCarryingPoint>	1.26321 1.5715	</topRightCarryingPoint>
+      <maxClimbAngle>	25	</maxClimbAngle>
+      <navmeshGirth>	6.0	</navmeshGirth>
+      <groundNodes>
+        <group>
+          <template>	Track_L	</template>
+          <startIndex>	0	</startIndex>
+          <count>	5	</count>
+          <isLeft>	true	</isLeft>
+          <minOffset>	-0.1	</minOffset>
+          <maxOffset>	0.07	</maxOffset>
+        </group>
+        <group>
+          <template>	Track_R	</template>
+          <startIndex>	0	</startIndex>
+          <count>	5	</count>
+          <isLeft>	false	</isLeft>
+          <minOffset>	-0.1	</minOffset>
+          <maxOffset>	0.07	</maxOffset>
+        </group>
+      </groundNodes>
+      <splineDesc>
+        <segmentModelLeft>	vehicles/chinese/Ch42_WalkerBulldog_M41D/track/segment.model	</segmentModelLeft>
+        <segmentModelRight>	vehicles/chinese/Ch42_WalkerBulldog_M41D/track/segment.model	</segmentModelRight>
+        <left>	vehicles/chinese/Ch42_WalkerBulldog_M41D/track/left.track	</left>
+        <right>	vehicles/chinese/Ch42_WalkerBulldog_M41D/track/right.track	</right>
+        <segmentLength>	0.128436	</segmentLength>
+        <segmentOffset>	0.0402844	</segmentOffset>
+        <lodDist>	SPLINE_TRACK	</lodDist>
+        <atlas>
+          <UTiles>	1	</UTiles>
+          <VTiles>	1	</VTiles>
+        </atlas>
+      </splineDesc>
+      <trackThickness>	0.005	</trackThickness>
+      <trackNodes>
+        <enable>	true	</enable>
+        <linkBones>	false	</linkBones>
+        <maxAmplitude>	0.2	</maxAmplitude>
+        <maxOffset>	0.2	</maxOffset>
+        <gravity>	-9.8	</gravity>
+        <elasticity>	1000	</elasticity>
+        <damping>	2	</damping>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L0	</name>
+          <forwardElastK>	0.8	</forwardElastK>
+          <backwardElastK>	1.4	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R0	</name>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L1	</name>
+          <forwardElastK>	0.8	</forwardElastK>
+          <backwardElastK>	1.6	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L2	</name>
+          <forwardElastK>	0.8	</forwardElastK>
+          <backwardElastK>	1.8	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L3	</name>
+          <forwardElastK>	0.8	</forwardElastK>
+          <backwardElastK>	2	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L0	</name>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L1	</name>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R1	</name>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R0	</name>
+          <forwardElastK>	0.8	</forwardElastK>
+          <backwardElastK>	1.4	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R1	</name>
+          <forwardElastK>	0.8	</forwardElastK>
+          <backwardElastK>	1.6	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R2	</name>
+          <forwardElastK>	0.8	</forwardElastK>
+          <backwardElastK>	1.8	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R3	</name>
+          <forwardElastK>	0.8	</forwardElastK>
+          <backwardElastK>	2	</backwardElastK>
+        </node>
+      </trackNodes>
+      <physicalTracks>
+        <left>
+          <segmentsCount>	89	</segmentsCount>
+          <segmentsOuterThickness>	0.088387	</segmentsOuterThickness>
+          <segmentsInnerThickness>	-0.00996888	</segmentsInnerThickness>
+          <segmentsPlaneOffset>	-1.2626	</segmentsPlaneOffset>
+          <springsLength>
+            <backwardMovement>
+              <back>	0.12814	</back>
+              <top>	0.121309	</top>
+              <front>	0.122187	</front>
+              <bottom>	0.103359	</bottom>
+            </backwardMovement>
+            <forwardMovement>
+              <back>	0.115116	</back>
+              <top>	0.125999	</top>
+              <front>	0.129536	</front>
+              <bottom>	0.103359	</bottom>
+            </forwardMovement>
+          </springsLength>
+          <mainSegment>
+            <model>	vehicles/chinese/Ch42_WalkerBulldog_M41D/track/segment.model	</model>
+            <length>	0.129037	</length>
+          </mainSegment>
+          <collisionHull>
+            <bottom></bottom>
+            <top>
+              <part>
+                <xStart>	-2.69836	</xStart>
+                <xStep>	0.0645184	</xStep>
+                <ySamples>	1.13515 1.17273 1.2015 1.20921 1.2114 1.21173 1.21206 1.21239 1.21272 1.21305 1.21337 1.2137 1.21403 1.21436 1.21469 1.21502 1.21534 1.21567 1.216 1.21633 1.21666 1.21699 1.21731 1.21763 1.21795 1.21826 1.21858 1.21889 1.21921 1.21953 1.21984 1.22016 1.22047 1.22079 1.22111 1.22142 1.22174 1.22205 1.22237 1.22269 1.223 1.22332 1.22363 1.22395 1.22427 1.22458 1.2249 1.22521 1.22553 1.22585 1.22616 1.22648 1.22679 1.22711 1.22742 1.22774 1.22806 1.22837 1.22869 1.229 1.22932 1.22964 1.22995 1.23027 1.23058 1.2309 1.23122 1.23153 1.23185 1.23216 1.23248 1.2328 1.23311 1.23343 1.23374 1.23406 1.23416 1.23312 1.22222 1.19606 1.17083 1.11722	</ySamples>
+              </part>
+            </top>
+          </collisionHull>
+          <bottomWheels>
+            <wheel>	WD_L4	</wheel>
+            <wheel>	W_L4	</wheel>
+            <wheel>	W_L3	</wheel>
+            <wheel>	W_L2	</wheel>
+            <wheel>	W_L1	</wheel>
+            <wheel>	W_L0	</wheel>
+            <wheel>	WD_L0	</wheel>
+          </bottomWheels>
+          <snapWheels>
+            <topFront>
+              <wheelName>	WD_L0	</wheelName>
+              <basePos>	2.22317 0.788233	</basePos>
+              <shiftVec>	0.24606 0.14162	</shiftVec>
+              <jointIdx>	10	</jointIdx>
+            </topFront>
+            <topBack>
+              <wheelName>	WD_L4	</wheelName>
+              <basePos>	-2.39938 0.853257	</basePos>
+              <shiftVec>	-0.216576 0.122631	</shiftVec>
+              <jointIdx>	51	</jointIdx>
+            </topBack>
+            <bottomBack>
+              <wheelName>	W_L4	</wheelName>
+              <basePos>	-1.61797 0.387794	</basePos>
+              <shiftVec>	0.0488433 -0.31992	</shiftVec>
+              <jointIdx>	63	</jointIdx>
+            </bottomBack>
+            <bottomFront>
+              <wheelName>	W_L0	</wheelName>
+              <basePos>	1.66008 0.387778	</basePos>
+              <shiftVec>	0.0415651 -0.317208	</shiftVec>
+              <jointIdx>	0	</jointIdx>
+            </bottomFront>
+          </snapWheels>
+          <radiusOverrides>
+            <wheel>
+              <name>	WD_L4	</name>
+              <radius>	0.247543	</radius>
+            </wheel>
+            <wheel>
+              <name>	WD_L0	</name>
+              <radius>	0.282729	</radius>
+            </wheel>
+          </radiusOverrides>
+          <teethSyncs>
+            <syncWithMainModel>	true	</syncWithMainModel>
+            <segmentSyncPivotOffset>	0.000000	</segmentSyncPivotOffset>
+            <sync>
+              <name>	WD_L4	</name>
+              <startAngle>	-181.314	</startAngle>
+              <teethCount>	12	</teethCount>
+            </sync>
+            <sync>
+              <name>	WD_L0	</name>
+              <startAngle>	-142.794	</startAngle>
+              <teethCount>	15	</teethCount>
+            </sync>
+          </teethSyncs>
+          <sourceCollisionHullPoints>
+            <top>
+              <range>
+                <point>	-1.33041 1.23462 -2.69834	</point>
+                <point>	-1.24041 1.27221 -2.63382	</point>
+                <point>	-1.24041 1.30097 -2.5693	</point>
+                <point>	-1.24041 1.30868 -2.50478	</point>
+                <point>	-1.24041 1.31088 -2.44027	</point>
+                <point>	-1.24041 1.31121 -2.37575	</point>
+                <point>	-1.24041 1.31154 -2.31123	</point>
+                <point>	-1.24041 1.31186 -2.24671	</point>
+                <point>	-1.24041 1.31219 -2.18219	</point>
+                <point>	-1.24041 1.31252 -2.11767	</point>
+                <point>	-1.24041 1.31285 -2.05316	</point>
+                <point>	-1.24041 1.31318 -1.98864	</point>
+                <point>	-1.24041 1.31351 -1.92412	</point>
+                <point>	-1.24041 1.31383 -1.8596	</point>
+                <point>	-1.24041 1.31416 -1.79508	</point>
+                <point>	-1.24041 1.31449 -1.73056	</point>
+                <point>	-1.24041 1.31482 -1.66604	</point>
+                <point>	-1.24041 1.31515 -1.60153	</point>
+                <point>	-1.24041 1.31548 -1.53701	</point>
+                <point>	-1.24041 1.3158 -1.47249	</point>
+                <point>	-1.24041 1.31613 -1.40797	</point>
+                <point>	-1.24041 1.31646 -1.34345	</point>
+                <point>	-1.24041 1.31679 -1.27893	</point>
+                <point>	-1.43041 1.3171 -1.21442	</point>
+                <point>	-1.43041 1.31742 -1.1499	</point>
+                <point>	-1.43041 1.31774 -1.08538	</point>
+                <point>	-1.43041 1.31805 -1.02086	</point>
+                <point>	-1.43041 1.31837 -0.956343	</point>
+                <point>	-1.43041 1.31868 -0.891824	</point>
+                <point>	-1.43041 1.319 -0.827306	</point>
+                <point>	-1.43041 1.31932 -0.762788	</point>
+                <point>	-1.43041 1.31963 -0.698269	</point>
+                <point>	-1.43041 1.31995 -0.633751	</point>
+                <point>	-1.43041 1.32026 -0.569232	</point>
+                <point>	-1.43041 1.32058 -0.504714	</point>
+                <point>	-1.43041 1.3209 -0.440196	</point>
+                <point>	-1.43041 1.32121 -0.375677	</point>
+                <point>	-1.43041 1.32153 -0.311159	</point>
+                <point>	-1.43041 1.32184 -0.24664	</point>
+                <point>	-1.43041 1.32216 -0.182122	</point>
+                <point>	-1.43041 1.32248 -0.117604	</point>
+                <point>	-1.43041 1.32279 -0.0530856	</point>
+                <point>	-1.43041 1.32311 0.0114329	</point>
+                <point>	-1.43041 1.32342 0.0759513	</point>
+                <point>	-1.43041 1.32374 0.14047	</point>
+                <point>	-1.43041 1.32405 0.204988	</point>
+                <point>	-1.43041 1.32437 0.269506	</point>
+                <point>	-1.43041 1.32469 0.334025	</point>
+                <point>	-1.43041 1.325 0.398543	</point>
+                <point>	-1.43041 1.32532 0.463062	</point>
+                <point>	-1.43041 1.32563 0.52758	</point>
+                <point>	-1.43041 1.32595 0.592098	</point>
+                <point>	-1.43041 1.32627 0.656617	</point>
+                <point>	-1.43041 1.32658 0.721135	</point>
+                <point>	-1.43041 1.3269 0.785653	</point>
+                <point>	-1.43041 1.32721 0.850172	</point>
+                <point>	-1.43041 1.32753 0.91469	</point>
+                <point>	-1.43041 1.32785 0.979209	</point>
+                <point>	-1.43041 1.32816 1.04373	</point>
+                <point>	-1.43041 1.32848 1.10825	</point>
+                <point>	-1.43041 1.32879 1.17276	</point>
+                <point>	-1.43041 1.32911 1.23728	</point>
+                <point>	-1.43041 1.32943 1.3018	</point>
+                <point>	-1.43041 1.32974 1.36632	</point>
+                <point>	-1.43041 1.33006 1.43084	</point>
+                <point>	-1.43041 1.33037 1.49536	</point>
+                <point>	-1.43041 1.33069 1.55987	</point>
+                <point>	-1.43041 1.33101 1.62439	</point>
+                <point>	-1.43041 1.33132 1.68891	</point>
+                <point>	-1.43041 1.33164 1.75343	</point>
+                <point>	-1.43041 1.33195 1.81795	</point>
+                <point>	-1.43041 1.33227 1.88247	</point>
+                <point>	-1.43041 1.33259 1.94698	</point>
+                <point>	-1.43041 1.3329 2.0115	</point>
+                <point>	-1.43041 1.33322 2.07602	</point>
+                <point>	-1.43041 1.33353 2.14054	</point>
+                <point>	-1.24041 1.33363 2.20506	</point>
+                <point>	-1.24041 1.3326 2.26958	</point>
+                <point>	-1.24041 1.32169 2.33409	</point>
+                <point>	-1.24041 1.29554 2.39861	</point>
+                <point>	-1.24041 1.27031 2.46313	</point>
+                <point>	-1.24041 1.21669 2.52765	</point>
+              </range>
+            </top>
+            <bottom></bottom>
+          </sourceCollisionHullPoints>
+        </left>
+        <right>
+          <segmentsCount>	89	</segmentsCount>
+          <segmentsOuterThickness>	0.0883901	</segmentsOuterThickness>
+          <segmentsInnerThickness>	-0.00997198	</segmentsInnerThickness>
+          <segmentsPlaneOffset>	1.2626	</segmentsPlaneOffset>
+          <springsLength>
+            <backwardMovement>
+              <back>	0.12814	</back>
+              <top>	0.121309	</top>
+              <front>	0.122187	</front>
+              <bottom>	0.103359	</bottom>
+            </backwardMovement>
+            <forwardMovement>
+              <back>	0.115116	</back>
+              <top>	0.125999	</top>
+              <front>	0.129536	</front>
+              <bottom>	0.103359	</bottom>
+            </forwardMovement>
+          </springsLength>
+          <mainSegment>
+            <model>	vehicles/chinese/Ch42_WalkerBulldog_M41D/track/segment.model	</model>
+            <length>	0.128433	</length>
+          </mainSegment>
+          <collisionHull>
+            <bottom></bottom>
+            <top>
+              <part>
+                <xStart>	-2.71254	</xStart>
+                <xStep>	0.0642166	</xStep>
+                <ySamples>	1.13389 1.17139 1.18897 1.20546 1.21133 1.21165 1.21198 1.21231 1.21263 1.21296 1.21329 1.21361 1.21394 1.21427 1.21459 1.21492 1.21525 1.21557 1.2159 1.21623 1.21655 1.21688 1.21721 1.21752 1.21784 1.21815 1.21847 1.21878 1.2191 1.21941 1.21973 1.22004 1.22035 1.22067 1.22098 1.2213 1.22161 1.22193 1.22224 1.22256 1.22287 1.22318 1.2235 1.22381 1.22413 1.22444 1.22476 1.22507 1.22539 1.2257 1.22601 1.22633 1.22664 1.22696 1.22727 1.22759 1.2279 1.22822 1.22853 1.22884 1.22916 1.22947 1.22979 1.2301 1.23042 1.23073 1.23105 1.23136 1.23167 1.23199 1.2323 1.23262 1.23293 1.23325 1.23356 1.23388 1.23414 1.23303 1.22431 1.20145 1.18315 1.14227 1.09913	</ySamples>
+              </part>
+            </top>
+          </collisionHull>
+          <bottomWheels>
+            <wheel>	WD_R4	</wheel>
+            <wheel>	W_R4	</wheel>
+            <wheel>	W_R3	</wheel>
+            <wheel>	W_R2	</wheel>
+            <wheel>	W_R1	</wheel>
+            <wheel>	W_R0	</wheel>
+            <wheel>	WD_R0	</wheel>
+          </bottomWheels>
+          <snapWheels>
+            <topFront>
+              <wheelName>	WD_R0	</wheelName>
+              <basePos>	2.22317 0.788233	</basePos>
+              <shiftVec>	0.248729 0.141158	</shiftVec>
+              <jointIdx>	10	</jointIdx>
+            </topFront>
+            <topBack>
+              <wheelName>	WD_R4	</wheelName>
+              <basePos>	-2.39938 0.853257	</basePos>
+              <shiftVec>	-0.216055 0.123798	</shiftVec>
+              <jointIdx>	51	</jointIdx>
+            </topBack>
+            <bottomBack>
+              <wheelName>	W_R4	</wheelName>
+              <basePos>	-1.69659 0.387763	</basePos>
+              <shiftVec>	-0.0158814 -0.319523	</shiftVec>
+              <jointIdx>	62	</jointIdx>
+            </bottomBack>
+            <bottomFront>
+              <wheelName>	W_R0	</wheelName>
+              <basePos>	1.58147 0.387748	</basePos>
+              <shiftVec>	0.102337 -0.303107	</shiftVec>
+              <jointIdx>	0	</jointIdx>
+            </bottomFront>
+          </snapWheels>
+          <radiusOverrides>
+            <wheel>
+              <name>	WD_R4	</name>
+              <radius>	0.247681	</radius>
+            </wheel>
+            <wheel>
+              <name>	WD_R0	</name>
+              <radius>	0.284837	</radius>
+            </wheel>
+          </radiusOverrides>
+          <teethSyncs>
+            <syncWithMainModel>	true	</syncWithMainModel>
+            <segmentSyncPivotOffset>	0.000000	</segmentSyncPivotOffset>
+            <sync>
+              <name>	WD_R4	</name>
+              <startAngle>	-175.545	</startAngle>
+              <teethCount>	12	</teethCount>
+            </sync>
+            <sync>
+              <name>	WD_R0	</name>
+              <startAngle>	-142.791	</startAngle>
+              <teethCount>	15	</teethCount>
+            </sync>
+          </teethSyncs>
+          <sourceCollisionHullPoints>
+            <top>
+              <range>
+                <point>	1.33041 1.23462 -2.69834	</point>
+                <point>	1.24041 1.27221 -2.63382	</point>
+                <point>	1.24041 1.30097 -2.5693	</point>
+                <point>	1.24041 1.30868 -2.50478	</point>
+                <point>	1.24041 1.31088 -2.44027	</point>
+                <point>	1.24041 1.31121 -2.37575	</point>
+                <point>	1.24041 1.31154 -2.31123	</point>
+                <point>	1.24041 1.31186 -2.24671	</point>
+                <point>	1.24041 1.31219 -2.18219	</point>
+                <point>	1.24041 1.31252 -2.11767	</point>
+                <point>	1.24041 1.31285 -2.05316	</point>
+                <point>	1.24041 1.31318 -1.98864	</point>
+                <point>	1.24041 1.31351 -1.92412	</point>
+                <point>	1.24041 1.31383 -1.8596	</point>
+                <point>	1.24041 1.31416 -1.79508	</point>
+                <point>	1.24041 1.31449 -1.73056	</point>
+                <point>	1.24041 1.31482 -1.66604	</point>
+                <point>	1.24041 1.31515 -1.60153	</point>
+                <point>	1.24041 1.31548 -1.53701	</point>
+                <point>	1.24041 1.3158 -1.47249	</point>
+                <point>	1.24041 1.31613 -1.40797	</point>
+                <point>	1.24041 1.31646 -1.34345	</point>
+                <point>	1.24041 1.31679 -1.27893	</point>
+                <point>	1.43041 1.3171 -1.21442	</point>
+                <point>	1.43041 1.31742 -1.1499	</point>
+                <point>	1.43041 1.31774 -1.08538	</point>
+                <point>	1.43041 1.31805 -1.02086	</point>
+                <point>	1.43041 1.31837 -0.956343	</point>
+                <point>	1.43041 1.31868 -0.891824	</point>
+                <point>	1.43041 1.319 -0.827306	</point>
+                <point>	1.43041 1.31932 -0.762788	</point>
+                <point>	1.43041 1.31963 -0.698269	</point>
+                <point>	1.43041 1.31995 -0.633751	</point>
+                <point>	1.43041 1.32026 -0.569232	</point>
+                <point>	1.43041 1.32058 -0.504714	</point>
+                <point>	1.43041 1.3209 -0.440196	</point>
+                <point>	1.43041 1.32121 -0.375677	</point>
+                <point>	1.43041 1.32153 -0.311159	</point>
+                <point>	1.43041 1.32184 -0.24664	</point>
+                <point>	1.43041 1.32216 -0.182122	</point>
+                <point>	1.43041 1.32248 -0.117604	</point>
+                <point>	1.43041 1.32279 -0.0530856	</point>
+                <point>	1.43041 1.32311 0.0114329	</point>
+                <point>	1.43041 1.32342 0.0759513	</point>
+                <point>	1.43041 1.32374 0.14047	</point>
+                <point>	1.43041 1.32405 0.204988	</point>
+                <point>	1.43041 1.32437 0.269506	</point>
+                <point>	1.43041 1.32469 0.334025	</point>
+                <point>	1.43041 1.325 0.398543	</point>
+                <point>	1.43041 1.32532 0.463062	</point>
+                <point>	1.43041 1.32563 0.52758	</point>
+                <point>	1.43041 1.32595 0.592098	</point>
+                <point>	1.43041 1.32627 0.656617	</point>
+                <point>	1.43041 1.32658 0.721135	</point>
+                <point>	1.43041 1.3269 0.785653	</point>
+                <point>	1.43041 1.32721 0.850172	</point>
+                <point>	1.43041 1.32753 0.91469	</point>
+                <point>	1.43041 1.32785 0.979209	</point>
+                <point>	1.43041 1.32816 1.04373	</point>
+                <point>	1.43041 1.32848 1.10825	</point>
+                <point>	1.43041 1.32879 1.17276	</point>
+                <point>	1.43041 1.32911 1.23728	</point>
+                <point>	1.43041 1.32943 1.3018	</point>
+                <point>	1.43041 1.32974 1.36632	</point>
+                <point>	1.43041 1.33006 1.43084	</point>
+                <point>	1.43041 1.33037 1.49536	</point>
+                <point>	1.43041 1.33069 1.55987	</point>
+                <point>	1.43041 1.33101 1.62439	</point>
+                <point>	1.43041 1.33132 1.68891	</point>
+                <point>	1.43041 1.33164 1.75343	</point>
+                <point>	1.43041 1.33195 1.81795	</point>
+                <point>	1.43041 1.33227 1.88247	</point>
+                <point>	1.43041 1.33259 1.94698	</point>
+                <point>	1.43041 1.3329 2.0115	</point>
+                <point>	1.43041 1.33322 2.07602	</point>
+                <point>	1.43041 1.33353 2.14054	</point>
+                <point>	1.24041 1.33363 2.20506	</point>
+                <point>	1.24041 1.3326 2.26958	</point>
+                <point>	1.24041 1.32169 2.33409	</point>
+                <point>	1.24041 1.29554 2.39861	</point>
+                <point>	1.24041 1.27031 2.46313	</point>
+                <point>	1.24041 1.21669 2.52765	</point>
+              </range>
+            </top>
+            <bottom></bottom>
+          </sourceCollisionHullPoints>
+        </right>
+      </physicalTracks>
+      <customization>
+        <customizableVehicleAreas>
+          <paint>	CHASSIS	</paint>
+          <camouflage></camouflage>
+        </customizableVehicleAreas>
+      </customization>
+      <customizationSlots>
+        <slot>
+          <slotType>	paint	</slotType>
+          <slotId>	256	</slotId>
+          <anchorPosition>	-1.53042 0.589419 -0.0719501	</anchorPosition>
+          <anchorDirection>	-0.932286 0.359056 -0.0438298	</anchorDirection>
+        </slot>
+        <slot>
+          <slotType>	style	</slotType>
+          <slotId>	257	</slotId>
+          <anchorPosition>	-0.000000 2.40421 0.273299	</anchorPosition>
+          <anchorDirection>	0.000000 1 0.000000	</anchorDirection>
+        </slot>
+      </customizationSlots>
+    </Chassis_Ch42_WalkerBulldog_M41D>
+  </chassis>
+  <turrets0>
+    <Turret_1_Ch42_WalkerBulldog_M41D>
+      <userString>	#china_vehicles:Turret_1_Ch42_WalkerBulldog_M41D	</userString>
+      <tags></tags>
+      <level>	8	</level>
+      <price>	30000	</price>
+      <notInShop>	true	</notInShop>
+      <armor>
+        <armor_1>	25.4	</armor_1>
+        <armor_2>	19.1	</armor_2>
+        <armor_3>	25.4	</armor_3>
+        <armor_4>	25.4	</armor_4>
+        <armor_5>	12.7	</armor_5>
+        <armor_6>	12.7	</armor_6>
+        <armor_7>	25.4	</armor_7>
+        <armor_8>	0	</armor_8>
+      </armor>
+      <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
+      <weight>	5000	</weight>
+      <maxHealth>	210	</maxHealth>
+      <rotationSpeed>	50	</rotationSpeed>
+      <turretRotatorHealth>
+        <maxHealth>	140	</maxHealth>
+        <maxRegenHealth>	70	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </turretRotatorHealth>
+      <circularVisionRadius>	370	</circularVisionRadius>
+      <surveyingDeviceHealth>
+        <maxHealth>	100	</maxHealth>
+        <maxRegenHealth>	50	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </surveyingDeviceHealth>
+      <guns>
+        <_76mm_M32K1>	shared	  <maxAmmo>	65	</maxAmmo>
+          <armor>
+            <armor_1>	31.8	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	31.8	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_2>
+            <armor_3>	25.4	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_3>
+            <armor_4>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_4>
+            <gun>	20	</gun>
+          </armor>
+          <turretYawLimits>	-180 180	</turretYawLimits>
+          <pitchLimits>
+            <minPitch>	0 -19 1 -19	</minPitch>
+            <maxPitch>	0 9 1 9	</maxPitch>
+          </pitchLimits>
+          <invisibilityFactorAtShot>	0.234	</invisibilityFactorAtShot>
+          <models>
+            <undamaged>	vehicles/chinese/Ch42_WalkerBulldog_M41D/normal/lod0/Gun_01.model	</undamaged>
+            <destroyed>	vehicles/chinese/Ch42_WalkerBulldog_M41D/crash/lod0/Gun_01.model	</destroyed>
+            <exploded>	vehicles/chinese/Ch42_WalkerBulldog_M41D/crash/lod0/Gun_01.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModelServer>	vehicles/chinese/Ch42_WalkerBulldog_M41D/collision/Gun_01.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/chinese/Ch42_WalkerBulldog_M41D/collision_client/Gun_01.model	</collisionModelClient>
+          </hitTester>
+          <effects>	shot_medium	</effects>
+          <customizationSlots>
+            <slot>
+              <slotType>	insigniaOnGun	</slotType>
+              <slotId>	771	</slotId>
+              <rayStart>	0.000000 0.008 1.53592	</rayStart>
+              <rayEnd>	0.0462782 -0.351236 1.53471	</rayEnd>
+              <rayUp>	0.084 0.000000 0.000000	</rayUp>
+              <applyToFabric>	true	</applyToFabric>
+              <size>	0.494	</size>
+              <hideIfDamaged>	false	</hideIfDamaged>
+              <isUVProportional>	true	</isUVProportional>
+            </slot>
+            <slot>
+              <slotType>	paint	</slotType>
+              <slotId>	768	</slotId>
+              <anchorPosition>	-0.000034 0.00419356 1.88718	</anchorPosition>
+              <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+            <slot>
+              <slotType>	camouflage	</slotType>
+              <slotId>	770	</slotId>
+              <anchorPosition>	-0.000034 0.00419356 1.88718	</anchorPosition>
+              <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+          </customizationSlots>
+          <customization>
+            <customizableVehicleAreas>
+              <paint>	GUN	</paint>
+              <camouflage>	GUN	</camouflage>
+            </customizableVehicleAreas>
+          </customization>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <camouflage>
+            <tiling>	1.55 1.55 0.000000 0.000000	</tiling>
+          </camouflage>
+        </_76mm_M32K1>
+      </guns>
+      <models>
+        <undamaged>	vehicles/chinese/Ch42_WalkerBulldog_M41D/normal/lod0/Turret_01.model	</undamaged>
+        <destroyed>	vehicles/chinese/Ch42_WalkerBulldog_M41D/crash/lod0/Turret_01.model	</destroyed>
+        <exploded>	vehicles/chinese/Ch42_WalkerBulldog_M41D/crash/lod0/Turret_01.model	</exploded>
+      </models>
+      <hitTester>
+        <collisionModelServer>	vehicles/chinese/Ch42_WalkerBulldog_M41D/collision/Turret_01.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/chinese/Ch42_WalkerBulldog_M41D/collision_client/Turret_01.model	</collisionModelClient>
+      </hitTester>
+      <gunPosition>	0.000000 0.4144 1.1167	</gunPosition>
+      <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
+      <showEmblemsOnGun>	false	</showEmblemsOnGun>
+      <physicsShape>	1.104 -0.282 1.039 0.000 0.615 0.028 0.829 0.576 0.424 0.535 0.312 0.500 0.000 0.100 0.000	</physicsShape>
+      <customizationSlots>
+        <slot>
+          <slotType>	inscription	</slotType>
+          <slotId>	546	</slotId>
+          <rayStart>	0.715341 0.597724 -1.51541	</rayStart>
+          <rayEnd>	0.543185 0.501209 -1.48305	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.475	</size>
+          <hideIfDamaged>	false	</hideIfDamaged>
+          <isUVProportional>	true	</isUVProportional>
+        </slot>
+        <slot>
+          <slotType>	player	</slotType>
+          <slotId>	514	</slotId>
+          <rayStart>	-1.01314 0.630065 0.00115786	</rayStart>
+          <rayEnd>	-0.841619 0.527263 0.00433628	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.281	</size>
+          <hideIfDamaged>	true	</hideIfDamaged>
+          <isUVProportional>	true	</isUVProportional>
+        </slot>
+        <slot>
+          <slotType>	player	</slotType>
+          <slotId>	515	</slotId>
+          <rayStart>	1.02599 0.624019 0.0317764	</rayStart>
+          <rayEnd>	0.849709 0.534571 0.0014153	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <isMirrored>	true	</isMirrored>
+          <size>	0.281	</size>
+          <hideIfDamaged>	true	</hideIfDamaged>
+          <isUVProportional>	true	</isUVProportional>
+        </slot>
+        <slot>
+          <slotType>	paint	</slotType>
+          <slotId>	512	</slotId>
+          <anchorPosition>	0.000000 0.879513 0.000000	</anchorPosition>
+          <anchorDirection>	0.000000 1 0.000000	</anchorDirection>
+        </slot>
+        <slot>
+          <slotType>	camouflage	</slotType>
+          <slotId>	513	</slotId>
+          <anchorPosition>	0.000000 0.879513 0.000000	</anchorPosition>
+          <anchorDirection>	0.000000 1 0.000000	</anchorDirection>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	578	</slotId>
+          <tags>	formfactor_any	</tags>
+          <position>	0.050254 1.9585 0.542053	</position>
+          <rotation>	0.2246 -0.000019 3.14152	</rotation>
+          <scale>	1.17723 1.17723 1.17722	</scale>
+          <doubleSided>	false	</doubleSided>
+          <showOn>	256	</showOn>
+          <clipAngle>	0.706858	</clipAngle>
+          <anchorPosition>	0.0502827 0.873076 0.369107	</anchorPosition>
+          <anchorDirection>	0.000064 0.974883 0.222717	</anchorDirection>
+        </slot>
+      </customizationSlots>
+      <customization>
+        <customizableVehicleAreas>
+          <paint>	TURRET	</paint>
+          <camouflage>	TURRET	</camouflage>
+        </customizableVehicleAreas>
+      </customization>
+      <camouflage>
+        <tiling>	1.55 1.55 0.000000 0.000000	</tiling>
+      </camouflage>
+    </Turret_1_Ch42_WalkerBulldog_M41D>
+  </turrets0>
+  <engines>
+    <Detroit_Diesel_8V71T>	shared	</Detroit_Diesel_8V71T>
+  </engines>
+  <fuelTanks>
+    <Heavy>	shared	</Heavy>
+  </fuelTanks>
+  <radios>
+    <AN_GRC_8>	shared	</AN_GRC_8>
+  </radios>
+  <clientAdjustmentFactors></clientAdjustmentFactors>
+  <physics>
+    <detailed>
+      <engines>
+        <Detroit_Diesel_8V71T>
+          <smplEnginePower>	780	</smplEnginePower>
+          <smplFwMaxSpeed>	65	</smplFwMaxSpeed>
+        </Detroit_Diesel_8V71T>
+      </engines>
+      <chassis>
+        <Chassis_Ch42_WalkerBulldog_M41D>
+          <axleCount>	5	</axleCount>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.05635	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.05635	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.05635	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.05635	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.05635	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.05635	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_Ch42_WalkerBulldog_M41D>
+      </chassis>
+    </detailed>
+  </physics>
+  <effects>
+    <collision></collision>
+    <damagedStateGroup>	medium	</damagedStateGroup>
+  </effects>
+  <emblems>
+    <default>	china_kuomintang	</default>
+    <lodDist>	MEDIUM	</lodDist>
+    <alpha>	0.92	</alpha>
+  </emblems>
+</Ch42_WalkerBulldog_M41D.xml>

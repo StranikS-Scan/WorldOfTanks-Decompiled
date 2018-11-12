@@ -14,7 +14,6 @@ from dossiers2.ui.achievements import MARK_ON_GUN_RECORD
 from gui import g_tankActiveCamouflage
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.gui_items.customization.outfit import Area, REGIONS_BY_SLOT_TYPE
-from gui.customization.shared import ANCHOR_TYPE_TO_SLOT_TYPE_MAP
 from gui.shared.items_cache import CACHE_SYNC_REASON
 from helpers import dependency
 from items.components.c11n_constants import ApplyArea, SeasonType
@@ -31,9 +30,7 @@ from CurrentVehicle import g_currentVehicle, g_currentPreviewVehicle
 from gui.hangar_cameras.hangar_camera_common import CameraMovementStates, CameraRelatedEvents
 from gui.shared import g_eventBus, EVENT_BUS_SCOPE
 from gui.ClientHangarSpace import hangarCFG
-from skeletons.gui.shared.utils import IHangarSpace
 _HANGAR_UNDERGUN_EMBLEM_ANGLE_SHIFT = math.pi / 4
-EmblemSlotHelper = namedtuple('EmblemSlotHelper', ['tankAreaSlot', 'tankAreaId', 'worldMatrix'])
 EmblemPositionParams = namedtuple('EmblemPositionParams', ['position', 'direction', 'emblemDescription'])
 Anchor = namedtuple('Anchor', ['pos',
  'normal',
@@ -78,7 +75,6 @@ class HangarVehicleAppearance(ComponentSystem):
     itemsCache = dependency.descriptor(IItemsCache)
     itemsFactory = dependency.descriptor(IGuiItemsFactory)
     settingsCore = dependency.descriptor(ISettingsCore)
-    hangarSpace = dependency.descriptor(IHangarSpace)
     wheelsAnimator = ComponentDescriptor()
     trackNodesAnimator = ComponentDescriptor()
     collisions = ComponentDescriptor()
@@ -313,13 +309,20 @@ class HangarVehicleAppearance(ComponentSystem):
             self.__fashions = VehiclePartsTuple(BigWorld.WGVehicleFashion(False), BigWorld.WGBaseFashion(), BigWorld.WGBaseFashion(), BigWorld.WGBaseFashion())
             model_assembler.setupTracksFashion(self.__vDesc, self.__fashions.chassis)
             self.__vEntity.model.setupFashions(self.__fashions)
-            model_assembler.assembleCollisionObstaclesCollector(self, None)
+            model_assembler.assembleCollisionObstaclesCollector(self, None, self.__vDesc)
             model_assembler.assembleTessellationCollisionSensor(self, None)
-            self.wheelsAnimator = model_assembler.createWheelsAnimator(self.__vEntity.model, self.__vDesc, None)
-            self.trackNodesAnimator = model_assembler.createTrackNodesAnimator(self.__vEntity.model, self.__vDesc, self.wheelsAnimator)
+            wheelsScroll = None
+            wheelsSteering = None
+            if self.__vDesc.chassis.generalWheelsAnimatorConfig is not None:
+                scrollableWheelsCount = self.__vDesc.chassis.generalWheelsAnimatorConfig.getWheelsCount()
+                wheelsScroll = [ (lambda : 0.0) for _ in xrange(scrollableWheelsCount) ]
+                steerableWheelsCount = self.__vDesc.chassis.generalWheelsAnimatorConfig.getSteerableWheelsCount()
+                wheelsSteering = [ (lambda : 0.0) for _ in xrange(steerableWheelsCount) ]
             chassisFashion = self.__fashions.chassis
+            self.wheelsAnimator = model_assembler.createWheelsAnimator(self.__vEntity.model, self.collisions, ColliderTypes.VEHICLE_COLLIDER, self.__vDesc, None, lambda : 0, wheelsScroll, wheelsSteering, self.__vEntity.id, chassisFashion)
+            self.trackNodesAnimator = model_assembler.createTrackNodesAnimator(self.__vEntity.model, self.__vDesc, self.wheelsAnimator)
             splineTracksImpl = model_assembler.setupSplineTracks(chassisFashion, self.__vDesc, self.__vEntity.model, self.__resources)
-            model_assembler.assembleTracks(self.__resources, self.__vDesc, self, splineTracksImpl, True)
+            model_assembler.assembleTracks(self.__resources, self.__vDesc, self, splineTracksImpl, True, True)
             dirtEnabled = BigWorld.WG_dirtEnabled() and 'HD' in self.__vDesc.type.tags
             if dirtEnabled:
                 dirtHandlers = [BigWorld.PyDirtHandler(True, self.__vEntity.model.node(TankPartNames.CHASSIS).position.y),
@@ -346,12 +349,12 @@ class HangarVehicleAppearance(ComponentSystem):
         gunPitch = self.__vDesc.gun.staticPitch
         if not ('AT-SPG' in self.__vDesc.type.tags or 'SPG' in self.__vDesc.type.tags):
             if turretYaw is None:
-                turretYaw = cfg['vehicle_turret_yaw'] if self.__vEntity.id == self.hangarSpace.space.vehicleEntityId else self.__vEntity.vehicleTurretYaw
+                turretYaw = cfg['vehicle_turret_yaw']
                 turretYawLimits = self.__vDesc.gun.turretYawLimits
                 if turretYawLimits is not None:
                     turretYaw = mathUtils.clamp(turretYawLimits[0], turretYawLimits[1], turretYaw)
             if gunPitch is None:
-                gunPitch = cfg['vehicle_gun_pitch'] if self.__vEntity.id == self.hangarSpace.space.vehicleEntityId else self.__vEntity.vehicleGunPitch
+                gunPitch = cfg['vehicle_gun_pitch']
                 gunPitchLimits = self.__vDesc.gun.pitchLimits['absolute']
                 gunPitch = mathUtils.clamp(gunPitchLimits[0], gunPitchLimits[1], gunPitch)
         else:
@@ -459,45 +462,39 @@ class HangarVehicleAppearance(ComponentSystem):
          GUI_ITEM_TYPE.PROJECTION_DECAL: {},
          GUI_ITEM_TYPE.MODIFICATION: {},
          GUI_ITEM_TYPE.STYLE: {}} for area in Area.ALL}
-        hullEmblemSlots = EmblemSlotHelper(self.__vDesc.hull.emblemSlots, Area.HULL, Math.Matrix(self.__vEntity.model.node(TankPartNames.HULL)))
-        if self.__vDesc.turret.showEmblemsOnGun:
-            turretEmblemSlots = EmblemSlotHelper(self.__vDesc.turret.emblemSlots, Area.GUN, Math.Matrix(self.__vEntity.model.node(TankPartNames.GUN)))
-        else:
-            turretEmblemSlots = EmblemSlotHelper(self.__vDesc.turret.emblemSlots, Area.TURRET, Math.Matrix(self.__vEntity.model.node(TankPartNames.TURRET)))
-        for emblemSlotHelper in (hullEmblemSlots, turretEmblemSlots):
-            for emblemSlot in emblemSlotHelper.tankAreaSlot:
-                startPos = emblemSlot.rayStart
-                endPos = emblemSlot.rayEnd
-                normal = startPos - endPos
-                normal.normalise()
-                worldEmblemNormal = emblemSlotHelper.worldMatrix.applyVector(normal)
-                sub = endPos - startPos
-                half = sub / 2.0
-                midPos = startPos + half
-                worldEmblemPos = emblemSlotHelper.worldMatrix.applyPoint(midPos)
-                container = slots[emblemSlotHelper.tankAreaId]
-                slotType = ANCHOR_TYPE_TO_SLOT_TYPE_MAP.get(emblemSlot.type, None)
-                if slotType is not None:
-                    slotId = emblemSlot.slotId if hasattr(emblemSlot, 'slotId') else -1
-                    container[slotType][len(container[slotType])] = Anchor(worldEmblemPos, worldEmblemNormal, 0, slotId, emblemSlot)
+        emblemSlotTypes = (GUI_ITEM_TYPE.INSCRIPTION, GUI_ITEM_TYPE.EMBLEM)
+        customizationSlotTypes = (GUI_ITEM_TYPE.PAINT,
+         GUI_ITEM_TYPE.CAMOUFLAGE,
+         GUI_ITEM_TYPE.PROJECTION_DECAL,
+         GUI_ITEM_TYPE.MODIFICATION,
+         GUI_ITEM_TYPE.STYLE)
+        for slotType in emblemSlotTypes:
+            for areaId in Area.ALL:
+                for emblemSlot in g_currentVehicle.item.getAnchors(slotType, areaId).itervalues():
+                    worldMatrix = Math.Matrix(self.__vEntity.model.node(Area.getName(areaId)))
+                    startPos = emblemSlot.rayStart
+                    endPos = emblemSlot.rayEnd
+                    normal = startPos - endPos
+                    normal.normalise()
+                    worldEmblemNormal = worldMatrix.applyVector(normal)
+                    sub = endPos - startPos
+                    half = sub / 2.0
+                    midPos = startPos + half
+                    worldEmblemPos = worldMatrix.applyPoint(midPos)
+                    container = slots[areaId]
+                    container[slotType][len(container[slotType])] = Anchor(worldEmblemPos, worldEmblemNormal, 0, emblemSlot.slotId, emblemSlot)
 
-        chassisSlotsAnchors = EmblemSlotHelper(self.__vDesc.chassis.slotsAnchors, Area.CHASSIS, Math.Matrix(self.__vEntity.model.node(TankPartNames.CHASSIS)))
-        hullSlotsAnchors = EmblemSlotHelper(self.__vDesc.hull.slotsAnchors, Area.HULL, Math.Matrix(self.__vEntity.model.node(TankPartNames.HULL)))
-        turretSlotsAnchors = EmblemSlotHelper(self.__vDesc.turret.slotsAnchors, Area.TURRET, Math.Matrix(self.__vEntity.model.node(TankPartNames.TURRET)))
-        gunSlotsAnchors = EmblemSlotHelper(self.__vDesc.gun.slotsAnchors, Area.GUN, Math.Matrix(self.__vEntity.model.node(TankPartNames.GUN)))
-        for emblemSlotHelper in (chassisSlotsAnchors,
-         hullSlotsAnchors,
-         turretSlotsAnchors,
-         gunSlotsAnchors):
-            for slotsAnchor in emblemSlotHelper.tankAreaSlot:
-                slotType = ANCHOR_TYPE_TO_SLOT_TYPE_MAP.get(slotsAnchor.type, None)
-                if slotType is not None:
-                    container = slots[emblemSlotHelper.tankAreaId]
-                    if slotsAnchor.applyTo is not None:
+        for slotType in customizationSlotTypes:
+            for areaId in Area.ALL:
+                for anchor in g_currentVehicle.item.getAnchors(slotType, areaId).itervalues():
+                    worldMatrix = Math.Matrix(self.__vEntity.model.node(Area.getName(anchor.areaId)))
+                    container = slots[anchor.areaId]
+                    applyTo = anchor.descriptor.applyTo
+                    if applyTo is not None:
                         index = -1
-                        if slotType in REGIONS_BY_SLOT_TYPE[emblemSlotHelper.tankAreaId]:
-                            regions = REGIONS_BY_SLOT_TYPE[emblemSlotHelper.tankAreaId][slotType]
-                            index = next((i for i, region in enumerate(regions) if slotsAnchor.applyTo == region), -1)
+                        if slotType in REGIONS_BY_SLOT_TYPE[areaId]:
+                            regions = REGIONS_BY_SLOT_TYPE[areaId][slotType]
+                            index = next((i for i, region in enumerate(regions) if applyTo == region), -1)
                     else:
                         index = len(container[slotType])
                     if index == -1:
@@ -505,12 +502,13 @@ class HangarVehicleAppearance(ComponentSystem):
                     if slotType in (GUI_ITEM_TYPE.MODIFICATION, GUI_ITEM_TYPE.STYLE):
                         hullAABB = self.collisions.getBoundingBox(TankPartIndexes.HULL)
                         anchorPosition = Math.Vector3((hullAABB[1].x + hullAABB[0].x) / 2.0, hullAABB[1].y / 2.0, (hullAABB[1].z + hullAABB[0].z) / 2.0)
-                        worldEmblemPos = hullSlotsAnchors.worldMatrix.applyPoint(anchorPosition)
+                        hullWorldMatrix = Math.Matrix(self.__vEntity.model.node(TankPartNames.HULL))
+                        worldEmblemPos = hullWorldMatrix.applyPoint(anchorPosition)
                     else:
-                        worldEmblemPos = emblemSlotHelper.worldMatrix.applyPoint(slotsAnchor.anchorPosition)
-                    worldEmblemNormal = emblemSlotHelper.worldMatrix.applyVector(slotsAnchor.anchorDirection)
+                        worldEmblemPos = worldMatrix.applyPoint(anchor.anchorPosition)
+                    worldEmblemNormal = worldMatrix.applyVector(anchor.anchorDirection)
                     worldEmblemNormal.normalise()
-                    container[slotType][index] = Anchor(worldEmblemPos, worldEmblemNormal, slotsAnchor.applyTo, slotsAnchor.slotId, slotsAnchor)
+                    container[slotType][index] = Anchor(worldEmblemPos, worldEmblemNormal, applyTo, anchor.slotId, anchor.descriptor)
 
         return slots
 

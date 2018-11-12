@@ -4,7 +4,7 @@ from web_client_api import w2capi
 from web_client_api.ui.shop import ShopWebApiMixin
 from web_client_api.ui.badges import BadgesWebApiMixin
 from web_client_api.ui.boosters import BoostersWindowWebApiMixin
-from web_client_api.ui.browser import OpenBrowserWindowWebApiMixin, CloseBrowserWindowWebApiMixin, OpenExternalBrowserWebApiMixin
+from web_client_api.ui.browser import OpenBrowserWindowWebApiMixin, CloseBrowserWindowWebApiMixin, CloseBrowserViewWebApiMixin, OpenExternalBrowserWebApiMixin
 from web_client_api.ui.barracks import BarracksWebApiMixin
 from web_client_api.ui.clan import ClanWindowWebApiMixin
 from web_client_api.ui import hangar
@@ -26,6 +26,11 @@ class OpenWindowWebApi(OpenBrowserWindowWebApiMixin, ClanWindowWebApiMixin, Prof
 
 @w2capi(name='close_window', key='window_id')
 class CloseWindowWebApi(CloseBrowserWindowWebApiMixin):
+    pass
+
+
+@w2capi('close_window', 'window_id')
+class CloseViewWebApi(CloseBrowserViewWebApiMixin):
     pass
 
 

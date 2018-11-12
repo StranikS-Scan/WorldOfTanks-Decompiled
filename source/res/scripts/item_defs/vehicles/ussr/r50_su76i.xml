@@ -102,7 +102,7 @@
       </slot>
       <slot>
         <slotType>	player	</slotType>
-        <slotId>	2	</slotId>
+        <slotId>	4	</slotId>
         <rayStart>	1.02336 0.908064 0.844836	</rayStart>
         <rayEnd>	0.652778 0.757515 0.844828	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
@@ -113,7 +113,7 @@
       </slot>
       <slot>
         <slotType>	inscription	</slotType>
-        <slotId>	3	</slotId>
+        <slotId>	36	</slotId>
         <rayStart>	-1.005 0.948464 0.0669223	</rayStart>
         <rayEnd>	-0.634213 0.798408 0.0669223	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
@@ -123,7 +123,7 @@
       </slot>
       <slot>
         <slotType>	player	</slotType>
-        <slotId>	4	</slotId>
+        <slotId>	5	</slotId>
         <rayStart>	-1.02336 0.908064 0.844836	</rayStart>
         <rayEnd>	-0.652778 0.757515 0.844828	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
@@ -133,7 +133,7 @@
       </slot>
       <slot>
         <slotType>	inscription	</slotType>
-        <slotId>	5	</slotId>
+        <slotId>	37	</slotId>
         <rayStart>	1.005 0.948464 0.0669223	</rayStart>
         <rayEnd>	0.634213 0.798408 0.0669223	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
@@ -143,7 +143,7 @@
       </slot>
       <slot>
         <slotType>	camouflage	</slotType>
-        <slotId>	8	</slotId>
+        <slotId>	3	</slotId>
         <anchorPosition>	0.00128381 0.463896 -1.69342	</anchorPosition>
         <anchorDirection>	0.000000 0.742236 -0.670138	</anchorDirection>
       </slot>
@@ -1021,7 +1021,7 @@
       <customizationSlots>
         <slot>
           <slotType>	style	</slotType>
-          <slotId>	6	</slotId>
+          <slotId>	257	</slotId>
           <anchorPosition>	-0.000000 2.21112 0.249066	</anchorPosition>
           <anchorDirection>	-0.000000 1 0.000000	</anchorDirection>
         </slot>
@@ -1097,7 +1097,7 @@
           <customizationSlots>
             <slot>
               <slotType>	camouflage	</slotType>
-              <slotId>	7	</slotId>
+              <slotId>	770	</slotId>
               <anchorPosition>	0.0368381 0.0594368 1.13873	</anchorPosition>
               <anchorDirection>	-0.000000 0.000000 1	</anchorDirection>
               <applyTo>	4096	</applyTo>
@@ -1143,6 +1143,7 @@
       <engines>
         <Maybach_HL_120_TRM_A>
           <smplEnginePower>	317.1843	</smplEnginePower>
+          <smplFwMaxSpeed>	50	</smplFwMaxSpeed>
         </Maybach_HL_120_TRM_A>
       </engines>
       <chassis>

@@ -46,8 +46,13 @@ class HangarCarouselDataProvider(CarouselDataProvider):
         super(HangarCarouselDataProvider, self).clear()
         self._supplyItems = []
 
+    def _buildRentPromitionVehicleItems(self):
+        rentPromotionCriteria = REQ_CRITERIA.VEHICLE.RENT_PROMOTION | ~self._baseCriteria
+        self._addVehicleItemsByCriteria(rentPromotionCriteria)
+
     def _buildVehicleItems(self):
         super(HangarCarouselDataProvider, self)._buildVehicleItems()
+        self._buildRentPromitionVehicleItems()
         self._buildSupplyItems()
 
     def _getAdditionalItemsIndexes(self):
@@ -67,9 +72,10 @@ class HangarCarouselDataProvider(CarouselDataProvider):
         items = self._itemsCache.items
         slots = items.stats.vehicleSlots
         vehicles = self.getTotalVehiclesCount()
+        rentPromotion = self.getRentPromotionVehiclesCount()
         slotPrice = items.shop.getVehicleSlotsPrice(slots)
         defaultSlotPrice = items.shop.defaults.getVehicleSlotsPrice(slots)
-        self._emptySlotsCount = slots - vehicles
+        self._emptySlotsCount = slots - (vehicles - rentPromotion)
         criteria = REQ_CRITERIA.IN_CD_LIST(items.recycleBin.getVehiclesIntCDs()) | REQ_CRITERIA.VEHICLE.IS_RESTORE_POSSIBLE
         self._restorableVehiclesCount = len(items.getVehicles(criteria))
         if slotPrice != defaultSlotPrice:

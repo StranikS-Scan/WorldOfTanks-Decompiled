@@ -91,7 +91,7 @@
       </slot>
       <slot>
         <slotType>	inscription	</slotType>
-        <slotId>	2	</slotId>
+        <slotId>	36	</slotId>
         <rayStart>	0.459024 0.337179 1.57063	</rayStart>
         <rayEnd>	0.459024 0.151713 1.49578	</rayEnd>
         <rayUp>	0.301911 -0.0189067 -0.953149	</rayUp>
@@ -101,7 +101,7 @@
       </slot>
       <slot>
         <slotType>	player	</slotType>
-        <slotId>	3	</slotId>
+        <slotId>	4	</slotId>
         <rayStart>	-0.541062 0.397785 1.41818	</rayStart>
         <rayEnd>	-0.541059 0.212321 1.34333	</rayEnd>
         <rayUp>	0.000000 0.000000 -1	</rayUp>
@@ -987,7 +987,7 @@
           <customizationSlots>
             <slot>
               <slotType>	insigniaOnGun	</slotType>
-              <slotId>	5	</slotId>
+              <slotId>	771	</slotId>
               <rayStart>	0.000003 0.000586137 2.8671	</rayStart>
               <rayEnd>	-0.00894188 -0.014948 2.86554	</rayEnd>
               <rayUp>	0.076 0.07 4	</rayUp>
@@ -1023,7 +1023,7 @@
       <customizationSlots>
         <slot>
           <slotType>	player	</slotType>
-          <slotId>	4	</slotId>
+          <slotId>	514	</slotId>
           <rayStart>	-0.324625 -0.0454813 -1.68711	</rayStart>
           <rayEnd>	-0.324625 -0.0457586 -1.48711	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
@@ -1051,6 +1051,7 @@
       <engines>
         <Detroit_Diesel_6V53T-S_IGR>
           <smplEnginePower>	470	</smplEnginePower>
+          <smplFwMaxSpeed>	64	</smplFwMaxSpeed>
         </Detroit_Diesel_6V53T-S_IGR>
       </engines>
       <chassis>

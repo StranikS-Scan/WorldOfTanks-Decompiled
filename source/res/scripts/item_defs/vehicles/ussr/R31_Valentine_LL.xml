@@ -93,7 +93,7 @@
       </slot>
       <slot>
         <slotType>	camouflage	</slotType>
-        <slotId>	8	</slotId>
+        <slotId>	3	</slotId>
         <anchorPosition>	0.00694743 0.338193 -1.72475	</anchorPosition>
         <anchorDirection>	0.000001 0.996192 -0.0871897	</anchorDirection>
       </slot>
@@ -860,7 +860,7 @@
       <customizationSlots>
         <slot>
           <slotType>	style	</slotType>
-          <slotId>	4	</slotId>
+          <slotId>	257	</slotId>
           <anchorPosition>	0.000241154 2.08252 0.624295	</anchorPosition>
           <anchorDirection>	-0.000000 1 -0.000000	</anchorDirection>
         </slot>
@@ -940,7 +940,7 @@
           <customizationSlots>
             <slot>
               <slotType>	camouflage	</slotType>
-              <slotId>	7	</slotId>
+              <slotId>	770	</slotId>
               <anchorPosition>	0.000000 0.000010 0.714387	</anchorPosition>
               <anchorDirection>	-0.000000 0.000000 1	</anchorDirection>
               <applyTo>	4096	</applyTo>
@@ -973,7 +973,7 @@
       <customizationSlots>
         <slot>
           <slotType>	player	</slotType>
-          <slotId>	2	</slotId>
+          <slotId>	514	</slotId>
           <rayStart>	-0.838006 0.380849 -0.0589871	</rayStart>
           <rayEnd>	-0.638059 0.380849 -0.0543797	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
@@ -983,7 +983,7 @@
         </slot>
         <slot>
           <slotType>	inscription	</slotType>
-          <slotId>	3	</slotId>
+          <slotId>	546	</slotId>
           <rayStart>	0.918804 0.323664 0.164515	</rayStart>
           <rayEnd>	0.52953 0.323663 0.072542	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
@@ -993,7 +993,7 @@
         </slot>
         <slot>
           <slotType>	camouflage	</slotType>
-          <slotId>	6	</slotId>
+          <slotId>	513	</slotId>
           <anchorPosition>	0.000000 0.651594 0.000000	</anchorPosition>
           <anchorDirection>	0.000000 1 0.000000	</anchorDirection>
         </slot>
@@ -1017,6 +1017,7 @@
       <engines>
         <AEC_A190>
           <smplEnginePower>	148.0194	</smplEnginePower>
+          <smplFwMaxSpeed>	32	</smplFwMaxSpeed>
         </AEC_A190>
       </engines>
       <chassis>

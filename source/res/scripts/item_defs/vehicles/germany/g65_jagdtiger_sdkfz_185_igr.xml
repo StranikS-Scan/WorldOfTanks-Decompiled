@@ -100,7 +100,7 @@
       </slot>
       <slot>
         <slotType>	player	</slotType>
-        <slotId>	2	</slotId>
+        <slotId>	4	</slotId>
         <rayStart>	-1.14495 1.30761 -0.424126	</rayStart>
         <rayEnd>	-0.963667 1.22312 -0.424126	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
@@ -110,7 +110,7 @@
       </slot>
       <slot>
         <slotType>	player	</slotType>
-        <slotId>	3	</slotId>
+        <slotId>	5	</slotId>
         <rayStart>	1.14495 1.30761 -0.424126	</rayStart>
         <rayEnd>	0.963667 1.22312 -0.424126	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
@@ -121,7 +121,7 @@
       </slot>
       <slot>
         <slotType>	inscription	</slotType>
-        <slotId>	4	</slotId>
+        <slotId>	36	</slotId>
         <rayStart>	-0.698422 0.638947 2.84796	</rayStart>
         <rayEnd>	-0.698511 0.332456 2.59094	</rayEnd>
         <rayUp>	0.000000 0.000000 -1	</rayUp>
@@ -131,7 +131,7 @@
       </slot>
       <slot>
         <slotType>	inscription	</slotType>
-        <slotId>	5	</slotId>
+        <slotId>	37	</slotId>
         <rayStart>	1.52235 0.497728 -2.8648	</rayStart>
         <rayEnd>	1.34116 0.41304 -2.86474	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
@@ -985,7 +985,7 @@
           <customizationSlots>
             <slot>
               <slotType>	insigniaOnGun	</slotType>
-              <slotId>	6	</slotId>
+              <slotId>	771	</slotId>
               <rayStart>	-0.000000 -0.00615249 3.82434	</rayStart>
               <rayEnd>	0.15641 -0.0867226 3.81621	</rayEnd>
               <rayUp>	0.072 0.064 4	</rayUp>
@@ -1034,6 +1034,7 @@
       <engines>
         <Maybach_HL_210P30_Ausf_A_IGR>
           <smplEnginePower>	740.0968	</smplEnginePower>
+          <smplFwMaxSpeed>	38	</smplFwMaxSpeed>
         </Maybach_HL_210P30_Ausf_A_IGR>
       </engines>
       <chassis>

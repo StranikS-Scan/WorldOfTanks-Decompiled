@@ -1,7 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/economics.py
+import typing
 from ItemRestore import getVehicleRestorePrice
 from gui.shared.money import Money, Currency
+from rent_common import makeRentID
 
 def getActionPrc(price, defaultPrice):
 
@@ -20,17 +22,28 @@ def getActionPrc(price, defaultPrice):
     return calculate(price, defaultPrice)
 
 
-def calcRentPackages(vehicle, proxy):
+def calcRentPackages(vehicle, proxy, rentalsController):
     result = []
     if proxy is not None and vehicle.isRentable:
-        rentCost = proxy.shop.getVehicleRentPrices().get(vehicle.intCD, {})
-        defaultRentCost = proxy.shop.defaults.getVehicleRentPrices().get(vehicle.intCD, {})
-        for key in sorted(rentCost.iterkeys()):
-            rentPrice = Money.makeFromMoneyTuple(rentCost[key].get('cost', ()))
-            defaultRentPrice = Money.makeFromMoneyTuple(defaultRentCost.get(key, {}).get('cost', rentPrice.toMoneyTuple()))
-            result.append({'days': key,
-             'rentPrice': rentPrice,
-             'defaultRentPrice': defaultRentPrice})
+        shopRentPrices = proxy.shop.getVehicleRentPrices().get(vehicle.intCD, {})
+        shopDefaultRentPrices = proxy.shop.defaults.getVehicleRentPrices().get(vehicle.intCD, {})
+        filteredRentPackages = rentalsController.filterRentPackages(shopRentPrices)
+        filteredDefaultRentCosts = rentalsController.filterRentPackages(shopDefaultRentPrices)
+        for rentType in sorted(filteredRentPackages.iterkeys()):
+            costsOfCurrentType = filteredRentPackages[rentType]
+            defaultCostsOfCurrentType = filteredDefaultRentCosts.get(rentType, {})
+            for packageID in sorted(costsOfCurrentType):
+                currentPackage = costsOfCurrentType[packageID]
+                rentPrice = rentalsController.getRentPriceOfPackage(vehicle, rentType, packageID, currentPackage)
+                defaultPackage = defaultCostsOfCurrentType.get(packageID, None)
+                if defaultPackage is not None:
+                    defaultRentPrice = rentalsController.getRentPriceOfPackage(vehicle, rentType, packageID, defaultPackage)
+                else:
+                    defaultRentPrice = rentPrice
+                result.append({'rentID': makeRentID(rentType, packageID),
+                 'rentPrice': rentPrice,
+                 'defaultRentPrice': defaultRentPrice,
+                 'seasonType': currentPackage.get('seasonType', None)})
 
     return result
 

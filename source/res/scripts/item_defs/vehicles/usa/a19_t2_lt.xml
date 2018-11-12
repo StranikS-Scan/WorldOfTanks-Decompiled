@@ -87,7 +87,7 @@
       </slot>
       <slot>
         <slotType>	inscription	</slotType>
-        <slotId>	2	</slotId>
+        <slotId>	36	</slotId>
         <rayStart>	-0.269073 0.243411 1.65895	</rayStart>
         <rayEnd>	-0.269073 -0.054466 1.54763	</rayEnd>
         <rayUp>	0.000000 0.000000 -1	</rayUp>
@@ -97,7 +97,7 @@
       </slot>
       <slot>
         <slotType>	camouflage	</slotType>
-        <slotId>	6	</slotId>
+        <slotId>	3	</slotId>
         <anchorPosition>	0.000000 0.793426 -1.49574	</anchorPosition>
         <anchorDirection>	0.000000 0.468609 -0.883405	</anchorDirection>
       </slot>
@@ -738,7 +738,7 @@
       <customizationSlots>
         <slot>
           <slotType>	style	</slotType>
-          <slotId>	5	</slotId>
+          <slotId>	257	</slotId>
           <anchorPosition>	0.000120972 2.04492 -0.106055	</anchorPosition>
           <anchorDirection>	-0.000000 1 0.000000	</anchorDirection>
         </slot>
@@ -814,7 +814,7 @@
           <customizationSlots>
             <slot>
               <slotType>	camouflage	</slotType>
-              <slotId>	8	</slotId>
+              <slotId>	770	</slotId>
               <anchorPosition>	0.000000 0.000707446 0.843603	</anchorPosition>
               <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
               <applyTo>	4096	</applyTo>
@@ -847,7 +847,7 @@
       <customizationSlots>
         <slot>
           <slotType>	player	</slotType>
-          <slotId>	3	</slotId>
+          <slotId>	514	</slotId>
           <rayStart>	0.911723 0.163685 -0.248936	</rayStart>
           <rayEnd>	0.332174 0.163685 -0.0936467	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
@@ -858,7 +858,7 @@
         </slot>
         <slot>
           <slotType>	player	</slotType>
-          <slotId>	4	</slotId>
+          <slotId>	515	</slotId>
           <rayStart>	-0.67996 0.167504 -0.304823	</rayStart>
           <rayEnd>	-0.498698 0.167504 -0.2203	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
@@ -868,7 +868,7 @@
         </slot>
         <slot>
           <slotType>	camouflage	</slotType>
-          <slotId>	7	</slotId>
+          <slotId>	513	</slotId>
           <anchorPosition>	0.000000 0.517023 0.000000	</anchorPosition>
           <anchorDirection>	0.000000 1 0.000000	</anchorDirection>
         </slot>
@@ -892,6 +892,7 @@
       <engines>
         <Continental_R-670-5>
           <smplEnginePower>	280.1795	</smplEnginePower>
+          <smplFwMaxSpeed>	72	</smplFwMaxSpeed>
         </Continental_R-670-5>
       </engines>
       <chassis>

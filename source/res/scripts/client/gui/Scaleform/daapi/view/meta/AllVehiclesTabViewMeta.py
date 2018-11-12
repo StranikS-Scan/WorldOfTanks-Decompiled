@@ -13,9 +13,6 @@ class AllVehiclesTabViewMeta(InventoryCategoryView):
     def sellItem(self, itemId):
         self._printOverrideError('sellItem')
 
-    def showItemInfo(self, itemId):
-        self._printOverrideError('showItemInfo')
-
     def changeSearchNameVehicle(self, inputText):
         self._printOverrideError('changeSearchNameVehicle')
 

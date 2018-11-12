@@ -86,7 +86,7 @@ class RecoveryPanel(RecoveryPanelMeta):
                 self.as_displayCooldownS(False, False)
                 self.as_displayHintS(False, False)
             elif state in {RM_STATE.TEMPORARILY_BLOCKED_FROM_RECOVERING, RM_STATE.TEMPORARILY_BLOCKED_RECOVER_TRY}:
-                if state == RM_STATE.TEMPORARILY_BLOCKED_FROM_RECOVERING and self.__state in {RM_STATE.TEMPORARILY_BLOCKED_FROM_RECOVERING, RM_STATE.NOT_RECOVERING}:
+                if state == RM_STATE.TEMPORARILY_BLOCKED_FROM_RECOVERING and self.__state in (RM_STATE.TEMPORARILY_BLOCKED_RECOVER_TRY, RM_STATE.TEMPORARILY_BLOCKED_FROM_RECOVERING, RM_STATE.NOT_RECOVERING):
                     pass
                 else:
                     self.as_displayCooldownS(True, True)

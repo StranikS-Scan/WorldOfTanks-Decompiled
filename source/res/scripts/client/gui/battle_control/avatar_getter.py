@@ -1,9 +1,10 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/battle_control/avatar_getter.py
+import logging
 import BigWorld
 import Math
 from gui import GUI_CTRL_MODE_FLAG
-from debug_utils import LOG_WARNING, LOG_CURRENT_EXCEPTION
+_logger = logging.getLogger(__name__)
 
 def isForcedGuiControlMode(avatar=None):
     if avatar is None:
@@ -11,7 +12,7 @@ def isForcedGuiControlMode(avatar=None):
     try:
         result = avatar.isForcedGuiControlMode()
     except AttributeError:
-        LOG_WARNING('Attribute "isForcedGuiControlMode" is not found')
+        _logger.warning('Attribute "isForcedGuiControlMode" not found')
         result = False
 
     return result
@@ -23,7 +24,7 @@ def getForcedGuiControlModeFlags(avatar=None):
     try:
         result = avatar.getForcedGuiControlModeFlags()
     except AttributeError:
-        LOG_WARNING('Attribute "getForcedGuiControlModeFlags" is not found')
+        _logger.warning('Attribute "getForcedGuiControlModeFlags" not found')
         result = 0
 
     return result
@@ -43,7 +44,7 @@ def setForcedGuiControlMode(value, stopVehicle=False, enableAiming=True, cursorV
     try:
         return BigWorld.player().setForcedGuiControlMode(flags)
     except AttributeError:
-        LOG_CURRENT_EXCEPTION()
+        _logger.exception('Attribute "setForcedGuiControlMode" not found')
         return False
 
 
@@ -53,7 +54,7 @@ def getPlayerName(avatar=None):
     try:
         result = avatar.name
     except AttributeError:
-        LOG_WARNING('Attribute "name" is not found')
+        _logger.warning('Attribute "name" not found')
         result = ''
 
     return result
@@ -81,7 +82,7 @@ def isVehicleAlive(avatar=None):
     try:
         result = avatar.isVehicleAlive
     except AttributeError:
-        LOG_WARNING('Attribute "isVehicleAlive" is not found')
+        _logger.warning('Attribute "isVehicleAlive" not found')
         result = False
 
     return result
@@ -93,7 +94,7 @@ def isVehicleOverturned(avatar=None):
     try:
         result = avatar.isVehicleOverturned
     except AttributeError:
-        LOG_WARNING('Attribute "isVehicleOverturned" is not found')
+        _logger.warning('Attribute "isVehicleOverturned" not found')
         result = False
 
     return result
@@ -105,7 +106,7 @@ def isVehicleBarrelUnderWater(avatar=None):
     try:
         result = avatar.isOwnBarrelUnderWater
     except AttributeError:
-        LOG_WARNING('Attribute "isOwnBarrelUnderWater" is not found')
+        _logger.warning('Attribute "isOwnBarrelUnderWater" not found')
         result = False
 
     return result
@@ -117,7 +118,7 @@ def isVehicleInFire(avatar=None):
     try:
         result = avatar.fireInVehicle
     except AttributeError:
-        LOG_WARNING('Attribute "fireInVehicle" is not found')
+        _logger.warning('Attribute "fireInVehicle" not found')
         result = False
 
     return result
@@ -129,7 +130,7 @@ def getVehicleDeviceStates(avatar=None):
     try:
         result = avatar.deviceStates
     except AttributeError:
-        LOG_WARNING('Attribute "deviceStates" is not found')
+        _logger.warning('Attribute "deviceStates" not found')
         result = {}
 
     return result
@@ -141,7 +142,7 @@ def getVehicleTypeDescriptor(avatar=None):
     try:
         result = avatar.vehicleTypeDescriptor
     except AttributeError:
-        LOG_WARNING('Attribute "vehicleTypeDescriptor" is not found')
+        _logger.warning('Attribute "vehicleTypeDescriptor" not found')
         result = None
 
     return result
@@ -153,7 +154,7 @@ def getVehicleExtrasDict(avatar=None):
     try:
         result = avatar.vehicleTypeDescriptor.extrasDict
     except AttributeError:
-        LOG_WARNING('Attribute "vehicleTypeDescriptor.extrasDict" is not found')
+        _logger.warning('Attribute "vehicleTypeDescriptor.extrasDict" not found')
         result = {}
 
     return result
@@ -165,7 +166,7 @@ def getSoundNotifications(avatar=None):
     try:
         result = avatar.soundNotifications
     except AttributeError:
-        LOG_WARNING('Attribute "soundNotifications" is not found')
+        _logger.warning('Attribute "soundNotifications" not found')
         result = None
 
     return result
@@ -177,7 +178,7 @@ def isPlayerOnArena(avatar=None):
     try:
         result = avatar.isOnArena
     except AttributeError:
-        LOG_WARNING('Attribute "isOnArena" is not found')
+        _logger.warning('Attribute "isOnArena" not found')
         result = False
 
     return result
@@ -189,7 +190,7 @@ def getInputHandler(avatar=None):
     try:
         result = avatar.inputHandler
     except AttributeError:
-        LOG_WARNING('Attribute "inputHandler" is not found')
+        _logger.warning('Attribute "inputHandler" not found')
         result = None
 
     return result
@@ -201,7 +202,7 @@ def getArena(avatar=None):
     try:
         result = avatar.arena
     except AttributeError:
-        LOG_WARNING('Attribute "arena" is not found')
+        _logger.warning('Attribute "arena" not found')
         result = None
 
     return result
@@ -211,7 +212,7 @@ def getArenaUniqueID(avatar=None):
     try:
         return getArena(avatar).arenaUniqueID
     except AttributeError:
-        LOG_WARNING('Attribute "arenaUniqueID" is not found')
+        _logger.warning('Attribute "arenaUniqueID" not found')
 
     return None
 
@@ -225,8 +226,7 @@ def updateVehicleSetting(code, value, avatar=None):
     try:
         avatar.updateVehicleSetting(vehicleid, code, value)
     except AttributeError:
-        LOG_CURRENT_EXCEPTION()
-        LOG_WARNING('Attribute "updateVehicleSetting" is not found')
+        _logger.exception('Attribute "updateVehicleSetting" not found')
 
     return
 
@@ -237,7 +237,7 @@ def changeVehicleSetting(code, value, avatar=None):
     try:
         avatar.base.vehicle_changeSetting(code, value)
     except AttributeError:
-        LOG_WARNING('Attribute "base.vehicle_changeSetting" is not found')
+        _logger.warning('Attribute "base.vehicle_changeSetting" not found')
 
     return
 
@@ -248,7 +248,7 @@ def activateAvatarEquipment(equipmentID, avatar=None):
     try:
         avatar.cell.activateEquipment(equipmentID)
     except AttributeError:
-        LOG_WARNING('Attribute "cell.activateEquipment" is not found')
+        _logger.warning('Attribute "cell.activateEquipment" not found')
 
     return
 
@@ -259,7 +259,7 @@ def leaveArena(avatar=None):
     try:
         avatar.leaveArena()
     except AttributeError:
-        LOG_WARNING('Attribute "leaveArena" is not found', avatar)
+        _logger.warning('Attribute "leaveArena" not found')
 
     return
 
@@ -270,7 +270,7 @@ def switchToOtherPlayer(vehicleID, avatar=None):
     try:
         avatar.selectPlayer(vehicleID)
     except AttributeError:
-        LOG_WARNING('Attribute "selectPlayer" is not found')
+        _logger.warning('Attribute "selectPlayer" not found')
 
     return
 
@@ -281,7 +281,7 @@ def setComponentsVisibility(flag, avatar=None):
     try:
         avatar.setComponentsVisibility(flag)
     except AttributeError:
-        LOG_WARNING('Attribute "setComponentsVisibility" is not found')
+        _logger.warning('Attribute "setComponentsVisibility" not found')
 
     return
 
@@ -293,7 +293,7 @@ def getOwnVehiclePosition(avatar=None):
         position = avatar.getOwnVehiclePosition()
     except AttributeError:
         position = None
-        LOG_WARNING('Attribute "getOwnVehiclePosition" is not found')
+        _logger.warning('Attribute "getOwnVehiclePosition" not found')
 
     return position
 
@@ -313,7 +313,7 @@ def getDistanceToGunMarker(avatar=None):
         try:
             gunPosition = avatar.gunRotator.markerInfo[0]
         except AttributeError:
-            LOG_WARNING('Attribute "gunRotator.markerInfo" is not found')
+            _logger.warning('Attribute "gunRotator.markerInfo" not found')
             return 0.0
 
         return (ownPosition - Math.Vector3(*gunPosition)).length
@@ -330,7 +330,7 @@ def getHealthPercentage(avatar=None):
     try:
         hp = avatar.getHealthPercentage()
     except AttributeError:
-        LOG_WARNING('Attribute "getHealthPercentage" is not found')
+        _logger.warning('Attribute "getHealthPercentage" not found')
         return [0.0, 0.0]
 
     return hp
@@ -342,7 +342,7 @@ def getLastRecoveryArgs(avatar=None):
     try:
         result = avatar.getLastRecoveryArgs()
     except AttributeError:
-        LOG_WARNING('Attribute "getLastRecoveryArgs" is not found')
+        _logger.warning('Attribute "getLastRecoveryArgs" not found')
         result = None
 
     return result
@@ -354,7 +354,18 @@ def getVehicleIDAttached(avatar=None):
     try:
         result = avatar.getVehicleAttached().id
     except AttributeError:
-        LOG_WARNING('Attribute "getVehicleAttached" is not found')
+        _logger.warning('Attribute "getVehicleAttached" is not found')
         result = None
 
     return result
+
+
+def setClientReady(avatar=None):
+    if avatar is None:
+        avatar = BigWorld.player()
+    try:
+        avatar.setClientReady()
+    except AttributeError:
+        _logger.warning('Attribute "setClientReady" not found')
+
+    return

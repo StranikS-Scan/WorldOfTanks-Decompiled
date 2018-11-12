@@ -7,6 +7,7 @@ import BigWorld
 import GUI
 import Math
 from ReplayEvents import g_replayEvents
+from constants import VEHICLE_SIEGE_STATE as _SIEGE_STATE
 from debug_utils import LOG_DEBUG
 from gui.Scaleform.daapi.view.battle.shared.formatters import formatHealthProgress, normalizeHealthPercent
 from gui.Scaleform.daapi.view.battle.shared.timers_common import PythonTimer
@@ -14,7 +15,7 @@ from gui.Scaleform.daapi.view.meta.DamagePanelMeta import DamagePanelMeta
 from gui.Scaleform.genConsts.APP_CONTAINERS_NAMES import APP_CONTAINERS_NAMES
 from gui.Scaleform.locale.INGAME_GUI import INGAME_GUI
 from gui.battle_control import vehicle_getter
-from gui.battle_control.battle_constants import VEHICLE_GUI_ITEMS, AUTO_ROTATION_FLAG
+from gui.battle_control.battle_constants import ALL_VEHICLE_GUI_ITEMS, AUTO_ROTATION_FLAG
 from gui.battle_control.battle_constants import VEHICLE_VIEW_STATE
 from helpers import dependency
 from helpers import i18n
@@ -32,7 +33,8 @@ _STATE_HANDLERS = {VEHICLE_VIEW_STATE.HEALTH: '_updateHealth',
  VEHICLE_VIEW_STATE.REPAIRING: '_updateRepairingDevice',
  VEHICLE_VIEW_STATE.SWITCHING: '_switching',
  VEHICLE_VIEW_STATE.STUN: '_updateStun',
- VEHICLE_VIEW_STATE.INSPIRE: '_updateInspire'}
+ VEHICLE_VIEW_STATE.INSPIRE: '_updateInspire',
+ VEHICLE_VIEW_STATE.SIEGE_MODE: '_changeSpeedoType'}
 
 class STATUS_ID(CONST_CONTAINER):
     STUN = 0
@@ -72,10 +74,12 @@ class _PythonTimer(PythonTimer, _IStatusAnimPlayer):
 
     def __init__(self, viewObject, statusId):
         super(_PythonTimer, self).__init__(viewObject, 0, 0, 0, 0, statusId=statusId)
+        self._animated = False
         self.__hideAnimated = False
 
     def showStatus(self, totalTime, animated):
         super(_PythonTimer, self).showStatus(totalTime, animated)
+        self._animated = animated
         self._totalTime = totalTime
         self._startTime = BigWorld.serverTime()
         self._finishTime = self._startTime + totalTime if totalTime else 0
@@ -87,7 +91,7 @@ class _PythonTimer(PythonTimer, _IStatusAnimPlayer):
         super(_PythonTimer, self).hideStatus(animated)
 
     def _showView(self, isBubble):
-        self._viewObject.as_setStatusTimerSnapshotS(self._statusId, self._totalTime)
+        self._viewObject.as_showStatusS(self._statusId, self._totalTime, self._animated)
 
     def _hideView(self):
         if self._hasStatus:
@@ -141,6 +145,7 @@ class DamagePanel(DamagePanelMeta):
         self.__isAutoRotationShown = False
         self.__statusAnimPlayers = {}
         self.__initialized = False
+        self.__isWheeledTech = False
         return
 
     def __del__(self):
@@ -152,7 +157,7 @@ class DamagePanel(DamagePanelMeta):
             self.as_showS(isShow)
 
     def getTooltipData(self, entityName, state):
-        if entityName in VEHICLE_GUI_ITEMS:
+        if entityName in ALL_VEHICLE_GUI_ITEMS:
             formatter = '#ingame_gui:damage_panel/devices/{}/{}'
         else:
             formatter = '#ingame_gui:damage_panel/crew/{}/{}'
@@ -306,11 +311,14 @@ class DamagePanel(DamagePanelMeta):
             if flag != AUTO_ROTATION_FLAG.IGNORE_IN_UI:
                 self.__isAutoRotationOn = flag == AUTO_ROTATION_FLAG.TURN_ON
                 self.__isAutoRotationShown = True
+        self.__isWheeledTech = vehicle.isWheeledTech
         self.__maxHealth = vTypeDesc.maxHealth
         health = vehicle.health
         healthStr = formatHealthProgress(health, self.__maxHealth)
         healthProgress = normalizeHealthPercent(health, self.__maxHealth)
-        self.as_setupS(healthStr, healthProgress, vehicle_getter.getVehicleIndicatorType(vTypeDesc), vehicle_getter.getCrewMainRolesWithIndexes(vType.crewRoles), inDegrees, vehicle_getter.hasTurretRotator(vTypeDesc), self.__isAutoRotationOn)
+        self.as_setupS(healthStr, healthProgress, vehicle_getter.getVehicleIndicatorType(vTypeDesc), vehicle_getter.getCrewMainRolesWithIndexes(vType.crewRoles), inDegrees, vehicle_getter.hasTurretRotator(vTypeDesc), self.__isWheeledTech, self.__isAutoRotationOn)
+        if self.__isWheeledTech:
+            self.as_setupWheeledS(vTypeDesc.chassis.generalWheelsAnimatorConfig.getWheelsCount())
         self._updatePlayerInfo(vehicle.id)
         if self.__tankIndicator is not None:
             self.__tankIndicator.setup(vehicle, yawLimits)
@@ -328,6 +336,14 @@ class DamagePanel(DamagePanelMeta):
                 else:
                     handler()
             return
+
+    def _changeSpeedoType(self, value):
+        siegeState = value[0]
+        if self.__isWheeledTech:
+            if siegeState == _SIEGE_STATE.ENABLED:
+                self.as_setSpeedModeS(True)
+            elif siegeState == _SIEGE_STATE.DISABLED:
+                self.as_setSpeedModeS(False)
 
     def __onReplayPaused(self, _):
         self.as_setPlaybackSpeedS(BattleReplay.g_replayCtrl.playbackSpeed)

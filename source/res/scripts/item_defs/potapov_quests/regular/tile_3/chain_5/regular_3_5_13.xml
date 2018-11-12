@@ -9,41 +9,14 @@
           <and>
             <or>
               <vehicleDamage>
-                <title>
-                  <key>	#personal_missions_details:quest_3_5_13_condition_title_vehicleDamage	</key>
-                </title>
-                <description>
-                  <key>	#personal_missions_details:quest_3_5_13_condition_description_vehicleDamage	</key>
-                </description>
                 <attackReason>	0	</attackReason>
                 <eventCount></eventCount>
-                <greaterOrEqual>	8	</greaterOrEqual>
+                <greaterOrEqual>	6	</greaterOrEqual>
               </vehicleDamage>
               <results>
-                <title>
-                  <key>	#personal_missions_details:quest_3_5_13_condition_title_stunNum	</key>
-                </title>
-                <description>
-                  <key>	#personal_missions_details:quest_3_5_13_condition_description_stunNum	</key>
-                </description>
                 <key>	stunNum	</key>
-                <greaterOrEqual>	10	</greaterOrEqual>
+                <greaterOrEqual>	8	</greaterOrEqual>
               </results>
-              <unit>
-                <unitVehicleDamage>
-                  <hideInGui></hideInGui>
-                  <attackReason>	0	</attackReason>
-                  <eventCount></eventCount>
-                  <greaterOrEqual>	8	</greaterOrEqual>
-                </unitVehicleDamage>
-              </unit>
-              <unit>
-                <results>
-                  <hideInGui></hideInGui>
-                  <key>	stunNum	</key>
-                  <greaterOrEqual>	10	</greaterOrEqual>
-                </results>
-              </unit>
             </or>
           </and>
         </postBattle>
@@ -93,41 +66,14 @@
           <and>
             <or>
               <vehicleDamage>
-                <title>
-                  <key>	#personal_missions_details:quest_3_5_13_condition_title_vehicleDamage	</key>
-                </title>
-                <description>
-                  <key>	#personal_missions_details:quest_3_5_13_condition_description_vehicleDamage	</key>
-                </description>
                 <attackReason>	0	</attackReason>
                 <eventCount></eventCount>
-                <greaterOrEqual>	8	</greaterOrEqual>
+                <greaterOrEqual>	6	</greaterOrEqual>
               </vehicleDamage>
               <results>
-                <title>
-                  <key>	#personal_missions_details:quest_3_5_13_condition_title_stunNum	</key>
-                </title>
-                <description>
-                  <key>	#personal_missions_details:quest_3_5_13_condition_description_stunNum	</key>
-                </description>
                 <key>	stunNum	</key>
-                <greaterOrEqual>	10	</greaterOrEqual>
+                <greaterOrEqual>	8	</greaterOrEqual>
               </results>
-              <unit>
-                <unitVehicleDamage>
-                  <hideInGui></hideInGui>
-                  <attackReason>	0	</attackReason>
-                  <eventCount></eventCount>
-                  <greaterOrEqual>	8	</greaterOrEqual>
-                </unitVehicleDamage>
-              </unit>
-              <unit>
-                <results>
-                  <hideInGui></hideInGui>
-                  <key>	stunNum	</key>
-                  <greaterOrEqual>	10	</greaterOrEqual>
-                </results>
-              </unit>
             </or>
             <win></win>
           </and>
@@ -164,25 +110,12 @@
               <vehicleDamage>
                 <attackReason>	0	</attackReason>
                 <eventCount></eventCount>
-                <greaterOrEqual>	8	</greaterOrEqual>
+                <greaterOrEqual>	6	</greaterOrEqual>
               </vehicleDamage>
               <results>
                 <key>	stunNum	</key>
-                <greaterOrEqual>	10	</greaterOrEqual>
+                <greaterOrEqual>	8	</greaterOrEqual>
               </results>
-              <unit>
-                <unitVehicleDamage>
-                  <attackReason>	0	</attackReason>
-                  <eventCount></eventCount>
-                  <greaterOrEqual>	8	</greaterOrEqual>
-                </unitVehicleDamage>
-              </unit>
-              <unit>
-                <results>
-                  <key>	stunNum	</key>
-                  <greaterOrEqual>	10	</greaterOrEqual>
-                </results>
-              </unit>
             </or>
             <win></win>
           </and>

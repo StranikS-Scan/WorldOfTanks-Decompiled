@@ -58,7 +58,7 @@ class BattleHintPanel(BattleHintPanelMeta, IAbstractPeriodView):
         return
 
     def __getActiveHintData(self):
-        return first(sorted(self.__hints.iteritems(), key=lambda h: h[1].priority, reverse=True))
+        return first(sorted(self.__hints.iteritems(), key=lambda h: h[1].priority, reverse=False))
 
     def __invalidateBtnHint(self):
         hintData = self.__getActiveHintData()

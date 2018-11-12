@@ -5,7 +5,7 @@ import BigWorld
 from CurrentVehicle import g_currentVehicle
 from gui.Scaleform import getNationsFilterAssetPath
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
-from gui.Scaleform.daapi.view.lobby.customization.shared import getItemInventoryCount, getItemAppliedCount
+from gui.Scaleform.daapi.view.lobby.customization.shared import getItemInventoryCount, getItemAppliedCount, SEASON_TYPE_TO_NAME
 from gui.Scaleform.framework import ViewTypes
 from gui.Scaleform.genConsts.BLOCKS_TOOLTIP_TYPES import BLOCKS_TOOLTIP_TYPES
 from gui.Scaleform.locale.MENU import MENU
@@ -23,13 +23,12 @@ from gui.shared.tooltips import formatters, TOOLTIP_TYPE
 from gui.shared.tooltips.common import BlocksTooltipData, makePriceBlock, CURRENCY_SETTINGS
 from gui.shared.utils.graphics import isRendererPipelineDeferred
 from items.components.c11n_constants import SeasonType
-from items.vehicles import VEHICLE_CLASS_TAGS
+from items.vehicles import VEHICLE_CLASS_TAGS, CamouflageBonus
 from helpers import dependency, int2roman
 from helpers.i18n import makeString as _ms
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.customization import ICustomizationService
-from gui.Scaleform.daapi.view.lobby.customization.shared import SEASON_TYPE_TO_NAME
 
 class SimplifiedStatsBlockConstructor(object):
 
@@ -112,28 +111,23 @@ class ElementTooltip(BlocksTooltipData):
         self._setMargins(afterBlock=14)
         self._setWidth(self.CUSTOMIZATION_TOOLTIP_WIDTH)
         self._item = None
-        self._isShowPrice = True
         self._specialArgs = None
         return
 
     def _packBlocks(self, *args):
-        itemIntCD = args[0]
+        self._item = self.itemsCache.items.getItemByCD(args[0])
+        statsConfig = self.context.getStatsConfiguration(self._item)
         if len(args) > 1:
-            self._isShowPrice = args[1]
-        else:
-            self._isShowPrice = True
-        if len(args) > 2:
-            self._specialArgs = args[2]
-        else:
-            self._specialArgs = []
-        self._item = self.itemsCache.items.getItemByCD(itemIntCD)
-        return self._packItemBlocks()
+            showInventoryBlock = args[1]
+            statsConfig.buyPrice = showInventoryBlock
+            statsConfig.sellPrice = showInventoryBlock
+            statsConfig.inventoryCount = showInventoryBlock
+        self._specialArgs = args[2] if len(args) > 2 else []
+        return self._packItemBlocks(statsConfig)
 
-    def _packItemBlocks(self):
+    def _packItemBlocks(self, statsConfig):
         self.bonusDescription = VEHICLE_CUSTOMIZATION.BONUS_CONDITION_SEASON
-        topBlocks = []
-        topBlocks.append(self._packTitleBlock())
-        topBlocks.append(self._packIconBlock(self._item.isHistorical()))
+        topBlocks = [self._packTitleBlock(), self._packIconBlock(self._item.isHistorical())]
         items = [formatters.packBuildUpBlockData(blocks=topBlocks, gap=10)]
         self.currentVehicle = g_currentVehicle.item
         self.boundVehs = [ vehicleCD for vehicleCD in self._item.boundInventoryCount if vehicleCD != -1 ]
@@ -171,8 +165,8 @@ class ElementTooltip(BlocksTooltipData):
             block = self._packDescriptionBlock()
             if block:
                 items.append(block)
-        if self._isShowPrice:
-            items.append(self._packInventoryBlock())
+        if statsConfig.buyPrice or statsConfig.sellPrice or statsConfig.inventoryCount:
+            items.append(self._packInventoryBlock(statsConfig.buyPrice, statsConfig.sellPrice, statsConfig.inventoryCount))
         if not self._item.isUnlocked:
             items.append(self._packLockedBlock())
         if self._item.descriptor.filter:
@@ -193,20 +187,12 @@ class ElementTooltip(BlocksTooltipData):
 
     def _packSuitableBlock(self):
         blocks = []
+        conditions = []
         if self._item.isVehicleBound and not self._item.mayApply:
             return formatters.packTitleDescBlock(title=text_styles.middleTitle(VEHICLE_CUSTOMIZATION.CUSTOMIZATION_TOOLTIP_SUITABLE_TITLE), desc=text_styles.standard(self.__makeVehiclesShortNamesString(set(self.boundVehs + self.installedToVehs))), padding=formatters.packPadding(top=-2))
         else:
             for node in self._item.descriptor.filter.include:
-                conditions = []
                 separator = ' '.join(['&nbsp;&nbsp;', icons.makeImageTag(RES_ICONS.MAPS_ICONS_CUSTOMIZATION_TOOLTIP_SEPARATOR, 3, 21, -6), '  '])
-                if node.levels:
-                    conditions.append(text_styles.main(VEHICLE_CUSTOMIZATION.CUSTOMIZATION_TOOLTIP_SUITABLE_TIER))
-                    for level in node.levels:
-                        conditions.append(text_styles.stats(int2roman(level)))
-                        conditions.append(text_styles.stats(',&nbsp;'))
-
-                    conditions = conditions[:-1]
-                    conditions.append(separator)
                 if node.nations:
                     for nation in node.nations:
                         name = nations.NAMES[nation]
@@ -214,7 +200,7 @@ class ElementTooltip(BlocksTooltipData):
                         conditions.append('  ')
 
                     conditions = conditions[:-1]
-                    conditions.append(separator)
+                    conditions.append(' ')
                 if node.tags:
                     for vehType in VEHICLE_TYPES_ORDER:
                         if vehType in node.tags:
@@ -224,23 +210,26 @@ class ElementTooltip(BlocksTooltipData):
                         conditions.append(separator)
                     if VEHICLE_TAGS.PREMIUM in node.tags:
                         conditions.append(icons.makeImageTag(RES_ICONS.MAPS_ICONS_LIBRARY_PREM_SMALL_ICON, 20, 17, -4))
-                        conditions.append(separator)
                     if VEHICLE_TAGS.PREMIUM_IGR in node.tags:
                         conditions.append(icons.premiumIgrSmall())
                         conditions.append(separator)
+                if node.levels:
+                    for level in node.levels:
+                        conditions.append(text_styles.stats(int2roman(level)))
+                        conditions.append(text_styles.stats(',&nbsp;'))
+
+                    conditions = conditions[:-1]
+                    conditions.append(separator)
                 if node.vehicles:
                     conditions.append(text_styles.standard(self.__makeVehiclesShortNamesString(set(node.vehicles), flat=True)))
                     conditions.append(separator)
-                if not conditions:
-                    continue
-                icn = text_styles.concatStylesToSingleLine(*conditions[:-1])
-                blocks.append(formatters.packTextBlockData(text=icn, padding=formatters.packPadding(top=-2)))
-                blocks.append(formatters.packTextBlockData(text=text_styles.neutral(VEHICLE_CUSTOMIZATION.FILTER_OR), padding=formatters.packPadding(top=-4)))
 
+            icn = text_styles.concatStylesToSingleLine(*conditions[:-1])
+            blocks.append(formatters.packTextBlockData(text=icn, padding=formatters.packPadding(top=-2)))
             if not blocks:
                 return None
             blocks.insert(0, formatters.packTitleDescBlock(title=text_styles.middleTitle(VEHICLE_CUSTOMIZATION.CUSTOMIZATION_TOOLTIP_SUITABLE_TITLE)))
-            return formatters.packBuildUpBlockData(blocks=blocks[:-1], padding=formatters.packPadding(top=-3))
+            return formatters.packBuildUpBlockData(blocks=blocks, padding=formatters.packPadding(top=-3))
 
     def _packAppliedBlock(self):
         vehicles = set(self.installedToVehs)
@@ -262,7 +251,7 @@ class ElementTooltip(BlocksTooltipData):
         if self._item.isLimited:
             purchaseLimit = self.service.getCtx().getPurchaseLimit(self._item)
             if self._item.buyCount > 0 and (purchaseLimit > 0 or self.appliedCount > 0):
-                specials.append(_ms(VEHICLE_CUSTOMIZATION.CUSTOMIZATION_LIMITED_SPECIAL_RULES_TEXT, avaivable=text_styles.neutral(purchaseLimit)))
+                specials.append(_ms(VEHICLE_CUSTOMIZATION.CUSTOMIZATION_LIMITED_SPECIAL_RULES_TEXT, available=text_styles.neutral(purchaseLimit)))
         if not specials:
             return None
         else:
@@ -288,9 +277,13 @@ class ElementTooltip(BlocksTooltipData):
         desc = _ms(VEHICLE_CUSTOMIZATION.CUSTOMIZATION_INFOTYPE_DESCRIPTION_MAP, mapType=text_styles.stats(mapType))
         if self._item.groupUserName:
             desc = text_styles.concatStylesToSingleLine(desc, _ms(VEHICLE_CUSTOMIZATION.CUSTOMIZATION_INFOTYPE_DESCRIPTION_TYPE, elementType=text_styles.stats(self._item.groupUserName)))
-        return formatters.packItemTitleDescBlockData(title=text_styles.highTitle(self._item.userName), desc=text_styles.main(desc), highlightPath=RES_ICONS.MAPS_ICONS_CUSTOMIZATION_CORNER_RARE, img=RES_ICONS.MAPS_ICONS_CUSTOMIZATION_BRUSH_RARE, imgPadding=formatters.packPadding(top=15, left=8), padding=formatters.packPadding(top=-20, left=-19, bottom=-7), txtPadding=formatters.packPadding(top=20, left=-8), descPadding=formatters.packPadding(top=-25, left=17)) if self._item.isRare() else formatters.packTitleDescBlock(title=text_styles.highTitle(self._item.userName), desc=text_styles.main(desc), descPadding=formatters.packPadding(top=-5))
+        title = self._item.userName
+        tooltipKey = TOOLTIPS.getItemBoxTooltip(self._item.itemTypeName)
+        if tooltipKey:
+            title = _ms(tooltipKey, group=self._item.userType, value=self._item.userName)
+        return formatters.packItemTitleDescBlockData(title=text_styles.highTitle(title), desc=text_styles.main(desc), highlightPath=RES_ICONS.MAPS_ICONS_CUSTOMIZATION_CORNER_RARE, img=RES_ICONS.MAPS_ICONS_CUSTOMIZATION_BRUSH_RARE, imgPadding=formatters.packPadding(top=15, left=8), padding=formatters.packPadding(top=-20, left=-19, bottom=-7), txtPadding=formatters.packPadding(top=20, left=-8), descPadding=formatters.packPadding(top=25, left=-8)) if self._item.isRare() else formatters.packTitleDescBlock(title=text_styles.highTitle(title), desc=text_styles.main(desc), descPadding=formatters.packPadding(top=-5))
 
-    def _packInventoryBlock(self):
+    def _packInventoryBlock(self, showBuyPrice, showSellPrice, showInventoryCount):
         container = self.app.containerManager.getContainer(ViewTypes.LOBBY_SUB)
         view = container.getView()
         if view.alias == VIEW_ALIAS.LOBBY_CUSTOMIZATION:
@@ -299,7 +292,7 @@ class ElementTooltip(BlocksTooltipData):
             getInventoryCount = getItemInventoryCount
         subBlocks = []
         money = self.itemsCache.items.stats.money
-        if not self._item.isHidden:
+        if showBuyPrice and not self._item.isHidden:
             for itemPrice in self._item.buyPrices:
                 currency = itemPrice.getCurrency()
                 value = itemPrice.price.getSignValue(currency)
@@ -315,28 +308,35 @@ class ElementTooltip(BlocksTooltipData):
                 if self._item.buyCount > 0:
                     subBlocks.append(makePriceBlock(value, setting(currency), needValue if needValue > 0 else None, defValue if defValue > 0 else None, actionPercent, valueWidth=88, leftPadding=49, forcedText=forcedText))
 
-            if not self._item.isRentable:
-                for itemPrice in self._item.sellPrices:
-                    currency = itemPrice.getCurrency()
-                    value = itemPrice.price.getSignValue(currency)
-                    defValue = itemPrice.defPrice.getSignValue(currency)
-                    actionPercent = itemPrice.getActionPrc()
-                    if actionPercent > 0:
-                        subBlocks.append(formatters.packTextParameterWithIconBlockData(name=text_styles.main(TOOLTIPS.ACTIONPRICE_SELL_BODY_SIMPLE), value=text_styles.concatStylesToSingleLine(text_styles.credits(BigWorld.wg_getIntegralFormat(value)), '    ', icons.credits()), icon='alertMedium', valueWidth=88, padding=formatters.packPadding(left=-5)))
-                    subBlocks.append(makePriceBlock(value, CURRENCY_SETTINGS.SELL_PRICE, oldPrice=defValue if defValue > 0 else None, percent=actionPercent, valueWidth=88, leftPadding=49))
+        if showSellPrice and not (self._item.isHidden or self._item.isRentable):
+            for itemPrice in self._item.sellPrices:
+                currency = itemPrice.getCurrency()
+                value = itemPrice.price.getSignValue(currency)
+                defValue = itemPrice.defPrice.getSignValue(currency)
+                actionPercent = itemPrice.getActionPrc()
+                if actionPercent > 0:
+                    subBlocks.append(formatters.packTextParameterWithIconBlockData(name=text_styles.main(TOOLTIPS.ACTIONPRICE_SELL_BODY_SIMPLE), value=text_styles.concatStylesToSingleLine(text_styles.credits(BigWorld.wg_getIntegralFormat(value)), '    ', icons.credits()), icon='alertMedium', valueWidth=88, padding=formatters.packPadding(left=-5)))
+                subBlocks.append(makePriceBlock(value, CURRENCY_SETTINGS.SELL_PRICE, oldPrice=defValue if defValue > 0 else None, percent=actionPercent, valueWidth=88, leftPadding=49))
 
         inventoryCount = getInventoryCount(self._item)
         info = text_styles.concatStylesWithSpace(text_styles.stats(inventoryCount))
-        if self._item.isRentable and inventoryCount > 0 or not self._item.isRentable:
-            title = text_styles.main(_ms(VEHICLE_CUSTOMIZATION.CUSTOMIZATION_TOOLTIP_INVENTORY_RENT_BATTLESLEFT, tankname=g_currentVehicle.item.shortUserName) if self._item.isRentable else VEHICLE_CUSTOMIZATION.CUSTOMIZATION_TOOLTIP_INVENTORY_AVAILABLE)
-            icon = RES_ICONS.MAPS_ICONS_LIBRARY_CLOCKICON_1 if self._item.isRentable else RES_ICONS.MAPS_ICONS_CUSTOMIZATION_STORAGE_ICON
-            padding = formatters.packPadding(left=83, bottom=-14 if self._item.isRentable else 0)
-            titlePadding = formatters.packPadding(left=-8 if self._item.isRentable else -1)
-            iconPadding = formatters.packPadding(top=-7 if self._item.isRentable else -2, left=-3 if self._item.isRentable else -2)
+        if showInventoryCount and (self._item.isRentable and inventoryCount > 0 or not self._item.isRentable):
+            if self._item.isRentable:
+                title = text_styles.main(_ms(VEHICLE_CUSTOMIZATION.CUSTOMIZATION_TOOLTIP_INVENTORY_RENT_BATTLESLEFT, tankname=g_currentVehicle.item.shortUserName))
+                icon = RES_ICONS.MAPS_ICONS_LIBRARY_CLOCKICON_1
+                padding = formatters.packPadding(left=83, bottom=-14)
+                titlePadding = formatters.packPadding(left=-8)
+                iconPadding = formatters.packPadding(top=-7, left=-3)
+            else:
+                title = text_styles.main(VEHICLE_CUSTOMIZATION.CUSTOMIZATION_TOOLTIP_INVENTORY_AVAILABLE)
+                icon = RES_ICONS.MAPS_ICONS_CUSTOMIZATION_STORAGE_ICON
+                padding = formatters.packPadding(left=83, bottom=0)
+                titlePadding = formatters.packPadding(left=-1)
+                iconPadding = formatters.packPadding(top=-2, left=-2)
             subBlocks.append(formatters.packTitleDescParameterWithIconBlockData(title=title, value=info, icon=icon, padding=padding, titlePadding=titlePadding, iconPadding=iconPadding))
         boundCount = self._item.boundInventoryCount.get(self.currentVehicle.intCD, 0)
         commonCount = boundCount + self.installedCount
-        if commonCount > 0 and self._item.isVehicleBound and not self._item.isRentable:
+        if showInventoryCount and commonCount > 0 and self._item.isVehicleBound and not self._item.isRentable:
             subBlocks.append(formatters.packTitleDescParameterWithIconBlockData(title=text_styles.main(_ms(VEHICLE_CUSTOMIZATION.CUSTOMIZATION_BOUND_ON_VEHICLE, tankname=g_currentVehicle.item.shortUserName)), value=text_styles.concatStylesWithSpace(text_styles.stats(commonCount)), icon=RES_ICONS.MAPS_ICONS_CUSTOMIZATION_TANK, padding=padding, titlePadding=titlePadding, iconPadding=formatters.packPadding(top=2)))
         return formatters.packBuildUpBlockData(blocks=subBlocks, gap=-1)
 
@@ -364,7 +364,7 @@ class ElementTooltip(BlocksTooltipData):
         blocks = []
         vehicle = g_currentVehicle.item
         bonusPercent = bonus.getFormattedValue(vehicle)
-        blocks.append(formatters.packImageTextBlockData(title=text_styles.bonusLocalInfoTipText(text_styles.concatStylesToSingleLine('+', bonusPercent)), img=RES_ICONS.MAPS_ICONS_LIBRARY_QUALIFIERS_48X48_CAMOUFLAGE, imgPadding=formatters.packPadding(top=-8, left=12), txtPadding=formatters.packPadding(top=-4), txtOffset=69))
+        blocks.append(formatters.packImageTextBlockData(title=text_styles.bonusLocalInfoTipText(text_styles.concatStylesToSingleLine('+', bonusPercent)), img=RES_ICONS.MAPS_ICONS_VEHPARAMS_BIG_INVISIBILITYSTILLFACTOR, imgPadding=formatters.packPadding(top=-8, left=12), txtPadding=formatters.packPadding(top=-4), txtOffset=69))
         blocks.append(formatters.packTextBlockData(text=text_styles.main(self.bonusDescription), padding=formatters.packPadding(top=-46, left=110)))
         stockVehicle = self.itemsCache.items.getStockVehicle(vehicle.intCD)
         comparator = params_helper.camouflageComparator(stockVehicle, camo)
@@ -408,5 +408,26 @@ class ElementIconTooltip(ElementTooltip):
     def __init__(self, context):
         super(ElementIconTooltip, self).__init__(context, TOOLTIPS_CONSTANTS.TECH_CUSTOMIZATION_ITEM_ICON)
 
+    def _packBonusBlock(self, bonus, camo, isApplied):
+        return super(ElementIconTooltip, self)._packBonusBlock(bonus, camo, True)
+
     def _packSuitableBlock(self):
         return None
+
+
+class ElementAwardTooltip(ElementTooltip):
+
+    def __init__(self, context):
+        super(ElementAwardTooltip, self).__init__(context, TOOLTIPS_CONSTANTS.TECH_CUSTOMIZATION_ITEM_AWARD)
+
+    def _packBonusBlock(self, bonus, camo, isApplied):
+        blocks = []
+        bonusDescription = self.bonusDescription
+        if self._item.itemTypeName == 'style':
+            bonusDescription = VEHICLE_CUSTOMIZATION.ELEMENTAWARDTOOLTIP_DESCRIPTION_STYLE
+        elif self._item.itemTypeName == 'camouflage':
+            bonusDescription = VEHICLE_CUSTOMIZATION.ELEMENTAWARDTOOLTIP_DESCRIPTION_CAMOUFLAGE
+        bonusPercent = '{min:.0f}-{max:.0f}%'.format(min=CamouflageBonus.MIN * 100, max=CamouflageBonus.MAX * 100)
+        blocks.append(formatters.packImageTextBlockData(title=text_styles.bonusLocalInfoTipText(bonusPercent), img=RES_ICONS.MAPS_ICONS_VEHPARAMS_BIG_INVISIBILITYSTILLFACTOR, imgPadding=formatters.packPadding(top=-8, left=12), txtPadding=formatters.packPadding(top=-4), txtOffset=69))
+        blocks.append(formatters.packTextBlockData(text=text_styles.main(bonusDescription), padding=formatters.packPadding(top=-55, left=120)))
+        return formatters.packBuildUpBlockData(blocks, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_BUILDUP_BLOCK_WHITE_BG_LINKAGE)

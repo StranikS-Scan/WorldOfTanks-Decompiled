@@ -61,8 +61,5 @@ class CustomizationBottomPanelMeta(BaseDAAPIComponent):
     def as_getDataProviderS(self):
         return self.flashObject.as_getDataProvider() if self._isDAAPIInited() else None
 
-    def as_showNotificationS(self, text):
-        return self.flashObject.as_showNotification(text) if self._isDAAPIInited() else None
-
     def as_removeCountersS(self):
         return self.flashObject.as_removeCounters() if self._isDAAPIInited() else None

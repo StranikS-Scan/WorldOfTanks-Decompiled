@@ -61,5 +61,8 @@ class Array(PyObjectEntity):
     def remove(self, index):
         self.proxy.removeValue(index)
 
+    def removeValues(self, indexes):
+        self.proxy.removeValues(indexes)
+
     def invalidate(self):
         self.proxy.invalidate()

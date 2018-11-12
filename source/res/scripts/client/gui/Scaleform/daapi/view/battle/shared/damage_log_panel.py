@@ -29,8 +29,12 @@ class _RECORD_STYLE(object):
     SHORT = 1
 
 
-_EVENT_POSITIONS_TO_RECORD_STYLE = {_EVENT_POSITIONS.ALL_BOTTOM: (_RECORD_STYLE.FULL, _RECORD_STYLE.FULL),
- _EVENT_POSITIONS.NEGATIVE_AT_TOP: (_RECORD_STYLE.FULL, _RECORD_STYLE.SHORT)}
+_EVENT_POSITIONS_TO_RECORD_STYLE = {_EVENT_POSITIONS.ALL_BOTTOM: {_DISPLAYED_EVENT_TYPES.ALL: (_RECORD_STYLE.FULL, _RECORD_STYLE.FULL),
+                               _DISPLAYED_EVENT_TYPES.ONLY_NEGATIVE: (_RECORD_STYLE.FULL, _RECORD_STYLE.SHORT),
+                               _DISPLAYED_EVENT_TYPES.ONLY_POSITIVE: (_RECORD_STYLE.FULL, _RECORD_STYLE.SHORT)},
+ _EVENT_POSITIONS.NEGATIVE_AT_TOP: {_DISPLAYED_EVENT_TYPES.ALL: (_RECORD_STYLE.FULL, _RECORD_STYLE.SHORT),
+                                    _DISPLAYED_EVENT_TYPES.ONLY_NEGATIVE: (_RECORD_STYLE.FULL, _RECORD_STYLE.SHORT),
+                                    _DISPLAYED_EVENT_TYPES.ONLY_POSITIVE: (_RECORD_STYLE.FULL, _RECORD_STYLE.SHORT)}}
 _DISPLAYED_EVENT_TYPES_TO_CONTENT_MASK = {_DISPLAYED_EVENT_TYPES.ALL: _ALL_EVENTS_MASK,
  _DISPLAYED_EVENT_TYPES.ONLY_NEGATIVE: _NEGATIVE_EVENTS_MASK,
  _DISPLAYED_EVENT_TYPES.ONLY_POSITIVE: _POSITIVE_EVENTS_MASK}
@@ -428,9 +432,10 @@ class DamageLogPanel(BattleDamageLogPanelMeta):
         settingGetter = self.settingsCore.getSetting
         self.__logViewMode = settingGetter(DAMAGE_LOG.SHOW_DETAILS)
         epos = settingGetter(DAMAGE_LOG.EVENT_POSITIONS)
+        etype = settingGetter(DAMAGE_LOG.SHOW_EVENT_TYPES)
         topLogContentMask, bottomLogContentMask = _EVENT_POSITIONS_TO_CONTENT_MASK[epos]
-        topLogRecStyle, bottomLogRecStyle = _EVENT_POSITIONS_TO_RECORD_STYLE[epos]
-        displayedEventsContentMask = _DISPLAYED_EVENT_TYPES_TO_CONTENT_MASK[settingGetter(DAMAGE_LOG.SHOW_EVENT_TYPES)]
+        topLogRecStyle, bottomLogRecStyle = _EVENT_POSITIONS_TO_RECORD_STYLE[epos][etype]
+        displayedEventsContentMask = _DISPLAYED_EVENT_TYPES_TO_CONTENT_MASK[etype]
         topLogContentMask &= displayedEventsContentMask
         bottomLogContentMask &= displayedEventsContentMask
         self.__topLog.updateLog(topLogContentMask, self.__logViewMode, topLogRecStyle)

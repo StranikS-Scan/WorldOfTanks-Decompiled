@@ -6,6 +6,3 @@ class RestoreVehiclesTabViewMeta(InventoryCategoryView):
 
     def restoreItem(self, itemId):
         self._printOverrideError('restoreItem')
-
-    def showItemInfo(self, itemId):
-        self._printOverrideError('showItemInfo')

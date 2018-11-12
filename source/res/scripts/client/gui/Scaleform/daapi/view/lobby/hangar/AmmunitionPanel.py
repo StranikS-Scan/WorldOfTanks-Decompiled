@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/hangar/AmmunitionPanel.py
 import logging
+from account_helpers.AccountSettings import CUSTOMIZATION_SECTION, AccountSettings, PROJECTION_DECAL_TAB_SHOWN_FIELD
 from constants import QUEUE_TYPE, PREBATTLE_TYPE
 from gui.prb_control.entities.listener import IGlobalListener
 from items.vehicles import NUM_OPTIONAL_DEVICE_SLOTS
@@ -11,7 +12,6 @@ from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.shared.fitting_slot_vo import FittingSlotVO, HangarFittingSlotVO
 from gui.Scaleform.daapi.view.meta.AmmunitionPanelMeta import AmmunitionPanelMeta
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
-from gui.Scaleform.genConsts.EPICBATTLES_ALIASES import EPICBATTLES_ALIASES
 from gui.Scaleform.locale.ITEM_TYPES import ITEM_TYPES
 from gui.shared import event_dispatcher as shared_events
 from gui.shared.event_bus import EVENT_BUS_SCOPE
@@ -100,9 +100,6 @@ class AmmunitionPanel(AmmunitionPanelMeta, IGlobalListener):
             shared_events.showModuleInfo(itemCD, g_currentVehicle.item.descriptor)
         return
 
-    def showBattleAbilityView(self):
-        self.fireEvent(LoadViewEvent(EPICBATTLES_ALIASES.EPIC_BATTLES_SKILL_ALIAS), EVENT_BUS_SCOPE.LOBBY)
-
     def _populate(self):
         super(AmmunitionPanel, self)._populate()
         self.startGlobalListening()
@@ -119,15 +116,24 @@ class AmmunitionPanel(AmmunitionPanelMeta, IGlobalListener):
             vehicle = g_currentVehicle.item
             statusId, msg, msgLvl = g_currentVehicle.getHangarMessage()
             rentAvailable = False
-            if statusId == Vehicle.VEHICLE_STATE.RENTAL_IS_OVER:
+            if statusId in (Vehicle.VEHICLE_STATE.RENTAL_IS_OVER, Vehicle.VEHICLE_STATE.RENTABLE_AGAIN):
                 canBuyOrRent, _ = vehicle.mayObtainForMoney(self.itemsCache.items.stats.money)
                 rentAvailable = vehicle.isRentable and canBuyOrRent
+            if msgLvl == Vehicle.VEHICLE_STATE_LEVEL.RENTABLE:
+                msgLvl = Vehicle.VEHICLE_STATE_LEVEL.INFO
             isBackground = statusId == Vehicle.VEHICLE_STATE.NOT_PRESENT
+            custSett = AccountSettings.getSettings(CUSTOMIZATION_SECTION)
+            appliedProjectionDecals = self.itemsCache.items.getItems(itemTypeID=GUI_ITEM_TYPE.PROJECTION_DECAL, criteria=REQ_CRITERIA.CUSTOMIZATION.FOR_VEHICLE(g_currentVehicle.item)).values()
+            if not custSett.get(PROJECTION_DECAL_TAB_SHOWN_FIELD, False) and appliedProjectionDecals and g_currentVehicle.getViewState().isCustomizationEnabled():
+                self.as_setCustomizationBtnCounterS(1)
+            else:
+                self.as_setCustomizationBtnCounterS(None)
             msgString = makeHtmlString('html_templates:vehicleStatus', msgLvl, {'message': i18n.makeString(msg)})
             self.__updateDevices(vehicle)
             self.as_updateVehicleStatusS({'message': msgString,
              'rentAvailable': rentAvailable,
              'isBackground': isBackground})
+        return
 
     def __inventoryUpdateCallBack(self, *args):
         self.update()

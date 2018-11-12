@@ -1306,7 +1306,7 @@
           <customizationSlots>
             <slot>
               <slotType>	insigniaOnGun	</slotType>
-              <slotId>	6	</slotId>
+              <slotId>	771	</slotId>
               <rayStart>	0.000002 -0.0965396 2.05518	</rayStart>
               <rayEnd>	-0.0187218 -0.173012 2.05518	</rayEnd>
               <rayUp>	0.133 0.133 5	</rayUp>
@@ -1342,7 +1342,7 @@
       <customizationSlots>
         <slot>
           <slotType>	inscription	</slotType>
-          <slotId>	2	</slotId>
+          <slotId>	546	</slotId>
           <rayStart>	1.10146 0.323397 0.795404	</rayStart>
           <rayEnd>	0.783018 0.219517 0.57679	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
@@ -1352,7 +1352,7 @@
         </slot>
         <slot>
           <slotType>	inscription	</slotType>
-          <slotId>	3	</slotId>
+          <slotId>	547	</slotId>
           <rayStart>	-1.02185 0.297428 0.740753	</rayStart>
           <rayEnd>	-0.862626 0.245486 0.631442	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
@@ -1362,7 +1362,7 @@
         </slot>
         <slot>
           <slotType>	player	</slotType>
-          <slotId>	4	</slotId>
+          <slotId>	514	</slotId>
           <rayStart>	1.22703 0.733217 -0.528833	</rayStart>
           <rayEnd>	1.03002 0.699677 -0.536582	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
@@ -1373,7 +1373,7 @@
         </slot>
         <slot>
           <slotType>	player	</slotType>
-          <slotId>	5	</slotId>
+          <slotId>	515	</slotId>
           <rayStart>	-0.908094 0.582026 -1.81306	</rayStart>
           <rayEnd>	-0.767778 0.574509 -1.67074	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
@@ -1401,6 +1401,7 @@
       <engines>
         <Continental_AV-1790-7B_IGR>
           <smplEnginePower>	856.3977	</smplEnginePower>
+          <smplFwMaxSpeed>	45	</smplFwMaxSpeed>
         </Continental_AV-1790-7B_IGR>
       </engines>
       <chassis>
@@ -1437,6 +1438,7 @@
               </medium>
             </metal>
           </grounds>
+          <axleCount>	5	</axleCount>
         </Chassis_A120_M48A5_IGR>
       </chassis>
     </detailed>

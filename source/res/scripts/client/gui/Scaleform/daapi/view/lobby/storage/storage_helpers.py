@@ -1,22 +1,18 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/storage/storage_helpers.py
 from gui import g_htmlTemplates
+from gui.Scaleform import MENU
 from gui.Scaleform.daapi.settings import BUTTON_LINKAGES
-from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.genConsts.SLOT_HIGHLIGHT_TYPES import SLOT_HIGHLIGHT_TYPES
 from gui.Scaleform.genConsts.STORE_CONSTANTS import STORE_CONSTANTS
-from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.STORAGE import STORAGE
-from gui.shared import g_eventBus, events
-from gui.shared.event_bus import EVENT_BUS_SCOPE
 from gui.shared.formatters import text_styles
 from helpers.i18n import makeString as _ms
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.items_parameters import params_helper
-from gui.shared.utils.functions import getViewName
 from gui.shared.utils.requesters.ItemsRequester import REQ_CRITERIA
-from helpers import i18n, dependency, int2roman
+from helpers import i18n, dependency, int2roman, time_utils
 from skeletons.gui.shared import IItemsCache
 _MAX_COMPATIBLE_VEHS_COUNT = 5
 _MAX_COMPATIBLE_GUNS_COUNT = 2
@@ -38,7 +34,7 @@ def getStorageItemDescr(item):
         return text_styles.main(desc)
 
 
-def createStorageDefVO(itemID, title, description, count, price, imageSmall, imageMedium, imageAlt, itemType='', nationFlagIcon='', level='', enabled=True, infoImgSrc='', infoText='', timerText='', timerIcon=''):
+def createStorageDefVO(itemID, title, description, count, price, imageSmall, imageMedium, imageAlt, itemType='', nationFlagIcon='', level='', enabled=True, infoImgSrc='', infoText='', timerText='', timerIcon='', contextMenuId=''):
     return {'id': itemID,
      'title': title,
      'description': description,
@@ -54,7 +50,8 @@ def createStorageDefVO(itemID, title, description, count, price, imageSmall, ima
      'timerText': timerText,
      'timerIcon': timerIcon,
      'infoImgSrc': infoImgSrc,
-     'infoText': infoText}
+     'infoText': infoText,
+     'contextMenuId': contextMenuId}
 
 
 def getStorageModuleName(item):
@@ -91,11 +88,6 @@ def getStorageShellsData(invVehicles, isCompatible, comparator=None, itemsCache=
         result.append(item)
 
     return result
-
-
-def showStorageModuleInfo(intCD):
-    g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.MODULE_INFO_WINDOW, getViewName(VIEW_ALIAS.MODULE_INFO_WINDOW, intCD), {'moduleCompactDescr': intCD,
-     'isAdditionalInfoShow': i18n.makeString(MENU.MODULEINFO_ADDITIONALINFO)}), EVENT_BUS_SCOPE.LOBBY)
 
 
 def _generateDescr(item, label, moreLabel, paramsNames, maxItemsCount):
@@ -139,3 +131,39 @@ def dummyFormatter(label, btnLabel='', btnTooltip=''):
      'btnTooltip': btnTooltip,
      'btnEvent': 'ResetFilterEvent',
      'btnLinkage': BUTTON_LINKAGES.BUTTON_BLACK}
+
+
+def enoughCreditsForRestore(restoreCreditsPrice, itemsCache):
+    currentMoney = itemsCache.items.stats.money
+    currentCredits = currentMoney.credits
+    liquidityCredits = currentCredits + currentMoney.gold * itemsCache.items.shop.exchangeRate
+    return (restoreCreditsPrice <= liquidityCredits, restoreCreditsPrice > currentCredits)
+
+
+def getVehicleRestoreInfo(vehicle):
+    info = vehicle.restoreInfo
+    if info.isInCooldown():
+        enabled = False
+        timeLeft = info.getRestoreCooldownTimeLeft()
+        icon = RES_ICONS.MAPS_ICONS_LIBRARY_ICON_SAND_WATCH
+        if timeLeft > time_utils.ONE_DAY:
+            description = i18n.makeString(MENU.VEHICLE_RESTORECOOLDOWNLEFT_DAYS, time=int(timeLeft / time_utils.ONE_DAY))
+        else:
+            if timeLeft > time_utils.ONE_HOUR:
+                timeValue = int(timeLeft / time_utils.ONE_HOUR)
+            else:
+                timeValue = '&lt;1'
+            description = i18n.makeString(MENU.VEHICLE_RESTORECOOLDOWNLEFT_HOURS, time=timeValue)
+    else:
+        enabled = True
+        timeLeft = 0 if info.isUnlimited() else info.getRestoreTimeLeft()
+        description = i18n.makeString(STORAGE.CARD_VEHICLE_HOVER_RESTOREAVAILABLELABEL)
+        icon = RES_ICONS.MAPS_ICONS_LIBRARY_CLOCKICON_1
+    if timeLeft:
+        timeStr = time_utils.getTillTimeString(timeLeft, MENU.TIME_TIMEVALUESHORT)
+    else:
+        timeStr = i18n.makeString(STORAGE.RESTORETIMELEFT_TIMELESS)
+    return (enabled,
+     timeStr,
+     description,
+     icon)

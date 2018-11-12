@@ -16,7 +16,19 @@ from soft_exception import SoftException
 PrecachedShell = namedtuple('PrecachedShell', 'guns params')
 PrecachedEquipment = namedtuple('PrecachedEquipment', 'nations params')
 PrecachedOptionalDevice = namedtuple('PrecachedOptionalDevice', 'weight nations')
-PrecachedChassis = namedtuple('PrecachedChassis', 'isHydraulic')
+PrecachedChassis = namedtuple('PrecachedChassis', 'isHydraulic, isWheeled')
+
+class _PrecachedChassisTypes(object):
+    DEFAULT = PrecachedChassis(isHydraulic=False, isWheeled=False)
+    HYDRAULIC = PrecachedChassis(isHydraulic=True, isWheeled=False)
+    WHEELED = PrecachedChassis(isHydraulic=False, isWheeled=True)
+    HYDRAULIC_WHEELED = PrecachedChassis(isHydraulic=True, isWheeled=True)
+    ALL = (DEFAULT,
+     HYDRAULIC,
+     WHEELED,
+     HYDRAULIC_WHEELED)
+    MAP = dict((((pC.isHydraulic, pC.isWheeled), pC) for pC in ALL))
+
 
 class PrecachedGun(namedtuple('PrecachedGun', 'clipVehicles autoReloadVehicles params turretsByVehicles')):
 
@@ -102,7 +114,7 @@ class VehicleDescrsCache(object):
 
 
 class _ParamsCache(object):
-    __slots__ = ('__cache', '__init', '__simplifiedParamsCoefficients', '__bonuses', '__noCamouflageVehicles')
+    __slots__ = ('__cache', '__init', '__simplifiedParamsCoefficients', '__bonuses', '__noCamouflageVehicles', '__wheeledChassisParams')
 
     def __init__(self):
         super(_ParamsCache, self).__init__()
@@ -111,6 +123,7 @@ class _ParamsCache(object):
         self.__simplifiedParamsCoefficients = {}
         self.__bonuses = {}
         self.__noCamouflageVehicles = ()
+        self.__wheeledChassisParams = {}
 
     @property
     def initialized(self):
@@ -146,6 +159,12 @@ class _ParamsCache(object):
 
     def isChassisHydraulic(self, itemCD):
         return self.getPrecachedParameters(itemCD).isHydraulic
+
+    def isChassisWheeled(self, itemCD):
+        return self.getPrecachedParameters(itemCD).isWheeled
+
+    def getWheeledChassisAxleLockAngles(self, itemCD):
+        return self.__wheeledChassisParams.get(itemCD)
 
     def getSimplifiedCoefficients(self):
         return self.__simplifiedParamsCoefficients
@@ -267,19 +286,23 @@ class _ParamsCache(object):
 
     def __precacheChassis(self, vehiclesCache):
         getter = vehicles.g_cache.chassis
-        hydraulic = PrecachedChassis(isHydraulic=True)
-        noHydraulic = PrecachedChassis(isHydraulic=False)
+        chassisItemType = ITEM_TYPES.vehicleChassis
+        processedItems = set()
         for nationIdx in nations.INDICES.itervalues():
-            self.__cache.setdefault(nationIdx, {})[ITEM_TYPES.vehicleChassis] = {}
-            siegeVcls = [ vDescr for vDescr in vehiclesCache.generator(nationIdx) if vDescr.hasSiegeMode ]
-            for chs in getter(nationIdx).itervalues():
-                result = noHydraulic
-                for vDescr in siegeVcls:
-                    for vChs in vDescr.type.chassis:
-                        if chs.compactDescr == vChs.compactDescr:
-                            result = hydraulic
+            self.__cache.setdefault(nationIdx, {})[chassisItemType] = {}
+            cachedChassisByNation = self.__cache[nationIdx][chassisItemType]
+            for vDescr in vehiclesCache.generator(nationIdx):
+                for vChs in vDescr.type.chassis:
+                    chassisCD = vChs.compactDescr
+                    cachedChassisByNation[chassisCD] = _PrecachedChassisTypes.MAP[vDescr.hasSiegeMode, vDescr.isWheeledVehicle]
+                    processedItems.add(chassisCD)
+                    if vDescr.isWheeledVehicle:
+                        chassisPhysics = vDescr.type.xphysics['chassis'][vChs.name]
+                        self.__wheeledChassisParams[chassisCD] = chassisPhysics['axleSteeringLockAngles']
 
-                self.__cache[nationIdx][ITEM_TYPES.vehicleChassis][chs.compactDescr] = result
+            for chs in getter(nationIdx).itervalues():
+                if chs.compactDescr not in processedItems:
+                    cachedChassisByNation[chs.compactDescr] = _PrecachedChassisTypes.DEFAULT
 
     def __cacheVehiclesWithoutCamouflage(self):
         vehicleCDs = []

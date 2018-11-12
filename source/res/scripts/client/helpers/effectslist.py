@@ -300,16 +300,12 @@ class _EffectDesc(object):
 
 
 class _PixieEffectDesc(_EffectDesc):
-    __slots__ = ('_files', '_filesNPC', '_havokFiles', '_force', '_surfaceMatKinds', '_orientByClosestSurfaceNormal', '_alwaysUpdate', '__prototypePixies')
+    __slots__ = ('_files', '_havokFiles', '_force', '_surfaceMatKinds', '_orientByClosestSurfaceNormal', '_alwaysUpdate', '__prototypePixies')
     TYPE = '_PixieEffectDesc'
-    sessionProvider = dependency.descriptor(IBattleSessionProvider)
 
     def __init__(self, dataSection):
         super(_PixieEffectDesc, self).__init__(dataSection)
         self._files = [ f for f in dataSection.readStrings('file') if f ]
-        self._filesNPC = None
-        if dataSection.has_key('fileNPC'):
-            self._filesNPC = [ f for f in dataSection.readStrings('fileNPC') if f ]
         if not self._files:
             _raiseWrongConfig('file', self.TYPE)
         self._force = 0
@@ -332,7 +328,7 @@ class _PixieEffectDesc(_EffectDesc):
         return
 
     def prerequisites(self):
-        return self._files if self._filesNPC is None else self._files + self._filesNPC
+        return self._files
 
     def reattach(self, elem, model):
         nodePos = self._nodeName
@@ -369,15 +365,7 @@ class _PixieEffectDesc(_EffectDesc):
         elem['model'] = model
         elem['typeDesc'] = self
         elem['pixie'] = None
-        isPlayer = True
-        if args.has_key('isPlayer'):
-            isPlayer = args['isPlayer']
-        eFile = None
-        isEventBattle = self.sessionProvider.arenaVisitor.gui.isEventBattle()
-        if isEventBattle and not isPlayer and self._filesNPC:
-            eFile = random.choice(self._filesNPC)
-        else:
-            eFile = random.choice(self._files)
+        eFile = random.choice(self._files)
         prototypePixie = self.__prototypePixies.get(eFile)
         modifiers = {}
         if args.get('havokSpawnedDestructibles', False):
@@ -1044,6 +1032,7 @@ class _PostProcessEffectDesc(_EffectDesc):
 class _FlashBangEffectDesc(_EffectDesc):
     __slots__ = ('_duration', '_keyframes', '__fba', '__clbackId')
     TYPE = '_FlashBangEffectDesc'
+    renderSettings = BigWorld.WGRenderSettings()
 
     def __init__(self, dataSection):
         super(_FlashBangEffectDesc, self).__init__(dataSection)
@@ -1064,12 +1053,12 @@ class _FlashBangEffectDesc(_EffectDesc):
         inputHandler = getattr(BigWorld.player(), 'inputHandler')
         if args.get('showFlashBang', True) and (inputHandler is None or inputHandler.isFlashBangAllowed):
             if self.__fba is not None:
-                BigWorld.removeFlashBangAnimation(self.__fba)
+                _FlashBangEffectDesc.renderSettings.removeFlashBangAnimation(self.__fba)
                 BigWorld.cancelCallback(self.__clbackId)
             self.__fba = Math.Vector4Animation()
             self.__fba.keyframes = self._keyframes
             self.__fba.duration = self._duration
-            BigWorld.flashBangAnimation(self.__fba)
+            _FlashBangEffectDesc.renderSettings.flashBangAnimation(self.__fba)
             self.__clbackId = BigWorld.callback(self._duration - 0.05, self.__removeMe)
         elem = {}
         elem['typeDesc'] = self
@@ -1078,7 +1067,7 @@ class _FlashBangEffectDesc(_EffectDesc):
 
     def __removeMe(self):
         if self.__fba is not None:
-            BigWorld.removeFlashBangAnimation(self.__fba)
+            _FlashBangEffectDesc.renderSettings.removeFlashBangAnimation(self.__fba)
             self.__clbackId = None
             self.__fba = None
         return
@@ -1210,7 +1199,8 @@ _effectDescFactory = {'pixie': _PixieEffectDesc,
  'stopEmission': _StopEmissionEffectDesc,
  'posteffect': _PostProcessEffectDesc,
  'light': _LightEffectDesc,
- 'destructionSound': _DestructionSoundEffectDesc}
+ 'destructionSound': _DestructionSoundEffectDesc,
+ 'lifetimeSound': _DestructionSoundEffectDesc}
 
 def _createEffectDesc(eType, dataSection):
     if not dataSection.values():

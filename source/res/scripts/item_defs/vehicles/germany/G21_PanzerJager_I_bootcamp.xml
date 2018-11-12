@@ -94,7 +94,7 @@
       </slot>
       <slot>
         <slotType>	player	</slotType>
-        <slotId>	2	</slotId>
+        <slotId>	4	</slotId>
         <rayStart>	-0.66486 1.11065 0.433867	</rayStart>
         <rayEnd>	-0.630006 1.10249 0.416016	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
@@ -104,7 +104,7 @@
       </slot>
       <slot>
         <slotType>	inscription	</slotType>
-        <slotId>	3	</slotId>
+        <slotId>	36	</slotId>
         <rayStart>	-0.940779 0.967455 0.00734404	</rayStart>
         <rayEnd>	-0.552659 0.870699 0.00734404	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
@@ -114,7 +114,7 @@
       </slot>
       <slot>
         <slotType>	inscription	</slotType>
-        <slotId>	4	</slotId>
+        <slotId>	37	</slotId>
         <rayStart>	0.940779 0.967455 0.00734404	</rayStart>
         <rayEnd>	0.552659 0.870699 0.00734404	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
@@ -948,6 +948,7 @@
       <engines>
         <Krupp_M311_bootcamp>
           <smplEnginePower>	89.8689	</smplEnginePower>
+          <smplFwMaxSpeed>	40	</smplFwMaxSpeed>
         </Krupp_M311_bootcamp>
       </engines>
       <chassis>

@@ -1,0 +1,58 @@
+<222_er_clime.xml>
+  <name>	#arenas:222_er_clime/name	</name>
+  <description>	#arenas:222_er_clime/description	</description>
+  <geometry>	spaces/222_er_clime	</geometry>
+  <boundingBox>
+    <bottomLeft>	-700.000000 -800.000000	</bottomLeft>
+    <upperRight>	700.000000 600.000000	</upperRight>
+  </boundingBox>
+  <minimap>	spaces/222_er_clime/mmap.dds	</minimap>
+  <vehicleCamouflageKind>	summer	</vehicleCamouflageKind>
+  <maxPlayersInTeam>	30	</maxPlayersInTeam>
+  <wwmusicSetup>
+    <wwmusicLoading>	music_klondike_loading_screen	</wwmusicLoading>
+    <wwmusicIntensive>	music_klondike_dron_intensive	</wwmusicIntensive>
+    <wwmusicRelaxed>	music_klondike_dron_relaxed	</wwmusicRelaxed>
+    <wwmusicStop>	music_dron_stop	</wwmusicStop>
+    <wwmusicEndbattleStop>	music_dron_endbattle_stop	</wwmusicEndbattleStop>
+    <wwmusicResultWin>	music_klondike_result_win	</wwmusicResultWin>
+    <wwmusicResultDrawn>	music_klondike_result_drawn	</wwmusicResultDrawn>
+    <wwmusicResultDefeat>	music_klondike_result_defeat	</wwmusicResultDefeat>
+  </wwmusicSetup>
+  <wwambientSound>	ambient_wind_autumn_01	</wwambientSound>
+  <umbraEnabled>	1	</umbraEnabled>
+  <batchingEnabled>	0	</batchingEnabled>
+  <water>
+    <texScale>	0	</texScale>
+    <freqX>	0	</freqX>
+    <freqZ>	0	</freqZ>
+  </water>
+  <numPlayerGroups>	3	</numPlayerGroups>
+  <playerGroupLimit>	10	</playerGroupLimit>
+  <gameplayTypes>
+    <ctf30x30>
+      <teamSpawnPoints>
+        <team1>
+          <position>	-27.661 -684.602	</position>
+          <position>	93.589 -640.343	</position>
+          <position>	350.985 -466.222	</position>
+        </team1>
+        <team2>
+          <position>	-310.345 374.131	</position>
+          <position>	-106.261 355.306	</position>
+          <position>	-30.516 493.922	</position>
+        </team2>
+      </teamSpawnPoints>
+      <teamBasePositions>
+        <team1>
+          <position1>	71.340805 -529.454834	</position1>
+        </team1>
+        <team2>
+          <position2>	-82.118011 337.797211	</position2>
+        </team2>
+      </teamBasePositions>
+    </ctf30x30>
+  </gameplayTypes>
+  <roadMap></roadMap>
+  <mapActivities></mapActivities>
+</222_er_clime.xml>

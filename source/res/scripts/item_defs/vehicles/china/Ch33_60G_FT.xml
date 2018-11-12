@@ -94,7 +94,7 @@
       </slot>
       <slot>
         <slotType>	player	</slotType>
-        <slotId>	2	</slotId>
+        <slotId>	4	</slotId>
         <rayStart>	0.823775 1.28556 0.113872	</rayStart>
         <rayEnd>	0.823763 0.992276 -0.158108	</rayEnd>
         <rayUp>	0.000000 0.000000 -1	</rayUp>
@@ -104,7 +104,7 @@
       </slot>
       <slot>
         <slotType>	inscription	</slotType>
-        <slotId>	3	</slotId>
+        <slotId>	36	</slotId>
         <rayStart>	-1.48761 1.39079 -1.01952	</rayStart>
         <rayEnd>	-1.09529 1.31284 -1.01952	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
@@ -114,7 +114,7 @@
       </slot>
       <slot>
         <slotType>	inscription	</slotType>
-        <slotId>	4	</slotId>
+        <slotId>	37	</slotId>
         <rayStart>	1.48761 1.39079 -1.01952	</rayStart>
         <rayEnd>	1.09529 1.31284 -1.01952	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
@@ -124,7 +124,7 @@
       </slot>
       <slot>
         <slotType>	camouflage	</slotType>
-        <slotId>	9	</slotId>
+        <slotId>	3	</slotId>
         <anchorPosition>	0.000000 0.752016 1.61151	</anchorPosition>
         <anchorDirection>	0.000000 0.422874 0.906188	</anchorDirection>
       </slot>
@@ -943,7 +943,7 @@
       <customizationSlots>
         <slot>
           <slotType>	style	</slotType>
-          <slotId>	10	</slotId>
+          <slotId>	257	</slotId>
           <anchorPosition>	0.000000 2.83545 -1.98427	</anchorPosition>
           <anchorDirection>	0.000000 1 -0.000000	</anchorDirection>
         </slot>
@@ -1754,7 +1754,7 @@
       <customizationSlots>
         <slot>
           <slotType>	style	</slotType>
-          <slotId>	8	</slotId>
+          <slotId>	257	</slotId>
           <anchorPosition>	0.000470943 2.8351 -1.98402	</anchorPosition>
           <anchorDirection>	0.000000 1 -0.000000	</anchorDirection>
         </slot>
@@ -1859,7 +1859,7 @@
           <customizationSlots>
             <slot>
               <slotType>	insigniaOnGun	</slotType>
-              <slotId>	5	</slotId>
+              <slotId>	771	</slotId>
               <rayStart>	-0.000013 -0.000043 1.2209	</rayStart>
               <rayEnd>	0.11058 -0.0385409 1.21587	</rayEnd>
               <rayUp>	0.091 0.083 5	</rayUp>
@@ -1869,7 +1869,7 @@
             </slot>
             <slot>
               <slotType>	camouflage	</slotType>
-              <slotId>	11	</slotId>
+              <slotId>	770	</slotId>
               <anchorPosition>	-0.000007 -0.000022 1.74582	</anchorPosition>
               <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
               <applyTo>	4096	</applyTo>
@@ -1949,7 +1949,7 @@
           <customizationSlots>
             <slot>
               <slotType>	insigniaOnGun	</slotType>
-              <slotId>	6	</slotId>
+              <slotId>	771	</slotId>
               <rayStart>	0.00073639 0.000083 1.12282	</rayStart>
               <rayEnd>	0.120313 -0.0511079 1.11768	</rayEnd>
               <rayUp>	0.085 0.078 5	</rayUp>
@@ -1959,7 +1959,7 @@
             </slot>
             <slot>
               <slotType>	camouflage	</slotType>
-              <slotId>	12	</slotId>
+              <slotId>	770	</slotId>
               <anchorPosition>	0.000368195 0.000042 1.76544	</anchorPosition>
               <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
               <applyTo>	4096	</applyTo>
@@ -2013,13 +2013,16 @@
       <engines>
         <_12150L1>
           <smplEnginePower>	350	</smplEnginePower>
+          <smplFwMaxSpeed>	45	</smplFwMaxSpeed>
         </_12150L1>
         <_12150L3G2>
           <smplEnginePower>	450	</smplEnginePower>
+          <smplFwMaxSpeed>	45	</smplFwMaxSpeed>
         </_12150L3G2>
       </engines>
       <chassis>
         <Chassis_Ch33_60G_FT>
+          <axleCount>	5	</axleCount>
           <grounds>
             <ground>
               <medium>
@@ -2054,6 +2057,7 @@
           </grounds>
         </Chassis_Ch33_60G_FT>
         <Chassis_Ch33_60G_FT_2>
+          <axleCount>	5	</axleCount>
           <grounds>
             <ground>
               <medium>

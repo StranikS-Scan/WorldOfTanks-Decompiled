@@ -7,6 +7,7 @@ from debug_utils import LOG_DEBUG
 class ProtectionZone(BigWorld.Entity):
 
     def __init__(self):
+        super(ProtectionZone, self).__init__(self)
         self.__lowerLeft = Math.Vector2(0, 0)
         self.__upperRight = Math.Vector2(0, 0)
 

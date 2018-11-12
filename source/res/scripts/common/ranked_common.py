@@ -1,39 +1,10 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/ranked_common.py
-import time
+import season_common
 
-def getRankedSeason(rankedConfig):
-    if not rankedConfig or not rankedConfig['isEnabled'] or not rankedConfig['cycleTimes']:
-        return (False, None)
-    else:
-        now = int(time.time())
-        for cycleInfo in rankedConfig['cycleTimes']:
-            startTime, endTime, seasonID, cycleID = cycleInfo
-            if now >= endTime:
-                continue
-            if now >= startTime:
-                return (True, cycleInfo)
-            return (False, cycleInfo)
-
-        return (False, None)
-
-
-def getCycleConfig(rankedConfig):
-    res, cycleInfo = getRankedSeason(rankedConfig)
-    if not res:
-        return None
-    else:
-        _, _, seasonID, cycleID = cycleInfo
-        season = rankedConfig['seasons'].get(seasonID)
-        if not season:
-            return None
-        cycle = season['cycles'].get(cycleID)
-        return cycle
-
-
-def getShieldsConfig(rankedConfig):
+def getShieldsConfig(rankedConfig, now):
     result = {}
-    res, seasonInfo = getRankedSeason(rankedConfig)
+    res, seasonInfo = season_common.getSeason(rankedConfig, now)
     if not res:
         return result
     _, _, seasonID, cycleID = seasonInfo

@@ -703,7 +703,6 @@ class QUESTS(object):
     DETAILS_CONDITIONS_CUMULATIVE_ISANYOURCRITTEDINNERMODULES = '#quests:details/conditions/cumulative/isAnyOurCrittedInnerModules'
     DETAILS_CONDITIONS_CUMULATIVE_ISENEMYBASECAPTURED = '#quests:details/conditions/cumulative/isEnemyBaseCaptured'
     DETAILS_CONDITIONS_CUMULATIVE_AGGREGATED = '#quests:details/conditions/cumulative/aggregated'
-    DETAILS_CONDITIONS_CUMULATIVE_EVENTPOINTS = '#quests:details/conditions/cumulative/eventPoints'
     DETAILS_DOSSIER_SNIPERSERIES = '#quests:details/dossier/sniperSeries'
     DETAILS_DOSSIER_MAXSNIPERSERIES = '#quests:details/dossier/maxSniperSeries'
     DETAILS_DOSSIER_INVINCIBLESERIES = '#quests:details/dossier/invincibleSeries'
@@ -1139,12 +1138,8 @@ class QUESTS(object):
     BONUSNAME_FREEXP = '#quests:bonusName/freeXP'
     BONUSNAME_TANKMENXP = '#quests:bonusName/tankmenXP'
     BONUSNAME_XPFACTOR = '#quests:bonusName/xpFactor'
-    BONUSNAME_XPFACTORHE = '#quests:bonusName/xpFactorHE'
-    BONUSNAME_XPFACTORELITEHE = '#quests:bonusName/xpFactorEliteHE'
     BONUSNAME_CREDITSFACTOR = '#quests:bonusName/creditsFactor'
-    BONUSNAME_CREDITSFACTORHE = '#quests:bonusName/creditsFactorHE'
     BONUSNAME_FREEXPFACTOR = '#quests:bonusName/freeXPFactor'
-    BONUSNAME_FREEXPFACTORHE = '#quests:bonusName/freeXPFactorHE'
     BONUSNAME_TANKMENXPFACTOR = '#quests:bonusName/tankmenXPFactor'
     BONUSNAME_DAILYXPFACTOR = '#quests:bonusName/dailyXPFactor'
     BONUSNAME_SLOTS = '#quests:bonusName/slots'
@@ -1459,7 +1454,7 @@ class QUESTS(object):
     PERSONALMISSION_STATUS_DONEWITHPAWN = '#quests:personalMission/status/doneWithPawn'
     PERSONALMISSION_STATUS_INPROGRESS = '#quests:personalMission/status/inProgress'
     PERSONALMISSION_STATUS_ISONPAUSE = '#quests:personalMission/status/isOnPause'
-    PERSONALMISSION_STATUS_NOTDONE = '#quests:personalMission/status/notDone'
+    PERSONALMISSION_STATUS_FAILED = '#quests:personalMission/status/failed'
     PERSONALMISSION_STATUS_ADDINPROGRESS = '#quests:personalMission/status/addInProgress'
     PERSONALMISSION_STATUS_SHEETRECOVERYINPROGRESS = '#quests:personalMission/status/sheetRecoveryInProgress'
     PERSONALMISSION_STATUS_ADDBOTTOMLOCKED_REGULAR = '#quests:personalMission/status/addBottomLocked/regular'
@@ -1498,6 +1493,7 @@ class QUESTS(object):
     METRICS_STATE_INPROGRESS = '#quests:metrics/state/inProgress'
     METRICS_STATE_FAILED = '#quests:metrics/state/failed'
     METRICS_TITLE_PROGRESS = '#quests:metrics/title/progress'
+    METRICS_TITLE_DONE = '#quests:metrics/title/done'
     METRICS_TITLE_POSITION = '#quests:metrics/title/position'
     METRICS_TITLE_LEFT = '#quests:metrics/title/left'
     METRICS_TITLE_TRIESLEFT = '#quests:metrics/title/triesLeft'
@@ -1530,12 +1526,8 @@ class QUESTS(object):
      BONUSNAME_FREEXP,
      BONUSNAME_TANKMENXP,
      BONUSNAME_XPFACTOR,
-     BONUSNAME_XPFACTORHE,
-     BONUSNAME_XPFACTORELITEHE,
      BONUSNAME_CREDITSFACTOR,
-     BONUSNAME_CREDITSFACTORHE,
      BONUSNAME_FREEXPFACTOR,
-     BONUSNAME_FREEXPFACTORHE,
      BONUSNAME_TANKMENXPFACTOR,
      BONUSNAME_DAILYXPFACTOR,
      BONUSNAME_SLOTS,

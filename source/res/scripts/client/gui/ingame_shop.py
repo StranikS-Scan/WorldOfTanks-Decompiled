@@ -3,10 +3,9 @@
 from adisp import process
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.hangar.BrowserView import makeBrowserParams
-from gui.Scaleform.daapi.view.lobby.store.browser import ingameshop_helpers
-from gui.Scaleform.daapi.view.lobby.store.browser.ingameshop_helpers import isIngameShopEnabled
+from gui.Scaleform.daapi.view.lobby.store.browser import ingameshop_helpers as helpers
 from gui.Scaleform.locale.WAITING import WAITING
-from gui.game_control.links import URLMarcos
+from gui.game_control.links import URLMacros
 from gui.shared import events, g_eventBus
 from gui.shared.economics import getGUIPrice
 from gui.shared.event_bus import EVENT_BUS_SCOPE
@@ -24,6 +23,10 @@ def _getParams(reason, price, itemId=None):
     return params
 
 
+def _makeBuyItemUrl(categoryUrl, itemId=None):
+    return '{}/items/$PARAMS(web2client_{})'.format(categoryUrl, itemId) if itemId else categoryUrl
+
+
 class _GoldPurchaseReason(object):
     VEHICLE = 'vehicle'
     XP = 'experience'
@@ -35,6 +38,14 @@ class _GoldPurchaseReason(object):
     BUNDLE = 'bundle'
 
 
+class Source(object):
+    EXTERNAL = 'external'
+
+
+class Origin(object):
+    STORAGE = 'storage'
+
+
 @dependency.replace_none_kwargs(itemsCache=IItemsCache)
 def canBuyGoldForItemThroughWeb(itemID, itemsCache=None):
     item = itemsCache.items.getItemByCD(itemID)
@@ -43,7 +54,7 @@ def canBuyGoldForItemThroughWeb(itemID, itemsCache=None):
 
 @dependency.replace_none_kwargs(itemsCache=IItemsCache, tradeIn=ITradeInController)
 def canBuyGoldForVehicleThroughWeb(vehicle, itemsCache=None, tradeIn=None):
-    if isIngameShopEnabled() and vehicle.isUnlocked:
+    if helpers.isIngameShopEnabled() and vehicle.isUnlocked:
         money = itemsCache.items.stats.money
         money = tradeIn.addTradeInPriceIfNeeded(vehicle, money)
         exchangeRate = itemsCache.items.shop.exchangeRate
@@ -56,6 +67,22 @@ def canBuyGoldForVehicleThroughWeb(vehicle, itemsCache=None, tradeIn=None):
                 if isBuyingAvailable:
                     return True
     return False
+
+
+def showBuyBoosterOverlay(itemId, source=None, origin=None):
+    _showBuyItemWebOverlay(helpers.getBuyBoostersUrl(), itemId, source, origin)
+
+
+def showBuyBattleBoosterOverlay(itemId, source=None, origin=None):
+    _showBuyItemWebOverlay(helpers.getBuyBattleBoostersUrl(), itemId, source, origin)
+
+
+def showBuyEquipmentOverlay(itemId, source=None, origin=None):
+    _showBuyItemWebOverlay(helpers.getBuyEquipmentUrl(), itemId, source, origin)
+
+
+def showBuyOptionalDeviceOverlay(itemId, source=None, origin=None):
+    _showBuyItemWebOverlay(helpers.getBuyOptionalDevicesUrl(), itemId, source, origin)
 
 
 def showBuyGoldForVehicleWebOverlay(fullPrice, intCD):
@@ -93,17 +120,29 @@ def showBuyGoldForBundle(fullPrice, params=None):
 
 
 @process
+def _showBuyItemWebOverlay(url, itemId, source=None, origin=None):
+    url = yield URLMacros().parse(url)
+    params = {}
+    if source:
+        params['source'] = source
+    if origin:
+        params['origin'] = origin
+    url = yield URLMacros().parse(url=_makeBuyItemUrl(url, itemId), params=params)
+    g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.OVERLAY_WEB_STORE, ctx={'url': url}), EVENT_BUS_SCOPE.LOBBY)
+
+
+@process
 def showBuyGoldWebOverlay(params=None):
-    url = ingameshop_helpers.getBuyMoreGoldUrl()
+    url = helpers.getBuyMoreGoldUrl()
     if url:
-        url = yield URLMarcos().parse(url, params=params)
+        url = yield URLMacros().parse(url, params=params)
         g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.OVERLAY_WEB_STORE, ctx={'url': url}), EVENT_BUS_SCOPE.LOBBY)
 
 
 @process
 def showBuyVehicleOverlay(params=None):
-    url = ingameshop_helpers.getVehicleUrl()
+    url = helpers.getVehicleUrl()
     if url:
-        url = yield URLMarcos().parse(url, params=params)
+        url = yield URLMacros().parse(url, params=params)
         g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.OVERLAY_WEB_STORE, ctx={'url': url,
          'browserParams': makeBrowserParams(WAITING.BUYITEM, True)}), EVENT_BUS_SCOPE.LOBBY)

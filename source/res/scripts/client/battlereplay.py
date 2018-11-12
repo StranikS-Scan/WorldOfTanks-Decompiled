@@ -66,6 +66,7 @@ class CallbackDataNames(object):
     DYN_SQUAD_ACCEPT_ACTION_NAME = 'DynSquad.AcceptInvitationToSquad'
     DYN_SQUAD_REJECT_ACTION_NAME = 'DynSquad.RejectInvitationToSquad'
     GUN_DAMAGE_SOUND = 'gunDamagedSound'
+    SHOW_AUTO_AIM_MARKER = 'showAutoAimMarker'
 
 
 class BattleReplay(object):
@@ -866,7 +867,6 @@ class BattleReplay(object):
         if not self.isPlaying or not self.__enableTimeWarp:
             return
         g_replayEvents.onTimeWarpStart()
-        BigWorld.wg_enableGUIBackground(True, False)
         if self.__isFinished:
             self.setPlaybackSpeedIdx(self.__savedPlaybackSpeedIdx)
         self.__isFinished = False
@@ -923,15 +923,14 @@ class BattleReplay(object):
         self.__replayCtrl.onSetEquipmentID(value)
 
     def onSetEquipmentId(self, equipmentId):
-        arcadeMode = BigWorld.player().inputHandler.ctrls.get('arcade', None)
         if equipmentId != -1:
             self.__equipmentId = equipmentId
-            arcadeMode.showGunMarker(False)
+            BigWorld.player().inputHandler.showGunMarker(False)
             mapCaseMode = BigWorld.player().inputHandler.ctrls.get('mapcase', None)
             if mapCaseMode is not None:
                 mapCaseMode.activateEquipment(equipmentId)
         else:
-            arcadeMode.showGunMarker(True)
+            BigWorld.player().inputHandler.showGunMarker(True)
         return
 
     def __onVehicleEnterWorld(self, vehicle):
@@ -971,7 +970,6 @@ class BattleReplay(object):
 
     def __cleanupAfterTimeWarp(self):
         self.__warpTime = -1.0
-        BigWorld.wg_enableGUIBackground(False, False)
         self.__enableInGameEffects(0.0 < self.__playbackSpeedModifiers[self.__playbackSpeedIdx] < 8.0)
         mute = not 0.0 < self.__playbackSpeedModifiers[self.__playbackSpeedIdx] < 8.0
         g_replayEvents.onMuteSound(mute)

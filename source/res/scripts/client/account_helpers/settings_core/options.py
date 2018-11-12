@@ -556,6 +556,23 @@ class UserPrefsFloatSetting(UserPrefsSetting):
         pass
 
 
+class UserPrefsPositiveIntSetting(UserPrefsSetting):
+
+    def _readValue(self, section):
+        default = self.getDefaultValue()
+        return max(0, section.readInt(self.sectionName, default)) if section is not None else default
+
+    def _writeValue(self, section, value):
+        if section is not None:
+            return section.writeInt(self.sectionName, max(0, int(value)))
+        else:
+            LOG_WARNING('Section is not defined', section)
+            return False
+
+    def getDefaultValue(self):
+        pass
+
+
 class PreferencesSetting(SettingAbstract):
 
     def __init__(self, isPreview=False):
@@ -2289,13 +2306,13 @@ class HangarCamParallaxEnabledSetting(StorageAccountSetting):
         return True
 
 
-class InterfaceScaleSetting(UserPrefsFloatSetting):
+class InterfaceScaleSetting(UserPrefsPositiveIntSetting):
     settingsCore = dependency.descriptor(ISettingsCore)
     connectionMgr = dependency.descriptor(IConnectionManager)
 
     def __init__(self, sectionName=None, isPreview=False):
         super(InterfaceScaleSetting, self).__init__(sectionName, isPreview)
-        self.__interfaceScale = 0
+        self.__scaleIdx = 0
         self.connectionMgr.onDisconnected += self.onDisconnected
         self.connectionMgr.onConnected += self.onConnected
 
@@ -2306,14 +2323,14 @@ class InterfaceScaleSetting(UserPrefsFloatSetting):
     def get(self):
         if BattleReplay.isPlaying():
             return self._get()
-        self.__checkAndCorrectScaleValue(self.__interfaceScale)
-        return self.__interfaceScale
+        self.__checkAndCorrectScaleValue(self.__scaleIdx)
+        return self.__scaleIdx
 
     def getDefaultValue(self):
         return AccountSettings.getSettingsDefault(self.sectionName)
 
     def setSystemValue(self, value):
-        self.__interfaceScale = value
+        self.__scaleIdx = value
         scale = self.settingsCore.interfaceScale.getScaleByIndex(value)
         width, height = GUI.screenResolution()[:2]
         event_dispatcher.changeAppResolution(width, height, scale)
@@ -2345,8 +2362,8 @@ class InterfaceScaleSetting(UserPrefsFloatSetting):
     def __checkAndCorrectScaleValue(self, value):
         scaleLength = len(self.settingsCore.interfaceScale.getScaleOptions())
         if value >= scaleLength:
-            self.__interfaceScale = 0
-            self._set(self.__interfaceScale)
+            self.__scaleIdx = 0
+            self._set(self.__scaleIdx)
             self.settingsCore.interfaceScale.scaleChanged()
 
 

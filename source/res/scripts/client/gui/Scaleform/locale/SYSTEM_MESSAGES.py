@@ -17,7 +17,6 @@ class SYSTEM_MESSAGES(object):
     CHARGE_SERVER_ERROR_SAVE = '#system_messages:charge/server_error_save'
     PREMIUM_CONTINUESUCCESS = '#system_messages:premium/continueSuccess'
     PREMIUM_BUYINGSUCCESS = '#system_messages:premium/buyingSuccess'
-    HE_SHOP_BUY_MAX_LEVEL_SUCCESS = '#system_messages:he_shop/buy_max_level_success'
     PREMIUM_SERVER_ERROR = '#system_messages:premium/server_error'
     PREMIUM_NOT_ENOUGH_GOLD = '#system_messages:premium/not_enough_gold'
     PREMIUM_WALLET_NOT_AVAILABLE = '#system_messages:premium/wallet_not_available'
@@ -210,6 +209,7 @@ class SYSTEM_MESSAGES(object):
     CUSTOMIZATION_ADDED_MODIFICATION = '#system_messages:customization/added/modification'
     CUSTOMIZATION_ADDED_STYLE = '#system_messages:customization/added/style'
     CUSTOMIZATION_ADDED_DECAL = '#system_messages:customization/added/decal'
+    CUSTOMIZATION_ADDED_PROJECTION_DECAL = '#system_messages:customization/added/projection_decal'
     CUSTOMIZATION_ADDED_EMBLEM = '#system_messages:customization/added/emblem'
     CUSTOMIZATION_ADDED_INSCRIPTION = '#system_messages:customization/added/inscription'
     CUSTOMIZATION_ADDED_PAINTVALUE = '#system_messages:customization/added/paintValue'
@@ -217,6 +217,7 @@ class SYSTEM_MESSAGES(object):
     CUSTOMIZATION_ADDED_MODIFICATIONVALUE = '#system_messages:customization/added/modificationValue'
     CUSTOMIZATION_ADDED_STYLEVALUE = '#system_messages:customization/added/styleValue'
     CUSTOMIZATION_ADDED_DECALVALUE = '#system_messages:customization/added/decalValue'
+    CUSTOMIZATION_ADDED_PROJECTION_DECALVALUE = '#system_messages:customization/added/projection_decalValue'
     CUSTOMIZATION_ADDED_EMBLEMVALUE = '#system_messages:customization/added/emblemValue'
     CUSTOMIZATION_ADDED_INSCRIPTIONVALUE = '#system_messages:customization/added/inscriptionValue'
     CUSTOMIZATION_REMOVED_PAINT = '#system_messages:customization/removed/paint'
@@ -224,6 +225,7 @@ class SYSTEM_MESSAGES(object):
     CUSTOMIZATION_REMOVED_MODIFICATION = '#system_messages:customization/removed/modification'
     CUSTOMIZATION_REMOVED_STYLE = '#system_messages:customization/removed/style'
     CUSTOMIZATION_REMOVED_DECAL = '#system_messages:customization/removed/decal'
+    CUSTOMIZATION_REMOVED_PROJECTION_DECAL = '#system_messages:customization/removed/projection_decal'
     CUSTOMIZATION_REMOVED_EMBLEM = '#system_messages:customization/removed/emblem'
     CUSTOMIZATION_REMOVED_INSCRIPTION = '#system_messages:customization/removed/inscription'
     CUSTOMIZATION_REMOVED_PAINTVALUE = '#system_messages:customization/removed/paintValue'
@@ -231,6 +233,7 @@ class SYSTEM_MESSAGES(object):
     CUSTOMIZATION_REMOVED_MODIFICATIONVALUE = '#system_messages:customization/removed/modificationValue'
     CUSTOMIZATION_REMOVED_STYLEVALUE = '#system_messages:customization/removed/styleValue'
     CUSTOMIZATION_REMOVED_DECALVALUE = '#system_messages:customization/removed/decalValue'
+    CUSTOMIZATION_REMOVED_PROJECTION_DECALVALUE = '#system_messages:customization/removed/projection_decalValue'
     CUSTOMIZATION_REMOVED_EMBLEMVALUE = '#system_messages:customization/removed/emblemValue'
     CUSTOMIZATION_REMOVED_INSCRIPTIONVALUE = '#system_messages:customization/removed/inscriptionValue'
     BONUSES_BOOSTER_VALUE = '#system_messages:bonuses/booster/value'
@@ -399,6 +402,10 @@ class SYSTEM_MESSAGES(object):
     VEHICLE_BUY_NOT_ENOUGH_GOLD = '#system_messages:vehicle_buy/not_enough_gold'
     VEHICLE_BUY_WALLET_NOT_AVAILABLE = '#system_messages:vehicle_buy/wallet_not_available'
     VEHICLE_RENT_SUCCESS = '#system_messages:vehicle_rent/success'
+    VEHICLE_RENT_BUYOPTION = '#system_messages:vehicle_rent/buyOption'
+    VEHICLE_RENT_TIMERENT = '#system_messages:vehicle_rent/timeRent'
+    VEHICLE_RENT_RANKED_SEASON = '#system_messages:vehicle_rent/ranked/season'
+    VEHICLE_RENT_RANKED_CYCLE = '#system_messages:vehicle_rent/ranked/cycle'
     VEHICLE_RENT_SERVER_ERROR = '#system_messages:vehicle_rent/server_error'
     VEHICLE_RENT_INVALID_VEHICLE = '#system_messages:vehicle_rent/invalid_vehicle'
     VEHICLE_RENT_SERVER_ERROR_CENTERDOWN = '#system_messages:vehicle_rent/server_error_centerDown'
@@ -1014,15 +1021,6 @@ class SYSTEM_MESSAGES(object):
     EPICBATTLES_NOTIFICATION_PRIMETIME = '#system_messages:epicBattles/notification/primeTime'
     EPICBATTLES_NOTIFICATION_NOTAVAILABLE = '#system_messages:epicBattles/notification/notAvailable'
     EPICBATTLES_NOTIFICATION_AVAILABLE = '#system_messages:epicBattles/notification/available'
-    HALLOWEEN_NO_GOLD = '#system_messages:halloween/no_gold'
-    HALLOWEEN_GOLD_ERROR = '#system_messages:halloween/gold_error'
-    HALLOWEEN_WALLET_NOT_AVAILABLE = '#system_messages:halloween/wallet_not_available'
-    HALLOWEEN_MAX_LEVEL_ALREADY_BOUGHT = '#system_messages:halloween/max_level_already_bought'
-    HALLOWEEN_DISABLED = '#system_messages:halloween/disabled'
-    HALLOWEEN_SERVER_ERROR = '#system_messages:halloween/server_error'
-    HALLOWEEN_GOLD_NOT_AVAILABLE = '#system_messages:halloween/gold_not_available'
-    HALLOWEEN_GOLD_PRICE_CHANGED = '#system_messages:halloween/gold_price_changed'
-    MAX_LEVEL_ALREADY_REACHED = '#system_messages:max_level_already_reached'
     UNIT_WARNINGS_ENUM = (UNIT_WARNINGS_NO_CLAN_MEMBERS,
      UNIT_WARNINGS_CANT_PICK_LEADER,
      UNIT_WARNINGS_KICKED_CANDIDATE,
@@ -1053,7 +1051,6 @@ class SYSTEM_MESSAGES(object):
      CHARGE_SERVER_ERROR_SAVE,
      PREMIUM_CONTINUESUCCESS,
      PREMIUM_BUYINGSUCCESS,
-     HE_SHOP_BUY_MAX_LEVEL_SUCCESS,
      PREMIUM_SERVER_ERROR,
      PREMIUM_NOT_ENOUGH_GOLD,
      PREMIUM_WALLET_NOT_AVAILABLE,
@@ -1246,6 +1243,7 @@ class SYSTEM_MESSAGES(object):
      CUSTOMIZATION_ADDED_MODIFICATION,
      CUSTOMIZATION_ADDED_STYLE,
      CUSTOMIZATION_ADDED_DECAL,
+     CUSTOMIZATION_ADDED_PROJECTION_DECAL,
      CUSTOMIZATION_ADDED_EMBLEM,
      CUSTOMIZATION_ADDED_INSCRIPTION,
      CUSTOMIZATION_ADDED_PAINTVALUE,
@@ -1253,6 +1251,7 @@ class SYSTEM_MESSAGES(object):
      CUSTOMIZATION_ADDED_MODIFICATIONVALUE,
      CUSTOMIZATION_ADDED_STYLEVALUE,
      CUSTOMIZATION_ADDED_DECALVALUE,
+     CUSTOMIZATION_ADDED_PROJECTION_DECALVALUE,
      CUSTOMIZATION_ADDED_EMBLEMVALUE,
      CUSTOMIZATION_ADDED_INSCRIPTIONVALUE,
      CUSTOMIZATION_REMOVED_PAINT,
@@ -1260,6 +1259,7 @@ class SYSTEM_MESSAGES(object):
      CUSTOMIZATION_REMOVED_MODIFICATION,
      CUSTOMIZATION_REMOVED_STYLE,
      CUSTOMIZATION_REMOVED_DECAL,
+     CUSTOMIZATION_REMOVED_PROJECTION_DECAL,
      CUSTOMIZATION_REMOVED_EMBLEM,
      CUSTOMIZATION_REMOVED_INSCRIPTION,
      CUSTOMIZATION_REMOVED_PAINTVALUE,
@@ -1267,6 +1267,7 @@ class SYSTEM_MESSAGES(object):
      CUSTOMIZATION_REMOVED_MODIFICATIONVALUE,
      CUSTOMIZATION_REMOVED_STYLEVALUE,
      CUSTOMIZATION_REMOVED_DECALVALUE,
+     CUSTOMIZATION_REMOVED_PROJECTION_DECALVALUE,
      CUSTOMIZATION_REMOVED_EMBLEMVALUE,
      CUSTOMIZATION_REMOVED_INSCRIPTIONVALUE,
      BONUSES_BOOSTER_VALUE,
@@ -1435,6 +1436,10 @@ class SYSTEM_MESSAGES(object):
      VEHICLE_BUY_NOT_ENOUGH_GOLD,
      VEHICLE_BUY_WALLET_NOT_AVAILABLE,
      VEHICLE_RENT_SUCCESS,
+     VEHICLE_RENT_BUYOPTION,
+     VEHICLE_RENT_TIMERENT,
+     VEHICLE_RENT_RANKED_SEASON,
+     VEHICLE_RENT_RANKED_CYCLE,
      VEHICLE_RENT_SERVER_ERROR,
      VEHICLE_RENT_INVALID_VEHICLE,
      VEHICLE_RENT_SERVER_ERROR_CENTERDOWN,
@@ -2049,16 +2054,7 @@ class SYSTEM_MESSAGES(object):
      TOKENS_NOTIFICATION_MARK_ACQUIRED,
      EPICBATTLES_NOTIFICATION_PRIMETIME,
      EPICBATTLES_NOTIFICATION_NOTAVAILABLE,
-     EPICBATTLES_NOTIFICATION_AVAILABLE,
-     HALLOWEEN_NO_GOLD,
-     HALLOWEEN_GOLD_ERROR,
-     HALLOWEEN_WALLET_NOT_AVAILABLE,
-     HALLOWEEN_MAX_LEVEL_ALREADY_BOUGHT,
-     HALLOWEEN_DISABLED,
-     HALLOWEEN_SERVER_ERROR,
-     HALLOWEEN_GOLD_NOT_AVAILABLE,
-     HALLOWEEN_GOLD_PRICE_CHANGED,
-     MAX_LEVEL_ALREADY_REACHED)
+     EPICBATTLES_NOTIFICATION_AVAILABLE)
     UNIT_NOTIFICATION_ENUM = (UNIT_NOTIFICATION_PLAYER_BECOME_EQUIPMENT_COMMANDER,
      UNIT_NOTIFICATION_PLAYEROFFLINE,
      UNIT_NOTIFICATION_PLAYERONLINE,

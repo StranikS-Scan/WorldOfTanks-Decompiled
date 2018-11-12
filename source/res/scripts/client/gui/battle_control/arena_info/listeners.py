@@ -394,13 +394,6 @@ class ArenaSpaceLoadListener(_Listener):
 
     def __loadCompleteDelayed(self):
         self.__clearSpaceCallback()
-        progress = 1.0
-        import BattleReplay
-        if not BattleReplay.g_replayCtrl.isTimeWarpInProgress:
-            progress = BigWorld.spaceLoadStatus()
-        if progress > self.__progress:
-            self.__progress = progress
-            self.__onSpaceLoadUpdated(progress)
         self.__onSpaceLoadCompleted()
         BigWorld.SetDrawInflux(True)
         self.__loadInfluxCallback()

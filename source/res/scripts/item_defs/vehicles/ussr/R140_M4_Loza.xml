@@ -94,7 +94,7 @@
       </slot>
       <slot>
         <slotType>	fixedInscription	</slotType>
-        <slotId>	2	</slotId>
+        <slotId>	204	</slotId>
         <rayStart>	1.41564 0.600791 0.82836	</rayStart>
         <rayEnd>	1.21564 0.600791 0.82836	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
@@ -105,13 +105,13 @@
       </slot>
       <slot>
         <slotType>	paint	</slotType>
-        <slotId>	13	</slotId>
+        <slotId>	2	</slotId>
         <anchorPosition>	-0.00110525 0.746925 -2.69144	</anchorPosition>
         <anchorDirection>	0.000000 0.573577 -0.819152	</anchorDirection>
       </slot>
       <slot>
         <slotType>	camouflage	</slotType>
-        <slotId>	6	</slotId>
+        <slotId>	3	</slotId>
         <anchorPosition>	0.00352335 0.746608 -2.69396	</anchorPosition>
         <anchorDirection>	0.000000 0.573577 -0.819152	</anchorDirection>
       </slot>
@@ -1045,13 +1045,13 @@
       <customizationSlots>
         <slot>
           <slotType>	paint	</slotType>
-          <slotId>	4	</slotId>
+          <slotId>	256	</slotId>
           <anchorPosition>	-1.2651 0.551008 -0.16279	</anchorPosition>
           <anchorDirection>	-0.9105 0.396564 -0.117161	</anchorDirection>
         </slot>
         <slot>
           <slotType>	style	</slotType>
-          <slotId>	5	</slotId>
+          <slotId>	257	</slotId>
           <anchorPosition>	0.000267772 2.70753 -0.178322	</anchorPosition>
           <anchorDirection>	0.000000 1 -0.000000	</anchorDirection>
         </slot>
@@ -1136,7 +1136,7 @@
           <customizationSlots>
             <slot>
               <slotType>	insigniaOnGun	</slotType>
-              <slotId>	3	</slotId>
+              <slotId>	771	</slotId>
               <rayStart>	-0.00411575 0.00345349 1.02209	</rayStart>
               <rayEnd>	-0.0261016 0.00257619 1.01954	</rayEnd>
               <rayUp>	0.089 0.079 5	</rayUp>
@@ -1146,21 +1146,21 @@
             </slot>
             <slot>
               <slotType>	paint	</slotType>
-              <slotId>	10	</slotId>
+              <slotId>	768	</slotId>
               <anchorPosition>	-0.00205788 0.00172675 1.66739	</anchorPosition>
               <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
               <applyTo>	4096	</applyTo>
             </slot>
             <slot>
               <slotType>	paint	</slotType>
-              <slotId>	11	</slotId>
+              <slotId>	769	</slotId>
               <anchorPosition>	0.000000 0.186013 0.186013	</anchorPosition>
               <anchorDirection>	0.000000 0.707107 0.707107	</anchorDirection>
               <applyTo>	16384	</applyTo>
             </slot>
             <slot>
               <slotType>	camouflage	</slotType>
-              <slotId>	12	</slotId>
+              <slotId>	770	</slotId>
               <anchorPosition>	-0.00205788 0.00172675 1.66739	</anchorPosition>
               <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
               <applyTo>	4096	</applyTo>
@@ -1193,13 +1193,13 @@
       <customizationSlots>
         <slot>
           <slotType>	paint	</slotType>
-          <slotId>	8	</slotId>
+          <slotId>	512	</slotId>
           <anchorPosition>	0.000000 0.723085 0.000000	</anchorPosition>
           <anchorDirection>	0.000000 1 0.000000	</anchorDirection>
         </slot>
         <slot>
           <slotType>	camouflage	</slotType>
-          <slotId>	9	</slotId>
+          <slotId>	513	</slotId>
           <anchorPosition>	0.000000 0.723085 0.000000	</anchorPosition>
           <anchorDirection>	0.000000 1 0.000000	</anchorDirection>
         </slot>
@@ -1224,10 +1224,12 @@
       <engines>
         <GMC_6046>
           <smplEnginePower>	433.4853	</smplEnginePower>
+          <smplFwMaxSpeed>	51.4	</smplFwMaxSpeed>
         </GMC_6046>
       </engines>
       <chassis>
         <Chassis_R140_M4_Loza>
+          <axleCount>	5	</axleCount>
           <grounds>
             <ground>
               <medium>

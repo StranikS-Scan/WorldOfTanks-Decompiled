@@ -4,6 +4,13 @@ import math
 import time
 from gui.Scaleform.locale.MENU import MENU
 from helpers import i18n, time_utils
+from rent_common import SeasonRentDuration
+from season_common import getDateFromSeasonID
+from constants import GameSeasonType
+_SEASON_TYPE_KEY = {GameSeasonType.SEASON: 'season',
+ GameSeasonType.RANKED: 'ranked'}
+_RENT_DURATION_KEY = {SeasonRentDuration.ENTIRE_SEASON: 'season',
+ SeasonRentDuration.SEASON_CYCLE: 'cycle'}
 
 def defaultFormatter(key, countType, count, ctx=None):
     kwargs = ctx.copy() if ctx else {}
@@ -54,12 +61,17 @@ class RentLeftFormatter(object):
         self.__localizationRootKey = '#menu:vehicle/rentLeft/%s'
 
     def getRentLeftStr(self, localization=None, timeStyle=None, ctx=None, formatter=None):
-        if self.__rentInfo.getTimeLeft() > 0:
+        activeSeasonRent = self.__rentInfo.getActiveSeasonRent()
+        if activeSeasonRent is not None:
+            resultStr = self.getRentSeasonLeftStr(activeSeasonRent, localization, formatter, timeStyle, ctx)
+        elif self.__rentInfo.getTimeLeft() > 0:
             resultStr = self.getRentTimeLeftStr(localization, timeStyle, ctx, formatter)
         elif self.__rentInfo.battlesLeft:
             resultStr = self.getRentBattlesLeftStr(localization, formatter)
-        else:
+        elif self.__rentInfo.winsLeft > 0:
             resultStr = self.getRentWinsLeftStr(localization, formatter)
+        else:
+            resultStr = ''
         return resultStr
 
     def getRentTimeLeftStr(self, localization=None, timeStyle=None, ctx=None, formatter=None):
@@ -85,3 +97,16 @@ class RentLeftFormatter(object):
             formatter = defaultFormatter
         winsLeft = self.__rentInfo.winsLeft
         return formatter(localization, 'wins', winsLeft) if winsLeft > 0 else ''
+
+    def getRentSeasonLeftStr(self, rentData, localization=None, formatter=None, timeStyle=None, ctx=None):
+        if localization is None:
+            localization = self.__localizationRootKey
+        if formatter is None:
+            formatter = defaultFormatter
+        timeLeft = self.__rentInfo.getTimeLeft()
+        timeLeftString = formatTime(timeLeft, time_utils.ONE_DAY, timeStyle)
+        identifier = 'days'
+        if rentData.duration == SeasonRentDuration.ENTIRE_SEASON and timeLeft > time_utils.ONE_WEEK:
+            timeLeftString, _ = getDateFromSeasonID(rentData.seasonID)
+            identifier = 'season'
+        return formatter(localization % _SEASON_TYPE_KEY[rentData.seasonType] + '/%s', identifier, timeLeftString, {})

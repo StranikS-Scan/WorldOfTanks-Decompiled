@@ -84,7 +84,7 @@
       </slot>
       <slot>
         <slotType>	inscription	</slotType>
-        <slotId>	2	</slotId>
+        <slotId>	36	</slotId>
         <rayStart>	-0.946704 0.488421 0.362231	</rayStart>
         <rayEnd>	-0.749911 0.452748 0.36223	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
@@ -94,7 +94,7 @@
       </slot>
       <slot>
         <slotType>	inscription	</slotType>
-        <slotId>	3	</slotId>
+        <slotId>	37	</slotId>
         <rayStart>	0.973787 0.386006 0.431858	</rayStart>
         <rayEnd>	0.776994 0.350333 0.431858	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
@@ -104,7 +104,7 @@
       </slot>
       <slot>
         <slotType>	camouflage	</slotType>
-        <slotId>	11	</slotId>
+        <slotId>	3	</slotId>
         <anchorPosition>	0.000000 0.584637 -0.788203	</anchorPosition>
         <anchorDirection>	0.000000 0.595742 -0.803176	</anchorDirection>
       </slot>
@@ -910,7 +910,7 @@
       <customizationSlots>
         <slot>
           <slotType>	style	</slotType>
-          <slotId>	7	</slotId>
+          <slotId>	257	</slotId>
           <anchorPosition>	-0.191257 2.00392 0.482518	</anchorPosition>
           <anchorDirection>	-0.000000 1 0.000000	</anchorDirection>
         </slot>
@@ -1708,7 +1708,7 @@
       <customizationSlots>
         <slot>
           <slotType>	style	</slotType>
-          <slotId>	9	</slotId>
+          <slotId>	257	</slotId>
           <anchorPosition>	-0.191239 2.00392 0.482609	</anchorPosition>
           <anchorDirection>	-0.000000 1 -0.000000	</anchorDirection>
         </slot>
@@ -1787,7 +1787,7 @@
           <customizationSlots>
             <slot>
               <slotType>	camouflage	</slotType>
-              <slotId>	6	</slotId>
+              <slotId>	770	</slotId>
               <anchorPosition>	0.0264428 -0.0472652 0.635484	</anchorPosition>
               <anchorDirection>	-0.000000 0.000000 1	</anchorDirection>
               <applyTo>	4096	</applyTo>
@@ -1849,7 +1849,7 @@
           <customizationSlots>
             <slot>
               <slotType>	camouflage	</slotType>
-              <slotId>	19	</slotId>
+              <slotId>	770	</slotId>
               <anchorPosition>	-0.0321137 0.000135303 0.604127	</anchorPosition>
               <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
               <applyTo>	4096	</applyTo>
@@ -1879,7 +1879,7 @@
       <customizationSlots>
         <slot>
           <slotType>	player	</slotType>
-          <slotId>	4	</slotId>
+          <slotId>	514	</slotId>
           <rayStart>	-0.541042 0.350115 0.298245	</rayStart>
           <rayEnd>	-0.359029 0.277238 0.258749	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
@@ -1889,7 +1889,7 @@
         </slot>
         <slot>
           <slotType>	player	</slotType>
-          <slotId>	5	</slotId>
+          <slotId>	515	</slotId>
           <rayStart>	0.541042 0.350115 0.298245	</rayStart>
           <rayEnd>	0.359029 0.277238 0.258749	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
@@ -1900,7 +1900,7 @@
         </slot>
         <slot>
           <slotType>	camouflage	</slotType>
-          <slotId>	13	</slotId>
+          <slotId>	513	</slotId>
           <anchorPosition>	0.000000 0.529173 0.000000	</anchorPosition>
           <anchorDirection>	-0.000000 1 0.000000	</anchorDirection>
         </slot>
@@ -1927,13 +1927,16 @@
       <engines>
         <SPA_18VT_v2>
           <smplEnginePower>	70	</smplEnginePower>
+          <smplFwMaxSpeed>	42.3	</smplFwMaxSpeed>
         </SPA_18VT_v2>
         <SPA_ABM_2>
           <smplEnginePower>	108	</smplEnginePower>
+          <smplFwMaxSpeed>	42.3	</smplFwMaxSpeed>
         </SPA_ABM_2>
       </engines>
       <chassis>
         <Chassis_It05_Carro_L6_40>
+          <axleCount>	5	</axleCount>
           <grounds>
             <ground>
               <medium>
@@ -1968,6 +1971,7 @@
           </grounds>
         </Chassis_It05_Carro_L6_40>
         <Chassis_It05_Carro_L6_40_2>
+          <axleCount>	5	</axleCount>
           <grounds>
             <ground>
               <medium>

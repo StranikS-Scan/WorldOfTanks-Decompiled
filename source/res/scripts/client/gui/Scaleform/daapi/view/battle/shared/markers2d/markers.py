@@ -3,6 +3,7 @@
 import Event
 import GUI
 from vehicle_systems.tankStructure import TankNodeNames
+from gun_rotation_shared import getLocalAimPoint
 
 class Marker(object):
 
@@ -86,3 +87,11 @@ class VehicleMarker(Marker):
 
     def __onModelChanged(self):
         self.onVehicleModelChanged(self._markerID, self.getMatrixProvider())
+
+
+class VehicleTargetMarker(VehicleMarker):
+
+    @classmethod
+    def fetchMatrixProvider(cls, vProxy):
+        pointOffset = getLocalAimPoint(vProxy.typeDescriptor)
+        return GUI.WGVehicleMarkersMatrixProvider(vProxy.matrix, pointOffset)

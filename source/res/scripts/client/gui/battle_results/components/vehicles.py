@@ -165,9 +165,12 @@ class EpicVehicleStatsBlock(RegularVehicleStatsBlock):
     def setRecord(self, result, reusable):
         super(EpicVehicleStatsBlock, self).setRecord(result, reusable)
         self.playerRank = 0
-        if 'playerRank' in result.avatar.extensionInfo:
-            self.playerRank = result.avatar.extensionInfo['playerRank']['rank']
+        avatar = reusable.avatars.getAvatarInfo(result.player.dbID)
+        extensionInfo = avatar.extensionInfo
+        if extensionInfo is not None and 'playerRank' in extensionInfo:
+            self.playerRank = extensionInfo['playerRank']['rank']
         self.respawns = result.respawns
+        return
 
     def getVO(self):
         if len(self.vehicles) > 1 and not self.__allAdded:
@@ -181,13 +184,14 @@ class RegularVehicleStatValuesBlock(base.StatsBlock):
     __slots__ = ('_isPersonal', '_filters', 'shots', 'hits', 'explosionHits', 'damageDealt', 'sniperDamageDealt', 'directHitsReceived', 'piercingsReceived', 'noDamageDirectHitsReceived', 'explosionHitsReceived', 'damageBlockedByArmor', 'teamHitsDamage', 'spotted', 'damagedKilled', 'damageAssisted', 'damageAssistedStun', 'stunNum', 'stunDuration', 'capturePoints', 'mileage', '__rawDamageAssistedStun', '__rawStunNum')
     lobbyContext = dependency.descriptor(ILobbyContext)
 
+    def __init__(self, meta=None, field='', *path):
+        super(RegularVehicleStatValuesBlock, self).__init__(meta, field, *path)
+        self._filters = set()
+
     def setPersonal(self, flag):
         self._isPersonal = flag
 
     def addFilters(self, filters):
-        if not hasattr(self, '_filters'):
-            self._filters = set()
-        filters = filters if isinstance(filters, (list, tuple)) else [filters]
         self._filters.update(filters)
 
     def setRecord(self, result, reusable):
@@ -243,13 +247,14 @@ class RankedVehicleStatValuesBlock(RegularVehicleStatValuesBlock):
 class EpicVehicleStatValuesBlock(base.StatsBlock):
     __slots__ = ('_team', '_isPersonal', '_filters', 'shots', 'hits', 'explosionHits', 'damageDealt', 'sniperDamageDealt', 'destructiblesDamageDealt', 'equipmentDamageDealt', 'directHitsReceived', 'piercingsReceived', 'noDamageDirectHitsReceived', 'explosionHitsReceived', 'damageBlockedByArmor', 'teamHitsDamage', 'spotted', 'damagedKilled', 'damageAssisted', 'equipmentDamageAssisted', 'damageAssistedStun', 'stunNum', 'capturePoints', 'timesDestroyed', 'teamSpecificStat', '__rawDamageAssistedStun', '__rawStunNum')
 
+    def __init__(self, meta=None, field='', *path):
+        super(EpicVehicleStatValuesBlock, self).__init__(meta, field, *path)
+        self._filters = set()
+
     def setPersonal(self, flag):
         self._isPersonal = flag
 
     def addFilters(self, filters):
-        if not hasattr(self, '_filters'):
-            self._filters = set()
-        filters = filters if isinstance(filters, (list, tuple)) else [filters]
         self._filters.update(filters)
 
     def setRecord(self, result, reusable):

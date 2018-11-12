@@ -30,9 +30,10 @@ class QuestProgressTopView(QuestProgressTopViewMeta):
         if qProgressCtrl is not None:
             qProgressCtrl.onFullConditionsUpdate += self.__onFullConditionsUpdate
             qProgressCtrl.onQuestProgressInited += self.__onFullConditionsUpdate
+            qProgressCtrl.onShowAnimation += self.__onShowAnimation
             if qProgressCtrl.isInited():
                 quest = qProgressCtrl.getSelectedQuest()
-                if quest and quest.hasBattleProgress():
+                if quest is not None:
                     self.__isProgressAvailable = True
                 self.__setVisibility()
         return
@@ -44,6 +45,7 @@ class QuestProgressTopView(QuestProgressTopViewMeta):
         if qProgressCtrl is not None:
             qProgressCtrl.onFullConditionsUpdate -= self.__onFullConditionsUpdate
             qProgressCtrl.onQuestProgressInited -= self.__onFullConditionsUpdate
+            qProgressCtrl.onShowAnimation -= self.__onShowAnimation
         return
 
     def __onSettingsChange(self, diff):
@@ -58,9 +60,13 @@ class QuestProgressTopView(QuestProgressTopViewMeta):
 
     def __onFullConditionsUpdate(self, *args):
         quest = self.sessionProvider.shared.questProgress.getSelectedQuest()
-        self.__isProgressAvailable = quest and quest.hasBattleProgress()
+        self.__isProgressAvailable = quest is not None
         self.__setVisibility()
+        return
 
     def __setVisibility(self):
         self.as_setVisibleS(self.__isProgressEnabled and self.__isProgressAvailable)
         self.as_setFlagVisibleS(self.__isFlagVisible and self.__isProgressAvailable)
+
+    def __onShowAnimation(self, *args):
+        self.as_showContentAnimationS()

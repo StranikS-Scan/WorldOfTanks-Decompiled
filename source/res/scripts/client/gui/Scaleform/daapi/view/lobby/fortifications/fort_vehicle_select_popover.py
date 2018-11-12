@@ -14,7 +14,7 @@ from gui.Scaleform.locale.VEH_COMPARE import VEH_COMPARE
 from gui.prb_control.entities.base.unit.listener import IUnitListener
 from gui.shared.events import CSVehicleSelectEvent, StrongholdEvent
 from gui.shared.formatters import text_styles
-from gui.shared.gui_items.Vehicle import VEHICLE_TYPES_ORDER, getSmallIconPath, Vehicle
+from gui.shared.gui_items.Vehicle import VEHICLE_TYPES_ORDER, getSmallIconPath, Vehicle, getTypeSmallIconPath
 from gui.shared.utils.functions import makeTooltip
 from gui.shared.utils.requesters import REQ_CRITERIA
 from helpers import dependency
@@ -48,9 +48,10 @@ class FortVehicleSelectPopover(FortVehicleSelectPopoverMeta, VehicleSelectorBase
         self._selectedVehicles = data.selectedVehicles
         return
 
-    def setVehicleSelected(self, dbID):
-        super(FortVehicleSelectPopover, self).setVehicleSelected(dbID)
-        self.updateAddButtonLabel()
+    def setVehicleSelected(self, dbID, autoClose):
+        super(FortVehicleSelectPopover, self).setVehicleSelected(dbID, autoClose)
+        if not autoClose:
+            self.updateAddButtonLabel()
 
     def updateAddButtonLabel(self):
         selectedCount = len(self._vehDP.getSelected())
@@ -124,7 +125,6 @@ class FortVehicleSelectPopover(FortVehicleSelectPopoverMeta, VehicleSelectorBase
         return
 
     def _makeVehicleVOAction(self, vehicle):
-        iconFunc = RES_ICONS.maps_icons_vehicletypes_elite if vehicle.isPremium else RES_ICONS.maps_icons_vehicletypes
         if self._selectedVehicles:
             checkSelectedFunc = self._isSelected
         else:
@@ -136,7 +136,7 @@ class FortVehicleSelectPopover(FortVehicleSelectPopoverMeta, VehicleSelectorBase
          'smallIconPath': getSmallIconPath(vehicle.name),
          'nationID': vehicle.nationID,
          'type': vehicle.type,
-         'typeIcon': iconFunc(vehicle.type + '.png'),
+         'typeIcon': getTypeSmallIconPath(vehicle.type, vehicle.isPremium),
          'selected': checkSelectedFunc(vehicle),
          'inHangar': False,
          'isMultiSelect': self._isMultiSelect,

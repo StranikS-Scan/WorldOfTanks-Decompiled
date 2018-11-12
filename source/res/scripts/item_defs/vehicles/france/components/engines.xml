@@ -77,14 +77,15 @@
     <Saurer_F155>	92	</Saurer_F155>
     <SOFAM_G_s_c_4>	93	</SOFAM_G_s_c_4>
     <Maybach_HL_295_1250>	94	</Maybach_HL_295_1250>
+    <Panhard_12H_6000_54>	95	</Panhard_12H_6000_54>
     <Maybach_HL_295_IGR>	60001	</Maybach_HL_295_IGR>
     <Detroit_Diesel_6V53T-S_IGR>	60002	</Detroit_Diesel_6V53T-S_IGR>
     <Renault_A_IGR>	60003	</Renault_A_IGR>
     <Somua_S-40Bis_IGR>	60004	</Somua_S-40Bis_IGR>
     <Sovam_de_250cv_IGR>	60005	</Sovam_de_250cv_IGR>
     <Hispano-Suiza_HS110_IGR>	60006	</Hispano-Suiza_HS110_IGR>
-    <Renault_T14_Halloween>	62001	</Renault_T14_Halloween>
     <Renault_S6Bis_bootcamp>	64001	</Renault_S6Bis_bootcamp>
+    <Engine_Panhard>	64002	</Engine_Panhard>
   </ids>
   <shared>
     <Somua_S-40>
@@ -103,6 +104,39 @@
       <rpm_min>	487	</rpm_min>
       <rpm_max>	2240	</rpm_max>
     </Somua_S-40>
+    <Engine_Panhard>
+      <userString>	#france_vehicles:Engine_Panhard	</userString>
+      <tags>	gasoline	</tags>
+      <level>	4	</level>
+      <price>	10420	</price>
+      <wwsoundPC>	eng_Continental_R975_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Continental_R975_npc	</wwsoundNPC>
+      <power>	220	</power>
+      <weight>	400	</weight>
+      <maxHealth>	80	</maxHealth>
+      <maxRegenHealth>	39	</maxRegenHealth>
+      <repairCost>	2	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	487	</rpm_min>
+      <rpm_max>	2240	</rpm_max>
+    </Engine_Panhard>
+    <Panhard_12H_6000_54>
+      <userString>	#france_vehicles:Panhard_12H_6000_54	</userString>
+      <tags>	gasoline	</tags>
+      <level>	8	</level>
+      <price>	55000	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_cadillac_series_42_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_cadillac_series_42_npc	</wwsoundNPC>
+      <power>	750	</power>
+      <weight>	279	</weight>
+      <maxHealth>	260	</maxHealth>
+      <maxRegenHealth>	60	</maxRegenHealth>
+      <repairCost>	8	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	400	</rpm_min>
+      <rpm_max>	3200	</rpm_max>
+    </Panhard_12H_6000_54>
     <Somua_S-40Bis>
       <userString>	#france_vehicles:Somua_S-40Bis	</userString>
       <tags>	gasoline	</tags>
@@ -167,24 +201,6 @@
       <rpm_min>	343	</rpm_min>
       <rpm_max>	2701	</rpm_max>
     </Renault_T14>
-    <Renault_T14_Halloween>
-      <userString>	#france_vehicles:Renault_T14_Halloween	</userString>
-      <tags>	gasoline	</tags>
-      <level>	5	</level>
-      <price>	22300	</price>
-      <notInShop>	true	</notInShop>
-      <wwsoundPC>	eng_Continental_R975_pc	</wwsoundPC>
-      <wwsoundNPC>	eng_Continental_R975_npc	</wwsoundNPC>
-      <power>	450	</power>
-      <weight>	750	</weight>
-      <maxHealth>	105	</maxHealth>
-      <maxRegenHealth>	52	</maxRegenHealth>
-      <repairCost>	4	</repairCost>
-      <fireStartingChance>	0.15	</fireStartingChance>
-      <rpm_min>	343	</rpm_min>
-      <rpm_max>	2701	</rpm_max>
-      <invulnerable>	true	</invulnerable>
-    </Renault_T14_Halloween>
     <Sovam_de_250cv>
       <userString>	#france_vehicles:Sovam_de_250cv	</userString>
       <tags>	gasoline	</tags>

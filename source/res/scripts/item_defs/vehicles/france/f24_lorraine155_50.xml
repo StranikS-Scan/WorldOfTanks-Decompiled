@@ -92,7 +92,7 @@
       </slot>
       <slot>
         <slotType>	player	</slotType>
-        <slotId>	2	</slotId>
+        <slotId>	4	</slotId>
         <rayStart>	-1.1847 1.4452 -0.67009	</rayStart>
         <rayEnd>	-1.03158 1.31654 -0.67009	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
@@ -102,7 +102,7 @@
       </slot>
       <slot>
         <slotType>	inscription	</slotType>
-        <slotId>	3	</slotId>
+        <slotId>	36	</slotId>
         <rayStart>	-1.52031 1.3278 0.217972	</rayStart>
         <rayEnd>	-1.16078 1.15246 0.217972	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
@@ -112,7 +112,7 @@
       </slot>
       <slot>
         <slotType>	player	</slotType>
-        <slotId>	4	</slotId>
+        <slotId>	5	</slotId>
         <rayStart>	1.1847 1.4452 -0.67009	</rayStart>
         <rayEnd>	1.03158 1.31654 -0.67009	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
@@ -123,7 +123,7 @@
       </slot>
       <slot>
         <slotType>	inscription	</slotType>
-        <slotId>	5	</slotId>
+        <slotId>	37	</slotId>
         <rayStart>	1.44391 1.29054 0.217972	</rayStart>
         <rayEnd>	1.23718 1.18972 0.217972	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
@@ -133,7 +133,7 @@
       </slot>
       <slot>
         <slotType>	camouflage	</slotType>
-        <slotId>	10	</slotId>
+        <slotId>	3	</slotId>
         <anchorPosition>	0.0125725 0.740049 -2.14743	</anchorPosition>
         <anchorDirection>	0.000000 0.809751 -0.586773	</anchorDirection>
       </slot>
@@ -797,7 +797,7 @@
       <customizationSlots>
         <slot>
           <slotType>	style	</slotType>
-          <slotId>	8	</slotId>
+          <slotId>	257	</slotId>
           <anchorPosition>	0.000000 2.72296 -0.000000	</anchorPosition>
           <anchorDirection>	-0.000000 1 0.000000	</anchorDirection>
         </slot>
@@ -1453,7 +1453,7 @@
       <customizationSlots>
         <slot>
           <slotType>	style	</slotType>
-          <slotId>	9	</slotId>
+          <slotId>	257	</slotId>
           <anchorPosition>	0.000143252 2.72283 0.000002	</anchorPosition>
           <anchorDirection>	-0.000000 1 0.000000	</anchorDirection>
         </slot>
@@ -1529,7 +1529,7 @@
           <customizationSlots>
             <slot>
               <slotType>	insigniaOnGun	</slotType>
-              <slotId>	6	</slotId>
+              <slotId>	771	</slotId>
               <rayStart>	0.000001 0.113749 3.25217	</rayStart>
               <rayEnd>	0.0815222 0.208027 3.25075	</rayEnd>
               <rayUp>	0.124 0.121 5	</rayUp>
@@ -1539,7 +1539,7 @@
             </slot>
             <slot>
               <slotType>	camouflage	</slotType>
-              <slotId>	11	</slotId>
+              <slotId>	770	</slotId>
               <anchorPosition>	0.000001 0.13818 2.49811	</anchorPosition>
               <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
               <applyTo>	4096	</applyTo>
@@ -1589,7 +1589,7 @@
           <customizationSlots>
             <slot>
               <slotType>	insigniaOnGun	</slotType>
-              <slotId>	7	</slotId>
+              <slotId>	771	</slotId>
               <rayStart>	0.000000 0.112867 2.08842	</rayStart>
               <rayEnd>	0.0557762 0.101651 2.08672	</rayEnd>
               <rayUp>	0.131 0.123 5	</rayUp>
@@ -1599,7 +1599,7 @@
             </slot>
             <slot>
               <slotType>	camouflage	</slotType>
-              <slotId>	13	</slotId>
+              <slotId>	770	</slotId>
               <anchorPosition>	0.000000 0.138683 2.07965	</anchorPosition>
               <anchorDirection>	-0.000000 0.000000 1	</anchorDirection>
               <applyTo>	4096	</applyTo>
@@ -1632,7 +1632,7 @@
       <customizationSlots>
         <slot>
           <slotType>	camouflage	</slotType>
-          <slotId>	14	</slotId>
+          <slotId>	513	</slotId>
           <anchorPosition>	0.000000 1.08773 -0.000000	</anchorPosition>
           <anchorDirection>	-0.000000 1 0.000000	</anchorDirection>
         </slot>
@@ -1663,9 +1663,11 @@
       <engines>
         <Maybach_HL_210_TRM_P30>
           <smplEnginePower>	687.2327	</smplEnginePower>
+          <smplFwMaxSpeed>	60	</smplFwMaxSpeed>
         </Maybach_HL_210_TRM_P30>
         <Maybach_HL_230_TRM_P30>
           <smplEnginePower>	740.0968	</smplEnginePower>
+          <smplFwMaxSpeed>	60	</smplFwMaxSpeed>
         </Maybach_HL_230_TRM_P30>
       </engines>
       <chassis>

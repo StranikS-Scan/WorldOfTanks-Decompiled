@@ -130,12 +130,14 @@ _DEFAULT_SETTINGS = {'registrationURL': '',
  'useDefaultGunMarkers': False,
  'spgAlternativeAimingCameraEnabled': False,
  'tokenShopAvailabilityURL': '',
+ 'frontlineChangedURL': '',
  'tokenShopAPIKey': '',
  'personalMissions': {},
  'rankedBattles': {},
  'easterEgg': EasterEggProps(True, []),
  'adventCalendar': {'popupIntervalInHours': 24,
-                    'baseURL': ''}}
+                    'baseURL': ''},
+ 'checkPromoFrequencyInBattles': 5}
 
 class GuiSettings(object):
 

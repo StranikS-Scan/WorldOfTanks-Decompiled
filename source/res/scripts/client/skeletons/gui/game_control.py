@@ -30,6 +30,33 @@ class IGameController(object):
         pass
 
 
+class ISeasonProvider(object):
+
+    def hasAnySeason(self):
+        raise NotImplementedError
+
+    def getCurrentCycleID(self):
+        raise NotImplementedError
+
+    def getSeasonPassed(self):
+        raise NotImplementedError
+
+    def getPreviousSeason(self):
+        raise NotImplementedError
+
+    def getCurrentSeason(self):
+        raise NotImplementedError
+
+    def getNextSeason(self):
+        raise NotImplementedError
+
+    def getSeason(self, seasonID):
+        raise NotImplementedError
+
+    def isWithinSeasonTime(self, seasonID):
+        raise NotImplementedError
+
+
 class IGameStateTracker(IGameController):
 
     def onAccountShowGUI(self, ctx):
@@ -104,6 +131,40 @@ class IGameSessionController(IGameController):
 
 class IRentalsController(IGameController):
     onRentChangeNotify = None
+
+    def getRentPackagesInfo(self, rentPrices, currentRentInfo):
+        raise NotImplementedError
+
+    def filterRentPackages(self, rentPrices):
+        raise NotImplementedError
+
+    def getRentPriceOfPackage(self, vehicle, rentType, packageID, package):
+        raise NotImplementedError
+
+
+class ISeasonsController(IGameController):
+    onSeasonChangeNotify = None
+
+    def hasAnySeason(self, seasonType):
+        raise NotImplementedError
+
+    def getCurrentSeason(self, seasonType):
+        raise NotImplementedError
+
+    def getCurrentCycleID(self, seasonType):
+        raise NotImplementedError
+
+    def getSeason(self, seasonType, seasonID):
+        raise NotImplementedError
+
+    def isSeasonActive(self, seasonID, seasonType):
+        raise NotImplementedError
+
+    def isWithinSeasonTime(self, seasonID, seasonType):
+        raise NotImplementedError
+
+    def isSeasonCycleActive(self, cycleID, seasonType):
+        raise NotImplementedError
 
 
 class IRestoreController(IGameController):
@@ -488,7 +549,7 @@ class IQuestsController(IGameController):
         raise NotImplementedError
 
 
-class IRankedBattlesController(IGameController):
+class IRankedBattlesController(IGameController, ISeasonProvider):
     onUpdated = None
     onPrimeTimeStatusUpdated = None
 
@@ -499,27 +560,6 @@ class IRankedBattlesController(IGameController):
         raise NotImplementedError
 
     def isAvailable(self):
-        raise NotImplementedError
-
-    def hasAnySeason(self):
-        raise NotImplementedError
-
-    def getCurrentCycleID(self):
-        raise NotImplementedError
-
-    def getSeasonPassed(self):
-        raise NotImplementedError
-
-    def getPreviousSeason(self):
-        raise NotImplementedError
-
-    def getCurrentSeason(self):
-        raise NotImplementedError
-
-    def getNextSeason(self):
-        raise NotImplementedError
-
-    def getSeason(self, seasonID):
         raise NotImplementedError
 
     def getRank(self, rankID, vehicle=None):
@@ -780,7 +820,7 @@ class IEpicBattleMetaGameController(IGameController):
     def getMaxPlayerLevel(self):
         raise NotImplementedError
 
-    def getPointsProgessForLevel(self, level):
+    def getPointsProgressForLevel(self, level):
         raise NotImplementedError
 
     def getPrimeTimes(self):
@@ -857,7 +897,3 @@ class ICalendarController(IGameController):
 
     def showCalendar(self, invokedFrom):
         raise NotImplementedError
-
-
-class IEventModeController(IGameController):
-    pass

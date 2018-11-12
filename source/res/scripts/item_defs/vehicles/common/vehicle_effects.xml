@@ -266,6 +266,274 @@
       </effects>
     </variant1>
   </waterCollisionHeavy>
+  <groundCollisionWheeledLight>
+    <variant1>
+      <timeline>
+        <impactEnd>	5.0	</impactEnd>
+      </timeline>
+      <effects>
+        <pixie>
+          <startKey>	start	</startKey>
+          <file>	particles/Tank/tank_collision_light_ground.xml	</file>
+          <force>	1	</force>
+        </pixie>
+        <collisionSound>
+          <startKey>	start	</startKey>
+          <wwsoundPC>	collision_static_object_wheel_tech_hull_ground ; collision_static_object_wheel_tech_suspension_ground	</wwsoundPC>
+          <wwsoundNPC>	collision_static_object_hull_NPC ; collision_static_object_suspension_NPC	</wwsoundNPC>
+        </collisionSound>
+      </effects>
+    </variant1>
+  </groundCollisionWheeledLight>
+  <groundCollisionWheeledHeavy>
+    <variant1>
+      <timeline>
+        <impactEnd>	5.0	</impactEnd>
+      </timeline>
+      <effects>
+        <pixie>
+          <startKey>	start	</startKey>
+          <file>	particles/Tank/tank_collision_ground.xml	</file>
+          <force>	1	</force>
+        </pixie>
+        <collisionSound>
+          <startKey>	start	</startKey>
+          <wwsoundPC>	collision_static_object_wheel_tech_hull_ground ; collision_static_object_wheel_tech_suspension_ground	</wwsoundPC>
+          <wwsoundNPC>	collision_static_object_hull_NPC ; collision_static_object_suspension_NPC	</wwsoundNPC>
+        </collisionSound>
+      </effects>
+    </variant1>
+  </groundCollisionWheeledHeavy>
+  <sandCollisionWheeledLight>
+    <variant1>
+      <timeline>
+        <impactEnd>	5.0	</impactEnd>
+      </timeline>
+      <effects>
+        <pixie>
+          <startKey>	start	</startKey>
+          <file>	particles/Tank/tank_collision_light_sand.xml	</file>
+          <force>	1	</force>
+        </pixie>
+        <collisionSound>
+          <startKey>	start	</startKey>
+          <wwsoundPC>	collision_static_object_wheel_tech_hull_sand ; collision_static_object_wheel_tech_suspension_sand	</wwsoundPC>
+          <wwsoundNPC>	collision_static_object_hull_NPC ; collision_static_object_suspension_NPC	</wwsoundNPC>
+        </collisionSound>
+      </effects>
+    </variant1>
+  </sandCollisionWheeledLight>
+  <sandCollisionWheeledHeavy>
+    <variant1>
+      <timeline>
+        <impactEnd>	5.0	</impactEnd>
+      </timeline>
+      <effects>
+        <pixie>
+          <startKey>	start	</startKey>
+          <file>	particles/Tank/tank_collision_sand.xml	</file>
+          <force>	1	</force>
+        </pixie>
+        <collisionSound>
+          <startKey>	start	</startKey>
+          <wwsoundPC>	collision_static_object_wheel_tech_hull_sand ; collision_static_object_wheel_tech_suspension_sand	</wwsoundPC>
+          <wwsoundNPC>	collision_static_object_hull_NPC ; collision_static_object_suspension_NPC	</wwsoundNPC>
+        </collisionSound>
+      </effects>
+    </variant1>
+  </sandCollisionWheeledHeavy>
+  <snowCollisionWheeledLight>
+    <variant1>
+      <timeline>
+        <impactEnd>	5.0	</impactEnd>
+      </timeline>
+      <effects>
+        <pixie>
+          <startKey>	start	</startKey>
+          <file>	particles/Tank/tank_collision_light_snow.xml	</file>
+          <force>	1	</force>
+        </pixie>
+        <collisionSound>
+          <startKey>	start	</startKey>
+          <wwsoundPC>	collision_static_object_wheel_tech_hull_snow ; collision_static_object_wheel_tech_suspension_snow	</wwsoundPC>
+          <wwsoundNPC>	collision_static_object_hull_NPC ; collision_static_object_suspension_NPC	</wwsoundNPC>
+        </collisionSound>
+      </effects>
+    </variant1>
+  </snowCollisionWheeledLight>
+  <snowCollisionWheeledHeavy>
+    <variant1>
+      <timeline>
+        <impactEnd>	5.0	</impactEnd>
+      </timeline>
+      <effects>
+        <pixie>
+          <startKey>	start	</startKey>
+          <file>	particles/Tank/tank_collision_snow.xml	</file>
+          <force>	1	</force>
+        </pixie>
+        <collisionSound>
+          <startKey>	start	</startKey>
+          <wwsoundPC>	collision_static_object_wheel_tech_hull_snow ; collision_static_object_wheel_tech_suspension_snow	</wwsoundPC>
+          <wwsoundNPC>	collision_static_object_hull_NPC ; collision_static_object_suspension_NPC	</wwsoundNPC>
+        </collisionSound>
+      </effects>
+    </variant1>
+  </snowCollisionWheeledHeavy>
+  <stoneCollisionWheeledLight>
+    <variant1>
+      <timeline>
+        <impactEnd>	5.0	</impactEnd>
+      </timeline>
+      <effects>
+        <pixie>
+          <startKey>	start	</startKey>
+          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
+          <file>	particles/Tank/tank_collision_light_stone.xml	</file>
+          <force>	1	</force>
+        </pixie>
+        <collisionSound>
+          <startKey>	start	</startKey>
+          <wwsoundPC>	collision_static_object_wheel_tech_hull_stone ; collision_static_object_wheel_tech_suspension_stone	</wwsoundPC>
+          <wwsoundNPC>	collision_static_object_hull_NPC ; collision_static_object_suspension_NPC	</wwsoundNPC>
+        </collisionSound>
+      </effects>
+    </variant1>
+  </stoneCollisionWheeledLight>
+  <stoneCollisionWheeledHeavy>
+    <variant1>
+      <timeline>
+        <impactEnd>	5.0	</impactEnd>
+      </timeline>
+      <effects>
+        <pixie>
+          <startKey>	start	</startKey>
+          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
+          <file>	particles/Tank/tank_collision_stone.xml	</file>
+          <force>	1	</force>
+        </pixie>
+        <collisionSound>
+          <startKey>	start	</startKey>
+          <wwsoundPC>	collision_static_object_wheel_tech_hull_stone ; collision_static_object_wheel_tech_suspension_stone	</wwsoundPC>
+          <wwsoundNPC>	collision_static_object_hull_NPC ; collision_static_object_suspension_NPC	</wwsoundNPC>
+        </collisionSound>
+      </effects>
+    </variant1>
+  </stoneCollisionWheeledHeavy>
+  <woodCollisionWheeledLight>
+    <variant1>
+      <timeline>
+        <impactEnd>	5.0	</impactEnd>
+      </timeline>
+      <effects>
+        <pixie>
+          <startKey>	start	</startKey>
+          <file>	particles/Tank/tank_collision_light_wood.xml	</file>
+          <force>	1	</force>
+        </pixie>
+        <collisionSound>
+          <startKey>	start	</startKey>
+          <wwsoundPC>	collision_static_object_wheel_tech_hull_wood; collision_static_object_wheel_tech_suspension_wood	</wwsoundPC>
+          <wwsoundNPC>	collision_static_object_hull_NPC ; collision_static_object_suspension_NPC	</wwsoundNPC>
+        </collisionSound>
+      </effects>
+    </variant1>
+  </woodCollisionWheeledLight>
+  <woodCollisionWheeledHeavy>
+    <variant1>
+      <timeline>
+        <impactEnd>	5.0	</impactEnd>
+      </timeline>
+      <effects>
+        <pixie>
+          <startKey>	start	</startKey>
+          <file>	particles/Tank/tank_collision_wood.xml	</file>
+          <force>	1	</force>
+        </pixie>
+        <collisionSound>
+          <startKey>	start	</startKey>
+          <wwsoundPC>	collision_static_object_wheel_tech_hull_wood; collision_static_object_wheel_tech_suspension_wood	</wwsoundPC>
+          <wwsoundNPC>	collision_static_object_hull_NPC ; collision_static_object_suspension_NPC	</wwsoundNPC>
+        </collisionSound>
+      </effects>
+    </variant1>
+  </woodCollisionWheeledHeavy>
+  <metalCollisionWheeledLight>
+    <variant1>
+      <timeline>
+        <impactEnd>	5.0	</impactEnd>
+      </timeline>
+      <effects>
+        <pixie>
+          <startKey>	start	</startKey>
+          <file>	particles/Tank/tank_collision_01.xml	</file>
+          <force>	1	</force>
+        </pixie>
+        <collisionSound>
+          <startKey>	start	</startKey>
+          <wwsoundPC>	collision_static_object_wheel_tech_hull_metal; collision_static_object_wheel_tech_suspension_metal	</wwsoundPC>
+          <wwsoundNPC>	collision_static_object_hull_NPC ; collision_static_object_suspension_NPC	</wwsoundNPC>
+        </collisionSound>
+      </effects>
+    </variant1>
+  </metalCollisionWheeledLight>
+  <metalCollisionWheeledHeavy>
+    <variant1>
+      <timeline>
+        <impactEnd>	5.0	</impactEnd>
+      </timeline>
+      <effects>
+        <pixie>
+          <startKey>	start	</startKey>
+          <file>	particles/Tank/tank_collision_01.xml	</file>
+          <force>	1	</force>
+        </pixie>
+        <collisionSound>
+          <startKey>	start	</startKey>
+          <wwsoundPC>	collision_static_object_wheel_tech_hull_metal; collision_static_object_wheel_tech_suspension_metal	</wwsoundPC>
+          <wwsoundNPC>	collision_static_object_hull_NPC ; collision_static_object_suspension_NPC	</wwsoundNPC>
+        </collisionSound>
+      </effects>
+    </variant1>
+  </metalCollisionWheeledHeavy>
+  <waterCollisionWheeledLight>
+    <variant1>
+      <timeline>
+        <impactEnd>	2.0	</impactEnd>
+      </timeline>
+      <effects>
+        <pixie>
+          <startKey>	start	</startKey>
+          <file>	particles/Tank/tank_collision_light_water.xml	</file>
+          <force>	1	</force>
+        </pixie>
+        <collisionSound>
+          <startKey>	start	</startKey>
+          <wwsoundPC>	collision_static_object_wheel_tech_hull_water; collision_static_object_wheel_tech_suspension_water	</wwsoundPC>
+          <wwsoundNPC>	water_coll_light ; water_coll_light	</wwsoundNPC>
+        </collisionSound>
+      </effects>
+    </variant1>
+  </waterCollisionWheeledLight>
+  <waterCollisionWheeledHeavy>
+    <variant1>
+      <timeline>
+        <impactEnd>	2.0	</impactEnd>
+      </timeline>
+      <effects>
+        <pixie>
+          <startKey>	start	</startKey>
+          <file>	particles/Tank/tank_collision_water.xml	</file>
+          <force>	1	</force>
+        </pixie>
+        <collisionSound>
+          <startKey>	start	</startKey>
+          <wwsoundPC>	collision_static_object_wheel_tech_hull_water; collision_static_object_wheel_tech_suspension_water	</wwsoundPC>
+          <wwsoundNPC>	water_coll_heavy ; water_coll_heavy	</wwsoundNPC>
+        </collisionSound>
+      </effects>
+    </variant1>
+  </waterCollisionWheeledHeavy>
   <collision>
     <variant1>
       <timeline>
@@ -446,7 +714,6 @@
           <endKey>	stopDeath	</endKey>
           <alwaysUpdateModel>	true	</alwaysUpdateModel>
           <file>	particles/Tank/destruction/destruction_small_01.xml	</file>
-          <fileNPC>	particles/Environment/halloween_2018_death_small.xml	</fileNPC>
           <position>	Scene Root	</position>
           <force>	1	</force>
         </pixie>
@@ -475,7 +742,6 @@
           <startKey>	flaming	</startKey>
           <endKey>	waitChangeBurnSound	</endKey>
           <file>	particles/Tank/destruction/fire_dead_small_02.xml	</file>
-          <fileNPC>	particles/Tank/empty.xml	</fileNPC>
           <position>	HP_Fire_1	</position>
         </pixie>
         <sound>
@@ -495,7 +761,6 @@
         <pixie>
           <startKey>	fire	</startKey>
           <file>	particles/Tank/destruction/flaming_small_01.xml	</file>
-          <fileNPC>	particles/Tank/empty.xml	</fileNPC>
           <position>	HP_Fire_1	</position>
         </pixie>
         <sound>
@@ -519,7 +784,6 @@
         <pixie>
           <startKey>	fire	</startKey>
           <file>	particles/Tank/destruction/flaming_small_02.xml	</file>
-          <fileNPC>	particles/Tank/empty.xml	</fileNPC>
           <position>	HP_Fire_1	</position>
         </pixie>
         <sound>
@@ -589,7 +853,6 @@
           <startKey>	flaming	</startKey>
           <endKey>	waitChangeBurnSound	</endKey>
           <file>	particles/Tank/destruction/fire_dead_small_02.xml	</file>
-          <fileNPC>	particles/Tank/empty.xml	</fileNPC>
           <position>	HP_Fire_1	</position>
         </pixie>
         <sound>
@@ -625,7 +888,6 @@
           <endKey>	stopExplosion	</endKey>
           <alwaysUpdateModel>	true	</alwaysUpdateModel>
           <file>	particles/Tank/destruction/burnup_small.xml	</file>
-          <fileNPC>	particles/Tank/empty.xml	</fileNPC>
           <position>	Scene Root	</position>
           <force>	1	</force>
         </pixie>
@@ -654,7 +916,6 @@
           <startKey>	flaming	</startKey>
           <endKey>	waitChangeBurnSound	</endKey>
           <file>	particles/Tank/destruction/fire_dead_small_02.xml	</file>
-          <fileNPC>	particles/Tank/empty.xml	</fileNPC>
           <position>	HP_Fire_1	</position>
         </pixie>
         <sound>
@@ -690,7 +951,6 @@
           <endKey>	stopExplosion	</endKey>
           <alwaysUpdateModel>	true	</alwaysUpdateModel>
           <file>	particles/Tank/destruction/fuel_small.xml	</file>
-          <fileNPC>	particles/Tank/empty.xml	</fileNPC>
           <position>	Scene Root	</position>
           <force>	1	</force>
         </pixie>
@@ -719,7 +979,6 @@
           <startKey>	flaming	</startKey>
           <endKey>	waitChangeBurnSound	</endKey>
           <file>	particles/Tank/destruction/fire_dead_small_02.xml	</file>
-          <fileNPC>	particles/Tank/empty.xml	</fileNPC>
           <position>	HP_Fire_1	</position>
         </pixie>
         <sound>
@@ -827,7 +1086,6 @@
           <startKey>	flaming	</startKey>
           <endKey>	waitChangeBurnSound	</endKey>
           <file>	particles/Tank/destruction/fire_dead_small_02.xml	</file>
-          <fileNPC>	particles/Tank/empty.xml	</fileNPC>
           <position>	HP_Fire_1	</position>
         </pixie>
         <sound>
@@ -888,7 +1146,6 @@
           <endKey>	stopDeath	</endKey>
           <alwaysUpdateModel>	true	</alwaysUpdateModel>
           <file>	particles/Tank/destruction/destruction_medium_01.xml	</file>
-          <fileNPC>	particles/Environment/halloween_2018_death_small.xml	</fileNPC>
           <position>	Scene Root	</position>
           <force>	1	</force>
         </pixie>
@@ -917,7 +1174,6 @@
           <startKey>	flaming	</startKey>
           <endKey>	waitChangeBurnSound	</endKey>
           <file>	particles/Tank/destruction/fire_dead_medium_01.xml	</file>
-          <fileNPC>	particles/Tank/empty.xml	</fileNPC>
           <position>	HP_Fire_1	</position>
         </pixie>
         <sound>
@@ -937,7 +1193,6 @@
         <pixie>
           <startKey>	fire	</startKey>
           <file>	particles/Tank/destruction/flaming_medium_01.xml	</file>
-          <fileNPC>	particles/Tank/empty.xml	</fileNPC>
           <position>	HP_Fire_1	</position>
         </pixie>
         <sound>
@@ -961,7 +1216,6 @@
         <pixie>
           <startKey>	fire	</startKey>
           <file>	particles/Tank/destruction/flaming_medium_02.xml	</file>
-          <fileNPC>	particles/Tank/empty.xml	</fileNPC>
           <position>	HP_Fire_1	</position>
         </pixie>
         <sound>
@@ -1031,7 +1285,6 @@
           <startKey>	flaming	</startKey>
           <endKey>	waitChangeBurnSound	</endKey>
           <file>	particles/Tank/destruction/fire_dead_medium_01.xml	</file>
-          <fileNPC>	particles/Tank/empty.xml	</fileNPC>
           <position>	HP_Fire_1	</position>
         </pixie>
         <sound>
@@ -1067,7 +1320,6 @@
           <endKey>	stopExplosion	</endKey>
           <alwaysUpdateModel>	true	</alwaysUpdateModel>
           <file>	particles/Tank/destruction/burnup_medium.xml	</file>
-          <fileNPC>	particles/Tank/empty.xml	</fileNPC>
           <position>	Scene Root	</position>
           <force>	1	</force>
         </pixie>
@@ -1096,7 +1348,6 @@
           <startKey>	flaming	</startKey>
           <endKey>	waitChangeBurnSound	</endKey>
           <file>	particles/Tank/destruction/fire_dead_medium_01.xml	</file>
-          <fileNPC>	particles/Tank/empty.xml	</fileNPC>
           <position>	HP_Fire_1	</position>
         </pixie>
         <sound>
@@ -1132,7 +1383,6 @@
           <endKey>	stopExplosion	</endKey>
           <alwaysUpdateModel>	true	</alwaysUpdateModel>
           <file>	particles/Tank/destruction/fuel_medium.xml	</file>
-          <fileNPC>	particles/Tank/empty.xml	</fileNPC>
           <position>	Scene Root	</position>
           <force>	1	</force>
         </pixie>
@@ -1161,7 +1411,6 @@
           <startKey>	flaming	</startKey>
           <endKey>	waitChangeBurnSound	</endKey>
           <file>	particles/Tank/destruction/fire_dead_medium_01.xml	</file>
-          <fileNPC>	particles/Tank/empty.xml	</fileNPC>
           <position>	HP_Fire_1	</position>
         </pixie>
         <sound>
@@ -1269,7 +1518,6 @@
           <startKey>	flaming	</startKey>
           <endKey>	waitChangeBurnSound	</endKey>
           <file>	particles/Tank/destruction/fire_dead_medium_01.xml	</file>
-          <fileNPC>	particles/Tank/empty.xml	</fileNPC>
           <position>	HP_Fire_1	</position>
         </pixie>
         <sound>
@@ -1330,7 +1578,6 @@
           <endKey>	stopDeath	</endKey>
           <alwaysUpdateModel>	true	</alwaysUpdateModel>
           <file>	particles/Tank/destruction/destruction_large_01.xml	</file>
-          <fileNPC>	particles/Environment/halloween_2018_death_small.xml	</fileNPC>
           <position>	Scene Root	</position>
           <force>	1	</force>
         </pixie>
@@ -1359,7 +1606,6 @@
           <startKey>	flaming	</startKey>
           <endKey>	waitChangeBurnSound	</endKey>
           <file>	particles/Tank/destruction/fire_dead_large_02.xml	</file>
-          <fileNPC>	particles/Tank/empty.xml	</fileNPC>
           <position>	HP_Fire_1	</position>
         </pixie>
         <sound>
@@ -1379,7 +1625,6 @@
         <pixie>
           <startKey>	fire	</startKey>
           <file>	particles/Tank/destruction/flaming_large_01.xml	</file>
-          <fileNPC>	particles/Tank/empty.xml	</fileNPC>
           <position>	HP_Fire_1	</position>
         </pixie>
         <sound>
@@ -1403,7 +1648,6 @@
         <pixie>
           <startKey>	fire	</startKey>
           <file>	particles/Tank/destruction/flaming_large_02.xml	</file>
-          <fileNPC>	particles/Tank/empty.xml	</fileNPC>
           <position>	HP_Fire_1	</position>
         </pixie>
         <sound>
@@ -1473,7 +1717,6 @@
           <startKey>	flaming	</startKey>
           <endKey>	waitChangeBurnSound	</endKey>
           <file>	particles/Tank/destruction/fire_dead_large_02.xml	</file>
-          <fileNPC>	particles/Tank/empty.xml	</fileNPC>
           <position>	HP_Fire_1	</position>
         </pixie>
         <sound>
@@ -1509,7 +1752,6 @@
           <endKey>	stopExplosion	</endKey>
           <alwaysUpdateModel>	true	</alwaysUpdateModel>
           <file>	particles/Tank/destruction/burnup_large.xml	</file>
-          <fileNPC>	particles/Tank/empty.xml	</fileNPC>
           <position>	Scene Root	</position>
           <force>	1	</force>
         </pixie>
@@ -1538,7 +1780,6 @@
           <startKey>	flaming	</startKey>
           <endKey>	waitChangeBurnSound	</endKey>
           <file>	particles/Tank/destruction/fire_dead_large_02.xml	</file>
-          <fileNPC>	particles/Tank/empty.xml	</fileNPC>
           <position>	HP_Fire_1	</position>
         </pixie>
         <sound>
@@ -1574,7 +1815,6 @@
           <endKey>	stopExplosion	</endKey>
           <alwaysUpdateModel>	true	</alwaysUpdateModel>
           <file>	particles/Tank/destruction/fuel_large.xml	</file>
-          <fileNPC>	particles/Tank/empty.xml	</fileNPC>
           <position>	Scene Root	</position>
           <force>	1	</force>
         </pixie>
@@ -1603,7 +1843,6 @@
           <startKey>	flaming	</startKey>
           <endKey>	waitChangeBurnSound	</endKey>
           <file>	particles/Tank/destruction/fire_dead_large_02.xml	</file>
-          <fileNPC>	particles/Tank/empty.xml	</fileNPC>
           <position>	HP_Fire_1	</position>
         </pixie>
         <sound>
@@ -1711,7 +1950,6 @@
           <startKey>	flaming	</startKey>
           <endKey>	waitChangeBurnSound	</endKey>
           <file>	particles/Tank/destruction/fire_dead_large_02.xml	</file>
-          <fileNPC>	particles/Tank/empty.xml	</fileNPC>
           <position>	HP_Fire_1	</position>
         </pixie>
         <sound>
@@ -1971,7 +2209,6 @@
         <pixie>
           <startKey>	fire	</startKey>
           <file>	particles/Tank/destruction/flaming_domination_large_01.xml	</file>
-          <fileNPC>	particles/Tank/empty.xml	</fileNPC>
           <position>	HP_Fire_1	</position>
         </pixie>
         <sound>
@@ -1994,7 +2231,6 @@
         <pixie>
           <startKey>	fire	</startKey>
           <file>	particles/Tank/destruction/flaming_domination_large_02.xml	</file>
-          <fileNPC>	particles/Tank/empty.xml	</fileNPC>
           <position>	HP_Fire_1	</position>
         </pixie>
         <sound>
@@ -2082,7 +2318,6 @@
           <endKey>	stopExplosion	</endKey>
           <alwaysUpdateModel>	true	</alwaysUpdateModel>
           <file>	particles/Tank/destruction/burnup_domination_large.xml	</file>
-          <fileNPC>	particles/Tank/empty.xml	</fileNPC>
           <position>	Scene Root	</position>
           <force>	1	</force>
         </pixie>
@@ -2130,7 +2365,6 @@
           <endKey>	stopExplosion	</endKey>
           <alwaysUpdateModel>	true	</alwaysUpdateModel>
           <file>	particles/Tank/destruction/fuel_domination_large.xml	</file>
-          <fileNPC>	particles/Tank/empty.xml	</fileNPC>
           <position>	Scene Root	</position>
           <force>	1	</force>
         </pixie>
@@ -2358,7 +2592,6 @@
           <startKey>	flaming	</startKey>
           <endKey>	waitChangeBurnSound	</endKey>
           <file>	particles/Tank/destruction/fire_dead_small_02.xml	</file>
-          <fileNPC>	particles/Tank/empty.xml	</fileNPC>
           <position>	HP_Fire_1	</position>
         </pixie>
         <sound>
@@ -2465,7 +2698,6 @@
           <startKey>	flaming	</startKey>
           <endKey>	waitChangeBurnSound	</endKey>
           <file>	particles/Tank/destruction/fire_dead_medium_01.xml	</file>
-          <fileNPC>	particles/Tank/empty.xml	</fileNPC>
           <position>	HP_Fire_1	</position>
         </pixie>
         <sound>
@@ -2572,7 +2804,6 @@
           <startKey>	flaming	</startKey>
           <endKey>	waitChangeBurnSound	</endKey>
           <file>	particles/Tank/destruction/fire_dead_medium_02.xml	</file>
-          <fileNPC>	particles/Tank/empty.xml	</fileNPC>
           <position>	HP_Fire_1	</position>
         </pixie>
         <sound>
@@ -2679,7 +2910,6 @@
           <startKey>	flaming	</startKey>
           <endKey>	waitChangeBurnSound	</endKey>
           <file>	particles/Tank/destruction/fire_dead_large_01.xml	</file>
-          <fileNPC>	particles/Tank/empty.xml	</fileNPC>
           <position>	HP_Fire_1	</position>
         </pixie>
         <sound>

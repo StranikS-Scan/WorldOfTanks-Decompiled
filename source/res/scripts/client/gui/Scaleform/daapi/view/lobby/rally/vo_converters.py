@@ -82,7 +82,7 @@ def makeVehicleBasicVO(vehicle, levelsRange=None, vehicleTypes=None):
         elif vehicleTypes is not None and vehicle.type not in vehicleTypes:
             enabled, tooltip = False, TOOLTIPS.VEHICLESELECTOR_INCOMPATIBLETYPE
         return {'intCD': vehicle.intCD,
-         'nationID': vehicle.customNationID,
+         'nationID': vehicle.nationID,
          'name': vehicle.name,
          'userName': vehicle.userName,
          'shortUserName': vehicle.shortUserName,
@@ -246,7 +246,7 @@ def _getSlotsData(unitMgrID, fullData, app=None, levelsRange=None, checkForVehic
     colorGetter = g_settings.getColorScheme('rosters').getColors
     itemsCache = dependency.instance(IItemsCache)
     vehicleGetter = itemsCache.items.getItemByCD
-    canTakeSlot = not pInfo.isLegionary()
+    canTakeSlot = not pInfo.isLegionary() and not isPlayerInSlot
     bwPlugin = proto_getter(PROTO_TYPE.BW_CHAT2)(None)
     isPlayerSpeaking = bwPlugin.voipController.isPlayerSpeaking
     unit = fullData.unit

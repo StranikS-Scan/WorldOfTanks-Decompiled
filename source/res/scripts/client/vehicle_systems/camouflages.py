@@ -11,7 +11,7 @@ from items.customizations import parseOutfitDescr, CustomizationOutfit
 from vehicle_systems.tankStructure import VehiclePartsTuple
 from vehicle_systems.tankStructure import TankPartNames, TankPartIndexes
 from gui.shared.gui_items import GUI_ITEM_TYPE
-from items.components.c11n_constants import ModificationType, C11N_MASK_REGION, DEFAULT_DECAL_SCALE_FACTORS, SeasonType, CustomizationType
+from items.components.c11n_constants import ModificationType, C11N_MASK_REGION, DEFAULT_DECAL_SCALE_FACTORS, SeasonType, CustomizationType, DEFAULT_DECAL_CLIP_ANGLE
 _logger = logging.getLogger(__name__)
 RepaintParams = namedtuple('PaintParams', ('enabled', 'baseColor', 'color', 'metallic', 'gloss', 'fading', 'strength'))
 RepaintParams.__new__.__defaults__ = (False,
@@ -31,14 +31,15 @@ CamoParams.__new__.__defaults__ = ('',
  0,
  0,
  0)
-ProjectionDecalParams = namedtuple('ProjectionDecalParams', ('slot', 'mirrored', 'decalMap', 'fixTransform', 'tintColor', 'decalMatrix', 'partMatrix'))
-ProjectionDecalGenericParams = namedtuple('ProjectionDecalGenericParams', ('tintColor', 'position', 'rotation', 'scale', 'decalMap', 'applyAreas', 'doubleSided'))
+ProjectionDecalGenericParams = namedtuple('ProjectionDecalGenericParams', ('tintColor', 'position', 'rotation', 'scale', 'decalMap', 'applyAreas', 'clipAngle', 'mirrored', 'doubleSided'))
 ProjectionDecalGenericParams.__new__.__defaults__ = (Math.Vector4(0.0),
  Math.Vector3(0.0),
  Math.Vector3(0.0, 1.0, 0.0),
- '',
  1.0,
+ '',
  0.0,
+ 0.0,
+ False,
  False)
 _DEFAULT_GLOSS = 0.509
 _DEFAULT_METALLIC = 0.23
@@ -223,6 +224,7 @@ def getGenericProjectionDecals(outfit, vehicleDescr):
         for idx in range(capacity):
             decal = projectionDecalsSlot.getSlotData(idx)
             if not decal.isEmpty():
+                mirrored = bool(decal.component.isMirrored())
                 if decal.component.slotId != 0:
                     if decal.component.slotId in vehSlotMap:
                         slotParams = vehSlotMap[decal.component.slotId]
@@ -232,6 +234,10 @@ def getGenericProjectionDecals(outfit, vehicleDescr):
                         showOn = slotParams.showOn
                         factors = slotParams.scaleFactors or DEFAULT_DECAL_SCALE_FACTORS
                         doubleSided = slotParams.doubleSided
+                        if slotParams.clipAngle is not None:
+                            clipAngle = slotParams.clipAngle
+                        else:
+                            clipAngle = DEFAULT_DECAL_CLIP_ANGLE
                     else:
                         _logger.warning('Wrong slotId in ProjectDecalComponent (slotId=%(slotId)d component=%(component)s)', {'slotId': decal.component.slotId,
                          'component': decal.component})
@@ -242,11 +248,12 @@ def getGenericProjectionDecals(outfit, vehicleDescr):
                     rotation = decal.component.rotation
                     showOn = decal.component.showOn
                     factors = DEFAULT_DECAL_SCALE_FACTORS
+                    clipAngle = DEFAULT_DECAL_CLIP_ANGLE
                     doubleSided = decal.component.doubleSided
                 if decal.component.scaleFactorId != 0:
                     factor = factors[decal.component.scaleFactorId - 1]
                     scale = Math.Vector3(scale[0] * factor, scale[1], scale[2] * factor)
-                params = ProjectionDecalGenericParams(tintColor=Math.Vector4(decal.component.tintColor) / 255, position=Math.Vector3(position), rotation=Math.Vector3(rotation), scale=Math.Vector3(scale), decalMap=decal.item.texture, applyAreas=showOn, doubleSided=doubleSided)
+                params = ProjectionDecalGenericParams(tintColor=Math.Vector4(decal.component.tintColor) / 255, position=Math.Vector3(position), rotation=Math.Vector3(rotation), scale=Math.Vector3(scale), decalMap=decal.item.texture, applyAreas=showOn, clipAngle=clipAngle, mirrored=mirrored, doubleSided=doubleSided)
                 decalsParams.append(params)
 
         return decalsParams

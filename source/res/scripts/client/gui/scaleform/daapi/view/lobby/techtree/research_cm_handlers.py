@@ -105,7 +105,8 @@ class ResearchVehicleContextMenuHandler(SimpleVehicleCMHandler):
         ItemsActionsFactory.doAction(ItemsActionsFactory.UNLOCK_ITEM, self._nodeCD, unlockProps.parentID, unlockProps.unlockIdx, unlockProps.xpCost)
 
     def showVehiclePreview(self):
-        shared_events.showVehiclePreview(self._nodeCD, self._previewAlias)
+        rootCD = self._rootCD
+        shared_events.showVehiclePreview(self._nodeCD, self._previewAlias, previewBackCb=lambda : shared_events.showResearchView(rootCD))
 
     def selectVehicle(self):
         shared_events.selectVehicleInHangar(self._nodeCD)

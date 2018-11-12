@@ -126,7 +126,7 @@ class ShopVehicleTab(ShopItemsTab, StoreVehicleTab):
     def _getStatusParams(self, item):
         statusMessage = ''
         money = self._items.stats.money
-        if item.getState()[0] == Vehicle.VEHICLE_STATE.RENTAL_IS_OVER:
+        if item.getState()[0] in (Vehicle.VEHICLE_STATE.RENTAL_IS_OVER, Vehicle.VEHICLE_STATE.RENTABLE_AGAIN):
             statusMessage = '#menu:store/vehicleStates/%s' % item.getState()[0]
             disabled = not self._isPurchaseEnabled(item, money)
         elif BigWorld.player().isLongDisconnectedFromCenter:

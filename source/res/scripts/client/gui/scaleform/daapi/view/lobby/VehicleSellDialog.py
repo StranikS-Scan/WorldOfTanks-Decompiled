@@ -5,6 +5,7 @@ from account_helpers.AccountSettings import AccountSettings
 from debug_utils import LOG_ERROR, LOG_CURRENT_EXCEPTION
 from gui import SystemMessages, makeHtmlString
 from gui.ClientUpdateManager import g_clientUpdateManager
+from gui.Scaleform.daapi.view.lobby.customization.shared import TYPES_ORDER
 from gui.Scaleform.daapi.view.lobby.store.browser.ingameshop_helpers import isIngameShopEnabled
 from gui.Scaleform.daapi.view.meta.VehicleSellDialogMeta import VehicleSellDialogMeta
 from gui.Scaleform.genConsts.CURRENCIES_CONSTANTS import CURRENCIES_CONSTANTS
@@ -68,6 +69,10 @@ class VehicleSellDialog(VehicleSellDialogMeta):
         self.checkControlQuestion(self.__checkUsefulTankman)
         modules = items.getItems(criteria=REQ_CRITERIA.VEHICLE.SUITABLE([vehicle]) | REQ_CRITERIA.INVENTORY).values()
         shells = items.getItems(criteria=REQ_CRITERIA.VEHICLE.SUITABLE([vehicle], [GUI_ITEM_TYPE.SHELL]) | REQ_CRITERIA.INVENTORY).values()
+        installedCustomizations = items.getItems(itemTypeID=GUI_ITEM_TYPE.STYLE, criteria=REQ_CRITERIA.CUSTOMIZATION.IS_INSTALLED_ON_VEHICLE(vehicle)).values()
+        if not installedCustomizations:
+            installedCustomizations = items.getItems(itemTypeID=GUI_ITEM_TYPE.CUSTOMIZATIONS, criteria=REQ_CRITERIA.CUSTOMIZATION.IS_INSTALLED_ON_VEHICLE(vehicle)).itervalues()
+            installedCustomizations = sorted(installedCustomizations, key=lambda item: TYPES_ORDER.index(item.itemTypeID))
         otherVehsShells = set()
         for invVeh in invVehs.itervalues():
             if invVeh.invID != self.__vehInvID:
@@ -204,6 +209,21 @@ class VehicleSellDialog(VehicleSellDialogMeta):
              'action': action})
 
         customizationOnVehicle = []
+        for c in installedCustomizations:
+            action = None
+            itemPrice = c.sellPrices.itemPrice
+            if itemPrice.isActionPrice():
+                action = packItemActionTooltipData(c, False)
+            count = c.getInstalledOnVehicleCount(vehicle.intCD)
+            data = {'intCD': c.intCD,
+             'userName': c.userName,
+             'sellPrice': (itemPrice.price * count).toMoneyTuple(),
+             'toInventory': True,
+             'onlyToInventory': c.isRentable or c.isHidden,
+             'count': count,
+             'action': action}
+            customizationOnVehicle.append(data)
+
         settings = self.getDialogSettings()
         isSlidingComponentOpened = settings['isOpened']
         self.as_setDataS({'accountMoney': items.stats.money.toMoneyTuple(),
@@ -251,8 +271,8 @@ class VehicleSellDialog(VehicleSellDialogMeta):
         self.as_checkGoldS(gold)
 
     @decorators.process('sellVehicle')
-    def __doSellVehicle(self, vehicle, shells, eqs, optDevicesToSell, inventory, isDismissCrew):
-        vehicleSeller = VehicleSeller(vehicle, shells, eqs, optDevicesToSell, inventory, isDismissCrew)
+    def __doSellVehicle(self, vehicle, shells, eqs, optDevicesToSell, inventory, customizationItems, isDismissCrew):
+        vehicleSeller = VehicleSeller(vehicle, shells, eqs, optDevicesToSell, inventory, customizationItems, isDismissCrew)
         currentMoneyGold = self.itemsCache.items.stats.money.get(Currency.GOLD, 0)
         spendMoneyGold = vehicleSeller.spendMoney.get(Currency.GOLD, 0)
         if isIngameShopEnabled() and currentMoneyGold < spendMoneyGold:
@@ -277,7 +297,8 @@ class VehicleSellDialog(VehicleSellDialogMeta):
             eqs = [ getItem(flashObject2Dict(eq)) for eq in eqs ]
             optDevicesToSell = [ getItem(flashObject2Dict(dev)) for dev in optDevicesToSell ]
             inventory = [ getItem(flashObject2Dict(module)) for module in inventory ]
-            self.__doSellVehicle(vehicle, shells, eqs, optDevicesToSell, inventory, isDismissCrew)
+            customizationItems = [ getItem(flashObject2Dict(cust_item)) for cust_item in customizationItems ]
+            self.__doSellVehicle(vehicle, shells, eqs, optDevicesToSell, inventory, customizationItems, isDismissCrew)
         except Exception:
             LOG_ERROR('There is error while selling vehicle')
             LOG_CURRENT_EXCEPTION()

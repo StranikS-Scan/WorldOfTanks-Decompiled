@@ -56,50 +56,50 @@ class Dialogs(DynAccessor):
 
         class activationConfirmation(DynAccessor):
             __slots__ = ()
-            cancel = 880
-            message = 878
-            submit = 879
-            title = 877
+            cancel = 878
+            message = 876
+            submit = 877
+            title = 875
 
         class replaceConfirmation(DynAccessor):
             __slots__ = ()
-            cancel = 884
-            message = 882
-            submit = 883
-            title = 881
+            cancel = 882
+            message = 880
+            submit = 881
+            title = 879
 
     class bootcamp(DynAccessor):
         __slots__ = ()
 
         class retry(DynAccessor):
             __slots__ = ()
-            cancel = 977
-            label = 974
-            message = 975
-            submit = 976
-            title = 973
+            cancel = 975
+            label = 972
+            message = 973
+            submit = 974
+            title = 971
 
         class skip(DynAccessor):
             __slots__ = ()
-            cancel = 967
-            label = 964
-            message = 965
-            submit = 966
-            title = 963
+            cancel = 965
+            label = 962
+            message = 963
+            submit = 964
+            title = 961
 
         class start(DynAccessor):
             __slots__ = ()
-            cancel = 972
-            label = 969
-            message = 970
-            submit = 971
-            title = 968
+            cancel = 970
+            label = 967
+            message = 968
+            submit = 969
+            title = 966
 
     class bootcampCenterUnavailable(DynAccessor):
         __slots__ = ()
-        cancel = 980
-        message = 979
-        title = 978
+        cancel = 978
+        message = 977
+        title = 976
 
     class buyConfirmation(DynAccessor):
         __slots__ = ()
@@ -218,43 +218,43 @@ class Dialogs(DynAccessor):
 
     class changeGraphics(DynAccessor):
         __slots__ = ()
-        cancel = 708
-        message = 706
-        submit = 707
-        title = 705
+        cancel = 706
+        message = 704
+        submit = 705
+        title = 703
 
     class changePeriphery(DynAccessor):
         __slots__ = ()
-        cancel = 803
-        message = 801
-        submit = 802
-        title = 800
+        cancel = 801
+        message = 799
+        submit = 800
+        title = 798
 
     class changeRoamingPeriphery(DynAccessor):
         __slots__ = ()
-        cancel = 807
-        message = 805
-        submit = 806
-        title = 804
+        cancel = 805
+        message = 803
+        submit = 804
+        title = 802
 
     class clanConfirmJoining(DynAccessor):
         __slots__ = ()
-        cancel = 890
+        cancel = 888
 
         class message(DynAccessor):
             __slots__ = ()
-            clanExit = 888
-            clanName = 887
+            clanExit = 886
+            clanName = 885
 
-        message_ = 886
-        submit = 889
-        title = 885
+        message_ = 884
+        submit = 887
+        title = 883
 
     class clan_data_not_available(DynAccessor):
         __slots__ = ()
-        cancel = 924
-        message = 923
-        title = 922
+        cancel = 922
+        message = 921
+        title = 920
 
     class common(DynAccessor):
         __slots__ = ()
@@ -273,23 +273,23 @@ class Dialogs(DynAccessor):
 
     class confirmBattleBoosterBuyAndInstall(DynAccessor):
         __slots__ = ()
-        cancel = 962
-        submit = 961
-        title = 960
+        cancel = 960
+        submit = 959
+        title = 958
 
     class confirmBattleBoosterInstall(DynAccessor):
         __slots__ = ()
-        cancel = 955
-        message = 953
-        submit = 954
-        title = 952
+        cancel = 953
+        message = 951
+        submit = 952
+        title = 950
 
     class confirmBattleBoosterInstallNotSuitable(DynAccessor):
         __slots__ = ()
-        cancel = 959
-        message = 957
-        submit = 958
-        title = 956
+        cancel = 957
+        message = 955
+        submit = 956
+        title = 954
 
     class confirmBuyAndInstall(DynAccessor):
         __slots__ = ()
@@ -311,6 +311,17 @@ class Dialogs(DynAccessor):
 
         class exchangeCredits(DynAccessor):
             __slots__ = ()
+            cancel = 844
+            exchangeNoNeedText = 847
+            goldNotEnoughText = 850
+            needGoldText = 834
+            needItemsStepperTitle = 837
+            needItemsText = 831
+            submit = 841
+            title = 828
+
+        class exchangeXp(DynAccessor):
+            __slots__ = ()
             cancel = 846
             exchangeNoNeedText = 849
             goldNotEnoughText = 852
@@ -320,29 +331,18 @@ class Dialogs(DynAccessor):
             submit = 843
             title = 830
 
-        class exchangeXp(DynAccessor):
-            __slots__ = ()
-            cancel = 848
-            exchangeNoNeedText = 851
-            goldNotEnoughText = 854
-            needGoldText = 838
-            needItemsStepperTitle = 841
-            needItemsText = 835
-            submit = 845
-            title = 832
-
-        goldItemsStepperTitle = 842
+        goldItemsStepperTitle = 840
 
         class restoreExchangeCredits(DynAccessor):
             __slots__ = ()
-            cancel = 847
-            exchangeNoNeedText = 850
-            goldNotEnoughText = 853
-            needGoldText = 837
-            needItemsStepperTitle = 840
-            needItemsText = 834
-            submit = 844
-            title = 831
+            cancel = 845
+            exchangeNoNeedText = 848
+            goldNotEnoughText = 851
+            needGoldText = 835
+            needItemsStepperTitle = 838
+            needItemsText = 832
+            submit = 842
+            title = 829
 
     class confirmModuleDialog(DynAccessor):
         __slots__ = ()
@@ -394,9 +394,9 @@ class Dialogs(DynAccessor):
 
     class createOrderConfirmation(DynAccessor):
         __slots__ = ()
-        cancel = 816
-        submit = 815
-        title = 814
+        cancel = 814
+        submit = 813
+        title = 812
 
     class crewRetraining(DynAccessor):
         __slots__ = ()
@@ -407,55 +407,55 @@ class Dialogs(DynAccessor):
 
         class close(DynAccessor):
             __slots__ = ()
-            cancel = 894
-            message = 892
-            submit = 893
-            title = 891
+            cancel = 892
+            message = 890
+            submit = 891
+            title = 889
 
         class filter(DynAccessor):
             __slots__ = ()
-            cancel = 898
-            message = 896
-            submit = 897
-            title = 895
+            cancel = 896
+            message = 894
+            submit = 895
+            title = 893
 
         class install_invoice_item(DynAccessor):
             __slots__ = ()
 
             class permanent(DynAccessor):
                 __slots__ = ()
-                cancel = 911
-                message = 909
-                submit = 910
-                title = 908
+                cancel = 909
+                message = 907
+                submit = 908
+                title = 906
 
             class permanent_last(DynAccessor):
                 __slots__ = ()
-                cancel = 915
-                message = 913
-                submit = 914
-                title = 912
+                cancel = 913
+                message = 911
+                submit = 912
+                title = 910
 
             class temporary(DynAccessor):
                 __slots__ = ()
-                cancel = 907
-                message = 905
-                submit = 906
-                title = 904
+                cancel = 905
+                message = 903
+                submit = 904
+                title = 902
 
-            will_be_deleted = 903
+            will_be_deleted = 901
 
         class remove_element(DynAccessor):
             __slots__ = ()
-            cancel = 902
-            message = 900
-            submit = 901
-            title = 899
+            cancel = 900
+            message = 898
+            submit = 899
+            title = 897
 
     class customizationConfirmSell(DynAccessor):
         __slots__ = ()
-        message = 992
-        title = 991
+        message = 990
+        title = 989
 
     class disconnect(DynAccessor):
         __slots__ = ()
@@ -504,9 +504,9 @@ class Dialogs(DynAccessor):
 
     class elenDisabled(DynAccessor):
         __slots__ = ()
-        cancel = 921
-        message = 920
-        title = 919
+        cancel = 919
+        message = 918
+        title = 917
 
     class elite(DynAccessor):
         __slots__ = ()
@@ -517,11 +517,11 @@ class Dialogs(DynAccessor):
 
     class epicBattleConfirmDialog(DynAccessor):
         __slots__ = ()
-        cancel = 875
-        checkBox = 876
-        message = 873
-        submit = 874
-        title = 872
+        cancel = 873
+        checkBox = 874
+        message = 871
+        submit = 872
+        title = 870
 
     class eula(DynAccessor):
         __slots__ = ()
@@ -575,27 +575,27 @@ class Dialogs(DynAccessor):
 
     class fortDisabled(DynAccessor):
         __slots__ = ()
-        cancel = 918
-        message = 917
-        title = 916
+        cancel = 916
+        message = 915
+        title = 914
 
     class fortTurnedOff(DynAccessor):
         __slots__ = ()
-        cancel = 827
-        message = 829
-        title = 828
+        cancel = 825
+        message = 827
+        title = 826
 
     class fortificationCloseDirection(DynAccessor):
         __slots__ = ()
-        cancel = 822
-        submit = 821
+        cancel = 820
+        submit = 819
 
     class fortificationFixedPlayers(DynAccessor):
         __slots__ = ()
-        cancel = 820
-        message = 818
-        submit = 819
-        title = 817
+        cancel = 818
+        message = 816
+        submit = 817
+        title = 815
 
     class freeSlotConfirmation(DynAccessor):
         __slots__ = ()
@@ -613,20 +613,20 @@ class Dialogs(DynAccessor):
 
     class freeXPInfo(DynAccessor):
         __slots__ = ()
-        message = 809
-        submitBtnLbl = 810
-        title = 808
+        message = 807
+        submitBtnLbl = 808
+        title = 806
 
     class gammaDialog(DynAccessor):
         __slots__ = ()
-        cancel = 1004
+        cancel = 1002
 
         class message(DynAccessor):
             __slots__ = ()
-            description = 1003
-            header = 1002
+            description = 1001
+            header = 1000
 
-        title = 1001
+        title = 999
 
     class gatheringXPForm(DynAccessor):
         __slots__ = ()
@@ -714,13 +714,6 @@ class Dialogs(DynAccessor):
         submit = 139
         title = 137
 
-    class halloweenShopBuyItem(DynAccessor):
-        __slots__ = ()
-        cancel = 1008
-        message = 1006
-        submit = 1007
-        title = 1005
-
     class haveNoEmptySlots(DynAccessor):
         __slots__ = ()
         cancel = 548
@@ -733,22 +726,22 @@ class Dialogs(DynAccessor):
 
         class excludeRating(DynAccessor):
             __slots__ = ()
-            cancel = 984
-            message = 982
-            submit = 983
-            title = 981
+            cancel = 982
+            message = 980
+            submit = 981
+            title = 979
 
     class hofDisabled(DynAccessor):
         __slots__ = ()
-        cancel = 987
-        message = 986
-        title = 985
+        cancel = 985
+        message = 984
+        title = 983
 
     class ingameShopDisabled(DynAccessor):
         __slots__ = ()
-        cancel = 990
-        message = 989
-        title = 988
+        cancel = 988
+        message = 987
+        title = 986
 
     class installConfirmationNotRemovable_crystal(DynAccessor):
         __slots__ = ()
@@ -773,31 +766,31 @@ class Dialogs(DynAccessor):
 
     class koreaParentNotification(DynAccessor):
         __slots__ = ()
-        cancel = 716
-        message = 714
-        submit = 715
-        title = 713
+        cancel = 714
+        message = 712
+        submit = 713
+        title = 711
 
     class koreaPlayTimeNotification(DynAccessor):
         __slots__ = ()
-        cancel = 720
-        message = 718
-        submit = 719
-        title = 717
+        cancel = 718
+        message = 716
+        submit = 717
+        title = 715
 
     class leaveEvent(DynAccessor):
         __slots__ = ()
-        cancel = 996
-        message = 994
-        submit = 995
-        title = 993
+        cancel = 994
+        message = 992
+        submit = 993
+        title = 991
 
     class leaveStartedEvent(DynAccessor):
         __slots__ = ()
-        cancel = 1000
-        message = 998
-        submit = 999
-        title = 997
+        cancel = 998
+        message = 996
+        submit = 997
+        title = 995
 
     class leftPrebattleAndAcceptInvite(DynAccessor):
         __slots__ = ()
@@ -840,10 +833,10 @@ class Dialogs(DynAccessor):
 
     class lowFpsWarning(DynAccessor):
         __slots__ = ()
-        cancel = 712
-        message = 710
-        submit = 711
-        title = 709
+        cancel = 710
+        message = 708
+        submit = 709
+        title = 707
 
     class messenger(DynAccessor):
         __slots__ = ()
@@ -972,42 +965,40 @@ class Dialogs(DynAccessor):
 
         class reason(DynAccessor):
             __slots__ = ()
-            afk = 684
+            afk = 683
             deserter = 681
-            event_afk = 685
-            event_deserter = 682
-            suicide = 683
+            suicide = 682
 
         title = 674
 
     class questsConfirmDialog(DynAccessor):
         __slots__ = ()
-        cancel = 858
-        checkBox = 859
-        message = 856
-        submit = 857
-        title = 855
+        cancel = 856
+        checkBox = 857
+        message = 854
+        submit = 855
+        title = 853
 
     class questsConfirmDiscardDialog(DynAccessor):
         __slots__ = ()
-        cancel = 871
-        message = 869
-        submit = 870
-        title = 865
+        cancel = 869
+        message = 867
+        submit = 868
+        title = 863
 
     class questsConfirmProgressDialog(DynAccessor):
         __slots__ = ()
-        cancel = 863
-        message = 861
-        submit = 862
-        title = 860
+        cancel = 861
+        message = 859
+        submit = 860
+        title = 858
 
     class questsDismissProgressDialog(DynAccessor):
         __slots__ = ()
-        cancel = 868
-        message = 866
-        submit = 867
-        title = 864
+        cancel = 866
+        message = 864
+        submit = 865
+        title = 862
 
     class quit(DynAccessor):
         __slots__ = ()
@@ -1064,65 +1055,65 @@ class Dialogs(DynAccessor):
 
         class autoSearch(DynAccessor):
             __slots__ = ()
-            cancel = 737
-            message = 735
-            submit = 736
-            title = 734
+            cancel = 735
+            message = 733
+            submit = 734
+            title = 732
 
         class changePeriphery(DynAccessor):
             __slots__ = ()
-            cancel = 745
-            message = 743
-            submit = 744
-            title = 742
+            cancel = 743
+            message = 741
+            submit = 742
+            title = 740
 
         class goToAnother(DynAccessor):
             __slots__ = ()
-            cancel = 749
-            message = 747
-            submit = 748
-            title = 746
+            cancel = 747
+            message = 745
+            submit = 746
+            title = 744
 
         class goToBattleTutorial(DynAccessor):
             __slots__ = ()
-            cancel = 769
-            message = 767
-            submit = 768
-            title = 766
+            cancel = 767
+            message = 765
+            submit = 766
+            title = 764
 
         class goToIntro(DynAccessor):
             __slots__ = ()
-            cancel = 789
-            message = 787
-            submit = 788
-            title = 786
+            cancel = 787
+            message = 785
+            submit = 786
+            title = 784
 
         class goToSquad(DynAccessor):
             __slots__ = ()
-            cancel = 753
-            message = 751
-            submit = 752
-            title = 750
+            cancel = 751
+            message = 749
+            submit = 750
+            title = 748
 
         class leave(DynAccessor):
             __slots__ = ()
-            cancel = 785
-            message = 783
-            submit = 784
-            title = 782
+            cancel = 783
+            message = 781
+            submit = 782
+            title = 780
 
         class leaveDisabled(DynAccessor):
             __slots__ = ()
-            cancel = 796
-            message = 795
-            title = 794
+            cancel = 794
+            message = 793
+            title = 792
 
         class startBattle(DynAccessor):
             __slots__ = ()
-            cancel = 741
-            message = 739
-            submit = 740
-            title = 738
+            cancel = 739
+            message = 737
+            submit = 738
+            title = 736
 
     class recruitWindow(DynAccessor):
         __slots__ = ()
@@ -1162,10 +1153,10 @@ class Dialogs(DynAccessor):
 
     class refuseTraining(DynAccessor):
         __slots__ = ()
-        cancel = 697
-        message = 695
-        submit = 696
-        title = 694
+        cancel = 695
+        message = 693
+        submit = 694
+        title = 692
 
     class removeConfirmationNotRemovable(DynAccessor):
         __slots__ = ()
@@ -1184,10 +1175,10 @@ class Dialogs(DynAccessor):
 
     class removeIncompatibleEqs(DynAccessor):
         __slots__ = ()
-        cancel = 693
-        message = 691
-        submit = 692
-        title = 690
+        cancel = 691
+        message = 689
+        submit = 690
+        title = 688
 
     class replacePassport(DynAccessor):
         __slots__ = ()
@@ -1222,17 +1213,17 @@ class Dialogs(DynAccessor):
 
     class reportBug(DynAccessor):
         __slots__ = ()
-        cancel = 826
-        message = 824
-        submit = 825
-        title = 823
+        cancel = 824
+        message = 822
+        submit = 823
+        title = 821
 
     class resetGraphics(DynAccessor):
         __slots__ = ()
-        cancel = 704
-        message = 702
-        submit = 703
-        title = 701
+        cancel = 702
+        message = 700
+        submit = 701
+        title = 699
 
     class restoreTankman(DynAccessor):
         __slots__ = ()
@@ -1265,24 +1256,24 @@ class Dialogs(DynAccessor):
 
         class goToAnother(DynAccessor):
             __slots__ = ()
-            cancel = 761
-            message = 759
-            submit = 760
-            title = 758
+            cancel = 759
+            message = 757
+            submit = 758
+            title = 756
 
         class goToBattleTutorial(DynAccessor):
             __slots__ = ()
-            cancel = 773
-            message = 771
-            submit = 772
-            title = 770
+            cancel = 771
+            message = 769
+            submit = 770
+            title = 768
 
         class goToSquad(DynAccessor):
             __slots__ = ()
-            cancel = 765
-            message = 763
-            submit = 764
-            title = 762
+            cancel = 763
+            message = 761
+            submit = 762
+            title = 760
 
         message = 253
         submit = 254
@@ -1311,20 +1302,20 @@ class Dialogs(DynAccessor):
 
         class common(DynAccessor):
             __slots__ = ()
-            title = 733
+            title = 731
 
     class shopSyncError(DynAccessor):
         __slots__ = ()
-        cancel = 700
-        message = 699
-        title = 698
+        cancel = 698
+        message = 697
+        title = 696
 
     class skillDropWindow(DynAccessor):
         __slots__ = ()
-        cancel = 689
-        message = 687
-        submit = 688
-        title = 686
+        cancel = 687
+        message = 685
+        submit = 686
+        title = 684
 
     class soundModeInvalid(DynAccessor):
         __slots__ = ()
@@ -1335,54 +1326,54 @@ class Dialogs(DynAccessor):
 
     class soundSpeakersPresetDoesNotMatch(DynAccessor):
         __slots__ = ()
-        cancel = 928
-        message = 926
-        submit = 927
-        title = 925
+        cancel = 926
+        message = 924
+        submit = 925
+        title = 923
 
     class soundSpeakersPresetReset(DynAccessor):
         __slots__ = ()
-        cancel = 932
-        message = 930
-        submit = 931
-        title = 929
+        cancel = 930
+        message = 928
+        submit = 929
+        title = 927
 
     class squad(DynAccessor):
         __slots__ = ()
 
         class goToAnother(DynAccessor):
             __slots__ = ()
-            cancel = 777
-            message = 775
-            submit = 776
-            title = 774
+            cancel = 775
+            message = 773
+            submit = 774
+            title = 772
 
         class goToBattleTutorial(DynAccessor):
             __slots__ = ()
-            cancel = 781
-            message = 779
-            submit = 780
-            title = 778
+            cancel = 779
+            message = 777
+            submit = 778
+            title = 776
 
         class goToSquad(DynAccessor):
             __slots__ = ()
-            cancel = 757
-            message = 755
-            submit = 756
-            title = 754
+            cancel = 755
+            message = 753
+            submit = 754
+            title = 752
 
         class leave(DynAccessor):
             __slots__ = ()
-            cancel = 793
-            message = 791
-            submit = 792
-            title = 790
+            cancel = 791
+            message = 789
+            submit = 790
+            title = 788
 
         class leaveDisabled(DynAccessor):
             __slots__ = ()
-            cancel = 799
-            message = 798
-            title = 797
+            cancel = 797
+            message = 796
+            title = 795
 
     class squadHaveNoPlayerAuto(DynAccessor):
         __slots__ = ()
@@ -1450,48 +1441,48 @@ class Dialogs(DynAccessor):
 
         class leave(DynAccessor):
             __slots__ = ()
-            cancel = 938
-            message = 934
-            submit = 937
-            title = 933
+            cancel = 936
+            message = 932
+            submit = 935
+            title = 931
 
         class leaveDefeat(DynAccessor):
             __slots__ = ()
-            message = 936
-            title = 935
+            message = 934
+            title = 933
 
     class switchPeripheryWindow(DynAccessor):
         __slots__ = ()
-        btnCancel = 813
-        btnSwitch = 812
-        windowTitle = 811
+        btnCancel = 811
+        btnSwitch = 810
+        windowTitle = 809
 
     class tankmanChageRole(DynAccessor):
         __slots__ = ()
 
         class unknownVehicle(DynAccessor):
             __slots__ = ()
-            cancel = 732
-            message = 730
-            submit = 731
-            title = 729
+            cancel = 730
+            message = 728
+            submit = 729
+            title = 727
 
     class tankmanRetraining(DynAccessor):
         __slots__ = ()
 
         class undistributedExp(DynAccessor):
             __slots__ = ()
-            cancel = 728
-            message = 726
-            submit = 727
-            title = 725
+            cancel = 726
+            message = 724
+            submit = 725
+            title = 723
 
         class unknownVehicle(DynAccessor):
             __slots__ = ()
-            cancel = 724
-            message = 722
-            submit = 723
-            title = 721
+            cancel = 722
+            message = 720
+            submit = 721
+            title = 719
 
     class technicalMaintenanceConfirm(DynAccessor):
         __slots__ = ()
@@ -1509,19 +1500,19 @@ class Dialogs(DynAccessor):
 
     class tradeInConfirmation(DynAccessor):
         __slots__ = ()
-        cancel = 947
+        cancel = 945
 
         class message(DynAccessor):
             __slots__ = ()
-            addition = 941
-            crew = 942
-            equipments = 944
-            optionalDevices = 945
-            shells = 943
+            addition = 939
+            crew = 940
+            equipments = 942
+            optionalDevices = 943
+            shells = 941
 
-        message_ = 940
-        submit = 946
-        title = 939
+        message_ = 938
+        submit = 944
+        title = 937
 
     class tradeInPopover(DynAccessor):
         __slots__ = ()
@@ -1598,10 +1589,10 @@ class Dialogs(DynAccessor):
 
         class exitDialog(DynAccessor):
             __slots__ = ()
-            cancel = 951
-            message = 949
-            submit = 950
-            title = 948
+            cancel = 949
+            message = 947
+            submit = 948
+            title = 946
 
     class vehicleRemoveDialog(DynAccessor):
         __slots__ = ()

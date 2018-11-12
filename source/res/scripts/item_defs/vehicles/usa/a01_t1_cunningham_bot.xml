@@ -22,7 +22,7 @@
   <camouflage>
     <priceFactor>	0.2	</priceFactor>
     <tiling>	1 1 0 0	</tiling>
-    <exclusionMask>	vehicles/american/A01_T1_Cunningham/T1_Cunningham_chassis_01_AM.dds	</exclusionMask>
+    <exclusionMask></exclusionMask>
   </camouflage>
   <hull>
     <armor>
@@ -87,7 +87,7 @@
       </slot>
       <slot>
         <slotType>	inscription	</slotType>
-        <slotId>	2	</slotId>
+        <slotId>	36	</slotId>
         <rayStart>	0.972806 0.430871 -1.08261	</rayStart>
         <rayEnd>	0.772807 0.430871 -1.08261	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
@@ -97,7 +97,7 @@
       </slot>
       <slot>
         <slotType>	inscription	</slotType>
-        <slotId>	3	</slotId>
+        <slotId>	37	</slotId>
         <rayStart>	-0.972806 0.430871 -1.08261	</rayStart>
         <rayEnd>	-0.772807 0.430871 -1.08261	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
@@ -798,7 +798,7 @@
       <customizationSlots>
         <slot>
           <slotType>	player	</slotType>
-          <slotId>	4	</slotId>
+          <slotId>	514	</slotId>
           <rayStart>	-0.587596 0.266962 0.157434	</rayStart>
           <rayEnd>	-0.395072 0.266843 0.103264	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
@@ -808,7 +808,7 @@
         </slot>
         <slot>
           <slotType>	player	</slotType>
-          <slotId>	5	</slotId>
+          <slotId>	515	</slotId>
           <rayStart>	0.58066 0.267611 0.193771	</rayStart>
           <rayEnd>	0.388825 0.267494 0.137209	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
@@ -833,6 +833,7 @@
       <engines>
         <Cunningham_bot>
           <smplEnginePower>	116.3009	</smplEnginePower>
+          <smplFwMaxSpeed>	41	</smplFwMaxSpeed>
         </Cunningham_bot>
       </engines>
       <chassis>

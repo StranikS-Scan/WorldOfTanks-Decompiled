@@ -8,12 +8,6 @@
         <postBattle>
           <and>
             <results>
-              <title>
-                <key>	#personal_missions_details:quest_common_condition_title_killsAssistedRadio	</key>
-              </title>
-              <description>
-                <key>	#personal_missions_details:quest_1_1_5_condition_description_killsAssistedRadio	</key>
-              </description>
               <key>	killsAssistedRadio	</key>
               <greaterOrEqual>	1	</greaterOrEqual>
             </results>
@@ -72,22 +66,10 @@
         <postBattle>
           <and>
             <results>
-              <title>
-                <key>	#personal_missions_details:quest_common_condition_title_killsAssistedRadio	</key>
-              </title>
-              <description>
-                <key>	#personal_missions_details:quest_1_1_5_condition_description_killsAssistedRadio	</key>
-              </description>
               <key>	killsAssistedRadio	</key>
               <greaterOrEqual>	1	</greaterOrEqual>
             </results>
             <results>
-              <title>
-                <key>	#personal_missions_details:quest_common_condition_title_damagedVehicleCntAssistedRadio	</key>
-              </title>
-              <description>
-                <key>	#personal_missions_details:quest_1_1_5_condition_description_damagedVehicleCntAssistedRadio	</key>
-              </description>
               <key>	damagedVehicleCntAssistedRadio	</key>
               <greaterOrEqual>	2	</greaterOrEqual>
             </results>

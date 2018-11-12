@@ -17,6 +17,7 @@ def getGameControllersConfig(manager):
     from gui.game_control.PromoController import PromoController as _Promos
     from gui.game_control.RefSystem import RefSystem as _RefSystem
     from gui.game_control.RentalsController import RentalsController as _Rentals
+    from gui.game_control.seasons_controller import SeasonsController as _Seasons
     from gui.game_control.ServerStats import ServerStats as _ServerStats
     from gui.game_control.SoundEventChecker import SoundEventChecker as _Sounds
     from gui.game_control.clan_lock_controller import ClanLockController as _ClanLocks
@@ -32,7 +33,6 @@ def getGameControllersConfig(manager):
     from gui.game_control.quests_controller import QuestsController as _Quests
     from gui.game_control.ranked_battles_controller import RankedBattlesController as _Ranked
     from gui.game_control.epic_mode_controller import EpicModeController as _Epic
-    from gui.game_control.event_mode_controller import EventModeController as _Event
     from gui.game_control.bootcamp_controller import BootcampController as _Bootcamp
     from gui.game_control.hero_tank_controller import HeroTankController as _HeroTankController
     from gui.game_control.epic_meta_game_ctrl import EpicBattleMetaGameController as _EpicMeta
@@ -76,7 +76,6 @@ def getGameControllersConfig(manager):
     _config(_interface.IBootcampController, _Bootcamp())
     _config(_interface.IRankedBattlesController, _Ranked())
     _config(_interface.IEpicModeController, _Epic())
-    _config(_interface.IEventModeController, _Event())
     _config(_interface.IHeroTankController, _HeroTankController())
     _config(_interface.IMarathonEventsController, _MarathonEventsController())
     _config(_interface.ICalendarController, _Calendar())
@@ -86,3 +85,4 @@ def getGameControllersConfig(manager):
         _config(_interface.IChinaController, _China())
     else:
         _config(_interface.IChinaController, _NoChina())
+    _config(_interface.ISeasonsController, _Seasons())

@@ -12,11 +12,11 @@ from gui.Scaleform.locale.VEHICLE_CUSTOMIZATION import VEHICLE_CUSTOMIZATION
 from gui.hangar_cameras.hangar_camera_common import CameraRelatedEvents
 from gui.shared import EVENT_BUS_SCOPE
 from gui.shared.gui_items import GUI_ITEM_TYPE
-from gui.shared.formatters import text_styles
 from helpers import dependency
 from skeletons.gui.customization import ICustomizationService
 from gui.shared.gui_items.customization.c11n_items import camoIconTemplate
 from skeletons.gui.shared import IItemsCache
+from helpers.i18n import makeString as _ms
 from items.components.c11n_constants import SeasonType
 from gui.customization.shared import getAppliedRegionsForCurrentHangarVehicle, getCustomizationTankPartName, C11nId
 from gui.shared.gui_items.customization.outfit import Area
@@ -48,6 +48,8 @@ class CustomizationPropertiesSheet(CustomizationPropertiesSheetMeta):
         self._editMode = False
         self._extraMoney = None
         self._isItemAppliedToAll = False
+        self._showSwitchers = False
+        self._isNarrowSlot = False
         self.__interactionType = CUSTOMIZATION_ALIASES.CUSTOMIZATION_POJECTION_INTERACTION_DEFAULT
         self.__changes = [False] * 3
         return
@@ -55,6 +57,10 @@ class CustomizationPropertiesSheet(CustomizationPropertiesSheetMeta):
     @property
     def isVisible(self):
         return self._isVisible
+
+    @property
+    def attachedSlot(self):
+        return C11nId(areaId=self._areaID, slotType=self._slotID, regionIdx=self._regionID)
 
     def editMode(self, value, interactionType):
         self._editMode = value
@@ -82,9 +88,10 @@ class CustomizationPropertiesSheet(CustomizationPropertiesSheetMeta):
         self.__ctx.onCustomizationSeasonChanged += self.__onSeasonChanged
         self.__ctx.onCustomizationItemInstalled += self.__onItemsInstalled
         self.__ctx.onCustomizationItemsRemoved += self.__onItemsRemoved
-        self.__ctx.onCustomizationCamouflageColorChanged += self.__onCamouflageColorChanged
-        self.__ctx.onCustomizationCamouflageScaleChanged += self.__onCamouflageScaleChanged
-        self.__ctx.onCustomizationProjectionDecalScaleChanged += self.__onProjectionDecalScaleChanged
+        self.__ctx.onCamouflageColorChanged += self.__onCamouflageColorChanged
+        self.__ctx.onCamouflageScaleChanged += self.__onCamouflageScaleChanged
+        self.__ctx.onProjectionDecalScaleChanged += self.__onProjectionDecalScaleChanged
+        self.__ctx.onProjectionDecalMirrored += self.__onProjectionDecalMirrored
         self.__ctx.onCustomizationItemsBought += self.__onItemsBought
         self.__ctx.onCustomizationItemSold += self.__onItemSold
         return
@@ -92,9 +99,10 @@ class CustomizationPropertiesSheet(CustomizationPropertiesSheetMeta):
     def _dispose(self):
         self.__ctx.onCustomizationItemSold -= self.__onItemSold
         self.__ctx.onCustomizationItemsBought -= self.__onItemsBought
-        self.__ctx.onCustomizationCamouflageScaleChanged -= self.__onCamouflageScaleChanged
-        self.__ctx.onCustomizationCamouflageColorChanged -= self.__onCamouflageColorChanged
-        self.__ctx.onCustomizationProjectionDecalScaleChanged -= self.__onProjectionDecalScaleChanged
+        self.__ctx.onCamouflageScaleChanged -= self.__onCamouflageScaleChanged
+        self.__ctx.onCamouflageColorChanged -= self.__onCamouflageColorChanged
+        self.__ctx.onProjectionDecalScaleChanged -= self.__onProjectionDecalScaleChanged
+        self.__ctx.onProjectionDecalMirrored -= self.__onProjectionDecalMirrored
         self.__ctx.onCustomizationItemsRemoved -= self.__onItemsRemoved
         self.__ctx.onCustomizationItemInstalled -= self.__onItemsInstalled
         self.__ctx.onCustomizationSeasonChanged -= self.__onSeasonChanged
@@ -108,24 +116,32 @@ class CustomizationPropertiesSheet(CustomizationPropertiesSheetMeta):
         super(CustomizationPropertiesSheet, self)._dispose()
         return
 
-    def show(self, areaID, slotID, regionID):
-        if self._slotID == slotID and self._regionID == regionID and self._areaID == areaID and self.isVisible:
+    def show(self, areaID, slotID, regionID, showSwitchers, isNarrowSlot, forceUpdate=False):
+        prevAnchor = C11nId(self._areaID, self._slotID, self._regionID)
+        newAnchor = C11nId(areaID, slotID, regionID)
+        self.__ctx.vehicleAnchorsUpdater.changeAnchorParams(prevAnchor, isDisplayed=True, isAutoScalable=True)
+        self.__ctx.vehicleAnchorsUpdater.changeAnchorParams(newAnchor, isDisplayed=not showSwitchers, isAutoScalable=False)
+        if self._slotID == slotID and self._regionID == regionID and self._areaID == areaID and self.isVisible and not forceUpdate:
             return
         self._slotID = slotID
         self._regionID = regionID
         self._areaID = areaID
         self._isVisible = True
+        self._showSwitchers = showSwitchers
+        self._isNarrowSlot = isNarrowSlot
         if self.__update():
             self.__ctx.onPropertySheetShown()
         self.__ctx.vehicleAnchorsUpdater.displayMenu(True)
 
     def hide(self):
+        anchor = C11nId(self._areaID, self._slotID, self._regionID)
         if not self.isVisible:
             return
         self._isVisible = False
         self.as_hideS()
         self.__ctx.onPropertySheetHidden()
         self.__ctx.vehicleAnchorsUpdater.displayMenu(False)
+        self.__ctx.vehicleAnchorsUpdater.changeAnchorParams(anchor, True, True)
 
     def onActionBtnClick(self, actionType, actionData):
         if actionType == CUSTOMIZATION_ALIASES.CUSTOMIZATION_SHEET_ACTION_APPLY_TO_ALL_PARTS:
@@ -155,6 +171,11 @@ class CustomizationPropertiesSheet(CustomizationPropertiesSheetMeta):
         elif actionType == CUSTOMIZATION_ALIASES.CUSTOMIZATION_SHEET_ACTION_CLOSE:
             self.hide()
             self.__ctx.onClearItem()
+        elif actionType == CUSTOMIZATION_ALIASES.CUSTOMIZATION_SHEET_ACTION_MIRROR:
+            self.__ctx.mirrorProjectionDecal(self._areaID, self._regionID)
+        elif actionType == CUSTOMIZATION_ALIASES.CUSTOMIZATION_SHEET_ACTION_MOVE:
+            self.__ctx.moveProjectionDecal(self._areaID, self._regionID, actionData)
+            self.__update()
 
     def onClose(self):
         self.hide()
@@ -269,7 +290,9 @@ class CustomizationPropertiesSheet(CustomizationPropertiesSheetMeta):
         vo = {'intCD': -1 if not currentElement else currentElement.intCD,
          'renderersData': self.__makeRenderersVOs() if currentElement else [],
          'isProjectionEnable': self._slotID == GUI_ITEM_TYPE.PROJECTION_DECAL,
-         'isBigRadius': self._slotID in (GUI_ITEM_TYPE.INSCRIPTION, GUI_ITEM_TYPE.PROJECTION_DECAL, GUI_ITEM_TYPE.EMBLEM)}
+         'isBigRadius': self._slotID in (GUI_ITEM_TYPE.INSCRIPTION, GUI_ITEM_TYPE.PROJECTION_DECAL, GUI_ITEM_TYPE.EMBLEM),
+         'showSwitchers': self._showSwitchers,
+         'isNarrowSlot': self._isNarrowSlot}
         return vo
 
     def __makeSlotVO(self):
@@ -283,9 +306,7 @@ class CustomizationPropertiesSheet(CustomizationPropertiesSheetMeta):
         if self._slotID == GUI_ITEM_TYPE.PAINT:
             renderers.append(self.__makeSetOnOtherTankPartsRendererVO())
         elif self._slotID == GUI_ITEM_TYPE.CAMOUFLAGE:
-            vo = self.__makeCamoColorRendererVO()
-            if vo is not None:
-                renderers.append(vo)
+            renderers.append(self.__makeCamoColorRendererVO())
             renderers.append(self.__makeScaleRendererVO())
             renderers.append(self.__makeSetOnOtherTankPartsRendererVO())
         elif self._slotID in (GUI_ITEM_TYPE.EMBLEM, GUI_ITEM_TYPE.INSCRIPTION, GUI_ITEM_TYPE.MODIFICATION):
@@ -295,6 +316,7 @@ class CustomizationPropertiesSheet(CustomizationPropertiesSheetMeta):
             if isExtentionEnabled:
                 renderers.append(self.__makeExtensionRendererVO())
         elif self._slotID == GUI_ITEM_TYPE.PROJECTION_DECAL:
+            renderers.append(self.__makeMirorRendererVO())
             renderers.append(self.__makeScaleRendererVO())
         renderers.append(self.__makeRemoveRendererVO())
         renderers.append(self.__makeCloseeRendererVO())
@@ -318,91 +340,131 @@ class CustomizationPropertiesSheet(CustomizationPropertiesSheetMeta):
         return
 
     def __makeSetOnOtherTankPartsRendererVO(self):
-        icon = RES_ICONS.MAPS_ICONS_CUSTOMIZATION_PROPERTY_SHEET_TANK
-        hoverIcon = RES_ICONS.MAPS_ICONS_CUSTOMIZATION_PROPERTY_SHEET_TANK_HOVER
+        icon = RES_ICONS.MAPS_ICONS_CUSTOMIZATION_PROPERTY_SHEET_IDLE_ICON_FULL_TANK
+        hoverIcon = RES_ICONS.MAPS_ICONS_CUSTOMIZATION_PROPERTY_SHEET_IDLE_ICON_FULL_TANK_HOVER
         actionBtnLabel = VEHICLE_CUSTOMIZATION.PROPERTYSHEET_ACTIONBTN_APPLYTOWHOLETANK
+        disableTooltip = _ms(VEHICLE_CUSTOMIZATION.PROPERTYSHEET_ACTIONBTN_APPLYTOWHOLETANKDISABLED, itemType=_ms('#vehicle_customization:propertySheet/actionBtn/forCurrentItem/' + self._currentItem.itemTypeName))
+        enabled = True
         if self._isItemAppliedToAll:
-            icon = RES_ICONS.MAPS_ICONS_CUSTOMIZATION_PROPERTY_SHEET_ICON_DEL_TANK
-            hoverIcon = RES_ICONS.MAPS_ICONS_CUSTOMIZATION_PROPERTY_SHEET_ICON_DEL_TANK_HOVER
+            icon = RES_ICONS.MAPS_ICONS_CUSTOMIZATION_PROPERTY_SHEET_REMOVE_ICON_DEL_TANK
+            hoverIcon = RES_ICONS.MAPS_ICONS_CUSTOMIZATION_PROPERTY_SHEET_REMOVE_ICON_DEL_TANK_HOVER
             actionBtnLabel = VEHICLE_CUSTOMIZATION.PROPERTYSHEET_ACTIONBTN_CANCEL
+        else:
+            enabled = self.__ctx.isPossibleToInstallToAllTankAreas(self.__ctx.currentSeason, self._slotID, self._currentSlotData)
         return {'iconSrc': icon,
          'iconHoverSrc': hoverIcon,
-         'actionBtnLabel': text_styles.tutorial(actionBtnLabel),
+         'iconDisableSrc': RES_ICONS.MAPS_ICONS_CUSTOMIZATION_PROPERTY_SHEET_DISABLE_ICON_FULL_TANK_DISABLE,
+         'actionBtnLabel': actionBtnLabel,
          'actionType': CUSTOMIZATION_ALIASES.CUSTOMIZATION_SHEET_ACTION_APPLY_TO_ALL_PARTS,
-         'rendererLnk': CUSTOMIZATION_ALIASES.CUSTOMIZATION_SHEET_BTN_RENDERER_UI}
+         'rendererLnk': CUSTOMIZATION_ALIASES.CUSTOMIZATION_SHEET_BTN_RENDERER_UI,
+         'animatedTransition': True,
+         'disableTooltip': disableTooltip,
+         'enabled': enabled}
 
-    def __removeAllTankPartsRendererVO(self):
-        icon = RES_ICONS.MAPS_ICONS_CUSTOMIZATION_PROPERTY_SHEET_ICON_DEL_TANK
-        hoverIcon = RES_ICONS.MAPS_ICONS_CUSTOMIZATION_PROPERTY_SHEET_ICON_DEL_TANK_HOVER
-        actionBtnLabel = VEHICLE_CUSTOMIZATION.PROPERTYSHEET_ACTIONBTN_CLEAR
+    def __makeMirorRendererVO(self):
+        if self._slotID not in (GUI_ITEM_TYPE.PROJECTION_DECAL,):
+            return {'iconSrc': '',
+             'iconHoverSrc': '',
+             'iconDisableSrc': '',
+             'actionBtnLabel': '',
+             'actionType': '',
+             'rendererLnk': '',
+             'enabled': False}
+        isMirrorOn = self._currentItem.canBeMirrored
+        alreadyMirrored = self._currentComponent.isMirrored()
+        icon = RES_ICONS.MAPS_ICONS_CUSTOMIZATION_PROPERTY_SHEET_IDLE_ICON_MIRROR_01_NORMAL
+        hoverIcon = RES_ICONS.MAPS_ICONS_CUSTOMIZATION_PROPERTY_SHEET_IDLE_ICON_MIRROR_01_HOVER
+        if alreadyMirrored:
+            icon = RES_ICONS.MAPS_ICONS_CUSTOMIZATION_PROPERTY_SHEET_IDLE_ICON_MIRROR_02_NORMAL
+            hoverIcon = RES_ICONS.MAPS_ICONS_CUSTOMIZATION_PROPERTY_SHEET_IDLE_ICON_MIRROR_02_HOVER
+        actionBtnLabel = VEHICLE_CUSTOMIZATION.PROPERTYSHEET_ACTIONBTN_MIRROR
         return {'iconSrc': icon,
          'iconHoverSrc': hoverIcon,
-         'actionBtnLabel': text_styles.tutorial(actionBtnLabel),
-         'actionType': CUSTOMIZATION_ALIASES.CUSTOMIZATION_SHEET_ACTION_REMOVE_FROM_ALL_PARTS,
-         'rendererLnk': CUSTOMIZATION_ALIASES.CUSTOMIZATION_SHEET_BTN_RENDERER_UI}
+         'iconDisableSrc': RES_ICONS.MAPS_ICONS_CUSTOMIZATION_PROPERTY_SHEET_DISABLE_ICON_MIRROR_01_DISABLED,
+         'actionBtnLabel': actionBtnLabel,
+         'actionType': CUSTOMIZATION_ALIASES.CUSTOMIZATION_SHEET_ACTION_MIRROR,
+         'rendererLnk': CUSTOMIZATION_ALIASES.CUSTOMIZATION_SHEET_BTN_RENDERER_UI,
+         'disableTooltip': VEHICLE_CUSTOMIZATION.CUSTOMIZATION_PROPERTYSHEET_DISABLED_MIRROR,
+         'enabled': isMirrorOn}
+
+    def __makeMoveRendererVO(self):
+        anchor = g_currentVehicle.item.getAnchorById(self._currentComponent.slotId)
+        parent = anchor if anchor.isParent else g_currentVehicle.item.getAnchorById(anchor.parentSlotId)
+        availableAnchors = parent.getChilds(self._currentItem.formfactor)
+        currentIdx = availableAnchors.index(anchor.slotId)
+        actionBtnLabel = _ms(VEHICLE_CUSTOMIZATION.PROPERTYSHEET_ACTIONBTN_MOVE, current=str(currentIdx + 1), total=str(len(availableAnchors)))
+        return {'actionBtnLabel': actionBtnLabel,
+         'actionType': CUSTOMIZATION_ALIASES.CUSTOMIZATION_SHEET_ACTION_MOVE,
+         'rendererLnk': CUSTOMIZATION_ALIASES.CUSTOMIZATION_SHEET_SWITCH_RENDERER_UI,
+         'disableTooltip': VEHICLE_CUSTOMIZATION.CUSTOMIZATION_PROPERTYSHEET_DISABLED_MOVE,
+         'buttonMode': True,
+         'enabled': len(availableAnchors) > 1}
 
     def __makeRemoveRendererVO(self):
-        iconSrc = RES_ICONS.MAPS_ICONS_CUSTOMIZATION_PROPERTY_SHEET_CROSS
-        hoverIcon = RES_ICONS.MAPS_ICONS_CUSTOMIZATION_PROPERTY_SHEET_CROSS_HOVER
-        if self._slotID == GUI_ITEM_TYPE.STYLE:
+        iconSrc = RES_ICONS.MAPS_ICONS_CUSTOMIZATION_PROPERTY_SHEET_REMOVE_STYLE_X
+        hoverIcon = RES_ICONS.MAPS_ICONS_CUSTOMIZATION_PROPERTY_SHEET_REMOVE_STYLE_X_HOVER
+        if self._slotID == GUI_ITEM_TYPE.MODIFICATION:
+            actionBtnLabel = VEHICLE_CUSTOMIZATION.PROPERTYSHEET_ACTIONBTN_REMOVE_TANK
+            iconSrc = RES_ICONS.MAPS_ICONS_CUSTOMIZATION_PROPERTY_SHEET_REMOVE_ICON_DEL_TANK
+            hoverIcon = RES_ICONS.MAPS_ICONS_CUSTOMIZATION_PROPERTY_SHEET_REMOVE_ICON_DEL_TANK_HOVER
+        elif self._slotID == GUI_ITEM_TYPE.EMBLEM:
+            actionBtnLabel = VEHICLE_CUSTOMIZATION.PROPERTYSHEET_ACTIONBTN_REMOVE_EMBLEM
+            iconSrc = RES_ICONS.MAPS_ICONS_CUSTOMIZATION_PROPERTY_SHEET_REMOVE_EMBLEM_X
+            hoverIcon = RES_ICONS.MAPS_ICONS_CUSTOMIZATION_PROPERTY_SHEET_REMOVE_EMBLEM_X_HOVER
+        elif self._slotID == GUI_ITEM_TYPE.INSCRIPTION:
+            actionBtnLabel = VEHICLE_CUSTOMIZATION.PROPERTYSHEET_ACTIONBTN_REMOVE_INSCRIPTION
+            iconSrc = RES_ICONS.MAPS_ICONS_CUSTOMIZATION_PROPERTY_SHEET_REMOVE_TYPE_X
+            hoverIcon = RES_ICONS.MAPS_ICONS_CUSTOMIZATION_PROPERTY_SHEET_REMOVE_TYPE_X_HOVER
+        elif self._slotID == GUI_ITEM_TYPE.PROJECTION_DECAL:
+            actionBtnLabel = VEHICLE_CUSTOMIZATION.PROPERTYSHEET_ACTIONBTN_REMOVE_PROJECTIONDECAL
+            iconSrc = RES_ICONS.MAPS_ICONS_CUSTOMIZATION_PROPERTY_SHEET_REMOVE_ICON_DECAL_X_HOVER
+            hoverIcon = RES_ICONS.MAPS_ICONS_CUSTOMIZATION_PROPERTY_SHEET_REMOVE_ICON_DECAL_X_NORMAL
+        elif self._slotID == GUI_ITEM_TYPE.STYLE:
             actionBtnLabel = VEHICLE_CUSTOMIZATION.PROPERTYSHEET_ACTIONBTN_REMOVESTYLE
-            iconSrc = RES_ICONS.MAPS_ICONS_CUSTOMIZATION_PROPERTY_SHEET_REMOVE_STYLE_X
-            hoverIcon = RES_ICONS.MAPS_ICONS_CUSTOMIZATION_PROPERTY_SHEET_REMOVE_STYLE_X_HOVER
         else:
-            if self._slotID == GUI_ITEM_TYPE.MODIFICATION:
-                actionBtnLabel = VEHICLE_CUSTOMIZATION.PROPERTYSHEET_ACTIONBTN_REMOVE_TANK
-                iconSrc = RES_ICONS.MAPS_ICONS_CUSTOMIZATION_PROPERTY_SHEET_REMOVE_EFFECTS_X
-                hoverIcon = RES_ICONS.MAPS_ICONS_CUSTOMIZATION_PROPERTY_SHEET_REMOVE_EFFECTS_X_HOVER
-            elif self._slotID == GUI_ITEM_TYPE.EMBLEM:
-                actionBtnLabel = VEHICLE_CUSTOMIZATION.PROPERTYSHEET_ACTIONBTN_REMOVE_EMBLEM
-                iconSrc = RES_ICONS.MAPS_ICONS_CUSTOMIZATION_PROPERTY_SHEET_REMOVE_EMBLEM_X
-                hoverIcon = RES_ICONS.MAPS_ICONS_CUSTOMIZATION_PROPERTY_SHEET_REMOVE_EMBLEM_X_HOVER
-            elif self._slotID == GUI_ITEM_TYPE.INSCRIPTION:
-                actionBtnLabel = VEHICLE_CUSTOMIZATION.PROPERTYSHEET_ACTIONBTN_REMOVE_INSCRIPTION
-                iconSrc = RES_ICONS.MAPS_ICONS_CUSTOMIZATION_PROPERTY_SHEET_REMOVE_TYPE_X
-                hoverIcon = RES_ICONS.MAPS_ICONS_CUSTOMIZATION_PROPERTY_SHEET_REMOVE_TYPE_X_HOVER
-            elif self._slotID == GUI_ITEM_TYPE.PROJECTION_DECAL:
-                actionBtnLabel = VEHICLE_CUSTOMIZATION.PROPERTYSHEET_ACTIONBTN_REMOVE_PROJECTIONDECAL
-                iconSrc = RES_ICONS.MAPS_ICONS_CUSTOMIZATION_PROPERTY_SHEET_REMOVE_EFFECTS_X
-                hoverIcon = RES_ICONS.MAPS_ICONS_CUSTOMIZATION_PROPERTY_SHEET_REMOVE_EFFECTS_X_HOVER
-            else:
-                actionBtnLabel = VEHICLE_CUSTOMIZATION.getSheetBtnRemoveText(getCustomizationTankPartName(self._areaID, self._regionID))
-            if self._slotID == GUI_ITEM_TYPE.CAMOUFLAGE:
-                iconSrc = RES_ICONS.MAPS_ICONS_CUSTOMIZATION_PROPERTY_SHEET_REMOVE_CAMO_X
-                hoverIcon = RES_ICONS.MAPS_ICONS_CUSTOMIZATION_PROPERTY_SHEET_REMOVE_CAMO_X_HOVER
-            elif self._slotID == GUI_ITEM_TYPE.PAINT:
-                iconSrc = RES_ICONS.MAPS_ICONS_CUSTOMIZATION_PROPERTY_SHEET_REMOVE_COLORS_X
-                hoverIcon = RES_ICONS.MAPS_ICONS_CUSTOMIZATION_PROPERTY_SHEET_REMOVE_COLORS_X_HOVER
+            actionBtnLabel = VEHICLE_CUSTOMIZATION.getSheetBtnRemoveText(getCustomizationTankPartName(self._areaID, self._regionID))
+        if self._slotID == GUI_ITEM_TYPE.CAMOUFLAGE:
+            iconSrc = RES_ICONS.MAPS_ICONS_CUSTOMIZATION_PROPERTY_SHEET_REMOVE_CAMO_X
+            hoverIcon = RES_ICONS.MAPS_ICONS_CUSTOMIZATION_PROPERTY_SHEET_REMOVE_CAMO_X_HOVER
+        elif self._slotID == GUI_ITEM_TYPE.PAINT:
+            iconSrc = RES_ICONS.MAPS_ICONS_CUSTOMIZATION_PROPERTY_SHEET_REMOVE_COLORS_X
+            hoverIcon = RES_ICONS.MAPS_ICONS_CUSTOMIZATION_PROPERTY_SHEET_REMOVE_COLORS_X_HOVER
         return {'iconSrc': iconSrc,
          'iconHoverSrc': hoverIcon,
-         'actionBtnLabel': text_styles.tutorial(actionBtnLabel),
+         'actionBtnLabel': actionBtnLabel,
          'rendererLnk': CUSTOMIZATION_ALIASES.CUSTOMIZATION_SHEET_BTN_RENDERER_UI,
-         'actionType': CUSTOMIZATION_ALIASES.CUSTOMIZATION_SHEET_ACTION_REMOVE_ONE}
+         'actionType': CUSTOMIZATION_ALIASES.CUSTOMIZATION_SHEET_ACTION_REMOVE_ONE,
+         'animatedTransition': True,
+         'enabled': True}
 
     def __makeCloseeRendererVO(self):
-        iconSrc = RES_ICONS.MAPS_ICONS_CUSTOMIZATION_PROPERTY_SHEET_CROSS
-        hoverIcon = RES_ICONS.MAPS_ICONS_CUSTOMIZATION_PROPERTY_SHEET_CROSS_HOVER
+        iconSrc = RES_ICONS.MAPS_ICONS_CUSTOMIZATION_PROPERTY_SHEET_IDLE_ICON_CLOSE
+        hoverIcon = RES_ICONS.MAPS_ICONS_CUSTOMIZATION_PROPERTY_SHEET_IDLE_ICON_CLOSE_HOVER
         actionBtnLabel = VEHICLE_CUSTOMIZATION.PROPERTYSHEET_ACTIONBTN_CLOSE
         return {'iconSrc': iconSrc,
          'iconHoverSrc': hoverIcon,
-         'actionBtnLabel': text_styles.tutorial(actionBtnLabel),
+         'actionBtnLabel': actionBtnLabel,
          'rendererLnk': CUSTOMIZATION_ALIASES.CUSTOMIZATION_SHEET_BTN_RENDERER_UI,
-         'actionType': CUSTOMIZATION_ALIASES.CUSTOMIZATION_SHEET_ACTION_CLOSE}
+         'actionType': CUSTOMIZATION_ALIASES.CUSTOMIZATION_SHEET_ACTION_CLOSE,
+         'enabled': True}
 
     def __makeExtensionRendererVO(self):
         if self.__ctx.autoRentEnabled():
-            icon = RES_ICONS.MAPS_ICONS_CUSTOMIZATION_PROPERTY_SHEET_ICON_DEL_RENT
-            hoverIcon = RES_ICONS.MAPS_ICONS_CUSTOMIZATION_PROPERTY_SHEET_ICON_DEL_RENT_HOVER
+            icon = RES_ICONS.MAPS_ICONS_CUSTOMIZATION_PROPERTY_SHEET_REMOVE_ICON_DEL_RENT
+            hoverIcon = RES_ICONS.MAPS_ICONS_CUSTOMIZATION_PROPERTY_SHEET_REMOVE_ICON_DEL_RENT_HOVER
             label = VEHICLE_CUSTOMIZATION.CUSTOMIZATION_POPOVER_STYLE_NOTAUTOPROLONGATIONLABEL
         else:
-            icon = RES_ICONS.MAPS_ICONS_CUSTOMIZATION_PROPERTY_SHEET_ICON_RENT
-            hoverIcon = RES_ICONS.MAPS_ICONS_CUSTOMIZATION_PROPERTY_SHEET_ICON_RENT_HOVER
+            icon = RES_ICONS.MAPS_ICONS_CUSTOMIZATION_PROPERTY_SHEET_IDLE_ICON_RENTAL
+            hoverIcon = RES_ICONS.MAPS_ICONS_CUSTOMIZATION_PROPERTY_SHEET_IDLE_ICON_RENTAL_HOVER
             label = VEHICLE_CUSTOMIZATION.CUSTOMIZATION_POPOVER_STYLE_AUTOPROLONGATIONLABEL
         return {'iconSrc': icon,
          'iconHoverSrc': hoverIcon,
-         'actionBtnLabel': text_styles.tutorial(label),
+         'iconDisableSrc': RES_ICONS.MAPS_ICONS_CUSTOMIZATION_PROPERTY_SHEET_DISABLE_ICON_RENTAL_DISABLE,
+         'actionBtnLabel': label,
          'actionType': CUSTOMIZATION_ALIASES.CUSTOMIZATION_SHEET_RENT_CHECKBOX_CHANGE,
-         'rendererLnk': CUSTOMIZATION_ALIASES.CUSTOMIZATION_SHEET_BTN_RENDERER_UI}
+         'rendererLnk': CUSTOMIZATION_ALIASES.CUSTOMIZATION_SHEET_BTN_RENDERER_UI,
+         'animatedTransition': True,
+         'enabled': True}
 
     def __makeCamoColorRendererVO(self):
         btnsBlockVO = []
@@ -415,43 +477,71 @@ class CustomizationPropertiesSheet(CustomizationPropertiesSheetMeta):
             icon = camoIconTemplate(texture, _PALETTE_WIDTH, _PALETTE_HEIGHT, palette, background=_PALETTE_BACKGROUND)
             btnsBlockVO.append(CustomizationCamoSwatchVO(icon, idx == self._currentComponent.palette)._asdict())
 
-        return {'iconSrc': RES_ICONS.MAPS_ICONS_CUSTOMIZATION_PROPERTY_SHEET_COLORS,
-         'iconHoverSrc': RES_ICONS.MAPS_ICONS_CUSTOMIZATION_PROPERTY_SHEET_COLORS_HOVER,
+        return {'iconSrc': RES_ICONS.MAPS_ICONS_CUSTOMIZATION_PROPERTY_SHEET_IDLE_ICON_PALETTE,
+         'iconHoverSrc': RES_ICONS.MAPS_ICONS_CUSTOMIZATION_PROPERTY_SHEET_IDLE_ICON_PALETTE_HOVER,
+         'iconDisableSrc': RES_ICONS.MAPS_ICONS_CUSTOMIZATION_PROPERTY_SHEET_DISABLE_ICON_PALETTE_DISABLE,
          'actionType': CUSTOMIZATION_ALIASES.CUSTOMIZATION_SHEET_ACTION_COLOR_CHANGE,
          'rendererLnk': CUSTOMIZATION_ALIASES.CUSTOMIZATION_SHEET_SCALE_COLOR_RENDERER_UI,
-         'btnsBlockVO': btnsBlockVO} if len(btnsBlockVO) == _MAX_PALETTES else None
+         'btnsBlockVO': btnsBlockVO,
+         'disableTooltip': VEHICLE_CUSTOMIZATION.CUSTOMIZATION_PROPERTYSHEET_DISABLED_COLOR,
+         'enabled': len(btnsBlockVO) == _MAX_PALETTES}
 
     def __makeScaleRendererVO(self):
         btnsBlockVO = []
         if self._slotID == GUI_ITEM_TYPE.CAMOUFLAGE:
             selected = self._currentComponent.patternSize
-        else:
+        elif self._slotID == GUI_ITEM_TYPE.PROJECTION_DECAL:
             selected = self._currentComponent.scaleFactorId - 1
+        else:
+            return {'iconSrc': '',
+             'iconHoverSrc': '',
+             'iconDisableSrc': '',
+             'actionType': '',
+             'rendererLnk': '',
+             'btnsBlockVO': '',
+             'enabled': False}
         for idx, scaleSizeLabel in enumerate(SCALE_SIZE):
             btnsBlockVO.append({'paletteIcon': '',
              'label': scaleSizeLabel,
              'selected': selected == idx,
              'value': idx})
 
-        return {'iconSrc': RES_ICONS.MAPS_ICONS_CUSTOMIZATION_PROPERTY_SHEET_SCALE,
-         'iconHoverSrc': RES_ICONS.MAPS_ICONS_CUSTOMIZATION_PROPERTY_SHEET_SCALE_HOVER,
+        return {'iconSrc': RES_ICONS.MAPS_ICONS_CUSTOMIZATION_PROPERTY_SHEET_IDLE_ICON_SCALE,
+         'iconHoverSrc': RES_ICONS.MAPS_ICONS_CUSTOMIZATION_PROPERTY_SHEET_IDLE_ICON_SCALE_HOVER,
+         'iconDisableSrc': RES_ICONS.MAPS_ICONS_CUSTOMIZATION_PROPERTY_SHEET_DISABLE_ICON_SCALE_DISABLE,
          'actionType': CUSTOMIZATION_ALIASES.CUSTOMIZATION_SHEET_ACTION_SCALE_CHANGE,
          'rendererLnk': CUSTOMIZATION_ALIASES.CUSTOMIZATION_SHEET_SCALE_COLOR_RENDERER_UI,
-         'btnsBlockVO': btnsBlockVO}
+         'btnsBlockVO': btnsBlockVO,
+         'enabled': True}
 
     def __makeSetOnOtherSeasonsRendererVO(self):
-        icon = RES_ICONS.MAPS_ICONS_CUSTOMIZATION_PROPERTY_SHEET_ICON_ALL_SEASON
-        hoverIcon = RES_ICONS.MAPS_ICONS_CUSTOMIZATION_PROPERTY_SHEET_ICON_ALL_SEASON_HOVER
+        icon = RES_ICONS.MAPS_ICONS_CUSTOMIZATION_PROPERTY_SHEET_IDLE_ICON_SEASON
+        hoverIcon = RES_ICONS.MAPS_ICONS_CUSTOMIZATION_PROPERTY_SHEET_IDLE_ICON_SEASON_HOVER
         actionBtnLabel = VEHICLE_CUSTOMIZATION.PROPERTYSHEET_ACTIONBTN_APPLYTOALLMAPS
+        disableTooltip = ''
+        enabled = True
+        disableTooltip = _ms(VEHICLE_CUSTOMIZATION.PROPERTYSHEET_ACTIONBTN_APPLYTOALLMAPSDISABLED, itemType=_ms('#vehicle_customization:propertySheet/actionBtn/forCurrentItem/' + self._currentItem.itemTypeName))
         if self._isItemAppliedToAll:
             actionBtnLabel = VEHICLE_CUSTOMIZATION.PROPERTYSHEET_ACTIONBTN_REMOVE_SEASONS
-            icon = RES_ICONS.MAPS_ICONS_CUSTOMIZATION_PROPERTY_SHEET_ICON_DEL_ALL_SEASON
-            hoverIcon = RES_ICONS.MAPS_ICONS_CUSTOMIZATION_PROPERTY_SHEET_ICON_DEL_ALL_SEASON_HOVER
+            icon = RES_ICONS.MAPS_ICONS_CUSTOMIZATION_PROPERTY_SHEET_REMOVE_ICON_DEL_ALL_SEASON
+            hoverIcon = RES_ICONS.MAPS_ICONS_CUSTOMIZATION_PROPERTY_SHEET_REMOVE_ICON_SEASON_X_HOVER
+        else:
+            enabled = self.__ctx.isPossibleToInstallItemForAllSeasons(self._areaID, self._slotID, self._regionID, self._currentSlotData)
+        if self._slotID == GUI_ITEM_TYPE.MODIFICATION:
+            disableTooltip = VEHICLE_CUSTOMIZATION.CUSTOMIZATION_PROPERTYSHEET_DISABLED_SEASONEFFECT
+        elif self._slotID == GUI_ITEM_TYPE.EMBLEM:
+            disableTooltip = VEHICLE_CUSTOMIZATION.CUSTOMIZATION_PROPERTYSHEET_DISABLED_SEASONEMBLEM
+        elif self._slotID == GUI_ITEM_TYPE.INSCRIPTION:
+            disableTooltip = VEHICLE_CUSTOMIZATION.CUSTOMIZATION_PROPERTYSHEET_DISABLED_SEASONINSCRIPTION
         return {'iconSrc': icon,
          'iconHoverSrc': hoverIcon,
-         'actionBtnLabel': text_styles.tutorial(actionBtnLabel),
+         'iconDisableSrc': RES_ICONS.MAPS_ICONS_CUSTOMIZATION_PROPERTY_SHEET_DISABLE_ICON_SEASON_DISABLE,
+         'actionBtnLabel': actionBtnLabel,
          'actionType': CUSTOMIZATION_ALIASES.CUSTOMIZATION_SHEET_ACTION_APPLY_TO_ALL_SEASONS,
-         'rendererLnk': CUSTOMIZATION_ALIASES.CUSTOMIZATION_SHEET_BTN_RENDERER_UI}
+         'rendererLnk': CUSTOMIZATION_ALIASES.CUSTOMIZATION_SHEET_BTN_RENDERER_UI,
+         'animatedTransition': True,
+         'disableTooltip': disableTooltip,
+         'enabled': enabled}
 
     def __onCacheResync(self, *_):
         if not g_currentVehicle.isPresent():
@@ -472,6 +562,9 @@ class CustomizationPropertiesSheet(CustomizationPropertiesSheetMeta):
         self.__update()
 
     def __onProjectionDecalScaleChanged(self, areaId, regionIdx, scale):
+        self.__update()
+
+    def __onProjectionDecalMirrored(self, areaId, regionIdx):
         self.__update()
 
     def __onItemsInstalled(self, item, slotId, buyLimitReached):

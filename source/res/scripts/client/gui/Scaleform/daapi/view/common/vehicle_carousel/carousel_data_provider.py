@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/common/vehicle_carousel/carousel_data_provider.py
 import BigWorld
+from constants import SEASON_NAME_BY_TYPE
 from dossiers2.ui.achievements import MARK_ON_GUN_RECORD
 from gui import GUI_NATIONS_ORDER_INDEX, makeHtmlString
 from gui.Scaleform import getButtonsAssetPath
@@ -8,7 +9,7 @@ from gui.Scaleform.framework.entities.DAAPIDataProvider import SortableDAAPIData
 from gui.Scaleform.locale.MENU import MENU
 from gui.shared.formatters import icons, text_styles
 from gui.shared.formatters.time_formatters import RentLeftFormatter
-from gui.shared.gui_items.Vehicle import Vehicle, VEHICLE_TYPES_ORDER_INDICES, getVehicleStateIcon, getBattlesLeft, getSmallIconPath, getIconPath
+from gui.shared.gui_items.Vehicle import Vehicle, VEHICLE_TYPES_ORDER_INDICES, getVehicleStateIcon, getVehicleStateAddIcon, getBattlesLeft, getSmallIconPath, getIconPath
 from gui.shared.gui_items.dossier.achievements.MarkOfMasteryAchievement import isMarkOfMasteryAchieved
 from gui.shared.utils.requesters import REQ_CRITERIA
 from helpers.i18n import makeString as ms
@@ -18,7 +19,9 @@ def sortedIndices(seq, getter, reverse=False):
 
 
 def getStatusCountStyle(vStateLvl):
-    return (text_styles.stats, text_styles.vehicleStatusCriticalText) if vStateLvl == Vehicle.VEHICLE_STATE_LEVEL.CRITICAL else (text_styles.stats, text_styles.vehicleStatusInfoText)
+    if vStateLvl == Vehicle.VEHICLE_STATE_LEVEL.CRITICAL:
+        return (text_styles.stats, text_styles.vehicleStatusCriticalText)
+    return (text_styles.tutorial, text_styles.tutorial) if vStateLvl == Vehicle.VEHICLE_STATE_LEVEL.RENTABLE else (text_styles.stats, text_styles.vehicleStatusInfoText)
 
 
 def _isLockedBackground(vState, vStateLvl):
@@ -56,8 +59,17 @@ def getVehicleDataVO(vehicle):
     if vehicle.isRotationApplied():
         if vState in (Vehicle.VEHICLE_STATE.AMMO_NOT_FULL, Vehicle.VEHICLE_STATE.LOCKED):
             vState = Vehicle.VEHICLE_STATE.ROTATION_GROUP_UNLOCKED
-    smallStatus, largeStatus = getStatusStrings(vState, vStateLvl, substitute=rentInfoText, ctx={'icon': icons.premiumIgrSmall(),
+    customStateExt = ''
+    if vState in (Vehicle.VEHICLE_STATE.RENTABLE, Vehicle.VEHICLE_STATE.RENTABLE_AGAIN):
+        rentPackagesInfo = vehicle.getRentPackagesInfo
+        if rentPackagesInfo.seasonType:
+            customStateExt = '/' + SEASON_NAME_BY_TYPE.get(rentPackagesInfo.seasonType)
+    smallStatus, largeStatus = getStatusStrings(vState + customStateExt, vStateLvl, substitute=rentInfoText, ctx={'icon': icons.premiumIgrSmall(),
      'battlesLeft': getBattlesLeft(vehicle)})
+    smallHoverStatus, largeHoverStatus = smallStatus, largeStatus
+    if vState == Vehicle.VEHICLE_STATE.RENTABLE:
+        smallHoverStatus, largeHoverStatus = getStatusStrings(vState + '/hover', vStateLvl, substitute=rentInfoText, ctx={'icon': icons.premiumIgrSmall(),
+         'battlesLeft': getBattlesLeft(vehicle)})
     if vehicle.dailyXPFactor > 1:
         bonusImage = getButtonsAssetPath('bonus_x{}'.format(vehicle.dailyXPFactor))
     else:
@@ -67,7 +79,9 @@ def getVehicleDataVO(vehicle):
     return {'id': vehicle.invID,
      'intCD': vehicle.intCD,
      'infoText': largeStatus,
+     'infoHoverText': largeHoverStatus,
      'smallInfoText': smallStatus,
+     'smallInfoHoverText': smallHoverStatus,
      'clanLock': vehicle.clanLock,
      'lockBackground': _isLockedBackground(vState, vStateLvl),
      'icon': vehicle.icon,
@@ -78,14 +92,16 @@ def getVehicleDataVO(vehicle):
      'level': vehicle.level,
      'premium': vehicle.isPremium,
      'favorite': vehicle.isFavorite,
-     'nation': vehicle.customNationID,
+     'nation': vehicle.nationID,
      'xpImgSource': bonusImage,
      'tankType': '{}_elite'.format(vehicle.type) if vehicle.isElite else vehicle.type,
      'rentLeft': rentInfoText,
-     'clickEnabled': vehicle.isInInventory,
+     'clickEnabled': vehicle.isInInventory or vehicle.isRentPromotion,
      'alpha': 1,
      'infoImgSrc': getVehicleStateIcon(vState),
-     'isCritInfo': vStateLvl == Vehicle.VEHICLE_STATE_LEVEL.CRITICAL}
+     'additionalImgSrc': getVehicleStateAddIcon(vState),
+     'isCritInfo': vStateLvl == Vehicle.VEHICLE_STATE_LEVEL.CRITICAL,
+     'isRentPromotion': vehicle.isRentPromotion and not vehicle.isRented}
 
 
 class CarouselDataProvider(SortableDAAPIDataProvider):
@@ -114,6 +130,9 @@ class CarouselDataProvider(SortableDAAPIDataProvider):
 
     def getTotalVehiclesCount(self):
         return len(self._vehicles)
+
+    def getRentPromotionVehiclesCount(self):
+        return len(self._getFilteredVehicles(REQ_CRITERIA.VEHICLE.RENT_PROMOTION))
 
     def getCurrentVehiclesCount(self):
         return len(self._filteredIndices)
@@ -151,8 +170,9 @@ class CarouselDataProvider(SortableDAAPIDataProvider):
     def selectVehicle(self, filteredIdx):
         realIdx = self._filteredIndices[filteredIdx]
         vehicle = self._vehicles[realIdx]
-        self._selectedIdx = filteredIdx
-        self._currentVehicle.selectVehicle(vehicle.invID)
+        if vehicle.isInInventory:
+            self._selectedIdx = filteredIdx
+            self._currentVehicle.selectVehicle(vehicle.invID)
 
     def updateVehicles(self, vehiclesCDs=None, filterCriteria=None):
         isFullResync = vehiclesCDs is None and filterCriteria is None
@@ -232,13 +252,10 @@ class CarouselDataProvider(SortableDAAPIDataProvider):
     def _syncRandomStats(self):
         self._randomStats = self._itemsCache.items.getAccountDossier().getRandomStats()
 
-    def _buildVehicleItems(self):
-        self._vehicles = []
-        self.__resetSortedIndices()
-        self._vehicleItems = []
-        self._syncRandomStats()
+    def _addVehicleItemsByCriteria(self, criteria):
+        vehiclesDict = self._itemsCache.items.getVehicles(criteria)
         vehicleIcons = []
-        for vehicle in self._itemsCache.items.getVehicles(self._baseCriteria).itervalues():
+        for vehicle in vehiclesDict.itervalues():
             vehicleIcons.append(vehicle.icon)
             self._vehicles.append(vehicle)
             vehicleDataVO = self._buildVehicle(vehicle)
@@ -247,13 +264,19 @@ class CarouselDataProvider(SortableDAAPIDataProvider):
 
         self.app.imageManager.loadImages(vehicleIcons)
 
+    def _buildVehicleItems(self):
+        self._vehicles = []
+        self.__resetSortedIndices()
+        self._vehicleItems = []
+        self._syncRandomStats()
+        self._addVehicleItemsByCriteria(self._baseCriteria)
+
     def _buildVehicle(self, vehicle):
         vo = getVehicleDataVO(vehicle)
         return vo
 
     def _getVehicleStats(self, vehicle):
         intCD = vehicle.intCD
-        visibleStats = False if 'hideStats' in vehicle.tags else self._showVehicleStats
         vehicleRandomStats = self._randomStats.getVehicles() if self._randomStats is not None else {}
         if intCD in vehicleRandomStats:
             battlesCount, wins, _ = vehicleRandomStats.get(intCD)
@@ -275,7 +298,7 @@ class CarouselDataProvider(SortableDAAPIDataProvider):
         else:
             statsText = '#menu:tankCarousel/statsStatus/unavailable'
         return {'statsText': text_styles.stats(statsText),
-         'visibleStats': visibleStats}
+         'visibleStats': self._showVehicleStats}
 
     def _updateVehicleItems(self, vehiclesCollection):
         updateIndices = []

@@ -96,7 +96,7 @@
       </slot>
       <slot>
         <slotType>	player	</slotType>
-        <slotId>	2	</slotId>
+        <slotId>	4	</slotId>
         <rayStart>	-1.044 0.836904 -2.3476	</rayStart>
         <rayEnd>	-0.96732 0.822593 -2.34778	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
@@ -106,7 +106,7 @@
       </slot>
       <slot>
         <slotType>	player	</slotType>
-        <slotId>	3	</slotId>
+        <slotId>	5	</slotId>
         <rayStart>	1.04301 0.836721 -2.3476	</rayStart>
         <rayEnd>	0.968303 0.822776 -2.34778	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
@@ -117,7 +117,7 @@
       </slot>
       <slot>
         <slotType>	inscription	</slotType>
-        <slotId>	4	</slotId>
+        <slotId>	36	</slotId>
         <rayStart>	1.20022 0.868618 -1.65996	</rayStart>
         <rayEnd>	0.807011 0.795204 -1.66092	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
@@ -127,7 +127,7 @@
       </slot>
       <slot>
         <slotType>	inscription	</slotType>
-        <slotId>	5	</slotId>
+        <slotId>	37	</slotId>
         <rayStart>	-1.20022 0.868618 -1.65996	</rayStart>
         <rayEnd>	-0.807011 0.795204 -1.66092	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
@@ -137,7 +137,7 @@
       </slot>
       <slot>
         <slotType>	camouflage	</slotType>
-        <slotId>	10	</slotId>
+        <slotId>	3	</slotId>
         <anchorPosition>	0.000000 0.255175 1.56854	</anchorPosition>
         <anchorDirection>	0.000000 0.160572 0.987024	</anchorDirection>
       </slot>
@@ -903,7 +903,7 @@
       <customizationSlots>
         <slot>
           <slotType>	style	</slotType>
-          <slotId>	8	</slotId>
+          <slotId>	257	</slotId>
           <anchorPosition>	0.000000 2.72709 -1.04049	</anchorPosition>
           <anchorDirection>	0.000000 1 -0.000000	</anchorDirection>
         </slot>
@@ -1661,7 +1661,7 @@
       <customizationSlots>
         <slot>
           <slotType>	style	</slotType>
-          <slotId>	9	</slotId>
+          <slotId>	257	</slotId>
           <anchorPosition>	0.000124285 2.7267 -1.04051	</anchorPosition>
           <anchorDirection>	-0.000000 1 0.000000	</anchorDirection>
         </slot>
@@ -1742,7 +1742,7 @@
           <customizationSlots>
             <slot>
               <slotType>	insigniaOnGun	</slotType>
-              <slotId>	6	</slotId>
+              <slotId>	771	</slotId>
               <rayStart>	-0.00438042 0.0726791 2.35877	</rayStart>
               <rayEnd>	-0.0444899 0.0865131 2.35616	</rayEnd>
               <rayUp>	0.108 0.096 5	</rayUp>
@@ -1752,7 +1752,7 @@
             </slot>
             <slot>
               <slotType>	camouflage	</slotType>
-              <slotId>	12	</slotId>
+              <slotId>	770	</slotId>
               <anchorPosition>	-0.00219025 0.080143 2.05071	</anchorPosition>
               <anchorDirection>	-0.000000 0.000000 1	</anchorDirection>
               <applyTo>	4096	</applyTo>
@@ -1810,7 +1810,7 @@
           <customizationSlots>
             <slot>
               <slotType>	insigniaOnGun	</slotType>
-              <slotId>	7	</slotId>
+              <slotId>	771	</slotId>
               <rayStart>	-0.0057097 0.0706347 4.80674	</rayStart>
               <rayEnd>	-0.0166409 0.112696 4.80606	</rayEnd>
               <rayUp>	0.104 0.098 5	</rayUp>
@@ -1820,7 +1820,7 @@
             </slot>
             <slot>
               <slotType>	camouflage	</slotType>
-              <slotId>	13	</slotId>
+              <slotId>	770	</slotId>
               <anchorPosition>	-0.00285487 0.079597 3.17079	</anchorPosition>
               <anchorDirection>	-0.000000 0.000000 1	</anchorDirection>
               <applyTo>	4096	</applyTo>
@@ -1881,9 +1881,11 @@
       <engines>
         <Maybach_HL_116>
           <smplEnginePower>	317.1843	</smplEnginePower>
+          <smplFwMaxSpeed>	25	</smplFwMaxSpeed>
         </Maybach_HL_116>
         <Maybach_HL_116_S>
           <smplEnginePower>	327.7571	</smplEnginePower>
+          <smplFwMaxSpeed>	25	</smplFwMaxSpeed>
         </Maybach_HL_116_S>
       </engines>
       <chassis>

@@ -1,13 +1,10 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/gui_items/processors/quests.py
 import operator
-import logging
 import BigWorld
 from debug_utils import LOG_DEBUG
 from gui.shared.gui_items.processors import Processor, makeI18nError, makeI18nSuccess, plugins
 from items import tankmen, ITEM_TYPES
-_logger = logging.getLogger(__name__)
-_logger.addHandler(logging.NullHandler())
 
 class _PMRequest(Processor):
 
@@ -27,6 +24,11 @@ class _PMRequest(Processor):
 
     def _successHandler(self, code, ctx=None):
         return makeI18nSuccess('%s/success' % self._getMessagePrefix(), questNames=', '.join(self._getQuestsNames()))
+
+    def _request(self, callback):
+        questIDs = self._getQuestsData(methodcaller=operator.methodcaller('getID'))
+        LOG_DEBUG('Make server request to select personal mission', questIDs)
+        BigWorld.player().selectPersonalMissions(questIDs, self._branch, lambda code, errStr: self._response(code, callback, errStr=errStr))
 
     def _getQuestsData(self, methodcaller):
         return [ methodcaller(q) for q in self.__quests ]
@@ -64,7 +66,7 @@ class PMQuestSelect(_PMRequest):
 
     def _request(self, callback):
         questIDs = self._getQuestsData(methodcaller=operator.methodcaller('getID'))
-        _logger.debug('Make server request to select personal mission %s', ', '.join([ str(idn) for idn in questIDs ]))
+        LOG_DEBUG('Make server request to select personal mission %s', ', '.join([ str(idn) for idn in questIDs ]))
         BigWorld.player().selectPersonalMissions(questIDs, self._branch, lambda code, errStr: self._response(code, callback, errStr=errStr))
 
     def _errorHandler(self, code, errStr='', ctx=None):
@@ -72,8 +74,6 @@ class PMQuestSelect(_PMRequest):
         questNames = ', '.join(self._getQuestsNames())
         if errStr:
             errorI18nKey = '%s/%s' % (errorI18nKey, errStr)
-            if errStr == 'LOCKED_BY_VEHICLE_QUEST':
-                questNames = ctx.get('questName', '')
         return makeI18nError(errorI18nKey, questNames=questNames)
 
 
@@ -86,12 +86,12 @@ class PMDiscard(_PMRequest):
 
     def _request(self, callback):
         questIDs = self._getQuestsData(methodcaller=operator.methodcaller('getID'))
-        _logger.debug('Make server request to discard personal mission %s', str(questIDs[0]))
+        LOG_DEBUG('Make server request to discard personal mission %s', str(questIDs[0]))
         BigWorld.player().resetPersonalMissions(questIDs, self._branch, lambda code, errStr: self._response(code, callback, errStr=errStr))
 
     def _successHandler(self, code, ctx=None):
         questName = self._getQuestsNames()[0]
-        return makeI18nSuccess('%s/success' % self._getMessagePrefix(), quest=questName)
+        return makeI18nSuccess('{}/success'.format(self._getMessagePrefix()), quest=questName)
 
     def _getMessagePrefix(self):
         pass
@@ -106,13 +106,13 @@ class PMPause(_PMRequest):
 
     def _request(self, callback):
         questIDs = self._getQuestsData(methodcaller=operator.methodcaller('getID'))
-        _logger.debug('Make server request to pause personal mission %s', str(questIDs[0]))
+        LOG_DEBUG('Make server request to pause personal mission %s', str(questIDs[0]))
         BigWorld.player().pausePersonalMissions(questIDs, self._branch, self._enable, lambda code, errStr: self._response(code, callback, errStr=errStr))
 
     def _successHandler(self, code, ctx=None):
         questName = self._getQuestsNames()[0]
         enable = 'pause' if self._enable else 'unpause'
-        return makeI18nSuccess('%s/success_%s' % (self._getMessagePrefix(), enable), quest=questName)
+        return makeI18nSuccess('{}/success_{}'.format(self._getMessagePrefix(), enable), quest=questName)
 
     def _getMessagePrefix(self):
         pass

@@ -99,13 +99,13 @@
       </slot>
       <slot>
         <slotType>	paint	</slotType>
-        <slotId>	12	</slotId>
+        <slotId>	2	</slotId>
         <anchorPosition>	0.000282156 0.790322 -3.44696	</anchorPosition>
         <anchorDirection>	0.000000 0.612355 -0.790583	</anchorDirection>
       </slot>
       <slot>
         <slotType>	camouflage	</slotType>
-        <slotId>	18	</slotId>
+        <slotId>	3	</slotId>
         <anchorPosition>	-0.000095 0.790474 -3.44744	</anchorPosition>
         <anchorDirection>	-0.000001 0.612399 -0.790549	</anchorDirection>
       </slot>
@@ -738,13 +738,13 @@
       <customizationSlots>
         <slot>
           <slotType>	paint	</slotType>
-          <slotId>	8	</slotId>
+          <slotId>	256	</slotId>
           <anchorPosition>	-1.62775 0.623345 0.000469923	</anchorPosition>
           <anchorDirection>	-0.933866 0.357623 0.000269602	</anchorDirection>
         </slot>
         <slot>
           <slotType>	style	</slotType>
-          <slotId>	9	</slotId>
+          <slotId>	257	</slotId>
           <anchorPosition>	0.000178114 3.03627 -0.0874363	</anchorPosition>
           <anchorDirection>	0.000000 1 -0.000000	</anchorDirection>
         </slot>
@@ -1369,13 +1369,13 @@
       <customizationSlots>
         <slot>
           <slotType>	paint	</slotType>
-          <slotId>	10	</slotId>
+          <slotId>	256	</slotId>
           <anchorPosition>	-1.62775 0.623345 0.000469923	</anchorPosition>
           <anchorDirection>	-0.933866 0.357623 0.000269602	</anchorDirection>
         </slot>
         <slot>
           <slotType>	style	</slotType>
-          <slotId>	11	</slotId>
+          <slotId>	257	</slotId>
           <anchorPosition>	0.000196486 3.03627 -0.0874371	</anchorPosition>
           <anchorDirection>	0.000000 1 -0.000000	</anchorDirection>
         </slot>
@@ -1477,31 +1477,32 @@
           <customizationSlots>
             <slot>
               <slotType>	insigniaOnGun	</slotType>
-              <slotId>	6	</slotId>
+              <slotId>	771	</slotId>
               <rayStart>	0.00190948 0.0343064 4.50645	</rayStart>
               <rayEnd>	0.0182312 -0.082051 4.50537	</rayEnd>
-              <rayUp>	0.085 0.074 5	</rayUp>
+              <rayUp>	0.085 0.000000 0.000000	</rayUp>
+              <applyToFabric>	true	</applyToFabric>
               <size>	0.5	</size>
               <hideIfDamaged>	false	</hideIfDamaged>
               <isUVProportional>	true	</isUVProportional>
             </slot>
             <slot>
               <slotType>	paint	</slotType>
-              <slotId>	16	</slotId>
+              <slotId>	768	</slotId>
               <anchorPosition>	0.00103373 0.0440173 2.97088	</anchorPosition>
               <anchorDirection>	-0.000000 -0.000000 1	</anchorDirection>
               <applyTo>	4096	</applyTo>
             </slot>
             <slot>
               <slotType>	paint	</slotType>
-              <slotId>	17	</slotId>
+              <slotId>	769	</slotId>
               <anchorPosition>	0.000000 0.45063 0.450631	</anchorPosition>
               <anchorDirection>	0.000000 0.707107 0.707107	</anchorDirection>
               <applyTo>	16384	</applyTo>
             </slot>
             <slot>
               <slotType>	camouflage	</slotType>
-              <slotId>	22	</slotId>
+              <slotId>	770	</slotId>
               <anchorPosition>	0.00103373 0.0440173 2.97088	</anchorPosition>
               <anchorDirection>	-0.000001 0.000000 1	</anchorDirection>
               <applyTo>	4096	</applyTo>
@@ -1565,31 +1566,32 @@
           <customizationSlots>
             <slot>
               <slotType>	insigniaOnGun	</slotType>
-              <slotId>	7	</slotId>
+              <slotId>	771	</slotId>
               <rayStart>	0.00190948 0.0343064 4.50645	</rayStart>
               <rayEnd>	0.0182312 -0.082051 4.50537	</rayEnd>
-              <rayUp>	0.109 0.105 5	</rayUp>
+              <rayUp>	0.109 0.000000 0.000000	</rayUp>
+              <applyToFabric>	true	</applyToFabric>
               <size>	0.5	</size>
               <hideIfDamaged>	false	</hideIfDamaged>
               <isUVProportional>	true	</isUVProportional>
             </slot>
             <slot>
               <slotType>	paint	</slotType>
-              <slotId>	19	</slotId>
+              <slotId>	768	</slotId>
               <anchorPosition>	0.000954801 0.04881 2.95509	</anchorPosition>
               <anchorDirection>	-0.000000 0.000000 1	</anchorDirection>
               <applyTo>	4096	</applyTo>
             </slot>
             <slot>
               <slotType>	paint	</slotType>
-              <slotId>	20	</slotId>
+              <slotId>	769	</slotId>
               <anchorPosition>	0.000000 0.45063 0.450631	</anchorPosition>
               <anchorDirection>	0.000000 0.707107 0.707107	</anchorDirection>
               <applyTo>	16384	</applyTo>
             </slot>
             <slot>
               <slotType>	camouflage	</slotType>
-              <slotId>	21	</slotId>
+              <slotId>	770	</slotId>
               <anchorPosition>	0.000954801 0.0488098 2.95509	</anchorPosition>
               <anchorDirection>	-0.000000 0.000000 1	</anchorDirection>
               <applyTo>	4096	</applyTo>
@@ -1622,7 +1624,7 @@
       <customizationSlots>
         <slot>
           <slotType>	player	</slotType>
-          <slotId>	2	</slotId>
+          <slotId>	514	</slotId>
           <rayStart>	-1.21562 0.659413 0.0240944	</rayStart>
           <rayEnd>	-1.0763 0.581116 0.0164896	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
@@ -1632,7 +1634,7 @@
         </slot>
         <slot>
           <slotType>	inscription	</slotType>
-          <slotId>	3	</slotId>
+          <slotId>	546	</slotId>
           <rayStart>	-1.21 0.672896 -1.3835	</rayStart>
           <rayEnd>	-1.0705 0.594546 -1.38397	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
@@ -1642,18 +1644,18 @@
         </slot>
         <slot>
           <slotType>	player	</slotType>
-          <slotId>	4	</slotId>
+          <slotId>	515	</slotId>
           <rayStart>	1.21562 0.659413 0.0240944	</rayStart>
           <rayEnd>	1.0763 0.581116 0.0164896	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
+          <isMirrored>	true	</isMirrored>
           <size>	0.32	</size>
           <hideIfDamaged>	false	</hideIfDamaged>
-          <isMirrored>	true	</isMirrored>
           <isUVProportional>	true	</isUVProportional>
         </slot>
         <slot>
           <slotType>	inscription	</slotType>
-          <slotId>	5	</slotId>
+          <slotId>	547	</slotId>
           <rayStart>	1.21 0.672896 -1.3835	</rayStart>
           <rayEnd>	1.0705 0.594546 -1.38397	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
@@ -1663,13 +1665,13 @@
         </slot>
         <slot>
           <slotType>	paint	</slotType>
-          <slotId>	14	</slotId>
+          <slotId>	512	</slotId>
           <anchorPosition>	0.000000 1.21287 0.000000	</anchorPosition>
           <anchorDirection>	0.000000 1 0.000000	</anchorDirection>
         </slot>
         <slot>
           <slotType>	camouflage	</slotType>
-          <slotId>	15	</slotId>
+          <slotId>	513	</slotId>
           <anchorPosition>	0.000000 1.21287 0.000000	</anchorPosition>
           <anchorDirection>	0.000000 1 0.000000	</anchorDirection>
         </slot>
@@ -1708,9 +1710,11 @@
       <engines>
         <Porsche_16_Cyl_Y1>
           <smplEnginePower>	1000	</smplEnginePower>
+          <smplFwMaxSpeed>	20	</smplFwMaxSpeed>
         </Porsche_16_Cyl_Y1>
         <Porsche_16_Cyl_Y2>
           <smplEnginePower>	1200	</smplEnginePower>
+          <smplFwMaxSpeed>	20	</smplFwMaxSpeed>
         </Porsche_16_Cyl_Y2>
       </engines>
       <chassis>
@@ -1747,6 +1751,7 @@
               </medium>
             </metal>
           </grounds>
+          <axleCount>	5	</axleCount>
         </Chassis_G115_Typ_205B>
         <Chassis_G115_Typ_205B_2>
           <grounds>
@@ -1781,6 +1786,7 @@
               </medium>
             </metal>
           </grounds>
+          <axleCount>	5	</axleCount>
         </Chassis_G115_Typ_205B_2>
       </chassis>
     </detailed>

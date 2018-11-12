@@ -3,6 +3,7 @@
 from adisp import process
 from gui import SystemMessages
 from gui import makeHtmlString
+from gui.Scaleform.daapi.view.lobby.store.browser.ingameshop_helpers import isIngameShopEnabled, getBuyPremiumUrl
 from gui.battle_results.settings import PROGRESS_ACTION
 from gui.battle_results import RequestEmblemContext, EMBLEM_TYPE
 from gui.prb_control.dispatcher import g_prbLoader
@@ -10,6 +11,7 @@ from gui.server_events import events_dispatcher as quests_events
 from gui.Scaleform.daapi.view.meta.BattleResultsMeta import BattleResultsMeta
 from gui.shared import event_bus_handlers, events, EVENT_BUS_SCOPE
 from gui.shared import event_dispatcher
+from gui.shared.event_dispatcher import showWebShop
 from gui.sounds.ambients import BattleResultsEnv
 from helpers import dependency
 from skeletons.gui.battle_results import IBattleResultsService
@@ -49,6 +51,12 @@ class BattleResultsWindow(BattleResultsMeta):
 
     def startCSAnimationSound(self, soundEffectID='cs_animation_league_up'):
         self.app.soundManager.playEffectSound(soundEffectID)
+
+    def showPremiumView(self, data):
+        if isIngameShopEnabled():
+            showWebShop(getBuyPremiumUrl())
+        else:
+            self.as_openPremiumPopoverS(data)
 
     def onResultsSharingBtnPress(self):
         raise NotImplementedError('This feature is not longer supported')

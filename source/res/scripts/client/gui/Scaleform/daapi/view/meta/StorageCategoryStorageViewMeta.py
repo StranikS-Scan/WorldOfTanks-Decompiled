@@ -1,17 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/meta/StorageCategoryStorageViewMeta.py
-from gui.Scaleform.daapi.view.lobby.storage.category_view import InventoryCategoryView
+from gui.Scaleform.framework.entities.BaseDAAPIComponent import BaseDAAPIComponent
 
-class StorageCategoryStorageViewMeta(InventoryCategoryView):
-
-    def navigateToStore(self):
-        self._printOverrideError('navigateToStore')
-
-    def sellItem(self, itemId):
-        self._printOverrideError('sellItem')
-
-    def showItemInfo(self, itemId):
-        self._printOverrideError('showItemInfo')
+class StorageCategoryStorageViewMeta(BaseDAAPIComponent):
 
     def onOpenTab(self, index):
         self._printOverrideError('onOpenTab')

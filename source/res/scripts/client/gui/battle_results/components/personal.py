@@ -102,7 +102,7 @@ class PersonalVehicleTypeIconsBlock(base.StatsBlock):
 
     def setRecord(self, result, reusable):
         for _, item in reusable.personal.getVehicleItemsIterator():
-            self.addNextComponent(base.DirectStatsItem('', getTypeBigIconPath(item.type, False)))
+            self.addNextComponent(base.DirectStatsItem('', getTypeBigIconPath(item.type)))
 
 
 class EpicVehicleNamesBlock(PersonalVehicleNamesBlock):
@@ -433,7 +433,7 @@ class TotalEfficiencyDetailsHeader(base.StatsBlock):
             value = info.spotted
             self.spotted = numbers.formatInt(value, _UNDEFINED_EFFICIENCY_VALUE)
             self.spottedTooltip = self.__makeEfficiencyHeaderTooltip('summSpotted', value)
-            self.hasEfficencyStats = info.kills + info.damageDealt + info.critsCount + info.critsCount + info.damageBlockedByArmor + info.damageAssisted + info.damageAssistedStun + info.spotted > 0
+            self.hasEfficencyStats = info.kills + info.damageDealt + info.critsCount + info.damageBlockedByArmor + info.damageAssisted + info.damageAssistedStun + info.spotted > 0
             return
 
     @classmethod

@@ -31,6 +31,10 @@
       <Type>	FLOAT32	</Type>
       <Flags>	ALL_CLIENTS	</Flags>
     </health>
+    <maxHealth>
+      <Type>	FLOAT32	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </maxHealth>
     <isDestructibleDestroyed>
       <Type>	BOOL	</Type>
       <Flags>	ALL_CLIENTS	</Flags>

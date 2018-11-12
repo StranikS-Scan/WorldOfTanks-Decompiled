@@ -125,11 +125,17 @@ class ClientArena(object):
     def collideWithArenaBB(self, start, end):
         return None if self.__arenaBBCollider is None and not self.__setupBBColliders() else self.__arenaBBCollider.collide(start, end)
 
+    def getArenaBB(self):
+        return (None, None) if self.__arenaBBCollider is None and not self.__setupBBColliders() else (self.__arenaBBCollider.getMinBounds(), self.__arenaBBCollider.getMaxBounds())
+
     def getClosestPointOnArenaBB(self, point):
         return None if self.__arenaBBCollider is None and not self.__setupBBColliders() else self.__arenaBBCollider.getClosestPointOnBB(point)
 
     def collideWithSpaceBB(self, start, end):
         return None if self.__spaceBBCollider is None and not self.__setupBBColliders() else self.__spaceBBCollider.collide(start, end)
+
+    def getSpaceBB(self):
+        return (None, None) if self.__spaceBBCollider is None and not self.__setupBBColliders() else (self.__spaceBBCollider.getMinBounds(), self.__spaceBBCollider.getMaxBounds())
 
     def isPointInsideArenaBB(self, point):
         return None if self.__arenaBBCollider is None and not self.__setupBBColliders() else self.__arenaBBCollider.isPointInsideBB(point)
@@ -319,6 +325,12 @@ class _BBCollider(object):
         self.__planes.append(Plane(Math.Vector3(-1.0, 0.0, 0.0), -self.__max.x))
         self.__planes.append(Plane(Math.Vector3(0.0, 1.0, 0.0), self.__min.y))
         self.__planes.append(Plane(Math.Vector3(0.0, -1.0, 0.0), -self.__max.y))
+
+    def getMinBounds(self):
+        return Math.Vector3(self.__min)
+
+    def getMaxBounds(self):
+        return Math.Vector3(self.__max)
 
     def isPointInsideBB(self, point3D):
         return self.__min.x <= point3D[0] <= self.__max.x and self.__min.y <= point3D[1] <= self.__max.y and self.__min.z <= point3D[2] <= self.__max.z

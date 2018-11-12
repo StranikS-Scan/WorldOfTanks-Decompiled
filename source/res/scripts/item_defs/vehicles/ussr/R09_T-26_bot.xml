@@ -87,7 +87,7 @@
       </slot>
       <slot>
         <slotType>	inscription	</slotType>
-        <slotId>	2	</slotId>
+        <slotId>	36	</slotId>
         <rayStart>	0.968951 0.376767 0.00503527	</rayStart>
         <rayEnd>	0.940437 0.2726 0.00503553	</rayEnd>
         <rayUp>	-0.964515 0.264028 0.000000	</rayUp>
@@ -97,7 +97,7 @@
       </slot>
       <slot>
         <slotType>	inscription	</slotType>
-        <slotId>	3	</slotId>
+        <slotId>	37	</slotId>
         <rayStart>	-0.309413 0.206307 1.8269	</rayStart>
         <rayEnd>	-0.309413 -0.187621 1.75745	</rayEnd>
         <rayUp>	0.000000 0.000000 -1	</rayUp>
@@ -1154,7 +1154,7 @@
       <customizationSlots>
         <slot>
           <slotType>	player	</slotType>
-          <slotId>	4	</slotId>
+          <slotId>	514	</slotId>
           <rayStart>	-0.675176 0.439617 -0.763186	</rayStart>
           <rayEnd>	-0.290207 0.439617 -0.654566	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
@@ -1164,7 +1164,7 @@
         </slot>
         <slot>
           <slotType>	player	</slotType>
-          <slotId>	5	</slotId>
+          <slotId>	515	</slotId>
           <rayStart>	0.675176 0.439617 -0.763186	</rayStart>
           <rayEnd>	0.290207 0.439617 -0.654566	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
@@ -1193,6 +1193,7 @@
       <engines>
         <T-26_bot>
           <smplEnginePower>	95.1553	</smplEnginePower>
+          <smplFwMaxSpeed>	36	</smplFwMaxSpeed>
         </T-26_bot>
       </engines>
       <chassis>

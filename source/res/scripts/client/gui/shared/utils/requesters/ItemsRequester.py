@@ -17,7 +17,7 @@ from gui.shared.gui_items.customization.outfit import Outfit
 from gui.shared.gui_items.gui_item_economics import ITEM_PRICE_EMPTY
 from helpers import dependency
 from items import vehicles, tankmen, getTypeOfCompactDescr
-from items.components.c11n_constants import SeasonType, CustomizationType
+from items.components.c11n_constants import SeasonType, CustomizationType, StyleFlags
 from skeletons.gui.shared import IItemsRequester
 from skeletons.gui.shared.gui_items import IGuiItemsFactory
 
@@ -93,6 +93,23 @@ class NegativeCompoundPredicateCondition(CompoundPredicateCondition):
         return super(NegativeCompoundPredicateCondition, self).lookInInventory()
 
 
+class OrCompoundPredicateCondition(CompoundPredicateCondition):
+
+    def __call__(self, item):
+        for predicate in self.predicates:
+            if predicate(item):
+                return True
+
+        return not self.predicates
+
+    def lookInInventory(self):
+        for predicate in self.predicates:
+            if not predicate.lookInInventory():
+                return False
+
+        return self.predicates
+
+
 class IntCDProtector(object):
     __slots__ = ('__intCDs',)
 
@@ -126,6 +143,11 @@ class RequestCriteria(object):
 
     def __invert__(self):
         return RequestCriteria(NegativeCompoundPredicateCondition(*self._conditions))
+
+    def __xor__(self, other):
+        selfConditions = CompoundPredicateCondition(*self._conditions)
+        otherConditions = CompoundPredicateCondition(*other.getConditions())
+        return RequestCriteria(OrCompoundPredicateCondition(selfConditions, otherConditions))
 
     def getConditions(self):
         return self._conditions
@@ -198,6 +220,7 @@ class REQ_CRITERIA(object):
         ACTIVE_RENT = RequestCriteria(InventoryPredicateCondition(lambda item: item.isRented and not item.rentalIsOver))
         EXPIRED_RENT = RequestCriteria(PredicateCondition(lambda item: item.isRented and item.rentalIsOver))
         EXPIRED_IGR_RENT = RequestCriteria(PredicateCondition(lambda item: item.isRented and item.rentalIsOver and item.isPremiumIGR))
+        RENT_PROMOTION = RequestCriteria(PredicateCondition(lambda item: item.isRentPromotion))
         DISABLED_IN_PREM_IGR = RequestCriteria(PredicateCondition(lambda item: item.isDisabledInPremIGR))
         IS_PREMIUM_IGR = RequestCriteria(PredicateCondition(lambda item: item.isPremiumIGR))
         ELITE = RequestCriteria(PredicateCondition(lambda item: item.isElite))
@@ -205,6 +228,7 @@ class REQ_CRITERIA(object):
         FULLY_ELITE = RequestCriteria(PredicateCondition(lambda item: item.isFullyElite))
         EVENT = RequestCriteria(PredicateCondition(lambda item: item.isEvent))
         EVENT_BATTLE = RequestCriteria(PredicateCondition(lambda item: item.isOnlyForEventBattles))
+        EPIC_BATTLE = RequestCriteria(PredicateCondition(lambda item: item.isOnlyForEpicBattles))
         HAS_XP_FACTOR = RequestCriteria(PredicateCondition(lambda item: item.dailyXPFactor != -1))
         IS_RESTORE_POSSIBLE = RequestCriteria(PredicateCondition(lambda item: item.isRestorePossible()))
         CAN_TRADE_IN = RequestCriteria(PredicateCondition(lambda item: item.canTradeIn))
@@ -229,11 +253,15 @@ class REQ_CRITERIA(object):
         BOOSTER_TYPES = staticmethod(lambda boosterTypes: RequestCriteria(PredicateCondition(lambda item: item.boosterType in boosterTypes)))
         IN_BOOSTER_ID_LIST = staticmethod(lambda boostersList: RequestCriteria(PredicateCondition(lambda item: item.boosterID in boostersList)))
         QUALITY = staticmethod(lambda qualityValues: RequestCriteria(PredicateCondition(lambda item: item.quality in qualityValues)))
+        DURATION = staticmethod(lambda durationTimes: RequestCriteria(PredicateCondition(lambda item: item.effectTime in durationTimes)))
 
     class BATTLE_BOOSTER(object):
         ALL = RequestCriteria(PredicateCondition(lambda item: item.itemTypeID == GUI_ITEM_TYPE.BATTLE_BOOSTER))
         CREW_EFFECT = RequestCriteria(PredicateCondition(lambda item: item.isCrewBooster()))
         OPTIONAL_DEVICE_EFFECT = RequestCriteria(PredicateCondition(lambda item: not item.isCrewBooster()))
+
+    class SHELL(object):
+        TYPE = staticmethod(lambda typesList: RequestCriteria(PredicateCondition(lambda item: item.type in typesList)))
 
     class ARTEFACT(object):
         DESCRIPTOR_NAME = staticmethod(lambda descriptorName: RequestCriteria(PredicateCondition(lambda item: item.name == descriptorName)))
@@ -261,6 +289,7 @@ class REQ_CRITERIA(object):
         FREE_OR_IN_INVENTORY = RequestCriteria(PredicateCondition(lambda item: item.isInInventory or item.getBuyPrice() == ITEM_PRICE_EMPTY))
         ONLY_IN_GROUP = staticmethod(lambda group: RequestCriteria(PredicateCondition(lambda item: item.groupUserName == group)))
         DISCLOSABLE = staticmethod(lambda vehicle: RequestCriteria(PredicateCondition(lambda item: item.fullInventoryCount(vehicle) or not item.isHidden)))
+        IS_INSTALLED_ON_VEHICLE = staticmethod(lambda vehicle: RequestCriteria(PredicateCondition(lambda item: item.getInstalledOnVehicleCount(vehicle.intCD) > 0)))
 
 
 class RESEARCH_CRITERIA(object):
@@ -489,10 +518,11 @@ class ItemsRequester(IItemsRequester):
                     vehicle = self.getItemByCD(vehicleIntCD)
                     for season in seasons:
                         outfitCompactDescr = None
+                        flags = StyleFlags.EMPTY
                         if outfitsData:
                             outfitData = outfitsData.get(season)
                             if outfitData:
-                                outfitCompactDescr, _ = outfitData
+                                outfitCompactDescr, flags = outfitData
                         newOutfit = Outfit(outfitCompactDescr)
                         if season == SeasonType.ALL:
                             prevOutfit = vehicle.getOutfit(SeasonType.SUMMER) or Outfit()
@@ -501,7 +531,10 @@ class ItemsRequester(IItemsRequester):
                             if prevStyleId != newStyleId:
                                 invalidStyles = set()
                                 invalidStyles.add(self.__updateStyleAppliedCount(prevStyleId, vehicleIntCD, 0))
-                                invalidStyles.add(self.__updateStyleAppliedCount(newStyleId, vehicleIntCD, 1))
+                                if flags & StyleFlags.INSTALLED:
+                                    invalidStyles.add(self.__updateStyleAppliedCount(newStyleId, vehicleIntCD, 1))
+                                else:
+                                    invalidStyles.add(self.__updateStyleAppliedCount(newStyleId, vehicleIntCD, 0))
                                 for styleIntCD in invalidStyles:
                                     if styleIntCD is not None:
                                         invalidate[GUI_ITEM_TYPE.CUSTOMIZATION].add(styleIntCD)
@@ -511,9 +544,15 @@ class ItemsRequester(IItemsRequester):
                             prevItemsCounter = prevOutfit.itemsCounter
                             newItemsCounter = newOutfit.itemsCounter
                             newItemsCounter.subtract(prevItemsCounter)
-                            for itemCD, count in newItemsCounter.iteritems():
-                                self.__inventory.updateC11nItemAppliedCount(itemCD, vehicleIntCD, count)
-                                invalidate[GUI_ITEM_TYPE.CUSTOMIZATION].add(itemCD)
+                            if flags & StyleFlags.INSTALLED:
+                                for itemCD, count in newItemsCounter.iteritems():
+                                    self.__inventory.updateC11nItemAppliedCount(itemCD, vehicleIntCD, count)
+                                    invalidate[GUI_ITEM_TYPE.CUSTOMIZATION].add(itemCD)
+
+                            else:
+                                for itemCD in newItemsCounter.iterkeys():
+                                    self.__inventory.updateC11nItemAppliedCount(itemCD, vehicleIntCD, 0)
+                                    invalidate[GUI_ITEM_TYPE.CUSTOMIZATION].add(itemCD)
 
                         invalidate[GUI_ITEM_TYPE.OUTFIT].add((vehicleIntCD, season))
 

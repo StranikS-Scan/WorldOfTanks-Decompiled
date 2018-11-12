@@ -1,0 +1,46 @@
+<italy_nonCN.xml>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	true	</historical>
+    <priceGroup>	italy marathon style notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <nations>	italy	</nations>
+        <levels>	6 8 9 10	</levels>
+      </include>
+    </vehicleFilter>
+    <style>
+      <id>	138	</id>
+      <texture>	gui/maps/vehicles/styles/italian_marathion_01.png	</texture>
+      <userString>	#vehicle_customization:special_style/italian_marathion_01	</userString>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	553	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <decals>
+            <item>
+              <id>	543	</id>
+              <appliedTo>	48	</appliedTo>
+            </item>
+            <item>
+              <id>	543	</id>
+              <appliedTo>	768	</appliedTo>
+            </item>
+            <item>
+              <id>	543	</id>
+              <appliedTo>	12288	</appliedTo>
+            </item>
+          </decals>
+        </outfit>
+      </outfits>
+    </style>
+  </itemGroup>
+</italy_nonCN.xml>

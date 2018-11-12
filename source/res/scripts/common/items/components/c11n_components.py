@@ -4,7 +4,7 @@ import items
 import items.vehicles as iv
 from items.components import shared_components
 from soft_exception import SoftException
-from items.components.c11n_constants import ApplyArea, SeasonType, ItemTags, CustomizationType, MAX_CAMOUFLAGE_PATTERN_SIZE, DecalType, PROJECTION_DECALS_SCALE_ID_VALUES, MAX_USERS_PROJECTION_DECALS, CustomizationTypeNames
+from items.components.c11n_constants import ApplyArea, SeasonType, Options, ItemTags, CustomizationType, MAX_CAMOUFLAGE_PATTERN_SIZE, DecalType, PROJECTION_DECALS_SCALE_ID_VALUES, MAX_USERS_PROJECTION_DECALS, CustomizationTypeNames, ProjectionDecalFormTags
 from typing import List, Dict, Type, Tuple, Optional, Union, TypeVar, FrozenSet
 Item = TypeVar('TypeVar')
 
@@ -105,23 +105,23 @@ class PaintItem(BaseCustomizationItem):
 
 class DecalItem(BaseCustomizationItem):
     itemType = CustomizationType.DECAL
-    __slots__ = ('type', 'isMirrored', 'texture')
+    __slots__ = ('type', 'canBeMirrored', 'texture')
     allSlots = BaseCustomizationItem.__slots__ + __slots__
 
     def __init__(self, parentGroup=None):
         self.type = 0
-        self.isMirrored = False
+        self.canBeMirrored = False
         self.texture = ''
         super(DecalItem, self).__init__(parentGroup)
 
 
 class ProjectionDecalItem(BaseCustomizationItem):
     itemType = CustomizationType.PROJECTION_DECAL
-    __slots__ = ('isMirrored', 'texture')
+    __slots__ = ('canBeMirrored', 'texture')
     allSlots = BaseCustomizationItem.__slots__ + __slots__
 
     def __init__(self, parentGroup=None):
-        self.isMirrored = False
+        self.canBeMirrored = False
         self.texture = ''
         super(ProjectionDecalItem, self).__init__(parentGroup)
 
@@ -174,6 +174,19 @@ class StyleItem(BaseCustomizationItem):
 
     def isVictim(self, color):
         return '{}Victim'.format(color) in self.tags
+
+
+class InsigniaItem(BaseCustomizationItem):
+    itemType = CustomizationType.INSIGNIA
+    __slots__ = ('atlas', 'alphabet', 'texture', 'canBeMirrored')
+    allSlots = BaseCustomizationItem.__slots__ + __slots__
+
+    def __init__(self, parentGroup=None):
+        self.atlas = ''
+        self.alphabet = ''
+        self.texture = ''
+        self.canBeMirrored = False
+        super(InsigniaItem, self).__init__(parentGroup)
 
 
 class ItemGroup(object):
@@ -278,7 +291,7 @@ class VehicleFilter(object):
 
 
 class CustomizationCache(object):
-    __slots__ = ('paints', 'camouflages', 'decals', 'projection_decals', 'modifications', 'levels', 'itemToPriceGroup', 'priceGroups', 'priceGroupNames', 'styles', 'defaultColors', 'itemTypes', 'priceGroupTags', '__victimStyles')
+    __slots__ = ('paints', 'camouflages', 'decals', 'projection_decals', 'modifications', 'levels', 'itemToPriceGroup', 'priceGroups', 'priceGroupNames', 'insignias', 'styles', 'defaultColors', 'itemTypes', 'priceGroupTags', '__victimStyles')
 
     def __init__(self):
         self.priceGroupTags = {}
@@ -291,6 +304,7 @@ class CustomizationCache(object):
         self.priceGroups = {}
         self.priceGroupNames = {}
         self.styles = {}
+        self.insignias = {}
         self.defaultColors = {}
         self.__victimStyles = {}
         self.itemTypes = {CustomizationType.MODIFICATION: self.modifications,
@@ -298,7 +312,8 @@ class CustomizationCache(object):
          CustomizationType.DECAL: self.decals,
          CustomizationType.CAMOUFLAGE: self.camouflages,
          CustomizationType.PAINT: self.paints,
-         CustomizationType.PROJECTION_DECAL: self.projection_decals}
+         CustomizationType.PROJECTION_DECAL: self.projection_decals,
+         CustomizationType.INSIGNIA: self.insignias}
         super(CustomizationCache, self).__init__()
 
     def isVehicleBound(self, itemId):
@@ -327,16 +342,16 @@ class CustomizationCache(object):
 
         return [ s for s in self.__victimStyles.get(hunting, []) if s.matchVehicleType(vehType) ]
 
-    def validateOutfit(self, vehTypeDescr, outfitDescr, tokens=None, season=SeasonType.ALL):
+    def validateOutfit(self, vehDescr, outfitDescr, tokens=None, season=SeasonType.ALL):
 
         def validateItem(name, storage, itemId):
             item = storage.get(itemId, None)
             if item is None:
                 return (False, '{} {} not found'.format(name, itemId))
-            elif not item.matchVehicleType(vehTypeDescr):
-                return (False, '{} {} incompatible vehicle'.format(name, itemId))
+            elif not item.matchVehicleType(vehDescr.type):
+                return (False, '{} {} incompatible vehicle {}'.format(name, itemId, vehDescr.type))
             elif not item.season & season:
-                return (False, '{} {} incompatible season'.format(name, itemId))
+                return (False, '{} {} incompatible season {}'.format(name, itemId, season))
             else:
                 return (False, '{} {} locked'.format(name, itemId)) if not item.isUnlocked(tokens) else (True, item)
 
@@ -344,33 +359,54 @@ class CustomizationCache(object):
             valid, paint = validateItem('paint', self.paints, p.id)
             if not valid:
                 return (valid, paint)
-            if paint.getAmount(p.appliedTo) is None:
-                return (False, 'paint {} incompatible appliedTo'.format(paint.id))
-            if p.appliedTo & ApplyArea.USER_PAINT_ALLOWED_REGIONS_VALUE != p.appliedTo:
-                return (False, 'paint {} wrong user apply area'.format(paint.id))
+            at = p.appliedTo
+            if paint.getAmount(at) is None:
+                return (False, 'paint {} incompatible appliedTo {}'.format(paint.id, at))
+            if not at or at & ApplyArea.USER_PAINT_ALLOWED_REGIONS_VALUE != at:
+                return (False, 'paint {} wrong user apply area {}'.format(paint.id, at))
 
         for d in outfitDescr.decals:
             valid, decal = validateItem('decal', self.decals, d.id)
             if not valid:
                 return (valid, decal)
+            at = d.appliedTo
             if decal.type == DecalType.EMBLEM:
-                if d.appliedTo & ApplyArea.EMBLEM_REGIONS_VALUE != d.appliedTo:
-                    return (False, 'emblem {} wrong appliedTo {}'.format(d.id, d.appliedTo))
+                if not at or at & ApplyArea.EMBLEM_REGIONS_VALUE != at:
+                    return (False, 'emblem {} wrong appliedTo {}'.format(d.id, at))
             if decal.type == DecalType.INSCRIPTION:
-                if d.appliedTo & ApplyArea.INSCRIPTION_REGIONS_VALUE != d.appliedTo:
-                    return (False, 'inscription {} wrong appliedTo {}'.format(d.id, d.appliedTo))
+                if not at or at & ApplyArea.INSCRIPTION_REGIONS_VALUE != at:
+                    return (False, 'inscription {} wrong appliedTo {}'.format(d.id, at))
 
         if len(outfitDescr.projection_decals) > MAX_USERS_PROJECTION_DECALS:
             return (False, 'projection decals quantity greater than acceptable')
         else:
+            usedParents = set()
             for d in outfitDescr.projection_decals:
                 valid, decal = validateItem('projection_decal', self.projection_decals, d.id)
                 if not valid:
                     return (valid, decal)
-                if d.showOn & ApplyArea.PROJECTION_DECAL_REGIONS_VALUE != d.showOn:
-                    return (False, 'projection decal {} wrong showOn {}'.format(d.id, d.showOn))
+                options = d.options
+                if options & Options.PROJECTION_DECALS_ALLOWED_OPTIONS_VALUE != options:
+                    return (False, 'projection decal {} wrong options {}'.format(d.id, options))
                 if d.scaleFactorId not in PROJECTION_DECALS_SCALE_ID_VALUES:
                     return (False, 'projection decal {} wrong scaleFactorId {}'.format(d.id, d.scaleFactorId))
+                slotId = d.slotId
+                slotParams = getVehicleProjectionDecalSlotParams(vehDescr, slotId)
+                if slotParams is None:
+                    return (False, 'projection decal {} wrong slotId = {}. VehType = {}'.format(d.id, slotId, vehDescr.type))
+                parentSlotId = slotParams.parentSlotId if slotParams.parentSlotId is not None else slotId
+                if parentSlotId in usedParents:
+                    return (False, 'projection decal {} slot {} already used. VehType = {}'.format(d.id, parentSlotId, vehDescr.type))
+                usedParents.add(parentSlotId)
+                if options & Options.MIRRORED and not decal.canBeMirrored:
+                    return (False, 'projection decal {} wrong mirrored option'.format(d.id))
+                slotFormFactors = set([ tag for tag in slotParams.tags if tag.startswith(ProjectionDecalFormTags.PREFIX) ])
+                if slotFormFactors and ProjectionDecalFormTags.ANY not in slotFormFactors:
+                    formfactor = next((tag for tag in decal.tags if tag.startswith(ProjectionDecalFormTags.PREFIX)), '')
+                    if not formfactor:
+                        return (False, 'projection decal {} wrong XML. formfactor is missing'.format(d.id, formfactor))
+                    if formfactor not in slotFormFactors:
+                        return (False, 'projection decal {} wrong formfactor {}'.format(d.id, formfactor))
 
             for ce in outfitDescr.camouflages:
                 valid, camo = validateItem('camouflage', self.camouflages, ce.id)
@@ -380,7 +416,7 @@ class CustomizationCache(object):
                 if camo.componentsCovering and at != camo.componentsCovering:
                     return (False, 'camouflage {} wrong covering'.format(camo.id))
                 cp = camo.compatibleParts
-                if at & cp != at:
+                if not at or at & cp != at:
                     return (False, 'camouflage {} wrong appliedTo {}'.format(camo.id, at))
                 if ce.patternSize < 0 or ce.patternSize > MAX_CAMOUFLAGE_PATTERN_SIZE:
                     return (False, 'camouflage has wrong pattern size {}'.format(ce.patternSize))
@@ -402,5 +438,23 @@ def splitIntDescr(intDescr):
     return (customizationType, id)
 
 
+def validateCustomizationEnabled(gameParams):
+    return gameParams['misc_settings']['isCustomizationEnabled']
+
+
 def validateCustomizationTypeEnabled(gameParams, customizationType):
     return CustomizationTypeNames[customizationType] not in gameParams['misc_settings']['disabledCustomizations']
+
+
+def getVehicleProjectionDecalSlotParams(vehicleDescr, vehicleSlotId):
+    slotTypeName = 'projectionDecal'
+    for vehiclePartSlots in (vehicleDescr.hull.slotsAnchors,
+     vehicleDescr.chassis.slotsAnchors,
+     vehicleDescr.turret.slotsAnchors,
+     vehicleDescr.gun.slotsAnchors):
+        for vehicleSlot in vehiclePartSlots:
+            if vehicleSlot.type != slotTypeName or vehicleSlot.slotId != vehicleSlotId:
+                continue
+            return vehicleSlot
+
+    return None

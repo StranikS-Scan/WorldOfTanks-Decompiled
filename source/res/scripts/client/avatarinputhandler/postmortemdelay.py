@@ -15,7 +15,7 @@ class PostmortemDelay(object):
     KILLER_VEHICLE_CAMERA_PIVOT_SETTINGS = (1.5, 3.0)
     KILLER_VEHICLE_PITCH_OFFSET = -0.3
 
-    def __init__(self, arcadeCamera, onKillerVisionStart, onStop):
+    def __init__(self, arcadeCamera, onKillerVisionStart, onStop, initialDelay=0):
         self.__killerVehicleID = None
         self.__bActive = False
         self.__mouseInputEnabled = False
@@ -29,6 +29,7 @@ class PostmortemDelay(object):
         self.__onKillerVisionStart = onKillerVisionStart
         self.__onStop = onStop
         self.__cbIDWait = None
+        self.__initialDelay = initialDelay
         BigWorld.player().onVehicleLeaveWorld += self.__onVehicleLeaveWorld
         g_playerEvents.onArenaPeriodChange += self.__onRoundFinished
         return
@@ -48,7 +49,8 @@ class PostmortemDelay(object):
         self.__bActive = True
         self.__fadeScreen()
         self.__moveCameraTo(BigWorld.player().playerVehicleID)
-        self.__cbIDWait = BigWorld.callback(self.FADE_DELAY_TIME, self.__onFadeDelay)
+        fadeDelay = self.FADE_DELAY_TIME + self.__initialDelay
+        self.__cbIDWait = BigWorld.callback(fadeDelay, self.__onFadeDelay)
 
     def stop(self):
         if not self.__bActive:

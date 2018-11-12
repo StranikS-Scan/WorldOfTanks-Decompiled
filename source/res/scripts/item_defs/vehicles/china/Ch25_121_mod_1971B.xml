@@ -82,14 +82,27 @@
         <isUVProportional>	true	</isUVProportional>
       </slot>
       <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	68	</slotId>
+        <tags>	direction_any formfactor_any	</tags>
+        <position>	0.0245875 0.81054 2.39782	</position>
+        <rotation>	0.475973 -0.000021 3.14155	</rotation>
+        <scale>	1.37913 0.999997 1.37897	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.838576	</clipAngle>
+        <anchorPosition>	0.024603 0.268094 2.60783	</anchorPosition>
+        <anchorDirection>	0.000034 0.888847 0.458204	</anchorDirection>
+      </slot>
+      <slot>
         <slotType>	paint	</slotType>
-        <slotId>	11	</slotId>
+        <slotId>	2	</slotId>
         <anchorPosition>	0.000000 0.633036 -2.49658	</anchorPosition>
         <anchorDirection>	0.000000 0.245783 -0.969325	</anchorDirection>
       </slot>
       <slot>
         <slotType>	camouflage	</slotType>
-        <slotId>	12	</slotId>
+        <slotId>	3	</slotId>
         <anchorPosition>	0.000000 0.633036 -2.49658	</anchorPosition>
         <anchorDirection>	0.000000 0.245783 -0.969325	</anchorDirection>
       </slot>
@@ -814,13 +827,13 @@
       <customizationSlots>
         <slot>
           <slotType>	paint	</slotType>
-          <slotId>	2	</slotId>
+          <slotId>	256	</slotId>
           <anchorPosition>	-1.61746 0.565277 0.02615	</anchorPosition>
           <anchorDirection>	-0.9439 0.329878 0.0152603	</anchorDirection>
         </slot>
         <slot>
           <slotType>	style	</slotType>
-          <slotId>	10	</slotId>
+          <slotId>	257	</slotId>
           <anchorPosition>	0.000072 2.27312 -0.055314	</anchorPosition>
           <anchorDirection>	0.000000 1 0.000000	</anchorDirection>
         </slot>
@@ -907,31 +920,32 @@
           <customizationSlots>
             <slot>
               <slotType>	insigniaOnGun	</slotType>
-              <slotId>	6	</slotId>
+              <slotId>	771	</slotId>
               <rayStart>	0.0427639 -0.0731174 1.10263	</rayStart>
               <rayEnd>	-0.00262963 -0.151855 1.10155	</rayEnd>
-              <rayUp>	0.107 0.102 4	</rayUp>
+              <rayUp>	0.107 0.000000 0.000000	</rayUp>
+              <applyToFabric>	true	</applyToFabric>
               <size>	0.541	</size>
               <hideIfDamaged>	false	</hideIfDamaged>
               <isUVProportional>	true	</isUVProportional>
             </slot>
             <slot>
               <slotType>	paint	</slotType>
-              <slotId>	15	</slotId>
+              <slotId>	768	</slotId>
               <anchorPosition>	0.0213794 -0.0349188 2.2186	</anchorPosition>
               <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
               <applyTo>	4096	</applyTo>
             </slot>
             <slot>
               <slotType>	paint	</slotType>
-              <slotId>	18	</slotId>
+              <slotId>	769	</slotId>
               <anchorPosition>	0.0398184 0.144729 0.39828	</anchorPosition>
               <anchorDirection>	0.0270336 0.790321 0.612097	</anchorDirection>
               <applyTo>	16384	</applyTo>
             </slot>
             <slot>
               <slotType>	camouflage	</slotType>
-              <slotId>	17	</slotId>
+              <slotId>	770	</slotId>
               <anchorPosition>	0.0213794 -0.0349188 2.2186	</anchorPosition>
               <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
               <applyTo>	4096	</applyTo>
@@ -963,8 +977,34 @@
       <physicsShape>	1.000 0.000 1.000 0.000 0.598 0.195 0.457 0.500 0.598 0.500 0.335 0.500 0.238 0.488 0.256	</physicsShape>
       <customizationSlots>
         <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	578	</slotId>
+          <tags>	direction_any formfactor_any	</tags>
+          <position>	-0.306342 1.475 0.428423	</position>
+          <rotation>	0.702172 -0.841912 3.14159	</rotation>
+          <scale>	1.1562 1.69877 1.15619	</scale>
+          <doubleSided>	false	</doubleSided>
+          <showOn>	256	</showOn>
+          <clipAngle>	1.29673	</clipAngle>
+          <anchorPosition>	-0.658365 0.594166 0.808639	</anchorPosition>
+          <anchorDirection>	-0.481769 0.763442 0.430181	</anchorDirection>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	579	</slotId>
+          <tags>	direction_any formfactor_any	</tags>
+          <position>	0.0165713 2.05811 -1.57891	</position>
+          <rotation>	1.99211 -0.000002 -0.000000	</rotation>
+          <scale>	1.09027 1.06435 1.15066	</scale>
+          <doubleSided>	false	</doubleSided>
+          <showOn>	256	</showOn>
+          <clipAngle>	1.37854	</clipAngle>
+          <anchorPosition>	0.028384 0.472917 -1.2384	</anchorPosition>
+          <anchorDirection>	0.000001 0.408959 -0.912553	</anchorDirection>
+        </slot>
+        <slot>
           <slotType>	inscription	</slotType>
-          <slotId>	3	</slotId>
+          <slotId>	546	</slotId>
           <rayStart>	1.31673 0.350343 0.128622	</rayStart>
           <rayEnd>	1.2214 0.32761 0.108699	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
@@ -974,7 +1014,7 @@
         </slot>
         <slot>
           <slotType>	player	</slotType>
-          <slotId>	4	</slotId>
+          <slotId>	514	</slotId>
           <rayStart>	-0.914649 0.392374 1.06259	</rayStart>
           <rayEnd>	-0.849959 0.335375 1.01193	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
@@ -984,30 +1024,30 @@
         </slot>
         <slot>
           <slotType>	player	</slotType>
-          <slotId>	5	</slotId>
+          <slotId>	515	</slotId>
           <rayStart>	0.931416 0.407987 1.0739	</rayStart>
           <rayEnd>	0.862761 0.352821 1.02654	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
+          <isMirrored>	true	</isMirrored>
           <size>	0.24	</size>
           <hideIfDamaged>	false	</hideIfDamaged>
-          <isMirrored>	true	</isMirrored>
           <isUVProportional>	true	</isUVProportional>
         </slot>
         <slot>
           <slotType>	paint	</slotType>
-          <slotId>	13	</slotId>
+          <slotId>	512	</slotId>
           <anchorPosition>	0.000000 0.815439 0.000000	</anchorPosition>
           <anchorDirection>	0.000000 1 0.000000	</anchorDirection>
         </slot>
         <slot>
           <slotType>	camouflage	</slotType>
-          <slotId>	14	</slotId>
+          <slotId>	513	</slotId>
           <anchorPosition>	0.000000 0.815439 0.000000	</anchorPosition>
           <anchorDirection>	0.000000 1 0.000000	</anchorDirection>
         </slot>
         <slot>
           <slotType>	inscription	</slotType>
-          <slotId>	19	</slotId>
+          <slotId>	547	</slotId>
           <rayStart>	-1.27358 0.39734 0.111755	</rayStart>
           <rayEnd>	-1.19138 0.342934 0.0949061	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
@@ -1041,6 +1081,7 @@
       <engines>
         <_12150L7B>
           <smplEnginePower>	700	</smplEnginePower>
+          <smplFwMaxSpeed>	50	</smplFwMaxSpeed>
         </_12150L7B>
       </engines>
       <chassis>

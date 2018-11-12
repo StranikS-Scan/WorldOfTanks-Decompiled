@@ -229,9 +229,6 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
     def showLobbyMenu(self):
         self.fireEvent(events.LoadViewEvent(VIEW_ALIAS.LOBBY_MENU), scope=EVENT_BUS_SCOPE.LOBBY)
 
-    def getCurrentHeaderButtons(self):
-        return [ buttonID for buttonID in self.BUTTONS_ORDER if self.__isHeaderButtonPresent(buttonID) ]
-
     @process
     def menuItemClick(self, alias):
         navigationPossible = yield self.lobbyContext.isHeaderNavigationPossible()
@@ -572,12 +569,13 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
             premiumBtnLbl = makeHtmlString('html_templates:lobby/header', 'premium-account-label', {'timeMetric': timeMetric,
              'timeLeft': timeLeft})
             canUpdatePremium = deltaInSeconds < time_utils.ONE_YEAR
-            buyPremiumLabel = self._getPremiumLabelText(True, canUpdatePremium)
         else:
             canUpdatePremium = True
             premiumBtnLbl = makeHtmlString('html_templates:lobby/header', 'base-account-label')
-            buyPremiumLabel = self._getPremiumLabelText(False, False)
         hasPersonalDiscount = self.__hasPremiumPacketDiscount()
+        if self.__isIngameShopEnabled:
+            canUpdatePremium = True
+        buyPremiumLabel = self._getPremiumLabelText(isPremiumAccount, canUpdatePremium)
         tooltip = self._getPremiumTooltipText(isPremiumAccount, canUpdatePremium)
         self.as_setPremiumParamsS(premiumBtnLbl, buyPremiumLabel, hasPersonalDiscount, tooltip, TOOLTIP_TYPES.COMPLEX)
 

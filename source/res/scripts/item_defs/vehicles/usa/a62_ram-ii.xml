@@ -24,7 +24,7 @@
   <camouflage>
     <priceFactor>	1.0	</priceFactor>
     <tiling>	1 1 0 0	</tiling>
-    <exclusionMask>	vehicles/american/A62_Ram-II/Ram_II_hull_01_AM.dds	</exclusionMask>
+    <exclusionMask></exclusionMask>
   </camouflage>
   <hull>
     <armor>
@@ -97,7 +97,7 @@
       </slot>
       <slot>
         <slotType>	camouflage	</slotType>
-        <slotId>	6	</slotId>
+        <slotId>	3	</slotId>
         <anchorPosition>	0.0769921 0.740301 -2.6504	</anchorPosition>
         <anchorDirection>	-0.00109845 0.621107 -0.783725	</anchorDirection>
       </slot>
@@ -877,7 +877,7 @@
       <customizationSlots>
         <slot>
           <slotType>	style	</slotType>
-          <slotId>	5	</slotId>
+          <slotId>	257	</slotId>
           <anchorPosition>	0.0815627 2.5204 -0.221525	</anchorPosition>
           <anchorDirection>	0.000000 1 0.000000	</anchorDirection>
         </slot>
@@ -954,7 +954,7 @@
           <customizationSlots>
             <slot>
               <slotType>	insigniaOnGun	</slotType>
-              <slotId>	4	</slotId>
+              <slotId>	771	</slotId>
               <rayStart>	-0.0228998 -0.000065 0.884933	</rayStart>
               <rayEnd>	-0.241798 -0.131186 0.884933	</rayEnd>
               <rayUp>	0.051 0.051 3	</rayUp>
@@ -964,7 +964,7 @@
             </slot>
             <slot>
               <slotType>	camouflage	</slotType>
-              <slotId>	9	</slotId>
+              <slotId>	770	</slotId>
               <anchorPosition>	-0.0114499 -0.000032 0.990405	</anchorPosition>
               <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
               <applyTo>	4096	</applyTo>
@@ -997,7 +997,7 @@
       <customizationSlots>
         <slot>
           <slotType>	inscription	</slotType>
-          <slotId>	2	</slotId>
+          <slotId>	546	</slotId>
           <rayStart>	1.19399 0.436635 0.232285	</rayStart>
           <rayEnd>	0.643134 0.198864 0.235488	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
@@ -1007,7 +1007,7 @@
         </slot>
         <slot>
           <slotType>	player	</slotType>
-          <slotId>	3	</slotId>
+          <slotId>	514	</slotId>
           <rayStart>	-0.89416 0.343928 0.429692	</rayStart>
           <rayEnd>	-0.696661 0.326614 0.40334	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
@@ -1017,7 +1017,7 @@
         </slot>
         <slot>
           <slotType>	camouflage	</slotType>
-          <slotId>	7	</slotId>
+          <slotId>	513	</slotId>
           <anchorPosition>	0.000000 0.643543 0.000000	</anchorPosition>
           <anchorDirection>	0.000000 1 0.000000	</anchorDirection>
         </slot>
@@ -1041,6 +1041,7 @@
       <engines>
         <Ford_GAA_1>
           <smplEnginePower>	465.2037	</smplEnginePower>
+          <smplFwMaxSpeed>	38	</smplFwMaxSpeed>
         </Ford_GAA_1>
       </engines>
       <chassis>

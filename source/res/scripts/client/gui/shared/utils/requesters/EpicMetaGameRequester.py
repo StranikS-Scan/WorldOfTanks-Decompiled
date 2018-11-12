@@ -13,6 +13,10 @@ class EpicMetaGameRequester(AbstractSyncDataRequester, IEpicMetaGameRequester):
         return self.getCacheValue('metaLevel', (0, 0, 0))
 
     @property
+    def seasonData(self):
+        return self.getCacheValue('seasonData', (0, False))
+
+    @property
     def skillPoints(self):
         return self.getCacheValue('abilityPts', 0)
 

@@ -9,39 +9,13 @@
           <and>
             <or>
               <results>
-                <title>
-                  <key>	#personal_missions_details:quest_3_5_14_condition_title_stunDuration	</key>
-                </title>
-                <description>
-                  <key>	#personal_missions_details:quest_3_5_14_condition_description_stunDuration	</key>
-                </description>
                 <key>	stunDuration	</key>
                 <greaterOrEqual>	180	</greaterOrEqual>
               </results>
               <results>
-                <title>
-                  <key>	#personal_missions_details:quest_common_condition_title_unit_damageAssistedTrack	</key>
-                </title>
-                <description>
-                  <key>	#personal_missions_details:quest_3_5_14_condition_description_damageAssistedTrack	</key>
-                </description>
                 <key>	damageAssistedTrack	</key>
                 <greaterOrEqual>	800	</greaterOrEqual>
               </results>
-              <unit>
-                <results>
-                  <hideInGui></hideInGui>
-                  <key>	stunDuration	</key>
-                  <greaterOrEqual>	180	</greaterOrEqual>
-                </results>
-              </unit>
-              <unit>
-                <results>
-                  <hideInGui></hideInGui>
-                  <key>	damageAssistedTrack	</key>
-                  <greaterOrEqual>	800	</greaterOrEqual>
-                </results>
-              </unit>
             </or>
           </and>
         </postBattle>
@@ -91,39 +65,13 @@
           <and>
             <or>
               <results>
-                <title>
-                  <key>	#personal_missions_details:quest_3_5_14_condition_title_stunDuration	</key>
-                </title>
-                <description>
-                  <key>	#personal_missions_details:quest_3_5_14_condition_description_stunDuration	</key>
-                </description>
                 <key>	stunDuration	</key>
                 <greaterOrEqual>	180	</greaterOrEqual>
               </results>
               <results>
-                <title>
-                  <key>	#personal_missions_details:quest_common_condition_title_unit_damageAssistedTrack	</key>
-                </title>
-                <description>
-                  <key>	#personal_missions_details:quest_3_5_14_condition_description_damageAssistedTrack	</key>
-                </description>
                 <key>	damageAssistedTrack	</key>
                 <greaterOrEqual>	800	</greaterOrEqual>
               </results>
-              <unit>
-                <results>
-                  <hideInGui></hideInGui>
-                  <key>	stunDuration	</key>
-                  <greaterOrEqual>	180	</greaterOrEqual>
-                </results>
-              </unit>
-              <unit>
-                <results>
-                  <hideInGui></hideInGui>
-                  <key>	damageAssistedTrack	</key>
-                  <greaterOrEqual>	800	</greaterOrEqual>
-                </results>
-              </unit>
             </or>
             <win></win>
           </and>
@@ -165,18 +113,6 @@
                 <key>	damageAssistedTrack	</key>
                 <greaterOrEqual>	800	</greaterOrEqual>
               </results>
-              <unit>
-                <results>
-                  <key>	stunDuration	</key>
-                  <greaterOrEqual>	180	</greaterOrEqual>
-                </results>
-              </unit>
-              <unit>
-                <results>
-                  <key>	damageAssistedTrack	</key>
-                  <greaterOrEqual>	800	</greaterOrEqual>
-                </results>
-              </unit>
             </or>
             <win></win>
           </and>

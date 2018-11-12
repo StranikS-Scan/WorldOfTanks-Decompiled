@@ -13,6 +13,7 @@ from gui.shared import g_eventBus, EVENT_BUS_SCOPE
 from skeletons.account_helpers.settings_core import ISettingsCore
 from helpers import dependency
 from AvatarInputHandler.cameras import FovExtended
+from gui.hangar_cameras.hangar_camera_manager import IMMEDIATE_CAMERA_MOVEMENT_MODE
 from skeletons.gui.shared.utils import IHangarSpace
 
 def normalizeAngle(angle):
@@ -225,7 +226,7 @@ class ClientSelectableCameraObject(ClientSelectableObject, CallbackDelayer, Time
     def __teleportHangarSpaceCamera(self):
         yaw = self.cameraYaw
         pitch = -1 * self.cameraPitch
-        self.hangarSpace.space.setCameraLocation(self.__goalTarget, self.cameraPivot, yaw, pitch, self.__goalDistance, None, False, False)
+        self.hangarSpace.space.setCameraLocation(self.__goalTarget, self.cameraPivot, yaw, pitch, self.__goalDistance, None, False, IMMEDIATE_CAMERA_MOVEMENT_MODE)
         return
 
     def __update(self):

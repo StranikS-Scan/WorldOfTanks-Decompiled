@@ -206,7 +206,7 @@ class StoreItemsTab(object):
         if item.isRentable and item.isRentAvailable:
             minRentPricePackage = item.getRentPackage()
             if minRentPricePackage:
-                actionPrc = item.getRentPackageActionPrc(minRentPricePackage['days'])
+                actionPrc = item.getRentPackageActionPrc(minRentPricePackage['rentID'])
                 if actionPrc > 0:
                     return Money(gold=actionPrc)
         return MONEY_UNDEFINED
@@ -301,7 +301,7 @@ class StoreVehicleTab(StoreItemsTab):
             discountText = ''
             if minRentPricePackage:
                 minRentPriceValue = minRentPricePackage['rentPrice']
-                actionPrc = item.getRentPackageActionPrc(minRentPricePackage['days'])
+                actionPrc = item.getRentPackageActionPrc(minRentPricePackage['rentID'])
                 currency = minRentPriceValue.getCurrency()
                 price = minRentPriceValue.getSignValue(currency)
                 priceText = makeHtmlString('html_templates:lobby/quests/actions', currency, {'value': price})

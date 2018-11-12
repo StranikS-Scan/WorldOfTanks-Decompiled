@@ -66,6 +66,7 @@ class _SmokeDebugVisualization(object):
 class SmokeScreen(object):
     guiSessionProvider = dependency.descriptor(IBattleSessionProvider)
     vignetteEnabled = False
+    renderSettings = BigWorld.WGRenderSettings()
 
     def __init__(self, smokeId, args):
         self.__args = args
@@ -119,7 +120,7 @@ class SmokeScreen(object):
             return
         SmokeScreen.vignetteEnabled = enabled
         if enabled:
-            SmokeScreen.defaultVignetteParams = BigWorld.getVignettSettings()
-            BigWorld.setVignettSettings(_SMOKE_VIGNETTE_PARAMS)
+            SmokeScreen.defaultVignetteParams = SmokeScreen.renderSettings.getVignetteSettings()
+            SmokeScreen.renderSettings.setVignetteSettings(_SMOKE_VIGNETTE_PARAMS)
         else:
-            BigWorld.setVignettSettings(SmokeScreen.defaultVignetteParams)
+            SmokeScreen.renderSettings.setVignetteSettings(SmokeScreen.defaultVignetteParams)

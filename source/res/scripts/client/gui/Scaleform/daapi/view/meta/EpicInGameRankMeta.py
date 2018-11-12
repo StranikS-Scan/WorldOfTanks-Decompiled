@@ -4,14 +4,14 @@ from gui.Scaleform.framework.entities.BaseDAAPIComponent import BaseDAAPICompone
 
 class EpicInGameRankMeta(BaseDAAPIComponent):
 
-    def as_setRankTextsS(self, rankTexts):
-        return self.flashObject.as_setRankTexts(rankTexts) if self._isDAAPIInited() else None
+    def levelUpAnimationComplete(self):
+        self._printOverrideError('levelUpAnimationComplete')
 
-    def as_setRankExperienceLevelsS(self, levelCaps):
-        return self.flashObject.as_setRankExperienceLevels(levelCaps) if self._isDAAPIInited() else None
+    def as_triggerLevelUpS(self, previousProgress):
+        return self.flashObject.as_triggerLevelUp(previousProgress) if self._isDAAPIInited() else None
 
-    def as_initRankS(self, progress):
-        return self.flashObject.as_initRank(progress) if self._isDAAPIInited() else None
+    def as_updateProgressS(self, previousProgress, currentProgress):
+        return self.flashObject.as_updateProgress(previousProgress, currentProgress) if self._isDAAPIInited() else None
 
-    def as_updatePlayerExperienceS(self, progress):
-        return self.flashObject.as_updatePlayerExperience(progress) if self._isDAAPIInited() else None
+    def as_setRankS(self, data):
+        return self.flashObject.as_setRank(data) if self._isDAAPIInited() else None

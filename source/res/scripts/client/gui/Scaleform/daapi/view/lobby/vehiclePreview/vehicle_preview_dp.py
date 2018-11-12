@@ -98,7 +98,7 @@ class DefaultVehPreviewDataProvider(IVehPreviewDataProvider):
 
     def __packTabButtonsData(self, vehicle):
         data = []
-        isPremium = vehicle.isPremium and (not vehicle.isHidden or vehicle.isRentable or vehicle.isRestorePossible())
+        isPremium = vehicle.isPremium and (not vehicle.isHidden or vehicle.isRentable) and not vehicle.isSpecial
         tabMapping = TAB_DATA_MAP_ELITE if isPremium else TAB_DATA_MAP
         for idx in TAB_ORDER:
             linkage, label = tabMapping[idx]

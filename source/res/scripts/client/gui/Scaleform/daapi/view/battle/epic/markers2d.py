@@ -148,7 +148,7 @@ class SectorBasesPlugin(EpicMissionsPlugin):
                 inCircle, _ = progressCtrl.getPlayerCircleState(PROGRESS_CIRCLE_TYPE.SECTOR_BASE_CIRCLE, base.baseID)
                 if inCircle:
                     self.__onVehicleEntered(PROGRESS_CIRCLE_TYPE.SECTOR_BASE_CIRCLE, base.baseID, None)
-                self.__onSectorBaseAdded(base)
+                self.__onSectorBaseAdded(base, isInBase=inCircle)
                 if base.capturePercentage > 0:
                     self.__onSectorBasePointsUpdate(base.baseID, base.isPlayerTeam(), base.capturePercentage, base.capturingStopped, 0, '')
 
@@ -219,17 +219,17 @@ class SectorBasesPlugin(EpicMissionsPlugin):
                 self._invokeMarker(handle, 'notifyVehicleInCircle', False)
             return
 
-    def __onSectorBaseAdded(self, sectorBase):
+    def __onSectorBaseAdded(self, sectorBase, isInBase=False):
         handle = self._createMarkerWithPosition(settings.MARKER_SYMBOL_NAME.SECTOR_BASE_TYPE, sectorBase.position + settings.MARKER_POSITION_ADJUSTMENT)
         if handle is None:
             return
         else:
-            self._setMarkerSticky(handle, False)
+            self._setMarkerSticky(handle, isInBase)
             self._setMarkerActive(handle, sectorBase.active())
             self._setMarkerMinScale(handle, 100)
             self._invokeMarker(handle, 'setOwningTeam', sectorBase.isPlayerTeam())
             self._invokeMarker(handle, 'setIdentifier', sectorBase.baseID)
-            self._invokeMarker(handle, 'setActive', False)
+            self._invokeMarker(handle, 'setActive', isInBase)
             self.__markers[sectorBase.baseID] = handle
             self.__checkPlayerInsideCircle(sectorBase.baseID)
             return

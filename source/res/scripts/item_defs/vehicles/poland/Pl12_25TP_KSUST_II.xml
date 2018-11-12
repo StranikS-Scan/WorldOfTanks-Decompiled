@@ -95,7 +95,7 @@
       </slot>
       <slot>
         <slotType>	camouflage	</slotType>
-        <slotId>	16	</slotId>
+        <slotId>	3	</slotId>
         <anchorPosition>	0.000000 0.368418 -2.35218	</anchorPosition>
         <anchorDirection>	0.000000 0.154742 -0.987955	</anchorDirection>
       </slot>
@@ -275,12 +275,47 @@
         <damping>	2	</damping>
         <node>
           <isLeft>	true	</isLeft>
-          <name>	Track_VD_L0	</name>
-          <offset>	-0.0372928	</offset>
+          <name>	Track_VT_L0	</name>
+          <forwardElastK>	0.9	</forwardElastK>
+          <backwardElastK>	1.6	</backwardElastK>
+          <offset>	-0.0501859	</offset>
         </node>
         <node>
           <isLeft>	false	</isLeft>
           <name>	Track_VD_R0	</name>
+          <offset>	-0.0372928	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L1	</name>
+          <forwardElastK>	0.9	</forwardElastK>
+          <backwardElastK>	1.7	</backwardElastK>
+          <offset>	-0.0501859	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L2	</name>
+          <forwardElastK>	0.9	</forwardElastK>
+          <backwardElastK>	1.8	</backwardElastK>
+          <offset>	-0.0501859	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L3	</name>
+          <forwardElastK>	0.9	</forwardElastK>
+          <backwardElastK>	1.9	</backwardElastK>
+          <offset>	-0.0501859	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L4	</name>
+          <forwardElastK>	0.9	</forwardElastK>
+          <backwardElastK>	2	</backwardElastK>
+          <offset>	-0.0501859	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L0	</name>
           <offset>	-0.0372928	</offset>
         </node>
         <node>
@@ -298,62 +333,35 @@
           <name>	Track_VT_R0	</name>
           <forwardElastK>	0.9	</forwardElastK>
           <backwardElastK>	1.6	</backwardElastK>
-          <offset>	0.000000	</offset>
+          <offset>	-0.0501859	</offset>
         </node>
         <node>
           <isLeft>	false	</isLeft>
           <name>	Track_VT_R1	</name>
           <forwardElastK>	0.9	</forwardElastK>
           <backwardElastK>	1.7	</backwardElastK>
+          <offset>	-0.0501859	</offset>
         </node>
         <node>
           <isLeft>	false	</isLeft>
           <name>	Track_VT_R2	</name>
           <forwardElastK>	0.9	</forwardElastK>
           <backwardElastK>	1.8	</backwardElastK>
+          <offset>	-0.0501859	</offset>
         </node>
         <node>
           <isLeft>	false	</isLeft>
           <name>	Track_VT_R3	</name>
           <forwardElastK>	0.9	</forwardElastK>
           <backwardElastK>	1.9	</backwardElastK>
+          <offset>	-0.0501859	</offset>
         </node>
         <node>
           <isLeft>	false	</isLeft>
           <name>	Track_VT_R4	</name>
           <forwardElastK>	0.9	</forwardElastK>
           <backwardElastK>	2	</backwardElastK>
-        </node>
-        <node>
-          <isLeft>	true	</isLeft>
-          <name>	Track_VT_L0	</name>
-          <forwardElastK>	0.9	</forwardElastK>
-          <backwardElastK>	1.6	</backwardElastK>
-          <offset>	0.000000	</offset>
-        </node>
-        <node>
-          <isLeft>	true	</isLeft>
-          <name>	Track_VT_L1	</name>
-          <forwardElastK>	0.9	</forwardElastK>
-          <backwardElastK>	1.7	</backwardElastK>
-        </node>
-        <node>
-          <isLeft>	true	</isLeft>
-          <name>	Track_VT_L2	</name>
-          <forwardElastK>	0.9	</forwardElastK>
-          <backwardElastK>	1.8	</backwardElastK>
-        </node>
-        <node>
-          <isLeft>	true	</isLeft>
-          <name>	Track_VT_L3	</name>
-          <forwardElastK>	0.9	</forwardElastK>
-          <backwardElastK>	1.9	</backwardElastK>
-        </node>
-        <node>
-          <isLeft>	true	</isLeft>
-          <name>	Track_VT_L4	</name>
-          <forwardElastK>	0.9	</forwardElastK>
-          <backwardElastK>	2	</backwardElastK>
+          <offset>	-0.0501859	</offset>
         </node>
       </trackNodes>
       <physicalTracks>
@@ -1017,7 +1025,7 @@
       <customizationSlots>
         <slot>
           <slotType>	style	</slotType>
-          <slotId>	14	</slotId>
+          <slotId>	257	</slotId>
           <anchorPosition>	0.000168959 2.49456 0.380004	</anchorPosition>
           <anchorDirection>	0.000000 1 -0.000000	</anchorDirection>
         </slot>
@@ -1189,6 +1197,76 @@
         <damping>	2	</damping>
         <node>
           <isLeft>	true	</isLeft>
+          <name>	Track_VT_L0	</name>
+          <forwardElastK>	0.9	</forwardElastK>
+          <backwardElastK>	1.6	</backwardElastK>
+          <offset>	-0.05	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R0	</name>
+          <forwardElastK>	0.9	</forwardElastK>
+          <backwardElastK>	1.6	</backwardElastK>
+          <offset>	-0.05	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L1	</name>
+          <forwardElastK>	0.9	</forwardElastK>
+          <backwardElastK>	1.7	</backwardElastK>
+          <offset>	-0.05	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L2	</name>
+          <forwardElastK>	0.9	</forwardElastK>
+          <backwardElastK>	1.8	</backwardElastK>
+          <offset>	-0.05	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L3	</name>
+          <forwardElastK>	0.9	</forwardElastK>
+          <backwardElastK>	1.9	</backwardElastK>
+          <offset>	-0.05	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L4	</name>
+          <forwardElastK>	0.9	</forwardElastK>
+          <backwardElastK>	2	</backwardElastK>
+          <offset>	-0.05	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R1	</name>
+          <forwardElastK>	0.9	</forwardElastK>
+          <backwardElastK>	1.7	</backwardElastK>
+          <offset>	-0.05	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R2	</name>
+          <forwardElastK>	0.9	</forwardElastK>
+          <backwardElastK>	1.8	</backwardElastK>
+          <offset>	-0.05	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R3	</name>
+          <forwardElastK>	0.9	</forwardElastK>
+          <backwardElastK>	1.9	</backwardElastK>
+          <offset>	-0.05	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R4	</name>
+          <forwardElastK>	0.9	</forwardElastK>
+          <backwardElastK>	2	</backwardElastK>
+          <offset>	-0.05	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
           <name>	Track_VD_L0	</name>
           <offset>	-0.0441989	</offset>
         </node>
@@ -1206,68 +1284,6 @@
           <isLeft>	false	</isLeft>
           <name>	Track_VD_R1	</name>
           <offset>	-0.0262431	</offset>
-        </node>
-        <node>
-          <isLeft>	false	</isLeft>
-          <name>	Track_VT_R0	</name>
-          <forwardElastK>	0.9	</forwardElastK>
-          <backwardElastK>	1.6	</backwardElastK>
-          <offset>	0.000000	</offset>
-        </node>
-        <node>
-          <isLeft>	false	</isLeft>
-          <name>	Track_VT_R1	</name>
-          <forwardElastK>	0.9	</forwardElastK>
-          <backwardElastK>	1.7	</backwardElastK>
-        </node>
-        <node>
-          <isLeft>	false	</isLeft>
-          <name>	Track_VT_R2	</name>
-          <forwardElastK>	0.9	</forwardElastK>
-          <backwardElastK>	1.8	</backwardElastK>
-        </node>
-        <node>
-          <isLeft>	false	</isLeft>
-          <name>	Track_VT_R3	</name>
-          <forwardElastK>	0.9	</forwardElastK>
-          <backwardElastK>	1.9	</backwardElastK>
-        </node>
-        <node>
-          <isLeft>	false	</isLeft>
-          <name>	Track_VT_R4	</name>
-          <forwardElastK>	0.9	</forwardElastK>
-          <backwardElastK>	2	</backwardElastK>
-        </node>
-        <node>
-          <isLeft>	true	</isLeft>
-          <name>	Track_VT_L0	</name>
-          <forwardElastK>	0.9	</forwardElastK>
-          <backwardElastK>	1.6	</backwardElastK>
-          <offset>	0.000000	</offset>
-        </node>
-        <node>
-          <isLeft>	true	</isLeft>
-          <name>	Track_VT_L1	</name>
-          <forwardElastK>	0.9	</forwardElastK>
-          <backwardElastK>	1.7	</backwardElastK>
-        </node>
-        <node>
-          <isLeft>	true	</isLeft>
-          <name>	Track_VT_L2	</name>
-          <forwardElastK>	0.9	</forwardElastK>
-          <backwardElastK>	1.8	</backwardElastK>
-        </node>
-        <node>
-          <isLeft>	true	</isLeft>
-          <name>	Track_VT_L3	</name>
-          <forwardElastK>	0.9	</forwardElastK>
-          <backwardElastK>	1.9	</backwardElastK>
-        </node>
-        <node>
-          <isLeft>	true	</isLeft>
-          <name>	Track_VT_L4	</name>
-          <forwardElastK>	0.9	</forwardElastK>
-          <backwardElastK>	2	</backwardElastK>
         </node>
       </trackNodes>
       <physicalTracks>
@@ -1931,7 +1947,7 @@
       <customizationSlots>
         <slot>
           <slotType>	style	</slotType>
-          <slotId>	15	</slotId>
+          <slotId>	257	</slotId>
           <anchorPosition>	0.000180005 2.49456 0.37999	</anchorPosition>
           <anchorDirection>	-0.000000 1 0.000000	</anchorDirection>
         </slot>
@@ -2030,7 +2046,7 @@
           <customizationSlots>
             <slot>
               <slotType>	insigniaOnGun	</slotType>
-              <slotId>	6	</slotId>
+              <slotId>	771	</slotId>
               <rayStart>	0.000000 0.00635382 1.686	</rayStart>
               <rayEnd>	0.0765822 -0.133325 1.65868	</rayEnd>
               <rayUp>	0.044 0.041 5	</rayUp>
@@ -2040,7 +2056,7 @@
             </slot>
             <slot>
               <slotType>	camouflage	</slotType>
-              <slotId>	18	</slotId>
+              <slotId>	770	</slotId>
               <anchorPosition>	0.000000 0.00317717 1.21151	</anchorPosition>
               <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
               <applyTo>	4096	</applyTo>
@@ -2073,7 +2089,7 @@
       <customizationSlots>
         <slot>
           <slotType>	player	</slotType>
-          <slotId>	2	</slotId>
+          <slotId>	514	</slotId>
           <rayStart>	-0.989201 0.495796 0.41583	</rayStart>
           <rayEnd>	-0.605372 0.410998 0.34178	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
@@ -2083,7 +2099,7 @@
         </slot>
         <slot>
           <slotType>	inscription	</slotType>
-          <slotId>	3	</slotId>
+          <slotId>	546	</slotId>
           <rayStart>	-0.994826 0.508926 -0.383378	</rayStart>
           <rayEnd>	-0.610637 0.425979 -0.30912	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
@@ -2093,7 +2109,7 @@
         </slot>
         <slot>
           <slotType>	player	</slotType>
-          <slotId>	4	</slotId>
+          <slotId>	515	</slotId>
           <rayStart>	0.989201 0.495796 0.41583	</rayStart>
           <rayEnd>	0.605372 0.410998 0.34178	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
@@ -2104,7 +2120,7 @@
         </slot>
         <slot>
           <slotType>	inscription	</slotType>
-          <slotId>	5	</slotId>
+          <slotId>	547	</slotId>
           <rayStart>	0.994826 0.508926 -0.383378	</rayStart>
           <rayEnd>	0.610637 0.425979 -0.30912	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
@@ -2114,7 +2130,7 @@
         </slot>
         <slot>
           <slotType>	camouflage	</slotType>
-          <slotId>	17	</slotId>
+          <slotId>	513	</slotId>
           <anchorPosition>	0.000000 0.975839 0.000000	</anchorPosition>
           <anchorDirection>	0.000000 1 0.000000	</anchorDirection>
         </slot>
@@ -2217,7 +2233,7 @@
           <customizationSlots>
             <slot>
               <slotType>	insigniaOnGun	</slotType>
-              <slotId>	11	</slotId>
+              <slotId>	771	</slotId>
               <rayStart>	0.000033 0.00551366 1.68562	</rayStart>
               <rayEnd>	-0.141004 -0.0689919 1.68084	</rayEnd>
               <rayUp>	0.044 0.041 5	</rayUp>
@@ -2227,7 +2243,7 @@
             </slot>
             <slot>
               <slotType>	camouflage	</slotType>
-              <slotId>	20	</slotId>
+              <slotId>	770	</slotId>
               <anchorPosition>	0.000016 0.0027566 1.21151	</anchorPosition>
               <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
               <applyTo>	4096	</applyTo>
@@ -2287,7 +2303,7 @@
           <customizationSlots>
             <slot>
               <slotType>	insigniaOnGun	</slotType>
-              <slotId>	12	</slotId>
+              <slotId>	771	</slotId>
               <rayStart>	-0.000046 0.0431026 1.46199	</rayStart>
               <rayEnd>	0.125502 0.000236236 1.45789	</rayEnd>
               <rayUp>	0.071 0.067 5	</rayUp>
@@ -2297,7 +2313,7 @@
             </slot>
             <slot>
               <slotType>	camouflage	</slotType>
-              <slotId>	21	</slotId>
+              <slotId>	770	</slotId>
               <anchorPosition>	-0.000023 0.0215516 0.99524	</anchorPosition>
               <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
               <applyTo>	4096	</applyTo>
@@ -2348,7 +2364,7 @@
           <customizationSlots>
             <slot>
               <slotType>	insigniaOnGun	</slotType>
-              <slotId>	13	</slotId>
+              <slotId>	771	</slotId>
               <rayStart>	0.000035 -0.00722336 2.50928	</rayStart>
               <rayEnd>	0.103339 -0.089305 2.50495	</rayEnd>
               <rayUp>	0.073 0.068 5	</rayUp>
@@ -2358,7 +2374,7 @@
             </slot>
             <slot>
               <slotType>	camouflage	</slotType>
-              <slotId>	22	</slotId>
+              <slotId>	770	</slotId>
               <anchorPosition>	0.000017 -0.0036118 1.81	</anchorPosition>
               <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
               <applyTo>	4096	</applyTo>
@@ -2388,7 +2404,7 @@
       <customizationSlots>
         <slot>
           <slotType>	player	</slotType>
-          <slotId>	7	</slotId>
+          <slotId>	514	</slotId>
           <rayStart>	-0.867107 0.784694 -0.595403	</rayStart>
           <rayEnd>	-0.473855 0.72209 -0.557559	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
@@ -2398,7 +2414,7 @@
         </slot>
         <slot>
           <slotType>	player	</slotType>
-          <slotId>	8	</slotId>
+          <slotId>	515	</slotId>
           <rayStart>	0.867107 0.784694 -0.595403	</rayStart>
           <rayEnd>	0.473855 0.72209 -0.557559	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
@@ -2409,7 +2425,7 @@
         </slot>
         <slot>
           <slotType>	inscription	</slotType>
-          <slotId>	9	</slotId>
+          <slotId>	546	</slotId>
           <rayStart>	-0.969291 0.388519 0.162342	</rayStart>
           <rayEnd>	-0.585023 0.317892 0.0766364	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
@@ -2419,7 +2435,7 @@
         </slot>
         <slot>
           <slotType>	inscription	</slotType>
-          <slotId>	10	</slotId>
+          <slotId>	547	</slotId>
           <rayStart>	0.966927 0.380227 0.179778	</rayStart>
           <rayEnd>	0.582659 0.309599 0.0940719	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
@@ -2429,7 +2445,7 @@
         </slot>
         <slot>
           <slotType>	camouflage	</slotType>
-          <slotId>	19	</slotId>
+          <slotId>	513	</slotId>
           <anchorPosition>	0.000000 1.20887 -0.000000	</anchorPosition>
           <anchorDirection>	0.000000 1 0.000000	</anchorDirection>
         </slot>
@@ -2464,13 +2480,16 @@
       <engines>
         <Maybach_HL_108>
           <smplEnginePower>	450	</smplEnginePower>
+          <smplFwMaxSpeed>	56	</smplFwMaxSpeed>
         </Maybach_HL_108>
         <Rytla_Wernera>
           <smplEnginePower>	500	</smplEnginePower>
+          <smplFwMaxSpeed>	56	</smplFwMaxSpeed>
         </Rytla_Wernera>
       </engines>
       <chassis>
         <Chassis_Pl12_25TP_KSUST_II>
+          <axleCount>	5	</axleCount>
           <grounds>
             <ground>
               <medium>
@@ -2505,6 +2524,7 @@
           </grounds>
         </Chassis_Pl12_25TP_KSUST_II>
         <Chassis_Pl12_25TP_KSUST_II_2>
+          <axleCount>	5	</axleCount>
           <grounds>
             <ground>
               <medium>

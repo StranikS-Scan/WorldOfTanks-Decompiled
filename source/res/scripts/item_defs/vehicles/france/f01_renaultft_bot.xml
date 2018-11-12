@@ -89,7 +89,7 @@
       </slot>
       <slot>
         <slotType>	inscription	</slotType>
-        <slotId>	2	</slotId>
+        <slotId>	36	</slotId>
         <rayStart>	-0.00646973 0.322969 1.05163	</rayStart>
         <rayEnd>	-0.00646973 -0.0596208 0.934895	</rayEnd>
         <rayUp>	0.000000 0.000000 -1	</rayUp>
@@ -854,7 +854,7 @@
       <customizationSlots>
         <slot>
           <slotType>	player	</slotType>
-          <slotId>	3	</slotId>
+          <slotId>	514	</slotId>
           <rayStart>	-0.684026 0.276667 -0.00522991	</rayStart>
           <rayEnd>	-0.291583 0.199379 -0.00870136	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
@@ -864,7 +864,7 @@
         </slot>
         <slot>
           <slotType>	player	</slotType>
-          <slotId>	4	</slotId>
+          <slotId>	515	</slotId>
           <rayStart>	0.684026 0.276667 -0.00522991	</rayStart>
           <rayEnd>	0.291583 0.199379 -0.00870136	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
@@ -890,6 +890,7 @@
       <engines>
         <Renault_bot>
           <smplEnginePower>	41.23396	</smplEnginePower>
+          <smplFwMaxSpeed>	21	</smplFwMaxSpeed>
         </Renault_bot>
       </engines>
       <chassis>

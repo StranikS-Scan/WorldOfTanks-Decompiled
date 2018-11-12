@@ -4,7 +4,7 @@ from gui.Scaleform.daapi.view.lobby.popover.SmartPopOverView import SmartPopOver
 
 class VehicleSelectPopoverMeta(SmartPopOverView):
 
-    def setVehicleSelected(self, dbID):
+    def setVehicleSelected(self, dbID, autoClose):
         self._printOverrideError('setVehicleSelected')
 
     def applyFilters(self, nation, vehicleType, level, isMain, hangarOnly):

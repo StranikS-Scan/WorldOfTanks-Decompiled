@@ -4,11 +4,11 @@ from gui.Scaleform.daapi.view.meta.WrapperViewMeta import WrapperViewMeta
 
 class EpicBattlesInfoViewMeta(WrapperViewMeta):
 
-    def onCloseBtnClick(self):
-        self._printOverrideError('onCloseBtnClick')
-
     def onEscapePress(self):
         self._printOverrideError('onEscapePress')
+
+    def onCloseBtnClick(self):
+        self._printOverrideError('onCloseBtnClick')
 
     def onManageAbilitiesBtnClick(self):
         self._printOverrideError('onManageAbilitiesBtnClick')
@@ -16,20 +16,14 @@ class EpicBattlesInfoViewMeta(WrapperViewMeta):
     def onPrestigeBtnClick(self):
         self._printOverrideError('onPrestigeBtnClick')
 
-    def onSeeRewardsBtnClick(self):
-        self._printOverrideError('onSeeRewardsBtnClick')
+    def onGameRewardsBtnClick(self):
+        self._printOverrideError('onGameRewardsBtnClick')
 
-    def onReadIntroBtnClick(self):
-        self._printOverrideError('onReadIntroBtnClick')
-
-    def onButtonWelcomeAnimationDone(self):
-        self._printOverrideError('onButtonWelcomeAnimationDone')
-
-    def onButtonsElementWelcomeAnimationDone(self):
-        self._printOverrideError('onButtonsElementWelcomeAnimationDone')
-
-    def onMetaElementWelcomeAnimationDone(self):
-        self._printOverrideError('onMetaElementWelcomeAnimationDone')
+    def onInfoBtnClick(self):
+        self._printOverrideError('onInfoBtnClick')
 
     def as_setDataS(self, data):
         return self.flashObject.as_setData(data) if self._isDAAPIInited() else None
+
+    def as_showInfoLinesS(self, show):
+        return self.flashObject.as_showInfoLines(show) if self._isDAAPIInited() else None

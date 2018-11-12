@@ -56,6 +56,7 @@
     <_152mm_59_152JG_FT>	58	</_152mm_59_152JG_FT>
     <_122-mm_60-122TP>	59	</_122-mm_60-122TP>
     <_130mm_59_130TA_QL>	60	</_130mm_59_130TA_QL>
+    <_76mm_M32K1>	61	</_76mm_M32K1>
     <_122mm_60_122T_113>	254	</_122mm_60_122T_113>
     <_100mm_60-100TA_IGR>	60001	</_100mm_60-100TA_IGR>
     <_100mm_62-100T_IGR>	60002	</_100mm_62-100T_IGR>
@@ -1194,6 +1195,64 @@
         </_76mm_HE_M42A1>
       </shots>
     </_76mm_Gun_Type64>
+    <_76mm_M32K1>
+      <userString>	#china_vehicles:_76mm_M32K1	</userString>
+      <tags></tags>
+      <level>	8	</level>
+      <price>	96000	</price>
+      <notInShop>	true	</notInShop>
+      <impulse>	0.48	</impulse>
+      <recoil>
+        <lodDist>	MEDIUM	</lodDist>
+        <amplitude>	0.36	</amplitude>
+        <recoilEffect>	medium	</recoilEffect>
+      </recoil>
+      <effects>	shot_medium_mb	</effects>
+      <reloadEffect>	reload50_75	</reloadEffect>
+      <pitchLimits>
+        <minPitch>	0.0 -15.0 1.0 -15.0	</minPitch>
+        <maxPitch>	0.0 10.0 1.0 10.0	</maxPitch>
+      </pitchLimits>
+      <turretYawLimits>	-180 180	</turretYawLimits>
+      <rotationSpeed>	40.25	</rotationSpeed>
+      <reloadTime>	4.6	</reloadTime>
+      <maxAmmo>	75	</maxAmmo>
+      <aimingTime>	1.5	</aimingTime>
+      <weight>	850	</weight>
+      <maxHealth>	130	</maxHealth>
+      <maxRegenHealth>	65	</maxRegenHealth>
+      <repairCost>	5	</repairCost>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
+      <shotDispersionRadius>	0.35	</shotDispersionRadius>
+      <shotDispersionFactors>
+        <turretRotation>	0.06	</turretRotation>
+        <afterShot>	3.0	</afterShot>
+        <whileGunDamaged>	2.0	</whileGunDamaged>
+      </shotDispersionFactors>
+      <shots>
+        <_76mm_APDS_T_M331>
+          <defaultPortion>	0.95	</defaultPortion>
+          <speed>	1257	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	186 173	</piercingPower>
+        </_76mm_APDS_T_M331>
+        <_76mm_APFSDS_T_M464>
+          <defaultPortion>	0.0	</defaultPortion>
+          <speed>	1433	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	220 205	</piercingPower>
+        </_76mm_APFSDS_T_M464>
+        <_76mm_HE_M352>
+          <defaultPortion>	0.05	</defaultPortion>
+          <speed>	732	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	38 38	</piercingPower>
+        </_76mm_HE_M352>
+      </shots>
+    </_76mm_M32K1>
     <_85mm_Tip_62-85TS>
       <userString>	#china_vehicles:_85mm_Tip_62-85TS	</userString>
       <tags></tags>

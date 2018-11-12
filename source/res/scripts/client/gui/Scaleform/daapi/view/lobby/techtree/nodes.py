@@ -141,7 +141,7 @@ class RealNode(ExposedNode):
         return self.__item.level
 
     def getTypeName(self):
-        return self.__item.itemTypeName
+        return self.__item.getGUIEmblemID()
 
     def getShortUserName(self):
         return self.__item.shortUserName

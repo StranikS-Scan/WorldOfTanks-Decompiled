@@ -8,12 +8,6 @@
         <postBattle>
           <and>
             <results>
-              <title>
-                <key>	#personal_missions_details:quest_common_condition_title_complexAssist	</key>
-              </title>
-              <description>
-                <key>	#personal_missions_details:quest_4_1_6_condition_description_damage_complexAssist	</key>
-              </description>
               <plus>
                 <key>	damagedVehicleCntAssistedTrack	</key>
                 <key>	damagedVehicleCntAssistedRadio	</key>
@@ -75,12 +69,6 @@
         <postBattle>
           <and>
             <results>
-              <title>
-                <key>	#personal_missions_details:quest_common_condition_title_complexAssist	</key>
-              </title>
-              <description>
-                <key>	#personal_missions_details:quest_4_1_6_condition_description_damage_complexAssist	</key>
-              </description>
               <plus>
                 <key>	damagedVehicleCntAssistedTrack	</key>
                 <key>	damagedVehicleCntAssistedRadio	</key>
@@ -88,12 +76,6 @@
               <greaterOrEqual>	6	</greaterOrEqual>
             </results>
             <results>
-              <title>
-                <key>	#personal_missions_details:quest_common_condition_title_complexAssist	</key>
-              </title>
-              <description>
-                <key>	#personal_missions_details:quest_4_1_6_condition_description_kills_complexAssist	</key>
-              </description>
               <plus>
                 <key>	killsAssistedTrack	</key>
                 <key>	killsAssistedRadio	</key>

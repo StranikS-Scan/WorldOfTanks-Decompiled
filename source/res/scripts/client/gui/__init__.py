@@ -138,7 +138,6 @@ def getGuiServicesConfig(manager):
     manager.addConfig(login.getLoginManagerConfig)
     manager.addConfig(server_events.getServerEventsConfig)
     manager.addConfig(server_events.getLinkedSetController)
-    manager.addConfig(server_events.getHalloweenController)
     manager.addConfig(battle_control.getBattleSessionConfig)
     manager.addConfig(sounds.getSoundsConfig)
     manager.addConfig(wgcg.getWebServicesConfig)

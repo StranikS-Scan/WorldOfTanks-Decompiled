@@ -315,7 +315,7 @@ def packItemRentActionTooltipData(item, rentPackage):
      'state': states,
      'newPrice': price,
      'oldPrice': defaultPrice,
-     'rentPackage': rentPackage['days']}
+     'rentPackage': rentPackage['rentID']}
 
 
 def packImageListParameterBlockData(listIconSrc, columnWidth, rowHeight, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_TILE_LIST_BLOCK_LINKAGE, padding=None, verticalGap=0, horizontalGap=0):

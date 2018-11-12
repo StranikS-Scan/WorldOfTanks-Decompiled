@@ -202,13 +202,13 @@ class VehicleContextMenuHandler(SimpleVehicleCMHandler):
                 if vehicle.intCD in wasInBattleSet:
                     vehicleWasInBattle = True
             if vehicle is not None:
-                options.extend([self._makeItem(VEHICLE.INFO, MENU.contextmenu(VEHICLE.INFO), {'enabled': vehicle.isContextMenuEnabled(VEHICLE.INFO)}), self._makeItem(VEHICLE.STATS, MENU.contextmenu(VEHICLE.STATS), {'enabled': vehicleWasInBattle}), self._makeSeparator()])
+                options.extend([self._makeItem(VEHICLE.INFO, MENU.contextmenu(VEHICLE.INFO)), self._makeItem(VEHICLE.STATS, MENU.contextmenu(VEHICLE.STATS), {'enabled': vehicleWasInBattle}), self._makeSeparator()])
                 self._manageVehCompareOptions(options, vehicle)
                 if self.prbDispatcher is not None:
                     isNavigationEnabled = not self.prbDispatcher.getFunctionalState().isNavigationDisabled()
                 else:
                     isNavigationEnabled = True
-                options.append(self._makeItem(VEHICLE.RESEARCH, MENU.contextmenu(VEHICLE.RESEARCH), {'enabled': isNavigationEnabled and vehicle.isContextMenuEnabled(VEHICLE.RESEARCH)}))
+                options.append(self._makeItem(VEHICLE.RESEARCH, MENU.contextmenu(VEHICLE.RESEARCH), {'enabled': isNavigationEnabled}))
                 if vehicle.isRented:
                     if not vehicle.isPremiumIGR:
                         items = self.itemsCache.items

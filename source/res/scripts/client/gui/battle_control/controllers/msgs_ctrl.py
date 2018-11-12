@@ -4,7 +4,6 @@ import weakref
 import BattleReplay
 import BigWorld
 import Event
-import event_points_event_type as _eventType
 from ReplayEvents import g_replayEvents
 from constants import ATTACK_REASON_INDICES as _AR_INDICES
 from gui.battle_control.battle_constants import BATTLE_CTRL_ID
@@ -34,13 +33,9 @@ _ATTACK_REASON_CODE = {_AR_INDICES['shot']: 'DEATH_FROM_SHOT',
  _AR_INDICES['recovery']: 'DEATH_FROM_RECOVERY',
  _AR_INDICES['artillery_eq']: 'DEATH_FROM_SHOT',
  _AR_INDICES['bomber_eq']: 'DEATH_FROM_SHOT'}
-_EVENT_TYPES = {_eventType.PLAYER_DIED: ('halloweenSin', '<font color="#000000">{}</font>', '<img src="img://gui/maps/icons/pveEvent/logIconSoul.png" vspace="-4"/>'),
- _eventType.POINTS_SAVED: ('halloweenSalvation', '{}', '<img src="img://gui/maps/icons/pveEvent/logIconSoulSaved.png" vspace="-3"/>'),
- _eventType.POINTS_PICKED: ('halloweenBliss', '<font color="#000000">{}</font>', '<img src="img://gui/maps/icons/pveEvent/logIconSoul.png" vspace="-4"/>')}
 _PLAYER_KILL_ENEMY_SOUND = 'enemy_killed_by_player'
 _PLAYER_KILL_ALLY_SOUND = 'ally_killed_by_player'
 _ALLY_KILLED_SOUND = 'ally_killed_by_enemy'
-_NAME_TRUNCATE_LENGTH = 16
 
 class BattleMessagesController(IBattleController):
     __slots__ = ('_battleCtx', '_arenaDP', '_arenaVisitor', '_eManager', '_buffer', '_isUIPopulated', 'onShowVehicleMessageByCode', 'onShowVehicleMessageByKey', 'onShowVehicleErrorByKey', 'onShowPlayerMessageByCode', 'onShowPlayerMessageByKey', 'onShowDestructibleEntityMessageByCode', '__weakref__')
@@ -126,9 +121,6 @@ class BattleMessagesController(IBattleController):
 
     def showAllyHitMessage(self, vehicleID=None):
         self.onShowPlayerMessageByKey('ALLY_HIT', {'entity': self._battleCtx.getPlayerFullName(vID=vehicleID)}, (('entity', vehicleID),))
-
-    def showEventPointsMessage(self, event):
-        pass
 
     def __getEntityString(self, avatar, entityID):
         if entityID == avatar.playerVehicleID:
@@ -267,64 +259,16 @@ class EpicBattleMessagesController(BattleMessagesController):
         return True
 
 
-class EventBattleMessagesController(BattleMessagesController):
-    __slots__ = ('_isReplayPlaying',)
-
-    def __init__(self, setup):
-        super(EventBattleMessagesController, self).__init__(setup)
-        self._isReplayPlaying = setup.isReplayPlaying
-
-    def showDestructibleEntityDestroyedMessage(self, avatar, destructibleID, attackerID):
-        pass
-
-    def showVehicleKilledMessage(self, avatar, targetID, attackerID, equipmentID, reason):
-        pass
-
-    def showVehicleDamageInfo(self, avatar, code, targetID, entityID, extra, equipmentID):
-        pass
-
-    def showVehicleMessage(self, key, args=None):
-        pass
-
-    def showVehicleError(self, key, args=None):
-        pass
-
-    def showAllyHitMessage(self, vehicleID=None):
-        pass
-
-    def showEventPointsMessage(self, event):
-        if self._isReplayPlaying and BattleReplay.g_replayCtrl.isTimeWarpInProgress:
-            return
-        else:
-            eventTypeData = _EVENT_TYPES.get(event.type)
-            if eventTypeData:
-                typeName, colorFormat, icon = eventTypeData
-                formatName = self._battleCtx.getPlayerFullName
-                truncateName = lambda name, width: name[:width] + '..' if len(name) > width else name
-                pointsStr = str(event.points)
-                alignFormat = '{{:^{}}}'.format(6 - len(pointsStr))
-                pointsStr = alignFormat.format(pointsStr)
-                pointsStr = colorFormat.format(pointsStr)
-                pointsStr = '{}{}'.format(pointsStr, icon)
-                args = {'player': truncateName(formatName(event.vehicleID, showVehShortName=False, showClan=False), _NAME_TRUNCATE_LENGTH),
-                 'enemy': formatName(event.enemyID, showClan=False) if event.enemyID else None,
-                 'points': pointsStr}
-                self.onShowPlayerMessageByKey(typeName, args)
-            return
-
-
 def createBattleMessagesCtrl(setup):
     sessionProvider = dependency.instance(IBattleSessionProvider)
     arenaVisitor = sessionProvider.arenaVisitor
-    if arenaVisitor.gui.isInEpicRange():
+    if not arenaVisitor.gui.isInEpicRange():
         if setup.isReplayPlaying:
-            ctrl = EpicBattleMessagesPlayer(setup)
+            ctrl = BattleMessagesPlayer(setup)
         else:
-            ctrl = EpicBattleMessagesController(setup)
-    elif arenaVisitor.gui.isEventBattle():
-        ctrl = EventBattleMessagesController(setup)
+            ctrl = BattleMessagesController(setup)
     elif setup.isReplayPlaying:
-        ctrl = BattleMessagesPlayer(setup)
+        ctrl = EpicBattleMessagesPlayer(setup)
     else:
-        ctrl = BattleMessagesController(setup)
+        ctrl = EpicBattleMessagesController(setup)
     return ctrl

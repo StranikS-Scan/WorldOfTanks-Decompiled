@@ -24,10 +24,6 @@ class ASSEMBLER_NAME_SUFFIXES(object):
 class DestructibleEntity(BigWorld.Entity):
 
     @property
-    def maxHealth(self):
-        return self.__properties.health
-
-    @property
     def isPlayerTeam(self):
         return self.team == BigWorld.player().team
 

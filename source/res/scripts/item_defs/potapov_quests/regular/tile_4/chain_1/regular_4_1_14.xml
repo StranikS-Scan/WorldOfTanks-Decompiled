@@ -7,27 +7,10 @@
       <conditions>
         <postBattle>
           <and>
-            <or>
-              <unit>
-                <results>
-                  <title>
-                    <key>	#personal_missions_details:quest_common_condition_title_squad_assistedRadio	</key>
-                  </title>
-                  <description>
-                    <key>	#personal_missions_details:quest_4_1_14_condition_description_damageAssistedRadio	</key>
-                  </description>
-                  <key>	damageAssistedRadio	</key>
-                  <greaterOrEqual>	6000	</greaterOrEqual>
-                </results>
-              </unit>
-              <and>
-                <results>
-                  <hideInGui></hideInGui>
-                  <key>	damageAssistedRadio	</key>
-                  <greaterOrEqual>	6000	</greaterOrEqual>
-                </results>
-              </and>
-            </or>
+            <results>
+              <key>	damageAssistedRadio	</key>
+              <greaterOrEqual>	4500	</greaterOrEqual>
+            </results>
           </and>
         </postBattle>
       </conditions>
@@ -76,27 +59,10 @@
       <conditions>
         <postBattle>
           <and>
-            <or>
-              <unit>
-                <results>
-                  <title>
-                    <key>	#personal_missions_details:quest_common_condition_title_squad_assistedRadio	</key>
-                  </title>
-                  <description>
-                    <key>	#personal_missions_details:quest_4_1_14_condition_description_damageAssistedRadio	</key>
-                  </description>
-                  <key>	damageAssistedRadio	</key>
-                  <greaterOrEqual>	6000	</greaterOrEqual>
-                </results>
-              </unit>
-              <and>
-                <results>
-                  <hideInGui></hideInGui>
-                  <key>	damageAssistedRadio	</key>
-                  <greaterOrEqual>	6000	</greaterOrEqual>
-                </results>
-              </and>
-            </or>
+            <results>
+              <key>	damageAssistedRadio	</key>
+              <greaterOrEqual>	4500	</greaterOrEqual>
+            </results>
             <isAlive></isAlive>
           </and>
         </postBattle>
@@ -128,21 +94,11 @@
         </preBattle>
         <postBattle>
           <and>
-            <or>
-              <unit>
-                <results>
-                  <key>	damageAssistedRadio	</key>
-                  <greaterOrEqual>	6000	</greaterOrEqual>
-                </results>
-              </unit>
-              <and>
-                <results>
-                  <hideInGui></hideInGui>
-                  <key>	damageAssistedRadio	</key>
-                  <greaterOrEqual>	6000	</greaterOrEqual>
-                </results>
-              </and>
-            </or>
+            <results>
+              <hideInGui></hideInGui>
+              <key>	damageAssistedRadio	</key>
+              <greaterOrEqual>	4500	</greaterOrEqual>
+            </results>
             <isAlive></isAlive>
           </and>
         </postBattle>

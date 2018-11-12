@@ -547,7 +547,7 @@ class DestructiblesManager(object):
             return
         else:
             effectVars = g_cache._getEffect(args.effectName, args.effectCategory, False)
-            if effectVars is None:
+            if not effectVars:
                 LOG_ERROR('Could not find any effects vars for: ' + str(args.effectName) + ' - type: ' + str(args.effectType) + ' - cat: ' + str(args.effectCategory) + ' (' + str(args.destrType) + ')')
                 return
             player = BigWorld.player()

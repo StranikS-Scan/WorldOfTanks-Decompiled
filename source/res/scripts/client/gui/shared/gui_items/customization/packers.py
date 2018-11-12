@@ -6,7 +6,7 @@ from gui.shared.gui_items import GUI_ITEM_TYPE
 from helpers import dependency
 from items import makeIntCompactDescrByID
 from items.components.c11n_constants import CustomizationType
-from items.customizations import PaintComponent, CamouflageComponent, DecalComponent, ProjectionDecalComponent
+from items.customizations import PaintComponent, CamouflageComponent, DecalComponent, ProjectionDecalComponent, InsigniaComponent
 from skeletons.gui.shared.gui_items import IGuiItemsFactory
 
 def pickPacker(itemTypeID):
@@ -22,6 +22,8 @@ def pickPacker(itemTypeID):
         return ModificationPacker
     if itemTypeID == GUI_ITEM_TYPE.PROJECTION_DECAL:
         return ProjectionDecalPacker
+    if itemTypeID == GUI_ITEM_TYPE.INSIGNIA:
+        return InsigniaPacker
     LOG_WARNING('Unsupported packer for the given type', itemTypeID)
     return CustomizationPacker
 
@@ -177,7 +179,7 @@ class ProjectionDecalPacker(CustomizationPacker):
     @staticmethod
     def pack(slot, component):
         for _, decal, subcomp in slot.items():
-            component.projection_decals.append(ProjectionDecalComponent(id=decal.id, showOn=subcomp.showOn, slotId=subcomp.slotId, scaleFactorId=subcomp.scaleFactorId, position=subcomp.position, scale=subcomp.scale, rotation=subcomp.rotation, doubleSided=subcomp.doubleSided))
+            component.projection_decals.append(ProjectionDecalComponent(id=decal.id, options=subcomp.options, slotId=subcomp.slotId, scaleFactorId=subcomp.scaleFactorId, showOn=subcomp.showOn, scale=subcomp.scale, rotation=subcomp.rotation, position=subcomp.position, tintColor=subcomp.tintColor, doubleSided=subcomp.doubleSided))
 
     @classmethod
     def unpack(cls, slot, component, proxy=None):
@@ -195,3 +197,31 @@ class ProjectionDecalPacker(CustomizationPacker):
     @staticmethod
     def getRawComponent():
         return ProjectionDecalComponent
+
+
+class InsigniaPacker(CustomizationPacker):
+
+    @staticmethod
+    def pack(slot, component):
+        for region, insignia, _ in slot.items():
+            component.insignias.append(InsigniaComponent(id=insignia.id, appliedTo=region))
+
+    @classmethod
+    def unpack(cls, slot, component, proxy=None):
+        regions = slot.getRegions()
+        for region, subcomp in product(regions, component.insignias):
+            appliedTo = subcomp.appliedTo & region
+            if appliedTo:
+                slotIdx = regions.index(appliedTo)
+                item = cls.create(subcomp, CustomizationType.INSIGNIA, proxy)
+                slot.set(item, slotIdx, component=subcomp)
+
+    @classmethod
+    def invalidate(cls, slot):
+        for region, insignia, comp in slot.items():
+            comp.id = insignia.id
+            comp.appliedTo = region
+
+    @staticmethod
+    def getRawComponent():
+        return InsigniaComponent

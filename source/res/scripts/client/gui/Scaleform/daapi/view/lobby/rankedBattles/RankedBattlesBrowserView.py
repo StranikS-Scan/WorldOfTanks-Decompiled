@@ -20,6 +20,7 @@ class RankedBattlesBrowserView(RankedBattlesBrowserViewMeta):
         self.__ctx = ctx
         self.__hasFocus = False
         self.__browser = None
+        self.__loadBrowserCbID = None
         return
 
     def onFocusChange(self, hasFocus):
@@ -34,8 +35,12 @@ class RankedBattlesBrowserView(RankedBattlesBrowserViewMeta):
 
     def onCloseView(self):
         ctx = self.__ctx
+        if self.__loadBrowserCbID is not None:
+            BigWorld.cancelCallback(self.__loadBrowserCbID)
+            self.__loadBrowserCbID = None
         returnAlias = ctx.get('returnAlias', VIEW_ALIAS.LOBBY_HANGAR) if ctx else VIEW_ALIAS.LOBBY_HANGAR
         self.fireEvent(events.LoadViewEvent(returnAlias, ctx=ctx), EVENT_BUS_SCOPE.LOBBY)
+        return
 
     def viewSize(self, width, height):
         self.__loadBrowser(width, height)
@@ -63,7 +68,12 @@ class RankedBattlesBrowserView(RankedBattlesBrowserViewMeta):
         return
 
     def __showBrowser(self):
-        BigWorld.callback(0.01, self.as_loadBrowserS)
+        self.__loadBrowserCbID = BigWorld.callback(0.01, self.__loadBrowserAS)
+
+    def __loadBrowserAS(self):
+        self.__loadBrowserCbID = None
+        self.as_loadBrowserS()
+        return
 
     def __updateSkipEscape(self):
         if self.__browser is not None:

@@ -41,7 +41,6 @@ class CONDITION_ICON:
     RAM = 'ram'
     MAIN_REPEAT = 'main_repeat'
     IMPROVE = 'improve'
-    EVENT_POINTS = 'event_points'
 
 
 class PROGRESS_TEMPLATE:
@@ -80,6 +79,8 @@ class ASSIST_TYPES(object):
 class CRIT_TYPES(object):
     INNER_MODULES_AND_TANKMEN = 0
     DESTROYED_TRACKS = 1
+    ALL_MODULES = 2
+    DESTROYED_INNER_MODULES_AND_TANKMAN = 3
 
 
 class CONTAINER:
@@ -99,6 +100,11 @@ class DISPLAY_TYPE:
 class MULTIPLIER_TYPE:
     ATTEMPTS = 'attempts'
     PROGRESS = 'progress'
+
+
+class MULTIPLIER_SCOPE:
+    POST_BATTLE = 'postBattle'
+    CARD = 'card'
 
 
 class IClientDescription(object):
@@ -130,10 +136,11 @@ class AverageDescription(RegularDescription):
 
 
 class HeaderDescription(IClientDescription):
-    __slots__ = ('displayType',)
+    __slots__ = ('displayType', 'isInOrGroup')
 
     def __init__(self, displayType):
         self.displayType = displayType
+        self.isInOrGroup = False
 
     @classmethod
     def getContainerType(cls):

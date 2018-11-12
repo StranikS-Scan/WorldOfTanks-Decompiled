@@ -51,7 +51,7 @@ class LobbyVehicleMarkerView(LobbyVehicleMarkerViewMeta):
         self.__destroyMarker()
 
     def __onCameraEntityUpdated(self, event):
-        if self.__vehicleMarker is None:
+        if self.__isMarkerDisabled or self.__vehicleMarker is None:
             return
         else:
             state = event.ctx['state']

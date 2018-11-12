@@ -141,6 +141,8 @@ class BlocksTooltipData(ToolTipBaseData):
         self.__marginAfterBlock = _DEFAULT_MARGIN_AFTER_BLOCK
         self.__marginAfterSeparator = _DEFAULT_MARGIN_AFTER_SEPARATOR
         self.__width = 0
+        self.item = None
+        return
 
     @classmethod
     def addAdvancedBlock(cls, data, disableAnim):
@@ -776,6 +778,7 @@ class ActionTooltipData(ToolTipBaseData):
         super(ActionTooltipData, self).__init__(context, TOOLTIP_TYPE.CONTROL)
 
     def getDisplayableData(self, itemType, key, newPrice, oldPrice, isBuying, forCredits=False, rentPackage=None):
+        makeSlotSellActionToolTip = False
         descr = ''
         oldPrice = Money.makeFromMoneyTuple(oldPrice)
         if not oldPrice.isDefined():
@@ -831,20 +834,22 @@ class ActionTooltipData(ToolTipBaseData):
             item = self.goodiesCache.getBooster(int(key))
             itemName = 'booster_%s/price' % item.boosterID
             deviceNameType = ACTION_TOOLTIPS_TYPE.BOOSTER
-        _ms = makeHtmlString
-        _template = 'html_templates:lobby/quests/actions'
-        _format = BigWorld.wg_getGoldFormat
-        _postfix = ''
+        elif itemType == ACTION_TOOLTIPS_TYPE.ECONOMICS:
+            itemName = key
+            makeSlotSellActionToolTip = True
+        template = 'html_templates:lobby/quests/actions'
+        format_ = BigWorld.wg_getGoldFormat
+        postfix = ''
         if not self.__checkPriceIsAllowed(newPrice):
-            _postfix = 'Error'
-        fmtNewGold = _ms(_template, Currency.GOLD + _postfix, {'value': _format(newPrice.gold)}) if newPrice.gold is not None else ''
-        fmtNewCredits = _ms(_template, Currency.CREDITS + _postfix, {'value': _format(newPrice.credits)}) if newPrice.credits is not None else ''
-        fmtNewCrystal = _ms(_template, Currency.CRYSTAL + _postfix, {'value': _format(newPrice.crystal)}) if newPrice.crystal is not None else ''
+            postfix = 'Error'
+        fmtNewGold = makeHtmlString(template, Currency.GOLD + postfix, {'value': format_(newPrice.gold)}) if newPrice.gold is not None else ''
+        fmtNewCredits = makeHtmlString(template, Currency.CREDITS + postfix, {'value': format_(newPrice.credits)}) if newPrice.credits is not None else ''
+        fmtNewCrystal = makeHtmlString(template, Currency.CRYSTAL + postfix, {'value': format_(newPrice.crystal)}) if newPrice.crystal is not None else ''
         if not self.__checkPriceIsAllowed(oldPrice):
-            _postfix = 'Error'
-        fmtOldGold = _ms(_template, Currency.GOLD + _postfix, {'value': _format(oldPrice.gold)}) if oldPrice.gold is not None else ''
-        fmtOldCredits = _ms(_template, Currency.CREDITS + _postfix, {'value': _format(oldPrice.credits)}) if oldPrice.credits is not None else ''
-        fmtOldCrystal = _ms(_template, Currency.CRYSTAL + _postfix, {'value': _format(oldPrice.crystal)}) if oldPrice.crystal is not None else ''
+            postfix = 'Error'
+        fmtOldGold = makeHtmlString(template, Currency.GOLD + postfix, {'value': format_(oldPrice.gold)}) if oldPrice.gold is not None else ''
+        fmtOldCredits = makeHtmlString(template, Currency.CREDITS + postfix, {'value': format_(oldPrice.credits)}) if oldPrice.credits is not None else ''
+        fmtOldCrystal = makeHtmlString(template, Currency.CRYSTAL + postfix, {'value': format_(oldPrice.crystal)}) if oldPrice.crystal is not None else ''
         if newPrice.isCurrencyDefined(Currency.GOLD) and newPrice.isCurrencyDefined(Currency.CREDITS):
             formatedNewPrice = i18n.makeString(TOOLTIPS.ACTIONPRICE_EXCHANGE_CURRENCYOR, credits=fmtNewCredits, gold=fmtNewGold)
         elif newPrice.isCurrencyDefined(Currency.GOLD) and newPrice.isCurrencyDefined(Currency.CRYSTAL):
@@ -870,13 +875,16 @@ class ActionTooltipData(ToolTipBaseData):
         else:
             formatedOldPrice = fmtOldCredits
         body = i18n.makeString(TOOLTIPS.ACTIONPRICE_BODY, oldPrice=formatedOldPrice, newPrice=formatedNewPrice)
+        actionUserName = ''
         if itemName:
             affectedAction = self.eventsCache.getAffectedAction(itemName)
             if affectedAction:
-                actionUserName = ''
                 action = self.eventsCache.getActions().get(affectedAction[ACTION_ENTITY_ITEM.ACTION_NAME_IDX])
                 if action:
-                    actionUserName = i18n.makeString(TOOLTIPS.ACTIONPRICE_ACTIONNAME, actionName=action.getUserName())
+                    if makeSlotSellActionToolTip:
+                        actionUserName = i18n.makeString(TOOLTIPS.ACTIONPRICE_ACTIONNAMESLOT, actionName=action.getUserName())
+                    else:
+                        actionUserName = i18n.makeString(TOOLTIPS.ACTIONPRICE_ACTIONNAME, actionName=action.getUserName())
                 deviceName = _ITEM_TYPE_TO_TOOLTIP_DICT.get(deviceNameType, '')
                 hasAffectedActions = affectedAction[ACTION_ENTITY_ITEM.AFFECTED_ACTIONS_IDX]
                 if hasAffectedActions or hasPersonalDiscount:
@@ -888,7 +896,7 @@ class ActionTooltipData(ToolTipBaseData):
                 else:
                     descr = i18n.makeString(TOOLTIPS.ACTIONPRICE_FORACTION, actionName=actionUserName)
         if hasRentCompensation:
-            formattedRentCompensation = makeHtmlString(_template, Currency.GOLD, {'value': BigWorld.wg_getGoldFormat(rentCompensation)})
+            formattedRentCompensation = makeHtmlString(template, Currency.GOLD, {'value': BigWorld.wg_getGoldFormat(rentCompensation)})
             descr += '\n' + i18n.makeString(TOOLTIPS.ACTIONPRICE_RENTCOMPENSATION, rentCompensation=formattedRentCompensation)
         if not isBuying and deviceName is not None:
             headerText = i18n.makeString(TOOLTIPS.ACTIONPRICE_SELL_HEADER)
@@ -899,6 +907,16 @@ class ActionTooltipData(ToolTipBaseData):
         else:
             headerText = i18n.makeString(TOOLTIPS.ACTIONPRICE_HEADER)
             bodyText = descr + '\n\n' + body if descr else body
+        if makeSlotSellActionToolTip:
+            template = 'html_templates:lobby/tooltips/'
+            headerText = i18n.makeString(TOOLTIPS.TANKS_CAROUSEL_BUY_SLOT_HEADER)
+            bodyText = i18n.makeString(TOOLTIPS.TANKS_CAROUSEL_BUY_SLOT_BODY) + '\n\n'
+            sep = icons.makeImageTag(RES_ICONS.MAPS_ICONS_TOOLTIP_TOOL_TIP_SEPARATOR, 283, 1, 15, 0)
+            fa = i18n.makeString(TOOLTIPS.ACTIONPRICE_FORACTION, actionName=text_styles.stats(actionUserName))
+            pr = i18n.makeString(TOOLTIPS.ACTIONPRICE_BODY_SLOT, oldPrice=formatedOldPrice, newPrice=formatedNewPrice)
+            bodyText += makeHtmlString(template, 'sell_slot_action', {'separator': sep,
+             'foraction': fa,
+             'prices': pr})
         return {'header': headerText,
          'body': bodyText}
 
@@ -937,15 +955,14 @@ class ActionXPTooltipData(ToolTipBaseData):
 
     @staticmethod
     def __formatPrice(price):
-        _ms = makeHtmlString
-        _template = 'html_templates:lobby/quests/actions'
-        _format = BigWorld.wg_getGoldFormat
+        template = 'html_templates:lobby/quests/actions'
+        format_ = BigWorld.wg_getGoldFormat
         if price.isCurrencyDefined(Currency.GOLD):
             if price.gold is not None:
-                return _ms(_template, DISCOUNT_TYPE.FREE_XP, {'value': _format(price.gold)})
+                return makeHtmlString(template, DISCOUNT_TYPE.FREE_XP, {'value': format_(price.gold)})
             return ''
         else:
-            return _ms(_template, DISCOUNT_TYPE.XP, {'value': _format(price.credits)}) if price.credits is not None else ''
+            return makeHtmlString(template, DISCOUNT_TYPE.XP, {'value': format_(price.credits)}) if price.credits is not None else ''
 
 
 class ToolTipFortWrongTime(ToolTipBaseData):
@@ -1025,15 +1042,14 @@ class FortSortieTooltipData(ToolTipBaseData):
         super(FortSortieTooltipData, self).__init__(context, TOOLTIP_TYPE.FORTIFICATIONS)
 
     def getDisplayableData(self, data):
-        _ms = i18n.makeString
-        division = text_styles.main(_ms(data.divisionName))
+        division = text_styles.main(i18n.makeString(data.divisionName))
         inBattleIcon = icons.makeImageTag(RES_ICONS.MAPS_ICONS_LIBRARY_SWORDSICON, 16, 16, -3, 0)
-        descriptionText = text_styles.main(_ms(data.descriptionForTT)) if data.descriptionForTT != '' else ''
-        return {'titleText': text_styles.highTitle(_ms(TOOLTIPS.FORTIFICATION_TOOLTIPFORTSORTIE_TITLE, name=data.creatorName)),
-         'divisionText': text_styles.standard(_ms(TOOLTIPS.FORTIFICATION_TOOLTIPFORTSORTIE_DIVISION, division=division)),
+        descriptionText = text_styles.main(i18n.makeString(data.descriptionForTT)) if data.descriptionForTT != '' else ''
+        return {'titleText': text_styles.highTitle(i18n.makeString(TOOLTIPS.FORTIFICATION_TOOLTIPFORTSORTIE_TITLE, name=data.creatorName)),
+         'divisionText': text_styles.standard(i18n.makeString(TOOLTIPS.FORTIFICATION_TOOLTIPFORTSORTIE_DIVISION, division=division)),
          'descriptionText': descriptionText,
-         'hintText': text_styles.standard(_ms(TOOLTIPS.FORTIFICATION_TOOLTIPFORTSORTIE_HINT)),
-         'inBattleText': text_styles.error(_ms(TOOLTIPS.FORTIFICATION_TOOLTIPFORTSORTIE_INBATTLE) + ' ' + inBattleIcon) if data.isInBattle else '',
+         'hintText': text_styles.standard(i18n.makeString(TOOLTIPS.FORTIFICATION_TOOLTIPFORTSORTIE_HINT)),
+         'inBattleText': text_styles.error(i18n.makeString(TOOLTIPS.FORTIFICATION_TOOLTIPFORTSORTIE_INBATTLE) + ' ' + inBattleIcon) if data.isInBattle else '',
          'isInBattle': data.isInBattle}
 
 
@@ -1316,7 +1332,7 @@ class HeaderMoneyAndXpTooltipData(BlocksTooltipData):
     def _getIcon(self):
         icon = self._btnType
         if self._btnType == CURRENCIES_CONSTANTS.FREE_XP:
-            icon = 'eliteXP'
+            icon = 'freeXP'
         return icon
 
 

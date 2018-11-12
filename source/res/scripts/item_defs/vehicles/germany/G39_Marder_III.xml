@@ -94,7 +94,7 @@
       </slot>
       <slot>
         <slotType>	player	</slotType>
-        <slotId>	2	</slotId>
+        <slotId>	4	</slotId>
         <rayStart>	-0.884538 1.03911 -0.0327809	</rayStart>
         <rayEnd>	-0.809044 1.01264 -0.0326046	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
@@ -104,7 +104,7 @@
       </slot>
       <slot>
         <slotType>	inscription	</slotType>
-        <slotId>	3	</slotId>
+        <slotId>	36	</slotId>
         <rayStart>	-1.00341 0.714015 0.104797	</rayStart>
         <rayEnd>	-0.927929 0.687525 0.104797	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
@@ -114,7 +114,7 @@
       </slot>
       <slot>
         <slotType>	player	</slotType>
-        <slotId>	4	</slotId>
+        <slotId>	5	</slotId>
         <rayStart>	0.936867 0.888616 0.253242	</rayStart>
         <rayEnd>	0.861372 0.862151 0.253423	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
@@ -125,7 +125,7 @@
       </slot>
       <slot>
         <slotType>	inscription	</slotType>
-        <slotId>	5	</slotId>
+        <slotId>	37	</slotId>
         <rayStart>	0.00525319 -0.232049 2.15942	</rayStart>
         <rayEnd>	0.00525319 -0.237892 2.07963	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
@@ -135,7 +135,7 @@
       </slot>
       <slot>
         <slotType>	camouflage	</slotType>
-        <slotId>	8	</slotId>
+        <slotId>	3	</slotId>
         <anchorPosition>	0.000000 0.508106 -1.29471	</anchorPosition>
         <anchorDirection>	0.000000 0.365322 -0.930881	</anchorDirection>
       </slot>
@@ -1057,7 +1057,7 @@
       <customizationSlots>
         <slot>
           <slotType>	style	</slotType>
-          <slotId>	10	</slotId>
+          <slotId>	257	</slotId>
           <anchorPosition>	0.000000 2.35413 0.000000	</anchorPosition>
           <anchorDirection>	0.000000 1 0.000000	</anchorDirection>
         </slot>
@@ -1971,7 +1971,7 @@
       <customizationSlots>
         <slot>
           <slotType>	style	</slotType>
-          <slotId>	7	</slotId>
+          <slotId>	257	</slotId>
           <anchorPosition>	0.00016177 2.35404 0.000006	</anchorPosition>
           <anchorDirection>	0.000000 1 0.000000	</anchorDirection>
         </slot>
@@ -2052,7 +2052,7 @@
           <customizationSlots>
             <slot>
               <slotType>	camouflage	</slotType>
-              <slotId>	9	</slotId>
+              <slotId>	770	</slotId>
               <anchorPosition>	-0.00238584 -0.0531279 1.99605	</anchorPosition>
               <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
               <applyTo>	4096	</applyTo>
@@ -2103,7 +2103,7 @@
           <customizationSlots>
             <slot>
               <slotType>	camouflage	</slotType>
-              <slotId>	11	</slotId>
+              <slotId>	770	</slotId>
               <anchorPosition>	-0.00135027 0.00254308 1.56792	</anchorPosition>
               <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
               <applyTo>	4096	</applyTo>
@@ -2149,7 +2149,7 @@
           <customizationSlots>
             <slot>
               <slotType>	camouflage	</slotType>
-              <slotId>	12	</slotId>
+              <slotId>	770	</slotId>
               <anchorPosition>	-0.00135027 0.00254308 1.56792	</anchorPosition>
               <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
               <applyTo>	4096	</applyTo>
@@ -2182,7 +2182,7 @@
       <customizationSlots>
         <slot>
           <slotType>	camouflage	</slotType>
-          <slotId>	13	</slotId>
+          <slotId>	513	</slotId>
           <anchorPosition>	-0.00719023 0.621925 0.509766	</anchorPosition>
           <anchorDirection>	-0.00687217 0.431482 0.902095	</anchorDirection>
         </slot>
@@ -2228,12 +2228,15 @@
       <engines>
         <Praga_EPA_AC>
           <smplEnginePower>	158.5922	</smplEnginePower>
+          <smplFwMaxSpeed>	47	</smplFwMaxSpeed>
         </Praga_EPA_AC>
         <Praga_NS>
           <smplEnginePower>	169.165	</smplEnginePower>
+          <smplFwMaxSpeed>	47	</smplFwMaxSpeed>
         </Praga_NS>
         <Praga_AusfIV>
           <smplEnginePower>	190.3106	</smplEnginePower>
+          <smplFwMaxSpeed>	47	</smplFwMaxSpeed>
         </Praga_AusfIV>
       </engines>
       <chassis>

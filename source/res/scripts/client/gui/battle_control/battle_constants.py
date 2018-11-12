@@ -5,7 +5,7 @@ from shared_utils import CONST_CONTAINER
 from constants import SECTOR_STATE
 
 class BATTLE_CTRL_ID(object):
-    AMMO, EQUIPMENTS, OPTIONAL_DEVICES, OBSERVED_VEHICLE_STATE, ARENA_LOAD_PROGRESS, ARENA_PERIOD, TEAM_BASES, DEBUG, HIT_DIRECTION, FEEDBACK, CHAT_COMMANDS, MESSAGES, DRR_SCALE, RESPAWN, REPAIR, DYN_SQUADS, AVATAR_PRIVATE_STATS, FLAG_NOTS, CROSSHAIR, MOD, GUI, PERSONAL_EFFICIENCY, TMP_IGNORE_LIST_CTRL, VIEW_POINTS, BATTLE_FIELD_CTRL, PLAYER_GAME_MODE_DATA, TEAM_HEALTH_BAR, ARENA_BORDER, PROGRESS_TIMER, MAPS, SPECTATOR, GAME_NOTIFICATIONS, EPIC_MISSIONS, GAME_MESSAGES_PANEL, QUEST_PROGRESS, EVENTPOINTS_VIEW, BATTLE_HINTS, EVENT_VIEW = range(1, 39)
+    AMMO, EQUIPMENTS, OPTIONAL_DEVICES, OBSERVED_VEHICLE_STATE, ARENA_LOAD_PROGRESS, ARENA_PERIOD, TEAM_BASES, DEBUG, HIT_DIRECTION, FEEDBACK, CHAT_COMMANDS, MESSAGES, DRR_SCALE, RESPAWN, REPAIR, DYN_SQUADS, AVATAR_PRIVATE_STATS, FLAG_NOTS, CROSSHAIR, MOD, GUI, PERSONAL_EFFICIENCY, TMP_IGNORE_LIST_CTRL, VIEW_POINTS, BATTLE_FIELD_CTRL, PLAYER_GAME_MODE_DATA, TEAM_HEALTH_BAR, ARENA_BORDER, PROGRESS_TIMER, MAPS, SPECTATOR, GAME_NOTIFICATIONS, EPIC_MISSIONS, GAME_MESSAGES_PANEL, QUEST_PROGRESS = range(1, 36)
 
 
 REUSABLE_BATTLE_CTRL_IDS = (BATTLE_CTRL_ID.MOD, BATTLE_CTRL_ID.GUI)
@@ -67,14 +67,29 @@ class VEHICLE_VIEW_STATE(object):
     UNDER_FIRE = 268435456
     RECOVERY = 536870912
     PROGRESS_CIRCLE = 1073741824
+    BURNOUT = 2147483648L
+    BURNOUT_WARNING = 4294967296L
+    BURNOUT_UNAVAILABLE_DUE_TO_BROKEN_ENGINE = 8589934592L
     CLIENT_ONLY = (AUTO_ROTATION, CRUISE_MODE)
 
 
 VEHICLE_DEVICES = ('engine', 'ammoBay', 'gun', 'turretRotator', 'leftTrack', 'rightTrack', 'surveyingDevice', 'radio', 'fuelTank')
+WHEELED_VEHICLE_DEVICES = ('engine', 'ammoBay', 'gun', 'turretRotator', 'surveyingDevice', 'radio', 'fuelTank', 'wheel0', 'wheel1', 'wheel2', 'wheel3', 'wheel4', 'wheel5', 'wheel6', 'wheel7')
 VEHICLE_GUI_ITEMS = ('engine', 'ammoBay', 'gun', 'turretRotator', 'chassis', 'surveyingDevice', 'radio', 'fuelTank')
+WHEELED_VEHICLE_GUI_ITEMS = ('engine', 'ammoBay', 'gun', 'turretRotator', 'wheel', 'surveyingDevice', 'radio', 'fuelTank')
+ALL_VEHICLE_GUI_ITEMS = ('engine', 'ammoBay', 'gun', 'turretRotator', 'chassis', 'wheel', 'surveyingDevice', 'radio', 'fuelTank')
 VEHICLE_DEVICE_IN_COMPLEX_ITEM = {'leftTrack': 'chassis',
- 'rightTrack': 'chassis'}
-VEHICLE_COMPLEX_ITEMS = {'chassis': ('leftTrack', 'rightTrack')}
+ 'rightTrack': 'chassis',
+ 'wheel0': 'wheel',
+ 'wheel1': 'wheel',
+ 'wheel2': 'wheel',
+ 'wheel3': 'wheel',
+ 'wheel4': 'wheel',
+ 'wheel5': 'wheel',
+ 'wheel6': 'wheel',
+ 'wheel7': 'wheel'}
+VEHICLE_COMPLEX_ITEMS = {'chassis': ('leftTrack', 'rightTrack'),
+ 'wheel': ('wheel0', 'wheel1', 'wheel2', 'wheel3', 'wheel4', 'wheel5', 'wheel6', 'wheel7')}
 DEVICE_STATE_NORMAL = 'normal'
 DEVICE_STATE_CRITICAL = 'critical'
 DEVICE_STATE_DESTROYED = 'destroyed'

@@ -96,7 +96,7 @@
       </slot>
       <slot>
         <slotType>	inscription	</slotType>
-        <slotId>	2	</slotId>
+        <slotId>	36	</slotId>
         <rayStart>	1.5586 0.630507 1.12595	</rayStart>
         <rayEnd>	1.1586 0.630507 1.12595	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
@@ -106,7 +106,7 @@
       </slot>
       <slot>
         <slotType>	inscription	</slotType>
-        <slotId>	3	</slotId>
+        <slotId>	37	</slotId>
         <rayStart>	-1.5586 0.630507 1.12595	</rayStart>
         <rayEnd>	-1.1586 0.630507 1.12595	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
@@ -1165,7 +1165,7 @@
           <customizationSlots>
             <slot>
               <slotType>	insigniaOnGun	</slotType>
-              <slotId>	6	</slotId>
+              <slotId>	771	</slotId>
               <rayStart>	0.000132071 -0.0113531 1.21077	</rayStart>
               <rayEnd>	-0.224259 -0.128573 1.19969	</rayEnd>
               <rayUp>	0.075 0.067 2	</rayUp>
@@ -1201,7 +1201,7 @@
       <customizationSlots>
         <slot>
           <slotType>	player	</slotType>
-          <slotId>	4	</slotId>
+          <slotId>	514	</slotId>
           <rayStart>	1.28629 0.564696 0.288725	</rayStart>
           <rayEnd>	0.703177 0.444366 0.214618	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
@@ -1212,7 +1212,7 @@
         </slot>
         <slot>
           <slotType>	player	</slotType>
-          <slotId>	5	</slotId>
+          <slotId>	515	</slotId>
           <rayStart>	-1.28629 0.564696 0.288725	</rayStart>
           <rayEnd>	-0.703177 0.444366 0.214618	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
@@ -1240,6 +1240,7 @@
       <engines>
         <Wright_Continental_R-975C1_bootcamp>
           <smplEnginePower>	422.9124	</smplEnginePower>
+          <smplFwMaxSpeed>	35	</smplFwMaxSpeed>
         </Wright_Continental_R-975C1_bootcamp>
       </engines>
       <chassis>

@@ -19,8 +19,8 @@ from helpers import dependency, i18n
 from items import vehicles
 from skeletons.gui.battle_session import IBattleSessionProvider
 from skeletons.gui.lobby_context import ILobbyContext
-_TIMERS_PRIORITY = {(_TIMER_STATES.STUN, _TIMER_STATES.WARNING_VIEW): 0,
- (_TIMER_STATES.CAPTURE_BLOCK, _TIMER_STATES.WARNING_VIEW): 0,
+_TIMERS_PRIORITY = {(_TIMER_STATES.STUN, _TIMER_STATES.WARNING_VIEW): 1,
+ (_TIMER_STATES.CAPTURE_BLOCK, _TIMER_STATES.WARNING_VIEW): 1,
  (_TIMER_STATES.OVERTURNED, _TIMER_STATES.CRITICAL_VIEW): 1,
  (_TIMER_STATES.DROWN, _TIMER_STATES.CRITICAL_VIEW): 1,
  (_TIMER_STATES.DEATH_ZONE, _TIMER_STATES.CRITICAL_VIEW): 1,
@@ -31,14 +31,15 @@ _TIMERS_PRIORITY = {(_TIMER_STATES.STUN, _TIMER_STATES.WARNING_VIEW): 0,
  (_TIMER_STATES.RECOVERY, _TIMER_STATES.CRITICAL_VIEW): 1,
  (_TIMER_STATES.SECTOR_AIRSTRIKE, _TIMER_STATES.CRITICAL_VIEW): 1,
  (_TIMER_STATES.SECTOR_AIRSTRIKE, _TIMER_STATES.WARNING_VIEW): 1,
- (_TIMER_STATES.SMOKE, _TIMER_STATES.WARNING_VIEW): 5,
- (_TIMER_STATES.INSPIRE, _TIMER_STATES.WARNING_VIEW): 5,
- (_TIMER_STATES.INSPIRE_CD, _TIMER_STATES.WARNING_VIEW): 5}
+ (_TIMER_STATES.SMOKE, _TIMER_STATES.WARNING_VIEW): 4,
+ (_TIMER_STATES.INSPIRE, _TIMER_STATES.WARNING_VIEW): 3,
+ (_TIMER_STATES.INSPIRE_CD, _TIMER_STATES.WARNING_VIEW): 3}
 _SECONDARY_TIMERS = (_TIMER_STATES.STUN,
  _TIMER_STATES.CAPTURE_BLOCK,
  _TIMER_STATES.SMOKE,
  _TIMER_STATES.INSPIRE,
  _TIMER_STATES.INSPIRE_CD)
+_MAX_DISPLAYED_SECONDARY_STATUS_TIMERS = 2
 
 def _showTimerView(typeID, viewID, view, totalTime, isBubble, currentTime=0):
     if typeID in _SECONDARY_TIMERS:
@@ -100,7 +101,13 @@ class _BaseTimersCollection(object):
     def addTimer(self, typeID, viewID, totalTime, finishTime, startTimer=None):
         pass
 
+    def addSecondaryTimer(self, typeID, viewID, totalTime, finishTime, startTime=None):
+        pass
+
     def removeTimer(self, typeID):
+        pass
+
+    def removeSecondaryTimer(self, typeID):
         pass
 
     def removeTimers(self):
@@ -137,12 +144,14 @@ class _TimersCollection(_BaseTimersCollection):
 
 
 class _StackTimersCollection(_BaseTimersCollection):
-    __slots__ = ('_currentTimer', '_priorityMap')
+    __slots__ = ('_currentTimer', '_currentSecondaryTimers', '_priorityMap', '_prioritySecondaryMap')
 
     def __init__(self, panel, clazz):
         super(_StackTimersCollection, self).__init__(panel, clazz)
         self._currentTimer = None
+        self._currentSecondaryTimers = []
         self._priorityMap = defaultdict(set)
+        self._prioritySecondaryMap = defaultdict(set)
         return
 
     def clear(self):
@@ -172,7 +181,7 @@ class _StackTimersCollection(_BaseTimersCollection):
         if timerPriority == 0:
             timer.show()
         elif self._currentTimer is None:
-            npTimer = self.__findNextPriorityTimer()
+            npTimer = self.__findNextPriorityByPriorityMap()
             if oldTimer and (npTimer is None or oldTimer.typeID != npTimer.typeID):
                 oldTimer.hide()
             self._currentTimer = npTimer
@@ -186,20 +195,48 @@ class _StackTimersCollection(_BaseTimersCollection):
                 self._currentTimer.show(True)
         return
 
+    def addSecondaryTimer(self, typeID, viewID, totalTime, finishTime, startTime=None):
+        self.removeSecondaryTimer(typeID)
+        timer = self._clazz(self._panel, typeID, viewID, totalTime, finishTime, startTime)
+        LOG_DEBUG('Adds secondary timer', timer)
+        self._timers[typeID] = timer
+        timerPriority = _TIMERS_PRIORITY[timer.typeID, timer.viewID]
+        self._prioritySecondaryMap[timerPriority].add(timer.typeID)
+        if not self._currentSecondaryTimers:
+            self._currentSecondaryTimers.append(timer)
+            currentSecondaryTimer = self._currentSecondaryTimers[self._currentSecondaryTimers.index(timer)]
+            if currentSecondaryTimer is not None:
+                currentSecondaryTimer.show()
+        elif len(self._currentSecondaryTimers) >= _MAX_DISPLAYED_SECONDARY_STATUS_TIMERS:
+            if timer not in self._currentSecondaryTimers:
+                self._currentSecondaryTimers.append(timer)
+            self.__evaluateMultipleStatusStates()
+        else:
+            if timer not in self._currentSecondaryTimers:
+                self._currentSecondaryTimers.append(timer)
+            timer.show()
+        return
+
     def removeTimer(self, typeID):
         if typeID in self._timers:
-            LOG_DEBUG('Removes timer', typeID)
             timer = self._timers.pop(typeID)
             self._priorityMap[_TIMERS_PRIORITY[typeID, timer.viewID]].discard(typeID)
-            if typeID in _SECONDARY_TIMERS:
-                timer.hide()
-            elif self._currentTimer and self._currentTimer.typeID == typeID:
+            if self._currentTimer and self._currentTimer.typeID == typeID:
                 timer.hide()
                 self._currentTimer = None
-        self._currentTimer = self.__findNextPriorityTimer()
+        self._currentTimer = self.__findNextPriorityByPriorityMap()
         if self._currentTimer and self._currentTimer.typeID != typeID:
             self._currentTimer.show(False)
         return
+
+    def removeSecondaryTimer(self, typeID):
+        if typeID in self._timers and typeID in _SECONDARY_TIMERS:
+            timer = self._timers.pop(typeID)
+            self._prioritySecondaryMap[_TIMERS_PRIORITY[typeID, timer.viewID]].discard(typeID)
+            if timer in self._currentSecondaryTimers:
+                timer.hide()
+                self._currentSecondaryTimers.remove(timer)
+            self.__evaluateMultipleStatusStates(False)
 
     def removeTimers(self):
         if self._currentTimer:
@@ -207,23 +244,49 @@ class _StackTimersCollection(_BaseTimersCollection):
         for timer in self._timers.itervalues():
             timer.hide()
 
+        self._currentSecondaryTimers = []
         self._currentTimer = None
         self._timers.clear()
         self._priorityMap.clear()
         return
 
-    def __findNextPriorityTimer(self):
-        if self._timers:
+    def __evaluateMultipleStatusStates(self, bubble=True):
+        activeTimers = self.__getActiveSecondaryTimers()
+        if not activeTimers or not self._currentSecondaryTimers:
+            return
+        for currTimer in self._currentSecondaryTimers:
+            if currTimer.typeID in activeTimers and activeTimers.index(currTimer.typeID) > 1:
+                currTimer.hide()
+            currTimer.show(bubble)
+
+    def __getActiveSecondaryTimers(self):
+        if not self._timers:
+            return
+        activeTimers = []
+        now = BigWorld.serverTime()
+        timerIDs = set((key for key, value in self._timers.iteritems() if now < value.finishTime or value.totalTime == 0))
+        for priority, timersSet in sorted(self._prioritySecondaryMap.items(), key=lambda x: x[0]):
+            timers = timersSet & timerIDs
+            if timers and priority != 0:
+                finishTimeSortedTimers = sorted(timers, key=lambda x: self._timers[x].finishTime)
+                for activeTimerID in finishTimeSortedTimers:
+                    activeTimers.append(activeTimerID)
+
+        return activeTimers
+
+    def __findNextPriorityByPriorityMap(self):
+        if not self._timers:
+            return None
+        else:
             now = BigWorld.serverTime()
             timerIDs = set((key for key, value in self._timers.iteritems() if now < value.finishTime or value.totalTime == 0))
             for priority, timersSet in sorted(self._priorityMap.items(), key=lambda x: x[0]):
                 timers = timersSet & timerIDs
                 if timers and priority != 0:
                     typeID = min(timers, key=lambda x: self._timers[x].finishTime)
-                    LOG_DEBUG('Found next priority destroy timer', self._timers[typeID])
                     return self._timers[typeID]
 
-        return None
+            return None
 
 
 class _ActionScriptTimerMixin(_BaseTimersCollection):
@@ -339,12 +402,18 @@ class DestroyTimersPanel(DestroyTimersPanelMeta):
 
     def _showTimer(self, typeID, totalTime, level, finishTime, startTime=None):
         if typeID is not None:
-            self._timers.addTimer(typeID, _mapping.getTimerViewTypeID(level), totalTime, finishTime, startTime)
+            if typeID in _SECONDARY_TIMERS:
+                self._timers.addSecondaryTimer(typeID, level, totalTime, finishTime, startTime)
+            else:
+                self._timers.addTimer(typeID, _mapping.getTimerViewTypeID(level), totalTime, finishTime, startTime)
         return
 
     def _hideTimer(self, typeID):
         if typeID is not None:
-            self._timers.removeTimer(typeID)
+            if typeID in _SECONDARY_TIMERS:
+                self._timers.removeSecondaryTimer(typeID)
+            else:
+                self._timers.removeTimer(typeID)
         return
 
     def __showDestroyTimer(self, value):
@@ -386,14 +455,14 @@ class DestroyTimersPanel(DestroyTimersPanelMeta):
 
     def __showStunTimer(self, value):
         if value:
-            self._timers.addTimer(_TIMER_STATES.STUN, _TIMER_STATES.WARNING_VIEW, value, None)
+            self._showTimer(_TIMER_STATES.STUN, value, _TIMER_STATES.WARNING_VIEW, None)
         else:
             self._hideTimer(_TIMER_STATES.STUN)
         return
 
     def __showCaptureBlockTimer(self, value):
         if value:
-            self._timers.addTimer(_TIMER_STATES.CAPTURE_BLOCK, _TIMER_STATES.WARNING_VIEW, value, None)
+            self._showTimer(_TIMER_STATES.CAPTURE_BLOCK, value, _TIMER_STATES.WARNING_VIEW, None)
         else:
             self._hideTimer(_TIMER_STATES.CAPTURE_BLOCK)
         return
@@ -402,7 +471,7 @@ class DestroyTimersPanel(DestroyTimersPanelMeta):
         if smokesInfo:
             maxEndTime, eqID = max(((smokeInfo['endTime'], smokeInfo['equipmentID']) for smokeInfo in smokesInfo))
             duration = vehicles.g_cache.equipments()[eqID].totalDuration
-            self._timers.addTimer(_TIMER_STATES.SMOKE, _TIMER_STATES.WARNING_VIEW, duration, maxEndTime)
+            self._showTimer(_TIMER_STATES.SMOKE, duration, _TIMER_STATES.WARNING_VIEW, maxEndTime)
         else:
             self._hideTimer(_TIMER_STATES.SMOKE)
 
@@ -416,10 +485,10 @@ class DestroyTimersPanel(DestroyTimersPanelMeta):
             self._hideTimer(_TIMER_STATES.INSPIRE)
             self._hideTimer(_TIMER_STATES.INSPIRE_CD)
             if isInactivation:
-                self._timers.addTimer(_TIMER_STATES.INSPIRE_CD, _TIMER_STATES.WARNING_VIEW, duration, endTime)
+                self._showTimer(_TIMER_STATES.INSPIRE_CD, duration, _TIMER_STATES.WARNING_VIEW, endTime)
                 self.as_setSecondaryTimerTextS(_TIMER_STATES.INSPIRE_CD, i18n.makeString(EPIC_BATTLE.INSPIRE_INSPIRED))
             else:
-                self._timers.addTimer(_TIMER_STATES.INSPIRE, _TIMER_STATES.WARNING_VIEW, duration, endTime)
+                self._showTimer(_TIMER_STATES.INSPIRE, duration, _TIMER_STATES.WARNING_VIEW, endTime)
                 text = i18n.makeString(EPIC_BATTLE.INSPIRE_INSPIRING) if isSourceVehicle else i18n.makeString(EPIC_BATTLE.INSPIRE_INSPIRED)
                 self.as_setSecondaryTimerTextS(_TIMER_STATES.INSPIRE, text)
         else:

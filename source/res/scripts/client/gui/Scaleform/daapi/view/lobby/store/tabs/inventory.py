@@ -73,7 +73,6 @@ class InventoryVehicleTab(InventoryItemsTab, StoreVehicleTab):
     def _getRequestCriteria(self, invVehicles):
         requestCriteria = super(InventoryVehicleTab, self)._getRequestCriteria(invVehicles)
         requestCriteria |= REQ_CRITERIA.INVENTORY
-        requestCriteria |= ~REQ_CRITERIA.VEHICLE.EVENT
         requestCriteria |= self._getVehicleRiterias(self._filterData['selectedTypes'], self._filterData['selectedLevels'])
         extra = self._filterData['extra']
         return self._getExtraCriteria(extra, requestCriteria, invVehicles)
@@ -93,7 +92,7 @@ class InventoryVehicleTab(InventoryItemsTab, StoreVehicleTab):
         disable = False
         statusMessage = ''
         state = item.getState()[0]
-        isStateSuitable = state in (Vehicle.VEHICLE_STATE.RENTAL_IS_OVER, Vehicle.VEHICLE_STATE.IGR_RENTAL_IS_OVER)
+        isStateSuitable = state in (Vehicle.VEHICLE_STATE.RENTAL_IS_OVER, Vehicle.VEHICLE_STATE.IGR_RENTAL_IS_OVER, Vehicle.VEHICLE_STATE.RENTABLE_AGAIN)
         isExcludedState = state in (Vehicle.VEHICLE_STATE.UNSUITABLE_TO_UNIT,)
         if isStateSuitable or not isExcludedState and not item.canSell:
             statusMessage = makeString('#menu:store/vehicleStates/%s' % state)

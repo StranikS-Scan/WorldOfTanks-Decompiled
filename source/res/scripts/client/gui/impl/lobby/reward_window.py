@@ -90,9 +90,12 @@ class RewardWindowContent(ViewImpl):
                     rendererModel = RewardRendererModel()
                     with rendererModel.transaction() as rewardTx:
                         rewardTx.setIcon(bonus.get('imgSource', ''))
-                        labelStr = bonus.get('label', '') or ''
-                        rewardTx.setLabelStr(labelStr)
+                        rewardTx.setLabelStr(bonus.get('label', '') or '')
                         rewardTx.setTooltipId(index)
+                        rewardTx.setHighlightType(bonus.get('highlightIcon', '') or '')
+                        rewardTx.setOverlayType(bonus.get('overlayIcon', '') or '')
+                        rewardTx.setHasCompensation(bonus.get('hasCompensation', False) or False)
+                        rewardTx.setLabelAlign(bonus.get('align', 'center') or 'center')
                     rewardsList.addViewModel(rendererModel)
                     self.__items[index] = TooltipData(tooltip=bonus.get('tooltip', None), isSpecial=bonus.get('isSpecial', False), specialAlias=bonus.get('specialAlias', ''), specialArgs=bonus.get('specialArgs', None))
 
@@ -147,7 +150,7 @@ class RewardWindowBase(StandardWindow):
         super(RewardWindowBase, self)._finalize()
         self.content.getViewModel().getContent().getViewModel().onConfirmBtnClicked -= self._onConfirmBtnClicked
 
-    def _onConfirmBtnClicked(self, args=None):
+    def _onConfirmBtnClicked(self, _=None):
         self.content.getViewModel().getContent().handleNextButton()
         self._onClosed()
 

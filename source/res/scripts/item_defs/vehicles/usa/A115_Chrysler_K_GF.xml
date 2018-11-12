@@ -1081,7 +1081,7 @@
           <customizationSlots>
             <slot>
               <slotType>	insigniaOnGun	</slotType>
-              <slotId>	2	</slotId>
+              <slotId>	771	</slotId>
               <rayStart>	-0.0013139 -0.0736716 2.61533	</rayStart>
               <rayEnd>	0.00761542 -0.128481 2.61343	</rayEnd>
               <rayUp>	0.114 0.109 5	</rayUp>
@@ -1133,6 +1133,7 @@
       <engines>
         <Chrysler_1200_HP>
           <smplEnginePower>	1100	</smplEnginePower>
+          <smplFwMaxSpeed>	35	</smplFwMaxSpeed>
         </Chrysler_1200_HP>
       </engines>
       <chassis>
@@ -1169,6 +1170,7 @@
               </medium>
             </metal>
           </grounds>
+          <axleCount>	5	</axleCount>
         </Chassis_A115_Chrysler_K_GF>
       </chassis>
     </detailed>

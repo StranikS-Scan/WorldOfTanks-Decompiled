@@ -11,7 +11,7 @@ from gui.shared.formatters import text_styles
 from gui.shared.items_parameters import RELATIVE_PARAMS
 from gui.shared.items_parameters.comparator import PARAM_STATE
 from gui.shared.items_parameters.params_helper import hasGroupPenalties, getCommonParam, PARAMS_GROUPS
-from gui.shared.utils import AUTO_RELOAD_PROP_NAME
+from gui.shared.utils import AUTO_RELOAD_PROP_NAME, MAX_STEERING_LOCK_ANGLE, WHEELED_SWITCH_ON_TIME, WHEELED_SWITCH_OFF_TIME, WHEELED_SWITCH_TIME
 from items import vehicles, artefacts, getTypeOfCompactDescr, ITEM_TYPES
 from web_stubs import i18n
 MEASURE_UNITS = {'aimingTime': MENU.TANK_PARAMS_S,
@@ -68,7 +68,11 @@ MEASURE_UNITS = {'aimingTime': MENU.TANK_PARAMS_S,
  'stunMaxDurationList': MENU.TANK_PARAMS_S,
  'stunMinDurationList': MENU.TANK_PARAMS_S,
  'cooldownSeconds': MENU.TANK_PARAMS_S,
- AUTO_RELOAD_PROP_NAME: MENU.TANK_PARAMS_S}
+ AUTO_RELOAD_PROP_NAME: MENU.TANK_PARAMS_S,
+ MAX_STEERING_LOCK_ANGLE: MENU.TANK_PARAMS_GRADS,
+ WHEELED_SWITCH_ON_TIME: MENU.TANK_PARAMS_S,
+ WHEELED_SWITCH_OFF_TIME: MENU.TANK_PARAMS_S,
+ WHEELED_SWITCH_TIME: MENU.TANK_PARAMS_S}
 COLORLESS_SCHEME = (text_styles.stats, text_styles.stats, text_styles.stats)
 NO_BONUS_SIMPLIFIED_SCHEME = (text_styles.warning, text_styles.warning, text_styles.warning)
 NO_BONUS_BASE_SCHEME = (text_styles.error, text_styles.stats, text_styles.stats)
@@ -78,7 +82,10 @@ EXTRACTED_BONUS_SCHEME = (text_styles.error, text_styles.bonusAppliedText, text_
 SITUATIONAL_SCHEME = (text_styles.critical, text_styles.warning, text_styles.bonusPreviewText)
 VEHICLE_PARAMS = tuple(chain(*[ PARAMS_GROUPS[param] for param in RELATIVE_PARAMS ]))
 ITEMS_PARAMS_LIST = {ITEM_TYPES.vehicleRadio: ('radioDistance', 'weight'),
- ITEM_TYPES.vehicleChassis: ('maxLoad', 'rotationSpeed', 'weight'),
+ ITEM_TYPES.vehicleChassis: ('maxLoad',
+                             'rotationSpeed',
+                             'weight',
+                             MAX_STEERING_LOCK_ANGLE),
  ITEM_TYPES.vehicleEngine: ('enginePower', 'fireStartingChance', 'weight'),
  ITEM_TYPES.vehicleTurret: ('armor', 'rotationSpeed', 'circularVisionRadius', 'weight'),
  ITEM_TYPES.vehicle: VEHICLE_PARAMS,
@@ -137,7 +144,7 @@ def formatVehicleParamName(paramName, showMeasureUnit=True):
     if isRelativeParameter(paramName):
         return text_styles.middleTitle(MENU.tank_params(paramName))
     else:
-        builder = text_styles.builder()
+        builder = text_styles.builder(delimiter='&nbsp;')
         builder.addStyledText(text_styles.main, MENU.tank_params(paramName))
         if showMeasureUnit:
             builder.addStyledText(text_styles.standard, MEASURE_UNITS.get(paramName, ''))
@@ -254,7 +261,11 @@ FORMAT_SETTINGS = {'relativePower': _integralFormat,
  'stunMinDurationList': _niceListFormat,
  'cooldownSeconds': _niceFormat,
  AUTO_RELOAD_PROP_NAME: {'preprocessor': _autoReloadPreprocessor,
-                         'rounder': lambda v: BigWorld.wg_getNiceNumberFormat(round(v, 1))}}
+                         'rounder': lambda v: BigWorld.wg_getNiceNumberFormat(round(v, 1))},
+ MAX_STEERING_LOCK_ANGLE: _niceFormat,
+ WHEELED_SWITCH_ON_TIME: _niceFormat,
+ WHEELED_SWITCH_OFF_TIME: _niceFormat,
+ WHEELED_SWITCH_TIME: _niceListFormat}
 
 def _deltaWrapper(fn):
 

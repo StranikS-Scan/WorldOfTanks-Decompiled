@@ -1146,7 +1146,7 @@
           <customizationSlots>
             <slot>
               <slotType>	insigniaOnGun	</slotType>
-              <slotId>	2	</slotId>
+              <slotId>	771	</slotId>
               <rayStart>	-0.0942743 -0.0361411 3.77	</rayStart>
               <rayEnd>	-0.152106 -0.105817 3.22157	</rayEnd>
               <rayUp>	0.11 0.109 5	</rayUp>
@@ -1199,10 +1199,12 @@
       <engines>
         <Porsche_Typ_205_2>
           <smplEnginePower>	1600	</smplEnginePower>
+          <smplFwMaxSpeed>	20	</smplFwMaxSpeed>
         </Porsche_Typ_205_2>
       </engines>
       <chassis>
         <Chassis_G138_VK168_02_Mauerbrecher>
+          <axleCount>	5	</axleCount>
           <grounds>
             <ground>
               <medium>

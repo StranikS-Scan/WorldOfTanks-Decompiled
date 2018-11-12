@@ -15,7 +15,7 @@ from gui.shared.items_parameters import functions, getShellDescriptors, getOptio
 from gui.shared.items_parameters.comparator import rateParameterState, PARAM_STATE
 from gui.shared.items_parameters.functions import getBasicShell
 from gui.shared.items_parameters.params_cache import g_paramsCache
-from gui.shared.utils import DAMAGE_PROP_NAME, PIERCING_POWER_PROP_NAME, AIMING_TIME_PROP_NAME, STUN_DURATION_PROP_NAME, GUARANTEED_STUN_DURATION_PROP_NAME, AUTO_RELOAD_PROP_NAME, GUN_AUTO_RELOAD, GUN_CAN_BE_AUTO_RELOAD
+from gui.shared.utils import DAMAGE_PROP_NAME, PIERCING_POWER_PROP_NAME, AIMING_TIME_PROP_NAME, STUN_DURATION_PROP_NAME, GUARANTEED_STUN_DURATION_PROP_NAME, AUTO_RELOAD_PROP_NAME, GUN_AUTO_RELOAD, GUN_CAN_BE_AUTO_RELOAD, MAX_STEERING_LOCK_ANGLE, WHEELED_SWITCH_OFF_TIME, WHEELED_SWITCH_ON_TIME, WHEELED_SWITCH_TIME
 from gui.shared.utils import DISPERSION_RADIUS_PROP_NAME, SHELLS_PROP_NAME, GUN_NORMAL, SHELLS_COUNT_PROP_NAME
 from gui.shared.utils import GUN_CAN_BE_CLIP, RELOAD_TIME_PROP_NAME
 from gui.shared.utils import RELOAD_MAGAZINE_TIME_PROP_NAME, SHELL_RELOADING_TIME_PROP_NAME, GUN_CLIP
@@ -108,6 +108,10 @@ def _timesToSecs(timesPerMinutes):
     return round(time_utils.ONE_MINUTE / timesPerMinutes, 3)
 
 
+def _getMaxSteeringLockAngle(axleSteeringLockAngles):
+    return max(map(abs, axleSteeringLockAngles)) if axleSteeringLockAngles else None
+
+
 class _ParameterBase(object):
 
     def __init__(self, itemDescr, vehicleDescr=None):
@@ -186,11 +190,19 @@ class ChassisParams(WeightedParam):
 
     @property
     def rotationSpeed(self):
-        return int(round(math.degrees(self._itemDescr.rotationSpeed)))
+        return int(round(math.degrees(self._itemDescr.rotationSpeed))) if not self.isWheeled else None
+
+    @property
+    def maxSteeringLockAngle(self):
+        return _getMaxSteeringLockAngle(g_paramsCache.getWheeledChassisAxleLockAngles(self._itemDescr.compactDescr)) if self.isWheeled else None
 
     @property
     def isHydraulic(self):
         return self._getPrecachedInfo().isHydraulic
+
+    @property
+    def isWheeled(self):
+        return self._getPrecachedInfo().isWheeled
 
 
 class TurretParams(WeightedParam):
@@ -252,9 +264,16 @@ class VehicleParams(_ParameterBase):
 
     @property
     def chassisRotationSpeed(self):
-        allTrfs = self.__getTerrainResistanceFactors()
-        avgTrf = sum(allTrfs) / len(allTrfs)
-        return math.degrees(items_utils.getChassisRotationSpeed(self._itemDescr, self.__factors)) / avgTrf
+        if not self._itemDescr.isWheeledVehicle:
+            allTrfs = self.__getTerrainResistanceFactors()
+            avgTrf = sum(allTrfs) / len(allTrfs)
+            return math.degrees(items_utils.getChassisRotationSpeed(self._itemDescr, self.__factors)) / avgTrf
+        else:
+            return None
+
+    @property
+    def maxSteeringLockAngle(self):
+        return _getMaxSteeringLockAngle(self.__getChassisPhysics().get('axleSteeringLockAngles')) if self._itemDescr.isWheeledVehicle else None
 
     @property
     def hullArmor(self):
@@ -362,7 +381,11 @@ class VehicleParams(_ParameterBase):
     @property
     def relativeMobility(self):
         coeffs = self.__coefficients['mobility']
-        value = round((self.chassisRotationSpeed * coeffs['chassisRotation'] + self.speedLimits[0] * coeffs['speedLimit'] + self.__getRealSpeedLimit() * coeffs['realSpeedLimit']) * coeffs['normalization'] * self.__adjustmentCoefficient('mobility'))
+        if self._itemDescr.isWheeledVehicle:
+            suspensionInfluence = self.maxSteeringLockAngle * coeffs['maxSteeringLockAngle']
+        else:
+            suspensionInfluence = self.chassisRotationSpeed * coeffs['chassisRotation']
+        value = round((suspensionInfluence + self.speedLimits[0] * coeffs['speedLimit'] + self.__getRealSpeedLimit() * coeffs['realSpeedLimit']) * coeffs['normalization'] * self.__adjustmentCoefficient('mobility'))
         return max(value, MIN_RELATIVE_VALUE)
 
     @property
@@ -425,15 +448,29 @@ class VehicleParams(_ParameterBase):
 
     @property
     def switchOnTime(self):
-        return self._itemDescr.type.siegeModeParams['switchOnTime'] if self._itemDescr.hasSiegeMode else None
+        return self.__getSwitchOnTime() if self.__hasHydraulicSiegeMode() else None
 
     @property
     def switchOffTime(self):
-        return self._itemDescr.type.siegeModeParams['switchOffTime'] if self._itemDescr.hasSiegeMode else None
+        return self.__getSwitchOffTime() if self.__hasHydraulicSiegeMode() else None
 
     @property
     def switchTime(self):
-        return (self.switchOnTime, self.switchOffTime) if self._itemDescr.hasSiegeMode else None
+        return (self.switchOnTime, self.switchOffTime) if self.__hasHydraulicSiegeMode() else None
+
+    @property
+    def wheeledSwitchOnTime(self):
+        return self.__getSwitchOnTime() if self.__hasWheeledSwitchMode() else None
+
+    @property
+    def wheeledSwitchOffTime(self):
+        return self.__getSwitchOffTime() if self.__hasWheeledSwitchMode() else None
+
+    @property
+    def wheeledSwitchTime(self):
+        if self.__hasWheeledSwitchMode() and (self.wheeledSwitchOnTime or self.wheeledSwitchOffTime):
+            return (self.wheeledSwitchOnTime, self.wheeledSwitchOffTime)
+        return None
 
     @property
     def stunMaxDuration(self):
@@ -457,7 +494,11 @@ class VehicleParams(_ParameterBase):
          'switchOffTime',
          'switchTime',
          AUTO_RELOAD_PROP_NAME,
-         RELOAD_TIME_PROP_NAME)
+         RELOAD_TIME_PROP_NAME,
+         MAX_STEERING_LOCK_ANGLE,
+         WHEELED_SWITCH_ON_TIME,
+         WHEELED_SWITCH_OFF_TIME,
+         WHEELED_SWITCH_TIME)
         stunConditionParams = ('stunMaxDuration', 'stunMinDuration')
         result = _ParamsDictProxy(self, preload, conditions=((conditionalParams, lambda v: v is not None), (stunConditionParams, lambda s: _isStunParamVisible(self._itemDescr.shot.shell))))
         return result
@@ -547,6 +588,12 @@ class VehicleParams(_ParameterBase):
         vDescr = self._itemDescr
         return len(vDescr.hull.fakeTurrets['lobby']) != len(vDescr.turrets)
 
+    def __hasHydraulicSiegeMode(self):
+        return not self._itemDescr.isWheeledVehicle and self._itemDescr.hasSiegeMode
+
+    def __hasWheeledSwitchMode(self):
+        return self._itemDescr.isWheeledVehicle and self._itemDescr.hasSiegeMode
+
     def __getRealSpeedLimit(self):
         enginePower = self.__getEnginePhysics()['smplEnginePower']
         rollingFriction = self.__getChassisPhysics()['grounds']['ground']['rollingFriction']
@@ -577,6 +624,14 @@ class VehicleParams(_ParameterBase):
             return (min([ key for _, key in minPitch ]) + hullAimingPitchMin, max([ key for _, key in maxPitch ]) + hullAimingPitchMax)
         else:
             return self._itemDescr.gun.pitchLimits['absolute']
+
+    def __getSwitchOffTime(self):
+        siegeMode = self._itemDescr.type.siegeModeParams
+        return siegeMode['switchOffTime'] if siegeMode else None
+
+    def __getSwitchOnTime(self):
+        siegeMode = self._itemDescr.type.siegeModeParams
+        return siegeMode['switchOnTime'] if siegeMode else None
 
     def __hasClipGun(self):
         return self._itemDescr.gun.clip[0] != 1

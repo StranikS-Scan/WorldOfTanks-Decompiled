@@ -73,18 +73,6 @@ class ISharedControllersLocator(object):
     def questProgress(self):
         raise NotImplementedError
 
-    @property
-    def eventPoints(self):
-        raise NotImplementedError
-
-    @property
-    def battleHints(self):
-        raise NotImplementedError
-
-    @property
-    def eventController(self):
-        raise NotImplementedError
-
 
 class IDynamicControllersLocator(object):
     __slots__ = ()

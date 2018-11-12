@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/vehicle_systems/tankStructure.py
 from collections import namedtuple
-from soft_exception import SoftException
+import random
 
 class ModelStates(object):
     UNDAMAGED = 'undamaged'
@@ -27,7 +27,7 @@ class TankPartNames(object):
             if n == name:
                 return idx
 
-        raise SoftException('Invalid part name!')
+        return None
 
 
 class DetachedTurretPartNames(object):
@@ -66,7 +66,7 @@ class TankPartIndexes(object):
 
     @staticmethod
     def getName(idx):
-        return TankPartNames.ALL[idx]
+        return TankPartNames.ALL[idx] if idx < len(TankPartNames.ALL) else None
 
 
 class TankNodeNames(object):
@@ -129,6 +129,19 @@ def getCrashedSkeleton(vehicleDesc):
     return result
 
 
+def chooseCrashSkin(partModelSets):
+    crashSetsCount = 0
+    for setName in partModelSets:
+        if setName.find('alterCrash') != -1:
+            crashSetsCount += 1
+
+    crashSkinNum = random.randint(0, crashSetsCount)
+    if crashSkinNum == 0:
+        return partModelSets['default']
+    crashSkinName = 'alterCrash' + str(crashSkinNum)
+    return partModelSets[crashSkinName]
+
+
 def getPartModelsFromDesc(vehicleDesc, modelsSetParams):
     skinName = modelsSetParams.skin
     paths = []
@@ -136,6 +149,8 @@ def getPartModelsFromDesc(vehicleDesc, modelsSetParams):
         part = getattr(vehicleDesc, partName)
         if skinName in part.modelsSets:
             skin = part.modelsSets[skinName]
+        elif modelsSetParams.state != 'undamaged':
+            skin = chooseCrashSkin(part.modelsSets)
         else:
             skin = part.modelsSets['default']
         path = skin.getPathByStateName(modelsSetParams.state)

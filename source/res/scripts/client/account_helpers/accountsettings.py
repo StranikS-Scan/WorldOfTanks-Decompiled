@@ -58,7 +58,6 @@ NEW_SETTINGS_COUNTER = 'newSettingsCounter'
 NEW_HOF_COUNTER = 'newHofCounter'
 NEW_LOBBY_TAB_COUNTER = 'newLobbyTabCounter'
 PROFILE_TECHNIQUE = 'profileTechnique'
-TRAJECTORY_VIEW_HINT_COUNTER = 'trajectoryViewHintCounter'
 PROFILE_TECHNIQUE_MEMBER = 'profileTechniqueMember'
 SHOW_CRYSTAL_HEADER_BAND = 'showCrystalHeaderBand'
 ELEN_NOTIFICATIONS = 'elenNotifications'
@@ -76,11 +75,20 @@ LAST_BADGES_VISIT = 'lastBadgesVisit'
 ENABLE_RANKED_ANIMATIONS = 'enableRankedAnimations'
 COLOR_SETTINGS_TAB_IDX = 'colorSettingsTabIdx'
 COLOR_SETTINGS_SHOWS_COUNT = 'colorSettingsShowsCount'
-QUEST_PROGRESS_SHOWS_COUNT = 'questProgressShowsCount'
 APPLIED_COLOR_SETTINGS = 'appliedColorSettings'
 SELECTED_QUEST_IN_REPLAY = 'SELECTED_QUEST_IN_REPLAY'
-EVENT_INTRO_SHOW_COUNT = 'eventIntroShowCount'
+LAST_SELECTED_PM_BRANCH = 'lastSelectedPMBranch'
+WHEELED_DEATH_DELAY_COUNT = 'wheeledDeathCounter'
 CUSTOMIZATION_SECTION = 'customization'
+PROJECTION_DECAL_TAB_SHOWN_FIELD = 'isProjectionDecalTabShown'
+QUEST_PROGRESS_HINT_SECTION = 'questProgressHint'
+HELP_SCREEN_HINT_SECTION = 'helpScreenHint'
+SIEGE_HINT_SECTION = 'siegeModeHint'
+WHEELED_MODE_HINT_SECTION = 'wheeledModeScreenHint'
+TRAJECTORY_VIEW_HINT_SECTION = 'trajectoryViewHint'
+LAST_DISPLAY_DAY = 'lastDisplayDay'
+HINTS_LEFT = 'hintsLeft'
+NUM_BATTLES = 'numBattles'
 KNOWN_SELECTOR_BATTLES = 'knownSelectorBattles'
 DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                'shop_current': (-1, STORE_CONSTANTS.VEHICLE, False),
@@ -259,7 +267,8 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                                     'isRankedWelcomeViewShowed': False,
                                     'isRankedWelcomeViewStarted': False,
                                     'isEpicRandomCheckboxClicked': False,
-                                    'isEpicWelcomeViewShowed': False},
+                                    'isEpicWelcomeViewShowed': False,
+                                    'lastShownEpicWelcomeScreen': 0},
                EULA_VERSION: {'version': 0},
                LINKEDSET_QUESTS: {'shown': 0},
                FORT_MEMBER_TUTORIAL: {'wasShown': False},
@@ -458,6 +467,8 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                 'doubleCarouselType': 0,
                 'vehicleCarouselStats': True,
                 'siegeModeHintCounter': 10,
+                'wheeledModeHintCounter': 6,
+                WHEELED_DEATH_DELAY_COUNT: 10,
                 NEW_SETTINGS_COUNTER: {'GameSettings': {'gameplay_epicStandard': True,
                                                         'c11nHistoricallyAccurate': True,
                                                         'hangarCamParallaxEnabled': True,
@@ -473,17 +484,30 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                                                             'feedbackQuestsProgress': {'progressViewType': True,
                                                                                        'progressViewConditions': True}},
                                        'ControlsSettings': {'showQuestProgress': True}},
-                TRAJECTORY_VIEW_HINT_COUNTER: 10,
                 SHOW_OPT_DEVICE_HINT: True,
                 'c11nHistoricallyAccurate': True,
                 LAST_BADGES_VISIT: 0,
                 ENABLE_RANKED_ANIMATIONS: True,
                 COLOR_SETTINGS_TAB_IDX: 0,
                 COLOR_SETTINGS_SHOWS_COUNT: 0,
-                QUEST_PROGRESS_SHOWS_COUNT: 6,
                 SELECTED_QUEST_IN_REPLAY: None,
                 APPLIED_COLOR_SETTINGS: {},
-                EVENT_INTRO_SHOW_COUNT: 0},
+                LAST_SELECTED_PM_BRANCH: 0,
+                TRAJECTORY_VIEW_HINT_SECTION: {HINTS_LEFT: 3,
+                                               LAST_DISPLAY_DAY: 0,
+                                               NUM_BATTLES: 0},
+                QUEST_PROGRESS_HINT_SECTION: {HINTS_LEFT: 3,
+                                              LAST_DISPLAY_DAY: 0,
+                                              NUM_BATTLES: 0},
+                HELP_SCREEN_HINT_SECTION: {HINTS_LEFT: 3,
+                                           LAST_DISPLAY_DAY: 0,
+                                           NUM_BATTLES: 0},
+                SIEGE_HINT_SECTION: {HINTS_LEFT: 3,
+                                     LAST_DISPLAY_DAY: 0,
+                                     NUM_BATTLES: 0},
+                WHEELED_MODE_HINT_SECTION: {HINTS_LEFT: 3,
+                                            LAST_DISPLAY_DAY: 0,
+                                            NUM_BATTLES: 0}},
  KEY_COUNTERS: {NEW_HOF_COUNTER: {PROFILE_CONSTANTS.HOF_ACHIEVEMENTS_BUTTON: True,
                                   PROFILE_CONSTANTS.HOF_VEHICLES_BUTTON: True,
                                   PROFILE_CONSTANTS.HOF_VIEW_RATING_BUTTON: True},
@@ -526,7 +550,7 @@ def _recursiveStep(defaultDict, savedDict, finalDict):
 
 class AccountSettings(object):
     onSettingsChanging = Event.Event()
-    version = 37
+    version = 38
     settingsCore = dependency.descriptor(ISettingsCore)
     __cache = {'login': None,
      'section': None}
@@ -922,6 +946,12 @@ class AccountSettings(object):
                         newSection.writeString('fireKey', 'KEY_NONE')
 
                 CommandMapping.g_instance.restoreUserConfig()
+            if currVersion < 38:
+                for key, section in _filterAccountSection(ads):
+                    accSettings = AccountSettings.__readSection(section, KEY_SETTINGS)
+                    if CUSTOMIZATION_SECTION in accSettings.keys():
+                        accSettings.write(CUSTOMIZATION_SECTION, _pack({}))
+
             ads.writeInt('version', AccountSettings.version)
         return
 

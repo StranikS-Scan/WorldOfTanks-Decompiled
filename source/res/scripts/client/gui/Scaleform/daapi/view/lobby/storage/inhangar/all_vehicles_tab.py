@@ -3,6 +3,7 @@
 from PlayerEvents import g_playerEvents
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.storage.inhangar import StorageCarouselDataProvider, StorageCarouselFilter
+from gui.Scaleform.daapi.view.lobby.store.browser.ingameshop_helpers import getVehicleUrl
 from gui.Scaleform.daapi.view.meta.AllVehiclesTabViewMeta import AllVehiclesTabViewMeta
 from gui.Scaleform.locale.STORAGE import STORAGE
 from gui.Scaleform.locale.TANK_CAROUSEL_FILTER import TANK_CAROUSEL_FILTER
@@ -19,6 +20,7 @@ from skeletons.gui.game_control import IRentalsController, IIGRController
 from gui.Scaleform.daapi.view.common.vehicle_carousel import carousel_environment
 from CurrentVehicle import g_currentVehicle
 from gui.shared.items_cache import CACHE_SYNC_REASON
+from gui.shared.event_dispatcher import showWebShop
 _SEARCH_INPUT_MAX_CHARS = 50
 
 class _CanSoldCriteriesGroup(CriteriesGroup):
@@ -54,6 +56,9 @@ class AllVehiclesTabView(AllVehiclesTabViewMeta, carousel_environment.ICarouselE
     def sellItem(self, itemId):
         shared_events.showVehicleSellDialog(self.itemsCache.items.getItemByCD(int(itemId)).invID)
 
+    def navigateToStore(self):
+        showWebShop(getVehicleUrl())
+
     def showItemInfo(self, itemId):
         shared_events.showVehicleInfo(itemId)
 
@@ -68,7 +73,7 @@ class AllVehiclesTabView(AllVehiclesTabViewMeta, carousel_environment.ICarouselE
 
     def applyFilter(self):
         self._dataProvider.applyFilter()
-        self.__updateCounter(not self.filter.isDefault())
+        self.__updateCounter()
         hasNoVehicles = self._dataProvider.getTotalVehiclesCount() == 0
         hasNoFilterResults = self._dataProvider.getCurrentVehiclesCount() == 0
         filterWarningVO = None
@@ -78,7 +83,7 @@ class AllVehiclesTabView(AllVehiclesTabViewMeta, carousel_environment.ICarouselE
         return
 
     def blinkCounter(self):
-        self.__updateCounter(not self.filter.isDefault())
+        self.__updateCounter()
 
     def formatCountVehicles(self):
         return carousel_environment.formatCountString(self._dataProvider.getCurrentVehiclesCount(), self._dataProvider.getTotalVehiclesCount())
@@ -121,14 +126,15 @@ class AllVehiclesTabView(AllVehiclesTabViewMeta, carousel_environment.ICarouselE
         searchInputLabel = _ms(TANK_CAROUSEL_FILTER.POPOVER_LABEL_SEARCHNAMEVEHICLE)
         self.as_updateSearchS(searchInputLabel, '', searchInputTooltip, _SEARCH_INPUT_MAX_CHARS)
 
-    def __updateCounter(self, shouldShow):
+    def __updateCounter(self):
+        shouldShow = not self.filter.isDefault()
         totalVehicles = self._dataProvider.getTotalVehiclesCount()
         if shouldShow and totalVehicles > 0:
             filteredVehicles = self._dataProvider.getCurrentVehiclesCount()
             drawAttention = filteredVehicles == 0
             self.as_updateCounterS(shouldShow, self._formatCountString(filteredVehicles, totalVehicles), drawAttention)
         else:
-            self.as_updateCounterS(False, '', False)
+            self.as_updateCounterS(False, self._formatTotalCountString(totalVehicles), False)
 
     def __onViewLoaded(self, view, *args, **kwargs):
         if view.settings.alias == VIEW_ALIAS.STORAGE_VEHICLES_FILTER_POPOVER:

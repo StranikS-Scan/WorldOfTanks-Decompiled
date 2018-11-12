@@ -310,6 +310,10 @@ class BATTLE_RESULTS(object):
     GETPREMIUMPOPOVER_ACTIONBTN_LABEL = '#battle_results:getPremiumPopover/actionBtn/label'
     GETPREMIUMPOPOVER_PREM = '#battle_results:getPremiumPopover/prem'
     GETPREMIUMPOPOVER_AWARD = '#battle_results:getPremiumPopover/award'
+    PERSONALQUEST_BONUS_MULTIPLIER = '#battle_results:personalQuest/bonus/multiplier'
+    PERSONALQUEST_BONUS_DESCR = '#battle_results:personalQuest/bonus/descr'
+    PERSONALQUEST_FAILED_ATTENTION = '#battle_results:personalQuest/failed/attention'
+    PERSONALQUEST_FAILED_DESCR = '#battle_results:personalQuest/failed/descr'
     DETAILS_TIME_LBL_ENUM = (DETAILS_TIME_LBL_OBJECTIVESREACHED,
      DETAILS_TIME_LBL_OBJECTIVESDESTROYED,
      DETAILS_TIME_LBL_BASESCAPTURED,

@@ -90,7 +90,7 @@
       </slot>
       <slot>
         <slotType>	inscription	</slotType>
-        <slotId>	2	</slotId>
+        <slotId>	36	</slotId>
         <rayStart>	1.03017 0.751605 0.12996	</rayStart>
         <rayEnd>	0.974423 0.559533 0.130107	</rayEnd>
         <rayUp>	-0.960157 0.27946 -0.000001	</rayUp>
@@ -100,7 +100,7 @@
       </slot>
       <slot>
         <slotType>	camouflage	</slotType>
-        <slotId>	5	</slotId>
+        <slotId>	3	</slotId>
         <anchorPosition>	0.000000 0.566193 -1.62285	</anchorPosition>
         <anchorDirection>	0.000000 0.329414 -0.944186	</anchorDirection>
       </slot>
@@ -353,7 +353,7 @@
       <customizationSlots>
         <slot>
           <slotType>	style	</slotType>
-          <slotId>	4	</slotId>
+          <slotId>	257	</slotId>
           <anchorPosition>	0.000058 1.96345 0.0493159	</anchorPosition>
           <anchorDirection>	0.000000 1 0.000000	</anchorDirection>
         </slot>
@@ -437,7 +437,7 @@
           <customizationSlots>
             <slot>
               <slotType>	camouflage	</slotType>
-              <slotId>	7	</slotId>
+              <slotId>	770	</slotId>
               <anchorPosition>	0.000024 -0.0337089 0.948841	</anchorPosition>
               <anchorDirection>	-0.000000 0.000000 1	</anchorDirection>
               <applyTo>	4096	</applyTo>
@@ -470,7 +470,7 @@
       <customizationSlots>
         <slot>
           <slotType>	player	</slotType>
-          <slotId>	3	</slotId>
+          <slotId>	514	</slotId>
           <rayStart>	-0.85423 0.244644 0.12481	</rayStart>
           <rayEnd>	-0.475219 0.140018 0.0512915	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
@@ -480,7 +480,7 @@
         </slot>
         <slot>
           <slotType>	camouflage	</slotType>
-          <slotId>	6	</slotId>
+          <slotId>	513	</slotId>
           <anchorPosition>	0.000000 0.645576 0.000000	</anchorPosition>
           <anchorDirection>	0.000000 1 0.000000	</anchorDirection>
         </slot>
@@ -504,6 +504,7 @@
       <engines>
         <Medous_MAT>
           <smplEnginePower>	190.3106	</smplEnginePower>
+          <smplFwMaxSpeed>	64	</smplFwMaxSpeed>
         </Medous_MAT>
       </engines>
       <chassis>

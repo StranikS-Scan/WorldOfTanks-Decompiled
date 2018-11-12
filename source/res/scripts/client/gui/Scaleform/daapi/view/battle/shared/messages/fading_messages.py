@@ -1,7 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/shared/messages/fading_messages.py
 import operator
-from constants import ARENA_GUI_TYPE
 from soft_exception import SoftException
 from account_helpers.settings_core.settings_constants import GRAPHICS
 from debug_utils import LOG_DEBUG, LOG_CURRENT_EXCEPTION
@@ -19,10 +18,7 @@ _COLOR_TO_METHOD = {BATTLE_MESSAGES_CONSTS.COLOR_YELLOW: 'as_showYellowMessageS'
  BATTLE_MESSAGES_CONSTS.COLOR_PURPLE: 'as_showPurpleMessageS',
  BATTLE_MESSAGES_CONSTS.COLOR_GREEN: 'as_showGreenMessageS',
  BATTLE_MESSAGES_CONSTS.COLOR_GOLD: 'as_showGoldMessageS',
- BATTLE_MESSAGES_CONSTS.COLOR_SELF: 'as_showSelfMessageS',
- BATTLE_MESSAGES_CONSTS.COLOR_YELLOW_EVENT: 'as_showEventYellowMessageS',
- BATTLE_MESSAGES_CONSTS.COLOR_GREEN_EVENT: 'as_showEventGreenMessageS',
- BATTLE_MESSAGES_CONSTS.COLOR_GREEN_CLEAN_EVENT: 'as_showEventGreenCleanMessageS'}
+ BATTLE_MESSAGES_CONSTS.COLOR_SELF: 'as_showSelfMessageS'}
 
 class FadingMessages(BattleMessageListMeta):
     sessionProvider = dependency.descriptor(IBattleSessionProvider)
@@ -65,9 +61,6 @@ class FadingMessages(BattleMessageListMeta):
     def _populate(self):
         super(FadingMessages, self)._populate()
         settings, self.__styles, self.__messages = messages_panel_reader.readXML(self.__settingsFilePath)
-        arenaGuiType = self.sessionProvider.arenaVisitor.getArenaGuiType()
-        if arenaGuiType == ARENA_GUI_TYPE.EVENT_BATTLES:
-            settings['direction'] = BATTLE_MESSAGES_CONSTS.LIST_DIRECTION_DOWN
         self.as_setupListS(settings)
         self._addGameListeners()
 

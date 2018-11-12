@@ -63,7 +63,7 @@ class EpicDestroyTimersPanel(EpicDestroyTimersPanelMeta):
                 self.__delayedCB = None
             else:
                 self.__displayDeathZoneTimer(value)
-        elif BigWorld.player().team == EPIC_BATTLE_TEAM_ID.TEAM_DEFENDER and not value.entered and avatar_getter.getInputHandler().ctrlModeName != CTRL_MODE_NAME.POSTMORTEM:
+        elif BigWorld.player().team == EPIC_BATTLE_TEAM_ID.TEAM_DEFENDER and not value.entered and avatar_getter.getInputHandler().ctrlModeName != CTRL_MODE_NAME.POSTMORTEM and not value.needToCloseTimer():
             if self.__delayedCB is not None:
                 BigWorld.cancelCallback(self.__delayedCB)
             self.__delayedCB = BigWorld.callback(_LEAVE_ZONE_DEFENDER_DELAY, partial(self.__displayDeathZoneTimer, value))
@@ -84,7 +84,8 @@ class EpicDestroyTimersPanel(EpicDestroyTimersPanelMeta):
 
     def __displayDeathZoneTimer(self, value):
         super(EpicDestroyTimersPanel, self)._showDeathZoneTimer(value)
-        self.__playSound(EPIC_SOUND.BF_EB_ENTER_CLOSED_ZONE)
+        if value.totalTime > 0:
+            self.__playSound(EPIC_SOUND.BF_EB_ENTER_CLOSED_ZONE)
         self.__delayedCB = None
         return
 

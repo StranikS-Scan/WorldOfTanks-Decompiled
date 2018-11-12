@@ -4,6 +4,8 @@
 
 class INGAME_HELP(object):
     BATTLECONTROLS_TITLE = '#ingame_help:battleControls/title'
+    BATTLECONTROLS_PAGETITLE = '#ingame_help:battleControls/pageTitle'
+    BATTLECONTROLS_CLOSEBTNLABEL = '#ingame_help:battleControls/closeBtnLabel'
     BATTLECONTROLS_MOVEMENTFORWARD = '#ingame_help:battleControls/movementForward'
     BATTLECONTROLS_MOVEMENTBACKWARD = '#ingame_help:battleControls/movementBackward'
     BATTLECONTROLS_MOVEMENTLEFT = '#ingame_help:battleControls/movementLeft'
@@ -85,3 +87,11 @@ class INGAME_HELP(object):
     SETTINGS_HELP = '#ingame_help:settings/help'
     SETTINGS_BUTTON = '#ingame_help:settings/button'
     RETURNTOGAME = '#ingame_help:returnToGame'
+    DETAILSHELP_TWOMODES_TITLE = '#ingame_help:detailsHelp/twoModes/title'
+    DETAILSHELP_BURNOUT_TITLE = '#ingame_help:detailsHelp/burnout/title'
+    DETAILSHELP_ABOUTTECHNIQUE_TITLE = '#ingame_help:detailsHelp/aboutTechnique/title'
+    DETAILSHELP_STABLECHASSIS_TITLE = '#ingame_help:detailsHelp/stableChassis/title'
+    DETAILSHELP_TWOMODES = '#ingame_help:detailsHelp/twoModes'
+    DETAILSHELP_BURNOUT = '#ingame_help:detailsHelp/burnout'
+    DETAILSHELP_ABOUTTECHNIQUE = '#ingame_help:detailsHelp/aboutTechnique'
+    DETAILSHELP_STABLECHASSIS = '#ingame_help:detailsHelp/stableChassis'

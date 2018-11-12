@@ -7,6 +7,7 @@ from gui.Scaleform.genConsts.QUESTS_ALIASES import QUESTS_ALIASES
 from gui.marathon.marathon_constants import DEFAULT_MARATHON_PREFIX
 from gui.server_events import awards, events_helpers, recruit_helper
 from gui.shared import g_eventBus, events, event_dispatcher as shared_events, EVENT_BUS_SCOPE
+from gui.shared.events import PersonalMissionsEvent
 from helpers import dependency
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
@@ -132,6 +133,10 @@ def hidePersonalMissionDetails():
     g_eventBus.handleEvent(events.HideWindowEvent(events.HideWindowEvent.HIDE_PERSONAL_MISSION_DETAILS_VIEW), EVENT_BUS_SCOPE.LOBBY)
 
 
+def showPersonalMissionBrowserView(ctx):
+    g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.PERSONAL_MISSIONS_BROWSER_VIEW, ctx=ctx), scope=EVENT_BUS_SCOPE.LOBBY)
+
+
 def showMission(eventID, eventType=None):
     eventsCache = dependency.instance(IEventsCache)
     quests = eventsCache.getQuests()
@@ -218,6 +223,10 @@ def showOperationUnlockedAward(quest, ctx):
 def showPersonalMissionsOperationAwardsScreen(ctx):
     alias = PERSONAL_MISSIONS_ALIASES.PERSONAL_MISSIONS_OPERATION_AWARDS_SCREEN_ALIAS
     g_eventBus.handleEvent(events.LoadViewEvent(alias, ctx=ctx), scope=EVENT_BUS_SCOPE.LOBBY)
+
+
+def updatePersonalMissionAward(context):
+    g_eventBus.handleEvent(events.PersonalMissionsEvent(PersonalMissionsEvent.UPDATE_AWARD_SCREEN, ctx=context), EVENT_BUS_SCOPE.LOBBY)
 
 
 def showPersonalMissionFirstEntryAwardView(ctx):

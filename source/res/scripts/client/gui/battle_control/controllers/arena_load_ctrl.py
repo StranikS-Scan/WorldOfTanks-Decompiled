@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/battle_control/controllers/arena_load_ctrl.py
 import BigWorld
+from gui.battle_control import avatar_getter
 from gui.battle_control.arena_info.interfaces import IArenaVehiclesController
 from gui.battle_control.battle_constants import BATTLE_CTRL_ID
 from gui.battle_control.view_components import ViewComponentsController
@@ -54,6 +55,7 @@ class ArenaLoadController(IArenaVehiclesController, ViewComponentsController):
     def arenaLoadCompleted(self):
         self.__isCompleted = True
         self.gameplay.postStateEvent(PlayerEventID.AVATAR_ARENA_LOADED, arenaGuiType=self.__arenaVisitor.getArenaGuiType())
+        avatar_getter.setClientReady()
         BigWorld.wg_setReducedFpsMode(False)
         from messenger import MessengerEntry
         MessengerEntry.g_instance.onAvatarShowGUI()

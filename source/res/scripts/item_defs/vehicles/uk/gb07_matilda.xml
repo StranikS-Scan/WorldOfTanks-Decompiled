@@ -95,7 +95,7 @@
       </slot>
       <slot>
         <slotType>	inscription	</slotType>
-        <slotId>	2	</slotId>
+        <slotId>	36	</slotId>
         <rayStart>	1.26602 0.458127 0.183102	</rayStart>
         <rayEnd>	1.08713 0.368694 0.183102	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
@@ -105,7 +105,7 @@
       </slot>
       <slot>
         <slotType>	camouflage	</slotType>
-        <slotId>	9	</slotId>
+        <slotId>	3	</slotId>
         <anchorPosition>	0.000000 0.476889 -1.87263	</anchorPosition>
         <anchorDirection>	0.000000 0.246786 -0.96907	</anchorDirection>
       </slot>
@@ -787,7 +787,7 @@
       <customizationSlots>
         <slot>
           <slotType>	style	</slotType>
-          <slotId>	7	</slotId>
+          <slotId>	257	</slotId>
           <anchorPosition>	0.000068 2.30008 0.568074	</anchorPosition>
           <anchorDirection>	-0.000000 1 0.000000	</anchorDirection>
         </slot>
@@ -1461,7 +1461,7 @@
       <customizationSlots>
         <slot>
           <slotType>	style	</slotType>
-          <slotId>	8	</slotId>
+          <slotId>	257	</slotId>
           <anchorPosition>	0.000100 2.30008 0.568052	</anchorPosition>
           <anchorDirection>	0.000000 1 0.000000	</anchorDirection>
         </slot>
@@ -1557,7 +1557,7 @@
           <customizationSlots>
             <slot>
               <slotType>	camouflage	</slotType>
-              <slotId>	18	</slotId>
+              <slotId>	770	</slotId>
               <anchorPosition>	0.000001 -0.0118072 0.931685	</anchorPosition>
               <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
               <applyTo>	4096	</applyTo>
@@ -1618,7 +1618,7 @@
           <customizationSlots>
             <slot>
               <slotType>	camouflage	</slotType>
-              <slotId>	11	</slotId>
+              <slotId>	770	</slotId>
               <anchorPosition>	0.000001 -0.0118079 0.960814	</anchorPosition>
               <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
               <applyTo>	4096	</applyTo>
@@ -1629,6 +1629,10 @@
           </camouflage>
         </_76mm_Howitzer_MkI>
         <QF_2pdr_Littlejohn>	shared	  <maxAmmo>	92	</maxAmmo>
+          <unlocks>
+            <vehicle>	GB20_Crusader	  <cost>	15000	</cost>
+            </vehicle>
+          </unlocks>
           <armor>
             <armor_1>	75	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_1>
@@ -1675,7 +1679,7 @@
           <customizationSlots>
             <slot>
               <slotType>	camouflage	</slotType>
-              <slotId>	13	</slotId>
+              <slotId>	770	</slotId>
               <anchorPosition>	0.000001 -0.0118072 1.17387	</anchorPosition>
               <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
               <applyTo>	4096	</applyTo>
@@ -1708,7 +1712,7 @@
       <customizationSlots>
         <slot>
           <slotType>	player	</slotType>
-          <slotId>	3	</slotId>
+          <slotId>	514	</slotId>
           <rayStart>	-0.928475 0.613175 -0.0178678	</rayStart>
           <rayEnd>	-0.528676 0.613175 -0.0299215	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
@@ -1718,7 +1722,7 @@
         </slot>
         <slot>
           <slotType>	inscription	</slotType>
-          <slotId>	4	</slotId>
+          <slotId>	546	</slotId>
           <rayStart>	-0.787318 0.46203 -0.761061	</rayStart>
           <rayEnd>	-0.523394 0.46203 -0.460516	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
@@ -1728,7 +1732,7 @@
         </slot>
         <slot>
           <slotType>	camouflage	</slotType>
-          <slotId>	10	</slotId>
+          <slotId>	513	</slotId>
           <anchorPosition>	0.000000 0.850149 0.000000	</anchorPosition>
           <anchorDirection>	0.000000 1 0.000000	</anchorDirection>
         </slot>
@@ -1823,7 +1827,7 @@
           <customizationSlots>
             <slot>
               <slotType>	camouflage	</slotType>
-              <slotId>	12	</slotId>
+              <slotId>	770	</slotId>
               <anchorPosition>	0.000001 -0.0118071 0.950565	</anchorPosition>
               <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
               <applyTo>	4096	</applyTo>
@@ -1880,7 +1884,7 @@
           <customizationSlots>
             <slot>
               <slotType>	camouflage	</slotType>
-              <slotId>	15	</slotId>
+              <slotId>	770	</slotId>
               <anchorPosition>	0.000001 -0.0118079 0.999515	</anchorPosition>
               <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
               <applyTo>	4096	</applyTo>
@@ -1937,7 +1941,7 @@
           <customizationSlots>
             <slot>
               <slotType>	camouflage	</slotType>
-              <slotId>	16	</slotId>
+              <slotId>	770	</slotId>
               <anchorPosition>	0.000001 -0.0118073 1.21317	</anchorPosition>
               <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
               <applyTo>	4096	</applyTo>
@@ -1970,7 +1974,7 @@
       <customizationSlots>
         <slot>
           <slotType>	player	</slotType>
-          <slotId>	5	</slotId>
+          <slotId>	514	</slotId>
           <rayStart>	-0.828674 0.626228 -0.0256566	</rayStart>
           <rayEnd>	-0.628765 0.626228 -0.0316836	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
@@ -1980,7 +1984,7 @@
         </slot>
         <slot>
           <slotType>	inscription	</slotType>
-          <slotId>	6	</slotId>
+          <slotId>	546	</slotId>
           <rayStart>	-0.766151 0.28627 -0.750743	</rayStart>
           <rayEnd>	-0.476614 0.28627 -0.474785	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
@@ -1990,7 +1994,7 @@
         </slot>
         <slot>
           <slotType>	camouflage	</slotType>
-          <slotId>	14	</slotId>
+          <slotId>	513	</slotId>
           <anchorPosition>	0.000000 0.848671 0.000000	</anchorPosition>
           <anchorDirection>	0.000000 1 0.000000	</anchorDirection>
         </slot>
@@ -2031,9 +2035,11 @@
       <engines>
         <AEC>
           <smplEnginePower>	183.9669	</smplEnginePower>
+          <smplFwMaxSpeed>	24	</smplFwMaxSpeed>
         </AEC>
         <Leyland>
           <smplEnginePower>	200.8834	</smplEnginePower>
+          <smplFwMaxSpeed>	24	</smplFwMaxSpeed>
         </Leyland>
       </engines>
       <chassis>

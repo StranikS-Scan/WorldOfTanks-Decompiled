@@ -5,8 +5,11 @@ import nations
 from account_helpers.AccountSettings import AccountSettings
 from gui import GUI_NATIONS_ORDER_INDEX
 from gui.Scaleform.daapi.view.common.vehicle_carousel.carousel_data_provider import CarouselDataProvider
-from gui.Scaleform.daapi.view.common.vehicle_carousel.carousel_filter import CarouselFilter, EventCriteriesGroup, BasicCriteriesGroup
+from gui.Scaleform.daapi.view.common.vehicle_carousel.carousel_filter import CarouselFilter
+from gui.Scaleform.daapi.view.common.vehicle_carousel.carousel_filter import EventCriteriesGroup
+from gui.Scaleform.daapi.view.common.vehicle_carousel.carousel_filter import BasicCriteriesGroup
 from gui.Scaleform.daapi.view.lobby.storage.storage_helpers import createStorageDefVO, getBoosterType
+from gui.Scaleform.genConsts.CONTEXT_MENU_HANDLER_TYPE import CONTEXT_MENU_HANDLER_TYPE
 from gui.Scaleform.genConsts.STORE_CONSTANTS import STORE_CONSTANTS
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.RES_SHOP import RES_SHOP
@@ -57,7 +60,7 @@ class StorageCarouselDataProvider(CarouselDataProvider):
         name = _getVehicleName(vehicle=item)
         description = _getVehicleDescription(vehicle=item)
         stateIcon, stateText = _getVehicleInfo(vehicle=item)
-        vo = createStorageDefVO(item.intCD, name, description, item.inventoryCount, getItemPricesVO(item.getSellPrice())[0], item.getShopIcon(STORE_CONSTANTS.ICON_SIZE_SMALL), item.getShopIcon(), RES_SHOP.getVehicleIcon(STORE_CONSTANTS.ICON_SIZE_SMALL, 'empty_tank'), itemType=getBoosterType(item), nationFlagIcon=RES_SHOP.getNationFlagIcon(nations.NAMES[item.nationID]), infoImgSrc=stateIcon, infoText=stateText)
+        vo = createStorageDefVO(item.intCD, name, description, item.inventoryCount, getItemPricesVO(item.getSellPrice())[0], item.getShopIcon(STORE_CONSTANTS.ICON_SIZE_SMALL), item.getShopIcon(), RES_SHOP.getVehicleIcon(STORE_CONSTANTS.ICON_SIZE_SMALL, 'empty_tank'), itemType=getBoosterType(item), nationFlagIcon=RES_SHOP.getNationFlagIcon(nations.NAMES[item.nationID]), infoImgSrc=stateIcon, infoText=stateText, contextMenuId=CONTEXT_MENU_HANDLER_TYPE.STORAGE_VEHICLES_REGULAR_ITEM)
         return vo
 
     def _getVehicleStats(self, vehicle):

@@ -95,7 +95,7 @@
       </slot>
       <slot>
         <slotType>	inscription	</slotType>
-        <slotId>	2	</slotId>
+        <slotId>	36	</slotId>
         <rayStart>	-0.000701201 0.328133 -3.00232	</rayStart>
         <rayEnd>	-0.000701178 0.0491123 -2.71571	</rayEnd>
         <rayUp>	0.0997217 0.995003 -0.00486422	</rayUp>
@@ -105,7 +105,7 @@
       </slot>
       <slot>
         <slotType>	camouflage	</slotType>
-        <slotId>	7	</slotId>
+        <slotId>	3	</slotId>
         <anchorPosition>	0.000000 0.182968 1.89306	</anchorPosition>
         <anchorDirection>	0.000000 0.0962037 0.995362	</anchorDirection>
       </slot>
@@ -849,7 +849,7 @@
       <customizationSlots>
         <slot>
           <slotType>	style	</slotType>
-          <slotId>	6	</slotId>
+          <slotId>	257	</slotId>
           <anchorPosition>	0.000106338 2.3227 -0.251463	</anchorPosition>
           <anchorDirection>	-0.000000 1 0.000000	</anchorDirection>
         </slot>
@@ -940,7 +940,7 @@
           <customizationSlots>
             <slot>
               <slotType>	insigniaOnGun	</slotType>
-              <slotId>	5	</slotId>
+              <slotId>	771	</slotId>
               <rayStart>	-0.00799927 0.0104618 2.70747	</rayStart>
               <rayEnd>	-0.183497 -0.0851697 2.70399	</rayEnd>
               <rayUp>	0.052 0.05 4	</rayUp>
@@ -950,7 +950,7 @@
             </slot>
             <slot>
               <slotType>	camouflage	</slotType>
-              <slotId>	9	</slotId>
+              <slotId>	770	</slotId>
               <anchorPosition>	-0.00399964 0.0052309 1.66014	</anchorPosition>
               <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
               <applyTo>	4096	</applyTo>
@@ -983,7 +983,7 @@
       <customizationSlots>
         <slot>
           <slotType>	player	</slotType>
-          <slotId>	3	</slotId>
+          <slotId>	514	</slotId>
           <rayStart>	-1.06756 0.283892 0.859134	</rayStart>
           <rayEnd>	-0.951515 0.28361 0.828567	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
@@ -993,7 +993,7 @@
         </slot>
         <slot>
           <slotType>	player	</slotType>
-          <slotId>	4	</slotId>
+          <slotId>	515	</slotId>
           <rayStart>	1.06756 0.283892 0.859134	</rayStart>
           <rayEnd>	0.951515 0.28361 0.828567	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
@@ -1004,7 +1004,7 @@
         </slot>
         <slot>
           <slotType>	camouflage	</slotType>
-          <slotId>	8	</slotId>
+          <slotId>	513	</slotId>
           <anchorPosition>	0.000000 0.63417 0.000000	</anchorPosition>
           <anchorDirection>	0.000000 1 0.000000	</anchorDirection>
         </slot>
@@ -1028,6 +1028,7 @@
       <engines>
         <Maybach_HL_120_TRM_C>
           <smplEnginePower>	317.1843	</smplEnginePower>
+          <smplFwMaxSpeed>	48	</smplFwMaxSpeed>
         </Maybach_HL_120_TRM_C>
       </engines>
       <chassis>

@@ -6,9 +6,15 @@ from adisp import process
 from gui import DialogsInterface
 from gui.Scaleform.daapi.view.dialogs.ConfirmModuleMeta import SellModuleMeta
 from gui.Scaleform.daapi.view.lobby.storage.category_view import StorageDataProvider
-from gui.Scaleform.daapi.view.lobby.storage.storage_helpers import getStorageItemDescr, createStorageDefVO, getStorageShellsData, getStorageModuleName, getBoosterType, getStorageItemIcon
+from gui.Scaleform.daapi.view.lobby.storage.storage_helpers import getStorageItemDescr
+from gui.Scaleform.daapi.view.lobby.storage.storage_helpers import createStorageDefVO
+from gui.Scaleform.daapi.view.lobby.storage.storage_helpers import getStorageShellsData
+from gui.Scaleform.daapi.view.lobby.storage.storage_helpers import getStorageModuleName
+from gui.Scaleform.daapi.view.lobby.storage.storage_helpers import getBoosterType
+from gui.Scaleform.daapi.view.lobby.storage.storage_helpers import getStorageItemIcon
 from gui.Scaleform.daapi.view.lobby.store.browser.ingameshop_helpers import getWebShopURL
 from gui.Scaleform.daapi.view.meta.StorageCategoryForSellViewMeta import StorageCategoryForSellViewMeta
+from gui.Scaleform.genConsts.CONTEXT_MENU_HANDLER_TYPE import CONTEXT_MENU_HANDLER_TYPE
 from gui.Scaleform.genConsts.STORE_CONSTANTS import STORE_CONSTANTS
 from gui.Scaleform.locale.RES_SHOP import RES_SHOP
 from gui.shared import events
@@ -17,6 +23,7 @@ from gui.shared.event_dispatcher import showWebShop
 from gui.shared.formatters import getItemPricesVO
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.gui_items.items_actions import factory as ItemsActionsFactory
+from gui.shared.gui_items.items_actions.actions import ItemSellSpec
 from gui.shared.money import Money
 from gui.shared.utils.requesters.ItemsRequester import REQ_CRITERIA
 from helpers.local_cache import FileLocalCache
@@ -98,7 +105,7 @@ class _SelectableDataProvider(StorageDataProvider):
         super(_SelectableDataProvider, self).fini()
         return
 
-    def buildList(self, *args):
+    def buildList(self, itemsVoList):
 
         def sortKey(item):
             itemPrice = item.getSellPrice().price
@@ -111,7 +118,7 @@ class _SelectableDataProvider(StorageDataProvider):
              -itemPrice.credits if itemPrice.credits is not None else 0,
              getStorageModuleName(item))
 
-        newList = sorted(args, key=sortKey)
+        newList = sorted(itemsVoList, key=sortKey)
         self.__guiItems = []
         self.__totalPrice = Money()
         self.__isAllSelected = True
@@ -200,7 +207,7 @@ class _SelectableDataProvider(StorageDataProvider):
     def __createVO(self, item):
         priceVO = getItemPricesVO(item.getSellPrice())[0]
         nationFlagIcon = RES_SHOP.getNationFlagIcon(nations.NAMES[item.nationID]) if item.nationID != nations.NONE_INDEX else ''
-        return createStorageDefVO(item.intCD, getStorageModuleName(item), getStorageItemDescr(item), item.inventoryCount, priceVO, getStorageItemIcon(item, STORE_CONSTANTS.ICON_SIZE_SMALL), getStorageItemIcon(item), 'altimage', itemType=getBoosterType(item), nationFlagIcon=nationFlagIcon)
+        return createStorageDefVO(item.intCD, getStorageModuleName(item), getStorageItemDescr(item), item.inventoryCount, priceVO, getStorageItemIcon(item, STORE_CONSTANTS.ICON_SIZE_SMALL), getStorageItemIcon(item), 'altimage', itemType=getBoosterType(item), nationFlagIcon=nationFlagIcon, contextMenuId=CONTEXT_MENU_HANDLER_TYPE.STORAGE_FOR_SELL_ITEM)
 
     def __getOriginalItemPrice(self, item):
         return item.getSellPrice().price * item.inventoryCount
@@ -219,7 +226,7 @@ class StorageCategoryForSellView(StorageCategoryForSellViewMeta):
                 intCD = item['id']
                 count = item['count']
                 typeIdx, _, _ = parseIntCompactDescr(intCD)
-                itemSellSpecs.append((typeIdx, intCD, count))
+                itemSellSpecs.append(ItemSellSpec(typeIdx, intCD, count))
 
         ItemsActionsFactory.doAction(ItemsActionsFactory.SELL_MULTIPLE, itemSellSpecs)
 

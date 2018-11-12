@@ -4,6 +4,7 @@ import struct
 from collections import namedtuple
 import logging
 import BigWorld
+from Math import Matrix
 from CurrentVehicle import g_currentVehicle
 from adisp import async, process as adisp_process
 from gui import DialogsInterface, g_tankActiveCamouflage, SystemMessages
@@ -19,6 +20,7 @@ from gui.Scaleform.daapi.view.meta.CustomizationMainViewMeta import Customizatio
 from gui.Scaleform.framework.entities.View import ViewKey, ViewKeyDynamic
 from gui.Scaleform.framework.managers.view_lifecycle_watcher import IViewLifecycleHandler, ViewLifecycleWatcher
 from gui.Scaleform.genConsts.CUSTOMIZATION_ALIASES import CUSTOMIZATION_ALIASES
+from gui.Scaleform.genConsts.CUSTOMIZATION_DIALOGS import CUSTOMIZATION_DIALOGS
 from gui.Scaleform.locale.ITEM_TYPES import ITEM_TYPES
 from gui.Scaleform.locale.MESSENGER import MESSENGER
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
@@ -46,6 +48,7 @@ from skeletons.gui.customization import ICustomizationService
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.shared.utils import IHangarSpace
+from account_helpers.AccountSettings import AccountSettings, CUSTOMIZATION_SECTION
 _logger = logging.getLogger(__name__)
 
 class _ModalWindowsPopupHandler(IViewLifecycleHandler):
@@ -53,29 +56,20 @@ class _ModalWindowsPopupHandler(IViewLifecycleHandler):
     __SUB_VIEWS = (VIEW_ALIAS.SETTINGS_WINDOW, VIEW_ALIAS.CUSTOMIZATION_PURCHASE_WINDOW, VIEW_ALIAS.LOBBY_MENU)
     __DIALOGS = (VIEW_ALIAS.SIMPLE_DIALOG, CUSTOMIZATION_ALIASES.CONFIRM_CUSTOMIZATION_ITEM_DIALOG)
 
-    def __init__(self):
+    def __init__(self, onViewPopupCallback):
         super(_ModalWindowsPopupHandler, self).__init__([ ViewKey(alias) for alias in self.__SUB_VIEWS ] + [ ViewKeyDynamic(alias) for alias in self.__DIALOGS ])
         self.__viewStack = []
+        self.__onViewPopupCallback = onViewPopupCallback
 
     def onViewCreated(self, view):
         self.__viewStack.append(view.key)
+        self.__onViewPopupCallback()
         self.service.suspendHighlighter()
 
     def onViewDestroyed(self, _):
         self.__viewStack.pop()
         if not self.__viewStack:
             self.service.resumeHighlighter()
-
-
-class _C11ViewsPopupHandler(IViewLifecycleHandler):
-    __VIEWS = (VIEW_ALIAS.CUSTOMIZATION_PURCHASE_WINDOW, VIEW_ALIAS.CUSTOMIZATION_ITEMS_POPOVER, VIEW_ALIAS.CUSTOMIZATION_KIT_POPOVER)
-
-    def __init__(self, onViewPopupCallback):
-        super(_C11ViewsPopupHandler, self).__init__([ ViewKey(alias) for alias in self.__VIEWS ])
-        self.__onViewPopupCallback = onViewPopupCallback
-
-    def onViewCreated(self, view):
-        self.__onViewPopupCallback()
 
 
 CustomizationAnchorInitVO = namedtuple('CustomizationAnchorInitVO', ('anchorUpdateVOs', 'typeRegions', 'maxItemsReached'))
@@ -141,14 +135,30 @@ class MainView(CustomizationMainViewMeta):
 
     def showBuyWindow(self):
         self.changeVisible(False)
-        self.__releaseItemSound()
-        self.soundManager.playInstantSound(SOUNDS.SELECT)
         purchaseItems = self.__ctx.getPurchaseItems()
         cart = getTotalPurchaseInfo(purchaseItems)
         if cart.totalPrice == ITEM_PRICE_EMPTY:
-            self.__ctx.applyItems(purchaseItems)
+            if self.containsVehicleBound(purchaseItems):
+                DialogsInterface.showI18nConfirmDialog(CUSTOMIZATION_DIALOGS.CUSTOMIZATION_INSTALL_BOUND_CHECK_NOTIFICATION, self.onBuyConfirmed)
+            else:
+                self.__ctx.applyItems(purchaseItems)
         else:
             self.fireEvent(events.LoadViewEvent(VIEW_ALIAS.CUSTOMIZATION_PURCHASE_WINDOW), EVENT_BUS_SCOPE.LOBBY)
+
+    def onBuyConfirmed(self, isOk):
+        if isOk:
+            self.__releaseItemSound()
+            self.soundManager.playInstantSound(SOUNDS.SELECT)
+            self.__ctx.applyItems(self.__ctx.getPurchaseItems())
+        else:
+            self.changeVisible(True)
+
+    def containsVehicleBound(self, purchaseItems):
+        for purchaseItem in purchaseItems:
+            if not purchaseItem.isDismantling and purchaseItem.item.isVehicleBound:
+                return True
+
+        return False
 
     def onPressClearBtn(self):
         self.__ctx.cancelChanges()
@@ -156,45 +166,23 @@ class MainView(CustomizationMainViewMeta):
     def onPressEscBtn(self):
         tabIndex = self.__ctx.currentTab
         if tabIndex not in C11nTabs.REGIONS and self.__ctx.isAnyAnchorSelected() or self.service.isRegionSelected():
-            self.__clearItem()
-            if self._isPropertySheetShown:
-                self.__hidePropertiesSheet()
+            self.__clearSelectionAndHidePropertySheet()
             self.as_enableDNDS(True)
         else:
             self.onCloseWindow()
 
-    def onPressSelectNextItem(self):
-        self.__installNextCarouselItem(shift=1)
-
-    def onPressSelectPrevItem(self):
-        self.__installNextCarouselItem(shift=-1)
-
-    def __installNextCarouselItem(self, shift=1):
-        if not self.__ctx.isAnyAnchorSelected() or self.__ctx.isCaruselItemSelected():
-            return
-        else:
-            c11nBottomPanel = self.components[VIEW_ALIAS.CUSTOMIZATION_BOTTOM_PANEL]
-            tabIndex = self.__ctx.currentTab
-            if tabIndex == C11nTabs.STYLE:
-                item = self.__ctx.modifiedStyle
-            else:
-                item = self.__ctx.getItemFromSelectedRegion()
-            if item is not None:
-                carouselItems = c11nBottomPanel.carouselItems
-                index = carouselItems.index(item.intCD) + shift
-                if 0 <= index < len(carouselItems):
-                    intCD = carouselItems[index]
-                    self.__ctx.caruselItemSelected(index, intCD)
-            return
+    def onPressSelectNextItem(self, reverse=False):
+        self.__ctx.installNextCarouselItem(reverse)
 
     def changeVisible(self, value):
-        _, slotType, _ = self.__ctx.selectedAnchor
-        self.__ctx.anchorSelected(slotType, -1, -1)
+        self.__clearSelectedAnchor()
         self.as_hideS(value)
 
     def onReleaseItem(self):
         self.__ctx.caruselItemUnselected()
         self.__releaseItemSound()
+        if not self.__propertiesSheet.isVisible:
+            self.__clearSelectedAnchor()
 
     def _onRegisterFlashComponent(self, viewPy, alias):
         if alias == VIEW_ALIAS.CUSTOMIZATION_PROPERTIES_SHEET:
@@ -244,17 +232,17 @@ class MainView(CustomizationMainViewMeta):
         return
 
     def __onItemsInstalled(self, item, slotId, limitReached):
+        self.__setHeaderInitData()
+        self.__setSeasonData()
+        self.__setAnchorsInitData(True)
         if self.itemIsPicked:
             self.soundManager.playInstantSound(SOUNDS.APPLY)
         else:
             areaId, slotType, regionIdx = self.__ctx.selectedAnchor
             self.__locateCameraOnAnchor(areaId, slotType, regionIdx)
             self.__showPropertiesSheet(areaId, slotType, regionIdx)
-        self.__setHeaderInitData()
-        self.__setSeasonData()
-        self.__setAnchorsInitData(True)
         if limitReached:
-            self.__clearItem()
+            self.as_releaseItemS()
 
     def __onItemsRemoved(self):
         self.soundManager.playInstantSound(SOUNDS.REMOVE)
@@ -273,8 +261,7 @@ class MainView(CustomizationMainViewMeta):
     def onCloseWindow(self):
         if self.isDisposed():
             return
-        if self._isPropertySheetShown:
-            self.__clearItem()
+        self.__clearSelectionAndHidePropertySheet()
         if self.__ctx.isOutfitsModified():
             DialogsInterface.showDialog(I18nConfirmDialogMeta('customization/close'), self.__onCloseWindow)
         else:
@@ -287,8 +274,7 @@ class MainView(CustomizationMainViewMeta):
 
     def onLobbyClick(self):
         if self.__ctx.currentTab in (C11nTabs.EMBLEM, C11nTabs.INSCRIPTION, C11nTabs.PROJECTION_DECAL):
-            self.__hidePropertiesSheet()
-            self.__clearItem()
+            self.__clearSelectionAndHidePropertySheet()
         if not self.__ctx.isCaruselItemSelected():
             self.as_enableDNDS(True)
 
@@ -303,7 +289,6 @@ class MainView(CustomizationMainViewMeta):
             self.as_enableDNDS(False)
         anchorSelected = self.__ctx.isAnchorSelected(slotType=slotType, areaId=areaId, regionIdx=regionIdx)
         itemInstalled = self.__ctx.anchorSelected(slotType, areaId, regionIdx)
-        self.__hideAnchorSwitchers()
         if self.__ctx.isSlotFilled(self.__ctx.selectedAnchor):
             if self.__ctx.isCaruselItemSelected():
                 if anchorSelected and not itemInstalled:
@@ -320,6 +305,7 @@ class MainView(CustomizationMainViewMeta):
         if self.__ctx.c11CameraManager is None:
             return
         else:
+            self.soundManager.playInstantSound(SOUNDS.CHOOSE)
             self.__updateAnchorsData()
             if slotType in (GUI_ITEM_TYPE.EMBLEM, GUI_ITEM_TYPE.INSCRIPTION):
                 if slotType == GUI_ITEM_TYPE.EMBLEM:
@@ -332,7 +318,15 @@ class MainView(CustomizationMainViewMeta):
             else:
                 anchorParams = self.service.getAnchorParams(areaId, slotType, regionIdx)
                 if slotType == GUI_ITEM_TYPE.PROJECTION_DECAL:
-                    self.__locatedOnEmbelem = self.__ctx.c11CameraManager.locateCameraOnAnchor(anchorParams.pos, anchorParams.normal)
+                    normal = anchorParams.normal
+                    if normal.dot((0.0, 1.0, 0.0)) > 0.99:
+                        localPYR = anchorParams.slotDescriptor.rotation
+                        worldRotation = Matrix()
+                        worldRotation.setRotateYPR((localPYR.y, localPYR.x, localPYR.z))
+                        vehicleMatrix = self.hangarSpace.getVehicleEntity().model.matrix
+                        worldRotation.postMultiply(vehicleMatrix)
+                        normal.setPitchYaw(anchorParams.normal.pitch, worldRotation.yaw)
+                    self.__locatedOnEmbelem = self.__ctx.c11CameraManager.locateCameraOnAnchor(anchorParams.pos, normal)
                 else:
                     self.__locatedOnEmbelem = self.__ctx.c11CameraManager.locateCameraOnAnchor(anchorParams.pos, None)
             return
@@ -357,12 +351,13 @@ class MainView(CustomizationMainViewMeta):
 
     def onAnchorsShown(self, anchors):
         if self.__ctx.vehicleAnchorsUpdater is not None:
-            self.__ctx.vehicleAnchorsUpdater.setAnchors(anchors)
+            propertiesSheetSlot = self.__propertiesSheet.attachedSlot if self.__propertiesSheet.isVisible else C11nId()
+            self.__ctx.vehicleAnchorsUpdater.setAnchors(anchors, propertiesSheetSlot)
         return
 
-    def propertiesSheetSet(self, sheet, width, height, crnterX, centerY):
+    def propertiesSheetSet(self, sheet, width, height, centerX, centerY):
         if self.__ctx.vehicleAnchorsUpdater is not None:
-            self.__ctx.vehicleAnchorsUpdater.setMenuParams(sheet, width, height, crnterX, centerY)
+            self.__ctx.vehicleAnchorsUpdater.setMenuParams(sheet, width, height, centerX, centerY)
         return
 
     def _populate(self):
@@ -373,6 +368,7 @@ class MainView(CustomizationMainViewMeta):
         self.__ctx.onCustomizationTabChanged += self.__onTabChanged
         self.__ctx.onCustomizationItemInstalled += self.__onItemsInstalled
         self.__ctx.onCustomizationItemsRemoved += self.__onItemsRemoved
+        self.__ctx.onCustomizationItemDataChanged += self.__onItemDataChanged
         self.__ctx.onCustomizationItemsBought += self.__onItemsBought
         self.__ctx.onCacheResync += self.__onCacheResync
         self.__ctx.onChangesCanceled += self.__onChangesCanceled
@@ -381,7 +377,7 @@ class MainView(CustomizationMainViewMeta):
         self.__ctx.onPropertySheetShown += self.__onPropertySheetShown
         self.__ctx.onClearItem += self.__onClearItem
         self.soundManager.playInstantSound(SOUNDS.ENTER)
-        self.__viewLifecycleWatcher.start(self.app.containerManager, [_ModalWindowsPopupHandler(), _C11ViewsPopupHandler(self.__hidePropertiesSheet)])
+        self.__viewLifecycleWatcher.start(self.app.containerManager, [_ModalWindowsPopupHandler(self.__clearSelectionAndHidePropertySheet)])
         self.lobbyContext.addHeaderNavigationConfirmator(self.__confirmHeaderNavigation)
         self.lobbyContext.getServerSettings().onServerSettingsChange += self.__onServerSettingChanged
         self.hangarSpace.onSpaceCreate += self.__onSpaceCreateHandler
@@ -397,7 +393,7 @@ class MainView(CustomizationMainViewMeta):
         self.fireEvent(LobbyHeaderMenuEvent(LobbyHeaderMenuEvent.TOGGLE_VISIBILITY, ctx={'state': HeaderMenuVisibilityState.ONLINE_COUNTER}), EVENT_BUS_SCOPE.LOBBY)
         self._isPropertySheetShown = False
         if self.__ctx.c11CameraManager is not None:
-            self.__ctx.c11CameraManager.locateCameraToCustomizationPreview(forceLocate=True)
+            self.__ctx.c11CameraManager.locateCameraToCustomizationPreview()
         self.__renderEnv = BigWorld.CustomizationEnvironment()
         self.__renderEnv.enable(True)
         if self.__ctx.vehicleAnchorsUpdater is not None:
@@ -439,6 +435,7 @@ class MainView(CustomizationMainViewMeta):
         self.__ctx.onCustomizationItemsBought -= self.__onItemsBought
         self.__ctx.onCustomizationItemsRemoved -= self.__onItemsRemoved
         self.__ctx.onCustomizationItemInstalled -= self.__onItemsInstalled
+        self.__ctx.onCustomizationItemDataChanged -= self.__onItemDataChanged
         self.__ctx.onCustomizationTabChanged -= self.__onTabChanged
         self.__ctx.onCustomizationModeChanged -= self.__onModeChanged
         self.__ctx.onCustomizationSeasonChanged -= self.__onSeasonChanged
@@ -458,7 +455,7 @@ class MainView(CustomizationMainViewMeta):
             yield DialogsInterface.showDialog(ConfirmC11nSellMeta(itemIntCD, inventoryCount, self.__ctx.sellItem))
         elif ctxMenuID == CustomizationOptions.REMOVE_FROM_TANK:
             if self.__ctx.mode == C11nMode.CUSTOM:
-                self.__ctx.removeItems(False, itemIntCD)
+                self.__ctx.removeItems(True, itemIntCD)
             else:
                 self.__ctx.removeStyle(itemIntCD)
 
@@ -497,24 +494,24 @@ class MainView(CustomizationMainViewMeta):
         self.as_onRegionHighlightedS(region, highlightingType, highlightingResult)
         if highlightingType:
             if highlightingResult:
+                self.soundManager.playInstantSound(SOUNDS.CHOOSE)
                 anchorSelected = self.__ctx.isAnchorSelected(slotType=slotType, areaId=areaId, regionIdx=regionIdx)
+                itemSelected = self.__ctx.isCaruselItemSelected()
                 itemInstalled = self.__ctx.anchorSelected(slotType, areaId, regionIdx)
                 slotFilled = self.__ctx.isSlotFilled(self.__ctx.selectedAnchor)
                 if self.__ctx.currentTab in (C11nTabs.EFFECT, C11nTabs.STYLE):
                     applyArea = ApplyArea.ALL
                 else:
                     applyArea = appliedToFromSlotsIds([self.__ctx.selectedAnchor])
-                if self.__ctx.isCaruselItemSelected():
+                if itemSelected:
                     self.service.highlightRegions(self.__ctx.getEmptyRegions())
                     if slotFilled and anchorSelected and not itemInstalled:
                         self.service.selectRegions(applyArea)
                         self.__locateCameraOnAnchor(areaId, slotType, regionIdx)
                         self.__showPropertiesSheet(areaId, slotType, regionIdx)
-                        self.soundManager.playInstantSound(SOUNDS.CHOOSE)
                     else:
                         self.service.selectRegions(ApplyArea.NONE)
                         self.__hidePropertiesSheet()
-                        self.soundManager.playInstantSound(SOUNDS.CHOOSE)
                 else:
                     if slotFilled:
                         self.__locateCameraOnAnchor(areaId, slotType, regionIdx)
@@ -563,16 +560,13 @@ class MainView(CustomizationMainViewMeta):
 
     def __onCarouselItemSelected(self, index, intCD):
         tabIndex = self.__ctx.currentTab
-        if tabIndex == C11nTabs.STYLE or tabIndex == C11nTabs.EFFECT:
+        if tabIndex in (C11nTabs.STYLE, C11nTabs.EFFECT):
             self.service.selectRegions(ApplyArea.ALL)
             areaId, slotType, regionIdx = self.__ctx.selectedAnchor
             self.onSelectAnchor(areaId, slotType, regionIdx)
-        if not self.__propertiesSheet.isVisible and not self.itemIsPicked:
+        if not self.__ctx.isAnyAnchorSelected() and not self.itemIsPicked:
             self.soundManager.playInstantSound(SOUNDS.PICK)
             self.itemIsPicked = True
-        if self.__ctx.isAnyAnchorSelected() and not self.__ctx.isCaruselItemSelected():
-            areaId, slotType, regionIdx = self.__ctx.selectedAnchor
-            self.__showPropertiesSheet(areaId, slotType, regionIdx)
 
     def __onServerSettingChanged(self, diff):
         if 'isCustomizationEnabled' in diff and not diff.get('isCustomizationEnabled', True):
@@ -582,15 +576,17 @@ class MainView(CustomizationMainViewMeta):
     def __onPropertySheetShown(self):
         self._isPropertySheetShown = True
         self.__updateDnd()
+        if self.__ctx.currentTab in (C11nTabs.INSCRIPTION, C11nTabs.EMBLEM):
+            self.__setAnchorsInitData()
 
     def __onPropertySheetHidden(self):
         tabIndex = self.__ctx.currentTab
         if tabIndex in C11nTabs.REGIONS:
             self.service.resetHighlighting()
-        else:
-            self.__hideAnchorSwitchers()
         self._isPropertySheetShown = False
         self.__updateDnd()
+        if self.__ctx.currentTab in (C11nTabs.INSCRIPTION, C11nTabs.EMBLEM):
+            self.__setAnchorsInitData()
 
     def __updateDnd(self):
         isDndEnable = False
@@ -629,25 +625,27 @@ class MainView(CustomizationMainViewMeta):
 
         tabIndex = self.__ctx.currentTab
         anchorVOs = []
-        cType = TABS_ITEM_MAPPING[tabIndex]
+        slotType = TABS_ITEM_MAPPING[tabIndex]
         maxItemsReached = False
+        visibleAnchors = self.__getVisibleAnchors(slotType)
         if tabIndex == C11nTabs.STYLE:
             anchorId = CustomizationSlotIdVO(Area.MISC, GUI_ITEM_TYPE.STYLE, 0)
             uid = customizationSlotIdToUid(anchorId)
             anchorVOs.append(CustomizationSlotUpdateVO(anchorId._asdict(), self.__ctx.modifiedStyle.intCD if self.__ctx.modifiedStyle is not None else 0, uid, None)._asdict())
         else:
             potentialPlaceTooltip = None
-            if cType in QUANTITY_LIMITED_CUSTOMIZATION_TYPES:
+            if slotType in QUANTITY_LIMITED_CUSTOMIZATION_TYPES:
                 outfit = self.__ctx.getModifiedOutfit(self.__ctx.currentSeason)
-                if self.__ctx.isC11nItemsQuantityLimitReached(outfit, cType):
+                if self.__ctx.isC11nItemsQuantityLimitReached(outfit, slotType):
                     maxItemsReached = True
-                    potentialPlaceTooltip = makeTooltip(VEHICLE_CUSTOMIZATION.CUSTOMIZATION_TOOLTIP_POTENTIALPROJDECALPLACE_TITLE, VEHICLE_CUSTOMIZATION.CUSTOMIZATION_TOOLTIP_POTENTIALPROJDECALPLACE_TEXT)
+                    potentialPlaceTooltip = makeTooltip(body=VEHICLE_CUSTOMIZATION.CUSTOMIZATION_TOOLTIP_POTENTIALPROJDECALPLACE_TOLTIP_TEXT)
             for areaId in Area.ALL:
-                regionsIndexes = getAppliedRegionsForCurrentHangarVehicle(areaId, cType)
-                slot = self.__ctx.currentOutfit.getContainer(areaId).slotFor(cType)
-                for regionsIndex in regionsIndexes:
-                    anchorId = CustomizationSlotIdVO(areaId, cType, regionsIndex)
-                    slotId = self.__ctx.getSlotIdByAnchorId(C11nId(areaId=areaId, slotType=cType, regionIdx=regionsIndex))
+                slot = self.__ctx.currentOutfit.getContainer(areaId).slotFor(slotType)
+                for regionIdx, anchor in g_currentVehicle.item.getAnchors(slotType, areaId).iteritems():
+                    if anchor.slotId not in visibleAnchors:
+                        continue
+                    anchorId = CustomizationSlotIdVO(areaId, slotType, regionIdx)
+                    slotId = self.__ctx.getSlotIdByAnchorId(C11nId(areaId=areaId, slotType=slotType, regionIdx=regionIdx))
                     itemIntCD = 0
                     if slotId is not None:
                         item = slot.getItem(slotId.regionIdx)
@@ -664,11 +662,52 @@ class MainView(CustomizationMainViewMeta):
             typeRegions = CUSTOMIZATION_ALIASES.ANCHOR_TYPE_PROJECTION_DECAL
         else:
             typeRegions = CUSTOMIZATION_ALIASES.ANCHOR_TYPE_DECAL
-        if update:
+        if update and slotType in C11nTabs.REGIONS:
             self.as_updateAnchorDataS(CustomizationAnchorInitVO(anchorVOs, typeRegions, maxItemsReached)._asdict())
         else:
             self.as_setAnchorInitS(CustomizationAnchorInitVO(anchorVOs, typeRegions, maxItemsReached)._asdict())
+            if self.__propertiesSheet.isVisible:
+                self.__ctx.vehicleAnchorsUpdater.changeAnchorParams(self.__ctx.selectedAnchor, isDisplayed=False, isAutoScalable=False)
         return
+
+    def __getVisibleAnchors(self, slotType):
+        visibleAnchorsIds = set()
+        currentVehicle = g_currentVehicle.item
+        if slotType == GUI_ITEM_TYPE.PROJECTION_DECAL:
+            for anchor in currentVehicle.getAnchors(GUI_ITEM_TYPE.PROJECTION_DECAL, Area.MISC).itervalues():
+                if anchor.isParent:
+                    visibleAnchorsIds.add(anchor.slotId)
+
+            outfit = self.__ctx.getModifiedOutfit(self.__ctx.currentSeason)
+            multySlot = outfit.getContainer(Area.MISC).slotFor(GUI_ITEM_TYPE.PROJECTION_DECAL)
+            if multySlot is not None:
+                for regionIdx in range(multySlot.capacity()):
+                    slotData = multySlot.getSlotData(regionIdx)
+                    if slotData.item is not None:
+                        anchor = g_currentVehicle.item.getAnchorById(slotData.component.slotId)
+                        if anchor.isParent:
+                            parent = anchor
+                        else:
+                            parent = g_currentVehicle.item.getAnchorById(anchor.parentSlotId)
+                        visibleAnchorsIds.discard(parent.slotId)
+                        visibleAnchorsIds.add(anchor.slotId)
+
+        else:
+            for area in Area.ALL:
+                for anchor in currentVehicle.getAnchors(slotType, area).itervalues():
+                    visibleAnchorsIds.add(anchor.slotId)
+
+        return visibleAnchorsIds
+
+    def __onItemDataChanged(self, areaId, slotId, regionIdx, changeAnchor, updatePropertiesSheet):
+        self.__setAnchorsInitData(True)
+        if self._isPropertySheetShown:
+            if updatePropertiesSheet:
+                self.__showPropertiesSheet(areaId, slotId, regionIdx, forceUpdate=True)
+            if changeAnchor:
+                self.__locateCameraOnAnchor(areaId, slotId, regionIdx)
+                slotIdVO = CustomizationSlotIdVO(areaId, slotId, self.__ctx.selectedAnchor.regionIdx)._asdict()
+                self.as_updateSelectedRegionsS(slotIdVO)
 
     def __setHeaderInitData(self):
         vehicle = g_currentVehicle.item
@@ -678,26 +717,23 @@ class MainView(CustomizationMainViewMeta):
          'isElite': vehicle.isElite,
          'closeBtnTooltip': VEHICLE_CUSTOMIZATION.CUSTOMIZATION_HEADERCLOSEBTN})
 
-    def __showPropertiesSheet(self, areaId, slotType, regionIdx):
+    def __showPropertiesSheet(self, areaId, slotType, regionIdx, forceUpdate=False):
         if self.__propertiesSheet:
             if self.__ctx.vehicleAnchorsUpdater is not None:
                 self.__ctx.vehicleAnchorsUpdater.attachMenuToAnchor(self.__ctx.selectedAnchor)
-                if self.__ctx.currentTab in C11nTabs.REGIONS:
-                    self.__ctx.vehicleAnchorsUpdater.changeAnchorParams(self.__ctx.selectedAnchor, True, False)
-            if self.__propertiesSheet.isVisible:
-                self.soundManager.playInstantSound(SOUNDS.CHOOSE)
-            self.__propertiesSheet.show(areaId, slotType, regionIdx)
             tabIndex = self.__ctx.currentTab
-            if tabIndex not in C11nTabs.REGIONS:
-                self.__showAnchorSwitchers(tabIndex == C11nTabs.EMBLEM)
+            self.__propertiesSheet.show(areaId, slotType, regionIdx, tabIndex not in C11nTabs.REGIONS, tabIndex == C11nTabs.EMBLEM, forceUpdate)
+            custSett = AccountSettings.getSettings(CUSTOMIZATION_SECTION)
+            hintShownField = 'isCarouselsArrowsHintShown'
+            if not custSett.get(hintShownField, False):
+                self.as_showCarouselsArrowsNotificationS(VEHICLE_CUSTOMIZATION.PROPERTYSHEET_KEYBOARD_HINT)
+                custSett[hintShownField] = True
+                AccountSettings.setSettings(CUSTOMIZATION_SECTION, custSett)
         return
 
     def __hidePropertiesSheet(self):
         if self.__propertiesSheet:
-            if self.__ctx.vehicleAnchorsUpdater is not None and self.__ctx.currentTab in C11nTabs.REGIONS:
-                self.__ctx.vehicleAnchorsUpdater.changeAnchorParams(self.__ctx.selectedAnchor, True, True)
             self.__propertiesSheet.hide()
-        return
 
     def getItemTabsData(self):
         data = []
@@ -705,7 +741,7 @@ class MainView(CustomizationMainViewMeta):
         for tabIdx in self.__ctx.visibleTabs:
             itemTypeID = TABS_ITEM_MAPPING[tabIdx]
             typeName = GUI_ITEM_TYPE_NAMES[itemTypeID]
-            showPlus = not self.__checkSlotsFilling(itemTypeID, self._currentSeason)
+            showPlus = not self.__ctx.checkSlotsFilling(itemTypeID, self.__ctx.currentSeason)
             data.append({'label': _ms(ITEM_TYPES.customizationPlural(typeName)),
              'tooltip': makeTooltip(ITEM_TYPES.customizationPlural(typeName), TOOLTIPS.customizationItemTab(typeName)),
              'id': tabIdx})
@@ -750,19 +786,18 @@ class MainView(CustomizationMainViewMeta):
         self.service.highlightRegions(ApplyArea.NONE)
         self.service.selectRegions(ApplyArea.NONE)
         self.__resetCameraFocus()
-        _, slotType, _ = self.__ctx.selectedAnchor
-        self.__ctx.anchorSelected(slotType, -1, -1)
+        self.__clearSelectedAnchor()
         self.__resetUIFocus()
         self.as_releaseItemS()
 
-    def __hideAnchorSwitchers(self, anchor=None):
-        if anchor is not None:
-            areaId, slotType, regionIdx = anchor
-        else:
-            areaId, slotType, regionIdx = (-1, -1, -1)
-        self.as_setAnchorSwitchersVisibleS(False, CustomizationSlotIdVO(areaId, slotType, regionIdx)._asdict())
-        return
+    def __clearSelectedAnchor(self):
+        _, slotType, _ = self.__ctx.selectedAnchor
+        self.__ctx.anchorSelected(slotType, -1, -1)
 
-    def __showAnchorSwitchers(self, isNarrowSlot):
-        areaId, slotType, regionIdx = self.__ctx.selectedAnchor
-        self.as_setAnchorSwitchersVisibleS(True, CustomizationSlotIdVO(areaId, slotType, regionIdx)._asdict(), isNarrowSlot)
+    def __clearSelectionAndHidePropertySheet(self):
+        if self._isPropertySheetShown:
+            self.__hidePropertiesSheet()
+        self.__clearItem()
+
+    def clearSelectionAndHidePropertySheet(self):
+        self.__clearSelectionAndHidePropertySheet()

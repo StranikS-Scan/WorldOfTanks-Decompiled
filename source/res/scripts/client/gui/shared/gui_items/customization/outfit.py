@@ -25,15 +25,18 @@ def scaffold():
      OutfitContainer(areaID=Area.HULL, slots=(MultiSlot(slotType=GUI_ITEM_TYPE.PAINT, regions=ApplyArea.HULL_PAINT_REGIONS),
       MultiSlot(slotType=GUI_ITEM_TYPE.CAMOUFLAGE, regions=ApplyArea.HULL_CAMOUFLAGE_REGIONS),
       MultiSlot(slotType=GUI_ITEM_TYPE.EMBLEM, regions=ApplyArea.HULL_EMBLEM_REGIONS),
-      MultiSlot(slotType=GUI_ITEM_TYPE.INSCRIPTION, regions=ApplyArea.HULL_INSCRIPTION_REGIONS))),
+      MultiSlot(slotType=GUI_ITEM_TYPE.INSCRIPTION, regions=ApplyArea.HULL_INSCRIPTION_REGIONS),
+      MultiSlot(slotType=GUI_ITEM_TYPE.INSIGNIA, regions=ApplyArea.HULL_INSIGNIA_REGIONS))),
      OutfitContainer(areaID=Area.TURRET, slots=(MultiSlot(slotType=GUI_ITEM_TYPE.PAINT, regions=ApplyArea.TURRET_PAINT_REGIONS),
       MultiSlot(slotType=GUI_ITEM_TYPE.CAMOUFLAGE, regions=ApplyArea.TURRET_CAMOUFLAGE_REGIONS),
       MultiSlot(slotType=GUI_ITEM_TYPE.EMBLEM, regions=ApplyArea.TURRET_EMBLEM_REGIONS),
-      MultiSlot(slotType=GUI_ITEM_TYPE.INSCRIPTION, regions=ApplyArea.TURRET_INSCRIPTION_REGIONS))),
+      MultiSlot(slotType=GUI_ITEM_TYPE.INSCRIPTION, regions=ApplyArea.TURRET_INSCRIPTION_REGIONS),
+      MultiSlot(slotType=GUI_ITEM_TYPE.INSIGNIA, regions=ApplyArea.TURRET_INSIGNIA_REGIONS))),
      OutfitContainer(areaID=Area.GUN, slots=(MultiSlot(slotType=GUI_ITEM_TYPE.PAINT, regions=ApplyArea.GUN_PAINT_REGIONS),
       MultiSlot(slotType=GUI_ITEM_TYPE.CAMOUFLAGE, regions=ApplyArea.GUN_CAMOUFLAGE_REGIONS),
       MultiSlot(slotType=GUI_ITEM_TYPE.EMBLEM, regions=ApplyArea.GUN_EMBLEM_REGIONS),
-      MultiSlot(slotType=GUI_ITEM_TYPE.INSCRIPTION, regions=ApplyArea.GUN_INSCRIPTION_REGIONS))),
+      MultiSlot(slotType=GUI_ITEM_TYPE.INSCRIPTION, regions=ApplyArea.GUN_INSCRIPTION_REGIONS),
+      MultiSlot(slotType=GUI_ITEM_TYPE.INSIGNIA, regions=ApplyArea.GUN_INSIGNIA_REGIONS))),
      OutfitContainer(areaID=Area.MISC, slots=(MultiSlot(slotType=GUI_ITEM_TYPE.MODIFICATION, regions=(ApplyArea.NONE,)), MultiSlot(slotType=GUI_ITEM_TYPE.PROJECTION_DECAL, regions=tuple(range(MAX_PROJECTION_DECALS))))))
 
 

@@ -349,9 +349,9 @@ class CustomFilesCache(object):
     def __onReadLocalFile(self, url, showImmediately):
         key = base64.b32encode(url)
         startTime = time.time()
-        remoteFile = self.__db[key] if self.__db is not None and key in self.__db else None
-        _LOG_EXECUTING_TIME(startTime, '__onReadLocalFile')
         try:
+            remoteFile = self.__db[key] if self.__db is not None and key in self.__db else None
+            _LOG_EXECUTING_TIME(startTime, '__onReadLocalFile')
             crc, f, ver = remoteFile[2:5]
             if crc != binascii.crc32(f) or _CACHE_VERSION != ver:
                 LOG_DEBUG('Old file was found.', url)
@@ -494,20 +494,31 @@ class CustomFilesCache(object):
                 self.__get(url, False, True)
             return
 
-    def __prepareCache(self):
+    def __prepareCache(self, recreate=False):
         try:
             cacheDir = self.__cacheDir
             if not os.path.isdir(cacheDir):
                 os.makedirs(cacheDir)
             filename = os.path.join(cacheDir, 'icons')
+            flag = 'c'
+            if recreate:
+                flag = 'n'
+                try:
+                    if self.__db is not None:
+                        self.__db.close()
+                except Exception:
+                    LOG_CURRENT_EXCEPTION()
+
             try:
-                self.__db = provider.open(filename, protocol=HIGHEST_PICKLE_PROTOCOL, flag='c', writeback=True)
+                self.__db = provider.open(filename, protocol=HIGHEST_PICKLE_PROTOCOL, flag=flag, writeback=True)
             except UnpicklingError:
                 LOG_WARNING('__prepareCache, unpickling with highest protocol has been failed, falling back to old protocol')
-                self.__db = provider.open(filename, flag='c', writeback=True)
+                self.__db = provider.open(filename, flag=flag, writeback=True)
 
         except Exception:
             LOG_CURRENT_EXCEPTION()
+
+        return
 
     def __writeCache(self, name, packet):
         if name in self.__written_cache:
@@ -522,6 +533,7 @@ class CustomFilesCache(object):
             startTime = time.time()
             if self.__db is not None:
                 self.__db[name] = packet
+                self.__db.sync()
             _LOG_EXECUTING_TIME(startTime, '__onWriteCache', 5.0)
         except Exception:
             LOG_CURRENT_EXCEPTION()

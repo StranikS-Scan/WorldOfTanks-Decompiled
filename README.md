@@ -12,6 +12,10 @@ Using **[PjOrion](https://koreanrandom.com/forum/topic/15280-)**:
 * **"Uncompile 6"** decompiler updated by **[R. Bernstein](https://github.com/rocky/python-uncompyle6)** and modified **StranikS_Scan**
 * Built-in decompressor of xml-files realized by **[SkepticalFox](https://github.com/ShadowHunterRUS)** and modified **StranikS_Scan**
 
+### Using ###
+1. Download commit to PC
+2. Run **"Zip-Unpacker.cmd"** to restore the original files from the **zip-archive** with the correct letters case in the file names
+
 ### Decompilation algorithm (recommendations)
 1. Create a folder **"source"** and a subfolder **"res"** in it
 2. Copy files **"paths.xml"** and **"version.xml"** from game-root to a folder **"source"**
@@ -30,3 +34,6 @@ Using **[PjOrion](https://koreanrandom.com/forum/topic/15280-)**:
 6. Clean the existing **"zip"** directory and move to it the new archive
 7. Create a commit, named as **"X.X.X: Added/Updated/Release/... #YYY"** or **"X.X.X_CT:..."**
 8. Offer a **"Pull request"** in the right branch
+
+### Files with different case of letters
+Due to the fact that during the update of the game, the developers changed the case of the letters in the files, there may be duplicate files in the repository. To solve this problem, the **"Zip-Unpacker.cmd"** file has been added to the repository. After downloading the repository or after synchronizing your copy of the repository with the GitHub, run this file. It will extract the py-files from the archive as they should be.

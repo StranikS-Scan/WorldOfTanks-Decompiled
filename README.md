@@ -12,6 +12,10 @@ Using **[PjOrion](https://koreanrandom.com/forum/topic/15280-)**:
 * **"Uncompile 6"** decompiler updated by **[R. Bernstein](https://github.com/rocky/python-uncompyle6)** and modified **StranikS_Scan**
 * Built-in decompressor of xml-files realized by **[SkepticalFox](https://github.com/ShadowHunterRUS)** and modified **StranikS_Scan**
 
+### Using ###
+1. Download commit to PC
+2. Run **"Zip-Unpacker.cmd"** to restore the original files from the **zip-archive** with the correct letters case in the file names
+
 ### Decompilation algorithm (recommendations)
 1. Create a folder **"source"** and a subfolder **"res"** in it
 2. Copy files **"paths.xml"** and **"version.xml"** from game-root to a folder **"source"**

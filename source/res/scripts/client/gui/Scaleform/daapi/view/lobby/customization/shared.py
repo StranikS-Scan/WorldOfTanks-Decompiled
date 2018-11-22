@@ -96,7 +96,8 @@ class AdditionalPurchaseGroups(object):
 
 OutfitInfo = namedtuple('OutfitInfo', ('original', 'modified'))
 
-def getCustomPurchaseItems(outfitsInfo):
+def getCustomPurchaseItems(outfitsInfo, seasonOrder=None):
+    seasonOrder = seasonOrder or SEASONS_ORDER
     itemsCache = dependency.instance(IItemsCache)
     purchaseItems = []
     inventoryCount = Counter()
@@ -107,7 +108,10 @@ def getCustomPurchaseItems(outfitsInfo):
         item = itemsCache.items.getItemByCD(intCD)
         inventoryCount[intCD] += item.fullInventoryCount(g_currentVehicle.item)
 
-    for season, outfitCompare in outfitsInfo.iteritems():
+    for season in reversed(seasonOrder):
+        if season not in outfitsInfo:
+            continue
+        outfitCompare = outfitsInfo[season]
         backward = outfitCompare.modified.diff(outfitCompare.original)
         for container in backward.containers():
             for slot in container.slots():
@@ -117,7 +121,10 @@ def getCustomPurchaseItems(outfitsInfo):
                         purchaseItems.append(PurchaseItem(item, price=item.getBuyPrice(), areaID=container.getAreaID(), slot=slot.getType(), regionID=idx, selected=True, group=season, isFromInventory=False, isDismantling=True))
                         inventoryCount[item.intCD] += 1
 
-    for season, outfitCompare in outfitsInfo.iteritems():
+    for season in seasonOrder:
+        if season not in outfitsInfo:
+            continue
+        outfitCompare = outfitsInfo[season]
         forward = outfitCompare.original.diff(outfitCompare.modified)
         for container in forward.containers():
             for slot in container.slots():
@@ -242,3 +249,15 @@ def fromHangarVehicleToWorldCoords(hangarVehicleCoords):
     compoundModel = g_currentVehicle.hangarSpace.space.getVehicleEntity().appearance.compoundModel
     modelMatrix = Math.Matrix(compoundModel.matrix)
     return modelMatrix.applyPoint(hangarVehicleCoords)
+
+
+def containsVehicleBound(purchaseItems):
+    fromInventoryCounter = Counter()
+    vehCD = g_currentVehicle.item.intCD
+    for purchaseItem in purchaseItems:
+        if purchaseItem.item and purchaseItem.item.isVehicleBound and not purchaseItem.isDismantling and not purchaseItem.item.isRentable:
+            if not purchaseItem.isFromInventory:
+                return True
+            fromInventoryCounter[purchaseItem.item] += 1
+
+    return any((count > item.boundInventoryCount.get(vehCD, 0) for item, count in fromInventoryCounter.items()))

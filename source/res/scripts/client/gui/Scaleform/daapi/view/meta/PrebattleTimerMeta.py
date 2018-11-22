@@ -4,6 +4,12 @@ from gui.Scaleform.framework.entities.BaseDAAPIComponent import BaseDAAPICompone
 
 class PrebattleTimerMeta(BaseDAAPIComponent):
 
+    def onShowFlag(self):
+        self._printOverrideError('onShowFlag')
+
+    def onHideFlag(self):
+        self._printOverrideError('onHideFlag')
+
     def as_setTimerS(self, totalTime):
         return self.flashObject.as_setTimer(totalTime) if self._isDAAPIInited() else None
 

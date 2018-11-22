@@ -188,6 +188,8 @@ class CustomizationService(_ServiceItemShopMixin, _ServiceHelpersMixin, ICustomi
         return
 
     def startHighlighter(self, mode=HighlightingMode.PAINT_REGIONS):
+        if self._mode != mode:
+            self._selectedRegion = ApplyArea.NONE
         self._mode = mode
         isLoaded = False
         entity = self.hangarSpace.getVehicleEntity()
@@ -196,12 +198,14 @@ class CustomizationService(_ServiceItemShopMixin, _ServiceHelpersMixin, ICustomi
             isLoaded = entity.appearance.isLoaded()
         if not isLoaded:
             self._needHelperRestart = True
-            return
+            return False
         if self._helper:
             self._helper.setSelectionMode(self._mode)
         else:
             self._helper = BigWorld.PyCustomizationHelper(entity.model, self._mode, self._isOver3dScene, self.__onRegionHighlighted)
+        self._helper.selectRegions(self._selectedRegion)
         self._isHighlighterActive = True
+        return True
 
     def stopHighlighter(self):
         entity = self.hangarSpace.getVehicleEntity()
@@ -225,7 +229,8 @@ class CustomizationService(_ServiceItemShopMixin, _ServiceHelpersMixin, ICustomi
 
     def resumeHighlighter(self):
         if self._needHelperRestart:
-            self.startHighlighter(self._mode)
+            if not self.startHighlighter(self._mode):
+                return
         self._needHelperRestart = False
         if self._helper is not None:
             self._helper.setSelectionMode(self._mode)
@@ -278,7 +283,7 @@ class CustomizationService(_ServiceItemShopMixin, _ServiceHelpersMixin, ICustomi
     def selectRegions(self, regionsMask):
         if self._helper:
             self._helper.selectRegions(regionsMask)
-            self._selectedRegion = regionsMask
+        self._selectedRegion = regionsMask
 
     def isRegionSelected(self):
         return self._selectedRegion != ApplyArea.NONE and self._isHighlighterActive

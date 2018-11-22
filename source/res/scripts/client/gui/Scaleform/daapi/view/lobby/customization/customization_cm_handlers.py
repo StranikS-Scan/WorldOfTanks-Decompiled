@@ -11,7 +11,7 @@ from skeletons.gui.shared import IItemsCache
 from skeletons.gui.customization import ICustomizationService
 from gui.shared.tooltips.formatters import packActionTooltipData
 from gui.shared.tooltips import ACTION_TOOLTIPS_TYPE
-from gui.Scaleform.daapi.view.lobby.customization.shared import SEASON_TYPE_TO_NAME
+from gui.Scaleform.daapi.view.lobby.customization.shared import SEASON_TYPE_TO_NAME, C11nMode
 
 class CustomizationOptions(object):
     BUY = 'buy'
@@ -55,8 +55,8 @@ class CustomizationItemCMHandler(AbstractContextMenuHandler):
         inventoryCount = self.__ctx.getItemInventoryCount(item)
         availableForSale = inventoryCount > 0 and item.getSellPrice() != ITEM_PRICE_EMPTY and not item.isRentable and not item.isHidden
         style = self.__ctx.modifiedStyle
-        if style is not None:
-            removeFromTankEnabled = style.intCD == item.intCD
+        if self.__ctx.mode == C11nMode.STYLE:
+            removeFromTankEnabled = style is not None and style.intCD == item.intCD
             removeFromTankText = CustomizationOptions.REMOVE_FROM_TANK
         else:
             outfit = self.__ctx.getModifiedOutfit(self.__ctx.currentSeason)

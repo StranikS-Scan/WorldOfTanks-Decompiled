@@ -71,7 +71,6 @@
       <collisionModelServer>	vehicles/russian/R11_MS-1/collision/Hull.model	</collisionModelServer>
       <collisionModelClient>	vehicles/russian/R11_MS-1/collision_client/Hull.model	</collisionModelClient>
     </hitTester>
-    <emblemSlots></emblemSlots>
     <hangarShadowTexture>	vehicles/russian/R11_MS-1/MS-1_HangarShadowMap.dds	</hangarShadowTexture>
     <customization>
       <customizableVehicleAreas>
@@ -209,128 +208,7 @@
           </transform>
         </decal>
       </AODecals>
-      <groundNodes>
-        <group>
-          <template>	Track_L	</template>
-          <startIndex>	0	</startIndex>
-          <count>	7	</count>
-          <isLeft>	true	</isLeft>
-          <minOffset>	-0.0526882	</minOffset>
-          <maxOffset>	0.0483871	</maxOffset>
-        </group>
-        <group>
-          <template>	Track_R	</template>
-          <startIndex>	0	</startIndex>
-          <count>	7	</count>
-          <isLeft>	false	</isLeft>
-          <minOffset>	-0.0526882	</minOffset>
-          <maxOffset>	0.0505376	</maxOffset>
-        </group>
-      </groundNodes>
-      <splineDesc>
-        <segmentModelLeft>	vehicles/russian/R11_MS-1/track/segment_L.model	</segmentModelLeft>
-        <segmentModelRight>	vehicles/russian/R11_MS-1/track/segment_R.model	</segmentModelRight>
-        <left>	vehicles/russian/R11_MS-1/track/left.track	</left>
-        <right>	vehicles/russian/R11_MS-1/track/right.track	</right>
-        <segmentLength>	0.155	</segmentLength>
-        <segmentOffset>	0.081	</segmentOffset>
-        <lodDist>	SPLINE_TRACK	</lodDist>
-        <atlas>
-          <UTiles>	1	</UTiles>
-          <VTiles>	1	</VTiles>
-        </atlas>
-      </splineDesc>
       <trackThickness>	-0.0339	</trackThickness>
-      <trackNodes>
-        <enable>	true	</enable>
-        <linkBones>	false	</linkBones>
-        <maxAmplitude>	0.01	</maxAmplitude>
-        <maxOffset>	0.01	</maxOffset>
-        <gravity>	-1.1	</gravity>
-        <elasticity>	1294	</elasticity>
-        <damping>	2	</damping>
-        <forwardElastK>	1	</forwardElastK>
-        <backwardElastK>	1	</backwardElastK>
-        <offset>	0.000000	</offset>
-        <node>
-          <isLeft>	true	</isLeft>
-          <name>	Track_VT_L0	</name>
-          <forwardElastK>	0.89	</forwardElastK>
-          <backwardElastK>	1.51	</backwardElastK>
-          <offset>	-0.036	</offset>
-        </node>
-        <node>
-          <isLeft>	false	</isLeft>
-          <name>	Track_VD_R0	</name>
-        </node>
-        <node>
-          <isLeft>	true	</isLeft>
-          <name>	Track_VT_L1	</name>
-          <forwardElastK>	0.89	</forwardElastK>
-          <backwardElastK>	1.51	</backwardElastK>
-          <offset>	-0.011	</offset>
-        </node>
-        <node>
-          <isLeft>	true	</isLeft>
-          <name>	Track_VT_L2	</name>
-          <forwardElastK>	0.89	</forwardElastK>
-          <backwardElastK>	1.51	</backwardElastK>
-          <offset>	-0.011	</offset>
-        </node>
-        <node>
-          <isLeft>	true	</isLeft>
-          <name>	Track_VT_L3	</name>
-          <offset>	-0.033	</offset>
-        </node>
-        <node>
-          <isLeft>	true	</isLeft>
-          <name>	Track_VT_L4	</name>
-          <offset>	-0.027	</offset>
-        </node>
-        <node>
-          <isLeft>	true	</isLeft>
-          <name>	Track_VD_L0	</name>
-        </node>
-        <node>
-          <isLeft>	true	</isLeft>
-          <name>	Track_VD_L1	</name>
-        </node>
-        <node>
-          <isLeft>	false	</isLeft>
-          <name>	Track_VD_R1	</name>
-        </node>
-        <node>
-          <isLeft>	false	</isLeft>
-          <name>	Track_VT_R0	</name>
-          <forwardElastK>	0.89	</forwardElastK>
-          <backwardElastK>	1.51	</backwardElastK>
-          <offset>	-0.036	</offset>
-        </node>
-        <node>
-          <isLeft>	false	</isLeft>
-          <name>	Track_VT_R1	</name>
-          <forwardElastK>	0.89	</forwardElastK>
-          <backwardElastK>	1.51	</backwardElastK>
-          <offset>	-0.011	</offset>
-        </node>
-        <node>
-          <isLeft>	false	</isLeft>
-          <name>	Track_VT_R2	</name>
-          <forwardElastK>	0.89	</forwardElastK>
-          <backwardElastK>	1.51	</backwardElastK>
-          <offset>	-0.011	</offset>
-        </node>
-        <node>
-          <isLeft>	false	</isLeft>
-          <name>	Track_VT_R3	</name>
-          <offset>	-0.033	</offset>
-        </node>
-        <node>
-          <isLeft>	false	</isLeft>
-          <name>	Track_VT_R4	</name>
-          <offset>	-0.027	</offset>
-        </node>
-      </trackNodes>
       <customization>
         <customizableVehicleAreas>
           <paint></paint>
@@ -431,7 +309,6 @@
         <collisionModelClient>	vehicles/russian/R11_MS-1/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	-0.083091 0.223955 0.456138	</gunPosition>
-      <emblemSlots></emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
       <physicsShape>	1.000 0.000 1.000 0.000 0.497 0.094 0.410 0.602 1.000 0.500 0.198 0.500 0.242 0.515 0.000	</physicsShape>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>

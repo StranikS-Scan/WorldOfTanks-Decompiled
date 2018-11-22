@@ -360,6 +360,42 @@
         </effects>
       </variant1>
     </tree_Maple_Autumn_12m_touchdown>
+    <tree_Maple_Autumn_25m_fall>
+      <variant1>
+        <stages>
+          <base>	6.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/trees/Broadleaves/tree_Maple_Autumn_25m_fall.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <destructionSound>
+            <startKey>	base	</startKey>
+            <wwsound>	obj_treefall_creak	</wwsound>
+          </destructionSound>
+        </effects>
+      </variant1>
+    </tree_Maple_Autumn_25m_fall>
+    <tree_Maple_Autumn_25m_touchdown>
+      <variant1>
+        <stages>
+          <base>	5.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/trees/Broadleaves/tree_Maple_Autumn_25m_touchdown.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <destructionSound>
+            <startKey>	base	</startKey>
+            <wwsound>	obj_treefall_down	</wwsound>
+          </destructionSound>
+        </effects>
+      </variant1>
+    </tree_Maple_Autumn_25m_touchdown>
     <tree_Birch_Colored_bush_single_01_fall>
       <variant1>
         <stages>
@@ -23854,6 +23890,31 @@
         </effects>
       </variant1>
     </inf_envEU_009_TownEnv_flowerpot_02_09>
+    <inf_mle_UNI_820_EightyEight_01>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/inf_mle_UNI_820_EightyEight_01.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <destructionSound>
+            <startKey>	base	</startKey>
+            <wwsound>	obj_generative	</wwsound>
+            <params>
+              <metal_1>	24	</metal_1>
+              <metal_2>	49	</metal_2>
+              <wood_1>	24	</wood_1>
+              <debrisAmount>	60	</debrisAmount>
+              <weight>	7500	</weight>
+            </params>
+          </destructionSound>
+        </effects>
+      </variant1>
+    </inf_mle_UNI_820_EightyEight_01>
     <inf_mle_UNI_820_EightyEight_01_01>
       <variant1>
         <stages>
@@ -29401,11 +29462,10 @@
             <startKey>	base	</startKey>
             <wwsound>	obj_generative	</wwsound>
             <params>
-              <debrisAmount>	37.16	</debrisAmount>
-              <weight>	4954.13	</weight>
-              <metal_1>	8.26	</metal_1>
-              <metal_2>	23.85	</metal_2>
-              <glass>	30.28	</glass>
+              <debrisAmount>	68.000000	</debrisAmount>
+              <weight>	3536.000000	</weight>
+              <wood_1>	15.000000	</wood_1>
+              <wood_2>	37.000000	</wood_2>
             </params>
           </destructionSound>
         </effects>

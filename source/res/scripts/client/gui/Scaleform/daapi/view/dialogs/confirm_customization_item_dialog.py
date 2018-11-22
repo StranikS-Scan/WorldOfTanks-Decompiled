@@ -41,7 +41,8 @@ class ConfirmCustomizationItemDialog(ConfirmItemWindowMeta):
         self.destroy()
 
     def submit(self, count, currency):
-        if self.meta.type == Types.BUY and self.meta.getItem().isVehicleBound:
+        item = self.meta.getItem()
+        if self.meta.type == Types.BUY and item.isVehicleBound and not item.isRentable:
 
             def callback(isOk):
                 if isOk:
@@ -52,8 +53,9 @@ class ConfirmCustomizationItemDialog(ConfirmItemWindowMeta):
             self.proceedSubmit(count, currency)
 
     def proceedSubmit(self, count, currency):
-        self.meta.submit(self.meta.getItem(), count, currency)
-        self._callHandler(True, self.meta.getItem(), count, currency)
+        item = self.meta.getItem()
+        self.meta.submit(item, count, currency)
+        self._callHandler(True, item, count, currency)
         self.destroy()
 
     def _callHandler(self, success, *kargs):
@@ -73,7 +75,7 @@ class ConfirmCustomizationItemDialog(ConfirmItemWindowMeta):
             if actualPrices != defaultPrices:
                 action = self.meta.getActionVO(item)
             iconWidth = iconHeight = 59
-            if item.isWide():
+            if item.isWide() and item.itemTypeID != GUI_ITEM_TYPE.PROJECTION_DECAL:
                 iconWidth = 118 if item.itemTypeID == GUI_ITEM_TYPE.INSCRIPTION else 161
             smallSlotVO = {'itemIcon': item.icon,
              'isBgVisible': False,

@@ -8,6 +8,7 @@ from gui import DialogsInterface
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform.daapi.view.dialogs.ExchangeDialogMeta import ExchangeCreditsSingleItemMeta, ExchangeCreditsMultiItemsMeta, InfoItemBase
 from gui.Scaleform.daapi.view.lobby.customization.customization_item_vo import buildCustomizationItemDataVO
+from gui.Scaleform.daapi.view.lobby.customization.shared import containsVehicleBound
 from gui.Scaleform.daapi.view.lobby.header.LobbyHeader import HeaderMenuVisibilityState
 from gui.Scaleform.daapi.view.lobby.store.browser.ingameshop_helpers import isIngameShopEnabled
 from gui.Scaleform.daapi.view.meta.CustomizationBuyWindowMeta import CustomizationBuyWindowMeta
@@ -103,7 +104,7 @@ class PurchaseWindow(CustomizationBuyWindowMeta):
                 meta = ExchangeCreditsMultiItemsMeta(itemsCDs, CartInfoItem())
             yield DialogsInterface.showDialog(meta)
             return
-        if self.containsVehicleBound(self.__purchaseItems):
+        if containsVehicleBound(self.__purchaseItems):
             DialogsInterface.showI18nConfirmDialog(CUSTOMIZATION_DIALOGS.CUSTOMIZATION_INSTALL_BOUND_BASKET_NOTIFICATION, self.onBuyConfirmed)
             return
         self.onBuyConfirmed(True)
@@ -112,13 +113,6 @@ class PurchaseWindow(CustomizationBuyWindowMeta):
         if isOk:
             self.__ctx.applyItems(self.__purchaseItems)
             self.close()
-
-    def containsVehicleBound(self, purchaseItems):
-        for purchaseItem in purchaseItems:
-            if not purchaseItem.isDismantling and purchaseItem.item.isVehicleBound:
-                return True
-
-        return False
 
     def onWindowClose(self):
         self.close()
@@ -332,7 +326,7 @@ class _SeparateItemPurchaseDescription(_BasePurchaseDescription):
         itemVO.update({'compoundPrice': getItemPricesVO(self.compoundPrice)[0],
          'isFromStorage': self.isFromInventory,
          'selected': self.selected,
-         'tooltip': TOOLTIPS_CONSTANTS.TECH_CUSTOMIZATION_ITEM})
+         'tooltip': TOOLTIPS_CONSTANTS.TECH_CUSTOMIZATION_ITEM_PURCHASE})
         return itemVO
 
     def __generateID(self, item):

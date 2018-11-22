@@ -15,6 +15,7 @@ from gui.Scaleform.genConsts.BATTLE_DESTROY_TIMER_STATES import BATTLE_DESTROY_T
 from gui.Scaleform.locale.EPIC_BATTLE import EPIC_BATTLE
 from gui.battle_control import avatar_getter
 from gui.battle_control.battle_constants import VEHICLE_VIEW_STATE
+from gui.battle_control import event_dispatcher as gui_event_dispatcher
 from helpers import dependency, i18n
 from items import vehicles
 from skeletons.gui.battle_session import IBattleSessionProvider
@@ -46,6 +47,7 @@ def _showTimerView(typeID, viewID, view, totalTime, isBubble, currentTime=0):
         view.as_showSecondaryTimerS(typeID, totalTime, currentTime)
     else:
         view.as_showS(typeID, viewID, isBubble)
+    gui_event_dispatcher.destroyTimersPanelShown(shown=True)
 
 
 def _hideTimerView(typeID, view):
@@ -53,6 +55,7 @@ def _hideTimerView(typeID, view):
         view.as_hideSecondaryTimerS(typeID)
     else:
         view.as_hideS(typeID)
+    gui_event_dispatcher.destroyTimersPanelShown(shown=False)
 
 
 class _ActionScriptTimer(TimerComponent):

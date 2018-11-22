@@ -16,7 +16,6 @@ from gui.hangar_cameras.hangar_camera_common import CameraRelatedEvents, CameraM
 from gui.hangar_cameras.hangar_camera_idle import HangarCameraIdle
 from gui.hangar_cameras.hangar_camera_parallax import HangarCameraParallax
 from AvatarInputHandler.cameras import FovExtended
-from vehicle_systems.stricted_loading import makeCallbackWeak
 _logger = getLogger(__name__)
 IMMEDIATE_CAMERA_MOVEMENT_MODE = 0
 FAST_CAMERA_MOVEMENT_MODE = 1
@@ -156,7 +155,7 @@ class HangarCameraManager(object):
             g_keyEventHandlers.remove(self.__handleKeyEvent)
             g_eventBus.removeListener(CameraRelatedEvents.LOBBY_VIEW_MOUSE_MOVE, self.__handleLobbyViewMouseEvent)
 
-    def setCameraLocation(self, targetPos=None, pivotPos=None, yaw=None, pitch=None, dist=None, camConstraints=None, ignoreConstraints=False, movementMode=FAST_CAMERA_MOVEMENT_MODE, previewMode=False, verticalOffset=0.0):
+    def setCameraLocation(self, targetPos=None, pivotPos=None, yaw=None, pitch=None, dist=None, camConstraints=None, ignoreConstraints=False, movementMode=FAST_CAMERA_MOVEMENT_MODE, previewMode=False):
         from gui.ClientHangarSpace import hangarCFG
         cfg = hangarCFG()
         sourceMat = Math.Matrix(self.__cam.source)
@@ -166,7 +165,6 @@ class HangarCameraManager(object):
             dist = self.__cam.pivotMaxDist
         if movementMode != IMMEDIATE_CAMERA_MOVEMENT_MODE:
             self.__cam.movementMode = movementMode
-        self.__cam.screenSpaceVerticalOffset = verticalOffset
         if camConstraints is not None:
             self.__camConstraints = camConstraints
         else:
@@ -179,9 +177,8 @@ class HangarCameraManager(object):
                 self.__yawCameraFilter.setConstraints(math.radians(startYaw), math.radians(endYaw))
                 self.__yawCameraFilter.setYawLimits(camYawConstr)
                 yawS = self.__yawCameraFilter.toLimit(yawS)
-                pitchOffset = self.__cam.pitchOffset
                 camPitchConstr = self.__camConstraints[0]
-                startPitch, endPitch = (math.radians(pc) - pitchOffset for pc in camPitchConstr)
+                startPitch, endPitch = (math.radians(pc) for pc in camPitchConstr)
                 pitchS = mathUtils.clamp(startPitch, endPitch, pitchS)
             distConstr = cfg['preview_cam_dist_constr'] if self.__isPreviewMode else self.__camConstraints[2]
             minDist, maxDist = distConstr
@@ -227,12 +224,6 @@ class HangarCameraManager(object):
     def getCameraPosition(self):
         return self.__cam.position
 
-    def updateProjection(self):
-        BigWorld.callback(0.0, makeCallbackWeak(self.__updateProjection))
-
-    def __updateProjection(self):
-        self.__cam.updateProjection()
-
     def __updateCameraByMouseMove(self, dx, dy, dz):
         if self.__cam is None or self.__movementDisabled:
             return
@@ -240,7 +231,10 @@ class HangarCameraManager(object):
             sourceMat = Math.Matrix(self.__cam.source)
             yaw = sourceMat.yaw
             pitch = sourceMat.pitch
-            dist = self.__cam.pivotMaxDist
+            if dz < 0.0:
+                dist = self.__cam.pivotMaxDist
+            else:
+                dist = self.__cam.targetMaxDist
             currentMatrix = Math.Matrix(self.__cam.invViewMatrix)
             currentYaw = currentMatrix.yaw
             yaw = self.__yawCameraFilter.getNextYaw(currentYaw, yaw, dx)

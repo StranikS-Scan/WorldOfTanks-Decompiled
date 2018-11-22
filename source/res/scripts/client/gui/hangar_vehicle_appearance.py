@@ -119,9 +119,9 @@ class HangarVehicleAppearance(ComponentSystem):
         g_eventBus.addListener(CameraRelatedEvents.CAMERA_ENTITY_UPDATED, self.__handleEntityUpdated)
         return
 
-    def recreate(self, vDesc, vState, callback):
+    def recreate(self, vDesc, vState=None, callback=None, outfit=None):
         self.__onLoadedCallback = callback
-        self.__reload(vDesc, vState, self._getActiveOutfit())
+        self.__reload(vDesc, vState or self.__vState, outfit or self._getActiveOutfit())
 
     def remove(self):
         self.__loadState.unload()
@@ -169,6 +169,9 @@ class HangarVehicleAppearance(ComponentSystem):
 
     def isLoaded(self):
         return self.__loadState.isLoaded
+
+    def recreateRequired(self, newOutfit):
+        return self.__outfit.modelsSet != newOutfit.modelsSet
 
     def computeVehicleHeight(self):
         gunLength = 0.0

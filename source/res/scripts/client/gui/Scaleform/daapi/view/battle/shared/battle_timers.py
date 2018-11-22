@@ -22,6 +22,8 @@ class _WWISE_EVENTS(object):
     BATTLE_ENDING_SOON = 'time_buzzer_02'
     COUNTDOWN_TICKING = 'time_countdown'
     STOP_TICKING = 'time_countdown_stop'
+    FLAG_APPEAR = 'pm_flag_appearance'
+    FLAG_DISAPPEAR = 'pm_flag_disappearance'
 
 
 _BATTLE_END_TIME = 0
@@ -38,8 +40,15 @@ class PreBattleTimer(PrebattleTimerMeta, IAbstractPeriodView, IArenaVehiclesCont
         self.__timeLeft = None
         self.__callbackID = None
         self.__arenaPeriod = None
+        self.__sounds = dict()
         super(PreBattleTimer, self).__init__()
         return
+
+    def onShowFlag(self):
+        self.__callWWISE(_WWISE_EVENTS.FLAG_APPEAR)
+
+    def onHideFlag(self):
+        self.__callWWISE(_WWISE_EVENTS.FLAG_DISAPPEAR)
 
     def getControllerID(self):
         return BATTLE_CTRL_ID.GUI
@@ -85,10 +94,21 @@ class PreBattleTimer(PrebattleTimerMeta, IAbstractPeriodView, IArenaVehiclesCont
         self.__onMappingChanged()
 
     def _dispose(self):
+        for sound in self.__sounds.values():
+            sound.stop()
+
+        self.__sounds.clear()
         self.sessionProvider.removeArenaCtrl(self)
         self.__clearTimeShiftCallback()
         CommandMapping.g_instance.onMappingChanged -= self.__onMappingChanged
         super(PreBattleTimer, self)._dispose()
+
+    def __callWWISE(self, wwiseEventName):
+        sound = SoundGroups.g_instance.getSound2D(wwiseEventName)
+        if sound is not None:
+            sound.play()
+            self.__sounds[wwiseEventName] = sound
+        return
 
     def __setTimeShitCallback(self):
         self.__callbackID = BigWorld.callback(_TIMER_ANIMATION_SHIFT, self.__updateTimer)

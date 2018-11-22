@@ -582,6 +582,7 @@ class BuyVehicleView(ViewImpl, EventSystemEntity):
         self.__destroyWindow()
 
     def __destroyWindow(self):
+        self.viewModel.congratulationAnim.setResetAnimTrgigger(True)
         window = self.getParentWindow()
         if window is not None:
             window.destroy()

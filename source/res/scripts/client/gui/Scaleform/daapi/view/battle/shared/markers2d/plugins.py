@@ -625,7 +625,7 @@ class VehicleMarkerTargetPlugin(MarkerPlugin, IArenaVehiclesController):
         vInfo = self.__arenaDP.getVehicleInfo(vehicleID)
         if vehicleID in self._markers:
             marker = self._markers[vehicleID]
-            if marker.setActive(True):
+            if marker.setActive(True) and vProxy is not None:
                 marker.attach(vProxy)
                 self._setMarkerMatrix(marker.getMarkerID(), marker.getMatrixProvider())
                 self._setMarkerActive(marker.getMarkerID(), True)
@@ -633,6 +633,7 @@ class VehicleMarkerTargetPlugin(MarkerPlugin, IArenaVehiclesController):
             if vInfo.isObserver():
                 return
             self.__addMarkerToPool(vehicleID, vProxy)
+        return
 
     def __addMarkerToPool(self, vehicleID, vProxy=None):
         if vProxy is not None:

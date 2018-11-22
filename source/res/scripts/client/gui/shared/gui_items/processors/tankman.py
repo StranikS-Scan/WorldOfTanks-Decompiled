@@ -247,7 +247,7 @@ class TankmanRetraining(ItemProcessor):
          plugins.VehicleCrewLockedValidator(vehicle),
          plugins.MessageConfirmator('tankmanRetraining/knownVehicleByGold', ctx=ctx, isEnabled=vehicle.isInInventory and isGoldPrice),
          plugins.MessageConfirmator('tankmanRetraining/unknownVehicleByGold', ctx=ctx, isEnabled=not vehicle.isInInventory and isGoldPrice),
-         plugins.MessageConfirmator('tankmanRetraining/unknownVehicle', ctx=ctx, isEnabled=not vehicle.isInInventory),
+         plugins.MessageConfirmator('tankmanRetraining/unknownVehicle', ctx=ctx, isEnabled=not vehicle.isInInventory and not isGoldPrice),
          plugins.MessageConfirmator('tankmanRetraining/undistributedExp', ctx=ctx, isEnabled=hasUndistributedExp)))
 
     def _getRecruitPrice(self, tmanCostTypeIdx):

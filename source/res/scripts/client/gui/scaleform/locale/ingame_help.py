@@ -95,3 +95,5 @@ class INGAME_HELP(object):
     DETAILSHELP_BURNOUT = '#ingame_help:detailsHelp/burnout'
     DETAILSHELP_ABOUTTECHNIQUE = '#ingame_help:detailsHelp/aboutTechnique'
     DETAILSHELP_STABLECHASSIS = '#ingame_help:detailsHelp/stableChassis'
+    DETAILSHELP_NOKEYSWARNING = '#ingame_help:detailsHelp/noKeysWarning'
+    DETAILSHELP_NOKEY = '#ingame_help:detailsHelp/noKey'

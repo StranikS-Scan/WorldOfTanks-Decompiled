@@ -4,6 +4,7 @@ from collections import namedtuple
 from itertools import chain
 import math
 import BigWorld
+import Vehicle
 from Math import Vector3, Matrix
 from AvatarInputHandler import mathUtils
 from gui.battle_control import event_dispatcher as gui_event_dispatcher
@@ -20,7 +21,7 @@ class MagneticAimSettings(object):
 _TargetVeh = namedtuple('TargetVehicle', ('vehicleRef', 'dotResult', 'distance'))
 
 def autoAimProcessor(target):
-    if target is not None:
+    if target is not None and isinstance(target, Vehicle.Vehicle):
         allyOrSelfVehicle = target.publicInfo['team'] == BigWorld.player().team or target.isPlayerVehicle
         if allyOrSelfVehicle or not target.isStarted or not target.isAlive():
             return
@@ -28,12 +29,15 @@ def autoAimProcessor(target):
     return
 
 
-def magneticAimProcessor():
+def magneticAimProcessor(previousTarget=None):
     if BigWorld.target() is None:
         target = magneticAimFindTarget()
-        if target:
+        if target and target != previousTarget:
             gui_event_dispatcher.addAutoAimMarker(vehicle=target)
             BigWorld.player().autoAim(target=target, magnetic=True)
+            return target
+        if target == previousTarget:
+            BigWorld.player().autoAim(target=None)
     return
 
 

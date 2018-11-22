@@ -11244,39 +11244,40 @@
       <health>	50	</health>
       <decayEffect>	none	</decayEffect>
       <effect>	inf_mle_UNI_820_EightyEight_05	</effect>
+      <hitEffect>	inf_mle_UNI_820_EightyEight_05	</hitEffect>
       <effectHP>	HP_module0	</effectHP>
       <effectScale>	1	</effectScale>
       <matName>	n_metal0	</matName>
       <lifetimeEffect>	none	</lifetimeEffect>
-      <hitEffect>	inf_mle_UNI_820_EightyEight_05	</hitEffect>
     </entry>
     <entry>
       <filename>	content/MilitaryEnvironment/hd_mle_UNI_820_EightyEight/normal/lod0/hd_mle_UNI_820_EightyEight_04.model	</filename>
       <health>	50	</health>
       <decayEffect>	none	</decayEffect>
       <effect>	inf_mle_UNI_820_EightyEight_03	</effect>
+      <hitEffect>	inf_mle_UNI_820_EightyEight_03	</hitEffect>
       <effectHP>	HP_module0	</effectHP>
       <effectScale>	1	</effectScale>
       <matName>	n_metal0	</matName>
       <lifetimeEffect>	none	</lifetimeEffect>
-      <hitEffect>	inf_mle_UNI_820_EightyEight_03	</hitEffect>
     </entry>
     <entry>
       <filename>	content/MilitaryEnvironment/hd_mle_UNI_820_EightyEight/normal/lod0/hd_mle_UNI_820_EightyEight_03.model	</filename>
       <health>	50	</health>
       <decayEffect>	none	</decayEffect>
       <effect>	inf_mle_UNI_820_EightyEight_03_01	</effect>
+      <hitEffect>	inf_mle_UNI_820_EightyEight_03_01	</hitEffect>
       <effectHP>	HP_module0	</effectHP>
       <effectScale>	1	</effectScale>
       <matName>	n_metal0	</matName>
       <lifetimeEffect>	none	</lifetimeEffect>
-      <hitEffect>	inf_mle_UNI_820_EightyEight_03_01	</hitEffect>
     </entry>
     <entry>
       <filename>	content/MilitaryEnvironment/hd_mle_UNI_820_EightyEight/normal/lod0/hd_mle_UNI_820_EightyEight_01.model	</filename>
       <health>	50	</health>
       <decayEffect>	none	</decayEffect>
-      <effect>	inf_mle_UNI_820_EightyEight_01_01	</effect>
+      <effect>	inf_mle_UNI_820_EightyEight_01	</effect>
+      <hitEffect>	inf_mle_UNI_820_EightyEight_01_01	</hitEffect>
       <effectHP>	HP_module0	</effectHP>
       <effectScale>	1	</effectScale>
       <matName>	n_metal0	</matName>
@@ -12457,17 +12458,6 @@
       <effectHP>	HP_module0	</effectHP>
       <effectScale>	1	</effectScale>
       <matName>	n_stone0	</matName>
-      <lifetimeEffect>	none	</lifetimeEffect>
-    </entry>
-    <entry>
-      <filename>	content/Buildings/hd_bld_UNI_006_KitCrashFactory/normal/lod0/hd_bld_UNI_006_KitCrashFactory_Roof_03.model	</filename>
-      <health>	5	</health>
-      <decayEffect>	bld_SU_024_FactoryBuilding	</decayEffect>
-      <effect>	hd_bld_AF_001_VHouse_Ruins_01_05	</effect>
-      <hitEffect>	bld_SU_024_FactoryBuilding_10_hit	</hitEffect>
-      <effectHP>	HP_module0	</effectHP>
-      <effectScale>	1	</effectScale>
-      <matName>	n_wood0	</matName>
       <lifetimeEffect>	none	</lifetimeEffect>
     </entry>
     <entry>
@@ -14167,6 +14157,17 @@
       <effectHP>	HP_module0	</effectHP>
       <effectScale>	1.000000	</effectScale>
       <matName>	n_metal0	</matName>
+      <lifetimeEffect>	none	</lifetimeEffect>
+    </entry>
+    <entry>
+      <filename>	content/Buildings/hd_bld_UNI_006_KitCrashFactory/normal/lod0/hd_bld_UNI_006_KitCrashFactory_Roof_03.model	</filename>
+      <health>	5	</health>
+      <decayEffect>	none	</decayEffect>
+      <effect>	hd_bld_UNI_008_WorkshopNew_Doors_Big_01_3_fragile	</effect>
+      <hitEffect>	hd_bld_UNI_008_WorkshopNew_Doors_Big_01_3_fragile	</hitEffect>
+      <effectHP>	HP_module0	</effectHP>
+      <effectScale>	1.000000	</effectScale>
+      <matName>	n_wood0	</matName>
       <lifetimeEffect>	none	</lifetimeEffect>
     </entry>
   </fragiles>
@@ -19213,20 +19214,6 @@
           <ramEffect>	inf_bldAM_008_WorkBarrack_01_19_ram	</ramEffect>
           <hitEffect>	inf_bldAM_008_WorkBarrack_01_19_hit	</hitEffect>
           <effectHP>	HP_module5	</effectHP>
-          <effectScale>	1	</effectScale>
-        </module>
-      </modules>
-    </entry>
-    <entry>
-      <filename>	content/Buildings/hd_bld_UNI_006_KitCrashFactory/normal/lod0/hd_bld_UNI_006_KitCrashFactory_Roof_03.model	</filename>
-      <modules>
-        <module>
-          <matName>	n_wood0	</matName>
-          <health>	50	</health>
-          <decayEffect>	none	</decayEffect>
-          <ramEffect>	hd_bld_UNI_006_KitCrashFactory_Roof_03	</ramEffect>
-          <hitEffect>	hd_bld_UNI_006_KitCrashFactory_Roof_03	</hitEffect>
-          <effectHP>	HP_module0	</effectHP>
           <effectScale>	1	</effectScale>
         </module>
       </modules>

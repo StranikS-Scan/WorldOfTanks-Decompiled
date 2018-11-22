@@ -883,7 +883,7 @@ class ShotDonePlugin(CrosshairPlugin):
 
 
 class SpeedometerWheeledTech(CrosshairPlugin):
-    __slots__ = ('__siegeState', '__burnoutLevelMax', '__burnoutWarningOn', '__viewID')
+    __slots__ = ('__siegeState', '__burnoutLevelMax', '__burnoutWarningOn', '__viewID', '__destroyTimerShown')
 
     def __init__(self, parentObj):
         super(SpeedometerWheeledTech, self).__init__(parentObj)
@@ -891,6 +891,7 @@ class SpeedometerWheeledTech(CrosshairPlugin):
         self.__burnoutLevelMax = 255.0
         self.__burnoutWarningOn = False
         self.__viewID = -1
+        self.__destroyTimerShown = False
 
     def start(self):
         vStateCtrl = self.sessionProvider.shared.vehicleState
@@ -902,6 +903,8 @@ class SpeedometerWheeledTech(CrosshairPlugin):
             vehicle = vStateCtrl.getControllingVehicle()
             if vehicle is not None and vehicle.isWheeledTech:
                 self.__onVehicleControlling(vehicle)
+        add = g_eventBus.addListener
+        add(GameEvent.DESTROY_TIMERS_PANEL, self.__destroyTimersListener, scope=EVENT_BUS_SCOPE.BATTLE)
         return
 
     def stop(self):
@@ -911,6 +914,8 @@ class SpeedometerWheeledTech(CrosshairPlugin):
             vStateCtrl.onVehicleStateUpdated -= self.__onVehicleStateUpdated
             vStateCtrl.onVehicleControlling -= self.__onVehicleControlling
             crosshairCtrl.onCrosshairViewChanged -= self.__onCrosshairViewChanged
+        remove = g_eventBus.removeListener
+        remove(GameEvent.DESTROY_TIMERS_PANEL, self.__destroyTimersListener, scope=EVENT_BUS_SCOPE.BATTLE)
         return
 
     def __onVehicleControlling(self, vehicle):
@@ -940,7 +945,8 @@ class SpeedometerWheeledTech(CrosshairPlugin):
             if _DEVICE_ENGINE_NAME in value and _DEVICE_REPAIRED in value:
                 self.parentObj.as_stopEngineCrushErrorS()
         elif stateID == VEHICLE_VIEW_STATE.BURNOUT_UNAVAILABLE_DUE_TO_BROKEN_ENGINE:
-            self.parentObj.as_setEngineCrushErrorS(INGAME_GUI.BURNOUT_HINT_ENGINEDAMAGED)
+            if not self.__destroyTimerShown:
+                self.parentObj.as_setEngineCrushErrorS(INGAME_GUI.BURNOUT_HINT_ENGINEDAMAGED)
 
     def __onCrosshairViewChanged(self, viewID):
         vStateCtrl = self.sessionProvider.shared.vehicleState
@@ -967,6 +973,7 @@ class SpeedometerWheeledTech(CrosshairPlugin):
         siegeVehicleDescr = None
         siegeMaxSpd = None
         if typeDesc.hasSiegeMode:
+            defaultVehicleDescr = typeDesc.defaultVehicleDescr
             siegeVehicleDescr = typeDesc.siegeVehicleDescr
         if siegeVehicleDescr is not None:
             siegeEngineCfg = siegeVehicleDescr.type.xphysics['engines'][typeDesc.engine.name]
@@ -993,9 +1000,19 @@ class SpeedometerWheeledTech(CrosshairPlugin):
         return
 
     def __setEngineDamageWarning(self):
-        self.__burnoutWarningOn = True
-        self.parentObj.as_setBurnoutWarningS(INGAME_GUI.BURNOUT_HINT_ENGINEDAMAGEWARNING)
+        if not self.__destroyTimerShown:
+            self.__burnoutWarningOn = True
+            self.parentObj.as_setBurnoutWarningS(INGAME_GUI.BURNOUT_HINT_ENGINEDAMAGEWARNING)
 
     def __stopEngineDamageWarning(self):
         self.__burnoutWarningOn = False
         self.parentObj.as_stopBurnoutWarningS()
+
+    def __destroyTimersListener(self, event):
+        isShown = event.ctx['shown']
+        if isShown is not None:
+            self.__destroyTimerShown = isShown
+        if not isShown:
+            self.__stopEngineDamageWarning()
+            self.parentObj.as_stopEngineCrushErrorS()
+        return

@@ -13,7 +13,7 @@ from gui.Scaleform.daapi.view.dialogs import I18nConfirmDialogMeta
 from gui.Scaleform.daapi.view.dialogs.confirm_customization_item_dialog_meta import ConfirmC11nBuyMeta, ConfirmC11nSellMeta
 from gui.Scaleform.daapi.view.lobby.customization import CustomizationItemCMHandler
 from gui.Scaleform.daapi.view.lobby.customization.customization_cm_handlers import CustomizationOptions
-from gui.Scaleform.daapi.view.lobby.customization.shared import C11nMode, TABS_ITEM_MAPPING, DRAG_AND_DROP_INACTIVE_TABS, C11nTabs, SEASON_TYPE_TO_NAME, SEASON_IDX_TO_TYPE, SEASON_TYPE_TO_IDX, SEASONS_ORDER, getTotalPurchaseInfo
+from gui.Scaleform.daapi.view.lobby.customization.shared import C11nMode, TABS_ITEM_MAPPING, DRAG_AND_DROP_INACTIVE_TABS, C11nTabs, SEASON_TYPE_TO_NAME, SEASON_IDX_TO_TYPE, SEASON_TYPE_TO_IDX, SEASONS_ORDER, getTotalPurchaseInfo, containsVehicleBound
 from gui.Scaleform.daapi.view.lobby.customization.sound_constants import SOUNDS, C11N_SOUND_SPACE
 from gui.Scaleform.daapi.view.lobby.header.LobbyHeader import HeaderMenuVisibilityState
 from gui.Scaleform.daapi.view.meta.CustomizationMainViewMeta import CustomizationMainViewMeta
@@ -21,11 +21,9 @@ from gui.Scaleform.framework.entities.View import ViewKey, ViewKeyDynamic
 from gui.Scaleform.framework.managers.view_lifecycle_watcher import IViewLifecycleHandler, ViewLifecycleWatcher
 from gui.Scaleform.genConsts.CUSTOMIZATION_ALIASES import CUSTOMIZATION_ALIASES
 from gui.Scaleform.genConsts.CUSTOMIZATION_DIALOGS import CUSTOMIZATION_DIALOGS
-from gui.Scaleform.locale.ITEM_TYPES import ITEM_TYPES
 from gui.Scaleform.locale.MESSENGER import MESSENGER
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.SYSTEM_MESSAGES import SYSTEM_MESSAGES
-from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.Scaleform.locale.VEHICLE_CUSTOMIZATION import VEHICLE_CUSTOMIZATION
 from gui.Scaleform.Waiting import Waiting
 from gui.SystemMessages import SM_TYPE, CURRENCY_TO_SM_TYPE
@@ -35,7 +33,7 @@ from gui.customization.shared import chooseMode, getAppliedRegionsForCurrentHang
 from gui.shared import events
 from gui.shared.event_bus import EVENT_BUS_SCOPE
 from gui.shared.events import LobbyHeaderMenuEvent
-from gui.shared.formatters import formatPrice
+from gui.shared.formatters import formatPrice, text_styles
 from gui.shared.gui_items import GUI_ITEM_TYPE, GUI_ITEM_TYPE_NAMES
 from gui.shared.gui_items.customization.outfit import Area
 from gui.shared.gui_items.gui_item_economics import ITEM_PRICE_EMPTY
@@ -113,7 +111,7 @@ class _SeasonSoundAnimantion(object):
 
 class MainView(CustomizationMainViewMeta):
     _COMMON_SOUND_SPACE = C11N_SOUND_SPACE
-    _ZOOM_ON_EMBLEM = 0.6
+    _ZOOM_ON_EMBLEM = 0.1
     _ZOOM_ON_INSCRIPTION = 0.1
     lobbyContext = dependency.descriptor(ILobbyContext)
     itemsCache = dependency.descriptor(IItemsCache)
@@ -138,7 +136,7 @@ class MainView(CustomizationMainViewMeta):
         purchaseItems = self.__ctx.getPurchaseItems()
         cart = getTotalPurchaseInfo(purchaseItems)
         if cart.totalPrice == ITEM_PRICE_EMPTY:
-            if self.containsVehicleBound(purchaseItems):
+            if containsVehicleBound(purchaseItems):
                 DialogsInterface.showI18nConfirmDialog(CUSTOMIZATION_DIALOGS.CUSTOMIZATION_INSTALL_BOUND_CHECK_NOTIFICATION, self.onBuyConfirmed)
             else:
                 self.__ctx.applyItems(purchaseItems)
@@ -152,13 +150,6 @@ class MainView(CustomizationMainViewMeta):
             self.__ctx.applyItems(self.__ctx.getPurchaseItems())
         else:
             self.changeVisible(True)
-
-    def containsVehicleBound(self, purchaseItems):
-        for purchaseItem in purchaseItems:
-            if not purchaseItem.isDismantling and purchaseItem.item.isVehicleBound:
-                return True
-
-        return False
 
     def onPressClearBtn(self):
         self.__ctx.cancelChanges()
@@ -208,6 +199,7 @@ class MainView(CustomizationMainViewMeta):
         seasonName = SEASON_TYPE_TO_NAME.get(seasonType)
         self.soundManager.playInstantSound(SOUNDS.SEASON_SELECT.format(seasonName))
         self.__setAnchorsInitData(True)
+        self.__setHeaderInitData()
 
     def __onTabChanged(self, tabIndex):
         self.soundManager.playInstantSound(SOUNDS.TAB_SWITCH)
@@ -218,7 +210,7 @@ class MainView(CustomizationMainViewMeta):
         self.__setAnchorsInitData()
         if self.__locatedOnEmbelem and self.__ctx.c11CameraManager is not None:
             self.__ctx.c11CameraManager.clearSelectedEmblemInfo()
-            self.__ctx.c11CameraManager.locateCameraToCustomizationPreview()
+            self.__ctx.c11CameraManager.locateCameraToCustomizationPreview(preserveAngles=True)
         self.__updateAnchorsData()
         if tabIndex == C11nTabs.STYLE:
             slotIdVO = CustomizationSlotIdVO(Area.MISC, GUI_ITEM_TYPE.STYLE, 0)._asdict()
@@ -229,6 +221,7 @@ class MainView(CustomizationMainViewMeta):
         self.as_updateSelectedRegionsS(slotIdVO)
         self.__updateDnd()
         self.__hidePropertiesSheet()
+        self.__setHeaderInitData()
         return
 
     def __onItemsInstalled(self, item, slotId, limitReached):
@@ -393,7 +386,7 @@ class MainView(CustomizationMainViewMeta):
         self.fireEvent(LobbyHeaderMenuEvent(LobbyHeaderMenuEvent.TOGGLE_VISIBILITY, ctx={'state': HeaderMenuVisibilityState.ONLINE_COUNTER}), EVENT_BUS_SCOPE.LOBBY)
         self._isPropertySheetShown = False
         if self.__ctx.c11CameraManager is not None:
-            self.__ctx.c11CameraManager.locateCameraToCustomizationPreview()
+            self.__ctx.c11CameraManager.locateCameraToCustomizationPreview(forceLocate=True)
         self.__renderEnv = BigWorld.CustomizationEnvironment()
         self.__renderEnv.enable(True)
         if self.__ctx.vehicleAnchorsUpdater is not None:
@@ -487,6 +480,9 @@ class MainView(CustomizationMainViewMeta):
         if self.__ctx.currentTab == C11nTabs.EFFECT:
             areaId = Area.MISC
             slotType = GUI_ITEM_TYPE.MODIFICATION
+        elif self.__ctx.currentTab == C11nTabs.STYLE:
+            areaId = Area.MISC
+            slotType = GUI_ITEM_TYPE.STYLE
         if areaId != -1 and regionIdx != -1:
             region = CustomizationSlotIdVO(areaId, slotType, regionIdx)._asdict()
         else:
@@ -600,7 +596,7 @@ class MainView(CustomizationMainViewMeta):
         for season in SEASONS_ORDER:
             seasonName = SEASON_TYPE_TO_NAME.get(season)
             if self.__ctx.mode == C11nMode.CUSTOM:
-                isFilled = self.__ctx.checkSlotsFillingForSeason(season)
+                isFilled = all((slotsCount == filledSlotsCount for slotsCount, filledSlotsCount in self.__ctx.checkSlotsFillingForSeason(season)))
             else:
                 isFilled = self.__ctx.modifiedStyle is not None
             filledSeasonSlots += int(isFilled)
@@ -656,18 +652,19 @@ class MainView(CustomizationMainViewMeta):
                     uid = customizationSlotIdToUid(anchorId)
                     anchorVOs.append(CustomizationSlotUpdateVO(anchorId._asdict(), itemIntCD, uid, tooltip)._asdict())
 
-        if tabIndex in C11nTabs.REGIONS:
+        isRegions = tabIndex in C11nTabs.REGIONS
+        if isRegions:
             typeRegions = CUSTOMIZATION_ALIASES.ANCHOR_TYPE_REGION
         elif tabIndex == C11nTabs.PROJECTION_DECAL:
             typeRegions = CUSTOMIZATION_ALIASES.ANCHOR_TYPE_PROJECTION_DECAL
         else:
             typeRegions = CUSTOMIZATION_ALIASES.ANCHOR_TYPE_DECAL
-        if update and slotType in C11nTabs.REGIONS:
+        if update and isRegions:
             self.as_updateAnchorDataS(CustomizationAnchorInitVO(anchorVOs, typeRegions, maxItemsReached)._asdict())
         else:
             self.as_setAnchorInitS(CustomizationAnchorInitVO(anchorVOs, typeRegions, maxItemsReached)._asdict())
             if self.__propertiesSheet.isVisible:
-                self.__ctx.vehicleAnchorsUpdater.changeAnchorParams(self.__ctx.selectedAnchor, isDisplayed=False, isAutoScalable=False)
+                self.__ctx.vehicleAnchorsUpdater.changeAnchorParams(self.__ctx.selectedAnchor, isDisplayed=isRegions, isAutoScalable=False)
         return
 
     def __getVisibleAnchors(self, slotType):
@@ -711,8 +708,21 @@ class MainView(CustomizationMainViewMeta):
 
     def __setHeaderInitData(self):
         vehicle = g_currentVehicle.item
+        currentTab = self.__ctx.currentTab
+        if currentTab == C11nTabs.STYLE:
+            if self.__ctx.modifiedStyle:
+                itemsCounter = text_styles.bonusPreviewText(VEHICLE_CUSTOMIZATION.CUSTOMIZATION_HEADER_COUNTER_STYLE_INSTALLED)
+            else:
+                itemsCounter = text_styles.stats(VEHICLE_CUSTOMIZATION.CUSTOMIZATION_HEADER_COUNTER_STYLE_NOTINSTALLED)
+        else:
+            itemTypeID = TABS_ITEM_MAPPING[currentTab]
+            typeName = GUI_ITEM_TYPE_NAMES[itemTypeID]
+            slotsCount, filledSlotsCount = self.__ctx.checkSlotsFilling(itemTypeID, self.__ctx.currentSeason)
+            textStyle = text_styles.bonusPreviewText if slotsCount == filledSlotsCount else text_styles.stats
+            itemsCounter = textStyle(_ms('#vehicle_customization:customization/header/counter/' + typeName, filled=filledSlotsCount, available=slotsCount))
         self.as_setHeaderDataS({'tankTier': str(int2roman(vehicle.level)),
          'tankName': vehicle.shortUserName,
+         'tankInfo': itemsCounter,
          'tankType': '{}_elite'.format(vehicle.type) if vehicle.isElite else vehicle.type,
          'isElite': vehicle.isElite,
          'closeBtnTooltip': VEHICLE_CUSTOMIZATION.CUSTOMIZATION_HEADERCLOSEBTN})
@@ -734,20 +744,6 @@ class MainView(CustomizationMainViewMeta):
     def __hidePropertiesSheet(self):
         if self.__propertiesSheet:
             self.__propertiesSheet.hide()
-
-    def getItemTabsData(self):
-        data = []
-        pluses = []
-        for tabIdx in self.__ctx.visibleTabs:
-            itemTypeID = TABS_ITEM_MAPPING[tabIdx]
-            typeName = GUI_ITEM_TYPE_NAMES[itemTypeID]
-            showPlus = not self.__ctx.checkSlotsFilling(itemTypeID, self.__ctx.currentSeason)
-            data.append({'label': _ms(ITEM_TYPES.customizationPlural(typeName)),
-             'tooltip': makeTooltip(ITEM_TYPES.customizationPlural(typeName), TOOLTIPS.customizationItemTab(typeName)),
-             'id': tabIdx})
-            pluses.append(showPlus)
-
-        return (data, pluses)
 
     @async
     @adisp_process

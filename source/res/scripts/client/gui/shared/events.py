@@ -58,6 +58,7 @@ class GameEvent(HasCtxEvent):
     ADD_AUTO_AIM_MARKER = 'game/addAutoIamMarker'
     SHOW_BTN_HINT = 'game/showBtnHint'
     HIDE_BTN_HINT = 'game/hideBtnHint'
+    DESTROY_TIMERS_PANEL = 'game/destroyTimersPanel'
 
 
 class GUICommonEvent(SharedEvent):

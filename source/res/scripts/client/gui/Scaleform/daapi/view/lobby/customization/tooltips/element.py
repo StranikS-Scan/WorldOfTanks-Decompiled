@@ -247,7 +247,10 @@ class ElementTooltip(BlocksTooltipData):
         blocks = []
         specials = []
         if self._item.isVehicleBound and self._item.mayApply:
-            specials.append(_ms(VEHICLE_CUSTOMIZATION.CUSTOMIZATION_BOUND_SPECIAL_TEXT))
+            if self._item.isRentable:
+                specials.append(_ms(VEHICLE_CUSTOMIZATION.CUSTOMIZATION_RENT_SPECIAL_TEXT))
+            else:
+                specials.append(_ms(VEHICLE_CUSTOMIZATION.CUSTOMIZATION_BOUND_SPECIAL_TEXT))
         if self._item.isLimited:
             purchaseLimit = self.service.getCtx().getPurchaseLimit(self._item)
             if self._item.buyCount > 0 and (purchaseLimit > 0 or self.appliedCount > 0):
@@ -320,6 +323,8 @@ class ElementTooltip(BlocksTooltipData):
 
         inventoryCount = getInventoryCount(self._item)
         info = text_styles.concatStylesWithSpace(text_styles.stats(inventoryCount))
+        padding = formatters.packPadding(left=83, bottom=0)
+        titlePadding = formatters.packPadding(left=-1)
         if showInventoryCount and (self._item.isRentable and inventoryCount > 0 or not self._item.isRentable):
             if self._item.isRentable:
                 title = text_styles.main(_ms(VEHICLE_CUSTOMIZATION.CUSTOMIZATION_TOOLTIP_INVENTORY_RENT_BATTLESLEFT, tankname=g_currentVehicle.item.shortUserName))
@@ -431,3 +436,12 @@ class ElementAwardTooltip(ElementTooltip):
         blocks.append(formatters.packImageTextBlockData(title=text_styles.bonusLocalInfoTipText(bonusPercent), img=RES_ICONS.MAPS_ICONS_VEHPARAMS_BIG_INVISIBILITYSTILLFACTOR, imgPadding=formatters.packPadding(top=-8, left=12), txtPadding=formatters.packPadding(top=-4), txtOffset=69))
         blocks.append(formatters.packTextBlockData(text=text_styles.main(bonusDescription), padding=formatters.packPadding(top=-55, left=120)))
         return formatters.packBuildUpBlockData(blocks, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_BUILDUP_BLOCK_WHITE_BG_LINKAGE)
+
+
+class ElementPurchaseTooltip(ElementTooltip):
+
+    def __init__(self, context):
+        super(ElementPurchaseTooltip, self).__init__(context, TOOLTIPS_CONSTANTS.TECH_CUSTOMIZATION_ITEM_PURCHASE)
+
+    def _packBonusBlock(self, bonus, camo, isApplied):
+        return super(ElementPurchaseTooltip, self)._packBonusBlock(bonus, camo, True)

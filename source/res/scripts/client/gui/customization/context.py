@@ -231,7 +231,6 @@ class CustomizationContext(object):
             return False
         else:
             item = self.service.getItemByCD(intCD)
-            anchorChanged = False
             if self.isBuyLimitReached(item):
                 SystemMessages.pushI18nMessage(SYSTEM_MESSAGES.CUSTOMIZATION_PROHIBITED, type=SystemMessages.SM_TYPE.Warning, itemName=item.userName)
                 return False
@@ -239,21 +238,11 @@ class CustomizationContext(object):
                 self._modifiedStyle = item
             else:
                 season = SEASON_IDX_TO_TYPE.get(seasonIdx, self._currentSeason)
-                if slotId.slotType == GUI_ITEM_TYPE.PROJECTION_DECAL:
-                    if component is not None:
-                        anchor = g_currentVehicle.item.getAnchorById(component.slotId)
-                        if anchor.isChild:
-                            anchorChanged = True
-                            parent = g_currentVehicle.item.getAnchorById(anchor.parentSlotId)
-                            component.slotId = parent.slotId
-                            self._selectedAnchor = C11nId(slotId.areaId, slotId.slotType, parent.regionIdx)
                 outfit = self._modifiedOutfits[season]
                 outfit.getContainer(slotId.areaId).slotFor(slotId.slotType).set(item, idx=slotId.regionIdx, component=component)
                 outfit.invalidate()
             self.refreshOutfit()
             buyLimitReached = self.isBuyLimitReached(item)
-            if anchorChanged:
-                self.itemDataChanged(slotId.areaId, GUI_ITEM_TYPE.PROJECTION_DECAL, parent.regionIdx, changeAnchor=True, updatePropertiesSheet=True)
             self.onCustomizationItemInstalled(item, slotId, buyLimitReached)
             return True
 
@@ -435,21 +424,15 @@ class CustomizationContext(object):
         else:
             slotId = self.selectedSlot
             if self.currentTab != C11nTabs.STYLE:
-                anchorChanged = False
                 outfit = self._modifiedOutfits[self._currentSeason]
                 slot = outfit.getContainer(slotId.areaId).slotFor(slotId.slotType)
                 slotData = slot.getSlotData(slotId.regionIdx)
                 anchor = self.getAnchorBySlotId(slotId)
-                if self._tabIndex == C11nTabs.PROJECTION_DECAL and anchor.isChild:
-                    anchorChanged = True
-                    anchorId = anchor.slotId if anchor.isParent else anchor.parentSlotId
-                    anchor = g_currentVehicle.item.getAnchorById(anchorId)
-                    self._selectedAnchor = C11nId(slotId.areaId, GUI_ITEM_TYPE.PROJECTION_DECAL, anchor.regionIdx)
                 slotData.item = item
                 slotData.component = self.__getComponent(item, self._selectedAnchor)
                 outfit.invalidate()
                 self.refreshOutfit()
-                self.itemDataChanged(slotId.areaId, slotId.slotType, anchor.regionIdx, changeAnchor=anchorChanged, updatePropertiesSheet=True)
+                self.itemDataChanged(slotId.areaId, slotId.slotType, anchor.regionIdx, changeAnchor=False, updatePropertiesSheet=True)
             else:
                 self.installItem(item.intCD, slotId, SEASON_TYPE_TO_IDX[self.currentSeason])
             self.onNextCarouselItemInstalled(carouselIndex)
@@ -546,7 +529,11 @@ class CustomizationContext(object):
         return OutfitInfo(self._originalStyle, self._modifiedStyle)
 
     def getPurchaseItems(self):
-        return getCustomPurchaseItems(self.getOutfitsInfo()) if self._mode == C11nMode.CUSTOM else getStylePurchaseItems(self.getStyleInfo())
+        if self._mode == C11nMode.CUSTOM:
+            currentSeason = self.currentSeason
+            order = [currentSeason] + [ s for s in SEASONS_ORDER if s != currentSeason ]
+            return getCustomPurchaseItems(self.getOutfitsInfo(), order)
+        return getStylePurchaseItems(self.getStyleInfo())
 
     def getItemInventoryCount(self, item):
         return getItemInventoryCount(item, self.getOutfitsInfo()) if self._mode == C11nMode.CUSTOM else getStyleInventoryCount(item, self.getStyleInfo())
@@ -670,10 +657,12 @@ class CustomizationContext(object):
 
     def checkSlotsFillingForSeason(self, season):
         checkedSlotTypes = (TABS_ITEM_MAPPING[tabId] for tabId in self.visibleTabs)
-        return all((self.checkSlotsFilling(slotType, season) for slotType in checkedSlotTypes))
+        return (self.checkSlotsFilling(slotType, season) for slotType in checkedSlotTypes)
 
     def checkSlotsFilling(self, slotType, season):
-        allSlotsFilled = True
+        outfit = self.getModifiedOutfit(season)
+        slotsCount = 0
+        filledSlotsCount = 0
         for areaId in Area.ALL:
             if slotType not in QUANTITY_LIMITED_CUSTOMIZATION_TYPES:
                 regionsIndexes = getAppliedRegionsForCurrentHangarVehicle(areaId, slotType)
@@ -687,17 +676,13 @@ class CustomizationContext(object):
                     regionsIndexes = ()
             else:
                 regionsIndexes = ()
+            slotsCount += len(regionsIndexes)
             for regionIdx in regionsIndexes:
-                item = self.getModifiedOutfit(season).getContainer(areaId).slotFor(slotType).getItem(regionIdx)
-                if item is None:
-                    break
-            else:
-                continue
+                item = outfit.getContainer(areaId).slotFor(slotType).getItem(regionIdx)
+                if item is not None:
+                    filledSlotsCount += 1
 
-            allSlotsFilled = False
-            break
-
-        return allSlotsFilled
+        return (slotsCount, filledSlotsCount)
 
     def carveUpOutfits(self, preserve=False):
         if preserve:

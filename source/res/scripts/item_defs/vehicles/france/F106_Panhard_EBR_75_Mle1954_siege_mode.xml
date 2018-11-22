@@ -133,7 +133,7 @@
       <weight>	3000	</weight>
       <maxLoad>	17000	</maxLoad>
       <terrainResistance>	1.0 1.35 1.95	</terrainResistance>
-      <brakeForce>	5000	</brakeForce>
+      <brakeForce>	15000	</brakeForce>
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
       <rotationSpeed>	34	</rotationSpeed>
       <shotDispersionFactors>
@@ -411,10 +411,6 @@
         <activePostmortem>	True	</activePostmortem>
       </leveredSuspension>
       <groundNodes>
-        <lodSettings>
-          <maxLodDistance>	LEVERED_SUSPENSION	</maxLodDistance>
-          <maxPriority>	5	</maxPriority>
-        </lodSettings>
         <node>
           <name>	Track_L0	</name>
           <affectedWheelName>	WD_L0	</affectedWheelName>
@@ -448,6 +444,10 @@
           <maxOffset>	0.04	</maxOffset>
         </node>
         <activePostmortem>	True	</activePostmortem>
+        <lodSettings>
+          <maxLodDistance>	LEVERED_SUSPENSION	</maxLodDistance>
+          <maxPriority>	5	</maxPriority>
+        </lodSettings>
       </groundNodes>
       <customization>
         <customizableVehicleAreas>
@@ -730,8 +730,8 @@
     </detailed>
   </physics>
   <siege_mode>
-    <switchOnTime>	0.5	</switchOnTime>
-    <switchOffTime>	0.5	</switchOffTime>
+    <switchOnTime>	0.2	</switchOnTime>
+    <switchOffTime>	0.2	</switchOffTime>
     <engineDamageCoeff>	1	</engineDamageCoeff>
     <soundStateChange>
       <on>	wheel_vehicle_speed_high	</on>

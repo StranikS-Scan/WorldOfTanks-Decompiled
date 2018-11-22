@@ -110,8 +110,8 @@
         <doubleSided>	false	</doubleSided>
         <showOn>	16	</showOn>
         <clipAngle>	1.29211	</clipAngle>
-        <anchorPosition>	-0.00236144 0.586417 3.00105	</anchorPosition>
-        <anchorDirection>	0.000098 0.939117 0.343599	</anchorDirection>
+        <anchorPosition>	-0.00236144 0.586415 3.00106	</anchorPosition>
+        <anchorDirection>	0.000098 0.939117 0.343598	</anchorDirection>
       </slot>
     </customizationSlots>
     <customization>
@@ -1168,7 +1168,7 @@
           <doubleSided>	false	</doubleSided>
           <showOn>	256	</showOn>
           <clipAngle>	1.03453	</clipAngle>
-          <anchorPosition>	0.807561 0.463526 0.822639	</anchorPosition>
+          <anchorPosition>	0.807561 0.463525 0.822639	</anchorPosition>
           <anchorDirection>	0.573118 0.724072 0.38374	</anchorDirection>
         </slot>
         <slot>
@@ -1181,8 +1181,35 @@
           <doubleSided>	false	</doubleSided>
           <showOn>	256	</showOn>
           <clipAngle>	0.781176	</clipAngle>
-          <anchorPosition>	-0.838082 0.437149 0.798173	</anchorPosition>
+          <anchorPosition>	-0.838083 0.43715 0.798168	</anchorPosition>
           <anchorDirection>	-0.671897 0.627509 0.39343	</anchorDirection>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	580	</slotId>
+          <tags>	formfactor_any	</tags>
+          <position>	-0.000051 1.93068 0.369597	</position>
+          <rotation>	0.000018 -0.000143252 3.14155	</rotation>
+          <scale>	2.1789 1.11175 2.17891	</scale>
+          <doubleSided>	false	</doubleSided>
+          <showOn>	256	</showOn>
+          <clipAngle>	0.983247	</clipAngle>
+          <anchorPosition>	-0.000029 0.814665 -0.298897	</anchorPosition>
+          <anchorDirection>	0.000044 1 0.000018	</anchorDirection>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	581	</slotId>
+          <parentSlotId>	580	</parentSlotId>
+          <tags>	formfactor_square	</tags>
+          <position>	0.000301931 1.20564 -1.99687	</position>
+          <rotation>	3.14168 -0.00014329 -0.000019	</rotation>
+          <scale>	2.23934 1.14259 2.23935	</scale>
+          <doubleSided>	false	</doubleSided>
+          <showOn>	16	</showOn>
+          <clipAngle>	0.875329	</clipAngle>
+          <anchorPosition>	0.000292699 0.0896309 -2.66533	</anchorPosition>
+          <anchorDirection>	-0.000019 1 0.000084	</anchorDirection>
         </slot>
       </customizationSlots>
       <customization>

@@ -62,6 +62,7 @@ class IngameShopBase(IngameShopViewMeta):
         self.__browserId = 0
         self.__loadBrowserCbID = None
         self._url = ctx.get('url') if ctx else None
+        self._useLastSessionUrl = False
         self._browserParams = (ctx or {}).get('browserParams', makeBrowserParams())
         return
 
@@ -100,7 +101,8 @@ class IngameShopBase(IngameShopViewMeta):
                 self.__browser.allowRightClick = True
                 self.__browser.useSpecialKeys = False
                 self.__browser.ignoreAltKey = True
-                self.__browser.onLoadStart += self._updateLastUrl
+                if self._useLastSessionUrl:
+                    self.__browser.onLoadStart += self._updateLastUrl
             self.__updateSkipEscape(not self.__hasFocus)
         else:
             _logger.error('ERROR: Browser could not be opened. Invalid URL!')
@@ -149,6 +151,7 @@ class IngameShopView(LobbySubView, IngameShopBase):
 
     def __init__(self, ctx=None):
         super(IngameShopView, self).__init__(ctx)
+        self._useLastSessionUrl = True
         if not self._url:
             self._url = _gelLastSessionInfo().url
         self.lobbyContext.getServerSettings().onServerSettingsChange += self.__onServerSettingsChanged

@@ -466,6 +466,12 @@ def configurePhysicsMode(cfg, typeDesc, gravityFactor):
     else:
         sizeZ = bmax[2] - bmin[2]
     hullCenter = (bmin + bmax) * 0.5
+    if typeDesc.isWheeledVehicle:
+        wheelBbMin, wheelBbMax, _ = typeDesc.chassis.wheels.wheels[-1].hitTester.bbox
+        wheelX = wheelBbMax[0] - wheelBbMin[0]
+        wheelZ = wheelBbMax[2] - wheelBbMin[2]
+        sizeX += wheelX * 2.0
+        sizeZ += wheelZ * 0.5
     cfg['hullSize'] = Math.Vector3((sizeX, cfg['bodyHeight'], sizeZ))
     cfg['shape']['useComplexForm'] = typeDesc.type.name == 'sweden:S11_Strv_103B'
     cfg['gravity'] = cfg['gravity'] * gravityFactor

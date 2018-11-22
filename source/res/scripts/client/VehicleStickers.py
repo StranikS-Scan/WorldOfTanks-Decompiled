@@ -504,11 +504,9 @@ class VehicleStickers(object):
 
         self.__stickers = {}
         for componentName, emblemSlots in componentSlots:
-            try:
-                componentIdx = TankPartNames.getIdx(componentName)
-            except Exception:
+            componentIdx = TankPartNames.getIdx(componentName)
+            if componentIdx is None:
                 componentIdx = _GUN_INSIGNIA_IDX
-
             modelStickers = ModelStickers(componentIdx, self.__stickerPacks, vehicleDesc, emblemSlots)
             self.__stickers[componentName] = ComponentStickers(modelStickers, {}, 1.0)
 
@@ -569,7 +567,8 @@ class VehicleStickers(object):
         componentName = TankPartIndexes.getName(componentIdx)
         if not componentName:
             convertedComponentIdx = DamageFromShotDecoder.convertComponentIndex(componentIdx)
-            componentName = collisionComponent.getPartName(convertedComponentIdx)
+            if convertedComponentIdx < 0:
+                return
         componentStickers = self.__stickers[componentName]
         if code in componentStickers.damageStickers:
             return

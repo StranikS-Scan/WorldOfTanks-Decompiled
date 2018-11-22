@@ -122,13 +122,9 @@ class CustomizationBottomPanel(CustomizationBottomPanelMeta):
         return self._carouselDP.collection
 
     def __updateTabs(self, selectedTab=-1):
-        tabsDP, _ = self.__getItemTabsData()
+        tabsDP, pluses = self.__getItemTabsData()
         self.as_setBottomPanelTabsDataS({'tabsDP': tabsDP,
          'selectedTab': selectedTab})
-        self.__updateTabsPluses()
-
-    def __updateTabsPluses(self):
-        _, pluses = self.__getItemTabsData()
         self.as_setBottomPanelTabsPlusesS(pluses)
 
     def __setFooterInitData(self, showSwitcherCounter):
@@ -242,7 +238,8 @@ class CustomizationBottomPanel(CustomizationBottomPanelMeta):
         for tabIdx in self.__ctx.visibleTabs:
             itemTypeID = TABS_ITEM_MAPPING[tabIdx]
             typeName = GUI_ITEM_TYPE_NAMES[itemTypeID]
-            showPlus = not self.__ctx.checkSlotsFilling(itemTypeID, self.__ctx.currentSeason)
+            slotsCount, filledSlotsCount = self.__ctx.checkSlotsFilling(itemTypeID, self.__ctx.currentSeason)
+            showPlus = filledSlotsCount < slotsCount
             tabData = {'label': _ms(ITEM_TYPES.customizationPlural(typeName)),
              'icon': RES_ICONS.getCustomizationIcon(typeName),
              'tooltip': makeTooltip(ITEM_TYPES.customizationPlural(typeName), TOOLTIPS.customizationItemTab(typeName)),
@@ -292,13 +289,13 @@ class CustomizationBottomPanel(CustomizationBottomPanelMeta):
         self.as_showPopoverBtnIconS(imgSrc)
 
     def __onItemsInstalled(self, item, slotId, buyLimitReached):
-        self.__updateTabsPluses()
+        self.__updateTabs(self.__ctx.currentTab)
         self.__setBottomPanelBillData()
         self.__refreshCarousel()
 
     def __onTabChanged(self, tabIndex):
         self.__refreshCarousel(force=True)
-        self.__updateTabsPluses()
+        self.__updateTabs(self.__ctx.currentTab)
         custSett = AccountSettings.getSettings(CUSTOMIZATION_SECTION)
         if tabIndex == C11nTabs.PROJECTION_DECAL and not custSett.get(PROJECTION_DECAL_TAB_SHOWN_FIELD, False):
             custSett[PROJECTION_DECAL_TAB_SHOWN_FIELD] = True
@@ -306,22 +303,20 @@ class CustomizationBottomPanel(CustomizationBottomPanelMeta):
             self.as_removeCountersS()
 
     def __onItemsRemoved(self):
-        self.__updateTabsPluses()
+        self.__updateTabs(self.__ctx.currentTab)
         self.__setBottomPanelBillData()
         self.__refreshCarousel()
 
     def __onModeChanged(self, mode):
-        self.__updateTabs(self.__ctx.currentTab)
         self._carouselDP.selectItem(self.__ctx.modifiedStyle if mode == C11nMode.STYLE else None)
         self.__setBottomPanelBillData()
         return
 
     def __onChangesCanceled(self):
-        self.__updateTabsPluses()
+        self.__updateTabs(self.__ctx.currentTab)
         self.__setBottomPanelBillData()
         self.__refreshCarousel(force=self.__needCaruselFullRebuild)
         self.__needCaruselFullRebuild = False
-        self.__updateTabsPluses()
 
     def __onItemSold(self, item, count):
         self._needCaruselFullRebuild = self._carouselDP.getOwnedFilter()

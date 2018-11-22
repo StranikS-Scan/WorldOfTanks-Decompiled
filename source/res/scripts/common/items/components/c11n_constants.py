@@ -260,3 +260,4 @@ customizationSlotIds = {'hull': {'clan': (1, 1),
          'insignia': (964, 971),
          'fixedEmblem': (972, 1023),
          'fixedInscription': (972, 1023)}}
+CUSTOMIZATION_SLOTS_VEHICLE_PARTS = ('hull', 'chassis', 'turret', 'gun')

@@ -67,7 +67,11 @@ class ClientSelectableCameraVehicle(ClientSelectableCameraObject):
         self.__updateFakeShadowAccordingToAppearance()
 
     def updateVehicleCustomization(self, outfit):
-        self.appearance.updateCustomization(outfit, self._onVehicleRefreshed)
+        recreate = self.appearance.recreateRequired(outfit)
+        if recreate:
+            self.appearance.recreate(self.typeDescriptor, callback=self._onVehicleLoaded, outfit=outfit)
+        else:
+            self.appearance.updateCustomization(outfit, self._onVehicleRefreshed)
 
     def _createAppearance(self):
         return HangarVehicleAppearance(self.spaceID, self)

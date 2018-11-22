@@ -84,3 +84,7 @@ def hideAutoAimMarker():
 
 def addAutoAimMarker(vehicle):
     g_eventBus.handleEvent(GameEvent(GameEvent.ADD_AUTO_AIM_MARKER, {'vehicle': vehicle}), scope=_SCOPE)
+
+
+def destroyTimersPanelShown(shown=None):
+    g_eventBus.handleEvent(GameEvent(GameEvent.DESTROY_TIMERS_PANEL, {'shown': shown}), scope=_SCOPE)

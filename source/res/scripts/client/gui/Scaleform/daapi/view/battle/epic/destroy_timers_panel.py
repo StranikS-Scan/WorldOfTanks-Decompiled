@@ -8,6 +8,7 @@ from gui.Scaleform.daapi.view.battle.shared import destroy_times_mapping as _map
 from gui.Scaleform.daapi.view.meta.EpicDestroyTimersPanelMeta import EpicDestroyTimersPanelMeta
 from gui.Scaleform.genConsts.BATTLE_DESTROY_TIMER_STATES import BATTLE_DESTROY_TIMER_STATES
 from gui.battle_control import avatar_getter
+from gui.battle_control import event_dispatcher as gui_event_dispatcher
 from epic_constants import EPIC_BATTLE_TEAM_ID
 from gui.battle_control.battle_constants import VEHICLE_VIEW_STATE
 from gui.battle_control.controllers.progress_circle_ctrl import PROGRESS_CIRCLE_TYPE
@@ -126,11 +127,13 @@ class EpicDestroyTimersPanel(EpicDestroyTimersPanelMeta):
         self.__inCircleIdx = idx
         self.__inCircleType = circleType
         self.as_showAdditionalTimerS(circleType, state)
+        gui_event_dispatcher.destroyTimersPanelShown(shown=True)
 
     def __onVehicleLeft(self, circleType, idx):
         if not self.__isPresentCircle(circleType, idx):
             return
         self.as_hideAdditionalTimerS(circleType)
+        gui_event_dispatcher.destroyTimersPanelShown(shown=False)
         self.__inCircleIdx = -1
         self.__inCircleType = -1
 

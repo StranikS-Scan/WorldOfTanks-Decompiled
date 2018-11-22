@@ -54,6 +54,12 @@ class VehicleCongratulationModel(ViewModel):
     def setTitle(self, value):
         self._setResource(7, value)
 
+    def getResetAnimTrgigger(self):
+        return self._getBool(8)
+
+    def setResetAnimTrgigger(self, value):
+        self._setBool(8, value)
+
     def _initialize(self):
         super(VehicleCongratulationModel, self)._initialize()
         self._addBoolProperty('isElite', False)
@@ -64,3 +70,4 @@ class VehicleCongratulationModel(ViewModel):
         self._addStringProperty('imageAlt', '')
         self._addResourceProperty('btnLbl', Resource.INVALID)
         self._addResourceProperty('title', Resource.INVALID)
+        self._addBoolProperty('resetAnimTrgigger', False)

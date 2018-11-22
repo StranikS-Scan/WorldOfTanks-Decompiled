@@ -140,8 +140,10 @@ class CustomizationPropertiesSheet(CustomizationPropertiesSheetMeta):
         self._isVisible = False
         self.as_hideS()
         self.__ctx.onPropertySheetHidden()
-        self.__ctx.vehicleAnchorsUpdater.displayMenu(False)
         self.__ctx.vehicleAnchorsUpdater.changeAnchorParams(anchor, True, True)
+
+    def elementControlsHide(self):
+        self.__ctx.vehicleAnchorsUpdater.displayMenu(False)
 
     def onActionBtnClick(self, actionType, actionData):
         if actionType == CUSTOMIZATION_ALIASES.CUSTOMIZATION_SHEET_ACTION_APPLY_TO_ALL_PARTS:
@@ -317,6 +319,7 @@ class CustomizationPropertiesSheet(CustomizationPropertiesSheetMeta):
                 renderers.append(self.__makeExtensionRendererVO())
         elif self._slotID == GUI_ITEM_TYPE.PROJECTION_DECAL:
             renderers.append(self.__makeMirorRendererVO())
+            renderers.append(self.__makeMoveRendererVO())
             renderers.append(self.__makeScaleRendererVO())
         renderers.append(self.__makeRemoveRendererVO())
         renderers.append(self.__makeCloseeRendererVO())

@@ -13,6 +13,9 @@ class CustomizationPropertiesSheetMeta(BaseDAAPIComponent):
     def interactionStatusUpdate(self, value):
         self._printOverrideError('interactionStatusUpdate')
 
+    def elementControlsHide(self):
+        self._printOverrideError('elementControlsHide')
+
     def onClose(self):
         self._printOverrideError('onClose')
 

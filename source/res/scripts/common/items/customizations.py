@@ -7,7 +7,7 @@ import varint
 import ResMgr
 from collections import namedtuple, OrderedDict, defaultdict
 from soft_exception import SoftException
-from items.components.c11n_constants import ApplyArea, SeasonType, Options, CustomizationType, CustomizationTypeNames, HIDDEN_CAMOUFLAGE_ID, StyleFlags, NO_OUTFIT_DATA, MAX_USERS_PROJECTION_DECALS
+from items.components.c11n_constants import ApplyArea, SeasonType, Options, CustomizationType, CustomizationTypeNames, HIDDEN_CAMOUFLAGE_ID, StyleFlags, NO_OUTFIT_DATA, MAX_USERS_PROJECTION_DECALS, CUSTOMIZATION_SLOTS_VEHICLE_PARTS
 from items.components import c11n_components as cn
 from constants import IS_CELLAPP, IS_BASEAPP
 from items import decodeEnum
@@ -589,18 +589,20 @@ class CustomizationOutfit(SerializableComponent):
 
         return dict(toMove)
 
-    def dismountUnsuitableComponents(self, vehDescr):
+    def dismountUnsuitableComponents(self, vehDescr, oldVehDescr):
         toMove = NamedVector()
         projectionDecals = self.projection_decals
-        newProjectionDecals = []
-        for projectionDecal in projectionDecals:
-            if cn.getVehicleProjectionDecalSlotParams(vehDescr, projectionDecal.slotId):
-                newProjectionDecals.append(projectionDecal)
-                continue
-            toMove[(CustomizationType.PROJECTION_DECAL, projectionDecal.id)] += 1
+        unsuitablePartNames = _getDifferVehiclePartNames(vehDescr, oldVehDescr)
+        if unsuitablePartNames:
+            newProjectionDecals = []
+            for projectionDecal in projectionDecals:
+                if not cn.getVehicleProjectionDecalSlotParams(oldVehDescr, projectionDecal.slotId, unsuitablePartNames):
+                    newProjectionDecals.append(projectionDecal)
+                    continue
+                toMove[(CustomizationType.PROJECTION_DECAL, projectionDecal.id)] += 1
 
-        if toMove:
-            self.projection_decals = newProjectionDecals
+            if toMove:
+                self.projection_decals = newProjectionDecals
         for regionValue, vehiclePart in ((ApplyArea.HULL_REGIONS_VALUE, vehDescr.hull),
          (ApplyArea.CHASSIS_REGIONS_VALUE, vehDescr.chassis),
          (ApplyArea.TURRET_REGIONS_VALUE, vehDescr.turret),
@@ -887,3 +889,12 @@ def _clamp16(value, minValue, maxValue):
 
 def _unclamp16(value, minValue, maxValue):
     return _unclamp(value, minValue, maxValue, 65535)
+
+
+def _getDifferVehiclePartNames(newVehDescr, oldVehDescr):
+    unsuitablePartNames = []
+    for partName in CUSTOMIZATION_SLOTS_VEHICLE_PARTS:
+        if getattr(newVehDescr, partName).compactDescr != getattr(oldVehDescr, partName).compactDescr:
+            unsuitablePartNames.append(partName)
+
+    return unsuitablePartNames

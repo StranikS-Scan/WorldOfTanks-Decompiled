@@ -4,7 +4,7 @@ import items
 import items.vehicles as iv
 from items.components import shared_components
 from soft_exception import SoftException
-from items.components.c11n_constants import ApplyArea, SeasonType, Options, ItemTags, CustomizationType, MAX_CAMOUFLAGE_PATTERN_SIZE, DecalType, PROJECTION_DECALS_SCALE_ID_VALUES, MAX_USERS_PROJECTION_DECALS, CustomizationTypeNames, ProjectionDecalFormTags
+from items.components.c11n_constants import ApplyArea, SeasonType, Options, ItemTags, CustomizationType, MAX_CAMOUFLAGE_PATTERN_SIZE, DecalType, PROJECTION_DECALS_SCALE_ID_VALUES, MAX_USERS_PROJECTION_DECALS, CustomizationTypeNames, ProjectionDecalFormTags, CUSTOMIZATION_SLOTS_VEHICLE_PARTS
 from typing import List, Dict, Type, Tuple, Optional, Union, TypeVar, FrozenSet
 Item = TypeVar('TypeVar')
 
@@ -446,13 +446,10 @@ def validateCustomizationTypeEnabled(gameParams, customizationType):
     return CustomizationTypeNames[customizationType] not in gameParams['misc_settings']['disabledCustomizations']
 
 
-def getVehicleProjectionDecalSlotParams(vehicleDescr, vehicleSlotId):
+def getVehicleProjectionDecalSlotParams(vehicleDescr, vehicleSlotId, partNames=CUSTOMIZATION_SLOTS_VEHICLE_PARTS):
     slotTypeName = 'projectionDecal'
-    for vehiclePartSlots in (vehicleDescr.hull.slotsAnchors,
-     vehicleDescr.chassis.slotsAnchors,
-     vehicleDescr.turret.slotsAnchors,
-     vehicleDescr.gun.slotsAnchors):
-        for vehicleSlot in vehiclePartSlots:
+    for partName in partNames:
+        for vehicleSlot in getattr(vehicleDescr, partName).slotsAnchors:
             if vehicleSlot.type != slotTypeName or vehicleSlot.slotId != vehicleSlotId:
                 continue
             return vehicleSlot

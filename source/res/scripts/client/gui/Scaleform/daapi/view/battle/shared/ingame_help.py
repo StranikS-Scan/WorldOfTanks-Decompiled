@@ -112,11 +112,14 @@ class IngameDetailsHelpWindow(IngameDetailsHelpWindowMeta, BattleGUIKeyHandler):
             self.__datailedList = list()
             if self.__ctx.get('hasSiegeMode'):
                 siegeKeyName = getReadableKey(CommandMapping.CMD_CM_VEHICLE_SWITCH_AUTOROTATION)
-                self.__addPage(self.__datailedList, INGAME_HELP.DETAILSHELP_TWOMODES_TITLE, _ms(INGAME_HELP.DETAILSHELP_TWOMODES, key1=siegeKeyName), [siegeKeyName], RES_ICONS.MAPS_ICONS_BATTLEHELP_WHEEL_TWO_MODE)
+                keyName = siegeKeyName if siegeKeyName else _ms(INGAME_HELP.DETAILSHELP_NOKEY)
+                self.__addPage(self.__datailedList, INGAME_HELP.DETAILSHELP_TWOMODES_TITLE, _ms(INGAME_HELP.DETAILSHELP_TWOMODES, key1=keyName), [siegeKeyName], RES_ICONS.MAPS_ICONS_BATTLEHELP_WHEEL_TWO_MODE)
             if self.__ctx.get('hasBurnout'):
                 breakeKeyName = getReadableKey(CommandMapping.CMD_BLOCK_TRACKS)
                 forwardKeyName = getReadableKey(CommandMapping.CMD_MOVE_FORWARD)
-                self.__addPage(self.__datailedList, INGAME_HELP.DETAILSHELP_BURNOUT_TITLE, _ms(INGAME_HELP.DETAILSHELP_BURNOUT, key1=breakeKeyName, key2=forwardKeyName), [forwardKeyName, breakeKeyName], RES_ICONS.MAPS_ICONS_BATTLEHELP_WHEEL_BURNOUT)
+                keyName1 = breakeKeyName if breakeKeyName else _ms(INGAME_HELP.DETAILSHELP_NOKEY)
+                keyName2 = forwardKeyName if forwardKeyName else _ms(INGAME_HELP.DETAILSHELP_NOKEY)
+                self.__addPage(self.__datailedList, INGAME_HELP.DETAILSHELP_BURNOUT_TITLE, _ms(INGAME_HELP.DETAILSHELP_BURNOUT, key1=keyName1, key2=keyName2), [forwardKeyName, breakeKeyName], RES_ICONS.MAPS_ICONS_BATTLEHELP_WHEEL_BURNOUT)
             if self.__ctx.get('isWheeled'):
                 self.__addPage(self.__datailedList, INGAME_HELP.DETAILSHELP_STABLECHASSIS_TITLE, _ms(INGAME_HELP.DETAILSHELP_STABLECHASSIS), [], RES_ICONS.MAPS_ICONS_BATTLEHELP_WHEEL_CHASSIS)
                 self.__addPage(self.__datailedList, INGAME_HELP.DETAILSHELP_ABOUTTECHNIQUE_TITLE, _ms(INGAME_HELP.DETAILSHELP_ABOUTTECHNIQUE), [], RES_ICONS.MAPS_ICONS_BATTLEHELP_WHEEL_DETAILS)

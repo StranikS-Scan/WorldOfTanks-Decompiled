@@ -195,6 +195,8 @@ class ISoundEventChecker(IGameController):
 class IHeroTankController(IGameController):
     onUpdated = None
     onInteractive = None
+    onHeroTankChanged = None
+    onHeroTankBought = None
 
     def getRandomTankCD(self):
         raise NotImplementedError
@@ -209,6 +211,15 @@ class IHeroTankController(IGameController):
         raise NotImplementedError
 
     def getCurrentRelatedURL(self):
+        raise NotImplementedError
+
+    def isOverloaded(self):
+        raise NotImplementedError
+
+    def setEffectPlayedTime(self):
+        raise NotImplementedError
+
+    def mustShow(self):
         raise NotImplementedError
 
 
@@ -856,6 +867,9 @@ class IManualController(IGameController):
 class ICalendarController(IGameController):
 
     def showCalendar(self, invokedFrom):
+        raise NotImplementedError
+
+    def mustShow(self):
         raise NotImplementedError
 
 

@@ -104,6 +104,12 @@ class ServerEventAbstract(object):
     def getType(self):
         return self._data.get('type', 0)
 
+    def getStartTimeRaw(self):
+        return self._data['startTime'] if 'startTime' in self._data else time.time()
+
+    def getFinishTimeRaw(self):
+        return self._data['finishTime'] if 'finishTime' in self._data else time.time()
+
     def getStartTime(self):
         return time_utils.makeLocalServerTime(self._data['startTime']) if 'startTime' in self._data else time.time()
 

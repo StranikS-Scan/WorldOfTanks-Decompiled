@@ -764,6 +764,14 @@ class IngameGui(DynAccessor):
     class rewardWindow(DynAccessor):
         __slots__ = ()
 
+        class anniversary_ga(DynAccessor):
+            __slots__ = ()
+            btnLabel = 1666
+            descText = 1665
+            headerText = 1663
+            subHeaderText = 1664
+            winHeaderText = 1662
+
         class base(DynAccessor):
             __slots__ = ()
             btnLabel = 1645

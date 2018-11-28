@@ -1,6 +1,14 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/game_control/__init__.py
 import constants
+from shared_utils import CONST_CONTAINER
+
+class CalendarInvokeOrigin(CONST_CONTAINER):
+    ACTION = 'action'
+    HANGAR = 'hangar'
+    SPLASH = 'first'
+    BANNER = 'banner'
+
 
 def getGameControllersConfig(manager):
     from gui.game_control.AOGAS import AOGASController as _AOGAS

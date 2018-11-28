@@ -308,7 +308,8 @@ TEAM_ITEM_VO_META_TUPLE = (('achievements', shared.AchievementsBlock(base.ListMe
  ('badge', 0, 'badge'),
  ('badgeIcon', '', 'badgeIcon'),
  ('playerRank', 0, 'playerRank'),
- ('respawns', 0, 'respawns'))
+ ('respawns', 0, 'respawns'),
+ ('suffixBadgeIcon', '', 'suffixBadgeIcon'))
 TEAM_ITEM_VO_META = base.PropertyMeta(TEAM_ITEM_VO_META_TUPLE)
 TEAM_ITEM_VO_META.bind(vehicles.RegularVehicleStatsBlock)
 TEAMS_VO_META = base.DictMeta({'team1': [],

@@ -144,13 +144,17 @@ class GLOBAL_FLAG(object):
     ALL_BONUSES_RECEIVED = '_AllBonusesReceived'
     MAY_PAWN_PERSONAL_MISSION = '_MayPawnPersonalMission'
     HAVE_NEW_BADGE = '_HaveNewBadge'
+    HAVE_NEW_SUFFIX_BADGE = '_HaveNewSuffixBadge'
+    BADGE_PAGE_HAS_NEW_SUFFIX_BADGE = '_BadgePageHasNewSuffixBadge'
     ALL = (IS_FLAGS_RESET,
      SHOW_HISTORY,
      HISTORY_NOT_AVAILABLE,
      IN_QUEUE,
      ALL_BONUSES_RECEIVED,
      MAY_PAWN_PERSONAL_MISSION,
-     HAVE_NEW_BADGE)
+     HAVE_NEW_BADGE,
+     HAVE_NEW_SUFFIX_BADGE,
+     BADGE_PAGE_HAS_NEW_SUFFIX_BADGE)
 
 
 class GlobalStorage(object):

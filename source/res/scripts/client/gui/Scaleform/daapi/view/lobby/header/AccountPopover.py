@@ -34,9 +34,10 @@ from helpers.i18n import makeString
 from skeletons.gui.game_control import IRefSystemController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
+from tutorial.control.context import GLOBAL_FLAG
 from tutorial.hints_manager import HINT_SHOWN_STATUS
-HAVE_NEW_BADGE = '_HaveNewBadge'
-HINT_ID = 'HaveNewBadgeHint'
+_PREFIX_BADGE_HINT_ID = 'HaveNewBadgeHint'
+_SUFFIX_BADGE_HINT_ID = 'HaveNewSuffixBadgeHint'
 
 class AccountPopover(AccountPopoverMeta, IGlobalListener, ClanListener, ClanEmblemsHelper):
     itemsCache = dependency.descriptor(IItemsCache)
@@ -48,12 +49,8 @@ class AccountPopover(AccountPopoverMeta, IGlobalListener, ClanListener, ClanEmbl
         self.__clanData = None
         self.__infoBtnEnabled = True
         self.__achieves = []
-        self.__tutorStorage = None
-        hintShown = self.settingsCore.serverSettings.getOnceOnlyHintsSetting(HINT_ID)
-        if hintShown != HINT_SHOWN_STATUS:
-            self.__tutorStorage = getTutorialGlobalStorage()
-            if self.__tutorStorage is not None:
-                self.__tutorStorage.setValue(HAVE_NEW_BADGE, self.__checkNewBadges())
+        self.__tutorStorage = getTutorialGlobalStorage()
+        self.__processHints()
         return
 
     @process
@@ -99,12 +96,8 @@ class AccountPopover(AccountPopoverMeta, IGlobalListener, ClanListener, ClanEmbl
         navigationPossible = yield self.lobbyContext.isHeaderNavigationPossible()
         if not navigationPossible:
             return
-        else:
-            if self.__tutorStorage is not None:
-                self.__tutorStorage.setValue(HAVE_NEW_BADGE, False)
-            shared_events.showBadges()
-            self.destroy()
-            return
+        shared_events.showBadges()
+        self.destroy()
 
     def onUnitFlagsChanged(self, flags, timeLeft):
         self.__updateButtonsStates()
@@ -188,10 +181,14 @@ class AccountPopover(AccountPopoverMeta, IGlobalListener, ClanListener, ClanEmbl
          'isSearchClanBtnEnabled': isAvailable}
 
     def _dispose(self):
+        if self.__tutorStorage is not None:
+            self.__tutorStorage.setValue(GLOBAL_FLAG.HAVE_NEW_SUFFIX_BADGE, False)
+            self.__tutorStorage.setValue(GLOBAL_FLAG.HAVE_NEW_BADGE, False)
         g_playerEvents.onCenterIsLongDisconnected -= self.__onCenterIsLongDisconnected
         self.stopGlobalListening()
         self.stopClanListening()
         super(AccountPopover, self)._dispose()
+        return
 
     def _onRegisterFlashComponent(self, viewPy, alias):
         super(AccountPopover, self)._onRegisterFlashComponent(viewPy, alias)
@@ -305,7 +302,7 @@ class AccountPopover(AccountPopoverMeta, IGlobalListener, ClanListener, ClanEmbl
         return
 
     def __syncUserInfo(self):
-        selectedBages = self.itemsCache.items.getBadges(REQ_CRITERIA.BADGE.SELECTED).values()
+        selectedBages = self.itemsCache.items.getBadges(REQ_CRITERIA.BADGE.SELECTED | REQ_CRITERIA.BADGE.PREFIX_LAYOUT).values()
         if selectedBages:
             badgeIcon = selectedBages[0].getSmallIcon()
         else:
@@ -336,10 +333,32 @@ class AccountPopover(AccountPopoverMeta, IGlobalListener, ClanListener, ClanEmbl
              'isLinkBtnEnabled': self.__infoBtnEnabled})
 
     def __checkNewBadges(self):
-        result = False
+        prefixNew = False
+        suffixNew = False
         for badge in self.itemsCache.items.getBadges().itervalues():
             if badge.isNew():
-                result = True
-                break
+                if badge.isSuffixLayout():
+                    suffixNew = True
+                elif badge.isPrefixLayout():
+                    prefixNew = True
+                if suffixNew and prefixNew:
+                    break
 
-        return result
+        return (prefixNew, suffixNew)
+
+    def __processHints(self):
+        if self.__tutorStorage is None:
+            return
+        else:
+            hasNewPrefixBadges, hasNewSuffixBadges = self.__checkNewBadges()
+            serverSettings = self.settingsCore.serverSettings
+            hintShown = serverSettings.getOnceOnlyHintsSetting(_SUFFIX_BADGE_HINT_ID)
+            if not hintShown and hasNewSuffixBadges:
+                self.__tutorStorage.setValue(GLOBAL_FLAG.HAVE_NEW_SUFFIX_BADGE, True)
+                if hasNewPrefixBadges:
+                    serverSettings.setOnceOnlyHintsSettings({_PREFIX_BADGE_HINT_ID: HINT_SHOWN_STATUS})
+                return
+            hintShown = serverSettings.getOnceOnlyHintsSetting(_PREFIX_BADGE_HINT_ID)
+            if not hintShown and hasNewPrefixBadges:
+                self.__tutorStorage.setValue(GLOBAL_FLAG.HAVE_NEW_BADGE, True)
+            return

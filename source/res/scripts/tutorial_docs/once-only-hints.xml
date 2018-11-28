@@ -63,6 +63,28 @@
       </condition>
       <equal-actions>	True	</equal-actions>
     </hint>
+    <hint>	HaveNewSuffixBadgeHint	  <item-id>	NewBadgeHintBtn	</item-id>
+      <text>	_(#menu:header/account/popover/tutorial/newSuffixBadge)	</text>
+      <arrow>
+        <direction>	B	</direction>
+        <loop>	True	</loop>
+      </arrow>
+      <condition>
+        <global-active>	_HaveNewSuffixBadge	</global-active>
+      </condition>
+      <equal-actions>	True	</equal-actions>
+    </hint>
+    <hint>	BadgePageNewSuffixBadgeHint	  <item-id>	NewBadgeHintCheckBox	</item-id>
+      <text>	_(#menu:badgePage/tutorial/newSuffixBadge)	</text>
+      <arrow>
+        <direction>	B	</direction>
+        <loop>	True	</loop>
+      </arrow>
+      <condition>
+        <global-active>	_BadgePageHasNewSuffixBadge	</global-active>
+      </condition>
+      <equal-actions>	True	</equal-actions>
+    </hint>
     <hint>	EpicReservesSlotHint	  <item-id>	EpicReservesSlot	</item-id>
       <text>	_(#epic_battle:tutorial/hint/epicReservesSlotHint)	</text>
       <arrow>

@@ -1,11 +1,12 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/battle_results/reusable/avatars.py
 from gui.battle_results.reusable import shared
+from gui.doc_loaders.badges_loader import getSelectedByLayout
 
 class AvatarInfo(shared.ItemInfo):
-    __slots__ = ('__totalDamaged', '__avatarKills', '__avatarDamaged', '__avatarDamageDealt', '__badge', '__fairplayViolations', '__accRank', '__prevAccRank', '__extInfo', '__weakref__')
+    __slots__ = ('__totalDamaged', '__avatarKills', '__avatarDamaged', '__avatarDamageDealt', '__badge', '__suffixBadge', '__fairplayViolations', '__accRank', '__prevAccRank', '__extInfo', '__weakref__')
 
-    def __init__(self, totalDamaged=0, avatarKills=0, avatarDamaged=0, avatarDamageDealt=0, fairplayViolations=None, wasInBattle=True, accRank=None, prevAccRank=None, rankedBadge=0, ext=None, **kwargs):
+    def __init__(self, totalDamaged=0, avatarKills=0, avatarDamaged=0, avatarDamageDealt=0, fairplayViolations=None, wasInBattle=True, accRank=None, prevAccRank=None, badges=(), ext=None, **kwargs):
         super(AvatarInfo, self).__init__(wasInBattle=wasInBattle)
         self.__totalDamaged = totalDamaged
         self.__avatarKills = avatarKills
@@ -14,7 +15,7 @@ class AvatarInfo(shared.ItemInfo):
         self.__fairplayViolations = shared.FairplayViolationsInfo(*(fairplayViolations or ()))
         self.__accRank = accRank
         self.__prevAccRank = prevAccRank
-        self.__badge = rankedBadge
+        self.__badge, self.__suffixBadge = getSelectedByLayout(badges)
         self.__extInfo = ext
 
     @property
@@ -54,6 +55,10 @@ class AvatarInfo(shared.ItemInfo):
     @property
     def badge(self):
         return self.__badge
+
+    @property
+    def suffixBadge(self):
+        return self.__suffixBadge
 
 
 class AvatarsInfo(shared.UnpackedInfo):

@@ -6,19 +6,31 @@ from account_helpers.AccountSettings import AccountSettings, LAST_CALENDAR_SHOW_
 from adisp import process
 from gui import GUI_SETTINGS
 from gui.Scaleform import MENU
+from gui.Scaleform.framework import ViewTypes
+from gui.Scaleform.framework.managers.containers import POP_UP_CRITERIA
+from gui.app_loader.settings import GUI_GLOBAL_SPACE_ID
+from gui.game_control import CalendarInvokeOrigin
 from gui.game_control.links import URLMarcos
 from gui.server_events.modifiers import CalendarSplashModifier
 from gui.shared import g_eventBus, events, EVENT_BUS_SCOPE
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from helpers import dependency, time_utils, i18n
 from helpers.time_utils import ONE_HOUR
-from shared_utils import CONST_CONTAINER
 from skeletons.gui.game_control import ICalendarController, IBrowserController
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.lobby_context import ILobbyContext
 from web_client_api import webApiCollection
 from web_client_api.request import RequestWebApi
 from web_client_api.sound import SoundWebApi
+from gui.app_loader import g_appLoader
+from web_client_api import w2capi
+from web_client_api.ui import ShopWebApiMixin, CloseWindowWebApi
+
+@w2capi(name='open_tab', key='tab_id')
+class _OpenShopTabWebApi(ShopWebApiMixin):
+    pass
+
+
 _BROWSER_SIZE = (1014, 654)
 _MIN_BROWSER_ID = 827709
 _logger = logging.getLogger(__name__)
@@ -27,12 +39,6 @@ _START_OF_DAY_OFFSET = {'EU': timedelta(hours=5),
  'ASIA': timedelta(hours=6),
  'NA': timedelta(hours=11),
  'RU': timedelta(hours=6)}
-
-class CalendarInvokeOrigin(CONST_CONTAINER):
-    ACTION = 'action'
-    HANGAR = 'hangar'
-    SPLASH = 'first'
-
 
 def calendarEnabledActionFilter(act):
     return any((isinstance(mod, CalendarSplashModifier) for mod in act.getModifiers()))
@@ -53,6 +59,9 @@ class CalendarController(ICalendarController):
     def onLobbyInited(self, event):
         self.eventsCache.onSyncCompleted += self.__onSyncCompleted
         self.browserCtrl.onBrowserDeleted += self.__onBrowserDeleted
+        self.__updateActions()
+        if self.__showOnSplash and self.mustShow():
+            self.showCalendar(CalendarInvokeOrigin.SPLASH)
 
     def fini(self):
         self.__urlMacros.clear()
@@ -90,11 +99,6 @@ class CalendarController(ICalendarController):
 
             return result
 
-    def onLobbyStarted(self, event):
-        self.__updateActions()
-        if self.__showOnSplash and self.mustShow():
-            self.showCalendar(CalendarInvokeOrigin.SPLASH)
-
     def onAvatarBecomePlayer(self):
         self.hideCalendar()
 
@@ -103,26 +107,36 @@ class CalendarController(ICalendarController):
 
     def showCalendar(self, invokedFrom):
         self.hideCalendar()
-        try:
-            while self.__browserID is None:
-                browserID = next(_browserIDGen)
-                if self.browserCtrl.getBrowser(browserID) is None:
-                    self.__browserID = browserID
-
-        except StopIteration:
-            _logger.error('Could not allocate a browser ID for calendar')
+        if g_appLoader.getSpaceID() != GUI_GLOBAL_SPACE_ID.LOBBY:
             return
+        else:
+            try:
+                while self.__browserID is None:
+                    browserID = next(_browserIDGen)
+                    if self.browserCtrl.getBrowser(browserID) is None:
+                        self.__browserID = browserID
 
-        self.__openBrowser(self.__browserID, _BROWSER_SIZE, invokedFrom)
-        self.__setShowTimestamp(time_utils.getServerRegionalTime())
-        _logger.debug('Calendar opened in web browser (browserID=%d)', self.__browserID)
-        return
+            except StopIteration:
+                _logger.error('Could not allocate a browser ID for calendar')
+                return
+
+            self.__openBrowser(self.__browserID, _BROWSER_SIZE, invokedFrom)
+            self.__setShowTimestamp(time_utils.getServerRegionalTime())
+            _logger.debug('Calendar opened in web browser (browserID=%d)', self.__browserID)
+            return
 
     def hideCalendar(self):
         if self.__browserID is None:
             return
         else:
-            self.browserCtrl.delBrowser(self.__browserID)
+            app = g_appLoader.getApp()
+            if app is not None and app.containerManager is not None:
+                browserWindow = app.containerManager.getView(ViewTypes.WINDOW, criteria={POP_UP_CRITERIA.UNIQUE_NAME: VIEW_ALIAS.ADVENT_CALENDAR})
+                if browserWindow is not None:
+                    browserWindow.destroy()
+                    self.__browserID = None
+                else:
+                    self.browserCtrl.delBrowser(self.__browserID)
             return
 
     def __onSyncCompleted(self, *_):
@@ -156,7 +170,7 @@ class CalendarController(ICalendarController):
         if not url:
             _logger.error('Invalid calendar URL')
             return
-        browserHandlers = webApiCollection(SoundWebApi, RequestWebApi)
+        browserHandlers = webApiCollection(SoundWebApi, RequestWebApi, _OpenShopTabWebApi, CloseWindowWebApi)
 
         def showBrowserWindow():
             ctx = {'size': browserSize,

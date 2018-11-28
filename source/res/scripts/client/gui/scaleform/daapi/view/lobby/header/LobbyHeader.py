@@ -488,7 +488,7 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
             return
 
     def __updateBadge(self, *args):
-        selectedBages = self.itemsCache.items.getBadges(REQ_CRITERIA.BADGE.SELECTED).values()
+        selectedBages = self.itemsCache.items.getBadges(REQ_CRITERIA.BADGE.SELECTED | REQ_CRITERIA.BADGE.PREFIX_LAYOUT).values()
         badge = None
         if selectedBages:
             badge = selectedBages[0].getSmallIcon()

@@ -171,11 +171,6 @@ class TutorialLoader(object):
             self.__hintsManager.start()
         return
 
-    def stopOnceOnlyHint(self, itemID):
-        if self.__hintsManager is not None:
-            self.__hintsManager.stopOnceOnlyHint(itemID)
-        return
-
     def leaveLobby(self):
         self.stop(restore=False)
 

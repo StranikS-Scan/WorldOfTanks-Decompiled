@@ -1,6 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/vehicle_compare/cmp_view.py
-from constants import IS_TUTORIAL_ENABLED
 from gui import SystemMessages
 from gui.Scaleform.daapi import LobbySubView
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
@@ -15,11 +14,11 @@ from gui.shared.event_bus import EVENT_BUS_SCOPE
 from gui.shared.event_dispatcher import selectVehicleInHangar, showVehiclePreview
 from gui.shared.formatters import text_styles
 from gui.shared.items_parameters.formatters import getAllParametersTitles
+from gui.shared.tutorial_helper import getTutorialGlobalStorage
 from helpers import dependency
 from helpers.i18n import makeString as _ms
 from skeletons.gui.game_control import IVehicleComparisonBasket
 from skeletons.gui.shared import IItemsCache
-from tutorial.loader import g_loader
 _BACK_BTN_LABELS = {VIEW_ALIAS.LOBBY_HANGAR: 'hangar',
  VIEW_ALIAS.LOBBY_STORE: 'shop',
  VIEW_ALIAS.LOBBY_RESEARCH: 'researchTree',
@@ -41,8 +40,9 @@ class VehicleCompareView(LobbySubView, VehicleCompareViewMeta):
         self.onBackClick()
 
     def onSelectModulesClick(self, vehicleID, index):
-        if IS_TUTORIAL_ENABLED:
-            g_loader.stopOnceOnlyHint('VehCompareConfig')
+        tutorStorage = getTutorialGlobalStorage()
+        if tutorStorage:
+            tutorStorage.setValue('VehCompareConfigHint', False)
         event = g_entitiesFactories.makeLoadEvent(VIEW_ALIAS.VEHICLE_COMPARE_MAIN_CONFIGURATOR, ctx={'index': int(index)})
         self.fireEvent(event, scope=EVENT_BUS_SCOPE.LOBBY)
 

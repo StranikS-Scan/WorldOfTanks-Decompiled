@@ -148,10 +148,12 @@ class VehiclePreview20(LobbySelectableView, VehiclePreview20Meta):
 
     def _onRegisterFlashComponent(self, viewPy, alias):
         super(VehiclePreview20, self)._onRegisterFlashComponent(viewPy, alias)
-        if alias == VEHPREVIEW_CONSTANTS.BUYING_PANEL_PY_ALIAS and self.__itemsPack:
-            viewPy.setPackItems(self.__itemsPack, self.__price, self.__title)
-            viewPy.setTimerData(self.__endTime, self.__oldPrice)
-            viewPy.setBuyParams(self.__buyParams)
+        if alias == VEHPREVIEW_CONSTANTS.BUYING_PANEL_PY_ALIAS:
+            viewPy.setCallSource(self._backAlias)
+            if self.__itemsPack:
+                viewPy.setPackItems(self.__itemsPack, self.__price, self.__title)
+                viewPy.setTimerData(self.__endTime, self.__oldPrice)
+                viewPy.setBuyParams(self.__buyParams)
         elif alias == VEHPREVIEW_CONSTANTS.CREW_LINKAGE and self.__itemsPack:
             crewItems = [ item for item in self.__itemsPack if item.type in ItemPackTypeGroup.CREW ]
             vehicleItems = [ item for item in self.__itemsPack if item.type in ItemPackTypeGroup.VEHICLE ]

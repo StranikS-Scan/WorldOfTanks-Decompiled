@@ -15,9 +15,10 @@ from vehicle_systems.stricted_loading import loadingPriority
 class CrashedTrackController(Component):
     baseTracksComponent = AutoProperty()
 
-    def __init__(self, vehicleDesc, trackFashion):
+    def __init__(self, vehicleDesc, trackFashion, modelsSet):
         self.__vehicleDesc = vehicleDesc
         self.__entity = None
+        self.__modelsSet = modelsSet
         self.__baseTrackFashion = trackFashion
         self.baseTracksComponent = None
         self.__triggerEvents = False
@@ -65,7 +66,7 @@ class CrashedTrackController(Component):
         self.__setupTracksHiding()
 
     def __setupTrackAssembler(self, entity):
-        modelNames = getPartModelsFromDesc(self.__vehicleDesc, ModelsSetParams(None, 'destroyed'))
+        modelNames = getPartModelsFromDesc(self.__vehicleDesc, ModelsSetParams(self.__modelsSet, 'destroyed'))
         compoundAssembler = BigWorld.CompoundAssembler()
         compoundAssembler.addRootPart(modelNames.chassis, TankPartNames.CHASSIS, entity.filter.groundPlacingMatrix)
         compoundAssembler.name = TankPartNames.CHASSIS

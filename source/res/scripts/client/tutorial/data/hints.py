@@ -1,6 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/tutorial/data/hints.py
-from collections import namedtuple
+from collections import namedtuple, defaultdict
 HintProps = namedtuple('HintProps', ('uniqueID', 'hintID', 'itemID', 'text', 'hasBox', 'arrow', 'padding'))
 
 class HintsData(object):
@@ -8,7 +8,7 @@ class HintsData(object):
     def __init__(self):
         super(HintsData, self).__init__()
         self.__guiFilePath = None
-        self.__hints = {}
+        self.__hints = defaultdict(list)
         return
 
     def setGuiFilePath(self, filePath):
@@ -18,19 +18,19 @@ class HintsData(object):
         return self.__guiFilePath
 
     def addHint(self, hint):
-        self.__hints[hint['itemID']] = hint
+        self.__hints[hint['itemID']].append(hint)
 
-    def hintForItem(self, itemID):
-        hint = None
-        if itemID in self.__hints:
-            hint = self.__hints[itemID]
-        return hint
+    def hintsForItem(self, itemID):
+        return self.__hints[itemID] if itemID in self.__hints else ()
 
-    def markAsShown(self, hint):
-        itemID = hint['itemID']
+    def markAsShown(self, itemID, hintID):
         if itemID in self.__hints:
-            del self.__hints[itemID]
+            hintsList = self.__hints[itemID]
+            for idx, hint in reversed(list(enumerate(hintsList))):
+                if hint['hintID'] == hintID:
+                    del hintsList[idx]
+                    break
 
     @property
     def hintsCount(self):
-        return len(self.__hints)
+        return sum((len(hintsList) for hintsList in self.__hints.itervalues()))

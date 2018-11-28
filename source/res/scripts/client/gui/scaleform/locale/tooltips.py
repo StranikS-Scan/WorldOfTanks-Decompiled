@@ -157,6 +157,8 @@ class TOOLTIPS(object):
     STORAGE_MAINMENU_IN_HANGAR = '#tooltips:storage/mainMenu/in_hangar'
     STORAGE_MAINMENU_PERSONAL_RESERVES = '#tooltips:storage/mainMenu/personal_reserves'
     STORAGE_FILTER_NORESULTSBTN = '#tooltips:storage/filter/noResultsBtn'
+    BADGEINFO_TITLE = '#tooltips:badgeinfo/title'
+    BADGEINFO_TEXT = '#tooltips:badgeinfo/text'
     TEMPLATE_DAYS_SHORT = '#tooltips:template/days/short'
     TEMPLATE_DAYS_VALUE = '#tooltips:template/days/value'
     TEMPLATE_HOURS_SHORT = '#tooltips:template/hours/short'
@@ -1870,6 +1872,8 @@ class TOOLTIPS(object):
     VEHICLEPREVIEW_VEHICLEPANEL_INFO_HEADER_NOCREW = '#tooltips:vehiclePreview/vehiclePanel/info/header/noCrew'
     VEHICLEPREVIEW_VEHICLEPANEL_INFO_BODY = '#tooltips:vehiclePreview/vehiclePanel/info/body'
     VEHICLEPREVIEW_BUYBUTTON_PARENTMODULEISLOCKED_HEADER = '#tooltips:vehiclePreview/buyButton/parentModuleIsLocked/header'
+    VEHICLEPREVIEW_BUYBUTTON_RESTOREREQUESTED_HEADER = '#tooltips:vehiclePreview/buyButton/restoreRequested/header'
+    VEHICLEPREVIEW_BUYBUTTON_RESTOREREQUESTED_BODY = '#tooltips:vehiclePreview/buyButton/restoreRequested/body'
     VEHICLEPREVIEW_BUYBUTTON_PARENTMODULEISLOCKED_BODY = '#tooltips:vehiclePreview/buyButton/parentModuleIsLocked/body'
     VEHICLEPREVIEW_BUYBUTTON_PARENTVEHICLEISLOCKED_HEADER = '#tooltips:vehiclePreview/buyButton/parentVehicleIsLocked/header'
     VEHICLEPREVIEW_BUYBUTTON_PARENTVEHICLEISLOCKED_BODY = '#tooltips:vehiclePreview/buyButton/parentVehicleIsLocked/body'
@@ -2538,6 +2542,8 @@ class TOOLTIPS(object):
     SHOWDAMAGEICON_BLOCKED = '#tooltips:showDamageIcon/blocked'
     BATTLESESSION_ALERT_HEADER = '#tooltips:battleSession/alert/header'
     BATTLESESSION_ALERT_BODY = '#tooltips:battleSession/alert/body'
+    MARATHON_SUBTITLE = '#tooltips:marathon/subtitle'
+    MARATHON_DATE = '#tooltips:marathon/date'
     KURSK_HEADER = '#tooltips:kursk/header'
     KURSK_BODY = '#tooltips:kursk/body'
     KURSK_PROGRESS = '#tooltips:kursk/progress'
@@ -2755,6 +2761,8 @@ class TOOLTIPS(object):
      ELEN_SUMMARY_PARAM_SUMALL_DAMAGEDEALT_BODY,
      ELEN_SUMMARY_PARAM_SUMALL_DAMAGEASSISTED_BODY)
     VEHICLEPREVIEW_BUYBUTTON_ALL_ENUM = (VEHICLEPREVIEW_BUYBUTTON_PARENTMODULEISLOCKED_HEADER,
+     VEHICLEPREVIEW_BUYBUTTON_RESTOREREQUESTED_HEADER,
+     VEHICLEPREVIEW_BUYBUTTON_RESTOREREQUESTED_BODY,
      VEHICLEPREVIEW_BUYBUTTON_PARENTMODULEISLOCKED_BODY,
      VEHICLEPREVIEW_BUYBUTTON_PARENTVEHICLEISLOCKED_HEADER,
      VEHICLEPREVIEW_BUYBUTTON_PARENTVEHICLEISLOCKED_BODY,

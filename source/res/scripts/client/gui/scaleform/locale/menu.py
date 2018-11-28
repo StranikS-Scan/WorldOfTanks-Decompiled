@@ -727,6 +727,8 @@ class MENU(object):
     HEADER_ACCOUNT_POPOVER_ACHIEVES_BATTLES = '#menu:header/account/popover/achieves/battles'
     HEADER_ACCOUNT_POPOVER_ACHIEVES_WINS = '#menu:header/account/popover/achieves/wins'
     HEADER_ACCOUNT_POPOVER_TUTORIAL_NEWBADGE = '#menu:header/account/popover/tutorial/newBadge'
+    HEADER_ACCOUNT_POPOVER_TUTORIAL_NEWSUFFIXBADGE = '#menu:header/account/popover/tutorial/newSuffixBadge'
+    BADGEPAGE_TUTORIAL_NEWSUFFIXBADGE = '#menu:badgePage/tutorial/newSuffixBadge'
     HEADER_NOTIFICATIONSIGN = '#menu:header/notificationSign'
     MODULEFITS_NEED_GUN = '#menu:moduleFits/need_gun'
     MODULEFITS_CENTER_UNAVAILABLE = '#menu:moduleFits/center_unavailable'

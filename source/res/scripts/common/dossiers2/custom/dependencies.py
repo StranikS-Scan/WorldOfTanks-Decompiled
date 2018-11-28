@@ -246,21 +246,6 @@ def _set_FALLOUT_STATS_DEPENDENCIES():
      'winPoints': [_updateWinnerLaurels]})
 
 
-RANKED_BADGES_DEPENDENCIES = {}
-
-def _set_RANKED_BADGES_DEPENDENCIES():
-    global RANKED_BADGES_DEPENDENCIES
-    RANKED_BADGES_DEPENDENCIES.update({'1': [_updateRankedBadge],
-     '2': [_updateRankedBadge],
-     '3': [_updateRankedBadge],
-     '4': [_updateRankedBadge],
-     '5': [_updateRankedBadge],
-     '6': [_updateRankedBadge],
-     '7': [_updateRankedBadge],
-     '8': [_updateRankedBadge],
-     '9': [_updateRankedBadge]})
-
-
 def _updateRankedBadge(dossierDescr, dossierBlockDescr, key, value, prevValue):
     eventsEnabled = dossierBlockDescr.eventsEnabled
     if eventsEnabled:
@@ -932,5 +917,4 @@ def init():
     _set_GLOBAL_MAP_STATS_DEPENDENCIES()
     _set_FALLOUT_STATS_DEPENDENCIES()
     _set_RANKED_STATS_DEPENDENCIES()
-    _set_RANKED_BADGES_DEPENDENCIES()
     _set_EPIC_BATTLE_STATS_DEPENDENCIES()

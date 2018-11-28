@@ -161,6 +161,10 @@ class EffectsListPlayer(object):
         self.__data = dict()
         return
 
+    @property
+    def isStarted(self):
+        return self.__isStarted
+
     def play(self, model, startKeyPoint=None, callbackFunc=None, waitForKeyOff=False):
         needPlay, newKey = self.__isNeedToPlay(waitForKeyOff)
         if not needPlay:
@@ -780,12 +784,12 @@ class _CollisionSoundEffectDesc(_NodeSoundEffectDesc):
         return
 
 
-class _DestructionSoundEffectDesc(_BaseSoundEvent):
-    TYPE = '_DestructionSoundEffectDesc'
+class _NonVehicleSoundEffectDesc(_BaseSoundEvent):
+    TYPE = '_NonVehicleSoundEffectDesc'
     __slots__ = ('_soundName', '_parameters')
 
     def __init__(self, dataSection):
-        super(_DestructionSoundEffectDesc, self).__init__(dataSection)
+        super(_NonVehicleSoundEffectDesc, self).__init__(dataSection)
         self._soundName = dataSection.readString('wwsound', '')
         self.__readParameters(dataSection)
 
@@ -1210,7 +1214,8 @@ _effectDescFactory = {'pixie': _PixieEffectDesc,
  'stopEmission': _StopEmissionEffectDesc,
  'posteffect': _PostProcessEffectDesc,
  'light': _LightEffectDesc,
- 'destructionSound': _DestructionSoundEffectDesc}
+ 'destructionSound': _NonVehicleSoundEffectDesc,
+ 'lifetimeSound': _NonVehicleSoundEffectDesc}
 
 def _createEffectDesc(eType, dataSection):
     if not dataSection.values():

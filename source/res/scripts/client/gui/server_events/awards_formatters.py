@@ -213,6 +213,12 @@ def getOperationPacker():
     return AwardsPacker(mapping)
 
 
+def getAnniversaryPacker():
+    formattersMap = getDefaultFormattersMap()
+    formattersMap['slots'] = CountableIntegralBonusFormatter()
+    return AwardsPacker(formattersMap)
+
+
 def formatCountLabel(count):
     return 'x{}'.format(count) if count > 1 else ''
 
@@ -231,7 +237,11 @@ def formatTimeLabel(hours):
     return str(int(time)) + ' ' + timeMetric
 
 
-_PreformattedBonus = namedtuple('_PreformattedBonus', 'bonusName, label userName images tooltip labelFormatter areTokensPawned specialArgs specialAlias isSpecial isCompensation align highlightType overlayType')
+_PreformattedBonus = namedtuple('_PreformattedBonus', 'bonusName label userName images tooltip labelFormatter areTokensPawned specialArgs specialAlias isSpecial isCompensation align highlightType overlayType postProcessTags')
+
+class PostProcessTags(CONST_CONTAINER):
+    IS_SUFFIX_BADGE = 'isSuffixBadge'
+
 
 class PreformattedBonus(_PreformattedBonus):
 
@@ -256,7 +266,8 @@ PreformattedBonus.__new__.__defaults__ = (None,
  False,
  LABEL_ALIGN.CENTER,
  None,
- None)
+ None,
+ tuple())
 
 class QuestsBonusComposer(object):
 
@@ -649,7 +660,11 @@ class DossierBonusFormatter(SimpleBonusFormatter):
             result.append(PreformattedBonus(bonusName=bonus.getName(), userName=self._getUserName(achievement), images=self._getImages(achievement), isSpecial=True, specialAlias=TOOLTIPS_CONSTANTS.BATTLE_STATS_ACHIEVS, specialArgs=[achievement.getBlock(), achievement.getName(), achievement.getValue()], isCompensation=self._isCompensation(bonus), label=self._formatBonusLabel()))
 
         for badge in bonus.getBadges():
-            result.append(PreformattedBonus(bonusName=bonus.getName(), userName=self._getUserName(badge), images=self._getImages(badge), isSpecial=True, specialAlias=self._getBadgeTooltipAlias(), specialArgs=[badge.badgeID], isCompensation=self._isCompensation(bonus), label=self._formatBonusLabel()))
+            if badge.isSuffixLayout():
+                tags = (PostProcessTags.IS_SUFFIX_BADGE,)
+            else:
+                tags = tuple()
+            result.append(PreformattedBonus(bonusName=bonus.getName(), userName=self._getUserName(badge), images=self._getImages(badge), isSpecial=True, specialAlias=self._getBadgeTooltipAlias(), specialArgs=[badge.badgeID], isCompensation=self._isCompensation(bonus), label=self._formatBonusLabel(), postProcessTags=tags))
 
         return result
 

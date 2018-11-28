@@ -8,7 +8,7 @@ from gui.app_loader import g_appLoader
 from gui.shared.utils.functions import getViewName
 from skeletons.gui.game_control import IBrowserController, IExternalLinksController
 from web_client_api import WebCommandException, w2c, W2CSchema, Field
-from gui.Scaleform.framework.managers.containers import POP_UP_CRITERIA
+from gui.Scaleform.framework.managers.containers import POP_UP_CRITERIA, ExternalCriteria
 
 class _OpenBrowserWindowSchema(W2CSchema):
     url = Field(required=True, type=basestring)
@@ -49,6 +49,16 @@ class OpenBrowserWindowWebApiMixin(object):
         return
 
 
+class BrowserSearchCriteria(ExternalCriteria):
+
+    def __init__(self, neededAlias):
+        super(BrowserSearchCriteria, self).__init__()
+        self.__neededAlias = neededAlias
+
+    def find(self, view, browserWindow):
+        return getattr(browserWindow, 'uniqueBrowserName', 0) == self.__neededAlias
+
+
 class CloseBrowserWindowWebApiMixin(object):
 
     @w2c(W2CSchema, 'browser')
@@ -60,9 +70,15 @@ class CloseBrowserWindowWebApiMixin(object):
                 supportedBrowserViewTypes = (ViewTypes.WINDOW, ViewTypes.OVERLAY)
                 browserWindow = None
                 for viewType in supportedBrowserViewTypes:
-                    browserWindow = app.containerManager.getView(viewType, criteria={POP_UP_CRITERIA.UNIQUE_NAME: windowAlias})
+                    browserWindow = app.containerManager.getView(viewType, criteria=BrowserSearchCriteria(windowAlias))
                     if browserWindow is not None:
                         break
+
+                if not browserWindow:
+                    for viewType in supportedBrowserViewTypes:
+                        browserWindow = app.containerManager.getView(viewType, criteria={POP_UP_CRITERIA.UNIQUE_NAME: windowAlias})
+                        if browserWindow is not None:
+                            break
 
                 if browserWindow is not None:
                     browserWindow.destroy()

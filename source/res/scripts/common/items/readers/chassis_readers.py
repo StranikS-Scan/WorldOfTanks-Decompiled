@@ -111,4 +111,13 @@ def readLeveredSuspension(xmlCtx, section, cache):
 
 
 def readSplineConfig(xmlCtx, section, cache):
-    return None if section['splineDesc'] is None else chassis_components.SplineConfig(segmentModelLeft=_xml.readNonEmptyString(xmlCtx, section, 'splineDesc/segmentModelLeft'), segmentModelRight=_xml.readNonEmptyString(xmlCtx, section, 'splineDesc/segmentModelRight'), segmentLength=_xml.readFloat(xmlCtx, section, 'splineDesc/segmentLength'), leftDesc=_xml.readStringOrNone(xmlCtx, section, 'splineDesc/left'), rightDesc=_xml.readStringOrNone(xmlCtx, section, 'splineDesc/right'), lodDist=shared_readers.readLodDist(xmlCtx, section, 'splineDesc/lodDist', cache), segmentOffset=_xml.readFloat(xmlCtx, section, 'splineDesc/segmentOffset', 0), segment2ModelLeft=_xml.readStringOrNone(xmlCtx, section, 'splineDesc/segment2ModelLeft'), segment2ModelRight=_xml.readStringOrNone(xmlCtx, section, 'splineDesc/segment2ModelRight'), segment2Offset=_xml.readFloat(xmlCtx, section, 'splineDesc/segment2Offset', 0), atlasUTiles=section.readInt('splineDesc/atlas/UTiles', 1), atlasVTiles=section.readInt('splineDesc/atlas/VTiles', 1))
+    if section['splineDesc'] is None:
+        return
+    else:
+        splineSegmentModelSets = {'default': chassis_components.SplineSegmentModelSet(left=_xml.readNonEmptyString(xmlCtx, section, 'splineDesc/segmentModelLeft'), right=_xml.readNonEmptyString(xmlCtx, section, 'splineDesc/segmentModelRight'), secondLeft=_xml.readStringOrNone(xmlCtx, section, 'splineDesc/segment2ModelLeft') or '', secondRight=_xml.readStringOrNone(xmlCtx, section, 'splineDesc/segment2ModelRight') or '')}
+        modelSetsSection = section['splineDesc/modelSets']
+        if modelSetsSection:
+            for sname, subSection in modelSetsSection.items():
+                splineSegmentModelSets[sname] = chassis_components.SplineSegmentModelSet(left=_xml.readNonEmptyString(xmlCtx, subSection, 'segmentModelLeft'), right=_xml.readNonEmptyString(xmlCtx, subSection, 'segmentModelRight'), secondLeft=_xml.readStringOrNone(xmlCtx, subSection, 'segment2ModelLeft'), secondRight=_xml.readStringOrNone(xmlCtx, subSection, 'segment2ModelRight'))
+
+        return chassis_components.SplineConfig(segmentModelSets=splineSegmentModelSets, segmentLength=_xml.readFloat(xmlCtx, section, 'splineDesc/segmentLength'), leftDesc=_xml.readStringOrNone(xmlCtx, section, 'splineDesc/left'), rightDesc=_xml.readStringOrNone(xmlCtx, section, 'splineDesc/right'), lodDist=shared_readers.readLodDist(xmlCtx, section, 'splineDesc/lodDist', cache), segmentOffset=_xml.readFloat(xmlCtx, section, 'splineDesc/segmentOffset', 0), segment2Offset=_xml.readFloat(xmlCtx, section, 'splineDesc/segment2Offset', 0), atlasUTiles=section.readInt('splineDesc/atlas/UTiles', 1), atlasVTiles=section.readInt('splineDesc/atlas/VTiles', 1))

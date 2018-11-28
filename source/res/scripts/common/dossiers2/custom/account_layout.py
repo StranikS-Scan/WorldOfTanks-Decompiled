@@ -9,7 +9,6 @@ from dossiers2.custom.dependencies import FALLOUT_STATS_DEPENDENCIES
 from dossiers2.custom.dependencies import FORT_ACHIEVEMENTS_DEPENDENCIES
 from dossiers2.custom.dependencies import GLOBAL_MAP_STATS_DEPENDENCIES
 from dossiers2.custom.dependencies import RANKED_STATS_DEPENDENCIES
-from dossiers2.custom.dependencies import RANKED_BADGES_DEPENDENCIES
 from dossiers2.custom.dependencies import A30X30_STATS_DEPENDENCIES
 from dossiers2.custom.dependencies import EPIC_BATTLE_STATS_DEPENDENCIES
 from battle_statistics_layouts import *
@@ -432,7 +431,19 @@ _SINGLE_ACHIEVEMENTS_VALUES = ['titleSniper',
  'streamersEventJove',
  'streamersEventAmway921',
  'streamersEventLeBwA',
- 'twitchPrime']
+ 'twitchPrime',
+ 'alphaTester',
+ 'betaTester',
+ '10YearsOfService',
+ '09YearsOfService',
+ '08YearsOfService',
+ '07YearsOfService',
+ '06YearsOfService',
+ '05YearsOfService',
+ '04YearsOfService',
+ '03YearsOfService',
+ '02YearsOfService',
+ '01YearsOfService']
 _singleAchievementsPopUps = ['titleSniper',
  'invincible',
  'diehard',
@@ -483,7 +494,19 @@ _singleAchievementsPopUps = ['titleSniper',
  'streamersEventJove',
  'streamersEventAmway921',
  'streamersEventLeBwA',
- 'twitchPrime']
+ 'twitchPrime',
+ 'alphaTester',
+ 'betaTester',
+ '10YearsOfService',
+ '09YearsOfService',
+ '08YearsOfService',
+ '07YearsOfService',
+ '06YearsOfService',
+ '05YearsOfService',
+ '04YearsOfService',
+ '03YearsOfService',
+ '02YearsOfService',
+ '01YearsOfService']
 _singleAchievementsBlockBuilder = BinarySetDossierBlockBuilder('singleAchievements', _SINGLE_ACHIEVEMENTS_VALUES, {}, _singleAchievementsPopUps)
 FORT_ACHIEVEMENTS_BLOCK_LAYOUT = ['conqueror',
  'fireAndSword',

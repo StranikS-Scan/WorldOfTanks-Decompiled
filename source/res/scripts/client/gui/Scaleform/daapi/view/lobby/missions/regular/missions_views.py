@@ -93,6 +93,7 @@ class MissionsMarathonView(MissionsMarathonViewMeta):
         self._height = 0
         self._builder = None
         self.__loadBrowserCallbackID = None
+        self.__browserView = None
         return
 
     def closeView(self):
@@ -104,9 +105,10 @@ class MissionsMarathonView(MissionsMarathonViewMeta):
     @process
     def reload(self):
         browser = self._browserCtrl.getBrowser(self.__browserID)
-        if browser is not None and self._marathonEvent:
+        if browser is not None and self._marathonEvent and self.__browserView:
             url = yield self._marathonEvent.getUrl()
             if url:
+                self.__browserView.as_loadingStartS()
                 browser.doNavigate(url)
         else:
             yield lambda callback: callback(True)
@@ -134,6 +136,7 @@ class MissionsMarathonView(MissionsMarathonViewMeta):
                 browserID = yield self._browserCtrl.load(url=url, useBrowserWindow=False, browserID=self.__browserID, browserSize=(self._width, self._height))
                 self.__browserID = browserID
                 viewPy.init(browserID, createMarathonWebHandlers(), alias=alias)
+                self.__browserView = viewPy
                 browser = self._browserCtrl.getBrowser(browserID)
                 if browser is not None:
                     browser.setAllowAutoLoadingScreen(False)
@@ -155,7 +158,9 @@ class MissionsMarathonView(MissionsMarathonViewMeta):
 
     def _dispose(self):
         self.__cancelLoadBrowserCallback()
+        self.__browserView = None
         super(MissionsMarathonView, self)._dispose()
+        return
 
     def __cancelLoadBrowserCallback(self):
         if self.__loadBrowserCallbackID is not None:

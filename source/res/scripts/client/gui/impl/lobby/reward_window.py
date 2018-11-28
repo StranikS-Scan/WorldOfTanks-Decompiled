@@ -8,9 +8,9 @@ from gui.Scaleform.framework.entities.View import ViewKey
 from gui.Scaleform.genConsts.BARRACKS_CONSTANTS import BARRACKS_CONSTANTS
 from gui.app_loader import g_appLoader
 from gui.impl.gen.view_models.ui_kit.reward_renderer_model import RewardRendererModel
-from gui.Scaleform.daapi.view.lobby.missions.awards_formatters import PackRentVehiclesAwardComposer
+from gui.Scaleform.daapi.view.lobby.missions.awards_formatters import PackRentVehiclesAwardComposer, AnniversaryAwardComposer
 from gui.impl.pub import ViewImpl
-from gui.server_events.awards_formatters import getPackRentVehiclesAwardPacker
+from gui.server_events.awards_formatters import getPackRentVehiclesAwardPacker, getAnniversaryPacker
 from gui.server_events.bonuses import getTutorialBonuses
 from gui.shared import g_eventBus, events, EVENT_BUS_SCOPE
 from gui.server_events.recruit_helper import getRecruitInfo
@@ -76,6 +76,9 @@ class RewardWindowContent(ViewImpl):
         self.getViewModel().setEventName(self._eventName)
         self._initRewardsList()
 
+    def _getAwardComposer(self):
+        return PackRentVehiclesAwardComposer(ADDITIONAL_AWARDS_COUNT, getPackRentVehiclesAwardPacker())
+
     def _initRewardsList(self):
         with self.getViewModel().transaction() as tx:
             rewardsList = tx.rewardsList.getItems()
@@ -85,7 +88,7 @@ class RewardWindowContent(ViewImpl):
                 vehBonus = getTutorialBonuses('vehicles', self._vehicles)
                 bonuses.extend(vehBonus)
                 bonuses.sort(key=self._keySortOrder)
-                formatter = PackRentVehiclesAwardComposer(ADDITIONAL_AWARDS_COUNT, getPackRentVehiclesAwardPacker())
+                formatter = self._getAwardComposer()
                 for index, bonus in enumerate(formatter.getFormattedBonuses(bonuses)):
                     rendererModel = RewardRendererModel()
                     with rendererModel.transaction() as rewardTx:
@@ -164,3 +167,31 @@ class TwitchRewardWindow(RewardWindowBase):
 
     def __init__(self, ctx=None, parent=None):
         super(TwitchRewardWindow, self).__init__(parent=parent, content=TwitchRewardWindowContent(layoutID=R.views.twitchRewardWindowContent, viewModelClazz=TwitchRewardWindowContentModel, ctx=ctx))
+
+
+class GiveAwayRewardWindowContent(RewardWindowContent):
+    __slots__ = ('__items', '_eventName', '_quest', '_vehicles')
+    _BONUSES_ORDER = ('dossier',
+     'badgesGroup',
+     'vehicles',
+     'items',
+     Currency.CRYSTAL,
+     Currency.CREDITS,
+     'customizations')
+
+    def handleNextButton(self):
+        self.getParentWindow().destroy()
+
+    def _getAwardComposer(self):
+        return AnniversaryAwardComposer(ADDITIONAL_AWARDS_COUNT, getAnniversaryPacker())
+
+
+class GiveAwayRewardWindow(RewardWindowBase):
+    __slots__ = ()
+
+    def __init__(self, ctx=None, parent=None):
+        super(GiveAwayRewardWindow, self).__init__(parent=parent, content=GiveAwayRewardWindowContent(layoutID=R.views.twitchRewardWindowContent, viewModelClazz=RewardWindowContentModel, ctx=ctx))
+
+    def _initialize(self):
+        super(GiveAwayRewardWindow, self)._initialize()
+        self.windowModel.setTitle(R.strings.ingame_gui.rewardWindow.anniversary_ga.winHeaderText)

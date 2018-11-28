@@ -23,6 +23,7 @@ class LobbyVehicleMarkerView(LobbyVehicleMarkerViewMeta):
     def _populate(self):
         super(LobbyVehicleMarkerView, self)._populate()
         self.addListener(events.HangarVehicleEvent.ON_HERO_TANK_LOADED, self.__onHeroTankLoaded, EVENT_BUS_SCOPE.LOBBY)
+        self.addListener(events.HangarVehicleEvent.ON_HERO_TANK_LABEL_UPDATE_REQUIRED, self.__onHeroTankLabelUpdateRequested, EVENT_BUS_SCOPE.LOBBY)
         self.addListener(events.HangarVehicleEvent.ON_HERO_TANK_DESTROY, self.__onHeroTankDestroy, EVENT_BUS_SCOPE.LOBBY)
         self.addListener(events.HangarVehicleEvent.HERO_TANK_MARKER, self.__onMarkerDisable, EVENT_BUS_SCOPE.LOBBY)
         self.addListener(CameraRelatedEvents.CAMERA_ENTITY_UPDATED, self.__onCameraEntityUpdated, EVENT_BUS_SCOPE.DEFAULT)
@@ -33,6 +34,7 @@ class LobbyVehicleMarkerView(LobbyVehicleMarkerViewMeta):
         super(LobbyVehicleMarkerView, self)._dispose()
         self.removeListener(CameraRelatedEvents.CAMERA_ENTITY_UPDATED, self.__onCameraEntityUpdated, EVENT_BUS_SCOPE.DEFAULT)
         self.removeListener(events.HangarVehicleEvent.ON_HERO_TANK_LOADED, self.__onHeroTankLoaded, EVENT_BUS_SCOPE.LOBBY)
+        self.removeListener(events.HangarVehicleEvent.ON_HERO_TANK_LABEL_UPDATE_REQUIRED, self.__onHeroTankLabelUpdateRequested, EVENT_BUS_SCOPE.LOBBY)
         self.removeListener(events.HangarVehicleEvent.ON_HERO_TANK_DESTROY, self.__onHeroTankDestroy, EVENT_BUS_SCOPE.LOBBY)
         self.removeListener(events.HangarVehicleEvent.HERO_TANK_MARKER, self.__onMarkerDisable, EVENT_BUS_SCOPE.LOBBY)
         self.removeListener(CameraRelatedEvents.FORCE_DISABLE_IDLE_PARALAX_MOVEMENT, self.__onMarkerDisable, EVENT_BUS_SCOPE.LOBBY)
@@ -44,6 +46,10 @@ class LobbyVehicleMarkerView(LobbyVehicleMarkerViewMeta):
         self.__destroyMarker()
 
     def __onHeroTankLoaded(self, event):
+        vehicle = event.ctx['entity']
+        self.__beginCreateMarker(vehicle)
+
+    def __onHeroTankLabelUpdateRequested(self, event):
         vehicle = event.ctx['entity']
         self.__beginCreateMarker(vehicle)
 

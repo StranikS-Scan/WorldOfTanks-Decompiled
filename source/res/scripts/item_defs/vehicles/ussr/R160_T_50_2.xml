@@ -47,6 +47,13 @@
       <undamaged>	vehicles/russian/R160_T_50_2/normal/lod0/Hull.model	</undamaged>
       <destroyed>	vehicles/russian/R160_T_50_2/crash/lod0/Hull.model	</destroyed>
       <exploded>	vehicles/russian/R160_T_50_2/crash/lod0/Hull.model	</exploded>
+      <sets>
+        <SD>
+          <undamaged>	vehicles/russian/R160_T_50_2/_skins/SD/normal/lod0/Hull.model	</undamaged>
+          <destroyed>	vehicles/russian/R160_T_50_2/_skins/SD/crash/lod0/Hull.model	</destroyed>
+          <exploded>	vehicles/russian/R160_T_50_2/_skins/SD/crash/lod0/Hull.model	</exploded>
+        </SD>
+      </sets>
     </models>
     <swinging>
       <lodDist>	FAR	</lodDist>
@@ -135,7 +142,7 @@
       <terrainResistance>	0.9 1 1.9	</terrainResistance>
       <brakeForce>	16000	</brakeForce>
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
-      <rotationSpeed>	45	</rotationSpeed>
+      <rotationSpeed>	48	</rotationSpeed>
       <shotDispersionFactors>
         <vehicleMovement>	0.12	</vehicleMovement>
         <vehicleRotation>	0.12	</vehicleRotation>
@@ -149,6 +156,13 @@
         <undamaged>	vehicles/russian/R160_T_50_2/normal/lod0/Chassis.model	</undamaged>
         <destroyed>	vehicles/russian/R160_T_50_2/crash/lod0/Chassis.model	</destroyed>
         <exploded>	vehicles/russian/R160_T_50_2/crash/lod0/Chassis.model	</exploded>
+        <sets>
+          <SD>
+            <undamaged>	vehicles/russian/R160_T_50_2/_skins/SD/normal/lod0/Chassis.model	</undamaged>
+            <destroyed>	vehicles/russian/R160_T_50_2/_skins/SD/crash/lod0/Chassis.model	</destroyed>
+            <exploded>	vehicles/russian/R160_T_50_2/_skins/SD/crash/lod0/Chassis.model	</exploded>
+          </SD>
+        </sets>
       </models>
       <traces>
         <lodDist>	MEDIUM	</lodDist>
@@ -276,6 +290,12 @@
           <UTiles>	1	</UTiles>
           <VTiles>	1	</VTiles>
         </atlas>
+        <modelSets>
+          <SD>
+            <segmentModelLeft>	vehicles/russian/R160_T_50_2/_skins/SD/track/segment.model	</segmentModelLeft>
+            <segmentModelRight>	vehicles/russian/R160_T_50_2/_skins/SD/track/segment.model	</segmentModelRight>
+          </SD>
+        </modelSets>
       </splineDesc>
       <trackThickness>	-0.0122449	</trackThickness>
       <trackNodes>
@@ -391,6 +411,11 @@
             <model>	vehicles/russian/R160_T_50_2/track/segment.model	</model>
             <length>	0.123988	</length>
           </mainSegment>
+          <modelSets>
+            <SD>
+              <mainSegmentModel>	vehicles/russian/R160_T_50_2/_skins/SD/track/segment.model	</mainSegmentModel>
+            </SD>
+          </modelSets>
           <collisionHull>
             <bottom>
               <part>
@@ -605,6 +630,11 @@
             <model>	vehicles/russian/R160_T_50_2/track/segment.model	</model>
             <length>	0.123795	</length>
           </mainSegment>
+          <modelSets>
+            <SD>
+              <mainSegmentModel>	vehicles/russian/R160_T_50_2/_skins/SD/track/segment.model	</mainSegmentModel>
+            </SD>
+          </modelSets>
           <collisionHull>
             <bottom>
               <part>
@@ -840,7 +870,7 @@
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	3200	</weight>
       <maxHealth>	116	</maxHealth>
-      <rotationSpeed>	48	</rotationSpeed>
+      <rotationSpeed>	52	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	120	</maxHealth>
         <maxRegenHealth>	60	</maxRegenHealth>
@@ -883,6 +913,13 @@
             <undamaged>	vehicles/russian/R160_T_50_2/normal/lod0/Gun_01.model	</undamaged>
             <destroyed>	vehicles/russian/R160_T_50_2/crash/lod0/Gun_01.model	</destroyed>
             <exploded>	vehicles/russian/R160_T_50_2/crash/lod0/Gun_01.model	</exploded>
+            <sets>
+              <SD>
+                <undamaged>	vehicles/russian/R160_T_50_2/_skins/SD/normal/lod0/Gun_01.model	</undamaged>
+                <destroyed>	vehicles/russian/R160_T_50_2/_skins/SD/crash/lod0/Gun_01.model	</destroyed>
+                <exploded>	vehicles/russian/R160_T_50_2/_skins/SD/crash/lod0/Gun_01.model	</exploded>
+              </SD>
+            </sets>
           </models>
           <hitTester>
             <collisionModelServer>	vehicles/russian/R160_T_50_2/collision/Gun_01.model	</collisionModelServer>
@@ -938,6 +975,13 @@
         <undamaged>	vehicles/russian/R160_T_50_2/normal/lod0/Turret_01.model	</undamaged>
         <destroyed>	vehicles/russian/R160_T_50_2/crash/lod0/Turret_01.model	</destroyed>
         <exploded>	vehicles/russian/R160_T_50_2/crash/lod0/Turret_01.model	</exploded>
+        <sets>
+          <SD>
+            <undamaged>	vehicles/russian/R160_T_50_2/_skins/SD/normal/lod0/Turret_01.model	</undamaged>
+            <destroyed>	vehicles/russian/R160_T_50_2/_skins/SD/crash/lod0/Turret_01.model	</destroyed>
+            <exploded>	vehicles/russian/R160_T_50_2/_skins/SD/crash/lod0/Turret_01.model	</exploded>
+          </SD>
+        </sets>
       </models>
       <hitTester>
         <collisionModelServer>	vehicles/russian/R160_T_50_2/collision/Turret_01.model	</collisionModelServer>

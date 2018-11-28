@@ -4,7 +4,7 @@ from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.Scaleform.locale.QUESTS import QUESTS
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.server_events import finders
-from gui.server_events.awards_formatters import QuestsBonusComposer, AWARDS_SIZES, PreformattedBonus, getPersonalMissionAwardPacker, getOperationPacker, formatCountLabel, LABEL_ALIGN, getLinkedSetAwardPacker, getHalloweenProgressAwardPacker, PACK_RENT_VEHICLES_BONUS
+from gui.server_events.awards_formatters import QuestsBonusComposer, AWARDS_SIZES, PreformattedBonus, getPersonalMissionAwardPacker, getOperationPacker, formatCountLabel, LABEL_ALIGN, getLinkedSetAwardPacker, getHalloweenProgressAwardPacker, PACK_RENT_VEHICLES_BONUS, PostProcessTags
 from gui.server_events.bonuses import FreeTokensBonus
 from gui.shared.formatters import text_styles
 from helpers import i18n, dependency
@@ -359,3 +359,19 @@ class MarathonAwardComposer(CurtailingAwardsComposer):
         if mergedBonuses:
             result.append(self._packMergedBonuses(mergedBonuses, size))
         return result
+
+
+class AnniversaryAwardComposer(CurtailingAwardsComposer):
+
+    def getFormattedBonuses(self, bonuses, size=AWARDS_SIZES.SMALL):
+        preformattedBonuses = self.getPreformattedBonuses(bonuses)
+        return self._packBonuses(self._doCustomSort(preformattedBonuses), size=AWARDS_SIZES.SMALL)
+
+    def _doCustomSort(self, bonuses):
+        for idx, bonus in enumerate(bonuses):
+            if PostProcessTags.IS_SUFFIX_BADGE in bonus.postProcessTags:
+                bonuses.pop(idx)
+                bonuses.append(bonus)
+                break
+
+        return bonuses

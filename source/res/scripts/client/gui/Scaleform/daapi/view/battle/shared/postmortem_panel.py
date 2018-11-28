@@ -287,11 +287,11 @@ class PostmortemPanel(_SummaryPostmortemPanel):
         if entityID:
             context = self.sessionProvider.getCtx()
             vInfoVO = context.getArenaDP().getVehicleInfo(entityID)
-            badgeID = vInfoVO.ranked.selectedBadge
-            icon = ''
-            if badgeID > 0:
-                icon = icons.makeImageTag(settings.getBadgeIconPath(settings.BADGES_ICONS.X24, badgeID), 24, 24, -5, 0)
-            names['killer'] = '{0}{1}'.format(icon, context.getPlayerFullName(entityID, showVehShortName=False))
+            prefixBadgeID = vInfoVO.ranked.selectedBadge
+            prefixIcon = ''
+            if prefixBadgeID > 0:
+                prefixIcon = icons.makeImageTag(settings.getBadgeIconPath(settings.BADGES_ICONS.X24, prefixBadgeID), 24, 24, -5, 0)
+            names['killer'] = '{0}{1}'.format(prefixIcon, context.getPlayerFullName(entityID, showVehShortName=False))
         device = deathInfo['device']
         if device:
             names['device'] = device

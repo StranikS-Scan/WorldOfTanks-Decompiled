@@ -244,6 +244,7 @@ class REQ_CRITERIA(object):
 
     class BADGE(object):
         SELECTED = RequestCriteria(PredicateCondition(lambda item: item.isSelected))
+        PREFIX_LAYOUT = RequestCriteria(PredicateCondition(lambda item: item.isPrefixLayout()))
         ACHIEVED = RequestCriteria(PredicateCondition(lambda item: item.isAchieved))
 
     class CUSTOMIZATION(object):
@@ -550,6 +551,9 @@ class ItemsRequester(IItemsRequester):
     def getStockVehicle(self, typeCompDescr, useInventory=False):
         if getTypeOfCompactDescr(typeCompDescr) == GUI_ITEM_TYPE.VEHICLE:
             proxy = self if useInventory else None
+            vehInvData = proxy.inventory.getItemData(typeCompDescr) if useInventory else None
+            if vehInvData is not None:
+                return self.itemsFactory.createVehicle(typeCompDescr=typeCompDescr, inventoryID=vehInvData.invID, proxy=proxy)
             return self.itemsFactory.createVehicle(typeCompDescr=typeCompDescr, proxy=proxy)
         else:
             return

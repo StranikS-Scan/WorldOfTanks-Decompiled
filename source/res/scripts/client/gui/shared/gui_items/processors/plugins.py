@@ -798,6 +798,7 @@ class BattleBoosterConfirmator(I18nMessageAbstractConfirmator):
 
 
 class BadgesValidator(SyncValidator):
+    _MAX_ALLOWED_SELECTED_BADGES = 1
 
     def __init__(self, badges):
         super(BadgesValidator, self).__init__()
@@ -805,6 +806,7 @@ class BadgesValidator(SyncValidator):
 
     def _validate(self):
         allBadges = self.itemsCache.items.getBadges()
+        selectedBadgesCount = 0
         for badgeID in self.badges:
             if badgeID not in allBadges:
                 return makeError('WRONG_ARGS_TYPE')
@@ -812,6 +814,6 @@ class BadgesValidator(SyncValidator):
             if not badge.isAchieved:
                 return makeError('NOT_UNLOCKED_BADGE')
             if badge.isSelected:
-                return makeError('ALREADY_SELECTED_BADGE')
+                selectedBadgesCount += 1
 
-        return makeSuccess()
+        return makeError('SELECTED_BADGES_LIMIT_REACHED') if selectedBadgesCount > self._MAX_ALLOWED_SELECTED_BADGES else makeSuccess()

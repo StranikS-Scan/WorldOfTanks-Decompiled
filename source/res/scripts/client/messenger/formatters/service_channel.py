@@ -1922,7 +1922,10 @@ class TokenQuestsFormatter(WaitItemsSyncFormatter):
                     camouflageUnlockedFor.add(operation.getVehicleBonus().intCD)
             for bonus in quest.getBonuses('dossier', []):
                 for badge in bonus.getBadges():
-                    badges.append(badge.getShortUserName())
+                    name = badge.getShortUserName()
+                    if name is None:
+                        LOG_ERROR("Couldn't find user name for the badge {}! Declare necessary localizations in the badge.po file!".format(badge.badgeID))
+                    badges.append(name)
 
         for qID in questIDs:
             if personal_missions.g_cache.isPersonalMission(qID):

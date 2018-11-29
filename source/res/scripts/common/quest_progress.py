@@ -21,6 +21,9 @@ class IProgress(object):
     def markAsVisited(self):
         raise NotImplementedError
 
+    def checkIsCompleted(self):
+        raise NotImplementedError
+
 
 class Progress(IProgress):
 
@@ -47,6 +50,9 @@ class Progress(IProgress):
 
     def isCumulative(self):
         return self.__isCumulative
+
+    def checkIsCompleted(self):
+        return False
 
     def getParam(self, name):
         return self.__params.get(name)
@@ -103,6 +109,9 @@ class BinaryProgress(Progress):
         super(BinaryProgress, self)._setCfg(**kwargs)
         self.__isDelay = isDelay
 
+    def checkIsCompleted(self):
+        return False
+
 
 class ValueProgress(Progress):
 
@@ -123,6 +132,9 @@ class ValueProgress(Progress):
             self.setValue(progress['value'])
             if self.__dynamicGoal:
                 self.setGoal(progress['goal'])
+
+    def checkIsCompleted(self):
+        return self.getValue() >= self.getGoal()
 
     def isDynamicGoal(self):
         return self.__dynamicGoal
@@ -168,6 +180,9 @@ class CounterProgress(Progress):
 
     def getCounter(self):
         return self.__counter
+
+    def checkIsCompleted(self):
+        return self.getUniqueCount() >= self.getUniqueGoal() and self.getTotalCount() >= self.getTotalGoal()
 
     def addValue(self, key, value):
         self.__counter[key] += value
@@ -219,6 +234,9 @@ class BattlesSeries(Progress):
 
     def getFailedBattles(self):
         return self.__battles.count(False)
+
+    def checkIsCompleted(self):
+        return False
 
     def setGoal(self, goal):
         if self.__goal != goal:
@@ -446,6 +464,7 @@ class BaseQuestProgress(object):
         self._wasFailed = False
         self._wasCompleted = False
         self._progressBeforeFailed = ''
+        self.updateIfConditionsAreAlreadySolved()
 
     def save(self):
         return self._progressStorage.save()
@@ -458,6 +477,19 @@ class BaseQuestProgress(object):
 
     def getMainProgress(self):
         return self._progressStorage.getMainProgress()
+
+    def updateIfConditionsAreAlreadySolved(self):
+        progresses = self._progressStorage.getMainProgress()
+        if not progresses:
+            return
+        for progress in progresses:
+            if progress.isAward() and progress.isCumulative() and progress.checkIsCompleted():
+                self.setCompleted(progress.getProgressID(), True)
+
+        isMainProgressCompleted = self.isCompleted(progresses[0].getProgressID())
+        for progress in (x for x in self._progressStorage.getProgresses().itervalues() if x not in progresses):
+            if progress.isAward() and progress.isCumulative() and progress.checkIsCompleted():
+                self.setCompleted(progress.getProgressID(), isMainProgressCompleted)
 
     def setCompleted(self, progressID, isMainProgressCompleted=True):
         progress = self._progressStorage.getProgress(progressID)

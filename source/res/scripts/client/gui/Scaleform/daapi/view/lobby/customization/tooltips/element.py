@@ -166,7 +166,9 @@ class ElementTooltip(BlocksTooltipData):
             if block:
                 items.append(block)
         if statsConfig.buyPrice or statsConfig.sellPrice or statsConfig.inventoryCount:
-            items.append(self._packInventoryBlock(statsConfig.buyPrice, statsConfig.sellPrice, statsConfig.inventoryCount))
+            inventoryBlocks = self._packInventoryBlock(statsConfig.buyPrice, statsConfig.sellPrice, statsConfig.inventoryCount)
+            if inventoryBlocks['data']['blocksData']:
+                items.append(inventoryBlocks)
         if not self._item.isUnlocked:
             items.append(self._packLockedBlock())
         if self._item.descriptor.filter:
@@ -325,7 +327,7 @@ class ElementTooltip(BlocksTooltipData):
         info = text_styles.concatStylesWithSpace(text_styles.stats(inventoryCount))
         padding = formatters.packPadding(left=83, bottom=0)
         titlePadding = formatters.packPadding(left=-1)
-        if showInventoryCount and (self._item.isRentable and inventoryCount > 0 or not self._item.isRentable):
+        if showInventoryCount and inventoryCount > 0:
             if self._item.isRentable:
                 title = text_styles.main(_ms(VEHICLE_CUSTOMIZATION.CUSTOMIZATION_TOOLTIP_INVENTORY_RENT_BATTLESLEFT, tankname=g_currentVehicle.item.shortUserName))
                 icon = RES_ICONS.MAPS_ICONS_LIBRARY_CLOCKICON_1

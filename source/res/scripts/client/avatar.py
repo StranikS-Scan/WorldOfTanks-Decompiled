@@ -223,6 +223,7 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
         if BattleReplay.g_replayCtrl.isPlaying:
             BattleReplay.g_replayCtrl.setDataCallback(CallbackDataNames.GUN_DAMAGE_SOUND, self.__gunDamagedSound)
         self.__aimingBooster = None
+        self.__hackSpaceKeeper = None
         return
 
     @proto_getter(PROTO_TYPE.BW_CHAT2)
@@ -342,8 +343,6 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
         uniprof.exitFromRegion('avatar.arena.battle')
         uniprof.enterToRegion('avatar.exiting')
         LOG_DEBUG('[INIT_STEPS] Avatar.onBecomeNonPlayer')
-        fakeSpaceKeeper = BigWorld.Model('')
-        BigWorld.addModel(fakeSpaceKeeper, self.spaceID)
         try:
             if self.gunRotator is not None:
                 self.gunRotator.destroy()
@@ -455,7 +454,9 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
         self.__initProgress = 0
         self.__vehicles = set()
         self.__gunDamagedShootSound = None
-        BigWorld.delModel(fakeSpaceKeeper)
+        if self.__hackSpaceKeeper is not None:
+            BigWorld.delModel(self.__hackSpaceKeeper)
+            self.__hackSpaceKeeper = None
         uniprof.exitFromRegion('avatar.exiting')
         return
 
@@ -1923,14 +1924,6 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
         if self.__initProgress < _INIT_STEPS.ALL_STEPS_PASSED or self.__initProgress & _INIT_STEPS.PLAYER_READY:
             return
         self.__initProgress |= _INIT_STEPS.PLAYER_READY
-        if self.isObserver():
-            import VehicleObserverGunRotator
-            self.gunRotator = VehicleObserverGunRotator.VehicleObserverGunRotator(self)
-        else:
-            import VehicleGunRotator
-            self.gunRotator = VehicleGunRotator.VehicleGunRotator(self)
-        self.positionControl = AvatarPositionControl.AvatarPositionControl(self)
-        self.__startGUI()
         self.inputHandler.setForcedGuiControlMode(self.__forcedGuiCtrlModeFlags)
         for v in BigWorld.entities.values():
             if v.inWorld and isinstance(v, Vehicle.Vehicle) and not v.isStarted:
@@ -1971,6 +1964,16 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
         BigWorld.callback(10.0, partial(BigWorld.pauseDRRAutoscaling, False))
         appearance_cache.onSpaceLoaded()
         self.__projectileMover.setSpaceID(self.spaceID)
+        if self.isObserver():
+            import VehicleObserverGunRotator
+            self.gunRotator = VehicleObserverGunRotator.VehicleObserverGunRotator(self)
+        else:
+            import VehicleGunRotator
+            self.gunRotator = VehicleGunRotator.VehicleGunRotator(self)
+        self.positionControl = AvatarPositionControl.AvatarPositionControl(self)
+        self.__startGUI()
+        self.__hackSpaceKeeper = BigWorld.Model('')
+        BigWorld.addModel(self.__hackSpaceKeeper, self.spaceID)
 
     def __initGUI(self):
         prereqs = []

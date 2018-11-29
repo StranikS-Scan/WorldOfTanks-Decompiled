@@ -51,6 +51,13 @@
       <undamaged>	vehicles/russian/R159_SU_130PM/normal/lod0/Hull.model	</undamaged>
       <destroyed>	vehicles/russian/R159_SU_130PM/crash/lod0/Hull.model	</destroyed>
       <exploded>	vehicles/russian/R159_SU_130PM/crash/lod0/Hull.model	</exploded>
+      <sets>
+        <SnowLeopard>
+          <undamaged>	vehicles/russian/R159_SU_130PM/_skins/SnowLeopard/normal/lod0/Hull.model	</undamaged>
+          <destroyed>	vehicles/russian/R159_SU_130PM/_skins/SnowLeopard/crash/lod0/Hull.model	</destroyed>
+          <exploded>	vehicles/russian/R159_SU_130PM/_skins/SnowLeopard/crash/lod0/Hull.model	</exploded>
+        </SnowLeopard>
+      </sets>
     </models>
     <swinging>
       <lodDist>	FAR	</lodDist>
@@ -146,6 +153,13 @@
         <undamaged>	vehicles/russian/R159_SU_130PM/normal/lod0/Chassis.model	</undamaged>
         <destroyed>	vehicles/russian/R159_SU_130PM/crash/lod0/Chassis.model	</destroyed>
         <exploded>	vehicles/russian/R159_SU_130PM/crash/lod0/Chassis.model	</exploded>
+        <sets>
+          <SnowLeopard>
+            <undamaged>	vehicles/russian/R159_SU_130PM/_skins/SnowLeopard/normal/lod0/Chassis.model	</undamaged>
+            <destroyed>	vehicles/russian/R159_SU_130PM/_skins/SnowLeopard/crash/lod0/Chassis.model	</destroyed>
+            <exploded>	vehicles/russian/R159_SU_130PM/_skins/SnowLeopard/crash/lod0/Chassis.model	</exploded>
+          </SnowLeopard>
+        </sets>
       </models>
       <traces>
         <lodDist>	MEDIUM	</lodDist>
@@ -856,7 +870,7 @@
           </armor>
           <turretYawLimits>	-77.5 77.5	</turretYawLimits>
           <pitchLimits>
-            <minPitch>	0 -37 0.025 -37 0.0277778 -29 0.0555556 -29 0.0583333 -10 0.941667 -10 0.944444 -29 0.972222 -29 0.975 -37 1 -37	</minPitch>
+            <minPitch>	0 -37 0.025 -37 0.0416667 -29 0.0555556 -29 0.0888889 -15 0.911111 -15 0.944444 -29 0.958333 -29 0.975 -37 1 -37	</minPitch>
             <maxPitch>	0 7 1 7	</maxPitch>
           </pitchLimits>
           <invisibilityFactorAtShot>	0.153	</invisibilityFactorAtShot>
@@ -872,6 +886,13 @@
             <undamaged>	vehicles/russian/R159_SU_130PM/normal/lod0/Gun_01.model	</undamaged>
             <destroyed>	vehicles/russian/R159_SU_130PM/crash/lod0/Gun_01.model	</destroyed>
             <exploded>	vehicles/russian/R159_SU_130PM/crash/lod0/Gun_01.model	</exploded>
+            <sets>
+              <SnowLeopard>
+                <undamaged>	vehicles/russian/R159_SU_130PM/_skins/SnowLeopard/normal/lod0/Gun_01.model	</undamaged>
+                <destroyed>	vehicles/russian/R159_SU_130PM/_skins/SnowLeopard/crash/lod0/Gun_01.model	</destroyed>
+                <exploded>	vehicles/russian/R159_SU_130PM/_skins/SnowLeopard/crash/lod0/Gun_01.model	</exploded>
+              </SnowLeopard>
+            </sets>
           </models>
           <hitTester>
             <collisionModelServer>	vehicles/russian/R159_SU_130PM/collision/Gun_01.model	</collisionModelServer>
@@ -927,6 +948,13 @@
         <undamaged>	vehicles/russian/R159_SU_130PM/normal/lod0/Turret_01.model	</undamaged>
         <destroyed>	vehicles/russian/R159_SU_130PM/crash/lod0/Turret_01.model	</destroyed>
         <exploded>	vehicles/russian/R159_SU_130PM/crash/lod0/Turret_01.model	</exploded>
+        <sets>
+          <SnowLeopard>
+            <undamaged>	vehicles/russian/R159_SU_130PM/_skins/SnowLeopard/normal/lod0/Turret_01.model	</undamaged>
+            <destroyed>	vehicles/russian/R159_SU_130PM/_skins/SnowLeopard/crash/lod0/Turret_01.model	</destroyed>
+            <exploded>	vehicles/russian/R159_SU_130PM/_skins/SnowLeopard/crash/lod0/Turret_01.model	</exploded>
+          </SnowLeopard>
+        </sets>
       </models>
       <hitTester>
         <collisionModelServer>	vehicles/russian/R159_SU_130PM/collision/Turret_01.model	</collisionModelServer>

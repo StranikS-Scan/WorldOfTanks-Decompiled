@@ -21,11 +21,11 @@ class SquadActionsHandler(AbstractActionsHandler):
     def usersStorage(self):
         return None
 
-    def setUnitChanged(self):
+    def setUnitChanged(self, loadHangar=False):
         flags = self._entity.getFlags()
         if self._entity.getPlayerInfo().isReady and flags.isInQueue():
             g_eventDispatcher.loadBattleQueue()
-        else:
+        elif loadHangar:
             g_eventDispatcher.loadHangar()
 
     def setPlayerInfoChanged(self):

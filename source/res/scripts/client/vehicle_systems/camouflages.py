@@ -60,14 +60,20 @@ def prepareFashions(isDamaged):
 
 
 def updateFashions(appearance):
-    if not appearance.isAlive:
-        return
-    fashions = list(appearance.fashions)
-    vDesc = appearance.typeDescriptor
-    outfit = appearance.outfit
     isDamaged = not appearance.isAlive
-    outfitData = getOutfitData(outfit, vDesc, isDamaged)
-    appearance.c11nComponent = Vehicular.C11nComponent(fashions, appearance.compoundModel, outfitData)
+    if isDamaged:
+        return
+    else:
+        fashions = list(appearance.fashions)
+        if not all(fashions):
+            _logger.warning('Skipping attempt to create C11nComponent for appearance with a missing fashion.')
+            appearance.c11nComponent = None
+            return
+        vDesc = appearance.typeDescriptor
+        outfit = appearance.outfit
+        outfitData = getOutfitData(outfit, vDesc, isDamaged)
+        appearance.c11nComponent = Vehicular.C11nComponent(fashions, appearance.compoundModel, outfitData)
+        return
 
 
 def getOutfitComponent(outfitCD):

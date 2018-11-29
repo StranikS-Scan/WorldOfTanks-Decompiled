@@ -479,10 +479,12 @@ def configurePhysicsMode(cfg, typeDesc, gravityFactor):
     offsZ = hullCenter[2]
     cfg['hullBoxOffsetZ'] = offsZ
     turretMin, turretMax, _ = typeDesc.turret.hitTester.bbox
+    _, gunMax, _ = typeDesc.gun.hitTester.bbox
     hullPos = typeDesc.chassis.hullPosition
     turretPos = typeDesc.hull.turretPositions[0]
     topPos = hullPos + turretPos
-    topPos.y += turretMax[1] - cfg['clearance'] - cfg['bodyHeight']
+    turretTopOffset = max(turretMax[1], typeDesc.turret.gunPosition[1] + gunMax[1])
+    topPos.y += turretTopOffset - cfg['clearance'] - cfg['bodyHeight']
     topPos.y = max(0.1, topPos.y * 0.8)
     topPos.y += cfg['bodyHeight'] * 0.5
     cfg['turretTopPos'] = topPos

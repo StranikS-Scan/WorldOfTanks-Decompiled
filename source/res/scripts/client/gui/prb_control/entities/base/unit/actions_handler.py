@@ -23,7 +23,7 @@ class AbstractActionsHandler(object):
     def setPlayersChanged(self):
         pass
 
-    def setUnitChanged(self):
+    def setUnitChanged(self, loadHangar=False):
         pass
 
     def executeInit(self, ctx):

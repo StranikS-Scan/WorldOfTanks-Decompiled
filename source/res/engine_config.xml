@@ -405,16 +405,16 @@
     <WWISE_low_profile>
       <memoryManager>
         <defaultPool>	8	</defaultPool>
-        <lowEnginePool>	5	</lowEnginePool>
-        <preparedPool>	80	</preparedPool>
+        <lowEnginePool>	6	</lowEnginePool>
         <streamingPool>	2	</streamingPool>
         <IOPoolSize>	4	</IOPoolSize>
+        <IOGranularity>	16	</IOGranularity>
       </memoryManager>
       <soundRender>
         <use_config>	true	</use_config>
         <HDR_lower_threshold>	-40	</HDR_lower_threshold>
         <max_voices>	70	</max_voices>
-        <low_sample_rate>	true	</low_sample_rate>
+        <low_sample_rate>	false	</low_sample_rate>
         <ambients>	false	</ambients>
         <reverbs>	false	</reverbs>
       </soundRender>
@@ -424,9 +424,6 @@
         </project>
       </voice_soundbanks>
       <SFX_soundbanks_loadonce>
-        <project>
-          <name>	plugin_media.bnk	</name>
-        </project>
         <project>
           <name>	eng_continental_R975.pck	</name>
         </project>
@@ -444,6 +441,18 @@
         </project>
         <project>
           <name>	eng_v55.pck	</name>
+        </project>
+        <project>
+          <name>	explosive_objects.pck	</name>
+        </project>
+        <project>
+          <name>	objects.pck	</name>
+        </project>
+        <project>
+          <name>	objects_generative.pck	</name>
+        </project>
+        <project>
+          <name>	plane.pck	</name>
         </project>
         <project>
           <name>	streams.pck	</name>
@@ -467,12 +476,30 @@
           <name>	gui.bnk	</name>
         </project>
         <project>
+          <name>	gui_ranked_battles.pck	</name>
+        </project>
+        <project>
           <name>	utility.bnk	</name>
+        </project>
+        <project>
+          <name>	plugin_media.bnk	</name>
         </project>
       </SFX_soundbanks_loadonce>
       <SFX_soundbanks_hangar>
         <project>
-          <name>	hangar_v2.bnk	</name>
+          <name>	fort_area.bnk	</name>
+        </project>
+        <project>
+          <name>	gui_ranked_battles.bnk	</name>
+        </project>
+        <project>
+          <name>	Personal_missions.bnk	</name>
+        </project>
+        <project>
+          <name>	customization.bnk	</name>
+        </project>
+        <project>
+          <name>	shop.bnk	</name>
         </project>
       </SFX_soundbanks_hangar>
       <SFX_soundbanks_login>

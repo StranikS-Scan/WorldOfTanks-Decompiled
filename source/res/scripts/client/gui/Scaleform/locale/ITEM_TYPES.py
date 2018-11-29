@@ -16,6 +16,7 @@ class ITEM_TYPES(object):
     VEHICLE_TAGS_AT_SPG_NAME = '#item_types:vehicle/tags/at-spg/name'
     VEHICLE_TAGS_AT_SPG_DESC = '#item_types:vehicle/tags/at-spg/desc'
     CHASSIS_NAME = '#item_types:chassis/name'
+    WHEEL_NAME = '#item_types:wheel/name'
     CHASSIS_DESC = '#item_types:chassis/desc'
     CHASSIS_TAGS = '#item_types:chassis/tags'
     TURRET_NAME = '#item_types:turret/name'

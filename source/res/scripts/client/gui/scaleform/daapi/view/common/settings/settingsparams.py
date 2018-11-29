@@ -87,15 +87,16 @@ class SettingsParams(object):
 
     def getApplyMethod(self, diff):
         newMonitorIndex = diff.get(settings_constants.GRAPHICS.MONITOR, g_monitorSettings.activeMonitor)
-        currentVideoMode = g_monitorSettings.windowMode
-        nextVideoMode = currentVideoMode
+        nextVideoMode = diff.get(settings_constants.GRAPHICS.VIDEO_MODE, g_monitorSettings.windowMode)
         requiresNextBattle = False
         havokSetting = diff.get('HAVOK_ENABLED', None)
         if havokSetting is not None:
             if havokSetting:
                 requiresNextBattle = not BigWorld.wg_isDestrCanBeActivated()
-        requiresNextBattle = requiresNextBattle or nextVideoMode == BigWorld.WindowModeExclusiveFullscreen and newMonitorIndex != g_monitorSettings.noRestartExclusiveFullscreenMonitorIndex
-        if requiresNextBattle:
+        restartNeeded = nextVideoMode == BigWorld.WindowModeExclusiveFullscreen and newMonitorIndex != g_monitorSettings.noRestartExclusiveFullscreenMonitorIndex
+        if restartNeeded:
+            method = options.APPLY_METHOD.RESTART
+        elif requiresNextBattle:
             method = options.APPLY_METHOD.NEXT_BATTLE
         else:
             method = options.APPLY_METHOD.NORMAL

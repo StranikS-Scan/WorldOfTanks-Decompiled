@@ -30,6 +30,7 @@ from CurrentVehicle import g_currentVehicle, g_currentPreviewVehicle
 from gui.hangar_cameras.hangar_camera_common import CameraMovementStates, CameraRelatedEvents
 from gui.shared import g_eventBus, EVENT_BUS_SCOPE
 from gui.ClientHangarSpace import hangarCFG
+_SHOULD_CHECK_EMBLEM_UNDER_GUN = False
 _HANGAR_UNDERGUN_EMBLEM_ANGLE_SHIFT = math.pi / 4
 EmblemPositionParams = namedtuple('EmblemPositionParams', ['position', 'direction', 'emblemDescription'])
 Anchor = namedtuple('Anchor', ['pos',
@@ -544,7 +545,8 @@ class HangarVehicleAppearance(ComponentSystem):
             if abs(direction.pitch - math.pi / 2) < 0.1:
                 direction = Math.Vector3(0, -1, 0) + upVecWorld * 0.01
                 direction.normalise()
-            direction = self.__correctEmblemLookAgainstGun(hitPos, direction, upVecWorld, emblem)
+            if _SHOULD_CHECK_EMBLEM_UNDER_GUN:
+                direction = self.__correctEmblemLookAgainstGun(hitPos, direction, upVecWorld, emblem)
             return EmblemPositionParams(hitPos, direction, emblem)
 
     def getCentralPointForArea(self, areaIdx):

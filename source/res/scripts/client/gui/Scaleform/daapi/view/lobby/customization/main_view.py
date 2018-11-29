@@ -619,53 +619,56 @@ class MainView(CustomizationMainViewMeta):
             s = struct.pack('bbh', customizationSlotIdVO.areaId, customizationSlotIdVO.slotId, customizationSlotIdVO.regionId)
             return struct.unpack('I', s)[0]
 
-        tabIndex = self.__ctx.currentTab
-        anchorVOs = []
-        slotType = TABS_ITEM_MAPPING[tabIndex]
-        maxItemsReached = False
-        visibleAnchors = self.__getVisibleAnchors(slotType)
-        if tabIndex == C11nTabs.STYLE:
-            anchorId = CustomizationSlotIdVO(Area.MISC, GUI_ITEM_TYPE.STYLE, 0)
-            uid = customizationSlotIdToUid(anchorId)
-            anchorVOs.append(CustomizationSlotUpdateVO(anchorId._asdict(), self.__ctx.modifiedStyle.intCD if self.__ctx.modifiedStyle is not None else 0, uid, None)._asdict())
+        if not g_currentVehicle.isPresent():
+            return
         else:
-            potentialPlaceTooltip = None
-            if slotType in QUANTITY_LIMITED_CUSTOMIZATION_TYPES:
-                outfit = self.__ctx.getModifiedOutfit(self.__ctx.currentSeason)
-                if self.__ctx.isC11nItemsQuantityLimitReached(outfit, slotType):
-                    maxItemsReached = True
-                    potentialPlaceTooltip = makeTooltip(body=VEHICLE_CUSTOMIZATION.CUSTOMIZATION_TOOLTIP_POTENTIALPROJDECALPLACE_TOLTIP_TEXT)
-            for areaId in Area.ALL:
-                slot = self.__ctx.currentOutfit.getContainer(areaId).slotFor(slotType)
-                for regionIdx, anchor in g_currentVehicle.item.getAnchors(slotType, areaId).iteritems():
-                    if anchor.slotId not in visibleAnchors:
-                        continue
-                    anchorId = CustomizationSlotIdVO(areaId, slotType, regionIdx)
-                    slotId = self.__ctx.getSlotIdByAnchorId(C11nId(areaId=areaId, slotType=slotType, regionIdx=regionIdx))
-                    itemIntCD = 0
-                    if slotId is not None:
-                        item = slot.getItem(slotId.regionIdx)
-                        itemIntCD = item.intCD if item is not None else 0
-                    tooltip = None
-                    if not itemIntCD:
-                        tooltip = potentialPlaceTooltip
-                    uid = customizationSlotIdToUid(anchorId)
-                    anchorVOs.append(CustomizationSlotUpdateVO(anchorId._asdict(), itemIntCD, uid, tooltip)._asdict())
+            tabIndex = self.__ctx.currentTab
+            anchorVOs = []
+            slotType = TABS_ITEM_MAPPING[tabIndex]
+            maxItemsReached = False
+            visibleAnchors = self.__getVisibleAnchors(slotType)
+            if tabIndex == C11nTabs.STYLE:
+                anchorId = CustomizationSlotIdVO(Area.MISC, GUI_ITEM_TYPE.STYLE, 0)
+                uid = customizationSlotIdToUid(anchorId)
+                anchorVOs.append(CustomizationSlotUpdateVO(anchorId._asdict(), self.__ctx.modifiedStyle.intCD if self.__ctx.modifiedStyle is not None else 0, uid, None)._asdict())
+            else:
+                potentialPlaceTooltip = None
+                if slotType in QUANTITY_LIMITED_CUSTOMIZATION_TYPES:
+                    outfit = self.__ctx.getModifiedOutfit(self.__ctx.currentSeason)
+                    if self.__ctx.isC11nItemsQuantityLimitReached(outfit, slotType):
+                        maxItemsReached = True
+                        potentialPlaceTooltip = makeTooltip(body=VEHICLE_CUSTOMIZATION.CUSTOMIZATION_TOOLTIP_POTENTIALPROJDECALPLACE_TOLTIP_TEXT)
+                for areaId in Area.ALL:
+                    slot = self.__ctx.currentOutfit.getContainer(areaId).slotFor(slotType)
+                    for regionIdx, anchor in g_currentVehicle.item.getAnchors(slotType, areaId).iteritems():
+                        if anchor.slotId not in visibleAnchors:
+                            continue
+                        anchorId = CustomizationSlotIdVO(areaId, slotType, regionIdx)
+                        slotId = self.__ctx.getSlotIdByAnchorId(C11nId(areaId=areaId, slotType=slotType, regionIdx=regionIdx))
+                        itemIntCD = 0
+                        if slotId is not None:
+                            item = slot.getItem(slotId.regionIdx)
+                            itemIntCD = item.intCD if item is not None else 0
+                        tooltip = None
+                        if not itemIntCD:
+                            tooltip = potentialPlaceTooltip
+                        uid = customizationSlotIdToUid(anchorId)
+                        anchorVOs.append(CustomizationSlotUpdateVO(anchorId._asdict(), itemIntCD, uid, tooltip)._asdict())
 
-        isRegions = tabIndex in C11nTabs.REGIONS
-        if isRegions:
-            typeRegions = CUSTOMIZATION_ALIASES.ANCHOR_TYPE_REGION
-        elif tabIndex == C11nTabs.PROJECTION_DECAL:
-            typeRegions = CUSTOMIZATION_ALIASES.ANCHOR_TYPE_PROJECTION_DECAL
-        else:
-            typeRegions = CUSTOMIZATION_ALIASES.ANCHOR_TYPE_DECAL
-        if update and isRegions:
-            self.as_updateAnchorDataS(CustomizationAnchorInitVO(anchorVOs, typeRegions, maxItemsReached)._asdict())
-        else:
-            self.as_setAnchorInitS(CustomizationAnchorInitVO(anchorVOs, typeRegions, maxItemsReached)._asdict())
-            if self.__propertiesSheet.isVisible:
-                self.__ctx.vehicleAnchorsUpdater.changeAnchorParams(self.__ctx.selectedAnchor, isDisplayed=isRegions, isAutoScalable=False)
-        return
+            isRegions = tabIndex in C11nTabs.REGIONS
+            if isRegions:
+                typeRegions = CUSTOMIZATION_ALIASES.ANCHOR_TYPE_REGION
+            elif tabIndex == C11nTabs.PROJECTION_DECAL:
+                typeRegions = CUSTOMIZATION_ALIASES.ANCHOR_TYPE_PROJECTION_DECAL
+            else:
+                typeRegions = CUSTOMIZATION_ALIASES.ANCHOR_TYPE_DECAL
+            if update and isRegions:
+                self.as_updateAnchorDataS(CustomizationAnchorInitVO(anchorVOs, typeRegions, maxItemsReached)._asdict())
+            else:
+                self.as_setAnchorInitS(CustomizationAnchorInitVO(anchorVOs, typeRegions, maxItemsReached)._asdict())
+                if self.__propertiesSheet.isVisible:
+                    self.__ctx.vehicleAnchorsUpdater.changeAnchorParams(self.__ctx.selectedAnchor, isDisplayed=isRegions, isAutoScalable=False)
+            return
 
     def __getVisibleAnchors(self, slotType):
         visibleAnchorsIds = set()

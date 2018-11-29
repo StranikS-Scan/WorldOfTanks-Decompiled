@@ -203,7 +203,7 @@ class CustomizationService(_ServiceItemShopMixin, _ServiceHelpersMixin, ICustomi
             self._helper.setSelectionMode(self._mode)
         else:
             self._helper = BigWorld.PyCustomizationHelper(entity.model, self._mode, self._isOver3dScene, self.__onRegionHighlighted)
-        self._helper.selectRegions(self._selectedRegion)
+        self.selectRegions(self._selectedRegion)
         self._isHighlighterActive = True
         return True
 
@@ -211,6 +211,7 @@ class CustomizationService(_ServiceItemShopMixin, _ServiceHelpersMixin, ICustomi
         entity = self.hangarSpace.getVehicleEntity()
         if entity and entity.appearance:
             entity.appearance.loadState.unsubscribe(self.resumeHighlighter, self.suspendHighlighter)
+        self._selectedRegion = ApplyArea.NONE
         self._helper = None
         self._needHelperRestart = False
         self._anchorPositions = None

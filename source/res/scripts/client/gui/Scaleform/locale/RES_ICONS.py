@@ -2130,6 +2130,8 @@ class RES_ICONS(object):
     MAPS_ICONS_LIBRARY_CRITS_TRACKDESTROYEDSMALL = '../maps/icons/library/crits/trackDestroyedSmall.png'
     MAPS_ICONS_LIBRARY_CRITS_TURRETROTATORCRITICALSMALL = '../maps/icons/library/crits/turretRotatorCriticalSmall.png'
     MAPS_ICONS_LIBRARY_CRITS_TURRETROTATORDESTROYEDSMALL = '../maps/icons/library/crits/turretRotatorDestroyedSmall.png'
+    MAPS_ICONS_LIBRARY_CRITS_WHEELCRITICALSMALL = '../maps/icons/library/crits/wheelCriticalSmall.png'
+    MAPS_ICONS_LIBRARY_CRITS_WHEELDESTROYEDSMALL = '../maps/icons/library/crits/wheelDestroyedSmall.png'
     MAPS_ICONS_LIBRARY_CYBERSPORT_ALERTICON = '../maps/icons/library/cybersport/alertIcon.png'
     MAPS_ICONS_LIBRARY_CYBERSPORT_CLOCKICON = '../maps/icons/library/cybersport/clockIcon.png'
     MAPS_ICONS_LIBRARY_CYBERSPORT_ICONDOWN = '../maps/icons/library/cybersport/iconDown.png'

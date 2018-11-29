@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/store/browser/ingame_shop_view.py
 import logging
 import BigWorld
+from PlayerEvents import g_playerEvents
 from adisp import process
 from gui.Scaleform.daapi import LobbySubView
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
@@ -33,12 +34,12 @@ class _LastSessionInfo(object):
         self.__url = ingameshop_helpers.getWebShopURL()
         self.__lifetime = secondsTimeout
         self.__nextRefreshTime = BigWorld.time() + self.__lifetime
+        self.__lastUserID = BigWorld.player().databaseID
 
     @property
     def url(self):
         hostUrl = ingameshop_helpers.getWebShopURL()
-        needResetUrl = BigWorld.time() >= self.__nextRefreshTime or not self.__url.startswith(hostUrl)
-        if needResetUrl:
+        if self.__needResetUrl(hostUrl):
             self.__url = hostUrl
         return self.__url
 
@@ -49,6 +50,9 @@ class _LastSessionInfo(object):
 
     def refreshLifetime(self):
         self.__nextRefreshTime = BigWorld.time() + self.__lifetime
+
+    def __needResetUrl(self, hostUrl):
+        return BigWorld.time() >= self.__nextRefreshTime or not self.__url.startswith(hostUrl) or BigWorld.player().databaseID != self.__lastUserID
 
 
 class IngameShopBase(IngameShopViewMeta):
@@ -114,13 +118,17 @@ class IngameShopBase(IngameShopViewMeta):
         self.as_setBrowserParamsS(self._browserParams)
 
     def _dispose(self):
-        _gelLastSessionInfo().refreshLifetime()
+        if self._useLastSessionUrl:
+            _gelLastSessionInfo().refreshLifetime()
         if self.__browser:
             self.__browser.onLoadStart -= self._updateLastUrl
         super(IngameShopBase, self)._dispose()
         if self.__browserId:
             self.browserCtrl.delBrowser(self.__browserId)
         self.fireEvent(events.IngameShopEvent(events.IngameShopEvent.INGAMESHOP_DEACTIVATED), scope=EVENT_BUS_SCOPE.DEFAULT)
+
+    def _refresh(self):
+        self.__browser.refresh()
 
     @staticmethod
     def _updateLastUrl(newUrl):
@@ -155,11 +163,13 @@ class IngameShopView(LobbySubView, IngameShopBase):
         if not self._url:
             self._url = _gelLastSessionInfo().url
         self.lobbyContext.getServerSettings().onServerSettingsChange += self.__onServerSettingsChanged
+        g_playerEvents.onShopResync += self.__onShopResync
 
     def onEscapePress(self):
         self.fireEvent(events.LoadViewEvent(VIEW_ALIAS.LOBBY_HANGAR), scope=EVENT_BUS_SCOPE.LOBBY)
 
     def _dispose(self):
+        g_playerEvents.onShopResync -= self.__onShopResync
         self.lobbyContext.getServerSettings().onServerSettingsChange -= self.__onServerSettingsChanged
         super(IngameShopView, self)._dispose()
 
@@ -167,6 +177,9 @@ class IngameShopView(LobbySubView, IngameShopBase):
         if 'ingameShop' in diff and not isIngameShopEnabled():
             _logger.info('INFO: InGameShop disabled by server settings')
             self.fireEvent(events.LoadViewEvent(VIEW_ALIAS.LOBBY_HANGAR), scope=EVENT_BUS_SCOPE.LOBBY)
+
+    def __onShopResync(self):
+        self._refresh()
 
 
 class IngameShopOverlay(IngameShopBase):

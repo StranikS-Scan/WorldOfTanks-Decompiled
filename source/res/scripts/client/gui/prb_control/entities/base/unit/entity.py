@@ -1101,7 +1101,8 @@ class UnitEntity(_UnitEntity):
             self.resetPlayerState()
         self._invokeListeners('onUnitFlagsChanged', flags, timeLeftInIdle)
         if not flags.isOnlyRosterWaitChanged():
-            self._actionsHandler.setUnitChanged()
+            loadHangar = flags.isInQueueChanged()
+            self._actionsHandler.setUnitChanged(loadHangar)
         members = unit.getMembers()
         diff = []
         for slotIdx in self._rosterSettings.getAllSlotsRange():

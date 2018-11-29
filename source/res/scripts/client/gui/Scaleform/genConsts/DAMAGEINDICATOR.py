@@ -42,3 +42,4 @@ class DAMAGEINDICATOR(object):
     TRACKS_CIRCLE = 'tracksCircle'
     TRIPLEX_CIRCLE = 'triplexCircle'
     TURRET_CIRCLE = 'turretCircle'
+    WHEEL_CIRCLE = 'wheelCircle'

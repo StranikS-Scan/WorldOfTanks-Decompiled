@@ -44,6 +44,9 @@ class ClientProgress(quest_progress.IProgress):
     def getProgressID(self):
         return self._commonProgress.getProgressID()
 
+    def checkIsCompleted(self):
+        return False
+
     def updateProgress(self, progress):
         self._commonProgress.updateProgress(progress)
 

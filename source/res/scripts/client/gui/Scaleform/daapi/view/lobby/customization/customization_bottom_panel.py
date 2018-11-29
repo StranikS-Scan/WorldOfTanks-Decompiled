@@ -58,9 +58,9 @@ class CustomizationBottomPanel(CustomizationBottomPanelMeta):
         self.__ctx.onNextCarouselItemInstalled += self.__onNextCarouselItemInstalled
         g_clientUpdateManager.addMoneyCallback(self.__setBottomPanelBillData)
         self.__updateTabs(self.__ctx.currentTab)
-        custSett = AccountSettings.getSettings(CUSTOMIZATION_SECTION)
-        showSwitcherCounter = not custSett.get(PROJECTION_DECAL_TAB_SHOWN_FIELD, False)
-        self.__setFooterInitData(showSwitcherCounter)
+        switcherCounterNotShown = not AccountSettings.getSettings(CUSTOMIZATION_SECTION).get(PROJECTION_DECAL_TAB_SHOWN_FIELD, False)
+        appliedProjectionDecals = C11nTabs.PROJECTION_DECAL in self.__ctx.visibleTabs
+        self.__setFooterInitData(switcherCounterNotShown and appliedProjectionDecals)
         self.__setBottomPanelBillData()
         self.as_showPopoverBtnIconS(RES_ICONS.MAPS_ICONS_CUSTOMIZATION_ITEMS_POPOVER_SUMMER_LIST30X16)
 

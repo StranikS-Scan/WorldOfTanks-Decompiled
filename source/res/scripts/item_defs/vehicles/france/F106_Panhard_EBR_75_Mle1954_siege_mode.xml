@@ -125,8 +125,6 @@
       <price>	30000	</price>
       <notInShop>	true	</notInShop>
       <armor>
-        <wheel>	10	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-        </wheel>
         <armor_9>	5	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
         </armor_9>
       </armor>
@@ -173,6 +171,7 @@
           <name>	WD_L0	</name>
           <radius>	0.617366	</radius>
           <isLeading>	true	</isLeading>
+          <deflatable>	true	</deflatable>
           <steeringProcessor>	True	</steeringProcessor>
           <scrollProcessor>
             <connectedToEngine>	True	</connectedToEngine>
@@ -197,6 +196,7 @@
           <name>	WD_L1	</name>
           <radius>	0.617366	</radius>
           <isLeading>	true	</isLeading>
+          <deflatable>	true	</deflatable>
           <steeringProcessor>	True	</steeringProcessor>
           <scrollProcessor>
             <connectedToEngine>	True	</connectedToEngine>
@@ -234,7 +234,7 @@
             <collisionModelClient>	vehicles/french/F106_Panhard_EBR_75_Mle1954/collision_client/Wheel_L_02.model	</collisionModelClient>
           </hitTester>
           <armor>
-            <wheel>	5	</wheel>
+            <wheel>	10	</wheel>
           </armor>
         </wheel>
         <wheel>
@@ -255,7 +255,7 @@
             <collisionModelClient>	vehicles/french/F106_Panhard_EBR_75_Mle1954/collision_client/Wheel_L_03.model	</collisionModelClient>
           </hitTester>
           <armor>
-            <wheel>	5	</wheel>
+            <wheel>	10	</wheel>
           </armor>
         </wheel>
         <wheel>
@@ -263,6 +263,7 @@
           <name>	WD_R0	</name>
           <radius>	0.617366	</radius>
           <isLeading>	true	</isLeading>
+          <deflatable>	true	</deflatable>
           <steeringProcessor>	True	</steeringProcessor>
           <scrollProcessor>
             <connectedToEngine>	True	</connectedToEngine>
@@ -279,7 +280,7 @@
             <collisionModelClient>	vehicles/french/F106_Panhard_EBR_75_Mle1954/collision_client/Wheel_R_01.model	</collisionModelClient>
           </hitTester>
           <armor>
-            <wheel>	5	</wheel>
+            <wheel>	10	</wheel>
           </armor>
         </wheel>
         <wheel>
@@ -287,6 +288,7 @@
           <name>	WD_R1	</name>
           <radius>	0.617366	</radius>
           <isLeading>	true	</isLeading>
+          <deflatable>	true	</deflatable>
           <steeringProcessor>	True	</steeringProcessor>
           <scrollProcessor>
             <connectedToEngine>	True	</connectedToEngine>
@@ -303,7 +305,7 @@
             <collisionModelClient>	vehicles/french/F106_Panhard_EBR_75_Mle1954/collision_client/Wheel_R_01.model	</collisionModelClient>
           </hitTester>
           <armor>
-            <wheel>	5	</wheel>
+            <wheel>	10	</wheel>
           </armor>
         </wheel>
         <wheel>
@@ -685,7 +687,7 @@
     <detailed>
       <engines>
         <Panhard_12H_6000_54>
-          <smplEnginePower>	950	</smplEnginePower>
+          <smplEnginePower>	780	</smplEnginePower>
           <smplFwMaxSpeed>	85	</smplFwMaxSpeed>
         </Panhard_12H_6000_54>
       </engines>

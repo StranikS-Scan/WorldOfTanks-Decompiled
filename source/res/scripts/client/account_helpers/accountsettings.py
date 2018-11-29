@@ -466,8 +466,6 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                 'carouselType': 0,
                 'doubleCarouselType': 0,
                 'vehicleCarouselStats': True,
-                'siegeModeHintCounter': 10,
-                'wheeledModeHintCounter': 6,
                 WHEELED_DEATH_DELAY_COUNT: 10,
                 NEW_SETTINGS_COUNTER: {'GameSettings': {'gameplay_epicStandard': True,
                                                         'c11nHistoricallyAccurate': True,
@@ -951,6 +949,10 @@ class AccountSettings(object):
                     accSettings = AccountSettings.__readSection(section, KEY_SETTINGS)
                     if CUSTOMIZATION_SECTION in accSettings.keys():
                         accSettings.write(CUSTOMIZATION_SECTION, _pack({}))
+                    obsoleteKeys = ('questProgressShowsCount', 'trajectoryViewHintCounter', 'siegeModeHintCounter')
+                    for sectionName in obsoleteKeys:
+                        if sectionName in accSettings.keys():
+                            accSettings.deleteSection(sectionName)
 
             ads.writeInt('version', AccountSettings.version)
         return

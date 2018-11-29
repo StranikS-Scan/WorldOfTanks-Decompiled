@@ -15,7 +15,10 @@ from skeletons.gui.server_events import IEventsCache
 from gui.customization.shared import createCustomizationBaseRequestCriteria
 
 def comparisonKey(item):
-    return (TYPES_ORDER.index(item.itemTypeID), item.groupID, item.id)
+    return (TYPES_ORDER.index(item.itemTypeID),
+     not item.isRare(),
+     item.groupID,
+     item.id)
 
 
 class CustomizationBookmarkVO(object):

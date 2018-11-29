@@ -944,6 +944,7 @@ class SpeedometerWheeledTech(CrosshairPlugin):
         elif stateID == VEHICLE_VIEW_STATE.DEVICES:
             if _DEVICE_ENGINE_NAME in value and _DEVICE_REPAIRED in value:
                 self.parentObj.as_stopEngineCrushErrorS()
+                self.__stopEngineDamageWarning()
         elif stateID == VEHICLE_VIEW_STATE.BURNOUT_UNAVAILABLE_DUE_TO_BROKEN_ENGINE:
             if not self.__destroyTimerShown:
                 self.parentObj.as_setEngineCrushErrorS(INGAME_GUI.BURNOUT_HINT_ENGINEDAMAGED)

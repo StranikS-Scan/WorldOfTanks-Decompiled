@@ -75,7 +75,8 @@ VEHICLE_DEVICE_TYPE_NAMES = ('engine',
  'track',
  'gun',
  'turretRotator',
- 'surveyingDevice')
+ 'surveyingDevice',
+ 'wheel')
 VEHICLE_TANKMAN_TYPE_NAMES = ('commander',
  'driver',
  'radioman',

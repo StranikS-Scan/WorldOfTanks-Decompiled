@@ -2132,6 +2132,8 @@ class VEHICLE_CUSTOMIZATION(object):
     SPECIAL_STYLE_COUNTERATTACK_DESC = '#vehicle_customization:special_style/Counterattack_desc'
     SPECIAL_STYLE_BLACKFRIDAY = '#vehicle_customization:special_style/BlackFriday'
     SPECIAL_STYLE_WGFEST2018 = '#vehicle_customization:special_style/WGFest2018'
+    SPECIAL_STYLE_SNOW_LEOPARD = '#vehicle_customization:special_style/snow_leopard'
+    SPECIAL_STYLE_SNOW_LEOPARD_DESCRIPTION = '#vehicle_customization:special_style/snow_leopard_description'
     CUSTOMIZATION_POPOVER_STYLE_SUMMER = '#vehicle_customization:customization/popover/style/summer'
     CUSTOMIZATION_POPOVER_STYLE_DESERT = '#vehicle_customization:customization/popover/style/desert'
     CUSTOMIZATION_POPOVER_STYLE_ANY = '#vehicle_customization:customization/popover/style/any'

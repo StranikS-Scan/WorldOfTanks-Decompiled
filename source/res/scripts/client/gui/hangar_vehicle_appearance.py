@@ -222,20 +222,23 @@ class HangarVehicleAppearance(ComponentSystem):
             self.__isVehicleDestroyed = True
         self.__vDesc = vDesc
         resources = camouflages.getCamoPrereqs(self.__outfit, vDesc)
+        modelsSet = self.__outfit.modelsSet
         splineDesc = vDesc.chassis.splineDesc
         if splineDesc is not None:
-            resources.append(splineDesc.segmentModelLeft)
-            resources.append(splineDesc.segmentModelRight)
+            resources.append(splineDesc.segmentModelLeft(modelsSet))
+            resources.append(splineDesc.segmentModelRight(modelsSet))
             if splineDesc.leftDesc is not None:
                 resources.append(splineDesc.leftDesc)
             if splineDesc.rightDesc is not None:
                 resources.append(splineDesc.rightDesc)
-            if splineDesc.segment2ModelLeft is not None:
-                resources.append(splineDesc.segment2ModelLeft)
-            if splineDesc.segment2ModelRight is not None:
-                resources.append(splineDesc.segment2ModelRight)
+            segment2ModelLeft = splineDesc.segment2ModelLeft(modelsSet)
+            if segment2ModelLeft is not None:
+                resources.append(segment2ModelLeft)
+            segment2ModelRight = splineDesc.segment2ModelRight(modelsSet)
+            if segment2ModelRight is not None:
+                resources.append(segment2ModelRight)
         from vehicle_systems import model_assembler
-        resources.append(model_assembler.prepareCompoundAssembler(self.__vDesc, ModelsSetParams(self.__outfit.modelsSet, self.__vState), self.__spaceId))
+        resources.append(model_assembler.prepareCompoundAssembler(self.__vDesc, ModelsSetParams(modelsSet, self.__vState), self.__spaceId))
         g_eventBus.handleEvent(CameraRelatedEvents(CameraRelatedEvents.VEHICLE_LOADING, ctx={'started': True,
          'vEntityId': self.__vEntity.id}), scope=EVENT_BUS_SCOPE.DEFAULT)
         cfg = hangarCFG()
@@ -258,7 +261,7 @@ class HangarVehicleAppearance(ComponentSystem):
         resources.append(collisionAssembler)
         physicalTracksBuilders = vDesc.chassis.physicalTracks
         for name, builder in physicalTracksBuilders.iteritems():
-            resources.append(builder.createLoader('{0}PhysicalTrack'.format(name)))
+            resources.append(builder.createLoader('{0}PhysicalTrack'.format(name), modelsSet))
 
         BigWorld.loadResourceListBG(tuple(resources), makeCallbackWeak(self.__onResourcesLoaded, self.__curBuildInd))
         return
@@ -290,7 +293,12 @@ class HangarVehicleAppearance(ComponentSystem):
             self.refresh()
 
     def _getActiveOutfit(self):
-        if g_currentPreviewVehicle.isPresent() or not g_currentVehicle.isPresent():
+        if g_currentPreviewVehicle.isPresent():
+            outfit = g_currentPreviewVehicle.getOutfit(SeasonType.WINTER)
+            if outfit:
+                return outfit
+            return self.itemsFactory.createOutfit()
+        elif not g_currentVehicle.isPresent():
             return self.itemsFactory.createOutfit()
         else:
             vehicle = g_currentVehicle.item
@@ -325,7 +333,7 @@ class HangarVehicleAppearance(ComponentSystem):
             chassisFashion = self.__fashions.chassis
             self.wheelsAnimator = model_assembler.createWheelsAnimator(self.__vEntity.model, self.collisions, ColliderTypes.VEHICLE_COLLIDER, self.__vDesc, None, lambda : 0, wheelsScroll, wheelsSteering, self.__vEntity.id, chassisFashion)
             self.trackNodesAnimator = model_assembler.createTrackNodesAnimator(self.__vEntity.model, self.__vDesc, self.wheelsAnimator)
-            splineTracksImpl = model_assembler.setupSplineTracks(chassisFashion, self.__vDesc, self.__vEntity.model, self.__resources)
+            splineTracksImpl = model_assembler.setupSplineTracks(chassisFashion, self.__vDesc, self.__vEntity.model, self.__resources, self.__outfit.modelsSet)
             model_assembler.assembleTracks(self.__resources, self.__vDesc, self, splineTracksImpl, True, True)
             dirtEnabled = BigWorld.WG_dirtEnabled() and 'HD' in self.__vDesc.type.tags
             if dirtEnabled:

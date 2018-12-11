@@ -26,6 +26,7 @@ from gui.Scaleform.managers.PopoverManager import PopoverManager
 from gui.Scaleform.managers.SoundManager import SoundManager
 from gui.Scaleform.managers.TweenSystem import TweenManager
 from gui.Scaleform.managers.UtilsManager import UtilsManager
+from gui.Scaleform.managers.fade_manager import FadeManager
 from gui.Scaleform.managers.voice_chat import LobbyVoiceChatManager
 from gui.impl.pub import UserWindowFlags
 from gui.shared import EVENT_BUS_SCOPE
@@ -41,6 +42,8 @@ class LobbyEntry(AppEntry):
 
     def __init__(self, appNS):
         super(LobbyEntry, self).__init__(UserWindowFlags.LOBBY_MAIN_WND, 'lobby.swf', appNS)
+        self.__fadeManager = None
+        return
 
     @property
     def cursorMgr(self):
@@ -50,19 +53,31 @@ class LobbyEntry(AppEntry):
     def waitingManager(self):
         return self.__getWaitingFromContainer()
 
+    @property
+    def fadeManager(self):
+        return self.__fadeManager
+
     @uniprof.regionDecorator(label='gui.lobby', scope='enter')
     def afterCreate(self):
         super(LobbyEntry, self).afterCreate()
         from gui.Scaleform.Waiting import Waiting
         Waiting.setWainingViewGetter(self.__getWaitingFromContainer)
+        self.__fadeManager.setup()
 
     @uniprof.regionDecorator(label='gui.lobby', scope='exit')
     def beforeDelete(self):
         from gui.Scaleform.Waiting import Waiting
         Waiting.setWainingViewGetter(None)
         Waiting.close()
+        if self.__fadeManager:
+            self.__fadeManager.destroy()
+            self.__fadeManager = None
         super(LobbyEntry, self).beforeDelete()
         return
+
+    def _createManagers(self):
+        super(LobbyEntry, self)._createManagers()
+        self.__fadeManager = FadeManager()
 
     def _createLoaderManager(self):
         return LoaderManager(self.proxy)

@@ -25,7 +25,7 @@ from helpers.i18n import makeString as _ms
 from gui.shared.personality import ServicesLocator
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.server_events import IEventsCache
-from skeletons.gui.game_control import IQuestsController, IMarathonEventsController
+from skeletons.gui.game_control import IQuestsController, IMarathonEventsController, IFestivityController
 from skeletons.gui.event_boards_controllers import IEventBoardController
 from skeletons.connection_mgr import IConnectionManager
 from gui.prb_control import prb_getters
@@ -190,6 +190,7 @@ class HangarHeader(HangarHeaderMeta, IGlobalListener, IEventBoardsListener):
     _connectionMgr = dependency.descriptor(IConnectionManager)
     _lobbyContext = dependency.descriptor(ILobbyContext)
     _marathonsCtrl = dependency.descriptor(IMarathonEventsController)
+    _festivityController = dependency.descriptor(IFestivityController)
 
     def __init__(self):
         super(HangarHeader, self).__init__()
@@ -227,6 +228,7 @@ class HangarHeader(HangarHeaderMeta, IGlobalListener, IEventBoardsListener):
         self.__screenWidth = BigWorld.screenSize()[0]
         self._eventsCache.onSyncCompleted += self.update
         self._eventsCache.onProgressUpdated += self.update
+        self._festivityController.onStateChanged += self.update
         g_clientUpdateManager.addCallbacks({'inventory.1': self.update,
          'stats.tutorialsCompleted': self.update})
         if self._eventsController:
@@ -241,6 +243,7 @@ class HangarHeader(HangarHeaderMeta, IGlobalListener, IEventBoardsListener):
         self._marathonsCtrl.onFlagUpdateNotify -= self.update
         self._eventsCache.onSyncCompleted -= self.update
         self._eventsCache.onProgressUpdated -= self.update
+        self._festivityController.onStateChanged -= self.update
         self._currentVehicle = None
         self.__screenWidth = None
         if self._eventsController:
@@ -259,7 +262,8 @@ class HangarHeader(HangarHeaderMeta, IGlobalListener, IEventBoardsListener):
              'tankInfo': text_styles.concatStylesToMultiLine(text_styles.promoSubTitle(vehicle.shortUserName), text_styles.stats(MENU.levels_roman(vehicle.level))),
              'isPremIGR': vehicle.isPremiumIGR,
              'isVisible': True,
-             'quests': quests}
+             'quests': quests,
+             'isNYWidgetVisible': self._festivityController.isEnabled()}
         else:
             headerVO = {'isVisible': False,
              'quests': []}
@@ -375,16 +379,17 @@ class HangarHeader(HangarHeaderMeta, IGlobalListener, IEventBoardsListener):
         quests = self._questController.getQuestForVehicle(vehicle)
         totalCount = len(quests)
         completedQuests = len([ q for q in quests if q.isCompleted() ])
+        festivityFlagData = self._festivityController.getHangarQuestsFlagData()
         if totalCount > 0:
             if completedQuests != totalCount:
                 label = _ms(MENU.hangarHeaderBattleQuestsLabel(LABEL_STATE.ACTIVE), total=totalCount - completedQuests)
             else:
                 label = icons.makeImageTag(RES_ICONS.MAPS_ICONS_LIBRARY_OUTLINE_QUESTS_ALL_DONE)
-            commonQuestsIcon = RES_ICONS.MAPS_ICONS_LIBRARY_OUTLINE_QUESTS_AVAILABLE
+            commonQuestsIcon = festivityFlagData.icon or RES_ICONS.MAPS_ICONS_LIBRARY_OUTLINE_QUESTS_AVAILABLE
         else:
-            commonQuestsIcon = RES_ICONS.MAPS_ICONS_LIBRARY_OUTLINE_QUESTS_DISABLED
+            commonQuestsIcon = festivityFlagData.iconDisabled if hasattr(festivityFlagData, 'iconDisabled') and festivityFlagData.iconDisabled is not None else RES_ICONS.MAPS_ICONS_LIBRARY_OUTLINE_QUESTS_DISABLED
             label = ''
-        quests = [self._headerQuestFormaterVo(totalCount > 0, commonQuestsIcon, label, HANGAR_HEADER_QUESTS.QUEST_TYPE_COMMON, tooltip=TOOLTIPS_CONSTANTS.QUESTS_PREVIEW, isTooltipSpecial=True)]
+        quests = [self._headerQuestFormaterVo(totalCount > 0, commonQuestsIcon, label, HANGAR_HEADER_QUESTS.QUEST_TYPE_COMMON, festivityFlagData.flagBackground, tooltip=TOOLTIPS_CONSTANTS.QUESTS_PREVIEW, isTooltipSpecial=True)]
         return self._wrapQuestGroup(HANGAR_HEADER_QUESTS.QUEST_GROUP_COMMON, '', quests)
 
     def __getMarathonQuestsVO(self, vehicle, isGroupped=False):

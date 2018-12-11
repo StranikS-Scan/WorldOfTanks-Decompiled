@@ -4,7 +4,7 @@ import copy
 from collections import namedtuple
 from functools import partial
 import BigWorld
-from constants import EVENT_TYPE as _ET, DOSSIER_TYPE
+from constants import EVENT_TYPE as _ET, DOSSIER_TYPE, LOOTBOX_TOKEN_PREFIX
 from debug_utils import LOG_ERROR, LOG_CURRENT_EXCEPTION
 from dossiers2.ui.achievements import ACHIEVEMENT_BLOCK, BADGES_BLOCK
 from gui import makeHtmlString
@@ -29,6 +29,7 @@ from helpers import getLocalizedData, i18n
 from helpers import time_utils
 from items import vehicles, tankmen
 from items.components import c11n_components as cc
+from items.tankmen import RECRUIT_TMAN_TOKEN_PREFIX
 from personal_missions import PM_BRANCH, PM_BRANCH_TO_FREE_TOKEN_NAME
 from shared_utils import makeTupleByDict
 from skeletons.gui.customization import ICustomizationService
@@ -69,11 +70,12 @@ def _isBadge(block):
 class SimpleBonus(object):
     itemsCache = dependency.descriptor(IItemsCache)
 
-    def __init__(self, name, value, isCompensation=False, ctx=None):
+    def __init__(self, name, value, isCompensation=False, ctx=None, compensationReason=None):
         self._name = name
         self._value = value
         self._isCompensation = isCompensation
         self._ctx = ctx or {}
+        self._compensationReason = compensationReason
 
     def getName(self):
         return self._name
@@ -86,6 +88,9 @@ class SimpleBonus(object):
 
     def isCompensation(self):
         return self._isCompensation
+
+    def getCompensationReason(self):
+        return self._compensationReason
 
     def getContext(self):
         return self._ctx
@@ -300,7 +305,8 @@ class TokensBonus(SimpleBonus):
     def getTokens(self):
         result = {}
         for tID, d in self._value.iteritems():
-            result[tID] = self._TOKEN_RECORD(tID, d.get('expires', {'at': None}).values()[0], d.get('count', 0), d.get('limit'))
+            expires = d.get('expires', {'at': None}) or {'at': None}
+            result[tID] = self._TOKEN_RECORD(tID, expires.values()[0], d.get('count', 0), d.get('limit'))
 
         return result
 
@@ -333,6 +339,38 @@ class BattleTokensBonus(TokensBonus):
         return i18n.makeString(webCache.getTokenInfo(styleID))
 
 
+class LootBoxTokensBonus(TokensBonus):
+    itemsCache = dependency.descriptor(IItemsCache)
+
+    def __init__(self, value, isCompensation=False, ctx=None):
+        super(TokensBonus, self).__init__('battleToken', value, isCompensation, ctx)
+
+    def isShowInGUI(self):
+        return True
+
+    def format(self):
+        return ', '.join(self.formattedList())
+
+    def formattedList(self):
+        result = []
+        for tokenID, tokenVal in self._value.iteritems():
+            lootBox = self.itemsCache.items.tokens.getLootBoxByTokenID(tokenID)
+            if lootBox is not None:
+                result.append(makeHtmlString('html_templates:lobby/quests/bonuses', 'lootBox', {'lootBoxType': lootBox.getType(),
+                 'value': tokenVal['count']}))
+
+        return result
+
+
+class TmanTemplateTokensBonus(TokensBonus):
+
+    def __init__(self, value, isCompensation=False, ctx=None):
+        super(TokensBonus, self).__init__('tmanToken', value, isCompensation, ctx)
+
+    def isShowInGUI(self):
+        return True
+
+
 def personalMissionsTokensFactory(name, value, isCompensation=False, ctx=None):
     from gui.server_events.finders import PERSONAL_MISSION_TOKEN
     completionTokenID = PERSONAL_MISSION_TOKEN % (ctx['campaignID'], ctx['operationID'])
@@ -343,6 +381,18 @@ def personalMissionsTokensFactory(name, value, isCompensation=False, ctx=None):
         if tID == completionTokenID:
             result.append(CompletionTokensBonus({tID: tValue}, isCompensation, ctx))
         result.append(TokensBonus(name, {tID: tValue}, isCompensation, ctx))
+
+    return result
+
+
+def tokensFactory(name, value, isCompensation=False, ctx=None):
+    result = []
+    for tID, tValue in value.iteritems():
+        if tID.startswith(LOOTBOX_TOKEN_PREFIX):
+            result.append(LootBoxTokensBonus({tID: tValue}, isCompensation, ctx))
+        if tID.startswith(RECRUIT_TMAN_TOKEN_PREFIX):
+            result.append(TmanTemplateTokensBonus({tID: tValue}, isCompensation, ctx))
+        result.append(BattleTokensBonus(name, {tID: tValue}, isCompensation, ctx))
 
     return result
 
@@ -570,8 +620,9 @@ class VehiclesBonus(SimpleBonus):
 
     @classmethod
     def isNonZeroCompensation(cls, vehInfo):
+        compensatedNumber = vehInfo.get('compensatedNumber', 0)
         compensation = vehInfo.get('customCompensation')
-        if compensation:
+        if compensatedNumber and compensation is not None:
             money = Money(*compensation)
             if money == _ZERO_COMPENSATION_MONEY:
                 return False
@@ -615,30 +666,47 @@ class VehiclesBonus(SimpleBonus):
     def getVehicles(self):
         result = []
         if self._value is not None:
-            for intCD, vehInfo in self._value.iteritems():
-                item = self.itemsCache.items.getItemByCD(intCD)
-                if item is not None:
-                    result.append((item, vehInfo))
+            if isinstance(self._value, dict):
+                for intCD, vehInfo in self._value.iteritems():
+                    item = self.itemsCache.items.getItemByCD(intCD)
+                    if item is not None:
+                        result.append((item, vehInfo))
+
+            elif isinstance(self._value, list):
+                for subDict in self._value:
+                    for intCD, vehInfo in subDict.iteritems():
+                        item = self.itemsCache.items.getItemByCD(intCD)
+                        if item is not None:
+                            result.append((item, vehInfo))
 
         return result
 
     def isRentVehicle(self, vehInfo):
         return True if self.getRentBattles(vehInfo) or self.getRentDays(vehInfo) or self.getRentWins(vehInfo) else False
 
-    def compensation(self, vehicle):
+    def compensation(self, vehicle, bonus):
         bonuses = []
-        if not vehicle.isPurchased:
-            return bonuses
         for curVehicle, vehInfo in self.getVehicles():
+            compensatedNumber = vehInfo.get('compensatedNumber', 0)
             compensation = vehInfo.get('customCompensation')
-            if curVehicle == vehicle and compensation:
-                money = Money.makeMoney(compensation)
-                for currency, value in money.iteritems():
-                    if value:
-                        cls = _BONUSES.get(currency)
-                        bonuses.append(cls(currency, value, isCompensation=True))
+            if compensatedNumber and compensation is not None and curVehicle == vehicle:
+                money = Money(*compensation)
+                while compensatedNumber > 0:
+                    for currency, value in money.iteritems():
+                        if value:
+                            cls = _BONUSES.get(currency)
+                            bonuses.append(cls(currency, value, isCompensation=True, compensationReason=bonus))
+
+                    compensatedNumber -= 1
 
         return bonuses
+
+    def checkIsCompensatedVehicle(self, vehicle):
+        for curVehicle, vehInfo in self.getVehicles():
+            compensation = vehInfo.get('customCompensation')
+            return curVehicle == vehicle and compensation
+
+        return False
 
     def getIconLabel(self):
         pass
@@ -680,6 +748,10 @@ class VehiclesBonus(SimpleBonus):
                 return calculateRoleLevel(vehInfo.get('crewLvl', DEFAULT_CREW_LVL), vehInfo.get('crewFreeXP', 0))
             if 'tankmen' in vehInfo:
                 for tman in vehInfo['tankmen']:
+                    if isinstance(tman, str):
+                        tankmanDecsr = tankmen.TankmanDescr(compactDescr=tman)
+                        if tankmanDecsr.role == Tankman.ROLES.COMMANDER:
+                            return calculateRoleLevel(tankmanDecsr.roleLevel, tankmanDecsr.freeXP)
                     if tman['role'] == Tankman.ROLES.COMMANDER:
                         return calculateRoleLevel(tman.get('roleLevel', DEFAULT_CREW_LVL), tman.get('freeXP', 0))
 
@@ -962,7 +1034,7 @@ class CustomizationsBonus(SimpleBonus):
         substitutes = []
         cache = vehicles.g_cache.customization20()
         for customizationItem in self._value:
-            c11nItem = self.__getC11nItem(customizationItem)
+            c11nItem = self.getC11nItem(customizationItem)
             itemType, itemId = cc.splitIntDescr(c11nItem.intCD)
             c11nComponent = cache.itemTypes[itemType][itemId]
             count = customizationItem.get('value')
@@ -988,7 +1060,7 @@ class CustomizationsBonus(SimpleBonus):
         bonuses.insert(0, CustomizationsBonus('customizations', substitutes))
         return bonuses
 
-    def __getC11nItem(self, item):
+    def getC11nItem(self, item):
         itemTypeName = item.get('custType')
         itemID = item.get('id')
         itemTypeID = GUI_ITEM_TYPE_INDICES.get(itemTypeName)
@@ -996,7 +1068,7 @@ class CustomizationsBonus(SimpleBonus):
         return c11nItem
 
     def __getCommonAwardsVOs(self, item, data, iconSize='small', align=TEXT_ALIGN.RIGHT, withCounts=False):
-        c11nItem = self.__getC11nItem(item)
+        c11nItem = self.getC11nItem(item)
         count = item.get('value', 1)
         itemData = {'imgSource': RES_ICONS.getBonusIcon(iconSize, c11nItem.itemTypeName),
          'label': text_styles.hightlight('x{}'.format(count)),
@@ -1022,7 +1094,7 @@ class CustomizationsBonus(SimpleBonus):
             itemData = self.__getCommonAwardsVOs(item, data, iconSize, align=TEXT_ALIGN.CENTER, withCounts=withCounts)
             itemData.update(_EPIC_AWARD_STATIC_VO_ENTRIES)
             if withDescription:
-                c11nItem = self.__getC11nItem(item)
+                c11nItem = self.getC11nItem(item)
                 itemData['description'] = c11nItem.userType
                 itemData['title'] = c11nItem.userName
             result.append(itemData)
@@ -1092,12 +1164,12 @@ _BONUSES = {Currency.CREDITS: CreditsBonus,
  'premium': PremiumDaysBonus,
  'vehicles': VehiclesBonus,
  'meta': MetaBonus,
- 'tokens': {'default': TokensBonus,
-            _ET.BATTLE_QUEST: BattleTokensBonus,
-            _ET.TOKEN_QUEST: BattleTokensBonus,
-            _ET.PERSONAL_QUEST: BattleTokensBonus,
+ 'tokens': {'default': tokensFactory,
+            _ET.BATTLE_QUEST: tokensFactory,
+            _ET.TOKEN_QUEST: tokensFactory,
+            _ET.PERSONAL_QUEST: tokensFactory,
             _ET.PERSONAL_MISSION: personalMissionsTokensFactory,
-            _ET.ELEN_QUEST: BattleTokensBonus},
+            _ET.ELEN_QUEST: tokensFactory},
  'dossier': {'default': DossierBonus,
              _ET.PERSONAL_MISSION: PersonalMissionDossierBonus},
  'tankmen': {'default': TankmenBonus,
@@ -1107,7 +1179,9 @@ _BONUSES = {Currency.CREDITS: CreditsBonus,
  'goodies': GoodiesBonus,
  'items': ItemsBonus,
  'oneof': BoxBonus,
- 'badgesGroup': BadgesGroupBonus}
+ 'badgesGroup': BadgesGroupBonus,
+ 'ny19Toys': SimpleBonus,
+ 'ny19ToyFragments': SimpleBonus}
 _BONUSES_PRIORITY = ('tokens', 'oneof')
 _BONUSES_ORDER = dict(((n, idx) for idx, n in enumerate(_BONUSES_PRIORITY)))
 
@@ -1169,6 +1243,10 @@ def getTutorialBonuses(name, value):
 
 def getEventBoardsBonusObj(name, value):
     return _initFromTree((name, _ET.ELEN_QUEST), name, value)
+
+
+def getNonQuestBonuses(name, value):
+    return _initFromTree((name, 'default'), name, value)
 
 
 def _getItemTooltip(name):

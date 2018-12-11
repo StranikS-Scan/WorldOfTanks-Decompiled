@@ -136,7 +136,8 @@ _DEFAULT_SETTINGS = {'registrationURL': '',
  'rankedBattles': {},
  'easterEgg': EasterEggProps(True, []),
  'adventCalendar': {'popupIntervalInHours': 24,
-                    'baseURL': ''},
+                    'baseURL': '',
+                    'herotankURL': ''},
  'checkPromoFrequencyInBattles': 5}
 
 class GuiSettings(object):

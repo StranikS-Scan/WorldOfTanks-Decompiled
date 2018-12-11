@@ -2,22 +2,25 @@
 # Embedded file name: scripts/client/gui/server_events/events_dispatcher.py
 import constants
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
+from gui.Scaleform.daapi.view.lobby.missions.missions_helper import getMissionInfoData
 from gui.Scaleform.genConsts.PERSONAL_MISSIONS_ALIASES import PERSONAL_MISSIONS_ALIASES
 from gui.Scaleform.genConsts.QUESTS_ALIASES import QUESTS_ALIASES
 from gui.marathon.marathon_constants import DEFAULT_MARATHON_PREFIX
-from gui.server_events import awards, events_helpers, recruit_helper
+from gui.server_events import awards, events_helpers, recruit_helper, anniversary_helper
+from gui.server_events.events_helpers import getLootboxesFromBonuses
 from gui.shared import g_eventBus, events, event_dispatcher as shared_events, EVENT_BUS_SCOPE
 from gui.shared.events import PersonalMissionsEvent
 from helpers import dependency
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
-from gui.impl.lobby.reward_window import TwitchRewardWindow
+from gui.impl.lobby.reward_window import TwitchRewardWindow, LootBoxRewardWindow, GiveAwayRewardWindow
 from shared_utils import first
 OPERATIONS = {PERSONAL_MISSIONS_ALIASES.PERONAL_MISSIONS_OPERATIONS_SEASON_1_ID: PERSONAL_MISSIONS_ALIASES.PERSONAL_MISSIONS_OPERATIONS_PAGE_ALIAS,
  PERSONAL_MISSIONS_ALIASES.PERONAL_MISSIONS_OPERATIONS_SEASON_2_ID: PERSONAL_MISSIONS_ALIASES.PERSONAL_MISSIONS2_OPERATIONS_PAGE_ALIAS}
 _EVENTS_REWARD_WINDOW = {recruit_helper.RecruitSourceID.TWITCH_0: TwitchRewardWindow,
  recruit_helper.RecruitSourceID.TWITCH_1: TwitchRewardWindow,
- recruit_helper.RecruitSourceID.TWITCH_2: TwitchRewardWindow}
+ recruit_helper.RecruitSourceID.TWITCH_2: TwitchRewardWindow,
+ anniversary_helper.ANNIVERSARY_EVENT_PREFIX: GiveAwayRewardWindow}
 
 def showPQSeasonAwardsWindow(questsType):
     g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.QUESTS_SEASON_AWARDS_WINDOW, ctx={'questsType': questsType}), EVENT_BUS_SCOPE.LOBBY)
@@ -196,16 +199,33 @@ def showRecruitWindow(recruitID, eventsCache=None):
 
 
 def showMissionAward(quest, ctx):
-    eventName = recruit_helper.getSourceIdFromQuest(quest.getID())
+    eventName = recruit_helper.getSourceIdFromQuest(quest.getID()) or anniversary_helper.getEventNameByQuest(quest)
     if eventName in _EVENTS_REWARD_WINDOW:
         ctx['quest'] = quest
         ctx['eventName'] = eventName
         rewardWindow = _EVENTS_REWARD_WINDOW[eventName](ctx)
         rewardWindow.load()
     else:
-        missionAward = awards.MissionAward(quest, ctx, showMissionsForCurrentVehicle)
-        if missionAward.getAwards():
-            shared_events.showMissionAwardWindow(missionAward)
+        bonuses = getMissionInfoData(quest).getSubstituteBonuses()
+        if bonuses:
+            lootboxes = getLootboxesFromBonuses(bonuses)
+            if lootboxes:
+                for lootboxId, lootboxInfo in lootboxes.iteritems():
+                    showLootboxesAward(lootboxId=lootboxId, lootboxCount=lootboxInfo['count'], isFree=lootboxInfo['isFree'])
+
+            else:
+                missionAward = awards.MissionAward(quest, ctx, showMissionsForCurrentVehicle)
+                if missionAward.getAwards():
+                    shared_events.showMissionAwardWindow(missionAward)
+
+
+def showLootboxesAward(lootboxId, lootboxCount, isFree):
+    ctx = {'eventName': recruit_helper.RecruitSourceID.LOOTBOX,
+     'lootboxType': lootboxId,
+     'lootboxesCount': lootboxCount,
+     'isFree': isFree}
+    rewardWindow = LootBoxRewardWindow(ctx)
+    rewardWindow.load()
 
 
 def showPersonalMissionAward(quest, ctx):

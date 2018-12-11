@@ -84,6 +84,7 @@
     <_183mm_L4>	90	</_183mm_L4>
     <_5inch_QF_Gun>	91	</_5inch_QF_Gun>
     <_76mm_Excalibur_Gun>	92	</_76mm_Excalibur_Gun>
+    <_120mm_Gun_L11>	93	</_120mm_Gun_L11>
     <_20pdr_Gun_Type_A_IGR>	60001	</_20pdr_Gun_Type_A_IGR>
     <_20pdr_Gun_Type_B_IGR>	60002	</_20pdr_Gun_Type_B_IGR>
     <_75mm_Gun_Vickers_HV_IGR>	60003	</_75mm_Gun_Vickers_HV_IGR>
@@ -4139,6 +4140,64 @@
         </_120mm_HE_L1A1>
       </shots>
     </_120mm_AT_Gun_L1A1>
+    <_120mm_Gun_L11>
+      <userString>	#gb_vehicles:_120mm_Gun_L11	</userString>
+      <tags></tags>
+      <level>	10	</level>
+      <price>	300000	</price>
+      <notInShop>	true	</notInShop>
+      <impulse>	0.68	</impulse>
+      <recoil>
+        <lodDist>	MEDIUM	</lodDist>
+        <amplitude>	0.24	</amplitude>
+        <recoilEffect>	large	</recoilEffect>
+      </recoil>
+      <effects>	shot_large	</effects>
+      <reloadEffect>	reload115_152	</reloadEffect>
+      <pitchLimits>
+        <minPitch>	0.0 -15.0 1.0 -15.0	</minPitch>
+        <maxPitch>	0.0 11.0 1.0 11.0	</maxPitch>
+      </pitchLimits>
+      <turretYawLimits>	-180 180	</turretYawLimits>
+      <rotationSpeed>	26.25	</rotationSpeed>
+      <reloadTime>	9.97142857142860	</reloadTime>
+      <maxAmmo>	64	</maxAmmo>
+      <aimingTime>	4.04	</aimingTime>
+      <weight>	1808	</weight>
+      <maxHealth>	210	</maxHealth>
+      <maxRegenHealth>	105	</maxRegenHealth>
+      <repairCost>	8	</repairCost>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
+      <shotDispersionRadius>	0.4	</shotDispersionRadius>
+      <shotDispersionFactors>
+        <turretRotation>	0.08	</turretRotation>
+        <afterShot>	4.0	</afterShot>
+        <whileGunDamaged>	2.0	</whileGunDamaged>
+      </shotDispersionFactors>
+      <shots>
+        <_120mm_APDS_L15>
+          <defaultPortion>	0.90	</defaultPortion>
+          <speed>	1150	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	270 245	</piercingPower>
+        </_120mm_APDS_L15>
+        <_120mm_APDS_L15A1>
+          <defaultPortion>	0.0	</defaultPortion>
+          <speed>	1150	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	310 270	</piercingPower>
+        </_120mm_APDS_L15A1>
+        <_120mm_HESH_L31A1>
+          <defaultPortion>	0.10	</defaultPortion>
+          <speed>	1067	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	140 140	</piercingPower>
+        </_120mm_HESH_L31A1>
+      </shots>
+    </_120mm_Gun_L11>
     <_120mm_Gun_L11A1>
       <userString>	#gb_vehicles:_120mm_Gun_L11A1	</userString>
       <tags></tags>

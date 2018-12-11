@@ -9,9 +9,14 @@ from gui.shared.gui_items.gui_item import GUIItem
 from helpers import i18n
 from shared_utils import CONST_CONTAINER
 
-class BADGE_TYPES(CONST_CONTAINER):
+class BadgeTypes(CONST_CONTAINER):
     OBSOLETE = 1
     COLLAPSIBLE = 2
+
+
+class BadgeLayouts(CONST_CONTAINER):
+    PREFIX = 1
+    SUFFIX = 2
 
 
 class Badge(GUIItem):
@@ -51,25 +56,46 @@ class Badge(GUIItem):
         return self.data['weight']
 
     def isObsolete(self):
-        return self.__checkType(BADGE_TYPES.OBSOLETE)
+        return self.__checkType(BadgeTypes.OBSOLETE)
 
     def isCollapsible(self):
-        return self.__checkType(BADGE_TYPES.COLLAPSIBLE)
+        return self.__checkType(BadgeTypes.COLLAPSIBLE)
+
+    def isPrefixLayout(self):
+        return self.__checkLayout(BadgeLayouts.PREFIX)
+
+    def isSuffixLayout(self):
+        return self.__checkLayout(BadgeLayouts.SUFFIX)
 
     def getHugeIcon(self):
         return getBadgeIconPath(BADGES_ICONS.X220, self.badgeID)
 
     def getBigIcon(self):
-        return getBadgeIconPath(BADGES_ICONS.X80, self.badgeID)
+        return self.getBigIconById(self.badgeID)
 
     def getIconX110(self):
         return getBadgeIconPath(BADGES_ICONS.X110, self.badgeID)
 
     def getSmallIcon(self):
-        return getBadgeIconPath(BADGES_ICONS.X48, self.badgeID)
+        return self.getSmallIconById(self.badgeID)
 
     def getThumbnailIcon(self):
         return getBadgeIconPath(BADGES_ICONS.X24, self.badgeID)
+
+    def getSuffixSmallIcon(self):
+        return self.getSuffixSmallIconByID(self.badgeID)
+
+    @classmethod
+    def getSuffixSmallIconByID(cls, badgeID):
+        return getBadgeIconPath(BADGES_ICONS.X48, badgeID)
+
+    @classmethod
+    def getSmallIconById(cls, badgeID):
+        return getBadgeIconPath(BADGES_ICONS.X48, badgeID)
+
+    @classmethod
+    def getBigIconById(cls, badgeID):
+        return getBadgeIconPath(BADGES_ICONS.X80, badgeID)
 
     def getUserName(self):
         key = BADGE.badgeName(self.badgeID)
@@ -99,3 +125,6 @@ class Badge(GUIItem):
 
     def __checkType(self, badgeType):
         return self.data['type'] & badgeType > 0
+
+    def __checkLayout(self, badgeLayout):
+        return self.data['layout'] & badgeLayout > 0

@@ -45,16 +45,6 @@ class HintsManager(object):
         self._gui = None
         return
 
-    def stopOnceOnlyHint(self, itemID):
-        if self._data is None:
-            return
-        else:
-            hint = self._data.hintForItem(itemID)
-            if hint is not None:
-                self._data.markAsShown(hint)
-                self.settingsCore.serverSettings.setOnceOnlyHintsSettings({hint['hintID']: HINT_SHOWN_STATUS})
-            return
-
     def __loadHintsData(self):
         LOG_DEBUG('Hints are loading')
         shownHints = self.settingsCore.serverSettings.getOnceOnlyHintsSettings()
@@ -71,31 +61,50 @@ class HintsManager(object):
 
     def __hideHint(self, itemID):
         if itemID in self.__activeHints:
-            hint = self.__activeHints[itemID]
-            self._gui.hideHint(hint['hintID'])
+            hintID = self.__getActiveHintIdByItemId(itemID)
+            self._gui.hideHint(hintID)
             del self.__activeHints[itemID]
 
     def __onGUIInput(self, event):
         itemID = event.getTargetID()
         if itemID in self.__activeHints:
+            hintID = self.__getActiveHintIdByItemId(itemID)
             self.__hideHint(itemID)
-            self.stopOnceOnlyHint(itemID)
+            self.__stopOnceOnlyHint(itemID, hintID)
             if self._data.hintsCount == 0:
                 self.stop()
 
     def __onItemFound(self, itemID):
-        hint = self._data.hintForItem(itemID)
-        if hint is not None and itemID not in self.__activeHints and self.__checkConditions(hint):
-            self.__showHint(hint)
-        return
+        if itemID not in self.__activeHints:
+            hints = self._data.hintsForItem(itemID)
+            for hint in hints:
+                if self.__checkConditions(hint):
+                    if itemID not in self.__activeHints:
+                        self.__showHint(hint)
+                        break
 
     def __onItemLost(self, itemID):
         if itemID in self.__activeHints:
             hint = self.__activeHints[itemID]
             if hint['equalActions']:
-                self.stopOnceOnlyHint(itemID)
+                self.__stopOnceOnlyHint(itemID, hint['hintID'])
             self.__hideHint(itemID)
 
     def __checkConditions(self, hint):
         conditions = hint['conditions']
         return True if conditions is None else FunctionalConditions(conditions).allConditionsOk()
+
+    def __getActiveHintIdByItemId(self, itemID):
+        return self.__activeHints[itemID]['hintID']
+
+    def __stopOnceOnlyHint(self, itemID, hintID):
+        if self._data is None:
+            return
+        else:
+            hints = self._data.hintsForItem(itemID)
+            for hint in hints:
+                if hint['hintID'] == hintID:
+                    self.settingsCore.serverSettings.setOnceOnlyHintsSettings({hintID: HINT_SHOWN_STATUS})
+                    self._data.markAsShown(itemID, hintID)
+
+            return

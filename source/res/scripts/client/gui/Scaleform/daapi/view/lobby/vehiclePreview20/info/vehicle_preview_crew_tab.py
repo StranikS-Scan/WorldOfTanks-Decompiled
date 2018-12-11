@@ -38,7 +38,9 @@ class VehiclePreviewCrewTab(VehiclePreviewCrewTabMeta):
         self._update()
 
     def update(self, *args):
-        self._update()
+        if g_currentPreviewVehicle.item is not None:
+            self._update()
+        return
 
     def _update(self):
         crewData = []

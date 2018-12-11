@@ -670,3 +670,24 @@ class IEpicMetaGameRequester(IRequester):
     @property
     def skillLevels(self):
         raise NotImplementedError
+
+
+class ITokensRequester(IRequester):
+
+    def getTokens(self):
+        raise NotImplementedError
+
+    def getLootBoxes(self):
+        raise NotImplementedError
+
+    def getLootBoxByTokenID(self, tokenID):
+        raise NotImplementedError
+
+    def getFreeLootBoxes(self):
+        raise NotImplementedError
+
+    def getLootBoxesTotalCount(self):
+        raise NotImplementedError
+
+    def getLootBoxesCountByType(self):
+        raise NotImplementedError

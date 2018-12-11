@@ -40,6 +40,14 @@ class IItemsRequester(requesters.IRequester):
     def epicMetaGame(self):
         raise NotImplementedError
 
+    @property
+    def festivity(self):
+        raise NotImplementedError
+
+    @property
+    def tokens(self):
+        raise NotImplementedError
+
     def requestUserDossier(self, databaseID, callback):
         raise NotImplementedError
 

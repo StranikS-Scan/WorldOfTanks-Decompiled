@@ -14,6 +14,7 @@ from gui.wgcg.clan.handlers import ClanRequestHandlers
 from gui.wgcg.elen.handlers import ElenRequestHandlers
 from gui.wgcg.hof.handlers import HofRequestHandlers
 from gui.wgcg.promo_screens.handlers import PromoScreensRequestHandlers
+from gui.wgcg.hero_tank.handlers import AdventCalendarRequestHandlers
 from gui.wgcg.rank.handlers import RankRequestHandlers
 from gui.wgcg.settings import WebRequestDataType
 from gui.wgcg.strongholds.handlers import StrongholdsRequestHandlers
@@ -94,6 +95,7 @@ class WgcgRequestsController(RequestsController):
         self.__handlers.update(HofRequestHandlers(requester).get())
         self.__handlers.update(RankRequestHandlers(requester).get())
         self.__handlers.update(PromoScreensRequestHandlers(requester).get())
+        self.__handlers.update(AdventCalendarRequestHandlers(requester).get())
 
     def fini(self):
         super(WgcgRequestsController, self).fini()

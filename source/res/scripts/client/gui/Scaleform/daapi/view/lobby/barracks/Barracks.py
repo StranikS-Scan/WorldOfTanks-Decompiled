@@ -334,6 +334,7 @@ class Barracks(BarracksMeta, LobbySubView, IGlobalListener):
         if self.filter['location'] == BARRACKS_CONSTANTS.LOCATION_FILTER_DISMISSED:
             self.__showDismissedTankmen(self.__buildCriteria())
         elif isNotRecruited:
+            self.__updateNotRecruitedTankmenField()
             self.__showNotRecruitedTankmen()
         else:
             self.__showActiveTankmen(self.__buildCriteria())
@@ -418,15 +419,17 @@ class Barracks(BarracksMeta, LobbySubView, IGlobalListener):
          'noInfoData': noInfoData})
 
     def __updateNotRecruitedTankmen(self, *args):
-        self.__notRecruitedTankmen = []
-        for recruitInfo in recruit_helper.getAllRecruitsInfo(sortByExpireTime=True):
-            self.__notRecruitedTankmen.append(_packNotRecruitedTankman(recruitInfo))
-
+        self.__updateNotRecruitedTankmenField()
         if self.filter['location'] == BARRACKS_CONSTANTS.LOCATION_FILTER_NOT_RECRUITED:
             self.__updateTankmen()
             recruit_helper.setNewRecruitsVisited()
         else:
             self.__updateRecruitNotification()
+
+    def __updateNotRecruitedTankmenField(self):
+        self.__notRecruitedTankmen = []
+        for recruitInfo in recruit_helper.getAllRecruitsInfo(sortByExpireTime=True):
+            self.__notRecruitedTankmen.append(_packNotRecruitedTankman(recruitInfo))
 
     def __showNotRecruitedTankmen(self):
         count = len(self.__notRecruitedTankmen)

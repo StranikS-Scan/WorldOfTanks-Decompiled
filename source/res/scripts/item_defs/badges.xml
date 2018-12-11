@@ -1261,5 +1261,101 @@
         </item>
       </value>
     </badge>
+    <badge>
+      <name>	alpha_tester_suffix	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	56	  <name>	id	</name>
+          <type>	int	</type>
+        </item>
+        <item>	1.0	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	19	  <name>	group	</name>
+          <type>	int	</type>
+        </item>
+        <item>	2	  <name>	class	</name>
+          <type>	int	</type>
+        </item>
+        <item>	2	  <name>	layout	</name>
+          <type>	int	</type>
+        </item>
+        <item>	1	  <name>	type	</name>
+          <type>	int	</type>
+        </item>
+      </value>
+    </badge>
+    <badge>
+      <name>	beta_tester_suffix	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	57	  <name>	id	</name>
+          <type>	int	</type>
+        </item>
+        <item>	1.0	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	19	  <name>	group	</name>
+          <type>	int	</type>
+        </item>
+        <item>	1	  <name>	class	</name>
+          <type>	int	</type>
+        </item>
+        <item>	2	  <name>	layout	</name>
+          <type>	int	</type>
+        </item>
+        <item>	1	  <name>	type	</name>
+          <type>	int	</type>
+        </item>
+      </value>
+    </badge>
+    <badge>
+      <name>	alpha_tester	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	58	  <name>	id	</name>
+          <type>	int	</type>
+        </item>
+        <item>	1	  <name>	type	</name>
+          <type>	int	</type>
+        </item>
+        <item>	1.0	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	18	  <name>	group	</name>
+          <type>	int	</type>
+        </item>
+        <item>	2	  <name>	class	</name>
+          <type>	int	</type>
+        </item>
+        <item>	green	  <name>	highlight	</name>
+          <type>	string	</type>
+        </item>
+      </value>
+    </badge>
+    <badge>
+      <name>	beta_tester	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	59	  <name>	id	</name>
+          <type>	int	</type>
+        </item>
+        <item>	1	  <name>	type	</name>
+          <type>	int	</type>
+        </item>
+        <item>	1.0	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	18	  <name>	group	</name>
+          <type>	int	</type>
+        </item>
+        <item>	1	  <name>	class	</name>
+          <type>	int	</type>
+        </item>
+        <item>	green	  <name>	highlight	</name>
+          <type>	string	</type>
+        </item>
+      </value>
+    </badge>
   </badges>
 </badges.xml>

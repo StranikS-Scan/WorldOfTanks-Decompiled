@@ -58,6 +58,13 @@
       <undamaged>	vehicles/russian/R45_IS-7/normal/lod0/Hull.model	</undamaged>
       <destroyed>	vehicles/russian/R45_IS-7/crash/lod0/Hull.model	</destroyed>
       <exploded>	vehicles/russian/R45_IS-7/crash/lod0/Hull.model	</exploded>
+      <sets>
+        <NYst>
+          <undamaged>	vehicles/russian/R45_IS-7/_skins/NYst/normal/lod0/Hull.model	</undamaged>
+          <destroyed>	vehicles/russian/R45_IS-7/_skins/NYst/crash/lod0/Hull.model	</destroyed>
+          <exploded>	vehicles/russian/R45_IS-7/_skins/NYst/crash/lod0/Hull.model	</exploded>
+        </NYst>
+      </sets>
     </models>
     <swinging>
       <lodDist>	FAR	</lodDist>
@@ -150,6 +157,13 @@
         <undamaged>	vehicles/russian/R45_IS-7/normal/lod0/Chassis.model	</undamaged>
         <destroyed>	vehicles/russian/R45_IS-7/crash/lod0/Chassis.model	</destroyed>
         <exploded>	vehicles/russian/R45_IS-7/crash/lod0/Chassis.model	</exploded>
+        <sets>
+          <NYst>
+            <undamaged>	vehicles/russian/R45_IS-7/_skins/NYst/normal/lod0/Chassis.model	</undamaged>
+            <destroyed>	vehicles/russian/R45_IS-7/_skins/NYst/crash/lod0/Chassis.model	</destroyed>
+            <exploded>	vehicles/russian/R45_IS-7/_skins/NYst/crash/lod0/Chassis.model	</exploded>
+          </NYst>
+        </sets>
       </models>
       <splineDesc>
         <segmentModelLeft>	vehicles/russian/R45_IS-7/track/segment.model	</segmentModelLeft>
@@ -163,6 +177,12 @@
           <UTiles>	1	</UTiles>
           <VTiles>	1	</VTiles>
         </atlas>
+        <modelSets>
+          <NYst>
+            <segmentModelLeft>	vehicles/russian/R45_IS-7/_skins/NYst/track/segment.model	</segmentModelLeft>
+            <segmentModelRight>	vehicles/russian/R45_IS-7/_skins/NYst/track/segment.model	</segmentModelRight>
+          </NYst>
+        </modelSets>
       </splineDesc>
       <traces>
         <lodDist>	FAR	</lodDist>
@@ -585,6 +605,11 @@
             <model>	vehicles/russian/R45_IS-7/track/segment.model	</model>
             <length>	0.149901	</length>
           </mainSegment>
+          <modelSets>
+            <NYst>
+              <mainSegmentModel>	vehicles/russian/R45_IS-7/_skins/NYst/track/segment.model	</mainSegmentModel>
+            </NYst>
+          </modelSets>
           <collisionHull>
             <bottom></bottom>
             <top>
@@ -781,6 +806,11 @@
             <model>	vehicles/russian/R45_IS-7/track/segment.model	</model>
             <length>	0.149862	</length>
           </mainSegment>
+          <modelSets>
+            <NYst>
+              <mainSegmentModel>	vehicles/russian/R45_IS-7/_skins/NYst/track/segment.model	</mainSegmentModel>
+            </NYst>
+          </modelSets>
           <collisionHull>
             <bottom></bottom>
             <top>
@@ -1040,6 +1070,13 @@
             <undamaged>	vehicles/russian/R45_IS-7/normal/lod0/Gun_01.model	</undamaged>
             <destroyed>	vehicles/russian/R45_IS-7/crash/lod0/Gun_01.model	</destroyed>
             <exploded>	vehicles/russian/R45_IS-7/crash/lod0/Gun_01.model	</exploded>
+            <sets>
+              <NYst>
+                <undamaged>	vehicles/russian/R45_IS-7/_skins/NYst/normal/lod0/Gun_01.model	</undamaged>
+                <destroyed>	vehicles/russian/R45_IS-7/_skins/NYst/crash/lod0/Gun_01.model	</destroyed>
+                <exploded>	vehicles/russian/R45_IS-7/_skins/NYst/crash/lod0/Gun_01.model	</exploded>
+              </NYst>
+            </sets>
           </models>
           <hitTester>
             <collisionModelServer>	vehicles/russian/R45_IS-7/collision/Gun_01.model	</collisionModelServer>
@@ -1095,6 +1132,13 @@
         <undamaged>	vehicles/russian/R45_IS-7/normal/lod0/Turret_01.model	</undamaged>
         <destroyed>	vehicles/russian/R45_IS-7/crash/lod0/Turret_01.model	</destroyed>
         <exploded>	vehicles/russian/R45_IS-7/crash/lod0/Turret_01.model	</exploded>
+        <sets>
+          <NYst>
+            <undamaged>	vehicles/russian/R45_IS-7/_skins/NYst/normal/lod0/Turret_01.model	</undamaged>
+            <destroyed>	vehicles/russian/R45_IS-7/_skins/NYst/crash/lod0/Turret_01.model	</destroyed>
+            <exploded>	vehicles/russian/R45_IS-7/_skins/NYst/crash/lod0/Turret_01.model	</exploded>
+          </NYst>
+        </sets>
       </models>
       <hitTester>
         <collisionModelServer>	vehicles/russian/R45_IS-7/collision/Turret_01.model	</collisionModelServer>

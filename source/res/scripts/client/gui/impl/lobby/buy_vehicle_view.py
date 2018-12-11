@@ -10,9 +10,10 @@ from rent_common import parseRentID
 from gui import GUI_SETTINGS
 from gui.Scaleform.locale.RES_SHOP import RES_SHOP
 from gui.impl.pub import ViewImpl
+from gui.impl.pub.lobby_window import LobbyWindow
 from gui.DialogsInterface import showI18nConfirmDialog
 from gui.Scaleform.daapi.view.dialogs import I18nConfirmDialogMeta, DIALOG_BUTTON_ID
-from frameworks.wulf import ViewFlags, WindowFlags, ViewStatus, Window
+from frameworks.wulf import ViewFlags, WindowFlags, ViewStatus
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform.daapi.view.lobby.store.browser.ingameshop_helpers import isIngameShopEnabled
 from gui.Scaleform.framework.entities.EventSystemEntity import EventSystemEntity
@@ -43,8 +44,6 @@ from gui.shared.utils import decorators
 from gui.shared.events import VehicleBuyEvent
 from gui.Scaleform.locale.DIALOGS import DIALOGS
 from gui.shared.gui_items.processors.vehicle import VehicleBuyer, VehicleSlotBuyer, VehicleRenter, VehicleTradeInProcessor, VehicleRestoreProcessor
-from gui.app_loader import g_appLoader
-from gui.Scaleform.framework.managers.loaders import ViewKey
 _logger = logging.getLogger(__name__)
 
 class BuyVehicleView(ViewImpl, EventSystemEntity):
@@ -799,15 +798,9 @@ class BuyVehicleView(ViewImpl, EventSystemEntity):
             SystemMessages.pushI18nMessage(SYSTEM_MESSAGES.VEHICLE_RESTORE_FINISHED, vehicleName=vehicle.userName)
 
 
-class BuyVehicleWindow(Window):
+class BuyVehicleWindow(LobbyWindow):
     __slots__ = ()
 
     def __init__(self, *args, **kwargs):
-        app = g_appLoader.getApp()
-        view = app.containerManager.getViewByKey(ViewKey(VIEW_ALIAS.LOBBY))
-        if view is not None:
-            parent = view.getParentWindow()
-        else:
-            parent = None
-        super(BuyVehicleWindow, self).__init__(content=BuyVehicleView(*args, **kwargs), wndFlags=WindowFlags.DIALOG, decorator=None, parent=parent)
+        super(BuyVehicleWindow, self).__init__(content=BuyVehicleView(*args, **kwargs), wndFlags=WindowFlags.DIALOG, decorator=None, parent=None)
         return

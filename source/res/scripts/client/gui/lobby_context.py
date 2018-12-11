@@ -77,8 +77,10 @@ class LobbyContext(ILobbyContext):
     def update(self, diff):
         if self.__serverSettings:
             if 'serverSettings' in diff:
+                self.__notifyToUpdate(diff['serverSettings'])
                 self.__serverSettings.update(diff['serverSettings'])
             elif ('serverSettings', '_r') in diff:
+                self.__notifyToUpdate(diff[('serverSettings', '_r')])
                 self.__serverSettings.set(diff[('serverSettings', '_r')])
 
     def updateGuiCtx(self, ctx):
@@ -199,3 +201,8 @@ class LobbyContext(ILobbyContext):
     @classmethod
     def _isSkipPeripheryChecking(cls):
         return cls.connectionMgr.isStandalone() and CURRENT_REALM == 'CT'
+
+    @dependency.replace_none_kwargs(itemsCache=IItemsCache)
+    def __notifyToUpdate(self, diff, itemsCache=None):
+        if 'lootBoxes_config' in diff:
+            itemsCache.items.tokens.updateAllLootBoxes(diff['lootBoxes_config'])

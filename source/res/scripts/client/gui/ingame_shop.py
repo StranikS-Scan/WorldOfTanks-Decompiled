@@ -15,18 +15,6 @@ from helpers import dependency
 from skeletons.gui.game_control import ITradeInController
 from skeletons.gui.shared import IItemsCache
 
-def _getParams(reason, price, itemId=None):
-    params = {'reason': reason,
-     'goldPrice': price}
-    if itemId is not None:
-        params['itemId'] = itemId
-    return params
-
-
-def _makeBuyItemUrl(categoryUrl, itemId=None):
-    return '{}/items/$PARAMS(web2client_{})'.format(categoryUrl, itemId) if itemId else categoryUrl
-
-
 class _GoldPurchaseReason(object):
     VEHICLE = 'vehicle'
     XP = 'experience'
@@ -44,6 +32,19 @@ class Source(object):
 
 class Origin(object):
     STORAGE = 'storage'
+
+
+def _getParams(reason, price, itemId=None):
+    params = {'reason': reason,
+     'goldPrice': price,
+     'source': Source.EXTERNAL}
+    if itemId is not None:
+        params['itemId'] = itemId
+    return params
+
+
+def _makeBuyItemUrl(categoryUrl, itemId=None):
+    return '{}/items/$PARAMS(web2client_{})'.format(categoryUrl, itemId) if itemId else categoryUrl
 
 
 @dependency.replace_none_kwargs(itemsCache=IItemsCache)

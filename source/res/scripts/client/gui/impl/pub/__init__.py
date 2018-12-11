@@ -10,6 +10,7 @@ from gui.impl.pub.standard_window import StandardWindow
 from gui.impl.pub.tooltip_window import SimpleToolTipWindow, ToolTipWindow
 from gui.impl.pub.window_view import WindowView
 from gui.impl.pub.view_impl import ViewImpl, PopOverViewImpl
+from gui.impl.pub.lobby_window import LobbyWindow
 
 class UserWindowFlags(WindowFlags):
     LOBBY_MAIN_WND = WindowFlags.MAIN_WINDOW | 65536
@@ -17,4 +18,4 @@ class UserWindowFlags(WindowFlags):
     USER_TYPES_MASK = WindowFlags.WINDOW_TYPE_MASK | 983040
 
 
-__all__ = ('ContextMenuID', 'ContextMenuContent', 'ContextMenuWindow', 'MainWindow', 'ServiceWindow', 'StandardWindow', 'SimpleToolTipWindow', 'ToolTipWindow', 'PopOverWindow', 'WindowView', 'ViewImpl', 'PopOverViewImpl')
+__all__ = ('ContextMenuID', 'ContextMenuContent', 'ContextMenuWindow', 'MainWindow', 'ServiceWindow', 'StandardWindow', 'SimpleToolTipWindow', 'ToolTipWindow', 'PopOverWindow', 'WindowView', 'ViewImpl', 'PopOverViewImpl', 'LobbyWindow')

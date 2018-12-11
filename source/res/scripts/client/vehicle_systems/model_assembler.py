@@ -380,33 +380,33 @@ def _createNameListByTemplate(startIndex, template, count):
 _ROOT_NODE_NAME = 'V'
 SplineTracks = namedtuple('SplineTracks', ('left', 'right'))
 
-def setupSplineTracks(fashion, vDesc, chassisModel, prereqs):
+def setupSplineTracks(fashion, vDesc, chassisModel, prereqs, modelsSet):
     splineDesc = vDesc.chassis.splineDesc
     resultTracks = None
     if splineDesc is not None:
         leftSpline = None
         rightSpline = None
         segmentModelLeft = segmentModelRight = segment2ModelLeft = segment2ModelRight = None
-        modelName = splineDesc.segmentModelLeft
+        modelName = splineDesc.segmentModelLeft(modelsSet)
         try:
             segmentModelLeft = prereqs[modelName]
         except Exception:
             debug_utils.LOG_ERROR("can't load track segment model <%s>" % modelName)
 
-        modelName = splineDesc.segmentModelRight
+        modelName = splineDesc.segmentModelRight(modelsSet)
         try:
             segmentModelRight = prereqs[modelName]
         except Exception:
             debug_utils.LOG_ERROR("can't load track segment model <%s>" % modelName)
 
-        modelName = splineDesc.segment2ModelLeft
+        modelName = splineDesc.segment2ModelLeft(modelsSet)
         if modelName is not None:
             try:
                 segment2ModelLeft = prereqs[modelName]
             except Exception:
                 debug_utils.LOG_ERROR("can't load track segment 2 model <%s>" % modelName)
 
-        modelName = splineDesc.segment2ModelRight
+        modelName = splineDesc.segment2ModelRight(modelsSet)
         if modelName is not None:
             try:
                 segment2ModelRight = prereqs[modelName]

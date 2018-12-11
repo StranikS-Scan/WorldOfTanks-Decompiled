@@ -402,9 +402,10 @@ class AppEntry(Flash, ApplicationMeta):
             self.__firingsAfterInit[event.eventType] = {'event': event,
              'scope': scope}
 
-    def setBackgroundAlpha(self, value):
+    def setBackgroundAlpha(self, value, notSilentChange=True):
         self.movie.backgroundAlpha = value
-        self.fireEvent(GameEvent(GameEvent.ON_BACKGROUND_ALPHA_CHANGE, {'alpha': value}), EVENT_BUS_SCOPE.GLOBAL)
+        if notSilentChange:
+            self.fireEvent(GameEvent(GameEvent.ON_BACKGROUND_ALPHA_CHANGE, {'alpha': value}), EVENT_BUS_SCOPE.GLOBAL)
 
     def getBackgroundAlpha(self):
         return self.movie.backgroundAlpha
@@ -414,6 +415,9 @@ class AppEntry(Flash, ApplicationMeta):
 
     def unblurBackgroundViews(self):
         self.as_unblurBackgroundViewsS()
+
+    def setMouseEventsEnabled(self, enabled):
+        self.as_setMouseEventsEnabledS(enabled)
 
     def _createManagers(self):
         self._loaderMgr = self._createLoaderManager()

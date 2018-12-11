@@ -4,8 +4,9 @@ import BigWorld
 import SoundGroups
 from vehicle_systems.tankStructure import ColliderTypes
 from svarog_script.py_component_system import ComponentSystem, ComponentDescriptor
+from gui.shared.selectable_object import ISelectableObject
 
-class ClientSelectableObject(BigWorld.Entity, ComponentSystem):
+class ClientSelectableObject(BigWorld.Entity, ComponentSystem, ISelectableObject):
     collisions = ComponentDescriptor()
 
     @property
@@ -15,6 +16,7 @@ class ClientSelectableObject(BigWorld.Entity, ComponentSystem):
     def __init__(self):
         BigWorld.Entity.__init__(self)
         ComponentSystem.__init__(self)
+        ISelectableObject.__init__(self)
         self.__enabled = True
         self.__edged = False
         self.__clickSound = None
@@ -22,14 +24,14 @@ class ClientSelectableObject(BigWorld.Entity, ComponentSystem):
         return
 
     def prerequisites(self):
-        if self.modelName != '':
-            bspModels = ((0, self.modelName),)
-            collisionAssembler = BigWorld.CollisionAssembler(bspModels, self.spaceID)
-            return [self.modelName, collisionAssembler]
-        return []
+        if not self.modelName:
+            return []
+        collisionModels = self._getCollisionModelsPrereqs()
+        collisionAssembler = BigWorld.CollisionAssembler(collisionModels, self.spaceID)
+        return [self.modelName, collisionAssembler]
 
     def onEnterWorld(self, prereqs):
-        if self.modelName == '':
+        if not self.modelName:
             return
         if self.modelName not in prereqs.failedIDs:
             model = prereqs[self.modelName]
@@ -49,28 +51,22 @@ class ClientSelectableObject(BigWorld.Entity, ComponentSystem):
                 self.__clickSound.stop()
             self.__clickSound.releaseMatrix()
             self.__clickSound = None
-        self.highlight(False)
+        self.setHighlight(False)
         return
 
-    def enable(self, enabled):
+    def setEnable(self, enabled):
         self.__enabled = enabled
         if not self.__enabled:
-            self.highlight(False)
+            self.setHighlight(False)
 
-    def highlight(self, show):
+    def setHighlight(self, show):
         if show:
             if not self.__edged and self.__enabled:
-                BigWorld.wgAddEdgeDetectEntity(self, 0, self.edgeMode, False)
+                self._addEdgeDetect()
                 self.__edged = True
         elif self.__edged:
-            BigWorld.wgDelEdgeDetectEntity(self)
+            self._delEdgeDetect()
             self.__edged = False
-
-    def onMouseDown(self):
-        pass
-
-    def onMouseUp(self):
-        pass
 
     def onMouseClick(self):
         if self.__clickSound is None:
@@ -83,8 +79,15 @@ class ClientSelectableObject(BigWorld.Entity, ComponentSystem):
             self.__clickSound.play()
         return
 
-    def onReleased(self):
-        pass
-
     def _getModelHeight(self):
         return self.model.height
+
+    def _getCollisionModelsPrereqs(self):
+        collisionModels = ((0, self.modelName),)
+        return collisionModels
+
+    def _addEdgeDetect(self):
+        BigWorld.wgAddEdgeDetectEntity(self, 0, self.edgeMode, False)
+
+    def _delEdgeDetect(self):
+        BigWorld.wgDelEdgeDetectEntity(self)

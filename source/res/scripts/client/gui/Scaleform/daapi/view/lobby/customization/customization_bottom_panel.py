@@ -50,17 +50,21 @@ class CustomizationBottomPanel(CustomizationBottomPanelMeta):
         self.__ctx.onCustomizationSeasonChanged += self.__onSeasonChanged
         self.__ctx.onCustomizationItemInstalled += self.__onItemsInstalled
         self.__ctx.onCustomizationTabChanged += self.__onTabChanged
+        self.__ctx.onCustomizationTabsUpdated += self.__onTabsUpdated
         self.__ctx.onCustomizationItemsRemoved += self.__onItemsRemoved
         self.__ctx.onCustomizationModeChanged += self.__onModeChanged
         self.__ctx.onChangesCanceled += self.__onChangesCanceled
         self.__ctx.onCustomizationItemSold += self.__onItemSold
         self.__ctx.onCustomizationItemDataChanged += self.__onItemDataChanged
         self.__ctx.onNextCarouselItemInstalled += self.__onNextCarouselItemInstalled
+        self.__ctx.onStylePreview += self.__onStylePreview
+        g_currentVehicle.onChanged += self.__onVehicleChanged
         g_clientUpdateManager.addMoneyCallback(self.__setBottomPanelBillData)
         self.__updateTabs(self.__ctx.currentTab)
         switcherCounterNotShown = not AccountSettings.getSettings(CUSTOMIZATION_SECTION).get(PROJECTION_DECAL_TAB_SHOWN_FIELD, False)
         appliedProjectionDecals = C11nTabs.PROJECTION_DECAL in self.__ctx.visibleTabs
-        self.__setFooterInitData(switcherCounterNotShown and appliedProjectionDecals)
+        self.__showSwitcherCounter = switcherCounterNotShown and appliedProjectionDecals
+        self.__setFooterInitData()
         self.__setBottomPanelBillData()
         self.as_showPopoverBtnIconS(RES_ICONS.MAPS_ICONS_CUSTOMIZATION_ITEMS_POPOVER_SUMMER_LIST30X16)
 
@@ -73,11 +77,14 @@ class CustomizationBottomPanel(CustomizationBottomPanelMeta):
         self.__ctx.onCustomizationModeChanged -= self.__onModeChanged
         self.__ctx.onCustomizationItemsRemoved -= self.__onItemsRemoved
         self.__ctx.onCustomizationTabChanged -= self.__onTabChanged
+        self.__ctx.onCustomizationTabsUpdated -= self.__onTabsUpdated
         self.__ctx.onCustomizationItemInstalled -= self.__onItemsInstalled
         self.__ctx.onCustomizationSeasonChanged -= self.__onSeasonChanged
         self.__ctx.onCacheResync -= self.__onCacheResync
         self.__ctx.onCarouselFilter -= self.__onCarouselFilter
-        self.__ctx.onNextCarouselItemInstalled += self.__onNextCarouselItemInstalled
+        self.__ctx.onNextCarouselItemInstalled -= self.__onNextCarouselItemInstalled
+        self.__ctx.onStylePreview -= self.__onStylePreview
+        g_currentVehicle.onChanged -= self.__onVehicleChanged
         self._carouselDP = None
         self.__ctx = None
         return
@@ -127,11 +134,11 @@ class CustomizationBottomPanel(CustomizationBottomPanelMeta):
          'selectedTab': selectedTab})
         self.as_setBottomPanelTabsPlusesS(pluses)
 
-    def __setFooterInitData(self, showSwitcherCounter):
+    def __setFooterInitData(self):
         self.as_setBottomPanelInitDataS({'tabsAvailableRegions': C11nTabs.AVAILABLE_REGIONS,
          'defaultStyleLabel': VEHICLE_CUSTOMIZATION.DEFAULTSTYLE_LABEL,
          'carouselInitData': self.__getCarouselInitData(),
-         'switcherInitData': self.__getSwitcherInitData(self.__ctx.mode, showSwitcherCounter),
+         'switcherInitData': self.__getSwitcherInitData(self.__ctx.mode, self.__showSwitcherCounter),
          'filtersVO': {'popoverAlias': VIEW_ALIAS.CUSTOMIZATION_FILTER_POPOVER,
                        'mainBtn': {'value': RES_ICONS.MAPS_ICONS_BUTTONS_FILTER,
                                    'tooltip': VEHICLE_CUSTOMIZATION.CAROUSEL_FILTER_MAINBTN},
@@ -271,6 +278,14 @@ class CustomizationBottomPanel(CustomizationBottomPanelMeta):
         self.__refreshCarousel(force=self.__needCaruselFullRebuild)
         self.__needCaruselFullRebuild = False
 
+    def __onVehicleChanged(self):
+        self.__updateTabs(self.__ctx.currentTab)
+        self._carouselDP.updateTabGroups()
+        self.resetFilter()
+        self.__updatePopoverBtnIcon()
+        self.__setBottomPanelBillData()
+        self.__setFooterInitData()
+
     def __onSeasonChanged(self, seasonType):
         self.__updateTabs(self.__ctx.currentTab)
         self.__refreshCarousel(force=True)
@@ -302,6 +317,10 @@ class CustomizationBottomPanel(CustomizationBottomPanelMeta):
             AccountSettings.setSettings(CUSTOMIZATION_SECTION, custSett)
             self.as_removeCountersS()
 
+    def __onTabsUpdated(self, tabIndex):
+        self.__updateTabs(tabIndex)
+        self.__refreshCarousel(force=True)
+
     def __onItemsRemoved(self):
         self.__updateTabs(self.__ctx.currentTab)
         self.__setBottomPanelBillData()
@@ -310,6 +329,7 @@ class CustomizationBottomPanel(CustomizationBottomPanelMeta):
     def __onModeChanged(self, mode):
         self._carouselDP.selectItem(self.__ctx.modifiedStyle if mode == C11nMode.STYLE else None)
         self.__setBottomPanelBillData()
+        self.__setFooterInitData()
         return
 
     def __onChangesCanceled(self):
@@ -323,3 +343,9 @@ class CustomizationBottomPanel(CustomizationBottomPanelMeta):
 
     def __onItemDataChanged(self, areaId, slotId, regionIdx, changeAnchor, updatePropertiesSheet):
         self.__setBottomPanelBillData()
+
+    def __onStylePreview(self, styleIntCD):
+        items = self._carouselDP.collection
+        if styleIntCD in items:
+            idx = items.index(styleIntCD)
+            self.onSelectItem(idx, styleIntCD)

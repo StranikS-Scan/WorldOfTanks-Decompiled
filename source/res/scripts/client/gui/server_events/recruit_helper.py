@@ -2,6 +2,8 @@
 # Embedded file name: scripts/client/gui/server_events/recruit_helper.py
 import BigWorld
 from constants import ENDLESS_TOKEN_TIME
+from gui.Scaleform.locale.RES_ICONS import RES_ICONS
+from items.tankmen import TankmanDescr
 from nations import NONE_INDEX, NAMES as NationNames
 from items import tankmen
 from items.components.component_constants import EMPTY_STRING
@@ -21,17 +23,19 @@ class RecruitSourceID(object):
     TWITCH_1 = 'twitch1'
     TWITCH_2 = 'twitch2'
     BUFFON = 'buffon'
+    LOOTBOX = 'lootbox'
     EVENTS = (TWITCH_0, TWITCH_1, TWITCH_2)
 
 
+_NEW_SKILL = 'new_skill'
 _TANKWOMAN_ROLE_LEVEL = 100
 _TANKWOMAN_ICON = 'girl-empty.png'
-_TANKWOMAN_LEARNT_SKILLS = ['brotherhood', 'new_skill']
+_TANKWOMAN_LEARNT_SKILLS = ['brotherhood']
 
 class _BaseRecruitInfo(object):
-    __slots__ = ('_recruitID', '_expiryTime', '_nations', '_learntSkills', '_freeXP', '_roleLevel', '_lastSkillLevel', '_roles', '_firstName', '_lastName', '_icon', '_sourceID')
+    __slots__ = ('_recruitID', '_expiryTime', '_nations', '_learntSkills', '_freeXP', '_roleLevel', '_lastSkillLevel', '_roles', '_firstName', '_lastName', '_icon', '_sourceID', '_isFemale', '_hasNewSkill')
 
-    def __init__(self, recruitID, expiryTime, nations, learntSkills, freeXP, roleLevel, lastSkillLevel, firstName, lastName, roles, icon, sourceID):
+    def __init__(self, recruitID, expiryTime, nations, learntSkills, freeXP, roleLevel, lastSkillLevel, firstName, lastName, roles, icon, sourceID, isFemale, hasNewSkill):
         self._recruitID = recruitID
         self._expiryTime = expiryTime
         self._nations = nations
@@ -44,6 +48,8 @@ class _BaseRecruitInfo(object):
         self._roles = roles
         self._icon = icon
         self._sourceID = sourceID
+        self._isFemale = isFemale
+        self._hasNewSkill = hasNewSkill
 
     def __cmp__(self, other):
         return cmp(self.getExpiryTimeStamp(), other.getExpiryTimeStamp())
@@ -67,7 +73,7 @@ class _BaseRecruitInfo(object):
         return self._roleLevel
 
     def getLearntSkills(self):
-        return self._learntSkills
+        return self._learntSkills + [_NEW_SKILL] if self._hasNewSkill else self._learntSkills
 
     def getLastSkillLevel(self):
         return self._lastSkillLevel
@@ -102,12 +108,19 @@ class _BaseRecruitInfo(object):
     def getSourceID(self):
         return self._sourceID
 
+    def getSpecialIcon(self):
+        icon = '../maps/icons/tankmen/icons/special/{}'.format(self._icon)
+        return RES_ICONS.getSpecialIcon(self._icon) if icon in RES_ICONS.MAPS_ICONS_TANKMEN_ICONS_SPECIAL_ENUM else None
+
+    def isFemale(self):
+        return self._isFemale
+
 
 class _QuestRecruitInfo(_BaseRecruitInfo):
     __slots__ = ('__operationName',)
 
     def __init__(self, questID, operationName):
-        super(_QuestRecruitInfo, self).__init__(recruitID=questID, expiryTime=0, nations=NationNames, learntSkills=_TANKWOMAN_LEARNT_SKILLS, freeXP=0, roleLevel=_TANKWOMAN_ROLE_LEVEL, lastSkillLevel=0, firstName=_ms(QUESTS.BONUSES_ITEM_TANKWOMAN), lastName=EMPTY_STRING, roles=[], icon=_TANKWOMAN_ICON, sourceID=RecruitSourceID.TANKWOMAN)
+        super(_QuestRecruitInfo, self).__init__(recruitID=questID, expiryTime=0, nations=NationNames, learntSkills=_TANKWOMAN_LEARNT_SKILLS, freeXP=0, roleLevel=_TANKWOMAN_ROLE_LEVEL, lastSkillLevel=0, firstName=_ms(QUESTS.BONUSES_ITEM_TANKWOMAN), lastName=EMPTY_STRING, roles=[], icon=_TANKWOMAN_ICON, sourceID=RecruitSourceID.TANKWOMAN, isFemale=True, hasNewSkill=True)
         self.__operationName = operationName
 
     def getLabel(self):
@@ -125,9 +138,11 @@ class _TokenRecruitInfo(_BaseRecruitInfo):
         self.__isPremium = isPremium
         learntSkills = freeSkills + skills
         nationNames = [ NationNames[i] for i in nations ]
+        needXP = sum((TankmanDescr.levelUpXpCost(level, len(skills) + 1) for level in xrange(0, tankmen.MAX_SKILL_LEVEL)))
+        hasNewSkill = freeXP >= needXP
         nation = nations[0] if nations else NONE_INDEX
-        roles, firstName, lastName, icon = self.__parseTankmanData(nation)
-        super(_TokenRecruitInfo, self).__init__(tokenName, expiryTime, nationNames, learntSkills, freeXP, roleLevel, lastSkillLevel, firstName, lastName, roles, icon, sourceID)
+        roles, firstName, lastName, icon, isFemale = self.__parseTankmanData(nation)
+        super(_TokenRecruitInfo, self).__init__(tokenName, expiryTime, nationNames, learntSkills, freeXP, roleLevel, lastSkillLevel, firstName, lastName, roles, icon, sourceID, isFemale, hasNewSkill)
 
     def getLabel(self):
         label = TOOLTIPS.getNotRecruitedTankmanEventLabel(self._sourceID)
@@ -138,8 +153,11 @@ class _TokenRecruitInfo(_BaseRecruitInfo):
         return description if description is not None else EMPTY_STRING
 
     def getFullUserNameByNation(self, nationID):
-        _, firstName, lastName, _ = self.__parseTankmanData(nationID)
+        _, firstName, lastName, _, _ = self.__parseTankmanData(nationID)
         return '{} {}'.format(firstName, lastName)
+
+    def getGroupName(self):
+        return self.__group
 
     def __parseTankmanData(self, nationID):
         config = tankmen.getNationGroups(nationID, self.__isPremium)
@@ -150,7 +168,8 @@ class _TokenRecruitInfo(_BaseRecruitInfo):
                 return ([],
                  EMPTY_STRING,
                  EMPTY_STRING,
-                 EMPTY_STRING)
+                 EMPTY_STRING,
+                 False)
             firstNameId = nationGroup.firstNamesList[0]
             lastNameId = nationGroup.lastNamesList[0]
             iconId = nationGroup.iconsList[0]
@@ -158,11 +177,13 @@ class _TokenRecruitInfo(_BaseRecruitInfo):
             return (nationGroup.rolesList,
              nationConfig.getFirstName(firstNameId),
              nationConfig.getLastName(lastNameId),
-             nationConfig.getIcon(iconId))
+             nationConfig.getIcon(iconId),
+             nationGroup.isFemales)
         return ([],
          EMPTY_STRING,
          EMPTY_STRING,
-         EMPTY_STRING)
+         EMPTY_STRING,
+         False)
 
 
 def _getRecruitInfoFromQuest(questID):

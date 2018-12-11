@@ -48,6 +48,12 @@ class WindowModel(ViewModel):
     def setContent(self, value):
         self._setView(6, value)
 
+    def getAlignToCenter(self):
+        return self._getBool(7)
+
+    def setAlignToCenter(self, value):
+        self._setBool(7, value)
+
     def _initialize(self):
         super(WindowModel, self)._initialize()
         self._addNumberProperty('x', 10)
@@ -57,5 +63,6 @@ class WindowModel(ViewModel):
         self._addResourceProperty('title', Resource.INVALID)
         self._addBoolProperty('canMinimize', False)
         self._addViewProperty('content')
+        self._addBoolProperty('alignToCenter', False)
         self.onClosed = self._addCommand('onClosed')
         self.onMinimazed = self._addCommand('onMinimazed')

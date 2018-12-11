@@ -1,0 +1,21 @@
+<NewYearToyObject.def>
+  <Parent>	NewYearSelectableObject	</Parent>
+  <Properties>
+    <hangingEffectName>
+      <Type>	STRING	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </hangingEffectName>
+    <regularEffectName>
+      <Type>	STRING	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </regularEffectName>
+    <animationSequence>
+      <Type>	STRING	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </animationSequence>
+    <appearanceDelay>
+      <Type>	FLOAT32	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </appearanceDelay>
+  </Properties>
+</NewYearToyObject.def>

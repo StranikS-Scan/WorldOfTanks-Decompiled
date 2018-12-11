@@ -13,6 +13,7 @@ from account_shared import LayoutIterator
 from constants import WIN_XP_FACTOR_MODE, RentType
 from rent_common import parseRentID
 from gui import makeHtmlString
+from gui.impl.gen import R
 from gui.Scaleform.genConsts.STORE_CONSTANTS import STORE_CONSTANTS
 from gui.Scaleform.locale.ITEM_TYPES import ITEM_TYPES
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
@@ -192,7 +193,7 @@ class Vehicle(FittingItem, HasStrCD):
         invData = dict()
         tradeInData = None
         if proxy is not None and proxy.inventory.isSynced() and proxy.stats.isSynced() and proxy.shop.isSynced() and proxy.vehicleRotation.isSynced() and proxy.recycleBin.isSynced():
-            invDataTmp = proxy.inventory.getItems(GUI_ITEM_TYPE.VEHICLE, inventoryID)
+            invDataTmp = proxy.inventory.getItems(GUI_ITEM_TYPE.VEHICLE, self._inventoryID)
             if invDataTmp is not None:
                 invData = invDataTmp
             tradeInData = proxy.shop.tradeIn
@@ -1413,6 +1414,15 @@ def getLevelIconPath(vehLevel):
 
 def getIconPath(vehicleName):
     return '../maps/icons/vehicle/%s' % getItemIconName(vehicleName)
+
+
+def getIconResource(vehicleName):
+    rName = getIconResourceName(vehicleName=vehicleName)
+    return R.images.gui.maps.icons.vehicle.dyn(rName)
+
+
+def getIconResourceName(vehicleName):
+    return vehicleName.replace(':', '_').replace('-', '_')
 
 
 def getContourIconPath(vehicleName):

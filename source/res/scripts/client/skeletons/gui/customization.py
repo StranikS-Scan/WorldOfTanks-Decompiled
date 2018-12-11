@@ -12,7 +12,7 @@ class ICustomizationService(object):
     def fini(self):
         raise NotImplementedError
 
-    def showCustomization(self):
+    def showCustomization(self, vehInvId=None, callback=None):
         raise NotImplementedError
 
     def getCtx(self):

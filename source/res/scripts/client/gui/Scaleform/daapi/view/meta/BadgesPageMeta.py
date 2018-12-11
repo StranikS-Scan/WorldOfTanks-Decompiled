@@ -13,6 +13,12 @@ class BadgesPageMeta(WrapperViewMeta):
     def onDeselectBadge(self):
         self._printOverrideError('onDeselectBadge')
 
+    def onSelectSuffixBadge(self):
+        self._printOverrideError('onSelectSuffixBadge')
+
+    def onDeselectSuffixBadge(self):
+        self._printOverrideError('onDeselectSuffixBadge')
+
     def onDummyButtonPress(self):
         self._printOverrideError('onDummyButtonPress')
 
@@ -27,3 +33,6 @@ class BadgesPageMeta(WrapperViewMeta):
 
     def as_setSelectedBadgeImgS(self, value):
         return self.flashObject.as_setSelectedBadgeImg(value) if self._isDAAPIInited() else None
+
+    def as_setSuffixBadgeImgS(self, value, descrText, selected):
+        return self.flashObject.as_setSuffixBadgeImg(value, descrText, selected) if self._isDAAPIInited() else None

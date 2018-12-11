@@ -2,27 +2,27 @@
 # Embedded file name: scripts/client/messenger/gui/Scaleform/channels/bw_chat2/battle_controllers.py
 import functools
 import BigWorld
+from arena_component_system.sector_base_arena_component import ID_TO_BASENAME
 from debug_utils import LOG_ERROR
+from gui.Scaleform.locale.EPIC_BATTLE import EPIC_BATTLE
+from gui.battle_control.arena_info.arena_vos import EPIC_BATTLE_KEYS
 from gui.shared import g_eventBus, EVENT_BUS_SCOPE
 from gui.shared.events import MessengerEvent
 from helpers import dependency
+from helpers import i18n
 from messenger.ext import isBattleChatEnabled
+from messenger.ext.player_helpers import isCurrentPlayer
 from messenger.formatters import chat_message
 from messenger.formatters.users_messages import getBroadcastIsInCoolDownMessage
 from messenger.gui.Scaleform.channels.layout import BattleLayout
+from messenger.m_constants import CLIENT_ERROR_ID
 from messenger.m_constants import PROTO_TYPE, MESSENGER_COMMAND_TYPE
-from messenger.ext.player_helpers import isCurrentPlayer
 from messenger.proto import proto_getter
-from messenger_common_chat2 import MESSENGER_LIMITS
 from messenger.proto.events import g_messengerEvents
 from messenger.proto.shared_errors import ClientError
-from messenger.m_constants import CLIENT_ERROR_ID
+from messenger_common_chat2 import MESSENGER_LIMITS
 from skeletons.gui.battle_session import IBattleSessionProvider
 from soft_exception import SoftException
-from helpers import i18n
-from gui.battle_control.arena_info.arena_vos import EPIC_BATTLE_KEYS
-from gui.Scaleform.locale.EPIC_BATTLE import EPIC_BATTLE
-from arena_component_system.sector_base_arena_component import ID_TO_BASENAME
 
 class _check_arena_in_waiting(object):
     sessionProvider = dependency.descriptor(IBattleSessionProvider)
@@ -93,8 +93,10 @@ class TeamChannelController(_ChannelController):
 
     def isEnabled(self):
         result = super(TeamChannelController, self).isEnabled()
-        hasAnyTeammates = self.sessionProvider.getArenaDP().getAlliesVehiclesNumber() > 1
-        return result and hasAnyTeammates
+        arenaDP = self.sessionProvider.getArenaDP()
+        hasAnyTeammates = arenaDP.getAlliesVehiclesNumber() > 1
+        isObserver = arenaDP.isPlayerObserver()
+        return result and (hasAnyTeammates or isObserver)
 
     def _formatCommand(self, command):
         isCurrent = False

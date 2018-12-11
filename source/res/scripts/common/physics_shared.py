@@ -556,7 +556,8 @@ def initVehiclePhysicsForced(physics, typeDesc, forcedCfg):
 
 def initVehiclePhysicsEditor(physics, typeDesc):
     if not hasattr(typeDesc.type.xphysics, 'detailed'):
-        typeDesc.type.xphysics['detailed'] = {'engines': {typeDesc.engine.name: {'startRPM': 1500,
+        typeDesc.type.xphysics['detailed'] = {'vehiclePhysicsType': VEHICLE_PHYSICS_TYPE.TANK,
+         'engines': {typeDesc.engine.name: {'startRPM': 1500,
                                             'powerFactor': 1,
                                             'rotationFactor': 0.857143,
                                             'engineTorque': ((500, 2.7),
@@ -839,6 +840,8 @@ def initVehiclePhysicsFromParams(physics, params, xmlPath):
     typeDesc.shot = gun_components.GunShot(None, 1.0, (10.0, 10.0), 100.0, 9.8, 500.0, 1000000.0)
     typeDesc.gun = vehicle_items.createGun(0, 0, 'Gun')
     typeDesc.gun.staticTurretYaw = None
+    typeDesc.gun.hitTester = _SimpleObject()
+    typeDesc.gun.hitTester.bbox = (params['turretHitTesterMin'], params['turretHitTesterMax'], None)
     typeDesc.hasSiegeMode = False
     typeDesc.isWheeledVehicle = False
     typeDesc.type.isRotationStill = False

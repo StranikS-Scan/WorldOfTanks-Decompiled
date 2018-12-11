@@ -12,5 +12,20 @@
       <Editable>	true	</Editable>
       <Default>	False	</Default>
     </multiLanguageSupport>
+    <outlineModelName>
+      <Type>	STRING	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <Editable>	true	</Editable>
+    </outlineModelName>
+    <animationSequence>
+      <Type>	STRING	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <Editable>	true	</Editable>
+    </animationSequence>
+    <viewSoundConfig>
+      <Type>	STRING	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <Editable>	true	</Editable>
+    </viewSoundConfig>
   </Properties>
 </ClientSelectableEasterEgg.def>

@@ -7,15 +7,15 @@
     <radioman></radioman>
   </crew>
   <speedLimits>
-    <forward>	65	</forward>
-    <backward>	65	</backward>
+    <forward>	60	</forward>
+    <backward>	60	</backward>
   </speedLimits>
   <invisibility>
-    <moving>	0.33	</moving>
-    <still>	0.33	</still>
+    <moving>	0.345	</moving>
+    <still>	0.345	</still>
     <camouflageBonus>	0.03	</camouflageBonus>
     <camouflageNetBonus>	0.1	</camouflageNetBonus>
-    <firePenalty>	0.496	</firePenalty>
+    <firePenalty>	0.518	</firePenalty>
   </invisibility>
   <repairCost>	5.7	</repairCost>
   <premiumVehicleXPFactor>	0.1	</premiumVehicleXPFactor>
@@ -167,6 +167,7 @@
       <wheels>
         <lodDist>	MEDIUM	</lodDist>
         <wheel>
+          <index>	0	</index>
           <isLeft>	true	</isLeft>
           <name>	WD_L0	</name>
           <radius>	0.617366	</radius>
@@ -190,8 +191,10 @@
           <armor>
             <wheel>	5	</wheel>
           </armor>
+          <wheelPos>	-0.88 0.61 -2.139	</wheelPos>
         </wheel>
         <wheel>
+          <index>	6	</index>
           <isLeft>	true	</isLeft>
           <name>	WD_L1	</name>
           <radius>	0.617366	</radius>
@@ -215,8 +218,10 @@
           <armor>
             <wheel>	5	</wheel>
           </armor>
+          <wheelPos>	-0.88 0.61 2.139	</wheelPos>
         </wheel>
         <wheel>
+          <index>	2	</index>
           <isLeft>	true	</isLeft>
           <name>	W_L0	</name>
           <radius>	0.611721	</radius>
@@ -236,8 +241,10 @@
           <armor>
             <wheel>	10	</wheel>
           </armor>
+          <wheelPos>	-1.026 0.581 -0.705	</wheelPos>
         </wheel>
         <wheel>
+          <index>	4	</index>
           <isLeft>	true	</isLeft>
           <name>	W_L1	</name>
           <radius>	0.611721	</radius>
@@ -257,8 +264,10 @@
           <armor>
             <wheel>	10	</wheel>
           </armor>
+          <wheelPos>	-1.026 0.581 0.705	</wheelPos>
         </wheel>
         <wheel>
+          <index>	1	</index>
           <isLeft>	false	</isLeft>
           <name>	WD_R0	</name>
           <radius>	0.617366	</radius>
@@ -282,8 +291,10 @@
           <armor>
             <wheel>	10	</wheel>
           </armor>
+          <wheelPos>	0.881 0.61 -2.139	</wheelPos>
         </wheel>
         <wheel>
+          <index>	7	</index>
           <isLeft>	false	</isLeft>
           <name>	WD_R1	</name>
           <radius>	0.617366	</radius>
@@ -307,8 +318,10 @@
           <armor>
             <wheel>	10	</wheel>
           </armor>
+          <wheelPos>	0.881 0.61 2.139	</wheelPos>
         </wheel>
         <wheel>
+          <index>	3	</index>
           <isLeft>	false	</isLeft>
           <name>	W_R0	</name>
           <radius>	0.611721	</radius>
@@ -328,8 +341,10 @@
           <armor>
             <wheel>	5	</wheel>
           </armor>
+          <wheelPos>	1.026 0.581 -0.705	</wheelPos>
         </wheel>
         <wheel>
+          <index>	5	</index>
           <isLeft>	false	</isLeft>
           <name>	W_R1	</name>
           <radius>	0.611721	</radius>
@@ -349,6 +364,7 @@
           <armor>
             <wheel>	5	</wheel>
           </armor>
+          <wheelPos>	1.026 0.581 0.705	</wheelPos>
         </wheel>
         <generalWheels>	True	</generalWheels>
         <activePostmortem>	True	</activePostmortem>
@@ -520,7 +536,7 @@
             <armor_9>	40	</armor_9>
             <gun>	20	</gun>
           </armor>
-          <shotDispersionRadius>	0.36	</shotDispersionRadius>
+          <shotDispersionRadius>	0.38	</shotDispersionRadius>
           <reloadTime>	10.3	</reloadTime>
           <aimingTime>	1.2	</aimingTime>
           <shotDispersionFactors>
@@ -687,8 +703,8 @@
     <detailed>
       <engines>
         <Panhard_12H_6000_54>
-          <smplEnginePower>	780	</smplEnginePower>
-          <smplFwMaxSpeed>	85	</smplFwMaxSpeed>
+          <smplEnginePower>	575	</smplEnginePower>
+          <smplFwMaxSpeed>	80	</smplFwMaxSpeed>
         </Panhard_12H_6000_54>
       </engines>
       <chassis>

@@ -29,16 +29,14 @@ def autoAimProcessor(target):
     return
 
 
-def magneticAimProcessor(previousTarget=None):
+def magneticAimProcessor(previousSimpleTarget=None, previousMagneticTarget=None):
     if BigWorld.target() is None:
         target = magneticAimFindTarget()
-        if target and target != previousTarget:
+        if target and target != previousSimpleTarget and target != previousMagneticTarget:
             gui_event_dispatcher.addAutoAimMarker(vehicle=target)
             BigWorld.player().autoAim(target=target, magnetic=True)
             return target
-        if target == previousTarget:
-            BigWorld.player().autoAim(target=None)
-    return
+    return previousSimpleTarget
 
 
 def magneticAimFindTarget():
@@ -110,7 +108,7 @@ def isVehicleVisibleFromCamera(vehicle, aimCamera):
         testResStatic = BigWorld.wg_collideSegment(BigWorld.player().spaceID, startPos, endPos, 128)
         if testResStatic is None:
             testResDynamic = BigWorld.wg_collideDynamic(BigWorld.player().spaceID, startPos, endPos, BigWorld.player().playerVehicleID)
-            if testResDynamic is None:
-                return True
+            return testResDynamic is None and True
+        continue
 
     return False

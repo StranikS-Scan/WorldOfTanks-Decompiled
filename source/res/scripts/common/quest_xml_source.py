@@ -14,7 +14,7 @@ from debug_utils import LOG_WARNING
 from dossiers2.custom.layouts import accountDossierLayout, vehicleDossierLayout, StaticSizeBlockBuilder, BinarySetDossierBlockBuilder
 from dossiers2.custom.records import RECORD_DB_IDS
 from items import vehicles
-from optional_bonuses import walkBonuses, FilterVisitor, StripVisitor
+from optional_bonuses import StripVisitor
 _WEEKDAYS = {'Mon': 1,
  'Tue': 2,
  'Wed': 3,
@@ -175,8 +175,8 @@ class Source(object):
                     raise SoftException('tokenQuest: Unexpected tags (cumulative, unit, vehicleKills, groupBy, battles)')
                 if not bonusLimit and daily:
                     raise SoftException('tokenQuest: daily should be used with bonusLimit tag')
-            mainNode.bonus = walkBonuses(readBonusSection(availableBonuses, questSection['bonus'], eventType), FilterVisitor(eventType))
-            mainNode.bonusDelayed = walkBonuses(readBonusSection(availableBonuses, questSection['bonusDelayed'], eventType), FilterVisitor(eventType))
+            mainNode.bonus = readBonusSection(availableBonuses, questSection['bonus'], eventType)
+            mainNode.bonusDelayed = readBonusSection(availableBonuses, questSection['bonusDelayed'], eventType)
             if eventType in (EVENT_TYPE.NT_QUEST, EVENT_TYPE.POTAPOV_QUEST):
                 mainNode.scripts = questSection['scripts'].asString if questSection.has_key('scripts') else ''
             questClientData = dict(info)
@@ -196,8 +196,8 @@ class Source(object):
 
     def __stripServerQuestData(self, questClientData):
         questClientData.pop('serverOnly', None)
-        questClientData['bonus'] = walkBonuses(questClientData['bonus'], StripVisitor())
-        questClientData['bonusDelayed'] = walkBonuses(questClientData['bonusDelayed'], StripVisitor())
+        questClientData['bonus'] = StripVisitor().walkBonuses(questClientData['bonus'])
+        questClientData['bonusDelayed'] = StripVisitor().walkBonuses(questClientData['bonusDelayed'])
         return
 
     def __readHeader(self, eventType, questSection, curTime, gStartTime, gFinishTime):
@@ -433,7 +433,8 @@ class Source(object):
         return condition_readers
 
     def __getAvailableBonuses(self, eventType):
-        bonusTypes = {'gold',
+        bonusTypes = {'meta',
+         'gold',
          'credits',
          'crystal',
          'freeXP',
@@ -449,8 +450,10 @@ class Source(object):
          'tankmen',
          'customizations',
          'vehicleChoice'}
-        if eventType in (EVENT_TYPE.BATTLE_QUEST, EVENT_TYPE.PERSONAL_QUEST):
+        if eventType in (EVENT_TYPE.BATTLE_QUEST, EVENT_TYPE.PERSONAL_QUEST, EVENT_TYPE.NT_QUEST):
             bonusTypes.update(('xp', 'tankmenXP', 'xpFactor', 'creditsFactor', 'freeXPFactor', 'tankmenXPFactor'))
+        if eventType in (EVENT_TYPE.NT_QUEST,):
+            bonusTypes.update(('vehicleXP', 'vehicleXPFactor'))
         return bonusTypes
 
     def __readCondition_groupBy(self, _, section, node):

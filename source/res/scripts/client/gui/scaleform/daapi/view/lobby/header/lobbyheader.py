@@ -33,6 +33,7 @@ from gui.clans.clan_helpers import isStrongholdsEnabled, isClansTabReplaceStrong
 from gui.game_control.ServerStats import STATS_TYPE
 from gui.game_control.wallet import WalletController
 from gui.gold_fish import isGoldFishActionActive, isTimeToShowGoldFishPromo
+from gui.impl.gen import R
 from gui.prb_control.entities.base.ctx import PrbAction
 from gui.prb_control.entities.listener import IGlobalListener
 from gui.prb_control.settings import PREBATTLE_ACTION_NAME, REQUEST_TYPE, UNIT_RESTRICTION, PRE_QUEUE_RESTRICTION
@@ -51,13 +52,15 @@ from gui.shared.tooltips import formatters
 from gui.shared.utils.functions import makeTooltip
 from gui.shared.utils.requesters.ItemsRequester import REQ_CRITERIA
 from gui.shared.view_helpers.emblems import ClanEmblemsHelper
+from gui.shared.ny_vignette_settings_switcher import checkVignetteSettings
+from gui.impl.new_year.sounds import NewYearSoundEvents
 from helpers import dependency
 from helpers import i18n, time_utils, isPlayerAccount
 from predefined_hosts import g_preDefinedHosts, PING_STATUSES
 from shared_utils import CONST_CONTAINER, BitmaskHelper
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.connection_mgr import IConnectionManager
-from skeletons.gui.game_control import IBootcampController
+from skeletons.gui.game_control import IBootcampController, IFestivityController
 from skeletons.gui.game_control import IEncyclopediaController
 from skeletons.gui.game_control import IEpicBattleMetaGameController
 from skeletons.gui.game_control import IIGRController, IChinaController, IServerStatsController
@@ -162,6 +165,7 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
     epicController = dependency.descriptor(IEpicBattleMetaGameController)
     bootcampController = dependency.descriptor(IBootcampController)
     hangarSpace = dependency.descriptor(IHangarSpace)
+    _festivityController = dependency.descriptor(IFestivityController)
 
     def __init__(self):
         super(LobbyHeader, self).__init__()
@@ -480,12 +484,12 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
                 self.requestClanEmblem16x16(g_clanCache.clanDBID)
             else:
                 self._updateHangarMenuData(None)
-            if diff is not None and any((self.goodiesCache.haveBooster(itemId) for itemId in diff.keys())):
+            if diff is not None and any((self.goodiesCache.haveBooster(itemId) for itemId in diff.keys())) and SoundGroupsInstance is not None:
                 SoundGroupsInstance.playSound2D('warehouse_booster')
             return
 
     def __updateBadge(self, *args):
-        selectedBages = self.itemsCache.items.getBadges(REQ_CRITERIA.BADGE.SELECTED).values()
+        selectedBages = self.itemsCache.items.getBadges(REQ_CRITERIA.BADGE.SELECTED | REQ_CRITERIA.BADGE.PREFIX_LAYOUT).values()
         badge = None
         if selectedBages:
             badge = selectedBages[0].getSmallIcon()
@@ -627,6 +631,19 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
         if pyEntity.viewType is ViewTypes.LOBBY_SUB:
             if pyEntity.alias in self.TABS.ALL():
                 self.__setCurrentScreen(pyEntity.alias)
+            self.__updateNYVisibility(pyEntity.alias)
+
+    def __updateNYVisibility(self, alias):
+        isShowMainMenuGlow = False
+        isShowBattleBtnGlow = False
+        if self._festivityController.isEnabled():
+            if alias == self.TABS.HANGAR:
+                isShowMainMenuGlow = True
+                isShowBattleBtnGlow = False
+            elif alias in (R.views.newYearMainView, R.views.newYearRewardsView):
+                isShowMainMenuGlow = False
+                isShowBattleBtnGlow = True
+        self.as_updateNYVisibilityS(isShowBattleBtnGlow, isShowMainMenuGlow)
 
     def __getContainer(self, viewType):
         return self.app.containerManager.getContainer(viewType) if self.app is not None and self.app.containerManager is not None else None
@@ -805,6 +822,11 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
     def __onHangarSpaceDestroy(self, inited):
         if inited and self.bootcampController.isInBootcamp():
             self.as_disableFightButtonS(True)
+        checkVignetteSettings(None)
+        from gui.impl.new_year.navigation import NewYearNavigation
+        if self._festivityController.isEnabled() and not NewYearNavigation.getCurrentObject():
+            WWISE.WW_eventGlobal(NewYearSoundEvents.MAIN_EXIT)
+        return
 
     def __onToggleVisibilityMenu(self, event):
         state = event.ctx['state']

@@ -2,7 +2,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/customization/tooltips/element.py
 import nations
 import BigWorld
-from CurrentVehicle import g_currentVehicle
+from CurrentVehicle import g_currentVehicle, g_currentPreviewVehicle
 from gui.Scaleform import getNationsFilterAssetPath
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.customization.shared import getItemInventoryCount, getItemAppliedCount, SEASON_TYPE_TO_NAME
@@ -129,18 +129,21 @@ class ElementTooltip(BlocksTooltipData):
         self.bonusDescription = VEHICLE_CUSTOMIZATION.BONUS_CONDITION_SEASON
         topBlocks = [self._packTitleBlock(), self._packIconBlock(self._item.isHistorical())]
         items = [formatters.packBuildUpBlockData(blocks=topBlocks, gap=10)]
-        self.currentVehicle = g_currentVehicle.item
+        isInPreview = g_currentPreviewVehicle.isPresent()
+        self.currentVehicle = g_currentPreviewVehicle.item if isInPreview else g_currentVehicle.item
         self.boundVehs = [ vehicleCD for vehicleCD in self._item.boundInventoryCount if vehicleCD != -1 ]
         self.installedToVehs = self._item.getInstalledVehicles()
         self.installedCount = self._item.getInstalledOnVehicleCount(self.currentVehicle.intCD)
-        c11nContext = self.service.getCtx()
         camo = None
         self.appliedCount = 0
+        isApplied = False
         if self._item.itemTypeID != GUI_ITEM_TYPE.STYLE:
-            self.appliedCount = getItemAppliedCount(self._item, c11nContext.getOutfitsInfo())
             bonus = self._item.bonus
-            hullContainer = self.service.getCtx().currentOutfit.hull
-            isApplied = hullContainer.slotFor(GUI_ITEM_TYPE.CAMOUFLAGE).getItem() == self._item
+            if not isInPreview:
+                c11nContext = self.service.getCtx()
+                self.appliedCount = getItemAppliedCount(self._item, c11nContext.getOutfitsInfo())
+                hullContainer = c11nContext.currentOutfit.hull
+                isApplied = hullContainer.slotFor(GUI_ITEM_TYPE.CAMOUFLAGE).getItem() == self._item
         else:
             self.bonusDescription = VEHICLE_CUSTOMIZATION.BONUS_STYLE
             for container in (self._item.getOutfit(season).hull for season in SeasonType.SEASONS if self._item.getOutfit(season)):
@@ -151,12 +154,13 @@ class ElementTooltip(BlocksTooltipData):
             else:
                 bonus = None
 
-            originalStyle = self.service.getCtx().originalStyle
-            modifiedStyle = self.service.getCtx().modifiedStyle
-            if modifiedStyle:
-                isApplied = self._item == modifiedStyle
-            else:
-                isApplied = self._item == originalStyle
+            if not isInPreview:
+                originalStyle = self.service.getCtx().originalStyle
+                modifiedStyle = self.service.getCtx().modifiedStyle
+                if modifiedStyle:
+                    isApplied = self._item == modifiedStyle
+                else:
+                    isApplied = self._item == originalStyle
             self.appliedCount = int(isApplied)
         if bonus:
             camo = self._item if not camo else camo
@@ -254,9 +258,11 @@ class ElementTooltip(BlocksTooltipData):
             else:
                 specials.append(_ms(VEHICLE_CUSTOMIZATION.CUSTOMIZATION_BOUND_SPECIAL_TEXT))
         if self._item.isLimited:
-            purchaseLimit = self.service.getCtx().getPurchaseLimit(self._item)
-            if self._item.buyCount > 0 and (purchaseLimit > 0 or self.appliedCount > 0):
-                specials.append(_ms(VEHICLE_CUSTOMIZATION.CUSTOMIZATION_LIMITED_SPECIAL_RULES_TEXT, available=text_styles.neutral(purchaseLimit)))
+            isInPreview = g_currentPreviewVehicle.isPresent()
+            if not isInPreview:
+                purchaseLimit = self.service.getCtx().getPurchaseLimit(self._item)
+                if self._item.buyCount > 0 and (purchaseLimit > 0 or self.appliedCount > 0):
+                    specials.append(_ms(VEHICLE_CUSTOMIZATION.CUSTOMIZATION_LIMITED_SPECIAL_RULES_TEXT, available=text_styles.neutral(purchaseLimit)))
         if not specials:
             return None
         else:

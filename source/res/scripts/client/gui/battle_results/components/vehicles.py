@@ -39,7 +39,7 @@ class TeamPlayerNameBlock(shared.PlayerNameBlock):
 
 
 class RegularVehicleStatsBlock(base.StatsBlock):
-    __slots__ = ('_isObserver', 'achievements', 'achievementsCount', 'vehicleState', 'vehicleStatePrefix', 'vehicleStateSuffix', 'killerID', 'deathReason', 'isPrematureLeave', 'vehicleName', 'vehicleShortName', 'vehicleIcon', 'vehicleSort', 'isPersonal', 'isTeamKiller', 'kills', 'tkills', 'realKills', 'xp', 'damageDealt', 'vehicles', 'playerID', 'player', 'statValues', 'fortResource', 'squadIndex', 'isPersonalSquad', 'xpSort', 'intCD', 'rank', 'rankIcon', 'badge', 'badgeIcon', 'isKilledByTeamKiller', 'playerRank', 'respawns')
+    __slots__ = ('_isObserver', 'achievements', 'achievementsCount', 'vehicleState', 'vehicleStatePrefix', 'vehicleStateSuffix', 'killerID', 'deathReason', 'isPrematureLeave', 'vehicleName', 'vehicleShortName', 'vehicleIcon', 'vehicleSort', 'isPersonal', 'isTeamKiller', 'kills', 'tkills', 'realKills', 'xp', 'damageDealt', 'vehicles', 'playerID', 'player', 'statValues', 'fortResource', 'squadIndex', 'isPersonalSquad', 'xpSort', 'intCD', 'rank', 'rankIcon', 'badge', 'badgeIcon', 'suffixBadgeIcon', 'isKilledByTeamKiller', 'playerRank', 'respawns')
 
     def __init__(self, meta=None, field='', *path):
         super(RegularVehicleStatsBlock, self).__init__(meta, field, *path)
@@ -51,6 +51,7 @@ class RegularVehicleStatsBlock(base.StatsBlock):
         self.vehicleSort = None
         self.badge = 0
         self.badgeIcon = None
+        self.suffixBadgeIcon = None
         return
 
     def setRecord(self, result, reusable):
@@ -58,10 +59,13 @@ class RegularVehicleStatsBlock(base.StatsBlock):
         avatar = reusable.avatars.getAvatarInfo(player.dbID)
         noPenalties = not avatar.hasPenalties()
         badgeIcon = None
+        self.suffixBadgeIcon = None
         if avatar is not None:
             self.badge = avatar.badge
             if self.badge > 0:
                 badgeIcon = style.makeBadgeIcon(self.badge)
+            if avatar.suffixBadge:
+                self.suffixBadgeIcon = style.makeBadgeIcon(avatar.suffixBadge)
         self.badgeIcon = badgeIcon
         self._processVehicles(result)
         self._setPlayerInfo(player)

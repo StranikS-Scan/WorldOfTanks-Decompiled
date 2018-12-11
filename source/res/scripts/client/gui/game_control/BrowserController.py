@@ -119,6 +119,7 @@ class BrowserController(IBrowserController):
             self.__pendingBrowsers[browserID] = ctx
         elif browserID in self.__browsers:
             _logger.debug('CTRL: Re-navigating an existing browser: %r - %s', browserID, url)
+            self.__showBrowser(browserID, ctx)
             browser = self.__browsers[browserID]
             browser.navigate(url)
             browser.changeTitle(title)

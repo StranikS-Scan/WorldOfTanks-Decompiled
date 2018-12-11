@@ -13,10 +13,12 @@ class BackgroundBlurSupport(object):
 
 
 class WGUIBackgroundBlurSupportImpl(BackgroundBlurSupport):
-    __slots__ = ('__blur',)
+    __slots__ = ('__blur', '__blur3dScene', '__blurUI')
 
-    def __init__(self):
+    def __init__(self, blur3dScene=True, blurUI=True):
         self.__blur = None
+        self.__blur3dScene = blur3dScene
+        self.__blurUI = blurUI
         return
 
     @sf_lobby
@@ -27,22 +29,26 @@ class WGUIBackgroundBlurSupportImpl(BackgroundBlurSupport):
     def battle(self):
         return None
 
-    def enable(self, ownLayer, layers, blurAnimRepeatCount=10):
-        if self.__blur is None:
-            self.__blur = GUI.WGUIBackgroundBlur()
-        self.__blur.enable = True
-        if self.lobby is not None:
-            self.lobby.blurBackgroundViews(ownLayer, layers, blurAnimRepeatCount)
-        if self.battle is not None:
-            self.battle.blurBackgroundViews()
+    def enable(self, ownLayer=None, layers=None, blurAnimRepeatCount=10):
+        if self.__blur3dScene:
+            if self.__blur is None:
+                self.__blur = GUI.WGUIBackgroundBlur()
+            self.__blur.enable = True
+        if self.__blurUI:
+            if self.lobby is not None:
+                self.lobby.blurBackgroundViews(ownLayer, layers, blurAnimRepeatCount)
+            if self.battle is not None:
+                self.battle.blurBackgroundViews()
         return
 
     def disable(self):
-        if self.__blur is not None:
-            self.__blur.enable = False
-            self.__blur = None
-        if self.lobby:
-            self.lobby.unblurBackgroundViews()
-        if self.battle:
-            self.battle.unblurBackgroundViews()
+        if self.__blur3dScene:
+            if self.__blur is not None:
+                self.__blur.enable = False
+                self.__blur = None
+        if self.__blurUI:
+            if self.lobby:
+                self.lobby.unblurBackgroundViews()
+            if self.battle:
+                self.battle.unblurBackgroundViews()
         return

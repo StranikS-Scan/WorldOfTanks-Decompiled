@@ -4,53 +4,30 @@ from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.Scaleform.locale.QUESTS import QUESTS
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.server_events import finders
-from gui.server_events.awards_formatters import QuestsBonusComposer, AWARDS_SIZES, PreformattedBonus, getPersonalMissionAwardPacker, getOperationPacker, formatCountLabel, LABEL_ALIGN, getLinkedSetAwardPacker, PACK_RENT_VEHICLES_BONUS
+from gui.server_events.awards_formatters import QuestsBonusComposer, AWARDS_SIZES, PreformattedBonus, getPersonalMissionAwardPacker, getOperationPacker, formatCountLabel, LABEL_ALIGN, getLinkedSetAwardPacker, PACK_RENT_VEHICLES_BONUS, PostProcessTags
 from gui.server_events.bonuses import FreeTokensBonus
 from gui.shared.formatters import text_styles
 from helpers import i18n, dependency
 from skeletons.gui.server_events import IEventsCache
 _OPERATION_AWARDS_COUNT = 3
 
-class CurtailingAwardsComposer(QuestsBonusComposer):
-
-    def __init__(self, displayedAwardsCount, awardsFormatter=None):
-        self._displayedAwardsCount = displayedAwardsCount
-        super(CurtailingAwardsComposer, self).__init__(awardsFormatter)
+class _MergingAwardsComposer(QuestsBonusComposer):
 
     def getShortBonusesData(self, bonuses):
         return self._getShortBonusesData(self.getPreformattedBonuses(bonuses))
 
-    def _packBonuses(self, preformattedBonuses, size):
-        bonusCount = len(preformattedBonuses)
-        mergedBonuses = []
-        awardsCount = self._displayedAwardsCount
-        if bonusCount > awardsCount:
-            sliceIdx = awardsCount - 1
-            displayBonuses = preformattedBonuses[:sliceIdx]
-            mergedBonuses = preformattedBonuses[sliceIdx:]
-        else:
-            displayBonuses = preformattedBonuses
-        result = []
-        for b in displayBonuses:
-            result.append(self._packBonus(b, size))
-
-        if mergedBonuses:
-            result.append(self._packMergedBonuses(mergedBonuses, size))
-        return result
-
     def _packBonus(self, bonus, size=AWARDS_SIZES.SMALL):
-        return {'label': bonus.getFormattedLabel(),
-         'imgSource': bonus.getImage(size),
-         'tooltip': bonus.tooltip,
-         'isSpecial': bonus.isSpecial,
-         'specialAlias': bonus.specialAlias,
-         'specialArgs': bonus.specialArgs,
-         'hasCompensation': bonus.isCompensation,
-         'align': bonus.align,
+        result = super(_MergingAwardsComposer, self)._packBonus(bonus, size)
+        compensationReason = None
+        if bonus.compensationReason is not None:
+            compensationReason = self._packBonus(bonus.compensationReason, size)
+        result.update({'hasCompensation': bonus.isCompensation,
+         'compensationReason': compensationReason,
          'highlightType': bonus.getHighlightType(size),
          'overlayType': bonus.getOverlayType(size),
          'highlightIcon': bonus.getHighlightIcon(size),
-         'overlayIcon': bonus.getOverlayIcon(size)}
+         'overlayIcon': bonus.getOverlayIcon(size)})
+        return result
 
     def _packMergedBonuses(self, mergedBonuses, size=AWARDS_SIZES.SMALL):
         mergedBonusCount = len(mergedBonuses)
@@ -70,6 +47,54 @@ class CurtailingAwardsComposer(QuestsBonusComposer):
             bonuses.append(shortData)
 
         return bonuses
+
+
+class CurtailingAwardsComposer(_MergingAwardsComposer):
+
+    def __init__(self, displayedAwardsCount, awardsFormatter=None):
+        self._displayedAwardsCount = displayedAwardsCount
+        super(CurtailingAwardsComposer, self).__init__(awardsFormatter)
+
+    def _packBonuses(self, preformattedBonuses, size):
+        bonusCount = len(preformattedBonuses)
+        mergedBonuses = []
+        awardsCount = self._displayedAwardsCount
+        if bonusCount > awardsCount:
+            sliceIdx = awardsCount - 1
+            displayBonuses = preformattedBonuses[:sliceIdx]
+            mergedBonuses = preformattedBonuses[sliceIdx:]
+        else:
+            displayBonuses = preformattedBonuses
+        result = []
+        for b in displayBonuses:
+            result.append(self._packBonus(b, size))
+
+        if mergedBonuses:
+            result.append(self._packMergedBonuses(mergedBonuses, size))
+        return result
+
+
+class CurtailingByTypeAwardsComposer(_MergingAwardsComposer):
+
+    def __init__(self, displayedTypes, awardsFormatter=None):
+        self._displayedTypes = displayedTypes
+        super(CurtailingByTypeAwardsComposer, self).__init__(awardsFormatter)
+
+    def _packBonuses(self, preformattedBonuses, size):
+        displayedBonuses = []
+        mergedBonuses = []
+        for bonus in preformattedBonuses:
+            if bonus.bonusName in self._displayedTypes:
+                displayedBonuses.append(bonus)
+            mergedBonuses.append(bonus)
+
+        result = []
+        for b in displayedBonuses:
+            result.append(self._packBonus(b, size))
+
+        if mergedBonuses:
+            result.append(self._packMergedBonuses(mergedBonuses, size))
+        return result
 
 
 class AwardsWindowComposer(CurtailingAwardsComposer):
@@ -144,6 +169,32 @@ class PackRentVehiclesAwardComposer(CurtailingAwardsComposer):
         if mergedBonuses:
             result.append(self._packMergedBonuses(mergedBonuses, size))
         return result
+
+
+class BonusNameQuestsBonusComposer(PackRentVehiclesAwardComposer):
+
+    def _packBonus(self, bonus, size=AWARDS_SIZES.SMALL):
+        packBonus = super(BonusNameQuestsBonusComposer, self)._packBonus(bonus, size)
+        packBonus['bonusName'] = bonus.bonusName
+        return packBonus
+
+
+class LootBoxBonusComposer(BonusNameQuestsBonusComposer):
+
+    def getVisibleFormattedBonuses(self, bonuses, alwaysVisibleBonuses, size=AWARDS_SIZES.SMALL):
+        preformattedBonuses = self.getPreformattedBonuses(bonuses)
+        alwaysPreformatedBonuses = self.getPreformattedBonuses(alwaysVisibleBonuses)
+        alwaysVisibleCount = len(alwaysPreformatedBonuses)
+        if alwaysVisibleCount:
+            totalCount = alwaysVisibleCount + len(preformattedBonuses)
+            if alwaysVisibleCount and totalCount > self._displayedAwardsCount:
+                insertPos = self._displayedAwardsCount - alwaysVisibleCount - 1
+                if insertPos < 0:
+                    insertPos = 0
+                preformattedBonuses[insertPos:insertPos] = alwaysPreformatedBonuses
+            else:
+                preformattedBonuses.extend(alwaysPreformatedBonuses)
+        return self._packBonuses(preformattedBonuses, size)
 
 
 def _getBonusesWithModifyTokens(bonuses, freeTokenName, addTokensCount, hasPawned):
@@ -352,3 +403,19 @@ class MarathonAwardComposer(CurtailingAwardsComposer):
         if mergedBonuses:
             result.append(self._packMergedBonuses(mergedBonuses, size))
         return result
+
+
+class AnniversaryAwardComposer(CurtailingAwardsComposer):
+
+    def getFormattedBonuses(self, bonuses, size=AWARDS_SIZES.SMALL):
+        preformattedBonuses = self.getPreformattedBonuses(bonuses)
+        return self._packBonuses(self._doCustomSort(preformattedBonuses), size=AWARDS_SIZES.SMALL)
+
+    def _doCustomSort(self, bonuses):
+        for idx, bonus in enumerate(bonuses):
+            if PostProcessTags.IS_SUFFIX_BADGE in bonus.postProcessTags:
+                bonuses.pop(idx)
+                bonuses.append(bonus)
+                break
+
+        return bonuses

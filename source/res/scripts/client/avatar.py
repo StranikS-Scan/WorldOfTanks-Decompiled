@@ -324,6 +324,7 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
             self.__gunDamagedShootSound = SoundGroups.g_instance.getSound2D('gun_damaged')
             if not g_offlineMapCreator.Active():
                 self.cell.switchObserverFPV(False)
+            BigWorld.worldDrawEnabled(False)
             uniprof.exitFromRegion('avatar.entering')
             return
 
@@ -2445,6 +2446,9 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
 
     def _doCmdIntArrStrArr(self, cmd, intArr, strArr, callback):
         self.__doCmd('doCmdIntArrStrArr', cmd, callback, intArr, strArr)
+
+    def _doCmdStrArr(self, cmd, strArr, callback):
+        self.__doCmd('doCmdStrArr', cmd, callback, strArr)
 
     def update(self, pickledDiff):
         self._update(cPickle.loads(pickledDiff))

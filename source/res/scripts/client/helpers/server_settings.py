@@ -405,6 +405,8 @@ class ServerSettings(object):
             self.__updateIngameShop(serverSettingsDiff)
         if 'disabledPersonalMissions' in serverSettingsDiff:
             self.__serverSettings['disabledPersonalMissions'] = serverSettingsDiff['disabledPersonalMissions']
+        if 'lootBoxes_config' in serverSettingsDiff:
+            self.__serverSettings['lootBoxes_config'] = serverSettingsDiff['lootBoxes_config']
         self.onServerSettingsChange(serverSettingsDiff)
 
     def clear(self):
@@ -511,6 +513,9 @@ class ServerSettings(object):
     def isIngamePreviewEnabled(self):
         return self.__bwIngameShop.isPreviewEnabled
 
+    def isLootBoxesEnabled(self):
+        return self.__getGlobalSetting('isLootBoxesEnabled')
+
     @property
     def ingameShop(self):
         return self.__bwIngameShop
@@ -535,6 +540,9 @@ class ServerSettings(object):
 
     def getBootcampBonuses(self):
         return self.__getGlobalSetting('bootcampBonuses', {})
+
+    def getLootBoxConfig(self):
+        return self.__getGlobalSetting('lootBoxes_config', {})
 
     def isEpicRandomEnabled(self):
         return self.__getGlobalSetting('isEpicRandomEnabled', False)

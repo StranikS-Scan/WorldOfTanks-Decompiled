@@ -45,8 +45,11 @@ class ServiceChannelManager(ChatActionsListener):
         message = ServiceChannelMessage.fromChatAction(chatAction, personal=True)
         self.__addServerMessage(message)
 
-    def pushClientSysMessage(self, message, msgType, isAlert=False, priority=None, messageData=None):
-        return self.__addClientMessage(message, SCH_CLIENT_MSG_TYPE.SYS_MSG_TYPE, isAlert=isAlert, auxData=[msgType.name(), priority, messageData])
+    def pushClientSysMessage(self, message, msgType, isAlert=False, priority=None, messageData=None, savedData=None):
+        return self.__addClientMessage(message, SCH_CLIENT_MSG_TYPE.SYS_MSG_TYPE, isAlert=isAlert, auxData=[msgType.name(),
+         priority,
+         messageData,
+         savedData])
 
     def pushClientMessage(self, message, msgType, isAlert=False, auxData=None):
         return self.__addClientMessage(message, msgType, isAlert=isAlert, auxData=auxData)

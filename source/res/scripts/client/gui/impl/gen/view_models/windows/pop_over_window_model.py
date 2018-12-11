@@ -29,10 +29,10 @@ class PopOverWindowModel(ViewModel):
     def setBoundHeight(self, value):
         self._setNumber(3, value)
 
-    def getFlowType(self):
+    def getDirectionType(self):
         return self._getNumber(4)
 
-    def setFlowType(self, value):
+    def setDirectionType(self, value):
         self._setNumber(4, value)
 
     def getContent(self):
@@ -53,7 +53,7 @@ class PopOverWindowModel(ViewModel):
         self._addNumberProperty('boundY', 0)
         self._addNumberProperty('boundWidth', 0)
         self._addNumberProperty('boundHeight', 0)
-        self._addNumberProperty('flowType', 0)
+        self._addNumberProperty('directionType', 0)
         self._addViewProperty('content')
         self._addBoolProperty('isCloseBtnVisible', True)
         self.onCloseBtnClicked = self._addCommand('onCloseBtnClicked')

@@ -37,7 +37,12 @@ SM_TYPE = Enumeration('System message type', ['Error',
  'PaymentMethodLink',
  'PaymentMethodUnlink',
  'RecruitGift',
- 'RecruitReminder'])
+ 'RecruitReminder',
+ 'LootBoxes',
+ 'LootBoxesGift',
+ 'NewYearEventStarted',
+ 'NewYearRewardsReminder',
+ 'LootBoxRewards'])
 CURRENCY_TO_SM_TYPE = {Currency.CREDITS: SM_TYPE.PurchaseForCredits,
  Currency.GOLD: SM_TYPE.PurchaseForGold,
  Currency.CRYSTAL: SM_TYPE.PurchaseForCrystal}
@@ -49,8 +54,8 @@ def _getSystemMessages():
     return dependency.instance(ISystemMessages)
 
 
-def pushMessage(text, type=SM_TYPE.Information, priority=None, messageData=None):
-    _getSystemMessages().pushMessage(text, type, priority, messageData=messageData)
+def pushMessage(text, type=SM_TYPE.Information, priority=None, messageData=None, savedData=None):
+    _getSystemMessages().pushMessage(text, type, priority, messageData=messageData, savedData=savedData)
 
 
 def pushI18nMessage(key, *args, **kwargs):

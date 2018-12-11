@@ -6,6 +6,7 @@ import typing
 import BigWorld
 import Windowing
 import Event
+import shared_utils
 from CurrentVehicle import g_currentVehicle
 from helpers import dependency
 from gui import SystemMessages
@@ -142,7 +143,6 @@ class CustomizationService(_ServiceItemShopMixin, _ServiceHelpersMixin, ICustomi
     def init(self):
         g_eventBus.addListener(events.LobbySimpleEvent.NOTIFY_CURSOR_OVER_3DSCENE, self.__onNotifyCursorOver3dScene)
         g_eventBus.addListener(events.LobbySimpleEvent.NOTIFY_CURSOR_DRAGGING, self.__onNotifyCursorDragging)
-        g_currentVehicle.onChangeStarted += self.__onVehicleEntityChange
         self.hangarSpace.onSpaceDestroy += self.__onSpaceDestroy
         self.hangarSpace.onSpaceCreate += self.__onSpaceCreate
         Windowing.addWindowAccessibilitynHandler(self.__onWindowAccessibilityChanged)
@@ -153,7 +153,6 @@ class CustomizationService(_ServiceItemShopMixin, _ServiceHelpersMixin, ICustomi
     def fini(self):
         g_eventBus.removeListener(events.LobbySimpleEvent.NOTIFY_CURSOR_OVER_3DSCENE, self.__onNotifyCursorOver3dScene)
         g_eventBus.removeListener(events.LobbySimpleEvent.NOTIFY_CURSOR_DRAGGING, self.__onNotifyCursorDragging)
-        g_currentVehicle.onChangeStarted -= self.__onVehicleEntityChange
         self.hangarSpace.onSpaceDestroy -= self.__onSpaceDestroy
         self.hangarSpace.onSpaceCreate -= self.__onSpaceCreate
         Windowing.removeWindowAccessibilityHandler(self.__onWindowAccessibilityChanged)
@@ -165,14 +164,23 @@ class CustomizationService(_ServiceItemShopMixin, _ServiceHelpersMixin, ICustomi
             self.__showCustomizationCallbackId = None
         return
 
-    def showCustomization(self):
+    def showCustomization(self, vehInvID=None, callback=None):
         if not g_currentVehicle.hangarSpace.spaceInited or not g_currentVehicle.hangarSpace.isModelLoaded:
             _logger.warning('Space or vehicle is not presented, could not show customization view, return')
             return
         else:
+            loadCallback = lambda : self.__loadCustomization(vehInvID, callback)
             if self.__showCustomizationCallbackId is None:
                 self.moveHangarVehicleToCustomizationRoom()
-                self.__showCustomizationCallbackId = BigWorld.callback(0.0, self.__showCustomization)
+                self.__showCustomizationCallbackId = BigWorld.callback(0.0, lambda : self.__showCustomization(loadCallback))
+            return
+
+    def __loadCustomization(self, vehInvID=None, callback=None):
+        if vehInvID is not None and vehInvID != g_currentVehicle.item.invID:
+            return g_currentVehicle.selectVehicle(vehInvID, lambda : self.__loadCustomization(vehInvID, callback))
+        else:
+            if callback is not None:
+                shared_utils.nextTick(callback)()
             return
 
     def getCtx(self):
@@ -324,14 +332,11 @@ class CustomizationService(_ServiceItemShopMixin, _ServiceHelpersMixin, ICustomi
         self.resumeHighlighter()
 
     def __onSpaceDestroy(self, _):
-        self.__onVehicleEntityChange()
-
-    def __onVehicleEntityChange(self):
         self.suspendHighlighter()
 
     def __onNotifyCursorOver3dScene(self, event):
+        self._isOver3dScene = event.ctx.get('isOver3dScene', False)
         if self._helper:
-            self._isOver3dScene = event.ctx.get('isOver3dScene', False)
             self._helper.setSelectingEnabled(self._isOver3dScene)
 
     def __onNotifyCursorDragging(self, event):
@@ -373,9 +378,13 @@ class CustomizationService(_ServiceItemShopMixin, _ServiceHelpersMixin, ICustomi
             self.__onSuspendHighlighter()
             g_eventBus.removeListener(events.LobbySimpleEvent.NOTIFY_SPACE_MOVED, self.__onSpaceMoving)
 
-    def __showCustomization(self):
+    def __showCustomization(self, callback=None):
         self.__showCustomizationCallbackId = None
-        g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.LOBBY_CUSTOMIZATION), scope=EVENT_BUS_SCOPE.LOBBY)
+        ctx = {}
+        if callback is not None:
+            ctx['callback'] = callback
+            self.__customizationShownCallback = None
+        g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.LOBBY_CUSTOMIZATION, ctx=ctx), scope=EVENT_BUS_SCOPE.LOBBY)
         return
 
     def __onWindowAccessibilityChanged(self, isAccessible):

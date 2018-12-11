@@ -59,6 +59,10 @@ class GameEvent(HasCtxEvent):
     SHOW_BTN_HINT = 'game/showBtnHint'
     HIDE_BTN_HINT = 'game/hideBtnHint'
     DESTROY_TIMERS_PANEL = 'game/destroyTimersPanel'
+    SHOW_LOOT_BOX_WINDOWS = 'game/showLootBoxWindows'
+    HIDE_LOOT_BOX_WINDOWS = 'game/hideLootBoxWindows'
+    CLOSE_LOOT_BOX_WINDOWS = 'game/closeLootBoxWindows'
+    IMAGE_VIEW_DONE = 'game/imageViewDone'
 
 
 class GUICommonEvent(SharedEvent):
@@ -285,6 +289,8 @@ class LobbySimpleEvent(HasCtxEvent):
     PREMIUM_BOUGHT = 'premiumBought'
     WAITING_SHOWN = 'waitingShown'
     BATTLE_RESULTS_POSTED = 'battleResultsPosted'
+    TURN_LOBBY_DRAGGING_ON = 'turnLobbyDraggingOn'
+    TURN_LOBBY_DRAGGING_OFF = 'turnLobbyDraggingOff'
 
 
 class MissionsEvent(HasCtxEvent):
@@ -539,6 +545,8 @@ class OpenLinkEvent(SharedEvent):
     PREM_SHOP = 'premShopURL'
     TOKEN_SHOP = 'tokenShopUrl'
     FRONTLINE_CHANGES = 'frontlineChangesURL'
+    LOOT_BOX_URL = 'lootBoxURL'
+    LOOT_BOX_GIFT_URL = 'lootBoxGiftURL'
 
     def __init__(self, eventType, url='', title='', params=None):
         super(OpenLinkEvent, self).__init__(eventType)
@@ -607,6 +615,7 @@ class VehicleBuyEvent(HasCtxEvent):
 
 
 class HangarVehicleEvent(HasCtxEvent):
+    ON_HERO_TANK_LABEL_UPDATE_REQUIRED = 'hangarVehicle/onHeroTankLabelUpdateRequired'
     ON_HERO_TANK_LOADED = 'hangarVehicle/onHeroTankLoaded'
     ON_HERO_TANK_DESTROY = 'hangarVehicle/onHeroTankDestroy'
     HERO_TANK_MARKER = 'hangarVehicle/heroTankMarker'
@@ -629,3 +638,16 @@ class StorageEvent(HasCtxEvent):
 class HangarCustomizationEvent(HasCtxEvent):
     CHANGE_VEHICLE_MODEL_TRANSFORM = 'hangarCustomization/changeVehicleModelTransform'
     RESET_VEHICLE_MODEL_TRANSFORM = 'hangarCustomization/resetVehicleModelTransform'
+
+
+class NewYearEvent(HasCtxEvent):
+    ON_BREAK_TOYS_FILTER_APPLIED = 'newYear/onBreakToysFilterApplied'
+    ON_LEVEL_UP_WINDOW_CONTENT_LOADED = 'newYear/onLevelUpWindowContentLoaded'
+    ON_LEVEL_UP_WINDOW_CONTENT_CLOSED = 'newYear/onLevelUpWindowContentClosed'
+
+
+class LootboxesEvent(HasCtxEvent):
+    ON_REWARD_VIEW_CLOSED = 'lootboxes/onRewardViewClosed'
+    ON_MULTI_OPEN_VIEW_CLOSED = 'lootboxes/onMultiOpenViewClosed'
+    ON_SHOW_SPECIAL_REWARDS_CLOSED = 'lootboxes/onShowSpecialRewardsClosed'
+    ON_ENTRY_VIEW_LOADED = 'lootboxes/onEntryViewLoaded'

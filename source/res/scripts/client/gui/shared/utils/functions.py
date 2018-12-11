@@ -187,8 +187,12 @@ def getArenaFullName(arenaTypeID):
     return arenaName
 
 
-def getBattleSubTypeWinText(arenaTypeID, teamID):
+def getBattleSubTypeWinText(arenaTypeID, teamID, isNewYear=False):
     key = 'type/%s/description' % ArenaType.g_cache[arenaTypeID].gameplayName
+    if random.random() <= 1.0 / 3.0 and isNewYear:
+        nyKey = key + 'NewYear'
+        if i18n.doesTextExist('#arenas:%s' % nyKey) or i18n.doesTextExist('#arenas:%s%d' % (nyKey, teamID)):
+            key = nyKey
     winText = i18n.makeString('#arenas:%s' % key)
     return i18n.makeString('#arenas:%s%d' % (key, teamID)) if winText == key else winText
 

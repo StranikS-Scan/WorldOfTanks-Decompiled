@@ -7,6 +7,7 @@ from items.components import chassis_components
 from items.components import component_constants
 from items.components.shared_components import LodSettings
 from items.readers import shared_readers
+from debug_utils import LOG_ERROR
 
 def readWheelsAndGroups(xmlCtx, section):
     wheelGroups = []
@@ -21,11 +22,22 @@ def readWheelsAndGroups(xmlCtx, section):
         if sname == 'wheel':
             from items.vehicles import _readHitTester, _readArmor
             ctx = (xmlCtx, 'wheels/wheel[{}]'.format(wheelId))
-            w = chassis_components.Wheel(isLeft=_xml.readBool(ctx, subsection, 'isLeft'), radius=_xml.readPositiveFloat(ctx, subsection, 'radius'), nodeName=intern(_xml.readNonEmptyString(ctx, subsection, 'name')), isLeading=subsection.readBool('isLeading', False), leadingSyncAngle=subsection.readFloat('syncAngle', defSyncAngle), hitTester=_readHitTester(ctx, subsection, 'hitTester', optional=True), materials=_readArmor(ctx, subsection, 'armor', optional=True, index=wheelId))
+            index = _xml.readIntOrNone(ctx, subsection, 'index')
+            w = chassis_components.Wheel(index=index, isLeft=_xml.readBool(ctx, subsection, 'isLeft'), radius=_xml.readPositiveFloat(ctx, subsection, 'radius'), nodeName=intern(_xml.readNonEmptyString(ctx, subsection, 'name')), isLeading=subsection.readBool('isLeading', False), leadingSyncAngle=subsection.readFloat('syncAngle', defSyncAngle), hitTester=_readHitTester(ctx, subsection, 'hitTester', optional=True), materials=_readArmor(ctx, subsection, 'armor', optional=True, index=index or wheelId), position=subsection.readVector3('wheelPos', (0, 0, 0)))
             wheels.append(w)
             wheelId += 1
-            tester = _readHitTester(ctx, subsection, 'hitTester', optional=True)
 
+    wheelIndices = [ wheel.index for wheel in wheels ]
+    if sorted(wheelIndices) == range(len(wheels)):
+        sortedWheels = [None] * len(wheels)
+        for wheel in wheels:
+            sortedWheels[wheel.index] = wheel
+
+        wheels = sortedWheels
+    elif wheelIndices == [None] * len(wheels):
+        pass
+    else:
+        LOG_ERROR('Invalid wheel index detected', xmlCtx, wheels)
     return (tuple(wheelGroups), tuple(wheels))
 
 
@@ -129,4 +141,13 @@ def readLeveredSuspension(xmlCtx, section, cache):
 
 
 def readSplineConfig(xmlCtx, section, cache):
-    return None if section['splineDesc'] is None else chassis_components.SplineConfig(segmentModelLeft=_xml.readNonEmptyString(xmlCtx, section, 'splineDesc/segmentModelLeft'), segmentModelRight=_xml.readNonEmptyString(xmlCtx, section, 'splineDesc/segmentModelRight'), segmentLength=_xml.readFloat(xmlCtx, section, 'splineDesc/segmentLength'), leftDesc=_xml.readStringOrNone(xmlCtx, section, 'splineDesc/left'), rightDesc=_xml.readStringOrNone(xmlCtx, section, 'splineDesc/right'), lodDist=shared_readers.readLodDist(xmlCtx, section, 'splineDesc/lodDist', cache), segmentOffset=_xml.readFloat(xmlCtx, section, 'splineDesc/segmentOffset', 0), segment2ModelLeft=_xml.readStringOrNone(xmlCtx, section, 'splineDesc/segment2ModelLeft'), segment2ModelRight=_xml.readStringOrNone(xmlCtx, section, 'splineDesc/segment2ModelRight'), segment2Offset=_xml.readFloat(xmlCtx, section, 'splineDesc/segment2Offset', 0), atlasUTiles=section.readInt('splineDesc/atlas/UTiles', 1), atlasVTiles=section.readInt('splineDesc/atlas/VTiles', 1))
+    if section['splineDesc'] is None:
+        return
+    else:
+        splineSegmentModelSets = {'default': chassis_components.SplineSegmentModelSet(left=_xml.readNonEmptyString(xmlCtx, section, 'splineDesc/segmentModelLeft'), right=_xml.readNonEmptyString(xmlCtx, section, 'splineDesc/segmentModelRight'), secondLeft=_xml.readStringOrNone(xmlCtx, section, 'splineDesc/segment2ModelLeft') or '', secondRight=_xml.readStringOrNone(xmlCtx, section, 'splineDesc/segment2ModelRight') or '')}
+        modelSetsSection = section['splineDesc/modelSets']
+        if modelSetsSection:
+            for sname, subSection in modelSetsSection.items():
+                splineSegmentModelSets[sname] = chassis_components.SplineSegmentModelSet(left=_xml.readNonEmptyString(xmlCtx, subSection, 'segmentModelLeft'), right=_xml.readNonEmptyString(xmlCtx, subSection, 'segmentModelRight'), secondLeft=_xml.readStringOrNone(xmlCtx, subSection, 'segment2ModelLeft'), secondRight=_xml.readStringOrNone(xmlCtx, subSection, 'segment2ModelRight'))
+
+        return chassis_components.SplineConfig(segmentModelSets=splineSegmentModelSets, segmentLength=_xml.readFloat(xmlCtx, section, 'splineDesc/segmentLength'), leftDesc=_xml.readStringOrNone(xmlCtx, section, 'splineDesc/left'), rightDesc=_xml.readStringOrNone(xmlCtx, section, 'splineDesc/right'), lodDist=shared_readers.readLodDist(xmlCtx, section, 'splineDesc/lodDist', cache), segmentOffset=_xml.readFloat(xmlCtx, section, 'splineDesc/segmentOffset', 0), segment2Offset=_xml.readFloat(xmlCtx, section, 'splineDesc/segment2Offset', 0), atlasUTiles=section.readInt('splineDesc/atlas/UTiles', 1), atlasVTiles=section.readInt('splineDesc/atlas/VTiles', 1))

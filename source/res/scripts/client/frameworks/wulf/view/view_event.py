@@ -67,8 +67,8 @@ class ViewEvent(object):
         return BoundingBox(*self.__core.bbox)
 
     @property
-    def flow(self):
-        return self.__core.flow
+    def direction(self):
+        return self.__core.direction
 
     def hasArgument(self, name):
         return self.__core.hasArgument(name)

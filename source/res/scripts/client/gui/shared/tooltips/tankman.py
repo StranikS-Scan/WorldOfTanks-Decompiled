@@ -183,7 +183,7 @@ class NotRecruitedTooltipData(BlocksTooltipData):
 
     def __init__(self, ctx):
         super(NotRecruitedTooltipData, self).__init__(ctx, TOOLTIP_TYPE.NOT_RECRUITED_TANKMAN)
-        self._setWidth(320)
+        self._setWidth(350)
         self.item = None
         return
 
@@ -193,7 +193,8 @@ class NotRecruitedTooltipData(BlocksTooltipData):
         self.item = item
         blocks = list()
         blocks.append(formatters.packImageTextBlockData(title=text_styles.highTitle(item.getFullUserName()), desc=text_styles.main(item.getLabel())))
-        blocks.append(formatters.packImageBlockData(img=item.getBigIcon(), align=BLOCKS_TOOLTIP_TYPES.ALIGN_CENTER))
+        specialIcon = item.getSpecialIcon()
+        blocks.append(formatters.packImageBlockData(img=specialIcon if specialIcon is not None else item.getBigIcon(), align=BLOCKS_TOOLTIP_TYPES.ALIGN_CENTER, width=350 if specialIcon is not None else -1, height=238 if specialIcon is not None else -1))
         blocks.append(formatters.packSeparatorBlockData())
         blocks.append(formatters.packTextBlockData(text_styles.main(item.getDescription()), useHtml=True, padding=formatters.packPadding(top=20, bottom=7)))
         if item.getLearntSkills():

@@ -237,6 +237,7 @@ class REQ_CRITERIA(object):
         CAN_NOT_BE_SOLD = RequestCriteria(PredicateCondition(lambda item: item.canNotBeSold))
         NAME_VEHICLE = staticmethod(lambda nameVehicle: RequestCriteria(PredicateCondition(lambda item: nameVehicle in item.searchableUserName)))
         DISCOUNT_RENT_OR_BUY = RequestCriteria(PredicateCondition(lambda item: (item.buyPrices.itemPrice.isActionPrice() or item.getRentPackageActionPrc() != 0) and not item.isRestoreAvailable()))
+        HAS_TAGS = staticmethod(lambda tags: RequestCriteria(PredicateCondition(lambda item: item.tags.issuperset(tags))))
 
     class TANKMAN(object):
         IN_TANK = RequestCriteria(PredicateCondition(lambda item: item.isInTank))
@@ -272,6 +273,7 @@ class REQ_CRITERIA(object):
 
     class BADGE(object):
         SELECTED = RequestCriteria(PredicateCondition(lambda item: item.isSelected))
+        PREFIX_LAYOUT = RequestCriteria(PredicateCondition(lambda item: item.isPrefixLayout()))
         ACHIEVED = RequestCriteria(PredicateCondition(lambda item: item.isAchieved))
 
     class CUSTOMIZATION(object):
@@ -290,6 +292,7 @@ class REQ_CRITERIA(object):
         ONLY_IN_GROUP = staticmethod(lambda group: RequestCriteria(PredicateCondition(lambda item: item.groupUserName == group)))
         DISCLOSABLE = staticmethod(lambda vehicle: RequestCriteria(PredicateCondition(lambda item: item.fullInventoryCount(vehicle) or not item.isHidden)))
         IS_INSTALLED_ON_VEHICLE = staticmethod(lambda vehicle: RequestCriteria(PredicateCondition(lambda item: item.getInstalledOnVehicleCount(vehicle.intCD) > 0)))
+        HAS_TAGS = staticmethod(lambda tags: RequestCriteria(PredicateCondition(lambda item: item.tags.issuperset(tags))))
 
 
 class RESEARCH_CRITERIA(object):
@@ -299,7 +302,7 @@ class RESEARCH_CRITERIA(object):
 class ItemsRequester(IItemsRequester):
     itemsFactory = dependency.descriptor(IGuiItemsFactory)
 
-    def __init__(self, inventory, stats, dossiers, goodies, shop, recycleBin, vehicleRotation, ranked, badges, epicMetaGame):
+    def __init__(self, inventory, stats, dossiers, goodies, shop, recycleBin, vehicleRotation, ranked, badges, epicMetaGame, festivityRequester, tokens):
         self.__inventory = inventory
         self.__stats = stats
         self.__dossiers = dossiers
@@ -310,7 +313,10 @@ class ItemsRequester(IItemsRequester):
         self.__ranked = ranked
         self.__badges = badges
         self.__epicMetaGame = epicMetaGame
+        self.__festivity = festivityRequester
+        self.__tokens = tokens
         self.__itemsCache = defaultdict(dict)
+        self.__brokenSyncAlreadyLoggedTypes = set()
         self.__vehCustomStateCache = defaultdict(dict)
 
     @property
@@ -353,6 +359,14 @@ class ItemsRequester(IItemsRequester):
     def epicMetaGame(self):
         return self.__epicMetaGame
 
+    @property
+    def festivity(self):
+        return self.__festivity
+
+    @property
+    def tokens(self):
+        return self.__tokens
+
     @async
     @process
     def request(self, callback=None):
@@ -383,6 +397,13 @@ class ItemsRequester(IItemsRequester):
         Waiting.show('download/epicMetaGame')
         yield self.epicMetaGame.request()
         Waiting.hide('download/epicMetaGame')
+        Waiting.show('download/festivity')
+        yield self.__festivity.request()
+        Waiting.hide('download/festivity')
+        Waiting.show('download/tokens')
+        yield self.__tokens.request()
+        Waiting.hide('download/tokens')
+        self.__brokenSyncAlreadyLoggedTypes.clear()
         callback(self)
 
     def isSynced(self):
@@ -433,7 +454,9 @@ class ItemsRequester(IItemsRequester):
         self.__recycleBin.clear()
         self.__ranked.clear()
         self.__badges.clear()
+        self.__tokens.clear()
         self.epicMetaGame.clear()
+        self.__festivity.clear()
 
     def invalidateCache(self, diff=None):
         invalidate = defaultdict(set)
@@ -589,6 +612,9 @@ class ItemsRequester(IItemsRequester):
     def getStockVehicle(self, typeCompDescr, useInventory=False):
         if getTypeOfCompactDescr(typeCompDescr) == GUI_ITEM_TYPE.VEHICLE:
             proxy = self if useInventory else None
+            vehInvData = proxy.inventory.getItemData(typeCompDescr) if useInventory else None
+            if vehInvData is not None:
+                return self.itemsFactory.createVehicle(typeCompDescr=typeCompDescr, inventoryID=vehInvData.invID, proxy=proxy)
             return self.itemsFactory.createVehicle(typeCompDescr=typeCompDescr, proxy=proxy)
         else:
             return
@@ -774,7 +800,7 @@ class ItemsRequester(IItemsRequester):
             return container[uid]
         else:
             if not self.isSynced():
-                self.__logBrokenSync()
+                self.__logBrokenSync(itemTypeIdx)
             item = self.itemsFactory.createGuiItem(itemTypeIdx, *args, **kwargs)
             if item is not None:
                 container[uid] = item
@@ -826,7 +852,10 @@ class ItemsRequester(IItemsRequester):
         vehData = self.__inventory.getVehicleData(tmanData.vehicle)
         return {vehData.descriptor.type.compactDescr} if vehData is not None else set()
 
-    def __logBrokenSync(self):
+    def __logBrokenSync(self, itemTypeID):
+        if itemTypeID in self.__brokenSyncAlreadyLoggedTypes:
+            return
+        self.__brokenSyncAlreadyLoggedTypes.add(itemTypeID)
         requesters = (self.__stats,
          self.__inventory,
          self.__recycleBin,

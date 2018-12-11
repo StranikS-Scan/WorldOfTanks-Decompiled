@@ -117,3 +117,6 @@ class LobbyHeaderMeta(BaseDAAPIComponent):
 
     def as_toggleVisibilityMenuS(self, state):
         return self.flashObject.as_toggleVisibilityMenu(state) if self._isDAAPIInited() else None
+
+    def as_updateNYVisibilityS(self, isShowBattleBtnGlow, isShowMainMenuGlow):
+        return self.flashObject.as_updateNYVisibility(isShowBattleBtnGlow, isShowMainMenuGlow) if self._isDAAPIInited() else None

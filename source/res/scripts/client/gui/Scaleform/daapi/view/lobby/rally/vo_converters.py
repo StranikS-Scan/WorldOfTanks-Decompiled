@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/rally/vo_converters.py
 import BigWorld
-from constants import MAX_VEHICLE_LEVEL, MIN_VEHICLE_LEVEL
+from constants import MAX_VEHICLE_LEVEL, MIN_VEHICLE_LEVEL, PREBATTLE_TYPE
 from constants import VEHICLE_CLASS_INDICES, VEHICLE_CLASSES
 from gui import makeHtmlString
 from helpers import dependency
@@ -246,7 +246,7 @@ def _getSlotsData(unitMgrID, fullData, app=None, levelsRange=None, checkForVehic
     colorGetter = g_settings.getColorScheme('rosters').getColors
     itemsCache = dependency.instance(IItemsCache)
     vehicleGetter = itemsCache.items.getItemByCD
-    canTakeSlot = not pInfo.isLegionary() and not isPlayerInSlot
+    canTakeSlot = not pInfo.isLegionary()
     bwPlugin = proto_getter(PROTO_TYPE.BW_CHAT2)(None)
     isPlayerSpeaking = bwPlugin.voipController.isPlayerSpeaking
     unit = fullData.unit
@@ -257,6 +257,8 @@ def _getSlotsData(unitMgrID, fullData, app=None, levelsRange=None, checkForVehic
         roster = unit.getRoster()
         rosterSlots = roster.slots
         isDefaultSlot = roster.isDefaultSlot
+        if unit.getPrebattleType() == PREBATTLE_TYPE.EXTERNAL:
+            canTakeSlot = canTakeSlot and not isPlayerInSlot
     unitState = fullData.flags
     playerCount = 0
     for slotInfo in fullData.slotsIterator:

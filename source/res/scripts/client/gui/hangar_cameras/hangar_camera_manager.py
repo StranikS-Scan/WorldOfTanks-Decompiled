@@ -4,18 +4,18 @@ import math
 from functools import partial
 from logging import getLogger
 import BigWorld
-import Math
 import Keys
+import Math
 from AvatarInputHandler import mathUtils
-from skeletons.account_helpers.settings_core import ISettingsCore
-from skeletons.gui.shared.utils import IHangarSpace
-from helpers import dependency
+from AvatarInputHandler.cameras import FovExtended
 from gui import g_keyEventHandlers, g_mouseEventHandlers
-from gui.shared import g_eventBus
 from gui.hangar_cameras.hangar_camera_common import CameraRelatedEvents, CameraMovementStates
 from gui.hangar_cameras.hangar_camera_idle import HangarCameraIdle
 from gui.hangar_cameras.hangar_camera_parallax import HangarCameraParallax
-from AvatarInputHandler.cameras import FovExtended
+from gui.shared import g_eventBus
+from helpers import dependency
+from skeletons.account_helpers.settings_core import ISettingsCore
+from skeletons.gui.shared.utils import IHangarSpace
 _logger = getLogger(__name__)
 IMMEDIATE_CAMERA_MOVEMENT_MODE = 0
 FAST_CAMERA_MOVEMENT_MODE = 1
@@ -99,6 +99,14 @@ class HangarCameraManager(object):
     settingsCore = dependency.descriptor(ISettingsCore)
     hangarSpace = dependency.descriptor(IHangarSpace)
 
+    @property
+    def handleInactiveCamera(self):
+        return self.__handleInactiveCamera
+
+    @handleInactiveCamera.setter
+    def handleInactiveCamera(self, value):
+        self.__handleInactiveCamera = value
+
     def __init__(self, spaceId):
         self.__spaceId = spaceId
         self.__cam = None
@@ -109,6 +117,7 @@ class HangarCameraManager(object):
         self.__isMouseDown = False
         self.__currentEntityId = None
         self.__movementDisabled = False
+        self.__handleInactiveCamera = False
         self.__isPreviewMode = False
         return
 
@@ -166,7 +175,7 @@ class HangarCameraManager(object):
         if movementMode != IMMEDIATE_CAMERA_MOVEMENT_MODE:
             self.__cam.movementMode = movementMode
         if camConstraints is not None:
-            self.__camConstraints = camConstraints
+            self.__camConstraints = list(camConstraints)
         else:
             self.__camConstraints[0] = cfg['cam_pitch_constr']
             self.__camConstraints[1] = cfg['cam_yaw_constr']
@@ -226,6 +235,8 @@ class HangarCameraManager(object):
 
     def __updateCameraByMouseMove(self, dx, dy, dz):
         if self.__cam is None or self.__movementDisabled:
+            return
+        elif self.__cam != BigWorld.camera() and not self.__handleInactiveCamera:
             return
         else:
             sourceMat = Math.Matrix(self.__cam.source)

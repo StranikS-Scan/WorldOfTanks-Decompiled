@@ -4,11 +4,11 @@ import math
 import BigWorld
 import Math
 from gui import g_guiResetters
+from gui.hangar_cameras.hangar_camera_manager import IMMEDIATE_CAMERA_MOVEMENT_MODE
 from helpers import dependency
 from helpers.CallbackDelayer import CallbackDelayer, TimeDeltaMeter
 from skeletons.account_helpers.settings_core import ISettingsCore
 from vehicle_systems.tankStructure import TankPartIndexes, TankPartNames
-from gui.hangar_cameras.hangar_camera_manager import IMMEDIATE_CAMERA_MOVEMENT_MODE
 _VERTICAL_OFFSET = 0.2
 _TRANSITION_DURATION = 0.8
 
@@ -31,23 +31,22 @@ class C11nHangarCameraManager(CallbackDelayer, TimeDeltaMeter):
         self.__prevPitch = None
         self.__hangarCamera = None
         self.__c11nCamera = None
-        self.__tankCentralPoint = None
         return
 
     def init(self):
         g_guiResetters.add(self.__onProjectionChanged)
         self._settingsCore.onSettingsApplied += self.__onProjectionChanged
-        self.__hangarCamera = BigWorld.camera()
+        self.__hangarCamera = self.__hangarCameraManager.camera
         self.__c11nCamera = BigWorld.SphericalTransitionCamera(self.__hangarCamera, _VERTICAL_OFFSET)
         targetPos = Math.Matrix(self.__hangarCamera.target).translation
         self.__c11nCamera.moveTo(targetPos, 0.0)
         BigWorld.camera(self.__c11nCamera)
+        self.__hangarCameraManager.handleInactiveCamera = True
         from gui.ClientHangarSpace import customizationHangarCFG
         customCfg = customizationHangarCFG()
         self.__hangarCamera.maxDistHalfLife = customCfg['cam_fluency']
         self.__hangarCamera.turningHalfLife = customCfg['cam_fluency']
         self.__hangarCamera.movementHalfLife = customCfg['cam_fluency']
-        self.__tankCentralPoint = self.__getTankCentralPoint()
 
     def fini(self):
         g_guiResetters.remove(self.__onProjectionChanged)
@@ -61,9 +60,9 @@ class C11nHangarCameraManager(CallbackDelayer, TimeDeltaMeter):
             self.__hangarCamera.turningHalfLife = cfg['cam_fluency']
             self.__hangarCamera.movementHalfLife = cfg['cam_fluency']
             BigWorld.camera(self.__hangarCamera)
+        self.__hangarCameraManager.handleInactiveCamera = False
         self.__hangarCamera = None
         self.__c11nCamera = None
-        self.__tankCentralPoint = None
         return
 
     def locateCameraToCustomizationPreview(self, forceLocate=False, preserveAngles=False):
@@ -73,8 +72,7 @@ class C11nHangarCameraManager(CallbackDelayer, TimeDeltaMeter):
             from gui.ClientHangarSpace import customizationHangarCFG, hangarCFG
             cfg = customizationHangarCFG()
             hangarConfig = hangarCFG()
-            self.__tankCentralPoint = self.__tankCentralPoint or self.__getTankCentralPoint()
-            worldPos = self.__tankCentralPoint
+            worldPos = self.__getTankCentralPoint()
             if worldPos:
                 pivotPos = Math.Vector3(0, 0, 0)
             else:

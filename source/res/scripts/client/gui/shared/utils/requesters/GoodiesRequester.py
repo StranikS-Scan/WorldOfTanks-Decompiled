@@ -9,13 +9,13 @@ GoodieVariable = namedtuple('GoodieVariable', 'state finishTime count')
 
 class GoodiesRequester(AbstractSyncDataRequester, IGoodiesRequester):
 
-    @async
-    def _requestCache(self, callback):
-        BigWorld.player().goodies.getCache(lambda resID, value: self._response(resID, value, callback))
-
     @property
     def goodies(self):
         return self.getCacheValue('goodies', {})
+
+    @async
+    def _requestCache(self, callback):
+        BigWorld.player().goodies.getCache(lambda resID, value: self._response(resID, value, callback))
 
     def _preprocessValidData(self, data):
         data = dict(data)

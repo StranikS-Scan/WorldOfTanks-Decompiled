@@ -50,9 +50,9 @@ class SystemMessagesInterface(ISystemMessages):
     def proto(self):
         return None
 
-    def pushMessage(self, text, type, priority=None, messageData=None):
+    def pushMessage(self, text, type, priority=None, messageData=None, savedData=None):
         if GUI_SETTINGS.isGuiEnabled():
-            self.proto.serviceChannel.pushClientSysMessage(text, type, priority=priority, messageData=messageData)
+            self.proto.serviceChannel.pushClientSysMessage(text, type, priority=priority, messageData=messageData, savedData=savedData)
         else:
             LOG_DEBUG('[SYSTEM MESSAGE]', text, type)
 

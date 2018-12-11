@@ -23,6 +23,7 @@ from gui.shared.utils.requesters import REQ_CRITERIA
 from helpers import i18n, dependency
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.customization import ICustomizationService
+from inventory_update_helper import updateOnInventoryChanges
 ARTEFACTS_SLOTS = (GUI_ITEM_TYPE_NAMES[GUI_ITEM_TYPE.OPTIONALDEVICE], GUI_ITEM_TYPE_NAMES[GUI_ITEM_TYPE.EQUIPMENT])
 _BOOSTERS_SLOTS = (GUI_ITEM_TYPE_NAMES[GUI_ITEM_TYPE.BATTLE_BOOSTER],)
 _ABILITY_SLOTS = (GUI_ITEM_TYPE_NAMES[GUI_ITEM_TYPE.BATTLE_ABILITY],)
@@ -76,11 +77,17 @@ def getAmmo(shells):
 
 
 class AmmunitionPanel(AmmunitionPanelMeta, IGlobalListener):
+    __slots__ = ('__hangarMessage',)
     itemsCache = dependency.descriptor(IItemsCache)
     service = dependency.descriptor(ICustomizationService)
 
-    def update(self):
-        self._update()
+    def __init__(self):
+        super(AmmunitionPanel, self).__init__()
+        self.__hangarMessage = None
+        return
+
+    def update(self, invDataDiff=None):
+        self._update(invDataDiff=invDataDiff)
 
     def showTechnicalMaintenance(self):
         self.fireEvent(LoadViewEvent(VIEW_ALIAS.TECHNICAL_MAINTENANCE), EVENT_BUS_SCOPE.LOBBY)
@@ -103,18 +110,28 @@ class AmmunitionPanel(AmmunitionPanelMeta, IGlobalListener):
     def _populate(self):
         super(AmmunitionPanel, self)._populate()
         self.startGlobalListening()
+        g_clientUpdateManager.addMoneyCallback(self.__moneyUpdateCallback)
         g_clientUpdateManager.addCallbacks({'inventory': self.__inventoryUpdateCallBack})
         self.update()
 
     def _dispose(self):
         self.stopGlobalListening()
         g_clientUpdateManager.removeObjectCallbacks(self)
+        self.__hangarMessage = None
         super(AmmunitionPanel, self)._dispose()
+        return
 
-    def _update(self):
+    def _update(self, onlyMoneyUpdate=False, invDataDiff=None):
         if g_currentVehicle.isPresent():
+            hangarMessage = g_currentVehicle.getHangarMessage()
+            if onlyMoneyUpdate and self.__hangarMessage == hangarMessage:
+                return
             vehicle = g_currentVehicle.item
-            statusId, msg, msgLvl = g_currentVehicle.getHangarMessage()
+            isNeedToUpdate = updateOnInventoryChanges(self.itemsCache, vehicle, invDataDiff)
+            if not isNeedToUpdate:
+                return
+            self.__hangarMessage = hangarMessage
+            statusId, msg, msgLvl = hangarMessage
             rentAvailable = False
             if statusId in (Vehicle.VEHICLE_STATE.RENTAL_IS_OVER, Vehicle.VEHICLE_STATE.RENTABLE_AGAIN):
                 canBuyOrRent, _ = vehicle.mayObtainForMoney(self.itemsCache.items.stats.money)
@@ -135,8 +152,11 @@ class AmmunitionPanel(AmmunitionPanelMeta, IGlobalListener):
              'isBackground': isBackground})
         return
 
-    def __inventoryUpdateCallBack(self, *args):
-        self.update()
+    def __inventoryUpdateCallBack(self, invDiff):
+        self.update(invDiff)
+
+    def __moneyUpdateCallback(self, *_):
+        self._update(onlyMoneyUpdate=True)
 
     def __updateDevices(self, vehicle):
         shells = []

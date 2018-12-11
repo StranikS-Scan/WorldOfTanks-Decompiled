@@ -52,6 +52,8 @@ GOLD_FISH_LAST_SHOW_TIME = 'goldFishWindowShowCooldown'
 BOOSTERS_FILTER = 'boostersFilter'
 LAST_PROMO_PATCH_VERSION = 'lastPromoPatchVersion'
 LAST_CALENDAR_SHOW_TIMESTAMP = 'lastCalendarShowTimestamp'
+LAST_HEROTANK_SHOW_TIMESTAMP = 'lastHerotankShowTimestamp'
+LAST_HEROTANK_SHOW_ID = 'lastHerotankShowId'
 LAST_RESTORE_NOTIFICATION = 'lastRestoreNotification'
 PREVIEW_INFO_PANEL_IDX = 'previewInfoPanelIdx'
 NEW_SETTINGS_COUNTER = 'newSettingsCounter'
@@ -300,6 +302,11 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                                          'compatibleOnly': True},
                'linkedset_view_vehicle': {'nation': -1,
                                           'vehicleType': 'none'},
+               'ny_vehicle_discount_activation': {'nation': -1,
+                                                  'vehicleType': 'none',
+                                                  'isMain': False,
+                                                  'level': -1,
+                                                  'compatibleOnly': False},
                PROMO: {},
                AWARDS: {'vehicleResearchAward': -1,
                         'victoryAward': -1,
@@ -455,6 +462,8 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                 'isEpicPerformanceWarningClicked': False,
                 LAST_PROMO_PATCH_VERSION: '',
                 LAST_CALENDAR_SHOW_TIMESTAMP: '',
+                LAST_HEROTANK_SHOW_TIMESTAMP: '',
+                LAST_HEROTANK_SHOW_ID: '',
                 LAST_RESTORE_NOTIFICATION: None,
                 'dynamicRange': 0,
                 'soundDevice': 0,
@@ -467,6 +476,7 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                 'doubleCarouselType': 0,
                 'vehicleCarouselStats': True,
                 WHEELED_DEATH_DELAY_COUNT: 10,
+                'lootBoxVideoOff': False,
                 NEW_SETTINGS_COUNTER: {'GameSettings': {'gameplay_epicStandard': True,
                                                         'c11nHistoricallyAccurate': True,
                                                         'hangarCamParallaxEnabled': True,

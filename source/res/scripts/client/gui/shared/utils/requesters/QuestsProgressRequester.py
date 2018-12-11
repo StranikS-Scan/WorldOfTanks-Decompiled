@@ -5,9 +5,12 @@ import BigWorld
 import personal_missions
 from adisp import async
 from gui.shared.utils.requesters.abstract import AbstractSyncDataRequester
+from skeletons.gui.shared import IItemsCache
+from helpers import dependency
 _Token = namedtuple('_Token', ('expireTime', 'count'))
 
 class _QuestsProgressRequester(AbstractSyncDataRequester):
+    itemsCache = dependency.descriptor(IItemsCache)
 
     def getTokenCount(self, tokenID):
         return self.__getToken(tokenID).count
@@ -24,7 +27,7 @@ class _QuestsProgressRequester(AbstractSyncDataRequester):
         BigWorld.player().questProgress.getCache(lambda resID, value: self._response(resID, value, callback))
 
     def __getTokensData(self):
-        return self.getCacheValue('tokens', {})
+        return self.itemsCache.items.tokens.getTokens()
 
     def __getToken(self, tokenID):
         return _Token(*self.__getTokensData().get(tokenID, (0, 0)))

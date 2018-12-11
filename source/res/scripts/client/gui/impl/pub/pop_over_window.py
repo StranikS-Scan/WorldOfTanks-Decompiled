@@ -14,7 +14,7 @@ class PopOverWindow(Window):
         self.popOverModel.setBoundY(event.bbox.positionY)
         self.popOverModel.setBoundWidth(event.bbox.width)
         self.popOverModel.setBoundHeight(event.bbox.height)
-        self.popOverModel.setFlowType(event.flow)
+        self.popOverModel.setDirectionType(event.direction)
         self.popOverModel.setIsCloseBtnVisible(content.isCloseBtnVisible)
         self.popOverModel.onCloseBtnClicked += self.__onCloseBtnClicked
 

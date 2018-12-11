@@ -181,12 +181,15 @@ class CompoundAppearance(ComponentSystem, CallbackDelayer):
         out = camouflages.getCamoPrereqs(self.__outfit, self.__typeDesc)
         splineDesc = typeDescriptor.chassis.splineDesc
         if splineDesc is not None:
-            out.append(splineDesc.segmentModelLeft)
-            out.append(splineDesc.segmentModelRight)
-            if splineDesc.segment2ModelLeft is not None:
-                out.append(splineDesc.segment2ModelLeft)
-            if splineDesc.segment2ModelRight is not None:
-                out.append(splineDesc.segment2ModelRight)
+            modelsSet = self.__outfit.modelsSet
+            out.append(splineDesc.segmentModelLeft(modelsSet))
+            out.append(splineDesc.segmentModelRight(modelsSet))
+            segment2ModelLeft = splineDesc.segment2ModelLeft(modelsSet)
+            if segment2ModelLeft is not None:
+                out.append(segment2ModelLeft)
+            segment2ModelRight = splineDesc.segment2ModelRight(modelsSet)
+            if segment2ModelRight is not None:
+                out.append(segment2ModelRight)
         self.__terrainMatKindLodDistance = typeDescriptor.chassis.traces.lodDist
         return out
 
@@ -474,8 +477,9 @@ class CompoundAppearance(ComponentSystem, CallbackDelayer):
         self.__setFashions(fashions, self.__isTurretDetached)
         self.__setupModels()
         if not isCurrentModelDamaged:
-            self.__splineTracks = model_assembler.setupSplineTracks(self.__fashion, self.__typeDesc, self.__compoundModel, prereqs)
-            self.crashedTracksController = CrashedTrackController(self.__typeDesc, self.__fashion)
+            modelsSet = self.__outfit.modelsSet
+            self.__splineTracks = model_assembler.setupSplineTracks(self.__fashion, self.__typeDesc, self.__compoundModel, prereqs, modelsSet)
+            self.crashedTracksController = CrashedTrackController(self.__typeDesc, self.__fashion, modelsSet)
         else:
             self.__trackScrollCtl = None
         if self.__currentDamageState.effect is not None:

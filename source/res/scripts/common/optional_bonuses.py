@@ -3,28 +3,8 @@
 import random
 import copy
 import time
-from constants import EVENT_TYPE
-from items import tankmen
+from account_shared import getCustomizationItem
 from soft_exception import SoftException
-
-def walkBonuses(bonusWithProbabilities, visitor):
-    result = visitor.resultHolder(bonusWithProbabilities)
-    for bonusName, bonusValue in bonusWithProbabilities.iteritems():
-        if bonusName == 'oneof':
-            deeper = visitor.onOneOf(result, bonusValue)
-        elif bonusName == 'allof':
-            deeper = visitor.onAllOf(result, bonusValue)
-        elif bonusName == 'groups':
-            deeper = visitor.onGroup(bonusValue)
-        else:
-            visitor.onValue(result, bonusName, bonusValue)
-            continue
-        for bonus in deeper:
-            for name, value in walkBonuses(bonus, visitor).iteritems():
-                visitor.onMerge(result, name, value)
-
-    return result
-
 
 def _packTrack(track):
     result = []
@@ -138,16 +118,29 @@ def __mergeDossier(total, key, value, isLeaf=False, count=1, *args):
             total['type'] = data['type']
 
 
+def __mergeNYToys(total, key, value, isLeaf=False, count=1, *args):
+    result = total.setdefault(key, {})
+    for toyID, toysCount in value.iteritems():
+        result[toyID] = result.get(toyID, 0) + count * toysCount
+
+
+def __mergeNY19AnyOf(total, key, value, isLeaf=False, count=1, *args):
+    result = total.setdefault(key, [])
+    result.extend(value if isinstance(value, list) else [value])
+
+
 BONUS_MERGERS = {'credits': __mergeValue,
  'gold': __mergeValue,
  'xp': __mergeValue,
  'crystal': __mergeValue,
  'freeXP': __mergeValue,
  'tankmenXP': __mergeValue,
+ 'vehicleXP': __mergeValue,
  'creditsFactor': __mergeFactor,
  'xpFactor': __mergeFactor,
  'freeXPFactor': __mergeFactor,
  'tankmenXPFactor': __mergeFactor,
+ 'vehicleXPFactor': __mergeFactor,
  'items': __mergeItems,
  'vehicles': __mergeVehicles,
  'slots': __mergeValue,
@@ -157,235 +150,369 @@ BONUS_MERGERS = {'credits': __mergeValue,
  'goodies': __mergeGoodies,
  'dossier': __mergeDossier,
  'tankmen': __mergeTankmen,
- 'customizations': __mergeCustomizations}
+ 'customizations': __mergeCustomizations,
+ 'ny19Toys': __mergeNYToys,
+ 'ny19ToyFragments': __mergeValue,
+ 'ny19AnyOf': __mergeNY19AnyOf,
+ 'ny18Toys': __mergeNYToys}
+ITEM_INVENTORY_CHECKERS = {'vehicles': lambda account, key: account._inventory.getVehicleInvID(key) != 0,
+ 'customizations': lambda account, key: account._customizations20.getItems((key,), 0)[key] > 0,
+ 'tokens': lambda account, key: account._quests.hasToken(key),
+ 'ny19Toys': lambda account, key: account._newYear.isToyPresentInCollection(key)}
 
-class NodeAcceptor(object):
+class BonusItemsCache(object):
 
-    def accept(self, bonusValue):
-        raise NotImplementedError()
-
-
-class AllNodesAcceptor(NodeAcceptor):
-
-    def accept(self, bonusValue):
-        return True
-
-
-class BonusNodeAcceptor(NodeAcceptor):
-
-    def __init__(self, account):
+    def __init__(self, account, cache=None):
         self.__account = account
+        self.__cache = cache or {}
 
-    def accept(self, bonusValue):
-        if 'vehicles' not in bonusValue:
+    def getRawData(self):
+        return self.__cache
+
+    def onItemAccepted(self, itemName, itemKey):
+        cache = self.__cache.setdefault(itemName, {})
+        state = cache.get(itemKey, None)
+        if state is not None:
+            wasInInventory, wasAccepted = state
+        else:
+            wasInInventory = ITEM_INVENTORY_CHECKERS[itemName](self.__account, itemKey)
+        cache[itemKey] = (wasInInventory, True)
+        return
+
+    def isItemExists(self, itemName, itemKey):
+        cache = self.__cache.setdefault(itemName, {})
+        state = cache.get(itemKey, None)
+        if state is not None:
+            wasInInventory, wasAccepted = state
+        else:
+            wasInInventory = ITEM_INVENTORY_CHECKERS[itemName](self.__account, itemKey)
+            wasAccepted = False
+            cache[itemKey] = (wasInInventory, wasAccepted)
+        return wasInInventory or wasAccepted
+
+    def getFinalizedCache(self):
+        result = {}
+        for bonus, checks in self.__cache.iteritems():
+            bonusResult = result.setdefault(bonus, {})
+            for key, (wasInInventory, wasAccepted) in checks.iteritems():
+                bonusResult[key] = (wasInInventory or wasAccepted, False)
+
+        return result
+
+    @staticmethod
+    def isInventoryChanged(account, itemsCache):
+        for bonus, checks in itemsCache.iteritems():
+            checker = ITEM_INVENTORY_CHECKERS[bonus]
+            for key, (state, _) in checks.iteritems():
+                if checker(account, key) != state:
+                    return True
+
+        return False
+
+
+class BonusNodeAcceptor(object):
+
+    def __init__(self, account, bonusConfig=None, counters=None, bonusCache=None):
+        self.__account = account
+        self.__limitsConfig = bonusConfig.get('limits', None) if bonusConfig else None
+        self.__locals = None
+        self.__cooldowns = None
+        self.__uses = None
+        self.__shouldVisitNodes = None
+        self.__bonusCache = bonusCache or BonusItemsCache(account)
+        self.__initCounters(counters or {})
+        return
+
+    def __initCounters(self, counters):
+        if self.__limitsConfig:
+            self.__uses = uses = {}
+            self.__cooldowns = cooldowns = {}
+            self.__locals = {}
+            for limitID, config in self.__limitsConfig.iteritems():
+                if 'guaranteedFrequency' in config or 'maxFrequency' in config:
+                    cooldowns[limitID], uses[limitID] = counters.get(limitID, (0, 0))
+
+    def getCounters(self):
+        if not self.__limitsConfig:
+            return None
+        else:
+            result = {}
+            cooldowns = self.__cooldowns
+            uses = self.__uses
+            for limitID, config in self.__limitsConfig.iteritems():
+                if 'guaranteedFrequency' in config or 'maxFrequency' in config:
+                    result[limitID] = (cooldowns[limitID], uses[limitID])
+
+            return result or None
+
+    def getBonusCache(self):
+        return self.__bonusCache
+
+    def isAcceptable(self, bonusNode, checkInventory=True):
+        if self.isLimitReached(bonusNode):
+            return False
+        return False if checkInventory and self.isBonusExists(bonusNode) else True
+
+    def getNodesForVisit(self, ids):
+        return self.__shouldVisitNodes.intersection(ids) if ids and self.__shouldVisitNodes else None
+
+    def isLimitReached(self, bonusNode):
+        if not self.__limitsConfig:
+            return False
+        limitID = bonusNode.get('properties', {}).get('limitID', None)
+        if not limitID:
+            return False
+        elif self.__locals.get(limitID, 1) <= 0:
             return True
-        for vehTypeDescr in bonusValue['vehicles'].iterkeys():
-            if self.__account._inventory.getVehicleInvID(vehTypeDescr) != 0:
-                return False
+        else:
+            return True if self.__cooldowns.get(limitID, 0) > 0 else False
 
-        return True
+    def updateBonusCache(self, bonusNode):
+        cache = self.__bonusCache
+        for itemType in ('vehicles', 'tokens', 'ny19Toys'):
+            if itemType in bonusNode:
+                for itemID in bonusNode[itemType].iterkeys():
+                    cache.onItemAccepted(itemType, itemID)
+
+        if 'customizations' in bonusNode:
+            for customization in bonusNode['customizations']:
+                c11nItem = getCustomizationItem(customization['custType'], customization['id'])[0]
+                cache.onItemAccepted('customizations', c11nItem.compactDescr)
+
+    def isBonusExists(self, bonusNode):
+        cache = self.__bonusCache
+        for itemType in ('vehicles', 'tokens', 'ny19Toys'):
+            if itemType in bonusNode:
+                for itemID in bonusNode[itemType].iterkeys():
+                    if cache.isItemExists(itemType, itemID):
+                        return True
+
+        if 'customizations' in bonusNode:
+            for customization in bonusNode['customizations']:
+                c11nItem = getCustomizationItem(customization['custType'], customization['id'])[0]
+                if cache.isItemExists('customizations', c11nItem.compactDescr):
+                    return True
+
+        return False
+
+    def accept(self, bonusNode):
+        limitID = bonusNode.get('properties', {}).get('limitID', None)
+        if limitID:
+            limitConfig = self.__limitsConfig[limitID]
+            if not limitConfig.get('countDuplicates', True) and self.isBonusExists(bonusNode):
+                return
+            if limitID in self.__locals:
+                self.__locals[limitID] -= 1
+            if limitID in self.__cooldowns:
+                self.__cooldowns[limitID] = limitConfig.get('maxFrequency', 0)
+            if limitID in self.__uses:
+                self.__uses[limitID] = 0
+        self.updateBonusCache(bonusNode)
+        return
+
+    def reuse(self):
+        if not self.__limitsConfig:
+            return
+        else:
+            self.__locals = locals = {}
+            cooldowns = self.__cooldowns
+            uses = self.__uses
+            self.__shouldVisitNodes = set([])
+            for limitID, limitConfig in self.__limitsConfig.iteritems():
+                bonusLimit = limitConfig.get('bonusLimit', None)
+                if bonusLimit is not None:
+                    locals[limitID] = bonusLimit
+                cooldown = limitConfig.get('maxFrequency', None)
+                if cooldown is not None:
+                    cooldowns[limitID] -= 1
+                guaranteedFrequency = limitConfig.get('guaranteedFrequency', None)
+                if guaranteedFrequency is not None:
+                    uses[limitID] += 1
+                    if uses[limitID] >= guaranteedFrequency:
+                        self.__shouldVisitNodes.add(limitID)
+
+            return
 
 
 class NodeVisitor(object):
 
-    def onOneOf(self, bonus, value):
+    def __init__(self, mergers, args):
+        self._mergers = mergers
+        self._mergersArgs = args
+
+    def onOneOf(self, storage, values):
         raise NotImplementedError()
 
-    def onAllOf(self, bonus, value):
+    def onAllOf(self, storage, values):
         raise NotImplementedError()
 
-    def onGroup(self, value):
+    def onGroup(self, storage, values):
         raise NotImplementedError()
 
-    def onValue(self, bonus, name, value):
+    def onMergeValue(self, storage, name, value, isLeaf):
+        self._mergers[name](storage, name, value, isLeaf, *self._mergersArgs)
+
+    def beforeWalk(self, storage, bonusSection):
         pass
 
-    def onMerge(self, bonus, name, value):
-        pass
+    def _walkSubsection(self, storage, bonusSection):
+        result = {}
+        for bonusName, bonusValue in bonusSection.iteritems():
+            if bonusName == 'oneof':
+                self.onOneOf(result, bonusValue)
+            if bonusName == 'allof':
+                self.onAllOf(result, bonusValue)
+            if bonusName == 'groups':
+                self.onGroup(result, bonusValue)
+            if bonusName in ('config', 'properties'):
+                continue
+            self.onMergeValue(result, bonusName, bonusValue, True)
+
+        for name, value in result.iteritems():
+            self.onMergeValue(storage, name, value, False)
+
+    def walkBonuses(self, bonusSection, storage=None):
+        result = storage if storage is not None else {}
+        self.beforeWalk(result, bonusSection)
+        self._walkSubsection(result, bonusSection)
+        return result
 
 
 class TrackVisitor(NodeVisitor):
 
-    def __init__(self, mergers, track, *args):
-        self.__mergers = mergers
-        self.__mergersArgs = args
+    def __init__(self, track, *args):
+        super(TrackVisitor, self).__init__(BONUS_MERGERS, args)
         self.__track = _trackIterator(track)
 
-    def onOneOf(self, bonus, value):
-        for probability, bonusValue in value:
+    def onOneOf(self, storage, values):
+        for probability, limitIDs, bonusValue in values[1]:
             if next(self.__track):
-                return [bonusValue]
+                self._walkSubsection(storage, bonusValue)
+                return
 
-        raise SoftException('Unreachable code, oneof probability bug %s' % value)
-
-    def onAllOf(self, bonus, value):
-        deeper = []
-        for probability, bonusValue in value:
+    def onAllOf(self, storage, values):
+        for probability, refGlobalID, bonusValue in values:
             if next(self.__track):
-                deeper.append(bonusValue)
+                self._walkSubsection(storage, bonusValue)
 
-        return deeper
-
-    def onGroup(self, value):
-        deeper = []
-        for bonusValue in value:
-            deeper.append(bonusValue)
-
-        return deeper
-
-    def onValue(self, bonus, name, value):
-        if name in self.__mergers:
-            self.__mergers[name](bonus, name, value, True, *self.__mergersArgs)
-
-    def onMerge(self, bonus, name, value):
-        if name in self.__mergers:
-            self.__mergers[name](bonus, name, value, False, *self.__mergersArgs)
-
-    @staticmethod
-    def resultHolder(result):
-        return {}
+    def onGroup(self, storage, values):
+        for bonusValue in values:
+            self._walkSubsection(storage, bonusValue)
 
 
 class ProbabilityVisitor(NodeVisitor):
 
-    def __init__(self, mergers, nodeAcceptor, *args):
-        self.__mergers = mergers
-        self.__mergersArgs = args
+    def __init__(self, nodeAcceptor, *args):
+        super(ProbabilityVisitor, self).__init__(BONUS_MERGERS, args)
         self.__bonusTrack = []
         self.__nodeAcceptor = nodeAcceptor
 
-    def bonusTrack(self):
+    def getBonusTrack(self):
         return _packTrack(self.__bonusTrack)
 
-    def onOneOf(self, bonus, value):
+    def onOneOf(self, storage, values):
         rand = random.random()
-        selectedIdx = None
-        for i, (probability, bonusValue) in enumerate(value):
-            if probability > rand:
+        limitIDs, bonusNodes = values
+        shouldVisitNodes = self.__nodeAcceptor.getNodesForVisit(limitIDs)
+        if shouldVisitNodes:
+            check = lambda _, nodeLimitIDs: nodeLimitIDs and nodeLimitIDs.intersection(shouldVisitNodes)
+        else:
+            check = lambda probability, _: probability > rand
+        for i, (probability, nodeLimitIDs, bonusValue) in enumerate(bonusNodes):
+            if check(probability, nodeLimitIDs):
                 selectedIdx = i
                 selectedValue = bonusValue
                 break
+        else:
+            raise SoftException('Unreachable code, oneof probability bug %s' % bonusNodes)
 
-        if selectedIdx is None:
-            raise SoftException('Unreachable code, oneof probability bug %s' % value)
-        if not self.__nodeAcceptor.accept(selectedValue):
-            accept = self.__nodeAcceptor.accept
-            altList = list(enumerate(value))
+        isAcceptable = self.__nodeAcceptor.isAcceptable
+        if not isAcceptable(selectedValue):
+            altList = list(enumerate(bonusNodes))
             random.shuffle(altList)
-            for i, (_, bonusValue) in altList:
-                if i != selectedIdx and bonusValue.get('compensation', False) and accept(bonusValue):
-                    selectedIdx = i
-                    selectedValue = bonusValue
-                    break
+            for i, (_1, _2, bonusValue) in altList:
+                if i != selectedIdx:
+                    isCompensation = bonusValue.get('properties', {}).get('compensation', False)
+                    if isCompensation and isAcceptable(bonusValue):
+                        selectedIdx = i
+                        selectedValue = bonusValue
+                        break
+            else:
+                shouldCompensated = selectedValue.get('properties', {}).get('shouldCompensated', False)
+                if not isAcceptable(selectedValue, False) or shouldCompensated:
+                    for i in xrange(len(bonusNodes)):
+                        self.__trackChoice(False)
+
+                    return
 
         for i in xrange(selectedIdx):
             self.__trackChoice(False)
 
         self.__trackChoice(True)
-        return [selectedValue]
+        self.__nodeAcceptor.accept(selectedValue)
+        self._walkSubsection(storage, selectedValue)
 
-    def onAllOf(self, bonus, value):
-        deeper = []
-        for probability, bonusValue in value:
-            if probability > random.random():
+    def onAllOf(self, storage, values):
+        acceptor = self.__nodeAcceptor
+        for probability, nodeLimitIDs, bonusValue in values:
+            shouldVisitNodes = acceptor.getNodesForVisit(nodeLimitIDs)
+            if shouldVisitNodes or probability > random.random() and acceptor.isAcceptable(bonusValue, False):
                 self.__trackChoice(True)
-                deeper.append(bonusValue)
+                self.__nodeAcceptor.accept(bonusValue)
+                self._walkSubsection(storage, bonusValue)
             self.__trackChoice(False)
 
-        return deeper
+    def onGroup(self, storage, values):
+        for bonusValue in values:
+            self._walkSubsection(storage, bonusValue)
 
-    def onGroup(self, value):
-        deeper = []
-        for bonusValue in value:
-            deeper.append(bonusValue)
-
-        return deeper
-
-    def onValue(self, bonus, name, value):
-        if name in self.__mergers:
-            self.__mergers[name](bonus, name, value, True, *self.__mergersArgs)
-
-    def onMerge(self, bonus, name, value):
-        if name in self.__mergers:
-            self.__mergers[name](bonus, name, value, False, *self.__mergersArgs)
+    def beforeWalk(self, storage, bonusSection):
+        self.__nodeAcceptor.reuse()
 
     def __trackChoice(self, choice):
         self.__bonusTrack.append(choice)
 
-    @staticmethod
-    def resultHolder(result):
-        return {}
-
-
-class FilterVisitor(NodeVisitor):
-
-    def __init__(self, eventType=None):
-        self.__eventType = eventType
-
-    def onOneOf(self, bonus, value):
-        deeper = []
-        for probability, bonusValue in value:
-            deeper.append(bonusValue)
-
-        return deeper
-
-    def onAllOf(self, bonus, value):
-        deeper = []
-        for probability, bonusValue in value:
-            deeper.append(bonusValue)
-
-        return deeper
-
-    def onGroup(self, value):
-        deeper = []
-        for bonusValue in value:
-            deeper.append(bonusValue)
-
-        return deeper
-
-    def onValue(self, bonus, name, value):
-        if self.__eventType != EVENT_TYPE.PERSONAL_MISSION and name == 'tankmen':
-            tankmenList = [ tankmen.makeTmanDescrByTmanData(tmanData) for tmanData in value ]
-            bonus['tankmen'] = tankmenList
-        if self.__eventType in EVENT_TYPE.LIKE_TOKEN_QUESTS and name == 'customization':
-            if 'boundToCurrentVehicle' in value:
-                raise SoftException("Unsupported tag 'boundToCurrentVehicle' in 'like token' quests")
-
-    @staticmethod
-    def resultHolder(result):
-        return result
-
 
 class StripVisitor(NodeVisitor):
 
-    def onOneOf(self, bonus, value):
-        result = []
-        deeper = []
-        for probability, bonusValue in value:
-            bonusValue.pop('compensation', None)
-            result.append((-1, bonusValue))
-            deeper.append(bonusValue)
+    class ValuesMerger:
 
-        bonus['oneof'] = result
-        return deeper
+        def __getitem__(self, item):
+            return self.copyMerger
 
-    def onAllOf(self, bonus, value):
-        result = []
-        deeper = []
-        for probability, bonusValue in value:
-            result.append((-1, bonusValue))
-            deeper.append(bonusValue)
+        @staticmethod
+        def copyMerger(storage, name, value, isLeaf):
+            storage[name] = value
 
-        bonus['allof'] = result
-        return deeper
+    def __init__(self):
+        super(StripVisitor, self).__init__(self.ValuesMerger(), tuple())
 
-    def onGroup(self, value):
-        deeper = []
-        for bonusValue in value:
-            deeper.append(bonusValue)
+    def onOneOf(self, storage, values):
+        strippedValues = []
+        _, values = values
+        for probability, refGlobalID, bonusValue in values:
+            stippedValue = {}
+            self._walkSubsection(stippedValue, bonusValue)
+            strippedValues.append((-1, None, stippedValue))
 
-        return deeper
+        storage['oneof'] = (None, strippedValues)
+        return
 
-    @staticmethod
-    def resultHolder(result):
-        return result
+    def onAllOf(self, storage, values):
+        strippedValues = []
+        for probability, refGlobalID, bonusValue in values:
+            stippedValue = {}
+            self._walkSubsection(stippedValue, bonusValue)
+            strippedValues.append((-1, None, stippedValue))
+
+        storage['allof'] = strippedValues
+        return
+
+    def onGroup(self, storage, values):
+        strippedValues = []
+        for bonusValue in values:
+            stippedValue = {}
+            self._walkSubsection(stippedValue, bonusValue)
+            strippedValues.append(stippedValue)
+
+        storage['groups'] = strippedValues

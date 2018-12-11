@@ -62,6 +62,13 @@
       </Arg>
       <Exposed></Exposed>
     </doCmdIntArrStrArr>
+    <doCmdStrArr>
+      <Arg>	INT16	</Arg>
+      <Arg>	INT16	</Arg>
+      <Arg>	ARRAY	  <of>	STRING	</of>
+      </Arg>
+      <Exposed></Exposed>
+    </doCmdStrArr>
   </BaseMethods>
   <ClientMethods>
     <onCmdResponse>

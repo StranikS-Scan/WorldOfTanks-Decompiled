@@ -60,6 +60,11 @@ class CustomizationCarouselDataProvider(SortableDAAPIDataProvider):
         self._proxy = proxy
         self._currentlyApplied = set()
         self._allSeasonAndTabFilterData = {}
+        self.updateTabGroups()
+        return
+
+    def updateTabGroups(self):
+        self._allSeasonAndTabFilterData.clear()
         visibleTabs = defaultdict(set)
         c11nContext = self.service.getCtx()
         anchorsData = c11nContext.hangarSpace.getSlotPositions()
@@ -106,7 +111,6 @@ class CustomizationCarouselDataProvider(SortableDAAPIDataProvider):
         self._itemSizeData = []
         self._customizationBookmarks = []
         self._selectedIdx = -1
-        return
 
     def clear(self):
         del self._customizationItems[:]

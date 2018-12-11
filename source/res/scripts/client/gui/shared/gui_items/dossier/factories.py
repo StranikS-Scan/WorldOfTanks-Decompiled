@@ -4,6 +4,7 @@ import nations
 from dossiers2.ui.achievements import ACHIEVEMENT_TYPE, getType as getAchieveType, ACHIEVEMENT_BLOCK as _AB, WHITE_TIGER_RECORD, RARE_STORAGE_RECORD, HONORED_RANK_RECORD
 from gui.shared.gui_items.dossier import achievements as _as
 from gui.shared.gui_items.dossier.achievements import abstract as _abstract_achievements
+from gui.shared.gui_items.dossier.achievements.loyal_service import LoyalServiceAchievement
 
 class _AchieveFactory(object):
 
@@ -220,6 +221,21 @@ _ACHIEVEMENTS_BY_NAME = {(_AB.TOTAL, 'warrior'): _CustomAchieveFactory.get(_as.W
  (_AB.SINGLE, 'streamersEventAmway921'): _AchieveFactory.get(_as.Achieved),
  (_AB.SINGLE, 'streamersEventLeBwA'): _AchieveFactory.get(_as.Achieved),
  (_AB.SINGLE, 'twitchPrime'): _AchieveFactory.get(_abstract_achievements.DeprecatedAchievement),
+ (_AB.SINGLE, 'alphaTester'): _AchieveFactory.get(LoyalServiceAchievement),
+ (_AB.SINGLE, 'betaTester'): _AchieveFactory.get(LoyalServiceAchievement),
+ (_AB.SINGLE, '10YearsOfService'): _AchieveFactory.get(LoyalServiceAchievement),
+ (_AB.SINGLE, '09YearsOfService'): _AchieveFactory.get(LoyalServiceAchievement),
+ (_AB.SINGLE, '08YearsOfService'): _AchieveFactory.get(LoyalServiceAchievement),
+ (_AB.SINGLE, '07YearsOfService'): _AchieveFactory.get(LoyalServiceAchievement),
+ (_AB.SINGLE, '06YearsOfService'): _AchieveFactory.get(LoyalServiceAchievement),
+ (_AB.SINGLE, '05YearsOfService'): _AchieveFactory.get(LoyalServiceAchievement),
+ (_AB.SINGLE, '04YearsOfService'): _AchieveFactory.get(LoyalServiceAchievement),
+ (_AB.SINGLE, '03YearsOfService'): _AchieveFactory.get(LoyalServiceAchievement),
+ (_AB.SINGLE, '02YearsOfService'): _AchieveFactory.get(LoyalServiceAchievement),
+ (_AB.SINGLE, '01YearsOfService'): _AchieveFactory.get(LoyalServiceAchievement),
+ (_AB.SINGLE, 'NY19A1'): _AchieveFactory.get(_abstract_achievements.DeprecatedAchievement),
+ (_AB.SINGLE, 'NY19A2'): _AchieveFactory.get(_abstract_achievements.DeprecatedAchievement),
+ (_AB.SINGLE, 'NY19A3'): _AchieveFactory.get(_abstract_achievements.DeprecatedAchievement),
  (_AB.TEAM_7X7, 'geniusForWarMedal'): _CustomAchieveFactory.get(_as.GeniusForWarAchievement),
  (_AB.TEAM_7X7, 'wolfAmongSheepMedal'): _CustomAchieveFactory.get(_as.WolfAmongSheepAchievement),
  (_AB.TEAM_7X7, 'fightingReconnaissanceMedal'): _CustomAchieveFactory.get(_as.FightingReconnaissanceAchievement),

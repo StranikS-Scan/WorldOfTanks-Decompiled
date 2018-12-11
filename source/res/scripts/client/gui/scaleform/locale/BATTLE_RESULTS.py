@@ -258,6 +258,7 @@ class BATTLE_RESULTS(object):
     DETAILS_CALCULATIONS_INTERMEDIATETOTAL = '#battle_results:details/calculations/intermediateTotal'
     DETAILS_CALCULATIONS_BASE = '#battle_results:details/calculations/base'
     DETAILS_CALCULATIONS_XPRECORD = '#battle_results:details/calculations/xpRecord'
+    DETAILS_CALCULATIONS_NEWYEAR = '#battle_results:details/calculations/newYear'
     DETAILS_CALCULATIONS_NOPENALTY = '#battle_results:details/calculations/noPenalty'
     DETAILS_CALCULATIONS_EVENT = '#battle_results:details/calculations/event'
     DETAILS_CALCULATIONS_FAIRPLAYVIOLATION_DESERTER = '#battle_results:details/calculations/fairPlayViolation/deserter'
@@ -376,6 +377,7 @@ class BATTLE_RESULTS(object):
      DETAILS_CALCULATIONS_INTERMEDIATETOTAL,
      DETAILS_CALCULATIONS_BASE,
      DETAILS_CALCULATIONS_XPRECORD,
+     DETAILS_CALCULATIONS_NEWYEAR,
      DETAILS_CALCULATIONS_NOPENALTY,
      DETAILS_CALCULATIONS_EVENT,
      DETAILS_CALCULATIONS_FAIRPLAYVIOLATION_DESERTER,

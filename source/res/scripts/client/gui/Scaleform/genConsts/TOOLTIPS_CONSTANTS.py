@@ -145,6 +145,7 @@ class TOOLTIPS_CONSTANTS(object):
     FREE_SHEET_NOT_ENOUGH = 'freeSheetNotEnough'
     FREE_SHEET_USED = 'freeSheetUsed'
     BADGE = 'badge'
+    BADGE_LOYAL_SERVICE = 'badgeLoyalService'
     EVENT_BOARDS_BADGE = 'eventBoardsBadge'
     EVENT_BOARDS_BADGES_GROUP = 'eventBoardsBadgesGroup'
     OPERATION = 'operation'
@@ -327,6 +328,7 @@ class TOOLTIPS_CONSTANTS(object):
      FREE_SHEET_NOT_ENOUGH,
      FREE_SHEET_USED,
      BADGE,
+     BADGE_LOYAL_SERVICE,
      OPERATION,
      PERSONAL_MISSION_INFO,
      PERSONAL_MISSIONS_MAP_REGION,

@@ -126,6 +126,8 @@ class VehicleInfoComponent(broker.ExchangeComponent):
          'teamColor': overrides.getColorScheme()}
         if vInfoVO.ranked.selectedBadge:
             data['badgeType'] = 'badge_{}'.format(vInfoVO.ranked.selectedBadge)
+        if vInfoVO.ranked.selectedSuffixBadge:
+            data['suffixBadgeType'] = 'badge_{}'.format(vInfoVO.ranked.selectedSuffixBadge)
         return self._data.update(data)
 
 

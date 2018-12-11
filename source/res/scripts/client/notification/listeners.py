@@ -676,7 +676,10 @@ class RecruitNotificationListener(_NotificationListener):
         priority = NotificationPriorityLevel.LOW
         if self.loginManager.getPreference('loginCount') == self._INCREASE_LIMIT_LOGIN:
             priority = NotificationPriorityLevel.MEDIUM
-        SystemMessages.pushMessage(i18n.makeString(MESSENGER.SERVICECHANNELMESSAGES_RECRUITREMINDER_TEXT, count=count, date=time), SystemMessages.SM_TYPE.RecruitReminder, priority=priority)
+        if time:
+            SystemMessages.pushMessage(i18n.makeString(MESSENGER.SERVICECHANNELMESSAGES_RECRUITREMINDER_TEXT, count=count, date=time), SystemMessages.SM_TYPE.RecruitReminder, priority=priority)
+        else:
+            SystemMessages.pushMessage(i18n.makeString(MESSENGER.SERVICECHANNELMESSAGES_RECRUITREMINDERTERMLESS_TEXT, count=count), SystemMessages.SM_TYPE.RecruitReminder, priority=priority)
 
 
 class NotificationsListeners(_NotificationListener):

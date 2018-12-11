@@ -129,6 +129,8 @@
     <Porsche_Typ_205_2>	143	</Porsche_Typ_205_2>
     <Maybach_HL_234P60_WT>	144	</Maybach_HL_234P60_WT>
     <Maybach_HL_234_TRM_P45_Leicht>	145	</Maybach_HL_234_TRM_P45_Leicht>
+    <Maybach_HL_98>	146	</Maybach_HL_98>
+    <MB_837_Ea_600M>	147	</MB_837_Ea_600M>
     <Development_Engine>	65535	</Development_Engine>
     <Maybach_HL57TR_bot>	247	</Maybach_HL57TR_bot>
     <Krupp_M301_bot>	248	</Krupp_M301_bot>
@@ -1713,6 +1715,23 @@
       <rpm_min>	280	</rpm_min>
       <rpm_max>	2360	</rpm_max>
     </MB-837-Ea-600>
+    <MB_837_Ea_600M>
+      <userString>	#germany_vehicles:MB_837_Ea_600M	</userString>
+      <tags>	diesel	</tags>
+      <level>	8	</level>
+      <price>	60000	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
+      <power>	800	</power>
+      <weight>	1400	</weight>
+      <maxHealth>	360	</maxHealth>
+      <maxRegenHealth>	170	</maxRegenHealth>
+      <repairCost>	9	</repairCost>
+      <fireStartingChance>	0.1	</fireStartingChance>
+      <rpm_min>	306	</rpm_min>
+      <rpm_max>	2280	</rpm_max>
+    </MB_837_Ea_600M>
     <MB-838_CAM-500_1>
       <userString>	#germany_vehicles:MB-838_CAM-500_1	</userString>
       <shortUserString>	#germany_vehicles:MB-838_CAM-500_1_short	</shortUserString>
@@ -2502,6 +2521,23 @@
       <rpm_min>	400	</rpm_min>
       <rpm_max>	2000	</rpm_max>
     </General_Motors_6V53T>
+    <Maybach_HL_98>
+      <userString>	#germany_vehicles:Maybach_HL_98	</userString>
+      <tags>	gasoline	</tags>
+      <level>	2	</level>
+      <price>	2000	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_Continental_R975_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Continental_R975_npc	</wwsoundNPC>
+      <power>	200	</power>
+      <weight>	550	</weight>
+      <maxHealth>	55	</maxHealth>
+      <maxRegenHealth>	27	</maxRegenHealth>
+      <repairCost>	3	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	500	</rpm_min>
+      <rpm_max>	2200	</rpm_max>
+    </Maybach_HL_98>
     <Maybach_HL_210P30_Ausf_A_IGR>
       <userString>	#igr_vehicles:Maybach_HL_210P30_Ausf_A_IGR	</userString>
       <tags>	gasoline	</tags>

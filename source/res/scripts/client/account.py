@@ -11,7 +11,6 @@ import Event
 from ChatManager import chatManager
 from ClientChat import ClientChat
 from ClientGlobalMap import ClientGlobalMap
-from ClientSelectableObject import ClientSelectableObject
 from ClientUnitMgr import ClientUnitMgr, ClientUnitBrowser
 from ContactInfo import ContactInfo
 from OfflineMapCreator import g_offlineMapCreator
@@ -19,8 +18,9 @@ from PlayerEvents import g_playerEvents as events
 from account_helpers import AccountSyncData, Inventory, DossierCache, Shop, Stats, QuestProgress, CustomFilesCache, BattleResultsCache, ClientGoodies, client_recycle_bin, AccountSettings
 from account_helpers import ClientInvitations, vehicle_rotation
 from account_helpers import ClientRanked, ClientBadges
-from account_helpers import client_epic_meta_game
+from account_helpers import client_epic_meta_game, tokens
 from account_helpers.AccountSettings import CURRENT_VEHICLE
+from account_helpers.festivity_manager import FestivityManager
 from account_helpers.settings_core import IntUserSettings
 from account_shared import NotificationItem, readClientServerVersion
 from adisp import process
@@ -30,6 +30,7 @@ from constants import PREBATTLE_INVITE_STATUS, PREBATTLE_TYPE
 from debug_utils import LOG_DEBUG, LOG_CURRENT_EXCEPTION, LOG_ERROR, LOG_DEBUG_DEV, LOG_WARNING
 from gui.Scaleform.Waiting import Waiting
 from gui.shared.ClanCache import g_clanCache
+from gui.shared.selectable_object import ISelectableObject
 from gui.wgnc import g_wgncProvider
 from helpers import dependency
 from helpers import uniprof
@@ -47,6 +48,59 @@ StreamData = namedtuple('StreamData', ['data',
  'origCrc32',
  'crc32'])
 StreamData.__new__.__defaults__ = (None,) * len(StreamData._fields)
+
+def _isInt(a):
+    return isinstance(a, (int, long))
+
+
+def _isStr(a):
+    return isinstance(a, str)
+
+
+def _isList(a):
+    return isinstance(a, (list, tuple))
+
+
+def _isIntList(l):
+    return _isList(l) and all([ _isInt(arg) for arg in l ])
+
+
+def _isStrList(l):
+    return _isList(l) and all([ _isStr(arg) for arg in l ])
+
+
+class _ClientCommandProxy(object):
+    _COMMAND_SIGNATURES = (('doCmdStr', lambda args: len(args) == 1 and _isStr(args[0])),
+     ('doCmdIntStr', lambda args: len(args) == 2 and _isInt(args[0]) and _isStr(args[1])),
+     ('doCmdInt3', lambda args: len(args) == 3 and all([ _isInt(arg) for arg in args ])),
+     ('doCmdInt4', lambda args: len(args) == 4 and all([ _isInt(arg) for arg in args ])),
+     ('doCmdInt2Str', lambda args: len(args) == 3 and _isStr(args[2]) and all([ _isInt(arg) for arg in args[:2] ])),
+     ('doCmdIntArr', lambda args: len(args) == 1 and _isIntList(args[0])),
+     ('doCmdIntStrArr', lambda args: len(args) == 2 and _isInt(args[0]) and _isStrList(args[1])),
+     ('doCmdIntArrStrArr', lambda args: len(args) == 2 and _isIntList(args[0]) and _isStrList(args[1])))
+
+    def __init__(self):
+        super(_ClientCommandProxy, self).__init__()
+        self.__commandGateway = None
+        return
+
+    def setGateway(self, commandGateway):
+        self.__commandGateway = commandGateway
+
+    def perform(self, commandName, *args):
+        if self.__commandGateway is None:
+            raise SoftException('Cliend command proxy is not ready')
+        callback = args[-1]
+        commandArgs = args[:-1]
+        for commandType, signatureCheck in self._COMMAND_SIGNATURES:
+            if signatureCheck(commandArgs):
+                self.__commandGateway(commandType, commandName, callback, *commandArgs)
+                break
+        else:
+            raise SoftException('Command "{}" failed. Given signature is not supported.'.format(commandName))
+
+        return
+
 
 class PlayerAccount(BigWorld.Entity, ClientChat):
     __onStreamCompletePredef = {AccountCommands.REQUEST_ID_PREBATTLES: 'receivePrebattles',
@@ -90,7 +144,9 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         self.recycleBin = g_accountRepository.recycleBin
         self.ranked = g_accountRepository.ranked
         self.badges = g_accountRepository.badges
+        self.tokens = g_accountRepository.tokens
         self.epicMetaGame = g_accountRepository.epicMetaGame
+        self.festivities = g_accountRepository.festivities
         self.customFilesCache = g_accountRepository.customFilesCache
         self.syncData.setAccount(self)
         self.inventory.setAccount(self)
@@ -107,7 +163,9 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         self.recycleBin.setAccount(self)
         self.ranked.setAccount(self)
         self.badges.setAccount(self)
+        self.tokens.setAccount(self)
         self.epicMetaGame.setAccount(self)
+        g_accountRepository.commandProxy.setGateway(self.__doCmd)
         self.isLongDisconnectedFromCenter = False
         self.prebattle = None
         self.unitBrowser = ClientUnitBrowser(self)
@@ -153,7 +211,9 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         self.recycleBin.onAccountBecomePlayer()
         self.ranked.onAccountBecomePlayer()
         self.badges.onAccountBecomePlayer()
+        self.tokens.onAccountBecomeNonPlayer()
         self.epicMetaGame.onAccountBecomePlayer()
+        self.festivities.onAccountBecomePlayer()
         chatManager.switchPlayerProxy(self)
         events.onAccountBecomePlayer()
         BigWorld.target.source = BigWorld.MouseTargetingMatrix()
@@ -182,7 +242,9 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         self.recycleBin.onAccountBecomeNonPlayer()
         self.ranked.onAccountBecomeNonPlayer()
         self.badges.onAccountBecomeNonPlayer()
+        self.tokens.onAccountBecomeNonPlayer()
         self.epicMetaGame.onAccountBecomeNonPlayer()
+        self.festivities.onAccountBecomeNonPlayer()
         self.__cancelCommands()
         self.syncData.setAccount(None)
         self.inventory.setAccount(None)
@@ -198,7 +260,9 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         self.recycleBin.setAccount(None)
         self.ranked.setAccount(None)
         self.badges.setAccount(None)
+        self.tokens.setAccount(None)
         self.epicMetaGame.setAccount(None)
+        g_accountRepository.commandProxy.setGateway(None)
         self.unitMgr.clear()
         self.unitBrowser.clear()
         events.onAccountBecomeNonPlayer()
@@ -346,53 +410,53 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         entitiesIDs = BigWorld.entities.keys()
         for key in entitiesIDs:
             e = BigWorld.entities[key]
-            if isinstance(e, ClientSelectableObject) and e.selectionId == selectionId:
+            if isinstance(e, ISelectableObject) and e.selectionId == selectionId:
                 self.targetFocus(e)
                 break
         else:
-            LOG_DEBUG('No ClientSelectableObject with selectionID', selectionId)
+            LOG_DEBUG('No ISelectableObject with selectionID', selectionId)
 
     def debugUnselectEntity(self, selectionId):
         entitiesIDs = BigWorld.entities.keys()
         for key in entitiesIDs:
             e = BigWorld.entities[key]
-            if isinstance(e, ClientSelectableObject) and e.selectionId == selectionId:
+            if isinstance(e, ISelectableObject) and e.selectionId == selectionId:
                 self.targetBlur(e)
                 break
         else:
-            LOG_DEBUG('No ClientSelectableObject with selectionID', selectionId)
+            LOG_DEBUG('No ISelectableObject with selectionID', selectionId)
 
     def debugSelectAllEntities(self):
         count = 0
         entitiesIDs = BigWorld.entities.keys()
         for key in entitiesIDs:
             e = BigWorld.entities[key]
-            if isinstance(e, ClientSelectableObject):
+            if isinstance(e, ISelectableObject):
                 self.targetFocus(e)
                 count += 1
 
         if count == 0:
-            LOG_DEBUG('No any ClientSelectableObject to select')
+            LOG_DEBUG('No any ISelectableObject to select')
 
     def debugUnselectAllEntites(self):
         count = 0
         entitiesIDs = BigWorld.entities.keys()
         for key in entitiesIDs:
             e = BigWorld.entities[key]
-            if isinstance(e, ClientSelectableObject):
+            if isinstance(e, ISelectableObject):
                 self.targetBlur(e)
                 count += 1
 
         if count == 0:
-            LOG_DEBUG('No any ClientSelectableObject to unselect')
+            LOG_DEBUG('No any ISelectableObject to unselect')
 
     def targetFocus(self, entity):
-        if self.__objectsSelectionEnabled and isinstance(entity, ClientSelectableObject) and entity.enabled:
+        if self.__objectsSelectionEnabled and isinstance(entity, ISelectableObject) and entity.enabled:
             self.hangarSpace.onMouseEnter(entity)
             self.__selectedEntity = entity
 
     def targetBlur(self, prevEntity):
-        if self.__objectsSelectionEnabled and isinstance(prevEntity, ClientSelectableObject):
+        if self.__objectsSelectionEnabled and isinstance(prevEntity, ISelectableObject):
             self.hangarSpace.onMouseExit(prevEntity)
             self.__selectedEntity = None
         return
@@ -1043,6 +1107,9 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
     def _doCmdIntArrStrArr(self, cmd, intArr, strArr, callback):
         return self.__doCmd('doCmdIntArrStrArr', cmd, callback, intArr, strArr)
 
+    def _doCmdStrArr(self, cmd, strArr, callback):
+        return self.__doCmd('doCmdStrArr', cmd, callback, strArr)
+
     def _update(self, triggerEvents, diff):
         LOG_DEBUG_DEV('_update', diff if triggerEvents else 'full sync')
         isFullSync = diff.get('prevRev', None) is None
@@ -1059,7 +1126,9 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
             self.recycleBin.synchronize(isFullSync, diff)
             self.ranked.synchronize(isFullSync, diff)
             self.badges.synchronize(isFullSync, diff)
+            self.tokens.synchronize(isFullSync, diff)
             self.epicMetaGame.synchronize(isFullSync, diff)
+            self.festivities.synchronize(isFullSync, diff)
             self.__synchronizeServerSettings(diff)
             self.__synchronizeDisabledPersonalMissions(diff)
             self.__synchronizeEventNotifications(diff)
@@ -1266,6 +1335,7 @@ class _AccountRepository(object):
     def __init__(self, name, className, initialServerSettings):
         self.className = className
         self.contactInfo = ContactInfo()
+        self.commandProxy = _ClientCommandProxy()
         self.serverSettings = copy.copy(initialServerSettings)
         self.syncData = AccountSyncData.AccountSyncData()
         self.inventory = Inventory.Inventory(self.syncData)
@@ -1288,7 +1358,9 @@ class _AccountRepository(object):
         self.recycleBin = client_recycle_bin.ClientRecycleBin(self.syncData)
         self.ranked = ClientRanked.ClientRanked(self.syncData)
         self.badges = ClientBadges.ClientBadges(self.syncData)
+        self.tokens = tokens.Tokens(self.syncData)
         self.epicMetaGame = client_epic_meta_game.ClientEpicMetaGame(self.syncData)
+        self.festivities = FestivityManager(self.syncData, self.commandProxy)
         self.gMap = ClientGlobalMap()
         self.onTokenReceived = Event.Event()
         self.requestID = AccountCommands.REQUEST_ID_UNRESERVED_MIN

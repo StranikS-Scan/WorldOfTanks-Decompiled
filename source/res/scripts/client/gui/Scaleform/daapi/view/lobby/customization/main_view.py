@@ -38,6 +38,7 @@ from gui.shared.gui_items import GUI_ITEM_TYPE, GUI_ITEM_TYPE_NAMES
 from gui.shared.gui_items.customization.outfit import Area
 from gui.shared.gui_items.gui_item_economics import ITEM_PRICE_EMPTY
 from gui.shared.utils.functions import makeTooltip
+from gui.shared.ny_vignette_settings_switcher import checkVignetteSettings
 from gui.hangar_cameras.hangar_camera_common import CameraRelatedEvents
 from helpers import dependency, int2roman
 from helpers.i18n import makeString as _ms
@@ -118,7 +119,7 @@ class MainView(CustomizationMainViewMeta):
     service = dependency.descriptor(ICustomizationService)
     hangarSpace = dependency.descriptor(IHangarSpace)
 
-    def __init__(self, _=None):
+    def __init__(self, viewCtx=None):
         super(MainView, self).__init__()
         self.__viewLifecycleWatcher = ViewLifecycleWatcher()
         self.fadeAnchorsOut = False
@@ -128,10 +129,11 @@ class MainView(CustomizationMainViewMeta):
         self._seasonSoundAnimantion = None
         self._isPropertySheetShown = False
         self.__ctx = None
+        self.__viewCtx = viewCtx or {}
         self.__renderEnv = None
         return
 
-    def showBuyWindow(self):
+    def showBuyWindow(self, ctx=None):
         self.changeVisible(False)
         purchaseItems = self.__ctx.getPurchaseItems()
         cart = getTotalPurchaseInfo(purchaseItems)
@@ -141,7 +143,13 @@ class MainView(CustomizationMainViewMeta):
             else:
                 self.__ctx.applyItems(purchaseItems)
         else:
-            self.fireEvent(events.LoadViewEvent(VIEW_ALIAS.CUSTOMIZATION_PURCHASE_WINDOW), EVENT_BUS_SCOPE.LOBBY)
+            self.fireEvent(events.LoadViewEvent(VIEW_ALIAS.CUSTOMIZATION_PURCHASE_WINDOW, ctx=ctx), EVENT_BUS_SCOPE.LOBBY)
+
+    def __onVehicleChanged(self):
+        self.__setHeaderInitData()
+        self.__setSeasonData()
+        self.__setAnchorsInitData()
+        self.__ctx.c11CameraManager.locateCameraToCustomizationPreview()
 
     def onBuyConfirmed(self, isOk):
         if isOk:
@@ -251,14 +259,14 @@ class MainView(CustomizationMainViewMeta):
     def fadeOutAnchors(self, isFadeOut):
         self.fadeAnchorsOut = isFadeOut
 
-    def onCloseWindow(self):
+    def onCloseWindow(self, force=False):
         if self.isDisposed():
             return
         self.__clearSelectionAndHidePropertySheet()
-        if self.__ctx.isOutfitsModified():
-            DialogsInterface.showDialog(I18nConfirmDialogMeta('customization/close'), self.__onCloseWindow)
+        if force or not self.__ctx.isOutfitsModified():
+            self.__onCloseWindow(proceed=True, exitCallbackEnabled=True)
         else:
-            self.__onCloseWindow(proceed=True)
+            DialogsInterface.showDialog(I18nConfirmDialogMeta('customization/close'), self.__onCloseWindow)
 
     def itemContextMenuDisplayed(self):
         cmHandler = self.app.contextMenuManager.getCurrentHandler()
@@ -369,6 +377,7 @@ class MainView(CustomizationMainViewMeta):
         self.__ctx.onPropertySheetHidden += self.__onPropertySheetHidden
         self.__ctx.onPropertySheetShown += self.__onPropertySheetShown
         self.__ctx.onClearItem += self.__onClearItem
+        g_currentVehicle.onChanged += self.__onVehicleChanged
         self.soundManager.playInstantSound(SOUNDS.ENTER)
         self.__viewLifecycleWatcher.start(self.app.containerManager, [_ModalWindowsPopupHandler(self.__clearSelectionAndHidePropertySheet)])
         self.lobbyContext.addHeaderNavigationConfirmator(self.__confirmHeaderNavigation)
@@ -382,6 +391,7 @@ class MainView(CustomizationMainViewMeta):
         self.__setSeasonData()
         self.__ctx.refreshOutfit()
         self.as_selectSeasonS(SEASON_TYPE_TO_IDX[self.__ctx.currentSeason])
+        checkVignetteSettings(None)
         self.fireEvent(CameraRelatedEvents(CameraRelatedEvents.FORCE_DISABLE_IDLE_PARALAX_MOVEMENT, ctx={'isDisable': True}), EVENT_BUS_SCOPE.LOBBY)
         self.fireEvent(LobbyHeaderMenuEvent(LobbyHeaderMenuEvent.TOGGLE_VISIBILITY, ctx={'state': HeaderMenuVisibilityState.ONLINE_COUNTER}), EVENT_BUS_SCOPE.LOBBY)
         self._isPropertySheetShown = False
@@ -391,6 +401,16 @@ class MainView(CustomizationMainViewMeta):
         self.__renderEnv.enable(True)
         if self.__ctx.vehicleAnchorsUpdater is not None:
             self.__ctx.vehicleAnchorsUpdater.setMainView(self.flashObject)
+        self._invalidate(self.__viewCtx)
+        if self.__ctx.mode == C11nMode.STYLE:
+            BigWorld.callback(0.0, lambda : self.__ctx.tabChanged(C11nTabs.STYLE))
+        return
+
+    def _invalidate(self, *args, **kwargs):
+        super(MainView, self)._invalidate()
+        callback = (args[0] or {}).get('callback')
+        if callback is not None:
+            callback()
         return
 
     def _dispose(self):
@@ -433,6 +453,10 @@ class MainView(CustomizationMainViewMeta):
         self.__ctx.onCustomizationModeChanged -= self.__onModeChanged
         self.__ctx.onCustomizationSeasonChanged -= self.__onSeasonChanged
         self.__ctx.onClearItem -= self.__onClearItem
+        g_currentVehicle.onChanged -= self.__onVehicleChanged
+        exitCallback = self.__ctx.getExitCallback()
+        if exitCallback is not None:
+            exitCallback(fromDestroy=True)
         self.__ctx = None
         self.service.destroyCtx()
         super(MainView, self)._dispose()
@@ -534,11 +558,16 @@ class MainView(CustomizationMainViewMeta):
     def __onSpaceRefreshHandler(self):
         Waiting.show(_WAITING_MESSAGE)
 
-    def __onCloseWindow(self, proceed):
+    def __onCloseWindow(self, proceed, exitCallbackEnabled=False):
         if proceed:
             if self._isPropertySheetShown:
                 self.__clearItem()
             self.fireEvent(events.LoadViewEvent(VIEW_ALIAS.LOBBY_HANGAR), scope=EVENT_BUS_SCOPE.LOBBY)
+            if exitCallbackEnabled and self.__ctx is not None:
+                exitCallback = self.__ctx.getExitCallback()
+                if exitCallback is not None:
+                    exitCallback()
+        return
 
     def __onCacheResync(self, *_):
         if not g_currentVehicle.isPresent():

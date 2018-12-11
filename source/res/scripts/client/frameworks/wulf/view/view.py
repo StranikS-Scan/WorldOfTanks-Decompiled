@@ -64,6 +64,14 @@ class View(PyObjectEntity):
             self.__viewModel = None
         return
 
+    def destroyWindow(self):
+        window = self.getParentWindow()
+        if window is not None:
+            window.destroy()
+        else:
+            self.destroy()
+        return
+
     def show(self):
         self.proxy.show()
 

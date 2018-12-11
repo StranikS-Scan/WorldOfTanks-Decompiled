@@ -13,6 +13,7 @@ from gui.shared.gui_items.artefacts import Equipment, BattleBooster, BattleAbili
 from gui.shared.gui_items.Tankman import Tankman
 from gui.shared.gui_items.Vehicle import Vehicle
 from gui.shared.gui_items.badge import Badge
+from gui.shared.gui_items.loot_box import LootBox
 from skeletons.gui.shared.gui_items import IGuiItemsFactory
 _logger = logging.getLogger(__name__)
 _NONE_GUI_ITEM_TYPE = 0
@@ -85,6 +86,9 @@ class GuiItemFactory(IGuiItemsFactory):
     def createBadge(self, descriptor, proxy=None):
         return Badge(descriptor, proxy)
 
+    def createLootBox(self, lootBoxID, lootBoxType, lootBoxCategory, count):
+        return LootBox(lootBoxID, lootBoxType, lootBoxCategory, count)
+
     def createCustomization(self, intCompactDescr, proxy=None):
         descriptor = vehicles.getItemByCompactDescr(intCompactDescr)
         if descriptor.itemType == CustomizationType.CAMOUFLAGE:
@@ -138,6 +142,7 @@ _ITEM_TYPES_MAPPING = {_NONE_GUI_ITEM_TYPE: lambda *args, **kwargs: None,
  GUI_ITEM_TYPE.ACCOUNT_DOSSIER: GuiItemFactory.createAccountDossier,
  GUI_ITEM_TYPE.VEHICLE_DOSSIER: GuiItemFactory.createVehicleDossier,
  GUI_ITEM_TYPE.BADGE: GuiItemFactory.createBadge,
+ GUI_ITEM_TYPE.LOOT_BOX: GuiItemFactory.createLootBox,
  GUI_ITEM_TYPE.CUSTOMIZATION: GuiItemFactory.createCustomization,
  GUI_ITEM_TYPE.PAINT: GuiItemFactory.createCustomization,
  GUI_ITEM_TYPE.CAMOUFLAGE: GuiItemFactory.createCustomization,

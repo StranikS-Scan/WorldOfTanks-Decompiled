@@ -11,7 +11,7 @@ import nations
 from Event import Event, EventManager
 from PlayerEvents import g_playerEvents
 from adisp import async, process
-from constants import EVENT_TYPE, EVENT_CLIENT_DATA
+from constants import EVENT_TYPE, EVENT_CLIENT_DATA, LOOTBOX_TOKEN_PREFIX
 from debug_utils import LOG_CURRENT_EXCEPTION, LOG_DEBUG
 from dossiers2.ui.achievements import ACHIEVEMENT_BLOCK
 from gui.server_events import caches as quests_caches
@@ -26,6 +26,7 @@ from gui.shared.utils.requesters.QuestsProgressRequester import QuestsProgressRe
 from helpers import dependency
 from helpers import isPlayerAccount
 from items import getTypeOfCompactDescr
+from items.tankmen import RECRUIT_TMAN_TOKEN_PREFIX
 from personal_missions import PERSONAL_MISSIONS_XML_PATH
 from quest_cache_helpers import readQuestsFromFile
 from skeletons.gui.lobby_context import ILobbyContext
@@ -145,13 +146,20 @@ class EventsCache(IEventsCache):
                 return
             isNeedToInvalidate = True
             isNeedToClearItemsCaches = False
+            isQPUpdated = False
 
             def _cbWrapper(*args):
                 callback(*args)
                 self.__personalMissions.update(self, diff)
 
             if diff is not None:
-                isQPUpdated = 'quests' in diff or 'tokens' in diff
+                isQPUpdated = 'quests' in diff or 'potapovQuests' in diff
+                if not isQPUpdated and 'tokens' in diff:
+                    for tokenID in diff['tokens'].iterkeys():
+                        if not tokenID.startswith(LOOTBOX_TOKEN_PREFIX) and not tokenID.startswith(RECRUIT_TMAN_TOKEN_PREFIX) and not tokenID.startswith('ny19:level:'):
+                            isQPUpdated = True
+                            break
+
                 isEventsDataUpdated = ('eventsData', '_r') in diff or diff.get('eventsData', {})
                 isNeedToInvalidate = isQPUpdated or isEventsDataUpdated
                 hasVehicleUnlocks = False
@@ -166,7 +174,11 @@ class EventsCache(IEventsCache):
                 return
             if isNeedToClearItemsCaches:
                 self.__clearQuestsItemsCache()
-            _cbWrapper(True)
+                _cbWrapper(True)
+            elif isQPUpdated:
+                _cbWrapper(True)
+            else:
+                callback(True)
             return
 
     def getQuests(self, filterFunc=None):
@@ -262,6 +274,12 @@ class EventsCache(IEventsCache):
     def getEventBattles(self):
         battles = self.__getEventBattles()
         return EventBattles(battles.get('vehicleTags', set()), battles.get('vehicles', []), bool(battles.get('enabled', 0)), battles.get('arenaTypeID')) if battles else EventBattles(set(), [], 0, None)
+
+    def getQuestByID(self, qID):
+        questsData = self.__getQuestsData()
+        questsData.update(self.__getPersonalQuestsData())
+        questsData.update(self.__getPersonalMissionsHiddenQuests())
+        return self._makeQuest(qID, questsData[qID]) if qID in questsData else None
 
     def isEventEnabled(self):
         return len(self.__getEventBattles()) > 0 and len(self.getEventVehicles()) > 0

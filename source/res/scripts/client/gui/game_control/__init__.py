@@ -1,6 +1,15 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/game_control/__init__.py
 import constants
+from skeletons.festivity_factory import IFestivityFactory
+from shared_utils import CONST_CONTAINER
+
+class CalendarInvokeOrigin(CONST_CONTAINER):
+    ACTION = 'action'
+    HANGAR = 'hangar'
+    SPLASH = 'first'
+    BANNER = 'banner'
+
 
 def getGameControllersConfig(manager):
     from gui.game_control.AOGAS import AOGASController as _AOGAS
@@ -49,6 +58,7 @@ def getGameControllersConfig(manager):
         controller.init()
         manager.addInstance(interface, controller, finalizer='fini')
 
+    _config(_interface.IFestivityController, manager.getService(IFestivityFactory).getController())
     _config(_interface.IReloginController, _Relogin())
     _config(_interface.IAOGASController, _AOGAS())
     _config(_interface.IGameSessionController, _GameSessions())

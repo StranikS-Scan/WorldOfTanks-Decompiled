@@ -114,6 +114,7 @@ class GAME(CONST_CONTAINER):
     MINIMAP_ALPHA_ENABLED = 'minimapAlphaEnabled'
     C11N_HISTORICALLY_ACCURATE = 'c11nHistoricallyAccurate'
     LOGIN_SERVER_SELECTION = 'loginServerSelection'
+    LOOT_BOX_VIDEO_OFF = 'lootBoxVideoOff'
 
 
 class TUTORIAL(CONST_CONTAINER):

@@ -10,7 +10,7 @@ class ISystemMessages(object):
     def destroy(self):
         raise NotImplementedError
 
-    def pushMessage(self, text, type, priority=None, messageData=None):
+    def pushMessage(self, text, type, priority=None, messageData=None, savedData=None):
         raise NotImplementedError
 
     def pushI18nMessage(self, key, *args, **kwargs):

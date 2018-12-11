@@ -5,11 +5,12 @@ import items
 import calendar
 from account_shared import validateCustomizationItem
 from invoices_helpers import checkAccountDossierOperation
-from items import vehicles, tankmen
+from items import vehicles, tankmen, ny19
 from items.components.c11n_constants import SeasonType
-from constants import DOSSIER_TYPE, IS_DEVELOPMENT, SEASON_TYPE_BY_NAME
+from constants import DOSSIER_TYPE, IS_DEVELOPMENT, SEASON_TYPE_BY_NAME, EVENT_TYPE
+from items.components.ny_constants import TOY_SETTING_IDS_BY_NAME, TOY_TYPE_IDS_BY_NAME
 from soft_exception import SoftException
-__all__ = ['getBonusReaders', 'readUTC', 'SUPPORTED_BONUSES']
+__all__ = ['readBonusSection', 'readUTC', 'SUPPORTED_BONUSES']
 
 def getBonusReaders(bonusTypes):
     return dict(((k, __BONUS_READERS[k]) for k in bonusTypes))
@@ -37,30 +38,30 @@ def readUTC(section, field, default=None):
         raise SoftException('Invalid field %s: %s' % (field, e))
 
 
-def __readBonus_bool(bonus, name, section):
+def __readBonus_bool(bonus, name, section, eventType):
     bonus[name] = section.asBool
 
 
-def __readBonus_string_set(bonus, name, section):
+def __readBonus_string_set(bonus, name, section, eventType):
     data = section.asString
     bonus[name] = data.strip().split()
 
 
-def __readBonus_int(bonus, name, section):
+def __readBonus_int(bonus, name, section, eventType):
     value = section.asInt
     if value < 0:
         raise SoftException('Negative value (%s)' % name)
     bonus[name] = section.asInt
 
 
-def __readBonus_factor(bonus, name, section):
+def __readBonus_factor(bonus, name, section, eventType):
     value = section.asFloat
     if value < 0:
         raise SoftException('Negative value (%s)' % name)
     bonus[name] = value
 
 
-def __readBonus_equipment(bonus, _name, section):
+def __readBonus_equipment(bonus, _name, section, eventType):
     eqName = section.asString
     cache = vehicles.g_cache
     eqID = cache.equipmentIDs().get(eqName)
@@ -74,7 +75,7 @@ def __readBonus_equipment(bonus, _name, section):
     return
 
 
-def __readBonus_optionalDevice(bonus, _name, section):
+def __readBonus_optionalDevice(bonus, _name, section, eventType):
     name = section.asString
     cache = vehicles.g_cache
     odID = cache.optionalDeviceIDs().get(name)
@@ -88,7 +89,7 @@ def __readBonus_optionalDevice(bonus, _name, section):
     return
 
 
-def __readBonus_item(bonus, _name, section):
+def __readBonus_item(bonus, _name, section, eventType):
     compDescr = section.asInt
     try:
         descr = vehicles.getItemByCompactDescr(compDescr)
@@ -103,7 +104,7 @@ def __readBonus_item(bonus, _name, section):
     bonus.setdefault('items', {})[compDescr] = count
 
 
-def __readBonus_vehicle(bonus, _name, section):
+def __readBonus_vehicle(bonus, _name, section, eventType):
     vehCompDescr = None
     if section.has_key('vehCompDescr'):
         vehCompDescr = section['vehCompDescr'].asString.decode('base64')
@@ -115,7 +116,7 @@ def __readBonus_vehicle(bonus, _name, section):
         vehTypeCompDescr = vehicles.makeIntCompactDescrByID('vehicle', nationID, innationID)
     extra = {}
     if section.has_key('tankmen'):
-        __readBonus_tankmen(extra, vehTypeCompDescr, section['tankmen'])
+        __readBonus_tankmen(extra, vehTypeCompDescr, section['tankmen'], eventType)
     else:
         if section.has_key('noCrew'):
             extra['noCrew'] = True
@@ -131,7 +132,11 @@ def __readBonus_vehicle(bonus, _name, section):
         __readBonus_customCompensation(extra, None, section['customCompensation'])
     if section.has_key('outfits'):
         __readBonus_outfits(extra, None, section['outfits'])
-    bonus.setdefault('vehicles', {})[vehCompDescr if vehCompDescr else vehTypeCompDescr] = extra
+    vehicleBonuses = bonus.setdefault('vehicles', {})
+    vehKey = vehCompDescr if vehCompDescr else vehTypeCompDescr
+    if vehKey in vehicleBonuses:
+        raise SoftException('Duplicate vehicle', vehKey)
+    vehicleBonuses[vehKey] = extra
     return
 
 
@@ -155,7 +160,7 @@ def __readBonus_vehicleCustomizations(bonus, _name, section):
     return
 
 
-def __readBonus_tankmen(bonus, vehTypeCompDescr, section):
+def __readBonus_tankmen(bonus, vehTypeCompDescr, section, eventType):
     lst = []
     for subsection in section.values():
         tmanDescr = subsection.asString
@@ -195,6 +200,8 @@ def __readBonus_tankmen(bonus, vehTypeCompDescr, section):
                 _, vehNationID, vehicleTypeID = vehicles.parseIntCompactDescr(vehTypeCompDescr)
                 if vehNationID != tmanData['nationID'] or vehicleTypeID != tmanData['vehicleTypeID']:
                     raise SoftException('Vehicle and tankman mismatch.')
+            if eventType != EVENT_TYPE.PERSONAL_MISSION:
+                tmanData = tankmen.makeTmanDescrByTmanData(tmanData)
             lst.append(tmanData)
         except Exception as e:
             raise SoftException('%s: %s' % (e, tmanData))
@@ -249,7 +256,7 @@ def __readBonus_outfits(bonus, _name, section):
     bonus['outfits'] = outfits
 
 
-def __readBonus_customizations(bonus, _name, section):
+def __readBonus_customizations(bonus, _name, section, eventType):
     lst = []
     for subsection in section.values():
         custData = {'value': subsection.readInt('value', 0),
@@ -258,6 +265,8 @@ def __readBonus_customizations(bonus, _name, section):
         if subsection.has_key('boundVehicle'):
             custData['vehTypeCompDescr'] = vehicles.makeIntCompactDescrByID('vehicle', *vehicles.g_list.getIDsByName(subsection.readString('boundVehicle', '')))
         elif subsection.has_key('boundToCurrentVehicle'):
+            if eventType in EVENT_TYPE.LIKE_TOKEN_QUESTS:
+                raise SoftException("Unsupported tag 'boundToCurrentVehicle' in 'like token' quests")
             custData['boundToCurrentVehicle'] = True
         if subsection.has_key('customCompensation'):
             __readBonus_customCompensation(custData, None, subsection['customCompensation'])
@@ -270,7 +279,7 @@ def __readBonus_customizations(bonus, _name, section):
     return
 
 
-def __readBonus_tokens(bonus, _name, section):
+def __readBonus_tokens(bonus, _name, section, eventType):
     id = section['id'].asString
     token = bonus.setdefault('tokens', {})[id] = {}
     expires = token.setdefault('expires', {})
@@ -282,7 +291,7 @@ def __readBonus_tokens(bonus, _name, section):
         token['count'] = section['count'].asInt
 
 
-def __readBonus_goodies(bonus, _name, section):
+def __readBonus_goodies(bonus, _name, section, eventType):
     id = section['id'].asInt
     goodie = bonus.setdefault('goodies', {})[id] = {}
     if section.has_key('limit'):
@@ -307,7 +316,7 @@ def __readBonus_expires(id, expires, section):
         return
 
 
-def __readBonus_dossier(bonus, _name, section):
+def __readBonus_dossier(bonus, _name, section, eventType):
     blockName, record = section['name'].asString.split(':')
     operation = 'add'
     if section.has_key('type'):
@@ -333,7 +342,7 @@ def __readBonus_dossier(bonus, _name, section):
      'type': operation}
 
 
-def __readBonus_vehicleChoice(bonus, _name, section):
+def __readBonus_vehicleChoice(bonus, _name, section, eventType):
     extra = {}
     if section.has_key('levels'):
         for level in section['levels'].asString.split():
@@ -343,63 +352,148 @@ def __readBonus_vehicleChoice(bonus, _name, section):
     bonus['demandedVehicles'] = extra
 
 
-def __readBonus_optional(bonusReaders, bonusRange, bonus, section, hasOneOf, isOneOf):
-    subBonus = __readBonusSubSection(bonusReaders, bonusRange, section)
-    probabilityAttr = section['probability']
-    if not isOneOf and probabilityAttr is None:
-        raise SoftException('Missing probability attribute in optional')
-    if probabilityAttr is None:
-        probability = 0
-    else:
-        probability = probabilityAttr.asInt / 100.0
-    if not 0 <= probability <= 100:
-        raise SoftException('Probability is out of range: {}'.format(probability))
-    if isOneOf:
-        bonus.setdefault('oneof', []).append((probability, subBonus))
-    else:
-        bonus.setdefault('allof', []).append((probability, subBonus))
-    return
+def __readBonus_ny19Toy(bonus, _name, section, eventType):
+    if section.has_key('id'):
+        tid = section['id'].asInt
+        if tid not in ny19.g_cache.toys:
+            raise SoftException('Unknown NY19 toyID: {}'.format(tid))
+        count = section['count'].asInt if section.has_key('count') else 0
+        ny19Toys = bonus.setdefault('ny19Toys', {})
+        ny19Toys[tid] = ny19Toys.get(tid, 0) + count
 
 
-def __readBonus_oneof(bonusReaders, bonusRange, bonus, section, hasOneOf, isOneOf):
+def __readBonus_ny19ToyFragments(bonus, _name, section, eventType):
+    if section.has_key('count'):
+        count = section['count'].asInt
+        bonus['ny19ToyFragments'] = bonus.get('ny19ToyFragments', 0) + count
+
+
+def __readBonus_ny19AnyOf(bonus, _name, section, eventType):
+    if section.has_key('setting'):
+        settingID = TOY_SETTING_IDS_BY_NAME[section.readString('setting')]
+    else:
+        settingID = -1
+    if section.has_key('type'):
+        typeID = TOY_TYPE_IDS_BY_NAME[section.readString('type')]
+    else:
+        typeID = -1
+    if section.has_key('rank'):
+        rank = section['rank'].asInt
+    else:
+        rank = -1
+    bonus.setdefault('ny19AnyOf', []).append((typeID, settingID, rank))
+
+
+def __readBonus_ny18Toy(bonus, _name, section, eventType):
+    if section.has_key('id'):
+        tid = section['id'].asInt
+        count = section['count'].asInt if section.has_key('count') else 0
+        ny18Toys = bonus.setdefault('ny18Toys', {})
+        ny18Toys[tid] = ny18Toys.get(tid, 0) + count
+
+
+def __readMetaSection(bonus, _name, section, eventType):
+    if section is None:
+        return
+    else:
+        meta = {}
+        for local, sub in section.items():
+            meta[local.strip()] = sub.readString('', '').strip()
+
+        bonus['meta'] = meta
+        return
+
+
+def __readBonus_optionalData(config, bonusReaders, section, eventType):
+    limitIDs, bonus = __readBonusSubSection(config, bonusReaders, section, eventType)
+    probability = section['probability']
+    if probability is not None:
+        probability = probability.asFloat
+        if not 0 <= probability <= 100:
+            raise SoftException('Probability is out of range: {}'.format(probability))
+        probability = probability / 100.0
+    properties = {}
+    if section.has_key('compensation'):
+        properties['compensation'] = section['compensation'].asBool
+    if section.has_key('shouldCompensated'):
+        properties['shouldCompensated'] = section['shouldCompensated'].asBool
+    if IS_DEVELOPMENT:
+        if section.has_key('name'):
+            properties['name'] = section['name'].asString
+    if section.has_key('limitID'):
+        limitID = section['limitID'].asString
+        limitConfig = config.get('limits', {}).get(limitID, {})
+        if not limitConfig:
+            raise SoftException('Unknown limitID: {}'.format(limitID))
+        properties['limitID'] = limitID
+        if 'guaranteedFrequency' in limitConfig:
+            limitIDs.add(limitID)
+    if properties:
+        bonus['properties'] = properties
+    return (limitIDs, probability, bonus)
+
+
+def __readBonus_optional(config, bonusReaders, bonus, section, eventType):
+    limitIDs, probability, subBonus = __readBonus_optionalData(config, bonusReaders, section, eventType)
+    if probability is None:
+        raise SoftException("Missing probability attribute in 'optional'")
+    properties = subBonus.get('properties', {})
+    for property in ('compensation', 'shouldCompensated'):
+        if properties.get(property, None) is not None:
+            raise SoftException("Property '{}' not allowed for standalone 'optional'".format(property))
+
+    bonus.setdefault('allof', []).append((probability, limitIDs if limitIDs else None, subBonus))
+    return limitIDs
+
+
+def __readBonus_oneof(config, bonusReaders, bonus, section, eventType):
     equalProbabilityCount = 0
     equalProbabilityValue = 0
-    bonuses = __readBonusSubSection(bonusReaders, bonusRange, section, True)
-    oneOfBonus = bonuses['oneof']
-    for probability, subBonus in oneOfBonus:
-        if probability == 0:
+    oneOfBonus = []
+    resultLimitIDs = set()
+    for name, subsection in section.items():
+        if name != 'optional':
+            raise SoftException("Unexpected section (or property) inside 'oneof': {}".format(name))
+        limitIDs, probability, subBonus = __readBonus_optionalData(config, bonusReaders, subsection, eventType)
+        if probability is None:
             equalProbabilityCount += 1
-        equalProbabilityValue += probability
+        else:
+            equalProbabilityValue += probability
+        if limitIDs:
+            if resultLimitIDs:
+                raise SoftException('Guaranteed limits conflict', resultLimitIDs, limitIDs)
+            limitID = subBonus.get('properties', {}).get('limitID', None)
+            if limitID and 'guaranteedFrequency' not in config['limits'][limitID]:
+                raise SoftException('Limits conflict', limitID, limitIDs)
+            resultLimitIDs.update(limitIDs)
+        oneOfBonus.append((probability, limitIDs if limitIDs else None, subBonus))
 
     if equalProbabilityCount:
         equalProbabilityValue = (1.0 - equalProbabilityValue) / equalProbabilityCount
     oneOfTemp = []
     maximumProbability = 0
-    for probability, subBonus in oneOfBonus:
-        if probability == 0:
+    for probability, limitIDs, subBonus in oneOfBonus:
+        if probability is None:
             maximumProbability += equalProbabilityValue
         else:
             maximumProbability += probability
-        oneOfTemp.append((maximumProbability, subBonus))
+        value = maximumProbability if probability != 0.0 else probability
+        oneOfTemp.append((min(1.0, value), limitIDs, subBonus))
 
-    lastProbability, lastSubBonus = oneOfTemp[-1]
-    if abs(1.0 - lastProbability) < 1e-06:
-        oneOfTemp[-1] = (1.0, lastSubBonus)
-    else:
-        raise SoftException('Sum of probabilities > 100')
-    if hasOneOf:
-        bonus.setdefault('groups', []).append({'oneof': oneOfTemp})
-    else:
-        bonus['oneof'] = oneOfTemp
-    return True
+    if abs(1.0 - maximumProbability) >= 1e-06:
+        raise SoftException('Sum of probabilities != 100', maximumProbability)
+    bonus.setdefault('groups', []).append({'oneof': (resultLimitIDs if resultLimitIDs else None, oneOfTemp)})
+    return resultLimitIDs
 
 
-def __readBonus_group(bonusReaders, bonusRange, bonus, section, hasOneOf, isOneOf):
-    subBonus = __readBonusSubSection(bonusReaders, bonusRange, section)
+def __readBonus_group(config, bonusReaders, bonus, section, eventType):
+    limitIDs, subBonus = __readBonusSubSection(config, bonusReaders, section, eventType)
     bonus.setdefault('groups', []).append(subBonus)
+    return limitIDs
 
 
-__BONUS_READERS = {'buyAllVehicles': __readBonus_bool,
+__BONUS_READERS = {'meta': __readMetaSection,
+ 'buyAllVehicles': __readBonus_bool,
  'equipGold': __readBonus_bool,
  'ultimateLoginPriority': __readBonus_bool,
  'addTankmanSkills': __readBonus_bool,
@@ -414,12 +508,14 @@ __BONUS_READERS = {'buyAllVehicles': __readBonus_bool,
  'premium': __readBonus_int,
  'xp': __readBonus_int,
  'tankmenXP': __readBonus_int,
+ 'vehicleXP': __readBonus_int,
  'trainCommander': __readBonus_int,
  'maxVehicleLevel': __readBonus_int,
  'xpFactor': __readBonus_factor,
  'creditsFactor': __readBonus_factor,
  'freeXPFactor': __readBonus_factor,
  'tankmenXPFactor': __readBonus_factor,
+ 'vehicleXPFactor': __readBonus_factor,
  'item': __readBonus_item,
  'equipment': __readBonus_equipment,
  'optionalDevice': __readBonus_optionalDevice,
@@ -429,61 +525,83 @@ __BONUS_READERS = {'buyAllVehicles': __readBonus_bool,
  'dossier': __readBonus_dossier,
  'tankmen': __readBonus_tankmen,
  'customizations': __readBonus_customizations,
- 'vehicleChoice': __readBonus_vehicleChoice}
+ 'vehicleChoice': __readBonus_vehicleChoice,
+ 'ny19Toy': __readBonus_ny19Toy,
+ 'ny19ToyFragments': __readBonus_ny19ToyFragments,
+ 'ny19AnyOf': __readBonus_ny19AnyOf,
+ 'ny18Toy': __readBonus_ny18Toy}
 __PROBABILITY_READERS = {'optional': __readBonus_optional,
  'oneof': __readBonus_oneof,
  'group': __readBonus_group}
+_RESERVED_NAMES = frozenset(['config',
+ 'properties',
+ 'limitID',
+ 'probability',
+ 'compensation',
+ 'name',
+ 'shouldCompensated'])
 SUPPORTED_BONUSES = frozenset(__BONUS_READERS.iterkeys())
+
+def __readBonusLimit(section):
+    properties = {}
+    name = section.readString('name', '')
+    if not name:
+        raise SoftException('Limit name missing')
+    for property in ('maxFrequency', 'guaranteedFrequency', 'bonusLimit'):
+        value = section[property]
+        if value is not None:
+            properties[property] = value.asInt
+
+    for property in ('countDuplicates',):
+        value = section[property]
+        if value is not None:
+            properties[property] = value.asBool
+
+    if not properties:
+        raise SoftException('Empty limit section: {}'.format(name))
+    if sum((True for property in properties if property in ('maxFrequency', 'guaranteedFrequency', 'bonusLimit'))) > 1:
+        raise SoftException('Too many limits: {}'.format(name))
+    return (name, properties)
+
+
+def __readBonusConfig(section):
+    config = {}
+    for name, data in section.items():
+        if name == 'limit':
+            limits = config.setdefault('limits', {})
+            limitName, limitConfig = __readBonusLimit(data)
+            if limitName in limits:
+                raise SoftException('Bonus limit already defined: {}'.format(limitName))
+            limits[limitName] = limitConfig
+        raise SoftException('Unknown config section: {}'.format(name))
+
+    return config
+
 
 def readBonusSection(bonusRange, section, eventType=None):
     if section is None:
         return {}
     else:
         bonusReaders = getBonusReaders(bonusRange)
-        bonus = __readBonusSubSection(bonusReaders, bonusRange, section)
+        config = __readBonusConfig(section['config']) if section.has_key('config') else {}
+        limitIDs, bonus = __readBonusSubSection(config, bonusReaders, section, eventType)
+        if config:
+            bonus['config'] = config
         return bonus
 
 
-def __readMetaSection(section):
-    if section is None:
-        return {}
-    else:
-        meta = {}
-        for local, sub in section.items():
-            meta[local.strip()] = sub.readString('', '').strip()
+def __readBonusSubSection(config, bonusReaders, section, eventType=None):
+    bonus = {}
+    resultLimitIDs = set()
+    for name, subSection in section.items():
+        if name in __PROBABILITY_READERS:
+            limitIDs = __PROBABILITY_READERS[name](config, bonusReaders, bonus, subSection, eventType)
+            if limitIDs:
+                resultLimitIDs.update(limitIDs)
+        if name in bonusReaders:
+            bonusReaders[name](bonus, name, subSection, eventType)
+        if name in _RESERVED_NAMES:
+            pass
+        raise SoftException('Bonus not in bonus readers: {}'.format(name))
 
-        return meta
-
-
-def __readBonusSubSection(bonusReaders, bonusRange, section, isOneOf=False):
-    if section is None:
-        return {}
-    else:
-        hasOneOf = False
-        bonus = {}
-        for name, sub in section.items():
-            if isOneOf and name != 'optional' and name != 'name':
-                raise SoftException('The only possible subsection of oneof is optional')
-            elif name in __PROBABILITY_READERS:
-                if __PROBABILITY_READERS[name](bonusReaders, bonusRange, bonus, sub, hasOneOf, isOneOf):
-                    hasOneOf = True
-                continue
-            elif name == 'meta':
-                bonus['meta'] = __readMetaSection(sub)
-                continue
-            elif name == 'name':
-                if IS_DEVELOPMENT:
-                    bonus['name'] = sub.readString('', '').strip()
-                continue
-            elif name == 'probability':
-                continue
-            elif name == 'compensation':
-                bonus['compensation'] = sub.readBool('', False)
-                continue
-            elif name not in bonusReaders:
-                raise SoftException('Bonus not in bonus readers {}'.format(name))
-            elif bonusRange is not None and name not in bonusRange:
-                raise SoftException('Bonus {} is not in the range: ({})'.format(name, bonusRange))
-            bonusReaders[name](bonus, name, sub)
-
-        return bonus
+    return (resultLimitIDs, bonus)

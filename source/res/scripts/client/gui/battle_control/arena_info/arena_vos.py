@@ -8,6 +8,7 @@ from debug_utils import LOG_ERROR
 from gui import makeHtmlString
 from gui.battle_control import avatar_getter, vehicle_getter
 from gui.battle_control.arena_info import settings
+from gui.doc_loaders.badges_loader import getSelectedByLayout
 from gui.shared.gui_items import Vehicle
 from gui.shared.gui_items.Vehicle import VEHICLE_TAGS, VEHICLE_CLASS_NAME
 from helpers import dependency, i18n
@@ -529,16 +530,21 @@ class VehicleArenaStatsVO(object):
 
 
 class PlayerRankedInfoVO(object):
-    __slots__ = ('rank', 'rankStep', 'badges', 'selectedBadge')
+    __slots__ = ('rank', 'rankStep', 'badges', 'selectedBadge', '__prefixBadge', '__suffixBadge')
 
     def __init__(self, rank=None, badges=None):
         super(PlayerRankedInfoVO, self).__init__()
         self.rank, self.rankStep = rank or (0, 0)
         self.badges = badges or ()
+        self.__prefixBadge, self.__suffixBadge = getSelectedByLayout(self.badges)
 
     @property
     def selectedBadge(self):
-        return self.badges[0] if self.badges else 0
+        return self.__prefixBadge
+
+    @property
+    def selectedSuffixBadge(self):
+        return self.__suffixBadge
 
 
 class VehicleArenaStatsDict(defaultdict):

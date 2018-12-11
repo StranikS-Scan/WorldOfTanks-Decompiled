@@ -9,7 +9,7 @@ from ..view.view_model import ViewModel
 from ..gui_constants import WindowStatus
 
 class Window(PyObjectEntity):
-    __slots__ = ('onStatusChanged',)
+    __slots__ = ('onStatusChanged', '__weakref__')
 
     def __init__(self, wndFlags, decorator, content=None, parent=None):
         if decorator is not None:

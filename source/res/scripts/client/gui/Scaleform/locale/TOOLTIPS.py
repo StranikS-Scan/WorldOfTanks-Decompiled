@@ -157,6 +157,8 @@ class TOOLTIPS(object):
     STORAGE_MAINMENU_IN_HANGAR = '#tooltips:storage/mainMenu/in_hangar'
     STORAGE_MAINMENU_PERSONAL_RESERVES = '#tooltips:storage/mainMenu/personal_reserves'
     STORAGE_FILTER_NORESULTSBTN = '#tooltips:storage/filter/noResultsBtn'
+    BADGEINFO_TITLE = '#tooltips:badgeinfo/title'
+    BADGEINFO_TEXT = '#tooltips:badgeinfo/text'
     TEMPLATE_DAYS_SHORT = '#tooltips:template/days/short'
     TEMPLATE_DAYS_VALUE = '#tooltips:template/days/value'
     TEMPLATE_HOURS_SHORT = '#tooltips:template/hours/short'
@@ -1868,6 +1870,8 @@ class TOOLTIPS(object):
     VEHICLEPREVIEW_VEHICLEPANEL_INFO_HEADER_NOCREW = '#tooltips:vehiclePreview/vehiclePanel/info/header/noCrew'
     VEHICLEPREVIEW_VEHICLEPANEL_INFO_BODY = '#tooltips:vehiclePreview/vehiclePanel/info/body'
     VEHICLEPREVIEW_BUYBUTTON_PARENTMODULEISLOCKED_HEADER = '#tooltips:vehiclePreview/buyButton/parentModuleIsLocked/header'
+    VEHICLEPREVIEW_BUYBUTTON_RESTOREREQUESTED_HEADER = '#tooltips:vehiclePreview/buyButton/restoreRequested/header'
+    VEHICLEPREVIEW_BUYBUTTON_RESTOREREQUESTED_BODY = '#tooltips:vehiclePreview/buyButton/restoreRequested/body'
     VEHICLEPREVIEW_BUYBUTTON_PARENTMODULEISLOCKED_BODY = '#tooltips:vehiclePreview/buyButton/parentModuleIsLocked/body'
     VEHICLEPREVIEW_BUYBUTTON_PARENTVEHICLEISLOCKED_HEADER = '#tooltips:vehiclePreview/buyButton/parentVehicleIsLocked/header'
     VEHICLEPREVIEW_BUYBUTTON_PARENTVEHICLEISLOCKED_BODY = '#tooltips:vehiclePreview/buyButton/parentVehicleIsLocked/body'
@@ -2068,6 +2072,7 @@ class TOOLTIPS(object):
     QUESTS_CONDITION_ACHIEVEMENTS_OTHERS = '#tooltips:quests/condition/achievements/others'
     QUESTS_BONUSES_TOKEN_HEADER = '#tooltips:quests/bonuses/token/header'
     QUESTS_BONUSES_TOKEN_BODY = '#tooltips:quests/bonuses/token/body'
+    QUESTS_BONUSES_LOOTBOXTOKEN_BODY = '#tooltips:quests/bonuses/lootBoxToken/body'
     HANGAR_HEADER_WGMONEYTOOLTIP_GOLDNAME = '#tooltips:hangar/header/wgmoneyTooltip/goldName'
     HANGAR_HEADER_WGMONEYTOOLTIP_CREDITSNAME = '#tooltips:hangar/header/wgmoneyTooltip/creditsName'
     HANGAR_HEADER_WGMONEYTOOLTIP_PURCHASEDVALUE = '#tooltips:hangar/header/wgmoneyTooltip/purchasedValue'
@@ -2189,6 +2194,7 @@ class TOOLTIPS(object):
     PERSONALMISSIONS_FREESHEET_NOTENOUGH = '#tooltips:personalMissions/freeSheet/notEnough'
     PERSONALMISSIONS_BADGE_TITLE = '#tooltips:personalMissions/badge/title'
     PERSONALMISSIONS_BADGE_DESCR = '#tooltips:personalMissions/badge/descr'
+    PERSONALMISSIONS_LOYALSERVICE_DESCR = '#tooltips:personalMissions/loyalService/descr'
     PERSONALMISSIONS_OPERATION_TITLE = '#tooltips:personalMissions/operation/title'
     PERSONALMISSIONS_OPERATION_MISSIONS_TITLE = '#tooltips:personalMissions/operation/missions/title'
     PERSONALMISSIONS_OPERATION_AWARDS_TITLE_DONE = '#tooltips:personalMissions/operation/awards/title/done'
@@ -2595,6 +2601,10 @@ class TOOLTIPS(object):
     NOTRECRUITEDTANKMAN_TANKWOMAN_DESC = '#tooltips:notrecruitedtankman/tankwoman/desc'
     NOTRECRUITEDTANKMAN_TWITCH1_LABEL = '#tooltips:notrecruitedtankman/twitch1/label'
     NOTRECRUITEDTANKMAN_TWITCH1_DESC = '#tooltips:notrecruitedtankman/twitch1/desc'
+    NOTRECRUITEDTANKMAN_NY19MEN_LABEL = '#tooltips:notrecruitedtankman/ny19men/label'
+    NOTRECRUITEDTANKMAN_NY19MEN_DESC = '#tooltips:notrecruitedtankman/ny19men/desc'
+    NOTRECRUITEDTANKMAN_NY19WOMAN_LABEL = '#tooltips:notrecruitedtankman/ny19woman/label'
+    NOTRECRUITEDTANKMAN_NY19WOMAN_DESC = '#tooltips:notrecruitedtankman/ny19woman/desc'
     QUESTS_AWARDS_VEHICLERENT_HEADER = '#tooltips:quests/awards/vehicleRent/header'
     QUESTS_AWARDS_VEHICLERENT_EXPIRE = '#tooltips:quests/awards/vehicleRent/expire'
     QUESTS_AWARDS_VEHICLERENT_RENTLEFT_RENTDAYS = '#tooltips:quests/awards/vehicleRent/rentLeft/rentDays'
@@ -2738,6 +2748,8 @@ class TOOLTIPS(object):
      ELEN_SUMMARY_PARAM_SUMALL_DAMAGEDEALT_BODY,
      ELEN_SUMMARY_PARAM_SUMALL_DAMAGEASSISTED_BODY)
     VEHICLEPREVIEW_BUYBUTTON_ALL_ENUM = (VEHICLEPREVIEW_BUYBUTTON_PARENTMODULEISLOCKED_HEADER,
+     VEHICLEPREVIEW_BUYBUTTON_RESTOREREQUESTED_HEADER,
+     VEHICLEPREVIEW_BUYBUTTON_RESTOREREQUESTED_BODY,
      VEHICLEPREVIEW_BUYBUTTON_PARENTMODULEISLOCKED_BODY,
      VEHICLEPREVIEW_BUYBUTTON_PARENTVEHICLEISLOCKED_HEADER,
      VEHICLEPREVIEW_BUYBUTTON_PARENTVEHICLEISLOCKED_BODY,
@@ -2859,7 +2871,9 @@ class TOOLTIPS(object):
     NOTRECRUITEDTANKMAN_ALL_DESC_ENUM = (NOTRECRUITEDTANKMAN_BASE_DESC,
      NOTRECRUITEDTANKMAN_BUFFON_DESC,
      NOTRECRUITEDTANKMAN_TANKWOMAN_DESC,
-     NOTRECRUITEDTANKMAN_TWITCH1_DESC)
+     NOTRECRUITEDTANKMAN_TWITCH1_DESC,
+     NOTRECRUITEDTANKMAN_NY19MEN_DESC,
+     NOTRECRUITEDTANKMAN_NY19WOMAN_DESC)
     ELEN_TASK_EVENTTYPE_FULL_ENUM = (ELEN_TASK_EVENTTYPE_FULL_NATION, ELEN_TASK_EVENTTYPE_FULL_LEVEL, ELEN_TASK_EVENTTYPE_FULL_CLASS)
     AWARDITEM_ALL_HEADER_ENUM = (AWARDITEM_CREDITS_HEADER,
      AWARDITEM_CRYSTAL_HEADER,
@@ -3052,7 +3066,9 @@ class TOOLTIPS(object):
     NOTRECRUITEDTANKMAN_ALL_LABEL_ENUM = (NOTRECRUITEDTANKMAN_BASE_LABEL,
      NOTRECRUITEDTANKMAN_BUFFON_LABEL,
      NOTRECRUITEDTANKMAN_TANKWOMAN_LABEL,
-     NOTRECRUITEDTANKMAN_TWITCH1_LABEL)
+     NOTRECRUITEDTANKMAN_TWITCH1_LABEL,
+     NOTRECRUITEDTANKMAN_NY19MEN_LABEL,
+     NOTRECRUITEDTANKMAN_NY19WOMAN_LABEL)
     ELEN_EXCEL_INFOPARAM_WINS_ALL_BODY_ENUM = (ELEN_EXCEL_INFOPARAM_WINS_VEHICLE_BODY,
      ELEN_EXCEL_INFOPARAM_WINS_NATION_BODY,
      ELEN_EXCEL_INFOPARAM_WINS_LEVEL_BODY,

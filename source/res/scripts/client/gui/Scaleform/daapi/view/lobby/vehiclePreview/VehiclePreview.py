@@ -146,15 +146,14 @@ class VehiclePreview(LobbySelectableView, VehiclePreviewMeta):
         AccountSettings.setSettings(PREVIEW_INFO_PANEL_IDX, index)
 
     def onBuyOrResearchClick(self):
-        if self.__isHeroTank:
+        vehicle = g_currentPreviewVehicle.item
+        if self.__isHeroTank and not vehicle.isRestorePossible():
             url = self.heroTanks.getCurrentRelatedURL()
             self.fireEvent(events.OpenLinkEvent(events.OpenLinkEvent.SPECIFIED, url=url))
+        elif canBuyGoldForVehicleThroughWeb(vehicle):
+            event_dispatcher.showVehicleBuyDialog(vehicle, previousAlias=VIEW_ALIAS.VEHICLE_PREVIEW)
         else:
-            vehicle = g_currentPreviewVehicle.item
-            if canBuyGoldForVehicleThroughWeb(vehicle):
-                event_dispatcher.showVehicleBuyDialog(vehicle, previousAlias=VIEW_ALIAS.VEHICLE_PREVIEW)
-            else:
-                self.__previewDP.buyAction(self._actionType, self._vehicleCD, self._skipConfirm)
+            self.__previewDP.buyAction(self._actionType, self._vehicleCD, self._skipConfirm)
 
     def onCompareClick(self):
         self.comparisonBasket.addVehicle(self._vehicleCD, initParameters={'strCD': g_currentPreviewVehicle.item.descriptor.makeCompactDescr()})
@@ -240,26 +239,30 @@ class VehiclePreview(LobbySelectableView, VehiclePreviewMeta):
             price = getGUIPrice(vehicle, money, exchangeRate)
             currency = price.getCurrency(byWeight=True)
             action = getActionPriceData(vehicle)
-            mayObtainForMoney = self.__isHeroTank or vehicle.mayObtainWithMoneyExchange(money, exchangeRate)
+            buttonHasToBeEnabled = self.__isHeroTank or vehicle.mayObtainWithMoneyExchange(money, exchangeRate)
+            if self.__isHeroTank and self.heroTanks.isOverloaded():
+                buttonHasToBeEnabled = vehicle.isPurchased or vehicle.isRestoreAvailable()
             isBuyingAvailable = not vehicle.isHidden or vehicle.isRentable or vehicle.isRestorePossible()
-            if currency == Currency.GOLD:
+            if vehicle.isRestorePossible() and not vehicle.isRestoreAvailable():
+                tooltip = _buildBuyButtonTooltip('restoreRequested')
+            elif currency == Currency.GOLD:
                 currencyIcon = RES_ICONS.MAPS_ICONS_LIBRARY_GOLDICONBIG
-                if mayObtainForMoney:
+                if buttonHasToBeEnabled:
                     formatter = text_styles.goldTextBig
                 else:
                     formatter = text_styles.errCurrencyTextBig
                     if isBuyingAvailable:
                         tooltip = _buildBuyButtonTooltip('notEnoughGold')
                         if isIngameShopEnabled():
-                            mayObtainForMoney = True
+                            buttonHasToBeEnabled = True
             else:
                 currencyIcon = RES_ICONS.MAPS_ICONS_LIBRARY_CREDITSICONBIG
-                formatter = text_styles.creditsTextBig if mayObtainForMoney else text_styles.errCurrencyTextBig
-                if not mayObtainForMoney and isBuyingAvailable:
+                formatter = text_styles.creditsTextBig if buttonHasToBeEnabled else text_styles.errCurrencyTextBig
+                if not buttonHasToBeEnabled and isBuyingAvailable:
                     tooltip = _buildBuyButtonTooltip('notEnoughCredits')
             if self._disableBuyButton:
-                mayObtainForMoney = False
-            return _ButtonState(mayObtainForMoney, formatter(BigWorld.wg_getIntegralFormat(price.getSignValue(currency))), VEHICLE_PREVIEW.BUYINGPANEL_BUYBTN_LABEL_RESTORE if vehicle.isRestorePossible() else VEHICLE_PREVIEW.BUYINGPANEL_BUYBTN_LABEL_BUY, action is not None, currencyIcon, action, tooltip)
+                buttonHasToBeEnabled = False
+            return _ButtonState(buttonHasToBeEnabled, formatter(BigWorld.wg_getIntegralFormat(price.getSignValue(currency))), VEHICLE_PREVIEW.BUYINGPANEL_BUYBTN_LABEL_RESTORE if vehicle.isRestorePossible() else (VEHICLE_PREVIEW.BUYINGPANEL_BUYBTN_LABEL_TOCALENDAR if self.__isHeroTank and self.heroTanks.isOverloaded() else VEHICLE_PREVIEW.BUYINGPANEL_BUYBTN_LABEL_BUY), action is not None, currencyIcon, action, tooltip)
         else:
             nodeCD = vehicle.intCD
             currencyIcon = RES_ICONS.MAPS_ICONS_LIBRARY_XPCOSTICONBIG

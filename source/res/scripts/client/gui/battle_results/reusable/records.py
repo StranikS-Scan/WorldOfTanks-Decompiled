@@ -93,6 +93,12 @@ _SUPPORTED_OPS = {ValueReplay.SET: ReplayRecord,
 
 class ReplayRecords(ResultRecord):
     __slots__ = ('_records',)
+    __NEW_YEAR_MAP = {'eventFreeXPList_ny19battle##xp_freeXP': 'newYearFreeXp',
+     'eventFreeXPFactor100List_ny19battle##xp_freeXP': 'newYearFreeXpFactor',
+     'eventXPList_ny19battle##vehXP': 'newYearXp',
+     'eventXPFactor100List_ny19battle##vehXP': 'newYearXpFactor',
+     'eventCreditsList_ny19battle##credits_gold': 'newYearCredits',
+     'eventCreditsFactor100List_ny19battle##credits_gold': 'newYearCreditsFactor'}
 
     def __init__(self, replay, *last):
         super(ReplayRecords, self).__init__()
@@ -136,7 +142,11 @@ class ReplayRecords(ResultRecord):
     def _addRecord(self, op, name, value, diff):
         if op in _SUPPORTED_OPS:
             clazz = _SUPPORTED_OPS[op]
-            self._records[name] = clazz(name, value, diff)
+            nyName = self.__remapForNewYear(name)
+            self._records[nyName] = clazz(nyName, value, diff)
+
+    def __remapForNewYear(self, name):
+        return self.__NEW_YEAR_MAP[name] if name in self.__NEW_YEAR_MAP else name
 
 
 class RecordsIterator(ResultRecord):

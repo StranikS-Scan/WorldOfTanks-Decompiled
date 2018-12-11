@@ -11,6 +11,8 @@ from gui.Scaleform.daapi.view.dialogs import I18nInfoDialogMeta, I18nConfirmDial
 from gui.Scaleform.daapi.view.lobby.store.browser.ingameshop_helpers import getWebShopURL, isIngameShopEnabled
 from gui.Scaleform.framework.entities.View import ViewKey
 from gui.Scaleform.genConsts.BOOSTER_CONSTANTS import BOOSTER_CONSTANTS
+from gui.Scaleform.genConsts.VEHICLE_SELECTOR_CONSTANTS import VEHICLE_SELECTOR_CONSTANTS
+from gui.Scaleform.genConsts.NEWYEAR_ALIASES import NEWYEAR_ALIASES
 from gui.Scaleform.genConsts.CLANS_ALIASES import CLANS_ALIASES
 from gui.Scaleform.genConsts.EPICBATTLES_ALIASES import EPICBATTLES_ALIASES
 from gui.Scaleform.genConsts.PERSONAL_MISSIONS_ALIASES import PERSONAL_MISSIONS_ALIASES
@@ -34,7 +36,10 @@ from skeletons.gui.game_control import IHeroTankController
 from skeletons.gui.goodies import IGoodiesCache
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
+from skeletons.new_year import INewYearController
 from soft_exception import SoftException
+from gui.shared.gui_items.loot_box import NewYearLootBoxes
+from gui.shared.gui_items.Vehicle import VEHICLE_CLASS_NAME as _VCN
 
 class SETTINGS_TAB_INDEX(object):
     GAME = 0
@@ -201,7 +206,7 @@ def showOldVehiclePreview(vehTypeCompDescr, previewAlias=VIEW_ALIAS.LOBBY_HANGAR
      'previewBackCb': previewBackCb}), scope=EVENT_BUS_SCOPE.LOBBY)
 
 
-def showVehiclePreview(vehTypeCompDescr, previewAlias=VIEW_ALIAS.LOBBY_HANGAR, vehStrCD=None, previewBackCb=None, itemsPack=None, price=money.MONEY_UNDEFINED, oldPrice=None, title='', endTime=None, buyParams=None):
+def showVehiclePreview(vehTypeCompDescr, previewAlias=VIEW_ALIAS.LOBBY_HANGAR, vehStrCD=None, previewBackCb=None, itemsPack=None, price=money.MONEY_UNDEFINED, oldPrice=None, title='', endTime=None, buyParams=None, vehParams=None):
     lobbyContext = dependency.instance(ILobbyContext)
     newPreviewEnabled = lobbyContext.getServerSettings().isIngamePreviewEnabled()
     heroTankController = dependency.instance(IHeroTankController)
@@ -219,7 +224,8 @@ def showVehiclePreview(vehTypeCompDescr, previewAlias=VIEW_ALIAS.LOBBY_HANGAR, v
          'oldPrice': oldPrice,
          'title': title,
          'endTime': endTime,
-         'buyParams': buyParams}), scope=EVENT_BUS_SCOPE.LOBBY)
+         'buyParams': buyParams,
+         'vehParams': vehParams}), scope=EVENT_BUS_SCOPE.LOBBY)
     elif itemsPack:
         SystemMessages.pushMessage(text=_ms(MESSENGER.CLIENT_ERROR_SHARED_TRY_LATER), type=SystemMessages.SM_TYPE.Error, priority=NotificationPriorityLevel.MEDIUM)
     else:
@@ -430,3 +436,43 @@ def showExchangeXPWindow():
 
 def showBubbleTooltip(msg):
     g_eventBus.handleEvent(events.BubbleTooltipEvent(events.BubbleTooltipEvent.SHOW, msg), scope=EVENT_BUS_SCOPE.LOBBY)
+
+
+@dependency.replace_none_kwargs(lobbyCtx=ILobbyContext, nyCtrl=INewYearController)
+def showLootBoxEntry(lootBoxType=NewYearLootBoxes.PREMIUM, lobbyCtx=None, nyCtrl=None):
+    enabled = lobbyCtx.getServerSettings().isLootBoxesEnabled() and nyCtrl.isEnabled()
+    if not enabled:
+        from gui.impl.lobby.loot_box.loot_box_helper import showRestrictedSysMessage
+        showRestrictedSysMessage()
+        return
+    from gui.impl.lobby.loot_box.loot_box_entry_view import LootBoxEntryWindow
+    window = LootBoxEntryWindow(lootBoxType)
+    window.load()
+
+
+def showLootBoxBuyWindow():
+    g_eventBus.handleEvent(events.OpenLinkEvent(events.OpenLinkEvent.LOOT_BOX_URL))
+
+
+def showLootBoxGiftWindow():
+    g_eventBus.handleEvent(events.OpenLinkEvent(events.OpenLinkEvent.LOOT_BOX_GIFT_URL))
+
+
+def showNewYearApplyVehicleDiscount(level):
+    g_eventBus.handleEvent(events.LoadViewEvent(NEWYEAR_ALIASES.NEW_YEAR_VEHICLE_SELECTOR_ALIAS, ctx={'isMultiSelect': False,
+     'section': 'ny_vehicle_discount_activation',
+     'vehicleTypes': (_VCN.LIGHT_TANK, _VCN.MEDIUM_TANK, _VCN.HEAVY_TANK),
+     'filterVisibility': VEHICLE_SELECTOR_CONSTANTS.VISIBLE_NATION | VEHICLE_SELECTOR_CONSTANTS.VISIBLE_VEHICLE_TYPE | VEHICLE_SELECTOR_CONSTANTS.VISIBLE_COMPATIBLE_ONLY,
+     'level': level}), scope=EVENT_BUS_SCOPE.LOBBY)
+
+
+def showLootBoxAutoOpenWindow(rewards):
+    from gui.impl.lobby.loot_box.loot_box_auto_open_view import LootBoxAutoOpenWindow
+    window = LootBoxAutoOpenWindow(rewards)
+    window.load()
+
+
+def showNYLevelUpWindow(context):
+    from gui.impl.new_year.views.new_year_level_up_view import NewYearLevelUpWindow
+    window = NewYearLevelUpWindow(context)
+    window.load()

@@ -31,7 +31,7 @@ class ViewImpl(View):
             advancedContent = event.getArgument('advancedContent')
             window = AdvancedToolTipWindow(event, self.getParentWindow(), self.createToolTipContent(event, normalContent), self.createToolTipContent(event, advancedContent))
         else:
-            content = self.createToolTipContent(event, 0)
+            content = self.createToolTipContent(event, event.contentID)
             if content is not None:
                 window = ToolTipWindow(event, content, self.getParentWindow())
         if window is not None:

@@ -314,6 +314,12 @@ class PromoScreensAccessor(BaseAccessor):
         return self._data_source.client_promo_log(callback, data)
 
 
+class AdventCalendarAccessor(BaseAccessor):
+
+    def get_hero_tanks_list(self, callback):
+        return self._data_source.get_hero_tanks_list(callback)
+
+
 class Requester(object):
     available_data_sources = {'stagings': StagingDataAccessor,
      'fake': FakeDataAccessor,
@@ -329,6 +335,7 @@ class Requester(object):
     wgelen = RequestDescriptor(WGElenAccessor)
     wgrms = RequestDescriptor(WgrmsAccessor)
     promo_screens = RequestDescriptor(PromoScreensAccessor)
+    advent_calendar = RequestDescriptor(AdventCalendarAccessor)
 
     @classmethod
     def create_requester(cls, url_fetcher, config, client_lang=None, user_agent=None):

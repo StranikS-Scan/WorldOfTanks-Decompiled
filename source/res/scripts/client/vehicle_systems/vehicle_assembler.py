@@ -47,7 +47,8 @@ class _CompoundAssembler(VehicleAssemblerAbstract):
 
     def prerequisites(self, typeDescriptor, vID, health=1, isCrewActive=True, isTurretDetached=False, outfitCD=''):
         prereqs = self.__appearance.prerequisites(typeDescriptor, vID, health, isCrewActive, isTurretDetached, outfitCD)
-        compoundAssembler = prepareCompoundAssembler(typeDescriptor, self.__appearance.modelsSetParams, BigWorld.player().spaceID, isTurretDetached)
+        modelsSetParams = self.__appearance.modelsSetParams
+        compoundAssembler = prepareCompoundAssembler(typeDescriptor, modelsSetParams, BigWorld.player().spaceID, isTurretDetached)
         if not isTurretDetached:
             bspModels = ((TankPartNames.getIdx(TankPartNames.CHASSIS), typeDescriptor.chassis.hitTester.bspModelName),
              (TankPartNames.getIdx(TankPartNames.HULL), typeDescriptor.hull.hitTester.bspModelName),
@@ -59,7 +60,7 @@ class _CompoundAssembler(VehicleAssemblerAbstract):
         prereqs += [compoundAssembler, collisionAssembler]
         physicalTracksBuilders = typeDescriptor.chassis.physicalTracks
         for name, builder in physicalTracksBuilders.iteritems():
-            prereqs.append(builder.createLoader('{0}PhysicalTrack'.format(name)))
+            prereqs.append(builder.createLoader('{0}PhysicalTrack'.format(name), modelsSetParams.skin))
 
         return (compoundAssembler, prereqs)
 

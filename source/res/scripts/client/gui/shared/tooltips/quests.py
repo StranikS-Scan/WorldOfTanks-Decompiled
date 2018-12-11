@@ -12,7 +12,7 @@ from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.server_events import events_helpers
-from gui.server_events.awards_formatters import TokenBonusFormatter
+from gui.server_events.awards_formatters import TokenBonusFormatter, PreformattedBonus, LABEL_ALIGN
 from gui.server_events.bonuses import CustomizationsBonus
 from gui.server_events.cond_formatters.tooltips import MissionsAccountRequirementsFormatter
 from gui.shared.formatters import text_styles, icons
@@ -20,11 +20,13 @@ from gui.shared.gui_items.Vehicle import getTypeSmallIconPath
 from gui.shared.tooltips import TOOLTIP_TYPE, formatters
 from gui.shared.tooltips.common import BlocksTooltipData
 from gui.shared.utils import flashObject2Dict
+from gui.shared.utils.functions import makeTooltip
 from helpers import dependency
 from helpers.i18n import makeString as _ms
 from shared_utils import findFirst
 from skeletons.gui.game_control import IQuestsController
 from skeletons.gui.server_events import IEventsCache
+from skeletons.new_year import INewYearController
 _MAX_AWARDS_PER_TOOLTIP = 5
 _MAX_QUESTS_PER_TOOLTIP = 4
 _MAX_BONUSES_PER_QUEST = 2
@@ -34,12 +36,18 @@ class _StringTokenBonusFormatter(TokenBonusFormatter):
 
     def format(self, bonus):
         result = super(_StringTokenBonusFormatter, self).format(bonus)
-        return [ _ms(TOOLTIPS.QUESTS_BONUSES_TOKEN_HEADER, userName=b.userName) for b in result ]
+        return [ b.userName for b in result ]
+
+    def _formatComplexToken(self, complexToken, token, bonus):
+        userName = self._getUserName(complexToken.styleID)
+        tooltip = makeTooltip(_ms(TOOLTIPS.QUESTS_BONUSES_TOKEN_HEADER, userName=userName), _ms(TOOLTIPS.QUESTS_BONUSES_TOKEN_BODY))
+        return PreformattedBonus(bonusName=bonus.getName(), images=self._getTokenImages(complexToken.styleID), label=self._formatBonusLabel(token.count), userName=_ms(TOOLTIPS.QUESTS_BONUSES_TOKEN_HEADER, userName=self._getUserName(complexToken.styleID)), labelFormatter=self._getLabelFormatter(bonus), tooltip=tooltip, align=LABEL_ALIGN.RIGHT, isCompensation=self._isCompensation(bonus))
 
 
 class QuestsPreviewTooltipData(BlocksTooltipData):
     _eventsCache = dependency.descriptor(IEventsCache)
     _questController = dependency.descriptor(IQuestsController)
+    _nyController = dependency.descriptor(INewYearController)
 
     def __init__(self, context):
         super(QuestsPreviewTooltipData, self).__init__(context, TOOLTIP_TYPE.QUESTS)
@@ -94,7 +102,8 @@ class QuestsPreviewTooltipData(BlocksTooltipData):
         return items
 
     def _getHeader(self, count, vehicleName, description):
-        return formatters.packImageTextBlockData(title=text_styles.highTitle(_ms(TOOLTIPS.HANGAR_HEADER_QUESTS_HEADER, count=count)), img=RES_ICONS.MAPS_ICONS_QUESTS_QUESTTOOLTIPHEADER, txtPadding=formatters.packPadding(top=20), txtOffset=20, desc=text_styles.main(_ms(description, vehicle=vehicleName)))
+        isNYEventEnabled = self._nyController.isEnabled()
+        return formatters.packImageTextBlockData(title=text_styles.highTitle(_ms(TOOLTIPS.HANGAR_HEADER_QUESTS_HEADER, count=count)), img=RES_ICONS.MAPS_ICONS_QUESTS_NYQUESTTOOLTIPHEADER if isNYEventEnabled else RES_ICONS.MAPS_ICONS_QUESTS_QUESTTOOLTIPHEADER, txtPadding=formatters.packPadding(top=20), txtOffset=20, desc=text_styles.main(_ms(description, vehicle=vehicleName)))
 
     def _getBottom(self, value):
         if value > 0:

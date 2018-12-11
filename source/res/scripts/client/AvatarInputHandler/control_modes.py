@@ -469,6 +469,7 @@ class ArcadeControlMode(_GunControlMode):
         self.__videoControlModeAvailable &= BattleReplay.g_replayCtrl.isPlaying or constants.HAS_DEV_RESOURCES
         self.__lockKeyPressedTime = None
         self.__lockKeyUpTime = None
+        self.__simpleAimTarget = None
         self.__magneticAimTarget = None
         return
 
@@ -524,10 +525,11 @@ class ArcadeControlMode(_GunControlMode):
                 gui_event_dispatcher.hideAutoAimMarker()
                 autoAimProcessor(target=BigWorld.target())
             BigWorld.player().autoAim(BigWorld.target())
+            self.__simpleAimTarget = BigWorld.target()
         if isWheeledTech and isFiredLockTarget and not isDown:
             if self.__lockKeyPressedTime is not None and self.__lockKeyUpTime is not None:
                 if self.__lockKeyUpTime - self.__lockKeyPressedTime <= MagneticAimSettings.KEY_DELAY_SEC:
-                    self.__magneticAimTarget = magneticAimProcessor(self.__magneticAimTarget)
+                    self.__magneticAimTarget = magneticAimProcessor(self.__simpleAimTarget, self.__magneticAimTarget)
         if cmdMap.isFired(CommandMapping.CMD_CM_SHOOT, key) and isDown:
             BigWorld.player().shoot()
             return True

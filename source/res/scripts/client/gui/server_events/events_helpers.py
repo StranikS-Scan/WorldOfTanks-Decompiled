@@ -15,6 +15,7 @@ from helpers import time_utils, i18n, dependency
 from shared_utils import CONST_CONTAINER
 from skeletons.gui.game_control import IMarathonEventsController
 from skeletons.gui.server_events import IEventsCache
+from skeletons.gui.shared import IItemsCache
 from gui.server_events.events_constants import LINKEDSET_GROUP_PREFIX, MARATHON_GROUP_PREFIX
 from helpers.i18n import makeString as _ms
 from gui.Scaleform.locale.LINKEDSET import LINKEDSET
@@ -260,6 +261,27 @@ def getLinkedSetMissionIDFromQuest(quest):
 
 def getLinkedSetQuestID(quest):
     return int(quest.getID().split('_')[2])
+
+
+@dependency.replace_none_kwargs(itemsCache=IItemsCache)
+def getLootboxesFromBonuses(bonuses, itemsCache=None):
+    lootboxes = {}
+    for bonus in bonuses:
+        if bonus.getName() == 'battleToken':
+            tokens = bonus.getTokens()
+            boxes = itemsCache.items.tokens.getLootBoxes()
+            for token in tokens.values():
+                if 'lootBox' in token.id:
+                    lootboxType = boxes[token.id].getType()
+                    if lootboxType not in lootboxes:
+                        lootboxes[lootboxType] = {'count': token.count,
+                         'isFree': boxes[token.id].isFree()}
+                    else:
+                        lootboxes[lootboxType]['count'] += token.count
+
+            break
+
+    return lootboxes
 
 
 class AwardSheetPresenter(object):

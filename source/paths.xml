@@ -1,7 +1,7 @@
 <root>
   <Paths>
-    <Path cacheSubdirs="true">./res_mods/1.3.0.0 Common Test</Path>
-    <Path mode="recursive" mask="*.wotmod" root="res">./mods/1.3.0.0 Common Test</Path>
+    <Path cacheSubdirs="true">./res_mods/1.3.0.0</Path>
+    <Path mode="recursive" mask="*.wotmod" root="res">./mods/1.3.0.0</Path>
     <Packages>
       <Package type="sd,hd">./res/packages/shared_content-part2.pkg</Package>
       <Package type="sd,hd">./res/packages/shared_content-part1.pkg</Package>
@@ -92,6 +92,8 @@
       <Package type="hd">./res/packages/90_minsk_hd.pkg</Package>
       <Package type="sd,hd">./res/packages/99_poland.pkg</Package>
       <Package type="hd">./res/packages/99_poland_hd.pkg</Package>
+      <Package type="sd,hd">./res/packages/h23_newyear.pkg</Package>
+      <Package type="hd">./res/packages/h23_newyear_hd.pkg</Package>
       <Package type="sandbox,sd,hd">./res/packages/hangar_v3.pkg</Package>
       <Package type="hd">./res/packages/hangar_v3_hd.pkg</Package>
       <Package type="sandbox,sd,hd">./res/packages/audioww-part1.pkg</Package>

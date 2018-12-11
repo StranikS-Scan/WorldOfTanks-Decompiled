@@ -5,6 +5,7 @@ from functools import partial
 from collections import namedtuple
 import logging
 import Event
+import shared_utils
 from soft_exception import SoftException
 from CurrentVehicle import g_currentVehicle
 from gui.shared.utils.decorators import process
@@ -115,9 +116,11 @@ class CustomizationContext(object):
         self._c11CameraManager = None
         self._autoRentEnabled = False
         self._carouselItems = None
+        self._exitCallback = None
         self.onCustomizationSeasonChanged = Event.Event(self._eventsManager)
         self.onCustomizationModeChanged = Event.Event(self._eventsManager)
         self.onCustomizationTabChanged = Event.Event(self._eventsManager)
+        self.onCustomizationTabsUpdated = Event.Event(self._eventsManager)
         self.onCustomizationItemInstalled = Event.Event(self._eventsManager)
         self.onCustomizationItemsRemoved = Event.Event(self._eventsManager)
         self.onCamouflageColorChanged = Event.Event(self._eventsManager)
@@ -136,8 +139,12 @@ class CustomizationContext(object):
         self.onPropertySheetShown = Event.Event(self._eventsManager)
         self.onPropertySheetHidden = Event.Event(self._eventsManager)
         self.onCustomizationItemDataChanged = Event.Event(self._eventsManager)
+        self.onStylePreview = Event.Event(self._eventsManager)
         self.onClearItem = Event.Event(self._eventsManager)
         return
+
+    def getExitCallback(self):
+        return self._exitCallback
 
     def setCarouselItems(self, carouselItems):
         self._carouselItems = carouselItems
@@ -165,7 +172,7 @@ class CustomizationContext(object):
         self.service.tryOnOutfit(self._currentOutfit)
         g_tankActiveCamouflage[g_currentVehicle.item.intCD] = self._currentSeason
 
-    def tabChanged(self, tabIndex):
+    def tabChanged(self, tabIndex, update=False):
         self._tabIndex = tabIndex
         if self._tabIndex == C11nTabs.EFFECT:
             self._selectedAnchor = C11nId(areaId=Area.MISC, slotType=GUI_ITEM_TYPE.MODIFICATION, regionIdx=0)
@@ -174,7 +181,10 @@ class CustomizationContext(object):
         else:
             self._selectedAnchor = C11nId()
         self._selectedCaruselItem = CaruselItemData()
-        self.onCustomizationTabChanged(tabIndex)
+        if update:
+            self.onCustomizationTabsUpdated(tabIndex)
+        else:
+            self.onCustomizationTabChanged(tabIndex)
 
     def anchorSelected(self, slotType, areaId, regionIdx):
         if self._tabIndex in (C11nTabs.EFFECT, C11nTabs.STYLE):
@@ -366,18 +376,19 @@ class CustomizationContext(object):
             self.onCustomizationItemsRemoved()
 
     def switchToCustom(self):
-        self._mode = C11nMode.CUSTOM
-        self.refreshOutfit()
-        self.tabChanged(self._lastTab)
-        self.onCustomizationModeChanged(self._mode)
+        if self._mode != C11nMode.CUSTOM:
+            self._mode = C11nMode.CUSTOM
+            self.refreshOutfit()
+            self.tabChanged(self._lastTab)
+            self.onCustomizationModeChanged(self._mode)
 
     def switchToStyle(self):
         if self._mode != C11nMode.STYLE:
             self._lastTab = self._tabIndex
-        self._mode = C11nMode.STYLE
-        self.refreshOutfit()
-        self.tabChanged(C11nTabs.STYLE)
-        self.onCustomizationModeChanged(self._mode)
+            self._mode = C11nMode.STYLE
+            self.refreshOutfit()
+            self.tabChanged(C11nTabs.STYLE)
+            self.onCustomizationModeChanged(self._mode)
 
     def cancelChanges(self):
         if self._mode == C11nMode.STYLE:
@@ -617,6 +628,7 @@ class CustomizationContext(object):
         nextTick(partial(self.onCustomizationItemSold, item=item, count=count))()
 
     def init(self):
+        g_currentVehicle.onChanged += self.__onVehicleChanged
         if not g_currentVehicle.isPresent():
             raise SoftException('There is not vehicle in hangar for customization.')
         self._autoRentEnabled = g_currentVehicle.item.isAutoRentStyle
@@ -644,6 +656,7 @@ class CustomizationContext(object):
         self.refreshOutfit()
 
     def fini(self):
+        g_currentVehicle.onChanged -= self.__onVehicleChanged
         self.itemsCache.onSyncCompleted -= self.__onCacheResync
         self.service.onOutfitChanged -= self.__onOutfitChanged
         self._eventsManager.clear()
@@ -651,9 +664,16 @@ class CustomizationContext(object):
         if self._c11CameraManager is not None:
             self._c11CameraManager.fini()
         self._c11CameraManager = None
-        self._vehicleAnchorsUpdater.stopUpdater()
+        if self._vehicleAnchorsUpdater is not None:
+            self._vehicleAnchorsUpdater.stopUpdater()
         self._vehicleAnchorsUpdater = None
+        self._exitCallback = None
         return
+
+    def __onVehicleChanged(self):
+        self._autoRentEnabled = g_currentVehicle.item.isAutoRentStyle
+        self.carveUpOutfits()
+        self.refreshOutfit()
 
     def checkSlotsFillingForSeason(self, season):
         checkedSlotTypes = (TABS_ITEM_MAPPING[tabId] for tabId in self.visibleTabs)
@@ -695,10 +715,9 @@ class CustomizationContext(object):
     def isOutfitsModified(self):
         if self._mode == self._originalMode:
             if self._mode == C11nMode.STYLE:
-                currentStyle = self.service.getCurrentStyle()
-                if self._modifiedStyle and currentStyle:
-                    return self._modifiedStyle.intCD != currentStyle.intCD or self._autoRentEnabled != g_currentVehicle.item.isAutoRentStyle
-                return not (self._modifiedStyle is None and currentStyle is None)
+                if self._modifiedStyle and self._originalStyle:
+                    return self._modifiedStyle.intCD != self._originalStyle.intCD or self._autoRentEnabled != g_currentVehicle.item.isAutoRentStyle
+                return not (self._modifiedStyle is None and self._originalStyle is None)
             for season in SeasonType.COMMON_SEASONS:
                 outfit = self._modifiedOutfits[season]
                 currOutfit = self._originalOutfits[season]
@@ -858,7 +877,7 @@ class CustomizationContext(object):
         else:
             tabIndex = first(self.visibleTabs, -1)
             self._lastTab = tabIndex
-        self.tabChanged(tabIndex)
+        self.tabChanged(tabIndex, update=True)
 
     def __getComponent(self, item, selectedAnchor):
         component = emptyComponent(selectedAnchor.slotType)
@@ -914,3 +933,10 @@ class CustomizationContext(object):
 
             return
             return
+
+    def previewStyle(self, style, exitCallback=None):
+        self.switchToStyle()
+        self._exitCallback = exitCallback
+        if style is not None:
+            shared_utils.nextTick(lambda : self.onStylePreview(style.intCD))()
+        return

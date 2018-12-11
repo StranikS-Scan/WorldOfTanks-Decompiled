@@ -25,7 +25,7 @@ from gui.shared.gui_items.Vehicle import Vehicle
 from gui.shared.utils.requesters import REQ_CRITERIA
 from helpers import dependency, time_utils
 from items import vehicles
-from optional_bonuses import TrackVisitor, BONUS_MERGERS, walkBonuses
+from optional_bonuses import TrackVisitor
 from shared_utils import first, findFirst, collapseIntervals
 from skeletons.gui.battle_results import IBattleResultsService
 from skeletons.connection_mgr import IConnectionManager
@@ -505,8 +505,8 @@ class RankedBattlesController(IRankedBattlesController, Notifiable, SeasonProvid
             qProgress = self.eventsCache.questsProgress.getQuestProgress(quest.getID()) or {}
             if qProgress:
                 bonusTrack = qProgress.get(None, {}).get('bonusTracks', [''])[0]
-                trackReplay = TrackVisitor(BONUS_MERGERS, bonusTrack, 1, None)
-                trackResult = walkBonuses(quest.getData().get('bonus', {}), trackReplay)
+                trackReplay = TrackVisitor(bonusTrack, 1, None)
+                trackResult = trackReplay.walkBonuses(quest.getData().get('bonus', {}))
                 for bonus in quest.getBonuses(bonusData=trackResult):
                     for awardVO in bonus.getRankedAwardVOs(iconSize='big', withCounts=True, withKey=True):
                         itemKey = awardVO.pop('itemKey')

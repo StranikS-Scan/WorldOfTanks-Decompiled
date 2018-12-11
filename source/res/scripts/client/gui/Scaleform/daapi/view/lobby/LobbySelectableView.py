@@ -39,10 +39,10 @@ class LobbySelectableView(LobbySubView):
         return
 
     def _highlight3DEntityAndShowTT(self, entity):
-        entity.highlight(True)
+        entity.setHighlight(True)
 
     def _fade3DEntityAndHideTT(self, entity):
-        entity.highlight(False)
+        entity.setHighlight(False)
 
     def _onNotifyCursorOver3dScene(self, event):
         isCursorOver3dScene = event.ctx.get('isOver3dScene', False)
@@ -75,17 +75,15 @@ class LobbySelectableView(LobbySubView):
     def _on3DObjectMouseDown(self):
         if self.hangarSpace.isCursorOver3DScene:
             self.__selected3DEntityUnderMouseDown = self.__selected3DEntity
-            if self.__selected3DEntity and hasattr(self.__selected3DEntity, 'onMouseDown'):
+            if self.__selected3DEntity:
                 self.__selected3DEntity.onMouseDown()
 
     def _on3DObjectMouseUp(self):
         if self.hangarSpace.isCursorOver3DScene:
             if self.__selected3DEntityUnderMouseDown:
                 if self.__selected3DEntityUnderMouseDown == self.__selected3DEntity:
-                    if hasattr(self.__selected3DEntityUnderMouseDown, 'onMouseClick'):
-                        self.__selected3DEntityUnderMouseDown.onMouseClick()
-                if hasattr(self.__selected3DEntityUnderMouseDown, 'onMouseUp'):
-                    self.__selected3DEntityUnderMouseDown.onMouseUp()
+                    self.__selected3DEntityUnderMouseDown.onMouseClick()
+                self.__selected3DEntityUnderMouseDown.onMouseUp()
         self._on3DObjectMouseEnter(self.__selected3DEntity)
         self.__selected3DEntityUnderMouseDown = None
         return

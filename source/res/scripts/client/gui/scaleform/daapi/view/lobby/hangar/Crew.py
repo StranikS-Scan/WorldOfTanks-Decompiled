@@ -19,6 +19,7 @@ from items.tankmen import getSkillsConfig, compareMastery
 from helpers.i18n import convert
 from gui.ClientUpdateManager import g_clientUpdateManager
 from skeletons.gui.shared import IItemsCache
+from inventory_update_helper import updateOnInventoryChanges
 
 class Crew(CrewMeta):
     itemsCache = dependency.descriptor(IItemsCache)
@@ -39,13 +40,17 @@ class Crew(CrewMeta):
 
     def onInventoryUpdate(self, invDiff):
         if GUI_ITEM_TYPE.TANKMAN in invDiff:
-            self.updateTankmen()
+            self.updateTankmen(invDiff)
 
-    def updateTankmen(self):
+    def updateTankmen(self, diff=None):
         Waiting.show('updateTankmen')
         if g_currentVehicle.isPresent():
-            tankmen = self.itemsCache.items.getTankmen()
             vehicle = g_currentVehicle.item
+            isNeedToUpdate = updateOnInventoryChanges(self.itemsCache, vehicle, diff)
+            if not isNeedToUpdate:
+                Waiting.hide('updateTankmen')
+                return
+            tankmen = self.itemsCache.items.getTankmen()
             commander_bonus = vehicle.bonuses['commander']
             roles = []
             lessMastered = 0

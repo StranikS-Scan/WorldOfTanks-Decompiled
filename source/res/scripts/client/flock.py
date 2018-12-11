@@ -12,16 +12,32 @@ from Math import Vector3
 import AnimationSequence
 ENVIRONMENT_EFFECTS_CONFIG_FILE = 'scripts/environment_effects.xml'
 
+def _addModelToScene(model):
+    player = BigWorld.player()
+    if hasattr(player, 'isOnArena'):
+        player.addModel(model)
+    else:
+        BigWorld.addModel(model)
+
+
+def _delModelFromScene(model):
+    player = BigWorld.player()
+    if hasattr(player, 'isOnArena'):
+        player.delModel(model)
+    else:
+        BigWorld.delModel(model)
+
+
 class DebugGizmo(object):
 
     def __init__(self, modelName='helpers/models/position_gizmo.model'):
         self.model = BigWorld.Model(modelName)
-        BigWorld.player().addModel(self.model)
+        _addModelToScene(self.model)
         self.motor = BigWorld.Servo(Math.Matrix())
         self.model.addMotor(self.motor)
 
     def __del__(self):
-        BigWorld.player().delModel(self.model)
+        _delModelFromScene(self.model)
         if self.model.motors:
             self.model.delMotor(self.motor)
 
@@ -52,9 +68,10 @@ class DebugLine(object):
         self.model.addMotor(self.motor)
         self.__thickness = 0.1
         self.set(start, end)
-        BigWorld.player().addModel(self.model)
+        _addModelToScene(self.model)
 
     def __del__(self):
+        _delModelFromScene(self.model)
         self.model.delMotor(self.motor)
 
     def set(self, start, end):

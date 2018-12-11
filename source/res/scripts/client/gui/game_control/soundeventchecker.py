@@ -7,6 +7,8 @@ from gui.shared.money import Money, Currency, MONEY_UNDEFINED
 from helpers import dependency
 from skeletons.gui.game_control import ISoundEventChecker
 from skeletons.gui.shared import IItemsCache
+from skeletons.gui.impl import IGuiLoader
+from gui.impl.gen import R
 _SPEND_SINGLE_SOUNDS = {Currency.CREDITS: SoundEffectsId.SPEND_CREDITS,
  Currency.GOLD: SoundEffectsId.SPEND_CREDITS,
  Currency.CRYSTAL: SoundEffectsId.SPEND_CRYSTAL}
@@ -67,8 +69,12 @@ class SoundEventChecker(ISoundEventChecker):
             if spendCurrencies:
                 self.__playSound(self.__getSoundID(spendCurrencies, _SPEND_SINGLE_SOUNDS, _SPEND_MULTI_SOUNDS, SoundEffectsId.SPEND_DEFAULT_SOUND))
             elif earnCurrencies:
-                self.__playSound(self.__getSoundID(earnCurrencies, _EARN_SINGLE_SOUNDS, _EARN_MULTI_SOUNDS, SoundEffectsId.EARN_DEFAULT_SOUND))
+                uiLoader = dependency.instance(IGuiLoader)
+                entryView = uiLoader.windowsManager.getViewByLayoutID(R.views.lootBoxEntryView)
+                if entryView is None:
+                    self.__playSound(self.__getSoundID(earnCurrencies, _EARN_SINGLE_SOUNDS, _EARN_MULTI_SOUNDS, SoundEffectsId.EARN_DEFAULT_SOUND))
             self.__currentMoney = self.__currentMoney.replaceAll(newValues)
+        return
 
     @classmethod
     def __getSoundID(cls, currencies, singleSounds, multiSounds, defSound):

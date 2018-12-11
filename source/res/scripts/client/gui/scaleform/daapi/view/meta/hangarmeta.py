@@ -69,3 +69,6 @@ class HangarMeta(View):
 
     def as_hideTeaserTimerS(self):
         return self.flashObject.as_hideTeaserTimer() if self._isDAAPIInited() else None
+
+    def as_setLootboxesVisibleS(self, value):
+        return self.flashObject.as_setLootboxesVisible(value) if self._isDAAPIInited() else None

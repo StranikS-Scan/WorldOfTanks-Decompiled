@@ -2036,6 +2036,7 @@ class VEHICLE_CUSTOMIZATION(object):
     REPAINT_CUSTOM_COLOR_18 = '#vehicle_customization:repaint/custom_color_18'
     REPAINT_CUSTOM_COLOR_19 = '#vehicle_customization:repaint/custom_color_19'
     REPAINT_FROST = '#vehicle_customization:repaint/frost'
+    REPAINT_HVOIN = '#vehicle_customization:repaint/hvoin'
     REPAINT_FIREWORKS_2019 = '#vehicle_customization:repaint/fireworks_2019'
     REPAINT_COLOR_GROUP_05 = '#vehicle_customization:repaint/color_group_05'
     REPAINT_COLOR_GROUP_02 = '#vehicle_customization:repaint/color_group_02'

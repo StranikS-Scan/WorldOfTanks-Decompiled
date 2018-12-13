@@ -510,7 +510,7 @@ class ArcadeControlMode(_GunControlMode):
         elif BigWorld.isKeyDown(Keys.KEY_CAPSLOCK) and isDown and key == Keys.KEY_F3 and self.__videoControlModeAvailable:
             self._aih.onControlModeChanged(CTRL_MODE_NAME.VIDEO, prevModeName=CTRL_MODE_NAME.ARCADE, camMatrix=self._cam.camera.matrix)
             return True
-        isWheeledTech = BigWorld.player().vehicle.isWheeledTech
+        isWheeledTech = self._aih.isWheeledTech
         if isWheeledTech and cmdMap.isFired(CommandMapping.CMD_CM_LOCK_TARGET, key):
             if isDown:
                 self.__lockKeyPressedTime = time.time()
@@ -918,7 +918,7 @@ class SniperControlMode(_GunControlMode):
         cmdMap = CommandMapping.g_instance
         isFiredFreeCamera = cmdMap.isFired(CommandMapping.CMD_CM_FREE_CAMERA, key)
         isFiredLockTarget = cmdMap.isFired(CommandMapping.CMD_CM_LOCK_TARGET, key) and isDown
-        isWheeledTech = BigWorld.player().vehicle.isWheeledTech
+        isWheeledTech = self._aih.isWheeledTech
         if isFiredFreeCamera or isFiredLockTarget:
             if isFiredFreeCamera:
                 self.setAimingMode(isDown, AIMING_MODE.USER_DISABLED)

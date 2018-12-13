@@ -128,6 +128,7 @@ class AvatarInputHandler(CallbackDelayer, ComponentSystem):
     ctrls = property(lambda self: self.__ctrls)
     isSPG = property(lambda self: self.__isSPG)
     isATSPG = property(lambda self: self.__isATSPG)
+    isWheeledTech = property(lambda self: self.__isWheeledTech)
     isFlashBangAllowed = property(lambda self: self.__ctrls['video'] != self.__curCtrl)
     isDetached = property(lambda self: self.__isDetached)
     isGuiVisible = property(lambda self: self.__isGUIVisible)
@@ -186,6 +187,7 @@ class AvatarInputHandler(CallbackDelayer, ComponentSystem):
         self.__prevModeAutorotation = None
         self.__isSPG = False
         self.__isATSPG = False
+        self.__isWheeledTech = False
         self.__setupCtrls(sec)
         self.__curCtrl = self.__ctrls[_CTRLS_FIRST]
         self.__ctrlModeName = _CTRLS_FIRST
@@ -352,6 +354,7 @@ class AvatarInputHandler(CallbackDelayer, ComponentSystem):
         arcadeMode = self.__ctrls['arcade']
         arcadeMode.camera.setToVehicleDirection()
         self.__identifySPG()
+        self.__identifyWheeledTech()
         self.__constructComponents()
 
     def setKillerVehicleID(self, killerVehicleID):
@@ -364,6 +367,7 @@ class AvatarInputHandler(CallbackDelayer, ComponentSystem):
         g_guiResetters.add(self.__onRecreateDevice)
         self.steadyVehicleMatrixCalculator = SteadyVehicleMatrixCalculator()
         self.__identifySPG()
+        self.__identifyWheeledTech()
         self.__constructComponents()
         for control in self.__ctrls.itervalues():
             control.create()
@@ -430,6 +434,7 @@ class AvatarInputHandler(CallbackDelayer, ComponentSystem):
     def __onVehicleChanged(self, isStatic):
         self.steadyVehicleMatrixCalculator.relinkSources()
         self.__identifySPG()
+        self.__identifyWheeledTech()
         if self.__waitObserverCallback is not None and self.__observerVehicle is not None:
             player = BigWorld.player()
             ownVehicle = BigWorld.entity(player.playerVehicleID)
@@ -688,6 +693,14 @@ class AvatarInputHandler(CallbackDelayer, ComponentSystem):
             vehTypeDesc = veh.typeDescriptor.type
             self.__isSPG = 'SPG' in vehTypeDesc.tags
             self.__isATSPG = 'AT-SPG' in vehTypeDesc.tags
+            return
+
+    def __identifyWheeledTech(self):
+        veh = BigWorld.entity(BigWorld.player().playerVehicleID)
+        if veh is None:
+            return
+        else:
+            self.__isWheeledTech = veh.isWheeledTech
             return
 
     def reloadDynamicSettings(self):

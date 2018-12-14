@@ -547,6 +547,7 @@ class OpenLinkEvent(SharedEvent):
     FRONTLINE_CHANGES = 'frontlineChangesURL'
     LOOT_BOX_URL = 'lootBoxURL'
     LOOT_BOX_GIFT_URL = 'lootBoxGiftURL'
+    LOOT_BOX_RESCUE_URL = 'lootBoxRescueURL'
 
     def __init__(self, eventType, url='', title='', params=None):
         super(OpenLinkEvent, self).__init__(eventType)

@@ -27,7 +27,8 @@ _LISTENERS = {OpenLinkEvent.SPECIFIED: '_handleSpecifiedURL',
  OpenLinkEvent.FRONTLINE_CHANGES: '_handleFrontlineChangesURL',
  OpenLinkEvent.TOKEN_SHOP: '_handleTokenShopURL',
  OpenLinkEvent.LOOT_BOX_URL: '_handleLootBoxURL',
- OpenLinkEvent.LOOT_BOX_GIFT_URL: '_handleLootBoxGiftURL'}
+ OpenLinkEvent.LOOT_BOX_GIFT_URL: '_handleLootBoxGiftURL',
+ OpenLinkEvent.LOOT_BOX_RESCUE_URL: '_handleLootBoxRescueURL'}
 
 class ExternalLinksHandler(IExternalLinksController):
 
@@ -84,12 +85,24 @@ class ExternalLinksHandler(IExternalLinksController):
             url = yield lambda callback: callback('')
         callback(url)
 
+    @async
+    @process
+    def getRescueURL(self, urlSettings, callback=lambda *args: None):
+        url = yield self.__urlMacros.parse(str(urlSettings), None)
+        callback(url)
+        return
+
     def _handleSpecifiedURL(self, event):
         self.open(event.url)
 
     @process
     def __openParsedUrl(self, urlName, params=None):
         parsedUrl = yield self.getURL(urlName, params)
+        self.open(parsedUrl)
+
+    @process
+    def __openRescueParsedUrl(self, urlName):
+        parsedUrl = yield self.getRescueURL(urlName)
         self.open(parsedUrl)
 
     def _handleOpenRegistrationURL(self, _):
@@ -148,3 +161,6 @@ class ExternalLinksHandler(IExternalLinksController):
 
     def _handleLootBoxGiftURL(self, _):
         self.__openParsedUrl('lootBoxGiftURL')
+
+    def _handleLootBoxRescueURL(self, event):
+        self.__openRescueParsedUrl(event.url)

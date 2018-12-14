@@ -69,6 +69,9 @@ class ViewContainer(object):
     def __repr__(self):
         return '{}[{}]=[viewType=[{}], views=[{}], loadingViews=[{}], child=[{}]]'.format(self.__class__.__name__, hex(id(self)), self.__viewType, self._views, self._loadingViews, self.__child)
 
+    def getViews(self):
+        return self._views.values()
+
     def destroy(self):
         while self.__child:
             container = next(self.__child.itervalues())

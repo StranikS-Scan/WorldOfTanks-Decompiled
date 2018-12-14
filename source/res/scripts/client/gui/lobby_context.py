@@ -27,6 +27,9 @@ class LobbyContext(ILobbyContext):
         self.__clientArenaIDGenerator = Int32IDGenerator()
         self.__headerNavigationConfirmators = set()
         self.__fightButtonConfirmators = set()
+        self.lootboxBuyURL = ''
+        self.lootboxTarget = ''
+        self.lootboxTtl = 0
         return
 
     def clear(self):
@@ -38,6 +41,9 @@ class LobbyContext(ILobbyContext):
         self.__arenaUniqueIDs.clear()
         if self.__serverSettings:
             self.__serverSettings.clear()
+        self.lootboxBuyURL = ''
+        self.lootboxTarget = ''
+        self.lootboxTtl = 0
         return
 
     def onAccountBecomePlayer(self):

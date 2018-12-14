@@ -488,8 +488,8 @@ class BaseQuestProgress(object):
 
         isMainProgressCompleted = self.isCompleted(progresses[0].getProgressID())
         for progress in (x for x in self._progressStorage.getProgresses().itervalues() if x not in progresses):
-            if progress.isAward() and progress.isCumulative() and progress.checkIsCompleted():
-                self.setCompleted(progress.getProgressID(), isMainProgressCompleted)
+            if progress.isAward() and progress.isCumulative() and progress.checkIsCompleted() and isMainProgressCompleted:
+                self.setCompleted(progress.getProgressID(), True)
 
     def setCompleted(self, progressID, isMainProgressCompleted=True):
         progress = self._progressStorage.getProgress(progressID)

@@ -126,6 +126,12 @@ def onAccountShowGUI(ctx):
     if serverSettings.isElenEnabled():
         yield ServicesLocator.eventsController.getEvents(onlySettings=True, onLogin=True, prefetchKeyArtBig=False)
         yield ServicesLocator.eventsController.getHangarFlag(onLogin=True)
+    lobbyContext = ServicesLocator.lobbyContext
+    current = time_utils.getCurrentTimestamp()
+    if current > lobbyContext.lootboxTtl:
+        from gui.shared.event_dispatcher import fetchLootBoxUrl
+        lobbyContext.lootboxBuyURL, lobbyContext.lootboxTarget, lobbyContext.lootboxTtl = yield fetchLootBoxUrl()
+        lobbyContext.lootboxTtl += time_utils.getCurrentTimestamp()
 
 
 def onAccountBecomeNonPlayer():

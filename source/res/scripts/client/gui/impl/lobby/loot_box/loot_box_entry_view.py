@@ -320,6 +320,7 @@ class LootBoxEntryView(ViewImpl):
         self.destroyWindow()
 
     def __onBackToHangar(self, _=None):
+        playSound(LootBoxViewEvents.ENTRY_VIEW_EXIT)
         self.destroyWindow()
         event_dispatcher.showHangar()
 

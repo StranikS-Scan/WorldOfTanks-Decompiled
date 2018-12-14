@@ -1,11 +1,15 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/event_dispatcher.py
+import base64
+import json
+import BigWorld
 from operator import attrgetter
 from CurrentVehicle import HeroTankPreviewAppearance
-from adisp import process
-from debug_utils import LOG_WARNING
+from adisp import process, async
+from debug_utils import LOG_WARNING, LOG_NOTE
 from gui import SystemMessages, DialogsInterface
 from gui.Scaleform import MENU
+from gui.Scaleform.Waiting import Waiting
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.dialogs import I18nInfoDialogMeta, I18nConfirmDialogMeta, DIALOG_BUTTON_ID
 from gui.Scaleform.daapi.view.lobby.store.browser.ingameshop_helpers import getWebShopURL, isIngameShopEnabled
@@ -30,7 +34,7 @@ from gui.shared.notifications import NotificationPriorityLevel
 from gui.shared.utils import isPopupsWindowsOpenDisabled
 from gui.shared.utils.functions import getViewName, getUniqueViewName
 from gui.shared.utils.requesters import REQ_CRITERIA
-from helpers import dependency
+from helpers import dependency, time_utils
 from helpers.i18n import makeString as _ms
 from skeletons.gui.game_control import IHeroTankController
 from skeletons.gui.goodies import IGoodiesCache
@@ -40,6 +44,9 @@ from skeletons.new_year import INewYearController
 from soft_exception import SoftException
 from gui.shared.gui_items.loot_box import NewYearLootBoxes
 from gui.shared.gui_items.Vehicle import VEHICLE_CLASS_NAME as _VCN
+from gui.app_loader import sf_lobby
+from skeletons.gui.impl import IGuiLoader
+from gui.impl.gen.resources import R
 
 class SETTINGS_TAB_INDEX(object):
     GAME = 0
@@ -450,8 +457,73 @@ def showLootBoxEntry(lootBoxType=NewYearLootBoxes.PREMIUM, lobbyCtx=None, nyCtrl
     window.load()
 
 
-def showLootBoxBuyWindow():
-    g_eventBus.handleEvent(events.OpenLinkEvent(events.OpenLinkEvent.LOOT_BOX_URL))
+@async
+def fetchLootBoxUrl(callback=None):
+    LOG_NOTE('<fetchLootBoxUrl> ttl expired')
+    fallbackURL = ''
+    timeout = 5.0
+    lobbyCtx = dependency.instance(ILobbyContext)
+    wgcgURL = lobbyCtx.getServerSettings().wgcg.url
+    if not wgcgURL.endswith('/'):
+        wgcgURL += '/'
+    wgcgURL += 'ny19'
+
+    def processResponse(r):
+        LOG_NOTE('<fetchLootBoxUrl> response:', base64.b64encode(r.body))
+        if r.responseCode == 200:
+            try:
+                data = json.loads(r.body)
+                callback((data.get('url', fallbackURL), data.get('state', 'external'), data.get('ttl', 0)))
+            except Exception:
+                callback(('', '', 0))
+
+        else:
+            callback(('', '', 0))
+
+    BigWorld.fetchURL(wgcgURL, lambda r, *args: processResponse(r), timeout=timeout)
+
+
+class LootBoxOverlayCloser(object):
+    guiApp = dependency.descriptor(IGuiLoader)
+
+    def __init__(self):
+        super(LootBoxOverlayCloser, self).__init__()
+
+    @sf_lobby
+    def app(self):
+        return None
+
+    def closeAllOverlays(self):
+        wndManager = self.guiApp.windowsManager
+        view = wndManager.getViewByLayoutID(R.views.lootBoxEntryView)
+        if view is not None:
+            view.getParentWindow().destroy()
+        view = wndManager.getViewByLayoutID(R.views.lootBoxRewardView)
+        if view is not None:
+            view.getParentWindow().destroy()
+        return
+
+
+@process
+@dependency.replace_none_kwargs(lobbyContext=ILobbyContext)
+def showLootBoxBuyWindow(lobbyContext=None):
+    Waiting.show('draw_research_items')
+    current = time_utils.getCurrentTimestamp()
+    if current > lobbyContext.lootboxTtl:
+        lobbyContext.lootboxBuyURL, lobbyContext.lootboxTarget, lobbyContext.lootboxTtl = yield fetchLootBoxUrl()
+        lobbyContext.lootboxTtl += time_utils.getCurrentTimestamp()
+    Waiting.hide('draw_research_items')
+    if lobbyContext.lootboxTarget and lobbyContext.lootboxBuyURL:
+        if lobbyContext.lootboxTarget == 'igb':
+            showWebShop(lobbyContext.lootboxBuyURL)
+            closer = LootBoxOverlayCloser()
+            closer.closeAllOverlays()
+        elif lobbyContext.lootboxTarget == 'external':
+            g_eventBus.handleEvent(events.OpenLinkEvent(events.OpenLinkEvent.LOOT_BOX_RESCUE_URL, lobbyContext.lootboxBuyURL))
+        else:
+            g_eventBus.handleEvent(events.OpenLinkEvent(events.OpenLinkEvent.LOOT_BOX_URL))
+    else:
+        g_eventBus.handleEvent(events.OpenLinkEvent(events.OpenLinkEvent.LOOT_BOX_URL))
 
 
 def showLootBoxGiftWindow():

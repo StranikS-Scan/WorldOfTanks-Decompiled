@@ -592,11 +592,11 @@ class CustomizationOutfit(SerializableComponent):
     def dismountUnsuitableComponents(self, vehDescr, oldVehDescr):
         toMove = NamedVector()
         projectionDecals = self.projection_decals
-        unsuitablePartNames = _getDifferVehiclePartNames(vehDescr, oldVehDescr)
-        if unsuitablePartNames:
+        differPartNames = _getDifferVehiclePartNames(vehDescr, oldVehDescr)
+        if differPartNames:
             newProjectionDecals = []
             for projectionDecal in projectionDecals:
-                if not cn.getVehicleProjectionDecalSlotParams(oldVehDescr, projectionDecal.slotId, unsuitablePartNames):
+                if not cn.getVehicleProjectionDecalSlotParams(oldVehDescr, projectionDecal.slotId, differPartNames):
                     newProjectionDecals.append(projectionDecal)
                     continue
                 toMove[(CustomizationType.PROJECTION_DECAL, projectionDecal.id)] += 1
@@ -609,14 +609,17 @@ class CustomizationOutfit(SerializableComponent):
          (ApplyArea.GUN_REGIONS_VALUE, vehDescr.gun)):
             for componentName, (area, _) in vehiclePart.customizableVehicleAreas.iteritems():
                 components = getattr(self, '{}s'.format(lower(componentName)))
+                componentType = getattr(CustomizationType, upper(componentName))
                 for component in components:
+                    if componentType == CustomizationType.CAMOUFLAGE and component.id == HIDDEN_CAMOUFLAGE_ID:
+                        continue
                     appliedTo = regionValue & component.appliedTo
                     if not appliedTo:
                         continue
                     dismountArea = appliedTo & ~(area & appliedTo)
                     if not dismountArea:
                         continue
-                    toMove += self.dismountComponents(dismountArea, (getattr(CustomizationType, upper(componentName)),))
+                    toMove += self.dismountComponents(dismountArea, (componentType,))
 
         return dict(toMove)
 
@@ -892,9 +895,9 @@ def _unclamp16(value, minValue, maxValue):
 
 
 def _getDifferVehiclePartNames(newVehDescr, oldVehDescr):
-    unsuitablePartNames = []
+    differPartNames = []
     for partName in CUSTOMIZATION_SLOTS_VEHICLE_PARTS:
         if getattr(newVehDescr, partName).compactDescr != getattr(oldVehDescr, partName).compactDescr:
-            unsuitablePartNames.append(partName)
+            differPartNames.append(partName)
 
-    return unsuitablePartNames
+    return differPartNames

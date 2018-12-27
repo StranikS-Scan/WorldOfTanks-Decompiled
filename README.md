@@ -16,7 +16,12 @@ Using **[PjOrion](https://koreanrandom.com/forum/topic/15280-)**:
 1. Download commit to PC
 2. Run **"Zip-Unpacker.cmd"** to restore the original files from the **zip-archive** with the correct letters case in the file names
 
-### Decompilation algorithm (recommendations)
+### Auto decompilation algorithm (recommendations)
+1. Replace old files with new files in the folder **"source"**: paths.xml, version.xml
+2. Delete old files and copy new files in the folder **"res"**
+3. Run **"WOT-UnDec.cmd"** to unpack and decompile the files
+
+### Manual decompilation algorithm
 1. Create a folder **"source"** and a subfolder **"res"** in it
 2. Copy files **"paths.xml"** and **"version.xml"** from game-root to a folder **"source"**
 3. Copy all **xml**-files from game folder **"res"** to the directory **"source\res"**

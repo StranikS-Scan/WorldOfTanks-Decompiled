@@ -2298,9 +2298,12 @@ class NewYearLevelUpRewardFormatter(WaitItemsSyncFormatter):
 
     @classmethod
     def _deleteColorAndFontAccentuation(cls, text):
-        regex = re.compile("(color='#.*?'|<b>|</b>)")
-        cleanText = re.sub(regex, '', text)
-        return cleanText
+        if text is None:
+            return text
+        else:
+            regex = re.compile("(color='#.*?'|<b>|</b>)")
+            cleanText = re.sub(regex, '', text)
+            return cleanText
 
 
 class NewYearCollectionRewardFormatter(WaitItemsSyncFormatter):

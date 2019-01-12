@@ -378,7 +378,8 @@ class NewYearAtmosphereHandler(ServiceChannelHandler):
             level = _parseNYLevelToken(qID)
             rewards[level] = bonuses
 
-        self.__showWindow(OrderedDict(sorted(rewards.items())))
+        if rewards:
+            self.__showWindow(OrderedDict(sorted(rewards.items())))
 
     @classmethod
     def __showWindow(cls, ctx):

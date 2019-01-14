@@ -215,6 +215,8 @@ class StatisticsCollector(IStatisticsCollector):
         resolutionContainer = graphics.g_monitorSettings.currentWindowSize
         if windowMode == BigWorld.WindowModeExclusiveFullscreen:
             resolutionContainer = graphics.g_monitorSettings.currentVideoMode
+        elif windowMode == BigWorld.WindowModeBorderless:
+            resolutionContainer = graphics.g_monitorSettings.currentBorderlessSize
         stat['screenResWidth'] = resolutionContainer.width
         stat['screenResHeight'] = resolutionContainer.height
         stat['drrScale'] = int(round(BigWorld.getDRRScale() * 100))

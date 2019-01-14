@@ -1,0 +1,672 @@
+<F111_AM39_Gendron_Somua.xml>
+  <xmlns:xmlref>	http://bwt/xmlref	</xmlns:xmlref>
+  <crew>
+    <commander>	gunner
+			radioman
+			loader	</commander>
+    <driver></driver>
+  </crew>
+  <speedLimits>
+    <forward>	69	</forward>
+    <backward>	30	</backward>
+  </speedLimits>
+  <invisibility>
+    <moving>	0.376	</moving>
+    <still>	0.376	</still>
+    <camouflageBonus>	0.03	</camouflageBonus>
+    <camouflageNetBonus>	0.1	</camouflageNetBonus>
+    <firePenalty>	0.564	</firePenalty>
+  </invisibility>
+  <repairCost>	2.0	</repairCost>
+  <premiumVehicleXPFactor>	0.7	</premiumVehicleXPFactor>
+  <crewXpFactor>	1.5	</crewXpFactor>
+  <camouflage>
+    <priceFactor>	0.4	</priceFactor>
+    <tiling>	1 1 0 0	</tiling>
+    <exclusionMask></exclusionMask>
+  </camouflage>
+  <hull>
+    <armor>
+      <armor_1>	15	</armor_1>
+      <armor_2>	15	</armor_2>
+      <armor_3>	15	</armor_3>
+      <armor_4>	15	</armor_4>
+      <armor_5>	7	</armor_5>
+      <armor_6>	7	</armor_6>
+      <armor_8>	0	</armor_8>
+    </armor>
+    <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
+    <weight>	3529	</weight>
+    <maxHealth>	112	</maxHealth>
+    <ammoBayHealth>
+      <maxHealth>	80	</maxHealth>
+      <maxRegenHealth>	55	</maxRegenHealth>
+      <repairCost>	1.0	</repairCost>
+    </ammoBayHealth>
+    <models>
+      <undamaged>	vehicles/french/F111_AM39_Gendron_Somua/normal/lod0/Hull.model	</undamaged>
+      <destroyed>	vehicles/french/F111_AM39_Gendron_Somua/crash/lod0/Hull.model	</destroyed>
+      <exploded>	vehicles/french/F111_AM39_Gendron_Somua/crash/lod0/Hull.model	</exploded>
+    </models>
+    <swinging>
+      <lodDist>	FAR	</lodDist>
+      <pitchParams>	0.34 38.00 0.36 1.00 0.05 0.34	</pitchParams>
+      <rollParams>	1.00 0.34 38.00 0.36 1.00 0.06 0.40	</rollParams>
+      <sensitivityToImpulse>	4.0	</sensitivityToImpulse>
+    </swinging>
+    <exhaust>
+      <pixie>	gas_small	</pixie>
+      <nodes>	HP_Track_Exhaus_1 HP_Track_Exhaus_2	</nodes>
+    </exhaust>
+    <turretPositions>
+      <turret>	0.000000 0.405619 0.217448	</turret>
+    </turretPositions>
+    <hitTester>
+      <collisionModelServer>	vehicles/french/F111_AM39_Gendron_Somua/collision/Hull.model	</collisionModelServer>
+      <collisionModelClient>	vehicles/french/F111_AM39_Gendron_Somua/collision_client/Hull.model	</collisionModelClient>
+    </hitTester>
+    <customizationSlots>
+      <slot>
+        <slotType>	camouflage	</slotType>
+        <slotId>	3	</slotId>
+        <anchorPosition>	0.000000 0.35791 -1.21834	</anchorPosition>
+        <anchorDirection>	0.000000 0.281858 -0.959456	</anchorDirection>
+      </slot>
+      <slot>
+        <slotType>	clan	</slotType>
+        <slotId>	1	</slotId>
+        <rayStart>	0.00532675 -0.117069 1.78405	</rayStart>
+        <rayEnd>	0.00532675 -0.281743 1.67055	</rayEnd>
+        <rayUp>	0.000000 0.000000 -1	</rayUp>
+        <size>	0.25	</size>
+        <hideIfDamaged>	true	</hideIfDamaged>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	inscription	</slotType>
+        <slotId>	36	</slotId>
+        <rayStart>	-0.750803 0.268778 -0.18201	</rayStart>
+        <rayEnd>	-0.550803 0.268778 -0.182015	</rayEnd>
+        <rayUp>	0.000000 1 0.000000	</rayUp>
+        <size>	0.5	</size>
+        <hideIfDamaged>	true	</hideIfDamaged>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	inscription	</slotType>
+        <slotId>	37	</slotId>
+        <rayStart>	0.750803 0.268778 -0.18201	</rayStart>
+        <rayEnd>	0.550803 0.268778 -0.182015	</rayEnd>
+        <rayUp>	0.000000 1 0.000000	</rayUp>
+        <size>	0.5	</size>
+        <hideIfDamaged>	true	</hideIfDamaged>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+    </customizationSlots>
+    <customization>
+      <customizableVehicleAreas>
+        <paint></paint>
+        <camouflage>	HULL	</camouflage>
+      </customizableVehicleAreas>
+    </customization>
+    <hangarShadowTexture>	vehicles/french/F111_AM39_Gendron_Somua/AM39_Gendron_Somua_HangarShadowMap.dds	</hangarShadowTexture>
+    <camouflage>
+      <tiling>	1.91 1.91 0.000000 0.000000	</tiling>
+    </camouflage>
+  </hull>
+  <chassis>
+    <Chassis_F111_AM39_Gendron_Somua>
+      <userString>	#france_vehicles:Chassis_F111_AM39_Gendron_Somua	</userString>
+      <tags></tags>
+      <level>	2	</level>
+      <price>	500	</price>
+      <notInShop>	true	</notInShop>
+      <armor>
+        <armor_9>	5	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+        </armor_9>
+      </armor>
+      <weight>	1300	</weight>
+      <maxLoad>	8000	</maxLoad>
+      <terrainResistance>	1.0 1.35 1.95	</terrainResistance>
+      <brakeForce>	6300	</brakeForce>
+      <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
+      <rotationSpeed>	34	</rotationSpeed>
+      <shotDispersionFactors>
+        <vehicleMovement>	0.1	</vehicleMovement>
+        <vehicleRotation>	0.15	</vehicleRotation>
+      </shotDispersionFactors>
+      <bulkHealthFactor>	3.0	</bulkHealthFactor>
+      <maxHealth>	60	</maxHealth>
+      <maxRegenHealth>	60	</maxRegenHealth>
+      <repairCost>	1.0	</repairCost>
+      <models>
+        <undamaged>	vehicles/french/F111_AM39_Gendron_Somua/normal/lod0/Chassis.model	</undamaged>
+        <destroyed>	vehicles/french/F111_AM39_Gendron_Somua/crash/lod0/Chassis.model	</destroyed>
+        <exploded>	vehicles/french/F111_AM39_Gendron_Somua/crash/lod0/Chassis.model	</exploded>
+      </models>
+      <traces>
+        <lodDist>	MEDIUM	</lodDist>
+        <bufferPrefs>	mediumTank	</bufferPrefs>
+        <textureSet>	usa_04	</textureSet>
+        <size>	0.5 0.5	</size>
+      </traces>
+      <AODecals>
+        <decal>
+          <transform>
+            <row0>	2.430480 0.000000 0.000000	</row0>
+            <row1>	0.000000 1.342020 0.000000	</row1>
+            <row2>	0.000000 0.000000 3.652850	</row2>
+            <row3>	0.000000 0.000000 0.000000	</row3>
+          </transform>
+        </decal>
+      </AODecals>
+      <wheels>
+        <lodDist>	MEDIUM	</lodDist>
+        <wheel>
+          <index>	4	</index>
+          <isLeft>	true	</isLeft>
+          <name>	WD_L0	</name>
+          <isLeading>	true	</isLeading>
+          <deflatable>	true	</deflatable>
+          <steeringProcessor>	true	</steeringProcessor>
+          <scrollProcessor>
+            <connectedToEngine>	true	</connectedToEngine>
+            <nodeOverride>	WD_L0_SCR	</nodeOverride>
+          </scrollProcessor>
+          <rollProcessor>
+            <maxDamageAngle>	0.3	</maxDamageAngle>
+          </rollProcessor>
+          <geometry>
+            <radius>	0.455	</radius>
+            <width>	0.265	</width>
+            <pivotXOffset>	-0.05	</pivotXOffset>
+          </geometry>
+          <proceduralCollisionBody>	true	</proceduralCollisionBody>
+          <deflation>
+            <maxYShift>	0.15	</maxYShift>
+            <explodedRadius>	0.36	</explodedRadius>
+          </deflation>
+          <hitTester>
+            <collisionModelServer>	vehicles/french/F111_AM39_Gendron_Somua/collision/Wheel_L_01.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/french/F111_AM39_Gendron_Somua/collision_client/Wheel_L_01.model	</collisionModelClient>
+          </hitTester>
+          <armor>
+            <wheel>	5	</wheel>
+          </armor>
+          <wheelPos>	-0.836 0.455 1.488	</wheelPos>
+        </wheel>
+        <wheel>
+          <index>	0	</index>
+          <isLeft>	true	</isLeft>
+          <name>	WD_L1	</name>
+          <isLeading>	true	</isLeading>
+          <deflatable>	true	</deflatable>
+          <scrollProcessor>
+            <connectedToEngine>	true	</connectedToEngine>
+            <nodeOverride>	WD_L1_SCR	</nodeOverride>
+          </scrollProcessor>
+          <rollProcessor>
+            <maxDamageAngle>	0.3	</maxDamageAngle>
+          </rollProcessor>
+          <geometry>
+            <radius>	0.455	</radius>
+            <width>	0.265	</width>
+            <pivotXOffset>	-0.05	</pivotXOffset>
+          </geometry>
+          <proceduralCollisionBody>	true	</proceduralCollisionBody>
+          <deflation>
+            <maxYShift>	0.15	</maxYShift>
+            <explodedRadius>	0.36	</explodedRadius>
+          </deflation>
+          <hitTester>
+            <collisionModelServer>	vehicles/french/F111_AM39_Gendron_Somua/collision/Wheel_L_02.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/french/F111_AM39_Gendron_Somua/collision_client/Wheel_L_02.model	</collisionModelClient>
+          </hitTester>
+          <armor>
+            <wheel>	5	</wheel>
+          </armor>
+          <wheelPos>	-0.836 0.455 -1.161	</wheelPos>
+        </wheel>
+        <wheel>
+          <index>	2	</index>
+          <isLeft>	true	</isLeft>
+          <name>	W_L0	</name>
+          <scrollProcessor>
+            <connectedToEngine>	true	</connectedToEngine>
+          </scrollProcessor>
+          <rollProcessor>
+            <maxDamageAngle>	0.3	</maxDamageAngle>
+          </rollProcessor>
+          <geometry>
+            <radius>	0.462	</radius>
+            <width>	0.265	</width>
+          </geometry>
+          <proceduralCollisionBody>	true	</proceduralCollisionBody>
+          <deflation>
+            <maxYShift>	0.15	</maxYShift>
+            <explodedRadius>	0.36	</explodedRadius>
+          </deflation>
+          <hitTester>
+            <collisionModelServer>	vehicles/french/F111_AM39_Gendron_Somua/collision/Wheel_L_01.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/french/F111_AM39_Gendron_Somua/collision_client/Wheel_L_01.model	</collisionModelClient>
+          </hitTester>
+          <armor>
+            <wheel>	5	</wheel>
+          </armor>
+          <wheelPos>	-0.768 0.603 0.125	</wheelPos>
+        </wheel>
+        <wheel>
+          <index>	5	</index>
+          <isLeft>	false	</isLeft>
+          <name>	WD_R0	</name>
+          <isLeading>	true	</isLeading>
+          <deflatable>	true	</deflatable>
+          <steeringProcessor>	true	</steeringProcessor>
+          <scrollProcessor>
+            <connectedToEngine>	true	</connectedToEngine>
+            <nodeOverride>	WD_R0_SCR	</nodeOverride>
+          </scrollProcessor>
+          <rollProcessor>
+            <maxDamageAngle>	0.3	</maxDamageAngle>
+          </rollProcessor>
+          <geometry>
+            <radius>	0.455	</radius>
+            <width>	0.265	</width>
+            <pivotXOffset>	0.05	</pivotXOffset>
+          </geometry>
+          <proceduralCollisionBody>	true	</proceduralCollisionBody>
+          <deflation>
+            <maxYShift>	0.15	</maxYShift>
+            <explodedRadius>	0.36	</explodedRadius>
+          </deflation>
+          <hitTester>
+            <collisionModelServer>	vehicles/french/F111_AM39_Gendron_Somua/collision/Wheel_R_01.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/french/F111_AM39_Gendron_Somua/collision_client/Wheel_R_01.model	</collisionModelClient>
+          </hitTester>
+          <armor>
+            <wheel>	5	</wheel>
+          </armor>
+          <wheelPos>	0.829 0.455 1.488	</wheelPos>
+        </wheel>
+        <wheel>
+          <index>	1	</index>
+          <isLeft>	false	</isLeft>
+          <name>	WD_R1	</name>
+          <isLeading>	true	</isLeading>
+          <deflatable>	true	</deflatable>
+          <scrollProcessor>
+            <connectedToEngine>	true	</connectedToEngine>
+            <nodeOverride>	WD_R1_SCR	</nodeOverride>
+          </scrollProcessor>
+          <rollProcessor>
+            <maxDamageAngle>	0.3	</maxDamageAngle>
+          </rollProcessor>
+          <geometry>
+            <radius>	0.455	</radius>
+            <width>	0.265	</width>
+            <pivotXOffset>	0.05	</pivotXOffset>
+          </geometry>
+          <proceduralCollisionBody>	true	</proceduralCollisionBody>
+          <deflation>
+            <maxYShift>	0.15	</maxYShift>
+            <explodedRadius>	0.36	</explodedRadius>
+          </deflation>
+          <hitTester>
+            <collisionModelServer>	vehicles/french/F111_AM39_Gendron_Somua/collision/Wheel_R_02.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/french/F111_AM39_Gendron_Somua/collision_client/Wheel_R_02.model	</collisionModelClient>
+          </hitTester>
+          <armor>
+            <wheel>	5	</wheel>
+          </armor>
+          <wheelPos>	0.829 0.455 -1.161	</wheelPos>
+        </wheel>
+        <wheel>
+          <index>	3	</index>
+          <isLeft>	false	</isLeft>
+          <name>	W_R0	</name>
+          <scrollProcessor>
+            <connectedToEngine>	true	</connectedToEngine>
+          </scrollProcessor>
+          <rollProcessor>
+            <maxDamageAngle>	0.3	</maxDamageAngle>
+          </rollProcessor>
+          <geometry>
+            <radius>	0.462	</radius>
+            <width>	0.265	</width>
+          </geometry>
+          <proceduralCollisionBody>	true	</proceduralCollisionBody>
+          <deflation>
+            <maxYShift>	0.15	</maxYShift>
+            <explodedRadius>	0.36	</explodedRadius>
+          </deflation>
+          <hitTester>
+            <collisionModelServer>	vehicles/french/F111_AM39_Gendron_Somua/collision/Wheel_R_01.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/french/F111_AM39_Gendron_Somua/collision_client/Wheel_R_01.model	</collisionModelClient>
+          </hitTester>
+          <armor>
+            <wheel>	5	</wheel>
+          </armor>
+          <wheelPos>	0.779 0.603 0.125	</wheelPos>
+        </wheel>
+        <generalWheels>	true	</generalWheels>
+        <globalDeflationShaderParams>
+          <wheelRadius>	0.455	</wheelRadius>
+          <rimRadius>	0.245	</rimRadius>
+          <sideShift>	0.2	</sideShift>
+          <peakShift>	0.95	</peakShift>
+        </globalDeflationShaderParams>
+        <activePostmortem>	true	</activePostmortem>
+      </wheels>
+      <hullPosition>	0.000000 0.972437 0.000000	</hullPosition>
+      <drivingWheels>	WD_L0 WD_L1	</drivingWheels>
+      <effects>
+        <lodDist>	MEDIUM	</lodDist>
+        <mud>	smallTankMud	</mud>
+      </effects>
+      <wwsoundPC>	wheels_suspension_pc	</wwsoundPC>
+      <wwsoundNPC>	wheels_suspension_npc	</wwsoundNPC>
+      <hullPosition>	0.000000 1.20215 0.000000	</hullPosition>
+      <hitTester>
+        <collisionModelServer>	vehicles/french/F111_AM39_Gendron_Somua/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/french/F111_AM39_Gendron_Somua/collision_client/Chassis.model	</collisionModelClient>
+      </hitTester>
+      <topRightCarryingPoint>	1.17927 2.01876	</topRightCarryingPoint>
+      <maxClimbAngle>	25	</maxClimbAngle>
+      <navmeshGirth>	6.0	</navmeshGirth>
+      <groundNodes>
+        <node>
+          <name>	Track_L0	</name>
+          <affectedWheelName>	WD_L0	</affectedWheelName>
+          <collisionSamplesCount>	5	</collisionSamplesCount>
+          <isLeft>	true	</isLeft>
+          <minOffset>	-0.06	</minOffset>
+          <maxOffset>	0.06	</maxOffset>
+        </node>
+        <node>
+          <name>	Track_L1	</name>
+          <affectedWheelName>	W_L0	</affectedWheelName>
+          <collisionSamplesCount>	5	</collisionSamplesCount>
+          <isLeft>	true	</isLeft>
+          <minOffset>	-0.001	</minOffset>
+          <maxOffset>	0.001	</maxOffset>
+        </node>
+        <node>
+          <name>	Track_L2	</name>
+          <affectedWheelName>	WD_L1	</affectedWheelName>
+          <collisionSamplesCount>	5	</collisionSamplesCount>
+          <isLeft>	true	</isLeft>
+          <minOffset>	-0.06	</minOffset>
+          <maxOffset>	0.06	</maxOffset>
+        </node>
+        <node>
+          <name>	Track_R0	</name>
+          <affectedWheelName>	WD_R0	</affectedWheelName>
+          <collisionSamplesCount>	5	</collisionSamplesCount>
+          <isLeft>	false	</isLeft>
+          <minOffset>	-0.06	</minOffset>
+          <maxOffset>	0.06	</maxOffset>
+        </node>
+        <node>
+          <name>	Track_R1	</name>
+          <affectedWheelName>	W_R0	</affectedWheelName>
+          <collisionSamplesCount>	5	</collisionSamplesCount>
+          <isLeft>	false	</isLeft>
+          <minOffset>	-0.001	</minOffset>
+          <maxOffset>	0.001	</maxOffset>
+        </node>
+        <node>
+          <name>	Track_R2	</name>
+          <affectedWheelName>	WD_R1	</affectedWheelName>
+          <collisionSamplesCount>	5	</collisionSamplesCount>
+          <isLeft>	false	</isLeft>
+          <minOffset>	-0.06	</minOffset>
+          <maxOffset>	0.06	</maxOffset>
+        </node>
+        <activePostmortem>	true	</activePostmortem>
+        <lodSettings>
+          <maxLodDistance>	LEVERED_SUSPENSION	</maxLodDistance>
+          <maxPriority>	5	</maxPriority>
+        </lodSettings>
+      </groundNodes>
+      <customization>
+        <customizableVehicleAreas>
+          <paint></paint>
+          <camouflage></camouflage>
+        </customizableVehicleAreas>
+      </customization>
+      <customizationSlots>
+        <slot>
+          <slotType>	style	</slotType>
+          <slotId>	257	</slotId>
+          <anchorPosition>	0.000000 1.97669 0.217422	</anchorPosition>
+          <anchorDirection>	0.000000 1 0.000000	</anchorDirection>
+        </slot>
+      </customizationSlots>
+    </Chassis_F111_AM39_Gendron_Somua>
+  </chassis>
+  <turrets0>
+    <Turret_1_F111_AM39_Gendron_Somua>
+      <userString>	#france_vehicles:Turret_1_F111_AM39_Gendron_Somua	</userString>
+      <tags></tags>
+      <level>	2	</level>
+      <price>	500	</price>
+      <notInShop>	true	</notInShop>
+      <armor>
+        <armor_1>	15	</armor_1>
+        <armor_3>	15	</armor_3>
+        <armor_4>	15	</armor_4>
+        <armor_5>	7	</armor_5>
+        <armor_6>	7	</armor_6>
+        <armor_8>	0	</armor_8>
+      </armor>
+      <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
+      <weight>	800	</weight>
+      <maxHealth>	28	</maxHealth>
+      <rotationSpeed>	42	</rotationSpeed>
+      <turretRotatorHealth>
+        <maxHealth>	60	</maxHealth>
+        <maxRegenHealth>	30	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </turretRotatorHealth>
+      <circularVisionRadius>	280	</circularVisionRadius>
+      <surveyingDeviceHealth>
+        <maxHealth>	40	</maxHealth>
+        <maxRegenHealth>	20	</maxRegenHealth>
+        <repairCost>	2.0	</repairCost>
+      </surveyingDeviceHealth>
+      <guns>
+        <_25mm_SA35>	shared	  <maxAmmo>	150	</maxAmmo>
+          <armor>
+            <gun>	10	</gun>
+          </armor>
+          <pitchLimits>
+            <minPitch>	0 -15 1 -15	</minPitch>
+            <maxPitch>	0 12 1 12	</maxPitch>
+          </pitchLimits>
+          <invisibilityFactorAtShot>	0.294	</invisibilityFactorAtShot>
+          <shotDispersionRadius>	0.43	</shotDispersionRadius>
+          <reloadTime>	2.1	</reloadTime>
+          <shotDispersionFactors>
+            <turretRotation>	0.1	</turretRotation>
+            <afterShot>	3	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <aimingTime>	1.8	</aimingTime>
+          <models>
+            <undamaged>	vehicles/french/F111_AM39_Gendron_Somua/normal/lod0/Gun_01.model	</undamaged>
+            <destroyed>	vehicles/french/F111_AM39_Gendron_Somua/crash/lod0/Gun_01.model	</destroyed>
+            <exploded>	vehicles/french/F111_AM39_Gendron_Somua/crash/lod0/Gun_01.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModelServer>	vehicles/french/F111_AM39_Gendron_Somua/collision/Gun_01.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/french/F111_AM39_Gendron_Somua/collision_client/Gun_01.model	</collisionModelClient>
+          </hitTester>
+          <customizationSlots>
+            <slot>
+              <slotType>	camouflage	</slotType>
+              <slotId>	770	</slotId>
+              <anchorPosition>	0.0862078 0.026222 0.653389	</anchorPosition>
+              <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+          </customizationSlots>
+          <customization>
+            <customizableVehicleAreas>
+              <paint></paint>
+              <camouflage>	GUN	</camouflage>
+            </customizableVehicleAreas>
+          </customization>
+          <camouflage>
+            <tiling>	0.5 0.25 0.000000 0.000000	</tiling>
+          </camouflage>
+        </_25mm_SA35>
+      </guns>
+      <models>
+        <undamaged>	vehicles/french/F111_AM39_Gendron_Somua/normal/lod0/Turret_01.model	</undamaged>
+        <destroyed>	vehicles/french/F111_AM39_Gendron_Somua/crash/lod0/Turret_01.model	</destroyed>
+        <exploded>	vehicles/french/F111_AM39_Gendron_Somua/crash/lod0/Turret_01.model	</exploded>
+      </models>
+      <hitTester>
+        <collisionModelServer>	vehicles/french/F111_AM39_Gendron_Somua/collision/Turret_01.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/french/F111_AM39_Gendron_Somua/collision_client/Turret_01.model	</collisionModelClient>
+      </hitTester>
+      <gunPosition>	0.000000 0.283182 0.318674	</gunPosition>
+      <customizationSlots>
+        <slot>
+          <slotType>	camouflage	</slotType>
+          <slotId>	513	</slotId>
+          <anchorPosition>	0.000000 0.598631 0.000000	</anchorPosition>
+          <anchorDirection>	0.000000 1 0.000000	</anchorDirection>
+        </slot>
+        <slot>
+          <slotType>	player	</slotType>
+          <slotId>	514	</slotId>
+          <rayStart>	-0.556435 0.335911 0.147015	</rayStart>
+          <rayEnd>	-0.375874 0.304227 0.0670518	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.25	</size>
+          <hideIfDamaged>	false	</hideIfDamaged>
+          <isUVProportional>	true	</isUVProportional>
+        </slot>
+        <slot>
+          <slotType>	player	</slotType>
+          <slotId>	515	</slotId>
+          <rayStart>	0.561688 0.322562 0.145511	</rayStart>
+          <rayEnd>	0.381116 0.290872 0.0655775	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <isMirrored>	true	</isMirrored>
+          <size>	0.25	</size>
+          <hideIfDamaged>	false	</hideIfDamaged>
+          <isUVProportional>	true	</isUVProportional>
+        </slot>
+      </customizationSlots>
+      <customization>
+        <customizableVehicleAreas>
+          <paint></paint>
+          <camouflage>	TURRET	</camouflage>
+        </customizableVehicleAreas>
+      </customization>
+      <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
+      <showEmblemsOnGun>	false	</showEmblemsOnGun>
+      <physicsShape>	0.908 -0.018 1.001 0.000 0.554 0.291 0.880 0.580 0.322 0.500 0.242 0.506 0.228 0.681 0.293	</physicsShape>
+    </Turret_1_F111_AM39_Gendron_Somua>
+  </turrets0>
+  <engines>
+    <Somua_V4>	shared	</Somua_V4>
+  </engines>
+  <fuelTanks>
+    <Small>	shared	</Small>
+  </fuelTanks>
+  <radios>
+    <ER_29_bis>	shared	</ER_29_bis>
+  </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <Somua_V4>
+          <smplEnginePower>	200	</smplEnginePower>
+          <smplFwMaxSpeed>	69	</smplFwMaxSpeed>
+        </Somua_V4>
+      </engines>
+      <chassis>
+        <Chassis_F111_AM39_Gendron_Somua>
+          <axleCount>	3	</axleCount>
+          <axleSteeringLockAngles>	0 0 15	</axleSteeringLockAngles>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.05	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.05	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.05	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.05	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.05	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.05	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_F111_AM39_Gendron_Somua>
+      </chassis>
+    </detailed>
+  </physics>
+  <extras>
+    <wheel_Health>	wheelHealths : WheelHealths	  <sounds>
+        <destroyed></destroyed>
+        <critical></critical>
+        <functional></functional>
+      </sounds>
+      <deviceUserString>	#ingame_gui:devices/wheel	</deviceUserString>
+    </wheel_Health>
+  </extras>
+  <deviceExtras>
+    <devices>
+      <wheel_Health>	track	  <multiple></multiple>
+      </wheel_Health>
+    </devices>
+    <tankmen></tankmen>
+  </deviceExtras>
+  <clientAdjustmentFactors></clientAdjustmentFactors>
+  <useHullZ>	True	</useHullZ>
+  <effects>
+    <collision></collision>
+    <damagedStateGroup>	small	</damagedStateGroup>
+    <groundCollisionLight>	groundCollisionWheeledLight	</groundCollisionLight>
+    <groundCollisionHeavy>	groundCollisionWheeledHeavy	</groundCollisionHeavy>
+    <sandCollisionLight>	sandCollisionWheeledLight	</sandCollisionLight>
+    <sandCollisionHeavy>	sandCollisionWheeledHeavy	</sandCollisionHeavy>
+    <snowCollisionLight>	snowCollisionWheeledLight	</snowCollisionLight>
+    <snowCollisionHeavy>	snowCollisionWheeledHeavy	</snowCollisionHeavy>
+    <stoneCollisionLight>	stoneCollisionWheeledLight	</stoneCollisionLight>
+    <stoneCollisionHeavy>	stoneCollisionWheeledHeavy	</stoneCollisionHeavy>
+    <woodCollisionLight>	woodCollisionWheeledLight	</woodCollisionLight>
+    <woodCollisionHeavy>	woodCollisionWheeledHeavy	</woodCollisionHeavy>
+    <metalCollisionLight>	metalCollisionWheeledLight	</metalCollisionLight>
+    <metalCollisionHeavy>	metalCollisionWheeledHeavy	</metalCollisionHeavy>
+    <waterCollisionLight>	waterCollisionWheeledLight	</waterCollisionLight>
+    <waterCollisionHeavy>	waterCollisionWheeledHeavy	</waterCollisionHeavy>
+  </effects>
+  <emblems>
+    <default>	french_rose	</default>
+    <lodDist>	MEDIUM	</lodDist>
+    <alpha>	1	</alpha>
+  </emblems>
+</F111_AM39_Gendron_Somua.xml>

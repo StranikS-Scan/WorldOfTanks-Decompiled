@@ -5,12 +5,12 @@ import weakref
 from functools import partial
 import BigWorld
 import Math
-from helpers.EffectsList import EffectsListPlayer
-from debug_utils import LOG_CODEPOINT_WARNING, LOG_CURRENT_EXCEPTION
-from helpers import i18n
-from helpers.EntityExtra import EntityExtra
 import material_kinds
+from debug_utils import LOG_CODEPOINT_WARNING, LOG_CURRENT_EXCEPTION
 from items import vehicles
+from helpers import i18n
+from helpers.EffectsList import EffectsListPlayer
+from helpers.EntityExtra import EntityExtra
 
 def reload():
     modNames = (reload.__module__,)

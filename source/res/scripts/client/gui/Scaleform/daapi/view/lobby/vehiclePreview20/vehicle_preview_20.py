@@ -7,34 +7,31 @@ from account_helpers import AccountSettings
 from account_helpers.AccountSettings import PREVIEW_INFO_PANEL_IDX
 from gui import makeHtmlString
 from gui.ClientUpdateManager import g_clientUpdateManager
+from gui.Scaleform.daapi.view.lobby.store.browser.ingameshop_helpers import isIngameShopEnabled, getBuyVehiclesUrl
+from gui.Scaleform.genConsts.STORE_CONSTANTS import STORE_CONSTANTS
+from gui.Scaleform.genConsts.STORE_TYPES import STORE_TYPES
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.LobbySelectableView import LobbySelectableView
-from gui.Scaleform.daapi.view.lobby.store.browser.ingameshop_helpers import isIngameShopEnabled, getBuyVehiclesUrl
 from gui.Scaleform.daapi.view.lobby.vehicle_compare.formatters import resolveStateTooltip
 from gui.Scaleform.daapi.view.meta.VehiclePreview20Meta import VehiclePreview20Meta
 from gui.Scaleform.framework import g_entitiesFactories
 from gui.Scaleform.genConsts.PERSONAL_MISSIONS_ALIASES import PERSONAL_MISSIONS_ALIASES
-from gui.Scaleform.genConsts.STORE_CONSTANTS import STORE_CONSTANTS
-from gui.Scaleform.genConsts.STORE_TYPES import STORE_TYPES
 from gui.Scaleform.genConsts.VEHPREVIEW_CONSTANTS import VEHPREVIEW_CONSTANTS
+from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.VEHICLE_PREVIEW import VEHICLE_PREVIEW
 from gui.Scaleform.locale.VEH_COMPARE import VEH_COMPARE
 from gui.hangar_cameras.hangar_camera_common import CameraRelatedEvents, CameraMovementStates
-from gui.impl.auxiliary.rewards_helper import getStyleCDByVehCD
-from gui.impl.lobby.loot_box.loot_box_helper import LOOT_BOX_REWARDS
-from gui.impl.new_year.sounds import NewYearSoundsManager, NewYearSoundConfigKeys, NewYearSoundEvents, NewYearSoundStates
 from gui.shared import event_dispatcher, events, event_bus_handlers, EVENT_BUS_SCOPE
 from gui.shared.event_dispatcher import showWebShop, showOldShop
 from gui.shared.gui_items.Vehicle import getTypeSmallIconPath
 from helpers import dependency
 from helpers.i18n import makeString as _ms
-from skeletons.gui.game_control import IFestivityController
-from skeletons.gui.game_control import IHeroTankController
-from skeletons.gui.game_control import IRestoreController
-from skeletons.gui.game_control import ITradeInController
 from skeletons.gui.game_control import IVehicleComparisonBasket
+from skeletons.gui.game_control import ITradeInController
+from skeletons.gui.game_control import IRestoreController
+from skeletons.gui.game_control import IHeroTankController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.shared.utils import IHangarSpace
@@ -45,8 +42,7 @@ _BACK_BTN_LABELS = {VIEW_ALIAS.LOBBY_HANGAR: 'hangar',
  VIEW_ALIAS.LOBBY_RESEARCH: 'researchTree',
  VIEW_ALIAS.LOBBY_TECHTREE: 'researchTree',
  VIEW_ALIAS.VEHICLE_COMPARE: 'vehicleCompare',
- PERSONAL_MISSIONS_ALIASES.PERSONAL_MISSIONS_AWARDS_VIEW_ALIAS: 'personalAwards',
- LOOT_BOX_REWARDS: 'lootBoxRewards'}
+ PERSONAL_MISSIONS_ALIASES.PERSONAL_MISSIONS_AWARDS_VIEW_ALIAS: 'personalAwards'}
 _TABS_DATA = ({'id': VEHPREVIEW_CONSTANTS.BROWSE_LINKAGE,
   'label': VEHICLE_PREVIEW.INFOPANEL_TAB_BROWSE_NAME,
   'linkage': VEHPREVIEW_CONSTANTS.BROWSE_LINKAGE}, {'id': VEHPREVIEW_CONSTANTS.MODULES_LINKAGE,
@@ -75,20 +71,6 @@ class VehiclePreview20(LobbySelectableView, VehiclePreview20Meta):
         self._previewBackCb = ctx.get('previewBackCb')
         self._backAlias = ctx.get('previewAlias', VIEW_ALIAS.LOBBY_HANGAR)
         self.__isHeroTank = ctx.get('isHeroTank', False)
-        vehParams = ctx.get('vehParams') or {}
-        self.__styleCD = vehParams.get('styleCD', getStyleCDByVehCD(self._vehicleCD))
-        self.__style = None
-        if self.__styleCD is not None:
-            style = self.itemsCache.items.getItemByCD(self.__styleCD)
-            if style and style.inventoryCount > 0:
-                self.__style = style
-        self.__isStyleSlotSelected = self.__style is not None
-        if dependency.instance(IFestivityController).isEnabled() and self.__isHeroTank:
-            self.__soundManager = NewYearSoundsManager({NewYearSoundConfigKeys.ENTRANCE_EVENT: NewYearSoundEvents.HERO,
-             NewYearSoundConfigKeys.EXIT_EVENT: NewYearSoundEvents.HERO_EXIT,
-             NewYearSoundConfigKeys.STATE_VALUE: NewYearSoundStates.HERO})
-        else:
-            self.__soundManager = None
         self.__itemsPack = ctx.get('itemsPack')
         self.__price = ctx.get('price')
         self.__oldPrice = ctx.get('oldPrice')
@@ -102,10 +84,11 @@ class VehiclePreview20(LobbySelectableView, VehiclePreview20Meta):
             self.__vehAppearanceChanged = False
         self.__keepVehicleSelectionEnabled = False
         self._needToResetAppearance = True
-        return
+        if not self.__isHeroTank:
+            self.hangarSpace.removeVehicle()
 
     def _populate(self):
-        g_currentPreviewVehicle.selectVehicle(self._vehicleCD, self.__vehicleStrCD, self.__style)
+        g_currentPreviewVehicle.selectVehicle(self._vehicleCD, self.__vehicleStrCD)
         super(VehiclePreview20, self)._populate()
         g_currentPreviewVehicle.onChanged += self.__onVehicleChanged
         self.comparisonBasket.onChange += self.__onCompareBasketChanged
@@ -118,17 +101,9 @@ class VehiclePreview20(LobbySelectableView, VehiclePreview20Meta):
             event_dispatcher.showHangar()
         if self.__itemsPack or self._backAlias == VIEW_ALIAS.LOBBY_STORE:
             self.heroTanks.setInteractive(False)
-        self.addListener(events.GameEvent.IMAGE_VIEW_DONE, self.__onImageViewDone)
         self.addListener(CameraRelatedEvents.CAMERA_ENTITY_UPDATED, self.handleSelectedEntityUpdated)
-        self.as_setStyleSlotDataS(self.__getStyleSlotData())
-        if self.__soundManager is not None:
-            self.__soundManager.onEnterView()
-        return
 
     def _dispose(self):
-        if self.__soundManager is not None:
-            self.__soundManager.onExitView()
-            self.__soundManager.clear()
         g_clientUpdateManager.removeObjectCallbacks(self)
         g_currentPreviewVehicle.onChanged -= self.__onVehicleChanged
         self.comparisonBasket.onChange -= self.__onCompareBasketChanged
@@ -138,31 +113,17 @@ class VehiclePreview20(LobbySelectableView, VehiclePreview20Meta):
         serverSettings = self.lobbyContext.getServerSettings()
         serverSettings.onServerSettingsChange -= self.__onServerSettingsChanged
         self.removeListener(CameraRelatedEvents.CAMERA_ENTITY_UPDATED, self.handleSelectedEntityUpdated)
-        self.removeListener(events.GameEvent.IMAGE_VIEW_DONE, self.__onImageViewDone)
         if self._needToResetAppearance:
             g_currentPreviewVehicle.selectNoVehicle()
             g_currentPreviewVehicle.resetAppearance()
         if self._backAlias == VIEW_ALIAS.VEHICLE_PREVIEW_20:
             g_currentVehicle.refreshModel()
-        if self._backAlias == LOOT_BOX_REWARDS and self._previewBackCb:
-            self._previewBackCb(fromDestroy=True)
         self._previewBackCb = None
         super(VehiclePreview20, self)._dispose()
         if self.__itemsPack or self._backAlias == VIEW_ALIAS.LOBBY_STORE:
             self.heroTanks.setInteractive(True)
         if self.__vehAppearanceChanged:
             g_currentPreviewVehicle.resetAppearance()
-        self.__style = None
-        return
-
-    def onStyleSlotToggled(self):
-        self.__isStyleSlotSelected = not self.__isStyleSlotSelected
-        self.as_setStyleSlotDataS(self.__getStyleSlotData())
-        if self.__style is not None and g_currentPreviewVehicle.isPresent():
-            if self.__isStyleSlotSelected:
-                g_currentPreviewVehicle.setStyle(self.__style)
-            else:
-                g_currentPreviewVehicle.removeSytle()
         return
 
     def closeView(self):
@@ -190,30 +151,28 @@ class VehiclePreview20(LobbySelectableView, VehiclePreview20Meta):
                 self.__processBackClick({'entity': entity})
         return
 
+    def _highlight3DEntityAndShowTT(self, entity):
+        LobbySelectableView._highlight3DEntityAndShowTT(self, entity)
+        itemId = entity.selectionId
+        if itemId:
+            self.as_show3DSceneTooltipS(TOOLTIPS_CONSTANTS.ENVIRONMENT, [itemId])
+
+    def _fade3DEntityAndHideTT(self, entity):
+        LobbySelectableView._fade3DEntityAndHideTT(self, entity)
+        self.as_hide3DSceneTooltipS()
+
     def _onRegisterFlashComponent(self, viewPy, alias):
         super(VehiclePreview20, self)._onRegisterFlashComponent(viewPy, alias)
-        if alias == VEHPREVIEW_CONSTANTS.BUYING_PANEL_PY_ALIAS:
-            viewPy.setCallSource(self._backAlias)
-            if self.__itemsPack:
-                viewPy.setPackItems(self.__itemsPack, self.__price, self.__title)
-                viewPy.setTimerData(self.__endTime, self.__oldPrice)
-                viewPy.setBuyParams(self.__buyParams)
+        if alias == VEHPREVIEW_CONSTANTS.BUYING_PANEL_PY_ALIAS and self.__itemsPack:
+            viewPy.setPackItems(self.__itemsPack, self.__price, self.__title)
+            viewPy.setTimerData(self.__endTime, self.__oldPrice)
+            viewPy.setBuyParams(self.__buyParams)
         elif alias == VEHPREVIEW_CONSTANTS.CREW_LINKAGE and self.__itemsPack:
             crewItems = [ item for item in self.__itemsPack if item.type in ItemPackTypeGroup.CREW ]
             vehicleItems = [ item for item in self.__itemsPack if item.type in ItemPackTypeGroup.VEHICLE ]
             viewPy.setVehicleCrews(vehicleItems, crewItems)
         elif alias == VEHPREVIEW_CONSTANTS.BROWSE_LINKAGE:
             viewPy.setHeroTank(self.__isHeroTank)
-
-    def __onImageViewDone(self, _):
-        if self.__soundManager is not None:
-            self.__soundManager.setEnterViewState()
-        return
-
-    def __getStyleSlotData(self):
-        return {'isVisible': self.__style is not None,
-         'styleIntCD': self.__styleCD,
-         'isSelected': self.__isStyleSlotSelected}
 
     def __onServerSettingsChanged(self, diff):
         if not self.lobbyContext.getServerSettings().isIngamePreviewEnabled():

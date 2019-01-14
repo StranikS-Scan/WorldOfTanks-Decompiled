@@ -6,7 +6,6 @@ import functools
 import logging
 import BigWorld
 import Keys
-import helpers
 from gui.Scaleform.managers.Cursor import Cursor
 from gui.shared import event_dispatcher
 from Event import Event, EventManager
@@ -125,8 +124,7 @@ class WebBrowser(object):
 
     def create(self):
         _logger.info('CREATE %s - %r', self.__baseUrl, self.__browserID)
-        clientLanguage = helpers.getClientLanguage()
-        self.__browser = BigWorld.createBrowser(self.__browserID, clientLanguage)
+        self.__browser = BigWorld.createWebView(self.__browserID)
         if self.__browser is None:
             _logger.error('create() NO BROWSER WAS CREATED: %s', self.__baseUrl)
             return False
@@ -140,6 +138,7 @@ class WebBrowser(object):
             self.__browser.script.onReady += self.__onReady
             self.__browser.script.onJsHostQuery += self.__onJsHostQuery
             self.__browser.script.onTitleChange += self.__onTitleChange
+            self.__browser.script.onDestroy += self.__onDestroy
 
             def injectBrowserKeyEvent(me, e):
                 if _BROWSER_KEY_LOGGING:
@@ -255,14 +254,15 @@ class WebBrowser(object):
             self.__browser.resize(size[0], size[1])
 
     def destroy(self):
-        self.__eventMgr.clear()
-        self.__eventMgr = None
+        if self.__eventMgr is not None:
+            self.__eventMgr.clear()
+            self.__eventMgr = None
         if self.__browser is not None:
             _logger.info('DESTROYED %s - %r', self.__baseUrl, self.__browserID)
             self.__browser.script.clear()
             self.__browser.script = None
             self.__browser.resetScaleformRender(self.__uiObj.movie, self.__texName)
-            BigWorld.removeBrowser(self.__browserID)
+            BigWorld.destroyWebView(self.__browserID)
             self.__browser = None
         if self.__cbID is not None:
             BigWorld.cancelCallback(self.__cbID)
@@ -529,6 +529,10 @@ class WebBrowser(object):
     def __onReady(self, success):
         self.ready(success)
 
+    def __onDestroy(self):
+        _logger.error('Destroy Web View %s - %r', self.__baseUrl, self.__browserID)
+        self.destroy()
+
     def __onJsHostQuery(self, command):
         self.onJsHostQuery(command)
 
@@ -557,6 +561,7 @@ class EventListener(object):
         self.onReady = Event(self.__eventMgr)
         self.onJsHostQuery = Event(self.__eventMgr)
         self.onTitleChange = Event(self.__eventMgr)
+        self.onDestroy = Event(self.__eventMgr)
         self.__urlFailed = False
         self.__browserProxy = weakref.proxy(browser)
         return
@@ -577,6 +582,9 @@ class EventListener(object):
 
     def ready(self, success):
         self.onReady(success)
+
+    def destroy(self):
+        self.onDestroy()
 
     def onBeginLoadingFrame(self, frameId, isMainFrame, url):
         if isMainFrame:
@@ -609,8 +617,15 @@ class EventListener(object):
     def onFilterNavigation(self, url):
         return self.__browserProxy.filterNavigation(url)
 
-    def onResourceLoadRequest(self, url):
+    def onResourceLoadRequest(self, method, url):
+        _logger.debug('requested %s %s', method, url)
         return self.__browserProxy.onResourceLoadRequest(url)
+
+    def onResourceLoadComplete(self, method, url):
+        _logger.debug('completed %s %s', method, url)
+
+    def onResourceLoadError(self, method, url):
+        _logger.warn('failed %s %s', method, url)
 
     def onWhitelistMiss(self, isMainFrame, failedURL):
         _logger.error('Unable to load resource: %s. Main frame: %r', failedURL, isMainFrame)

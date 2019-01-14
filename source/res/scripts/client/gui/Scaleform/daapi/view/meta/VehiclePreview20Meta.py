@@ -16,14 +16,14 @@ class VehiclePreview20Meta(View):
     def onCompareClick(self):
         self._printOverrideError('onCompareClick')
 
-    def onStyleSlotToggled(self):
-        self._printOverrideError('onStyleSlotToggled')
-
     def as_setDataS(self, data):
         return self.flashObject.as_setData(data) if self._isDAAPIInited() else None
 
     def as_setTabsDataS(self, tabs):
         return self.flashObject.as_setTabsData(tabs) if self._isDAAPIInited() else None
 
-    def as_setStyleSlotDataS(self, slotData):
-        return self.flashObject.as_setStyleSlotData(slotData) if self._isDAAPIInited() else None
+    def as_show3DSceneTooltipS(self, id, args):
+        return self.flashObject.as_show3DSceneTooltip(id, args) if self._isDAAPIInited() else None
+
+    def as_hide3DSceneTooltipS(self):
+        return self.flashObject.as_hide3DSceneTooltip() if self._isDAAPIInited() else None

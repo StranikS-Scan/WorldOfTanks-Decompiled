@@ -5,10 +5,9 @@ import items
 import calendar
 from account_shared import validateCustomizationItem
 from invoices_helpers import checkAccountDossierOperation
-from items import vehicles, tankmen, ny19
+from items import vehicles, tankmen
 from items.components.c11n_constants import SeasonType
 from constants import DOSSIER_TYPE, IS_DEVELOPMENT, SEASON_TYPE_BY_NAME, EVENT_TYPE
-from items.components.ny_constants import TOY_SETTING_IDS_BY_NAME, TOY_TYPE_IDS_BY_NAME
 from soft_exception import SoftException
 __all__ = ['readBonusSection', 'readUTC', 'SUPPORTED_BONUSES']
 
@@ -352,46 +351,6 @@ def __readBonus_vehicleChoice(bonus, _name, section, eventType):
     bonus['demandedVehicles'] = extra
 
 
-def __readBonus_ny19Toy(bonus, _name, section, eventType):
-    if section.has_key('id'):
-        tid = section['id'].asInt
-        if tid not in ny19.g_cache.toys:
-            raise SoftException('Unknown NY19 toyID: {}'.format(tid))
-        count = section['count'].asInt if section.has_key('count') else 0
-        ny19Toys = bonus.setdefault('ny19Toys', {})
-        ny19Toys[tid] = ny19Toys.get(tid, 0) + count
-
-
-def __readBonus_ny19ToyFragments(bonus, _name, section, eventType):
-    if section.has_key('count'):
-        count = section['count'].asInt
-        bonus['ny19ToyFragments'] = bonus.get('ny19ToyFragments', 0) + count
-
-
-def __readBonus_ny19AnyOf(bonus, _name, section, eventType):
-    if section.has_key('setting'):
-        settingID = TOY_SETTING_IDS_BY_NAME[section.readString('setting')]
-    else:
-        settingID = -1
-    if section.has_key('type'):
-        typeID = TOY_TYPE_IDS_BY_NAME[section.readString('type')]
-    else:
-        typeID = -1
-    if section.has_key('rank'):
-        rank = section['rank'].asInt
-    else:
-        rank = -1
-    bonus.setdefault('ny19AnyOf', []).append((typeID, settingID, rank))
-
-
-def __readBonus_ny18Toy(bonus, _name, section, eventType):
-    if section.has_key('id'):
-        tid = section['id'].asInt
-        count = section['count'].asInt if section.has_key('count') else 0
-        ny18Toys = bonus.setdefault('ny18Toys', {})
-        ny18Toys[tid] = ny18Toys.get(tid, 0) + count
-
-
 def __readMetaSection(bonus, _name, section, eventType):
     if section is None:
         return
@@ -525,11 +484,7 @@ __BONUS_READERS = {'meta': __readMetaSection,
  'dossier': __readBonus_dossier,
  'tankmen': __readBonus_tankmen,
  'customizations': __readBonus_customizations,
- 'vehicleChoice': __readBonus_vehicleChoice,
- 'ny19Toy': __readBonus_ny19Toy,
- 'ny19ToyFragments': __readBonus_ny19ToyFragments,
- 'ny19AnyOf': __readBonus_ny19AnyOf,
- 'ny18Toy': __readBonus_ny18Toy}
+ 'vehicleChoice': __readBonus_vehicleChoice}
 __PROBABILITY_READERS = {'optional': __readBonus_optional,
  'oneof': __readBonus_oneof,
  'group': __readBonus_group}

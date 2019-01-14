@@ -26,12 +26,14 @@
     <SCR_528_Fr>	34	</SCR_528_Fr>
     <SCR_619_F155>	35	</SCR_619_F155>
     <AN_VRC_7>	36	</AN_VRC_7>
+    <ER_29_bis>	37	</ER_29_bis>
+    <EM3_R61>	38	</EM3_R61>
+    <SCR_528_F>	39	</SCR_528_F>
     <SCR_528_IGR>	60001	</SCR_528_IGR>
     <FuG8f_IGR>	60002	</FuG8f_IGR>
     <ER_56_IGR>	60003	</ER_56_IGR>
     <SCR_508_IGR>	60004	</SCR_508_IGR>
     <ER_51_bootcamp>	64001	</ER_51_bootcamp>
-    <Radio_Panhard>	64002	</Radio_Panhard>
   </ids>
   <shared>
     <FuG_Spr.D>
@@ -46,18 +48,6 @@
       <maxRegenHealth>	49	</maxRegenHealth>
       <repairCost>	0.5	</repairCost>
     </FuG_Spr.D>
-    <Radio_Panhard>
-      <userString>	#france_vehicles:Radio_Panhard	</userString>
-      <tags></tags>
-      <level>	3	</level>
-      <price>	630	</price>
-      <notInShop>	true	</notInShop>
-      <weight>	50	</weight>
-      <distance>	310	</distance>
-      <maxHealth>	100	</maxHealth>
-      <maxRegenHealth>	49	</maxRegenHealth>
-      <repairCost>	0.5	</repairCost>
-    </Radio_Panhard>
     <Fanions_de_signaux_bot>
       <userString>	#france_vehicles:Fanions_de_signaux_bot	</userString>
       <tags></tags>
@@ -263,6 +253,18 @@
       <maxRegenHealth>	100	</maxRegenHealth>
       <repairCost>	1	</repairCost>
     </ER_29>
+    <ER_29_bis>
+      <userString>	#france_vehicles:ER_29_bis	</userString>
+      <tags></tags>
+      <level>	5	</level>
+      <price>	3650	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	50	</weight>
+      <distance>	360	</distance>
+      <maxHealth>	140	</maxHealth>
+      <maxRegenHealth>	100	</maxRegenHealth>
+      <repairCost>	1	</repairCost>
+    </ER_29_bis>
     <SCR_619>
       <userString>	#france_vehicles:SCR_619	</userString>
       <tags></tags>
@@ -344,6 +346,17 @@
       <maxRegenHealth>	150	</maxRegenHealth>
       <repairCost>	3	</repairCost>
     </SCR_528_Fr>
+    <SCR_528_F>
+      <userString>	#france_vehicles:SCR_528_F	</userString>
+      <tags></tags>
+      <level>	10	</level>
+      <price>	54000	</price>
+      <weight>	80	</weight>
+      <distance>	750	</distance>
+      <maxHealth>	200	</maxHealth>
+      <maxRegenHealth>	150	</maxRegenHealth>
+      <repairCost>	3	</repairCost>
+    </SCR_528_F>
     <AN_VRC_7>
       <userString>	#france_vehicles:AN_VRC_7	</userString>
       <tags></tags>
@@ -356,6 +369,17 @@
       <maxRegenHealth>	150	</maxRegenHealth>
       <repairCost>	3	</repairCost>
     </AN_VRC_7>
+    <EM3_R61>
+      <userString>	#france_vehicles:EM3_R61	</userString>
+      <tags></tags>
+      <level>	9	</level>
+      <price>	38000	</price>
+      <weight>	100	</weight>
+      <distance>	710	</distance>
+      <maxHealth>	150	</maxHealth>
+      <maxRegenHealth>	75	</maxRegenHealth>
+      <repairCost>	3	</repairCost>
+    </EM3_R61>
     <SCR_528_IGR>
       <userString>	#igr_vehicles:SCR_528_IGR	</userString>
       <tags></tags>

@@ -12,7 +12,7 @@ class OldStyleBonusFormatter(object):
     def accumulateBonuses(self, bonus):
         self._result.append(bonus)
 
-    def extractFormattedBonuses(self):
+    def extractFormattedBonuses(self, addLineSeparator=False):
         result = self._result[:]
         self._result = []
         return result
@@ -72,11 +72,11 @@ class SimpleBonusFormatter(OldStyleBonusFormatter):
         if formattedList:
             self._result.extend(formattedList)
 
-    def extractFormattedBonuses(self):
+    def extractFormattedBonuses(self, addLineSeparator=False):
         simpleBonusesList = super(SimpleBonusFormatter, self).extractFormattedBonuses()
         result = []
         if simpleBonusesList:
-            result.append(formatters.packSimpleBonusesBlock(simpleBonusesList))
+            result.append(formatters.packSimpleBonusesBlock(simpleBonusesList, ',' if addLineSeparator else ''))
         return result
 
 
@@ -94,16 +94,19 @@ class OldStyleAwardsPacker(AwardsPacker):
 
     def format(self, bonuses, event=None):
         formattedBonuses = []
+        isCustomizationBonusExist = False
         for b in bonuses:
             if b.isShowInGUI():
                 formatter = self._getBonusFormatter(b.getName())
                 if formatter:
                     formatter.accumulateBonuses(b)
+                if b.getName() == 'customizations':
+                    isCustomizationBonusExist = True
 
         fmts = [self.__defaultFormatter]
         fmts.extend(sorted(self.getFormatters().itervalues(), key=lambda f: f.getOrder()))
         for formatter in fmts:
-            formattedBonuses.extend(formatter.extractFormattedBonuses())
+            formattedBonuses.extend(formatter.extractFormattedBonuses(isCustomizationBonusExist))
 
         return formattedBonuses
 

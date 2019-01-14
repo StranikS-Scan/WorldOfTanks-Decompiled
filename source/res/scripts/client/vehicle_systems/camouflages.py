@@ -184,6 +184,10 @@ def getRepaint(outfit, containerId, vDesc):
     container = outfit.getContainer(containerId)
     paintSlot = container.slotFor(GUI_ITEM_TYPE.PAINT)
     capacity = paintSlot.capacity()
+    camoSlot = container.slotFor(GUI_ITEM_TYPE.CAMOUFLAGE)
+    if camoSlot is not None:
+        if camoSlot.getItem() is not None:
+            enabled = True
     colors = [defaultColor] * capacity
     metallics = [overlapMetallic or _DEFAULT_METALLIC] * (capacity + 1)
     glosses = [overlapGloss or _DEFAULT_GLOSS] * (capacity + 1)
@@ -206,9 +210,11 @@ def getRepaint(outfit, containerId, vDesc):
 
 
 def getGenericProjectionDecals(outfit, vehicleDescr):
+    from gui.customization.shared import matchProjectionDecalsToSlots, getPositionTag
 
-    def createVehSlotsMap(vehDescr):
-        vehSlots = {}
+    def createVehSlotsMaps(vehDescr):
+        slotsByIdMap = {}
+        slotsByTagMap = {}
         slotTypeName = 'projectionDecal'
         for vehiclePartSlots in (vehDescr.hull.slotsAnchors,
          vehDescr.chassis.slotsAnchors,
@@ -216,24 +222,31 @@ def getGenericProjectionDecals(outfit, vehicleDescr):
          vehDescr.gun.slotsAnchors):
             for vehicleSlot in vehiclePartSlots:
                 if vehicleSlot.type == slotTypeName:
-                    vehSlots[vehicleSlot.slotId] = vehicleSlot
+                    slotsByIdMap[vehicleSlot.slotId] = vehicleSlot
+                    positionTag = getPositionTag(vehicleSlot)
+                    if positionTag is not None:
+                        slotsByTagMap[positionTag] = vehicleSlot
 
-        return vehSlots
+        return (slotsByIdMap, slotsByTagMap)
 
     decalsParams = []
     projectionDecalsSlot = outfit.misc.slotFor(GUI_ITEM_TYPE.PROJECTION_DECAL)
     if projectionDecalsSlot is None:
         return decalsParams
     else:
-        vehSlotMap = createVehSlotsMap(vehicleDescr)
+        slotsByIdMap, slotsByTagMap = createVehSlotsMaps(vehicleDescr)
+        if outfit.id != 0:
+            if not matchProjectionDecalsToSlots(projectionDecalsSlot, slotsByTagMap):
+                _logger.warning('No available slots for tagged decals. vehicle: %(vehicle)s styleId: %(id)s', {'vehicle': vehicleDescr.type.name,
+                 'id': outfit.id})
         capacity = projectionDecalsSlot.capacity()
         for idx in range(capacity):
             decal = projectionDecalsSlot.getSlotData(idx)
             if not decal.isEmpty():
                 mirrored = bool(decal.component.isMirrored())
                 if decal.component.slotId != 0:
-                    if decal.component.slotId in vehSlotMap:
-                        slotParams = vehSlotMap[decal.component.slotId]
+                    if decal.component.slotId in slotsByIdMap:
+                        slotParams = slotsByIdMap[decal.component.slotId]
                         position = slotParams.position
                         scale = slotParams.scale
                         rotation = slotParams.rotation
@@ -249,6 +262,8 @@ def getGenericProjectionDecals(outfit, vehicleDescr):
                          'component': decal.component})
                         continue
                 else:
+                    if decal.component.tags:
+                        continue
                     position = decal.component.position
                     scale = decal.component.scale
                     rotation = decal.component.rotation

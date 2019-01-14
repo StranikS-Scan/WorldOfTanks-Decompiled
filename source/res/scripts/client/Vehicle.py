@@ -393,15 +393,20 @@ class Vehicle(BigWorld.Entity, BattleAbilitiesComponent):
             return
 
     def set_wheelsState(self, prev):
-        __WHEEL_DESTROYED = 3
-        for i in xrange(0, 8):
-            prevState = prev >> i * 2 & 3
-            newState = self.wheelsState >> i * 2 & 3
-            if prevState != newState:
-                if newState == __WHEEL_DESTROYED:
-                    self.appearance.onChassisDestroySound(False, True, i)
-                elif prevState == __WHEEL_DESTROYED:
-                    self.appearance.onChassisDestroySound(False, False, i)
+        if self.appearance is None:
+            return
+        else:
+            __WHEEL_DESTROYED = 3
+            for i in xrange(0, 8):
+                prevState = prev >> i * 2 & 3
+                newState = self.wheelsState >> i * 2 & 3
+                if prevState != newState:
+                    if newState == __WHEEL_DESTROYED:
+                        self.appearance.onChassisDestroySound(False, True, i)
+                    elif prevState == __WHEEL_DESTROYED:
+                        self.appearance.onChassisDestroySound(False, False, i)
+
+            return
 
     def set_damageStickers(self, prev=None):
         if self.isStarted:

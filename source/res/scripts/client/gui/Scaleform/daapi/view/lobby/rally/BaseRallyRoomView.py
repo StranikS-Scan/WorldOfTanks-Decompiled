@@ -190,11 +190,7 @@ class BaseRallyRoomView(BaseRallyRoomViewMeta):
             vehicles = self.itemsCache.items.getVehicles(REQ_CRITERIA.VEHICLE.SPECIFIC_BY_CD(vehicles))
         self.fireEvent(events.LoadViewEvent(CYBER_SPORT_ALIASES.VEHICLE_SELECTOR_POPUP_PY, ctx={'isMultiSelect': False,
          'vehicles': vehicles,
-         'titleText': CYBERSPORT.WINDOW_VEHICLESELECTOR_TITLE,
-         'selectButton': CYBERSPORT.WINDOW_VEHICLESELECTOR_BUTTONS_SELECT,
-         'cancelButton': CYBERSPORT.WINDOW_VEHICLESELECTOR_BUTTONS_CANCEL,
          'infoText': self._getVehicleSelectorDescription(),
-         'compatibleOnlyLabel': CYBERSPORT.WINDOW_VEHICLESELECTOR_FILTERS_MATCHES,
          'selectedVehicles': self._getVehicleSelectorVehicles(),
          'section': 'cs_unit_view_vehicle',
          'levelsRange': levelsRange}), scope=EVENT_BUS_SCOPE.LOBBY)

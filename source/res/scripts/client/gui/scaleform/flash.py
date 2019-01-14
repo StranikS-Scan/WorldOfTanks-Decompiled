@@ -10,12 +10,14 @@ _logger = logging.getLogger(__name__)
 
 class Flash(object):
 
-    def __init__(self, swf, className='Flash', args=None, path=SCALEFORM_SWF_PATH, descriptor=0):
+    def __init__(self, swf='', className='Flash', args=None, path=SCALEFORM_SWF_PATH, descriptor=0):
         args = args or []
         super(Flash, self).__init__()
-        self.__fsCbs = defaultdict(set)
         self.__exCbs = defaultdict(set)
-        fileName = '{}/{}'.format(path, swf)
+        if swf:
+            fileName = '{}/{}'.format(path, swf)
+        else:
+            fileName = ''
         self.component = getattr(GUI, className)(fileName, descriptor, *args)
         self.component.focus = True
         self.component.moveFocus = True
@@ -23,7 +25,6 @@ class Flash(object):
         self.flashSize = (2, 2)
         self.isActive = False
         movie = self.component.movie
-        movie.setFSCommandCallback(_FsCommandObj(self))
         movie.setExternalInterfaceCallback(_ExternalInterfaceObj(self))
 
     def __del__(self):
@@ -53,7 +54,6 @@ class Flash(object):
 
     def beforeDelete(self):
         self.removeAllCallbacks()
-        self.__fsCbs.clear()
         self.__exCbs.clear()
         self.flashSize = None
         del self.component
@@ -106,25 +106,6 @@ class Flash(object):
         self.movie.invoke(('respond', args))
         return
 
-    def addFsCallback(self, command, function):
-        self.__fsCbs[command].add(function)
-
-    def removeFsCallback(self, command):
-        try:
-            self.__fsCbs.pop(command)
-        except KeyError:
-            pass
-
-    def addFsCallbacks(self, commands):
-        add = self.addFsCallback
-        for command, function in commands.items():
-            add(command, function)
-
-    def removeFsCallbacks(self, *args):
-        remove = self.removeFsCallback
-        for command in args:
-            remove(command)
-
     def addExternalCallback(self, command, function):
         self.__exCbs[command].add(function)
 
@@ -150,20 +131,7 @@ class Flash(object):
             remove(command)
 
     def removeAllCallbacks(self):
-        self.__fsCbs.clear()
         self.__exCbs.clear()
-
-    def handleFsCommandCallback(self, command, arg):
-        result = False
-        if command in self.__fsCbs:
-            result = True
-            callbacks = self.__fsCbs[command]
-            for callback in callbacks:
-                callback(arg)
-
-        else:
-            _logger.debug('FsCommandCallback "%s" not found: %r', command, arg)
-        return result
 
     def handleExternalInterfaceCallback(self, command, args):
         result = False
@@ -180,19 +148,6 @@ class Flash(object):
         else:
             _logger.debug('ExternalInterfaceCallback "%s" not found: %r', command, args)
         return result
-
-
-class _FsCommandObj(object):
-
-    def __init__(self, obj):
-        self.__weakObj = weakref.ref(obj)
-
-    def __call__(self, command, args):
-        obj = self.__weakObj()
-        if obj:
-            obj.handleFsCommandCallback(command, args)
-        else:
-            _logger.warning('Weak object has been already destroyed: command = %s, args = %r.', command, args)
 
 
 class _ExternalInterfaceObj(object):

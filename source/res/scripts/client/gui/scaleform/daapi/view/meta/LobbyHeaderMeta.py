@@ -61,8 +61,8 @@ class LobbyHeaderMeta(BaseDAAPIComponent):
     def as_setBadgeIconS(self, tID):
         return self.flashObject.as_setBadgeIcon(tID) if self._isDAAPIInited() else None
 
-    def as_setPremiumParamsS(self, btnLabel, doLabel, isHasAction, tooltip, tooltipType):
-        return self.flashObject.as_setPremiumParams(btnLabel, doLabel, isHasAction, tooltip, tooltipType) if self._isDAAPIInited() else None
+    def as_setPremiumParamsS(self, data):
+        return self.flashObject.as_setPremiumParams(data) if self._isDAAPIInited() else None
 
     def as_setPremShopDataS(self, iconSrc, premShopText, tooltip, tooltipType):
         return self.flashObject.as_setPremShopData(iconSrc, premShopText, tooltip, tooltipType) if self._isDAAPIInited() else None
@@ -117,6 +117,3 @@ class LobbyHeaderMeta(BaseDAAPIComponent):
 
     def as_toggleVisibilityMenuS(self, state):
         return self.flashObject.as_toggleVisibilityMenu(state) if self._isDAAPIInited() else None
-
-    def as_updateNYVisibilityS(self, isShowBattleBtnGlow, isShowMainMenuGlow):
-        return self.flashObject.as_updateNYVisibility(isShowBattleBtnGlow, isShowMainMenuGlow) if self._isDAAPIInited() else None

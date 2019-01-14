@@ -33,6 +33,13 @@ class WaitingObserver(AppLoaderObserver):
         self._proxy.changeSpace(spaces.WaitingSpace())
 
 
+class CreateLobbyObserver(AppLoaderObserver):
+    __slots__ = ()
+
+    def onEnterState(self, event=None):
+        self._proxy.createLobby()
+
+
 class IntroVideoObserver(AppLoaderObserver):
     __slots__ = ()
 
@@ -100,6 +107,7 @@ class ReplayVersionDiffersObserver(AppLoaderObserver):
     __slots__ = ()
 
     def onEnterState(self, event=None):
+        self._proxy.createLobby()
         self._proxy.changeSpace(spaces.LoginSpace(action=spaces.ReplayVersionDiffersDialogAction()))
 
 
@@ -185,14 +193,14 @@ class NormalAppTracker(StateObserversContainer):
     __slots__ = ()
 
     def __init__(self, proxy):
-        super(NormalAppTracker, self).__init__(IntroVideoObserver(GameplayStateID.INTRO_VIDEO, proxy), LoginObserver(GameplayStateID.LOGIN, proxy), LobbyObserver(GameplayStateID.ACCOUNT_SHOW_GUI, proxy), CreateBattleObserver(GameplayStateID.AVATAR_ENTERING, proxy), BattleLoadingObserver(GameplayStateID.AVATAR_ARENA_INFO, proxy), BattleLoadingObserver(GameplayStateID.AVATAR_SHOW_GUI, proxy), BattlePageObserver(GameplayStateID.AVATAR_ARENA_LOADED, proxy), WaitingObserver(GameplayStateID.AVATAR_EXITING, proxy))
+        super(NormalAppTracker, self).__init__(CreateLobbyObserver(GameplayStateID.OFFLINE, proxy), IntroVideoObserver(GameplayStateID.INTRO_VIDEO, proxy), LoginObserver(GameplayStateID.LOGIN, proxy), LobbyObserver(GameplayStateID.ACCOUNT_SHOW_GUI, proxy), CreateBattleObserver(GameplayStateID.AVATAR_ENTERING, proxy), BattleLoadingObserver(GameplayStateID.AVATAR_ARENA_INFO, proxy), BattleLoadingObserver(GameplayStateID.AVATAR_SHOW_GUI, proxy), BattlePageObserver(GameplayStateID.AVATAR_ARENA_LOADED, proxy), WaitingObserver(GameplayStateID.AVATAR_EXITING, proxy))
 
 
 class ReplayAppTracker(StateObserversContainer):
     __slots__ = ()
 
     def __init__(self, proxy):
-        super(ReplayAppTracker, self).__init__(ReplayVersionDiffersObserver(GameplayStateID.BATTLE_REPLAY_VERSION_DIFFERS, proxy), ReplayCreateBattleObserver(GameplayStateID.AVATAR_ENTERING, proxy), ReplayBattleLoadingObserver(GameplayStateID.AVATAR_ARENA_INFO, GameplayStateID.AVATAR_ARENA_LOADED, proxy), ReplayBattleLoadingObserver(GameplayStateID.AVATAR_SHOW_GUI, GameplayStateID.AVATAR_ARENA_LOADED, proxy), ReplayBattlePageObserver(GameplayStateID.AVATAR_ARENA_LOADED, proxy), ReplayFinishObserver(GameplayStateID.BATTLE_REPLAY_FINISHED), ReplayRewindObserver(GameplayStateID.BATTLE_REPLAY_REWIND, proxy), LoginObserver(GameplayStateID.BATTLE_REPLAY_NEXT, proxy))
+        super(ReplayAppTracker, self).__init__(ReplayVersionDiffersObserver(GameplayStateID.BATTLE_REPLAY_VERSION_DIFFERS, proxy), ReplayCreateBattleObserver(GameplayStateID.AVATAR_ENTERING, proxy), ReplayBattleLoadingObserver(GameplayStateID.AVATAR_ARENA_INFO, GameplayStateID.AVATAR_ARENA_LOADED, proxy), ReplayBattleLoadingObserver(GameplayStateID.AVATAR_SHOW_GUI, GameplayStateID.AVATAR_ARENA_LOADED, proxy), ReplayBattlePageObserver(GameplayStateID.AVATAR_ARENA_LOADED, proxy), ReplayFinishObserver(GameplayStateID.BATTLE_REPLAY_FINISHED), ReplayRewindObserver(GameplayStateID.BATTLE_REPLAY_REWIND, proxy))
 
 
 class GameplayStatesObserver(BaseStateObserver):
@@ -211,9 +219,6 @@ class GameplayStatesObserver(BaseStateObserver):
         self.gameplay.removeStateObserver(self)
         self.__proxy = None
         self.__clearTracker()
-        if self.__tracker is not None:
-            self.gameplay.removeStateObserver(self.__tracker)
-            self.__tracker = None
         return
 
     def getStateIDs(self):
@@ -223,7 +228,6 @@ class GameplayStatesObserver(BaseStateObserver):
         if not flag or self.__tracker is not None:
             return
         else:
-            self.__proxy.createLobby()
             if stateID == GameplayStateID.BATTLE_REPLAY:
                 self.__tracker = ReplayAppTracker(self.__proxy)
             else:

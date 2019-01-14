@@ -26,6 +26,9 @@ class _WaitingEntity(object):
     def message(self):
         return self.__message
 
+    def updateOverlapsUI(self, overlapsUI):
+        self.__overlapsUI = overlapsUI
+
     def clear(self):
         self.__interruptCallbacks = []
 
@@ -42,20 +45,28 @@ class _WaitingEntity(object):
 
 
 class Waiting(object):
-    __wainingViewGetter = None
+    __waitingViewGetter = None
+    __lobbyPageWaitingKeeper = None
     __waitingStack = []
     __suspendStack = []
     __isVisible = False
 
     @classmethod
-    def setWainingViewGetter(cls, getter):
-        cls.__wainingViewGetter = getter
+    def setWaitingViewGetter(cls, getter):
+        cls.__waitingViewGetter = getter
 
     @classmethod
-    def getWaitingView(cls):
+    def setLobbyPageWaitingKeeper(cls, waitingKeeper):
+        cls.__lobbyPageWaitingKeeper = waitingKeeper
+
+    @classmethod
+    def getWaitingView(cls, overlapsUI):
         view = None
-        if callable(cls.__wainingViewGetter):
-            view = cls.__wainingViewGetter()
+        if overlapsUI:
+            if callable(cls.__waitingViewGetter):
+                view = cls.__waitingViewGetter()
+        elif cls.__lobbyPageWaitingKeeper is not None:
+            view = cls.__lobbyPageWaitingKeeper
         return view
 
     @classmethod
@@ -73,6 +84,13 @@ class Waiting(object):
                 return True
 
         return False
+
+    @classmethod
+    def _addToStack(cls, message, interruptCallback, overlapsUI):
+        overlapsUI = overlapsUI or cls._hasOverlapsUIWaiting()
+        w = _WaitingEntity(message, interruptCallback, overlapsUI)
+        cls.__waitingStack.append(w)
+        return w
 
     @classmethod
     def getWaiting(cls, msg):
@@ -98,85 +116,94 @@ class Waiting(object):
             if isSingle:
                 w.addInterruptCallback(interruptCallback)
             else:
-                w = _WaitingEntity(message, interruptCallback, overlapsUI)
-                Waiting.__waitingStack.append(w)
+                w = cls._addToStack(message, interruptCallback, overlapsUI)
         else:
-            w = _WaitingEntity(message, interruptCallback, overlapsUI)
-            Waiting.__waitingStack.append(w)
-        Waiting._showWaiting(w)
+            w = cls._addToStack(message, interruptCallback, overlapsUI)
+        cls._showWaiting(w)
         return
 
     @classmethod
     def hide(cls, message):
-        w = Waiting.getSuspendedWaiting(message)
+        w = cls.getSuspendedWaiting(message)
         if w is not None:
             w.clear()
-            Waiting.__suspendStack.remove(w)
-        w = Waiting.getWaiting(message)
+            view = cls.getWaitingView(w.overlapsUI)
+            if view:
+                view.waitingHide()
+            cls.__suspendStack.remove(w)
+        w = cls.getWaiting(message)
         if w is not None:
             w.clear()
-            Waiting.__waitingStack.remove(w)
-        if Waiting.__waitingStack:
-            Waiting._showWaiting(Waiting.__waitingStack[-1])
+            view = cls.getWaitingView(w.overlapsUI)
+            if view:
+                view.waitingHide()
+            cls.__waitingStack.remove(w)
+        if cls.__waitingStack:
+            cls._showWaiting(cls.__waitingStack[-1])
         else:
-            Waiting.close()
+            cls.close()
         return
 
     @classmethod
     def suspend(cls):
-        if Waiting.isSuspended():
+        if cls.isSuspended():
             return
-        Waiting.__suspendStack = Waiting.__waitingStack[:]
-        Waiting.close()
+        cls.__suspendStack = cls.__waitingStack[:]
+        cls.close()
 
     @classmethod
     def resume(cls):
-        if not Waiting.isSuspended():
+        if not cls.isSuspended():
             return
-        if Waiting.__suspendStack:
-            Waiting._showWaiting(Waiting.__suspendStack[-1])
-            Waiting.__waitingStack = Waiting.__suspendStack[:]
-        Waiting.__suspendStack = []
+        if cls.__suspendStack:
+            cls._showWaiting(cls.__suspendStack[-1])
+            cls.__waitingStack = cls.__suspendStack[:]
+        cls.__suspendStack = []
 
     @classmethod
     def isSuspended(cls):
-        return len(Waiting.__suspendStack) > 0
+        return len(cls.__suspendStack) > 0
 
     @classmethod
     def close(cls):
         BigWorld.Screener.setEnabled(True)
-        view = Waiting.getWaitingView()
-        if view:
-            view.close()
-        Waiting.__isVisible = False
-        for w in Waiting.__waitingStack:
+        cls.__isVisible = False
+        for w in cls.__waitingStack:
             w.clear()
+            view = cls.getWaitingView(w.overlapsUI)
+            if view:
+                view.waitingHide()
 
-        Waiting.__waitingStack = []
+        cls.__waitingStack = []
 
     @classmethod
     def rollback(cls):
-        for w in Waiting.__suspendStack:
+        for w in cls.__suspendStack:
             w.clear()
 
-        Waiting.__suspendStack = []
-        Waiting.close()
+        cls.__suspendStack = []
+        cls.close()
 
     @classmethod
     def cancelCallback(cls):
-        view = Waiting.getWaitingView()
+        view = cls.getWaitingView(True)
         if view is not None:
             view.cancelCallback()
         return
 
     @classmethod
-    def _showWaiting(cls, waiting):
-        view = Waiting.getWaitingView()
+    def _showWaiting(cls, w):
+        view = cls.getWaitingView(w.overlapsUI)
+        if view is None and w.overlapsUI is False:
+            view = cls.getWaitingView(True)
+            if view is not None:
+                w.updateOverlapsUI(True)
         if view is not None:
-            view.showS(i18n.makeString('#waiting:%s' % waiting.message), cls._hasOverlapsUIWaiting() or waiting.overlapsUI)
-            Waiting.__isVisible = True
-            view.setCallback(waiting.interrupt)
-            from gui.shared.events import LobbySimpleEvent
-            from gui.shared import EVENT_BUS_SCOPE
-            view.fireEvent(LobbySimpleEvent(LobbySimpleEvent.WAITING_SHOWN), scope=EVENT_BUS_SCOPE.LOBBY)
+            view.waitingShow(i18n.makeString('#waiting:%s' % w.message))
+            cls.__isVisible = True
+            if w.overlapsUI:
+                view.setCallback(w.interrupt)
+                from gui.shared.events import LobbySimpleEvent
+                from gui.shared import EVENT_BUS_SCOPE
+                view.fireEvent(LobbySimpleEvent(LobbySimpleEvent.WAITING_SHOWN), scope=EVENT_BUS_SCOPE.LOBBY)
         return

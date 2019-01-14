@@ -46,9 +46,6 @@ class CustomizationMainViewMeta(View):
     def playCustomSound(self, sound):
         self._printOverrideError('playCustomSound')
 
-    def clearSelectionAndHidePropertySheet(self):
-        self._printOverrideError('clearSelectionAndHidePropertySheet')
-
     def as_hideS(self, value):
         return self.flashObject.as_hide(value) if self._isDAAPIInited() else None
 
@@ -79,8 +76,8 @@ class CustomizationMainViewMeta(View):
     def as_selectSeasonS(self, value):
         return self.flashObject.as_selectSeason(value) if self._isDAAPIInited() else None
 
-    def as_releaseItemS(self):
-        return self.flashObject.as_releaseItem() if self._isDAAPIInited() else None
+    def as_releaseItemS(self, deselectAnchor=True):
+        return self.flashObject.as_releaseItem(deselectAnchor) if self._isDAAPIInited() else None
 
     def as_showCarouselsArrowsNotificationS(self, text):
         return self.flashObject.as_showCarouselsArrowsNotification(text) if self._isDAAPIInited() else None

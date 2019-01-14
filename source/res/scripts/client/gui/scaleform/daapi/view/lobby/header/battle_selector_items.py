@@ -18,6 +18,7 @@ from gui.shared.utils import SelectorBattleTypesUtils as selectorUtils
 from helpers import i18n, time_utils, dependency
 from skeletons.gui.game_control import IRankedBattlesController
 from skeletons.gui.game_control import IEpicBattleMetaGameController
+from skeletons.gui.game_control import IBootcampController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
 from gui.clans.clan_helpers import isStrongholdsEnabled
@@ -239,6 +240,7 @@ class _SandboxItem(_SelectorItem):
 
 
 class _EpicQueueItem(_SelectorItem):
+    bootcampController = dependency.descriptor(IBootcampController)
     epicQueueController = dependency.descriptor(IEpicBattleMetaGameController)
 
     def isRandomBattle(self):
@@ -247,7 +249,8 @@ class _EpicQueueItem(_SelectorItem):
     def getVO(self):
         vo = super(_EpicQueueItem, self).getVO()
         isNow = self.epicQueueController.isInPrimeTime()
-        vo['specialBgIcon'] = RES_ICONS.MAPS_ICONS_BUTTONS_SELECTORRENDERERBGEVENT if isNow else ''
+        inBootcamp = self.bootcampController.isInBootcamp()
+        vo['specialBgIcon'] = RES_ICONS.MAPS_ICONS_BUTTONS_SELECTORRENDERERBGEVENT if isNow and not inBootcamp else ''
         return vo
 
     def getFormattedLabel(self):
@@ -276,13 +279,16 @@ class _EpicQueueItem(_SelectorItem):
             return None
 
     def _update(self, state):
-        isNow = self.epicQueueController.isInPrimeTime()
+        isNow = self.epicQueueController.isAvailable()
         isEpicEnabled = self.lobbyContext.getServerSettings().isEpicBattleEnabled()
+        hasNextSeason, _ = self.epicQueueController.getCurrentCycleInfo()
+        isAvailableOnOtherServers = self.epicQueueController.hasAvailablePrimeTimeServers()
         if not isEpicEnabled or not isNow:
             self._isLocked = True
-            self._isDisabled = state.hasLockedState or not self.epicQueueController.hasAvailablePrimeTimeServers()
+        self._isDisabled = state.hasLockedState or not isAvailableOnOtherServers or not hasNextSeason
         self._isSelected = state.isQueueSelected(QUEUE_TYPE.EPIC)
-        self._isVisible = isEpicEnabled
+        self._isVisible = isEpicEnabled if hasNextSeason is not None else False
+        return
 
 
 class _BattleSelectorItems(object):

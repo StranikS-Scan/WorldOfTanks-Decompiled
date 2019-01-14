@@ -22,8 +22,10 @@ def readWheelsAndGroups(xmlCtx, section):
         if sname == 'wheel':
             from items.vehicles import _readHitTester, _readArmor
             ctx = (xmlCtx, 'wheels/wheel[{}]'.format(wheelId))
+            radiusKey = 'radius' if subsection.has_key('radius') else 'geometry/radius'
             index = _xml.readIntOrNone(ctx, subsection, 'index')
-            w = chassis_components.Wheel(index=index, isLeft=_xml.readBool(ctx, subsection, 'isLeft'), radius=_xml.readPositiveFloat(ctx, subsection, 'radius'), nodeName=intern(_xml.readNonEmptyString(ctx, subsection, 'name')), isLeading=subsection.readBool('isLeading', False), leadingSyncAngle=subsection.readFloat('syncAngle', defSyncAngle), hitTester=_readHitTester(ctx, subsection, 'hitTester', optional=True), materials=_readArmor(ctx, subsection, 'armor', optional=True, index=index or wheelId), position=subsection.readVector3('wheelPos', (0, 0, 0)))
+            actualIndex = wheelId if index is None else index
+            w = chassis_components.Wheel(index=index, isLeft=_xml.readBool(ctx, subsection, 'isLeft'), radius=_xml.readPositiveFloat(ctx, subsection, radiusKey), nodeName=intern(_xml.readNonEmptyString(ctx, subsection, 'name')), isLeading=subsection.readBool('isLeading', False), leadingSyncAngle=subsection.readFloat('syncAngle', defSyncAngle), hitTester=_readHitTester(ctx, subsection, 'hitTester', optional=True), materials=_readArmor(ctx, subsection, 'armor', optional=True, index=actualIndex), position=subsection.readVector3('wheelPos', (0, 0, 0)))
             wheels.append(w)
             wheelId += 1
 

@@ -306,9 +306,10 @@ class _StaticObjectMarker3D(_IMarker):
             if self.__action:
                 try:
                     clipResource = self.__model.deprecatedGetAnimationClipResource(self.__action)
-                    loader = AnimationSequence.Loader(clipResource, BigWorld.player().spaceID)
+                    spaceID = BigWorld.player().spaceID
+                    loader = AnimationSequence.Loader(clipResource, spaceID)
                     animator = loader.loadSync()
-                    animator.bindTo(AnimationSequence.ModelWrapperContainer(self.__model))
+                    animator.bindTo(AnimationSequence.ModelWrapperContainer(self.__model, spaceID))
                     animator.start()
                     self.__animator = animator
                 except ValueError:

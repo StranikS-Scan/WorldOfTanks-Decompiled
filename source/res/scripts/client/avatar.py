@@ -1044,11 +1044,16 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
         else:
             STATUS = VEHICLE_MISC_STATUS
             floatArg = floatArgs[0]
+            typeDescr = self.vehicleTypeDescriptor
+            if self.observedVehicleID is not None:
+                observedVehicle = BigWorld.entity(self.observedVehicleID)
+                if observedVehicle is not None:
+                    typeDescr = observedVehicle.typeDescriptor
             if code == STATUS.DESTROYED_DEVICE_IS_REPAIRING:
                 extraIndex = intArg & 255
                 progress = (intArg & 65280) >> 8
-                LOG_DEBUG_DEV('DESTROYED_DEVICE_IS_REPAIRING (%s): %s%%, %s sec' % (self.vehicleTypeDescriptor.extras[extraIndex].name, progress, floatArg))
-                self.guiSessionProvider.invalidateVehicleState(VEHICLE_VIEW_STATE.REPAIRING, (self.vehicleTypeDescriptor.extras[extraIndex].name[:-len('Health')], progress, floatArg))
+                LOG_DEBUG_DEV('DESTROYED_DEVICE_IS_REPAIRING (%s): %s%%, %s sec' % (typeDescr.extras[extraIndex].name, progress, floatArg))
+                self.guiSessionProvider.invalidateVehicleState(VEHICLE_VIEW_STATE.REPAIRING, (typeDescr.extras[extraIndex].name[:-len('Health')], progress, floatArg))
             elif code == STATUS.OTHER_VEHICLE_DAMAGED_DEVICES_VISIBLE:
                 prevVal = self.__maySeeOtherVehicleDamagedDevices
                 newVal = bool(intArg)
@@ -1167,7 +1172,12 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
 
     def showVehicleDamageInfo(self, vehicleID, damageIndex, extraIndex, entityID, equipmentID):
         damageCode = constants.DAMAGE_INFO_CODES[damageIndex]
-        extra = self.vehicleTypeDescriptor.extras[extraIndex] if extraIndex != 0 else None
+        typeDescr = self.vehicleTypeDescriptor
+        if self.observedVehicleID is not None:
+            observedVehicle = BigWorld.entity(self.observedVehicleID)
+            if observedVehicle is not None:
+                typeDescr = observedVehicle.typeDescriptor
+        extra = typeDescr.extras[extraIndex] if extraIndex != 0 else None
         if vehicleID == self.playerVehicleID or vehicleID == self.observedVehicleID or not self.__isVehicleAlive and vehicleID == self.inputHandler.ctrl.curVehicleID:
             self.__showDamageIconAndPlaySound(damageCode, extra, vehicleID)
         if damageCode not in self.__damageInfoNoNotification:
@@ -2252,7 +2262,7 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
         try:
             vehicle = BigWorld.entity(self.playerVehicleID)
             if vehicle is not None and vehicle.isStarted:
-                return vehicle.appearance.isUnderwater and None
+                return self.__isOwnBarrelUnderWater() and None
             gunDescr = vehicle.typeDescriptor.gun
             burstCount = gunDescr.burst[0]
             ammo = self.guiSessionProvider.shared.ammo

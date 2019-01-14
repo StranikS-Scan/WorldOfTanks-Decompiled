@@ -60,6 +60,7 @@
   </BaseMethods>
   <ClientMethods>
     <onChatAction>
+      <AllowUnsafeData>	true	</AllowUnsafeData>
       <Arg>	CHAT_ACTION_DATA	</Arg>
       <VariableLengthHeaderSize>	1	  <WarnLevel>	none	</WarnLevel>
       </VariableLengthHeaderSize>

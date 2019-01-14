@@ -156,6 +156,7 @@
     <icon>	../maps/icons/artefact/stereoscope.png 0 0	</icon>
     <price>	500000	</price>
     <removable>	true	</removable>
+    <tags>	stereoscope reconnaissance	</tags>
     <vehicleFilter>
       <exclude>
         <vehicle>
@@ -163,7 +164,6 @@
         </vehicle>
       </exclude>
     </vehicleFilter>
-    <tags>	stereoscope reconnaissance	</tags>
     <script>	Stereoscope	  <weight>	50	</weight>
       <activateWhenStillSec>	3.0	</activateWhenStillSec>
       <circularVisionRadiusFactor>	1.25	</circularVisionRadiusFactor>

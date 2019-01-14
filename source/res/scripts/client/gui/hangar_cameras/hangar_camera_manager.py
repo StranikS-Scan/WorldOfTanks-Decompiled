@@ -4,18 +4,19 @@ import math
 from functools import partial
 from logging import getLogger
 import BigWorld
-import Keys
 import Math
+import Keys
 from AvatarInputHandler import mathUtils
-from AvatarInputHandler.cameras import FovExtended
+from skeletons.account_helpers.settings_core import ISettingsCore
+from skeletons.gui.shared.utils import IHangarSpace
+from helpers import dependency
 from gui import g_keyEventHandlers, g_mouseEventHandlers
+from gui.shared import g_eventBus
 from gui.hangar_cameras.hangar_camera_common import CameraRelatedEvents, CameraMovementStates
 from gui.hangar_cameras.hangar_camera_idle import HangarCameraIdle
 from gui.hangar_cameras.hangar_camera_parallax import HangarCameraParallax
-from gui.shared import g_eventBus
-from helpers import dependency
-from skeletons.account_helpers.settings_core import ISettingsCore
-from skeletons.gui.shared.utils import IHangarSpace
+from AvatarInputHandler.cameras import FovExtended
+from vehicle_systems.stricted_loading import makeCallbackWeak
 _logger = getLogger(__name__)
 IMMEDIATE_CAMERA_MOVEMENT_MODE = 0
 FAST_CAMERA_MOVEMENT_MODE = 1
@@ -175,7 +176,7 @@ class HangarCameraManager(object):
         if movementMode != IMMEDIATE_CAMERA_MOVEMENT_MODE:
             self.__cam.movementMode = movementMode
         if camConstraints is not None:
-            self.__camConstraints = list(camConstraints)
+            self.__camConstraints = camConstraints
         else:
             self.__camConstraints[0] = cfg['cam_pitch_constr']
             self.__camConstraints[1] = cfg['cam_yaw_constr']
@@ -232,6 +233,15 @@ class HangarCameraManager(object):
 
     def getCameraPosition(self):
         return self.__cam.position
+
+    def updateProjection(self):
+        BigWorld.callback(0.0, makeCallbackWeak(self.__updateProjection))
+
+    def disableMovementByMouse(self, disable):
+        self.__movementDisabled = disable
+
+    def __updateProjection(self):
+        self.__cam.updateProjection()
 
     def __updateCameraByMouseMove(self, dx, dy, dz):
         if self.__cam is None or self.__movementDisabled:
@@ -354,7 +364,7 @@ class HangarCameraManager(object):
             self.__updateCameraDistanceLimits()
 
     def __handleDisableMovement(self, event):
-        self.__movementDisabled = event.ctx['disable']
+        self.disableMovementByMouse(event.ctx['disable'])
 
     def __updateCameraDistanceLimits(self):
         from gui.ClientHangarSpace import hangarCFG

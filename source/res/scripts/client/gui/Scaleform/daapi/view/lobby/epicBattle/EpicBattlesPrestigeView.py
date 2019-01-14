@@ -1,15 +1,22 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/epicBattle/EpicBattlesPrestigeView.py
+import SoundGroups
 from debug_utils import LOG_ERROR
+from gui import SystemMessages
 from gui.Scaleform.daapi import LobbySubView
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.epicBattle.epic_meta_level_icon import getEpicMetaIconVODict, EPIC_META_LEVEL_ICON_SIZE
+from gui.Scaleform.daapi.view.lobby.epicBattle.epic_prestige_progress import getPrestigeLevelAwardsVOs
 from gui.Scaleform.daapi.view.meta.EpicBattlesPrestigeViewMeta import EpicBattlesPrestigeViewMeta
 from gui.Scaleform.genConsts.EPICBATTLES_ALIASES import EPICBATTLES_ALIASES
 from gui.Scaleform.locale.EPIC_BATTLE import EPIC_BATTLE
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
+from gui.server_events.awards_formatters import AWARDS_SIZES
 from gui.shared import EVENT_BUS_SCOPE
 from gui.shared import events
+from gui.shared.gui_items.processors.common import EpicPrestigeTrigger
+from gui.shared.utils import decorators
+from gui.sounds.epic_sound_constants import EPIC_METAGAME_WWISE_SOUND_EVENTS
 from helpers import dependency, i18n, int2roman
 from skeletons.gui.game_control import IEpicBattleMetaGameController
 from skeletons.gui.lobby_context import ILobbyContext
@@ -32,7 +39,7 @@ class EpicBattlesPrestigeView(LobbySubView, EpicBattlesPrestigeViewMeta):
         self.__back()
 
     def onResetBtnClick(self):
-        pass
+        self.__triggerPrestige()
 
     def _populate(self):
         super(EpicBattlesPrestigeView, self)._populate()
@@ -44,7 +51,7 @@ class EpicBattlesPrestigeView(LobbySubView, EpicBattlesPrestigeViewMeta):
             LOG_ERROR('This line of code should never be reached!')
             self.fireEvent(events.LoadViewEvent(EPICBATTLES_ALIASES.EPIC_BATTLES_INFO_ALIAS), EVENT_BUS_SCOPE.LOBBY)
             return
-        awardsVO = ''
+        awardsVO = getPrestigeLevelAwardsVOs(self.eventsCache.getAllQuests(), nextPrestigeLevel, AWARDS_SIZES.BIG)
         prestigeLvlTxt = i18n.makeString(EPIC_BATTLE.EPICBATTLESPRESTIGEVIEW_PRESTIGELEVEL, level=int2roman(nextPrestigeLevel + 1))
         data = {'prestigeLevelText': prestigeLvlTxt,
          'prestigeTitleText': i18n.makeString(EPIC_BATTLE.EPICBATTLESPRESTIGEVIEW_MAINTITLE),
@@ -56,6 +63,15 @@ class EpicBattlesPrestigeView(LobbySubView, EpicBattlesPrestigeViewMeta):
          'epicMetaLevelIconData': getEpicMetaIconVODict(nextPrestigeLevel, 1),
          'backgroundImageSrc': RES_ICONS.MAPS_ICONS_EPICBATTLES_BACKGROUNDS_META_BLUR_BG}
         self.as_setDataS(data)
+
+    @decorators.process('updating')
+    def __triggerPrestige(self):
+        SoundGroups.g_instance.playSound2D(EPIC_METAGAME_WWISE_SOUND_EVENTS.EB_PRESTIGE_RESET)
+        result = yield EpicPrestigeTrigger().request()
+        if result.userMsg:
+            SystemMessages.pushMessage(result.userMsg, type=result.sysMsgType)
+        elif result.success:
+            self.as_showSuccessfullPrestigeS()
 
     def __close(self):
         self.fireEvent(events.LoadViewEvent(VIEW_ALIAS.LOBBY_HANGAR), scope=EVENT_BUS_SCOPE.LOBBY)

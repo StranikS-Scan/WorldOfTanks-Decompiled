@@ -12,7 +12,7 @@ from helpers.i18n import makeString as _ms
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.items_parameters import params_helper
 from gui.shared.utils.requesters.ItemsRequester import REQ_CRITERIA
-from helpers import i18n, dependency, int2roman, time_utils
+from helpers import i18n, dependency, int2roman, time_utils, func_utils
 from skeletons.gui.shared import IItemsCache
 _MAX_COMPATIBLE_VEHS_COUNT = 5
 _MAX_COMPATIBLE_GUNS_COUNT = 2
@@ -106,16 +106,19 @@ def _generateDescr(item, label, moreLabel, paramsNames, maxItemsCount):
 
 
 def getBoosterType(item):
-    if item.itemTypeID == GUI_ITEM_TYPE.BATTLE_BOOSTER:
-        if item.isCrewBooster():
-            return SLOT_HIGHLIGHT_TYPES.BATTLE_BOOSTER_CREW_REPLACE
-        return SLOT_HIGHLIGHT_TYPES.BATTLE_BOOSTER
-    return SLOT_HIGHLIGHT_TYPES.EQUIPMENT_PLUS if item.itemTypeID == GUI_ITEM_TYPE.OPTIONALDEVICE and item.isDeluxe() else SLOT_HIGHLIGHT_TYPES.NO_HIGHLIGHT
+    if item is not None:
+        if item.itemTypeID == GUI_ITEM_TYPE.BATTLE_BOOSTER:
+            if item.isCrewBooster():
+                return SLOT_HIGHLIGHT_TYPES.BATTLE_BOOSTER_CREW_REPLACE
+            return SLOT_HIGHLIGHT_TYPES.BATTLE_BOOSTER
+        if item.itemTypeID == GUI_ITEM_TYPE.OPTIONALDEVICE and item.isDeluxe():
+            return SLOT_HIGHLIGHT_TYPES.EQUIPMENT_PLUS
+    return SLOT_HIGHLIGHT_TYPES.NO_HIGHLIGHT
 
 
 def getStorageItemIcon(item, size=STORE_CONSTANTS.ICON_SIZE_MEDIUM):
     if item.itemTypeID in GUI_ITEM_TYPE.VEHICLE_COMPONENTS:
-        icon = item.getShopIcon(size)
+        icon = func_utils.makeFlashPath(item.getShopIcon(size))
     else:
         icon = item.icon
     return icon

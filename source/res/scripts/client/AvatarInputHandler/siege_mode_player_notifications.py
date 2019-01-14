@@ -30,6 +30,8 @@ class SiegeModeSoundNotifications(Component):
                 if sound is not None:
                     sound.stop()
 
+        if self.__engineWasDestroyed:
+            SoundGroups.g_instance.playSound2D(SOUND_NOTIFICATIONS.MOVEMENT_LIMITED_OFF)
         self.__sounds = None
         if self.__siegeCallback is not None:
             BigWorld.cancelCallback(self.__siegeCallback)

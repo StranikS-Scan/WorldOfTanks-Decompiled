@@ -139,10 +139,10 @@ def _findPersonalMissionsState(eventsCache, vehicle, branch):
                         return (WIDGET_PM_STATE.OPERATION_DISABLED, None)
                     if quest.isDisabled():
                         return (WIDGET_PM_STATE.MISSION_DISABLED, None)
-                    if quest.isOnPause:
-                        return (WIDGET_PM_STATE.ON_PAUSE, quest)
                     if vehicleLvl < quest.getVehMinLevel():
                         return (WIDGET_PM_STATE.LOW_LEVEL, None)
+                    if quest.isOnPause:
+                        return (WIDGET_PM_STATE.ON_PAUSE, quest)
                     return (WIDGET_PM_STATE.IN_PROGRESS, quest)
                 if operation.isDisabled() or quest.isDisabled() or operationState & WIDGET_PM_STATE.NO_VEHICLE:
                     continue
@@ -262,8 +262,7 @@ class HangarHeader(HangarHeaderMeta, IGlobalListener, IEventBoardsListener):
              'tankInfo': text_styles.concatStylesToMultiLine(text_styles.promoSubTitle(vehicle.shortUserName), text_styles.stats(MENU.levels_roman(vehicle.level))),
              'isPremIGR': vehicle.isPremiumIGR,
              'isVisible': True,
-             'quests': quests,
-             'isNYWidgetVisible': self._festivityController.isEnabled()}
+             'quests': quests}
         else:
             headerVO = {'isVisible': False,
              'quests': []}
@@ -387,9 +386,9 @@ class HangarHeader(HangarHeaderMeta, IGlobalListener, IEventBoardsListener):
                 label = icons.makeImageTag(RES_ICONS.MAPS_ICONS_LIBRARY_OUTLINE_QUESTS_ALL_DONE)
             commonQuestsIcon = festivityFlagData.icon or RES_ICONS.MAPS_ICONS_LIBRARY_OUTLINE_QUESTS_AVAILABLE
         else:
-            commonQuestsIcon = festivityFlagData.iconDisabled if hasattr(festivityFlagData, 'iconDisabled') and festivityFlagData.iconDisabled is not None else RES_ICONS.MAPS_ICONS_LIBRARY_OUTLINE_QUESTS_DISABLED
+            commonQuestsIcon = festivityFlagData.iconDisabled or RES_ICONS.MAPS_ICONS_LIBRARY_OUTLINE_QUESTS_DISABLED
             label = ''
-        quests = [self._headerQuestFormaterVo(totalCount > 0, commonQuestsIcon, label, HANGAR_HEADER_QUESTS.QUEST_TYPE_COMMON, festivityFlagData.flagBackground, tooltip=TOOLTIPS_CONSTANTS.QUESTS_PREVIEW, isTooltipSpecial=True)]
+        quests = [self._headerQuestFormaterVo(totalCount > 0, commonQuestsIcon, label, HANGAR_HEADER_QUESTS.QUEST_TYPE_COMMON, flag=festivityFlagData.flagBackground, tooltip=TOOLTIPS_CONSTANTS.QUESTS_PREVIEW, isTooltipSpecial=True)]
         return self._wrapQuestGroup(HANGAR_HEADER_QUESTS.QUEST_GROUP_COMMON, '', quests)
 
     def __getMarathonQuestsVO(self, vehicle, isGroupped=False):

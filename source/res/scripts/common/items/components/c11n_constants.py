@@ -10,10 +10,13 @@ HIDDEN_CAMOUFLAGE_ID = 1
 TOTAL_COUNTER_TYPE_DESCR = -1
 MAX_PROJECTION_DECALS = 6
 MAX_USERS_PROJECTION_DECALS = 2
+MAX_PROJECTION_DECALS_PER_AREA = 2
 PROJECTION_DECALS_SCALE_ID_VALUES = (0, 1, 2, 3)
 DEFAULT_DECAL_SCALE_FACTORS = (0.6, 0.8, 1.0)
 DEFAULT_SCALE_FACTOR_ID = 3
 DEFAULT_DECAL_CLIP_ANGLE = 0.0
+RENT_IS_ALMOST_OVER_VALUE = 3
+NUMBER_OF_PERSONAL_NUMBER_DIGITS = 3
 
 class CustomizationType(object):
     PAINT = 1
@@ -24,6 +27,8 @@ class CustomizationType(object):
     ITEM_GROUP = 6
     PROJECTION_DECAL = 7
     INSIGNIA = 8
+    PERSONAL_NUMBER = 9
+    FONT = 10
     RANGE = {PAINT,
      CAMOUFLAGE,
      DECAL,
@@ -31,9 +36,13 @@ class CustomizationType(object):
      MODIFICATION,
      ITEM_GROUP,
      PROJECTION_DECAL,
-     INSIGNIA}
-    _APPLIED_TO_TYPES = (PAINT, CAMOUFLAGE, DECAL)
-    _INT_TYPES = (STYLE, MODIFICATION, PROJECTION_DECAL)
+     PERSONAL_NUMBER,
+     FONT}
+    _APPLIED_TO_TYPES = (PAINT,
+     CAMOUFLAGE,
+     DECAL,
+     PERSONAL_NUMBER)
+    _SIMPLE_TYPES = (STYLE, MODIFICATION, PROJECTION_DECAL)
 
 
 CustomizationTypeNames = {getattr(CustomizationType, k):k for k in dir(CustomizationType) if not k.startswith('_') and k != 'RANGE'}
@@ -46,14 +55,15 @@ class ItemTags(object):
     HIDDEN_IN_UI = 'hiddenInUI'
 
 
-class DirectionTags:
-    ANY = 'direction_any'
-    LEFT_TO_RIGHT = 'direction_left_to_right'
-    RIGHT_TO_LEFT = 'direction_right_to_left'
+class ProjectionDecalDirectionTags(object):
+    PREFIX = 'direction_'
+    ANY = PREFIX + 'any'
+    LEFT_TO_RIGHT = PREFIX + 'left_to_right'
+    RIGHT_TO_LEFT = PREFIX + 'right_to_left'
     ALL = (ANY, LEFT_TO_RIGHT, RIGHT_TO_LEFT)
 
 
-class ProjectionDecalFormTags:
+class ProjectionDecalFormTags(object):
     PREFIX = 'formfactor_'
     ANY = PREFIX + 'any'
     SQUARE = PREFIX + 'square'
@@ -67,6 +77,20 @@ class ProjectionDecalFormTags:
      RECT1X3,
      RECT1X4,
      RECT1X6)
+
+
+class ProjectionDecalPositionTags(object):
+    PREFIX = 'position_'
+    TOP = PREFIX + 'top'
+    LEFT = PREFIX + 'left'
+    RIGHT = PREFIX + 'right'
+    FRONT = PREFIX + 'front'
+    BACK = PREFIX + 'back'
+    ALL = (TOP,
+     LEFT,
+     RIGHT,
+     FRONT,
+     BACK)
 
 
 class ApplyArea(object):
@@ -103,6 +127,7 @@ class ApplyArea(object):
     HULL_INSCRIPTION_REGIONS = (HULL_2, HULL_3)
     HULL_PROJECTION_DECAL_REGIONS = (HULL, HULL_1)
     HULL_INSIGNIA_REGIONS = (HULL, HULL_1)
+    HULL_PERSONAL_NUMBER_REGIONS = (HULL_2, HULL_3)
     TURRET_REGIONS = (TURRET,
      TURRET_1,
      TURRET_2,
@@ -113,6 +138,7 @@ class ApplyArea(object):
     TURRET_INSCRIPTION_REGIONS = (TURRET_2, TURRET_3)
     TURRET_PROJECTION_DECAL_REGIONS = (TURRET, TURRET_1)
     TURRET_INSIGNIA_REGIONS = (TURRET, TURRET_1)
+    TURRET_PERSONAL_NUMBER_REGIONS = (TURRET_2, TURRET_3)
     GUN_REGIONS = (GUN,
      GUN_1,
      GUN_2,
@@ -123,6 +149,7 @@ class ApplyArea(object):
     GUN_INSCRIPTION_REGIONS = (GUN_2, GUN_3)
     GUN_PROJECTION_DECAL_REGIONS = (GUN, GUN_1)
     GUN_INSIGNIA_REGIONS = (GUN, GUN_1)
+    GUN_PERSONAL_NUMBER_REGIONS = (GUN_2, GUN_3)
     RANGE = {HULL,
      HULL_1,
      HULL_2,
@@ -150,12 +177,14 @@ class ApplyArea(object):
     EMBLEM_REGIONS = HULL_EMBLEM_REGIONS + TURRET_EMBLEM_REGIONS + GUN_EMBLEM_REGIONS
     INSCRIPTION_REGIONS = HULL_INSCRIPTION_REGIONS + TURRET_INSCRIPTION_REGIONS + GUN_INSCRIPTION_REGIONS
     PROJECTION_DECAL_REGIONS = HULL_PROJECTION_DECAL_REGIONS + TURRET_PROJECTION_DECAL_REGIONS + GUN_PROJECTION_DECAL_REGIONS
-    USER_PAINT_ALLOWED_REGIONS_VALUE = reduce(int.__or__, USER_PAINT_ALLOWED_REGIONS)
+    PERSONAL_NUMBER_REGIONS = HULL_PERSONAL_NUMBER_REGIONS + TURRET_PERSONAL_NUMBER_REGIONS + GUN_PERSONAL_NUMBER_REGIONS
+    PAINT_REGIONS_VALUE = reduce(int.__or__, USER_PAINT_ALLOWED_REGIONS)
     DECAL_REGIONS_VALUE = reduce(int.__or__, DECAL_REGIONS)
     CAMOUFLAGE_REGIONS_VALUE = reduce(int.__or__, CAMOUFLAGE_REGIONS)
     EMBLEM_REGIONS_VALUE = reduce(int.__or__, EMBLEM_REGIONS)
     INSCRIPTION_REGIONS_VALUE = reduce(int.__or__, INSCRIPTION_REGIONS)
     PROJECTION_DECAL_REGIONS_VALUE = reduce(int.__or__, PROJECTION_DECAL_REGIONS)
+    PERSONAL_NUMBER_REGIONS_VALUE = reduce(int.__or__, PERSONAL_NUMBER_REGIONS)
     CHASSIS_REGIONS_VALUE = reduce(int.__or__, CHASSIS_REGIONS)
     GUN_REGIONS_VALUE = reduce(int.__or__, GUN_REGIONS)
     HULL_REGIONS_VALUE = reduce(int.__or__, HULL_REGIONS)
@@ -206,6 +235,8 @@ class DecalType(object):
     EMBLEM = 1
     INSCRIPTION = 2
 
+
+DecalTypeNames = {getattr(DecalType, k):k for k in dir(DecalType) if not k.startswith('_')}
 
 class StyleFlags(object):
     ENABLED = 1

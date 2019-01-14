@@ -351,10 +351,6 @@ class _VehicleInfo(object):
         raise NotImplementedError
 
     @property
-    def numDestructiblesDefended(self):
-        raise NotImplementedError
-
-    @property
     def destructiblesDamageDealt(self):
         raise NotImplementedError
 
@@ -594,10 +590,6 @@ class VehicleDetailedInfo(_VehicleInfo):
     @property
     def numDestroyed(self):
         return self._extPublic.get('destructibleEntity', {}).get('numDestroyed', 0)
-
-    @property
-    def numDestructiblesDefended(self):
-        return self._extPublic.get('destructibleEntity', {}).get('numDefended', 0)
 
     @property
     def destructiblesDamageDealt(self):
@@ -904,10 +896,6 @@ class VehicleSummarizeInfo(_VehicleInfo):
     @property
     def destructiblesDamageDealt(self):
         return self.__accumulate('destructiblesDamageDealt')
-
-    @property
-    def numDestructiblesDefended(self):
-        return self.__accumulate('numDestructiblesDefended')
 
     @property
     def equipmentDamageDealt(self):

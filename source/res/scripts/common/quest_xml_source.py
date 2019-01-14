@@ -327,6 +327,7 @@ class Source(object):
          'refSystemRalXPPool': self.__readBattleResultsConditionList,
          'refSystemRalBought10Lvl': self.__readCondition_true,
          'isTutorialCompleted': self.__readCondition_bool,
+         'isLinkedSetEnabled': self.__readCondition_bool,
          'totalBattles': self.__readBattleResultsConditionList,
          'accountPrimaryTypes': self.__readListOfInts,
          'accountSecondaryTypes': self.__readListOfInts}
@@ -390,6 +391,8 @@ class Source(object):
              'correspondedPaint': self.__readConditionComplex_true,
              'correspondedStyle': self.__readConditionComplex_true,
              'correspondedModification': self.__readConditionComplex_true,
+             'correspondedProjectionDecal': self.__readConditionComplex_true,
+             'correspondedPersonalNumber': self.__readConditionComplex_true,
              'unit': self.__readBattleResultsConditionList,
              'results': self.__readBattleResultsConditionList,
              'key': self.__readCondition_keyResults,

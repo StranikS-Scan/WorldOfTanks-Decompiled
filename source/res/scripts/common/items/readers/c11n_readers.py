@@ -20,7 +20,7 @@ class BaseCustomizationItemXmlReader(object):
     def __init__(self):
         super(BaseCustomizationItemXmlReader, self).__init__()
 
-    def _readFromXml(self, target, xmlCtx, section):
+    def _readFromXml(self, target, xmlCtx, section, cache=None):
         if section.has_key('id'):
             target.id = ix.readInt(xmlCtx, section, 'id', 1)
         if section.has_key('tags'):
@@ -42,9 +42,9 @@ class BaseCustomizationItemXmlReader(object):
             if target.maxNumber <= 0:
                 ix.raiseWrongXml(xmlCtx, 'maxNumber', 'should not be less then 1')
         if IS_CLIENT or IS_WEB:
-            self._readClientOnlyFromXml(target, xmlCtx, section)
+            self._readClientOnlyFromXml(target, xmlCtx, section, cache)
 
-    def _readClientOnlyFromXml(self, target, xmlCtx, section):
+    def _readClientOnlyFromXml(self, target, xmlCtx, section, cache=None):
         target.i18n = shared_components.I18nExposedComponent(section.readString('userString'), section.readString('description'))
 
     @staticmethod
@@ -85,7 +85,7 @@ class BaseCustomizationItemXmlReader(object):
 class PaintXmlReader(BaseCustomizationItemXmlReader):
     __slots__ = ()
 
-    def _readFromXml(self, target, xmlCtx, section):
+    def _readFromXml(self, target, xmlCtx, section, cache=None):
         super(PaintXmlReader, self)._readFromXml(target, xmlCtx, section)
         if section.has_key('color'):
             target.color = iv._readColor(xmlCtx, section, 'color')
@@ -101,7 +101,7 @@ class PaintXmlReader(BaseCustomizationItemXmlReader):
                     if ctype & i:
                         target.usageCosts[i] = cost
 
-    def _readClientOnlyFromXml(self, target, xmlCtx, section):
+    def _readClientOnlyFromXml(self, target, xmlCtx, section, cache=None):
         super(PaintXmlReader, self)._readClientOnlyFromXml(target, xmlCtx, section)
         if section.has_key('texture'):
             target.texture = section.readString('texture')
@@ -116,12 +116,12 @@ class PaintXmlReader(BaseCustomizationItemXmlReader):
 class DecalXmlReader(BaseCustomizationItemXmlReader):
     __slots__ = ()
 
-    def _readFromXml(self, target, xmlCtx, section):
+    def _readFromXml(self, target, xmlCtx, section, cache=None):
         super(DecalXmlReader, self)._readFromXml(target, xmlCtx, section)
         if section.has_key('type'):
             target.type = readEnum(xmlCtx, section, 'type', DecalType)
 
-    def _readClientOnlyFromXml(self, target, xmlCtx, section):
+    def _readClientOnlyFromXml(self, target, xmlCtx, section, cache=None):
         super(DecalXmlReader, self)._readClientOnlyFromXml(target, xmlCtx, section)
         if section.has_key('texture'):
             target.texture = section.readString('texture')
@@ -132,24 +132,40 @@ class DecalXmlReader(BaseCustomizationItemXmlReader):
 class ProjectionDecalXmlReader(BaseCustomizationItemXmlReader):
     __slots__ = ()
 
-    def _readFromXml(self, target, xmlCtx, section):
+    def _readFromXml(self, target, xmlCtx, section, cache=None):
         super(ProjectionDecalXmlReader, self)._readFromXml(target, xmlCtx, section)
         if section.has_key('mirror'):
             target.canBeMirrored = ix.readBool(xmlCtx, section, 'mirror')
 
-    def _readClientOnlyFromXml(self, target, xmlCtx, section):
+    def _readClientOnlyFromXml(self, target, xmlCtx, section, cache=None):
         super(ProjectionDecalXmlReader, self)._readClientOnlyFromXml(target, xmlCtx, section)
         if section.has_key('texture'):
             target.texture = section.readString('texture')
 
 
+class PersonalNumberXmlReader(BaseCustomizationItemXmlReader):
+    __slots__ = ()
+
+    def _readFromXml(self, target, xmlCtx, section, cache):
+        super(PersonalNumberXmlReader, self)._readFromXml(target, xmlCtx, section, cache)
+
+    def _readClientOnlyFromXml(self, target, xmlCtx, section, cache):
+        super(PersonalNumberXmlReader, self)._readClientOnlyFromXml(target, xmlCtx, section, cache)
+        if section.has_key('texture'):
+            target.texture = section.readString('texture')
+        if section.has_key('preview_texture'):
+            target.previewTexture = section.readString('preview_texture')
+        if section.has_key('fontId'):
+            target.fontInfo = cache.fonts[section.readInt('fontId')]
+
+
 class ModificationXmlReader(BaseCustomizationItemXmlReader):
     __slots__ = ()
 
-    def _readFromXml(self, target, xmlCtx, section):
+    def _readFromXml(self, target, xmlCtx, section, cache=None):
         super(ModificationXmlReader, self)._readFromXml(target, xmlCtx, section)
 
-    def _readClientOnlyFromXml(self, target, xmlCtx, section):
+    def _readClientOnlyFromXml(self, target, xmlCtx, section, cache=None):
         super(ModificationXmlReader, self)._readClientOnlyFromXml(target, xmlCtx, section)
         if section.has_key('texture'):
             target.texture = section.readString('texture')
@@ -169,7 +185,7 @@ class ModificationXmlReader(BaseCustomizationItemXmlReader):
 class CamouflageXmlReader(BaseCustomizationItemXmlReader):
     __slots__ = ()
 
-    def _readFromXml(self, target, xmlCtx, section):
+    def _readFromXml(self, target, xmlCtx, section, cache=None):
         super(CamouflageXmlReader, self)._readFromXml(target, xmlCtx, section)
         target.compatibleParts = readFlagEnum(xmlCtx, section, 'compatibleParts', ApplyArea, target.compatibleParts)
         target.componentsCovering = readFlagEnum(xmlCtx, section, 'componentsCovering', ApplyArea, target.componentsCovering)
@@ -186,7 +202,7 @@ class CamouflageXmlReader(BaseCustomizationItemXmlReader):
                 palettes.append(res)
                 target.palettes = tuple(palettes)
 
-    def _readClientOnlyFromXml(self, target, xmlCtx, section):
+    def _readClientOnlyFromXml(self, target, xmlCtx, section, cache=None):
         super(CamouflageXmlReader, self)._readClientOnlyFromXml(target, xmlCtx, section)
         if section.has_key('texture'):
             target.texture = section.readString('texture')
@@ -209,7 +225,7 @@ class StyleXmlReader(BaseCustomizationItemXmlReader):
     __slots__ = ()
     __outfitDeserializer = c11n.ComponentXmlDeserializer(c11n._CUSTOMIZATION_CLASSES)
 
-    def _readFromXml(self, target, xmlCtx, section):
+    def _readFromXml(self, target, xmlCtx, section, cache=None):
         super(StyleXmlReader, self)._readFromXml(target, xmlCtx, section)
         prototype = True
         if section.has_key('outfits'):
@@ -235,7 +251,7 @@ class StyleXmlReader(BaseCustomizationItemXmlReader):
         if totalSeason != target.season and not prototype:
             ix.raiseWrongXml(xmlCtx, 'outfits', 'style season must correspond to declared outfits')
 
-    def _readClientOnlyFromXml(self, target, xmlCtx, section):
+    def _readClientOnlyFromXml(self, target, xmlCtx, section, cache=None):
         super(StyleXmlReader, self)._readClientOnlyFromXml(target, xmlCtx, section)
         if section.has_key('texture'):
             target.texture = section.readString('texture')
@@ -246,10 +262,10 @@ class StyleXmlReader(BaseCustomizationItemXmlReader):
 class InsigniaXmlReader(BaseCustomizationItemXmlReader):
     __slots__ = ()
 
-    def _readFromXml(self, target, xmlCtx, section):
+    def _readFromXml(self, target, xmlCtx, section, cache=None):
         super(InsigniaXmlReader, self)._readFromXml(target, xmlCtx, section)
 
-    def _readClientOnlyFromXml(self, target, xmlCtx, section):
+    def _readClientOnlyFromXml(self, target, xmlCtx, section, cache=None):
         super(InsigniaXmlReader, self)._readClientOnlyFromXml(target, xmlCtx, section)
         if section.has_key('atlas'):
             target.atlas = section.readString('atlas')
@@ -278,6 +294,12 @@ def readCustomizationCacheFromXml(cache, folder):
     pgFile = os.path.join(folder, 'default_colors.xml')
     _readDefaultColors(cache, (None, 'default_colors.xml'), ResMgr.openSection(pgFile), 'default_color')
     ResMgr.purge(pgFile)
+    pgFile = os.path.join(folder, 'fonts', 'list.xml')
+    _readFonts(cache, (None, 'fonts/list.xml'), ResMgr.openSection(pgFile), 'font')
+    ResMgr.purge(pgFile)
+    pgFile = os.path.join(folder, 'personal_numbers', 'prohibitedNumbers.xml')
+    _readProhibitedNumbers((None, 'personal_numbers/prohibitedNumbers.xml'), ResMgr.openSection(pgFile))
+    ResMgr.purge(pgFile)
     __readItemFolder(cc.PaintItem, folder, 'paint', cache.paints)
     __readItemFolder(cc.CamouflageItem, folder, 'camouflage', cache.camouflages)
     __readItemFolder(cc.ModificationItem, folder, 'modification', cache.modifications)
@@ -285,7 +307,17 @@ def readCustomizationCacheFromXml(cache, folder):
     __readItemFolder(cc.ProjectionDecalItem, folder, 'projection_decal', cache.projection_decals)
     __readItemFolder(cc.StyleItem, folder, 'style', cache.styles)
     __readItemFolder(cc.InsigniaItem, folder, 'insignia', cache.insignias)
+    __readItemFolder(cc.PersonalNumberItem, folder, 'personal_number', cache.personal_numbers)
     return None
+
+
+def _readProhibitedNumbers(xmlCtx, section):
+    prohibitedNumbers = ix.readTupleOfStrings(xmlCtx, section, 'ProhibitedNumbers')
+    for prohibitedNumber in prohibitedNumbers:
+        if not prohibitedNumber.isdigit():
+            ix.raiseWrongXml(xmlCtx, 'ProhibitedNumbers', '%s is not a number' % prohibitedNumber)
+
+    cc.PersonalNumberItem.setProhibitedNumbers(prohibitedNumbers)
 
 
 def _readItems(cache, itemCls, xmlCtx, section, itemSectionName, storage):
@@ -300,7 +332,7 @@ def _readItems(cache, itemCls, xmlCtx, section, itemSectionName, storage):
         group = cc.ItemGroup(itemCls)
         gCtx = (xmlCtx, 'itemGroup {0}'.format(i))
         itemPrototype = itemCls()
-        reader._readFromXml(itemPrototype, gCtx, gsection)
+        reader._readFromXml(itemPrototype, gCtx, gsection, cache)
         group.itemPrototype = itemPrototype
         j = 0
         for iname, isection in gsection.items():
@@ -309,7 +341,7 @@ def _readItems(cache, itemCls, xmlCtx, section, itemSectionName, storage):
             iCtx = (gCtx, '{0} {1}'.format(iname, j))
             j += 1
             item = itemCls(group)
-            reader._readFromXml(item, iCtx, isection)
+            reader._readFromXml(item, iCtx, isection, cache)
             if item.compactDescr in itemToGroup:
                 ix.raiseWrongXml(iCtx, 'id', 'duplicate item. id: %s found in group %s' % (item.id, itemToGroup[item.compactDescr]))
             storage[item.id] = item
@@ -348,6 +380,22 @@ def _readPriceGroups(cache, xmlCtx, section, sectionName):
 
         cache.priceGroupNames[priceGroup.name] = priceGroup.id
         cache.priceGroups[priceGroup.id] = priceGroup
+
+
+def _readFonts(cache, xmlCtx, section, sectionName):
+    for tag, iSection in section.items():
+        if tag != sectionName:
+            continue
+        font = cc.Font()
+        font.id = ix.readInt(xmlCtx, iSection, 'id', 1)
+        iCtx = (xmlCtx, 'id %s' % font.id)
+        if font.id in cache.fonts:
+            ix.raiseWrongXml(iCtx, 'id', 'duplicate price group id')
+        font.texture = ix.readString(xmlCtx, iSection, 'texture')
+        font.alphabet = ix.readString(xmlCtx, iSection, 'alphabet')
+        if iSection.has_key('mask'):
+            font.mask = ix.readString(xmlCtx, iSection, 'mask')
+        cache.fonts[font.id] = font
 
 
 def _readDefaultColors(cache, xmlCtx, section, sectionName):
@@ -394,4 +442,5 @@ __xmlReaders = {cc.PaintItem: PaintXmlReader(),
  cc.CamouflageItem: CamouflageXmlReader(),
  cc.ModificationItem: ModificationXmlReader(),
  cc.StyleItem: StyleXmlReader(),
- cc.InsigniaItem: InsigniaXmlReader()}
+ cc.InsigniaItem: InsigniaXmlReader(),
+ cc.PersonalNumberItem: PersonalNumberXmlReader()}

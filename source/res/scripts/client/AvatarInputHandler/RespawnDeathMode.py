@@ -4,6 +4,7 @@ import weakref
 import BigWorld
 import GUI
 import SoundGroups
+import BattleReplay
 from AvatarInputHandler import aih_global_binding
 from DynamicCameras.ArcadeCamera import ArcadeCamera
 from control_modes import IControlMode, _ARCADE_CAM_PIVOT_POS
@@ -36,6 +37,7 @@ class RespawnDeathMode(IControlMode):
         return
 
     def enable(self, **args):
+        BattleReplay.g_replayCtrl.onRespawnMode(True)
         SoundGroups.g_instance.changePlayMode(0)
         self.__cam.enable(None, False, args.get('postmortemParams'))
         self.__cam.reinitMatrix()
@@ -53,6 +55,7 @@ class RespawnDeathMode(IControlMode):
         ctrl = self.guiSessionProvider.dynamic.respawn
         if hasattr(ctrl, 'showUiAllowed'):
             ctrl.showUiAllowed = False
+        BattleReplay.g_replayCtrl.onRespawnMode(False)
 
     def handleMouseEvent(self, dx, dy, dz):
         GUI.mcursor().position = self.__aimOffset

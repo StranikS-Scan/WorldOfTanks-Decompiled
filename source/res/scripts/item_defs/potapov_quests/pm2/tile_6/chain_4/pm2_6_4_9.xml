@@ -8,7 +8,7 @@
         <postBattle>
           <and>
             <vehicleDamage>
-              <distance>	250	</distance>
+              <distance>	300	</distance>
               <greaterOrEqual>	2000	</greaterOrEqual>
             </vehicleDamage>
           </and>
@@ -66,11 +66,11 @@
         <postBattle>
           <and>
             <vehicleDamage>
-              <distance>	250	</distance>
+              <distance>	300	</distance>
               <greaterOrEqual>	2000	</greaterOrEqual>
             </vehicleDamage>
             <vehicleKills>
-              <greaterOrEqual>	3	</greaterOrEqual>
+              <greaterOrEqual>	2	</greaterOrEqual>
             </vehicleKills>
           </and>
         </postBattle>
@@ -103,11 +103,11 @@
         <postBattle>
           <and>
             <vehicleDamage>
-              <distance>	250	</distance>
+              <distance>	300	</distance>
               <greaterOrEqual>	2000	</greaterOrEqual>
             </vehicleDamage>
             <vehicleKills>
-              <greaterOrEqual>	3	</greaterOrEqual>
+              <greaterOrEqual>	2	</greaterOrEqual>
             </vehicleKills>
           </and>
         </postBattle>

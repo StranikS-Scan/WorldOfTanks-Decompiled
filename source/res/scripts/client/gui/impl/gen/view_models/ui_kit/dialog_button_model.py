@@ -1,6 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/gen/view_models/ui_kit/dialog_button_model.py
-from frameworks.wulf import Resource
+from gui.impl.gen import R
 from frameworks.wulf import ViewModel
 
 class DialogButtonModel(ViewModel):
@@ -56,9 +56,9 @@ class DialogButtonModel(ViewModel):
         super(DialogButtonModel, self)._initialize()
         self._addStringProperty('name', '')
         self._addStringProperty('rawLabel', '')
-        self._addResourceProperty('label', Resource.INVALID)
+        self._addResourceProperty('label', R.invalid())
         self._addBoolProperty('isEnabled', True)
         self._addBoolProperty('doSetFocus', False)
-        self._addResourceProperty('icon', Resource.INVALID)
+        self._addResourceProperty('icon', R.invalid())
         self._addBoolProperty('iconAfterText', True)
         self.onClicked = self._addCommand('onClicked')

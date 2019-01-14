@@ -27,7 +27,7 @@ from gui.shared.money import Currency
 from gui.shared.tooltips import formatters, ToolTipBaseData
 from gui.shared.tooltips import getComplexStatus, getUnlockPrice, TOOLTIP_TYPE
 from gui.shared.tooltips.common import BlocksTooltipData, makePriceBlock, CURRENCY_SETTINGS
-from gui.shared.utils import MAX_STEERING_LOCK_ANGLE, WHEELED_SWITCH_TIME
+from gui.shared.utils import MAX_STEERING_LOCK_ANGLE, WHEELED_SWITCH_TIME, WHEELED_SPEED_MODE_SPEED
 from helpers import i18n, time_utils, int2roman, dependency
 from helpers.i18n import makeString as _ms
 from skeletons.gui.game_control import ITradeInController
@@ -581,6 +581,7 @@ class PriceBlockConstructor(VehicleTooltipBlockConstructor):
 class CommonStatsBlockConstructor(VehicleTooltipBlockConstructor):
     PARAMS = {VEHICLE_CLASS_NAME.LIGHT_TANK: ('enginePowerPerTon',
                                      'speedLimits',
+                                     WHEELED_SPEED_MODE_SPEED,
                                      'chassisRotationSpeed',
                                      MAX_STEERING_LOCK_ANGLE,
                                      WHEELED_SWITCH_TIME,

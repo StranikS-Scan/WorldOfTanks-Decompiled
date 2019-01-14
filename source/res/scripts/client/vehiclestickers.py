@@ -25,6 +25,7 @@ def _getAccountRepository():
 _TextureParams = namedtuple('TextureParams', ('textureName', 'bumpTextureName', 'mirror'))
 _CounterParams = namedtuple('CounterParams', ('atlas', 'alphabet', 'mirror'))
 _StickerSlotPair = namedtuple('_StickerSlotPair', ('componentSlot', 'stickerParams'))
+_PersonalNumberTexParams = namedtuple('PersonalNumberTexParams', ('textureName', 'textureMap', 'text', 'fontMask'))
 _GUN_INSIGNIA_IDX = -1
 _INSIGNIA_LETTER = '*'
 
@@ -60,8 +61,9 @@ class ModelStickers(object):
         self.__stickerPacks = stickerPacks
         for slot in emblemSlots:
             if slot.type in self.__stickerPacks:
-                stickerPack = self.__stickerPacks[slot.type]
-                stickerPack.bind(componentIdx, slot)
+                stickerPackTuple = self.__stickerPacks[slot.type]
+                for stickerPack in stickerPackTuple:
+                    stickerPack.bind(componentIdx, slot)
 
         self.__model = None
         self.__toPartRootMatrix = mathUtils.createIdentityMatrix()
@@ -72,6 +74,7 @@ class ModelStickers(object):
         return
 
     def __destroy__(self):
+        self.__isLoadingClanEmblems = False
         self.detachStickers()
 
     def attachStickers(self, model, parentNode, isDamaged, toPartRootMatrix=None):
@@ -83,8 +86,9 @@ class ModelStickers(object):
         self.__isDamaged = isDamaged
         self.__stickerModel.setupSuperModel(self.__model, self.__toPartRootMatrix)
         self.__parentNode.attach(self.__stickerModel)
-        for stickerPack in self.__stickerPacks.itervalues():
-            stickerPack.attach(self.__componentIdx, self.__stickerModel, isDamaged)
+        for stickerPackTuple in self.__stickerPacks.itervalues():
+            for stickerPack in stickerPackTuple:
+                stickerPack.attach(self.__componentIdx, self.__stickerModel, isDamaged)
 
         return
 
@@ -94,8 +98,9 @@ class ModelStickers(object):
         else:
             if self.__stickerModel.attached:
                 self.__parentNode.detach(self.__stickerModel)
-            for stickerPack in self.__stickerPacks.itervalues():
-                stickerPack.detach(self.__componentIdx, self.__stickerModel)
+            for stickerPackTuple in self.__stickerPacks.itervalues():
+                for stickerPack in stickerPackTuple:
+                    stickerPack.detach(self.__componentIdx, self.__stickerModel)
 
             self.__stickerModel.clear()
             self.__model = None
@@ -111,10 +116,12 @@ class ModelStickers(object):
         return
 
     def updateClanSticker(self):
-        clanStickerPack = self.__stickerPacks[SlotTypes.CLAN]
+        clanStickerPackTuple = self.__stickerPacks[SlotTypes.CLAN]
         if self.__model is not None:
-            clanStickerPack.detach(self.__componentIdx, self.__stickerModel)
-            clanStickerPack.attach(self.__componentIdx, self.__stickerModel, self.__isDamaged)
+            for clanStickerPack in clanStickerPackTuple:
+                clanStickerPack.detach(self.__componentIdx, self.__stickerModel)
+                clanStickerPack.attach(self.__componentIdx, self.__stickerModel, self.__isDamaged)
+
         return
 
     def setAlpha(self, stickersAlpha):
@@ -285,10 +292,9 @@ class InscriptionStickerPack(StickerPack):
             params = self._data[componentIdx]
             slotIdx = len(params)
             item = slot.getItem(slotIdx)
-            if item is not None:
+            stickerParam = None
+            if item and item.itemTypeID == GUI_ITEM_TYPE.INSCRIPTION:
                 stickerParam = self._convertToParams(item)
-            else:
-                stickerParam = None
             params.append(_StickerSlotPair(componentSlot, stickerParam))
             return
 
@@ -301,6 +307,56 @@ class InscriptionStickerPack(StickerPack):
     def _getStickerAttributes(self, slot, sticker):
         stickerAttributes = super(InscriptionStickerPack, self)._getStickerAttributes(slot, sticker)
         return stickerAttributes | StickerAttributes.IS_INSCRIPTION
+
+
+class PersonalNumStickerPack(StickerPack):
+    _ALLOWED_PART_IDX = (TankPartIndexes.HULL, TankPartIndexes.TURRET, TankPartIndexes.GUN)
+
+    def bind(self, componentIdx, componentSlot):
+        if not self._isValidComponentIdx(componentIdx):
+            return
+        else:
+            container = self._outfit.getContainer(componentIdx)
+            slot = container.slotFor(GUI_ITEM_TYPE.PERSONAL_NUMBER)
+            params = self._data[componentIdx]
+            slotIdx = len(params)
+            slotData = slot.getSlotData(slotIdx)
+            stickerParam = None
+            if slotData.component and slotData.item and slotData.item.itemTypeID == GUI_ITEM_TYPE.PERSONAL_NUMBER:
+                stickerParam = self._convertToParams(slotData)
+            params.append(_StickerSlotPair(componentSlot, stickerParam))
+            return
+
+    def _convertToParams(self, slotData):
+        return _PersonalNumberTexParams(textureName=slotData.item.fontInfo.texture, textureMap=slotData.item.fontInfo.alphabet, text=slotData.component.number, fontMask=slotData.item.fontInfo.mask)
+
+    def _getStickerSize(self, slot):
+        return (slot.size, slot.size * 0.5)
+
+    def attach(self, componentIdx, stickerModel, isDamaged):
+        if not self._isValidComponentIdx(componentIdx):
+            return
+        params = self._data[componentIdx]
+        for idx, param in enumerate(params):
+            slot, sticker = param
+            if not sticker or slot.hideIfDamaged and isDamaged:
+                continue
+            texName, texMap, text, fontMask = sticker
+            if texName == '' and not self._useTexture():
+                continue
+            sizes = self._getStickerSize(slot)
+            handle = stickerModel.addCounterSticker((texName,
+             texMap,
+             text,
+             slot.rayStart,
+             slot.rayEnd,
+             sizes,
+             slot.rayUp,
+             fontMask,
+             1,
+             3,
+             True))
+            self._handles[componentIdx][idx] = handle
 
 
 class ClanStickerPack(StickerPack):
@@ -418,8 +474,17 @@ class InsigniaStickerPack(StickerPack):
                 continue
             size = self._getStickerSize(slot)
             value = _INSIGNIA_LETTER * self._insigniaRank
-            mirrored = sticker.mirror and slot.isMirrored
-            handle = stickerModel.addCounterSticker(sticker.atlas, sticker.alphabet, value, slot.rayStart, slot.rayEnd, size, slot.rayUp, mirrored)
+            handle = stickerModel.addCounterSticker((sticker.atlas,
+             sticker.alphabet,
+             value,
+             slot.rayStart,
+             slot.rayEnd,
+             size,
+             slot.rayUp,
+             '',
+             1,
+             3,
+             True))
             self._handles[componentIdx][idx] = handle
 
     def _isValidComponentIdx(self, componentIdx):
@@ -453,10 +518,11 @@ class InsigniaStickerPack(StickerPack):
 class VehicleStickers(object):
 
     def setClanID(self, clanID):
-        clanStickerPack = self.__stickerPacks[SlotTypes.CLAN]
-        if clanStickerPack.setClanId(clanID):
-            for componentStickers in self.__stickers.itervalues():
-                componentStickers.stickers.updateClanSticker()
+        clanStickerPackTuple = self.__stickerPacks[SlotTypes.CLAN]
+        for clanStickerPack in clanStickerPackTuple:
+            if clanStickerPack.setClanId(clanID):
+                for componentStickers in self.__stickers.itervalues():
+                    componentStickers.stickers.updateClanSticker()
 
     def __setAlpha(self, alpha):
         multipliedAlpha = alpha * self.__defaultAlpha
@@ -490,18 +556,13 @@ class VehicleStickers(object):
          (TankPartNames.TURRET if self.__showEmblemsOnGun else TankPartNames.GUN, []),
          ('gunInsignia', vehicleDesc.gun.emblemSlots))
         insignias = InsigniaStickerPack(vehicleDesc, outfit, insigniaRank)
-        self.__stickerPacks = {SlotTypes.PLAYER: EmblemStickerPack(vehicleDesc, outfit),
-         SlotTypes.FIXED_EMBLEM: FixedEmblemStickerPack(vehicleDesc, outfit),
-         SlotTypes.INSCRIPTION: InscriptionStickerPack(vehicleDesc, outfit),
-         SlotTypes.FIXED_INSCRIPTION: FixedInscriptionStickerPack(vehicleDesc, outfit),
-         SlotTypes.INSIGNIA: insignias,
-         SlotTypes.INSIGNIA_ON_GUN: insignias,
-         SlotTypes.CLAN: ClanStickerPack(vehicleDesc)}
-        if vehicleDesc.chassis.generalWheelsAnimatorConfig:
-            for wheelNodeName in vehicleDesc.chassis.generalWheelsAnimatorConfig.getWheelNodeNames(True):
-                componentSlots = componentSlots + ((wheelNodeName, []),)
-                self.__componentNames.append((wheelNodeName, wheelNodeName))
-
+        self.__stickerPacks = {SlotTypes.PLAYER: (EmblemStickerPack(vehicleDesc, outfit),),
+         SlotTypes.FIXED_EMBLEM: (FixedEmblemStickerPack(vehicleDesc, outfit),),
+         SlotTypes.INSCRIPTION: (InscriptionStickerPack(vehicleDesc, outfit), PersonalNumStickerPack(vehicleDesc, outfit)),
+         SlotTypes.FIXED_INSCRIPTION: (FixedInscriptionStickerPack(vehicleDesc, outfit),),
+         SlotTypes.INSIGNIA: (insignias,),
+         SlotTypes.INSIGNIA_ON_GUN: (insignias,),
+         SlotTypes.CLAN: (ClanStickerPack(vehicleDesc),)}
         self.__stickers = {}
         for componentName, emblemSlots in componentSlots:
             componentIdx = TankPartNames.getIdx(componentName)

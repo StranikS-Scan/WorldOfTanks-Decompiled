@@ -10,7 +10,7 @@ from gui.shared.items_parameters import params, RELATIVE_PARAMS, MAX_RELATIVE_VA
 from gui.shared.items_parameters.comparator import VehiclesComparator, ItemsComparator
 from gui.shared.items_parameters.functions import getBasicShell
 from gui.shared.items_parameters.params_cache import g_paramsCache
-from gui.shared.utils import AUTO_RELOAD_PROP_NAME, MAX_STEERING_LOCK_ANGLE, WHEELED_SWITCH_ON_TIME, WHEELED_SWITCH_OFF_TIME
+from gui.shared.utils import AUTO_RELOAD_PROP_NAME, MAX_STEERING_LOCK_ANGLE, WHEELED_SWITCH_ON_TIME, WHEELED_SWITCH_OFF_TIME, WHEELED_SPEED_MODE_SPEED
 from helpers import dependency
 from items import vehicles, ITEM_TYPES
 from shared_utils import findFirst, first
@@ -45,6 +45,7 @@ RELATIVE_MOBILITY_PARAMS = ('vehicleWeight',
  'enginePower',
  'enginePowerPerTon',
  'speedLimits',
+ WHEELED_SPEED_MODE_SPEED,
  'chassisRotationSpeed',
  MAX_STEERING_LOCK_ANGLE,
  'switchOnTime',

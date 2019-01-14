@@ -13,20 +13,6 @@ _WHITESPACE_RE = re.compile('\\s+')
 _COLOR_TAG_OPEN = '{colorTagOpen}'
 _COLOR_TAG_CLOSE = '{colorTagClose}'
 
-def _strsanitize(s):
-    if not isinstance(s, unicode):
-        s = s.decode('utf-8')
-    s = s.replace(u'\r\n', ' ').replace(u'\n', ' ').replace(u'\t', ' ').replace(u'\\', '\\u005c').replace(u'"', '\\u0022').replace(u'`', '\\u0060').encode('utf-8')
-    return _WHITESPACE_RE.sub(s, ' ')
-
-
-def _pathsanitize(s):
-    s = s or ''
-    if s.startswith('..'):
-        s = 'gui' + s[2:]
-    return s
-
-
 def _formatPrice(itemPrice):
     if itemPrice.isActionPrice():
         price = itemPrice.defPrice.toDict()
@@ -66,9 +52,9 @@ def _formatTechName(value):
 
 
 def _formatImagePaths(item):
-    return {'small': _pathsanitize(item.getShopIcon(size=STORE_CONSTANTS.ICON_SIZE_SMALL)),
-     'medium': _pathsanitize(item.getShopIcon(size=STORE_CONSTANTS.ICON_SIZE_MEDIUM)),
-     'large': _pathsanitize(item.getShopIcon(size=STORE_CONSTANTS.ICON_SIZE_LARGE))}
+    return {'small': item.getShopIcon(size=STORE_CONSTANTS.ICON_SIZE_SMALL),
+     'medium': item.getShopIcon(size=STORE_CONSTANTS.ICON_SIZE_MEDIUM),
+     'large': item.getShopIcon(size=STORE_CONSTANTS.ICON_SIZE_LARGE)}
 
 
 def _formatVehicleRestore(item):
@@ -88,14 +74,14 @@ def _formatVehicleRestore(item):
 
 Field = namedtuple('Field', ('name', 'getter'))
 idField = Field('id', lambda i: i.intCD)
-nameField = Field('name', lambda i: _strsanitize(i.userName))
+nameField = Field('name', lambda i: i.userName)
 nationField = Field('nation', lambda i: i.nationName)
-nationNameField = Field('nationName', lambda i: _strsanitize(i.nationUserName))
+nationNameField = Field('nationName', lambda i: i.nationUserName)
 typeField = Field('type', lambda i: i.type)
-typeNameField = Field('typeName', lambda i: _strsanitize(i.typeUserName))
-descriptionField = Field('description', lambda i: _strsanitize(i.fullDescription))
-shortDescriptionSpecialField = Field('shortDescriptionSpecial', lambda i: _strsanitize(i.shortDescriptionSpecial))
-longDescriptionSpecialField = Field('longDescriptionSpecial', lambda i: _strsanitize(i.longDescriptionSpecial))
+typeNameField = Field('typeName', lambda i: i.typeUserName)
+descriptionField = Field('description', lambda i: i.fullDescription)
+shortDescriptionSpecialField = Field('shortDescriptionSpecial', lambda i: i.shortDescriptionSpecial)
+longDescriptionSpecialField = Field('longDescriptionSpecial', lambda i: i.longDescriptionSpecial)
 inventoryCountField = Field('inventoryCount', lambda i: i.inventoryCount)
 buyPriceField = Field('buyPrice', lambda i: _formatPrice(i.buyPrices.itemPrice))
 sellPriceField = Field('sellPrice', lambda i: _formatPrice(i.sellPrices.itemPrice))
@@ -129,27 +115,21 @@ def makeActionFormatter():
     fields = [Field('id', lambda actionInfo: actionInfo.getID()),
      Field('startDate', lambda actionInfo: time_utils.timestampToISO(actionInfo.getExactStartTime())),
      Field('endDate', lambda actionInfo: time_utils.timestampToISO(actionInfo.getExactFinishTime())),
-     Field('name', lambda actionInfo: _strsanitize(actionInfo.getTitle())),
-     Field('description', lambda actionInfo: _strsanitize(actionInfo.event.getDescription())),
+     Field('name', lambda actionInfo: actionInfo.getTitle()),
+     Field('description', lambda actionInfo: actionInfo.event.getDescription()),
      Field('triggerChainID', lambda actionInfo: actionInfo.getTriggerChainID()),
      Field('type', lambda actionInfo: actionInfo.discount.getName()),
      Field('params', _formatActionParams)]
     return Formatter(fields)
 
 
-@dependency.replace_none_kwargs(itemsCache=IItemsCache)
-def makeVehicleFormatter(includeInventoryFields=False, itemsCache=None):
+def makeVehicleFormatter(includeInventoryFields=False):
     isPremiumField = Field('isPremium', lambda i: i.isPremium)
     levelField = Field('level', lambda i: i.level)
     isUnlockedField = Field('isUnlocked', lambda i: i.isUnlocked)
-    shortName = Field('shortName', lambda i: _strsanitize(i.shortUserName))
+    shortName = Field('shortName', lambda i: i.shortUserName)
     restore = Field('restore', _formatVehicleRestore)
-
-    def isTradeInAvailable(vehicle):
-        tradeIn = itemsCache.items.shop.tradeIn
-        return tradeIn.isEnabled and vehicle.level in tradeIn.allowedVehicleLevels and vehicle.intCD not in tradeIn.forbiddenVehicles
-
-    isTradeInAvailableField = Field('isTradeInAvailable', isTradeInAvailable)
+    isTradeInAvailableField = Field('isTradeInAvailable', lambda i: i.canTradeIn)
     fields = [idField,
      nameField,
      shortName,
@@ -214,7 +194,7 @@ def makeDeviceFormatter(compatVehGetter=None, fittedVehGetter=None, itemsCache=N
 def makeEquipmentFormatter(fittedVehGetter=None):
     fields = list(_vehicleArtifactsFieldSet)
     fields.remove(descriptionField)
-    fields.extend([Field('cooldown', lambda i: i.descriptor.cooldownSeconds), Field('nations', lambda i: [ nations.NAMES[i] for i in sorted(i.descriptor.compatibleNations()) ]), Field('description', lambda i: _strsanitize(i.descriptor.description))])
+    fields.extend([Field('cooldown', lambda i: i.descriptor.cooldownSeconds), Field('nations', lambda i: [ nations.NAMES[i] for i in sorted(i.descriptor.compatibleNations()) ]), Field('description', lambda i: i.descriptor.description)])
     if fittedVehGetter:
         fields.append(Field('fittedVehicles', lambda i: fittedVehGetter(i.intCD)))
     return Formatter(fields)
@@ -241,13 +221,13 @@ def makeBattleBoosterFormatter(fittedVehGetter=None):
                 key = ITEM_TYPES.TANKMAN_SKILLS_TYPE_SKILL_SHORT
         else:
             key = ITEM_TYPES.OPTIONALDEVICE_NAME
-        return _strsanitize(i18n.makeString(key))
+        return i18n.makeString(key)
 
     def formatBoosterDescription(i):
-        return _strsanitize(i.getCrewBoosterDescription(False)) if i.isCrewBooster() else _strsanitize(i.getOptDeviceBoosterDescription(vehicle=None, valueFormatter=_formatValueToColorTag))
+        return i.getCrewBoosterDescription(False) if i.isCrewBooster() else i.getOptDeviceBoosterDescription(vehicle=None, valueFormatter=_formatValueToColorTag)
 
     fields.extend([Field('affectedSkill', formatAffectedSkill),
-     Field('affectedSkillName', lambda i: _strsanitize(i.getAffectedSkillUserName())),
+     Field('affectedSkillName', lambda i: i.getAffectedSkillUserName()),
      Field('boosterType', formatBoosterType),
      Field('boosterTypeName', formatBoosterTypeName),
      Field('description', formatBoosterDescription)])
@@ -260,7 +240,7 @@ def makeBoosterFormatter():
     fields = [Field('id', lambda booster: booster.boosterID),
      Field('inventoryCount', lambda booster: booster.count),
      Field('kpi', lambda booster: _formatKPI(booster.kpi)),
-     Field('description', lambda booster: _strsanitize(booster.getBonusDescription(valueFormatter=_formatValueToColorTag))),
+     Field('description', lambda booster: booster.getBonusDescription(valueFormatter=_formatValueToColorTag)),
      shortDescriptionSpecialField,
      longDescriptionSpecialField,
      Field('duration', lambda booster: booster.effectTime),
@@ -273,8 +253,8 @@ def makeBoosterFormatter():
 
 def makeModuleFormatter():
     fields = [idField,
-     Field('name', lambda i: _strsanitize(i.longUserName)),
-     Field('type', lambda i: _strsanitize(i.descriptor.itemTypeName)),
+     Field('name', lambda i: i.longUserName),
+     Field('type', lambda i: i.descriptor.itemTypeName),
      techNameField,
      nationField,
      buyPriceField,

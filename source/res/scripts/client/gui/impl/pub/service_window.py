@@ -1,26 +1,11 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/pub/service_window.py
-from frameworks.wulf import Window, WindowFlags
-from gui.impl.gen.view_models.windows.window_model import WindowModel
+from frameworks.wulf import WindowFlags
+from gui.impl.pub.window_impl import WindowImpl
 from gui.impl.pub.window_view import WindowView
 
-class ServiceWindow(Window):
+class ServiceWindow(WindowImpl):
     __slots__ = ()
 
-    def __init__(self, content=None, parent=None):
-        super(ServiceWindow, self).__init__(wndFlags=WindowFlags.SERVICE_WINDOW | WindowFlags.RESIZABLE, decorator=WindowView(), content=content, parent=parent)
-
-    @property
-    def windowModel(self):
-        return super(ServiceWindow, self)._getDecoratorViewModel()
-
-    def _initialize(self):
-        super(ServiceWindow, self)._initialize()
-        self.windowModel.onClosed += self._onClosed
-
-    def _finalize(self):
-        self.windowModel.onClosed -= self._onClosed
-        super(ServiceWindow, self)._finalize()
-
-    def _onClosed(self, _=None):
-        self.destroy()
+    def __init__(self, content=None, parent=None, areaID=0):
+        super(ServiceWindow, self).__init__(wndFlags=WindowFlags.SERVICE_WINDOW | WindowFlags.RESIZABLE, decorator=WindowView(), content=content, parent=parent, areaID=areaID)

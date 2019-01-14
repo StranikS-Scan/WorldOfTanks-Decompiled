@@ -10,7 +10,7 @@ from gui.battle_results.reusable import shared
 from helpers.bots import preprocessBotName
 
 class CommonInfo(shared.UnpackedInfo):
-    __slots__ = ('__arenaTypeID', '__winnerTeam', '__finishReason', '__arenaVisitor', '__bots')
+    __slots__ = ('__arenaTypeID', '__winnerTeam', '__finishReason', '__arenaVisitor', '__bots', '__extCommon')
 
     def __init__(self, arenaTypeID=0, guiType=ARENA_GUI_TYPE.UNKNOWN, bonusType=ARENA_BONUS_TYPE.UNKNOWN, winnerTeam=0, finishReason=FINISH_REASON.UNKNOWN, bots=None, **kwargs):
         super(CommonInfo, self).__init__()
@@ -18,6 +18,7 @@ class CommonInfo(shared.UnpackedInfo):
         self.__winnerTeam = winnerTeam
         self.__finishReason = finishReason
         self.__bots = defaultdict()
+        self.__extCommon = kwargs.get('extCommon', {})
         if bots is not None:
             for info in bots.iteritems():
                 if len(info) > 1:
@@ -68,6 +69,10 @@ class CommonInfo(shared.UnpackedInfo):
     @property
     def isMultiTeamMode(self):
         return self.__arenaVisitor.gui.isMultiTeam()
+
+    @property
+    def extCommon(self):
+        return self.__extCommon
 
     def isSquadSupported(self):
         return self.__arenaVisitor.bonus.isSquadSupported()

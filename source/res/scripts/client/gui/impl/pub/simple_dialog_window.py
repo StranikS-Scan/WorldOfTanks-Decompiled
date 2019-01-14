@@ -7,7 +7,7 @@ from gui.impl.pub.dialog_window import DialogWindow, DialogShine, DialogContent
 class SimpleDialogWindow(DialogWindow):
 
     def __init__(self, parent=None, shine=DialogShine.NORMAL):
-        super(SimpleDialogWindow, self).__init__(content=DialogContent(R.views.simpleDialogContent, SimpleDialogWindowModel), parent=parent)
+        super(SimpleDialogWindow, self).__init__(content=DialogContent(R.views.simpleDialogContent(), SimpleDialogWindowModel), parent=parent)
         self._setBackgroundShine(shine)
 
     @property

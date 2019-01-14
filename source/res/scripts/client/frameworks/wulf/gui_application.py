@@ -1,14 +1,16 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/frameworks/wulf/gui_application.py
+import typing
+from .py_object_wrappers import PyGuiApplication
 from .resource_manager import ResourceManager
 from .windows_system.windows_manager import WindowsManager
 
 class GuiApplication(object):
     __slots__ = ('__impl', '__windowsManager', '__resourceManager')
 
-    def __init__(self, impl):
+    def __init__(self):
         super(GuiApplication, self).__init__()
-        self.__impl = impl
+        self.__impl = PyGuiApplication()
         self.__windowsManager = None
         self.__resourceManager = None
         return

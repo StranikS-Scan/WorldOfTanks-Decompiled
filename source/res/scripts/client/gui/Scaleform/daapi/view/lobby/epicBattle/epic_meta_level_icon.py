@@ -3,6 +3,7 @@
 from collections import namedtuple
 from helpers import int2roman
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
+from epic_prestige_progress import getBlockBackgroundIndexForPrestigeLevel
 _FOREGROUND_TO_META_LEVEL = {None: [1],
  1: range(2, 6),
  2: range(6, 11),
@@ -38,4 +39,4 @@ def _getEpicMetaIconBackground(prestigeLevel, size=EPIC_META_LEVEL_ICON_SIZE.SMA
 
 
 def _getEpicMetaIconForeground(prestigeLevel, metaLevel, size=EPIC_META_LEVEL_ICON_SIZE.SMALL):
-    return None if metaLevel < 2 else RES_ICONS.getPrestigeLevelForeground(size, '', _getForegroundIndexForMetaLevel(metaLevel))
+    return None if metaLevel < 2 else RES_ICONS.getPrestigeLevelForeground(size, getBlockBackgroundIndexForPrestigeLevel(prestigeLevel), _getForegroundIndexForMetaLevel(metaLevel))

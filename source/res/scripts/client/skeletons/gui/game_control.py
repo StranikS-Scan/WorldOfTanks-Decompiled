@@ -256,8 +256,6 @@ class ISoundEventChecker(IGameController):
 class IHeroTankController(IGameController):
     onUpdated = None
     onInteractive = None
-    onHeroTankChanged = None
-    onHeroTankBought = None
 
     def getRandomTankCD(self):
         raise NotImplementedError
@@ -272,15 +270,6 @@ class IHeroTankController(IGameController):
         raise NotImplementedError
 
     def getCurrentRelatedURL(self):
-        raise NotImplementedError
-
-    def isOverloaded(self):
-        raise NotImplementedError
-
-    def setEffectPlayedTime(self):
-        raise NotImplementedError
-
-    def mustShow(self):
         raise NotImplementedError
 
 
@@ -815,7 +804,7 @@ class IMarathonEventsController(IGameController):
         raise NotImplementedError
 
 
-class IEpicBattleMetaGameController(IGameController):
+class IEpicBattleMetaGameController(IGameController, ISeasonProvider):
     onUpdated = None
     onPrimeTimeStatusUpdated = None
 
@@ -837,9 +826,6 @@ class IEpicBattleMetaGameController(IGameController):
     def getPrimeTimes(self):
         raise NotImplementedError
 
-    def hasAnySeason(self):
-        raise NotImplementedError
-
     def getPrimeTimeStatus(self, peripheryID=None):
         raise NotImplementedError
 
@@ -853,6 +839,9 @@ class IEpicBattleMetaGameController(IGameController):
         raise NotImplementedError
 
     def getPlayerLevelInfo(self):
+        raise NotImplementedError
+
+    def getSeasonData(self):
         raise NotImplementedError
 
     def getSkillPoints(self):
@@ -876,7 +865,7 @@ class IEpicBattleMetaGameController(IGameController):
     def getAllUnlockedSkillLevelsBySkillId(self):
         raise NotImplementedError
 
-    def getSeasonEndTime(self):
+    def getCurrentCycleInfo(self):
         raise NotImplementedError
 
     def hasSuitableVehicles(self):
@@ -886,6 +875,9 @@ class IEpicBattleMetaGameController(IGameController):
         raise NotImplementedError
 
     def hasAvailablePrimeTimeServers(self):
+        raise NotImplementedError
+
+    def isWelcomeScreenUpToDate(self, serverSettings):
         raise NotImplementedError
 
 
@@ -906,10 +898,7 @@ class IManualController(IGameController):
 
 class ICalendarController(IGameController):
 
-    def showCalendar(self, invokedFrom=''):
-        raise NotImplementedError
-
-    def mustShow(self):
+    def showCalendar(self, invokedFrom):
         raise NotImplementedError
 
 
@@ -920,10 +909,4 @@ class IFestivityController(IGameController):
         raise NotImplementedError
 
     def getHangarQuestsFlagData(self):
-        raise NotImplementedError
-
-    def getHangarWidgetLinkage(self):
-        raise NotImplementedError
-
-    def getHangarEdgeColor(self):
         raise NotImplementedError

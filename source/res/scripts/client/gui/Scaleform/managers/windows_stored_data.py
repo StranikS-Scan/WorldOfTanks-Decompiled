@@ -1,14 +1,15 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/managers/windows_stored_data.py
+import logging
 from collections import namedtuple, defaultdict
 import functools
 import types
-from debug_utils import LOG_ERROR, LOG_WARNING, LOG_DEBUG
 from gui.Scaleform.daapi.view.meta.WindowViewMeta import WindowViewMeta
 from gui.doc_loaders.WindowsStoredDataLoader import WindowsStoredDataLoader
 from messenger.ext.channel_num_gen import isClientIDValid
 from soft_exception import SoftException
 WindowGeometry = namedtuple('WindowGeometry', ('x', 'y', 'width', 'height'))
+_logger = logging.getLogger(__name__)
 
 class DATA_TYPE(object):
     UNIQUE_WINDOW = 1
@@ -91,7 +92,7 @@ class stored_window(object):
             clazz._dispose = wrapDispose(clazz._dispose)
             clazz.__stored_window__ = True
         else:
-            LOG_WARNING('Class already wrapped', clazz)
+            _logger.warning('Class already wrapped: %r', clazz)
         return clazz
 
 
@@ -143,7 +144,7 @@ class UniqueWindowStoredData(WindowStoredData):
     def __init__(self, name, *args):
         super(UniqueWindowStoredData, self).__init__(*args)
         if type(name) not in types.StringTypes:
-            LOG_WARNING('Unique name must be string. It is ignored', name)
+            _logger.warning('Unique name must be string. It is ignored: %r', name)
             name = ''
             self._trusted = False
         self._uniqueName = name
@@ -189,7 +190,7 @@ class CarouselWindowStoredData(WindowStoredData):
         if getter and callable(getter):
             clientID = getter()
         else:
-            LOG_ERROR('Can not get clientID', window)
+            _logger.error('Can not get clientID: %r', window)
             return
         return CarouselWindowStoredData(clientID)
 
@@ -232,13 +233,13 @@ class ChannelWindowStoredData(WindowStoredData):
         if getter and callable(getter):
             protoType = getter()
         else:
-            LOG_ERROR('Can not get protoType', window)
+            _logger.error('Can not get protoType: %r', window)
             return
         getter = getattr(window, 'getChannelID', None)
         if getter and callable(getter):
             channelID = getter()
         else:
-            LOG_ERROR('Can not get protoType', window)
+            _logger.error('Can not get channelID: %r', window)
             return
         return ChannelWindowStoredData(protoType, channelID)
 
@@ -292,25 +293,25 @@ class _WindowsStoredDataManager(object):
         self.__targetMask = mask & TARGET_ID.ALL
         for record in records:
             if len(record) < 2:
-                LOG_ERROR('Invalid record', record)
+                _logger.error('Invalid record: %r', record)
                 continue
             targetID, dataType = record[:2]
             if not targetID & TARGET_ID.ALL:
-                LOG_ERROR('Invalid target ID', record)
+                _logger.error('Invalid target ID: %r', record)
                 continue
             if not self.isTargetEnabled(targetID):
-                LOG_WARNING('Target is not enabled. Records are ignored to load', self.__targetMask, record)
+                _logger.warning('Target is not enabled. Records are ignored to load: %r, %r', self.__targetMask, record)
                 continue
             if dataType not in DATA_TYPE.RANGE:
-                LOG_ERROR('Invalid data type', record)
+                _logger.error('Invalid data type: %r', record)
                 continue
             if dataType not in self.__supported:
-                LOG_ERROR('Data type is not supported', dataType)
+                _logger.error('Data type is not supported: %r', dataType)
                 continue
             try:
                 self.__storedData[targetID].append(self.__supported[dataType](*record[2:]))
             except TypeError:
-                LOG_ERROR('Invalid record', record)
+                _logger.error('Invalid record: %r', record)
 
     def stop(self):
         if not self.__isStarted:
@@ -320,11 +321,11 @@ class _WindowsStoredDataManager(object):
             records = []
             for targetID, windowsData in self.__storedData.iteritems():
                 if not self.__targetMask & targetID and windowsData:
-                    LOG_WARNING('Target is not enabled. Records are ignored to flush', targetID, self.__targetMask)
+                    _logger.warning('Target is not enabled. Records are ignored to flush: %r, %r', targetID, self.__targetMask)
                     continue
                 for data in windowsData:
                     if not data.isTrusted():
-                        LOG_DEBUG('Data is not trusted. It do not write to file', data)
+                        _logger.debug('Data is not trusted. It do not write to file: %r', data)
                         continue
                     record = data.pack()
                     if record is None:
@@ -361,7 +362,7 @@ class _WindowsStoredDataManager(object):
         if not self.isTargetEnabled(targetID):
             return
         elif dataType not in self.__supported:
-            LOG_ERROR('Data type is not supported', dataType)
+            _logger.error('Data type is not supported: %r', dataType)
             return
         else:
             clazz = self.__supported[dataType]

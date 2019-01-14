@@ -8,8 +8,8 @@
         <postBattle>
           <and>
             <vehicleDamage>
-              <classes>	AT-SPG	</classes>
-              <greaterOrEqual>	3000	</greaterOrEqual>
+              <classes>	AT-SPG heavyTank	</classes>
+              <greaterOrEqual>	3500	</greaterOrEqual>
             </vehicleDamage>
           </and>
         </postBattle>
@@ -112,12 +112,12 @@
         <postBattle>
           <and>
             <vehicleDamage>
-              <classes>	AT-SPG	</classes>
-              <greaterOrEqual>	3000	</greaterOrEqual>
+              <classes>	AT-SPG heavyTank	</classes>
+              <greaterOrEqual>	3500	</greaterOrEqual>
             </vehicleDamage>
             <results>
               <key>	damaged	</key>
-              <greaterOrEqual>	7	</greaterOrEqual>
+              <greaterOrEqual>	6	</greaterOrEqual>
             </results>
             <win></win>
           </and>
@@ -146,12 +146,12 @@
         <postBattle>
           <and>
             <vehicleDamage>
-              <classes>	AT-SPG	</classes>
-              <greaterOrEqual>	3000	</greaterOrEqual>
+              <classes>	AT-SPG heavyTank	</classes>
+              <greaterOrEqual>	3500	</greaterOrEqual>
             </vehicleDamage>
             <results>
               <key>	damaged	</key>
-              <greaterOrEqual>	7	</greaterOrEqual>
+              <greaterOrEqual>	6	</greaterOrEqual>
             </results>
             <win></win>
           </and>

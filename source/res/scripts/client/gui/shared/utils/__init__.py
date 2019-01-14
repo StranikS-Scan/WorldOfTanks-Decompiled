@@ -37,6 +37,7 @@ MAX_STEERING_LOCK_ANGLE = 'maxSteeringLockAngle'
 WHEELED_SWITCH_ON_TIME = 'wheeledSwitchOnTime'
 WHEELED_SWITCH_OFF_TIME = 'wheeledSwitchOffTime'
 WHEELED_SWITCH_TIME = 'wheeledSwitchTime'
+WHEELED_SPEED_MODE_SPEED = 'wheeledSpeedModeSpeed'
 GUN_RELOADING_TYPE = 'gunReloadingType'
 GUN_CAN_BE_CLIP = 1
 GUN_CLIP = 2

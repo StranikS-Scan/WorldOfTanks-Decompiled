@@ -54,18 +54,6 @@ class ICustomizationService(object):
     def getCamouflages(self, vehicle=None, criteria=None):
         raise NotImplementedError
 
-    def getModifications(self, vehicle=None, criteria=None):
-        raise NotImplementedError
-
-    def getDecals(self, vehicle=None, criteria=None):
-        raise NotImplementedError
-
-    def getEmblems(self, vehicle=None, criteria=None):
-        raise NotImplementedError
-
-    def getInscriptions(self, vehicle=None, criteria=None):
-        raise NotImplementedError
-
     def getStyles(self, vehicle=None, criteria=None):
         raise NotImplementedError
 
@@ -96,7 +84,7 @@ class ICustomizationService(object):
     def isRegionSelected(self):
         raise NotImplementedError
 
-    def buyItems(self, items, vehicle=None):
+    def buyItems(self, item, count, vehicle=None):
         raise NotImplementedError
 
     def sellItem(self, item, count, vehicle=None):

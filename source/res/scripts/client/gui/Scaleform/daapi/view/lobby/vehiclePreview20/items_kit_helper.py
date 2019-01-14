@@ -2,6 +2,8 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/vehiclePreview20/items_kit_helper.py
 import itertools
 from collections import Container
+from gui.Scaleform.daapi.view.lobby.storage.storage_helpers import getBoosterType
+from gui.Scaleform.genConsts.SLOT_HIGHLIGHT_TYPES import SLOT_HIGHLIGHT_TYPES
 from gui.Scaleform.locale.COMMON import COMMON
 from gui.Scaleform.locale.QUESTS import QUESTS
 from gui.Scaleform.locale.RES_SHOP import RES_SHOP
@@ -272,17 +274,20 @@ def _createItemVO(rawItem, itemsCache, goodiesCache, slotIndex, rawTooltipData=N
     if rawItem == _BOX_ITEM:
         cd = 0
         icon = RES_ICONS.MAPS_ICONS_RANKEDBATTLES_BOXES_48X48_METAL_1
+        overlay = SLOT_HIGHLIGHT_TYPES.NO_HIGHLIGHT
         count = 0
     else:
         fittingItem = lookupItem(rawItem, itemsCache, goodiesCache)
         cd = fittingItem.intCD if fittingItem is not None else rawItem.id
         icon = getItemIcon(rawItem, fittingItem)
+        overlay = getBoosterType(fittingItem)
         if rawItem.type in _UNCOUNTABLE_ITEM_TYPE:
             count = 1
         else:
             count = rawItem.count
     return {'id': str(cd),
      'icon': icon,
+     'overlayType': overlay,
      'type': rawItem.type if rawItem is not None else BOX_TYPE,
      'iconAlt': RES_ICONS.MAPS_ICONS_ARTEFACT_NOTFOUND,
      'slotIndex': slotIndex,
@@ -299,10 +304,12 @@ def _getBoxTooltipVO(rawItems, itemsCache, goodiesCache):
             icon = RES_ICONS.getBonusIcon('small', fittingItem.itemTypeName)
         else:
             icon = getItemIcon(rawItem, fittingItem)
+        overlay = getBoosterType(fittingItem)
         items.append({'id': rawItem.id,
          'type': rawItem.type,
          'count': str(rawItem.count) if rawItem.type not in _UNCOUNTABLE_ITEM_TYPE else '',
          'icon': icon,
+         'overlay': overlay,
          'desc': getItemTitle(rawItem, fittingItem, forBox=True)})
 
     vo = {'icon': RES_ICONS.MAPS_ICONS_RANKEDBATTLES_BOXES_48X48_METAL_1,

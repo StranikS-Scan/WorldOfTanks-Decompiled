@@ -50,36 +50,35 @@ class RankedBattlesView(LobbySubView, RankedBattlesViewMeta):
 
     def _populate(self):
         super(RankedBattlesView, self)._populate()
-        self.rankedController.onUpdated += self.__updateData
-        self.__setData(None)
-        self.__updateData()
-        return
-
-    def _dispose(self):
-        self.rankedController.onUpdated -= self.__updateData
-        super(RankedBattlesView, self)._dispose()
-
-    def __setData(self, leagueData):
+        self.rankedController.onUpdated += self.__onRankedDataUpdated
         self.as_setDataS({'header': text_styles.superPromoTitle(RANKED_BATTLES.RANKEDBATTLEVIEW_TITLE),
          'closeLbl': RANKED_BATTLES.RANKEDBATTLEVIEW_CLOSEBTN,
          'closeDescr': RANKED_BATTLES.RANKEDBATTLEVIEW_CLOSEBTNDESCR,
-         'playVideoLbl': RANKED_BATTLES.RANKEDBATTLEVIEW_PLAYVIDEOBTN,
-         'playVideoBtnEnabled': False,
-         'calendarStatus': self.__getStatusBlock(),
-         'progressBlock': self.__buildProgressData(),
-         'awardsBlock': self.__getAwardsBlock(leagueData),
-         'bgImgPath': RES_ICONS.MAPS_ICONS_RANKEDBATTLES_BG_RANK_BLUR,
-         'isUpdateProgress': False})
+         'bgImgPath': RES_ICONS.MAPS_ICONS_RANKEDBATTLES_BG_RANK_BLUR})
+        self.__setLeagueAwards(None)
+        self.__requestLeagueData()
+        self.__setRankedData()
+        return
+
+    def _dispose(self):
+        self.rankedController.onUpdated -= self.__onRankedDataUpdated
+        super(RankedBattlesView, self)._dispose()
 
     @process
-    def __updateData(self):
-        result = yield self.rankedController.getLeagueData()
+    def __requestLeagueData(self):
+        leagueData = yield self.rankedController.getLeagueData()
         if not self.isDisposed():
-            self.__setData(result)
+            self.__setLeagueAwards(leagueData)
 
-    def __updateProgress(self):
-        self.as_setDataS({'progressBlock': self.__buildProgressData(),
-         'isUpdateProgress': True})
+    def __setLeagueAwards(self, leagueData):
+        self.as_setLeagueDataS(self.__getAwardsBlock(leagueData))
+
+    def __setRankedData(self):
+        self.as_setRankedDataS(self.__getStatusBlock(), self.__buildProgressData())
+
+    def __onRankedDataUpdated(self):
+        self.__requestLeagueData()
+        self.__setRankedData()
 
     def __close(self):
         self.fireEvent(events.LoadViewEvent(VIEW_ALIAS.LOBBY_HANGAR), scope=EVENT_BUS_SCOPE.LOBBY)

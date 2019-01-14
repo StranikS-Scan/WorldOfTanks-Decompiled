@@ -126,7 +126,7 @@ class PanzerAssemblerWWISE(_CompoundAssembler):
         model_assembler.assembleHullAimingController(appearance)
         appearance.trackNodesAnimator = model_assembler.createTrackNodesAnimator(appearance.compoundModel, appearance.typeDescriptor, appearance.wheelsAnimator, lodStateLink)
         model_assembler.assembleVehicleTraces(appearance, appearance.filter, lodStateLink)
-        model_assembler.assembleTracks(resourceRefs, appearance.typeDescriptor, appearance, appearance.splineTracks, False, False, lodStateLink)
+        model_assembler.assembleTracks(resourceRefs, appearance.typeDescriptor, appearance, appearance.splineTracks, False, lodStateLink)
         return
 
     def _assembleParts(self, isPlayer, appearance, resourceRefs):

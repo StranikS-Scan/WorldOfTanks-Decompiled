@@ -4,9 +4,6 @@
 
 class IFestivityFactory(object):
 
-    def getDataSyncKey(self):
-        raise NotImplementedError
-
     def getRequester(self):
         raise NotImplementedError
 

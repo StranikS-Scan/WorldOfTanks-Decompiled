@@ -11,7 +11,7 @@ from gui.Scaleform.locale.STORAGE import STORAGE
 from gui.Scaleform.locale.TANK_CAROUSEL_FILTER import TANK_CAROUSEL_FILTER
 from gui.shared import events, EVENT_BUS_SCOPE
 from gui.shared.formatters import text_styles
-from gui.shared.gui_items.Vehicle import VEHICLE_CLASS_NAME
+from gui.shared.gui_items.Vehicle import VEHICLE_TABLE_TYPES_ORDER_INDICES_REVERSED
 from gui.shared.gui_items.Vehicle import getSmallIconPath, getTypeSmallIconPath
 from gui.shared.utils.requesters import REQ_CRITERIA
 from gui.shared.utils import sortByFields
@@ -20,12 +20,6 @@ from helpers import dependency
 from helpers.i18n import makeString as _ms
 from skeletons.gui.shared import IItemsCache
 _SEARCH_INPUT_MAX_CHARS = 50
-VEHICLE_TABLE_TYPES_ORDER = (VEHICLE_CLASS_NAME.LIGHT_TANK,
- VEHICLE_CLASS_NAME.MEDIUM_TANK,
- VEHICLE_CLASS_NAME.HEAVY_TANK,
- VEHICLE_CLASS_NAME.AT_SPG,
- VEHICLE_CLASS_NAME.SPG)
-VEHICLE_TABLE_TYPES_ORDER_INDICES = dict(((n, i) for i, n in enumerate(VEHICLE_TABLE_TYPES_ORDER)))
 
 def _makeVehicleCmpVO(vehicle):
     return {'intCD': vehicle.intCD,
@@ -135,8 +129,8 @@ class VehiclesDataProvider(SortableDAAPIDataProvider):
         self._sort = (('level', False),)
         self.__sortMapping = {'check': lambda v: v['selected'],
          'nations': lambda v: GUI_NATIONS_ORDER_INDEX_REVERSED[nations.NAMES[v['nationID']]],
-         'type': lambda v: VEHICLE_TABLE_TYPES_ORDER_INDICES[v['type']],
-         'level': lambda v: v['level'] << 16 | GUI_NATIONS_ORDER_INDEX_REVERSED[nations.NAMES[v['nationID']]] << 8 | VEHICLE_TABLE_TYPES_ORDER_INDICES[v['type']],
+         'type': lambda v: VEHICLE_TABLE_TYPES_ORDER_INDICES_REVERSED[v['type']],
+         'level': lambda v: v['level'] << 16 | GUI_NATIONS_ORDER_INDEX_REVERSED[nations.NAMES[v['nationID']]] << 8 | VEHICLE_TABLE_TYPES_ORDER_INDICES_REVERSED[v['type']],
          'name': lambda v: v['shortUserName']}
         return
 

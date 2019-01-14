@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/items/artefacts.py
 import math
+import os
 from functools import partial
 from itertools import chain
 import items
@@ -12,11 +13,12 @@ from items.components import shared_components, component_constants
 from tankmen import MAX_SKILL_LEVEL
 
 class Artefact(BasicItem):
-    __slots__ = ('name', 'id', 'compactDescr', 'tags', 'i18n', 'icon', 'removable', 'price', 'showInShop', 'stunResistanceEffect', 'stunResistanceDuration', '_vehWeightFraction', '_weight', '_maxWeightChange', '__vehicleFilter', '__artefactFilter', 'isImproved', 'kpi')
+    __slots__ = ('name', 'id', 'compactDescr', 'tags', 'i18n', 'icon', 'removable', 'price', 'showInShop', 'stunResistanceEffect', 'stunResistanceDuration', '_vehWeightFraction', '_weight', '_maxWeightChange', '__vehicleFilter', '__artefactFilter', 'isImproved', 'kpi', 'iconName')
 
     def __init__(self, typeID, itemID, itemName, compactDescr):
         super(Artefact, self).__init__(typeID, itemID, itemName, compactDescr)
         self.icon = None
+        self.iconName = None
         self.removable = False
         self.price = None
         self.showInShop = False
@@ -100,6 +102,7 @@ class Artefact(BasicItem):
         if IS_CLIENT or IS_WEB:
             self.i18n = shared_components.I18nComponent(userStringKey=section.readString('userString'), descriptionKey=section.readString('description'), shortDescriptionSpecialKey=section.readString('shortDescriptionSpecial'), longDescriptionSpecialKey=section.readString('longDescriptionSpecial'))
             self.icon = _xml.readIcon(xmlCtx, section, 'icon')
+            self.iconName = os.path.splitext(os.path.basename(self.icon[0]))[0]
         if IS_CLIENT and section.has_key('kpi'):
             self.kpi = _readKpi(xmlCtx, section['kpi'])
         else:

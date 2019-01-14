@@ -404,14 +404,6 @@
     <notInShop>	True	</notInShop>
   </priceGroup>
   <priceGroup>
-    <id>	107	</id>
-    <name>	SD styles notInShop	</name>
-    <tags>	SD styles notInShop	</tags>
-    <price>	750	  <gold></gold>
-    </price>
-    <notInShop>	True	</notInShop>
-  </priceGroup>
-  <priceGroup>
     <id>	109	</id>
     <name>	Armistice styles	</name>
     <tags>	Armistice styles	</tags>
@@ -436,18 +428,10 @@
     <notInShop>	true	</notInShop>
   </priceGroup>
   <priceGroup>
-    <id>	110	</id>
-    <name>	Thanksgiving styles	</name>
-    <tags>	Thanksgiving styles	</tags>
-    <price>	1750	  <gold></gold>
-    </price>
-    <notInShop>	True	</notInShop>
-  </priceGroup>
-  <priceGroup>
-    <id>	123	</id>
-    <name>	BlackFriday styles	</name>
-    <tags>	BlackFriday styles	</tags>
-    <price>	1750	  <gold></gold>
+    <id>	107	</id>
+    <name>	SD styles notInShop	</name>
+    <tags>	SD styles notInShop	</tags>
+    <price>	750	  <gold></gold>
     </price>
     <notInShop>	True	</notInShop>
   </priceGroup>
@@ -484,12 +468,28 @@
     <notInShop>	True	</notInShop>
   </priceGroup>
   <priceGroup>
+    <id>	110	</id>
+    <name>	Thanksgiving styles	</name>
+    <tags>	Thanksgiving styles	</tags>
+    <price>	1750	  <gold></gold>
+    </price>
+    <notInShop>	True	</notInShop>
+  </priceGroup>
+  <priceGroup>
+    <id>	123	</id>
+    <name>	BlackFriday styles	</name>
+    <tags>	BlackFriday styles	</tags>
+    <price>	1750	  <gold></gold>
+    </price>
+    <notInShop>	True	</notInShop>
+  </priceGroup>
+  <priceGroup>
     <id>	125	</id>
     <name>	Counterattack styles	</name>
     <tags>	Counterattack styles	</tags>
     <price>	1750	  <gold></gold>
     </price>
-    <notInShop>	True	</notInShop>
+    <notInShop>	true	</notInShop>
   </priceGroup>
   <priceGroup>
     <id>	69	</id>
@@ -612,6 +612,14 @@
     <notInShop>	True	</notInShop>
   </priceGroup>
   <priceGroup>
+    <id>	129	</id>
+    <name>	camouflages WBulldog notInShop	</name>
+    <tags>	camouflages WBulldog notInShop	</tags>
+    <price>	300	  <gold></gold>
+    </price>
+    <notInShop>	True	</notInShop>
+  </priceGroup>
+  <priceGroup>
     <id>	85	</id>
     <name>	football emblems 100	</name>
     <tags>	football emblems	</tags>
@@ -730,5 +738,13 @@
     <price>	110	  <gold></gold>
     </price>
     <notInShop>	False	</notInShop>
+  </priceGroup>
+  <priceGroup>
+    <id>	41	</id>
+    <name>	custom personal number	</name>
+    <price>	50	  <gold></gold>
+    </price>
+    <notInShop>	False	</notInShop>
+    <tags>	personal_numbers	</tags>
   </priceGroup>
 </list.xml>

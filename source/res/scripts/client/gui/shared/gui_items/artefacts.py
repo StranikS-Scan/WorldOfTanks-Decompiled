@@ -4,12 +4,12 @@ from itertools import chain, imap
 import nations
 from debug_utils import LOG_CURRENT_EXCEPTION
 from gui.Scaleform.genConsts.STORE_CONSTANTS import STORE_CONSTANTS
-from gui.Scaleform.locale.RES_SHOP import RES_SHOP
 from gui.shared.gui_items import GUI_ITEM_ECONOMY_CODE, GUI_ITEM_TYPE_NAMES, GUI_ITEM_TYPE
 from gui.shared.gui_items.fitting_item import FittingItem
 from gui.shared.gui_items.Tankman import isSkillLearnt
 from gui.shared.gui_items.gui_item_economics import ItemPrice, ITEM_PRICE_EMPTY
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
+from gui.Scaleform.locale.RES_SHOP_EXT import RES_SHOP_EXT
 from gui.shared.money import Money, Currency, MONEY_UNDEFINED
 from gui.shared.utils.functions import stripColorTagDescrTags
 from items import artefacts, vehicles as vehicleItems, tankmen
@@ -78,6 +78,9 @@ class VehicleArtefact(FittingItem):
     def isRemovingStun(self):
         return False
 
+    def getShopIcon(self, size=STORE_CONSTANTS.ICON_SIZE_MEDIUM):
+        return RES_SHOP_EXT.getArtefactIcon(size, self.descriptor.iconName)
+
 
 class Equipment(VehicleArtefact):
     __slots__ = ()
@@ -140,9 +143,6 @@ class Equipment(VehicleArtefact):
 
     def getGUIEmblemID(self):
         return super(Equipment, self).icon
-
-    def getShopIcon(self, size=STORE_CONSTANTS.ICON_SIZE_MEDIUM):
-        return RES_SHOP.getArtefactIcon(size, super(Equipment, self).getShopIcon(size))
 
     def isCrewBooster(self):
         return False
@@ -373,9 +373,6 @@ class OptionalDevice(RemovableDevice):
         if result is None:
             result = RES_ICONS.getBonusIcon(size, self.name.split('_')[0])
         return result
-
-    def getShopIcon(self, size=STORE_CONSTANTS.ICON_SIZE_MEDIUM):
-        return RES_SHOP.getArtefactIcon(size, super(OptionalDevice, self).getShopIcon(size))
 
     def isInstalled(self, vehicle, slotIdx=None):
         for idx, op in enumerate(vehicle.optDevices):

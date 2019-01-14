@@ -1,0 +1,33 @@
+<c11nProlong.xml>
+  <default-scene>	DefaultScene	</default-scene>
+  <initial-scene>	VehicleCustomization	</initial-scene>
+  <scenes>
+    <scene>	VehicleCustomization	  <post-effects></post-effects>
+      <runtime-effects>
+        <show-hint>	CustomizationAutoprolongationHint	</show-hint>
+      </runtime-effects>
+      <gui-items></gui-items>
+    </scene>
+  </scenes>
+  <has-id>
+    <hint>	CustomizationAutoprolongationHint	  <item-id>	CustomizationAutoprolongation	</item-id>
+      <text>	_(#tutorial:customization/autoprolongation)	</text>
+      <arrow>
+        <direction>	R	</direction>
+        <loop>	True	</loop>
+      </arrow>
+      <actions>
+        <click-outside>	CustomizationAutoprolongation	  <effects>
+            <refuse-training></refuse-training>
+          </effects>
+        </click-outside>
+        <esc>	CustomizationAutoprolongation	  <effects>
+            <refuse-training></refuse-training>
+          </effects>
+        </esc>
+      </actions>
+    </hint>
+  </has-id>
+  <triggers></triggers>
+  <vars></vars>
+</c11nProlong.xml>

@@ -2258,7 +2258,7 @@
         <Ch39_WZ120_1G_FT>	1 1 0.9 0.000000	</Ch39_WZ120_1G_FT>
         <Ch40_WZ120G_FT>	3 3 0.000000 0.000000	</Ch40_WZ120G_FT>
         <Ch41_WZ_111_5A>	1.6 1.6 0.000000 0.000000	</Ch41_WZ_111_5A>
-        <china:Ch42_WalkerBulldog_M41D>	1.15 1.15 0.000000 0.000000	</china:Ch42_WalkerBulldog_M41D>
+        <china:Ch42_WalkerBulldog_M41D>	1.4 1.4 0.000000 0.000000	</china:Ch42_WalkerBulldog_M41D>
       </tiling>
     </camouflage>
   </itemGroup>
@@ -2601,6 +2601,37 @@
       </palettes>
       <tiling>
         <china:Ch25_121_mod_1971B>	4.05405 4.05405 0.12 0.1	</china:Ch25_121_mod_1971B>
+      </tiling>
+    </camouflage>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:camouflage/opaque	</userString>
+    <season>	ALL	</season>
+    <historical>	true	</historical>
+    <priceGroup>	camouflages WBulldog notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	china:Ch42_WalkerBulldog_M41D	</vehicles>
+      </include>
+    </vehicleFilter>
+    <camouflage>
+      <id>	2	</id>
+      <texture>	vehicles/chinese/Camouflage/pharmoz_tricolor.dds	</texture>
+      <description>	#vehicle_customization:camouflage/pharmoz_tricolor/description	</description>
+      <scales>	1.3 1 0.7	</scales>
+      <userString>	#vehicle_customization:camouflage/pharmoz_tricolor/label	</userString>
+      <tags>	vehicleBound	</tags>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <palettes>
+        <palette>
+          <c0>	93 55 34 255	</c0>
+          <c1>	36 73 44 255	</c1>
+          <c2>	10 10 10 255	</c2>
+          <c3>	0 0 0 0	</c3>
+        </palette>
+      </palettes>
+      <tiling>
+        <china:Ch42_WalkerBulldog_M41D>	0.98 0.98 0.05 -0.15	</china:Ch42_WalkerBulldog_M41D>
       </tiling>
     </camouflage>
   </itemGroup>

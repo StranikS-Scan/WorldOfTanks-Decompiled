@@ -371,6 +371,7 @@ class MapCaseControlMode(IControlMode, CallbackDelayer):
         self.__activeSelector = _DefaultStrikeSelector(Vector3(0, 0, 0), None)
         self.__equipmentID = None
         self.__aimingMode = 0
+        self.__aimingModeUserDisabled = False
         MapCaseControlMode.prevCtlMode = [Vector3(0, 0, 0), '', 0]
         return
 
@@ -399,6 +400,8 @@ class MapCaseControlMode(IControlMode, CallbackDelayer):
             targetPos = args.get('preferredPos', Vector3(0, 0, 0))
         self.__cam.enable(targetPos, args.get('saveDist', True))
         self.__aimingMode = args.get('aimingMode', self.__aimingMode)
+        self.__aimingModeUserDisabled = self.getAimingMode(AIMING_MODE.USER_DISABLED)
+        self.__aimingMode |= AIMING_MODE.USER_DISABLED
         self.__isEnabled = True
         equipmentID = args.get('equipmentID', None)
         if equipmentID is None:
@@ -506,6 +509,7 @@ class MapCaseControlMode(IControlMode, CallbackDelayer):
 
     def setAimingMode(self, enable, mode):
         if mode == AIMING_MODE.USER_DISABLED:
+            self.__aimingModeUserDisabled = enable
             return
         if mode == AIMING_MODE.TARGET_LOCK and not enable:
             MapCaseControlMode.prevCtlMode[MapCaseControlMode.__AIM_MODE] &= -1 - mode
@@ -547,7 +551,9 @@ class MapCaseControlMode(IControlMode, CallbackDelayer):
             MapCaseControlMode.deactivateCallback()
             MapCaseControlMode.deactivateCallback = None
         prevMode = MapCaseControlMode.prevCtlMode
-        self.__aih.onControlModeChanged(prevMode[MapCaseControlMode.__MODE_NAME], preferredPos=prevMode[MapCaseControlMode.__PREFERED_POSITION], aimingMode=prevMode[MapCaseControlMode.__AIM_MODE], saveDist=False, saveZoom=True)
+        if not self.__aimingModeUserDisabled:
+            self.__aimingMode &= -1 - AIMING_MODE.USER_DISABLED
+        self.__aih.onControlModeChanged(prevMode[MapCaseControlMode.__MODE_NAME], preferredPos=prevMode[MapCaseControlMode.__PREFERED_POSITION], aimingMode=self.__aimingMode, saveDist=False, saveZoom=True)
         self.stopCallback(self.__tick)
         self.__cam.update(0.0, 0.0, 0.0, False)
         replayCtrl = BattleReplay.g_replayCtrl
@@ -596,7 +602,7 @@ def activateMapCase(equipmentID, deactivateCallback):
             if pos is None:
                 pos = Vector3(0.0, 0.0, 0.0)
         MapCaseControlMode.prevCtlMode = [pos, inputHandler.ctrlModeName, inputHandler.ctrl.aimingMode]
-        inputHandler.onControlModeChanged('mapcase', preferredPos=pos, aimingMode=AIMING_MODE.USER_DISABLED, equipmentID=equipmentID, saveDist=False)
+        inputHandler.onControlModeChanged('mapcase', preferredPos=pos, aimingMode=inputHandler.ctrl.aimingMode, equipmentID=equipmentID, saveDist=False)
     return
 
 

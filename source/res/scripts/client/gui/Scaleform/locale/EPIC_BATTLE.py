@@ -1,6 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/locale/EPIC_BATTLE.py
-
+from debug_utils import LOG_WARNING
 
 class EPIC_BATTLE(object):
     STATUS_TIMELEFT = '#epic_battle:status/timeLeft'
@@ -193,6 +193,13 @@ class EPIC_BATTLE(object):
     EPICBATTLESINFOVIEW_RULEBATTLEPERFORMANCEBUTTON_LABEL = '#epic_battle:epicBattlesInfoView/ruleBattlePerformanceButton/label'
     EPICBATTLESINFOVIEW_RULEREWARDSPRESTIGEBUTTON_LABEL = '#epic_battle:epicBattlesInfoView/ruleRewardsPrestigeButton/label'
     EPICBATTLESINFOVIEW_MAXLEVEL = '#epic_battle:epicBattlesInfoView/maxLevel'
+    EPICBATTLESOFFLINEVIEW_TITLE = '#epic_battle:epicBattlesOfflineView/title'
+    EPICBATTLESOFFLINEVIEW_GAMERULES = '#epic_battle:epicBattlesOfflineView/gameRules'
+    EPICBATTLESOFFLINEVIEW_CALENDARSUBTITLE = '#epic_battle:epicBattlesOfflineView/calendarSubTitle'
+    EPICBATTLESOFFLINEVIEW_CALENDARDESCRIPTION = '#epic_battle:epicBattlesOfflineView/calendarDescription'
+    EPICBATTLESWELCOMEBACKVIEW_TITLE = '#epic_battle:epicBattlesWelcomeBackView/title'
+    EPICBATTLESWELCOMEBACKVIEW_SUBTITLE = '#epic_battle:epicBattlesWelcomeBackView/subTitle'
+    EPICBATTLESWELCOMEBACKVIEW_PLAYVIDEOBTN_LABEL = '#epic_battle:epicBattlesWelcomeBackView/playVideoBtn/label'
     EPICBATTLESPRESTIGEVIEW_PRESTIGEINFO = '#epic_battle:epicBattlesPrestigeView/prestigeInfo'
     EPICBATTLESPRESTIGEVIEW_PRESTIGELEVEL = '#epic_battle:epicBattlesPrestigeView/prestigeLevel'
     EPICBATTLESPRESTIGEVIEW_EXCHANGE = '#epic_battle:epicBattlesPrestigeView/exchange'
@@ -255,3 +262,18 @@ class EPIC_BATTLE(object):
     PRIMETIME_STATUS_DISABLE = '#epic_battle:primeTime/status/disable'
     TUTORIAL_HINT_EPICRESERVESSLOTHINT = '#epic_battle:tutorial/hint/epicReservesSlotHint'
     TUTORIAL_HINT_EPICRESERVESBTNHINT = '#epic_battle:tutorial/hint/epicReservesBtnHint'
+    RANK_RANK_ENUM = (RANK_RANK0,
+     RANK_RANK1,
+     RANK_RANK2,
+     RANK_RANK3,
+     RANK_RANK4,
+     RANK_RANK5)
+
+    @classmethod
+    def getRankLabel(cls, key0):
+        outcome = '#epic_battle:rank/rank{}'.format(key0)
+        if outcome not in cls.RANK_RANK_ENUM:
+            LOG_WARNING('Localization key "{}" not found'.format(outcome))
+            return None
+        else:
+            return outcome

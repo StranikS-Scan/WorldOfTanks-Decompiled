@@ -1,6 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/gen/view_models/views/buy_vehicle_view/vehicle_congratulation_model.py
-from frameworks.wulf import Resource
+from gui.impl.gen import R
 from frameworks.wulf import ViewModel
 
 class VehicleCongratulationModel(ViewModel):
@@ -68,6 +68,6 @@ class VehicleCongratulationModel(ViewModel):
         self._addStringProperty('vName', '')
         self._addStringProperty('image', '')
         self._addStringProperty('imageAlt', '')
-        self._addResourceProperty('btnLbl', Resource.INVALID)
-        self._addResourceProperty('title', Resource.INVALID)
+        self._addResourceProperty('btnLbl', R.invalid())
+        self._addResourceProperty('title', R.invalid())
         self._addBoolProperty('resetAnimTrgigger', False)

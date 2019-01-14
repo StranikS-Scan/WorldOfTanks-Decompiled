@@ -1038,10 +1038,14 @@ class TOOLTIPS(object):
     VEHICLE_RENTLEFT_HOURS = '#tooltips:vehicle/rentLeft/hours'
     VEHICLE_RENTLEFT_BATTLES = '#tooltips:vehicle/rentLeft/battles'
     VEHICLE_RENTLEFT_WINS = '#tooltips:vehicle/rentLeft/wins'
+    VEHICLE_RENTLEFT_EPIC_SEASON = '#tooltips:vehicle/rentLeft/epic/season'
+    VEHICLE_RENTLEFT_EPIC_DAYS = '#tooltips:vehicle/rentLeft/epic/days'
     VEHICLE_RENTLEFTFUTURE_DAYS = '#tooltips:vehicle/rentLeftFuture/days'
     VEHICLE_RENTLEFTFUTURE_HOURS = '#tooltips:vehicle/rentLeftFuture/hours'
     VEHICLE_RENTLEFTFUTURE_BATTLES = '#tooltips:vehicle/rentLeftFuture/battles'
     VEHICLE_RENTLEFTFUTURE_WINS = '#tooltips:vehicle/rentLeftFuture/wins'
+    VEHICLE_RENTLEFTFUTURE_EPIC_SEASON = '#tooltips:vehicle/rentLeftFuture/epic/season'
+    VEHICLE_RENTLEFTFUTURE_EPIC_DAYS = '#tooltips:vehicle/rentLeftFuture/epic/days'
     VEHICLE_RENTAVAILABLE = '#tooltips:vehicle/rentAvailable'
     VEHICLE_RESTORELEFT_DAYS = '#tooltips:vehicle/restoreLeft/days'
     VEHICLE_RESTORELEFT_HOURS = '#tooltips:vehicle/restoreLeft/hours'
@@ -1824,6 +1828,7 @@ class TOOLTIPS(object):
     TANK_PARAMS_DESC_WHEELEDSWITCHONTIME = '#tooltips:tank_params/desc/wheeledSwitchOnTime'
     TANK_PARAMS_DESC_WHEELEDSWITCHOFFTIME = '#tooltips:tank_params/desc/wheeledSwitchOffTime'
     TANK_PARAMS_DESC_WHEELEDSWITCHTIME = '#tooltips:tank_params/desc/wheeledSwitchTime'
+    TANK_PARAMS_DESC_WHEELEDSPEEDMODESPEED = '#tooltips:tank_params/desc/wheeledSpeedModeSpeed'
     TANK_PARAMS_DESC_STUNMINDURATION = '#tooltips:tank_params/desc/stunMinDuration'
     TANK_PARAMS_DESC_STUNMAXDURATION = '#tooltips:tank_params/desc/stunMaxDuration'
     VEHICLEPARAMS_TITLE_VALUETEMPLATE = '#tooltips:vehicleParams/title/valueTemplate'
@@ -1870,8 +1875,6 @@ class TOOLTIPS(object):
     VEHICLEPREVIEW_VEHICLEPANEL_INFO_HEADER_NOCREW = '#tooltips:vehiclePreview/vehiclePanel/info/header/noCrew'
     VEHICLEPREVIEW_VEHICLEPANEL_INFO_BODY = '#tooltips:vehiclePreview/vehiclePanel/info/body'
     VEHICLEPREVIEW_BUYBUTTON_PARENTMODULEISLOCKED_HEADER = '#tooltips:vehiclePreview/buyButton/parentModuleIsLocked/header'
-    VEHICLEPREVIEW_BUYBUTTON_RESTOREREQUESTED_HEADER = '#tooltips:vehiclePreview/buyButton/restoreRequested/header'
-    VEHICLEPREVIEW_BUYBUTTON_RESTOREREQUESTED_BODY = '#tooltips:vehiclePreview/buyButton/restoreRequested/body'
     VEHICLEPREVIEW_BUYBUTTON_PARENTMODULEISLOCKED_BODY = '#tooltips:vehiclePreview/buyButton/parentModuleIsLocked/body'
     VEHICLEPREVIEW_BUYBUTTON_PARENTVEHICLEISLOCKED_HEADER = '#tooltips:vehiclePreview/buyButton/parentVehicleIsLocked/header'
     VEHICLEPREVIEW_BUYBUTTON_PARENTVEHICLEISLOCKED_BODY = '#tooltips:vehiclePreview/buyButton/parentVehicleIsLocked/body'
@@ -1910,6 +1913,7 @@ class TOOLTIPS(object):
     VEHICLEPREVIEW_BOXTOOLTIP_MODIFICATION_HEADER = '#tooltips:vehiclePreview/boxTooltip/modification/header'
     VEHICLEPREVIEW_BOXTOOLTIP_PAINT_HEADER = '#tooltips:vehiclePreview/boxTooltip/paint/header'
     VEHICLEPREVIEW_BOXTOOLTIP_PROJECTIONDECAL_HEADER = '#tooltips:vehiclePreview/boxTooltip/projectionDecal/header'
+    VEHICLEPREVIEW_BOXTOOLTIP_PERSONALNUMBER_HEADER = '#tooltips:vehiclePreview/boxTooltip/personalNumber/header'
     CONTENTBUYVIEW_SLOTCHECKBOX_NOTENOUGHSLOTS_HEADER = '#tooltips:contentBuyView/slotCheckbox/notEnoughSlots/header'
     CONTENTBUYVIEW_SLOTCHECKBOX_NOTENOUGHSLOTS_BODY = '#tooltips:contentBuyView/slotCheckbox/notEnoughSlots/body'
     SQUADWINDOW_EVENTVEHICLE = '#tooltips:squadWindow/eventVehicle'
@@ -2072,7 +2076,6 @@ class TOOLTIPS(object):
     QUESTS_CONDITION_ACHIEVEMENTS_OTHERS = '#tooltips:quests/condition/achievements/others'
     QUESTS_BONUSES_TOKEN_HEADER = '#tooltips:quests/bonuses/token/header'
     QUESTS_BONUSES_TOKEN_BODY = '#tooltips:quests/bonuses/token/body'
-    QUESTS_BONUSES_LOOTBOXTOKEN_BODY = '#tooltips:quests/bonuses/lootBoxToken/body'
     HANGAR_HEADER_WGMONEYTOOLTIP_GOLDNAME = '#tooltips:hangar/header/wgmoneyTooltip/goldName'
     HANGAR_HEADER_WGMONEYTOOLTIP_CREDITSNAME = '#tooltips:hangar/header/wgmoneyTooltip/creditsName'
     HANGAR_HEADER_WGMONEYTOOLTIP_PURCHASEDVALUE = '#tooltips:hangar/header/wgmoneyTooltip/purchasedValue'
@@ -2622,7 +2625,8 @@ class TOOLTIPS(object):
      VEHICLEPREVIEW_BOXTOOLTIP_INSCRIPTION_HEADER,
      VEHICLEPREVIEW_BOXTOOLTIP_MODIFICATION_HEADER,
      VEHICLEPREVIEW_BOXTOOLTIP_PAINT_HEADER,
-     VEHICLEPREVIEW_BOXTOOLTIP_PROJECTIONDECAL_HEADER)
+     VEHICLEPREVIEW_BOXTOOLTIP_PROJECTIONDECAL_HEADER,
+     VEHICLEPREVIEW_BOXTOOLTIP_PERSONALNUMBER_HEADER)
     CUSTOMIZATION_TABS_ALL_BODY_ENUM = (CUSTOMIZATION_TABS_PAINT_BODY,
      CUSTOMIZATION_TABS_CAMOUFLAGE_BODY,
      CUSTOMIZATION_TABS_EMBLEM_BODY,
@@ -2748,8 +2752,6 @@ class TOOLTIPS(object):
      ELEN_SUMMARY_PARAM_SUMALL_DAMAGEDEALT_BODY,
      ELEN_SUMMARY_PARAM_SUMALL_DAMAGEASSISTED_BODY)
     VEHICLEPREVIEW_BUYBUTTON_ALL_ENUM = (VEHICLEPREVIEW_BUYBUTTON_PARENTMODULEISLOCKED_HEADER,
-     VEHICLEPREVIEW_BUYBUTTON_RESTOREREQUESTED_HEADER,
-     VEHICLEPREVIEW_BUYBUTTON_RESTOREREQUESTED_BODY,
      VEHICLEPREVIEW_BUYBUTTON_PARENTMODULEISLOCKED_BODY,
      VEHICLEPREVIEW_BUYBUTTON_PARENTVEHICLEISLOCKED_HEADER,
      VEHICLEPREVIEW_BUYBUTTON_PARENTVEHICLEISLOCKED_BODY,
@@ -3117,6 +3119,7 @@ class TOOLTIPS(object):
      TANK_PARAMS_DESC_WHEELEDSWITCHONTIME,
      TANK_PARAMS_DESC_WHEELEDSWITCHOFFTIME,
      TANK_PARAMS_DESC_WHEELEDSWITCHTIME,
+     TANK_PARAMS_DESC_WHEELEDSPEEDMODESPEED,
      TANK_PARAMS_DESC_STUNMINDURATION,
      TANK_PARAMS_DESC_STUNMAXDURATION)
 

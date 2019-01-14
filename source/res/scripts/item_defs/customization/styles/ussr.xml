@@ -288,6 +288,12 @@
               <appliedTo>	52416	</appliedTo>
             </item>
           </decals>
+          <insignias>
+            <item>
+              <id>	1	</id>
+              <appliedTo>	4096	</appliedTo>
+            </item>
+          </insignias>
         </outfit>
       </outfits>
     </style>
@@ -380,38 +386,6 @@
   <itemGroup>
     <userString>	#vehicle_customization:styles/special_styles	</userString>
     <season>	ALL	</season>
-    <historical>	true	</historical>
-    <priceGroup>	SD styles notInShop	</priceGroup>
-    <vehicleFilter>
-      <include>
-        <vehicles>	ussr:R160_T_50_2	</vehicles>
-      </include>
-    </vehicleFilter>
-    <style>
-      <id>	215	</id>
-      <texture>	gui/maps/vehicles/styles/t50_2.png	</texture>
-      <description>	#vehicle_customization:special_style/t50_2_desc	</description>
-      <modelsSet>	SD	</modelsSet>
-      <maxNumber>	1	</maxNumber>
-      <userString>	#vehicle_customization:special_style/t50_2	</userString>
-      <outfits>
-        <outfit>
-          <season>	ALL	</season>
-          <camouflages>
-            <item>
-              <id>	1	</id>
-              <appliedTo>	16	</appliedTo>
-              <patternSize>	1	</patternSize>
-              <palette>	0	</palette>
-            </item>
-          </camouflages>
-        </outfit>
-      </outfits>
-    </style>
-  </itemGroup>
-  <itemGroup>
-    <userString>	#vehicle_customization:styles/special_styles	</userString>
-    <season>	ALL	</season>
     <historical>	false	</historical>
     <priceGroup>	SnowLeopard styles	</priceGroup>
     <vehicleFilter>
@@ -446,6 +420,38 @@
               <appliedTo>	52416	</appliedTo>
             </item>
           </decals>
+        </outfit>
+      </outfits>
+    </style>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	true	</historical>
+    <priceGroup>	SD styles notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	ussr:R160_T_50_2	</vehicles>
+      </include>
+    </vehicleFilter>
+    <style>
+      <id>	215	</id>
+      <texture>	gui/maps/vehicles/styles/t50_2.png	</texture>
+      <description>	#vehicle_customization:special_style/t50_2_desc	</description>
+      <modelsSet>	SD	</modelsSet>
+      <maxNumber>	1	</maxNumber>
+      <userString>	#vehicle_customization:special_style/t50_2	</userString>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	1	</id>
+              <appliedTo>	16	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
         </outfit>
       </outfits>
     </style>

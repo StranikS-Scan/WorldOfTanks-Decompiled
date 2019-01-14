@@ -14,6 +14,7 @@ class VIEW_ALIAS(COMMON_VIEW_ALIAS):
     LOBBY_HEADER = 'lobbyHeader'
     CUSTOMIZATION_PROPERTIES_SHEET = 'customizationPropertiesSheet'
     CUSTOMIZATION_BOTTOM_PANEL = 'customizationBottomPanel'
+    CUSTOMIZATION_INSCRIPTION_CONTROLLER = 'customizationInscriptionController'
     LOBBY_HANGAR = 'hangar'
     LOBBY_SHOP = 'shop'
     LOBBY_STORE_ACTIONS = 'storeActions'

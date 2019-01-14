@@ -3,6 +3,7 @@
 
 
 class ILinkedSetController(object):
+    onStateChanged = None
 
     def init(self):
         raise NotImplementedError

@@ -23,7 +23,6 @@ class BrowserWindow(BrowserWindowMeta):
         self.__isSolidBorder = ctx.get('isSolidBorder', False)
         self.__alias = ctx.get('alias', '')
         self.__handlers = ctx.get('handlers', None)
-        self.__uniqueBrowserName = '_'.join((self.__alias, str(self.__browserID)))
         return
 
     def _onRegisterFlashComponent(self, viewPy, alias):
@@ -51,7 +50,3 @@ class BrowserWindow(BrowserWindowMeta):
     def __handleBrowserClose(self, event):
         if event.ctx.get('browserID') == self.__browserID:
             self.destroy()
-
-    @property
-    def uniqueBrowserName(self):
-        return self.__uniqueBrowserName

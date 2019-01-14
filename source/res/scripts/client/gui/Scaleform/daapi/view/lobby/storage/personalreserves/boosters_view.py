@@ -14,7 +14,7 @@ from gui.goodies.goodie_items import BOOSTERS_ORDERS, BOOSTER_QUALITY_NAMES, MAX
 from gui.shared.event_dispatcher import showWebShop
 from gui.shared.formatters import text_styles, getItemPricesVO
 from gui.shared.utils.requesters.ItemsRequester import REQ_CRITERIA
-from helpers import dependency, int2roman
+from helpers import dependency, int2roman, func_utils
 from helpers.time_utils import ONE_HOUR
 from helpers.i18n import makeString as _ms
 from shared_utils import CONST_CONTAINER
@@ -168,7 +168,7 @@ class StorageCategoryPersonalReservesView(StorageCategoryPersonalReservesViewMet
             for booster in sorted(boosters, cmp=self.__sort):
                 mainText = text_styles.main(booster.getBonusDescription(valueFormatter=text_styles.neutral))
                 romanLvl = getQualityLevel(booster.quality)
-                vo = createStorageDefVO(booster.boosterID, mainText, mainText, booster.count, getItemPricesVO(booster.getSellPrice())[0], booster.getShopIcon(STORE_CONSTANTS.ICON_SIZE_SMALL), booster.getShopIcon(), 'altimage', enabled=booster.isReadyToActivate, level=int2roman(romanLvl) if romanLvl is not None else '', contextMenuId=CONTEXT_MENU_HANDLER_TYPE.STORAGE_PERSONAL_RESERVE_ITEM)
+                vo = createStorageDefVO(booster.boosterID, mainText, mainText, booster.count, getItemPricesVO(booster.getSellPrice())[0], func_utils.makeFlashPath(booster.getShopIcon(STORE_CONSTANTS.ICON_SIZE_SMALL)), func_utils.makeFlashPath(booster.getShopIcon()), 'altimage', enabled=booster.isReadyToActivate, level=int2roman(romanLvl) if romanLvl is not None else '', contextMenuId=CONTEXT_MENU_HANDLER_TYPE.STORAGE_PERSONAL_RESERVE_ITEM)
                 dataProviderValues.append(vo)
                 filteredBoostersCount += booster.count
 

@@ -3,8 +3,6 @@
 import math
 import BigWorld
 import Math
-import GUI
-import Event
 from AvatarInputHandler import mathUtils
 
 class ImpulseReason(object):
@@ -162,28 +160,6 @@ def isPointOnScreen(point):
     return posInClip.w != 0 and -1 <= posInClip.x / posInClip.w <= 1 and (True if -1 <= posInClip.y / posInClip.w <= 1 else False)
 
 
-def worldToScreenPos(worldPos, screenResolution=None):
-    if screenResolution is None:
-        screenWidth, screenHeight = GUI.screenResolution()
-    else:
-        screenWidth, screenHeight = screenResolution
-    viewProjMatrix = getViewProjectionMatrix()
-    clipPos = viewProjMatrix.applyV4Point(Math.Vector4(worldPos.x, worldPos.y, worldPos.z, 1.0))
-    if clipPos.w <= 0.0:
-        return
-    else:
-        ndcPos = Math.Vector2()
-        ndcPos.x = clipPos.x / clipPos.w
-        ndcPos.y = clipPos.y / clipPos.w
-        if abs(ndcPos.x) > 1.0 or abs(ndcPos.y) > 1.0:
-            return
-        halfScreenWidth = screenWidth / 2.0
-        halfScreenHeight = screenHeight / 2.0
-        screenPosX = halfScreenWidth * (ndcPos.x + 1.0)
-        screenPosY = halfScreenHeight * (1.0 - ndcPos.y)
-        return Math.Vector2(screenPosX, screenPosY)
-
-
 def projectPoint(point):
     posInClip = Math.Vector4(point.x, point.y, point.z, 1)
     posInClip = getViewProjectionMatrix().applyV4Point(posInClip)
@@ -296,8 +272,6 @@ class FovExtended(object):
         self.__isHorizontalFovFixed = getScreenAspectRatio() > FovExtended.__TO_HORIZONTAL_THRESHOLD
         self.__multiplier = 1.0
         self.__enabled = True
-        self.onSetFovSettingEvent = Event.Event()
-        self.onRefreshFovEvent = Event.Event()
         initialVerticalFov = math.radians(60)
         self.defaultHorizontalFov = initialVerticalFov * getScreenAspectRatio()
         from gui import g_guiResetters
@@ -326,13 +300,6 @@ class FovExtended(object):
     def refreshFov(self):
         self.__isHorizontalFovFixed = getScreenAspectRatio() > FovExtended.__TO_HORIZONTAL_THRESHOLD
         self.setFovByMultiplier(self.__multiplier)
-        self.onRefreshFovEvent()
-
-    def applyHorizontalFovSetting(self, horizontalFov, needToReset):
-        if needToReset:
-            self.resetFov()
-        self.defaultHorizontalFov = horizontalFov
-        self.onSetFovSettingEvent()
 
 
 def _clampPoint2DInBox2D(bottomLeft, upperRight, point):

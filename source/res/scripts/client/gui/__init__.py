@@ -137,7 +137,6 @@ def getGuiServicesConfig(manager):
     manager.addConfig(impl.getGuiImplConfig)
     manager.addConfig(login.getLoginManagerConfig)
     manager.addConfig(server_events.getServerEventsConfig)
-    manager.addConfig(server_events.getLinkedSetController)
     manager.addConfig(battle_control.getBattleSessionConfig)
     manager.addConfig(sounds.getSoundsConfig)
     manager.addConfig(wgcg.getWebServicesConfig)
@@ -148,6 +147,7 @@ def getGuiServicesConfig(manager):
     manager.addConfig(hangar_cameras.getHangarCamerasConfig)
     manager.addConfig(promo.getPromoConfig)
     manager.addInstance(ILobbyContext, lobby_context.LobbyContext(), finalizer='clear')
+    manager.addConfig(server_events.getLinkedSetController)
     if HAS_DEV_RESOURCES:
         try:
             from gui.development import getDevelopmentServicesConfig

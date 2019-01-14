@@ -26,8 +26,9 @@ from helpers import dependency
 from helpers.i18n import makeString as _ms
 from helpers.statistics import HANGAR_LOADING_STATE
 from skeletons.account_helpers.settings_core import ISettingsCore
-from skeletons.gui.game_control import IRankedBattlesController, IEpicBattleMetaGameController, IPromoController, IFestivityController
+from skeletons.gui.game_control import IRankedBattlesController, IEpicBattleMetaGameController, IPromoController
 from skeletons.gui.game_control import IIGRController
+from skeletons.gui.impl import IGuiLoader
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
 from gui.shared import event_dispatcher as shared_events
@@ -38,6 +39,10 @@ from gui.hangar_cameras.hangar_camera_common import CameraRelatedEvents, CameraM
 import BigWorld
 from HeroTank import HeroTank
 from gui.game_control.links import URLMacros
+
+def predicateNotEmptyWindow(window):
+    return window.content is not None
+
 
 class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
     _SOUND_STATE_PLACE = 'STATE_hangar_place'
@@ -51,10 +56,10 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
     igrCtrl = dependency.descriptor(IIGRController)
     lobbyContext = dependency.descriptor(ILobbyContext)
     statsCollector = dependency.descriptor(IStatisticsCollector)
+    gui = dependency.descriptor(IGuiLoader)
     _settingsCore = dependency.descriptor(ISettingsCore)
     hangarSpace = dependency.descriptor(IHangarSpace)
     _promoController = dependency.descriptor(IPromoController)
-    _festivityController = dependency.descriptor(IFestivityController)
     _COMMON_SOUND_SPACE = __SOUND_SETTINGS
 
     def __init__(self, _=None):
@@ -86,7 +91,8 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
         windowsContainer = containerManager.getContainer(ViewTypes.WINDOW)
         browserWindowContainer = containerManager.getContainer(ViewTypes.BROWSER)
         overlayContainer = containerManager.getContainer(ViewTypes.OVERLAY)
-        if not dialogsContainer.getViewCount() and not windowsContainer.getViewCount() and not browserWindowContainer.getViewCount() and not overlayContainer.getViewCount():
+        unboundWindows = self.gui.windowsManager.findWindows(predicateNotEmptyWindow)
+        if not dialogsContainer.getViewCount() and not windowsContainer.getViewCount() and not browserWindowContainer.getViewCount() and not overlayContainer.getViewCount() and not unboundWindows:
             containerManager.onViewAddedToContainer += self.__onViewAddedToContainer
             self.fireEvent(LobbySimpleEvent(LobbySimpleEvent.SHOW_HELPLAYOUT), scope=EVENT_BUS_SCOPE.LOBBY)
             self.as_showHelpLayoutS()
@@ -106,7 +112,6 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
         self.hangarSpace.onVehicleChanged += self.__onVehicleLoaded
         self.hangarSpace.onSpaceRefresh += self.__onSpaceRefresh
         self.hangarSpace.onSpaceCreate += self.__onSpaceCreate
-        self._festivityController.onStateChanged += self.__updateFestivityState
         self.igrCtrl.onIgrTypeChanged += self.__onIgrTypeChanged
         self.itemsCache.onSyncCompleted += self.onCacheResync
         self.rankedController.onUpdated += self.onRankedUpdate
@@ -136,7 +141,6 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
         self.hangarSpace.onVehicleChanged -= self.__onVehicleLoaded
         self.hangarSpace.onSpaceRefresh -= self.__onSpaceRefresh
         self.hangarSpace.onSpaceCreate -= self.__onSpaceCreate
-        self._festivityController.onStateChanged -= self.__updateFestivityState
         self.igrCtrl.onIgrTypeChanged -= self.__onIgrTypeChanged
         self.rankedController.onUpdated -= self.onRankedUpdate
         self.rankedController.onPrimeTimeStatusUpdated -= self.__onRankedPrimeStatusUpdate
@@ -353,7 +357,6 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
         self.__updateHeaderWidget()
         self.__updateCrew()
         self.__updateAlertMessage()
-        self.__updateFestivityState()
         Waiting.hide('updateVehicle')
 
     def __onCurrentVehicleChanged(self):
@@ -429,6 +432,3 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
         else:
             self.__isVehicleCameraReadyForC11n = vehicleEntity.state == CameraMovementStates.ON_OBJECT
             return
-
-    def __updateFestivityState(self):
-        self.as_setLootboxesVisibleS(self._festivityController.isEnabled())

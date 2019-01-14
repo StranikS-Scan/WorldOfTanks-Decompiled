@@ -10,6 +10,9 @@ class BattleStatisticDataControllerMeta(BaseDAAPIComponent):
     def as_refreshS(self):
         return self.flashObject.as_refresh() if self._isDAAPIInited() else None
 
+    def as_resetFragsS(self):
+        return self.flashObject.as_resetFrags() if self._isDAAPIInited() else None
+
     def as_setVehiclesDataS(self, vehData):
         return self.flashObject.as_setVehiclesData(vehData) if self._isDAAPIInited() else None
 

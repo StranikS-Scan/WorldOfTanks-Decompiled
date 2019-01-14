@@ -3,23 +3,25 @@
 import logging
 import typing
 import Event
-import GUI
-from frameworks.wulf.view.view_event import ViewEvent
+from .view_event import ViewEvent
 from .view_model import ViewModel
 from ..py_object_binder import PyObjectEntity
+from ..py_object_wrappers import PyObjectView
 from ..gui_constants import ViewFlags, ViewStatus, ViewEventType
 _logger = logging.getLogger(__name__)
 
 class View(PyObjectEntity):
-    __slots__ = ('_proxy', '__viewModel', '__args', '__kwargs', 'onStatusChanged')
+    __slots__ = ('__viewStatus', '__viewModel', '__args', '__kwargs', 'onStatusChanged')
 
     def __init__(self, layoutID, wsFlags, viewModelClazz, *args, **kwargs):
         self._swapStates(ViewStatus.UNDEFINED, ViewStatus.CREATED)
         self.__viewModel = viewModelClazz()
-        super(View, self).__init__(GUI.PyObjectView(layoutID, self.__viewModel.proxy, wsFlags))
+        super(View, self).__init__(PyObjectView(layoutID, self.__viewModel.proxy, wsFlags))
         self.onStatusChanged = Event.Event()
+        self.__viewStatus = ViewStatus.UNDEFINED if self.proxy is None else self.proxy.viewStatus
         self.__args = args
         self.__kwargs = kwargs
+        return
 
     def __repr__(self):
         return '{}(uniqueID={}, layoutID={})'.format(self.__class__.__name__, self.uniqueID, self.layoutID)
@@ -37,8 +39,12 @@ class View(PyObjectEntity):
         return ViewFlags.getViewType(self.proxy.viewFlags) if self.proxy is not None else ''
 
     @property
+    def viewFlags(self):
+        return self.proxy.viewFlags if self.proxy is not None else 0
+
+    @property
     def viewStatus(self):
-        return self.proxy.viewStatus if self.proxy is not None else ViewStatus.UNDEFINED
+        return self.__viewStatus
 
     def checkViewFlags(self, flags):
         return self.proxy.checkViewFlags(flags) if self.proxy is not None else False
@@ -62,14 +68,6 @@ class View(PyObjectEntity):
         if self.__viewModel is not None:
             self.__viewModel.unbind()
             self.__viewModel = None
-        return
-
-    def destroyWindow(self):
-        window = self.getParentWindow()
-        if window is not None:
-            window.destroy()
-        else:
-            self.destroy()
         return
 
     def show(self):
@@ -105,6 +103,7 @@ class View(PyObjectEntity):
         self.unbind()
 
     def _cViewStatusChanged(self, oldStatus, newStatus):
+        self.__viewStatus = newStatus
         self._swapStates(oldStatus, newStatus)
         self.onStatusChanged(newStatus)
 

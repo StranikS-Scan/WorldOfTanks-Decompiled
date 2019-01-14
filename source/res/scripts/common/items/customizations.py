@@ -10,7 +10,8 @@ from soft_exception import SoftException
 from items.components.c11n_constants import ApplyArea, SeasonType, Options, CustomizationType, CustomizationTypeNames, HIDDEN_CAMOUFLAGE_ID, StyleFlags, NO_OUTFIT_DATA, MAX_USERS_PROJECTION_DECALS, CUSTOMIZATION_SLOTS_VEHICLE_PARTS
 from items.components import c11n_components as cn
 from constants import IS_CELLAPP, IS_BASEAPP
-from items import decodeEnum
+from items import decodeEnum, makeIntCompactDescrByID
+from debug_utils import LOG_CURRENT_EXCEPTION, LOG_ERROR
 from typing import List, Dict, Type, Tuple, Any, TypeVar, Optional, MutableMapping
 try:
     from xml.etree import cElementTree as ET
@@ -19,14 +20,16 @@ except ImportError:
 
 class FieldTypes(object):
     VARINT = 2
+    TAGS = 4
     OPTIONS_ENUM = 8
     FLOAT = 16
     APPLY_AREA_ENUM = 32
     TYPED_ARRAY = 64
     CUSTOM_TYPE_OFFSET = 128
+    STRING = 512
 
 
-FieldType = namedtuple('FieldType', 'type default deprecated  weakEqualIgnored xmlOnly')
+FieldType = namedtuple('FieldType', 'type default deprecated weakEqualIgnored xmlOnly')
 
 def arrayField(itemType, default=None, xmlOnly=False):
     return FieldType(FieldTypes.TYPED_ARRAY | itemType, default or [], False, False, xmlOnly)
@@ -34,6 +37,10 @@ def arrayField(itemType, default=None, xmlOnly=False):
 
 def intField(default=0):
     return FieldType(FieldTypes.VARINT, default, False, False, False)
+
+
+def strField(default=''):
+    return FieldType(FieldTypes.STRING, default, False, False, False)
 
 
 def xmlOnlyIntField(default=0):
@@ -56,8 +63,12 @@ def xmlOnlyApplyAreaEnumField(default=0):
     return FieldType(FieldTypes.APPLY_AREA_ENUM, default, False, True, True)
 
 
+def xmlOnlyTagsField(default=()):
+    return FieldType(FieldTypes.TAGS, default, False, True, True)
+
+
 def optionsEnumField(default=0):
-    return FieldType(FieldTypes.OPTIONS_ENUM, default, False, True, False)
+    return FieldType(FieldTypes.OPTIONS_ENUM, default, False, False, False)
 
 
 def customFieldType(customType):
@@ -195,9 +206,14 @@ class ComponentBinSerializer(object):
         result = [ self.__serialize(item, itemType) for item in value ]
         return varint.encode(len(value)) + ''.join(result)
 
+    def __serializeString(self, value):
+        return varint.encode(len(value)) + value
+
     def __serialize(self, value, itemType):
         if itemType == FieldTypes.VARINT:
             return varint.encode(value)
+        if itemType == FieldTypes.STRING:
+            return self.__serializeString(value)
         if itemType == FieldTypes.APPLY_AREA_ENUM:
             return varint.encode(value)
         if itemType == FieldTypes.OPTIONS_ENUM:
@@ -257,6 +273,8 @@ class ComponentBinDeserializer(object):
                 ftype = t.type
                 if ftype == FieldTypes.VARINT:
                     value = varint.decode_stream(io)
+                elif ftype == FieldTypes.STRING:
+                    value = self.__decodeString()
                 elif ftype == FieldTypes.APPLY_AREA_ENUM:
                     value = varint.decode_stream(io)
                 elif ftype == FieldTypes.OPTIONS_ENUM:
@@ -277,9 +295,10 @@ class ComponentBinDeserializer(object):
         return obj
 
     def __decodeArray(self, itemType, k, path, next, wanted):
-        n = varint.decode_stream(self.__stream)
+        io = self.__stream
+        n = varint.decode_stream(io)
         if itemType == FieldTypes.VARINT:
-            array = [ varint.decode_stream(self.__stream) for _ in xrange(n) ]
+            array = [ varint.decode_stream(io) for _ in xrange(n) ]
             if path and path[1] is None and path[0] == k and wanted in array:
                 raise FoundItemException()
             return array
@@ -289,6 +308,10 @@ class ComponentBinDeserializer(object):
         else:
             raise SerializationException('Unsupported item type')
             return
+
+    def __decodeString(self):
+        stream = self.__stream
+        return stream.read(varint.decode_stream(stream))
 
 
 class ComponentXmlSerializer(object):
@@ -356,6 +379,10 @@ class ComponentXmlDeserializer(object):
                 value = section.readFloat(fname)
             elif ftype == FieldTypes.APPLY_AREA_ENUM:
                 value = self.__decodeEnum(section.readString(fname), ApplyArea)
+            elif ftype == FieldTypes.TAGS:
+                value = tuple(section.readString(fname).split())
+            elif ftype == FieldTypes.STRING:
+                value = section.readString(fname)
             elif ftype == FieldTypes.OPTIONS_ENUM:
                 value = self.__decodeEnum(section.readString(fname), Options)
             elif ftype & FieldTypes.TYPED_ARRAY:
@@ -396,10 +423,10 @@ class EmptyComponent(SerializableComponent):
 
 class PaintComponent(SerializableComponent):
     customType = 1
-    fields = OrderedDict((('id', intField()), ('appliedTo', applyAreaEnumField(ApplyArea.USER_PAINT_ALLOWED_REGIONS_VALUE))))
+    fields = OrderedDict((('id', intField()), ('appliedTo', applyAreaEnumField(ApplyArea.PAINT_REGIONS_VALUE))))
     __slots__ = ('id', 'appliedTo')
 
-    def __init__(self, id=0, appliedTo=ApplyArea.USER_PAINT_ALLOWED_REGIONS_VALUE):
+    def __init__(self, id=0, appliedTo=ApplyArea.PAINT_REGIONS_VALUE):
         self.id = id
         self.appliedTo = appliedTo
         super(PaintComponent, self).__init__()
@@ -459,10 +486,11 @@ class ProjectionDecalComponent(SerializableComponent):
      ('rotation', xmlOnlyFloatArrayField()),
      ('position', xmlOnlyFloatArrayField()),
      ('tintColor', intArrayField(xmlOnly=True)),
-     ('doubleSided', xmlOnlyIntField(0))))
-    __slots__ = ('id', 'options', 'slotId', 'scaleFactorId', 'showOn', 'scale', 'rotation', 'position', 'tintColor', 'doubleSided')
+     ('doubleSided', xmlOnlyIntField(0)),
+     ('tags', xmlOnlyTagsField(()))))
+    __slots__ = ('id', 'options', 'slotId', 'scaleFactorId', 'showOn', 'scale', 'rotation', 'position', 'tintColor', 'doubleSided', 'tags')
 
-    def __init__(self, id=0, options=Options.NONE, slotId=0, scaleFactorId=0, showOn=ApplyArea.NONE, scale=(1, 10, 1), rotation=(0, 0, 0), position=(0, 0, 0), tintColor=(255, 255, 255, 255), doubleSided=0):
+    def __init__(self, id=0, options=Options.NONE, slotId=0, scaleFactorId=0, showOn=ApplyArea.NONE, scale=(1, 10, 1), rotation=(0, 0, 0), position=(0, 0, 0), tintColor=(255, 255, 255, 255), doubleSided=0, tags=()):
         self.id = id
         self.options = options
         self.slotId = slotId
@@ -473,6 +501,7 @@ class ProjectionDecalComponent(SerializableComponent):
         self.position = position
         self.tintColor = tintColor
         self.doubleSided = doubleSided
+        self.tags = tags
         super(ProjectionDecalComponent, self).__init__()
 
     def __str__(self):
@@ -480,6 +509,18 @@ class ProjectionDecalComponent(SerializableComponent):
 
     def isMirrored(self):
         return self.options & Options.MIRRORED
+
+
+class PersonalNumberComponent(SerializableComponent):
+    customType = 8
+    fields = OrderedDict((('id', intField()), ('number', strField()), ('appliedTo', applyAreaEnumField(ApplyArea.NONE))))
+    __slots__ = ('id', 'number', 'appliedTo')
+
+    def __init__(self, id=0, number=None, appliedTo=ApplyArea.NONE):
+        self.id = id
+        self.number = number or ''
+        self.appliedTo = appliedTo
+        super(PersonalNumberComponent, self).__init__()
 
 
 class CustomizationOutfit(SerializableComponent):
@@ -490,10 +531,11 @@ class CustomizationOutfit(SerializableComponent):
      ('decals', customArrayField(DecalComponent.customType)),
      ('styleId', intField()),
      ('projection_decals', customArrayField(ProjectionDecalComponent.customType)),
-     ('insignias', customArrayField(InsigniaComponent.customType))))
-    __slots__ = ('modifications', 'paints', 'camouflages', 'decals', 'styleId', 'projection_decals', 'insignias')
+     ('insignias', customArrayField(InsigniaComponent.customType)),
+     ('personal_numbers', customArrayField(PersonalNumberComponent.customType))))
+    __slots__ = ('modifications', 'paints', 'camouflages', 'decals', 'styleId', 'projection_decals', 'insignias', 'personal_numbers')
 
-    def __init__(self, modifications=None, paints=None, camouflages=None, decals=None, projection_decals=None, styleId=0, insignias=None):
+    def __init__(self, modifications=None, paints=None, camouflages=None, decals=None, projection_decals=None, personal_numbers=None, styleId=0, insignias=None):
         self.modifications = modifications or []
         self.paints = paints or []
         self.camouflages = camouflages or []
@@ -501,6 +543,7 @@ class CustomizationOutfit(SerializableComponent):
         self.styleId = styleId or 0
         self.insignias = insignias or []
         self.projection_decals = projection_decals or []
+        self.personal_numbers = personal_numbers or []
         super(CustomizationOutfit, self).__init__()
 
     def __nonzero__(self):
@@ -573,10 +616,10 @@ class CustomizationOutfit(SerializableComponent):
         selfItems.extend(otherItems)
 
     def dismountComponents(self, applyArea, dismountTypes=CustomizationType._APPLIED_TO_TYPES):
-        outfitComponents = (self.paints, self.camouflages, self.decals)
         toMove = defaultdict(int)
         areas = [ i for i in ApplyArea.RANGE if i & applyArea ]
-        for c11nType, components in zip(CustomizationType._APPLIED_TO_TYPES, outfitComponents):
+        for c11nType in CustomizationType._APPLIED_TO_TYPES:
+            components = getattr(self, '{}s'.format(lower(CustomizationTypeNames[c11nType])))
             if c11nType not in dismountTypes:
                 continue
             for component in components:
@@ -633,11 +676,13 @@ class CustomizationOutfit(SerializableComponent):
                         if area & component.appliedTo:
                             result += 1
 
-        elif typeId in CustomizationType._INT_TYPES:
+        elif typeId in CustomizationType._SIMPLE_TYPES:
             if typeId == CustomizationType.STYLE and self.styleId == componentId:
                 result += 1
             elif typeId == CustomizationType.PROJECTION_DECAL:
                 result += len([ component for component in self.projection_decals if componentId == component.id ])
+            elif typeId == CustomizationType.PERSONAL_NUMBER:
+                result += len([ component for component in self.personal_numbers if componentId == component.id ])
             elif typeId == CustomizationType.MODIFICATION and componentId in self.modifications:
                 result += 1
         return result
@@ -662,7 +707,7 @@ class CustomizationOutfit(SerializableComponent):
 
                 if count != countBefore:
                     setattr(self, attr, [ component for component in outfitComponents if component.appliedTo ])
-            elif typeId in CustomizationType._INT_TYPES:
+            elif typeId in CustomizationType._SIMPLE_TYPES:
                 if typeId == CustomizationType.STYLE and self.styleId == componentId:
                     self.styleId = 0
                     count -= 1
@@ -741,6 +786,11 @@ def getAllItemsFromOutfit(cc, outfit, ignoreHiddenCamouflage=True):
     for d in outfit.projection_decals:
         result[cn.ProjectionDecalItem.makeIntDescr(d.id)] += 1
 
+    for number in outfit.personal_numbers:
+        for i in ApplyArea.RANGE:
+            if i & number.appliedTo:
+                result[cn.PersonalNumberItem.makeIntDescr(number.id)] += 1
+
     for p in outfit.paints:
         result[cn.PaintItem.makeIntDescr(p.id)] += cc.paints[p.id].getAmount(p.appliedTo)
 
@@ -779,6 +829,7 @@ class OutfitLogEntry(object):
         self._decals = CustomizationOutfit.applyAreaBitmaskToDict(outfit.decals)
         self._projection_decals = outfit.projection_decals
         self._camouflages = CustomizationOutfit.applyAreaBitmaskToDict(outfit.camouflages)
+        self._personal_numbers = CustomizationOutfit.applyAreaBitmaskToDict(outfit.personal_numbers)
         self.chassis_paint_cd = self.__getPaintCd(ApplyArea.CHASSIS)
         self.hull_paint_cd = self.__getPaintCd(ApplyArea.HULL)
         self.turret_paint_cd = self.__getPaintCd(ApplyArea.TURRET)
@@ -795,6 +846,12 @@ class OutfitLogEntry(object):
         self.turret_decal_cd1 = self.__getDecalCd(ApplyArea.TURRET_1)
         self.turret_decal_cd2 = self.__getDecalCd(ApplyArea.TURRET_2)
         self.turret_decal_cd3 = self.__getDecalCd(ApplyArea.TURRET_3)
+        self.hull_personal_number0 = self.__getPersonalNumberData(ApplyArea.HULL_2)
+        self.hull_personal_number1 = self.__getPersonalNumberData(ApplyArea.HULL_3)
+        self.turret_personal_number0 = self.__getPersonalNumberData(ApplyArea.TURRET_2)
+        self.turret_personal_number1 = self.__getPersonalNumberData(ApplyArea.TURRET_3)
+        self.gun_personal_number0 = self.__getPersonalNumberData(ApplyArea.GUN_2)
+        self.gun_personal_number1 = self.__getPersonalNumberData(ApplyArea.GUN_3)
         for number in xrange(0, MAX_USERS_PROJECTION_DECALS):
             setattr(self, 'projection_decal{0}'.format(number), self.__getProjectionDecalData(number))
 
@@ -812,6 +869,9 @@ class OutfitLogEntry(object):
     def __getDecalCd(self, area):
         return OutfitLogEntry.__getItemCompDescr(self._decals, area, cn.DecalItem.makeIntDescr)
 
+    def __getPersonalNumberCd(self, area):
+        return OutfitLogEntry.__getItemCompDescr(self._personal_numbers, area, cn.PersonalNumberItem.makeIntDescr)
+
     def __getProjectionDecalData(self, number):
         value = {'projection_decal_slot': 0,
          'projection_decal_cd': 0,
@@ -826,6 +886,13 @@ class OutfitLogEntry(object):
         except IndexError:
             pass
 
+        return value
+
+    def __getPersonalNumberData(self, area):
+        value = {}
+        value['personal_number_cd'] = self.__getPersonalNumberCd(area)
+        number = self._personal_numbers.get(area)
+        value['number'] = number[0].number if number else ''
         return value
 
     def toDict(self):

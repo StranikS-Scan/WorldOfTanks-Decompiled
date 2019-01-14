@@ -1,6 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/gen/view_models/ui_kit/image_res_str_model.py
-from frameworks.wulf import Resource
+from gui.impl.gen import R
 from frameworks.wulf import ViewModel
 
 class ImageResStrModel(ViewModel):
@@ -14,4 +14,4 @@ class ImageResStrModel(ViewModel):
 
     def _initialize(self):
         super(ImageResStrModel, self)._initialize()
-        self._addResourceProperty('imgSource', Resource.INVALID)
+        self._addResourceProperty('imgSource', R.invalid())

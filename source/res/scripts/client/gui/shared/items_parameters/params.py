@@ -15,7 +15,7 @@ from gui.shared.items_parameters import functions, getShellDescriptors, getOptio
 from gui.shared.items_parameters.comparator import rateParameterState, PARAM_STATE
 from gui.shared.items_parameters.functions import getBasicShell
 from gui.shared.items_parameters.params_cache import g_paramsCache
-from gui.shared.utils import DAMAGE_PROP_NAME, PIERCING_POWER_PROP_NAME, AIMING_TIME_PROP_NAME, STUN_DURATION_PROP_NAME, GUARANTEED_STUN_DURATION_PROP_NAME, AUTO_RELOAD_PROP_NAME, GUN_AUTO_RELOAD, GUN_CAN_BE_AUTO_RELOAD, MAX_STEERING_LOCK_ANGLE, WHEELED_SWITCH_OFF_TIME, WHEELED_SWITCH_ON_TIME, WHEELED_SWITCH_TIME
+from gui.shared.utils import DAMAGE_PROP_NAME, PIERCING_POWER_PROP_NAME, AIMING_TIME_PROP_NAME, STUN_DURATION_PROP_NAME, GUARANTEED_STUN_DURATION_PROP_NAME, AUTO_RELOAD_PROP_NAME, GUN_AUTO_RELOAD, GUN_CAN_BE_AUTO_RELOAD, MAX_STEERING_LOCK_ANGLE, WHEELED_SWITCH_OFF_TIME, WHEELED_SWITCH_ON_TIME, WHEELED_SWITCH_TIME, WHEELED_SPEED_MODE_SPEED
 from gui.shared.utils import DISPERSION_RADIUS_PROP_NAME, SHELLS_PROP_NAME, GUN_NORMAL, SHELLS_COUNT_PROP_NAME
 from gui.shared.utils import GUN_CAN_BE_CLIP, RELOAD_TIME_PROP_NAME
 from gui.shared.utils import RELOAD_MAGAZINE_TIME_PROP_NAME, SHELL_RELOADING_TIME_PROP_NAME, GUN_CLIP
@@ -263,6 +263,14 @@ class VehicleParams(_ParameterBase):
         return [ round(speed * METERS_PER_SECOND_TO_KILOMETERS_PER_HOUR, 2) for speed in limits ]
 
     @property
+    def wheeledSpeedModeSpeed(self):
+        if self.__hasWheeledSwitchMode():
+            limits = self._itemDescr.siegeVehicleDescr.physics['speedLimits']
+            return [ round(speed * METERS_PER_SECOND_TO_KILOMETERS_PER_HOUR, 2) for speed in limits ]
+        else:
+            return None
+
+    @property
     def chassisRotationSpeed(self):
         if not self._itemDescr.isWheeledVehicle:
             allTrfs = self.__getTerrainResistanceFactors()
@@ -498,7 +506,8 @@ class VehicleParams(_ParameterBase):
          MAX_STEERING_LOCK_ANGLE,
          WHEELED_SWITCH_ON_TIME,
          WHEELED_SWITCH_OFF_TIME,
-         WHEELED_SWITCH_TIME)
+         WHEELED_SWITCH_TIME,
+         WHEELED_SPEED_MODE_SPEED)
         stunConditionParams = ('stunMaxDuration', 'stunMinDuration')
         result = _ParamsDictProxy(self, preload, conditions=((conditionalParams, lambda v: v is not None), (stunConditionParams, lambda s: _isStunParamVisible(self._itemDescr.shot.shell))))
         return result
@@ -847,7 +856,13 @@ class ShellParams(CompatibleParams):
     @property
     def compatibles(self):
         getter = vehicles.getItemByCompactDescr
-        return [ getter(gunCD).userString for gunCD in self._getPrecachedInfo().guns ]
+        overallList = [ getter(gunCD).userString for gunCD in self._getPrecachedInfo().guns ]
+        uniques = []
+        for weapon in overallList:
+            if weapon not in uniques:
+                uniques.append(weapon)
+
+        return uniques
 
     @property
     def stunMaxDuration(self):

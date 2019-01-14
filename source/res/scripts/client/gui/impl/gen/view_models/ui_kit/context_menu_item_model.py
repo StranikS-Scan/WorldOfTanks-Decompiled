@@ -1,7 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/gen/view_models/ui_kit/context_menu_item_model.py
-import typing
-from frameworks.wulf import Resource
+from gui.impl.gen import R
 from frameworks.wulf import ViewModel
 from gui.impl.gen.view_models.ui_kit.list_model import ListModel
 
@@ -51,8 +50,8 @@ class ContextMenuItemModel(ViewModel):
     def _initialize(self):
         super(ContextMenuItemModel, self)._initialize()
         self._addViewModelProperty('subItemsList', ListModel())
-        self._addResourceProperty('label', Resource.INVALID)
-        self._addResourceProperty('icon', Resource.INVALID)
+        self._addResourceProperty('label', R.invalid())
+        self._addResourceProperty('icon', R.invalid())
         self._addBoolProperty('isEnabled', True)
         self._addBoolProperty('isSeparator', False)
         self._addNumberProperty('id', 0)

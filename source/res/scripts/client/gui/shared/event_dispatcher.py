@@ -1,22 +1,16 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/event_dispatcher.py
-import base64
-import json
-import BigWorld
 from operator import attrgetter
 from CurrentVehicle import HeroTankPreviewAppearance
-from adisp import process, async
-from debug_utils import LOG_WARNING, LOG_NOTE
+from adisp import process
+from debug_utils import LOG_WARNING
 from gui import SystemMessages, DialogsInterface
 from gui.Scaleform import MENU
-from gui.Scaleform.Waiting import Waiting
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.dialogs import I18nInfoDialogMeta, I18nConfirmDialogMeta, DIALOG_BUTTON_ID
 from gui.Scaleform.daapi.view.lobby.store.browser.ingameshop_helpers import getWebShopURL, isIngameShopEnabled
 from gui.Scaleform.framework.entities.View import ViewKey
 from gui.Scaleform.genConsts.BOOSTER_CONSTANTS import BOOSTER_CONSTANTS
-from gui.Scaleform.genConsts.VEHICLE_SELECTOR_CONSTANTS import VEHICLE_SELECTOR_CONSTANTS
-from gui.Scaleform.genConsts.NEWYEAR_ALIASES import NEWYEAR_ALIASES
 from gui.Scaleform.genConsts.CLANS_ALIASES import CLANS_ALIASES
 from gui.Scaleform.genConsts.EPICBATTLES_ALIASES import EPICBATTLES_ALIASES
 from gui.Scaleform.genConsts.PERSONAL_MISSIONS_ALIASES import PERSONAL_MISSIONS_ALIASES
@@ -34,19 +28,13 @@ from gui.shared.notifications import NotificationPriorityLevel
 from gui.shared.utils import isPopupsWindowsOpenDisabled
 from gui.shared.utils.functions import getViewName, getUniqueViewName
 from gui.shared.utils.requesters import REQ_CRITERIA
-from helpers import dependency, time_utils
+from helpers import dependency
 from helpers.i18n import makeString as _ms
 from skeletons.gui.game_control import IHeroTankController
 from skeletons.gui.goodies import IGoodiesCache
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
-from skeletons.new_year import INewYearController
 from soft_exception import SoftException
-from gui.shared.gui_items.loot_box import NewYearLootBoxes
-from gui.shared.gui_items.Vehicle import VEHICLE_CLASS_NAME as _VCN
-from gui.app_loader import sf_lobby
-from skeletons.gui.impl import IGuiLoader
-from gui.impl.gen.resources import R
 
 class SETTINGS_TAB_INDEX(object):
     GAME = 0
@@ -85,6 +73,14 @@ def showRankedPrimeTimeWindow():
 
 def showEpicBattlesPrimeTimeWindow():
     g_eventBus.handleEvent(events.LoadViewEvent(alias=EPICBATTLES_ALIASES.EPIC_BATTLES_PRIME_TIME_ALIAS, ctx={}), EVENT_BUS_SCOPE.LOBBY)
+
+
+def showEpicBattlesOfflineWindow():
+    g_eventBus.handleEvent(events.LoadViewEvent(alias=EPICBATTLES_ALIASES.EPIC_BATTLES_OFFLINE_ALIAS, ctx={}), EVENT_BUS_SCOPE.LOBBY)
+
+
+def showEpicBattlesWelcomeBackWindow():
+    g_eventBus.handleEvent(events.LoadViewEvent(alias=EPICBATTLES_ALIASES.EPIC_BATTLES_WELCOME_BACK_ALIAS, ctx={}), EVENT_BUS_SCOPE.LOBBY)
 
 
 def showEpicBattlesAfterBattleWindow(reusableInfo):
@@ -213,7 +209,7 @@ def showOldVehiclePreview(vehTypeCompDescr, previewAlias=VIEW_ALIAS.LOBBY_HANGAR
      'previewBackCb': previewBackCb}), scope=EVENT_BUS_SCOPE.LOBBY)
 
 
-def showVehiclePreview(vehTypeCompDescr, previewAlias=VIEW_ALIAS.LOBBY_HANGAR, vehStrCD=None, previewBackCb=None, itemsPack=None, price=money.MONEY_UNDEFINED, oldPrice=None, title='', endTime=None, buyParams=None, vehParams=None):
+def showVehiclePreview(vehTypeCompDescr, previewAlias=VIEW_ALIAS.LOBBY_HANGAR, vehStrCD=None, previewBackCb=None, itemsPack=None, price=money.MONEY_UNDEFINED, oldPrice=None, title='', endTime=None, buyParams=None):
     lobbyContext = dependency.instance(ILobbyContext)
     newPreviewEnabled = lobbyContext.getServerSettings().isIngamePreviewEnabled()
     heroTankController = dependency.instance(IHeroTankController)
@@ -231,8 +227,7 @@ def showVehiclePreview(vehTypeCompDescr, previewAlias=VIEW_ALIAS.LOBBY_HANGAR, v
          'oldPrice': oldPrice,
          'title': title,
          'endTime': endTime,
-         'buyParams': buyParams,
-         'vehParams': vehParams}), scope=EVENT_BUS_SCOPE.LOBBY)
+         'buyParams': buyParams}), scope=EVENT_BUS_SCOPE.LOBBY)
     elif itemsPack:
         SystemMessages.pushMessage(text=_ms(MESSENGER.CLIENT_ERROR_SHARED_TRY_LATER), type=SystemMessages.SM_TYPE.Error, priority=NotificationPriorityLevel.MEDIUM)
     else:
@@ -443,108 +438,3 @@ def showExchangeXPWindow():
 
 def showBubbleTooltip(msg):
     g_eventBus.handleEvent(events.BubbleTooltipEvent(events.BubbleTooltipEvent.SHOW, msg), scope=EVENT_BUS_SCOPE.LOBBY)
-
-
-@dependency.replace_none_kwargs(lobbyCtx=ILobbyContext, nyCtrl=INewYearController)
-def showLootBoxEntry(lootBoxType=NewYearLootBoxes.PREMIUM, lobbyCtx=None, nyCtrl=None):
-    enabled = lobbyCtx.getServerSettings().isLootBoxesEnabled() and nyCtrl.isEnabled()
-    if not enabled:
-        from gui.impl.lobby.loot_box.loot_box_helper import showRestrictedSysMessage
-        showRestrictedSysMessage()
-        return
-    from gui.impl.lobby.loot_box.loot_box_entry_view import LootBoxEntryWindow
-    window = LootBoxEntryWindow(lootBoxType)
-    window.load()
-
-
-@async
-def fetchLootBoxUrl(callback=None):
-    LOG_NOTE('<fetchLootBoxUrl> ttl expired')
-    fallbackURL = ''
-    timeout = 5.0
-    lobbyCtx = dependency.instance(ILobbyContext)
-    wgcgURL = lobbyCtx.getServerSettings().wgcg.url
-    if not wgcgURL.endswith('/'):
-        wgcgURL += '/'
-    wgcgURL += 'ny19'
-
-    def processResponse(r):
-        LOG_NOTE('<fetchLootBoxUrl> response:', base64.b64encode(r.body))
-        if r.responseCode == 200:
-            try:
-                data = json.loads(r.body)
-                callback((data.get('url', fallbackURL), data.get('state', 'external'), data.get('ttl', 0)))
-            except Exception:
-                callback(('', '', 0))
-
-        else:
-            callback(('', '', 0))
-
-    BigWorld.fetchURL(wgcgURL, lambda r, *args: processResponse(r), timeout=timeout)
-
-
-class LootBoxOverlayCloser(object):
-    guiApp = dependency.descriptor(IGuiLoader)
-
-    def __init__(self):
-        super(LootBoxOverlayCloser, self).__init__()
-
-    @sf_lobby
-    def app(self):
-        return None
-
-    def closeAllOverlays(self):
-        wndManager = self.guiApp.windowsManager
-        view = wndManager.getViewByLayoutID(R.views.lootBoxEntryView)
-        if view is not None:
-            view.getParentWindow().destroy()
-        view = wndManager.getViewByLayoutID(R.views.lootBoxRewardView)
-        if view is not None:
-            view.getParentWindow().destroy()
-        return
-
-
-@process
-@dependency.replace_none_kwargs(lobbyContext=ILobbyContext)
-def showLootBoxBuyWindow(lobbyContext=None):
-    Waiting.show('draw_research_items')
-    current = time_utils.getCurrentTimestamp()
-    if current > lobbyContext.lootboxTtl:
-        lobbyContext.lootboxBuyURL, lobbyContext.lootboxTarget, lobbyContext.lootboxTtl = yield fetchLootBoxUrl()
-        lobbyContext.lootboxTtl += time_utils.getCurrentTimestamp()
-    Waiting.hide('draw_research_items')
-    if lobbyContext.lootboxTarget and lobbyContext.lootboxBuyURL:
-        if lobbyContext.lootboxTarget == 'igb':
-            showWebShop(lobbyContext.lootboxBuyURL)
-            closer = LootBoxOverlayCloser()
-            closer.closeAllOverlays()
-        elif lobbyContext.lootboxTarget == 'external':
-            g_eventBus.handleEvent(events.OpenLinkEvent(events.OpenLinkEvent.LOOT_BOX_RESCUE_URL, lobbyContext.lootboxBuyURL))
-        else:
-            g_eventBus.handleEvent(events.OpenLinkEvent(events.OpenLinkEvent.LOOT_BOX_URL))
-    else:
-        g_eventBus.handleEvent(events.OpenLinkEvent(events.OpenLinkEvent.LOOT_BOX_URL))
-
-
-def showLootBoxGiftWindow():
-    g_eventBus.handleEvent(events.OpenLinkEvent(events.OpenLinkEvent.LOOT_BOX_GIFT_URL))
-
-
-def showNewYearApplyVehicleDiscount(level):
-    g_eventBus.handleEvent(events.LoadViewEvent(NEWYEAR_ALIASES.NEW_YEAR_VEHICLE_SELECTOR_ALIAS, ctx={'isMultiSelect': False,
-     'section': 'ny_vehicle_discount_activation',
-     'vehicleTypes': (_VCN.LIGHT_TANK, _VCN.MEDIUM_TANK, _VCN.HEAVY_TANK),
-     'filterVisibility': VEHICLE_SELECTOR_CONSTANTS.VISIBLE_NATION | VEHICLE_SELECTOR_CONSTANTS.VISIBLE_VEHICLE_TYPE | VEHICLE_SELECTOR_CONSTANTS.VISIBLE_COMPATIBLE_ONLY,
-     'level': level}), scope=EVENT_BUS_SCOPE.LOBBY)
-
-
-def showLootBoxAutoOpenWindow(rewards):
-    from gui.impl.lobby.loot_box.loot_box_auto_open_view import LootBoxAutoOpenWindow
-    window = LootBoxAutoOpenWindow(rewards)
-    window.load()
-
-
-def showNYLevelUpWindow(context):
-    from gui.impl.new_year.views.new_year_level_up_view import NewYearLevelUpWindow
-    window = NewYearLevelUpWindow(context)
-    window.load()

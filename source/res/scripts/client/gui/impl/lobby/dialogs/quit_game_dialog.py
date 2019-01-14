@@ -13,17 +13,17 @@ class QuitGameDialogWindow(DialogWindow):
     __slots__ = ()
 
     def __init__(self, parent=None):
-        super(QuitGameDialogWindow, self).__init__(content=DialogContent(R.views.quitGameDialogContent, SimpleDialogWindowModel), parent=parent)
+        super(QuitGameDialogWindow, self).__init__(content=DialogContent(R.views.quitGameDialogContent(), SimpleDialogWindowModel), parent=parent)
         self._setBackgroundShine(DialogShine.NONE)
-        self._addButton(DialogButtons.SUBMIT, R.strings.dialogs.quit.submit)
-        self._addButton(DialogButtons.CANCEL, R.strings.dialogs.quit.cancel, True)
+        self._addButton(DialogButtons.SUBMIT, R.strings.dialogs.quit.submit())
+        self._addButton(DialogButtons.CANCEL, R.strings.dialogs.quit.cancel(), True)
         width = GUI.screenResolution()
         if width > _RESIZE_TRIGER_WIDTH:
-            image = R.images.gui.maps.uiKit.dialogs.quit_bg_big
+            image = R.images.gui.maps.uiKit.dialogs.quit_bg_big()
         else:
-            image = R.images.gui.maps.uiKit.dialogs.quit_bg
+            image = R.images.gui.maps.uiKit.dialogs.quit_bg()
         self.viewModel.setBackgroundImage(image)
-        self.contentViewModel.setHeader(R.strings.dialogs.quit.title)
+        self.contentViewModel.setHeader(R.strings.dialogs.quit.title())
 
     def _initialize(self):
         super(QuitGameDialogWindow, self)._initialize()
@@ -42,7 +42,7 @@ class QuitGameDialogWindow(DialogWindow):
             _logger.error('Window height is not found: %r', ctx)
             return
         if ctx['width'] > _RESIZE_TRIGER_WIDTH:
-            image = R.images.gui.maps.uiKit.dialogs.quit_bg_big
+            image = R.images.gui.maps.uiKit.dialogs.quit_bg_big()
         else:
-            image = R.images.gui.maps.uiKit.dialogs.quit_bg
+            image = R.images.gui.maps.uiKit.dialogs.quit_bg()
         self.viewModel.setBackgroundImage(image)

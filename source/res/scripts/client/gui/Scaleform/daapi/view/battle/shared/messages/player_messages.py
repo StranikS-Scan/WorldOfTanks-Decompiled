@@ -71,10 +71,7 @@ class PlayerMessages(fading_messages.FadingMessages):
         self.showMessage(key, args, extra)
 
     def __onCombatEquipmentUpdated(self, _, item):
-        if item.getPrevStage() in (EQUIPMENT_STAGES.DEPLOYING,
-         EQUIPMENT_STAGES.UNAVAILABLE,
-         EQUIPMENT_STAGES.COOLDOWN,
-         EQUIPMENT_STAGES.SHARED_COOLDOWN) and item.getStage() == EQUIPMENT_STAGES.READY:
+        if item.getPrevStage() in (EQUIPMENT_STAGES.DEPLOYING, EQUIPMENT_STAGES.UNAVAILABLE, EQUIPMENT_STAGES.COOLDOWN) and item.getStage() == EQUIPMENT_STAGES.READY:
             postfix = item.getDescriptor().name.split('_')[0].upper()
             self.showMessage('COMBAT_EQUIPMENT_READY', {}, postfix=postfix)
 

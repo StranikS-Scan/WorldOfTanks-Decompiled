@@ -8,8 +8,6 @@ class APP_CONTAINERS_NAMES(object):
     SUBVIEW = 'subView'
     WINDOWS = 'window'
     SYSTEM_MESSAGES = 'systemMessages'
-    FRONT_WAITING = 'frontWaiting'
-    BACK_WAITING = 'backWaiting'
     BROWSER = 'browser'
     DIALOGS = 'topWindow'
     OVERLAY = 'overlay'
@@ -24,8 +22,6 @@ class APP_CONTAINERS_NAMES(object):
      SUBVIEW,
      WINDOWS,
      SYSTEM_MESSAGES,
-     FRONT_WAITING,
-     BACK_WAITING,
      BROWSER,
      DIALOGS,
      OVERLAY,

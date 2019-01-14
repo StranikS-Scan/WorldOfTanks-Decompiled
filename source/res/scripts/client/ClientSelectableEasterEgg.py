@@ -2,7 +2,6 @@
 # Embedded file name: scripts/client/ClientSelectableEasterEgg.py
 import BigWorld
 import AnimationSequence
-import ResMgr
 from ClientSelectableObject import ClientSelectableObject
 from gui import GUI_SETTINGS
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
@@ -12,7 +11,6 @@ from helpers import dependency
 from skeletons.gui.game_control import IBootcampController
 from helpers import getClientLanguage
 from vehicle_systems.stricted_loading import makeCallbackWeak
-_VIEW_SOUNDS_XML_PATH = 'scripts/item_defs/easter_egg_sound_config.xml'
 
 class ClientSelectableEasterEgg(ClientSelectableObject):
     bootcampController = dependency.descriptor(IBootcampController)
@@ -20,13 +18,11 @@ class ClientSelectableEasterEgg(ClientSelectableObject):
     def __init__(self):
         super(ClientSelectableEasterEgg, self).__init__()
         self.__animator = None
-        self.__viewSounds = None
         if self.bootcampController.isInBootcamp() or not GUI_SETTINGS.easterEgg.enabled:
-            self.setEnable(False)
+            self.enable(False)
         return
 
     def prerequisites(self):
-        self.__readViewSoundSettings()
         prereqs = super(ClientSelectableEasterEgg, self).prerequisites()
         if not prereqs:
             return []
@@ -56,13 +52,11 @@ class ClientSelectableEasterEgg(ClientSelectableObject):
         if self.__animator is not None:
             self.__animator.stop()
             self.__animator = None
-        self.__viewSounds = None
         return
 
     def onMouseClick(self):
         super(ClientSelectableEasterEgg, self).onMouseClick()
-        g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.IMAGE_VIEW, ctx={'img': self.__getImageName(),
-         'soundConfig': self.__viewSounds}), EVENT_BUS_SCOPE.LOBBY)
+        g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.IMAGE_VIEW, ctx={'img': self.__getImageName()}), EVENT_BUS_SCOPE.LOBBY)
 
     def __getImageName(self):
         nameParts = [self.imageName]
@@ -94,21 +88,3 @@ class ClientSelectableEasterEgg(ClientSelectableObject):
             BigWorld.wgDelEdgeDetectCompoundModel(compoundModel)
         else:
             super(ClientSelectableEasterEgg, self)._delEdgeDetect()
-
-    def __readViewSoundSettings(self):
-        self.__viewSounds = {}
-        if not self.viewSoundConfig:
-            return
-        else:
-            section = ResMgr.openSection(_VIEW_SOUNDS_XML_PATH)
-            if section is None or not section.has_key(self.viewSoundConfig):
-                return
-            for action, soundConfig in section[self.viewSoundConfig].items():
-                self.__viewSounds[action] = {}
-                for soundAction, value in soundConfig.items():
-                    if soundAction == 'event':
-                        self.__viewSounds[action][soundAction] = value.asString
-                    if soundAction == 'state':
-                        self.__viewSounds[action][soundAction] = [value.readString('group'), value.asString]
-
-            return

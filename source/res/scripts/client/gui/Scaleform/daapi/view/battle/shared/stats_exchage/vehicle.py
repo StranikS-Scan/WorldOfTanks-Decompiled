@@ -2,6 +2,8 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/shared/stats_exchage/vehicle.py
 from gui.Scaleform.daapi.view.battle.shared.stats_exchage import broker
 from gui.battle_control.arena_info import vos_collections
+from helpers import dependency
+from skeletons.gui.battle_session import IBattleSessionProvider
 
 class ISortedIDsComposer(object):
     __slots__ = ()
@@ -85,6 +87,7 @@ class TotalStatsComposer(broker.IExchangeComposer):
 
 
 class VehicleInfoComponent(broker.ExchangeComponent):
+    sessionProvider = dependency.descriptor(IBattleSessionProvider)
     __slots__ = ('_data',)
 
     def __init__(self):
@@ -103,11 +106,13 @@ class VehicleInfoComponent(broker.ExchangeComponent):
         vTypeVO = vInfoVO.vehicleType
         playerVO = vInfoVO.player
         accountDBID = playerVO.accountDBID
+        battleCtx = self.sessionProvider.getCtx()
+        isTeamKiller = playerVO.isTeamKiller or battleCtx.isTeamKiller(vID=vehicleID, accID=accountDBID) or overrides.isTeamKiller(vInfoVO)
         parts = self._ctx.getPlayerFullName(vInfoVO)
         data = {'accountDBID': accountDBID,
          'playerName': parts.playerName,
          'playerFullName': parts.playerFullName,
-         'playerStatus': overrides.getPlayerStatus(vInfoVO),
+         'playerStatus': overrides.getPlayerStatus(vInfoVO, isTeamKiller),
          'clanAbbrev': playerVO.clanAbbrev,
          'region': parts.regionCode,
          'userTags': self._ctx.getUserTags(accountDBID, playerVO.igrType),

@@ -1,6 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/gen/view_models/windows/simple_dialog_window_model.py
-from frameworks.wulf import Resource
+from gui.impl.gen import R
 from frameworks.wulf import ViewModel
 
 class SimpleDialogWindowModel(ViewModel):
@@ -20,5 +20,5 @@ class SimpleDialogWindowModel(ViewModel):
 
     def _initialize(self):
         super(SimpleDialogWindowModel, self)._initialize()
-        self._addResourceProperty('header', Resource.INVALID)
-        self._addResourceProperty('description', Resource.INVALID)
+        self._addResourceProperty('header', R.invalid())
+        self._addResourceProperty('description', R.invalid())

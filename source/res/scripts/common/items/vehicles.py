@@ -7,6 +7,7 @@ from functools import partial
 import struct
 import itertools
 import copy
+import os
 import BigWorld
 from Math import Vector2, Vector3
 import nations
@@ -14,6 +15,7 @@ import items
 from items import _xml, makeIntCompactDescrByID, parseIntCompactDescr, ITEM_TYPES
 from items.components import component_constants, shell_components, chassis_components, skills_constants
 from items.components import shared_components
+from items.components.c11n_constants import ProjectionDecalPositionTags
 from items.readers import chassis_readers
 from items.readers import gun_readers
 from items.readers import shared_readers
@@ -76,6 +78,7 @@ VEHICLE_DEVICE_TYPE_NAMES = ('engine',
  'gun',
  'turretRotator',
  'surveyingDevice',
+ 'STUN_PLACEHOLDER',
  'wheel')
 VEHICLE_TANKMAN_TYPE_NAMES = ('commander',
  'driver',
@@ -1322,6 +1325,8 @@ class VehicleType(object):
                             if matInfo.multipleExtra:
                                 wheel.materials[matKind] = matInfo._replace(extra=self.extrasDict[matInfo.extra])
 
+        if IS_CLIENT:
+            self.__checkPositionTags()
         VehicleType.currentReadingVeh = None
         section = None
         ResMgr.purge(xmlPath, True)
@@ -1415,6 +1420,43 @@ class VehicleType(object):
                     autounlocks.append(turret.compactDescr)
 
         return autounlocks
+
+    def __checkPositionTags(self):
+        hullsPositionTags = set()
+        for hull in self.hulls:
+            hullsPositionTags = self.__checkPartPositionTags(hull, hullsPositionTags)
+
+        turretsPositionTags = set()
+        gunsPositionTags = set()
+        for turrets in self.turrets:
+            for turret in turrets:
+                turretsPositionTags = self.__checkPartPositionTags(turret, turretsPositionTags)
+                gunPositionTags = set()
+                for gun in turret.guns:
+                    gunPositionTags = self.__checkPartPositionTags(gun, gunPositionTags)
+
+                gunsPositionTags |= gunPositionTags
+
+        repeatingTags = hullsPositionTags & gunsPositionTags | hullsPositionTags & turretsPositionTags | gunsPositionTags & turretsPositionTags
+        if repeatingTags:
+            LOG_ERROR('repeating position tags: {} for {}'.format(','.join(repeatingTags), self.name))
+
+    def __checkPartPositionTags(self, part, partTags):
+        tags = set()
+        projectionDecalSlots = [ slot for slot in part.slotsAnchors if slot.type == 'projectionDecal' ]
+        for slot in projectionDecalSlots:
+            positionTags = [ tag for tag in slot.tags if tag.startswith(ProjectionDecalPositionTags.PREFIX) ]
+            if len(positionTags) > 1:
+                LOG_ERROR('several position tags for slot ID%i' % slot.slotId)
+            for tag in positionTags:
+                if tag not in tags:
+                    tags.add(tag)
+                LOG_ERROR('repeating position tags: {} for {}'.format(tag, self.name))
+
+        repeatingTags = tags & partTags
+        if repeatingTags:
+            LOG_ERROR('repeating position tags: {} for {}'.format(','.join(repeatingTags), self.name))
+        return tags | partTags
 
 
 class Cache(object):
@@ -3250,9 +3292,10 @@ def _readShell(xmlCtx, section, name, nationID, shellTypeID, icons):
     if IS_CLIENT or IS_WEB:
         shell.i18n = shared_components.I18nComponent(section.readString('userString'), section.readString('description'))
         v = _xml.readNonEmptyString(xmlCtx, section, 'icon')
-        shell.icon = icons.get(v)
-        if shell.icon is None:
+        if icons.get(v) is None:
             _xml.raiseWrongXml(xmlCtx, 'icon', "unknown icon '%s'" % v)
+        shell.icon = icons.get(v)
+        shell.iconName = os.path.splitext(os.path.basename(shell.icon[0]))[0]
     _readPriceForItem(xmlCtx, section, shell.compactDescr)
     if IS_CELLAPP or IS_WEB:
         shell.isGold = 'gold' in _xml.readPrice(xmlCtx, section, 'price') or section.readBool('improved', False)

@@ -870,7 +870,7 @@
             <collisionModelServer>	vehicles/russian/R77_KV2/collision/Gun_05.model	</collisionModelServer>
             <collisionModelClient>	vehicles/russian/R77_KV2/collision_client/Gun_05.model	</collisionModelClient>
           </hitTester>
-          <animateEmblemSlots>	false	</animateEmblemSlots>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
           <customization>
             <customizableVehicleAreas>
               <paint>	GUN GUN_2	</paint>
@@ -878,6 +878,17 @@
             </customizableVehicleAreas>
           </customization>
           <customizationSlots>
+            <slot>
+              <slotType>	insigniaOnGun	</slotType>
+              <slotId>	771	</slotId>
+              <rayStart>	-0.002 0.045 1.36556	</rayStart>
+              <rayEnd>	-0.0678126 0.0869122 1.38464	</rayEnd>
+              <rayUp>	0.1437 0.000000 0.000000	</rayUp>
+              <applyToFabric>	true	</applyToFabric>
+              <size>	0.621217	</size>
+              <hideIfDamaged>	false	</hideIfDamaged>
+              <isUVProportional>	true	</isUVProportional>
+            </slot>
             <slot>
               <slotType>	paint	</slotType>
               <slotId>	768	</slotId>
@@ -948,9 +959,9 @@
           <rayStart>	1.01258 0.709128 -1.29739	</rayStart>
           <rayEnd>	0.614064 0.709128 -1.26295	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
+          <isMirrored>	true	</isMirrored>
           <size>	0.32	</size>
           <hideIfDamaged>	false	</hideIfDamaged>
-          <isMirrored>	true	</isMirrored>
           <isUVProportional>	true	</isUVProportional>
         </slot>
         <slot>

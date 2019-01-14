@@ -83,13 +83,14 @@ class WindowStatus(CONST_CONTAINER):
 
 
 class WindowFlags(CONST_CONTAINER):
+    UNDEFINED = 0
     WINDOW = 1
     GLOBAL_WINDOW = 2
     MAIN_WINDOW = 4 | GLOBAL_WINDOW
     DIALOG = 16 | WINDOW
     BROWSER = 32 | WINDOW
     POP_OVER = 48 | WINDOW
-    TOOL_TIP = 64 | WINDOW
+    TOOLTIP = 64 | WINDOW
     CONTEXT_MENU = 80 | WINDOW
     DROP_DOWN = 96 | WINDOW
     OVERLAY = 112 | WINDOW
@@ -132,5 +133,8 @@ class PropertyType(CONST_CONTAINER):
     ARRAY = 8
 
 
-class Resource(CONST_CONTAINER):
-    INVALID = 0
+class PositionAnchor(CONST_CONTAINER):
+    LEFT = 0
+    RIGHT = 1
+    TOP = 2
+    BOTTOM = 3

@@ -83,9 +83,8 @@ class UnboundViewAdaptor(DisposableEntity, ViewInterface):
         return False if self.__window is None else self.__window.windowStatus == WindowStatus.LOADED
 
     def setView(self, view):
-        self.__window = Window(WindowFlags.WINDOW, None, view)
+        self.__window = Window(WindowFlags.WINDOW, content=view)
         self.__window.onStatusChanged += self.__onStatusChanged
-        return
 
     def loadView(self):
         if self.__loadID is not None:

@@ -8,9 +8,13 @@
         <postBattle>
           <and>
             <vehicleKills>
-              <limittedTime>	90	</limittedTime>
-              <greaterOrEqual>	1	</greaterOrEqual>
+              <limittedTime>	240	</limittedTime>
+              <greaterOrEqual>	2	</greaterOrEqual>
             </vehicleKills>
+            <results>
+              <key>	damageDealt	</key>
+              <greaterOrEqual>	2000	</greaterOrEqual>
+            </results>
           </and>
         </postBattle>
       </conditions>
@@ -56,9 +60,13 @@
         <postBattle>
           <and>
             <vehicleKills>
-              <limittedTime>	90	</limittedTime>
-              <greaterOrEqual>	1	</greaterOrEqual>
+              <limittedTime>	240	</limittedTime>
+              <greaterOrEqual>	2	</greaterOrEqual>
             </vehicleKills>
+            <results>
+              <key>	damageDealt	</key>
+              <greaterOrEqual>	2000	</greaterOrEqual>
+            </results>
             <isAlive></isAlive>
           </and>
         </postBattle>
@@ -91,9 +99,13 @@
         <postBattle>
           <and>
             <vehicleKills>
-              <limittedTime>	90	</limittedTime>
-              <greaterOrEqual>	1	</greaterOrEqual>
+              <limittedTime>	240	</limittedTime>
+              <greaterOrEqual>	2	</greaterOrEqual>
             </vehicleKills>
+            <results>
+              <key>	damageDealt	</key>
+              <greaterOrEqual>	2000	</greaterOrEqual>
+            </results>
             <isAlive></isAlive>
           </and>
         </postBattle>

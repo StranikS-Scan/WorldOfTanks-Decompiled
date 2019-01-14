@@ -58,9 +58,10 @@ class CircularFlyer(BigWorld.UserDataObject):
                 if self.actionName != '':
                     clipResource = self.__model.deprecatedGetAnimationClipResource(self.actionName)
                     if clipResource:
-                        loader = AnimationSequence.Loader(clipResource, BigWorld.player().spaceID)
+                        spaceID = BigWorld.player().spaceID
+                        loader = AnimationSequence.Loader(clipResource, spaceID)
                         animator = loader.loadSync()
-                        animator.bindTo(AnimationSequence.ModelWrapperContainer(self.__model))
+                        animator.bindTo(AnimationSequence.ModelWrapperContainer(self.__model, spaceID))
                         animator.start()
                         self.__animator = animator
                 if self.pixieName != '' and self.pixieName not in resourceRefs.failedIDs:

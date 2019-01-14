@@ -1,0 +1,47 @@
+<personal_numbers.xml>
+  <xmlns:ussr>	ussr	</xmlns:ussr>
+  <xmlns:germany>	germany	</xmlns:germany>
+  <xmlns:usa>	usa	</xmlns:usa>
+  <xmlns:china>	china	</xmlns:china>
+  <xmlns:france>	france	</xmlns:france>
+  <xmlns:uk>	uk	</xmlns:uk>
+  <xmlns:japan>	japan	</xmlns:japan>
+  <xmlns:czech>	czech	</xmlns:czech>
+  <xmlns:sweden>	sweden	</xmlns:sweden>
+  <xmlns:poland>	poland	</xmlns:poland>
+  <itemGroup>
+    <name>	personal numbers	</name>
+    <userString>	#vehicle_customization:personal_number/general	</userString>
+    <season>	ALL	</season>
+    <historical>	true	</historical>
+    <priceGroup>	custom personal number	</priceGroup>
+    <personal_number>
+      <id>	1	</id>
+      <texture>	gui/maps/vehicles/personal_numbers/font_01.png	</texture>
+      <preview_texture>	gui/maps/vehicles/personal_numbers/font_01_preview.png	</preview_texture>
+      <userString>	#vehicle_customization:personal_number/fonts/font_01	</userString>
+      <fontId>	1	</fontId>
+    </personal_number>
+    <personal_number>
+      <id>	2	</id>
+      <texture>	gui/maps/vehicles/personal_numbers/font_02.png	</texture>
+      <preview_texture>	gui/maps/vehicles/personal_numbers/font_02_preview.png	</preview_texture>
+      <userString>	#vehicle_customization:personal_number/fonts/font_02	</userString>
+      <fontId>	2	</fontId>
+    </personal_number>
+    <personal_number>
+      <id>	3	</id>
+      <texture>	gui/maps/vehicles/personal_numbers/font_03.png	</texture>
+      <preview_texture>	gui/maps/vehicles/personal_numbers/font_03_preview.png	</preview_texture>
+      <userString>	#vehicle_customization:personal_number/fonts/font_03	</userString>
+      <fontId>	3	</fontId>
+    </personal_number>
+    <personal_number>
+      <id>	4	</id>
+      <texture>	gui/maps/vehicles/personal_numbers/font_04.png	</texture>
+      <preview_texture>	gui/maps/vehicles/personal_numbers/font_04_preview.png	</preview_texture>
+      <userString>	#vehicle_customization:personal_number/fonts/font_04	</userString>
+      <fontId>	4	</fontId>
+    </personal_number>
+  </itemGroup>
+</personal_numbers.xml>

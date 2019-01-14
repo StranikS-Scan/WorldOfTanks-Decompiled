@@ -220,7 +220,12 @@ class DamagePanel(DamagePanelMeta):
         self.as_setPlayerInfoS(result.playerName, result.clanAbbrev, result.regionCode, result.vehicleName)
 
     def _updateDeviceState(self, value):
-        self.as_updateDeviceStateS(*value[:2])
+        controllingVehicle = self.sessionProvider.shared.vehicleState.getControllingVehicle()
+        if controllingVehicle is None:
+            return
+        else:
+            self.as_updateDeviceStateS(*value[:2])
+            return
 
     def _updateRepairingDevice(self, value):
         self.as_updateRepairingDeviceS(*value)
@@ -276,13 +281,10 @@ class DamagePanel(DamagePanelMeta):
             return
 
     def __setupDevicesStates(self):
-        if self.__initialized:
+        ctrl = self.sessionProvider.shared.vehicleState
+        if ctrl is None:
             return
         else:
-            self.__initialized = True
-            ctrl = self.sessionProvider.shared.vehicleState
-            if ctrl is None:
-                return
             ctrl.onVehicleStateUpdated += self.__onVehicleStateUpdated
             for stateID in _STATE_HANDLERS.iterkeys():
                 value = ctrl.getStateValue(stateID)

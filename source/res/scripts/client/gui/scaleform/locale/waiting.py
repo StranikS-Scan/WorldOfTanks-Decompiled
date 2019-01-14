@@ -107,7 +107,6 @@ class WAITING(object):
     DOWNLOAD_BADGES = '#waiting:download/badges'
     DOWNLOAD_EPICMETAGAME = '#waiting:download/epicMetaGame'
     DOWNLOAD_TOKENS = '#waiting:download/tokens'
-    DOWNLOAD_FESTIVITY = '#waiting:download/festivity'
     UPDATINGSKILLWINDOW = '#waiting:updatingSkillWindow'
     PREBATTLE_CREATE = '#waiting:prebattle/create'
     PREBATTLE_TEAM_READY = '#waiting:prebattle/team_ready'
@@ -155,10 +154,6 @@ class WAITING(object):
     MESSENGER_SUBSCRIBE = '#waiting:messenger/subscribe'
     CLANS_INVITES_SEND = '#waiting:clans/invites/send'
     HOF_LOADING = '#waiting:hof/loading'
-    NEWYEAR_APPLYVEHICLEDISCOUNT = '#waiting:newYear/applyVehicleDiscount'
-    NEWYEAR_BREAKDECORATIONSWAITING = '#waiting:newYear/breakDecorationsWaiting'
-    NEWYEAR_HANGTOYWAITING = '#waiting:newYear/hangToyWaiting'
-    NEWYEAR_BUYTOYWAITING = '#waiting:newYear/buyToyWaiting'
     TITLES_ENUM = (TITLES_QUEUE,
      TITLES_REGISTERING,
      TITLES_ANOTHER_PERIPHERY,

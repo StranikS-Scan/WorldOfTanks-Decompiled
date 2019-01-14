@@ -266,7 +266,9 @@ class MENU(object):
     TANKCAROUSEL_VEHICLESTATES_FALLOUT_BROKEN = '#menu:tankCarousel/vehicleStates/fallout_broken'
     TANKCAROUSEL_VEHICLESTATES_RENTALISOVER = '#menu:tankCarousel/vehicleStates/rentalIsOver'
     TANKCAROUSEL_VEHICLESTATES_RENTABLE = '#menu:tankCarousel/vehicleStates/rentable'
+    TANKCAROUSEL_VEHICLESTATES_RENTABLE_EPIC = '#menu:tankCarousel/vehicleStates/rentable/epic'
     TANKCAROUSEL_VEHICLESTATES_RENTABLE_RANKED = '#menu:tankCarousel/vehicleStates/rentable/ranked'
+    TANKCAROUSEL_VEHICLESTATES_RENTABLEAGAIN_EPIC = '#menu:tankCarousel/vehicleStates/rentableAgain/epic'
     TANKCAROUSEL_VEHICLESTATES_RENTABLEAGAIN_RANKED = '#menu:tankCarousel/vehicleStates/rentableAgain/ranked'
     TANKCAROUSEL_VEHICLESTATES_RENTABLE_HOVER = '#menu:tankCarousel/vehicleStates/rentable/hover'
     TANKCAROUSEL_VEHICLESTATES_IGRRENTALISOVER = '#menu:tankCarousel/vehicleStates/igrRentalIsOver'
@@ -295,8 +297,10 @@ class MENU(object):
     STORE_VEHICLESTATES_EXPLODED = '#menu:store/vehicleStates/exploded'
     STORE_VEHICLESTATES_RENTALISOVER = '#menu:store/vehicleStates/rentalIsOver'
     STORE_VEHICLESTATES_RENTABLE = '#menu:store/vehicleStates/rentable'
+    STORE_VEHICLESTATES_RENTABLE_EPIC = '#menu:store/vehicleStates/rentable/epic'
     STORE_VEHICLESTATES_RENTABLE_RANKED = '#menu:store/vehicleStates/rentable/ranked'
     STORE_VEHICLESTATES_RENTABLEAGAIN = '#menu:store/vehicleStates/rentableAgain'
+    STORE_VEHICLESTATES_RENTABLEAGAIN_EPIC = '#menu:store/vehicleStates/rentableAgain/epic'
     STORE_VEHICLESTATES_RENTABLEAGAIN_RANKED = '#menu:store/vehicleStates/rentableAgain/ranked'
     STORE_VEHICLESTATES_IGRRENTALISOVER = '#menu:store/vehicleStates/igrRentalIsOver'
     STORE_VEHICLESTATES_INPREMIUMIGRONLY = '#menu:store/vehicleStates/inPremiumIgrOnly'
@@ -478,6 +482,7 @@ class MENU(object):
     TANK_PARAMS_WHEELEDSWITCHOFFTIME = '#menu:tank_params/wheeledSwitchOffTime'
     TANK_PARAMS_SWITCHTIME = '#menu:tank_params/switchTime'
     TANK_PARAMS_WHEELEDSWITCHTIME = '#menu:tank_params/wheeledSwitchTime'
+    TANK_PARAMS_WHEELEDSPEEDMODESPEED = '#menu:tank_params/wheeledSpeedModeSpeed'
     TANK_PARAMS_TIMEOFREACHING = '#menu:tank_params/timeOfReaching'
     TANK_PARAMS_ATTAINABLESPEED = '#menu:tank_params/attainableSpeed'
     TANK_PARAMS_HULLARMOR = '#menu:tank_params/hullArmor'
@@ -863,6 +868,7 @@ class MENU(object):
     ACCOUNTTYPES_FREE = '#menu:accountTypes/free'
     ACCOUNTTYPES_BASE = '#menu:accountTypes/base'
     ACCOUNTTYPES_PREMIUM = '#menu:accountTypes/premium'
+    ACCOUNTTYPES_SUBSCRIPTION = '#menu:accountTypes/subscription'
     ACCOUNTTYPES_DEMO = '#menu:accountTypes/demo'
     PREMIUM_BUYTITLE = '#menu:premium/buyTitle'
     PREMIUM_CONTINUETITLE = '#menu:premium/continueTitle'
@@ -999,6 +1005,7 @@ class MENU(object):
     VEHICLEINFO_PARAMS_WHEELEDSWITCHOFFTIME = '#menu:vehicleInfo/params/wheeledSwitchOffTime'
     VEHICLEINFO_PARAMS_SWITCHTIME = '#menu:vehicleInfo/params/switchTime'
     VEHICLEINFO_PARAMS_WHEELEDSWITCHTIME = '#menu:vehicleInfo/params/wheeledSwitchTime'
+    VEHICLEINFO_PARAMS_WHEELEDSPEEDMODESPEED = '#menu:vehicleInfo/params/wheeledSpeedModeSpeed'
     VEHICLEINFO_PARAMS_STUNMAXDURATION = '#menu:vehicleInfo/params/stunMaxDuration'
     VEHICLEINFO_PARAMS_STUNMINDURATION = '#menu:vehicleInfo/params/stunMinDuration'
     VEHICLEINFO_TABS_PROPERTIES = '#menu:vehicleInfo/tabs/properties'
@@ -1205,6 +1212,8 @@ class MENU(object):
     VEHICLE_RENTLEFT_HOURS = '#menu:vehicle/rentLeft/hours'
     VEHICLE_RENTLEFT_BATTLES = '#menu:vehicle/rentLeft/battles'
     VEHICLE_RENTLEFT_WINS = '#menu:vehicle/rentLeft/wins'
+    VEHICLE_RENTLEFT_EPIC_SEASON = '#menu:vehicle/rentLeft/epic/season'
+    VEHICLE_RENTLEFT_EPIC_DAYS = '#menu:vehicle/rentLeft/epic/days'
     VEHICLE_RESTORELEFT_DISABLEDBYRENT = '#menu:vehicle/restoreLeft/disabledByRent'
     VEHICLE_RESTORELEFT_UNLIM = '#menu:vehicle/restoreLeft/unlim'
     VEHICLE_RESTORELEFT_DAYS = '#menu:vehicle/restoreLeft/days'
@@ -1212,6 +1221,8 @@ class MENU(object):
     VEHICLE_RESTORECOOLDOWNLEFT_DAYS = '#menu:vehicle/restoreCooldownLeft/days'
     VEHICLE_RESTORECOOLDOWNLEFT_HOURS = '#menu:vehicle/restoreCooldownLeft/hours'
     SHOP_MENU_VEHICLE_RENT_DAYS = '#menu:shop/menu/vehicle/rent/days'
+    SHOP_MENU_VEHICLE_RENT_SEASON = '#menu:shop/menu/vehicle/rent/season'
+    SHOP_MENU_VEHICLE_RENT_CYCLE = '#menu:shop/menu/vehicle/rent/cycle'
     SHOP_MENU_VEHICLE_RENT_FOREVER = '#menu:shop/menu/vehicle/rent/forever'
     SHOP_MENU_VEHICLE_RENT_AVAILABLE = '#menu:shop/menu/vehicle/rent/available'
     SHOP_MENU_VEHICLE_RENT_DISCOUNT = '#menu:shop/menu/vehicle/rent/discount'
@@ -1813,6 +1824,8 @@ class MENU(object):
     CST_ITEM_CTX_MENU_PREVIEW = '#menu:cst_item_ctx_menu/preview'
     CST_ITEM_CTX_MENU_RESTORE = '#menu:cst_item_ctx_menu/restore'
     CST_ITEM_CTX_MENU_ACTIVATE = '#menu:cst_item_ctx_menu/activate'
+    CST_ITEM_CTX_MENU_AUTOPROLONGATIONON = '#menu:cst_item_ctx_menu/autoprolongationOn'
+    CST_ITEM_CTX_MENU_AUTOPROLONGATIONOFF = '#menu:cst_item_ctx_menu/autoprolongationOff'
     VIEWHEADER_BACKBTN_LABEL = '#menu:viewHeader/backBtn/label'
     VIEWHEADER_CLOSEBTN_LABEL = '#menu:viewHeader/closeBtn/label'
     INTERNET_PROVIDER_ROSTELECOM_NAME = '#menu:internet_provider/Rostelecom/name'
@@ -2035,6 +2048,7 @@ class MENU(object):
      TANK_PARAMS_WHEELEDSWITCHOFFTIME,
      TANK_PARAMS_SWITCHTIME,
      TANK_PARAMS_WHEELEDSWITCHTIME,
+     TANK_PARAMS_WHEELEDSPEEDMODESPEED,
      TANK_PARAMS_TIMEOFREACHING,
      TANK_PARAMS_ATTAINABLESPEED,
      TANK_PARAMS_HULLARMOR,
@@ -2213,7 +2227,9 @@ class MENU(object):
      TANKCAROUSEL_VEHICLESTATES_FALLOUT_BROKEN,
      TANKCAROUSEL_VEHICLESTATES_RENTALISOVER,
      TANKCAROUSEL_VEHICLESTATES_RENTABLE,
+     TANKCAROUSEL_VEHICLESTATES_RENTABLE_EPIC,
      TANKCAROUSEL_VEHICLESTATES_RENTABLE_RANKED,
+     TANKCAROUSEL_VEHICLESTATES_RENTABLEAGAIN_EPIC,
      TANKCAROUSEL_VEHICLESTATES_RENTABLEAGAIN_RANKED,
      TANKCAROUSEL_VEHICLESTATES_RENTABLE_HOVER,
      TANKCAROUSEL_VEHICLESTATES_IGRRENTALISOVER,
@@ -2325,7 +2341,9 @@ class MENU(object):
      CST_ITEM_CTX_MENU_SHOWINHANGAR,
      CST_ITEM_CTX_MENU_PREVIEW,
      CST_ITEM_CTX_MENU_RESTORE,
-     CST_ITEM_CTX_MENU_ACTIVATE)
+     CST_ITEM_CTX_MENU_ACTIVATE,
+     CST_ITEM_CTX_MENU_AUTOPROLONGATIONON,
+     CST_ITEM_CTX_MENU_AUTOPROLONGATIONOFF)
     HANGAR_HEADER_PERSONAL_QUESTS_LABEL_ENUM = (HANGAR_HEADER_PERSONAL_QUESTS_LABEL_ACTIVE,
      HANGAR_HEADER_PERSONAL_QUESTS_LABEL_EMPTY,
      HANGAR_HEADER_PERSONAL_QUESTS_LABEL_INACTIVE,

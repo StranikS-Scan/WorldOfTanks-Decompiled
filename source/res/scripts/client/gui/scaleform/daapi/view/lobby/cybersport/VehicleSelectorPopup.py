@@ -5,7 +5,6 @@ from constants import VEHICLE_CLASSES
 from gui.Scaleform.daapi.view.lobby.vehicle_selector_base import VehicleSelectorBase
 from gui.Scaleform.daapi.view.lobby.rally.vo_converters import makeVehicleVO
 from gui.Scaleform.daapi.view.meta.VehicleSelectorPopupMeta import VehicleSelectorPopupMeta
-from gui.Scaleform.genConsts.VEHICLE_SELECTOR_CONSTANTS import VEHICLE_SELECTOR_CONSTANTS
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.shared.events import CSVehicleSelectEvent, HideWindowEvent
@@ -20,17 +19,12 @@ class VehicleSelectorPopup(VehicleSelectorPopupMeta, VehicleSelectorBase):
         super(VehicleSelectorPopup, self).__init__()
         self._levelsRange = ctx.get('levelsRange', self._levelsRange)
         self.__isMultiSelect = ctx.get('isMultiSelect', False)
-        self._infoText = ctx.get('infoText', '')
+        self.__infoText = ctx.get('infoText', '')
         self.__componentsOffset = ctx.get('componentsOffset', 0)
-        self._titleText = ctx.get('titleText', '')
-        self._selectButton = ctx.get('selectButton', '')
-        self._cancelButton = ctx.get('cancelButton', '')
-        self._compatibleOnlyLabel = ctx.get('compatibleOnlyLabel', '')
         self.__section = ctx['section']
         self.__vehicles = ctx.get('vehicles')
         self.__selectedVehicles = ctx.get('selectedVehicles')
         self.__vehicleTypes = ctx.get('vehicleTypes', VEHICLE_CLASSES)
-        self._filterVisibility = ctx.get('filterVisibility', VEHICLE_SELECTOR_CONSTANTS.VISIBLE_ALL)
         self.showNotReadyVehicles = ctx.get('showNotReady', True)
 
     def _populate(self):
@@ -38,7 +32,7 @@ class VehicleSelectorPopup(VehicleSelectorPopupMeta, VehicleSelectorBase):
         self.addListener(HideWindowEvent.HIDE_VEHICLE_SELECTOR_WINDOW, self.onWindowForceClose)
         self.initFilters()
         self.as_setListModeS(self.__isMultiSelect)
-        self.as_setTextsS(self._titleText, self._infoText, self._selectButton, self._cancelButton)
+        self.as_setInfoTextS(self.__infoText, self.__componentsOffset)
 
     def _dispose(self):
         self.removeListener(HideWindowEvent.HIDE_VEHICLE_SELECTOR_WINDOW, self.onWindowForceClose)

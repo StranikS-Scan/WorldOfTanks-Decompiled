@@ -12,32 +12,16 @@ from Math import Vector3
 import AnimationSequence
 ENVIRONMENT_EFFECTS_CONFIG_FILE = 'scripts/environment_effects.xml'
 
-def _addModelToScene(model):
-    player = BigWorld.player()
-    if hasattr(player, 'isOnArena'):
-        player.addModel(model)
-    else:
-        BigWorld.addModel(model)
-
-
-def _delModelFromScene(model):
-    player = BigWorld.player()
-    if hasattr(player, 'isOnArena'):
-        player.delModel(model)
-    else:
-        BigWorld.delModel(model)
-
-
 class DebugGizmo(object):
 
     def __init__(self, modelName='helpers/models/position_gizmo.model'):
         self.model = BigWorld.Model(modelName)
-        _addModelToScene(self.model)
+        BigWorld.player().addModel(self.model)
         self.motor = BigWorld.Servo(Math.Matrix())
         self.model.addMotor(self.motor)
 
     def __del__(self):
-        _delModelFromScene(self.model)
+        BigWorld.player().delModel(self.model)
         if self.model.motors:
             self.model.delMotor(self.motor)
 
@@ -68,10 +52,9 @@ class DebugLine(object):
         self.model.addMotor(self.motor)
         self.__thickness = 0.1
         self.set(start, end)
-        _addModelToScene(self.model)
+        BigWorld.player().addModel(self.model)
 
     def __del__(self):
-        _delModelFromScene(self.model)
         self.model.delMotor(self.motor)
 
     def set(self, start, end):
@@ -151,7 +134,7 @@ class FlockLike(object):
                 clipResource = model.deprecatedGetAnimationClipResource('FlockAnimAction')
                 loader = AnimationSequence.Loader(clipResource, spaceID)
                 animator = loader.loadSync()
-                animator.bindTo(AnimationSequence.ModelWrapperContainer(model))
+                animator.bindTo(AnimationSequence.ModelWrapperContainer(model, spaceID))
                 animator.speed = animSpeed
                 animator.start()
                 self._animators.append(animator)

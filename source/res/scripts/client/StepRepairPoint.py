@@ -55,9 +55,10 @@ class StepRepairPoint(BigWorld.Entity):
             try:
                 clipResource = self.model.deprecatedGetAnimationClipResource(_g_stepRepairPointSettings.flagAnim)
                 if clipResource:
-                    loader = AnimationSequence.Loader(clipResource, BigWorld.player().spaceID)
+                    spaceID = BigWorld.player().spaceID
+                    loader = AnimationSequence.Loader(clipResource, spaceID)
                     self.__animator = loader.loadSync()
-                    self.__animator.bindTo(AnimationSequence.ModelWrapperContainer(self.model))
+                    self.__animator.bindTo(AnimationSequence.ModelWrapperContainer(self.model, spaceID))
                     self.__animator.start()
             except Exception:
                 LOG_WARNING('Unable to start "%s" animation action for model "%s"' % (_g_stepRepairPointSettings.flagAnim, _g_stepRepairPointSettings.flagModel))

@@ -8,14 +8,17 @@ from gui.Scaleform.locale.VEHICLE_CUSTOMIZATION import VEHICLE_CUSTOMIZATION
 from gui.shared.gui_items import GUI_ITEM_TYPE_NAMES, GUI_ITEM_TYPE
 from gui.shared.gui_items.fitting_item import FittingItem, RentalInfoProvider
 from helpers import i18n, dependency
-from items.components.c11n_constants import SeasonType, ItemTags, DirectionTags, ProjectionDecalFormTags
+from items.components.c11n_constants import SeasonType, ItemTags, ProjectionDecalDirectionTags, ProjectionDecalFormTags
 from shared_utils import first
 from skeletons.gui.server_events import IEventsCache
 _UNBOUND_VEH = 0
 _CAMO_ICON_TEMPLATE = 'img://camouflage,{width},{height},"{texture}","{background}",{colors},{weights}'
 _CAMO_SWATCH_WIDTH = 128
 _CAMO_SWATCH_HEIGHT = 128
+_PN_SWATCH_WIDTH = 228
+_PN_SWATCH_HEIGHT = 104
 _CAMO_SWATCH_BACKGROUND = 'gui/maps/vehicles/camouflages/camo_back.dds'
+_PERSONAL_NUM_ICON_TEMPLATE = 'img://personal_num,{width},{height},"{texture}","{alphabet}","{number}","{textureMask}","{background}"'
 STYLE_GROUP_ID_TO_GROUP_NAME_MAP = {VEHICLE_CUSTOMIZATION.STYLES_SPECIAL_STYLES: VEHICLE_CUSTOMIZATION.CUSTOMIZATION_INFOTYPE_TYPE_STYLE_SPECIAL,
  VEHICLE_CUSTOMIZATION.STYLES_MAIN_STYLES: VEHICLE_CUSTOMIZATION.CUSTOMIZATION_INFOTYPE_TYPE_STYLE_MAIN,
  VEHICLE_CUSTOMIZATION.STYLES_RENTED_STYLES: VEHICLE_CUSTOMIZATION.CUSTOMIZATION_INFOTYPE_TYPE_STYLE_RENTAL,
@@ -24,6 +27,10 @@ STYLE_GROUP_ID_TO_GROUP_NAME_MAP = {VEHICLE_CUSTOMIZATION.STYLES_SPECIAL_STYLES:
 def camoIconTemplate(texture, width, height, colors, background=_CAMO_SWATCH_BACKGROUND):
     weights = Math.Vector4(*[ (color >> 24) / 255.0 for color in colors ])
     return _CAMO_ICON_TEMPLATE.format(width=width, height=height, texture=texture, background=background, colors=','.join((str(color) for color in colors)), weights=','.join((str(weight) for weight in weights)))
+
+
+def personalNumIconTemplate(number, width, height, texture, alphabet, textureMask='', background=''):
+    return _PERSONAL_NUM_ICON_TEMPLATE.format(width=width, height=height, number=number, texture=texture, textureMask=textureMask, alphabet=alphabet, background=background)
 
 
 class ConcealmentBonus(object):
@@ -358,13 +365,42 @@ class ProjectionDecal(Decal):
 
     @property
     def direction(self):
-        directionTags = (tag for tag in self.tags if tag.startswith('direction_'))
-        return first(directionTags, DirectionTags.ANY)
+        directionTags = (tag for tag in self.tags if tag.startswith(ProjectionDecalDirectionTags.PREFIX))
+        return first(directionTags, ProjectionDecalDirectionTags.ANY)
 
     @property
     def formfactor(self):
-        formTags = (tag for tag in self.tags if tag.startswith('formfactor_'))
+        formTags = (tag for tag in self.tags if tag.startswith(ProjectionDecalFormTags.PREFIX))
         return first(formTags, ProjectionDecalFormTags.ANY)
+
+    def isWide(self):
+        return True
+
+
+class PersonalNumber(Customization):
+
+    def __init__(self, *args, **kwargs):
+        super(PersonalNumber, self).__init__(*args, **kwargs)
+        self.itemTypeID = GUI_ITEM_TYPE.PERSONAL_NUMBER
+
+    @property
+    def texture(self):
+        return self.descriptor.texture
+
+    @property
+    def previewTexture(self):
+        return self.descriptor.previewTexture
+
+    @property
+    def fontInfo(self):
+        return self.descriptor.fontInfo
+
+    @property
+    def isMirrored(self):
+        return self.descriptor.isMirrored
+
+    def getIconApplied(self, component):
+        return self.descriptor.previewTexture.replace('gui/', '../', 1)
 
     def isWide(self):
         return True

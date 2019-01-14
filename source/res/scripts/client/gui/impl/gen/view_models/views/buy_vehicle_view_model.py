@@ -1,7 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/gen/view_models/views/buy_vehicle_view_model.py
-import typing
-from frameworks.wulf import Resource
+from gui.impl.gen import R
 from frameworks.wulf import ViewModel
 from gui.impl.gen.view_models.ui_kit.list_model import ListModel
 from gui.impl.gen.view_models.views.buy_vehicle_view.equipment_block_model import EquipmentBlockModel
@@ -166,10 +165,10 @@ class BuyVehicleViewModel(ViewModel):
         self._addBoolProperty('isRentVisible', False)
         self._addBoolProperty('isRentSelected', False)
         self._addBoolProperty('isRestore', False)
-        self._addResourceProperty('withoutCommanderAltText', Resource.INVALID)
+        self._addResourceProperty('withoutCommanderAltText', R.invalid())
         self._addBoolProperty('isInBootcamp', False)
-        self._addResourceProperty('priceDescription', Resource.INVALID)
-        self._addResourceProperty('noCrewCheckboxLabel', Resource.INVALID)
+        self._addResourceProperty('priceDescription', R.invalid())
+        self._addResourceProperty('noCrewCheckboxLabel', R.invalid())
         self._addBoolProperty('isMovingTextEnabled', False)
         self._addBoolProperty('isContentHidden', False)
         self.onCloseBtnClick = self._addCommand('onCloseBtnClick')

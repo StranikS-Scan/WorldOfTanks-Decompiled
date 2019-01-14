@@ -35,6 +35,10 @@ def logFunc(func):
     return wrapped
 
 
+def makeFlashPath(s):
+    return '..' + s[3:]
+
+
 def freeze(seconds, nextFrame=True):
     if nextFrame:
         LOG_DEBUG('Freeze call at', BigWorld.time())

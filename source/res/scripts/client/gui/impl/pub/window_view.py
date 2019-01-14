@@ -7,7 +7,7 @@ from gui.impl.gen import R
 class WindowView(View):
     __slots__ = ()
 
-    def __init__(self, layoutID=R.views.standardWindow, viewModelClazz=WindowModel):
+    def __init__(self, layoutID=R.views.standardWindow(), viewModelClazz=WindowModel):
         super(WindowView, self).__init__(layoutID, ViewFlags.WINDOW_DECORATOR, viewModelClazz)
 
     @property

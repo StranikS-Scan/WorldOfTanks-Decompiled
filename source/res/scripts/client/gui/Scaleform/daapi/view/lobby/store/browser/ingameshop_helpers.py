@@ -15,6 +15,11 @@ def isIngameShopEnabled(itemsCache=None):
     return itemsCache.items.stats.isIngameShopEnabled
 
 
+@dependency.replace_none_kwargs(itemsCache=IItemsCache)
+def isSubscriptionEnabled(itemsCache=None):
+    return itemsCache.items.stats.isSubscriptionEnabled
+
+
 def getWebShopURL():
     return _getUrl()
 

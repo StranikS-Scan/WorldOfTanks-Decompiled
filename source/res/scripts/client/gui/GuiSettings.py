@@ -1,13 +1,14 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/GuiSettings.py
+import logging
 from collections import namedtuple
 import nations
 import constants
 import resource_helper
-from debug_utils import LOG_NOTE, LOG_CURRENT_EXCEPTION
 from helpers import getClientLanguage, time_utils
 from gui import macroses
 from soft_exception import SoftException
+_logger = logging.getLogger(__name__)
 GUI_SETTINGS_FILE_PATH = 'gui/gui_settings.xml'
 VIDEO_SETTINGS_FILE_PATH = 'gui/video_settings.xml'
 MovingTextProps = namedtuple('MovingTextProps', 'show internalBrowser')
@@ -136,8 +137,7 @@ _DEFAULT_SETTINGS = {'registrationURL': '',
  'rankedBattles': {},
  'easterEgg': EasterEggProps(True, []),
  'adventCalendar': {'popupIntervalInHours': 24,
-                    'baseURL': '',
-                    'herotankURL': ''},
+                    'baseURL': ''},
  'checkPromoFrequencyInBattles': 5}
 
 class GuiSettings(object):
@@ -157,7 +157,7 @@ class GuiSettings(object):
         if constants.IS_DEVELOPMENT:
             diff = set(self.__settings.keys()) - set(settings.keys())
             if diff:
-                LOG_NOTE('Settings are not in {0}:'.format(GUI_SETTINGS_FILE_PATH), diff)
+                _logger.info('Settings are not in %s: %r', GUI_SETTINGS_FILE_PATH, diff)
         self.__settings.update(settings)
 
     def __getattr__(self, name):
@@ -178,8 +178,8 @@ class GuiSettings(object):
     def isShowLanguageBar(self):
         try:
             return getClientLanguage() in self.language_bar
-        except Exception:
-            LOG_CURRENT_EXCEPTION()
+        except Exception as ex:
+            _logger.exception(ex)
             return False
 
     def isEmpty(self, name):

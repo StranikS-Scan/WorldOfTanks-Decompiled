@@ -97,6 +97,11 @@ class StatsRequester(AbstractSyncDataRequester, IStatsRequester):
         return shopMode == 'enabled' or shopMode == 'restricted' and shopFeatureKey in self.SPA
 
     @property
+    def isSubscriptionEnabled(self):
+        subscriptionKey = '/wot/game/premium_subscription'
+        return subscriptionKey in self.SPA
+
+    @property
     def isTeamKiller(self):
         return self.getCacheValue('tkillIsSuspected', False)
 

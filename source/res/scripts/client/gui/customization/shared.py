@@ -1,10 +1,12 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/customization/shared.py
-from collections import namedtuple
+from collections import namedtuple, defaultdict
+from copy import deepcopy
+from itertools import product
 import logging
 import Math
 from gui.shared.gui_items import GUI_ITEM_TYPE, GUI_ITEM_TYPE_NAMES
-from items.components.c11n_constants import CustomizationType, C11N_MASK_REGION, SeasonType, ApplyArea, MAX_USERS_PROJECTION_DECALS, C11N_GUN_APPLY_REGIONS
+from items.components.c11n_constants import CustomizationType, C11N_MASK_REGION, MAX_PROJECTION_DECALS_PER_AREA, MAX_USERS_PROJECTION_DECALS, ProjectionDecalPositionTags, SeasonType, ApplyArea, C11N_GUN_APPLY_REGIONS
 from shared_utils import CONST_CONTAINER, isEmpty
 from vehicle_systems.tankStructure import TankPartIndexes, TankPartNames
 from CurrentVehicle import g_currentVehicle
@@ -20,6 +22,7 @@ C11N_ITEM_TYPE_MAP = {GUI_ITEM_TYPE.PAINT: CustomizationType.PAINT,
  GUI_ITEM_TYPE.DECAL: CustomizationType.DECAL,
  GUI_ITEM_TYPE.EMBLEM: CustomizationType.DECAL,
  GUI_ITEM_TYPE.INSCRIPTION: CustomizationType.DECAL,
+ GUI_ITEM_TYPE.PERSONAL_NUMBER: CustomizationType.PERSONAL_NUMBER,
  GUI_ITEM_TYPE.STYLE: CustomizationType.STYLE,
  GUI_ITEM_TYPE.PROJECTION_DECAL: CustomizationType.PROJECTION_DECAL}
 
@@ -169,3 +172,84 @@ def getVehiclePartByIdx(vehicle, partIdx):
     if partIdx == TankPartIndexes.GUN:
         vehiclePart = vehicle.descriptor.gun
     return vehiclePart
+
+
+def getAppliedAreas(mask):
+    areas = []
+    for area in ApplyArea.RANGE:
+        if mask & area:
+            areas.append(area)
+
+    return areas
+
+
+def getPositionTag(slot):
+    for tag in slot.tags:
+        if tag.startswith(ProjectionDecalPositionTags.PREFIX):
+            return tag
+
+    return None
+
+
+def matchProjectionDecalsToSlots(projectionDecalsSlot, slotsByTagMap):
+    taggedDecals = []
+    appliedDecals = []
+    for idx, _, component in projectionDecalsSlot.items():
+        slotData = projectionDecalsSlot.getSlotData(idx)
+        if component.slotId == 0 and component.tags:
+            taggedDecals.append(slotData)
+        appliedDecals.append(slotData)
+
+    if taggedDecals:
+        slots = __findProjectionDecalsSlotsByTags(taggedDecals, appliedDecals, slotsByTagMap)
+        if slots:
+            for decal, slotParams in zip(taggedDecals, slots):
+                decal.component.slotId = slotParams.slotId
+
+        else:
+            return False
+    return True
+
+
+def __findProjectionDecalsSlotsByTags(decals, appliedDecals, slotsByTagMap):
+    resultSlots = []
+    for tagsOrder in product(*[ decal.component.tags for decal in decals ]):
+        slotsByTags = deepcopy(slotsByTagMap)
+        slots = []
+        for tag in tagsOrder:
+            slot = slotsByTags.pop(tag, None)
+            if slot is not None and slot not in slots:
+                slots.append(slot)
+            break
+        else:
+            if __checkSlotsOrder(slots, appliedDecals):
+                resultSlots = __compareSlotsOrders(resultSlots, slots, decals)
+
+    return resultSlots
+
+
+def __checkSlotsOrder(slots, appliedDecals):
+    areas = defaultdict(int)
+    for decal in appliedDecals:
+        for area in getAppliedAreas(decal.component.showOn):
+            areas[area] += 1
+
+    for slot in slots:
+        appliedAreas = getAppliedAreas(slot.showOn)
+        if all((areas[area] < MAX_PROJECTION_DECALS_PER_AREA for area in appliedAreas)):
+            for area in appliedAreas:
+                areas[area] += 1
+
+        return False
+
+    return True
+
+
+def __compareSlotsOrders(slotsA, slotsB, decals):
+    if not slotsA or not slotsB:
+        return slotsA or slotsB
+    slotsAIds = [ decal.component.tags.index(getPositionTag(slot)) for slot, decal in zip(slotsA, decals) ]
+    slotsAIds.sort()
+    slotsBIds = [ decal.component.tags.index(getPositionTag(slot)) for slot, decal in zip(slotsB, decals) ]
+    slotsBIds.sort()
+    return slotsA if slotsBIds >= slotsAIds else slotsB

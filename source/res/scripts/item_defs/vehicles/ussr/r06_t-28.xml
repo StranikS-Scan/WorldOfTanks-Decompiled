@@ -286,45 +286,10 @@
         <elasticity>	757	</elasticity>
         <damping>	2	</damping>
         <node>
-          <isLeft>	true	</isLeft>
-          <name>	Track_VT_L0	</name>
-          <forwardElastK>	0.85	</forwardElastK>
-          <backwardElastK>	1.6	</backwardElastK>
-          <offset>	-0.099	</offset>
-        </node>
-        <node>
           <isLeft>	false	</isLeft>
           <name>	Track_VT_R0	</name>
           <forwardElastK>	0.85	</forwardElastK>
           <backwardElastK>	1.6	</backwardElastK>
-          <offset>	-0.099	</offset>
-        </node>
-        <node>
-          <isLeft>	true	</isLeft>
-          <name>	Track_VT_L1	</name>
-          <forwardElastK>	0.83	</forwardElastK>
-          <backwardElastK>	2	</backwardElastK>
-          <offset>	-0.027	</offset>
-        </node>
-        <node>
-          <isLeft>	true	</isLeft>
-          <name>	Track_VT_L2	</name>
-          <forwardElastK>	0.8	</forwardElastK>
-          <backwardElastK>	2.5	</backwardElastK>
-          <offset>	-0.039	</offset>
-        </node>
-        <node>
-          <isLeft>	true	</isLeft>
-          <name>	Track_VT_L3	</name>
-          <forwardElastK>	0.8	</forwardElastK>
-          <backwardElastK>	3	</backwardElastK>
-          <offset>	-0.044	</offset>
-        </node>
-        <node>
-          <isLeft>	true	</isLeft>
-          <name>	Track_VT_L4	</name>
-          <forwardElastK>	0.8	</forwardElastK>
-          <backwardElastK>	3.5	</backwardElastK>
           <offset>	-0.099	</offset>
         </node>
         <node>
@@ -356,6 +321,40 @@
         </node>
         <node>
           <isLeft>	true	</isLeft>
+          <name>	Track_VT_L0	</name>
+          <forwardElastK>	0.85	</forwardElastK>
+          <backwardElastK>	1.6	</backwardElastK>
+          <offset>	-0.099	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L1	</name>
+          <forwardElastK>	0.83	</forwardElastK>
+          <backwardElastK>	2	</backwardElastK>
+          <offset>	-0.027	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L2	</name>
+          <forwardElastK>	0.8	</forwardElastK>
+          <backwardElastK>	2.5	</backwardElastK>
+          <offset>	-0.039	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L3	</name>
+          <forwardElastK>	0.8	</forwardElastK>
+          <backwardElastK>	3	</backwardElastK>
+          <offset>	-0.044	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L4	</name>
+          <forwardElastK>	0.8	</forwardElastK>
+          <backwardElastK>	3.5	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
           <name>	Track_VD_L0	</name>
           <forwardElastK>	1.13	</forwardElastK>
           <backwardElastK>	1.5	</backwardElastK>
@@ -364,7 +363,7 @@
         <node>
           <isLeft>	false	</isLeft>
           <name>	Track_VD_R0	</name>
-          <forwardElastK>	0.88	</forwardElastK>
+          <forwardElastK>	1.13	</forwardElastK>
           <backwardElastK>	1.5	</backwardElastK>
           <offset>	-0.03	</offset>
         </node>
@@ -379,7 +378,7 @@
           <isLeft>	false	</isLeft>
           <name>	Track_VD_R1	</name>
           <forwardElastK>	2.05	</forwardElastK>
-          <backwardElastK>	0.8	</backwardElastK>
+          <backwardElastK>	1.39	</backwardElastK>
           <offset>	-0.03	</offset>
         </node>
       </trackNodes>
@@ -2428,9 +2427,9 @@
           <rayStart>	0.804964 0.445527 -0.694605	</rayStart>
           <rayEnd>	0.616031 0.445489 -0.628997	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
+          <isMirrored>	true	</isMirrored>
           <size>	0.32	</size>
           <hideIfDamaged>	false	</hideIfDamaged>
-          <isMirrored>	true	</isMirrored>
           <isUVProportional>	true	</isUVProportional>
         </slot>
         <slot>
@@ -2762,9 +2761,9 @@
           <rayStart>	0.775351 0.53628 -0.499512	</rayStart>
           <rayEnd>	0.585011 0.479896 -0.475195	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
+          <isMirrored>	true	</isMirrored>
           <size>	0.32	</size>
           <hideIfDamaged>	false	</hideIfDamaged>
-          <isMirrored>	true	</isMirrored>
           <isUVProportional>	true	</isUVProportional>
         </slot>
         <slot>

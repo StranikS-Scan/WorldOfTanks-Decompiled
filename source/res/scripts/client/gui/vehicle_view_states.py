@@ -55,7 +55,7 @@ class NoPresentViewState(IVehicleViewState):
 
 
 class SelectedViewState(IVehicleViewState):
-    __slots__ = ('_locked', '_isInHangar', '_isBroken', '_isDisabledInRent', '_isOnlyForEventBattles', '_isOutfitLocked')
+    __slots__ = ('_locked', '_isInHangar', '_isBroken', '_isDisabledInRent', '_isOnlyForEventBattles', '_isOutfitLocked', '_isCustomizationEnabled')
 
     def __init__(self, vehicle):
         super(SelectedViewState, self).__init__()
@@ -75,6 +75,7 @@ class SelectedViewState(IVehicleViewState):
         self._isDisabledInRent = vehicle.isDisabledInRent()
         self._isOnlyForEventBattles = vehicle.isOnlyForEventBattles()
         self._isOutfitLocked = vehicle.isOutfitLocked()
+        self._isCustomizationEnabled = vehicle.isCustomizationEnabled()
 
     def _resolvePrbState(self):
         self._locked = False
@@ -97,7 +98,7 @@ class SelectedViewState(IVehicleViewState):
         return not self._locked and self._isInHangar
 
     def isCustomizationEnabled(self):
-        return not self._isOnlyForEventBattles and self._isInHangar and not self._locked and not self._isBroken and not self._isDisabledInRent and not self._isOutfitLocked
+        return self._isCustomizationEnabled
 
     def isOnlyForEventBattles(self):
         return self._isOnlyForEventBattles

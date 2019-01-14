@@ -231,6 +231,7 @@ class ReplayLoadingSpace(BattleLoadingSpace):
 
     def showGUI(self, appFactory, appNS, appState):
         if appState == _STATE_ID.INITIALIZED:
+            appFactory.destroyLobby()
             appFactory.showBattle()
             appFactory.loadBattlePage(appNS, self._arenaGuiType)
             appFactory.goToBattleLoading(appNS)

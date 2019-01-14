@@ -39,9 +39,10 @@ class FlagModel(object):
             try:
                 clipResource = self.__flagModel.deprecatedGetAnimationClipResource(self.__flagSettings.flagAnim)
                 if clipResource:
-                    loader = AnimationSequence.Loader(clipResource, BigWorld.player().spaceID)
+                    spaceID = BigWorld.player().spaceID
+                    loader = AnimationSequence.Loader(clipResource, spaceID)
                     self.__flagAnimator = loader.loadSync()
-                    self.__flagAnimator.bindTo(AnimationSequence.ModelWrapperContainer(self.__flagModel))
+                    self.__flagAnimator.bindTo(AnimationSequence.ModelWrapperContainer(self.__flagModel, spaceID))
                     self.__flagAnimator.start()
             except Exception:
                 LOG_WARNING('Unable to start "%s" animation action for model' % self.__flagSettings.flagAnim)

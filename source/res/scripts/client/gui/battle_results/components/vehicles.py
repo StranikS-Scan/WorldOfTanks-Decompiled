@@ -265,9 +265,10 @@ class EpicVehicleStatValuesBlock(base.StatsBlock):
         self.timesDestroyed = str(result.deathCount)
         self._team = result.player.team
         if self._team == EPIC_BATTLE_TEAM_ID.TEAM_ATTACKER:
-            self.teamSpecificStat = str(result.numCaptured) + '/' + str(result.numDestroyed)
+            self.teamSpecificStat = '{0}/{1}'.format(result.numCaptured, result.numDestroyed)
         else:
-            self.teamSpecificStat = str(result.numDefended) + '/' + str(result.numDestructiblesDefended)
+            numDestructiblesDefended = reusable.common.extCommon.get('destructibleEntity', {}).get('numDefended', 0)
+            self.teamSpecificStat = '{0}/{1}'.format(result.numDefended, numDestructiblesDefended)
         self.__rawDamageAssistedStun = result.damageAssistedStun
         self.__rawStunNum = result.stunNum
         if self.__rawStunNum == 0:

@@ -1,32 +1,28 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/reward_window.py
-from frameworks.wulf import ViewFlags, WindowFlags
+from frameworks.wulf import ViewFlags
+from frameworks.wulf.gui_constants import WindowFlags
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
-from gui.Scaleform.daapi.view.lobby.missions.missions_helper import getMissionInfoData
-from gui.Scaleform.framework import ViewTypes
-from gui.Scaleform.genConsts.BARRACKS_CONSTANTS import BARRACKS_CONSTANTS
-from gui.app_loader import sf_lobby
-from gui.impl.gen.view_models.ui_kit.reward_renderer_model import RewardRendererModel
 from gui.Scaleform.daapi.view.lobby.missions.awards_formatters import PackRentVehiclesAwardComposer, AnniversaryAwardComposer
-from gui.impl.gen.view_models.windows.loot_box_reward_window_content_model import LootBoxRewardWindowContentModel
-from gui.impl.pub import ViewImpl
-from gui.impl.pub.window_view import WindowView
-from gui.prb_control import prbDispatcherProperty
-from gui.server_events.awards_formatters import getPackRentVehiclesAwardPacker, getAnniversaryPacker
-from gui.server_events.bonuses import getNonQuestBonuses
-from gui.shared import g_eventBus, events, EVENT_BUS_SCOPE
-from gui.server_events.recruit_helper import getRecruitInfo
+from gui.Scaleform.daapi.view.lobby.missions.missions_helper import getMissionInfoData
+from gui.Scaleform.framework.entities.View import ViewKey
+from gui.Scaleform.genConsts.BARRACKS_CONSTANTS import BARRACKS_CONSTANTS
+from gui.app_loader import g_appLoader
+from gui.impl.backport import TooltipData, BackportTooltipWindow
 from gui.impl.gen import R
+from gui.impl.gen.view_models.ui_kit.reward_renderer_model import RewardRendererModel
 from gui.impl.gen.view_models.windows.reward_window_content_model import RewardWindowContentModel
 from gui.impl.gen.view_models.windows.twitch_reward_window_content_model import TwitchRewardWindowContentModel
-from gui.shared.event_dispatcher import showLootBoxEntry
+from gui.impl.pub import ViewImpl
+from gui.impl.pub.window_impl import WindowImpl
+from gui.impl.pub.window_view import WindowView
+from gui.server_events.awards_formatters import getPackRentVehiclesAwardPacker, getAnniversaryPacker
+from gui.server_events.bonuses import getTutorialBonuses
+from gui.server_events.recruit_helper import getRecruitInfo
+from gui.shared import g_eventBus, events, EVENT_BUS_SCOPE
 from gui.shared.money import Currency
-from gui.impl.backport_tooltip import TooltipData, BackportTooltipWindow
-from gui.impl.pub import LobbyWindow
-from helpers import dependency
-from skeletons.gui.game_control import IFestivityController
 BASE_EVENT_NAME = 'base'
-ADDITIONAL_AWARDS_COUNT = 5
+_ADDITIONAL_AWARDS_COUNT = 5
 
 class RewardWindowContent(ViewImpl):
     __slots__ = ('__items', '_eventName', '_quest', '_vehicles')
@@ -64,7 +60,7 @@ class RewardWindowContent(ViewImpl):
         g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.LOBBY_BARRACKS, ctx={'location': BARRACKS_CONSTANTS.LOCATION_FILTER_NOT_RECRUITED}), scope=EVENT_BUS_SCOPE.LOBBY)
 
     def createToolTip(self, event):
-        if event.contentID == R.views.backportTooltipContent:
+        if event.contentID == R.views.backportTooltipContent():
             tooltipId = event.getArgument('tooltipId')
             window = BackportTooltipWindow(self.__items[tooltipId], self.getParentWindow()) if tooltipId is not None else None
             if window is not None:
@@ -82,7 +78,7 @@ class RewardWindowContent(ViewImpl):
         self._initRewardsList()
 
     def _getAwardComposer(self):
-        return PackRentVehiclesAwardComposer(ADDITIONAL_AWARDS_COUNT, getPackRentVehiclesAwardPacker())
+        return PackRentVehiclesAwardComposer(_ADDITIONAL_AWARDS_COUNT, getPackRentVehiclesAwardPacker())
 
     def _initRewardsList(self):
         with self.getViewModel().transaction() as tx:
@@ -90,7 +86,7 @@ class RewardWindowContent(ViewImpl):
             if self._quest is not None:
                 allBonuses = getMissionInfoData(self._quest).getSubstituteBonuses()
                 bonuses = [ bonus for bonus in allBonuses if bonus.getName() != 'vehicles' ]
-                vehBonus = getNonQuestBonuses('vehicles', self._vehicles)
+                vehBonus = getTutorialBonuses('vehicles', self._vehicles)
                 bonuses.extend(vehBonus)
                 bonuses.sort(key=self._keySortOrder)
                 formatter = self._getAwardComposer()
@@ -133,37 +129,31 @@ class TwitchRewardWindowContent(RewardWindowContent):
         return
 
 
-class RewardWindowBase(LobbyWindow):
+class RewardWindowBase(WindowImpl):
     __slots__ = ()
 
-    def __init__(self, content=None, parent=None):
-        super(RewardWindowBase, self).__init__(wndFlags=WindowFlags.DIALOG, decorator=WindowView(), content=content, parent=parent)
-
-    @property
-    def windowModel(self):
-        return super(RewardWindowBase, self)._getDecoratorViewModel()
+    def __init__(self, parent, content):
+        if parent is None:
+            app = g_appLoader.getApp()
+            view = app.containerManager.getViewByKey(ViewKey(VIEW_ALIAS.LOBBY))
+            if view is not None:
+                parent = view.getParentWindow()
+        super(RewardWindowBase, self).__init__(WindowFlags.DIALOG | WindowFlags.RESIZABLE, decorator=WindowView(), parent=parent, content=content, areaID=R.areas.default())
+        return
 
     def _initialize(self):
         super(RewardWindowBase, self)._initialize()
-        self.content.getViewModel().getContent().getViewModel().onConfirmBtnClicked += self._onConfirmBtnClicked
+        self.content.getViewModel().onConfirmBtnClicked += self._onConfirmBtnClicked
         with self.windowModel.transaction() as tx:
-            tx.setAlignToCenter(True)
-            self._setWindowTitle()
-        self.windowModel.onClosed += self._onClosed
-
-    def _setWindowTitle(self):
-        self.windowModel.setTitle(R.strings.ingame_gui.rewardWindow.winHeaderText)
+            tx.setTitle(R.strings.ingame_gui.rewardWindow.winHeaderText())
+        self.center()
 
     def _finalize(self):
         super(RewardWindowBase, self)._finalize()
-        self.content.getViewModel().getContent().getViewModel().onConfirmBtnClicked -= self._onConfirmBtnClicked
-        self.windowModel.onClosed -= self._onClosed
-
-    def _onClosed(self, _=None):
-        self.destroy()
+        self.content.getViewModel().onConfirmBtnClicked -= self._onConfirmBtnClicked
 
     def _onConfirmBtnClicked(self, _=None):
-        self.content.getViewModel().getContent().handleNextButton()
+        self.content.handleNextButton()
         self._onClosed()
 
 
@@ -171,114 +161,39 @@ class RewardWindow(RewardWindowBase):
     __slots__ = ()
 
     def __init__(self, ctx=None, parent=None):
-        super(RewardWindow, self).__init__(parent=parent, content=RewardWindowContent(layoutID=R.views.rewardWindowContent, viewModelClazz=RewardWindowContentModel, ctx=ctx))
+        super(RewardWindow, self).__init__(parent=parent, content=RewardWindowContent(layoutID=R.views.rewardWindowContent(), viewModelClazz=RewardWindowContentModel, ctx=ctx))
 
 
 class TwitchRewardWindow(RewardWindowBase):
     __slots__ = ()
 
     def __init__(self, ctx=None, parent=None):
-        super(TwitchRewardWindow, self).__init__(parent=parent, content=TwitchRewardWindowContent(layoutID=R.views.twitchRewardWindowContent, viewModelClazz=TwitchRewardWindowContentModel, ctx=ctx))
-
-
-class LootBoxRewardWindowContent(RewardWindowContent):
-    _festivityController = dependency.descriptor(IFestivityController)
-    __slots__ = ('_lootboxType', '_lootboxesCount', '_isFree')
-
-    def __init__(self, layoutID, viewModelClazz, ctx):
-        super(LootBoxRewardWindowContent, self).__init__(layoutID, viewModelClazz, ctx)
-        if ctx is not None:
-            self._lootboxType = ctx.get('lootboxType', '')
-            self._lootboxesCount = ctx.get('lootboxesCount', 0)
-            self._isFree = ctx.get('isFree', False)
-        else:
-            self._lootboxType = ''
-            self._lootboxesCount = 0
-            self._isFree = False
-        return
-
-    def handleNextButton(self):
-        showLootBoxEntry(self._lootboxType)
-
-    @prbDispatcherProperty
-    def prbDispatcher(self):
-        pass
-
-    @sf_lobby
-    def app(self):
-        pass
-
-    def _initialize(self, *args, **kwargs):
-        super(LootBoxRewardWindowContent, self)._initialize(*args, **kwargs)
-        g_eventBus.addListener(events.FightButtonEvent.FIGHT_BUTTON_UPDATE, self.__handleFightButtonUpdated, scope=EVENT_BUS_SCOPE.LOBBY)
-        g_eventBus.addListener(events.LootboxesEvent.ON_ENTRY_VIEW_LOADED, self.__onEntryViewLoaded, scope=EVENT_BUS_SCOPE.LOBBY)
-        self._festivityController.onStateChanged += self.__onStateChanged
-        self.app.containerManager.onViewLoaded += self.__onViewLoaded
-        with self.getViewModel().transaction() as tx:
-            tx.setRewardsCount(self._lootboxesCount)
-            tx.setLootboxType(self._lootboxType)
-            tx.setIsFree(self._isFree)
-
-    def _finalize(self):
-        self._festivityController.onStateChanged -= self.__onStateChanged
-        self.app.containerManager.onViewLoaded -= self.__onViewLoaded
-        g_eventBus.removeListener(events.FightButtonEvent.FIGHT_BUTTON_UPDATE, self.__handleFightButtonUpdated, scope=EVENT_BUS_SCOPE.LOBBY)
-        g_eventBus.removeListener(events.LootboxesEvent.ON_ENTRY_VIEW_LOADED, self.__onEntryViewLoaded, scope=EVENT_BUS_SCOPE.LOBBY)
-        super(LootBoxRewardWindowContent, self)._finalize()
-
-    def _initRewardsList(self):
-        pass
-
-    def __onStateChanged(self):
-        if not self._festivityController.isEnabled():
-            self.destroyWindow()
-
-    def __handleFightButtonUpdated(self, _):
-        prbDispatcher = self.prbDispatcher
-        if prbDispatcher is not None and prbDispatcher.getFunctionalState().isNavigationDisabled():
-            self.destroyWindow()
-        return
-
-    def __onViewLoaded(self, pyView):
-        if pyView.alias != VIEW_ALIAS.LOBBY_HANGAR and pyView.viewType == ViewTypes.LOBBY_SUB:
-            self.destroyWindow()
-
-    def __onEntryViewLoaded(self, _):
-        self.destroyWindow()
-
-
-class LootBoxRewardWindow(RewardWindowBase):
-    __slots__ = ()
-
-    def __init__(self, ctx=None, parent=None):
-        super(LootBoxRewardWindow, self).__init__(parent=parent, content=LootBoxRewardWindowContent(layoutID=R.views.lootBoxRewardWindowContent, viewModelClazz=LootBoxRewardWindowContentModel, ctx=ctx))
-
-    def _setWindowTitle(self):
-        self.windowModel.setTitle(R.strings.ingame_gui.rewardWindow.lootbox.winHeaderText)
+        super(TwitchRewardWindow, self).__init__(parent=parent, content=TwitchRewardWindowContent(layoutID=R.views.twitchRewardWindowContent(), viewModelClazz=TwitchRewardWindowContentModel, ctx=ctx))
 
 
 class GiveAwayRewardWindowContent(RewardWindowContent):
     __slots__ = ('__items', '_eventName', '_quest', '_vehicles')
-    _BONUSES_ORDER = ('dossier',
+    _BONUSES_ORDER = (Currency.CRYSTAL,
      'badgesGroup',
+     'dossier',
      'vehicles',
-     'items',
-     Currency.CRYSTAL,
      Currency.CREDITS,
-     'customizations')
+     'customizations',
+     'items')
 
     def handleNextButton(self):
         self.getParentWindow().destroy()
 
     def _getAwardComposer(self):
-        return AnniversaryAwardComposer(ADDITIONAL_AWARDS_COUNT, getAnniversaryPacker())
+        return AnniversaryAwardComposer(_ADDITIONAL_AWARDS_COUNT, getAnniversaryPacker())
 
 
 class GiveAwayRewardWindow(RewardWindowBase):
     __slots__ = ()
 
     def __init__(self, ctx=None, parent=None):
-        super(GiveAwayRewardWindow, self).__init__(parent=parent, content=GiveAwayRewardWindowContent(layoutID=R.views.twitchRewardWindowContent, viewModelClazz=RewardWindowContentModel, ctx=ctx))
+        super(GiveAwayRewardWindow, self).__init__(parent=parent, content=GiveAwayRewardWindowContent(layoutID=R.views.twitchRewardWindowContent(), viewModelClazz=RewardWindowContentModel, ctx=ctx))
 
-    def _setWindowTitle(self):
-        self.windowModel.setTitle(R.strings.ingame_gui.rewardWindow.anniversary_ga.winHeaderText)
+    def _initialize(self):
+        super(GiveAwayRewardWindow, self)._initialize()
+        self.windowModel.setTitle(R.strings.ingame_gui.rewardWindow.anniversary_ga.winHeaderText())

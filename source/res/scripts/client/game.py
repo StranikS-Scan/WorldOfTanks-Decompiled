@@ -116,7 +116,6 @@ def init(scriptConfig, engineConfig, userPreferences, loadingScreenGUI=None):
         TriggersManager.init()
         RSSDownloader.init()
         items.clearXMLCache()
-        SoundGroups.loadLightSoundsDB()
         import player_ranks
         player_ranks.init()
         import destructible_entities
@@ -207,7 +206,6 @@ def start():
                     LOG_CURRENT_EXCEPTION()
 
                 ServiceLocator.gameplay.start()
-                gui_personality.start()
             elif sys.argv[1] == 'replayTimeout':
                 try:
                     g_replayCtrl.replayTimeout = float(sys.argv[2])
@@ -216,10 +214,8 @@ def start():
                     LOG_CURRENT_EXCEPTION()
 
                 ServiceLocator.gameplay.start()
-                gui_personality.start()
             elif sys.argv[1] == 'botInit' or sys.argv[1] == 'botExecute':
                 ServiceLocator.gameplay.start()
-                gui_personality.start()
                 try:
                     LOG_DEBUG('BOTNET: Playing scenario "%s" with bot "%s"...' % (sys.argv[2], sys.argv[3]))
                     if sys.argv[1] == 'botInit':
@@ -232,10 +228,8 @@ def start():
 
             else:
                 ServiceLocator.gameplay.start()
-                gui_personality.start()
         else:
             ServiceLocator.gameplay.start()
-            gui_personality.start()
         try:
             import Vibroeffects
             Vibroeffects.VibroManager.g_instance.start()
@@ -502,6 +496,7 @@ _PYTHON_MACROS = {'p': 'BigWorld.player()',
  'clan': 'from gui.shared.ClanCache import g_clanCache; clan = g_clanCache',
  'camera': 'BigWorld.player().inputHandler.ctrl',
  'resetEpic': 'BigWorld.player().epicMetaGame.resetEpicMetaGame',
+ 'setHero': 'from HeroTank import debugReloadHero; debugReloadHero',
  'rankedCtrl': 'from helpers import dependency; from skeletons.gui.game_control import IRankedBattlesController;rc = dependency.instance(IRankedBattlesController)',
  'eventsCache': 'from helpers import dependency; from skeletons.gui.server_events import IEventsCache;ec = dependency.instance(IEventsCache)',
  'items': 'from helpers import dependency; from skeletons.gui.shared import IItemsCache;items = dependency.instance(IItemsCache).items'}

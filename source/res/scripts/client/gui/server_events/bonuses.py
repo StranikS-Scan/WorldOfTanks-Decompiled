@@ -16,6 +16,7 @@ from gui.Scaleform.locale.BADGE import BADGE
 from gui.Scaleform.locale.QUESTS import QUESTS
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
+from gui.Scaleform.locale.VEHICLE_CUSTOMIZATION import VEHICLE_CUSTOMIZATION
 from gui.Scaleform.settings import getBadgeIconPath, BADGES_ICONS
 from gui.server_events.formatters import parseComplexToken
 from gui.shared.formatters import text_styles
@@ -27,6 +28,7 @@ from gui.shared.utils.functions import makeTooltip, stripColorTagDescrTags
 from helpers import dependency
 from helpers import getLocalizedData, i18n
 from helpers import time_utils
+from helpers.i18n import makeString as _ms
 from items import vehicles, tankmen
 from items.components import c11n_components as cc
 from items.tankmen import RECRUIT_TMAN_TOKEN_PREFIX
@@ -1005,7 +1007,12 @@ class CustomizationsBonus(SimpleBonus):
 
     def getList(self):
         result = []
-        for itemData in self.getCustomizations():
+        separator = ''
+        customizations = self.getCustomizations()
+        customizationsCountMax = len(customizations) - 1
+        if customizationsCountMax > 0:
+            separator = ','
+        for count, itemData in enumerate(customizations):
             itemTypeName = itemData.get('custType')
             itemID = itemData.get('id')
             boundVehicle = itemData.get('vehTypeCompDescr')
@@ -1016,13 +1023,22 @@ class CustomizationsBonus(SimpleBonus):
             valueStr = None
             if value > 1:
                 valueStr = text_styles.main(i18n.makeString(QUESTS.BONUSES_CUSTOMIZATION_VALUE, count=value))
+            key = VEHICLE_CUSTOMIZATION.getElementBonusDesc(item.itemTypeName)
+            bonusDesc = ''
+            if key is not None:
+                bonusDesc = _ms(key, value=item.userName)
+                if value > 0:
+                    bonusDesc = bonusDesc + _ms(VEHICLE_CUSTOMIZATION.ELEMENTBONUS_FACTOR, count=value)
+                if count < customizationsCountMax:
+                    bonusDesc = bonusDesc + separator
             result.append({'intCD': item.intCD,
              'texture': item.icon,
              'value': value,
              'valueStr': valueStr,
              'boundVehicle': boundVehicle,
              'boundToCurrentVehicle': boundToCurrentVehicle,
-             'showPrice': False})
+             'showPrice': False,
+             'description': bonusDesc})
 
         return result
 
@@ -1034,7 +1050,7 @@ class CustomizationsBonus(SimpleBonus):
         substitutes = []
         cache = vehicles.g_cache.customization20()
         for customizationItem in self._value:
-            c11nItem = self.getC11nItem(customizationItem)
+            c11nItem = self.__getC11nItem(customizationItem)
             itemType, itemId = cc.splitIntDescr(c11nItem.intCD)
             c11nComponent = cache.itemTypes[itemType][itemId]
             count = customizationItem.get('value')
@@ -1060,7 +1076,7 @@ class CustomizationsBonus(SimpleBonus):
         bonuses.insert(0, CustomizationsBonus('customizations', substitutes))
         return bonuses
 
-    def getC11nItem(self, item):
+    def __getC11nItem(self, item):
         itemTypeName = item.get('custType')
         itemID = item.get('id')
         itemTypeID = GUI_ITEM_TYPE_INDICES.get(itemTypeName)
@@ -1068,7 +1084,7 @@ class CustomizationsBonus(SimpleBonus):
         return c11nItem
 
     def __getCommonAwardsVOs(self, item, data, iconSize='small', align=TEXT_ALIGN.RIGHT, withCounts=False):
-        c11nItem = self.getC11nItem(item)
+        c11nItem = self.__getC11nItem(item)
         count = item.get('value', 1)
         itemData = {'imgSource': RES_ICONS.getBonusIcon(iconSize, c11nItem.itemTypeName),
          'label': text_styles.hightlight('x{}'.format(count)),
@@ -1094,7 +1110,7 @@ class CustomizationsBonus(SimpleBonus):
             itemData = self.__getCommonAwardsVOs(item, data, iconSize, align=TEXT_ALIGN.CENTER, withCounts=withCounts)
             itemData.update(_EPIC_AWARD_STATIC_VO_ENTRIES)
             if withDescription:
-                c11nItem = self.getC11nItem(item)
+                c11nItem = self.__getC11nItem(item)
                 itemData['description'] = c11nItem.userType
                 itemData['title'] = c11nItem.userName
             result.append(itemData)
@@ -1179,9 +1195,7 @@ _BONUSES = {Currency.CREDITS: CreditsBonus,
  'goodies': GoodiesBonus,
  'items': ItemsBonus,
  'oneof': BoxBonus,
- 'badgesGroup': BadgesGroupBonus,
- 'ny19Toys': SimpleBonus,
- 'ny19ToyFragments': SimpleBonus}
+ 'badgesGroup': BadgesGroupBonus}
 _BONUSES_PRIORITY = ('tokens', 'oneof')
 _BONUSES_ORDER = dict(((n, idx) for idx, n in enumerate(_BONUSES_PRIORITY)))
 

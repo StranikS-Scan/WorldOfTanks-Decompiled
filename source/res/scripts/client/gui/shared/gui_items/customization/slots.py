@@ -2,7 +2,7 @@
 # Embedded file name: scripts/client/gui/shared/gui_items/customization/slots.py
 from shared_utils import first
 from gui.shared.gui_items import GUI_ITEM_TYPE
-from items.components.c11n_constants import DirectionTags, ProjectionDecalFormTags
+from items.components.c11n_constants import ProjectionDecalDirectionTags, ProjectionDecalFormTags, ProjectionDecalPositionTags
 ANCHOR_TYPE_TO_SLOT_TYPE_MAP = {'inscription': GUI_ITEM_TYPE.INSCRIPTION,
  'player': GUI_ITEM_TYPE.EMBLEM,
  'paint': GUI_ITEM_TYPE.PAINT,
@@ -155,12 +155,17 @@ class ProjectionDecalSlot(BaseCustomizationSlot):
 
     @property
     def direction(self):
-        directionTags = (tag for tag in self.tags if tag.startswith('direction_'))
-        return first(directionTags, DirectionTags.ANY)
+        directionTags = (tag for tag in self.tags if tag.startswith(ProjectionDecalDirectionTags.PREFIX))
+        return first(directionTags, ProjectionDecalDirectionTags.ANY)
 
     @property
     def formfactors(self):
-        return tuple((tag for tag in self.tags if tag.startswith('formfactor_'))) or (ProjectionDecalFormTags.ANY,)
+        return tuple((tag for tag in self.tags if tag.startswith(ProjectionDecalFormTags.PREFIX))) or (ProjectionDecalFormTags.ANY,)
+
+    @property
+    def positionTag(self):
+        positionTags = (tag for tag in self.tags if tag.startswith(ProjectionDecalPositionTags.PREFIX))
+        return first(positionTags, None)
 
     @property
     def parentSlotId(self):

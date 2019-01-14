@@ -24,6 +24,13 @@ class SOUNDS(CONST_CONTAINER):
     CUST_TICK_ON = 'cust_tick_on'
     CUST_TICK_ON_ALL = 'cust_tick_on_all'
     CUST_TICK_OFF = 'cust_tick_off'
+    CUST_CHOICE_NUMBER = 'cust_choice_number'
+    CUST_CHOISE_NUMBER_OVER = 'cust_choise_number_over'
+    CUST_CHOICE_BACKSPACE = 'cust_choice_backspace'
+    CUST_CHOICE_DELETE = 'cust_choice_delete'
+    CUST_CHOICE_NUMBER_DENIED = 'cust_choice_number_denied'
+    CUST_CHOICE_ESC = 'cust_choise_esc'
+    CUST_CHOICE_ENTER = 'cust_choice_enter'
 
 
 C11N_SOUND_SPACE = CommonSoundSpaceSettings(name=SOUNDS.COMMON_SOUND_SPACE, entranceStates={SOUNDS.STATE_PLACE: SOUNDS.STATE_PLACE_C11N}, exitStates={}, persistentSounds=(), stoppableSounds=(), priorities=(), autoStart=True, enterEvent=SOUNDS.ENTER, exitEvent=SOUNDS.EXIT)

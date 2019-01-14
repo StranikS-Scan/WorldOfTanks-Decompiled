@@ -204,7 +204,7 @@ def isMarathon(eventID):
 
 
 def isLinkedSet(eventID):
-    return eventID.startswith(LINKEDSET_GROUP_PREFIX)
+    return eventID.startswith(LINKEDSET_GROUP_PREFIX) if eventID else False
 
 
 def isRegularQuest(eventID):
@@ -324,8 +324,10 @@ def getTankmanRewardQuests():
 
 def _getlocalizeLinkedSetQuestString(localizedKey, quest):
     curProgress, totalProgress = getProgressFromQuestWithSingleAccumulative(quest)
-    kwargs = {'cur_progress': _formatNumberInLinkedSetQuest(curProgress),
-     'total_progress': _formatNumberInLinkedSetQuest(totalProgress)}
+    kwargs = {}
+    if curProgress is not None and totalProgress is not None:
+        kwargs.update({'cur_progress': _formatNumberInLinkedSetQuest(curProgress),
+         'total_progress': _formatNumberInLinkedSetQuest(totalProgress)})
     return _ms(localizedKey, **kwargs)
 
 

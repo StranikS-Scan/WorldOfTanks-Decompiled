@@ -61,10 +61,7 @@ class CyberSportIntroView(CyberSportIntroMeta):
         rosterSettings = self.prbEntity.getRosterSettings()
         self.fireEvent(events.LoadViewEvent(CYBER_SPORT_ALIASES.VEHICLE_SELECTOR_POPUP_PY, ctx={'isMultiSelect': False,
          'infoText': CYBERSPORT.WINDOW_VEHICLESELECTOR_INFO_INTRO,
-         'titleText': CYBERSPORT.WINDOW_VEHICLESELECTOR_TITLE,
-         'selectButton': CYBERSPORT.WINDOW_VEHICLESELECTOR_BUTTONS_SELECT,
-         'cancelButton': CYBERSPORT.WINDOW_VEHICLESELECTOR_BUTTONS_CANCEL,
-         'compatibleOnlyLabel': CYBERSPORT.WINDOW_VEHICLESELECTOR_FILTERS_MATCHES,
+         'componentsOffset': 45,
          'selectedVehicles': self.__getSelectedVehicles(),
          'section': 'cs_intro_view_vehicle',
          'levelsRange': rosterSettings.getLevelsRange(),

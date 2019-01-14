@@ -1,15 +1,17 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/framework/entities/View.py
 import logging
+import typing
 from collections import namedtuple
+from frameworks.wulf import Window
 from gui.Scaleform.framework.entities.ub_windows_tracker import UnboundWindowsTracker
-from soft_exception import SoftException
 from gui.Scaleform.framework.settings import UIFrameworkImpl
 from gui.Scaleform.framework.entities.DisposableEntity import EntityState
 from gui.Scaleform.framework.entities.abstract.AbstractViewMeta import AbstractViewMeta
 from gui.Scaleform.framework.entities.view_interface import ViewInterface
 from gui.doc_loaders import hints_layout
 from gui.shared.events import FocusEvent
+from soft_exception import SoftException
 _logger = logging.getLogger(__name__)
 _ViewKey = namedtuple('_ViewKey', ['alias', 'name'])
 
@@ -148,10 +150,10 @@ class View(AbstractViewMeta, ViewInterface):
     def onFocusIn(self, alias):
         self.fireEvent(FocusEvent(FocusEvent.COMPONENT_FOCUSED))
 
-    def getParentWindow(self):
+    def getParentWindow(self, parent=None):
         if self.__ubWindowsTracker is None:
-            self.__ubWindowsTracker = UnboundWindowsTracker()
-            self.__ubWindowsTracker.create()
+            self.__ubWindowsTracker = UnboundWindowsTracker(self)
+            self.__ubWindowsTracker.create(parent=parent)
         return self.__ubWindowsTracker.getParentWindow()
 
     def isVisible(self):

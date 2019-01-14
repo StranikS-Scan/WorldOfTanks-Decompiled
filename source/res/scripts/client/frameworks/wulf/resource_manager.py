@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/frameworks/wulf/resource_manager.py
+import typing
 from .py_object_binder import PyObjectEntity
 
 class ResourceManager(PyObjectEntity):
@@ -15,3 +16,9 @@ class ResourceManager(PyObjectEntity):
 
     def getTranslatedText(self, resourceID):
         return self.proxy.getTranslatedText(resourceID)
+
+    def getImagePath(self, resourceID):
+        return self.proxy.getImagePath(resourceID)
+
+    def getSoundEffectId(self, resourceID):
+        return self.proxy.getSoundEffectId(resourceID)

@@ -37,6 +37,7 @@ from skeletons.gui.event_boards_controllers import IEventBoardController
 from skeletons.gui.game_control import IMarathonEventsController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
+from skeletons.gui.linkedset import ILinkedSetController
 from gui.server_events.events_helpers import isLinkedSet
 TabData = namedtuple('TabData', ('alias',
  'linkage',
@@ -378,6 +379,7 @@ class MissionViewBase(MissionsViewBaseMeta):
 class MissionView(MissionViewBase):
     __sound_env__ = LobbySubViewEnv
     eventsCache = dependency.descriptor(IEventsCache)
+    linkedSetController = dependency.descriptor(ILinkedSetController)
 
     def __init__(self):
         super(MissionView, self).__init__()
@@ -407,11 +409,13 @@ class MissionView(MissionViewBase):
     def _populate(self):
         super(MissionView, self)._populate()
         self.eventsCache.onSyncCompleted += self._onEventsUpdate
+        self.linkedSetController.onStateChanged += self._onLinkedSetStateChanged
         g_clientUpdateManager.addCallbacks({'inventory.1': self._onEventsUpdate,
          'stats.unlocks': self.__onUnlocksUpdate})
 
     def _dispose(self):
         self.eventsCache.onSyncCompleted -= self._onEventsUpdate
+        self.linkedSetController.onStateChanged -= self._onLinkedSetStateChanged
         g_clientUpdateManager.removeObjectCallbacks(self)
         super(MissionView, self)._dispose()
 
@@ -457,6 +461,9 @@ class MissionView(MissionViewBase):
         self.as_setWaitingVisibleS(False)
         if self._builder:
             self.__updateEvents()
+
+    def _onLinkedSetStateChanged(self, *args):
+        self._onEventsUpdate()
 
     def __onUnlocksUpdate(self, unlocks):
         if any((getTypeOfCompactDescr(intCD) == GUI_ITEM_TYPE.VEHICLE for intCD in unlocks)):

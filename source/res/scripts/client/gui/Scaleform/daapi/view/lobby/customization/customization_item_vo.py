@@ -6,7 +6,7 @@ from gui.shared.gui_items.gui_item_economics import ITEM_PRICE_EMPTY
 from helpers.i18n import makeString as _ms
 from gui.Scaleform.locale.VEHICLE_CUSTOMIZATION import VEHICLE_CUSTOMIZATION
 
-def buildCustomizationItemDataVO(item, count, plainView=False, showDetailItems=True, forceLocked=False, showUnsupportedAlert=False, isCurrentlyApplied=False, addExtraName=True, isAlreadyUsed=False, isDarked=False, noPrice=False):
+def buildCustomizationItemDataVO(item, count, plainView=False, showDetailItems=True, forceLocked=False, showUnsupportedAlert=False, isCurrentlyApplied=False, addExtraName=True, isAlreadyUsed=False, isDarked=False, noPrice=False, autoRentEnabled=False):
     isSpecial = item.isVehicleBound and (item.buyCount > 0 or item.inventoryCount > 0) or item.isLimited and item.buyCount > 0
     hasBonus = item.bonus is not None and not plainView
     locked = (not item.isUnlocked or forceLocked) and not plainView
@@ -23,13 +23,13 @@ def buildCustomizationItemDataVO(item, count, plainView=False, showDetailItems=T
     rentalInfoText = ''
     if item.isRentable and count <= 0:
         rentalInfoText = text_styles.main(_ms(VEHICLE_CUSTOMIZATION.CAROUSEL_RENTALBATTLES, battlesNum=item.rentCount))
-    return CustomizationCarouselRendererVO(item.intCD, item.itemTypeID, item.isWide(), item.icon, hasBonus, locked, buyPrice, count, item.isRentable, showDetailItems, isNonHistoric, isSpecial, isDarked, isAlreadyUsed, showUnsupportedAlert, extraNames=extraNames, showRareIcon=item.isRare(), isEquipped=isCurrentlyApplied, rentalInfoText=rentalInfoText, imageCached=imageCached).asDict()
+    return CustomizationCarouselRendererVO(item.intCD, item.itemTypeID, item.isWide(), item.icon, hasBonus, locked, buyPrice, count, item.isRentable, showDetailItems, isNonHistoric, isSpecial, isDarked, isAlreadyUsed, showUnsupportedAlert, extraNames=extraNames, showRareIcon=item.isRare(), isEquipped=isCurrentlyApplied, rentalInfoText=rentalInfoText, imageCached=imageCached, autoRentEnabled=autoRentEnabled).asDict()
 
 
 class CustomizationCarouselRendererVO(object):
-    __slots__ = ('intCD', 'typeId', 'isWide', 'icon', 'hasBonus', 'locked', 'buyPrice', 'quantity', 'isRental', 'showDetailItems', 'isNonHistoric', 'isSpecial', 'isDarked', 'isAlreadyUsed', 'showAlert', 'buyOperationAllowed', 'extraNames', 'showRareIcon', 'isEquipped', 'rentalInfoText', 'imageCached')
+    __slots__ = ('intCD', 'typeId', 'isWide', 'icon', 'hasBonus', 'locked', 'buyPrice', 'quantity', 'isRental', 'autoRentEnabled', 'showDetailItems', 'isNonHistoric', 'isSpecial', 'isDarked', 'isAlreadyUsed', 'showAlert', 'buyOperationAllowed', 'extraNames', 'showRareIcon', 'isEquipped', 'rentalInfoText', 'imageCached')
 
-    def __init__(self, intCD, typeId, isWide, icon, hasBonus, locked, buyPrice, quantity=None, isRental=False, showDetailItems=True, isNonHistoric=False, isSpecial=False, isDarked=False, isAlreadyUsed=False, showAlert=False, buyOperationAllowed=True, extraNames=None, showRareIcon=False, isEquipped=False, rentalInfoText='', imageCached=True):
+    def __init__(self, intCD, typeId, isWide, icon, hasBonus, locked, buyPrice, quantity=None, isRental=False, showDetailItems=True, isNonHistoric=False, isSpecial=False, isDarked=False, isAlreadyUsed=False, showAlert=False, buyOperationAllowed=True, extraNames=None, showRareIcon=False, isEquipped=False, rentalInfoText='', imageCached=True, autoRentEnabled=False):
         self.intCD = intCD
         self.typeId = typeId
         self.isWide = isWide
@@ -39,6 +39,7 @@ class CustomizationCarouselRendererVO(object):
         self.buyPrice = getItemPricesVO(buyPrice)[0]
         self.quantity = quantity
         self.isRental = isRental
+        self.autoRentEnabled = autoRentEnabled
         self.showDetailItems = showDetailItems
         self.isNonHistoric = isNonHistoric
         self.isSpecial = isSpecial
@@ -60,6 +61,7 @@ class CustomizationCarouselRendererVO(object):
          'locked': self.locked,
          'buyPrice': self.buyPrice,
          'isRental': self.isRental,
+         'autoRentEnabled': self.autoRentEnabled,
          'showDetailItems': self.showDetailItems,
          'isNonHistoric': self.isNonHistoric,
          'isSpecial': self.isSpecial,

@@ -3,7 +3,7 @@
 from collections import namedtuple
 from CurrentVehicle import g_currentVehicle
 from account_helpers import AccountSettings
-from account_helpers.AccountSettings import CUSTOMIZATION_SECTION, PROJECTION_DECAL_TAB_SHOWN_FIELD
+from account_helpers.AccountSettings import CUSTOMIZATION_SECTION, PROJECTION_DECAL_TAB_SHOWN_FIELD, USER_NUMBER_TAB_SHOWN_FIELD
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.customization.customization_carousel import CustomizationCarouselDataProvider
@@ -35,6 +35,7 @@ class CustomizationBottomPanel(CustomizationBottomPanelMeta):
         super(CustomizationBottomPanel, self).__init__()
         self.__ctx = None
         self._carouselDP = None
+        self.__switcherCounter = 0
         self.__needCaruselFullRebuild = False
         return
 
@@ -57,16 +58,21 @@ class CustomizationBottomPanel(CustomizationBottomPanelMeta):
         self.__ctx.onCustomizationItemSold += self.__onItemSold
         self.__ctx.onCustomizationItemDataChanged += self.__onItemDataChanged
         self.__ctx.onNextCarouselItemInstalled += self.__onNextCarouselItemInstalled
-        self.__ctx.onStylePreview += self.__onStylePreview
         g_currentVehicle.onChanged += self.__onVehicleChanged
         g_clientUpdateManager.addMoneyCallback(self.__setBottomPanelBillData)
         self.__updateTabs(self.__ctx.currentTab)
-        switcherCounterNotShown = not AccountSettings.getSettings(CUSTOMIZATION_SECTION).get(PROJECTION_DECAL_TAB_SHOWN_FIELD, False)
-        appliedProjectionDecals = C11nTabs.PROJECTION_DECAL in self.__ctx.visibleTabs
-        self.__showSwitcherCounter = switcherCounterNotShown and appliedProjectionDecals
         self.__setFooterInitData()
         self.__setBottomPanelBillData()
         self.as_showPopoverBtnIconS(RES_ICONS.MAPS_ICONS_CUSTOMIZATION_ITEMS_POPOVER_SUMMER_LIST30X16)
+
+    def __setSwitcherCounters(self):
+        self.__switcherCounter = 0
+        custSett = AccountSettings.getSettings(CUSTOMIZATION_SECTION)
+        appliedProjectionDecals = C11nTabs.PROJECTION_DECAL in self.__ctx.visibleTabs
+        if not custSett.get(PROJECTION_DECAL_TAB_SHOWN_FIELD, False) and appliedProjectionDecals:
+            self.__switcherCounter += 1
+        if not custSett.get(USER_NUMBER_TAB_SHOWN_FIELD, False):
+            self.__switcherCounter += 1
 
     def _dispose(self):
         super(CustomizationBottomPanel, self)._dispose()
@@ -83,7 +89,6 @@ class CustomizationBottomPanel(CustomizationBottomPanelMeta):
         self.__ctx.onCacheResync -= self.__onCacheResync
         self.__ctx.onCarouselFilter -= self.__onCarouselFilter
         self.__ctx.onNextCarouselItemInstalled -= self.__onNextCarouselItemInstalled
-        self.__ctx.onStylePreview -= self.__onStylePreview
         g_currentVehicle.onChanged -= self.__onVehicleChanged
         self._carouselDP = None
         self.__ctx = None
@@ -138,7 +143,6 @@ class CustomizationBottomPanel(CustomizationBottomPanelMeta):
         self.as_setBottomPanelInitDataS({'tabsAvailableRegions': C11nTabs.AVAILABLE_REGIONS,
          'defaultStyleLabel': VEHICLE_CUSTOMIZATION.DEFAULTSTYLE_LABEL,
          'carouselInitData': self.__getCarouselInitData(),
-         'switcherInitData': self.__getSwitcherInitData(self.__ctx.mode, self.__showSwitcherCounter),
          'filtersVO': {'popoverAlias': VIEW_ALIAS.CUSTOMIZATION_FILTER_POPOVER,
                        'mainBtn': {'value': RES_ICONS.MAPS_ICONS_BUTTONS_FILTER,
                                    'tooltip': VEHICLE_CUSTOMIZATION.CAROUSEL_FILTER_MAINBTN},
@@ -147,20 +151,25 @@ class CustomizationBottomPanel(CustomizationBottomPanelMeta):
                                        'selected': self._carouselDP.getOwnedFilter()}, {'value': RES_ICONS.MAPS_ICONS_BUTTONS_EQUIPPED_ICON,
                                        'tooltip': VEHICLE_CUSTOMIZATION.CAROUSEL_FILTER_EQUIPPEDBTN,
                                        'selected': self._carouselDP.getAppliedFilter()}]}})
+        self.__updateSetSwitcherData()
+
+    def __updateSetSwitcherData(self):
+        self.__setSwitcherCounters()
+        self.as_setSwitchersDataS(self.__getSwitcherInitData(self.__ctx.mode, self.__switcherCounter))
 
     @staticmethod
     def __getCarouselInitData():
         return {'message': '{}{}\n{}'.format(icons.makeImageTag(RES_ICONS.MAPS_ICONS_LIBRARY_ATTENTIONICONFILLED, vSpace=-3), text_styles.neutral(VEHICLE_CUSTOMIZATION.CAROUSEL_MESSAGE_HEADER), text_styles.main(VEHICLE_CUSTOMIZATION.CAROUSEL_MESSAGE_DESCRIPTION))}
 
     @staticmethod
-    def __getSwitcherInitData(mode, showSwitcherCounter):
+    def __getSwitcherInitData(mode, switcherCounter):
         data = {'leftLabel': VEHICLE_CUSTOMIZATION.SWITCHER_NAME_CUSTSOMSTYLE,
          'rightLabel': VEHICLE_CUSTOMIZATION.SWITCHER_NAME_DEFAULTSTYLE,
          'leftEvent': 'installStyle',
          'rightEvent': 'installStyles',
          'isLeft': mode == C11nMode.CUSTOM}
-        if showSwitcherCounter and mode == C11nMode.STYLE:
-            data['leftCounter'] = 1
+        if switcherCounter > 0:
+            data['leftCounter'] = switcherCounter
         return data
 
     def __buildCustomizationCarouselDataVO(self):
@@ -202,7 +211,7 @@ class CustomizationBottomPanel(CustomizationBottomPanelMeta):
          'billVO': {'title': text_styles.highlightText(_ms(VEHICLE_CUSTOMIZATION.BUYPOPOVER_RESULT)),
                     'priceLbl': text_styles.main('{} {}'.format(_ms(VEHICLE_CUSTOMIZATION.BUYPOPOVER_PRICE), toByeCount)),
                     'fromStorageLbl': text_styles.main('{} {}'.format(_ms(VEHICLE_CUSTOMIZATION.BUYPOPOVER_FROMSTORAGE), fromStorageCount)),
-                    'isEnoughStatuses': getMoneyVO(Money(outfitsModified, outfitsModified, outfitsModified)),
+                    'isEnoughStatuses': getMoneyVO(Money(True, True, True)),
                     'pricePanel': totalPriceVO[0]}})
 
     def __showBill(self):
@@ -235,13 +244,15 @@ class CustomizationBottomPanel(CustomizationBottomPanelMeta):
         noPrice = item.buyCount <= 0
         isDarked = purchaseLimit == 0 and itemInventoryCount == 0
         isAlreadyUsed = isDarked and not isCurrentlyApplied
-        return buildCustomizationItemDataVO(item, itemInventoryCount, showUnsupportedAlert=showUnsupportedAlert, isCurrentlyApplied=isCurrentlyApplied, isAlreadyUsed=isAlreadyUsed, forceLocked=isAlreadyUsed, isDarked=isDarked, noPrice=noPrice)
+        autoRentEnabled = self.__ctx.autoRentEnabled()
+        return buildCustomizationItemDataVO(item, itemInventoryCount, showUnsupportedAlert=showUnsupportedAlert, isCurrentlyApplied=isCurrentlyApplied, isAlreadyUsed=isAlreadyUsed, forceLocked=isAlreadyUsed, isDarked=isDarked, noPrice=noPrice, autoRentEnabled=autoRentEnabled)
 
     def __getItemTabsData(self):
         data = []
         pluses = []
         custSett = AccountSettings.getSettings(CUSTOMIZATION_SECTION)
         isProjectionDecalTabShown = custSett.get(PROJECTION_DECAL_TAB_SHOWN_FIELD, False)
+        isUserNumberTabShown = custSett.get(USER_NUMBER_TAB_SHOWN_FIELD, False)
         for tabIdx in self.__ctx.visibleTabs:
             itemTypeID = TABS_ITEM_MAPPING[tabIdx]
             typeName = GUI_ITEM_TYPE_NAMES[itemTypeID]
@@ -253,6 +264,10 @@ class CustomizationBottomPanel(CustomizationBottomPanelMeta):
              'id': tabIdx}
             if not isProjectionDecalTabShown and itemTypeID == GUI_ITEM_TYPE.PROJECTION_DECAL:
                 tabData['counter'] = 1
+                tabData['counterID'] = PROJECTION_DECAL_TAB_SHOWN_FIELD
+            if not isUserNumberTabShown and itemTypeID == GUI_ITEM_TYPE.INSCRIPTION:
+                tabData['counter'] = 1
+                tabData['counterID'] = USER_NUMBER_TAB_SHOWN_FIELD
             data.append(tabData)
             pluses.append(showPlus)
 
@@ -311,11 +326,20 @@ class CustomizationBottomPanel(CustomizationBottomPanelMeta):
     def __onTabChanged(self, tabIndex):
         self.__refreshCarousel(force=True)
         self.__updateTabs(self.__ctx.currentTab)
+        needUpdateSwitchers = False
         custSett = AccountSettings.getSettings(CUSTOMIZATION_SECTION)
         if tabIndex == C11nTabs.PROJECTION_DECAL and not custSett.get(PROJECTION_DECAL_TAB_SHOWN_FIELD, False):
+            needUpdateSwitchers = True
             custSett[PROJECTION_DECAL_TAB_SHOWN_FIELD] = True
             AccountSettings.setSettings(CUSTOMIZATION_SECTION, custSett)
-            self.as_removeCountersS()
+            self.as_removeCountersS(PROJECTION_DECAL_TAB_SHOWN_FIELD)
+        if tabIndex == C11nTabs.INSCRIPTION and not custSett.get(USER_NUMBER_TAB_SHOWN_FIELD, False):
+            needUpdateSwitchers = True
+            custSett[USER_NUMBER_TAB_SHOWN_FIELD] = True
+            AccountSettings.setSettings(CUSTOMIZATION_SECTION, custSett)
+            self.as_removeCountersS(USER_NUMBER_TAB_SHOWN_FIELD)
+        if needUpdateSwitchers:
+            self.__updateSetSwitcherData()
 
     def __onTabsUpdated(self, tabIndex):
         self.__updateTabs(tabIndex)
@@ -341,11 +365,7 @@ class CustomizationBottomPanel(CustomizationBottomPanelMeta):
     def __onItemSold(self, item, count):
         self._needCaruselFullRebuild = self._carouselDP.getOwnedFilter()
 
-    def __onItemDataChanged(self, areaId, slotId, regionIdx, changeAnchor, updatePropertiesSheet):
+    def __onItemDataChanged(self, areaId, slotId, regionIdx, changeAnchor, updatePropertiesSheet, refreshCarousel):
         self.__setBottomPanelBillData()
-
-    def __onStylePreview(self, styleIntCD):
-        items = self._carouselDP.collection
-        if styleIntCD in items:
-            idx = items.index(styleIntCD)
-            self.onSelectItem(idx, styleIntCD)
+        if refreshCarousel:
+            self.__refreshCarousel()

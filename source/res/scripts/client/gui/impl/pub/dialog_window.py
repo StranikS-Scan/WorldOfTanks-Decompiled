@@ -23,9 +23,9 @@ _logger = logging.getLogger(__name__)
 
 class DialogShine(CONST_CONTAINER):
     NONE = 0
-    NORMAL = R.images.gui.maps.uiKit.dialogs.greenShine
-    RED = R.images.gui.maps.uiKit.dialogs.redShine
-    YELLOW = R.images.gui.maps.uiKit.dialogs.yellowShine
+    NORMAL = R.images.gui.maps.uiKit.dialogs.greenShine()
+    RED = R.images.gui.maps.uiKit.dialogs.redShine()
+    YELLOW = R.images.gui.maps.uiKit.dialogs.yellowShine()
 
 
 class DialogButtons(CONST_CONTAINER):
@@ -50,7 +50,7 @@ class DialogWindow(Window):
     __slots__ = ('__blur', '__scope', '__event', '__result', '__currencyAdapter', '__buttons')
 
     def __init__(self, content, bottomContent=None, parent=None, showCurrency=False, enableBlur=True):
-        super(DialogWindow, self).__init__(wndFlags=WindowFlags.DIALOG | WindowFlags.RESIZABLE, decorator=ViewImpl(R.views.dialogWindow, ViewFlags.WINDOW_DECORATOR, DialogWindowModel), content=content, parent=parent)
+        super(DialogWindow, self).__init__(wndFlags=WindowFlags.DIALOG | WindowFlags.RESIZABLE, decorator=ViewImpl(R.views.dialogWindow(), ViewFlags.WINDOW_DECORATOR, DialogWindowModel), content=content, parent=parent)
         if bottomContent is not None:
             self._setBottomContent(bottomContent)
         self.__blur = WGUIBackgroundBlurSupportImpl()

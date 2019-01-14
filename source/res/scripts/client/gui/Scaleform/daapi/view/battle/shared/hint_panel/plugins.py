@@ -67,11 +67,13 @@ class HintPanelPlugin(IPlugin):
         lastDayOfYear = setting[LAST_DISPLAY_DAY]
         dayOfYear = datetime.now().timetuple().tm_yday
         daysLeft = (dayOfYear - lastDayOfYear + time_utils.DAYS_IN_YEAR) % time_utils.DAYS_IN_YEAR
-        if hintsLeft == 0:
-            if daysLeft < dayCoolDown and numBattles < battleCoolDown:
-                setting[NUM_BATTLES] = numBattles + 1
-            else:
-                setting[HINTS_LEFT] = _HINT_DISPLAY_COUNT_AFTER_RESET
+        if hintsLeft == 0 and (daysLeft >= dayCoolDown or numBattles >= battleCoolDown):
+            setting[HINTS_LEFT] = _HINT_DISPLAY_COUNT_AFTER_RESET
+
+    @classmethod
+    def _updateCounterOnBattle(cls, setting):
+        if not cls._haveHintsLeft(setting):
+            setting[NUM_BATTLES] = setting[NUM_BATTLES] + 1
 
     @staticmethod
     def _haveHintsLeft(setting):
@@ -137,6 +139,10 @@ class TrajectoryViewHintPlugin(HintPanelPlugin):
     def updateMapping(self):
         if self.__isHintShown:
             self.__addHint()
+
+    def setPeriod(self, period):
+        if period is ARENA_PERIOD.BATTLE:
+            self._updateCounterOnBattle(self.__settings)
 
     def __setup(self, crosshairCtrl, vehicleCtrl):
         self.__onCrosshairViewChanged(crosshairCtrl.getViewID())
@@ -238,8 +244,10 @@ class SiegeIndicatorHintPlugin(HintPanelPlugin):
         self._isInProgressCircle = False
         self._isUnderFire = False
         self.__isWheeledTech = False
+        self.__period = None
         self.__isInDisplayPeriod = False
         self.__callbackDelayer = CallbackDelayer()
+        return
 
     def start(self):
         vStateCtrl = self.sessionProvider.shared.vehicleState
@@ -279,9 +287,13 @@ class SiegeIndicatorHintPlugin(HintPanelPlugin):
         self.__updateHint()
 
     def setPeriod(self, period):
-        self.__isInDisplayPeriod = period is ARENA_PERIOD.BATTLE
+        if period is ARENA_PERIOD.BATTLE:
+            self.__isInDisplayPeriod = self.__period is not None
+            self._updateCounterOnBattle(self.__settings[self.__isWheeledTech])
+        self.__period = period
         if self.__isEnabled:
             self.__updateHint()
+        return
 
     def __onHintUsed(self):
         self._updateCounterOnUsed(self.__settings[self.__isWheeledTech])
@@ -427,6 +439,9 @@ class PreBattleHintPlugin(HintPanelPlugin):
 
     def setPeriod(self, period):
         self.__isInDisplayPeriod = period in (ARENA_PERIOD.PREBATTLE, ARENA_PERIOD.WAITING)
+        if period is ARENA_PERIOD.BATTLE:
+            self._updateCounterOnBattle(self.__settings[PRBSettings.HELP_IDX])
+            self._updateCounterOnBattle(self.__settings[PRBSettings.QUEST_IDX])
 
     def updateMapping(self):
         if self.__hintInQueue is not None:

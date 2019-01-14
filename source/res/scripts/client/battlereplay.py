@@ -67,6 +67,7 @@ class CallbackDataNames(object):
     DYN_SQUAD_REJECT_ACTION_NAME = 'DynSquad.RejectInvitationToSquad'
     GUN_DAMAGE_SOUND = 'gunDamagedSound'
     SHOW_AUTO_AIM_MARKER = 'showAutoAimMarker'
+    HIDE_AUTO_AIM_MARKER = 'hideAutoAimMarker'
 
 
 class BattleReplay(object):
@@ -748,10 +749,6 @@ class BattleReplay(object):
         self.__replayCtrl.isLaggingNow = isLaggingNow
 
     def onClientVersionDiffers(self):
-        if BigWorld.wg_isFpsInfoStoreEnabled():
-            BigWorld.wg_markFpsStoreFileAsFailed(self.__fileName)
-            self.stop()
-            return
         if not self.scriptModalWindowsEnabled:
             self.acceptVersionDiffering()
             return
@@ -978,6 +975,9 @@ class BattleReplay(object):
             self.__wasVideoBeforeRewind = False
         BigWorld.restartSoundZoneManager()
         g_replayEvents.onTimeWarpFinish()
+
+    def onRespawnMode(self, enabled):
+        self.__replayCtrl.onRespawnMode(enabled)
 
 
 def _JSON_Encode(obj):

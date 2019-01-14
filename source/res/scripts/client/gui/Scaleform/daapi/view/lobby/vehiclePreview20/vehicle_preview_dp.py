@@ -12,7 +12,7 @@ from gui.shared.gui_items import Vehicle
 from gui.shared.gui_items.items_actions import factory
 from gui.shared.money import Money, Currency, MONEY_UNDEFINED
 from gui.shared.utils.functions import makeTooltip
-from helpers import dependency
+from helpers import dependency, func_utils
 from skeletons.gui.shared import IItemsCache
 from web_client_api.common import CompensationType
 from items_kit_helper import getCompensateItemsCount, getDataOneVehicle, getDataMultiVehicles, collapseItemsPack
@@ -22,7 +22,7 @@ _logger = logging.getLogger(__name__)
 def _createVehicleVO(rawItem, itemsCache):
     vehicle = itemsCache.items.getStockVehicle(rawItem.id, useInventory=True)
     if vehicle is not None:
-        icon = vehicle.getShopIcon(STORE_CONSTANTS.ICON_SIZE_SMALL)
+        icon = func_utils.makeFlashPath(vehicle.getShopIcon(STORE_CONSTANTS.ICON_SIZE_SMALL))
         cd = vehicle.intCD
         label = vehicle.shortUserName
         nation = vehicle.nationID

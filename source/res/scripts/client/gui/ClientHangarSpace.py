@@ -20,21 +20,20 @@ from skeletons.gui.shared.gui_items import IGuiItemsFactory
 from skeletons.map_activities import IMapActivities
 from skeletons.gui.shared.utils import IHangarSpace
 _DEFAULT_SPACES_PATH = 'spaces'
-_DEFAULT_HANGAR = 'hangar_v3'
 _SERVER_CMD_CHANGE_HANGAR = 'cmd_change_hangar'
 _SERVER_CMD_CHANGE_HANGAR_PREM = 'cmd_change_hangar_prem'
 _CUSTOMIZATION_HANGAR_SETTINGS_SEC = 'customizationHangarSettings'
+_SPACE_FULL_VISIBILITY_MASK = ~0
 
 def _getDefaultHangarPath(isPremium):
-    global _DEFAULT_HANGAR
-    return '%s/%s' % (_DEFAULT_SPACES_PATH, _DEFAULT_HANGAR)
+    return '%s/hangar_v3' % _DEFAULT_SPACES_PATH
 
 
 def _getHangarPath(isPremium, isPremIGR):
     global _HANGAR_CFGS
     global _EVENT_HANGAR_PATHS
     if isPremium in _EVENT_HANGAR_PATHS:
-        return _EVENT_HANGAR_PATHS[isPremium]
+        return _EVENT_HANGAR_PATHS[isPremium][0]
     return _HANGAR_CFGS[_getDefaultHangarPath(False)][_IGR_HANGAR_PATH_KEY] if isPremIGR else _getDefaultHangarPath(isPremium)
 
 
@@ -44,6 +43,10 @@ def _getHangarKey(path):
 
 def _getHangarType(isPremium):
     return 'premium' if isPremium else 'basic'
+
+
+def _getHangarVisibilityMask(isPremium):
+    return _EVENT_HANGAR_PATHS[isPremium][1] if isPremium in _EVENT_HANGAR_PATHS else _SPACE_FULL_VISIBILITY_MASK
 
 
 _CFG = {}
@@ -62,7 +65,6 @@ def customizationHangarCFG():
 
 
 def _readHangarSettings():
-    global _DEFAULT_HANGAR
     hangarsXml = ResMgr.openSection('gui/hangars.xml')
     paths = [ path for path, _ in ResMgr.openSection(_DEFAULT_SPACES_PATH).items() ]
     configset = {}
@@ -88,9 +90,6 @@ def _readHangarSettings():
         configset[spaceKey] = cfg
         _validateConfigValues(cfg)
 
-    defaultHangar = hangarsXml.readString('default_hangar')
-    if defaultHangar:
-        _DEFAULT_HANGAR = defaultHangar
     return configset
 
 
@@ -218,18 +217,19 @@ class ClientHangarSpace(object):
         isIGR = self.igrCtrl.getRoomType() == constants.IGR_TYPE.PREMIUM
         spacePath = _getHangarPath(isPremium, isIGR)
         spaceType = _getHangarType(isPremium)
+        spaceVisibilityMask = _getHangarVisibilityMask(isPremium)
         LOG_DEBUG('load hangar: hangar type = <{0:>s}>, space = <{1:>s}>'.format(spaceType, spacePath))
         safeSpacePath = _getDefaultHangarPath(False)
         if ResMgr.openSection(spacePath) is None:
             LOG_ERROR('Failed to load hangar from path: %s; default hangar will be loaded instead' % spacePath)
             spacePath = safeSpacePath
         try:
-            self.__spaceMappingId = BigWorld.addSpaceGeometryMapping(self.__spaceId, None, spacePath)
+            self.__spaceMappingId = BigWorld.addSpaceGeometryMapping(self.__spaceId, None, spacePath, spaceVisibilityMask)
         except Exception:
             try:
                 LOG_CURRENT_EXCEPTION()
                 spacePath = safeSpacePath
-                self.__spaceMappingId = BigWorld.addSpaceGeometryMapping(self.__spaceId, None, spacePath)
+                self.__spaceMappingId = BigWorld.addSpaceGeometryMapping(self.__spaceId, None, spacePath, spaceVisibilityMask)
             except Exception:
                 BigWorld.releaseSpace(self.__spaceId)
                 self.__spaceMappingId = None
@@ -330,6 +330,7 @@ class ClientHangarSpace(object):
             BigWorld.cancelCallback(self.__waitCallback)
             self.__waitCallback = None
         BigWorld.SetDrawInflux(False)
+        BigWorld.worldDrawEnabled(False)
         self.mapActivities.stop()
         if self.__spaceId is not None and BigWorld.isClientSpace(self.__spaceId):
             if self.__spaceMappingId is not None:
@@ -391,14 +392,14 @@ class _ClientHangarSpacePathOverride(object):
     def setPremium(self, isPremium):
         self.hangarSpace.refreshSpace(isPremium, True)
 
-    def setPath(self, path, isPremium=None, isReload=True):
+    def setPath(self, path, visibilityMask=_SPACE_FULL_VISIBILITY_MASK, isPremium=None, isReload=True):
         if path is not None and not path.startswith('spaces/'):
             path = 'spaces/' + path
         if isPremium is None:
             isPremium = self.hangarSpace.isPremium
         if path is not None:
-            _EVENT_HANGAR_PATHS[isPremium] = path
-        elif _EVENT_HANGAR_PATHS.has_key(isPremium):
+            _EVENT_HANGAR_PATHS[isPremium] = (path, visibilityMask)
+        elif isPremium in _EVENT_HANGAR_PATHS:
             del _EVENT_HANGAR_PATHS[isPremium]
         if isReload:
             self.hangarSpace.refreshSpace(self.hangarSpace.isPremium, True)
@@ -414,12 +415,12 @@ class _ClientHangarSpacePathOverride(object):
         hasChanged = False
         for notification in diff['removed']:
             if notification['type'] == _SERVER_CMD_CHANGE_HANGAR:
-                if _EVENT_HANGAR_PATHS.has_key(False):
+                if False in _EVENT_HANGAR_PATHS:
                     del _EVENT_HANGAR_PATHS[False]
                 if not isPremium:
                     hasChanged = True
             if notification['type'] == _SERVER_CMD_CHANGE_HANGAR_PREM:
-                if _EVENT_HANGAR_PATHS.has_key(True):
+                if True in _EVENT_HANGAR_PATHS:
                     del _EVENT_HANGAR_PATHS[True]
                 if isPremium:
                     hasChanged = True
@@ -427,25 +428,28 @@ class _ClientHangarSpacePathOverride(object):
         for notification in diff['added']:
             if not notification['data']:
                 continue
-            path = None
             try:
                 data = json.loads(notification['data'])
                 path = data['hangar']
+                if 'visibilityMask' in data:
+                    visibilityMask = int(data['visibilityMask'], 16)
+                else:
+                    visibilityMask = _SPACE_FULL_VISIBILITY_MASK
             except Exception:
                 path = notification['data']
+                visibilityMask = _SPACE_FULL_VISIBILITY_MASK
 
             if notification['type'] == _SERVER_CMD_CHANGE_HANGAR:
-                _EVENT_HANGAR_PATHS[False] = path
+                _EVENT_HANGAR_PATHS[False] = (path, visibilityMask)
                 if not isPremium:
                     hasChanged = True
             if notification['type'] == _SERVER_CMD_CHANGE_HANGAR_PREM:
-                _EVENT_HANGAR_PATHS[True] = path
+                _EVENT_HANGAR_PATHS[True] = (path, visibilityMask)
                 if isPremium:
                     hasChanged = True
 
         if hasChanged and self.hangarSpace.inited:
             self.hangarSpace.refreshSpace(isPremium, True)
-        return
 
 
 g_clientHangarSpaceOverride = _ClientHangarSpacePathOverride()

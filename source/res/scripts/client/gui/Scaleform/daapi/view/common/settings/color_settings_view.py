@@ -113,7 +113,7 @@ class ColorSettingsView(ColorSettingsViewMeta):
         super(ColorSettingsView, self)._populate()
         if self.app is not None:
             self._savedBackgroundAlpha = self.app.getBackgroundAlpha()
-            self.app.setBackgroundAlpha(0, notSilentChange=False)
+            self.app.setBackgroundAlpha(0)
             self.addListener(GameEvent.ON_BACKGROUND_ALPHA_CHANGE, self.__onExternalBackgroundAlphaChange, EVENT_BUS_SCOPE.GLOBAL)
         self.as_initDataS({'header': text_styles.superPromoTitle(SETTINGS.COLORSETTINGS_VIEW_HEADER),
          'typesHeader': text_styles.highTitle(SETTINGS.COLORSETTINGS_VIEW_SUBTITLE),
@@ -140,7 +140,7 @@ class ColorSettingsView(ColorSettingsViewMeta):
         self.settingsCore.clearStorages()
         self.removeListener(GameEvent.ON_BACKGROUND_ALPHA_CHANGE, self.__onExternalBackgroundAlphaChange, EVENT_BUS_SCOPE.GLOBAL)
         if self.app is not None:
-            self.app.setBackgroundAlpha(self._savedBackgroundAlpha, notSilentChange=False)
+            self.app.setBackgroundAlpha(self._savedBackgroundAlpha)
             if hasattr(self.app, 'leaveGuiControlMode'):
                 self.app.leaveGuiControlMode(VIEW_ALIAS.COLOR_SETTING)
         self.fireEvent(GameEvent(GameEvent.SHOW_EXTERNAL_COMPONENTS), scope=EVENT_BUS_SCOPE.GLOBAL)

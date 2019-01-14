@@ -155,7 +155,7 @@
         <left>	vehicles/british/GB08_Churchill_I/track/left.track	</left>
         <right>	vehicles/british/GB08_Churchill_I/track/right.track	</right>
         <segmentLength>	0.211	</segmentLength>
-        <segmentOffset>	0.29	</segmentOffset>
+        <segmentOffset>	0.255	</segmentOffset>
         <lodDist>	SPLINE_TRACK	</lodDist>
         <atlas>
           <UTiles>	1	</UTiles>
@@ -281,13 +281,29 @@
         <damping>	2	</damping>
         <node>
           <isLeft>	true	</isLeft>
-          <name>	Track_VD_L0	</name>
-          <forwardElastK>	0.9	</forwardElastK>
-          <offset>	0.000000	</offset>
+          <name>	Track_VT_L0	</name>
+          <forwardElastK>	1	</forwardElastK>
+          <backwardElastK>	1	</backwardElastK>
+          <offset>	-0.056	</offset>
+          <rightSibling>	Track_VT_L1	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L1	</name>
+          <forwardElastK>	2	</forwardElastK>
+          <backwardElastK>	2	</backwardElastK>
+          <offset>	-0.073	</offset>
+          <leftSibling>	Track_VT_L0	</leftSibling>
         </node>
         <node>
           <isLeft>	false	</isLeft>
           <name>	Track_VD_R0	</name>
+          <forwardElastK>	0.9	</forwardElastK>
+          <offset>	0.000000	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L0	</name>
           <forwardElastK>	0.9	</forwardElastK>
           <offset>	0.000000	</offset>
         </node>
@@ -304,34 +320,18 @@
           <offset>	0.000000	</offset>
         </node>
         <node>
-          <isLeft>	true	</isLeft>
-          <name>	Track_VT_L0	</name>
-          <forwardElastK>	0.9	</forwardElastK>
-          <backwardElastK>	0.8	</backwardElastK>
-          <offset>	-0.056	</offset>
-          <rightSibling>	Track_VT_L1	</rightSibling>
-        </node>
-        <node>
-          <isLeft>	true	</isLeft>
-          <name>	Track_VT_L1	</name>
-          <forwardElastK>	0.9	</forwardElastK>
-          <backwardElastK>	1	</backwardElastK>
-          <offset>	-0.073	</offset>
-          <leftSibling>	Track_VT_L0	</leftSibling>
-        </node>
-        <node>
           <isLeft>	false	</isLeft>
           <name>	Track_VT_R0	</name>
-          <forwardElastK>	0.9	</forwardElastK>
-          <backwardElastK>	0.8	</backwardElastK>
+          <forwardElastK>	1	</forwardElastK>
+          <backwardElastK>	1	</backwardElastK>
           <offset>	-0.056	</offset>
           <rightSibling>	Track_VT_R1	</rightSibling>
         </node>
         <node>
           <isLeft>	false	</isLeft>
           <name>	Track_VT_R1	</name>
-          <forwardElastK>	0.9	</forwardElastK>
-          <backwardElastK>	1	</backwardElastK>
+          <forwardElastK>	2	</forwardElastK>
+          <backwardElastK>	2	</backwardElastK>
           <offset>	-0.073	</offset>
           <leftSibling>	Track_VT_R0	</leftSibling>
         </node>
@@ -767,7 +767,7 @@
         <left>	vehicles/british/GB08_Churchill_I/track/left.track	</left>
         <right>	vehicles/british/GB08_Churchill_I/track/right.track	</right>
         <segmentLength>	0.211	</segmentLength>
-        <segmentOffset>	0.29	</segmentOffset>
+        <segmentOffset>	0.255	</segmentOffset>
         <lodDist>	SPLINE_TRACK	</lodDist>
         <atlas>
           <UTiles>	1	</UTiles>
@@ -893,13 +893,29 @@
         <damping>	2	</damping>
         <node>
           <isLeft>	true	</isLeft>
-          <name>	Track_VD_L0	</name>
-          <forwardElastK>	0.9	</forwardElastK>
-          <offset>	0.000000	</offset>
+          <name>	Track_VT_L0	</name>
+          <forwardElastK>	1	</forwardElastK>
+          <backwardElastK>	1	</backwardElastK>
+          <offset>	-0.056	</offset>
+          <rightSibling>	Track_VT_L1	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L1	</name>
+          <forwardElastK>	2	</forwardElastK>
+          <backwardElastK>	2	</backwardElastK>
+          <offset>	-0.073	</offset>
+          <leftSibling>	Track_VT_L0	</leftSibling>
         </node>
         <node>
           <isLeft>	false	</isLeft>
           <name>	Track_VD_R0	</name>
+          <forwardElastK>	0.9	</forwardElastK>
+          <offset>	0.000000	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L0	</name>
           <forwardElastK>	0.9	</forwardElastK>
           <offset>	0.000000	</offset>
         </node>
@@ -916,62 +932,22 @@
           <offset>	0.000000	</offset>
         </node>
         <node>
-          <isLeft>	true	</isLeft>
-          <name>	Track_VT_L0	</name>
-          <forwardElastK>	0.9	</forwardElastK>
-          <backwardElastK>	0.8	</backwardElastK>
-          <offset>	-0.056	</offset>
-          <rightSibling>	Track_VT_L1	</rightSibling>
-        </node>
-        <node>
-          <isLeft>	true	</isLeft>
-          <name>	Track_VT_L1	</name>
-          <forwardElastK>	0.9	</forwardElastK>
-          <backwardElastK>	1	</backwardElastK>
-          <offset>	-0.073	</offset>
-          <leftSibling>	Track_VT_L0	</leftSibling>
-        </node>
-        <node>
           <isLeft>	false	</isLeft>
           <name>	Track_VT_R0	</name>
-          <forwardElastK>	0.9	</forwardElastK>
-          <backwardElastK>	0.8	</backwardElastK>
+          <forwardElastK>	1	</forwardElastK>
+          <backwardElastK>	1	</backwardElastK>
           <offset>	-0.056	</offset>
           <rightSibling>	Track_VT_R1	</rightSibling>
         </node>
         <node>
           <isLeft>	false	</isLeft>
           <name>	Track_VT_R1	</name>
-          <forwardElastK>	0.9	</forwardElastK>
-          <backwardElastK>	1	</backwardElastK>
+          <forwardElastK>	2	</forwardElastK>
+          <backwardElastK>	2	</backwardElastK>
           <offset>	-0.073	</offset>
           <leftSibling>	Track_VT_R0	</leftSibling>
         </node>
       </trackNodes>
-      <effects>
-        <lodDist>	MEDIUM	</lodDist>
-        <mud>	largeTankMud	</mud>
-      </effects>
-      <wwsoundPC>	treads_type_pc	</wwsoundPC>
-      <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
-      <hullPosition>	0.000000 1.37518 0.000000	</hullPosition>
-      <hitTester>
-        <collisionModelServer>	vehicles/british/GB08_Churchill_I/collision/Chassis.model	</collisionModelServer>
-        <collisionModelClient>	vehicles/british/GB08_Churchill_I/collision_client/Chassis.model	</collisionModelClient>
-      </hitTester>
-      <topRightCarryingPoint>	1.0882 1.99583	</topRightCarryingPoint>
-      <maxClimbAngle>	25	</maxClimbAngle>
-      <navmeshGirth>	6.0	</navmeshGirth>
-      <AODecals>
-        <decal>
-          <transform>
-            <row0>	3.782410 0.000000 0.000000	</row0>
-            <row1>	0.000000 1.410910 0.000000	</row1>
-            <row2>	0.000000 0.000000 7.210920	</row2>
-            <row3>	0.000000 0.000000 0.000000	</row3>
-          </transform>
-        </decal>
-      </AODecals>
       <physicalTracks>
         <left>
           <segmentsCount>	75	</segmentsCount>
@@ -1326,6 +1302,30 @@
           </sourceCollisionHullPoints>
         </right>
       </physicalTracks>
+      <effects>
+        <lodDist>	MEDIUM	</lodDist>
+        <mud>	largeTankMud	</mud>
+      </effects>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
+      <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
+      <hullPosition>	0.000000 1.37518 0.000000	</hullPosition>
+      <hitTester>
+        <collisionModelServer>	vehicles/british/GB08_Churchill_I/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/british/GB08_Churchill_I/collision_client/Chassis.model	</collisionModelClient>
+      </hitTester>
+      <topRightCarryingPoint>	1.0882 1.99583	</topRightCarryingPoint>
+      <maxClimbAngle>	25	</maxClimbAngle>
+      <navmeshGirth>	6.0	</navmeshGirth>
+      <AODecals>
+        <decal>
+          <transform>
+            <row0>	3.782410 0.000000 0.000000	</row0>
+            <row1>	0.000000 1.410910 0.000000	</row1>
+            <row2>	0.000000 0.000000 7.210920	</row2>
+            <row3>	0.000000 0.000000 0.000000	</row3>
+          </transform>
+        </decal>
+      </AODecals>
       <customization>
         <customizableVehicleAreas>
           <paint></paint>

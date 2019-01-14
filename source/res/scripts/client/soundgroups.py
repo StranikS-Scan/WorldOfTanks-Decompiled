@@ -8,6 +8,7 @@ import ResMgr
 import constants
 import PlayerEvents
 import MusicControllerWWISE
+import Windowing
 from ReplayEvents import g_replayEvents
 from debug_utils import LOG_ERROR, LOG_WARNING, LOG_DEBUG
 from helpers import i18n
@@ -323,7 +324,8 @@ class SoundGroups(object):
             self.__soundModes.setNationalMapping(nationalMapping)
         else:
             self.__soundModes.setNationalMappingByMode(soundModeName)
-        self.applyPreferences()
+        if not self.applyPreferences():
+            Windowing.addWindowAccessibilitynHandler(self.__onWindowAccessibilityChanged)
         g_replayEvents.onMuteSound += self.__onReplayMute
         g_appLoader.onGUISpaceEntered += self.__onGUISpaceEntered
         return
@@ -342,6 +344,7 @@ class SoundGroups(object):
         if player is not None and player.inputHandler is not None:
             player.inputHandler.onCameraChanged -= self.__onCameraChanged
         self.onVolumeChanged.clear()
+        Windowing.removeWindowAccessibilityHandler(self.__onWindowAccessibilityChanged)
         return
 
     def enableLobbySounds(self, enable):
@@ -443,13 +446,15 @@ class SoundGroups(object):
 
     def applyPreferences(self):
         if not BigWorld.isWindowVisible():
-            return
+            return False
         self.setMasterVolume(self.__masterVolume)
         for categoryName in self.__volumeByCategory.iterkeys():
             newVolume = self.__volumeByCategory[categoryName]
             if self.__muffledByReplay and categoryName in ('vehicles', 'effects', 'ambient'):
                 newVolume = 0.0
             self.setVolume(categoryName, newVolume, updatePrefs=False)
+
+        return True
 
     def muffleWWISEVolume(self):
         if not self.__muffled:
@@ -476,6 +481,11 @@ class SoundGroups(object):
                 return
             self.changePlayMode(0)
             return
+
+    def __onWindowAccessibilityChanged(self, isAccessible):
+        if isAccessible:
+            self.applyPreferences()
+            Windowing.removeWindowAccessibilityHandler(self.__onWindowAccessibilityChanged)
 
     def unloadAll(self):
         MusicControllerWWISE.destroy()
@@ -621,24 +631,3 @@ class SoundGroups(object):
 
     def setSwitch(self, group, switch):
         WWISE.WW_setSwitch(group, switch)
-
-
-def loadLightSoundsDB():
-    ENVIRONMENT_EFFECTS_CONFIG_FILE = 'scripts/environment_effects.xml'
-    section = ResMgr.openSection(ENVIRONMENT_EFFECTS_CONFIG_FILE)
-    if section is None:
-        return
-    else:
-        lightSoundDB = []
-        if section['lightSounds'] is None:
-            return
-        for _, propertySection in section['lightSounds'].items():
-            DBitem = []
-            DBitem.append(propertySection.readString('modelName'))
-            DBitem.append(propertySection.readVector3('offset'))
-            DBitem.append(propertySection.readStrings('wwsound'))
-            DBitem.append(propertySection.readString('hardPoint'))
-            lightSoundDB.append(DBitem)
-
-        WWISE.LSloadEventsDB(lightSoundDB)
-        return

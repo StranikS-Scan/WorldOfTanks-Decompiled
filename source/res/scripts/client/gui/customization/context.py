@@ -5,7 +5,6 @@ from functools import partial
 from collections import namedtuple
 import logging
 import Event
-import shared_utils
 from soft_exception import SoftException
 from CurrentVehicle import g_currentVehicle
 from gui.shared.utils.decorators import process
@@ -18,7 +17,7 @@ from gui.shared.gui_items.processors.common import OutfitApplier, StyleApplier, 
 from gui.shared.gui_items.processors.vehicle import VehicleAutoStyleEquipProcessor
 from gui.shared.gui_items.customization.outfit import Area
 from gui.shared.gui_items.customization.containers import emptyComponent
-from items.components.c11n_constants import ApplyArea, SeasonType, DEFAULT_SCALE_FACTOR_ID, Options, DirectionTags
+from items.components.c11n_constants import ApplyArea, SeasonType, DEFAULT_SCALE_FACTOR_ID, Options, ProjectionDecalDirectionTags
 from helpers import dependency
 from shared_utils import nextTick
 from skeletons.gui.shared import IItemsCache
@@ -29,9 +28,11 @@ from shared_utils import first
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.shared.utils import IHangarSpace
 from gui.hangar_cameras.c11n_hangar_camera_manager import C11nHangarCameraManager
+from gui.Scaleform.daapi.view.lobby.customization.customization_inscription_controller import PersonalNumEditStatuses, PersonalNumEditCommands
 _logger = logging.getLogger(__name__)
 CaruselItemData = namedtuple('CaruselItemData', ('index', 'intCD'))
 CaruselItemData = partial(CaruselItemData, index=-1, intCD=-1)
+InscriptionSlotInfo = namedtuple('InscriptionSlotInfo', ('item', 'number'))
 
 class CustomizationContext(object):
     itemsCache = dependency.descriptor(IItemsCache)
@@ -96,6 +97,10 @@ class CustomizationContext(object):
     def c11CameraManager(self):
         return self._c11CameraManager
 
+    @property
+    def storedInscriptionSlotInfo(self):
+        return self._storedPersonalNumbers.get(self._selectedAnchor, InscriptionSlotInfo(None, None))
+
     def __init__(self):
         self._currentSeason = SeasonType.SUMMER
         self.__visibleTabs = defaultdict(set)
@@ -116,7 +121,7 @@ class CustomizationContext(object):
         self._c11CameraManager = None
         self._autoRentEnabled = False
         self._carouselItems = None
-        self._exitCallback = None
+        self.__prolongStyleRent = False
         self.onCustomizationSeasonChanged = Event.Event(self._eventsManager)
         self.onCustomizationModeChanged = Event.Event(self._eventsManager)
         self.onCustomizationTabChanged = Event.Event(self._eventsManager)
@@ -139,15 +144,27 @@ class CustomizationContext(object):
         self.onPropertySheetShown = Event.Event(self._eventsManager)
         self.onPropertySheetHidden = Event.Event(self._eventsManager)
         self.onCustomizationItemDataChanged = Event.Event(self._eventsManager)
-        self.onStylePreview = Event.Event(self._eventsManager)
         self.onClearItem = Event.Event(self._eventsManager)
+        self.onPersonalNumberEditModeChanged = Event.Event(self._eventsManager)
+        self.onPersonalNumberEditModeCmdSent = Event.Event(self._eventsManager)
+        self.onProlongStyleRent = Event.Event(self._eventsManager)
+        self.onChangeAutoRent = Event.Event(self._eventsManager)
+        g_currentVehicle.onChanged += self.__onVehicleChanged
+        self._numberEditModeActive = False
+        self._numberIsEmpty = True
+        self._storedPersonalNumbers = defaultdict()
         return
-
-    def getExitCallback(self):
-        return self._exitCallback
 
     def setCarouselItems(self, carouselItems):
         self._carouselItems = carouselItems
+
+    def setNumberEditModeActive(self, value):
+        self._numberEditModeActive = value
+
+    def getNumberEditModeActive(self):
+        return self._numberEditModeActive
+
+    numberEditModeActive = property(getNumberEditModeActive, setNumberEditModeActive)
 
     def changeSeason(self, seasonType):
         self._currentSeason = seasonType
@@ -157,6 +174,7 @@ class CustomizationContext(object):
     def changeAutoRent(self):
         self._autoRentEnabled = not self._autoRentEnabled
         self.itemDataChanged(areaId=Area.MISC, slotType=GUI_ITEM_TYPE.STYLE, regionIdx=0)
+        self.onChangeAutoRent()
 
     def autoRentEnabled(self):
         return self._autoRentEnabled
@@ -173,6 +191,8 @@ class CustomizationContext(object):
         g_tankActiveCamouflage[g_currentVehicle.item.intCD] = self._currentSeason
 
     def tabChanged(self, tabIndex, update=False):
+        if self.numberEditModeActive:
+            self.sendNumberEditModeCommand(PersonalNumEditCommands.CANCEL_EDIT_MODE)
         self._tabIndex = tabIndex
         if self._tabIndex == C11nTabs.EFFECT:
             self._selectedAnchor = C11nId(areaId=Area.MISC, slotType=GUI_ITEM_TYPE.MODIFICATION, regionIdx=0)
@@ -197,8 +217,7 @@ class CustomizationContext(object):
                     self._vehicleAnchorsUpdater.changeAnchorParams(prevSelectedAnchor, True, True)
             self.onCustomizationAnchorSelected(self._selectedAnchor.slotType, self._selectedAnchor.areaId, self._selectedAnchor.regionIdx)
             if areaId != -1 and regionIdx != -1 and self._selectedCaruselItem.intCD != -1:
-                outfit = self._modifiedOutfits[self._currentSeason]
-                slotId = self.__getFreeSlot(self._selectedAnchor, outfit)
+                slotId = self.__getFreeSlot(self._selectedAnchor, self._currentSeason)
                 if slotId is None or not self.__isItemInstalledInOutfitSlot(slotId, self._selectedCaruselItem.intCD):
                     item = self.service.getItemByCD(self._selectedCaruselItem.intCD)
                     component = self.__getComponent(item, self.selectedAnchor)
@@ -206,11 +225,13 @@ class CustomizationContext(object):
                         return True
             return False
 
-    def getSlotIdByAnchorId(self, anchorId):
+    def getSlotIdByAnchorId(self, anchorId, season=None):
         if anchorId.slotType != GUI_ITEM_TYPE.PROJECTION_DECAL:
             return anchorId
         else:
-            outfit = self._modifiedOutfits[self.currentSeason]
+            if season is None:
+                season = self.currentSeason
+            outfit = self._modifiedOutfits[season]
             anchorParams = self.service.getAnchorParams(anchorId.areaId, anchorId.slotType, anchorId.regionIdx)
             if anchorParams is None:
                 return
@@ -249,8 +270,16 @@ class CustomizationContext(object):
             else:
                 season = SEASON_IDX_TO_TYPE.get(seasonIdx, self._currentSeason)
                 outfit = self._modifiedOutfits[season]
+                if slotId.slotType == GUI_ITEM_TYPE.INSCRIPTION:
+                    prevInstalledItem = self.getItemFromSelectedRegion()
+                    if prevInstalledItem and not self.numberEditModeActive:
+                        self.storeInscriptionSlotInfo()
+                if item.itemTypeID != GUI_ITEM_TYPE.PERSONAL_NUMBER and self.numberEditModeActive:
+                    self.sendNumberEditModeCommand(PersonalNumEditCommands.CANCEL_BY_INSCRIPTION_SELECT)
                 outfit.getContainer(slotId.areaId).slotFor(slotId.slotType).set(item, idx=slotId.regionIdx, component=component)
                 outfit.invalidate()
+            if item.itemTypeID == GUI_ITEM_TYPE.PERSONAL_NUMBER and self.storedInscriptionSlotInfo[1]:
+                self.restoreInscriptionSlotContent()
             self.refreshOutfit()
             buyLimitReached = self.isBuyLimitReached(item)
             self.onCustomizationItemInstalled(item, slotId, buyLimitReached)
@@ -268,9 +297,8 @@ class CustomizationContext(object):
                         needed += 1
 
             inventoryCount = self.getItemInventoryCount(currentSlotData.item)
-            appliedCount = getItemAppliedCount(currentSlotData.item, self.getOutfitsInfo())
             toBye = needed - inventoryCount
-            return toBye <= currentSlotData.item.buyCount - appliedCount
+            return toBye <= currentSlotData.item.buyCount
         else:
             return True
 
@@ -290,28 +318,52 @@ class CustomizationContext(object):
         return additionalyApplyedItems
 
     def isPossibleToInstallItemForAllSeasons(self, areaID, slotType, regionIdx, currentSlotData):
-        if currentSlotData.item.isLimited:
+        if currentSlotData.item.isLimited or currentSlotData.item.isHidden:
             needed = 0
             for season in SeasonType.COMMON_SEASONS:
-                item = self.getModifiedOutfit(season).getContainer(areaID).slotFor(slotType).getItem(regionIdx)
+                slotId = self.getSlotIdByAnchorId(C11nId(areaId=areaID, slotType=slotType, regionIdx=regionIdx), season)
+                outfit = self.getModifiedOutfit(season)
+                if slotId is not None:
+                    item = outfit.getContainer(slotId.areaId).slotFor(slotId.slotType).getItem(slotId.regionIdx)
+                else:
+                    item = None
                 if item is None or item != currentSlotData.item:
                     needed += 1
 
             inventoryCount = self.getItemInventoryCount(currentSlotData.item)
-            appliedCount = getItemAppliedCount(currentSlotData.item, self.getOutfitsInfo())
             toBye = needed - inventoryCount
-            return toBye <= currentSlotData.item.buyCount - appliedCount
+            return toBye <= currentSlotData.item.buyCount
         else:
             return True
+
+    def getLockedProjectionDecalSeasons(self, regionIdx):
+        lockedSeasons = []
+        for season in SeasonType.COMMON_SEASONS:
+            outfit = self.getModifiedOutfit(season)
+            if self.isC11nItemsQuantityLimitReached(outfit, GUI_ITEM_TYPE.PROJECTION_DECAL):
+                region = self.getFilledProjectionDecalSlotRegion(regionIdx, season)
+                if region == -1:
+                    lockedSeasons.append(season)
+
+        return lockedSeasons
 
     def installItemForAllSeasons(self, areaID, slotType, regionIdx, currentSlotData):
         additionalyApplyedItems = 0
         for season in SeasonType.COMMON_SEASONS:
-            slotData = self.getModifiedOutfit(season).getContainer(areaID).slotFor(slotType).getSlotData(regionIdx)
+            anchorId = C11nId(areaId=areaID, slotType=slotType, regionIdx=regionIdx)
+            slotId = self.getSlotIdByAnchorId(anchorId, season)
+            outfit = self.getModifiedOutfit(season)
+            if slotId is None:
+                region = self.getFilledProjectionDecalSlotRegion(regionIdx, season)
+                if region == -1:
+                    slotId = self.__getFreeSlot(anchorId, season)
+                else:
+                    slotId = C11nId(areaId=areaID, slotType=slotType, regionIdx=region)
+            slotData = outfit.getContainer(slotId.areaId).slotFor(slotId.slotType).getSlotData(slotId.regionIdx)
             df = currentSlotData.weakDiff(slotData)
             if slotData.item is None or df.item is not None:
                 seasonIdx = SEASON_TYPE_TO_IDX[season]
-                self.installItem(currentSlotData.item.intCD, C11nId(areaId=areaID, slotType=slotType, regionIdx=regionIdx), seasonIdx)
+                self.installItem(currentSlotData.item.intCD, slotId, seasonIdx, currentSlotData.component)
                 additionalyApplyedItems += 1
 
         return additionalyApplyedItems
@@ -323,6 +375,8 @@ class CustomizationContext(object):
             item = slot.getItem(slotId.regionIdx)
             if item is not None and not item.isHiddenInUI():
                 slot.remove(idx=slotId.regionIdx)
+                if item.itemTypeID in (GUI_ITEM_TYPE.PERSONAL_NUMBER, GUI_ITEM_TYPE.INSCRIPTION):
+                    self.resetInscriptionSlotInfo()
         if refresh:
             self.refreshOutfit()
             self.onCustomizationItemsRemoved()
@@ -336,8 +390,8 @@ class CustomizationContext(object):
                 self.removeItemFromSlot(season, slotId)
 
     def removeItemForAllSeasons(self, areaId, slotType, regionIdx):
-        slotId = C11nId(areaId=areaId, slotType=slotType, regionIdx=regionIdx)
         for season in SeasonType.COMMON_SEASONS:
+            slotId = self.getSlotIdByAnchorId(C11nId(areaId=areaId, slotType=slotType, regionIdx=regionIdx), season)
             self.removeItemFromSlot(season, slotId, refresh=False)
 
         self.refreshOutfit()
@@ -383,6 +437,8 @@ class CustomizationContext(object):
             self.onCustomizationModeChanged(self._mode)
 
     def switchToStyle(self):
+        if self.numberEditModeActive:
+            self.sendNumberEditModeCommand(PersonalNumEditCommands.CANCEL_EDIT_MODE)
         if self._mode != C11nMode.STYLE:
             self._lastTab = self._tabIndex
             self._mode = C11nMode.STYLE
@@ -396,6 +452,7 @@ class CustomizationContext(object):
         else:
             self.__cancelModifiedOufits()
         self.refreshOutfit()
+        self.resetInscriptionSlotInfo()
         self.onChangesCanceled()
 
     def caruselItemSelected(self, index, intCD):
@@ -403,7 +460,7 @@ class CustomizationContext(object):
         self._selectedCaruselItem = CaruselItemData(index=index, intCD=intCD)
         itemSelected = self.isCaruselItemSelected()
         if self.isAnyAnchorSelected() and itemSelected and not prevItemSelected:
-            slotId = self.__getFreeSlot(self.selectedAnchor, self._modifiedOutfits[self.currentSeason])
+            slotId = self.__getFreeSlot(self.selectedAnchor, self.currentSeason)
             if slotId is None:
                 return False
             item = self.service.getItemByCD(intCD)
@@ -439,8 +496,17 @@ class CustomizationContext(object):
                 slot = outfit.getContainer(slotId.areaId).slotFor(slotId.slotType)
                 slotData = slot.getSlotData(slotId.regionIdx)
                 anchor = self.getAnchorBySlotId(slotId)
+                if slotData.item.itemTypeID in (GUI_ITEM_TYPE.PERSONAL_NUMBER, GUI_ITEM_TYPE.INSCRIPTION) and not self.numberEditModeActive:
+                    self.storeInscriptionSlotInfo()
                 slotData.item = item
                 slotData.component = self.__getComponent(item, self._selectedAnchor)
+                if item.itemTypeID == GUI_ITEM_TYPE.PERSONAL_NUMBER:
+                    if self.storedInscriptionSlotInfo.number:
+                        self.restoreInscriptionSlotContent()
+                    else:
+                        self.onPersonalNumberEditModeChanged(PersonalNumEditStatuses.EDIT_MODE_STARTED)
+                elif self.numberEditModeActive:
+                    self.sendNumberEditModeCommand(PersonalNumEditCommands.CANCEL_EDIT_MODE)
                 outfit.invalidate()
                 self.refreshOutfit()
                 self.itemDataChanged(slotId.areaId, slotId.slotType, anchor.regionIdx, changeAnchor=False, updatePropertiesSheet=True)
@@ -496,6 +562,55 @@ class CustomizationContext(object):
             self.onProjectionDecalScaleChanged(areaId, regionIdx, scale)
             self.itemDataChanged(areaId, GUI_ITEM_TYPE.PROJECTION_DECAL, regionIdx)
 
+    def changePersonalNumberValue(self, value):
+        slotId = self.getSlotIdByAnchorId(C11nId(self._selectedAnchor.areaId, GUI_ITEM_TYPE.PERSONAL_NUMBER, self._selectedAnchor.regionIdx))
+        slot = self.currentOutfit.getContainer(slotId.areaId).slotFor(slotId.slotType)
+        component = slot.getComponent(slotId.regionIdx)
+        self._numberIsEmpty = not bool(value)
+        if component.number != value:
+            component.number = value
+            self.refreshOutfit()
+        self.itemDataChanged(slotId.areaId, slotId.slotType, self._selectedAnchor.regionIdx, changeAnchor=False, updatePropertiesSheet=False, refreshCarousel=False)
+
+    def isOnly1ChangedNumberInEditMode(self):
+        if self.numberEditModeActive and not g_currentVehicle.item.descriptor.type.hasCustomDefaultCamouflage:
+            purchaseItems = [ it for it in self.getPurchaseItems() if not it.isDismantling and it.group == self.currentSeason ]
+            return len(purchaseItems) == 1 and purchaseItems[0].item.itemTypeID == GUI_ITEM_TYPE.PERSONAL_NUMBER
+        return False
+
+    def storeInscriptionSlotInfo(self):
+        slotId = self.getSlotIdByAnchorId(C11nId(self._selectedAnchor.areaId, GUI_ITEM_TYPE.PERSONAL_NUMBER, self._selectedAnchor.regionIdx))
+        slot = self.currentOutfit.getContainer(slotId.areaId).slotFor(slotId.slotType)
+        slotData = slot.getSlotData(slotId.regionIdx)
+        component = slot.getComponent(slotId.regionIdx)
+        if slotData and slotData.item.itemTypeID == GUI_ITEM_TYPE.PERSONAL_NUMBER:
+            self._storedPersonalNumbers[self._selectedAnchor] = InscriptionSlotInfo(slotData.item, component.number)
+        elif slotData and slotData.item.itemTypeID == GUI_ITEM_TYPE.INSCRIPTION:
+            self._storedPersonalNumbers[self._selectedAnchor] = InscriptionSlotInfo(slotData.item, None)
+        return
+
+    def restoreInscriptionSlotContent(self):
+        inscriptionSlotInfo = self._storedPersonalNumbers.get(self._selectedAnchor, InscriptionSlotInfo(None, None))
+        if inscriptionSlotInfo:
+            number = inscriptionSlotInfo.number
+            if number:
+                self.changePersonalNumberValue(number)
+            else:
+                item = inscriptionSlotInfo.item
+                slotId = self.__getFreeSlot(self._selectedAnchor, self._currentSeason)
+                outfit = self._modifiedOutfits[self._currentSeason]
+                outfit.getContainer(slotId.areaId).slotFor(slotId.slotType).set(item, idx=slotId.regionIdx)
+                outfit.invalidate()
+                buyLimitReached = self.isBuyLimitReached(item)
+                self.onCustomizationItemInstalled(item, slotId, buyLimitReached)
+        return
+
+    def resetInscriptionSlotInfo(self):
+        self._storedPersonalNumbers.clear()
+
+    def sendNumberEditModeCommand(self, cmd):
+        self.onPersonalNumberEditModeCmdSent(cmd)
+
     def mirrorProjectionDecal(self, areaId, regionIdx):
         slotId = self.getSlotIdByAnchorId(C11nId(areaId, GUI_ITEM_TYPE.PROJECTION_DECAL, regionIdx))
         slot = self.currentOutfit.getContainer(slotId.areaId).slotFor(slotId.slotType)
@@ -544,7 +659,7 @@ class CustomizationContext(object):
             currentSeason = self.currentSeason
             order = [currentSeason] + [ s for s in SEASONS_ORDER if s != currentSeason ]
             return getCustomPurchaseItems(self.getOutfitsInfo(), order)
-        return getStylePurchaseItems(self.getStyleInfo())
+        return getStylePurchaseItems(self.getStyleInfo(), buyMore=self.__prolongStyleRent)
 
     def getItemInventoryCount(self, item):
         return getItemInventoryCount(item, self.getOutfitsInfo()) if self._mode == C11nMode.CUSTOM else getStyleInventoryCount(item, self.getStyleInfo())
@@ -572,6 +687,17 @@ class CustomizationContext(object):
         df = self._modifiedOutfits[season].diff(self._originalOutfits[season])
         notModifiedItems = df.diff(self._originalOutfits[self.currentSeason])
         return notModifiedItems
+
+    def prolongStyleRent(self, style):
+        self.switchToStyle()
+        if style is not None:
+            self._modifiedStyle = style
+            self.__prolongStyleRent = True
+            self.refreshOutfit()
+            self._autoRentEnabled = True
+            self.itemDataChanged(areaId=Area.MISC, slotType=GUI_ITEM_TYPE.STYLE, regionIdx=0)
+            self.onProlongStyleRent()
+        return
 
     @process('customizationApply')
     def applyItems(self, purchaseItems):
@@ -603,6 +729,10 @@ class CustomizationContext(object):
                 results.append(result)
 
         if groupHasItems[AdditionalPurchaseGroups.STYLES_GROUP_ID]:
+            if self.__prolongStyleRent:
+                if self._modifiedStyle.boundInventoryCount.get(g_currentVehicle.item.intCD, 0) > 0 or self._originalStyle and self._modifiedStyle.id == self._originalStyle.id:
+                    self.service.buyItems(self._modifiedStyle, 1, g_currentVehicle.item)
+                self.__prolongStyleRent = False
             result = yield StyleApplier(g_currentVehicle.item, self._modifiedStyle).request()
             results.append(result)
         if self._autoRentEnabled != g_currentVehicle.item.isAutoRentStyle:
@@ -628,7 +758,6 @@ class CustomizationContext(object):
         nextTick(partial(self.onCustomizationItemSold, item=item, count=count))()
 
     def init(self):
-        g_currentVehicle.onChanged += self.__onVehicleChanged
         if not g_currentVehicle.isPresent():
             raise SoftException('There is not vehicle in hangar for customization.')
         self._autoRentEnabled = g_currentVehicle.item.isAutoRentStyle
@@ -656,9 +785,9 @@ class CustomizationContext(object):
         self.refreshOutfit()
 
     def fini(self):
-        g_currentVehicle.onChanged -= self.__onVehicleChanged
         self.itemsCache.onSyncCompleted -= self.__onCacheResync
         self.service.onOutfitChanged -= self.__onOutfitChanged
+        g_currentVehicle.onChanged -= self.__onVehicleChanged
         self._eventsManager.clear()
         self.settingsCore.interfaceScale.onScaleExactlyChanged -= self.__onInterfaceScaleChanged
         if self._c11CameraManager is not None:
@@ -667,7 +796,6 @@ class CustomizationContext(object):
         if self._vehicleAnchorsUpdater is not None:
             self._vehicleAnchorsUpdater.stopUpdater()
         self._vehicleAnchorsUpdater = None
-        self._exitCallback = None
         return
 
     def __onVehicleChanged(self):
@@ -718,6 +846,8 @@ class CustomizationContext(object):
                 if self._modifiedStyle and self._originalStyle:
                     return self._modifiedStyle.intCD != self._originalStyle.intCD or self._autoRentEnabled != g_currentVehicle.item.isAutoRentStyle
                 return not (self._modifiedStyle is None and self._originalStyle is None)
+            if self.numberEditModeActive and self.isOnly1ChangedNumberInEditMode() and self._numberIsEmpty:
+                return False
             for season in SeasonType.COMMON_SEASONS:
                 outfit = self._modifiedOutfits[season]
                 currOutfit = self._originalOutfits[season]
@@ -767,6 +897,20 @@ class CustomizationContext(object):
             return False
             return
 
+    def getFilledProjectionDecalSlotRegion(self, regionIdx, season):
+        slotType, areaId = GUI_ITEM_TYPE.PROJECTION_DECAL, Area.MISC
+        slot = g_currentVehicle.item.getAnchorBySlotId(slotType, areaId, regionIdx)
+        outfit = self._modifiedOutfits[season]
+        multySlot = outfit.getContainer(areaId).slotFor(slotType)
+        for region in range(multySlot.capacity()):
+            component = multySlot.getComponent(region)
+            if component is not None:
+                itemSlot = g_currentVehicle.item.getAnchorById(component.slotId)
+                if (itemSlot.parentSlotId or itemSlot.slotId) == (slot.parentSlotId or slot.slotId):
+                    return region
+
+        return -1
+
     def isC11nItemsQuantityLimitReached(self, outfit, slotType):
         if slotType not in QUANTITY_LIMITED_CUSTOMIZATION_TYPES:
             return False
@@ -807,10 +951,14 @@ class CustomizationContext(object):
     def getItemFromSelectedRegion(self):
         outfit = self.currentOutfit
         slot = self.selectedSlot
-        return outfit.getContainer(slot.areaId).slotFor(slot.slotType).getItem(slot.regionIdx)
+        if slot.slotType == GUI_ITEM_TYPE.STYLE:
+            return self._modifiedStyle
+        else:
+            container = outfit.getContainer(slot.areaId)
+            return container.slotFor(slot.slotType).getItem(slot.regionIdx) if container else None
 
-    def itemDataChanged(self, areaId, slotType, regionIdx, changeAnchor=False, updatePropertiesSheet=False):
-        self.onCustomizationItemDataChanged(areaId, slotType, regionIdx, changeAnchor, updatePropertiesSheet)
+    def itemDataChanged(self, areaId, slotType, regionIdx, changeAnchor=False, updatePropertiesSheet=False, refreshCarousel=True):
+        self.onCustomizationItemDataChanged(areaId, slotType, regionIdx, changeAnchor, updatePropertiesSheet, refreshCarousel)
 
     def __carveUpOutfits(self):
         for season in SeasonType.COMMON_SEASONS:
@@ -880,7 +1028,7 @@ class CustomizationContext(object):
         self.tabChanged(tabIndex, update=True)
 
     def __getComponent(self, item, selectedAnchor):
-        component = emptyComponent(selectedAnchor.slotType)
+        component = emptyComponent(item.itemTypeID)
         if selectedAnchor.slotType == GUI_ITEM_TYPE.PROJECTION_DECAL:
             component.id = item.id
             anchor = g_currentVehicle.item.getAnchorBySlotId(selectedAnchor.slotType, selectedAnchor.areaId, selectedAnchor.regionIdx)
@@ -890,7 +1038,7 @@ class CustomizationContext(object):
                 return
             component.slotId = anchor.slotId
             component.scaleFactorId = DEFAULT_SCALE_FACTOR_ID
-            if item.canBeMirrored and item.direction != DirectionTags.ANY and anchor.direction != DirectionTags.ANY and item.direction != anchor.direction:
+            if item.canBeMirrored and item.direction != ProjectionDecalDirectionTags.ANY and anchor.direction != ProjectionDecalDirectionTags.ANY and item.direction != anchor.direction:
                 component.options |= Options.MIRRORED
             return component
         else:
@@ -914,8 +1062,9 @@ class CustomizationContext(object):
             return False
             return
 
-    def __getFreeSlot(self, anchorId, outfit):
-        slotId = self.getSlotIdByAnchorId(anchorId)
+    def __getFreeSlot(self, anchorId, season):
+        outfit = self.getModifiedOutfit(season)
+        slotId = self.getSlotIdByAnchorId(anchorId, season)
         if slotId is not None:
             return slotId
         elif anchorId.slotType not in QUANTITY_LIMITED_CUSTOMIZATION_TYPES:
@@ -933,10 +1082,3 @@ class CustomizationContext(object):
 
             return
             return
-
-    def previewStyle(self, style, exitCallback=None):
-        self.switchToStyle()
-        self._exitCallback = exitCallback
-        if style is not None:
-            shared_utils.nextTick(lambda : self.onStylePreview(style.intCD))()
-        return

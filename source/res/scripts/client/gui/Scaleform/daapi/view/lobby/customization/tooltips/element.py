@@ -2,7 +2,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/customization/tooltips/element.py
 import nations
 import BigWorld
-from CurrentVehicle import g_currentVehicle, g_currentPreviewVehicle
+from CurrentVehicle import g_currentVehicle
 from gui.Scaleform import getNationsFilterAssetPath
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.customization.shared import getItemInventoryCount, getItemAppliedCount, SEASON_TYPE_TO_NAME
@@ -104,6 +104,7 @@ class ElementTooltip(BlocksTooltipData):
     CUSTOMIZATION_TOOLTIP_ICON_WIDTH_WIDE = 204
     CUSTOMIZATION_TOOLTIP_ICON_WIDTH_OTHER_BIG = 228
     CUSTOMIZATION_TOOLTIP_ICON_WIDTH_INSCRIPTION = 278
+    CUSTOMIZATION_TOOLTIP_ICON_WIDTH_PERSONAL_NUMBER = 390
 
     def __init__(self, context, tooltipType=TOOLTIPS_CONSTANTS.TECH_CUSTOMIZATION_ITEM):
         super(ElementTooltip, self).__init__(context, tooltipType)
@@ -129,21 +130,17 @@ class ElementTooltip(BlocksTooltipData):
         self.bonusDescription = VEHICLE_CUSTOMIZATION.BONUS_CONDITION_SEASON
         topBlocks = [self._packTitleBlock(), self._packIconBlock(self._item.isHistorical())]
         items = [formatters.packBuildUpBlockData(blocks=topBlocks, gap=10)]
-        isInPreview = g_currentPreviewVehicle.isPresent()
-        self.currentVehicle = g_currentPreviewVehicle.item if isInPreview else g_currentVehicle.item
+        self.currentVehicle = g_currentVehicle.item
         self.boundVehs = [ vehicleCD for vehicleCD in self._item.boundInventoryCount if vehicleCD != -1 ]
         self.installedToVehs = self._item.getInstalledVehicles()
         self.installedCount = self._item.getInstalledOnVehicleCount(self.currentVehicle.intCD)
         camo = None
         self.appliedCount = 0
-        isApplied = False
         if self._item.itemTypeID != GUI_ITEM_TYPE.STYLE:
+            self.appliedCount = getItemAppliedCount(self._item, self.service.getCtx().getOutfitsInfo())
             bonus = self._item.bonus
-            if not isInPreview:
-                c11nContext = self.service.getCtx()
-                self.appliedCount = getItemAppliedCount(self._item, c11nContext.getOutfitsInfo())
-                hullContainer = c11nContext.currentOutfit.hull
-                isApplied = hullContainer.slotFor(GUI_ITEM_TYPE.CAMOUFLAGE).getItem() == self._item
+            hullContainer = self.service.getCtx().currentOutfit.hull
+            isApplied = hullContainer.slotFor(GUI_ITEM_TYPE.CAMOUFLAGE).getItem() == self._item
         else:
             self.bonusDescription = VEHICLE_CUSTOMIZATION.BONUS_STYLE
             for container in (self._item.getOutfit(season).hull for season in SeasonType.SEASONS if self._item.getOutfit(season)):
@@ -154,13 +151,12 @@ class ElementTooltip(BlocksTooltipData):
             else:
                 bonus = None
 
-            if not isInPreview:
-                originalStyle = self.service.getCtx().originalStyle
-                modifiedStyle = self.service.getCtx().modifiedStyle
-                if modifiedStyle:
-                    isApplied = self._item == modifiedStyle
-                else:
-                    isApplied = self._item == originalStyle
+            originalStyle = self.service.getCtx().originalStyle
+            modifiedStyle = self.service.getCtx().modifiedStyle
+            if modifiedStyle:
+                isApplied = self._item == modifiedStyle
+            else:
+                isApplied = self._item == originalStyle
             self.appliedCount = int(isApplied)
         if bonus:
             camo = self._item if not camo else camo
@@ -258,11 +254,9 @@ class ElementTooltip(BlocksTooltipData):
             else:
                 specials.append(_ms(VEHICLE_CUSTOMIZATION.CUSTOMIZATION_BOUND_SPECIAL_TEXT))
         if self._item.isLimited:
-            isInPreview = g_currentPreviewVehicle.isPresent()
-            if not isInPreview:
-                purchaseLimit = self.service.getCtx().getPurchaseLimit(self._item)
-                if self._item.buyCount > 0 and (purchaseLimit > 0 or self.appliedCount > 0):
-                    specials.append(_ms(VEHICLE_CUSTOMIZATION.CUSTOMIZATION_LIMITED_SPECIAL_RULES_TEXT, available=text_styles.neutral(purchaseLimit)))
+            purchaseLimit = self.service.getCtx().getPurchaseLimit(self._item)
+            if self._item.buyCount > 0 and (purchaseLimit > 0 or self.appliedCount > 0):
+                specials.append(_ms(VEHICLE_CUSTOMIZATION.CUSTOMIZATION_LIMITED_SPECIAL_RULES_TEXT, available=text_styles.neutral(purchaseLimit)))
         if not specials:
             return None
         else:
@@ -335,8 +329,12 @@ class ElementTooltip(BlocksTooltipData):
         titlePadding = formatters.packPadding(left=-1)
         if showInventoryCount and inventoryCount > 0:
             if self._item.isRentable:
-                title = text_styles.main(_ms(VEHICLE_CUSTOMIZATION.CUSTOMIZATION_TOOLTIP_INVENTORY_RENT_BATTLESLEFT, tankname=g_currentVehicle.item.shortUserName))
+                textKey = VEHICLE_CUSTOMIZATION.CUSTOMIZATION_TOOLTIP_INVENTORY_RENT_BATTLESLEFT
                 icon = RES_ICONS.MAPS_ICONS_LIBRARY_CLOCKICON_1
+                if self._item.isRented and self.service.getCtx().autoRentEnabled():
+                    textKey = VEHICLE_CUSTOMIZATION.CUSTOMIZATION_TOOLTIP_INVENTORY_RENT_BATTLESLEFT_AUTOPROLONGATIONON
+                    icon = RES_ICONS.MAPS_ICONS_CUSTOMIZATION_ICON_RENT
+                title = text_styles.main(_ms(textKey, tankname=g_currentVehicle.item.shortUserName))
                 padding = formatters.packPadding(left=83, bottom=-14)
                 titlePadding = formatters.packPadding(left=-8)
                 iconPadding = formatters.packPadding(top=-7, left=-3)
@@ -356,9 +354,11 @@ class ElementTooltip(BlocksTooltipData):
     def _countImageWidth(self):
         iconWidth = self.CUSTOMIZATION_TOOLTIP_ICON_WIDTH
         if self._item.isWide():
-            if self._item.itemTypeName == 'inscription':
+            if self._item.itemTypeID == GUI_ITEM_TYPE.INSCRIPTION:
                 iconWidth = self.CUSTOMIZATION_TOOLTIP_ICON_WIDTH_WIDE
-            elif self._item.itemTypeName == 'modification' or self._item.itemTypeName == 'style':
+            elif self._item.itemTypeID == GUI_ITEM_TYPE.PERSONAL_NUMBER:
+                iconWidth = self.CUSTOMIZATION_TOOLTIP_ICON_WIDTH_PERSONAL_NUMBER
+            elif self._item.itemTypeID in (GUI_ITEM_TYPE.MODIFICATION, GUI_ITEM_TYPE.STYLE):
                 iconWidth = self.CUSTOMIZATION_TOOLTIP_ICON_WIDTH_OTHER_BIG
         return iconWidth
 

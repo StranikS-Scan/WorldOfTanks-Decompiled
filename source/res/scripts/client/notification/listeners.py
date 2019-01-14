@@ -3,6 +3,7 @@
 import collections
 import weakref
 from collections import defaultdict
+from constants import AUTO_MAINTENANCE_RESULT
 from adisp import process
 from debug_utils import LOG_DEBUG, LOG_ERROR
 from gui.Scaleform.locale.CLANS import CLANS
@@ -26,7 +27,7 @@ from messenger.proto import proto_getter
 from messenger.proto.events import g_messengerEvents
 from messenger.proto.xmpp.xmpp_constants import XMPP_ITEM_TYPE
 from notification import tutorial_helper
-from notification.decorators import MessageDecorator, PrbInviteDecorator, FriendshipRequestDecorator, WGNCPopUpDecorator, ClanAppsDecorator, ClanInvitesDecorator, ClanAppActionDecorator, ClanInvitesActionDecorator, ClanSingleAppDecorator, ClanSingleInviteDecorator
+from notification.decorators import MessageDecorator, PrbInviteDecorator, C11nMessageDecorator, FriendshipRequestDecorator, WGNCPopUpDecorator, ClanAppsDecorator, ClanInvitesDecorator, ClanAppActionDecorator, ClanInvitesActionDecorator, ClanSingleAppDecorator, ClanSingleInviteDecorator
 from notification.settings import NOTIFICATION_TYPE, NOTIFICATION_BUTTON_STATE
 from skeletons.gui.login_manager import ILoginManager
 
@@ -54,6 +55,8 @@ class _WGNCNotificationListener(_NotificationListener):
 
 
 class ServiceChannelListener(_NotificationListener):
+    _MESSAGE_DECORATOR_BY_TYPE = {AUTO_MAINTENANCE_RESULT.RENT_IS_OVER: C11nMessageDecorator,
+     AUTO_MAINTENANCE_RESULT.RENT_IS_ALMOST_OVER: C11nMessageDecorator}
 
     @proto_getter(PROTO_TYPE.BW)
     def proto(self):
@@ -69,7 +72,7 @@ class ServiceChannelListener(_NotificationListener):
             messages = serviceChannel.getReadMessages()
             addNotification = model.collection.addItem
             for clientID, (_, formatted, settings) in messages:
-                addNotification(MessageDecorator(clientID, formatted, settings))
+                addNotification(self.__makeNotification(clientID, formatted, settings, model))
 
             serviceChannel.handleUnreadMessages()
         return result
@@ -83,7 +86,12 @@ class ServiceChannelListener(_NotificationListener):
     def __onMessageReceived(self, clientID, formatted, settings):
         model = self._model()
         if model:
-            model.addNotification(MessageDecorator(clientID, formatted, settings))
+            model.addNotification(self.__makeNotification(clientID, formatted, settings, model))
+
+    def __makeNotification(self, clientID, formatted, settings, model):
+        messageDecorator = self._MESSAGE_DECORATOR_BY_TYPE.get(settings.messageType, MessageDecorator)
+        notification = messageDecorator(clientID, formatted, settings, model)
+        return notification
 
 
 class PrbInvitesListener(_NotificationListener, IGlobalListener):
@@ -676,10 +684,7 @@ class RecruitNotificationListener(_NotificationListener):
         priority = NotificationPriorityLevel.LOW
         if self.loginManager.getPreference('loginCount') == self._INCREASE_LIMIT_LOGIN:
             priority = NotificationPriorityLevel.MEDIUM
-        if time:
-            SystemMessages.pushMessage(i18n.makeString(MESSENGER.SERVICECHANNELMESSAGES_RECRUITREMINDER_TEXT, count=count, date=time), SystemMessages.SM_TYPE.RecruitReminder, priority=priority)
-        else:
-            SystemMessages.pushMessage(i18n.makeString(MESSENGER.SERVICECHANNELMESSAGES_RECRUITREMINDERTERMLESS_TEXT, count=count), SystemMessages.SM_TYPE.RecruitReminder, priority=priority)
+        SystemMessages.pushMessage(i18n.makeString(MESSENGER.SERVICECHANNELMESSAGES_RECRUITREMINDER_TEXT, count=count, date=time), SystemMessages.SM_TYPE.RecruitReminder, priority=priority)
 
 
 class NotificationsListeners(_NotificationListener):

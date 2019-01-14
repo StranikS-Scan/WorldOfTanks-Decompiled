@@ -19,6 +19,9 @@ class CustomizationPropertiesSheetMeta(BaseDAAPIComponent):
     def onClose(self):
         self._printOverrideError('onClose')
 
+    def registerInscriptionController(self, inscriptionController, inputLines):
+        self._printOverrideError('registerInscriptionController')
+
     def as_setDataAndShowS(self, data):
         return self.flashObject.as_setDataAndShow(data) if self._isDAAPIInited() else None
 

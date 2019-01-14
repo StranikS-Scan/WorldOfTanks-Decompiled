@@ -1,7 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/gen/view_models/views/buy_vehicle_view/equipment_block_model.py
-import typing
-from frameworks.wulf import Resource
+from gui.impl.gen import R
 from frameworks.wulf import ViewModel
 from gui.impl.gen.view_models.ui_kit.list_model import ListModel
 from gui.impl.gen.view_models.ui_kit.vehicle_action_btn_model import VehicleActionBtnModel
@@ -150,7 +149,7 @@ class EquipmentBlockModel(ViewModel):
         self._addBoolProperty('emtySlotAvailable', False)
         self._addBoolProperty('isRestore', False)
         self._addBoolProperty('isSlotAnimPlaying', False)
-        self._addResourceProperty('buyBtnLabel', Resource.INVALID)
+        self._addResourceProperty('buyBtnLabel', R.invalid())
         self._addNumberProperty('confirmGoldPrice', 0)
         self._addBoolProperty('popoverIsAvailable', False)
         self._addBoolProperty('showBuyBootcampAnim', False)

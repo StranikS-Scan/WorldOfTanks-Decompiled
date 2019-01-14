@@ -1,6 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/gui_loader.py
-import GUI
 from frameworks.wulf import GuiApplication
 from skeletons.gui.impl import IGuiLoader
 
@@ -9,7 +8,7 @@ class GuiLoader(IGuiLoader):
 
     def __init__(self):
         super(GuiLoader, self).__init__()
-        self.__gui = GuiApplication(GUI.PyGuiApplication())
+        self.__gui = GuiApplication()
 
     @property
     def resourceManager(self):

@@ -1,0 +1,615 @@
+<150901-0510_501001-0510_linkedset_quests.xml>
+  <quests>
+    <group>
+      <enabled>	true	</enabled>
+      <id>	linkedset:1	</id>
+      <groupContent>	linkedset_1_1	</groupContent>
+    </group>
+    <group>
+      <enabled>	true	</enabled>
+      <id>	linkedset:2	</id>
+      <groupContent>	linkedset_2_1
+				linkedset_2_2
+				linkedset_2_3
+				linkedset_2_4
+				linkedset_2_5
+				linkedset_2_6
+				linkedset_2_7
+				linkedset_2_8	</groupContent>
+    </group>
+    <group>
+      <enabled>	true	</enabled>
+      <id>	linkedset:3	</id>
+      <groupContent>	linkedset_3_1
+				linkedset_3_2
+				linkedset_3_3	</groupContent>
+    </group>
+    <group>
+      <enabled>	true	</enabled>
+      <id>	linkedset:4	</id>
+      <groupContent>	linkedset_4_1	</groupContent>
+    </group>
+    <tokenQuest>
+      <enabled>	true	</enabled>
+      <id>	linkedset_cohorts_check	</id>
+      <serverOnly>	true	</serverOnly>
+      <conditions>
+        <preBattle>
+          <account>
+            <and>
+              <isLinkedSetEnabled>	true	</isLinkedSetEnabled>
+              <or>
+                <and>
+                  <vehiclesUnlocked>
+                    <levels>	6 7 8 9 10	</levels>
+                    <lessOrEqual>	0	</lessOrEqual>
+                  </vehiclesUnlocked>
+                  <totalBattles>
+                    <lessOrEqual>	1000	</lessOrEqual>
+                  </totalBattles>
+                </and>
+                <accountPrimaryTypes>	4 5 6 7 8	</accountPrimaryTypes>
+                <accountSecondaryTypes>	4	</accountSecondaryTypes>
+              </or>
+            </and>
+          </account>
+        </preBattle>
+      </conditions>
+      <bonus>
+        <token>
+          <id>	linkedset_1_1_unlock	</id>
+          <expires>	01.12.2050 05:10	</expires>
+        </token>
+      </bonus>
+    </tokenQuest>
+    <tokenQuest>
+      <enabled>	true	</enabled>
+      <id>	linkedset_1_1	</id>
+      <conditions>
+        <preBattle>
+          <account>
+            <and>
+              <isLinkedSetEnabled>	true	</isLinkedSetEnabled>
+              <isTutorialCompleted>	true	</isTutorialCompleted>
+              <token>
+                <id>	linkedset_1_1_unlock	</id>
+                <greaterOrEqual>	1	</greaterOrEqual>
+                <consume>	10	  <force></force>
+                </consume>
+              </token>
+            </and>
+          </account>
+        </preBattle>
+        <common>
+          <bonusLimit>	1	</bonusLimit>
+        </common>
+      </conditions>
+      <bonus>
+        <token>
+          <id>	linkedset_2_1_unlock	</id>
+          <expires>	01.12.2050 05:10	</expires>
+        </token>
+        <token>
+          <id>	linkedset_3_1_unlock	</id>
+          <expires>	01.12.2050 05:10	</expires>
+        </token>
+        <token>
+          <id>	linkedset_3_2_unlock	</id>
+          <expires>	01.12.2050 05:10	</expires>
+        </token>
+        <token>
+          <id>	linkedset_3_3_unlock	</id>
+          <expires>	01.12.2050 05:10	</expires>
+        </token>
+      </bonus>
+    </tokenQuest>
+    <battleQuest>
+      <enabled>	true	</enabled>
+      <id>	linkedset_2_1	</id>
+      <conditions>
+        <preBattle>
+          <account>
+            <and>
+              <isLinkedSetEnabled>	true	</isLinkedSetEnabled>
+              <token>
+                <id>	linkedset_2_1_unlock	</id>
+                <greaterOrEqual>	1	</greaterOrEqual>
+                <consume>	10	  <force></force>
+                </consume>
+              </token>
+            </and>
+          </account>
+          <vehicle>
+            <and>
+              <hasReceivedMultipliedXP>	false	</hasReceivedMultipliedXP>
+              <vehicleDescr>
+                <levels>	2 3 4 5 6 7 8 9 10	</levels>
+              </vehicleDescr>
+            </and>
+          </vehicle>
+          <battle>
+            <bonusTypes>	1 24	</bonusTypes>
+          </battle>
+        </preBattle>
+        <postBattle>
+          <win></win>
+        </postBattle>
+        <common>
+          <bonusLimit>	1	</bonusLimit>
+        </common>
+      </conditions>
+      <bonus>
+        <credits>	10000	</credits>
+        <freeXP>	500	</freeXP>
+        <token>
+          <id>	linkedset_2_2_unlock	</id>
+          <expires>	01.12.2050 05:10	</expires>
+        </token>
+      </bonus>
+    </battleQuest>
+    <hangarQuest>
+      <enabled>	true	</enabled>
+      <id>	linkedset_2_2	</id>
+      <conditions>
+        <preBattle>
+          <account>
+            <and>
+              <isLinkedSetEnabled>	true	</isLinkedSetEnabled>
+              <token>
+                <id>	linkedset_2_2_unlock	</id>
+                <greaterOrEqual>	1	</greaterOrEqual>
+                <consume>	10	  <force></force>
+                </consume>
+              </token>
+              <moduleBuySell>
+                <greaterOrEqual>	1	</greaterOrEqual>
+              </moduleBuySell>
+            </and>
+          </account>
+        </preBattle>
+        <common>
+          <bonusLimit>	1	</bonusLimit>
+        </common>
+      </conditions>
+      <bonus>
+        <credits>	25000	</credits>
+        <token>
+          <id>	linkedset_2_3_unlock	</id>
+          <expires>	01.12.2050 05:10	</expires>
+        </token>
+      </bonus>
+    </hangarQuest>
+    <battleQuest>
+      <enabled>	true	</enabled>
+      <id>	linkedset_2_3	</id>
+      <conditions>
+        <preBattle>
+          <account>
+            <and>
+              <isLinkedSetEnabled>	true	</isLinkedSetEnabled>
+              <token>
+                <id>	linkedset_2_3_unlock	</id>
+                <greaterOrEqual>	1	</greaterOrEqual>
+                <consume>	10	  <force></force>
+                </consume>
+              </token>
+            </and>
+          </account>
+          <vehicle>
+            <and>
+              <vehicleDescr>
+                <levels>	3 4 5 6 7 8 9 10	</levels>
+              </vehicleDescr>
+              <unregularAmmo></unregularAmmo>
+            </and>
+          </vehicle>
+          <battle>
+            <bonusTypes>	1 24	</bonusTypes>
+          </battle>
+        </preBattle>
+        <common>
+          <bonusLimit>	1	</bonusLimit>
+        </common>
+      </conditions>
+      <bonus>
+        <credits>	25000	</credits>
+        <freeXP>	1000	</freeXP>
+        <token>
+          <id>	linkedset_2_4_unlock	</id>
+          <expires>	01.12.2050 05:10	</expires>
+        </token>
+      </bonus>
+    </battleQuest>
+    <hangarQuest>
+      <enabled>	true	</enabled>
+      <id>	linkedset_2_4	</id>
+      <conditions>
+        <preBattle>
+          <account>
+            <and>
+              <isLinkedSetEnabled>	true	</isLinkedSetEnabled>
+              <token>
+                <id>	linkedset_2_4_unlock	</id>
+                <greaterOrEqual>	1	</greaterOrEqual>
+                <consume>	10	  <force></force>
+                </consume>
+              </token>
+              <moduleBuySell>
+                <lessOrEqual>	-1	</lessOrEqual>
+              </moduleBuySell>
+            </and>
+          </account>
+        </preBattle>
+        <common>
+          <bonusLimit>	1	</bonusLimit>
+        </common>
+      </conditions>
+      <bonus>
+        <item>	251	  <count>	3	</count>
+        </item>
+        <item>	763	  <count>	3	</count>
+        </item>
+        <item>	1275	  <count>	3	</count>
+        </item>
+        <token>
+          <id>	linkedset_2_5_unlock	</id>
+          <expires>	01.12.2050 05:10	</expires>
+        </token>
+      </bonus>
+    </hangarQuest>
+    <battleQuest>
+      <enabled>	true	</enabled>
+      <id>	linkedset_2_5	</id>
+      <conditions>
+        <preBattle>
+          <account>
+            <and>
+              <isLinkedSetEnabled>	true	</isLinkedSetEnabled>
+              <token>
+                <id>	linkedset_2_5_unlock	</id>
+                <greaterOrEqual>	1	</greaterOrEqual>
+                <consume>	10	  <force></force>
+                </consume>
+              </token>
+            </and>
+          </account>
+          <vehicle>
+            <and>
+              <vehicleDescr>
+                <levels>	3 4 5 6 7 8 9 10	</levels>
+              </vehicleDescr>
+              <consumables>
+                <equipmentCount>
+                  <greaterOrEqual>	3	</greaterOrEqual>
+                </equipmentCount>
+              </consumables>
+            </and>
+          </vehicle>
+          <battle>
+            <bonusTypes>	1 24	</bonusTypes>
+          </battle>
+        </preBattle>
+        <common>
+          <battles>
+            <count>	5	</count>
+          </battles>
+          <bonusLimit>	1	</bonusLimit>
+        </common>
+      </conditions>
+      <bonus>
+        <freeXP>	2500	</freeXP>
+        <customizations>
+          <item>
+            <value>	1	</value>
+            <custType>	decal	</custType>
+            <id>	15945	</id>
+          </item>
+        </customizations>
+        <token>
+          <id>	linkedset_2_6_unlock	</id>
+          <expires>	01.12.2050 05:10	</expires>
+        </token>
+      </bonus>
+    </battleQuest>
+    <battleQuest>
+      <enabled>	true	</enabled>
+      <id>	linkedset_2_6	</id>
+      <conditions>
+        <preBattle>
+          <account>
+            <and>
+              <isLinkedSetEnabled>	true	</isLinkedSetEnabled>
+              <token>
+                <id>	linkedset_2_6_unlock	</id>
+                <greaterOrEqual>	1	</greaterOrEqual>
+                <consume>	10	  <force></force>
+                </consume>
+              </token>
+            </and>
+          </account>
+          <vehicle>
+            <and>
+              <or>
+                <correspondedCamouflage>
+                  <hideInGui></hideInGui>
+                </correspondedCamouflage>
+                <correspondedDecal>
+                  <hideInGui></hideInGui>
+                </correspondedDecal>
+                <correspondedPaint>
+                  <hideInGui></hideInGui>
+                </correspondedPaint>
+                <correspondedStyle>
+                  <hideInGui></hideInGui>
+                </correspondedStyle>
+                <correspondedModification>
+                  <hideInGui></hideInGui>
+                </correspondedModification>
+                <correspondedProjectionDecal>
+                  <hideInGui></hideInGui>
+                </correspondedProjectionDecal>
+                <correspondedPersonalNumber>
+                  <hideInGui></hideInGui>
+                </correspondedPersonalNumber>
+              </or>
+              <vehicleDescr>
+                <levels>	3 4 5 6 7 8 9 10	</levels>
+              </vehicleDescr>
+            </and>
+          </vehicle>
+          <battle>
+            <bonusTypes>	1 24	</bonusTypes>
+          </battle>
+        </preBattle>
+        <common>
+          <bonusLimit>	1	</bonusLimit>
+        </common>
+      </conditions>
+      <bonus>
+        <item>	1785	  <count>	1	</count>
+        </item>
+        <token>
+          <id>	linkedset_2_7_unlock	</id>
+          <expires>	01.12.2050 05:10	</expires>
+        </token>
+      </bonus>
+    </battleQuest>
+    <battleQuest>
+      <enabled>	true	</enabled>
+      <id>	linkedset_2_7	</id>
+      <conditions>
+        <preBattle>
+          <account>
+            <and>
+              <isLinkedSetEnabled>	true	</isLinkedSetEnabled>
+              <token>
+                <id>	linkedset_2_7_unlock	</id>
+                <greaterOrEqual>	1	</greaterOrEqual>
+                <consume>	10	  <force></force>
+                </consume>
+              </token>
+            </and>
+          </account>
+          <vehicle>
+            <and>
+              <vehicleDescr>
+                <levels>	4 5 6 7 8 9 10	</levels>
+              </vehicleDescr>
+              <installedModules>
+                <optionalDeviceCount>
+                  <greaterOrEqual>	1	</greaterOrEqual>
+                </optionalDeviceCount>
+              </installedModules>
+            </and>
+          </vehicle>
+          <battle>
+            <bonusTypes>	1 24	</bonusTypes>
+          </battle>
+        </preBattle>
+        <common>
+          <battles>
+            <count>	10	</count>
+          </battles>
+          <bonusLimit>	1	</bonusLimit>
+        </common>
+      </conditions>
+      <bonus>
+        <credits>	75000	</credits>
+        <goodie>
+          <id>	10001	</id>
+          <count>	5	</count>
+        </goodie>
+        <goodie>
+          <id>	10011	</id>
+          <count>	5	</count>
+        </goodie>
+        <token>
+          <id>	linkedset_2_8_unlock	</id>
+          <expires>	01.12.2050 05:10	</expires>
+        </token>
+      </bonus>
+    </battleQuest>
+    <battleQuest>
+      <enabled>	true	</enabled>
+      <id>	linkedset_2_8	</id>
+      <conditions>
+        <preBattle>
+          <account>
+            <and>
+              <isLinkedSetEnabled>	true	</isLinkedSetEnabled>
+              <token>
+                <id>	linkedset_2_8_unlock	</id>
+                <greaterOrEqual>	1	</greaterOrEqual>
+                <consume>	10	  <force></force>
+                </consume>
+              </token>
+            </and>
+          </account>
+          <vehicle>
+            <and>
+              <vehicleDescr>
+                <levels>	4 5 6 7 8 9 10	</levels>
+              </vehicleDescr>
+              <goodies>
+                <goodiesCount>
+                  <greaterOrEqual>	1	</greaterOrEqual>
+                </goodiesCount>
+              </goodies>
+            </and>
+          </vehicle>
+          <battle>
+            <bonusTypes>	1 24	</bonusTypes>
+          </battle>
+        </preBattle>
+        <common>
+          <battles>
+            <count>	5	</count>
+          </battles>
+          <bonusLimit>	1	</bonusLimit>
+        </common>
+      </conditions>
+      <bonus>
+        <vehicle>	ussr:R108_T34_85M	  <rent>
+            <time>	10	</time>
+          </rent>
+          <crewLvl>	100	</crewLvl>
+        </vehicle>
+        <goodie>
+          <id>	5047	</id>
+          <count>	5	</count>
+        </goodie>
+        <freeXP>	3000	</freeXP>
+        <token>
+          <id>	linkedset_4_1_unlock	</id>
+          <expires>	01.12.2050 05:10	</expires>
+        </token>
+      </bonus>
+    </battleQuest>
+    <tokenQuest>
+      <enabled>	true	</enabled>
+      <id>	linkedset_3_1	</id>
+      <conditions>
+        <preBattle>
+          <account>
+            <and>
+              <isLinkedSetEnabled>	true	</isLinkedSetEnabled>
+              <token>
+                <id>	linkedset_3_1_unlock	</id>
+                <greaterOrEqual>	1	</greaterOrEqual>
+                <consume>	10	  <force></force>
+                </consume>
+              </token>
+              <vehiclesUnlocked>
+                <levels>	4	</levels>
+                <greaterOrEqual>	1	</greaterOrEqual>
+              </vehiclesUnlocked>
+            </and>
+          </account>
+        </preBattle>
+        <common>
+          <bonusLimit>	1	</bonusLimit>
+        </common>
+      </conditions>
+      <bonus>
+        <credits>	70000	</credits>
+        <freeXP>	2000	</freeXP>
+        <token>
+          <id>	linkedset_4_1_unlock	</id>
+          <expires>	01.12.2050 05:10	</expires>
+        </token>
+      </bonus>
+    </tokenQuest>
+    <tokenQuest>
+      <enabled>	true	</enabled>
+      <id>	linkedset_3_2	</id>
+      <conditions>
+        <preBattle>
+          <account>
+            <and>
+              <isLinkedSetEnabled>	true	</isLinkedSetEnabled>
+              <token>
+                <id>	linkedset_3_2_unlock	</id>
+                <greaterOrEqual>	1	</greaterOrEqual>
+                <consume>	10	  <force></force>
+                </consume>
+              </token>
+              <vehiclesUnlocked>
+                <levels>	5	</levels>
+                <greaterOrEqual>	1	</greaterOrEqual>
+              </vehiclesUnlocked>
+            </and>
+          </account>
+        </preBattle>
+        <common>
+          <bonusLimit>	1	</bonusLimit>
+        </common>
+      </conditions>
+      <bonus>
+        <gold>	100	</gold>
+        <token>
+          <id>	linkedset_4_1_unlock	</id>
+          <expires>	01.12.2050 05:10	</expires>
+        </token>
+      </bonus>
+    </tokenQuest>
+    <battleQuest>
+      <enabled>	true	</enabled>
+      <id>	linkedset_3_3	</id>
+      <conditions>
+        <preBattle>
+          <account>
+            <and>
+              <isLinkedSetEnabled>	true	</isLinkedSetEnabled>
+              <token>
+                <id>	linkedset_3_3_unlock	</id>
+                <greaterOrEqual>	1	</greaterOrEqual>
+                <consume>	10	  <force></force>
+                </consume>
+              </token>
+            </and>
+          </account>
+        </preBattle>
+        <common>
+          <bonusLimit>	1	</bonusLimit>
+          <cumulative>
+            <credits>	250000	</credits>
+          </cumulative>
+        </common>
+      </conditions>
+      <bonus>
+        <premium>	1	</premium>
+        <token>
+          <id>	linkedset_4_1_unlock	</id>
+          <expires>	01.12.2050 05:10	</expires>
+        </token>
+      </bonus>
+    </battleQuest>
+    <tokenQuest>
+      <enabled>	true	</enabled>
+      <id>	linkedset_4_1	</id>
+      <conditions>
+        <preBattle>
+          <account>
+            <and>
+              <isLinkedSetEnabled>	true	</isLinkedSetEnabled>
+              <token>
+                <id>	linkedset_4_1_unlock	</id>
+                <greaterOrEqual>	4	</greaterOrEqual>
+                <consume>	10	  <force></force>
+                </consume>
+              </token>
+            </and>
+          </account>
+        </preBattle>
+        <common>
+          <bonusLimit>	1	</bonusLimit>
+        </common>
+      </conditions>
+      <bonusDelayed>
+        <vehicleChoice>
+          <levels>	6	</levels>
+        </vehicleChoice>
+      </bonusDelayed>
+    </tokenQuest>
+  </quests>
+</150901-0510_501001-0510_linkedset_quests.xml>

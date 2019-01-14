@@ -118,17 +118,6 @@ def __mergeDossier(total, key, value, isLeaf=False, count=1, *args):
             total['type'] = data['type']
 
 
-def __mergeNYToys(total, key, value, isLeaf=False, count=1, *args):
-    result = total.setdefault(key, {})
-    for toyID, toysCount in value.iteritems():
-        result[toyID] = result.get(toyID, 0) + count * toysCount
-
-
-def __mergeNY19AnyOf(total, key, value, isLeaf=False, count=1, *args):
-    result = total.setdefault(key, [])
-    result.extend(value if isinstance(value, list) else [value])
-
-
 BONUS_MERGERS = {'credits': __mergeValue,
  'gold': __mergeValue,
  'xp': __mergeValue,
@@ -150,15 +139,10 @@ BONUS_MERGERS = {'credits': __mergeValue,
  'goodies': __mergeGoodies,
  'dossier': __mergeDossier,
  'tankmen': __mergeTankmen,
- 'customizations': __mergeCustomizations,
- 'ny19Toys': __mergeNYToys,
- 'ny19ToyFragments': __mergeValue,
- 'ny19AnyOf': __mergeNY19AnyOf,
- 'ny18Toys': __mergeNYToys}
+ 'customizations': __mergeCustomizations}
 ITEM_INVENTORY_CHECKERS = {'vehicles': lambda account, key: account._inventory.getVehicleInvID(key) != 0,
  'customizations': lambda account, key: account._customizations20.getItems((key,), 0)[key] > 0,
- 'tokens': lambda account, key: account._quests.hasToken(key),
- 'ny19Toys': lambda account, key: account._newYear.isToyPresentInCollection(key)}
+ 'tokens': lambda account, key: account._quests.hasToken(key)}
 
 class BonusItemsCache(object):
 
@@ -269,7 +253,7 @@ class BonusNodeAcceptor(object):
 
     def updateBonusCache(self, bonusNode):
         cache = self.__bonusCache
-        for itemType in ('vehicles', 'tokens', 'ny19Toys'):
+        for itemType in ('vehicles', 'tokens'):
             if itemType in bonusNode:
                 for itemID in bonusNode[itemType].iterkeys():
                     cache.onItemAccepted(itemType, itemID)
@@ -281,7 +265,7 @@ class BonusNodeAcceptor(object):
 
     def isBonusExists(self, bonusNode):
         cache = self.__bonusCache
-        for itemType in ('vehicles', 'tokens', 'ny19Toys'):
+        for itemType in ('vehicles', 'tokens'):
             if itemType in bonusNode:
                 for itemID in bonusNode[itemType].iterkeys():
                     if cache.isItemExists(itemType, itemID):

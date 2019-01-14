@@ -261,7 +261,10 @@ class _RankedBattlesConfig(namedtuple('_RankedBattlesConfig', ('isEnabled', 'per
         return cls()
 
 
-class _EpicMetaGameConfig(namedtuple('_EpicMetaGameConfig', ('maxCombatReserveLevel', 'metaLevel', 'rewards'))):
+class _EpicMetaGameConfig(namedtuple('_EpicMetaGameConfig', ['maxCombatReserveLevel',
+ 'seasonData',
+ 'metaLevel',
+ 'rewards'])):
 
     def asDict(self):
         return self._asdict()
@@ -272,23 +275,31 @@ class _EpicMetaGameConfig(namedtuple('_EpicMetaGameConfig', ('maxCombatReserveLe
         return self._replace(**dataToUpdate)
 
 
-_EpicMetaGameConfig.__new__.__defaults__ = (0, 0, {})
-
-class _EpicGameConfig(namedtuple('_EpicGameConfig', ('isEnabled', 'validVehicleLevels', 'seasons', 'peripheryIDs'))):
-
-    def asDict(self):
-        return self._asdict()
-
-    def replace(self, data):
-        allowedFields = self._fields
-        dataToUpdate = dict(((k, v) for k, v in data.iteritems() if k in allowedFields))
-        return self._replace(**dataToUpdate)
-
-
-_EpicGameConfig.__new__.__defaults__ = (False,
- [],
- {},
+_EpicMetaGameConfig.__new__.__defaults__ = (0,
+ (0, False),
+ (0, 0, 0),
  {})
+
+class _EpicGameConfig(namedtuple('_EpicGameConfig', ('isEnabled', 'validVehicleLevels', 'seasons', 'cycleTimes', 'peripheryIDs', 'primeTimes'))):
+    __slots__ = ()
+
+    def __new__(cls, **kwargs):
+        defaults = dict(isEnabled=False, validVehicleLevels=[], seasons={}, cycleTimes=(), peripheryIDs={}, primeTimes={})
+        defaults.update(kwargs)
+        return super(_EpicGameConfig, cls).__new__(cls, **defaults)
+
+    def asDict(self):
+        return self._asdict()
+
+    def replace(self, data):
+        allowedFields = self._fields
+        dataToUpdate = dict(((k, v) for k, v in data.iteritems() if k in allowedFields))
+        return self._replace(**dataToUpdate)
+
+    @classmethod
+    def defaults(cls):
+        return cls()
+
 
 class _TelecomConfig(object):
     __slots__ = ('__config',)
@@ -537,6 +548,9 @@ class ServerSettings(object):
 
     def isBootcampEnabled(self):
         return self.__getGlobalSetting('isBootcampEnabled', False)
+
+    def isLinkedSetEnabled(self):
+        return self.__getGlobalSetting('isLinkedSetEnabled', False)
 
     def getBootcampBonuses(self):
         return self.__getGlobalSetting('bootcampBonuses', {})

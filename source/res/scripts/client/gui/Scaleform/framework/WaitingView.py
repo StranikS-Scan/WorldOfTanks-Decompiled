@@ -18,16 +18,6 @@ class WaitingView(WaitingViewMeta):
             if self.__callback:
                 self.__callback()
 
-    def close(self):
-        self.__callback = None
-        try:
-            self.hideS(None)
-        except Exception:
-            LOG_ERROR('There is error while trying to close waiting')
-            LOG_CURRENT_EXCEPTION()
-
-        return
-
     def destroy(self):
         self.__callback = None
         InputHandler.g_instance.onKeyUp -= self.handleKeyUpEvent
@@ -39,4 +29,17 @@ class WaitingView(WaitingViewMeta):
 
     def cancelCallback(self):
         self.__callback = None
+        return
+
+    def waitingShow(self, msg):
+        self.as_showWaitingS(msg)
+
+    def waitingHide(self):
+        self.__callback = None
+        try:
+            self.as_hideWaitingS()
+        except Exception:
+            LOG_ERROR('There is error while trying to close waiting')
+            LOG_CURRENT_EXCEPTION()
+
         return

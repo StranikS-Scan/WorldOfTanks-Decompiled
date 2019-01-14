@@ -13,7 +13,7 @@ from gui.server_events.events_helpers import EventInfoModel
 from gui.server_events.formatters import formatStrDiscount, formatPercentValue, formatMultiplierValue, formatGoldPriceNormalCard, formatCreditPriceNormalCard, DECORATION_SIZES, formatGoldPrice, formatGoldPriceBig, formatCreditPrice, formatCreditPriceBig, formatVehicleLevel, DISCOUNT_TYPE
 from gui.shared.formatters import icons
 from gui.server_events import settings as quest_settings
-from gui.shared.utils import MAX_STEERING_LOCK_ANGLE, WHEELED_SWITCH_ON_TIME, WHEELED_SWITCH_OFF_TIME
+from gui.shared.utils import MAX_STEERING_LOCK_ANGLE, WHEELED_SWITCH_ON_TIME, WHEELED_SWITCH_OFF_TIME, WHEELED_SPEED_MODE_SPEED
 from helpers import i18n, dependency, time_utils
 from skeletons.gui.game_control import IMarathonEventsController
 from skeletons.gui.server_events import IEventsCache
@@ -533,6 +533,7 @@ class VehPriceActionInfo(ActionInfo):
     def __getCommonStatsBlock(self, vehicle):
         _params = {VEHICLE_CLASS_NAME.LIGHT_TANK: ('enginePowerPerTon',
                                          'speedLimits',
+                                         WHEELED_SPEED_MODE_SPEED,
                                          'chassisRotationSpeed',
                                          'circularVisionRadius',
                                          MAX_STEERING_LOCK_ANGLE,

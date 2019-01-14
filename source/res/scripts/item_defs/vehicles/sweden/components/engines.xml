@@ -36,6 +36,7 @@
     <Motoraggregat_1S_A>	38	</Motoraggregat_1S_A>
     <Meteor_Mark_IVB>	39	</Meteor_Mark_IVB>
     <AV_1790>	40	</AV_1790>
+    <Volvo_V8B>	41	</Volvo_V8B>
     <Development_Engine>	65535	</Development_Engine>
   </ids>
   <shared>
@@ -641,5 +642,22 @@
       <rpm_min>	374	</rpm_min>
       <rpm_max>	2601	</rpm_max>
     </AV_1790>
+    <Volvo_V8B>
+      <userString>	#sweden_vehicles:Volvo_V8B	</userString>
+      <tags>	gasoline	</tags>
+      <level>	8	</level>
+      <price>	44000	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_Continental_R975_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Continental_R975_npc	</wwsoundNPC>
+      <power>	680	</power>
+      <weight>	1050	</weight>
+      <maxHealth>	234	</maxHealth>
+      <maxRegenHealth>	123	</maxRegenHealth>
+      <repairCost>	5	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	387	</rpm_min>
+      <rpm_max>	2560	</rpm_max>
+    </Volvo_V8B>
   </shared>
 </engines.xml>

@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/LobbyView.py
+import weakref
 import constants
 import gui
 from PlayerEvents import g_playerEvents
@@ -100,6 +101,7 @@ class LobbyView(LobbyPageMeta):
         self.__currIgrType = constants.IGR_TYPE.NONE
         self.__viewLifecycleWatcher = ViewLifecycleWatcher()
         self._entityEnqueueCancelCallback = None
+        Waiting.setLobbyPageWaitingKeeper(weakref.proxy(self))
         return
 
     @proto_getter(PROTO_TYPE.BW_CHAT2)
@@ -114,8 +116,6 @@ class LobbyView(LobbyPageMeta):
         self.addListener(events.LobbySimpleEvent.SHOW_HELPLAYOUT, self.__showHelpLayout, EVENT_BUS_SCOPE.LOBBY)
         self.addListener(events.LobbySimpleEvent.CLOSE_HELPLAYOUT, self.__closeHelpLayout, EVENT_BUS_SCOPE.LOBBY)
         self.addListener(events.GameEvent.SCREEN_SHOT_MADE, self.__handleScreenShotMade, EVENT_BUS_SCOPE.GLOBAL)
-        self.addListener(events.LobbySimpleEvent.TURN_LOBBY_DRAGGING_ON, self.__turnLobbyDraggingOn, EVENT_BUS_SCOPE.LOBBY)
-        self.addListener(events.LobbySimpleEvent.TURN_LOBBY_DRAGGING_OFF, self.__turnLobbyDraggingOff, EVENT_BUS_SCOPE.LOBBY)
         g_playerEvents.onEntityCheckOutEnqueued += self._onEntityCheckoutEnqueued
         g_playerEvents.onAccountBecomeNonPlayer += self._onAccountBecomeNonPlayer
         viewLifecycleHandler = _LobbySubViewsLifecycleHandler()
@@ -133,6 +133,7 @@ class LobbyView(LobbyPageMeta):
 
     @uniprof.regionDecorator(label='account.show_gui', scope='enter')
     def _dispose(self):
+        Waiting.setLobbyPageWaitingKeeper(None)
         self.igrCtrl.onIgrTypeChanged -= self.__onIgrTypeChanged
         self.__viewLifecycleWatcher.stop()
         g_playerEvents.onEntityCheckOutEnqueued -= self._onEntityCheckoutEnqueued
@@ -143,8 +144,6 @@ class LobbyView(LobbyPageMeta):
         self.removeListener(events.LobbySimpleEvent.SHOW_HELPLAYOUT, self.__showHelpLayout, EVENT_BUS_SCOPE.LOBBY)
         self.removeListener(events.LobbySimpleEvent.CLOSE_HELPLAYOUT, self.__closeHelpLayout, EVENT_BUS_SCOPE.LOBBY)
         self.removeListener(events.GameEvent.SCREEN_SHOT_MADE, self.__handleScreenShotMade, EVENT_BUS_SCOPE.GLOBAL)
-        self.removeListener(events.LobbySimpleEvent.TURN_LOBBY_DRAGGING_ON, self.__turnLobbyDraggingOn, EVENT_BUS_SCOPE.LOBBY)
-        self.removeListener(events.LobbySimpleEvent.TURN_LOBBY_DRAGGING_OFF, self.__turnLobbyDraggingOff, EVENT_BUS_SCOPE.LOBBY)
         View._dispose(self)
         return
 
@@ -158,12 +157,6 @@ class LobbyView(LobbyPageMeta):
         if 'path' not in event.ctx:
             return
         SystemMessages.pushMessage(i18n.makeString('#menu:screenshot/save') % {'path': event.ctx['path']}, SystemMessages.SM_TYPE.Information)
-
-    def __turnLobbyDraggingOn(self, _):
-        self.as_switchLobbyDraggingS(True)
-
-    def __turnLobbyDraggingOff(self, _):
-        self.as_switchLobbyDraggingS(False)
 
     def _onEntityCheckoutEnqueued(self, cancelCallback):
         g_eventBus.addListener(BootcampEvent.QUEUE_DIALOG_CANCEL, self._onEntityCheckoutCanceled, EVENT_BUS_SCOPE.LOBBY)
@@ -181,6 +174,12 @@ class LobbyView(LobbyPageMeta):
         self._entityEnqueueCancelCallback = None
         g_eventBus.removeListener(BootcampEvent.QUEUE_DIALOG_CANCEL, self._onEntityCheckoutCanceled, EVENT_BUS_SCOPE.LOBBY)
         return
+
+    def waitingShow(self, msg):
+        self.as_showWaitingS(msg)
+
+    def waitingHide(self):
+        self.as_hideWaitingS()
 
     def moveSpace(self, dx, dy, dz):
         self.fireEvent(CameraRelatedEvents(CameraRelatedEvents.LOBBY_VIEW_MOUSE_MOVE, ctx={'dx': dx,

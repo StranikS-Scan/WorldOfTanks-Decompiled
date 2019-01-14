@@ -22,6 +22,10 @@ class Types(object):
     SELL = 1
 
 
+class ItemsCountStepSize(object):
+    STANDART = 1
+
+
 class ConfirmC11nBuyMeta(IDialogMeta):
     itemsCache = dependency.descriptor(IItemsCache)
 
@@ -89,6 +93,12 @@ class ConfirmC11nBuyMeta(IDialogMeta):
             result = min(result, item.buyCount)
         return min(result, MAX_ITEMS_FOR_BUY_OPERATION)
 
+    def getStepFactor(self, item):
+        step = ItemsCountStepSize.STANDART
+        if item.isRentable:
+            step = item.rentCount
+        return step
+
 
 class ConfirmC11nSellMeta(ConfirmC11nBuyMeta):
 
@@ -120,3 +130,7 @@ class ConfirmC11nSellMeta(ConfirmC11nBuyMeta):
         prices = self.getActualPrices(item)
         defaultPrices = self.getDefaultPrices(item)
         return packActionTooltipData(ACTION_TOOLTIPS_TYPE.ITEM, str(item.intCD), False, prices, defaultPrices)
+
+    def getStepFactor(self, item):
+        step = ItemsCountStepSize.STANDART
+        return step

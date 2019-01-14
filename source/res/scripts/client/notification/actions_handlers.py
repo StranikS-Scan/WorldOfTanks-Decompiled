@@ -6,7 +6,6 @@ from adisp import process
 from debug_utils import LOG_ERROR, LOG_DEBUG
 from gui import DialogsInterface, makeHtmlString, SystemMessages
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
-from gui.Scaleform.framework import ScopeTemplates
 from gui.Scaleform.genConsts.CLANS_ALIASES import CLANS_ALIASES
 from gui.Scaleform.genConsts.FORTIFICATION_ALIASES import FORTIFICATION_ALIASES
 from gui.Scaleform.genConsts.QUESTS_ALIASES import QUESTS_ALIASES
@@ -14,13 +13,10 @@ from gui.Scaleform.genConsts.RANKEDBATTLES_ALIASES import RANKEDBATTLES_ALIASES
 from gui.Scaleform.genConsts.BARRACKS_CONSTANTS import BARRACKS_CONSTANTS
 from gui.battle_results import RequestResultsContext
 from gui.clans.clan_helpers import showAcceptClanInviteDialog
-from gui.impl.gen import R
-from gui.impl.new_year.views.new_year_rewards_view import NewYearRewardsView
 from gui.prb_control import prbInvitesProperty, prbDispatcherProperty
 from gui.ranked_battles import ranked_helpers
 from gui.server_events.events_dispatcher import showPersonalMission
 from gui.shared import g_eventBus, events, actions, EVENT_BUS_SCOPE, event_dispatcher as shared_events
-from gui.shared.events import LoadUnboundViewEvent
 from gui.shared.utils import decorators
 from gui.wgcg.clan import contexts as clan_ctxs
 from gui.wgnc import g_wgncProvider
@@ -570,7 +566,36 @@ class OpenCustomizationHandler(_ActionHandler):
 
     def handleAction(self, model, entityID, action):
         super(OpenCustomizationHandler, self).handleAction(model, entityID, action)
-        self.service.showCustomization()
+        notification = model.getNotification(self.getNotType(), entityID)
+        savedData = notification.getSavedData()
+        vehicleIntCD = savedData.get('vehicleIntCD')
+        vehicle = self.service.getItemByCD(vehicleIntCD)
+        if vehicle.invID != -1:
+            self.service.showCustomization(vehicle.invID, callback=self.service.getCtx().switchToStyle)
+
+
+class ProlongStyleRent(_ActionHandler):
+    service = dependency.descriptor(ICustomizationService)
+
+    @classmethod
+    def getNotType(cls):
+        return NOTIFICATION_TYPE.MESSAGE
+
+    @classmethod
+    def getActions(cls):
+        pass
+
+    def handleAction(self, model, entityID, action):
+        super(ProlongStyleRent, self).handleAction(model, entityID, action)
+        notification = model.getNotification(self.getNotType(), entityID)
+        savedData = notification.getSavedData()
+        vehicleIntCD = savedData.get('vehicleIntCD')
+        styleIntCD = savedData.get('styleIntCD')
+        vehicle = self.service.getItemByCD(vehicleIntCD)
+        style = self.service.getItemByCD(styleIntCD)
+        if vehicle.invID != -1:
+            callback = lambda : self.service.getCtx().prolongStyleRent(style)
+            self.service.showCustomization(vehicle.invID, callback)
 
 
 class _OpenNotrecruitedHandler(_NavigationDisabledActionHandler):
@@ -619,23 +644,8 @@ class _OpenLootBoxesHandler(_NavigationDisabledActionHandler):
         notification = model.getNotification(self.getNotType(), entityID)
         savedData = notification.getSavedData()
         if savedData is not None:
-            shared_events.showLootBoxEntry(lootBoxType=savedData)
+            pass
         return
-
-
-class _LootBoxesGiftHandler(_ActionHandler):
-
-    @classmethod
-    def getNotType(cls):
-        return NOTIFICATION_TYPE.MESSAGE
-
-    @classmethod
-    def getActions(cls):
-        pass
-
-    def handleAction(self, model, entityID, action):
-        super(_LootBoxesGiftHandler, self).handleAction(model, entityID, action)
-        shared_events.showLootBoxGiftWindow()
 
 
 class _LootBoxesAutoOpenHandler(_NavigationDisabledActionHandler):
@@ -652,22 +662,8 @@ class _LootBoxesAutoOpenHandler(_NavigationDisabledActionHandler):
         notification = model.getNotification(self.getNotType(), entityID)
         savedData = notification.getSavedData()
         if savedData is not None and 'rewards' in savedData:
-            shared_events.showLootBoxAutoOpenWindow(savedData['rewards'])
+            pass
         return
-
-
-class _NewYearOpenRewardsScreenHandler(_NavigationDisabledActionHandler):
-
-    @classmethod
-    def getNotType(cls):
-        return NOTIFICATION_TYPE.MESSAGE
-
-    @classmethod
-    def getActions(cls):
-        pass
-
-    def doAction(self, model, entityID, action):
-        g_eventBus.handleEvent(LoadUnboundViewEvent(R.views.newYearRewardsView, NewYearRewardsView, ScopeTemplates.LOBBY_SUB_SCOPE))
 
 
 _AVAILABLE_HANDLERS = (ShowBattleResultsHandler,
@@ -696,9 +692,8 @@ _AVAILABLE_HANDLERS = (ShowBattleResultsHandler,
  _OpenNotrecruitedHandler,
  OpenPersonalMissionHandler,
  _OpenLootBoxesHandler,
- _LootBoxesGiftHandler,
  _LootBoxesAutoOpenHandler,
- _NewYearOpenRewardsScreenHandler)
+ ProlongStyleRent)
 
 class NotificationsActionsHandlers(object):
     __slots__ = ('__single', '__multi')

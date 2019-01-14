@@ -176,6 +176,9 @@ class EpicEntity(PreQueueEntity):
         g_eventDispatcher.loadHangar()
 
     def __processWelcome(self):
+        if not self.epicController.isWelcomeScreenUpToDate(self.settingsCore.serverSettings):
+            g_eventDispatcher.loadEpicWelcome()
+            return FUNCTIONAL_FLAG.LOAD_PAGE
         return FUNCTIONAL_FLAG.UNDEFINED
 
     def __onServerSettingChanged(self, diff):

@@ -1,0 +1,95 @@
+<95_lost_city_ctf.xml>
+  <name>	#arenas:95_lost_city_ctf/name	</name>
+  <description>	#arenas:95_lost_city_ctf/description	</description>
+  <geometry>	spaces/95_lost_city_ctf	</geometry>
+  <estimatedLoad>	0.3	</estimatedLoad>
+  <roundLength>	900	</roundLength>
+  <boundingBox>
+    <bottomLeft>	-500.000000 -500.000000	</bottomLeft>
+    <upperRight>	500.000000 500.000000	</upperRight>
+  </boundingBox>
+  <minimap>	spaces/95_lost_city_ctf/mmap.dds	</minimap>
+  <vehicleCamouflageKind>	desert	</vehicleCamouflageKind>
+  <umbraEnabled>	1	</umbraEnabled>
+  <wwmusicSetup>
+    <wwmusicLoading>	music_lost_city_loading_screen	</wwmusicLoading>
+    <wwmusicIntensive>	music_lost_city_dron_intensive	</wwmusicIntensive>
+    <wwmusicRelaxed>	music_lost_city_dron_relaxed	</wwmusicRelaxed>
+    <wwmusicStop>	music_dron_stop	</wwmusicStop>
+    <wwmusicEndbattleStop>	music_dron_endbattle_stop	</wwmusicEndbattleStop>
+    <wwmusicResultWin>	music_lost_city_result_win	</wwmusicResultWin>
+    <wwmusicResultDrawn>	music_lost_city_result_drawn	</wwmusicResultDrawn>
+    <wwmusicResultDefeat>	music_lost_city_result_defeat	</wwmusicResultDefeat>
+  </wwmusicSetup>
+  <wwambientSound>	amb_map_95_wind	</wwambientSound>
+  <water>
+    <texScale>	0	</texScale>
+    <freqX>	0	</freqX>
+    <freqZ>	0	</freqZ>
+  </water>
+  <gameplayTypes>
+    <ctf>
+      <teamSpawnPoints>
+        <team1>
+          <position>	0 -350	</position>
+        </team1>
+        <team2>
+          <position>	0 350	</position>
+        </team2>
+      </teamSpawnPoints>
+      <teamBasePositions>
+        <team1>
+          <position1>	0.000000 -350.000000	</position1>
+        </team1>
+        <team2>
+          <position1>	-0.000023 350.000000	</position1>
+        </team2>
+      </teamBasePositions>
+    </ctf>
+    <domination>
+      <teamSpawnPoints>
+        <team1>
+          <position>	350 -450	</position>
+        </team1>
+        <team2>
+          <position>	350 450	</position>
+        </team2>
+      </teamSpawnPoints>
+      <controlPoint>	-0.000069 0.000015	</controlPoint>
+    </domination>
+    <assault>
+      <winnerIfTimeout>	2	</winnerIfTimeout>
+      <teamSpawnPoints>
+        <team1>
+          <position>	-410 0	</position>
+        </team1>
+        <team2>
+          <position>	380 0	</position>
+        </team2>
+      </teamSpawnPoints>
+      <teamBasePositions>
+        <team2>
+          <position1>	191.677185 0.737327	</position1>
+        </team2>
+      </teamBasePositions>
+    </assault>
+    <assault2>
+      <winnerIfTimeout>	1	</winnerIfTimeout>
+      <winnerIfExtermination>	1	</winnerIfExtermination>
+      <teamSpawnPoints>
+        <team1>
+          <position>	-315.682 121.161	</position>
+        </team1>
+        <team2>
+          <position>	315.682 -121.161	</position>
+        </team2>
+      </teamSpawnPoints>
+      <teamBasePositions>
+        <team1>
+          <position1>	53.463394 292.177002	</position1>
+          <position2>	-0.000015 0.000000	</position2>
+        </team1>
+      </teamBasePositions>
+    </assault2>
+  </gameplayTypes>
+</95_lost_city_ctf.xml>

@@ -189,7 +189,7 @@ class BarrelReload(SimpleReload):
                 if BARREL_DEBUG_ENABLED:
                     LOG_DEBUG('!!! Play Ammo Low  = {0} {1}'.format(currentTime, self._desc.ammoLow))
         else:
-            if shellCount == 1:
+            if shellCount == 1 and reloadShellCount > 2:
                 if BARREL_DEBUG_ENABLED:
                     LOG_DEBUG('!!! Play Alert  = {0} {1}'.format(currentTime, self._desc.lastShellAlert))
                 playByName(self._desc.lastShellAlert)
@@ -355,7 +355,7 @@ class AutoReload(CallbackDelayer):
             time = shellReloadTime - self._desc.duration
             if time < 0.0:
                 time = 0.0
-            self.delayCallback(time, self.__onShellInTheBarrel, shellCount, BigWorld.time() + time)
+            self.delayCallback(time, self.__onShellInTheBarrel, shellCount, reloadShellCount, BigWorld.time() + time)
             return
 
     def stop(self):
@@ -392,7 +392,7 @@ class AutoReload(CallbackDelayer):
     def shotFail(self):
         playByName(self._desc.shotFail)
 
-    def __onShellInTheBarrel(self, shellCount, time):
+    def __onShellInTheBarrel(self, shellCount, reloadShellCount, time):
         if fabs(time - BigWorld.time()) > 0.1:
             return
         else:
@@ -403,7 +403,7 @@ class AutoReload(CallbackDelayer):
                 if replayCtrl.isPlaying and replayCtrl.isTimeWarpInProgress:
                     return
                 self._sound.play()
-                if shellCount == 1:
+                if shellCount == 1 and reloadShellCount > 2:
                     SoundGroups.g_instance.playSound2D(self._desc.lastShellAlert)
             return
 

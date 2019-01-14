@@ -12,6 +12,7 @@ from gui.shared.formatters import text_styles
 from gui.Scaleform.daapi.view.meta.BaseBattleLoadingMeta import BaseBattleLoadingMeta
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.battle_session import IBattleSessionProvider
+from skeletons.gui.impl import IGuiLoader
 from skeletons.gui.lobby_context import ILobbyContext
 __bBattleLoadingShowed = False
 
@@ -31,6 +32,7 @@ class BattleLoading(BaseBattleLoadingMeta, IArenaVehiclesController):
     sessionProvider = dependency.descriptor(IBattleSessionProvider)
     settingsCore = dependency.descriptor(ISettingsCore)
     lobbyContext = dependency.descriptor(ILobbyContext)
+    gui = dependency.descriptor(IGuiLoader)
 
     def __init__(self, _=None):
         super(BattleLoading, self).__init__()
@@ -89,9 +91,10 @@ class BattleLoading(BaseBattleLoadingMeta, IArenaVehiclesController):
             criteria.setClassTag(classTag)
             criteria.setLevel(vLvl)
             criteria.setNation(nation)
+            translation = self.gui.resourceManager.getTranslatedText
             tip = criteria.find()
-            self.as_setTipTitleS(text_styles.highTitle(tip.status))
-            self.as_setTipS(text_styles.playerOnline(tip.body))
+            self.as_setTipTitleS(text_styles.highTitle(translation(tip.status)))
+            self.as_setTipS(text_styles.playerOnline(translation(tip.body)))
             self.as_setVisualTipInfoS(self.__makeVisualTipVO(arenaDP, tip))
             _setBattleLoading(True)
         return
@@ -104,8 +107,9 @@ class BattleLoading(BaseBattleLoadingMeta, IArenaVehiclesController):
         loadingInfo = settings_constants.GAME.BATTLE_LOADING_RANKED_INFO if self._arenaVisitor.gui.isRankedBattle() else settings_constants.GAME.BATTLE_LOADING_INFO
         setting = self.settingsCore.options.getSetting(loadingInfo)
         settingID = setting.getSettingID(isVisualOnly=self._arenaVisitor.gui.isSandboxBattle() or self._arenaVisitor.gui.isEventBattle())
+        tipIconPath = self.gui.resourceManager.getImagePath(tip.icon)
         vo = {'settingID': settingID,
-         'tipIcon': tip.icon if settingID == BattleLoadingTipSetting.OPTIONS.VISUAL else None,
+         'tipIcon': tipIconPath if settingID == BattleLoadingTipSetting.OPTIONS.VISUAL else None,
          'arenaTypeID': self._arenaVisitor.type.getID(),
          'minimapTeam': arenaDP.getNumberOfTeam(),
          'showMinimap': settingID == BattleLoadingTipSetting.OPTIONS.MINIMAP,

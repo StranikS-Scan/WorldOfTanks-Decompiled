@@ -3,14 +3,17 @@
 import math
 import BigWorld
 import Math
+import Event
 from gui import g_guiResetters
-from gui.hangar_cameras.hangar_camera_manager import IMMEDIATE_CAMERA_MOVEMENT_MODE
 from helpers import dependency
 from helpers.CallbackDelayer import CallbackDelayer, TimeDeltaMeter
 from skeletons.account_helpers.settings_core import ISettingsCore
 from vehicle_systems.tankStructure import TankPartIndexes, TankPartNames
+from gui.hangar_cameras.hangar_camera_manager import IMMEDIATE_CAMERA_MOVEMENT_MODE
+from ClientSelectableCameraVehicle import ClientSelectableCameraVehicle
 _VERTICAL_OFFSET = 0.2
 _TRANSITION_DURATION = 0.8
+_WORLD_UP = Math.Vector3(0, 1, 0)
 
 class C11nCameraModes(object):
     START_STATE = 0
@@ -31,6 +34,9 @@ class C11nHangarCameraManager(CallbackDelayer, TimeDeltaMeter):
         self.__prevPitch = None
         self.__hangarCamera = None
         self.__c11nCamera = None
+        self.__tankCentralPoint = None
+        self._eventsManager = Event.EventManager()
+        self.onTurretRotated = Event.Event(self._eventsManager)
         return
 
     def init(self):
@@ -51,6 +57,7 @@ class C11nHangarCameraManager(CallbackDelayer, TimeDeltaMeter):
     def fini(self):
         g_guiResetters.remove(self.__onProjectionChanged)
         self._settingsCore.onSettingsApplied -= self.__onProjectionChanged
+        self._eventsManager.clear()
         if self.__c11nCamera is not None:
             self.__c11nCamera.stop()
         if self.__hangarCamera is not None:
@@ -65,14 +72,22 @@ class C11nHangarCameraManager(CallbackDelayer, TimeDeltaMeter):
         self.__c11nCamera = None
         return
 
-    def locateCameraToCustomizationPreview(self, forceLocate=False, preserveAngles=False):
+    @property
+    def vEntity(self):
+        vEntity = BigWorld.entity(self.__hangarCameraManager.getCurrentEntityId())
+        return vEntity if isinstance(vEntity, ClientSelectableCameraVehicle) else None
+
+    def locateCameraToCustomizationPreview(self, forceLocate=False, preserveAngles=False, disableMovementByMouse=False, updateTankCentralPoint=False):
         if self.__hangarCamera is None or self.__hangarCameraManager is None:
             return
         else:
             from gui.ClientHangarSpace import customizationHangarCFG, hangarCFG
             cfg = customizationHangarCFG()
             hangarConfig = hangarCFG()
-            worldPos = self.__getTankCentralPoint()
+            self.__rotateTurret()
+            if self.__tankCentralPoint is None or updateTankCentralPoint:
+                self.__tankCentralPoint = self.__getTankCentralPoint()
+            worldPos = self.__tankCentralPoint
             if worldPos:
                 pivotPos = Math.Vector3(0, 0, 0)
             else:
@@ -87,6 +102,7 @@ class C11nHangarCameraManager(CallbackDelayer, TimeDeltaMeter):
                 previewPitch = math.radians(cfg['cam_start_angles'][1])
             self._setCameraLocation(targetPos=worldPos, pivotPos=pivotPos, yaw=previewYaw, pitch=previewPitch, dist=cfg['cam_start_dist'], camConstraints=[hangarConfig['cam_pitch_constr'], hangarConfig['cam_yaw_constr'], cfg['cam_dist_constr']], forceLocate=forceLocate)
             self.__currentMode = C11nCameraModes.PREVIEW
+            self.disableMovementByMouse(disableMovementByMouse)
             self.__prevPitch = None
             return
 
@@ -98,39 +114,48 @@ class C11nHangarCameraManager(CallbackDelayer, TimeDeltaMeter):
             cfg = hangarCFG()
             self.__hangarCameraManager.setCameraLocation(targetPos=cfg['cam_start_target_pos'], pivotPos=cfg['cam_pivot_pos'], yaw=math.radians(cfg['cam_start_angles'][0]), pitch=math.radians(cfg['cam_start_angles'][1]), dist=cfg['cam_start_dist'], camConstraints=[cfg['cam_pitch_constr'], cfg['cam_yaw_constr'], cfg['cam_dist_constr']])
             self.__currentMode = C11nCameraModes.START_STATE
+            self.disableMovementByMouse(False)
             return
 
-    def locateCameraOnEmblem(self, onHull, emblemType, emblemIdx, relativeSize=0.5):
+    def locateCameraOnEmblem(self, onHull, emblemType, emblemIdx, relativeSize=0.5, disableMovementByMouse=False, turretYaw=None):
         if self.__hangarCamera is None:
             return False
         else:
             self.__savePitch()
-            vEntity = BigWorld.entity(self.__hangarCameraManager.getCurrentEntityId())
-            from HangarVehicle import HangarVehicle
-            if not isinstance(vEntity, HangarVehicle):
+            if self.vEntity is None:
                 return False
-            emblemPositionParams = vEntity.appearance.getEmblemPos(onHull, emblemType, emblemIdx)
+            emblemPositionParams = self.vEntity.appearance.getEmblemPos(onHull, emblemType, emblemIdx)
             if emblemPositionParams is None:
                 return False
+            self.__rotateTurret(turretYaw)
             position = emblemPositionParams.position
             direction = emblemPositionParams.direction
             emblemPositionParams = emblemPositionParams.emblemDescription
             from gui.ClientHangarSpace import hangarCFG
             hangarCfg = hangarCFG()
-            emblemSize = emblemPositionParams[3] * hangarCfg['v_scale']
+            emblemSize = emblemPositionParams.size * hangarCfg['v_scale']
             halfF = emblemSize / (2 * relativeSize)
             dist = halfF / math.tan(BigWorld.projection().fov / 2)
             distConstraints = self.__getDistConstraints(position)
-            constraints = (hangarCfg['cam_pitch_constr'], hangarCfg['cam_yaw_constr'], distConstraints)
+            constraints = [hangarCfg['cam_pitch_constr'], hangarCfg['cam_yaw_constr'], distConstraints]
+            transformMatrix = Math.Matrix()
+            transformMatrix.lookAt(position, direction, emblemPositionParams.rayUp)
+            transformMatrix.invert()
+            emblemUp = transformMatrix.applyVector(_WORLD_UP)
+            if not emblemUp.dot(_WORLD_UP) > 0.99:
+                direction = emblemUp * (emblemUp * _WORLD_UP)
+                direction.normalise()
             self._setCameraLocation(targetPos=position, pivotPos=Math.Vector3(0, 0, 0), yaw=direction.yaw, pitch=-direction.pitch, dist=dist, camConstraints=constraints, previewMode=False)
             self.__currentMode = C11nCameraModes.EMBLEM
+            self.disableMovementByMouse(disableMovementByMouse)
             return True
 
-    def locateCameraOnAnchor(self, position, normal):
+    def locateCameraOnAnchor(self, position, normal, disableMovementByMouse=False, turretYaw=None):
         if self.__hangarCamera is None:
             return False
         else:
             self.__savePitch()
+            self.__rotateTurret(turretYaw)
             if normal is not None:
                 direction = -normal
                 yaw = direction.yaw
@@ -144,11 +169,30 @@ class C11nHangarCameraManager(CallbackDelayer, TimeDeltaMeter):
             constraints = (hangarCfg['cam_pitch_constr'], hangarCfg['cam_yaw_constr'], distConstraints)
             self._setCameraLocation(targetPos=position, pivotPos=Math.Vector3(0, 0, 0), yaw=yaw, pitch=pitch, camConstraints=constraints)
             self.__currentMode = C11nCameraModes.ANCHOR
+            self.disableMovementByMouse(disableMovementByMouse)
             return True
 
     def clearSelectedEmblemInfo(self):
         if self.__hangarCameraManager is not None:
             self.__hangarCameraManager.setPreviewMode(False)
+        return
+
+    def __rotateTurret(self, turretYaw=None):
+        if self.vEntity is not None:
+            rotated = self.vEntity.appearance.rotateTurret(turretYaw)
+            if rotated:
+                BigWorld.callback(0.0, lambda : BigWorld.callback(0.0, self.__onTurretRotated))
+        return
+
+    def __onTurretRotated(self):
+        if self.vEntity is not None:
+            self.vEntity.appearance.updateSlotPositions(checkDecalsAgainstGun=False)
+            self.onTurretRotated()
+        return
+
+    def disableMovementByMouse(self, disable):
+        if self.__hangarCameraManager is not None:
+            self.__hangarCameraManager.disableMovementByMouse(disable)
         return
 
     def _setCameraLocation(self, targetPos=None, pivotPos=None, yaw=None, pitch=None, dist=None, camConstraints=None, ignoreConstraints=False, previewMode=False, forceLocate=False):
@@ -170,10 +214,8 @@ class C11nHangarCameraManager(CallbackDelayer, TimeDeltaMeter):
         return (commonConstraints[0], commonConstraints[1] - (position[1] - startingPoint[1]))
 
     def __getTankCentralPoint(self):
-        vEntity = BigWorld.entity(self.__hangarCameraManager.getCurrentEntityId())
-        from HangarVehicle import HangarVehicle
-        if isinstance(vEntity, HangarVehicle) and vEntity.appearance is not None and vEntity.appearance.compoundModel is not None:
-            appearance = vEntity.appearance
+        if self.vEntity is not None and self.vEntity.appearance is not None and self.vEntity.appearance.compoundModel is not None:
+            appearance = self.vEntity.appearance
             hullAABB = appearance.collisions.getBoundingBox(TankPartIndexes.HULL)
             position = Math.Vector3((hullAABB[1].x + hullAABB[0].x) / 2.0, hullAABB[1].y / 2.0, (hullAABB[1].z + hullAABB[0].z) / 2.0)
             m = Math.Matrix(appearance.compoundModel.node(TankPartNames.HULL))

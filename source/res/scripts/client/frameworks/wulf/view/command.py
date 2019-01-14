@@ -2,14 +2,14 @@
 # Embedded file name: scripts/client/frameworks/wulf/view/command.py
 import typing
 from Event import Event
-import GUI
 from ..py_object_binder import PyObjectEntity
+from ..py_object_wrappers import PyObjectCommand
 
 class Command(PyObjectEntity):
     __slots__ = ('__event',)
 
     def __init__(self):
-        super(Command, self).__init__(GUI.PyObjectCommand())
+        super(Command, self).__init__(PyObjectCommand())
         self.__event = Event()
 
     @property

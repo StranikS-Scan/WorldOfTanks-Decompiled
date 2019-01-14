@@ -296,6 +296,7 @@ class BattleStrongholdsQueue(BattleStrongholdsQueueMeta, LobbySubView, ClanEmble
         self.__groups = []
         self.__battleQueueVO = {}
         self.__imagesFetchCoordinator = ImagesFetchCoordinator()
+        self._blur = WGUIBackgroundBlur()
         return
 
     @prbEntityProperty
@@ -334,6 +335,8 @@ class BattleStrongholdsQueue(BattleStrongholdsQueueMeta, LobbySubView, ClanEmble
 
     def _populate(self):
         super(BattleStrongholdsQueue, self)._populate()
+        self._blur.enable = True
+        self.fireEvent(events.HangarVehicleEvent(events.HangarVehicleEvent.HERO_TANK_MARKER, ctx={'isDisable': True}), EVENT_BUS_SCOPE.LOBBY)
         self.startPrbListening()
         self.addListener(events.StrongholdEvent.STRONGHOLD_ON_TIMER, self.__onMatchmakingTimerChanged, scope=EVENT_BUS_SCOPE.STRONGHOLD)
         g_playerEvents.onArenaCreated += self.onStartBattle
@@ -350,6 +353,8 @@ class BattleStrongholdsQueue(BattleStrongholdsQueueMeta, LobbySubView, ClanEmble
         self.stopPrbListening()
         self.removeListener(events.StrongholdEvent.STRONGHOLD_ON_TIMER, self.__onMatchmakingTimerChanged, scope=EVENT_BUS_SCOPE.STRONGHOLD)
         self.__imagesFetchCoordinator.fini()
+        self._blur.enable = False
+        self.fireEvent(events.HangarVehicleEvent(events.HangarVehicleEvent.HERO_TANK_MARKER, ctx={'isDisable': False}), EVENT_BUS_SCOPE.LOBBY)
         super(BattleStrongholdsQueue, self)._dispose()
 
     def __getBattleQueueVO(self):

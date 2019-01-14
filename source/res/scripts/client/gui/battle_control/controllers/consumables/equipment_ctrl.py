@@ -167,7 +167,10 @@ class _EquipmentItem(object):
 
     @property
     def becomeReady(self):
-        return self.isReady and self._prevStage in (EQUIPMENT_STAGES.DEPLOYING, EQUIPMENT_STAGES.UNAVAILABLE, EQUIPMENT_STAGES.COOLDOWN)
+        return self.isReady and self._prevStage in (EQUIPMENT_STAGES.DEPLOYING,
+         EQUIPMENT_STAGES.UNAVAILABLE,
+         EQUIPMENT_STAGES.COOLDOWN,
+         EQUIPMENT_STAGES.SHARED_COOLDOWN)
 
     def getDescriptor(self):
         return self._descriptor

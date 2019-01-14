@@ -27,8 +27,8 @@ def _readCustomizationSlot(ctx, subsection, slotType):
         availableShowOnRegions = c11n_constants.ApplyArea.HULL | c11n_constants.ApplyArea.TURRET | c11n_constants.ApplyArea.GUN
         if showOn | availableShowOnRegions != availableShowOnRegions:
             _xml.raiseWrongSection(ctx, 'showOn')
-    availableTags = c11n_constants.DirectionTags.ALL + c11n_constants.ProjectionDecalFormTags.ALL
-    tags = readTagsOrEmpty(ctx, subsection, availableTags)
+    availableTags = c11n_constants.ProjectionDecalDirectionTags.ALL + c11n_constants.ProjectionDecalFormTags.ALL + c11n_constants.ProjectionDecalPositionTags.ALL
+    tags = readOrderedTagsOrEmpty(ctx, subsection, availableTags)
     slotId = _xml.readInt(ctx, subsection, 'slotId')
     parentSlotId = _xml.readIntOrNone(ctx, subsection, 'parentSlotId')
     if slotType == 'projectionDecal' and parentSlotId is None:
@@ -87,22 +87,45 @@ def readTagsOrEmpty(xmlCtx, section, allowedTagNames, subsectionName='tags'):
     return frozenset(res)
 
 
+def readOrderedTagsOrEmpty(xmlCtx, section, allowedTagNames, subsectionName='tags'):
+    tags = _xml.readStringOrNone(xmlCtx, section, subsectionName)
+    res = []
+    if tags is not None:
+        tagNames = tags.split()
+        for tagName in tagNames:
+            if tagName not in allowedTagNames:
+                _xml.raiseWrongXml(xmlCtx, subsectionName, "unknown tag '%s'" % tagName)
+            res.append(intern(tagName))
+
+    return tuple(res)
+
+
 def readCustomizationSlots(xmlCtx, section, subsectionName):
     slots = []
     anchors = []
     slot_tag_name = 'slot'
+    slotIDs = set()
     for sname, subsection in _xml.getChildren(xmlCtx, section, subsectionName):
         if sname != slot_tag_name:
             _xml.raiseWrongXml(xmlCtx, 'customizationSlots/{}'.format(sname), 'expected {}'.format(slot_tag_name))
         ctx = (xmlCtx, 'customizationSlots/{}'.format(sname))
         slotType = _xml.readString(ctx, subsection, 'slotType')
+        descr = None
         if slotType in component_constants.ALLOWED_EMBLEM_SLOTS:
             descr = _readEmblemSlot(ctx, subsection, slotType)
             slots.append(descr)
-        if slotType in component_constants.ALLOWED_SLOTS_ANCHORS:
+        elif slotType in component_constants.ALLOWED_SLOTS_ANCHORS:
             descr = _readCustomizationSlot(ctx, subsection, slotType)
             anchors.append(descr)
-        _xml.raiseWrongXml(xmlCtx, 'customizationSlots/{}/{}'.format(sname, slotType), 'expected value is {}'.format(_ALLOWED_EMBLEM_SLOTS + _ALLOWED_SLOTS_ANCHORS))
+        else:
+            _xml.raiseWrongXml(xmlCtx, 'customizationSlots/{}/{}'.format(sname, slotType), 'expected value is {}'.format(_ALLOWED_EMBLEM_SLOTS + _ALLOWED_SLOTS_ANCHORS))
+        if descr is not None and descr.slotId not in slotIDs:
+            slotIDs.add(descr.slotId)
+        xmlContext, fileName = xmlCtx
+        while xmlContext is not None:
+            xmlContext, fileName = xmlContext
+
+        LOG_ERROR('Repeated customization slot ID{} for {}'.format(descr.slotId, fileName))
 
     return (tuple(slots), tuple(anchors))
 

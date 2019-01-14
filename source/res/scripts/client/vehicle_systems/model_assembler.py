@@ -42,9 +42,6 @@ def prepareCompoundAssembler(vehicleDesc, modelsSetParams, spaceID, isTurretDeta
     if not isTurretDetached:
         assembler.addPart(turret, turretJointName, TankPartNames.TURRET)
         assembler.addPart(gun, TankNodeNames.GUN_JOINT, TankPartNames.GUN)
-    wheelsConfig = vehicleDesc.chassis.generalWheelsAnimatorConfig
-    if wheelsConfig is not None:
-        wheelsConfig.updateCompoundAssembler(assembler)
     cornerPoint = vehicleDesc.chassis.topRightCarryingPoint
     assembler.addNode(TankNodeNames.TRACK_LEFT_MID, TankPartNames.CHASSIS, mathUtils.createTranslationMatrix((-cornerPoint[0], 0, 0)))
     assembler.addNode(TankNodeNames.TRACK_RIGHT_MID, TankPartNames.CHASSIS, mathUtils.createTranslationMatrix((cornerPoint[0], 0, 0)))
@@ -220,7 +217,7 @@ def assembleVehicleTraces(appearance, f, lodStateLink=None):
         vehicleTraces.addTrackTrace('', wlOffset, tracesConfig.size, length, tracesConfig.bufferPrefs, False)
     else:
         zeroOffset = Math.Vector2(0, 0)
-        wheelNodes = chassisConfig.generalWheelsAnimatorConfig.getWheelNodeNames(False)
+        wheelNodes = chassisConfig.generalWheelsAnimatorConfig.getWheelNodeNames()
         for wheelNode in wheelNodes:
             hasLiftMode = False if appearance.suspension.hasSuspensionForWheel(wheelNode) else True
             if hasLiftMode:
@@ -316,8 +313,8 @@ def assembleVehicleAudition(isPlayer, appearance):
     PLAYER_UPDATE_PERIOD = 0.1
     NPC_UPDATE_PERIOD = 0.25
     typeDescriptor = appearance.typeDescriptor
-    engineEventName = typeDescriptor.engine.sounds.getWWPlayerSound(isPlayer)
-    chassisEventName = typeDescriptor.chassis.sounds.getWWPlayerSound(isPlayer)
+    engineEventName = typeDescriptor.engine.sounds.getEvents()
+    chassisEventName = typeDescriptor.chassis.sounds.getEvents()
     if typeDescriptor.chassis.generalWheelsAnimatorConfig:
         vehicleData = (typeDescriptor.physics['enginePower'] / component_constants.HP_TO_WATTS,
          typeDescriptor.physics['weight'],
@@ -341,7 +338,7 @@ def assembleVehicleAudition(isPlayer, appearance):
     vehicleAudition = Vehicular.VehicleAudition(appearance.id, isPlayer, vehicleData)
     vehicleAudition.setEffectMaterialsInfo(lambda : appearance.terrainEffectMaterialNames)
     vehicleAudition.setSpeedInfo(lambda : appearance.filter.angularSpeed, lambda : appearance.filter.strafeSpeed)
-    vehicleAudition.setTracksInfo(lambda : appearance.transmissionScroll(), lambda : appearance.getWheelsSteeringMax(), DataLinks.createBoolLink(appearance.flyingInfoProvider, 'isFlying'))
+    vehicleAudition.setTracksInfo(lambda : appearance.transmissionScroll, lambda : appearance.transmissionSlip, lambda : appearance.getWheelsSteeringMax(), DataLinks.createBoolLink(appearance.flyingInfoProvider, 'isFlying'))
     if typeDescriptor.type.siegeModeParams is not None:
         soundStateChange = typeDescriptor.type.siegeModeParams['soundStateChange']
         vehicleAudition.setSiegeSoundEvents(soundStateChange.on if soundStateChange.on is not None else '', soundStateChange.off if soundStateChange.off is not None else '')
@@ -520,12 +517,12 @@ def __assembleSimpleTracks(vehicleDesc, fashion, wheelsDataProvider, tracks):
         return
 
 
-def __assemblePhysicalTracks(resourceRefs, appearance, tracks, instantWarmup, ignoreMaxDisplacement):
+def __assemblePhysicalTracks(resourceRefs, appearance, tracks, instantWarmup):
     inited = True
     leftTrack = resourceRefs['leftPhysicalTrack'] if resourceRefs.has_key('leftPhysicalTrack') else None
     rightTrack = resourceRefs['rightPhysicalTrack'] if resourceRefs.has_key('rightPhysicalTrack') else None
     if leftTrack is not None:
-        leftTrack.init(appearance.compoundModel, appearance.wheelsAnimator, appearance.collisionObstaclesCollector, appearance.tessellationCollisionSensor, instantWarmup, ignoreMaxDisplacement)
+        leftTrack.init(appearance.compoundModel, appearance.wheelsAnimator, appearance.collisionObstaclesCollector, appearance.tessellationCollisionSensor, instantWarmup)
         if leftTrack.inited:
             appearance.fashion.setPhysicalTrack(leftTrack)
             tracks.addTrackComponent(True, leftTrack, _PHYSICAL_TRACKS_LOD_SETTINGS)
@@ -534,7 +531,7 @@ def __assemblePhysicalTracks(resourceRefs, appearance, tracks, instantWarmup, ig
     else:
         inited = False
     if rightTrack is not None:
-        rightTrack.init(appearance.compoundModel, appearance.wheelsAnimator, appearance.collisionObstaclesCollector, appearance.tessellationCollisionSensor, instantWarmup, ignoreMaxDisplacement)
+        rightTrack.init(appearance.compoundModel, appearance.wheelsAnimator, appearance.collisionObstaclesCollector, appearance.tessellationCollisionSensor, instantWarmup)
         if rightTrack.inited:
             appearance.fashion.setPhysicalTrack(rightTrack)
             tracks.addTrackComponent(False, rightTrack, _PHYSICAL_TRACKS_LOD_SETTINGS)
@@ -560,10 +557,10 @@ def __assembleSplineTracks(vehicleDesc, appearance, splineTracksImpl, tracks):
         return
 
 
-def assembleTracks(resourceRefs, vehicleDesc, appearance, splineTracksImpl, instantWarmup, ignoreMaxDisplacement, lodLink=None):
+def assembleTracks(resourceRefs, vehicleDesc, appearance, splineTracksImpl, instantWarmup, lodLink=None):
     tracks = Vehicular.VehicleTracks(appearance.compoundModel, TankPartIndexes.CHASSIS, _AREA_LOD_FOR_NONSIMPLE_TRACKS)
     appearance.tracks = tracks
-    __assemblePhysicalTracks(resourceRefs, appearance, tracks, instantWarmup, ignoreMaxDisplacement)
+    __assemblePhysicalTracks(resourceRefs, appearance, tracks, instantWarmup)
     __assembleSplineTracks(vehicleDesc, appearance, splineTracksImpl, tracks)
     __assembleSimpleTracks(vehicleDesc, appearance.fashion, appearance.wheelsAnimator, tracks)
     vehicleFilter = getattr(appearance, 'filter', None)

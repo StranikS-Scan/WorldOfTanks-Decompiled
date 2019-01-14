@@ -8,10 +8,6 @@ from shared_utils.account_helpers.diff_utils import synchronizeDicts
 from skeletons.festivity_factory import IFestivityFactory
 _logger = logging.getLogger()
 
-def _skipResponse(resultID, errorCode):
-    _logger.debug('_skipResponse %s %s', resultID, errorCode)
-
-
 class FestivityManager(object):
     _festivityFactory = dependency.descriptor(IFestivityFactory)
 
@@ -75,5 +71,5 @@ class FestivityManager(object):
             return
         else:
             if callback is not None:
-                callback(resultID, self.__cache['epicMetaGame'].get(itemName, None))
+                callback(resultID, self.__cache[self.__festivityKey].get(itemName, None))
             return

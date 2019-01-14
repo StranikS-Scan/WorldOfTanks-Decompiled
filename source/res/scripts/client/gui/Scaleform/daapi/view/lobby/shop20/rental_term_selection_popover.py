@@ -15,7 +15,9 @@ from helpers import dependency, i18n
 from skeletons.gui.shared import IItemsCache
 from gui.Scaleform.daapi.view.lobby.store.browser.ingameshop_helpers import isIngameShopEnabled
 _NOT_RENT_IDX = -1
-_SEASON_RENT_TERMS = {GameSeasonType.RANKED: {RentType.SEASON_RENT: STORE.RENTALTERMSELECTIONPOPOVER_TERMSLOTSEASON_RANKEDSEASON,
+_SEASON_RENT_TERMS = {GameSeasonType.EPIC: {RentType.SEASON_RENT: STORE.RENTALTERMSELECTIONPOPOVER_TERMSLOTSEASON_EPICSEASON,
+                       RentType.SEASON_CYCLE_RENT: STORE.RENTALTERMSELECTIONPOPOVER_TERMSLOTSEASON_EPICCYCLE},
+ GameSeasonType.RANKED: {RentType.SEASON_RENT: STORE.RENTALTERMSELECTIONPOPOVER_TERMSLOTSEASON_RANKEDSEASON,
                          RentType.SEASON_CYCLE_RENT: STORE.RENTALTERMSELECTIONPOPOVER_TERMSLOTSEASON_RANKEDCYCLE}}
 
 class RentalTermSelectionPopover(RentalTermSelectionPopoverMeta):

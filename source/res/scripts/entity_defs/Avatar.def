@@ -57,6 +57,7 @@
     <arenaExtraData>
       <Type>	PYTHON	</Type>
       <Flags>	BASE_AND_CLIENT	</Flags>
+      <AllowUnsafeData>	true	</AllowUnsafeData>
     </arenaExtraData>
     <weatherPresetID>
       <Type>	UINT8	</Type>
@@ -175,9 +176,11 @@
   </Properties>
   <TempProperties>
     <_Avatar__p></_Avatar__p>
+    <_Avatar__visibilityHandler></_Avatar__visibilityHandler>
     <_entityExtraUserData></_entityExtraUserData>
     <_extras></_extras>
     <_avatarClientProxy></_avatarClientProxy>
+    <questProgresses></questProgresses>
     <_components></_components>
   </TempProperties>
   <ClientMethods>
@@ -435,6 +438,7 @@
     <updateQuestProgress>
       <Arg>	STRING	</Arg>
       <Arg>	PYTHON	</Arg>
+      <AllowUnsafeData>	true	</AllowUnsafeData>
     </updateQuestProgress>
   </ClientMethods>
   <CellMethods>

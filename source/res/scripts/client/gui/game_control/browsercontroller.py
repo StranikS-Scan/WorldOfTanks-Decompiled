@@ -57,13 +57,14 @@ class BrowserController(IBrowserController):
 
     def onAvatarBecomePlayer(self):
         self.__stop()
-
-    def onConnected(self):
-        BigWorld.connectBrowser()
+        BigWorld.destroyBrowser()
 
     def onDisconnected(self):
         self.__stop()
-        BigWorld.disconnectBrowser()
+        BigWorld.destroyBrowser()
+
+    def onLobbyStarted(self, ctx):
+        BigWorld.createBrowser()
 
     def addFilterHandler(self, handler):
         self.__filters.add(handler)
@@ -119,7 +120,6 @@ class BrowserController(IBrowserController):
             self.__pendingBrowsers[browserID] = ctx
         elif browserID in self.__browsers:
             _logger.debug('CTRL: Re-navigating an existing browser: %r - %s', browserID, url)
-            self.__showBrowser(browserID, ctx)
             browser = self.__browsers[browserID]
             browser.navigate(url)
             browser.changeTitle(title)

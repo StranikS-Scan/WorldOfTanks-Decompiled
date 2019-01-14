@@ -9,6 +9,13 @@ from gui.Scaleform.daapi.view.dialogs.confirm_customization_item_dialog_meta imp
 from gui.Scaleform.genConsts.CUSTOMIZATION_DIALOGS import CUSTOMIZATION_DIALOGS
 from gui.shared.formatters import getMoneyVO
 from gui.shared.gui_items import GUI_ITEM_TYPE
+from gui.Scaleform.locale.VEHICLE_CUSTOMIZATION import VEHICLE_CUSTOMIZATION
+
+class CustomizationItemIconWidth(object):
+    SMALL = 59
+    MEDIUM = 118
+    BIG = 161
+
 
 class ConfirmCustomizationItemDialog(ConfirmItemWindowMeta):
 
@@ -54,6 +61,8 @@ class ConfirmCustomizationItemDialog(ConfirmItemWindowMeta):
 
     def proceedSubmit(self, count, currency):
         item = self.meta.getItem()
+        stepFactor = self.meta.getStepFactor(item)
+        count = count / stepFactor
         self.meta.submit(item, count, currency)
         self._callHandler(True, item, count, currency)
         self.destroy()
@@ -74,24 +83,30 @@ class ConfirmCustomizationItemDialog(ConfirmItemWindowMeta):
             action = None
             if actualPrices != defaultPrices:
                 action = self.meta.getActionVO(item)
-            iconWidth = iconHeight = 59
+            iconWidth = iconHeight = CustomizationItemIconWidth.SMALL
             if item.isWide() and item.itemTypeID != GUI_ITEM_TYPE.PROJECTION_DECAL:
-                iconWidth = 118 if item.itemTypeID == GUI_ITEM_TYPE.INSCRIPTION else 161
+                iconWidth = CustomizationItemIconWidth.MEDIUM if item.itemTypeID == GUI_ITEM_TYPE.INSCRIPTION or item.itemTypeID == GUI_ITEM_TYPE.PERSONAL_NUMBER else CustomizationItemIconWidth.BIG
+            countLabel = ''
+            if item.isRentable and item.rentCount:
+                countLabel = VEHICLE_CUSTOMIZATION.CONFIRMITEMDIALOG_COUNTLABEL
             smallSlotVO = {'itemIcon': item.icon,
              'isBgVisible': False,
              'isFrameVisible': True,
              'iconWidth': iconWidth,
              'iconHeight': iconHeight}
+            stepFactor = self.meta.getStepFactor(item)
             resultData = {'id': item.intCD,
              'price': getMoneyVO(actualPrices),
              'actionPriceData': action,
              'name': item.userName,
              'description': item.userType,
              'currency': currency,
-             'defaultValue': self.meta.getDefaultValue(item),
+             'defaultValue': self.meta.getDefaultValue(item) * stepFactor,
              'maxAvailableCount': self.meta.getMaxAvailableItemsCount(item),
              'hasSeveralPrices': hasAlternativePrice,
-             'smallSlotVO': smallSlotVO}
+             'smallSlotVO': smallSlotVO,
+             'countLabel': countLabel,
+             'stepSize': stepFactor}
             self.as_setDataS(resultData)
         else:
             LOG_ERROR("Couldn't find given customization item: ", self.meta.getItem())

@@ -52,6 +52,7 @@ class TOOLTIP_TYPE(CONST_CONTAINER):
     EPIC_SELECTOR_INFO = 'epicSelectorInfo'
     EPIC_SELECTOR_UNAVAILABLE_INFO = 'epicSelectorUnavailableInfo'
     EPIC_META_LEVEL_PROGRESS_INFO = 'epicMetaLevelProgressInfo'
+    EPIC_PRESTIGE_PROGRESS_BLOCK_INFO = 'epicPrestigeProgressBlockInfo'
 
 
 class TOOLTIP_COMPONENT(CONST_CONTAINER):

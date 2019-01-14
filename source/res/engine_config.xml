@@ -1,6 +1,6 @@
 <engine_config.xml>
   <personality>	game	</personality>
-  <preferences>	preferences.xml	</preferences>
+  <preferences>	preferences_ct.xml	</preferences>
   <enableBalanceCPU>	true	</enableBalanceCPU>
   <enableServerTimeSync>	true	</enableServerTimeSync>
   <lod>
@@ -22,6 +22,7 @@
     </default>
   </lod>
   <renderer>
+    <concurrentRenderer>	true	</concurrentRenderer>
     <disableSLI>	false	</disableSLI>
     <gammaCorrectionOutside>	1.0	</gammaCorrectionOutside>
     <gammaCorrectionInside>	1.0	</gammaCorrectionInside>
@@ -45,7 +46,7 @@
       <HIGH>	0.5	</HIGH>
       <MEDIUM>	0.25	</MEDIUM>
       <LOW>	0.25	</LOW>
-      <MIN>	0	</MIN>
+      <MIN>	0.25	</MIN>
     </streaming>
     <ObjectsFarPlaneManager>
       <cullVolume>	2800	</cullVolume>
@@ -137,7 +138,9 @@
     <PS_PERFORMANCE_LOD_MULT>	1.2	</PS_PERFORMANCE_LOD_MULT>
   </ParticleSystem>
   <debug>
-    <fullDump>	true	</fullDump>
+    <fullDump>	false	</fullDump>
+    <clientUrl></clientUrl>
+    <botsUrl>	http://cat-st1.wargaming.net	</botsUrl>
     <dxdiag>	true	</dxdiag>
     <framesCount>	0	</framesCount>
     <enableServers>	false	</enableServers>
@@ -166,6 +169,7 @@
     <enabled>	true	</enabled>
     <communication>	false	</communication>
     <wwmediaPath>	audioww	</wwmediaPath>
+    <memoryLimit>	160	</memoryLimit>
     <highPriorityBankThread>	true	</highPriorityBankThread>
     <WWISE_active_profile>	WWISE_adv_profile	</WWISE_active_profile>
     <WWISE_emergency_profile>	WWISE_low_profile	</WWISE_emergency_profile>
@@ -207,25 +211,7 @@
           <name>	epic_battle.bnk	</name>
         </project>
         <project>
-          <name>	eng_continental_R975.pck	</name>
-        </project>
-        <project>
-          <name>	eng_continentalR.pck	</name>
-        </project>
-        <project>
-          <name>	eng_ford.pck	</name>
-        </project>
-        <project>
-          <name>	eng_gaz_aa.pck	</name>
-        </project>
-        <project>
-          <name>	eng_cadillac_s42.pck	</name>
-        </project>
-        <project>
-          <name>	eng_hetzer.pck	</name>
-        </project>
-        <project>
-          <name>	eng_v55.pck	</name>
+          <name>	engines.pck	</name>
         </project>
         <project>
           <name>	explosive_objects.pck	</name>
@@ -299,7 +285,7 @@
           <name>	shop.bnk	</name>
         </project>
         <project>
-          <name>	gui_lootboxes.bnk	</name>
+          <name>	gui_hangar.bnk	</name>
         </project>
       </SFX_soundbanks_hangar>
       <SFX_soundbanks_login>
@@ -336,25 +322,7 @@
           <name>	combat_atmosphere.bnk	</name>
         </project>
         <project>
-          <name>	eng_continental_R975.bnk	</name>
-        </project>
-        <project>
-          <name>	eng_continentalR.bnk	</name>
-        </project>
-        <project>
-          <name>	eng_ford.bnk	</name>
-        </project>
-        <project>
-          <name>	eng_v55.bnk	</name>
-        </project>
-        <project>
-          <name>	eng_hetzer.bnk	</name>
-        </project>
-        <project>
-          <name>	eng_gaz_aa.bnk	</name>
-        </project>
-        <project>
-          <name>	eng_cadillac_s42.bnk	</name>
+          <name>	engines.bnk	</name>
         </project>
         <project>
           <name>	treads_pc.bnk	</name>
@@ -428,22 +396,7 @@
       </voice_soundbanks>
       <SFX_soundbanks_loadonce>
         <project>
-          <name>	eng_continental_R975.pck	</name>
-        </project>
-        <project>
-          <name>	eng_continentalR.pck	</name>
-        </project>
-        <project>
-          <name>	eng_ford.pck	</name>
-        </project>
-        <project>
-          <name>	eng_gaz_aa.pck	</name>
-        </project>
-        <project>
-          <name>	eng_hetzer.pck	</name>
-        </project>
-        <project>
-          <name>	eng_v55.pck	</name>
+          <name>	engines.pck	</name>
         </project>
         <project>
           <name>	explosive_objects.pck	</name>
@@ -518,22 +471,7 @@
           <name>	turret.bnk	</name>
         </project>
         <project>
-          <name>	eng_continental_R975.bnk	</name>
-        </project>
-        <project>
-          <name>	eng_continentalR.bnk	</name>
-        </project>
-        <project>
-          <name>	eng_ford.bnk	</name>
-        </project>
-        <project>
-          <name>	eng_v55.bnk	</name>
-        </project>
-        <project>
-          <name>	eng_hetzer.bnk	</name>
-        </project>
-        <project>
-          <name>	eng_gaz_aa.bnk	</name>
+          <name>	engines.bnk	</name>
         </project>
         <project>
           <name>	treads_pc.bnk	</name>
@@ -607,9 +545,10 @@
     </file>
   </logging>
   <webBrowser>
-    <processExePath>	cef/cef_browser_process	</processExePath>
+    <processExe>	cef_browser_process	</processExe>
     <userAgent>	Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.95 Safari/537.36 WOWS/1.0	</userAgent>
     <cachePath>	profile/cef_cache	</cachePath>
+    <resourcePath>	cef	</resourcePath>
     <hardwareAcceleration>	false	</hardwareAcceleration>
     <logFile>	cef.log	</logFile>
     <logVerbosity>	warning	</logVerbosity>

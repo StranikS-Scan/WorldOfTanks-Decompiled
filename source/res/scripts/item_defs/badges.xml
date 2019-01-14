@@ -661,7 +661,7 @@
       </value>
     </badge>
     <badge>
-      <name>	global_map_1	</name>
+      <name>	global_map_legend	</name>
       <type>	dict	</type>
       <value>
         <item>	27	  <name>	id	</name>
@@ -692,7 +692,7 @@
       </value>
     </badge>
     <badge>
-      <name>	global_map_2	</name>
+      <name>	global_map_gambit	</name>
       <type>	dict	</type>
       <value>
         <item>	28	  <name>	id	</name>
@@ -701,7 +701,7 @@
         <item>	4.12	  <name>	weight	</name>
           <type>	float	</type>
         </item>
-        <item>	14	  <name>	group	</name>
+        <item>	13	  <name>	group	</name>
           <type>	int	</type>
         </item>
         <item>	gold	  <name>	highlight	</name>
@@ -840,7 +840,7 @@
       </value>
     </badge>
     <badge>
-      <name>	gambit	</name>
+      <name>	global_map_arms_race	</name>
       <type>	dict	</type>
       <value>
         <item>	35	  <name>	id	</name>
@@ -848,6 +848,142 @@
         </item>
         <item>	4.13	  <name>	weight	</name>
           <type>	float	</type>
+        </item>
+        <item>	13	  <name>	group	</name>
+          <type>	int	</type>
+        </item>
+        <item>	gold	  <name>	highlight	</name>
+          <type>	string	</type>
+        </item>
+        <item>
+          <name>	realm	</name>
+          <type>	dict	</type>
+          <value>
+            <item>
+              <name>	exclude	</name>
+              <type>	list	</type>
+              <value>
+                <item>	CN	</item>
+              </value>
+            </item>
+          </value>
+        </item>
+      </value>
+    </badge>
+    <badge>
+      <name>	global_map_soldiers_of_fortune	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	60	  <name>	id	</name>
+          <type>	int	</type>
+        </item>
+        <item>	4.14	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	13	  <name>	group	</name>
+          <type>	int	</type>
+        </item>
+        <item>	gold	  <name>	highlight	</name>
+          <type>	string	</type>
+        </item>
+        <item>
+          <name>	realm	</name>
+          <type>	dict	</type>
+          <value>
+            <item>
+              <name>	exclude	</name>
+              <type>	list	</type>
+              <value>
+                <item>	CN	</item>
+              </value>
+            </item>
+          </value>
+        </item>
+      </value>
+    </badge>
+    <badge>
+      <name>	clan_tournament_gold	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	61	  <name>	id	</name>
+          <type>	int	</type>
+        </item>
+        <item>	4.20	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	14	  <name>	group	</name>
+          <type>	int	</type>
+        </item>
+        <item>	3	  <name>	class	</name>
+          <type>	int	</type>
+        </item>
+        <item>	gold	  <name>	highlight	</name>
+          <type>	string	</type>
+        </item>
+        <item>
+          <name>	realm	</name>
+          <type>	dict	</type>
+          <value>
+            <item>
+              <name>	exclude	</name>
+              <type>	list	</type>
+              <value>
+                <item>	CN	</item>
+              </value>
+            </item>
+          </value>
+        </item>
+      </value>
+    </badge>
+    <badge>
+      <name>	clan_tournament_silver	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	62	  <name>	id	</name>
+          <type>	int	</type>
+        </item>
+        <item>	4.21	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	14	  <name>	group	</name>
+          <type>	int	</type>
+        </item>
+        <item>	2	  <name>	class	</name>
+          <type>	int	</type>
+        </item>
+        <item>	gold	  <name>	highlight	</name>
+          <type>	string	</type>
+        </item>
+        <item>
+          <name>	realm	</name>
+          <type>	dict	</type>
+          <value>
+            <item>
+              <name>	exclude	</name>
+              <type>	list	</type>
+              <value>
+                <item>	CN	</item>
+              </value>
+            </item>
+          </value>
+        </item>
+      </value>
+    </badge>
+    <badge>
+      <name>	clan_tournament_bronze	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	63	  <name>	id	</name>
+          <type>	int	</type>
+        </item>
+        <item>	4.22	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	14	  <name>	group	</name>
+          <type>	int	</type>
+        </item>
+        <item>	1	  <name>	class	</name>
+          <type>	int	</type>
         </item>
         <item>	gold	  <name>	highlight	</name>
           <type>	string	</type>

@@ -1,10 +1,10 @@
 <Ch42_WalkerBulldog_M41D.xml>
   <xmlns:xmlref>	http://bwt/xmlref	</xmlns:xmlref>
   <crew>
-    <commander>	radioman	</commander>
+    <commander></commander>
     <driver></driver>
     <gunner></gunner>
-    <loader></loader>
+    <loader>	radioman	</loader>
   </crew>
   <speedLimits>
     <forward>	65	</forward>
@@ -41,7 +41,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_7	</primaryArmor>
     <weight>	11662	</weight>
-    <maxHealth>	840	</maxHealth>
+    <maxHealth>	880	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	200	</maxHealth>
       <maxRegenHealth>	135	</maxRegenHealth>
@@ -107,27 +107,55 @@
         <slotType>	projectionDecal	</slotType>
         <slotId>	68	</slotId>
         <tags>	formfactor_any	</tags>
-        <position>	-0.000100 0.890813 1.74113	</position>
+        <position>	-0.0123623 1.24528 2.19977	</position>
         <rotation>	0.626798 -0.000029 -3.11957	</rotation>
-        <scale>	1.23779 1.23779 1.23779	</scale>
+        <scale>	1.12176 1.12176 1.12176	</scale>
         <doubleSided>	false	</doubleSided>
         <showOn>	16	</showOn>
-        <clipAngle>	1.30376	</clipAngle>
-        <anchorPosition>	-0.0122353 0.337221 2.064	</anchorPosition>
-        <anchorDirection>	-0.0220414 0.809713 0.586412	</anchorDirection>
+        <clipAngle>	1.20672	</clipAngle>
+        <anchorPosition>	-0.012394 0.24703 2.20061	</anchorPosition>
+        <anchorDirection>	-0.0220379 0.809713 0.586412	</anchorDirection>
       </slot>
       <slot>
         <slotType>	projectionDecal	</slotType>
         <slotId>	69	</slotId>
         <tags>	formfactor_any	</tags>
-        <position>	0.000013 1.85443 -1.98312	</position>
-        <rotation>	2.96033 -0.000007 -0.000001	</rotation>
-        <scale>	1.88465 0.999998 1.88465	</scale>
+        <position>	0.000016 1.52777 -2.39728	</position>
+        <rotation>	2.74869 -0.000008 -0.000002	</rotation>
+        <scale>	1.28096 0.679681 1.28096	</scale>
         <doubleSided>	false	</doubleSided>
         <showOn>	16	</showOn>
         <clipAngle>	0.714712	</clipAngle>
-        <anchorPosition>	0.000013 0.60969 -1.93815	</anchorPosition>
-        <anchorDirection>	0.000001 0.983617 -0.18027	</anchorDirection>
+        <anchorPosition>	0.000016 0.498952 -2.38509	</anchorPosition>
+        <anchorDirection>	0.000001 0.923802 -0.382872	</anchorDirection>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	70	</slotId>
+        <tags>	formfactor_square	</tags>
+        <parentSlotId>	68	</parentSlotId>
+        <position>	-0.000098 0.941442 1.67122	</position>
+        <rotation>	0.626798 -0.000029 -3.11957	</rotation>
+        <scale>	1.67422 1.67422 1.67421	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	1.30376	</clipAngle>
+        <anchorPosition>	-0.011791 0.371654 1.98236	</anchorPosition>
+        <anchorDirection>	-0.0220379 0.809713 0.586411	</anchorDirection>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	71	</slotId>
+        <tags>	formfactor_square	</tags>
+        <parentSlotId>	68	</parentSlotId>
+        <position>	-0.00496833 0.791473 2.25401	</position>
+        <rotation>	0.678048 3.11428 -0.0229039	</rotation>
+        <scale>	0.930343 0.930338 0.930341	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	1.30376	</clipAngle>
+        <anchorPosition>	-0.004342 -0.292492 2.32216	</anchorPosition>
+        <anchorDirection>	0.00576746 -0.778594 0.627501	</anchorDirection>
       </slot>
     </customizationSlots>
     <customization>
@@ -778,14 +806,14 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	5000	</weight>
-      <maxHealth>	210	</maxHealth>
+      <maxHealth>	220	</maxHealth>
       <rotationSpeed>	50	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	140	</maxHealth>
         <maxRegenHealth>	70	</maxRegenHealth>
         <repairCost>	1.0	</repairCost>
       </turretRotatorHealth>
-      <circularVisionRadius>	370	</circularVisionRadius>
+      <circularVisionRadius>	390	</circularVisionRadius>
       <surveyingDeviceHealth>
         <maxHealth>	100	</maxHealth>
         <maxRegenHealth>	50	</maxRegenHealth>
@@ -920,14 +948,28 @@
           <slotType>	projectionDecal	</slotType>
           <slotId>	578	</slotId>
           <tags>	formfactor_any	</tags>
-          <position>	0.050254 1.9585 0.542053	</position>
+          <position>	0.0311836 1.93195 0.658257	</position>
           <rotation>	0.2246 -0.000019 3.14152	</rotation>
           <scale>	1.17723 1.17723 1.17722	</scale>
           <doubleSided>	false	</doubleSided>
           <showOn>	256	</showOn>
           <clipAngle>	0.706858	</clipAngle>
-          <anchorPosition>	0.0502827 0.873076 0.369107	</anchorPosition>
-          <anchorDirection>	0.000064 0.974883 0.222717	</anchorDirection>
+          <anchorPosition>	0.0312144 0.846529 0.485312	</anchorPosition>
+          <anchorDirection>	0.000068 0.974883 0.222716	</anchorDirection>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	579	</slotId>
+          <tags>	formfactor_square	</tags>
+          <parentSlotId>	578	</parentSlotId>
+          <position>	-0.00413242 1.98722 -1.33381	</position>
+          <rotation>	-3.14002 -0.000002 -0.000021	</rotation>
+          <scale>	1.3211 1.3211 1.32109	</scale>
+          <doubleSided>	false	</doubleSided>
+          <showOn>	256	</showOn>
+          <clipAngle>	1.15112	</clipAngle>
+          <anchorPosition>	-0.00414188 0.913116 -1.6064	</anchorPosition>
+          <anchorDirection>	-0.000021 0.999999 0.00157276	</anchorDirection>
         </slot>
       </customizationSlots>
       <customization>

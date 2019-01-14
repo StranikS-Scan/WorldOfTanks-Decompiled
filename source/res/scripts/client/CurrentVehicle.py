@@ -1,27 +1,25 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/CurrentVehicle.py
 import BigWorld
-from Event import Event, EventManager
-from account_helpers.AccountSettings import AccountSettings, CURRENT_VEHICLE
-from adisp import process
 from constants import CustomizationInvData
-from gui.ClientUpdateManager import g_clientUpdateManager
-from gui.Scaleform.Waiting import Waiting
-from gui.Scaleform.locale.MENU import MENU
-from gui.shared.formatters import icons
+from Event import Event, EventManager
+from adisp import process
 from gui.shared.formatters.time_formatters import getTimeLeftStr
-from gui.shared.gui_items import GUI_ITEM_TYPE
-from gui.shared.gui_items.Vehicle import Vehicle
 from gui.shared.gui_items.processors.module import getPreviewInstallerProcessor
-from gui.shared.utils.requesters import REQ_CRITERIA
 from gui.vehicle_view_states import createState4CurrentVehicle
 from helpers import dependency
-from helpers import isPlayerAccount, i18n
 from items.vehicles import VehicleDescr
-from skeletons.gui.customization import ICustomizationService
-from skeletons.gui.game_control import IIGRController, IRentalsController, IHeroTankController
+from helpers import isPlayerAccount, i18n
+from account_helpers.AccountSettings import AccountSettings, CURRENT_VEHICLE
+from gui.ClientUpdateManager import g_clientUpdateManager
+from gui.shared.utils.requesters import REQ_CRITERIA
+from gui.shared.formatters import icons
+from gui.shared.gui_items import GUI_ITEM_TYPE
+from gui.shared.gui_items.Vehicle import Vehicle
+from gui.Scaleform.locale.MENU import MENU
+from gui.Scaleform.Waiting import Waiting
+from skeletons.gui.game_control import IIGRController, IRentalsController
 from skeletons.gui.shared import IItemsCache
-from skeletons.gui.shared.gui_items import IGuiItemsFactory
 from skeletons.gui.shared.utils import IHangarSpace
 _MODULES_NAMES = ('turret',
  'chassis',
@@ -105,7 +103,6 @@ class _CachedVehicle(object):
 class _CurrentVehicle(_CachedVehicle):
     igrCtrl = dependency.descriptor(IIGRController)
     rentals = dependency.descriptor(IRentalsController)
-    __herotankCtrl = dependency.descriptor(IHeroTankController)
 
     def __init__(self):
         super(_CurrentVehicle, self).__init__()
@@ -168,7 +165,7 @@ class _CurrentVehicle(_CachedVehicle):
             self.onChanged()
 
     def refreshModel(self):
-        if g_currentPreviewVehicle.item is not None and not g_currentPreviewVehicle.isHeroTank and not self.__herotankCtrl.isOverloaded():
+        if g_currentPreviewVehicle.item is not None and not g_currentPreviewVehicle.isHeroTank:
             return
         else:
             if self.isPresent() and self.isInHangar() and self.item.modelState:
@@ -260,6 +257,9 @@ class _CurrentVehicle(_CachedVehicle):
     def isAutoEquipFull(self):
         return not self.isPresent() or self.item.isAutoEquipFull()
 
+    def isCustomizationEnabled(self):
+        return not self.isPresent() or self.item.isCustomizationEnabled()
+
     def selectVehicle(self, vehInvID=0, callback=None):
         vehicle = self.itemsCache.items.getVehicle(vehInvID)
         if vehicle is None:
@@ -347,15 +347,6 @@ g_currentVehicle = _CurrentVehicle()
 
 class PreviewAppearance(object):
 
-    def changeCurrentPreviewVehicle(self, herotankController):
-        pass
-
-    def apply(self, herotankController):
-        pass
-
-    def unapply(self, herotankController):
-        pass
-
     def refreshVehicle(self, item):
         raise NotImplementedError
 
@@ -373,18 +364,6 @@ class _RegularPreviewAppearance(PreviewAppearance):
 
 class HeroTankPreviewAppearance(PreviewAppearance):
 
-    def changeCurrentPreviewVehicle(self, herotankController):
-        if herotankController.isOverloaded():
-            g_currentPreviewVehicle.selectVehicle(herotankController.getCurrentTankCD())
-
-    def apply(self, herotankController):
-        if herotankController:
-            herotankController.onHeroTankChanged += g_currentPreviewVehicle.herotankChanged
-
-    def unapply(self, herotankController):
-        if herotankController:
-            herotankController.onHeroTankChanged -= g_currentPreviewVehicle.herotankChanged
-
     def refreshVehicle(self, item):
         if item is None:
             from ClientSelectableCameraObject import ClientSelectableCameraObject
@@ -393,9 +372,6 @@ class HeroTankPreviewAppearance(PreviewAppearance):
 
 
 class _CurrentPreviewVehicle(_CachedVehicle):
-    itemsFactory = dependency.descriptor(IGuiItemsFactory)
-    service = dependency.descriptor(ICustomizationService)
-    __heroTankCtrl = dependency.descriptor(IHeroTankController)
 
     def __init__(self):
         super(_CurrentPreviewVehicle, self).__init__()
@@ -403,7 +379,6 @@ class _CurrentPreviewVehicle(_CachedVehicle):
         self.__defaultItem = None
         self.__vehAppearance = _RegularPreviewAppearance()
         self.__isHeroTank = False
-        self.__style = None
         self.onComponentInstalled = Event(self._eManager)
         self.onVehicleUnlocked = Event(self._eManager)
         self.onVehicleInventoryChanged = Event(self._eManager)
@@ -413,41 +388,7 @@ class _CurrentPreviewVehicle(_CachedVehicle):
         super(_CurrentPreviewVehicle, self).destroy()
         self.__item = None
         self.__defaultItem = None
-        if self.__vehAppearance:
-            self.__vehAppearance.unapply(self.__heroTankCtrl)
         self.__vehAppearance = None
-        return
-
-    def getOutfit(self, season):
-        return self.__style.getOutfit(season) if self.__style else None
-
-    def setStyle(self, style):
-        if style and self.__item and style.mayInstall(self.__item):
-            self.__style = style
-            self.__applyStyle()
-            self.onComponentInstalled()
-            if self.__vehAppearance is not None:
-                self.__vehAppearance.refreshVehicle(self.__item)
-        return
-
-    def __applyStyle(self):
-        for season in self.__style.seasons:
-            outfit = self.itemsFactory.createOutfit(isEnabled=True, isInstalled=True)
-            styleOutfit = self.__style.getOutfit(season)
-            outfit.hull.slotFor(GUI_ITEM_TYPE.CAMOUFLAGE).set(styleOutfit.hull.slotFor(GUI_ITEM_TYPE.CAMOUFLAGE).getItem())
-            self.__item.setCustomOutfit(season, outfit)
-
-    def removeSytle(self):
-        if self.__style and self.__item:
-            for season in self.__style.seasons:
-                outfit = self.__item.getOutfit(season)
-                if outfit:
-                    outfit.hull.slotFor(GUI_ITEM_TYPE.CAMOUFLAGE).clear()
-
-        self.__style = None
-        if self.__vehAppearance is not None:
-            self.__vehAppearance.refreshVehicle(self.__item)
-        self.onComponentInstalled()
         return
 
     def init(self):
@@ -457,20 +398,15 @@ class _CurrentPreviewVehicle(_CachedVehicle):
     def refreshModel(self):
         pass
 
-    def selectVehicle(self, vehicleCD=None, vehicleStrCD=None, style=None):
-        self._selectVehicle(vehicleCD, vehicleStrCD, style)
+    def selectVehicle(self, vehicleCD=None, vehicleStrCD=None):
+        self._selectVehicle(vehicleCD, vehicleStrCD)
 
     def selectNoVehicle(self):
-        self.removeSytle()
         self._selectVehicle(None)
         return
 
     def resetAppearance(self, appearance=None):
-        if self.__vehAppearance:
-            self.__vehAppearance.unapply(self.__heroTankCtrl)
         self.__vehAppearance = appearance or _RegularPreviewAppearance()
-        if self.__vehAppearance:
-            self.__vehAppearance.apply(self.__heroTankCtrl)
 
     def selectHeroTank(self, value):
         self.__isHeroTank = value
@@ -497,8 +433,7 @@ class _CurrentPreviewVehicle(_CachedVehicle):
         if self.isPresent():
             vehicle = self.itemsCache.items.getItemByCD(self.item.intCD)
             if vehicle.isInInventory:
-                if not self.__heroTankCtrl.isOverloaded():
-                    self.selectNoVehicle()
+                self.selectNoVehicle()
                 self.onVehicleInventoryChanged()
 
     def isModified(self):
@@ -533,7 +468,7 @@ class _CurrentPreviewVehicle(_CachedVehicle):
         super(_CurrentPreviewVehicle, self)._addListeners()
         g_clientUpdateManager.addCallbacks({'stats.unlocks': self._onUpdateUnlocks})
 
-    def _selectVehicle(self, vehicleCD, vehicleStrCD=None, style=None):
+    def _selectVehicle(self, vehicleCD, vehicleStrCD=None):
         if self.isPresent() and self.item.intCD == vehicleCD:
             return
         else:
@@ -544,10 +479,6 @@ class _CurrentPreviewVehicle(_CachedVehicle):
                 self.__item = self.__makePreviewVehicleFromStrCD(vehicleStrCD)
             else:
                 self.__item = self.__getPreviewVehicle(vehicleCD)
-            if style and self.__item:
-                if style.mayInstall(self.__item):
-                    self.__style = style
-                    self.__applyStyle()
             if self.__vehAppearance is not None:
                 self.__vehAppearance.refreshVehicle(self.__item)
             self._setChangeCallback()
@@ -575,9 +506,6 @@ class _CurrentPreviewVehicle(_CachedVehicle):
 
         vehicle.crew = vehicle.getPerfectCrew()
         return vehicle
-
-    def herotankChanged(self):
-        self.__vehAppearance.changeCurrentPreviewVehicle(self.__heroTankCtrl)
 
 
 g_currentPreviewVehicle = _CurrentPreviewVehicle()

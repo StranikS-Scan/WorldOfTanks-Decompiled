@@ -1,12 +1,12 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/gui_items/customization/packers.py
 from itertools import product
-from debug_utils import LOG_WARNING
+from debug_utils import LOG_WARNING, LOG_ERROR
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from helpers import dependency
 from items import makeIntCompactDescrByID
 from items.components.c11n_constants import CustomizationType
-from items.customizations import PaintComponent, CamouflageComponent, DecalComponent, ProjectionDecalComponent, InsigniaComponent
+from items.customizations import PaintComponent, CamouflageComponent, DecalComponent, ProjectionDecalComponent, InsigniaComponent, PersonalNumberComponent
 from skeletons.gui.shared.gui_items import IGuiItemsFactory
 
 def pickPacker(itemTypeID):
@@ -24,8 +24,33 @@ def pickPacker(itemTypeID):
         return ProjectionDecalPacker
     if itemTypeID == GUI_ITEM_TYPE.INSIGNIA:
         return InsigniaPacker
+    if itemTypeID == GUI_ITEM_TYPE.PERSONAL_NUMBER:
+        return PersonalNumberPacker
     LOG_WARNING('Unsupported packer for the given type', itemTypeID)
     return CustomizationPacker
+
+
+def pickPackers(itemTypes):
+    packers = []
+    if GUI_ITEM_TYPE.CAMOUFLAGE in itemTypes:
+        packers.append(CamouflagePacker)
+    if GUI_ITEM_TYPE.PAINT in itemTypes:
+        packers.append(PaintPacker)
+    if GUI_ITEM_TYPE.EMBLEM in itemTypes:
+        packers.append(DecalPacker)
+    if GUI_ITEM_TYPE.INSCRIPTION in itemTypes:
+        packers.append(DecalPacker)
+    if GUI_ITEM_TYPE.MODIFICATION in itemTypes:
+        packers.append(ModificationPacker)
+    if GUI_ITEM_TYPE.PROJECTION_DECAL in itemTypes:
+        packers.append(ProjectionDecalPacker)
+    if GUI_ITEM_TYPE.INSIGNIA in itemTypes:
+        packers.append(InsigniaPacker)
+    if GUI_ITEM_TYPE.PERSONAL_NUMBER in itemTypes:
+        packers.append(PersonalNumberPacker)
+    if not packers:
+        LOG_ERROR('Unsupported packer for the given type', itemTypes)
+    return packers
 
 
 def isComponentComplex(component):
@@ -121,7 +146,7 @@ class DecalPacker(CustomizationPacker):
 
     @staticmethod
     def pack(slot, component):
-        for region, decal, _ in slot.items():
+        for region, decal, _ in slot.items((GUI_ITEM_TYPE.EMBLEM, GUI_ITEM_TYPE.INSCRIPTION)):
             component.decals.append(DecalComponent(id=decal.id, appliedTo=region))
 
     @classmethod
@@ -139,7 +164,7 @@ class DecalPacker(CustomizationPacker):
 
     @classmethod
     def invalidate(cls, slot):
-        for region, decal, comp in slot.items():
+        for region, decal, comp in slot.items((GUI_ITEM_TYPE.EMBLEM, GUI_ITEM_TYPE.INSCRIPTION)):
             comp.id = decal.id
             comp.appliedTo = region
 
@@ -225,3 +250,31 @@ class InsigniaPacker(CustomizationPacker):
     @staticmethod
     def getRawComponent():
         return InsigniaComponent
+
+
+class PersonalNumberPacker(CustomizationPacker):
+
+    @staticmethod
+    def pack(slot, component):
+        for region, coolNumItem, subcomp in slot.items((GUI_ITEM_TYPE.PERSONAL_NUMBER,)):
+            component.personal_numbers.append(PersonalNumberComponent(id=coolNumItem.id, number=subcomp.number, appliedTo=region))
+
+    @classmethod
+    def unpack(cls, slot, component, proxy=None):
+        regions = slot.getRegions()
+        for region, subcomp in product(regions, component.personal_numbers):
+            appliedTo = subcomp.appliedTo & region
+            if appliedTo:
+                slotIdx = regions.index(appliedTo)
+                item = cls.create(subcomp, CustomizationType.PERSONAL_NUMBER, proxy)
+                slot.set(item, slotIdx, component=subcomp)
+
+    @classmethod
+    def invalidate(cls, slot):
+        for region, coolNum, comp in slot.items((GUI_ITEM_TYPE.PERSONAL_NUMBER,)):
+            comp.id = coolNum.id
+            comp.appliedTo = region
+
+    @staticmethod
+    def getRawComponent():
+        return PersonalNumberComponent

@@ -7,14 +7,9 @@
       <conditions>
         <postBattle>
           <and>
-            <vehicleDamage>
-              <classes>	SPG	</classes>
-              <attackReason>	0	</attackReason>
-              <eventCount></eventCount>
-              <greaterOrEqual>	3	</greaterOrEqual>
-            </vehicleDamage>
             <vehicleKills>
-              <classes>	SPG	</classes>
+              <rammingInfo>	stayedAlive dealtMoreDamage	</rammingInfo>
+              <attackReason>	2	</attackReason>
               <greaterOrEqual>	1	</greaterOrEqual>
             </vehicleKills>
           </and>
@@ -71,18 +66,13 @@
       <conditions>
         <postBattle>
           <and>
-            <vehicleDamage>
-              <classes>	SPG	</classes>
-              <attackReason>	0	</attackReason>
-              <eventCount></eventCount>
-              <greaterOrEqual>	3	</greaterOrEqual>
-            </vehicleDamage>
             <vehicleKills>
-              <classes>	SPG	</classes>
+              <rammingInfo>	stayedAlive dealtMoreDamage	</rammingInfo>
+              <attackReason>	2	</attackReason>
               <greaterOrEqual>	1	</greaterOrEqual>
             </vehicleKills>
-            <isAlive></isAlive>
             <win></win>
+            <isAlive></isAlive>
           </and>
         </postBattle>
       </conditions>
@@ -113,18 +103,13 @@
         </preBattle>
         <postBattle>
           <and>
-            <vehicleDamage>
-              <classes>	SPG	</classes>
-              <attackReason>	0	</attackReason>
-              <eventCount></eventCount>
-              <greaterOrEqual>	3	</greaterOrEqual>
-            </vehicleDamage>
             <vehicleKills>
-              <classes>	SPG	</classes>
+              <rammingInfo>	stayedAlive dealtMoreDamage	</rammingInfo>
+              <attackReason>	2	</attackReason>
               <greaterOrEqual>	1	</greaterOrEqual>
             </vehicleKills>
-            <isAlive></isAlive>
             <win></win>
+            <isAlive></isAlive>
           </and>
         </postBattle>
       </conditions>

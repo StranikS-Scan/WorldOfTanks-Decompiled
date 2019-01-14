@@ -74,7 +74,8 @@ class _StatsListener(_Listener):
         self._page.invalidateElites(elites)
 
     def _onVehiclesXPUpdate(self, xps):
-        self._page.invalidateVTypeXP(xps)
+        newXPs = {key:(value if value else 0) for key, value in xps.iteritems()}
+        self._page.invalidateVTypeXP(newXPs)
 
     def _onUnlocksUpdate(self, unlocks):
         self._page.invalidateUnlocks(unlocks)

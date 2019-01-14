@@ -26,7 +26,6 @@ from helpers.i18n import makeString as _ms
 from shared_utils import findFirst
 from skeletons.gui.game_control import IQuestsController
 from skeletons.gui.server_events import IEventsCache
-from skeletons.new_year import INewYearController
 _MAX_AWARDS_PER_TOOLTIP = 5
 _MAX_QUESTS_PER_TOOLTIP = 4
 _MAX_BONUSES_PER_QUEST = 2
@@ -47,7 +46,6 @@ class _StringTokenBonusFormatter(TokenBonusFormatter):
 class QuestsPreviewTooltipData(BlocksTooltipData):
     _eventsCache = dependency.descriptor(IEventsCache)
     _questController = dependency.descriptor(IQuestsController)
-    _nyController = dependency.descriptor(INewYearController)
 
     def __init__(self, context):
         super(QuestsPreviewTooltipData, self).__init__(context, TOOLTIP_TYPE.QUESTS)
@@ -102,8 +100,7 @@ class QuestsPreviewTooltipData(BlocksTooltipData):
         return items
 
     def _getHeader(self, count, vehicleName, description):
-        isNYEventEnabled = self._nyController.isEnabled()
-        return formatters.packImageTextBlockData(title=text_styles.highTitle(_ms(TOOLTIPS.HANGAR_HEADER_QUESTS_HEADER, count=count)), img=RES_ICONS.MAPS_ICONS_QUESTS_NYQUESTTOOLTIPHEADER if isNYEventEnabled else RES_ICONS.MAPS_ICONS_QUESTS_QUESTTOOLTIPHEADER, txtPadding=formatters.packPadding(top=20), txtOffset=20, desc=text_styles.main(_ms(description, vehicle=vehicleName)))
+        return formatters.packImageTextBlockData(title=text_styles.highTitle(_ms(TOOLTIPS.HANGAR_HEADER_QUESTS_HEADER, count=count)), img=RES_ICONS.MAPS_ICONS_QUESTS_QUESTTOOLTIPHEADER, txtPadding=formatters.packPadding(top=20), txtOffset=20, desc=text_styles.main(_ms(description, vehicle=vehicleName)))
 
     def _getBottom(self, value):
         if value > 0:

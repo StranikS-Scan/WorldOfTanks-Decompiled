@@ -24,6 +24,7 @@ from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.events import LobbyHeaderMenuEvent
 from gui.shared.event_bus import EVENT_BUS_SCOPE
 from gui.shared.money import Currency
+from gui.shared import event_dispatcher
 from gui.shared.utils.graphics import isRendererPipelineDeferred
 from helpers import dependency
 from helpers.i18n import makeString as _ms
@@ -35,6 +36,7 @@ from shared import getTotalPurchaseInfo, AdditionalPurchaseGroups
 _CUSTOMIZATION_SEASON_TITLES = {SeasonType.WINTER: VEHICLE_CUSTOMIZATION.BUYWINDOW_TITLE_WINTER,
  SeasonType.SUMMER: VEHICLE_CUSTOMIZATION.BUYWINDOW_TITLE_SUMMER,
  SeasonType.DESERT: VEHICLE_CUSTOMIZATION.BUYWINDOW_TITLE_DESERT}
+_CUSTOMIZATION_TUTORIAL_CHAPTER = 'c11nProlong'
 _SelectItemData = namedtuple('_SelectItemData', ('season', 'quantity', 'purchaseIndices'))
 
 class CartInfoItem(InfoItemBase):
@@ -79,6 +81,7 @@ class PurchaseWindow(CustomizationBuyWindowMeta):
         self.__counters = {season:[0, 0] for season in SeasonType.COMMON_SEASONS}
         self.__moneyState = _MoneyForPurchase.NOT_ENOUGH
         self.__blur = GUI.WGUIBackgroundBlur()
+        self.__prolongStyleRent = (ctx or {}).get('prolongStyleRent', False)
         return
 
     def selectItem(self, itemId, fromStorage):
@@ -118,8 +121,11 @@ class PurchaseWindow(CustomizationBuyWindowMeta):
         self.close()
 
     def close(self):
-        self.__c11nView.changeVisible(True)
-        self.destroy()
+        if self.__prolongStyleRent:
+            self.__c11nView.onCloseWindow(force=True)
+        else:
+            self.__c11nView.changeVisible(True)
+            self.destroy()
 
     def _populate(self):
         super(PurchaseWindow, self)._populate()
@@ -166,11 +172,20 @@ class PurchaseWindow(CustomizationBuyWindowMeta):
         self.__setTitlesData()
 
     def __setTitlesData(self):
+        vehicle = g_currentVehicle.item
+        haveAutoprolongation = False
+        autoprolongationSelected = False
         seasonTitlesText = {season:_ms(_CUSTOMIZATION_SEASON_TITLES[season]) for season in SeasonType.COMMON_SEASONS}
         if self.__isStyle:
-            item = self.__ctx.getPurchaseItems()[0].item
+            item = self.__purchaseItems[0].item
             titleTemplate = _ms(TOOLTIPS.VEHICLEPREVIEW_BOXTOOLTIP_STYLE_HEADER, group=item.userType, value=item.userName)
             bigTitleTemplate = _ms(VEHICLE_CUSTOMIZATION.CUSTOMIZATION_INFOTYPE_TYPE_STYLE_MULTILINE, group=item.userType, value=text_styles.heroTitle(item.userName))
+            if item.isRentable:
+                haveAutoprolongation = True
+                autoprolongationSelected = self.__ctx.autoRentEnabled()
+            if self.__prolongStyleRent and not autoprolongationSelected:
+                autoprolongationSelected = True
+                self.updateAutoProlongation()
         else:
             totalCount = 0
             for season in SeasonType.COMMON_SEASONS:
@@ -181,12 +196,27 @@ class PurchaseWindow(CustomizationBuyWindowMeta):
 
             titleTemplate = '{} ({})'.format(_ms(VEHICLE_CUSTOMIZATION.CUSTOMIZATION_BUYWINDOW_TITLE), totalCount)
             bigTitleTemplate = text_styles.grandTitle(titleTemplate)
+        for season in SeasonType.COMMON_SEASONS:
+            bonusSeparator = '&nbsp;&nbsp;'
+            if self.__isStyle:
+                outfit = self.__purchaseItems[0].item.getOutfit(season)
+            else:
+                outfit = self.__ctx.getOutfitsInfo()[season].modified
+            if outfit:
+                camo = outfit.hull.slotFor(GUI_ITEM_TYPE.CAMOUFLAGE).getItem()
+                if camo and camo.bonus:
+                    bonusPercent = camo.bonus.getFormattedValue(vehicle)
+                    seasonTitlesText[season] += bonusSeparator + text_styles.bonusAppliedText(_ms(VEHICLE_CUSTOMIZATION.BUYWINDOW_TITLE_BONUSCAMO, bonus=bonusPercent))
+
         titleText = text_styles.promoTitle(bigTitleTemplate)
         titleTextSmall = text_styles.promoTitle(titleTemplate)
         self.as_setInitDataS({'windowTitle': VEHICLE_CUSTOMIZATION.WINDOW_PURCHASE_HEADER,
          'isStyle': self.__isStyle,
          'titleText': titleText,
-         'titleTextSmall': titleTextSmall})
+         'titleTextSmall': titleTextSmall,
+         'haveAutoprolongation': haveAutoprolongation,
+         'autoprolongationSelected': autoprolongationSelected,
+         'prolongStyleRent': self.__prolongStyleRent})
         self.as_setTitlesS({'summerTitle': seasonTitlesText[SeasonType.SUMMER],
          'winterTitle': seasonTitlesText[SeasonType.WINTER],
          'desertTitle': seasonTitlesText[SeasonType.DESERT]})
@@ -215,10 +245,17 @@ class PurchaseWindow(CustomizationBuyWindowMeta):
                 self.__moneyState = _MoneyForPurchase.NOT_ENOUGH
         inGameShopOn = Currency.GOLD in shortage.getCurrency() and isIngameShopEnabled()
         validTransaction = self.__moneyState != _MoneyForPurchase.NOT_ENOUGH or inGameShopOn
+        rentalInfoText = ''
+        if self.__isStyle:
+            item = self.__purchaseItems[0].item
+            if item.isRentable:
+                rentCount = item.rentCount
+                rentalInfoText = text_styles.main(_ms(VEHICLE_CUSTOMIZATION.CAROUSEL_RENTALBATTLES, battlesNum=rentCount))
         self.as_setTotalDataS({'totalLabel': text_styles.highTitle(_ms(VEHICLE_CUSTOMIZATION.WINDOW_PURCHASE_TOTALCOST, selected=cart.numSelected, total=cart.numApplying)),
          'enoughMoney': validTransaction,
          'inFormationAlert': inFormationAlert,
-         'totalPrice': totalPriceVO[0]})
+         'totalPrice': totalPriceVO[0],
+         'prolongationCondition': rentalInfoText})
         self.__setBuyButtonState(validTransaction, inGameShopOn)
 
     def __setBuyButtonState(self, validTransaction, inGameShopOn):
@@ -239,6 +276,13 @@ class PurchaseWindow(CustomizationBuyWindowMeta):
     def __onServerSettingChanged(self, diff):
         if 'isCustomizationEnabled' in diff and not diff.get('isCustomizationEnabled', True):
             self.destroy()
+
+    def updateAutoProlongation(self):
+        self.__ctx.changeAutoRent()
+
+    def onAutoProlongationCheckboxAdded(self):
+        if self.__prolongStyleRent:
+            event_dispatcher.runSalesChain(_CUSTOMIZATION_TUTORIAL_CHAPTER)
 
 
 class _ProcessorSelector(object):
@@ -345,6 +389,7 @@ class _StyleItemPurchaseDescription(_BasePurchaseDescription):
 
 class _SeasonPurchaseInfo(object):
     _ORDERED_KEYS = (GUI_ITEM_TYPE.INSCRIPTION,
+     GUI_ITEM_TYPE.PERSONAL_NUMBER,
      GUI_ITEM_TYPE.MODIFICATION,
      GUI_ITEM_TYPE.PAINT,
      GUI_ITEM_TYPE.CAMOUFLAGE,

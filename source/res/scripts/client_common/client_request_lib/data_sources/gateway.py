@@ -547,10 +547,6 @@ class GatewayDataAccessor(base.BaseDataAccessor):
         url = '/hof/user/restore/'
         return self._request_data(callback, url, method='POST')
 
-    def get_hero_tanks_list(self, callback):
-        url = '/advc/herotank/'
-        return self._request_data(callback, url, method='GET')
-
     def get_teaser(self, callback):
         get_params = {'language': self._get_formatted_language_code()}
         url = '/promobe/teaser/'

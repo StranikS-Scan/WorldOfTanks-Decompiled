@@ -3,7 +3,6 @@
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform.daapi.view.meta.BaseStorageCategoryViewMeta import BaseStorageCategoryViewMeta
 from gui.Scaleform.framework.entities.DAAPIDataProvider import DAAPIDataProvider
-from gui.app_loader.decorators import sf_lobby
 from gui.shared.utils.requesters.ItemsRequester import REQ_CRITERIA
 from helpers import dependency
 from gui.Scaleform.daapi.view.lobby.storage import storage_helpers
@@ -40,10 +39,6 @@ class BaseCategoryView(BaseStorageCategoryViewMeta):
         super(BaseCategoryView, self).__init__()
         self._dataProvider = self._createDataProvider()
 
-    @sf_lobby
-    def app(self):
-        return None
-
     def _createDataProvider(self):
         return StorageDataProvider()
 
@@ -68,9 +63,8 @@ class BaseCategoryView(BaseStorageCategoryViewMeta):
         pass
 
     def __playSound(self, soundName):
-        app = self.app
-        if app is not None and app.soundManager is not None:
-            app.soundManager.playEffectSound(soundName)
+        if self.app is not None and self.app.soundManager is not None:
+            self.app.soundManager.playEffectSound(soundName)
         return
 
     def _makeFilterWarningVO(self, label, btnLabel, btnTooltip):

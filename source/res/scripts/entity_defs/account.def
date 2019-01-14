@@ -30,11 +30,11 @@
     <Interface>	QuestProcessor	</Interface>
   </Implements>
   <Properties>
-    <requiredVersion_13000>
+    <requiredVersion_14000>
       <Type>	STRING	</Type>
       <Flags>	BASE_AND_CLIENT	</Flags>
-      <Default>	ru_1.3.0_4	</Default>
-    </requiredVersion_13000>
+      <Default>	ct_1.4.0	</Default>
+    </requiredVersion_14000>
     <name>
       <Type>	STRING	</Type>
       <Flags>	BASE_AND_CLIENT	</Flags>
@@ -181,6 +181,7 @@
       <Type>	PYTHON	</Type>
       <Flags>	BASE_AND_CLIENT	</Flags>
       <Backupable>	false	</Backupable>
+      <AllowUnsafeData>	true	</AllowUnsafeData>
     </initialServerSettings>
   </Properties>
   <ClientMethods>
@@ -248,6 +249,7 @@
       <Arg>	SERVER_STATISTICS	</Arg>
     </receiveServerStats>
     <receiveQueueInfo>
+      <AllowUnsafeData>	true	</AllowUnsafeData>
       <Arg>	QUEUE_INFO	</Arg>
     </receiveQueueInfo>
     <updatePrebattle>
@@ -280,6 +282,7 @@
       <VariableLengthHeaderSize>	1	  <WarnLevel>	none	</WarnLevel>
       </VariableLengthHeaderSize>
       <Arg>	PYTHON	</Arg>
+      <AllowUnsafeData>	true	</AllowUnsafeData>
     </onUnitNotify>
     <onUnitError>
       <Arg>	INT32	</Arg>

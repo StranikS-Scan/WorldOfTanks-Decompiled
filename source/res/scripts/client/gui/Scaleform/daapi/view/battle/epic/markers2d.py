@@ -293,6 +293,7 @@ class HeadquartersPlugin(EpicMissionsPlugin):
         destructibleComponent = getattr(self.sessionProvider.arenaVisitor.getComponentSystem(), 'destructibleEntityComponent', None)
         if destructibleComponent is not None:
             destructibleComponent.onDestructibleEntityAdded += self.__onDestructibleEntityAdded
+            destructibleComponent.onDestructibleEntityRemoved += self.__onDestructibleEntityRemoved
             destructibleComponent.onDestructibleEntityStateChanged += self.__onDestructibleEntityStateChanged
             destructibleComponent.onDestructibleEntityHealthChanged += self.__onDestructibleEntityHealthChanged
         else:
@@ -303,6 +304,7 @@ class HeadquartersPlugin(EpicMissionsPlugin):
         destructibleComponent = getattr(self.sessionProvider.arenaVisitor.getComponentSystem(), 'destructibleEntityComponent', None)
         if destructibleComponent is not None:
             destructibleComponent.onDestructibleEntityAdded -= self.__onDestructibleEntityAdded
+            destructibleComponent.onDestructibleEntityRemoved -= self.__onDestructibleEntityRemoved
             destructibleComponent.onDestructibleEntityStateChanged -= self.__onDestructibleEntityStateChanged
             destructibleComponent.onDestructibleEntityHealthChanged -= self.__onDestructibleEntityHealthChanged
         super(HeadquartersPlugin, self).fini()
@@ -417,6 +419,14 @@ class HeadquartersPlugin(EpicMissionsPlugin):
                 self._setMarkerSticky(handle, False)
                 self._invokeMarker(handle, 'setHighlight', False)
             return
+
+    def __onDestructibleEntityRemoved(self, entityId):
+        handle = self.__markers.pop(entityId, None)
+        if handle:
+            self._destroyMarker(handle)
+            if self.__visibleHQ == entityId:
+                self.__visibleHQ = -1
+        return
 
     def __onDestructibleEntityStateChanged(self, entityId):
         handle = self.__markers.get(entityId, None)

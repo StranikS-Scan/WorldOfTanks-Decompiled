@@ -17,7 +17,7 @@ from gui.Scaleform.locale.STORAGE import STORAGE
 from gui.shared.formatters import getItemPricesVO, text_styles, icons
 from gui.shared.gui_items.Vehicle import getTypeUserName, getVehicleStateIcon, Vehicle, VEHICLE_TYPES_ORDER_INDICES
 from gui.shared.money import Currency
-from helpers import int2roman
+from helpers import int2roman, func_utils
 from helpers.i18n import makeString as _ms
 
 class StorageCarouselFilter(CarouselFilter):
@@ -59,8 +59,12 @@ class StorageCarouselDataProvider(CarouselDataProvider):
     def _buildVehicle(self, item):
         name = _getVehicleName(vehicle=item)
         description = _getVehicleDescription(vehicle=item)
+        imageSmall = func_utils.makeFlashPath(item.getShopIcon(STORE_CONSTANTS.ICON_SIZE_SMALL))
+        imageMedium = func_utils.makeFlashPath(item.getShopIcon())
         stateIcon, stateText = _getVehicleInfo(vehicle=item)
-        vo = createStorageDefVO(item.intCD, name, description, item.inventoryCount, getItemPricesVO(item.getSellPrice())[0], item.getShopIcon(STORE_CONSTANTS.ICON_SIZE_SMALL), item.getShopIcon(), RES_SHOP.getVehicleIcon(STORE_CONSTANTS.ICON_SIZE_SMALL, 'empty_tank'), itemType=getBoosterType(item), nationFlagIcon=RES_SHOP.getNationFlagIcon(nations.NAMES[item.nationID]), infoImgSrc=stateIcon, infoText=stateText, contextMenuId=CONTEXT_MENU_HANDLER_TYPE.STORAGE_VEHICLES_REGULAR_ITEM)
+        if (not imageSmall or not imageMedium) and not stateText:
+            stateText = text_styles.vehicleStatusInfoText(_ms(STORAGE.INHANGAR_NOIMAGE))
+        vo = createStorageDefVO(item.intCD, name, description, item.inventoryCount, getItemPricesVO(item.getSellPrice())[0], imageSmall, imageMedium, RES_SHOP.getVehicleIcon(STORE_CONSTANTS.ICON_SIZE_SMALL, 'empty_tank'), itemType=getBoosterType(item), nationFlagIcon=RES_SHOP.getNationFlagIcon(nations.NAMES[item.nationID]), infoImgSrc=stateIcon, infoText=stateText, contextMenuId=CONTEXT_MENU_HANDLER_TYPE.STORAGE_VEHICLES_REGULAR_ITEM)
         return vo
 
     def _getVehicleStats(self, vehicle):

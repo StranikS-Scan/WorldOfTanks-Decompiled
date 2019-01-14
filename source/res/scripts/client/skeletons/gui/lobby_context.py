@@ -3,6 +3,7 @@
 
 
 class ILobbyContext(object):
+    onServerSettingsChanged = None
 
     def clear(self):
         raise NotImplementedError

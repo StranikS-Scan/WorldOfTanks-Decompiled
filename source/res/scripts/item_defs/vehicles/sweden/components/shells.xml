@@ -1010,4 +1010,48 @@
       <devices>	150	</devices>
     </damage>
   </_105mm_sgr_L_67>
+  <_105mm_slpprj_L_53>
+    <id>	74	</id>
+    <userString>	#sweden_vehicles:_105mm_slpprj_L_53	</userString>
+    <icon>	ap	</icon>
+    <price>	570	</price>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	105	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainArmorPiercing	</effects>
+    <damage>
+      <armor>	320	</armor>
+      <devices>	150	</devices>
+    </damage>
+  </_105mm_slpprj_L_53>
+  <_105mm_slpprj_L_53_B>
+    <id>	75	</id>
+    <userString>	#sweden_vehicles:_105mm_slpprj_L_53_B	</userString>
+    <icon>	ap_cr	</icon>
+    <price>	4400	</price>
+    <improved>	true	</improved>
+    <kind>	ARMOR_PIERCING_CR	</kind>
+    <caliber>	105	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainAPCR	</effects>
+    <damage>
+      <armor>	320	</armor>
+      <devices>	150	</devices>
+    </damage>
+  </_105mm_slpprj_L_53_B>
+  <_105mm_sgr_L_53>
+    <id>	76	</id>
+    <userString>	#sweden_vehicles:_105mm_sgr_L_53	</userString>
+    <icon>	he	</icon>
+    <price>	380	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <caliber>	105	</caliber>
+    <explosionRadius>	1.91	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	mainHighExplosive	</effects>
+    <damage>
+      <armor>	420	</armor>
+      <devices>	150	</devices>
+    </damage>
+  </_105mm_sgr_L_53>
 </shells.xml>

@@ -1,9 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/gui/Scaleform/data/faq_data.py
-import inspect
 import logging
 from collections import namedtuple
-from frameworks.wulf import Resource
 from gui.impl.gen import R
 from gui.shared.events import OpenLinkEvent
 from helpers import dependency
@@ -55,19 +53,19 @@ class FAQList(object):
         length = faq.length()
         translation = self.gui.resourceManager.getTranslatedText
         for number in xrange(1, length + 1):
-            questionID = faq.dyn(QUESTION_FORMAT.format(number))
-            if not questionID:
+            question = faq.dyn(QUESTION_FORMAT.format(number))
+            if not question:
                 continue
-            question = translation(questionID)
-            answerID = faq.dyn(ANSWER_FORMAT.format(number))
-            if not answerID:
+            questionText = translation(question())
+            answer = faq.dyn(ANSWER_FORMAT.format(number))
+            if not answer:
                 _logger.error('Answer %d is not found', number)
                 continue
-            elif inspect.isclass(answerID):
-                answer = self.__findAnswerWithSuffix(answerID)
+            elif not answer.exists():
+                answerText = self.__findAnswerWithSuffix(answer)
             else:
-                answer = translation(answerID)
-            result.append(FAQItem(number, question, answer))
+                answerText = translation(answer())
+            result.append(FAQItem(number, questionText, answerText))
 
         return sorted(result, key=lambda item: item.number)
 
@@ -79,14 +77,14 @@ class FAQList(object):
 
         return answer
 
-    def __findAnswerWithSuffix(self, answerID):
-        result = Resource.INVALID
+    def __findAnswerWithSuffix(self, answer):
+        result = R.invalid()
         for suffix, methodName in self.__extraFormats.iteritems():
-            nextID = answerID.dyn(suffix)
-            if nextID:
+            nextAnswer = answer.dyn(suffix)
+            if nextAnswer:
                 method = getattr(self, methodName, None)
                 if method and callable(method):
-                    result = method(self.gui.resourceManager.getTranslatedText(nextID))
+                    result = method(self.gui.resourceManager.getTranslatedText(nextAnswer()))
                 else:
                     _logger.error('Method %s is not found', methodName)
                 break

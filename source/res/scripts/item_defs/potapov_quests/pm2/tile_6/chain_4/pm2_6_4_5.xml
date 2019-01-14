@@ -7,9 +7,15 @@
       <conditions>
         <postBattle>
           <and>
+            <results>
+              <plus>
+                <key>	damageAssistedTrack	</key>
+                <key>	damageAssistedRadio	</key>
+              </plus>
+              <greaterOrEqual>	1500	</greaterOrEqual>
+            </results>
             <vehicleKills>
-              <rammingInfo>	stayedAlive dealtMoreDamage	</rammingInfo>
-              <attackReason>	2	</attackReason>
+              <classes>	SPG	</classes>
               <greaterOrEqual>	1	</greaterOrEqual>
             </vehicleKills>
           </and>
@@ -66,13 +72,19 @@
       <conditions>
         <postBattle>
           <and>
+            <results>
+              <plus>
+                <key>	damageAssistedTrack	</key>
+                <key>	damageAssistedRadio	</key>
+              </plus>
+              <greaterOrEqual>	1500	</greaterOrEqual>
+            </results>
             <vehicleKills>
-              <rammingInfo>	stayedAlive dealtMoreDamage	</rammingInfo>
-              <attackReason>	2	</attackReason>
+              <classes>	SPG	</classes>
               <greaterOrEqual>	1	</greaterOrEqual>
             </vehicleKills>
-            <win></win>
             <isAlive></isAlive>
+            <win></win>
           </and>
         </postBattle>
       </conditions>
@@ -103,13 +115,19 @@
         </preBattle>
         <postBattle>
           <and>
+            <results>
+              <plus>
+                <key>	damageAssistedTrack	</key>
+                <key>	damageAssistedRadio	</key>
+              </plus>
+              <greaterOrEqual>	1500	</greaterOrEqual>
+            </results>
             <vehicleKills>
-              <rammingInfo>	stayedAlive dealtMoreDamage	</rammingInfo>
-              <attackReason>	2	</attackReason>
+              <classes>	SPG	</classes>
               <greaterOrEqual>	1	</greaterOrEqual>
             </vehicleKills>
-            <win></win>
             <isAlive></isAlive>
+            <win></win>
           </and>
         </postBattle>
       </conditions>

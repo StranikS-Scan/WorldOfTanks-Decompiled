@@ -161,10 +161,6 @@ class EffectsListPlayer(object):
         self.__data = dict()
         return
 
-    @property
-    def isStarted(self):
-        return self.__isStarted
-
     def play(self, model, startKeyPoint=None, callbackFunc=None, waitForKeyOff=False):
         needPlay, newKey = self.__isNeedToPlay(waitForKeyOff)
         if not needPlay:
@@ -431,9 +427,10 @@ class _AnimationEffectDesc(_EffectDesc):
         animator = None
         if _isPyModel(targetModel):
             clipResource = targetModel.deprecatedGetAnimationClipResource(self._name)
-            loader = AnimationSequence.Loader(clipResource, BigWorld.player().spaceID)
+            spaceID = BigWorld.player().spaceID
+            loader = AnimationSequence.Loader(clipResource, spaceID)
             animator = loader.loadSync()
-            animator.bindTo(AnimationSequence.ModelWrapperContainer(model))
+            animator.bindTo(AnimationSequence.ModelWrapperContainer(model, spaceID))
             animator.start()
         else:
             SoftException('EffectsList trying to play old animation <%s> on compoud model <%s>.' % (self._name, self.TYPE))
@@ -523,9 +520,10 @@ class _ModelEffectDesc(_EffectDesc):
         animator = None
         if self._animation:
             clipResource = model.deprecatedGetAnimationClipResource(self._animation)
-            loader = AnimationSequence.Loader(clipResource, BigWorld.player().spaceID)
+            spaceID = BigWorld.player().spaceID
+            loader = AnimationSequence.Loader(clipResource, spaceID)
             animator = loader.loadSync()
-            animator.bindTo(AnimationSequence.ModelWrapperContainer(model))
+            animator.bindTo(AnimationSequence.ModelWrapperContainer(model, spaceID))
             animator.start()
         elem = {'typeDesc': self,
          'model': model,
@@ -772,12 +770,12 @@ class _CollisionSoundEffectDesc(_NodeSoundEffectDesc):
         return
 
 
-class _NonVehicleSoundEffectDesc(_BaseSoundEvent):
-    TYPE = '_NonVehicleSoundEffectDesc'
+class _DestructionSoundEffectDesc(_BaseSoundEvent):
+    TYPE = '_DestructionSoundEffectDesc'
     __slots__ = ('_soundName', '_parameters')
 
     def __init__(self, dataSection):
-        super(_NonVehicleSoundEffectDesc, self).__init__(dataSection)
+        super(_DestructionSoundEffectDesc, self).__init__(dataSection)
         self._soundName = dataSection.readString('wwsound', '')
         self.__readParameters(dataSection)
 
@@ -1203,8 +1201,8 @@ _effectDescFactory = {'pixie': _PixieEffectDesc,
  'stopEmission': _StopEmissionEffectDesc,
  'posteffect': _PostProcessEffectDesc,
  'light': _LightEffectDesc,
- 'destructionSound': _NonVehicleSoundEffectDesc,
- 'lifetimeSound': _NonVehicleSoundEffectDesc}
+ 'destructionSound': _DestructionSoundEffectDesc,
+ 'lifetimeSound': _DestructionSoundEffectDesc}
 
 def _createEffectDesc(eType, dataSection):
     if not dataSection.values():

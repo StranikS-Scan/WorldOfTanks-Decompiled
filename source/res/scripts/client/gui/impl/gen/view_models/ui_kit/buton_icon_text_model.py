@@ -1,6 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/gen/view_models/ui_kit/buton_icon_text_model.py
-from frameworks.wulf import Resource
+from gui.impl.gen import R
 from frameworks.wulf import ViewModel
 
 class ButonIconTextModel(ViewModel):
@@ -38,9 +38,9 @@ class ButonIconTextModel(ViewModel):
 
     def _initialize(self):
         super(ButonIconTextModel, self)._initialize()
-        self._addResourceProperty('label', Resource.INVALID)
+        self._addResourceProperty('label', R.invalid())
         self._addStringProperty('labelString', '')
-        self._addResourceProperty('icon', Resource.INVALID)
+        self._addResourceProperty('icon', R.invalid())
         self._addBoolProperty('isEnabled', True)
         self._addBoolProperty('isSelected', False)
         self.onClicked = self._addCommand('onClicked')

@@ -302,7 +302,7 @@ class RESEARCH_CRITERIA(object):
 class ItemsRequester(IItemsRequester):
     itemsFactory = dependency.descriptor(IGuiItemsFactory)
 
-    def __init__(self, inventory, stats, dossiers, goodies, shop, recycleBin, vehicleRotation, ranked, badges, epicMetaGame, festivityRequester, tokens):
+    def __init__(self, inventory, stats, dossiers, goodies, shop, recycleBin, vehicleRotation, ranked, badges, epicMetaGame, tokens, festivityRequester):
         self.__inventory = inventory
         self.__stats = stats
         self.__dossiers = dossiers
@@ -397,12 +397,12 @@ class ItemsRequester(IItemsRequester):
         Waiting.show('download/epicMetaGame')
         yield self.epicMetaGame.request()
         Waiting.hide('download/epicMetaGame')
-        Waiting.show('download/festivity')
-        yield self.__festivity.request()
-        Waiting.hide('download/festivity')
         Waiting.show('download/tokens')
         yield self.__tokens.request()
         Waiting.hide('download/tokens')
+        Waiting.show('download/festivity')
+        yield self.__festivity.request()
+        Waiting.hide('download/festivity')
         self.__brokenSyncAlreadyLoggedTypes.clear()
         callback(self)
 
@@ -612,9 +612,6 @@ class ItemsRequester(IItemsRequester):
     def getStockVehicle(self, typeCompDescr, useInventory=False):
         if getTypeOfCompactDescr(typeCompDescr) == GUI_ITEM_TYPE.VEHICLE:
             proxy = self if useInventory else None
-            vehInvData = proxy.inventory.getItemData(typeCompDescr) if useInventory else None
-            if vehInvData is not None:
-                return self.itemsFactory.createVehicle(typeCompDescr=typeCompDescr, inventoryID=vehInvData.invID, proxy=proxy)
             return self.itemsFactory.createVehicle(typeCompDescr=typeCompDescr, proxy=proxy)
         else:
             return

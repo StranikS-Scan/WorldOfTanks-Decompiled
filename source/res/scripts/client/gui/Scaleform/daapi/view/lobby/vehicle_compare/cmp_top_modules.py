@@ -4,7 +4,6 @@ import operator
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.items_parameters import params
 from gui.shared.utils.requesters import REQ_CRITERIA
-from gui.Scaleform.daapi.view.lobby.techtree.techtree_dp import g_techTreeDP
 from helpers import dependency
 from skeletons.gui.shared import IItemsCache
 _COMMON_CRITERIA = REQ_CRITERIA.EMPTY | ~REQ_CRITERIA.HIDDEN
@@ -27,34 +26,27 @@ class _BaseModuleComparator(object):
         def __key(item):
             return item.level
 
+        return self._getModuleParam(__key, excludes)
+
+    def maxCreditsCost(self, excludes=None):
+
+        def __key(item):
+            return item.buyPrices.itemPrice.price[0]
+
+        return self._getModuleParam(__key, excludes)
+
+    def mostValuableParam(self, excludes=None):
+        pass
+
+    def _getModuleParam(self, getter, excludes=None):
         items = [ x for x in self._items.values() if x not in excludes ]
         if not items:
             return (False, None)
         elif len(items) == 1:
             return (True, self._items.values()[0])
         else:
-            sortedItems = sorted(items, key=__key)
-            return (False, sortedItems[-1]) if sortedItems[-1].level == sortedItems[-2].level else (True, sortedItems[-1])
-
-    def maxResearchCost(self, excludes=None):
-        res = []
-        for intCD, module in self._items.items():
-            if excludes and module in excludes:
-                continue
-            unlockPrices = g_techTreeDP.getUnlockPrices(intCD)
-            if unlockPrices:
-                vehIntCD = self._vehicle.intCD
-                if vehIntCD in unlockPrices:
-                    res.append((unlockPrices[vehIntCD], module))
-
-        if not res:
-            return (False, None)
-        else:
-            res = sorted(res)
-            return (True, res[-1][1])
-
-    def mostValuableParam(self, excludes=None):
-        pass
+            sortedItems = sorted(items, key=getter)
+            return (False, sortedItems[-1]) if getter(sortedItems[-1]) == getter(sortedItems[-2]) else (True, sortedItems[-1])
 
     def _getValuableParam(self, paramName, excludes=None):
         res = []
@@ -84,12 +76,11 @@ class TopModulesChecker(object):
          GunComparator(self._requestCriteria, self.__vehicle),
          EngineComparator(self._requestCriteria, self.__vehicle),
          RadioComparator(self._requestCriteria, self.__vehicle)]
-        g_techTreeDP.load()
 
     def process(self):
         modules = []
         for comparator in self._comparators:
-            for functor in (comparator.maxLvl, comparator.maxResearchCost, comparator.mostValuableParam):
+            for functor in (comparator.maxLvl, comparator.maxCreditsCost, comparator.mostValuableParam):
                 fit, module = self.__check(functor)
                 if fit:
                     modules.append(module)

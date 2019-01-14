@@ -11,6 +11,7 @@ import Event
 from ChatManager import chatManager
 from ClientChat import ClientChat
 from ClientGlobalMap import ClientGlobalMap
+from ClientSelectableObject import ClientSelectableObject
 from ClientUnitMgr import ClientUnitMgr, ClientUnitBrowser
 from ContactInfo import ContactInfo
 from OfflineMapCreator import g_offlineMapCreator
@@ -30,7 +31,6 @@ from constants import PREBATTLE_INVITE_STATUS, PREBATTLE_TYPE
 from debug_utils import LOG_DEBUG, LOG_CURRENT_EXCEPTION, LOG_ERROR, LOG_DEBUG_DEV, LOG_WARNING
 from gui.Scaleform.Waiting import Waiting
 from gui.shared.ClanCache import g_clanCache
-from gui.shared.selectable_object import ISelectableObject
 from gui.wgnc import g_wgncProvider
 from helpers import dependency
 from helpers import uniprof
@@ -410,53 +410,53 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         entitiesIDs = BigWorld.entities.keys()
         for key in entitiesIDs:
             e = BigWorld.entities[key]
-            if isinstance(e, ISelectableObject) and e.selectionId == selectionId:
+            if isinstance(e, ClientSelectableObject) and e.selectionId == selectionId:
                 self.targetFocus(e)
                 break
         else:
-            LOG_DEBUG('No ISelectableObject with selectionID', selectionId)
+            LOG_DEBUG('No ClientSelectableObject with selectionID', selectionId)
 
     def debugUnselectEntity(self, selectionId):
         entitiesIDs = BigWorld.entities.keys()
         for key in entitiesIDs:
             e = BigWorld.entities[key]
-            if isinstance(e, ISelectableObject) and e.selectionId == selectionId:
+            if isinstance(e, ClientSelectableObject) and e.selectionId == selectionId:
                 self.targetBlur(e)
                 break
         else:
-            LOG_DEBUG('No ISelectableObject with selectionID', selectionId)
+            LOG_DEBUG('No ClientSelectableObject with selectionID', selectionId)
 
     def debugSelectAllEntities(self):
         count = 0
         entitiesIDs = BigWorld.entities.keys()
         for key in entitiesIDs:
             e = BigWorld.entities[key]
-            if isinstance(e, ISelectableObject):
+            if isinstance(e, ClientSelectableObject):
                 self.targetFocus(e)
                 count += 1
 
         if count == 0:
-            LOG_DEBUG('No any ISelectableObject to select')
+            LOG_DEBUG('No any ClientSelectableObject to select')
 
     def debugUnselectAllEntites(self):
         count = 0
         entitiesIDs = BigWorld.entities.keys()
         for key in entitiesIDs:
             e = BigWorld.entities[key]
-            if isinstance(e, ISelectableObject):
+            if isinstance(e, ClientSelectableObject):
                 self.targetBlur(e)
                 count += 1
 
         if count == 0:
-            LOG_DEBUG('No any ISelectableObject to unselect')
+            LOG_DEBUG('No any ClientSelectableObject to unselect')
 
     def targetFocus(self, entity):
-        if self.__objectsSelectionEnabled and isinstance(entity, ISelectableObject) and entity.enabled:
+        if self.__objectsSelectionEnabled and isinstance(entity, ClientSelectableObject) and entity.enabled:
             self.hangarSpace.onMouseEnter(entity)
             self.__selectedEntity = entity
 
     def targetBlur(self, prevEntity):
-        if self.__objectsSelectionEnabled and isinstance(prevEntity, ISelectableObject):
+        if self.__objectsSelectionEnabled and isinstance(prevEntity, ClientSelectableObject):
             self.hangarSpace.onMouseExit(prevEntity)
             self.__selectedEntity = None
         return

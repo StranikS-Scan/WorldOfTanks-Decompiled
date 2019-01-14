@@ -8,6 +8,7 @@ from functools import partial
 from itertools import chain
 from types import FunctionType, BooleanType, TypeType
 from Event import Event
+from helpers import uniprof
 from soft_exception import SoftException
 _logger = logging.getLogger(__name__)
 
@@ -280,11 +281,13 @@ def w2c(schema, name='', finiHandlerName=None):
     def decorator(fn):
         if inspect.isgeneratorfunction(fn):
 
+            @uniprof.regionDecorator(label='w2c {}'.format(name), scope='wrap')
             def handler(self, cmd, ctx):
                 _CallbackDispatcher(fn(self, cmd), ctx['callback'])
 
         else:
 
+            @uniprof.regionDecorator(label='w2c {}'.format(name), scope='wrap')
             def handler(self, cmd, ctx):
                 argspec = inspect.getargspec(fn)
                 return ctx['callback'](fn(self, cmd, ctx)) if 'ctx' in argspec.args and argspec.args.index('ctx') == 2 else ctx['callback'](fn(self, cmd))

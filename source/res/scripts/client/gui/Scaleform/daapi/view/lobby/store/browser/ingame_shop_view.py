@@ -41,6 +41,7 @@ class _LastSessionInfo(object):
         hostUrl = ingameshop_helpers.getWebShopURL()
         if self.__needResetUrl(hostUrl):
             self.__url = hostUrl
+            self.__lastUserID = BigWorld.player().databaseID
         return self.__url
 
     @url.setter
@@ -183,14 +184,6 @@ class IngameShopView(LobbySubView, IngameShopBase):
 
 
 class IngameShopOverlay(IngameShopBase):
-
-    def __init__(self, *args):
-        super(IngameShopOverlay, self).__init__(*args)
-        self.__uniqueBrowserName = VIEW_ALIAS.OVERLAY_WEB_STORE
-
-    @property
-    def uniqueBrowserName(self):
-        return self.__uniqueBrowserName
 
     def onEscapePress(self):
         if not self._browserParams.get('isTransparent'):

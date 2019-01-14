@@ -2,11 +2,14 @@
 # Embedded file name: scripts/client/notification/decorators.py
 import BigWorld
 from debug_utils import LOG_ERROR
+from gui.ClientUpdateManager import g_clientUpdateManager
+from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.locale.INVITES import INVITES
 from gui.clans.formatters import ClanSingleNotificationHtmlTextFormatter, ClanMultiNotificationsHtmlTextFormatter, ClanAppActionHtmlTextFormatter
 from gui.clans.settings import CLAN_APPLICATION_STATES, CLAN_INVITE_STATES
 from gui.prb_control import prbInvitesProperty
 from gui.prb_control.formatters.invites import getPrbInviteHtmlFormatter
+from gui.shared import g_eventBus, EVENT_BUS_SCOPE
 from gui.shared.notifications import NotificationPriorityLevel, NotificationGuiSettings, NotificationGroup
 from helpers import dependency
 from helpers import i18n
@@ -19,6 +22,7 @@ from notification.settings import NOTIFICATION_TYPE, NOTIFICATION_BUTTON_STATE
 from notification.settings import makePathToIcon
 from gui.wgnc.settings import WGNC_DEFAULT_ICON, WGNC_POP_UP_BUTTON_WIDTH
 from helpers import time_utils
+from skeletons.gui.shared import IItemsCache
 from skeletons.gui.web import IWebController
 
 def _makeShowTime():
@@ -161,6 +165,10 @@ class SearchCriteria(_NotificationDecorator):
 
 class MessageDecorator(_NotificationDecorator):
 
+    def __init__(self, entityID, entity=None, settings=None, model=None):
+        self._model = model
+        super(MessageDecorator, self).__init__(entityID, entity, settings)
+
     def getSavedData(self):
         return self._vo['message'].get('savedData')
 
@@ -192,6 +200,59 @@ class MessageDecorator(_NotificationDecorator):
          'entityID': self.getID(),
          'message': message,
          'notify': self.isNotify()}
+
+
+class C11nMessageDecorator(MessageDecorator):
+    itemsCache = dependency.descriptor(IItemsCache)
+
+    def __init__(self, entityID, entity=None, settings=None, model=None):
+        super(C11nMessageDecorator, self).__init__(entityID, entity, settings, model)
+        g_eventBus.addListener(VIEW_ALIAS.HERO_VEHICLE_PREVIEW_20, self.__lockButtons, EVENT_BUS_SCOPE.LOBBY)
+        g_eventBus.addListener(VIEW_ALIAS.BATTLE_QUEUE, self.__lockButtons, EVENT_BUS_SCOPE.LOBBY)
+        g_eventBus.addListener(VIEW_ALIAS.LOBBY_HANGAR, self.__updateButtons, EVENT_BUS_SCOPE.LOBBY)
+        g_clientUpdateManager.addCallbacks({'inventory': self.__updateButtons})
+        g_clientUpdateManager.addCallbacks({'cache.vehsLock': self.__updateButtons})
+
+    def update(self, formatted):
+        _NotificationDecorator.update(self, formatted)
+
+    def _make(self, formatted=None, settings=None):
+        super(C11nMessageDecorator, self)._make(formatted, settings)
+        self.__updateButtonsState()
+
+    def __updateButtonsState(self, lock=False):
+        state = NOTIFICATION_BUTTON_STATE.VISIBLE
+        if self.__vehicle is not None:
+            if not lock and self.__vehicle.isCustomizationEnabled():
+                state = NOTIFICATION_BUTTON_STATE.DEFAULT
+        self._entity['buttonsStates'].update({'submit': state})
+        if self._model is not None:
+            self._model.updateNotification(self.getType(), self._entityID, self._entity, False)
+        return
+
+    def __updateButtons(self, event):
+        self.__updateButtonsState(lock=False)
+
+    def __lockButtons(self, event):
+        self.__updateButtonsState(lock=True)
+
+    @property
+    def __vehicle(self):
+        vehicle = None
+        if self.itemsCache is not None:
+            savedData = self._entity.get('savedData')
+            if savedData is not None:
+                vehicleIntCD = savedData.get('vehicleIntCD')
+                if vehicleIntCD is not None:
+                    vehicle = self.itemsCache.items.getItemByCD(vehicleIntCD)
+        return vehicle
+
+    def clear(self):
+        super(C11nMessageDecorator, self).clear()
+        g_eventBus.removeListener(VIEW_ALIAS.HERO_VEHICLE_PREVIEW_20, self.__lockButtons, EVENT_BUS_SCOPE.LOBBY)
+        g_eventBus.removeListener(VIEW_ALIAS.BATTLE_QUEUE, self.__lockButtons, EVENT_BUS_SCOPE.LOBBY)
+        g_eventBus.removeListener(VIEW_ALIAS.LOBBY_HANGAR, self.__updateButtons, EVENT_BUS_SCOPE.LOBBY)
+        g_clientUpdateManager.removeObjectCallbacks(self)
 
 
 class PrbInviteDecorator(_NotificationDecorator):

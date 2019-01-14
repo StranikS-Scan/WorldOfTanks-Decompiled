@@ -5,7 +5,6 @@ from collections import namedtuple
 from math import ceil
 from gui.Scaleform.genConsts.SLOT_HIGHLIGHT_TYPES import SLOT_HIGHLIGHT_TYPES
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
-from gui.Scaleform.locale.NY import NY
 from gui.Scaleform.locale.QUESTS import QUESTS
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
@@ -17,16 +16,14 @@ from gui.shared.gui_items.Tankman import getRoleUserName
 from gui.shared.money import Currency
 from gui.shared.utils.functions import makeTooltip
 from gui.shared.utils.requesters import REQ_CRITERIA
-from helpers import time_utils, i18n, dependency, int2roman
+from helpers import time_utils, i18n, dependency
 from items.tankmen import RECRUIT_TMAN_TOKEN_PREFIX
-from new_year.ny_toy_info import NewYear19ToyInfo
 from personal_missions import PM_BRANCH
 from shared_utils import CONST_CONTAINER, findFirst
 from skeletons.gui.customization import ICustomizationService
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
 from constants import LOOTBOX_TOKEN_PREFIX
-from skeletons.new_year import INewYearController
 _logger = logging.getLogger(__name__)
 
 class AWARDS_SIZES(CONST_CONTAINER):
@@ -170,31 +167,8 @@ def getPackRentVehiclesFormattersMap():
 def getLootboxesFormatterMap():
     mapping = getMisssionsFormattersMap()
     mapping.update({'vehicles': RentVehiclesBonusFormatter(),
-     'tmanToken': TmanTemplateBonusFormatter(),
-     'ny19Toys': NewYearToyFormatter(False),
-     'ny19ToyFragments': NewYearFragmentsFormatter()})
-    return mapping
-
-
-def getLootboxesAutoOpenFormatterMap():
-    mapping = getLootboxesFormatterMap()
-    mapping.update({'ny19Toys': NewYearToyFormatter(True)})
-    return mapping
-
-
-def getNewYearFormattersMap():
-    countableIntegralBonusFormatter = CountableIntegralBonusFormatter()
-    mapping = getDefaultFormattersMap()
-    mapping.update({'tokens': NewYearTokenBonusFormatter(),
-     'battleToken': NewYearTokenBonusFormatter(),
-     'slots': countableIntegralBonusFormatter,
-     'berths': countableIntegralBonusFormatter,
      'tmanToken': TmanTemplateBonusFormatter()})
     return mapping
-
-
-def getPackRentNewYearAwardPacker():
-    return AwardsPacker(getNewYearFormattersMap())
 
 
 def getDefaultAwardFormatter():
@@ -219,10 +193,6 @@ def getPackRentVehiclesAwardPacker():
 
 def getLootboxesAwardsPacker():
     return AwardsPacker(getLootboxesFormatterMap())
-
-
-def getLootboxesAutoOpenAwardsPacker():
-    return AwardsPacker(getLootboxesAutoOpenFormatterMap())
 
 
 def getPersonalMissionAwardPacker():
@@ -265,6 +235,11 @@ _PreformattedBonus = namedtuple('_PreformattedBonus', 'bonusName label userName 
 
 class PostProcessTags(CONST_CONTAINER):
     IS_SUFFIX_BADGE = 'isSuffixBadge'
+    IS_PREFIX_BADGE = 'isPrefixBadge'
+
+    @classmethod
+    def getBadgeTag(cls, badge):
+        return cls.IS_SUFFIX_BADGE if badge.isSuffixLayout() else cls.IS_PREFIX_BADGE
 
 
 class PreformattedBonus(_PreformattedBonus):
@@ -274,7 +249,7 @@ class PreformattedBonus(_PreformattedBonus):
 
     def getFormattedLabel(self, formatter=None):
         formatter = formatter or self.labelFormatter
-        return formatter(self.label) if formatter else self.label
+        return formatter(self.label) if formatter and self.label else self.label
 
     def getHighlightType(self, size):
         types = self.highlightType
@@ -340,14 +315,6 @@ class QuestsBonusComposer(object):
          'specialArgs': bonus.specialArgs,
          'align': bonus.align,
          'userName': bonus.userName}
-
-
-class NewYearQuestBonusComposer(QuestsBonusComposer):
-
-    def _packBonus(self, bonus, size=AWARDS_SIZES.SMALL):
-        packBonus = super(NewYearQuestBonusComposer, self)._packBonus(bonus, size)
-        packBonus['bonusName'] = bonus.bonusName
-        return packBonus
 
 
 class AwardsPacker(object):
@@ -618,47 +585,6 @@ class TmanTemplateBonusFormatter(SimpleBonusFormatter):
             return PreformattedBonus(bonusName=bonus.getName(), userName=nameStr, label='', images=images, labelFormatter=self._getLabelFormatter(bonus), align=self._getLabelAlign(bonus), specialAlias=TOOLTIPS_CONSTANTS.TANKMAN_NOT_RECRUITED, specialArgs=[tokenID], isSpecial=True)
 
 
-class NewYearTokenBonusFormatter(TokenBonusFormatter):
-    _nyController = dependency.descriptor(INewYearController)
-
-    def _format(self, bonus):
-        result = []
-        for tokenID, token in bonus.getTokens().iteritems():
-            complexToken = parseComplexToken(tokenID)
-            if complexToken.isDisplayable:
-                result.append(self._formatComplexToken(complexToken, token, bonus))
-            if tokenID.startswith(LOOTBOX_TOKEN_PREFIX):
-                formatted = self._formatLootBoxToken(tokenID, token, bonus)
-                if formatted is None:
-                    _logger.error('Received wrong loot box token from server: %s', tokenID)
-                else:
-                    result.append(formatted)
-            if tokenID.startswith('ny19:vd:'):
-                formatted = self.__formatNYVehicleDiscountBonus(tokenID, token, bonus)
-                if formatted is None:
-                    _logger.error('Received wrong discount token from server: %s', tokenID)
-                else:
-                    result.append(formatted)
-
-        return result
-
-    def __formatNYVehicleDiscountBonus(self, tokenID, _, bonus):
-        level, discount = self.__getVehicleLevelAndDiscount(tokenID)
-        images = {'big': RES_ICONS.MAPS_ICONS_NEW_YEAR_INFOTYPE_TANK_RIBBON}
-        tooltip = makeTooltip(i18n.makeString(NY.BONUSINFOTOOLTIP_TANKIMAGE_HEADER, level=level), i18n.makeString(NY.BONUSINFOTOOLTIP_TANKIMAGE_BODY, discount=discount, level=level))
-        return PreformattedBonus(bonusName='discountVehicles', label=''.join(('-', str(discount), '%')), labelFormatter=text_styles.stats, images=images, align=LABEL_ALIGN.RIGHT, isCompensation=self._isCompensation(bonus), isSpecial=False, tooltip=tooltip, specialArgs=[tokenID])
-
-    def __getVehicleLevelAndDiscount(self, tokenID):
-        level = int(tokenID.split(':')[-1])
-        discount = self.__getDiscountText(level)
-        return (int2roman(level), discount)
-
-    def __getDiscountText(self, level):
-        levelInfo = self._nyController.getLevel(level)
-        discountValue = levelInfo.variadicDiscountValue()
-        return str(discountValue) if discountValue is not None else ''
-
-
 class LinkedSetTokenBonusFormatter(TokenBonusFormatter):
 
     def _formatBonusLabel(self, count):
@@ -852,11 +778,7 @@ class DossierBonusFormatter(SimpleBonusFormatter):
             result.append(PreformattedBonus(bonusName=bonus.getName(), userName=self._getUserName(achievement), images=self._getImages(achievement), isSpecial=True, specialAlias=TOOLTIPS_CONSTANTS.BATTLE_STATS_ACHIEVS, specialArgs=[achievement.getBlock(), achievement.getName(), achievement.getValue()], isCompensation=self._isCompensation(bonus)))
 
         for badge in bonus.getBadges():
-            if badge.isSuffixLayout():
-                tags = (PostProcessTags.IS_SUFFIX_BADGE,)
-            else:
-                tags = tuple()
-            result.append(PreformattedBonus(bonusName=bonus.getName(), userName=self._getUserName(badge), images=self._getImages(badge), isSpecial=True, specialAlias=self._getBadgeTooltipAlias(), specialArgs=[badge.badgeID], isCompensation=self._isCompensation(bonus), postProcessTags=tags))
+            result.append(PreformattedBonus(bonusName=bonus.getName(), userName=self._getUserName(badge), images=self._getImages(badge), isSpecial=True, specialAlias=self._getBadgeTooltipAlias(), specialArgs=[badge.badgeID], isCompensation=self._isCompensation(bonus), postProcessTags=(PostProcessTags.getBadgeTag(badge),)))
 
         return result
 
@@ -875,6 +797,11 @@ class DossierBonusFormatter(SimpleBonusFormatter):
 
 
 class LoyalServiceBonusFormatter(DossierBonusFormatter):
+
+    def _format(self, bonus):
+        result = super(LoyalServiceBonusFormatter, self)._format(bonus)
+        result.sort(key=lambda preFormattedBonus: int(not (PostProcessTags.IS_PREFIX_BADGE in preFormattedBonus.postProcessTags or PostProcessTags.IS_SUFFIX_BADGE in preFormattedBonus.postProcessTags)))
+        return result
 
     @classmethod
     def _getBadgeTooltipAlias(cls):
@@ -1134,55 +1061,3 @@ class LinkedSetItemsBonusFormatter(ItemsBonusFormatter):
 
     def _formatBonusLabel(self, count):
         return 'x{}'.format(count)
-
-
-class NewYearToyFormatter(SimpleBonusFormatter):
-
-    def __init__(self, needJoin):
-        self.__needJoin = needJoin
-
-    def _format(self, bonus):
-        result = []
-        for toyID, count in bonus.getValue().iteritems():
-            if count > 0 and self.__needJoin:
-                result.append(self._toyFormat(bonus, toyID, count))
-            if count > 0 and not self.__needJoin:
-                result.extend([self._toyFormat(bonus, toyID, 1)] * count)
-
-        return result
-
-    def _toyFormat(self, bonus, toyID, count):
-        return PreformattedBonus(bonusName=bonus.getName(), images=self._getImages(toyID), label=formatCountLabel(count), labelFormatter=text_styles.stats, userName=self._getUserName(toyID), specialArgs=[toyID, count])
-
-    @classmethod
-    def _getImages(cls, toyID):
-        toyInfo = NewYear19ToyInfo(toyID)
-        result = {}
-        for size in AWARDS_SIZES.ALL():
-            result[size] = RES_ICONS.getDecorationIcon(toyInfo.getIconName())
-
-        return result
-
-    @classmethod
-    def _getUserName(cls, toyID):
-        toyInfo = NewYear19ToyInfo(toyID)
-        return NY.getToyUserName(toyInfo.getLocalKey())
-
-
-class NewYearFragmentsFormatter(SimpleBonusFormatter):
-
-    def _format(self, bonus):
-        count = bonus.getValue()
-        return [PreformattedBonus(bonusName=bonus.getName(), images=self._getImages(bonus), label=str(count), labelFormatter=text_styles.stats, userName=self._getUserName(bonus), specialArgs=[count])]
-
-    @classmethod
-    def _getImages(cls, bonus):
-        result = {}
-        for size in AWARDS_SIZES.ALL():
-            result[size] = RES_ICONS.MAPS_ICONS_LOOTBOXES_FRAGMENTS
-
-        return result
-
-    @classmethod
-    def _getUserName(cls, bonus):
-        return NY.FRAGMENTS_NAME

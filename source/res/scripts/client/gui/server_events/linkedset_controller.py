@@ -27,6 +27,7 @@ from gui.Scaleform.framework import ViewTypes
 from gui.Scaleform.framework.managers.containers import POP_UP_CRITERIA
 from gui.server_events.events_helpers import hasAtLeastOneCompletedQuest, isAllQuestsCompleted
 from gui.shared.utils import isPopupsWindowsOpenDisabled
+from Event import Event, EventManager
 _SNDID_ACHIEVEMENT = 'result_screen_achievements'
 _SNDID_BONUS = 'result_screen_bonus'
 _HMTL_STRING_FORMAT_PATH = 'html_templates:lobby/quests/linkedSet'
@@ -42,6 +43,9 @@ class LinkedSetController(ILinkedSetController):
     def __init__(self):
         self.needToShowAward = False
         self._app = None
+        self._em = EventManager()
+        self.onStateChanged = Event(self._em)
+        self._isLinkedSetEnabled = False
         return
 
     def init(self):
@@ -49,18 +53,24 @@ class LinkedSetController(ILinkedSetController):
         g_eventBus.addListener(events.LobbySimpleEvent.BATTLE_RESULTS_POSTED, self._onBattleResultsPosted, EVENT_BUS_SCOPE.LOBBY)
         g_eventBus.addListener(events.LinkedSetEvent.VEHICLE_SELECTED, self._onLinkedSetVehicleSelected, EVENT_BUS_SCOPE.LOBBY)
         g_eventBus.addListener(events.MissionsEvent.ON_TAB_CHANGED, self._onMissionsTabEventsSelected, EVENT_BUS_SCOPE.LOBBY)
+        self.lobbyContext.onServerSettingsChanged += self._onLobbyServerSettingChanged
+        self.lobbyContext.getServerSettings().onServerSettingsChange += self._onServerSettingsChange
         self.eventsCache.onSyncCompleted += self._onSyncCompleted
+        self._isLinkedSetEnabled = self._getIsLinkedSetEnabled()
 
     def fini(self):
+        self._em.clear()
         g_eventBus.removeListener(VIEW_ALIAS.BATTLE_RESULTS, self._onShowBattleResults, EVENT_BUS_SCOPE.LOBBY)
         g_eventBus.removeListener(events.LobbySimpleEvent.BATTLE_RESULTS_POSTED, self._onBattleResultsPosted, EVENT_BUS_SCOPE.LOBBY)
         g_eventBus.removeListener(events.LinkedSetEvent.VEHICLE_SELECTED, self._onLinkedSetVehicleSelected, EVENT_BUS_SCOPE.LOBBY)
         g_eventBus.removeListener(events.MissionsEvent.ON_TAB_CHANGED, self._onMissionsTabEventsSelected, EVENT_BUS_SCOPE.LOBBY)
+        self.lobbyContext.onServerSettingsChanged -= self._onLobbyServerSettingChanged
+        self.lobbyContext.getServerSettings().onServerSettingsChange -= self._onServerSettingsChange
         self.eventsCache.onSyncCompleted -= self._onSyncCompleted
+        self._isLinkedSetEnabled = False
 
     def isLinkedSetEnabled(self):
-        hasAvailableOrComletedQuests = any((quest for quest in self.eventsCache.getLinkedSetQuests().itervalues() if quest.isAvailable().isValid or quest.isCompleted()))
-        return hasAvailableOrComletedQuests and (self.lobbyContext.getServerSettings().isBootcampEnabled() or hasAtLeastOneCompletedQuest(self.eventsCache.getLinkedSetQuests().itervalues()))
+        return self._isLinkedSetEnabled
 
     def isLinkedSetFinished(self):
         return isAllQuestsCompleted(self.eventsCache.getLinkedSetQuests().itervalues())
@@ -140,9 +150,33 @@ class LinkedSetController(ILinkedSetController):
     def getLinkedSetQuests(self, filterFunc=None):
         return self.eventsCache.getLinkedSetQuests(filterFunc)
 
+    def _getIsLinkedSetEnabled(self):
+        if self.lobbyContext.getServerSettings().isLinkedSetEnabled():
+            hasAvailableOrComletedQuests = any((quest for quest in self.eventsCache.getLinkedSetQuests().itervalues() if quest.isAvailable().isValid or quest.isCompleted()))
+            if hasAvailableOrComletedQuests:
+                if self.lobbyContext.getServerSettings().isBootcampEnabled():
+                    return True
+                return hasAtLeastOneCompletedQuest(self.eventsCache.getLinkedSetQuests().itervalues())
+        return False
+
     def _onSyncCompleted(self):
         if self._isLinkedSetViewOnScene():
             self._showNewCompletedQuests()
+        self._checkIsLinkedSetStateChanged()
+
+    def _onLobbyServerSettingChanged(self, newServerSettings):
+        newServerSettings.onServerSettingsChange += self._onServerSettingsChange
+        self._checkIsLinkedSetStateChanged()
+
+    def _onServerSettingsChange(self, diff):
+        if any((value in diff for value in ('isLinkedSetEnabled', 'isBootcampEnabled'))):
+            self._checkIsLinkedSetStateChanged()
+
+    def _checkIsLinkedSetStateChanged(self):
+        currentState = self._getIsLinkedSetEnabled()
+        if currentState != self._isLinkedSetEnabled:
+            self._isLinkedSetEnabled = currentState
+            self.onStateChanged(self.isLinkedSetEnabled())
 
     def _isLinkedSetViewOnScene(self):
         app = g_appLoader.getApp()

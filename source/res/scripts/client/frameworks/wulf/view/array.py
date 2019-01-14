@@ -1,13 +1,17 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/frameworks/wulf/view/array.py
-import GUI
+import typing
 from ..py_object_binder import PyObjectEntity
+from ..py_object_wrappers import PyObjectArray
 
 class Array(PyObjectEntity):
     __slots__ = ()
 
     def __init__(self):
-        super(Array, self).__init__(GUI.PyObjectArray())
+        super(Array, self).__init__(PyObjectArray())
+
+    def __repr__(self):
+        return 'Array(size={})'.format(self.proxy.getSize() if self.proxy is not None else 0)
 
     def __len__(self):
         return self.proxy.getSize()
@@ -21,6 +25,9 @@ class Array(PyObjectEntity):
 
     def clear(self):
         self.proxy.clear()
+
+    def getValue(self, index):
+        return self.proxy.getValue(index)
 
     def addNumber(self, value):
         self.proxy.addNumber(value)

@@ -6,7 +6,7 @@ from debug_utils import LOG_CURRENT_EXCEPTION
 class EntityExtra(object):
     __slots__ = ('name', 'index')
 
-    def __init__(self, name, index, containerName, dataSection, **kwargs):
+    def __init__(self, name, index, containerName, dataSection):
         self.name = name
         self.index = index
         self._readConfig(dataSection, containerName)

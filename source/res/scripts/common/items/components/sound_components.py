@@ -8,34 +8,22 @@ HullAimingSound = namedtuple('HullAimingSound', ('lodDist', 'angleLimitValue', '
 SoundSiegeModeStateChange = namedtuple('SoundSiegeModeStateChange', ['on', 'off'])
 
 class WWTripleSoundConfig(object):
-    __slots__ = ('__wwsound', '__wwsoundPC', '__wwsoundNPC')
+    __slots__ = ('__eventNames',)
 
     def __init__(self, wwsound, wwsoundPC, wwsoundNPC):
         super(WWTripleSoundConfig, self).__init__()
-        self.__wwsound = wwsound
-        self.__wwsoundPC = wwsoundPC
-        self.__wwsoundNPC = wwsoundNPC
-
-    @property
-    def wwsound(self):
-        return self.__wwsound
-
-    @property
-    def wwsoundPC(self):
-        return self.__wwsoundPC
-
-    @property
-    def wwsoundNPC(self):
-        return self.__wwsoundNPC
+        if wwsoundPC:
+            if wwsoundNPC:
+                self.__eventNames = (wwsoundPC, wwsoundNPC)
+            else:
+                self.__eventNames = (wwsoundPC, wwsound)
+        elif wwsoundNPC:
+            self.__eventNames = (wwsound, wwsoundNPC)
+        else:
+            self.__eventNames = (wwsound, wwsound)
 
     def isEmpty(self):
-        return self.__wwsound == '' and (self.__wwsoundPC == '' or self.__wwsoundNPC == '')
+        return not self.__eventNames[0] and not self.__eventNames[1]
 
-    def getWWPlayerSound(self, isPersonal):
-        if isPersonal:
-            sound = self.__wwsoundPC
-        else:
-            sound = self.__wwsoundNPC
-        if not sound:
-            sound = self.__wwsound
-        return sound
+    def getEvents(self):
+        return self.__eventNames

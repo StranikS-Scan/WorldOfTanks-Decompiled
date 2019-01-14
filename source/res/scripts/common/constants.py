@@ -15,7 +15,7 @@ IS_BOT = BigWorld.component == 'bot'
 IS_CELLAPP = BigWorld.component == 'cell'
 IS_BASEAPP = BigWorld.component in ('base', 'service')
 IS_WEB = BigWorld.component == 'web'
-CURRENT_REALM = 'RU'
+CURRENT_REALM = 'CT'
 DEFAULT_LANGUAGE = 'ru'
 AUTH_REALM = 'RU'
 IS_DEVELOPMENT = CURRENT_REALM == 'DEV'
@@ -1129,11 +1129,11 @@ class RentType(object):
 
 class GameSeasonType(object):
     RANKED = 1
-    SEASON = 2
+    EPIC = 2
 
 
 SEASON_TYPE_BY_NAME = {'ranked': GameSeasonType.RANKED,
- 'season': GameSeasonType.SEASON}
+ 'epic': GameSeasonType.EPIC}
 SEASON_NAME_BY_TYPE = {val:key for key, val in SEASON_TYPE_BY_NAME.iteritems()}
 CHANNEL_SEARCH_RESULTS_LIMIT = 50
 USER_SEARCH_RESULTS_LIMIT = 50
@@ -1190,6 +1190,7 @@ class AUTO_MAINTENANCE_RESULT:
     DISABLED_OPTION = 3
     NO_WALLET_SESSION = 4
     RENT_IS_OVER = 5
+    RENT_IS_ALMOST_OVER = 6
 
 
 class REQUEST_COOLDOWN:
@@ -1216,14 +1217,6 @@ class REQUEST_COOLDOWN:
     RUN_QUEST = 1.0
     PAWN_FREE_AWARD_LIST = 1.0
     LOOTBOX = 1.0
-    NEW_YEAR_SLOT_FILL = 0.4
-    NEW_YEAR_CRAFT = 0.5
-    NEW_YEAR_CRAFT_OLD_TOYS = 0.5
-    NEW_YEAR_BREAK_TOYS = 1.0
-    NEW_YEAR_SEE_INVENTORY_TOYS = 0.5
-    NEW_YEAR_SEE_COLLECTION_TOYS = 0.5
-    NEW_YEAR_SELECT_DISCOUNT = 1.0
-    NEW_YEAR_VIEW_ALBUM = 0.5
 
 
 IS_SHOW_INGAME_HELP_FIRST_TIME = False

@@ -22,6 +22,12 @@ class CustomizationBuyWindowMeta(View):
     def applyToTankChanged(self, selected):
         self._printOverrideError('applyToTankChanged')
 
+    def updateAutoProlongation(self):
+        self._printOverrideError('updateAutoProlongation')
+
+    def onAutoProlongationCheckboxAdded(self):
+        self._printOverrideError('onAutoProlongationCheckboxAdded')
+
     def as_setInitDataS(self, data):
         return self.flashObject.as_setInitData(data) if self._isDAAPIInited() else None
 

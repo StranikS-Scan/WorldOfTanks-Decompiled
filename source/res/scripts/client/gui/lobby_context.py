@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/lobby_context.py
+from Event import Event, EventManager
 import BigWorld
 from adisp import async, process
 from constants import CURRENT_REALM
@@ -27,9 +28,8 @@ class LobbyContext(ILobbyContext):
         self.__clientArenaIDGenerator = Int32IDGenerator()
         self.__headerNavigationConfirmators = set()
         self.__fightButtonConfirmators = set()
-        self.lootboxBuyURL = ''
-        self.lootboxTarget = ''
-        self.lootboxTtl = 0
+        self.__em = EventManager()
+        self.onServerSettingsChanged = Event(self.__em)
         return
 
     def clear(self):
@@ -41,9 +41,7 @@ class LobbyContext(ILobbyContext):
         self.__arenaUniqueIDs.clear()
         if self.__serverSettings:
             self.__serverSettings.clear()
-        self.lootboxBuyURL = ''
-        self.lootboxTarget = ''
-        self.lootboxTtl = 0
+        self.__em.clear()
         return
 
     def onAccountBecomePlayer(self):
@@ -110,6 +108,7 @@ class LobbyContext(ILobbyContext):
         if self.__serverSettings:
             self.__serverSettings.clear()
         self.__serverSettings = ServerSettings(serverSettings)
+        self.onServerSettingsChanged(self.__serverSettings)
 
     def getPlayerFullName(self, pName, clanInfo=None, clanAbbrev=None, regionCode=None, pDBID=None):
         fullName = pName

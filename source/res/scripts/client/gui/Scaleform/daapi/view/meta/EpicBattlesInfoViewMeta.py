@@ -22,8 +22,14 @@ class EpicBattlesInfoViewMeta(WrapperViewMeta):
     def onInfoBtnClick(self):
         self._printOverrideError('onInfoBtnClick')
 
+    def onShowRewardVehicleInGarageBtnClick(self):
+        self._printOverrideError('onShowRewardVehicleInGarageBtnClick')
+
     def as_setDataS(self, data):
         return self.flashObject.as_setData(data) if self._isDAAPIInited() else None
 
     def as_showInfoLinesS(self, show):
         return self.flashObject.as_showInfoLines(show) if self._isDAAPIInited() else None
+
+    def as_showFinalRewardClaimedS(self):
+        return self.flashObject.as_showFinalRewardClaimed() if self._isDAAPIInited() else None

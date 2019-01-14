@@ -11,11 +11,11 @@ from gui.shared.events import PersonalMissionsEvent
 from gui.shared.gui_items.processors import quests as quests_proc
 from gui.shared.tutorial_helper import getTutorialGlobalStorage
 from gui.shared.utils import decorators
+from helpers import dependency
 from personal_missions import PM_BRANCH
 from skeletons.gui.lobby_context import ILobbyContext
-from tutorial.control.context import GLOBAL_FLAG
-from helpers import dependency
 from skeletons.gui.server_events import IEventsCache
+from tutorial.control.context import GLOBAL_FLAG
 _logger = logging.getLogger(__name__)
 
 class PersonalMissionDetailsContainerView(LobbySubView, PersonalMissionDetailsContainerViewMeta):
@@ -98,7 +98,6 @@ class PersonalMissionDetailsContainerView(LobbySubView, PersonalMissionDetailsCo
 
     def _populate(self):
         super(PersonalMissionDetailsContainerView, self)._populate()
-        self._eventsCache.onSyncCompleted += self.__setData
         self._eventsCache.onProgressUpdated += self._onProgressUpdated
         self._lobbyCtx.getServerSettings().onServerSettingsChange += self._onSettingsChanged
         self.__setData()
@@ -113,15 +112,18 @@ class PersonalMissionDetailsContainerView(LobbySubView, PersonalMissionDetailsCo
         self.fireEvent(PersonalMissionsEvent(PersonalMissionsEvent.ON_DETAILS_VIEW_CLOSE), EVENT_BUS_SCOPE.LOBBY)
         super(PersonalMissionDetailsContainerView, self)._dispose()
         self._lobbyCtx.getServerSettings().onServerSettingsChange -= self._onSettingsChanged
-        self._eventsCache.onSyncCompleted -= self.__setData
         self._eventsCache.onProgressUpdated -= self._onProgressUpdated
         self.__storage = None
         self.__quests = None
         return
 
-    def _onProgressUpdated(self, _):
-        self.__quests = self.__getQuests()
-        self.__setData()
+    def _onProgressUpdated(self, branch):
+        if self.__branch == branch:
+            self.__quests = self.__getQuests()
+            self.__setData()
+            for qData in self.__datailedList:
+                if qData['eventID'] == str(self.__selectedQuestID):
+                    self.as_setMissionDataS(qData)
 
     @event_bus_handlers.eventBusHandler(events.HideWindowEvent.HIDE_PERSONAL_MISSION_DETAILS_VIEW, EVENT_BUS_SCOPE.LOBBY)
     def __handleDetailsClose(self, _):

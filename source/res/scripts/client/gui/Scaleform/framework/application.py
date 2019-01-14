@@ -63,10 +63,10 @@ class AppEntry(Flash, ApplicationMeta):
     connectionMgr = dependency.descriptor(IConnectionManager)
     guiApp = dependency.descriptor(IGuiLoader)
 
-    def __init__(self, userWndFlags, swfName, appNS, daapiBridge=None):
-        self.__mainWnd = MainWindow(userWndFlags, None)
+    def __init__(self, entryID, appNS, daapiBridge=None):
+        self.__mainWnd = MainWindow(entryID)
         self.__mainWnd.load()
-        super(AppEntry, self).__init__(swfName, path=SCALEFORM_SWF_PATH_V3, descriptor=self.__mainWnd.descriptor)
+        super(AppEntry, self).__init__(path=SCALEFORM_SWF_PATH_V3, descriptor=self.__mainWnd.descriptor)
         self.proxy = weakref.proxy(self)
         self._loaderMgr = None
         self._containerMgr = None
@@ -415,9 +415,6 @@ class AppEntry(Flash, ApplicationMeta):
 
     def unblurBackgroundViews(self):
         self.as_unblurBackgroundViewsS()
-
-    def setMouseEventsEnabled(self, enabled):
-        self.as_setMouseEventsEnabledS(enabled)
 
     def _createManagers(self):
         self._loaderMgr = self._createLoaderManager()

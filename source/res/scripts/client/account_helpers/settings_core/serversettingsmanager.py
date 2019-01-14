@@ -48,7 +48,6 @@ class SETTINGS_SECTIONS(CONST_CONTAINER):
     ENCYCLOPEDIA_RECOMMENDATIONS_3 = 'ENCYCLOPEDIA_RECOMMENDATIONS_3'
     UI_STORAGE = 'UI_STORAGE'
     LINKEDSET_QUESTS = 'LINKEDSET_QUESTS'
-    LOOT_BOX_VIEWED = 'LOOT_BOX_VIEWED'
 
 
 class UI_STORAGE_KEYS(CONST_CONTAINER):
@@ -103,8 +102,7 @@ class ServerSettingsManager(object):
                                        GAME.VEHICLE_CAROUSEL_STATS: 14,
                                        GAME.MINIMAP_ALPHA_ENABLED: 15,
                                        GAME.HANGAR_CAM_PARALLAX_ENABLED: 16,
-                                       GAME.C11N_HISTORICALLY_ACCURATE: 17,
-                                       GAME.LOOT_BOX_VIDEO_OFF: 24}, offsets={GAME.BATTLE_LOADING_INFO: Offset(4, 48),
+                                       GAME.C11N_HISTORICALLY_ACCURATE: 17}, offsets={GAME.BATTLE_LOADING_INFO: Offset(4, 48),
                                        GAME.BATTLE_LOADING_RANKED_INFO: Offset(21, 6291456),
                                        GAME.HANGAR_CAM_PERIOD: Offset(18, 1835008)}),
      SETTINGS_SECTIONS.GAMEPLAY: Section(masks={}, offsets={GAME.GAMEPLAY_MASK: Offset(0, 65535)}),
@@ -272,7 +270,8 @@ class ServerSettingsManager(object):
                                          'EpicReservesBtnHint': 7,
                                          'PauseHint': 8,
                                          'HaveNewSuffixBadgeHint': 9,
-                                         'BadgePageNewSuffixBadgeHint': 10}, offsets={}),
+                                         'BadgePageNewSuffixBadgeHint': 10,
+                                         'CustomizationAutoprolongationHint': 11}, offsets={}),
      SETTINGS_SECTIONS.DAMAGE_INDICATOR: Section(masks={DAMAGE_INDICATOR.TYPE: 0,
                                           DAMAGE_INDICATOR.PRESETS: 1,
                                           DAMAGE_INDICATOR.DAMAGE_VALUE: 2,
@@ -323,8 +322,7 @@ class ServerSettingsManager(object):
                                     UI_STORAGE_KEYS.AUTO_RELOAD_HIGHLIGHTS_COUNTER: Offset(10, 7168)}),
      SETTINGS_SECTIONS.LINKEDSET_QUESTS: Section(masks={}, offsets={'shown': Offset(0, 4294967295L)}),
      SETTINGS_SECTIONS.QUESTS_PROGRESS: Section(masks={}, offsets={QUESTS_PROGRESS.VIEW_TYPE: Offset(0, 3),
-                                         QUESTS_PROGRESS.DISPLAY_TYPE: Offset(2, 12)}),
-     SETTINGS_SECTIONS.LOOT_BOX_VIEWED: Section(masks={}, offsets={'count': Offset(0, 4294967295L)})}
+                                         QUESTS_PROGRESS.DISPLAY_TYPE: Offset(2, 12)})}
     AIM_MAPPING = {'net': 1,
      'netType': 1,
      'centralTag': 1,

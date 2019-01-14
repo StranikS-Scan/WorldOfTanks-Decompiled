@@ -156,9 +156,9 @@ class InstalledItemsPopoverDataProvider(SortableDAAPIDataProvider):
                             continue
                         if not isNonHistoric or not item.isHistorical():
                             if item.intCD not in notModifiedItemsGroups:
-                                notModifiedItemsGroups[item.intCD] = _ItemGroupDescription(item, 0, [], slot.getType(), True)
+                                notModifiedItemsGroups[item.intCD] = _ItemGroupDescription(item, 0, [], item.itemTypeID, True)
                             notModifiedItemsGroups[item.intCD].numItems += 1
-                            notModifiedItemsGroups[item.intCD].regionIdList.append(_RegionId(container.getAreaID(), slot.getType(), idx))
+                            notModifiedItemsGroups[item.intCD].regionIdList.append(_RegionId(container.getAreaID(), item.itemTypeID, idx))
 
         if purchaseItemsGroups and notModifiedItemsGroups:
             self._list.append({'userName': text_styles.main(_ms(VEHICLE_CUSTOMIZATION.CUSTOMIZATION_NONHISTORIC_TABLEHEADERS_NEW)),

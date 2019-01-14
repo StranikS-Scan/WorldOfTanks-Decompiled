@@ -215,6 +215,18 @@ g_defaultWheeledChassisXPhysicsCfg.update({'axleSteeringLockAngles': (0.0, 0.0, 
              'warningMaxHealthCritEngine': 50.0,
              'power': 1.0,
              'impulse': 0.0}})
+g_defaultVehicleXPhysicsShapeCfg = {'useComplexForm': False,
+ 'isParametricShape': True,
+ 'terrAftChamferFraction': 0.5,
+ 'terrFrontChamferFraction': 0.5,
+ 'terrBoardAngle': 0.0,
+ 'tankAftChamferFraction': 0.25,
+ 'tankFrontChamferFraction': 0.25,
+ 'tankBoardAngle': 0.0,
+ 'auxClearance': 0.8}
+g_defaultWheeledVehicleXPhysicsShapeCfg = copy.deepcopy(g_defaultVehicleXPhysicsShapeCfg)
+g_defaultWheeledVehicleXPhysicsShapeCfg.update({'wheelZPenetration': 0.8,
+ 'wheelSize': (0.0, 0.0, 0.0)})
 g_defaultVehicleXPhysicsCfg = {'mode_index': 0,
  'gravity': 9.81,
  'hullCOMShiftY': 0.0,
@@ -222,15 +234,6 @@ g_defaultVehicleXPhysicsCfg = {'mode_index': 0,
  'overspeedResistBaseFactor': 0.5,
  'allowedRPMExcessUnbounded': 1.4,
  'absoluteSpeedLimit': 25.0,
- 'shape': {'useComplexForm': False,
-           'isParametricShape': True,
-           'terrAftChamferFraction': 0.5,
-           'terrFrontChamferFraction': 0.5,
-           'terrBoardAngle': 0.0,
-           'tankAftChamferFraction': 0.25,
-           'tankFrontChamferFraction': 0.25,
-           'tankBoardAngle': 0.0,
-           'auxClearance': 0.8},
  'engine': {'engineTorque': ((500.0, 2.0),
                              (1000.0, 3.0),
                              (2000.0, 2.5),
@@ -303,9 +306,11 @@ g_defaultVehicleXPhysicsCfg = {'mode_index': 0,
                          'rotationFactor': 1.0}}}
 g_defaultTankXPhysicsCfg = copy.deepcopy(g_defaultVehicleXPhysicsCfg)
 g_defaultTankXPhysicsCfg.update({'vehiclePhysicsType': VEHICLE_PHYSICS_TYPE.TANK,
+ 'shape': g_defaultVehicleXPhysicsShapeCfg,
  'chassis': g_defaultChassisXPhysicsCfg})
 g_defaultWheeledTechXPhysicsCfg = copy.deepcopy(g_defaultVehicleXPhysicsCfg)
 g_defaultWheeledTechXPhysicsCfg.update({'vehiclePhysicsType': VEHICLE_PHYSICS_TYPE.WHEELED_TECH,
+ 'shape': g_defaultWheeledVehicleXPhysicsShapeCfg,
  'chassis': g_defaultWheeledChassisXPhysicsCfg})
 
 def init():
@@ -460,23 +465,22 @@ def configurePhysicsMode(cfg, typeDesc, gravityFactor):
     cfg['useComplexForm'] = typeDesc.type.name == 'sweden:S11_Strv_103B'
     bmin, bmax, _ = typeDesc.chassis.hitTester.bbox
     sizeX = bmax[0] - bmin[0]
-    if typeDesc.hasSiegeMode and typeDesc.type.useHullZ:
+    offsZ = (bmin[2] + bmax[2]) * 0.5
+    if typeDesc.type.useHullZ:
         bmin_, bmax_, _ = typeDesc.hull.hitTester.bbox
         sizeZ = bmax_[2] - bmin_[2]
+        if typeDesc.isWheeledVehicle:
+            offsZ = (bmin_[2] + bmax_[2]) * 0.5
     else:
         sizeZ = bmax[2] - bmin[2]
-    hullCenter = (bmin + bmax) * 0.5
     if typeDesc.isWheeledVehicle:
-        wheelBbMin, wheelBbMax, _ = typeDesc.chassis.wheels.wheels[-1].hitTester.bbox
-        wheelX = wheelBbMax[0] - wheelBbMin[0]
-        wheelZ = wheelBbMax[2] - wheelBbMin[2]
-        sizeX += wheelX * 2.0
-        sizeZ += wheelZ * 0.5
+        wheelBbMin, wheelBbMax, _ = typeDesc.chassis.wheels.wheels[0].hitTester.bbox
+        wheelSize = wheelBbMax - wheelBbMin
+        cfg['shape']['wheelSize'] = wheelSize
     cfg['hullSize'] = Math.Vector3((sizeX, cfg['bodyHeight'], sizeZ))
     cfg['shape']['useComplexForm'] = typeDesc.type.name == 'sweden:S11_Strv_103B'
     cfg['gravity'] = cfg['gravity'] * gravityFactor
     cfg['engine']['engineTorque'] = tuple(((arg, val * gravityFactor) for arg, val in cfg['engine']['engineTorque']))
-    offsZ = hullCenter[2]
     cfg['hullBoxOffsetZ'] = offsZ
     turretMin, turretMax, _ = typeDesc.turret.hitTester.bbox
     _, gunMax, _ = typeDesc.gun.hitTester.bbox

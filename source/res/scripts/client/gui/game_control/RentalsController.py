@@ -6,7 +6,7 @@ import copy
 import typing
 import BigWorld
 import Event
-from constants import RentType, GameSeasonType
+from constants import RentType, SEASON_NAME_BY_TYPE
 from gui.shared.utils.requesters.ItemsRequester import REQ_CRITERIA
 from gui.shared.money import Money
 from helpers import dependency
@@ -153,12 +153,14 @@ class RentalsController(IRentalsController):
                     self.__vehiclesForUpdate.append(item[0])
 
             nextRentNotification = max(nextRentNotification, 0)
-        currentSeason = self.seasonsController.getCurrentSeason(GameSeasonType.RANKED)
-        if currentSeason:
-            nextCycleChange = currentSeason.getCycleEndDate() if currentSeason.hasActiveCycle(time_utils.getCurrentLocalServerTimestamp()) else currentSeason.getCycleStartDate()
-            delta = float(time_utils.getTimeDeltaFromNow(time_utils.makeLocalServerTime(nextCycleChange)))
-            if delta > 0:
-                nextRentNotification = min(nextRentNotification, self.getDeltaPeriod(delta))
+        for seasonType in SEASON_NAME_BY_TYPE:
+            currentSeason = self.seasonsController.getCurrentSeason(seasonType)
+            if currentSeason:
+                nextCycleChange = currentSeason.getCycleEndDate() if currentSeason.hasActiveCycle(time_utils.getCurrentLocalServerTimestamp()) else currentSeason.getCycleStartDate()
+                delta = float(time_utils.getTimeDeltaFromNow(time_utils.makeLocalServerTime(nextCycleChange)))
+                if delta > 0:
+                    nextRentNotification = min(nextRentNotification, self.getDeltaPeriod(delta))
+
         if not notificationList and nextRentNotification == maxint:
             return
         self.__rentNotifyTimeCallback = BigWorld.callback(nextRentNotification, self.__notifyRentTime)

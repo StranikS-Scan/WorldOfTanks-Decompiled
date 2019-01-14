@@ -1,7 +1,7 @@
 <root>
   <Paths>
-    <Path cacheSubdirs="true">./res_mods/1.3.0.1</Path>
-    <Path mode="recursive" mask="*.wotmod" root="res">./mods/1.3.0.1</Path>
+    <Path cacheSubdirs="true">./res_mods/1.4.0.0 Common Test</Path>
+    <Path mode="recursive" mask="*.wotmod" root="res">./mods/1.4.0.0 Common Test</Path>
     <Packages>
       <Package type="sd,hd">./res/packages/shared_content-part2.pkg</Package>
       <Package type="sd,hd">./res/packages/shared_content-part1.pkg</Package>
@@ -72,8 +72,6 @@
       <Package type="hd">./res/packages/34_redshire_hd.pkg</Package>
       <Package type="sd,hd">./res/packages/35_steppes.pkg</Package>
       <Package type="hd">./res/packages/35_steppes_hd.pkg</Package>
-      <Package type="sd,hd">./res/packages/36_fishing_bay.pkg</Package>
-      <Package type="hd">./res/packages/36_fishing_bay_hd.pkg</Package>
       <Package type="sd,hd">./res/packages/37_caucasus.pkg</Package>
       <Package type="hd">./res/packages/37_caucasus_hd.pkg</Package>
       <Package type="sd,hd">./res/packages/38_mannerheim_line.pkg</Package>
@@ -90,15 +88,15 @@
       <Package type="hd">./res/packages/63_tundra_hd.pkg</Package>
       <Package type="sd,hd">./res/packages/90_minsk.pkg</Package>
       <Package type="hd">./res/packages/90_minsk_hd.pkg</Package>
+      <Package type="sd,hd">./res/packages/95_lost_city_ctf.pkg</Package>
+      <Package type="hd">./res/packages/95_lost_city_ctf_hd.pkg</Package>
       <Package type="sd,hd">./res/packages/99_poland.pkg</Package>
       <Package type="hd">./res/packages/99_poland_hd.pkg</Package>
-      <Package type="sd,hd">./res/packages/h23_newyear.pkg</Package>
-      <Package type="hd">./res/packages/h23_newyear_hd.pkg</Package>
       <Package type="sandbox,sd,hd">./res/packages/hangar_v3.pkg</Package>
       <Package type="hd">./res/packages/hangar_v3_hd.pkg</Package>
       <Package type="sandbox,sd,hd">./res/packages/audioww-part1.pkg</Package>
       <Package type="sandbox,sd,hd">./res/packages/audioww-part2.pkg</Package>
-      <Package type="sandbox,sd,hd,cef">./res/packages/gui.pkg</Package>
+      <Package type="sandbox,sd,hd">./res/packages/gui.pkg</Package>
       <Package type="sandbox,sd,hd">./res/packages/misc.pkg</Package>
       <Package type="hd">./res/packages/misc_hd.pkg</Package>
       <Package type="sandbox,sd,hd">./res/packages/particles.pkg</Package>

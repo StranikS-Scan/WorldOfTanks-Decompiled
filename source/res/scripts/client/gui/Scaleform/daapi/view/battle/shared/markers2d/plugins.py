@@ -611,7 +611,7 @@ class VehicleMarkerTargetPlugin(MarkerPlugin, IArenaVehiclesController):
             self._destroyVehicleMarker(vehicleID)
 
     def onVehicleMarkerRemoved(self, vehicleID):
-        self.__hideVehicleMarker(vehicleID)
+        self._hideVehicleMarker(vehicleID)
 
     def _destroyVehicleMarker(self, vehicleID):
         if vehicleID in self._markers:
@@ -661,9 +661,9 @@ class VehicleMarkerTargetPlugin(MarkerPlugin, IArenaVehiclesController):
 
     def _hideAllMarkers(self, event=None):
         for vehicleID in self._markers:
-            self.__hideVehicleMarker(vehicleID)
+            self._hideVehicleMarker(vehicleID)
 
-    def __hideVehicleMarker(self, vehicleID):
+    def _hideVehicleMarker(self, vehicleID):
         if vehicleID in self._markers:
             marker = self._markers[vehicleID]
             if marker.setActive(False):
@@ -684,6 +684,7 @@ class VehicleMarkerTargetPluginReplayPlaying(VehicleMarkerTargetPlugin):
         super(VehicleMarkerTargetPluginReplayPlaying, self).__init__(parentObj)
         if BattleReplay.g_replayCtrl.isPlaying:
             BattleReplay.g_replayCtrl.setDataCallback(CallbackDataNames.SHOW_AUTO_AIM_MARKER, self._addMarker)
+            BattleReplay.g_replayCtrl.setDataCallback(CallbackDataNames.HIDE_AUTO_AIM_MARKER, self._hideVehicleMarker)
 
 
 class VehicleMarkerTargetPluginReplayRecording(VehicleMarkerTargetPlugin):
@@ -692,6 +693,11 @@ class VehicleMarkerTargetPluginReplayRecording(VehicleMarkerTargetPlugin):
         if BattleReplay.g_replayCtrl.isRecording:
             BattleReplay.g_replayCtrl.serializeCallbackData(CallbackDataNames.SHOW_AUTO_AIM_MARKER, (vehicleID,))
         super(VehicleMarkerTargetPluginReplayRecording, self)._addMarker(vehicleID)
+
+    def _hideVehicleMarker(self, vehicleID):
+        if BattleReplay.g_replayCtrl.isRecording:
+            BattleReplay.g_replayCtrl.serializeCallbackData(CallbackDataNames.HIDE_AUTO_AIM_MARKER, (vehicleID,))
+        super(VehicleMarkerTargetPluginReplayRecording, self)._hideVehicleMarker(vehicleID)
 
 
 _EQUIPMENT_DEFAULT_INTERVAL = 1.0

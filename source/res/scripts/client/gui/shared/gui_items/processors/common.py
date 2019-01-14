@@ -287,3 +287,13 @@ class EpicPrestigeTrigger(Processor):
     def _request(self, callback):
         LOG_DEBUG('Make server request to trigger prestige')
         BigWorld.player().epicMetaGame.triggerEpicMetaGamePrestige(lambda code, errStr: self._response(code, callback, errStr=errStr))
+
+
+class EpicRewardsClaimer(Processor):
+
+    def _errorHandler(self, code, errStr='', ctx=None):
+        return makeI18nError('epicBattles/claimReward/error')
+
+    def _request(self, callback):
+        LOG_DEBUG('Make server request to claim final reward')
+        BigWorld.player().epicMetaGame.claimEpicMetaGameMaxPrestigeReward(lambda code, errStr: self._response(code, callback, errStr=errStr))

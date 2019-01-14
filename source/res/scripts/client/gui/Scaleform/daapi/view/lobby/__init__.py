@@ -156,7 +156,7 @@ def getBusinessHandlers():
 class LobbyPackageBusinessHandler(PackageBusinessHandler):
 
     def __init__(self):
-        listeners = ((VIEW_ALIAS.ADVENT_CALENDAR, self.showAdventCalendarWindow),
+        listeners = ((VIEW_ALIAS.ADVENT_CALENDAR, self.loadViewByCtxEvent),
          (VIEW_ALIAS.AWARD_WINDOW, self.loadViewByCtxEvent),
          (VIEW_ALIAS.BATTLE_QUEUE, self.loadViewByCtxEvent),
          (VIEW_ALIAS.BATTLE_STRONGHOLDS_QUEUE, self.loadViewByCtxEvent),
@@ -202,13 +202,6 @@ class LobbyPackageBusinessHandler(PackageBusinessHandler):
          (VIEW_ALIAS.BADGES_PAGE, self.loadViewByCtxEvent),
          (VIEW_ALIAS.UNBOUND_INJECT_WINDOW, self.loadViewByCtxEvent))
         super(LobbyPackageBusinessHandler, self).__init__(listeners, app_settings.APP_NAME_SPACE.SF_LOBBY, EVENT_BUS_SCOPE.LOBBY)
-
-    def showAdventCalendarWindow(self, event):
-        if self.findViewByName(ViewTypes.WINDOW, event.name) is not None:
-            self.bringViewToFront(event.name)
-        else:
-            self.loadViewByCtxEvent(event)
-        return
 
 
 class LobbyDialogsHandler(PackageBusinessHandler):

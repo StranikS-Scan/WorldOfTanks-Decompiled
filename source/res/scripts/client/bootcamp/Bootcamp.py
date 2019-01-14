@@ -285,7 +285,7 @@ class Bootcamp(EventSystemEntity):
             self.__chapter = Chapter()
         if self.__gui is None:
             self.__gui = BootcampGUI()
-        WWISE.loadSoundPool(self.BOOTCAMP_SOUND_BANKS, 14, 'Bootcamp')
+        WWISE.loadSoundPool(self.BOOTCAMP_SOUND_BANKS, 'Bootcamp')
         self.sessionProvider.getCtx().setPlayerFullNameFormatter(_BCNameFormatter())
         return
 
@@ -498,8 +498,8 @@ class Bootcamp(EventSystemEntity):
 
     def setHangarSpace(self, hangarSpace, hangarSpacePremium):
         from gui.ClientHangarSpace import g_clientHangarSpaceOverride
-        g_clientHangarSpaceOverride.setPath(hangarSpacePremium, True, False)
-        g_clientHangarSpaceOverride.setPath(hangarSpace, False, False)
+        g_clientHangarSpaceOverride.setPath(hangarSpacePremium, -1, True, False)
+        g_clientHangarSpaceOverride.setPath(hangarSpace, -1, False, False)
 
     def setBootcampHangarSpace(self):
         BigWorld.updateTerrainBorders((-127, -237, -37, -157))

@@ -91,6 +91,8 @@ class CompoundAppearance(ComponentSystem, CallbackDelayer):
     burnoutLevel = property(lambda self: self.__vehicle.burnoutLevel / 255.0 if self.__vehicle is not None else 0.0)
     filterRetrievers = property(lambda self: self.__filterRetrievers)
     allLodCalculators = property(lambda self: self.__allLodCalculators)
+    transmissionSlip = property(lambda self: self.__commonSlip)
+    transmissionScroll = property(lambda self: self.__commonScroll)
     filter = AutoProperty()
     detailedEngineState = ComponentDescriptor()
     gearbox = ComponentDescriptor()
@@ -170,6 +172,8 @@ class CompoundAppearance(ComponentSystem, CallbackDelayer):
         self.__chassisColisionMatrix = Math.WGAdaptiveMatrixProvider()
         self.__filterRetrievers = []
         self.__allLodCalculators = []
+        self.__commonSlip = 0.0
+        self.__commonScroll = 0.0
         return
 
     def prerequisites(self, typeDescriptor, vID, health, isCrewActive, isTurretDetached, outfitCD):
@@ -388,7 +392,7 @@ class CompoundAppearance(ComponentSystem, CallbackDelayer):
 
     def __processPostmortemComponents(self):
         if self.wheelsAnimator is not None and self.wheelsAnimator.activePostmortem:
-            self.wheelsAnimator.reattachCompound(self.compoundModel)
+            self.wheelsAnimator.reattachToCrash(self.compoundModel, self.fashion)
         if self.suspension is not None and self.suspension.activePostmortem:
             self.suspension.reattachCompound(self.compoundModel)
         if self.leveredSuspension is not None and self.leveredSuspension.activePostmortem:
@@ -665,9 +669,9 @@ class CompoundAppearance(ComponentSystem, CallbackDelayer):
             self.deactivate(False)
             self.shadowManager.reattachCompoundModel(vehicle, self.__compoundModel, newCompoundModel)
             self.__compoundModel = newCompoundModel
-            self.__processPostmortemComponents()
             self.__isTurretDetached = vehicle.isTurretDetached
             self.__prepareSystemsForDamagedVehicle(vehicle, self.__isTurretDetached)
+            self.__processPostmortemComponents()
             if isRightSideFlying:
                 self.__fashion.changeTrackVisibility(False, False)
             if isLeftSideFlying:
@@ -771,6 +775,7 @@ class CompoundAppearance(ComponentSystem, CallbackDelayer):
             distanceFromPlayer = self.lodCalculator.lodDistance
             self.__updateCurrTerrainMatKinds()
             self.__updateEffectsLOD(distanceFromPlayer)
+            self.__updateTransmissionScroll()
             if self.customEffectManager:
                 self.customEffectManager.update()
             return
@@ -988,6 +993,31 @@ class CompoundAppearance(ComponentSystem, CallbackDelayer):
             self.engineAudition.onEngineGearUp()
         return
 
+    def __updateTransmissionScroll(self):
+        self.__commonSlip = 0.0
+        self.__commonScroll = 0.0
+        worldMatrix = Math.Matrix(self.compoundModel.matrix)
+        zAxis = worldMatrix.applyToAxis(2)
+        vehicleSpeed = zAxis.dot(self.filter.velocity)
+        wheelsScroll = self.wheelsScroll
+        if wheelsScroll is not None:
+            wheelCount = len(wheelsScroll)
+            skippedWheelsCount = 0
+            for wheelIndex in xrange(0, wheelCount):
+                flying = self.wheelsAnimator.wheelIsFlying(wheelIndex)
+                if not flying:
+                    self.__commonScroll += wheelsScroll[wheelIndex]
+                    self.__commonSlip += wheelsScroll[wheelIndex] - vehicleSpeed
+                skippedWheelsCount += 1
+
+            activeWheelCount = max(len(wheelsScroll) - skippedWheelsCount, 1)
+            self.__commonSlip /= activeWheelCount
+            self.__commonScroll /= activeWheelCount
+        elif self.__trackScrollCtl is not None:
+            self.__commonScroll = max(self.__trackScrollCtl.leftScroll(), self.__trackScrollCtl.rightScroll())
+            self.__commonSlip = max(self.__trackScrollCtl.leftSlip(), self.__trackScrollCtl.rightSlip())
+        return
+
     def addCameraCollider(self):
         collider = self.collisions
         if collider is not None:
@@ -1005,25 +1035,6 @@ class CompoundAppearance(ComponentSystem, CallbackDelayer):
         if self.engineAudition is not None:
             self.engineAudition.onEngineDamageRisk(risk)
         return
-
-    def transmissionScroll(self):
-        wheelsScroll = self.wheelsScroll
-        if wheelsScroll is not None:
-            worldMatrix = Math.Matrix(self.compoundModel.matrix)
-            zAxis = worldMatrix.applyToAxis(2)
-            vehicleSpeed = zAxis.dot(self.filter.velocity)
-            scrolls = 0
-            wheelCount = len(wheelsScroll)
-            skippedWheelsCount = 0
-            for wheelIndex in xrange(0, wheelCount):
-                flying = self.wheelsAnimator.wheelIsFlying(wheelIndex)
-                if not flying:
-                    scrolls += wheelsScroll[wheelIndex] - vehicleSpeed
-                skippedWheelsCount += 1
-
-            return scrolls / max(len(wheelsScroll) - skippedWheelsCount, 1)
-        else:
-            return max(self.__rightTrackScroll, self.__leftTrackScroll)
 
     def getWheelsSteeringMax(self):
         if self.wheelsSteering is not None and len(self.wheelsSteering) >= 2:

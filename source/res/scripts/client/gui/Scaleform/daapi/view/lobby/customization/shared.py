@@ -51,7 +51,14 @@ TABS_ITEM_MAPPING = {C11nTabs.STYLE: GUI_ITEM_TYPE.STYLE,
  C11nTabs.INSCRIPTION: GUI_ITEM_TYPE.INSCRIPTION,
  C11nTabs.PROJECTION_DECAL: GUI_ITEM_TYPE.PROJECTION_DECAL,
  C11nTabs.EFFECT: GUI_ITEM_TYPE.MODIFICATION}
-TYPE_TO_TAB_IDX = {v:k for k, v in TABS_ITEM_MAPPING.iteritems()}
+TYPE_TO_TAB_IDX = {GUI_ITEM_TYPE.STYLE: C11nTabs.STYLE,
+ GUI_ITEM_TYPE.PAINT: C11nTabs.PAINT,
+ GUI_ITEM_TYPE.CAMOUFLAGE: C11nTabs.CAMOUFLAGE,
+ GUI_ITEM_TYPE.EMBLEM: C11nTabs.EMBLEM,
+ GUI_ITEM_TYPE.INSCRIPTION: C11nTabs.INSCRIPTION,
+ GUI_ITEM_TYPE.PERSONAL_NUMBER: C11nTabs.INSCRIPTION,
+ GUI_ITEM_TYPE.PROJECTION_DECAL: C11nTabs.PROJECTION_DECAL,
+ GUI_ITEM_TYPE.MODIFICATION: C11nTabs.EFFECT}
 SEASON_IDX_TO_TYPE = {SEASONS_CONSTANTS.SUMMER_INDEX: SeasonType.SUMMER,
  SEASONS_CONSTANTS.WINTER_INDEX: SeasonType.WINTER,
  SEASONS_CONSTANTS.DESERT_INDEX: SeasonType.DESERT}
@@ -67,10 +74,14 @@ TYPES_ORDER = (GUI_ITEM_TYPE.PAINT,
  GUI_ITEM_TYPE.CAMOUFLAGE,
  GUI_ITEM_TYPE.PROJECTION_DECAL,
  GUI_ITEM_TYPE.EMBLEM,
+ GUI_ITEM_TYPE.PERSONAL_NUMBER,
  GUI_ITEM_TYPE.INSCRIPTION,
  GUI_ITEM_TYPE.MODIFICATION,
  GUI_ITEM_TYPE.STYLE)
 DRAG_AND_DROP_INACTIVE_TABS = (C11nTabs.STYLE, C11nTabs.EFFECT)
+SEASON_TYPE_TO_INFOTYPE_MAP = {SeasonType.SUMMER: VEHICLE_CUSTOMIZATION.CUSTOMIZATION_INFOTYPE_MAPTYPE_SUMMER,
+ SeasonType.DESERT: VEHICLE_CUSTOMIZATION.CUSTOMIZATION_INFOTYPE_MAPTYPE_DESERT,
+ SeasonType.WINTER: VEHICLE_CUSTOMIZATION.CUSTOMIZATION_INFOTYPE_MAPTYPE_WINTER}
 
 class PurchaseItem(object):
     __slots__ = ('item', 'price', 'areaID', 'slot', 'regionID', 'selected', 'group', 'isFromInventory', 'isDismantling')
@@ -118,7 +129,7 @@ def getCustomPurchaseItems(outfitsInfo, seasonOrder=None):
                 for idx in range(slot.capacity()):
                     item = slot.getItem(idx)
                     if item:
-                        purchaseItems.append(PurchaseItem(item, price=item.getBuyPrice(), areaID=container.getAreaID(), slot=slot.getType(), regionID=idx, selected=True, group=season, isFromInventory=False, isDismantling=True))
+                        purchaseItems.append(PurchaseItem(item, price=item.getBuyPrice(), areaID=container.getAreaID(), slot=item.itemTypeID, regionID=idx, selected=True, group=season, isFromInventory=False, isDismantling=True))
                         inventoryCount[item.intCD] += 1
 
     for season in seasonOrder:
@@ -132,7 +143,7 @@ def getCustomPurchaseItems(outfitsInfo, seasonOrder=None):
                     item = slot.getItem(idx)
                     if item:
                         isFromInventory = inventoryCount[item.intCD] > 0
-                        purchaseItems.append(PurchaseItem(item, price=item.getBuyPrice(), areaID=container.getAreaID(), slot=slot.getType(), regionID=idx, selected=True, group=season, isFromInventory=isFromInventory, isDismantling=False))
+                        purchaseItems.append(PurchaseItem(item, price=item.getBuyPrice(), areaID=container.getAreaID(), slot=item.itemTypeID, regionID=idx, selected=True, group=season, isFromInventory=isFromInventory, isDismantling=False))
                         inventoryCount[item.intCD] -= 1
 
     return purchaseItems
@@ -156,11 +167,13 @@ def getOutfitWithoutItems(outfitsInfo, intCD, count):
         yield (season, outfitCompare.original)
 
 
-def getStylePurchaseItems(styleInfo):
+def getStylePurchaseItems(styleInfo, buyMore=False):
     purchaseItems = []
     original = styleInfo.original
     modified = styleInfo.modified
-    if modified and not original or modified and original.id != modified.id:
+    if buyMore:
+        purchaseItems.append(PurchaseItem(modified, modified.getBuyPrice(), areaID=None, slot=None, regionID=None, selected=True, group=AdditionalPurchaseGroups.STYLES_GROUP_ID, isFromInventory=False, isDismantling=False))
+    elif modified and not original or modified and original.id != modified.id:
         inventoryCount = styleInfo.modified.fullInventoryCount(g_currentVehicle.item)
         isFromInventory = inventoryCount > 0
         purchaseItems.append(PurchaseItem(modified, modified.getBuyPrice(), areaID=None, slot=None, regionID=None, selected=True, group=AdditionalPurchaseGroups.STYLES_GROUP_ID, isFromInventory=isFromInventory, isDismantling=False))

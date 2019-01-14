@@ -4,9 +4,8 @@ import BigWorld
 import SoundGroups
 from vehicle_systems.tankStructure import ColliderTypes
 from svarog_script.py_component_system import ComponentSystem, ComponentDescriptor
-from gui.shared.selectable_object import ISelectableObject
 
-class ClientSelectableObject(BigWorld.Entity, ComponentSystem, ISelectableObject):
+class ClientSelectableObject(BigWorld.Entity, ComponentSystem):
     collisions = ComponentDescriptor()
 
     @property
@@ -16,7 +15,6 @@ class ClientSelectableObject(BigWorld.Entity, ComponentSystem, ISelectableObject
     def __init__(self):
         BigWorld.Entity.__init__(self)
         ComponentSystem.__init__(self)
-        ISelectableObject.__init__(self)
         self.__enabled = True
         self.__edged = False
         self.__clickSound = None
@@ -51,15 +49,15 @@ class ClientSelectableObject(BigWorld.Entity, ComponentSystem, ISelectableObject
                 self.__clickSound.stop()
             self.__clickSound.releaseMatrix()
             self.__clickSound = None
-        self.setHighlight(False)
+        self.highlight(False)
         return
 
-    def setEnable(self, enabled):
+    def enable(self, enabled):
         self.__enabled = enabled
         if not self.__enabled:
-            self.setHighlight(False)
+            self.highlight(False)
 
-    def setHighlight(self, show):
+    def highlight(self, show):
         if show:
             if not self.__edged and self.__enabled:
                 self._addEdgeDetect()
@@ -67,6 +65,12 @@ class ClientSelectableObject(BigWorld.Entity, ComponentSystem, ISelectableObject
         elif self.__edged:
             self._delEdgeDetect()
             self.__edged = False
+
+    def onMouseDown(self):
+        pass
+
+    def onMouseUp(self):
+        pass
 
     def onMouseClick(self):
         if self.__clickSound is None:
@@ -78,6 +82,9 @@ class ClientSelectableObject(BigWorld.Entity, ComponentSystem, ISelectableObject
         else:
             self.__clickSound.play()
         return
+
+    def onReleased(self):
+        pass
 
     def _getModelHeight(self):
         return self.model.height

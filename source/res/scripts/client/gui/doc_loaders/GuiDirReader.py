@@ -3,8 +3,8 @@
 import ResMgr
 
 class GuiDirReader(object):
-    SCALEFORM_STARTUP_VIDEO_PATH = 'gui/flash/videos/startup'
-    SCALEFORM_STARTUP_VIDEO_MASK = 'videos/startup/%s'
+    SCALEFORM_STARTUP_VIDEO_PATH = 'gui/flash/videos'
+    SCALEFORM_STARTUP_VIDEO_MASK = 'videos/%s'
     VIDEO_EXTENSION = 'usm'
 
     @staticmethod
@@ -12,8 +12,8 @@ class GuiDirReader(object):
         ds = ResMgr.openSection(GuiDirReader.SCALEFORM_STARTUP_VIDEO_PATH)
         movieFiles = []
         for filename in ds.keys():
-            _, extension = filename.split('.')
-            if extension == GuiDirReader.VIDEO_EXTENSION:
+            basename, extension = filename.split('.')
+            if extension == GuiDirReader.VIDEO_EXTENSION and basename[0:1] != '_':
                 movieFiles.append(GuiDirReader.SCALEFORM_STARTUP_VIDEO_MASK % filename)
 
         ResMgr.purge(GuiDirReader.SCALEFORM_STARTUP_VIDEO_PATH, True)

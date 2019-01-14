@@ -3,19 +3,25 @@
 from collections import namedtuple
 from itertools import islice
 from CurrentVehicle import g_currentVehicle
+from gui import DialogsInterface
+from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
+from gui.Scaleform.daapi.view.dialogs import DIALOG_BUTTON_ID, PMConfirmationDialogMeta
 from gui.Scaleform.daapi.view.lobby.customization.shared import SCALE_SIZE
 from gui.Scaleform.daapi.view.meta.CustomizationPropertiesSheetMeta import CustomizationPropertiesSheetMeta
+from gui.Scaleform.daapi.view.lobby.customization.customization_inscription_controller import PersonalNumEditStatuses
 from gui.Scaleform.daapi.view.lobby.customization.shared import C11nMode, C11nTabs
 from gui.Scaleform.genConsts.CUSTOMIZATION_ALIASES import CUSTOMIZATION_ALIASES
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.VEHICLE_CUSTOMIZATION import VEHICLE_CUSTOMIZATION
 from gui.hangar_cameras.hangar_camera_common import CameraRelatedEvents
 from gui.shared import EVENT_BUS_SCOPE
+from gui.shared.formatters import text_styles
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from helpers import dependency
 from skeletons.gui.customization import ICustomizationService
 from gui.shared.gui_items.customization.c11n_items import camoIconTemplate
 from skeletons.gui.shared import IItemsCache
+from gui import makeHtmlString
 from helpers.i18n import makeString as _ms
 from items.components.c11n_constants import SeasonType
 from gui.customization.shared import getAppliedRegionsForCurrentHangarVehicle, getCustomizationTankPartName, C11nId
@@ -32,6 +38,13 @@ _C11nEditModes = {CUSTOMIZATION_ALIASES.CUSTOMIZATION_POJECTION_INTERACTION_DEFA
  CUSTOMIZATION_ALIASES.CUSTOMIZATION_POJECTION_INTERACTION_MOVE: 1,
  CUSTOMIZATION_ALIASES.CUSTOMIZATION_POJECTION_INTERACTION_SCALE: 2,
  CUSTOMIZATION_ALIASES.CUSTOMIZATION_POJECTION_INTERACTION_ROTATION: 3}
+_SEASONS_REMOVE_TEXT = {SeasonType.SUMMER: VEHICLE_CUSTOMIZATION.PROPERTYSHEET_NOTIFY_DECAL_SEASONS_SUMMER,
+ SeasonType.WINTER: VEHICLE_CUSTOMIZATION.PROPERTYSHEET_NOTIFY_DECAL_SEASONS_WINTER,
+ SeasonType.DESERT: VEHICLE_CUSTOMIZATION.PROPERTYSHEET_NOTIFY_DECAL_SEASONS_DESERT,
+ SeasonType.SUMMER | SeasonType.WINTER: VEHICLE_CUSTOMIZATION.PROPERTYSHEET_NOTIFY_DECAL_SEASONS_SUMMER_WINTER,
+ SeasonType.SUMMER | SeasonType.DESERT: VEHICLE_CUSTOMIZATION.PROPERTYSHEET_NOTIFY_DECAL_SEASONS_SUMMER_DESERT,
+ SeasonType.WINTER | SeasonType.DESERT: VEHICLE_CUSTOMIZATION.PROPERTYSHEET_NOTIFY_DECAL_SEASONS_WINTER_DESERT}
+_APPLY_TO_OTHER_SEASONS_DIALOG = 'customization/applyProjectionDecalToOtherSeasons'
 
 class CustomizationPropertiesSheet(CustomizationPropertiesSheetMeta):
     itemsCache = dependency.instance(IItemsCache)
@@ -50,9 +63,14 @@ class CustomizationPropertiesSheet(CustomizationPropertiesSheetMeta):
         self._isItemAppliedToAll = False
         self._showSwitchers = False
         self._isNarrowSlot = False
+        self.__inscriptionController = None
         self.__interactionType = CUSTOMIZATION_ALIASES.CUSTOMIZATION_POJECTION_INTERACTION_DEFAULT
         self.__changes = [False] * 3
         return
+
+    def _onRegisterFlashComponent(self, viewPy, alias):
+        if alias == VIEW_ALIAS.CUSTOMIZATION_INSCRIPTION_CONTROLLER:
+            self.__inscriptionController = viewPy
 
     @property
     def isVisible(self):
@@ -79,6 +97,9 @@ class CustomizationPropertiesSheet(CustomizationPropertiesSheetMeta):
     def setRotation(self, value):
         pass
 
+    def registerInscriptionController(self, inscriptionController, inputLines):
+        self.__ctx.vehicleAnchorsUpdater.registerInscriptionController(inscriptionController, inputLines)
+
     def _populate(self):
         super(CustomizationPropertiesSheet, self)._populate()
         self.__ctx = self.service.getCtx()
@@ -94,6 +115,7 @@ class CustomizationPropertiesSheet(CustomizationPropertiesSheetMeta):
         self.__ctx.onProjectionDecalMirrored += self.__onProjectionDecalMirrored
         self.__ctx.onCustomizationItemsBought += self.__onItemsBought
         self.__ctx.onCustomizationItemSold += self.__onItemSold
+        self.__ctx.onChangeAutoRent += self.onChangeAutoRent
         return
 
     def _dispose(self):
@@ -107,12 +129,14 @@ class CustomizationPropertiesSheet(CustomizationPropertiesSheetMeta):
         self.__ctx.onCustomizationItemInstalled -= self.__onItemsInstalled
         self.__ctx.onCustomizationSeasonChanged -= self.__onSeasonChanged
         self.__ctx.onCacheResync -= self.__onCacheResync
+        self.__ctx.onChangeAutoRent -= self.onChangeAutoRent
         self._extraMoney = None
         self._isItemAppliedToAll = False
         self._slotID = -1
         self._regionID = -1
         self._areaID = -1
         self.__ctx = None
+        self.__inscriptionController = None
         super(CustomizationPropertiesSheet, self)._dispose()
         return
 
@@ -130,6 +154,10 @@ class CustomizationPropertiesSheet(CustomizationPropertiesSheetMeta):
         self._showSwitchers = showSwitchers
         self._isNarrowSlot = isNarrowSlot
         if self.__update():
+            if self._currentItem and self._currentItem.itemTypeID == GUI_ITEM_TYPE.PERSONAL_NUMBER and self.__inscriptionController and (self._currentComponent.number == '' or self.__ctx.numberEditModeActive):
+                self.__inscriptionController.show()
+            elif self.__inscriptionController:
+                self.__inscriptionController.hide()
             self.__ctx.onPropertySheetShown()
         self.__ctx.vehicleAnchorsUpdater.displayMenu(True)
 
@@ -139,6 +167,8 @@ class CustomizationPropertiesSheet(CustomizationPropertiesSheetMeta):
             return
         self._isVisible = False
         self.as_hideS()
+        if self.__inscriptionController:
+            self.__inscriptionController.hide()
         self.__ctx.onPropertySheetHidden()
         self.__ctx.vehicleAnchorsUpdater.changeAnchorParams(anchor, True, True)
 
@@ -150,8 +180,7 @@ class CustomizationPropertiesSheet(CustomizationPropertiesSheetMeta):
             self._isItemAppliedToAll = not self._isItemAppliedToAll
             self.__applyToOtherAreas(self._isItemAppliedToAll)
         elif actionType == CUSTOMIZATION_ALIASES.CUSTOMIZATION_SHEET_ACTION_APPLY_TO_ALL_SEASONS:
-            self._isItemAppliedToAll = not self._isItemAppliedToAll
-            self.__applyToOtherSeasons(self._isItemAppliedToAll)
+            self.__applyToOtherSeasons()
         elif actionType == CUSTOMIZATION_ALIASES.CUSTOMIZATION_SHEET_ACTION_REMOVE_ONE:
             self.__removeElement()
         elif actionType == CUSTOMIZATION_ALIASES.CUSTOMIZATION_SHEET_RENT_CHECKBOX_CHANGE:
@@ -178,6 +207,11 @@ class CustomizationPropertiesSheet(CustomizationPropertiesSheetMeta):
         elif actionType == CUSTOMIZATION_ALIASES.CUSTOMIZATION_SHEET_ACTION_MOVE:
             self.__ctx.moveProjectionDecal(self._areaID, self._regionID, actionData)
             self.__update()
+        elif actionType == CUSTOMIZATION_ALIASES.CUSTOMIZATION_SHEET_ACTION_EDIT:
+            self.hide()
+            if GUI_ITEM_TYPE.PERSONAL_NUMBER == self.__ctx.getItemFromSelectedRegion().itemTypeID:
+                self.__ctx.storeInscriptionSlotInfo()
+            self.__ctx.onPersonalNumberEditModeChanged(PersonalNumEditStatuses.EDIT_MODE_STARTED)
 
     def onClose(self):
         self.hide()
@@ -211,7 +245,8 @@ class CustomizationPropertiesSheet(CustomizationPropertiesSheetMeta):
         if self._isVisible and self._slotID != -1 and self._regionID != -1 and self._areaID != -1:
             self.__updateItemAppliedToAllFlag()
             self.__updateExtraPrice()
-            self.as_setDataAndShowS(self.__makeVO())
+            if self._currentStyle or self._currentItem:
+                self.as_setDataAndShowS(self.__makeVO())
             self.__ctx.caruselItemUnselected()
             self.__ctx.onPropertySheetShown()
             return True
@@ -232,17 +267,47 @@ class CustomizationPropertiesSheet(CustomizationPropertiesSheetMeta):
         self.__ctx.removeItemFromAllTankAreas(currentSeason, self._slotID)
         self.__update()
 
-    def __applyToOtherSeasons(self, installItem):
+    def __applyToOtherSeasons(self):
         if self.__ctx.currentTab not in (C11nTabs.EFFECT,
          C11nTabs.EMBLEM,
          C11nTabs.INSCRIPTION,
          C11nTabs.PROJECTION_DECAL):
             return
-        if installItem:
+        if not self._isItemAppliedToAll:
+            if self.__ctx.currentTab == C11nTabs.PROJECTION_DECAL:
+                lockedSeasons = self.__ctx.getLockedProjectionDecalSeasons(self._regionID)
+                if lockedSeasons:
+                    self.__showApplyToOtherSeasonsDialog(lockedSeasons)
+                    return
             self.__ctx.installItemForAllSeasons(self._areaID, self._slotID, self._regionID, self._currentSlotData)
+            self._isItemAppliedToAll = True
         else:
             self.__ctx.removeItemForAllSeasons(self._areaID, self._slotID, self._regionID)
+            self._isItemAppliedToAll = False
         self.__update()
+
+    def __showApplyToOtherSeasonsDialog(self, lockedSeasons):
+        removedText = text_styles.alert(VEHICLE_CUSTOMIZATION.PROPERTYSHEET_NOTIFY_DECAL_SEASONS_REMOVED)
+        seasonsString = self.__getLockedSeasonsString(lockedSeasons)
+        if len(lockedSeasons) == 1:
+            dialogMessage = _ms(VEHICLE_CUSTOMIZATION.PROPERTYSHEET_NOTIFY_DECAL_DIALOG_SEASON)
+        else:
+            dialogMessage = _ms(VEHICLE_CUSTOMIZATION.PROPERTYSHEET_NOTIFY_DECAL_DIALOG_SEASONS)
+        message = makeHtmlString('html_templates:lobby/customization/dialog', 'decal', {'value': _ms(dialogMessage, season=seasonsString.decode('utf-8').upper(), removed=removedText.decode('utf-8').upper())})
+        DialogsInterface.showDialog(PMConfirmationDialogMeta(_APPLY_TO_OTHER_SEASONS_DIALOG, messageCtx={'message': message,
+         'icon': RES_ICONS.MAPS_ICONS_LIBRARY_ICON_ALERT_90X84}, focusedID=DIALOG_BUTTON_ID.CLOSE), self.__installProjectionDecalToAllSeasonsDialogCallback)
+
+    def __installProjectionDecalToAllSeasonsDialogCallback(self, confirmed):
+        if not confirmed:
+            return
+        lockedSeasons = self.__ctx.getLockedProjectionDecalSeasons(self._regionID)
+        projectionDecalsFilter = lambda item: item.itemTypeID == GUI_ITEM_TYPE.PROJECTION_DECAL
+        for season in lockedSeasons:
+            outfit = self.__ctx.getModifiedOutfit(season)
+            self.__ctx.removeItemsFromOutfit(outfit, projectionDecalsFilter, refresh=False)
+
+        self.__ctx.installItemForAllSeasons(self._areaID, self._slotID, self._regionID, self._currentSlotData)
+        self._isItemAppliedToAll = True
 
     def __removeElement(self):
         if self._slotID == GUI_ITEM_TYPE.STYLE:
@@ -271,13 +336,24 @@ class CustomizationPropertiesSheet(CustomizationPropertiesSheetMeta):
                 self._isItemAppliedToAll = False
                 break
 
-        elif self.__ctx.currentTab in (C11nTabs.EFFECT, C11nTabs.EMBLEM, C11nTabs.INSCRIPTION):
+        elif self.__ctx.currentTab in (C11nTabs.EFFECT,
+         C11nTabs.EMBLEM,
+         C11nTabs.INSCRIPTION,
+         C11nTabs.PROJECTION_DECAL):
             self._isItemAppliedToAll = True
             firstSeason = SeasonType.COMMON_SEASONS[0]
-            fistSlotData = self.__ctx.getModifiedOutfit(firstSeason).getContainer(self._areaID).slotFor(self._slotID).getSlotData(self._regionID)
+            firstSlotId = self.__ctx.getSlotIdByAnchorId(self.attachedSlot, firstSeason)
+            if firstSlotId is None:
+                self._isItemAppliedToAll = False
+                return
+            fistSlotData = self.__ctx.getModifiedOutfit(firstSeason).getContainer(firstSlotId.areaId).slotFor(firstSlotId.slotType).getSlotData(firstSlotId.regionIdx)
             if fistSlotData.item is not None:
                 for season in SeasonType.COMMON_SEASONS[1:]:
-                    slotData = self.__ctx.getModifiedOutfit(season).getContainer(self._areaID).slotFor(self._slotID).getSlotData(self._regionID)
+                    slotId = self.__ctx.getSlotIdByAnchorId(self.attachedSlot, season)
+                    if slotId is None:
+                        self._isItemAppliedToAll = False
+                        break
+                    slotData = self.__ctx.getModifiedOutfit(season).getContainer(slotId.areaId).slotFor(slotId.slotType).getSlotData(slotId.regionIdx)
                     df = fistSlotData.weakDiff(slotData)
                     if slotData.item is None or df.item is not None:
                         self._isItemAppliedToAll = False
@@ -289,11 +365,12 @@ class CustomizationPropertiesSheet(CustomizationPropertiesSheetMeta):
 
     def __makeVO(self):
         currentElement = self._currentStyle if self._slotID == GUI_ITEM_TYPE.STYLE else self._currentItem
-        vo = {'intCD': -1 if not currentElement else currentElement.intCD,
-         'renderersData': self.__makeRenderersVOs() if currentElement else [],
+        isPersonalNumberEdit = self.__ctx.numberEditModeActive
+        vo = {'intCD': -1 if not currentElement and isPersonalNumberEdit else currentElement.intCD,
+         'renderersData': self.__makeRenderersVOs() if currentElement and not isPersonalNumberEdit else [],
          'isProjectionEnable': self._slotID == GUI_ITEM_TYPE.PROJECTION_DECAL,
          'isBigRadius': self._slotID in (GUI_ITEM_TYPE.INSCRIPTION, GUI_ITEM_TYPE.PROJECTION_DECAL, GUI_ITEM_TYPE.EMBLEM),
-         'showSwitchers': self._showSwitchers,
+         'showSwitchers': self._showSwitchers and not isPersonalNumberEdit,
          'isNarrowSlot': self._isNarrowSlot}
         return vo
 
@@ -312,6 +389,8 @@ class CustomizationPropertiesSheet(CustomizationPropertiesSheetMeta):
             renderers.append(self.__makeScaleRendererVO())
             renderers.append(self.__makeSetOnOtherTankPartsRendererVO())
         elif self._slotID in (GUI_ITEM_TYPE.EMBLEM, GUI_ITEM_TYPE.INSCRIPTION, GUI_ITEM_TYPE.MODIFICATION):
+            if self._currentItem.itemTypeID == GUI_ITEM_TYPE.PERSONAL_NUMBER:
+                renderers.append(self.__makeEditInscriptionRendererVO())
             renderers.append(self.__makeSetOnOtherSeasonsRendererVO())
         elif self._slotID == GUI_ITEM_TYPE.STYLE:
             isExtentionEnabled = self._currentStyle and self._currentStyle.isRentable
@@ -319,8 +398,9 @@ class CustomizationPropertiesSheet(CustomizationPropertiesSheetMeta):
                 renderers.append(self.__makeExtensionRendererVO())
         elif self._slotID == GUI_ITEM_TYPE.PROJECTION_DECAL:
             renderers.append(self.__makeMirorRendererVO())
-            renderers.append(self.__makeMoveRendererVO())
             renderers.append(self.__makeScaleRendererVO())
+            renderers.append(self.__makeMoveRendererVO())
+            renderers.append(self.__makeSetOnOtherSeasonsRendererVO())
         renderers.append(self.__makeRemoveRendererVO())
         renderers.append(self.__makeCloseeRendererVO())
         return renderers
@@ -521,8 +601,9 @@ class CustomizationPropertiesSheet(CustomizationPropertiesSheetMeta):
         icon = RES_ICONS.MAPS_ICONS_CUSTOMIZATION_PROPERTY_SHEET_IDLE_ICON_SEASON
         hoverIcon = RES_ICONS.MAPS_ICONS_CUSTOMIZATION_PROPERTY_SHEET_IDLE_ICON_SEASON_HOVER
         actionBtnLabel = VEHICLE_CUSTOMIZATION.PROPERTYSHEET_ACTIONBTN_APPLYTOALLMAPS
-        disableTooltip = ''
+        notifyString = ''
         enabled = True
+        needNotify = False
         disableTooltip = _ms(VEHICLE_CUSTOMIZATION.PROPERTYSHEET_ACTIONBTN_APPLYTOALLMAPSDISABLED, itemType=_ms('#vehicle_customization:propertySheet/actionBtn/forCurrentItem/' + self._currentItem.itemTypeName))
         if self._isItemAppliedToAll:
             actionBtnLabel = VEHICLE_CUSTOMIZATION.PROPERTYSHEET_ACTIONBTN_REMOVE_SEASONS
@@ -536,6 +617,12 @@ class CustomizationPropertiesSheet(CustomizationPropertiesSheetMeta):
             disableTooltip = VEHICLE_CUSTOMIZATION.CUSTOMIZATION_PROPERTYSHEET_DISABLED_SEASONEMBLEM
         elif self._slotID == GUI_ITEM_TYPE.INSCRIPTION:
             disableTooltip = VEHICLE_CUSTOMIZATION.CUSTOMIZATION_PROPERTYSHEET_DISABLED_SEASONINSCRIPTION
+        elif self._slotID == GUI_ITEM_TYPE.PROJECTION_DECAL:
+            disableTooltip = VEHICLE_CUSTOMIZATION.CUSTOMIZATION_PROPERTYSHEET_DISABLED_SEASONDECAL
+            lockedSeasons = self.__ctx.getLockedProjectionDecalSeasons(self._regionID)
+            if lockedSeasons:
+                needNotify = True
+                notifyString = self.__makeProjectionDecalInstallToOtherSeasonsNotifyString(lockedSeasons)
         return {'iconSrc': icon,
          'iconHoverSrc': hoverIcon,
          'iconDisableSrc': RES_ICONS.MAPS_ICONS_CUSTOMIZATION_PROPERTY_SHEET_DISABLE_ICON_SEASON_DISABLE,
@@ -544,7 +631,37 @@ class CustomizationPropertiesSheet(CustomizationPropertiesSheetMeta):
          'rendererLnk': CUSTOMIZATION_ALIASES.CUSTOMIZATION_SHEET_BTN_RENDERER_UI,
          'animatedTransition': True,
          'disableTooltip': disableTooltip,
+         'notifyText': notifyString,
+         'needNotify': needNotify,
          'enabled': enabled}
+
+    def __makeProjectionDecalInstallToOtherSeasonsNotifyString(self, lockedSeasons):
+        removedText = text_styles.alert(VEHICLE_CUSTOMIZATION.PROPERTYSHEET_NOTIFY_DECAL_SEASONS_REMOVED)
+        seasonsText = self.__getLockedSeasonsString(lockedSeasons)
+        if len(lockedSeasons) == 1:
+            tooltipText = _ms(VEHICLE_CUSTOMIZATION.PROPERTYSHEET_NOTIFY_DECAL_TOOLTIP_SEASON)
+        else:
+            tooltipText = _ms(VEHICLE_CUSTOMIZATION.PROPERTYSHEET_NOTIFY_DECAL_TOOLTIP_SEASONS)
+        notifyString = makeHtmlString('html_templates:lobby/customization/notify', 'decal', {'value': _ms(tooltipText, season=seasonsText, removed=removedText)})
+        return notifyString
+
+    def __getLockedSeasonsString(self, lockedSeasons):
+        seasonsMask = SeasonType.UNDEFINED
+        for season in lockedSeasons:
+            seasonsMask |= season
+
+        seasonsString = text_styles.alert(_SEASONS_REMOVE_TEXT.get(seasonsMask, ''))
+        return seasonsString
+
+    def __makeEditInscriptionRendererVO(self):
+        return {'iconSrc': RES_ICONS.MAPS_ICONS_CUSTOMIZATION_PROPERTY_SHEET_IDLE_ICON_EDIT,
+         'iconHoverSrc': RES_ICONS.MAPS_ICONS_CUSTOMIZATION_PROPERTY_SHEET_IDLE_ICON_EDIT_HOVER,
+         'iconDisableSrc': RES_ICONS.MAPS_ICONS_CUSTOMIZATION_PROPERTY_SHEET_DISABLE_ICON_EDIT_DISABLE,
+         'actionBtnLabel': VEHICLE_CUSTOMIZATION.PROPERTYSHEET_ACTIONBTN_EDIT_INSCRIPTION,
+         'actionType': CUSTOMIZATION_ALIASES.CUSTOMIZATION_SHEET_ACTION_EDIT,
+         'rendererLnk': CUSTOMIZATION_ALIASES.CUSTOMIZATION_SHEET_BTN_RENDERER_UI,
+         'animatedTransition': True,
+         'enabled': True}
 
     def __onCacheResync(self, *_):
         if not g_currentVehicle.isPresent():
@@ -580,4 +697,7 @@ class CustomizationPropertiesSheet(CustomizationPropertiesSheetMeta):
         self.__update()
 
     def __onItemSold(self, item, count):
+        self.__update()
+
+    def onChangeAutoRent(self):
         self.__update()

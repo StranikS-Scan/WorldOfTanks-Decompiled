@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/hangar/AmmunitionPanel.py
 import logging
-from account_helpers.AccountSettings import CUSTOMIZATION_SECTION, AccountSettings, PROJECTION_DECAL_TAB_SHOWN_FIELD
+from account_helpers.AccountSettings import CUSTOMIZATION_SECTION, AccountSettings, PROJECTION_DECAL_TAB_SHOWN_FIELD, USER_NUMBER_TAB_SHOWN_FIELD
 from constants import QUEUE_TYPE, PREBATTLE_TYPE
 from gui.prb_control.entities.listener import IGlobalListener
 from items.vehicles import NUM_OPTIONAL_DEVICE_SLOTS
@@ -21,6 +21,7 @@ from gui.shared.gui_items.Vehicle import Vehicle
 from gui.shared.gui_items.vehicle_equipment import BATTLE_BOOSTER_LAYOUT_SIZE
 from gui.shared.utils.requesters import REQ_CRITERIA
 from helpers import i18n, dependency
+from skeletons.gui.game_control import IBootcampController
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.customization import ICustomizationService
 from inventory_update_helper import updateOnInventoryChanges
@@ -139,21 +140,30 @@ class AmmunitionPanel(AmmunitionPanelMeta, IGlobalListener):
             if msgLvl == Vehicle.VEHICLE_STATE_LEVEL.RENTABLE:
                 msgLvl = Vehicle.VEHICLE_STATE_LEVEL.INFO
             isBackground = statusId == Vehicle.VEHICLE_STATE.NOT_PRESENT
-            custSett = AccountSettings.getSettings(CUSTOMIZATION_SECTION)
-            appliedProjectionDecals = self.itemsCache.items.getItems(itemTypeID=GUI_ITEM_TYPE.PROJECTION_DECAL, criteria=REQ_CRITERIA.CUSTOMIZATION.FOR_VEHICLE(g_currentVehicle.item)).values()
-            if not custSett.get(PROJECTION_DECAL_TAB_SHOWN_FIELD, False) and appliedProjectionDecals and g_currentVehicle.getViewState().isCustomizationEnabled():
-                self.as_setCustomizationBtnCounterS(1)
-            else:
-                self.as_setCustomizationBtnCounterS(None)
+            self.__applyCustomizationNewCounter()
             msgString = makeHtmlString('html_templates:vehicleStatus', msgLvl, {'message': i18n.makeString(msg)})
             self.__updateDevices(vehicle)
             self.as_updateVehicleStatusS({'message': msgString,
              'rentAvailable': rentAvailable,
              'isBackground': isBackground})
-        return
 
     def __inventoryUpdateCallBack(self, invDiff):
         self.update(invDiff)
+
+    def __applyCustomizationNewCounter(self):
+        custSett = AccountSettings.getSettings(CUSTOMIZATION_SECTION)
+        appliedProjectionDecals = self.itemsCache.items.getItems(itemTypeID=GUI_ITEM_TYPE.PROJECTION_DECAL, criteria=REQ_CRITERIA.CUSTOMIZATION.FOR_VEHICLE(g_currentVehicle.item)).values()
+        customizationCounter = 0
+        bootcampController = dependency.instance(IBootcampController)
+        if g_currentVehicle.getViewState().isCustomizationEnabled() and not bootcampController.isInBootcamp():
+            if not custSett.get(PROJECTION_DECAL_TAB_SHOWN_FIELD, False) and appliedProjectionDecals:
+                customizationCounter += 1
+            if not custSett.get(USER_NUMBER_TAB_SHOWN_FIELD, False):
+                customizationCounter += 1
+        if customizationCounter == 0:
+            customizationCounter = None
+        self.as_setCustomizationBtnCounterS(customizationCounter)
+        return
 
     def __moneyUpdateCallback(self, *_):
         self._update(onlyMoneyUpdate=True)

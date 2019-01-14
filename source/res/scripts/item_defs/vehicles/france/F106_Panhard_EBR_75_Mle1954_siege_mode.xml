@@ -7,8 +7,8 @@
     <radioman></radioman>
   </crew>
   <speedLimits>
-    <forward>	60	</forward>
-    <backward>	60	</backward>
+    <forward>	80	</forward>
+    <backward>	80	</backward>
   </speedLimits>
   <invisibility>
     <moving>	0.345	</moving>
@@ -55,7 +55,7 @@
     </swinging>
     <exhaust>
       <pixie>	gas_medium	</pixie>
-      <nodes>	HP_Track_Exhaus_1 HP_Track_Exhaus_4	</nodes>
+      <nodes>	HP_Track_Exhaus_1 HP_Track_Exhaus_2 HP_Track_Exhaus_3 HP_Track_Exhaus_4	</nodes>
     </exhaust>
     <turretPositions>
       <turret>	0.000000 0.225994 0.007086	</turret>
@@ -66,9 +66,9 @@
     </hitTester>
     <hangarShadowTexture>	vehicles/french/F106_Panhard_EBR_75_Mle1954/Panhard_EBR_75_Mle1954_HangarShadowMap.dds	</hangarShadowTexture>
     <burnoutAnimation>
-      <accumulationImpulse>	1.3	</accumulationImpulse>
+      <accumulationImpulse>	1.0	</accumulationImpulse>
       <dischargeImpulse>	5.0	</dischargeImpulse>
-      <timeToAccumulationImpulse>	0.2	</timeToAccumulationImpulse>
+      <timeToAccumulationImpulse>	0.1	</timeToAccumulationImpulse>
     </burnoutAnimation>
     <customizationSlots>
       <slot>
@@ -97,14 +97,42 @@
         <slotType>	projectionDecal	</slotType>
         <slotId>	68	</slotId>
         <tags>	formfactor_any	</tags>
-        <position>	-0.00267463 1.1788 1.35038	</position>
-        <rotation>	0.0425773 0.000288847 3.13923	</rotation>
-        <scale>	1.04291 0.688036 1.04291	</scale>
+        <position>	-0.002645 1.10985 1.84446	</position>
+        <rotation>	0.554032 -0.00107133 3.13882	</rotation>
+        <scale>	1.00714 0.664442 1.00714	</scale>
         <doubleSided>	false	</doubleSided>
         <showOn>	16	</showOn>
-        <clipAngle>	0.561938	</clipAngle>
-        <anchorPosition>	-0.00207841 0.227467 1.36107	</anchorPosition>
-        <anchorDirection>	0.00237493 0.999091 0.0425636	</anchorDirection>
+        <clipAngle>	1.40495	</clipAngle>
+        <anchorPosition>	-0.00256095 -0.0599919 1.86445	</anchorPosition>
+        <anchorDirection>	0.00221217 0.850407 0.526121	</anchorDirection>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	69	</slotId>
+        <tags>	formfactor_square	</tags>
+        <parentSlotId>	68	</parentSlotId>
+        <position>	-0.00259764 1.20539 1.38649	</position>
+        <rotation>	0.280198 -0.000290278 3.13914	</rotation>
+        <scale>	1.37516 0.907234 1.37516	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	1.40495	</clipAngle>
+        <anchorPosition>	-0.0021378 0.189502 1.44009	</anchorPosition>
+        <anchorDirection>	0.00237249 0.960998 0.276546	</anchorDirection>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	70	</slotId>
+        <tags>	formfactor_square	</tags>
+        <parentSlotId>	68	</parentSlotId>
+        <position>	-0.00393908 1.14427 -1.79282	</position>
+        <rotation>	2.59962 -0.00107312 -0.00203323	</rotation>
+        <scale>	1.00714 0.664441 1.00714	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	1.40495	</clipAngle>
+        <anchorPosition>	-0.0039953 -0.0253307 -1.81242	</anchorPosition>
+        <anchorDirection>	-0.00147969 0.856691 -0.515828	</anchorDirection>
       </slot>
     </customizationSlots>
     <customization>
@@ -125,13 +153,15 @@
       <price>	30000	</price>
       <notInShop>	true	</notInShop>
       <armor>
+        <wheel>	10	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+        </wheel>
         <armor_9>	5	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
         </armor_9>
       </armor>
       <weight>	3000	</weight>
       <maxLoad>	17000	</maxLoad>
       <terrainResistance>	1.0 1.35 1.95	</terrainResistance>
-      <brakeForce>	15000	</brakeForce>
+      <brakeForce>	22500	</brakeForce>
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
       <rotationSpeed>	34	</rotationSpeed>
       <shotDispersionFactors>
@@ -140,7 +170,7 @@
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
       <maxHealth>	200	</maxHealth>
-      <maxRegenHealth>	150	</maxRegenHealth>
+      <maxRegenHealth>	200	</maxRegenHealth>
       <repairCost>	7.5	</repairCost>
       <models>
         <undamaged>	vehicles/french/F106_Panhard_EBR_75_Mle1954/normal/lod0/Chassis.model	</undamaged>
@@ -152,7 +182,7 @@
         <bufferPrefs>	mediumTank	</bufferPrefs>
         <textureSet>	usa_04	</textureSet>
         <size>	0.5 0.4	</size>
-        <activePostmortem>	True	</activePostmortem>
+        <activePostmortem>	true	</activePostmortem>
       </traces>
       <AODecals>
         <decal>
@@ -167,50 +197,28 @@
       <wheels>
         <lodDist>	MEDIUM	</lodDist>
         <wheel>
-          <index>	0	</index>
-          <isLeft>	true	</isLeft>
-          <name>	WD_L0	</name>
-          <radius>	0.617366	</radius>
-          <isLeading>	true	</isLeading>
-          <deflatable>	true	</deflatable>
-          <steeringProcessor>	True	</steeringProcessor>
-          <scrollProcessor>
-            <connectedToEngine>	True	</connectedToEngine>
-          </scrollProcessor>
-          <rollProcessor>
-            <maxDamageAngle>	0.3	</maxDamageAngle>
-          </rollProcessor>
-          <collisionCylinder>
-            <width>	0.34	</width>
-            <xOffset>	-0.145	</xOffset>
-          </collisionCylinder>
-          <hitTester>
-            <collisionModelServer>	vehicles/french/F106_Panhard_EBR_75_Mle1954/collision/Wheel_L_01.model	</collisionModelServer>
-            <collisionModelClient>	vehicles/french/F106_Panhard_EBR_75_Mle1954/collision_client/Wheel_L_01.model	</collisionModelClient>
-          </hitTester>
-          <armor>
-            <wheel>	5	</wheel>
-          </armor>
-          <wheelPos>	-0.88 0.61 -2.139	</wheelPos>
-        </wheel>
-        <wheel>
           <index>	6	</index>
           <isLeft>	true	</isLeft>
-          <name>	WD_L1	</name>
-          <radius>	0.617366	</radius>
+          <name>	WD_L0	</name>
           <isLeading>	true	</isLeading>
           <deflatable>	true	</deflatable>
-          <steeringProcessor>	True	</steeringProcessor>
+          <steeringProcessor>	true	</steeringProcessor>
           <scrollProcessor>
-            <connectedToEngine>	True	</connectedToEngine>
+            <connectedToEngine>	true	</connectedToEngine>
           </scrollProcessor>
           <rollProcessor>
             <maxDamageAngle>	0.3	</maxDamageAngle>
           </rollProcessor>
-          <collisionCylinder>
+          <geometry>
+            <radius>	0.617366	</radius>
             <width>	0.34	</width>
-            <xOffset>	-0.145	</xOffset>
-          </collisionCylinder>
+            <pivotXOffset>	-0.145	</pivotXOffset>
+          </geometry>
+          <proceduralCollisionBody>	true	</proceduralCollisionBody>
+          <deflation>
+            <maxYShift>	0.25	</maxYShift>
+            <explodedRadius>	0.476	</explodedRadius>
+          </deflation>
           <hitTester>
             <collisionModelServer>	vehicles/french/F106_Panhard_EBR_75_Mle1954/collision/Wheel_L_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/french/F106_Panhard_EBR_75_Mle1954/collision_client/Wheel_L_01.model	</collisionModelClient>
@@ -221,19 +229,53 @@
           <wheelPos>	-0.88 0.61 2.139	</wheelPos>
         </wheel>
         <wheel>
-          <index>	2	</index>
+          <index>	0	</index>
           <isLeft>	true	</isLeft>
-          <name>	W_L0	</name>
-          <radius>	0.611721	</radius>
+          <name>	WD_L1	</name>
+          <isLeading>	true	</isLeading>
+          <deflatable>	true	</deflatable>
+          <steeringProcessor>	true	</steeringProcessor>
           <scrollProcessor>
-            <connectedToEngine>	True	</connectedToEngine>
+            <connectedToEngine>	true	</connectedToEngine>
           </scrollProcessor>
           <rollProcessor>
             <maxDamageAngle>	0.3	</maxDamageAngle>
           </rollProcessor>
-          <collisionCylinder>
+          <geometry>
+            <radius>	0.617366	</radius>
+            <width>	0.34	</width>
+            <pivotXOffset>	-0.145	</pivotXOffset>
+          </geometry>
+          <proceduralCollisionBody>	true	</proceduralCollisionBody>
+          <deflation>
+            <maxYShift>	0.25	</maxYShift>
+            <explodedRadius>	0.476	</explodedRadius>
+          </deflation>
+          <hitTester>
+            <collisionModelServer>	vehicles/french/F106_Panhard_EBR_75_Mle1954/collision/Wheel_L_01.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/french/F106_Panhard_EBR_75_Mle1954/collision_client/Wheel_L_01.model	</collisionModelClient>
+          </hitTester>
+          <armor>
+            <wheel>	5	</wheel>
+          </armor>
+          <wheelPos>	-0.88 0.61 -2.139	</wheelPos>
+        </wheel>
+        <wheel>
+          <index>	4	</index>
+          <isLeft>	true	</isLeft>
+          <name>	W_L0	</name>
+          <scrollProcessor>
+            <connectedToEngine>	true	</connectedToEngine>
+          </scrollProcessor>
+          <rollProcessor>
+            <maxDamageAngle>	0.3	</maxDamageAngle>
+          </rollProcessor>
+          <geometry>
+            <radius>	0.611721	</radius>
             <width>	0.345	</width>
-          </collisionCylinder>
+            <pivotXOffset>	-0.05	</pivotXOffset>
+          </geometry>
+          <proceduralCollisionBody>	true	</proceduralCollisionBody>
           <hitTester>
             <collisionModelServer>	vehicles/french/F106_Panhard_EBR_75_Mle1954/collision/Wheel_L_02.model	</collisionModelServer>
             <collisionModelClient>	vehicles/french/F106_Panhard_EBR_75_Mle1954/collision_client/Wheel_L_02.model	</collisionModelClient>
@@ -241,22 +283,24 @@
           <armor>
             <wheel>	10	</wheel>
           </armor>
-          <wheelPos>	-1.026 0.581 -0.705	</wheelPos>
+          <wheelPos>	-1.026 0.581 0.705	</wheelPos>
         </wheel>
         <wheel>
-          <index>	4	</index>
+          <index>	2	</index>
           <isLeft>	true	</isLeft>
           <name>	W_L1	</name>
-          <radius>	0.611721	</radius>
           <scrollProcessor>
-            <connectedToEngine>	True	</connectedToEngine>
+            <connectedToEngine>	true	</connectedToEngine>
           </scrollProcessor>
           <rollProcessor>
             <maxDamageAngle>	0.3	</maxDamageAngle>
           </rollProcessor>
-          <collisionCylinder>
+          <geometry>
+            <radius>	0.611721	</radius>
             <width>	0.345	</width>
-          </collisionCylinder>
+            <pivotXOffset>	-0.05	</pivotXOffset>
+          </geometry>
+          <proceduralCollisionBody>	true	</proceduralCollisionBody>
           <hitTester>
             <collisionModelServer>	vehicles/french/F106_Panhard_EBR_75_Mle1954/collision/Wheel_L_03.model	</collisionModelServer>
             <collisionModelClient>	vehicles/french/F106_Panhard_EBR_75_Mle1954/collision_client/Wheel_L_03.model	</collisionModelClient>
@@ -264,53 +308,32 @@
           <armor>
             <wheel>	10	</wheel>
           </armor>
-          <wheelPos>	-1.026 0.581 0.705	</wheelPos>
-        </wheel>
-        <wheel>
-          <index>	1	</index>
-          <isLeft>	false	</isLeft>
-          <name>	WD_R0	</name>
-          <radius>	0.617366	</radius>
-          <isLeading>	true	</isLeading>
-          <deflatable>	true	</deflatable>
-          <steeringProcessor>	True	</steeringProcessor>
-          <scrollProcessor>
-            <connectedToEngine>	True	</connectedToEngine>
-          </scrollProcessor>
-          <rollProcessor>
-            <maxDamageAngle>	0.3	</maxDamageAngle>
-          </rollProcessor>
-          <collisionCylinder>
-            <width>	0.34	</width>
-            <xOffset>	0.145	</xOffset>
-          </collisionCylinder>
-          <hitTester>
-            <collisionModelServer>	vehicles/french/F106_Panhard_EBR_75_Mle1954/collision/Wheel_R_01.model	</collisionModelServer>
-            <collisionModelClient>	vehicles/french/F106_Panhard_EBR_75_Mle1954/collision_client/Wheel_R_01.model	</collisionModelClient>
-          </hitTester>
-          <armor>
-            <wheel>	10	</wheel>
-          </armor>
-          <wheelPos>	0.881 0.61 -2.139	</wheelPos>
+          <isLeading>	false	</isLeading>
+          <wheelPos>	-1.026 0.581 -0.705	</wheelPos>
         </wheel>
         <wheel>
           <index>	7	</index>
           <isLeft>	false	</isLeft>
-          <name>	WD_R1	</name>
-          <radius>	0.617366	</radius>
+          <name>	WD_R0	</name>
           <isLeading>	true	</isLeading>
           <deflatable>	true	</deflatable>
-          <steeringProcessor>	True	</steeringProcessor>
+          <steeringProcessor>	true	</steeringProcessor>
           <scrollProcessor>
-            <connectedToEngine>	True	</connectedToEngine>
+            <connectedToEngine>	true	</connectedToEngine>
           </scrollProcessor>
           <rollProcessor>
             <maxDamageAngle>	0.3	</maxDamageAngle>
           </rollProcessor>
-          <collisionCylinder>
+          <geometry>
+            <radius>	0.617366	</radius>
             <width>	0.34	</width>
-            <xOffset>	0.145	</xOffset>
-          </collisionCylinder>
+            <pivotXOffset>	0.145	</pivotXOffset>
+          </geometry>
+          <proceduralCollisionBody>	true	</proceduralCollisionBody>
+          <deflation>
+            <maxYShift>	0.25	</maxYShift>
+            <explodedRadius>	0.476	</explodedRadius>
+          </deflation>
           <hitTester>
             <collisionModelServer>	vehicles/french/F106_Panhard_EBR_75_Mle1954/collision/Wheel_R_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/french/F106_Panhard_EBR_75_Mle1954/collision_client/Wheel_R_01.model	</collisionModelClient>
@@ -321,19 +344,53 @@
           <wheelPos>	0.881 0.61 2.139	</wheelPos>
         </wheel>
         <wheel>
-          <index>	3	</index>
+          <index>	1	</index>
           <isLeft>	false	</isLeft>
-          <name>	W_R0	</name>
-          <radius>	0.611721	</radius>
+          <name>	WD_R1	</name>
+          <isLeading>	true	</isLeading>
+          <deflatable>	true	</deflatable>
+          <steeringProcessor>	true	</steeringProcessor>
           <scrollProcessor>
-            <connectedToEngine>	True	</connectedToEngine>
+            <connectedToEngine>	true	</connectedToEngine>
           </scrollProcessor>
           <rollProcessor>
             <maxDamageAngle>	0.3	</maxDamageAngle>
           </rollProcessor>
-          <collisionCylinder>
+          <geometry>
+            <radius>	0.617366	</radius>
+            <width>	0.34	</width>
+            <pivotXOffset>	0.145	</pivotXOffset>
+          </geometry>
+          <proceduralCollisionBody>	true	</proceduralCollisionBody>
+          <deflation>
+            <maxYShift>	0.25	</maxYShift>
+            <explodedRadius>	0.476	</explodedRadius>
+          </deflation>
+          <hitTester>
+            <collisionModelServer>	vehicles/french/F106_Panhard_EBR_75_Mle1954/collision/Wheel_R_01.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/french/F106_Panhard_EBR_75_Mle1954/collision_client/Wheel_R_01.model	</collisionModelClient>
+          </hitTester>
+          <armor>
+            <wheel>	10	</wheel>
+          </armor>
+          <wheelPos>	0.881 0.61 -2.139	</wheelPos>
+        </wheel>
+        <wheel>
+          <index>	5	</index>
+          <isLeft>	false	</isLeft>
+          <name>	W_R0	</name>
+          <scrollProcessor>
+            <connectedToEngine>	true	</connectedToEngine>
+          </scrollProcessor>
+          <rollProcessor>
+            <maxDamageAngle>	0.3	</maxDamageAngle>
+          </rollProcessor>
+          <geometry>
+            <radius>	0.611721	</radius>
             <width>	0.345	</width>
-          </collisionCylinder>
+            <pivotXOffset>	0.05	</pivotXOffset>
+          </geometry>
+          <proceduralCollisionBody>	true	</proceduralCollisionBody>
           <hitTester>
             <collisionModelServer>	vehicles/french/F106_Panhard_EBR_75_Mle1954/collision/Wheel_R_02.model	</collisionModelServer>
             <collisionModelClient>	vehicles/french/F106_Panhard_EBR_75_Mle1954/collision_client/Wheel_R_02.model	</collisionModelClient>
@@ -341,22 +398,24 @@
           <armor>
             <wheel>	5	</wheel>
           </armor>
-          <wheelPos>	1.026 0.581 -0.705	</wheelPos>
+          <wheelPos>	1.026 0.581 0.705	</wheelPos>
         </wheel>
         <wheel>
-          <index>	5	</index>
+          <index>	3	</index>
           <isLeft>	false	</isLeft>
           <name>	W_R1	</name>
-          <radius>	0.611721	</radius>
           <scrollProcessor>
-            <connectedToEngine>	True	</connectedToEngine>
+            <connectedToEngine>	true	</connectedToEngine>
           </scrollProcessor>
           <rollProcessor>
             <maxDamageAngle>	0.3	</maxDamageAngle>
           </rollProcessor>
-          <collisionCylinder>
+          <geometry>
+            <radius>	0.611721	</radius>
             <width>	0.345	</width>
-          </collisionCylinder>
+            <pivotXOffset>	0.05	</pivotXOffset>
+          </geometry>
+          <proceduralCollisionBody>	true	</proceduralCollisionBody>
           <hitTester>
             <collisionModelServer>	vehicles/french/F106_Panhard_EBR_75_Mle1954/collision/Wheel_R_03.model	</collisionModelServer>
             <collisionModelClient>	vehicles/french/F106_Panhard_EBR_75_Mle1954/collision_client/Wheel_R_03.model	</collisionModelClient>
@@ -364,10 +423,16 @@
           <armor>
             <wheel>	5	</wheel>
           </armor>
-          <wheelPos>	1.026 0.581 0.705	</wheelPos>
+          <wheelPos>	1.026 0.581 -0.705	</wheelPos>
         </wheel>
-        <generalWheels>	True	</generalWheels>
-        <activePostmortem>	True	</activePostmortem>
+        <generalWheels>	true	</generalWheels>
+        <globalDeflationShaderParams>
+          <wheelRadius>	0.61	</wheelRadius>
+          <rimRadius>	0.35	</rimRadius>
+          <sideShift>	0.2	</sideShift>
+          <peakShift>	0.95	</peakShift>
+        </globalDeflationShaderParams>
+        <activePostmortem>	true	</activePostmortem>
       </wheels>
       <hullPosition>	0.000000 1.20215 0.000000	</hullPosition>
       <drivingWheels>	WD_L0 WD_L1	</drivingWheels>
@@ -396,7 +461,7 @@
           <trackNode>	Track_L1	</trackNode>
           <limits>	-5.0 25.0	</limits>
           <collisionSamplesCount>	5	</collisionSamplesCount>
-          <hasLiftMode>	True	</hasLiftMode>
+          <hasLiftMode>	true	</hasLiftMode>
           <affectedWheelName>	W_L0	</affectedWheelName>
         </lever>
         <lever>
@@ -405,7 +470,7 @@
           <trackNode>	Track_R1	</trackNode>
           <limits>	-5.0 25.0	</limits>
           <collisionSamplesCount>	5	</collisionSamplesCount>
-          <hasLiftMode>	True	</hasLiftMode>
+          <hasLiftMode>	true	</hasLiftMode>
           <affectedWheelName>	W_R0	</affectedWheelName>
         </lever>
         <lever>
@@ -414,7 +479,7 @@
           <trackNode>	Track_L2	</trackNode>
           <limits>	185.0 155.0	</limits>
           <collisionSamplesCount>	5	</collisionSamplesCount>
-          <hasLiftMode>	True	</hasLiftMode>
+          <hasLiftMode>	true	</hasLiftMode>
           <affectedWheelName>	W_L1	</affectedWheelName>
         </lever>
         <lever>
@@ -423,10 +488,10 @@
           <trackNode>	Track_R2	</trackNode>
           <limits>	185.0 155.0	</limits>
           <collisionSamplesCount>	5	</collisionSamplesCount>
-          <hasLiftMode>	True	</hasLiftMode>
+          <hasLiftMode>	true	</hasLiftMode>
           <affectedWheelName>	W_R1	</affectedWheelName>
         </lever>
-        <activePostmortem>	True	</activePostmortem>
+        <activePostmortem>	true	</activePostmortem>
       </leveredSuspension>
       <groundNodes>
         <node>
@@ -461,7 +526,7 @@
           <minOffset>	-0.06	</minOffset>
           <maxOffset>	0.04	</maxOffset>
         </node>
-        <activePostmortem>	True	</activePostmortem>
+        <activePostmortem>	true	</activePostmortem>
         <lodSettings>
           <maxLodDistance>	LEVERED_SUSPENSION	</maxLodDistance>
           <maxPriority>	5	</maxPriority>
@@ -537,7 +602,7 @@
             <gun>	20	</gun>
           </armor>
           <shotDispersionRadius>	0.38	</shotDispersionRadius>
-          <reloadTime>	10.3	</reloadTime>
+          <reloadTime>	9.5	</reloadTime>
           <aimingTime>	1.2	</aimingTime>
           <shotDispersionFactors>
             <turretRotation>	0.04	</turretRotation>
@@ -570,7 +635,8 @@
               <slotId>	771	</slotId>
               <rayStart>	-0.000418988 -0.000190262 3.0299	</rayStart>
               <rayEnd>	0.0314061 -0.0115135 3.0284	</rayEnd>
-              <rayUp>	0.072 0.067 5	</rayUp>
+              <rayUp>	0.072 0.000000 0.000000	</rayUp>
+              <applyToFabric>	true	</applyToFabric>
               <size>	0.487	</size>
               <hideIfDamaged>	false	</hideIfDamaged>
               <isUVProportional>	true	</isUVProportional>
@@ -600,14 +666,28 @@
               <slotType>	projectionDecal	</slotType>
               <slotId>	836	</slotId>
               <tags>	formfactor_any	</tags>
-              <position>	0.0208229 1.77476 -1.00431	</position>
+              <position>	0.0208035 2.14459 -1.00376	</position>
               <rotation>	-3.1401 -0.000201225 -0.000052	</rotation>
-              <scale>	1.187 0.999998 1.187	</scale>
+              <scale>	1.187 0.999994 1.187	</scale>
               <doubleSided>	false	</doubleSided>
               <showOn>	4096	</showOn>
               <clipAngle>	0.000000	</clipAngle>
-              <anchorPosition>	0.0216079 0.255893 -1.04074	</anchorPosition>
-              <anchorDirection>	-0.000052 0.999999 0.00148835	</anchorDirection>
+              <anchorPosition>	0.021608 0.251865 -1.04074	</anchorPosition>
+              <anchorDirection>	-0.000052 0.999999 0.00149264	</anchorDirection>
+            </slot>
+            <slot>
+              <slotType>	projectionDecal	</slotType>
+              <slotId>	837	</slotId>
+              <tags>	formfactor_square	</tags>
+              <parentSlotId>	836	</parentSlotId>
+              <position>	0.190347 2.12246 -0.490063	</position>
+              <rotation>	0.00170385 -0.000002 3.14133	</rotation>
+              <scale>	1.12508 0.94783 1.12508	</scale>
+              <doubleSided>	false	</doubleSided>
+              <showOn>	4096	</showOn>
+              <clipAngle>	1.17658	</clipAngle>
+              <anchorPosition>	0.191172 0.229738 -0.527036	</anchorPosition>
+              <anchorDirection>	0.000262646 0.999999 0.00170385	</anchorDirection>
             </slot>
           </customizationSlots>
           <customization>
@@ -641,9 +721,9 @@
           <rayStart>	0.445662 -0.0323547 -1.67855	</rayStart>
           <rayEnd>	0.4456 -0.0323929 -1.47855	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
+          <isMirrored>	true	</isMirrored>
           <size>	0.23	</size>
           <hideIfDamaged>	true	</hideIfDamaged>
-          <isMirrored>	true	</isMirrored>
           <isUVProportional>	true	</isUVProportional>
         </slot>
         <slot>
@@ -703,14 +783,14 @@
     <detailed>
       <engines>
         <Panhard_12H_6000_54>
-          <smplEnginePower>	575	</smplEnginePower>
+          <smplEnginePower>	605	</smplEnginePower>
           <smplFwMaxSpeed>	80	</smplFwMaxSpeed>
         </Panhard_12H_6000_54>
       </engines>
       <chassis>
         <Chassis_F106_Panhard_EBR_75_Mle1954>
           <axleCount>	4	</axleCount>
-          <axleSteeringLockAngles>	-20 0 0 20	</axleSteeringLockAngles>
+          <axleSteeringLockAngles>	-15 0 0 15	</axleSteeringLockAngles>
           <grounds>
             <ground>
               <medium>
@@ -748,8 +828,8 @@
     </detailed>
   </physics>
   <siege_mode>
-    <switchOnTime>	0.2	</switchOnTime>
-    <switchOffTime>	0.2	</switchOffTime>
+    <switchOnTime>	0.1	</switchOnTime>
+    <switchOffTime>	0.1	</switchOffTime>
     <engineDamageCoeff>	1	</engineDamageCoeff>
     <soundStateChange>
       <on>	wheel_vehicle_speed_high	</on>
@@ -773,6 +853,7 @@
     <tankmen></tankmen>
   </deviceExtras>
   <clientAdjustmentFactors></clientAdjustmentFactors>
+  <useHullZ>	True	</useHullZ>
   <effects>
     <collision></collision>
     <damagedStateGroup>	medium	</damagedStateGroup>

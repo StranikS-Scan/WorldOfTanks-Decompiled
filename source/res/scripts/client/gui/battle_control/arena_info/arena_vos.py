@@ -97,7 +97,7 @@ def isPremiumIGR(tags):
 
 
 class PlayerInfoVO(object):
-    __slots__ = ('accountDBID', 'name', 'clanAbbrev', 'igrType', 'personaMissionIDs', 'personalMissionInfo', 'isPrebattleCreator', 'forbidInBattleInvitations')
+    __slots__ = ('accountDBID', 'name', 'clanAbbrev', 'igrType', 'personaMissionIDs', 'personalMissionInfo', 'isPrebattleCreator', 'forbidInBattleInvitations', 'isTeamKiller')
     eventsCache = dependency.descriptor(IEventsCache)
 
     def __init__(self, accountDBID=0L, name=None, clanAbbrev='', igrType=IGR_TYPE.NONE, personalMissionIDs=None, personalMissionInfo=None, isPrebattleCreator=False, forbidInBattleInvitations=False, **kwargs):
@@ -110,6 +110,7 @@ class PlayerInfoVO(object):
         self.personalMissionInfo = personalMissionInfo or {}
         self.isPrebattleCreator = isPrebattleCreator
         self.forbidInBattleInvitations = forbidInBattleInvitations
+        self.isTeamKiller = False
 
     def __repr__(self):
         return 'PlayerInfoVO(accountDBID = {0:n}, name = {1:>s})'.format(self.accountDBID, self.name)
@@ -322,13 +323,7 @@ class VehicleArenaInfoVO(object):
         return self.player.isPrebattleCreator and self.isSquadMan()
 
     def isTeamKiller(self, playerTeam=None):
-        if playerTeam is not None and self.team != playerTeam:
-            return False
-        elif self.vehicleID == avatar_getter.getPlayerVehicleID() and avatar_getter.isPlayerTeamKillSuspected():
-            return True
-        else:
-            return self.playerStatus & _PLAYER_STATUS.IS_TEAM_KILLER > 0
-            return
+        return True if self.vehicleID == avatar_getter.getPlayerVehicleID() and avatar_getter.isPlayerTeamKillSuspected() else self.playerStatus & _PLAYER_STATUS.IS_TEAM_KILLER > 0
 
     def getPlayerStatusInTeam(self, playerTeam=None):
         playerStatus = 0

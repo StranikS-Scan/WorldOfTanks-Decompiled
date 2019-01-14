@@ -13,7 +13,7 @@
                 <key>	damageReceived	</key>
                 <key>	damageBlockedByArmor	</key>
               </plus>
-              <greaterOrEqual>	12000	</greaterOrEqual>
+              <greaterOrEqual>	10000	</greaterOrEqual>
             </results>
           </and>
         </postBattle>
@@ -121,11 +121,11 @@
                 <key>	damageReceived	</key>
                 <key>	damageBlockedByArmor	</key>
               </plus>
-              <greaterOrEqual>	12000	</greaterOrEqual>
+              <greaterOrEqual>	10000	</greaterOrEqual>
             </results>
             <results>
               <key>	percentFromTotalTeamDamage	</key>
-              <greaterOrEqual>	25	</greaterOrEqual>
+              <greaterOrEqual>	20	</greaterOrEqual>
             </results>
             <win></win>
           </and>
@@ -159,11 +159,11 @@
                 <key>	damageReceived	</key>
                 <key>	damageBlockedByArmor	</key>
               </plus>
-              <greaterOrEqual>	12000	</greaterOrEqual>
+              <greaterOrEqual>	10000	</greaterOrEqual>
             </results>
             <results>
               <key>	percentFromTotalTeamDamage	</key>
-              <greaterOrEqual>	25	</greaterOrEqual>
+              <greaterOrEqual>	20	</greaterOrEqual>
             </results>
             <win></win>
           </and>

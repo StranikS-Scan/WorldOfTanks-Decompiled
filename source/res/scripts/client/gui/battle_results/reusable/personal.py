@@ -154,7 +154,7 @@ class _XPReplayRecords(records.ReplayRecords):
         if isHighScope:
             self._addRecord(ValueReplay.SET, 'isHighScope', 1, 0)
         self._addRecord(ValueReplay.SET, 'achievementXP', achievementXP, 0)
-        self._addRecord(ValueReplay.SET, 'xpToShow', max(0, self.getRecord('xp') - self.getRecord('premiumVehicleXPFactor100')), 0)
+        self._addRecord(ValueReplay.SET, 'xpToShow', max(0, self.getRecord('xp')), 0)
 
     def _getRecord(self, name):
         value = super(_XPReplayRecords, self)._getRecord(name)

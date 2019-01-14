@@ -5,8 +5,11 @@ import Math
 from gui.customization.shared import C11nId
 from gui.shared.gui_items.customization.outfit import Area
 from gui.Scaleform.daapi.view.lobby.customization.shared import C11nTabs
-EMBLEM_SCALE_FACTOR = 0.5
-INSCRIPTION_SCALE_FACTOR = 0.25
+_ASPECT_RATIO = {C11nTabs.EMBLEM: 1.0,
+ C11nTabs.INSCRIPTION: 2.0}
+_ANCHOR_SHIFT_FROM_CENTRE = {C11nTabs.EMBLEM: 0.5,
+ C11nTabs.INSCRIPTION: 0.3}
+_LINES_SHIFT_FROM_CENTRE = 0.4
 
 class VehicleAnchorsUpdater(object):
 
@@ -42,24 +45,26 @@ class VehicleAnchorsUpdater(object):
                     anchorParams = self.__getAnchorParams(customSlotId)
                     if anchorParams is not None:
                         anchorWorldPos = Math.Vector3(anchorParams.pos)
+                        bottom = Math.Vector3(anchorParams.pos)
+                        size = 0.0
                         normal = Math.Vector3(anchorParams.normal)
                         if self.__ctx.currentTab in C11nTabs.REGIONS:
                             if customSlotId.areaId != Area.GUN:
                                 normal.normalise()
                                 anchorWorldPos -= normal * 0.2
-                        elif self.__ctx.currentTab in (C11nTabs.EMBLEM, C11nTabs.INSCRIPTION) and customSlotId != menuSlotId:
-                            rayUp = anchorParams.slotDescriptor.rayUp
-                            rayUp.normalise()
-                            scaleFactor = 0
-                            if self.__ctx.currentTab == C11nTabs.EMBLEM:
-                                scaleFactor = EMBLEM_SCALE_FACTOR
-                            elif self.__ctx.currentTab == C11nTabs.INSCRIPTION:
-                                item = self.__ctx.currentOutfit.getContainer(customSlotId.areaId).slotFor(customSlotId.slotType).getItem(customSlotId.regionIdx)
-                                if item is not None:
-                                    scaleFactor = INSCRIPTION_SCALE_FACTOR
+                        elif self.__ctx.currentTab in (C11nTabs.EMBLEM, C11nTabs.INSCRIPTION):
                             size = anchorParams.slotDescriptor.size
-                            anchorWorldPos += Math.Vector3(rayUp) * size * scaleFactor * self.__vScale
-                        scaleformUid = self.__vehicleCustomizationAnchors.addAnchor(anchorWorldPos, normal, displayObject, True, True, True)
+                            decalUp = normal * (anchorParams.slotDescriptor.rayUp * normal)
+                            slotHeight = size / _ASPECT_RATIO[self.__ctx.currentTab]
+                            if customSlotId == menuSlotId:
+                                shift = slotHeight * _LINES_SHIFT_FROM_CENTRE
+                                bottom = anchorWorldPos - decalUp * shift * self.__vScale
+                            else:
+                                item = self.__ctx.currentOutfit.getContainer(customSlotId.areaId).slotFor(customSlotId.slotType).getItem(customSlotId.regionIdx)
+                                if item is not None or self.__ctx.currentTab == C11nTabs.EMBLEM:
+                                    shift = slotHeight * _ANCHOR_SHIFT_FROM_CENTRE[self.__ctx.currentTab]
+                                    anchorWorldPos += decalUp * shift * self.__vScale
+                        scaleformUid = self.__vehicleCustomizationAnchors.addAnchor(anchorWorldPos, normal, bottom, size, displayObject, True, True, True)
                         processedObjectIds[customSlotId] = scaleformUid
 
             self.__processedAnchors = processedObjectIds
@@ -86,6 +91,9 @@ class VehicleAnchorsUpdater(object):
     def displayMenu(self, display):
         self.__vehicleCustomizationAnchors.displayMenu(display)
 
+    def displayLine(self, display):
+        self.__vehicleCustomizationAnchors.displayLine(display)
+
     def attachMenuToAnchor(self, slotId):
         scaleformUid = self.__processedAnchors.get(slotId, -1)
         if scaleformUid == -1:
@@ -106,3 +114,13 @@ class VehicleAnchorsUpdater(object):
 
             self.__processedAnchors.clear()
         return
+
+    def hideAllAnchors(self):
+        if self.__vehicleCustomizationAnchors is not None:
+            for scaleformUid in self.__processedAnchors.itervalues():
+                self.__vehicleCustomizationAnchors.changeAnchorParams(scaleformUid, False, False)
+
+        return
+
+    def registerInscriptionController(self, inscriptionController, inputLines):
+        self.__vehicleCustomizationAnchors.registerInscriptionController(inscriptionController, inputLines)

@@ -60,6 +60,7 @@ class CustomizationCarouselDataProvider(SortableDAAPIDataProvider):
         self._proxy = proxy
         self._currentlyApplied = set()
         self._allSeasonAndTabFilterData = {}
+        self._userCreatedItems = None
         self.updateTabGroups()
         return
 
@@ -89,14 +90,10 @@ class CustomizationCarouselDataProvider(SortableDAAPIDataProvider):
                     if tabIndex not in C11nTabs.VISIBLE:
                         continue
                     if item.itemTypeID in (GUI_ITEM_TYPE.INSCRIPTION, GUI_ITEM_TYPE.EMBLEM):
-                        for areaData in anchorsData.itervalues():
-                            if areaData.get(item.itemTypeID):
-                                hasSlots = True
-                                break
-                        else:
-                            hasSlots = False
-
-                        if not hasSlots:
+                        if not self.__hasSlots(anchorsData, item.itemTypeID):
+                            continue
+                    elif item.itemTypeID is GUI_ITEM_TYPE.PERSONAL_NUMBER:
+                        if not self.__hasSlots(anchorsData, GUI_ITEM_TYPE.INSCRIPTION):
                             continue
                     visibleTabs[seasonType].add(tabIndex)
 
@@ -111,6 +108,14 @@ class CustomizationCarouselDataProvider(SortableDAAPIDataProvider):
         self._itemSizeData = []
         self._customizationBookmarks = []
         self._selectedIdx = -1
+
+    @staticmethod
+    def __hasSlots(anchorsData, itemTypeID):
+        for areaData in anchorsData.itervalues():
+            if areaData.get(itemTypeID):
+                return True
+
+        return False
 
     def clear(self):
         del self._customizationItems[:]
@@ -185,9 +190,10 @@ class CustomizationCarouselDataProvider(SortableDAAPIDataProvider):
     def getCurrentlyApplied(self):
         return self._currentlyApplied
 
-    def buildList(self, tabIndex, season, refresh=True):
+    def buildList(self, tabIndex, season, refresh=True, userCreatedItems=None):
         self._tabIndex = tabIndex
         self._seasonID = season
+        self._userCreatedItems = userCreatedItems
         self.clear()
         self._buildCustomizationItems()
         if refresh:
@@ -234,6 +240,10 @@ class CustomizationCarouselDataProvider(SortableDAAPIDataProvider):
             appliedItems = self._proxy.getAppliedItems(isOriginal=False)
             requirement |= REQ_CRITERIA.CUSTOM(lambda item: item.intCD in appliedItems)
         allItems = self.itemsCache.items.getItems(TABS_ITEM_MAPPING[self._tabIndex], requirement)
+        if self._tabIndex == C11nTabs.INSCRIPTION:
+            allItems.update(self.itemsCache.items.getItems(GUI_ITEM_TYPE.PERSONAL_NUMBER, requirement))
+        if self._userCreatedItems:
+            allItems.update(self._userCreatedItems)
         self._customizationItems = []
         self._customizationBookmarks = []
         lastGroupID = None

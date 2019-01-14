@@ -1,6 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/frameworks/wulf/view/view_event.py
-
+import typing
 
 class Position2D(object):
     __slots__ = ('__positionX', '__positionY')

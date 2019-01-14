@@ -1,27 +1,42 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/gen_utils.py
-from typing import Optional, Union
-from frameworks.wulf import Resource
+from typing import Optional, Generator, Iterator
 
 class DynAccessor(object):
-    __slots__ = ()
+    __slots__ = ('__resId',)
 
-    @classmethod
-    def dyn(cls, attr, default=Resource.INVALID):
-        return getattr(cls, attr, default)
+    def __init__(self, value=0):
+        self.__resId = value
 
-    @classmethod
-    def keys(cls):
-        return (attr for attr in dir(cls) if attr not in dir(DynAccessor))
+    def __call__(self):
+        return self.__resId
 
-    @classmethod
-    def values(cls):
-        return (getattr(cls, attr) for attr in cls.keys())
+    def __nonzero__(self):
+        return self.__resId >= 0
 
-    @classmethod
-    def items(cls):
-        return ((attr, getattr(cls, attr)) for attr in cls.keys())
+    def dyn(self, attr, default=None):
+        return getattr(self, attr, default or _g_invalid)
 
-    @classmethod
-    def length(cls):
-        return len(tuple(cls.keys()))
+    def keys(self):
+        return (attr for attr in dir(self) if attr not in dir(DynAccessor) and not attr.startswith('_'))
+
+    def values(self):
+        return (getattr(self, attr) for attr in self.keys())
+
+    def items(self):
+        return ((attr, getattr(self, attr)) for attr in self.keys())
+
+    def length(self):
+        return len(tuple(self.keys()))
+
+    def exists(self):
+        return self.__resId > 0
+
+
+class _InvalidDynAccessor(DynAccessor):
+
+    def keys(self):
+        return iter(())
+
+
+_g_invalid = _InvalidDynAccessor(-1)

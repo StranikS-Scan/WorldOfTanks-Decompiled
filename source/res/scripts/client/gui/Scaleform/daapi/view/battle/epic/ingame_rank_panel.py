@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/epic/ingame_rank_panel.py
 from gui.Scaleform.daapi.view.meta.EpicInGameRankMeta import EpicInGameRankMeta
+from gui.Scaleform.locale.EPIC_BATTLE import EPIC_BATTLE
 from helpers import dependency
 from skeletons.gui.battle_session import IBattleSessionProvider
 _MAX_IN_GAME_RANK = 5
@@ -40,7 +41,7 @@ class InGameRankPanel(EpicInGameRankMeta):
          'isMaxRank': self.__currentRank == _MAX_IN_GAME_RANK,
          'previousProgress': 0,
          'newProgress': self.__getThresholdPercentage(self.__currentExp),
-         'rankText': str(self.__currentRank)})
+         'rankText': EPIC_BATTLE.getRankLabel(self.__currentRank)})
 
     def __getThresholdPercentage(self, expValue):
         activeRank = self.__getRank(expValue)

@@ -31,16 +31,6 @@ class BaseTransition(Node):
     def setTarget(self, state):
         self.__targets.append(weakref.ref(state))
 
-    def getEnabledStates(self):
-        states = self.getTargets()
-        if not states:
-            return []
-        else:
-            source = self.getSource()
-            if source is not None:
-                states.insert(0, source)
-            return states
-
     def execute(self, event):
         raise NotImplementedError
 
@@ -68,9 +58,9 @@ class ConditionTransition(BaseTransition):
 class StringEventTransition(BaseTransition):
     __slots__ = ('__token',)
 
-    def __init__(self, token, priority=0):
+    def __init__(self, token='', priority=0):
         super(StringEventTransition, self).__init__(priority=priority)
         self.__token = token
 
     def execute(self, event):
-        return event.token == self.__token if isinstance(event, StringEvent) else False
+        return not self.__token or event.token == self.__token if isinstance(event, StringEvent) else False

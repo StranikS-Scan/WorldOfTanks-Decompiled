@@ -11,11 +11,9 @@ from gui.wgnc.client import ClosePollWindowFromPopUp, ClientLogic
 from gui.wgnc.errors import ValidationError
 from gui.wgnc.events import g_wgncEvents
 from gui.wgnc.settings import WGNC_GUI_TYPE, WGNC_GUI_INVALID_SEQS, convertToLocalIcon, convertToLocalBG
-from helpers import dependency, i18n
+from helpers import dependency
 from ids_generators import SequenceIDGenerator
 from skeletons.gui.game_control import IRefSystemController, IPromoController
-from gui import SystemMessages
-from gui.Scaleform.locale.MESSENGER import MESSENGER
 _ButtonData = namedtuple('_ButtonData', ['label',
  'action',
  'visible',
@@ -95,11 +93,11 @@ class _GUIItem(object):
 _idGen = SequenceIDGenerator()
 
 @ReprInjector.withParent(('_priority', 'priority'), ('_icon', 'icon'), ('_bg', 'bg'), ('_group', 'group'), ('_isNotify', 'isNotify'))
-class _PopUpItem(_GUIItem):
+class PopUpItem(_GUIItem):
     __slots__ = ('_priority', '_icon', '_bg', '_group', '_isNotify')
 
     def __init__(self, body, topic, priority, buttons=None, icon='information', bg='', group='info', isNotify=True):
-        super(_PopUpItem, self).__init__('pop-up-{0}'.format(_idGen.next()), body, topic, buttons, False)
+        super(PopUpItem, self).__init__('pop-up-{0}'.format(_idGen.next()), body, topic, buttons, False)
         self._priority = priority
         self._icon = icon
         self._bg = bg
@@ -323,17 +321,3 @@ class GUIHolder(object):
             return
         for _, item in self.__items.iteritems():
             item.validate(actionsHolder)
-
-
-class _LootBoxGiftPopUp(_PopUpItem):
-
-    def show(self, _):
-        SystemMessages.pushMessage(i18n.makeString(MESSENGER.SERVICECHANNELMESSAGES_LOOTBOXESGIFT_BODY), type=SystemMessages.SM_TYPE.LootBoxesGift)
-
-
-def createPopUpItem(body, topic, priority, buttons, icon, bg, group, isNotify):
-    if topic == 'gift_received':
-        item = _LootBoxGiftPopUp(body, topic, priority, buttons, icon, bg, group, isNotify)
-    else:
-        item = _PopUpItem(body, topic, priority, buttons, icon, bg, group, isNotify)
-    return item

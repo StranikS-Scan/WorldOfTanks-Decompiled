@@ -13,12 +13,11 @@ from account_shared import LayoutIterator
 from constants import WIN_XP_FACTOR_MODE, RentType
 from rent_common import parseRentID
 from gui import makeHtmlString
-from gui.impl.gen import R
 from gui.Scaleform.genConsts.STORE_CONSTANTS import STORE_CONSTANTS
 from gui.Scaleform.locale.ITEM_TYPES import ITEM_TYPES
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
-from gui.Scaleform.locale.RES_SHOP import RES_SHOP
-from gui.prb_control import prb_getters
+from gui.Scaleform.locale.RES_SHOP_EXT import RES_SHOP_EXT
+from gui.prb_control import prb_getters, prbDispatcherProperty
 from gui.prb_control.settings import PREBATTLE_SETTING_NAME
 from gui.shared.economics import calcRentPackages, getActionPrc, calcVehicleRestorePrice
 from gui.shared.formatters import text_styles
@@ -193,7 +192,7 @@ class Vehicle(FittingItem, HasStrCD):
         invData = dict()
         tradeInData = None
         if proxy is not None and proxy.inventory.isSynced() and proxy.stats.isSynced() and proxy.shop.isSynced() and proxy.vehicleRotation.isSynced() and proxy.recycleBin.isSynced():
-            invDataTmp = proxy.inventory.getItems(GUI_ITEM_TYPE.VEHICLE, self._inventoryID)
+            invDataTmp = proxy.inventory.getItems(GUI_ITEM_TYPE.VEHICLE, inventoryID)
             if invDataTmp is not None:
                 invData = invDataTmp
             tradeInData = proxy.shop.tradeIn
@@ -504,7 +503,7 @@ class Vehicle(FittingItem, HasStrCD):
 
     def getShopIcon(self, size=STORE_CONSTANTS.ICON_SIZE_MEDIUM):
         name = self.name.split(':')[1]
-        return RES_SHOP.getVehicleIcon(size, name) if RES_SHOP.hasVehicleIcon(size, name) else None
+        return RES_SHOP_EXT.getVehicleIcon(size, name)
 
     @property
     def shellsLayoutIdx(self):
@@ -1139,6 +1138,18 @@ class Vehicle(FittingItem, HasStrCD):
     def isAutoRentStyle(self):
         return bool(self.settings & VEHICLE_SETTINGS_FLAG.AUTO_RENT_CUSTOMIZATION)
 
+    @prbDispatcherProperty
+    def __prbDispatcher(self):
+        return None
+
+    def isCustomizationEnabled(self):
+        locked = False
+        if self.__prbDispatcher is not None:
+            permission = self.__prbDispatcher.getGUIPermissions()
+            if permission is not None:
+                locked = not permission.canChangeVehicle()
+        return not self.isOnlyForEventBattles and not self.isInBattle and self.isInInventory and not self.isLocked and not locked and not self.isBroken and not self.rentalIsOver and not self.isOutfitLocked
+
     def isAutoLoadFull(self):
         if self.isAutoLoad:
             for shell in self.shells:
@@ -1414,15 +1425,6 @@ def getLevelIconPath(vehLevel):
 
 def getIconPath(vehicleName):
     return '../maps/icons/vehicle/%s' % getItemIconName(vehicleName)
-
-
-def getIconResource(vehicleName):
-    rName = getIconResourceName(vehicleName=vehicleName)
-    return R.images.gui.maps.icons.vehicle.dyn(rName)
-
-
-def getIconResourceName(vehicleName):
-    return vehicleName.replace(':', '_').replace('-', '_')
 
 
 def getContourIconPath(vehicleName):

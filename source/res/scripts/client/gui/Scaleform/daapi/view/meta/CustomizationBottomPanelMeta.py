@@ -37,6 +37,9 @@ class CustomizationBottomPanelMeta(BaseDAAPIComponent):
     def as_setBottomPanelInitDataS(self, data):
         return self.flashObject.as_setBottomPanelInitData(data) if self._isDAAPIInited() else None
 
+    def as_setSwitchersDataS(self, data):
+        return self.flashObject.as_setSwitchersData(data) if self._isDAAPIInited() else None
+
     def as_setBottomPanelTabsDataS(self, data):
         return self.flashObject.as_setBottomPanelTabsData(data) if self._isDAAPIInited() else None
 
@@ -61,5 +64,5 @@ class CustomizationBottomPanelMeta(BaseDAAPIComponent):
     def as_getDataProviderS(self):
         return self.flashObject.as_getDataProvider() if self._isDAAPIInited() else None
 
-    def as_removeCountersS(self):
-        return self.flashObject.as_removeCounters() if self._isDAAPIInited() else None
+    def as_removeCountersS(self, id):
+        return self.flashObject.as_removeCounters(id) if self._isDAAPIInited() else None

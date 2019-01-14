@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/vehiclePreview20/info/vehicle_preview_crew_tab.py
 from CurrentVehicle import g_currentPreviewVehicle
+from debug_utils import LOG_DEBUG
 from gui.Scaleform.daapi.view.meta.VehiclePreviewCrewTabMeta import VehiclePreviewCrewTabMeta
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.Scaleform.locale.ITEM_TYPES import ITEM_TYPES
@@ -38,40 +39,42 @@ class VehiclePreviewCrewTab(VehiclePreviewCrewTabMeta):
         self._update()
 
     def update(self, *args):
-        if g_currentPreviewVehicle.item is not None:
-            self._update()
-        return
+        self._update()
 
     def _update(self):
-        crewData = []
-        for _, tankman in g_currentPreviewVehicle.item.crew:
-            role = tankman.descriptor.role
-            crewData.append({'icon': RES_ICONS.getItemBonus42x42(role),
-             'name': text_styles.middleTitle(ITEM_TYPES.tankman_roles(role)),
-             'tooltip': TOOLTIPS_CONSTANTS.VEHICLE_PREVIEW_CREW_MEMBER,
-             'role': role})
+        currentVehicle = g_currentPreviewVehicle.item
+        if not currentVehicle:
+            LOG_DEBUG('Current vehicle is None, avoid updating.')
+            return
+        else:
+            crewData = []
+            for _, tankman in currentVehicle.crew:
+                role = tankman.descriptor.role
+                crewData.append({'icon': RES_ICONS.getItemBonus42x42(role),
+                 'name': text_styles.middleTitle(ITEM_TYPES.tankman_roles(role)),
+                 'tooltip': TOOLTIPS_CONSTANTS.VEHICLE_PREVIEW_CREW_MEMBER,
+                 'role': role})
 
-        vehicleCrewComment = i18n.makeString(TOOLTIPS.VEHICLEPREVIEW_VEHICLEPANEL_INFO_HEADER_NOCREW)
-        if self.__vehicleItems and self.__crewItems:
-            currentVehicle = g_currentPreviewVehicle.item
-            gID = None
-            for item in self.__vehicleItems:
-                if item.id == currentVehicle.intCD:
-                    gID = item.groupID
-                    break
+            vehicleCrewComment = i18n.makeString(TOOLTIPS.VEHICLEPREVIEW_VEHICLEPANEL_INFO_HEADER_NOCREW)
+            if self.__vehicleItems and self.__crewItems:
+                gID = None
+                for item in self.__vehicleItems:
+                    if item.id == currentVehicle.intCD:
+                        gID = item.groupID
+                        break
 
-            try:
-                topCrewItem = sorted([ item for item in self.__crewItems if item.groupID == gID ], key=lambda item: ItemPackTypeGroup.CREW.index(item.type))[-1]
-            except IndexError:
-                topCrewItem = None
+                try:
+                    topCrewItem = sorted([ item for item in self.__crewItems if item.groupID == gID ], key=lambda item: ItemPackTypeGroup.CREW.index(item.type))[-1]
+                except IndexError:
+                    topCrewItem = None
 
-            if topCrewItem is not None:
-                pctValue = {ItemPackType.CREW_50: 50,
-                 ItemPackType.CREW_75: 75,
-                 ItemPackType.CREW_100: 100}.get(topCrewItem.type)
-                if pctValue is not None:
-                    vehicleCrewComment = i18n.makeString(TOOLTIPS.VEHICLEPREVIEW_VEHICLEPANEL_INFO_HEADER_WITHCREW, pctValue)
-        self.as_setDataS({'listDesc': text_styles.main(VEHICLE_PREVIEW.INFOPANEL_TAB_CREWINFO_LISTDESC_TEXT),
-         'vehicleCrewComment': text_styles.middleTitle(vehicleCrewComment),
-         'crewList': crewData})
-        return
+                if topCrewItem is not None:
+                    pctValue = {ItemPackType.CREW_50: 50,
+                     ItemPackType.CREW_75: 75,
+                     ItemPackType.CREW_100: 100}.get(topCrewItem.type)
+                    if pctValue is not None:
+                        vehicleCrewComment = i18n.makeString(TOOLTIPS.VEHICLEPREVIEW_VEHICLEPANEL_INFO_HEADER_WITHCREW, pctValue)
+            self.as_setDataS({'listDesc': text_styles.main(VEHICLE_PREVIEW.INFOPANEL_TAB_CREWINFO_LISTDESC_TEXT),
+             'vehicleCrewComment': text_styles.middleTitle(vehicleCrewComment),
+             'crewList': crewData})
+            return

@@ -8,7 +8,7 @@
         <postBattle>
           <and>
             <vehicleDamage>
-              <classes>	heavyTank	</classes>
+              <classes>	heavyTank mediumTank	</classes>
               <greaterOrEqual>	3000	</greaterOrEqual>
             </vehicleDamage>
           </and>
@@ -58,11 +58,11 @@
         <postBattle>
           <and>
             <vehicleDamage>
-              <classes>	heavyTank	</classes>
+              <classes>	heavyTank mediumTank	</classes>
               <greaterOrEqual>	3000	</greaterOrEqual>
             </vehicleDamage>
             <vehicleKills>
-              <greaterOrEqual>	4	</greaterOrEqual>
+              <greaterOrEqual>	3	</greaterOrEqual>
             </vehicleKills>
           </and>
         </postBattle>
@@ -95,11 +95,11 @@
         <postBattle>
           <and>
             <vehicleDamage>
-              <classes>	heavyTank	</classes>
+              <classes>	heavyTank mediumTank	</classes>
               <greaterOrEqual>	3000	</greaterOrEqual>
             </vehicleDamage>
             <vehicleKills>
-              <greaterOrEqual>	4	</greaterOrEqual>
+              <greaterOrEqual>	3	</greaterOrEqual>
             </vehicleKills>
           </and>
         </postBattle>

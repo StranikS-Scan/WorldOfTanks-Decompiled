@@ -607,7 +607,7 @@ class Action(ServerEventAbstract):
 
             return result
 
-    def getModifiersDict(self):
+    def getModifiers(self):
         result = {}
         for stepData in self._data.get('steps'):
             mName = stepData.get('name')
@@ -618,10 +618,7 @@ class Action(ServerEventAbstract):
                 result[mName].update(m)
             result[mName] = m
 
-        return result
-
-    def getModifiers(self):
-        return sorted(self.getModifiersDict().itervalues(), key=operator.methodcaller('getName'), cmp=compareModifiers)
+        return sorted(result.itervalues(), key=operator.methodcaller('getName'), cmp=compareModifiers)
 
 
 class PMCampaign(object):

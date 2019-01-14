@@ -32,7 +32,6 @@ class VehicleCompareAddVehiclePopover(VehicleSelectPopoverBase, VehicleSelectorB
     def initFilters(self):
         filters = self._initFilter(nation=-1, vehicleType='none', isMain=False, level=-1, compatibleOnly=False)
         self._updateFilter(filters['nation'], filters['vehicleType'], filters['isMain'], filters['level'], filters['compatibleOnly'])
-        filters.update({'compatibleOnlyLabel': VEH_COMPARE.ADDVEHPOPOVER_SHOWONLYMYVAHICLES})
         return filters
 
     def applyFilters(self, nation, vehicleType, level, isMain, hangarOnly):

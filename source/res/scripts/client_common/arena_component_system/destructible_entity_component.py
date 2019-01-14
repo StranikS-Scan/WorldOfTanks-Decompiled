@@ -10,9 +10,11 @@ class DestructibleEntitiesComponent(ClientArenaComponent):
         ClientArenaComponent.__init__(self, componentSystem)
         self.__destructibleEntities = {}
         self.onDestructibleEntityAdded = Event.Event(self._eventManager)
+        self.onDestructibleEntityRemoved = Event.Event(self._eventManager)
         self.onDestructibleEntityHealthChanged = Event.Event(self._eventManager)
         self.onDestructibleEntityIsActiveChanged = Event.Event(self._eventManager)
         self.onDestructibleEntityStateChanged = Event.Event(self._eventManager)
+        self.onDestructibleEntityFeedbackReceived = Event.Event(self._eventManager)
 
     def destroy(self):
         ClientArenaComponent.destroy(self)
@@ -31,8 +33,12 @@ class DestructibleEntitiesComponent(ClientArenaComponent):
     def updateDestructibleEntityDestructionState(self, destEntity):
         self.onDestructibleEntityStateChanged(destEntity.destructibleEntityID)
 
+    def updateDestructibleEntityFeedback(self, destEntity, eventID, isImmediate=False):
+        self.onDestructibleEntityFeedbackReceived(eventID, destEntity.destructibleEntityID, isImmediate)
+
     def removeDestructibleEntity(self, destEntity):
         if destEntity.destructibleEntityID in self.__destructibleEntities:
+            self.onDestructibleEntityRemoved(destEntity.destructibleEntityID)
             del self.__destructibleEntities[destEntity.destructibleEntityID]
 
     def getNumDestructibleEntities(self):

@@ -836,7 +836,8 @@ class ActionTooltipData(ToolTipBaseData):
             deviceNameType = ACTION_TOOLTIPS_TYPE.BOOSTER
         elif itemType == ACTION_TOOLTIPS_TYPE.ECONOMICS:
             itemName = key
-            makeSlotSellActionToolTip = True
+            if itemName == 'slotsPrices':
+                makeSlotSellActionToolTip = True
         template = 'html_templates:lobby/quests/actions'
         format_ = BigWorld.wg_getGoldFormat
         postfix = ''

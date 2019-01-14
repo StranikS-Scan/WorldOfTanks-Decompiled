@@ -5,7 +5,7 @@ from constants import SHELL_TYPES
 from gui.Scaleform.genConsts.FITTING_TYPES import FITTING_TYPES
 from gui.Scaleform.genConsts.STORE_CONSTANTS import STORE_CONSTANTS
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
-from gui.Scaleform.locale.RES_SHOP import RES_SHOP
+from gui.Scaleform.locale.RES_SHOP_EXT import RES_SHOP_EXT
 from gui.shared.items_parameters.params_cache import g_paramsCache
 import nations
 from helpers import i18n
@@ -43,7 +43,7 @@ class VehicleModule(FittingItem):
         return self.itemTypeName
 
     def getShopIcon(self, size=STORE_CONSTANTS.ICON_SIZE_MEDIUM):
-        return RES_SHOP.getModuleIcon(size, self.itemTypeName)
+        return RES_SHOP_EXT.getModuleIcon(size, self.itemTypeName)
 
 
 class VehicleChassis(VehicleModule):
@@ -86,7 +86,7 @@ class VehicleChassis(VehicleModule):
         return FITTING_TYPES.VEHICLE_WHEELED_CHASSIS if self.isWheeledChassis() else super(VehicleChassis, self).getGUIEmblemID()
 
     def getShopIcon(self, size=STORE_CONSTANTS.ICON_SIZE_MEDIUM):
-        return RES_SHOP.getModuleIcon(size, FITTING_TYPES.VEHICLE_WHEELED_CHASSIS) if self.isWheeledChassis() else super(VehicleChassis, self).getShopIcon(size)
+        return RES_SHOP_EXT.getModuleIcon(size, FITTING_TYPES.VEHICLE_WHEELED_CHASSIS) if self.isWheeledChassis() else super(VehicleChassis, self).getShopIcon(size)
 
     def _getShortInfoKey(self):
         return '#menu:descriptions/{}'.format(FITTING_TYPES.VEHICLE_WHEELED_CHASSIS if self.isWheeledChassis() else self.itemTypeName)
@@ -309,8 +309,7 @@ class Shell(FittingItem):
          'unicName': self.descriptor.icon[0]}
 
     def getShopIcon(self, size=STORE_CONSTANTS.ICON_SIZE_MEDIUM):
-        name = super(Shell, self).getShopIcon(size)
-        return RES_SHOP.getShellIcon(size, name) if RES_SHOP.hasShellIcon(size, name) else None
+        return RES_SHOP_EXT.getShellIcon(size, self.descriptor.iconName)
 
     def getGUIEmblemID(self):
         return self.type

@@ -104,14 +104,42 @@
         <slotType>	projectionDecal	</slotType>
         <slotId>	68	</slotId>
         <tags>	formfactor_any	</tags>
-        <position>	0.133903 0.399313 1.49847	</position>
-        <rotation>	0.226977 -0.000018 3.14152	</rotation>
-        <scale>	2.27225 2.27225 2.27226	</scale>
+        <position>	0.571398 1.53334 1.19545	</position>
+        <rotation>	0.108909 -0.000014 3.14152	</rotation>
+        <scale>	1.69559 1.69559 1.6956	</scale>
         <doubleSided>	false	</doubleSided>
         <showOn>	16	</showOn>
         <clipAngle>	0.92677	</clipAngle>
-        <anchorPosition>	0.133981 0.648469 1.75482	</anchorPosition>
+        <anchorPosition>	0.571398 0.68335 1.19664	</anchorPosition>
+        <anchorDirection>	0.000071 0.994075 0.108694	</anchorDirection>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	69	</slotId>
+        <tags>	formfactor_square	</tags>
+        <parentSlotId>	68	</parentSlotId>
+        <position>	-0.449852 1.22911 2.34306	</position>
+        <rotation>	0.226977 -0.000018 3.14152	</rotation>
+        <scale>	1.31047 1.31047 1.31048	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.92677	</clipAngle>
+        <anchorPosition>	-0.449852 0.371642 2.34383	</anchorPosition>
         <anchorDirection>	0.000069 0.974351 0.225033	</anchorDirection>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	70	</slotId>
+        <tags>	formfactor_square	</tags>
+        <parentSlotId>	68	</parentSlotId>
+        <position>	0.142996 1.48091 1.67518	</position>
+        <rotation>	0.108924 -0.000019 3.14152	</rotation>
+        <scale>	2.42382 2.42382 2.42381	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.92677	</clipAngle>
+        <anchorPosition>	0.142997 0.637587 1.67709	</anchorPosition>
+        <anchorDirection>	0.000071 0.994074 0.108709	</anchorDirection>
       </slot>
     </customizationSlots>
     <customization>
@@ -282,30 +310,62 @@
         <node>
           <isLeft>	true	</isLeft>
           <name>	Track_VT_L0	</name>
-          <forwardElastK>	2	</forwardElastK>
-          <backwardElastK>	0.75	</backwardElastK>
-        </node>
-        <node>
-          <isLeft>	false	</isLeft>
-          <name>	Track_VD_R0	</name>
+          <forwardElastK>	1.6	</forwardElastK>
+          <backwardElastK>	0.65	</backwardElastK>
+          <offset>	-0.0836431	</offset>
         </node>
         <node>
           <isLeft>	true	</isLeft>
           <name>	Track_VT_L1	</name>
-          <forwardElastK>	1.8	</forwardElastK>
-          <backwardElastK>	0.75	</backwardElastK>
+          <forwardElastK>	1.2	</forwardElastK>
+          <backwardElastK>	0.65	</backwardElastK>
+          <offset>	-0.109665	</offset>
         </node>
         <node>
           <isLeft>	true	</isLeft>
           <name>	Track_VT_L2	</name>
-          <forwardElastK>	1.6	</forwardElastK>
-          <backwardElastK>	0.75	</backwardElastK>
+          <forwardElastK>	1.3	</forwardElastK>
+          <backwardElastK>	0.55	</backwardElastK>
+          <offset>	-0.13197	</offset>
         </node>
         <node>
           <isLeft>	true	</isLeft>
           <name>	Track_VT_L3	</name>
-          <forwardElastK>	1.4	</forwardElastK>
-          <backwardElastK>	0.75	</backwardElastK>
+          <forwardElastK>	1.3	</forwardElastK>
+          <backwardElastK>	0.5	</backwardElastK>
+          <offset>	-0.0910781	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R0	</name>
+          <forwardElastK>	1.6	</forwardElastK>
+          <backwardElastK>	0.65	</backwardElastK>
+          <offset>	-0.0836431	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R1	</name>
+          <forwardElastK>	1.2	</forwardElastK>
+          <backwardElastK>	0.65	</backwardElastK>
+          <offset>	-0.109665	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R2	</name>
+          <forwardElastK>	1.3	</forwardElastK>
+          <backwardElastK>	0.55	</backwardElastK>
+          <offset>	-0.13197	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R3	</name>
+          <forwardElastK>	1.3	</forwardElastK>
+          <backwardElastK>	0.5	</backwardElastK>
+          <offset>	-0.0910781	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R0	</name>
         </node>
         <node>
           <isLeft>	true	</isLeft>
@@ -318,30 +378,6 @@
         <node>
           <isLeft>	false	</isLeft>
           <name>	Track_VD_R1	</name>
-        </node>
-        <node>
-          <isLeft>	false	</isLeft>
-          <name>	Track_VT_R0	</name>
-          <forwardElastK>	2	</forwardElastK>
-          <backwardElastK>	0.75	</backwardElastK>
-        </node>
-        <node>
-          <isLeft>	false	</isLeft>
-          <name>	Track_VT_R1	</name>
-          <forwardElastK>	1.8	</forwardElastK>
-          <backwardElastK>	0.75	</backwardElastK>
-        </node>
-        <node>
-          <isLeft>	false	</isLeft>
-          <name>	Track_VT_R2	</name>
-          <forwardElastK>	1.6	</forwardElastK>
-          <backwardElastK>	0.75	</backwardElastK>
-        </node>
-        <node>
-          <isLeft>	false	</isLeft>
-          <name>	Track_VT_R3	</name>
-          <forwardElastK>	1.4	</forwardElastK>
-          <backwardElastK>	0.75	</backwardElastK>
         </node>
       </trackNodes>
       <groundNodes>
@@ -435,7 +471,7 @@
           <radiusOverrides>
             <wheel>
               <name>	WD_L4	</name>
-              <radius>	0.241307	</radius>
+              <radius>	0.25	</radius>
             </wheel>
             <wheel>
               <name>	WD_L0	</name>
@@ -667,7 +703,7 @@
           <radiusOverrides>
             <wheel>
               <name>	WD_R4	</name>
-              <radius>	0.241456	</radius>
+              <radius>	0.25	</radius>
             </wheel>
             <wheel>
               <name>	WD_R0	</name>
@@ -1017,6 +1053,33 @@
           <slotId>	513	</slotId>
           <anchorPosition>	0.000000 1.2961 0.000000	</anchorPosition>
           <anchorDirection>	0.000000 1 0.000000	</anchorDirection>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	578	</slotId>
+          <tags>	formfactor_any	</tags>
+          <position>	-0.0065599 2.39134 -0.875118	</position>
+          <rotation>	0.000001 -0.000011 3.14152	</rotation>
+          <scale>	1.11933 0.175744 1.11934	</scale>
+          <doubleSided>	false	</doubleSided>
+          <showOn>	256	</showOn>
+          <clipAngle>	0.92677	</clipAngle>
+          <anchorPosition>	-0.0051621 1.3012 -0.463444	</anchorPosition>
+          <anchorDirection>	0.000073 1 0.000001	</anchorDirection>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	579	</slotId>
+          <tags>	formfactor_square	</tags>
+          <parentSlotId>	578	</parentSlotId>
+          <position>	-0.00220589 2.39133 -0.875117	</position>
+          <rotation>	3.14158 -0.000002 -0.000102997	</rotation>
+          <scale>	1.08404 0.170203 1.08405	</scale>
+          <doubleSided>	false	</doubleSided>
+          <showOn>	256	</showOn>
+          <clipAngle>	0.92677	</clipAngle>
+          <anchorPosition>	-0.000802775 1.30119 -0.463442	</anchorPosition>
+          <anchorDirection>	-0.000102997 1 -0.000013	</anchorDirection>
         </slot>
       </customizationSlots>
       <customization>

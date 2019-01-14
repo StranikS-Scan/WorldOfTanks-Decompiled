@@ -14,6 +14,7 @@ from dossiers2.ui.achievements import MARK_ON_GUN_RECORD
 from gui import g_tankActiveCamouflage
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.gui_items.customization.outfit import Area, REGIONS_BY_SLOT_TYPE
+from gui.shared.gui_items.customization.slots import ANCHOR_TYPE_TO_SLOT_TYPE_MAP, SLOT_TYPE_TO_ANCHOR_TYPE_MAP
 from gui.shared.items_cache import CACHE_SYNC_REASON
 from helpers import dependency
 from items.components.c11n_constants import ApplyArea, SeasonType
@@ -30,14 +31,19 @@ from CurrentVehicle import g_currentVehicle, g_currentPreviewVehicle
 from gui.hangar_cameras.hangar_camera_common import CameraMovementStates, CameraRelatedEvents
 from gui.shared import g_eventBus, EVENT_BUS_SCOPE
 from gui.ClientHangarSpace import hangarCFG
-_SHOULD_CHECK_EMBLEM_UNDER_GUN = False
-_HANGAR_UNDERGUN_EMBLEM_ANGLE_SHIFT = math.pi / 4
-EmblemPositionParams = namedtuple('EmblemPositionParams', ['position', 'direction', 'emblemDescription'])
+from gui.battle_control.vehicle_getter import hasTurretRotator
+_SHOULD_CHECK_DECAL_UNDER_GUN = True
+_HANGAR_TURRET_SHIFT = math.pi / 8
+EmblemPositionParams = namedtuple('EmblemPositionParams', ['position',
+ 'direction',
+ 'up',
+ 'emblemDescription'])
 Anchor = namedtuple('Anchor', ['pos',
  'normal',
  'applyTo',
  'vehicleSlotId',
- 'slotDescriptor'])
+ 'slotDescriptor',
+ 'turretYaw'])
 
 class _LoadStateNotifier(object):
     __em = Event.EventManager()
@@ -111,6 +117,9 @@ class HangarVehicleAppearance(ComponentSystem):
         self.__vehicleStickers = None
         self.__isVehicleDestroyed = False
         self.__outfit = None
+        self.__staticTurretYaw = 0.0
+        self.__staticGunPitch = 0.0
+        self.__slotPositions = None
         self.shadowManager = None
         cfg = hangarCFG()
         self.__currentEmblemsAlpha = cfg['emblems_alpha_undamaged']
@@ -118,6 +127,7 @@ class HangarVehicleAppearance(ComponentSystem):
         self.settingsCore.onSettingsChanged += self.__onSettingsChanged
         self.itemsCache.onSyncCompleted += self.__onItemsCacheSyncCompleted
         g_eventBus.addListener(CameraRelatedEvents.CAMERA_ENTITY_UPDATED, self.__handleEntityUpdated)
+        g_currentVehicle.onChanged += self.__onVehicleChanged
         return
 
     def recreate(self, vDesc, vState=None, callback=None, outfit=None):
@@ -158,6 +168,7 @@ class HangarVehicleAppearance(ComponentSystem):
         self.settingsCore.onSettingsChanged -= self.__onSettingsChanged
         self.itemsCache.onSyncCompleted -= self.__onItemsCacheSyncCompleted
         g_eventBus.removeListener(CameraRelatedEvents.CAMERA_ENTITY_UPDATED, self.__handleEntityUpdated)
+        g_currentVehicle.onChanged -= self.__onVehicleChanged
         return
 
     @property
@@ -293,12 +304,7 @@ class HangarVehicleAppearance(ComponentSystem):
             self.refresh()
 
     def _getActiveOutfit(self):
-        if g_currentPreviewVehicle.isPresent():
-            outfit = g_currentPreviewVehicle.getOutfit(SeasonType.WINTER)
-            if outfit:
-                return outfit
-            return self.itemsFactory.createOutfit()
-        elif not g_currentVehicle.isPresent():
+        if g_currentPreviewVehicle.isPresent() and not g_currentPreviewVehicle.isHeroTank or not g_currentVehicle.isPresent():
             return self.itemsFactory.createOutfit()
         else:
             vehicle = g_currentVehicle.item
@@ -334,7 +340,7 @@ class HangarVehicleAppearance(ComponentSystem):
             self.wheelsAnimator = model_assembler.createWheelsAnimator(self.__vEntity.model, self.collisions, ColliderTypes.VEHICLE_COLLIDER, self.__vDesc, None, lambda : 0, wheelsScroll, wheelsSteering, self.__vEntity.id, chassisFashion)
             self.trackNodesAnimator = model_assembler.createTrackNodesAnimator(self.__vEntity.model, self.__vDesc, self.wheelsAnimator)
             splineTracksImpl = model_assembler.setupSplineTracks(chassisFashion, self.__vDesc, self.__vEntity.model, self.__resources, self.__outfit.modelsSet)
-            model_assembler.assembleTracks(self.__resources, self.__vDesc, self, splineTracksImpl, True, True)
+            model_assembler.assembleTracks(self.__resources, self.__vDesc, self, splineTracksImpl, True)
             dirtEnabled = BigWorld.WG_dirtEnabled() and 'HD' in self.__vDesc.type.tags
             if dirtEnabled:
                 dirtHandlers = [BigWorld.PyDirtHandler(True, self.__vEntity.model.node(TankPartNames.CHASSIS).position.y),
@@ -357,26 +363,26 @@ class HangarVehicleAppearance(ComponentSystem):
             self.trackNodesAnimator = None
             self.dirtComponent = None
         cfg = hangarCFG()
-        turretYaw = self.__vDesc.gun.staticTurretYaw
-        gunPitch = self.__vDesc.gun.staticPitch
+        self.__staticTurretYaw = self.__vDesc.gun.staticTurretYaw
+        self.__staticGunPitch = self.__vDesc.gun.staticPitch
         if not ('AT-SPG' in self.__vDesc.type.tags or 'SPG' in self.__vDesc.type.tags):
-            if turretYaw is None:
-                turretYaw = cfg['vehicle_turret_yaw']
+            if self.__staticTurretYaw is None:
+                self.__staticTurretYaw = cfg['vehicle_turret_yaw']
                 turretYawLimits = self.__vDesc.gun.turretYawLimits
                 if turretYawLimits is not None:
-                    turretYaw = mathUtils.clamp(turretYawLimits[0], turretYawLimits[1], turretYaw)
-            if gunPitch is None:
-                gunPitch = cfg['vehicle_gun_pitch']
+                    self.__staticTurretYaw = mathUtils.clamp(turretYawLimits[0], turretYawLimits[1], self.__staticTurretYaw)
+            if self.__staticGunPitch is None:
+                self.__staticGunPitch = cfg['vehicle_gun_pitch']
                 gunPitchLimits = self.__vDesc.gun.pitchLimits['absolute']
-                gunPitch = mathUtils.clamp(gunPitchLimits[0], gunPitchLimits[1], gunPitch)
+                self.__staticGunPitch = mathUtils.clamp(gunPitchLimits[0], gunPitchLimits[1], self.__staticGunPitch)
         else:
-            if turretYaw is None:
-                turretYaw = 0.0
-            if gunPitch is None:
-                gunPitch = 0.0
-        turretYawMatrix = mathUtils.createRotationMatrix((turretYaw, 0.0, 0.0))
+            if self.__staticTurretYaw is None:
+                self.__staticTurretYaw = 0.0
+            if self.__staticGunPitch is None:
+                self.__staticGunPitch = 0.0
+        turretYawMatrix = mathUtils.createRotationMatrix((self.__staticTurretYaw, 0.0, 0.0))
         self.__vEntity.model.node(TankPartNames.TURRET, turretYawMatrix)
-        gunPitchMatrix = mathUtils.createRotationMatrix((0.0, gunPitch, 0.0))
+        gunPitchMatrix = mathUtils.createRotationMatrix((0.0, self.__staticGunPitch, 0.0))
         self.__vEntity.model.node(TankPartNames.GUN, gunPitchMatrix)
         return
 
@@ -386,8 +392,9 @@ class HangarVehicleAppearance(ComponentSystem):
         return
 
     def __getThisVehicleDossierInsigniaRank(self):
-        vehicleDossier = self.itemsCache.items.getVehicleDossier(self.__vDesc.type.compactDescr)
-        return vehicleDossier.getRandomStats().getAchievement(MARK_ON_GUN_RECORD).getValue()
+        if self.__vDesc:
+            vehicleDossier = self.itemsCache.items.getVehicleDossier(self.__vDesc.type.compactDescr)
+            return vehicleDossier.getRandomStats().getAchievement(MARK_ON_GUN_RECORD).getValue()
 
     def __setupEmblems(self, outfit):
         if self.__vehicleStickers is not None:
@@ -467,6 +474,14 @@ class HangarVehicleAppearance(ComponentSystem):
             return
 
     def getSlotPositions(self):
+        if self.__slotPositions is None:
+            self.__getSlotPositions(checkDecalsAgainstGun=True)
+        return self.__slotPositions
+
+    def updateSlotPositions(self, checkDecalsAgainstGun=False):
+        self.__getSlotPositions(checkDecalsAgainstGun)
+
+    def __getSlotPositions(self, checkDecalsAgainstGun):
         slots = {area:{GUI_ITEM_TYPE.INSCRIPTION: {},
          GUI_ITEM_TYPE.EMBLEM: {},
          GUI_ITEM_TYPE.PAINT: {},
@@ -494,7 +509,17 @@ class HangarVehicleAppearance(ComponentSystem):
                     midPos = startPos + half
                     worldEmblemPos = worldMatrix.applyPoint(midPos)
                     container = slots[areaId]
-                    container[slotType][len(container[slotType])] = Anchor(worldEmblemPos, worldEmblemNormal, 0, emblemSlot.slotId, emblemSlot)
+                    regionIdx = len(container[slotType])
+                    if not checkDecalsAgainstGun:
+                        anchorParams = self.__slotPositions[areaId][slotType].get(regionIdx)
+                        turretYaw = anchorParams.turretYaw if anchorParams is not None else None
+                    elif areaId == Area.HULL:
+                        anchorType = SLOT_TYPE_TO_ANCHOR_TYPE_MAP[slotType]
+                        emblemParams = self.getEmblemPos(areaId == Area.HULL, anchorType, regionIdx)
+                        turretYaw = self.__correctTurretYaw(emblemParams.position, emblemParams.direction, emblemParams.up, emblemParams.emblemDescription)
+                    else:
+                        turretYaw = None
+                    container[slotType][regionIdx] = Anchor(worldEmblemPos, worldEmblemNormal, 0, emblemSlot.slotId, emblemSlot, turretYaw)
 
         for slotType in customizationSlotTypes:
             for areaId in Area.ALL:
@@ -515,14 +540,23 @@ class HangarVehicleAppearance(ComponentSystem):
                         hullAABB = self.collisions.getBoundingBox(TankPartIndexes.HULL)
                         anchorPosition = Math.Vector3((hullAABB[1].x + hullAABB[0].x) / 2.0, hullAABB[1].y / 2.0, (hullAABB[1].z + hullAABB[0].z) / 2.0)
                         hullWorldMatrix = Math.Matrix(self.__vEntity.model.node(TankPartNames.HULL))
-                        worldEmblemPos = hullWorldMatrix.applyPoint(anchorPosition)
+                        worldPos = hullWorldMatrix.applyPoint(anchorPosition)
                     else:
-                        worldEmblemPos = worldMatrix.applyPoint(anchor.anchorPosition)
-                    worldEmblemNormal = worldMatrix.applyVector(anchor.anchorDirection)
-                    worldEmblemNormal.normalise()
-                    container[slotType][index] = Anchor(worldEmblemPos, worldEmblemNormal, applyTo, anchor.slotId, anchor.descriptor)
+                        worldPos = worldMatrix.applyPoint(anchor.anchorPosition)
+                    worldNormal = worldMatrix.applyVector(anchor.anchorDirection)
+                    worldNormal.normalise()
+                    if not checkDecalsAgainstGun:
+                        anchorParams = self.__slotPositions[anchor.areaId][slotType].get(index)
+                        turretYaw = anchorParams.turretYaw if anchorParams is not None else None
+                    elif slotType == GUI_ITEM_TYPE.PROJECTION_DECAL and anchor.showOn & ApplyArea.HULL:
+                        deculUp = worldNormal * (Math.Vector3(0, 1, 0) * worldNormal)
+                        turretYaw = self.__correctTurretYaw(worldPos, -worldNormal, deculUp, anchor.descriptor)
+                    else:
+                        turretYaw = None
+                    container[slotType][index] = Anchor(worldPos, worldNormal, applyTo, anchor.slotId, anchor.descriptor, turretYaw)
 
-        return slots
+        self.__slotPositions = slots
+        return
 
     def getEmblemPos(self, onHull, emblemType, emblemIdx):
         if onHull:
@@ -540,22 +574,20 @@ class HangarVehicleAppearance(ComponentSystem):
             return None
         else:
             emblem = desiredEmblems[emblemIdx]
-            direction = emblem[1] - emblem[0]
+            startPos = emblem.rayStart
+            endPos = emblem.rayEnd
+            direction = endPos - startPos
             direction.normalise()
-            startPos = emblem[0]
-            endPos = emblem[1]
             sub = endPos - startPos
             half = sub / 2.0
             hitPos = startPos + half
             hitPos = worldMat.applyPoint(hitPos)
-            upVecWorld = worldMat.applyVector(emblem[2])
+            upVecWorld = worldMat.applyVector(emblem.rayUp)
             upVecWorld.normalise()
             if abs(direction.pitch - math.pi / 2) < 0.1:
                 direction = Math.Vector3(0, -1, 0) + upVecWorld * 0.01
                 direction.normalise()
-            if _SHOULD_CHECK_EMBLEM_UNDER_GUN:
-                direction = self.__correctEmblemLookAgainstGun(hitPos, direction, upVecWorld, emblem)
-            return EmblemPositionParams(hitPos, direction, emblem)
+            return EmblemPositionParams(hitPos, direction, upVecWorld, emblem)
 
     def getCentralPointForArea(self, areaIdx):
 
@@ -585,40 +617,52 @@ class HangarVehicleAppearance(ComponentSystem):
             position = _getBBCenter(TankPartNames.CHASSIS)
         return position
 
-    def __getEmblemCorners(self, hitPos, dir, up, emblem):
+    def __getDecalCorners(self, hitPos, dir, up, decal):
         cfg = hangarCFG()
-        size = emblem[3] * cfg['v_scale']
+        vScale = cfg['v_scale']
+        slotType = ANCHOR_TYPE_TO_SLOT_TYPE_MAP[decal.type]
+        if slotType == GUI_ITEM_TYPE.PROJECTION_DECAL:
+            width = decal.scale[0] * vScale
+            height = decal.scale[2] * vScale
+        elif slotType == GUI_ITEM_TYPE.INSCRIPTION:
+            width = decal.size * vScale
+            height = width * 0.5
+        elif slotType == GUI_ITEM_TYPE.EMBLEM:
+            width = height = decal.size * vScale
+        else:
+            return []
         m = Math.Matrix()
         m.lookAt(hitPos, dir, up)
         m.invert()
-        result = (Math.Vector3(size * 0.5, size * 0.5, -0.25),
-         Math.Vector3(size * 0.5, -size * 0.5, -0.25),
-         Math.Vector3(-size * 0.5, -size * 0.5, -0.25),
-         Math.Vector3(-size * 0.5, size * 0.5, -0.25))
+        result = (Math.Vector3(width * 0.5, height * 0.5, 0),
+         Math.Vector3(width * 0.5, -height * 0.5, 0),
+         Math.Vector3(-width * 0.5, -height * 0.5, 0),
+         Math.Vector3(-width * 0.5, height * 0.5, 0))
         return [ m.applyPoint(vec) for vec in result ]
 
-    def __correctEmblemLookAgainstGun(self, hitPos, dir, up, emblem):
-        checkDirWorld = dir * -10.0
-        cornersWorld = self.__getEmblemCorners(hitPos, dir, up, emblem)
-        result = self.collisions.collideShape(TankPartNames.getIdx(TankPartNames.GUN), (cornersWorld[0],
-         cornersWorld[1],
-         cornersWorld[2],
-         cornersWorld[3]), checkDirWorld)
-        if result < 0.0:
-            return dir
-        dirRot = Math.Matrix()
-        angle = _HANGAR_UNDERGUN_EMBLEM_ANGLE_SHIFT
-        turretMat = Math.Matrix(self.__vEntity.model.node(TankPartNames.TURRET))
-        fromTurretToHit = hitPos - turretMat.translation
-        gunDir = turretMat.applyVector(Math.Vector3(0, 0, 1))
-        if Math.Vector3(0, 1, 0).dot(gunDir * fromTurretToHit) < 0:
-            angle = -angle
-        dirRot.setRotateY(angle)
-        normRot = Math.Matrix()
-        normRot.setRotateYPR((dir.yaw, dir.pitch, 0))
-        dirRot.postMultiply(normRot)
-        dir = dirRot.applyVector(Math.Vector3(0, 0, 1))
-        return dir
+    def __correctTurretYaw(self, hitPos, dir, up, emblem):
+        if not _SHOULD_CHECK_DECAL_UNDER_GUN:
+            return None
+        else:
+            turretMat = Math.Matrix(self.__vEntity.model.node(TankPartNames.TURRET))
+            fromTurretToHit = hitPos - turretMat.translation
+            if fromTurretToHit.z < 0:
+                return None
+            checkDirWorld = dir * -10.0
+            cornersWorld = self.__getDecalCorners(hitPos, dir, up, emblem)
+            if not cornersWorld:
+                return None
+            result = self.collisions.collideShape(TankPartNames.getIdx(TankPartNames.GUN), (cornersWorld[0],
+             cornersWorld[1],
+             cornersWorld[2],
+             cornersWorld[3]), checkDirWorld)
+            if result < 0.0:
+                return None
+            turretYaw = _HANGAR_TURRET_SHIFT
+            gunDir = turretMat.applyVector(Math.Vector3(0, 0, 1))
+            if Math.Vector3(0, 1, 0).dot(gunDir * fromTurretToHit) > 0.0:
+                turretYaw = -turretYaw
+            return turretYaw
 
     def updateCustomization(self, outfit=None, callback=None):
         if self.__isVehicleDestroyed:
@@ -631,6 +675,23 @@ class HangarVehicleAppearance(ComponentSystem):
         self.__updatePaint(outfit)
         self.__updateDecals(outfit)
         self.__updateProjectionDecals(outfit)
+
+    def rotateTurret(self, turretYaw=None):
+        if self.compoundModel is None:
+            return False
+        if turretYaw is None or not hasTurretRotator(self.__vDesc):
+            turretYaw = self.__staticTurretYaw
+        else:
+            turretYawLimits = self.__vDesc.gun.turretYawLimits
+            if turretYawLimits is not None:
+                turretYaw = mathUtils.clamp(turretYawLimits[0], turretYawLimits[1], turretYaw)
+        currentTurretYaw = Math.Matrix(self.compoundModel.node(TankPartNames.TURRET)).yaw
+        if abs(currentTurretYaw - turretYaw) > 0.0001:
+            turretYawMatrix = mathUtils.createRotationMatrix((turretYaw, 0.0, 0.0))
+            self.compoundModel.node(TankPartNames.TURRET, turretYawMatrix)
+            return True
+        else:
+            return False
 
     def __updatePaint(self, outfit):
         for fashionIdx, _ in enumerate(TankPartNames.ALL):
@@ -648,3 +709,7 @@ class HangarVehicleAppearance(ComponentSystem):
     def __updateProjectionDecals(self, outfit):
         decals = camouflages.getGenericProjectionDecals(outfit, self.__vDesc)
         self.c11nComponent.setDecals(decals)
+
+    def __onVehicleChanged(self):
+        self.__slotPositions = None
+        return

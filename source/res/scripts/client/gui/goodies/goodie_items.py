@@ -5,11 +5,11 @@ import BigWorld
 from goodies.goodie_constants import GOODIE_RESOURCE_TYPE, GOODIE_STATE, GOODIE_VARIETY, GOODIE_TARGET_TYPE
 from gui import GUI_SETTINGS
 from gui.Scaleform.genConsts.STORE_CONSTANTS import STORE_CONSTANTS
-from gui.Scaleform.locale.RES_SHOP import RES_SHOP
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.shared.gui_items import GUI_ITEM_ECONOMY_CODE, KPI
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
+from gui.Scaleform.locale.RES_SHOP_EXT import RES_SHOP_EXT
 from gui.shared.economics import getActionPrc
 from gui.shared.formatters import text_styles
 from gui.shared.money import Currency, MONEY_UNDEFINED
@@ -331,7 +331,7 @@ class Booster(_Goodie):
         return _BOOSTER_QUALITY_SOURCE_PATH % self.quality
 
     def getShopIcon(self, size=STORE_CONSTANTS.ICON_SIZE_MEDIUM):
-        return RES_SHOP.getBoosterIcon(size, self.boosterGuiType)
+        return RES_SHOP_EXT.getBoosterIcon(size, self.boosterGuiType)
 
     def getExpiryDate(self):
         return BigWorld.wg_getLongDateFormat(self.expiryTime) if self.expiryTime is not None else ''

@@ -909,7 +909,8 @@
               <slotId>	771	</slotId>
               <rayStart>	0.00225778 -0.0206706 1.20758	</rayStart>
               <rayEnd>	-0.0440517 -0.000223191 1.20728	</rayEnd>
-              <rayUp>	0.098 0.093 5	</rayUp>
+              <rayUp>	0.098 0.000000 0.000000	</rayUp>
+              <applyToFabric>	true	</applyToFabric>
               <size>	0.73	</size>
               <hideIfDamaged>	false	</hideIfDamaged>
               <isUVProportional>	true	</isUVProportional>
@@ -936,7 +937,7 @@
         <collisionModelServer>	vehicles/russian/R156_IS_2M/collision/Turret_01.model	</collisionModelServer>
         <collisionModelClient>	vehicles/russian/R156_IS_2M/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
-      <gunPosition>	-0.002538 0.398964 1.36137	</gunPosition>
+      <gunPosition>	-0.001907 0.398964 1.36137	</gunPosition>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
       <physicsShape>	1.079 -0.103 1.083 -0.040 0.699 0.133 0.582 0.283 0.522 0.533 0.266 0.500 0.212 0.840 0.234	</physicsShape>
@@ -963,9 +964,9 @@
           <rayStart>	1.01957 0.503815 0.201267	</rayStart>
           <rayEnd>	0.937598 0.475084 0.187152	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
+          <isMirrored>	true	</isMirrored>
           <size>	0.3	</size>
           <hideIfDamaged>	true	</hideIfDamaged>
-          <isMirrored>	true	</isMirrored>
           <isUVProportional>	true	</isUVProportional>
         </slot>
         <slot>

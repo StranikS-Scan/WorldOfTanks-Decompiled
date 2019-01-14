@@ -21,26 +21,26 @@ class Area(TankPartIndexes):
 
 
 def scaffold():
-    return (OutfitContainer(areaID=Area.CHASSIS, slots=(MultiSlot(slotType=GUI_ITEM_TYPE.PAINT, regions=ApplyArea.CHASSIS_PAINT_REGIONS),)),
-     OutfitContainer(areaID=Area.HULL, slots=(MultiSlot(slotType=GUI_ITEM_TYPE.PAINT, regions=ApplyArea.HULL_PAINT_REGIONS),
-      MultiSlot(slotType=GUI_ITEM_TYPE.CAMOUFLAGE, regions=ApplyArea.HULL_CAMOUFLAGE_REGIONS),
-      MultiSlot(slotType=GUI_ITEM_TYPE.EMBLEM, regions=ApplyArea.HULL_EMBLEM_REGIONS),
-      MultiSlot(slotType=GUI_ITEM_TYPE.INSCRIPTION, regions=ApplyArea.HULL_INSCRIPTION_REGIONS),
-      MultiSlot(slotType=GUI_ITEM_TYPE.INSIGNIA, regions=ApplyArea.HULL_INSIGNIA_REGIONS))),
-     OutfitContainer(areaID=Area.TURRET, slots=(MultiSlot(slotType=GUI_ITEM_TYPE.PAINT, regions=ApplyArea.TURRET_PAINT_REGIONS),
-      MultiSlot(slotType=GUI_ITEM_TYPE.CAMOUFLAGE, regions=ApplyArea.TURRET_CAMOUFLAGE_REGIONS),
-      MultiSlot(slotType=GUI_ITEM_TYPE.EMBLEM, regions=ApplyArea.TURRET_EMBLEM_REGIONS),
-      MultiSlot(slotType=GUI_ITEM_TYPE.INSCRIPTION, regions=ApplyArea.TURRET_INSCRIPTION_REGIONS),
-      MultiSlot(slotType=GUI_ITEM_TYPE.INSIGNIA, regions=ApplyArea.TURRET_INSIGNIA_REGIONS))),
-     OutfitContainer(areaID=Area.GUN, slots=(MultiSlot(slotType=GUI_ITEM_TYPE.PAINT, regions=ApplyArea.GUN_PAINT_REGIONS),
-      MultiSlot(slotType=GUI_ITEM_TYPE.CAMOUFLAGE, regions=ApplyArea.GUN_CAMOUFLAGE_REGIONS),
-      MultiSlot(slotType=GUI_ITEM_TYPE.EMBLEM, regions=ApplyArea.GUN_EMBLEM_REGIONS),
-      MultiSlot(slotType=GUI_ITEM_TYPE.INSCRIPTION, regions=ApplyArea.GUN_INSCRIPTION_REGIONS),
-      MultiSlot(slotType=GUI_ITEM_TYPE.INSIGNIA, regions=ApplyArea.GUN_INSIGNIA_REGIONS))),
-     OutfitContainer(areaID=Area.MISC, slots=(MultiSlot(slotType=GUI_ITEM_TYPE.MODIFICATION, regions=(ApplyArea.NONE,)), MultiSlot(slotType=GUI_ITEM_TYPE.PROJECTION_DECAL, regions=tuple(range(MAX_PROJECTION_DECALS))))))
+    return (OutfitContainer(areaID=Area.CHASSIS, slots=(MultiSlot(slotTypes=(GUI_ITEM_TYPE.PAINT,), regions=ApplyArea.CHASSIS_PAINT_REGIONS),)),
+     OutfitContainer(areaID=Area.HULL, slots=(MultiSlot(slotTypes=(GUI_ITEM_TYPE.PAINT,), regions=ApplyArea.HULL_PAINT_REGIONS),
+      MultiSlot(slotTypes=(GUI_ITEM_TYPE.CAMOUFLAGE,), regions=ApplyArea.HULL_CAMOUFLAGE_REGIONS),
+      MultiSlot(slotTypes=(GUI_ITEM_TYPE.EMBLEM,), regions=ApplyArea.HULL_EMBLEM_REGIONS),
+      MultiSlot(slotTypes=(GUI_ITEM_TYPE.INSCRIPTION, GUI_ITEM_TYPE.PERSONAL_NUMBER), regions=ApplyArea.HULL_INSCRIPTION_REGIONS),
+      MultiSlot(slotTypes=(GUI_ITEM_TYPE.INSIGNIA,), regions=ApplyArea.HULL_INSIGNIA_REGIONS))),
+     OutfitContainer(areaID=Area.TURRET, slots=(MultiSlot(slotTypes=(GUI_ITEM_TYPE.PAINT,), regions=ApplyArea.TURRET_PAINT_REGIONS),
+      MultiSlot(slotTypes=(GUI_ITEM_TYPE.CAMOUFLAGE,), regions=ApplyArea.TURRET_CAMOUFLAGE_REGIONS),
+      MultiSlot(slotTypes=(GUI_ITEM_TYPE.EMBLEM,), regions=ApplyArea.TURRET_EMBLEM_REGIONS),
+      MultiSlot(slotTypes=(GUI_ITEM_TYPE.INSCRIPTION, GUI_ITEM_TYPE.PERSONAL_NUMBER), regions=ApplyArea.TURRET_INSCRIPTION_REGIONS),
+      MultiSlot(slotTypes=(GUI_ITEM_TYPE.INSIGNIA,), regions=ApplyArea.TURRET_INSIGNIA_REGIONS))),
+     OutfitContainer(areaID=Area.GUN, slots=(MultiSlot(slotTypes=(GUI_ITEM_TYPE.PAINT,), regions=ApplyArea.GUN_PAINT_REGIONS),
+      MultiSlot(slotTypes=(GUI_ITEM_TYPE.CAMOUFLAGE,), regions=ApplyArea.GUN_CAMOUFLAGE_REGIONS),
+      MultiSlot(slotTypes=(GUI_ITEM_TYPE.EMBLEM,), regions=ApplyArea.GUN_EMBLEM_REGIONS),
+      MultiSlot(slotTypes=(GUI_ITEM_TYPE.INSCRIPTION, GUI_ITEM_TYPE.PERSONAL_NUMBER), regions=ApplyArea.GUN_INSCRIPTION_REGIONS),
+      MultiSlot(slotTypes=(GUI_ITEM_TYPE.INSIGNIA,), regions=ApplyArea.GUN_INSIGNIA_REGIONS))),
+     OutfitContainer(areaID=Area.MISC, slots=(MultiSlot(slotTypes=(GUI_ITEM_TYPE.MODIFICATION,), regions=(ApplyArea.NONE,)), MultiSlot(slotTypes=(GUI_ITEM_TYPE.PROJECTION_DECAL,), regions=tuple(range(MAX_PROJECTION_DECALS))))))
 
 
-REGIONS_BY_SLOT_TYPE = {container.getAreaID():{slot.getType():slot.getRegions() for slot in container.slots()} for container in scaffold()}
+REGIONS_BY_SLOT_TYPE = {container.getAreaID():{slotType:slot.getRegions() for slot in container.slots() for slotType in slot.getTypes()} for container in scaffold()}
 
 class Outfit(HasStrCD):
     __slots__ = ('_id', '_styleDescr', '_containers', '_isEnabled', '_isInstalled')

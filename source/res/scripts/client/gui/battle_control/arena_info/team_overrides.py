@@ -26,12 +26,12 @@ class DefaultTeamOverrides(object):
         return False
 
     def isTeamKiller(self, vo):
-        return False
+        return self.personal.teamKillSuspected or vo.isTeamKiller(playerTeam=self.team) if self.isPlayerSelected(vo) else vo.isTeamKiller(playerTeam=self.team)
 
     def getAction(self, vo):
         return VehicleActions.getBitMask(vo.events)
 
-    def getPlayerStatus(self, vo):
+    def getPlayerStatus(self, vo, isTeamKiller=False):
         playerStatus = _P_STATUS.DEFAULT
         if vo.isActionsDisabled() or self.isReplayPlaying:
             playerStatus |= _P_STATUS.IS_ACTION_DISABLED
@@ -39,7 +39,7 @@ class DefaultTeamOverrides(object):
             playerStatus |= _P_STATUS.IS_SQUAD_MAN
             if self.isPersonalSquad(vo):
                 playerStatus |= _P_STATUS.IS_SQUAD_PERSONAL
-        if self.isTeamKiller(vo):
+        if self.isTeamKiller(vo) or isTeamKiller:
             playerStatus |= _P_STATUS.IS_TEAM_KILLER
         if self.isPlayerSelected(vo) and not self.personal.isOtherSelected() or self.isPostmortemView(vo):
             playerStatus |= _P_STATUS.IS_PLAYER_SELECTED
@@ -72,13 +72,10 @@ class PlayerTeamOverrides(DefaultTeamOverrides):
     def isPersonalSquad(self, vo):
         return vo.isSquadMan(prebattleID=self.personal.prebattleID)
 
-    def isTeamKiller(self, vo):
-        return self.personal.teamKillSuspected or vo.isTeamKiller(playerTeam=self.team) if self.isPlayerSelected(vo) else vo.isTeamKiller(playerTeam=self.team)
-
     def getAction(self, vo):
         pass
 
-    def getPlayerStatus(self, vo):
+    def getPlayerStatus(self, vo, isTeamKiller=False):
         status = super(PlayerTeamOverrides, self).getPlayerStatus(vo)
         if self.personal.vehicleID == vo.vehicleID and vo.isSquadMan() and self.__isVoipSupported and not self.settingsCore.getSetting(SOUND.VOIP_ENABLE) and not self.isReplayPlaying:
             status |= _P_STATUS.IS_VOIP_DISABLED

@@ -6,7 +6,6 @@ import typing
 import BigWorld
 import Windowing
 import Event
-import shared_utils
 from CurrentVehicle import g_currentVehicle
 from helpers import dependency
 from gui import SystemMessages
@@ -43,18 +42,6 @@ class _ServiceItemShopMixin(object):
 
     def getCamouflages(self, vehicle=None, criteria=REQ_CRITERIA.EMPTY):
         return self.getItems(GUI_ITEM_TYPE.CAMOUFLAGE, vehicle, criteria)
-
-    def getModifications(self, vehicle=None, criteria=REQ_CRITERIA.EMPTY):
-        return self.getItems(GUI_ITEM_TYPE.MODIFICATION, vehicle, criteria)
-
-    def getDecals(self, vehicle=None, criteria=REQ_CRITERIA.EMPTY):
-        return self.getItems(GUI_ITEM_TYPE.DECAL, vehicle, criteria)
-
-    def getEmblems(self, vehicle=None, criteria=REQ_CRITERIA.EMPTY):
-        return self.getItems(GUI_ITEM_TYPE.EMBLEM, vehicle, criteria)
-
-    def getInscriptions(self, vehicle=None, criteria=REQ_CRITERIA.EMPTY):
-        return self.getItems(GUI_ITEM_TYPE.INSCRIPTION, vehicle, criteria)
 
     def getStyles(self, vehicle=None, criteria=REQ_CRITERIA.EMPTY):
         return self.getItems(GUI_ITEM_TYPE.STYLE, vehicle, criteria)
@@ -126,7 +113,6 @@ class CustomizationService(_ServiceItemShopMixin, _ServiceHelpersMixin, ICustomi
         self._helper = None
         self._mode = HighlightingMode.PAINT_REGIONS
         self._eventsManager = Event.EventManager()
-        self._anchorPositions = None
         self._needHelperRestart = False
         self._isOver3dScene = False
         self.onRegionHighlighted = Event.Event(self._eventsManager)
@@ -180,7 +166,7 @@ class CustomizationService(_ServiceItemShopMixin, _ServiceHelpersMixin, ICustomi
             return g_currentVehicle.selectVehicle(vehInvID, lambda : self.__loadCustomization(vehInvID, callback))
         else:
             if callback is not None:
-                shared_utils.nextTick(callback)()
+                BigWorld.callback(0.0, callback)
             return
 
     def getCtx(self):
@@ -215,6 +201,10 @@ class CustomizationService(_ServiceItemShopMixin, _ServiceHelpersMixin, ICustomi
         self._isHighlighterActive = True
         return True
 
+    def restartHighlighter(self):
+        self.stopHighlighter()
+        self.startHighlighter(self._mode)
+
     def stopHighlighter(self):
         entity = self.hangarSpace.getVehicleEntity()
         if entity and entity.appearance:
@@ -222,7 +212,6 @@ class CustomizationService(_ServiceItemShopMixin, _ServiceHelpersMixin, ICustomi
         self._selectedRegion = ApplyArea.NONE
         self._helper = None
         self._needHelperRestart = False
-        self._anchorPositions = None
         self._isHighlighterActive = False
         return
 
@@ -231,7 +220,6 @@ class CustomizationService(_ServiceItemShopMixin, _ServiceHelpersMixin, ICustomi
             return
         else:
             self._needHelperRestart = self._helper is not None
-            self._anchorPositions = None
             self._helper = None
             self._isHighlighterActive = False
             return
@@ -259,11 +247,10 @@ class CustomizationService(_ServiceItemShopMixin, _ServiceHelpersMixin, ICustomi
             slot = area.get(slotId, {})
             return slot.get(regionId, None)
 
-        if self._anchorPositions is None:
-            self._anchorPositions = g_currentVehicle.hangarSpace.getSlotPositions()
+        anchorPositions = g_currentVehicle.hangarSpace.getSlotPositions()
         if areaId == Area.MISC:
             anchors = []
-            for area in self._anchorPositions.itervalues():
+            for area in anchorPositions.itervalues():
                 slot = area.get(slotId, {})
                 anchors.extend(slot.itervalues())
                 if regionId < len(anchors):
@@ -271,7 +258,7 @@ class CustomizationService(_ServiceItemShopMixin, _ServiceHelpersMixin, ICustomi
                     return anchor
 
         else:
-            area = self._anchorPositions.get(areaId, {})
+            area = anchorPositions.get(areaId, {})
             anchor = getAnchor(area, slotId, regionId)
             if anchor is not None:
                 return anchor

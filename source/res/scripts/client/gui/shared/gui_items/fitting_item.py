@@ -4,7 +4,6 @@ from collections import namedtuple
 import BigWorld
 from debug_utils import LOG_CURRENT_EXCEPTION
 from gui import GUI_SETTINGS
-from gui.Scaleform.genConsts.STORE_CONSTANTS import STORE_CONSTANTS
 from gui.shared.gui_items import GUI_ITEM_TYPE, GUI_ITEM_ECONOMY_CODE
 from gui.shared.gui_items.gui_item_economics import ItemPrice, ItemPrices, ITEM_PRICE_EMPTY, ITEM_PRICES_EMPTY
 from gui.shared.gui_items.gui_item import GUIItem, HasIntCD
@@ -274,8 +273,8 @@ class FittingItem(GUIItem, HasIntCD):
     def getBonusIcon(self, size='small'):
         return self.icon
 
-    def getShopIcon(self, size=STORE_CONSTANTS.ICON_SIZE_MEDIUM):
-        return self.descriptor.icon[0].split('/')[-1].split('.')[0]
+    def getShopIcon(self, size):
+        pass
 
     def getBuyPrice(self, preferred=True):
         if self.buyPrices.hasAltPrice():

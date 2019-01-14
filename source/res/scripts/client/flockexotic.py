@@ -72,7 +72,7 @@ class FlockExotic(BigWorld.Entity, FlockLike, CallbackDelayer):
                 clipResource = model.deprecatedGetAnimationClipResource('FlockAnimAction')
                 loader = AnimationSequence.Loader(clipResource, self.spaceID)
                 animator = loader.loadSync()
-                animator.bindTo(AnimationSequence.ModelWrapperContainer(model))
+                animator.bindTo(AnimationSequence.ModelWrapperContainer(model, self.spaceID))
                 animator.speed = animSpeed
                 self._animators.append(animator)
 

@@ -22,6 +22,7 @@ class PackItemsPopover(PackItemsPopoverMeta):
             count = item.get('count', 0)
             items.append({'value': _ms(TOOLTIPS.VEHICLEPREVIEW_SHOPPACK_COUNT, count=count) if count > 1 else None,
              'icon': item.get('icon'),
+             'overlayType': item.get('overlay'),
              'description': item.get('desc'),
              'hasCompensation': item.get('hasCompensation', False)})
 

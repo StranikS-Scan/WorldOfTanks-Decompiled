@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/dialogs.py
-from async import async, await, AsyncReturn
+from async import async, await
+from BWUtil import AsyncReturn
 from gui.impl.gen import R
 from gui.impl.lobby.dialogs.quit_game_dialog import QuitGameDialogWindow
 from gui.impl.pub.dialog_window import DialogButtons
@@ -13,10 +14,10 @@ def simple(parent, message, buttons=R.strings.dialogs.common, focused=DialogButt
     for name in DialogButtons.ALL:
         button = message.dyn(name) or buttons.dyn(name)
         isFocused = name == focused
-        if button:
-            dialog.addButton(name, button, isFocused)
+        if button.exists():
+            dialog.addButton(name, button(), isFocused)
 
-    dialog.setText(message.dyn('title'), message.dyn('message'))
+    dialog.setText(message.dyn('title')(), message.dyn('message')())
     dialog.load()
     result = yield await(dialog.wait())
     dialog.destroy()

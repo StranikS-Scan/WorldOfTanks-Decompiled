@@ -302,6 +302,13 @@ def readTupleOfNonNegativeInts(xmlCtx, section, subsectionName, count=None):
     return ints
 
 
+def readTupleOfStrings(xmlCtx, section, subsectionName, count=None, separator=' '):
+    strings = getSubsection(xmlCtx, section, subsectionName).asString.split(separator)
+    if count is not None and len(strings) != count:
+        raiseWrongXml(xmlCtx, subsectionName, '%d strings expected' % count)
+    return tuple(strings)
+
+
 def readTupleOfBools(xmlCtx, section, subsectionName, count=None):
     strings = getSubsection(xmlCtx, section, subsectionName).asString.split()
     if count is not None and len(strings) != count:

@@ -3,10 +3,10 @@
 import logging
 from contextlib import contextmanager
 import typing
-import GUI
 from .command import Command
 from .array import Array
 from ..py_object_binder import PyObjectEntity
+from ..py_object_wrappers import PyObjectViewModel
 _logger = logging.getLogger(__name__)
 _logger.addHandler(logging.NullHandler())
 
@@ -14,7 +14,7 @@ class ViewModel(PyObjectEntity):
     __slots__ = ()
 
     def __init__(self):
-        super(ViewModel, self).__init__(GUI.PyObjectViewModel())
+        super(ViewModel, self).__init__(PyObjectViewModel())
 
     def hold(self):
         self.proxy.hold()

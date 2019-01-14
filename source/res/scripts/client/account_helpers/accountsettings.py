@@ -13,6 +13,7 @@ import WWISE
 from constants import VEHICLE_CLASSES, MAX_VEHICLE_LEVEL
 from account_helpers import gameplay_ctx
 from debug_utils import LOG_CURRENT_EXCEPTION
+from gui.Scaleform.genConsts.CUSTOMIZATION_ALIASES import CUSTOMIZATION_ALIASES
 from gui.Scaleform.genConsts.PROFILE_CONSTANTS import PROFILE_CONSTANTS
 from gui.Scaleform.genConsts.MISSIONS_CONSTANTS import MISSIONS_CONSTANTS
 from gui.Scaleform.genConsts.STORE_CONSTANTS import STORE_CONSTANTS
@@ -52,8 +53,6 @@ GOLD_FISH_LAST_SHOW_TIME = 'goldFishWindowShowCooldown'
 BOOSTERS_FILTER = 'boostersFilter'
 LAST_PROMO_PATCH_VERSION = 'lastPromoPatchVersion'
 LAST_CALENDAR_SHOW_TIMESTAMP = 'lastCalendarShowTimestamp'
-LAST_HEROTANK_SHOW_TIMESTAMP = 'lastHerotankShowTimestamp'
-LAST_HEROTANK_SHOW_ID = 'lastHerotankShowId'
 LAST_RESTORE_NOTIFICATION = 'lastRestoreNotification'
 PREVIEW_INFO_PANEL_IDX = 'previewInfoPanelIdx'
 NEW_SETTINGS_COUNTER = 'newSettingsCounter'
@@ -82,7 +81,9 @@ SELECTED_QUEST_IN_REPLAY = 'SELECTED_QUEST_IN_REPLAY'
 LAST_SELECTED_PM_BRANCH = 'lastSelectedPMBranch'
 WHEELED_DEATH_DELAY_COUNT = 'wheeledDeathCounter'
 CUSTOMIZATION_SECTION = 'customization'
-PROJECTION_DECAL_TAB_SHOWN_FIELD = 'isProjectionDecalTabShown'
+PROJECTION_DECAL_TAB_SHOWN_FIELD = CUSTOMIZATION_ALIASES.PROJECTION_DECAL_TAB_SHOWN_FIELD
+USER_NUMBER_TAB_SHOWN_FIELD = CUSTOMIZATION_ALIASES.USER_NUMBER_TAB_SHOWN_FIELD
+CAROUSEL_ARROWS_HINT_SHOWN_FIELD = 'isCarouselsArrowsHintShown'
 QUEST_PROGRESS_HINT_SECTION = 'questProgressHint'
 HELP_SCREEN_HINT_SECTION = 'helpScreenHint'
 SIEGE_HINT_SECTION = 'siegeModeHint'
@@ -302,11 +303,6 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                                          'compatibleOnly': True},
                'linkedset_view_vehicle': {'nation': -1,
                                           'vehicleType': 'none'},
-               'ny_vehicle_discount_activation': {'nation': -1,
-                                                  'vehicleType': 'none',
-                                                  'isMain': False,
-                                                  'level': -1,
-                                                  'compatibleOnly': False},
                PROMO: {},
                AWARDS: {'vehicleResearchAward': -1,
                         'victoryAward': -1,
@@ -462,8 +458,6 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                 'isEpicPerformanceWarningClicked': False,
                 LAST_PROMO_PATCH_VERSION: '',
                 LAST_CALENDAR_SHOW_TIMESTAMP: '',
-                LAST_HEROTANK_SHOW_TIMESTAMP: '',
-                LAST_HEROTANK_SHOW_ID: '',
                 LAST_RESTORE_NOTIFICATION: None,
                 'dynamicRange': 0,
                 'soundDevice': 0,
@@ -476,7 +470,6 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                 'doubleCarouselType': 0,
                 'vehicleCarouselStats': True,
                 WHEELED_DEATH_DELAY_COUNT: 10,
-                'lootBoxVideoOff': False,
                 NEW_SETTINGS_COUNTER: {'GameSettings': {'gameplay_epicStandard': True,
                                                         'c11nHistoricallyAccurate': True,
                                                         'hangarCamParallaxEnabled': True,
@@ -507,7 +500,7 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                 QUEST_PROGRESS_HINT_SECTION: {HINTS_LEFT: 3,
                                               LAST_DISPLAY_DAY: 0,
                                               NUM_BATTLES: 0},
-                HELP_SCREEN_HINT_SECTION: {HINTS_LEFT: 3,
+                HELP_SCREEN_HINT_SECTION: {HINTS_LEFT: 1,
                                            LAST_DISPLAY_DAY: 0,
                                            NUM_BATTLES: 0},
                 SIEGE_HINT_SECTION: {HINTS_LEFT: 3,
@@ -558,7 +551,7 @@ def _recursiveStep(defaultDict, savedDict, finalDict):
 
 class AccountSettings(object):
     onSettingsChanging = Event.Event()
-    version = 38
+    version = 39
     settingsCore = dependency.descriptor(ISettingsCore)
     __cache = {'login': None,
      'section': None}
@@ -963,6 +956,15 @@ class AccountSettings(object):
                     for sectionName in obsoleteKeys:
                         if sectionName in accSettings.keys():
                             accSettings.deleteSection(sectionName)
+
+            if currVersion < 39:
+                for key, section in _filterAccountSection(ads):
+                    accSettings = AccountSettings.__readSection(section, KEY_SETTINGS)
+                    if CUSTOMIZATION_SECTION in accSettings.keys():
+                        custSett = _unpack(accSettings[CUSTOMIZATION_SECTION].asString)
+                        if CAROUSEL_ARROWS_HINT_SHOWN_FIELD in custSett:
+                            del custSett[CAROUSEL_ARROWS_HINT_SHOWN_FIELD]
+                        accSettings.write(CUSTOMIZATION_SECTION, _pack(custSett))
 
             ads.writeInt('version', AccountSettings.version)
         return

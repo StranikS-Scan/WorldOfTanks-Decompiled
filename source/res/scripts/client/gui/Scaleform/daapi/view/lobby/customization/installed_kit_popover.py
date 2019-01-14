@@ -2,14 +2,13 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/customization/installed_kit_popover.py
 from collections import namedtuple
 from gui import makeHtmlString
-from gui.Scaleform.daapi.view.lobby.customization.shared import SEASONS_ORDER, SEASON_TYPE_TO_NAME, TYPES_ORDER
+from gui.Scaleform.daapi.view.lobby.customization.shared import SEASONS_ORDER, SEASON_TYPE_TO_NAME, TYPES_ORDER, SEASON_TYPE_TO_INFOTYPE_MAP
 from gui.Scaleform.daapi.view.meta.CustomizationKitPopoverMeta import CustomizationKitPopoverMeta
 from gui.Scaleform.framework.entities.DAAPIDataProvider import SortableDAAPIDataProvider
 from gui.Scaleform.locale.VEHICLE_CUSTOMIZATION import VEHICLE_CUSTOMIZATION
 from gui.shared.formatters import text_styles
 from helpers import dependency
 from helpers.i18n import makeString as _ms
-from items.components.c11n_constants import SeasonType
 from skeletons.gui.customization import ICustomizationService
 _makeItemIconVO = lambda item: _ItemIcon(item.intCD, item.icon, item.isWide(), item.isHistorical())._asdict()
 _CustomizationPopoverKitRendererVO = namedtuple('_CustomizationPopoverKitRendererVO', ('name', 'itemIcons'))
@@ -39,6 +38,14 @@ class InstalledKitPopover(CustomizationKitPopoverMeta):
         self._assignedDP = InstalledItemsPopoverDataProvider(self.__ctx)
         self._assignedDP.setFlashObject(self.as_getDPS())
         self.__update()
+        appliedStyle = self.__ctx.getStyleInfo().modified
+        autoprolongationSelected = False
+        autoprolongationEnabled = False
+        if appliedStyle and appliedStyle.isRentable:
+            autoprolongationSelected = self.__ctx.autoRentEnabled()
+            autoprolongationEnabled = True
+        self.as_setAutoProlongationCheckboxSelectedS(autoprolongationSelected)
+        self.as_setAutoProlongationCheckboxEnabledS(autoprolongationEnabled)
 
     def _dispose(self):
         self.__ctx.onChangesCanceled -= self.__update
@@ -51,13 +58,7 @@ class InstalledKitPopover(CustomizationKitPopoverMeta):
         return
 
     def __setHeader(self):
-        seasonLabel = ''
-        if self.__ctx.currentSeason == SeasonType.SUMMER:
-            seasonLabel = VEHICLE_CUSTOMIZATION.CUSTOMIZATION_INFOTYPE_MAPTYPE_SUMMER
-        elif self.__ctx.currentSeason == SeasonType.DESERT:
-            seasonLabel = VEHICLE_CUSTOMIZATION.CUSTOMIZATION_INFOTYPE_MAPTYPE_DESERT
-        elif self.__ctx.currentSeason == SeasonType.WINTER:
-            seasonLabel = VEHICLE_CUSTOMIZATION.CUSTOMIZATION_INFOTYPE_MAPTYPE_WINTER
+        seasonLabel = SEASON_TYPE_TO_INFOTYPE_MAP[self.__ctx.currentSeason]
         isClear = False
         clearMessage = ''
         if self.__ctx.currentOutfit.isEmpty():
@@ -69,6 +70,9 @@ class InstalledKitPopover(CustomizationKitPopoverMeta):
     def __update(self, *args):
         self._assignedDP.rebuildList()
         self.__setHeader()
+
+    def updateAutoProlongation(self):
+        self.__ctx.changeAutoRent()
 
 
 class InstalledItemsPopoverDataProvider(SortableDAAPIDataProvider):

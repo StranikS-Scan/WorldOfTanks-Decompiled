@@ -39,7 +39,7 @@ class EpicMetaGameUnavailableTooltip(BlocksTooltipData):
             tomorrowStart, tomorrowEnd = todayStart + time_utils.ONE_DAY, todayEnd + time_utils.ONE_DAY
             todayPeriods = ()
             tomorrowPeriods = ()
-            time, status = self.epicController.getSeasonEndTime()
+            time, status = self.epicController.getCurrentCycleInfo()
             if status:
                 todayPeriods = primeTime.getPeriodsBetween(todayStart, min(todayEnd, time))
                 if tomorrowStart < time:
@@ -74,7 +74,7 @@ class EpicMetaGameUnavailableTooltip(BlocksTooltipData):
         return i18n.makeString(EPIC_BATTLE.SELECTORTOOLTIP_EPICBATTLE_DISABLED_TIMETABLE_EMPTY)
 
     def _getTillEndBlock(self, timeLeft):
-        _, status = self.epicController.getSeasonEndTime()
+        _, status = self.epicController.getCurrentCycleInfo()
         if status:
             endKey = EPIC_BATTLE.SELECTORTOOLTIP_EPICBATTLE_DISABLED_TILLEND
         else:

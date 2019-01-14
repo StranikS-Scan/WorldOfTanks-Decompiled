@@ -4,6 +4,7 @@ from Event import Event
 from gui.Scaleform.framework.managers.context_menu import AbstractContextMenuHandler
 from gui.Scaleform.locale.MENU import MENU
 from gui.shared.formatters import getItemPricesVO
+from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.gui_items.gui_item_economics import ITEM_PRICE_EMPTY
 from helpers import dependency
 from shared_utils import first
@@ -15,8 +16,11 @@ from gui.Scaleform.daapi.view.lobby.customization.shared import SEASON_TYPE_TO_N
 
 class CustomizationOptions(object):
     BUY = 'buy'
+    BUY_MORE = 'buyMore'
     SELL = 'sell'
     REMOVE_FROM_TANK = 'removeFromTank'
+    PROLONGATION_ON = 'autoprolongationOn'
+    PROLONGATION_OFF = 'autoprolongationOff'
 
 
 class CustomizationItemCMHandler(AbstractContextMenuHandler):
@@ -27,10 +31,15 @@ class CustomizationItemCMHandler(AbstractContextMenuHandler):
         self._intCD = 0
         super(CustomizationItemCMHandler, self).__init__(cmProxy, ctx, {CustomizationOptions.BUY: 'buyItem',
          CustomizationOptions.SELL: 'sellItem',
-         CustomizationOptions.REMOVE_FROM_TANK: 'removeItemFromTank'})
+         CustomizationOptions.REMOVE_FROM_TANK: 'removeItemFromTank',
+         CustomizationOptions.PROLONGATION_ON: 'changeAutoRent',
+         CustomizationOptions.PROLONGATION_OFF: 'changeAutoRent'})
         self.onSelected = Event(self._eManager)
         self._item = self.itemsCache.items.getItemByCD(self._intCD)
         self.__ctx = self.service.getCtx()
+
+    def changeAutoRent(self):
+        self.__ctx.changeAutoRent()
 
     def fini(self):
         self.__ctx = None
@@ -71,15 +80,33 @@ class CustomizationItemCMHandler(AbstractContextMenuHandler):
             price = sellPriceVO[0]['price']
             sellPriceVO[0] = {}
             sellPriceVO[0]['price'] = price
-        return [self._makeItem(CustomizationOptions.BUY, MENU.cst_item_ctx_menu(CustomizationOptions.BUY), {'data': {'price': first(buyPriceVO)} if availableForPurchase else None,
-          'enabled': availableForPurchase}, None, 'CurrencyContextMenuItem'),
-         self._makeSeparator(),
-         self._makeItem(CustomizationOptions.SELL, MENU.cst_item_ctx_menu(CustomizationOptions.SELL), {'data': {'price': first(sellPriceVO)} if availableForSale else None,
-          'enabled': availableForSale,
-          'showAlert': showAlert,
-          'tooltipVO': tooltipVO}, None, 'CurrencyContextMenuItem'),
-         self._makeSeparator(),
-         self._makeItem(CustomizationOptions.REMOVE_FROM_TANK, MENU.cst_item_ctx_menu(removeFromTankText), {'enabled': removeFromTankEnabled})]
+        menuItems = []
+        buyText = CustomizationOptions.BUY
+        if self.__ctx.getItemInventoryCount(item) > 0 and item.isRentable:
+            buyText = CustomizationOptions.BUY_MORE
+        menuItems.append(self._makeItem(CustomizationOptions.BUY, MENU.cst_item_ctx_menu(buyText), {'data': {'price': first(buyPriceVO)} if availableForPurchase else None,
+         'enabled': availableForPurchase}, None, 'CurrencyContextMenuItem'))
+        menuItems.append(self._makeSeparator())
+        if item.isRentable:
+            if item.itemTypeID == GUI_ITEM_TYPE.STYLE:
+                prolongationEnabled = self.__ctx.modifiedStyle == item
+            else:
+                outfit = self.__ctx.getModifiedOutfit(self.__ctx.currentSeason)
+                appliedCount = outfit.itemsCounter[item.intCD]
+                prolongationEnabled = appliedCount > 0
+            optId = CustomizationOptions.PROLONGATION_ON
+            if self.__ctx.autoRentEnabled():
+                optId = CustomizationOptions.PROLONGATION_OFF
+            menuItems.append(self._makeItem(optId, MENU.cst_item_ctx_menu(optId), {'enabled': prolongationEnabled,
+             'iconType': optId}))
+            menuItems.append(self._makeSeparator())
+        menuItems.append(self._makeItem(CustomizationOptions.SELL, MENU.cst_item_ctx_menu(CustomizationOptions.SELL), {'data': {'price': first(sellPriceVO)} if availableForSale else None,
+         'enabled': availableForSale,
+         'showAlert': showAlert,
+         'tooltipVO': tooltipVO}, None, 'CurrencyContextMenuItem'))
+        menuItems.append(self._makeSeparator())
+        menuItems.append(self._makeItem(CustomizationOptions.REMOVE_FROM_TANK, MENU.cst_item_ctx_menu(removeFromTankText), {'enabled': removeFromTankEnabled}))
+        return menuItems
 
     def _initFlashValues(self, ctx):
         self._intCD = ctx.itemID

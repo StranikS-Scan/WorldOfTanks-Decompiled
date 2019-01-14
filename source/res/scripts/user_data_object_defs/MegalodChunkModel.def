@@ -1,0 +1,26 @@
+<MegalodChunkModel.def>
+  <Domain>	CLIENT	</Domain>
+  <Properties>
+    <items>
+      <Type>	ARRAY	  <of>	STRING	</of>
+      </Type>
+      <Editable>	true	</Editable>
+    </items>
+    <megalodModel>
+      <Type>	STRING	</Type>
+      <Editable>	true	</Editable>
+    </megalodModel>
+    <viewDistance>
+      <Type>	FLOAT	</Type>
+      <Editable>	true	</Editable>
+    </viewDistance>
+    <boundsMin>
+      <Type>	VECTOR3	</Type>
+      <Editable>	true	</Editable>
+    </boundsMin>
+    <boundsMax>
+      <Type>	VECTOR3	</Type>
+      <Editable>	true	</Editable>
+    </boundsMax>
+  </Properties>
+</MegalodChunkModel.def>

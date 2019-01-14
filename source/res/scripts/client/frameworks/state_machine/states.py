@@ -1,16 +1,22 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/frameworks/state_machine/states.py
 from collections import namedtuple
+from . import visitor
 from .exceptions import StateError
-from .node import Node, NodesVisitor
+from .node import Node
 from .transitions import BaseTransition
 
 class StateFlags(object):
     UNDEFINED = 0
     INITIAL = 1
-    FINAL = 4
-    SINGULAR = 8
-    PARALLEL = 16
+    FINAL = 2
+    HISTORY = 4
+    EFFECT_TYPE_MASK = 7
+    SHALLOW_HISTORY = HISTORY | 8
+    DEEP_HISTORY = HISTORY | 16
+    HISTORY_TYPE_MASK = 28
+    SINGULAR = 32
+    PARALLEL = 64
 
 
 def _filterState(child):
@@ -18,7 +24,11 @@ def _filterState(child):
 
 
 def _filterInitialState(child):
-    return isinstance(child, State) and child.isInitial()
+    return _filterState(child) and child.isInitial()
+
+
+def _filterHistoryState(child):
+    return _filterState(child) and child.isHistory()
 
 
 def _filterBaseTransition(child):
@@ -44,6 +54,9 @@ class State(Node):
     def getStateID(self):
         return self.__stateID
 
+    def getFlags(self):
+        return self.__flags
+
     def isInitial(self):
         return self.__flags & StateFlags.INITIAL > 0
 
@@ -56,14 +69,14 @@ class State(Node):
     def isFinal(self):
         return self.__flags & StateFlags.FINAL > 0
 
-    def isNative(self):
-        return not self.isFinal()
+    def isHistory(self):
+        return self.__flags & StateFlags.HISTORY > 0
 
-    def isUnion(self):
-        return self.isNative() and not self.isParallel() and self.getChildrenStates()
+    def isCompound(self):
+        return not self.isFinal() and not self.isParallel() and self.getChildrenStates()
 
-    def isElementary(self):
-        return self.isFinal() or self.isNative() and not self.getChildrenStates()
+    def isAtomic(self):
+        return self.isFinal() or not self.isFinal() and not self.getChildrenStates()
 
     @staticmethod
     def isMachine():
@@ -103,6 +116,9 @@ class State(Node):
 
     def getChildrenStates(self):
         return self.getChildren(filter_=_filterState)
+
+    def getHistoryStates(self):
+        return self.getChildren(filter_=_filterHistoryState)
 
     def addTransition(self, transition, target=None):
         if not isinstance(transition, BaseTransition):
@@ -184,13 +200,13 @@ class _StateTogglingSortKey(object):
     def _cmp(self, other):
         if self.state.getParent() == other.state.getParent():
             parent = self.state.getParent()
-            return cmp(NodesVisitor.getDescendantIndex(self.state, parent, filter_=_filterState), NodesVisitor.getDescendantIndex(other.state, parent, filter_=_filterState))
-        if NodesVisitor.isDescendantOf(self.state, other.state):
+            return cmp(visitor.getDescendantIndex(self.state, parent, filter_=_filterState), visitor.getDescendantIndex(other.state, parent, filter_=_filterState))
+        if visitor.isDescendantOf(self.state, other.state):
             return self.direction.ancestor
-        if NodesVisitor.isDescendantOf(other.state, self.state):
+        if visitor.isDescendantOf(other.state, self.state):
             return self.direction.descendant
-        lca = NodesVisitor.getLCA([self.state, other.state], upper=self.state.getMachine())
-        return cmp(NodesVisitor.getDescendantIndex(self.state, lca, filter_=_filterState), NodesVisitor.getDescendantIndex(other.state, lca, filter_=_filterState))
+        lca = visitor.getLCA([self.state, other.state], upper=self.state.getMachine())
+        return cmp(visitor.getDescendantIndex(self.state, lca, filter_=_filterState), visitor.getDescendantIndex(other.state, lca, filter_=_filterState))
 
 
 class StateEnteringSortKey(_StateTogglingSortKey):

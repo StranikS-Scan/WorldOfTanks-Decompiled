@@ -1,19 +1,20 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/pub/context_menu_window.py
 import logging
-from frameworks.wulf import View, ViewFlags, Window, WindowFlags
+import typing
+from frameworks.wulf import View, ViewFlags, WindowFlags
 from gui.impl.gen import R
 from gui.impl.gen.view_models.ui_kit.context_menu_item_model import ContextMenuItemModel
 from gui.impl.gen.view_models.ui_kit.context_menu_sub_item_model import ContextMenuSubItemModel
 from gui.impl.gen.view_models.windows.context_menu_content_model import ContextMenuContentModel
-from gui.impl.gen.view_models.windows.context_menu_window_model import ContextMenuWindowModel
+from gui.impl.pub.window_impl import WindowImpl
 from gui.impl.pub.window_view import WindowView
 _logger = logging.getLogger(__name__)
 
 class ContextMenuContent(View):
 
     def __init__(self):
-        super(ContextMenuContent, self).__init__(R.views.contextMenuContent, ViewFlags.COMPONENT, ContextMenuContentModel)
+        super(ContextMenuContent, self).__init__(R.views.contextMenuContent(), ViewFlags.COMPONENT, ContextMenuContentModel)
 
     @property
     def viewModel(self):
@@ -106,14 +107,8 @@ class ContextMenuContent(View):
             return
 
 
-class ContextMenuWindow(Window):
+class ContextMenuWindow(WindowImpl):
     __slots__ = ()
 
-    def __init__(self, event, content, parent):
-        super(ContextMenuWindow, self).__init__(wndFlags=WindowFlags.CONTEXT_MENU, decorator=WindowView(layoutID=R.views.contextMenuWindow, viewModelClazz=ContextMenuWindowModel), content=content, parent=parent)
-        self.contextMenuModel.setX(event.mouse.positionX)
-        self.contextMenuModel.setY(event.mouse.positionY)
-
-    @property
-    def contextMenuModel(self):
-        return super(ContextMenuWindow, self)._getDecoratorViewModel()
+    def __init__(self, content, parent):
+        super(ContextMenuWindow, self).__init__(wndFlags=WindowFlags.CONTEXT_MENU, decorator=WindowView(layoutID=R.views.contextMenuWindow()), content=content, parent=parent, areaID=R.areas.specific())

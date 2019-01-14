@@ -2,6 +2,7 @@
   <name>	#arenas:59_asia_great_wall/name	</name>
   <description>	#arenas:59_asia_great_wall/description	</description>
   <geometry>	spaces/59_asia_great_wall	</geometry>
+  <estimatedLoad>	0.3	</estimatedLoad>
   <roundLength>	900	</roundLength>
   <boundingBox>
     <bottomLeft>	-500.0 -500.0	</bottomLeft>
@@ -43,23 +44,6 @@
       </teamSpawnPoints>
       <controlPoint>	-140.728149 -164.915146	</controlPoint>
     </domination>
-    <assault>
-      <winnerIfTimeout>	1	</winnerIfTimeout>
-      <teamSpawnPoints>
-        <team1>
-          <position>	-426.267 -402.299	</position>
-        </team1>
-        <team2>
-          <position>	391.595 283.083	</position>
-        </team2>
-      </teamSpawnPoints>
-      <teamBasePositions>
-        <team1>
-          <position1>	-131.931 -158.477	</position1>
-        </team1>
-        <team2></team2>
-      </teamBasePositions>
-    </assault>
   </gameplayTypes>
   <mapActivities></mapActivities>
   <roadMap></roadMap>

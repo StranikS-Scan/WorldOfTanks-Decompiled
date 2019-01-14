@@ -11,7 +11,7 @@ from gui.shared.formatters import text_styles
 from gui.shared.items_parameters import RELATIVE_PARAMS
 from gui.shared.items_parameters.comparator import PARAM_STATE
 from gui.shared.items_parameters.params_helper import hasGroupPenalties, getCommonParam, PARAMS_GROUPS
-from gui.shared.utils import AUTO_RELOAD_PROP_NAME, MAX_STEERING_LOCK_ANGLE, WHEELED_SWITCH_ON_TIME, WHEELED_SWITCH_OFF_TIME, WHEELED_SWITCH_TIME
+from gui.shared.utils import AUTO_RELOAD_PROP_NAME, MAX_STEERING_LOCK_ANGLE, WHEELED_SWITCH_ON_TIME, WHEELED_SWITCH_OFF_TIME, WHEELED_SWITCH_TIME, WHEELED_SPEED_MODE_SPEED
 from items import vehicles, artefacts, getTypeOfCompactDescr, ITEM_TYPES
 from web_stubs import i18n
 MEASURE_UNITS = {'aimingTime': MENU.TANK_PARAMS_S,
@@ -72,7 +72,8 @@ MEASURE_UNITS = {'aimingTime': MENU.TANK_PARAMS_S,
  MAX_STEERING_LOCK_ANGLE: MENU.TANK_PARAMS_GRADS,
  WHEELED_SWITCH_ON_TIME: MENU.TANK_PARAMS_S,
  WHEELED_SWITCH_OFF_TIME: MENU.TANK_PARAMS_S,
- WHEELED_SWITCH_TIME: MENU.TANK_PARAMS_S}
+ WHEELED_SWITCH_TIME: MENU.TANK_PARAMS_S,
+ WHEELED_SPEED_MODE_SPEED: MENU.TANK_PARAMS_MPH}
 COLORLESS_SCHEME = (text_styles.stats, text_styles.stats, text_styles.stats)
 NO_BONUS_SIMPLIFIED_SCHEME = (text_styles.warning, text_styles.warning, text_styles.warning)
 NO_BONUS_BASE_SCHEME = (text_styles.error, text_styles.stats, text_styles.stats)
@@ -265,7 +266,8 @@ FORMAT_SETTINGS = {'relativePower': _integralFormat,
  MAX_STEERING_LOCK_ANGLE: _niceFormat,
  WHEELED_SWITCH_ON_TIME: _niceFormat,
  WHEELED_SWITCH_OFF_TIME: _niceFormat,
- WHEELED_SWITCH_TIME: _niceListFormat}
+ WHEELED_SWITCH_TIME: _niceListFormat,
+ WHEELED_SPEED_MODE_SPEED: _niceListFormat}
 
 def _deltaWrapper(fn):
 

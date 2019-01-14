@@ -883,7 +883,7 @@ class ShotDonePlugin(CrosshairPlugin):
 
 
 class SpeedometerWheeledTech(CrosshairPlugin):
-    __slots__ = ('__siegeState', '__burnoutLevelMax', '__burnoutWarningOn', '__viewID', '__destroyTimerShown')
+    __slots__ = ('__siegeState', '__burnoutLevelMax', '__burnoutWarningOn', '__viewID', '__destroyTimerShown', '__cachedBurnoutLevel')
 
     def __init__(self, parentObj):
         super(SpeedometerWheeledTech, self).__init__(parentObj)
@@ -892,6 +892,8 @@ class SpeedometerWheeledTech(CrosshairPlugin):
         self.__burnoutWarningOn = False
         self.__viewID = -1
         self.__destroyTimerShown = False
+        self.__cachedBurnoutLevel = None
+        return
 
     def start(self):
         vStateCtrl = self.sessionProvider.shared.vehicleState
@@ -985,7 +987,13 @@ class SpeedometerWheeledTech(CrosshairPlugin):
 
     def __addSpedometer(self, vehicle):
         normalMaxSpd, siegeMaxSpd = self.__getMaxSpeeds(vehicle)
+        self.parentObj.as_removeSpeedometerS()
         self.parentObj.as_addSpeedometerS(normalMaxSpd, siegeMaxSpd)
+        if self.__cachedBurnoutLevel is not None:
+            self.parentObj.as_updateBurnoutS(self.__cachedBurnoutLevel)
+        if self.__burnoutWarningOn:
+            self.parentObj.as_setBurnoutWarningS(INGAME_GUI.BURNOUT_HINT_ENGINEDAMAGEWARNING)
+        return
 
     def __changeSpeedoType(self, siegeState, _):
         if siegeState == _SIEGE_STATE.ENABLED:
@@ -998,6 +1006,7 @@ class SpeedometerWheeledTech(CrosshairPlugin):
         if burnoutLevel is not None and burnoutLevel <= self.__burnoutLevelMax:
             burnoutLevel = burnoutLevel / self.__burnoutLevelMax
             self.parentObj.as_updateBurnoutS(burnoutLevel)
+            self.__cachedBurnoutLevel = burnoutLevel
         return
 
     def __setEngineDamageWarning(self):

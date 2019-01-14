@@ -7,7 +7,7 @@ from helpers import i18n, time_utils
 from rent_common import SeasonRentDuration
 from season_common import getDateFromSeasonID
 from constants import GameSeasonType
-_SEASON_TYPE_KEY = {GameSeasonType.SEASON: 'season',
+_SEASON_TYPE_KEY = {GameSeasonType.EPIC: 'epic',
  GameSeasonType.RANKED: 'ranked'}
 _RENT_DURATION_KEY = {SeasonRentDuration.ENTIRE_SEASON: 'season',
  SeasonRentDuration.SEASON_CYCLE: 'cycle'}

@@ -9,7 +9,7 @@ class PopOverWindow(Window):
     __slots__ = ()
 
     def __init__(self, event, content, parent):
-        super(PopOverWindow, self).__init__(wndFlags=WindowFlags.POP_OVER, decorator=WindowView(layoutID=R.views.popOverWindow, viewModelClazz=PopOverWindowModel), content=content, parent=parent)
+        super(PopOverWindow, self).__init__(wndFlags=WindowFlags.POP_OVER, decorator=WindowView(layoutID=R.views.popOverWindow(), viewModelClazz=PopOverWindowModel), content=content, parent=parent)
         self.popOverModel.setBoundX(event.bbox.positionX)
         self.popOverModel.setBoundY(event.bbox.positionY)
         self.popOverModel.setBoundWidth(event.bbox.width)

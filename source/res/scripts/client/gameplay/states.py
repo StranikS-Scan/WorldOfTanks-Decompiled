@@ -169,6 +169,7 @@ class BattleReplayInitState(State):
         starting = State(stateID=GameplayStateID.BATTLE_REPLAY_STARTING)
         nextReplay = State(stateID=GameplayStateID.BATTLE_REPLAY_NEXT)
         loading.addTransition(StringEventTransition(ReplayEventID.REPLAY_VERSION_CONFIRMATION), target=differs)
+        nextReplay.addTransition(StringEventTransition(ReplayEventID.REPLAY_VERSION_CONFIRMATION), target=differs)
         differs.addTransition(StringEventTransition(ReplayEventID.REPLAY_VERSION_CONFIRMED), target=starting)
         self.addChildState(loading)
         self.addChildState(differs)

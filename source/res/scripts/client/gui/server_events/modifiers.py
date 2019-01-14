@@ -1214,15 +1214,6 @@ class MarathonEventModifier(ActionModifier):
         super(MarathonEventModifier, self).__init__(name, params, modType=ACTION_MODIFIER_TYPE.DISCOUNT, section=ACTION_SECTION_TYPE.ALL, itemType=GUI_ITEM_TYPE.ACHIEVEMENT)
 
 
-class HeroTankModifier(ActionModifier):
-
-    def __init__(self, name, params):
-        super(HeroTankModifier, self).__init__('calendar', params, modType=ACTION_MODIFIER_TYPE.AVAILABILITY)
-
-    def getDuration(self):
-        return None
-
-
 class CalendarModifier(ActionModifier):
 
     def __init__(self, name, params):
@@ -1231,18 +1222,6 @@ class CalendarModifier(ActionModifier):
     def getDuration(self):
         strDuration = self._params.get('duration')
         return int(strDuration) if strDuration else None
-
-
-class AvailabilityModifier(ActionModifier):
-
-    def __init__(self, name, params):
-        super(AvailabilityModifier, self).__init__(name, params, modType=ACTION_MODIFIER_TYPE.AVAILABILITY)
-
-
-class EventStateModifier(AvailabilityModifier):
-
-    def getState(self):
-        return self.getParams().get('state')
 
 
 class CalendarSplashModifier(ActionModifier):
@@ -1292,9 +1271,7 @@ _MODIFIERS = (('mul_EconomicsParams', EconomicsMul),
  ('set_MarathonInProgress', MarathonEventModifier),
  ('set_MarathonFinished', MarathonEventModifier),
  ('AdventCalendarEnabled', CalendarModifier),
- ('AdventCalendarForced', CalendarSplashModifier),
- ('EventState', EventStateModifier),
- ('HerotankOverloaded', HeroTankModifier))
+ ('AdventCalendarForced', CalendarSplashModifier))
 _MODIFIERS_DICT = dict(_MODIFIERS)
 _MODIFIERS_ORDER = dict(((n, idx) for idx, (n, _) in enumerate(_MODIFIERS)))
 

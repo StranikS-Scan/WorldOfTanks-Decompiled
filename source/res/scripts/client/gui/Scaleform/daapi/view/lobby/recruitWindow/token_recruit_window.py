@@ -3,20 +3,19 @@
 import nations
 from adisp import async, process
 from gui import SystemMessages
+from gui.impl import backport
+from gui.impl.gen.resources import R
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.recruitWindow.RecruitParamsComponent import packPredefinedTmanParams
 from gui.Scaleform.daapi.view.meta.QuestRecruitWindowMeta import QuestRecruitWindowMeta
 from gui.Scaleform.framework.entities.View import CommonSoundSpaceSettings
 from gui.Scaleform.genConsts.AWARDWINDOW_CONSTANTS import AWARDWINDOW_CONSTANTS
-from gui.Scaleform.locale.DIALOGS import DIALOGS
-from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.server_events.pm_constants import SOUNDS
 from gui.shared.gui_items import Tankman
 from gui.shared.gui_items.processors.tankman import TankmanTokenRecruit
 from gui.shared.utils import decorators
 from gui.sounds.filters import STATE_HANGAR_FILTERED
 from helpers import dependency
-from helpers.i18n import makeString as _ms
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
 
@@ -60,9 +59,9 @@ class TokenRecruitWindow(QuestRecruitWindowMeta):
         if self.__currentSelectedNationID != selectedNationID:
             faceIcon = self.__tokenData.getBigIcon()
             bgImage = self.__getBgImage(self.__tokenData.getSourceID())
-            self.as_setInitDataS({'windowTitle': _ms(DIALOGS.RECRUITWINDOW_TITLE),
-             'applyButtonLabel': _ms(DIALOGS.RECRUITWINDOW_SUBMIT),
-             'cancelButtonLabel': _ms(DIALOGS.RECRUITWINDOW_CANCEL),
+            self.as_setInitDataS({'windowTitle': backport.text(R.strings.dialogs.recruitWindow.title()),
+             'applyButtonLabel': backport.text(R.strings.dialogs.recruitWindow.submit()),
+             'cancelButtonLabel': backport.text(R.strings.dialogs.recruitWindow.cancel()),
              'name': self.__tokenData.getFullUserNameByNation(selectedNationID),
              'nation': nationName,
              'rank': Tankman.getRankUserName(selectedNationID, self.__tokenData.getRankID()),
@@ -80,10 +79,10 @@ class TokenRecruitWindow(QuestRecruitWindowMeta):
 
     @staticmethod
     def __getBgImage(eventName):
-        bg = None
+        bgID = None
         if eventName is not None:
-            bg = RES_ICONS.getRecruitWindowBg(eventName=eventName)
-        return bg if bg is not None else ''
+            bgID = R.images.gui.maps.icons.tankmen.windows.dyn(attr='{}_recruitWindowBg'.format(eventName))
+        return backport.image(bgID()) if bgID is not None and bgID.exists() else ''
 
     @async
     @process

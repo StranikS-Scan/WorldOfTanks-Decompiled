@@ -78,6 +78,18 @@
     <SOFAM_G_s_c_4>	93	</SOFAM_G_s_c_4>
     <Maybach_HL_295_1250>	94	</Maybach_HL_295_1250>
     <Panhard_12H_6000_54>	95	</Panhard_12H_6000_54>
+    <Panhard_H_101>	96	</Panhard_H_101>
+    <Panhard_12H_6000_63>	97	</Panhard_12H_6000_63>
+    <Hotchkiss_V6_mle_48>	98	</Hotchkiss_V6_mle_48>
+    <Hotchkiss_V6_mle_49>	99	</Hotchkiss_V6_mle_49>
+    <Hotchkiss_V6_mle_50>	100	</Hotchkiss_V6_mle_50>
+    <Panhard_12H_6000_X>	101	</Panhard_12H_6000_X>
+    <Peugeot_PRV_V6_F1>	102	</Peugeot_PRV_V6_F1>
+    <Peugeot_PRV_V6_F2>	103	</Peugeot_PRV_V6_F2>
+    <Peugeot_PRV_V6_F3>	104	</Peugeot_PRV_V6_F3>
+    <Somua_V4>	105	</Somua_V4>
+    <Panhard_I_S_K_4F_II_bis>	106	</Panhard_I_S_K_4F_II_bis>
+    <Panhard_4E>	107	</Panhard_4E>
     <Maybach_HL_295_IGR>	60001	</Maybach_HL_295_IGR>
     <Detroit_Diesel_6V53T-S_IGR>	60002	</Detroit_Diesel_6V53T-S_IGR>
     <Renault_A_IGR>	60003	</Renault_A_IGR>
@@ -85,7 +97,6 @@
     <Sovam_de_250cv_IGR>	60005	</Sovam_de_250cv_IGR>
     <Hispano-Suiza_HS110_IGR>	60006	</Hispano-Suiza_HS110_IGR>
     <Renault_S6Bis_bootcamp>	64001	</Renault_S6Bis_bootcamp>
-    <Engine_Panhard>	64002	</Engine_Panhard>
   </ids>
   <shared>
     <Somua_S-40>
@@ -104,22 +115,38 @@
       <rpm_min>	487	</rpm_min>
       <rpm_max>	2240	</rpm_max>
     </Somua_S-40>
-    <Engine_Panhard>
-      <userString>	#france_vehicles:Engine_Panhard	</userString>
+    <Panhard_H_101>
+      <userString>	#france_vehicles:Panhard_H_101	</userString>
       <tags>	gasoline	</tags>
-      <level>	4	</level>
-      <price>	10420	</price>
-      <wwsoundPC>	eng_Continental_R975_pc	</wwsoundPC>
-      <wwsoundNPC>	eng_Continental_R975_npc	</wwsoundNPC>
-      <power>	220	</power>
-      <weight>	400	</weight>
-      <maxHealth>	80	</maxHealth>
-      <maxRegenHealth>	39	</maxRegenHealth>
-      <repairCost>	2	</repairCost>
+      <level>	9	</level>
+      <price>	75000	</price>
+      <wwsoundPC>	eng_Skoda_Prague_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Skoda_Prague_npc	</wwsoundNPC>
+      <power>	550	</power>
+      <weight>	380	</weight>
+      <maxHealth>	320	</maxHealth>
+      <maxRegenHealth>	130	</maxRegenHealth>
+      <repairCost>	9	</repairCost>
       <fireStartingChance>	0.2	</fireStartingChance>
-      <rpm_min>	487	</rpm_min>
-      <rpm_max>	2240	</rpm_max>
-    </Engine_Panhard>
+      <rpm_min>	400	</rpm_min>
+      <rpm_max>	3200	</rpm_max>
+    </Panhard_H_101>
+    <Panhard_12H_6000_63>
+      <userString>	#france_vehicles:Panhard_12H_6000_63	</userString>
+      <tags>	gasoline	</tags>
+      <level>	10	</level>
+      <price>	125000	</price>
+      <wwsoundPC>	eng_Skoda_Prague_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Skoda_Prague_npc	</wwsoundNPC>
+      <power>	620	</power>
+      <weight>	279	</weight>
+      <maxHealth>	320	</maxHealth>
+      <maxRegenHealth>	130	</maxRegenHealth>
+      <repairCost>	9	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	400	</rpm_min>
+      <rpm_max>	3200	</rpm_max>
+    </Panhard_12H_6000_63>
     <Panhard_12H_6000_54>
       <userString>	#france_vehicles:Panhard_12H_6000_54	</userString>
       <tags>	gasoline	</tags>
@@ -128,10 +155,10 @@
       <notInShop>	true	</notInShop>
       <wwsoundPC>	eng_cadillac_series_42_pc	</wwsoundPC>
       <wwsoundNPC>	eng_cadillac_series_42_npc	</wwsoundNPC>
-      <power>	500	</power>
+      <power>	525	</power>
       <weight>	279	</weight>
       <maxHealth>	260	</maxHealth>
-      <maxRegenHealth>	60	</maxRegenHealth>
+      <maxRegenHealth>	105	</maxRegenHealth>
       <repairCost>	8	</repairCost>
       <fireStartingChance>	0.2	</fireStartingChance>
       <rpm_min>	400	</rpm_min>
@@ -1403,6 +1430,168 @@
       <rpm_min>	298	</rpm_min>
       <rpm_max>	2643	</rpm_max>
     </SOFAM_G_s_c_4>
+    <Hotchkiss_V6_mle_48>
+      <userString>	#france_vehicles:Hotchkiss_V6_mle_48	</userString>
+      <tags>	gasoline	</tags>
+      <level>	6	</level>
+      <price>	24700	</price>
+      <wwsoundPC>	eng_cadillac_series_42_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_cadillac_series_42_npc	</wwsoundNPC>
+      <power>	440	</power>
+      <weight>	800	</weight>
+      <maxHealth>	250	</maxHealth>
+      <maxRegenHealth>	100	</maxRegenHealth>
+      <repairCost>	8	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	400	</rpm_min>
+      <rpm_max>	3200	</rpm_max>
+    </Hotchkiss_V6_mle_48>
+    <Hotchkiss_V6_mle_49>
+      <userString>	#france_vehicles:Hotchkiss_V6_mle_49	</userString>
+      <tags>	gasoline	</tags>
+      <level>	7	</level>
+      <price>	34400	</price>
+      <wwsoundPC>	eng_cadillac_series_42_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_cadillac_series_42_npc	</wwsoundNPC>
+      <power>	500	</power>
+      <weight>	800	</weight>
+      <maxHealth>	250	</maxHealth>
+      <maxRegenHealth>	100	</maxRegenHealth>
+      <repairCost>	8	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	400	</rpm_min>
+      <rpm_max>	3200	</rpm_max>
+    </Hotchkiss_V6_mle_49>
+    <Hotchkiss_V6_mle_50>
+      <userString>	#france_vehicles:Hotchkiss_V6_mle_50	</userString>
+      <tags>	gasoline	</tags>
+      <level>	8	</level>
+      <price>	42000	</price>
+      <wwsoundPC>	eng_cadillac_series_42_npc	</wwsoundPC>
+      <wwsoundNPC>	eng_cadillac_series_42_pc	</wwsoundNPC>
+      <power>	525	</power>
+      <weight>	800	</weight>
+      <maxHealth>	250	</maxHealth>
+      <maxRegenHealth>	100	</maxRegenHealth>
+      <repairCost>	9	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	400	</rpm_min>
+      <rpm_max>	3200	</rpm_max>
+    </Hotchkiss_V6_mle_50>
+    <Panhard_12H_6000_X>
+      <userString>	#france_vehicles:Panhard_12H_6000_X	</userString>
+      <tags>	gasoline	</tags>
+      <level>	10	</level>
+      <price>	125000	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_Skoda_Prague_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Skoda_Prague_npc	</wwsoundNPC>
+      <power>	820	</power>
+      <weight>	279	</weight>
+      <maxHealth>	360	</maxHealth>
+      <maxRegenHealth>	145	</maxRegenHealth>
+      <repairCost>	9	</repairCost>
+      <fireStartingChance>	0.1	</fireStartingChance>
+      <rpm_min>	400	</rpm_min>
+      <rpm_max>	3200	</rpm_max>
+    </Panhard_12H_6000_X>
+    <Peugeot_PRV_V6_F1>
+      <userString>	#france_vehicles:Peugeot_PRV_V6_F1	</userString>
+      <tags>	gasoline	</tags>
+      <level>	7	</level>
+      <price>	31000	</price>
+      <wwsoundPC>	eng_cadillac_series_42_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_cadillac_series_42_npc	</wwsoundNPC>
+      <power>	240	</power>
+      <weight>	400	</weight>
+      <maxHealth>	260	</maxHealth>
+      <maxRegenHealth>	105	</maxRegenHealth>
+      <repairCost>	5	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	400	</rpm_min>
+      <rpm_max>	3200	</rpm_max>
+    </Peugeot_PRV_V6_F1>
+    <Peugeot_PRV_V6_F2>
+      <userString>	#france_vehicles:Peugeot_PRV_V6_F2	</userString>
+      <tags>	gasoline	</tags>
+      <level>	8	</level>
+      <price>	43500	</price>
+      <wwsoundPC>	eng_cadillac_series_42_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_cadillac_series_42_npc	</wwsoundNPC>
+      <power>	260	</power>
+      <weight>	400	</weight>
+      <maxHealth>	260	</maxHealth>
+      <maxRegenHealth>	105	</maxRegenHealth>
+      <repairCost>	5	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	400	</rpm_min>
+      <rpm_max>	3200	</rpm_max>
+    </Peugeot_PRV_V6_F2>
+    <Peugeot_PRV_V6_F3>
+      <userString>	#france_vehicles:Peugeot_PRV_V6_F3	</userString>
+      <tags>	gasoline	</tags>
+      <level>	8	</level>
+      <price>	46000	</price>
+      <wwsoundPC>	eng_cadillac_series_42_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_cadillac_series_42_npc	</wwsoundNPC>
+      <power>	285	</power>
+      <weight>	400	</weight>
+      <maxHealth>	260	</maxHealth>
+      <maxRegenHealth>	105	</maxRegenHealth>
+      <repairCost>	5	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	400	</rpm_min>
+      <rpm_max>	3200	</rpm_max>
+    </Peugeot_PRV_V6_F3>
+    <Somua_V4>
+      <userString>	#france_vehicles:Somua_V4	</userString>
+      <tags>	gasoline	</tags>
+      <level>	2	</level>
+      <price>	2000	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_cadillac_series_42_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_cadillac_series_42_npc	</wwsoundNPC>
+      <power>	200	</power>
+      <weight>	350	</weight>
+      <maxHealth>	100	</maxHealth>
+      <maxRegenHealth>	49	</maxRegenHealth>
+      <repairCost>	2	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	700	</rpm_min>
+      <rpm_max>	3000	</rpm_max>
+    </Somua_V4>
+    <Panhard_I_S_K_4F_II_bis>
+      <userString>	#france_vehicles:Panhard_I_S_K_4F_II_bis	</userString>
+      <tags>	gasoline	</tags>
+      <level>	5	</level>
+      <price>	16300	</price>
+      <wwsoundPC>	eng_cadillac_series_42_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_cadillac_series_42_npc	</wwsoundNPC>
+      <power>	285	</power>
+      <weight>	300	</weight>
+      <maxHealth>	136	</maxHealth>
+      <maxRegenHealth>	67	</maxRegenHealth>
+      <repairCost>	3	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	700	</rpm_min>
+      <rpm_max>	3000	</rpm_max>
+    </Panhard_I_S_K_4F_II_bis>
+    <Panhard_4E>
+      <userString>	#france_vehicles:Panhard_4E	</userString>
+      <tags>	gasoline	</tags>
+      <level>	6	</level>
+      <price>	23500	</price>
+      <wwsoundPC>	eng_cadillac_series_42_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_cadillac_series_42_npc	</wwsoundNPC>
+      <power>	315	</power>
+      <weight>	300	</weight>
+      <maxHealth>	234	</maxHealth>
+      <maxRegenHealth>	123	</maxRegenHealth>
+      <repairCost>	5	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	400	</rpm_min>
+      <rpm_max>	3200	</rpm_max>
+    </Panhard_4E>
     <Maybach_HL_295_IGR>
       <userString>	#igr_vehicles:Maybach_HL_295_IGR	</userString>
       <tags>	gasoline	</tags>

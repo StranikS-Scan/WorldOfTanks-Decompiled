@@ -5,7 +5,7 @@ from debug_utils import LOG_WARNING
 from items import vehicles, EQUIPMENT_TYPES, getTypeOfCompactDescr
 from items.components.c11n_constants import CustomizationType, DecalType
 from gui.shared.gui_items import GUI_ITEM_TYPE
-from gui.shared.gui_items.customization.c11n_items import Customization, Paint, Camouflage, Modification, Insignia, Decal, Emblem, Inscription, Style, ProjectionDecal
+from gui.shared.gui_items.customization.c11n_items import Customization, Paint, Camouflage, Modification, Insignia, Decal, Emblem, Inscription, Style, ProjectionDecal, PersonalNumber
 from gui.shared.gui_items.customization.outfit import Outfit
 from gui.shared.gui_items.dossier import TankmanDossier, AccountDossier, VehicleDossier
 from gui.shared.gui_items.vehicle_modules import Shell, VehicleGun, VehicleChassis, VehicleEngine, VehicleRadio, VehicleTurret, VehicleFuelTank
@@ -107,6 +107,8 @@ class GuiItemFactory(IGuiItemsFactory):
             else:
                 LOG_WARNING('Unknown decal type', descriptor.type)
                 cls = Decal
+        elif descriptor.itemType == CustomizationType.PERSONAL_NUMBER:
+            cls = PersonalNumber
         elif descriptor.itemType == CustomizationType.PROJECTION_DECAL:
             cls = ProjectionDecal
         elif descriptor.itemType == CustomizationType.INSIGNIA:

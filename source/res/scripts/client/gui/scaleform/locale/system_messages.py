@@ -195,6 +195,7 @@ class SYSTEM_MESSAGES(object):
     DENUNCIATION_SUCCESS = '#system_messages:denunciation/success'
     CUSTOMIZATION_UNAVAILABLE = '#system_messages:customization/unavailable'
     CUSTOMIZATION_PROHIBITED = '#system_messages:customization/prohibited'
+    CUSTOMIZATION_PERSONAL_NUMBER_PROHIBITED = '#system_messages:customization/personal_number_prohibited'
     CUSTOMIZATION_SERVER_ERROR = '#system_messages:customization/server_error'
     CUSTOMIZATION_CREDITS_NOT_ENOUGH = '#system_messages:customization/credits_not_enough'
     CUSTOMIZATION_GOLD_NOT_ENOUGH = '#system_messages:customization/gold_not_enough'
@@ -212,6 +213,7 @@ class SYSTEM_MESSAGES(object):
     CUSTOMIZATION_ADDED_PROJECTION_DECAL = '#system_messages:customization/added/projection_decal'
     CUSTOMIZATION_ADDED_EMBLEM = '#system_messages:customization/added/emblem'
     CUSTOMIZATION_ADDED_INSCRIPTION = '#system_messages:customization/added/inscription'
+    CUSTOMIZATION_ADDED_PERSONAL_NUMBER = '#system_messages:customization/added/personal_number'
     CUSTOMIZATION_ADDED_PAINTVALUE = '#system_messages:customization/added/paintValue'
     CUSTOMIZATION_ADDED_CAMOUFLAGEVALUE = '#system_messages:customization/added/camouflageValue'
     CUSTOMIZATION_ADDED_MODIFICATIONVALUE = '#system_messages:customization/added/modificationValue'
@@ -220,6 +222,7 @@ class SYSTEM_MESSAGES(object):
     CUSTOMIZATION_ADDED_PROJECTION_DECALVALUE = '#system_messages:customization/added/projection_decalValue'
     CUSTOMIZATION_ADDED_EMBLEMVALUE = '#system_messages:customization/added/emblemValue'
     CUSTOMIZATION_ADDED_INSCRIPTIONVALUE = '#system_messages:customization/added/inscriptionValue'
+    CUSTOMIZATION_ADDED_PERSONAL_NUMBERVALUE = '#system_messages:customization/added/personal_numberValue'
     CUSTOMIZATION_REMOVED_PAINT = '#system_messages:customization/removed/paint'
     CUSTOMIZATION_REMOVED_CAMOUFLAGE = '#system_messages:customization/removed/camouflage'
     CUSTOMIZATION_REMOVED_MODIFICATION = '#system_messages:customization/removed/modification'
@@ -228,6 +231,7 @@ class SYSTEM_MESSAGES(object):
     CUSTOMIZATION_REMOVED_PROJECTION_DECAL = '#system_messages:customization/removed/projection_decal'
     CUSTOMIZATION_REMOVED_EMBLEM = '#system_messages:customization/removed/emblem'
     CUSTOMIZATION_REMOVED_INSCRIPTION = '#system_messages:customization/removed/inscription'
+    CUSTOMIZATION_REMOVED_PERSONAL_NUMBER = '#system_messages:customization/removed/personal_number'
     CUSTOMIZATION_REMOVED_PAINTVALUE = '#system_messages:customization/removed/paintValue'
     CUSTOMIZATION_REMOVED_CAMOUFLAGEVALUE = '#system_messages:customization/removed/camouflageValue'
     CUSTOMIZATION_REMOVED_MODIFICATIONVALUE = '#system_messages:customization/removed/modificationValue'
@@ -236,6 +240,7 @@ class SYSTEM_MESSAGES(object):
     CUSTOMIZATION_REMOVED_PROJECTION_DECALVALUE = '#system_messages:customization/removed/projection_decalValue'
     CUSTOMIZATION_REMOVED_EMBLEMVALUE = '#system_messages:customization/removed/emblemValue'
     CUSTOMIZATION_REMOVED_INSCRIPTIONVALUE = '#system_messages:customization/removed/inscriptionValue'
+    CUSTOMIZATION_REMOVED_PERSONAL_NUMBERVALUE = '#system_messages:customization/removed/personal_numberValue'
     BONUSES_BOOSTER_VALUE = '#system_messages:bonuses/booster/value'
     CHECKOUT_ERROR = '#system_messages:checkout_error'
     ANOTHER_PERIPHERY = '#system_messages:another_periphery'
@@ -404,6 +409,8 @@ class SYSTEM_MESSAGES(object):
     VEHICLE_RENT_SUCCESS = '#system_messages:vehicle_rent/success'
     VEHICLE_RENT_BUYOPTION = '#system_messages:vehicle_rent/buyOption'
     VEHICLE_RENT_TIMERENT = '#system_messages:vehicle_rent/timeRent'
+    VEHICLE_RENT_EPIC_SEASON = '#system_messages:vehicle_rent/epic/season'
+    VEHICLE_RENT_EPIC_CYCLE = '#system_messages:vehicle_rent/epic/cycle'
     VEHICLE_RENT_RANKED_SEASON = '#system_messages:vehicle_rent/ranked/season'
     VEHICLE_RENT_RANKED_CYCLE = '#system_messages:vehicle_rent/ranked/cycle'
     VEHICLE_RENT_SERVER_ERROR = '#system_messages:vehicle_rent/server_error'
@@ -1024,16 +1031,8 @@ class SYSTEM_MESSAGES(object):
     LOOTBOXES_OPEN_SERVER_ERROR = '#system_messages:lootboxes/open/server_error'
     LOOTBOXES_OPEN_SERVER_ERROR_DISABLED = '#system_messages:lootboxes/open/server_error/DISABLED'
     LOOTBOXES_OPEN_SERVER_ERROR_COOLDOWN = '#system_messages:lootboxes/open/server_error/COOLDOWN'
-    NEWYEAR_CRAFTTOY_SERVER_ERROR = '#system_messages:newYear/craftToy/server_error'
-    NEWYEAR_BUYTOY_SERVER_ERROR = '#system_messages:newYear/buyToy/server_error'
-    NEWYEAR_APPLYVEHICLEDISCOUNT_SUCCESS = '#system_messages:newYear/applyVehicleDiscount/success'
-    NEWYEAR_APPLYVEHICLEDISCOUNT_SERVER_ERROR = '#system_messages:newYear/applyVehicleDiscount/server_error'
-    NEWYEAR_APPLYVEHICLEDISCOUNT_SERVER_ERROR_NODISCOUNTS = '#system_messages:newYear/applyVehicleDiscount/server_error/noDiscounts'
-    NEWYEAR_APPLYVEHICLEDISCOUNT_SERVER_ERROR_ALREADYACTIVE = '#system_messages:newYear/applyVehicleDiscount/server_error/alreadyActive'
-    NEWYEAR_APPLYVEHICLEDISCOUNT_SERVER_ERROR_ALREADYBOUGHT = '#system_messages:newYear/applyVehicleDiscount/server_error/alreadyBought'
-    NEWYEAR_APPLYVEHICLEDISCOUNT_SERVER_ERROR_NODISCOUNTFORVEHICLE = '#system_messages:newYear/applyVehicleDiscount/server_error/noDiscountForVehicle'
-    NEWYEAR_BREAKTOYS_SERVER_ERROR = '#system_messages:newYear/breakToys/server_error'
-    NEWYEAR_HANGTOY_SERVER_ERROR = '#system_messages:newYear/hangToy/server_error'
+    EPICBATTLES_CLAIMREWARD_ERROR = '#system_messages:epicBattles/claimReward/error'
+    EPICBATTLES_PRESTIGETRIGGER_ERROR = '#system_messages:epicBattles/prestigeTrigger/error'
     UNIT_WARNINGS_ENUM = (UNIT_WARNINGS_NO_CLAN_MEMBERS,
      UNIT_WARNINGS_CANT_PICK_LEADER,
      UNIT_WARNINGS_KICKED_CANDIDATE,
@@ -1242,6 +1241,7 @@ class SYSTEM_MESSAGES(object):
      DENUNCIATION_SUCCESS,
      CUSTOMIZATION_UNAVAILABLE,
      CUSTOMIZATION_PROHIBITED,
+     CUSTOMIZATION_PERSONAL_NUMBER_PROHIBITED,
      CUSTOMIZATION_SERVER_ERROR,
      CUSTOMIZATION_CREDITS_NOT_ENOUGH,
      CUSTOMIZATION_GOLD_NOT_ENOUGH,
@@ -1259,6 +1259,7 @@ class SYSTEM_MESSAGES(object):
      CUSTOMIZATION_ADDED_PROJECTION_DECAL,
      CUSTOMIZATION_ADDED_EMBLEM,
      CUSTOMIZATION_ADDED_INSCRIPTION,
+     CUSTOMIZATION_ADDED_PERSONAL_NUMBER,
      CUSTOMIZATION_ADDED_PAINTVALUE,
      CUSTOMIZATION_ADDED_CAMOUFLAGEVALUE,
      CUSTOMIZATION_ADDED_MODIFICATIONVALUE,
@@ -1267,6 +1268,7 @@ class SYSTEM_MESSAGES(object):
      CUSTOMIZATION_ADDED_PROJECTION_DECALVALUE,
      CUSTOMIZATION_ADDED_EMBLEMVALUE,
      CUSTOMIZATION_ADDED_INSCRIPTIONVALUE,
+     CUSTOMIZATION_ADDED_PERSONAL_NUMBERVALUE,
      CUSTOMIZATION_REMOVED_PAINT,
      CUSTOMIZATION_REMOVED_CAMOUFLAGE,
      CUSTOMIZATION_REMOVED_MODIFICATION,
@@ -1275,6 +1277,7 @@ class SYSTEM_MESSAGES(object):
      CUSTOMIZATION_REMOVED_PROJECTION_DECAL,
      CUSTOMIZATION_REMOVED_EMBLEM,
      CUSTOMIZATION_REMOVED_INSCRIPTION,
+     CUSTOMIZATION_REMOVED_PERSONAL_NUMBER,
      CUSTOMIZATION_REMOVED_PAINTVALUE,
      CUSTOMIZATION_REMOVED_CAMOUFLAGEVALUE,
      CUSTOMIZATION_REMOVED_MODIFICATIONVALUE,
@@ -1283,6 +1286,7 @@ class SYSTEM_MESSAGES(object):
      CUSTOMIZATION_REMOVED_PROJECTION_DECALVALUE,
      CUSTOMIZATION_REMOVED_EMBLEMVALUE,
      CUSTOMIZATION_REMOVED_INSCRIPTIONVALUE,
+     CUSTOMIZATION_REMOVED_PERSONAL_NUMBERVALUE,
      BONUSES_BOOSTER_VALUE,
      CHECKOUT_ERROR,
      ANOTHER_PERIPHERY,
@@ -1451,6 +1455,8 @@ class SYSTEM_MESSAGES(object):
      VEHICLE_RENT_SUCCESS,
      VEHICLE_RENT_BUYOPTION,
      VEHICLE_RENT_TIMERENT,
+     VEHICLE_RENT_EPIC_SEASON,
+     VEHICLE_RENT_EPIC_CYCLE,
      VEHICLE_RENT_RANKED_SEASON,
      VEHICLE_RENT_RANKED_CYCLE,
      VEHICLE_RENT_SERVER_ERROR,
@@ -2071,16 +2077,8 @@ class SYSTEM_MESSAGES(object):
      LOOTBOXES_OPEN_SERVER_ERROR,
      LOOTBOXES_OPEN_SERVER_ERROR_DISABLED,
      LOOTBOXES_OPEN_SERVER_ERROR_COOLDOWN,
-     NEWYEAR_CRAFTTOY_SERVER_ERROR,
-     NEWYEAR_BUYTOY_SERVER_ERROR,
-     NEWYEAR_APPLYVEHICLEDISCOUNT_SUCCESS,
-     NEWYEAR_APPLYVEHICLEDISCOUNT_SERVER_ERROR,
-     NEWYEAR_APPLYVEHICLEDISCOUNT_SERVER_ERROR_NODISCOUNTS,
-     NEWYEAR_APPLYVEHICLEDISCOUNT_SERVER_ERROR_ALREADYACTIVE,
-     NEWYEAR_APPLYVEHICLEDISCOUNT_SERVER_ERROR_ALREADYBOUGHT,
-     NEWYEAR_APPLYVEHICLEDISCOUNT_SERVER_ERROR_NODISCOUNTFORVEHICLE,
-     NEWYEAR_BREAKTOYS_SERVER_ERROR,
-     NEWYEAR_HANGTOY_SERVER_ERROR)
+     EPICBATTLES_CLAIMREWARD_ERROR,
+     EPICBATTLES_PRESTIGETRIGGER_ERROR)
     UNIT_NOTIFICATION_ENUM = (UNIT_NOTIFICATION_PLAYER_BECOME_EQUIPMENT_COMMANDER,
      UNIT_NOTIFICATION_PLAYEROFFLINE,
      UNIT_NOTIFICATION_PLAYERONLINE,

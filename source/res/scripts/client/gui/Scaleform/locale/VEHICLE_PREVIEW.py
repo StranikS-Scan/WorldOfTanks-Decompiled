@@ -10,7 +10,6 @@ class VEHICLE_PREVIEW(object):
     HEADER_BACKBTN_DESCRLABEL_STORAGE = '#vehicle_preview:header/backBtn/descrLabel/storage'
     HEADER_BACKBTN_DESCRLABEL_HANGAR = '#vehicle_preview:header/backBtn/descrLabel/hangar'
     HEADER_BACKBTN_DESCRLABEL_VEHICLECOMPARE = '#vehicle_preview:header/backBtn/descrLabel/vehicleCompare'
-    HEADER_BACKBTN_DESCRLABEL_LOOTBOXREWARDS = '#vehicle_preview:header/backBtn/descrLabel/lootBoxRewards'
     HEADER_TITLE = '#vehicle_preview:header/title'
     HERO_HEADER_TITLE = '#vehicle_preview:hero/header/title'
     HEADER_CLOSEBTN_LABEL = '#vehicle_preview:header/closeBtn/label'
@@ -25,10 +24,8 @@ class VEHICLE_PREVIEW(object):
     BUYINGPANEL_BUYBTN_LABEL_BUY = '#vehicle_preview:buyingPanel/buyBtn/label/buy'
     BUYINGPANEL_BUYBTN_LABEL_BUYITEMPACK = '#vehicle_preview:buyingPanel/buyBtn/label/buyItemPack'
     BUYINGPANEL_BUYBTN_LABEL_RESTORE = '#vehicle_preview:buyingPanel/buyBtn/label/restore'
-    BUYINGPANEL_BUYBTN_LABEL_RESTOREREQUESTED = '#vehicle_preview:buyingPanel/buyBtn/label/restoreRequested'
     BUYINGPANEL_BUYBTN_LABEL_RESEARCH = '#vehicle_preview:buyingPanel/buyBtn/label/research'
     BUYINGPANEL_NOTRESEARCHEDVEHICLEWARNING = '#vehicle_preview:buyingPanel/notResearchedVehicleWarning'
-    BUYINGPANEL_BUYBTN_LABEL_TOCALENDAR = '#vehicle_preview:buyingPanel/buyBtn/label/toCalendar'
     BUYINGPANEL_COMPENSATION_BODY = '#vehicle_preview:buyingPanel/compensation/body'
     INFOPANEL_TAB_CREWINFO_NAME = '#vehicle_preview:infoPanel/tab/crewInfo/name'
     INFOPANEL_TAB_FACTSHEET_NAME = '#vehicle_preview:infoPanel/tab/factSheet/name'
@@ -49,8 +46,7 @@ class VEHICLE_PREVIEW(object):
      HEADER_BACKBTN_DESCRLABEL_SHOP,
      HEADER_BACKBTN_DESCRLABEL_STORAGE,
      HEADER_BACKBTN_DESCRLABEL_HANGAR,
-     HEADER_BACKBTN_DESCRLABEL_VEHICLECOMPARE,
-     HEADER_BACKBTN_DESCRLABEL_LOOTBOXREWARDS)
+     HEADER_BACKBTN_DESCRLABEL_VEHICLECOMPARE)
 
     @classmethod
     def getBackBtnLabel(cls, key):

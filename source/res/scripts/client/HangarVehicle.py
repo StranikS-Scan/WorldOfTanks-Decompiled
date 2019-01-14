@@ -38,7 +38,7 @@ class HangarVehicle(ClientSelectableCameraVehicle):
         self.hangarSpace.onSpaceCreate += self.__onSpaceCreated
         g_eventBus.addListener(events.HangarCustomizationEvent.CHANGE_VEHICLE_MODEL_TRANSFORM, self.__changeVehicleModelTransform, scope=EVENT_BUS_SCOPE.LOBBY)
         g_eventBus.addListener(events.HangarCustomizationEvent.RESET_VEHICLE_MODEL_TRANSFORM, self.__resetVehicleModelTransform, scope=EVENT_BUS_SCOPE.LOBBY)
-        self.setEnable(False)
+        self.enable(False)
         self.setState(CameraMovementStates.ON_OBJECT)
 
     def onLeaveWorld(self):
@@ -48,7 +48,7 @@ class HangarVehicle(ClientSelectableCameraVehicle):
         super(HangarVehicle, self).onLeaveWorld()
 
     def __onSpaceCreated(self):
-        self.setEnable(False)
+        self.enable(False)
         self.setState(CameraMovementStates.ON_OBJECT)
         self.cameraPivot = self.hangarSpace.space.camera.pivotPosition
 

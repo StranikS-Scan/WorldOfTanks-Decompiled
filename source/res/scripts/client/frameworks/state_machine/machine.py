@@ -3,23 +3,23 @@
 import logging
 import operator
 from . import states as _states
+from . import validator
+from . import visitor
 from .events import StateEvent
 from .exceptions import StateMachineError
-from .node import NodesVisitor
 from .observers import BaseStateObserver
 from .observers import StateObserversContainer
 from .transitions import BaseTransition
 _logger = logging.getLogger(__name__)
-_logger.addHandler(logging.NullHandler())
 
 class StateMachine(_states.State):
-    __slots__ = ('__isRunning', '__visitor', '__entered', '__observers')
+    __slots__ = ('__isRunning', '__entered', '__history', '__observers')
 
     def __init__(self, stateID=''):
         super(StateMachine, self).__init__(stateID=stateID)
         self.__isRunning = False
-        self.__visitor = NodesVisitor()
         self.__entered = []
+        self.__history = {}
         self.__observers = StateObserversContainer()
 
     @staticmethod
@@ -28,7 +28,7 @@ class StateMachine(_states.State):
 
     def start(self, doValidate=True):
         if doValidate:
-            _validateMachine(self)
+            validator.validate(self)
         if self.__isRunning:
             _logger.debug('%r: Machine is already started', self)
             return
@@ -48,6 +48,7 @@ class StateMachine(_states.State):
             return
         self.__isRunning = False
         self.__observers.clear()
+        self.__history.clear()
         del self.__entered[:]
         self.clear()
         _logger.debug('%r: Machine is stopped', self)
@@ -58,6 +59,9 @@ class StateMachine(_states.State):
                 return True
 
         return False
+
+    def isRunning(self):
+        return self.__isRunning
 
     def addState(self, state):
         self.addChildState(state)
@@ -75,6 +79,8 @@ class StateMachine(_states.State):
 
     def connect(self, observer):
         self.__observers.addObserver(observer)
+        for state in self.__entered:
+            observer.onStateChanged(state.getStateID(), True)
 
     def disconnect(self, observer):
         self.__observers.removeObserver(observer)
@@ -102,12 +108,10 @@ class StateMachine(_states.State):
 
     def __select(self, event):
         result = []
-        for state in self.__entered:
-            if not state.isElementary() or state.isMachine():
-                continue
-            states = self.__visitor.getAncestors(state, self.getParent())
-            if state.isNative():
-                states.insert(0, state)
+        filtered = [ state for state in self.__entered if state.isAtomic() ]
+        for state in filtered:
+            states = visitor.getAncestors(state, upper=self.getParent())
+            states.insert(0, state)
             transition = self.__execute(states, event)
             if transition is not None and transition not in result:
                 result.append(transition)
@@ -134,15 +138,22 @@ class StateMachine(_states.State):
     def __exit(self, transitions):
         result = []
         for transition in transitions:
-            states = transition.getEnabledStates()
-            if not states:
-                continue
-            lca = self.__visitor.getLCA(states, upper=self.getParent())
+            domain = visitor.getTransitionDomain(transition, self.__history, upper=self.getParent())
             for state in self.__entered:
-                if self.__visitor.isDescendantOf(state, lca) and state not in result:
+                if visitor.isDescendantOf(state, domain) and state not in result:
                     result.append(state)
 
         result.sort(key=_states.StateExitingSortKey)
+        for state in result:
+            for history in state.getHistoryStates():
+                historyFlag = history.getFlags() & _states.StateFlags.HISTORY_TYPE_MASK
+                if historyFlag == _states.StateFlags.DEEP_HISTORY:
+                    snapshot = [ entered for entered in self.__entered if entered.isAtomic() and visitor.isDescendantOf(entered, state) ]
+                else:
+                    snapshot = [ entered for entered in self.__entered if entered.getParent() == state ]
+                self.__history[history.getStateID()] = snapshot
+                _logger.debug('%r: snapshot is recorded to history for %r -> %r', self, state, snapshot)
+
         for state in result:
             _logger.debug('%r: %r is exiting', self, state)
             state.exit()
@@ -153,12 +164,7 @@ class StateMachine(_states.State):
     def __enter(self, transitions):
         result = []
         for transition in transitions:
-            states = transition.getEnabledStates()
-            if not states:
-                continue
-            lca = self.__visitor.getLCA(states, upper=self.getParent())
-            for state in states[1:]:
-                self.__collect(state, lca, result)
+            self.__collect(transition, result)
 
         result.sort(key=_states.StateEnteringSortKey)
         for state in result:
@@ -168,27 +174,59 @@ class StateMachine(_states.State):
 
         return result
 
-    def __collect(self, state, root, accumulation):
-        accumulation.append(state)
-        if state.isParallel():
-            for child in state.getChildrenStates():
-                self.__collect(child, state, accumulation)
+    def __collect(self, transition, accumulation):
+        domain = visitor.getTransitionDomain(transition, self.__history, upper=self.getParent())
+        for state in transition.getTargets():
+            self.__dcollect(state, accumulation)
 
-        if state.isUnion():
-            self.__collect(state.getInitial(), state, accumulation)
-        ancestors = self.__visitor.getAncestors(state, root)
+        for state in visitor.getEffectiveTargetStates(transition, self.__history):
+            self.__acollect(state, domain, accumulation)
+
+    def __dcollect(self, state, accumulation):
+        if state.isHistory():
+            self.__restore(state, accumulation)
+        else:
+            accumulation.append(state)
+            if state.isCompound():
+                self.__dcollect(state.getInitial(), accumulation)
+                self.__acollect(state.getInitial(), state, accumulation)
+            elif state.isParallel():
+                self.__pcollect(state, accumulation)
+
+    def __acollect(self, state, root, accumulation):
+        ancestors = visitor.getAncestors(state, root)
         for ancestor in ancestors:
             if ancestor.getParent() is None:
                 continue
             accumulation.append(ancestor)
-            if not ancestor.isParallel():
-                continue
-            for child in ancestor.getChildrenStates():
-                for item in accumulation:
-                    if self.__visitor.isDescendantOf(item, child):
-                        break
-                else:
-                    self.__collect(child, ancestor, accumulation)
+            if ancestor.isParallel():
+                self.__pcollect(state, accumulation)
+
+        return
+
+    def __pcollect(self, state, accumulation):
+        for child in state.getChildrenStates():
+            for item in accumulation:
+                if visitor.isDescendantOf(item, child):
+                    break
+            else:
+                self.__dcollect(child, accumulation)
+
+    def __restore(self, history, accumulation):
+        stateID = history.getStateID()
+        if stateID in self.__history:
+            states = self.__history[stateID]
+        else:
+            transitions = history.getTransitions()
+            if transitions:
+                states = (transitions[0].getTarget(),)
+            else:
+                states = ()
+        for state in states:
+            self.__dcollect(state, accumulation)
+            parent = state.getParent()
+            if parent is not None:
+                self.__acollect(state, parent, accumulation)
 
         return
 
@@ -213,40 +251,3 @@ class _InitialTransition(BaseTransition):
 
     def execute(self, event):
         return True
-
-
-def _validateTransitionHasLCA(transition, upper=None):
-    states = transition.getEnabledStates()
-    if states and NodesVisitor.getLCA(states, upper=upper) is None:
-        raise StateMachineError('States have no LCA in transition {}'.format(transition))
-    return
-
-
-def _validateInitialState(state):
-    initial = state.getInitial()
-    if initial is None:
-        raise StateMachineError('{} has no initial state'.format(state))
-    return
-
-
-def _validateState(state, machine):
-    if state.isUnion():
-        _validateInitialState(state)
-    if state.isNative():
-        for transition in state.getTransitions():
-            _validateTransitionHasLCA(transition, upper=machine.getParent())
-
-
-def _validateMachine(machine):
-    _validateInitialState(machine)
-    ids = []
-    for state in machine.visitInOrder(lambda item: isinstance(item, _states.State)):
-        if state.isMachine():
-            continue
-        stateID = state.getStateID()
-        if stateID:
-            if stateID not in ids:
-                ids.append(stateID)
-            else:
-                raise StateMachineError('{} is not unique, each state must have unique ID'.format(state))
-            _validateState(state, machine)

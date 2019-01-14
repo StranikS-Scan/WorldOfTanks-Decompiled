@@ -133,7 +133,9 @@ class BattleStatisticsDataController(BattleStatisticDataControllerMeta, IVehicle
         exchange.addTotalStats(self._statsCollector.getTotalStats(self._arenaVisitor, self.sessionProvider))
         exchange.addSortIDs(arenaDP, False, True)
         data = exchange.get(forced=True)
-        if data:
+        if self.sessionProvider.isReplayPlaying and not data:
+            self.as_resetFragsS()
+        elif data:
             self.as_setFragsS(data)
 
     def addVehicleInfo(self, vo, arenaDP):

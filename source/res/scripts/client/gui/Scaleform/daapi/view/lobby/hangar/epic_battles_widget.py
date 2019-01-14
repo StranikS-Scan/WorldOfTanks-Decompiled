@@ -15,7 +15,7 @@ from gui.shared.formatters import text_styles
 from gui.shared.tooltips import TOOLTIP_TYPE
 from gui.shared.tooltips import formatters
 from gui.shared.tooltips.common import BlocksTooltipData
-from helpers import dependency, i18n
+from helpers import dependency, i18n, int2roman
 from helpers import time_utils
 from helpers.i18n import makeString as _ms
 from skeletons.gui.game_control import IEpicBattleMetaGameController
@@ -78,7 +78,7 @@ class EpicBattlesWidgetTooltip(BlocksTooltipData):
         famePtsToProgress = self.epicMetaGameCtrl.getPointsProgressForLevel(pMetaLevel)
         block = super(EpicBattlesWidgetTooltip, self)._packBlocks()
         title = TOOLTIPS.EPICBATTLEWIDGET_HEADER
-        desc = i18n.makeString(TOOLTIPS.EPICBATTLEWIDGET_DESC, level=pMetaLevel)
+        desc = i18n.makeString(TOOLTIPS.EPICBATTLEWIDGET_DESC, prestige=int2roman(pPrestigeLevel + 1), level=pMetaLevel)
         block.append(formatters.packTitleDescBlock(title=text_styles.highTitle(title), desc=text_styles.standard(desc)))
         if pMetaLevel == maxMetaLevel:
             if pPrestigeLevel == maxPrestigeLevel:

@@ -305,7 +305,7 @@ class RangeSelectorDesc(SelectorDesc):
                     break
                 idx += 1
 
-            return self._selectors[idx].getActiveEffects(effects, args) if idx > -1 and idx < len(self._selectors) else None
+            return self._selectors[idx].getActiveEffects(effects, args) if -1 < idx < len(self._selectors) else None
 
 
 class UnionSelectorDesc(SelectorDesc):
@@ -375,9 +375,18 @@ class EffectSelectorDesc(SelectorDesc):
     def fillTemplate(self, args, effects):
         self._variable = args.get(self._variable, self._variable)
         self.__ttl = args.get(self.__ttl, self.__ttl)
-        fileDesc = args.get('_fileDescriptor', '')
-        if fileDesc:
-            self._variable = intern(self._variable.format(fileDesc))
+        pathArgs = []
+        for key, val in args.iteritems():
+            if len(key) == 2 and key[0] == '_' and key[1].isdigit:
+                index = int(key[1])
+                if index >= len(pathArgs):
+                    for i in xrange(index - len(pathArgs) + 1):
+                        pathArgs.append('{' + str(i) + '}')
+
+                pathArgs[index] = val
+
+        if pathArgs:
+            self._variable = self._variable.format(*pathArgs)
         if self.__hardPoint is not None:
             self.__hardPoint = args.get(self.__hardPoint, self.__hardPoint)
             self.__makeIdWithHP(effects)

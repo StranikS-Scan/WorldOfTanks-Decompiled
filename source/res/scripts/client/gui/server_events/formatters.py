@@ -248,11 +248,12 @@ def packTextBlock(label, value=None, relation=None, questID=None, isAvailable=Tr
     return UiElement(blockData, 'label')
 
 
-def packSimpleBonusesBlock(bonusesList):
+def packSimpleBonusesBlock(bonusesList, endlineSymbol=''):
     data = {'linkage': 'QuestTextAwardBlockUI',
      'items': bonusesList,
      'separator': ', ',
-     'ellipsis': '..'}
+     'ellipsis': '..',
+     'endline': endlineSymbol}
     return UiElement(data)
 
 
@@ -276,7 +277,7 @@ def _packAchieveElement(userName, iconPath, block, record, value=0):
 
 
 def packCustomizations(elements):
-    return UiElement({'linkage': 'CustomizationsBlock_UI',
+    return UiElement({'linkage': 'CustomizationsBlockUI',
      'list': elements})
 
 

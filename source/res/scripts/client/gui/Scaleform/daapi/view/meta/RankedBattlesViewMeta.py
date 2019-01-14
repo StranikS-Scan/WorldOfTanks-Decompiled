@@ -13,8 +13,11 @@ class RankedBattlesViewMeta(WrapperViewMeta):
     def onAwardClick(self, awardID):
         self._printOverrideError('onAwardClick')
 
-    def onPlayBtnClick(self):
-        self._printOverrideError('onPlayBtnClick')
-
     def as_setDataS(self, data):
         return self.flashObject.as_setData(data) if self._isDAAPIInited() else None
+
+    def as_setLeagueDataS(self, awards):
+        return self.flashObject.as_setLeagueData(awards) if self._isDAAPIInited() else None
+
+    def as_setRankedDataS(self, calendarStatus, progressBlock):
+        return self.flashObject.as_setRankedData(calendarStatus, progressBlock) if self._isDAAPIInited() else None

@@ -74,13 +74,7 @@ class AllVehiclesTabView(AllVehiclesTabViewMeta, carousel_environment.ICarouselE
     def applyFilter(self):
         self._dataProvider.applyFilter()
         self.__updateCounter()
-        hasNoVehicles = self._dataProvider.getTotalVehiclesCount() == 0
-        hasNoFilterResults = self._dataProvider.getCurrentVehiclesCount() == 0
-        filterWarningVO = None
-        if hasNoFilterResults and not hasNoVehicles:
-            filterWarningVO = self._makeFilterWarningVO(STORAGE.FILTER_WARNINGMESSAGE, STORAGE.FILTER_NORESULTSBTN_LABEL, TOOLTIPS.STORAGE_FILTER_NORESULTSBTN)
-        self.as_showFilterWarningS(filterWarningVO)
-        return
+        self.__updateFilterWarning()
 
     def blinkCounter(self):
         self.__updateCounter()
@@ -150,7 +144,8 @@ class AllVehiclesTabView(AllVehiclesTabViewMeta, carousel_environment.ICarouselE
 
     def __updateVehicles(self, vehicles=None, filterCriteria=None):
         self._dataProvider.updateVehicles(vehicles, filterCriteria)
-        self.applyFilter()
+        self.__updateCounter()
+        self.__updateFilterWarning()
         hasNoVehicles = self._dataProvider.getTotalVehiclesCount() == 0
         self.as_showDummyScreenS(hasNoVehicles)
 
@@ -159,6 +154,15 @@ class AllVehiclesTabView(AllVehiclesTabViewMeta, carousel_environment.ICarouselE
 
     def __updateIgrType(self, roomType, xpFactor):
         self.__updateVehicles(filterCriteria=REQ_CRITERIA.VEHICLE.IS_PREMIUM_IGR)
+
+    def __updateFilterWarning(self):
+        hasNoVehicles = self._dataProvider.getTotalVehiclesCount() == 0
+        hasNoFilterResults = self._dataProvider.getCurrentVehiclesCount() == 0
+        filterWarningVO = None
+        if hasNoFilterResults and not hasNoVehicles:
+            filterWarningVO = self._makeFilterWarningVO(STORAGE.FILTER_WARNINGMESSAGE, STORAGE.FILTER_NORESULTSBTN_LABEL, TOOLTIPS.STORAGE_FILTER_NORESULTSBTN)
+        self.as_showFilterWarningS(filterWarningVO)
+        return
 
     def __onVehicleBecomeElite(self, *vehicles):
         self.__updateVehicles(vehicles)

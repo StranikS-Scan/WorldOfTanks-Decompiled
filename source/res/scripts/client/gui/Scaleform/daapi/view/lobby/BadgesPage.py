@@ -3,6 +3,9 @@
 import operator
 from collections import defaultdict
 import BigWorld
+import constants
+from adisp import process
+from gui.Scaleform.locale.WAITING import WAITING
 from gui.shared.gui_items.badge import Badge
 from gui.shared.tutorial_helper import getTutorialGlobalStorage
 from helpers import dependency, i18n
@@ -18,7 +21,6 @@ from gui.shared.formatters import text_styles
 from gui.Scaleform.locale.BADGE import BADGE
 from gui.shared.gui_items.processors.common import BadgesSelector
 from gui.shared.items_cache import CACHE_SYNC_REASON
-from gui.shared.utils import decorators
 from tutorial.control.context import GLOBAL_FLAG
 _SUFFIX_BADGE_HINT_ID = 'BadgePageNewSuffixBadgeHint'
 
@@ -43,6 +45,7 @@ class BadgesPage(BadgesPageMeta):
         self.__prefixBadgeID = None
         self.__receivedSuffixBadgeID = None
         self.__suffixBadgeSelected = False
+        self.__waitingCbId = None
         self.__tutorStorage = getTutorialGlobalStorage()
         if self.__tutorStorage is not None:
             hasNewBadges = self.__checkNewSuffixBadges()
@@ -86,6 +89,8 @@ class BadgesPage(BadgesPageMeta):
         if self.__tutorStorage is not None:
             self.__tutorStorage.setValue(GLOBAL_FLAG.BADGE_PAGE_HAS_NEW_SUFFIX_BADGE, False)
         self.itemsCache.onSyncCompleted -= self.__onItemsChanged
+        if self.__waitingCbId:
+            BigWorld.cancelCallback(self.__waitingCbId)
         super(BadgesPage, self)._dispose()
         return
 
@@ -122,16 +127,22 @@ class BadgesPage(BadgesPageMeta):
          'badgesData': notReceivedBadgesData})
         return
 
-    @decorators.process('updating')
+    @process
     def __selectBadges(self):
         badges = []
+        self.as_showWaitingS(WAITING.UPDATING, {})
         if self.__prefixBadgeID:
             badges.append(self.__prefixBadgeID)
         if self.__receivedSuffixBadgeID and self.__suffixBadgeSelected:
             badges.append(self.__receivedSuffixBadgeID)
         result = yield BadgesSelector(badges).request()
-        if result and result.userMsg:
-            SystemMessages.pushMessage(result.userMsg, type=result.sysMsgType)
+        if result:
+            if result.userMsg:
+                SystemMessages.pushMessage(result.userMsg, type=result.sysMsgType)
+            if not result.success:
+                self.__onCooldownOver()
+            else:
+                self.__waitingCbId = BigWorld.callback(constants.REQUEST_COOLDOWN.BADGES, self.__onCooldownOver)
 
     def __preprocessBadges(self):
         prefixSelected = None
@@ -169,3 +180,8 @@ class BadgesPage(BadgesPageMeta):
                 return True
 
         return False
+
+    def __onCooldownOver(self):
+        self.__waitingCbId = None
+        self.as_hideWaitingS()
+        return

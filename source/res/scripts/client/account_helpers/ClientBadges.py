@@ -18,7 +18,7 @@ class ClientBadges(object):
         return
 
     def selectBadges(self, badgeList, callback=_skipResponse):
-        self.__account._doCmdIntArr(AccountCommands.CMD_SELECT_BADGES, badgeList, lambda requestID, resultID, errorCode: callback(resultID, errorCode))
+        self.__account._doCmdIntArr(AccountCommands.CMD_SELECT_BADGES, badgeList, callback)
 
     def onAccountBecomePlayer(self):
         self.__ignore = False

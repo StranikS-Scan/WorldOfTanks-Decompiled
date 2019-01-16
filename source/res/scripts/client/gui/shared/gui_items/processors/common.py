@@ -276,7 +276,7 @@ class BadgesSelector(Processor):
 
     def _request(self, callback):
         LOG_DEBUG('Make server request to select badges', self.__badges)
-        BigWorld.player().badges.selectBadges(self.__badges, lambda resID, code: self._response(code, callback))
+        BigWorld.player().badges.selectBadges(self.__badges, lambda resID, code, errStr: self._response(code, callback, errStr))
 
 
 class EpicPrestigeTrigger(Processor):

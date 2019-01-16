@@ -2,30 +2,31 @@
 # Embedded file name: scripts/client/gui/prb_control/prb_helpers.py
 from gui.Scaleform.settings import getBadgeIconPathByDimension
 from gui.shared.formatters.icons import makeImageTag
+from gui.shared.gui_items.badge import BadgeLayouts
 from helpers import dependency
-from shared_utils import findFirst
 from skeletons.gui.shared import IItemsCache
 
+@dependency.replace_none_kwargs(itemsCache=IItemsCache)
+def _findFirstPrefixBadge(selectedBadges, itemsCache=None):
+    badgeDescrs = itemsCache.items.badges.available
+    for sbID in selectedBadges:
+        badgeDescr = badgeDescrs.get(sbID)
+        if badgeDescr and badgeDescr['layout'] == BadgeLayouts.PREFIX:
+            return sbID
+
+
 class BadgesHelper(object):
-    itemsCache = dependency.descriptor(IItemsCache)
 
     def __init__(self, badges=None):
         self.__badges = badges or []
+        self.__prefixBadgeID = None
+        return
 
     def getBadgeID(self):
-        return self.__findFirstPrefixBadge(0)
+        if self.__prefixBadgeID is None:
+            self.__prefixBadgeID = _findFirstPrefixBadge(self.__badges)
+        return self.__prefixBadgeID
 
     def getBadgeImgStr(self, size, vspace):
-        badgeID = self.__findFirstPrefixBadge()
-        badgeImgStr = ''
-        if badgeID is not None:
-            badgeImgStr = makeImageTag(getBadgeIconPathByDimension(size, badgeID), size, size, vspace)
-        return badgeImgStr
-
-    def __findFirstPrefixBadge(self, default=None):
-
-        def __isPrefixBadge(badgeID):
-            badge = self.itemsCache.items.getBadges().get(badgeID)
-            return badge.isPrefixLayout() if badge else False
-
-        return findFirst(__isPrefixBadge, self.__badges, default)
+        badgeID = self.getBadgeID()
+        return makeImageTag(getBadgeIconPathByDimension(size, badgeID), size, size, vspace) if badgeID else ''

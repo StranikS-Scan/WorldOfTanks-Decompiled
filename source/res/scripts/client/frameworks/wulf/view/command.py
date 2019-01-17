@@ -12,6 +12,14 @@ class Command(PyObjectEntity):
         super(Command, self).__init__(PyObjectCommand())
         self.__event = Event()
 
+    def __call__(self, args=None):
+        if args is not None:
+            args = (args,)
+        else:
+            args = ()
+        self.__event(*args)
+        return
+
     @property
     def name(self):
         return self.proxy.name

@@ -4,7 +4,7 @@ from gui.Scaleform.daapi.view.common.vehicle_carousel.carousel_environment impor
 
 class VehicleSelectorCarouselMeta(CarouselEnvironment):
 
-    def setFilter(self, id):
+    def setFilter(self, id, selected):
         self._printOverrideError('setFilter')
 
     def as_initCarouselFilterS(self, data):

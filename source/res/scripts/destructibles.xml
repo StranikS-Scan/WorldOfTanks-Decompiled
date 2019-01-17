@@ -8678,13 +8678,13 @@
     <entry>
       <filename>	content/Buildings/hd_bld_AM_022_DispatchingStations/normal/lod0/hd_bld_AM_022_DispatchingStations.model	</filename>
       <health>	10	</health>
-      <decayEffect>	hd_env_AM_009_Poles_hit	</decayEffect>
+      <decayEffect>	none	</decayEffect>
       <effect>	hd_bld_AM_035_SmallShed	</effect>
       <hitEffect>	hd_bld_SU_206_Cellar	</hitEffect>
       <effectHP>	HP_module0	</effectHP>
       <effectScale>	1.000000	</effectScale>
       <matName>	n_wood0	</matName>
-      <lifetimeEffect>	hd_bld_SU_103_LostCityConstructor_InProgress_05_Wall	</lifetimeEffect>
+      <lifetimeEffect>	none	</lifetimeEffect>
     </entry>
     <entry>
       <filename>	content/Environment/hd_env_SU_008_ArmyTech/normal/lod0/hd_env_SU_008_ArmyTech.model	</filename>
@@ -18107,8 +18107,8 @@
       <filename>	content/Buildings/hd_bld_UNI_008_WorkshopNew/normal/lod0/hd_bld_UNI_008_WorkshopNew_Doors_Big_01.model	</filename>
       <modules>
         <module>
-          <matName>	n_metal0_1_2	</matName>
-          <health>	10	</health>
+          <matName>	n_metal2_1	</matName>
+          <health>	50	</health>
           <decayEffect>	none	</decayEffect>
           <ramEffect>	hd_bld_UNI_008_WorkshopNew_Doors_Big_01_1	</ramEffect>
           <hitEffect>	hd_bld_UNI_008_WorkshopNew_Doors_Big_01_1	</hitEffect>
@@ -18116,21 +18116,21 @@
           <effectScale>	1	</effectScale>
         </module>
         <module>
-          <matName>	n_metal0_2	</matName>
-          <health>	10	</health>
-          <decayEffect>	none	</decayEffect>
-          <ramEffect>	hd_bld_UNI_008_WorkshopNew_Doors_Big_01_1	</ramEffect>
-          <hitEffect>	hd_bld_UNI_008_WorkshopNew_Doors_Big_01_1	</hitEffect>
-          <effectHP>	HP_module2	</effectHP>
-          <effectScale>	1	</effectScale>
-        </module>
-        <module>
-          <matName>	n_metal0_3	</matName>
+          <matName>	n_metal3_3	</matName>
           <health>	1	</health>
           <decayEffect>	none	</decayEffect>
           <ramEffect>	hd_bld_UNI_008_WorkshopNew_Doors_Big_01_3	</ramEffect>
           <hitEffect>	hd_bld_UNI_008_WorkshopNew_Doors_Big_01_3	</hitEffect>
           <effectHP>	HP_module3	</effectHP>
+          <effectScale>	1	</effectScale>
+        </module>
+        <module>
+          <matName>	n_metal4_2	</matName>
+          <health>	50	</health>
+          <decayEffect>	none	</decayEffect>
+          <ramEffect>	hd_bld_UNI_008_WorkshopNew_Doors_Big_01_1	</ramEffect>
+          <hitEffect>	hd_bld_UNI_008_WorkshopNew_Doors_Big_01_1	</hitEffect>
+          <effectHP>	HP_module2	</effectHP>
           <effectScale>	1	</effectScale>
         </module>
       </modules>

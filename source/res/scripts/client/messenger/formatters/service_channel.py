@@ -502,7 +502,7 @@ class AutoMaintenanceFormatter(ServiceChannelFormatter):
             else:
                 templateName = 'WarningSysMessage'
             if result == AUTO_MAINTENANCE_RESULT.OK:
-                msg += shared_fmts.formatPrice(cost.toAbs())
+                msg += shared_fmts.formatPrice(cost.toAbs(), ignoreZeros=True)
             formatted = g_settings.msgTemplates.format(templateName, {'text': msg}, data=data)
             return [_MessageData(formatted, self._getGuiSettings(message, priorityLevel=priorityLevel, messageType=result))]
         else:

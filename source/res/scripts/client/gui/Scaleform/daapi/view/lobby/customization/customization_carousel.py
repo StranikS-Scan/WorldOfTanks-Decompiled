@@ -247,16 +247,16 @@ class CustomizationCarouselDataProvider(SortableDAAPIDataProvider):
         self._customizationItems = []
         self._customizationBookmarks = []
         lastGroupID = None
-        for idx, item in enumerate(sorted(allItems.itervalues(), key=comparisonKey)):
+        for item in sorted(allItems.itervalues(), key=comparisonKey):
             if item.isHiddenInUI():
                 continue
             groupID = item.groupID
             if item.intCD == self._selectIntCD:
-                self._selectedIdx = len(self._customizationItems)
+                self._selectedIdx = self.itemCount
                 self._selectIntCD = None
             if groupID != lastGroupID:
                 lastGroupID = groupID
-                self._customizationBookmarks.append(CustomizationBookmarkVO(item.groupUserName, idx).asDict())
+                self._customizationBookmarks.append(CustomizationBookmarkVO(item.groupUserName, self.itemCount).asDict())
             self._customizationItems.append(item.intCD)
             self._itemSizeData.append(item.isWide())
 

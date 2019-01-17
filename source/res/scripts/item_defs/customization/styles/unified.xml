@@ -2608,6 +2608,46 @@
   <itemGroup>
     <userString>	#vehicle_customization:styles/special_styles	</userString>
     <season>	ALL	</season>
+    <historical>	true	</historical>
+    <priceGroup>	special styles veteran	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	uk:GB98_T95_FV4201_Chieftain	</vehicles>
+      </include>
+    </vehicleFilter>
+    <style>
+      <id>	234	</id>
+      <texture>	gui/maps/vehicles/styles/veteran_chieftain.png	</texture>
+      <userString>	#vehicle_customization:special_style/veteran_chieftain	</userString>
+      <tags>	vehicleBound	</tags>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	607	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <decals>
+            <item>
+              <id>	655	</id>
+              <appliedTo>	13104	</appliedTo>
+            </item>
+            <item>
+              <id>	654	</id>
+              <appliedTo>	52416	</appliedTo>
+            </item>
+          </decals>
+        </outfit>
+      </outfits>
+    </style>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <season>	ALL	</season>
     <historical>	false	</historical>
     <priceGroup>	special style notInShop	</priceGroup>
     <vehicleFilter>

@@ -1,15 +1,15 @@
 <poland.xml>
-  <xmlns:czech0>	ussr	</xmlns:czech0>
-  <xmlns:germany>	germany	</xmlns:germany>
-  <xmlns:usa>	usa	</xmlns:usa>
-  <xmlns:china>	china	</xmlns:china>
-  <xmlns:france>	france	</xmlns:france>
-  <xmlns:uk>	uk	</xmlns:uk>
-  <xmlns:japan>	japan	</xmlns:japan>
-  <xmlns:czech>	czech	</xmlns:czech>
-  <xmlns:sweden>	sweden	</xmlns:sweden>
-  <xmlns:poland>	poland	</xmlns:poland>
-  <xmlns:italy>	italy	</xmlns:italy>
+  <poland:Pl06_10TP2>	ussr	</poland:Pl06_10TP2>
+  <poland:Pl05_50TP_Tyszkiewicza5>	germany	</poland:Pl05_50TP_Tyszkiewicza5>
+  <poland:Pl06_10TP1>	usa	</poland:Pl06_10TP1>
+  <poland:Pl05_50TP_Tyszkiewicza2>	china	</poland:Pl05_50TP_Tyszkiewicza2>
+  <poland:Pl05_50TP_Tyszkiewicza4>	france	</poland:Pl05_50TP_Tyszkiewicza4>
+  <poland:Pl06_10TP0>	uk	</poland:Pl06_10TP0>
+  <poland:Pl05_50TP_Tyszkiewicza7>	japan	</poland:Pl05_50TP_Tyszkiewicza7>
+  <poland:Pl05_50TP_Tyszkiewicza3>	czech	</poland:Pl05_50TP_Tyszkiewicza3>
+  <poland:Pl05_50TP_Tyszkiewicza9>	sweden	</poland:Pl05_50TP_Tyszkiewicza9>
+  <poland:Pl05_50TP_Tyszkiewicza8>	poland	</poland:Pl05_50TP_Tyszkiewicza8>
+  <poland:Pl05_50TP_Tyszkiewicza6>	italy	</poland:Pl05_50TP_Tyszkiewicza6>
   <itemGroup>
     <userString>	#vehicle_customization:camouflage/opaque	</userString>
     <season>	desert	</season>
@@ -804,6 +804,129 @@
         <Pl13_53TP_Markowskiego>	1.64 1.64 0.000000 0.000000	</Pl13_53TP_Markowskiego>
         <Pl14_4TP>	2.3 2.3 0.000000 0.000000	</Pl14_4TP>
         <Pl15_60TP_Lewandowskiego>	1.58 1.58 0.000000 0.000000	</Pl15_60TP_Lewandowskiego>
+      </tiling>
+    </camouflage>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:camouflage/opaque	</userString>
+    <season>	summer	</season>
+    <historical>	true	</historical>
+    <priceGroup>	legacy notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <nations>	poland	</nations>
+      </include>
+    </vehicleFilter>
+    <camouflage>
+      <id>	639	</id>
+      <texture>	vehicles/british/Camouflage/GB_1_grassy_green.dds	</texture>
+      <description>	#vehicle_customization:camouflage/poland/bicolor/grassy_green/description	</description>
+      <scales>	1.3 1 0.7	</scales>
+      <userString>	#vehicle_customization:camouflage/poland/bicolor/grassy_green/label	</userString>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <palettes>
+        <palette>
+          <c0>	66 77 53 255	</c0>
+          <c1>	109 115 79 255	</c1>
+          <c2>	0 0 0 0	</c2>
+          <c3>	0 0 0 0	</c3>
+        </palette>
+      </palettes>
+      <tiling>
+        <poland:Pl01_TKS_20mm>	2.2 2.2 0.000000 0.000000	</poland:Pl01_TKS_20mm>
+        <poland:Pl05_50TP_Tyszkiewicza>	1.9 1.9 0.000000 0.000000	</poland:Pl05_50TP_Tyszkiewicza>
+        <poland:Pl06_10TP>	1.05 1.05 0.000000 0.000000	</poland:Pl06_10TP>
+        <poland:Pl07_14TP>	4.91 4.91 0.03 0.000000	</poland:Pl07_14TP>
+        <poland:Pl08_50TP_prototyp>	2.12 2.12 0.000000 0.000000	</poland:Pl08_50TP_prototyp>
+        <poland:Pl09_7TP>	1.39 1.39 0.15 0.000000	</poland:Pl09_7TP>
+        <poland:Pl10_40TP_Habicha>	1.89 1.89 0.000000 0.000000	</poland:Pl10_40TP_Habicha>
+        <poland:Pl11_45TP_Habicha>	1.47 1.47 0.14 0.000000	</poland:Pl11_45TP_Habicha>
+        <poland:Pl12_25TP_KSUST_II>	2.37 2.37 0.26 0.66	</poland:Pl12_25TP_KSUST_II>
+        <poland:Pl13_53TP_Markowskiego>	2.07 2.07 0.37 0.000000	</poland:Pl13_53TP_Markowskiego>
+        <poland:Pl05_50TP_Tyszkiewicza0>	2.24 2.24 0.000000 0.000000	</poland:Pl05_50TP_Tyszkiewicza0>
+        <poland:Pl05_50TP_Tyszkiewicza1>	2.18 2.18 0.000000 0.000000	</poland:Pl05_50TP_Tyszkiewicza1>
+      </tiling>
+    </camouflage>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:camouflage/opaque	</userString>
+    <season>	winter	</season>
+    <historical>	true	</historical>
+    <priceGroup>	legacy notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <nations>	poland	</nations>
+      </include>
+    </vehicleFilter>
+    <camouflage>
+      <id>	640	</id>
+      <texture>	vehicles/british/Camouflage/GB_1_winter.dds	</texture>
+      <description>	#vehicle_customization:camouflage/poland/bicolor/winter/description	</description>
+      <scales>	1.3 1 0.7	</scales>
+      <userString>	#vehicle_customization:camouflage/poland/bicolor/winter/label	</userString>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <palettes>
+        <palette>
+          <c0>	177 176 173 255	</c0>
+          <c1>	116 110 90 255	</c1>
+          <c2>	0 0 0 0	</c2>
+          <c3>	0 0 0 0	</c3>
+        </palette>
+      </palettes>
+      <tiling>
+        <poland:Pl01_TKS_20mm>	3.3 3.3 0.000000 0.000000	</poland:Pl01_TKS_20mm>
+        <poland:Pl05_50TP_Tyszkiewicza>	2.96 2.96 0.000000 0.000000	</poland:Pl05_50TP_Tyszkiewicza>
+        <poland:Pl06_10TP>	2.15 2.15 0.000000 0.000000	</poland:Pl06_10TP>
+        <poland:Pl07_14TP>	3.78 3.78 0.000000 0.000000	</poland:Pl07_14TP>
+        <poland:Pl08_50TP_prototyp>	2.52 2.52 0.000000 0.000000	</poland:Pl08_50TP_prototyp>
+        <poland:Pl09_7TP>	2.56 2.56 0.000000 0.000000	</poland:Pl09_7TP>
+        <poland:Pl10_40TP_Habicha>	2.46 2.46 0.000000 0.000000	</poland:Pl10_40TP_Habicha>
+        <poland:Pl11_45TP_Habicha>	2.34 2.34 0.000000 0.000000	</poland:Pl11_45TP_Habicha>
+        <poland:Pl12_25TP_KSUST_II>	2.81 2.81 0.000000 0.000000	</poland:Pl12_25TP_KSUST_II>
+        <poland:Pl13_53TP_Markowskiego>	2.3 2.3 0.000000 0.000000	</poland:Pl13_53TP_Markowskiego>
+        <poland:Pl05_50TP_Tyszkiewicza0>	1.61 1.61 0.000000 0.000000	</poland:Pl05_50TP_Tyszkiewicza0>
+        <poland:Pl05_50TP_Tyszkiewicza1>	2.4 2.4 0.000000 0.000000	</poland:Pl05_50TP_Tyszkiewicza1>
+      </tiling>
+    </camouflage>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:camouflage/opaque	</userString>
+    <season>	desert	</season>
+    <historical>	true	</historical>
+    <priceGroup>	legacy notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <nations>	poland	</nations>
+      </include>
+    </vehicleFilter>
+    <camouflage>
+      <id>	641	</id>
+      <texture>	vehicles/german/Camouflage/Cger_1_7GrayZigzag.dds	</texture>
+      <description>	#vehicle_customization:camouflage/poland/bicolor/GrayZigzag/description	</description>
+      <scales>	1.3 1 0.7	</scales>
+      <userString>	#vehicle_customization:camouflage/poland/bicolor/GrayZigzag/label	</userString>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <palettes>
+        <palette>
+          <c0>	55 57 59 255	</c0>
+          <c1>	142 128 107 255	</c1>
+          <c2>	0 0 0 0	</c2>
+          <c3>	0 0 0 0	</c3>
+        </palette>
+      </palettes>
+      <tiling>
+        <poland:Pl01_TKS_20mm>	2.61 2.61 0.000000 0.000000	</poland:Pl01_TKS_20mm>
+        <poland:Pl05_50TP_Tyszkiewicza>	2.15 2.15 0.000000 0.000000	</poland:Pl05_50TP_Tyszkiewicza>
+        <poland:Pl06_10TP>	0.99 0.99 0.000000 0.000000	</poland:Pl06_10TP>
+        <poland:Pl07_14TP>	3.37 3.37 0.000000 0.000000	</poland:Pl07_14TP>
+        <poland:Pl08_50TP_prototyp>	1.46 1.46 0.000000 0.000000	</poland:Pl08_50TP_prototyp>
+        <poland:Pl09_7TP>	0.89 0.89 0.000000 0.000000	</poland:Pl09_7TP>
+        <poland:Pl10_40TP_Habicha>	1.63 1.63 0.000000 0.000000	</poland:Pl10_40TP_Habicha>
+        <poland:Pl11_45TP_Habicha>	1.4 1.4 0.000000 0.000000	</poland:Pl11_45TP_Habicha>
+        <poland:Pl12_25TP_KSUST_II>	2.62 2.62 0.000000 0.000000	</poland:Pl12_25TP_KSUST_II>
+        <poland:Pl13_53TP_Markowskiego>	2.21 2.21 0.000000 0.000000	</poland:Pl13_53TP_Markowskiego>
+        <poland:Pl05_50TP_Tyszkiewicza0>	2.15 2.15 0.000000 0.000000	</poland:Pl05_50TP_Tyszkiewicza0>
+        <poland:Pl05_50TP_Tyszkiewicza1>	1.86 1.86 0.000000 0.000000	</poland:Pl05_50TP_Tyszkiewicza1>
       </tiling>
     </camouflage>
   </itemGroup>

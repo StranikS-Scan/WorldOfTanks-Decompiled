@@ -32,8 +32,8 @@ from gui.shared.money import MONEY_UNDEFINED, Currency, Money
 from gui.shared.gui_items.gui_item_economics import ItemPrice, ItemPrices, ITEM_PRICE_EMPTY
 from gui.shared.utils import makeSearchableString
 from helpers import i18n, time_utils, dependency
-from items import vehicles, tankmen, customizations, getTypeInfoByName, getTypeOfCompactDescr
-from items.components.c11n_constants import SeasonType, CustomizationType, StyleFlags
+from items import vehicles, tankmen, customizations, getTypeInfoByName, getTypeOfCompactDescr, makeIntCompactDescrByID
+from items.components.c11n_constants import SeasonType, CustomizationType, StyleFlags, HIDDEN_CAMOUFLAGE_ID
 from shared_utils import findFirst, CONST_CONTAINER
 from skeletons.gui.game_control import IIGRController, IRentalsController
 from skeletons.gui.lobby_context import ILobbyContext
@@ -211,7 +211,7 @@ class Vehicle(FittingItem, HasStrCD):
             hasAvailableRentPackages, mainRentType, seasonType = self.rentalsController.getRentPackagesInfo(proxy.shop.getVehicleRentPrices().get(self.intCD, {}), self._rentInfo)
             self._rentPackagesInfo = RentPackagesInfo(hasAvailableRentPackages, mainRentType, seasonType)
             self._isSelected = bool(self.invID in proxy.stats.oldVehInvIDs)
-            self._customOutfits = self._parseCustomOutfits(self.intCD, proxy)
+            self._customOutfits = self._parseCustomOutfits(self.intCD, proxy, self.descriptor.type.hasCustomDefaultCamouflage)
             self._styledOutfits = self._parseStyledOutfits(self.intCD, proxy)
             restoreConfig = proxy.shop.vehiclesRestoreConfig
             self._restorePrice = calcVehicleRestorePrice(self.buyPrices.itemPrice.defPrice, proxy.shop)
@@ -455,12 +455,18 @@ class Vehicle(FittingItem, HasStrCD):
         return result
 
     @classmethod
-    def _parseCustomOutfits(cls, compactDescr, proxy):
+    def _parseCustomOutfits(cls, compactDescr, proxy, hasDefaultCamouflage=False):
         outfits = {}
         for season in SeasonType.SEASONS:
             outfitData = proxy.inventory.getOutfitData(compactDescr, season)
             if outfitData:
                 outfits[season] = cls.itemsFactory.createOutfit(strCompactDescr=outfitData.compDescr, isEnabled=bool(outfitData.flags & StyleFlags.ENABLED), isInstalled=bool(outfitData.flags & StyleFlags.INSTALLED), proxy=proxy)
+            if hasDefaultCamouflage:
+                outfit = cls.itemsFactory.createOutfit(isInstalled=True, isEnabled=True)
+                hiddenCamoCD = makeIntCompactDescrByID('customizationItem', CustomizationType.CAMOUFLAGE, HIDDEN_CAMOUFLAGE_ID)
+                camo = cls.itemsFactory.createCustomization(hiddenCamoCD)
+                outfit.hull.slotFor(GUI_ITEM_TYPE.CAMOUFLAGE).set(camo)
+                outfits[season] = outfit
             outfits[season] = cls.itemsFactory.createOutfit()
 
         return outfits

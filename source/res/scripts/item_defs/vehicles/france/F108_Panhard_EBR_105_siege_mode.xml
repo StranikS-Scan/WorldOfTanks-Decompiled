@@ -7,8 +7,8 @@
     <radioman></radioman>
   </crew>
   <speedLimits>
-    <forward>	105	</forward>
-    <backward>	75	</backward>
+    <forward>	95	</forward>
+    <backward>	70	</backward>
   </speedLimits>
   <invisibility>
     <moving>	0.371	</moving>
@@ -232,7 +232,7 @@
             <connectedToEngine>	true	</connectedToEngine>
           </scrollProcessor>
           <rollProcessor>
-            <maxDamageAngle>	0.3	</maxDamageAngle>
+            <maxDamageAngle>	0.05	</maxDamageAngle>
           </rollProcessor>
           <geometry>
             <radius>	0.59	</radius>
@@ -257,7 +257,7 @@
             <connectedToEngine>	true	</connectedToEngine>
           </scrollProcessor>
           <rollProcessor>
-            <maxDamageAngle>	0.3	</maxDamageAngle>
+            <maxDamageAngle>	0.05	</maxDamageAngle>
           </rollProcessor>
           <geometry>
             <radius>	0.59	</radius>
@@ -748,8 +748,8 @@
     <detailed>
       <engines>
         <Panhard_12H_6000_X>
-          <smplEnginePower>	850	</smplEnginePower>
-          <smplFwMaxSpeed>	105	</smplFwMaxSpeed>
+          <smplEnginePower>	800	</smplEnginePower>
+          <smplFwMaxSpeed>	95	</smplFwMaxSpeed>
         </Panhard_12H_6000_X>
       </engines>
       <chassis>

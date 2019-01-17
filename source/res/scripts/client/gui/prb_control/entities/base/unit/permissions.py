@@ -71,6 +71,9 @@ class UnitIntroPermissions(IUnitPermissions):
     def canCreateSquad(self):
         return not self._hasLockedState
 
+    def canChangeVehicle(self):
+        return not self._hasLockedState
+
 
 @ReprInjector.simple(('_roles', 'roles'), ('_flags', 'flags'), ('_isCurrentPlayer', 'isCurrentPlayer'), ('_isPlayerReady', 'isPlayerReady'), ('_hasLockedState', 'hasLockedState'))
 class UnitPermissions(IUnitPermissions):

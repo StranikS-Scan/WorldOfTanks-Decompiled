@@ -347,4 +347,77 @@
       </outfits>
     </style>
   </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/main_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	true	</historical>
+    <priceGroup>	generic custom look styles	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <nations>	czech	</nations>
+      </include>
+    </vehicleFilter>
+    <style>
+      <id>	245	</id>
+      <texture>	gui/maps/vehicles/styles/generic_custom_look_czech.png	</texture>
+      <description>	#vehicle_customization:main_style/generic_custom_look_czech_desc	</description>
+      <userString>	#vehicle_customization:main_style/generic_custom_look_czech	</userString>
+      <outfits>
+        <outfit>
+          <season>	summer	</season>
+          <camouflages>
+            <item>
+              <id>	15701	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <decals>
+            <item>
+              <id>	672	</id>
+              <appliedTo>	13104	</appliedTo>
+            </item>
+          </decals>
+        </outfit>
+        <outfit>
+          <season>	winter	</season>
+          <camouflages>
+            <item>
+              <id>	15719	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <decals>
+            <item>
+              <id>	672	</id>
+              <appliedTo>	13104	</appliedTo>
+            </item>
+          </decals>
+        </outfit>
+        <outfit>
+          <season>	desert	</season>
+          <camouflages>
+            <item>
+              <id>	15718	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <decals>
+            <item>
+              <id>	672	</id>
+              <appliedTo>	13104	</appliedTo>
+            </item>
+          </decals>
+        </outfit>
+        <outfit>
+          <season>	event	</season>
+        </outfit>
+      </outfits>
+    </style>
+  </itemGroup>
 </czech.xml>

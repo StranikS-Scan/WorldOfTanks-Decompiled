@@ -447,6 +447,8 @@ class CustomizationContext(object):
             self.onCustomizationModeChanged(self._mode)
 
     def cancelChanges(self):
+        if self.numberEditModeActive:
+            self.sendNumberEditModeCommand(PersonalNumEditCommands.CANCEL_EDIT_MODE)
         if self._mode == C11nMode.STYLE:
             self.__cancelModifiedStyle()
         else:
@@ -694,7 +696,6 @@ class CustomizationContext(object):
             self._modifiedStyle = style
             self.__prolongStyleRent = True
             self.refreshOutfit()
-            self._autoRentEnabled = True
             self.itemDataChanged(areaId=Area.MISC, slotType=GUI_ITEM_TYPE.STYLE, regionIdx=0)
             self.onProlongStyleRent()
         return

@@ -777,6 +777,26 @@
     </decal>
   </itemGroup>
   <itemGroup>
+    <userString>	#vehicle_customization:emblem/special	</userString>
+    <season>	ALL	</season>
+    <historical>	true	</historical>
+    <priceGroup>	emblems notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	uk:GB98_T95_FV4201_Chieftain	</vehicles>
+      </include>
+    </vehicleFilter>
+    <decal>
+      <id>	655	</id>
+      <texture>	gui/maps/vehicles/decals/player_stickers/special/sticker_438.dds	</texture>
+      <userString>	#vehicle_customization:emblem/special/sticker_438	</userString>
+      <tags>	vehicleBound	</tags>
+      <mirror>	false	</mirror>
+    </decal>
+    <name>	veteran_chieftain	</name>
+    <type>	EMBLEM	</type>
+  </itemGroup>
+  <itemGroup>
     <name>	lunar_NY	</name>
     <userString>	#vehicle_customization:emblem/special	</userString>
     <season>	ALL	</season>
@@ -882,6 +902,64 @@
       <texture>	gui/maps/vehicles/decals/player_stickers/special/sticker_452.dds	</texture>
       <userString>	#vehicle_customization:emblem/special/sticker_452	</userString>
       <mirror>	true	</mirror>
+    </decal>
+  </itemGroup>
+  <itemGroup>
+    <name>	generic_custom_look_germany	</name>
+    <userString>	#vehicle_customization:emblem/battle	</userString>
+    <season>	ALL	</season>
+    <historical>	true	</historical>
+    <priceGroup>	emblems notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <nations>	germany	</nations>
+      </include>
+    </vehicleFilter>
+    <type>	EMBLEM	</type>
+    <decal>
+      <id>	671	</id>
+      <texture>	gui/maps/vehicles/decals/player_stickers/special/sticker_453.dds	</texture>
+      <userString>	#vehicle_customization:emblem/special/sticker_453	</userString>
+      <mirror>	false	</mirror>
+    </decal>
+  </itemGroup>
+  <itemGroup>
+    <name>	generic_custom_look_czech	</name>
+    <userString>	#vehicle_customization:emblem/battle	</userString>
+    <season>	ALL	</season>
+    <historical>	true	</historical>
+    <priceGroup>	emblems notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <nations>	czech	</nations>
+      </include>
+    </vehicleFilter>
+    <type>	EMBLEM	</type>
+    <decal>
+      <id>	672	</id>
+      <texture>	gui/maps/vehicles/decals/player_stickers/special/sticker_454.dds	</texture>
+      <userString>	#vehicle_customization:emblem/special/sticker_454	</userString>
+      <mirror>	false	</mirror>
+    </decal>
+  </itemGroup>
+  <itemGroup>
+    <name>	Generic Custom Looks Vol.1	</name>
+    <userString>	#vehicle_customization:emblem/battle	</userString>
+    <season>	ALL	</season>
+    <historical>	true	</historical>
+    <priceGroup>	legacy notInShop	</priceGroup>
+    <type>	EMBLEM	</type>
+    <decal>
+      <id>	677	</id>
+      <texture>	gui/maps/vehicles/decals/player_stickers/battle/sticker_44.dds	</texture>
+      <userString>	#vehicle_customization:emblem/special/sticker_456	</userString>
+      <mirror>	false	</mirror>
+    </decal>
+    <decal>
+      <id>	678	</id>
+      <texture>	gui/maps/vehicles/decals/player_stickers/battle/sticker_02.dds	</texture>
+      <userString>	#vehicle_customization:emblem/special/sticker_457	</userString>
+      <mirror>	false	</mirror>
     </decal>
   </itemGroup>
 </special_emblems.xml>

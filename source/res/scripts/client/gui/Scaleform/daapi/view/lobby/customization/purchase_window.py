@@ -183,9 +183,6 @@ class PurchaseWindow(CustomizationBuyWindowMeta):
             if item.isRentable:
                 haveAutoprolongation = True
                 autoprolongationSelected = self.__ctx.autoRentEnabled()
-            if self.__prolongStyleRent and not autoprolongationSelected:
-                autoprolongationSelected = True
-                self.updateAutoProlongation()
         else:
             totalCount = 0
             for season in SeasonType.COMMON_SEASONS:

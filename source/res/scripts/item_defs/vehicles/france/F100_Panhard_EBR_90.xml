@@ -7,8 +7,8 @@
     <radioman></radioman>
   </crew>
   <speedLimits>
-    <forward>	70	</forward>
-    <backward>	70	</backward>
+    <forward>	65	</forward>
+    <backward>	65	</backward>
   </speedLimits>
   <invisibility>
     <moving>	0.376	</moving>
@@ -562,7 +562,7 @@
         </armor_9>
       </armor>
       <weight>	3000	</weight>
-      <maxLoad>	15000	</maxLoad>
+      <maxLoad>	15500	</maxLoad>
       <terrainResistance>	1.0 1.35 1.95	</terrainResistance>
       <brakeForce>	20250	</brakeForce>
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
@@ -1221,12 +1221,12 @@
     <detailed>
       <engines>
         <Panhard_H_101>
-          <smplEnginePower>	550	</smplEnginePower>
-          <smplFwMaxSpeed>	70	</smplFwMaxSpeed>
+          <smplEnginePower>	500	</smplEnginePower>
+          <smplFwMaxSpeed>	65	</smplFwMaxSpeed>
         </Panhard_H_101>
         <Panhard_12H_6000_63>
-          <smplEnginePower>	620	</smplEnginePower>
-          <smplFwMaxSpeed>	70	</smplFwMaxSpeed>
+          <smplEnginePower>	580	</smplEnginePower>
+          <smplFwMaxSpeed>	65	</smplFwMaxSpeed>
         </Panhard_12H_6000_63>
       </engines>
       <chassis>

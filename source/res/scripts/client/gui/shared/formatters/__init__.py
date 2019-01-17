@@ -14,14 +14,16 @@ from gui.impl.gen.view_models.ui_kit.action_price_model import ActionPriceModel
 _logger = logging.getLogger(__name__)
 __all__ = ('icons', 'text_styles', 'time_formatters')
 
-def formatPrice(price, reverse=False, currency=Currency.CREDITS, useIcon=False, useStyle=False):
+def formatPrice(price, reverse=False, currency=Currency.CREDITS, useIcon=False, useStyle=False, ignoreZeros=False):
     outPrice = []
     currencies = [ c for c in Currency.ALL if price.get(c) is not None ]
     if not currencies:
         currencies = [currency]
     for c in currencies:
-        formatter = getBWFormatter(c)
         value = price.get(c, 0)
+        if value == 0 and ignoreZeros:
+            continue
+        formatter = getBWFormatter(c)
         cFormatted = formatter(value) if formatter else value
         if useStyle:
             styler = getStyle(c)

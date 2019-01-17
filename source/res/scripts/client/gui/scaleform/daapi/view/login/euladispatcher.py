@@ -49,6 +49,8 @@ class EULADispatcher(EventSystemEntity):
         self.onEULAClosed()
         if event.isAgree:
             self.__saveVersionFile()
+        else:
+            self.fini()
 
     @async
     def processLicense(self, callback=None):

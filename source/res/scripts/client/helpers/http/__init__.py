@@ -139,7 +139,7 @@ def openUrl(url, timeout=_DEFAULT_TIMEOUT, modified=None, agent=''):
         if response:
             response.close()
 
-    return _HttpResponse(response)
+    return _HttpResponse(None)
 
 
 def openPage(connection, page, modified=None, agent=''):

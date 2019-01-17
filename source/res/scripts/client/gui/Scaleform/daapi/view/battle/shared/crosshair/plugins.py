@@ -461,9 +461,9 @@ class AmmoPlugin(CrosshairPlugin):
         return result
 
     def __onShellsUpdated(self, _, quantity, quantityInClip, result):
+        self.__shellsInClip = quantityInClip
         if not result & SHELL_SET_RESULT.CURRENT:
             return
-        self.__shellsInClip = quantityInClip
         isLow, state = self.__guiSettings.getState(quantity, quantityInClip)
         self._parentObj.as_setAmmoStockS(quantity, quantityInClip, isLow, state, result & SHELL_SET_RESULT.CASSETTE_RELOAD > 0)
 

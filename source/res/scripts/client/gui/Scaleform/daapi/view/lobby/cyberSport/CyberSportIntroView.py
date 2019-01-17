@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/cyberSport/CyberSportIntroView.py
 from helpers import dependency
 from helpers.i18n import makeString as _ms
+from account_helpers.AccountSettings import SELECTED_INTRO_VEHICLES_FIELD
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.shared import events
 from gui.shared.gui_items.Vehicle import VEHICLE_CLASS_NAME as _VCN
@@ -53,10 +54,6 @@ class _IntroViewVO(object):
 class CyberSportIntroView(CyberSportIntroMeta):
     itemsCache = dependency.descriptor(IItemsCache)
 
-    def __init__(self):
-        super(CyberSportIntroView, self).__init__()
-        self._section = 'selectedIntroVehicles'
-
     def showSelectorPopup(self):
         rosterSettings = self.prbEntity.getRosterSettings()
         self.fireEvent(events.LoadViewEvent(CYBER_SPORT_ALIASES.VEHICLE_SELECTOR_POPUP_PY, ctx={'isMultiSelect': False,
@@ -92,7 +89,7 @@ class CyberSportIntroView(CyberSportIntroMeta):
     def __updateSelectedVehicles(self, event):
         if event.ctx:
             vehIntCD = int(event.ctx[0])
-            self.prbEntity.setSelectedVehicles(self._section, [vehIntCD])
+            self.prbEntity.setSelectedVehicles(SELECTED_INTRO_VEHICLES_FIELD, [vehIntCD])
             self.__updateAutoSearchVehicle([vehIntCD])
 
     def __updateAutoSearchVehicle(self, vehsIntCD):
@@ -113,4 +110,4 @@ class CyberSportIntroView(CyberSportIntroMeta):
             self.as_setNoVehiclesS(TOOLTIPS.CYBERSPORT_NOVEHICLESINHANGAR)
 
     def __getSelectedVehicles(self):
-        return self.prbEntity.getSelectedVehicles(self._section)
+        return self.prbEntity.getSelectedVehicles(SELECTED_INTRO_VEHICLES_FIELD)

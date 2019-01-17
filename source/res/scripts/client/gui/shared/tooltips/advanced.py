@@ -19,7 +19,7 @@ from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.ITEM_TYPES import ITEM_TYPES
 from gui.prb_control.settings import PREBATTLE_ACTION_NAME
 from helpers import i18n
-DISABLED_ITEMS_IDS = (12793, 37954)
+DISABLED_ITEMS_IDS = (12793, 37954, 40258, 38722, 38210, 39234, 40514, 39746, 38978, 38466, 39490, 40002)
 
 class ComplexTooltip(BlocksTooltipData):
     __settingsCore = dependency.descriptor(ISettingsCore)

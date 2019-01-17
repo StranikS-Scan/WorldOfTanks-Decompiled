@@ -17,6 +17,7 @@ import Event
 import AreaDestructibles
 import TriggersManager
 from debug_utils import LOG_ERROR, LOG_DEBUG, LOG_WARNING, LOG_CURRENT_EXCEPTION
+from gui import GUI_CTRL_MODE_FLAG
 from helpers import EffectsList, isPlayerAvatar, isPlayerAccount, getFullClientVersion
 from PlayerEvents import g_playerEvents
 from ReplayEvents import g_replayEvents
@@ -581,6 +582,8 @@ class BattleReplay(object):
                 AreaDestructibles.g_destructiblesManager.onAfterReplayTimeWarp()
                 if isPlayerAvatar():
                     BigWorld.player().onVehicleEnterWorld += self.__onVehicleEnterWorld
+                from gui.app_loader import g_appLoader, settings
+                g_appLoader.attachCursor(settings.APP_NAME_SPACE.SF_BATTLE, flags=GUI_CTRL_MODE_FLAG.CURSOR_ATTACHED)
             if self.isRecording:
                 player = BigWorld.player()
                 arena = player.arena

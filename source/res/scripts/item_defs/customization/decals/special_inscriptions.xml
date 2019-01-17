@@ -722,6 +722,26 @@
     </decal>
   </itemGroup>
   <itemGroup>
+    <userString>	#vehicle_customization:inscription/special	</userString>
+    <season>	ALL	</season>
+    <historical>	true	</historical>
+    <priceGroup>	inscriptions notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	uk:GB98_T95_FV4201_Chieftain	</vehicles>
+      </include>
+    </vehicleFilter>
+    <decal>
+      <id>	654	</id>
+      <texture>	gui/maps/vehicles/decals/inscriptions/special/inscription_229.dds	</texture>
+      <userString>	#vehicle_customization:inscription/special/special_229	</userString>
+      <tags>	vehicleBound	</tags>
+      <mirror>	false	</mirror>
+    </decal>
+    <name>	veteran_chieftain	</name>
+    <type>	INSCRIPTION	</type>
+  </itemGroup>
+  <itemGroup>
     <name>	defender_day	</name>
     <userString>	#vehicle_customization:inscription/special	</userString>
     <season>	ALL	</season>
@@ -732,6 +752,44 @@
       <id>	669	</id>
       <texture>	gui/maps/vehicles/decals/inscriptions/special/inscription_230.dds	</texture>
       <userString>	#vehicle_customization:inscription/special/special_230	</userString>
+      <mirror>	false	</mirror>
+    </decal>
+  </itemGroup>
+  <itemGroup>
+    <name>	generic_custom_poland	</name>
+    <userString>	#vehicle_customization:inscription/historical	</userString>
+    <season>	ALL	</season>
+    <historical>	true	</historical>
+    <priceGroup>	inscriptions notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <nations>	poland	</nations>
+      </include>
+    </vehicleFilter>
+    <type>	INSCRIPTION	</type>
+    <decal>
+      <id>	673	</id>
+      <texture>	gui/maps/vehicles/decals/inscriptions/special/inscription_231.dds	</texture>
+      <userString>	#vehicle_customization:inscription/special/special_231	</userString>
+      <mirror>	false	</mirror>
+    </decal>
+  </itemGroup>
+  <itemGroup>
+    <name>	generic_custom_sweden	</name>
+    <userString>	#vehicle_customization:inscription/historical	</userString>
+    <season>	ALL	</season>
+    <historical>	true	</historical>
+    <priceGroup>	inscriptions notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <nations>	sweden	</nations>
+      </include>
+    </vehicleFilter>
+    <type>	INSCRIPTION	</type>
+    <decal>
+      <id>	674	</id>
+      <texture>	gui/maps/vehicles/decals/inscriptions/special/inscription_232.dds	</texture>
+      <userString>	#vehicle_customization:inscription/special/special_232	</userString>
       <mirror>	false	</mirror>
     </decal>
   </itemGroup>

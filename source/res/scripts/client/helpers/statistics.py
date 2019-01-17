@@ -7,7 +7,7 @@ from constants import ARENA_PERIOD, INVALID_CLIENT_STATS
 from account_helpers.settings_core.settings_constants import GRAPHICS
 from gui.shared.utils import graphics
 from debug_utils import LOG_DEBUG, LOG_NOTE
-from helpers import dependency
+from helpers import dependency, isPlayerAvatar
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.connection_mgr import IConnectionManager
 from skeletons.gui.battle_session import IBattleSessionProvider
@@ -277,12 +277,12 @@ class StatisticsCollector(IStatisticsCollector):
         self.__invalidStats |= INVALID_CLIENT_STATS.CLIENT_DRR_SCALE_CHANGED
 
     def __updateIdle(self):
-        if BigWorld.player().arena.period > ARENA_PERIOD.IDLE:
+        if isPlayerAvatar() and BigWorld.player().arena.period > ARENA_PERIOD.IDLE:
             self.__updateFunc = self.__updatePrebattle
             self.__updateFunc()
 
     def __updatePrebattle(self):
-        if BigWorld.player().arena.period == ARENA_PERIOD.BATTLE and self.__state == _STATISTICS_STATE.STARTED:
+        if isPlayerAvatar() and BigWorld.player().arena.period == ARENA_PERIOD.BATTLE and self.__state == _STATISTICS_STATE.STARTED:
             BigWorld.enableBattleStatisticCollector(True)
             self.settingsCore.onSettingsChanged += self.__onSettingsChanged
             ctrl = self.sessionProvider.shared.drrScale

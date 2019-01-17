@@ -22,7 +22,10 @@ from gui.shared import EVENT_BUS_SCOPE, events
 from gui.shared.utils import SelectorBattleTypesUtils as selectorUtils
 from helpers import dependency
 from helpers import i18n
+from account_helpers.AccountSettings import SELECTED_INTRO_VEHICLES_FIELD
 from skeletons.gui.lobby_context import ILobbyContext
+from CurrentVehicle import g_currentVehicle
+from skeletons.gui.shared import IItemsCache
 
 @stored_window(DATA_TYPE.UNIQUE_WINDOW, TARGET_ID.CHANNEL_CAROUSEL)
 class CyberSportMainWindow(CyberSportMainWindowMeta):
@@ -104,6 +107,12 @@ class CyberSportMainWindow(CyberSportMainWindowMeta):
 
     def onUnitAutoSearchStarted(self, timeLeft):
         self.__currentState = CYBER_SPORT_ALIASES.AUTO_SEARCH_COMMANDS_STATE
+        vehicles = self.prbEntity.getSelectedVehicles(SELECTED_INTRO_VEHICLES_FIELD)
+        if vehicles and g_currentVehicle.item.intCD != vehicles[0]:
+            itemsCache = dependency.instance(IItemsCache)
+            item = itemsCache.items.getItemByCD(vehicles[0])
+            if hasattr(item, 'invID'):
+                g_currentVehicle.selectVehicle(item.invID)
         self.as_enableWndCloseBtnS(False)
         self.__initState(timeLeft=timeLeft)
 

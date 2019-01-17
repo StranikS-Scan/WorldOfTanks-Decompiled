@@ -42,11 +42,13 @@ class VehiclePreviewBrowseTab(VehiclePreviewBrowseTabMeta):
             if item.buyPrices.itemPrice.defPrice.get(Currency.GOLD):
                 maxDescriptionLength = _MAX_LENGTH_FULL_DESCRIPTION_WITH_KPI
                 bonuses = [{'icon': RES_SHOP.MAPS_SHOP_KPI_STAR_ICON_BENEFITS,
-                  'title': text_styles.concatStylesToMultiLine(text_styles.highTitle(VEHICLE_PREVIEW.INFOPANEL_PREMIUM_FREEEXPMULTIPLIER), text_styles.main(VEHICLE_PREVIEW.INFOPANEL_PREMIUM_FREEEXPTEXT))}, {'icon': RES_SHOP.MAPS_SHOP_KPI_CROW_BENEFITS,
-                  'title': text_styles.concatStylesToMultiLine(text_styles.highTitle(VEHICLE_PREVIEW.INFOPANEL_PREMIUM_CREWTRANSFERTITLE), text_styles.main(VEHICLE_PREVIEW.INFOPANEL_PREMIUM_CREWTRANSFERTEXT))}]
+                  'title': text_styles.concatStylesToMultiLine(text_styles.highTitle(VEHICLE_PREVIEW.INFOPANEL_PREMIUM_FREEEXPMULTIPLIER), text_styles.main(VEHICLE_PREVIEW.INFOPANEL_PREMIUM_FREEEXPTEXT))}]
                 if not item.isSpecial:
-                    bonuses.insert(1, {'icon': RES_SHOP.MAPS_SHOP_KPI_MONEY_BENEFITS,
+                    bonuses.append({'icon': RES_SHOP.MAPS_SHOP_KPI_MONEY_BENEFITS,
                      'title': text_styles.concatStylesToMultiLine(text_styles.highTitle(VEHICLE_PREVIEW.INFOPANEL_PREMIUM_CREDITSMULTIPLIER), text_styles.main(VEHICLE_PREVIEW.INFOPANEL_PREMIUM_CREDITSTEXT))})
+                if not item.isCrewLocked:
+                    bonuses.append({'icon': RES_SHOP.MAPS_SHOP_KPI_CROW_BENEFITS,
+                     'title': text_styles.concatStylesToMultiLine(text_styles.highTitle(VEHICLE_PREVIEW.INFOPANEL_PREMIUM_CREWTRANSFERTITLE), text_styles.main(VEHICLE_PREVIEW.INFOPANEL_PREMIUM_CREWTRANSFERTEXT))})
             else:
                 maxDescriptionLength = _MAX_LENGTH_FULL_DESCRIPTION_NO_KPI
                 bonuses = None

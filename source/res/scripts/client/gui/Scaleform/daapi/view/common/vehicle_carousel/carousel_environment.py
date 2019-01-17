@@ -85,6 +85,9 @@ class CarouselEnvironment(CarouselEnvironmentMeta, IGlobalListener, ICarouselEnv
     def onDequeued(self, queueType, *args):
         self.updateAviability()
 
+    def onUnitAutoSearchStarted(self, timeLeft):
+        self.updateAviability()
+
     @property
     def filter(self):
         return self._carouselDP.filter if self._carouselDP is not None else None

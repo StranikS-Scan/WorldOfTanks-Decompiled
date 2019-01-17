@@ -3460,7 +3460,7 @@
           </pixie>
           <destructionSound>
             <startKey>	base	</startKey>
-            <wwsound>	obj_pole	</wwsound>
+            <wwsound>	obj_pole_metall_touch	</wwsound>
             <params></params>
           </destructionSound>
         </effects>
@@ -3691,7 +3691,7 @@
           </pixie>
           <destructionSound>
             <startKey>	base	</startKey>
-            <wwsound>	obj_pole	</wwsound>
+            <wwsound>	obj_road_sign	</wwsound>
             <params></params>
           </destructionSound>
         </effects>
@@ -26018,6 +26018,7 @@
             <force>	1	</force>
           </pixie>
           <destructionSound>
+            <startKey>	base	</startKey>
             <wwsound>	obj_generative	</wwsound>
             <params>
               <weight>	7275.000000	</weight>
@@ -33768,7 +33769,13 @@
           </pixie>
           <destructionSound>
             <startKey>	base	</startKey>
-            <wwsound>	obj_stone_wood	</wwsound>
+            <wwsound>	obj_generative	</wwsound>
+            <params>
+              <debrisAmount>	43.150002	</debrisAmount>
+              <weight>	4833.330078	</weight>
+              <metal_1>	33.520000	</metal_1>
+              <wood_1>	64.260002	</wood_1>
+            </params>
           </destructionSound>
         </effects>
       </variant1>
@@ -33786,7 +33793,13 @@
           </pixie>
           <destructionSound>
             <startKey>	base	</startKey>
-            <wwsound>	obj_stone_wood	</wwsound>
+            <wwsound>	obj_generative	</wwsound>
+            <params>
+              <weight>	4833.330078	</weight>
+              <metal_1>	33.520000	</metal_1>
+              <wood_1>	64.260002	</wood_1>
+              <debrisAmount>	43.150002	</debrisAmount>
+            </params>
           </destructionSound>
         </effects>
       </variant1>

@@ -92,6 +92,7 @@ TRAJECTORY_VIEW_HINT_SECTION = 'trajectoryViewHint'
 LAST_DISPLAY_DAY = 'lastDisplayDay'
 HINTS_LEFT = 'hintsLeft'
 NUM_BATTLES = 'numBattles'
+SELECTED_INTRO_VEHICLES_FIELD = 'selectedIntroVehicles'
 KNOWN_SELECTOR_BATTLES = 'knownSelectorBattles'
 DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                'shop_current': (-1, STORE_CONSTANTS.VEHICLE, False),
@@ -316,7 +317,7 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                SPEAKERS_DEVICE: 0},
  KEY_FAVORITES: {CURRENT_VEHICLE: 0,
                  FALLOUT_VEHICLES: {}},
- KEY_SETTINGS: {'unitWindow': {'selectedIntroVehicles': []},
+ KEY_SETTINGS: {'unitWindow': {SELECTED_INTRO_VEHICLES_FIELD: []},
                 'vehicleSellDialog': {'isOpened': False},
                 KNOWN_SELECTOR_BATTLES: set(),
                 'tankmanDropSkillIdx': 0,

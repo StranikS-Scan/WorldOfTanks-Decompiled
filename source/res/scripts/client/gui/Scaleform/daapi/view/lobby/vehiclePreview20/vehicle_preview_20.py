@@ -86,6 +86,7 @@ class VehiclePreview20(LobbySelectableView, VehiclePreview20Meta):
         self._needToResetAppearance = True
         if not self.__isHeroTank:
             self.hangarSpace.removeVehicle()
+        g_currentPreviewVehicle.selectHeroTank(self.__isHeroTank)
 
     def _populate(self):
         g_currentPreviewVehicle.selectVehicle(self._vehicleCD, self.__vehicleStrCD)

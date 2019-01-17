@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client/gui/prb_control/entities/e_sport/unit/entity.py
 from CurrentVehicle import g_currentVehicle
 from account_helpers import AccountSettings
+from account_helpers.AccountSettings import SELECTED_INTRO_VEHICLES_FIELD
 from constants import PREBATTLE_TYPE
 from debug_utils import LOG_ERROR, LOG_WARNING
 from gui.prb_control import settings, prb_getters
@@ -44,10 +45,10 @@ class ESportIntroEntity(UnitIntroEntity):
     def init(self, ctx=None):
         self._searchHandler = UnitAutoSearchHandler(self)
         self._searchHandler.init()
-        selectedVehs = self.getSelectedVehicles('selectedIntroVehicles')
+        selectedVehs = self.getSelectedVehicles(SELECTED_INTRO_VEHICLES_FIELD)
         if not selectedVehs and g_currentVehicle.isPresent():
             selectedVehs = [g_currentVehicle.item.intCD]
-        self.setSelectedVehicles('selectedIntroVehicles', selectedVehs)
+        self.setSelectedVehicles(SELECTED_INTRO_VEHICLES_FIELD, selectedVehs)
         return super(ESportIntroEntity, self).init(ctx)
 
     def fini(self, ctx=None, woEvents=False):

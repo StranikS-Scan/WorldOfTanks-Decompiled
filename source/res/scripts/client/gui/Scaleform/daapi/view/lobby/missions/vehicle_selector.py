@@ -20,8 +20,8 @@ class MissionVehicleSelectorCarousel(VehicleSelectorCarouselMeta):
         self._usedFilters = ('inventory',)
         self._carouselDPCls = _MissionsCarouselDataProvider
 
-    def setFilter(self, idx):
-        self.filter.switch(self._usedFilters[idx])
+    def setFilter(self, idx, selected):
+        self.filter.update({self._usedFilters[idx]: selected})
         self.applyFilter()
 
     def getSuitableVehicles(self):
@@ -140,6 +140,14 @@ class _MissionsCarouselDataProvider(CarouselDataProvider):
 
     def getSuitableVehiclesCount(self):
         return len(self.__suitableVehiclesIDs)
+
+    def applyFilter(self):
+        super(_MissionsCarouselDataProvider, self).applyFilter()
+        if not self._filteredIndices:
+            self._filteredIndices = self._getSortedIndices()
+            self._filteredIndices += self._getAdditionalItemsIndexes()
+            if self._filteredIndices:
+                self._filterByIndices()
 
     def _dispose(self):
         self.__extraConditions = []

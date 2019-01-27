@@ -1,10 +1,12 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/gui_items/vehicle_adjusters.py
+from gui.Scaleform.daapi.view.lobby.vehicle_compare import cmp_helpers
 from helpers import dependency
 from adisp import process
 from debug_utils import LOG_WARNING
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.gui_items.processors import module as installer_module
+from items import tankmen
 from skeletons.gui.shared import IItemsCache
 
 @process
@@ -129,3 +131,14 @@ def changeShell(vehicle, slotIndex):
         vehicle.descriptor.activeGunShotIndex = slotIndex
         return True
     return False
+
+
+def applyTankmanSkillOnVehicle(vehicle, skillsByRolesIdx):
+    nationID, vehicleTypeID = vehicle.descriptor.type.id
+    crew = vehicle.crew
+    for idx, (roleIdx, tman) in enumerate(crew):
+        skills = skillsByRolesIdx[roleIdx]
+        if skills:
+            prevRoleLevel = tankmen.MAX_SKILL_LEVEL
+            role = tman.role
+            crew[idx] = (roleIdx, cmp_helpers.createTankman(nationID, vehicleTypeID, role, prevRoleLevel, skills))

@@ -22,7 +22,8 @@ from gui.prb_control.settings import PREBATTLE_SETTING_NAME
 from gui.shared.economics import calcRentPackages, getActionPrc, calcVehicleRestorePrice
 from gui.shared.formatters import text_styles
 from gui.shared.gui_items import CLAN_LOCK, GUI_ITEM_TYPE, getItemIconName, GUI_ITEM_ECONOMY_CODE
-from gui.shared.gui_items.customization.slots import ProjectionDecalSlot, BaseCustomizationSlot, EmblemSlot, ANCHOR_TYPE_TO_SLOT_TYPE_MAP
+from gui.shared.gui_items.customization.slots import ProjectionDecalSlot, BaseCustomizationSlot, EmblemSlot
+from gui.shared.gui_items.customization.slots import ANCHOR_TYPE_TO_SLOT_TYPE_MAP
 from gui.shared.gui_items.customization.outfit import Area, REGIONS_BY_SLOT_TYPE
 from gui.shared.gui_items.vehicle_equipment import VehicleEquipment
 from gui.shared.gui_items.gui_item import HasStrCD
@@ -428,7 +429,7 @@ class Vehicle(FittingItem, HasStrCD):
                 tankman = self.itemsFactory.createTankman(strCompactDescr=tmanInvData['compDescr'], inventoryID=tankmanID, vehicle=self, proxy=proxy)
             crewItems.append((idx, tankman))
 
-        return _sortCrew(crewItems, crewRoles)
+        return sortCrew(crewItems, crewRoles)
 
     @staticmethod
     def __crewSort(t1, t2):
@@ -782,6 +783,10 @@ class Vehicle(FittingItem, HasStrCD):
     @property
     def rentLeftBattles(self):
         return self.rentInfo.battlesLeft
+
+    @property
+    def isSeasonRent(self):
+        return bool(self.rentInfo.seasonRent)
 
     @property
     def rentExpiryState(self):
@@ -1256,7 +1261,7 @@ class Vehicle(FittingItem, HasStrCD):
                 crewItems.append((slotIdx, unskilledTman))
             crewItems.append((slotIdx, tman))
 
-        return _sortCrew(crewItems, crewRoles)
+        return sortCrew(crewItems, crewRoles)
 
     def getCrewBySkillLevels(self, defRoleLevel, skillsByIdxs=None, levelByIdxs=None, nativeVehsByIdxs=None):
         skillsByIdxs = skillsByIdxs or {}
@@ -1278,7 +1283,7 @@ class Vehicle(FittingItem, HasStrCD):
                 tankman = None
             crewItems.append((idx, tankman))
 
-        return _sortCrew(crewItems, crewRoles)
+        return sortCrew(crewItems, crewRoles)
 
     def getOutfit(self, season):
         for outfit in (self._styledOutfits.get(season), self._customOutfits.get(season)):
@@ -1497,7 +1502,7 @@ def findVehicleArmorMinMax(vd):
     return minMax
 
 
-def _sortCrew(crewItems, crewRoles):
+def sortCrew(crewItems, crewRoles):
     RO = Tankman.TANKMEN_ROLES_ORDER
     return sorted(crewItems, cmp=lambda a, b: RO[crewRoles[a[0]][0]] - RO[crewRoles[b[0]][0]])
 

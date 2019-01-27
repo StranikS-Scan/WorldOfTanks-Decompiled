@@ -1,20 +1,23 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/storage/personalreserves/boosters_view.py
+import copy
+from account_helpers import AccountSettings
 from goodies.goodie_constants import GOODIE_RESOURCE_TYPE
 from gui.ClientUpdateManager import g_clientUpdateManager
+from gui.Scaleform import MENU
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
-from gui.Scaleform.daapi.view.lobby.storage.storage_helpers import createStorageDefVO
+from gui.Scaleform.daapi.view.lobby.storage.storage_helpers import createStorageDefVO, isStorageSessionTimeout
 from gui.Scaleform.daapi.view.lobby.store.browser.ingameshop_helpers import getBuyBoostersUrl
 from gui.Scaleform.genConsts.CONTEXT_MENU_HANDLER_TYPE import CONTEXT_MENU_HANDLER_TYPE
 from gui.Scaleform.genConsts.STORE_CONSTANTS import STORE_CONSTANTS
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.STORAGE import STORAGE
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
-from gui.goodies.goodie_items import BOOSTERS_ORDERS, BOOSTER_QUALITY_NAMES, MAX_ACTIVE_BOOSTERS_COUNT
+from gui.goodies.goodie_items import BOOSTERS_ORDERS, MAX_ACTIVE_BOOSTERS_COUNT
 from gui.shared.event_dispatcher import showWebShop
 from gui.shared.formatters import text_styles, getItemPricesVO
 from gui.shared.utils.requesters.ItemsRequester import REQ_CRITERIA
-from helpers import dependency, int2roman, func_utils
+from helpers import dependency, func_utils
 from helpers.time_utils import ONE_HOUR
 from helpers.i18n import makeString as _ms
 from shared_utils import CONST_CONTAINER
@@ -49,9 +52,6 @@ def getDurationInSeconds(hour):
     return hour * ONE_HOUR
 
 
-_QUALITY_NAME_TO_LEVEL_MAP = {BOOSTER_QUALITY_NAMES.SMALL: 1,
- BOOSTER_QUALITY_NAMES.MEDIUM: 2,
- BOOSTER_QUALITY_NAMES.BIG: 3}
 _DURATION_FILTER_ITEMS = [{'filterValue': _FilterBit.ONE,
   'selected': False,
   'tooltip': makeTooltip(body=_ms(TOOLTIPS.STORAGE_FILTER_PERSONALRESERVES_BTNS_DURATION, durTime=_DURATION_BIT_TO_DURATION_VALUE.get(_FilterBit.ONE))),
@@ -96,19 +96,16 @@ def getCriteriaFromFilterMask(filterMask):
     return criteria
 
 
-def getQualityLevel(quality):
-    return _QUALITY_NAME_TO_LEVEL_MAP.get(quality)
-
-
 class StorageCategoryPersonalReservesView(StorageCategoryPersonalReservesViewMeta):
-    boosters = dependency.descriptor(IBoostersController)
-    eventsCache = dependency.descriptor(IEventsCache)
-    goodiesCache = dependency.descriptor(IGoodiesCache)
+    _boostersCtrl = dependency.descriptor(IBoostersController)
+    _eventsCache = dependency.descriptor(IEventsCache)
+    _goodiesCache = dependency.descriptor(IGoodiesCache)
 
     def __init__(self):
         super(StorageCategoryPersonalReservesView, self).__init__()
         self._boosters = []
         self.__filterMask = 0
+        self._loadFilters()
 
     def navigateToStore(self):
         showWebShop(getBuyBoostersUrl())
@@ -125,6 +122,19 @@ class StorageCategoryPersonalReservesView(StorageCategoryPersonalReservesViewMet
     def activateReserve(self, boosterID):
         shared_events.showBoosterActivateDialog(boosterID)
 
+    def _getClientSectionKey(self):
+        pass
+
+    def _loadFilters(self):
+        if isStorageSessionTimeout():
+            return
+        filterDict = AccountSettings.getSessionSettings(self._getClientSectionKey())
+        self.__filterMask = filterDict['filterMask']
+
+    def _saveFilters(self):
+        filterDict = {'filterMask': self.__filterMask}
+        AccountSettings.setSessionSettings(self._getClientSectionKey(), filterDict)
+
     def _onRegisterFlashComponent(self, viewPy, alias):
         super(StorageCategoryPersonalReservesView, self)._onRegisterFlashComponent(viewPy, alias)
         if alias == VIEW_ALIAS.BOOSTERS_PANEL:
@@ -140,35 +150,34 @@ class StorageCategoryPersonalReservesView(StorageCategoryPersonalReservesViewMet
         super(StorageCategoryPersonalReservesView, self)._populate()
         g_clientUpdateManager.addCallbacks({'goodies': self.__onUpdateBoosters,
          'shop': self.__onUpdateBoosters})
-        self.boosters.onBoosterChangeNotify += self.__onUpdateBoosters
-        self.eventsCache.onSyncCompleted += self.__onQuestsUpdate
+        self._boostersCtrl.onBoosterChangeNotify += self.__onUpdateBoosters
+        self._eventsCache.onSyncCompleted += self.__onQuestsUpdate
         self.__onUpdateBoosters()
         self.__initFilter()
 
     def _dispose(self):
         g_clientUpdateManager.removeObjectCallbacks(self)
-        self.boosters.onBoosterChangeNotify -= self.__onUpdateBoosters
-        self.eventsCache.onSyncCompleted -= self.__onQuestsUpdate
+        self._boostersCtrl.onBoosterChangeNotify -= self.__onUpdateBoosters
+        self._eventsCache.onSyncCompleted -= self.__onQuestsUpdate
+        self._saveFilters()
         super(StorageCategoryPersonalReservesView, self)._dispose()
 
     def _update(self, *args):
         self.__onUpdateBoosters()
 
     def __onUpdateBoosters(self, *args):
-        activeBoostersCount = len(self.goodiesCache.getBoosters(criteria=REQ_CRITERIA.BOOSTER.ACTIVE).values())
-        totalBoostersCount = sum((x.count for x in self.goodiesCache.getBoosters(criteria=REQ_CRITERIA.BOOSTER.IN_ACCOUNT).values()))
+        activeBoostersCount = len(self._goodiesCache.getBoosters(criteria=REQ_CRITERIA.BOOSTER.ACTIVE).values())
+        totalBoostersCount = sum((x.count for x in self._goodiesCache.getBoosters(criteria=REQ_CRITERIA.BOOSTER.IN_ACCOUNT).values()))
         filteredBoostersCount = 0
         criteria = REQ_CRITERIA.BOOSTER.IN_ACCOUNT | REQ_CRITERIA.BOOSTER.ENABLED
         criteria |= getCriteriaFromFilterMask(self.__filterMask)
-        boosters = self.goodiesCache.getBoosters(criteria=criteria).values()
+        boosters = self._goodiesCache.getBoosters(criteria=criteria).values()
         dataProviderValues = []
         showDummyScreen = False
         filterWarningVO = None
         if boosters:
             for booster in sorted(boosters, cmp=self.__sort):
-                mainText = text_styles.main(booster.getBonusDescription(valueFormatter=text_styles.neutral))
-                romanLvl = getQualityLevel(booster.quality)
-                vo = createStorageDefVO(booster.boosterID, mainText, mainText, booster.count, getItemPricesVO(booster.getSellPrice())[0], func_utils.makeFlashPath(booster.getShopIcon(STORE_CONSTANTS.ICON_SIZE_SMALL)), func_utils.makeFlashPath(booster.getShopIcon()), 'altimage', enabled=booster.isReadyToActivate, level=int2roman(romanLvl) if romanLvl is not None else '', contextMenuId=CONTEXT_MENU_HANDLER_TYPE.STORAGE_PERSONAL_RESERVE_ITEM)
+                vo = createStorageDefVO(booster.boosterID, text_styles.hightlight(_ms(MENU.BOOSTER_DESCRIPTION_EFFECTVALUETIME, effectValue=booster.getFormattedValue(), effectTime=booster.getEffectTimeStr(hoursOnly=True))), text_styles.main(_ms(MENU.boosterInfluenceLocale(booster.boosterGuiType))), booster.count, getItemPricesVO(booster.getSellPrice())[0], func_utils.makeFlashPath(booster.getShopIcon(STORE_CONSTANTS.ICON_SIZE_SMALL)), func_utils.makeFlashPath(booster.getShopIcon()), 'altimage', enabled=booster.isReadyToActivate, contextMenuId=CONTEXT_MENU_HANDLER_TYPE.STORAGE_PERSONAL_RESERVE_ITEM)
                 dataProviderValues.append(vo)
                 filteredBoostersCount += booster.count
 
@@ -194,9 +203,19 @@ class StorageCategoryPersonalReservesView(StorageCategoryPersonalReservesViewMet
          'hasActiveReserve': active != 0})
 
     def __initFilter(self):
-        durationFilters = {'items': _DURATION_FILTER_ITEMS,
+        durationItems = copy.deepcopy(_DURATION_FILTER_ITEMS)
+        for item in durationItems:
+            if self.__filterMask & item['filterValue'] == item['filterValue']:
+                item.update({'selected': True})
+
+        typeItems = copy.deepcopy(_TYPE_FILTER_ITEMS)
+        for item in typeItems:
+            if self.__filterMask & item['filterValue'] == item['filterValue']:
+                item.update({'selected': True})
+
+        durationFilters = {'items': durationItems,
          'minSelectedItems': 0}
-        typeFilters = {'items': _TYPE_FILTER_ITEMS,
+        typeFilters = {'items': typeItems,
          'minSelectedItems': 0}
         self.as_initFilterS(typeFilters, durationFilters)
 

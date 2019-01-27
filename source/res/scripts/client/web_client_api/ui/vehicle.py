@@ -8,23 +8,36 @@ from debug_utils import LOG_ERROR
 from gui import SystemMessages
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.vehiclePreview20.items_kit_helper import getCDFromId
+from gui.Scaleform.daapi.view.lobby.epicBattle.epic_helpers import checkIfVehicleIsHidden
+from gui.Scaleform.locale.VEHICLE_PREVIEW import VEHICLE_PREVIEW
 from gui.Scaleform.locale.W2C import W2C
 from gui.shared import event_dispatcher
 from gui.shared.money import Money, MONEY_UNDEFINED, Currency
-from helpers import dependency, i18n
+from helpers import dependency
+from helpers.i18n import makeString as _ms
+from helpers.time_utils import getCurrentLocalServerTimestamp, getTimeStructInLocal
 from helpers.time_utils import getTimestampFromISO, getDateTimeInUTC, utcToLocalDatetime, getDateTimeInLocal
 from items import ITEM_TYPES
-from skeletons.gui.game_control import IVehicleComparisonBasket
+from shared_utils import first
+from skeletons.gui.game_control import IVehicleComparisonBasket, IEpicBattleMetaGameController
 from skeletons.gui.shared import IItemsCache
 from web_client_api import W2CSchema, Field, w2c
 from soft_exception import SoftException
-from web_client_api.common import ItemPackType, CompensationType, CompensationSpec, ItemPackTypeGroup, ItemPackEntry
+from web_client_api.common import ItemPackType, CompensationType, CompensationSpec, ItemPackTypeGroup
+from web_client_api.common import ItemPackEntry, VehicleOfferEntry
 _logger = getLogger(__name__)
 REQUIRED_ITEM_FIELDS = {'type',
  'id',
  'count',
  'groupID'}
-REQUIRED_COMPENSATION_FIELDS = {'type', 'value', 'count'}
+REQUIRED_COMPENSATION_FIELDS = {'type', 'value'}
+REQUIRED_CUSTOMCREW_FIELDS = {'extra'}
+REQUIRED_TANKMAN_FIELDS = {'isPremium',
+ 'role',
+ 'roleLevel',
+ 'gId',
+ 'nationID',
+ 'vehicleTypeID'}
 
 class _ItemPackValidationError(SoftException):
     pass
@@ -36,10 +49,17 @@ class _ItemPackEntry(ItemPackEntry):
         return self._replace(**values)
 
 
+class _VehicleOfferEntry(VehicleOfferEntry):
+
+    def replace(self, values):
+        return self._replace(**values)
+
+
 def _validateItemsPack(items):
     _validateItemsRequiredFields(items)
     _validateItemsPackTypes(items)
     _validateItemsCompensationRequiredFields(items)
+    _validateItemsCustomCrewRequiredFields(items)
     _validateItemsCompensation(items)
     return True
 
@@ -65,6 +85,17 @@ def _validateItemsCompensationRequiredFields(items):
                     raise SoftException('Invalid compensation spec')
                 if not CompensationType.hasValue(compensationSpec['type']):
                     raise SoftException('Unsupported compensation type "{}"'.format(compensationSpec['type']))
+
+
+def _validateItemsCustomCrewRequiredFields(items):
+    for item in items:
+        if item['type'] == ItemPackType.CREW_CUSTOM:
+            if not REQUIRED_CUSTOMCREW_FIELDS.issubset(item):
+                raise SoftException('Invalid custom crew spec')
+            if 'tankmen' not in item['extra']:
+                raise SoftException('Invalid custom crew extra spec')
+            if not all([ REQUIRED_TANKMAN_FIELDS.issubset(tankman) for tankman in item['extra']['tankmen'] ]):
+                raise SoftException('Invalid custom crew tankman spec')
 
 
 def _validateItemsCompensation(items):
@@ -130,6 +161,67 @@ def _parseItemsPack(items):
     return result
 
 
+def _parseOffers(offers):
+    return [ _VehicleOfferEntry(id=_getOfferID(offer) or str(ndx), eventType=offer.get('event_type'), rent=offer.get('rent'), crew=_getOfferCrew(offer), name=_getOfferStr(offer, VEHICLE_PREVIEW.getOfferName), label=_getOfferStr(offer, VEHICLE_PREVIEW.getOfferLabel), left=_getRentLeft(offer), buyPrice=Money(**offer.get('buy_price', MONEY_UNDEFINED)), bestOffer=offer.get('best_offer'), buyParams=offer.get('buy_params'), preferred=bool(offer.get('preferred', False))) for ndx, offer in enumerate(offers) ]
+
+
+def _getOfferID(offer):
+    buyParams = offer.get('buy_params')
+    return buyParams.get('transactionID') if buyParams else None
+
+
+@dependency.replace_none_kwargs(epicCtrl=IEpicBattleMetaGameController)
+def _getOfferStr(offer, getKey, epicCtrl=None):
+    key, values = _parseRent(offer)
+    if key == 'cycle':
+        indexes = str(epicCtrl.getCycleOrdinalNumber(first(values)))
+    elif key == 'cycles':
+        indexes = [ epicCtrl.getCycleOrdinalNumber(value) for value in values ]
+        indexes = '{}-{}'.format(min(indexes), max(indexes))
+    else:
+        _, endTimestamp = epicCtrl.getSeasonTimeRange()
+        indexes = str(getTimeStructInLocal(endTimestamp).tm_year)
+    return _ms(key=getKey(key), value=indexes)
+
+
+@dependency.replace_none_kwargs(epicCtrl=IEpicBattleMetaGameController)
+def _getRentLeft(offer, epicCtrl=None):
+    key, values = _parseRent(offer)
+    value = max(values)
+    currentTimestamp = getCurrentLocalServerTimestamp()
+    season = epicCtrl.getCurrentSeason()
+    if season:
+        currentCycle = season.getCycleInfo()
+        if key == 'season':
+            lastCycle = season.getLastCycleInfo()
+            endDate = season.getEndDate()
+        elif key in ('cycle', 'cycles'):
+            lastCycle = season.getCycleInfo(value)
+            endDate = lastCycle.endDate
+        else:
+            raise SoftException('invalid rent info')
+        cyclesLeft = lastCycle.ordinalNumber + 1 - currentCycle.ordinalNumber
+        timeLeft = endDate - currentTimestamp
+        return (cyclesLeft, timeLeft if timeLeft >= 0 else 0)
+
+
+def _parseRent(offer):
+    rentInfo = offer.get('rent')
+    if rentInfo:
+        if len(rentInfo) > 1:
+            key = 'cycles'
+            values = (int(rent['cycle']) for rent in rentInfo)
+        else:
+            key, value = first(rentInfo).iteritems().next()
+            values = (int(value),)
+        return (key, values)
+    raise SoftException('invalid rent collection')
+
+
+def _getOfferCrew(offer):
+    return ItemPackEntry(type=ItemPackType.CREW_100 if Money(**offer.get('buy_price', MONEY_UNDEFINED)).gold else ItemPackType.CREW_75, groupID=1)
+
+
 def _parseBuyPrice(buyPrice):
     buyPrice = buyPrice.copy()
     discount = buyPrice.pop('discount', None)
@@ -161,6 +253,14 @@ def _validatePrice(tData, errorStr=''):
 
 class _VehiclePreviewSchema(W2CSchema):
     vehicle_id = Field(required=True, type=int)
+    back_url = Field(required=False, type=basestring)
+
+
+class _VehicleOffersPreviewSchema(W2CSchema):
+    vehicle_id = Field(required=True, type=int)
+    description = Field(required=False, type=dict)
+    offers = Field(required=True, type=(list, NoneType))
+    buy_params = Field(required=False, type=dict)
     back_url = Field(required=False, type=basestring)
 
 
@@ -204,7 +304,7 @@ class VehicleComparisonBasketWebApiMixin(object):
 
 
 def _pushInvalidPreviewMessage():
-    SystemMessages.pushMessage(i18n.makeString(W2C.ERROR_INVALIDPREVIEWVEHICLE), SystemMessages.SM_TYPE.Error, NC_MESSAGE_PRIORITY.MEDIUM)
+    SystemMessages.pushMessage(_ms(W2C.ERROR_INVALIDPREVIEWVEHICLE), SystemMessages.SM_TYPE.Error, NC_MESSAGE_PRIORITY.MEDIUM)
 
 
 class VehiclePreviewWebApiMixin(object):
@@ -217,6 +317,19 @@ class VehiclePreviewWebApiMixin(object):
             event_dispatcher.showVehiclePreview(vehTypeCompDescr=vehicleID, previewAlias=self._getVehiclePreviewReturnAlias(cmd), previewBackCb=self._getVehiclePreviewReturnCallback(cmd))
         else:
             _pushInvalidPreviewMessage()
+
+    @w2c(_VehiclePreviewSchema, 'vehicle_frontline_preview')
+    def openFrontLineVehiclePreview(self, cmd):
+        vehicleID = cmd.vehicle_id
+        if self.__validVehiclePreview(vehicleID):
+            if not checkIfVehicleIsHidden(vehicleID):
+                event_dispatcher.showVehiclePreview(vehTypeCompDescr=vehicleID, previewAlias=cmd.back_url, previewBackCb=self._getVehiclePreviewReturnCallback(cmd), isFrontline=True)
+        else:
+            _pushInvalidPreviewMessage()
+
+    @w2c(_VehicleOffersPreviewSchema, 'vehicle_offers_preview')
+    def openVehicleOffersPreview(self, cmd):
+        event_dispatcher.showVehiclePreview(vehTypeCompDescr=int(cmd.vehicle_id), offers=_parseOffers(cmd.offers), price=MONEY_UNDEFINED, oldPrice=MONEY_UNDEFINED, description=cmd.description, previewAlias=self._getVehiclePreviewReturnAlias(cmd), previewBackCb=self._getVehiclePreviewReturnCallback(cmd))
 
     @w2c(_VehiclePackPreviewSchema, 'vehicle_pack_preview')
     def openVehiclePackPreview(self, cmd):

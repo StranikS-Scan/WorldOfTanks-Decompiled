@@ -105,11 +105,7 @@ class AccountRequirements(ConditionsParser):
             return conditions.AccountDossierValue(uniqueName, data)
         if name == 'vehiclesUnlocked':
             return conditions.VehiclesUnlocked(uniqueName, data)
-        if name == 'vehiclesOwned':
-            return conditions.VehiclesOwned(uniqueName, data)
-        if name == 'refSystemRalXPPool':
-            return conditions.RefSystemRalXPPoolCondition(uniqueName, data)
-        return conditions.RefSystemRalBought10Lvl(uniqueName, data) if name == 'refSystemRalBought10Lvl' else None
+        return conditions.VehiclesOwned(uniqueName, data) if name == 'vehiclesOwned' else None
 
     def isAvailable(self):
         conds = self.getConditions()

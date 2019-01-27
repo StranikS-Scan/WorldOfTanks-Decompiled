@@ -9,16 +9,13 @@ from helpers import dependency, i18n
 from account_helpers.AccountSettings import AccountSettings, LAST_BADGES_VISIT
 from helpers.time_utils import getServerUTCTime
 from skeletons.account_helpers.settings_core import ISettingsCore
+from skeletons.gui.game_control import IBadgesController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
-from gui import SystemMessages
 from gui.Scaleform.daapi.view.meta.BadgesPageMeta import BadgesPageMeta
 from gui.shared.event_dispatcher import showHangar
 from gui.shared.formatters import text_styles
 from gui.Scaleform.locale.BADGE import BADGE
-from gui.shared.gui_items.processors.common import BadgesSelector
-from gui.shared.items_cache import CACHE_SYNC_REASON
-from gui.shared.utils import decorators
 from tutorial.control.context import GLOBAL_FLAG
 _SUFFIX_BADGE_HINT_ID = 'BadgePageNewSuffixBadgeHint'
 
@@ -37,6 +34,7 @@ class BadgesPage(BadgesPageMeta):
     itemsCache = dependency.descriptor(IItemsCache)
     lobbyContext = dependency.instance(ILobbyContext)
     settingsCore = dependency.descriptor(ISettingsCore)
+    badgesController = dependency.descriptor(IBadgesController)
 
     def __init__(self, *args, **kwargs):
         super(BadgesPage, self).__init__(*args, **kwargs)
@@ -80,18 +78,14 @@ class BadgesPage(BadgesPageMeta):
                     'descrTf': text_styles.main(BADGE.BADGESPAGE_HEADER_DESCR),
                     'playerText': text_styles.grandTitle(self.lobbyContext.getPlayerFullName(userName))}})
         self.__updateBadges()
-        self.itemsCache.onSyncCompleted += self.__onItemsChanged
+        self.badgesController.onUpdated += self.__updateBadges
 
     def _dispose(self):
         if self.__tutorStorage is not None:
             self.__tutorStorage.setValue(GLOBAL_FLAG.BADGE_PAGE_HAS_NEW_SUFFIX_BADGE, False)
-        self.itemsCache.onSyncCompleted -= self.__onItemsChanged
+        self.badgesController.onUpdated -= self.__updateBadges
         super(BadgesPage, self)._dispose()
         return
-
-    def __onItemsChanged(self, updateReason, _):
-        if updateReason in (CACHE_SYNC_REASON.DOSSIER_RESYNC, CACHE_SYNC_REASON.CLIENT_UPDATE):
-            self.__updateBadges()
 
     def __updateBadges(self):
         receivedBadgesData = []
@@ -122,31 +116,25 @@ class BadgesPage(BadgesPageMeta):
          'badgesData': notReceivedBadgesData})
         return
 
-    @decorators.process('updating')
     def __selectBadges(self):
         badges = []
         if self.__prefixBadgeID:
             badges.append(self.__prefixBadgeID)
         if self.__receivedSuffixBadgeID and self.__suffixBadgeSelected:
             badges.append(self.__receivedSuffixBadgeID)
-        result = yield BadgesSelector(badges).request()
-        if result and result.userMsg:
-            SystemMessages.pushMessage(result.userMsg, type=result.sysMsgType)
+        self.badgesController.select(badges)
 
     def __preprocessBadges(self):
-        prefixSelected = None
-        suffixBadge = None
+        prefixSelected = self.badgesController.getPrefix()
+        suffixBadge = self.badgesController.getSuffix()
         prefixBadges = []
         cache = defaultdict(list)
         for badge in self.itemsCache.items.getBadges().itervalues():
-            prefixLayout = badge.isPrefixLayout()
-            if prefixLayout:
-                if badge.isSelected:
-                    prefixSelected = badge
-            elif badge.isAchieved:
-                suffixBadge = badge
-            if not prefixLayout:
+            if not badge.isPrefixLayout():
                 continue
+            badge.isSelected = False
+            if prefixSelected is not None and badge.badgeID == prefixSelected.badgeID:
+                badge.isSelected = True
             if badge.isObsolete() and not badge.isAchieved:
                 continue
             if badge.isCollapsible():
@@ -164,8 +152,5 @@ class BadgesPage(BadgesPageMeta):
         return (prefixSelected, sorted(prefixBadges), suffixBadge)
 
     def __checkNewSuffixBadges(self):
-        for badge in self.itemsCache.items.getBadges().itervalues():
-            if badge.isNew() and badge.isSuffixLayout():
-                return True
-
-        return False
+        suffix = self.badgesController.getSuffix()
+        return suffix is not None and suffix.isNew()

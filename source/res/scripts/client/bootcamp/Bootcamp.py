@@ -18,6 +18,7 @@ from debug_utils_bootcamp import LOG_DEBUG_DEV_BOOTCAMP
 from PlayerEvents import g_playerEvents
 from bootcamp_shared import BOOTCAMP_BATTLE_ACTION
 from gui import makeHtmlString
+from gui.Scaleform.daapi.view.lobby.referral_program.referral_program_helpers import isReferralProgramEnabled, isCurrentUserRecruit
 from gui.app_loader import g_appLoader
 from gui.prb_control.dispatcher import g_prbLoader
 from gui.Scaleform.Waiting import Waiting
@@ -78,6 +79,7 @@ class Bootcamp(EventSystemEntity):
         self.__account = None
         self.__avatar = None
         self.__lessonId = 0
+        self.__isRecruit = False
         self.__isBattleLesson = False
         self.__context = {}
         self.__chapter = None
@@ -246,6 +248,7 @@ class Bootcamp(EventSystemEntity):
         if (lessonNum == 0 or not isBattleLesson) and not autoStartBattle:
             self.showActionWaitWindow()
             yield ServicesLocator.itemsCache.update(CACHE_SYNC_REASON.SHOW_GUI)
+            self.__isRecruit = isCurrentUserRecruit()
             self.hideActionWaitWindow()
         if self.__currentState is not None:
             self.__currentState.deactivate()
@@ -483,7 +486,8 @@ class Bootcamp(EventSystemEntity):
          'autoStart': autoStart,
          'lessonNumber': self.__lessonId,
          'tutorialPages': self.getBattleLoadingPages(),
-         'showSkipOption': True}
+         'showSkipOption': True,
+         'isReferralEnabled': self.isReferralEnabled()}
         return introPageData
 
     def getIntroVideoData(self):
@@ -528,6 +532,9 @@ class Bootcamp(EventSystemEntity):
 
     def getNationData(self):
         return self.__nationsData[self.__nation]
+
+    def isReferralEnabled(self):
+        return isReferralProgramEnabled() and self.__isRecruit
 
     def isMarkerLittlePiercingEnabled(self):
         return self.__context.get('little_pierced', False)

@@ -4,7 +4,6 @@ import BigWorld
 from gui.Scaleform.daapi.view.servers_data_provider import ServersDataProvider
 from gui.Scaleform.locale.COMMON import COMMON
 from gui.Scaleform.locale.RANKED_BATTLES import RANKED_BATTLES
-from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from helpers import i18n
 
 class PrimeTimesServersDataProvider(ServersDataProvider):
@@ -66,7 +65,6 @@ class PrimeTimesServersDataProvider(ServersDataProvider):
 
         else:
             periodsStr = i18n.makeString(COMMON.COMMON_DASH)
-        vo['tooltip'] = i18n.makeString(TOOLTIPS.RANKED_SERVERNAME, name=serverName)
         vo['shortname'] = item['shortname']
         vo['schedules'] = '\n'.join(periodsStr)
         vo['selected'] = False
@@ -74,11 +72,5 @@ class PrimeTimesServersDataProvider(ServersDataProvider):
         return vo
 
     def __getMaxPrimeTimes(self):
-        newPrimeTimes = 0
-        maxPrimeTimes = 0
-        for serverPeriods in self.primeTimes.values():
-            newPrimeTimes = len(serverPeriods)
-            if maxPrimeTimes < newPrimeTimes:
-                maxPrimeTimes = newPrimeTimes
-
-        return maxPrimeTimes
+        if self.primeTimes:
+            return max([ len(serverPeriods) for serverPeriods in self.primeTimes.values() ])

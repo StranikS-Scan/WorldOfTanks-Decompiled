@@ -86,7 +86,8 @@ class BrowserView(LobbySubView, BrowserViewMeta):
 
     def __onKeyDown(self, event):
         if event.key == Keys.KEY_ESCAPE:
-            self.onCloseView()
+            if not self.__browser.skipEscape:
+                self.onCloseView()
 
     def __getFromCtx(self, name, default=None):
         ctx = self.__ctx

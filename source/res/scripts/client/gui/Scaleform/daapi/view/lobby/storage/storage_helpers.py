@@ -1,21 +1,47 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/storage/storage_helpers.py
+import random
+from functools import partial
+import BigWorld
+import nations
+from account_helpers import AccountSettings
+from account_helpers.AccountSettings import LAST_STORAGE_VISITED_TIMESTAMP
 from gui import g_htmlTemplates
 from gui.Scaleform import MENU
 from gui.Scaleform.daapi.settings import BUTTON_LINKAGES
+from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.genConsts.SLOT_HIGHLIGHT_TYPES import SLOT_HIGHLIGHT_TYPES
 from gui.Scaleform.genConsts.STORE_CONSTANTS import STORE_CONSTANTS
+from gui.Scaleform.genConsts.STORAGE_CONSTANTS import STORAGE_CONSTANTS
+from gui.Scaleform.genConsts.CONTEXT_MENU_HANDLER_TYPE import CONTEXT_MENU_HANDLER_TYPE
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
+from gui.Scaleform.locale.MENU import MENU as _MENU
+from gui.Scaleform.locale.RES_SHOP import RES_SHOP
 from gui.Scaleform.locale.STORAGE import STORAGE
-from gui.shared.formatters import text_styles
+from gui.shared.event_dispatcher import showVehiclePreview, showStorage
+from gui.shared.formatters import text_styles, getItemPricesVO, icons
+from gui.shared.gui_items.gui_item_economics import ITEM_PRICE_EMPTY
 from helpers.i18n import makeString as _ms
+from gui.shared.money import Currency
 from gui.shared.gui_items import GUI_ITEM_TYPE
+from gui.shared.gui_items.Vehicle import getTypeUserName, getVehicleStateIcon, Vehicle
 from gui.shared.items_parameters import params_helper
 from gui.shared.utils.requesters.ItemsRequester import REQ_CRITERIA
 from helpers import i18n, dependency, int2roman, time_utils, func_utils
+from helpers.time_utils import getCurrentTimestamp
 from skeletons.gui.shared import IItemsCache
 _MAX_COMPATIBLE_VEHS_COUNT = 5
 _MAX_COMPATIBLE_GUNS_COUNT = 2
+_HANDLERS_MAP = {GUI_ITEM_TYPE.OPTIONALDEVICE: CONTEXT_MENU_HANDLER_TYPE.STORAGE_EQUIPMENT_ITEM,
+ GUI_ITEM_TYPE.EQUIPMENT: CONTEXT_MENU_HANDLER_TYPE.STORAGE_EQUIPMENT_ITEM,
+ GUI_ITEM_TYPE.BATTLE_BOOSTER: CONTEXT_MENU_HANDLER_TYPE.STORAGE_BONS_ITEM,
+ GUI_ITEM_TYPE.TURRET: CONTEXT_MENU_HANDLER_TYPE.STORAGE_MODULES_SHELLS_ITEM,
+ GUI_ITEM_TYPE.ENGINE: CONTEXT_MENU_HANDLER_TYPE.STORAGE_MODULES_SHELLS_ITEM,
+ GUI_ITEM_TYPE.GUN: CONTEXT_MENU_HANDLER_TYPE.STORAGE_MODULES_SHELLS_ITEM,
+ GUI_ITEM_TYPE.RADIO: CONTEXT_MENU_HANDLER_TYPE.STORAGE_MODULES_SHELLS_ITEM,
+ GUI_ITEM_TYPE.CHASSIS: CONTEXT_MENU_HANDLER_TYPE.STORAGE_MODULES_SHELLS_ITEM,
+ GUI_ITEM_TYPE.SHELL: CONTEXT_MENU_HANDLER_TYPE.STORAGE_MODULES_SHELLS_ITEM}
+_CUSTOMIZATION_VEHICLE_CRITERIA = ~REQ_CRITERIA.VEHICLE.IS_PREMIUM_IGR | ~REQ_CRITERIA.VEHICLE.EVENT_BATTLE | ~REQ_CRITERIA.VEHICLE.IS_BOT
 
 def getStorageItemDescr(item):
     itemType = item.itemTypeID
@@ -34,24 +60,55 @@ def getStorageItemDescr(item):
         return text_styles.main(desc)
 
 
-def createStorageDefVO(itemID, title, description, count, price, imageSmall, imageMedium, imageAlt, itemType='', nationFlagIcon='', level='', enabled=True, infoImgSrc='', infoText='', timerText='', timerIcon='', contextMenuId=''):
+def createStorageDefVO(itemID, title, description, count, price, image, imageAlt, itemType='', nationFlagIcon='', enabled=True, contextMenuId=''):
     return {'id': itemID,
      'title': title,
      'description': description,
      'count': count,
      'price': price,
-     'imageMedium': imageMedium,
-     'imageSmall': imageSmall,
+     'image': image,
      'imageAlt': imageAlt,
      'type': itemType,
      'nationFlagIcon': nationFlagIcon,
      'enabled': enabled,
-     'level': level,
-     'timerText': timerText,
-     'timerIcon': timerIcon,
-     'infoImgSrc': infoImgSrc,
-     'infoText': infoText,
      'contextMenuId': contextMenuId}
+
+
+def getStorageVehicleVo(vehicle):
+    name = _getVehicleName(vehicle)
+    description = _getVehicleDescription(vehicle)
+    imageSmall = func_utils.makeFlashPath(vehicle.getShopIcon(STORE_CONSTANTS.ICON_SIZE_SMALL))
+    stateIcon, stateText = _getVehicleInfo(vehicle)
+    if not imageSmall and not stateText:
+        stateText = text_styles.vehicleStatusInfoText(_ms(STORAGE.INHANGAR_NOIMAGE))
+    vo = createStorageDefVO(vehicle.intCD, name, description, vehicle.inventoryCount, getItemPricesVO(vehicle.getSellPrice())[0], imageSmall, RES_SHOP.getVehicleIcon(STORE_CONSTANTS.ICON_SIZE_SMALL, 'empty_tank'), itemType=getBoosterType(vehicle), nationFlagIcon=RES_SHOP.getNationFlagIcon(nations.NAMES[vehicle.nationID]), contextMenuId=CONTEXT_MENU_HANDLER_TYPE.STORAGE_VEHICLES_REGULAR_ITEM)
+    vo.update({'infoImgSrc': stateIcon,
+     'infoText': stateText})
+    return vo
+
+
+def _getVehicleName(vehicle):
+    return ' '.join((getTypeUserName(vehicle.type, False), text_styles.neutral(int2roman(vehicle.level)), vehicle.shortUserName))
+
+
+def _getVehicleDescription(vehicle):
+    return ' '.join((_ms(STORAGE.CARD_VEHICLE_HOVER_MAXADDITIONALPRICELABEL), BigWorld.wg_getIntegralFormat(_calculateVehicleMaxAdditionalPrice(vehicle)), icons.credits()))
+
+
+def _getVehicleInfo(vehicle):
+    vState, vStateLvl = vehicle.getState()
+    if vState not in Vehicle.CAN_SELL_STATES:
+        infoTextStyle = text_styles.vehicleStatusCriticalText if vStateLvl == Vehicle.VEHICLE_STATE_LEVEL.CRITICAL else text_styles.vehicleStatusInfoText
+        stateText = infoTextStyle(_ms(_MENU.tankcarousel_vehiclestates(vState)))
+        stateIcon = getVehicleStateIcon(vState)
+        return (stateIcon, stateText)
+    else:
+        return (None, None)
+
+
+def _calculateVehicleMaxAdditionalPrice(vehicle):
+    items = list(vehicle.equipment.regularConsumables) + vehicle.optDevices + vehicle.shells
+    return sum((item.getSellPrice().price.get(Currency.CREDITS, 0) * getattr(item, 'count', 1) for item in items if item is not None))
 
 
 def getStorageModuleName(item):
@@ -170,3 +227,45 @@ def getVehicleRestoreInfo(vehicle):
      timeStr,
      description,
      icon)
+
+
+def getItemVo(item):
+
+    def getItemNationID(item):
+        compatibleNations = []
+        if item.itemTypeName == STORE_CONSTANTS.EQUIPMENT:
+            item.descriptor.compatibleNations()
+        return compatibleNations[0] if len(compatibleNations) == 1 else item.nationID
+
+    priceVO = getItemPricesVO(item.getSellPrice())[0]
+    itemNationID = getItemNationID(item)
+    nationFlagIcon = RES_SHOP.getNationFlagIcon(nations.NAMES[itemNationID]) if itemNationID != nations.NONE_INDEX else ''
+    vo = createStorageDefVO(item.intCD, getStorageModuleName(item), getStorageItemDescr(item), item.inventoryCount, priceVO, getStorageItemIcon(item, STORE_CONSTANTS.ICON_SIZE_SMALL), 'altimage', itemType=getBoosterType(item), nationFlagIcon=nationFlagIcon, enabled=item.itemTypeID != GUI_ITEM_TYPE.BATTLE_BOOSTER, contextMenuId=_HANDLERS_MAP[item.itemTypeID])
+    return vo
+
+
+def isStorageSessionTimeout():
+    lastVisitTime = AccountSettings.getSessionSettings(LAST_STORAGE_VISITED_TIMESTAMP)
+    return getCurrentTimestamp() - lastVisitTime > STORAGE_CONSTANTS.SESSION_TIMEOUT
+
+
+def customizationAvailableForSell(item):
+    return item.inventoryCount > 0 and item.getSellPrice() != ITEM_PRICE_EMPTY and not item.isRentable and not item.isHidden
+
+
+@dependency.replace_none_kwargs(itemsCache=IItemsCache)
+def customizationPreview(itemCD, itemsCache=None):
+    item = itemsCache.items.getItemByCD(itemCD)
+    vehicles = []
+    req = _CUSTOMIZATION_VEHICLE_CRITERIA | ~REQ_CRITERIA.SECRET
+    for vehCD, vehicle in itemsCache.items.getVehicles(req).iteritems():
+        if not vehicle.isOutfitLocked and item.mayInstall(vehicle):
+            vehicles.append(vehCD)
+
+    if not vehicles:
+        secretReq = _CUSTOMIZATION_VEHICLE_CRITERIA | REQ_CRITERIA.SECRET
+        for vehCD, vehicle in itemsCache.items.getVehicles(secretReq).iteritems():
+            if not vehicle.isOutfitLocked and item.mayInstall(vehicle):
+                vehicles.append(vehCD)
+
+    showVehiclePreview(random.choice(vehicles), previewBackCb=partial(showStorage, defaultSection=STORAGE_CONSTANTS.CUSTOMIZATION), previewAlias=VIEW_ALIAS.LOBBY_STORAGE, vehParams={'styleCD': itemCD})

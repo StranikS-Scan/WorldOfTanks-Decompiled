@@ -3,6 +3,7 @@
 from gui.prb_control.entities.base.actions_validator import BaseActionsValidator, ActionsValidatorComposite
 from gui.prb_control.items import ValidationResult
 from gui.prb_control.settings import UNIT_RESTRICTION
+from gui.shared.gui_items.Vehicle import Vehicle
 from shared_utils import findFirst
 
 class UnitStateValidator(BaseActionsValidator):
@@ -48,11 +49,14 @@ class UnitVehiclesValidator(BaseActionsValidator):
                         if vehicle.isInBattle:
                             return ValidationResult(False, UNIT_RESTRICTION.VEHICLE_IS_IN_BATTLE)
                         return ValidationResult(False, UNIT_RESTRICTION.VEHICLE_NOT_VALID)
+                    state, _ = vehicle.getState()
+                    if state == Vehicle.VEHICLE_STATE.UNSUITABLE_TO_QUEUE:
+                        return ValidationResult(False, UNIT_RESTRICTION.VEHICLE_WRONG_MODE)
 
             return super(UnitVehiclesValidator, self)._validate()
 
     def _isValidMode(self, vehicle):
-        return not vehicle.isEvent
+        return not vehicle.isEvent and not vehicle.isOnlyForEventBattles
 
     def _isCheckForRent(self):
         return True

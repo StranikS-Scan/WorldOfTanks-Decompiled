@@ -6,7 +6,7 @@ from debug_utils import LOG_ERROR, LOG_CODEPOINT_WARNING
 from gui import SystemMessages
 from gui.Scaleform.daapi import LobbySubView
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
-from gui.Scaleform.daapi.view.lobby.epicBattle.epic_meta_level_icon import getEpicMetaIconVODict, EPIC_META_LEVEL_ICON_SIZE
+from gui.Scaleform.daapi.view.lobby.epicBattle.epic_meta_level_icon import getEpicMetaIconVODict
 from gui.Scaleform.daapi.view.lobby.epicBattle.epic_prestige_progress import getPrestigeProgressVO, getPrestigeLevelAwardsVOs, getFinalTankRewardIconPath, getFinalTankRewardVehicleID
 from gui.Scaleform.daapi.view.lobby.epicBattle.epic_cycle_helpers import getActiveCycleTimeFrameStrings
 from gui.Scaleform.daapi.view.lobby.missions.awards_formatters import AWARDS_SIZES, CurtailingAwardsComposer
@@ -89,7 +89,7 @@ class EpicBattlesInfoView(LobbySubView, EpicBattlesInfoViewMeta):
 
     def _packCombatReservesVO(self, availablePoints):
         skillLvls = self.epicMetaGameCtrl.getSkillLevels()
-        allSkills = self.epicMetaGameCtrl.getSkillInformation()
+        allSkills = self.epicMetaGameCtrl.getAllSkillsInformation()
         unlockedSkills = 0
         for skillID in allSkills.iterkeys():
             if skillLvls.get(skillID, 0) != 0:
@@ -158,7 +158,7 @@ class EpicBattlesInfoView(LobbySubView, EpicBattlesInfoViewMeta):
          'pageDescriptionHtmlText': text_styles.promoSubTitle(cycleDescText),
          'aboutButtonLabel': i18n.makeString(EPIC_BATTLE.INFOVIEW_ABOUTBUTTON_ABOUTFRONTLINE).upper(),
          'canClaimFinalReward': self.__canClaimFinalReward(),
-         'epicMetaLevelIconData': getEpicMetaIconVODict(pPrestigeLevel, pMetaLevel, EPIC_META_LEVEL_ICON_SIZE.BIG),
+         'epicMetaLevelIconData': getEpicMetaIconVODict(pPrestigeLevel, pMetaLevel),
          'epicRewardRibbonData': self._packRewardRibbonData(pPrestigeLevel + 1, self.eventsCache.getAllQuests(), maxPrestigeLevel),
          'epicCombatReservesData': self._packCombatReservesVO(self.epicMetaGameCtrl.getSkillPoints()),
          'epicMetaProgressData': self._packMetaProgressVO(prestigeAllowed, maxRewardClaimed),

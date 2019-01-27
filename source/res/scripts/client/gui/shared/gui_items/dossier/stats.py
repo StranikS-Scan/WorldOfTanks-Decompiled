@@ -427,7 +427,7 @@ class _AchievementsBlock(_StatsBlockAbstract):
     def isAchievementInLayout(self, record):
         return record in layouts.getAchievementsLayout(self.__dossier.getDossierType())
 
-    def getAchievements(self, isInDossier=None):
+    def getAchievements(self, isInDossier=None, showHidden=True):
         result = defaultdict(list)
         for record in layouts.getAchievementsLayout(self.__dossier.getDossierType()):
             try:
@@ -439,10 +439,11 @@ class _AchievementsBlock(_StatsBlockAbstract):
                             if not isinstance(factory, _SequenceAchieveFactory):
                                 achieve = {achieve.getName(): achieve}
                             for a in achieve.itervalues():
-                                section = a.getSection()
-                                if section is None:
-                                    section = getAchieveSection(record)
-                                result[section].append(a)
+                                if not a.isHidden() or showHidden:
+                                    section = a.getSection()
+                                    if section is None:
+                                        section = getAchieveSection(record)
+                                    result[section].append(a)
 
             except Exception:
                 LOG_ERROR('There is exception while achievement creating', record)

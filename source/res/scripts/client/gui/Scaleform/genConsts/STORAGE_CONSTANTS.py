@@ -7,6 +7,7 @@ class STORAGE_CONSTANTS(object):
     STORAGE = 'storage'
     FOR_SELL = 'for_sell'
     PERSONAL_RESERVES = 'personal_reserves'
+    CUSTOMIZATION = 'customization'
     FOR_SELL_VIEW = 'StorageCategoryForSellViewUI'
     STORAGE_VIEW = 'StorageCategoryStorageViewUI'
     STORAGE_REGULAR_ITEMS_TAB = 'RegularItemsTabViewUI'
@@ -15,7 +16,9 @@ class STORAGE_CONSTANTS(object):
     IN_HANGAR_VIEW = 'StorageCategoryInHangarViewUI'
     IN_HANGAR_ALL_VEHICLES_TAB = 'AllVehiclesTabViewUI'
     IN_HANGAR_RESTORE_VEHICLES_TAB = 'RestoreVehiclesTabViewUI'
+    IN_HANGAR_RENT_VEHICLES_TAB = 'RentVehiclesTabViewUI'
     PERSONAL_RESERVES_VIEW = 'StorageCategoryPersonalReservesViewUI'
+    CUSTOMIZATION_VIEW = 'StorageCategoryCustomizationViewUI'
     INVENTORY_TAB_ALL = 'all'
     INVENTORY_TAB_EQUIPMENT = 'equipment'
     INVENTORY_TAB_CONSUMABLE = 'consumable'
@@ -23,3 +26,5 @@ class STORAGE_CONSTANTS(object):
     INVENTORY_TAB_SHELLS = 'shells'
     VEHICLES_TAB_ALL = 'all'
     VEHICLES_TAB_RESTORE = 'restore'
+    VEHICLES_TAB_RENT = 'rent'
+    SESSION_TIMEOUT = 300

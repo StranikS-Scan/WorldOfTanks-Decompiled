@@ -26,12 +26,11 @@ from gui.shared.event_bus import EVENT_BUS_SCOPE
 from gui.shared.event_dispatcher import showStorage
 from gui.shared.formatters import text_styles, icons
 from gui.shared.tutorial_helper import getTutorialGlobalStorage
-from gui.shared.utils.requesters import REQ_CRITERIA
 from gui.shared.view_helpers.emblems import ClanEmblemsHelper
 from helpers import dependency
 from helpers import isPlayerAccount
 from helpers.i18n import makeString
-from skeletons.gui.game_control import IRefSystemController
+from skeletons.gui.game_control import IBadgesController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
 from tutorial.control.context import GLOBAL_FLAG
@@ -41,8 +40,8 @@ _SUFFIX_BADGE_HINT_ID = 'HaveNewSuffixBadgeHint'
 
 class AccountPopover(AccountPopoverMeta, IGlobalListener, ClanListener, ClanEmblemsHelper):
     itemsCache = dependency.descriptor(IItemsCache)
-    refSystem = dependency.descriptor(IRefSystemController)
     lobbyContext = dependency.descriptor(ILobbyContext)
+    badgesController = dependency.descriptor(IBadgesController)
 
     def __init__(self, _):
         super(AccountPopover, self).__init__()
@@ -85,10 +84,6 @@ class AccountPopover(AccountPopoverMeta, IGlobalListener, ClanListener, ClanEmbl
 
     def openInviteWindow(self):
         self.fireEvent(events.LoadViewEvent(CLANS_ALIASES.CLAN_PERSONAL_INVITES_WINDOW_PY), EVENT_BUS_SCOPE.LOBBY)
-        self.destroy()
-
-    def openReferralManagement(self):
-        self.fireEvent(events.LoadViewEvent(VIEW_ALIAS.REFERRAL_MANAGEMENT_WINDOW), EVENT_BUS_SCOPE.LOBBY)
         self.destroy()
 
     @process
@@ -198,7 +193,6 @@ class AccountPopover(AccountPopoverMeta, IGlobalListener, ClanListener, ClanEmbl
     def __updateButtonsStates(self):
         self.__setInfoButtonState()
         self.__setClanData()
-        self.__setReferralData()
         self.__updateBoostersPanelState()
         self.__syncUserInfo()
 
@@ -212,7 +206,6 @@ class AccountPopover(AccountPopoverMeta, IGlobalListener, ClanListener, ClanEmbl
         if isPlayerAccount():
             self.__setUserInfo()
             self.__syncUserInfo()
-            self.__setReferralData()
 
     def __setUserInfo(self):
         self.__setInfoButtonState()
@@ -302,9 +295,9 @@ class AccountPopover(AccountPopoverMeta, IGlobalListener, ClanListener, ClanEmbl
         return
 
     def __syncUserInfo(self):
-        selectedBages = self.itemsCache.items.getBadges(REQ_CRITERIA.BADGE.SELECTED | REQ_CRITERIA.BADGE.PREFIX_LAYOUT).values()
-        if selectedBages:
-            badgeIcon = selectedBages[0].getSmallIcon()
+        badge = self.badgesController.getPrefix()
+        if badge is not None:
+            badgeIcon = badge.getSmallIcon()
         else:
             badgeIcon = RES_ICONS.MAPS_ICONS_LIBRARY_BADGES_48X48_BADGE_DEFAULT
         title = text_styles.middleTitle(MENU.HEADER_ACCOUNT_POPOVER_BOOSTERS_BLOCKTITLE) + ' ' + icons.info()
@@ -314,6 +307,7 @@ class AccountPopover(AccountPopoverMeta, IGlobalListener, ClanListener, ClanEmbl
          'boostersBlockTitleTooltip': TOOLTIPS.HEADER_ACCOUNTPOPOVER_BOOSTERSTITLE,
          'badgeIcon': badgeIcon}
         self.as_setDataS(userVO)
+        return
 
     def __setInfoButtonState(self):
         self.__infoBtnEnabled = True
@@ -325,12 +319,6 @@ class AccountPopover(AccountPopoverMeta, IGlobalListener, ClanListener, ClanEmbl
     def __onCenterIsLongDisconnected(self, *args):
         self.__setClanData()
         self.__syncUserInfo()
-
-    def __setReferralData(self):
-        if self.refSystem.isReferrer():
-            self.as_setReferralDataS({'invitedText': makeString(MENU.HEADER_ACCOUNT_POPOVER_REFERRAL_INVITED, referrersNum=len(self.refSystem.getReferrals())),
-             'moreInfoText': makeString(MENU.HEADER_ACCOUNT_POPOVER_REFERRAL_MOREINFO),
-             'isLinkBtnEnabled': self.__infoBtnEnabled})
 
     def __checkNewBadges(self):
         prefixNew = False

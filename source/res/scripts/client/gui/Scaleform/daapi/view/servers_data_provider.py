@@ -1,6 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/servers_data_provider.py
-from debug_utils import LOG_ERROR, LOG_DEBUG
+import logging
 from gui.Scaleform.framework.entities.DAAPIDataProvider import SortableDAAPIDataProvider
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.shared.formatters import icons
@@ -10,7 +10,7 @@ from helpers.i18n import makeString as _ms
 from predefined_hosts import HOST_AVAILABILITY, PING_STATUSES, g_preDefinedHosts
 from predefined_hosts import AUTO_LOGIN_QUERY_URL
 from skeletons.account_helpers.settings_core import ISettingsCore
-_PING_MAX_VALUE = 999
+_logger = logging.getLogger(__name__)
 
 class _INDICATOR_STATUSES(object):
     WAITING = -1
@@ -24,15 +24,16 @@ class _INDICATOR_STATUSES(object):
 
 
 class ServersDataProvider(SortableDAAPIDataProvider):
-    settingsCore = dependency.descriptor(ISettingsCore)
+    __PING_MAX_VALUE = 999
+    __settingsCore = dependency.descriptor(ISettingsCore)
 
     def __init__(self):
         super(ServersDataProvider, self).__init__()
         self._list = []
         self.__mapping = {}
         self.__selectedID = None
-        self.__isColorBlind = self.settingsCore.getSetting('isColorBlind')
-        self.settingsCore.onSettingsChanged += self.__onSettingsChanged
+        self.__isColorBlind = self.__settingsCore.getSetting('isColorBlind')
+        self.__settingsCore.onSettingsChanged += self.__onSettingsChanged
         return
 
     @property
@@ -53,7 +54,7 @@ class ServersDataProvider(SortableDAAPIDataProvider):
         return
 
     def fini(self):
-        self.settingsCore.onSettingsChanged -= self.__onSettingsChanged
+        self.__settingsCore.onSettingsChanged -= self.__onSettingsChanged
         self.clear()
         self.destroy()
 
@@ -72,7 +73,7 @@ class ServersDataProvider(SortableDAAPIDataProvider):
             try:
                 vo = self.sortedCollection[index]
             except IndexError:
-                LOG_ERROR('Item not found', index)
+                _logger.error('Item not found %i', index)
 
         return vo
 
@@ -105,7 +106,7 @@ class ServersDataProvider(SortableDAAPIDataProvider):
     def _makeVO(self, index, item):
         hostName = item['data']
         pingValue, pingStatus = g_preDefinedHosts.getHostPingData(hostName)
-        pingValue = min(pingValue, _PING_MAX_VALUE)
+        pingValue = min(pingValue, self.__PING_MAX_VALUE)
         csisStatus = item['csisStatus']
         serverName = item['label']
         pingIndicatorState = self.__getUpdatedPingStatus(pingStatus, item)
@@ -120,12 +121,14 @@ class ServersDataProvider(SortableDAAPIDataProvider):
          'enabled': enabled}
         if csisStatus == HOST_AVAILABILITY.NOT_RECOMMENDED:
             vo['tooltip'] = _ms(TOOLTIPS.SERVER_NOTRECOMENDED, icon=icons.serverAlert(), server=serverName)
+        elif 'tooltip' in item:
+            vo['tooltip'] = item['tooltip']
         return vo
 
     def requestItemAtHandler(self, idx):
         item = super(ServersDataProvider, self).requestItemAtHandler(idx)
         if item is None:
-            LOG_DEBUG(idx, item)
+            _logger.debug('Item with id %i is None', idx)
         return item
 
     def __onSettingsChanged(self, diff):
@@ -138,23 +141,22 @@ class ServersDataProvider(SortableDAAPIDataProvider):
 
             self.refresh()
 
-    @staticmethod
-    def __getUpdatedPingStatus(pingStatus, item):
-
-        def __checkPingForValidStatus(income_status):
-            if income_status in _INDICATOR_STATUSES.ALL:
-                return income_status
-            else:
-                LOG_ERROR('Mismatch ping status "{}" and available indicator statuses.'.format(income_status))
-                return None
-
+    def __getUpdatedPingStatus(self, pingStatus, item):
         csisStatus = item['csisStatus']
         if pingStatus == PING_STATUSES.REQUESTED:
             return _INDICATOR_STATUSES.WAITING
         if csisStatus == HOST_AVAILABILITY.RECOMMENDED or csisStatus == HOST_AVAILABILITY.UNKNOWN:
-            return __checkPingForValidStatus(pingStatus)
+            return self.__checkPingForValidStatus(pingStatus)
         if csisStatus in (HOST_AVAILABILITY.NOT_AVAILABLE, HOST_AVAILABILITY.NOT_RECOMMENDED):
             return _INDICATOR_STATUSES.IGNORED
         if csisStatus == HOST_AVAILABILITY.REQUESTED:
             return _INDICATOR_STATUSES.WAITING
-        return _INDICATOR_STATUSES.IGNORED if item['data'] == AUTO_LOGIN_QUERY_URL else __checkPingForValidStatus(pingStatus)
+        return _INDICATOR_STATUSES.IGNORED if item['data'] == AUTO_LOGIN_QUERY_URL else self.__checkPingForValidStatus(pingStatus)
+
+    @staticmethod
+    def __checkPingForValidStatus(incomeStatus):
+        if incomeStatus in _INDICATOR_STATUSES.ALL:
+            return incomeStatus
+        else:
+            _logger.error('Mismatch ping status "%s" and available indicator statuses.', incomeStatus)
+            return None

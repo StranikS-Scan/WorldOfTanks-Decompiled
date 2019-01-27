@@ -8,14 +8,19 @@ CM_BUY_COLOR = 13347959
 
 class CMLabel(object):
     INFORMATION = 'information'
+    STATS = 'showVehicleStatistics'
     SELL = 'sell'
+    REMOVE = 'remove'
     SALE_OPTION = 'saleOption'
+    BUY = 'buy'
     BUY_MORE = 'buyMore'
+    RENEW_RENT = 'rentRenew'
     ADD_TO_COMPARE = 'addToCompare'
     SHOW_IN_HANGAR = 'showInHangar'
     PREVIEW = 'preview'
     RESTORE = 'restore'
     ACTIVATE = 'activate'
+    PREVIEW_CUSTOMIZATION = 'previewCustomization'
 
 
 def option(order, label):

@@ -71,13 +71,16 @@ class IItemsRequester(requesters.IRequester):
     def getTankmen(self, criteria=None):
         raise NotImplementedError
 
-    def getItems(self, itemTypeID=None, criteria=None, nationID=None):
+    def getItems(self, itemTypeID=None, criteria=None, nationID=None, onlyWithPrices=True):
         raise NotImplementedError
 
     def getVehicles(self, criteria=None):
         raise NotImplementedError
 
     def getBadges(self, criteria=None):
+        raise NotImplementedError
+
+    def getBadgeByID(self, badgeID):
         raise NotImplementedError
 
     def getItemByCD(self, typeCompDescr):

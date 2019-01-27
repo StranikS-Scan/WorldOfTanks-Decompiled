@@ -140,6 +140,9 @@ class RegularAchievement(GUIItem):
     def isAvailableInQuest(self):
         return True
 
+    def isHidden(self):
+        return self._name.startswith('epicBattle') and not self._isInDossier
+
     @classmethod
     def checkIsInDossier(cls, block, name, dossier):
         if dossier is not None:

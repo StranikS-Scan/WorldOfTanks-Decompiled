@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/common/vehicle_carousel/carousel_filter.py
+import copy
 import constants
 import nations
 from account_helpers.AccountSettings import AccountSettings, CAROUSEL_FILTER_1, CAROUSEL_FILTER_2
@@ -35,6 +36,8 @@ class _CarouselFilter(object):
             if group.isApplicableFor(vehicle):
                 return group.apply(vehicle)
 
+        return True
+
     def getFilters(self, keys=None):
         if keys is not None:
             filters = _filterDict(self._filters, keys)
@@ -63,7 +66,7 @@ class _CarouselFilter(object):
         for section in self._clientSections:
             defaultFilters.update(AccountSettings.getFilterDefault(section))
 
-        keys = keys or defaultFilters.keys()
+        keys = keys or defaultFilters.iterkeys()
         exceptions = exceptions or []
         keys = [ key for key in keys if key not in exceptions ]
         defaultFilters = _filterDict(defaultFilters, keys)
@@ -136,6 +139,55 @@ class CarouselFilter(_CarouselFilter):
             savedFilters[key] = type(value)(savedFilters[key])
 
         self.update(savedFilters, save=False)
+
+
+class SessionCarouselFilter(_CarouselFilter):
+
+    def __init__(self, criteries=None):
+        super(SessionCarouselFilter, self).__init__()
+        self._clientSections = tuple()
+        self._criteriesGroups = (EventCriteriesGroup(), BasicCriteriesGroup())
+
+    def load(self):
+        defaultFilters = dict()
+        savedFilters = dict()
+        for section in self._clientSections:
+            defaultFilters.update(AccountSettings.getSessionSettingsDefault(section))
+
+        savedFilters = copy.deepcopy(defaultFilters)
+        for section in self._clientSections:
+            savedFilters.update(AccountSettings.getSessionSettings(section))
+
+        self._filters = defaultFilters
+        self.update(savedFilters, save=False)
+
+    def save(self):
+        for section in self._clientSections:
+            AccountSettings.setSessionSettings(section, self._filters)
+
+    def isDefault(self, keys=None):
+        defaultFilters = {}
+        for section in self._clientSections:
+            defaultFilters.update(AccountSettings.getSessionSettingsDefault(section))
+
+        if keys is None:
+            keys = defaultFilters.keys()
+        for key in keys:
+            if self._filters[key] != defaultFilters[key]:
+                return False
+
+        return True
+
+    def reset(self, keys=None, exceptions=None, save=True):
+        defaultFilters = {}
+        for section in self._clientSections:
+            defaultFilters.update(AccountSettings.getSessionSettingsDefault(section))
+
+        keys = keys or defaultFilters.iterkeys()
+        exceptions = exceptions or []
+        keys = [ key for key in keys if key not in exceptions ]
+        defaultFilters = _filterDict(defaultFilters, keys)
+        self.update(defaultFilters, save)
 
 
 class BasicCriteriesGroup(CriteriesGroup):

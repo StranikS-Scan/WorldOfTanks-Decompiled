@@ -1,13 +1,18 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/event_dispatcher.py
+import logging
 from operator import attrgetter
 from CurrentVehicle import HeroTankPreviewAppearance
 from adisp import process
+from constants import RentType, GameSeasonType
 from debug_utils import LOG_WARNING
 from gui import SystemMessages, DialogsInterface
 from gui.Scaleform import MENU
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.dialogs import I18nInfoDialogMeta, I18nConfirmDialogMeta, DIALOG_BUTTON_ID
+from gui.Scaleform.daapi.view.dialogs.ExchangeDialogMeta import ExchangeCreditsWebProductMeta
+from gui.Scaleform.daapi.view.dialogs.rent_confirm_dialog import RentConfirmDialogMeta
+from gui.Scaleform.daapi.view.lobby.referral_program.referral_program_helpers import getReferralProgramURL
 from gui.Scaleform.daapi.view.lobby.store.browser.ingameshop_helpers import getWebShopURL, isIngameShopEnabled
 from gui.Scaleform.framework.entities.View import ViewKey
 from gui.Scaleform.genConsts.BOOSTER_CONSTANTS import BOOSTER_CONSTANTS
@@ -17,24 +22,31 @@ from gui.Scaleform.genConsts.PERSONAL_MISSIONS_ALIASES import PERSONAL_MISSIONS_
 from gui.Scaleform.genConsts.RANKEDBATTLES_ALIASES import RANKEDBATTLES_ALIASES
 from gui.Scaleform.genConsts.STORAGE_CONSTANTS import STORAGE_CONSTANTS
 from gui.Scaleform.locale.MESSENGER import MESSENGER
+from gui.SystemMessages import SM_TYPE, pushMessage
 from gui.app_loader import g_appLoader
 from gui.game_control.links import URLMacros
+from gui.ingame_shop import generateShopRentRenewProductID, showBuyGoldForRentWebOverlay
+from gui.ingame_shop import getShopProductInfo
+from gui.ingame_shop import makeBuyParamsByProductInfo
+from gui.ingame_shop import showBuyVehicleOverlay
 from gui.prb_control.settings import CTRL_ENTITY_TYPE
 from gui.shared import events, g_eventBus, money
 from gui.shared.event_bus import EVENT_BUS_SCOPE
 from gui.shared.formatters import text_styles
 from gui.shared.gui_items.processors.goodies import BoosterActivator
+from gui.shared.money import Money, Currency
 from gui.shared.notifications import NotificationPriorityLevel
 from gui.shared.utils import isPopupsWindowsOpenDisabled
 from gui.shared.utils.functions import getViewName, getUniqueViewName
 from gui.shared.utils.requesters import REQ_CRITERIA
 from helpers import dependency
 from helpers.i18n import makeString as _ms
-from skeletons.gui.game_control import IHeroTankController
+from skeletons.gui.game_control import IHeroTankController, IReferralProgramController
 from skeletons.gui.goodies import IGoodiesCache
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
 from soft_exception import SoftException
+_logger = logging.getLogger(__name__)
 
 class SETTINGS_TAB_INDEX(object):
     GAME = 0
@@ -75,10 +87,6 @@ def showEpicBattlesPrimeTimeWindow():
     g_eventBus.handleEvent(events.LoadViewEvent(alias=EPICBATTLES_ALIASES.EPIC_BATTLES_PRIME_TIME_ALIAS, ctx={}), EVENT_BUS_SCOPE.LOBBY)
 
 
-def showEpicBattlesOfflineWindow():
-    g_eventBus.handleEvent(events.LoadViewEvent(alias=EPICBATTLES_ALIASES.EPIC_BATTLES_OFFLINE_ALIAS, ctx={}), EVENT_BUS_SCOPE.LOBBY)
-
-
 def showEpicBattlesWelcomeBackWindow():
     g_eventBus.handleEvent(events.LoadViewEvent(alias=EPICBATTLES_ALIASES.EPIC_BATTLES_WELCOME_BACK_ALIAS, ctx={}), EVENT_BUS_SCOPE.LOBBY)
 
@@ -89,6 +97,62 @@ def showEpicBattlesAfterBattleWindow(reusableInfo):
 
 def showVehicleInfo(vehTypeCompDescr):
     g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.VEHICLE_INFO_WINDOW, getViewName(VIEW_ALIAS.VEHICLE_INFO_WINDOW, int(vehTypeCompDescr)), ctx={'vehicleCompactDescr': int(vehTypeCompDescr)}), EVENT_BUS_SCOPE.LOBBY)
+
+
+def showVehicleRentDialog(intCD, rentType, nums, seasonType, price, buyParams):
+    if not (seasonType == GameSeasonType.EPIC and rentType in (RentType.SEASON_RENT, RentType.SEASON_CYCLE_RENT)):
+        _logger.debug('GameSeasonType %s with RentType %s is not supported', seasonType, rentType)
+        return
+    _purchaseOffer(intCD, rentType, nums, price, seasonType, buyParams, renew=False)
+
+
+@process
+def showVehicleRentRenewDialog(intCD, rentType, num, seasonType):
+    if not (seasonType == GameSeasonType.EPIC and rentType == RentType.SEASON_CYCLE_RENT):
+        _logger.debug('GameSeasonType %s with RentType %s is not supported', seasonType, rentType)
+        return
+    productID = generateShopRentRenewProductID(intCD, rentType, num, seasonType)
+    productInfo = yield getShopProductInfo(productID)
+    if productInfo:
+        buyParams = makeBuyParamsByProductInfo(productInfo)
+        price = Money.makeFrom(buyParams['priceCode'], buyParams['priceAmount'])
+        _purchaseOffer(intCD, rentType, [num], price, seasonType, buyParams, renew=True)
+    else:
+        _logger.error('productInfo is None or empty')
+
+
+@process
+@dependency.replace_none_kwargs(itemsCache=IItemsCache)
+def _purchaseOffer(vehicleCD, rentType, nums, price, seasonType, buyParams, renew, itemsCache=None):
+    if mayObtainForMoney(price):
+        _doPurchaseOffer(vehicleCD, rentType, nums, price, seasonType, buyParams, renew)
+    elif mayObtainWithMoneyExchange(price):
+        vehicle = itemsCache.items.getItemByCD(vehicleCD)
+        isOk, _ = yield DialogsInterface.showDialog(ExchangeCreditsWebProductMeta(name=vehicle.shortUserName if vehicle else '', count=1, price=price.get(Currency.CREDITS)))
+        if isOk:
+            _doPurchaseOffer(vehicleCD, rentType, nums, price, seasonType, buyParams, renew)
+    elif price.getCurrency() == Currency.GOLD and isIngameShopEnabled():
+        showBuyGoldForRentWebOverlay(price.get(Currency.GOLD), vehicleCD)
+
+
+@process
+def _doPurchaseOffer(vehicleCD, rentType, nums, price, seasonType, buyParams, renew):
+    requestConfirmed = yield DialogsInterface.showDialog(meta=RentConfirmDialogMeta(vehicleCD, rentType, nums, price, seasonType, renew))
+    if requestConfirmed:
+        if mayObtainForMoney(price):
+            showBuyVehicleOverlay(buyParams)
+        else:
+            pushMessage(_ms(MESSENGER.SERVICECHANNELMESSAGES_VEHICLERENTERROR_NOTENOUGHMONEY), type=SM_TYPE.lookup('Error'))
+
+
+@dependency.replace_none_kwargs(itemsCache=IItemsCache)
+def mayObtainWithMoneyExchange(itemPrice, itemsCache=None):
+    return itemPrice <= itemsCache.items.stats.money.exchange(Currency.GOLD, Currency.CREDITS, itemsCache.items.shop.exchangeRate, default=0)
+
+
+@dependency.replace_none_kwargs(itemsCache=IItemsCache)
+def mayObtainForMoney(itemPrice, itemsCache=None):
+    return itemPrice <= itemsCache.items.stats.money
 
 
 def showModuleInfo(itemCD, vehicleDescr):
@@ -209,26 +273,33 @@ def showOldVehiclePreview(vehTypeCompDescr, previewAlias=VIEW_ALIAS.LOBBY_HANGAR
      'previewBackCb': previewBackCb}), scope=EVENT_BUS_SCOPE.LOBBY)
 
 
-def showVehiclePreview(vehTypeCompDescr, previewAlias=VIEW_ALIAS.LOBBY_HANGAR, vehStrCD=None, previewBackCb=None, itemsPack=None, price=money.MONEY_UNDEFINED, oldPrice=None, title='', endTime=None, buyParams=None):
+def showVehiclePreview(vehTypeCompDescr, previewAlias=VIEW_ALIAS.LOBBY_HANGAR, vehStrCD=None, previewBackCb=None, itemsPack=None, offers=None, price=money.MONEY_UNDEFINED, oldPrice=None, title='', description=None, endTime=None, buyParams=None, vehParams=None, isFrontline=False):
     lobbyContext = dependency.instance(ILobbyContext)
     newPreviewEnabled = lobbyContext.getServerSettings().isIngamePreviewEnabled()
     heroTankController = dependency.instance(IHeroTankController)
     heroTankCD = heroTankController.getCurrentTankCD()
     isHeroTank = heroTankCD and heroTankCD == vehTypeCompDescr
-    if isHeroTank and not itemsPack:
+    if isHeroTank and not (itemsPack or offers):
         goToHeroTankOnScene(vehTypeCompDescr, previewAlias)
+    elif isFrontline:
+        g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.FRONTLINE_VEHICLE_PREVIEW_20, ctx={'itemCD': vehTypeCompDescr,
+         'previewAlias': previewAlias,
+         'previewBackCb': previewBackCb}), scope=EVENT_BUS_SCOPE.LOBBY)
     elif newPreviewEnabled:
         g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.VEHICLE_PREVIEW_20, ctx={'itemCD': vehTypeCompDescr,
          'previewAlias': previewAlias,
          'vehicleStrCD': vehStrCD,
          'previewBackCb': previewBackCb,
          'itemsPack': itemsPack,
+         'offers': offers,
          'price': price,
          'oldPrice': oldPrice,
          'title': title,
+         'description': description,
          'endTime': endTime,
-         'buyParams': buyParams}), scope=EVENT_BUS_SCOPE.LOBBY)
-    elif itemsPack:
+         'buyParams': buyParams,
+         'vehParams': vehParams}), scope=EVENT_BUS_SCOPE.LOBBY)
+    elif itemsPack or offers:
         SystemMessages.pushMessage(text=_ms(MESSENGER.CLIENT_ERROR_SHARED_TRY_LATER), type=SystemMessages.SM_TYPE.Error, priority=NotificationPriorityLevel.MEDIUM)
     else:
         showOldVehiclePreview(vehTypeCompDescr, previewAlias, vehStrCD, previewBackCb)
@@ -415,11 +486,6 @@ def showVehicleCompare():
     g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.VEHICLE_COMPARE), scope=EVENT_BUS_SCOPE.LOBBY)
 
 
-def showEpicBattleSkillView(previousPageAlias=VIEW_ALIAS.LOBBY_HANGAR, showBackButton=False):
-    g_eventBus.handleEvent(events.LoadViewEvent(EPICBATTLES_ALIASES.EPIC_BATTLES_SKILL_ALIAS, ctx={'showBackButton': showBackButton,
-     'previousPage': previousPageAlias}), scope=EVENT_BUS_SCOPE.LOBBY)
-
-
 def showCrystalWindow():
     g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.CRYSTALS_PROMO_WINDOW), EVENT_BUS_SCOPE.LOBBY)
 
@@ -438,3 +504,18 @@ def showExchangeXPWindow():
 
 def showBubbleTooltip(msg):
     g_eventBus.handleEvent(events.BubbleTooltipEvent(events.BubbleTooltipEvent.SHOW, msg), scope=EVENT_BUS_SCOPE.LOBBY)
+
+
+def showReferralProgramWindow(url=None):
+    referralController = dependency.instance(IReferralProgramController)
+    if url is None:
+        url = getReferralProgramURL()
+    referralController.showWindow(url=url)
+    return
+
+
+@process
+def showBrowserOverlayView(url, params=None):
+    if url:
+        url = yield URLMacros().parse(url, params=params)
+        g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.OVERLAY_BROWSER_VIEW, ctx={'url': url}), EVENT_BUS_SCOPE.LOBBY)

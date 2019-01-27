@@ -36,7 +36,8 @@ class ViewKeyDynamic(ViewKey):
         return self.alias == other.alias if isinstance(other, ViewKey) else False
 
 
-CommonSoundSpaceSettings = namedtuple('CommonSoundSpaceSettings', ('name', 'entranceStates', 'exitStates', 'persistentSounds', 'stoppableSounds', 'priorities', 'autoStart', 'enterEvent', 'exitEvent'))
+CommonSoundSpaceSettings = namedtuple('CommonSoundSpaceSettings', ('name', 'entranceStates', 'exitStates', 'persistentSounds', 'stoppableSounds', 'priorities', 'autoStart', 'enterEvent', 'exitEvent', 'parentSpace'))
+CommonSoundSpaceSettings.__new__.func_defaults = (None,) * len(CommonSoundSpaceSettings._fields)
 
 class View(AbstractViewMeta, ViewInterface):
     _COMMON_SOUND_SPACE = None
@@ -172,6 +173,13 @@ class View(AbstractViewMeta, ViewInterface):
         if not self.soundManager.isUsed:
             if self._COMMON_SOUND_SPACE and not self._COMMON_SOUND_SPACE.persistentSounds:
                 self.__commonSoundManagers.pop(self._COMMON_SOUND_SPACE.name)
+        if self._COMMON_SOUND_SPACE and self._COMMON_SOUND_SPACE.parentSpace:
+            parentManager = self.__commonSoundManagers.get(self._COMMON_SOUND_SPACE.parentSpace)
+            if parentManager is not None:
+                parentManager.unregister(id(self))
+                parentManager.clear(requester=id(self))
+                if not parentManager.isUsed:
+                    self.__commonSoundManagers.pop(self._COMMON_SOUND_SPACE.parentSpace)
         super(View, self)._destroy()
         return
 
@@ -184,3 +192,8 @@ class View(AbstractViewMeta, ViewInterface):
         else:
             self.__soundsManager = _ViewSoundsManager()
         self.soundManager.register(id(self), self._COMMON_SOUND_SPACE)
+        if self._COMMON_SOUND_SPACE and self._COMMON_SOUND_SPACE.parentSpace:
+            parentManager = self.__commonSoundManagers.get(self._COMMON_SOUND_SPACE.parentSpace)
+            if parentManager is not None:
+                parentManager.register(id(self), CommonSoundSpaceSettings(autoStart=True))
+        return

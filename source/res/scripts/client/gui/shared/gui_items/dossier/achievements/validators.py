@@ -15,6 +15,10 @@ if IS_WEB:
         return False
 
 
+    def requiresReferralProgram():
+        return False
+
+
     def accountIsRoaming(dossier):
         return False
 
@@ -40,6 +44,11 @@ else:
     def requiresFortification():
         lobbyContext = dependency.instance(ILobbyContext)
         return lobbyContext.getServerSettings() is not None and lobbyContext.getServerSettings().isStrongholdsEnabled()
+
+
+    def requiresReferralProgram():
+        lobbyContext = dependency.instance(ILobbyContext)
+        return lobbyContext.getServerSettings() is not None and lobbyContext.getServerSettings().isReferralProgramEnabled()
 
 
     def accountIsRoaming(dossier):

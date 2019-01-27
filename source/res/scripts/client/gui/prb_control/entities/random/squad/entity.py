@@ -3,6 +3,7 @@
 import account_helpers
 from constants import MAX_VEHICLE_LEVEL, MIN_VEHICLE_LEVEL, PREBATTLE_TYPE, QUEUE_TYPE, VEHICLE_CLASS_INDICES
 from gui.ClientUpdateManager import g_clientUpdateManager
+from gui.prb_control.entities.random.pre_queue.vehicles_watcher import RandomVehiclesWatcher
 from gui.prb_control.events_dispatcher import g_eventDispatcher
 from gui.prb_control.entities.base.squad.entity import SquadEntryPoint, SquadEntity
 from gui.prb_control.items import SelectResult
@@ -67,7 +68,9 @@ class RandomSquadEntity(SquadEntity):
         self._isUseSPGValidateRule = True
         self._maxSpgCount = False
         self._mapID = 0
+        self.__watcher = None
         super(RandomSquadEntity, self).__init__(FUNCTIONAL_FLAG.RANDOM, PREBATTLE_TYPE.SQUAD)
+        return
 
     def init(self, ctx=None):
         rv = super(RandomSquadEntity, self).init(ctx)
@@ -79,6 +82,8 @@ class RandomSquadEntity(SquadEntity):
         self.lobbyContext.getServerSettings().onServerSettingsChange += self._onServerSettingChanged
         self.eventsCache.onSyncCompleted += self._onServerSettingChanged
         g_clientUpdateManager.addCallbacks({'inventory.1': self._onInventoryVehiclesUpdated})
+        self.__watcher = RandomVehiclesWatcher()
+        self.__watcher.start()
         return rv
 
     def fini(self, ctx=None, woEvents=False):
@@ -88,6 +93,9 @@ class RandomSquadEntity(SquadEntity):
         self._isBalancedSquad = False
         self._isUseSPGValidateRule = False
         self.invalidateVehicleStates()
+        if self.__watcher is not None:
+            self.__watcher.stop()
+            self.__watcher = None
         return super(RandomSquadEntity, self).fini(ctx=ctx, woEvents=woEvents)
 
     def getQueueType(self):

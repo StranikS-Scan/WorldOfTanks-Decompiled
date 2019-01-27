@@ -48,6 +48,7 @@ def _readMessageDialogData(xmlCtx, section, isNation):
     _fillValue(data, xmlCtx, section, 'label', _xml.readStringOrNone, default='')
     _fillValue(data, xmlCtx, section, 'text', _xml.readStringOrNone, default='')
     _fillValue(data, xmlCtx, section, 'voiceover', _xml.readStringOrNone, default='')
+    _fillValue(data, xmlCtx, section, 'description', _xml.readStringOrNone, default='')
     _fillValue(data, xmlCtx, section, 'background', _xml.readStringOrNone, default='')
     _fillValue(data, xmlCtx, section, 'only_first_bootcamp_bottom', partial(_xml.readBool, default=False))
     bottomRenderer = _fillValue(data, xmlCtx, section, 'bottom_renderer', _xml.readStringOrNone, default='')

@@ -7,5 +7,8 @@ class VehiclePreviewCrewTabMeta(BaseDAAPIComponent):
     def setActiveState(self, isActive):
         self._printOverrideError('setActiveState')
 
+    def getTooltipData(self, crewId):
+        self._printOverrideError('getTooltipData')
+
     def as_setDataS(self, data):
         return self.flashObject.as_setData(data) if self._isDAAPIInited() else None

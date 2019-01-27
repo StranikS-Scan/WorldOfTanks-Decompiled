@@ -5,26 +5,28 @@ from collections import Container
 from gui.Scaleform.daapi.view.lobby.storage.storage_helpers import getBoosterType
 from gui.Scaleform.genConsts.SLOT_HIGHLIGHT_TYPES import SLOT_HIGHLIGHT_TYPES
 from gui.Scaleform.locale.COMMON import COMMON
+from gui.Scaleform.locale.EPIC_BATTLE import EPIC_BATTLE
 from gui.Scaleform.locale.QUESTS import QUESTS
 from gui.Scaleform.locale.RES_SHOP import RES_SHOP
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.shared.gui_items.Tankman import CrewTypes
+from gui.shared.money import Currency
+from gui.shared.utils.functions import makeTooltip
 from items import EQUIPMENT_TYPES
 from items import makeIntCompactDescrByID as makeCD
 from items.components.c11n_constants import CustomizationType
 from items.vehicles import NUM_OPTIONAL_DEVICE_SLOTS, NUM_EQUIPMENT_SLOTS_BY_TYPE, NUM_SHELLS_SLOTS
+from shared_utils import findFirst, first
 from skeletons.gui.goodies import IGoodiesCache
 from web_client_api.common import ItemPackType, ItemPackTypeGroup, ItemPackEntry
 from gui.shared.gui_items import vehicle_adjusters
-from shared_utils import first
 from gui.shared.gui_items import GUI_ITEM_TYPE
-from skeletons.gui.customization import ICustomizationService
 from skeletons.gui.shared import IItemsCache
-from skeletons.gui.shared.gui_items import IGuiItemsFactory
 from helpers import dependency
 from helpers.i18n import makeString as _ms
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
+OFFER_CHANGED_EVENT = 'offerChanged'
 _NUM_REGULAR_EQUIPMENT_SLOTS = NUM_EQUIPMENT_SLOTS_BY_TYPE[EQUIPMENT_TYPES.regular]
 _UNLIMITED_ITEMS_COUNT = -1
 _ANY_ITEM_TYPE = {v for _, v in ItemPackType.getIterator()} - set(ItemPackTypeGroup.CREW)
@@ -51,6 +53,7 @@ _PACK_ITEMS_SORT_ORDER = list(itertools.chain(ItemPackTypeGroup.CUSTOM, ItemPack
 _TOOLTIP_TYPE = {ItemPackType.ITEM_DEVICE: TOOLTIPS_CONSTANTS.SHOP_20_MODULE,
  ItemPackType.ITEM_EQUIPMENT: TOOLTIPS_CONSTANTS.SHOP_20_MODULE,
  ItemPackType.ITEM_SHELL: TOOLTIPS_CONSTANTS.SHOP_20_SHELL,
+ ItemPackType.ITEM_BATTLE_BOOSTER: TOOLTIPS_CONSTANTS.SHOP_20_BATTLE_BOOSTER,
  ItemPackType.GOODIE_CREDITS: TOOLTIPS_CONSTANTS.SHOP_20_BOOSTER,
  ItemPackType.GOODIE_EXPERIENCE: TOOLTIPS_CONSTANTS.SHOP_20_BOOSTER,
  ItemPackType.GOODIE_CREW_EXPERIENCE: TOOLTIPS_CONSTANTS.SHOP_20_BOOSTER,
@@ -71,7 +74,11 @@ _TOOLTIP_TYPE = {ItemPackType.ITEM_DEVICE: TOOLTIPS_CONSTANTS.SHOP_20_MODULE,
  ItemPackType.CAMOUFLAGE_ALL: TOOLTIPS_CONSTANTS.SHOP_20_CUSTOMIZATION_ITEM,
  ItemPackType.CAMOUFLAGE_DESERT: TOOLTIPS_CONSTANTS.SHOP_20_CUSTOMIZATION_ITEM,
  ItemPackType.CAMOUFLAGE_SUMMER: TOOLTIPS_CONSTANTS.SHOP_20_CUSTOMIZATION_ITEM,
- ItemPackType.CAMOUFLAGE_WINTER: TOOLTIPS_CONSTANTS.SHOP_20_CUSTOMIZATION_ITEM}
+ ItemPackType.CAMOUFLAGE_WINTER: TOOLTIPS_CONSTANTS.SHOP_20_CUSTOMIZATION_ITEM,
+ ItemPackType.ACHIEVEMENT: TOOLTIPS_CONSTANTS.SHOP_20_ACHIEVEMENT,
+ ItemPackType.SINGLE_ACHIEVEMENTS: TOOLTIPS_CONSTANTS.SHOP_20_ACHIEVEMENT,
+ ItemPackType.BADGE: TOOLTIPS_CONSTANTS.SHOP_20_BADGE,
+ ItemPackType.PLAYER_BADGE: TOOLTIPS_CONSTANTS.SHOP_20_BADGE}
 _ICONS = {ItemPackType.CAMOUFLAGE_ALL: RES_SHOP.MAPS_SHOP_REWARDS_48X48_PRIZE_CAMOUFLAGE,
  ItemPackType.CAMOUFLAGE_WINTER: RES_SHOP.MAPS_SHOP_REWARDS_48X48_PRIZE_CAMOUFLAGE,
  ItemPackType.CAMOUFLAGE_SUMMER: RES_SHOP.MAPS_SHOP_REWARDS_48X48_PRIZE_CAMOUFLAGE,
@@ -87,7 +94,8 @@ _ICONS = {ItemPackType.CAMOUFLAGE_ALL: RES_SHOP.MAPS_SHOP_REWARDS_48X48_PRIZE_CA
  ItemPackType.CUSTOM_GOLD: RES_SHOP.MAPS_SHOP_REWARDS_48X48_MONEY_GOLD,
  ItemPackType.CUSTOM_CREDITS: RES_SHOP.MAPS_SHOP_REWARDS_48X48_MONEY_SILVER,
  ItemPackType.CUSTOM_CRYSTAL: RES_SHOP.MAPS_SHOP_REWARDS_48X48_MONEY_BONDS,
- ItemPackType.CUSTOM_SLOT: RES_SHOP.MAPS_SHOP_REWARDS_48X48_PRIZE_HANGARSLOT}
+ ItemPackType.CUSTOM_SLOT: RES_SHOP.MAPS_SHOP_REWARDS_48X48_PRIZE_HANGARSLOT,
+ ItemPackType.CUSTOM_CREW: RES_SHOP.MAPS_SHOP_REWARDS_48X48_PRIZECREW}
 _NOT_FOUND_ICONS = {ItemPackType.TOKEN: RES_ICONS.MAPS_ICONS_QUESTS_ICON_BATTLE_MISSIONS_PRIZE_TOKEN}
 _PREM_ICONS = {1: RES_SHOP.MAPS_SHOP_REWARDS_48X48_ICON_BATTLE_MISSIONS_PRIZE_1DAYPREM,
  2: RES_SHOP.MAPS_SHOP_REWARDS_48X48_ICON_BATTLE_MISSIONS_PRIZE_2DAYPREM,
@@ -153,12 +161,6 @@ def getCompensateItemsCount(rawItem, itemsCache):
     return 0
 
 
-@dependency.replace_none_kwargs(c11nService=ICustomizationService)
-def previewStyle(vehicle, style, c11nService=None):
-    if style.itemTypeID == GUI_ITEM_TYPE.STYLE and style.mayInstall(vehicle) and not style.isRentable:
-        c11nService.tryOnOutfit(style.getOutfit(first(style.seasons)))
-
-
 def _getSuitableShellsForVehicle(vehicle):
     return [ shot.shell.compactDescr for shot in vehicle.gun.descriptor.shots ]
 
@@ -205,9 +207,13 @@ def getItemTitle(rawItem, item, forBox=False):
         title = _ms(key=QUESTS.BONUSES_CREDITS_DESCRIPTION, value=rawItem.count)
     elif rawItem.type == ItemPackType.CUSTOM_CRYSTAL:
         title = _ms(key=QUESTS.BONUSES_CRYSTAL_DESCRIPTION, value=rawItem.count)
+    elif rawItem.type == ItemPackType.CUSTOM_SUPPLY_POINT:
+        title = _ms(EPIC_BATTLE.EPICBATTLEITEM_SUPPLYPOINTS_HEADER)
+    elif rawItem.type == ItemPackType.CUSTOM_REWARD_POINT:
+        title = _ms(EPIC_BATTLE.EPICBATTLEITEM_REWARDPOINTS_HEADER)
     elif rawItem.type == ItemPackType.CUSTOM_PREMIUM:
         title = _ms(TOOLTIPS.PREMIUM_DAYS_HEADER, rawItem.count)
-    elif rawItem.type in ItemPackTypeGroup.CREW:
+    elif rawItem.type in ItemPackTypeGroup.CREW or rawItem.type == ItemPackType.CUSTOM_CREW:
         title = _ms(TOOLTIPS.CREW_HEADER)
     else:
         title = rawItem.title or ''
@@ -227,10 +233,18 @@ def getItemDescription(rawItem, item):
         description = _ms(TOOLTIPS.AWARDITEM_CRYSTAL_BODY)
     elif rawItem.type == ItemPackType.CUSTOM_PREMIUM:
         description = _ms(TOOLTIPS.AWARDITEM_PREMIUM_BODY)
+    elif rawItem.type == ItemPackType.CUSTOM_SUPPLY_POINT:
+        description = _ms(EPIC_BATTLE.EPICBATTLEITEM_SUPPLYPOINTS_DESCRIPTION)
+    elif rawItem.type == ItemPackType.CUSTOM_REWARD_POINT:
+        description = _ms(EPIC_BATTLE.EPICBATTLEITEM_REWARDPOINTS_DESCRIPTION)
     elif rawItem.type in ItemPackTypeGroup.CREW:
-        description = _ms(TOOLTIPS.CREW_BODY, value={ItemPackType.CREW_50: CrewTypes.SKILL_50,
-         ItemPackType.CREW_75: CrewTypes.SKILL_75,
-         ItemPackType.CREW_100: CrewTypes.SKILL_100}.get(rawItem.type))
+        if rawItem.type == ItemPackType.CREW_CUSTOM:
+            description = _ms(TOOLTIPS.CREWCUSTOM_BODY)
+        else:
+            description = _ms(TOOLTIPS.CREW_BODY, value={ItemPackType.CREW_50: CrewTypes.SKILL_50,
+             ItemPackType.CREW_75: CrewTypes.SKILL_75,
+             ItemPackType.CREW_100: CrewTypes.SKILL_100,
+             ItemPackType.CUSTOM_CREW: CrewTypes.SKILL_100}.get(rawItem.type))
     else:
         description = rawItem.description or ''
     return description
@@ -248,7 +262,7 @@ def showItemTooltip(toolTipMgr, rawItem, item):
     else:
         header = getItemTitle(rawItem, item)
         body = getItemDescription(rawItem, item)
-        tooltip = '{{HEADER}}{header}{{/HEADER}}{{BODY}}{body}{{/BODY}}'.format(header=header, body=body)
+        tooltip = makeTooltip(header, body)
         toolTipMgr.onCreateComplexTooltip(tooltip, 'INFO')
     return
 
@@ -316,15 +330,6 @@ def _getBoxTooltipVO(rawItems, itemsCache, goodiesCache):
      'count': len(rawItems),
      'items': items}
     return vo
-
-
-@dependency.replace_none_kwargs(factory=IGuiItemsFactory, c11nService=ICustomizationService)
-def _applyCamouflage(vehicle, factory=None, c11nService=None):
-    camo = first(c11nService.getCamouflages(vehicle=vehicle).itervalues())
-    if camo:
-        outfit = factory.createOutfit(isEnabled=True, isInstalled=True)
-        outfit.hull.slotFor(GUI_ITEM_TYPE.CAMOUFLAGE).set(camo)
-        vehicle.setCustomOutfit(first(camo.seasons), outfit)
 
 
 def _checkItemType(a, b):
@@ -458,15 +463,11 @@ class _PriorityNodeContainer(_NodeContainer):
             self._children.append(item)
             maxIndex = len(_PACK_ITEMS_SORT_ORDER)
             self._children.sort(key=lambda i: _PACK_ITEMS_SORT_ORDER.index(i.type) if i.type in _PACK_ITEMS_SORT_ORDER else maxIndex)
-            excluded = None
             if self._maxChildCount != _UNLIMITED_ITEMS_COUNT and len(self._children) > self._maxChildCount:
                 excluded = self._children.pop()
                 self._addItemToNextNode(excluded, vehicle, vehicleGroupId)
-            if excluded != item:
-                self._applyItem(item, vehicle)
         else:
             self._addItemToNextNode(item, vehicle, vehicleGroupId)
-        return
 
     def getVO(self):
         if len(self._children) <= 1:
@@ -474,19 +475,30 @@ class _PriorityNodeContainer(_NodeContainer):
         rawTooltipData = _getBoxTooltipVO(self._children, self.itemsCache, self.goodiesCache)
         return [_createItemVO(_BOX_ITEM, self.itemsCache, self.goodiesCache, 0, rawTooltipData)]
 
-    def _applyItem(self, item, vehicle):
-        fittingItem = lookupItem(item, self.itemsCache, self.goodiesCache)
-        if fittingItem is None:
-            return
+
+class _CustomCrewSkillsNodeContainer(_NodeContainer):
+    CREW_COUNT = 1
+
+    def __init__(self, nextNode=None):
+        super(_CustomCrewSkillsNodeContainer, self).__init__(self.CREW_COUNT, ItemPackType.CREW_CUSTOM, nextNode)
+
+    def getVO(self):
+        return []
+
+    def parseCrewSkills(self, item):
+        return {idx:tankmanItem.get('skills', []) + tankmanItem.get('freeSkills', []) for idx, tankmanItem in enumerate(item.extra['tankmen'])}
+
+    def _install(self, item, vehicle, slotIdx):
+        crewSkills = self.parseCrewSkills(item)
+        if crewSkills is None:
+            return (False, 0)
         else:
-            if item.type == ItemPackType.STYLE and not fittingItem.isRentable:
-                _applyCamouflage(vehicle)
-                previewStyle(vehicle, fittingItem)
-            return
+            vehicle_adjusters.applyTankmanSkillOnVehicle(vehicle, crewSkills)
+            return (True, 0)
 
 
 def getDataOneVehicle(itemsPack, vehicle, vehicleGroupId):
-    root = _OptDeviceNodeContainer(nextNode=_ShellNodeContainer(nextNode=_EquipmentNodeContainer(nextNode=_PriorityNodeContainer(1, nextNode=_PriorityNodeContainer(_UNLIMITED_ITEMS_COUNT)))))
+    root = _CustomCrewSkillsNodeContainer(nextNode=_OptDeviceNodeContainer(nextNode=_ShellNodeContainer(nextNode=_EquipmentNodeContainer(nextNode=_PriorityNodeContainer(1, nextNode=_PriorityNodeContainer(_UNLIMITED_ITEMS_COUNT))))))
     for item in itemsPack:
         root.addItem(item, vehicle, vehicleGroupId)
 
@@ -507,8 +519,8 @@ def getDataMultiVehicles(itemsPack, vehicle):
     for item in itemsPack:
         container.addItem(item, vehicle, None)
 
-    itemsVOs = [container.getVO()]
-    return addCompensationInfo(itemsVOs, itemsPack)
+    inContainerVOs = container.getVO()
+    return addCompensationInfo([inContainerVOs], itemsPack) if inContainerVOs else []
 
 
 @dependency.replace_none_kwargs(itemsCache=IItemsCache)
@@ -531,3 +543,17 @@ def addCompensationInfo(itemsVOs, itemsPack, itemsCache=None):
                 insideBoxVO['hasCompensation'] = hasCompensation(insideBoxVO)
 
     return itemsVOs
+
+
+def getActiveOffer(offers):
+    return findFirst(lambda o: o.preferred, offers) or findFirst(lambda o: o.bestOffer, offers) or first(offers)
+
+
+@dependency.replace_none_kwargs(itemsCache=IItemsCache)
+def mayObtainWithMoneyExchange(itemPrice, itemsCache=None):
+    return itemPrice <= itemsCache.items.stats.money.exchange(Currency.GOLD, Currency.CREDITS, itemsCache.items.shop.exchangeRate, default=0)
+
+
+@dependency.replace_none_kwargs(itemsCache=IItemsCache)
+def mayObtainForMoney(itemPrice, itemsCache=None):
+    return itemPrice <= itemsCache.items.stats.money

@@ -324,8 +324,6 @@ class Source(object):
          'premium': self.__readCondition_bool,
          'daily': self.__readCondition_true,
          'bonusLimit': self.__readCondition_int,
-         'refSystemRalXPPool': self.__readBattleResultsConditionList,
-         'refSystemRalBought10Lvl': self.__readCondition_true,
          'isTutorialCompleted': self.__readCondition_bool,
          'isLinkedSetEnabled': self.__readCondition_bool,
          'totalBattles': self.__readBattleResultsConditionList,

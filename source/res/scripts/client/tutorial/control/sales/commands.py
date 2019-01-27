@@ -82,4 +82,4 @@ def configureShopForVehicleTradeIn():
 
 def showAdventCalendarFromAction():
     calendarCtrl = dependency.instance(ICalendarController)
-    calendarCtrl.showCalendar(invokedFrom=CalendarInvokeOrigin.ACTION)
+    calendarCtrl.showWindow(invokedFrom=CalendarInvokeOrigin.ACTION)

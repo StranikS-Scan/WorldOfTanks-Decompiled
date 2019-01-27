@@ -4,6 +4,8 @@
 
 class VEHPREVIEW_CONSTANTS(object):
     CREW_INFO_LINKAGE = 'VehPreviewCrewInfoUI'
+    BUYING_PANEL_LINKAGE = 'VehiclePreview20BuyingPanelUI'
+    EPIC_BATTLE_PANEL_LINKAGE = 'VehiclePreview20EpicBattlePanelUI'
     FACT_SHEET_LINKAGE = 'VehPreviewFactSheetUI'
     ELITE_FACT_SHEET_LINKAGE = 'VehPreviewEliteFactSheetUI'
     BROWSE_LINKAGE = 'VPBrowseUI'
@@ -15,6 +17,7 @@ class VEHPREVIEW_CONSTANTS(object):
     MODULES_PY_ALIAS = 'vehPreviewModules'
     PARAMETERS_PY_ALIAS = 'vehPreviewParams'
     BUYING_PANEL_PY_ALIAS = 'vehPreviewBuyingPanel'
+    EPIC_BATTLE_PANEL_PY_ALIAS = 'vehPreviewEpicBattlePanel'
     CREW_BONUS = 0
     BATTLE_BONUS = 1
     REPLACE_BONUS = 2

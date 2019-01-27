@@ -4,6 +4,14 @@ import operator
 from ValueReplay import ValueReplay
 from debug_utils import LOG_ERROR
 
+def convertFactorToPercent(factor):
+    return factor * 100
+
+
+def makeReplayValueRound(value):
+    return int(round(value))
+
+
 class ResultRecord(object):
     __slots__ = ()
 
@@ -31,10 +39,6 @@ class RawRecords(ResultRecord):
                 result += self._records[name]
 
         return result
-
-
-def makeReplayValueRound(value):
-    return int(round(value))
 
 
 class ReplayRecord(ResultRecord):

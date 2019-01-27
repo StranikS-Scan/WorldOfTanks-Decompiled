@@ -19,7 +19,7 @@ from gui.shared.items_parameters import params_helper
 from gui.shared.items_parameters.formatters import formatModuleParamName, formatParameter
 from gui.shared.utils import decorators, EXTRA_MODULE_INFO
 from gui.shared.utils.requesters.ItemsRequester import REQ_CRITERIA
-from gui.shared.event_dispatcher import showBattleBoosterBuyDialog, showEpicBattleSkillView
+from gui.shared.event_dispatcher import showBattleBoosterBuyDialog
 from helpers import dependency, i18n
 from helpers.i18n import makeString as _ms
 from gui.shared.formatters import text_styles, getItemPricesVOWithReason
@@ -30,7 +30,7 @@ from items import getTypeInfoByName
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.shared import IItemsCache
 from account_helpers.AccountSettings import AccountSettings, SHOW_OPT_DEVICE_HINT
-from skeletons.gui.game_control import IBootcampController
+from skeletons.gui.game_control import IBootcampController, IEpicBattleMetaGameController
 from bootcamp.Bootcamp import g_bootcamp
 _PARAMS_LISTS = {GUI_ITEM_TYPE.RADIO: ('radioDistance',),
  GUI_ITEM_TYPE.CHASSIS: ('rotationSpeed', 'maxSteeringLockAngle', 'maxLoad'),
@@ -109,7 +109,7 @@ def _extendByBattleAbilityData(targetData, ability, slotIndex):
     targetData['slotIndex'] = slotIndex
     targetData['desc'] = text_styles.main(ability.shortDescription)
     targetData['name'] = text_styles.stats(ability.userName)
-    targetData['level'] = ability.level
+    targetData['level'] = ability.level if ability.isUnlocked else 1
     targetData['removeButtonLabel'] = EPIC_BATTLE.FITTINGSELECTPOPOVER_REMOVEBUTTON
     targetData['changeOrderButtonLabel'] = EPIC_BATTLE.FITTINGSELECTPOPOVER_CHANGEORDER
 
@@ -263,24 +263,22 @@ class CommonFittingSelectPopover(FittingSelectPopoverMeta):
 class HangarFittingSelectPopover(CommonFittingSelectPopover):
     bootcampController = dependency.descriptor(IBootcampController)
 
-    def __init__(self, ctx=None, logicProvider=None):
+    def __init__(self, ctx=None, customProviderClass=None):
         data_ = ctx['data']
-        slotType = data_.slotType
         self.__preferredLayout = data_.preferredLayout
         self.__slotIndex = data_.slotIndex
         if g_currentPreviewVehicle.isPresent():
-            _logicProvider = _PreviewLogicProvider(slotType, self.__slotIndex)
+            providerClass = _PreviewLogicProvider
             vehicle = g_currentPreviewVehicle.item
         else:
             if self.bootcampController.isInBootcamp():
-                _logicProvider = _BootCampLogicProvider(slotType, self.__slotIndex)
+                providerClass = _BootCampLogicProvider
             else:
-                _logicProvider = _HangarLogicProvider(slotType, self.__slotIndex)
+                providerClass = _HangarLogicProvider
             vehicle = g_currentVehicle.item
-        if logicProvider is None:
-            logicProvider = _logicProvider
+        providerClass = customProviderClass or providerClass
+        logicProvider = providerClass(data_.slotType, data_.slotIndex)
         super(HangarFittingSelectPopover, self).__init__(vehicle, logicProvider, ctx)
-        return
 
     def _prepareInitialData(self):
         result = super(HangarFittingSelectPopover, self)._prepareInitialData()
@@ -292,10 +290,14 @@ class HangarFittingSelectPopover(CommonFittingSelectPopover):
 
 
 class BattleAbilitySelectPopover(HangarFittingSelectPopover):
-    itemsCache = dependency.descriptor(IItemsCache)
+    __itemsCache = dependency.descriptor(IItemsCache)
+    __epicController = dependency.descriptor(IEpicBattleMetaGameController)
+
+    def __init__(self, ctx, *_):
+        super(BattleAbilitySelectPopover, self).__init__(ctx, _BattleAbilityLogicProvider)
 
     def onManageBattleAbilitiesClicked(self):
-        showEpicBattleSkillView(showBackButton=False)
+        self.__epicController.showBattleReservesScreen()
         self.destroy()
 
     def _prepareInitialData(self):
@@ -320,7 +322,7 @@ class BattleAbilitySelectPopover(HangarFittingSelectPopover):
         return data
 
     def __isHintVisible(self):
-        return not self.itemsCache.items.getItems(GUI_ITEM_TYPE.BATTLE_ABILITY, REQ_CRITERIA.UNLOCKED)
+        return not self.__itemsCache.items.getItems(GUI_ITEM_TYPE.BATTLE_ABILITY, REQ_CRITERIA.UNLOCKED)
 
 
 class OptionalDeviceSelectPopover(HangarFittingSelectPopover):
@@ -521,16 +523,17 @@ class PopoverLogicProvider(object):
         else:
             criteria = REQ_CRITERIA.VEHICLE.SUITABLE([self._vehicle], [typeId]) | self._getSpecificCriteria(typeId)
             data = self.itemsCache.items.getItems(typeId, criteria).values()
-            data.sort(reverse=True)
+            data.sort(reverse=True, key=self._getItemsSortingKey())
             return data
+
+    def _getItemsSortingKey(self):
+        return None
 
     def _getSpecificCriteria(self, typeID):
         if typeID == GUI_ITEM_TYPE.BATTLE_BOOSTER:
             criteria = REQ_CRITERIA.BATTLE_BOOSTER.OPTIONAL_DEVICE_EFFECT if self._tabIndex == _POPOVER_FIRST_TAB_IDX else REQ_CRITERIA.BATTLE_BOOSTER.CREW_EFFECT
         elif typeID == GUI_ITEM_TYPE.OPTIONALDEVICE:
             criteria = REQ_CRITERIA.OPTIONAL_DEVICE.SIMPLE if self._tabIndex == _POPOVER_FIRST_TAB_IDX else REQ_CRITERIA.OPTIONAL_DEVICE.DELUXE
-        elif typeID == GUI_ITEM_TYPE.BATTLE_ABILITY:
-            criteria = REQ_CRITERIA.UNLOCKED
         else:
             criteria = REQ_CRITERIA.EMPTY
         return criteria
@@ -607,10 +610,30 @@ class _HangarLogicProvider(PopoverLogicProvider):
          'removeButtonLabel': MENU.MODULEFITS_REMOVENAME,
          'removeButtonTooltip': MENU.MODULEFITS_REMOVETOOLTIP,
          'itemPrices': getItemPricesVOWithReason(reason, itemPrice)})
-        if vehicleModule.itemTypeID == GUI_ITEM_TYPE.BATTLE_ABILITY:
-            moduleData['disabled'] = isInstalled and not isInstalledInSlot
-            moduleData['showPrice'] = False
         return moduleData
+
+
+class _BattleAbilityLogicProvider(_HangarLogicProvider):
+    __epicMetaGameCtrl = dependency.descriptor(IEpicBattleMetaGameController)
+    __ABILITIES_ORDER = ('EpicSmoke', 'EpicRecon', 'EpicInspire', 'EpicEngineering', 'EpicArtillery', 'EpicBomber')
+
+    def _getSpecificCriteria(self, _):
+        skillItemIDs = []
+        allSkills = self.__epicMetaGameCtrl.getAllSkillsInformation().values()
+        for skillInfo in allSkills:
+            skillExample = skillInfo.getMaxUnlockedSkillLevel() or skillInfo.levels[skillInfo.maxLvl]
+            skillItemIDs.append(skillExample.eqID)
+
+        return REQ_CRITERIA.CUSTOM(lambda item: item.innationID in skillItemIDs)
+
+    def _getItemsSortingKey(self):
+        return lambda item: self.__ABILITIES_ORDER.index(item.getSubTypeName())
+
+    def _buildModuleData(self, vehicleModule, isInstalledInSlot, stats):
+        baseData = super(_BattleAbilityLogicProvider, self)._buildModuleData(vehicleModule, isInstalledInSlot, stats)
+        baseData['disabled'] = vehicleModule.isInstalled(self._vehicle) and not isInstalledInSlot or not vehicleModule.isUnlocked
+        baseData['showPrice'] = False
+        return baseData
 
 
 class _BootCampLogicProvider(_HangarLogicProvider):

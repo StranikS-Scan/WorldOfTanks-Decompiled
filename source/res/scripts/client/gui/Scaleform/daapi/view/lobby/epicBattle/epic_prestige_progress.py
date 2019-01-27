@@ -8,11 +8,12 @@ from gui.shared.gui_items import Vehicle
 from helpers import dependency, int2roman, i18n
 from skeletons.gui.game_control import IEpicBattleMetaGameController
 from skeletons.gui.shared import IItemsCache
-PRESTIGE_TOKEN_TEMPLATE = 'epicmetagame:prestige:%d'
-_ICON_NAME_TO_PRESTIGE_LEVEL = {'1': range(0, 3),
- '2': range(3, 6),
- '3': range(6, 9),
- '4': range(9, 11)}
+FRONTLINE_PRESTIGE_TOKEN_TEMPLATE = 'epicmetagame:prestige:%d'
+FRONTLINE_LEVEL_TOKEN_TEMPLATE = 'epicmetagame:levelup:%d'
+_ICON_NAME_TO_PRESTIGE_LEVEL = {'1': range(0, 4),
+ '2': range(4, 7),
+ '3': range(7, 10),
+ '4': range(10, 11)}
 
 class PrestigeBonusType(object):
     VEHICLE = 'vehicles'
@@ -82,10 +83,19 @@ def getPrestigeProgressVO(allQuests, metaLevel, pPrestigeLevel, isMaxMetaLevel):
 
 
 def getPrestigeLevelAwardsVOs(allQuests, pPrestigeLevel, iconSize):
-    currentPrestigeQuest = allQuests.get(PRESTIGE_TOKEN_TEMPLATE % pPrestigeLevel, None)
+    currentPrestigeQuest = allQuests.get(FRONTLINE_PRESTIGE_TOKEN_TEMPLATE % pPrestigeLevel, None)
     awardsVO = []
     if currentPrestigeQuest:
         bonuses = currentPrestigeQuest.getBonuses()
+        awardsVO = sum([ bonus.getEpicAwardVOs(withDescription=False, iconSize=iconSize) for bonus in bonuses ], [])
+    return awardsVO
+
+
+def getLevelAwardsVOs(allQuests, level, iconSize):
+    currentLevelQuest = allQuests.get(FRONTLINE_LEVEL_TOKEN_TEMPLATE % level, None)
+    awardsVO = []
+    if currentLevelQuest:
+        bonuses = currentLevelQuest.getBonuses()
         awardsVO = sum([ bonus.getEpicAwardVOs(withDescription=False, iconSize=iconSize) for bonus in bonuses ], [])
     return awardsVO
 
@@ -123,7 +133,7 @@ def getBlockBackgroundIndexForPrestigeLevel(pLevel):
 def _getPrestigeLevelUpAwards(allQuests, maxPrestigeLevel):
     awards = []
     for i in xrange(0, maxPrestigeLevel + 1):
-        currentPrestigeQuest = allQuests.get(PRESTIGE_TOKEN_TEMPLATE % i, None)
+        currentPrestigeQuest = allQuests.get(FRONTLINE_PRESTIGE_TOKEN_TEMPLATE % i, None)
         specialAwardValue = None
         if currentPrestigeQuest:
             bonuses = currentPrestigeQuest.getBonuses()

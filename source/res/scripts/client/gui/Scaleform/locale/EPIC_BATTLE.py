@@ -212,28 +212,33 @@ class EPIC_BATTLE(object):
     EPICBATTLESPRESTIGEVIEW_CONGRATULATIONS = '#epic_battle:epicBattlesPrestigeView/congratulations'
     EPICBATTLESPRESTIGEVIEW_RESETBUTTONTEXT = '#epic_battle:epicBattlesPrestigeView/resetButtonText'
     EPICBATTLESPRESTIGEVIEW_CANCELBUTTONTEXT = '#epic_battle:epicBattlesPrestigeView/cancelButtonText'
-    EPICBATTLESWIDGETTOOLTIP_FAMEPOINTS = '#epic_battle:epicBattlesWidgetTooltip/famePoints'
-    EPICBATTLESWIDGETTOOLTIP_FAMEPOINTSDESCRIPTION = '#epic_battle:epicBattlesWidgetTooltip/famePointsDescription'
-    EPICBATTLESWIDGETTOOLTIP_PRESTIGEREACHED = '#epic_battle:epicBattlesWidgetTooltip/prestigeReached'
     EPIC_BATTLES_AFTER_BATTLE_TITLE = '#epic_battle:epic_battles_after_battle/Title'
     EPIC_BATTLES_AFTER_BATTLE_ACHIEVED_RANK = '#epic_battle:epic_battles_after_battle/Achieved_Rank'
     EPIC_BATTLES_AFTER_BATTLE_LEVEL_UP_TITLE = '#epic_battle:epic_battles_after_battle/Level_Up_Title'
     EPIC_BATTLES_AFTER_BATTLE_LEVEL_UP_MAX_TITLE = '#epic_battle:epic_battles_after_battle/Level_Up_Max_Title'
-    SELECTORTOOLTIP_EPICBATTLE_ENABLED_HEADER = '#epic_battle:selectorTooltip/epicBattle/enabled/header'
-    SELECTORTOOLTIP_EPICBATTLE_ENABLED_BODY = '#epic_battle:selectorTooltip/epicBattle/enabled/body'
-    SELECTORTOOLTIP_EPICBATTLE_ENABLED_ATTENTION_ASSUREDLOWPERFORMANCE = '#epic_battle:selectorTooltip/epicBattle/enabled/attention/assuredLowPerformance'
-    SELECTORTOOLTIP_EPICBATTLE_ENABLED_ATTENTION_POSSIBLELOWPERFORMANCE = '#epic_battle:selectorTooltip/epicBattle/enabled/attention/possibleLowPerformance'
-    SELECTORTOOLTIP_EPICBATTLE_ENABLED_ATTENTION_INFORMATIVELOWPERFORMANCE = '#epic_battle:selectorTooltip/epicBattle/enabled/attention/informativeLowPerformance'
-    SELECTORTOOLTIP_EPICBATTLE_DISABLED_TITLE = '#epic_battle:selectorTooltip/epicBattle/disabled/title'
-    SELECTORTOOLTIP_EPICBATTLE_DISABLED_DESC = '#epic_battle:selectorTooltip/epicBattle/disabled/desc'
-    SELECTORTOOLTIP_EPICBATTLE_DISABLED_TIMETABLE_TITLE = '#epic_battle:selectorTooltip/epicBattle/disabled/timeTable/title'
-    SELECTORTOOLTIP_EPICBATTLE_DISABLED_TIMETABLE_TODAY = '#epic_battle:selectorTooltip/epicBattle/disabled/timeTable/today'
-    SELECTORTOOLTIP_EPICBATTLE_DISABLED_TIMETABLE_TOMORROW = '#epic_battle:selectorTooltip/epicBattle/disabled/timeTable/tomorrow'
-    SELECTORTOOLTIP_EPICBATTLE_DISABLED_TIMETABLE_EMPTY = '#epic_battle:selectorTooltip/epicBattle/disabled/timeTable/empty'
-    SELECTORTOOLTIP_EPICBATTLE_DISABLED_TILLEND = '#epic_battle:selectorTooltip/epicBattle/disabled/tillEnd'
-    SELECTORTOOLTIP_EPICBATTLE_DISABLED_STARTIN = '#epic_battle:selectorTooltip/epicBattle/disabled/startIn'
-    TOOLTIP_EPICBATTLE_AVAILABLEIN = '#epic_battle:tooltip/epicBattle/availableIn'
-    PRIMETIMEALERTMESSAGEBLOCK_MESSAGE = '#epic_battle:primeTimeAlertMessageBlock/message'
+    EPIC_BATTLES_AFTER_BATTLE_MAX_LEVEL_INFO = '#epic_battle:epic_battles_after_battle/max_level_info'
+    EPIC_BATTLES_AFTER_BATTLE_MAX_PRESTIGE_IN_CYCLE_INFO = '#epic_battle:epic_battles_after_battle/max_prestige_in_cycle_info'
+    EPIC_BATTLES_AFTER_BATTLE_MAX_PRESTIGE_IN_SEASON_INFO = '#epic_battle:epic_battles_after_battle/max_prestige_in_season_info'
+    SELECTORTOOLTIP_EPICBATTLE_HEADER = '#epic_battle:selectorTooltip/epicBattle/header'
+    SELECTORTOOLTIP_EPICBATTLE_BODY = '#epic_battle:selectorTooltip/epicBattle/body'
+    SELECTORTOOLTIP_EPICBATTLE_FROZEN = '#epic_battle:selectorTooltip/epicBattle/frozen'
+    SELECTORTOOLTIP_EPICBATTLE_TIMETABLE_TITLE = '#epic_battle:selectorTooltip/epicBattle/timeTable/title'
+    SELECTORTOOLTIP_EPICBATTLE_TIMETABLE_TODAY = '#epic_battle:selectorTooltip/epicBattle/timeTable/today'
+    SELECTORTOOLTIP_EPICBATTLE_TIMETABLE_TOMORROW = '#epic_battle:selectorTooltip/epicBattle/timeTable/tomorrow'
+    SELECTORTOOLTIP_EPICBATTLE_TIMETABLE_DASH = '#epic_battle:selectorTooltip/epicBattle/timeTable/dash'
+    SELECTORTOOLTIP_EPICBATTLE_TIMELEFT = '#epic_battle:selectorTooltip/epicBattle/timeLeft'
+    SELECTORTOOLTIP_EPICBATTLE_STARTIN = '#epic_battle:selectorTooltip/epicBattle/startIn'
+    SELECTORTOOLTIP_EPICBATTLE_ATTENTION_ASSUREDLOWPERFORMANCE_TITLE = '#epic_battle:selectorTooltip/epicBattle/attention/assuredLowPerformance/title'
+    SELECTORTOOLTIP_EPICBATTLE_ATTENTION_ASSUREDLOWPERFORMANCE_DESCRIPTION = '#epic_battle:selectorTooltip/epicBattle/attention/assuredLowPerformance/description'
+    SELECTORTOOLTIP_EPICBATTLE_ATTENTION_POSSIBLELOWPERFORMANCE_TITLE = '#epic_battle:selectorTooltip/epicBattle/attention/possibleLowPerformance/title'
+    SELECTORTOOLTIP_EPICBATTLE_ATTENTION_POSSIBLELOWPERFORMANCE_DESCRIPTION = '#epic_battle:selectorTooltip/epicBattle/attention/possibleLowPerformance/description'
+    SELECTORTOOLTIP_EPICBATTLE_ATTENTION_INFORMATIVELOWPERFORMANCE_TITLE = '#epic_battle:selectorTooltip/epicBattle/attention/informativeLowPerformance/title'
+    SELECTORTOOLTIP_EPICBATTLE_ATTENTION_INFORMATIVELOWPERFORMANCE_DESCRIPTION = '#epic_battle:selectorTooltip/epicBattle/attention/informativeLowPerformance/description'
+    WIDGETALERTMESSAGEBLOCK_NOCYCLEMESSAGE = '#epic_battle:widgetAlertMessageBlock/noCycleMessage'
+    WIDGETALERTMESSAGEBLOCK_ALLPERIPHERIESHALT = '#epic_battle:widgetAlertMessageBlock/allPeripheriesHalt'
+    WIDGETALERTMESSAGEBLOCK_SOMEPERIPHERIESHALT = '#epic_battle:widgetAlertMessageBlock/somePeripheriesHalt'
+    WIDGETALERTMESSAGEBLOCK_SINGLEMODEHALT = '#epic_battle:widgetAlertMessageBlock/singleModeHalt'
+    WIDGETALERTMESSAGEBLOCK_BUTTON = '#epic_battle:widgetAlertMessageBlock/button'
     STATUS_TIMELEFT_DAYS = '#epic_battle:status/timeLeft/days'
     STATUS_TIMELEFT_HOURS = '#epic_battle:status/timeLeft/hours'
     STATUS_TIMELEFT_MIN = '#epic_battle:status/timeLeft/min'
@@ -249,30 +254,59 @@ class EPIC_BATTLE(object):
     METAABILITYSCREEN_ABILITY_NOT_POINTS = '#epic_battle:metaAbilityScreen/Ability_not_points'
     FITTINGSELECTPOPOVER_REMOVEBUTTON = '#epic_battle:fittingSelectPopover/RemoveButton'
     FITTINGSELECTPOPOVER_CHANGEORDER = '#epic_battle:fittingSelectPopover/ChangeOrder'
+    FITTINGSELECTPOPOVER_NOTACTIVATED = '#epic_battle:fittingSelectPopover/notActivated'
     FITTINGSELECTPOPOVERBATTKEABILITY_TITLETEXT = '#epic_battle:fittingSelectPopoverBattkeAbility/titleText'
     FITTINGSELECTPOPOVERBATTKEABILITY_DESCTEXT = '#epic_battle:fittingSelectPopoverBattkeAbility/descText'
     PRIMETIME_TITLE = '#epic_battle:primeTime/title'
     PRIMETIME_TITLEWELCOME = '#epic_battle:primeTime/titleWelcome'
     PRIMETIME_APPLYBTN = '#epic_battle:primeTime/applyBtn'
+    PRIMETIME_CANCELBTN = '#epic_battle:primeTime/cancelBtn'
     PRIMETIME_CONTINUEBTN = '#epic_battle:primeTime/continueBtn'
     PRIMETIME_SERVERTOOLTIP = '#epic_battle:primeTime/serverTooltip'
+    PRIMETIME_SERVERUNAVAILABLETOOLTIP = '#epic_battle:primeTime/serverUnavailableTooltip'
     PRIMETIME_SERVERS = '#epic_battle:primeTime/servers'
+    PRIMETIME_STATUS_NOPRIMETIMEONTHISSERVER = '#epic_battle:primeTime/status/noPrimeTimeOnThisServer'
+    PRIMETIME_STATUS_CYCLEFINISHEDONTHISSERVER = '#epic_battle:primeTime/status/cycleFinishedOnThisServer'
+    PRIMETIME_STATUS_NOPRIMETIMESONALLSERVERS = '#epic_battle:primeTime/status/noPrimeTimesOnAllServers'
+    PRIMETIME_STATUS_DISABLEDONTHISSERVER = '#epic_battle:primeTime/status/disabledOnThisServer'
+    PRIMETIME_MANYSERVERSAVAILABLE = '#epic_battle:primeTime/manyServersAvailable'
+    PRIMETIME_ONESERVERAVAILABLE = '#epic_battle:primeTime/oneServerAvailable'
+    PRIMETIME_PRIMEISAVAILABLE = '#epic_battle:primeTime/primeIsAvailable'
+    PRIMETIME_PRIMEWILLBEAVAILABLE = '#epic_battle:primeTime/primeWillBeAvailable'
+    PRIMETIME_ENDOFCYCLE = '#epic_battle:primeTime/endOfCycle'
     PRIMETIME_STATUS_THISENABLE = '#epic_battle:primeTime/status/thisEnable'
-    PRIMETIME_STATUS_DISABLEFIRST = '#epic_battle:primeTime/status/disableFirst'
     PRIMETIME_STATUS_DISABLE = '#epic_battle:primeTime/status/disable'
     TUTORIAL_HINT_EPICRESERVESSLOTHINT = '#epic_battle:tutorial/hint/epicReservesSlotHint'
     TUTORIAL_HINT_EPICRESERVESBTNHINT = '#epic_battle:tutorial/hint/epicReservesBtnHint'
+    SEASON_201902_NAME = '#epic_battle:season/201902/name'
+    SEASON_202002_NAME = '#epic_battle:season/202002/name'
+    VEHICLE_PREVIEW_TITLE = '#epic_battle:vehicle_preview/title'
+    VEHICLE_PREVIEW_DESCRIPTION = '#epic_battle:vehicle_preview/description'
+    EPICBATTLEITEM_REWARDPOINTS_HEADER = '#epic_battle:epicBattleItem/rewardPoints/header'
+    EPICBATTLEITEM_REWARDPOINTS_DESCRIPTION = '#epic_battle:epicBattleItem/rewardPoints/description'
+    EPICBATTLEITEM_SUPPLYPOINTS_HEADER = '#epic_battle:epicBattleItem/supplyPoints/header'
+    EPICBATTLEITEM_SUPPLYPOINTS_DESCRIPTION = '#epic_battle:epicBattleItem/supplyPoints/description'
     RANK_RANK_ENUM = (RANK_RANK0,
      RANK_RANK1,
      RANK_RANK2,
      RANK_RANK3,
      RANK_RANK4,
      RANK_RANK5)
+    SEASON_ALL_NAME_ENUM = (SEASON_201902_NAME, SEASON_202002_NAME)
 
     @classmethod
     def getRankLabel(cls, key0):
         outcome = '#epic_battle:rank/rank{}'.format(key0)
         if outcome not in cls.RANK_RANK_ENUM:
+            LOG_WARNING('Localization key "{}" not found'.format(outcome))
+            return None
+        else:
+            return outcome
+
+    @classmethod
+    def getSeasonName(cls, key0):
+        outcome = '#epic_battle:season/{}/name'.format(key0)
+        if outcome not in cls.SEASON_ALL_NAME_ENUM:
             LOG_WARNING('Localization key "{}" not found'.format(outcome))
             return None
         else:

@@ -138,9 +138,10 @@ class AbstractContextMenuHandler(object):
         return
 
     @classmethod
-    def _makeItem(cls, optId, optLabel=None, optInitData=None, optSubMenu=None, linkage=None):
+    def _makeItem(cls, optId, optLabel=None, optInitData=None, optSubMenu=None, linkage=None, iconType=''):
         return {'id': optId,
          'label': optLabel,
+         'iconType': iconType,
          'initData': optInitData,
          'submenu': optSubMenu,
          'linkage': linkage}

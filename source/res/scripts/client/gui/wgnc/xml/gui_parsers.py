@@ -100,38 +100,6 @@ class _WindowParser(SectionParser):
         return self._itemClass(name, body, topic, buttons, isModal, isHidden)
 
 
-class _ReferrerParser(SectionParser):
-
-    def getTagName(self):
-        pass
-
-    def parse(self, section):
-        name = self._readString('name', section)
-        return gui_items.ReferrerItem(name, section.readInt('invitations_count', False), section.readBool('hidden', True))
-
-
-class _FenixParser(SectionParser):
-
-    def getTagName(self):
-        pass
-
-    def parse(self, section):
-        name = self._readString('name', section)
-        referrer = self._readString('name_referrer', section)
-        return gui_items.ReferralItem(name, referrer, False, section.readBool('hidden', True))
-
-
-class _RecruitParser(SectionParser):
-
-    def getTagName(self):
-        pass
-
-    def parse(self, section):
-        name = self._readString('name', section)
-        referrer = self._readString('name_referrer', section)
-        return gui_items.ReferralItem(name, referrer, True, section.readBool('hidden', True))
-
-
 class _PollParser(_WindowParser):
 
     def __init__(self, itemClass=gui_items.PollItem):
@@ -173,9 +141,5 @@ class GUIItemsParser_v2(_GUIItemsParser):
     def __init__(self):
         super(GUIItemsParser_v2, self).__init__((_PopUpParser(),
          _WindowParser(),
-         _ReferrerParser(),
-         _ReferrerParser(),
-         _FenixParser(),
-         _RecruitParser(),
          _PollParser(),
          _BrowserParser()))

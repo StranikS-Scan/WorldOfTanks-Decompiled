@@ -296,6 +296,7 @@ class MENU(object):
     STORE_VEHICLESTATES_DESTROYED = '#menu:store/vehicleStates/destroyed'
     STORE_VEHICLESTATES_EXPLODED = '#menu:store/vehicleStates/exploded'
     STORE_VEHICLESTATES_RENTALISOVER = '#menu:store/vehicleStates/rentalIsOver'
+    STORE_VEHICLESTATES_RENTED_EPIC = '#menu:store/vehicleStates/rented/epic'
     STORE_VEHICLESTATES_RENTABLE = '#menu:store/vehicleStates/rentable'
     STORE_VEHICLESTATES_RENTABLE_EPIC = '#menu:store/vehicleStates/rentable/epic'
     STORE_VEHICLESTATES_RENTABLE_RANKED = '#menu:store/vehicleStates/rentable/ranked'
@@ -652,6 +653,11 @@ class MENU(object):
     HEADERBUTTONS_FIGHTBTN_TOOLTIP_SANDBOX_INVALID_LEVEL_BODY = '#menu:headerButtons/fightBtn/tooltip/sandbox/invalid/level/body'
     HEADERBUTTONS_FIGHTBTN_TOOLTIP_RANKEDVEHLEVELREQUIRED_HEADER = '#menu:headerButtons/fightBtn/tooltip/rankedVehLevelRequired/header'
     HEADERBUTTONS_FIGHTBTN_TOOLTIP_RANKEDVEHLEVELREQUIRED_BODY = '#menu:headerButtons/fightBtn/tooltip/rankedVehLevelRequired/body'
+    HEADERBUTTONS_FIGHTBTN_TOOLTIP_EPICLEVELREQUIRED_HEADER = '#menu:headerButtons/fightBtn/tooltip/epicLevelRequired/header'
+    HEADERBUTTONS_FIGHTBTN_TOOLTIP_EPICLEVELREQUIRED_BODYSTART = '#menu:headerButtons/fightBtn/tooltip/epicLevelRequired/bodyStart'
+    HEADERBUTTONS_FIGHTBTN_TOOLTIP_EPICLEVELREQUIRED_BODYEND = '#menu:headerButtons/fightBtn/tooltip/epicLevelRequired/bodyEnd'
+    HEADERBUTTONS_FIGHTBTN_TOOLTIP_EPICBATTLEONLY_HEADER = '#menu:headerButtons/fightBtn/tooltip/epicBattleOnly/header'
+    HEADERBUTTONS_FIGHTBTN_TOOLTIP_EPICBATTLEONLY_BODY = '#menu:headerButtons/fightBtn/tooltip/epicBattleOnly/body'
     HEADERBUTTONS_FIGHTBTN_TOOLTIP_RANKEDDISABLED_HEADER = '#menu:headerButtons/fightBtn/tooltip/rankedDisabled/header'
     HEADERBUTTONS_FIGHTBTN_TOOLTIP_RANKEDDISABLED_BODY = '#menu:headerButtons/fightBtn/tooltip/rankedDisabled/body'
     PVESANDBOX_QUEUE_TITLE = '#menu:pveSandbox/queue/title'
@@ -741,8 +747,6 @@ class MENU(object):
     HEADER_ACCOUNT_POPOVER_CREW_POSITION_COMMANDER = '#menu:header/account/popover/crew/position/commander'
     HEADER_ACCOUNT_POPOVER_CREW_POSITION_PRIVATE = '#menu:header/account/popover/crew/position/private'
     HEADER_ACCOUNT_POPOVER_CREW_POSITION_RECRUIT = '#menu:header/account/popover/crew/position/recruit'
-    HEADER_ACCOUNT_POPOVER_REFERRAL_INVITED = '#menu:header/account/popover/referral/invited'
-    HEADER_ACCOUNT_POPOVER_REFERRAL_MOREINFO = '#menu:header/account/popover/referral/moreInfo'
     HEADER_ACCOUNT_POPOVER_ACHIEVES_RATING = '#menu:header/account/popover/achieves/rating'
     HEADER_ACCOUNT_POPOVER_ACHIEVES_BATTLES = '#menu:header/account/popover/achieves/battles'
     HEADER_ACCOUNT_POPOVER_ACHIEVES_WINS = '#menu:header/account/popover/achieves/wins'
@@ -1214,6 +1218,8 @@ class MENU(object):
     VEHICLE_RENTLEFT_WINS = '#menu:vehicle/rentLeft/wins'
     VEHICLE_RENTLEFT_EPIC_SEASON = '#menu:vehicle/rentLeft/epic/season'
     VEHICLE_RENTLEFT_EPIC_DAYS = '#menu:vehicle/rentLeft/epic/days'
+    VEHICLE_RENTLEFT_EPIC_CYCLE = '#menu:vehicle/rentLeft/epic/cycle'
+    VEHICLE_RENTLEFT_EPIC_CYCLES = '#menu:vehicle/rentLeft/epic/cycles'
     VEHICLE_RESTORELEFT_DISABLEDBYRENT = '#menu:vehicle/restoreLeft/disabledByRent'
     VEHICLE_RESTORELEFT_UNLIM = '#menu:vehicle/restoreLeft/unlim'
     VEHICLE_RESTORELEFT_DAYS = '#menu:vehicle/restoreLeft/days'
@@ -1328,6 +1334,7 @@ class MENU(object):
     CONTEXTMENU_VEHICLEBUY = '#menu:contextMenu/vehicleBuy'
     CONTEXTMENU_VEHICLERESTORE = '#menu:contextMenu/vehicleRestore'
     CONTEXTMENU_VEHICLEREMOVE = '#menu:contextMenu/vehicleRemove'
+    CONTEXTMENU_VEHICLERENTRENEW = '#menu:contextMenu/vehicleRentRenew'
     CONTEXTMENU_USERINFO = '#menu:contextMenu/userInfo'
     CONTEXTMENU_CLANINFO = '#menu:contextMenu/clanInfo'
     CONTEXTMENU_SENDCLANINVITE = '#menu:contextMenu/sendClanInvite'
@@ -1570,17 +1577,6 @@ class MENU(object):
     AWARDWINDOW_QUESTS_MEDALS_HEADER = '#menu:awardWindow/quests/medals/header'
     AWARDWINDOW_QUESTS_VEHICLE_HEADER = '#menu:awardWindow/quests/vehicle/header'
     AWARDWINDOW_QUESTS_VEHICLE_DESCRIPTION = '#menu:awardWindow/quests/vehicle/description'
-    AWARDWINDOW_REFERRAL_TANKMAN_HEADER = '#menu:awardWindow/referral/tankman/header'
-    AWARDWINDOW_REFERRAL_TANKMAN_DESCRIPTION_NORMAL = '#menu:awardWindow/referral/tankman/description/normal'
-    AWARDWINDOW_REFERRAL_TANKMAN_DESCRIPTION_NOXP = '#menu:awardWindow/referral/tankman/description/noXp'
-    AWARDWINDOW_REFERRAL_VEHICLE_HEADER = '#menu:awardWindow/referral/vehicle/header'
-    AWARDWINDOW_REFERRAL_VEHICLE_DESCRIPTION_NORMAL = '#menu:awardWindow/referral/vehicle/description/normal'
-    AWARDWINDOW_REFERRAL_VEHICLE_DESCRIPTION_NOXP = '#menu:awardWindow/referral/vehicle/description/noXp'
-    AWARDWINDOW_REFERRAL_VEHICLE_DESCRIPTION_BOUGHT = '#menu:awardWindow/referral/vehicle/description/bought'
-    AWARDWINDOW_REFERRAL_NEXTTANKMAN = '#menu:awardWindow/referral/nextTankman'
-    AWARDWINDOW_REFERRAL_COMPLETE = '#menu:awardWindow/referral/complete'
-    AWARDWINDOW_REFERRAL_CREDITS_HEADER = '#menu:awardWindow/referral/credits/header'
-    AWARDWINDOW_REFERRAL_CREDITS_DESCRIPTION = '#menu:awardWindow/referral/credits/description'
     AWARDWINDOW_SPECIALACHIEVEMENT_RESEARCH_DESCRIPTION1 = '#menu:awardWindow/specialAchievement/research/description1'
     AWARDWINDOW_SPECIALACHIEVEMENT_RESEARCH_DESCRIPTION2 = '#menu:awardWindow/specialAchievement/research/description2'
     AWARDWINDOW_SPECIALACHIEVEMENT_RESEARCH_DESCRIPTION3 = '#menu:awardWindow/specialAchievement/research/description3'
@@ -1645,38 +1641,6 @@ class MENU(object):
     AWARDWINDOW_PERSONALMISSION_NEXTBUTTONAWARD = '#menu:awardWindow/personalMission/nextButtonAward'
     AWARDWINDOW_PERSONALMISSION_NEXTBUTTONAWARD_TOOLTIP_HEADER = '#menu:awardWindow/personalMission/nextButtonAward/tooltip/header'
     AWARDWINDOW_PERSONALMISSION_NEXTBUTTONAWARD_TOOLTIP_BODY = '#menu:awardWindow/personalMission/nextButtonAward/tooltip/body'
-    REFERRALMANAGEMENTWINDOW_TITLE = '#menu:ReferralManagementWindow/title'
-    REFERRALMANAGEMENTWINDOW_INFOHEADER_HAVENOTTANK = '#menu:ReferralManagementWindow/infoHeader/haveNotTank'
-    REFERRALMANAGEMENTWINDOW_INFOHEADER_HAVETANK = '#menu:ReferralManagementWindow/infoHeader/haveTank'
-    REFERRALMANAGEMENTWINDOW_DESCRIPTION = '#menu:ReferralManagementWindow/description'
-    REFERRALMANAGEMENTWINDOW_INVITEDPLAYERS = '#menu:ReferralManagementWindow/invitedPlayers'
-    REFERRALMANAGEMENTWINDOW_INVITEMANAGEMENTLINK = '#menu:ReferralManagementWindow/inviteManagementLink'
-    REFERRALMANAGEMENTWINDOW_CLOSEBTNLABEL = '#menu:ReferralManagementWindow/closeBtnLabel'
-    REFERRALMANAGEMENTWINDOW_REFERRALSTABLE_NICK = '#menu:ReferralManagementWindow/referralsTable/nick'
-    REFERRALMANAGEMENTWINDOW_REFERRALSTABLE_EXP = '#menu:ReferralManagementWindow/referralsTable/exp'
-    REFERRALMANAGEMENTWINDOW_REFERRALSTABLE_EXPMULTIPLIER = '#menu:ReferralManagementWindow/referralsTable/expMultiplier'
-    REFERRALMANAGEMENTWINDOW_REFERRALSTABLE_LEFTTIME = '#menu:ReferralManagementWindow/referralsTable/leftTime'
-    REFERRALMANAGEMENTWINDOW_REFERRALSTABLE_LEFTHOURS = '#menu:ReferralManagementWindow/referralsTable/leftHours'
-    REFERRALMANAGEMENTWINDOW_REFERRALSTABLE_LEFTDAYS = '#menu:ReferralManagementWindow/referralsTable/leftDays'
-    REFERRALMANAGEMENTWINDOW_REFERRALSTABLE_CREATESQUADBTN_LABEL = '#menu:ReferralManagementWindow/referralsTable/createSquadBtn/label'
-    REFERRALMANAGEMENTWINDOW_REFERRALSTABLE_EMPTYLINE = '#menu:ReferralManagementWindow/referralsTable/emptyLine'
-    REFERRALMANAGEMENTWINDOW_PROGRESSINDICATOR_PROGRESS = '#menu:ReferralManagementWindow/progressIndicator/progress'
-    REFERRALMANAGEMENTWINDOW_PROGRESSINDICATOR_COMPLETE = '#menu:ReferralManagementWindow/progressIndicator/complete'
-    REFERRALMANAGEMENTWINDOW_PROGRESSNOTAVAILABLE = '#menu:ReferralManagementWindow/progressNotAvailable'
-    REFERRALREFERRERINTROWINDOW_WINDOWTITLE = '#menu:ReferralReferrerIntroWindow/windowTitle'
-    REFERRALREFERRERINTROWINDOW_APPLYBUTTON_LABEL = '#menu:ReferralReferrerIntroWindow/applyButton/label'
-    REFERRALREFERRERINTROWINDOW_TITLEMESSAGE = '#menu:ReferralReferrerIntroWindow/titleMessage'
-    REFERRALREFERRERINTROWINDOW_TEXTBLOCK_TITLE_INVITE_BLOCK = '#menu:ReferralReferrerIntroWindow/textBlock_title/invite_block'
-    REFERRALREFERRERINTROWINDOW_TEXTBLOCK_BODY_INVITE_BLOCK = '#menu:ReferralReferrerIntroWindow/textBlock_body/invite_block'
-    REFERRALREFERRERINTROWINDOW_TEXTBLOCK_TITLE_SQUAD_BLOCK = '#menu:ReferralReferrerIntroWindow/textBlock_title/squad_block'
-    REFERRALREFERRERINTROWINDOW_TEXTBLOCK_BODY_SQUAD_BLOCK = '#menu:ReferralReferrerIntroWindow/textBlock_body/squad_block'
-    REFERRALREFERRERINTROWINDOW_TEXTBLOCK_TITLE_REFERRALS_BLOCK = '#menu:ReferralReferrerIntroWindow/textBlock_title/referrals_block'
-    REFERRALREFERRERINTROWINDOW_TEXTBLOCK_BODY_REFERRALS_BLOCK = '#menu:ReferralReferrerIntroWindow/textBlock_body/referrals_block'
-    REFERRALREFERRERINTROWINDOW_TEXTBLOCK_LINK = '#menu:ReferralReferrerIntroWindow/textBlock_link'
-    REFERRALREFERRALSINTROWINDOW_TEXT_BLOCK_TITLE = '#menu:ReferralReferralsIntroWindow/text_block/title'
-    REFERRALREFERRALSINTROWINDOW_TEXT_BLOCK_BODY_REFERRALS = '#menu:ReferralReferralsIntroWindow/text_block/body/referrals'
-    REFERRALREFERRALSINTROWINDOW_TEXT_BLOCK_BODY_PHENIX = '#menu:ReferralReferralsIntroWindow/text_block/body/phenix'
-    REFERRALREFERRALSINTROWINDOW_TEXT_BLOCK_SQUAD_TEXT = '#menu:ReferralReferralsIntroWindow/text_block/squad_text'
     VEHICLE_IGRRENTLEFT_DAYS = '#menu:vehicle/igrRentLeft/days'
     VEHICLE_IGRRENTLEFT_HOURS = '#menu:vehicle/igrRentLeft/hours'
     VEHICLEPREVIEW_ENDTIME = '#menu:vehiclePreview/endTime'
@@ -1737,20 +1701,29 @@ class MENU(object):
     BOOSTERS_COMMON_EFFECT_VALUE = '#menu:boosters/common/effect_value'
     BOOSTERS_COMMON_EFFECT_TIME = '#menu:boosters/common/effect_time'
     BOOSTER_USERNAME_BOOSTER_XP = '#menu:booster/userName/booster_xp'
+    BOOSTER_INFLUENCE_BOOSTER_XP = '#menu:booster/influence/booster_xp'
     BOOSTER_DESCRIPTION_BOOSTER_XP = '#menu:booster/description/booster_xp'
+    BOOSTER_DESCRIPTION_BONUSVALUETIME_BOOSTER_XP = '#menu:booster/description/bonusValueTime/booster_xp'
     BOOSTER_BONUS_BOOSTER_XP = '#menu:booster/bonus/booster_xp'
     BOOSTER_USERNAME_BOOSTER_FREE_XP = '#menu:booster/userName/booster_free_xp'
+    BOOSTER_INFLUENCE_BOOSTER_FREE_XP = '#menu:booster/influence/booster_free_xp'
     BOOSTER_DESCRIPTION_BOOSTER_FREE_XP = '#menu:booster/description/booster_free_xp'
+    BOOSTER_DESCRIPTION_BONUSVALUETIME_BOOSTER_FREE_XP = '#menu:booster/description/bonusValueTime/booster_free_xp'
     BOOSTER_BONUS_BOOSTER_FREE_XP = '#menu:booster/bonus/booster_free_xp'
     BOOSTER_USERNAME_BOOSTER_CREW_XP = '#menu:booster/userName/booster_crew_xp'
+    BOOSTER_INFLUENCE_BOOSTER_CREW_XP = '#menu:booster/influence/booster_crew_xp'
     BOOSTER_DESCRIPTION_BOOSTER_CREW_XP = '#menu:booster/description/booster_crew_xp'
+    BOOSTER_DESCRIPTION_BONUSVALUETIME_BOOSTER_CREW_XP = '#menu:booster/description/bonusValueTime/booster_crew_xp'
     BOOSTER_BONUS_BOOSTER_CREW_XP = '#menu:booster/bonus/booster_crew_xp'
     BOOSTER_USERNAME_BOOSTER_CREDITS = '#menu:booster/userName/booster_credits'
+    BOOSTER_INFLUENCE_BOOSTER_CREDITS = '#menu:booster/influence/booster_credits'
     BOOSTER_DESCRIPTION_BOOSTER_CREDITS = '#menu:booster/description/booster_credits'
+    BOOSTER_DESCRIPTION_BONUSVALUETIME_BOOSTER_CREDITS = '#menu:booster/description/bonusValueTime/booster_credits'
     BOOSTER_BONUS_BOOSTER_CREDITS = '#menu:booster/bonus/booster_credits'
     BOOSTER_USERNAME_BOOSTER_REPAIR = '#menu:booster/userName/booster_repair'
     BOOSTER_DESCRIPTION_BOOSTER_REPAIR = '#menu:booster/description/booster_repair'
     BOOSTER_DESCRIPTION_EFFECTTIME = '#menu:booster/description/effectTime'
+    BOOSTER_DESCRIPTION_EFFECTVALUETIME = '#menu:booster/description/effectValueTime'
     BOOSTER_QUALITY_SMALL = '#menu:booster/quality/small'
     BOOSTER_QUALITY_MEDIUM = '#menu:booster/quality/medium'
     BOOSTER_QUALITY_BIG = '#menu:booster/quality/big'
@@ -1763,6 +1736,10 @@ class MENU(object):
     HEADERBUTTONS_BATTLE_TYPES_EPICBATTLE_DESCR = '#menu:headerButtons/battle/types/epicBattle/descr'
     HEADERBUTTONS_BATTLE_TYPES_EPIC = '#menu:headerButtons/battle/types/epic'
     HEADERBUTTONS_BATTLE_TYPES_EPIC_DESCR = '#menu:headerButtons/battle/types/epic/descr'
+    HEADERBUTTONS_BATTLE_TYPES_EPIC_EXTRA_STARTSAT = '#menu:headerButtons/battle/types/epic/extra/startsAt'
+    HEADERBUTTONS_BATTLE_TYPES_EPIC_EXTRA_CURRENTCYCLE = '#menu:headerButtons/battle/types/epic/extra/currentCycle'
+    HEADERBUTTONS_BATTLE_TYPES_EPIC_EXTRA_CURRENTSEASON = '#menu:headerButtons/battle/types/epic/extra/currentSeason'
+    HEADERBUTTONS_BATTLE_TYPES_EPIC_EXTRA_FROZEN = '#menu:headerButtons/battle/types/epic/extra/frozen'
     ONLINECOUNTER_TOTAL = '#menu:onlineCounter/total'
     ONLINECOUNTER_DELIMITER = '#menu:onlineCounter/delimiter'
     ONLINECOUNTER_UNAVAILABLE = '#menu:onlineCounter/unavailable'
@@ -1817,13 +1794,17 @@ class MENU(object):
     CST_ITEM_CTX_MENU_REMOVEFROMTANK_WINTER = '#menu:cst_item_ctx_menu/removeFromTank/winter'
     CST_ITEM_CTX_MENU_REMOVEFROMTANK_DESERT = '#menu:cst_item_ctx_menu/removeFromTank/desert'
     CST_ITEM_CTX_MENU_INFORMATION = '#menu:cst_item_ctx_menu/information'
+    CST_ITEM_CTX_MENU_SHOWVEHICLESTATISTICS = '#menu:cst_item_ctx_menu/showVehicleStatistics'
     CST_ITEM_CTX_MENU_PROHIBITSALE = '#menu:cst_item_ctx_menu/prohibitSale'
     CST_ITEM_CTX_MENU_ALLOWSALE = '#menu:cst_item_ctx_menu/allowSale'
     CST_ITEM_CTX_MENU_ADDTOCOMPARE = '#menu:cst_item_ctx_menu/addToCompare'
     CST_ITEM_CTX_MENU_SHOWINHANGAR = '#menu:cst_item_ctx_menu/showInHangar'
     CST_ITEM_CTX_MENU_PREVIEW = '#menu:cst_item_ctx_menu/preview'
+    CST_ITEM_CTX_MENU_PREVIEWCUSTOMIZATION = '#menu:cst_item_ctx_menu/previewCustomization'
     CST_ITEM_CTX_MENU_RESTORE = '#menu:cst_item_ctx_menu/restore'
     CST_ITEM_CTX_MENU_ACTIVATE = '#menu:cst_item_ctx_menu/activate'
+    CST_ITEM_CTX_MENU_REMOVE = '#menu:cst_item_ctx_menu/remove'
+    CST_ITEM_CTX_MENU_RENTRENEW = '#menu:cst_item_ctx_menu/rentRenew'
     CST_ITEM_CTX_MENU_AUTOPROLONGATIONON = '#menu:cst_item_ctx_menu/autoprolongationOn'
     CST_ITEM_CTX_MENU_AUTOPROLONGATIONOFF = '#menu:cst_item_ctx_menu/autoprolongationOff'
     VIEWHEADER_BACKBTN_LABEL = '#menu:viewHeader/backBtn/label'
@@ -1861,6 +1842,7 @@ class MENU(object):
      CONTEXTMENU_VEHICLEBUY,
      CONTEXTMENU_VEHICLERESTORE,
      CONTEXTMENU_VEHICLEREMOVE,
+     CONTEXTMENU_VEHICLERENTRENEW,
      CONTEXTMENU_USERINFO,
      CONTEXTMENU_CLANINFO,
      CONTEXTMENU_SENDCLANINVITE,
@@ -1950,6 +1932,17 @@ class MENU(object):
      DATETIME_MONTHS_FULL_11,
      DATETIME_MONTHS_FULL_12)
     BROWSER_CUSTOMTITLE_ENUM = (BROWSER_CUSTOMTITLE_FORT_OFFENSIVERESULT, BROWSER_CUSTOMTITLE_FORT_CONGRATULATION)
+    BOOSTER_DESCRIPTION_ENUM = (BOOSTER_DESCRIPTION_BOOSTER_XP,
+     BOOSTER_DESCRIPTION_BONUSVALUETIME_BOOSTER_XP,
+     BOOSTER_DESCRIPTION_BOOSTER_FREE_XP,
+     BOOSTER_DESCRIPTION_BONUSVALUETIME_BOOSTER_FREE_XP,
+     BOOSTER_DESCRIPTION_BOOSTER_CREW_XP,
+     BOOSTER_DESCRIPTION_BONUSVALUETIME_BOOSTER_CREW_XP,
+     BOOSTER_DESCRIPTION_BOOSTER_CREDITS,
+     BOOSTER_DESCRIPTION_BONUSVALUETIME_BOOSTER_CREDITS,
+     BOOSTER_DESCRIPTION_BOOSTER_REPAIR,
+     BOOSTER_DESCRIPTION_EFFECTTIME,
+     BOOSTER_DESCRIPTION_EFFECTVALUETIME)
     DATETIME_MONTHS_ENUM = (DATETIME_MONTHS_FULL_1,
      DATETIME_MONTHS_FULL_2,
      DATETIME_MONTHS_FULL_3,
@@ -2007,7 +2000,12 @@ class MENU(object):
      LEVELS_ROMAN_9,
      LEVELS_ROMAN_10,
      LEVELS_ALL)
-    REFERRALREFERRALSINTROWINDOW_TEXT_BLOCK_BODY_ENUM = (REFERRALREFERRALSINTROWINDOW_TEXT_BLOCK_BODY_REFERRALS, REFERRALREFERRALSINTROWINDOW_TEXT_BLOCK_BODY_PHENIX)
+    BOOSTER_USERNAME_ENUM = (BOOSTER_USERNAME_BOOSTER_XP,
+     BOOSTER_USERNAME_BOOSTER_FREE_XP,
+     BOOSTER_USERNAME_BOOSTER_CREW_XP,
+     BOOSTER_USERNAME_BOOSTER_CREDITS,
+     BOOSTER_USERNAME_BOOSTER_REPAIR)
+    BOOSTER_QUALITY_ENUM = (BOOSTER_QUALITY_SMALL, BOOSTER_QUALITY_MEDIUM, BOOSTER_QUALITY_BIG)
     NATIONS_ENUM = (NATIONS_TITLE,
      NATIONS_USSR,
      NATIONS_GERMANY,
@@ -2173,7 +2171,14 @@ class MENU(object):
      MODULEINFO_PARAMS_STUNMAXDURATIONLIST,
      MODULEINFO_PARAMS_STUNMINDURATIONLIST,
      MODULEINFO_PARAMS_COOLDOWNSECONDS)
-    REFERRALREFERRERINTROWINDOW_TEXTBLOCK_TITLE_ENUM = (REFERRALREFERRERINTROWINDOW_TEXTBLOCK_TITLE_INVITE_BLOCK, REFERRALREFERRERINTROWINDOW_TEXTBLOCK_TITLE_SQUAD_BLOCK, REFERRALREFERRERINTROWINDOW_TEXTBLOCK_TITLE_REFERRALS_BLOCK)
+    BOOSTER_BONUS_ENUM = (BOOSTER_BONUS_BOOSTER_XP,
+     BOOSTER_BONUS_BOOSTER_FREE_XP,
+     BOOSTER_BONUS_BOOSTER_CREW_XP,
+     BOOSTER_BONUS_BOOSTER_CREDITS)
+    BOOSTER_DESCRIPTION_BONUSVALUETIME_ENUM = (BOOSTER_DESCRIPTION_BONUSVALUETIME_BOOSTER_XP,
+     BOOSTER_DESCRIPTION_BONUSVALUETIME_BOOSTER_FREE_XP,
+     BOOSTER_DESCRIPTION_BONUSVALUETIME_BOOSTER_CREW_XP,
+     BOOSTER_DESCRIPTION_BONUSVALUETIME_BOOSTER_CREDITS)
     DATETIME_MONTHS_SHORT_ENUM = (DATETIME_MONTHS_SHORT_1,
      DATETIME_MONTHS_SHORT_2,
      DATETIME_MONTHS_SHORT_3,
@@ -2263,6 +2268,10 @@ class MENU(object):
      LEVELS_ROMAN_8,
      LEVELS_ROMAN_9,
      LEVELS_ROMAN_10)
+    BOOSTER_INFLUENCE_ENUM = (BOOSTER_INFLUENCE_BOOSTER_XP,
+     BOOSTER_INFLUENCE_BOOSTER_FREE_XP,
+     BOOSTER_INFLUENCE_BOOSTER_CREW_XP,
+     BOOSTER_INFLUENCE_BOOSTER_CREDITS)
     HANGAR_HEADER_BATTLE_QUESTS_LABEL_ENUM = (HANGAR_HEADER_BATTLE_QUESTS_LABEL_ACTIVE, HANGAR_HEADER_BATTLE_QUESTS_LABEL_INACTIVE)
     INTERNET_PROVIDER_ALL_NAME_ENUM = (INTERNET_PROVIDER_ROSTELECOM_NAME,
      INTERNET_PROVIDER_BELTELECOM_NAME,
@@ -2326,7 +2335,6 @@ class MENU(object):
      LOADING_BATTLETYPES_DESC_21,
      LOADING_BATTLETYPES_22,
      LOADING_BATTLETYPES_DESC_22)
-    REFERRALREFERRERINTROWINDOW_TEXTBLOCK_BODY_ENUM = (REFERRALREFERRERINTROWINDOW_TEXTBLOCK_BODY_INVITE_BLOCK, REFERRALREFERRERINTROWINDOW_TEXTBLOCK_BODY_SQUAD_BLOCK, REFERRALREFERRERINTROWINDOW_TEXTBLOCK_BODY_REFERRALS_BLOCK)
     CST_ITEM_CTX_MENU_ENUM = (CST_ITEM_CTX_MENU_BUY,
      CST_ITEM_CTX_MENU_BUYMORE,
      CST_ITEM_CTX_MENU_SELL,
@@ -2335,13 +2343,17 @@ class MENU(object):
      CST_ITEM_CTX_MENU_REMOVEFROMTANK_WINTER,
      CST_ITEM_CTX_MENU_REMOVEFROMTANK_DESERT,
      CST_ITEM_CTX_MENU_INFORMATION,
+     CST_ITEM_CTX_MENU_SHOWVEHICLESTATISTICS,
      CST_ITEM_CTX_MENU_PROHIBITSALE,
      CST_ITEM_CTX_MENU_ALLOWSALE,
      CST_ITEM_CTX_MENU_ADDTOCOMPARE,
      CST_ITEM_CTX_MENU_SHOWINHANGAR,
      CST_ITEM_CTX_MENU_PREVIEW,
+     CST_ITEM_CTX_MENU_PREVIEWCUSTOMIZATION,
      CST_ITEM_CTX_MENU_RESTORE,
      CST_ITEM_CTX_MENU_ACTIVATE,
+     CST_ITEM_CTX_MENU_REMOVE,
+     CST_ITEM_CTX_MENU_RENTRENEW,
      CST_ITEM_CTX_MENU_AUTOPROLONGATIONON,
      CST_ITEM_CTX_MENU_AUTOPROLONGATIONOFF)
     HANGAR_HEADER_PERSONAL_QUESTS_LABEL_ENUM = (HANGAR_HEADER_PERSONAL_QUESTS_LABEL_ACTIVE,
@@ -2462,33 +2474,6 @@ class MENU(object):
     def denunciation(cls, key0):
         outcome = '#menu:denunciation/{}'.format(key0)
         if outcome not in cls.DENUNCIATION_ENUM:
-            LOG_WARNING('Localization key "{}" not found'.format(outcome))
-            return None
-        else:
-            return outcome
-
-    @classmethod
-    def referralreferrerintrowindow_textblock_title(cls, key0):
-        outcome = '#menu:ReferralReferrerIntroWindow/textBlock_title/{}'.format(key0)
-        if outcome not in cls.REFERRALREFERRERINTROWINDOW_TEXTBLOCK_TITLE_ENUM:
-            LOG_WARNING('Localization key "{}" not found'.format(outcome))
-            return None
-        else:
-            return outcome
-
-    @classmethod
-    def referralreferrerintrowindow_textblock_body(cls, key0):
-        outcome = '#menu:ReferralReferrerIntroWindow/textBlock_body/{}'.format(key0)
-        if outcome not in cls.REFERRALREFERRERINTROWINDOW_TEXTBLOCK_BODY_ENUM:
-            LOG_WARNING('Localization key "{}" not found'.format(outcome))
-            return None
-        else:
-            return outcome
-
-    @classmethod
-    def referralreferralsintrowindow_text_block_body(cls, key0):
-        outcome = '#menu:ReferralReferralsIntroWindow/text_block/body/{}'.format(key0)
-        if outcome not in cls.REFERRALREFERRALSINTROWINDOW_TEXT_BLOCK_BODY_ENUM:
             LOG_WARNING('Localization key "{}" not found'.format(outcome))
             return None
         else:
@@ -2624,6 +2609,60 @@ class MENU(object):
     def internetProviderTariff(cls, key0):
         outcome = '#menu:internet_provider/{}/tariff'.format(key0)
         if outcome not in cls.INTERNET_PROVIDER_ALL_TARIFF_ENUM:
+            LOG_WARNING('Localization key "{}" not found'.format(outcome))
+            return None
+        else:
+            return outcome
+
+    @classmethod
+    def boosterTypeLocale(cls, value):
+        outcome = '#menu:booster/userName/{}'.format(value)
+        if outcome not in cls.BOOSTER_USERNAME_ENUM:
+            LOG_WARNING('Localization key "{}" not found'.format(outcome))
+            return None
+        else:
+            return outcome
+
+    @classmethod
+    def boosterInfluenceLocale(cls, value):
+        outcome = '#menu:booster/influence/{}'.format(value)
+        if outcome not in cls.BOOSTER_INFLUENCE_ENUM:
+            LOG_WARNING('Localization key "{}" not found'.format(outcome))
+            return None
+        else:
+            return outcome
+
+    @classmethod
+    def boosterDescriptionLocale(cls, value):
+        outcome = '#menu:booster/description/{}'.format(value)
+        if outcome not in cls.BOOSTER_DESCRIPTION_ENUM:
+            LOG_WARNING('Localization key "{}" not found'.format(outcome))
+            return None
+        else:
+            return outcome
+
+    @classmethod
+    def boosterDescriptionBVTLocale(cls, value):
+        outcome = '#menu:booster/description/bonusValueTime/{}'.format(value)
+        if outcome not in cls.BOOSTER_DESCRIPTION_BONUSVALUETIME_ENUM:
+            LOG_WARNING('Localization key "{}" not found'.format(outcome))
+            return None
+        else:
+            return outcome
+
+    @classmethod
+    def boosterQualityLocale(cls, value):
+        outcome = '#menu:booster/quality/{}'.format(value)
+        if outcome not in cls.BOOSTER_QUALITY_ENUM:
+            LOG_WARNING('Localization key "{}" not found'.format(outcome))
+            return None
+        else:
+            return outcome
+
+    @classmethod
+    def boosterBonusLocale(cls, value):
+        outcome = '#menu:booster/bonus/{}'.format(value)
+        if outcome not in cls.BOOSTER_BONUS_ENUM:
             LOG_WARNING('Localization key "{}" not found'.format(outcome))
             return None
         else:

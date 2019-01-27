@@ -1,10 +1,11 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/gui_items/processors/quests.py
+import logging
 import operator
 import BigWorld
-from debug_utils import LOG_DEBUG
 from gui.shared.gui_items.processors import Processor, makeI18nError, makeI18nSuccess, plugins
 from items import tankmen, ITEM_TYPES
+_logger = logging.getLogger(__name__)
 
 class _PMRequest(Processor):
 
@@ -17,17 +18,17 @@ class _PMRequest(Processor):
         raise NotImplementedError
 
     def _errorHandler(self, code, errStr='', ctx=None):
-        errorI18nKey = '%s/server_error' % self._getMessagePrefix()
+        errorI18nKey = '{}/server_error'.format(self._getMessagePrefix())
         if errStr:
-            errorI18nKey = '%s/%s' % (errorI18nKey, errStr)
-        return makeI18nError(errorI18nKey, questNames=', '.join(self._getQuestsNames()))
+            errorI18nKey = '{}/{}'.format(errorI18nKey, errStr)
+        return makeI18nError(sysMsgKey=errorI18nKey, questNames=', '.join(self._getQuestsNames()))
 
     def _successHandler(self, code, ctx=None):
-        return makeI18nSuccess('%s/success' % self._getMessagePrefix(), questNames=', '.join(self._getQuestsNames()))
+        return makeI18nSuccess(sysMsgKey='{}/success'.format(self._getMessagePrefix()), questNames=', '.join(self._getQuestsNames()))
 
     def _request(self, callback):
         questIDs = self._getQuestsData(methodcaller=operator.methodcaller('getID'))
-        LOG_DEBUG('Make server request to select personal mission', questIDs)
+        _logger.debug('Make server request to select personal mission, questIDs: %s', questIDs)
         BigWorld.player().selectPersonalMissions(questIDs, self._branch, lambda code, errStr: self._response(code, callback, errStr=errStr))
 
     def _getQuestsData(self, methodcaller):
@@ -66,15 +67,15 @@ class PMQuestSelect(_PMRequest):
 
     def _request(self, callback):
         questIDs = self._getQuestsData(methodcaller=operator.methodcaller('getID'))
-        LOG_DEBUG('Make server request to select personal mission %s', ', '.join([ str(idn) for idn in questIDs ]))
+        _logger.debug('Make server request to select personal mission %s', ', '.join([ str(idn) for idn in questIDs ]))
         BigWorld.player().selectPersonalMissions(questIDs, self._branch, lambda code, errStr: self._response(code, callback, errStr=errStr))
 
     def _errorHandler(self, code, errStr='', ctx=None):
-        errorI18nKey = '%s/server_error' % self._getMessagePrefix()
+        errorI18nKey = '{}/server_error'.format(self._getMessagePrefix())
         questNames = ', '.join(self._getQuestsNames())
         if errStr:
-            errorI18nKey = '%s/%s' % (errorI18nKey, errStr)
-        return makeI18nError(errorI18nKey, questNames=questNames)
+            errorI18nKey = '{}/{}'.format(errorI18nKey, errStr)
+        return makeI18nError(sysMsgKey=errorI18nKey, questNames=questNames)
 
 
 class PMDiscard(_PMRequest):
@@ -86,7 +87,7 @@ class PMDiscard(_PMRequest):
 
     def _request(self, callback):
         questIDs = self._getQuestsData(methodcaller=operator.methodcaller('getID'))
-        LOG_DEBUG('Make server request to discard personal mission %s', str(questIDs[0]))
+        _logger.debug('Make server request to discard personal mission %s', str(questIDs[0]))
         BigWorld.player().resetPersonalMissions(questIDs, self._branch, lambda code, errStr: self._response(code, callback, errStr=errStr))
 
     def _successHandler(self, code, ctx=None):
@@ -106,7 +107,7 @@ class PMPause(_PMRequest):
 
     def _request(self, callback):
         questIDs = self._getQuestsData(methodcaller=operator.methodcaller('getID'))
-        LOG_DEBUG('Make server request to pause personal mission %s', str(questIDs[0]))
+        _logger.debug('Make server request to pause personal mission %s', str(questIDs[0]))
         BigWorld.player().pausePersonalMissions(questIDs, self._branch, self._enable, lambda code, errStr: self._response(code, callback, errStr=errStr))
 
     def _successHandler(self, code, ctx=None):
@@ -135,10 +136,10 @@ class _PMGetReward(Processor):
         pass
 
     def _errorHandler(self, code, errStr='', ctx=None):
-        return makeI18nError('%s/server_error/%s' % (self._getMessagePrefix(), errStr), defaultSysMsgKey='%s/server_error' % self._getMessagePrefix())
+        return makeI18nError('{}/server_error/{}'.format(self._getMessagePrefix(), errStr), defaultSysMsgKey='{}/server_error'.format(self._getMessagePrefix()))
 
     def _request(self, callback):
-        LOG_DEBUG('Make server request to get reward', self.__quest, self.__needTankman, self.__nationID, self.__inNationID, self.__role)
+        _logger.debug('Make server request to get reward: %s, %s, %s, %s, %s', self.__quest, self.__needTankman, self.__nationID, self.__inNationID, self.__role)
         BigWorld.player().getPersonalMissionReward(self.__quest.getID(), self.__quest.getQuestBranch(), self.__needTankman, self.__nationID, self.__inNationID, tankmen.SKILL_INDICES[self.__role], lambda code, errStr: self._response(code, callback, errStr=errStr))
 
 
@@ -167,11 +168,11 @@ class PMPawn(Processor):
         pass
 
     def _errorHandler(self, code, errStr='', ctx=None):
-        return makeI18nError('%s/server_error/%s' % (self._getMessagePrefix(), errStr), defaultSysMsgKey='%s/server_error' % self._getMessagePrefix())
+        return makeI18nError('{}/server_error/{}'.format(self._getMessagePrefix(), errStr), defaultSysMsgKey='{}/server_error'.format(self._getMessagePrefix()))
 
     def _successHandler(self, code, ctx=None):
-        return makeI18nSuccess('%s/success' % self._getMessagePrefix(), questName=self.__quest.getShortUserName(), count=self.__quest.getPawnCost())
+        return makeI18nSuccess('{}/success'.format(self._getMessagePrefix()), questName=self.__quest.getShortUserName(), count=self.__quest.getPawnCost())
 
     def _request(self, callback):
-        LOG_DEBUG('Make server request to pawn quest', self.__quest)
+        _logger.debug('Make server request to pawn quest: %s', self.__quest)
         BigWorld.player().pawnFreeAwardList(self.__quest.getType(), self.__quest.getID(), lambda code: self._response(code, callback))

@@ -1,8 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/gui_items/processors/module.py
+import logging
 import BigWorld
 import AccountCommands
-from debug_utils import LOG_DEBUG, LOG_UNEXPECTED
 from gui import makeHtmlString
 from gui.SystemMessages import SM_TYPE, CURRENCY_TO_SM_TYPE, CURRENCY_TO_SM_TYPE_DISMANTLING
 from gui.shared.formatters import formatPrice, icons, getBWFormatter
@@ -17,13 +17,14 @@ from helpers import i18n, dependency
 from skeletons.gui.game_control import IEpicBattleMetaGameController
 from skeletons.gui.shared.gui_items import IGuiItemsFactory
 from gui.shared.gui_items.gui_item_economics import ITEM_PRICE_EMPTY
-MULTIPLE_SELLING_TEMPLATE = 'multipleSelling/%s'
+MULTIPLE_SELLING_TEMPLATE = 'multipleSelling/{}'
+_logger = logging.getLogger(__name__)
 
 def _getIconHtmlTagForCurrency(currency):
     getter = getattr(icons, currency)
     if getter:
         return getter()
-    LOG_UNEXPECTED('Could not fetch an icon getter for the following currency', currency)
+    _logger.error('Could not fetch an icon getter for the following currency %s', currency)
 
 
 def _formatCurrencyValue(currency, value):
@@ -46,15 +47,13 @@ class ModuleProcessor(ItemProcessor):
         raise NotImplementedError
 
     def _formMessage(self, msg):
-        LOG_DEBUG('Generating response for ModuleProcessor: ', self.opType, msg)
-        return '%(itemType)s_%(opType)s/%(msg)s' % {'itemType': self.ITEMS_MSG_PREFIXES.get(self.item.itemTypeID, self.DEFAULT_PREFIX),
-         'opType': self.opType,
-         'msg': msg}
+        _logger.debug('Generating response for ModuleProcessor: %s, %s', self.opType, msg)
+        return '{itemType}_{opType}/{msg}'.format(itemType=self.ITEMS_MSG_PREFIXES.get(self.item.itemTypeID, self.DEFAULT_PREFIX), opType=self.opType, msg=msg)
 
     def _errorHandler(self, code, errStr='', ctx=None):
         if not errStr:
             errStr = 'server_error' if code != AccountCommands.RES_CENTER_DISCONNECTED else 'server_error_centerDown'
-        return makeI18nError(self._formMessage(errStr), defaultSysMsgKey=self._formMessage('server_error'), auxData={'errStr': errStr}, **self._getMsgCtx())
+        return makeI18nError(sysMsgKey=self._formMessage(errStr), defaultSysMsgKey=self._formMessage('server_error'), auxData={'errStr': errStr}, **self._getMsgCtx())
 
 
 class ModuleTradeProcessor(ModuleProcessor):
@@ -94,10 +93,10 @@ class ModuleBuyer(ModuleTradeProcessor):
         return CURRENCY_TO_SM_TYPE.get(self._currency, SM_TYPE.PurchaseForCredits)
 
     def _successHandler(self, code, ctx=None):
-        return makeI18nSuccess(self._formMessage('success'), type=self._getSysMsgType(), **self._getMsgCtx())
+        return makeI18nSuccess(sysMsgKey=self._formMessage('success'), type=self._getSysMsgType(), **self._getMsgCtx())
 
     def _request(self, callback):
-        LOG_DEBUG('Make server request to buy {} module(s) {} for currency {} (item price - {})'.format(self.count, self.item, self._currency, self._itemPrice))
+        _logger.debug('Make server request to buy %s module(s) %s for currency %s (item price - %s)', self.count, self.item, self._currency, self._itemPrice)
         originalCurrency = self.item.buyPrices.itemPrice.getCurrency()
         goldForCredits = originalCurrency == Currency.GOLD and self._currency == Currency.CREDITS and getItemBuyPrice(self.item, self._currency, self.itemsCache.items.shop) is not None
         BigWorld.player().shop.buy(self.item.itemTypeID, self.item.nationID, self.item.intCD, self.count, int(goldForCredits), lambda code: self._response(code, callback))
@@ -116,7 +115,7 @@ class ModuleSeller(ModuleTradeProcessor):
         return makeI18nSuccess(self._formMessage('success'), type=SM_TYPE.Selling, **self._getMsgCtx())
 
     def _request(self, callback):
-        LOG_DEBUG('Make server request to sell item', self.item, self.count)
+        _logger.debug('Make server request to sell item: %s, %s', self.item, self.count)
         BigWorld.player().inventory.sell(self.item.itemTypeID, self.item.intCD, self.count, lambda code: self._response(code, callback))
 
 
@@ -127,7 +126,7 @@ class MultipleModulesSeller(Processor):
         self.__items = items
 
     def _successHandler(self, code, ctx=None):
-        return makeI18nSuccess((MULTIPLE_SELLING_TEMPLATE % 'success'), type=SM_TYPE.MultipleSelling, **self._getMsgCtx())
+        return makeI18nSuccess(sysMsgKey=MULTIPLE_SELLING_TEMPLATE.format('success'), type=SM_TYPE.MultipleSelling, **self._getMsgCtx())
 
     def _getPrice(self):
         price = ITEM_PRICE_EMPTY
@@ -165,7 +164,7 @@ class ModuleInstallProcessor(ModuleProcessor, VehicleItemProcessor):
          'kind': self.item.userType}
 
     def _successHandler(self, code, ctx=None):
-        return makeI18nSuccess(self._formMessage('success'), type=SM_TYPE.Information, **self._getMsgCtx())
+        return makeI18nSuccess(sysMsgKey=self._formMessage('success'), type=SM_TYPE.Information, **self._getMsgCtx())
 
 
 class OptDeviceInstaller(ModuleInstallProcessor):
@@ -178,7 +177,7 @@ class OptDeviceInstaller(ModuleInstallProcessor):
             action = packActionTooltipData(ACTION_TOOLTIPS_TYPE.ECONOMICS, 'paidRemovalCost', True, self.removalPrice.price, self.removalPrice.defPrice)
         addPlugins = []
         if install:
-            addPlugins += (plugins.MessageConfirmator('installConfirmationNotRemovable_%s' % self.removalPrice.price.getCurrency(), ctx={'name': item.userName}, isEnabled=not item.isRemovable and not skipConfirm),)
+            addPlugins += (plugins.MessageConfirmator('installConfirmationNotRemovable_{}'.format(self.removalPrice.price.getCurrency()), ctx={'name': item.userName}, isEnabled=not item.isRemovable and not skipConfirm),)
         else:
             addPlugins += (plugins.DemountDeviceConfirmator('removeConfirmationNotRemovableMoney', ctx={'name': item.userName,
               'price': self.removalPrice,
@@ -192,7 +191,7 @@ class OptDeviceInstaller(ModuleInstallProcessor):
         item = self.item if self.install else None
         self.vehicle.optDevices[self.slotIdx] = item
         smType = CURRENCY_TO_SM_TYPE_DISMANTLING.get(self.removalPrice.price.getCurrency(), SM_TYPE.DismantlingForGold)
-        return makeI18nSuccess(self._formMessage('money_success'), type=smType, **self._getMsgCtx()) if not self.install and not self.item.isRemovable and self.useMoney else super(OptDeviceInstaller, self)._successHandler(code, ctx)
+        return makeI18nSuccess(sysMsgKey=self._formMessage('money_success'), type=smType, **self._getMsgCtx()) if not self.install and not self.item.isRemovable and self.useMoney else super(OptDeviceInstaller, self)._successHandler(code, ctx)
 
     def _request(self, callback):
         itemCD = self.item.intCD if self.install else 0
@@ -245,7 +244,7 @@ class CommonModuleInstallProcessor(ModuleProcessor, VehicleItemProcessor):
 
         if removedItems:
             additionalMessages.append(makeI18nSuccess(self._formMessage('incompatibleEqs'), items="', '".join(removedItems), type=SM_TYPE.Information))
-        additionalMessages.append(makeI18nSuccess(self._formMessage('success'), type=SM_TYPE.Information, auxData=additionalMessages, **self._getMsgCtx()))
+        additionalMessages.append(makeI18nSuccess(sysMsgKey=self._formMessage('success'), type=SM_TYPE.Information, auxData=additionalMessages, **self._getMsgCtx()))
         return makeSuccess(auxData=additionalMessages)
 
 
@@ -274,7 +273,7 @@ class TurretInstaller(CommonModuleInstallProcessor):
     def _successHandler(self, code, ctx=None):
         if self.gunCD:
             gun = self.itemsCache.items.getItemByCD(self.gunCD)
-            return makeI18nSuccess(self._formMessage('success_gun_change'), type=SM_TYPE.Information, gun=gun.userName, **self._getMsgCtx())
+            return makeI18nSuccess(sysMsgKey=self._formMessage('success_gun_change'), type=SM_TYPE.Information, gun=gun.userName, **self._getMsgCtx())
         return super(TurretInstaller, self)._successHandler(code, ctx)
 
 
@@ -309,7 +308,7 @@ class OtherModuleInstaller(CommonModuleInstallProcessor):
         self.addPlugin(plugins.CompatibilityInstallValidator(vehicle, item, 0))
 
     def _request(self, callback):
-        LOG_DEBUG('Request to equip module', self.vehicle, self.item)
+        _logger.debug('Request to equip module: %s, %s', self.vehicle, self.item)
         BigWorld.player().inventory.equip(self.vehicle.invID, self.item.intCD, lambda code, ext: self._response(code, callback, ctx=ext))
 
 
@@ -355,7 +354,7 @@ class BuyAndInstallItemProcessor(ModuleBuyer):
                 self.addPlugin(plugins.TurretCompatibilityInstallValidator(vehicle, item, self.__gunCompDescr))
             elif item.itemTypeID == GUI_ITEM_TYPE.OPTIONALDEVICE:
                 removalPrice = item.getRemovalPrice(self.itemsCache.items)
-                self.addPlugin(plugins.MessageConfirmator('installConfirmationNotRemovable_%s' % removalPrice.price.getCurrency(), ctx={'name': item.userName}, isEnabled=not item.isRemovable and not skipConfirm))
+                self.addPlugin(plugins.MessageConfirmator('installConfirmationNotRemovable_{}'.format(removalPrice.price.getCurrency()), ctx={'name': item.userName}, isEnabled=not item.isRemovable and not skipConfirm))
             self.addPlugin(plugins.MessageConfirmator('removeIncompatibleEqs', ctx={'name': "', '".join([ eq.userName for eq in conflictedEqs ])}, isEnabled=bool(conflictedEqs) and not skipConfirm))
         else:
             self.addPlugins([plugins.ModuleBuyerConfirmator('confirmBuyNotInstall', ctx={'userString': item.userName,
@@ -376,20 +375,20 @@ class BuyAndInstallItemProcessor(ModuleBuyer):
 
     def _successHandler(self, code, ctx=None):
         if self.__mayInstall:
-            LOG_DEBUG('code, ctx', code, ctx)
+            _logger.debug('code: %s, ctx: %s', code, ctx)
             if self.item.itemTypeID == GUI_ITEM_TYPE.EQUIPMENT:
-                auxData = [makeI18nSuccess(self._formApplyMessage('success'), type=SM_TYPE.Information, **self._getMsgCtx())]
+                auxData = [makeI18nSuccess(sysMsgKey=self._formApplyMessage('success'), type=SM_TYPE.Information, **self._getMsgCtx())]
             elif self.item.itemTypeID == GUI_ITEM_TYPE.OPTIONALDEVICE:
-                auxData = [makeI18nSuccess(self._formApplyMessage('success'), type=SM_TYPE.Information, **self._getMsgCtx())]
+                auxData = [makeI18nSuccess(sysMsgKey=self._formApplyMessage('success'), type=SM_TYPE.Information, **self._getMsgCtx())]
             elif self.item.itemTypeID == GUI_ITEM_TYPE.TURRET:
                 if self.__gunCompDescr:
                     gun = self.itemsCache.items.getItemByCD(self.__gunCompDescr)
-                    auxData = [makeI18nSuccess(self._formApplyMessage('success_gun_change'), type=SM_TYPE.Information, gun=gun.userName, **self._getMsgCtx())]
+                    auxData = [makeI18nSuccess(sysMsgKey=self._formApplyMessage('success_gun_change'), type=SM_TYPE.Information, gun=gun.userName, **self._getMsgCtx())]
                 else:
                     auxData = self.__getAdditionalMessages(ctx)
             else:
                 auxData = self.__getAdditionalMessages(ctx)
-            return makeI18nSuccess(self._formMessage('success'), auxData=auxData, type=self._getSysMsgType(), **self._getMsgCtx())
+            return makeI18nSuccess(sysMsgKey=self._formMessage('success'), auxData=auxData, type=self._getSysMsgType(), **self._getMsgCtx())
         else:
             return super(BuyAndInstallItemProcessor, self)._successHandler(code, ctx)
 
@@ -402,18 +401,16 @@ class BuyAndInstallItemProcessor(ModuleBuyer):
                 removedItems.append(item.name)
 
         if removedItems:
-            additionalMessages.append(makeI18nSuccess(self._formApplyMessage('incompatibleEqs'), items="', '".join(removedItems), type=SM_TYPE.Information))
-        additionalMessages.append(makeI18nSuccess(self._formApplyMessage('success'), type=SM_TYPE.Information, auxData=additionalMessages[:], **self._getMsgCtx()))
+            additionalMessages.append(makeI18nSuccess(sysMsgKey=self._formApplyMessage('incompatibleEqs'), items="', '".join(removedItems), type=SM_TYPE.Information))
+        additionalMessages.append(makeI18nSuccess(sysMsgKey=self._formApplyMessage('success'), type=SM_TYPE.Information, auxData=additionalMessages[:], **self._getMsgCtx()))
         return additionalMessages
 
     def _formApplyMessage(self, msg):
-        return '%(itemType)s_%(opType)s/%(msg)s' % {'itemType': self.ITEMS_MSG_PREFIXES.get(self.item.itemTypeID, self.DEFAULT_PREFIX),
-         'opType': 'apply',
-         'msg': msg}
+        return '{itemType}_{opType}/{msg}'.format(itemType=self.ITEMS_MSG_PREFIXES.get(self.item.itemTypeID, self.DEFAULT_PREFIX), opType='apply', msg=msg)
 
     def _request(self, callback):
         if self.__mayInstall:
-            LOG_DEBUG('Make server request to buyAndInstallModule module', self.__vehInvID, self.item.intCD, self.__slotIdx, self.__gunCompDescr, self._currency)
+            _logger.debug('Make server request to buyAndInstallModule module: %s, %s, %s, %s, %s', self.__vehInvID, self.item.intCD, self.__slotIdx, self.__gunCompDescr, self._currency)
             BigWorld.player().shop.buyAndEquipItem(self.__vehInvID, self.item.intCD, self.__slotIdx, False, self.__gunCompDescr, lambda code, errStr, ext: self._response(code, callback, ctx=ext, errStr=errStr))
         else:
             super(BuyAndInstallItemProcessor, self)._request(callback)
@@ -438,7 +435,7 @@ class BattleAbilityInstaller(ModuleInstallProcessor):
             if skillID == selectedSkill and skillID != -1:
                 currentSkills[idx] = previousSkill
 
-        epicMetaGameCtrl.changeEquippedSkills(currentSkills, self.vehicle.intCD, lambda code: self._response(code, callback))
+        epicMetaGameCtrl.changeEquippedSkills(currentSkills, self.vehicle.intCD, lambda code, _: self._response(code, callback))
 
     def _successHandler(self, code, ctx=None):
         return makeSuccess()

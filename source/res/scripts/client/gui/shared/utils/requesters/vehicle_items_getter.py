@@ -132,8 +132,8 @@ _MODULES_GETTERS = {GUI_ITEM_TYPE.VEHICLE: _getVehicles,
  GUI_ITEM_TYPE.PROJECTION_DECAL: _getProjectionDecal,
  GUI_ITEM_TYPE.PERSONAL_NUMBER: _getPersonalNumber}
 
-def getItemsIterator(data, nationID=None, itemTypeID=None):
-    if 'itemPrices' in data:
+def getItemsIterator(data, nationID=None, itemTypeID=None, onlyWithPrices=False):
+    if 'itemPrices' in data and onlyWithPrices:
         prices = data['itemPrices']
     else:
         prices = ItemsPrices()
@@ -153,7 +153,7 @@ def getItemsIterator(data, nationID=None, itemTypeID=None):
             getter = getters[typeID]
             for item in getter(nextID):
                 intCD = item.compactDescr
-                if intCD in prices:
+                if not onlyWithPrices or intCD in prices:
                     yield intCD
 
     return

@@ -52,7 +52,7 @@ class AccountValidator(object):
             LOG_WARNING('Invalid vehicle selling result', vehInvID, code)
             callback(code >= 0)
 
-        BigWorld.player().inventory.sellVehicle(vehInvID, True, [], [], response)
+        BigWorld.player().inventory.sellVehicle(vehInvID, True, [], [], {}, response)
 
     @async
     def __devDismissInvalidTankmen(self, tmanInvID, callback):

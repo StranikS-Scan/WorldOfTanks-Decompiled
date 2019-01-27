@@ -5,6 +5,7 @@ from adisp import process
 from debug_utils import LOG_CURRENT_EXCEPTION, LOG_ERROR, LOG_WARNING, LOG_DEBUG
 from gui.promo.promo_logger import PromoLogSourceType
 from gui.shared.utils.decorators import ReprInjector
+from gui.wgnc.custom_actions_keeper import CustomActionsKeeper
 from gui.wgnc.events import g_wgncEvents
 from gui.wgnc.settings import WGNC_GUI_TYPE
 from gui.wgnc.common import WebHandlersContainer
@@ -108,6 +109,32 @@ class OpenExternalBrowser(_OpenBrowser):
             BigWorld.wg_openWebBrowser(self._url)
         except (AttributeError, TypeError):
             LOG_CURRENT_EXCEPTION()
+
+
+@ReprInjector.withParent()
+class CustomAction(_Action):
+
+    def __init__(self, action_name, **kwargs):
+        super(CustomAction, self).__init__(action_name)
+        self.actionID = kwargs.get('id') or kwargs.get('action_id', -1)
+        self.kwargs = kwargs
+
+    def invoke(self, notID, actor=None):
+        actor, value = self.__getActor()
+        if actor is not None:
+            return CustomActionsKeeper.invoke(actor, **self.kwargs)
+        else:
+            LOG_ERROR("Can't find actor for ", str(value))
+            return
+
+    def __getActor(self):
+        value = self.kwargs.get('value', None)
+        if isinstance(value, dict):
+            return (value.get('action_class', None), value)
+        else:
+            ac = self.kwargs.get('action_class', None)
+            action = CustomActionsKeeper.getAction(ac or value) or (ac if value != ac else None)
+            return (action, value)
 
 
 @ReprInjector.withParent(('_target', 'target'))

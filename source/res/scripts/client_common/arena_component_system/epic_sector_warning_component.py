@@ -387,12 +387,12 @@ class EpicSectorWarningComponent(ClientArenaComponent, CallbackDelayer):
 
 
 class SectorBorderVisualisation(object):
-    BORDER_REMOVE_LIST = {EPIC_BATTLE_TEAM_ID.TEAM_ATTACKER: (AAD.MINUS_X, AAD.PLUS_X, AAD.MINUS_Z),
-     EPIC_BATTLE_TEAM_ID.TEAM_DEFENDER: (AAD.MINUS_X, AAD.PLUS_X, AAD.PLUS_Z)}
+    _TEAM_BORDER_DIRS = {EPIC_BATTLE_TEAM_ID.TEAM_ATTACKER: (AAD.PLUS_Z,),
+     EPIC_BATTLE_TEAM_ID.TEAM_DEFENDER: (AAD.MINUS_Z,)}
 
     def __init__(self, sectorWarningComponent):
         self.__sectorVisuals = {}
-        self.__protectionVisuals = defaultdict(list)
+        self.__protectionVisuals = {}
 
     def destroy(self):
         for borderVisual in self.__sectorVisuals.values():
@@ -410,21 +410,24 @@ class SectorBorderVisualisation(object):
         border = self.__sectorVisuals.get(edgeId, None)
         if border is None:
             self.__sectorVisuals[edgeId] = border = BorderVisual()
-            border.create(*edges[edgeId].getEdgePoints())
+            fromPos, toPos = edges[edgeId].getEdgePoints()
+            border.create(fromPos, toPos, edgeState)
         border.showState(edgeState)
         return
 
     def showProtectionZone(self, zoneId, edgeState, owningTeam, protectionZones):
-        borders = self.__protectionVisuals[zoneId]
-        idx = 0
-        for borderDir in AAD.RANGE:
-            if borderDir in self.BORDER_REMOVE_LIST[owningTeam]:
-                continue
-            if len(borders) <= idx:
+        borders = self.__protectionVisuals.get(zoneId, None)
+        if borders is None:
+            borders = []
+            for borderDir in self._TEAM_BORDER_DIRS[owningTeam]:
                 visual = BorderVisual()
                 borders.append(visual)
-                visual.create(*AAD.getBoundingBoxSegmentByDirection3D(protectionZones[zoneId].geometry[1:3], borderDir))
-            idx += 1
+                bounds = protectionZones[zoneId].geometry[1:3]
+                fromPos, toPos = AAD.getBoundingBoxSegmentByDirection3D(bounds, borderDir)
+                visual.create(fromPos, toPos, edgeState)
 
+            self.__protectionVisuals[zoneId] = borders
         for border in borders:
             border.showState(edgeState)
+
+        return

@@ -23,11 +23,26 @@ class IGameController(object):
     def onAccountBecomePlayer(self):
         pass
 
+    def onLobbyInited(self, event):
+        pass
+
     def onLobbyStarted(self, ctx):
         pass
 
-    def onLobbyInited(self, event):
+
+class IGameWindowController(IGameController):
+
+    def hideWindow(self):
         pass
+
+    def showWindow(self, url=None, invokedFrom=None):
+        pass
+
+    def getUrl(self, callback=lambda *args: None):
+        raise NotImplementedError
+
+    def _getUrl(self):
+        raise NotImplementedError
 
 
 class ISeasonProvider(object):
@@ -280,68 +295,6 @@ class IServerStatsController(IGameController):
         raise NotImplementedError
 
     def getStats(self):
-        raise NotImplementedError
-
-
-class IRefSystemController(IGameController):
-    onUpdated = None
-    onQuestsUpdated = None
-    onPlayerBecomeReferrer = None
-    onPlayerBecomeReferral = None
-
-    def getReferrers(self):
-        raise NotImplementedError
-
-    def getReferrals(self):
-        raise NotImplementedError
-
-    def getQuests(self):
-        raise NotImplementedError
-
-    def isTotallyCompleted(self):
-        raise NotImplementedError
-
-    def getPosByXPinTeam(self):
-        raise NotImplementedError
-
-    def getTotalXP(self):
-        raise NotImplementedError
-
-    def getReferralsXPPool(self):
-        raise NotImplementedError
-
-    def getAvailableReferralsCount(self):
-        raise NotImplementedError
-
-    def showTankmanAwardWindow(self, tankman, completedQuestIDs):
-        raise NotImplementedError
-
-    def showVehicleAwardWindow(self, vehicle, completedQuestIDs):
-        raise NotImplementedError
-
-    def showCreditsAwardWindow(self, creditsValue, completedQuestIDs):
-        raise NotImplementedError
-
-    def showReferrerIntroWindow(self, invitesCount):
-        raise NotImplementedError
-
-    def showReferralIntroWindow(self, nickname, isNewbie=False):
-        raise NotImplementedError
-
-    @classmethod
-    def getRefPeriods(cls):
-        raise NotImplementedError
-
-    @classmethod
-    def getMaxReferralXPPool(cls):
-        raise NotImplementedError
-
-    @classmethod
-    def getMaxNumberOfReferrals(cls):
-        raise NotImplementedError
-
-    @classmethod
-    def isReferrer(cls):
         raise NotImplementedError
 
 
@@ -723,6 +676,9 @@ class IBootcampController(IGameController):
     def runCount(self):
         raise NotImplementedError
 
+    def isReferralEnabled(self):
+        raise NotImplementedError
+
     def needAwarding(self):
         raise NotImplementedError
 
@@ -742,6 +698,9 @@ class IBootcampController(IGameController):
         raise NotImplementedError
 
     def getCheckpoint(self):
+        raise NotImplementedError
+
+    def getSkipDialogConstants(self):
         raise NotImplementedError
 
     def saveCheckpoint(self, checkpoint):
@@ -820,6 +779,15 @@ class IEpicBattleMetaGameController(IGameController, ISeasonProvider):
     def getMaxPlayerLevel(self):
         raise NotImplementedError
 
+    def getRewardVehicles(self):
+        raise NotImplementedError
+
+    def getStageLimit(self):
+        raise NotImplementedError
+
+    def getMaxPlayerPrestigeLevel(self):
+        raise NotImplementedError
+
     def getPointsProgressForLevel(self, level):
         raise NotImplementedError
 
@@ -832,10 +800,13 @@ class IEpicBattleMetaGameController(IGameController, ISeasonProvider):
     def getPointsForLevel(self, level):
         raise NotImplementedError
 
+    def getLevelProgress(self):
+        raise NotImplementedError
+
     def getLevelForPoints(self, points):
         raise NotImplementedError
 
-    def getSkillInformation(self):
+    def getAllSkillsInformation(self):
         raise NotImplementedError
 
     def getPlayerLevelInfo(self):
@@ -868,7 +839,19 @@ class IEpicBattleMetaGameController(IGameController, ISeasonProvider):
     def getCurrentCycleInfo(self):
         raise NotImplementedError
 
+    def getCycleInfo(self, cycleID):
+        raise NotImplementedError
+
+    def getCycleOrdinalNumber(self, cycleID):
+        raise NotImplementedError
+
+    def getSeasonTimeRange(self):
+        raise NotImplementedError
+
     def hasSuitableVehicles(self):
+        raise NotImplementedError
+
+    def isFrozen(self):
         raise NotImplementedError
 
     def getPrimeTimesForDay(self, selectedTime, groupIdentical=False):
@@ -879,6 +862,15 @@ class IEpicBattleMetaGameController(IGameController, ISeasonProvider):
 
     def isWelcomeScreenUpToDate(self, serverSettings):
         raise NotImplementedError
+
+    def openURL(self, url=None):
+        raise NotImplementedError
+
+    def showBattleReservesScreen(self):
+        raise NotImplementedError
+
+    def getStoredEpicDiscount(self):
+        return NotImplementedError
 
 
 class IManualController(IGameController):
@@ -897,8 +889,21 @@ class IManualController(IGameController):
 
 
 class ICalendarController(IGameController):
+    pass
 
-    def showCalendar(self, invokedFrom):
+
+class IReferralProgramController(IGameController):
+    onReferralProgramEnabled = None
+    onReferralProgramDisabled = None
+    onReferralProgramUpdated = None
+
+    def isFirstIndication(self):
+        raise NotImplementedError
+
+    def getBubbleCount(self):
+        raise NotImplementedError
+
+    def updateBubble(self):
         raise NotImplementedError
 
 
@@ -909,4 +914,17 @@ class IFestivityController(IGameController):
         raise NotImplementedError
 
     def getHangarQuestsFlagData(self):
+        raise NotImplementedError
+
+
+class IBadgesController(IGameController):
+    onUpdated = None
+
+    def select(self, badges):
+        raise NotImplementedError
+
+    def getPrefix(self):
+        raise NotImplementedError
+
+    def getSuffix(self):
         raise NotImplementedError

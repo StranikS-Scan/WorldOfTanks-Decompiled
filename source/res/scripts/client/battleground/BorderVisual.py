@@ -12,6 +12,7 @@ CONFIG_FILE = 'scripts/dynamic_objects.xml'
 BORDER_VISUAL_TAG = 'SectorBorderVisual'
 VisualSetting = namedtuple('VisualSetting', ('modelPath', 'overTerrainHeight', 'modelSettings'))
 ModelSetting = namedtuple('ModelSetting', ('scale', 'spacing', 'color'))
+DashesParams = namedtuple('DashesParams', ('size', 'color', 'shift', 'offset'))
 
 def _readModelSetting(ctx, section):
     return ModelSetting(scale=_xml.readVector3(ctx, section, 'scale'), spacing=_xml.readFloat(ctx, section, 'spacing'), color=int(_xml.readString(ctx, section, 'color'), 0))
@@ -26,6 +27,8 @@ def _readVisualSettings():
 g_borderVisualSettings = _readVisualSettings()
 
 class BorderVisual(object):
+    __DEFAULT_DASH_SIZE = (1, 1)
+    __DEFAULT_DASH_COLOR = 4294967295L
 
     def __init__(self):
         self.__direction = None
@@ -36,12 +39,14 @@ class BorderVisual(object):
         self.__modelOffsets = None
         self.__rootModel = None
         self.__rootMatrix = None
+        self.__edgeState = None
         return
 
-    def create(self, fromPos, toPos):
+    def create(self, fromPos, toPos, currentEdgeState=SECTOR_EDGE_STATE.NONE):
         if None in (fromPos, toPos):
             return
         else:
+            self.__edgeState = currentEdgeState
             if not BigWorld.player().arena.isPointInsideArenaBB(fromPos):
                 fromPos = BigWorld.player().arena.getClosestPointOnArenaBB(fromPos)
             if not BigWorld.player().arena.isPointInsideArenaBB(toPos):
@@ -65,14 +70,17 @@ class BorderVisual(object):
             self.__terrainModels = [None] * maxNumModels
             self.__attachNodes = [None] * maxNumModels
             self.__modelOffsets = [None] * maxNumModels
+            dashesParams = self.__getDashesParams(currentEdgeState)
             for idx in range(0, maxNumModels):
                 self.__terrainModels[idx] = area = BigWorld.PyTerrainSelectedArea()
                 self.__modelOffsets[idx] = offset = Matrix()
                 self.__attachNodes[idx] = attachNode = rootModel.node('', offset)
                 attachNode.attach(area)
-                area.setup(g_borderVisualSettings.modelPath, (1, 1), g_borderVisualSettings.overTerrainHeight, 4294967295L)
+                area.setup(g_borderVisualSettings.modelPath, dashesParams.size, g_borderVisualSettings.overTerrainHeight, dashesParams.color)
                 area.doYCutOff(False)
                 area.enableAccurateCollision(False)
+                offset.translation = dashesParams.offset
+                dashesParams.offset.x += dashesParams.shift
 
             return
 
@@ -94,21 +102,38 @@ class BorderVisual(object):
             self.__rootModel.visible = False
             return
         self.__rootModel.visible = True
-        modelSetting = g_borderVisualSettings.modelSettings[edgeState]
+        if self.__edgeState == edgeState:
+            return
+        self.__edgeState = edgeState
         numModels = self.__numModelsPerEdgeState[edgeState]
-        dashLength = modelSetting.scale.x
-        gap = (self.__length - numModels * dashLength) / numModels
-        cur = (self.__length - gap - dashLength) * Vector3(-0.5, 0, 0)
+        dashesParams = self.__getDashesParams(edgeState)
         for terrainModel, attachNode, offset in zip(self.__terrainModels, self.__attachNodes, self.__modelOffsets):
-            terrainModel.setColor(modelSetting.color)
+            terrainModel.setColor(dashesParams.color)
             if not terrainModel.attached:
                 attachNode.attach(terrainModel)
-            offset.translation = cur
-            terrainModel.setSize((modelSetting.scale.x, modelSetting.scale.z))
+            offset.translation = dashesParams.offset
+            terrainModel.setSize(dashesParams.size)
             terrainModel.updateHeights()
-            cur.x += dashLength + gap
+            dashesParams.offset.x += dashesParams.shift
 
         for idx in range(numModels, len(self.__attachNodes)):
             if self.__terrainModels[idx].attached:
                 self.__attachNodes[idx].detach(self.__terrainModels[idx])
             break
+
+    def __getDashesParams(self, edgeState):
+        if edgeState != SECTOR_EDGE_STATE.NONE:
+            modelSetting = g_borderVisualSettings.modelSettings[edgeState]
+            size = (modelSetting.scale.x, modelSetting.scale.z)
+            color = modelSetting.color
+            gap = modelSetting.spacing
+            length = modelSetting.scale.x
+        else:
+            maxNumModels = max(self.__numModelsPerEdgeState.values())
+            size = self.__DEFAULT_DASH_SIZE
+            color = self.__DEFAULT_DASH_COLOR
+            gap = (self.__length - maxNumModels * size[0]) / maxNumModels
+            length = size[0]
+        shift = gap + length
+        offset = (self.__length - shift) * Vector3(-0.5, 0, 0)
+        return DashesParams(size, color, shift, offset)

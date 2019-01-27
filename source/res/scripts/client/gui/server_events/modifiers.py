@@ -1214,6 +1214,12 @@ class MarathonEventModifier(ActionModifier):
         super(MarathonEventModifier, self).__init__(name, params, modType=ACTION_MODIFIER_TYPE.DISCOUNT, section=ACTION_SECTION_TYPE.ALL, itemType=GUI_ITEM_TYPE.ACHIEVEMENT)
 
 
+class ReferralModifier(ActionModifier):
+
+    def __init__(self, name, params):
+        super(ReferralModifier, self).__init__('referralDisabled', params, modType=ACTION_MODIFIER_TYPE.AVAILABILITY)
+
+
 class CalendarModifier(ActionModifier):
 
     def __init__(self, name, params):
@@ -1270,6 +1276,7 @@ _MODIFIERS = (('mul_EconomicsParams', EconomicsMul),
  ('set_MarathonAnnounce', MarathonEventModifier),
  ('set_MarathonInProgress', MarathonEventModifier),
  ('set_MarathonFinished', MarathonEventModifier),
+ ('ReferralProgramDisabled', ReferralModifier),
  ('AdventCalendarEnabled', CalendarModifier),
  ('AdventCalendarForced', CalendarSplashModifier))
 _MODIFIERS_DICT = dict(_MODIFIERS)

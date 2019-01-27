@@ -129,7 +129,9 @@ def makeVehicleFormatter(includeInventoryFields=False):
     isUnlockedField = Field('isUnlocked', lambda i: i.isUnlocked)
     shortName = Field('shortName', lambda i: i.shortUserName)
     restore = Field('restore', _formatVehicleRestore)
+    inHangarField = Field('inHangar', lambda i: i.isInInventory)
     isTradeInAvailableField = Field('isTradeInAvailable', lambda i: i.canTradeIn)
+    inHangarField = Field('inHangar', lambda i: i.isInInventory)
     fields = [idField,
      nameField,
      shortName,
@@ -148,7 +150,8 @@ def makeVehicleFormatter(includeInventoryFields=False):
      isUnlockedField,
      imagesField,
      isTradeInAvailableField,
-     restore]
+     restore,
+     inHangarField]
     if includeInventoryFields:
         shellFormatter = makeShellFormatter(includeCount=True)
         shellsField = Field('shells', lambda i: [ shellFormatter.format(s) for s in i.shells ])
@@ -291,4 +294,13 @@ def makePremiumPackFormatter():
      Field('buyPrice', lambda pack: _formatPrice(pack.buyPrice)),
      Field('duration', lambda pack: pack.duration),
      Field('id', lambda pack: pack.id)]
+    return Formatter(fields)
+
+
+def makeCustomizationFormatter():
+    fields = [Field('id', lambda i: i.id),
+     Field('type', lambda i: i.itemTypeName),
+     Field('priceGroup', lambda i: i.priceGroup),
+     buyPriceField,
+     sellPriceField]
     return Formatter(fields)

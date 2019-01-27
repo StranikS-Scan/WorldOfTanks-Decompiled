@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/web_client_api/ui/browser.py
 from adisp import process
+from gui.shared.event_dispatcher import showBrowserOverlayView
 from helpers import dependency
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.framework import ViewTypes
@@ -22,6 +23,10 @@ class _OpenBrowserWindowSchema(W2CSchema):
 
 
 class _OpenExternalBrowserSchema(W2CSchema):
+    url = Field(required=True, type=basestring)
+
+
+class _OpenBrowserOverlaySchema(W2CSchema):
     url = Field(required=True, type=basestring)
 
 
@@ -57,7 +62,7 @@ class CloseBrowserWindowWebApiMixin(object):
             windowAlias = getViewName(ctx['browser_alias'], ctx['browser_id'])
             app = g_appLoader.getApp()
             if app is not None and app.containerManager is not None:
-                supportedBrowserViewTypes = (ViewTypes.WINDOW, ViewTypes.OVERLAY)
+                supportedBrowserViewTypes = (ViewTypes.WINDOW, ViewTypes.OVERLAY, ViewTypes.LOBBY_TOP_SUB)
                 browserWindow = None
                 for viewType in supportedBrowserViewTypes:
                     browserWindow = app.containerManager.getView(viewType, criteria={POP_UP_CRITERIA.UNIQUE_NAME: windowAlias})
@@ -95,3 +100,10 @@ class OpenExternalBrowserWebApiMixin(object):
     def externalBrowser(self, cmd, ctx):
         linkCtrl = dependency.instance(IExternalLinksController)
         linkCtrl.open(cmd.url)
+
+
+class OpenBrowserOverlayWebApiMixin(object):
+
+    @w2c(_OpenBrowserOverlaySchema, 'browser_overlay')
+    def openBrowserOverlay(self, cmd):
+        showBrowserOverlayView(cmd.url)

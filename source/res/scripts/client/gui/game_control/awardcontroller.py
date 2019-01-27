@@ -12,7 +12,7 @@ from account_helpers.settings_core.settings_constants import SOUND
 from account_shared import getFairPlayViolationName
 from chat_shared import SYS_MESSAGE_TYPE
 from constants import EVENT_TYPE, INVOICE_ASSET
-from debug_utils import LOG_CURRENT_EXCEPTION, LOG_WARNING, LOG_ERROR, LOG_DEBUG
+from debug_utils import LOG_ERROR, LOG_DEBUG
 from dossiers2.custom.records import DB_ID_TO_RECORD
 from dossiers2.ui.layouts import PERSONAL_MISSIONS_GROUP
 from gui import DialogsInterface
@@ -36,29 +36,25 @@ from gui.server_events.events_dispatcher import showLootboxesAward
 from gui.server_events.finders import PM_FINAL_TOKEN_QUEST_IDS_BY_OPERATION_ID, getBranchByOperationId, BRANCH_TO_OPERATION_IDS, CHAMPION_BADGES_BY_BRANCH
 from gui.shared import EVENT_BUS_SCOPE, g_eventBus, events
 from gui.shared.events import PersonalMissionsEvent
-from gui.shared.gui_items.Tankman import Tankman
-from gui.shared.gui_items.Vehicle import Vehicle
 from gui.shared.gui_items.dossier.factories import getAchievementFactory
 from gui.shared.utils import isPopupsWindowsOpenDisabled
 from gui.shared.utils.functions import getViewName
 from gui.shared.utils.requesters import REQ_CRITERIA
-from gui.shared.utils.transport import z_loads
 from gui.sounds.sound_constants import SPEAKERS_CONFIG
 from helpers import dependency
 from helpers import i18n
 from items import ITEM_TYPE_INDICES, getTypeOfCompactDescr, vehicles as vehicles_core
-from messenger.formatters import NCContextItemFormatter, TimeFormatter
+from messenger.formatters import TimeFormatter
 from messenger.formatters.service_channel import TelecomReceivedInvoiceFormatter
 from messenger.proto.events import g_messengerEvents
 from skeletons.account_helpers.settings_core import ISettingsCore
-from skeletons.gui.game_control import IRefSystemController, IAwardController, IRankedBattlesController, IBootcampController
+from skeletons.gui.game_control import IAwardController, IRankedBattlesController, IBootcampController
 from skeletons.gui.goodies import IGoodiesCache
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.sounds import ISoundsController
 
 class AwardController(IAwardController, IGlobalListener):
-    refSystem = dependency.descriptor(IRefSystemController)
     bootcampController = dependency.descriptor(IBootcampController)
     eventsCache = dependency.descriptor(IEventsCache)
 
@@ -67,10 +63,8 @@ class AwardController(IAwardController, IGlobalListener):
          QuestBoosterAwardHandler(self),
          BoosterAfterBattleAwardHandler(self),
          PunishWindowHandler(self),
-         RefSystemQuestsWindowHandler(self),
          TokenQuestsWindowHandler(self),
          MotiveQuestsWindowHandler(self),
-         RefSysStatusWindowHandler(self),
          VehiclesResearchHandler(self),
          VictoryHandler(self),
          BattlesCountHandler(self),
@@ -247,24 +241,6 @@ class PunishWindowHandler(ServiceChannelHandler):
              'time': TimeFormatter.getActualMsgTimeStr(arenaCreateTime),
              'reason': i18n.makeString(DIALOGS.all('punishmentWindow/reason/%s' % getFairPlayViolationName(violation)))}), lambda *args: None)
         return
-
-
-class RefSystemQuestsWindowHandler(ServiceChannelHandler):
-
-    def __init__(self, awardCtrl):
-        super(RefSystemQuestsWindowHandler, self).__init__(SYS_MESSAGE_TYPE.refSystemQuests.index(), awardCtrl)
-
-    def _showAward(self, ctx):
-        _, message = ctx
-        completedQuestIDs = message.data.get('completedQuestIDs', set())
-        for tmanCompDescr in message.data.get('tankmen') or []:
-            self._awardCtrl.refSystem.showTankmanAwardWindow(Tankman(tmanCompDescr), completedQuestIDs)
-
-        for vehiclesData in message.data.get('vehicles', []):
-            for vehTypeCompDescr in vehiclesData:
-                self._awardCtrl.refSystem.showVehicleAwardWindow(Vehicle(typeCompDescr=abs(vehTypeCompDescr)), completedQuestIDs)
-
-        self._awardCtrl.refSystem.showCreditsAwardWindow(message.data.get('credits', 0), completedQuestIDs)
 
 
 class PersonalMissionBonusHandler(ServiceChannelHandler):
@@ -714,50 +690,6 @@ class PersonalMissionOperationUnlockedHandler(BattleQuestsAutoWindowHandler):
     @staticmethod
     def _showWindow(quest, context):
         quests_events.showOperationUnlockedAward(quest, context)
-
-
-class RefSysStatusWindowHandler(ServiceChannelHandler):
-
-    def __init__(self, awardCtrl):
-        super(RefSysStatusWindowHandler, self).__init__(SYS_MESSAGE_TYPE.notificationsCenter.index(), awardCtrl)
-
-    def _showAward(self, ctx):
-        data = z_loads(ctx[1].data)
-        if 'window' not in data:
-            return
-        context = {}
-        if 'context' in data:
-            context = self.__formatContext(data['context'])
-        if data['window'] == 1:
-            self.__showRefSystemNotification('showReferrerIntroWindow', invitesCount=context.get('invites_count', 0))
-        elif data['window'] == 2:
-            self.__showRefSystemNotification('showReferralIntroWindow', nickname=context['nickname'], isNewbie=True)
-        elif data['window'] == 3:
-            self.__showRefSystemNotification('showReferralIntroWindow', nickname=context['nickname'], isNewbie=False)
-        else:
-            LOG_WARNING('Unknown referral system user status window', data)
-
-    def __showRefSystemNotification(self, methodName, **ctx):
-        try:
-            getattr(self._awardCtrl.refSystem, methodName)(**ctx)
-        except Exception:
-            LOG_ERROR('There is exception while processing notification center window', methodName, ctx)
-            LOG_CURRENT_EXCEPTION()
-
-    def __formatContext(self, ctx):
-        result = {}
-        if type(ctx) is not types.DictType:
-            LOG_ERROR('Context is invalid', ctx)
-            return result
-        getItemFormat = NCContextItemFormatter.getItemFormat
-        for key, item in ctx.iteritems():
-            if len(item) > 1:
-                itemType, itemValue = item[0:2]
-                result[key] = getItemFormat(itemType, itemValue)
-            LOG_ERROR('Context item is invalid', item)
-            result[key] = str(item)
-
-        return result
 
 
 class SpecialAchievement(AwardHandler):

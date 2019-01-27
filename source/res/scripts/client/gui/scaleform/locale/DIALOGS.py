@@ -148,6 +148,14 @@ class DIALOGS(object):
     CONFIRMMODULEDIALOG_SHOP_TOTALLABEL1 = '#dialogs:confirmModuleDialog/shop/totalLabel1'
     CONFIRMMODULEDIALOG_INVENTORY_TOTALLABEL1 = '#dialogs:confirmModuleDialog/inventory/totalLabel1'
     CONFIRMMODULEDIALOG_REZULTLABEL1 = '#dialogs:confirmModuleDialog/rezultLabel1'
+    RENTCONFIRMATION_TITLE = '#dialogs:rentConfirmation/title'
+    RENTCONFIRMATION_MESSAGE = '#dialogs:rentConfirmation/message'
+    RENTCONFIRMATION_SUBMIT = '#dialogs:rentConfirmation/submit'
+    RENTCONFIRMATION_CANCEL = '#dialogs:rentConfirmation/cancel'
+    RENTCONFIRMATIONRENEW_TITLE = '#dialogs:rentConfirmationRenew/title'
+    RENTCONFIRMATIONRENEW_MESSAGE = '#dialogs:rentConfirmationRenew/message'
+    RENTCONFIRMATIONRENEW_SUBMIT = '#dialogs:rentConfirmationRenew/submit'
+    RENTCONFIRMATIONRENEW_CANCEL = '#dialogs:rentConfirmationRenew/cancel'
     BUYCONFIRMATION_TITLE = '#dialogs:buyConfirmation/title'
     BUYCONFIRMATION_MESSAGECOMBINE = '#dialogs:buyConfirmation/messageCombine'
     BUYCONFIRMATION_MESSAGE = '#dialogs:buyConfirmation/message'
@@ -914,6 +922,11 @@ class DIALOGS(object):
     BOOTCAMP_SKIP_MESSAGE = '#dialogs:bootcamp/skip/message'
     BOOTCAMP_SKIP_SUBMIT = '#dialogs:bootcamp/skip/submit'
     BOOTCAMP_SKIP_CANCEL = '#dialogs:bootcamp/skip/cancel'
+    BOOTCAMP_SKIP_REFERRAL_TITLE = '#dialogs:bootcamp/skip/referral/title'
+    BOOTCAMP_SKIP_REFERRAL_LABEL = '#dialogs:bootcamp/skip/referral/label'
+    BOOTCAMP_SKIP_REFERRAL_MESSAGE = '#dialogs:bootcamp/skip/referral/message'
+    BOOTCAMP_SKIP_REFERRAL_SUBMIT = '#dialogs:bootcamp/skip/referral/submit'
+    BOOTCAMP_SKIP_REFERRAL_CANCEL = '#dialogs:bootcamp/skip/referral/cancel'
     BOOTCAMP_START_TITLE = '#dialogs:bootcamp/start/title'
     BOOTCAMP_START_LABEL = '#dialogs:bootcamp/start/label'
     BOOTCAMP_START_MESSAGE = '#dialogs:bootcamp/start/message'
@@ -951,6 +964,10 @@ class DIALOGS(object):
     GAMMADIALOG_MESSAGE_HEADER = '#dialogs:gammaDialog/message/header'
     GAMMADIALOG_MESSAGE_DESCRIPTION = '#dialogs:gammaDialog/message/description'
     GAMMADIALOG_CANCEL = '#dialogs:gammaDialog/cancel'
+    REFERRALREWARD_TITLE = '#dialogs:referralReward/title'
+    REFERRALREWARD_MESSAGE = '#dialogs:referralReward/message'
+    REFERRALREWARD_SUBMIT = '#dialogs:referralReward/submit'
+    REFERRALREWARD_CANCEL = '#dialogs:referralReward/cancel'
     VEHICLESELLDIALOG_VEHICLETYPE_ENUM = (VEHICLESELLDIALOG_VEHICLETYPE_LIGHTTANK,
      VEHICLESELLDIALOG_VEHICLETYPE_MEDIUMTANK,
      VEHICLESELLDIALOG_VEHICLETYPE_HEAVYTANK,
@@ -1088,6 +1105,14 @@ class DIALOGS(object):
      CONFIRMMODULEDIALOG_SHOP_TOTALLABEL1,
      CONFIRMMODULEDIALOG_INVENTORY_TOTALLABEL1,
      CONFIRMMODULEDIALOG_REZULTLABEL1,
+     RENTCONFIRMATION_TITLE,
+     RENTCONFIRMATION_MESSAGE,
+     RENTCONFIRMATION_SUBMIT,
+     RENTCONFIRMATION_CANCEL,
+     RENTCONFIRMATIONRENEW_TITLE,
+     RENTCONFIRMATIONRENEW_MESSAGE,
+     RENTCONFIRMATIONRENEW_SUBMIT,
+     RENTCONFIRMATIONRENEW_CANCEL,
      BUYCONFIRMATION_TITLE,
      BUYCONFIRMATION_MESSAGECOMBINE,
      BUYCONFIRMATION_MESSAGE,
@@ -1854,6 +1879,11 @@ class DIALOGS(object):
      BOOTCAMP_SKIP_MESSAGE,
      BOOTCAMP_SKIP_SUBMIT,
      BOOTCAMP_SKIP_CANCEL,
+     BOOTCAMP_SKIP_REFERRAL_TITLE,
+     BOOTCAMP_SKIP_REFERRAL_LABEL,
+     BOOTCAMP_SKIP_REFERRAL_MESSAGE,
+     BOOTCAMP_SKIP_REFERRAL_SUBMIT,
+     BOOTCAMP_SKIP_REFERRAL_CANCEL,
      BOOTCAMP_START_TITLE,
      BOOTCAMP_START_LABEL,
      BOOTCAMP_START_MESSAGE,
@@ -1890,7 +1920,11 @@ class DIALOGS(object):
      GAMMADIALOG_TITLE,
      GAMMADIALOG_MESSAGE_HEADER,
      GAMMADIALOG_MESSAGE_DESCRIPTION,
-     GAMMADIALOG_CANCEL)
+     GAMMADIALOG_CANCEL,
+     REFERRALREWARD_TITLE,
+     REFERRALREWARD_MESSAGE,
+     REFERRALREWARD_SUBMIT,
+     REFERRALREWARD_CANCEL)
     RECRUITWINDOW_VEHICLECLASSDROPDOWN_ENUM = (RECRUITWINDOW_VEHICLECLASSDROPDOWN_ALL,
      RECRUITWINDOW_VEHICLECLASSDROPDOWN_LIGHTTANK,
      RECRUITWINDOW_VEHICLECLASSDROPDOWN_MEDIUMTANK,

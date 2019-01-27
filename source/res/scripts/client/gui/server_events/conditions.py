@@ -1483,39 +1483,6 @@ class MultiStunEvent(_Condition, _Negatable):
         return self._relation
 
 
-class RefSystemRalXPPoolCondition(_Requirement):
-
-    def __init__(self, path, data):
-        super(RefSystemRalXPPoolCondition, self).__init__('refSystemRalXPPool', dict(data), path)
-        self._relation = _findRelation(self._data.keys())
-        self._relationValue = float(_getNodeValue(self._data, self._relation))
-
-    def __repr__(self):
-        return 'RefSystemRalXPPoolCondition<%s=%s>' % (self._relation, str(self._relationValue))
-
-    def negate(self):
-        self._relation = _RELATIONS.getOppositeRelation(self._relation)
-
-    def getValue(self):
-        return self._relationValue
-
-
-class RefSystemRalBought10Lvl(_Requirement):
-
-    def __init__(self, path, data):
-        super(RefSystemRalBought10Lvl, self).__init__('refSystemRalBought10Lvl', dict(data), path)
-        self._relation = bool(self._data['value'])
-
-    def __repr__(self):
-        return 'RefSystemRalBought10Lvl<value=%r>' % self._relation
-
-    def negate(self):
-        self._relation = not self._relation
-
-    def getValue(self):
-        return self._relation
-
-
 def getProgressFromQuestWithSingleAccumulative(quest):
     conditions = quest.bonusCond.getConditions()
     if conditions and len(conditions.items) == 1:

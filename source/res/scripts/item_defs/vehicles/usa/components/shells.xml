@@ -1375,21 +1375,6 @@
       <devices>	165	</devices>
     </damage>
   </_120mm_AP_Shot>
-  <_120mm_HE_Shot>
-    <id>	59	</id>
-    <userString>	#usa_vehicles:_120mm_HE_Shot	</userString>
-    <icon>	he	</icon>
-    <price>	900	</price>
-    <kind>	HIGH_EXPLOSIVE	</kind>
-    <caliber>	120	</caliber>
-    <explosionRadius>	2.42	</explosionRadius>
-    <isTracer>	true	</isTracer>
-    <effects>	largeHighExplosive	</effects>
-    <damage>
-      <armor>	515	</armor>
-      <devices>	165	</devices>
-    </damage>
-  </_120mm_HE_Shot>
   <_120mm_HE_Shot_fallout>
     <id>	117	</id>
     <userString>	#usa_vehicles:_120mm_HE_Shot_fallout	</userString>
@@ -1406,20 +1391,6 @@
       <devices>	165	</devices>
     </damage>
   </_120mm_HE_Shot_fallout>
-  <_120mm_AP-T_M358>
-    <id>	60	</id>
-    <userString>	#usa_vehicles:_120mm_AP-T_M358	</userString>
-    <icon>	ap	</icon>
-    <price>	1060	</price>
-    <kind>	ARMOR_PIERCING	</kind>
-    <caliber>	120	</caliber>
-    <isTracer>	true	</isTracer>
-    <effects>	largeArmorPiercing	</effects>
-    <damage>
-      <armor>	400	</armor>
-      <devices>	165	</devices>
-    </damage>
-  </_120mm_AP-T_M358>
   <_120mm_AP-T_M358_fallout>
     <id>	115	</id>
     <userString>	#usa_vehicles:_120mm_AP-T_M358_fallout	</userString>
@@ -1435,6 +1406,35 @@
       <devices>	165	</devices>
     </damage>
   </_120mm_AP-T_M358_fallout>
+  <_120mm_HE_Shot>
+    <id>	59	</id>
+    <userString>	#usa_vehicles:_120mm_HE_Shot	</userString>
+    <icon>	he	</icon>
+    <price>	900	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <caliber>	120	</caliber>
+    <explosionRadius>	2.42	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	largeHighExplosive	</effects>
+    <damage>
+      <armor>	515	</armor>
+      <devices>	165	</devices>
+    </damage>
+  </_120mm_HE_Shot>
+  <_120mm_AP-T_M358>
+    <id>	60	</id>
+    <userString>	#usa_vehicles:_120mm_AP-T_M358	</userString>
+    <icon>	ap	</icon>
+    <price>	1060	</price>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	120	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	largeArmorPiercing	</effects>
+    <damage>
+      <armor>	400	</armor>
+      <devices>	165	</devices>
+    </damage>
+  </_120mm_AP-T_M358>
   <_120mm_HEAT-T_M469>
     <id>	61	</id>
     <userString>	#usa_vehicles:_120mm_HEAT-T_M469	</userString>

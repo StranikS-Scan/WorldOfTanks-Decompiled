@@ -10,7 +10,7 @@ from gui.shared.gui_items.gui_item_economics import ItemPrice
 from gui.shared.money import Money
 from helpers import dependency, i18n
 from gui.shared.gui_items import GUI_ITEM_TYPE
-from gui.shared.utils.requesters.ItemsRequester import REQ_CRITERIA
+from gui.shared.utils.requesters.ItemsRequester import REQ_CRITERIA, RequestCriteria, PredicateCondition
 from soft_exception import SoftException
 from skeletons.gui.goodies import IGoodiesCache
 from skeletons.gui.shared import IItemsCache
@@ -54,18 +54,58 @@ _GUI_ITEMS_TYPE_MAP = {ShopItemType.VEHICLE: GUI_ITEM_TYPE.VEHICLE,
  ShopItemType.DEVICE: GUI_ITEM_TYPE.OPTIONALDEVICE,
  ShopItemType.BATTLE_BOOSTER: GUI_ITEM_TYPE.BATTLE_BOOSTER,
  ShopItemType.MODULE: GUI_ITEM_TYPE.VEHICLE_MODULES,
- ShopItemType.SHELL: GUI_ITEM_TYPE.SHELL}
+ ShopItemType.SHELL: GUI_ITEM_TYPE.SHELL,
+ ShopItemType.PAINT: GUI_ITEM_TYPE.PAINT,
+ ShopItemType.CAMOUFLAGE: GUI_ITEM_TYPE.CAMOUFLAGE,
+ ShopItemType.MODIFICATION: GUI_ITEM_TYPE.MODIFICATION,
+ ShopItemType.STYLE: GUI_ITEM_TYPE.STYLE,
+ ShopItemType.DECAL: GUI_ITEM_TYPE.DECAL,
+ ShopItemType.EMBLEM: GUI_ITEM_TYPE.EMBLEM,
+ ShopItemType.INSCRIPTION: GUI_ITEM_TYPE.INSCRIPTION,
+ ShopItemType.PROJECTION_DECAL: GUI_ITEM_TYPE.PROJECTION_DECAL}
 _ITEMS_CRITERIA_MAP = {ShopItemType.VEHICLE: {'inventory': REQ_CRITERIA.INVENTORY,
                         'premium': REQ_CRITERIA.VEHICLE.PREMIUM,
                         'ready': REQ_CRITERIA.VEHICLE.READY,
-                        'sellable': REQ_CRITERIA.VEHICLE.CAN_SELL},
- ShopItemType.EQUIPMENT: {'inventory': REQ_CRITERIA.INVENTORY},
- ShopItemType.DEVICE: {'inventory': REQ_CRITERIA.INVENTORY},
- ShopItemType.BATTLE_BOOSTER: {'inventory': REQ_CRITERIA.INVENTORY},
- ShopItemType.MODULE: {'inventory': REQ_CRITERIA.INVENTORY},
- ShopItemType.BOOSTER: {'inventory': REQ_CRITERIA.BOOSTER.IN_ACCOUNT},
- ShopItemType.SHELL: {'inventory': REQ_CRITERIA.INVENTORY},
- ShopItemType.PREMIUM: {}}
+                        'sellable': REQ_CRITERIA.VEHICLE.CAN_SELL,
+                        'secret': REQ_CRITERIA.SECRET,
+                        'hidden': REQ_CRITERIA.HIDDEN,
+                        'is_premium_igr': REQ_CRITERIA.VEHICLE.IS_PREMIUM_IGR},
+ ShopItemType.EQUIPMENT: {'inventory': REQ_CRITERIA.INVENTORY,
+                          'secret': REQ_CRITERIA.SECRET,
+                          'hidden': REQ_CRITERIA.HIDDEN},
+ ShopItemType.DEVICE: {'inventory': REQ_CRITERIA.INVENTORY,
+                       'secret': REQ_CRITERIA.SECRET,
+                       'hidden': REQ_CRITERIA.HIDDEN},
+ ShopItemType.BATTLE_BOOSTER: {'inventory': REQ_CRITERIA.INVENTORY,
+                               'secret': REQ_CRITERIA.SECRET,
+                               'hidden': REQ_CRITERIA.HIDDEN},
+ ShopItemType.MODULE: {'inventory': REQ_CRITERIA.INVENTORY,
+                       'secret': REQ_CRITERIA.SECRET,
+                       'hidden': REQ_CRITERIA.HIDDEN},
+ ShopItemType.BOOSTER: {'inventory': REQ_CRITERIA.BOOSTER.IN_ACCOUNT,
+                        'hidden': REQ_CRITERIA.HIDDEN,
+                        'enabled': REQ_CRITERIA.BOOSTER.ENABLED},
+ ShopItemType.SHELL: {'inventory': REQ_CRITERIA.INVENTORY,
+                      'secret': REQ_CRITERIA.SECRET,
+                      'hidden': REQ_CRITERIA.HIDDEN},
+ ShopItemType.PREMIUM: {},
+ ShopItemType.PAINT: {},
+ ShopItemType.CAMOUFLAGE: {},
+ ShopItemType.MODIFICATION: {},
+ ShopItemType.STYLE: {},
+ ShopItemType.DECAL: {},
+ ShopItemType.EMBLEM: {},
+ ShopItemType.INSCRIPTION: {},
+ ShopItemType.PROJECTION_DECAL: {}}
+
+class IdInListCriteria(RequestCriteria):
+
+    def __call__(self, idList):
+        self._conditions = (PredicateCondition(lambda x: not idList or x.intCD in idList),)
+        return self
+
+
+ID_IN_LIST = IdInListCriteria()
 _EXTRA_ITEMS_CRITERIA_MAP = {ShopItemType.VEHICLE: ~REQ_CRITERIA.HIDDEN | ~REQ_CRITERIA.SECRET | ~REQ_CRITERIA.VEHICLE.IS_PREMIUM_IGR,
  ShopItemType.EQUIPMENT: ~REQ_CRITERIA.HIDDEN | ~REQ_CRITERIA.SECRET,
  ShopItemType.DEVICE: ~REQ_CRITERIA.HIDDEN | ~REQ_CRITERIA.SECRET,
@@ -73,12 +113,20 @@ _EXTRA_ITEMS_CRITERIA_MAP = {ShopItemType.VEHICLE: ~REQ_CRITERIA.HIDDEN | ~REQ_C
  ShopItemType.MODULE: ~REQ_CRITERIA.HIDDEN | ~REQ_CRITERIA.SECRET,
  ShopItemType.SHELL: ~REQ_CRITERIA.HIDDEN | ~REQ_CRITERIA.SECRET,
  ShopItemType.BOOSTER: REQ_CRITERIA.BOOSTER.ENABLED | ~REQ_CRITERIA.HIDDEN}
+_SHOP_CUSTOMIZATION_TYPES = (ShopItemType.PAINT,
+ ShopItemType.CAMOUFLAGE,
+ ShopItemType.MODIFICATION,
+ ShopItemType.STYLE,
+ ShopItemType.DECAL,
+ ShopItemType.EMBLEM,
+ ShopItemType.INSCRIPTION,
+ ShopItemType.PROJECTION_DECAL)
 
-def _parseCriteriaSpec(itemType, spec):
+def _parseCriteriaSpec(itemType, spec, idList=None):
     typeCriteria = _ITEMS_CRITERIA_MAP[itemType]
-    ids = sorted([ val.strip() for val in spec.split(',') ] if spec else [])
+    ids = sorted([ val.strip() for val in spec ] if spec else [])
     normalizedIds = [ i.replace('!', '') for i in ids ]
-    compoundCriteria = REQ_CRITERIA.EMPTY
+    compoundCriteria = REQ_CRITERIA.EMPTY | ID_IN_LIST(idList) if idList else REQ_CRITERIA.EMPTY
     for critId, normalizedCritId in zip(ids, normalizedIds):
         try:
             criteria = typeCriteria[normalizedCritId]
@@ -93,8 +141,9 @@ def _parseCriteriaSpec(itemType, spec):
 
 class _GetItemsSchema(W2CSchema):
     type = Field(required=True, type=basestring, validator=lambda value, data: ShopItemType.hasValue(value))
-    criteria = Field(required=False, type=basestring, validator=lambda value, data: _parseCriteriaSpec(data['type'], value))
+    criteria = Field(required=False, type=list, validator=lambda value, data: _parseCriteriaSpec(data['type'], value))
     fields = Field(required=False, type=list, validator=None)
+    id_list = Field(required=False, type=list, validator=None)
 
 
 class ItemsWebApiMixin(object):
@@ -117,10 +166,8 @@ class ItemsWebApiMixin(object):
     def getItems(self, cmd):
         if not self.__cachesInitialized:
             self.updateMappingCaches()
-        criteria = _parseCriteriaSpec(cmd.type, cmd.criteria)
+        criteria = _parseCriteriaSpec(cmd.type, cmd.criteria, cmd.id_list)
         allowedFields = set(cmd.fields) if cmd.fields else None
-        if not criteria.lookInInventory():
-            criteria |= _EXTRA_ITEMS_CRITERIA_MAP.get(cmd.type, REQ_CRITERIA.EMPTY)
         result = [ self.__getFormatter(cmd.type, criteria).format(item, allowedFields) for item in self.__collectItems(cmd.type, criteria) ]
         return result
 
@@ -146,6 +193,8 @@ class ItemsWebApiMixin(object):
                 fmt = formatters.makePremiumPackFormatter()
             elif itemType == ShopItemType.SHELL:
                 fmt = formatters.makeShellFormatter()
+            elif itemType in _SHOP_CUSTOMIZATION_TYPES:
+                fmt = formatters.makeCustomizationFormatter()
             self.__formattersMap[key] = fmt
             return fmt
 
@@ -188,7 +237,7 @@ class ItemsWebApiMixin(object):
         self.__compatVehiclesCache.update({itemType:defaultdict(list) for itemType in types})
         self.__fittedVehiclesCache.clear()
         self.__fittedVehiclesCache.update({itemType:defaultdict(list) for itemType in types})
-        vehicles = self.itemsCache.items.getItems(GUI_ITEM_TYPE.VEHICLE, REQ_CRITERIA.INVENTORY).itervalues()
+        vehicles = self.itemsCache.items.getItems(GUI_ITEM_TYPE.VEHICLE, REQ_CRITERIA.INVENTORY, onlyWithPrices=False).itervalues()
         typedItemPairs = list(chain.from_iterable((collectAll(itemType) for itemType in types)))
         for veh in vehicles:
             for itemType, item in typedItemPairs:

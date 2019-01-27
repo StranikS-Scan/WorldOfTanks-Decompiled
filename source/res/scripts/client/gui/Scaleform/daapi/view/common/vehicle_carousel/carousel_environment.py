@@ -16,7 +16,7 @@ from gui.shared.utils.functions import makeTooltip
 from gui.shared.utils.requesters.ItemsRequester import REQ_CRITERIA
 from helpers import dependency
 from skeletons.account_helpers.settings_core import ISettingsCore
-from skeletons.gui.game_control import IRentalsController, IIGRController, IClanLockController
+from skeletons.gui.game_control import IRentalsController, IIGRController, IClanLockController, IEpicBattleMetaGameController
 from skeletons.gui.shared import IItemsCache
 _CAROUSEL_FILTERS = ('bonus', 'favorite', 'elite', 'premium')
 if constants.IS_KOREA:
@@ -55,6 +55,7 @@ class CarouselEnvironment(CarouselEnvironmentMeta, IGlobalListener, ICarouselEnv
     clanLock = dependency.descriptor(IClanLockController)
     settingsCore = dependency.descriptor(ISettingsCore)
     itemsCache = dependency.descriptor(IItemsCache)
+    epicController = dependency.descriptor(IEpicBattleMetaGameController)
 
     def __init__(self):
         super(CarouselEnvironment, self).__init__()
@@ -136,21 +137,22 @@ class CarouselEnvironment(CarouselEnvironmentMeta, IGlobalListener, ICarouselEnv
     def _populate(self):
         super(CarouselEnvironment, self)._populate()
         self._currentVehicle = g_currentVehicle
-        self.rentals.onRentChangeNotify += self.__updateRent
-        self.igrCtrl.onIgrTypeChanged += self.__updateIgrType
-        self.clanLock.onClanLockUpdate += self.__updateClanLocks
-        self.itemsCache.onSyncCompleted += self.__onCacheResync
-        self._currentVehicle.onChanged += self.__onCurrentVehicleChanged
-        self.settingsCore.onSettingsChanged += self._onCarouselSettingsChange
-        g_playerEvents.onVehicleBecomeElite += self.__onVehicleBecomeElite
-        g_prbCtrlEvents.onVehicleClientStateChanged += self.__onVehicleClientStateChanged
-        self.startGlobalListening()
         self._initDataProvider()
         setting = self.settingsCore.options.getSetting(settings_constants.GAME.VEHICLE_CAROUSEL_STATS)
         self._carouselDP.setShowStats(setting.get())
         self._carouselDP.setEnvironment(self.app)
         self._carouselDP.setFlashObject(self.as_getDataProviderS())
         self._carouselDP.buildList()
+        self.rentals.onRentChangeNotify += self.__updateRent
+        self.igrCtrl.onIgrTypeChanged += self.__updateIgrType
+        self.clanLock.onClanLockUpdate += self.__updateClanLocks
+        self.itemsCache.onSyncCompleted += self.__onCacheResync
+        self._currentVehicle.onChanged += self.__onCurrentVehicleChanged
+        self.epicController.onUpdated += self.__updateEpicSeasonRent
+        self.settingsCore.onSettingsChanged += self._onCarouselSettingsChange
+        g_playerEvents.onVehicleBecomeElite += self.__onVehicleBecomeElite
+        g_prbCtrlEvents.onVehicleClientStateChanged += self.__onVehicleClientStateChanged
+        self.startGlobalListening()
         self.applyFilter()
         self.updateAviability()
         self.as_setInitDataS({'counterCloseTooltip': makeTooltip('#tooltips:tanksFilter/counter/close/header', '#tooltips:tanksFilter/counter/close/body')})
@@ -161,6 +163,7 @@ class CarouselEnvironment(CarouselEnvironmentMeta, IGlobalListener, ICarouselEnv
         self.clanLock.onClanLockUpdate -= self.__updateClanLocks
         self.itemsCache.onSyncCompleted -= self.__onCacheResync
         self._currentVehicle.onChanged -= self.__onCurrentVehicleChanged
+        self.epicController.onUpdated -= self.__updateEpicSeasonRent
         self.settingsCore.onSettingsChanged -= self._onCarouselSettingsChange
         g_playerEvents.onVehicleBecomeElite -= self.__onVehicleBecomeElite
         g_prbCtrlEvents.onVehicleClientStateChanged -= self.__onVehicleClientStateChanged
@@ -186,6 +189,9 @@ class CarouselEnvironment(CarouselEnvironmentMeta, IGlobalListener, ICarouselEnv
 
     def __updateRent(self, vehicles):
         self.updateVehicles(vehicles)
+
+    def __updateEpicSeasonRent(self, diff):
+        self.updateVehicles(filterCriteria=REQ_CRITERIA.VEHICLE.SEASON_RENT)
 
     def __updateIgrType(self, roomType, xpFactor):
         self.updateVehicles(filterCriteria=REQ_CRITERIA.VEHICLE.IS_PREMIUM_IGR)

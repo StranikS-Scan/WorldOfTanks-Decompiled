@@ -1,8 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/gui_items/processors/plugins.py
+import logging
 from collections import namedtuple
 from adisp import process, async
-from debug_utils import LOG_WARNING
 from account_helpers import isLongDisconnectedFromCenter
 from account_helpers.AccountSettings import AccountSettings
 from items import tankmen
@@ -20,6 +20,7 @@ from helpers import dependency
 from items.components import skills_constants
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
+_logger = logging.getLogger(__name__)
 _SHELLS_MONEY_ERRORS = {Currency.CREDITS: 'SHELLS_NO_CREDITS',
  Currency.GOLD: 'SHELLS_NO_GOLD',
  Currency.CRYSTAL: 'SHELLS_NO_CRYSTAL'}
@@ -236,7 +237,7 @@ class CompatibilityValidator(SyncValidator):
 
     def _validate(self):
         success, errMsg = self._checkCompatibility()
-        return makeError('error_%s' % errMsg.replace(' ', '_')) if not success else makeSuccess()
+        return makeError('error_{}'.format(errMsg.replace(' ', '_'))) if not success else makeSuccess()
 
 
 class CompatibilityInstallValidator(CompatibilityValidator):
@@ -258,7 +259,7 @@ class TurretCompatibilityInstallValidator(SyncValidator):
 
     def _validate(self):
         success, errMsg = self._checkCompatibility()
-        return makeError('error_%s' % errMsg.replace(' ', '_')) if not success else makeSuccess()
+        return makeError('error_{}'.format(errMsg.replace(' ', '_'))) if not success else makeSuccess()
 
 
 class CompatibilityRemoveValidator(CompatibilityValidator):
@@ -325,7 +326,7 @@ class VehicleLayoutValidator(SyncValidator):
         if shortage:
             currency = shortage.getCurrency(byWeight=True)
             if currency not in errors:
-                LOG_WARNING('Unexpected case: unknown currency!')
+                _logger.warning('Unexpected case: unknown currency!')
                 return makeError()
             return makeError(errors[currency])
         else:
@@ -798,7 +799,6 @@ class BattleBoosterConfirmator(I18nMessageAbstractConfirmator):
 
 
 class BadgesValidator(SyncValidator):
-    _MAX_ALLOWED_SELECTED_BADGES = 1
 
     def __init__(self, badges):
         super(BadgesValidator, self).__init__()
@@ -806,14 +806,11 @@ class BadgesValidator(SyncValidator):
 
     def _validate(self):
         allBadges = self.itemsCache.items.getBadges()
-        selectedBadgesCount = 0
         for badgeID in self.badges:
             if badgeID not in allBadges:
                 return makeError('WRONG_ARGS_TYPE')
             badge = allBadges[badgeID]
             if not badge.isAchieved:
                 return makeError('NOT_UNLOCKED_BADGE')
-            if badge.isSelected:
-                selectedBadgesCount += 1
 
-        return makeError('SELECTED_BADGES_LIMIT_REACHED') if selectedBadgesCount > self._MAX_ALLOWED_SELECTED_BADGES else makeSuccess()
+        return makeSuccess()

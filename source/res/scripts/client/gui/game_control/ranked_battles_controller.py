@@ -17,7 +17,8 @@ from gui.ranked_battles import ranked_helpers
 from gui.ranked_battles.awards_formatters import getRankedQuestsOrderedAwards
 from gui.ranked_battles.constants import PRIME_TIME_STATUS
 from gui.ranked_battles.ranked_models import RankedSeason, Rank, VehicleRank, RANK_STATE, RankStep, RankProgress, RankedDossier
-from gui.ranked_battles.ranked_models import PrimeTime, RANK_CHANGE_STATES
+from gui.periodic_battles.models import PrimeTime
+from gui.ranked_battles.ranked_models import RANK_CHANGE_STATES
 from debug_utils import LOG_WARNING
 from gui.server_events.awards_formatters import AWARDS_SIZES
 from gui.shared import event_dispatcher, events, EVENT_BUS_SCOPE, g_eventBus

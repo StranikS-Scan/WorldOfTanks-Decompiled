@@ -1,11 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/customization/tooltips/element.py
-import nations
 import BigWorld
 from CurrentVehicle import g_currentVehicle
-from gui.Scaleform import getNationsFilterAssetPath
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
-from gui.Scaleform.daapi.view.lobby.customization.shared import getItemInventoryCount, getItemAppliedCount, SEASON_TYPE_TO_NAME
+from gui.Scaleform.daapi.view.lobby.customization.shared import getItemInventoryCount, getItemAppliedCount, SEASON_TYPE_TO_NAME, makeVehiclesShortNamesString, getSuitableText
 from gui.Scaleform.framework import ViewTypes
 from gui.Scaleform.genConsts.BLOCKS_TOOLTIP_TYPES import BLOCKS_TOOLTIP_TYPES
 from gui.Scaleform.locale.MENU import MENU
@@ -16,15 +14,14 @@ from gui.Scaleform.locale.VEHICLE_CUSTOMIZATION import VEHICLE_CUSTOMIZATION
 from gui.shared.formatters import text_styles, icons
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.gui_items.customization.packers import pickPacker
-from gui.shared.gui_items.Vehicle import VEHICLE_TYPES_ORDER, VEHICLE_TAGS
 from gui.shared.items_parameters import params_helper, formatters as params_formatters
 from gui.shared.items_parameters.params_helper import SimplifiedBarVO
 from gui.shared.tooltips import formatters, TOOLTIP_TYPE
 from gui.shared.tooltips.common import BlocksTooltipData, makePriceBlock, CURRENCY_SETTINGS
 from gui.shared.utils.graphics import isRendererPipelineDeferred
 from items.components.c11n_constants import SeasonType
-from items.vehicles import VEHICLE_CLASS_TAGS, CamouflageBonus
-from helpers import dependency, int2roman
+from items.vehicles import CamouflageBonus
+from helpers import dependency
 from helpers.i18n import makeString as _ms
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.shared import IItemsCache
@@ -158,7 +155,7 @@ class ElementTooltip(BlocksTooltipData):
             else:
                 isApplied = self._item == originalStyle
             self.appliedCount = int(isApplied)
-        if bonus:
+        if bonus and statsConfig.showBonus:
             camo = self._item if not camo else camo
             items.append(self._packBonusBlock(bonus, camo, isApplied))
         if not self._item.isHistorical() or self._item.fullDescription:
@@ -189,44 +186,10 @@ class ElementTooltip(BlocksTooltipData):
 
     def _packSuitableBlock(self):
         blocks = []
-        conditions = []
         if self._item.isVehicleBound and not self._item.mayApply:
-            return formatters.packTitleDescBlock(title=text_styles.middleTitle(VEHICLE_CUSTOMIZATION.CUSTOMIZATION_TOOLTIP_SUITABLE_TITLE), desc=text_styles.standard(self.__makeVehiclesShortNamesString(set(self.boundVehs + self.installedToVehs))), padding=formatters.packPadding(top=-2))
+            return formatters.packTitleDescBlock(title=text_styles.middleTitle(VEHICLE_CUSTOMIZATION.CUSTOMIZATION_TOOLTIP_SUITABLE_TITLE), desc=text_styles.standard(makeVehiclesShortNamesString(set(self.boundVehs + self.installedToVehs), self.currentVehicle)), padding=formatters.packPadding(top=-2))
         else:
-            for node in self._item.descriptor.filter.include:
-                separator = ' '.join(['&nbsp;&nbsp;', icons.makeImageTag(RES_ICONS.MAPS_ICONS_CUSTOMIZATION_TOOLTIP_SEPARATOR, 3, 21, -6), '  '])
-                if node.nations:
-                    for nation in node.nations:
-                        name = nations.NAMES[nation]
-                        conditions.append(icons.makeImageTag(getNationsFilterAssetPath(name), 26, 16, -4))
-                        conditions.append('  ')
-
-                    conditions = conditions[:-1]
-                    conditions.append(' ')
-                if node.tags:
-                    for vehType in VEHICLE_TYPES_ORDER:
-                        if vehType in node.tags:
-                            conditions.append(icons.makeImageTag(RES_ICONS.getFilterVehicleType(vehType), 27, 17, -4))
-
-                    if VEHICLE_CLASS_TAGS & node.tags:
-                        conditions.append(separator)
-                    if VEHICLE_TAGS.PREMIUM in node.tags:
-                        conditions.append(icons.makeImageTag(RES_ICONS.MAPS_ICONS_LIBRARY_PREM_SMALL_ICON, 20, 17, -4))
-                    if VEHICLE_TAGS.PREMIUM_IGR in node.tags:
-                        conditions.append(icons.premiumIgrSmall())
-                        conditions.append(separator)
-                if node.levels:
-                    for level in node.levels:
-                        conditions.append(text_styles.stats(int2roman(level)))
-                        conditions.append(text_styles.stats(',&nbsp;'))
-
-                    conditions = conditions[:-1]
-                    conditions.append(separator)
-                if node.vehicles:
-                    conditions.append(text_styles.standard(self.__makeVehiclesShortNamesString(set(node.vehicles), flat=True)))
-                    conditions.append(separator)
-
-            icn = text_styles.concatStylesToSingleLine(*conditions[:-1])
+            icn = getSuitableText(self._item, self.currentVehicle)
             blocks.append(formatters.packTextBlockData(text=icn, padding=formatters.packPadding(top=-2)))
             if not blocks:
                 return None
@@ -240,9 +203,9 @@ class ElementTooltip(BlocksTooltipData):
         elif not self.installedToVehs:
             return None
         if self._item.mayApply or self.currentVehicle.intCD in self.installedToVehs:
-            return formatters.packTitleDescBlock(title=text_styles.middleTitle(VEHICLE_CUSTOMIZATION.CUSTOMIZATION_LIMITED_ON_VEHICLE), desc=text_styles.main(self.__makeVehiclesShortNamesString(vehicles)), padding=formatters.packPadding(top=-2))
+            return formatters.packTitleDescBlock(title=text_styles.middleTitle(VEHICLE_CUSTOMIZATION.CUSTOMIZATION_LIMITED_ON_VEHICLE), desc=text_styles.main(makeVehiclesShortNamesString(vehicles, self.currentVehicle)), padding=formatters.packPadding(top=-2))
         else:
-            blocks = [formatters.packImageTextBlockData(title=text_styles.critical(VEHICLE_CUSTOMIZATION.CUSTOMIZATION_LIMITED_ON_OTHER_VEHICLE), img=RES_ICONS.MAPS_ICONS_LIBRARY_MARKER_BLOCKED, imgPadding=formatters.packPadding(left=-3, top=2)), formatters.packTextBlockData(text=text_styles.main(_ms(self.__makeVehiclesShortNamesString(vehicles))))]
+            blocks = [formatters.packImageTextBlockData(title=text_styles.critical(VEHICLE_CUSTOMIZATION.CUSTOMIZATION_LIMITED_ON_OTHER_VEHICLE), img=RES_ICONS.MAPS_ICONS_LIBRARY_MARKER_BLOCKED, imgPadding=formatters.packPadding(left=-3, top=2)), formatters.packTextBlockData(text=text_styles.main(_ms(makeVehiclesShortNamesString(vehicles, self.currentVehicle))))]
             return formatters.packBuildUpBlockData(blocks, gap=3, padding=formatters.packPadding(bottom=-5))
 
     def _packSpecialBlock(self):
@@ -405,15 +368,6 @@ class ElementTooltip(BlocksTooltipData):
 
     def _packUnsupportedBlock(self):
         return formatters.packImageTextBlockData(img=RES_ICONS.MAPS_ICONS_LIBRARY_ALERTICON, imgPadding=formatters.packPadding(top=3, right=3), desc=text_styles.alert(_ms(VEHICLE_CUSTOMIZATION.CUSTOMIZATION_TOOLTIP_WARNING_TITLE)))
-
-    def __makeVehiclesShortNamesString(self, vehiclesCDs, flat=False):
-        getVehicleShortName = lambda vehicleCD: self.itemsCache.items.getItemByCD(vehicleCD).shortUserName
-        vehiclesShortNames = []
-        if self.currentVehicle.intCD in vehiclesCDs and not flat:
-            vehiclesCDs.remove(self.currentVehicle.intCD)
-            vehiclesShortNames.append(self.currentVehicle.shortUserName + _ms(VEHICLE_CUSTOMIZATION.CUSTOMIZATION_LIMITED_CURRENT_VEHICLE))
-        vehiclesShortNames.extend(map(getVehicleShortName, vehiclesCDs))
-        return ', '.join(vehiclesShortNames)
 
 
 class ElementIconTooltip(ElementTooltip):

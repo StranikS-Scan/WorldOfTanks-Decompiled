@@ -48,7 +48,6 @@ class EventsCache(IEventsCache):
      EVENT_TYPE.TOKEN_QUEST,
      EVENT_TYPE.PERSONAL_QUEST,
      EVENT_TYPE.PERSONAL_MISSION)
-    SYSTEM_QUESTS = (EVENT_TYPE.REF_SYSTEM_QUEST,)
     lobbyContext = dependency.descriptor(ILobbyContext)
     rareAchievesCache = dependency.descriptor(IRaresCache)
     linkedSet = dependency.descriptor(ILinkedSetController)

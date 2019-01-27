@@ -5,6 +5,7 @@ from constants import CustomizationInvData
 from Event import Event, EventManager
 from adisp import process
 from gui.shared.formatters.time_formatters import getTimeLeftStr
+from gui.shared.gui_items.customization.outfit import Area
 from gui.shared.gui_items.processors.module import getPreviewInstallerProcessor
 from gui.vehicle_view_states import createState4CurrentVehicle
 from helpers import dependency
@@ -18,8 +19,11 @@ from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.gui_items.Vehicle import Vehicle
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.Waiting import Waiting
+from shared_utils import first
+from skeletons.gui.customization import ICustomizationService
 from skeletons.gui.game_control import IIGRController, IRentalsController
 from skeletons.gui.shared import IItemsCache
+from skeletons.gui.shared.gui_items import IGuiItemsFactory
 from skeletons.gui.shared.utils import IHangarSpace
 _MODULES_NAMES = ('turret',
  'chassis',
@@ -227,6 +231,9 @@ class _CurrentVehicle(_CachedVehicle):
     def isOnlyForEventBattles(self):
         return self.isPresent() and self.item.isOnlyForEventBattles
 
+    def isOnlyForEpicBattles(self):
+        return self.isPresent() and self.item.isOnlyForEpicBattles
+
     def isOutfitLocked(self):
         return self.isPresent() and self.item.isOutfitLocked
 
@@ -372,6 +379,8 @@ class HeroTankPreviewAppearance(PreviewAppearance):
 
 
 class _CurrentPreviewVehicle(_CachedVehicle):
+    _itemsFactory = dependency.descriptor(IGuiItemsFactory)
+    _c11nService = dependency.descriptor(ICustomizationService)
 
     def __init__(self):
         super(_CurrentPreviewVehicle, self).__init__()
@@ -433,7 +442,6 @@ class _CurrentPreviewVehicle(_CachedVehicle):
         if self.isPresent():
             vehicle = self.itemsCache.items.getItemByCD(self.item.intCD)
             if vehicle.isInInventory:
-                self.selectNoVehicle()
                 self.onVehicleInventoryChanged()
 
     def isModified(self):
@@ -463,6 +471,32 @@ class _CurrentPreviewVehicle(_CachedVehicle):
 
     def hasModulesToSelect(self):
         return self.isPresent() and self.item.hasModulesToSelect
+
+    def previewStyle(self, style):
+        if self.isPresent() and not self.item.isOutfitLocked and style.mayInstall(self.item):
+            self._applyCamouflageTTC()
+            self.hangarSpace.updateVehicleOutfit(style.getOutfit(first(style.seasons)))
+            self.onChanged()
+
+    def previewCamouflage(self, camouflage):
+        if self.isPresent() and not self.item.isOutfitLocked and camouflage.mayInstall(self.item):
+            outfit = self._itemsFactory.createOutfit()
+            for tankPart in Area.ALL:
+                slot = outfit.getContainer(tankPart).slotFor(GUI_ITEM_TYPE.CAMOUFLAGE)
+                if slot:
+                    slot.set(camouflage)
+
+            self.hangarSpace.updateVehicleOutfit(outfit)
+            self._applyCamouflageTTC()
+            self.onChanged()
+
+    def _applyCamouflageTTC(self):
+        if self.isPresent():
+            camo = first(self._c11nService.getCamouflages(vehicle=self.item).itervalues())
+            if camo:
+                outfit = self._itemsFactory.createOutfit(isEnabled=True, isInstalled=True)
+                outfit.hull.slotFor(GUI_ITEM_TYPE.CAMOUFLAGE).set(camo)
+                self.item.setCustomOutfit(first(camo.seasons), outfit)
 
     def _addListeners(self):
         super(_CurrentPreviewVehicle, self)._addListeners()

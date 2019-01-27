@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/game_control/bootcamp_controller.py
+from collections import namedtuple
 import AccountCommands
 import BigWorld
 from adisp import process
@@ -22,6 +23,7 @@ from gui.prb_control.entities.base.ctx import PrbAction
 from gui.prb_control.settings import PREBATTLE_ACTION_NAME
 from gui import DialogsInterface
 from debug_utils import LOG_ERROR
+BootcampDialogConstants = namedtuple('BootcampDialogConstants', 'dialogType dialogKey focusedID needAwarding')
 
 class BootcampController(IBootcampController):
     sessionProvider = dependency.descriptor(IBattleSessionProvider)
@@ -79,6 +81,9 @@ class BootcampController(IBootcampController):
 
     def needAwarding(self):
         return g_bootcamp.getParameters().get('needAwarding', False)
+
+    def isReferralEnabled(self):
+        return g_bootcamp.isReferralEnabled()
 
     def isInBootcampAccount(self):
         return self.__inBootcampAccount
@@ -177,7 +182,7 @@ class BootcampController(IBootcampController):
     def runBootcamp(self):
         if self.isInBootcamp():
             if not self.needAwarding():
-                self.stopBootcamp(inBattle=False)
+                self.stopBootcamp(inBattle=not self.isInBootcampAccount())
             else:
                 self.__doBootcamp(isSkip=True)
         elif isLongDisconnectedFromCenter():
@@ -189,18 +194,25 @@ class BootcampController(IBootcampController):
     def prbDispatcher(self):
         return None
 
-    @process
-    def __doBootcamp(self, isSkip):
-        dialogType, focusedID = (ExecutionChooserDialogMeta.SKIP, DIALOG_BUTTON_ID.CLOSE) if isSkip else (ExecutionChooserDialogMeta.RETRY, DIALOG_BUTTON_ID.SUBMIT)
+    def getSkipDialogConstants(self, isSkip=True):
         bootcampLiteral = 'bootcamp/'
-        dialogKey = bootcampLiteral + dialogType
         needAwarding = self.needAwarding()
+        isReferralEnabled = self.isReferralEnabled()
+        dialogType, focusedID = (ExecutionChooserDialogMeta.SKIP, DIALOG_BUTTON_ID.CLOSE) if isSkip else (ExecutionChooserDialogMeta.RETRY, DIALOG_BUTTON_ID.SUBMIT)
+        dialogKey = bootcampLiteral + dialogType
+        if isReferralEnabled and dialogType == ExecutionChooserDialogMeta.SKIP:
+            dialogKey = bootcampLiteral + ExecutionChooserDialogMeta.SKIP_REFERRAL
         if not isSkip and needAwarding:
             dialogKey = bootcampLiteral + ExecutionChooserDialogMeta.START
-        result = yield DialogsInterface.showDialog(ExecutionChooserDialogMeta(dialogType, dialogKey, focusedID, not needAwarding and not isSkip))
+        return BootcampDialogConstants(dialogType=dialogType, dialogKey=dialogKey, focusedID=focusedID, needAwarding=needAwarding)
+
+    @process
+    def __doBootcamp(self, isSkip):
+        dialogConstants = self.getSkipDialogConstants(isSkip)
+        result = yield DialogsInterface.showDialog(ExecutionChooserDialogMeta(dialogConstants.dialogType, dialogConstants.dialogKey, dialogConstants.focusedID, not dialogConstants.needAwarding and not isSkip))
         if result:
             if isSkip:
-                self.stopBootcamp(False)
+                self.stopBootcamp(inBattle=not self.isInBootcampAccount())
             elif self.prbDispatcher is not None:
                 action = PrbAction(PREBATTLE_ACTION_NAME.BOOTCAMP)
                 yield self.prbDispatcher.doSelectAction(action)

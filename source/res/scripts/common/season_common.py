@@ -1,9 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/season_common.py
-import time
 from typing import Dict, Optional, Any, List
 from collections import namedtuple
-from constants import IS_CLIENT
 
 class CycleStatus(object):
     PAST = 'past'
@@ -16,17 +14,23 @@ class GameSeasonCycle(namedtuple('GameSeasonCycle', 'ID, status, startDate, endD
     def __cmp__(self, other):
         return cmp(self.ID, other.ID)
 
+    def getEpicCycleNumber(self):
+        return int(self.ID % 100)
+
 
 class GameSeason(object):
 
-    def __init__(self, seasonInfo, seasonData):
-        self.__cycleStartDate, self.__cycleEndDate, self.__seasonId, self.__cycleID = seasonInfo
+    def __init__(self, cycleInfo, seasonData):
+        self.__cycleStartDate, self.__cycleEndDate, self.__seasonId, self.__cycleID = cycleInfo
         self.__data = seasonData
         self.__cycles = None
         return
 
     def hasActiveCycle(self, now):
         return self.__cycleStartDate <= now < self.__cycleEndDate
+
+    def isLastCycle(self, cycleID):
+        return self.getLastCycleInfo().ordinalNumber == self.getCycleInfo(cycleID).ordinalNumber
 
     def getSeasonID(self):
         return self.__seasonId
@@ -45,8 +49,46 @@ class GameSeason(object):
             self._buildCycles()
         return self.__cycles
 
-    def getCycleInfo(self):
-        return None if not self.getCycleID() else self.getAllCycles()[self.getCycleID()]
+    def getCycleInfo(self, cycleID=None):
+        if cycleID is None:
+            cycleID = self.getCycleID()
+        return self.getAllCycles().get(cycleID, None) if cycleID is not None else None
+
+    def getNextCycleInfo(self, cycleID=None):
+        if cycleID is None:
+            cycleID = self.getCycleID()
+        if cycleID is not None:
+            cycles = self.getAllCycles()
+            if cycleID in cycles:
+                currentCycleOrdinalNumber = cycles[cycleID].ordinalNumber
+                for cycle in sorted(cycles.values(), key=lambda c: c.ordinalNumber):
+                    if cycle.ordinalNumber > currentCycleOrdinalNumber:
+                        return cycle
+
+        return
+
+    def getNextByTimeCycle(self, now):
+        cycles = self.getAllCycles()
+        for cycle in sorted(cycles.values(), key=lambda c: c.startDate):
+            if cycle.startDate >= now:
+                return cycle
+
+    def getLastCycleInfo(self):
+        lastCycleID = max(self.getAllCycles().iterkeys())
+        return self.getAllCycles()[lastCycleID] if lastCycleID else None
+
+    def getLastActiveCycleInfo(self, now):
+        lastCycle = None
+        if self.hasActiveCycle(now):
+            return self.getCycleInfo()
+        else:
+            for cycle in self.getAllCycles().values():
+                if cycle.endDate > now:
+                    continue
+                if lastCycle is None or lastCycle.endDate < cycle.endDate:
+                    lastCycle = cycle
+
+            return lastCycle
 
     def getCycleStartDate(self):
         return self.__cycleStartDate

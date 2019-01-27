@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client/gui/game_control/season_provider.py
 from operator import itemgetter
 import season_common
+from shared_utils import first
 from skeletons.gui.game_control import ISeasonProvider
 from helpers import time_utils
 from season_common import GameSeason
@@ -27,10 +28,10 @@ class SeasonProvider(ISeasonProvider):
     def getCurrentSeason(self):
         settings = self.__getSeasonSettings()
         now = time_utils.getServerRegionalTime()
-        _, seasonInfo = season_common.getSeason(settings.asDict(), now)
-        if seasonInfo:
-            _, _, seasonID, _ = seasonInfo
-            return self._createSeason(seasonInfo, settings.seasons.get(seasonID, {}))
+        _, cycleInfo = season_common.getSeason(settings.asDict(), now)
+        if cycleInfo:
+            _, _, seasonID, _ = cycleInfo
+            return self._createSeason(cycleInfo, settings.seasons.get(seasonID, {}))
         else:
             return None
 
@@ -59,13 +60,13 @@ class SeasonProvider(ISeasonProvider):
 
     def getSeason(self, seasonID):
         settings = self.__getSeasonSettings()
-        seasonCyleInfos = season_common.getAllSeasonCycleInfos(settings.asDict(), seasonID)
+        seasonCycleInfos = season_common.getAllSeasonCycleInfos(settings.asDict(), seasonID)
         seasonData = settings.seasons.get(seasonID, {})
         if seasonData:
-            cycleInfo = seasonCyleInfos[0] if seasonCyleInfos else (None,
+            cycleInfo = first(seasonCycleInfos, (None,
              None,
              seasonID,
-             None)
+             None))
             return self._createSeason(cycleInfo, seasonData)
         else:
             return
@@ -84,6 +85,17 @@ class SeasonProvider(ISeasonProvider):
                 seasonsPassed.append((seasonID, endSeason))
 
         return seasonsPassed
+
+    def getClosestStateChangeTime(self):
+        season = self.getCurrentSeason()
+        now = time_utils.getServerRegionalTime()
+        if season is not None:
+            if season.hasActiveCycle(now):
+                return season.getCycleEndDate()
+            return season.getCycleStartDate() or season.getEndDate()
+        else:
+            season = self.getNextSeason()
+            return season.getStartDate() if season else 0
 
     def _setSeasonSettingsProvider(self, settingsProvider):
         self.__settingsProvider = settingsProvider

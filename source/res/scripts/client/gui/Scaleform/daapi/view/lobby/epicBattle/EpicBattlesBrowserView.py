@@ -54,7 +54,6 @@ class EpicBattlesBrowserView(LobbySubView, EpicBattlesBrowserViewMeta):
         else:
             self.__urlID = ctx['urlID']
             self.__previousPage = ctx.get('previousPage')
-        self.__showBackBtn = ctx.get('showBackBtn', False)
         return
 
     def onEscapePress(self):

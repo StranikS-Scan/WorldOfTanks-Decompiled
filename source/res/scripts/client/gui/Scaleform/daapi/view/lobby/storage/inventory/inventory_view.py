@@ -1,22 +1,21 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/storage/inventory/inventory_view.py
+import copy
+from account_helpers import AccountSettings
 from adisp import process
-from gui import GUI_NATIONS_ORDER_INDICES
-import nations
 from gui import DialogsInterface
+from gui import GUI_NATIONS_ORDER_INDICES
+from gui.Scaleform.daapi.view.dialogs.ConfirmModuleMeta import SellModuleMeta
 from gui.Scaleform.daapi.view.lobby.rally.vo_converters import makeVehicleVO
 from gui.Scaleform.daapi.view.lobby.storage import storage_helpers
 from gui.Scaleform.daapi.view.lobby.storage.category_view import InventoryCategoryView
-from gui.Scaleform.daapi.view.lobby.storage.storage_helpers import getBoosterType
-from gui.Scaleform.daapi.view.dialogs.ConfirmModuleMeta import SellModuleMeta
+from gui.Scaleform.daapi.view.meta.ItemsWithVehicleFilterTabViewMeta import ItemsWithVehicleFilterTabViewMeta
 from gui.Scaleform.daapi.view.meta.StorageCategoryStorageViewMeta import StorageCategoryStorageViewMeta
 from gui.Scaleform.genConsts.STORAGE_CONSTANTS import STORAGE_CONSTANTS
-from gui.Scaleform.genConsts.CONTEXT_MENU_HANDLER_TYPE import CONTEXT_MENU_HANDLER_TYPE
-from gui.Scaleform.genConsts.STORE_CONSTANTS import STORE_CONSTANTS as SC
+from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.Scaleform.locale.STORAGE import STORAGE
+from gui.shared import events, EVENT_BUS_SCOPE
 from gui.shared.gui_items import GUI_ITEM_TYPE
-from gui.Scaleform.locale.RES_SHOP import RES_SHOP
-from gui.shared.formatters import getItemPricesVO
 from gui.shared.utils.requesters.ItemsRequester import REQ_CRITERIA
 VERSION = 1
 _TABS_DATA = ({'id': STORAGE_CONSTANTS.INVENTORY_TAB_ALL,
@@ -40,15 +39,6 @@ _TABS_ITEM_TYPES = {STORAGE_CONSTANTS.INVENTORY_TAB_ALL: GUI_ITEM_TYPE.VEHICLE_C
  STORAGE_CONSTANTS.INVENTORY_TAB_CONSUMABLE: (GUI_ITEM_TYPE.EQUIPMENT, GUI_ITEM_TYPE.BATTLE_BOOSTER),
  STORAGE_CONSTANTS.INVENTORY_TAB_MODULES: GUI_ITEM_TYPE.VEHICLE_MODULES,
  STORAGE_CONSTANTS.INVENTORY_TAB_SHELLS: GUI_ITEM_TYPE.SHELL}
-_HANDLERS_MAP = {GUI_ITEM_TYPE.OPTIONALDEVICE: CONTEXT_MENU_HANDLER_TYPE.STORAGE_EQUIPMENT_ITEM,
- GUI_ITEM_TYPE.EQUIPMENT: CONTEXT_MENU_HANDLER_TYPE.STORAGE_EQUIPMENT_ITEM,
- GUI_ITEM_TYPE.BATTLE_BOOSTER: CONTEXT_MENU_HANDLER_TYPE.STORAGE_BONS_ITEM,
- GUI_ITEM_TYPE.TURRET: CONTEXT_MENU_HANDLER_TYPE.STORAGE_MODULES_SHELLS_ITEM,
- GUI_ITEM_TYPE.ENGINE: CONTEXT_MENU_HANDLER_TYPE.STORAGE_MODULES_SHELLS_ITEM,
- GUI_ITEM_TYPE.GUN: CONTEXT_MENU_HANDLER_TYPE.STORAGE_MODULES_SHELLS_ITEM,
- GUI_ITEM_TYPE.RADIO: CONTEXT_MENU_HANDLER_TYPE.STORAGE_MODULES_SHELLS_ITEM,
- GUI_ITEM_TYPE.CHASSIS: CONTEXT_MENU_HANDLER_TYPE.STORAGE_MODULES_SHELLS_ITEM,
- GUI_ITEM_TYPE.SHELL: CONTEXT_MENU_HANDLER_TYPE.STORAGE_MODULES_SHELLS_ITEM}
 _TABS_SORT_ORDER = dict(((n, idx) for idx, n in enumerate((GUI_ITEM_TYPE.OPTIONALDEVICE,
  GUI_ITEM_TYPE.EQUIPMENT,
  GUI_ITEM_TYPE.BATTLE_BOOSTER,
@@ -103,11 +93,8 @@ class InventoryCategoryStorageView(StorageCategoryStorageViewMeta):
             self.__views[STORAGE_CONSTANTS.INVENTORY_TAB_ALL] = viewPy
             self.__views[STORAGE_CONSTANTS.INVENTORY_TAB_EQUIPMENT] = viewPy
             self.__views[STORAGE_CONSTANTS.INVENTORY_TAB_CONSUMABLE] = viewPy
-        elif alias == STORAGE_CONSTANTS.STORAGE_MODULES_TAB:
-            self.__views[STORAGE_CONSTANTS.INVENTORY_TAB_MODULES] = viewPy
-        elif alias == STORAGE_CONSTANTS.STORAGE_SHELLS_TAB:
-            self.__views[STORAGE_CONSTANTS.INVENTORY_TAB_SHELLS] = viewPy
-        viewPy.setTabId(self.__currentTabId)
+        if alias not in (STORAGE_CONSTANTS.STORAGE_MODULES_TAB, STORAGE_CONSTANTS.STORAGE_SHELLS_TAB):
+            viewPy.setTabId(self.__currentTabId)
 
     def _populate(self):
         super(InventoryCategoryStorageView, self)._populate()
@@ -122,12 +109,12 @@ class RegularInventoryCategoryTabView(InventoryCategoryView):
 
     def _populate(self):
         super(RegularInventoryCategoryTabView, self)._populate()
-        self.itemsCache.onSyncCompleted += self.__onCacheResync
+        self._itemsCache.onSyncCompleted += self.__onCacheResync
         self._buildItems()
 
     def _dispose(self):
         super(RegularInventoryCategoryTabView, self)._dispose()
-        self.itemsCache.onSyncCompleted -= self.__onCacheResync
+        self._itemsCache.onSyncCompleted -= self.__onCacheResync
 
     @process
     def _sellItems(self, itemId):
@@ -145,19 +132,11 @@ class RegularInventoryCategoryTabView(InventoryCategoryView):
         if self._currentTabId in (STORAGE_CONSTANTS.INVENTORY_TAB_ALL, STORAGE_CONSTANTS.INVENTORY_TAB_MODULES):
             criteria |= REQ_CRITERIA.TYPE_CRITERIA(GUI_ITEM_TYPE.VEHICLE_MODULES, REQ_CRITERIA.VEHICLE.SUITABLE(invVehicles))
         if self._currentTabId in (STORAGE_CONSTANTS.INVENTORY_TAB_ALL, STORAGE_CONSTANTS.INVENTORY_TAB_SHELLS):
-            criteria |= REQ_CRITERIA.TYPE_CRITERIA((GUI_ITEM_TYPE.SHELL,), storage_helpers.getStorageShellsCriteria(self.itemsCache, invVehicles, True))
+            criteria |= REQ_CRITERIA.TYPE_CRITERIA((GUI_ITEM_TYPE.SHELL,), storage_helpers.getStorageShellsCriteria(self._itemsCache, invVehicles, True))
         return criteria
 
     def _getVO(self, item):
-        priceVO = getItemPricesVO(item.getSellPrice())[0]
-        itemNationID = self._getItemNationID(item)
-        nationFlagIcon = RES_SHOP.getNationFlagIcon(nations.NAMES[itemNationID]) if itemNationID != nations.NONE_INDEX else ''
-        vo = storage_helpers.createStorageDefVO(item.intCD, storage_helpers.getStorageModuleName(item), storage_helpers.getStorageItemDescr(item), item.inventoryCount, priceVO, storage_helpers.getStorageItemIcon(item, SC.ICON_SIZE_SMALL), storage_helpers.getStorageItemIcon(item), 'altimage', itemType=getBoosterType(item), nationFlagIcon=nationFlagIcon, enabled=item.itemTypeID != GUI_ITEM_TYPE.BATTLE_BOOSTER, contextMenuId=_HANDLERS_MAP[item.itemTypeID])
-        return vo
-
-    def _getItemNationID(self, item):
-        compatibleNations = item.descriptor.compatibleNations() if item.itemTypeName == SC.EQUIPMENT else []
-        return compatibleNations[0] if len(compatibleNations) == 1 else item.nationID
+        return storage_helpers.getItemVo(item)
 
     def __onCacheResync(self, *args):
         self._buildItems()
@@ -170,7 +149,8 @@ class RegularInventoryCategoryTabView(InventoryCategoryView):
         return _comparator
 
 
-class FiltrableInventoryCategoryTabView(RegularInventoryCategoryTabView):
+class FiltrableInventoryCategoryTabView(ItemsWithVehicleFilterTabViewMeta):
+    filterItems = None
 
     def __init__(self):
         super(FiltrableInventoryCategoryTabView, self).__init__()
@@ -178,15 +158,92 @@ class FiltrableInventoryCategoryTabView(RegularInventoryCategoryTabView):
         self._totalCount = -1
         self._currentCount = -1
         self._selectedVehicle = None
+        self.__isActive = False
+        self._loadFilters()
         return
+
+    def setActiveState(self, isActive):
+        self.__isActive = isActive
+
+    @process
+    def sellItem(self, itemId):
+        yield DialogsInterface.showDialog(SellModuleMeta(int(itemId)))
+
+    def onFiltersChange(self, filterMask):
+        self._filterMask = filterMask
+        self._buildItems()
+
+    def resetFilter(self):
+        self._filterMask = 0
+        self._selectedVehicle = None
+        self.as_updateVehicleFilterButtonS()
+        self.as_resetFilterS(self._filterMask)
+        self._buildItems()
+        return
+
+    def resetVehicleFilter(self):
+        self._selectedVehicle = None
+        self.as_updateVehicleFilterButtonS()
+        self._buildItems()
+        return
+
+    def _loadFilters(self):
+        if storage_helpers.isStorageSessionTimeout():
+            return
+        else:
+            filterDict = AccountSettings.getSessionSettings(self._getClientSectionKey())
+            self._filterMask = filterDict['filterMask']
+            vehicleCD = filterDict['vehicleCD']
+            self._selectedVehicle = self._itemsCache.items.getItemByCD(vehicleCD) if vehicleCD else None
+            return
+
+    def _saveFilters(self):
+        vehicleCD = self._selectedVehicle.intCD if self._selectedVehicle else None
+        filterDict = {'filterMask': self._filterMask,
+         'vehicleCD': vehicleCD}
+        AccountSettings.setSessionSettings(self._getClientSectionKey(), filterDict)
+        return
+
+    def _getClientSectionKey(self):
+        raise NotImplementedError
 
     def _getFilteredCriteria(self):
         return REQ_CRITERIA.EMPTY
 
+    def _initFilter(self):
+        items = self._getInitFilterItems()
+        for item in items:
+            if self._filterMask & item['filterValue'] == item['filterValue']:
+                item.update({'selected': True})
+
+        typeFilters = {'items': items,
+         'minSelectedItems': 0}
+        self.as_initFilterS(typeFilters, self._makeVehicleVO(self._selectedVehicle))
+
+    def _populate(self):
+        super(FiltrableInventoryCategoryTabView, self)._populate()
+        self._initFilter()
+        self.addListener(events.StorageEvent.VEHICLE_SELECTED, self.__onVehicleSelected, scope=EVENT_BUS_SCOPE.LOBBY)
+        self._itemsCache.onSyncCompleted += self.__onCacheResync
+        self._buildItems()
+
+    def _dispose(self):
+        self._saveFilters()
+        self.removeListener(events.StorageEvent.VEHICLE_SELECTED, self.__onVehicleSelected, scope=EVENT_BUS_SCOPE.LOBBY)
+        self._itemsCache.onSyncCompleted -= self.__onCacheResync
+        super(FiltrableInventoryCategoryTabView, self)._dispose()
+
+    def _buildItems(self):
+        super(FiltrableInventoryCategoryTabView, self)._buildItems()
+        self.__updateUI()
+
+    def _getVO(self, item):
+        return storage_helpers.getItemVo(item)
+
     def _getVoList(self):
         baseCriteria = self._getRequestCriteria(self._invVehicles)
         filterCriteria = self._getFilteredCriteria()
-        totalItems = self.itemsCache.items.getItems(self._getItemTypeID(), baseCriteria, nationID=None)
+        totalItems = self._itemsCache.items.getItems(self._getItemTypeID(), baseCriteria, nationID=None)
         self._totalCount = sum((item.inventoryCount for item in totalItems.values()))
         dataProviderListVoItems = []
         for item in sorted(totalItems.itervalues(), cmp=self._getComparator()):
@@ -204,3 +261,46 @@ class FiltrableInventoryCategoryTabView(RegularInventoryCategoryTabView):
             vo = makeVehicleVO(vehicle)
             vo.update({'type': '{}_elite'.format(vehicle.type) if vehicle.isPremium else vehicle.type})
             return vo
+
+    def _getComparator(self):
+
+        def _comparator(a, b):
+            return cmp(_TABS_SORT_ORDER[a.itemTypeID], _TABS_SORT_ORDER[b.itemTypeID]) or cmp(GUI_NATIONS_ORDER_INDICES[a.nationID], GUI_NATIONS_ORDER_INDICES[b.nationID]) or _IN_GROUP_COMPARATOR[a.itemTypeID](a, b)
+
+        return _comparator
+
+    def _getInitFilterItems(self):
+        return copy.deepcopy(self.filterItems) if self.filterItems is not None else []
+
+    def __updateUI(self):
+        self.__updateFilterCounter()
+        self.__updateScreen()
+
+    def __updateFilterCounter(self):
+        if self._totalCount != -1 and self._currentCount != -1:
+            shouldShow = self._filterMask != 0 or bool(self._selectedVehicle)
+            if shouldShow:
+                countString = self._formatCountString(self._currentCount, self._totalCount)
+            else:
+                countString = self._formatTotalCountString(self._totalCount)
+            self.as_updateCounterS(shouldShow, countString, self._currentCount == 0)
+
+    def __updateScreen(self):
+        hasNoItems = self._totalCount == 0
+        hasNoFilterResults = not hasNoItems and self._currentCount == 0
+        filterWarningVO = None
+        if hasNoFilterResults:
+            filterWarningVO = self._makeFilterWarningVO(STORAGE.FILTER_WARNINGMESSAGE, STORAGE.FILTER_NORESULTSBTN_LABEL, TOOLTIPS.STORAGE_FILTER_NORESULTSBTN)
+        elif hasNoItems:
+            self.as_showDummyScreenS(hasNoItems)
+        self.as_showFilterWarningS(filterWarningVO)
+        return
+
+    def __onVehicleSelected(self, event):
+        if event.ctx and event.ctx.get('vehicleId') and self.__isActive:
+            self._selectedVehicle = vehicle = self._itemsCache.items.getItemByCD(event.ctx['vehicleId'])
+            self.as_updateVehicleFilterButtonS(self._makeVehicleVO(vehicle))
+            self._buildItems()
+
+    def __onCacheResync(self, *args):
+        self._buildItems()

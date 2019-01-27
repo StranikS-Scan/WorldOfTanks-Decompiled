@@ -199,7 +199,8 @@ class Customization(FittingItem):
         return self.season & SeasonType.EVENT
 
     def mayInstall(self, vehicle, _=None):
-        return True if not self.descriptor.filter else self.descriptor.filter.matchVehicleType(vehicle.descriptor.type)
+        itemFilter = self._descriptor.filter
+        return itemFilter is None or itemFilter.matchVehicleType(vehicle.descriptor.type)
 
     def isWide(self):
         return False

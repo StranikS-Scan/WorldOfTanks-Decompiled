@@ -10,6 +10,7 @@ from gui.shared.gui_items.gui_item import GUIItem, HasIntCD
 from gui.shared.items_parameters import params_helper, formatters
 from gui.shared.money import Money, Currency, MONEY_UNDEFINED
 from gui.shared.utils.functions import getShortDescr, stripColorTagDescrTags
+from shared_utils import first
 from skeletons.gui.game_control import ISeasonsController
 from helpers import i18n, time_utils, dependency
 from items import vehicles, getTypeInfoByName
@@ -31,31 +32,115 @@ class RentalInfoProvider(_RentalInfoProvider):
         result = _RentalInfoProvider.__new__(cls, time, compensations, battles, wins, seasonRent or {}, isRented)
         return result
 
+    def canRentRenewForSeason(self, seasonType):
+        currentSeason = self.seasonsController.getCurrentSeason(seasonType)
+        return currentSeason and currentSeason.getCycleInfo()
+
+    def canCycleRentRenewForSeason(self, seasonType):
+        return self.getAvailableRentRenewCycleInfoForSeason(seasonType) is not None
+
+    def getAvailableRentRenewCycleInfoForSeason(self, seasonType):
+        currentSeason = self.seasonsController.getCurrentSeason(seasonType)
+        if currentSeason is not None:
+            lastRentedCycle = self.getLastCycleRentInfo(seasonType)
+            if lastRentedCycle:
+                currentCycle = currentSeason.getCycleInfo()
+                if currentCycle and currentCycle.ID > lastRentedCycle.ID:
+                    return currentCycle
+                nextCycle = currentSeason.getNextCycleInfo()
+                if nextCycle and nextCycle.ID > lastRentedCycle.ID:
+                    return nextCycle
+                return currentSeason.getNextCycleInfo(lastRentedCycle.ID)
+        return
+
+    def getLastCycleRentInfo(self, seasonType):
+        currentSeason = self.seasonsController.getCurrentSeason(seasonType)
+        if currentSeason:
+            rents = self.seasonRent.get(seasonType, [])
+            if rents:
+                cyclesIDs = [ cycleID for cycleID, duration in rents if duration == SeasonRentDuration.SEASON_CYCLE ]
+                cycles = [ currentSeason.getCycleInfo(cycleID) for cycleID in cyclesIDs if currentSeason.getCycleInfo(cycleID) ]
+                if cycles:
+                    return sorted(cycles, key=lambda c: c.ordinalNumber)[-1]
+        return None
+
     def getActiveSeasonRent(self):
-        for seasonType, rentType in self.seasonRent.iteritems():
-            rentID, duration = rentType
-            if duration == SeasonRentDuration.ENTIRE_SEASON:
-                if self.seasonsController.isWithinSeasonTime(rentID, seasonType):
-                    seasonByID = self.seasonsController.getSeason(seasonType, rentID)
-                    if seasonByID is not None:
-                        return SeasonRentInfo(seasonType, rentID, duration, seasonByID.getEndDate())
-            if duration == SeasonRentDuration.SEASON_CYCLE:
-                currentSeason = self.seasonsController.getCurrentSeason(seasonType)
-                if currentSeason is not None and currentSeason.getCycleID() == rentID:
-                    return SeasonRentInfo(seasonType, rentID, duration, currentSeason.getCycleEndDate())
+        for seasonType, rentTypes in self.seasonRent.iteritems():
+            seasonRents = [ item for item in rentTypes if item[1] == SeasonRentDuration.ENTIRE_SEASON ]
+            if seasonRents:
+                for rentType in seasonRents:
+                    rentID, duration = rentType
+                    if self.seasonsController.isWithinSeasonTime(rentID, seasonType):
+                        seasonByID = self.seasonsController.getSeason(seasonType, rentID)
+                        if seasonByID is not None:
+                            return SeasonRentInfo(seasonType, rentID, duration, seasonByID.getEndDate())
+
+            cycleRents = [ item for item in rentTypes if item[1] == SeasonRentDuration.SEASON_CYCLE ]
+            if cycleRents:
+                for rentType in cycleRents:
+                    rentID, duration = rentType
+                    currentSeason = self.seasonsController.getCurrentSeason(seasonType)
+                    if currentSeason is not None and currentSeason.getCycleID() == rentID:
+                        return SeasonRentInfo(seasonType, rentID, duration, currentSeason.getCycleEndDate())
 
         return
 
     def getTimeLeft(self):
         if self.rentExpiryTime != float('inf'):
-            seasonRent = self.getActiveSeasonRent()
-            expiryTime = max(self.rentExpiryTime, seasonRent.expiryTime if seasonRent is not None else 0)
+            expiryTime = max(self.rentExpiryTime, self._getSeasonExpiryTime())
             return float(time_utils.getTimeDeltaFromNow(time_utils.makeLocalServerTime(expiryTime)))
-        else:
-            return float('inf')
+        return float('inf')
 
     def getExpiryState(self):
-        return self.rentExpiryTime != float('inf') and self.battlesLeft <= 0 and self.winsLeft <= 0 and self.getTimeLeft() <= 0 and self.getActiveSeasonRent() is None
+        return self.rentExpiryTime != float('inf') and self.battlesLeft <= 0 and self.winsLeft <= 0 and self.getTimeLeft() <= 0 and not self.getActiveSeasonRent()
+
+    def getRentalPeriodInCycles(self):
+        activeSeasonRentInfo = self.getActiveSeasonRent()
+        if not activeSeasonRentInfo:
+            return
+        else:
+            seasonType, rentID, duration, _ = activeSeasonRentInfo
+            currentSeason = self.seasonsController.getCurrentSeason(seasonType)
+            if currentSeason:
+                if duration == SeasonRentDuration.ENTIRE_SEASON:
+                    if self.seasonsController.isWithinSeasonTime(rentID, seasonType):
+                        curCycle = currentSeason.getCycleInfo()
+                        lastCycle = currentSeason.getLastCycleInfo()
+                        if curCycle is None or lastCycle is None:
+                            return
+                        if curCycle == lastCycle:
+                            return (curCycle,)
+                        return (curCycle, lastCycle)
+                elif duration == SeasonRentDuration.SEASON_CYCLE:
+                    lastFutureCycleInfo = self._getLastFutureCycleRentInfo()
+                    curCycle = currentSeason.getCycleInfo()
+                    if lastFutureCycleInfo:
+                        lastCycle = currentSeason.getCycleInfo(lastFutureCycleInfo.seasonID)
+                        return (curCycle, lastCycle)
+                    return (curCycle,)
+            return
+
+    def _getLastFutureCycleRentInfo(self):
+        for seasonType, rentTypes in self.seasonRent.iteritems():
+            currentSeason = self.seasonsController.getCurrentSeason(seasonType)
+            if currentSeason:
+                currentCycleID = currentSeason.getCycleID()
+                futureCycleRents = first(sorted([ item[0] for item in rentTypes if item[1] == SeasonRentDuration.SEASON_CYCLE and item[0] > currentCycleID ], reverse=True))
+                if futureCycleRents:
+                    lastFutureCycleRentID = futureCycleRents
+                    cycleInfo = currentSeason.getCycleInfo(lastFutureCycleRentID)
+                    if cycleInfo:
+                        return SeasonRentInfo(seasonType, lastFutureCycleRentID, SeasonRentDuration.SEASON_CYCLE, cycleInfo.endDate)
+
+        return None
+
+    def _getSeasonExpiryTime(self):
+        activeSeasonRent = self.getActiveSeasonRent()
+        lastFutureCycleRent = self._getLastFutureCycleRentInfo()
+        if activeSeasonRent:
+            if lastFutureCycleRent:
+                return lastFutureCycleRent.expiryTime
+            return activeSeasonRent.expiryTime
 
 
 class FittingItem(GUIItem, HasIntCD):

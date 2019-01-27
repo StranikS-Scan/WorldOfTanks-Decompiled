@@ -629,7 +629,7 @@ class _VehicleQuestsBlockInfo(_EventsBlockInfo):
          'bodyLinkage': QUESTS_ALIASES.MISSION_PACK_MARATHON_BODY_LINKAGE}
 
     def __applyFilter(self, quest):
-        forbiddenQuestConditions = [lambda q: q.getType() in (EVENT_TYPE.TOKEN_QUEST, EVENT_TYPE.REF_SYSTEM_QUEST), lambda q: not q.getFinishTimeLeft(), lambda q: isLinkedSet(q.getGroupID())]
+        forbiddenQuestConditions = [lambda q: q.getType() in (EVENT_TYPE.TOKEN_QUEST,), lambda q: not q.getFinishTimeLeft(), lambda q: isLinkedSet(q.getGroupID())]
         if any((isForbidden(quest) for isForbidden in forbiddenQuestConditions)):
             return False
         return quest.isValidVehicleCondition(g_currentVehicle.item) if quest.getType() != EVENT_TYPE.MOTIVE_QUEST else quest.isValidVehicleCondition(g_currentVehicle.item) and not quest.isCompleted() and quest.isAvailable()[0]

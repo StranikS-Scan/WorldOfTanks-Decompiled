@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/wgnc/xml/actions_parsers.py
+import resource_helper
 from gui.wgnc import actions
 from gui.wgnc.wgnc_helpers import parseSize
 from gui.wgnc.errors import ParseError
@@ -47,6 +48,31 @@ class _OpenWindowParser(SectionParser):
         return actions.OpenWindow(self._readString('name', section), self._readString('target', section))
 
 
+class _CustomActionsParser(SectionParser):
+
+    def getTagName(self):
+        pass
+
+    def parse(self, section):
+        ctx, _ = resource_helper.getRoot('')
+        return actions.CustomAction(action_name=self._readString('name', section), **self.__parse(ctx, section))
+
+    def __parse(self, ctx, section):
+        res = {}
+        for c, ss in resource_helper.getIterator(ctx, section):
+            val = resource_helper.readItem(c, ss, ss.name).value
+            res[self.__getKeyName(ss)] = val if val else self.__parse(c, ss)
+
+        if not res:
+            res[self.__getKeyName(section)] = resource_helper.readItem(ctx, section, section.name).value
+        if 'action_class' not in res.keys():
+            res['action_class'] = resource_helper.readItem(ctx, section, section.name).value
+        return res
+
+    def __getKeyName(self, section):
+        return section['name'].asString if section['name'] is not None else section.name
+
+
 class _ReplaceButtonsAction(SectionParser):
 
     def getTagName(self):
@@ -78,4 +104,5 @@ class ActionsParser_v2(_ActionsParser):
         super(ActionsParser_v2, self).__init__((_CallbackActionParser(),
          _BrowseActionParser(),
          _OpenWindowParser(),
-         _ReplaceButtonsAction()))
+         _ReplaceButtonsAction(),
+         _CustomActionsParser()))

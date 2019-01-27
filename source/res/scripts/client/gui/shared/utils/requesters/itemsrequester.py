@@ -162,6 +162,10 @@ class RequestCriteria(object):
 
         return False
 
+    @property
+    def conditions(self):
+        return self._conditions
+
 
 class IntCDProtectionRequestCriteria(RequestCriteria):
 
@@ -221,6 +225,7 @@ class REQ_CRITERIA(object):
         EXPIRED_RENT = RequestCriteria(PredicateCondition(lambda item: item.isRented and item.rentalIsOver))
         EXPIRED_IGR_RENT = RequestCriteria(PredicateCondition(lambda item: item.isRented and item.rentalIsOver and item.isPremiumIGR))
         RENT_PROMOTION = RequestCriteria(PredicateCondition(lambda item: item.isRentPromotion))
+        SEASON_RENT = RequestCriteria(PredicateCondition(lambda item: item.isSeasonRent))
         DISABLED_IN_PREM_IGR = RequestCriteria(PredicateCondition(lambda item: item.isDisabledInPremIGR))
         IS_PREMIUM_IGR = RequestCriteria(PredicateCondition(lambda item: item.isPremiumIGR))
         ELITE = RequestCriteria(PredicateCondition(lambda item: item.isElite))
@@ -631,7 +636,7 @@ class ItemsRequester(IItemsRequester):
                 tankman = self.__makeDismissedTankman(tmanInvID, tankmanData)
         return tankman
 
-    def getItems(self, itemTypeID=None, criteria=REQ_CRITERIA.EMPTY, nationID=None):
+    def getItems(self, itemTypeID=None, criteria=REQ_CRITERIA.EMPTY, nationID=None, onlyWithPrices=True):
         result = ItemsCollection()
         if not isinstance(itemTypeID, tuple):
             itemTypeID = (itemTypeID,)
@@ -647,7 +652,7 @@ class ItemsRequester(IItemsRequester):
             protector = criteria.getIntCDProtector()
             if protector is not None and protector.isUnlinked():
                 return result
-            for intCD in vehicle_items_getter.getItemsIterator(self.__shop.getItemsData(), nationID=nationID, itemTypeID=typeID):
+            for intCD in vehicle_items_getter.getItemsIterator(self.__shop.getItemsData(), nationID=nationID, itemTypeID=typeID, onlyWithPrices=onlyWithPrices):
                 if protector is not None and protector.isTriggered(intCD):
                     continue
                 item = itemGetter(intCD)
@@ -684,6 +689,10 @@ class ItemsRequester(IItemsRequester):
                 result[badgeID] = item
 
         return result
+
+    def getBadgeByID(self, badgeID):
+        badgeData = self.__badges.available.get(badgeID)
+        return None if badgeData is None else self.itemsFactory.createBadge(badgeData, proxy=self)
 
     def getItemByCD(self, typeCompDescr):
         return self.__makeVehicle(typeCompDescr) if getTypeOfCompactDescr(typeCompDescr) == GUI_ITEM_TYPE.VEHICLE else self.__makeSimpleItem(typeCompDescr)

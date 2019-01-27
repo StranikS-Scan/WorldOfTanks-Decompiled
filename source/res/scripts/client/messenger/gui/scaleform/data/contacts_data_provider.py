@@ -326,14 +326,12 @@ class _FormationCategory(_Category):
 
 
 class _OthersCategory(_Category):
-    __slots__ = ('_ignored', '_pending', '_referrers', '_referrals')
+    __slots__ = ('_ignored', '_pending')
 
     def __init__(self):
         super(_OthersCategory, self).__init__(CONTACTS_ALIASES.GROUP_OTHER_CATEGORY_ID)
         self._ignored = _vo_converter.IgnoredConverter(self._converter.makeBaseVO())
         self._pending = _vo_converter.RqFriendshipConverter(self._converter.makeBaseVO())
-        self._referrers = _vo_converter.ReferrersConverter(self._converter.makeBaseVO())
-        self._referrals = _vo_converter.ReferralsConverter(self._converter.makeBaseVO())
 
     def clear(self, full=False):
         for group in self._iterGroups():
@@ -342,11 +340,7 @@ class _OthersCategory(_Category):
         super(_OthersCategory, self).clear(full)
 
     def getTags(self):
-        return {_TAG.IGNORED,
-         _TAG.IGNORED_TMP,
-         _TAG.REFERRER,
-         _TAG.REFERRAL,
-         _TAG.SUB_PENDING_IN}
+        return {_TAG.IGNORED, _TAG.IGNORED_TMP, _TAG.SUB_PENDING_IN}
 
     def isEmpty(self):
         for group in self._iterGroups():
@@ -373,10 +367,6 @@ class _OthersCategory(_Category):
             result = self._ignored.setContact(contact)
         if not contact.isFriend() and _TAG.SUB_PENDING_IN in tags:
             result = self._pending.setContact(contact)
-        if _TAG.REFERRER in tags:
-            result = self._referrers.setContact(contact)
-        if _TAG.REFERRAL in tags:
-            result = self._referrals.setContact(contact)
         return result
 
     def updateContact(self, contact):
@@ -409,7 +399,6 @@ class _OthersCategory(_Category):
 
     def setAction(self, actionID, contact):
         dbID = contact.getID()
-        tags = contact.getTags()
         result = False
         if actionID in (_ACTION_ID.IGNORED_ADDED, _ACTION_ID.TMP_IGNORED_ADDED):
             result = self._ignored.setContact(contact)
@@ -420,19 +409,12 @@ class _OthersCategory(_Category):
                 result = self._pending.setContact(contact)
             else:
                 result = self._pending.removeContact(dbID)
-        if _TAG.REFERRER in tags:
-            result = self._referrers.setContact(contact)
-        if _TAG.REFERRAL in tags:
-            result = self._referrals.setContact(contact)
         if actionID == _ACTION_ID.NOTE_CHANGED:
             result = self.updateContact(contact)
         return result
 
     def _iterGroups(self):
-        for group in (self._pending,
-         self._ignored,
-         self._referrers,
-         self._referrals):
+        for group in (self._pending, self._ignored):
             yield group
 
 

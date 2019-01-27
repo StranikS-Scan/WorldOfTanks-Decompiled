@@ -2,13 +2,16 @@
 # Embedded file name: scripts/client/gui/wgnc/proxy_data.py
 from account_helpers import getAccountDatabaseID
 from adisp import process
+from gui.Scaleform.daapi.view.lobby.referral_program.referral_program_helpers import getReferralProgramURL
 from gui.Scaleform.locale.MENU import MENU
+from gui.awards.event_dispatcher import showRecruiterAward
 from gui.promo.promo_logger import PromoLogSourceType, PromoLogActions
+from gui.shared.event_dispatcher import showReferralProgramWindow
 from gui.wgnc.common import WebHandlersContainer
 from gui.wgnc.events import g_wgncEvents
 from gui.wgnc.settings import WGNC_DATA_PROXY_TYPE
 from helpers import dependency
-from skeletons.gui.game_control import IEncyclopediaController, IBrowserController, IPromoController
+from skeletons.gui.game_control import IEncyclopediaController, IBrowserController, IPromoController, IReferralProgramController
 from skeletons.gui.shared.promo import IPromoLogger
 
 class _ProxyDataItem(object):
@@ -248,6 +251,39 @@ class ShowInBrowserItem(_ProxyDataItem, WebHandlersContainer):
         if self.__titleKey:
             localizedValue = MENU.browser_customtitle(self.__titleKey)
         return localizedValue or self.__title
+
+
+class UpdateRefferalBubbleItem(_ProxyDataItem):
+    _referralCtrl = dependency.descriptor(IReferralProgramController)
+
+    def getType(self):
+        return WGNC_DATA_PROXY_TYPE.UPDATE_REFERRAL_BUBBLE
+
+    def show(self, _):
+        self._referralCtrl.updateBubble()
+
+
+class BecomeRecruiterItem(_ProxyDataItem):
+
+    def getType(self):
+        return WGNC_DATA_PROXY_TYPE.BECOME_RECRUITER
+
+    def show(self, _):
+        showRecruiterAward()
+
+
+class ShowReferralWindowItem(_ProxyDataItem):
+
+    def __init__(self, relativeUrl=None):
+        self.__relativeUrl = relativeUrl if relativeUrl is not None else ''
+        return
+
+    def getType(self):
+        return WGNC_DATA_PROXY_TYPE.SHOW_REFERRAL_WINDOW
+
+    def show(self, _):
+        url = getReferralProgramURL() + self.__relativeUrl
+        showReferralProgramWindow(url)
 
 
 class ProxyDataHolder(object):

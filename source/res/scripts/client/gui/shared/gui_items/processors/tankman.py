@@ -1,8 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/gui_items/processors/tankman.py
+import logging
 import BigWorld
 from constants import EQUIP_TMAN_CODE
-from debug_utils import LOG_DEBUG
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.SystemMessages import SM_TYPE, CURRENCY_TO_SM_TYPE
 from gui.game_control.restore_contoller import getTankmenRestoreInfo
@@ -15,6 +15,7 @@ from gui import makeHtmlString
 from items import tankmen, makeIntCompactDescrByID
 from items.tankmen import SKILL_INDICES, SKILL_NAMES, getSkillsConfig
 from skeletons.gui.game_control import IRestoreController
+_logger = logging.getLogger(__name__)
 
 def _getSysMsgType(price):
     return CURRENCY_TO_SM_TYPE.get(price.getCurrency(byWeight=False), SM_TYPE.Information)
@@ -36,13 +37,13 @@ class TankmanDismiss(ItemProcessor):
         return
 
     def _errorHandler(self, code, errStr='', ctx=None):
-        return makeI18nError('dismiss_tankman/%s' % errStr, defaultSysMsgKey='dismiss_tankman/server_error')
+        return makeI18nError(sysMsgKey='dismiss_tankman/{}'.format(errStr), defaultSysMsgKey='dismiss_tankman/server_error')
 
     def _successHandler(self, code, ctx=None):
         return makeI18nSuccess('dismiss_tankman/success', type=SM_TYPE.Information)
 
     def _request(self, callback):
-        LOG_DEBUG('Make server request to dismiss tankman:', self.item)
+        _logger.debug('Make server request to dismiss tankman: %s', self.item)
         BigWorld.player().inventory.dismissTankman(self.item.invID, lambda code: self._response(code, callback))
 
 
@@ -60,14 +61,14 @@ class TankmanRecruit(Processor):
         self.tmanCostTypeIdx = tmanCostTypeIdx
 
     def _errorHandler(self, code, errStr='', ctx=None):
-        return makeI18nError('recruit_window/%s' % errStr, defaultSysMsgKey='recruit_window/server_error', auxData=ctx)
+        return makeI18nError(sysMsgKey='recruit_window/{}'.format(errStr), defaultSysMsgKey='recruit_window/server_error', auxData=ctx)
 
     def _successHandler(self, code, ctx=None):
         tmanCost = self.__getRecruitPrice(self.tmanCostTypeIdx)
-        return makeI18nSuccess('recruit_window/financial_success', price=formatPrice(tmanCost), type=self.__getSysMsgType(), auxData=ctx) if tmanCost else makeI18nSuccess('recruit_window/success', type=self.__getSysMsgType(), auxData=ctx)
+        return makeI18nSuccess(sysMsgKey='recruit_window/financial_success', auxData=ctx, price=formatPrice(tmanCost), type=self.__getSysMsgType()) if tmanCost else makeI18nSuccess('recruit_window/success', type=self.__getSysMsgType(), auxData=ctx)
 
     def _request(self, callback):
-        LOG_DEBUG('Make server request to recruit tankman:', self.nationID, self.vehTypeID, self.role, self.tmanCostTypeIdx)
+        _logger.debug('Make server request to recruit tankman: %s, %s, %s, %s', self.nationID, self.vehTypeID, self.role, self.tmanCostTypeIdx)
         BigWorld.player().shop.buyTankman(self.nationID, self.vehTypeID, self.role, self.tmanCostTypeIdx, lambda code, tmanInvID, tmanCompDescr: self._response(code, callback, ctx=tmanInvID))
 
     def __getRecruitPrice(self, tmanCostTypeIdx):
@@ -94,7 +95,7 @@ class TankmanTokenRecruit(Processor):
         self.vehicleName = vehicle.shortUserName
 
     def _errorHandler(self, code, errStr='', ctx=None):
-        return makeI18nError('recruit_window/%s' % errStr, defaultSysMsgKey='recruit_window/server_error', auxData=ctx)
+        return makeI18nError(sysMsgKey='recruit_window/{}'.format(errStr), defaultSysMsgKey='recruit_window/server_error', auxData=ctx)
 
     def _successHandler(self, code, ctx=None):
         html = makeHtmlString(path='html_templates:lobby/processors/system_messages', key='recruit', ctx={'fullName': self.recruitInfo.getFullUserName(),
@@ -105,7 +106,7 @@ class TankmanTokenRecruit(Processor):
         return makeSuccess(html, msgType=SM_TYPE.Information, auxData=ctx)
 
     def _request(self, callback):
-        LOG_DEBUG('Make server request to recruit notrecruit tankman (by token):', self.nationID, self.vehTypeID, self.role)
+        _logger.debug('Make server request to recruit notrecruit tankman (by token): %s, %s, %s', self.nationID, self.vehTypeID, self.role)
         BigWorld.player().shop.buyTokenTankman(self.nationID, self.vehTypeID, self.role, self.tokenName, lambda code, tmanInvID, tmanCompDescr: self._response(code, callback, ctx=tmanInvID))
 
 
@@ -129,13 +130,13 @@ class TankmanEquip(Processor):
 
     def _errorHandler(self, code, errStr='', ctx=None):
         prefix = self.__getSysMsgPrefix()
-        return makeI18nError('%s/%s' % (prefix, errStr), defaultSysMsgKey='%s/server_error' % prefix)
+        return makeI18nError(sysMsgKey='{}/{}'.format(prefix, errStr), defaultSysMsgKey='{}/server_error'.format(prefix))
 
     def _successHandler(self, code, ctx=None):
-        return makeI18nSuccess('%s/success' % self.__getSysMsgPrefix(), type=SM_TYPE.Information)
+        return makeI18nSuccess(sysMsgKey='{}/success'.format(self.__getSysMsgPrefix()), type=SM_TYPE.Information)
 
     def _request(self, callback):
-        LOG_DEBUG('Make server request to equip tankman:', self.tankman, self.vehicle, self.slot, self.isReequip)
+        _logger.debug('Make server request to equip tankman: %s, %s, %s, %s', self.tankman, self.vehicle, self.slot, self.isReequip)
         tmanInvID = None
         if self.tankman is not None:
             tmanInvID = self.tankman.invID
@@ -162,18 +163,18 @@ class TankmanRecruitAndEquip(Processor):
         return
 
     def _request(self, callback):
-        LOG_DEBUG('Make server request to buy and equip tankman:', self.vehicle, self.slot, self.tmanCostTypeIdx)
+        _logger.debug('Make server request to buy and equip tankman: %s, %s, %s', self.vehicle, self.slot, self.tmanCostTypeIdx)
         BigWorld.player().shop.buyAndEquipTankman(self.vehicle.invID, self.slot, self.tmanCostTypeIdx, lambda code, tmanInvID, tmanCompDescr: self._response(code, callback, ctx=tmanInvID))
 
     def _errorHandler(self, code, errStr='', ctx=None):
         prefix = self.__getSysMsgPrefix()
-        return makeI18nError('%s/%s' % (prefix, errStr), defaultSysMsgKey='%s/server_error' % prefix, auxData=ctx)
+        return makeI18nError(sysMsgKey='{}/{}'.format(prefix, errStr), defaultSysMsgKey='{}/server_error'.format(prefix), auxData=ctx)
 
     def _successHandler(self, code, ctx=None):
         tmanCost = self.__getRecruitPrice(self.tmanCostTypeIdx)
         prefix = self.__getSysMsgPrefix()
         sysMsgType = _getSysMsgType(tmanCost)
-        return makeI18nSuccess('%s/financial_success' % prefix, price=formatPrice(tmanCost), type=sysMsgType, auxData=ctx) if tmanCost else makeI18nSuccess('%s/success' % prefix, type=sysMsgType, auxData=ctx)
+        return makeI18nSuccess(sysMsgKey='{}/financial_success'.format(prefix), auxData=ctx, price=formatPrice(tmanCost), type=sysMsgType) if tmanCost else makeI18nSuccess(sysMsgKey='{}/success'.format(prefix), auxData=ctx, type=sysMsgType)
 
     def __getRecruitPrice(self, tmanCostTypeIdx):
         upgradeCost = self.itemsCache.items.shop.tankmanCost[tmanCostTypeIdx]
@@ -199,13 +200,13 @@ class TankmanUnload(Processor):
         return
 
     def _errorHandler(self, code, errStr='', ctx=None):
-        return makeI18nError('%s/%s' % (self.__sysMsgPrefix, errStr), defaultSysMsgKey='%s/server_error' % self.__sysMsgPrefix)
+        return makeI18nError(sysMsgKey='{}/{}'.format(self.__sysMsgPrefix, errStr), defaultSysMsgKey='{}/server_error'.format(self.__sysMsgPrefix))
 
     def _successHandler(self, code, ctx=None):
-        return makeI18nSuccess('%s/success' % self.__sysMsgPrefix, type=SM_TYPE.Information)
+        return makeI18nSuccess(sysMsgKey='{}/success'.format(self.__sysMsgPrefix), type=SM_TYPE.Information)
 
     def _request(self, callback):
-        LOG_DEBUG('Trying to unload tankman', self.vehicle, self.slot)
+        _logger.debug('Trying to unload tankman: %s, %s', self.vehicle, self.slot)
         BigWorld.player().inventory.equipTankman(self.vehicle.invID, self.slot, None, lambda code: self._response(code, callback))
         return
 
@@ -218,13 +219,13 @@ class TankmanReturn(Processor):
         super(TankmanReturn, self).__init__((plugins.VehicleValidator(self.__vehicle, False, prop={'isLocked': True}), plugins.VehicleCrewLockedValidator(vehicle)))
 
     def _successHandler(self, code, ctx=None):
-        return makeI18nSuccess('%s/success' % self.__prefix, type=SM_TYPE.Information)
+        return makeI18nSuccess(sysMsgKey='{}/success'.format(self.__prefix), type=SM_TYPE.Information)
 
     def _errorHandler(self, code, errStr='', ctx=None):
-        return makeI18nError('%s/%s' % (self.__prefix, errStr), defaultSysMsgKey='%s/server_error' % self.__prefix)
+        return makeI18nError(sysMsgKey='{}/{}'.format(self.__prefix, errStr), defaultSysMsgKey='{}/server_error'.format(self.__prefix))
 
     def _request(self, callback):
-        LOG_DEBUG('Make server request to return crew. VehicleItem :', self.__vehicle)
+        _logger.debug('Make server request to return crew. VehicleItem: %s', self.__vehicle)
         BigWorld.player().inventory.returnCrew(self.__vehicle.invID, lambda code: self._response(code, callback))
 
 
@@ -257,14 +258,14 @@ class TankmanRetraining(ItemProcessor):
         return Money(gold=upgradeCost[Currency.GOLD]) if tmanCostTypeIdx == 2 else MONEY_UNDEFINED
 
     def _errorHandler(self, code, errStr='', ctx=None):
-        return makeI18nError('retraining_tankman/%s' % errStr, defaultSysMsgKey='retraining_tankman/server_error')
+        return makeI18nError(sysMsgKey='retraining_tankman/{}'.format(errStr), defaultSysMsgKey='retraining_tankman/server_error')
 
     def _successHandler(self, code, ctx=None):
         sysMsgType = _getSysMsgType(self.tmanCost)
-        return makeI18nSuccess('retraining_tankman/financial_success', price=formatPrice(self.tmanCost), type=sysMsgType, auxData=ctx) if self.tmanCost else makeI18nSuccess('retraining_tankman/success', type=sysMsgType, auxData=ctx)
+        return makeI18nSuccess(sysMsgKey='retraining_tankman/financial_success', auxData=ctx, type=sysMsgType, price=formatPrice(self.tmanCost)) if self.tmanCost else makeI18nSuccess(sysMsgKey='retraining_tankman/success', auxData=ctx, type=sysMsgType)
 
     def _request(self, callback):
-        LOG_DEBUG('Make server request to retrain Crew:', self.item, self.vehicle, self.tmanCostTypeIdx)
+        _logger.debug('Make server request to retrain Crew: %s, %s, %s', self.item, self.vehicle, self.tmanCostTypeIdx)
         BigWorld.player().inventory.respecTankman(self.item.invID, self.vehicle.intCD, self.tmanCostTypeIdx, lambda code: self._response(code, callback))
 
 
@@ -299,7 +300,7 @@ class TankmanCrewRetraining(Processor):
         messagePrefix = 'retraining_crew'
         if crewMembersCount == 1:
             messagePrefix = 'retraining_tankman'
-        return makeI18nError('%s/%s' % (messagePrefix, errStr), defaultSysMsgKey='%s/server_error' % messagePrefix)
+        return makeI18nError(sysMsgKey='{}/{}'.format(messagePrefix, errStr), defaultSysMsgKey='{}/server_error'.format(messagePrefix))
 
     def _successHandler(self, code, ctx=None):
         crewMembersCount = len(self.tankmen)
@@ -308,10 +309,10 @@ class TankmanCrewRetraining(Processor):
             messagePrefix = 'retraining_tankman'
         crewRetrainingCost = self._getRecruitPrice(self.tmanCostTypeIdx)
         sysMsgType = _getSysMsgType(crewRetrainingCost)
-        return makeI18nSuccess('%s/financial_success' % messagePrefix, type=sysMsgType, auxData=ctx, price=formatPrice(crewRetrainingCost)) if crewRetrainingCost else makeI18nSuccess('%s/success' % messagePrefix, type=sysMsgType, auxData=ctx)
+        return makeI18nSuccess(sysMsgKey='{}/financial_success'.format(messagePrefix), auxData=ctx, type=sysMsgType, price=formatPrice(crewRetrainingCost)) if crewRetrainingCost else makeI18nSuccess('{}/success'.format(messagePrefix), type=sysMsgType, auxData=ctx)
 
     def _request(self, callback):
-        LOG_DEBUG('Make server request to retrain Crew:', self.tankmen, self.vehicle, self.tmanCostTypeIdx)
+        _logger.debug('Make server request to retrain Crew: %s, %s, %s', self.tankmen, self.vehicle, self.tmanCostTypeIdx)
         tMenInvIDsAndCostTypeIdx = []
         for tManInvID in self.tankmen:
             tMenInvIDsAndCostTypeIdx.append((tManInvID, self.tmanCostTypeIdx))
@@ -332,13 +333,13 @@ class TankmanFreeToOwnXpConvertor(Processor):
         self.__selectedXpForConvert = selectedXpForConvert
 
     def _errorHandler(self, code, errStr='', ctx=None):
-        return makeI18nError('free_xp_to_tman_skill/error/%s' % errStr, defaultSysMsgKey='free_xp_to_tman_skill/server_error')
+        return makeI18nError(sysMsgKey='free_xp_to_tman_skill/error/{}'.format(errStr), defaultSysMsgKey='free_xp_to_tman_skill/server_error')
 
     def _successHandler(self, code, ctx=None):
-        return makeI18nSuccess('free_xp_to_tman_skill/success', freeXP=BigWorld.wg_getIntegralFormat(self.__selectedXpForConvert), type=SM_TYPE.Information)
+        return makeI18nSuccess(sysMsgKey='free_xp_to_tman_skill/success', freeXP=BigWorld.wg_getIntegralFormat(self.__selectedXpForConvert), type=SM_TYPE.Information)
 
     def _request(self, callback):
-        LOG_DEBUG('Attempt to request server to exchange Free user XP to tankman XP', self.__tankman, self.__selectedXpForConvert)
+        _logger.debug('Attempt to request server to exchange Free user XP to tankman XP: %s, %s', self.__tankman, self.__selectedXpForConvert)
         BigWorld.player().inventory.freeXPToTankman(self.__tankman.invID, self.__selectedXpForConvert, lambda errStr, code: self._response(code, callback, errStr=errStr))
 
 
@@ -349,13 +350,13 @@ class TankmanAddSkill(ItemProcessor):
         self.skillName = skillName
 
     def _errorHandler(self, code, errStr='', ctx=None):
-        return makeI18nError('add_tankman_skill/%s' % errStr, defaultSysMsgKey='add_tankman_skill/server_error')
+        return makeI18nError(sysMsgKey='add_tankman_skill/{}'.format(errStr), defaultSysMsgKey='add_tankman_skill/server_error')
 
     def _successHandler(self, code, ctx=None):
-        return makeI18nSuccess('add_tankman_skill/success', type=SM_TYPE.Information)
+        return makeI18nSuccess(sysMsgKey='add_tankman_skill/success', type=SM_TYPE.Information)
 
     def _request(self, callback):
-        LOG_DEBUG('Make server request to add tankman skill:', self.item, self.skillName)
+        _logger.debug('Make server request to add tankman skill: %s, %s', self.item, self.skillName)
         BigWorld.player().inventory.addTankmanSkill(self.item.invID, self.skillName, lambda code: self._response(code, callback))
 
 
@@ -374,22 +375,22 @@ class TankmanChangeRole(ItemProcessor):
          plugins.MoneyValidator(Money(gold=self.__changeRoleCost))))
 
     def _errorHandler(self, code, errStr='', ctx=None):
-        return makeI18nError('change_tankman_role/%s' % errStr, defaultSysMsgKey='change_tankman_role/server_error')
+        return makeI18nError(sysMsgKey='change_tankman_role/{}'.format(errStr), defaultSysMsgKey='change_tankman_role/server_error')
 
     def _successHandler(self, code, ctx=None):
         msgType = SM_TYPE.FinancialTransactionWithGold
         vehicle = self.itemsCache.items.getItemByCD(self.__vehTypeCompDescr)
         if ctx == EQUIP_TMAN_CODE.OK:
-            auxData = makeI18nSuccess('change_tankman_role/installed', vehicle=vehicle.shortUserName)
+            auxData = makeI18nSuccess(sysMsgKey='change_tankman_role/installed', vehicle=vehicle.shortUserName)
         elif ctx == EQUIP_TMAN_CODE.NO_FREE_SLOT:
             roleStr = Tankman.getRoleUserName(SKILL_NAMES[self.__roleIdx])
-            auxData = makeI18nSuccess('change_tankman_role/slot_is_taken', vehicle=vehicle.shortUserName, role=roleStr)
+            auxData = makeI18nSuccess(sysMsgKey='change_tankman_role/slot_is_taken', vehicle=vehicle.shortUserName, role=roleStr)
         else:
-            auxData = makeI18nSuccess('change_tankman_role/no_vehicle')
+            auxData = makeI18nSuccess(sysMsgKey='change_tankman_role/no_vehicle')
         return makeI18nSuccess('change_tankman_role/success', money=formatPrice(Money(gold=self.__changeRoleCost)), type=msgType, auxData=auxData)
 
     def _request(self, callback):
-        LOG_DEBUG('Make server request to change tankman role:', self.item, self.__roleIdx, self.__vehTypeCompDescr)
+        _logger.debug('Make server request to change tankman role: %s, %s, %s', self.item, self.__roleIdx, self.__vehTypeCompDescr)
         BigWorld.player().inventory.changeTankmanRole(self.item.invID, self.__roleIdx, self.__vehTypeCompDescr, lambda code, ext: self._response(code, callback, ctx=ext))
 
 
@@ -400,15 +401,15 @@ class TankmanDropSkills(ItemProcessor):
         self.dropSkillCostIdx = dropSkillCostIdx
 
     def _errorHandler(self, code, errStr='', ctx=None):
-        return makeI18nError('drop_tankman_skill/%s' % errStr, defaultSysMsgKey='drop_tankman_skill/server_error')
+        return makeI18nError(sysMsgKey='drop_tankman_skill/{}'.format(errStr), defaultSysMsgKey='drop_tankman_skill/server_error')
 
     def _successHandler(self, code, ctx=None):
         msgType = self.__getTankmanSysMsgType(self.dropSkillCostIdx)
         price = self.itemsCache.items.shop.dropSkillsCost.get(self.dropSkillCostIdx)
-        return makeI18nSuccess('drop_tankman_skill/success', money=formatPrice(Money(**price)), type=msgType)
+        return makeI18nSuccess(sysMsgKey='drop_tankman_skill/success', money=formatPrice(Money(**price)), type=msgType)
 
     def _request(self, callback):
-        LOG_DEBUG('Make server request to drop tankman skills:', self.item, self.dropSkillCostIdx)
+        _logger.debug('Make server request to drop tankman skills: %s, %s', self.item, self.dropSkillCostIdx)
         BigWorld.player().inventory.dropTankmanSkills(self.item.invID, self.dropSkillCostIdx, lambda code: self._response(code, callback))
 
     def __getTankmanSysMsgType(self, dropSkillCostIdx):
@@ -438,13 +439,13 @@ class TankmanChangePassport(ItemProcessor):
         self.price = price
 
     def _errorHandler(self, code, errStr='', ctx=None):
-        return makeI18nError('replace_tankman/%s' % errStr, defaultSysMsgKey='replace_tankman/server_error')
+        return makeI18nError(sysMsgKey='replace_tankman/{}'.format(errStr), defaultSysMsgKey='replace_tankman/server_error')
 
     def _successHandler(self, code, ctx=None):
-        return makeI18nSuccess('replace_tankman/success', money=formatPrice(Money(gold=self.price)), type=SM_TYPE.PurchaseForGold)
+        return makeI18nSuccess(sysMsgKey='replace_tankman/success', money=formatPrice(Money(gold=self.price)), type=SM_TYPE.PurchaseForGold)
 
     def _request(self, callback):
-        LOG_DEBUG('Make server request to change tankman passport:', self.item.invID, self.isPremium, self.isFemale, self.firstNameGroup, self.firstNameID, self.lastNameGroup, self.lastNameID)
+        _logger.debug('Make server request to change tankman passport: %s, %s, %s, %s, %s, %s, %s', self.item.invID, self.isPremium, self.isFemale, self.firstNameGroup, self.firstNameID, self.lastNameGroup, self.lastNameID)
         BigWorld.player().inventory.replacePassport(self.item.invID, self.isPremium, self.isFemale, self.firstNameGroup, self.firstNameID, self.lastNameGroup, self.lastNameID, self.iconGroup, self.iconID, lambda code: self._response(code, callback))
 
     @classmethod
@@ -471,15 +472,15 @@ class TankmanRestore(ItemProcessor):
          plugins.IsLongDisconnectedFromCenter()))
 
     def _errorHandler(self, code, errStr='', ctx=None):
-        return makeI18nError('restore_tankman/%s' % errStr, defaultSysMsgKey='restore_tankman/server_error')
+        return makeI18nError(sysMsgKey='restore_tankman/{}'.format(errStr), defaultSysMsgKey='restore_tankman/server_error')
 
     def _successHandler(self, code, ctx=None):
         restorePrice, _ = getTankmenRestoreInfo(self.__tankman)
         if restorePrice:
             currency = restorePrice.getCurrency()
-            return makeI18nSuccess('restore_tankman/financial_success', type=_getSysMsgType(restorePrice), money=formatPriceForCurrency(restorePrice, currency))
-        return makeI18nSuccess('restore_tankman/success', type=SM_TYPE.Information)
+            return makeI18nSuccess(sysMsgKey='restore_tankman/financial_success', type=_getSysMsgType(restorePrice), money=formatPriceForCurrency(restorePrice, currency))
+        return makeI18nSuccess(sysMsgKey='restore_tankman/success', type=SM_TYPE.Information)
 
     def _request(self, callback):
-        LOG_DEBUG('Make server request to restore tankman:', self.item)
+        _logger.debug('Make server request to restore tankman: %s', self.item)
         BigWorld.player().recycleBin.restoreTankman(abs(self.item.invID), lambda code, errStr: self._response(code, callback, errStr=errStr))

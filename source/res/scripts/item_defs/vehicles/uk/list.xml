@@ -41,7 +41,7 @@
     <description>	#gb_vehicles:GB21_Cromwell_descr	</description>
     <shortUserString>	#gb_vehicles:GB21_Cromwell_short	</shortUserString>
     <price>	900000	</price>
-    <tags>	mediumTank improvedVentilation_class2_user mediumCaliberTankRammer_user wetCombatPack_class1_user enhancedSuspension_Christie_user HD	</tags>
+    <tags>	mediumTank mediumTank1 improvedVentilation_class2_user mediumCaliberTankRammer_user wetCombatPack_class1_user enhancedSuspension_Christie_user HD	</tags>
     <level>	6	</level>
   </GB21_Cromwell>
   <GB15_Stuart_I>
@@ -66,7 +66,7 @@
     <description>	#gb_vehicles:GB20_Crusader_descr	</description>
     <shortUserString>	#gb_vehicles:GB20_Crusader_short	</shortUserString>
     <price>	380000	</price>
-    <tags>	mediumTank improvedVentilation_class2_user wetCombatPack_class1_user mediumCaliberTankRammer_user enhancedSuspension_Christie_user HD	</tags>
+    <tags>	mediumTank mediumTank1 improvedVentilation_class2_user wetCombatPack_class1_user mediumCaliberTankRammer_user enhancedSuspension_Christie_user HD	</tags>
     <level>	5	</level>
   </GB20_Crusader>
   <GB06_Vickers_Medium_Mk_III>
@@ -84,7 +84,7 @@
     <description>	#gb_vehicles:GB08_Churchill_I_descr	</description>
     <shortUserString>	#gb_vehicles:GB08_Churchill_I_short	</shortUserString>
     <price>	340000	</price>
-    <tags>	heavyTank improvedVentilation_class3_user mediumCaliberTankRammer_user wetCombatPack_class1_user enhancedVertical_springs_class3_user HD	</tags>
+    <tags>	heavyTank heavyTank1 improvedVentilation_class3_user mediumCaliberTankRammer_user wetCombatPack_class1_user enhancedVertical_springs_class3_user HD	</tags>
     <level>	5	</level>
   </GB08_Churchill_I>
   <GB10_Black_Prince>
@@ -93,7 +93,7 @@
     <description>	#gb_vehicles:GB10_Black_Prince_descr	</description>
     <shortUserString>	#gb_vehicles:GB10_Black_Prince_short	</shortUserString>
     <price>	1400000	</price>
-    <tags>	heavyTank improvedVentilation_class3_user aimingStabilizer_Mk2_user largeCaliberTankRammer_user wetCombatPack_class2_user enhancedVertical_springs_class3_user HD	</tags>
+    <tags>	heavyTank heavyTank1 improvedVentilation_class3_user aimingStabilizer_Mk2_user largeCaliberTankRammer_user wetCombatPack_class2_user enhancedVertical_springs_class3_user HD	</tags>
     <level>	7	</level>
   </GB10_Black_Prince>
   <GB27_Sexton>
@@ -138,7 +138,7 @@
     <shortUserString>	#gb_vehicles:GB09_Churchill_VII_short	</shortUserString>
     <description>	#gb_vehicles:GB09_Churchill_VII_descr	</description>
     <price>	900000	</price>
-    <tags>	heavyTank improvedVentilation_class3_user mediumCaliberTankRammer_user wetCombatPack_class1_user enhancedVertical_springs_class3_user HD	</tags>
+    <tags>	heavyTank heavyTank1 improvedVentilation_class3_user mediumCaliberTankRammer_user wetCombatPack_class1_user enhancedVertical_springs_class3_user HD	</tags>
     <level>	6	</level>
   </GB09_Churchill_VII>
   <GB04_Valentine>
@@ -165,7 +165,7 @@
     <description>	#gb_vehicles:GB22_Comet_descr	</description>
     <shortUserString>	#gb_vehicles:GB22_Comet_short	</shortUserString>
     <price>	1350500	</price>
-    <tags>	mediumTank improvedVentilation_class2_user aimingStabilizer_Mk1_user mediumCaliberTankRammer_user wetCombatPack_class1_user enhancedSuspension_Christie_user HD	</tags>
+    <tags>	mediumTank mediumTank1 improvedVentilation_class2_user aimingStabilizer_Mk1_user mediumCaliberTankRammer_user wetCombatPack_class1_user enhancedSuspension_Christie_user HD	</tags>
     <level>	7	</level>
   </GB22_Comet>
   <GB24_Centurion_Mk3>
@@ -308,7 +308,7 @@
     <description>	#gb_vehicles:GB40_Gun_Carrier_Churchill_descr	</description>
     <shortUserString>	#gb_vehicles:GB40_Gun_Carrier_Churchill_short	</shortUserString>
     <price>	965000	</price>
-    <tags>	AT-SPG heavyAT-SPG improvedVentilation_class3_user mediumCaliberTankRammer_user wetCombatPack_class1_user HD	</tags>
+    <tags>	AT-SPG heavyAT-SPG AT-SPG2 improvedVentilation_class3_user mediumCaliberTankRammer_user wetCombatPack_class1_user HD	</tags>
     <level>	6	</level>
   </GB40_Gun_Carrier_Churchill>
   <GB75_AT7>
@@ -613,6 +613,20 @@
     <tags>	mediumTank mediumTank3 improvedVentilation_class2_user aimingStabilizer_Mk1_user mediumCaliberTankRammer_user wetCombatPack_class1_user enhancedHorizontal_springs_class2_user HD inGame	</tags>
     <level>	8	</level>
   </GB70_N_FV4202_105>
+  <GB70_N_FV4202_105_FL>
+    <id>	227	</id>
+    <userString>	#gb_vehicles:GB70_N_FV4202_105_FL	</userString>
+    <description>	#gb_vehicles:GB70_N_FV4202_105_descr	</description>
+    <shortUserString>	#gb_vehicles:GB70_N_FV4202_105_FL_short	</shortUserString>
+    <shortDescriptionSpecial>	#gb_vehicles:GB70_N_FV4202_105_short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#gb_vehicles:GB70_N_FV4202_105_long_special	</longDescriptionSpecial>
+    <price>	7300	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <cannotBeBought>	true	</cannotBeBought>
+    <tags>	mediumTank mediumTank3 improvedVentilation_class2_user aimingStabilizer_Mk1_user mediumCaliberTankRammer_user wetCombatPack_class1_user enhancedHorizontal_springs_class2_user HD inGame epic_battles	</tags>
+    <level>	8	</level>
+  </GB70_N_FV4202_105_FL>
   <GB85_Cromwell_Berlin>
     <id>	218	</id>
     <userString>	#gb_vehicles:GB85_Cromwell_Berlin	</userString>
@@ -623,7 +637,7 @@
     <price>	3450	  <gold></gold>
     </price>
     <notInShop>	true	</notInShop>
-    <tags>	mediumTank improvedVentilation_class2_user mediumCaliberTankRammer_user wetCombatPack_class1_user enhancedSuspension_Christie_user HD	</tags>
+    <tags>	mediumTank mediumTank1 improvedVentilation_class2_user mediumCaliberTankRammer_user wetCombatPack_class1_user enhancedSuspension_Christie_user HD	</tags>
     <level>	6	</level>
   </GB85_Cromwell_Berlin>
   <GB35_Sentinel_AC_IV>
@@ -685,7 +699,7 @@
     <price>	3200	  <gold></gold>
     </price>
     <notInShop>	true	</notInShop>
-    <tags>	mediumTank improvedVentilation_class2_user aimingStabilizer_Mk1_user mediumCaliberTankRammer_user wetCombatPack_class1_user enhancedVertical_springs_class2_user HD	</tags>
+    <tags>	mediumTank mediumTank1 improvedVentilation_class2_user aimingStabilizer_Mk1_user mediumCaliberTankRammer_user wetCombatPack_class1_user enhancedVertical_springs_class2_user HD	</tags>
     <level>	6	</level>
   </GB95_Ekins_Firefly_M4A4>
   <GB97_Chimera>
@@ -747,7 +761,7 @@
     <description>	#igr_vehicles:GB21_Cromwell_IGR_descr	</description>
     <shortUserString>	#igr_vehicles:GB21_Cromwell_IGR_short	</shortUserString>
     <price>	1	</price>
-    <tags>	mediumTank improvedVentilation_class2_user mediumCaliberTankRammer_user wetCombatPack_class1_user enhancedSuspension_Christie_user premiumIGR secret HD	</tags>
+    <tags>	mediumTank mediumTank1 improvedVentilation_class2_user mediumCaliberTankRammer_user wetCombatPack_class1_user enhancedSuspension_Christie_user premiumIGR secret HD	</tags>
     <level>	6	</level>
   </GB21_Cromwell_IGR>
   <GB77_FV304_IGR>
@@ -773,7 +787,7 @@
     <description>	#igr_vehicles:GB08_Churchill_I_IGR_descr	</description>
     <shortUserString>	#igr_vehicles:GB08_Churchill_I_IGR_short	</shortUserString>
     <price>	1	</price>
-    <tags>	heavyTank improvedVentilation_class3_user mediumCaliberTankRammer_user wetCombatPack_class1_user enhancedVertical_springs_class3_user HD premiumIGR secret	</tags>
+    <tags>	heavyTank heavyTank1 improvedVentilation_class3_user mediumCaliberTankRammer_user wetCombatPack_class1_user enhancedVertical_springs_class3_user HD premiumIGR secret	</tags>
     <level>	5	</level>
   </GB08_Churchill_I_IGR>
   <GB13_FV215b_IGR>

@@ -24,6 +24,9 @@ class WGNC_DATA_PROXY_TYPE(object):
     CLAN_APP_DECLINED_FOR_MEMBERS = 24
     CLAN_APP_ACCEPTED_FOR_MEMBERS = 32
     SHOW_PROMO_TEASER = 64
+    UPDATE_REFERRAL_BUBBLE = 80
+    BECOME_RECRUITER = 81
+    SHOW_REFERRAL_WINDOW = 82
 
 
 WGNC_POP_UP_PRIORITIES = ('low', 'medium', 'high')
@@ -38,7 +41,11 @@ _WGNC_ICON_TO_LOCAL = {'information': WGNC_DEFAULT_ICON,
  'eventIcon': 'EventIcon',
  'shBattleResult': 'FortBattleResult',
  'sally_result': 'SallyResult',
- 'sh_resource': 'FortResource'}
+ 'sh_resource': 'FortResource',
+ 'hands': 'hands',
+ 'handsOff': 'handsOff',
+ 'handsPlus': 'handsPlus',
+ 'box': 'referralCoin'}
 
 def convertToLocalIcon(icon):
     result = WGNC_DEFAULT_ICON
@@ -56,7 +63,8 @@ _WGNC_BG_TO_LOCAL = {'battle_defeat': ('BgBattleResultIconDefeat', (288, 167)),
  'sh_sally_result': ('SallyResultBg', (312, 170)),
  'poll': ('BgPoll', (288, 110)),
  'offer': ('OfferIconBg', (288, 110)),
- 'event': ('EventIconBg', (288, 110))}
+ 'event': ('EventIconBg', (288, 110)),
+ 'referral': ('BgReferral', (288, 167))}
 
 def convertToLocalBG(icon):
     result = ('', (0, 0))

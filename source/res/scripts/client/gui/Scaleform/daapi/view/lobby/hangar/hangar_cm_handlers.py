@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/hangar/hangar_cm_handlers.py
 from CurrentVehicle import g_currentVehicle
 from adisp import process
+from constants import GameSeasonType, RentType
 from debug_utils import LOG_ERROR
 from gui import SystemMessages
 from gui.Scaleform.framework.entities.EventSystemEntity import EventSystemEntity
@@ -10,12 +11,13 @@ from gui.Scaleform.locale.MENU import MENU
 from gui.prb_control import prbDispatcherProperty
 from gui.shared import event_dispatcher as shared_events
 from gui.shared import events, EVENT_BUS_SCOPE
+from gui.shared.event_dispatcher import showVehicleRentRenewDialog
 from gui.shared.gui_items.items_actions import factory as ItemsActionsFactory
 from gui.shared.gui_items.processors.tankman import TankmanUnload
 from gui.shared.gui_items.processors.vehicle import VehicleFavoriteProcessor
 from gui.shared.utils import decorators
 from helpers import dependency
-from skeletons.gui.game_control import IVehicleComparisonBasket
+from skeletons.gui.game_control import IVehicleComparisonBasket, IEpicBattleMetaGameController
 from skeletons.gui.shared import IItemsCache
 
 class CREW(object):
@@ -34,7 +36,7 @@ class MODULE(object):
 
 
 class VEHICLE(object):
-    INFO = 'vehicleInfoEx'
+    INFO = 'vehicleInfo'
     PREVIEW = 'preview'
     STATS = 'showVehicleStatistics'
     UNLOCK = 'unlock'
@@ -42,6 +44,7 @@ class VEHICLE(object):
     SELL = 'sell'
     BUY = 'buy'
     RESEARCH = 'vehicleResearch'
+    RENEW = 'vehicleRentRenew'
     REMOVE = 'vehicleRemove'
     CHECK = 'vehicleCheck'
     UNCHECK = 'vehicleUncheck'
@@ -137,7 +140,8 @@ class SimpleVehicleCMHandler(AbstractContextMenuHandler, EventSystemEntity):
 
 
 class VehicleContextMenuHandler(SimpleVehicleCMHandler):
-    comparisonBasket = dependency.descriptor(IVehicleComparisonBasket)
+    _comparisonBasket = dependency.descriptor(IVehicleComparisonBasket)
+    _epicController = dependency.descriptor(IEpicBattleMetaGameController)
 
     def __init__(self, cmProxy, ctx=None):
         super(VehicleContextMenuHandler, self).__init__(cmProxy, ctx, {VEHICLE.INFO: 'showVehicleInfo',
@@ -147,7 +151,8 @@ class VehicleContextMenuHandler(SimpleVehicleCMHandler):
          VEHICLE.UNCHECK: 'uncheckFavoriteVehicle',
          VEHICLE.STATS: 'showVehicleStats',
          VEHICLE.BUY: 'buyVehicle',
-         VEHICLE.COMPARE: 'compareVehicle'})
+         VEHICLE.COMPARE: 'compareVehicle',
+         VEHICLE.RENEW: 'renewRentVehicle'})
 
     @prbDispatcherProperty
     def prbDispatcher(self):
@@ -174,7 +179,12 @@ class VehicleContextMenuHandler(SimpleVehicleCMHandler):
         self.__favoriteVehicle(False)
 
     def compareVehicle(self):
-        self.comparisonBasket.addVehicle(self.vehCD)
+        self._comparisonBasket.addVehicle(self.vehCD)
+
+    def renewRentVehicle(self):
+        vehicle = self.itemsCache.items.getVehicle(self.vehInvID)
+        rentRenewCycle = vehicle.rentInfo.getAvailableRentRenewCycleInfoForSeason(GameSeasonType.EPIC)
+        showVehicleRentRenewDialog(self.vehCD, RentType.SEASON_CYCLE_RENT, rentRenewCycle.ID, GameSeasonType.EPIC)
 
     def _initFlashValues(self, ctx):
         self.vehInvID = int(ctx.inventoryId)
@@ -216,6 +226,7 @@ class VehicleContextMenuHandler(SimpleVehicleCMHandler):
                         label = MENU.CONTEXTMENU_RESTORE if vehicle.isRestoreAvailable() else MENU.CONTEXTMENU_BUY
                         options.append(self._makeItem(VEHICLE.BUY, label, {'enabled': enabled}))
                     options.append(self._makeItem(VEHICLE.SELL, MENU.contextmenu(VEHICLE.REMOVE), {'enabled': vehicle.canSell and vehicle.rentalIsOver}))
+                    options.append(self._makeItem(VEHICLE.RENEW, MENU.contextmenu(VEHICLE.RENEW), {'enabled': vehicle.isOnlyForEpicBattles and vehicle.rentInfo.canCycleRentRenewForSeason(GameSeasonType.EPIC)}))
                 else:
                     options.append(self._makeItem(VEHICLE.SELL, MENU.contextmenu(VEHICLE.SELL), {'enabled': vehicle.canSell and not isEventVehicle}))
                 if vehicle.isFavorite:
@@ -225,8 +236,8 @@ class VehicleContextMenuHandler(SimpleVehicleCMHandler):
             return options
 
     def _manageVehCompareOptions(self, options, vehicle):
-        if self.comparisonBasket.isEnabled():
-            options.append(self._makeItem(VEHICLE.COMPARE, MENU.contextmenu(VEHICLE.COMPARE), {'enabled': self.comparisonBasket.isReadyToAdd(vehicle)}))
+        if self._comparisonBasket.isEnabled():
+            options.append(self._makeItem(VEHICLE.COMPARE, MENU.contextmenu(VEHICLE.COMPARE), {'enabled': self._comparisonBasket.isReadyToAdd(vehicle)}))
 
     @process
     def __favoriteVehicle(self, isFavorite):

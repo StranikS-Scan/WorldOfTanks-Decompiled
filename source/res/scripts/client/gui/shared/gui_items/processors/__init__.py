@@ -22,13 +22,13 @@ def makeError(userMsg='', msgType=SM_TYPE.Error, auxData=None):
 
 
 def makeI18nSuccess(sysMsgKey='', auxData=None, *args, **kwargs):
-    return makeSuccess(i18n.makeString(('#system_messages:%s' % sysMsgKey), *args, **kwargs), kwargs.get('type', SM_TYPE.Information), auxData)
+    return makeSuccess(i18n.makeString('#system_messages:{}'.format(sysMsgKey), *args, **kwargs), kwargs.get('type', SM_TYPE.Information), auxData)
 
 
 def makeI18nError(sysMsgKey='', defaultSysMsgKey='', auxData=None, *args, **kwargs):
-    localKey = '#system_messages:%s' % sysMsgKey
+    localKey = '#system_messages:{}'.format(sysMsgKey)
     if localKey not in SYSTEM_MESSAGES.ALL_ENUM and defaultSysMsgKey:
-        localKey = '#system_messages:%s' % defaultSysMsgKey
+        localKey = '#system_messages:{}'.format(defaultSysMsgKey)
     return makeError(i18n.makeString(localKey, *args, **kwargs), kwargs.get('type', SM_TYPE.Error), auxData)
 
 

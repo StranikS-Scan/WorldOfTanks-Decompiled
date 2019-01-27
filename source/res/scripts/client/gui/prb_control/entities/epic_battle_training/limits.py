@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client/gui/prb_control/entities/epic_battle_training/limits.py
 from constants import PREBATTLE_ACCOUNT_STATE, PREBATTLE_TYPE
 from gui.prb_control.entities.base.limits import AbstractTeamIsValid, LimitsCollection, VehicleIsValid, TeamNoPlayersInBattle, TeamIsValid
+from gui.prb_control.settings import PREBATTLE_RESTRICTION
 from skeletons.gui.shared import IItemsCache
 from helpers import dependency
 from items import vehicles
@@ -33,7 +34,14 @@ class ObserverInTeamIsValid(AbstractTeamIsValid):
         return True
 
 
+class EpicVehicleIsValid(VehicleIsValid):
+
+    def check(self, teamLimits):
+        isValid, restriction = super(EpicVehicleIsValid, self).check(teamLimits)
+        return (True, '') if restriction == PREBATTLE_RESTRICTION.VEHICLE_EPIC_ONLY else (isValid, restriction)
+
+
 class EpicBattleTrainingLimits(LimitsCollection):
 
     def __init__(self, entity):
-        super(EpicBattleTrainingLimits, self).__init__(entity, (VehicleIsValid(),), (TeamNoPlayersInBattle(PREBATTLE_TYPE.EPIC_TRAINING), TeamIsValid(), ObserverInTeamIsValid()))
+        super(EpicBattleTrainingLimits, self).__init__(entity, (EpicVehicleIsValid(),), (TeamNoPlayersInBattle(PREBATTLE_TYPE.EPIC_TRAINING), TeamIsValid(), ObserverInTeamIsValid()))

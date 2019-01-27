@@ -10,27 +10,27 @@ _SOURCE = shop.Source.EXTERNAL
 _ORIGIN = shop.Origin.STORAGE
 
 class PersonalReservesCMHandler(ContextMenu):
-    sqGen = SequenceIDGenerator()
-    goodiesCache = dependency.descriptor(IGoodiesCache)
+    _sqGen = SequenceIDGenerator()
+    _goodiesCache = dependency.descriptor(IGoodiesCache)
 
-    @option(sqGen.next(), CMLabel.INFORMATION)
+    @option(_sqGen.next(), CMLabel.INFORMATION)
     def showInfo(self):
         shared_events.showStorageBoosterInfo(self._id)
 
-    @option(sqGen.next(), CMLabel.ACTIVATE)
+    @option(_sqGen.next(), CMLabel.ACTIVATE)
     def activate(self):
         shared_events.showBoosterActivateDialog(self._id)
 
-    @option(sqGen.next(), CMLabel.BUY_MORE)
+    @option(_sqGen.next(), CMLabel.BUY_MORE)
     def buy(self):
         shop.showBuyBoosterOverlay(self._id, _SOURCE, _ORIGIN)
 
     def _getOptionCustomData(self, label):
         if label == CMLabel.ACTIVATE:
-            booster = self.goodiesCache.getBooster(self._id)
+            booster = self._goodiesCache.getBooster(self._id)
             return {'enabled': booster.isReadyToActivate}
         elif label == CMLabel.BUY_MORE:
-            booster = self.goodiesCache.getBooster(self._id)
+            booster = self._goodiesCache.getBooster(self._id)
             if not booster.isHidden:
                 return {'textColor': CM_BUY_COLOR}
             return {'enabled': False}

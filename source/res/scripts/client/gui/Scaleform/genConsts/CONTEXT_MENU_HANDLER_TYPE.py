@@ -30,4 +30,6 @@ class CONTEXT_MENU_HANDLER_TYPE(object):
     STORAGE_BONS_ITEM = 'storageBonsItem'
     STORAGE_VEHICLES_REGULAR_ITEM = 'storageVehiclesRegularItem'
     STORAGE_VEHICLES_RESTORE_ITEM = 'storageVehiclesRestoreItem'
+    STORAGE_VEHICLES_RENTED_ITEM = 'storageVehiclesRentedItem'
     STORAGE_PERSONAL_RESERVE_ITEM = 'storagePersonalReserveItem'
+    STORAGE_CUSTOMZIZATION_ITEM = 'storageCustomizationItem'

@@ -281,7 +281,7 @@ class BuyVehicleView(ViewImpl, EventSystemEntity):
         currencyValue = price.get(currencyType)
         if currencyValue is not None:
             priceModel.setPrice(wgGetIntegralFormat(currencyValue))
-            priceModel.setDefPrice(wgGetIntegralFormat(defPrice.get(currencyType)))
+            priceModel.setDefPrice(wgGetIntegralFormat(defPrice.get(currencyType, 0)))
         else:
             for currencyType in Currency.ALL:
                 currencyValue = price.get(currencyType)

@@ -12,7 +12,7 @@ import constants
 import personal_missions
 from adisp import async, process
 from chat_shared import decompressSysMessage
-from constants import INVOICE_ASSET, AUTO_MAINTENANCE_TYPE, AUTO_MAINTENANCE_RESULT, PREBATTLE_TYPE, FINISH_REASON, KICK_REASON_NAMES, KICK_REASON, NC_MESSAGE_TYPE, NC_MESSAGE_PRIORITY, SYS_MESSAGE_CLAN_EVENT, SYS_MESSAGE_CLAN_EVENT_NAMES, ARENA_GUI_TYPE, SYS_MESSAGE_FORT_EVENT_NAMES, EVENT_TYPE
+from constants import INVOICE_ASSET, AUTO_MAINTENANCE_TYPE, AUTO_MAINTENANCE_RESULT, PREBATTLE_TYPE, FINISH_REASON, KICK_REASON_NAMES, KICK_REASON, NC_MESSAGE_TYPE, NC_MESSAGE_PRIORITY, SYS_MESSAGE_CLAN_EVENT, SYS_MESSAGE_CLAN_EVENT_NAMES, ARENA_GUI_TYPE, SYS_MESSAGE_FORT_EVENT_NAMES
 from debug_utils import LOG_ERROR, LOG_WARNING, LOG_CURRENT_EXCEPTION, LOG_DEBUG
 from dossiers2.custom.records import DB_ID_TO_RECORD
 from dossiers2.ui.achievements import ACHIEVEMENT_BLOCK, BADGES_BLOCK
@@ -725,6 +725,18 @@ class InvoiceReceivedFormatter(WaitItemsSyncFormatter):
         return (addVehNames, removeVehNames, rentedVehNames)
 
     @classmethod
+    def hasRenewBonus(cls, vehicles):
+        for vehInfo in vehicles.itervalues():
+            rent = vehInfo.get('rent')
+            if rent:
+                cycles = rent.get('cycle')
+                renew = rent.get('renew')
+                if cycles and not renew:
+                    return True
+
+        return False
+
+    @classmethod
     def getVehiclesString(cls, vehicles, htmlTplPostfix='InvoiceReceived'):
         addVehNames, removeVehNames, rentedVehNames = cls._getVehicleNames(vehicles)
         result = []
@@ -734,6 +746,8 @@ class InvoiceReceivedFormatter(WaitItemsSyncFormatter):
             result.append(g_settings.htmlTemplates.format('vehiclesDebited' + htmlTplPostfix, ctx={'vehicles': ', '.join(removeVehNames)}))
         if rentedVehNames:
             result.append(g_settings.htmlTemplates.format('vehiclesRented' + htmlTplPostfix, ctx={'vehicles': ', '.join(rentedVehNames)}))
+            if cls.hasRenewBonus(vehicles):
+                result.append(i18n.makeString(MESSENGER.SERVICECHANNELMESSAGES_INVOICERECEIVED_VEHICLESRENTED_BONUS))
         return '<br/>'.join(result)
 
     @classmethod
@@ -2140,51 +2154,6 @@ class RentalsExpiredFormatter(ServiceChannelFormatter):
         vehicleName = getUserName(vehicles_core.getVehicleType(vehTypeCD))
         ctx = {'vehicleName': vehicleName}
         return g_settings.msgTemplates.format(self._templateKey, ctx=ctx)
-
-
-class RefSystemReferralBoughtVehicleFormatter(ServiceChannelFormatter):
-
-    def isNotify(self):
-        return True
-
-    def format(self, message, *args):
-        settings = self._getGuiSettings(message, 'refSystemBoughtVehicle')
-        formatted = g_settings.msgTemplates.format('refSystemBoughtVehicle', {'userName': message.data.get('nickName', '')})
-        return [_MessageData(formatted, settings)]
-
-
-class RefSystemReferralContributedXPFormatter(WaitItemsSyncFormatter):
-    eventsCache = dependency.descriptor(IEventsCache)
-
-    def isNotify(self):
-        return True
-
-    @async
-    @process
-    def format(self, message, callback):
-        yield lambda callback: callback(True)
-        isSynced = yield self._waitForSyncItems()
-        if message.data and isSynced:
-            refSystemQuests = self.eventsCache.getHiddenQuests(lambda x: x.getType() == EVENT_TYPE.REF_SYSTEM_QUEST)
-            notCompleted = findFirst(lambda q: not q.isCompleted(), refSystemQuests.values())
-            if notCompleted:
-                data = message.data
-                settings = self._getGuiSettings(message, 'refSystemContributeXp')
-                formatted = g_settings.msgTemplates.format('refSystemContributeXp', {'userName': data.get('nickName', ''),
-                 'xp': BigWorld.wg_getIntegralFormat(data.get('xp', 0))})
-                callback([_MessageData(formatted, settings)])
-            else:
-                callback([_MessageData(None, None)])
-        else:
-            callback([_MessageData(None, None)])
-        return
-
-
-class RefSystemQuestsFormatter(TokenQuestsFormatter):
-
-    @property
-    def _templateName(self):
-        pass
 
 
 class RecruitQuestsFormatter(WaitItemsSyncFormatter):

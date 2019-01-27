@@ -55,6 +55,7 @@ class UI_STORAGE_KEYS(CONST_CONTAINER):
     AUTO_RELOAD_MARK_IS_SHOWN = 'auto_reload_mark_shown'
     DISABLE_ANIMATED_TOOLTIP = 'disable_animated_tooltip'
     FIELD_POST_HINT_IS_SHOWN = 'field_post_hint'
+    REFERRAL_BUTTON_CIRCLES_SHOWN = 'referral_button_circles_shown'
 
 
 class ServerSettingsManager(object):
@@ -318,7 +319,8 @@ class ServerSettingsManager(object):
                                     UI_STORAGE_KEYS.DISABLE_ANIMATED_TOOLTIP: 13,
                                     UI_STORAGE_KEYS.FIELD_POST_HINT_IS_SHOWN: 14,
                                     PM_TUTOR_FIELDS.PM2_ONE_FAL_SHOWN: 15,
-                                    PM_TUTOR_FIELDS.PM2_MULTIPLE_FAL_SHOWN: 16}, offsets={PM_TUTOR_FIELDS.INITIAL_FAL_COUNT: Offset(2, 124),
+                                    PM_TUTOR_FIELDS.PM2_MULTIPLE_FAL_SHOWN: 16,
+                                    UI_STORAGE_KEYS.REFERRAL_BUTTON_CIRCLES_SHOWN: 17}, offsets={PM_TUTOR_FIELDS.INITIAL_FAL_COUNT: Offset(2, 124),
                                     UI_STORAGE_KEYS.AUTO_RELOAD_HIGHLIGHTS_COUNTER: Offset(10, 7168)}),
      SETTINGS_SECTIONS.LINKEDSET_QUESTS: Section(masks={}, offsets={'shown': Offset(0, 4294967295L)}),
      SETTINGS_SECTIONS.QUESTS_PROGRESS: Section(masks={}, offsets={QUESTS_PROGRESS.VIEW_TYPE: Offset(0, 3),

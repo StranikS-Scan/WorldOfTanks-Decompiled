@@ -179,10 +179,6 @@ class StatsRequester(AbstractSyncDataRequester, IStatsRequester):
         return self.getCacheValue('globalRating', 0)
 
     @property
-    def refSystem(self):
-        return self.getCacheValue('refSystem', {})
-
-    @property
     def SPA(self):
         return self.getCacheValue('SPA', {})
 

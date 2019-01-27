@@ -17,10 +17,12 @@ from gui.Scaleform.genConsts.CUSTOMIZATION_ALIASES import CUSTOMIZATION_ALIASES
 from gui.Scaleform.genConsts.PROFILE_CONSTANTS import PROFILE_CONSTANTS
 from gui.Scaleform.genConsts.MISSIONS_CONSTANTS import MISSIONS_CONSTANTS
 from gui.Scaleform.genConsts.STORE_CONSTANTS import STORE_CONSTANTS
+from gui.prb_control.settings import SELECTOR_BATTLE_TYPES
 from soft_exception import SoftException
 from skeletons.account_helpers.settings_core import ISettingsCore
 from helpers import dependency
 KEY_FILTERS = 'filters'
+KEY_SESSION_SETTINGS = 'session_settings'
 KEY_SETTINGS = 'settings'
 KEY_FAVORITES = 'favorites'
 KEY_COUNTERS = 'counters'
@@ -36,6 +38,7 @@ RANKED_CAROUSEL_FILTER_CLIENT_1 = 'RANKED_CAROUSEL_FILTER_CLIENT_1'
 EPICBATTLE_CAROUSEL_FILTER_1 = 'EPICBATTLE_CAROUSEL_FILTER_1'
 EPICBATTLE_CAROUSEL_FILTER_2 = 'EPICBATTLE_CAROUSEL_FILTER_2'
 EPICBATTLE_CAROUSEL_FILTER_CLIENT_1 = 'EPICBATTLE_CAROUSEL_FILTER_CLIENT_1'
+STORAGE_VEHICLES_CAROUSEL_FILTER_1 = 'STORAGE_CAROUSEL_FILTER_1'
 BARRACKS_FILTER = 'barracks_filter'
 ORDERS_FILTER = 'ORDERS_FILTER'
 CURRENT_VEHICLE = 'current'
@@ -53,11 +56,13 @@ GOLD_FISH_LAST_SHOW_TIME = 'goldFishWindowShowCooldown'
 BOOSTERS_FILTER = 'boostersFilter'
 LAST_PROMO_PATCH_VERSION = 'lastPromoPatchVersion'
 LAST_CALENDAR_SHOW_TIMESTAMP = 'lastCalendarShowTimestamp'
+LAST_STORAGE_VISITED_TIMESTAMP = 'lastStorageVisitedTimestamp'
 LAST_RESTORE_NOTIFICATION = 'lastRestoreNotification'
 PREVIEW_INFO_PANEL_IDX = 'previewInfoPanelIdx'
 NEW_SETTINGS_COUNTER = 'newSettingsCounter'
 NEW_HOF_COUNTER = 'newHofCounter'
 NEW_LOBBY_TAB_COUNTER = 'newLobbyTabCounter'
+REFERRAL_COUNTER = 'referralButtonCounter'
 PROFILE_TECHNIQUE = 'profileTechnique'
 PROFILE_TECHNIQUE_MEMBER = 'profileTechniqueMember'
 SHOW_CRYSTAL_HEADER_BAND = 'showCrystalHeaderBand'
@@ -304,6 +309,11 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                                          'compatibleOnly': True},
                'linkedset_view_vehicle': {'nation': -1,
                                           'vehicleType': 'none'},
+               'epic_rent_view_vehicle': {'nation': -1,
+                                          'vehicleType': 'none',
+                                          'isMain': False,
+                                          'level': -1,
+                                          'compatibleOnly': True},
                PROMO: {},
                AWARDS: {'vehicleResearchAward': -1,
                         'victoryAward': -1,
@@ -513,11 +523,53 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
  KEY_COUNTERS: {NEW_HOF_COUNTER: {PROFILE_CONSTANTS.HOF_ACHIEVEMENTS_BUTTON: True,
                                   PROFILE_CONSTANTS.HOF_VEHICLES_BUTTON: True,
                                   PROFILE_CONSTANTS.HOF_VIEW_RATING_BUTTON: True},
-                NEW_LOBBY_TAB_COUNTER: {}},
+                NEW_LOBBY_TAB_COUNTER: {},
+                REFERRAL_COUNTER: 1},
  KEY_NOTIFICATIONS: {ELEN_NOTIFICATIONS: {MISSIONS_CONSTANTS.ELEN_EVENT_STARTED_NOTIFICATION: set(),
                                           MISSIONS_CONSTANTS.ELEN_EVENT_FINISHED_NOTIFICATION: set(),
                                           MISSIONS_CONSTANTS.ELEN_EVENT_TAB_VISITED: set()},
-                     RECRUIT_NOTIFICATIONS: set()}}
+                     RECRUIT_NOTIFICATIONS: set()},
+ KEY_SESSION_SETTINGS: {STORAGE_VEHICLES_CAROUSEL_FILTER_1: {'ussr': False,
+                                                             'germany': False,
+                                                             'usa': False,
+                                                             'china': False,
+                                                             'france': False,
+                                                             'uk': False,
+                                                             'japan': False,
+                                                             'czech': False,
+                                                             'sweden': False,
+                                                             'poland': False,
+                                                             'italy': False,
+                                                             'lightTank': False,
+                                                             'mediumTank': False,
+                                                             'heavyTank': False,
+                                                             'SPG': False,
+                                                             'AT-SPG': False,
+                                                             'level_1': False,
+                                                             'level_2': False,
+                                                             'level_3': False,
+                                                             'level_4': False,
+                                                             'level_5': False,
+                                                             'level_6': False,
+                                                             'level_7': False,
+                                                             'level_8': False,
+                                                             'level_9': False,
+                                                             'level_10': False,
+                                                             'premium': False,
+                                                             'elite': False,
+                                                             'igr': False,
+                                                             'rented': True,
+                                                             'event': True,
+                                                             'gameMode': False,
+                                                             'favorite': False,
+                                                             'bonus': False,
+                                                             'searchNameVehicle': ''},
+                        'storage_shells': {'filterMask': 0,
+                                           'vehicleCD': None},
+                        'storage_modules': {'filterMask': 0,
+                                            'vehicleCD': None},
+                        'storage_reserves': {'filterMask': 0},
+                        LAST_STORAGE_VISITED_TIMESTAMP: -1}}
 
 def _filterAccountSection(dataSec):
     for key, section in dataSec.items()[:]:
@@ -556,6 +608,8 @@ class AccountSettings(object):
     settingsCore = dependency.descriptor(ISettingsCore)
     __cache = {'login': None,
      'section': None}
+    __sessionSettings = {'login': None,
+     'section': None}
     __isFirstRun = True
     __isCleanPC = False
 
@@ -563,6 +617,8 @@ class AccountSettings(object):
     def clearCache():
         AccountSettings.__cache['login'] = None
         AccountSettings.__cache['section'] = None
+        AccountSettings.__sessionSettings['login'] = None
+        AccountSettings.__sessionSettings['section'] = None
         return
 
     @staticmethod
@@ -717,7 +773,6 @@ class AccountSettings(object):
                                 accFilters.write(filterName, base64.b64encode(pickle.dumps(userValue)))
 
             if currVersion < 10:
-                from gui.prb_control.settings import SELECTOR_BATTLE_TYPES
                 for key, section in ads.items()[:]:
                     if key == 'account':
                         accSettings = AccountSettings.__readSection(section, KEY_SETTINGS)
@@ -740,7 +795,6 @@ class AccountSettings(object):
                         accSettings.write('statsSortingSortie', base64.b64encode(pickle.dumps(defaultSorting)))
 
             if currVersion < 12:
-                from gui.prb_control.settings import SELECTOR_BATTLE_TYPES
                 for key, section in _filterAccountSection(ads):
                     accSettings = AccountSettings.__readSection(section, KEY_SETTINGS)
                     if KNOWN_SELECTOR_BATTLES in accSettings.keys():
@@ -1039,6 +1093,18 @@ class AccountSettings(object):
         AccountSettings.__setValue(name, value, KEY_NOTIFICATIONS)
 
     @staticmethod
+    def getSessionSettings(name):
+        return AccountSettings.__getSessionSettings(name)
+
+    @staticmethod
+    def setSessionSettings(name, value):
+        AccountSettings.__setSessionSettings(name, value)
+
+    @staticmethod
+    def getSessionSettingsDefault(name):
+        return DEFAULT_VALUES[KEY_SESSION_SETTINGS].get(name, None)
+
+    @staticmethod
     def updateNewSettingsCounter(defaultDict, savedDict):
         finalDict = {}
         _recursiveStep(defaultDict, savedDict, finalDict)
@@ -1070,6 +1136,38 @@ class AccountSettings(object):
             else:
                 fds.deleteSection(name)
             AccountSettings.onSettingsChanging(name, value)
+
+    @staticmethod
+    def __getSessionSettings(name):
+        if name in DEFAULT_VALUES[KEY_SESSION_SETTINGS]:
+            sessionSettings = AccountSettings.__getUserSessionSettings()
+            if isinstance(sessionSettings, dict) and name in sessionSettings.keys():
+                return copy.deepcopy(sessionSettings.get(name))
+            return copy.deepcopy(DEFAULT_VALUES[KEY_SESSION_SETTINGS][name])
+        else:
+            return None
+
+    @staticmethod
+    def __setSessionSettings(name, value):
+        if name not in DEFAULT_VALUES[KEY_SESSION_SETTINGS]:
+            raise SoftException('Default value "{}" is not found in "{}"'.format(name, type))
+        if AccountSettings.__getSessionSettings(name) != value:
+            sessionSettings = AccountSettings.__getUserSessionSettings()
+            if isinstance(sessionSettings, dict):
+                if DEFAULT_VALUES[KEY_SESSION_SETTINGS][name] != value:
+                    sessionSettings.update({name: value})
+                elif name in sessionSettings.keys():
+                    sessionSettings.pop(name)
+
+    @staticmethod
+    def __getUserSessionSettings():
+        userLogin = getattr(BigWorld.player(), 'name', '')
+        if AccountSettings.__sessionSettings['section'] is None:
+            AccountSettings.__sessionSettings['section'] = dict()
+        if AccountSettings.__sessionSettings['login'] != userLogin and userLogin != '':
+            AccountSettings.__sessionSettings['section'] = dict()
+            AccountSettings.__sessionSettings['login'] = userLogin
+        return AccountSettings.__sessionSettings['section']
 
     @staticmethod
     def __checkUserKeyBinding(key=None, command=None, commandSectionItems=None):

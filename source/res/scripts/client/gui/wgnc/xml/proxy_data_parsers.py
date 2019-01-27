@@ -1,6 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/wgnc/xml/proxy_data_parsers.py
-from debug_utils import LOG_ERROR
+from debug_utils import LOG_ERROR, LOG_WARNING
 from gui.wgcg.promo_screens.parsers import PromoDataParser
 from gui.wgnc import proxy_data
 from gui.wgnc.wgnc_helpers import parseSize
@@ -172,6 +172,36 @@ class _ProxyDataItemsParser(ParsersCollection):
         return proxy_data.ProxyDataHolder(items)
 
 
+class _ReferralBubbleParser(SectionParser):
+
+    def getTagName(self):
+        pass
+
+    def parse(self, section):
+        return proxy_data.UpdateRefferalBubbleItem()
+
+
+class _BecomeRecruiterParser(SectionParser):
+
+    def getTagName(self):
+        pass
+
+    def parse(self, section):
+        return proxy_data.BecomeRecruiterItem()
+
+
+class _ShowReferralWindowParser(SectionParser):
+
+    def getTagName(self):
+        pass
+
+    def parse(self, section):
+        relativeUrl = section.readString('relative_url')
+        if not relativeUrl:
+            LOG_WARNING('WGNC show_referral_window item has no relative_url')
+        return proxy_data.ShowReferralWindowItem(relativeUrl)
+
+
 class ProxyDataItemParser_v2(_ProxyDataItemsParser):
 
     def __init__(self):
@@ -186,4 +216,7 @@ class ProxyDataItemParser_v2(_ProxyDataItemsParser):
          _ClanInviteAcceptedParser(),
          _EncyclopediaContentParser(),
          _ShowInBrowserParser(),
-         _ShowPromoParser()))
+         _ShowPromoParser(),
+         _ReferralBubbleParser(),
+         _BecomeRecruiterParser(),
+         _ShowReferralWindowParser()))

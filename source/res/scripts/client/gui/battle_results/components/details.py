@@ -8,6 +8,7 @@ from gui.Scaleform.locale.BATTLE_RESULTS import BATTLE_RESULTS
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.battle_results.components import base
 from gui.battle_results.components import style
+from gui.battle_results.reusable.records import convertFactorToPercent
 from gui.shared.formatters import icons
 from gui.shared.money import Currency
 from helpers import i18n
@@ -141,8 +142,8 @@ class _EconomicsDetailsBlock(base.StatsBlock):
     def _addEmptyRow(self):
         self.addNextComponent(style.EmptyStatRow())
 
-    def _addStatsRow(self, label, column1=None, column2=None, column3=None, column4=None, htmlKey=''):
-        value = style.makeStatRow(label, column1=column1, column2=column2, column3=column3, column4=column4, htmlKey=htmlKey)
+    def _addStatsRow(self, label, labelArgs=None, column1=None, column2=None, column3=None, column4=None, htmlKey=''):
+        value = style.makeStatRow(label, labelArgs=labelArgs, column1=column1, column2=column2, column3=column3, column4=column4, htmlKey=htmlKey)
         self.addNextComponent(base.DirectStatsItem('', value))
 
     def _addAOGASFactor(self, baseRecords, allColumns=True):
@@ -165,10 +166,11 @@ class MoneyDetailsBlock(_EconomicsDetailsBlock):
         baseCredits, premiumCredits, goldRecords, autoRecords = result
         isTotalShown = False
         self.__addBaseCredits(baseCredits, premiumCredits)
-        isTotalShown |= self.__addStatsItemIfExists('noPenalty', baseCredits, premiumCredits, 'achievementCredits')
-        isTotalShown |= self.__addStatsItemIfExists('boosters', baseCredits, premiumCredits, 'boosterCredits', 'boosterCreditsFactor100')
-        isTotalShown |= self.__addStatsItemIfExists('battlePayments', baseCredits, premiumCredits, 'orderCreditsFactor100')
+        isTotalShown |= self.__addStatsItemIfExists('noPenalty', baseCredits, premiumCredits, None, 'achievementCredits')
+        isTotalShown |= self.__addStatsItemIfExists('boosters', baseCredits, premiumCredits, None, 'boosterCredits', 'boosterCreditsFactor100')
+        isTotalShown |= self.__addStatsItemIfExists('battlePayments', baseCredits, premiumCredits, None, 'orderCreditsFactor100')
         isTotalShown |= self.__addEventsMoney(baseCredits, premiumCredits, goldRecords)
+        isTotalShown |= self.__addReferralSystemFactor(baseCredits, premiumCredits)
         self._addEmptyRow()
         self.__addViolationPenalty()
         isTotalShown |= self.__addStatsItem('friendlyFirePenalty', baseCredits, premiumCredits, 'originalCreditsPenalty', 'originalCreditsContributionOut')
@@ -183,6 +185,7 @@ class MoneyDetailsBlock(_EconomicsDetailsBlock):
         self.__addAutoCompletion('autoEquip', autoRecords, 'autoEquipCredits', 'autoEquipGold')
         self._addEmptyRow()
         self.__addTotalResults(baseCredits, premiumCredits, goldRecords, autoRecords)
+        return
 
     def __addStatsItem(self, label, baseRecords, premiumRecords, *names):
         baseValue = baseRecords.getRecord(*names)
@@ -192,7 +195,7 @@ class MoneyDetailsBlock(_EconomicsDetailsBlock):
         self._addStatsRow(label, column1=baseLabel, column3=premiumLabel)
         return baseValue != 0 or premiumValue != 0
 
-    def __addStatsItemIfExists(self, label, baseRecords, premiumRecords, *names):
+    def __addStatsItemIfExists(self, label, baseRecords, premiumRecords, labelArgs=None, *names):
         baseValue = baseRecords.getRecord(*names)
         premiumValue = premiumRecords.getRecord(*names)
         result = False
@@ -200,7 +203,7 @@ class MoneyDetailsBlock(_EconomicsDetailsBlock):
             result = True
             baseValue = style.makeCreditsLabel(baseValue, canBeFaded=not self.isPremium)
             premiumValue = style.makeCreditsLabel(premiumValue, canBeFaded=self.isPremium)
-            self._addStatsRow(label, column1=baseValue, column3=premiumValue)
+            self._addStatsRow(label, labelArgs, column1=baseValue, column3=premiumValue)
         return result
 
     def __addBaseCredits(self, baseRecords, premiumRecords):
@@ -211,6 +214,11 @@ class MoneyDetailsBlock(_EconomicsDetailsBlock):
         premiumCredits += premiumRecords.getRecord('originalCreditsToDraw')
         premiumCredits -= premiumRecords.getRecord('achievementCredits')
         self._addStatsRow('base', column1=style.makeCreditsLabel(baseCredits, canBeFaded=not self.isPremium), column3=style.makeCreditsLabel(premiumCredits, canBeFaded=self.isPremium))
+
+    def __addReferralSystemFactor(self, baseCredits, premiumCredits):
+        referralFactor = baseCredits.getFactor('referral20CreditsFactor100')
+        labelArgs = {'bonusFactor': convertFactorToPercent(referralFactor)}
+        return self.__addStatsItemIfExists('referralBonus', baseCredits, premiumCredits, labelArgs, 'referral20CreditsFactor100')
 
     def __addEventsMoney(self, baseCredits, premiumCredits, goldRecords):
         baseEventCredits = baseCredits.findRecord('eventCreditsList_') + baseCredits.findRecord('eventCreditsFactor100List_')
@@ -297,7 +305,7 @@ class XPDetailsBlock(_EconomicsDetailsBlock):
         self.__addXPsItemIfExists('tacticalTraining', baseXP, premiumXP, 'orderXPFactor100')
         self.__addFreeXPsItemIfExists('militaryManeuvers', baseFreeXP, premiumFreeXP, 'orderFreeXPFactor100')
         self.__addEventXPs(baseXP, premiumXP, baseFreeXP, premiumFreeXP)
-        self.__addReferralSystemFactor(baseXP, premiumXP, baseFreeXP, premiumFreeXP)
+        self.__addReferralSystemFactor(baseXP, premiumXP)
         self.__addComplexXPsItemIfExists('premiumVehicleXP', baseXP, premiumXP, baseFreeXP, premiumFreeXP, 'premiumVehicleXPFactor100', 'premiumVehicleXPFactor100')
         if reusable.getPersonalSquadFlags()[0]:
             self.__getSquadXPDetails(baseXP, premiumXP)
@@ -308,10 +316,10 @@ class XPDetailsBlock(_EconomicsDetailsBlock):
         self.__addXPsViolationPenalty()
         self.__addTotalResults(baseXP, premiumXP, baseFreeXP, premiumFreeXP)
 
-    def __addXPsItem(self, label, baseXP, premiumXP, xpRecord):
+    def __addXPsItem(self, label, baseXP, premiumXP, xpRecord, labelArgs=None):
         columns = {'column1': style.makeXpLabel(baseXP.getRecord(xpRecord), canBeFaded=not self.isPremium),
          'column3': style.makeXpLabel(premiumXP.getRecord(xpRecord), canBeFaded=self.isPremium)}
-        self._addStatsRow(label, **columns)
+        self._addStatsRow(label, labelArgs=labelArgs, **columns)
 
     def __addFreeXPsItem(self, label, baseFreeXP, premiumFreeXP, freeXPRecord):
         columns = {'column2': style.makeFreeXpLabel(baseFreeXP.getRecord(freeXPRecord), canBeFaded=not self.isPremium),
@@ -430,9 +438,11 @@ class XPDetailsBlock(_EconomicsDetailsBlock):
         self._addStatsRow(label, **columns)
         return
 
-    def __addReferralSystemFactor(self, baseXP, premiumXP, baseFreeXP, premiumFreeXP):
-        if baseXP.getFactor('refSystemXPFactor10') > 1:
-            self.__addComplexXPsItem('referralBonus', baseXP, premiumXP, baseFreeXP, premiumFreeXP, 'refSystemXPFactor10', 'refSystemXPFactor10')
+    def __addReferralSystemFactor(self, baseXP, premiumXP):
+        referralFactor = baseXP.getFactor('referral20XPFactor100')
+        if referralFactor > 0:
+            labelArgs = {'bonusFactor': convertFactorToPercent(referralFactor)}
+            self.__addXPsItem('referralBonus', baseXP, premiumXP, 'referral20XPFactor100', labelArgs=labelArgs)
 
     def __addTotalResults(self, baseXP, premiumXP, baseFreeXP, premiumFreeXP):
         baseCanBeFaded = not self.isPremium and self.canResourceBeFaded

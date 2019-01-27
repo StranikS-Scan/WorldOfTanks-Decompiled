@@ -10,6 +10,11 @@ def _getUrl(urlName=None, lobbyContext=None):
     return lobbyContext.getServerSettings().ingameShop.hostUrl if urlName is None else lobbyContext.getServerSettings().ingameShop.hostUrl + GUI_SETTINGS.ingameshop.get(urlName)
 
 
+@dependency.replace_none_kwargs(lobbyContext=ILobbyContext)
+def _getBackendUrl(urlName=None, lobbyContext=None):
+    return lobbyContext.getServerSettings().ingameShop.backendHostUrl if urlName is None else lobbyContext.getServerSettings().ingameShop.backendHostUrl + GUI_SETTINGS.ingameshopBackend.get(urlName)
+
+
 @dependency.replace_none_kwargs(itemsCache=IItemsCache)
 def isIngameShopEnabled(itemsCache=None):
     return itemsCache.items.stats.isIngameShopEnabled
@@ -18,6 +23,18 @@ def isIngameShopEnabled(itemsCache=None):
 @dependency.replace_none_kwargs(itemsCache=IItemsCache)
 def isSubscriptionEnabled(itemsCache=None):
     return itemsCache.items.stats.isSubscriptionEnabled
+
+
+def getWebShopBackendURL():
+    return _getBackendUrl()
+
+
+def getLoginUrl():
+    return _getBackendUrl('loginUrl')
+
+
+def getProductsUrl():
+    return _getBackendUrl('productsUrl')
 
 
 def getWebShopURL():

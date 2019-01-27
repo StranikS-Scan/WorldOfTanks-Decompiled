@@ -71,8 +71,6 @@ class USER_TAG(object):
     CURRENT = 'himself'
     CLAN_MEMBER = 'ownClanMember'
     OTHER_CLAN_MEMBER = 'otherClanMember'
-    REFERRER = 'referrer'
-    REFERRAL = 'referral'
     IGR_BASE = 'igr/base'
     IGR_PREMIUM = 'igr/premium'
     INVALID_NAME = 'invalid/name'
@@ -89,18 +87,11 @@ class USER_TAG(object):
     SUB_FROM = 'sub/from'
     PRESENCE_DND = 'presence/dnd'
     BAN_CHAT = 'ban/chat'
-    _SHARED_TAGS = {CLAN_MEMBER,
-     REFERRER,
-     REFERRAL,
-     SEARCH,
-     TEMP}
+    _SHARED_TAGS = {CLAN_MEMBER, SEARCH, TEMP}
     _CLOSED_CONTACTS = _SHARED_TAGS | {FRIEND}
     _ALL_CONTACTS = _SHARED_TAGS | {IGNORED, IGNORED_TMP, SUB_PENDING_IN}
     _STORED_TO_CACHE = {MUTED}
-    _TRUSTED_TAGS = {FRIEND,
-     CLAN_MEMBER,
-     REFERRER,
-     REFERRAL}
+    _TRUSTED_TAGS = {FRIEND, CLAN_MEMBER}
 
     @classmethod
     def filterAllContactsTags(cls, tags):

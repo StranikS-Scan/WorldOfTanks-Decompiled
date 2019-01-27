@@ -1,6 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/locale/LOOTBOXES.py
-from debug_utils import LOG_WARNING
+
 
 class LOOTBOXES(object):
     TYPE_NEWYEAR_PREMIUM = '#lootboxes:type/newYear_premium'
@@ -82,18 +82,3 @@ class LOOTBOXES(object):
     NOTIFICATION_HEADER = '#lootboxes:notification/header'
     NOTIFICATION_REWARDS = '#lootboxes:notification/rewards'
     NOTIFICATION_NY19MAN = '#lootboxes:notification/ny19man'
-    ENTRYDESC_ENUM = (ENTRYDESC_BUYSLOT,
-     ENTRYDESC_QUESTSLOT,
-     ENTRYDESC_NEWYEAR_PREMIUM,
-     ENTRYDESC_NEWYEAR_USUAL,
-     ENTRYDESC_BOXESCOUNT,
-     ENTRYDESC_RESTRICTEDMODE)
-
-    @classmethod
-    def getLootboxName(cls, boxType):
-        outcome = '#lootboxes:entryDesc/{}'.format(boxType)
-        if outcome not in cls.ENTRYDESC_ENUM:
-            LOG_WARNING('Localization key "{}" not found'.format(outcome))
-            return None
-        else:
-            return outcome

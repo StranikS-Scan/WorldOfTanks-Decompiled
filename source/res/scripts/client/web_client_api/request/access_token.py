@@ -10,17 +10,17 @@ class _RequestAccessTokenSchema(W2CSchema):
 
 
 class AccessTokenWebApiMixin(object):
-    connectionMgr = dependency.descriptor(IConnectionManager)
-    webCtrl = dependency.descriptor(IWebController)
+    _connectionMgr = dependency.descriptor(IConnectionManager)
+    _webCtrl = dependency.descriptor(IWebController)
 
     @w2c(_RequestAccessTokenSchema, 'access_token')
     def accessToken(self, cmd):
-        accessTokenData = yield self.webCtrl.getAccessTokenData(force=cmd.force)
+        accessTokenData = yield self._webCtrl.getAccessTokenData(force=cmd.force)
         if accessTokenData is not None:
-            yield {'spa_id': str(self.connectionMgr.databaseID),
+            yield {'spa_id': str(self._connectionMgr.databaseID),
              'access_token': str(accessTokenData.accessToken),
              'expires_in': accessTokenData.expiresAt - time_utils.getCurrentTimestamp(),
-             'periphery_id': str(self.connectionMgr.peripheryID)}
+             'periphery_id': str(self._connectionMgr.peripheryID)}
         else:
             yield {'error': 'Unable to obtain access token.'}
         return

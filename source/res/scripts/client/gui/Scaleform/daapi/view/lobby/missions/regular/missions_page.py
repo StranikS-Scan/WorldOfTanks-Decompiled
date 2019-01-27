@@ -166,12 +166,11 @@ class MissionsPage(LobbySubView, MissionsPageMeta):
         if requestedTab:
             self.__currentTabAlias = requestedTab
         else:
-            elenEnabled = self.lobbyContext.getServerSettings().isElenEnabled()
             self.__currentTabAlias = caches.getNavInfo().getMissionsTab()
-            if self.__currentTabAlias == QUESTS_ALIASES.MISSIONS_EVENT_BOARDS_VIEW_PY_ALIAS and (not elenEnabled or not self.eventsController.hasEvents()):
+            if self.__currentTabAlias == QUESTS_ALIASES.MISSIONS_EVENT_BOARDS_VIEW_PY_ALIAS and not self.__elenHasEvents():
                 self.__currentTabAlias = None
             if not self.__currentTabAlias:
-                if elenEnabled and self.eventsController.hasEvents():
+                if self.__elenHasEvents():
                     self.__currentTabAlias = QUESTS_ALIASES.MISSIONS_EVENT_BOARDS_VIEW_PY_ALIAS
                 elif self.marathonsCtrl.isAnyActive():
                     self.__currentTabAlias = QUESTS_ALIASES.MISSIONS_MARATHON_VIEW_PY_ALIAS
@@ -237,7 +236,6 @@ class MissionsPage(LobbySubView, MissionsPageMeta):
         data = []
         tabs = []
         marathonEvent = None
-        isElenEnabled = self.lobbyContext.getServerSettings().isElenEnabled()
         for tabData in TABS_DATA_ORDERED:
             alias = tabData.alias
             tab = {'label': tabData.label,
@@ -249,7 +247,7 @@ class MissionsPage(LobbySubView, MissionsPageMeta):
                 marathonEvent = self.marathonsCtrl.getMarathon(tabData.prefix)
                 tab['prefix'] = tabData.prefix
                 header_tab['prefix'] = tabData.prefix
-            if alias == QUESTS_ALIASES.MISSIONS_EVENT_BOARDS_VIEW_PY_ALIAS and not (isElenEnabled and self.eventsController.hasEvents()) or alias == QUESTS_ALIASES.MISSIONS_MARATHON_VIEW_PY_ALIAS and not (marathonEvent and marathonEvent.isEnabled()) or alias == QUESTS_ALIASES.MISSIONS_GROUPED_VIEW_PY_ALIAS and self.marathonsCtrl.isAnyActive():
+            if alias == QUESTS_ALIASES.MISSIONS_EVENT_BOARDS_VIEW_PY_ALIAS and not self.__elenHasEvents() or alias == QUESTS_ALIASES.MISSIONS_MARATHON_VIEW_PY_ALIAS and not (marathonEvent and marathonEvent.isEnabled()) or alias == QUESTS_ALIASES.MISSIONS_GROUPED_VIEW_PY_ALIAS and self.marathonsCtrl.isAnyActive():
                 if alias == self.__currentTabAlias and marathonEvent and marathonEvent.prefix == self.__marathonPrefix:
                     self.__currentTabAlias = QUESTS_ALIASES.MISSIONS_CATEGORIES_VIEW_PY_ALIAS
                 continue
@@ -258,7 +256,7 @@ class MissionsPage(LobbySubView, MissionsPageMeta):
                     header_tab['selected'] = self.__marathonPrefix == tabData.prefix
                 else:
                     header_tab['selected'] = True
-            if alias == QUESTS_ALIASES.MISSIONS_EVENT_BOARDS_VIEW_PY_ALIAS and not isElenEnabled:
+            if alias == QUESTS_ALIASES.MISSIONS_EVENT_BOARDS_VIEW_PY_ALIAS and not self.lobbyContext.getServerSettings().isElenEnabled():
                 header_tab['tooltip'] = tabData.tooltipDisabled
                 header_tab['enabled'] = False
             if alias == QUESTS_ALIASES.CURRENT_VEHICLE_MISSIONS_VIEW_PY_ALIAS:
@@ -283,6 +281,9 @@ class MissionsPage(LobbySubView, MissionsPageMeta):
         self.as_setTabsCounterDataS(data)
         self.showFilter()
         return
+
+    def __elenHasEvents(self):
+        return self.lobbyContext.getServerSettings().isElenEnabled() and self.eventsController.hasEvents()
 
     def __filterApplied(self):
         for attr in self.__filterData:

@@ -26,7 +26,7 @@ class ClientIndexItem(base.StatsItem):
 
 
 class PlayerNameBlock(base.StatsBlock):
-    __slots__ = ('__dbID', 'nameLabel', 'fullNameLabel', 'clanLabel', 'regionLabel')
+    __slots__ = ('__dbID', 'nameLabel', 'fullNameLabel', 'clanLabel', 'regionLabel', 'isTeamKiller')
 
     def __init__(self, meta=None, field='', *path):
         super(PlayerNameBlock, self).__init__(meta, field, *path)
@@ -38,6 +38,7 @@ class PlayerNameBlock(base.StatsBlock):
     def setTeamKillerInfo(self):
         self.nameLabel = makeTeamKillerText(self.nameLabel)
         self.fullNameLabel = makeTeamKillerText(self.fullNameLabel)
+        self.isTeamKiller = True
 
     def setPlayerInfo(self, playerInfo):
         self.__dbID = playerInfo.dbID

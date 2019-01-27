@@ -1,6 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/epicBattle/epic_prestige_progress_tooltip.py
-from gui.Scaleform.daapi.view.lobby.epicBattle.epic_prestige_progress import PRESTIGE_TOKEN_TEMPLATE
+from gui.Scaleform.daapi.view.lobby.epicBattle.epic_prestige_progress import FRONTLINE_PRESTIGE_TOKEN_TEMPLATE
 from gui.Scaleform.locale.EPIC_BATTLE import EPIC_BATTLE
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.shared.formatters import text_styles
@@ -72,7 +72,8 @@ class EpicPrestigeProgressTooltip(BlocksTooltipData):
             return
         else:
             maxMetaLevel = self.lobbyCtx.getServerSettings().epicMetaGame.metaLevel.get('maxLevel', 0)
-            currentPrestigeQuest = self.eventsCache.getAllQuests().get(PRESTIGE_TOKEN_TEMPLATE % (prestigeOver - 1), None)
+            quests = self.eventsCache.getAllQuests()
+            currentPrestigeQuest = quests.get(FRONTLINE_PRESTIGE_TOKEN_TEMPLATE % (prestigeOver - 1), None)
             awardsVO = []
             if currentPrestigeQuest:
                 bonuses = currentPrestigeQuest.getBonuses()

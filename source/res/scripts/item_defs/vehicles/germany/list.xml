@@ -391,7 +391,7 @@
     <shortUserString>	#germany_vehicles:Sturer_Emil_short	</shortUserString>
     <description>	#germany_vehicles:Sturer_Emil_descr	</description>
     <price>	1300000	</price>
-    <tags>	AT-SPG heavyAT-SPG enhancedTorsions5t_user largeCaliberTankRammer_user wetCombatPack_class1_user HD	</tags>
+    <tags>	AT-SPG heavyAT-SPG AT-SPG2 enhancedTorsions5t_user largeCaliberTankRammer_user wetCombatPack_class1_user HD	</tags>
     <level>	7	</level>
   </G43_Sturer_Emil>
   <G39_Marder_III>
@@ -418,7 +418,7 @@
     <shortUserString>	#germany_vehicles:Nashorn_short	</shortUserString>
     <description>	#germany_vehicles:Nashorn_descr	</description>
     <price>	905000	</price>
-    <tags>	AT-SPG mediumAT-SPG enhancedLevers_user grousers_user wetCombatPack_class1_user mediumCaliberTankRammer_user HD	</tags>
+    <tags>	AT-SPG mediumAT-SPG AT-SPG1 enhancedLevers_user grousers_user wetCombatPack_class1_user mediumCaliberTankRammer_user HD	</tags>
     <level>	6	</level>
   </G40_Nashorn>
   <G72_JagdPz_E100>
@@ -978,6 +978,20 @@
     <tags>	heavyTank improvedVentilation_class3_user beast antifragmentationLining_superheavy_user enhancedTorsions5t_user largeCaliberTankRammer_user wetCombatPack_class2_user aimingStabilizer_Mk2_user HD	</tags>
     <level>	8	</level>
   </G51_Lowe>
+  <G51_Lowe_FL>
+    <id>	255	</id>
+    <userString>	#germany_vehicles:Lowe_FL	</userString>
+    <shortUserString>	#germany_vehicles:Lowe_FL_short	</shortUserString>
+    <description>	#germany_vehicles:Lowe_descr	</description>
+    <shortDescriptionSpecial>	#germany_vehicles:Lowe_short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#germany_vehicles:Lowe_long_special	</longDescriptionSpecial>
+    <price>	12500	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <cannotBeBought>	true	</cannotBeBought>
+    <tags>	heavyTank improvedVentilation_class3_user beast antifragmentationLining_superheavy_user enhancedTorsions5t_user largeCaliberTankRammer_user wetCombatPack_class2_user aimingStabilizer_Mk2_user HD epic_battles	</tags>
+    <level>	8	</level>
+  </G51_Lowe_FL>
   <G46_T-25>
     <id>	213	</id>
     <userString>	#germany_vehicles:T-25	</userString>
@@ -987,7 +1001,7 @@
     <longDescriptionSpecial>	#germany_vehicles:T-25_long_special	</longDescriptionSpecial>
     <price>	1500	  <gold></gold>
     </price>
-    <tags>	mediumTank improvedVentilation_class2_user enhancedSprings_user mediumCaliberTankRammer_user wetCombatPack_class1_user HD	</tags>
+    <tags>	mediumTank mediumTank1 improvedVentilation_class2_user enhancedSprings_user mediumCaliberTankRammer_user wetCombatPack_class1_user HD	</tags>
     <level>	5	</level>
   </G46_T-25>
   <G50_T-15>
@@ -1034,7 +1048,7 @@
     <price>	6700	  <gold></gold>
     </price>
     <notInShop>	true	</notInShop>
-    <tags>	AT-SPG mediumAT-SPG improvedVentilation_class2_user enhancedBelwillWashers_user mediumCaliberTankRammer_user wetCombatPack_class1_user HD	</tags>
+    <tags>	AT-SPG mediumAT-SPG AT-SPG1 improvedVentilation_class2_user enhancedBelwillWashers_user mediumCaliberTankRammer_user wetCombatPack_class1_user HD	</tags>
     <level>	7	</level>
   </G48_E-25>
   <G41_DickerMax>
@@ -1046,7 +1060,7 @@
     <longDescriptionSpecial>	#germany_vehicles:DickerMax_long_special	</longDescriptionSpecial>
     <price>	3200	  <gold></gold>
     </price>
-    <tags>	AT-SPG mediumAT-SPG enhancedTorsions5t_user mediumCaliberTankRammer_user wetCombatPack_class1_user HD	</tags>
+    <tags>	AT-SPG mediumAT-SPG AT-SPG2 enhancedTorsions5t_user mediumCaliberTankRammer_user wetCombatPack_class1_user HD	</tags>
     <level>	6	</level>
   </G41_DickerMax>
   <G77_PzIV_Schmalturm>
@@ -1210,7 +1224,7 @@
     <longDescriptionSpecial>	#germany_vehicles:G109_Steyr_WT_long_special	</longDescriptionSpecial>
     <price>	5950	  <gold></gold>
     </price>
-    <tags>	AT-SPG mediumAT-SPG enhancedSprings_class2_user mediumCaliberTankRammer_user wetCombatPack_class1_user HD inGame	</tags>
+    <tags>	AT-SPG mediumAT-SPG AT-SPG1 enhancedSprings_class2_user mediumCaliberTankRammer_user wetCombatPack_class1_user HD inGame	</tags>
     <level>	7	</level>
   </G109_Steyr_WT>
   <G112_KanonenJagdPanzer>
@@ -1307,6 +1321,20 @@
     <tags>	mediumTank mediumTank1 improvedVentilation_class2_user mediumCaliberTankRammer_user wetCombatPack_class1_user aimingStabilizer_Mk1_user HD	</tags>
     <level>	8	</level>
   </G119_Panzer58>
+  <G119_Panzer58_FL>
+    <id>	222	</id>
+    <userString>	#germany_vehicles:G119_Panzer58_FL	</userString>
+    <shortUserString>	#germany_vehicles:G119_Panzer58_FL_short	</shortUserString>
+    <description>	#germany_vehicles:G119_Panzer58_descr	</description>
+    <shortDescriptionSpecial>	#germany_vehicles:G119_Panzer58_short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#germany_vehicles:G119_Panzer58_long_special	</longDescriptionSpecial>
+    <price>	7700	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <cannotBeBought>	true	</cannotBeBought>
+    <tags>	mediumTank mediumTank1 improvedVentilation_class2_user mediumCaliberTankRammer_user wetCombatPack_class1_user aimingStabilizer_Mk1_user HD epic_battles	</tags>
+    <level>	8	</level>
+  </G119_Panzer58_FL>
   <G120_M41_90>
     <id>	250	</id>
     <userString>	#germany_vehicles:G120_M41_90	</userString>
@@ -1393,7 +1421,7 @@
     <description>	#igr_vehicles:E-25_IGR_descr	</description>
     <price>	1	  <gold></gold>
     </price>
-    <tags>	AT-SPG mediumAT-SPG improvedVentilation_class2_user enhancedBelwillWashers_user  mediumCaliberTankRammer_user wetCombatPack_class1_user premiumIGR secret HD	</tags>
+    <tags>	AT-SPG mediumAT-SPG AT-SPG1 improvedVentilation_class2_user enhancedBelwillWashers_user  mediumCaliberTankRammer_user wetCombatPack_class1_user premiumIGR secret HD	</tags>
     <level>	7	</level>
   </G48_E-25_IGR>
   <G03_PzV_Panther_IGR>

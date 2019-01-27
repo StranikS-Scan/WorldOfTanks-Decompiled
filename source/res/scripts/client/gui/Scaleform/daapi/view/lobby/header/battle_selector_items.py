@@ -243,6 +243,10 @@ class _EpicQueueItem(_SelectorItem):
     bootcampController = dependency.descriptor(IBootcampController)
     epicQueueController = dependency.descriptor(IEpicBattleMetaGameController)
 
+    def __init__(self, label, data, order, selectorType=None, isVisible=True):
+        super(_EpicQueueItem, self).__init__(label, data, order, selectorType, isVisible)
+        self.__isFrozen = False
+
     def isRandomBattle(self):
         return True
 
@@ -255,40 +259,59 @@ class _EpicQueueItem(_SelectorItem):
 
     def getFormattedLabel(self):
         battleTypeName = super(_EpicQueueItem, self).getFormattedLabel()
-        availabilityStr = None
-        if self.epicQueueController.hasSuitableVehicles():
-            availabilityStr = self.__getAvailabilityStr()
+        availabilityStr = self.__getPerformanceAlarmStr() or self.__getScheduleStr()
         return battleTypeName if availabilityStr is None else '%s\n%s' % (battleTypeName, availabilityStr)
 
-    def __getAvailabilityStr(self):
-        _, time, _ = self.epicQueueController.getPrimeTimeStatus()
-        timeLeftStr = time_utils.getTillTimeString(time, EPIC_BATTLE.STATUS_TIMELEFT)
-        if not self.epicQueueController.isInPrimeTime():
-            availablePrimeTime = self.epicQueueController.hasAnySeason() and self.epicQueueController.getPrimeTimeStatus()[1] != 0
-            if availablePrimeTime:
-                return text_styles.main(i18n.makeString(EPIC_BATTLE.TOOLTIP_EPICBATTLE_AVAILABLEIN, time=timeLeftStr))
-            return None
-        currPerformanceGroup = self.epicQueueController.getPerformanceGroup()
-        if currPerformanceGroup == EPIC_PERF_GROUP.HIGH_RISK:
-            attention = text_styles.error(MENU.HEADERBUTTONS_BATTLE_MENU_ATTENTION_LOWPERFORMANCE)
-            return icons.makeImageTag(RES_ICONS.MAPS_ICONS_LIBRARY_MARKER_BLOCKED, vSpace=-3) + ' ' + attention
-        elif currPerformanceGroup == EPIC_PERF_GROUP.MEDIUM_RISK:
-            attention = text_styles.neutral(MENU.HEADERBUTTONS_BATTLE_MENU_ATTENTION_REDUCEDPERFORMANCE)
-            return icons.makeImageTag(RES_ICONS.MAPS_ICONS_LIBRARY_ATTENTIONICON, vSpace=-3) + ' ' + attention
-        else:
-            return None
+    @process
+    def _doSelect(self, dispatcher):
+        isSuccess = yield dispatcher.doSelectAction(PrbAction(self._data))
+        if isSuccess and self._isNew:
+            selectorUtils.setBattleTypeAsKnown(self._selectorType)
+            self.epicQueueController.openURL()
 
     def _update(self, state):
         isNow = self.epicQueueController.isAvailable()
         isEpicEnabled = self.lobbyContext.getServerSettings().isEpicBattleEnabled()
-        hasNextSeason, _ = self.epicQueueController.getCurrentCycleInfo()
-        isAvailableOnOtherServers = self.epicQueueController.hasAvailablePrimeTimeServers()
+        self.__isFrozen = self.epicQueueController.isFrozen()
         if not isEpicEnabled or not isNow:
             self._isLocked = True
-        self._isDisabled = state.hasLockedState or not isAvailableOnOtherServers or not hasNextSeason
+        ctrl = self.epicQueueController
+        hasActualSeason = ctrl.getCurrentSeason() or ctrl.getPreviousSeason() and ctrl.getNextSeason()
+        self._isDisabled = state.hasLockedState or not hasActualSeason or self.__isFrozen
         self._isSelected = state.isQueueSelected(QUEUE_TYPE.EPIC)
-        self._isVisible = isEpicEnabled if hasNextSeason is not None else False
-        return
+        self._isVisible = isEpicEnabled if hasActualSeason else False
+
+    def __getScheduleStr(self):
+        if self.__isFrozen:
+            return text_styles.main(i18n.makeString(MENU.HEADERBUTTONS_BATTLE_TYPES_EPIC_EXTRA_FROZEN))
+        else:
+            currentSeason = self.epicQueueController.getCurrentSeason()
+            if currentSeason:
+                seasonName = i18n.makeString(EPIC_BATTLE.getSeasonName(currentSeason.getSeasonID()))
+                if currentSeason.hasActiveCycle(time_utils.getCurrentLocalServerTimestamp()):
+                    cycleName = currentSeason.getCycleInfo().getEpicCycleNumber()
+                    scheduleStr = i18n.makeString(MENU.HEADERBUTTONS_BATTLE_TYPES_EPIC_EXTRA_CURRENTCYCLE, cycle=cycleName, season=seasonName)
+                else:
+                    scheduleStr = i18n.makeString(MENU.HEADERBUTTONS_BATTLE_TYPES_EPIC_EXTRA_CURRENTSEASON, season=seasonName)
+            else:
+                nextSeason = self.epicQueueController.getNextSeason()
+                if nextSeason:
+                    startTime = time_utils.getDateTimeFormat(nextSeason.getStartDate())
+                    scheduleStr = i18n.makeString(MENU.HEADERBUTTONS_BATTLE_TYPES_EPIC_EXTRA_STARTSAT, time=startTime)
+                else:
+                    scheduleStr = None
+            return text_styles.main(scheduleStr) if scheduleStr else None
+
+    def __getPerformanceAlarmStr(self):
+        currPerformanceGroup = self.epicQueueController.getPerformanceGroup()
+        attentionText, iconPath = (None, None)
+        if currPerformanceGroup == EPIC_PERF_GROUP.HIGH_RISK:
+            attentionText = text_styles.error(MENU.HEADERBUTTONS_BATTLE_MENU_ATTENTION_LOWPERFORMANCE)
+            iconPath = RES_ICONS.MAPS_ICONS_LIBRARY_MARKER_BLOCKED
+        elif currPerformanceGroup == EPIC_PERF_GROUP.MEDIUM_RISK:
+            attentionText = text_styles.alert(MENU.HEADERBUTTONS_BATTLE_MENU_ATTENTION_REDUCEDPERFORMANCE)
+            iconPath = RES_ICONS.MAPS_ICONS_LIBRARY_ALERTICON
+        return icons.makeImageTag(iconPath, vSpace=-3) + ' ' + attentionText if attentionText and iconPath else None
 
 
 class _BattleSelectorItems(object):
@@ -512,7 +535,7 @@ def _addSandboxType(items):
 
 
 def _addEpicQueueBattleType(items):
-    items.append(_EpicQueueItem(MENU.HEADERBUTTONS_BATTLE_TYPES_EPIC, PREBATTLE_ACTION_NAME.EPIC, 1))
+    items.append(_EpicQueueItem(MENU.HEADERBUTTONS_BATTLE_TYPES_EPIC, PREBATTLE_ACTION_NAME.EPIC, 1, SELECTOR_BATTLE_TYPES.EPIC))
 
 
 def _addSimpleSquadType(items):

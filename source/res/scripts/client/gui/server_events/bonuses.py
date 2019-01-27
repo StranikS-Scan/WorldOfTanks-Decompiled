@@ -6,6 +6,7 @@ from functools import partial
 import BigWorld
 from constants import EVENT_TYPE as _ET, DOSSIER_TYPE, LOOTBOX_TOKEN_PREFIX
 from debug_utils import LOG_ERROR, LOG_CURRENT_EXCEPTION
+from dossiers2.custom.records import RECORD_DB_IDS
 from dossiers2.ui.achievements import ACHIEVEMENT_BLOCK, BADGES_BLOCK
 from gui import makeHtmlString
 from gui.Scaleform.genConsts.BOOSTER_CONSTANTS import BOOSTER_CONSTANTS
@@ -17,7 +18,7 @@ from gui.Scaleform.locale.QUESTS import QUESTS
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.Scaleform.locale.VEHICLE_CUSTOMIZATION import VEHICLE_CUSTOMIZATION
-from gui.Scaleform.settings import getBadgeIconPath, BADGES_ICONS
+from gui.Scaleform.settings import getBadgeIconPath, BADGES_ICONS, ICONS_SIZES
 from gui.server_events.formatters import parseComplexToken
 from gui.shared.formatters import text_styles
 from gui.shared.gui_items import GUI_ITEM_TYPE, GUI_ITEM_TYPE_INDICES
@@ -38,6 +39,7 @@ from skeletons.gui.customization import ICustomizationService
 from skeletons.gui.goodies import IGoodiesCache
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
+from gui.server_events.awards_formatters import AWARDS_SIZES
 DEFAULT_CREW_LVL = 50
 _CUSTOMIZATIONS_SCALE = 44.0 / 128
 _EPIC_AWARD_STATIC_VO_ENTRIES = {'compensationTooltip': QUESTS.BONUSES_COMPENSATION,
@@ -129,6 +131,13 @@ class SimpleBonus(object):
 
     def getList(self):
         return None
+
+    def getWrappedEpicBonusList(self):
+        return [{'id': 0,
+          'type': 'custom/{}'.format(self.getName()),
+          'value': self.getValue(),
+          'icon': {AWARDS_SIZES.SMALL: self.getIconBySize(AWARDS_SIZES.SMALL),
+                   AWARDS_SIZES.BIG: self.getIconBySize(AWARDS_SIZES.BIG)}}]
 
     def __getCommonAwardsVOs(self, iconSize='small', align=TEXT_ALIGN.CENTER, withCounts=False):
         itemInfo = {'imgSource': self.getIconBySize(iconSize),
@@ -336,6 +345,18 @@ class BattleTokensBonus(TokensBonus):
 
         return ', '.join(result) if result else None
 
+    def getWrappedEpicBonusList(self):
+        result = []
+        for tokenID, value in self._value.iteritems():
+            if tokenID == 'prestige_point':
+                result.append({'id': 0,
+                 'value': value.get('count', 1),
+                 'icon': {AWARDS_SIZES.SMALL: RES_ICONS.getEpicBattlesPrestigePoints('48x48'),
+                          AWARDS_SIZES.BIG: RES_ICONS.getEpicBattlesPrestigePoints('80x80')},
+                 'type': 'custom/{}'.format(tokenID)})
+
+        return result
+
     def _getUserName(self, styleID):
         webCache = self.eventsCache.prefetcher
         return i18n.makeString(webCache.getTokenInfo(styleID))
@@ -475,6 +496,18 @@ class ItemsBonus(SimpleBonus):
 
         return result
 
+    def getWrappedEpicBonusList(self):
+        result = []
+        for item, count in self.getItems().iteritems():
+            if item is not None and count:
+                result.append({'id': item.intCD,
+                 'type': 'item/{}'.format(item.itemTypeName),
+                 'value': count,
+                 'icon': {AWARDS_SIZES.SMALL: item.getBonusIcon(AWARDS_SIZES.SMALL),
+                          AWARDS_SIZES.BIG: item.getBonusIcon(AWARDS_SIZES.BIG)}})
+
+        return result
+
     def hasIconFormat(self):
         return True
 
@@ -569,6 +602,26 @@ class GoodiesBonus(SimpleBonus):
 
         return result
 
+    def getWrappedEpicBonusList(self):
+        result = []
+        for booster, count in self.getBoosters().iteritems():
+            if booster is not None:
+                result.append({'id': booster.boosterID,
+                 'type': 'goodie/{}'.format(booster.getTypeAsString()),
+                 'value': count,
+                 'icon': {AWARDS_SIZES.SMALL: booster.icon,
+                          AWARDS_SIZES.BIG: booster.bigIcon}})
+
+        for discount, count in self.getDiscounts().iteritems():
+            if discount is not None:
+                result.append({'id': discount.discountID,
+                 'type': 'discount/{}'.format(discount.targetType),
+                 'value': discount.getFormattedValue(),
+                 'icon': {AWARDS_SIZES.SMALL: discount.icon,
+                          AWARDS_SIZES.BIG: discount.bigIcon}})
+
+        return result
+
     def formattedList(self):
         result = []
         for booster, count in self.getBoosters().iteritems():
@@ -655,6 +708,17 @@ class VehiclesBonus(SimpleBonus):
             if vInfoLabels:
                 result.append(text_styles.standard(i18n.makeString('#quests:bonuses/vehicles/name', name=text_styles.main(item.userName), vehInfo='; '.join(vInfoLabels))))
             result.append(text_styles.main(item.userName))
+
+        return result
+
+    def getWrappedEpicBonusList(self):
+        result = []
+        for item, _ in self.getVehicles():
+            result.append({'id': item.intCD,
+             'type': 'vehicle/{}'.format(item.type),
+             'value': 1,
+             'icon': {AWARDS_SIZES.SMALL: item.iconSmall,
+                      AWARDS_SIZES.BIG: item.icon}})
 
         return result
 
@@ -842,6 +906,27 @@ class DossierBonus(SimpleBonus):
     def formattedList(self):
         return self.getAchievements()
 
+    def getWrappedEpicBonusList(self):
+        result = []
+        for block, record in self.getRecords().iterkeys():
+            if block == 'singleAchievements':
+                blockID = RECORD_DB_IDS[block, record]
+            else:
+                blockID = record
+            result.append({'id': blockID,
+             'type': block,
+             'value': 1,
+             'icon': self.__getEpicBonusImages(block, record)})
+
+        return result
+
+    def __getEpicBonusImages(self, block, record):
+        if block == 'playerBadges':
+            return {AWARDS_SIZES.SMALL: getBadgeIconPath(BADGES_ICONS.X48, record),
+             AWARDS_SIZES.BIG: getBadgeIconPath(BADGES_ICONS.X80, record)}
+        return {AWARDS_SIZES.SMALL: RES_ICONS.getEpicAchievementIcon(ICONS_SIZES.X48, record),
+         AWARDS_SIZES.BIG: RES_ICONS.getEpicAchievementIcon(ICONS_SIZES.X80, record)} if block == 'singleAchievements' else {}
+
     def __getCommonAwardsVOs(self, block, record, iconSize='small', withCounts=False):
         badgesIconSizes = {'big': BADGES_ICONS.X80,
          'small': BADGES_ICONS.X48}
@@ -989,18 +1074,6 @@ class TankwomanBonus(TankmenBonus):
         return ', '.join(result)
 
 
-class RefSystemTankmenBonus(TankmenBonus):
-
-    def formatValue(self):
-        result = []
-        for tmanInfo in self.getTankmenData():
-            if tmanInfo.isFemale:
-                return '%s %s' % (i18n.makeString(QUESTS.BONUSES_ITEM_TANKWOMAN), i18n.makeString(QUESTS.BONUSES_TANKMEN_DESCRIPTION, value=getRoleUserName(tmanInfo.role)))
-            result.append(i18n.makeString(QUESTS.BONUSES_TANKMEN_DESCRIPTION, value=getRoleUserName(tmanInfo.role)))
-
-        return ', '.join(result)
-
-
 class CustomizationsBonus(SimpleBonus):
     c11n = dependency.descriptor(ICustomizationService)
     INFOTIP_ARGS_ORDER = ('intCD', 'showPrice')
@@ -1039,6 +1112,32 @@ class CustomizationsBonus(SimpleBonus):
              'boundToCurrentVehicle': boundToCurrentVehicle,
              'showPrice': False,
              'description': bonusDesc})
+
+        return result
+
+    def getWrappedEpicBonusList(self):
+        result = []
+        for itemData in self.getCustomizations():
+            itemType = itemData.get('custType')
+            itemTypeID = GUI_ITEM_TYPE_INDICES.get(itemType)
+            item = self.c11n.getItemByID(itemTypeID, itemData.get('id'))
+            smallIcon = item.getBonusIcon(AWARDS_SIZES.SMALL)
+            bigIcon = item.getBonusIcon(AWARDS_SIZES.BIG)
+            typeStr = itemType
+            if itemType == 'decal':
+                typeStr = 'decal/1'
+            elif itemType == 'paint':
+                typeStr = 'paint/all'
+            elif itemType == 'camouflage':
+                typeStr = 'camouflage/all'
+            elif itemType == 'style':
+                smallIcon = RES_ICONS.getBonusIcon(AWARDS_SIZES.SMALL, itemType)
+                bigIcon = RES_ICONS.getBonusIcon(AWARDS_SIZES.BIG, itemType)
+            result.append({'id': itemData.get('id'),
+             'type': typeStr,
+             'value': itemData.get('value', 0),
+             'icon': {AWARDS_SIZES.SMALL: smallIcon,
+                      AWARDS_SIZES.BIG: bigIcon}})
 
         return result
 
@@ -1189,8 +1288,7 @@ _BONUSES = {Currency.CREDITS: CreditsBonus,
  'dossier': {'default': DossierBonus,
              _ET.PERSONAL_MISSION: PersonalMissionDossierBonus},
  'tankmen': {'default': TankmenBonus,
-             _ET.PERSONAL_MISSION: TankwomanBonus,
-             _ET.REF_SYSTEM_QUEST: RefSystemTankmenBonus},
+             _ET.PERSONAL_MISSION: TankwomanBonus},
  'customizations': CustomizationsBonus,
  'goodies': GoodiesBonus,
  'items': ItemsBonus,

@@ -280,6 +280,7 @@ class SoundGroups(object):
         soundModeName = SoundModes.DEFAULT_MODE_NAME
         nationalMapping = None
         self.__soundModes = None
+        self.__viewPlayModeParam = WWISE.WW_getRTPCValue('RTPC_ext_viewPlayMode')
         if not userPrefs.has_key(Settings.KEY_SOUND_PREFERENCES):
             userPrefs.write(Settings.KEY_SOUND_PREFERENCES, '')
             self.__masterVolume = MASTER_VOLUME_DEFAULT
@@ -593,14 +594,14 @@ class SoundGroups(object):
         if vehicleTypeDescriptor is not None:
             __ceilLess = vehicleTypeDescriptor.turret.ceilless
         if mode == 0:
-            WWISE.WW_setRTCPGlobal('RTPC_ext_viewPlayMode', 1)
+            self.__viewPlayModeParam.setGlobal(1)
             if __ceilLess is True:
                 WWISE.WW_setState('STATE_viewPlayMode', 'STATE_viewplaymode_arcade_ceilless')
             else:
                 WWISE.WW_setState('STATE_viewPlayMode', 'STATE_viewPlayMode_arcade')
             WWISE.WWsetCameraShift(None)
         elif mode == 1:
-            WWISE.WW_setRTCPGlobal('RTPC_ext_viewPlayMode', 0)
+            self.__viewPlayModeParam.setGlobal(0)
             if __ceilLess is True:
                 WWISE.WW_setState('STATE_viewPlayMode', 'STATE_viewplaymode_sniper_ceilless')
             else:
@@ -609,7 +610,7 @@ class SoundGroups(object):
                 compoundModel = BigWorld.player().getVehicleAttached().appearance.compoundModel
                 WWISE.WWsetCameraShift(compoundModel.node(TankPartNames.TURRET))
         elif mode == 2:
-            WWISE.WW_setRTCPGlobal('RTPC_ext_viewPlayMode', 2)
+            self.__viewPlayModeParam.setGlobal(2)
             WWISE.WW_setState('STATE_viewPlayMode', 'STATE_viewPlayMode_strategic')
             WWISE.WWsetCameraShift(None)
         return

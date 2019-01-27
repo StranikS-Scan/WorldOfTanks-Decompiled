@@ -82,9 +82,10 @@ class _ViewSoundsManager(object):
 
                     if spaceSettings.enterEvent:
                         self.playInstantSound(spaceSettings.enterEvent)
-                    self.__setStates(spaceSettings.entranceStates)
                     self.__exitStates = spaceSettings.exitStates
                     self.__started = True
+            if spaceSettings.autoStart:
+                self.__setStates(spaceSettings.entranceStates)
             return
 
     def __stopAllSounds(self, stopPersistent):

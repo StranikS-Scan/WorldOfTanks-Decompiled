@@ -16,7 +16,6 @@ from helpers import dependency
 from skeletons.gui.game_control import IRankedBattlesController
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.lobby_context import ILobbyContext
-from gui.ranked_battles.constants import PRIME_TIME_STATUS
 
 class BattleTypeSelectPopover(BattleTypeSelectPopoverMeta):
     eventsCache = dependency.descriptor(IEventsCache)
@@ -87,5 +86,4 @@ class BattleTypeSelectPopover(BattleTypeSelectPopoverMeta):
         return (TOOLTIPS_CONSTANTS.RANKED_SELECTOR_INFO, True) if self.rankedController.isAvailable() and hasSuitableVehicles else (TOOLTIPS_CONSTANTS.RANKED_UNAVAILABLE_INFO, True)
 
     def __getEpicAvailabilityData(self):
-        status, _, _ = self.epicQueueController.getPrimeTimeStatus()
-        return (TOOLTIPS_CONSTANTS.EPIC_SELECTOR_UNAVAILABLE_INFO, True) if status == PRIME_TIME_STATUS.NOT_AVAILABLE else (TOOLTIPS_CONSTANTS.EPIC_SELECTOR_INFO, True)
+        return (TOOLTIPS_CONSTANTS.EPIC_SELECTOR_INFO, True)

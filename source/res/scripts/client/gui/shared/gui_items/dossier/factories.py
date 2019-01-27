@@ -275,6 +275,10 @@ _ACHIEVEMENTS_BY_NAME = {(_AB.TOTAL, 'warrior'): _CustomAchieveFactory.get(_as.W
  (_AB.FALLOUT, 'unreachable'): _AchieveFactory.get(_abstract_achievements.DeprecatedAchievement),
  (_AB.FALLOUT, 'champion'): _AchieveFactory.get(_abstract_achievements.DeprecatedAchievement),
  (_AB.FALLOUT, 'bannerman'): _AchieveFactory.get(_abstract_achievements.DeprecatedAchievement),
+ (_AB.EPIC_BATTLE, 'epicBattle1'): _AchieveFactory.get(_abstract_achievements.DeprecatedAchievement),
+ (_AB.EPIC_BATTLE, 'epicBattle2'): _AchieveFactory.get(_abstract_achievements.DeprecatedAchievement),
+ (_AB.EPIC_BATTLE, 'epicBattle3'): _AchieveFactory.get(_abstract_achievements.DeprecatedAchievement),
+ (_AB.EPIC_BATTLE, 'epicBattle4'): _AchieveFactory.get(_abstract_achievements.DeprecatedAchievement),
  WHITE_TIGER_RECORD: _CustomAchieveFactory.get(_as.WhiteTigerAchievement),
  HONORED_RANK_RECORD: _CustomAchieveFactory.get(_as.HonoredRankAchievement),
  RARE_STORAGE_RECORD: _RareAchievesFactory.get()}

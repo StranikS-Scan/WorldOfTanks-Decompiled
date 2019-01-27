@@ -29,7 +29,7 @@ class EpicSkillBaseTooltipData(BlocksTooltipData):
         return items
 
     def _constructHeader(self, block, skillID, level):
-        skillLevel = self._epicMetaGameCtrl.getSkillInformation()[skillID].levels[level]
+        skillLevel = self._epicMetaGameCtrl.getAllSkillsInformation()[skillID].levels[level]
         title = skillLevel.name
         icon = skillLevel.icon
         romanLvl = int2roman(level)
@@ -50,7 +50,7 @@ class EpicSkillExtendedTooltip(EpicSkillBaseTooltipData):
 
     def _packBlocks(self, skillID, specLevel=None):
         headerblocks = super(EpicSkillExtendedTooltip, self)._packBlocks(skillID, specLevel)
-        skillInfo = self._epicMetaGameCtrl.getSkillInformation()[skillID]
+        skillInfo = self._epicMetaGameCtrl.getAllSkillsInformation()[skillID]
         currentLvl = self._epicMetaGameCtrl.getSkillLevels().get(skillID, 1)
         specLevel = clamp(1, skillInfo.maxLvl, int(specLevel) if specLevel else currentLvl)
         bodyBlocks = [formatters.packTextBlockData(text=text_styles.middleTitle('{}{}'.format(i18n.makeString(EPIC_BATTLE.ABILITYINFO_PROPERTIES), i18n.makeString(COMMON.COMMON_COLON))))]
@@ -62,7 +62,7 @@ class EpicSkillExtendedTooltip(EpicSkillBaseTooltipData):
 
 def _equipmentToEpicSkillConverter(epicMetaGameCtrl, eqCompDescr):
     convertedEqCompDescr = int(eqCompDescr) >> 8 & 65535
-    skillID = next((abilityID for abilityID, skillInfo in epicMetaGameCtrl.getSkillInformation().iteritems() if convertedEqCompDescr in (lvl.eqID for lvl in skillInfo.levels.itervalues())), 0)
+    skillID = next((abilityID for abilityID, skillInfo in epicMetaGameCtrl.getAllSkillsInformation().iteritems() if convertedEqCompDescr in (lvl.eqID for lvl in skillInfo.levels.itervalues())), 0)
     if skillID == 0:
         LOG_ERROR('Could not find the epic skill corresponding to the given eqCompDescr: ' + str(eqCompDescr))
     return skillID

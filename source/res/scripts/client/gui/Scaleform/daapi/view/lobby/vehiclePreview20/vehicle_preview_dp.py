@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/vehiclePreview20/vehicle_preview_dp.py
 import logging
 import nations
+from gui.Scaleform import MENU
 from gui.Scaleform.genConsts.STORE_CONSTANTS import STORE_CONSTANTS
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
@@ -13,8 +14,10 @@ from gui.shared.gui_items.items_actions import factory
 from gui.shared.money import Money, Currency, MONEY_UNDEFINED
 from gui.shared.utils.functions import makeTooltip
 from helpers import dependency, func_utils
+from helpers.i18n import makeString as _ms
+from helpers.time_utils import getTillTimeString
 from skeletons.gui.shared import IItemsCache
-from web_client_api.common import CompensationType
+from web_client_api.common import CompensationType, ItemPackTypeGroup
 from items_kit_helper import getCompensateItemsCount, getDataOneVehicle, getDataMultiVehicles, collapseItemsPack
 from gui import GUI_NATIONS_ORDER_INDEX_REVERSED
 _logger = logging.getLogger(__name__)
@@ -39,6 +42,31 @@ def _createVehicleVO(rawItem, itemsCache):
      'hasCompensation': getCompensateItemsCount(rawItem, itemsCache) > 0,
      'level': RES_ICONS.getLevelIcon(vehicle.level),
      'tankType': Vehicle.getTypeSmallIconPath(vehicle.type, vehicle.isElite)}
+
+
+def _createOfferVO(offer, setActive=False):
+    return {'id': offer.id,
+     'label': offer.label,
+     'active': setActive,
+     'tooltipData': makeTooltip(header=offer.name, body=_ms(**_getRentTooltipData(offer)))}
+
+
+def _getRentTooltipData(offer):
+    rents = offer.rent
+    if rents:
+        seasons = [ rent['season'] for rent in rents if rent.get('season') ]
+        cycles = [ rent['cycle'] for rent in rents if rent.get('cycle') ]
+        cyclesLeft, timeLeft = offer.left
+        if seasons or len(cycles) > 1:
+            key = VEHICLE_PREVIEW.BUYINGPANEL_OFFER_RENT_FRONTLINE_TOOLTIP_BODY_CYCLESLEFT
+            value = str(cyclesLeft)
+        else:
+            key = VEHICLE_PREVIEW.BUYINGPANEL_OFFER_RENT_FRONTLINE_TOOLTIP_BODY_TIMELEFT
+            value = getTillTimeString(timeLeft, MENU.TIME_TIMEVALUE)
+        return {'key': key,
+         'value': text_styles.stats(value)}
+    else:
+        return None
 
 
 def _vehicleComparisonKey(vehicle):
@@ -115,24 +143,58 @@ class DefaultVehPreviewDataProvider(IVehPreviewDataProvider):
          'compensation': compensationData if compensationData is not None else {},
          'showCannotResearchWarning': False}
 
+    def getOffersBuyingPanelData(self, data):
+        isAction = data.action is not None
+        return {'setTitle': data.title,
+         'uniqueVehicleTitle': '',
+         'buyingLabel': '',
+         'vehicleId': 0,
+         'isCanTrade': False,
+         'isBuyingAvailable': True,
+         'isMoneyEnough': data.enabled,
+         'buyButtonEnabled': data.enabled,
+         'buyButtonLabel': data.label,
+         'buyButtonTooltip': data.tooltip,
+         'price': data.price,
+         'showGlow': True,
+         'showAction': isAction,
+         'actionTooltipType': TOOLTIPS_CONSTANTS.COMPLEX if isAction else None,
+         'actionData': None,
+         'actionTooltip': data.action,
+         'hasCompensation': False,
+         'compensation': {},
+         'showCannotResearchWarning': False}
+
+    def getOffersData(self, offers, activeID):
+        return [ _createOfferVO(offer, offer.id == activeID) for offer in offers ]
+
+    @staticmethod
+    def separateItemsPack(packItems):
+        ordinaryItems = []
+        vehiclesItems = []
+        if packItems:
+            for item in packItems:
+                if item.type in ItemPackTypeGroup.VEHICLE:
+                    vehiclesItems.append(item)
+                ordinaryItems.append(item)
+
+        return (vehiclesItems, ordinaryItems)
+
     def getItemsPackData(self, vehicle, items, vehicleItems):
         vehiclesCount = len(vehicleItems)
         if vehiclesCount == 0:
             _logger.error('No any vehicle in the pack.')
-            return ([], [])
+            return ([], [], [])
+        collapsedItemsVOs = getDataMultiVehicles(items, vehicle) if items else []
+        if vehiclesCount == 1:
+            vehiclesVOs = []
+            itemsVOs = getDataOneVehicle(items, vehicle, vehicleItems[0].groupID)
         else:
-            if vehiclesCount == 1:
-                vehiclesVOs = []
-                itemsVOs = getDataOneVehicle(items, vehicle, vehicleItems[0].groupID)
-            else:
-                getVehicle = self.itemsCache.items.getStockVehicle
-                vehicleItems = sorted(vehicleItems, key=lambda veh: _vehicleComparisonKey(getVehicle(veh.id, useInventory=True)), reverse=True)
-                vehiclesVOs = [ _createVehicleVO(packedVeh, self.itemsCache) for packedVeh in vehicleItems ]
-                if items:
-                    itemsVOs = getDataMultiVehicles(items, vehicle)
-                else:
-                    itemsVOs = None
-            return (vehiclesVOs, itemsVOs)
+            getVehicle = self.itemsCache.items.getStockVehicle
+            vehicleItems = sorted(vehicleItems, key=lambda veh: _vehicleComparisonKey(getVehicle(veh.id, useInventory=True)), reverse=True)
+            vehiclesVOs = [ _createVehicleVO(packedVeh, self.itemsCache) for packedVeh in vehicleItems ]
+            itemsVOs = collapsedItemsVOs
+        return (vehiclesVOs, itemsVOs, collapsedItemsVOs)
 
     def __getCompensationData(self, itemsPack):
         compensationMoney = MONEY_UNDEFINED

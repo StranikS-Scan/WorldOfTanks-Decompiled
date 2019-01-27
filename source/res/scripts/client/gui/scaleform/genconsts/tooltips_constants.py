@@ -40,9 +40,6 @@ class TOOLTIPS_CONSTANTS(object):
     HANGAR_SHELL = 'hangarShell'
     COMPARE_SHELL = 'compareShell'
     AWARD_SHELL = 'awardShell'
-    REF_SYS_AWARDS = 'refSysAwards'
-    REF_SYS_DESCRIPTION = 'refSysDescription'
-    REF_SYS_XP_MULTIPLIER = 'refSysXPMultiplier'
     SHOP_MODULE = 'shopModule'
     SHOP_BATTLE_BOOSTER = 'shopBattleBooster'
     AWARD_MODULE = 'awardModule'
@@ -52,8 +49,11 @@ class TOOLTIPS_CONSTANTS(object):
     SHOP_20_BOOSTER = 'shop20Booster'
     SHOP_20_BATTLE_BOOSTER = 'shop20BattleBooster'
     SHOP_20_CUSTOMIZATION_ITEM = 'shop20CustomizationItem'
+    SHOP_20_ACHIEVEMENT = 'shop20Achievement'
+    SHOP_20_BADGE = 'shop20Badge'
     TANKMAN_SKILL = 'tankmanSkill'
     TANKMAN_NEW_SKILL = 'tankmanNewSkill'
+    PREVIEW_CREW_SKILL = 'previewCrewSkill'
     EFFICIENCY_PARAM = 'efficiencyParam'
     RSS_NEWS = 'rssNews'
     MAP = 'map'
@@ -137,6 +137,7 @@ class TOOLTIPS_CONSTANTS(object):
     VEHICLE_CMP_PARAMETERS = 'vehicleCmpParameters'
     BASE_VEHICLE_PARAMETERS = 'baseVehicleParameters'
     VEHICLE_PREVIEW_CREW_MEMBER = 'vehiclePreviewCrewMember'
+    VEHICLE_PREVIEW_20_CREW_MEMBER = 'vehiclePreview20CrewMember'
     TRADE_IN = 'tradeIn'
     TRADE_IN_PRICE = 'ToolTipTradeInPriceUI'
     SELECTED_VEHICLE_TRADEOFF = 'selectedVehicleTradeOff'
@@ -171,7 +172,6 @@ class TOOLTIPS_CONSTANTS(object):
     EPIC_SKILL_SLOT_INFO = 'epicSkillSlotInfo'
     EPIC_META_LEVEL_PROGRESS_INFO = 'epicMetaLevelProgressInfo'
     EPIC_SELECTOR_INFO = 'epicSelectorInfo'
-    EPIC_SELECTOR_UNAVAILABLE_INFO = 'epicSelectorUnavailableInfo'
     EPIC_PRESTIGE_PROGRESS_BLOCK_INFO = 'epicPrestigeProgressBlockInfo'
     BLOCKS_DEFAULT_UI = 'ToolTipInblocksDefaultUI'
     TANKMEN_UI = 'ToolTipTankmenUI'
@@ -194,12 +194,9 @@ class TOOLTIPS_CONSTANTS(object):
     SORTIE_DIVISION_UI = 'ToolTipSortieDivisionUI'
     MAP_UI = 'ToolTipMapUI'
     COMPLEX_UI = 'ToolTipComplexUI'
-    CLAN_INFO_UI = 'ToolTipClanInfoUI'
     REF_SYS_DIRECTS_UI = 'ToolTipRefSysDirectsUI'
     REF_SYS_RESERVES_UI = 'ToolTipRefSysReservesUI'
-    REF_SYS_AWARDS_UI = 'ToolTipRefSysAwardsUI'
-    REF_SYS_DESCRIPTION_UI = 'ToolTipRefSysDescriptionUI'
-    REF_SYS_XP_MULTIPLIER_UI = 'ToolTipRefSysXPMultiplierUI'
+    CLAN_INFO_UI = 'ToolTipClanInfoUI'
     SETTINGS_BUTTON_UI = 'ToolTipInblocksDefaultUI'
     CUSTOMIZATION_ITEM_UI = 'ToolTipCustomizationItemUI'
     TECH_CUSTOMIZATION_ITEM_UI = 'ToolTipInblocksDefaultUI'
@@ -263,7 +260,9 @@ class TOOLTIPS_CONSTANTS(object):
      MARKS_ON_GUN_ACHIEVEMENT,
      GLOBAL_RATING,
      MARK_OF_MASTERY,
-     ACHIEVEMENT_ATTR]
+     ACHIEVEMENT_ATTR,
+     SHOP_20_ACHIEVEMENT,
+     SHOP_20_BADGE]
     BOOSTERS_SET = [INVENTORY_BATTLE_BOOSTER,
      AWARD_BATTLE_BOOSTER,
      BATTLE_BOOSTER,
@@ -281,9 +280,6 @@ class TOOLTIPS_CONSTANTS(object):
      MAP,
      MAP_SMALL,
      CLAN_COMMON_INFO,
-     REF_SYS_AWARDS,
-     REF_SYS_DESCRIPTION,
-     REF_SYS_XP_MULTIPLIER,
      ACTION_PRICE,
      ACTION_XP,
      QUESTS_VEHICLE_BONUSES,
@@ -318,7 +314,6 @@ class TOOLTIPS_CONSTANTS(object):
     ELEN_SET = [EVENT_QUESTS_PREVIEW, EVENT_BOARDS_BADGE, EVENT_BOARDS_BADGES_GROUP]
     EPIC_BATTLE_SET = [EPIC_SKILL_INFO,
      EPIC_SELECTOR_INFO,
-     EPIC_SELECTOR_UNAVAILABLE_INFO,
      EPIC_SKILL_SLOT_INFO,
      EPIC_META_LEVEL_PROGRESS_INFO,
      EPIC_PRESTIGE_PROGRESS_BLOCK_INFO]
@@ -348,7 +343,8 @@ class TOOLTIPS_CONSTANTS(object):
      TANKMAN_SKILL,
      TANKMAN_NEW_SKILL,
      TANKMAN_SKILL_EXTENDED,
-     TANKMAN_NOT_RECRUITED]
+     TANKMAN_NOT_RECRUITED,
+     PREVIEW_CREW_SKILL]
     RANKED_SET = [RANKED_BATTLES_RANK,
      RANKED_STEP,
      RANKED_CALENDAR_DAY_INFO,
@@ -392,6 +388,7 @@ class TOOLTIPS_CONSTANTS(object):
      VEHICLE_PREVIEW_AVG_PARAMETERS,
      VEHICLE_PREVIEW_ADVANCED_PARAMETERS,
      VEHICLE_PREVIEW_CREW_MEMBER,
+     VEHICLE_PREVIEW_20_CREW_MEMBER,
      TECHTREE_VEHICLE_ANNOUNCEMENT]
     VEHICLES_ITEMS_SET = [INVENTORY_MODULE,
      SHOP_MODULE,

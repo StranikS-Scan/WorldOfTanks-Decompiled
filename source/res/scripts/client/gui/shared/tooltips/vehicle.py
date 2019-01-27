@@ -14,11 +14,12 @@ from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.shared.formatters import text_styles, moneyWithIcon, icons
 from gui.shared.formatters.time_formatters import RentLeftFormatter, getTimeLeftInfo
 from gui.shared.gui_items import GUI_ITEM_ECONOMY_CODE
-from gui.shared.gui_items.Tankman import Tankman
+from gui.shared.gui_items.Tankman import Tankman, getRoleUserName
 from gui.shared.gui_items.Vehicle import VEHICLE_CLASS_NAME
 from gui.shared.gui_items.Vehicle import Vehicle, getBattlesLeft, getTypeBigIconPath
 from gui.shared.gui_items.fitting_item import RentalInfoProvider
-from gui.shared.items_parameters import RELATIVE_PARAMS, formatters as param_formatter, params_helper, bonus_helper
+from gui.shared.items_parameters import RELATIVE_PARAMS, params_helper, bonus_helper
+from gui.shared.items_parameters import formatters as param_formatter
 from gui.shared.items_parameters.bonus_helper import isSituationalBonus
 from gui.shared.items_parameters.comparator import PARAM_STATE
 from gui.shared.items_parameters.formatters import isRelativeParameter, SITUATIONAL_SCHEME, EXTRACTED_BONUS_SCHEME
@@ -90,7 +91,10 @@ class VehicleInfoTooltipData(BlocksTooltipData):
         telecomBlock = TelecomBlockConstructor(vehicle, valueWidth, leftPadding, rightPadding).construct()
         if telecomBlock:
             items.append(formatters.packBuildUpBlockData(telecomBlock, padding=leftRightPadding))
-        priceBlock, invalidWidth = PriceBlockConstructor(vehicle, statsConfig, self.context.getParams(), valueWidth, leftPadding, rightPadding).construct()
+        frontlineBlock = FrontlineRentBlockConstructor(vehicle, statsConfig, self.context.getParams(), valueWidth, leftPadding, rightPadding).construct()
+        if frontlineBlock:
+            items.append(formatters.packBuildUpBlockData(frontlineBlock, gap=-4, padding=formatters.packPadding(left=leftPadding, right=rightPadding, top=-20, bottom=-20)))
+        priceBlock, invalidWidth = PriceBlockConstructor(vehicle, statsConfig, self.context.getParams(), valueWidth, leftPadding, rightPadding, not frontlineBlock).construct()
         shouldBeCut = self.calledBy and self.calledBy in _SHORTEN_TOOLTIP_CASES
         if priceBlock and not shouldBeCut:
             self._setWidth(_TOOLTIP_MAX_WIDTH if invalidWidth else _TOOLTIP_MIN_WIDTH)
@@ -341,7 +345,7 @@ class VehiclePreviewCrewMemberTooltipData(BlocksTooltipData):
 
     def _packBlocks(self, role):
         blocks = []
-        bodyStr = '%s/%s' % (TOOLTIPS.VEHICLEPREVIEW_CREW, role)
+        bodyStr = '{}/{}'.format(TOOLTIPS.VEHICLEPREVIEW_CREW, role)
         crewParams = {k:text_styles.neutral(v) for k, v in _CREW_TOOLTIP_PARAMS[role].iteritems()}
         blocks.append(formatters.packTitleDescBlock(text_styles.highTitle(ITEM_TYPES.tankman_roles(role)), text_styles.main(_ms(bodyStr, **crewParams))))
         vehicle = self.context.getVehicle()
@@ -354,6 +358,33 @@ class VehiclePreviewCrewMemberTooltipData(BlocksTooltipData):
                     blocks.append(formatters.packTextBlockData(text_styles.main(_ms(TOOLTIPS.VEHICLEPREVIEW_CREW_ADDITIONALROLES, roles=rolesStr))))
 
         return blocks
+
+
+class VehiclePreview20CrewMemberTooltipData(VehiclePreviewCrewMemberTooltipData):
+
+    def __init__(self, context):
+        super(VehiclePreview20CrewMemberTooltipData, self).__init__(context)
+        self._setWidth(295)
+
+    def _packBlocks(self, role, name, vehicleName, icon, description, skillsItems, *args, **kwargs):
+        blocks = []
+        defaultBlocks = super(VehiclePreview20CrewMemberTooltipData, self)._packBlocks(role)
+        roleStr = getRoleUserName(role)
+        if name and icon:
+            bodyStr = '{}, {}'.format(roleStr, vehicleName)
+            blocks.append(formatters.packImageTextBlockData(title=text_styles.highTitle(name), desc=text_styles.main(bodyStr)))
+            blocks.append(formatters.packImageBlockData(img=icon, padding=formatters.packPadding(left=63)))
+            blocks.append(formatters.packSeparatorBlockData())
+            if description:
+                blocks.append(formatters.packTextBlockData(text_styles.main(description), useHtml=True, padding=formatters.packPadding(top=20, bottom=7)))
+        else:
+            blocks.extend(defaultBlocks)
+        if skillsItems:
+            blocks.append(formatters.packTextBlockData(text_styles.middleTitle(TOOLTIPS.VEHICLEPREVIEW_TANKMAN_SKILLSTITLE), padding=formatters.packPadding(top=10, bottom=10)))
+            for skillItem in skillsItems:
+                blocks.append(formatters.packImageTextBlockData(img=skillItem[0], title=text_styles.main(skillItem[1]), txtPadding=formatters.packPadding(left=10), titleAtMiddle=True))
+
+        return [formatters.packBuildUpBlockData(blocks, padding=formatters.packPadding(bottom=10))]
 
 
 class VehicleTradeInTooltipData(ToolTipBaseData):
@@ -462,13 +493,14 @@ class TelecomBlockConstructor(VehicleTooltipBlockConstructor):
 
 class PriceBlockConstructor(VehicleTooltipBlockConstructor):
 
-    def __init__(self, vehicle, configuration, params, valueWidth, leftPadding, rightPadding):
+    def __init__(self, vehicle, configuration, params, valueWidth, leftPadding, rightPadding, showRent=True):
         super(PriceBlockConstructor, self).__init__(vehicle, configuration, leftPadding, rightPadding)
         self._valueWidth = valueWidth
         self._rentExpiryTime = params.get('rentExpiryTime')
         self._rentBattlesLeft = params.get('rentBattlesLeft')
         self._rentWinsLeft = params.get('rentWinsLeft')
         self._rentSeason = params.get('rentSeason')
+        self._showRent = showRent
 
     def construct(self):
         xp = self.configuration.xp
@@ -559,7 +591,7 @@ class PriceBlockConstructor(VehicleTooltipBlockConstructor):
                     block.append(makePriceBlock(price, CURRENCY_SETTINGS.getRentSetting(currency), neededValue, oldPrice, actionPrc, valueWidth=self._valueWidth))
                     if not self.vehicle.isRented or self.vehicle.rentalIsOver:
                         block.append(formatters.packTextParameterWithIconBlockData(name=text_styles.main('#tooltips:vehicle/rentAvailable'), value='', icon=ICON_TEXT_FRAMES.RENTALS, valueWidth=self._valueWidth, padding=paddings))
-            if rentals and not self.vehicle.isPremiumIGR:
+            if rentals and not self.vehicle.isPremiumIGR and self._showRent:
                 if futureRentals:
                     rentLeftKey = '#tooltips:vehicle/rentLeftFuture/%s'
                     rentInfo = RentalInfoProvider(time=self._rentExpiryTime, battles=self._rentBattlesLeft, wins=self._rentWinsLeft, seasonRent=self._rentSeason, isRented=True)
@@ -576,6 +608,38 @@ class PriceBlockConstructor(VehicleTooltipBlockConstructor):
             notEnoughMoney = neededValue > 0
             hasAction = actionPrc > 0
             return (block, notEnoughMoney or hasAction)
+
+
+class FrontlineRentBlockConstructor(VehicleTooltipBlockConstructor):
+
+    def __init__(self, vehicle, configuration, params, valueWidth, leftPadding, rightPadding):
+        super(FrontlineRentBlockConstructor, self).__init__(vehicle, configuration, leftPadding, rightPadding)
+        self._valueWidth = valueWidth
+        self._rentExpiryTime = params.get('rentExpiryTime')
+        self._rentBattlesLeft = params.get('rentBattlesLeft')
+        self._rentWinsLeft = params.get('rentWinsLeft')
+        self._rentSeason = params.get('rentSeason')
+
+    def construct(self):
+        block = []
+        rentals = self.configuration.rentals
+        futureRentals = self.configuration.futureRentals
+        paddings = formatters.packPadding(left=-5)
+        if rentals and not self.vehicle.isPremiumIGR:
+            if futureRentals:
+                rentLeftKey = '#tooltips:vehicle/rentLeftFuture/%s'
+                rentInfo = RentalInfoProvider(time=self._rentExpiryTime, battles=self._rentBattlesLeft, wins=self._rentWinsLeft, seasonRent=self._rentSeason, isRented=True)
+            else:
+                rentLeftKey = '#tooltips:vehicle/rentLeft/%s'
+                rentInfo = self.vehicle.rentInfo
+            if rentInfo.getActiveSeasonRent() is not None:
+                rentFormatter = RentLeftFormatter(rentInfo)
+                rentLeftInfo = rentFormatter.getRentLeftStr(rentLeftKey)
+                block.append(formatters.packTextParameterBlockData(name=text_styles.main(TOOLTIPS.VEHICLE_DEAL_EPIC_MAIN), value='', valueWidth=self._valueWidth, padding=paddings))
+                if rentLeftInfo:
+                    block.append(formatters.packTextParameterWithIconBlockData(name=text_styles.neutral(rentLeftInfo), value='', icon=ICON_TEXT_FRAMES.RENTALS, valueWidth=self._valueWidth, padding=paddings))
+                return block
+        return
 
 
 class CommonStatsBlockConstructor(VehicleTooltipBlockConstructor):

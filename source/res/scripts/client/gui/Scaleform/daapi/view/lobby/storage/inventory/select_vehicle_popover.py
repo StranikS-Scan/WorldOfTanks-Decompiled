@@ -59,7 +59,7 @@ class VehicleSelectPopoverStorage(StorageVehicleSelectPopoverMeta):
 
 
 class VehicleSelectPopover(VehicleSelectPopoverStorage, VehicleSelectorBase):
-    itemsCache = dependency.descriptor(IItemsCache)
+    _itemsCache = dependency.descriptor(IItemsCache)
 
     def __init__(self, ctx=None):
         super(VehicleSelectPopover, self).__init__(ctx)
@@ -72,7 +72,7 @@ class VehicleSelectPopover(VehicleSelectPopoverStorage, VehicleSelectorBase):
     def updateData(self):
         criteria = REQ_CRITERIA.INVENTORY
         criteria |= REQ_CRITERIA.VEHICLE.NAME_VEHICLE(self._searchStr)
-        allVehicles = self.itemsCache.items.getVehicles(criteria)
+        allVehicles = self._itemsCache.items.getVehicles(criteria)
         vehicles = self._updateData(allVehicles)
         self._vehDP.buildList(vehicles)
         if self._vehDP.collection:

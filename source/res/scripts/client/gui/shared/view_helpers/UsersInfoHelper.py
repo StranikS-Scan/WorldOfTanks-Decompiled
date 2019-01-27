@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/view_helpers/UsersInfoHelper.py
 from collections import defaultdict
+from Event import Event
 from debug_utils import LOG_DEBUG
 from gui.shared import formatters as shared_fmts
 from gui.shared.view_helpers.UsersInfoController import UsersInfoController
@@ -19,6 +20,7 @@ class UsersInfoHelper(object):
     def __init__(self):
         self._invalid = defaultdict(set)
         self.__callback = None
+        self.onNamesReceived = Event()
         return
 
     def __del__(self):
@@ -35,7 +37,7 @@ class UsersInfoHelper(object):
         cls._rqCtrl.fini()
 
     def onUserNamesReceived(self, names):
-        pass
+        self.onNamesReceived()
 
     def onUserRatingsReceived(self, ratings):
         pass

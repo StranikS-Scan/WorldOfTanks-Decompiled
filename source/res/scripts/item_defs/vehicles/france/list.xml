@@ -270,7 +270,7 @@
     <shortUserString>	#france_vehicles:S_35CA_short	</shortUserString>
     <description>	#france_vehicles:S_35CA_descr	</description>
     <price>	403000	</price>
-    <tags>	AT-SPG lightAT-SPG wetCombatPack_class1_user mediumCaliberTankRammer_user enhancedSprings_user HD	</tags>
+    <tags>	AT-SPG lightAT-SPG AT-SPG2 wetCombatPack_class1_user mediumCaliberTankRammer_user enhancedSprings_user HD	</tags>
     <level>	5	</level>
   </F33_S_35CA>
   <F35_AMX_AC_Mle1946>
@@ -488,7 +488,7 @@
     <shortUserString>	#france_vehicles:F107_Hotchkiss_EBR_short	</shortUserString>
     <description>	#france_vehicles:F107_Hotchkiss_EBR_descr	</description>
     <price>	1380000	</price>
-    <tags>	lightTank wheeledVehicle burnout scout improvedVentilation_class1_user mediumCaliberTankRammer_user wetCombatPack_class1_user enhancedSuspension_wheeled_user aimingStabilizer_Mk1_user noStereoscope HD	</tags>
+    <tags>	lightTank wheeledVehicle scout improvedVentilation_class1_user mediumCaliberTankRammer_user wetCombatPack_class1_user enhancedSuspension_wheeled_user aimingStabilizer_Mk1_user noStereoscope HD	</tags>
     <level>	7	</level>
   </F107_Hotchkiss_EBR>
   <F110_Lynx_6x6>
@@ -497,7 +497,7 @@
     <shortUserString>	#france_vehicles:F110_Lynx_6x6_short	</shortUserString>
     <description>	#france_vehicles:F110_Lynx_6x6_descr	</description>
     <price>	2350000	</price>
-    <tags>	lightTank wheeledVehicle burnout scout improvedVentilation_class1_user mediumCaliberTankRammer_user wetCombatPack_class1_user enhancedSuspension_wheeled_user aimingStabilizer_Mk1_user noStereoscope siegeMode HD	</tags>
+    <tags>	lightTank wheeledVehicle scout improvedVentilation_class1_user mediumCaliberTankRammer_user wetCombatPack_class1_user enhancedSuspension_wheeled_user aimingStabilizer_Mk1_user noStereoscope siegeMode HD	</tags>
     <level>	8	</level>
   </F110_Lynx_6x6>
   <F100_Panhard_EBR_90>
@@ -506,7 +506,7 @@
     <shortUserString>	#france_vehicles:F100_Panhard_EBR_90_short	</shortUserString>
     <description>	#france_vehicles:F100_Panhard_EBR_90_descr	</description>
     <price>	3400000	</price>
-    <tags>	lightTank wheeledVehicle burnout scout improvedVentilation_class1_user mediumCaliberTankRammer_user wetCombatPack_class1_user enhancedSuspension_wheeled_user aimingStabilizer_Mk1_user noStereoscope siegeMode HD	</tags>
+    <tags>	lightTank wheeledVehicle scout improvedVentilation_class1_user mediumCaliberTankRammer_user wetCombatPack_class1_user enhancedSuspension_wheeled_user aimingStabilizer_Mk1_user noStereoscope siegeMode HD	</tags>
     <level>	9	</level>
   </F100_Panhard_EBR_90>
   <F108_Panhard_EBR_105>
@@ -515,7 +515,7 @@
     <shortUserString>	#france_vehicles:F108_Panhard_EBR_105_short	</shortUserString>
     <description>	#france_vehicles:F108_Panhard_EBR_105_descr	</description>
     <price>	6100000	</price>
-    <tags>	lightTank wheeledVehicle burnout scout improvedVentilation_class1_user mediumCaliberTankRammer_user wetCombatPack_class1_user enhancedSuspension_wheeled_user aimingStabilizer_Mk1_user noStereoscope siegeMode HD	</tags>
+    <tags>	lightTank wheeledVehicle scout improvedVentilation_class1_user mediumCaliberTankRammer_user wetCombatPack_class1_user enhancedSuspension_wheeled_user aimingStabilizer_Mk1_user noStereoscope siegeMode HD	</tags>
     <level>	10	</level>
   </F108_Panhard_EBR_105>
   <F111_AM39_Gendron_Somua>
@@ -541,7 +541,7 @@
     <price>	100	  <gold></gold>
     </price>
     <notInShop>	true	</notInShop>
-    <tags>	lightTank wheeledVehicle burnout scout improvedVentilation_class1_user wetCombatPack_class1_user enhancedSuspension_wheeled_user aimingStabilizer_Mk1_user noStereoscope siegeMode HD secret	</tags>
+    <tags>	lightTank wheeledVehicle scout improvedVentilation_class1_user wetCombatPack_class1_user enhancedSuspension_wheeled_user aimingStabilizer_Mk1_user noStereoscope siegeMode HD secret	</tags>
     <level>	8	</level>
   </F106_Panhard_EBR_75_Mle1954>
   <F97_ELC_EVEN_90>
@@ -620,6 +620,20 @@
     <tags>	heavyTank heavyTank1 improvedVentilation_class3_user aimingStabilizer_Mk2_user mediumCaliberTankRammer_user wetCombatPack_class2_user enhancedTorsions5t_user HD	</tags>
     <level>	8	</level>
   </F74_AMX_M4_1949>
+  <F74_AMX_M4_1949_FL>
+    <id>	255	</id>
+    <userString>	#france_vehicles:F74_AMX_M4_1949_FL	</userString>
+    <shortUserString>	#france_vehicles:F74_AMX_M4_1949_FL_short	</shortUserString>
+    <description>	#france_vehicles:F74_AMX_M4_1949_descr	</description>
+    <shortDescriptionSpecial>	#france_vehicles:F74_AMX_M4_1949_short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#france_vehicles:F74_AMX_M4_1949_long_special	</longDescriptionSpecial>
+    <price>	11700	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <cannotBeBought>	true	</cannotBeBought>
+    <tags>	heavyTank heavyTank1 improvedVentilation_class3_user aimingStabilizer_Mk2_user mediumCaliberTankRammer_user wetCombatPack_class2_user enhancedTorsions5t_user HD epic_battles	</tags>
+    <level>	8	</level>
+  </F74_AMX_M4_1949_FL>
   <F73_M4A1_Revalorise>
     <id>	246	</id>
     <userString>	#france_vehicles:F73_M4A1_Revalorise	</userString>
@@ -632,6 +646,20 @@
     <tags>	mediumTank mediumTank1 improvedVentilation_class2_user mediumCaliberTankRammer_user wetCombatPack_class1_user enhancedVertical_springs_class2_user aimingStabilizer_Mk1_user HD	</tags>
     <level>	8	</level>
   </F73_M4A1_Revalorise>
+  <F73_M4A1_Revalorise_FL>
+    <id>	252	</id>
+    <userString>	#france_vehicles:F73_M4A1_Revalorise_FL	</userString>
+    <shortUserString>	#france_vehicles:F73_M4A1_Revalorise_FL_short	</shortUserString>
+    <description>	#france_vehicles:F73_M4A1_Revalorise_descr	</description>
+    <shortDescriptionSpecial>	#france_vehicles:F73_M4A1_Revalorise_short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#france_vehicles:F73_M4A1_Revalorise_long_special	</longDescriptionSpecial>
+    <price>	7200	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <cannotBeBought>	true	</cannotBeBought>
+    <tags>	mediumTank mediumTank1 improvedVentilation_class2_user mediumCaliberTankRammer_user wetCombatPack_class1_user enhancedVertical_springs_class2_user aimingStabilizer_Mk1_user HD epic_battles	</tags>
+    <level>	8	</level>
+  </F73_M4A1_Revalorise_FL>
   <F69_AMX13_57_100_GrandFinal>
     <id>	247	</id>
     <userString>	#france_vehicles:F69_AMX13_57_100_GrandFinal	</userString>
@@ -734,7 +762,7 @@
     <shortUserString>	#igr_vehicles:S_35CA_IGR_short	</shortUserString>
     <description>	#igr_vehicles:S_35CA_IGR_descr	</description>
     <price>	1	</price>
-    <tags>	AT-SPG lightAT-SPG wetCombatPack_class1_user mediumCaliberTankRammer_user enhancedSprings_user premiumIGR secret	</tags>
+    <tags>	AT-SPG lightAT-SPG AT-SPG2 wetCombatPack_class1_user mediumCaliberTankRammer_user enhancedSprings_user premiumIGR secret	</tags>
     <level>	5	</level>
   </F33_S_35CA_IGR>
   <F62_ELC_AMX_IGR>

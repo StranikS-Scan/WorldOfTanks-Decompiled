@@ -2,7 +2,7 @@
 # Embedded file name: scripts/client/gui/wgnc/gui_items.py
 from collections import namedtuple
 from functools import partial
-from debug_utils import LOG_ERROR, LOG_WARNING, LOG_DEBUG
+from debug_utils import LOG_WARNING, LOG_DEBUG
 from gui.promo.promo_logger import PromoLogSourceType
 from gui.shared import g_eventBus, EVENT_BUS_SCOPE
 from gui.shared.events import WGNCShowItemEvent
@@ -13,7 +13,7 @@ from gui.wgnc.events import g_wgncEvents
 from gui.wgnc.settings import WGNC_GUI_TYPE, WGNC_GUI_INVALID_SEQS, convertToLocalIcon, convertToLocalBG
 from helpers import dependency
 from ids_generators import SequenceIDGenerator
-from skeletons.gui.game_control import IRefSystemController, IPromoController
+from skeletons.gui.game_control import IPromoController
 _ButtonData = namedtuple('_ButtonData', ['label',
  'action',
  'visible',
@@ -149,53 +149,6 @@ class WindowItem(_GUIItem):
     def show(self, notID):
         LOG_DEBUG('WindowItem.show', notID, self._name)
         g_eventBus.handleEvent(WGNCShowItemEvent(notID, self._name, WGNCShowItemEvent.SHOW_BASIC_WINDOW), EVENT_BUS_SCOPE.LOBBY)
-
-
-@ReprInjector.withParent(('_count', 'count'))
-class ReferrerItem(WindowItem):
-    __slots__ = ('_count',)
-    refSystem = dependency.descriptor(IRefSystemController)
-
-    def __init__(self, name, count=0, hidden=True):
-        super(ReferrerItem, self).__init__(name, '', '', None, False, hidden)
-        self._count = count
-        return
-
-    def getType(self):
-        return WGNC_GUI_TYPE.COMPLEX_WINDOW
-
-    def getInvitationsCount(self):
-        return self._count
-
-    def show(self, notID):
-        if self.refSystem:
-            self.refSystem.showReferrerIntroWindow(self._count)
-        else:
-            LOG_ERROR('Referral system controller is not found')
-
-
-@ReprInjector.withParent(('_referrer', 'referrer'), ('_isNewbie', 'isNewbie'))
-class ReferralItem(WindowItem):
-    __slots__ = ('_referrer', '_isNewbie')
-    refSystem = dependency.descriptor(IRefSystemController)
-
-    def __init__(self, name, referrer, isNewbie=False, hidden=True):
-        super(ReferralItem, self).__init__(name, '', '', None, False, hidden)
-        self._referrer = referrer
-        self._isNewbie = isNewbie
-        return
-
-    def getType(self):
-        return WGNC_GUI_TYPE.COMPLEX_WINDOW
-
-    def getReferrer(self):
-        return self._referrer
-
-    def show(self, notID):
-        if self.refSystem:
-            self.refSystem.showReferralIntroWindow(self._referrer, self._isNewbie)
-        else:
-            LOG_ERROR('Referral system controller is not found')
 
 
 @ReprInjector.withParent()

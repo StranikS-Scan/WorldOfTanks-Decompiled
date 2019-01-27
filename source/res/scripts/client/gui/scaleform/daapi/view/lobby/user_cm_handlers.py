@@ -54,7 +54,10 @@ class USER(object):
     REQUEST_FRIENDSHIP = 'requestFriendship'
     VEHICLE_INFO = 'vehicleInfoEx'
     VEHICLE_PREVIEW = 'vehiclePreview'
+    END_REFERRAL_COMPANY = 'endReferralCompany'
 
+
+_CM_ICONS = {USER.END_REFERRAL_COMPANY: 'endReferralCompany'}
 
 class BaseUserCMHandler(AbstractContextMenuHandler, EventSystemEntity):
     itemsCache = dependency.descriptor(IItemsCache)
@@ -426,6 +429,7 @@ class CustomUserCMHandler(BaseUserCMHandler):
         super(CustomUserCMHandler, self).__init__(cmProxy, ctx=ctx)
         self.__customOptions = ctx.customItems
         self.__excludedOptions = ctx.excludedItems
+        self.__customOptionsAfterEnd = ctx.customItemsAfterEnd
         self.__optionSelected = False
         self.onSelected = Event(self._eManager)
 
@@ -438,7 +442,7 @@ class CustomUserCMHandler(BaseUserCMHandler):
     def onOptionSelect(self, optionId):
         self.__optionSelected = True
         self.onSelected(optionId)
-        if optionId not in self.__customOptions:
+        if optionId not in self.__customOptions and optionId not in self.__customOptionsAfterEnd:
             super(CustomUserCMHandler, self).onOptionSelect(optionId=optionId)
 
     def _generateOptions(self, ctx=None):
@@ -451,10 +455,16 @@ class CustomUserCMHandler(BaseUserCMHandler):
         customOptions = []
         if self.__customOptions:
             for optID, label, enabled in self.__customOptions:
-                customOptions.append(self._makeItem(optID, label, optInitData={'enabled': enabled}))
+                customOptions.append(self._makeItem(optID, label, optInitData={'enabled': enabled}, iconType=_CM_ICONS.get(optID, '')))
 
             customOptions.append(self._makeSeparator())
-        return customOptions + options
+            options = customOptions + options
+        if self.__customOptionsAfterEnd:
+            options.append(self._makeSeparator())
+            for optID, label, enabled in self.__customOptionsAfterEnd:
+                options.append(self._makeItem(optID, label, optInitData={'enabled': enabled}, iconType=_CM_ICONS.get(optID, '')))
+
+        return options
 
     def _excludeOptions(self, options):
         excludedOptions = self.__excludedOptions

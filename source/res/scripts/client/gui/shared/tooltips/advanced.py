@@ -147,7 +147,7 @@ class HangarModuleAdvanced(BaseAdvancedTooltip):
 
 class TankmanPreviewTooltipAdvanced(BaseAdvancedTooltip):
 
-    def _packBlocks(self, role):
+    def _packBlocks(self, role, *args, **kwargs):
         return self._packAdvancedBlocks(_TANKMAN_MOVIES[role], ITEM_TYPES.tankman_roles(role), role)
 
 

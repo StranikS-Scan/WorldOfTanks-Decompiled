@@ -115,7 +115,7 @@ def getItemPricesViewModel(statsMoney, *itemPrices):
                     actionPriceModel.setType(currency)
                     actionPriceModel.setIsWithAction(hasAction)
                     actionPriceModel.setPrice(BigWorld.wg_getIntegralFormat(currencyValue))
-                    defPrice = BigWorld.wg_getIntegralFormat(itemPrice.defPrice.get(currency))
+                    defPrice = BigWorld.wg_getIntegralFormat(itemPrice.defPrice.get(currency, 0))
                     actionPriceModel.setDefPrice(defPrice)
                     priceModels.append(actionPriceModel)
 

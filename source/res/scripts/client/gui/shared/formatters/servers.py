@@ -24,11 +24,12 @@ def formatPingStatus(csisStatus, isColorBlind, isSelected, pingStatus, pingValue
         colorBlindName = ''
         if isColorBlind and pingStatus == PING_STATUSES.HIGH:
             colorBlindName = '_color_blind'
-        pingStatusIcon = formatPingStatusIcon(RES_ICONS.maps_icons_pingstatus_stairs_indicator(str(pingStatus) + colorBlindName + '.png'))
+        pingStatusIcon = makePingStatusIcon(pingStatus, colorBlindName)
         return text_styles.concatStylesToSingleLine(text_styles.main(' '), formattedPing, pingStatusIcon) if useBigSize else text_styles.concatStylesToSingleLine(formattedPing, '', pingStatusIcon)
 
 
-def formatPingStatusIcon(icon):
+def makePingStatusIcon(pingStatus, colorBlindName=''):
+    icon = RES_ICONS.pingStatusIcon(str(pingStatus), colorBlindName)
     return icons.makeImageTag(icon, 14, 14, -3)
 
 

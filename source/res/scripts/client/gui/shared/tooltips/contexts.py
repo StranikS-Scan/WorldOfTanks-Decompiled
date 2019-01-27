@@ -2,9 +2,10 @@
 # Embedded file name: scripts/client/gui/shared/tooltips/contexts.py
 from collections import namedtuple
 import constants
-from constants import ARENA_GUI_TYPE
+from constants import ARENA_BONUS_TYPE, ARENA_GUI_TYPE
 import gui
 from CurrentVehicle import g_currentVehicle, g_currentPreviewVehicle
+from dossiers2.custom.records import DB_ID_TO_RECORD
 from dossiers2.ui.achievements import ACHIEVEMENT_BLOCK
 from gui.Scaleform.daapi.view.lobby.techtree.techtree_dp import g_techTreeDP
 from gui.Scaleform.daapi.view.lobby.vehicle_compare import cmp_helpers
@@ -12,7 +13,7 @@ from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.server_events import recruit_helper
 from gui.shared.formatters import text_styles
 from gui.shared.gui_items import GUI_ITEM_TYPE
-from gui.shared.gui_items.Tankman import getTankmanSkill
+from gui.shared.gui_items.Tankman import getTankmanSkill, SabatonTankmanSkill, TankmanSkill
 from gui.shared.gui_items.dossier import factories, loadDossier
 from gui.shared.items_parameters import params_helper
 from gui.shared.items_parameters.formatters import NO_BONUS_SIMPLIFIED_SCHEME
@@ -34,7 +35,7 @@ def _getCmpInitialVehicle():
 
 
 class StatsConfiguration(object):
-    __slots__ = ('vehicle', 'sellPrice', 'buyPrice', 'unlockPrice', 'inventoryCount', 'vehiclesCount', 'node', 'xp', 'dailyXP', 'minRentPrice', 'restorePrice', 'rentals', 'slotIdx', 'futureRentals', 'isAwardWindow')
+    __slots__ = ('vehicle', 'sellPrice', 'buyPrice', 'unlockPrice', 'inventoryCount', 'vehiclesCount', 'node', 'xp', 'dailyXP', 'minRentPrice', 'restorePrice', 'rentals', 'slotIdx', 'futureRentals', 'isAwardWindow', 'showBonus')
 
     def __init__(self):
         self.vehicle = None
@@ -52,6 +53,7 @@ class StatsConfiguration(object):
         self.dailyXP = True
         self.slotIdx = 0
         self.isAwardWindow = False
+        self.showBonus = True
         return
 
 
@@ -525,6 +527,16 @@ class PersonalCaseContext(ToolTipContext):
         return skill
 
 
+class PreviewCaseContext(ToolTipContext):
+    itemsCache = dependency.descriptor(IItemsCache)
+
+    def __init__(self, fieldsToExclude=None):
+        super(PreviewCaseContext, self).__init__(TOOLTIP_COMPONENT.PERSONAL_CASE, fieldsToExclude)
+
+    def buildItem(self, skillID):
+        return SabatonTankmanSkill('brotherhood') if skillID == 'sabaton_brotherhood' else TankmanSkill(skillID)
+
+
 class NewSkillContext(PersonalCaseContext):
     SKILL_MOCK = namedtuple('SkillMock', ('header', 'userName', 'shortDescription', 'description', 'count', 'level'))
 
@@ -550,7 +562,7 @@ class ProfileContext(ToolTipContext):
         self._arenaType = ARENA_GUI_TYPE.RANDOM
         return
 
-    def buildItem(self, dossierType, dossierCompDescr, block, name, isRare, isUserDossier, vehicleLevel, arenaType):
+    def buildItem(self, dossierType, dossierCompDescr, block, name, isRare, isUserDossier=True, vehicleLevel=0, arenaType=ARENA_BONUS_TYPE.REGULAR):
         dossier = loadDossier(dossierCompDescr)
         if dossierType == constants.DOSSIER_TYPE.VEHICLE:
             self._component = TOOLTIP_COMPONENT.PROFILE_VEHICLE
@@ -591,6 +603,13 @@ class BattleResultContext(ProfileContext):
         value.vehicleLevel = self._vehicleLevel
         value.arenaType = self._arenaType
         return value
+
+
+class Shop20AchievementContext(BattleResultContext):
+
+    def buildItem(self, aID, *args):
+        block, achieveName = DB_ID_TO_RECORD[aID]
+        return super(Shop20AchievementContext, self).buildItem(block, achieveName)
 
 
 class BattleResultMarksOnGunContext(BattleResultContext):
@@ -710,6 +729,9 @@ class TechCustomizationContext(ToolTipContext):
         value.sellPrice = True
         return value
 
+    def getParams(self):
+        return {'showBonus': True}
+
 
 class Shop20CustomizationContext(TechCustomizationContext):
 
@@ -718,6 +740,7 @@ class Shop20CustomizationContext(TechCustomizationContext):
         value.sellPrice = False
         value.buyPrice = False
         value.inventoryCount = True
+        value.showBonus = False
         return value
 
 
@@ -754,18 +777,23 @@ class Shop20BoosterContext(BoosterContext):
 
     def getStatsConfiguration(self, booster):
         value = super(Shop20BoosterContext, self).getStatsConfiguration(booster)
+        value.activateInfo = True
+        value.activeState = False
         value.inventoryCount = True
         return value
 
 
 class BoosterStatsConfiguration(object):
-    __slots__ = ('buyPrice', 'inventoryCount', 'quests', 'activeState')
+    __slots__ = ('buyPrice', 'inventoryCount', 'quests', 'activeState', 'effectTime', 'activateInfo', 'dueDate')
 
     def __init__(self):
         self.buyPrice = False
         self.inventoryCount = False
         self.quests = False
         self.activeState = True
+        self.effectTime = True
+        self.activateInfo = False
+        self.dueDate = False
 
 
 class HangarServerStatusContext(ToolTipContext):

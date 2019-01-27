@@ -15,6 +15,8 @@ from gui.shared import events, g_eventBus, EVENT_BUS_SCOPE
 from gui.shared.events import BootcampEvent
 from gui.Scaleform.locale.BOOTCAMP import BOOTCAMP
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
+from helpers import dependency
+from skeletons.gui.game_control import IBootcampController
 PATH_BACKGROUNDS = '../maps/icons/bootcamp/loading/{0}_{1}.png'
 PATH_BACKGROUNDS_CORE = '../maps/icons/bootcamp/loading/{0}_{1}_core.png'
 LINKAGE_BACKGROUNDS = '{0}Page{1}UI'
@@ -25,6 +27,7 @@ class INTRO_HIGHLIGHT_TYPE(object):
 
 
 class BCIntroPage(BCIntroVideoPageMeta):
+    bootcampCtrl = dependency.descriptor(IBootcampController)
 
     def __init__(self, settings):
         super(BCIntroPage, self).__init__()
@@ -36,6 +39,7 @@ class BCIntroPage(BCIntroVideoPageMeta):
         self._tutorialPages = settings.get('tutorialPages', [])
         self._autoStart = settings.get('autoStart', False)
         self._showSkipOption = settings.get('showSkipOption', True) if not BattleReplay.isPlaying() else False
+        self._isReferralEnabled = settings.get('isReferralEnabled', False)
         self._highlightingMask = 0
         self._goToBattleEvent = lambda : g_bootcampEvents.onGameplayChoice(WOT_GAMEPLAY.BOOTCAMP, WOT_GAMEPLAY.ON)
         return
@@ -50,7 +54,10 @@ class BCIntroPage(BCIntroVideoPageMeta):
             self._setHighlighting(INTRO_HIGHLIGHT_TYPE.START_BUTTON, False)
 
     def skipBootcamp(self):
-        g_bootcampEvents.onGameplayChoice(WOT_GAMEPLAY.BOOTCAMP, WOT_GAMEPLAY.OFF)
+        if self.bootcampCtrl.isInBootcampAccount():
+            g_bootcampEvents.onGameplayChoice(WOT_GAMEPLAY.BOOTCAMP, WOT_GAMEPLAY.OFF)
+        else:
+            self.bootcampCtrl.runBootcamp()
 
     def handleError(self, data):
         self._onFinish()
@@ -98,7 +105,10 @@ class BCIntroPage(BCIntroVideoPageMeta):
 
         pageCount = len(listSmall)
         label = BOOTCAMP.BTN_TUTORIAL_START if self._showSkipOption and self._lessonNumber == 0 else BOOTCAMP.BTN_CONTINUE_PREBATTLE
-        self.as_playVideoS({'showTutorialPages': pageCount > 0,
+        self.as_playVideoS({'isReferralEnabled': self._isReferralEnabled,
+         'isBootcampCloseEnabled': self._isReferralEnabled,
+         'referralDescription': BOOTCAMP.WELLCOME_BOOTCAMP_REFERRAL,
+         'showTutorialPages': pageCount > 0,
          'backgroundImage': self._backgroundImage,
          'source': self._movieFile,
          'volume': self._soundValue,

@@ -1,5 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/storage/storage_view.py
+from account_helpers import AccountSettings
+from account_helpers.AccountSettings import LAST_STORAGE_VISITED_TIMESTAMP
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform.daapi import LobbySubView
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
@@ -13,6 +15,7 @@ from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.shared import events, EVENT_BUS_SCOPE
 from gui.shared.event_dispatcher import showHangar
 from helpers import dependency
+from helpers.time_utils import getCurrentTimestamp
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
 from gui.shared.utils.requesters.ItemsRequester import REQ_CRITERIA
@@ -20,8 +23,8 @@ from gui.shared.gui_items import GUI_ITEM_TYPE
 
 class StorageView(LobbySubView, StorageViewMeta):
     __background_alpha__ = 1.0
-    lobbyContext = dependency.descriptor(ILobbyContext)
-    itemsCache = dependency.descriptor(IItemsCache)
+    _lobbyContext = dependency.descriptor(ILobbyContext)
+    _itemsCache = dependency.descriptor(IItemsCache)
     _COMMON_SOUND_SPACE = STORAGE_SOUND_SPACE
 
     def __init__(self, ctx=None):
@@ -37,7 +40,10 @@ class StorageView(LobbySubView, StorageViewMeta):
           'tooltip': TOOLTIPS.STORAGE_MAINMENU_IN_HANGAR},
          {'id': STORAGE_CONSTANTS.PERSONAL_RESERVES,
           'linkage': STORAGE_CONSTANTS.PERSONAL_RESERVES_VIEW,
-          'tooltip': TOOLTIPS.STORAGE_MAINMENU_PERSONAL_RESERVES}]
+          'tooltip': TOOLTIPS.STORAGE_MAINMENU_PERSONAL_RESERVES},
+         {'id': STORAGE_CONSTANTS.CUSTOMIZATION,
+          'linkage': STORAGE_CONSTANTS.CUSTOMIZATION_VIEW,
+          'tooltip': TOOLTIPS.STORAGE_MAINMENU_CUSTOMIZATION}]
         self.__showDummyScreen = False
         self.__isItemsForSellEmpty = self.__getItemsForSellEmpty()
         self.__activeSectionIdx = 0
@@ -59,7 +65,7 @@ class StorageView(LobbySubView, StorageViewMeta):
 
     def _populate(self):
         super(StorageView, self)._populate()
-        self.__showDummyScreen = not self.lobbyContext.getServerSettings().isIngameStorageEnabled()
+        self.__showDummyScreen = not self._lobbyContext.getServerSettings().isIngameStorageEnabled()
         self.__initialize()
 
     def _invalidate(self, *args, **kwargs):
@@ -68,21 +74,25 @@ class StorageView(LobbySubView, StorageViewMeta):
 
     def _dispose(self):
         self.__removeHandlers()
+        self.__saveLastTimestamp()
         super(StorageView, self)._dispose()
 
+    def __saveLastTimestamp(self):
+        AccountSettings.setSessionSettings(LAST_STORAGE_VISITED_TIMESTAMP, getCurrentTimestamp())
+
     def __addHandlers(self):
-        serverSettings = self.lobbyContext.getServerSettings()
+        serverSettings = self._lobbyContext.getServerSettings()
         serverSettings.onServerSettingsChange += self.__onServerSettingChanged
         g_clientUpdateManager.addCallbacks({'inventory': self.__onInventoryUpdated})
 
     def __removeHandlers(self):
         g_clientUpdateManager.removeObjectCallbacks(self)
-        serverSettings = self.lobbyContext.getServerSettings()
+        serverSettings = self._lobbyContext.getServerSettings()
         serverSettings.onServerSettingsChange -= self.__onServerSettingChanged
 
     def __onServerSettingChanged(self, diff):
         if 'ingameShop' in diff:
-            storageEnabled = self.lobbyContext.getServerSettings().isIngameStorageEnabled()
+            storageEnabled = self._lobbyContext.getServerSettings().isIngameStorageEnabled()
             if isIngameShopEnabled():
                 if not storageEnabled and not self.__showDummyScreen:
                     showHangar()
@@ -109,11 +119,11 @@ class StorageView(LobbySubView, StorageViewMeta):
         self.__activeTab = sectionTab
 
     def __getItemsForSellEmpty(self):
-        invVehicles = self.itemsCache.items.getVehicles(REQ_CRITERIA.INVENTORY).values()
+        invVehicles = self._itemsCache.items.getVehicles(REQ_CRITERIA.INVENTORY).values()
         requestTypeIds = GUI_ITEM_TYPE.VEHICLE_MODULES
         criteria = ~REQ_CRITERIA.VEHICLE.SUITABLE(invVehicles, requestTypeIds)
         criteria |= REQ_CRITERIA.INVENTORY
-        items = self.itemsCache.items.getItems(requestTypeIds, criteria, nationID=None)
+        items = self._itemsCache.items.getItems(requestTypeIds, criteria, nationID=None)
         shellItems = getStorageShellsData(invVehicles, False)
         return not items and not shellItems
 

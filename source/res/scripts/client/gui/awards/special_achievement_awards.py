@@ -4,14 +4,14 @@ import BigWorld
 from gui.Scaleform.locale.CLANS import CLANS
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
-from gui.goodies.goodie_items import _BOOSTER_DESCRIPTION_LOCALE
 from gui.server_events.awards import AwardAbstract, ExplosionBackAward
 from gui.shared import event_dispatcher as shared_events
+from gui.shared.event_dispatcher import showReferralProgramWindow
 from gui.shared.formatters import text_styles
 from helpers import dependency
 from helpers import i18n
-from skeletons.gui.shared import IItemsCache
 from skeletons.gui.lobby_context import ILobbyContext
+from skeletons.gui.shared import IItemsCache
 
 class ResearchAward(ExplosionBackAward):
 
@@ -101,7 +101,7 @@ class BoosterAward(ExplosionBackAward):
         return self._booster.bigIcon
 
     def getHeader(self):
-        return text_styles.highTitle(i18n.makeString(MENU.AWARDWINDOW_BOOSTERAWARD_HEADER, boosterName=i18n.makeString(_BOOSTER_DESCRIPTION_LOCALE % self._booster.boosterGuiType, effectValue=self._booster.getFormattedValue(text_styles.highTitle))))
+        return text_styles.highTitle(i18n.makeString(MENU.AWARDWINDOW_BOOSTERAWARD_HEADER, boosterName=i18n.makeString(MENU.boosterDescriptionLocale(self._booster.boosterGuiType), effectValue=self._booster.getFormattedValue(text_styles.highTitle))))
 
     def getDescription(self):
         localKey = '#menu:awardWindow/boosterAward/description/timeValue/%s'
@@ -233,3 +233,24 @@ class TelecomAward(AwardAbstract):
         if hasattr(item, 'invID'):
             g_currentVehicle.selectVehicle(item.invID)
         shared_events.showHangar()
+
+
+class RecruiterAward(ExplosionBackAward):
+
+    def getWindowTitle(self):
+        return i18n.makeString(MENU.AWARDWINDOW_RECRUITERAWARD_TITLE)
+
+    def getAwardImage(self):
+        return RES_ICONS.MAPS_ICONS_AWARDS_BECOMERECRUITER
+
+    def getHeader(self):
+        return text_styles.promoTitle(text_styles.alignText(i18n.makeString(MENU.AWARDWINDOW_RECRUITERAWARD_HEADER), 'center'))
+
+    def getOkButtonText(self):
+        return i18n.makeString(MENU.AWARDWINDOW_RECRUITERAWARD_OKBUTTON)
+
+    def getDescription(self):
+        return text_styles.main(text_styles.alignText(i18n.makeString(MENU.AWARDWINDOW_RECRUITERAWARD_DESCRIPTION), 'center'))
+
+    def handleOkButton(self):
+        showReferralProgramWindow()

@@ -13,8 +13,5 @@ class PrimeTimeMeta(WrapperViewMeta):
     def selectServer(self, id):
         self._printOverrideError('selectServer')
 
-    def as_setDataS(self, data):
-        return self.flashObject.as_setData(data) if self._isDAAPIInited() else None
-
     def as_getServersDPS(self):
         return self.flashObject.as_getServersDP() if self._isDAAPIInited() else None

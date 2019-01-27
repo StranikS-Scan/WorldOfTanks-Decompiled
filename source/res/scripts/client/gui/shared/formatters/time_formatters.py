@@ -5,8 +5,8 @@ import time
 from gui.Scaleform.locale.MENU import MENU
 from helpers import i18n, time_utils
 from rent_common import SeasonRentDuration
-from season_common import getDateFromSeasonID
 from constants import GameSeasonType
+from season_common import getDateFromSeasonID
 _SEASON_TYPE_KEY = {GameSeasonType.EPIC: 'epic',
  GameSeasonType.RANKED: 'ranked'}
 _RENT_DURATION_KEY = {SeasonRentDuration.ENTIRE_SEASON: 'season',
@@ -34,6 +34,18 @@ def getTimeLeftInfo(timeLeft, timeStyle=None):
         if timeLeft > time_utils.ONE_DAY:
             return ('days', formatTime(timeLeft, time_utils.ONE_DAY, timeStyle))
         return ('hours', formatTime(timeLeft, time_utils.ONE_HOUR, timeStyle))
+
+
+def getRentEpicSeasonTimeLeft(timeLeft, timeStyle=None):
+    if timeLeft > 0 and timeLeft != float('inf'):
+        if timeLeft > time_utils.ONE_DAY:
+            fmtKey, timeNum = 'daysLeft', formatTime(timeLeft, time_utils.ONE_DAY, timeStyle)
+        elif timeLeft >= time_utils.ONE_HOUR:
+            fmtKey, timeNum = 'hoursLeft', formatTime(timeLeft, time_utils.ONE_HOUR, timeStyle)
+        else:
+            timeLeft = timeLeft if timeLeft > time_utils.ONE_MINUTE else time_utils.ONE_MINUTE
+            fmtKey, timeNum = 'minsLeft', formatTime(timeLeft, time_utils.ONE_MINUTE, timeStyle)
+        return i18n.makeString('#tooltips:vehicle/rentLeft/epic/%s' % fmtKey, timeNum=timeNum)
 
 
 def getTimeLeftStr(localization, timeLeft, timeStyle=None, ctx=None, formatter=None):
@@ -99,14 +111,36 @@ class RentLeftFormatter(object):
         return formatter(localization, 'wins', winsLeft) if winsLeft > 0 else ''
 
     def getRentSeasonLeftStr(self, rentData, localization=None, formatter=None, timeStyle=None, ctx=None):
+        ctx = ctx or {}
         if localization is None:
             localization = self.__localizationRootKey
         if formatter is None:
             formatter = defaultFormatter
+        identifier = None
+        timeLeftString = ''
+        extraData = dict()
+        if rentData.seasonType == GameSeasonType.RANKED:
+            identifier, timeLeftString, extraData = self.getRentRankedSeasonLeftStr(rentData, timeStyle)
+        if rentData.seasonType == GameSeasonType.EPIC:
+            identifier, timeLeftString, extraData = self.getRentEpicSeasonLeftStr(timeStyle)
+        ctx.update(extraData)
+        return '' if not identifier else formatter(localization % _SEASON_TYPE_KEY[rentData.seasonType] + '/%s', identifier, timeLeftString, ctx)
+
+    def getRentEpicSeasonLeftStr(self, timeStyle):
+        cycles = self.__rentInfo.getRentalPeriodInCycles()
+        if not cycles:
+            return (None, None, None)
+        else:
+            timeLeftString = '-'.join([ str(cycle.ordinalNumber) for cycle in cycles ])
+            identifier = 'cycles' if len(cycles) > 1 else 'cycle'
+            return (identifier, timeLeftString, {})
+
+    def getRentRankedSeasonLeftStr(self, rentData, timeStyle):
+        ctx = {}
         timeLeft = self.__rentInfo.getTimeLeft()
         timeLeftString = formatTime(timeLeft, time_utils.ONE_DAY, timeStyle)
         identifier = 'days'
         if rentData.duration == SeasonRentDuration.ENTIRE_SEASON and timeLeft > time_utils.ONE_WEEK:
             timeLeftString, _ = getDateFromSeasonID(rentData.seasonID)
             identifier = 'season'
-        return formatter(localization % _SEASON_TYPE_KEY[rentData.seasonType] + '/%s', identifier, timeLeftString, {})
+        return (identifier, timeLeftString, ctx)

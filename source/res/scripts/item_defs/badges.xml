@@ -1043,11 +1043,12 @@
           <type>	dict	</type>
           <value>
             <item>
-              <name>	include	</name>
+              <name>	exclude	</name>
               <type>	list	</type>
               <value>
-                <item>	NA	</item>
-                <item>	ASIA	</item>
+                <item>	RU	</item>
+                <item>	EU	</item>
+                <item>	CN	</item>
               </value>
             </item>
           </value>
@@ -1489,6 +1490,78 @@
           <type>	int	</type>
         </item>
         <item>	green	  <name>	highlight	</name>
+          <type>	string	</type>
+        </item>
+      </value>
+    </badge>
+    <badge>
+      <name>	frontline_2019_1	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	67	  <name>	id	</name>
+          <type>	int	</type>
+        </item>
+        <item>	4.41	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	15	  <name>	group	</name>
+          <type>	int	</type>
+        </item>
+        <item>	gold	  <name>	highlight	</name>
+          <type>	string	</type>
+        </item>
+      </value>
+    </badge>
+    <badge>
+      <name>	frontline_2019_2	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	68	  <name>	id	</name>
+          <type>	int	</type>
+        </item>
+        <item>	4.42	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	15	  <name>	group	</name>
+          <type>	int	</type>
+        </item>
+        <item>	gold	  <name>	highlight	</name>
+          <type>	string	</type>
+        </item>
+      </value>
+    </badge>
+    <badge>
+      <name>	frontline_2019_3	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	69	  <name>	id	</name>
+          <type>	int	</type>
+        </item>
+        <item>	4.43	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	15	  <name>	group	</name>
+          <type>	int	</type>
+        </item>
+        <item>	gold	  <name>	highlight	</name>
+          <type>	string	</type>
+        </item>
+      </value>
+    </badge>
+    <badge>
+      <name>	frontline_2019_4	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	70	  <name>	id	</name>
+          <type>	int	</type>
+        </item>
+        <item>	4.43	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	15	  <name>	group	</name>
+          <type>	int	</type>
+        </item>
+        <item>	gold	  <name>	highlight	</name>
           <type>	string	</type>
         </item>
       </value>

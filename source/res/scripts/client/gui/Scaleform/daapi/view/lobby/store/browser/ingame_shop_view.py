@@ -4,6 +4,7 @@ import logging
 import BigWorld
 from PlayerEvents import g_playerEvents
 from adisp import process
+from gui.Scaleform.genConsts.STORAGE_CONSTANTS import STORAGE_CONSTANTS
 from gui.Scaleform.daapi import LobbySubView
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.hangar.BrowserView import makeBrowserParams
@@ -18,13 +19,12 @@ from skeletons.gui.shared import IItemsCache
 from sound_constants import INGAMESHOP_SOUND_SPACE
 _logger = logging.getLogger(__name__)
 _logger.addHandler(logging.NullHandler())
-_SESSION_TIMEOUT = 300
 _g_lastSessionInfo = None
 
 def _gelLastSessionInfo():
     global _g_lastSessionInfo
     if _g_lastSessionInfo is None:
-        _g_lastSessionInfo = _LastSessionInfo(_SESSION_TIMEOUT)
+        _g_lastSessionInfo = _LastSessionInfo(STORAGE_CONSTANTS.SESSION_TIMEOUT)
     return _g_lastSessionInfo
 
 
@@ -56,12 +56,11 @@ class _LastSessionInfo(object):
         return BigWorld.time() >= self.__nextRefreshTime or not self.__url.startswith(hostUrl) or BigWorld.player().databaseID != self.__lastUserID
 
 
-class IngameShopBase(IngameShopViewMeta):
+class WebOverlayBase(IngameShopViewMeta):
     browserCtrl = dependency.descriptor(IBrowserController)
-    _COMMON_SOUND_SPACE = INGAMESHOP_SOUND_SPACE
 
     def __init__(self, ctx=None):
-        super(IngameShopBase, self).__init__(ctx)
+        super(WebOverlayBase, self).__init__(ctx)
         self.__browser = None
         self.__hasFocus = False
         self.__browserId = 0
@@ -70,6 +69,10 @@ class IngameShopBase(IngameShopViewMeta):
         self._useLastSessionUrl = False
         self._browserParams = (ctx or {}).get('browserParams', makeBrowserParams())
         return
+
+    def onEscapePress(self):
+        if not self._browserParams.get('isTransparent'):
+            self.destroy()
 
     def onFocusChange(self, hasFocus):
         self.__hasFocus = hasFocus
@@ -81,17 +84,21 @@ class IngameShopBase(IngameShopViewMeta):
     def getBrowser(self):
         return self.__browser
 
+    def webHandlers(self):
+        from gui.Scaleform.daapi.view.lobby.shared.web_handlers import createBrowserOverlayWebHandlers
+        return createBrowserOverlayWebHandlers()
+
     def _onRegisterFlashComponent(self, viewPy, alias):
-        from gui.Scaleform.daapi.view.lobby.store.browser.web_handlers import createShopWebHandlers
-        super(IngameShopBase, self)._onRegisterFlashComponent(viewPy, alias)
+        webHandlers = self.webHandlers()
+        super(WebOverlayBase, self)._onRegisterFlashComponent(viewPy, alias)
         if alias == VIEW_ALIAS.BROWSER:
-            viewPy.init(browserID=self.__browserId, webHandlersMap=createShopWebHandlers())
+            viewPy.init(browserID=self.__browserId, webHandlersMap=webHandlers)
             viewPy.onError += self.__onError
 
     def _onUnregisterFlashComponent(self, viewPy, alias):
         if alias == VIEW_ALIAS.BROWSER:
             viewPy.onError -= self.__onError
-        super(IngameShopBase, self)._onUnregisterFlashComponent(viewPy, alias)
+        super(WebOverlayBase, self)._onUnregisterFlashComponent(viewPy, alias)
 
     def _getUrl(self):
         return self._url
@@ -114,7 +121,7 @@ class IngameShopBase(IngameShopViewMeta):
         return
 
     def _populate(self):
-        super(IngameShopBase, self)._populate()
+        super(WebOverlayBase, self)._populate()
         self.fireEvent(events.IngameShopEvent(events.IngameShopEvent.INGAMESHOP_ACTIVATED), scope=EVENT_BUS_SCOPE.DEFAULT)
         self.as_setBrowserParamsS(self._browserParams)
 
@@ -123,7 +130,7 @@ class IngameShopBase(IngameShopViewMeta):
             _gelLastSessionInfo().refreshLifetime()
         if self.__browser:
             self.__browser.onLoadStart -= self._updateLastUrl
-        super(IngameShopBase, self)._dispose()
+        super(WebOverlayBase, self)._dispose()
         if self.__browserId:
             self.browserCtrl.delBrowser(self.__browserId)
         self.fireEvent(events.IngameShopEvent(events.IngameShopEvent.INGAMESHOP_DEACTIVATED), scope=EVENT_BUS_SCOPE.DEFAULT)
@@ -152,6 +159,14 @@ class IngameShopBase(IngameShopViewMeta):
         self.__loadBrowserCbID = None
         self.as_loadBrowserS()
         return
+
+
+class IngameShopBase(WebOverlayBase):
+    _COMMON_SOUND_SPACE = INGAMESHOP_SOUND_SPACE
+
+    def webHandlers(self):
+        from gui.Scaleform.daapi.view.lobby.store.browser.web_handlers import createShopWebHandlers
+        return createShopWebHandlers()
 
 
 class IngameShopView(LobbySubView, IngameShopBase):

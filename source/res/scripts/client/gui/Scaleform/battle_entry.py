@@ -59,7 +59,7 @@ BATTLE_OPTIMIZATION_CONFIG = {BATTLE_VIEW_ALIASES.MINIMAP: OptimizationSetting('
 class BattleEntry(AppEntry):
 
     def __init__(self, appNS):
-        super(BattleEntry, self).__init__(R.entries.battle(), appNS, DAAPIRootBridge(initCallback='registerBattleTest'))
+        super(BattleEntry, self).__init__(R.entries.battle(), appNS, swf='battle.swf', daapiBridge=DAAPIRootBridge(initCallback='registerBattleTest'))
         self.__input = None
         return
 

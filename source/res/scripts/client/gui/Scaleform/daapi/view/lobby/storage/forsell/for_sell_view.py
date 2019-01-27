@@ -207,7 +207,7 @@ class _SelectableDataProvider(StorageDataProvider):
     def __createVO(self, item):
         priceVO = getItemPricesVO(item.getSellPrice())[0]
         nationFlagIcon = RES_SHOP.getNationFlagIcon(nations.NAMES[item.nationID]) if item.nationID != nations.NONE_INDEX else ''
-        return createStorageDefVO(item.intCD, getStorageModuleName(item), getStorageItemDescr(item), item.inventoryCount, priceVO, getStorageItemIcon(item, STORE_CONSTANTS.ICON_SIZE_SMALL), getStorageItemIcon(item), 'altimage', itemType=getBoosterType(item), nationFlagIcon=nationFlagIcon, contextMenuId=CONTEXT_MENU_HANDLER_TYPE.STORAGE_FOR_SELL_ITEM)
+        return createStorageDefVO(item.intCD, getStorageModuleName(item), getStorageItemDescr(item), item.inventoryCount, priceVO, getStorageItemIcon(item, STORE_CONSTANTS.ICON_SIZE_SMALL), 'altimage', itemType=getBoosterType(item), nationFlagIcon=nationFlagIcon, contextMenuId=CONTEXT_MENU_HANDLER_TYPE.STORAGE_FOR_SELL_ITEM)
 
     def __getOriginalItemPrice(self, item):
         return item.getSellPrice().price * item.inventoryCount
@@ -244,12 +244,12 @@ class StorageCategoryForSellView(StorageCategoryForSellViewMeta):
     def _populate(self):
         super(StorageCategoryForSellView, self)._populate()
         self.addListener(events.StorageEvent.SELECT_MODULE_FOR_SELL, self.__onSellModule, scope=EVENT_BUS_SCOPE.LOBBY)
-        self.itemsCache.onSyncCompleted += self.__onCacheResync
+        self._itemsCache.onSyncCompleted += self.__onCacheResync
 
     def _dispose(self):
         self.removeListener(events.StorageEvent.SELECT_MODULE_FOR_SELL, self.__onSellModule, scope=EVENT_BUS_SCOPE.LOBBY)
         super(StorageCategoryForSellView, self)._dispose()
-        self.itemsCache.onSyncCompleted -= self.__onCacheResync
+        self._itemsCache.onSyncCompleted -= self.__onCacheResync
 
     def _createDataProvider(self):
         return _SelectableDataProvider()

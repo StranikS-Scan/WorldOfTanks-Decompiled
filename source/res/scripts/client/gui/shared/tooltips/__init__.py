@@ -29,7 +29,6 @@ class TOOLTIP_TYPE(CONST_CONTAINER):
     CYBER_SPORT = 'cyberSport'
     MAP = 'map'
     CONTROL = 'control'
-    REF_SYSTEM = 'refSystem'
     PRIVATE_QUESTS = 'privateQuests'
     CONTACT = 'contact'
     QUESTS = 'quests'

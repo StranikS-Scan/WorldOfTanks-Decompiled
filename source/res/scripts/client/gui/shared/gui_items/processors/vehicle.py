@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/gui_items/processors/vehicle.py
+import logging
 import BigWorld
 import AccountCommands
 from constants import RentType, SEASON_NAME_BY_TYPE
@@ -8,7 +9,6 @@ from bootcamp.Bootcamp import g_bootcamp
 from items import EQUIPMENT_TYPES
 from account_shared import LayoutIterator
 from adisp import process, async
-from debug_utils import LOG_DEBUG
 from gui import SystemMessages
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.SYSTEM_MESSAGES import SYSTEM_MESSAGES
@@ -27,6 +27,7 @@ from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
 from rent_common import parseRentID
 from soft_exception import SoftException
+_logger = logging.getLogger(__name__)
 _SEASON_RENT_DURATION_KEY = {RentType.SEASON_RENT: 'season',
  RentType.SEASON_CYCLE_RENT: 'cycle'}
 
@@ -84,16 +85,16 @@ class VehicleBuyer(VehicleReceiveProcessor):
         slotsEnough = itemsCache.items.inventory.getFreeSlots(itemsCache.items.stats.vehicleSlots) > 0
         if not self.showNotEnoughSlotMsg and not slotsEnough:
             errStr = 'slot_error'
-        return makeI18nError(msg, defaultSysMsgKey='vehicle_buy/server_error', auxData={'errStr': errStr}, vehName=self.item.userName)
+        return makeI18nError(sysMsgKey=msg, defaultSysMsgKey='vehicle_buy/server_error', auxData={'errStr': errStr}, vehName=self.item.userName)
 
     def _successHandler(self, code, ctx=None):
-        return makeI18nSuccess('vehicle_buy/success', vehName=self.item.userName, price=formatPrice(self.price), type=self._getSysMsgType())
+        return makeI18nSuccess(sysMsgKey='vehicle_buy/success', vehName=self.item.userName, price=formatPrice(self.price), type=self._getSysMsgType())
 
     def _getSysMsgType(self):
         return CURRENCY_TO_SM_TYPE.get(self.item.buyPrices.itemPrice.getCurrency(byWeight=False), SM_TYPE.Information)
 
     def _request(self, callback):
-        LOG_DEBUG('Make request to buy vehicle', self.item, self.crewType, self.buyShell, self.price)
+        _logger.debug('Make request to buy vehicle: %s, %s, %s, %s', self.item, self.crewType, self.buyShell, self.price)
         BigWorld.player().shop.buyVehicle(self.item.nationID, self.item.innationID, self.buyShell, self.buyCrew, self.crewType, -1, lambda code: self._response(code, callback))
 
 
@@ -115,8 +116,8 @@ class VehicleRenter(VehicleReceiveProcessor):
         if not errStr:
             msg = 'vehicle_rent/server_error' if code != AccountCommands.RES_CENTER_DISCONNECTED else 'vehicle_rent/server_error_centerDown'
         else:
-            msg = 'vehicle_rent/%s' % errStr
-        return makeI18nError(msg, defaultSysMsgKey='vehicle_rent/server_error', vehName=self.item.userName)
+            msg = 'vehicle_rent/{}'.format(errStr)
+        return makeI18nError(sysMsgKey=msg, defaultSysMsgKey='vehicle_rent/server_error', vehName=self.item.userName)
 
     def _successHandler(self, code, ctx=None):
         rentType, _ = parseRentID(self.rentPackageID)
@@ -135,7 +136,7 @@ class VehicleRenter(VehicleReceiveProcessor):
         return makeI18nSuccess('vehicle_rent/success', vehName=self.item.userName, rentPackageName=rentPackageName, price=formatPrice(self.price), type=self._getSysMsgType(), buyOption=buyOption)
 
     def _request(self, callback):
-        LOG_DEBUG('Make request to rent vehicle', self.item, self.crewType, self.buyShell, self.price)
+        _logger.debug('Make request to rent vehicle: %s, %s, %s, %s', self.item, self.crewType, self.buyShell, self.price)
         BigWorld.player().shop.buyVehicle(self.item.nationID, self.item.innationID, self.buyShell, self.buyCrew, self.crewType, self.rentPackageID, lambda code: self._response(code, callback, ctx={'rentID': self.rentPackageID}))
 
     def _getSysMsgType(self):
@@ -154,15 +155,15 @@ class VehicleRestoreProcessor(VehicleBuyer):
     def _getPrice(self):
         return getCrewAndShellsSumPrice(self.item.restorePrice, self.item, self.crewType, self.buyShell)
 
-    def _errorHandler(self, code, errStr='', ctx=None):
+    def _errorHandler(self, code, errStr='', ctx=None, itemsCache=None):
         if not errStr:
             msg = 'vehicle_restore/server_error' if code != AccountCommands.RES_CENTER_DISCONNECTED else 'vehicle_restore/server_error_centerDown'
         else:
-            msg = 'vehicle_restore/%s' % errStr
-        return makeI18nError(msg, defaultSysMsgKey='vehicle_restore/server_error', vehName=self.item.userName)
+            msg = 'vehicle_restore/{}'.format(errStr)
+        return makeI18nError(sysMsgKey=msg, defaultSysMsgKey='vehicle_restore/server_error', vehName=self.item.userName)
 
     def _successHandler(self, code, ctx=None):
-        return makeI18nSuccess('vehicle_restore/success', vehName=self.item.userName, price=formatPrice(self.price), type=self._getSysMsgType())
+        return makeI18nSuccess(sysMsgKey='vehicle_restore/success', vehName=self.item.userName, price=formatPrice(self.price), type=self._getSysMsgType())
 
     def _getSysMsgType(self):
         return SM_TYPE.Restore
@@ -171,7 +172,7 @@ class VehicleRestoreProcessor(VehicleBuyer):
         return (proc_plugs.MoneyValidator(self.price), proc_plugs.VehicleSlotsConfirmator(not self.buySlot), proc_plugs.IsLongDisconnectedFromCenter())
 
     def _request(self, callback):
-        LOG_DEBUG('Make request to restore vehicle', self.item, self.crewType, self.buyShell, self.price)
+        _logger.debug('Make request to restore vehicle: %s, %s, %s, %s', self.item, self.crewType, self.buyShell, self.price)
         BigWorld.player().shop.buyVehicle(self.item.nationID, self.item.innationID, self.buyShell, self.buyCrew, self.crewType, -1, lambda code: self._response(code, callback))
 
 
@@ -192,21 +193,21 @@ class VehicleTradeInProcessor(VehicleBuyer):
     def _getPrice(self):
         return super(VehicleTradeInProcessor, self)._getPrice() - self.itemToTradeOff.tradeOffPrice
 
-    def _errorHandler(self, code, errStr='', ctx=None):
+    def _errorHandler(self, code, errStr='', ctx=None, itemsCache=None):
         if not errStr:
             msg = 'vehicle_trade_in/server_error' if code != AccountCommands.RES_CENTER_DISCONNECTED else 'vehicle_trade_in/server_error_centerDown'
         else:
-            msg = 'vehicle_trade_in/%s' % errStr
-        return makeI18nError(msg, vehName=self.item.userName, defaultSysMsgKey='vehicle_trade_in/server_error', tradeOffVehName=self.itemToTradeOff.userName)
+            msg = 'vehicle_trade_in/{}'.format(errStr)
+        return makeI18nError(sysMsgKey=msg, defaultSysMsgKey='vehicle_trade_in/server_error', vehName=self.item.userName, tradeOffVehName=self.itemToTradeOff.userName)
 
     def _successHandler(self, code, ctx=None):
-        return makeI18nSuccess('vehicle_trade_in/success', vehName=self.item.userName, tradeOffVehName=self.itemToTradeOff.userName, price=formatPrice(self.price), type=self._getSysMsgType())
+        return makeI18nSuccess(sysMsgKey='vehicle_trade_in/success', vehName=self.item.userName, tradeOffVehName=self.itemToTradeOff.userName, price=formatPrice(self.price), type=self._getSysMsgType())
 
     def _getSysMsgType(self):
         return CURRENCY_TO_SM_TYPE.get(self.item.buyPrices.itemPrice.getCurrency(byWeight=False), SM_TYPE.Information)
 
     def _request(self, callback):
-        LOG_DEBUG('Make request to trade-in vehicle', self.item, self.itemToTradeOff, self.buyShell, self.buyCrew, self.crewType, self.price)
+        _logger.debug('Make request to trade-in vehicle: %s, %s, %s, %s, %s, %s', self.item, self.itemToTradeOff, self.buyShell, self.buyCrew, self.crewType, self.price)
         BigWorld.player().shop.tradeInVehicle(self.itemToTradeOff.invID, self.item.nationID, self.item.innationID, self.buyShell, self.buyCrew, self.crewType, lambda code: self._response(code, callback))
 
 
@@ -226,7 +227,7 @@ class VehicleSlotBuyer(Processor):
         return
 
     def _errorHandler(self, code, errStr='', ctx=None):
-        return makeI18nError('vehicle_slot_buy/%s' % errStr, defaultSysMsgKey='vehicle_slot_buy/server_error')
+        return makeI18nError(sysMsgKey='vehicle_slot_buy/{}'.format(errStr), defaultSysMsgKey='vehicle_slot_buy/server_error')
 
     def _successHandler(self, code, ctx=None):
         price = self.__getSlotPrice()
@@ -234,10 +235,10 @@ class VehicleSlotBuyer(Processor):
             money = formatPrice(price)
         else:
             money = formatGoldPrice(price.gold)
-        return makeI18nSuccess('vehicle_slot_buy/success', money=money, type=SM_TYPE.FinancialTransactionWithGold)
+        return makeI18nSuccess(sysMsgKey='vehicle_slot_buy/success', money=money, type=SM_TYPE.FinancialTransactionWithGold)
 
     def _request(self, callback):
-        LOG_DEBUG('Attempt to request server for buying vehicle slot')
+        _logger.debug('Attempt to request server for buying vehicle slot')
         BigWorld.player().stats.buySlot(lambda code: self._response(code, callback))
 
     def __getSlotPrice(self):
@@ -294,26 +295,26 @@ class VehicleSeller(ItemProcessor):
         return
 
     def _errorHandler(self, code, errStr='', ctx=None):
-        localKey = 'vehicle_sell/%s'
+        localKey = 'vehicle_sell/{}'
         defaultKey = 'vehicle_sell/server_error'
         if self.isRemovedAfterRent:
-            localKey = 'vehicle_remove/%s'
+            localKey = 'vehicle_remove/{}'
             defaultKey = 'vehicle_remove/server_error'
-        return makeI18nError(localKey % errStr, defaultSysMsgKey=defaultKey, vehName=self.vehicle.userName)
+        return makeI18nError(sysMsgKey=localKey.format(errStr), defaultSysMsgKey=defaultKey, vehName=self.vehicle.userName)
 
     def _successHandler(self, code, ctx=None):
         restoreInfo = ''
         sellForGold = self.vehicle.getSellPrice(preferred=True).getCurrency(byWeight=True) == Currency.GOLD
         if self.vehicle.isPremium and not self.vehicle.isUnique and not self.vehicle.isUnrecoverable and self.lobbyContext.getServerSettings().isVehicleRestoreEnabled() and not sellForGold:
             timeKey, formattedTime = getTimeLeftInfo(self.itemsCache.items.shop.vehiclesRestoreConfig.restoreDuration)
-            restoreInfo = makeString('#system_messages:vehicle/restoreDuration/%s' % timeKey, time=formattedTime)
+            restoreInfo = makeString('#system_messages:vehicle/restoreDuration/{}'.format(timeKey), time=formattedTime)
         if self.isDismantlingForMoney:
             localKey = 'vehicle_sell/success_dismantling'
             smType = SM_TYPE.Selling
             if self.isRemovedAfterRent:
                 localKey = 'vehicle_remove/success_dismantling'
                 smType = SM_TYPE.Remove
-            return makeI18nSuccess(localKey, vehName=self.vehicle.userName, gainMoney=formatPrice(self.gainMoney), spendMoney=formatPrice(self.spendMoney), restoreInfo=restoreInfo, type=smType)
+            return makeI18nSuccess(sysMsgKey=localKey, vehName=self.vehicle.userName, gainMoney=formatPrice(self.gainMoney), spendMoney=formatPrice(self.spendMoney), restoreInfo=restoreInfo, type=smType)
         else:
             localKey = 'vehicle_sell/success'
             if not sellForGold:
@@ -323,7 +324,7 @@ class VehicleSeller(ItemProcessor):
             if self.isRemovedAfterRent:
                 localKey = 'vehicle_remove/success'
                 smType = SM_TYPE.Remove
-            return makeI18nSuccess(localKey, vehName=self.vehicle.userName, money=formatPrice(self.gainMoney), restoreInfo=restoreInfo, type=smType)
+            return makeI18nSuccess(sysMsgKey=localKey, vehName=self.vehicle.userName, money=formatPrice(self.gainMoney), restoreInfo=restoreInfo, type=smType)
 
     def _request(self, callback):
         itemsFromVehicle = list()
@@ -345,11 +346,7 @@ class VehicleSeller(ItemProcessor):
         for dev in self.optDevs:
             itemsFromVehicle.append(dev.intCD)
 
-        for custItem in self.customizationItems:
-            customizationItems.append(custItem.intCD)
-            customizationItems.append(custItem.getInstalledOnVehicleCount(self.vehicle.intCD))
-
-        LOG_DEBUG('Make server request:', self.vehicle.invID, isSellShells, isSellEqs, isSellFromInv, isSellOptDevs, self.isDismantlingForMoney, self.isCrewDismiss, itemsFromVehicle, itemsFromInventory)
+        _logger.debug('Make server request: %s, %s, %s, %s, %s, %s, %s, %s, %s', self.vehicle.invID, isSellShells, isSellEqs, isSellFromInv, isSellOptDevs, self.isDismantlingForMoney, self.isCrewDismiss, itemsFromVehicle, itemsFromInventory)
         BigWorld.player().inventory.sellVehicle(self.vehicle.invID, self.isCrewDismiss, itemsFromVehicle, itemsFromInventory, customizationItems, lambda code: self._response(code, callback))
 
     def __getGainSpendMoney(self, vehicle, vehShells, vehEqs, optDevicesToSell, inventory, customizationItems):
@@ -397,7 +394,7 @@ class VehicleSettingsProcessor(ItemProcessor):
         super(VehicleSettingsProcessor, self).__init__(vehicle, plugins or [])
 
     def _request(self, callback):
-        LOG_DEBUG('Make server request for changing vehicle settings', self.item, self._setting, bool(self._value))
+        _logger.debug('Make server request for changing vehicle settings: %s, %s, %s', self.item, self._setting, bool(self._value))
         BigWorld.player().inventory.changeVehicleSetting(self.item.invID, self._setting, bool(self._value), lambda code: self._response(code, callback))
 
 
@@ -407,10 +404,10 @@ class VehicleTmenXPAccelerator(VehicleSettingsProcessor):
         super(VehicleTmenXPAccelerator, self).__init__(vehicle, VEHICLE_SETTINGS_FLAG.XP_TO_TMAN, value, (proc_plugs.MessageConfirmator('xpToTmenCheckbox', isEnabled=value),))
 
     def _errorHandler(self, code, errStr='', ctx=None):
-        return makeI18nError('vehicle_tmenxp_accelerator/%s' % errStr, defaultSysMsgKey='vehicle_tmenxp_accelerator/server_error', vehName=self.item.userName)
+        return makeI18nError(sysMsgKey='vehicle_tmenxp_accelerator/{}'.format(errStr), defaultSysMsgKey='vehicle_tmenxp_accelerator/server_error', vehName=self.item.userName)
 
     def _successHandler(self, code, ctx=None):
-        return makeI18nSuccess('vehicle_tmenxp_accelerator/success' + str(self._value), vehName=self.item.userName, type=SM_TYPE.Information)
+        return makeI18nSuccess(sysMsgKey='vehicle_tmenxp_accelerator/success' + str(self._value), vehName=self.item.userName, type=SM_TYPE.Information)
 
 
 class VehicleFavoriteProcessor(VehicleSettingsProcessor):
@@ -491,7 +488,7 @@ class VehicleLayoutProcessor(Processor):
             for eqCompDescr, price, count in ctx.get('eqs', []):
                 price = Money.makeFromMoneyTuple(price)
                 equipment = self.itemsCache.items.getItemByCD(eqCompDescr)
-                additionalMessages.append(makeI18nSuccess('artefact_buy/success', kind=equipment.userType, name=equipment.userName, count=count, money=formatPrice(price), type=self._getSysMsgType(price)))
+                additionalMessages.append(makeI18nSuccess(sysMsgKey='artefact_buy/success', kind=equipment.userType, name=equipment.userName, count=count, money=formatPrice(price), type=self._getSysMsgType(price)))
 
         return makeSuccess(auxData=additionalMessages)
 
@@ -500,7 +497,7 @@ class VehicleLayoutProcessor(Processor):
             msg = 'server_error' if code != AccountCommands.RES_CENTER_DISCONNECTED else 'server_error_centerDown'
         else:
             msg = errStr
-        return makeI18nError('layout_apply/%s' % msg, defaultSysMsgKey='layout_apply/server_error', vehName=self.vehicle.userName, type=SM_TYPE.Error)
+        return makeI18nError(sysMsgKey='layout_apply/{}'.format(msg), defaultSysMsgKey='layout_apply/server_error', vehName=self.vehicle.userName, type=SM_TYPE.Error)
 
     def getShellsLayoutPrice(self):
         if self.shellsLayoutHelper is None:
@@ -573,12 +570,12 @@ class BuyAndInstallBattleBoosterProcessor(VehicleBattleBoosterLayoutProcessor):
         BigWorld.player().shop.buy(self.battleBooster.itemTypeID, self.battleBooster.nationID, self.battleBooster.intCD, self.count, 0, lambda code: self._buyResponse(code, callback))
 
     def _buyResponse(self, code, callback):
-        LOG_DEBUG('Server response on buy battle booster', code)
+        _logger.debug('Server response on buy battle booster: %s', code)
         if code < 0:
             return callback(self._errorHandler(code))
         price = self.battleBooster.getBuyPrice().price
         price *= self.count
-        message = makeI18nSuccess('battleBooster_buy/success', kind=self.battleBooster.userType, name=self.battleBooster.userName, count=self.count, money=formatPrice(price), type=self._getSysMsgType(price))
+        message = makeI18nSuccess(sysMsgKey='battleBooster_buy/success', kind=self.battleBooster.userType, name=self.battleBooster.userName, count=self.count, money=formatPrice(price), type=self._getSysMsgType(price))
         SystemMessages.pushI18nMessage(message.userMsg, type=message.sysMsgType)
         super(BuyAndInstallBattleBoosterProcessor, self)._request(callback)
 
@@ -594,10 +591,10 @@ class VehicleRepairer(ItemProcessor):
 
     def _errorHandler(self, code, errStr='', ctx=None):
         needed = Money(credits=self._repairCost.credits - self.itemsCache.items.stats.credits)
-        return makeI18nError('vehicle_repair/%s' % errStr, defaultSysMsgKey='vehicle_repair/server_error', vehName=self.item.userName, needed=formatPrice(needed))
+        return makeI18nError(sysMsgKey='vehicle_repair/{}'.format(errStr), defaultSysMsgKey='vehicle_repair/server_error', vehName=self.item.userName, needed=formatPrice(needed))
 
     def _successHandler(self, code, ctx=None):
-        return makeI18nSuccess('vehicle_repair/success', vehName=self.item.userName, money=formatPrice(self._repairCost), type=SM_TYPE.Repair)
+        return makeI18nSuccess(sysMsgKey='vehicle_repair/success', vehName=self.item.userName, money=formatPrice(self._repairCost), type=SM_TYPE.Repair)
 
 
 @async

@@ -7,6 +7,7 @@ from helpers import i18n
 
 class ExecutionChooserDialogMeta(I18nConfirmDialogMeta):
     SKIP = 'skip'
+    SKIP_REFERRAL = 'skip/referral'
     RETRY = 'retry'
     START = 'start'
 

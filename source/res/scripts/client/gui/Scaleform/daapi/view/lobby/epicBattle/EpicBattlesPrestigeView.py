@@ -5,7 +5,7 @@ from debug_utils import LOG_ERROR
 from gui import SystemMessages
 from gui.Scaleform.daapi import LobbySubView
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
-from gui.Scaleform.daapi.view.lobby.epicBattle.epic_meta_level_icon import getEpicMetaIconVODict, EPIC_META_LEVEL_ICON_SIZE
+from gui.Scaleform.daapi.view.lobby.epicBattle.epic_meta_level_icon import getEpicMetaIconVODict
 from gui.Scaleform.daapi.view.lobby.epicBattle.epic_prestige_progress import getPrestigeLevelAwardsVOs
 from gui.Scaleform.daapi.view.meta.EpicBattlesPrestigeViewMeta import EpicBattlesPrestigeViewMeta
 from gui.Scaleform.genConsts.EPICBATTLES_ALIASES import EPICBATTLES_ALIASES
@@ -59,9 +59,9 @@ class EpicBattlesPrestigeView(LobbySubView, EpicBattlesPrestigeViewMeta):
          'resetLevelContainerTitleText': i18n.makeString(EPIC_BATTLE.EPICBATTLESPRESTIGEVIEW_RESETLEVEL_TITLE),
          'rewardTitleText': i18n.makeString(EPIC_BATTLE.EPICBATTLESPRESTIGEVIEW_CONGRATULATIONS),
          'awards': awardsVO,
-         'metaLevelIconPrestige': getEpicMetaIconVODict(nextPrestigeLevel, 1, EPIC_META_LEVEL_ICON_SIZE.BIG),
+         'metaLevelIconPrestige': getEpicMetaIconVODict(nextPrestigeLevel, 1),
          'epicMetaLevelIconData': getEpicMetaIconVODict(nextPrestigeLevel, 1),
-         'backgroundImageSrc': RES_ICONS.MAPS_ICONS_EPICBATTLES_BACKGROUNDS_META_BLUR_BG}
+         'backgroundImageSrc': RES_ICONS.MAPS_ICONS_EPICBATTLES_BACKGROUNDS_META_BG}
         self.as_setDataS(data)
 
     @decorators.process('updating')

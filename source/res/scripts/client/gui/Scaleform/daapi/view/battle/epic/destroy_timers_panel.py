@@ -58,7 +58,7 @@ class EpicDestroyTimersPanel(EpicDestroyTimersPanelMeta):
         super(EpicDestroyTimersPanel, self)._dispose()
 
     def _showDeathZoneTimer(self, value):
-        if value.needToCloseAll():
+        if value.needToCloseAll() or value.needToCloseTimer():
             if self.__delayedCB is not None:
                 BigWorld.cancelCallback(self.__delayedCB)
                 self.__delayedCB = None

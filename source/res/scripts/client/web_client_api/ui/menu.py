@@ -12,6 +12,7 @@ class _UserMenuSchema(W2CSchema):
     user_name = Field(required=True, type=basestring)
     custom_items = Field(type=list, default=[])
     excluded_items = Field(type=list, default=[])
+    custom_items_after_end = Field(type=list, default=[])
 
 
 class UserMenuWebApiMixin(object):
@@ -22,7 +23,8 @@ class UserMenuWebApiMixin(object):
         context = {'dbID': cmd.spa_id,
          'userName': cmd.user_name,
          'customItems': cmd.custom_items,
-         'excludedItems': cmd.excluded_items}
+         'excludedItems': cmd.excluded_items,
+         'customItemsAfterEnd': cmd.custom_items_after_end}
         callback = ctx.get('callback')
         browserView = ctx.get('browser_view')
         app = g_appLoader.getApp()

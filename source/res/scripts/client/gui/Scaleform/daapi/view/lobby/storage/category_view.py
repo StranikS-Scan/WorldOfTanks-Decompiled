@@ -33,7 +33,7 @@ class StorageDataProvider(DAAPIDataProvider):
 
 
 class BaseCategoryView(BaseStorageCategoryViewMeta):
-    itemsCache = dependency.descriptor(IItemsCache)
+    _itemsCache = dependency.descriptor(IItemsCache)
 
     def __init__(self):
         super(BaseCategoryView, self).__init__()
@@ -79,7 +79,7 @@ class BaseCategoryView(BaseStorageCategoryViewMeta):
 
 
 class InventoryCategoryView(BaseCategoryView):
-    itemsCache = dependency.descriptor(IItemsCache)
+    _itemsCache = dependency.descriptor(IItemsCache)
 
     def __init__(self):
         super(InventoryCategoryView, self).__init__()
@@ -88,6 +88,9 @@ class InventoryCategoryView(BaseCategoryView):
 
     def _getRequestCriteria(self, invVehicles):
         return REQ_CRITERIA.EMPTY
+
+    def _getInvVehicleCriteria(self):
+        return REQ_CRITERIA.INVENTORY
 
     def _getComparator(self):
         return None
@@ -100,7 +103,7 @@ class InventoryCategoryView(BaseCategoryView):
 
     def _getVoList(self):
         criteria = self._getRequestCriteria(self._invVehicles)
-        items = self.itemsCache.items.getItems(self._getItemTypeID(), criteria, nationID=None)
+        items = self._itemsCache.items.getItems(self._getItemTypeID(), criteria, nationID=None)
         dataProviderValues = []
         for item in sorted(items.itervalues(), cmp=self._getComparator()):
             dataProviderValues.append(self._getVO(item))
@@ -112,7 +115,7 @@ class InventoryCategoryView(BaseCategoryView):
 
     def _populate(self):
         super(InventoryCategoryView, self)._populate()
-        self._invVehicles = self.itemsCache.items.getVehicles(REQ_CRITERIA.INVENTORY).values()
+        self._invVehicles = self._itemsCache.items.getVehicles(self._getInvVehicleCriteria()).values()
         g_clientUpdateManager.addCallbacks({'inventory': self._inventoryUpdatesCallback})
 
     def _dispose(self):
@@ -122,7 +125,7 @@ class InventoryCategoryView(BaseCategoryView):
         return
 
     def _inventoryUpdatesCallback(self, *args):
-        self._invVehicles = self.itemsCache.items.getVehicles(REQ_CRITERIA.INVENTORY).values()
+        self._invVehicles = self._itemsCache.items.getVehicles(REQ_CRITERIA.INVENTORY).values()
         self._buildItems()
 
     def _update(self, *args):

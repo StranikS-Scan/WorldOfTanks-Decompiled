@@ -124,10 +124,11 @@ class _ViewEvent(HasCtxEvent):
 class DirectLoadViewEvent(_ViewEvent):
 
     def __init__(self, loadParams, *args, **kwargs):
-        super(DirectLoadViewEvent, self).__init__(ViewEventType.LOAD_VIEW, loadParams.viewKey.alias, loadParams.viewKey.name)
+        super(DirectLoadViewEvent, self).__init__(ViewEventType.LOAD_VIEW, loadParams.viewKey.alias, loadParams.viewKey.name, ctx=kwargs.get('ctx', None))
         self.loadParams = loadParams
         self.args = args
         self.kwargs = kwargs
+        return
 
 
 class LoadViewsChainEvent(_ViewEvent):
@@ -629,3 +630,14 @@ class StorageEvent(HasCtxEvent):
 class HangarCustomizationEvent(HasCtxEvent):
     CHANGE_VEHICLE_MODEL_TRANSFORM = 'hangarCustomization/changeVehicleModelTransform'
     RESET_VEHICLE_MODEL_TRANSFORM = 'hangarCustomization/resetVehicleModelTransform'
+
+
+class ReferralProgramEvent(HasCtxEvent):
+    REFERRAL_PROGRAM_ACTIVATED = 'referralProgramActivated'
+    REFERRAL_PROGRAM_DEACTIVATED = 'referralProgrammDeactivated'
+    SHOW_REFERRAL_PROGRAM_WINDOW = 'showReferralProgramWindow'
+    DISABLE_REFERRAL_PROGRAM = 'disableReferralProgram'
+
+
+class AdventCalendarEvent(HasCtxEvent):
+    ADVENT_CALENDAR = 'adventCalendar'

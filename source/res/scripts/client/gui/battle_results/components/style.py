@@ -114,7 +114,7 @@ class EmptyStatRow(StatRow):
         return
 
 
-def makeStatRow(label='', column1=None, column2=None, column3=None, column4=None, htmlKey=''):
+def makeStatRow(label='', labelArgs=None, column1=None, column2=None, column3=None, column4=None, htmlKey=''):
     if column2 is not None:
         lineType = WIDE_STAT_ROW
     elif not any((column2, column3, column4)):
@@ -122,7 +122,10 @@ def makeStatRow(label='', column1=None, column2=None, column3=None, column4=None
     else:
         lineType = NORMAL_STAT_ROW
     if label:
-        i18nText = i18n.makeString(BATTLE_RESULTS.getDetailsCalculation(statName=label))
+        if labelArgs:
+            i18nText = i18n.makeString(BATTLE_RESULTS.getDetailsCalculation(statName=label), **labelArgs)
+        else:
+            i18nText = i18n.makeString(BATTLE_RESULTS.getDetailsCalculation(statName=label))
         if htmlKey:
             label = makeHtmlString('html_templates:lobby/battle_results', htmlKey, {'value': i18nText})
         else:

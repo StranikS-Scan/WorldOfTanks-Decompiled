@@ -227,7 +227,7 @@ class _BwHallOfFame(namedtuple('_BwHallOfFame', ('hofHostUrl', 'isHofEnabled', '
         return cls()
 
 
-class _BwIngameShop(namedtuple('_BwIngameShop', ('hostUrl', 'shopMode', 'isStorageEnabled', 'isPreviewEnabled'))):
+class _BwIngameShop(namedtuple('_BwIngameShop', ('hostUrl', 'backendHostUrl', 'shopMode', 'isStorageEnabled', 'isPreviewEnabled'))):
 
     def replace(self, data):
         allowedFields = self._fields
@@ -236,6 +236,7 @@ class _BwIngameShop(namedtuple('_BwIngameShop', ('hostUrl', 'shopMode', 'isStora
 
 
 _BwIngameShop.__new__.__defaults__ = ('',
+ '',
  'disabled',
  False,
  False)
@@ -321,6 +322,7 @@ class ServerSettings(object):
 
     def __init__(self, serverSettings):
         self.onServerSettingsChange = Event()
+        self.__serverSettings = {}
         self.set(serverSettings)
 
     def set(self, serverSettings):
@@ -618,6 +620,9 @@ class ServerSettings(object):
 
     def isPromoLoggingEnabled(self):
         return self.__getGlobalSetting('isPromoLoggingEnabled', False)
+
+    def isReferralProgramEnabled(self):
+        return self.__getGlobalSetting('isReferralProgramEnabled', False)
 
     def __getGlobalSetting(self, settingsName, default=None):
         return self.__serverSettings.get(settingsName, default)

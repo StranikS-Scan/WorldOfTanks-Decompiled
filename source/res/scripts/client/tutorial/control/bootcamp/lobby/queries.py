@@ -31,10 +31,12 @@ class MessageDialogContentQuery(ContentQuery):
         else:
             data = msgContent['data']
         showBottomData = not data['only_first_bootcamp_bottom'] or self.bootcampController.needAwarding()
+        showReferralData = self.bootcampController.isReferralEnabled()
         msgData = {'messagePreset': _PRESET_RENDERERS[data['preset']],
          'label': i18n.makeString(data['label']),
          'iconPath': data['icon'],
          'message': i18n.makeString(data['text']) if showBottomData else '',
+         'referralDescription': i18n.makeString(data['description']) if showReferralData else '',
          'background': data['background']}
         voiceover = data['voiceover']
         if showBottomData:

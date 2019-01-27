@@ -3,6 +3,7 @@
 import time
 import BigWorld
 from goodies.goodie_constants import GOODIE_RESOURCE_TYPE, GOODIE_STATE, GOODIE_VARIETY, GOODIE_TARGET_TYPE
+from goodies.goodie_helpers import GOODIE_TEXT_TO_RESOURCE
 from gui import GUI_SETTINGS
 from gui.Scaleform.genConsts.STORE_CONSTANTS import STORE_CONSTANTS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
@@ -17,14 +18,6 @@ from gui.shared.gui_items.gui_item_economics import ItemPrices, ItemPrice, ITEM_
 from shared_utils import CONST_CONTAINER
 from helpers import time_utils
 from helpers.i18n import makeString as _ms
-_BOOSTER_ICON_PATH = '../maps/icons/boosters/%s.png'
-_BOOSTER_BIG_ICON_PATH = '../maps/icons/boosters/%s_big.png'
-_BOOSTER_TT_BIG_ICON_PATH = '../maps/icons/boosters/%s_tt_big.png'
-_BOOSTER_QUALITY_SOURCE_PATH = '../maps/icons/boosters/booster_quality_%s.png'
-_BOOSTER_TYPE_LOCALE = '#menu:booster/userName/%s'
-_BOOSTER_DESCRIPTION_LOCALE = '#menu:booster/description/%s'
-_BOOSTER_QUALITY_LOCALE = '#menu:booster/quality/%s'
-_BOOSTER_BONUS_LOCALE = '#menu:booster/bonus/%s'
 MAX_ACTIVE_BOOSTERS_COUNT = 3
 
 class BOOSTER_QUALITY_NAMES(CONST_CONTAINER):
@@ -40,6 +33,7 @@ _BOOSTER_TYPE_NAMES = {GOODIE_RESOURCE_TYPE.GOLD: 'booster_gold',
  GOODIE_RESOURCE_TYPE.XP: 'booster_xp',
  GOODIE_RESOURCE_TYPE.CREW_XP: 'booster_crew_xp',
  GOODIE_RESOURCE_TYPE.FREE_XP: 'booster_free_xp'}
+_BOOSTER_TYPE_TEXT = {v:k for k, v in GOODIE_TEXT_TO_RESOURCE.iteritems()}
 BOOSTERS_ORDERS = {GOODIE_RESOURCE_TYPE.XP: 0,
  GOODIE_RESOURCE_TYPE.CREW_XP: 1,
  GOODIE_RESOURCE_TYPE.FREE_XP: 2,
@@ -144,7 +138,7 @@ class _PersonalDiscount(_Goodie):
         return self._goodieDescription.target.limit
 
     def getFormattedValue(self, formatter=None):
-        value = '%s%%' % self.effectValue
+        value = '{}%'.format(self.effectValue)
         return formatter(value) if formatter is not None else value
 
     @property
@@ -227,15 +221,15 @@ class Booster(_Goodie):
 
     @property
     def icon(self):
-        return _BOOSTER_ICON_PATH % self.boosterGuiType
+        return RES_ICONS.boosterIconPath(self.boosterGuiType)
 
     @property
     def bigIcon(self):
-        return _BOOSTER_BIG_ICON_PATH % self.boosterGuiType
+        return RES_ICONS.boosterBigIconPath(self.boosterGuiType)
 
     @property
     def bigTooltipIcon(self):
-        return _BOOSTER_TT_BIG_ICON_PATH % self.boosterGuiType
+        return RES_ICONS.boosterTTBigIconPath(self.boosterGuiType)
 
     @property
     def boosterGuiType(self):
@@ -250,7 +244,7 @@ class Booster(_Goodie):
 
     @property
     def qualityStr(self):
-        return _ms(_BOOSTER_QUALITY_LOCALE % self.quality)
+        return _ms(MENU.boosterQualityLocale(self.quality))
 
     @property
     def inCooldown(self):
@@ -276,7 +270,7 @@ class Booster(_Goodie):
 
     @property
     def userName(self):
-        return _ms(_BOOSTER_TYPE_LOCALE % self.boosterGuiType)
+        return _ms(MENU.boosterTypeLocale(self.boosterGuiType))
 
     @property
     def fullUserName(self):
@@ -302,11 +296,14 @@ class Booster(_Goodie):
             kpiList.append(KPI(name, 1.0 + self.effectValue / 100.0, KPI.Type.MUL))
         return kpiList
 
+    def getTypeAsString(self):
+        return _BOOSTER_TYPE_TEXT[self.boosterType]
+
     def getDescription(self, valueFormatter=None):
-        return _ms(_BOOSTER_DESCRIPTION_LOCALE % self.boosterGuiType, effectValue=self.getFormattedValue(valueFormatter)) + _ms(MENU.BOOSTER_DESCRIPTION_EFFECTTIME, effectTime=self.getEffectTimeStr())
+        return _ms(MENU.boosterDescriptionLocale(self.boosterGuiType), effectValue=self.getFormattedValue(valueFormatter)) + _ms(MENU.BOOSTER_DESCRIPTION_EFFECTTIME, effectTime=self.getEffectTimeStr())
 
     def getBonusDescription(self, valueFormatter=None):
-        return _ms(_BOOSTER_BONUS_LOCALE % self.boosterGuiType, effectValue=self.getFormattedValue(valueFormatter), effectHours=self.getEffectTimeStr(hoursOnly=True))
+        return _ms(MENU.boosterBonusLocale(self.boosterGuiType), effectValue=self.getFormattedValue(valueFormatter), effectHours=self.getEffectTimeStr(hoursOnly=True))
 
     def getCooldownAsPercent(self):
         percent = 0
@@ -325,10 +322,10 @@ class Booster(_Goodie):
         return time_utils.getTillTimeString(self.getUsageLeftTime(), MENU.TIME_TIMEVALUESHORT)
 
     def getEffectTimeStr(self, hoursOnly=False):
-        return _ms(MENU.VEHICLEPREVIEW_TIMELEFTSHORT_HOURS, hour=time.strftime('%H', time.gmtime(self.effectTime)).lstrip('0')) if hoursOnly else time_utils.getTillTimeString(self.effectTime, MENU.TIME_TIMEVALUE)
+        return _ms(MENU.VEHICLEPREVIEW_TIMELEFTSHORT_HOURS, hour=str(time.gmtime(self.effectTime).tm_hour)) if hoursOnly else time_utils.getTillTimeString(self.effectTime, MENU.TIME_TIMEVALUE)
 
     def getQualityIcon(self):
-        return _BOOSTER_QUALITY_SOURCE_PATH % self.quality
+        return RES_ICONS.boosterQualitySourcePath(self.quality)
 
     def getShopIcon(self, size=STORE_CONSTANTS.ICON_SIZE_MEDIUM):
         return RES_SHOP_EXT.getBoosterIcon(size, self.boosterGuiType)
@@ -356,9 +353,9 @@ class Booster(_Goodie):
 
     def getFormattedValue(self, formatter=None):
         if self.effectValue > 0:
-            value = '+%s%%' % self.effectValue
+            value = '+{}%'.format(self.effectValue)
         else:
-            value = '%s%%' % self.effectValue
+            value = '{}%'.format(self.effectValue)
         return formatter(value) if formatter is not None else value
 
     @classmethod

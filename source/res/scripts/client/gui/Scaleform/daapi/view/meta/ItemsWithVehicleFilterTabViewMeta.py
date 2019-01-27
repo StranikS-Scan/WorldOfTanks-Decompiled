@@ -1,14 +1,17 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/meta/ItemsWithVehicleFilterTabViewMeta.py
-from gui.Scaleform.daapi.view.lobby.storage.inventory.inventory_view import FiltrableInventoryCategoryTabView
+from gui.Scaleform.daapi.view.lobby.storage.inventory.inventory_view import InventoryCategoryView
 
-class ItemsWithVehicleFilterTabViewMeta(FiltrableInventoryCategoryTabView):
+class ItemsWithVehicleFilterTabViewMeta(InventoryCategoryView):
 
     def sellItem(self, itemId):
         self._printOverrideError('sellItem')
 
     def resetFilter(self):
         self._printOverrideError('resetFilter')
+
+    def resetVehicleFilter(self):
+        self._printOverrideError('resetVehicleFilter')
 
     def onFiltersChange(self, filters):
         self._printOverrideError('onFiltersChange')

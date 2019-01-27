@@ -3,13 +3,14 @@
 import nations
 from items import vehicles
 from web_client_api import w2c, w2capi, Field, W2CSchema
+from web_client_api.shop import ItemsWebApiMixin
 
 class _VehicleInfoSchema(W2CSchema):
     vehicle_id = Field(type=(int, long))
 
 
 @w2capi(name='vehicles', key='action')
-class VehiclesWebApi(W2CSchema):
+class VehiclesWebApi(W2CSchema, ItemsWebApiMixin):
 
     @w2c(_VehicleInfoSchema, 'vehicle_info')
     def vehicleInfo(self, cmd):

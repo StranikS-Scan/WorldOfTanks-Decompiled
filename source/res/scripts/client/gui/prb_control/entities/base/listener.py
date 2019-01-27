@@ -13,7 +13,9 @@ class IPrbListener(object):
         return None
 
     def startPrbListening(self):
-        self.prbEntity.addListener(self)
+        if self.prbEntity is not None:
+            self.prbEntity.addListener(self)
+        return
 
     def stopPrbListening(self):
         if self.prbEntity is not None:

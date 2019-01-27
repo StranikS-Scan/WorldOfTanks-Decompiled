@@ -206,6 +206,8 @@ class BattleQueue(BattleQueueMeta, LobbySubView):
         super(BattleQueue, self)._populate()
         self._blur.enable = True
         self.fireEvent(events.HangarVehicleEvent(events.HangarVehicleEvent.HERO_TANK_MARKER, ctx={'isDisable': True}), EVENT_BUS_SCOPE.LOBBY)
+        self.addListener(events.GameEvent.SHOW_EXTERNAL_COMPONENTS, self._onShowExternals, scope=EVENT_BUS_SCOPE.GLOBAL)
+        self.addListener(events.GameEvent.HIDE_EXTERNAL_COMPONENTS, self._onHideExternals, scope=EVENT_BUS_SCOPE.GLOBAL)
         g_playerEvents.onArenaCreated += self.onStartBattle
         self.__updateQueueInfo()
         self.__updateTimer()
@@ -215,6 +217,8 @@ class BattleQueue(BattleQueueMeta, LobbySubView):
     def _dispose(self):
         self.__stopUpdateScreen()
         g_playerEvents.onArenaCreated -= self.onStartBattle
+        self.removeListener(events.GameEvent.SHOW_EXTERNAL_COMPONENTS, self._onShowExternals, scope=EVENT_BUS_SCOPE.GLOBAL)
+        self.removeListener(events.GameEvent.HIDE_EXTERNAL_COMPONENTS, self._onHideExternals, scope=EVENT_BUS_SCOPE.GLOBAL)
         self._blur.enable = False
         self.fireEvent(events.HangarVehicleEvent(events.HangarVehicleEvent.HERO_TANK_MARKER, ctx={'isDisable': False}), EVENT_BUS_SCOPE.LOBBY)
         super(BattleQueue, self)._dispose()
@@ -282,6 +286,12 @@ class BattleQueue(BattleQueueMeta, LobbySubView):
     def _getProvider(self):
         return self.__provider
 
+    def _onHideExternals(self, _):
+        self._blur.enable = False
+
+    def _onShowExternals(self, _):
+        self._blur.enable = True
+
 
 class BattleStrongholdsQueue(BattleStrongholdsQueueMeta, LobbySubView, ClanEmblemsHelper, IGlobalListener):
     __sound_env__ = BattleQueueEnv
@@ -337,15 +347,19 @@ class BattleStrongholdsQueue(BattleStrongholdsQueueMeta, LobbySubView, ClanEmble
         super(BattleStrongholdsQueue, self)._populate()
         self._blur.enable = True
         self.fireEvent(events.HangarVehicleEvent(events.HangarVehicleEvent.HERO_TANK_MARKER, ctx={'isDisable': True}), EVENT_BUS_SCOPE.LOBBY)
+        self.addListener(events.GameEvent.SHOW_EXTERNAL_COMPONENTS, self._onShowExternals, scope=EVENT_BUS_SCOPE.GLOBAL)
+        self.addListener(events.GameEvent.HIDE_EXTERNAL_COMPONENTS, self._onHideExternals, scope=EVENT_BUS_SCOPE.GLOBAL)
         self.startPrbListening()
         self.addListener(events.StrongholdEvent.STRONGHOLD_ON_TIMER, self.__onMatchmakingTimerChanged, scope=EVENT_BUS_SCOPE.STRONGHOLD)
         g_playerEvents.onArenaCreated += self.onStartBattle
-        permissions = self.prbEntity.getPermissions()
-        self.as_showExitS(permissions.canStopBattleQueue())
+        if self.prbEntity is not None:
+            permissions = self.prbEntity.getPermissions()
+            self.as_showExitS(permissions.canStopBattleQueue())
         self.as_showWaitingS('')
         self.__battleQueueVO = self.__getBattleQueueVO()
         self.__requestClanIcon()
         MusicControllerWWISE.play()
+        return
 
     def _dispose(self):
         self.__stopUpdateScreen()
@@ -353,6 +367,8 @@ class BattleStrongholdsQueue(BattleStrongholdsQueueMeta, LobbySubView, ClanEmble
         self.stopPrbListening()
         self.removeListener(events.StrongholdEvent.STRONGHOLD_ON_TIMER, self.__onMatchmakingTimerChanged, scope=EVENT_BUS_SCOPE.STRONGHOLD)
         self.__imagesFetchCoordinator.fini()
+        self.removeListener(events.GameEvent.SHOW_EXTERNAL_COMPONENTS, self._onShowExternals, scope=EVENT_BUS_SCOPE.GLOBAL)
+        self.removeListener(events.GameEvent.HIDE_EXTERNAL_COMPONENTS, self._onHideExternals, scope=EVENT_BUS_SCOPE.GLOBAL)
         self._blur.enable = False
         self.fireEvent(events.HangarVehicleEvent(events.HangarVehicleEvent.HERO_TANK_MARKER, ctx={'isDisable': False}), EVENT_BUS_SCOPE.LOBBY)
         super(BattleStrongholdsQueue, self)._dispose()
@@ -369,14 +385,16 @@ class BattleStrongholdsQueue(BattleStrongholdsQueueMeta, LobbySubView, ClanEmble
     def __requestClanIcon(self):
         myClanIcon = self.__battleQueueVO['myClanIcon']
         if not myClanIcon:
-            if self.prbEntity.isStrongholdSettingsValid():
-                clan = self.prbEntity.getStrongholdSettings().getHeader().getClan()
+            entity = self.prbEntity
+            if entity.isStrongholdSettingsValid():
+                clan = entity.getStrongholdSettings().getHeader().getClan()
                 self.requestClanEmblem32x32(clan.getId())
                 self.__battleQueueVO['myClanName'] = getClanTag(clan.getTag(), clan.getColor())
 
     def __getTitle(self):
-        if self.prbEntity.isStrongholdSettingsValid():
-            header = self.prbEntity.getStrongholdSettings().getHeader()
+        entity = self.prbEntity
+        if entity is not None and entity.isStrongholdSettingsValid():
+            header = entity.getStrongholdSettings().getHeader()
             if header.isSortie():
                 level = int2roman(header.getMaxLevel())
                 title = makeString(FORTIFICATIONS.STRONGHOLDINFO_SORTIE) % {'level': level}
@@ -499,3 +517,9 @@ class BattleStrongholdsQueue(BattleStrongholdsQueueMeta, LobbySubView, ClanEmble
     def __showBattleRoom():
         g_eventDispatcher.loadStrongholds()
         g_eventDispatcher.loadHangar()
+
+    def _onHideExternals(self, _):
+        self._blur.enable = False
+
+    def _onShowExternals(self, _):
+        self._blur.enable = True

@@ -301,6 +301,9 @@ class BattleAbility(Equipment):
     def shortDescription(self):
         return self.descriptor.shortDescription
 
+    def getSubTypeName(self):
+        return self.descriptor.__class__.__name__
+
     def setLevel(self, value):
         self._level = value
 

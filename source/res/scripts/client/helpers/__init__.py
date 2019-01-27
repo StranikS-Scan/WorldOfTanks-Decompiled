@@ -174,3 +174,16 @@ def getHelperServicesConfig(manager):
     collector = StatisticsCollector()
     collector.init()
     manager.addInstance(IStatisticsCollector, collector, finalizer='fini')
+
+
+class ReferralButtonHandler(object):
+
+    @classmethod
+    def invoke(cls, **kwargs):
+        from gui.shared.event_dispatcher import showReferralProgramWindow
+        from gui.Scaleform.daapi.view.lobby.referral_program.referral_program_helpers import getReferralProgramURL
+        value = kwargs.get('value', None)
+        url = value.get('action_url', None) if isinstance(value, dict) else None
+        url = getReferralProgramURL() + url
+        showReferralProgramWindow(url)
+        return

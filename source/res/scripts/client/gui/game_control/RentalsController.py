@@ -11,7 +11,7 @@ from gui.shared.utils.requesters.ItemsRequester import REQ_CRITERIA
 from gui.shared.money import Money
 from helpers import dependency
 from helpers import time_utils
-from skeletons.gui.game_control import IRentalsController, ISeasonsController
+from skeletons.gui.game_control import IRentalsController, ISeasonsController, IEpicBattleMetaGameController
 from skeletons.gui.shared import IItemsCache
 from rent_common import SeasonRentDuration, calculateSeasonRentPrice
 from season_common import GameSeason
@@ -22,6 +22,7 @@ RENT_TYPE_WEIGHTS = {RentType.TIME_RENT: 0,
 class RentalsController(IRentalsController):
     itemsCache = dependency.descriptor(IItemsCache)
     seasonsController = dependency.descriptor(ISeasonsController)
+    epicController = dependency.descriptor(IEpicBattleMetaGameController)
 
     def __init__(self):
         super(RentalsController, self).__init__()
@@ -36,6 +37,7 @@ class RentalsController(IRentalsController):
 
     def onLobbyInited(self, event):
         self.itemsCache.onSyncCompleted += self._update
+        self.epicController.onUpdated += self._update
         if self.__rentNotifyTimeCallback is None:
             self.__startRentTimeNotifyCallback()
         return
@@ -51,6 +53,7 @@ class RentalsController(IRentalsController):
         self.__vehiclesForUpdate = None
         self.onRentChangeNotify.clear()
         self.itemsCache.onSyncCompleted -= self._update
+        self.epicController.onUpdated -= self._update
         return
 
     def _update(self, *args):
@@ -156,7 +159,10 @@ class RentalsController(IRentalsController):
         for seasonType in SEASON_NAME_BY_TYPE:
             currentSeason = self.seasonsController.getCurrentSeason(seasonType)
             if currentSeason:
-                nextCycleChange = currentSeason.getCycleEndDate() if currentSeason.hasActiveCycle(time_utils.getCurrentLocalServerTimestamp()) else currentSeason.getCycleStartDate()
+                if currentSeason.hasActiveCycle(time_utils.getCurrentLocalServerTimestamp()):
+                    nextCycleChange = currentSeason.getCycleEndDate()
+                else:
+                    nextCycleChange = currentSeason.getCycleStartDate()
                 delta = float(time_utils.getTimeDeltaFromNow(time_utils.makeLocalServerTime(nextCycleChange)))
                 if delta > 0:
                     nextRentNotification = min(nextRentNotification, self.getDeltaPeriod(delta))

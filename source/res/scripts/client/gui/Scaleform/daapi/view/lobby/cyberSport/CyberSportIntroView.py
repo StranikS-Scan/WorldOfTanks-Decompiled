@@ -58,6 +58,10 @@ class CyberSportIntroView(CyberSportIntroMeta):
         rosterSettings = self.prbEntity.getRosterSettings()
         self.fireEvent(events.LoadViewEvent(CYBER_SPORT_ALIASES.VEHICLE_SELECTOR_POPUP_PY, ctx={'isMultiSelect': False,
          'infoText': CYBERSPORT.WINDOW_VEHICLESELECTOR_INFO_INTRO,
+         'titleText': CYBERSPORT.WINDOW_VEHICLESELECTOR_TITLE,
+         'selectButton': CYBERSPORT.WINDOW_VEHICLESELECTOR_BUTTONS_SELECT,
+         'cancelButton': CYBERSPORT.WINDOW_VEHICLESELECTOR_BUTTONS_CANCEL,
+         'compatibleOnlyLabel': CYBERSPORT.WINDOW_VEHICLESELECTOR_FILTERS_MATCHES,
          'componentsOffset': 45,
          'selectedVehicles': self.__getSelectedVehicles(),
          'section': 'cs_intro_view_vehicle',
@@ -103,6 +107,9 @@ class CyberSportIntroView(CyberSportIntroMeta):
             elif vehicle.type not in _ACCEPTED_VEH_TYPES:
                 isReadyVehicle = False
                 warnTooltip = TOOLTIPS.CYBERSPORT_INTRO_SELECTEDVEHICLEWARN_INCOMPATIBLETYPE
+            elif vehicle.isOnlyForEpicBattles:
+                isReadyVehicle = False
+                warnTooltip = TOOLTIPS.CYBERSPORT_UNIT_FIGHTBTN_EVENTVEHICLEWRONGMODE
             else:
                 warnTooltip, isReadyVehicle = '', vehicle.isReadyToPrebattle()
             self.as_setSelectedVehicleS(makeIntroVehicleVO(vehicle, isReadyVehicle, warnTooltip))

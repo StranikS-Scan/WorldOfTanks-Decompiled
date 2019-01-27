@@ -3,7 +3,6 @@
 import cPickle
 from collections import namedtuple
 import math
-from operator import methodcaller
 import ResMgr
 import BigWorld
 import constants
@@ -49,7 +48,7 @@ from gui.Scaleform.genConsts.BLOCKS_TOOLTIP_TYPES import BLOCKS_TOOLTIP_TYPES
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.connection_mgr import IConnectionManager
 from skeletons.gui.web import IWebController
-from skeletons.gui.game_control import IRefSystemController, IIGRController, IServerStatsController
+from skeletons.gui.game_control import IIGRController, IServerStatsController
 from skeletons.gui.goodies import IGoodiesCache
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
@@ -310,12 +309,6 @@ class ContactTooltipData(ToolTipBaseData):
             if USER_TAG.BAN_CHAT in tags:
                 currentUnit += self.__addBR(currentUnit)
                 currentUnit += self.__makeIconUnitStr('contactMsgsOff.png', TOOLTIPS.CONTACT_UNITS_STATUS_DESCRIPTION_CHATBAN)
-            if USER_TAG.REFERRER in tags:
-                currentUnit += self.__addBR(currentUnit)
-                currentUnit += self.__makeReferralStr(TOOLTIPS.CONTACT_UNITS_STATUS_DESCRIPTION_RECRUITER)
-            elif USER_TAG.REFERRAL in tags:
-                currentUnit += self.__addBR(currentUnit)
-                currentUnit += self.__makeReferralStr(TOOLTIPS.CONTACT_UNITS_STATUS_DESCRIPTION_RECRUIT)
             if currentUnit != '':
                 units.append(currentUnit)
             groupsStr = ''
@@ -343,9 +336,6 @@ class ContactTooltipData(ToolTipBaseData):
 
     def __makeIconUnitStr(self, icon, descr):
         return self.__converter.makeIconTag(iconPath=icon) + ' ' + makeHtmlString('html_templates:contacts/contact', 'tooltipSimpleTxt', {'descr': makeString(descr)})
-
-    def __makeReferralStr(self, descr):
-        return self.__converter.makeIconTag(key='referrTag') + ' ' + makeHtmlString('html_templates:contacts/contact', 'tooltipSimpleTxt', {'descr': makeString(descr)})
 
     def __addBR(self, currentUnit):
         return '<br/>' if currentUnit != '' else ''
@@ -605,151 +595,6 @@ class ClanCommonInfoTooltipData(ToolTipBaseData):
              'statDescriptions': text_styles.concatStylesToMultiLine(text_styles.main(i18n.makeString(TOOLTIPS.CLANCOMMONINFO_STATRATING)), text_styles.main(i18n.makeString(TOOLTIPS.CLANCOMMONINFO_STATBATTLESCOUNT)), text_styles.main(i18n.makeString(TOOLTIPS.CLANCOMMONINFO_STATWINSPERCENT)), text_styles.main(i18n.makeString(TOOLTIPS.CLANCOMMONINFO_STATAVGEXP))),
              'bottomInfoText': text_styles.concatStylesToMultiLine(text_styles.main(i18n.makeString(TOOLTIPS.CLANCOMMONINFO_COMMANDER, commanderName=text_styles.stats(userName))), text_styles.main(i18n.makeString(TOOLTIPS.CLANCOMMONINFO_ACTIVITY, activity=text_styles.standard(isActive)))),
              'isClanActive': data.isActive()}
-
-
-class ToolTipRefSysDescription(ToolTipBaseData):
-    BONUSES_PRIORITY = ('vehicles', 'tankmen', 'credits')
-    refSystem = dependency.descriptor(IRefSystemController)
-
-    def __init__(self, context):
-        super(ToolTipRefSysDescription, self).__init__(context, TOOLTIP_TYPE.REF_SYSTEM)
-
-    def getDisplayableData(self):
-        return {'titleTF': self.__makeTitle(),
-         'actionTF': self.__makeMainText(TOOLTIPS.TOOLTIPREFSYSDESCRIPTION_HEADER_ACTIONTF),
-         'conditionsTF': self.__makeConditions(),
-         'awardsTitleTF': self.__makeStandardText(TOOLTIPS.TOOLTIPREFSYSDESCRIPTION_HEADER_AWARDSTITLETF),
-         'blocksVOs': self.__makeBlocks(),
-         'bottomTF': self.__makeMainText(TOOLTIPS.TOOLTIPREFSYSDESCRIPTION_BOTTOM_BOTTOMTF)}
-
-    def __makeTitle(self):
-        return text_styles.highTitle(makeString(TOOLTIPS.TOOLTIPREFSYSDESCRIPTION_HEADER_TITLETF))
-
-    def __makeMainText(self, value):
-        return text_styles.main(makeString(value))
-
-    def __makeConditions(self):
-        return text_styles.standard(makeString(TOOLTIPS.TOOLTIPREFSYSAWARDS_INFOBODY_CONDITIONS, top=self.refSystem.getPosByXPinTeam()))
-
-    def __makeStandardText(self, value):
-        return text_styles.standard(makeString(value))
-
-    def __makeBlocks(self):
-        result = []
-        for xp, quests in self.refSystem.getQuests():
-            xpCost = BigWorld.wg_getIntegralFormat(xp)
-            awardDescrPars = []
-            for quest in quests:
-                for bonusName in self.BONUSES_PRIORITY:
-                    bonuses = quest.getBonuses(bonusName)
-                    if bonuses:
-                        awardDescrPars.append(', '.join(map(methodcaller('getDescription'), bonuses)))
-
-            awardDescr = ', '.join(awardDescrPars)
-            result.append({'leftTF': text_styles.credits(xpCost),
-             'rightTF': awardDescr,
-             'iconSource': RES_ICONS.MAPS_ICONS_LIBRARY_NORMALXPICON})
-
-        return result
-
-
-class ToolTipRefSysAwards(ToolTipBaseData):
-    BONUSES_PRIORITY = ('vehicles', 'tankmen', 'credits')
-    eventsCache = dependency.descriptor(IEventsCache)
-    refSystem = dependency.descriptor(IRefSystemController)
-
-    def __init__(self, context):
-        super(ToolTipRefSysAwards, self).__init__(context, TOOLTIP_TYPE.REF_SYSTEM)
-
-    def getDisplayableData(self, data):
-        xp, questIDs = cPickle.loads(data)
-
-        def filterFunc(q):
-            return q.getID() in questIDs
-
-        quests = self.eventsCache.getHiddenQuests(filterFunc)
-        icon = ''
-        awardDescrPars = []
-        isCompleted = True
-        for bonusName in self.BONUSES_PRIORITY:
-            for quest in quests.itervalues():
-                bonuses = quest.getBonuses(bonusName)
-                if bonuses:
-                    awardDescrPars.append(', '.join(map(methodcaller('getDescription'), bonuses)))
-                    if not icon:
-                        icon = bonuses[0].getTooltipIcon()
-                if isCompleted and not quest.isCompleted():
-                    isCompleted = False
-
-        awardDescr = ', '.join(awardDescrPars)
-        return {'iconSource': icon,
-         'infoTitle': self.__makeTitle(awardDescr),
-         'infoBody': self.__makeBody(xp, isCompleted),
-         'conditions': self.__makeConditions(),
-         'awardStatus': self.__makeStatus(isCompleted)}
-
-    def __makeTitle(self, value):
-        award = text_styles.highTitle(value)
-        return self.__makeTitleGeneralText(award)
-
-    def __makeTitleGeneralText(self, award):
-        return text_styles.highTitle(i18n.makeString(TOOLTIPS.TOOLTIPREFSYSAWARDS_TITLE_GENERAL, awardMsg=award))
-
-    def __makeBody(self, expCount, isCompleted):
-        howManyExp = expCount - self.refSystem.getReferralsXPPool()
-        notEnoughMsg = ''
-        if not isCompleted and howManyExp > 0:
-            notEnough = text_styles.error(i18n.makeString(TOOLTIPS.TOOLTIPREFSYSAWARDS_INFOBODY_REQUIREMENTS_NOTENOUGH))
-            notEnoughMsg = i18n.makeString(TOOLTIPS.TOOLTIPREFSYSAWARDS_INFOBODY_REQUIREMENTS_NOTENOUGHMSG, notEnough=notEnough, howMany=self.__formatExpCount(howManyExp))
-        resultFormatter = text_styles.main(i18n.makeString(TOOLTIPS.TOOLTIPREFSYSAWARDS_INFOBODY_REQUIREMENTS, expCount=self.__formatExpCount(expCount), notEnoughMsg=notEnoughMsg))
-        return resultFormatter
-
-    def __formatExpCount(self, value):
-        value = text_styles.credits(BigWorld.wg_getIntegralFormat(value))
-        icon = icons.makeImageTag(RES_ICONS.MAPS_ICONS_LIBRARY_NORMALXPICON, 16, 16, -3, 0)
-        return value + icon
-
-    def __makeConditions(self):
-        return text_styles.standard(i18n.makeString(TOOLTIPS.TOOLTIPREFSYSAWARDS_INFOBODY_CONDITIONS, top=self.refSystem.getPosByXPinTeam()))
-
-    def __makeStatus(self, isReceived):
-        loc = TOOLTIPS.TOOLTIPREFSYSAWARDS_INFOBODY_NOTACCESS
-        if isReceived:
-            loc = TOOLTIPS.TOOLTIPREFSYSAWARDS_INFOBODY_ACCESS
-        return text_styles.main(i18n.makeString(loc))
-
-
-class ToolTipRefSysXPMultiplier(ToolTipBaseData):
-    refSystem = dependency.descriptor(IRefSystemController)
-
-    def __init__(self, context):
-        super(ToolTipRefSysXPMultiplier, self).__init__(context, TOOLTIP_TYPE.REF_SYSTEM)
-
-    def getDisplayableData(self):
-        icon = icons.makeImageTag(RES_ICONS.MAPS_ICONS_LIBRARY_NORMALXPICON, 16, 16, -3, 0)
-        expNum = text_styles.credits(makeString(BigWorld.wg_getNiceNumberFormat(self.refSystem.getMaxReferralXPPool())))
-        titleText = text_styles.highTitle(makeString(TOOLTIPS.TOOLTIPREFSYSXPMULTIPLIER_TITLE))
-        descriptionText = text_styles.main(makeString(TOOLTIPS.TOOLTIPREFSYSXPMULTIPLIER_DESCRIPTION))
-        conditionsText = text_styles.standard(makeString(TOOLTIPS.TOOLTIPREFSYSXPMULTIPLIER_CONDITIONS))
-        bottomText = text_styles.main(makeString(TOOLTIPS.TOOLTIPREFSYSXPMULTIPLIER_BOTTOM, expNum=expNum + '<nobr>' + icon))
-        xpBlocks = []
-        for _, (period, bonus) in enumerate(self.refSystem.getRefPeriods()):
-            xpBonus = 'x%s' % BigWorld.wg_getNiceNumberFormat(bonus)
-            condition = self.__formatPeriod(period)
-            xpBlocks.append({'xpIconSource': RES_ICONS.MAPS_ICONS_LIBRARY_NORMALXPICON,
-             'multiplierText': text_styles.credits(xpBonus),
-             'descriptionText': text_styles.main(condition)})
-
-        return {'titleText': titleText,
-         'descriptionText': descriptionText,
-         'conditionsText': conditionsText,
-         'bottomText': bottomText,
-         'xpBlocksVOs': xpBlocks}
-
-    def __formatPeriod(self, period):
-        if period <= 24:
-            return makeString(TOOLTIPS.TOOLTIPREFSYSXPMULTIPLIER_CONDITIONS_HOURS, hoursNum=period)
-        return makeString(TOOLTIPS.TOOLTIPREFSYSXPMULTIPLIER_CONDITIONS_DAYS, daysNum=period / 24) if period <= 8760 else makeString(TOOLTIPS.TOOLTIPREFSYSXPMULTIPLIER_CONDITIONS_OTHER)
 
 
 class _BattleStatus(object):

@@ -2,6 +2,14 @@
 # Embedded file name: scripts/client/gui/game_control/__init__.py
 import constants
 from skeletons.festivity_factory import IFestivityFactory
+from shared_utils import CONST_CONTAINER
+
+class CalendarInvokeOrigin(CONST_CONTAINER):
+    ACTION = 'action'
+    HANGAR = 'hangar'
+    SPLASH = 'first'
+    BANNER = 'banner'
+
 
 def getGameControllersConfig(manager):
     from gui.game_control.AOGAS import AOGASController as _AOGAS
@@ -16,7 +24,6 @@ def getGameControllersConfig(manager):
     from gui.game_control.InternalLinksHandler import InternalLinksHandler as _InternalLinks
     from gui.game_control.NotifyController import NotifyController as _Notify
     from gui.game_control.PromoController import PromoController as _Promos
-    from gui.game_control.RefSystem import RefSystem as _RefSystem
     from gui.game_control.RentalsController import RentalsController as _Rentals
     from gui.game_control.seasons_controller import SeasonsController as _Seasons
     from gui.game_control.ServerStats import ServerStats as _ServerStats
@@ -41,6 +48,8 @@ def getGameControllersConfig(manager):
     from gui.game_control.calendar_controller import CalendarController as _Calendar
     from gui.marathon.marathon_event_controller import MarathonEventsController as _MarathonEventsController
     from skeletons.gui import game_control as _interface
+    from gui.game_control.referral_program_controller import ReferralProgramController as _ReferralController
+    from gui.game_control.badges_controller import BadgesController as _Badges
     tracker = GameStateTracker()
     tracker.init()
     manager.addInstance(_interface.IGameStateTracker, tracker, finalizer='fini')
@@ -63,7 +72,6 @@ def getGameControllersConfig(manager):
     _config(_interface.IInternalLinksController, _InternalLinks())
     _config(_interface.ISoundEventChecker, _Sounds())
     _config(_interface.IServerStatsController, _ServerStats())
-    _config(_interface.IRefSystemController, _RefSystem())
     _config(_interface.IBrowserController, _Browser())
     _config(_interface.IEventsNotificationsController, _EventNotifications())
     _config(_interface.IPromoController, _Promos())
@@ -83,8 +91,10 @@ def getGameControllersConfig(manager):
     _config(_interface.ICalendarController, _Calendar())
     _config(_interface.IEpicBattleMetaGameController, _EpicMeta())
     _config(_interface.IManualController, _ManualController())
+    _config(_interface.IReferralProgramController, _ReferralController())
     if constants.IS_CHINA:
         _config(_interface.IChinaController, _China())
     else:
         _config(_interface.IChinaController, _NoChina())
     _config(_interface.ISeasonsController, _Seasons())
+    _config(_interface.IBadgesController, _Badges())

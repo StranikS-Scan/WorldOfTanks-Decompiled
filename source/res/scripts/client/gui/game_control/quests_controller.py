@@ -99,7 +99,7 @@ class _QuestCache(object):
 
     @classmethod
     def __filterFunc(cls, event):
-        if event.getType() in (EVENT_TYPE.TOKEN_QUEST, EVENT_TYPE.REF_SYSTEM_QUEST):
+        if event.getType() in (EVENT_TYPE.TOKEN_QUEST,):
             return False
         if not event.getFinishTimeLeft():
             return False

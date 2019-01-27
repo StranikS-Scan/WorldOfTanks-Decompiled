@@ -13,14 +13,14 @@ _SOURCE = shop.Source.EXTERNAL
 _ORIGIN = shop.Origin.STORAGE
 
 class ModulesShellsCMHandler(ContextMenu):
-    sqGen = SequenceIDGenerator()
-    itemsCache = dependency.descriptor(IItemsCache)
+    _sqGen = SequenceIDGenerator()
+    _itemsCache = dependency.descriptor(IItemsCache)
 
-    @option(sqGen.next(), CMLabel.INFORMATION)
+    @option(_sqGen.next(), CMLabel.INFORMATION)
     def showInfo(self):
         shared_events.showStorageModuleInfo(self._id)
 
-    @option(sqGen.next(), CMLabel.SELL)
+    @option(_sqGen.next(), CMLabel.SELL)
     @process
     def sell(self):
         yield DialogsInterface.showDialog(SellModuleMeta(self._id))
@@ -30,21 +30,21 @@ class ModulesShellsCMHandler(ContextMenu):
 
 
 class EquipmentCMHandler(ContextMenu):
-    sqGen = SequenceIDGenerator()
-    itemsCache = dependency.descriptor(IItemsCache)
+    _sqGen = SequenceIDGenerator()
+    _itemsCache = dependency.descriptor(IItemsCache)
 
-    @option(sqGen.next(), CMLabel.INFORMATION)
+    @option(_sqGen.next(), CMLabel.INFORMATION)
     def showInfo(self):
         shared_events.showStorageModuleInfo(self._id)
 
-    @option(sqGen.next(), CMLabel.SELL)
+    @option(_sqGen.next(), CMLabel.SELL)
     @process
     def sell(self):
         yield DialogsInterface.showDialog(SellModuleMeta(self._id))
 
-    @option(sqGen.next(), CMLabel.BUY_MORE)
+    @option(_sqGen.next(), CMLabel.BUY_MORE)
     def buy(self):
-        typeID = self.itemsCache.items.getItemByCD(self._id).itemTypeID if self._id else -1
+        typeID = self._itemsCache.items.getItemByCD(self._id).itemTypeID if self._id else -1
         if typeID == GUI_ITEM_TYPE.OPTIONALDEVICE:
             shop.showBuyOptionalDeviceOverlay(self._id, _SOURCE, _ORIGIN)
         elif typeID == GUI_ITEM_TYPE.EQUIPMENT:
@@ -57,18 +57,18 @@ class EquipmentCMHandler(ContextMenu):
 
 
 class BattleBoostersCMHandler(ContextMenu):
-    sqGen = SequenceIDGenerator()
+    _sqGen = SequenceIDGenerator()
 
-    @option(sqGen.next(), CMLabel.INFORMATION)
+    @option(_sqGen.next(), CMLabel.INFORMATION)
     def showInfo(self):
         shared_events.showStorageModuleInfo(self._id)
 
-    @option(sqGen.next(), CMLabel.SELL)
+    @option(_sqGen.next(), CMLabel.SELL)
     @process
     def sell(self):
         yield DialogsInterface.showDialog(SellModuleMeta(self._id))
 
-    @option(sqGen.next(), CMLabel.BUY_MORE)
+    @option(_sqGen.next(), CMLabel.BUY_MORE)
     def buy(self):
         shop.showBuyBattleBoosterOverlay(self._id, _SOURCE, _ORIGIN)
 

@@ -12,15 +12,15 @@ class ProfileTechniqueWindow(ProfileTechnique):
         self.__dataReceiver.onDataReceived += self.__requestedDataReceived
         return
 
-    def __requestedDataReceived(self, databaseID, vehicleID):
-        if self.__currentlyRequestingVehicleId == vehicleID:
-            self._receiveVehicleDossier(vehicleID, databaseID)
-
     def requestData(self, vehicleId):
         self.as_responseVehicleDossierS(None)
         self.__currentlyRequestingVehicleId = int(vehicleId)
         self.__dataReceiver.invoke(self._databaseID, self.__currentlyRequestingVehicleId)
         return
+
+    def invokeUpdate(self):
+        super(ProfileTechniqueWindow, self).invokeUpdate()
+        self._receiveVehicleDossier(self._selectedVehicleIntCD, self._databaseID)
 
     def _dispose(self):
         self.__dataReceiver.onDataReceived -= self.__requestedDataReceived
@@ -32,3 +32,7 @@ class ProfileTechniqueWindow(ProfileTechnique):
     def _setRatingButton(self):
         self.as_setRatingButtonS({'enabled': False,
          'visible': False})
+
+    def __requestedDataReceived(self, databaseID, vehicleID):
+        if self.__currentlyRequestingVehicleId == vehicleID:
+            self._receiveVehicleDossier(vehicleID, databaseID)

@@ -201,7 +201,8 @@ class VehiclePreview(LobbySelectableView, VehiclePreviewMeta):
             self.__updateHeaderData()
 
     def __onInventoryChanged(self, *arg):
-        if not g_currentPreviewVehicle.isPresent() and self.bootcamp.isInBootcamp():
+        g_currentPreviewVehicle.selectNoVehicle()
+        if self.bootcamp.isInBootcamp():
             event_dispatcher.selectVehicleInHangar(self._vehicleCD)
 
     def __onRestoreChanged(self, vehicles):
@@ -328,7 +329,7 @@ class VehiclePreview(LobbySelectableView, VehiclePreviewMeta):
              'tooltip': TOOLTIPS_CONSTANTS.VEHICLE_PREVIEW_CREW_MEMBER,
              'role': role})
 
-        return {'listDesc': text_styles.main(VEHICLE_PREVIEW.INFOPANEL_TAB_CREWINFO_LISTDESC_TEXT),
+        return {'listDesc': text_styles.main(VEHICLE_PREVIEW.INFOPANEL_TAB_LISTDESC_CREW),
          'crewList': crewData}
 
     def __packFactSheetData(self):

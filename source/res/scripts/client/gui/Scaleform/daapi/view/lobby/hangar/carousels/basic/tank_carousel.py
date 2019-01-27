@@ -68,7 +68,8 @@ class TankCarousel(TankCarouselMeta):
         return self.getAlias()
 
     def updateParams(self):
-        self._carouselDP.updateSupplies()
+        if self._carouselDP:
+            self._carouselDP.updateSupplies()
 
     def updateVehicles(self, vehicles=None, filterCriteria=None):
         super(TankCarousel, self).updateVehicles(vehicles, filterCriteria)

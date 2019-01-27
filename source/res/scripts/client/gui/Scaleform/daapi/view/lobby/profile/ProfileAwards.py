@@ -23,15 +23,15 @@ class ProfileAwards(ProfileAwardsMeta):
 
     def _sendAccountData(self, targetData, accountDossier):
         super(ProfileAwards, self)._sendAccountData(targetData, accountDossier)
-        achievements = targetData.getAchievements()
+        achievements = targetData.getAchievements(showHidden=False)
         totalItemsList = []
         for block in achievements:
             totalItemsList.append(len(block))
 
         if self.__achievementsFilter == PROFILE.SECTION_AWARDS_DROPDOWN_LABELS_INPROCESS:
-            achievements = targetData.getAchievements(isInDossier=True)
+            achievements = targetData.getAchievements(isInDossier=True, showHidden=False)
         elif self.__achievementsFilter == PROFILE.SECTION_AWARDS_DROPDOWN_LABELS_NONE:
-            achievements = targetData.getAchievements(isInDossier=False)
+            achievements = targetData.getAchievements(isInDossier=False, showHidden=False)
         packedList = []
         for achievementBlockList in achievements:
             packedList.append(AchievementsUtils.packAchievementList(achievementBlockList, accountDossier.getDossierType(), dumpDossier(accountDossier), self._userID is None))

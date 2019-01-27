@@ -78,9 +78,9 @@ class EpicBattlesSkillView(LobbySubView, EpicBattlesSkillViewMeta):
     def _packSkillViewVO(self):
         unspentSkillPoints = self.epicMetaGameCtrl.getSkillPoints()
         showSkillPoint = unspentSkillPoints > 0
-        data = EpicBattlesSkillViewVO(skillPoints=unspentSkillPoints, skills=[], showBackButton=self.__showBackButton, showSkillPoints=showSkillPoint, header=text_styles.superPromoTitle(EPIC_BATTLE.METAABILITYSCREEN_MANAGE_RESERVES_HEADER), headerBig=text_styles.grandTitle(EPIC_BATTLE.METAABILITYSCREEN_MANAGE_RESERVES_HEADER), skillsLabel=self.__getUnspentPointsStr(showSkillPoint), skillInfo=self._packSkillInfo(), backgroundImageSrc=RES_ICONS.MAPS_ICONS_EPICBATTLES_BACKGROUNDS_META_BLUR_BG)._asdict()
+        data = EpicBattlesSkillViewVO(skillPoints=unspentSkillPoints, skills=[], showBackButton=self.__showBackButton, showSkillPoints=showSkillPoint, header=text_styles.superPromoTitle(EPIC_BATTLE.METAABILITYSCREEN_MANAGE_RESERVES_HEADER), headerBig=text_styles.grandTitle(EPIC_BATTLE.METAABILITYSCREEN_MANAGE_RESERVES_HEADER), skillsLabel=self.__getUnspentPointsStr(showSkillPoint), skillInfo=self._packSkillInfo(), backgroundImageSrc=RES_ICONS.MAPS_ICONS_EPICBATTLES_BACKGROUNDS_META_BG)._asdict()
         skillLvls = self.epicMetaGameCtrl.getSkillLevels()
-        allSkills = self.epicMetaGameCtrl.getSkillInformation()
+        allSkills = self.epicMetaGameCtrl.getAllSkillsInformation()
         for skillID, skillInfo in allSkills.iteritems():
             lvl = skillLvls[skillID] if skillID in skillLvls else 0
             icon = RES_ICONS.getEpicBattlesSkillIcon('176x176', skillInfo.levels[max(1, lvl)].icon)
@@ -120,7 +120,7 @@ class EpicBattlesSkillView(LobbySubView, EpicBattlesSkillViewMeta):
         self.as_updateDataS(self._packSkillViewVODiff(diff))
 
     def __updateSkillDataBlock(self, skillID, level=None):
-        skillInfo = self.epicMetaGameCtrl.getSkillInformation()[skillID]
+        skillInfo = self.epicMetaGameCtrl.getAllSkillsInformation()[skillID]
         currentLvl = self.epicMetaGameCtrl.getSkillLevels().get(skillID, 1)
         specLevel = clamp(1, skillInfo.maxLvl, int(level) if level else currentLvl)
         bodyBlocks = []

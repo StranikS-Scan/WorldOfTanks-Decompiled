@@ -13,5 +13,8 @@ class EpicBattlesWidgetMeta(BaseDAAPIComponent):
     def onSoundTrigger(self, trigerName):
         self._printOverrideError('onSoundTrigger')
 
+    def onChangeServerClick(self):
+        self._printOverrideError('onChangeServerClick')
+
     def as_setDataS(self, data):
         return self.flashObject.as_setData(data) if self._isDAAPIInited() else None

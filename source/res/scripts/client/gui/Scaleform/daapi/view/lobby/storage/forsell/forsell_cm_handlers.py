@@ -10,18 +10,18 @@ from gui.shared import event_dispatcher as shared_events
 from ids_generators import SequenceIDGenerator
 
 class ForSellCMHandler(ContextMenu, EventSystemEntity):
-    sqGen = SequenceIDGenerator()
+    _sqGen = SequenceIDGenerator()
 
-    @option(sqGen.next(), CMLabel.INFORMATION)
+    @option(_sqGen.next(), CMLabel.INFORMATION)
     def showInfo(self):
         shared_events.showStorageModuleInfo(self._id)
 
-    @option(sqGen.next(), CMLabel.SELL)
+    @option(_sqGen.next(), CMLabel.SELL)
     @process
     def sell(self):
         yield DialogsInterface.showDialog(SellModuleMeta(self._id))
 
-    @option(sqGen.next(), CMLabel.SALE_OPTION)
+    @option(_sqGen.next(), CMLabel.SALE_OPTION)
     def switchSaleOption(self):
         self.fireEvent(events.StorageEvent(events.StorageEvent.SELECT_MODULE_FOR_SELL, ctx={'intCD': self._id}), scope=EVENT_BUS_SCOPE.LOBBY)
 

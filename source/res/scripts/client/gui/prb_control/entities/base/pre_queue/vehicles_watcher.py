@@ -8,7 +8,8 @@ class BaseVehiclesWatcher(object):
 
     def start(self):
         self.__setUnsuitableState()
-        g_clientUpdateManager.addCallbacks({'inventory': self.__onInventoryChanged})
+        g_clientUpdateManager.addCallbacks({'inventory': self.__update,
+         'eventsData': self.__update})
 
     def stop(self):
         g_clientUpdateManager.removeObjectCallbacks(self)
@@ -37,5 +38,5 @@ class BaseVehiclesWatcher(object):
         if intCDs:
             g_prbCtrlEvents.onVehicleClientStateChanged(intCDs)
 
-    def __onInventoryChanged(self, diff):
+    def __update(self, diff):
         self.__setUnsuitableState()

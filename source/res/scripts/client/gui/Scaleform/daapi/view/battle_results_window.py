@@ -78,7 +78,8 @@ class BattleResultsWindow(BattleResultsMeta):
 
     def __setBattleResults(self):
         if not self.__dataSet:
-            self.as_setDataS(self.battleResults.getResultsVO(self.__arenaUniqueID))
+            battleResultsVO = self.battleResults.getResultsVO(self.__arenaUniqueID)
+            self.as_setDataS(battleResultsVO)
             self.__dataSet = True
 
     @event_bus_handlers.eventBusHandler(events.LobbySimpleEvent.BATTLE_RESULTS_POSTED, EVENT_BUS_SCOPE.LOBBY)

@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/gui_items/processors/common.py
+import logging
 import BigWorld
-from debug_utils import LOG_DEBUG, LOG_ERROR, LOG_WARNING
 from gui import SystemMessages
 from gui.Scaleform.locale.MESSENGER import MESSENGER
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
@@ -9,6 +9,7 @@ from gui.SystemMessages import SM_TYPE, CURRENCY_TO_SM_TYPE
 from gui.shared.formatters import formatPrice, formatGoldPrice, text_styles, icons
 from gui.shared.gui_items.processors import Processor, makeError, makeSuccess, makeI18nError, makeI18nSuccess, plugins
 from gui.shared.money import Money, Currency
+_logger = logging.getLogger(__name__)
 
 class TankmanBerthsBuyer(Processor):
 
@@ -18,13 +19,13 @@ class TankmanBerthsBuyer(Processor):
         self.berthsPrice = berthsPrice
 
     def _errorHandler(self, code, errStr='', ctx=None):
-        return makeI18nError('buy_tankmen_berths/%s' % errStr, defaultSysMsgKey='buy_tankmen_berths/server_error')
+        return makeI18nError(sysMsgKey='buy_tankmen_berths/{}'.format(errStr), defaultSysMsgKey='buy_tankmen_berths/server_error')
 
     def _successHandler(self, code, ctx=None):
-        return makeI18nSuccess('buy_tankmen_berths/success', money=formatPrice(self.berthsPrice), type=SM_TYPE.PurchaseForGold)
+        return makeI18nSuccess(sysMsgKey='buy_tankmen_berths/success', money=formatPrice(self.berthsPrice), type=SM_TYPE.PurchaseForGold)
 
     def _request(self, callback):
-        LOG_DEBUG('Make server request to buy tankman berths')
+        _logger.debug('Make server request to buy tankman berths')
         BigWorld.player().stats.buyBerths(lambda code: self._response(code, callback))
 
 
@@ -41,14 +42,14 @@ class PremiumAccountBuyer(Processor):
         self.arenaUniqueID = arenaUniqueID
 
     def _errorHandler(self, code, errStr='', ctx=None):
-        return makeI18nError('premium/%s' % errStr, defaultSysMsgKey='premium/server_error', period=self.period, auxData={'errStr': errStr})
+        return makeI18nError(sysMsgKey='premium/{}'.format(errStr), defaultSysMsgKey='premium/server_error', auxData={'errStr': errStr}, period=self.period)
 
     def _successHandler(self, code, ctx=None):
         localKey = 'premium/continueSuccess' if self.wasPremium else 'premium/buyingSuccess'
-        return makeI18nSuccess(localKey, period=self.period, money=formatGoldPrice(self.premiumPrice), type=SM_TYPE.PurchaseForGold)
+        return makeI18nSuccess(sysMsgKey=localKey, period=self.period, money=formatGoldPrice(self.premiumPrice), type=SM_TYPE.PurchaseForGold)
 
     def _request(self, callback):
-        LOG_DEBUG('Make server request to buy premium account', self.period, self.premiumPrice)
+        _logger.debug('Make server request to buy premium account, %s, %s', self.period, self.premiumPrice)
         BigWorld.player().stats.upgradeToPremium(self.period, self.arenaUniqueID, lambda code, errStr: self._response(code, callback, errStr=errStr))
 
     def __getConfirmator(self, withoutBenefits, period, price):
@@ -69,13 +70,13 @@ class GoldToCreditsExchanger(Processor):
           'resultCurrencyAmount': BigWorld.wg_getIntegralFormat(self.credits)}), plugins.MoneyValidator(Money(gold=self.gold))))
 
     def _errorHandler(self, code, errStr='', ctx=None):
-        return makeI18nError('exchange/%s' % errStr, defaultSysMsgKey='exchange/server_error', gold=self.gold)
+        return makeI18nError(sysMsgKey='exchange/{}'.format(errStr), defaultSysMsgKey='exchange/server_error', gold=self.gold)
 
     def _successHandler(self, code, ctx=None):
-        return makeI18nSuccess('exchange/success', gold=BigWorld.wg_getGoldFormat(self.gold), credits=formatPrice(Money(credits=self.credits)), type=SM_TYPE.FinancialTransactionWithGold)
+        return makeI18nSuccess(sysMsgKey='exchange/success', gold=BigWorld.wg_getGoldFormat(self.gold), credits=formatPrice(Money(credits=self.credits)), type=SM_TYPE.FinancialTransactionWithGold)
 
     def _request(self, callback):
-        LOG_DEBUG('Make server request to exchange gold to credits')
+        _logger.debug('Make server request to exchange gold to credits')
         BigWorld.player().stats.exchange(self.gold, lambda code: self._response(code, callback))
 
 
@@ -90,13 +91,13 @@ class FreeXPExchanger(Processor):
         super(FreeXPExchanger, self).__init__(plugins=(self.__makeConfirmator(), plugins.MoneyValidator(Money(gold=self.gold)), plugins.EliteVehiclesValidator(self.vehiclesCD)))
 
     def _errorHandler(self, code, errStr='', ctx=None):
-        return makeI18nError('exchangeXP/%s' % errStr, defaultSysMsgKey='exchangeXP/server_error', xp=BigWorld.wg_getIntegralFormat(self.xp))
+        return makeI18nError(sysMsgKey='exchangeXP/{}'.format(errStr), defaultSysMsgKey='exchangeXP/server_error', xp=BigWorld.wg_getIntegralFormat(self.xp))
 
     def _successHandler(self, code, ctx=None):
-        return makeI18nSuccess('exchangeXP/success', gold=BigWorld.wg_getGoldFormat(self.gold), xp=BigWorld.wg_getIntegralFormat(self.xp), type=SM_TYPE.FinancialTransactionWithGold)
+        return makeI18nSuccess(sysMsgKey='exchangeXP/success', gold=BigWorld.wg_getGoldFormat(self.gold), xp=BigWorld.wg_getIntegralFormat(self.xp), type=SM_TYPE.FinancialTransactionWithGold)
 
     def _request(self, callback):
-        LOG_DEBUG('Make server request to exchange xp for credits')
+        _logger.debug('Make server request to exchange xp for credits')
         BigWorld.player().stats.convertToFreeXP(self.vehiclesCD, self.xp, lambda code: self._response(code, callback), int(self.__freeConversion))
 
     def __makeConfirmator(self):
@@ -118,14 +119,14 @@ class BattleResultsGetter(Processor):
         self.__arenaUniqueID = arenaUniqueID
 
     def _errorHandler(self, code, errStr='', ctx=None):
-        LOG_WARNING('Error on server request to get battle results ', self.__arenaUniqueID, code, errStr, ctx)
+        _logger.warning('Error on server request to get battle results: %s, %s, %s, %s', self.__arenaUniqueID, code, errStr, ctx)
         return makeError()
 
     def _successHandler(self, code, ctx=None):
         return makeSuccess(auxData=ctx)
 
     def _request(self, callback):
-        LOG_DEBUG('Make server request to get battle results')
+        _logger.debug('Make server request to get battle results')
         BigWorld.player().battleResultsCache.get(self.__arenaUniqueID, lambda code, battleResults: self._response(code, callback, ctx=battleResults))
 
 
@@ -138,14 +139,10 @@ class OutfitApplier(Processor):
         self.season = season
 
     def _errorHandler(self, code, errStr='', ctx=None):
-        if not errStr:
-            msg = 'server_error'
-        else:
-            msg = errStr
-        return makeI18nError('customization/{}'.format(msg))
+        return makeI18nError('customization/{}'.format(errStr or 'server_error'))
 
     def _request(self, callback):
-        LOG_DEBUG('Make server request to put on outfit on vehicle {}, season {}'.format(self.vehicle.invID, self.season))
+        _logger.debug('Make server request to put on outfit on vehicle %s, season %s', self.vehicle.invID, self.season)
         BigWorld.player().shop.buyAndEquipOutfit(self.vehicle.invID, self.season, self.outfit.pack().makeCompDescr(), lambda code: self._response(code, callback))
 
 
@@ -157,19 +154,11 @@ class StyleApplier(Processor):
         self.style = style
 
     def _errorHandler(self, code, errStr='', ctx=None):
-        if not errStr:
-            msg = 'server_error'
-        else:
-            msg = errStr
-        return makeI18nError('customization/{}'.format(msg))
+        return makeI18nError('customization/{}'.format(errStr or 'server_error'))
 
     def _request(self, callback):
-        LOG_DEBUG('Make server request to put on style on vehicle {}'.format(self.vehicle.invID))
-        if self.style:
-            styleID = self.style.id
-        else:
-            styleID = 0
-        BigWorld.player().shop.buyAndEquipStyle(self.vehicle.invID, styleID, lambda code: self._response(code, callback))
+        _logger.debug('Make server request to put on style on vehicle %s', self.vehicle.invID)
+        BigWorld.player().shop.buyAndEquipStyle(self.vehicle.invID, self.style.id if self.style else 0, lambda code: self._response(code, callback))
 
 
 class CustomizationsBuyer(Processor):
@@ -181,24 +170,17 @@ class CustomizationsBuyer(Processor):
         self.count = count
 
     def _errorHandler(self, code, errStr='', ctx=None):
-        if not errStr:
-            msg = 'server_error'
-        else:
-            msg = errStr
-        return makeI18nError('customization/{}'.format(msg))
+        return makeI18nError('customization/{}'.format(errStr or 'server_error'))
 
     def _request(self, callback):
-        if self.vehicle:
-            invID = self.vehicle.invID
-        else:
-            invID = 0
-        LOG_DEBUG('Make server request to buy customizations on vehicle {}: {} count {}'.format(invID, self.item, self.count))
+        invID = self.vehicle.invID if self.vehicle else 0
+        _logger.debug('Make server request to buy customizations on vehicle %s: %s count %s', invID, self.item, self.count)
         BigWorld.player().shop.buyCustomizations(invID, {self.item.intCD: self.count}, lambda code: self._response(code, callback))
 
     def _getTotalPrice(self):
         buyPrice = self.item.buyPrices.itemPrice.price
         if not buyPrice:
-            LOG_ERROR('Incorrect attempt to buy item {}'.format(self.item))
+            _logger.error('Incorrect attempt to buy item %s', self.item)
         return buyPrice * self.count
 
     def _getMsgCtx(self):
@@ -224,16 +206,12 @@ class CustomizationsSeller(Processor):
         self.count = count
 
     def _errorHandler(self, code, errStr='', ctx=None):
-        if not errStr:
-            msg = 'server_error'
-        else:
-            msg = errStr
-        return makeI18nError('customization/{}'.format(msg))
+        return makeI18nError('customization/{}'.format(errStr or 'server_error'))
 
     def _getTotalPrice(self):
         sellPrice = self.item.sellPrices.itemPrice.price
         if not sellPrice:
-            LOG_ERROR('Attempt to sell item {} that is not sold.'.format(self.item))
+            _logger.error('Attempt to sell item %s that is not sold.', self.item)
         return sellPrice * self.count
 
     def _getMsgCtx(self):
@@ -248,11 +226,8 @@ class CustomizationsSeller(Processor):
         return makeSuccess(auxData=ctx)
 
     def _request(self, callback):
-        if self.vehicle:
-            invID = self.vehicle.invID
-        else:
-            invID = 0
-        LOG_DEBUG('Make server request to sell customizations on vehicle {}, item {}, count {}'.format(invID, self.item, self.count))
+        invID = self.vehicle.invID if self.vehicle else 0
+        _logger.debug('Make server request to sell customizations on vehicle %s, item %s, count %s', invID, self.item, self.count)
         BigWorld.player().shop.sellCustomizations(invID, self.item.intCD, self.count, lambda code: self._response(code, callback))
 
 
@@ -272,11 +247,11 @@ class BadgesSelector(Processor):
         pass
 
     def _errorHandler(self, code, errStr='', ctx=None):
-        return makeI18nError('%s/server_error/%s' % (self._getMessagePrefix(), errStr), defaultSysMsgKey='%s/server_error' % self._getMessagePrefix())
+        return makeI18nError(sysMsgKey='{}/server_error/{}'.format(self._getMessagePrefix(), errStr), defaultSysMsgKey='{}/server_error'.format(self._getMessagePrefix()))
 
     def _request(self, callback):
-        LOG_DEBUG('Make server request to select badges', self.__badges)
-        BigWorld.player().badges.selectBadges(self.__badges, lambda resID, code: self._response(code, callback))
+        _logger.debug('Make server request to select badges %s', self.__badges)
+        BigWorld.player().badges.selectBadges(self.__badges, lambda resID, code, errStr: self._response(code, callback, errStr))
 
 
 class EpicPrestigeTrigger(Processor):
@@ -285,7 +260,7 @@ class EpicPrestigeTrigger(Processor):
         return makeI18nError('epicBattles/prestigeTrigger/error')
 
     def _request(self, callback):
-        LOG_DEBUG('Make server request to trigger prestige')
+        _logger.debug('Make server request to trigger prestige')
         BigWorld.player().epicMetaGame.triggerEpicMetaGamePrestige(lambda code, errStr: self._response(code, callback, errStr=errStr))
 
 
@@ -295,5 +270,5 @@ class EpicRewardsClaimer(Processor):
         return makeI18nError('epicBattles/claimReward/error')
 
     def _request(self, callback):
-        LOG_DEBUG('Make server request to claim final reward')
+        _logger.debug('Make server request to claim final reward')
         BigWorld.player().epicMetaGame.claimEpicMetaGameMaxPrestigeReward(lambda code, errStr: self._response(code, callback, errStr=errStr))

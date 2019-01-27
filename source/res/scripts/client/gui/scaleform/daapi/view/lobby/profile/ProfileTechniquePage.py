@@ -66,3 +66,8 @@ class ProfileTechniquePage(ProfileTechniquePageMeta):
     def requestData(self, vehicleId):
         self._receiveVehicleDossier(int(vehicleId), None)
         return
+
+    def invokeUpdate(self):
+        super(ProfileTechniquePage, self).invokeUpdate()
+        self._receiveVehicleDossier(self._selectedVehicleIntCD, None)
+        return

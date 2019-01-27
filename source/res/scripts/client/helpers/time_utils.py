@@ -6,7 +6,7 @@ import datetime
 import time
 import BigWorld
 from debug_utils import LOG_CURRENT_EXCEPTION
-from helpers import i18n
+from helpers.i18n import makeString as _ms
 from soft_exception import SoftException
 DAYS_IN_YEAR = 365
 HOURS_IN_DAY = 24
@@ -136,7 +136,7 @@ def getTillTimeString(timeValue, keyNamespace, isRoundUp=False):
      'hour': time.strftime('%H', gmtime),
      'min': time.strftime('%M', gmtime),
      'sec': time.strftime('%S', gmtime)}
-    return i18n.makeString(('%s/%s' % (keyNamespace, fmtKey)), **fmtValues)
+    return _ms('{}/{}'.format(keyNamespace, fmtKey), **fmtValues)
 
 
 def getCurrentTimestamp():

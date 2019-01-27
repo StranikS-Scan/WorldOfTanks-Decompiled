@@ -2,17 +2,27 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/customization/shared.py
 from collections import namedtuple, Counter
 import Math
+import nations
 from CurrentVehicle import g_currentVehicle
+from gui.Scaleform import getNationsFilterAssetPath
 from gui.customization.shared import HighlightingMode
+from gui.hangar_cameras.hangar_camera_common import CameraMovementStates
+from gui.shared.formatters import icons, text_styles
 from gui.shared.gui_items import GUI_ITEM_TYPE
+from gui.shared.gui_items.Vehicle import VEHICLE_TYPES_ORDER, VEHICLE_TAGS
 from gui.shared.gui_items.gui_item_economics import ITEM_PRICE_EMPTY
 from gui.Scaleform.genConsts.SEASONS_CONSTANTS import SEASONS_CONSTANTS
 from gui.Scaleform.locale.VEHICLE_CUSTOMIZATION import VEHICLE_CUSTOMIZATION
-from helpers import dependency
+from gui.Scaleform.locale.RES_ICONS import RES_ICONS
+from helpers import dependency, int2roman
+from helpers.i18n import makeString as _ms
 from items.components.c11n_constants import SeasonType
+from items.vehicles import VEHICLE_CLASS_TAGS
 from shared_utils import CONST_CONTAINER
+from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
 from gui.shared.money import Money
+from skeletons.gui.shared.utils import IHangarSpace
 
 class C11nMode(CONST_CONTAINER):
     STYLE, CUSTOM = range(2)
@@ -274,3 +284,66 @@ def containsVehicleBound(purchaseItems):
             fromInventoryCounter[purchaseItem.item] += 1
 
     return any((count > item.boundInventoryCount.get(vehCD, 0) for item, count in fromInventoryCounter.items()))
+
+
+def getSuitableText(item, currentVehicle=None):
+    conditions = []
+    for node in item.descriptor.filter.include:
+        separator = ' '.join(['&nbsp;&nbsp;', icons.makeImageTag(RES_ICONS.MAPS_ICONS_CUSTOMIZATION_TOOLTIP_SEPARATOR, 3, 21, -6), '  '])
+        if node.nations:
+            for nation in node.nations:
+                name = nations.NAMES[nation]
+                conditions.append(icons.makeImageTag(getNationsFilterAssetPath(name), 26, 16, -4))
+                conditions.append('  ')
+
+            conditions = conditions[:-1]
+            conditions.append(' ')
+        if node.tags:
+            for vehType in VEHICLE_TYPES_ORDER:
+                if vehType in node.tags:
+                    conditions.append(icons.makeImageTag(RES_ICONS.getFilterVehicleType(vehType), 27, 17, -4))
+
+            if VEHICLE_CLASS_TAGS & node.tags:
+                conditions.append(separator)
+            if VEHICLE_TAGS.PREMIUM in node.tags:
+                conditions.append(icons.makeImageTag(RES_ICONS.MAPS_ICONS_LIBRARY_PREM_SMALL_ICON, 20, 17, -4))
+            if VEHICLE_TAGS.PREMIUM_IGR in node.tags:
+                conditions.append(icons.premiumIgrSmall())
+                conditions.append(separator)
+        if node.levels:
+            for level in node.levels:
+                conditions.append(text_styles.stats(int2roman(level)))
+                conditions.append(text_styles.stats(',&nbsp;'))
+
+            conditions = conditions[:-1]
+            conditions.append(separator)
+        if node.vehicles:
+            conditions.append(text_styles.standard(makeVehiclesShortNamesString(set(node.vehicles), currentVehicle, flat=True)))
+            conditions.append(separator)
+
+    return text_styles.concatStylesToSingleLine(*conditions[:-1])
+
+
+@dependency.replace_none_kwargs(itemsCache=IItemsCache)
+def makeVehiclesShortNamesString(vehiclesCDs, currentVehicle, flat=False, itemsCache=None):
+
+    def getVehicleShortName(vehicleCD):
+        return itemsCache.items.getItemByCD(vehicleCD).shortUserName
+
+    vehiclesShortNames = []
+    if currentVehicle is not None and currentVehicle.intCD in vehiclesCDs and not flat:
+        vehiclesCDs.remove(currentVehicle.intCD)
+        vehiclesShortNames.append(currentVehicle.shortUserName + _ms(VEHICLE_CUSTOMIZATION.CUSTOMIZATION_LIMITED_CURRENT_VEHICLE))
+    vehiclesShortNames.extend(map(getVehicleShortName, vehiclesCDs))
+    return ', '.join(vehiclesShortNames)
+
+
+@dependency.replace_none_kwargs(lobbyContext=ILobbyContext, hangarSpace=IHangarSpace)
+def isC11nEnabled(lobbyContext=None, hangarSpace=None):
+    state = g_currentVehicle.getViewState()
+    vehicleEntity = hangarSpace.getVehicleEntity()
+    if vehicleEntity is None:
+        isVehicleCameraReadyForC11n = False
+    else:
+        isVehicleCameraReadyForC11n = vehicleEntity.state == CameraMovementStates.ON_OBJECT
+    return lobbyContext.getServerSettings().isCustomizationEnabled() and state.isCustomizationEnabled() and not state.isOnlyForEventBattles() and hangarSpace.spaceInited and hangarSpace.isModelLoaded and isVehicleCameraReadyForC11n

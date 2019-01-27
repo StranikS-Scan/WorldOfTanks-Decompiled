@@ -900,7 +900,7 @@ class EVENT_TYPE:
     BATTLE_QUEST = 2
     TOKEN_QUEST = 3
     PERSONAL_QUEST = 6
-    REF_SYSTEM_QUEST = 7
+    REF_SYSTEM_QUEST_DEPRECATED = 7
     POTAPOV_QUEST = 8
     PERSONAL_MISSION = 8
     GROUP = 9
@@ -914,7 +914,6 @@ class EVENT_TYPE:
     NAME_TO_TYPE = {'battleQuest': BATTLE_QUEST,
      'tokenQuest': TOKEN_QUEST,
      'personalQuest': PERSONAL_QUEST,
-     'refSystemQuest': REF_SYSTEM_QUEST,
      'potapovQuest': POTAPOV_QUEST,
      'group': GROUP,
      'tutorial': TUTORIAL,
@@ -927,7 +926,6 @@ class EVENT_TYPE:
     QUEST_RANGE = (BATTLE_QUEST,
      TOKEN_QUEST,
      PERSONAL_QUEST,
-     REF_SYSTEM_QUEST,
      POTAPOV_QUEST,
      PERSONAL_MISSION,
      GROUP,
@@ -942,9 +940,8 @@ class EVENT_TYPE:
      MOTIVE_QUEST,
      RANKED_QUEST,
      NT_QUEST)
-    LIKE_TOKEN_QUESTS = (TOKEN_QUEST, REF_SYSTEM_QUEST)
+    LIKE_TOKEN_QUESTS = (TOKEN_QUEST,)
     ONE_BONUS_QUEST = (TOKEN_QUEST,
-     REF_SYSTEM_QUEST,
      POTAPOV_QUEST,
      PERSONAL_MISSION,
      RANKED_QUEST)
@@ -1086,6 +1083,7 @@ class INVOICE_EMITTER:
     WG = 10
     WGCW = 11
     PSS = 12
+    WOTRP = 13
     NEGATIVE = (BACKYARD,
      COMMUNITY,
      PORTAL,
@@ -1094,7 +1092,8 @@ class INVOICE_EMITTER:
      CN_BUY,
      WG,
      WGCW,
-     PSS)
+     PSS,
+     WOTRP)
     RANGE = (PAYMENT_SYSTEM,
      BACKYARD,
      COMMUNITY,
@@ -1105,7 +1104,8 @@ class INVOICE_EMITTER:
      ACTION_APPLIER,
      WG,
      WGCW,
-     PSS)
+     PSS,
+     WOTRP)
 
 
 class INVOICE_ASSET:
@@ -1128,6 +1128,7 @@ class RentType(object):
 
 
 class GameSeasonType(object):
+    NONE = 0
     RANKED = 1
     EPIC = 2
 
@@ -1217,6 +1218,7 @@ class REQUEST_COOLDOWN:
     RUN_QUEST = 1.0
     PAWN_FREE_AWARD_LIST = 1.0
     LOOTBOX = 1.0
+    BADGES = 2.0
 
 
 IS_SHOW_INGAME_HELP_FIRST_TIME = False
@@ -1607,16 +1609,6 @@ class PREBATTLE_INVITE_STATUS:
 PREBATTLE_INVITE_STATUS_NAMES = dict([ (v, k) for k, v in PREBATTLE_INVITE_STATUS.__dict__.iteritems() if not k.startswith('_') ])
 FAIRPLAY_VIOLATIONS_NAMES = ('deserter', 'suicide', 'afk')
 FAIRPLAY_VIOLATIONS_MASKS = dict([ (name, 1 << index) for index, name in enumerate(FAIRPLAY_VIOLATIONS_NAMES) ])
-
-class REF_SYSTEM_FLAG:
-    REFERRAL_NEW_PLAYER = 1
-    REFERRAL_PHOENIX = 2
-    CONFIRMED_INVITE = 4
-    CONFIRMED_FIRST_BATTLE = 8
-    REFERRAL_BOUGHT_10_LVL_VEH = 16
-    PREFIX_TO_TYPE = {'invited_by': REFERRAL_NEW_PLAYER,
-     'winback_by': REFERRAL_PHOENIX}
-
 
 class INVALID_CLIENT_STATS:
     OK = 0

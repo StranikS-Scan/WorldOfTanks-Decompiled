@@ -216,10 +216,6 @@ class IStatsRequester(IRequester):
         raise NotImplementedError
 
     @property
-    def refSystem(self):
-        raise NotImplementedError
-
-    @property
     def SPA(self):
         raise NotImplementedError
 
@@ -460,10 +456,6 @@ class IShopCommonStats(object):
         raise NotImplementedError
 
     def getEmblemCost(self, days=0):
-        raise NotImplementedError
-
-    @property
-    def refSystem(self):
         raise NotImplementedError
 
     @property

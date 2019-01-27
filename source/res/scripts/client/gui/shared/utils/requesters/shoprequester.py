@@ -347,10 +347,6 @@ class ShopCommonStats(IShopCommonStats):
         return self.playerEmblemCost.get(days)
 
     @property
-    def refSystem(self):
-        return self.getValue('refSystem', {})
-
-    @property
     def tradeIn(self):
         tradeInData = self.getValue('tradeIn')
         return TradeInData(**tradeInData) if tradeInData is not None else TradeInData()

@@ -222,7 +222,7 @@ def __readBonus_seasonRent(outRent, section):
             else:
                 raise SoftException('Invalid season / cycle ID in rent bonus <rent><season>. Expected format: GameSeasonType:season_YYYYMM or                 GameSeasonType:cycle_YYYYMMDD')
             ID = int(strID.split('_', 1)[1].strip())
-            outRent[rentType] = (seasonType, ID)
+            outRent[rentType] = [(seasonType, ID)]
         except (KeyError, ValueError):
             raise SoftException('Failed to parse season rent bonus for <rent><{type}>. Expected format: GameSeasonType:season_YYYYMM or                 GameSeasonType:cycle_YYYYMMDD')
 

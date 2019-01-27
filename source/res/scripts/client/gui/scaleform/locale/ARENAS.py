@@ -116,6 +116,7 @@ class ARENAS(object):
     C_208_BF_EPIC_NORMANDY_NAME = '#arenas:208_bf_epic_normandy/name'
     C_208_BF_EPIC_NORMANDY_DESCRIPTION = '#arenas:208_bf_epic_normandy/description'
     TYPE_EPIC_NAME = '#arenas:type/epic/name'
+    TYPE_EPIC_NAME_INQUOTES = '#arenas:type/epic/name/inQuotes'
     TYPE_EPIC_DESCRIPTION1 = '#arenas:type/epic/description1'
     TYPE_EPIC_DESCRIPTION2 = '#arenas:type/epic/description2'
     C_03_CAMPANIA_BIG_NAME = '#arenas:03_campania_big/name'

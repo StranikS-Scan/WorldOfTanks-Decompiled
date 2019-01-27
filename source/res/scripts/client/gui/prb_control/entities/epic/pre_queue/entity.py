@@ -25,6 +25,7 @@ from gui.ranked_battles.constants import PRIME_TIME_STATUS
 from gui.shared import event_dispatcher
 from helpers import dependency, i18n
 from skeletons.account_helpers.settings_core import ISettingsCore
+from skeletons.connection_mgr import IConnectionManager
 from skeletons.gui.game_control import IEpicBattleMetaGameController
 from skeletons.gui.lobby_context import ILobbyContext
 from predefined_hosts import g_preDefinedHosts
@@ -49,14 +50,14 @@ class EpicSubscriber(PreQueueSubscriber):
 
 
 class EpicEntryPoint(PreQueueEntryPoint):
-    epicController = dependency.descriptor(IEpicBattleMetaGameController)
-    settingsCore = dependency.descriptor(ISettingsCore)
+    __epicController = dependency.descriptor(IEpicBattleMetaGameController)
+    __connectionMgr = dependency.descriptor(IConnectionManager)
 
     def __init__(self):
         super(EpicEntryPoint, self).__init__(FUNCTIONAL_FLAG.EPIC, QUEUE_TYPE.EPIC)
 
     def select(self, ctx, callback=None):
-        status, _, _ = self.epicController.getPrimeTimeStatus()
+        status, _, _ = self.__epicController.getPrimeTimeStatus()
         if status in (PRIME_TIME_STATUS.DISABLED, PRIME_TIME_STATUS.FROZEN, PRIME_TIME_STATUS.NO_SEASON):
             SystemMessages.pushMessage(i18n.makeString(SYSTEM_MESSAGES.EPICBATTLES_NOTIFICATION_NOTAVAILABLE), type=SystemMessages.SM_TYPE.Error)
             if callback is not None:
@@ -70,13 +71,6 @@ class EpicEntryPoint(PreQueueEntryPoint):
             g_prbCtrlEvents.onPreQueueJoinFailure(PRE_QUEUE_JOIN_ERRORS.NOT_AVAILABLE)
             return
         else:
-            _, isCycleActive = self.epicController.getCurrentCycleInfo()
-            if status is not PRIME_TIME_STATUS.AVAILABLE and not isCycleActive:
-                event_dispatcher.showEpicBattlesOfflineWindow()
-                if callback is not None:
-                    callback(False)
-                g_prbCtrlEvents.onPreQueueJoinFailure(PRE_QUEUE_JOIN_ERRORS.NOT_AVAILABLE)
-                return
             super(EpicEntryPoint, self).select(ctx, callback)
             return
 
@@ -86,8 +80,10 @@ class EpicEntryPoint(PreQueueEntryPoint):
     def __isFrontlineAvailableOnDifferentPeriphery(self):
         hostsList = g_preDefinedHosts.getSimpleHostsList(g_preDefinedHosts.hostsWithRoaming())
         for _, _, _, peripheryID in hostsList:
-            primeTimeStatus, _, _ = self.epicController.getPrimeTimeStatus(peripheryID)
-            if primeTimeStatus == PRIME_TIME_STATUS.AVAILABLE:
+            if peripheryID == self.__connectionMgr.peripheryID:
+                continue
+            primeTimeStatus, _, _ = self.__epicController.getPrimeTimeStatus(peripheryID)
+            if primeTimeStatus != PRIME_TIME_STATUS.NOT_SET:
                 return True
 
         return False
@@ -115,8 +111,6 @@ class EpicEntity(PreQueueEntity):
         self.__watcher = EpicVehiclesWatcher()
         self.__watcher.start()
         result = super(EpicEntity, self).init(ctx)
-        if not result & FUNCTIONAL_FLAG.LOAD_PAGE:
-            result |= self.__processWelcome()
         return result
 
     @prequeue_storage_getter(QUEUE_TYPE.EPIC)

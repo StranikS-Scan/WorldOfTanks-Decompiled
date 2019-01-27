@@ -111,8 +111,6 @@ class ContactConverter(object):
         elif USER_TAG.IGR_PREMIUM in tags:
             if USER_TAG.SUB_TO not in tags:
                 icons.append(RES_ICONS.MAPS_ICONS_LIBRARY_PREMIUM_SMALL)
-        if USER_TAG.REFERRAL in tags or USER_TAG.REFERRER in tags:
-            icons.append(RES_ICONS.MAPS_ICONS_REFERRAL_REFERRALSMALLHAND)
         if USER_TAG.IGNORED in tags:
             icons.append(RES_ICONS.MAPS_ICONS_MESSENGER_CONTACTIGNORED)
         elif USER_TAG.FRIEND in tags and USER_TAG.SUB_TO not in tags and USER_TAG.SUB_FROM not in tags:
@@ -210,8 +208,7 @@ class ContactConverter(object):
 
 _CACHED_ICONS_TAGS = {'ignored': ContactConverter.makeIconTag(iconPath='contactIgnored.png'),
  'pending': ContactConverter.makeIconTag(iconPath='contactConfirmNeeded.png'),
- 'note': ContactConverter.makeIconTag(iconPath='contactNote.png'),
- 'refSys': ContactConverter.makeIconTag(key='referrTag')}
+ 'note': ContactConverter.makeIconTag(iconPath='contactNote.png')}
 
 class _GroupCondition(object):
     __slots__ = ('_htmlString', '_allIDs')
@@ -498,24 +495,6 @@ class RqFriendshipConverter(GroupConverter):
 
     def getGuiID(self):
         return CONTACTS_ALIASES.PENDING_FRIENDS_GROUP_RESERVED_ID
-
-
-class ReferralsConverter(GroupConverter):
-
-    def __init__(self, parentCategory):
-        super(ReferralsConverter, self).__init__(i18n.makeString(I18N_MESSENGER.MESSENGER_CONTACTS_MAINGROUPS_OTHER_REFERRALS), parentCategory, TotalCondition())
-
-    def getGuiID(self):
-        return CONTACTS_ALIASES.REFERRALS_GROUP_RESERVED_ID
-
-
-class ReferrersConverter(GroupConverter):
-
-    def __init__(self, parentCategory):
-        super(ReferrersConverter, self).__init__(i18n.makeString(I18N_MESSENGER.MESSENGER_CONTACTS_MAINGROUPS_OTHER_REFERRERS), parentCategory, TotalCondition())
-
-    def getGuiID(self):
-        return CONTACTS_ALIASES.REFERRERS_GROUP_RESERVED_ID
 
 
 class FriendsWoGroupConverter(_ContactsConverter):

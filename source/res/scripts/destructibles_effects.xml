@@ -3832,6 +3832,31 @@
     </hd_env_UNI_073_BurntTreeStump_01_touchdown>
   </fallingAtoms>
   <fragiles>
+    <hd_mle011_GroupBoxes_02>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/hd_mle011_GroupBoxes_02.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <destructionSound>
+            <startKey>	base	</startKey>
+            <wwsound>	obj_generative	</wwsound>
+            <params>
+              <debrisAmount>	59.000000	</debrisAmount>
+              <weight>	7005.000000	</weight>
+              <metal_2>	70.000000	</metal_2>
+              <metal_1>	66.000000	</metal_1>
+              <stone_2>	27.000000	</stone_2>
+            </params>
+          </destructionSound>
+        </effects>
+      </variant1>
+    </hd_mle011_GroupBoxes_02>
     <hd_bld_EU_054_SummerHouse>
       <variant1>
         <stages>
@@ -13717,6 +13742,29 @@
         </effects>
       </variant1>
     </inf_gaf006_GerWoodFenceTile1_02>
+    <hd_gaf_AM_005_Villfence_Gate>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/hd_gaf_AM_005_Villfence_Gate.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <destructionSound>
+            <startKey>	base	</startKey>
+            <wwsound>	obj_generative	</wwsound>
+            <params>
+              <wood_2>	24	</wood_2>
+              <debrisAmount>	100	</debrisAmount>
+              <weight>	3500	</weight>
+            </params>
+          </destructionSound>
+        </effects>
+      </variant1>
+    </hd_gaf_AM_005_Villfence_Gate>
     <inf_gaf_026_WoodFence_Gate_01>
       <variant1>
         <stages>
@@ -15901,6 +15949,30 @@
         </effects>
       </variant1>
     </inf_mle009_BoxCamouflage_02>
+    <hd_mle_UNI_811_CamouflageTent_01>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/hd_mle_UNI_811_CamouflageTent_01.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <destructionSound>
+            <startKey>	base	</startKey>
+            <wwsound>	obj_generative	</wwsound>
+            <params>
+              <wood_2>	18.78	</wood_2>
+              <cloth>	74	</cloth>
+              <debrisAmount>	72.65	</debrisAmount>
+              <weight>	2800	</weight>
+            </params>
+          </destructionSound>
+        </effects>
+      </variant1>
+    </hd_mle_UNI_811_CamouflageTent_01>
     <inf_mle009_BoxCamouflage1>
       <variant1>
         <stages>
@@ -29445,7 +29517,7 @@
               <metal_1>	68.95	</metal_1>
               <metal_2>	37.98	</metal_2>
               <debrisAmount>	97.71	</debrisAmount>
-              <weight>	7214.61	</weight>
+              <weight>	8511.030273	</weight>
             </params>
           </destructionSound>
         </effects>
@@ -29467,9 +29539,9 @@
             <startKey>	base	</startKey>
             <params>
               <metal_1>	68.95	</metal_1>
-              <metal_2>	64.22	</metal_2>
+              <metal_2>	37.980000	</metal_2>
               <debrisAmount>	97.71	</debrisAmount>
-              <weight>	7214.61	</weight>
+              <weight>	8511.030273	</weight>
             </params>
           </destructionSound>
         </effects>
@@ -29538,10 +29610,10 @@
             <wwsound>	obj_generative	</wwsound>
             <startKey>	base	</startKey>
             <params>
-              <metal_1>	68.95	</metal_1>
-              <metal_2>	8.22	</metal_2>
-              <debrisAmount>	97.71	</debrisAmount>
-              <weight>	7214.61	</weight>
+              <metal_1>	6.800000	</metal_1>
+              <metal_2>	25.180000	</metal_2>
+              <debrisAmount>	65.629997	</debrisAmount>
+              <weight>	9908.089844	</weight>
             </params>
           </destructionSound>
         </effects>
@@ -29562,10 +29634,10 @@
             <wwsound>	obj_generative	</wwsound>
             <startKey>	base	</startKey>
             <params>
-              <metal_1>	68.95	</metal_1>
-              <metal_2>	8.22	</metal_2>
-              <debrisAmount>	97.71	</debrisAmount>
-              <weight>	7214.61	</weight>
+              <metal_1>	6.800000	</metal_1>
+              <metal_2>	25.180000	</metal_2>
+              <debrisAmount>	65.629997	</debrisAmount>
+              <weight>	9908.089844	</weight>
             </params>
           </destructionSound>
         </effects>
@@ -29682,10 +29754,10 @@
             <wwsound>	obj_generative	</wwsound>
             <startKey>	base	</startKey>
             <params>
-              <weight>	7214.61	</weight>
-              <metal_1>	50.23	</metal_1>
-              <metal_2>	26.94	</metal_2>
-              <debrisAmount>	97.71	</debrisAmount>
+              <weight>	9908.089844	</weight>
+              <metal_1>	6.800000	</metal_1>
+              <metal_2>	25.180000	</metal_2>
+              <debrisAmount>	65.629997	</debrisAmount>
             </params>
           </destructionSound>
         </effects>
@@ -29706,10 +29778,10 @@
             <wwsound>	obj_generative	</wwsound>
             <startKey>	base	</startKey>
             <params>
-              <weight>	7214.61	</weight>
-              <metal_1>	50.23	</metal_1>
-              <metal_2>	26.94	</metal_2>
-              <debrisAmount>	97.71	</debrisAmount>
+              <weight>	9908.089844	</weight>
+              <metal_1>	6.800000	</metal_1>
+              <metal_2>	25.180000	</metal_2>
+              <debrisAmount>	65.629997	</debrisAmount>
             </params>
           </destructionSound>
         </effects>
@@ -29755,9 +29827,9 @@
             <startKey>	base	</startKey>
             <params>
               <metal_1>	68.95	</metal_1>
-              <metal_2>	8.22	</metal_2>
+              <metal_2>	21.879999	</metal_2>
               <debrisAmount>	80.82	</debrisAmount>
-              <weight>	7214.61	</weight>
+              <weight>	8253.679688	</weight>
             </params>
           </destructionSound>
         </effects>
@@ -29824,9 +29896,10 @@
             <wwsound>	obj_generative	</wwsound>
             <startKey>	base	</startKey>
             <params>
-              <metal_1>	48.4	</metal_1>
-              <debrisAmount>	37.9	</debrisAmount>
-              <weight>	4840.18	</weight>
+              <metal_1>	6.800000	</metal_1>
+              <debrisAmount>	42.470001	</debrisAmount>
+              <weight>	9908.089844	</weight>
+              <metal_2>	25.180000	</metal_2>
             </params>
           </destructionSound>
         </effects>
@@ -29847,9 +29920,10 @@
             <wwsound>	obj_generative	</wwsound>
             <startKey>	base	</startKey>
             <params>
-              <metal_1>	18.26	</metal_1>
+              <metal_1>	6.800000	</metal_1>
               <debrisAmount>	42.47	</debrisAmount>
-              <weight>	4840.18	</weight>
+              <weight>	9908.089844	</weight>
+              <metal_2>	25.180000	</metal_2>
             </params>
           </destructionSound>
         </effects>
@@ -29870,9 +29944,10 @@
             <wwsound>	obj_generative	</wwsound>
             <startKey>	base	</startKey>
             <params>
-              <metal_1>	51.14	</metal_1>
-              <debrisAmount>	34.7	</debrisAmount>
-              <weight>	4840.18	</weight>
+              <metal_1>	6.800000	</metal_1>
+              <debrisAmount>	42.470001	</debrisAmount>
+              <weight>	9908.089844	</weight>
+              <metal_2>	25.180000	</metal_2>
             </params>
           </destructionSound>
         </effects>
@@ -29893,9 +29968,10 @@
             <wwsound>	obj_generative	</wwsound>
             <startKey>	base	</startKey>
             <params>
-              <metal_1>	18.26	</metal_1>
+              <metal_1>	6.800000	</metal_1>
               <debrisAmount>	42.47	</debrisAmount>
-              <weight>	4840.18	</weight>
+              <weight>	9908.089844	</weight>
+              <metal_2>	25.180000	</metal_2>
             </params>
           </destructionSound>
         </effects>
@@ -29916,9 +29992,10 @@
             <wwsound>	obj_generative	</wwsound>
             <startKey>	base	</startKey>
             <params>
-              <metal_1>	18.26	</metal_1>
+              <metal_1>	6.800000	</metal_1>
               <debrisAmount>	42.47	</debrisAmount>
-              <weight>	4840.18	</weight>
+              <weight>	9908.089844	</weight>
+              <metal_2>	25.180000	</metal_2>
             </params>
           </destructionSound>
         </effects>
@@ -29939,9 +30016,10 @@
             <wwsound>	obj_generative	</wwsound>
             <startKey>	base	</startKey>
             <params>
-              <metal_1>	18.26	</metal_1>
+              <metal_1>	6.800000	</metal_1>
               <debrisAmount>	42.47	</debrisAmount>
-              <weight>	4840.18	</weight>
+              <weight>	9908.089844	</weight>
+              <metal_2>	25.180000	</metal_2>
             </params>
           </destructionSound>
         </effects>
@@ -29962,9 +30040,10 @@
             <wwsound>	obj_generative	</wwsound>
             <startKey>	base	</startKey>
             <params>
-              <metal_1>	18.26	</metal_1>
+              <metal_1>	6.800000	</metal_1>
               <debrisAmount>	42.47	</debrisAmount>
-              <weight>	4840.18	</weight>
+              <weight>	9908.089844	</weight>
+              <metal_2>	25.180000	</metal_2>
             </params>
           </destructionSound>
         </effects>
@@ -29985,14 +30064,111 @@
             <wwsound>	obj_generative	</wwsound>
             <startKey>	base	</startKey>
             <params>
-              <metal_1>	18.26	</metal_1>
+              <metal_1>	6.800000	</metal_1>
               <debrisAmount>	42.47	</debrisAmount>
-              <weight>	4840.18	</weight>
+              <weight>	9908.089844	</weight>
+              <metal_2>	25.180000	</metal_2>
             </params>
           </destructionSound>
         </effects>
       </variant1>
     </hd_env_UNI_628_VentilationSys_End_01_hit>
+    <hd_env_UNI_628_VentilationSys_End_02>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/hd_env_UNI_628_VentilationSys_End.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <destructionSound>
+            <wwsound>	obj_generative	</wwsound>
+            <startKey>	base	</startKey>
+            <params>
+              <metal_1>	6.800000	</metal_1>
+              <debrisAmount>	42.47	</debrisAmount>
+              <weight>	9908.089844	</weight>
+              <metal_2>	25.180000	</metal_2>
+            </params>
+          </destructionSound>
+        </effects>
+      </variant1>
+    </hd_env_UNI_628_VentilationSys_End_02>
+    <hd_env_UNI_628_VentilationSys_End_02_hit>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/hd_env_UNI_628_VentilationSys_End.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <destructionSound>
+            <wwsound>	obj_generative	</wwsound>
+            <startKey>	base	</startKey>
+            <params>
+              <metal_1>	6.800000	</metal_1>
+              <debrisAmount>	42.47	</debrisAmount>
+              <weight>	9908.089844	</weight>
+              <metal_2>	25.180000	</metal_2>
+            </params>
+          </destructionSound>
+        </effects>
+      </variant1>
+    </hd_env_UNI_628_VentilationSys_End_02_hit>
+    <hd_env_UNI_628_VentilationSys_End_03>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/hd_env_UNI_628_VentilationSys_End.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <destructionSound>
+            <wwsound>	obj_generative	</wwsound>
+            <startKey>	base	</startKey>
+            <params>
+              <metal_1>	6.800000	</metal_1>
+              <debrisAmount>	42.47	</debrisAmount>
+              <weight>	9908.089844	</weight>
+              <metal_2>	25.180000	</metal_2>
+            </params>
+          </destructionSound>
+        </effects>
+      </variant1>
+    </hd_env_UNI_628_VentilationSys_End_03>
+    <hd_env_UNI_628_VentilationSys_End_03_hit>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/hd_env_UNI_628_VentilationSys_End.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <destructionSound>
+            <wwsound>	obj_generative	</wwsound>
+            <startKey>	base	</startKey>
+            <params>
+              <metal_1>	6.800000	</metal_1>
+              <debrisAmount>	42.47	</debrisAmount>
+              <weight>	9908.089844	</weight>
+              <metal_2>	25.180000	</metal_2>
+            </params>
+          </destructionSound>
+        </effects>
+      </variant1>
+    </hd_env_UNI_628_VentilationSys_End_03_hit>
     <hd_env_UNI_628_VentilationSys_Tile>
       <variant1>
         <stages>
@@ -30031,9 +30207,10 @@
             <wwsound>	obj_generative	</wwsound>
             <startKey>	base	</startKey>
             <params>
-              <metal_1>	42.2	</metal_1>
-              <debrisAmount>	34.4	</debrisAmount>
-              <weight>	6055.05	</weight>
+              <metal_1>	6.800000	</metal_1>
+              <debrisAmount>	42.470001	</debrisAmount>
+              <weight>	9908.089844	</weight>
+              <metal_2>	25.180000	</metal_2>
             </params>
           </destructionSound>
         </effects>
@@ -30054,9 +30231,10 @@
             <wwsound>	obj_generative	</wwsound>
             <startKey>	base	</startKey>
             <params>
-              <metal_1>	42.2	</metal_1>
-              <debrisAmount>	34.4	</debrisAmount>
-              <weight>	6055.05	</weight>
+              <metal_1>	6.800000	</metal_1>
+              <debrisAmount>	42.470001	</debrisAmount>
+              <weight>	9908.089844	</weight>
+              <metal_2>	25.180000	</metal_2>
             </params>
           </destructionSound>
         </effects>

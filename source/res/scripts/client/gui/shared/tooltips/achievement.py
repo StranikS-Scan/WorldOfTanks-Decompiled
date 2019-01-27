@@ -1,21 +1,28 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/tooltips/achievement.py
+import logging
 import constants
 import BigWorld
+from CurrentVehicle import g_currentVehicle
 from debug_utils import LOG_ERROR
+from gui.Scaleform.genConsts.BLOCKS_TOOLTIP_TYPES import BLOCKS_TOOLTIP_TYPES
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
+from gui.shared.formatters import text_styles
 from gui.shared.formatters.icons import makeImageTag
 from gui.shared.money import Money
+from gui.shared.utils import getPlayerName
 from helpers import dependency, int2roman
 from helpers.i18n import makeString
 from dossiers2.custom.config import RECORD_CONFIGS
 from dossiers2.ui.achievements import MARK_OF_MASTERY_RECORD
-from gui.shared.tooltips import ToolTipParameterField, ToolTipDataField, ToolTipData, ToolTipMethodField, ToolTipBaseData, TOOLTIP_TYPE
+from gui.shared.tooltips import ToolTipParameterField, ToolTipDataField, ToolTipData, ToolTipMethodField, ToolTipBaseData, TOOLTIP_TYPE, formatters
+from gui.shared.tooltips.common import BlocksTooltipData
 from gui.shared.gui_items.dossier.achievements.abstract import achievementHasVehiclesList, isSeriesAchievement
 from skeletons.gui.shared import IItemsCache
 _ACHIEVEMENT_VEHICLES_MAX = 5
 _ACHIEVEMENT_VEHICLES_SHOW = 5
+_logger = logging.getLogger(__name__)
 
 class AchievementParamsField(ToolTipParameterField):
 
@@ -213,3 +220,28 @@ class GlobalRatingTooltipData(ToolTipBaseData):
         return {'name': makeString('#achievements:globalRating'),
          'descr': makeString('#achievements:globalRating_descr'),
          'isInDossier': True}
+
+
+class BadgeTooltipData(BlocksTooltipData):
+    __itemsCache = dependency.descriptor(IItemsCache)
+
+    def __init__(self, context):
+        super(BadgeTooltipData, self).__init__(context, TOOLTIP_TYPE.PRIVATE_QUESTS)
+        self._setContentMargin(top=20, left=20, bottom=20, right=20)
+        self._setMargins(afterBlock=16)
+        self._setWidth(364)
+
+    def _packBlocks(self, badgeID):
+        blocks = super(BadgeTooltipData, self)._packBlocks()
+        badge = self.__itemsCache.items.getBadges().get(int(badgeID))
+        if badge is None:
+            _logger.warning('Missing tooltip text for %r, please check badge.po', int(badgeID))
+            return blocks
+        else:
+            tooltipData = [formatters.packTextBlockData(text_styles.highTitle(badge.getUserName())), formatters.packImageBlockData(badge.getHugeIcon(), BLOCKS_TOOLTIP_TYPES.ALIGN_CENTER, padding=formatters.packPadding(top=-5, bottom=11))]
+            if g_currentVehicle.isPresent():
+                vehicle = g_currentVehicle.item
+                tooltipData.append(formatters.packBadgeInfoBlockData(badge.getThumbnailIcon(), vehicle.iconContour, text_styles.bonusPreviewText(getPlayerName()), text_styles.bonusPreviewText(vehicle.shortUserName)))
+            blocks.append(formatters.packBuildUpBlockData(tooltipData))
+            blocks.append(formatters.packTextBlockData(text_styles.main(badge.getUserDescription())))
+            return blocks

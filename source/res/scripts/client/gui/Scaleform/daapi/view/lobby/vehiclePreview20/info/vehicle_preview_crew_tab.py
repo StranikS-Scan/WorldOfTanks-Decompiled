@@ -46,6 +46,7 @@ def getTankmanSkill(skillName, tankman=None):
 
 
 class PreviewTankman(object):
+    _TANKWOMAN_ICON_FORMAT_STRING = '../maps/icons/tankmen/icons/{}/girl-empty.png'
 
     def __init__(self, tmanData):
         self.firstNameID = tmanData.get('firstNameID', None)
@@ -65,7 +66,9 @@ class PreviewTankman(object):
 
     @property
     def fullUserName(self):
-        return getFullUserName(self.nationID, self.firstNameID, self.lastNameID) if self.firstNameID and self.lastNameID else ITEM_TYPES.tankman_roles(self.role)
+        if self.firstNameID and self.lastNameID:
+            return getFullUserName(self.nationID, self.firstNameID, self.lastNameID)
+        return TOOLTIPS.AWARDITEM_TANKWOMEN_HEADER if self.isFemale else ITEM_TYPES.tankman_roles(self.role)
 
     @property
     def vehicleName(self):
@@ -73,11 +76,15 @@ class PreviewTankman(object):
 
     @property
     def icon(self):
-        return getSmallIconPath(self.nationID, self.iconID) if self.iconID else RES_ICONS.getItemBonus42x42(self.role)
+        if self.iconID:
+            return getSmallIconPath(self.nationID, self.iconID)
+        return self._TANKWOMAN_ICON_FORMAT_STRING.format('small') if self.isFemale else RES_ICONS.getItemBonus42x42(self.role)
 
     @property
     def bigIcon(self):
-        return getBigIconPath(self.nationID, self.iconID) if self.iconID else ''
+        if self.iconID:
+            return getBigIconPath(self.nationID, self.iconID)
+        return self._TANKWOMAN_ICON_FORMAT_STRING.format('big') if self.isFemale else ''
 
     @property
     def tooltip(self):
@@ -245,7 +252,7 @@ class VehiclePreviewCrewTab(VehiclePreviewCrewTabMeta):
             for idx, tankman in self.__customCrew:
                 tankmanData = tankman.getVO(showTankmanSkills)
                 tankmanData.update({'crewId': idx})
-                if tankman.iconID:
+                if tankman.iconID or tankman.isFemale:
                     uniqueCrewList.append(tankmanData)
                 regularCrewList.append(tankmanData)
 

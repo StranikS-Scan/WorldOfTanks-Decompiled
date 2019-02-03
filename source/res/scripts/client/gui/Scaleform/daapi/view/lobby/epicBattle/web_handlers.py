@@ -5,7 +5,7 @@ from gui.shared import g_eventBus, events, EVENT_BUS_SCOPE
 from web_client_api import webApiCollection
 from web_client_api.frontline import FrontLineWebApi
 from web_client_api.request import RequestWebApi
-from web_client_api.sound import SoundWebApi, HangarSoundWebApi
+from web_client_api.sound import SoundWebApi, HangarSoundWebApi, SoundStateWebApi
 from web_client_api.shop import ShopWebApi
 from web_client_api.ui import NotificationWebApi, OpenWindowWebApi, OpenTabWebApi
 from web_client_api.ui import CloseWindowWebApi, UtilWebApi, ContextMenuWebApi
@@ -31,4 +31,4 @@ def _goBack(url):
 
 
 def createFrontlineWebHandlers():
-    return webApiCollection(FrontLineWebApi, VehiclesWebApi, RequestWebApi, ShopWebApi, OpenWindowWebApi, CloseWindowWebApi, _OpenTabWebApi, NotificationWebApi, ContextMenuWebApi, UtilWebApi, SoundWebApi, HangarSoundWebApi)
+    return webApiCollection(FrontLineWebApi, VehiclesWebApi, RequestWebApi, ShopWebApi, OpenWindowWebApi, CloseWindowWebApi, _OpenTabWebApi, NotificationWebApi, ContextMenuWebApi, UtilWebApi, SoundWebApi, SoundStateWebApi, HangarSoundWebApi)

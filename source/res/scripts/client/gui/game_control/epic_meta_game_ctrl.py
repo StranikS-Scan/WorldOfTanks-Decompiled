@@ -4,6 +4,7 @@ import logging
 from itertools import chain
 from collections import defaultdict
 import BigWorld
+import WWISE
 import Event
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.game_control.links import URLMacros
@@ -29,6 +30,7 @@ from gui.shared.gui_items.vehicle_equipment import BattleAbilityConsumables
 from gui.prb_control.dispatcher import g_prbLoader
 from gui.shared.utils.scheduled_notifications import Notifiable, SimpleNotifier
 from gui.prb_control.entities.listener import IGlobalListener
+from gui.prb_control.settings import FUNCTIONAL_FLAG
 from helpers.statistics import HARDWARE_SCORE_PARAMS
 from predefined_hosts import g_preDefinedHosts, HOST_AVAILABILITY
 from account_helpers.AccountSettings import AccountSettings, GUI_START_BEHAVIOR
@@ -99,6 +101,23 @@ class EpicMetaGameSkill(object):
         return (self.levels[lvl + 1] for lvl in xrange(maxUnlockedLvlIdx))
 
 
+class _FrontLineSounds(object):
+    __SELECT_EVENT = 'gui_eb_mode_enter'
+    __DESELECT_EVENT = 'gui_eb_mode_exit'
+    __STATE_GROUP = 'STATE_gamemode'
+    __STATE_SELECTED = 'STATE_gamemode_frontline'
+    __STATE_DESELECTED = 'STATE_gamemode_default'
+
+    @staticmethod
+    def onChange(isSelected):
+        if isSelected:
+            WWISE.WW_eventGlobal(_FrontLineSounds.__SELECT_EVENT)
+            WWISE.WW_setState(_FrontLineSounds.__STATE_GROUP, _FrontLineSounds.__STATE_SELECTED)
+        else:
+            WWISE.WW_eventGlobal(_FrontLineSounds.__DESELECT_EVENT)
+            WWISE.WW_setState(_FrontLineSounds.__STATE_GROUP, _FrontLineSounds.__STATE_DESELECTED)
+
+
 class EpicBattleMetaGameController(IEpicBattleMetaGameController, Notifiable, SeasonProvider, IGlobalListener):
     itemsCache = dependency.descriptor(IItemsCache)
     battleResultsService = dependency.descriptor(IBattleResultsService)
@@ -121,6 +140,7 @@ class EpicBattleMetaGameController(IEpicBattleMetaGameController, Notifiable, Se
         self.__performanceGroup = None
         self.__urlMacros = URLMacros()
         self.__baseUrl = GUI_SETTINGS.lookup('frontline')
+        self.__isFrSoundMode = False
         return
 
     def init(self):
@@ -143,17 +163,20 @@ class EpicBattleMetaGameController(IEpicBattleMetaGameController, Notifiable, Se
         g_clientUpdateManager.addCallbacks({'epicMetaGame': self.__updateEpic,
          'inventory': self.__onInventoryUpdate})
         self.startGlobalListening()
-        self.__getStaticData()
+        self.__setData()
         self.__invalidateBattleAbilities()
         self.startNotification()
         if self.getPerformanceGroup() == EPIC_PERF_GROUP.HIGH_RISK:
             self.lobbyContext.addFightButtonConfirmator(self.__confirmFightButtonPressEnabled)
+        self.__isFrSoundMode = False
+        self.__updateSounds()
 
     def onDisconnected(self):
         self.__clear()
 
     def onPrbEntitySwitched(self):
         self.__invalidateBattleAbilities()
+        self.__updateSounds()
 
     def onAccountBecomePlayer(self):
         self.battleResultsService.onResultPosted += self.__showBattleResults
@@ -397,7 +420,7 @@ class EpicBattleMetaGameController(IEpicBattleMetaGameController, Notifiable, Se
         self.__invalidateBattleAbilityItems()
         self.__invalidateBattleAbilitiesForVehicle()
 
-    def __getStaticData(self):
+    def __setData(self):
         self.__skillData = {}
         skills = self.__getSettings().rewards.get('combatReserves', {})
         maxSkillLvl = self.__getSettings().maxCombatReserveLevel
@@ -441,11 +464,19 @@ class EpicBattleMetaGameController(IEpicBattleMetaGameController, Notifiable, Se
 
     def __updateEpicMetaGameSettings(self, diff):
         if 'epic_config' in diff:
+            self.__setData()
             self.onUpdated(diff)
             self.__resetTimer()
 
     def __getTimer(self):
-        _, timeLeft, _ = self.getPrimeTimeStatus()
+        primeTimeStatus, timeLeft, _ = self.getPrimeTimeStatus()
+        if primeTimeStatus != PRIME_TIME_STATUS.AVAILABLE and not self.connectionMgr.isStandalone():
+            allPeripheryIDs = set([ host.peripheryID for host in g_preDefinedHosts.hostsWithRoaming() ])
+            for peripheryID in allPeripheryIDs:
+                peripheryStatus, peripheryTime, _ = self.getPrimeTimeStatus(peripheryID)
+                if peripheryStatus == PRIME_TIME_STATUS.NOT_AVAILABLE and peripheryTime < timeLeft:
+                    timeLeft = peripheryTime
+
         seasonsChangeTime = self.getClosestStateChangeTime()
         currTime = time_utils.getCurrentLocalServerTimestamp()
         if seasonsChangeTime and (currTime + timeLeft > seasonsChangeTime or timeLeft == 0):
@@ -530,6 +561,12 @@ class EpicBattleMetaGameController(IEpicBattleMetaGameController, Notifiable, Se
     def __onInventoryUpdate(self, invDiff):
         if GUI_ITEM_TYPE.VEHICLE or GUI_ITEM_TYPE.BATTLE_ABILITY or GUI_ITEM_TYPE.CUSTOMIZATION in invDiff:
             self.__invalidateBattleAbilities()
+
+    def __updateSounds(self):
+        isFrSoundMode = bool(self.prbEntity.getModeFlags() & FUNCTIONAL_FLAG.EPIC)
+        if isFrSoundMode != self.__isFrSoundMode:
+            _FrontLineSounds.onChange(isFrSoundMode)
+            self.__isFrSoundMode = isFrSoundMode
 
     @async
     @process

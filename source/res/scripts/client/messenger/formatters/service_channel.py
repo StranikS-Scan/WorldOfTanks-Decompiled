@@ -1837,22 +1837,10 @@ class TokenQuestsFormatter(WaitItemsSyncFormatter):
             if strGoodies:
                 result.append(strGoodies)
         if not asBattleFormatter:
-            achieves = data.get('popUpRecords', [])
-            achievesNames = set()
-            badgesNames = set()
-            for recordIdx, value in achieves:
-                record = DB_ID_TO_RECORD[recordIdx]
-                if record[0] == BADGES_BLOCK:
-                    badgesNames.add(i18n.makeString(BADGE.badgeName(record[1])))
-                    continue
-                factory = getAchievementFactory(record)
-                if factory is not None:
-                    a = factory.create(value=int(value))
-                    if a is not None:
-                        achievesNames.add(a.getUserName())
-
-            if achievesNames:
-                result.append(cls.__makeQuestsAchieve('battleQuestsPopUps', achievements=', '.join(achievesNames)))
+            achievementsNames = cls.__extractAchievements(data)
+            if achievementsNames:
+                result.append(cls.__makeQuestsAchieve('battleQuestsPopUps', achievements=', '.join(achievementsNames)))
+            badgesNames = cls.__extractBadges(data)
             if badgesNames:
                 result.append(cls.__makeQuestsAchieve('badgeAchievement', badges=', '.join(badgesNames)))
         return '<br/>'.join(result) if result else None
@@ -1864,6 +1852,32 @@ class TokenQuestsFormatter(WaitItemsSyncFormatter):
     @property
     def _templateName(self):
         pass
+
+    @staticmethod
+    def __extractAchievements(data):
+        achieves = data.get('popUpRecords', [])
+        result = set()
+        for recordIdx, value in achieves:
+            record = DB_ID_TO_RECORD[recordIdx]
+            if record[0] == BADGES_BLOCK:
+                continue
+            factory = getAchievementFactory(record)
+            if factory is not None:
+                a = factory.create(value=int(value))
+                if a is not None:
+                    result.add(a.getUserName())
+
+        return result
+
+    @staticmethod
+    def __extractBadges(data):
+        result = set()
+        for block in data.get('dossier', {}).values():
+            for record in block.keys():
+                if record[0] == BADGES_BLOCK:
+                    result.add(i18n.makeString(BADGE.badgeName(record[1])))
+
+        return result
 
     @classmethod
     def __makeQuestsAchieve(cls, key, **kwargs):
@@ -1891,12 +1905,12 @@ class TokenQuestsFormatter(WaitItemsSyncFormatter):
                 if operationID in operations:
                     operation = operations[operationID]
                     camouflageUnlockedFor.add(operation.getVehicleBonus().intCD)
-            for bonus in quest.getBonuses('dossier', []):
-                for badge in bonus.getBadges():
-                    name = badge.getShortUserName()
-                    if name is None:
-                        LOG_ERROR("Couldn't find user name for the badge {}! Declare necessary localizations in the badge.po file!".format(badge.badgeID))
-                    badges.append(name)
+                for bonus in quest.getBonuses('dossier', []):
+                    for badge in bonus.getBadges():
+                        name = badge.getShortUserName()
+                        if name is None:
+                            LOG_ERROR("Couldn't find user name for the badge {}! Declare necessary localizations in the badge.po file!".format(badge.badgeID))
+                        badges.append(name)
 
         for qID in questIDs:
             if personal_missions.g_cache.isPersonalMission(qID):

@@ -5242,7 +5242,54 @@
       </selector>
     </template>
     <template>
-      <name>	WheeledTrailSide	</name>
+      <name>	4WheeledTrailSide	</name>
+      <selector>
+        <type>	union	</type>
+        <selector>
+          <type>	template	</type>
+          <name>	WheelEffectdust	</name>
+          <parameters>	_Node:_Node1	</parameters>
+        </selector>
+        <selector>
+          <type>	template	</type>
+          <name>	WheelEffectsolid	</name>
+          <parameters>	_Node:_Node2	</parameters>
+        </selector>
+        <selector>
+          <type>	effect	</type>
+          <name>	particles/Tank/movement/forcefields/Forcefield_{0}_track_spd1.xml	</name>
+          <effectHP>	_Node1	</effectHP>
+        </selector>
+      </selector>
+    </template>
+    <template>
+      <name>	6WheeledTrailSide	</name>
+      <selector>
+        <type>	union	</type>
+        <selector>
+          <type>	template	</type>
+          <name>	WheelEffectdust	</name>
+          <parameters>	_Node:_Node1	</parameters>
+        </selector>
+        <selector>
+          <type>	template	</type>
+          <name>	WheelEffectsolid	</name>
+          <parameters>	_Node:_Node2	</parameters>
+        </selector>
+        <selector>
+          <type>	template	</type>
+          <name>	WheelEffectsolid	</name>
+          <parameters>	_Node:_Node3	</parameters>
+        </selector>
+        <selector>
+          <type>	effect	</type>
+          <name>	particles/Tank/movement/forcefields/Forcefield_{0}_track_spd1.xml	</name>
+          <effectHP>	_Node1	</effectHP>
+        </selector>
+      </selector>
+    </template>
+    <template>
+      <name>	8WheeledTrailSide	</name>
       <selector>
         <type>	union	</type>
         <selector>
@@ -5273,19 +5320,57 @@
       </selector>
     </template>
     <template>
-      <name>	WheeledEffectsSet	</name>
+      <name>	4WheeledEffectsSet	</name>
       <selector>
         <type>	union	</type>
         <selector>
           <type>	union	</type>
           <selector>
             <type>	template	</type>
-            <name>	WheeledTrailSide	</name>
+            <name>	4WheeledTrailSide	</name>
+            <parameters>	_Node1:_RNode1;      _Node2:_RNode2;      _matkind:matkindR      	</parameters>
+          </selector>
+          <selector>
+            <type>	template	</type>
+            <name>	4WheeledTrailSide	</name>
+            <parameters>	_Node1:_LNode1;      _Node2:_LNode2;      _matkind:matkindL      	</parameters>
+          </selector>
+        </selector>
+      </selector>
+    </template>
+    <template>
+      <name>	6WheeledEffectsSet	</name>
+      <selector>
+        <type>	union	</type>
+        <selector>
+          <type>	union	</type>
+          <selector>
+            <type>	template	</type>
+            <name>	6WheeledTrailSide	</name>
+            <parameters>	_Node1:_RNode1;      _Node2:_RNode2;      _Node3:_RNode3;      _matkind:matkindR      	</parameters>
+          </selector>
+          <selector>
+            <type>	template	</type>
+            <name>	6WheeledTrailSide	</name>
+            <parameters>	_Node1:_LNode1;      _Node2:_LNode2;      _Node3:_LNode3;      _matkind:matkindL      	</parameters>
+          </selector>
+        </selector>
+      </selector>
+    </template>
+    <template>
+      <name>	8WheeledEffectsSet	</name>
+      <selector>
+        <type>	union	</type>
+        <selector>
+          <type>	union	</type>
+          <selector>
+            <type>	template	</type>
+            <name>	8WheeledTrailSide	</name>
             <parameters>	_Node1:_RNode1;      _Node2:_RNode2;      _Node3:_RNode3;      _Node4:_RNode4;      _matkind:matkindR      	</parameters>
           </selector>
           <selector>
             <type>	template	</type>
-            <name>	WheeledTrailSide	</name>
+            <name>	8WheeledTrailSide	</name>
             <parameters>	_Node1:_LNode1;      _Node2:_LNode2;      _Node3:_LNode3;      _Node4:_LNode4;      _matkind:matkindL      	</parameters>
           </selector>
         </selector>
@@ -5308,6 +5393,144 @@
       </selector>
     </template>
     <template>
+      <name>	4WheelsEffect	</name>
+      <selector>
+        <type>	union	</type>
+        <selector>
+          <type>	range	</type>
+          <variable>	speed	</variable>
+          <selector>
+            <key>	-200	</key>
+            <type>	template	</type>
+            <name>	4WheeledEffectsSet	</name>
+            <parameters>	_RNode1:HP_Wheel_R_02_Front;       _RNode2:HP_Wheel_R_01_Front;       _LNode1:HP_Wheel_L_02_Front;       _LNode2:HP_Wheel_L_01_Front	</parameters>
+          </selector>
+          <selector>
+            <key>	-1	</key>
+            <type>	union	</type>
+          </selector>
+          <selector>
+            <key>	1	</key>
+            <type>	template	</type>
+            <name>	4WheeledEffectsSet	</name>
+            <parameters>	_RNode1:HP_Wheel_R_01_Rear;       _RNode2:HP_Wheel_R_02_Rear;       _LNode1:HP_Wheel_L_01_Rear;       _LNode2:HP_Wheel_L_02_Rear;	</parameters>
+          </selector>
+        </selector>
+        <selector>
+          <type>	range	</type>
+          <variable>	commonSlip	</variable>
+          <selector>
+            <key>	-200	</key>
+            <type>	template	</type>
+            <name>	WheeledSlipEffectsSet	</name>
+            <parameters>	_RNode1:HP_Wheel_R_02_Front;       _LNode1:HP_Wheel_L_02_Front	</parameters>
+          </selector>
+          <selector>
+            <key>	-1	</key>
+            <type>	union	</type>
+          </selector>
+          <selector>
+            <key>	1	</key>
+            <type>	template	</type>
+            <name>	WheeledSlipEffectsSet	</name>
+            <parameters>	_RNode1:HP_Wheel_R_01_Rear;       _LNode1:HP_Wheel_L_01_Rear	</parameters>
+          </selector>
+        </selector>
+      </selector>
+    </template>
+    <template>
+      <name>	6WheelsEffect	</name>
+      <selector>
+        <type>	union	</type>
+        <selector>
+          <type>	range	</type>
+          <variable>	speed	</variable>
+          <selector>
+            <key>	-200	</key>
+            <type>	template	</type>
+            <name>	6WheeledEffectsSet	</name>
+            <parameters>	_RNode1:HP_Wheel_R_03_Front;       _RNode2:HP_Wheel_R_02_Front;       _RNode3:HP_Wheel_R_01_Front;       _LNode1:HP_Wheel_L_03_Front;       _LNode2:HP_Wheel_L_02_Front;       _LNode3:HP_Wheel_L_01_Front	</parameters>
+          </selector>
+          <selector>
+            <key>	-1	</key>
+            <type>	union	</type>
+          </selector>
+          <selector>
+            <key>	1	</key>
+            <type>	template	</type>
+            <name>	6WheeledEffectsSet	</name>
+            <parameters>	_RNode1:HP_Wheel_R_01_Rear;       _RNode2:HP_Wheel_R_02_Rear;       _RNode3:HP_Wheel_R_03_Rear;       _LNode1:HP_Wheel_L_01_Rear;       _LNode2:HP_Wheel_L_02_Rear;       _LNode3:HP_Wheel_L_03_Rear;	</parameters>
+          </selector>
+        </selector>
+        <selector>
+          <type>	range	</type>
+          <variable>	commonSlip	</variable>
+          <selector>
+            <key>	-200	</key>
+            <type>	template	</type>
+            <name>	WheeledSlipEffectsSet	</name>
+            <parameters>	_RNode1:HP_Wheel_R_03_Front;       _LNode1:HP_Wheel_L_03_Front	</parameters>
+          </selector>
+          <selector>
+            <key>	-1	</key>
+            <type>	union	</type>
+          </selector>
+          <selector>
+            <key>	1	</key>
+            <type>	template	</type>
+            <name>	WheeledSlipEffectsSet	</name>
+            <parameters>	_RNode1:HP_Wheel_R_01_Rear;       _LNode1:HP_Wheel_L_01_Rear	</parameters>
+          </selector>
+        </selector>
+      </selector>
+    </template>
+    <template>
+      <name>	6WheelsEffectGendron	</name>
+      <selector>
+        <type>	union	</type>
+        <selector>
+          <type>	range	</type>
+          <variable>	speed	</variable>
+          <selector>
+            <key>	-200	</key>
+            <type>	template	</type>
+            <name>	4WheeledEffectsSet	</name>
+            <parameters>	_RNode1:HP_Wheel_R_03_Front;       _RNode2:HP_Wheel_R_01_Front;       _LNode1:HP_Wheel_L_03_Front;       _LNode2:HP_Wheel_L_01_Front	</parameters>
+          </selector>
+          <selector>
+            <key>	-1	</key>
+            <type>	union	</type>
+          </selector>
+          <selector>
+            <key>	1	</key>
+            <type>	template	</type>
+            <name>	4WheeledEffectsSet	</name>
+            <parameters>	_RNode1:HP_Wheel_R_01_Rear;       _RNode2:HP_Wheel_R_03_Rear;       _LNode1:HP_Wheel_L_01_Rear;       _LNode2:HP_Wheel_L_03_Rear;	</parameters>
+          </selector>
+        </selector>
+        <selector>
+          <type>	range	</type>
+          <variable>	commonSlip	</variable>
+          <selector>
+            <key>	-200	</key>
+            <type>	template	</type>
+            <name>	WheeledSlipEffectsSet	</name>
+            <parameters>	_RNode1:HP_Wheel_R_03_Front;       _LNode1:HP_Wheel_L_03_Front	</parameters>
+          </selector>
+          <selector>
+            <key>	-1	</key>
+            <type>	union	</type>
+          </selector>
+          <selector>
+            <key>	1	</key>
+            <type>	template	</type>
+            <name>	WheeledSlipEffectsSet	</name>
+            <parameters>	_RNode1:HP_Wheel_R_01_Rear;       _LNode1:HP_Wheel_L_01_Rear	</parameters>
+          </selector>
+        </selector>
+      </selector>
+    </template>
+    <template>
       <name>	8WheelsEffect	</name>
       <selector>
         <type>	union	</type>
@@ -5317,7 +5540,7 @@
           <selector>
             <key>	-200	</key>
             <type>	template	</type>
-            <name>	WheeledEffectsSet	</name>
+            <name>	8WheeledEffectsSet	</name>
             <parameters>	_RNode1:HP_Wheel_R_04_Front;       _RNode2:HP_Wheel_R_03_Front;       _RNode3:HP_Wheel_R_02_Front;       _RNode4:HP_Wheel_R_01_Front;       _LNode1:HP_Wheel_L_04_Front;       _LNode2:HP_Wheel_L_03_Front;       _LNode3:HP_Wheel_L_02_Front;       _LNode4:HP_Wheel_L_01_Front	</parameters>
           </selector>
           <selector>
@@ -5327,7 +5550,7 @@
           <selector>
             <key>	1	</key>
             <type>	template	</type>
-            <name>	WheeledEffectsSet	</name>
+            <name>	8WheeledEffectsSet	</name>
             <parameters>	_RNode1:HP_Wheel_R_01_Rear;       _RNode2:HP_Wheel_R_02_Rear;       _RNode3:HP_Wheel_R_03_Rear;       _RNode4:HP_Wheel_R_04_Rear;       _LNode1:HP_Wheel_L_01_Rear;       _LNode2:HP_Wheel_L_02_Rear;       _LNode3:HP_Wheel_L_03_Rear;       _LNode4:HP_Wheel_L_04_Rear	</parameters>
           </selector>
         </selector>
@@ -5481,6 +5704,36 @@
         </selector>
       </selector>
     </strvMud>
+    <medium4WheelsMud>
+      <selector>
+        <type>	union	</type>
+        <selector>
+          <type>	template	</type>
+          <name>	4WheelsEffect	</name>
+          <constantsGroup>	medium	</constantsGroup>
+        </selector>
+      </selector>
+    </medium4WheelsMud>
+    <medium6WheelsMud>
+      <selector>
+        <type>	union	</type>
+        <selector>
+          <type>	template	</type>
+          <name>	6WheelsEffect	</name>
+          <constantsGroup>	medium	</constantsGroup>
+        </selector>
+      </selector>
+    </medium6WheelsMud>
+    <medium6WheelsMudGendron>
+      <selector>
+        <type>	union	</type>
+        <selector>
+          <type>	template	</type>
+          <name>	6WheelsEffectGendron	</name>
+          <constantsGroup>	medium	</constantsGroup>
+        </selector>
+      </selector>
+    </medium6WheelsMudGendron>
     <medium8WheelsMud>
       <selector>
         <type>	union	</type>

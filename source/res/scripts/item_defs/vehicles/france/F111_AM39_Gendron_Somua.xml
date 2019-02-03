@@ -52,7 +52,7 @@
       <lodDist>	FAR	</lodDist>
       <pitchParams>	0.34 38.00 0.36 1.00 0.05 0.34	</pitchParams>
       <rollParams>	1.00 0.34 38.00 0.36 1.00 0.06 0.40	</rollParams>
-      <sensitivityToImpulse>	4.0	</sensitivityToImpulse>
+      <sensitivityToImpulse>	4	</sensitivityToImpulse>
     </swinging>
     <exhaust>
       <pixie>	gas_small	</pixie>
@@ -242,10 +242,6 @@
             <width>	0.265	</width>
           </geometry>
           <proceduralCollisionBody>	true	</proceduralCollisionBody>
-          <deflation>
-            <maxYShift>	0.15	</maxYShift>
-            <explodedRadius>	0.36	</explodedRadius>
-          </deflation>
           <hitTester>
             <collisionModelServer>	vehicles/french/F111_AM39_Gendron_Somua/collision/Wheel_L_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/french/F111_AM39_Gendron_Somua/collision_client/Wheel_L_01.model	</collisionModelClient>
@@ -254,6 +250,7 @@
             <wheel>	5	</wheel>
           </armor>
           <wheelPos>	-0.768 0.603 0.125	</wheelPos>
+          <isLeading>	false	</isLeading>
         </wheel>
         <wheel>
           <index>	5	</index>
@@ -335,10 +332,6 @@
             <width>	0.265	</width>
           </geometry>
           <proceduralCollisionBody>	true	</proceduralCollisionBody>
-          <deflation>
-            <maxYShift>	0.15	</maxYShift>
-            <explodedRadius>	0.36	</explodedRadius>
-          </deflation>
           <hitTester>
             <collisionModelServer>	vehicles/french/F111_AM39_Gendron_Somua/collision/Wheel_R_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/french/F111_AM39_Gendron_Somua/collision_client/Wheel_R_01.model	</collisionModelClient>
@@ -347,6 +340,7 @@
             <wheel>	5	</wheel>
           </armor>
           <wheelPos>	0.779 0.603 0.125	</wheelPos>
+          <isLeading>	false	</isLeading>
         </wheel>
         <generalWheels>	true	</generalWheels>
         <globalDeflationShaderParams>
@@ -361,7 +355,7 @@
       <drivingWheels>	WD_L0 WD_L1	</drivingWheels>
       <effects>
         <lodDist>	MEDIUM	</lodDist>
-        <mud>	smallTankMud	</mud>
+        <mud>	medium6WheelsMudGendron	</mud>
       </effects>
       <wwsoundPC>	wheels_suspension_pc	</wwsoundPC>
       <wwsoundNPC>	wheels_suspension_npc	</wwsoundNPC>

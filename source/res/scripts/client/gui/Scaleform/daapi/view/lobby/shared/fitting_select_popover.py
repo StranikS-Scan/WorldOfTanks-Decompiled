@@ -109,7 +109,7 @@ def _extendByBattleAbilityData(targetData, ability, slotIndex):
     targetData['slotIndex'] = slotIndex
     targetData['desc'] = text_styles.main(ability.shortDescription)
     targetData['name'] = text_styles.stats(ability.userName)
-    targetData['level'] = ability.level if ability.isUnlocked else 1
+    targetData['level'] = ability.level if ability.isUnlocked else 0
     targetData['removeButtonLabel'] = EPIC_BATTLE.FITTINGSELECTPOPOVER_REMOVEBUTTON
     targetData['changeOrderButtonLabel'] = EPIC_BATTLE.FITTINGSELECTPOPOVER_CHANGEORDER
 

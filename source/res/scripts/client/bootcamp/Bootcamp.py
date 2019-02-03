@@ -476,7 +476,7 @@ class Bootcamp(EventSystemEntity):
     def getBattleLoadingPages(self):
         return getBattleSettings(self.__lessonId).lessonPages
 
-    def getIntroPageData(self):
+    def getIntroPageData(self, isChoice=False):
         parameters = self.getParameters()
         autoStart = parameters.get('introAutoStart', False)
         if BattleReplay.isPlaying():
@@ -487,7 +487,8 @@ class Bootcamp(EventSystemEntity):
          'lessonNumber': self.__lessonId,
          'tutorialPages': self.getBattleLoadingPages(),
          'showSkipOption': True,
-         'isReferralEnabled': self.isReferralEnabled()}
+         'isReferralEnabled': self.isReferralEnabled(),
+         'isChoice': isChoice}
         return introPageData
 
     def getIntroVideoData(self):

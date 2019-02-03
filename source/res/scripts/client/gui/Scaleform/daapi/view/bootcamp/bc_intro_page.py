@@ -40,6 +40,7 @@ class BCIntroPage(BCIntroVideoPageMeta):
         self._autoStart = settings.get('autoStart', False)
         self._showSkipOption = settings.get('showSkipOption', True) if not BattleReplay.isPlaying() else False
         self._isReferralEnabled = settings.get('isReferralEnabled', False)
+        self._isChoice = settings.get('isChoice', False)
         self._highlightingMask = 0
         self._goToBattleEvent = lambda : g_bootcampEvents.onGameplayChoice(WOT_GAMEPLAY.BOOTCAMP, WOT_GAMEPLAY.ON)
         return
@@ -54,7 +55,7 @@ class BCIntroPage(BCIntroVideoPageMeta):
             self._setHighlighting(INTRO_HIGHLIGHT_TYPE.START_BUTTON, False)
 
     def skipBootcamp(self):
-        if self.bootcampCtrl.isInBootcampAccount():
+        if self._isChoice:
             g_bootcampEvents.onGameplayChoice(WOT_GAMEPLAY.BOOTCAMP, WOT_GAMEPLAY.OFF)
         else:
             self.bootcampCtrl.runBootcamp()

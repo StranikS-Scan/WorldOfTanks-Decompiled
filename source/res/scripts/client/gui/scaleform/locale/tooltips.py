@@ -1787,7 +1787,6 @@ class TOOLTIPS(object):
     TANK_PARAMS_AVGPARAMCOMMENT_PIERCINGPOWER = '#tooltips:tank_params/avgParamComment/piercingPower'
     TANK_PARAMS_DESC_AVGDAMAGEPERMINUTE = '#tooltips:tank_params/desc/avgDamagePerMinute'
     TANK_PARAMS_DESC_TURRETROTATIONSPEED = '#tooltips:tank_params/desc/turretRotationSpeed'
-    TANK_PARAMS_DESC_GUNROTATIONSPEED = '#tooltips:tank_params/desc/gunRotationSpeed'
     TANK_PARAMS_DESC_CIRCULARVISIONRADIUS = '#tooltips:tank_params/desc/circularVisionRadius'
     TANK_PARAMS_DESC_RADIODISTANCE = '#tooltips:tank_params/desc/radioDistance'
     TANK_PARAMS_DESC_TURRETYAWLIMITS = '#tooltips:tank_params/desc/turretYawLimits'
@@ -3091,7 +3090,6 @@ class TOOLTIPS(object):
      TANK_PARAMS_DESC_AVGDAMAGE,
      TANK_PARAMS_DESC_AVGDAMAGEPERMINUTE,
      TANK_PARAMS_DESC_TURRETROTATIONSPEED,
-     TANK_PARAMS_DESC_GUNROTATIONSPEED,
      TANK_PARAMS_DESC_CIRCULARVISIONRADIUS,
      TANK_PARAMS_DESC_RADIODISTANCE,
      TANK_PARAMS_DESC_TURRETYAWLIMITS,

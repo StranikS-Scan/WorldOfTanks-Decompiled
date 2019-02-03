@@ -23514,52 +23514,6 @@
         </effects>
       </variant1>
     </inf_gaf002_Fence_01>
-    <inf_gaf010_Fence_01>
-      <variant1>
-        <stages>
-          <base>	4.0	</base>
-        </stages>
-        <effects>
-          <pixie>
-            <startKey>	base	</startKey>
-            <file>	particles/Environment/objects/inf_gaf010_FenceTile.xml	</file>
-            <force>	1	</force>
-          </pixie>
-          <destructionSound>
-            <startKey>	base	</startKey>
-            <wwsound>	obj_generative	</wwsound>
-            <params>
-              <wood_1>	40	</wood_1>
-              <debrisAmount>	100	</debrisAmount>
-              <weight>	2600	</weight>
-            </params>
-          </destructionSound>
-        </effects>
-      </variant1>
-    </inf_gaf010_Fence_01>
-    <inf_gaf010_Fence_02>
-      <variant1>
-        <stages>
-          <base>	4.0	</base>
-        </stages>
-        <effects>
-          <pixie>
-            <startKey>	base	</startKey>
-            <file>	particles/Environment/objects/inf_gaf010_FenceTile.xml	</file>
-            <force>	1	</force>
-          </pixie>
-          <destructionSound>
-            <startKey>	base	</startKey>
-            <wwsound>	obj_generative	</wwsound>
-            <params>
-              <wood_1>	24	</wood_1>
-              <debrisAmount>	100	</debrisAmount>
-              <weight>	2600	</weight>
-            </params>
-          </destructionSound>
-        </effects>
-      </variant1>
-    </inf_gaf010_Fence_02>
     <inf_gafAS_001_StoneSimpleWall_end_01>
       <variant1>
         <stages>
@@ -26476,6 +26430,30 @@
         </effects>
       </variant1>
     </hd_env_SU_088_Playground_02>
+    <hd_env_SU_088_Playground_03>
+      <variant1>
+        <stages>
+          <base>	35.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/hd_env_SU_088_Playground_03.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <destructionSound>
+            <startKey>	base	</startKey>
+            <wwsound>	obj_generative	</wwsound>
+            <params>
+              <metal_1>	60.000000	</metal_1>
+              <debrisAmount>	41.000000	</debrisAmount>
+              <weight>	3446.000000	</weight>
+              <metal_2>	44.000000	</metal_2>
+            </params>
+          </destructionSound>
+        </effects>
+      </variant1>
+    </hd_env_SU_088_Playground_03>
     <hd_env_SU_088_Playground_04>
       <variant1>
         <stages>

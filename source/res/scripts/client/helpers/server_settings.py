@@ -410,6 +410,7 @@ class ServerSettings(object):
             self.__updateWgcg(serverSettingsDiff)
         if 'epic_config' in serverSettingsDiff:
             self.__updateEpic(serverSettingsDiff)
+            self.__serverSettings['epic_config'] = serverSettingsDiff['epic_config']
         if 'telecom_config' in serverSettingsDiff:
             self.__telecomConfig = _TelecomConfig(self.__serverSettings['telecom_config'])
         if 'disabledPMOperations' in serverSettingsDiff:
@@ -639,7 +640,7 @@ class ServerSettings(object):
         self.__rankedBattlesSettings = self.__rankedBattlesSettings.replace(targetSettings['ranked_config'])
 
     def __updateEpic(self, targetSettings):
-        self.__epicMetaGameSettings = self.__epicMetaGameSettings.replace(targetSettings['epic_config'])
+        self.__epicMetaGameSettings = self.__epicMetaGameSettings.replace(targetSettings['epic_config'].get('epicMetaGame', {}))
         self.__epicGameSettings = self.__epicGameSettings.replace(targetSettings['epic_config'])
 
     def __updateIngameShop(self, targetSettings):

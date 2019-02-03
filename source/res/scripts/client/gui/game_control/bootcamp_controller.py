@@ -173,7 +173,7 @@ class BootcampController(IBootcampController):
         self.__inBootcampAccount = False
 
     def __onBootcampStartChoice(self):
-        g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.BOOTCAMP_INTRO, None, g_bootcamp.getIntroPageData()), EVENT_BUS_SCOPE.LOBBY)
+        g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.BOOTCAMP_INTRO, None, g_bootcamp.getIntroPageData(True)), EVENT_BUS_SCOPE.LOBBY)
         return
 
     def __onGameplayChoice(self, gameplayType, gameplayChoice):

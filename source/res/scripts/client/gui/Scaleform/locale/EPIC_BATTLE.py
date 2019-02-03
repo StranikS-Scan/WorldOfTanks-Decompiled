@@ -239,6 +239,7 @@ class EPIC_BATTLE(object):
     WIDGETALERTMESSAGEBLOCK_SOMEPERIPHERIESHALT = '#epic_battle:widgetAlertMessageBlock/somePeripheriesHalt'
     WIDGETALERTMESSAGEBLOCK_SINGLEMODEHALT = '#epic_battle:widgetAlertMessageBlock/singleModeHalt'
     WIDGETALERTMESSAGEBLOCK_BUTTON = '#epic_battle:widgetAlertMessageBlock/button'
+    WIDGETALERTMESSAGEBLOCK_STARTIN = '#epic_battle:widgetAlertMessageBlock/startIn'
     STATUS_TIMELEFT_DAYS = '#epic_battle:status/timeLeft/days'
     STATUS_TIMELEFT_HOURS = '#epic_battle:status/timeLeft/hours'
     STATUS_TIMELEFT_MIN = '#epic_battle:status/timeLeft/min'

@@ -25,15 +25,19 @@ class EpicSkillBaseTooltipData(BlocksTooltipData):
 
     def _packBlocks(self, skillID, level=None):
         items = super(EpicSkillBaseTooltipData, self)._packBlocks()
-        self._constructHeader(items, skillID, int(level) if level else self._epicMetaGameCtrl.getSkillLevels().get(skillID, 1))
+        self._constructHeader(items, skillID, int(level) if level else self._epicMetaGameCtrl.getSkillLevels().get(skillID, None))
         return items
 
     def _constructHeader(self, block, skillID, level):
+        if level:
+            romanLvl = int2roman(level)
+            desc = i18n.makeString(EPIC_BATTLE.METAABILITYSCREEN_ABILITY_LEVEL, lvl=romanLvl)
+        else:
+            level = 1
+            desc = EPIC_BATTLE.METAABILITYSCREEN_ABILITY_NOT_UNLOCKED
         skillLevel = self._epicMetaGameCtrl.getAllSkillsInformation()[skillID].levels[level]
         title = skillLevel.name
         icon = skillLevel.icon
-        romanLvl = int2roman(level)
-        desc = i18n.makeString(EPIC_BATTLE.METAABILITYSCREEN_ABILITY_LEVEL, lvl=romanLvl)
         imgPaddingLeft = 20
         imgPaddingTop = 0
         txtOffset = 85

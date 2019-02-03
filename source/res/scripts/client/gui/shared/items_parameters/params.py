@@ -54,7 +54,6 @@ _GUN_EXCLUDED_PARAMS = {GUN_NORMAL: (SHELLS_COUNT_PROP_NAME,
 _FACTOR_TO_SKILL_PENALTY_MAP = {'turret/rotationSpeed': ('turretRotationSpeed', 'relativePower'),
  'circularVisionRadius': ('circularVisionRadius', 'relativeVisibility'),
  'radio/distance': ('radioDistance', 'relativeVisibility'),
- 'gun/rotationSpeed': ('gunRotationSpeed', 'relativePower'),
  'gun/reloadTime': ('reloadTime',
                     'avgDamagePerMinute',
                     'relativePower',
@@ -317,14 +316,7 @@ class VehicleParams(_ParameterBase):
 
     @property
     def turretRotationSpeed(self):
-        return round(math.degrees(items_utils.getTurretRotationSpeed(self._itemDescr, self.__factors)), 2) if self.__hasTurret() else None
-
-    @property
-    def gunRotationSpeed(self):
-        if self._itemDescr.isYawHullAimingAvailable:
-            return self.chassisRotationSpeed
-        else:
-            return round(math.degrees(items_utils.getGunRotationSpeed(self._itemDescr, self.__factors)), 2) if not self.__hasTurret() else None
+        return round(math.degrees(items_utils.getTurretRotationSpeed(self._itemDescr, self.__factors)), 2)
 
     @property
     def circularVisionRadius(self):
@@ -364,7 +356,7 @@ class VehicleParams(_ParameterBase):
     def relativePower(self):
         coeffs = self.__coefficients['power']
         penetration = self._itemDescr.shot.piercingPower[0]
-        rotationSpeed = self.turretRotationSpeed or self.gunRotationSpeed
+        rotationSpeed = self.turretRotationSpeed
         turretCoefficient = 1 if self.__hasTurret() else coeffs['turretCoefficient']
         heCorrection = 1.0
         if 'SPG' in self._itemDescr.type.tags:
@@ -494,7 +486,6 @@ class VehicleParams(_ParameterBase):
         conditionalParams = ('turretYawLimits',
          'gunYawLimits',
          'clipFireRate',
-         'gunRotationSpeed',
          'turretRotationSpeed',
          'turretArmor',
          'reloadTimeSecs',

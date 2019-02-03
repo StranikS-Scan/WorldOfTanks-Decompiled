@@ -56,6 +56,7 @@ class EpicBattlesWidget(EpicBattlesWidgetMeta):
         return CalendarStatusVO(alertIcon=RES_ICONS.MAPS_ICONS_LIBRARY_ALERTBIGICON if showPrimeTimeAlert else None, buttonIcon='', buttonLabel=i18n.makeString(EPIC_BATTLE.WIDGETALERTMESSAGEBLOCK_BUTTON), buttonVisible=showPrimeTimeAlert and hasAvailableServers, buttonTooltip=None, statusText=self.__getAlertStatusText(timeLeft, hasAvailableServers), popoverAlias=None, bgVisible=True, shadowFilterVisible=showPrimeTimeAlert)
 
     def __getAlertStatusText(self, timeLeft, hasAvailableServers):
+        alertStr = ''
         if hasAvailableServers:
             alertStr = _ms(EPIC_BATTLE.WIDGETALERTMESSAGEBLOCK_SOMEPERIPHERIESHALT, serverName=self.__connectionMgr.serverUserNameShort)
         else:
@@ -70,16 +71,20 @@ class EpicBattlesWidget(EpicBattlesWidgetMeta):
                 timeLeftStr = time_utils.getTillTimeString(timeLeft, EPIC_BATTLE.STATUS_TIMELEFT)
                 alertStr = _ms(key, time=timeLeftStr)
             else:
-                prevSeason = self.epicMetaGameCtrl.getCurrentSeason() or self.epicMetaGameCtrl.getPreviousSeason()
+                prevSeason = currSeason or self.epicMetaGameCtrl.getPreviousSeason()
                 if prevSeason is not None:
                     prevCycle = prevSeason.getLastActiveCycleInfo(currTime)
                     if prevCycle is not None:
                         cycleId = prevCycle.getEpicCycleNumber()
                         alertStr = _ms(EPIC_BATTLE.WIDGETALERTMESSAGEBLOCK_NOCYCLEMESSAGE, cycle=cycleId)
-                    else:
-                        alertStr = ''
-                else:
-                    alertStr = ''
+                if not alertStr:
+                    nextSeason = currSeason or self.epicMetaGameCtrl.getNextSeason()
+                    if nextSeason is not None:
+                        nextCycle = nextSeason.getNextByTimeCycle(currTime)
+                        if nextCycle is not None:
+                            cycleId = nextCycle.getEpicCycleNumber()
+                            timeLeftStr = time_utils.getTillTimeString(timeLeft, EPIC_BATTLE.STATUS_TIMELEFT)
+                            alertStr = _ms(EPIC_BATTLE.WIDGETALERTMESSAGEBLOCK_STARTIN, cycle=cycleId, time=timeLeftStr)
         return text_styles.vehicleStatusCriticalText(alertStr)
 
 

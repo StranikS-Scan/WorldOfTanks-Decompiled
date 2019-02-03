@@ -1,11 +1,17 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/web_client_api/sound/__init__.py
 import SoundGroups
+import WWISE
 from web_client_api import w2c, w2capi, W2CSchema, Field
 from gui.app_loader import g_appLoader
 
 class _SoundSchema(W2CSchema):
     sound_id = Field(required=True, type=basestring)
+
+
+class _SoundStateSchema(W2CSchema):
+    state_name = Field(required=True, type=basestring)
+    state_value = Field(required=True, type=basestring)
 
 
 class _HangarSoundSchema(W2CSchema):
@@ -20,6 +26,19 @@ class SoundWebApi(object):
         app = g_appLoader.getApp()
         if app and app.soundManager:
             app.soundManager.playEffectSound(cmd.sound_id)
+
+
+@w2capi()
+class SoundStateWebApi(object):
+    __ON_EXIT_STATES = {'STATE_overlay_hangar_general': 'STATE_overlay_hangar_general_off'}
+
+    @w2c(_SoundStateSchema, 'sound_state', finiHandlerName='_soundStateFini')
+    def setSoundState(self, cmd):
+        WWISE.WW_setState(str(cmd.state_name), str(cmd.state_value))
+
+    def _soundStateFini(self):
+        for stateName, stateValue in self.__ON_EXIT_STATES.iteritems():
+            WWISE.WW_setState(stateName, stateValue)
 
 
 @w2capi()

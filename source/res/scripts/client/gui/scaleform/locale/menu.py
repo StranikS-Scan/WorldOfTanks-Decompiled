@@ -498,7 +498,6 @@ class MENU(object):
     TANK_PARAMS_AVGPIERCINGPOWER = '#menu:tank_params/avgPiercingPower'
     TANK_PARAMS_AVGDAMAGEPERMINUTE = '#menu:tank_params/avgDamagePerMinute'
     TANK_PARAMS_TURRETROTATIONSPEED = '#menu:tank_params/turretRotationSpeed'
-    TANK_PARAMS_GUNROTATIONSPEED = '#menu:tank_params/gunRotationSpeed'
     TANK_PARAMS_CIRCULARVISIONRADIUS = '#menu:tank_params/circularVisionRadius'
     TANK_PARAMS_RADIODISTANCE = '#menu:tank_params/radioDistance'
     TANK_PARAMS_TURRETYAWLIMITS = '#menu:tank_params/turretYawLimits'
@@ -988,7 +987,6 @@ class MENU(object):
     VEHICLEINFO_PARAMS_AVGDAMAGE = '#menu:vehicleInfo/params/avgDamage'
     VEHICLEINFO_PARAMS_AVGPIERCINGPOWER = '#menu:vehicleInfo/params/avgPiercingPower'
     VEHICLEINFO_PARAMS_TURRETROTATIONSPEED = '#menu:vehicleInfo/params/turretRotationSpeed'
-    VEHICLEINFO_PARAMS_GUNROTATIONSPEED = '#menu:vehicleInfo/params/gunRotationSpeed'
     VEHICLEINFO_PARAMS_CIRCULARVISIONRADIUS = '#menu:vehicleInfo/params/circularVisionRadius'
     VEHICLEINFO_PARAMS_RADIODISTANCE = '#menu:vehicleInfo/params/radioDistance'
     VEHICLEINFO_PARAMS_PITCHLIMITS = '#menu:vehicleInfo/params/pitchLimits'
@@ -2061,7 +2059,6 @@ class MENU(object):
      TANK_PARAMS_AVGPIERCINGPOWER,
      TANK_PARAMS_AVGDAMAGEPERMINUTE,
      TANK_PARAMS_TURRETROTATIONSPEED,
-     TANK_PARAMS_GUNROTATIONSPEED,
      TANK_PARAMS_CIRCULARVISIONRADIUS,
      TANK_PARAMS_RADIODISTANCE,
      TANK_PARAMS_TURRETYAWLIMITS,

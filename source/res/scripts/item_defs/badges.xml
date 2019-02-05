@@ -1495,6 +1495,117 @@
       </value>
     </badge>
     <badge>
+      <name>	badgeRP_1tier	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	64	  <name>	id	</name>
+          <type>	int	</type>
+        </item>
+        <item>	1.0	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	19	  <name>	group	</name>
+          <type>	int	</type>
+        </item>
+        <item>	3	  <name>	class	</name>
+          <type>	int	</type>
+        </item>
+        <item>	aquamarine	  <name>	highlight	</name>
+          <type>	string	</type>
+        </item>
+        <item>	1	  <name>	type	</name>
+          <type>	int	</type>
+        </item>
+        <item>
+          <name>	realm	</name>
+          <type>	dict	</type>
+          <value>
+            <item>
+              <name>	exclude	</name>
+              <type>	list	</type>
+              <value>
+                <item>	CN	</item>
+              </value>
+            </item>
+          </value>
+        </item>
+      </value>
+    </badge>
+    <badge>
+      <name>	badgeRP_2tier	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	65	  <name>	id	</name>
+          <type>	int	</type>
+        </item>
+        <item>	1.0	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	19	  <name>	group	</name>
+          <type>	int	</type>
+        </item>
+        <item>	2	  <name>	class	</name>
+          <type>	int	</type>
+        </item>
+        <item>	aquamarine	  <name>	highlight	</name>
+          <type>	string	</type>
+        </item>
+        <item>	1	  <name>	type	</name>
+          <type>	int	</type>
+        </item>
+        <item>
+          <name>	realm	</name>
+          <type>	dict	</type>
+          <value>
+            <item>
+              <name>	exclude	</name>
+              <type>	list	</type>
+              <value>
+                <item>	CN	</item>
+              </value>
+            </item>
+          </value>
+        </item>
+      </value>
+    </badge>
+    <badge>
+      <name>	badgeRP_3tier	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	66	  <name>	id	</name>
+          <type>	int	</type>
+        </item>
+        <item>	1.0	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	19	  <name>	group	</name>
+          <type>	int	</type>
+        </item>
+        <item>	1	  <name>	class	</name>
+          <type>	int	</type>
+        </item>
+        <item>	aquamarine	  <name>	highlight	</name>
+          <type>	string	</type>
+        </item>
+        <item>	1	  <name>	type	</name>
+          <type>	int	</type>
+        </item>
+        <item>
+          <name>	realm	</name>
+          <type>	dict	</type>
+          <value>
+            <item>
+              <name>	exclude	</name>
+              <type>	list	</type>
+              <value>
+                <item>	CN	</item>
+              </value>
+            </item>
+          </value>
+        </item>
+      </value>
+    </badge>
+    <badge>
       <name>	frontline_2019_1	</name>
       <type>	dict	</type>
       <value>

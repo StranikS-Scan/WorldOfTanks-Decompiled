@@ -237,7 +237,7 @@ def getItemDescription(rawItem, item):
         description = _ms(EPIC_BATTLE.EPICBATTLEITEM_SUPPLYPOINTS_DESCRIPTION)
     elif rawItem.type == ItemPackType.CUSTOM_REWARD_POINT:
         description = _ms(EPIC_BATTLE.EPICBATTLEITEM_REWARDPOINTS_DESCRIPTION)
-    elif rawItem.type in ItemPackTypeGroup.CREW:
+    elif rawItem.type in ItemPackTypeGroup.CREW or rawItem.type == ItemPackType.CUSTOM_CREW:
         if rawItem.type == ItemPackType.CREW_CUSTOM:
             description = _ms(TOOLTIPS.CREWCUSTOM_BODY)
         else:

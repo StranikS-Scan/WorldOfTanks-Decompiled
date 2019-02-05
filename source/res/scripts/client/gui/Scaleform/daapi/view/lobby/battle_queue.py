@@ -386,10 +386,11 @@ class BattleStrongholdsQueue(BattleStrongholdsQueueMeta, LobbySubView, ClanEmble
         myClanIcon = self.__battleQueueVO['myClanIcon']
         if not myClanIcon:
             entity = self.prbEntity
-            if entity.isStrongholdSettingsValid():
+            if entity is not None and entity.isStrongholdSettingsValid():
                 clan = entity.getStrongholdSettings().getHeader().getClan()
                 self.requestClanEmblem32x32(clan.getId())
                 self.__battleQueueVO['myClanName'] = getClanTag(clan.getTag(), clan.getColor())
+        return
 
     def __getTitle(self):
         entity = self.prbEntity

@@ -22,8 +22,61 @@ _TOOLTIP_MAX_WIDTH = 480
 _AUTOCANNON_SHOT_DISTANCE = 400
 _MAX_INSTALLED_LIST_LEN = 10
 
+class BattleBoosterTooltipBlockConstructor(object):
+    itemsCache = dependency.descriptor(IItemsCache)
+
+    def __init__(self, module, configuration, leftPadding=20, rightPadding=20):
+        self.module = module
+        self.configuration = configuration
+        self.leftPadding = leftPadding
+        self.rightPadding = rightPadding
+
+    def construct(self):
+        return None
+
+
+class HeaderBlockConstructor(BattleBoosterTooltipBlockConstructor):
+
+    def construct(self):
+        module = self.module
+        block = []
+        title = module.userName
+        imgPaddingLeft = 7
+        imgPaddingTop = 5
+        desc = TOOLTIPS.BATTLEBOOSTER_CREW if module.isCrewBooster() else TOOLTIPS.BATTLEBOOSTER_OPTIONALDEVICE
+        overlayPath, highlightPath = self._getOverlayAndHighlight()
+        overlayPadding = formatters.packPadding(top=SLOT_HIGHLIGHT_TYPES.TOOLTIP_OVERLAY_PADDING_TOP, left=SLOT_HIGHLIGHT_TYPES.TOOLTIP_OVERLAY_PADDING_LEFT)
+        highlightPadding = formatters.packPadding(top=SLOT_HIGHLIGHT_TYPES.TOOLTIP_HIGHLIGHT_PADDING_TOP, left=SLOT_HIGHLIGHT_TYPES.TOOLTIP_HIGHLIGHT_PADDING_LEFT)
+        block.append(formatters.packItemTitleDescBlockData(title=text_styles.highTitle(title), desc=text_styles.standard(_ms(desc)), img=module.icon, imgPadding=formatters.packPadding(left=imgPaddingLeft, top=imgPaddingTop), txtGap=-3, txtOffset=90 - self.leftPadding, padding=formatters.packPadding(top=-6), overlayPath=overlayPath, overlayPadding=overlayPadding, highlightPath=highlightPath, highlightPadding=highlightPadding))
+        return block
+
+    def _getOverlayAndHighlight(self):
+        module = self.module
+        if module.isCrewBooster():
+            currentVehicle = self.configuration.vehicle
+            isLearnt = currentVehicle is None or module.isAffectedSkillLearnt(self.configuration.vehicle)
+            overlayPath = RES_ICONS.MAPS_ICONS_QUESTS_BONUSES_SMALL_BATTLEBOOSTER_OVERLAY if isLearnt else RES_ICONS.MAPS_ICONS_QUESTS_BONUSES_SMALL_BATTLEBOOSTERREPLACE_OVERLAY
+        else:
+            overlayPath = RES_ICONS.MAPS_ICONS_QUESTS_BONUSES_SMALL_BATTLEBOOSTER_OVERLAY
+        highlightPath = RES_ICONS.MAPS_ICONS_QUESTS_BONUSES_SMALL_BATTLEBOOSTER_HIGHLIGHT
+        return (overlayPath, highlightPath)
+
+
+class EpicHeaderBlockConstructor(HeaderBlockConstructor):
+
+    def _getOverlayAndHighlight(self):
+        module = self.module
+        if module.isCrewBooster():
+            overlayPath = RES_ICONS.MAPS_ICONS_QUESTS_BONUSES_SMALL_BATTLEBOOSTERREPLACE_OVERLAY
+        else:
+            overlayPath = RES_ICONS.MAPS_ICONS_QUESTS_BONUSES_SMALL_BATTLEBOOSTER_OVERLAY
+        highlightPath = RES_ICONS.MAPS_ICONS_QUESTS_BONUSES_SMALL_BATTLEBOOSTER_HIGHLIGHT
+        return (overlayPath, highlightPath)
+
+
 class BattleBoosterBlockTooltipData(BlocksTooltipData):
     itemsCache = dependency.descriptor(IItemsCache)
+    _headerBlockConstructor = HeaderBlockConstructor
 
     def __init__(self, context):
         super(BattleBoosterBlockTooltipData, self).__init__(context, TOOLTIP_TYPE.MODULE)
@@ -48,7 +101,7 @@ class BattleBoosterBlockTooltipData(BlocksTooltipData):
         blockPadding = formatters.packPadding(left=leftPadding, right=rightPadding, top=blockTopPadding)
         textGap = -2
         valueWidth = 110
-        items.append(formatters.packBuildUpBlockData(HeaderBlockConstructor(module, statsConfig, leftPadding, rightPadding).construct(), padding=formatters.packPadding(left=leftPadding, right=rightPadding, top=topPadding, bottom=bottomPadding)))
+        items.append(formatters.packBuildUpBlockData(self._headerBlockConstructor(module, statsConfig, leftPadding, rightPadding).construct(), padding=formatters.packPadding(left=leftPadding, right=rightPadding, top=topPadding, bottom=bottomPadding)))
         effectsBlock = EffectsBlockConstructor(module, statusConfig, leftPadding, rightPadding).construct()
         if effectsBlock:
             items.append(formatters.packBuildUpBlockData(effectsBlock, padding=blockPadding, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_BUILDUP_BLOCK_WHITE_BG_LINKAGE))
@@ -80,44 +133,8 @@ class BattleBoosterBlockTooltipData(BlocksTooltipData):
         return items
 
 
-class BattleBoosterTooltipBlockConstructor(object):
-    itemsCache = dependency.descriptor(IItemsCache)
-
-    def __init__(self, module, configuration, leftPadding=20, rightPadding=20):
-        self.module = module
-        self.configuration = configuration
-        self.leftPadding = leftPadding
-        self.rightPadding = rightPadding
-
-    def construct(self):
-        return None
-
-
-class HeaderBlockConstructor(BattleBoosterTooltipBlockConstructor):
-
-    def construct(self):
-        module = self.module
-        block = []
-        title = module.userName
-        imgPaddingLeft = 7
-        imgPaddingTop = 5
-        desc = TOOLTIPS.BATTLEBOOSTER_CREW if module.isCrewBooster() else TOOLTIPS.BATTLEBOOSTER_OPTIONALDEVICE
-        overlayPath, highlightPath = self.__getOverlayAndHighlight()
-        overlayPadding = formatters.packPadding(top=SLOT_HIGHLIGHT_TYPES.TOOLTIP_OVERLAY_PADDING_TOP, left=SLOT_HIGHLIGHT_TYPES.TOOLTIP_OVERLAY_PADDING_LEFT)
-        highlightPadding = formatters.packPadding(top=SLOT_HIGHLIGHT_TYPES.TOOLTIP_HIGHLIGHT_PADDING_TOP, left=SLOT_HIGHLIGHT_TYPES.TOOLTIP_HIGHLIGHT_PADDING_LEFT)
-        block.append(formatters.packItemTitleDescBlockData(title=text_styles.highTitle(title), desc=text_styles.standard(_ms(desc)), img=module.icon, imgPadding=formatters.packPadding(left=imgPaddingLeft, top=imgPaddingTop), txtGap=-3, txtOffset=90 - self.leftPadding, padding=formatters.packPadding(top=-6), overlayPath=overlayPath, overlayPadding=overlayPadding, highlightPath=highlightPath, highlightPadding=highlightPadding))
-        return block
-
-    def __getOverlayAndHighlight(self):
-        module = self.module
-        if module.isCrewBooster():
-            currentVehicle = self.configuration.vehicle
-            isLearnt = currentVehicle is None or module.isAffectedSkillLearnt(self.configuration.vehicle)
-            overlayPath = RES_ICONS.MAPS_ICONS_QUESTS_BONUSES_SMALL_BATTLEBOOSTER_OVERLAY if isLearnt else RES_ICONS.MAPS_ICONS_QUESTS_BONUSES_SMALL_BATTLEBOOSTERREPLACE_OVERLAY
-        else:
-            overlayPath = RES_ICONS.MAPS_ICONS_QUESTS_BONUSES_SMALL_BATTLEBOOSTER_OVERLAY
-        highlightPath = RES_ICONS.MAPS_ICONS_QUESTS_BONUSES_SMALL_BATTLEBOOSTER_HIGHLIGHT
-        return (overlayPath, highlightPath)
+class EpicBattleBoosterBlockTooltipData(BattleBoosterBlockTooltipData):
+    _headerBlockConstructor = EpicHeaderBlockConstructor
 
 
 class BattleBoosterPriceBlockConstructor(PriceBlockConstructor):

@@ -186,7 +186,11 @@ _ACHIEVEMENTS15X15_BLOCK_LAYOUT = ['fragsBeast',
  'readyForBattleAllianceGermany',
  'readyForBattleAllianceUSA',
  'readyForBattleAllianceFrance',
- 'superTesterVeteran']
+ 'superTesterVeteran',
+ 'RP2018firstmed',
+ 'RP2018secondmed',
+ 'RP2018thirdmed',
+ 'RP2018sergeant']
 _achievements15x15PopUps = ['warrior',
  'invader',
  'sniper',
@@ -305,7 +309,11 @@ _achievements15x15PopUps = ['warrior',
  'readyForBattleAllianceGermany',
  'readyForBattleAllianceUSA',
  'readyForBattleAllianceFrance',
- 'superTesterVeteran']
+ 'superTesterVeteran',
+ 'RP2018firstmed',
+ 'RP2018secondmed',
+ 'RP2018thirdmed',
+ 'RP2018sergeant']
 _achievements15x15BlockBuilder = StaticSizeBlockBuilder('achievements', _ACHIEVEMENTS15X15_BLOCK_LAYOUT, ACHIEVEMENT15X15_DEPENDENCIES, _achievements15x15PopUps)
 ACHIEVEMENTS7X7_BLOCK_LAYOUT = ['wolfAmongSheep',
  'wolfAmongSheepMedal',

@@ -2,8 +2,9 @@
 # Embedded file name: scripts/client/gui/ingame_shop.py
 import logging
 import json
-import urllib2
 import uuid
+from collections import namedtuple
+import BigWorld
 from adisp import async, process
 from constants import RentType, GameSeasonType
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
@@ -16,13 +17,14 @@ from gui.shared import events, g_eventBus
 from gui.shared.economics import getGUIPrice
 from gui.shared.event_bus import EVENT_BUS_SCOPE
 from gui.shared.gui_items import GUI_ITEM_TYPE
-from gui.shared.money import Currency
+from gui.shared.money import Currency, Money
 from gui.shared.utils import decorators
 from helpers import dependency, getClientLanguage
 from skeletons.gui.game_control import ITradeInController
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.web import IWebController
 _logger = logging.getLogger(__name__)
+_ProductInfo = namedtuple('_ProductInfo', ('price', 'href', 'method'))
 SHOP_RENT_TYPE_MAP = {RentType.NO_RENT: 'none',
  RentType.TIME_RENT: 'time',
  RentType.BATTLES_RENT: 'battles',
@@ -182,39 +184,50 @@ def showBuyVehicleOverlay(params=None):
 @decorators.process('loadingData')
 @dependency.replace_none_kwargs(webCtrl=IWebController)
 def getShopProductInfo(productID, callback=None, webCtrl=None):
-    productInfo = {}
+    productInfo = None
     accessTokenData = yield webCtrl.getAccessTokenData(force=False)
-    if accessTokenData is not None:
-        loginUrl = yield URLMacros().parse(url=getLoginUrl())
-        authRequest = urllib2.Request(url=loginUrl, data='')
-        authHeader = {'key': 'AUTHORIZATION',
-         'val': 'Basic {}'.format(str(accessTokenData.accessToken))}
-        authRequest.add_header(**authHeader)
-        try:
-            authResponse = urllib2.urlopen(authRequest)
-            cookie = authResponse.headers.get('Set-Cookie')
-            productsUrl = yield URLMacros().parse(url=getProductsUrl())
-            productUrl = '{}/{}'.format(productsUrl, productID)
-            productRequest = urllib2.Request(productUrl)
-            productRequest.add_header(**authHeader)
-            productRequest.add_header('cookie', cookie)
-            productRequest.add_header('ACCEPT-LANGUAGE', getClientLanguage())
-            productResponse = urllib2.urlopen(productRequest)
-            productInfo = json.load(productResponse)
-        except urllib2.HTTPError as e:
-            _logger.debug('%s: %s', e, e.url)
-
+    loginUrl = yield URLMacros().parse(url=getLoginUrl())
+    productUrl = yield URLMacros().parse(url=getProductsUrl(productID))
+    reqTimeoutSeconds = 10.0
+    if accessTokenData is not None and loginUrl and productUrl:
+        authHeader = ('Authorization: Basic {}'.format(str(accessTokenData.accessToken)),)
+        authResponse = yield _fetchUrl(loginUrl, authHeader, reqTimeoutSeconds, 'POST')
+        if 200 <= authResponse.responseCode < 300:
+            getProductHeader = authHeader + ('Cookie: {}'.format(authResponse.headers().get('Set-Cookie')), 'Accept-Language: {}'.format(getClientLanguage()))
+            productResponse = yield _fetchUrl(productUrl, getProductHeader, reqTimeoutSeconds, 'GET')
+            productInfo = _tryParseProductInfo(productResponse.body)
     if callback:
         callback(productInfo)
     return
 
 
+@async
+def _fetchUrl(url, headers, timeout, method, callback):
+    BigWorld.fetchURL(url, callback, headers, timeout, method)
+
+
+def _tryParseProductInfo(responseBody):
+    try:
+        productInfo = json.loads(responseBody)
+        data = productInfo['data']
+        priceSection = data['price']
+        buySection = data['links']['buy']
+        return _ProductInfo(price=Money.makeFrom(priceSection.get('currency', 'credits'), int(priceSection.get('value', 0))), href=buySection['href'], method=buySection['method'])
+    except (TypeError,
+     KeyError,
+     ValueError,
+     IndexError) as e:
+        _logger.exception(e)
+
+    return None
+
+
 def makeBuyParamsByProductInfo(productInfo):
-    data = productInfo['data']
-    priceSection = data['price']
-    buySection = data['links']['buy']
+    price = productInfo.price
+    currency = price.getCurrency()
+    amount = price.get(currency)
     return {'transactionID': str(uuid.uuid4()),
-     'priceCode': priceSection['currency'],
-     'priceAmount': int(priceSection['value']),
-     'buyLinkHref': buySection['href'],
-     'buyLinkMethod': buySection['method']}
+     'priceCode': currency,
+     'priceAmount': amount,
+     'buyLinkHref': productInfo.href,
+     'buyLinkMethod': productInfo.method}

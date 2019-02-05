@@ -136,6 +136,7 @@ class INGAME_GUI(object):
     CHAT_EXAMPLE_ATTENTION_TO_CELL = '#ingame_gui:chat_example/attention_to_cell'
     CHAT_EXAMPLE_ATTACK_ENEMY = '#ingame_gui:chat_example/attack_enemy'
     CHAT_EXAMPLE_SPG_AIM_AREA = '#ingame_gui:chat_example/spg_aim_area'
+    CHAT_EXAMPLE_ATTENTION_TO_POSITION = '#ingame_gui:chat_example/attention_to_position'
     STATISTICS_TAB_LINE_UP_HEADER = '#ingame_gui:statistics/tab/line_up/header'
     STATISTICS_TAB_LINE_UP_TITLE = '#ingame_gui:statistics/tab/line_up/title'
     STATISTICS_TAB_QUESTS_HEADER = '#ingame_gui:statistics/tab/quests/header'
@@ -752,7 +753,8 @@ class INGAME_GUI(object):
      CHAT_EXAMPLE_NEGATIVE,
      CHAT_EXAMPLE_ATTENTION_TO_CELL,
      CHAT_EXAMPLE_ATTACK_ENEMY,
-     CHAT_EXAMPLE_SPG_AIM_AREA)
+     CHAT_EXAMPLE_SPG_AIM_AREA,
+     CHAT_EXAMPLE_ATTENTION_TO_POSITION)
 
     @classmethod
     def chat_shortcuts(cls, key0):

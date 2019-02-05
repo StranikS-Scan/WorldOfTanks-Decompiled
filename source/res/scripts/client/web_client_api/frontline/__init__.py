@@ -1,9 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/web_client_api/frontline/__init__.py
-from gui.Scaleform.daapi.view.lobby.epicBattle.epic_helpers import getAwardsForPrestige, getAwardsForLevel
 from gui.Scaleform.daapi.view.lobby.epicBattle.epic_helpers import triggerPrestige, checkIfVehicleIsHidden
 from gui.Scaleform.daapi.view.lobby.epicBattle.epic_helpers import checkEpicRewardVehAlreadyBought
-from gui.Scaleform.daapi.view.lobby.epicBattle.epic_helpers import getAllAwardsForLevel, getAllAwardsForPrestige
+from gui.Scaleform.daapi.view.lobby.epicBattle.epic_helpers import getAwardsForLevel, getAwardsForPrestige
 from gui.Scaleform.daapi.view.lobby.epicBattle.epic_helpers import getFrontLineSkills, getEpicGamePlayerPrestigePoints
 from helpers import dependency
 from skeletons.gui.game_control import IEpicBattleMetaGameController
@@ -61,9 +60,9 @@ class FrontLineWebApi(W2CSchema):
     def handleGetRewardsData(self, cmd):
         if hasattr(cmd, 'category') and cmd.category:
             if cmd.category == 'level':
-                return getAllAwardsForLevel()
+                return getAwardsForLevel()
             if cmd.category == 'prestige':
-                return getAllAwardsForPrestige()
+                return getAwardsForPrestige()
             if cmd.category == 'vehicles':
                 rewardsData = dict()
                 rewardsData['prestige_points'] = getEpicGamePlayerPrestigePoints()

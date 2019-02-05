@@ -44,6 +44,7 @@ class TOOLTIPS_CONSTANTS(object):
     SHOP_BATTLE_BOOSTER = 'shopBattleBooster'
     AWARD_MODULE = 'awardModule'
     AWARD_BATTLE_BOOSTER = 'awardBattleBooster'
+    EPIC_AWARD_BATTLE_BOOSTER = 'epicAwardBattleBooster'
     SHOP_20_MODULE = 'shop20Module'
     SHOP_20_SHELL = 'shop20Shell'
     SHOP_20_BOOSTER = 'shop20Booster'
@@ -265,6 +266,7 @@ class TOOLTIPS_CONSTANTS(object):
      SHOP_20_BADGE]
     BOOSTERS_SET = [INVENTORY_BATTLE_BOOSTER,
      AWARD_BATTLE_BOOSTER,
+     EPIC_AWARD_BATTLE_BOOSTER,
      BATTLE_BOOSTER,
      SHOP_BATTLE_BOOSTER,
      SHOP_20_BATTLE_BOOSTER,

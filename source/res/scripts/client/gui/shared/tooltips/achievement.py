@@ -22,6 +22,7 @@ from gui.shared.gui_items.dossier.achievements.abstract import achievementHasVeh
 from skeletons.gui.shared import IItemsCache
 _ACHIEVEMENT_VEHICLES_MAX = 5
 _ACHIEVEMENT_VEHICLES_SHOW = 5
+_REFERRAL_BADGES = (64, 65, 66)
 _logger = logging.getLogger(__name__)
 
 class AchievementParamsField(ToolTipParameterField):
@@ -239,7 +240,7 @@ class BadgeTooltipData(BlocksTooltipData):
             return blocks
         else:
             tooltipData = [formatters.packTextBlockData(text_styles.highTitle(badge.getUserName())), formatters.packImageBlockData(badge.getHugeIcon(), BLOCKS_TOOLTIP_TYPES.ALIGN_CENTER, padding=formatters.packPadding(top=-5, bottom=11))]
-            if g_currentVehicle.isPresent():
+            if g_currentVehicle.isPresent() and badgeID not in _REFERRAL_BADGES:
                 vehicle = g_currentVehicle.item
                 tooltipData.append(formatters.packBadgeInfoBlockData(badge.getThumbnailIcon(), vehicle.iconContour, text_styles.bonusPreviewText(getPlayerName()), text_styles.bonusPreviewText(vehicle.shortUserName)))
             blocks.append(formatters.packBuildUpBlockData(tooltipData))

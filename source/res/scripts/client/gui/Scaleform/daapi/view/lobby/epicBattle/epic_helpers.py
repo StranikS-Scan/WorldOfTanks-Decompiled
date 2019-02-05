@@ -2,21 +2,21 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/epicBattle/epic_helpers.py
 import logging
 from gui import SystemMessages
-from gui.impl import backport
-from gui.impl.gen import R
 from gui.shared.gui_items.processors.common import EpicPrestigeTrigger
 from gui.shared.items_parameters.formatters import _cutDigits
-from gui.shared.utils import decorators
 from helpers import dependency, i18n
 from items import vehicles
 from shared_utils import first
+from gui.shared.utils import decorators
 from skeletons.gui.game_control import IEpicBattleMetaGameController
 from skeletons.gui.server_events import IEventsCache
+from gui.Scaleform.locale.RES_ICONS import RES_ICONS
+from gui.server_events.awards_formatters import AWARDS_SIZES
+from gui.impl import backport
+from gui.impl.gen import R
 _logger = logging.getLogger(__name__)
 FRONTLINE_PRESTIGE_TOKEN_BASE = 'epicmetagame:prestige:'
-FRONTLINE_PRESTIGE_TOKEN_TEMPLATE = FRONTLINE_PRESTIGE_TOKEN_BASE + '%d'
-FRONTLINE_PRESTIGE_LEVEL_BASE = 'epicmetagame:levelup:'
-FRONTLINE_PRESTIGE_LEVEL_TEMPLATE = FRONTLINE_PRESTIGE_LEVEL_BASE + '%d'
+FRONTLINE_LEVEL_TOKEN_BASE = 'epicmetagame:levelup:'
 FRONTLINE_TOKEN_PRESTIGE_POINTS = 'prestige_point'
 FRONTLINE_HIDDEN_TAG = 'fr_hidden'
 FRONTLINE_VEH_BOUGHT_TOKEN_TEMPLATE = 'fr_reward_%s'
@@ -138,8 +138,8 @@ class MultiTextParam(AbilityParam, DisplayValuesMixin):
     def updateParams(cls, curEq, param):
         values = cls._getParamValue(curEq, param)
         unitLocalization = backport.text(R.strings.ingame_gui.marker.meters())
-        values = [ '{}{}'.format(value, unitLocalization) for value in values ]
-        value = ' x '.join(values)
+        value = ' x '.join((str(value) for value in values))
+        value = ''.join((value, unitLocalization))
         return value
 
 
@@ -193,50 +193,47 @@ epicEquipmentParameterFormaters = {'cooldownTime': DirectNumericTextParam.update
  'captureSpeedFactor': PercentNumericTextParam.updateParams,
  'captureBlockBonusTime': DirectNumericTextParam.updateParams}
 
-def getAwardsForPrestige(prestige):
-    return _getFormattedAwardsForQuest(FRONTLINE_PRESTIGE_TOKEN_TEMPLATE % prestige)
+def getAwardsForLevel(level=None):
+    return _getAwardsForTokenBase(FRONTLINE_LEVEL_TOKEN_BASE, level=level)
 
 
-def getAwardsForLevel(level):
-    return _getFormattedAwardsForQuest(FRONTLINE_PRESTIGE_LEVEL_TEMPLATE % level)
-
-
-def getAllAwardsForLevel():
-    return _getAllAwardsForTokenBase(FRONTLINE_PRESTIGE_LEVEL_BASE)
-
-
-def getAllAwardsForPrestige():
-    return _getAllAwardsForTokenBase(FRONTLINE_PRESTIGE_TOKEN_BASE)
+def getAwardsForPrestige(level=None):
+    return _getAwardsForTokenBase(FRONTLINE_PRESTIGE_TOKEN_BASE, level=level)
 
 
 @dependency.replace_none_kwargs(eventsCache=IEventsCache)
-def _getAllAwardsForTokenBase(tokenBase, eventsCache=None):
+def _getAwardsForTokenBase(tokenBase, level=None, eventsCache=None):
     awardsData = dict()
+    packSP = tokenBase == FRONTLINE_LEVEL_TOKEN_BASE
     allQuests = eventsCache.getAllQuests()
     for questKey, questData in allQuests.iteritems():
-        _, _, questNum = questKey.partition(tokenBase)
-        if questNum:
-            questAwards = list()
-            questBonuses = questData.getBonuses()
-            for bonusGroup in questBonuses:
-                questAwards.extend(bonusGroup.getWrappedEpicBonusList())
+        if tokenBase in questKey:
+            _, _, questNum = questKey.partition(tokenBase)
+            if questNum:
+                questBonuses = questData.getBonuses()
+                awardsData[int(questNum)] = _packBonuses(questBonuses, packSP)
 
-            awardsData[int(questNum)] = questAwards
-
+    if level:
+        if level in awardsData:
+            return awardsData[level]
+        return {}
     return awardsData
 
 
-@dependency.replace_none_kwargs(eventsCache=IEventsCache)
-def _getFormattedAwardsForQuest(questKey, eventsCache=None):
-    awardsData = []
-    allQuests = eventsCache.getAllQuests()
-    questData = allQuests.get(questKey, None)
-    if questData is not None:
-        questBonuses = questData.getBonuses()
-        for bonusGroup in questBonuses:
-            awardsData.extend(bonusGroup.getWrappedEpicBonusList())
+def _packBonuses(bonuses, packSP=False):
+    icon = RES_ICONS.getEpicBattlesAwardIcon('80x80', 'abilityToken')
+    if packSP:
+        result = [{'id': 0,
+          'type': 'custom/supply_point',
+          'value': 1,
+          'icon': {AWARDS_SIZES.SMALL: icon,
+                   AWARDS_SIZES.BIG: icon}}]
+    else:
+        result = []
+    for bonus in bonuses:
+        result.extend(bonus.getWrappedEpicBonusList())
 
-    return awardsData
+    return result
 
 
 def checkIfVehicleIsHidden(intCD):

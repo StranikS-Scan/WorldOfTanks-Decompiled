@@ -394,3 +394,17 @@ class AnniversaryAwardComposer(CurtailingAwardsComposer):
                 break
 
         return bonuses
+
+
+class EpicCurtailingAwardsComposer(CurtailingAwardsComposer):
+
+    @classmethod
+    def _getShortBonusesData(cls, preformattedBonuses, size=AWARDS_SIZES.SMALL):
+        bonuses = []
+        for bonus in preformattedBonuses:
+            shortData = {'name': bonus.userName,
+             'label': bonus.getFormattedLabel(),
+             'imgSource': bonus.getImage('tooltip')}
+            bonuses.append(shortData)
+
+        return bonuses

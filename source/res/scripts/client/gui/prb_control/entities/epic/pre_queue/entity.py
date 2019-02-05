@@ -82,8 +82,8 @@ class EpicEntryPoint(PreQueueEntryPoint):
         for _, _, _, peripheryID in hostsList:
             if peripheryID == self.__connectionMgr.peripheryID:
                 continue
-            primeTimeStatus, _, _ = self.__epicController.getPrimeTimeStatus(peripheryID)
-            if primeTimeStatus != PRIME_TIME_STATUS.NOT_SET:
+            primeTimeStatus, _, primeTimeNow = self.__epicController.getPrimeTimeStatus(peripheryID)
+            if primeTimeStatus != PRIME_TIME_STATUS.NOT_SET and primeTimeNow:
                 return True
 
         return False

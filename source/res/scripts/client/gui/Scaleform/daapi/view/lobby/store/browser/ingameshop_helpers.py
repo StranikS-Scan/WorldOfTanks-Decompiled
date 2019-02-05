@@ -33,8 +33,8 @@ def getLoginUrl():
     return _getBackendUrl('loginUrl')
 
 
-def getProductsUrl():
-    return _getBackendUrl('productsUrl')
+def getProductsUrl(productID):
+    return '{}/{}'.format(_getBackendUrl('productsUrl'), productID)
 
 
 def getWebShopURL():

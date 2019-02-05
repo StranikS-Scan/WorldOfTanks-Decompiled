@@ -594,6 +594,7 @@ class TOOLTIPS(object):
     ACHIEVEMENT_PARAMS_VEHICLESLEFT = '#tooltips:achievement/params/vehiclesLeft'
     ACHIEVEMENT_PARAMS_QUESTSLEFT = '#tooltips:achievement/params/questsLeft'
     ACHIEVEMENT_PARAMS_TANKWOMENLEFT = '#tooltips:achievement/params/tankwomenLeft'
+    ACHIEVEMENT_PARAMS_RECRUITSLEFT = '#tooltips:achievement/params/recruitsLeft'
     ACHIEVEMENT_PARAMS_DAMAGELEFT = '#tooltips:achievement/params/damageLeft'
     ACHIEVEMENT_PARAMS_BATTLESLEFT = '#tooltips:achievement/params/battlesLeft'
     ACHIEVEMENT_PARAMS_CAPTUREPOINTSLEFT = '#tooltips:achievement/params/capturePointsLeft'

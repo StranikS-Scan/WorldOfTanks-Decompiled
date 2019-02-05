@@ -1,13 +1,13 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/epicBattle/EpicBattlesAfterBattleView.py
 import SoundGroups
-from gui.Scaleform.daapi.view.lobby.missions.awards_formatters import CurtailingAwardsComposer
+from gui.Scaleform.daapi.view.lobby.missions.awards_formatters import EpicCurtailingAwardsComposer
 from gui.Scaleform.daapi.view.meta.EpicBattlesAfterBattleViewMeta import EpicBattlesAfterBattleViewMeta
 from gui.Scaleform.locale.EPIC_BATTLE import EPIC_BATTLE
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
-from gui.server_events.awards_formatters import AWARDS_SIZES
+from gui.server_events.awards_formatters import AWARDS_SIZES, getEpicViewAwardPacker
 from gui.shared.utils import toUpper
-from helpers import dependency
+from helpers import dependency, int2roman
 from helpers.i18n import makeString as _ms
 from skeletons.gui.game_control import IEpicBattleMetaGameController
 from skeletons.gui.server_events import IEventsCache
@@ -68,7 +68,7 @@ def _AccumulateBonuses(bonuses):
 
 class EpicBattlesAfterBattleView(EpicBattlesAfterBattleViewMeta):
     _MAX_VISIBLE_AWARDS = 6
-    _awardsFormatter = CurtailingAwardsComposer(_MAX_VISIBLE_AWARDS)
+    _awardsFormatter = EpicCurtailingAwardsComposer(_MAX_VISIBLE_AWARDS, getEpicViewAwardPacker())
     __eventsCache = dependency.descriptor(IEventsCache)
     __epicMetaGameCtrl = dependency.descriptor(IEpicBattleMetaGameController)
 
@@ -154,7 +154,9 @@ class EpicBattlesAfterBattleView(EpicBattlesAfterBattleViewMeta):
             levelStr = _ms(EPIC_BATTLE.EPIC_BATTLES_AFTER_BATTLE_MAX_PRESTIGE_IN_SEASON_INFO, season=i18n.makeString(EPIC_BATTLE.getSeasonName(season.getSeasonID())))
         elif prestige >= self.__epicMetaGameCtrl.getStageLimit():
             currCycleID = season.getCycleInfo().getEpicCycleNumber()
-            levelStr = _ms(EPIC_BATTLE.EPIC_BATTLES_AFTER_BATTLE_MAX_PRESTIGE_IN_CYCLE_INFO, currCycle=currCycleID, prestige=self.__epicMetaGameCtrl.getStageLimit(), nextCycle=currCycleID + 1)
+            prestige = self.__epicMetaGameCtrl.getStageLimit()
+            prestigeStr = int2roman(prestige) if prestige else ''
+            levelStr = _ms(EPIC_BATTLE.EPIC_BATTLES_AFTER_BATTLE_MAX_PRESTIGE_IN_CYCLE_INFO, currCycle=currCycleID, prestige=prestigeStr, nextCycle=currCycleID + 1)
         elif level >= self.__epicMetaGameCtrl.getMaxPlayerLevel():
             levelStr = _ms(EPIC_BATTLE.EPIC_BATTLES_AFTER_BATTLE_MAX_LEVEL_INFO, level=self.__epicMetaGameCtrl.getMaxPlayerLevel())
         return text_styles.highTitle(levelStr)

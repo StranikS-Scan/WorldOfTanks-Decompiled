@@ -277,6 +277,7 @@ class BATTLE_RESULTS(object):
     DETAILS_CALCULATIONS_FIRSTWIN = '#battle_results:details/calculations/firstWin'
     DETAILS_CALCULATIONS_IGRBONUS = '#battle_results:details/calculations/igrBonus'
     DETAILS_CALCULATIONS_FORTORDER = '#battle_results:details/calculations/fortOrder'
+    DETAILS_CALCULATIONS_REFERRALBONUS = '#battle_results:details/calculations/referralBonus'
     DETAILS_CALCULATIONS_MULTIPLIERINFO_HEADER = '#battle_results:details/calculations/multiplierInfo/header'
     DETAILS_CALCULATIONS_MULTIPLIERINFO_BODY = '#battle_results:details/calculations/multiplierInfo/body'
     DETAILS_CALCULATIONS_MULTIPLIERINFO_VEHICLESEPARATOR = '#battle_results:details/calculations/multiplierInfo/vehicleSeparator'
@@ -394,6 +395,7 @@ class BATTLE_RESULTS(object):
      DETAILS_CALCULATIONS_FIRSTWIN,
      DETAILS_CALCULATIONS_IGRBONUS,
      DETAILS_CALCULATIONS_FORTORDER,
+     DETAILS_CALCULATIONS_REFERRALBONUS,
      DETAILS_CALCULATIONS_MULTIPLIERINFO_HEADER,
      DETAILS_CALCULATIONS_MULTIPLIERINFO_BODY,
      DETAILS_CALCULATIONS_MULTIPLIERINFO_VEHICLESEPARATOR,

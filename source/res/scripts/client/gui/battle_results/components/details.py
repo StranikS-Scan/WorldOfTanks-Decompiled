@@ -440,7 +440,7 @@ class XPDetailsBlock(_EconomicsDetailsBlock):
 
     def __addReferralSystemFactor(self, baseXP, premiumXP):
         referralFactor = baseXP.getFactor('referral20XPFactor100')
-        if referralFactor > 0:
+        if referralFactor > 0 and baseXP.getRecord('referral20XPFactor100'):
             labelArgs = {'bonusFactor': convertFactorToPercent(referralFactor)}
             self.__addXPsItem('referralBonus', baseXP, premiumXP, 'referral20XPFactor100', labelArgs=labelArgs)
 

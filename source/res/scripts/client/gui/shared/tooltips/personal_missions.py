@@ -121,11 +121,11 @@ class BadgeTooltipData(BlocksTooltipData):
         self._setMargins(afterBlock=16)
         self._setWidth(364)
 
-    def _packBlocks(self, badgeID):
+    def _packBlocks(self, badgeID, showVehicle=True):
         blocks = super(BadgeTooltipData, self)._packBlocks()
         badge = self.__itemsCache.items.getBadges()[badgeID]
         tooltipData = [formatters.packTextBlockData(text_styles.highTitle(badge.getUserName())), formatters.packImageBlockData(badge.getHugeIcon(), BLOCKS_TOOLTIP_TYPES.ALIGN_CENTER, padding=formatters.packPadding(top=-5, bottom=11))]
-        if g_currentVehicle.isPresent():
+        if g_currentVehicle.isPresent() and showVehicle:
             vehicle = g_currentVehicle.item
             tooltipData.append(formatters.packBadgeInfoBlockData(badge.getThumbnailIcon(), vehicle.iconContour, text_styles.bonusPreviewText(getPlayerName()), text_styles.bonusPreviewText(vehicle.shortUserName)))
         blocks.append(formatters.packBuildUpBlockData(tooltipData))

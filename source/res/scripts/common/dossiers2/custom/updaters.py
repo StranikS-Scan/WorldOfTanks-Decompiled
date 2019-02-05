@@ -13,7 +13,7 @@ from VersionUpdater import VersionUpdaterBase
 from wotdecorators import singleton
 from debug_utils import LOG_DEBUG_DEV
 from soft_exception import SoftException
-ACCOUNT_DOSSIER_VERSION = 116
+ACCOUNT_DOSSIER_VERSION = 117
 ACCOUNT_DOSSIER_UPDATE_FUNCTION_TEMPLATE = '__updateFromAccountDossier%d'
 VEHICLE_DOSSIER_VERSION = 101
 VEHICLE_DOSSIER_UPDATE_FUNCTION_TEMPLATE = '__updateFromVehicleDossier%d'
@@ -3098,6 +3098,91 @@ def __updateFromAccountDossier115(compDescr):
     addRecords(updateCtx, 'singleAchievements', formats, {})
     setVersion(updateCtx, 116)
     return (116, updateCtx['dossierCompDescr'])
+
+
+def __updateFromAccountDossier116(compDescr):
+    blocksLayout = ['a15x15',
+     'a15x15_2',
+     'clan',
+     'clan2',
+     'company',
+     'company2',
+     'a7x7',
+     'achievements',
+     'vehTypeFrags',
+     'a15x15Cut',
+     'rareAchievements',
+     'total',
+     'a7x7Cut',
+     'max15x15',
+     'max7x7',
+     'achievements7x7',
+     'historical',
+     'maxHistorical',
+     'historicalAchievements',
+     'historicalCut',
+     'uniqueAchievements',
+     'fortBattles',
+     'maxFortBattles',
+     'fortBattlesCut',
+     'fortSorties',
+     'maxFortSorties',
+     'fortSortiesCut',
+     'fortBattlesInClan',
+     'maxFortBattlesInClan',
+     'fortSortiesInClan',
+     'maxFortSortiesInClan',
+     'fortAchievements',
+     'singleAchievements',
+     'clanAchievements',
+     'rated7x7',
+     'maxRated7x7',
+     'achievementsRated7x7',
+     'rated7x7Cut',
+     'globalMapMiddle',
+     'globalMapChampion',
+     'globalMapAbsolute',
+     'maxGlobalMapMiddle',
+     'maxGlobalMapChampion',
+     'maxGlobalMapAbsolute',
+     'globalMapCommonCut',
+     'fallout',
+     'falloutCut',
+     'maxFallout',
+     'falloutAchievements',
+     'ranked',
+     'maxRanked',
+     'rankedCuts',
+     'rankedSeasons',
+     'rankedCurrent',
+     'rankedPrevious',
+     'maxRankedCurrent',
+     'maxRankedPrevious',
+     'rankedCurrentCut',
+     'rankedPreviousCut',
+     'rankedCurrentCycle',
+     'rankedPreviousCycle',
+     'a30x30',
+     'a30x30Cut',
+     'max30x30',
+     'markOfMasteryCut',
+     'playerBadges',
+     'epicBattle',
+     'epicBattleCut',
+     'maxEpicBattle',
+     'epicBattleAchievements']
+    updateCtx = {'dossierCompDescr': compDescr,
+     'blockSizeFormat': 'H',
+     'versionFormat': 'H',
+     'blocksLayout': blocksLayout}
+    getHeader(updateCtx)
+    formats = [('RP2018firstmed', 'B'),
+     ('RP2018secondmed', 'B'),
+     ('RP2018thirdmed', 'B'),
+     ('RP2018sergeant', 'B')]
+    addRecords(updateCtx, 'achievements', formats, {})
+    setVersion(updateCtx, 117)
+    return (117, updateCtx['dossierCompDescr'])
 
 
 def __updateFromVehicleDossier64(compDescr):

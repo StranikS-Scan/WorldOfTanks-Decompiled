@@ -32,6 +32,7 @@ class _ShowToolTipSchema(W2CSchema):
     tooltipType = Field(required=True, type=basestring)
     itemId = Field(required=True, type=(int, basestring))
     blockId = Field(type=basestring, validator=lambda value, _: value in ACHIEVEMENT_BLOCK.ALL)
+    showVehicle = Field(type=bool, default=True)
 
 
 class _ShowCustomTooltipSchema(W2CSchema):
@@ -76,14 +77,15 @@ class UtilWebApiMixin(object):
         withLongOnlyArgs = (TC.AWARD_VEHICLE,
          TC.AWARD_MODULE,
          TC.INVENTORY_BATTLE_BOOSTER,
-         TC.BOOSTERS_BOOSTER_INFO,
-         TC.BADGE)
+         TC.BOOSTERS_BOOSTER_INFO)
         if tooltipType in withLongIntArgs:
             args = [itemId, 0]
         elif tooltipType in withLongBoolArgs:
             args = [itemId, False]
         elif tooltipType in withLongOnlyArgs:
             args = [itemId]
+        elif tooltipType == TC.BADGE:
+            args = [itemId, cmd.showVehicle]
         elif tooltipType == TC.ACHIEVEMENT:
             dossier = self.itemsCache.items.getAccountDossier()
             dossierCompDescr = dumpDossier(self.itemsCache.items.getAccountDossier())

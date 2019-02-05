@@ -34,7 +34,7 @@ from gui.shared import events, g_eventBus, money
 from gui.shared.event_bus import EVENT_BUS_SCOPE
 from gui.shared.formatters import text_styles
 from gui.shared.gui_items.processors.goodies import BoosterActivator
-from gui.shared.money import Money, Currency
+from gui.shared.money import Currency
 from gui.shared.notifications import NotificationPriorityLevel
 from gui.shared.utils import isPopupsWindowsOpenDisabled
 from gui.shared.utils.functions import getViewName, getUniqueViewName
@@ -113,12 +113,11 @@ def showVehicleRentRenewDialog(intCD, rentType, num, seasonType):
         return
     productID = generateShopRentRenewProductID(intCD, rentType, num, seasonType)
     productInfo = yield getShopProductInfo(productID)
-    if productInfo:
-        buyParams = makeBuyParamsByProductInfo(productInfo)
-        price = Money.makeFrom(buyParams['priceCode'], buyParams['priceAmount'])
-        _purchaseOffer(intCD, rentType, [num], price, seasonType, buyParams, renew=True)
-    else:
-        _logger.error('productInfo is None or empty')
+    if not productInfo:
+        SystemMessages.pushMessage(_ms(MESSENGER.SERVER_ERRORS_INTERNALERROR_MESSAGE), type=SystemMessages.SM_TYPE.Error)
+        return
+    buyParams = makeBuyParamsByProductInfo(productInfo)
+    _purchaseOffer(intCD, rentType, [num], productInfo.price, seasonType, buyParams, renew=True)
 
 
 @process

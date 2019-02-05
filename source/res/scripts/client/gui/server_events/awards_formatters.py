@@ -8,11 +8,13 @@ from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.Scaleform.locale.QUESTS import QUESTS
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
+from gui.Scaleform.settings import ICONS_SIZES
 from gui.server_events.formatters import parseComplexToken, TOKEN_SIZES
 from gui.server_events.recruit_helper import getRecruitInfo
 from gui.shared.formatters import text_styles
 from gui.shared.gui_items import GUI_ITEM_TYPE, GUI_ITEM_TYPE_INDICES, getItemIconName
 from gui.shared.gui_items.Tankman import getRoleUserName
+from gui.shared.gui_items.badge import Badge
 from gui.shared.money import Currency
 from gui.shared.utils.functions import makeTooltip
 from gui.shared.utils.requesters import REQ_CRITERIA
@@ -158,6 +160,13 @@ def getLinkedSetFormattersMap():
     return mapping
 
 
+def getEpicSetFormattersMap():
+    mapping = getMisssionsFormattersMap()
+    mapping.update({'items': EpicItemsBonusFormatter(),
+     'dossier': EpicDossierBonusFormatter()})
+    return mapping
+
+
 def getPackRentVehiclesFormattersMap():
     mapping = getDefaultFormattersMap()
     mapping.update({'vehicles': RentVehiclesBonusFormatter()})
@@ -177,6 +186,10 @@ def getDefaultAwardFormatter():
 
 def getMissionAwardPacker():
     return AwardsPacker(getMisssionsFormattersMap())
+
+
+def getEpicViewAwardPacker():
+    return AwardsPacker(getEpicSetFormattersMap())
 
 
 def getLinkedSetAwardPacker():
@@ -981,15 +994,7 @@ class ItemsBonusFormatter(SimpleBonusFormatter):
         result = []
         for item, count in sorted(bonus.getItems().items(), key=lambda i: i[0]):
             if item is not None and count:
-                if item.itemTypeID == GUI_ITEM_TYPE.EQUIPMENT and 'avatar' in item.tags:
-                    alias = TOOLTIPS_CONSTANTS.BATTLE_CONSUMABLE
-                elif item.itemTypeID == GUI_ITEM_TYPE.SHELL:
-                    alias = TOOLTIPS_CONSTANTS.AWARD_SHELL
-                elif item.itemTypeID == GUI_ITEM_TYPE.BATTLE_BOOSTER:
-                    alias = TOOLTIPS_CONSTANTS.AWARD_BATTLE_BOOSTER
-                else:
-                    alias = TOOLTIPS_CONSTANTS.AWARD_MODULE
-                result.append(PreformattedBonus(bonusName=bonus.getName(), images=self._getImages(item), isSpecial=True, label=self._formatBonusLabel(count), labelFormatter=self._getLabelFormatter(bonus), userName=self._getUserName(item), specialAlias=alias, specialArgs=[item.intCD], align=LABEL_ALIGN.RIGHT, isCompensation=self._isCompensation(bonus), highlightType=self._getHighlightType(item), overlayType=self._getOverlayType(item), highlightIcon=self._getHighlightIcon(item), overlayIcon=self._getOverlayIcon(item)))
+                result.append(PreformattedBonus(bonusName=bonus.getName(), images=self._getImages(item), isSpecial=True, label=self._formatBonusLabel(count), labelFormatter=self._getLabelFormatter(bonus), userName=self._getUserName(item), specialAlias=self._getTooltip(item), specialArgs=[item.intCD], align=LABEL_ALIGN.RIGHT, isCompensation=self._isCompensation(bonus), highlightType=self._getHighlightType(item), overlayType=self._getOverlayType(item), highlightIcon=self._getHighlightIcon(item), overlayIcon=self._getOverlayIcon(item)))
 
         return result
 
@@ -1007,6 +1012,14 @@ class ItemsBonusFormatter(SimpleBonusFormatter):
             result[size] = RES_ICONS.getBonusIcon(size, item.getGUIEmblemID())
 
         return result
+
+    @classmethod
+    def _getTooltip(cls, item):
+        if item.itemTypeID == GUI_ITEM_TYPE.EQUIPMENT and 'avatar' in item.tags:
+            return TOOLTIPS_CONSTANTS.BATTLE_CONSUMABLE
+        if item.itemTypeID == GUI_ITEM_TYPE.SHELL:
+            return TOOLTIPS_CONSTANTS.AWARD_SHELL
+        return TOOLTIPS_CONSTANTS.AWARD_BATTLE_BOOSTER if item.itemTypeID == GUI_ITEM_TYPE.BATTLE_BOOSTER else TOOLTIPS_CONSTANTS.AWARD_MODULE
 
     @classmethod
     def _getHighlightType(cls, item):
@@ -1061,3 +1074,56 @@ class LinkedSetItemsBonusFormatter(ItemsBonusFormatter):
 
     def _formatBonusLabel(self, count):
         return 'x{}'.format(count)
+
+
+class EpicItemsBonusFormatter(ItemsBonusFormatter):
+
+    @classmethod
+    def _getImages(cls, item):
+        result = {}
+        for size in AWARDS_SIZES.ALL():
+            if item.itemTypeID == GUI_ITEM_TYPE.BATTLE_BOOSTER and item.isCrewBooster():
+                result[size] = RES_ICONS.getBonusIcon(size, item.name)
+            result[size] = RES_ICONS.getBonusIcon(size, item.getGUIEmblemID())
+
+        result['tooltip'] = item.getBonusIcon(AWARDS_SIZES.BIG)
+        return result
+
+    @classmethod
+    def _getOverlayType(cls, item):
+        result = {}
+        for size in AWARDS_SIZES.ALL():
+            result[size] = SLOT_HIGHLIGHT_TYPES.NO_HIGHLIGHT
+
+        if item.itemTypeName == SLOT_HIGHLIGHT_TYPES.OPTIONAL_DEVICE_NAME and item.isDeluxe():
+            result[AWARDS_SIZES.BIG] = SLOT_HIGHLIGHT_TYPES.EQUIPMENT_PLUS_BIG
+            result[AWARDS_SIZES.SMALL] = SLOT_HIGHLIGHT_TYPES.EQUIPMENT_PLUS
+        elif item.itemTypeName == SLOT_HIGHLIGHT_TYPES.BATTLE_BOOSTER_NAME and not item.isCrewBooster():
+            result[AWARDS_SIZES.BIG] = SLOT_HIGHLIGHT_TYPES.BATTLE_BOOSTER_BIG
+            result[AWARDS_SIZES.SMALL] = SLOT_HIGHLIGHT_TYPES.BATTLE_BOOSTER
+        return result
+
+    @classmethod
+    def _getOverlayIcon(cls, item):
+        result = {}
+        itemTypeName = item.itemTypeName
+        for size in AWARDS_SIZES.ALL():
+            if itemTypeName == SLOT_HIGHLIGHT_TYPES.OPTIONAL_DEVICE_NAME and item.isDeluxe():
+                result[size] = RES_ICONS.getBonusOverlay(size, SLOT_HIGHLIGHT_TYPES.EQUIPMENT_PLUS)
+            if itemTypeName == SLOT_HIGHLIGHT_TYPES.BATTLE_BOOSTER_NAME and not item.isCrewBooster():
+                result[size] = RES_ICONS.getBonusOverlay(size, SLOT_HIGHLIGHT_TYPES.BATTLE_BOOSTER)
+            result[size] = SLOT_HIGHLIGHT_TYPES.NO_HIGHLIGHT
+
+        return result
+
+
+class EpicDossierBonusFormatter(DossierBonusFormatter):
+
+    @classmethod
+    def _getImages(cls, bonus):
+        if isinstance(bonus, Badge):
+            return {AWARDS_SIZES.SMALL: bonus.getSmallIcon(),
+             AWARDS_SIZES.BIG: bonus.getBigIcon()}
+        bonus, record = bonus.getRecordName()
+        return {AWARDS_SIZES.SMALL: RES_ICONS.getEpicAchievementIcon(ICONS_SIZES.X48, record),
+         AWARDS_SIZES.BIG: RES_ICONS.getEpicAchievementIcon(ICONS_SIZES.X80, record)}

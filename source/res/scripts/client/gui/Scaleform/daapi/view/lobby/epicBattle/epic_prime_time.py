@@ -24,9 +24,9 @@ class FrontLineServerPresenter(ServerListItemPresenter):
 
     def _buildTooltip(self):
         if not self.getTimeLeft():
-            return _ms(EPIC_BATTLE.PRIMETIME_ENDOFCYCLE, server=self.getName())
+            return text_styles.expText(_ms(EPIC_BATTLE.PRIMETIME_ENDOFCYCLE, server=self.getName()))
         timeStr = text_styles.neutral(time_utils.getTillTimeString(self.getTimeLeft(), MENU.TIME_TIMEVALUEWITHSECS))
-        return _ms(EPIC_BATTLE.PRIMETIME_SERVERTOOLTIP, server=self._shortName, time=timeStr) if self._getIsAvailable() else _ms(EPIC_BATTLE.PRIMETIME_SERVERUNAVAILABLETOOLTIP, time=timeStr)
+        return text_styles.expText(_ms(EPIC_BATTLE.PRIMETIME_SERVERTOOLTIP, server=self._shortName, time=timeStr)) if self._getIsAvailable() else text_styles.expText(_ms(EPIC_BATTLE.PRIMETIME_SERVERUNAVAILABLETOOLTIP, time=timeStr))
 
     def isEnabled(self):
         return self.isActive()

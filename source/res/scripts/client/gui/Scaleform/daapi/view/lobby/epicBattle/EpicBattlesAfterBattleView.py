@@ -101,27 +101,27 @@ class EpicBattlesAfterBattleView(EpicBattlesAfterBattleViewMeta):
         famePtsToProgress = self.__epicMetaGameCtrl.getLevelProgress()
         famePointsReceived = sum(famePtsToProgress[prevPMetaLevel:pMetaLevel]) + pFamePts - prevPFamePts
         achievedRank = extInfo['playerRank'].get('rank', -1)
-        rankName = getattr(EPIC_BATTLE, 'RANK_RANK{}'.format(achievedRank))
+        rankName = toUpper(_ms(getattr(EPIC_BATTLE, 'RANK_RANK{}'.format(achievedRank))))
         awardsVO = self._awardsFormatter.getFormattedBonuses(self.__getBonuses(pMetaLevel), size=AWARDS_SIZES.BIG)
         maxLevelText = ''
         fameBarVisible = True
         maxPrestigeIconVisible = pPrestigeLevel == self.__epicMetaGameCtrl.getMaxPlayerPrestigeLevel()
         if prevPMetaLevel >= maxMetaLevel or pPrestigeLevel >= self.__epicMetaGameCtrl.getStageLimit():
-            lvlReachedText = EPIC_BATTLE.EPIC_BATTLES_AFTER_BATTLE_LEVEL_UP_MAX_TITLE
+            lvlReachedText = toUpper(_ms(EPIC_BATTLE.EPIC_BATTLES_AFTER_BATTLE_LEVEL_UP_MAX_TITLE))
             maxLevelText = self.__getMaxLevelInfoStr(pPrestigeLevel, pMetaLevel)
             fameBarVisible = False
         else:
-            lvlReachedText = EPIC_BATTLE.EPIC_BATTLES_AFTER_BATTLE_LEVEL_UP_TITLE
+            lvlReachedText = toUpper(_ms(EPIC_BATTLE.EPIC_BATTLES_AFTER_BATTLE_LEVEL_UP_TITLE))
         data = {'awards': awardsVO,
          'progress': self.__getProgress(pMetaLevel, pFamePts, prevPMetaLevel, prevPFamePts, maxMetaLevel),
          'barText': '+' + str(famePointsReceived),
          'epicMetaLevelIconData': getEpicMetaIconVODict(pPrestigeLevel, pMetaLevel),
          'rank': achievedRank + 1,
-         'rankText': toUpper(text_styles.heroTitle(rankName)),
-         'rankTextBig': toUpper(text_styles.epicTitle(rankName)),
+         'rankText': text_styles.heroTitle(rankName),
+         'rankTextBig': text_styles.epicTitle(rankName),
          'rankSubText': text_styles.highTitle(EPIC_BATTLE.EPIC_BATTLES_AFTER_BATTLE_ACHIEVED_RANK),
-         'levelUpText': toUpper(text_styles.heroTitle(lvlReachedText)),
-         'levelUpTextBig': toUpper(text_styles.epicTitle(lvlReachedText)),
+         'levelUpText': text_styles.heroTitle(lvlReachedText),
+         'levelUpTextBig': text_styles.epicTitle(lvlReachedText),
          'backgroundImageSrc': RES_ICONS.MAPS_ICONS_EPICBATTLES_BACKGROUNDS_META_BG,
          'maxLevelText': maxLevelText,
          'fameBarVisible': fameBarVisible,

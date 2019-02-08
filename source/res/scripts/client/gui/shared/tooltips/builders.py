@@ -107,8 +107,11 @@ class AdvancedDataBuilder(AdvancedBuilder):
             data = self._provider.buildToolTip(*args)
             item = self._provider.item
             disabledForWheeled = False
-            if item is not None and isinstance(item, VehicleChassis) or isinstance(item, OptionalDevice):
-                disabledForWheeled = g_currentVehicle.item.isWheeledTech and item.intCD in DISABLED_ITEMS_IDS
+            if item is not None:
+                if isinstance(item, VehicleChassis):
+                    disabledForWheeled = item.intCD in DISABLED_ITEMS_IDS
+                elif isinstance(item, OptionalDevice):
+                    disabledForWheeled = g_currentVehicle.item.isWheeledTech and item.intCD in DISABLED_ITEMS_IDS
             if supportAdvanced and not disabledForWheeled:
                 self._provider.addAdvancedBlock(data, disableAnim)
         return data

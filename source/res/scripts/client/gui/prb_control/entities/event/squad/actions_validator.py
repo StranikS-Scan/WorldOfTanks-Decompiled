@@ -5,7 +5,7 @@ from gui.prb_control.entities.base.squad.actions_validator import SquadActionsVa
 class _EventBattleVehiclesValidator(SquadVehiclesValidator):
 
     def _isValidMode(self, vehicle):
-        return vehicle.isEvent and not vehicle.isOnlyForEventBattles
+        return vehicle.isEvent and not vehicle.isOnlyForEpicBattles
 
 
 class EventBattleSquadActionsValidator(SquadActionsValidator):

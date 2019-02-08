@@ -60,12 +60,15 @@ class BaseAdvancedTooltip(BlocksTooltipData):
         LOG_DEBUG('packBlocks::', args, kwargs, self.context)
         self._item = self.context.buildItem(*args, **kwargs)
         items = super(BaseAdvancedTooltip, self)._packBlocks()
-        if self._item is not None and isinstance(self._item, VehicleChassis) or isinstance(self._item, OptionalDevice):
-            disabledForWheeled = g_currentVehicle.item.isWheeledTech and self._item.intCD in DISABLED_ITEMS_IDS
-            if disabledForWheeled:
-                return []
-        items.extend(self._getBlocksList(*args, **kwargs))
-        return items
+        disabledForWheeled = False
+        if self._item is not None:
+            if isinstance(self._item, (VehicleChassis, OptionalDevice)):
+                disabledForWheeled = self._item.intCD in DISABLED_ITEMS_IDS
+        if disabledForWheeled:
+            return []
+        else:
+            items.extend(self._getBlocksList(*args, **kwargs))
+            return items
 
     def _getBlocksList(self, *args, **kwargs):
         pass

@@ -304,15 +304,17 @@ class CarouselDataProvider(SortableDAAPIDataProvider):
         updateIndices = []
         updateVehicles = []
         self._syncRandomStats()
+        oldVehs = {veh.intCD:(idx, veh) for idx, veh in enumerate(self._vehicles)}
         for newVehicle in vehiclesCollection:
-            for idx, oldVehicle in enumerate(self._vehicles):
-                if oldVehicle.intCD == newVehicle.intCD:
-                    vehicleDataVO = self._buildVehicle(newVehicle)
-                    vehicleDataVO.update(self._getVehicleStats(newVehicle))
-                    self._vehicleItems[idx] = vehicleDataVO
-                    self._vehicles[idx] = newVehicle
-                    updateIndices.append(idx)
-                    updateVehicles.append(self._vehicleItems[idx])
+            intCD = newVehicle.intCD
+            if intCD in oldVehs:
+                idx, _ = oldVehs[intCD]
+                vehicleDataVO = self._buildVehicle(newVehicle)
+                vehicleDataVO.update(self._getVehicleStats(newVehicle))
+                self._vehicleItems[idx] = vehicleDataVO
+                self._vehicles[idx] = newVehicle
+                updateIndices.append(idx)
+                updateVehicles.append(self._vehicleItems[idx])
 
         if updateVehicles:
             self.__resetSortedIndices()

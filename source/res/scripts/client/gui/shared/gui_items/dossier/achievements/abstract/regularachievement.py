@@ -122,6 +122,9 @@ class RegularAchievement(GUIItem):
     def getUserDescription(self):
         return i18n.makeString('#achievements:%s_descr' % self._getActualName())
 
+    def getUserWebDescription(self):
+        return self.getUserDescription()
+
     def getUserHeroInfo(self):
         heroInfoKey = '#achievements:%s_heroInfo' % self._getActualName()
         return i18n.makeString(heroInfoKey) if i18n.doesTextExist(heroInfoKey) else ''

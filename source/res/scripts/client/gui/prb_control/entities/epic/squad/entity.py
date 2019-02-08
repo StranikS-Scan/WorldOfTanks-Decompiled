@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client/gui/prb_control/entities/epic/squad/entity.py
 import account_helpers
 from constants import PREBATTLE_TYPE, QUEUE_TYPE, VEHICLE_CLASS_INDICES
+from gui.prb_control.entities.epic.squad.actions_validator import EpicSquadActionsValidator
 from gui.prb_control.events_dispatcher import g_eventDispatcher
 from gui.prb_control.entities.base.squad.entity import SquadEntryPoint, SquadEntity
 from gui.prb_control.items import SelectResult
@@ -13,7 +14,6 @@ from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.lobby_context import ILobbyContext
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.prb_control.entities.random.squad.actions_handler import BalancedSquadActionsHandler
-from gui.prb_control.entities.random.squad.actions_validator import SPGForbiddenBalancedSquadActionsValidator
 from gui.prb_control.storages import prequeue_storage_getter
 from gui.prb_control.entities.epic.pre_queue.vehicles_watcher import EpicVehiclesWatcher
 
@@ -122,7 +122,7 @@ class EpicSquadEntity(SquadEntity):
         return BalancedSquadActionsHandler(self)
 
     def _createActionsValidator(self):
-        return SPGForbiddenBalancedSquadActionsValidator(self)
+        return EpicSquadActionsValidator(self)
 
     def _vehicleStateCondition(self, v):
         result = True

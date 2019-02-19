@@ -19,29 +19,29 @@ class _QuestsProgressRequester(AbstractSyncDataRequester):
         return self.__getToken(tokenID).expireTime
 
     def getTokenNames(self):
-        tokens = self.__getTokensData()
+        tokens = self.getTokensData()
         return tokens.keys()
+
+    def getTokensData(self):
+        return self.itemsCache.items.tokens.getTokens()
 
     @async
     def _requestCache(self, callback=None):
         BigWorld.player().questProgress.getCache(lambda resID, value: self._response(resID, value, callback))
 
-    def __getTokensData(self):
-        return self.itemsCache.items.tokens.getTokens()
-
     def __getToken(self, tokenID):
-        return _Token(*self.__getTokensData().get(tokenID, (0, 0)))
+        return _Token(*self.getTokensData().get(tokenID, (0, 0)))
 
 
 class QuestsProgressRequester(_QuestsProgressRequester):
 
     def getQuestProgress(self, qID):
-        return self.__getQuestsData().get(qID, {}).get('progress')
+        return self.getQuestsData().get(qID, {}).get('progress')
 
     def hasQuestDelayedRewards(self, qID):
         return qID in self.__getQuestsRewards()
 
-    def __getQuestsData(self):
+    def getQuestsData(self):
         return self.getCacheValue('quests', {})
 
     def __getQuestsRewards(self):

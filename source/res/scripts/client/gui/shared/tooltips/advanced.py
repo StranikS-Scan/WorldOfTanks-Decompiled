@@ -4,7 +4,6 @@ from constants import SHELL_TYPES
 from helpers.i18n import makeString
 from helpers import dependency
 from skeletons.account_helpers.settings_core import ISettingsCore
-from CurrentVehicle import g_currentVehicle
 from gui.shared.formatters import text_styles
 from gui.shared.tooltips.common import BlocksTooltipData
 from gui.shared.tooltips import formatters

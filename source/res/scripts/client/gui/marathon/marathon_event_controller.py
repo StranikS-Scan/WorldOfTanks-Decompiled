@@ -190,8 +190,8 @@ class MarathonEvent(object):
     def getTokensData(self, prefix=None, postfix=None):
         return self.__getProgress('tokens', prefix, postfix)
 
-    def getMarathonProgress(self, byCompletedTokensCount=True):
-        tokens = self.getTokensData(prefix=self.prefix, postfix=self.data.completedTokenPostfix)
+    def getMarathonProgress(self, byCompletedTokensCount=False):
+        tokens = self.getTokensData(prefix=self.data.tokenPrefix, postfix=self.data.completedTokenPostfix)
         if byCompletedTokensCount:
             return (len(tokens), self.data.questsInChain)
         tokenPrefixLen = len(self.data.tokenPrefix)
@@ -327,7 +327,7 @@ class MarathonEvent(object):
             self.__group = groups[sortedGroups[0]]
         else:
             self.__group = None
-        tokens = self.getTokensData(prefix=self.prefix).keys()
+        tokens = self.getTokensData(prefix=self.data.tokenPrefix).keys()
         self.__vehInInventory = any((t in tokens for t in self.data.awardTokens))
         return
 
@@ -346,7 +346,12 @@ class MarathonEvent(object):
         return q.getID().startswith(self.prefix)
 
     def __getProgress(self, progressType, prefix=None, postfix=None):
-        progress = self._eventsCache.questsProgress.getCacheValue(progressType, {})
+        progress = {}
+        if progressType == 'quests':
+            progress = self._eventsCache.questsProgress.getQuestsData()
+        elif progressType == 'tokens':
+            progress = self._eventsCache.questsProgress.getTokensData()
+        prefix = self.data.tokenPrefix if prefix is None else prefix
         if prefix:
             progress = {k:v for k, v in progress.iteritems() if k.startswith(prefix)}
         if postfix:

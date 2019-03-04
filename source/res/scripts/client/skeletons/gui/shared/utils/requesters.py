@@ -31,6 +31,18 @@ class IInventoryRequester(IRequester):
     def getC11nItemAppliedOnVehicleCount(self, itemCD, vehicleCD):
         raise NotImplementedError
 
+    def updateC11nItemsNoveltyData(self):
+        raise NotImplementedError
+
+    def updateC11nItemNoveltyData(self, itemIntCD):
+        raise NotImplementedError
+
+    def getC11nItemNoveltyData(self, itemIntCD):
+        raise NotImplementedError
+
+    def getC11nItemsNoveltyCounters(self, vehicleType):
+        raise NotImplementedError
+
     def getItemsData(self, itemTypeID):
         raise NotImplementedError
 
@@ -60,6 +72,10 @@ class IStatsRequester(IRequester):
 
     @property
     def mayConsumeWalletResources(self):
+        raise NotImplementedError
+
+    @property
+    def currencyStatuses(self):
         raise NotImplementedError
 
     @property
@@ -374,14 +390,6 @@ class IShopCommonStats(object):
         raise NotImplementedError
 
     @property
-    def passportChangeCost(self):
-        raise NotImplementedError
-
-    @property
-    def passportFemaleChangeCost(self):
-        raise NotImplementedError
-
-    @property
     def freeXPToTManXPRate(self):
         raise NotImplementedError
 
@@ -661,6 +669,57 @@ class IEpicMetaGameRequester(IRequester):
 
     @property
     def skillLevels(self):
+        raise NotImplementedError
+
+
+class IBlueprintsRequester(IRequester):
+
+    def getBlueprintCount(self, vehicleCD, vehicleLevel):
+        raise NotImplementedError
+
+    def getBlueprintData(self, vehicleCD, vehicleLevel):
+        raise NotImplementedError
+
+    def getBlueprintDiscount(self, vehicleCD, vehicleLevel):
+        raise NotImplementedError
+
+    def getRequiredCountAndDiscount(self, vehicleCD, vLevel):
+        raise NotImplementedError
+
+    def getFragmentDiscountAndCost(self, vehicleCD, vehicleLevel, xpFullCost):
+        raise NotImplementedError
+
+    def getAllNationalFragmentsData(self):
+        raise NotImplementedError
+
+    def calculateCost(self, oldCost, discount):
+        raise NotImplementedError
+
+    def getNationalFragments(self, fragmentCD):
+        raise NotImplementedError
+
+    def getIntelligenceData(self):
+        raise NotImplementedError
+
+    def getRequiredIntelligenceAndNational(self, vLevel):
+        raise NotImplementedError
+
+    def hasUniversalFragments(self):
+        raise NotImplementedError
+
+    def isLastFragment(self, totalCount, filledCount):
+        raise NotImplementedError
+
+    def canConvertToVehicleFragment(self, vehicleCD, vehicleLevel):
+        raise NotImplementedError
+
+    def getConvertibleFragmentCount(self, vehicleCD, vehicleLevel):
+        raise NotImplementedError
+
+    def getLayout(self, vehicleCD, vehicleLevel):
+        raise NotImplementedError
+
+    def isBlueprintsAvailable(self):
         raise NotImplementedError
 
 

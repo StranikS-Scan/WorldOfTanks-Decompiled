@@ -129,7 +129,6 @@ def makeVehicleFormatter(includeInventoryFields=False):
     isUnlockedField = Field('isUnlocked', lambda i: i.isUnlocked)
     shortName = Field('shortName', lambda i: i.shortUserName)
     restore = Field('restore', _formatVehicleRestore)
-    inHangarField = Field('inHangar', lambda i: i.isInInventory)
     isTradeInAvailableField = Field('isTradeInAvailable', lambda i: i.canTradeIn)
     inHangarField = Field('inHangar', lambda i: i.isInInventory)
     fields = [idField,

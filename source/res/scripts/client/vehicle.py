@@ -679,14 +679,9 @@ class Vehicle(BigWorld.Entity, BattleAbilitiesComponent):
         player = BigWorld.player()
         if self is not player.getVehicleAttached():
             return
-        else:
-            crewGroup = 0
-            arena = getattr(player, 'arena', None)
-            if arena is not None:
-                crewGroup = arena.vehicles[self.id]['crewGroup']
-            vehicleType = self.typeDescriptor.type
-            setSpecialVoice(crewGroup, vehicleType, self.id == player.playerVehicleID)
-            return
+        commanderSkinID = self.publicInfo.commanderSkinID
+        vehicleType = self.typeDescriptor.type
+        setSpecialVoice(self.publicInfo.crewGroup, commanderSkinID, vehicleType, self.id == player.playerVehicleID)
 
     def stopVisual(self, showStipple=False):
         if not self.isStarted:

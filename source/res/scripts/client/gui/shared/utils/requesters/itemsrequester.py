@@ -8,7 +8,7 @@ import dossiers2
 import nations
 from account_shared import LayoutIterator
 from adisp import async, process
-from constants import CustomizationInvData
+from constants import CustomizationInvData, SkinInvData
 from debug_utils import LOG_WARNING, LOG_DEBUG, LOG_ERROR
 from goodies.goodie_constants import GOODIE_STATE
 from gui.shared.gui_items import GUI_ITEM_TYPE, GUI_ITEM_TYPE_NAMES, ItemsCollection, getVehicleSuitablesByType
@@ -16,8 +16,9 @@ from gui.shared.utils.requesters import vehicle_items_getter
 from gui.shared.gui_items.customization.outfit import Outfit
 from gui.shared.gui_items.gui_item_economics import ITEM_PRICE_EMPTY
 from helpers import dependency
-from items import vehicles, tankmen, getTypeOfCompactDescr
+from items import vehicles, tankmen, getTypeOfCompactDescr, makeIntCompactDescrByID
 from items.components.c11n_constants import SeasonType, CustomizationType, StyleFlags
+from items.components.crewSkins_constants import CrewSkinType
 from skeletons.gui.shared import IItemsRequester
 from skeletons.gui.shared.gui_items import IGuiItemsFactory
 
@@ -241,6 +242,7 @@ class REQ_CRITERIA(object):
         CAN_SELL = RequestCriteria(PredicateCondition(lambda item: item.canSell))
         CAN_NOT_BE_SOLD = RequestCriteria(PredicateCondition(lambda item: item.canNotBeSold))
         NAME_VEHICLE = staticmethod(lambda nameVehicle: RequestCriteria(PredicateCondition(lambda item: nameVehicle in item.searchableUserName)))
+        NAME_VEHICLE_WITH_SHORT = staticmethod(lambda nameVehicle: RequestCriteria(PredicateCondition(lambda item: nameVehicle in item.searchableShortUserName or nameVehicle in item.searchableUserName)))
         DISCOUNT_RENT_OR_BUY = RequestCriteria(PredicateCondition(lambda item: (item.buyPrices.itemPrice.isActionPrice() or item.getRentPackageActionPrc() != 0) and not item.isRestoreAvailable()))
         HAS_TAGS = staticmethod(lambda tags: RequestCriteria(PredicateCondition(lambda item: item.tags.issuperset(tags))))
 
@@ -250,6 +252,9 @@ class REQ_CRITERIA(object):
         NATIVE_TANKS = staticmethod(lambda vehiclesList=[]: RequestCriteria(PredicateCondition(lambda item: item.vehicleNativeDescr.type.compactDescr in vehiclesList)))
         DISMISSED = RequestCriteria(PredicateCondition(lambda item: item.isDismissed))
         ACTIVE = ~DISMISSED
+
+    class CREW_SKIN(object):
+        IN_ACCOUNT = RequestCriteria(PredicateCondition(lambda item: item.inAccount()))
 
     class BOOSTER(object):
         ENABLED = RequestCriteria(PredicateCondition(lambda item: item.enabled))
@@ -307,7 +312,7 @@ class RESEARCH_CRITERIA(object):
 class ItemsRequester(IItemsRequester):
     itemsFactory = dependency.descriptor(IGuiItemsFactory)
 
-    def __init__(self, inventory, stats, dossiers, goodies, shop, recycleBin, vehicleRotation, ranked, badges, epicMetaGame, tokens, festivityRequester):
+    def __init__(self, inventory, stats, dossiers, goodies, shop, recycleBin, vehicleRotation, ranked, badges, epicMetaGame, tokens, festivityRequester, blueprints=None):
         self.__inventory = inventory
         self.__stats = stats
         self.__dossiers = dossiers
@@ -318,6 +323,7 @@ class ItemsRequester(IItemsRequester):
         self.__ranked = ranked
         self.__badges = badges
         self.__epicMetaGame = epicMetaGame
+        self.__blueprints = blueprints
         self.__festivity = festivityRequester
         self.__tokens = tokens
         self.__itemsCache = defaultdict(dict)
@@ -365,6 +371,10 @@ class ItemsRequester(IItemsRequester):
         return self.__epicMetaGame
 
     @property
+    def blueprints(self):
+        return self.__blueprints
+
+    @property
     def festivity(self):
         return self.__festivity
 
@@ -402,6 +412,9 @@ class ItemsRequester(IItemsRequester):
         Waiting.show('download/epicMetaGame')
         yield self.epicMetaGame.request()
         Waiting.hide('download/epicMetaGame')
+        Waiting.show('download/blueprints')
+        yield self.__blueprints.request()
+        Waiting.hide('download/blueprints')
         Waiting.show('download/tokens')
         yield self.__tokens.request()
         Waiting.hide('download/tokens')
@@ -412,7 +425,7 @@ class ItemsRequester(IItemsRequester):
         callback(self)
 
     def isSynced(self):
-        return self.__stats.isSynced() and self.__inventory.isSynced() and self.__recycleBin.isSynced() and self.__shop.isSynced() and self.__dossiers.isSynced() and self.__goodies.isSynced() and self.__vehicleRotation.isSynced() and self.ranked.isSynced() and self.epicMetaGame.isSynced()
+        return self.__stats.isSynced() and self.__inventory.isSynced() and self.__recycleBin.isSynced() and self.__shop.isSynced() and self.__dossiers.isSynced() and self.__goodies.isSynced() and self.__vehicleRotation.isSynced() and self.ranked.isSynced() and self.epicMetaGame.isSynced() and self.__blueprints.isSynced() if self.__blueprints is not None else False
 
     @async
     @process
@@ -461,6 +474,7 @@ class ItemsRequester(IItemsRequester):
         self.__badges.clear()
         self.__tokens.clear()
         self.epicMetaGame.clear()
+        self.__blueprints.clear()
         self.__festivity.clear()
 
     def invalidateCache(self, diff=None):
@@ -520,6 +534,22 @@ class ItemsRequester(IItemsRequester):
                         tmanInvID = _getDiffID(itemID)
                         tmanData = self.__inventory.getTankmanData(tmanInvID)
                         if tmanData is not None and tmanData.vehicle != -1:
+                            invalidate[GUI_ITEM_TYPE.VEHICLE].update(self.__getVehicleCDForTankman(tmanData))
+                            invalidate[GUI_ITEM_TYPE.TANKMAN].update(self.__getTankmenIDsForTankman(tmanData))
+
+            if itemTypeID == GUI_ITEM_TYPE.CREW_SKINS:
+                for data in itemsDiff.itervalues():
+                    invalidate[GUI_ITEM_TYPE.TANKMAN].update(data.keys())
+
+                if SkinInvData.ITEMS in itemsDiff:
+                    skinsDiff = itemsDiff[SkinInvData.ITEMS]
+                    skinCDs = [ makeIntCompactDescrByID('crewSkin', CrewSkinType.CREW_SKIN, v) for v in skinsDiff.keys() ]
+                    invalidate[itemTypeID].update(skinCDs)
+                if SkinInvData.OUTFITS in itemsDiff:
+                    outfitDiff = itemsDiff[SkinInvData.OUTFITS]
+                    for tmanInvID in outfitDiff.keys():
+                        tmanData = self.__inventory.getTankmanData(tmanInvID)
+                        if tmanData is not None and tmanData.vehicle != constants.VEHICLE_NO_INV_ID:
                             invalidate[GUI_ITEM_TYPE.VEHICLE].update(self.__getVehicleCDForTankman(tmanData))
                             invalidate[GUI_ITEM_TYPE.TANKMAN].update(self.__getTankmenIDsForTankman(tmanData))
 
@@ -586,7 +616,12 @@ class ItemsRequester(IItemsRequester):
 
                 for cType, items in itemsDiff.get(CustomizationInvData.ITEMS, {}).iteritems():
                     for idx in items.iterkeys():
-                        intCD = vehicles.makeIntCompactDescrByID('customizationItem', cType, idx)
+                        intCD = vehicles.makeIntCompactDescrByID('customizationItem', cType, _getDiffID(idx))
+                        invalidate[GUI_ITEM_TYPE.CUSTOMIZATION].add(intCD)
+
+                for cType, items in itemsDiff.get(CustomizationInvData.NOVELTY_DATA, {}).iteritems():
+                    for idx in items.iterkeys():
+                        intCD = vehicles.makeIntCompactDescrByID('customizationItem', cType, _getDiffID(idx))
                         invalidate[GUI_ITEM_TYPE.CUSTOMIZATION].add(intCD)
 
             invalidate[itemTypeID].update(itemsDiff.keys())
@@ -635,6 +670,10 @@ class ItemsRequester(IItemsRequester):
             if tankmanData is not None:
                 tankman = self.__makeDismissedTankman(tmanInvID, tankmanData)
         return tankman
+
+    def getCrewSkin(self, skinID):
+        typeCompDescr = vehicles.makeIntCompactDescrByID(GUI_ITEM_TYPE_NAMES[GUI_ITEM_TYPE.CREW_SKINS], CrewSkinType.CREW_SKIN, skinID)
+        return self.__makeSimpleItem(typeCompDescr)
 
     def getItems(self, itemTypeID=None, criteria=REQ_CRITERIA.EMPTY, nationID=None, onlyWithPrices=True):
         result = ItemsCollection()

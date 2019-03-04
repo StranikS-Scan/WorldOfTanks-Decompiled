@@ -6,7 +6,9 @@ from collections import namedtuple
 from Event import Event
 from constants import IS_TUTORIAL_ENABLED, SWITCH_STATE
 from debug_utils import LOG_WARNING, LOG_ERROR, LOG_DEBUG
-from gui import GUI_SETTINGS
+from gui import GUI_SETTINGS, SystemMessages
+from gui.SystemMessages import SM_TYPE
+from gui.Scaleform.locale.SYSTEM_MESSAGES import SYSTEM_MESSAGES
 from gui.shared.utils.decorators import ReprInjector
 from personal_missions import PM_BRANCH
 from shared_utils import makeTupleByDict, updateDict
@@ -262,6 +264,19 @@ class _RankedBattlesConfig(namedtuple('_RankedBattlesConfig', ('isEnabled', 'per
         return cls()
 
 
+class _ProgressiveReward(namedtuple('_ProgressiveReward', ('isEnabled', 'levelTokenID', 'probabilityTokenID', 'maxLevel'))):
+
+    def replace(self, data):
+        allowedFields = self._fields
+        dataToUpdate = dict(((k, v) for k, v in data.iteritems() if k in allowedFields))
+        return self._replace(**dataToUpdate)
+
+
+_ProgressiveReward.__new__.__defaults__ = (True,
+ 'pr:level',
+ 'pr:probability',
+ 0)
+
 class _EpicMetaGameConfig(namedtuple('_EpicMetaGameConfig', ['maxCombatReserveLevel',
  'seasonData',
  'metaLevel',
@@ -316,6 +331,49 @@ class _TelecomConfig(object):
     @classmethod
     def defaults(cls):
         return cls({'bundles': {}})
+
+
+class _BlueprintsConfig(namedtuple('_BlueprintsConfig', ('allowBlueprintsConversion', 'isEnabled', 'useBlueprintsForUnlock', 'levels'))):
+    __slots__ = ()
+
+    @classmethod
+    def defaults(cls):
+        return cls(False, False, False, {})
+
+    def allowConversion(self):
+        return self.allowBlueprintsConversion
+
+    def enabled(self):
+        return self.isEnabled
+
+    def useBlueprints(self):
+        return self.useBlueprintsForUnlock
+
+    def countAndDiscountByLevels(self):
+        return self.levels
+
+    def getRequiredFragmentsForConversion(self, level):
+        return (0, 0) if not self.isBlueprintsAvailable() or level not in self.levels else self.levels[level][2]
+
+    def getFragmentCount(self, level):
+        if not self.isBlueprintsAvailable():
+            return 0
+        if level == 1:
+            return 1
+        return self.levels[level][0] if level in self.levels else 0
+
+    def getFragmentDiscount(self, level):
+        discount = 0
+        if self.isBlueprintsAvailable() and level > 1 and level in self.levels:
+            discount = self.levels[level][1]
+        return discount
+
+    def isBlueprintsAvailable(self):
+        return self.isEnabled and self.useBlueprintsForUnlock
+
+    @staticmethod
+    def isBlueprintModeChange(diff):
+        return 'isEnabled' in diff or 'useBlueprintsForUnlock' in diff
 
 
 class ServerSettings(object):
@@ -394,6 +452,14 @@ class ServerSettings(object):
             self.__telecomConfig = _TelecomConfig(self.__serverSettings['telecom_config'])
         else:
             self.__telecomConfig = _TelecomConfig.defaults()
+        if 'blueprints_config' in self.__serverSettings:
+            self.__blueprintsConfig = makeTupleByDict(_BlueprintsConfig, self.__serverSettings['blueprints_config'])
+        else:
+            self.__blueprintsConfig = _BlueprintsConfig.defaults()
+        if 'progressive_reward_config' in self.__serverSettings:
+            self.__progressiveReward = makeTupleByDict(_ProgressiveReward, self.__serverSettings['progressive_reward_config'])
+        else:
+            self.__progressiveReward = _ProgressiveReward()
         self.onServerSettingsChange(serverSettings)
 
     def update(self, serverSettingsDiff):
@@ -419,8 +485,12 @@ class ServerSettings(object):
             self.__updateIngameShop(serverSettingsDiff)
         if 'disabledPersonalMissions' in serverSettingsDiff:
             self.__serverSettings['disabledPersonalMissions'] = serverSettingsDiff['disabledPersonalMissions']
+        if 'blueprints_config' in serverSettingsDiff:
+            self.__updateBlueprints(serverSettingsDiff['blueprints_config'])
         if 'lootBoxes_config' in serverSettingsDiff:
             self.__serverSettings['lootBoxes_config'] = serverSettingsDiff['lootBoxes_config']
+        if 'progressive_reward_config' in serverSettingsDiff:
+            self.__updateProgressiveReward(serverSettingsDiff)
         self.onServerSettingsChange(serverSettingsDiff)
 
     def clear(self):
@@ -489,6 +559,10 @@ class ServerSettings(object):
     def telecomConfig(self):
         return self.__telecomConfig
 
+    @property
+    def blueprintsConfig(self):
+        return self.__blueprintsConfig
+
     def isEpicBattleEnabled(self):
         return self.epicBattles.isEnabled
 
@@ -542,6 +616,9 @@ class ServerSettings(object):
             else:
                 return True
         return False
+
+    def isBlueprintDataChangedInDiff(self, diff):
+        return 'blueprints_config' in diff
 
     def isTutorialEnabled(self):
         return self.__getGlobalSetting('isTutorialEnabled', IS_TUTORIAL_ENABLED)
@@ -625,6 +702,12 @@ class ServerSettings(object):
     def isReferralProgramEnabled(self):
         return self.__getGlobalSetting('isReferralProgramEnabled', False)
 
+    def isCrewSkinsEnabled(self):
+        return self.__getGlobalSetting('isCrewSkinsEnabled', False)
+
+    def getProgressiveRewardConfig(self):
+        return self.__progressiveReward
+
     def __getGlobalSetting(self, settingsName, default=None):
         return self.__serverSettings.get(settingsName, default)
 
@@ -645,3 +728,14 @@ class ServerSettings(object):
 
     def __updateIngameShop(self, targetSettings):
         self.__bwIngameShop = self.__bwIngameShop.replace(targetSettings['ingameShop'])
+
+    def __updateBlueprints(self, targetSettings):
+        self.__blueprintsConfig = self.__blueprintsConfig._replace(**targetSettings)
+        if self.__blueprintsConfig.isBlueprintModeChange(targetSettings):
+            if not self.__blueprintsConfig.isEnabled or not self.__blueprintsConfig.useBlueprintsForUnlock:
+                SystemMessages.pushI18nMessage(SYSTEM_MESSAGES.BLUEPRINTS_SWITCH_OFF, type=SM_TYPE.Information, priority='medium')
+            else:
+                SystemMessages.pushI18nMessage(SYSTEM_MESSAGES.BLUEPRINTS_SWITCH_ON, type=SM_TYPE.Information, priority='medium')
+
+    def __updateProgressiveReward(self, targetSettings):
+        self.__progressiveReward = self.__progressiveReward.replace(targetSettings['progressive_reward_config'])

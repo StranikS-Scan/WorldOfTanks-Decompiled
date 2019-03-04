@@ -17,6 +17,7 @@ from gui.prb_control import prbInvitesProperty, prbDispatcherProperty
 from gui.ranked_battles import ranked_helpers
 from gui.server_events.events_dispatcher import showPersonalMission
 from gui.shared import g_eventBus, events, actions, EVENT_BUS_SCOPE, event_dispatcher as shared_events
+from gui.shared.event_dispatcher import showProgressiveRewardWindow
 from gui.shared.utils import decorators
 from gui.wgcg.clan import contexts as clan_ctxs
 from gui.wgnc import g_wgncProvider
@@ -666,6 +667,20 @@ class _LootBoxesAutoOpenHandler(_NavigationDisabledActionHandler):
         return
 
 
+class _OpenProgressiveRewardView(_NavigationDisabledActionHandler):
+
+    @classmethod
+    def getNotType(cls):
+        return NOTIFICATION_TYPE.PROGRESSIVE_REWARD
+
+    @classmethod
+    def getActions(cls):
+        pass
+
+    def doAction(self, model, entityID, action):
+        showProgressiveRewardWindow()
+
+
 _AVAILABLE_HANDLERS = (ShowBattleResultsHandler,
  ShowTutorialBattleHistoryHandler,
  ShowFortBattleResultsHandler,
@@ -693,6 +708,7 @@ _AVAILABLE_HANDLERS = (ShowBattleResultsHandler,
  OpenPersonalMissionHandler,
  _OpenLootBoxesHandler,
  _LootBoxesAutoOpenHandler,
+ _OpenProgressiveRewardView,
  ProlongStyleRent)
 
 class NotificationsActionsHandlers(object):

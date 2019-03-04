@@ -48,8 +48,7 @@ class ServersDataProvider(SortableDAAPIDataProvider):
         return None
 
     def clear(self):
-        self._list = []
-        self.__mapping.clear()
+        self.__clearLists()
         self.__selectedID = None
         return
 
@@ -78,21 +77,19 @@ class ServersDataProvider(SortableDAAPIDataProvider):
         return vo
 
     def buildList(self, cache):
-        self.clear()
-        if cache:
-            for index, item in enumerate(cache):
-                vo = self._makeVO(index, item)
-                self._list.append(vo)
-                self.__mapping[vo['id']] = index
+        self.__clearLists()
+        for index, item in enumerate(cache):
+            vo = self._makeVO(index, item)
+            self._list.append(vo)
+            self.__mapping[vo['id']] = index
+
+        if self.__selectedID not in self.__mapping:
+            self.__selectedID = None
+        return
 
     def rebuildList(self, cache):
         self.buildList(cache)
         self.refresh()
-
-    def refreshItem(self, cache, clanDBID):
-        isSelected = self.__selectedID == clanDBID
-        self.buildList(cache)
-        return True if isSelected and clanDBID not in self.__mapping else False
 
     def pyGetSelectedIdx(self):
         return self.getSelectedIdx()
@@ -102,6 +99,12 @@ class ServersDataProvider(SortableDAAPIDataProvider):
 
     def refreshSingleItem(self, index, item):
         self.flashObject.invalidateItem(index, item)
+
+    def requestItemAtHandler(self, idx):
+        item = super(ServersDataProvider, self).requestItemAtHandler(idx)
+        if item is None:
+            _logger.debug('Item with id %i is None', idx)
+        return item
 
     def _makeVO(self, index, item):
         hostName = item['data']
@@ -125,11 +128,9 @@ class ServersDataProvider(SortableDAAPIDataProvider):
             vo['tooltip'] = item['tooltip']
         return vo
 
-    def requestItemAtHandler(self, idx):
-        item = super(ServersDataProvider, self).requestItemAtHandler(idx)
-        if item is None:
-            _logger.debug('Item with id %i is None', idx)
-        return item
+    def __clearLists(self):
+        self._list = []
+        self.__mapping.clear()
 
     def __onSettingsChanged(self, diff):
         if 'isColorBlind' in diff:

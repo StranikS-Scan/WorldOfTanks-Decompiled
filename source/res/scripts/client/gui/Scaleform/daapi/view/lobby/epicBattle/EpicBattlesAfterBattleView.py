@@ -106,10 +106,11 @@ class EpicBattlesAfterBattleView(EpicBattlesAfterBattleViewMeta):
         maxLevelText = ''
         fameBarVisible = True
         maxPrestigeIconVisible = pPrestigeLevel == self.__epicMetaGameCtrl.getMaxPlayerPrestigeLevel()
-        if prevPMetaLevel >= maxMetaLevel or pPrestigeLevel >= self.__epicMetaGameCtrl.getStageLimit():
+        if prevPMetaLevel >= maxMetaLevel or pMetaLevel >= maxMetaLevel or pPrestigeLevel >= self.__epicMetaGameCtrl.getStageLimit():
             lvlReachedText = toUpper(_ms(EPIC_BATTLE.EPIC_BATTLES_AFTER_BATTLE_LEVEL_UP_MAX_TITLE))
             maxLevelText = self.__getMaxLevelInfoStr(pPrestigeLevel, pMetaLevel)
-            fameBarVisible = False
+            if prevPMetaLevel >= maxMetaLevel or pPrestigeLevel >= self.__epicMetaGameCtrl.getStageLimit():
+                fameBarVisible = False
         else:
             lvlReachedText = toUpper(_ms(EPIC_BATTLE.EPIC_BATTLES_AFTER_BATTLE_LEVEL_UP_TITLE))
         data = {'awards': awardsVO,

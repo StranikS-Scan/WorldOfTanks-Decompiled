@@ -1,9 +1,11 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/SystemMessages.py
+from collections import namedtuple
 from enumerations import Enumeration
 from gui.shared.money import Currency
 from helpers import dependency
 from skeletons.gui.system_messages import ISystemMessages
+ResultMsg = namedtuple('ResultMsg', 'success userMsg sysMsgType auxData')
 SM_TYPE = Enumeration('System message type', ['Error',
  'ErrorHeader',
  'ErrorSimple',
@@ -39,7 +41,9 @@ SM_TYPE = Enumeration('System message type', ['Error',
  'RecruitGift',
  'RecruitReminder',
  'LootBoxes',
- 'LootBoxRewards'])
+ 'LootBoxRewards',
+ 'SkinCompensation',
+ 'FrontlineVehicleRewards'])
 CURRENCY_TO_SM_TYPE = {Currency.CREDITS: SM_TYPE.PurchaseForCredits,
  Currency.GOLD: SM_TYPE.PurchaseForGold,
  Currency.CRYSTAL: SM_TYPE.PurchaseForCrystal}
@@ -53,6 +57,13 @@ def _getSystemMessages():
 
 def pushMessage(text, type=SM_TYPE.Information, priority=None, messageData=None, savedData=None):
     _getSystemMessages().pushMessage(text, type, priority, messageData=messageData, savedData=savedData)
+
+
+def pushMessages(resultMsg):
+    if resultMsg.userMsg:
+        pushMessage(resultMsg.userMsg, type=resultMsg.sysMsgType)
+    if resultMsg.auxData and isinstance(resultMsg.auxData, ResultMsg):
+        pushMessages(resultMsg.auxData)
 
 
 def pushI18nMessage(key, *args, **kwargs):

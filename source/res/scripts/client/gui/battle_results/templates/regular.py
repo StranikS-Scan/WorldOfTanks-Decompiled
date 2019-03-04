@@ -1,6 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/battle_results/templates/regular.py
-from constants import ARENA_GUI_TYPE
+from constants import ARENA_GUI_TYPE, MIN_VEHICLE_LEVEL
 from gui.Scaleform.genConsts.BATTLE_EFFICIENCY_TYPES import BATTLE_EFFICIENCY_TYPES
 from gui.Scaleform.locale.BATTLE_RESULTS import BATTLE_RESULTS
 from gui.Scaleform.locale.INGAME_GUI import INGAME_GUI
@@ -74,12 +74,14 @@ CLANS_COMMON_VO_META = base.PropertyMeta((('allies', common.ClanInfoBlock(field=
 CLANS_COMMON_VO_META.bind(common.ClansInfoBlock)
 _PERSONAL_VEHICLE_VO_META = base.PropertyMeta((('isPrematureLeave', False, 'isPrematureLeave'),
  ('flag', '', 'nationName'),
- ('tankIcon', '../maps/icons/vehicle/noImage.png', 'vehicleIcon'),
+ ('tankIcon', 'empty_tank', 'vehicleIcon'),
+ ('tankLevel', MIN_VEHICLE_LEVEL, 'vehicleLevel'),
  ('killerID', 0, 'killerID'),
  ('vehicleStateStr', '', 'vehicleState'),
  ('vehicleStatePrefixStr', '', 'vehicleStatePrefix'),
  ('vehicleStateSuffixStr', '', 'vehicleStateSuffix'),
- ('isKilledByTeamKiller', False, 'isKilledByTeamKiller')))
+ ('isKilledByTeamKiller', False, 'isKilledByTeamKiller'),
+ ('isNotObserver', True, 'isVehicleStatusDefined')))
 _PERSONAL_VEHICLE_VO_META.bind(personal.PersonalVehicleBlock)
 _PERSONAL_PLAYER_NAME_VO_META = base.PropertyMeta((('playerNameStr', '', 'nameLabel'),
  ('playerFullNameStr', '', 'fullNameLabel'),
@@ -318,3 +320,4 @@ REGULAR_TEAMS_STATS_BLOCK.addNextComponent(vehicles.RegularTeamStatsBlock(meta=b
 REGULAR_TEAMS_STATS_BLOCK.addNextComponent(vehicles.RegularTeamStatsBlock(meta=base.ListMeta(), field='team2'))
 VEHICLE_PROGRESS_STATS_BLOCK = progress.VehicleProgressBlock(base.ListMeta(), 'unlocks', _RECORD.PERSONAL)
 QUESTS_PROGRESS_STATS_BLOCK = progress.QuestsProgressBlock(base.ListMeta(), 'quests', _RECORD.PERSONAL)
+PROGRESSIVE_REWARD_VO = progress.ProgressiveRewardVO('progressiveReward')

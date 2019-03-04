@@ -34,7 +34,7 @@ class RankedBattlesPrimeTimeView(RankedPrimeTimeMeta):
             serversDDEnabled = True
         applyButtonLabel = _ms(RANKED_BATTLES.PRIMETIME_APPLYBTN)
         title = text_styles.epicTitle(RANKED_BATTLES.PRIMETIME_TITLE)
-        if self._isEnabled:
+        if self._hasAvailableServers():
             if serverInfo:
                 serverTimeLeft = serverInfo.getTimeLeft()
                 serverName = serverInfo.getName()
@@ -56,7 +56,7 @@ class RankedBattlesPrimeTimeView(RankedPrimeTimeMeta):
          'serverDDVisible': True}
 
     def _getPrbActionName(self):
-        if self._isEnabled:
+        if self._hasAvailableServers():
             prbAction = PREBATTLE_ACTION_NAME.RANKED
         else:
             prbAction = PREBATTLE_ACTION_NAME.RANKED_FORCED

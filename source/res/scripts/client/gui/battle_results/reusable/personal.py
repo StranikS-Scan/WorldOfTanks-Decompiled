@@ -292,7 +292,7 @@ class _EconomicsRecordsChains(object):
 
 
 class PersonalInfo(shared.UnpackedInfo):
-    __slots__ = ('__avatar', '__vehicles', '__lifeTimeInfo', '__isObserver', '__economicsRecords', '__isPremium', '__questsProgress', '__PM2Progress', '__rankInfo', '__isTeamKiller')
+    __slots__ = ('__avatar', '__vehicles', '__lifeTimeInfo', '__isObserver', '__economicsRecords', '__isPremium', '__questsProgress', '__PM2Progress', '__rankInfo', '__isTeamKiller', '__progressiveReward')
     itemsCache = dependency.descriptor(IItemsCache)
 
     def __init__(self, personal):
@@ -373,6 +373,9 @@ class PersonalInfo(shared.UnpackedInfo):
     def getRankInfo(self):
         return self.__rankInfo
 
+    def getProgressiveReward(self):
+        return self.__progressiveReward
+
     def getBaseCreditsRecords(self):
         return self.__economicsRecords.getBaseCreditsRecords()
 
@@ -413,6 +416,7 @@ class PersonalInfo(shared.UnpackedInfo):
             self.__questsProgress.update(infoAvatar.get('questsProgress', {}))
             self.__PM2Progress.update(infoAvatar.get('PM2Progress', {}))
             self.__rankInfo = PostBattleRankInfo.fromDict(infoAvatar)
+            self.__progressiveReward = infoAvatar.get('progressiveReward')
         for item in items:
             intCD = item.intCD
             data = info[intCD]

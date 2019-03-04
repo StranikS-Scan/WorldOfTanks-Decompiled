@@ -34,6 +34,9 @@ class ClientEpicMetaGame(object):
     def claimEpicMetaGameMaxPrestigeReward(self, callback=_skipResponse):
         self.__account._doCmdInt3(AccountCommands.CMD_CLAIM_EPIC_META_MAX_PRESTIGE_REWARD, 0, 0, 0, lambda requestID, resultID, errorCode: callback(resultID, errorCode))
 
+    def buyFrontlineRewardVehicle(self, vehicleCD, callback=_skipResponse):
+        self.__account._doCmdInt3(AccountCommands.CMD_BUY_FL_REWARD_VEH, vehicleCD, 0, 0, lambda requestID, resultID, errorCode: callback(resultID, errorCode))
+
     def getStoredDiscount(self):
         return self.__cache['epicMetaGame'].get('freeEpicDiscount', {})
 

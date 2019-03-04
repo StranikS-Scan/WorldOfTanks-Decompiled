@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/web_client_api/shop/stats.py
 import logging
+from gui.game_control.wallet import WalletController
 from gui.shared.money import Currency
 from helpers import dependency
 from helpers import time_utils
@@ -20,8 +21,9 @@ class BalanceWebApiMixin(object):
             premiumExpireISOTime = time_utils.timestampToISO(premiumExpireLocalTime)
         else:
             premiumExpireISOTime = None
-        balanceData = {'premiumExpireDate': premiumExpireISOTime}
-        balanceData.update({currency:money.get(currency, 0) for currency in Currency.ALL})
+        balanceData = {currency:money.get(currency, 0) for currency in Currency.ALL}
+        balanceData.update({'walletStatus': {key:WalletController.STATUS.getKeyByValue(code).lower() for key, code in stats.currencyStatuses.items() if key in Currency.ALL},
+         'premiumExpireDate': premiumExpireISOTime})
         return balanceData
 
     @w2c(W2CSchema, 'get_stats')
@@ -47,8 +49,6 @@ class BalanceWebApiMixin(object):
          'creditsTankmanCost': lambda stats: getTrainingCost(stats.tankmanCost, Currency.CREDITS),
          'goldDropSkillsCost': lambda stats: getTrainingCost(stats.dropSkillsCost, Currency.GOLD),
          'creditsDropSkillsCost': lambda stats: getTrainingCost(stats.dropSkillsCost, Currency.CREDITS),
-         'passportChangeCost': lambda stats: stats.passportChangeCost,
-         'femalePassportChangeCost': lambda stats: stats.passportFemaleChangeCost,
          'freeXPToTManXPRate': lambda stats: stats.freeXPToTManXPRate,
          'paidRemovalCostGold': lambda stats: stats.paidRemovalCost,
          'exchangeRate': lambda stats: stats.exchangeRate,

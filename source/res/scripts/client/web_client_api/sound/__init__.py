@@ -30,7 +30,8 @@ class SoundWebApi(object):
 
 @w2capi()
 class SoundStateWebApi(object):
-    __ON_EXIT_STATES = {'STATE_overlay_hangar_general': 'STATE_overlay_hangar_general_off'}
+    __ON_EXIT_STATES = {'STATE_overlay_hangar_general': 'STATE_overlay_hangar_general_off',
+     'STATE_video_overlay': 'STATE_video_overlay_off'}
 
     @w2c(_SoundStateSchema, 'sound_state', finiHandlerName='_soundStateFini')
     def setSoundState(self, cmd):

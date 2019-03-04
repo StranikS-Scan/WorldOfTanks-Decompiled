@@ -1731,6 +1731,7 @@ class VehicleList(object):
 
     def __init__(self):
         self.__ids = {}
+        self.__categories = {}
         typeCompDescrsByLevel = {level:[] for level in range(1, 11)}
         list = []
         for nation in nations.NAMES:
@@ -1744,6 +1745,10 @@ class VehicleList(object):
             descrs = self.__readVehicleList(nation, section, xmlPath)
             list.append(descrs)
             nationID = nations.INDICES[nation]
+            for d in descrs.itervalues():
+                self.__categories.setdefault((nationID, (set(d.tags) & VEHICLE_CLASS_TAGS).pop(), d.level), 0)
+                self.__categories[(nationID, (set(d.tags) & VEHICLE_CLASS_TAGS).pop(), d.level)] += 1
+
             self.__ids.update(dict(((d.name, (nationID, d.id)) for d in descrs.itervalues())))
             for descr in descrs.itervalues():
                 typeCompDescrsByLevel[descr.level].append(descr.compactDescr)
@@ -1756,6 +1761,18 @@ class VehicleList(object):
 
     def getList(self, nationID):
         return self.__nations[nationID]
+
+    def getCategories(self, nationID=None, vehClass=None, level=None, excluded=()):
+        result = copy.copy(self.__categories)
+        for tcd in excluded:
+            if parseIntCompactDescr(tcd)[0] != ITEM_TYPES.vehicle:
+                continue
+            category = (lambda vt: (vt.id[0], (set(vt.tags) & VEHICLE_CLASS_TAGS).pop(), vt.level))(getVehicleType(tcd))
+            result[category] = count = result[category] - 1
+            if count < 1:
+                result.pop(category, None)
+
+        return {args for args in result if (nationID is None or args[0] == nationID) and (vehClass is None or args[1] == vehClass) and (level is None or args[2] == level)}
 
     def getTypeCompDescrsByLevel(self, level):
         return self.__typeCompDescrsByLevel[level]

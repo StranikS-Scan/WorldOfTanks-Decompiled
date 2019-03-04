@@ -219,7 +219,11 @@ class VehiclePreviewCrewTab(VehiclePreviewCrewTabMeta):
         if all((len(s) <= 1 for s in skills)):
             firstSkill = first(notEmptySkills)[0]
             icon = firstSkill.bigIconPath
-            skillName = firstSkill.name if not _isSabatonBrotherhood(firstSkill) else 'sabaton_brotherhood'
+            skillName = ''
+            if _isSabatonBrotherhood(firstSkill):
+                skillName = 'sabaton_brotherhood'
+            elif not firstSkill.name == 'new':
+                skillName = firstSkill.name
             notEmptySkillsLen = len(notEmptySkills)
             if notEmptySkillsLen == 1:
                 role = first((tMan.role for tMan in crew if tMan.hasNewSkill)) if firstSkill.name == 'new' else first((tMan.role for tMan in crew if tMan.skills))

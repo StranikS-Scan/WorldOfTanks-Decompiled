@@ -266,7 +266,8 @@ class Source(object):
          'uiDecoration': questSection.readInt('uiDecoration', 0),
          'peripheryIDs': {int(p) for p in onlyForPeripheriesList.split()} if onlyForPeripheriesList else set(),
          'runFlags': runFlags,
-         'showPostBattleStat': questSection.readBool('showPostBattleStat', False)}
+         'showPostBattleStat': questSection.readBool('showPostBattleStat', False),
+         'saveBonusHistory': questSection.readBool('saveBonusHistory', False)}
         if eventType == EVENT_TYPE.MOTIVE_QUEST:
             extraSubsectionsNames = ('advice', 'requirements', 'congratulation')
             for subsectionName in extraSubsectionsNames:
@@ -450,7 +451,10 @@ class Source(object):
          'dossier',
          'tankmen',
          'customizations',
-         'vehicleChoice'}
+         'vehicleChoice',
+         'crewSkin',
+         'blueprint',
+         'blueprintAny'}
         if eventType in (EVENT_TYPE.BATTLE_QUEST, EVENT_TYPE.PERSONAL_QUEST, EVENT_TYPE.NT_QUEST):
             bonusTypes.update(('xp', 'tankmenXP', 'xpFactor', 'creditsFactor', 'freeXPFactor', 'tankmenXPFactor'))
         if eventType in (EVENT_TYPE.NT_QUEST,):

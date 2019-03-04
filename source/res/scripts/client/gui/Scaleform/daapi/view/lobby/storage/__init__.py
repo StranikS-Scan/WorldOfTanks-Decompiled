@@ -3,6 +3,9 @@
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.storage.customization.customization_cm_handlers import CustomizationCMHandler
 from gui.Scaleform.daapi.view.lobby.storage.customization.customization_view import StorageCategoryCustomizationView
+from gui.Scaleform.daapi.view.common.filter_popover import StorageBlueprintsFilterPopover
+from gui.Scaleform.daapi.view.lobby.storage.blueprints.blueprints_cm_handlers import BlueprintsCMHandler
+from gui.Scaleform.daapi.view.lobby.storage.blueprints.blueprints_storage_view import StorageCategoryBlueprintsView
 from gui.Scaleform.daapi.view.lobby.storage.forsell.for_sell_view import StorageCategoryForSellView
 from gui.Scaleform.daapi.view.lobby.storage.forsell.forsell_cm_handlers import ForSellCMHandler
 from gui.Scaleform.daapi.view.lobby.storage.inhangar.all_vehicles_tab import AllVehiclesTabView
@@ -27,6 +30,7 @@ from gui.Scaleform.framework import ViewSettings, ViewTypes, ScopeTemplates, Gro
 from gui.Scaleform.framework.package_layout import PackageBusinessHandler
 from gui.Scaleform.genConsts.CONTEXT_MENU_HANDLER_TYPE import CONTEXT_MENU_HANDLER_TYPE
 from gui.Scaleform.genConsts.STORAGE_CONSTANTS import STORAGE_CONSTANTS
+from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.app_loader import settings as app_settings
 from gui.shared import EVENT_BUS_SCOPE
 
@@ -39,7 +43,8 @@ def getContextMenuHandlers():
      (CONTEXT_MENU_HANDLER_TYPE.STORAGE_VEHICLES_RESTORE_ITEM, VehiclesRestoreCMHandler),
      (CONTEXT_MENU_HANDLER_TYPE.STORAGE_VEHICLES_RENTED_ITEM, VehiclesRentedCMHandler),
      (CONTEXT_MENU_HANDLER_TYPE.STORAGE_PERSONAL_RESERVE_ITEM, PersonalReservesCMHandler),
-     (CONTEXT_MENU_HANDLER_TYPE.STORAGE_CUSTOMZIZATION_ITEM, CustomizationCMHandler))
+     (CONTEXT_MENU_HANDLER_TYPE.STORAGE_CUSTOMZIZATION_ITEM, CustomizationCMHandler),
+     (CONTEXT_MENU_HANDLER_TYPE.STORAGE_BLUEPRINTS_ITEM, BlueprintsCMHandler))
 
 
 def getViewSettings():
@@ -56,8 +61,31 @@ def getViewSettings():
      ViewSettings(STORAGE_CONSTANTS.STORAGE_SHELLS_TAB, ShellsTabView, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
      ViewSettings(STORAGE_CONSTANTS.PERSONAL_RESERVES_VIEW, StorageCategoryPersonalReservesView, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
      GroupedViewSettings(VIEW_ALIAS.STORAGE_VEHICLES_FILTER_POPOVER, StorageVehicleFilterPopover, 'vehiclesFiltersPopoverView.swf', ViewTypes.WINDOW, VIEW_ALIAS.STORAGE_VEHICLES_FILTER_POPOVER, VIEW_ALIAS.STORAGE_VEHICLES_FILTER_POPOVER, ScopeTemplates.DEFAULT_SCOPE),
+     ViewSettings(STORAGE_CONSTANTS.BLUEPRINTS_VIEW, StorageCategoryBlueprintsView, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
+     GroupedViewSettings(VIEW_ALIAS.STORAGE_BLUEPRINTS_FILTER_POPOVER, StorageBlueprintsFilterPopover, 'vehiclesFiltersPopoverView.swf', ViewTypes.WINDOW, VIEW_ALIAS.STORAGE_VEHICLES_FILTER_POPOVER, VIEW_ALIAS.STORAGE_BLUEPRINTS_FILTER_POPOVER, ScopeTemplates.DEFAULT_SCOPE),
      GroupedViewSettings(VIEW_ALIAS.STORAGE_VEHICLE_SELECTOR_POPOVER, VehicleSelectPopover, 'storageVehicleSelectorPopover.swf', ViewTypes.WINDOW, VIEW_ALIAS.STORAGE_VEHICLE_SELECTOR_POPOVER, VIEW_ALIAS.STORAGE_VEHICLE_SELECTOR_POPOVER, ScopeTemplates.DEFAULT_SCOPE),
      ViewSettings(STORAGE_CONSTANTS.CUSTOMIZATION_VIEW, StorageCategoryCustomizationView, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE))
+
+
+def getSectionsList():
+    return ({'id': STORAGE_CONSTANTS.FOR_SELL,
+      'linkage': STORAGE_CONSTANTS.FOR_SELL_VIEW,
+      'tooltip': TOOLTIPS.STORAGE_MAINMENU_FOR_SELL},
+     {'id': STORAGE_CONSTANTS.STORAGE,
+      'linkage': STORAGE_CONSTANTS.STORAGE_VIEW,
+      'tooltip': TOOLTIPS.STORAGE_MAINMENU_STORAGE},
+     {'id': STORAGE_CONSTANTS.BLUEPRINTS,
+      'linkage': STORAGE_CONSTANTS.BLUEPRINTS_VIEW,
+      'tooltip': TOOLTIPS.STORAGE_MAINMENU_BLUEPRINTS},
+     {'id': STORAGE_CONSTANTS.IN_HANGAR,
+      'linkage': STORAGE_CONSTANTS.IN_HANGAR_VIEW,
+      'tooltip': TOOLTIPS.STORAGE_MAINMENU_IN_HANGAR},
+     {'id': STORAGE_CONSTANTS.PERSONAL_RESERVES,
+      'linkage': STORAGE_CONSTANTS.PERSONAL_RESERVES_VIEW,
+      'tooltip': TOOLTIPS.STORAGE_MAINMENU_PERSONAL_RESERVES},
+     {'id': STORAGE_CONSTANTS.CUSTOMIZATION,
+      'linkage': STORAGE_CONSTANTS.CUSTOMIZATION_VIEW,
+      'tooltip': TOOLTIPS.STORAGE_MAINMENU_CUSTOMIZATION})
 
 
 def getBusinessHandlers():
@@ -67,5 +95,8 @@ def getBusinessHandlers():
 class StoragePackageBusinessHandler(PackageBusinessHandler):
 
     def __init__(self):
-        listeners = ((VIEW_ALIAS.LOBBY_STORAGE, self.loadViewByCtxEvent), (VIEW_ALIAS.STORAGE_VEHICLES_FILTER_POPOVER, self.loadViewByCtxEvent), (VIEW_ALIAS.STORAGE_VEHICLE_SELECTOR_POPOVER, self.loadViewByCtxEvent))
+        listeners = ((VIEW_ALIAS.LOBBY_STORAGE, self.loadViewByCtxEvent),
+         (VIEW_ALIAS.STORAGE_VEHICLES_FILTER_POPOVER, self.loadViewByCtxEvent),
+         (VIEW_ALIAS.STORAGE_BLUEPRINTS_FILTER_POPOVER, self.loadViewByCtxEvent),
+         (VIEW_ALIAS.STORAGE_VEHICLE_SELECTOR_POPOVER, self.loadViewByCtxEvent))
         super(StoragePackageBusinessHandler, self).__init__(listeners, app_settings.APP_NAME_SPACE.SF_LOBBY, EVENT_BUS_SCOPE.LOBBY)

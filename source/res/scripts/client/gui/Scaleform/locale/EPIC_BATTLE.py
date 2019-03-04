@@ -282,11 +282,14 @@ class EPIC_BATTLE(object):
     SEASON_201902_NAME = '#epic_battle:season/201902/name'
     SEASON_202002_NAME = '#epic_battle:season/202002/name'
     VEHICLE_PREVIEW_TITLE = '#epic_battle:vehicle_preview/title'
-    VEHICLE_PREVIEW_DESCRIPTION = '#epic_battle:vehicle_preview/description'
     EPICBATTLEITEM_REWARDPOINTS_HEADER = '#epic_battle:epicBattleItem/rewardPoints/header'
     EPICBATTLEITEM_REWARDPOINTS_DESCRIPTION = '#epic_battle:epicBattleItem/rewardPoints/description'
     EPICBATTLEITEM_SUPPLYPOINTS_HEADER = '#epic_battle:epicBattleItem/supplyPoints/header'
     EPICBATTLEITEM_SUPPLYPOINTS_DESCRIPTION = '#epic_battle:epicBattleItem/supplyPoints/description'
+    BUYCONFIRM_TITLE = '#epic_battle:buyConfirm/title'
+    BUYCONFIRM_CONTENT = '#epic_battle:buyConfirm/content'
+    BUYCONFIRM_BUYLABEL = '#epic_battle:buyConfirm/buyLabel'
+    BUYCONFIRM_BACKLABEL = '#epic_battle:buyConfirm/backLabel'
     RANK_RANK_ENUM = (RANK_RANK0,
      RANK_RANK1,
      RANK_RANK2,

@@ -48,17 +48,29 @@ class VehicleCongratulationModel(ViewModel):
     def setBtnLbl(self, value):
         self._setResource(6, value)
 
-    def getTitle(self):
+    def getBackBtnLbl(self):
         return self._getResource(7)
 
-    def setTitle(self, value):
+    def setBackBtnLbl(self, value):
         self._setResource(7, value)
 
+    def getTitle(self):
+        return self._getResource(8)
+
+    def setTitle(self, value):
+        self._setResource(8, value)
+
     def getResetAnimTrgigger(self):
-        return self._getBool(8)
+        return self._getBool(9)
 
     def setResetAnimTrgigger(self, value):
-        self._setBool(8, value)
+        self._setBool(9, value)
+
+    def getNeedBackBtn(self):
+        return self._getBool(10)
+
+    def setNeedBackBtn(self, value):
+        self._setBool(10, value)
 
     def _initialize(self):
         super(VehicleCongratulationModel, self)._initialize()
@@ -69,5 +81,7 @@ class VehicleCongratulationModel(ViewModel):
         self._addStringProperty('image', '')
         self._addStringProperty('imageAlt', '')
         self._addResourceProperty('btnLbl', R.invalid())
+        self._addResourceProperty('backBtnLbl', R.invalid())
         self._addResourceProperty('title', R.invalid())
         self._addBoolProperty('resetAnimTrgigger', False)
+        self._addBoolProperty('needBackBtn', False)

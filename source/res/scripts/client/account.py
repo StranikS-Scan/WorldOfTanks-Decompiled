@@ -16,7 +16,7 @@ from ClientUnitMgr import ClientUnitMgr, ClientUnitBrowser
 from ContactInfo import ContactInfo
 from OfflineMapCreator import g_offlineMapCreator
 from PlayerEvents import g_playerEvents as events
-from account_helpers import AccountSyncData, Inventory, DossierCache, Shop, Stats, QuestProgress, CustomFilesCache, BattleResultsCache, ClientGoodies, client_recycle_bin, AccountSettings
+from account_helpers import AccountSyncData, Inventory, DossierCache, Shop, Stats, QuestProgress, CustomFilesCache, BattleResultsCache, ClientGoodies, client_blueprints, client_recycle_bin, AccountSettings
 from account_helpers import ClientInvitations, vehicle_rotation
 from account_helpers import ClientRanked, ClientBadges
 from account_helpers import client_epic_meta_game, tokens
@@ -146,6 +146,7 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         self.badges = g_accountRepository.badges
         self.tokens = g_accountRepository.tokens
         self.epicMetaGame = g_accountRepository.epicMetaGame
+        self.blueprints = g_accountRepository.blueprints
         self.festivities = g_accountRepository.festivities
         self.customFilesCache = g_accountRepository.customFilesCache
         self.syncData.setAccount(self)
@@ -165,6 +166,7 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         self.badges.setAccount(self)
         self.tokens.setAccount(self)
         self.epicMetaGame.setAccount(self)
+        self.blueprints.setAccount(self)
         g_accountRepository.commandProxy.setGateway(self.__doCmd)
         self.isLongDisconnectedFromCenter = False
         self.prebattle = None
@@ -213,6 +215,7 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         self.badges.onAccountBecomePlayer()
         self.tokens.onAccountBecomeNonPlayer()
         self.epicMetaGame.onAccountBecomePlayer()
+        self.blueprints.onAccountBecomePlayer()
         self.festivities.onAccountBecomePlayer()
         chatManager.switchPlayerProxy(self)
         events.onAccountBecomePlayer()
@@ -244,6 +247,7 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         self.badges.onAccountBecomeNonPlayer()
         self.tokens.onAccountBecomeNonPlayer()
         self.epicMetaGame.onAccountBecomeNonPlayer()
+        self.blueprints.onAccountBecomeNonPlayer()
         self.festivities.onAccountBecomeNonPlayer()
         self.__cancelCommands()
         self.syncData.setAccount(None)
@@ -262,6 +266,7 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         self.badges.setAccount(None)
         self.tokens.setAccount(None)
         self.epicMetaGame.setAccount(None)
+        self.blueprints.setAccount(None)
         g_accountRepository.commandProxy.setGateway(None)
         self.unitMgr.clear()
         self.unitBrowser.clear()
@@ -1080,6 +1085,10 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         LOG_DEBUG('messenger_onActionByServer', actions.getActionName(actionID), reqID, args)
         MessengerEntry.g_instance.protos.BW_CHAT2.onActionReceived(actionID, reqID, args)
 
+    def addBlueprintFragment(self, fragmentTypeCD, requestedCount, other=-1):
+        LOG_DEBUG('Account.addBlueprintFragment: fragmentTypeCD={}, count={}'.format(fragmentTypeCD, requestedCount))
+        self.base.doCmdInt3(AccountCommands.REQUEST_ID_NO_RESPONSE, AccountCommands.CMD_BPF_ADD_FRAGMENTS_DEV, requestedCount, fragmentTypeCD, other)
+
     def processInvitations(self, invitations):
         self.prebattleInvitations.processInvitations(invitations)
 
@@ -1088,6 +1097,9 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
 
     def _doCmdIntStr(self, cmd, int1, s, callback):
         return self.__doCmd('doCmdIntStr', cmd, callback, int1, s)
+
+    def _doCmdInt2(self, cmd, int1, int2, callback):
+        return self.__doCmd('doCmdInt2', cmd, callback, int1, int2)
 
     def _doCmdInt3(self, cmd, int1, int2, int3, callback):
         return self.__doCmd('doCmdInt3', cmd, callback, int1, int2, int3)
@@ -1128,6 +1140,7 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
             self.badges.synchronize(isFullSync, diff)
             self.tokens.synchronize(isFullSync, diff)
             self.epicMetaGame.synchronize(isFullSync, diff)
+            self.blueprints.synchronize(isFullSync, diff)
             self.festivities.synchronize(isFullSync, diff)
             self.__synchronizeServerSettings(diff)
             self.__synchronizeDisabledPersonalMissions(diff)
@@ -1360,6 +1373,7 @@ class _AccountRepository(object):
         self.badges = ClientBadges.ClientBadges(self.syncData)
         self.tokens = tokens.Tokens(self.syncData)
         self.epicMetaGame = client_epic_meta_game.ClientEpicMetaGame(self.syncData)
+        self.blueprints = client_blueprints.ClientBlueprints(self.syncData)
         self.festivities = FestivityManager(self.syncData, self.commandProxy)
         self.gMap = ClientGlobalMap()
         self.onTokenReceived = Event.Event()

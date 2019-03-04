@@ -5,6 +5,8 @@ import copy
 import time
 from account_shared import getCustomizationItem
 from soft_exception import SoftException
+from items import tankmen
+from items.components.crewSkins_constants import NO_CREW_SKIN_ID
 
 def _packTrack(track):
     result = []
@@ -68,6 +70,11 @@ def __mergeCustomizations(total, key, value, isLeaf, count, vehTypeCompDescr):
         customizations.append(subvalue)
 
 
+def __mergeCrewSkins(total, key, value, isLeaf=False, *args):
+    skins = total.setdefault(key, [])
+    skins.extend(value if isinstance(value, list) else [value])
+
+
 def __mergeTokens(total, key, value, isLeaf=False, count=1, *args):
     totalTokens = total.setdefault(key, {})
     for tokenID, tokenData in value.iteritems():
@@ -118,6 +125,13 @@ def __mergeDossier(total, key, value, isLeaf=False, count=1, *args):
             total['type'] = data['type']
 
 
+def __mergeBlueprints(total, key, value, isLeaf=False, count=1, *args):
+    totalBlueprints = total.setdefault(key, {})
+    for fragmentCD, fragmentData in value.iteritems():
+        totalBlueprints.setdefault(fragmentCD, 0)
+        totalBlueprints[fragmentCD] += count * fragmentData
+
+
 BONUS_MERGERS = {'credits': __mergeValue,
  'gold': __mergeValue,
  'xp': __mergeValue,
@@ -139,7 +153,10 @@ BONUS_MERGERS = {'credits': __mergeValue,
  'goodies': __mergeGoodies,
  'dossier': __mergeDossier,
  'tankmen': __mergeTankmen,
- 'customizations': __mergeCustomizations}
+ 'customizations': __mergeCustomizations,
+ 'crewSkins': __mergeCrewSkins,
+ 'blueprintsAny': __mergeItems,
+ 'blueprints': __mergeBlueprints}
 ITEM_INVENTORY_CHECKERS = {'vehicles': lambda account, key: account._inventory.getVehicleInvID(key) != 0,
  'customizations': lambda account, key: account._customizations20.getItems((key,), 0)[key] > 0,
  'tokens': lambda account, key: account._quests.hasToken(key)}

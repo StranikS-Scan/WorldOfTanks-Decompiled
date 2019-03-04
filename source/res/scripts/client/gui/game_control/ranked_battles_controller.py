@@ -92,9 +92,6 @@ class RankedBattlesController(IRankedBattlesController, Notifiable, SeasonProvid
     def isAvailable(self):
         return self.isEnabled() and not self.isFrozen() and self.getCurrentSeason() is not None
 
-    def hasAnySeason(self):
-        return bool(self.__getSettings().seasons)
-
     def getLadderPoints(self):
         return self.itemsCache.items.ranked.ladderPoints
 
@@ -438,7 +435,7 @@ class RankedBattlesController(IRankedBattlesController, Notifiable, SeasonProvid
             currentSeason = self.getCurrentSeason()
             if currentSeason is None:
                 return (PRIME_TIME_STATUS.NO_SEASON, 0, False)
-            isNow, timeLeft = primeTime.getAvailability(time_utils.getCurrentLocalServerTimestamp(), self.getCurrentSeason().getCycleEndDate())
+            isNow, timeLeft = primeTime.getAvailability(time_utils.getCurrentLocalServerTimestamp(), currentSeason.getCycleEndDate())
             return (PRIME_TIME_STATUS.AVAILABLE, timeLeft, isNow) if isNow else (PRIME_TIME_STATUS.NOT_AVAILABLE, timeLeft, False)
 
     def hasAvailablePrimeTimeServers(self):
@@ -635,7 +632,7 @@ class RankedBattlesController(IRankedBattlesController, Notifiable, SeasonProvid
              'position': position}
 
     def _createSeason(self, cycleInfo, seasonData):
-        return RankedSeason(cycleInfo, seasonData, self._getRankedDossier(), self.getLadderPoints())
+        return RankedSeason(cycleInfo, seasonData, self.__getRankedDossier(), self.getLadderPoints())
 
     def __clear(self):
         lobbyContext = dependency.instance(ILobbyContext)
@@ -734,7 +731,7 @@ class RankedBattlesController(IRankedBattlesController, Notifiable, SeasonProvid
         season = self.getCurrentSeason()
         return None if season is None else first(self.eventsCache.getRankedQuests(lambda q: q.getRank() == rankId and q.isHidden() and q.isProcessedAtCycleEnd() and q.getSeasonID() == season.getSeasonID() and q.getCycleID() == season.getCycleID()).values())
 
-    def _getRankedDossier(self):
+    def __getRankedDossier(self):
         return self.itemsCache.items.getAccountDossier().getDossierDescr()['rankedSeasons']
 
     def __getDossierForCycle(self, cycleID, seasonID=None):
@@ -743,7 +740,7 @@ class RankedBattlesController(IRankedBattlesController, Notifiable, SeasonProvid
             season = self.getCurrentSeason()
             if season is not None:
                 seasonID = season.getSeasonID()
-        dossier = self._getRankedDossier()
+        dossier = self.__getRankedDossier()
         if seasonID is not None:
             cycleDossier = dossier.get((seasonID, cycleID))
         return RankedDossier(*(cycleDossier or RankedDossier.defaults()))

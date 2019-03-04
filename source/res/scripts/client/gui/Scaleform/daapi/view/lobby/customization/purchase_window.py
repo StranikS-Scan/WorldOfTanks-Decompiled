@@ -4,6 +4,8 @@ from collections import namedtuple
 import GUI
 from adisp import process
 from CurrentVehicle import g_currentVehicle
+from gui.impl import backport
+from gui.impl.gen import R
 from gui import DialogsInterface
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform.daapi.view.dialogs.ExchangeDialogMeta import ExchangeCreditsSingleItemMeta, ExchangeCreditsMultiItemsMeta, InfoItemBase
@@ -15,12 +17,12 @@ from gui.Scaleform.daapi.view.meta.CustomizationBuyWindowMeta import Customizati
 from gui.Scaleform.framework import ViewTypes
 from gui.Scaleform.genConsts.CUSTOMIZATION_DIALOGS import CUSTOMIZATION_DIALOGS
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
-from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.VEHICLE_CUSTOMIZATION import VEHICLE_CUSTOMIZATION
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.ingame_shop import showBuyGoldForCustomization
 from gui.shared.formatters import text_styles, icons, getItemPricesVO
 from gui.shared.gui_items import GUI_ITEM_TYPE
+from gui.shared.gui_items.customization.outfit import Area
 from gui.shared.events import LobbyHeaderMenuEvent
 from gui.shared.event_bus import EVENT_BUS_SCOPE
 from gui.shared.money import Currency
@@ -32,10 +34,10 @@ from items.components.c11n_constants import SeasonType
 from skeletons.gui.customization import ICustomizationService
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
-from shared import getTotalPurchaseInfo, AdditionalPurchaseGroups
-_CUSTOMIZATION_SEASON_TITLES = {SeasonType.WINTER: VEHICLE_CUSTOMIZATION.BUYWINDOW_TITLE_WINTER,
- SeasonType.SUMMER: VEHICLE_CUSTOMIZATION.BUYWINDOW_TITLE_SUMMER,
- SeasonType.DESERT: VEHICLE_CUSTOMIZATION.BUYWINDOW_TITLE_DESERT}
+from shared import getTotalPurchaseInfo, AdditionalPurchaseGroups, getPurchaseMoneyState, MoneyForPurchase, isTransactionValid
+_CUSTOMIZATION_SEASON_TITLES = {SeasonType.WINTER: backport.text(R.strings.vehicle_customization.buyWindow.title.winter()),
+ SeasonType.SUMMER: backport.text(R.strings.vehicle_customization.buyWindow.title.summer()),
+ SeasonType.DESERT: backport.text(R.strings.vehicle_customization.buyWindow.title.desert())}
 _CUSTOMIZATION_TUTORIAL_CHAPTER = 'c11nProlong'
 _SelectItemData = namedtuple('_SelectItemData', ('season', 'quantity', 'purchaseIndices'))
 
@@ -60,12 +62,6 @@ class CartInfoItem(InfoItemBase):
         pass
 
 
-class _MoneyForPurchase(object):
-    NOT_ENOUGH = 0
-    ENOUGH_WITH_EXCHANGE = 1
-    ENOUGH = 2
-
-
 class PurchaseWindow(CustomizationBuyWindowMeta):
     lobbyContext = dependency.descriptor(ILobbyContext)
     itemsCache = dependency.descriptor(IItemsCache)
@@ -79,7 +75,7 @@ class PurchaseWindow(CustomizationBuyWindowMeta):
         self.__isStyle = False
         self.__items = {}
         self.__counters = {season:[0, 0] for season in SeasonType.COMMON_SEASONS}
-        self.__moneyState = _MoneyForPurchase.NOT_ENOUGH
+        self.__moneyState = MoneyForPurchase.NOT_ENOUGH
         self.__blur = GUI.WGUIBackgroundBlur()
         self.__prolongStyleRent = (ctx or {}).get('prolongStyleRent', False)
         return
@@ -92,13 +88,13 @@ class PurchaseWindow(CustomizationBuyWindowMeta):
 
     @process
     def buy(self):
-        if self.__moneyState is _MoneyForPurchase.NOT_ENOUGH:
+        if self.__moneyState is MoneyForPurchase.NOT_ENOUGH:
             if isIngameShopEnabled():
                 cart = getTotalPurchaseInfo(self.__purchaseItems)
                 totalPriceGold = cart.totalPrice.price.get(Currency.GOLD, 0)
                 showBuyGoldForCustomization(totalPriceGold)
             return
-        if self.__moneyState is _MoneyForPurchase.ENOUGH_WITH_EXCHANGE:
+        if self.__moneyState is MoneyForPurchase.ENOUGH_WITH_EXCHANGE:
             if self.__isStyle:
                 item = self.__purchaseItems[0].item
                 meta = ExchangeCreditsSingleItemMeta(item.intCD)
@@ -171,15 +167,31 @@ class PurchaseWindow(CustomizationBuyWindowMeta):
         self.__setTotalData()
         self.__setTitlesData()
 
-    def __setTitlesData(self):
+    def __getCamoBonus(self, item):
         vehicle = g_currentVehicle.item
+        bonusSeparator = '&nbsp;&nbsp;'
+        if item and item.bonus:
+            bonus = item.bonus.getFormattedValue(vehicle)
+            return bonusSeparator + text_styles.bonusAppliedText(_ms(VEHICLE_CUSTOMIZATION.BUYWINDOW_TITLE_BONUSCAMO, bonus=bonus))
+
+    def __setTitlesData(self):
         haveAutoprolongation = False
         autoprolongationSelected = False
         seasonTitlesText = {season:_ms(_CUSTOMIZATION_SEASON_TITLES[season]) for season in SeasonType.COMMON_SEASONS}
+        seasonCountersText = {season:'' for season in SeasonType.COMMON_SEASONS}
+        seasonCountersSmallText = {season:'' for season in SeasonType.COMMON_SEASONS}
+        seasonBonusText = {season:'' for season in SeasonType.COMMON_SEASONS}
         if self.__isStyle:
             item = self.__purchaseItems[0].item
             titleTemplate = _ms(TOOLTIPS.VEHICLEPREVIEW_BOXTOOLTIP_STYLE_HEADER, group=item.userType, value=item.userName)
             bigTitleTemplate = _ms(VEHICLE_CUSTOMIZATION.CUSTOMIZATION_INFOTYPE_TYPE_STYLE_MULTILINE, group=item.userType, value=text_styles.heroTitle(item.userName))
+            for season in SeasonType.COMMON_SEASONS:
+                outfit = item.getOutfit(season)
+                if outfit:
+                    container = outfit.hull
+                    camo = container.slotFor(GUI_ITEM_TYPE.CAMOUFLAGE).getItem()
+                    seasonBonusText[season] = self.__getCamoBonus(camo)
+
             if item.isRentable:
                 haveAutoprolongation = True
                 autoprolongationSelected = self.__ctx.autoRentEnabled()
@@ -189,21 +201,14 @@ class PurchaseWindow(CustomizationBuyWindowMeta):
                 purchase, inventory = self.__counters[season]
                 count = purchase + inventory
                 totalCount += count
-                seasonTitlesText[season] += (text_styles.unavailable(' ({})') if count == 0 else ' ({})').format(count)
+                seasonCountersText[season] = (text_styles.unavailable(' ({})') if count == 0 else ' ({})').format(count)
+                seasonCountersSmallText[season] = (text_styles.critical(' ({})') if count == 0 else ' ({})').format(count)
 
-            titleTemplate = '{} ({})'.format(_ms(VEHICLE_CUSTOMIZATION.CUSTOMIZATION_BUYWINDOW_TITLE), totalCount)
-            bigTitleTemplate = text_styles.grandTitle(titleTemplate)
-        for season in SeasonType.COMMON_SEASONS:
-            bonusSeparator = '&nbsp;&nbsp;'
-            if self.__isStyle:
-                outfit = self.__purchaseItems[0].item.getOutfit(season)
-            else:
-                outfit = self.__ctx.getOutfitsInfo()[season].modified
-            if outfit:
-                camo = outfit.hull.slotFor(GUI_ITEM_TYPE.CAMOUFLAGE).getItem()
-                if camo and camo.bonus:
-                    bonusPercent = camo.bonus.getFormattedValue(vehicle)
-                    seasonTitlesText[season] += bonusSeparator + text_styles.bonusAppliedText(_ms(VEHICLE_CUSTOMIZATION.BUYWINDOW_TITLE_BONUSCAMO, bonus=bonusPercent))
+        titleTemplate = backport.text(R.strings.vehicle_customization.customization.buyWindow.title())
+        bigTitleTemplate = text_styles.grandTitle(titleTemplate)
+        for item in self.__purchaseItems:
+            if item.areaID == Area.HULL and item.item.itemTypeID == GUI_ITEM_TYPE.CAMOUFLAGE and item.selected:
+                seasonBonusText[item.item.season] = self.__getCamoBonus(item.item)
 
         titleText = text_styles.promoTitle(bigTitleTemplate)
         titleTextSmall = text_styles.promoTitle(titleTemplate)
@@ -214,9 +219,17 @@ class PurchaseWindow(CustomizationBuyWindowMeta):
          'haveAutoprolongation': haveAutoprolongation,
          'autoprolongationSelected': autoprolongationSelected,
          'prolongStyleRent': self.__prolongStyleRent})
-        self.as_setTitlesS({'summerTitle': seasonTitlesText[SeasonType.SUMMER],
-         'winterTitle': seasonTitlesText[SeasonType.WINTER],
-         'desertTitle': seasonTitlesText[SeasonType.DESERT]})
+        titles = self.__getSeasonTitle(seasonTitlesText, seasonCountersText, seasonBonusText)
+        titlesSmall = self.__getSeasonTitle(seasonTitlesText, seasonCountersSmallText, seasonBonusText)
+        self.as_setTitlesS({'summerTitle': text_styles.highTitle(titles[SeasonType.SUMMER]),
+         'winterTitle': text_styles.highTitle(titles[SeasonType.WINTER]),
+         'desertTitle': text_styles.highTitle(titles[SeasonType.DESERT]),
+         'summerSmallTitle': text_styles.middleTitle(titlesSmall[SeasonType.SUMMER]),
+         'winterSmallTitle': text_styles.middleTitle(titlesSmall[SeasonType.WINTER]),
+         'desertSmallTitle': text_styles.middleTitle(titlesSmall[SeasonType.DESERT])})
+
+    def __getSeasonTitle(self, text, count, bonus):
+        return {season:text[season] + count[season] + bonus[season] for season in SeasonType.COMMON_SEASONS}
 
     def __setTotalData(self, *_):
         cart = getTotalPurchaseInfo(self.__purchaseItems)
@@ -227,21 +240,10 @@ class PurchaseWindow(CustomizationBuyWindowMeta):
             inFormationAlert = text_styles.concatStylesWithSpace(icons.markerBlocked(), text_styles.error(VEHICLE_CUSTOMIZATION.WINDOW_PURCHASE_FORMATION_ALERT))
         price = cart.totalPrice.price
         money = self.itemsCache.items.stats.money
-        exchangeRate = self.itemsCache.items.shop.exchangeRate
         shortage = money.getShortage(price)
-        if not shortage:
-            self.__moneyState = _MoneyForPurchase.ENOUGH
-        else:
-            money = money - price + shortage
-            price = shortage
-            money = money.exchange(Currency.GOLD, Currency.CREDITS, exchangeRate, default=0)
-            shortage = money.getShortage(price)
-            if not shortage:
-                self.__moneyState = _MoneyForPurchase.ENOUGH_WITH_EXCHANGE
-            else:
-                self.__moneyState = _MoneyForPurchase.NOT_ENOUGH
+        self.__moneyState = getPurchaseMoneyState(price)
         inGameShopOn = Currency.GOLD in shortage.getCurrency() and isIngameShopEnabled()
-        validTransaction = self.__moneyState != _MoneyForPurchase.NOT_ENOUGH or inGameShopOn
+        validTransaction = isTransactionValid(self.__moneyState, price)
         rentalInfoText = ''
         if self.__isStyle:
             item = self.__purchaseItems[0].item
@@ -303,10 +305,10 @@ class _ProcessorSelector(object):
 class _BasePurchaseDescription(object):
     __slots__ = ('intCD', 'identificator', 'itemData', 'quantity', 'purchaseIndices')
 
-    def __init__(self, item, purchaseIdx=0, quantity=1):
+    def __init__(self, item, purchaseIdx=0, quantity=1, component=None):
         self.intCD = item.intCD
         self.identificator = self.intCD
-        self.itemData = self._buildCustomizationItemData(item)
+        self.itemData = self._buildCustomizationItemData(item, component)
         self.quantity = quantity
         self.purchaseIndices = [purchaseIdx]
 
@@ -321,12 +323,15 @@ class _BasePurchaseDescription(object):
         self.purchaseIndices.extend(indices)
 
     @staticmethod
-    def _buildCustomizationItemData(item):
+    def _buildCustomizationItemData(item, component=None):
         if item.itemTypeID == GUI_ITEM_TYPE.MODIFICATION:
             showUnsupportedAlert = not isRendererPipelineDeferred()
         else:
             showUnsupportedAlert = False
-        return buildCustomizationItemDataVO(item, None, True, False, True, showUnsupportedAlert=showUnsupportedAlert, addExtraName=False)
+        customIcon = None
+        if item.itemTypeID == GUI_ITEM_TYPE.PERSONAL_NUMBER and component:
+            customIcon = item.numberIcon(component.number)
+        return buildCustomizationItemDataVO(item, None, True, False, True, showUnsupportedAlert=showUnsupportedAlert, addExtraName=False, customIcon=customIcon)
 
 
 class _StubItemPurchaseDescription(_BasePurchaseDescription):
@@ -345,10 +350,9 @@ class _StubItemPurchaseDescription(_BasePurchaseDescription):
         return itemVO
 
     @staticmethod
-    def _buildCustomizationItemData(item):
+    def _buildCustomizationItemData(item, component=None):
         itemData = {'intCD': 0,
-         'icon': RES_ICONS.MAPS_ICONS_LIBRARY_TANKITEM_BUY_TANK_POPOVER_SMALL,
-         'isGhost': True}
+         'isPlaceHolder': True}
         return itemData
 
 
@@ -356,7 +360,7 @@ class _SeparateItemPurchaseDescription(_BasePurchaseDescription):
     __slots__ = ('intCD', 'identificator', 'selected', 'itemData', 'compoundPrice', 'quantity', 'isFromInventory', 'purchaseIndices')
 
     def __init__(self, purchaseItem, purchaseIdx):
-        super(_SeparateItemPurchaseDescription, self).__init__(purchaseItem.item, purchaseIdx)
+        super(_SeparateItemPurchaseDescription, self).__init__(purchaseItem.item, purchaseIdx, component=purchaseItem.component)
         self.identificator = self.__generateID(purchaseItem)
         self.selected = purchaseItem.selected
         self.compoundPrice = purchaseItem.price
@@ -385,12 +389,12 @@ class _StyleItemPurchaseDescription(_BasePurchaseDescription):
 
 
 class _SeasonPurchaseInfo(object):
-    _ORDERED_KEYS = (GUI_ITEM_TYPE.INSCRIPTION,
+    _ORDERED_KEYS = (GUI_ITEM_TYPE.PROJECTION_DECAL,
+     GUI_ITEM_TYPE.INSCRIPTION,
      GUI_ITEM_TYPE.PERSONAL_NUMBER,
      GUI_ITEM_TYPE.MODIFICATION,
      GUI_ITEM_TYPE.PAINT,
      GUI_ITEM_TYPE.CAMOUFLAGE,
-     GUI_ITEM_TYPE.PROJECTION_DECAL,
      GUI_ITEM_TYPE.EMBLEM,
      GUI_ITEM_TYPE.STYLE)
 

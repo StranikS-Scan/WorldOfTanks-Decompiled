@@ -26,7 +26,7 @@ class FrontLineServerPresenter(ServerListItemPresenter):
         if not self.getTimeLeft():
             return text_styles.expText(_ms(EPIC_BATTLE.PRIMETIME_ENDOFCYCLE, server=self.getName()))
         timeStr = text_styles.neutral(time_utils.getTillTimeString(self.getTimeLeft(), MENU.TIME_TIMEVALUEWITHSECS))
-        return text_styles.expText(_ms(EPIC_BATTLE.PRIMETIME_SERVERTOOLTIP, server=self._shortName, time=timeStr)) if self._getIsAvailable() else text_styles.expText(_ms(EPIC_BATTLE.PRIMETIME_SERVERUNAVAILABLETOOLTIP, time=timeStr))
+        return text_styles.expText(_ms(EPIC_BATTLE.PRIMETIME_SERVERTOOLTIP, server=self.getName(), time=timeStr)) if self._getIsAvailable() else text_styles.expText(_ms(EPIC_BATTLE.PRIMETIME_SERVERUNAVAILABLETOOLTIP, time=timeStr))
 
     def isEnabled(self):
         return self.isActive()
@@ -46,21 +46,22 @@ class EpicBattlesPrimeTimeView(EpicPrimeTimeMeta):
         else:
             serversDDEnabled = serverDDVisible = True
             serversText = EPIC_BATTLE.PRIMETIME_MANYSERVERSAVAILABLE
-        isActiveOnOtherServers = self.__epicController.hasAvailablePrimeTimeServers()
+        isAlert = False
         if self.__epicController.hasAvailablePrimeTimeServers():
             warningIconSrc = RES_ICONS.MAPS_ICONS_LIBRARY_ICON_CLOCK_100X100
         else:
             warningIconSrc = RES_ICONS.MAPS_ICONS_LIBRARY_ICON_ALERT_90X84
+            isAlert = True
         return {'warningIconSrc': warningIconSrc,
          'status': text_styles.grandTitle(self.__getStatusText()),
          'serversText': text_styles.expText(serversText),
          'serversDDEnabled': serversDDEnabled,
          'serverDDVisible': serverDDVisible,
          'timeText': text_styles.expText(self.__getTimeText(serverInfo)),
-         'showAlertBG': isActiveOnOtherServers}
+         'showAlertBG': isAlert}
 
     def _getPrbActionName(self):
-        if self._isEnabled:
+        if self._hasAvailableServers():
             prbAction = PREBATTLE_ACTION_NAME.EPIC
         else:
             prbAction = PREBATTLE_ACTION_NAME.EPIC_FORCED
@@ -73,7 +74,7 @@ class EpicBattlesPrimeTimeView(EpicPrimeTimeMeta):
         if not self.__epicController.hasAvailablePrimeTimeServers():
             return EPIC_BATTLE.PRIMETIME_STATUS_NOPRIMETIMESONALLSERVERS
         else:
-            currServerName = self._connectionMgr.serverUserNameShort
+            currServerName = self._connectionMgr.serverUserName
             primeTime = self.__epicController.getPrimeTimes().get(self._connectionMgr.peripheryID)
             timestamp, status = self.__epicController.getCurrentCycleInfo()
             currTime = time_utils.getCurrentLocalServerTimestamp()

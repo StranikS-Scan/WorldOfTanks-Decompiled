@@ -24,6 +24,8 @@ FREE_XP_DIFF_KEY = _STAT_DIFF_FORMAT.format('freeXP')
 UNLOCKS_DIFF_KEY = _STAT_DIFF_FORMAT.format('unlocks')
 VEH_XP_DIFF_KEY = _STAT_DIFF_FORMAT.format('vehTypeXP')
 ELITE_DIFF_KEY = _STAT_DIFF_FORMAT.format('eliteVehicles')
+BLUEPRINT_DIFF_KEY = 'blueprints'
+BLUEPRINT_SETTINGS_KEY = 'serverSettings.blueprints_config'
 
 class _Listener(object):
 
@@ -43,12 +45,32 @@ class _Listener(object):
         return
 
 
+class _BlueprintsListener(_Listener):
+    __lobbyContext = dependency.instance(ILobbyContext)
+
+    def startListen(self, page):
+        super(_BlueprintsListener, self).startListen(page)
+        g_clientUpdateManager.addCallbacks({BLUEPRINT_DIFF_KEY: self._onBlueprintsUpdate,
+         BLUEPRINT_SETTINGS_KEY: self.__onBlueprintsModeChanged})
+
+    def stopListen(self):
+        g_clientUpdateManager.removeObjectCallbacks(self)
+        super(_BlueprintsListener, self).stopListen()
+
+    def _onBlueprintsUpdate(self, blueprints):
+        self._page.invalidateBlueprints(blueprints)
+
+    def __onBlueprintsModeChanged(self, _):
+        isEnabled = self.__lobbyContext.getServerSettings().blueprintsConfig.isBlueprintsAvailable()
+        self._page.invalidateBlueprintMode(isEnabled)
+
+
 class _StatsListener(_Listener):
-    lobbyContext = dependency.instance(ILobbyContext)
+    __lobbyContext = dependency.instance(ILobbyContext)
 
     def startListen(self, page):
         super(_StatsListener, self).startListen(page)
-        self.lobbyContext.getServerSettings().onServerSettingsChange += self.__onServerSettingsChanged
+        self.__lobbyContext.getServerSettings().onServerSettingsChange += self.__onServerSettingsChanged
         g_clientUpdateManager.addCallbacks({CREDITS_DIFF_KEY: self._onCreditsUpdate,
          GOLD_DIFF_KEY: self._onGoldUpdate,
          FREE_XP_DIFF_KEY: self._onFreeXPUpdate,
@@ -57,7 +79,7 @@ class _StatsListener(_Listener):
          ELITE_DIFF_KEY: self._onEliteVehiclesUpdate})
 
     def stopListen(self):
-        self.lobbyContext.getServerSettings().onServerSettingsChange -= self.__onServerSettingsChanged
+        self.__lobbyContext.getServerSettings().onServerSettingsChange -= self.__onServerSettingsChanged
         g_clientUpdateManager.removeObjectCallbacks(self)
         super(_StatsListener, self).stopListen()
 
@@ -81,14 +103,14 @@ class _StatsListener(_Listener):
         self._page.invalidateUnlocks(unlocks)
 
     def __onServerSettingsChanged(self, diff):
-        if self.lobbyContext.getServerSettings().isIngameDataChangedInDiff(diff, 'isEnabled'):
+        if self.__lobbyContext.getServerSettings().isIngameDataChangedInDiff(diff, 'isEnabled'):
             self._onGoldUpdate(None)
         return
 
 
 class _ItemsCacheListener(_Listener):
-    itemsCache = dependency.descriptor(IItemsCache)
-    comparisonBasket = dependency.descriptor(IVehicleComparisonBasket)
+    __itemsCache = dependency.descriptor(IItemsCache)
+    __comparisonBasket = dependency.descriptor(IVehicleComparisonBasket)
 
     def __init__(self):
         super(_ItemsCacheListener, self).__init__()
@@ -100,16 +122,16 @@ class _ItemsCacheListener(_Listener):
          CACHE_DIFF_KEY: self.__onCacheUpdate,
          GOODIES_DIFF_KEY: self.__onGoodiesUpdate})
         g_playerEvents.onCenterIsLongDisconnected += self.__center_onIsLongDisconnected
-        self.itemsCache.onSyncCompleted += self.__items_onSyncCompleted
-        self.comparisonBasket.onChange += self.__onVehCompareBasketChanged
-        self.comparisonBasket.onSwitchChange += self.__onVehCompareBasketSwitchChange
+        self.__itemsCache.onSyncCompleted += self.__items_onSyncCompleted
+        self.__comparisonBasket.onChange += self.__onVehCompareBasketChanged
+        self.__comparisonBasket.onSwitchChange += self.__onVehCompareBasketSwitchChange
 
     def stopListen(self):
         g_clientUpdateManager.removeObjectCallbacks(self)
         g_playerEvents.onCenterIsLongDisconnected -= self.__center_onIsLongDisconnected
-        self.itemsCache.onSyncCompleted -= self.__items_onSyncCompleted
-        self.comparisonBasket.onChange -= self.__onVehCompareBasketChanged
-        self.comparisonBasket.onSwitchChange -= self.__onVehCompareBasketSwitchChange
+        self.__itemsCache.onSyncCompleted -= self.__items_onSyncCompleted
+        self.__comparisonBasket.onChange -= self.__onVehCompareBasketChanged
+        self.__comparisonBasket.onSwitchChange -= self.__onVehCompareBasketSwitchChange
         super(_ItemsCacheListener, self).stopListen()
 
     def __onInventoryUpdate(self, _):
@@ -117,7 +139,7 @@ class _ItemsCacheListener(_Listener):
 
     def __onGoodiesUpdate(self, goodies):
         invalidated = set()
-        vehicleDiscounts = self.itemsCache.items.shop.getVehicleDiscountDescriptions()
+        vehicleDiscounts = self.__itemsCache.items.shop.getVehicleDiscountDescriptions()
         for goodieID in goodies:
             vehicleDiscount = vehicleDiscounts.get(goodieID)
             if vehicleDiscount:
@@ -152,14 +174,14 @@ class _ItemsCacheListener(_Listener):
 
 
 class _WalletStatusListener(_Listener):
-    wallet = dependency.descriptor(IWalletController)
+    __wallet = dependency.descriptor(IWalletController)
 
     def startListen(self, page):
         super(_WalletStatusListener, self).startListen(page)
-        self.wallet.onWalletStatusChanged += self.__onWalletStatusChanged
+        self.__wallet.onWalletStatusChanged += self.__onWalletStatusChanged
 
     def stopListen(self):
-        self.wallet.onWalletStatusChanged -= self.__onWalletStatusChanged
+        self.__wallet.onWalletStatusChanged -= self.__onWalletStatusChanged
         super(_WalletStatusListener, self).stopListen()
 
     def __onWalletStatusChanged(self, status):
@@ -167,14 +189,14 @@ class _WalletStatusListener(_Listener):
 
 
 class _RentChangeListener(_Listener):
-    rentals = dependency.descriptor(IRentalsController)
+    __rentals = dependency.descriptor(IRentalsController)
 
     def startListen(self, page):
         super(_RentChangeListener, self).startListen(page)
-        self.rentals.onRentChangeNotify += self.__onRentChange
+        self.__rentals.onRentChangeNotify += self.__onRentChange
 
     def stopListen(self):
-        self.rentals.onRentChangeNotify -= self.__onRentChange
+        self.__rentals.onRentChangeNotify -= self.__onRentChange
         super(_RentChangeListener, self).stopListen()
 
     def __onRentChange(self, vehicles):
@@ -182,14 +204,14 @@ class _RentChangeListener(_Listener):
 
 
 class _RestoreListener(_Listener):
-    restores = dependency.descriptor(IRestoreController)
+    __restores = dependency.descriptor(IRestoreController)
 
     def startListen(self, page):
-        self.restores.onRestoreChangeNotify += self.__onRestoreChanged
+        self.__restores.onRestoreChangeNotify += self.__onRestoreChanged
         super(_RestoreListener, self).startListen(page)
 
     def stopListen(self):
-        self.restores.onRestoreChangeNotify -= self.__onRestoreChanged
+        self.__restores.onRestoreChangeNotify -= self.__onRestoreChanged
         super(_RestoreListener, self).stopListen()
 
     def __onRestoreChanged(self, vehicles):
@@ -232,6 +254,7 @@ class TTListenerDecorator(_Listener):
         self._prbListener = _PrbGlobalListener()
         self._rent = _RentChangeListener()
         self._restore = _RestoreListener()
+        self._blueprints = _BlueprintsListener()
 
     def startListen(self, page):
         proxy = weakref.proxy(page)
@@ -241,6 +264,7 @@ class TTListenerDecorator(_Listener):
         self._prbListener.startListen(proxy)
         self._rent.startListen(proxy)
         self._restore.startListen(proxy)
+        self._blueprints.startListen(proxy)
 
     def stopListen(self):
         self._stats.stopListen()
@@ -249,3 +273,4 @@ class TTListenerDecorator(_Listener):
         self._prbListener.stopListen()
         self._rent.stopListen()
         self._restore.stopListen()
+        self._blueprints.stopListen()

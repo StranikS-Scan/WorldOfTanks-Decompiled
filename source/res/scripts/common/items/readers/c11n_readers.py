@@ -257,6 +257,8 @@ class StyleXmlReader(BaseCustomizationItemXmlReader):
             target.texture = section.readString('texture')
         if section.has_key('modelsSet'):
             target.modelsSet = section.readString('modelsSet')
+        if section.has_key('textInfo'):
+            target.textInfo = section.readString('textInfo')
 
 
 class InsigniaXmlReader(BaseCustomizationItemXmlReader):

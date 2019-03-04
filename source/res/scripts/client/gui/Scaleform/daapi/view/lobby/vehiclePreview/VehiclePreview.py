@@ -3,6 +3,7 @@
 from collections import namedtuple
 import BigWorld
 from CurrentVehicle import g_currentPreviewVehicle, g_currentVehicle
+from HeroTank import HeroTank
 from account_helpers import AccountSettings
 from account_helpers.AccountSettings import PREVIEW_INFO_PANEL_IDX
 from gui.ClientUpdateManager import g_clientUpdateManager
@@ -23,23 +24,21 @@ from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.Scaleform.locale.VEHICLE_PREVIEW import VEHICLE_PREVIEW
+from gui.hangar_cameras.hangar_camera_common import CameraRelatedEvents, CameraMovementStates
 from gui.ingame_shop import canBuyGoldForVehicleThroughWeb
 from gui.shared import event_dispatcher, events, event_bus_handlers, EVENT_BUS_SCOPE
-from gui.shared.economics import getGUIPrice
+from gui.shared.economics import getPriceTypeAndValue
 from gui.shared.event_dispatcher import showWebShop, showOldShop
-from gui.shared.formatters import text_styles, icons
+from gui.shared.formatters import text_styles, icons, chooseItemPriceVO, getItemUnlockPricesVO
 from gui.shared.money import Currency
-from gui.shared.tooltips.formatters import getActionPriceData
 from gui.shared.utils.functions import makeTooltip
 from helpers import dependency
 from helpers.i18n import makeString as _ms
 from skeletons.gui.game_control import IVehicleComparisonBasket, ITradeInController, IRestoreController, IHeroTankController, IBootcampController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
-from gui.hangar_cameras.hangar_camera_common import CameraRelatedEvents, CameraMovementStates
-from HeroTank import HeroTank
 from skeletons.gui.shared.utils import IHangarSpace
-_ButtonState = namedtuple('_ButtonState', 'enabled, price, label, isAction, currencyIcon, action, tooltip')
+_ButtonState = namedtuple('_ButtonState', ('enabled', 'isMoneyEnough', 'itemPrice', 'label', 'isAction', 'tooltip', 'isUnlock'))
 _BACK_BTN_LABELS = {VIEW_ALIAS.LOBBY_HANGAR: 'hangar',
  VIEW_ALIAS.LOBBY_STORE: 'shop',
  VIEW_ALIAS.LOBBY_RESEARCH: 'researchTree',
@@ -89,11 +88,52 @@ class VehiclePreview(LobbySelectableView, VehiclePreviewMeta):
         g_currentPreviewVehicle.selectHeroTank(self.__isHeroTank)
         return
 
+    def closeView(self):
+        if self._previewBackCb:
+            self._previewBackCb()
+        else:
+            event_dispatcher.showHangar()
+
+    def onBackClick(self):
+        self.__processBackClick()
+
+    def onOpenInfoTab(self, index):
+        AccountSettings.setSettings(PREVIEW_INFO_PANEL_IDX, index)
+
+    def onBuyOrResearchClick(self):
+        if self.__isHeroTank:
+            url = self.heroTanks.getCurrentRelatedURL()
+            self.fireEvent(events.OpenLinkEvent(events.OpenLinkEvent.SPECIFIED, url=url))
+        else:
+            vehicle = g_currentPreviewVehicle.item
+            level = vehicle.level
+            if canBuyGoldForVehicleThroughWeb(vehicle):
+                event_dispatcher.showVehicleBuyDialog(vehicle, previousAlias=VIEW_ALIAS.VEHICLE_PREVIEW)
+            else:
+                self.__previewDP.buyAction(self._actionType, self._vehicleCD, self._skipConfirm, level)
+
+    def onCompareClick(self):
+        self.comparisonBasket.addVehicle(self._vehicleCD, initParameters={'strCD': g_currentPreviewVehicle.item.descriptor.makeCompactDescr()})
+
+    def handleSelectedEntityUpdated(self, event):
+        ctx = event.ctx
+        entity = BigWorld.entities.get(ctx['entityId'], None)
+        if ctx['state'] == CameraMovementStates.MOVING_TO_OBJECT:
+            if isinstance(entity, HeroTank):
+                descriptor = entity.typeDescriptor
+                if descriptor:
+                    self._needToResetAppearance = False
+                    event_dispatcher.showHeroTankPreview(descriptor.type.compactDescr, previewAlias=VIEW_ALIAS.VEHICLE_PREVIEW, previousBackAlias=self._backAlias)
+            elif entity.id == self.hangarSpace.space.vehicleEntityId:
+                self.__processBackClick({'entity': entity})
+        return
+
     def _populate(self):
         g_currentPreviewVehicle.selectVehicle(self._vehicleCD, self.__vehicleStrCD)
         LobbySelectableView._populate(self)
         g_clientUpdateManager.addMoneyCallback(self._updateBtnState)
-        g_clientUpdateManager.addCallbacks({'stats.freeXP': self._updateBtnState})
+        g_clientUpdateManager.addCallbacks({'stats.freeXP': self._updateBtnState,
+         'serverSettings.blueprints_config': self.__onBlueprintsModeChanged})
         g_currentPreviewVehicle.onComponentInstalled += self.__updateStatus
         g_currentPreviewVehicle.onVehicleUnlocked += self._updateBtnState
         g_currentPreviewVehicle.onVehicleInventoryChanged += self.__onInventoryChanged
@@ -133,45 +173,6 @@ class VehiclePreview(LobbySelectableView, VehiclePreviewMeta):
         LobbySelectableView._dispose(self)
         if self.__vehAppearanceChanged:
             g_currentPreviewVehicle.resetAppearance()
-        return
-
-    def closeView(self):
-        if self._previewBackCb:
-            self._previewBackCb()
-        else:
-            event_dispatcher.showHangar()
-
-    def onBackClick(self):
-        self.__processBackClick()
-
-    def onOpenInfoTab(self, index):
-        AccountSettings.setSettings(PREVIEW_INFO_PANEL_IDX, index)
-
-    def onBuyOrResearchClick(self):
-        if self.__isHeroTank:
-            url = self.heroTanks.getCurrentRelatedURL()
-            self.fireEvent(events.OpenLinkEvent(events.OpenLinkEvent.SPECIFIED, url=url))
-        else:
-            vehicle = g_currentPreviewVehicle.item
-            if canBuyGoldForVehicleThroughWeb(vehicle):
-                event_dispatcher.showVehicleBuyDialog(vehicle, previousAlias=VIEW_ALIAS.VEHICLE_PREVIEW)
-            else:
-                self.__previewDP.buyAction(self._actionType, self._vehicleCD, self._skipConfirm)
-
-    def onCompareClick(self):
-        self.comparisonBasket.addVehicle(self._vehicleCD, initParameters={'strCD': g_currentPreviewVehicle.item.descriptor.makeCompactDescr()})
-
-    def handleSelectedEntityUpdated(self, event):
-        ctx = event.ctx
-        entity = BigWorld.entities.get(ctx['entityId'], None)
-        if ctx['state'] == CameraMovementStates.MOVING_TO_OBJECT:
-            if isinstance(entity, HeroTank):
-                descriptor = entity.typeDescriptor
-                if descriptor:
-                    self._needToResetAppearance = False
-                    event_dispatcher.showHeroTankPreview(descriptor.type.compactDescr, previewAlias=VIEW_ALIAS.VEHICLE_PREVIEW, previousBackAlias=self._backAlias)
-            elif entity.id == self.hangarSpace.space.vehicleEntityId:
-                self.__processBackClick({'entity': entity})
         return
 
     def _updateBtnState(self, *args):
@@ -216,17 +217,20 @@ class VehiclePreview(LobbySelectableView, VehiclePreviewMeta):
         if self.lobbyContext.getServerSettings().isIngamePreviewEnabled():
             self.__processBackClick()
 
+    def __onBlueprintsModeChanged(self, _):
+        self._updateBtnState()
+
     def __updateStatus(self):
         if g_currentPreviewVehicle.hasModulesToSelect():
             if g_currentPreviewVehicle.isModified():
                 icon = icons.makeImageTag(RES_ICONS.MAPS_ICONS_LIBRARY_INFO_YELLOW, 24, 24, -7, -4)
-                text = text_styles.neutral('%s%s' % (_ms(VEHICLE_PREVIEW.MODULESPANEL_STATUS_TEXT), icon))
+                text = text_styles.neutral(''.join((_ms(VEHICLE_PREVIEW.MODULESPANEL_STATUS_TEXT), icon)))
             else:
                 icon = icons.makeImageTag(RES_ICONS.MAPS_ICONS_LIBRARY_INFO, 24, 24, -7, -4)
-                text = text_styles.stats('%s%s' % (_ms(VEHICLE_PREVIEW.MODULESPANEL_LABEL), icon))
+                text = text_styles.stats(''.join((_ms(VEHICLE_PREVIEW.MODULESPANEL_LABEL), icon)))
         else:
             icon = icons.makeImageTag(RES_ICONS.MAPS_ICONS_LIBRARY_INFO, 24, 24, -7, -4)
-            text = text_styles.stats('%s%s' % (_ms(VEHICLE_PREVIEW.MODULESPANEL_NOMODULESOPTIONS), icon))
+            text = text_styles.stats(''.join((_ms(VEHICLE_PREVIEW.MODULESPANEL_NOMODULESOPTIONS), icon)))
         self.as_updateVehicleStatusS(text)
 
     def __updateHeaderData(self):
@@ -240,45 +244,45 @@ class VehiclePreview(LobbySelectableView, VehiclePreviewMeta):
             money = stats.money
             money = self.tradeIn.addTradeInPriceIfNeeded(vehicle, money)
             exchangeRate = self.itemsCache.items.shop.exchangeRate
-            price = getGUIPrice(vehicle, money, exchangeRate)
+            priceType, price = getPriceTypeAndValue(vehicle, money, exchangeRate)
             currency = price.getCurrency(byWeight=True)
-            action = getActionPriceData(vehicle)
+            isAction = False
+            minRentPricePackage = vehicle.getRentPackage()
+            if minRentPricePackage:
+                isAction = minRentPricePackage['rentPrice'] != minRentPricePackage['defaultRentPrice']
+            elif not vehicle.isRestoreAvailable():
+                isAction = vehicle.buyPrices.getSum().isActionPrice()
+            itemPrice = chooseItemPriceVO(priceType, price)
             mayObtainForMoney = self.__isHeroTank or vehicle.mayObtainWithMoneyExchange(money, exchangeRate)
             isBuyingAvailable = not vehicle.isHidden or vehicle.isRentable or vehicle.isRestorePossible()
-            if currency == Currency.GOLD:
-                currencyIcon = RES_ICONS.MAPS_ICONS_LIBRARY_GOLDICONBIG
-                if mayObtainForMoney:
-                    formatter = text_styles.goldTextBig
+            isMoneyEnough = mayObtainForMoney
+            if not mayObtainForMoney and isBuyingAvailable:
+                if currency == Currency.GOLD:
+                    tooltip = _buildBuyButtonTooltip('notEnoughGold')
+                    if isIngameShopEnabled():
+                        mayObtainForMoney = True
                 else:
-                    formatter = text_styles.errCurrencyTextBig
-                    if isBuyingAvailable:
-                        tooltip = _buildBuyButtonTooltip('notEnoughGold')
-                        if isIngameShopEnabled():
-                            mayObtainForMoney = True
-            else:
-                currencyIcon = RES_ICONS.MAPS_ICONS_LIBRARY_CREDITSICONBIG
-                formatter = text_styles.creditsTextBig if mayObtainForMoney else text_styles.errCurrencyTextBig
-                if not mayObtainForMoney and isBuyingAvailable:
                     tooltip = _buildBuyButtonTooltip('notEnoughCredits')
             if self._disableBuyButton:
                 mayObtainForMoney = False
-            return _ButtonState(mayObtainForMoney, formatter(BigWorld.wg_getIntegralFormat(price.getSignValue(currency))), VEHICLE_PREVIEW.BUYINGPANEL_BUYBTN_LABEL_RESTORE if vehicle.isRestorePossible() else VEHICLE_PREVIEW.BUYINGPANEL_BUYBTN_LABEL_BUY, action is not None, currencyIcon, action, tooltip)
+            return _ButtonState(mayObtainForMoney, isMoneyEnough, itemPrice, VEHICLE_PREVIEW.BUYINGPANEL_BUYBTN_LABEL_RESTORE if vehicle.isRestorePossible() else VEHICLE_PREVIEW.BUYINGPANEL_BUYBTN_LABEL_BUY, isAction, tooltip, isUnlock=False)
         else:
             nodeCD = vehicle.intCD
-            currencyIcon = RES_ICONS.MAPS_ICONS_LIBRARY_XPCOSTICONBIG
-            isAvailableToUnlock, xpCost, possibleXp = g_techTreeDP.isVehicleAvailableToUnlock(nodeCD)
-            formatter = text_styles.creditsTextBig if possibleXp >= xpCost else text_styles.errCurrencyTextBig
+            isNextToUnlock, isXpEnough = g_techTreeDP.isVehicleAvailableToUnlock(nodeCD, vehicle.level)
+            isAvailableToUnlock = isNextToUnlock and isXpEnough
+            isXPEnough = True
+            unlocks = self.itemsCache.items.stats.unlocks
+            next2Unlock, unlockProps = g_techTreeDP.isNext2Unlock(nodeCD, unlocked=set(unlocks), xps=stats.vehiclesXPs, freeXP=stats.freeXP, level=vehicle.level)
             if not isAvailableToUnlock:
-                unlocks = self.itemsCache.items.stats.unlocks
-                next2Unlock, _ = g_techTreeDP.isNext2Unlock(nodeCD, unlocked=set(unlocks), xps=stats.vehiclesXPs, freeXP=stats.freeXP)
                 if next2Unlock:
+                    isXPEnough = False
                     tooltip = _buildBuyButtonTooltip('notEnoughXp')
                 elif any((bool(cd in unlocks) for cd in g_techTreeDP.getTopLevel(nodeCD))):
                     tooltip = _buildBuyButtonTooltip('parentModuleIsLocked')
                 else:
                     tooltip = _buildBuyButtonTooltip('parentVehicleIsLocked')
-            return _ButtonState(isAvailableToUnlock, formatter(BigWorld.wg_getIntegralFormat(xpCost)), VEHICLE_PREVIEW.BUYINGPANEL_BUYBTN_LABEL_RESEARCH, False, currencyIcon, None, tooltip)
-            return None
+            unlockPriceVO = getItemUnlockPricesVO(unlockProps)
+            return _ButtonState(isAvailableToUnlock, isXPEnough, unlockPriceVO, VEHICLE_PREVIEW.BUYINGPANEL_BUYBTN_LABEL_RESEARCH, unlockProps.discount > 0, tooltip, isUnlock=True)
 
     def __getStaticData(self):
         result = {'header': self.__getHeaderData(),

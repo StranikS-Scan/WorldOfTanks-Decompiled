@@ -1,17 +1,16 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/gui_items/processors/__init__.py
 import logging
-from collections import namedtuple
 from gui.Scaleform.locale.SYSTEM_MESSAGES import SYSTEM_MESSAGES
 from helpers import dependency
 from helpers import i18n
 from adisp import process, async
-from gui.SystemMessages import SM_TYPE
+from gui.SystemMessages import SM_TYPE, ResultMsg
 from gui.shared.utils import code2str
 from gui.shared.gui_items.processors import plugins as proc_plugs
+from gui.shared.money import Currency
 from skeletons.gui.shared import IItemsCache
 _logger = logging.getLogger(__name__)
-ResultMsg = namedtuple('ResultMsg', 'success userMsg sysMsgType auxData')
 
 def makeSuccess(userMsg='', msgType=SM_TYPE.Information, auxData=None):
     return ResultMsg(True, userMsg, msgType, auxData)
@@ -30,6 +29,15 @@ def makeI18nError(sysMsgKey='', defaultSysMsgKey='', auxData=None, *args, **kwar
     if localKey not in SYSTEM_MESSAGES.ALL_ENUM and defaultSysMsgKey:
         localKey = '#system_messages:{}'.format(defaultSysMsgKey)
     return makeError(i18n.makeString(localKey, *args, **kwargs), kwargs.get('type', SM_TYPE.Error), auxData)
+
+
+def makeCrewSkinCompensationMessage(comp):
+    compMsg = None
+    if comp is not None:
+        amount = comp.price.get(Currency.CREDITS, None)
+        if amount is not None:
+            compMsg = makeI18nSuccess(sysMsgKey='crewSkinsCompensation/success', compensation=amount, type=SM_TYPE.SkinCompensation)
+    return compMsg
 
 
 class Processor(object):

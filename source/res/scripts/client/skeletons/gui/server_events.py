@@ -150,3 +150,6 @@ class IEventsCache(object):
 
     def getActiveQuests(self, filterFunc=None):
         raise NotImplementedError
+
+    def getProgressiveReward(self):
+        raise NotImplementedError

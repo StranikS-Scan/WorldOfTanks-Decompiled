@@ -3737,8 +3737,8 @@
       <health>	20	</health>
       <physicParams>	200 3.2 0.03 150000 10000 0 0.05	</physicParams>
       <lifetimeEffect>	none	</lifetimeEffect>
-      <fractureEffect>	inf_env414_Pole_Fall_1	</fractureEffect>
-      <touchdownEffect>	inf_env201_Loudspeaker_fracture	</touchdownEffect>
+      <fractureEffect>	inf_envAM_005_sign_fracture	</fractureEffect>
+      <touchdownEffect>	inf_envAM_005_sign_touchdown	</touchdownEffect>
       <touchdownBreakEffect></touchdownBreakEffect>
       <effectScale>	1	</effectScale>
     </entry>
@@ -4028,8 +4028,8 @@
       <filename>	content/Buildings/hd_bld_UNI_745_Pavilion/normal/lod0/hd_bld_UNI_745_Pavilion.model	</filename>
       <health>	20	</health>
       <decayEffect>	none	</decayEffect>
-      <effect>	hd_bld_AM_035_SmallShed_01	</effect>
-      <hitEffect>	hd_bld_AM_035_SmallShed_01_hit	</hitEffect>
+      <effect>	hd_bld_UNI_745_Pavilion	</effect>
+      <hitEffect>	hd_bld_UNI_745_Pavilion	</hitEffect>
       <effectHP>	HP_module0	</effectHP>
       <effectScale>	1	</effectScale>
       <matName>	n_wood0	</matName>
@@ -5937,7 +5937,7 @@
       <hitEffect>	inf_fuel_env418_OldGMercedes2_20_hit	</hitEffect>
       <effectHP>	HP_module0	</effectHP>
       <effectScale>	1	</effectScale>
-      <matName>	n_metal0	</matName>
+      <matName>	n_metal2	</matName>
       <lifetimeEffect>	none	</lifetimeEffect>
     </entry>
     <entry>
@@ -5959,7 +5959,7 @@
       <hitEffect>	inf_fuel_env418_OldGMercedes2_22_hit	</hitEffect>
       <effectHP>	HP_module0	</effectHP>
       <effectScale>	1	</effectScale>
-      <matName>	n_metal0	</matName>
+      <matName>	n_metal1	</matName>
       <lifetimeEffect>	none	</lifetimeEffect>
     </entry>
     <entry>
@@ -6326,11 +6326,11 @@
       <health>	10	</health>
       <decayEffect>	none	</decayEffect>
       <effect>	inf_bld_19_01_Arch_03	</effect>
+      <hitEffect>	inf_bld_19_01_Arch_03	</hitEffect>
       <effectHP>	HP_module_0	</effectHP>
       <effectScale>	1.000000	</effectScale>
-      <matName>	n_stone0_0	</matName>
+      <matName>	n_stone0_1	</matName>
       <lifetimeEffect>	none	</lifetimeEffect>
-      <hitEffect>	inf_bld_19_01_Arch_03	</hitEffect>
     </entry>
     <entry>
       <filename>	content/Environment/env_19_07_Flowerbed/normal/lod0/env_19_07_Flowerbed_01.model	</filename>
@@ -7663,7 +7663,7 @@
       <filename>	content/GatesAndFences/hd_gaf_EU_018_StoneFence/normal/lod0/hd_gaf_EU_018_StoneFence_Corner.model	</filename>
       <health>	15	</health>
       <decayEffect>	none	</decayEffect>
-      <effect>	inf_gaf020_CastleFenceCorner_02	</effect>
+      <effect>	hd_gaf_EU_018_StoneFence_Corner	</effect>
       <effectHP>	HP_module0	</effectHP>
       <effectScale>	1	</effectScale>
       <matName>	n_stone0	</matName>
@@ -12510,6 +12510,17 @@
       <lifetimeEffect>	none	</lifetimeEffect>
     </entry>
     <entry>
+      <filename>	content/Buildings/hd_bld_UNI_008_WorkshopNew/normal/lod0/hd_bld_UNI_008_WorkshopNew_Doors_Big_02_Left.model	</filename>
+      <health>	5	</health>
+      <decayEffect>	none	</decayEffect>
+      <effect>	hd_bld_UNI_008_WorkshopNew_Doors_Big_02_Left	</effect>
+      <hitEffect>	hd_bld_UNI_008_WorkshopNew_Doors_Big_02_Left	</hitEffect>
+      <effectHP>	HP_module0	</effectHP>
+      <effectScale>	1	</effectScale>
+      <matName>	n_metal0	</matName>
+      <lifetimeEffect>	none	</lifetimeEffect>
+    </entry>
+    <entry>
       <filename>	content/Buildings/hd_bld_UNI_008_WorkshopNew/normal/lod0/hd_bld_UNI_008_WorkshopNew_Doors_Big_03_Right.model	</filename>
       <health>	5	</health>
       <decayEffect>	none	</decayEffect>
@@ -13471,7 +13482,6 @@
       <health>	5	</health>
       <decayEffect>	none	</decayEffect>
       <effect>	inf_gafSU_92_03_IronFence_big_gate	</effect>
-      <hitEffect>	none	</hitEffect>
       <effectHP>	HP_module0	</effectHP>
       <effectScale>	1	</effectScale>
       <matName>	n_stone0	</matName>
@@ -13482,7 +13492,6 @@
       <health>	5	</health>
       <decayEffect>	none	</decayEffect>
       <effect>	inf_gafSU_92_03_IronFence_big_tile	</effect>
-      <hitEffect>	none	</hitEffect>
       <effectHP>	HP_module0	</effectHP>
       <effectScale>	1	</effectScale>
       <matName>	n_stone0	</matName>
@@ -13493,7 +13502,6 @@
       <health>	5	</health>
       <decayEffect>	none	</decayEffect>
       <effect>	inf_gafSU_92_03_IronFence_big_tile_01	</effect>
-      <hitEffect>	none	</hitEffect>
       <effectHP>	HP_module0	</effectHP>
       <effectScale>	1	</effectScale>
       <matName>	n_stone0	</matName>
@@ -13735,7 +13743,6 @@
       <health>	8	</health>
       <decayEffect>	none	</decayEffect>
       <effect>	inf_env406_Flowerbed1	</effect>
-      <hitEffect>	none	</hitEffect>
       <effectHP>	HP_module0	</effectHP>
       <effectScale>	1	</effectScale>
       <matName>	n_stone0	</matName>
@@ -13977,8 +13984,8 @@
       <filename>	content/GatesAndFences/hd_gaf_AM_008_ConcreteFence/normal/lod0/hd_gaf_AM_008_ConcreteFence.model	</filename>
       <health>	10	</health>
       <decayEffect>	none	</decayEffect>
-      <effect>	hd_gaf_SU_008_ConcreteFence_Tile	</effect>
-      <hitEffect>	hd_gaf_SU_008_ConcreteFence_Tile	</hitEffect>
+      <effect>	hd_gaf_AM_008_ConcreteFence_Tile_01	</effect>
+      <hitEffect>	hd_gaf_AM_008_ConcreteFence_Tile_01	</hitEffect>
       <effectHP>	HP_module0	</effectHP>
       <effectScale>	1	</effectScale>
       <matName>	n_stone0	</matName>
@@ -14021,8 +14028,8 @@
       <filename>	content/GatesAndFences/hd_gaf_AM_008_ConcreteFence/normal/lod0/hd_gaf_AM_008_ConcreteFence_Tile_02.model	</filename>
       <health>	10	</health>
       <decayEffect>	none	</decayEffect>
-      <effect>	hd_gaf_SU_008_ConcreteFence_Tile	</effect>
-      <hitEffect>	hd_gaf_SU_008_ConcreteFence_Tile	</hitEffect>
+      <effect>	hd_gaf_AM_008_ConcreteFence_Tile_01	</effect>
+      <hitEffect>	hd_gaf_AM_008_ConcreteFence_Tile_01	</hitEffect>
       <effectHP>	HP_module0	</effectHP>
       <effectScale>	1	</effectScale>
       <matName>	n_stone0	</matName>
@@ -14132,7 +14139,6 @@
       <health>	5	</health>
       <decayEffect>	none	</decayEffect>
       <effect>	hd_gaf010_FenceTile1	</effect>
-      <hitEffect>	none	</hitEffect>
       <effectHP>	HP_module0	</effectHP>
       <effectScale>	1.000000	</effectScale>
       <matName>	n_wood0	</matName>
@@ -14143,7 +14149,6 @@
       <health>	5	</health>
       <decayEffect>	none	</decayEffect>
       <effect>	hd_gaf010_FenceTile1	</effect>
-      <hitEffect>	none	</hitEffect>
       <effectHP>	HP_module0	</effectHP>
       <effectScale>	1.000000	</effectScale>
       <matName>	n_wood0	</matName>
@@ -14252,8 +14257,8 @@
       <filename>	content/Environment/hd_env_AM_072_PhoneBooth/normal/lod0/hd_env_AM_072_PhoneBooth.model	</filename>
       <health>	1	</health>
       <decayEffect>	none	</decayEffect>
-      <effect>	hd_env_EU_057_CallBox	</effect>
-      <hitEffect>	hd_env_EU_057_CallBox	</hitEffect>
+      <effect>	hd_env_AM_072_PhoneBooth	</effect>
+      <hitEffect>	hd_env_AM_072_PhoneBooth	</hitEffect>
       <effectHP>	HP_module0	</effectHP>
       <effectScale>	1	</effectScale>
       <matName>	n_metal0	</matName>
@@ -14484,7 +14489,6 @@
       <health>	5	</health>
       <decayEffect>	none	</decayEffect>
       <effect>	inf_gaf018_StoneFence_03_01	</effect>
-      <hitEffect>	none	</hitEffect>
       <effectHP>	HP_module0	</effectHP>
       <effectScale>	1.000000	</effectScale>
       <matName>	n_stone0	</matName>
@@ -16959,29 +16963,6 @@
       </modules>
     </entry>
     <entry>
-      <filename>	content/Railway/hd_rw_UNI_005_Locomotive/normal/lod0/hd_rw_UNI_005_Locomotive.model	</filename>
-      <modules>
-        <module>
-          <matName>	n_metal0_0	</matName>
-          <health>	80	</health>
-          <decayEffect>	none	</decayEffect>
-          <ramEffect>	inf_rw005_locomotive_1	</ramEffect>
-          <hitEffect>	inf_rw005_locomotive_1_hit	</hitEffect>
-          <effectHP>	HP_module0	</effectHP>
-          <effectScale>	1	</effectScale>
-        </module>
-        <module>
-          <matName>	n_metal1_1	</matName>
-          <health>	80	</health>
-          <decayEffect>	none	</decayEffect>
-          <ramEffect>	inf_rw005_locomotive_2	</ramEffect>
-          <hitEffect>	inf_rw005_locomotive_2_hit	</hitEffect>
-          <effectHP>	HP_module1	</effectHP>
-          <effectScale>	1	</effectScale>
-        </module>
-      </modules>
-    </entry>
-    <entry>
       <filename>	content/Buildings/bld_101_03_Vhouse03/normal/lod0/bld_101_03_Vhouse03_a.model	</filename>
       <modules>
         <module>
@@ -19370,7 +19351,7 @@
           <health>	1	</health>
           <decayEffect>	none	</decayEffect>
           <ramEffect>	hd_bld_AS_005_VHouseShop_01	</ramEffect>
-          <hitEffect>	none	</hitEffect>
+          <hitEffect>	hd_bld_AS_005_VHouseShop_01	</hitEffect>
           <effectHP>	HP_module4	</effectHP>
           <effectScale>	1.000000	</effectScale>
         </module>
@@ -19900,6 +19881,29 @@
           <ramEffect>	hd_gaf_SU_007_AvenueFence_02	</ramEffect>
           <hitEffect>	hd_gaf_SU_007_AvenueFence_02	</hitEffect>
           <effectHP>	HP_module5	</effectHP>
+          <effectScale>	1.000000	</effectScale>
+        </module>
+      </modules>
+    </entry>
+    <entry>
+      <filename>	content/Railway/hd_rw_UNI_005_Locomotive/normal/lod0/hd_rw_UNI_005_Locomotive.model	</filename>
+      <modules>
+        <module>
+          <matName>	n_metal0_1	</matName>
+          <health>	80	</health>
+          <decayEffect>	none	</decayEffect>
+          <ramEffect>	inf_rw005_locomotive_1	</ramEffect>
+          <hitEffect>	inf_rw005_locomotive_1_hit	</hitEffect>
+          <effectHP>	HP_module0	</effectHP>
+          <effectScale>	1.000000	</effectScale>
+        </module>
+        <module>
+          <matName>	n_metal0_2	</matName>
+          <health>	80	</health>
+          <decayEffect>	none	</decayEffect>
+          <ramEffect>	inf_rw005_locomotive_2	</ramEffect>
+          <hitEffect>	inf_rw005_locomotive_2_hit	</hitEffect>
+          <effectHP>	HP_module1	</effectHP>
           <effectScale>	1.000000	</effectScale>
         </module>
       </modules>

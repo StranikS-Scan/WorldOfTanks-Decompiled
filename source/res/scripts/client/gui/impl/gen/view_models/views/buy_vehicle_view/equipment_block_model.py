@@ -118,17 +118,11 @@ class EquipmentBlockModel(ViewModel):
     def setPopoverIsAvailable(self, value):
         self._setBool(19, value)
 
-    def getShowBuyBootcampAnim(self):
+    def getIsRentVisible(self):
         return self._getBool(20)
 
-    def setShowBuyBootcampAnim(self, value):
-        self._setBool(20, value)
-
-    def getIsRentVisible(self):
-        return self._getBool(21)
-
     def setIsRentVisible(self, value):
-        self._setBool(21, value)
+        self._setBool(20, value)
 
     def _initialize(self):
         super(EquipmentBlockModel, self)._initialize()
@@ -152,6 +146,5 @@ class EquipmentBlockModel(ViewModel):
         self._addResourceProperty('buyBtnLabel', R.invalid())
         self._addNumberProperty('confirmGoldPrice', 0)
         self._addBoolProperty('popoverIsAvailable', False)
-        self._addBoolProperty('showBuyBootcampAnim', False)
         self._addBoolProperty('isRentVisible', False)
         self.onCancelTradeOffVehicle = self._addCommand('onCancelTradeOffVehicle')

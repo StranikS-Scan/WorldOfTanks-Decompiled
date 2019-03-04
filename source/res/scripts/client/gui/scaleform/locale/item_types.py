@@ -152,6 +152,11 @@ class ITEM_TYPES(object):
     CUSTOMIZATION_PLURAL_INSCRIPTION = '#item_types:customization/plural/inscription'
     CUSTOMIZATION_PLURAL_PROJECTIONDECAL = '#item_types:customization/plural/projectionDecal'
     CUSTOMIZATION_PLURAL_PERSONALNUMBER = '#item_types:customization/plural/personalNumber'
+    CREWSKINS_ITEMTYPE_COMMON = '#item_types:crewSkins/itemType/common'
+    CREWSKINS_ITEMTYPE_RARE = '#item_types:crewSkins/itemType/rare'
+    CREWSKINS_ITEMTYPE_EPIC = '#item_types:crewSkins/itemType/epic'
+    TANKMAN_GENDER_MAN = '#item_types:tankman/gender/man'
+    TANKMAN_GENDER_WOMAN = '#item_types:tankman/gender/woman'
     TANKMAN_SKILLS_ENUM = (TANKMAN_SKILLS_MAIN,
      TANKMAN_SKILLS_REPAIR,
      TANKMAN_SKILLS_REPAIR_DESCR,

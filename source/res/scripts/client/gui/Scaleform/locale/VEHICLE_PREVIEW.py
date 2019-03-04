@@ -3,6 +3,7 @@
 from debug_utils import LOG_WARNING
 
 class VEHICLE_PREVIEW(object):
+    BUYINGPANEL_OFFER_RENT_FRONTLINE_TOOLTIP_BEST_OFFER = '#vehicle_preview:buyingPanel/offer/rent/frontline/tooltip/best_offer'
     HEADER_BACKBTN_LABEL = '#vehicle_preview:header/backBtn/label'
     HEADER_BACKBTN_DESCRLABEL_RESEARCHTREE = '#vehicle_preview:header/backBtn/descrLabel/researchTree'
     HEADER_BACKBTN_DESCRLABEL_PERSONALAWARDS = '#vehicle_preview:header/backBtn/descrLabel/personalAwards'
@@ -34,6 +35,8 @@ class VEHICLE_PREVIEW(object):
     BUYINGPANEL_OFFER_RENT_FRONTLINE_TOOLTIP_BODY_CYCLESLEFT = '#vehicle_preview:buyingPanel/offer/rent/frontline/tooltip/body/cyclesLeft'
     BUYINGPANEL_OFFER_RENT_FRONTLINE_TOOLTIP_BEST_OFFER_HEADER = '#vehicle_preview:buyingPanel/offer/rent/frontline/tooltip/best_offer/header'
     BUYINGPANEL_OFFER_RENT_FRONTLINE_TOOLTIP_BEST_OFFER_BODY = '#vehicle_preview:buyingPanel/offer/rent/frontline/tooltip/best_offer/body'
+    BUYINGPANEL_CUSTOMOFFER_BUY = '#vehicle_preview:buyingPanel/customOffer/buy'
+    BUYINGPANEL_CUSTOMOFFER_RESEARCH = '#vehicle_preview:buyingPanel/customOffer/research'
     MODULESPANEL_TITLE = '#vehicle_preview:modulesPanel/title'
     MODULESPANEL_LABEL = '#vehicle_preview:modulesPanel/Label'
     MODULESPANEL_NOMODULESOPTIONS = '#vehicle_preview:modulesPanel/noModulesOptions'

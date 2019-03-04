@@ -202,11 +202,7 @@ class MapActivities(IMapActivities):
     def __startArenaPeriodSpecificActivities(self, period, periodStartTime):
         for relativeStartTime, activity in self.__pendingActivities:
             if activity.arenaPeriod == period:
-                passedPeriodTime = periodStartTime - Timer.getTime()
-                if relativeStartTime < passedPeriodTime:
-                    self.__pendingActivities.remove((relativeStartTime, activity))
-                else:
-                    activity.setStartTime(periodStartTime + relativeStartTime)
+                activity.setStartTime(periodStartTime + relativeStartTime)
 
     def __onAvatarReady(self):
         if self.__cbID is not None:

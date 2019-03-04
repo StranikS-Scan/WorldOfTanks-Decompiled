@@ -7,6 +7,7 @@ from account_shared import validateCustomizationItem
 from invoices_helpers import checkAccountDossierOperation
 from items import vehicles, tankmen
 from items.components.c11n_constants import SeasonType
+from items.components.crewSkins_constants import NO_CREW_SKIN_ID
 from constants import DOSSIER_TYPE, IS_DEVELOPMENT, SEASON_TYPE_BY_NAME, EVENT_TYPE
 from soft_exception import SoftException
 __all__ = ['readBonusSection', 'readUTC', 'SUPPORTED_BONUSES']
@@ -278,6 +279,17 @@ def __readBonus_customizations(bonus, _name, section, eventType):
     return
 
 
+def __readBonus_crewSkin(bonus, _name, section, eventType):
+    crewSkinID = section.readInt('id', NO_CREW_SKIN_ID)
+    skinData = {'id': crewSkinID,
+     'count': section.readInt('count', 0)}
+    if crewSkinID not in tankmen.g_cache.crewSkins().skins:
+        raise SoftException("Unknown crew skin id '%s'" % crewSkinID)
+    if skinData['count'] == 0:
+        raise SoftException("Invalid count for crew skin id '%s'" % crewSkinID)
+    bonus.setdefault('crewSkins', []).append(skinData)
+
+
 def __readBonus_tokens(bonus, _name, section, eventType):
     id = section['id'].asString
     token = bonus.setdefault('tokens', {})[id] = {}
@@ -339,6 +351,31 @@ def __readBonus_dossier(bonus, _name, section, eventType):
     bonus.setdefault('dossier', {}).setdefault(dossierType, {})[blockName, record] = {'value': value,
      'unique': unique,
      'type': operation}
+
+
+def __readBonus_blueprint(bonus, _name, section, eventType):
+    bonus.setdefault('blueprints', {})
+    compDescr = section.readInt('compDescr', 0) or vehicles.makeVehicleTypeCompDescrByName(section.readString('vehType'))
+    if compDescr == 0:
+        raise SoftException('Invalid vehicle type name or description %s' % section)
+    count = section.readInt('count', 0)
+    if count != 0:
+        bonus['blueprints'].update({compDescr: count})
+
+
+def __readBonus_blueprintAny(bonus, _name, section, eventType):
+    bonus.setdefault('blueprintsAny', {})
+    nationID = section.readInt('nationID', -1)
+    level = section.readInt('level', -1)
+    if not (level == -1 or 1 < level < 11):
+        raise SoftException('Invalid vehicle level %s, must be [2..10] or missing' % level)
+    vehClass = section.readString('vehClass', 'any')
+    if not (vehClass == 'any' or vehClass in vehicles.VEHICLE_CLASS_TAGS):
+        raise SoftException('Invalid vehicle class %s' % vehClass)
+    count = section.readInt('count', 1)
+    if count < 1:
+        raise SoftException('Any blueprint count must be positive, got %s' % count)
+    bonus['blueprintsAny'].update({(nationID, vehClass, level): count})
 
 
 def __readBonus_vehicleChoice(bonus, _name, section, eventType):
@@ -484,7 +521,10 @@ __BONUS_READERS = {'meta': __readMetaSection,
  'dossier': __readBonus_dossier,
  'tankmen': __readBonus_tankmen,
  'customizations': __readBonus_customizations,
- 'vehicleChoice': __readBonus_vehicleChoice}
+ 'crewSkin': __readBonus_crewSkin,
+ 'vehicleChoice': __readBonus_vehicleChoice,
+ 'blueprint': __readBonus_blueprint,
+ 'blueprintAny': __readBonus_blueprintAny}
 __PROBABILITY_READERS = {'optional': __readBonus_optional,
  'oneof': __readBonus_oneof,
  'group': __readBonus_group}
@@ -557,6 +597,6 @@ def __readBonusSubSection(config, bonusReaders, section, eventType=None):
             bonusReaders[name](bonus, name, subSection, eventType)
         if name in _RESERVED_NAMES:
             pass
-        raise SoftException('Bonus not in bonus readers: {}'.format(name))
+        raise SoftException('Bonus {} not in bonus readers: {}'.format(name, bonusReaders.keys()))
 
     return (resultLimitIDs, bonus)

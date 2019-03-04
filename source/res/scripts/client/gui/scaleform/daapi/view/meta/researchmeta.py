@@ -4,17 +4,17 @@ from gui.Scaleform.daapi.view.lobby.techtree.research_view import ResearchView
 
 class ResearchMeta(ResearchView):
 
-    def requestNationData(self):
-        self._printOverrideError('requestNationData')
+    def requestResearchData(self):
+        self._printOverrideError('requestResearchData')
 
-    def getResearchItemsData(self, vehCD, rootChanged):
-        self._printOverrideError('getResearchItemsData')
+    def request4Unlock(self, itemCD, topLevel):
+        self._printOverrideError('request4Unlock')
 
-    def onResearchItemsDrawn(self):
-        self._printOverrideError('onResearchItemsDrawn')
+    def request4Rent(self, itemCD):
+        self._printOverrideError('request4Rent')
 
-    def goToTechTree(self, nation):
-        self._printOverrideError('goToTechTree')
+    def goToNextVehicle(self, vehCD):
+        self._printOverrideError('goToNextVehicle')
 
     def exitFromResearch(self):
         self._printOverrideError('exitFromResearch')
@@ -25,8 +25,14 @@ class ResearchMeta(ResearchView):
     def compareVehicle(self, itemCD):
         self._printOverrideError('compareVehicle')
 
-    def as_drawResearchItemsS(self, nation, vehCD):
-        return self.flashObject.as_drawResearchItems(nation, vehCD) if self._isDAAPIInited() else None
+    def as_setDataS(self, data):
+        return self.flashObject.as_setData(data) if self._isDAAPIInited() else None
+
+    def as_setRootDataS(self, data):
+        return self.flashObject.as_setRootData(data) if self._isDAAPIInited() else None
+
+    def as_setResearchItemsS(self, nation, raw):
+        return self.flashObject.as_setResearchItems(nation, raw) if self._isDAAPIInited() else None
 
     def as_setFreeXPS(self, freeXP):
         return self.flashObject.as_setFreeXP(freeXP) if self._isDAAPIInited() else None
@@ -36,9 +42,6 @@ class ResearchMeta(ResearchView):
 
     def as_setWalletStatusS(self, walletStatus):
         return self.flashObject.as_setWalletStatus(walletStatus) if self._isDAAPIInited() else None
-
-    def as_setRootNodeVehCompareDataS(self, data):
-        return self.flashObject.as_setRootNodeVehCompareData(data) if self._isDAAPIInited() else None
 
     def as_setXpInfoLinkageS(self, linkage):
         return self.flashObject.as_setXpInfoLinkage(linkage) if self._isDAAPIInited() else None

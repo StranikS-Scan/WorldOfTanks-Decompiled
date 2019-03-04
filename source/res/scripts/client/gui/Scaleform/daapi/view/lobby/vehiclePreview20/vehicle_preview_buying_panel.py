@@ -19,54 +19,57 @@ from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.Scaleform.locale.VEHICLE_PREVIEW import VEHICLE_PREVIEW
 from gui.app_loader import g_appLoader
+from gui.game_control.wallet import WalletController
 from gui.hangar_cameras.hangar_camera_common import CameraRelatedEvents
-from gui.ingame_shop import canBuyGoldForVehicleThroughWeb
-from gui.ingame_shop import showBuyVehicleOverlay, showBuyGoldForBundle
+from gui.impl import backport
+from gui.impl.gen import R
+from gui.ingame_shop import canBuyGoldForVehicleThroughWeb, showBuyVehicleOverlay, showBuyGoldForBundle
 from gui.referral_program import showGetVehiclePage
 from gui.shared import event_dispatcher, g_eventBus
 from gui.shared import events, EVENT_BUS_SCOPE
-from gui.shared.economics import getGUIPrice
 from gui.shared.event_dispatcher import showVehicleRentDialog
 from gui.shared.events import HasCtxEvent
 from gui.shared.formatters import icons, text_styles, formatPrice
+from gui.shared.economics import getPriceTypeAndValue
+from gui.shared.formatters import getItemPricesVO, getItemUnlockPricesVO, chooseItemPriceVO
+from gui.shared.tooltips.formatters import getActionPriceData
 from gui.shared.gui_items.items_actions import factory
+from gui.shared.gui_items.gui_item_economics import ItemPrice
 from gui.shared.money import Currency, MONEY_UNDEFINED
-from gui.shared.tooltips import ACTION_TOOLTIPS_TYPE
-from gui.shared.tooltips.formatters import getActionPriceData, packActionTooltipData
 from gui.shared.utils.functions import makeTooltip
+from shared_utils import findFirst, first
 from helpers import dependency
 from helpers import time_utils
 from helpers.i18n import makeString as _ms
-from items_kit_helper import lookupItem, BOX_TYPE, showItemTooltip, OFFER_CHANGED_EVENT
-from items_kit_helper import getActiveOffer, mayObtainForMoney, mayObtainWithMoneyExchange
-from shared_utils import findFirst, first
-from skeletons.gui.game_control import IVehicleComparisonBasket, ITradeInController
-from skeletons.gui.game_control import IRestoreController, IHeroTankController, IEpicBattleMetaGameController
+from items_kit_helper import lookupItem, BOX_TYPE, showItemTooltip
+from items_kit_helper import OFFER_CHANGED_EVENT, getActiveOffer, mayObtainForMoney, mayObtainWithMoneyExchange
+from skeletons.gui.game_control import IVehicleComparisonBasket
+from skeletons.gui.game_control import ITradeInController, IRestoreController, IHeroTankController
 from skeletons.gui.goodies import IGoodiesCache
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
 from web_client_api.common import ItemPackTypeGroup, ItemPackEntry
-_ButtonState = namedtuple('_ButtonState', 'enabled, price, label, action, tooltip, title')
+_ButtonState = namedtuple('_ButtonState', ('enabled', 'itemPrice', 'label', 'isAction', 'actionTooltip', 'tooltip', 'title', 'isMoneyEnough', 'isUnlock', 'isPrevItemsUnlock'))
 
 def _buildBuyButtonTooltip(key):
     return makeTooltip(TOOLTIPS.vehiclepreview_buybutton_all(key, 'header'), TOOLTIPS.vehiclepreview_buybutton_all(key, 'body'))
 
 
 class VehiclePreviewBuyingPanel(VehiclePreviewBuyingPanelMeta):
-    itemsCache = dependency.descriptor(IItemsCache)
-    goodiesCache = dependency.descriptor(IGoodiesCache)
-    comparisonBasket = dependency.descriptor(IVehicleComparisonBasket)
-    tradeIn = dependency.descriptor(ITradeInController)
-    restores = dependency.descriptor(IRestoreController)
-    heroTanks = dependency.descriptor(IHeroTankController)
-    epicController = dependency.descriptor(IEpicBattleMetaGameController)
-    lobbyContext = dependency.descriptor(ILobbyContext)
+    _itemsCache = dependency.descriptor(IItemsCache)
+    _goodiesCache = dependency.descriptor(IGoodiesCache)
+    _comparisonBasket = dependency.descriptor(IVehicleComparisonBasket)
+    _tradeIn = dependency.descriptor(ITradeInController)
+    _restores = dependency.descriptor(IRestoreController)
+    _heroTanks = dependency.descriptor(IHeroTankController)
+    _lobbyContext = dependency.descriptor(ILobbyContext)
 
     def __init__(self, skipConfirm=False):
         super(VehiclePreviewBuyingPanel, self).__init__()
-        heroTankCD = self.heroTanks.getCurrentTankCD()
-        self._actionType = None
+        heroTankCD = self._heroTanks.getCurrentTankCD()
         self._vehicleCD = g_currentPreviewVehicle.item.intCD
+        self._vehicleLevel = g_currentPreviewVehicle.item.level
+        self._actionType = None
         self._skipConfirm = skipConfirm
         self._disableBuyButton = False
         self.__previewDP = DefaultVehPreviewDataProvider()
@@ -88,6 +91,7 @@ class VehiclePreviewBuyingPanel(VehiclePreviewBuyingPanelMeta):
         self.__cachedVehiclesVOs = None
         self.__cachedItemsVOs = None
         self.__cachedCollapsedItemsVOs = None
+        g_techTreeDP.load()
         return
 
     def onBuyOrResearchClick(self):
@@ -149,8 +153,9 @@ class VehiclePreviewBuyingPanel(VehiclePreviewBuyingPanelMeta):
         self.__description = description
         selectedID = getActiveOffer(self.__offers).id
         offersData = self.__previewDP.getOffersData(self.__offers, selectedID) if len(self.__offers) > 1 else []
-        self.as_setOffersDataS(offersData)
-        self.onOfferSelected(selectedID)
+        if offersData:
+            self.as_setOffersDataS(offersData)
+            self.onOfferSelected(selectedID)
 
     def onOfferSelected(self, offerID):
         self.__currentOffer = findFirst(lambda o: o.id == offerID, self.__offers)
@@ -177,7 +182,7 @@ class VehiclePreviewBuyingPanel(VehiclePreviewBuyingPanelMeta):
                 itemId = intCD
 
             rawItem = [ item for item in self.__items if item.id == itemId and item.type == itemType ][0]
-            item = lookupItem(rawItem, self.itemsCache, self.goodiesCache)
+            item = lookupItem(rawItem, self._itemsCache, self._goodiesCache)
             showItemTooltip(toolTipMgr, rawItem, item)
         except IndexError:
             return
@@ -189,33 +194,25 @@ class VehiclePreviewBuyingPanel(VehiclePreviewBuyingPanelMeta):
         super(VehiclePreviewBuyingPanel, self)._populate()
         g_clientUpdateManager.addMoneyCallback(self.__updateBtnState)
         g_clientUpdateManager.addCallbacks({'stats.freeXP': self.__updateBtnState,
-         'inventory': self.__updateBtnState})
+         'inventory': self.__updateBtnState,
+         'serverSettings.blueprints_config': self.__onBlueprintsModeChanged})
         g_currentPreviewVehicle.onVehicleUnlocked += self.__updateBtnState
         g_currentPreviewVehicle.onChanged += self.__onVehicleChanged
-        self.restores.onRestoreChangeNotify += self.__onRestoreChanged
-        self.lobbyContext.getServerSettings().onServerSettingsChange += self.__onServerSettingsChanged
+        self._restores.onRestoreChangeNotify += self.__onRestoreChanged
+        self._lobbyContext.getServerSettings().onServerSettingsChange += self.__onServerSettingsChanged
         self.addListener(CameraRelatedEvents.VEHICLE_LOADING, self.__onVehicleLoading, EVENT_BUS_SCOPE.DEFAULT)
 
     def _dispose(self):
         g_clientUpdateManager.removeObjectCallbacks(self)
         g_currentPreviewVehicle.onVehicleUnlocked -= self.__updateBtnState
         g_currentPreviewVehicle.onChanged -= self.__onVehicleChanged
-        self.restores.onRestoreChangeNotify -= self.__onRestoreChanged
-        self.lobbyContext.getServerSettings().onServerSettingsChange -= self.__onServerSettingsChanged
+        self._restores.onRestoreChangeNotify -= self.__onRestoreChanged
+        self._lobbyContext.getServerSettings().onServerSettingsChange -= self.__onServerSettingsChanged
         self.removeListener(CameraRelatedEvents.VEHICLE_LOADING, self.__onVehicleLoading, EVENT_BUS_SCOPE.DEFAULT)
         self.__stopTimer()
         self.__styleByGroup.clear()
         self.__vehicleByGroup.clear()
         super(VehiclePreviewBuyingPanel, self)._dispose()
-
-    def __isReferralWindow(self):
-        return self.__backAlias == VIEW_ALIAS.REFERRAL_PROGRAM_WINDOW
-
-    def __getConfirmationDialogKey(self):
-        key = 'buyConfirmation'
-        if self.__isReferralWindow():
-            key = 'referralReward'
-        return key
 
     def __update(self, collapseItems=False):
         if self.__cachedVehiclesVOs:
@@ -230,6 +227,15 @@ class VehiclePreviewBuyingPanel(VehiclePreviewBuyingPanelMeta):
     def __getOfferByID(self, offerID):
         return findFirst(lambda o: o.buy_params['transactionID'] == offerID, self.__offers)
 
+    def __isReferralWindow(self):
+        return self.__backAlias == VIEW_ALIAS.REFERRAL_PROGRAM_WINDOW
+
+    def __getConfirmationDialogKey(self):
+        key = 'buyConfirmation'
+        if self.__isReferralWindow():
+            key = 'referralReward'
+        return key
+
     def __buyRequestConfirmation(self, key='buyConfirmation'):
         return DialogsInterface.showDialog(meta=I18nConfirmDialogMeta(key=key, messageCtx={'product': self.__title or '"This Pack"',
          'price': formatPrice(self.__price, reverse=True, useIcon=True)}, focusedID=DIALOG_BUTTON_ID.SUBMIT))
@@ -242,7 +248,7 @@ class VehiclePreviewBuyingPanel(VehiclePreviewBuyingPanelMeta):
             groupID = self.__vehicleByGroup.get(vehicle.intCD)
             if not ctxEvent.ctx.get('started') and groupID in self.__styleByGroup:
                 customizationStyle = self.__styleByGroup[groupID]
-                style = self.itemsCache.items.getItemByCD(customizationStyle)
+                style = self._itemsCache.items.getItemByCD(customizationStyle)
                 if style is not None and not style.isRentable:
                     g_currentPreviewVehicle.previewStyle(style)
             return
@@ -276,8 +282,11 @@ class VehiclePreviewBuyingPanel(VehiclePreviewBuyingPanelMeta):
                 self.__updateBtnState()
 
     def __onServerSettingsChanged(self, diff):
-        if self.lobbyContext.getServerSettings().isIngameDataChangedInDiff(diff, 'isEnabled'):
+        if self._lobbyContext.getServerSettings().isIngameDataChangedInDiff(diff, 'isEnabled'):
             self.__updateBtnState()
+
+    def __onBlueprintsModeChanged(self, _):
+        self.__updateBtnState()
 
     def __getBtnData(self):
         if self.__price is not None:
@@ -287,91 +296,94 @@ class VehiclePreviewBuyingPanel(VehiclePreviewBuyingPanelMeta):
             return self.__getBtnDataUnlockedVehicle(vehicle) if vehicle.isUnlocked else self.__getBtnDataLockedVehicle(vehicle)
 
     def __getBtnDataPack(self):
-        priceVO = []
-        enabled = True
-        action = None
         tooltip = ''
-        for curr in [ c for c in Currency.ALL if self.__price.get(c) is not None ]:
-            priceVO.append(curr)
-            priceVO.append(self.__price.getSignValue(curr))
-
+        actionTooltip = None
+        currency = self.__price.getCurrency()
         if self._disableBuyButton:
             tooltip = _buildBuyButtonTooltip('endTime')
             enabled = False
-        if self.__oldPrice.isDefined():
-            action = packActionTooltipData(ACTION_TOOLTIPS_TYPE.ECONOMICS, 'itemsPack', True, self.__price, self.__oldPrice)
+        else:
+            enabled = self.__walletAvailableForCurrency(currency) and (isIngameShopEnabled() if currency == Currency.GOLD else mayObtainForMoney(self.__price) or mayObtainWithMoneyExchange(self.__price))
         if self.__currentOffer and self.__currentOffer.bestOffer and self.__currentOffer.eventType:
-            action = makeTooltip(**self.__getBestOfferTooltipData(self.__currentOffer.eventType))
+            actionTooltip = self.__getBestOfferTooltipData(self.__currentOffer.eventType)
         if self.__isReferralWindow():
-            buttonLabel = VEHICLE_PREVIEW.BUYINGPANEL_BUYBTN_LABEL_OBTAIN
+            buttonLabel = backport.text(R.strings.vehicle_preview.buyingPanel.buyBtn.label.obtain())
         elif self.__items:
-            buttonLabel = VEHICLE_PREVIEW.BUYINGPANEL_BUYBTN_LABEL_BUYITEMPACK
+            buttonLabel = backport.text(R.strings.vehicle_preview.buyingPanel.buyBtn.label.buyItemPack())
         elif self.__offers and self.__currentOffer:
-            if self.__price.getCurrency() == Currency.GOLD:
-                enabled = isIngameShopEnabled()
-            else:
-                enabled = mayObtainForMoney(self.__price) or mayObtainWithMoneyExchange(self.__price)
-            buttonLabel = VEHICLE_PREVIEW.BUYINGPANEL_BUYBTN_LABEL_RENT
+            buttonLabel = backport.text(R.strings.vehicle_preview.buyingPanel.buyBtn.label.rent())
             self.__title = self.__getCurrentOfferTitle()
         else:
-            buttonLabel = VEHICLE_PREVIEW.BUYINGPANEL_BUYBTN_LABEL_BUY
-        return _ButtonState(enabled, priceVO, buttonLabel, action, tooltip, self.__title)
+            buttonLabel = backport.text(R.strings.vehicle_preview.buyingPanel.buyBtn.label.buy())
+        return _ButtonState(enabled=enabled, itemPrice=getItemPricesVO(ItemPrice(price=self.__price, defPrice=self.__oldPrice)), label=buttonLabel, isAction=self.__oldPrice.isDefined() or actionTooltip is not None, actionTooltip=actionTooltip, tooltip=tooltip, title=self.__title, isMoneyEnough=True, isUnlock=False, isPrevItemsUnlock=True)
 
     def __getBtnDataUnlockedVehicle(self, vehicle):
-        money = self.itemsCache.items.stats.money
-        money = self.tradeIn.addTradeInPriceIfNeeded(vehicle, money)
-        tooltip = ''
-        exchangeRate = self.itemsCache.items.shop.exchangeRate
-        price = getGUIPrice(vehicle, money, exchangeRate)
+        money = self._itemsCache.items.stats.money
+        money = self._tradeIn.addTradeInPriceIfNeeded(vehicle, money)
+        notEnoughMoneyTooltip = ''
+        actionTooltip = getActionPriceData(vehicle)
+        exchangeRate = self._itemsCache.items.shop.exchangeRate
+        priceType, price = getPriceTypeAndValue(vehicle, money, exchangeRate)
+        itemPrice = chooseItemPriceVO(priceType, price)
         currency = price.getCurrency(byWeight=True)
-        action = getActionPriceData(vehicle)
-        mayObtain = self.__isHeroTank or vehicle.mayObtainWithMoneyExchange(money, exchangeRate)
+        walletAvailable = self.__walletAvailableForCurrency(currency)
+        isAction = False
+        minRentPricePackage = vehicle.getRentPackage()
+        if minRentPricePackage:
+            isAction = minRentPricePackage['rentPrice'] != minRentPricePackage['defaultRentPrice']
+        elif not vehicle.isRestoreAvailable():
+            isAction = vehicle.buyPrices.getSum().isActionPrice()
+        mayObtain = self.__isHeroTank or walletAvailable and vehicle.mayObtainWithMoneyExchange(money, exchangeRate)
         isBuyingAvailable = not vehicle.isHidden or vehicle.isRentable or vehicle.isRestorePossible()
-        if currency == Currency.GOLD:
-            if not mayObtain:
-                if isBuyingAvailable:
-                    tooltip = _buildBuyButtonTooltip('notEnoughGold')
-                    if isIngameShopEnabled():
-                        mayObtain = True
-        elif not mayObtain and isBuyingAvailable:
-            tooltip = _buildBuyButtonTooltip('notEnoughCredits')
+        isMoneyEnough = True
+        if walletAvailable:
+            if currency == Currency.GOLD:
+                if not mayObtain:
+                    if isBuyingAvailable:
+                        notEnoughMoneyTooltip = _buildBuyButtonTooltip('notEnoughGold')
+                        isMoneyEnough = False
+                        if isIngameShopEnabled():
+                            mayObtain = True
+            elif not mayObtain and isBuyingAvailable:
+                notEnoughMoneyTooltip = _buildBuyButtonTooltip('notEnoughCredits')
+                isMoneyEnough = False
         if self._disableBuyButton:
             mayObtain = False
-        return _ButtonState(mayObtain, [currency, price.getSignValue(currency)], VEHICLE_PREVIEW.BUYINGPANEL_BUYBTN_LABEL_RESTORE if vehicle.isRestorePossible() else VEHICLE_PREVIEW.BUYINGPANEL_BUYBTN_LABEL_BUY, action, tooltip, self.__title)
+            isMoneyEnough = False
+        return _ButtonState(enabled=mayObtain, itemPrice=itemPrice, label=backport.text(R.strings.vehicle_preview.buyingPanel.buyBtn.label.restore()) if vehicle.isRestorePossible() else backport.text(R.strings.vehicle_preview.buyingPanel.buyBtn.label.buy()), isAction=isAction, actionTooltip=actionTooltip, tooltip=notEnoughMoneyTooltip, title=self.__title, isMoneyEnough=isMoneyEnough, isUnlock=False, isPrevItemsUnlock=True)
 
     def __getBtnDataLockedVehicle(self, vehicle):
-        stats = self.itemsCache.items.stats
+        stats = self._itemsCache.items.stats
         tooltip = ''
         nodeCD = vehicle.intCD
-        isAvailableToUnlock, xpCost, _ = g_techTreeDP.isVehicleAvailableToUnlock(nodeCD)
+        _, isXpEnough = g_techTreeDP.isVehicleAvailableToUnlock(nodeCD, self._vehicleLevel)
+        unlocks = self._itemsCache.items.stats.unlocks
+        isNext2Unlock, unlockProps = g_techTreeDP.isNext2Unlock(nodeCD, unlocked=set(unlocks), xps=stats.vehiclesXPs, freeXP=stats.freeXP, level=self._vehicleLevel)
+        isAvailableToUnlock = isXpEnough and isNext2Unlock
         if not isAvailableToUnlock:
-            g_techTreeDP.load()
-            unlocks = self.itemsCache.items.stats.unlocks
-            next2Unlock, _ = g_techTreeDP.isNext2Unlock(nodeCD, unlocked=set(unlocks), xps=stats.vehiclesXPs, freeXP=stats.freeXP)
-            if next2Unlock:
+            if not isXpEnough:
                 tooltip = _buildBuyButtonTooltip('notEnoughXp')
             elif any((bool(cd in unlocks) for cd in g_techTreeDP.getTopLevel(nodeCD))):
                 tooltip = _buildBuyButtonTooltip('parentModuleIsLocked')
             else:
                 tooltip = _buildBuyButtonTooltip('parentVehicleIsLocked')
-        return _ButtonState(isAvailableToUnlock, ['xp', xpCost], VEHICLE_PREVIEW.BUYINGPANEL_BUYBTN_LABEL_RESEARCH, None, tooltip, self.__title)
+        return _ButtonState(enabled=isAvailableToUnlock, itemPrice=getItemUnlockPricesVO(unlockProps), label=backport.text(R.strings.vehicle_preview.buyingPanel.buyBtn.label.research()), isAction=unlockProps.discount > 0, actionTooltip=None, tooltip=tooltip, title=self.__title, isMoneyEnough=isXpEnough, isUnlock=True, isPrevItemsUnlock=isNext2Unlock)
 
     def __getBestOfferTooltipData(self, eventType=None):
-        return {'header': VEHICLE_PREVIEW.BUYINGPANEL_OFFER_RENT_FRONTLINE_TOOLTIP_BEST_OFFER_HEADER,
-         'body': VEHICLE_PREVIEW.BUYINGPANEL_OFFER_RENT_FRONTLINE_TOOLTIP_BEST_OFFER_BODY} if eventType == 'frontline' else None
+        return VEHICLE_PREVIEW.BUYINGPANEL_OFFER_RENT_FRONTLINE_TOOLTIP_BEST_OFFER if eventType == 'frontline' else None
 
     def __getCurrentOfferTitle(self):
         if self.__offers and self.__currentOffer:
             if self.__currentOffer.eventType == 'frontline':
                 firstRent = first(self.__currentOffer.rent)
                 if len(self.__offers) > 1 or firstRent and firstRent.get('season') is not None:
-                    return _ms(VEHICLE_PREVIEW.BUYINGPANEL_OFFER_RENT_TITLE_FRONTLINE_ORDINAL)
-                return _ms(VEHICLE_PREVIEW.BUYINGPANEL_OFFER_RENT_TITLE_FRONTLINE_SINGLE_CYCLE, cycles=self.__currentOffer.name)
+                    return _ms(backport.text(R.strings.vehicle_preview.buyingPanel.offer.rent.title.frontline.ordinal()))
+                return _ms(backport.text(R.strings.vehicle_preview.buyingPanel.offer.rent.title.frontline.single_cycle()), cycles=self.__currentOffer.name)
         return self.__title
 
     def __getCurrentOfferDescription(self):
-        return {'header': VEHICLE_PREVIEW.BUYINGPANEL_OFFER_RENT_FRONTLINE_DESCRIPTION_HEADER,
-         'body': VEHICLE_PREVIEW.BUYINGPANEL_OFFER_RENT_FRONTLINE_DESCRIPTION_BODY_CREDITS} if self.__currentOffer and self.__currentOffer.eventType == 'frontline' else None
+        return {'header': backport.text(R.strings.vehicle_preview.buyingPanel.offer.rent.frontline.description.header()),
+         'body': backport.text(R.strings.vehicle_preview.buyingPanel.offer.rent.frontline.description.body.credits())} if self.__currentOffer and self.__currentOffer.eventType == 'frontline' else None
 
     def __startTimer(self, interval):
         self.__stopTimer()
@@ -424,18 +436,19 @@ class VehiclePreviewBuyingPanel(VehiclePreviewBuyingPanelMeta):
 
     @process
     def __purchasePackage(self):
-        requestConfirmed = yield self.__buyRequestConfirmation(self.__getConfirmationDialogKey())
-        if requestConfirmed:
-            if self.__isReferralWindow():
-                vehicle = g_currentPreviewVehicle.item
-                inventoryVehicle = self.itemsCache.items.getItemByCD(vehicle.intCD)
-                showGetVehiclePage(inventoryVehicle, self.__buyParams)
-                return
-            goldPrice = self.__price.get(Currency.GOLD, 0)
-            if goldPrice > self.itemsCache.items.stats.gold:
-                showBuyGoldForBundle(goldPrice, self.__buyParams)
-            else:
-                showBuyVehicleOverlay(self.__buyParams)
+        if self.__items is not None:
+            requestConfirmed = yield self.__buyRequestConfirmation(self.__getConfirmationDialogKey())
+            if requestConfirmed:
+                if self.__isReferralWindow():
+                    inventoryVehicle = self._itemsCache.items.getItemByCD(g_currentPreviewVehicle.item.intCD)
+                    showGetVehiclePage(inventoryVehicle, self.__buyParams)
+                    return
+                goldPrice = self.__price.get(Currency.GOLD, 0)
+                if goldPrice > self._itemsCache.items.stats.gold:
+                    showBuyGoldForBundle(goldPrice, self.__buyParams)
+                else:
+                    showBuyVehicleOverlay(self.__buyParams)
+        return
 
     def __purchaseOffer(self):
         rent = self.__currentOffer.rent
@@ -448,12 +461,16 @@ class VehiclePreviewBuyingPanel(VehiclePreviewBuyingPanelMeta):
         event_dispatcher.showVehicleBuyDialog(vehicle)
 
     def __purchaseHeroTank(self):
-        url = self.heroTanks.getCurrentRelatedURL()
+        url = self._heroTanks.getCurrentRelatedURL()
         self.fireEvent(events.OpenLinkEvent(events.OpenLinkEvent.SPECIFIED, url=url))
 
     def __research(self):
         if self._actionType == factory.UNLOCK_ITEM:
-            unlockProps = g_techTreeDP.getUnlockProps(self._vehicleCD)
-            factory.doAction(factory.UNLOCK_ITEM, self._vehicleCD, unlockProps.parentID, unlockProps.unlockIdx, unlockProps.xpCost, skipConfirm=self._skipConfirm)
+            unlockProps = g_techTreeDP.getUnlockProps(self._vehicleCD, self._vehicleLevel)
+            factory.doAction(factory.UNLOCK_ITEM, self._vehicleCD, unlockProps, skipConfirm=self._skipConfirm)
         else:
-            factory.doAction(factory.BUY_VEHICLE, self._vehicleCD, False, VIEW_ALIAS.VEHICLE_PREVIEW_20, skipConfirm=self._skipConfirm)
+            factory.doAction(factory.BUY_VEHICLE, self._vehicleCD, False, None, VIEW_ALIAS.VEHICLE_PREVIEW_20, skipConfirm=self._skipConfirm)
+        return
+
+    def __walletAvailableForCurrency(self, currency):
+        return self._itemsCache.items.stats.currencyStatuses.get(currency) == WalletController.STATUS.AVAILABLE

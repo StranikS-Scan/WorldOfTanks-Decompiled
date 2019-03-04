@@ -15,6 +15,7 @@ BUY_AND_INSTALL_ITEM_VEHICLE_LAYOUT = 'buyAndInstallItemVehicleLayout'
 BUY_BERTHS = 'buyBerths'
 BUY_VEHICLE_SLOT = 'buyVehClot'
 BUY_BOOSTER = 'buyBooster'
+CONVERT_BLUEPRINT_FRAGMENT = 'convertFragment'
 _ACTION_MAP = {SELL_ITEM: actions.SellItemAction,
  SELL_MULTIPLE: actions.SellMultipleItems,
  UNLOCK_ITEM: actions.UnlockItemAction,
@@ -27,7 +28,8 @@ _ACTION_MAP = {SELL_ITEM: actions.SellItemAction,
  BUY_AND_INSTALL_ITEM_VEHICLE_LAYOUT: actions.BuyAndInstallItemVehicleLayout,
  BUY_BERTHS: actions.BuyBerthsAction,
  BUY_VEHICLE_SLOT: actions.BuyVehicleSlotAction,
- BUY_BOOSTER: actions.BuyBoosterAction}
+ BUY_BOOSTER: actions.BuyBoosterAction,
+ CONVERT_BLUEPRINT_FRAGMENT: actions.ConvertBlueprintFragmentAction}
 
 def doAction(actionType, *args, **kwargs):
     if actionType in _ACTION_MAP:

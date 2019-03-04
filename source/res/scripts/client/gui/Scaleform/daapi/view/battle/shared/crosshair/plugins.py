@@ -3,6 +3,8 @@
 import math
 from collections import defaultdict
 import BigWorld
+import BattleReplay
+from ReplayEvents import g_replayEvents
 from AvatarInputHandler import gun_marker_ctrl
 from PlayerEvents import g_playerEvents
 from account_helpers.settings_core.settings_constants import GRAPHICS, AIM
@@ -898,6 +900,8 @@ class SpeedometerWheeledTech(CrosshairPlugin):
     def start(self):
         vStateCtrl = self.sessionProvider.shared.vehicleState
         crosshairCtrl = self.sessionProvider.shared.crosshair
+        if BattleReplay.g_replayCtrl.isPlaying:
+            g_replayEvents.onTimeWarpStart += self.__onReplayTimeWarpStart
         if vStateCtrl is not None:
             vStateCtrl.onVehicleStateUpdated += self.__onVehicleStateUpdated
             vStateCtrl.onVehicleControlling += self.__onVehicleControlling
@@ -923,14 +927,16 @@ class SpeedometerWheeledTech(CrosshairPlugin):
     def __onVehicleControlling(self, vehicle):
         vStateCtrl = self.sessionProvider.shared.vehicleState
         vTypeDesc = vehicle.typeDescriptor
-        if vTypeDesc.isWheeledVehicle:
+        if vTypeDesc.isWheeledVehicle and vehicle.health > 0:
+            self.__updateBurnoutWarning(vStateCtrl)
+            self.__updateCurBurnoutLevel(vehicle)
             self.__addSpedometer(vehicle)
             self.__updateCurStateSpeedMode(vStateCtrl)
         else:
             self.parentObj.as_removeSpeedometerS()
 
     def __onVehicleStateUpdated(self, stateID, value):
-        if stateID == VEHICLE_VIEW_STATE.SPEED:
+        if stateID == VEHICLE_VIEW_STATE.SPEED and self.parentObj is not None:
             self.parentObj.as_updateSpeedS(value)
         elif stateID == VEHICLE_VIEW_STATE.SIEGE_MODE:
             self.__changeSpeedoType(*value)
@@ -943,13 +949,14 @@ class SpeedometerWheeledTech(CrosshairPlugin):
                 self.__setEngineDamageWarning()
             elif self.__burnoutWarningOn:
                 self.__stopEngineDamageWarning()
-        elif stateID == VEHICLE_VIEW_STATE.DEVICES:
+        elif stateID == VEHICLE_VIEW_STATE.DEVICES and self.parentObj is not None:
             if _DEVICE_ENGINE_NAME in value and _DEVICE_REPAIRED in value:
                 self.parentObj.as_stopEngineCrushErrorS()
                 self.__stopEngineDamageWarning()
-        elif stateID == VEHICLE_VIEW_STATE.BURNOUT_UNAVAILABLE_DUE_TO_BROKEN_ENGINE:
+        elif stateID == VEHICLE_VIEW_STATE.BURNOUT_UNAVAILABLE_DUE_TO_BROKEN_ENGINE and self.parentObj is not None:
             if not self.__destroyTimerShown:
                 self.parentObj.as_setEngineCrushErrorS(INGAME_GUI.BURNOUT_HINT_ENGINEDAMAGED)
+        return
 
     def __onCrosshairViewChanged(self, viewID):
         vStateCtrl = self.sessionProvider.shared.vehicleState
@@ -962,12 +969,33 @@ class SpeedometerWheeledTech(CrosshairPlugin):
                 self.__updateCurStateSpeedMode(vStateCtrl)
             return
 
+    def __onReplayTimeWarpStart(self):
+        self.parentObj.as_updateSpeedS(0)
+        if self.__cachedBurnoutLevel is not None:
+            self.parentObj.as_updateBurnoutS(self.__cachedBurnoutLevel)
+        if self.__burnoutWarningOn:
+            self.parentObj.as_setBurnoutWarningS(INGAME_GUI.BURNOUT_HINT_ENGINEDAMAGEWARNING)
+        else:
+            self.parentObj.as_stopBurnoutWarningS()
+        return
+
     def __updateCurStateSpeedMode(self, vStateCtrl):
         value = vStateCtrl.getStateValue(VEHICLE_VIEW_STATE.SIEGE_MODE)
         if value is not None:
             self.__onVehicleStateUpdated(VEHICLE_VIEW_STATE.SIEGE_MODE, value)
         else:
             self.__onVehicleStateUpdated(VEHICLE_VIEW_STATE.SIEGE_MODE, (_SIEGE_STATE.DISABLED, None))
+        return
+
+    def __updateCurBurnoutLevel(self, vehicle):
+        self.__cachedBurnoutLevel = vehicle.burnoutLevel
+
+    def __updateBurnoutWarning(self, vStateCtrl):
+        value = vStateCtrl.getStateValue(VEHICLE_VIEW_STATE.BURNOUT_WARNING)
+        if value is not None:
+            self.__burnoutWarningOn = value
+        else:
+            self.__burnoutWarningOn = False
         return
 
     def __getMaxSpeeds(self, vehicle):
@@ -993,6 +1021,8 @@ class SpeedometerWheeledTech(CrosshairPlugin):
             self.parentObj.as_updateBurnoutS(self.__cachedBurnoutLevel)
         if self.__burnoutWarningOn:
             self.parentObj.as_setBurnoutWarningS(INGAME_GUI.BURNOUT_HINT_ENGINEDAMAGEWARNING)
+        else:
+            self.parentObj.as_stopBurnoutWarningS()
         return
 
     def __changeSpeedoType(self, siegeState, _):
@@ -1015,8 +1045,10 @@ class SpeedometerWheeledTech(CrosshairPlugin):
             self.parentObj.as_setBurnoutWarningS(INGAME_GUI.BURNOUT_HINT_ENGINEDAMAGEWARNING)
 
     def __stopEngineDamageWarning(self):
-        self.__burnoutWarningOn = False
-        self.parentObj.as_stopBurnoutWarningS()
+        if self.parentObj is not None:
+            self.__burnoutWarningOn = False
+            self.parentObj.as_stopBurnoutWarningS()
+        return
 
     def __destroyTimersListener(self, event):
         isShown = event.ctx['shown']

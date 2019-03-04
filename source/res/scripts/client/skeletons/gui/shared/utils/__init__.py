@@ -41,6 +41,10 @@ class IItemsRequester(requesters.IRequester):
         raise NotImplementedError
 
     @property
+    def blueprints(self):
+        raise NotImplementedError
+
+    @property
     def tokens(self):
         raise NotImplementedError
 
@@ -66,6 +70,9 @@ class IItemsRequester(requesters.IRequester):
         raise NotImplementedError
 
     def getTankman(self, tmanInvID):
+        raise NotImplementedError
+
+    def getCrewSkin(self, skinID):
         raise NotImplementedError
 
     def getTankmen(self, criteria=None):

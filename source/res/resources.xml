@@ -154,4 +154,9 @@
   <gameplay>
     <areaBorderModel>	system/models/fx_area_border.model	</areaBorderModel>
   </gameplay>
+  <asset_pipeline>
+    <havok_processor>
+      <allowNonZeroLod>	False	</allowNonZeroLod>
+    </havok_processor>
+  </asset_pipeline>
 </resources.xml>

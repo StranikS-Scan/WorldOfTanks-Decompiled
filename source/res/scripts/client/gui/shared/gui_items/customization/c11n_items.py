@@ -8,10 +8,9 @@ from gui.Scaleform.locale.VEHICLE_CUSTOMIZATION import VEHICLE_CUSTOMIZATION
 from gui.shared.gui_items import GUI_ITEM_TYPE_NAMES, GUI_ITEM_TYPE
 from gui.shared.gui_items.fitting_item import FittingItem, RentalInfoProvider
 from helpers import i18n, dependency
-from items.components.c11n_constants import SeasonType, ItemTags, ProjectionDecalDirectionTags, ProjectionDecalFormTags
+from items.components.c11n_constants import SeasonType, ItemTags, ProjectionDecalDirectionTags, ProjectionDecalFormTags, UNBOUND_VEH_KEY, NUM_ALL_ITEMS_KEY
 from shared_utils import first
 from skeletons.gui.server_events import IEventsCache
-_UNBOUND_VEH = 0
 _CAMO_ICON_TEMPLATE = 'img://camouflage,{width},{height},"{texture}","{background}",{colors},{weights}'
 _CAMO_SWATCH_WIDTH = 128
 _CAMO_SWATCH_HEIGHT = 128
@@ -19,18 +18,23 @@ _PN_SWATCH_WIDTH = 228
 _PN_SWATCH_HEIGHT = 104
 _CAMO_SWATCH_BACKGROUND = 'gui/maps/vehicles/camouflages/camo_back.dds'
 _PERSONAL_NUM_ICON_TEMPLATE = 'img://personal_num,{width},{height},"{texture}","{alphabet}","{number}","{textureMask}","{background}"'
+_PERSONAL_NUM_ICON_TEMPLATE = 'img://personal_num,{width},{height},"{texture}","{fontPath}","{number}","{textureMask}","{background}"'
 STYLE_GROUP_ID_TO_GROUP_NAME_MAP = {VEHICLE_CUSTOMIZATION.STYLES_SPECIAL_STYLES: VEHICLE_CUSTOMIZATION.CUSTOMIZATION_INFOTYPE_TYPE_STYLE_SPECIAL,
  VEHICLE_CUSTOMIZATION.STYLES_MAIN_STYLES: VEHICLE_CUSTOMIZATION.CUSTOMIZATION_INFOTYPE_TYPE_STYLE_MAIN,
  VEHICLE_CUSTOMIZATION.STYLES_RENTED_STYLES: VEHICLE_CUSTOMIZATION.CUSTOMIZATION_INFOTYPE_TYPE_STYLE_RENTAL,
  VEHICLE_CUSTOMIZATION.STYLES_UNIQUE_STYLES: VEHICLE_CUSTOMIZATION.CUSTOMIZATION_INFOTYPE_TYPE_STYLE_UNIQUE}
+STYLE_GROUP_ID_TO_FULL_GROUP_NAME_MAP = {VEHICLE_CUSTOMIZATION.STYLES_SPECIAL_STYLES: VEHICLE_CUSTOMIZATION.CAROUSEL_SWATCH_STYLE_SPECIAL,
+ VEHICLE_CUSTOMIZATION.STYLES_MAIN_STYLES: VEHICLE_CUSTOMIZATION.CAROUSEL_SWATCH_STYLE_MAIN,
+ VEHICLE_CUSTOMIZATION.STYLES_RENTED_STYLES: VEHICLE_CUSTOMIZATION.CAROUSEL_SWATCH_STYLE_RENTED,
+ VEHICLE_CUSTOMIZATION.STYLES_UNIQUE_STYLES: VEHICLE_CUSTOMIZATION.CAROUSEL_SWATCH_STYLE_UNIQUE}
 
 def camoIconTemplate(texture, width, height, colors, background=_CAMO_SWATCH_BACKGROUND):
     weights = Math.Vector4(*[ (color >> 24) / 255.0 for color in colors ])
     return _CAMO_ICON_TEMPLATE.format(width=width, height=height, texture=texture, background=background, colors=','.join((str(color) for color in colors)), weights=','.join((str(weight) for weight in weights)))
 
 
-def personalNumIconTemplate(number, width, height, texture, alphabet, textureMask='', background=''):
-    return _PERSONAL_NUM_ICON_TEMPLATE.format(width=width, height=height, number=number, texture=texture, textureMask=textureMask, alphabet=alphabet, background=background)
+def personalNumIconTemplate(number, width, height, texture, fontPath, textureMask='', background=''):
+    return _PERSONAL_NUM_ICON_TEMPLATE.format(width=width, height=height, number=number, texture=texture, textureMask=textureMask, fontPath=fontPath, background=background)
 
 
 class ConcealmentBonus(object):
@@ -78,6 +82,7 @@ class Customization(FittingItem):
         self._boundInventoryCount = {}
         self._bonus = None
         self._installedVehicles = defaultdict(int)
+        self.__noveltyData = []
         if proxy is not None and proxy.inventory.isSynced():
             installledVehicles = proxy.inventory.getC11nItemAppliedVehicles(self.intCD)
             invCount = proxy.inventory.getItems(GUI_ITEM_TYPE.CUSTOMIZATION, self.intCD)
@@ -87,7 +92,8 @@ class Customization(FittingItem):
             for vehIntCD, count in invCount.iteritems():
                 self._boundInventoryCount[vehIntCD] = count
 
-        self._inventoryCount = self.boundInventoryCount.pop(_UNBOUND_VEH, 0)
+            self.__noveltyData = proxy.inventory.getC11nItemNoveltyData(intCompactDescr)
+        self._inventoryCount = self.boundInventoryCount.pop(UNBOUND_VEH_KEY, 0)
         self._isUnlocked = True
         return
 
@@ -165,7 +171,7 @@ class Customization(FittingItem):
     def buyCount(self):
         if self.isHidden:
             return 0
-        return max(self.descriptor.maxNumber - self.boundInventoryCount.get(-1, 0), 0) if self.isLimited else float('inf')
+        return max(self.descriptor.maxNumber - self.boundInventoryCount.get(NUM_ALL_ITEMS_KEY, 0), 0) if self.isLimited else float('inf')
 
     @property
     def mayApply(self):
@@ -219,6 +225,14 @@ class Customization(FittingItem):
 
     def getGUIEmblemID(self):
         pass
+
+    def isNew(self):
+        return bool(self.__noveltyData)
+
+    def getNoveltyCounter(self, vehicle):
+        if not self.mayInstall(vehicle):
+            return 0
+        return sum([ self.__noveltyData.get(key, 0) for key in (UNBOUND_VEH_KEY, vehicle.intCD) ])
 
     @staticmethod
     def getSpecialArgs(component):
@@ -406,6 +420,9 @@ class PersonalNumber(Customization):
     def isWide(self):
         return True
 
+    def numberIcon(self, number=''):
+        return super(PersonalNumber, self).icon if number == '' else personalNumIconTemplate(number, _PN_SWATCH_WIDTH, _PN_SWATCH_HEIGHT, self.fontInfo.texture, self.fontInfo.alphabet, self.fontInfo.mask)
+
 
 class Style(Customization):
     __slots__ = ('_outfits',)
@@ -434,6 +451,10 @@ class Style(Customization):
     @property
     def userType(self):
         return i18n.makeString(STYLE_GROUP_ID_TO_GROUP_NAME_MAP[self.groupID])
+
+    @property
+    def textInfo(self):
+        return self.descriptor.textInfo
 
     def getRentInfo(self, vehicle):
         if not self.isRentable:

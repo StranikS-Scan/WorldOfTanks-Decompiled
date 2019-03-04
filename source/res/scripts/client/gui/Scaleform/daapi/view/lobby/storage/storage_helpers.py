@@ -75,7 +75,7 @@ def createStorageDefVO(itemID, title, description, count, price, image, imageAlt
 
 
 def getStorageVehicleVo(vehicle):
-    name = _getVehicleName(vehicle)
+    name = getVehicleName(vehicle)
     description = _getVehicleDescription(vehicle)
     imageSmall = func_utils.makeFlashPath(vehicle.getShopIcon(STORE_CONSTANTS.ICON_SIZE_SMALL))
     stateIcon, stateText = _getVehicleInfo(vehicle)
@@ -87,7 +87,7 @@ def getStorageVehicleVo(vehicle):
     return vo
 
 
-def _getVehicleName(vehicle):
+def getVehicleName(vehicle):
     return ' '.join((getTypeUserName(vehicle.type, False), text_styles.neutral(int2roman(vehicle.level)), vehicle.shortUserName))
 
 

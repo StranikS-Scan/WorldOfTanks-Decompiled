@@ -1,34 +1,44 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/techtree/techtree_page.py
-import GUI
 import Keys
+import BigWorld
+import GUI
 import nations
-from account_helpers.settings_core.settings_constants import TUTORIAL
 from constants import IS_DEVELOPMENT
 from debug_utils import LOG_DEBUG, LOG_ERROR
+from blueprints.BlueprintTypes import BlueprintTypes
 from gui import g_guiResetters
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
+from gui.Scaleform.daapi.view.lobby.go_back_helper import BackButtonContextKeys
 from gui.Scaleform.daapi.view.lobby.techtree import dumpers
 from gui.Scaleform.daapi.view.lobby.techtree.data import NationTreeData
 from gui.Scaleform.daapi.view.lobby.techtree.settings import SelectedNation
+from gui.Scaleform.daapi.view.lobby.techtree.sound_constants import Sounds
 from gui.Scaleform.daapi.view.lobby.techtree.techtree_dp import g_techTreeDP
-from gui.Scaleform.daapi.view.lobby.techtree.sound_constants import TECHTREE_SOUND_SPACE
 from gui.Scaleform.daapi.view.meta.TechTreeMeta import TechTreeMeta
+from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
+from gui.impl import backport
+from gui.impl.gen.resources import R
 from gui.ingame_shop import canBuyGoldForVehicleThroughWeb
-from gui.shared import events, EVENT_BUS_SCOPE
-from gui.shared.gui_items.items_actions import factory as ItemsActionsFactory
-from gui.sounds.ambients import LobbySubViewEnv
 from gui.shared import event_dispatcher as shared_events
+from gui.shared import events, EVENT_BUS_SCOPE
+from gui.shared.formatters import text_styles
+from gui.shared.gui_items.items_actions import factory as ItemsActionsFactory
+from gui.shared.utils.requesters.blueprints_requester import getNationalFragmentCD
+from helpers import dependency
+from skeletons.gui.lobby_context import ILobbyContext
 _HEIGHT_LESS_THAN_SPECIFIED_TO_OVERRIDE = 768
 _HEIGHT_LESS_THAN_SPECIFIED_OVERRIDE_TAG = 'height_less_768'
 
 class TechTree(TechTreeMeta):
-    __sound_env__ = LobbySubViewEnv
-    _COMMON_SOUND_SPACE = TECHTREE_SOUND_SPACE
+    __lobbyContext = dependency.descriptor(ILobbyContext)
 
     def __init__(self, ctx=None):
         super(TechTree, self).__init__(NationTreeData(dumpers.NationObjDumper()))
         self._resolveLoadCtx(ctx=ctx)
+        self.__blueprintMode = ctx.get(BackButtonContextKeys.BLUEPRINT_MODE, False)
+        self.__intelligenceAmount = 0
+        self.__nationalFragmentsData = {}
 
     def __del__(self):
         LOG_DEBUG('TechTree deleted')
@@ -47,35 +57,60 @@ class TechTree(TechTreeMeta):
             return {}
         nationIdx = nations.INDICES[nationName]
         SelectedNation.select(nationIdx)
+        self.__updateBlueprintBalance()
         self._data.load(nationIdx, override=self._getOverride())
+        self.__playBlueprintPlusSound()
         return self._data.dump()
 
-    def request4Unlock(self, unlockCD, vehCD, unlockIdx, xpCost):
-        ItemsActionsFactory.doAction(ItemsActionsFactory.UNLOCK_ITEM, int(unlockCD), int(vehCD), int(unlockIdx), int(xpCost))
+    def request4Unlock(self, itemCD):
+        itemCD = int(itemCD)
+        node = self._data.getNodeByItemCD(itemCD)
+        unlockProps = node.getUnlockProps() if node is not None else None
+        if unlockProps is not None:
+            ItemsActionsFactory.doAction(ItemsActionsFactory.UNLOCK_ITEM, itemCD, unlockProps)
+        return
 
     def request4Buy(self, itemCD):
         itemCD = int(itemCD)
-        vehicle = self.itemsCache.items.getItemByCD(itemCD)
+        vehicle = self._itemsCache.items.getItemByCD(itemCD)
         if canBuyGoldForVehicleThroughWeb(vehicle):
             shared_events.showVehicleBuyDialog(vehicle)
         else:
             ItemsActionsFactory.doAction(ItemsActionsFactory.BUY_VEHICLE, itemCD)
 
     def request4VehCompare(self, vehCD):
-        self.cmpBasket.addVehicle(int(vehCD))
+        self._cmpBasket.addVehicle(int(vehCD))
 
     def request4Restore(self, itemCD):
         ItemsActionsFactory.doAction(ItemsActionsFactory.BUY_VEHICLE, int(itemCD))
 
     def goToNextVehicle(self, vehCD):
-        exitEvent = events.LoadViewEvent(VIEW_ALIAS.LOBBY_TECHTREE, ctx={'nation': SelectedNation.getName()})
-        loadEvent = events.LoadViewEvent(VIEW_ALIAS.LOBBY_RESEARCH, ctx={'rootCD': vehCD,
-         'exit': exitEvent})
+        loadEvent = events.LoadViewEvent(VIEW_ALIAS.LOBBY_RESEARCH, ctx={BackButtonContextKeys.ROOT_CD: vehCD,
+         BackButtonContextKeys.EXIT: self.__exitEvent()})
         self.fireEvent(loadEvent, scope=EVENT_BUS_SCOPE.LOBBY)
 
     def onCloseTechTree(self):
         if self._canBeClosed:
             self.fireEvent(events.LoadViewEvent(VIEW_ALIAS.LOBBY_HANGAR), scope=EVENT_BUS_SCOPE.LOBBY)
+
+    def onBlueprintModeSwitch(self, enabled):
+        if self.__blueprintMode == enabled:
+            return
+        self.__blueprintMode = enabled
+        if enabled:
+            self.soundManager.playInstantSound(Sounds.BLUEPRINT_VIEW_ON_SOUND_ID)
+            self.__playBlueprintPlusSound()
+        else:
+            self.soundManager.playInstantSound(Sounds.BLUEPRINT_VIEW_OFF_SOUND_ID)
+
+    def invalidateBlueprintMode(self, isEnabled):
+        if isEnabled:
+            self.as_setBlueprintsSwitchButtonStateS(enabled=True, selected=self.__blueprintMode, tooltip=TOOLTIPS.TECHTREEPAGE_BLUEPRINTSSWITCHTOOLTIP, visible=True)
+        else:
+            self.__blueprintMode = False
+            self.__disableBlueprintsSwitchButton(isEnabled)
+            shared_events.showHangar()
+        self.redraw()
 
     def invalidateVehLocks(self, locks):
         if self._data.invalidateLocks(locks):
@@ -99,7 +134,7 @@ class TechTree(TechTreeMeta):
             self.redraw()
 
     def _resolveLoadCtx(self, ctx=None):
-        nation = ctx['nation'] if ctx is not None and 'nation' in ctx else None
+        nation = ctx[BackButtonContextKeys.NATION] if ctx is not None and BackButtonContextKeys.NATION in ctx else None
         if nation is not None and nation in nations.INDICES:
             nationIdx = nations.INDICES[nation]
             SelectedNation.select(nationIdx)
@@ -120,7 +155,10 @@ class TechTree(TechTreeMeta):
         if IS_DEVELOPMENT:
             from gui import InputHandler
             InputHandler.g_instance.onKeyUp += self.__handleReloadData
-        self.setupContextHints(TUTORIAL.RESEARCH_TREE)
+        if self.__blueprintMode:
+            self.as_setBlueprintModeS(True)
+        isBlueprintsEnabled = self.__lobbyContext.getServerSettings().blueprintsConfig.isBlueprintsAvailable()
+        self.__disableBlueprintsSwitchButton(isBlueprintsEnabled)
         self._populateAfter()
 
     def _populateAfter(self):
@@ -137,6 +175,13 @@ class TechTree(TechTreeMeta):
     def _disposeAfter(self):
         pass
 
+    def _blueprintExitEvent(self, vehicleCD):
+        return self.__exitEvent()
+
+    def __exitEvent(self):
+        return events.LoadViewEvent(VIEW_ALIAS.LOBBY_TECHTREE, ctx={BackButtonContextKeys.NATION: SelectedNation.getName(),
+         BackButtonContextKeys.BLUEPRINT_MODE: self.__blueprintMode})
+
     def __onUpdateStage(self):
         g_techTreeDP.setOverride(self._getOverride())
         if g_techTreeDP.load():
@@ -146,3 +191,40 @@ class TechTree(TechTreeMeta):
         if event.key is Keys.KEY_R:
             g_techTreeDP.load(isReload=True)
             self.redraw()
+
+    def __hasConversionPlusesOnTree(self):
+        for node in self._data.getNodes():
+            bpfProps = node.getBpfProps()
+            if bpfProps and bpfProps.canConvert:
+                return True
+
+        return False
+
+    def __playBlueprintPlusSound(self):
+        if self.__blueprintMode and self.__hasConversionPlusesOnTree():
+            self.soundManager.playInstantSound(Sounds.BLUEPRINT_VIEW_PLUS_SOUND_ID)
+
+    def __disableBlueprintsSwitchButton(self, isEnabled):
+        if not isEnabled:
+            self.as_setBlueprintsSwitchButtonStateS(enabled=False, selected=self.__blueprintMode, tooltip=TOOLTIPS.TECHTREEPAGE_BLUEPRINTSSWITCHTOOLTIPDISABLED, visible=True)
+
+    def __formatBlueprintBalance(self):
+        bpRequester = self._itemsCache.items.blueprints
+        self.__intelligenceAmount = bpRequester.getIntelligenceData()
+        self.__nationalFragmentsData = bpRequester.getAllNationalFragmentsData()
+        selectedNation = SelectedNation.getIndex()
+        nationalAmount = self.__nationalFragmentsData.get(selectedNation, 0)
+        balanceStr = text_styles.main(backport.text(R.strings.blueprints.blueprintScreen.resourcesOnStorage()))
+        intFragmentVO = {'iconPath': backport.image(R.images.gui.maps.icons.blueprints.fragment.small.intelligence()),
+         'title': BigWorld.wg_getIntegralFormat(self.__intelligenceAmount),
+         'fragmentCD': BlueprintTypes.INTELLIGENCE_DATA}
+        natFragmentVO = {'iconPath': backport.image(R.images.gui.maps.icons.blueprints.fragment.small.dyn(SelectedNation.getName())()),
+         'title': BigWorld.wg_getIntegralFormat(nationalAmount),
+         'fragmentCD': getNationalFragmentCD(selectedNation)}
+        balanceVO = {'balanceStr': balanceStr,
+         'internationalItemVO': intFragmentVO,
+         'nationalItemVO': natFragmentVO}
+        return balanceVO
+
+    def __updateBlueprintBalance(self):
+        self.as_setBlueprintBalanceS(self.__formatBlueprintBalance())

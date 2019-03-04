@@ -198,7 +198,7 @@ class IngameShopView(LobbySubView, IngameShopBase):
         self._refresh()
 
 
-class IngameShopOverlay(IngameShopBase):
+class IngameShopOverlay(WebOverlayBase):
 
     def onEscapePress(self):
         if not self._browserParams.get('isTransparent'):

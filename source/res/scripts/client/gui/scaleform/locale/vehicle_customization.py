@@ -516,10 +516,10 @@ class VEHICLE_CUSTOMIZATION(object):
     CAMOUFLAGE_FIREWORKS_2019_DESCRIPTION = '#vehicle_customization:camouflage/fireworks_2019/description'
     CAMOUFLAGE_PHARMOZ_TRICOLOR_LABEL = '#vehicle_customization:camouflage/pharmoz_tricolor/label'
     CAMOUFLAGE_PHARMOZ_TRICOLOR_DESCRIPTION = '#vehicle_customization:camouflage/pharmoz_tricolor/description'
-    CAMOUFLAGE_LUNAR_NY_GROUND_LABEL = '#vehicle_customization:camouflage/lunar_NY_ground/label'
-    CAMOUFLAGE_LUNAR_NY_GROUND_DESCRIPTION = '#vehicle_customization:camouflage/lunar_NY_ground/description'
     CAMOUFLAGE_VBR_LABEL = '#vehicle_customization:camouflage/vbr/label'
     CAMOUFLAGE_VBR_DESCRIPTION = '#vehicle_customization:camouflage/vbr/description'
+    CAMOUFLAGE_LUNAR_NY_GROUND_LABEL = '#vehicle_customization:camouflage/lunar_NY_ground/label'
+    CAMOUFLAGE_LUNAR_NY_GROUND_DESCRIPTION = '#vehicle_customization:camouflage/lunar_NY_ground/description'
     CAMOUFLAGE_LUNAR_NY_METALL_LABEL = '#vehicle_customization:camouflage/lunar_NY_metall/label'
     CAMOUFLAGE_LUNAR_NY_METALL_DESCRIPTION = '#vehicle_customization:camouflage/lunar_NY_metall/description'
     CAMOUFLAGE_LUNAR_NY_FIRE_LABEL = '#vehicle_customization:camouflage/lunar_NY_fire/label'
@@ -528,6 +528,16 @@ class VEHICLE_CUSTOMIZATION(object):
     CAMOUFLAGE_LUNAR_NY_WATER_DESCRIPTION = '#vehicle_customization:camouflage/lunar_NY_water/description'
     CAMOUFLAGE_LUNAR_NY_WOOD_LABEL = '#vehicle_customization:camouflage/lunar_NY_wood/label'
     CAMOUFLAGE_LUNAR_NY_WOOD_DESCRIPTION = '#vehicle_customization:camouflage/lunar_NY_wood/description'
+    CAMOUFLAGE_LUNAR_NY_GROUND_LOW_BRIGHT_LABEL = '#vehicle_customization:camouflage/lunar_NY_ground_low_bright/label'
+    CAMOUFLAGE_LUNAR_NY_GROUND_LOW_BRIGHT_DESCRIPTION = '#vehicle_customization:camouflage/lunar_NY_ground_low_bright/description'
+    CAMOUFLAGE_LUNAR_NY_METALL_LOW_BRIGHT_LABEL = '#vehicle_customization:camouflage/lunar_NY_metall_low_bright/label'
+    CAMOUFLAGE_LUNAR_NY_METALL_LOW_BRIGHT_DESCRIPTION = '#vehicle_customization:camouflage/lunar_NY_metall_low_bright/description'
+    CAMOUFLAGE_LUNAR_NY_FIRE_LOW_BRIGHT_LABEL = '#vehicle_customization:camouflage/lunar_NY_fire_low_bright/label'
+    CAMOUFLAGE_LUNAR_NY_FIRE_LOW_BRIGHT_DESCRIPTION = '#vehicle_customization:camouflage/lunar_NY_fire_low_bright/description'
+    CAMOUFLAGE_LUNAR_NY_WATER_LOW_BRIGHT_LABEL = '#vehicle_customization:camouflage/lunar_NY_water_low_bright/label'
+    CAMOUFLAGE_LUNAR_NY_WATER_LOW_BRIGHT_DESCRIPTION = '#vehicle_customization:camouflage/lunar_NY_water_low_bright/description'
+    CAMOUFLAGE_LUNAR_NY_WOOD_LOW_BRIGHT_LABEL = '#vehicle_customization:camouflage/lunar_NY_wood_low_bright/label'
+    CAMOUFLAGE_LUNAR_NY_WOOD_LOW_BRIGHT_DESCRIPTION = '#vehicle_customization:camouflage/lunar_NY_wood_low_bright/description'
     CAMOUFLAGE_DEFENDER_DAY_LABEL = '#vehicle_customization:camouflage/defender_day/label'
     CAMOUFLAGE_DEFENDER_DAY_DESCRIPTION = '#vehicle_customization:camouflage/defender_day/description'
     CAMOUFLAGE_REFERAL_PROGRAMM_01_LABEL = '#vehicle_customization:camouflage/referal_programm_01/label'
@@ -542,6 +552,12 @@ class VEHICLE_CUSTOMIZATION(object):
     CAMOUFLAGE_AUSTRALIA_DAY_D_DESCRIPTION = '#vehicle_customization:camouflage/australia_day_d/description'
     CAMOUFLAGE_DEFENDER_DAY_2_LABEL = '#vehicle_customization:camouflage/defender_day_2/label'
     CAMOUFLAGE_DEFENDER_DAY_2_DESCRIPTION = '#vehicle_customization:camouflage/defender_day_2/description'
+    CAMOUFLAGE_WOT_BIRTHDAY_EU_LABEL = '#vehicle_customization:camouflage/wot_birthday_eu/label'
+    CAMOUFLAGE_WOT_BIRTHDAY_EU_DESCRIPTION = '#vehicle_customization:camouflage/wot_birthday_eu/description'
+    CAMOUFLAGE_WOT_BIRTHDAY_NA_LABEL = '#vehicle_customization:camouflage/wot_birthday_na/label'
+    CAMOUFLAGE_WOT_BIRTHDAY_NA_DESCRIPTION = '#vehicle_customization:camouflage/wot_birthday_na/description'
+    CAMOUFLAGE_WOT_BIRTHDAY_CN_LABEL = '#vehicle_customization:camouflage/wot_birthday_cn/label'
+    CAMOUFLAGE_WOT_BIRTHDAY_CN_DESCRIPTION = '#vehicle_customization:camouflage/wot_birthday_cn/description'
     EMBLEM = '#vehicle_customization:emblem'
     EMBLEM_CLAN_CONTENT = '#vehicle_customization:emblem/clan_content'
     EMBLEM_SPECIAL = '#vehicle_customization:emblem/special'
@@ -1048,6 +1064,18 @@ class VEHICLE_CUSTOMIZATION(object):
     EMBLEM_SPECIAL_STICKER_448 = '#vehicle_customization:emblem/special/sticker_448'
     EMBLEM_SPECIAL_STICKER_449 = '#vehicle_customization:emblem/special/sticker_449'
     EMBLEM_SPECIAL_STICKER_450 = '#vehicle_customization:emblem/special/sticker_450'
+    EMBLEM_SPECIAL_STICKER_463 = '#vehicle_customization:emblem/special/sticker_463'
+    EMBLEM_SPECIAL_STICKER_464 = '#vehicle_customization:emblem/special/sticker_464'
+    EMBLEM_SPECIAL_STICKER_465 = '#vehicle_customization:emblem/special/sticker_465'
+    EMBLEM_SPECIAL_STICKER_466 = '#vehicle_customization:emblem/special/sticker_466'
+    EMBLEM_SPECIAL_STICKER_467 = '#vehicle_customization:emblem/special/sticker_467'
+    EMBLEM_SPECIAL_STICKER_468 = '#vehicle_customization:emblem/special/sticker_468'
+    EMBLEM_SPECIAL_STICKER_469 = '#vehicle_customization:emblem/special/sticker_469'
+    EMBLEM_SPECIAL_STICKER_470 = '#vehicle_customization:emblem/special/sticker_470'
+    EMBLEM_SPECIAL_STICKER_471 = '#vehicle_customization:emblem/special/sticker_471'
+    EMBLEM_SPECIAL_STICKER_472 = '#vehicle_customization:emblem/special/sticker_472'
+    EMBLEM_SPECIAL_STICKER_473 = '#vehicle_customization:emblem/special/sticker_473'
+    EMBLEM_SPECIAL_STICKER_474 = '#vehicle_customization:emblem/special/sticker_474'
     EMBLEM_SPECIAL_STICKER_451 = '#vehicle_customization:emblem/special/sticker_451'
     EMBLEM_SPECIAL_STICKER_452 = '#vehicle_customization:emblem/special/sticker_452'
     EMBLEM_SPECIAL_STICKER_453 = '#vehicle_customization:emblem/special/sticker_453'
@@ -1056,6 +1084,7 @@ class VEHICLE_CUSTOMIZATION(object):
     EMBLEM_SPECIAL_STICKER_456 = '#vehicle_customization:emblem/special/sticker_456'
     EMBLEM_SPECIAL_STICKER_457 = '#vehicle_customization:emblem/special/sticker_457'
     EMBLEM_SPECIAL_STICKER_458 = '#vehicle_customization:emblem/special/sticker_458'
+    EMBLEM_SPECIAL_STICKER_460 = '#vehicle_customization:emblem/special/sticker_460'
     EMBLEM_SPECIAL_STICKER_461 = '#vehicle_customization:emblem/special/sticker_461'
     EMBLEM_SPECIAL_STICKER_462 = '#vehicle_customization:emblem/special/sticker_462'
     INSCRIPTION = '#vehicle_customization:inscription'
@@ -1641,6 +1670,7 @@ class VEHICLE_CUSTOMIZATION(object):
     INSCRIPTION_SPECIAL_SPECIAL_232 = '#vehicle_customization:inscription/special/special_232'
     INSCRIPTION_SPECIAL_SPECIAL_233 = '#vehicle_customization:inscription/special/special_233'
     INSCRIPTION_SPECIAL_SPECIAL_234 = '#vehicle_customization:inscription/special/special_234'
+    INSCRIPTION_SPECIAL_SPECIAL_236 = '#vehicle_customization:inscription/special/special_236'
     INSCRIPTION_SPECIAL_SPECIAL_237 = '#vehicle_customization:inscription/special/special_237'
     ITEM_EMBLEM1 = '#vehicle_customization:item/emblem1'
     ITEM_EMBLEM2 = '#vehicle_customization:item/emblem2'
@@ -1782,6 +1812,7 @@ class VEHICLE_CUSTOMIZATION(object):
     BONUSNAME_EXTENDED_RADIOMAN = '#vehicle_customization:bonusName/extended/radioman'
     FILTER_POPOVER_TITLE = '#vehicle_customization:filter/popover/title'
     FILTER_POPOVER_SHOWONLYFILTERS_TITLE = '#vehicle_customization:filter/popover/showonlyfilters/title'
+    FILTER_POPOVER_FORMFILTERS_TITLE = '#vehicle_customization:filter/popover/formfilters/title'
     FILTER_POPOVER_SHOWONLYFILTERS_HISTORIC = '#vehicle_customization:filter/popover/showonlyfilters/historic'
     FILTER_POPOVER_SHOWONLYFILTERS_ACQUIRED = '#vehicle_customization:filter/popover/showonlyfilters/acquired'
     FILTER_POPOVER_BONUSTYPE_TITLE = '#vehicle_customization:filter/popover/bonusType/title'
@@ -1975,6 +2006,7 @@ class VEHICLE_CUSTOMIZATION(object):
     CUSTOMIZATION_POPOVER_SCALE_SMALL = '#vehicle_customization:customization/Popover/scale/small'
     CUSTOMIZATION_POPOVER_CAMO_COLOR = '#vehicle_customization:customization/Popover/Camo/color'
     CUSTOMIZATION_POPOVER_STYLE_AUTOPROLONGATIONLABEL = '#vehicle_customization:customization/popover/style/autoProlongationLabel'
+    CUSTOMIZATION_POPOVER_STYLE_INFO = '#vehicle_customization:customization/popover/style/info'
     CUSTOMIZATION_KITPOPOVER_AUTOPROLONGATIONLABEL = '#vehicle_customization:customization/kitPopover/autoProlongationLabel'
     CUSTOMIZATION_POPOVER_STYLE_NOTAUTOPROLONGATIONLABEL = '#vehicle_customization:customization/popover/style/notautoProlongationLabel'
     CUSTOMIZATION_INFOTYPE_MAP = '#vehicle_customization:customization/infotype/map'
@@ -2298,6 +2330,12 @@ class VEHICLE_CUSTOMIZATION(object):
     SPECIAL_STYLE_REFERAL_PROGRAMM_DESC = '#vehicle_customization:special_style/referal_programm_desc'
     MAIN_STYLE_DEFENDER_DAY_2 = '#vehicle_customization:main_style/defender_day_2'
     MAIN_STYLE_DEFENDER_DAY_2_DESC = '#vehicle_customization:main_style/defender_day_2_desc'
+    MAIN_STYLE_WOT_BIRTHDAY_EU = '#vehicle_customization:main_style/wot_birthday_eu'
+    MAIN_STYLE_WOT_BIRTHDAY_EU_DESC = '#vehicle_customization:main_style/wot_birthday_eu_desc'
+    MAIN_STYLE_WOT_BIRTHDAY_NA = '#vehicle_customization:main_style/wot_birthday_na'
+    MAIN_STYLE_WOT_BIRTHDAY_NA_DESC = '#vehicle_customization:main_style/wot_birthday_na_desc'
+    MAIN_STYLE_WOT_BIRTHDAY_CN = '#vehicle_customization:main_style/wot_birthday_cn'
+    MAIN_STYLE_WOT_BIRTHDAY_CN_DESC = '#vehicle_customization:main_style/wot_birthday_cn_desc'
     CUSTOMIZATION_POPOVER_STYLE_SUMMER = '#vehicle_customization:customization/popover/style/summer'
     CUSTOMIZATION_POPOVER_STYLE_DESERT = '#vehicle_customization:customization/popover/style/desert'
     CUSTOMIZATION_POPOVER_STYLE_ANY = '#vehicle_customization:customization/popover/style/any'
@@ -2323,10 +2361,13 @@ class VEHICLE_CUSTOMIZATION(object):
     CUSTOMIZATION_ITEMSPOPOVER_TITLE_ITEMS = '#vehicle_customization:customization/itemsPopover/title/items'
     CUSTOMIZATION_ITEMSPOPOVER_HISTORICCHECKBOX_ITEMS = '#vehicle_customization:customization/itemsPopover/historicCheckBox/items'
     CUSTOMIZATION_ITEMSPOPOVER_BTN = '#vehicle_customization:customization/itemsPopover/btn'
+    CUSTOMIZATION_ITEMSPOPOVER_BTN_DISABLED = '#vehicle_customization:customization/itemsPopover/btn/disabled'
+    CUSTOMIZATION_ITEMSPOPOVER_BTN_STYLE_DISABLED = '#vehicle_customization:customization/itemsPopover/btn/style/disabled'
     CUSTOMIZATION_ITEMSPOPOVER_CLEAR_MASSAGE = '#vehicle_customization:customization/itemsPopover/clear/massage'
     CUSTOMIZATION_ITEMSPOPOVER_CLEAR_NONHISTORICMASSAGE = '#vehicle_customization:customization/itemsPopover/clear/nonHistoricMassage'
     CUSTOMIZATION_KITPOPOVER_TITLE_ITEMS = '#vehicle_customization:customization/kitPopover/title/items'
     CUSTOMIZATION_KITPOPOVER_BUTTONTEXT_REMOVESTYLEKIT = '#vehicle_customization:customization/kitPopover/buttonText/removeStyleKit'
+    CUSTOMIZATION_CUSTOMIZATIONTRIGGER_TOOLTIP_NOSTYLE = '#vehicle_customization:customization/customizationTrigger/tooltip/noStyle'
     CUSTOMIZATION_BUYWINDOW_TITLE = '#vehicle_customization:customization/buyWindow/title'
     CUSTOMIZATION_FILTER_ALLGROUPS = '#vehicle_customization:customization/filter/allGroups'
     COMMIT_APPLY = '#vehicle_customization:commit/apply'
@@ -2339,6 +2380,7 @@ class VEHICLE_CUSTOMIZATION(object):
     CAROUSEL_SWATCH_STYLE_RENTED = '#vehicle_customization:carousel/swatch/style/rented'
     CAROUSEL_SWATCH_STYLE_MAIN = '#vehicle_customization:carousel/swatch/style/main'
     CAROUSEL_SWATCH_STYLE_SPECIAL = '#vehicle_customization:carousel/swatch/style/special'
+    CAROUSEL_SWATCH_STYLE_UNIQUE = '#vehicle_customization:carousel/swatch/style/unique'
     DEFAULTSTYLE_LABEL = '#vehicle_customization:defaultStyle/label'
     CUSTOMIZATION_HINT_MAXQTYDECALSAPPLIED = '#vehicle_customization:customization/hint/maxQtyDecalsApplied'
     PROPERTYSHEET_TITLE_APPLIEDTO = '#vehicle_customization:propertySheet/title/appliedTo'
@@ -2476,6 +2518,7 @@ class VEHICLE_CUSTOMIZATION(object):
     PROJECTION_DECALS_IDENTITY_SIGNS_PROJECTION_DECAL_04 = '#vehicle_customization:projection_decals/identity_signs/projection_decal_04'
     PROJECTION_DECALS_IDENTITY_SIGNS_PROJECTION_DECAL_05 = '#vehicle_customization:projection_decals/identity_signs/projection_decal_05'
     PROJECTION_DECALS_HOLIDAY = '#vehicle_customization:projection_decals/holiday'
+    PROJECTION_DECALS_HOLIDAY_PROJECTION_DECAL_01 = '#vehicle_customization:projection_decals/holiday/projection_decal_01'
     PROJECTION_DECALS_HOLIDAY_PROJECTION_DECAL_02 = '#vehicle_customization:projection_decals/holiday/projection_decal_02'
     PROJECTION_DECALS_HOLIDAY_PROJECTION_DECAL_03 = '#vehicle_customization:projection_decals/holiday/projection_decal_03'
     PROJECTION_DECALS_SPECIAL = '#vehicle_customization:projection_decals/special'
@@ -2504,6 +2547,7 @@ class VEHICLE_CUSTOMIZATION(object):
     ELEMENTBONUS_DESC_MODIFICATION = '#vehicle_customization:elementBonus/desc/modification'
     ELEMENTBONUS_DESC_PAINT = '#vehicle_customization:elementBonus/desc/paint'
     ELEMENTBONUS_DESC_PROJECTIONDECAL = '#vehicle_customization:elementBonus/desc/projectionDecal'
+    ELEMENTBONUS_DESC_PERSONALNUMBER = '#vehicle_customization:elementBonus/desc/personalNumber'
     ELEMENTBONUS_FACTOR = '#vehicle_customization:elementBonus/factor'
     BONUS_NAME_EXTENDED_ENUM = (BONUS_NAME_EXTENDED_CAMOUFLAGE,)
     ELEMENTBONUS_DESC_ENUM = (ELEMENTBONUS_DESC_SHELL,
@@ -2513,18 +2557,16 @@ class VEHICLE_CUSTOMIZATION(object):
      ELEMENTBONUS_DESC_INSCRIPTION,
      ELEMENTBONUS_DESC_MODIFICATION,
      ELEMENTBONUS_DESC_PAINT,
-     ELEMENTBONUS_DESC_PROJECTIONDECAL)
-    SEASON_SELECTION_ENUM = (SEASON_SELECTION_SUMMER,
-     SEASON_SELECTION_WINTER,
-     SEASON_SELECTION_DESERT,
-     SEASON_SELECTION_SELECTED_SUMMER,
-     SEASON_SELECTION_SELECTED_WINTER,
-     SEASON_SELECTION_SELECTED_DESERT,
-     SEASON_SELECTION_TOOLTIP,
-     SEASON_SELECTION_MAPNAME_SUMMER,
-     SEASON_SELECTION_MAPNAME_WINTER,
-     SEASON_SELECTION_MAPNAME_DESERT,
-     SEASON_SELECTION_MAPNAME_ALL)
+     ELEMENTBONUS_DESC_PROJECTIONDECAL,
+     ELEMENTBONUS_DESC_PERSONALNUMBER)
+    PROPERTYSHEET_ELEMENTTYPE_ENUM = (PROPERTYSHEET_ELEMENTTYPE_TURRET,
+     PROPERTYSHEET_ELEMENTTYPE_MASK,
+     PROPERTYSHEET_ELEMENTTYPE_GUN,
+     PROPERTYSHEET_ELEMENTTYPE_CHASSIS,
+     PROPERTYSHEET_ELEMENTTYPE_HULL,
+     PROPERTYSHEET_ELEMENTTYPE_INSCRIPTION,
+     PROPERTYSHEET_ELEMENTTYPE_EMBLEM,
+     PROPERTYSHEET_ELEMENTTYPE_ALL)
     PROPERTYSHEET_MAP_ENUM = (PROPERTYSHEET_MAP_SUMMER, PROPERTYSHEET_MAP_WINTER, PROPERTYSHEET_MAP_DESERT)
     SEASON_SELECTION_SELECTED_ENUM = (SEASON_SELECTION_SELECTED_SUMMER, SEASON_SELECTION_SELECTED_WINTER, SEASON_SELECTION_SELECTED_DESERT)
     PROPERTYSHEET_ACTIONBTN_REMOVE_ENUM = (PROPERTYSHEET_ACTIONBTN_REMOVE_TURRET,
@@ -2554,14 +2596,17 @@ class VEHICLE_CUSTOMIZATION(object):
      PROPERTYSHEET_TITLE_REMOVE_PROJECTIONDECAL,
      PROPERTYSHEET_TITLE_REMOVE_MODIFICATION)
     BONUS_NAME_ENUM = (BONUS_NAME_CAMOUFLAGE, BONUS_NAME_EXTENDED_CAMOUFLAGE)
-    PROPERTYSHEET_ELEMENTTYPE_ENUM = (PROPERTYSHEET_ELEMENTTYPE_TURRET,
-     PROPERTYSHEET_ELEMENTTYPE_MASK,
-     PROPERTYSHEET_ELEMENTTYPE_GUN,
-     PROPERTYSHEET_ELEMENTTYPE_CHASSIS,
-     PROPERTYSHEET_ELEMENTTYPE_HULL,
-     PROPERTYSHEET_ELEMENTTYPE_INSCRIPTION,
-     PROPERTYSHEET_ELEMENTTYPE_EMBLEM,
-     PROPERTYSHEET_ELEMENTTYPE_ALL)
+    SEASON_SELECTION_ENUM = (SEASON_SELECTION_SUMMER,
+     SEASON_SELECTION_WINTER,
+     SEASON_SELECTION_DESERT,
+     SEASON_SELECTION_SELECTED_SUMMER,
+     SEASON_SELECTION_SELECTED_WINTER,
+     SEASON_SELECTION_SELECTED_DESERT,
+     SEASON_SELECTION_TOOLTIP,
+     SEASON_SELECTION_MAPNAME_SUMMER,
+     SEASON_SELECTION_MAPNAME_WINTER,
+     SEASON_SELECTION_MAPNAME_DESERT,
+     SEASON_SELECTION_MAPNAME_ALL)
 
     @classmethod
     def getShortBonusName(cls, bonusType):

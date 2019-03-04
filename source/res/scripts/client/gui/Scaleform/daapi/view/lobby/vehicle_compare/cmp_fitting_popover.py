@@ -18,13 +18,9 @@ _POPOVER_SECOND_TAB_IDX = 1
 class VehCmpBattleBoosterSelectPopover(BattleBoosterSelectPopover):
 
     def __init__(self, ctx=None):
-        data_ = ctx['data']
         self.__initialLoad = True
         self.cmpVeh = cmp_helpers.getCmpConfiguratorMainView().getCurrentVehicle()
-        slotType = data_.slotType
-        slotIndex = data_.slotIndex
-        logicProvider = _CmpVehBattleBoosterLogicProvider(slotType, slotIndex, self.cmpVeh)
-        super(VehCmpBattleBoosterSelectPopover, self).__init__(ctx, logicProvider)
+        super(VehCmpBattleBoosterSelectPopover, self).__init__(ctx, lambda slotType, slotIndex: _CmpVehBattleBoosterLogicProvider(slotType, slotIndex, self.cmpVeh))
 
     def _getInitialTabIndex(self):
         if self.__initialLoad:

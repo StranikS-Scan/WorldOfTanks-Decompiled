@@ -21,10 +21,10 @@ class PrimeTimesServersDataProvider(ServersDataProvider):
             serverPeriods = self.primeTimes[server['shortname']]
             for periodStart, _ in serverPeriods:
                 if periodStartMin is None:
-                    chosenServer = server['shortname']
+                    chosenServer = server['id']
                     periodStartMin = periodStart
                 if periodStart < periodStartMin:
-                    chosenServer = server['shortname']
+                    chosenServer = server['id']
                     periodStartMin = periodStart
                 if periodStart == periodStartMin:
                     chosenServer = None
@@ -38,16 +38,9 @@ class PrimeTimesServersDataProvider(ServersDataProvider):
                 if server['pingValue'] < minPingServer['pingValue']:
                     minPingServer = server
 
-            return minPingServer['shortname']
+            return minPingServer['id']
         else:
             return
-
-    def setSelectedID(self, sid):
-        super(PrimeTimesServersDataProvider, self).setSelectedID(sid)
-        for vo in self.sortedCollection:
-            if vo['id'] == sid:
-                vo['selected'] = not vo['selected']
-            vo['selected'] = False
 
     def _makeVO(self, index, item):
         vo = super(PrimeTimesServersDataProvider, self)._makeVO(index, item)

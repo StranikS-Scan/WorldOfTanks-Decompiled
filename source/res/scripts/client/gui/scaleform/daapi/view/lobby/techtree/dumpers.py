@@ -1,14 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/techtree/dumpers.py
 import gui
-import nations
-from debug_utils import LOG_ERROR
-from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
-from gui.Scaleform.daapi.view.lobby.techtree import techtree_dp
 from gui.Scaleform.daapi.view.lobby.techtree.settings import SelectedNation
 from gui.Scaleform.daapi.view.lobby.techtree.settings import VehicleClassInfo
 from gui.Scaleform.daapi.view.lobby.techtree.techtree_dp import g_techTreeDP
-from gui.Scaleform.daapi.view.lobby.vehicle_compare import formatters as vc_formatters
 from helpers import i18n
 __all__ = ('ResearchItemsObjDumper', 'NationObjDumper')
 
@@ -32,9 +27,6 @@ class ResearchBaseDumper(_BaseDumper):
     def __init__(self, cache=None):
         super(ResearchBaseDumper, self).__init__(cache or self._getDefaultCacheObj())
 
-    def _getDefaultCacheObj(self):
-        return {'nodes': []}
-
     def clear(self, full=False):
         nodes = self._cache['nodes']
         while nodes:
@@ -54,6 +46,9 @@ class ResearchBaseDumper(_BaseDumper):
 
         return self._cache
 
+    def _getDefaultCacheObj(self):
+        return {'nodes': []}
+
     def _getItemData(self, node, rootItem):
         nodeCD = node.getNodeCD()
         if node.isVehicle():
@@ -65,6 +60,7 @@ class ResearchBaseDumper(_BaseDumper):
          'primaryClass': vClass,
          'level': node.getLevel(),
          'iconPath': node.getIcon(),
+         'smallIconPath': node.getSmallIcon(),
          'state': node.getState(),
          'displayInfo': node.getDisplayInfo(),
          'extraInfo': node.getExtraInfo(rootItem)}
@@ -78,13 +74,10 @@ class ResearchItemsObjDumper(ResearchBaseDumper):
         while nodes:
             nodes.pop().clear()
 
-        self._cache['global']['extraInfo'].clear()
-
     def dump(self, data):
         self.clear()
         self._fillCacheSection('nodes', data, data.getNodes())
         self._fillCacheSection('top', data, data.getTopLevel())
-        self._getGlobalData(data)
         return self._cache
 
     def _fillCacheSection(self, sectionName, data, items):
@@ -94,30 +87,7 @@ class ResearchItemsObjDumper(ResearchBaseDumper):
     def _getDefaultCacheObj(self):
         defCache = super(ResearchItemsObjDumper, self)._getDefaultCacheObj()
         defCache['top'] = []
-        defCache['global'] = {'enableInstallItems': False,
-         'statusString': None,
-         'extraInfo': {},
-         'freeXP': 0,
-         'hasNationTree': False}
         return defCache
-
-    def _getGlobalData(self, data):
-        try:
-            nation = nations.NAMES[data.getNationID()]
-        except IndexError:
-            LOG_ERROR('Nation not found', data.getNationID())
-            nation = None
-
-        globalData = self._cache['global']
-        warningMessage = None
-        globalData.update({'enableInstallItems': data.isInstallItemsEnabled(),
-         'statusString': data.getRootStatusString(),
-         'extraInfo': self._getExtraInfo(data),
-         'freeXP': data.getUnlockStats().freeXP,
-         'hasNationTree': nation in techtree_dp.g_techTreeDP.getAvailableNations(),
-         'warningMessage': warningMessage,
-         'historicalBattleID': -1})
-        return
 
     def _getExtraInfo(self, data):
         item = data.getRootItem()
@@ -138,22 +108,11 @@ class ResearchItemsObjDumper(ResearchBaseDumper):
         return result
 
     def _getItemData(self, node, rootItem):
-        nodeCD = node.getNodeCD()
-        status, statusLevel = node.getStatus()
         data = super(ResearchItemsObjDumper, self)._getItemData(node, rootItem)
-        data.update({'longName': node.getLongUserName(),
-         'smallIconPath': node.getSmallIcon(),
+        data.update({'state': node.getState(),
          'earnedXP': node.getEarnedXP(),
-         'shopPrice': node.getShopPrice(),
          'unlockProps': node.getUnlockTuple(),
-         'status': status,
-         'statusLevel': statusLevel,
-         'isPremiumIGR': node.isPremiumIGR(),
-         'showVehicleBtnLabel': node.getPreviewLabel(),
-         'showVehicleBtnEnabled': node.isPreviewAllowed(),
-         'vehCompareRootData': vc_formatters.getBtnCompareData(rootItem) if nodeCD == rootItem.intCD else {},
-         'vehCompareTreeNodeData': node.getCompareData(),
-         'previewAlias': VIEW_ALIAS.LOBBY_RESEARCH})
+         'buyPrice': node.getBuyPrices()})
         return data
 
 
@@ -185,23 +144,20 @@ class NationObjDumper(_BaseDumper):
 
     def _getVehicleData(self, node):
         tags = node.getTags()
-        status, statusLevel = node.getStatus()
+        blueprints = node.getBpfProps()
         return {'id': node.getNodeCD(),
          'state': node.getState(),
          'type': node.getTypeName(),
          'nameString': node.getShortUserName(),
          'primaryClass': self._vClassInfo.getInfoByTags(tags),
          'level': node.getLevel(),
-         'longName': node.getLongUserName(),
-         'iconPath': node.getIcon(),
          'smallIconPath': node.getSmallIcon(),
          'earnedXP': node.getEarnedXP(),
-         'shopPrice': node.getShopPrice(),
          'displayInfo': node.getDisplayInfo(),
          'unlockProps': node.getUnlockTuple(),
-         'status': status,
-         'statusLevel': statusLevel,
          'isRemovable': node.isRented(),
-         'isPremiumIGR': node.isPremiumIGR(),
          'vehCompareTreeNodeData': node.getCompareData(),
-         'previewAlias': VIEW_ALIAS.LOBBY_TECHTREE}
+         'blueprintLabel': node.getBlueprintLabel(),
+         'blueprintProgress': node.getBlueprintProgress(),
+         'blueprintCanConvert': blueprints.canConvert if blueprints is not None else False,
+         'buyPrice': node.getBuyPrices()}

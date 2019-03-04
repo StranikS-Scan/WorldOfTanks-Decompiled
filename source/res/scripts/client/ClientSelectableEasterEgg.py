@@ -72,7 +72,7 @@ class ClientSelectableEasterEgg(ClientSelectableObject):
 
     def __onAnimatorLoaded(self, resourceName, resourceList):
         self.__animator = resourceList[resourceName]
-        self.__animator.bindTo(AnimationSequence.ModelWrapperContainer(self.model))
+        self.__animator.bindTo(AnimationSequence.ModelWrapperContainer(self.model, self.spaceID))
         self.__animator.start()
 
     def _addEdgeDetect(self):

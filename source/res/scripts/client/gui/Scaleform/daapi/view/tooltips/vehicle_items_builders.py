@@ -31,7 +31,7 @@ class TechTreeModuleBuilder(AdvancedDataBuilder):
     __slots__ = ()
 
     def __init__(self, tooltipType, linkage):
-        super(TechTreeModuleBuilder, self).__init__(tooltipType, linkage, module.ModuleBlockTooltipData(contexts.TechTreeContext()), advanced.HangarModuleAdvanced(contexts.TechTreeContext()))
+        super(TechTreeModuleBuilder, self).__init__(tooltipType, linkage, module.ModuleBlockTooltipData(contexts.ModuleContext()), advanced.HangarModuleAdvanced(contexts.ModuleContext()))
 
     def _buildData(self, _advanced, node, parentCD, *args, **kwargs):
         return super(TechTreeModuleBuilder, self)._buildData(_advanced, node, parentCD)

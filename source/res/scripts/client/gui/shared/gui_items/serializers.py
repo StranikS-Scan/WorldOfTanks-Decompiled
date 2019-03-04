@@ -5,11 +5,14 @@ import math
 import collections
 from gui.Scaleform.daapi.view.lobby.store.browser.ingameshop_helpers import isIngameShopEnabled
 from gui.shared.money import Money, Currency
-from helpers import dependency
+from helpers import dependency, i18n
 from items.components import skills_constants
+from items.components.crewSkins_constants import NO_CREW_SKIN_ID
+from gui.shared.gui_items.crew_skin import localizedFullName
 from gui.shared.gui_items.fitting_item import ICONS_MASK
 from gui.shared.gui_items import Tankman, Vehicle
 from skeletons.gui.shared import IItemsCache
+from skeletons.gui.lobby_context import ILobbyContext
 
 def packTankmanSkill(skill, isPermanent=False, tankman=None):
     if skill.roleType in skills_constants.ACTIVE_SKILLS or skill.roleType in skills_constants.ROLES:
@@ -213,6 +216,18 @@ def packTraining(vehicle, crew=None, itemsCache=None):
          'showAction': actualPrice != defaultPrice})
 
     return result
+
+
+@dependency.replace_none_kwargs(itemsCache=IItemsCache, lobbyContext=ILobbyContext)
+def repackTankmanWithSkinData(item, data, itemsCache=None, lobbyContext=None):
+    if item.skinID != NO_CREW_SKIN_ID and lobbyContext.getServerSettings().isCrewSkinsEnabled():
+        skinItem = itemsCache.items.getCrewSkin(item.skinID)
+        data['icon']['big'] = Tankman.getCrewSkinIconBig(skinItem.getIconID())
+        data['firstUserName'] = i18n.makeString(skinItem.getFirstName())
+        data['lastUserName'] = i18n.makeString(skinItem.getLastName())
+        data['fullName'] = localizedFullName(skinItem)
+    else:
+        data['fullName'] = item.fullUserName
 
 
 def _getTrainingButtonsForTankman(costsActual, costsDefault, currentMoney, vehicle=None, tankman=None):

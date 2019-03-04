@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/vehiclePreview20/items_kit_helper.py
 import itertools
 from collections import Container
+from CurrentVehicle import g_currentPreviewVehicle
 from gui.Scaleform.daapi.view.lobby.storage.storage_helpers import getBoosterType
 from gui.Scaleform.genConsts.SLOT_HIGHLIGHT_TYPES import SLOT_HIGHLIGHT_TYPES
 from gui.Scaleform.locale.COMMON import COMMON
@@ -78,6 +79,7 @@ _TOOLTIP_TYPE = {ItemPackType.ITEM_DEVICE: TOOLTIPS_CONSTANTS.SHOP_20_MODULE,
  ItemPackType.ACHIEVEMENT: TOOLTIPS_CONSTANTS.SHOP_20_ACHIEVEMENT,
  ItemPackType.SINGLE_ACHIEVEMENTS: TOOLTIPS_CONSTANTS.SHOP_20_ACHIEVEMENT,
  ItemPackType.BADGE: TOOLTIPS_CONSTANTS.SHOP_20_BADGE,
+ ItemPackType.REFERRAL_BADGE: TOOLTIPS_CONSTANTS.REFERRAL_BADGE,
  ItemPackType.PLAYER_BADGE: TOOLTIPS_CONSTANTS.SHOP_20_BADGE}
 _ICONS = {ItemPackType.CAMOUFLAGE_ALL: RES_SHOP.MAPS_SHOP_REWARDS_48X48_PRIZE_CAMOUFLAGE,
  ItemPackType.CAMOUFLAGE_WINTER: RES_SHOP.MAPS_SHOP_REWARDS_48X48_PRIZE_CAMOUFLAGE,
@@ -95,7 +97,7 @@ _ICONS = {ItemPackType.CAMOUFLAGE_ALL: RES_SHOP.MAPS_SHOP_REWARDS_48X48_PRIZE_CA
  ItemPackType.CUSTOM_CREDITS: RES_SHOP.MAPS_SHOP_REWARDS_48X48_MONEY_SILVER,
  ItemPackType.CUSTOM_CRYSTAL: RES_SHOP.MAPS_SHOP_REWARDS_48X48_MONEY_BONDS,
  ItemPackType.CUSTOM_SLOT: RES_SHOP.MAPS_SHOP_REWARDS_48X48_PRIZE_HANGARSLOT,
- ItemPackType.CUSTOM_CREW: RES_SHOP.MAPS_SHOP_REWARDS_48X48_PRIZECREW}
+ ItemPackType.CUSTOM_REFERRAL_CREW: RES_SHOP.MAPS_SHOP_REWARDS_48X48_PRIZECREW}
 _NOT_FOUND_ICONS = {ItemPackType.TOKEN: RES_ICONS.MAPS_ICONS_QUESTS_ICON_BATTLE_MISSIONS_PRIZE_TOKEN}
 _PREM_ICONS = {1: RES_SHOP.MAPS_SHOP_REWARDS_48X48_ICON_BATTLE_MISSIONS_PRIZE_1DAYPREM,
  2: RES_SHOP.MAPS_SHOP_REWARDS_48X48_ICON_BATTLE_MISSIONS_PRIZE_2DAYPREM,
@@ -213,7 +215,10 @@ def getItemTitle(rawItem, item, forBox=False):
         title = _ms(EPIC_BATTLE.EPICBATTLEITEM_REWARDPOINTS_HEADER)
     elif rawItem.type == ItemPackType.CUSTOM_PREMIUM:
         title = _ms(TOOLTIPS.PREMIUM_DAYS_HEADER, rawItem.count)
-    elif rawItem.type in ItemPackTypeGroup.CREW or rawItem.type == ItemPackType.CUSTOM_CREW:
+    elif rawItem.type == ItemPackType.CUSTOM_REFERRAL_CREW:
+        vehicle = g_currentPreviewVehicle.item
+        title = _ms(TOOLTIPS.CUSTOMCREW_REFERRAL_HEADER, vehicle=vehicle.userName)
+    elif rawItem.type in ItemPackTypeGroup.CREW:
         title = _ms(TOOLTIPS.CREW_HEADER)
     else:
         title = rawItem.title or ''
@@ -233,18 +238,19 @@ def getItemDescription(rawItem, item):
         description = _ms(TOOLTIPS.AWARDITEM_CRYSTAL_BODY)
     elif rawItem.type == ItemPackType.CUSTOM_PREMIUM:
         description = _ms(TOOLTIPS.AWARDITEM_PREMIUM_BODY)
+    elif rawItem.type == ItemPackType.CUSTOM_REFERRAL_CREW:
+        description = _ms(TOOLTIPS.CUSTOMCREW_REFERRAL_BODY, value=CrewTypes.SKILL_100)
     elif rawItem.type == ItemPackType.CUSTOM_SUPPLY_POINT:
         description = _ms(EPIC_BATTLE.EPICBATTLEITEM_SUPPLYPOINTS_DESCRIPTION)
     elif rawItem.type == ItemPackType.CUSTOM_REWARD_POINT:
         description = _ms(EPIC_BATTLE.EPICBATTLEITEM_REWARDPOINTS_DESCRIPTION)
-    elif rawItem.type in ItemPackTypeGroup.CREW or rawItem.type == ItemPackType.CUSTOM_CREW:
+    elif rawItem.type in ItemPackTypeGroup.CREW:
         if rawItem.type == ItemPackType.CREW_CUSTOM:
             description = _ms(TOOLTIPS.CREWCUSTOM_BODY)
         else:
             description = _ms(TOOLTIPS.CREW_BODY, value={ItemPackType.CREW_50: CrewTypes.SKILL_50,
              ItemPackType.CREW_75: CrewTypes.SKILL_75,
-             ItemPackType.CREW_100: CrewTypes.SKILL_100,
-             ItemPackType.CUSTOM_CREW: CrewTypes.SKILL_100}.get(rawItem.type))
+             ItemPackType.CREW_100: CrewTypes.SKILL_100}.get(rawItem.type))
     else:
         description = rawItem.description or ''
     return description

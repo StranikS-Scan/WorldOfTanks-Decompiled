@@ -3,24 +3,45 @@
 import importlib
 from collections import namedtuple
 from functools import partial
+import nations
+import resource_helper
 from items import _xml, vehicles
 from helpers.html import translation
-import nations
 from tutorial.data import chapter as tutorial_chapter
 from tutorial.data import effects
 from tutorial.data import conditions as tut_conditions
-from tutorial.data.events import GUI_EVENT_TYPE
+from tutorial.data.events import GuiEventType
 from tutorial.control.context import SOUND_EVENT
 from tutorial.logger import LOG_ERROR
-import resource_helper
 _EFFECT_TYPE = effects.EFFECT_TYPE
 _COND_STATE = tut_conditions.CONDITION_STATE
+_CheckedComponentState = namedtuple('CheckedComponentState', ('state', 'value'))
 
 def parseID(xmlCtx, section, msg):
     entityID = section.asString
     if not entityID:
         _xml.raiseWrongXml(xmlCtx, section.name, msg)
     return entityID
+
+
+def _parseOneState(xml, section):
+    checkedState = parseID(xml, section['state'], 'Specify ui state')
+    neededValue = _xml.readBool(xml, section, 'value')
+    return _CheckedComponentState(checkedState, neededValue)
+
+
+def _parseNeededState(xmlCtx, section):
+    stateSection = section['checked-ui-state']
+    if not stateSection:
+        return None
+    else:
+        result = []
+        for name, subSection in stateSection.items():
+            if name == 'simple-state':
+                result.append(_parseOneState(xmlCtx, subSection))
+            _xml.raiseWrongXml(xmlCtx, section, 'Tag %s are not found' % name)
+
+        return result if result else None
 
 
 def _readFlagCondition(xmlCtx, section, state, flags):
@@ -114,6 +135,33 @@ def _readVarCondition(xmlCtx, section, _):
         return None
 
 
+def _readConnectedItemCondition(xmlCtx, section, _=None):
+    hintID = parseID(xmlCtx, section['hint-id'], 'Specify a hint ID')
+    status = _xml.readBool(xmlCtx, section, 'value')
+    return tut_conditions.ConnectedItemCondition(hintID, status)
+
+
+def _readComplexCondition(xmlCtx, section):
+    items = []
+    item = None
+    for name, subSection in section.items():
+        if name == 'condition-hint-showed':
+            item = _readConnectedItemCondition(xmlCtx, subSection)
+        else:
+            _xml.raiseWrongXml(xmlCtx, section, 'Tag %s are not found' % name)
+        items.append(item)
+
+    return items
+
+
+def _readComplexConditionAnd(xmlCtx, section, _):
+    return tut_conditions.ComplexConditionAnd(_readComplexCondition(xmlCtx, section))
+
+
+def _readComplexConditionOr(xmlCtx, section, _):
+    return tut_conditions.ComplexConditionOr(_readComplexCondition(xmlCtx, section))
+
+
 def _parseEffectTriggeredCondition(xmlCtx, section, state):
     entityID = parseID(xmlCtx, section, 'Specify a entity ID')
     return tut_conditions.EffectTriggeredCondition(entityID, state)
@@ -177,7 +225,10 @@ _BASE_CONDITION_TAGS = {'active': lambda xmlCtx, section, flags: _readFlagCondit
  'on-scene': lambda xmlCtx, section, flags: _readCurrentSceneCondition(xmlCtx, section, _COND_STATE.ACTIVE),
  'not-on-scene': lambda xmlCtx, section, flags: _readCurrentSceneCondition(xmlCtx, section, ~_COND_STATE.ACTIVE),
  'view-present': lambda xmlCtx, section, flags: _readViewPresentCondition(xmlCtx, section, _COND_STATE.ACTIVE),
- 'view-not-present': lambda xmlCtx, section, flags: _readViewPresentCondition(xmlCtx, section, ~_COND_STATE.ACTIVE)}
+ 'view-not-present': lambda xmlCtx, section, flags: _readViewPresentCondition(xmlCtx, section, ~_COND_STATE.ACTIVE),
+ 'condition-hint-showed': _readConnectedItemCondition,
+ 'condition-and': _readComplexConditionAnd,
+ 'condition-or': _readComplexConditionOr}
 
 class ConditionTags(object):
 
@@ -213,11 +264,11 @@ def _parseConditions(xmlCtx, section, flags):
     return readConditions(xmlCtx, condSec, flags) if condSec is not None else None
 
 
-ACTION_TAGS = {'click': GUI_EVENT_TYPE.CLICK,
- 'click-outside': GUI_EVENT_TYPE.CLICK_OUTSIDE,
- 'esc': GUI_EVENT_TYPE.ESC,
- 'enable': GUI_EVENT_TYPE.ENABLE,
- 'disable': GUI_EVENT_TYPE.DISABLE}
+ACTION_TAGS = {'click': GuiEventType.CLICK,
+ 'click-outside': GuiEventType.CLICK_OUTSIDE,
+ 'esc': GuiEventType.ESC,
+ 'enable': GuiEventType.ENABLE,
+ 'disable': GuiEventType.DISABLE}
 
 def parseAction(xmlCtx, section, flags):
     name = section.name
@@ -780,23 +831,23 @@ def _readAction(xmlCtx, section, eventType, flags):
 
 
 def _readClickAction(xmlCtx, section, flags):
-    return _readAction(xmlCtx, section, GUI_EVENT_TYPE.CLICK, flags)
+    return _readAction(xmlCtx, section, GuiEventType.CLICK, flags)
 
 
 def _readClickOutsideAction(xmlCtx, section, flags):
-    return _readAction(xmlCtx, section, GUI_EVENT_TYPE.CLICK_OUTSIDE, flags)
+    return _readAction(xmlCtx, section, GuiEventType.CLICK_OUTSIDE, flags)
 
 
 def _readEscapeAction(xmlCtx, section, flags):
-    return _readAction(xmlCtx, section, GUI_EVENT_TYPE.ESC, flags)
+    return _readAction(xmlCtx, section, GuiEventType.ESC, flags)
 
 
 def _readEnableAction(xmlCtx, section, flags):
-    return _readAction(xmlCtx, section, GUI_EVENT_TYPE.ENABLE, flags)
+    return _readAction(xmlCtx, section, GuiEventType.ENABLE, flags)
 
 
 def _readDisableAction(xmlCtx, section, flags):
-    return _readAction(xmlCtx, section, GUI_EVENT_TYPE.DISABLE, flags)
+    return _readAction(xmlCtx, section, GuiEventType.DISABLE, flags)
 
 
 def _readGameAttribute(xmlCtx, section, _):
@@ -904,5 +955,9 @@ def parseHint(xmlCtx, section):
         sectionInfo['padding'] = None
     sectionInfo['hasBox'] = section.readBool('has-box', True)
     sectionInfo['conditions'] = _parseConditions(xmlCtx, section, [])
+    sectionInfo['checked-ui-state'] = _parseNeededState(xmlCtx, section)
     sectionInfo['equalActions'] = section.readBool('equal-actions', False)
+    sectionInfo['ignoreOutsideClick'] = section.readBool('ignore-outside-click', False)
+    sectionInfo['updateRuntime'] = section.readBool('update-runtime', False)
+    sectionInfo['checkViewArea'] = section.readBool('check-view-area', False)
     return sectionInfo

@@ -176,7 +176,7 @@ class HangarCameraManager(object):
         if movementMode != IMMEDIATE_CAMERA_MOVEMENT_MODE:
             self.__cam.movementMode = movementMode
         if camConstraints is not None:
-            self.__camConstraints = camConstraints
+            self.__camConstraints = list(camConstraints)
         else:
             self.__camConstraints[0] = cfg['cam_pitch_constr']
             self.__camConstraints[1] = cfg['cam_yaw_constr']

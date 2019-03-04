@@ -73,6 +73,6 @@ class CommanderSlotModel(ViewModel):
         self._addStringProperty('title', '')
         self._addStringProperty('defPrice', '')
         self._addBoolProperty('isFree', False)
-        self._addNumberProperty('discount', 0)
+        self._addNumberProperty('discount', -1)
         self._addBoolProperty('slotIsEnabled', True)
         self._addBoolProperty('showBootcampAnim', False)

@@ -459,6 +459,17 @@ class MENU(object):
     NATION_TREE_TITLE_SWEDEN = '#menu:nation_tree/title/sweden'
     NATION_TREE_TITLE_POLAND = '#menu:nation_tree/title/poland'
     NATION_TREE_TITLE_ITALY = '#menu:nation_tree/title/italy'
+    NATION_TREE_BLUEPRINT_TITLE_USSR = '#menu:nation_tree/blueprint_title/ussr'
+    NATION_TREE_BLUEPRINT_TITLE_GERMANY = '#menu:nation_tree/blueprint_title/germany'
+    NATION_TREE_BLUEPRINT_TITLE_USA = '#menu:nation_tree/blueprint_title/usa'
+    NATION_TREE_BLUEPRINT_TITLE_FRANCE = '#menu:nation_tree/blueprint_title/france'
+    NATION_TREE_BLUEPRINT_TITLE_UK = '#menu:nation_tree/blueprint_title/uk'
+    NATION_TREE_BLUEPRINT_TITLE_CHINA = '#menu:nation_tree/blueprint_title/china'
+    NATION_TREE_BLUEPRINT_TITLE_JAPAN = '#menu:nation_tree/blueprint_title/japan'
+    NATION_TREE_BLUEPRINT_TITLE_CZECH = '#menu:nation_tree/blueprint_title/czech'
+    NATION_TREE_BLUEPRINT_TITLE_SWEDEN = '#menu:nation_tree/blueprint_title/sweden'
+    NATION_TREE_BLUEPRINT_TITLE_POLAND = '#menu:nation_tree/blueprint_title/poland'
+    NATION_TREE_BLUEPRINT_TITLE_ITALY = '#menu:nation_tree/blueprint_title/italy'
     SERVERSTATS_PLAYERSCOUNT = '#menu:serverStats/playersCount'
     SERVERSTATS_ARENASCOUNT = '#menu:serverStats/arenasCount'
     SERVERSTATS_PLAYERSINARENACOUNT = '#menu:serverStats/playersInArenaCount'
@@ -912,6 +923,11 @@ class MENU(object):
     GOLDFISH_EVENTTEXT = '#menu:goldFish/eventText'
     GOLDFISH_EVENTLINK = '#menu:goldFish/eventLink'
     GOLDFISH_BUTTONCLOSE = '#menu:goldFish/buttonClose'
+    BLUEPRINTS_CONVERSIONVIEW_TITLE = '#menu:blueprints/conversionView/title'
+    BLUEPRINTS_CONVERSIONVIEW_MULTICONVERSION_TITLE = '#menu:blueprints/conversionView/multiConversion/title'
+    BLUEPRINTS_CONVERSIONVIEW_MULTICONVERSION_DESCRIPTION = '#menu:blueprints/conversionView/multiConversion/description'
+    BLUEPRINTS_CONVERSIONVIEW_BTNCONVERT = '#menu:blueprints/conversionView/btnConvert'
+    BLUEPRINTS_CONVERSIONVIEW_BTNCANCEL = '#menu:blueprints/conversionView/btnCancel'
     MODULEINFO_TITLE = '#menu:moduleInfo/title'
     MODULEINFO_PARAMETERSLABEL = '#menu:moduleInfo/parametersLabel'
     MODULEINFO_PARAMETERSCLIPGUNLABEL = '#menu:moduleInfo/parametersClipGunLabel'
@@ -1021,24 +1037,28 @@ class MENU(object):
     UNLOCKS_UNLOCKBUTTON = '#menu:unlocks/unlockButton'
     UNLOCKS_EXCHANGEBUTTON = '#menu:unlocks/exchangeButton'
     UNLOCKS_XPTOTMENCHECKBOX = '#menu:unlocks/xpToTmenCheckbox'
-    RESEARCH_PREMIUM_BENEFITS_HEAD = '#menu:research/premium/benefits/head'
-    RESEARCH_SPECIAL_BENEFITS_HEAD = '#menu:research/special/benefits/head'
     RESEARCH_PREMIUM_BENEFITS_FIRST = '#menu:research/premium/benefits/first'
     RESEARCH_PREMIUM_BENEFITS_SECOND = '#menu:research/premium/benefits/second'
     RESEARCH_PREMIUM_BENEFITS_THIRD = '#menu:research/premium/benefits/third'
     RESEARCH_PREMIUM_BENEFITS_FOURTH = '#menu:research/premium/benefits/fourth'
-    RESEARCH_PREMIUM_BENEFITS_FIFTH = '#menu:research/premium/benefits/fifth'
-    RESEARCH_PREMIUM_BENEFITS_PREMIUMVEHICLEFIRST = '#menu:research/premium/benefits/premiumVehicleFirst'
-    RESEARCH_PREMIUM_BENEFITS_PREMIUMVEHICLESECOND = '#menu:research/premium/benefits/premiumVehicleSecond'
-    RESEARCH_PREMIUM_DESCRIPTION_TITTE = '#menu:research/premium/description/titte'
+    RESEARCH_PREMIUM_DISCOUNT = '#menu:research/premium/discount'
     RESEARCH_LABELS_BUTTON_SHOWINHANGAR = '#menu:research/labels/button/showInHangar'
     RESEARCH_LABELS_BUTTON_ADDTOCOMPARE = '#menu:research/labels/button/addToCompare'
-    RESEARCH_SHOWINPREVIEWBTN_LABEL = '#menu:research/showInPreviewBtn/label'
+    RESEARCH_LABELS_BUTTON_VEHICLEPREVIEW = '#menu:research/labels/button/vehiclePreview'
     RESEARCH_LABELS_VEHXP = '#menu:research/labels/vehXP'
     RESEARCH_LABELS_FREEXP = '#menu:research/labels/freeXP'
     RESEARCH_LABELS_TOTALXP = '#menu:research/labels/totalXP'
+    RESEARCH_STATUS_TRADEIN = '#menu:research/status/tradeIn'
+    RESEARCH_STATUS_RENTLEFT = '#menu:research/status/rentLeft'
     RESEARCH_STATUS_HISTORICALMODULES = '#menu:research/status/historicalModules'
+    RESEARCH_RESTORE_COMMMONINFO = '#menu:research/restore/commmonInfo'
+    RESEARCH_RESTORE_DUEDATE = '#menu:research/restore/dueDate'
+    RESEARCH_LABELS_BUTTON_BUY = '#menu:research/labels/button/buy'
     RESEARCH_LABELS_BUTTON_RESTORE = '#menu:research/labels/button/restore'
+    RESEARCH_LABELS_BUTTON_TRADE_IN = '#menu:research/labels/button/trade-in'
+    RESEARCH_LABELS_BUTTON_RENT = '#menu:research/labels/button/rent'
+    RESEARCH_LABELS_BLUEPRINT = '#menu:research/labels/blueprint'
+    RESEARCH_LABELS_BLUEPRINTCOMPLETE = '#menu:research/labels/blueprintComplete'
     TRADE_IN = '#menu:trade/in'
     BARRACKS_MENU_ROLEFILTER_TEXTFIELD = '#menu:barracks/menu/roleFilter/textfield'
     BARRACKS_BTNBUYTANKMAN = '#menu:barracks/btnBuyTankman'
@@ -1407,6 +1427,7 @@ class MENU(object):
     CONTEXTMENU_WITHDRAWINVITATIONTOSQUAD = '#menu:contextMenu/withdrawInvitationToSquad'
     CONTEXTMENU_ACCEPTINVITATIONTOSQUAD = '#menu:contextMenu/acceptInvitationToSquad'
     CONTEXTMENU_REJECTINVITATIONTOSQUAD = '#menu:contextMenu/rejectInvitationToSquad'
+    CONTEXTMENU_GOTOBLUEPRINT = '#menu:contextMenu/goToBlueprint'
     DENUNCIATION_1 = '#menu:denunciation/1'
     DENUNCIATION_2 = '#menu:denunciation/2'
     DENUNCIATION_3 = '#menu:denunciation/3'
@@ -1809,8 +1830,38 @@ class MENU(object):
     CST_ITEM_CTX_MENU_RENTRENEW = '#menu:cst_item_ctx_menu/rentRenew'
     CST_ITEM_CTX_MENU_AUTOPROLONGATIONON = '#menu:cst_item_ctx_menu/autoprolongationOn'
     CST_ITEM_CTX_MENU_AUTOPROLONGATIONOFF = '#menu:cst_item_ctx_menu/autoprolongationOff'
+    CST_ITEM_CTX_MENU_CONVERTBLUEPRINT = '#menu:cst_item_ctx_menu/convertBlueprint'
+    CST_ITEM_CTX_MENU_CONVERTBLUEPRINTMAX = '#menu:cst_item_ctx_menu/convertBlueprintMax'
+    CST_ITEM_CTX_MENU_CONVERTBLUEPRINTMAXCOUNT = '#menu:cst_item_ctx_menu/convertBlueprintMaxCount'
+    CST_ITEM_CTX_MENU_SHOWBLUEPRINT = '#menu:cst_item_ctx_menu/showBlueprint'
     VIEWHEADER_BACKBTN_LABEL = '#menu:viewHeader/backBtn/label'
+    VIEWHEADER_BACKBTN_DESCRLABEL_TECHTREE = '#menu:viewHeader/backBtn/descrLabel/techtree'
+    VIEWHEADER_BACKBTN_DESCRLABEL_HANGAR = '#menu:viewHeader/backBtn/descrLabel/hangar'
     VIEWHEADER_CLOSEBTN_LABEL = '#menu:viewHeader/closeBtn/label'
+    VIEWHEADER_BACKBTN_DESCRLABEL_STORAGE = '#menu:viewHeader/backBtn/descrLabel/storage'
+    VIEWHEADER_BACKBTN_DESCRLABEL_RESEARCH = '#menu:viewHeader/backBtn/descrLabel/research'
+    VIEWHEADER_BACKBTN_DESCRLABEL_TECHTREE_USSR = '#menu:viewHeader/backBtn/descrLabel/techtree/ussr'
+    VIEWHEADER_BACKBTN_DESCRLABEL_TECHTREE_GERMANY = '#menu:viewHeader/backBtn/descrLabel/techtree/germany'
+    VIEWHEADER_BACKBTN_DESCRLABEL_TECHTREE_USA = '#menu:viewHeader/backBtn/descrLabel/techtree/usa'
+    VIEWHEADER_BACKBTN_DESCRLABEL_TECHTREE_FRANCE = '#menu:viewHeader/backBtn/descrLabel/techtree/france'
+    VIEWHEADER_BACKBTN_DESCRLABEL_TECHTREE_UK = '#menu:viewHeader/backBtn/descrLabel/techtree/uk'
+    VIEWHEADER_BACKBTN_DESCRLABEL_TECHTREE_CHINA = '#menu:viewHeader/backBtn/descrLabel/techtree/china'
+    VIEWHEADER_BACKBTN_DESCRLABEL_TECHTREE_JAPAN = '#menu:viewHeader/backBtn/descrLabel/techtree/japan'
+    VIEWHEADER_BACKBTN_DESCRLABEL_TECHTREE_CZECH = '#menu:viewHeader/backBtn/descrLabel/techtree/czech'
+    VIEWHEADER_BACKBTN_DESCRLABEL_TECHTREE_SWEDEN = '#menu:viewHeader/backBtn/descrLabel/techtree/sweden'
+    VIEWHEADER_BACKBTN_DESCRLABEL_TECHTREE_POLAND = '#menu:viewHeader/backBtn/descrLabel/techtree/poland'
+    VIEWHEADER_BACKBTN_DESCRLABEL_TECHTREE_ITALY = '#menu:viewHeader/backBtn/descrLabel/techtree/italy'
+    VIEWHEADER_BACKBTN_DESCRLABEL_TECHTREE_USSR_BLUEPRINTS = '#menu:viewHeader/backBtn/descrLabel/techtree/ussr/blueprints'
+    VIEWHEADER_BACKBTN_DESCRLABEL_TECHTREE_GERMANY_BLUEPRINTS = '#menu:viewHeader/backBtn/descrLabel/techtree/germany/blueprints'
+    VIEWHEADER_BACKBTN_DESCRLABEL_TECHTREE_USA_BLUEPRINTS = '#menu:viewHeader/backBtn/descrLabel/techtree/usa/blueprints'
+    VIEWHEADER_BACKBTN_DESCRLABEL_TECHTREE_FRANCE_BLUEPRINTS = '#menu:viewHeader/backBtn/descrLabel/techtree/france/blueprints'
+    VIEWHEADER_BACKBTN_DESCRLABEL_TECHTREE_UK_BLUEPRINTS = '#menu:viewHeader/backBtn/descrLabel/techtree/uk/blueprints'
+    VIEWHEADER_BACKBTN_DESCRLABEL_TECHTREE_CHINA_BLUEPRINTS = '#menu:viewHeader/backBtn/descrLabel/techtree/china/blueprints'
+    VIEWHEADER_BACKBTN_DESCRLABEL_TECHTREE_JAPAN_BLUEPRINTS = '#menu:viewHeader/backBtn/descrLabel/techtree/japan/blueprints'
+    VIEWHEADER_BACKBTN_DESCRLABEL_TECHTREE_CZECH_BLUEPRINTS = '#menu:viewHeader/backBtn/descrLabel/techtree/czech/blueprints'
+    VIEWHEADER_BACKBTN_DESCRLABEL_TECHTREE_SWEDEN_BLUEPRINTS = '#menu:viewHeader/backBtn/descrLabel/techtree/sweden/blueprints'
+    VIEWHEADER_BACKBTN_DESCRLABEL_TECHTREE_POLAND_BLUEPRINTS = '#menu:viewHeader/backBtn/descrLabel/techtree/poland/blueprints'
+    VIEWHEADER_BACKBTN_DESCRLABEL_TECHTREE_ITALY_BLUEPRINTS = '#menu:viewHeader/backBtn/descrLabel/techtree/italy/blueprints'
     INTERNET_PROVIDER_ROSTELECOM_NAME = '#menu:internet_provider/Rostelecom/name'
     INTERNET_PROVIDER_ROSTELECOM_TARIFF = '#menu:internet_provider/Rostelecom/tariff'
     INTERNET_PROVIDER_BELTELECOM_NAME = '#menu:internet_provider/Beltelecom/name'
@@ -1819,6 +1870,8 @@ class MENU(object):
     INTERNET_PROVIDER_KYIVSTAR_TARIFF = '#menu:internet_provider/Kyivstar/tariff'
     INTERNET_PROVIDER_KAZAKHTELECOM_NAME = '#menu:internet_provider/Kazakhtelecom/name'
     INTERNET_PROVIDER_KAZAKHTELECOM_TARIFF = '#menu:internet_provider/Kazakhtelecom/tariff'
+    PROGRESSIVEREWARD_WIDGET_TITLE = '#menu:progressiveReward/widget/title'
+    PROGRESSIVEREWARD_WIDGET_DESC = '#menu:progressiveReward/widget/desc'
     DATETIME_WEEKDAYS_SHORT_ENUM = (DATETIME_WEEKDAYS_SHORT_1,
      DATETIME_WEEKDAYS_SHORT_2,
      DATETIME_WEEKDAYS_SHORT_3,
@@ -1919,8 +1972,20 @@ class MENU(object):
      CONTEXTMENU_WITHDRAWINVITATIONTOSQUAD,
      CONTEXTMENU_ACCEPTINVITATIONTOSQUAD,
      CONTEXTMENU_REJECTINVITATIONTOSQUAD,
+     CONTEXTMENU_GOTOBLUEPRINT,
      CONTEXTMENU_VIEWCLANPROFILE,
      CONTEXTMENU_COPYCLANNAME)
+    NATION_TREE_TITLE_ENUM = (NATION_TREE_TITLE_USSR,
+     NATION_TREE_TITLE_GERMANY,
+     NATION_TREE_TITLE_USA,
+     NATION_TREE_TITLE_FRANCE,
+     NATION_TREE_TITLE_UK,
+     NATION_TREE_TITLE_CHINA,
+     NATION_TREE_TITLE_JAPAN,
+     NATION_TREE_TITLE_CZECH,
+     NATION_TREE_TITLE_SWEDEN,
+     NATION_TREE_TITLE_POLAND,
+     NATION_TREE_TITLE_ITALY)
     DATETIME_MONTHS_FULL_ENUM = (DATETIME_MONTHS_FULL_1,
      DATETIME_MONTHS_FULL_2,
      DATETIME_MONTHS_FULL_3,
@@ -2176,6 +2241,32 @@ class MENU(object):
      BOOSTER_BONUS_BOOSTER_FREE_XP,
      BOOSTER_BONUS_BOOSTER_CREW_XP,
      BOOSTER_BONUS_BOOSTER_CREDITS)
+    VIEWHEADER_BACKBTN_DESCRLABEL_ENUM = (VIEWHEADER_BACKBTN_DESCRLABEL_TECHTREE,
+     VIEWHEADER_BACKBTN_DESCRLABEL_HANGAR,
+     VIEWHEADER_BACKBTN_DESCRLABEL_STORAGE,
+     VIEWHEADER_BACKBTN_DESCRLABEL_RESEARCH,
+     VIEWHEADER_BACKBTN_DESCRLABEL_TECHTREE_USSR,
+     VIEWHEADER_BACKBTN_DESCRLABEL_TECHTREE_GERMANY,
+     VIEWHEADER_BACKBTN_DESCRLABEL_TECHTREE_USA,
+     VIEWHEADER_BACKBTN_DESCRLABEL_TECHTREE_FRANCE,
+     VIEWHEADER_BACKBTN_DESCRLABEL_TECHTREE_UK,
+     VIEWHEADER_BACKBTN_DESCRLABEL_TECHTREE_CHINA,
+     VIEWHEADER_BACKBTN_DESCRLABEL_TECHTREE_JAPAN,
+     VIEWHEADER_BACKBTN_DESCRLABEL_TECHTREE_CZECH,
+     VIEWHEADER_BACKBTN_DESCRLABEL_TECHTREE_SWEDEN,
+     VIEWHEADER_BACKBTN_DESCRLABEL_TECHTREE_POLAND,
+     VIEWHEADER_BACKBTN_DESCRLABEL_TECHTREE_ITALY,
+     VIEWHEADER_BACKBTN_DESCRLABEL_TECHTREE_USSR_BLUEPRINTS,
+     VIEWHEADER_BACKBTN_DESCRLABEL_TECHTREE_GERMANY_BLUEPRINTS,
+     VIEWHEADER_BACKBTN_DESCRLABEL_TECHTREE_USA_BLUEPRINTS,
+     VIEWHEADER_BACKBTN_DESCRLABEL_TECHTREE_FRANCE_BLUEPRINTS,
+     VIEWHEADER_BACKBTN_DESCRLABEL_TECHTREE_UK_BLUEPRINTS,
+     VIEWHEADER_BACKBTN_DESCRLABEL_TECHTREE_CHINA_BLUEPRINTS,
+     VIEWHEADER_BACKBTN_DESCRLABEL_TECHTREE_JAPAN_BLUEPRINTS,
+     VIEWHEADER_BACKBTN_DESCRLABEL_TECHTREE_CZECH_BLUEPRINTS,
+     VIEWHEADER_BACKBTN_DESCRLABEL_TECHTREE_SWEDEN_BLUEPRINTS,
+     VIEWHEADER_BACKBTN_DESCRLABEL_TECHTREE_POLAND_BLUEPRINTS,
+     VIEWHEADER_BACKBTN_DESCRLABEL_TECHTREE_ITALY_BLUEPRINTS)
     BOOSTER_DESCRIPTION_BONUSVALUETIME_ENUM = (BOOSTER_DESCRIPTION_BONUSVALUETIME_BOOSTER_XP,
      BOOSTER_DESCRIPTION_BONUSVALUETIME_BOOSTER_FREE_XP,
      BOOSTER_DESCRIPTION_BONUSVALUETIME_BOOSTER_CREW_XP,
@@ -2356,7 +2447,11 @@ class MENU(object):
      CST_ITEM_CTX_MENU_REMOVE,
      CST_ITEM_CTX_MENU_RENTRENEW,
      CST_ITEM_CTX_MENU_AUTOPROLONGATIONON,
-     CST_ITEM_CTX_MENU_AUTOPROLONGATIONOFF)
+     CST_ITEM_CTX_MENU_AUTOPROLONGATIONOFF,
+     CST_ITEM_CTX_MENU_CONVERTBLUEPRINT,
+     CST_ITEM_CTX_MENU_CONVERTBLUEPRINTMAX,
+     CST_ITEM_CTX_MENU_CONVERTBLUEPRINTMAXCOUNT,
+     CST_ITEM_CTX_MENU_SHOWBLUEPRINT)
     HANGAR_HEADER_PERSONAL_QUESTS_LABEL_ENUM = (HANGAR_HEADER_PERSONAL_QUESTS_LABEL_ACTIVE,
      HANGAR_HEADER_PERSONAL_QUESTS_LABEL_EMPTY,
      HANGAR_HEADER_PERSONAL_QUESTS_LABEL_INACTIVE,
@@ -2664,6 +2759,24 @@ class MENU(object):
     def boosterBonusLocale(cls, value):
         outcome = '#menu:booster/bonus/{}'.format(value)
         if outcome not in cls.BOOSTER_BONUS_ENUM:
+            LOG_WARNING('Localization key "{}" not found'.format(outcome))
+            return None
+        else:
+            return outcome
+
+    @classmethod
+    def viewheader_backbtn_descrlabel(cls, key0):
+        outcome = '#menu:viewHeader/backBtn/descrLabel/{}'.format(key0)
+        if outcome not in cls.VIEWHEADER_BACKBTN_DESCRLABEL_ENUM:
+            LOG_WARNING('Localization key "{}" not found'.format(outcome))
+            return None
+        else:
+            return outcome
+
+    @classmethod
+    def getNationTreeTitle(cls, key0):
+        outcome = '#menu:nation_tree/title/{}'.format(key0)
+        if outcome not in cls.NATION_TREE_TITLE_ENUM:
             LOG_WARNING('Localization key "{}" not found'.format(outcome))
             return None
         else:

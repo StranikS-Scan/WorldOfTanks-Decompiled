@@ -1,32 +1,17 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/pub/dialog_window.py
 import logging
-from functools import partial
 from gui.Scaleform.genConsts.APP_CONTAINERS_NAMES import APP_CONTAINERS_NAMES
 from shared_utils import CONST_CONTAINER
-import BigWorld
 from async import async, await, AsyncEvent, AsyncReturn, AsyncScope, BrokenPromiseError
-from frameworks.wulf import Array, ViewFlags
+from frameworks.wulf import ViewFlags
 from frameworks.wulf import WindowFlags, Window
-from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.impl.gen import R
-from gui.impl.gen.view_models.ui_kit.currency_item_model import CurrencyItemModel
 from gui.impl.gen.view_models.ui_kit.dialog_button_model import DialogButtonModel
 from gui.impl.gen.view_models.windows.dialog_window_model import DialogWindowModel
 from gui.impl.pub.view_impl import ViewImpl
 from gui.impl.wrappers.background_blur import WGUIBackgroundBlurSupportImpl
-from gui.shared.money import Currency
-from helpers import dependency
-from skeletons.gui.game_control import IWalletController
-from skeletons.gui.shared import IItemsCache
 _logger = logging.getLogger(__name__)
-
-class DialogShine(CONST_CONTAINER):
-    NONE = 0
-    NORMAL = R.images.gui.maps.uiKit.dialogs.greenShine()
-    RED = R.images.gui.maps.uiKit.dialogs.redShine()
-    YELLOW = R.images.gui.maps.uiKit.dialogs.yellowShine()
-
 
 class DialogButtons(CONST_CONTAINER):
     SUBMIT = DialogButtonModel.BTN_SUBMIT
@@ -39,6 +24,12 @@ class DialogButtons(CONST_CONTAINER):
      RESEARCH)
 
 
+class DialogLayer(CONST_CONTAINER):
+    WINDOW = WindowFlags.WINDOW
+    TOP_WINDOW = WindowFlags.DIALOG
+    OVERLAY = WindowFlags.OVERLAY
+
+
 class DialogContent(ViewImpl):
     __slots__ = ()
 
@@ -47,27 +38,25 @@ class DialogContent(ViewImpl):
 
 
 class DialogWindow(Window):
-    __slots__ = ('__blur', '__scope', '__event', '__result', '__currencyAdapter', '__buttons')
+    __slots__ = ('__blur', '__scope', '__event', '__result')
 
-    def __init__(self, content, bottomContent=None, parent=None, showCurrency=False, enableBlur=True):
-        super(DialogWindow, self).__init__(wndFlags=WindowFlags.DIALOG | WindowFlags.RESIZABLE, decorator=ViewImpl(R.views.dialogWindow(), ViewFlags.WINDOW_DECORATOR, DialogWindowModel), content=content, parent=parent)
+    def __init__(self, content=None, bottomContent=None, parent=None, balanceContent=None, enableBlur=True, layer=DialogLayer.TOP_WINDOW):
+        if content is not None:
+            pass
+        super(DialogWindow, self).__init__(wndFlags=layer | WindowFlags.RESIZABLE, decorator=ViewImpl(R.views.dialogWindow(), ViewFlags.WINDOW_DECORATOR, DialogWindowModel), content=content, parent=parent)
         if bottomContent is not None:
             self._setBottomContent(bottomContent)
         self.__blur = WGUIBackgroundBlurSupportImpl()
         self.__scope = AsyncScope()
         self.__event = AsyncEvent(scope=self.__scope)
         self.__result = DialogButtons.CANCEL
-        self.__buttons = {}
         if enableBlur:
-            self.__blur.enable(APP_CONTAINERS_NAMES.DIALOGS, [APP_CONTAINERS_NAMES.VIEWS,
-             APP_CONTAINERS_NAMES.WINDOWS,
-             APP_CONTAINERS_NAMES.SUBVIEW,
-             APP_CONTAINERS_NAMES.BROWSER])
-        self.__currencyAdapter = None
-        if showCurrency:
-            self.__currencyAdapter = DialogWindowCurrencyAdapter()
-            self.viewModel.currency.setItems(self.__currencyAdapter.currencyModel)
-        self.viewModel.setHasCurrencyBlock(showCurrency)
+            blurLayers = [APP_CONTAINERS_NAMES.VIEWS, APP_CONTAINERS_NAMES.SUBVIEW, APP_CONTAINERS_NAMES.BROWSER]
+            if layer > DialogLayer.WINDOW:
+                blurLayers.append(APP_CONTAINERS_NAMES.WINDOWS)
+            self.__blur.enable(APP_CONTAINERS_NAMES.DIALOGS, blurLayers)
+        if balanceContent is not None:
+            self.viewModel.setBalanceContent(balanceContent)
         return
 
     @async
@@ -97,15 +86,11 @@ class DialogWindow(Window):
         self.viewModel.buttons.onUserItemClicked += self._onButtonClick
 
     def _finalize(self):
-        if self.__currencyAdapter is not None:
-            self.__currencyAdapter.finalize()
         self.viewModel.onClosed -= self._onClosed
         self.viewModel.buttons.onUserItemClicked -= self._onButtonClick
-        self.__buttons.clear()
         super(DialogWindow, self)._finalize()
         self.__scope.destroy()
         self.__blur.disable()
-        return
 
     def _onClosed(self, _=None):
         self.destroy()
@@ -113,16 +98,21 @@ class DialogWindow(Window):
     def _removeAllButtons(self):
         self.viewModel.buttons.setItems([])
 
-    def _addButton(self, name, label, isFocused=False):
+    def _addButton(self, name, label, isFocused=False, invalidateAll=False):
         button = DialogButtonModel()
         button.setName(name)
         button.setLabel(label)
         button.setDoSetFocus(isFocused)
-        self.__buttons[name] = button
         self.viewModel.buttons.addViewModel(button, isSelected=isFocused)
+        if invalidateAll:
+            self.viewModel.buttons.invalidate()
 
     def _getButton(self, name):
-        return self.__buttons[name] if name in self.__buttons else None
+        for item in self.viewModel.buttons.getItems():
+            if name == item.getName():
+                return item
+
+        return None
 
     def _onButtonClick(self, item):
         self.__result = item.getName()
@@ -131,74 +121,20 @@ class DialogWindow(Window):
     def _setBackgroundImage(self, value):
         self.viewModel.setBackgroundImage(value)
 
-    def _setHasCloseButton(self, value):
-        self.viewModel.setHasCloseBtn(value)
-
     def _setBottomContent(self, value):
         self.viewModel.setBottomContent(value)
 
-    def _setBackgroundShine(self, value):
-        self.viewModel.setBackgroundShineImage(value)
+    def _setContent(self, value):
+        self.viewModel.setContent(value)
 
+    def _setIconHighlight(self, value):
+        self.viewModel.setIconHighlight(value)
 
-class CurrencyStatus(CONST_CONTAINER):
-    IN_PROGRESS = 0
-    NOT_AVAILABLE = 1
-    AVAILABLE = 2
+    def _setAnimationHighlight(self, value):
+        self.viewModel.setAnimationHighlight(value)
 
+    def _setPreset(self, value):
+        self.viewModel.setPreset(value)
 
-class DialogWindowCurrencyAdapter(object):
-    itemsCache = dependency.descriptor(IItemsCache)
-    wallet = dependency.descriptor(IWalletController)
-    __slots__ = ('__stats', '__currencyModel', '__currencyIndexes', '__callbacks')
-    __CURRENCY_FORMATTER = {Currency.CREDITS: BigWorld.wg_getIntegralFormat,
-     Currency.GOLD: BigWorld.wg_getGoldFormat,
-     Currency.CRYSTAL: BigWorld.wg_getIntegralFormat,
-     'freeXP': BigWorld.wg_getIntegralFormat}
-
-    def __init__(self):
-        self.__currencyModel = Array()
-        self.__currencyIndexes = []
-        self.__callbacks = {}
-        self.__stats = self.itemsCache.items.stats
-        for currency in Currency.GUI_ALL:
-            self.__addCurrency(currency, self.__getCurrencyFormatter(currency)(self.__stats.actualMoney.get(currency)))
-
-        self.__addCurrency('freeXP', self.__getCurrencyFormatter('freeXP')(self.__stats.actualFreeXP))
-        self.wallet.onWalletStatusChanged += self.__onWalletChanged
-
-    def finalize(self):
-        for currency, callback in self.__callbacks.iteritems():
-            g_clientUpdateManager.removeCallback('stats.{}'.format(currency), callback)
-
-        self.wallet.onWalletStatusChanged -= self.__onWalletChanged
-        self.__callbacks.clear()
-
-    @property
-    def currencyModel(self):
-        return self.__currencyModel
-
-    def __addCurrency(self, currency, value):
-        button = CurrencyItemModel()
-        button.setCurrency(currency)
-        button.setValue(value)
-        self.currencyModel.addViewModel(button)
-        self.__currencyIndexes.append(currency)
-        callback = partial(self.__onCurrencyUpdated, currency)
-        self.__callbacks[currency] = callback
-        g_clientUpdateManager.addCallback('stats.{}'.format(currency), callback)
-
-    def __getCurrencyFormatter(self, currency):
-        return self.__CURRENCY_FORMATTER[currency] if currency in self.__CURRENCY_FORMATTER else BigWorld.wg_getIntegralFormat
-
-    def __onCurrencyUpdated(self, currency, value):
-        index = self.__currencyIndexes.index(currency)
-        self.currencyModel[index].setValue(self.__getCurrencyFormatter(currency)(value) if value is not None else '')
-        return
-
-    def __onWalletChanged(self, status):
-        for currency in Currency.GUI_ALL:
-            self.__onCurrencyUpdated(currency, self.__stats.actualMoney.get(currency) if status[currency] == CurrencyStatus.AVAILABLE else None)
-
-        self.__onCurrencyUpdated('freeXP', self.__stats.actualFreeXP if status['freeXP'] == CurrencyStatus.AVAILABLE else None)
-        return
+    def _serShowSoundId(self, value):
+        self.viewModel.setShowSoundId(value)

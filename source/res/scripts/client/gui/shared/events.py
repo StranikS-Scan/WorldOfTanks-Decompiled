@@ -175,6 +175,7 @@ class ShowDialogEvent(SharedEvent):
     SHOW_SIMPLE_DLG = 'showSimpleDialog'
     SHOW_ICON_DIALOG = 'showIconDialog'
     SHOW_ICON_PRICE_DIALOG = 'showIconPriceDialog'
+    SHOW_CREW_SKINS_COMPENSATION_DIALOG = 'showCrewSkinsCompensationDialog'
     SHOW_DEMOUNT_DEVICE_DIALOG = 'showDemountDeviceDialog'
     SHOW_DESTROY_DEVICE_DIALOG = 'showDestroyDeviceDialog'
     SHOW_PM_CONFIRMATION_DIALOG = 'showPMConfirmationDialog'
@@ -386,7 +387,7 @@ class TutorialEvent(SharedEvent):
     SET_HANGAR_HEADER_ENABLED = 'setHangarHeaderEnabled'
     OVERRIDE_BATTLE_SELECTOR_HINT = 'overrideBattleSelectorHint'
 
-    def __init__(self, eventType, settingsID='', targetID='', reloadIfRun=False, initialChapter=None, restoreIfRun=False, isStopForced=False, isAfterBattle=False):
+    def __init__(self, eventType, settingsID='', targetID='', reloadIfRun=False, initialChapter=None, restoreIfRun=False, isStopForced=False, isAfterBattle=False, state=False):
         super(TutorialEvent, self).__init__(eventType)
         self.settingsID = settingsID
         self.targetID = targetID
@@ -395,6 +396,7 @@ class TutorialEvent(SharedEvent):
         self.restoreIfRun = restoreIfRun
         self.isStopForced = isStopForced
         self.isAfterBattle = isAfterBattle
+        self.componentState = state
 
     def getState(self):
         return {'reloadIfRun': self.reloadIfRun,
@@ -520,6 +522,7 @@ class IngameShopEvent(HasCtxEvent):
 
 class OpenLinkEvent(SharedEvent):
     SPECIFIED = 'openSpecifiedURL'
+    PARSED = 'openParsedURL'
     REGISTRATION = 'openRegistrationURL'
     RECOVERY_PASSWORD = 'openRecoveryPasswordURL'
     PAYMENT = 'openPaymentURL'
@@ -641,3 +644,7 @@ class ReferralProgramEvent(HasCtxEvent):
 
 class AdventCalendarEvent(HasCtxEvent):
     ADVENT_CALENDAR = 'adventCalendar'
+
+
+class ProgressiveRewardEvent(HasCtxEvent):
+    WIDGET_WAS_SHOWN = 'progressiveWidgetWasShown'

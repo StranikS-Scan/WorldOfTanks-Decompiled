@@ -12,6 +12,7 @@ from skeletons.gui.game_control import IIGRController
 
 def _initializeDefaultSettings(core, data, initialized):
     LOG_DEBUG('Initializing server settings.')
+    from account_helpers.counter_settings import dropCounters as dropNewSettingsCounters
     from account_helpers.AccountSettings import AccountSettings
     options = core.options
     gameData = data['gameData'] = {GAME.DATE_TIME_MESSAGE_INDEX: 2,
@@ -82,6 +83,7 @@ def _initializeDefaultSettings(core, data, initialized):
     data['markersData'] = AccountSettings.getSettings('markers')
     data['graphicsData'] = {GAME.LENS_EFFECT: core.getSetting(GAME.LENS_EFFECT)}
     data['marksOnGun'] = {GAME.SHOW_MARKS_ON_GUN: core.getSetting(GAME.SHOW_MARKS_ON_GUN)}
+    dropNewSettingsCounters()
     return
 
 

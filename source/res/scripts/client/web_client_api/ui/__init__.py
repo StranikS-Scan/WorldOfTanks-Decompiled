@@ -20,6 +20,7 @@ from web_client_api.ui.strongholds import StrongholdsWebApiMixin
 from web_client_api.ui.techtree import TechTreeTabWebApiMixin
 from web_client_api.ui.util import UtilWebApiMixin
 from web_client_api.ui.vehicle import VehicleSellWebApiMixin, VehicleCompareWebApiMixin, VehiclePreviewWebApiMixin, VehicleComparisonBasketWebApiMixin
+from web_client_api.ui.waiting import WaitingWebApiMixin
 
 @w2capi(name='open_window', key='window_id')
 class OpenWindowWebApi(OpenBrowserWindowWebApiMixin, ClanWindowWebApiMixin, ProfileWindowWebApiMixin, OpenExternalBrowserWebApiMixin, VehicleSellWebApiMixin, hangar.HangarWindowsWebApiMixin, BoostersWindowWebApiMixin, PremiumWindowWebApiMixin, ManualPageWebApiMixin, ChatWebApiMixin, SquadWebApiMixin, OpenBrowserOverlayWebApiMixin):
@@ -52,5 +53,5 @@ class ContextMenuWebApi(UserMenuWebApiMixin):
 
 
 @w2capi(name='util', key='action')
-class UtilWebApi(UtilWebApiMixin, VehicleCompareWebApiMixin):
+class UtilWebApi(UtilWebApiMixin, VehicleCompareWebApiMixin, WaitingWebApiMixin):
     pass

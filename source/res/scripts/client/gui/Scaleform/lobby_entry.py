@@ -33,6 +33,8 @@ from gui.app_loader import settings as app_settings
 from helpers import dependency, uniprof
 from skeletons.gui.game_control import IBootcampController
 LOBBY_OPTIMIZATION_CONFIG = {VIEW_ALIAS.LOBBY_HEADER: OptimizationSetting(),
+ VIEW_ALIAS.LOBBY_TECHTREE: OptimizationSetting(),
+ VIEW_ALIAS.LOBBY_RESEARCH: OptimizationSetting(),
  HANGAR_ALIASES.TANK_CAROUSEL: OptimizationSetting(),
  GRAPHICS_OPTIMIZATION_ALIASES.CUSTOMISATION_BOTTOM_PANEL: OptimizationSetting()}
 

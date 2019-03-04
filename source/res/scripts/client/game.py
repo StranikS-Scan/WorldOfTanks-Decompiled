@@ -467,6 +467,10 @@ def handleInputLangChangeEvent():
     return False
 
 
+def getAuthRealm():
+    return constants.AUTH_REALM
+
+
 def addChatMsg(*msg):
     print 'Message:', msg
 

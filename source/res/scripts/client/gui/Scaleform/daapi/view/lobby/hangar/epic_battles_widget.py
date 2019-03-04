@@ -27,7 +27,6 @@ CalendarStatusVO = namedtuple('CalendarStatusVO', ('alertIcon', 'buttonIcon', 'b
 
 class EpicBattlesWidget(EpicBattlesWidgetMeta):
     epicMetaGameCtrl = dependency.descriptor(IEpicBattleMetaGameController)
-    lobbyContext = dependency.descriptor(ILobbyContext)
     __connectionMgr = dependency.descriptor(IConnectionManager)
 
     def onWidgetClick(self):
@@ -45,8 +44,7 @@ class EpicBattlesWidget(EpicBattlesWidgetMeta):
     def _buildVO(self):
         pPrestigeLevel, pLevel, _ = self.epicMetaGameCtrl.getPlayerLevelInfo()
         maxMetaLevel = self.epicMetaGameCtrl.getMaxPlayerLevel()
-        isEpicEnabled = self.lobbyContext.getServerSettings().isEpicBattleEnabled()
-        showAlert = not self.epicMetaGameCtrl.isInPrimeTime() and isEpicEnabled
+        showAlert = not self.epicMetaGameCtrl.isInPrimeTime() and self.epicMetaGameCtrl.isEnabled()
         return EpicBattlesWidgetVO(skillPoints=self.epicMetaGameCtrl.getSkillPoints(), calendarStatus=self.__getStatusBlock()._asdict(), canPrestige=pLevel == maxMetaLevel, showAlert=showAlert, epicMetaLevelIconData=getEpicMetaIconVODict(pPrestigeLevel, pLevel))
 
     def __getStatusBlock(self):
@@ -71,20 +69,20 @@ class EpicBattlesWidget(EpicBattlesWidgetMeta):
                 timeLeftStr = time_utils.getTillTimeString(timeLeft, EPIC_BATTLE.STATUS_TIMELEFT)
                 alertStr = _ms(key, time=timeLeftStr)
             else:
-                prevSeason = currSeason or self.epicMetaGameCtrl.getPreviousSeason()
-                if prevSeason is not None:
-                    prevCycle = prevSeason.getLastActiveCycleInfo(currTime)
-                    if prevCycle is not None:
-                        cycleId = prevCycle.getEpicCycleNumber()
-                        alertStr = _ms(EPIC_BATTLE.WIDGETALERTMESSAGEBLOCK_NOCYCLEMESSAGE, cycle=cycleId)
+                nextSeason = currSeason or self.epicMetaGameCtrl.getNextSeason()
+                if nextSeason is not None:
+                    nextCycle = nextSeason.getNextByTimeCycle(currTime)
+                    if nextCycle is not None:
+                        cycleId = nextCycle.getEpicCycleNumber()
+                        timeLeftStr = time_utils.getTillTimeString(timeLeft, EPIC_BATTLE.STATUS_TIMELEFT)
+                        alertStr = _ms(EPIC_BATTLE.WIDGETALERTMESSAGEBLOCK_STARTIN, cycle=cycleId, time=timeLeftStr)
                 if not alertStr:
-                    nextSeason = currSeason or self.epicMetaGameCtrl.getNextSeason()
-                    if nextSeason is not None:
-                        nextCycle = nextSeason.getNextByTimeCycle(currTime)
-                        if nextCycle is not None:
-                            cycleId = nextCycle.getEpicCycleNumber()
-                            timeLeftStr = time_utils.getTillTimeString(timeLeft, EPIC_BATTLE.STATUS_TIMELEFT)
-                            alertStr = _ms(EPIC_BATTLE.WIDGETALERTMESSAGEBLOCK_STARTIN, cycle=cycleId, time=timeLeftStr)
+                    prevSeason = currSeason or self.epicMetaGameCtrl.getPreviousSeason()
+                    if prevSeason is not None:
+                        prevCycle = prevSeason.getLastActiveCycleInfo(currTime)
+                        if prevCycle is not None:
+                            cycleId = prevCycle.getEpicCycleNumber()
+                            alertStr = _ms(EPIC_BATTLE.WIDGETALERTMESSAGEBLOCK_NOCYCLEMESSAGE, cycle=cycleId)
         return text_styles.vehicleStatusCriticalText(alertStr)
 
 

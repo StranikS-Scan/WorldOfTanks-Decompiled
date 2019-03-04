@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client/gui/battle_results/components/personal.py
 import BigWorld
 from constants import DEATH_REASON_ALIVE
+from gui.Scaleform.genConsts.STORE_CONSTANTS import STORE_CONSTANTS
 from gui.Scaleform.locale.BATTLE_RESULTS import BATTLE_RESULTS
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
@@ -11,7 +12,7 @@ from gui.battle_results.components import style
 from gui.shared.crits_mask_parser import CRIT_MASK_SUB_TYPES
 from gui.shared.formatters import numbers
 from gui.shared.formatters import text_styles
-from gui.shared.gui_items.Vehicle import getIconPath, getSmallIconPath, getTypeBigIconPath
+from gui.shared.gui_items.Vehicle import getSmallIconPath, getTypeBigIconPath, getNationLessName, getIconShopPath
 from gui.shared.utils.functions import makeTooltip
 from helpers import i18n
 _UNDEFINED_EFFICIENCY_VALUE = '-'
@@ -114,15 +115,16 @@ class EpicVehicleNamesBlock(PersonalVehicleNamesBlock):
 
 
 class PersonalVehicleBlock(base.StatsBlock):
-    __slots__ = ('_isVehicleStatusDefined', 'vehicleIcon', 'nationName', 'killerID', 'vehicleState', 'vehicleStatePrefix', 'vehicleStateSuffix', 'isPrematureLeave', 'isKilledByTeamKiller')
+    __slots__ = ('isVehicleStatusDefined', 'vehicleIcon', 'vehicleLevel', 'nationName', 'killerID', 'vehicleState', 'vehicleStatePrefix', 'vehicleStateSuffix', 'isPrematureLeave', 'isKilledByTeamKiller')
 
     def setVehicle(self, item):
         if item is not None:
-            self._isVehicleStatusDefined = not item.isObserver
-            self.vehicleIcon = getIconPath(item.name)
+            self.isVehicleStatusDefined = not item.isObserver
+            self.vehicleIcon = self._getVehicleIcon(item)
+            self.vehicleLevel = item.level
             self.nationName = item.nationName
         else:
-            self._isVehicleStatusDefined = False
+            self.isVehicleStatusDefined = False
         return
 
     def setRecord(self, result, reusable):
@@ -133,10 +135,19 @@ class PersonalVehicleBlock(base.StatsBlock):
             self.isPrematureLeave = True
             self.vehicleState = i18n.makeString(BATTLE_RESULTS.COMMON_VEHICLESTATE_PREMATURELEAVE)
         elif deathReason > DEATH_REASON_ALIVE:
-            if self._isVehicleStatusDefined and killerID:
+            if self.isVehicleStatusDefined and killerID:
                 fillKillerInfoBlock(self, deathReason, killerID, reusable)
         else:
             self.vehicleState = i18n.makeString(BATTLE_RESULTS.COMMON_VEHICLESTATE_ALIVE)
+
+    def _getVehicleIcon(self, item):
+        return getNationLessName(item.name)
+
+
+class EpicVehicleBlock(PersonalVehicleBlock):
+
+    def _getVehicleIcon(self, item):
+        return getIconShopPath(item.name, STORE_CONSTANTS.ICON_SIZE_LARGE)
 
 
 class PersonalVehiclesBlock(base.StatsBlock):
@@ -145,10 +156,13 @@ class PersonalVehiclesBlock(base.StatsBlock):
     def setRecord(self, result, reusable):
         personal = reusable.personal
         for intCD, item in personal.getVehicleItemsIterator():
-            component = PersonalVehicleBlock()
+            component = self._createComponent()
             component.setVehicle(item)
             component.setRecord(result[intCD], reusable)
             self.addComponent(self.getNextComponentIndex(), component)
+
+    def _createComponent(self):
+        return PersonalVehicleBlock()
 
 
 class EpicVehiclesBlock(PersonalVehiclesBlock):
@@ -159,6 +173,9 @@ class EpicVehiclesBlock(PersonalVehiclesBlock):
         component.vehicleIcon = RES_ICONS.MAPS_ICONS_LIBRARY_EPICVEHICLESALL
         self.addNextComponent(component)
         super(EpicVehiclesBlock, self).setRecord(result, reusable)
+
+    def _createComponent(self):
+        return EpicVehicleBlock()
 
 
 class _DetailsBlock(base.StatsBlock):

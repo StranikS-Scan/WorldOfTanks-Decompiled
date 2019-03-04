@@ -48,6 +48,7 @@ class TutorialManager(TutorialManagerMeta):
         self._components = set()
         self._componentProps = {}
         self._pendingComponentAnimations = {}
+        self.__hintsWithClientTriggers = None
         self.setEnvironment(app)
         if isEnabled:
             self._config = gui_config.readConfig(path)
@@ -75,6 +76,9 @@ class TutorialManager(TutorialManagerMeta):
     def lastBattleSelectorHintOverride(self):
         return self.__battleSelectorHintOverride
 
+    def setHintsWithClientTriggers(self, clientTriggers):
+        self.__hintsWithClientTriggers = clientTriggers
+
     def getViewTutorialID(self, name):
         return None if not self._isEnabled else name
 
@@ -94,7 +98,11 @@ class TutorialManager(TutorialManagerMeta):
         self.as_setTriggersS(componentID, triggers)
 
     def clearTriggers(self, componentID):
+        if self.__hintsWithClientTriggers is not None:
+            self.__hintsWithClientTriggers.removeActiveHints()
+            self.__hintsWithClientTriggers.updateRealState()
         self.setTriggers(componentID, ())
+        return
 
     def showInteractiveHint(self, componentID, content, triggers=None):
         if not self._validate(componentID):
@@ -107,13 +115,18 @@ class TutorialManager(TutorialManagerMeta):
                 content['padding'] = self._config.getItem(componentID).padding
             self.__doShowEffect(componentID, _EFFECT_TYPES.HINT, content)
             if triggers is not None:
+                triggers.extend(self.__getClientTrigger(componentID))
                 self.as_setTriggersS(componentID, triggers)
             return True
 
     def closeInteractiveHint(self, componentID):
         if not self._validate(componentID):
             return
-        self.as_setTriggersS(componentID, ())
+        clientTriggers = self.__getClientTrigger(componentID)
+        if clientTriggers:
+            self.as_setTriggersS(componentID, clientTriggers)
+        else:
+            self.as_setTriggersS(componentID, ())
         self.__doHideEffect(componentID, _EFFECT_TYPES.HINT)
 
     def setComponentProps(self, componentID, props):
@@ -201,6 +214,9 @@ class TutorialManager(TutorialManagerMeta):
             if deferredAnim is not None:
                 animType, animParams = deferredAnim
                 self.__doShowEffect(componentID, animType, animParams)
+            clientTriggers = self.__getClientTrigger(componentID)
+            if clientTriggers:
+                self.as_setTriggersS(componentID, clientTriggers)
             self.fireEvent(_Event(_Event.ON_COMPONENT_FOUND, targetID=componentID), scope=EVENT_BUS_SCOPE.GLOBAL)
             return
 
@@ -208,11 +224,14 @@ class TutorialManager(TutorialManagerMeta):
         _logger.debug('onComponentDisposed: %r', componentID)
         self._components.discard(componentID)
         self._componentViewBindings[componentID].actualUniqueName = None
+        if self.__hintsWithClientTriggers is not None:
+            self.__hintsWithClientTriggers.updateRealState(componentID)
+            self.__hintsWithClientTriggers.removeActiveHints()
         self.fireEvent(_Event(_Event.ON_COMPONENT_LOST, targetID=componentID), scope=EVENT_BUS_SCOPE.GLOBAL)
         return
 
-    def onTriggerActivated(self, componentID, triggerType):
-        self.fireEvent(_Event(_Event.ON_TRIGGER_ACTIVATED, targetID=componentID, settingsID=triggerType), scope=EVENT_BUS_SCOPE.GLOBAL)
+    def onTriggerActivated(self, componentID, triggerType, state):
+        self.fireEvent(_Event(_Event.ON_TRIGGER_ACTIVATED, targetID=componentID, settingsID=triggerType, state=state), scope=EVENT_BUS_SCOPE.GLOBAL)
 
     def onEffectCompleted(self, componentID, effectType):
         _logger.debug('onEffectCompleted: %r, %r', componentID, effectType)
@@ -246,6 +265,8 @@ class TutorialManager(TutorialManagerMeta):
         self.__headerMenuButtonsOverride = None
         self.__hangarHeaderEnabled = True
         self.__battleSelectorHintOverride = None
+        self.__allHintsWithStateTriggers = None
+        self.__hintsWithActiveStateTriggers = None
         self._componentProps.clear()
         self._pendingComponentAnimations.clear()
         return
@@ -312,3 +333,10 @@ class TutorialManager(TutorialManagerMeta):
 
         if props:
             _logger.error('__doSetComponentProps: unsupported properties: %r, %r', componentID, props)
+
+    def __getClientTrigger(self, componentID):
+        if self.__hintsWithClientTriggers is None:
+            return
+        else:
+            triggers = self.__hintsWithClientTriggers.getNeededTriggersForComponent(componentID)
+            return triggers

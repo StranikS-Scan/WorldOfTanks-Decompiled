@@ -45,8 +45,9 @@ class CommonContextMenuHandler(SimpleVehicleCMHandler):
             ItemsActionsFactory.doAction(ItemsActionsFactory.BUY_VEHICLE, self.vehCD)
 
     def researchVehicle(self):
-        unlockProp = g_techTreeDP.getUnlockProps(self.vehCD)
-        ItemsActionsFactory.doAction(ItemsActionsFactory.UNLOCK_ITEM, self.vehCD, unlockProp.parentID, unlockProp.unlockIdx, unlockProp.xpCost)
+        vehicle = self.itemsCache.items.getItemByCD(self.vehCD)
+        unlockProps = g_techTreeDP.getUnlockProps(vehicle.intCD, vehicle.level)
+        ItemsActionsFactory.doAction(ItemsActionsFactory.UNLOCK_ITEM, self.vehCD, unlockProps)
 
     def getVehCD(self):
         return self.vehCD
@@ -71,7 +72,8 @@ class CommonContextMenuHandler(SimpleVehicleCMHandler):
                 btnEnabled = vehicle.mayObtainWithMoneyExchange(items.stats.money, items.shop.exchangeRate)
             options.append(self._makeItem(VEHICLE.BUY, label, {'enabled': btnEnabled}))
         else:
-            isAvailableToUnlock, _, _ = g_techTreeDP.isVehicleAvailableToUnlock(self.vehCD)
+            isNextToUnlock, isXpEnough = g_techTreeDP.isVehicleAvailableToUnlock(self.vehCD)
+            isAvailableToUnlock = isNextToUnlock and isXpEnough
             options.append(self._makeItem(VEHICLE.RESEARCH, MENU.contextmenu(VEHICLE.RESEARCH), {'enabled': isAvailableToUnlock}))
         self._manageEndOptions(options, vehicle)
         return options

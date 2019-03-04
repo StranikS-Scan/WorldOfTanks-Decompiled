@@ -698,15 +698,9 @@
       <Arg>	UINT8	</Arg>
     </onRoundFinished>
     <leaveDisconnected></leaveDisconnected>
-    <setVehicleDevelopmentFeature>
-      <Exposed></Exposed>
-      <Arg>	OBJECT_ID	</Arg>
-      <Arg>	STRING	</Arg>
-      <Arg>	INT32	</Arg>
-      <Arg>	STRING	</Arg>
-    </setVehicleDevelopmentFeature>
     <setDevelopmentFeature>
       <Exposed></Exposed>
+      <Arg>	OBJECT_ID	</Arg>
       <Arg>	STRING	</Arg>
       <Arg>	INT32	</Arg>
       <Arg>	STRING	</Arg>

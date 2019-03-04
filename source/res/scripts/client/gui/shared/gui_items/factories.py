@@ -14,6 +14,7 @@ from gui.shared.gui_items.Tankman import Tankman
 from gui.shared.gui_items.Vehicle import Vehicle
 from gui.shared.gui_items.badge import Badge
 from gui.shared.gui_items.loot_box import LootBox
+from gui.shared.gui_items.crew_skin import CrewSkin
 from skeletons.gui.shared.gui_items import IGuiItemsFactory
 _logger = logging.getLogger(__name__)
 _NONE_GUI_ITEM_TYPE = 0
@@ -125,6 +126,9 @@ class GuiItemFactory(IGuiItemsFactory):
         else:
             return Outfit(strCompactDescr=strCompactDescr, component=component, isEnabled=isEnabled, isInstalled=isInstalled, proxy=proxy)
 
+    def createCrewSkin(self, intCompactDescr, proxy=None):
+        return CrewSkin(intCompactDescr, proxy)
+
 
 _ITEM_TYPES_MAPPING = {_NONE_GUI_ITEM_TYPE: lambda *args, **kwargs: None,
  GUI_ITEM_TYPE.SHELL: GuiItemFactory.createShell,
@@ -152,4 +156,5 @@ _ITEM_TYPES_MAPPING = {_NONE_GUI_ITEM_TYPE: lambda *args, **kwargs: None,
  GUI_ITEM_TYPE.DECAL: GuiItemFactory.createCustomization,
  GUI_ITEM_TYPE.STYLE: GuiItemFactory.createCustomization,
  GUI_ITEM_TYPE.PROJECTION_DECAL: GuiItemFactory.createCustomization,
- GUI_ITEM_TYPE.OUTFIT: GuiItemFactory.createOutfit}
+ GUI_ITEM_TYPE.OUTFIT: GuiItemFactory.createOutfit,
+ GUI_ITEM_TYPE.CREW_SKINS: GuiItemFactory.createCrewSkin}

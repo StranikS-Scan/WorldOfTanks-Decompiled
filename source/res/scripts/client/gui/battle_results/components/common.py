@@ -6,6 +6,7 @@ from account_helpers.AccountSettings import AccountSettings, ENABLE_RANKED_ANIMA
 from gui.Scaleform.locale.BATTLE_RESULTS import BATTLE_RESULTS
 from gui.Scaleform.locale.RANKED_BATTLES import RANKED_BATTLES
 from gui.Scaleform.genConsts.RANKEDBATTLES_ALIASES import RANKEDBATTLES_ALIASES
+from gui.Scaleform.genConsts.BATTLE_RESULT_TYPES import BATTLE_RESULT_TYPES
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.battle_results.components import base
 from gui.battle_results.components import style
@@ -13,23 +14,26 @@ from gui.battle_results.settings import PLAYER_TEAM_RESULT as _TEAM_RESULT, UI_V
 from gui.ranked_battles.ranked_models import RANK_CHANGE_STATES
 from gui.battle_results.reusable import sort_keys
 from gui.shared.formatters import text_styles
+from gui.shared.utils import toUpper
 from skeletons.gui.game_control import IRankedBattlesController
 from helpers import i18n, dependency
 from skeletons.gui.battle_session import IBattleSessionProvider
 from gui.battle_control.battle_constants import WinStatus
 _ARENA_TYPE_FORMAT = '#arenas:type/{0}/name'
 _ARENA_TYPE_EXT_FORMAT = '#menu:loading/battleTypes/{0}'
-_ARENA_FULL_NAME_FORMAT = '{0} - {1}'
-_ARENA_ICON_PATH = '../maps/icons/map/stats/%s.png'
+_ARENA_FULL_NAME_FORMAT = '#battle_results:common/arena/fullName'
+_ARENA_ICON_PATH = '../maps/icons/map/stats/{0}/%s.png'
 _FULL_RESULT_LABEL = '#menu:finalStatistic/commonStats/resultlabel/{0}'
 _FINISH_REASON_LABEL = '#battle_results:finish/reason/{0}'
+_FINISH_PLAYER_TANK_SEPARATOR = '#battle_results:finish/playerTank/separator'
 _STEPS_EARNED = 2
 _STEP_EARNED = 1
 _STEP_NOT_CHANGED = 0
 _STEP_LOST = -1
 
 def makeArenaFullName(arenaTypeName, i18nKey):
-    return _ARENA_FULL_NAME_FORMAT.format(i18n.makeString(arenaTypeName), i18n.makeString(i18nKey))
+    arenaFullName = i18n.makeString(_ARENA_FULL_NAME_FORMAT)
+    return arenaFullName.format(i18n.makeString(arenaTypeName), i18n.makeString(i18nKey))
 
 
 def makeRegularFinishResultLabel(finishReason, teamResult):
@@ -358,7 +362,7 @@ class ArenaIconItem(base.StatsItem):
     __slots__ = ()
 
     def _convert(self, record, reusable):
-        return reusable.common.getArenaIcon(_ARENA_ICON_PATH)
+        return reusable.common.getArenaIcon(_ARENA_ICON_PATH.format(BATTLE_RESULT_TYPES.MAP_SIZE_BIG))
 
 
 class ArenaDurationItem(base.StatsItem):
@@ -453,7 +457,7 @@ class RegularFinishResultBlock(base.StatsBlock):
         teamResult = reusable.getPersonalTeamResult()
         self.finishReasonLabel = makeRegularFinishResultLabel(reusable.common.finishReason, teamResult)
         self.shortResultLabel = teamResult
-        self.fullResultLabel = _FULL_RESULT_LABEL.format(teamResult)
+        self.fullResultLabel = toUpper(i18n.makeString(_FULL_RESULT_LABEL.format(teamResult)))
 
 
 class StrongholdBattleFinishResultBlock(RegularFinishResultBlock):
@@ -476,7 +480,7 @@ class StrongholdBattleFinishResultBlock(RegularFinishResultBlock):
                 sessionCtx.setLastArenaWinStatus(WinStatus(winStatus))
         self.finishReasonLabel = makeRegularFinishResultLabel(reusable.common.finishReason, teamResult)
         self.shortResultLabel = teamResult
-        self.fullResultLabel = _FULL_RESULT_LABEL.format(teamResult)
+        self.fullResultLabel = toUpper(i18n.makeString(_FULL_RESULT_LABEL.format(teamResult)))
         return
 
 
@@ -500,7 +504,7 @@ class EpicBattleBattleFinishResultBlock(RegularFinishResultBlock):
                 sessionCtx.setLastArenaWinStatus(WinStatus(winStatus))
         self.finishReasonLabel = makeEpicBattleFinishResultLabel(reusable.common.finishReason, teamResult)
         self.shortResultLabel = teamResult
-        self.fullResultLabel = _FULL_RESULT_LABEL.format(teamResult)
+        self.fullResultLabel = toUpper(i18n.makeString(_FULL_RESULT_LABEL.format(teamResult)))
         return
 
 

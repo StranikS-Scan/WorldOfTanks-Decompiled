@@ -740,6 +740,7 @@ class VehicleSummarizeInfo(_VehicleInfo):
         value = self.__accumulate('damageDealt')
         if self.__avatar is not None:
             value += self.__avatar.avatarDamageDealt
+        value += self.destructiblesDamageDealt
         return value
 
     @property

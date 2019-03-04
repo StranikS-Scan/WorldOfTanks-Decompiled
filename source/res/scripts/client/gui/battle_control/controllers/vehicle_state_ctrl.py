@@ -203,6 +203,7 @@ class VehicleStateController(IBattleController):
         self.__updater = None
         self.__isRqToSwitch = False
         self.__isInPostmortem = False
+        self.__needInvalidate = False
         return
 
     def getControllerID(self):
@@ -283,12 +284,14 @@ class VehicleStateController(IBattleController):
         return
 
     def switchToOther(self, vehicleID):
-        if self.__vehicleID == vehicleID or vehicleID is None:
-            if not vehicleID:
-                self.__vehicleID = 0
-                self.notifyStateChanged(VEHICLE_VIEW_STATE.SWITCHING, 0)
+        if vehicleID is None:
+            self.notifyStateChanged(VEHICLE_VIEW_STATE.SWITCHING, 0)
+            self.__needInvalidate = True
+            return
+        elif self.__vehicleID == vehicleID and not self.__needInvalidate:
             return
         else:
+            self.__needInvalidate = False
             self.notifyStateChanged(VEHICLE_VIEW_STATE.SWITCHING, vehicleID)
             self.__waitingTI.stop()
             if self.__updater:

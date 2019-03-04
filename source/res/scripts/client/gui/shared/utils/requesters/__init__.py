@@ -5,6 +5,7 @@ from InventoryRequester import InventoryRequester
 from StatsRequester import StatsRequester
 from DossierRequester import DossierRequester
 from GoodiesRequester import GoodiesRequester
+from blueprints_requester import BlueprintsRequester
 from recycle_bin_requester import RecycleBinRequester
 from vehicle_rotation_requester import VehicleRotationRequester
 from tokens_requester import TokensRequester
@@ -20,4 +21,4 @@ def fini():
     _rq_fini()
 
 
-__all__ = ('ShopRequester', 'InventoryRequester', 'StatsRequester', 'DossierRequester', 'ItemsRequester', 'GoodiesRequester', 'RecycleBinRequester', 'VehicleRotationRequester', 'TokensRequester', 'TokenRequester', 'TokenResponse', 'getTokenRequester', 'REQ_CRITERIA', 'RequestCriteria', 'RequestCtx', 'DataRequestCtx', 'RequestsByIDProcessor', 'DataRequestsByIDProcessor')
+__all__ = ('ShopRequester', 'InventoryRequester', 'StatsRequester', 'DossierRequester', 'ItemsRequester', 'GoodiesRequester', 'RecycleBinRequester', 'VehicleRotationRequester', 'BlueprintsRequester', 'TokensRequester', 'TokenRequester', 'TokenResponse', 'getTokenRequester', 'REQ_CRITERIA', 'RequestCriteria', 'RequestCtx', 'DataRequestCtx', 'RequestsByIDProcessor', 'DataRequestsByIDProcessor')

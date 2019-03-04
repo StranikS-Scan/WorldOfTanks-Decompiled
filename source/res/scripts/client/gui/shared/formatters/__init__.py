@@ -1,18 +1,68 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/formatters/__init__.py
 import logging
+from itertools import combinations
 import BigWorld
 from gui import makeHtmlString
+from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
+from gui.Scaleform.genConsts.CURRENCIES_CONSTANTS import CURRENCIES_CONSTANTS
+from gui.impl.gen.view_models.ui_kit.action_price_model import ActionPriceModel
+from gui.shared.economics import ActualPrice
 from gui.shared.formatters import icons
 from gui.shared.formatters import text_styles
 from gui.shared.formatters import time_formatters
 from gui.shared.formatters.currency import getBWFormatter, getStyle
 from gui.shared.gui_items import GUI_ITEM_ECONOMY_CODE
 from gui.shared.money import Money, Currency
+from helpers import i18n, dependency
 from helpers.i18n import makeString
-from gui.impl.gen.view_models.ui_kit.action_price_model import ActionPriceModel
+from skeletons.gui.shared import IItemsCache
 _logger = logging.getLogger(__name__)
 __all__ = ('icons', 'text_styles', 'time_formatters')
+
+@dependency.replace_none_kwargs(itemsCache=IItemsCache)
+def _checkPriceIsAllowed(price, itemsCache=None):
+    isPurchaseAllowed = itemsCache.items.stats.isIngameShopEnabled
+    if isPurchaseAllowed:
+        for currencyType in Currency.ALL:
+            if price.get(currencyType):
+                isPurchaseAllowed &= currencyType == Currency.GOLD
+
+    return itemsCache.items.stats.money >= price or isPurchaseAllowed
+
+
+def _getFormattedPrice(price):
+    format_ = BigWorld.wg_getGoldFormat
+    postfix = ''
+    template = 'html_templates:lobby/quests/actions'
+    fmtCurrency = {currencyName:'' for currencyName in Currency.ALL}
+    if not _checkPriceIsAllowed(price):
+        postfix = 'Error'
+    for currencyName in fmtCurrency:
+        currencyValue = price.get(currencyName)
+        if currencyValue is not None:
+            fmtCurrency[currencyName] = makeHtmlString(template, currencyName + postfix, {'value': format_(currencyValue)})
+
+    for firstCurrency, secondCurrency in combinations(Currency.BY_WEIGHT, 2):
+        if price.isCurrencyDefined(firstCurrency) and price.isCurrencyDefined(secondCurrency):
+            return i18n.makeString(TOOLTIPS.ACTIONPRICE_EXCHANGE_CURRENCYOR, credits=fmtCurrency[secondCurrency], gold=fmtCurrency[firstCurrency])
+
+    for currencyName in Currency.BY_WEIGHT:
+        if price.isCurrencyDefined(currencyName):
+            return fmtCurrency[currencyName]
+
+    return
+
+
+def formatActionPrices(oldPrice, newPrice):
+    oldPrice = Money.makeFromMoneyTuple(oldPrice)
+    if not oldPrice.isDefined():
+        oldPrice = Money(credits=0)
+    newPrice = Money.makeFromMoneyTuple(newPrice)
+    if not newPrice.isDefined():
+        newPrice = Money.makeFrom(oldPrice.getCurrency(), 0)
+    return (_getFormattedPrice(oldPrice), _getFormattedPrice(newPrice))
+
 
 def formatPrice(price, reverse=False, currency=Currency.CREDITS, useIcon=False, useStyle=False, ignoreZeros=False):
     outPrice = []
@@ -160,3 +210,38 @@ def getItemPricesVOWithReason(reason, *itemPrices):
         resultVO.append({'price': getMoneyVOWithReason(reason, itemPrice.price)})
 
     return resultVO
+
+
+def getItemUnlockPricesVO(*unlockProps):
+    resultVO = []
+    for unlockProp in unlockProps:
+        if unlockProp.discount:
+            resultVO.append({'price': ((CURRENCIES_CONSTANTS.XP_COST, unlockProp.xpCost),),
+             'defPrice': ((CURRENCIES_CONSTANTS.XP_COST, unlockProp.xpFullCost),),
+             'action': ((CURRENCIES_CONSTANTS.XP_COST, unlockProp.discount),)})
+        resultVO.append({'price': ((CURRENCIES_CONSTANTS.XP_COST, unlockProp.xpCost),)})
+
+    return resultVO
+
+
+def getUnlockDiscountXpVO(unlockProps, xpType):
+    return {'cost': unlockProps.xpCost,
+     'fullCost': unlockProps.xpFullCost,
+     'xpType': xpType}
+
+
+def getItemSellPricesVO(sellCurrency, *sellPrices):
+    return [ {'price': getMoneyVO(sellPrice) or ((sellCurrency, 0),)} for sellPrice in sellPrices ]
+
+
+def getItemRentOrRestorePricesVO(*prices):
+    return [ {'price': getMoneyVO(price)} for price in prices ]
+
+
+def chooseItemPriceVO(priceType, price):
+    itemPrice = None
+    if priceType == ActualPrice.RENT_PRICE or priceType == ActualPrice.RESTORE_PRICE:
+        itemPrice = getItemRentOrRestorePricesVO(price)
+    elif priceType == ActualPrice.BUY_PRICE:
+        itemPrice = getItemPricesVO(price)
+    return itemPrice

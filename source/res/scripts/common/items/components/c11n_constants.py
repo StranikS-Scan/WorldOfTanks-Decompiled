@@ -14,9 +14,10 @@ MAX_PROJECTION_DECALS_PER_AREA = 2
 PROJECTION_DECALS_SCALE_ID_VALUES = (0, 1, 2, 3)
 DEFAULT_DECAL_SCALE_FACTORS = (0.6, 0.8, 1.0)
 DEFAULT_SCALE_FACTOR_ID = 3
+DEFAULT_PALETTE = 0
 DEFAULT_DECAL_CLIP_ANGLE = 0.0
 RENT_IS_ALMOST_OVER_VALUE = 3
-NUMBER_OF_PERSONAL_NUMBER_DIGITS = 3
+PERSONAL_NUMBER_DIGITS_COUNT = 3
 
 class CustomizationType(object):
     PAINT = 1
@@ -292,3 +293,5 @@ customizationSlotIds = {'hull': {'clan': (1, 1),
          'fixedEmblem': (972, 1023),
          'fixedInscription': (972, 1023)}}
 CUSTOMIZATION_SLOTS_VEHICLE_PARTS = ('hull', 'chassis', 'turret', 'gun')
+UNBOUND_VEH_KEY = 0
+NUM_ALL_ITEMS_KEY = -1

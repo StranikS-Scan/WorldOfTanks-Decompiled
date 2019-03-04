@@ -7,6 +7,7 @@ from gui.Scaleform.Waiting import Waiting
 from gui.Scaleform.daapi import LobbySubView
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.trainings import formatters
+from gui.Scaleform.daapi.view.lobby.trainings.sound_constants import TRAININGS_SOUND_SPACE
 from gui.Scaleform.daapi.view.meta.TrainingFormMeta import TrainingFormMeta
 from gui.Scaleform.framework import ViewTypes
 from gui.Scaleform.framework.managers.containers import POP_UP_CRITERIA
@@ -27,6 +28,7 @@ from skeletons.gui.lobby_context import ILobbyContext
 
 class Trainings(LobbySubView, TrainingFormMeta, ILegacyListener):
     __sound_env__ = LobbySubViewEnv
+    _COMMON_SOUND_SPACE = TRAININGS_SOUND_SPACE
     lobbyContext = dependency.descriptor(ILobbyContext)
 
     def __init__(self, _=None):

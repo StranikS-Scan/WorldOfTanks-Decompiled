@@ -2,10 +2,13 @@
 # Embedded file name: scripts/client/gui/shared/tooltips/contexts.py
 from collections import namedtuple
 import constants
-from constants import ARENA_BONUS_TYPE, ARENA_GUI_TYPE
 import gui
+import nations
 from CurrentVehicle import g_currentVehicle, g_currentPreviewVehicle
 from dossiers2.custom.records import DB_ID_TO_RECORD
+from blueprints.BlueprintTypes import BlueprintTypes
+from blueprints.FragmentTypes import getFragmentType
+from constants import ARENA_BONUS_TYPE, ARENA_GUI_TYPE
 from dossiers2.ui.achievements import ACHIEVEMENT_BLOCK
 from gui.Scaleform.daapi.view.lobby.techtree.techtree_dp import g_techTreeDP
 from gui.Scaleform.daapi.view.lobby.vehicle_compare import cmp_helpers
@@ -18,6 +21,7 @@ from gui.shared.gui_items.dossier import factories, loadDossier
 from gui.shared.items_parameters import params_helper
 from gui.shared.items_parameters.formatters import NO_BONUS_SIMPLIFIED_SCHEME
 from gui.shared.tooltips import TOOLTIP_COMPONENT
+from gui.shared.utils.requesters.blueprints_requester import getFragmentNationID
 from helpers import dependency
 from helpers.i18n import makeString
 from shared_utils import findFirst
@@ -152,6 +156,27 @@ class ShopContext(ToolTipContext):
         return value
 
 
+class BadgeContext(ToolTipContext):
+    __itemsCache = dependency.descriptor(IItemsCache)
+
+    def __init__(self, fieldsToExclude=None):
+        super(BadgeContext, self).__init__(TOOLTIP_COMPONENT.BADGE, fieldsToExclude)
+
+    def getParamsConfiguration(self, badge):
+        return BadgeParamsConfiguration()
+
+    def buildItem(self, badgeID):
+        return self.__itemsCache.items.getBadges().get(int(badgeID))
+
+
+class ReferralProgramBadgeContext(BadgeContext):
+
+    def getParamsConfiguration(self, badge):
+        value = super(ReferralProgramBadgeContext, self).getParamsConfiguration(badge)
+        value.showVehicle = False
+        return value
+
+
 class AwardContext(ShopContext):
     itemsCache = dependency.descriptor(IItemsCache)
 
@@ -236,7 +261,7 @@ class InventoryContext(ToolTipContext):
         value.minRentPrice = False
         value.unlockPrice = False
         value.sellPrice = True
-        value.xp = getattr(item, 'xp', 0) > 0
+        value.xp = True
         value.dailyXP = True
         return value
 
@@ -260,6 +285,7 @@ class CarouselContext(InventoryContext):
     def getStatsConfiguration(self, item):
         value = super(CarouselContext, self).getStatsConfiguration(item)
         value.rentals = True
+        value.buyPrice = True
         return value
 
     def buildItem(self, intCD):
@@ -458,12 +484,94 @@ class TechTreeContext(ShopContext):
         value.vehicle = self._vehicle
         value.node = self._node
         value.xp = True
+        value.sellPrice = True
         return value
 
     def getParamsConfiguration(self, item):
         value = super(TechTreeContext, self).getParamsConfiguration(item)
         value.vehicle = self._vehicle
         return value
+
+
+class ModuleContext(TechTreeContext):
+
+    def getStatsConfiguration(self, item):
+        value = super(ModuleContext, self).getStatsConfiguration(item)
+        value.sellPrice = False
+        return value
+
+
+class BlueprintContext(ToolTipContext):
+    __itemsCache = dependency.descriptor(IItemsCache)
+
+    def __init__(self, fieldsToExclude=None):
+        super(BlueprintContext, self).__init__(TOOLTIP_COMPONENT.BLUEPRINT, fieldsToExclude)
+        self.__blueprintCD = None
+        return
+
+    def buildItem(self, cd=None):
+        self.__blueprintCD = cd
+        return self.__blueprintCD
+
+    def getVehicleBlueprintData(self, vehicleCD=None):
+        if vehicleCD is None and self.__blueprintCD is None:
+            return
+        else:
+            vehicleCD = int(self.__blueprintCD if vehicleCD is None else vehicleCD)
+            vehicle = self.__itemsCache.items.getItemByCD(vehicleCD)
+            if vehicle is None:
+                return
+            blueprintData = self.__itemsCache.items.blueprints.getBlueprintData(vehicleCD, vehicle.level)
+            convertibleCount = self.__itemsCache.items.blueprints.getConvertibleFragmentCount(vehicleCD, vehicle.level)
+            return (vehicle, blueprintData, convertibleCount)
+
+    def getDiscountValues(self, vehicle=None):
+        if vehicle is None and self.__blueprintCD is None:
+            return
+        else:
+            if vehicle is None:
+                vehicle = self.__itemsCache.items.getItemByCD(int(self.__blueprintCD))
+            newCost, discount, fullCost = g_techTreeDP.getOldAndNewCost(vehicle.intCD, vehicle.level)
+            xpDiscount = fullCost - newCost
+            return (discount, xpDiscount)
+
+    def getFragmentDiscounts(self, vehicle=None):
+        if vehicle is None and self.__blueprintCD is None:
+            return
+        else:
+            if vehicle is None:
+                vehicle = self.__itemsCache.items.getItemByCD(int(self.__blueprintCD))
+            _, _, fullUnlockPrice = g_techTreeDP.getOldAndNewCost(vehicle.intCD, vehicle.level)
+            return self.__itemsCache.items.blueprints.getFragmentDiscountAndCost(vehicle.intCD, vehicle.level, fullUnlockPrice)
+
+    def getFragmentConvertData(self, vLevel=None):
+        if vLevel is None and self.__blueprintCD is None:
+            return
+        else:
+            if vLevel is None:
+                vLevel = self.__itemsCache.items.getItemByCD(int(self.__blueprintCD)).level
+            reqNational, reqIntel = self.__itemsCache.items.blueprints.getRequiredIntelligenceAndNational(vLevel)
+            return (reqIntel, reqNational)
+
+    def getTypeAndNation(self, fragmentCD=None):
+        if fragmentCD is None and self.__blueprintCD is None:
+            return
+        else:
+            fragmentCD = self.__blueprintCD if fragmentCD is None else fragmentCD
+            fragmentType = getFragmentType(fragmentCD)
+            nation = nations.NAMES[getFragmentNationID(fragmentCD)] if fragmentType == BlueprintTypes.NATIONAL else None
+            return (fragmentType, nation)
+
+    def getUniversalCount(self, vehicleCD=None):
+        return self.__itemsCache.items.blueprints.getIntelligenceData() if vehicleCD is None else self.__itemsCache.items.blueprints.getNationalFragments(vehicleCD)
+
+    def getBlueprintLayout(self, vehicle=None):
+        if vehicle is None and self.__blueprintCD is None:
+            return
+        else:
+            if vehicle is None:
+                vehicle = self.__itemsCache.items.getItemByCD(int(self.__blueprintCD))
+            return self.__itemsCache.items.blueprints.getLayout(vehicle.intCD, vehicle.level)
 
 
 class VehicleAnnouncementContext(ToolTipContext):
@@ -487,6 +595,11 @@ class VehCmpModulesContext(TechTreeContext):
         value.isResearchPage = False
         value.showCustomStates = False
         value.checkBuying = False
+        return value
+
+    def getStatsConfiguration(self, item):
+        value = super(VehCmpModulesContext, self).getStatsConfiguration(item)
+        value.sellPrice = True
         return value
 
 
@@ -535,6 +648,27 @@ class PreviewCaseContext(ToolTipContext):
 
     def buildItem(self, skillID):
         return SabatonTankmanSkill('brotherhood') if skillID == 'sabaton_brotherhood' else TankmanSkill(skillID)
+
+
+class CrewSkinContext(ToolTipContext):
+    itemsCache = dependency.descriptor(IItemsCache)
+
+    def __init__(self, fieldsToExclude=None):
+        super(CrewSkinContext, self).__init__(TOOLTIP_COMPONENT.PERSONAL_CASE, fieldsToExclude)
+
+    def buildItem(self, skinID):
+        return self.itemsCache.items.getCrewSkin(skinID)
+
+
+class CrewSkinTankmanContext(ToolTipContext):
+    TankmanContext = namedtuple('SkinTankmnaContext', ('tankman', 'crewSkin'))
+    itemsCache = dependency.descriptor(IItemsCache)
+
+    def __init__(self, fieldsToExclude=None):
+        super(CrewSkinTankmanContext, self).__init__(TOOLTIP_COMPONENT.PERSONAL_CASE, fieldsToExclude)
+
+    def buildItem(self, tankmanID, skinID):
+        return self.TankmanContext(self.itemsCache.items.getTankman(tankmanID), self.itemsCache.items.getCrewSkin(skinID))
 
 
 class NewSkillContext(PersonalCaseContext):
@@ -794,6 +928,13 @@ class BoosterStatsConfiguration(object):
         self.effectTime = True
         self.activateInfo = False
         self.dueDate = False
+
+
+class BadgeParamsConfiguration(object):
+    __slots__ = ('showVehicle',)
+
+    def __init__(self):
+        self.showVehicle = True
 
 
 class HangarServerStatusContext(ToolTipContext):

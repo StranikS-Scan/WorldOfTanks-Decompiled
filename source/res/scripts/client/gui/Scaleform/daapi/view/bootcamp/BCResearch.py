@@ -1,18 +1,13 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/bootcamp/BCResearch.py
-from gui.Scaleform.daapi.view.lobby.techtree.research_page import Research
-from gui.Scaleform.daapi.view.lobby.techtree.data import ResearchItemsData
-from gui.Scaleform.genConsts.RESEARCH_ALIASES import RESEARCH_ALIASES
-from gui.shared import events, EVENT_BUS_SCOPE
 from bootcamp.Bootcamp import g_bootcamp, DISABLED_TANK_LEVELS
-from debug_utils import LOG_DEBUG
-from skeletons.gui.shared import IItemsCache
-from helpers import dependency
-from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
-from gui.shared import event_dispatcher as shared_events
-from gui.Scaleform.genConsts.NODE_STATE_FLAGS import NODE_STATE_FLAGS
-from gui.Scaleform.daapi.view.lobby.techtree.settings import NODE_STATE
 from gui.Scaleform.daapi.view.lobby.techtree import dumpers
+from gui.Scaleform.daapi.view.lobby.techtree.data import ResearchItemsData
+from gui.Scaleform.daapi.view.lobby.techtree.research_page import Research
+from gui.Scaleform.daapi.view.lobby.techtree.settings import NODE_STATE
+from gui.Scaleform.genConsts.NODE_STATE_FLAGS import NODE_STATE_FLAGS
+from gui.Scaleform.genConsts.RESEARCH_ALIASES import RESEARCH_ALIASES
+from gui.shared import event_dispatcher as shared_events
 
 class BCResearchItemsData(ResearchItemsData):
 
@@ -41,7 +36,9 @@ class BCResearchItemsData(ResearchItemsData):
             item = self._items.getItemByCD(nodeCD)
             if item.level in DISABLED_TANK_LEVELS and NODE_STATE.isAvailable2Buy(state):
                 state = NODE_STATE.add(state, NODE_STATE_FLAGS.PURCHASE_DISABLED)
-            node.setState(state)
+        if NODE_STATE.hasBlueprints(state):
+            state = NODE_STATE.remove(state, NODE_STATE_FLAGS.BLUEPRINT)
+        node.setState(state)
         return super(BCResearchItemsData, self)._addNode(nodeCD, node)
 
     def _addTopNode(self, nodeCD, node):
@@ -54,6 +51,18 @@ class BCResearchItemsData(ResearchItemsData):
         node.setState(state)
         return super(BCResearchItemsData, self)._addTopNode(nodeCD, node)
 
+    def _change2Unlocked(self, node):
+        super(BCResearchItemsData, self)._change2Unlocked(node)
+        state = node.getState()
+        state = NODE_STATE.removeIfHas(state, NODE_STATE_FLAGS.BLUEPRINT)
+        node.setState(state)
+
+    def _getBlueprintsProps(self, vehicleCD, level):
+        return None
+
+    def _getNewCost(self, vehicleCD, level, oldCost):
+        return (oldCost, 0)
+
 
 class BCResearch(Research):
 
@@ -62,24 +71,16 @@ class BCResearch(Research):
         self._data = BCResearchItemsData(dumpers.ResearchItemsObjDumper())
         self._resolveLoadCtx(ctx=ctx)
 
-    def request4Info(self, itemCD, rootCD):
-        LOG_DEBUG('BCResearch.request4Info', itemCD, rootCD)
-        super(BCResearch, self).request4Info(itemCD, rootCD)
-
-    def request4Unlock(self, unlockCD, vehCD, unlockIdx, xpCost):
+    def request4Unlock(self, unlockCD, topLevel):
         nationData = g_bootcamp.getNationData()
-        if nationData['module'] == unlockCD:
-            super(BCResearch, self).request4Unlock(unlockCD, vehCD, unlockIdx, xpCost)
-        elif nationData['vehicle_second'] == unlockCD:
+        if nationData['vehicle_second'] == unlockCD:
             shared_events.showOldVehiclePreview(int(unlockCD), self.alias)
         else:
-            super(BCResearch, self).request4Unlock(unlockCD, vehCD, unlockIdx, xpCost)
+            super(BCResearch, self).request4Unlock(unlockCD, topLevel)
 
     def request4Buy(self, itemCD):
         nationData = g_bootcamp.getNationData()
-        if nationData['module'] == itemCD:
-            super(BCResearch, self).request4Buy(itemCD)
-        elif nationData['vehicle_second'] == itemCD:
+        if nationData['vehicle_second'] == itemCD:
             shared_events.showOldVehiclePreview(int(itemCD), self.alias)
         else:
             super(BCResearch, self).request4Buy(itemCD)
@@ -87,32 +88,11 @@ class BCResearch(Research):
     def invalidateVehCompare(self):
         pass
 
-    def goToTechTree(self, nation):
-        self.fireEvent(events.LoadViewEvent(VIEW_ALIAS.LOBBY_TECHTREE, ctx={'nation': nation}), scope=EVENT_BUS_SCOPE.LOBBY)
-
-    def as_setRootNodeVehCompareDataS(self, unlocks):
-        unlocks['modeAvailable'] = False
-        super(BCResearch, self).as_setRootNodeVehCompareDataS(unlocks)
-
-    def getResearchItemsData(self, vehCD, rootChanged):
-        LOG_DEBUG('BCResearch.getResearchItemsData', g_bootcamp.getLessonNum())
-        dumpData = super(BCResearch, self).getResearchItemsData(vehCD, rootChanged)
-        nodes = dumpData.get('nodes', [])
-        for node in nodes:
-            if 'vehCompareRootData' in node:
-                node['vehCompareRootData']['modeAvailable'] = False
-            if 'vehCompareTreeNodeData' in node:
-                node['vehCompareTreeNodeData']['modeAvailable'] = False
-            node['showVehicleBtnVisible'] = False
-            node['showVehicleBtnEnabled'] = False
-
-        dumpData['global']['hasNationTree'] = False
-        return dumpData
+    def invalidateUnlocks(self, unlocks):
+        self.redraw()
 
     def goToVehicleView(self, itemCD):
-        LOG_DEBUG('BCResearch.goToVehicleView', itemCD, self.alias)
-        itemsCache = dependency.instance(IItemsCache)
-        vehicle = itemsCache.items.getItemByCD(int(itemCD))
+        vehicle = self._itemsCache.items.getItemByCD(int(itemCD))
         if vehicle.isPreviewAllowed():
             shared_events.showOldVehiclePreview(int(itemCD), self.alias)
         elif vehicle.isInInventory:
@@ -120,6 +100,12 @@ class BCResearch(Research):
 
     def setupContextHints(self, hintID):
         pass
+
+    def _getRootData(self):
+        result = super(BCResearch, self)._getRootData()
+        result['compareBtnEnabled'] = False
+        result['previewBtnEnabled'] = False
+        return result
 
     def _dispose(self):
         self._listener.stopListen()

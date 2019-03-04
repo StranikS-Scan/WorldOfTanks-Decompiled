@@ -1,15 +1,17 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/formatters/text_styles.py
 import types
-from helpers import i18n
 from gui import makeHtmlString
 from gui.shared.money import Currency
+from helpers import i18n
 from soft_exception import SoftException
 __all__ = ('standard',
  'main',
+ 'mainBig',
  'neutral',
  'stats',
  'statInfo',
+ 'statusAttention',
  'statusAlert',
  'statusAttention',
  'middleTitle',
@@ -39,6 +41,7 @@ __all__ = ('standard',
  'concatStylesToSingleLine',
  'concatStylesToMultiLine',
  'superPromoTitle',
+ 'superPromoTitleEm',
  'highlightText',
  'unavailable',
  'missionStatusAvailable',
@@ -71,6 +74,10 @@ def locked(text):
 
 def main(text):
     return _formatText('mainText', text)
+
+
+def mainBig(text):
+    return _formatText('mainBigText', text)
 
 
 def neutral(text):
@@ -289,6 +296,10 @@ def premiumVehicleName(text):
 
 def superPromoTitle(text):
     return _formatText('superPromoTitle', text)
+
+
+def superPromoTitleEm(text):
+    return _formatText('superPromoTitleEm', text)
 
 
 def highlightText(text):

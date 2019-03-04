@@ -79,6 +79,7 @@ from skeletons.connection_mgr import IConnectionManager
 from skeletons.gui.battle_session import IBattleSessionProvider
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.helpers.statistics import IStatisticsCollector
+from soft_exception import SoftException
 from streamIDs import RangeStreamIDCallbacks, STREAM_ID_CHAT_MAX, STREAM_ID_CHAT_MIN, STREAM_ID_AVATAR_BATTLE_RESULS
 from avatar_components.CombatEquipmentManager import CombatEquipmentManager
 from avatar_components.AvatarObserver import AvatarObserver
@@ -143,6 +144,12 @@ AVATAR_COMPONENTS = {CombatEquipmentManager,
  AvatarEpicData,
  AvatarRecoveryMechanic,
  AvatarRespawnMechanic}
+
+class VehicleDeinitFailureException(SoftException):
+
+    def __init__(self):
+        super(VehicleDeinitFailureException, self).__init__('Exception during vehicle deinit has been detected, thus leading to unstable state of it. Please, check the first exception happened in this function call instead of analyzing c++ crash.')
+
 
 class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarObserver, TeamHealthbarMechanic, AvatarEpicData, AvatarRecoveryMechanic, AvatarRespawnMechanic):
     __onStreamCompletePredef = {STREAM_ID_AVATAR_BATTLE_RESULS: 'receiveBattleResults'}
@@ -363,8 +370,12 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
             TriggersManager.g_manager.enable(False)
         for v in BigWorld.entities.values():
             if isinstance(v, Vehicle.Vehicle) and v.isStarted:
-                self.onVehicleLeaveWorld(v)
-                v.stopVisual(False)
+                try:
+                    self.onVehicleLeaveWorld(v)
+                    v.stopVisual(False)
+                except:
+                    LOG_CURRENT_EXCEPTION()
+                    raise VehicleDeinitFailureException()
 
         try:
             self.__stippleMgr.destroy()
@@ -560,27 +571,27 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
                         gui_event_dispatcher.toggleGUIVisibility()
                         return True
                     if key == Keys.KEY_1:
-                        self.base.setVehicleDevelopmentFeature(self.playerVehicleID, 'heal', 0, '')
+                        self.base.setDevelopmentFeature(0, 'heal', 0, '')
                         return True
                     if key == Keys.KEY_2:
-                        self.base.setVehicleDevelopmentFeature(self.playerVehicleID, 'reload_gun', 0, '')
+                        self.base.setDevelopmentFeature(0, 'reload_gun', 0, '')
                         return True
                     if key == Keys.KEY_3:
-                        self.base.setVehicleDevelopmentFeature(self.playerVehicleID, 'start_fire', 0, '')
+                        self.base.setDevelopmentFeature(0, 'start_fire', 0, '')
                         return True
                     if key == Keys.KEY_4:
-                        self.base.setVehicleDevelopmentFeature(self.playerVehicleID, 'explode', 0, '')
+                        self.base.setDevelopmentFeature(0, 'explode', 0, '')
                         return True
                     if key == Keys.KEY_5:
-                        self.base.setVehicleDevelopmentFeature(self.playerVehicleID, 'break_left_track', 0, '')
+                        self.base.setDevelopmentFeature(0, 'break_left_track', 0, '')
                         return True
                     if key == Keys.KEY_6:
-                        self.base.setVehicleDevelopmentFeature(self.playerVehicleID, 'break_right_track', 0, '')
+                        self.base.setDevelopmentFeature(0, 'break_right_track', 0, '')
                         return True
                     if key == Keys.KEY_7:
-                        self.base.setVehicleDevelopmentFeature(self.playerVehicleID, 'destroy_self', 0, '')
+                        self.base.setDevelopmentFeature(0, 'destroy_self', 0, '')
                     if key == Keys.KEY_8:
-                        self.base.setVehicleDevelopmentFeature(self.playerVehicleID, 'kill_engine', 0, '')
+                        self.base.setDevelopmentFeature(0, 'kill_engine', 0, '')
                     if key == Keys.KEY_F:
                         vehicle = BigWorld.entity(self.playerVehicleID)
                         vehicle.filter.enableClientFilters = not vehicle.filter.enableClientFilters
@@ -589,31 +600,31 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
                         self.moveVehicle(1, True)
                         return True
                     if key == Keys.KEY_R:
-                        self.base.setDevelopmentFeature('pickup', 0, 'straight')
+                        self.base.setDevelopmentFeature(0, 'pickup', 0, 'straight')
                         return True
                     if key == Keys.KEY_T:
-                        self.base.setDevelopmentFeature('log_tkill_ratings', 0, '')
+                        self.base.setDevelopmentFeature(0, 'log_tkill_ratings', 0, '')
                         return True
                     if key == Keys.KEY_N:
                         self.isTeleport = not self.isTeleport
                         return True
                     if key == Keys.KEY_K:
-                        self.base.setDevelopmentFeature('respawn_vehicle', 0, '')
+                        self.base.setDevelopmentFeature(0, 'respawn_vehicle', 0, '')
                         return True
                     if key == Keys.KEY_O:
-                        self.base.setDevelopmentFeature('pickup', 0, 'roll')
+                        self.base.setDevelopmentFeature(0, 'pickup', 0, 'roll')
                         return True
                     if key == Keys.KEY_P:
-                        self.base.setDevelopmentFeature('captureClosestBase', 0, '')
+                        self.base.setDevelopmentFeature(0, 'captureClosestBase', 0, '')
                         return True
                     if key == Keys.KEY_Q:
-                        self.base.setDevelopmentFeature('teleportToShotPoint', 0, '')
+                        self.base.setDevelopmentFeature(0, 'teleportToShotPoint', 0, '')
                         return True
                     if key == Keys.KEY_V:
-                        self.base.setDevelopmentFeature('setSignal', 3, '')
+                        self.base.setDevelopmentFeature(0, 'setSignal', 3, '')
                         return True
                     if key == Keys.KEY_C:
-                        self.base.setDevelopmentFeature('navigateTo', 0, cPickle.dumps((tuple(self.inputHandler.getDesiredShotPoint()), None, None), -1))
+                        self.base.setDevelopmentFeature(0, 'navigateTo', 0, cPickle.dumps((tuple(self.inputHandler.getDesiredShotPoint()), None, None), -1))
                         return True
                 if constants.HAS_DEV_RESOURCES and cmdMap.isFired(CommandMapping.CMD_SWITCH_SERVER_MARKER, key) and isDown:
                     self.gunRotator.showServerMarker = not self.gunRotator.showServerMarker
@@ -897,9 +908,14 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
         if not vehicle.isStarted:
             return
         else:
-            self.onVehicleLeaveWorld(vehicle)
-            self.__vehicles.remove(vehicle)
-            model = vehicle.stopVisual(True)
+            try:
+                self.onVehicleLeaveWorld(vehicle)
+                self.__vehicles.remove(vehicle)
+                model = vehicle.stopVisual(True)
+            except:
+                LOG_CURRENT_EXCEPTION()
+                raise VehicleDeinitFailureException()
+
             vehicle.model = None
             if model is not None:
                 self.__stippleMgr.showFor(vehicle, model)
@@ -1039,16 +1055,16 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
         self.guiSessionProvider.shared.optionalDevices.setOptionalDevice(deviceID, isOn)
 
     def updateVehicleMiscStatus(self, vehicleID, code, intArg, floatArgs):
-        if vehicleID != self.playerVehicleID and vehicleID != self.observedVehicleID and (self.__isVehicleAlive or vehicleID != self.inputHandler.ctrl.curVehicleID):
+        observedVehID = self.guiSessionProvider.shared.vehicleState.getControllingVehicleID()
+        if vehicleID != self.playerVehicleID and vehicleID != observedVehID and (self.__isVehicleAlive or vehicleID != self.inputHandler.ctrl.curVehicleID):
             return
         else:
             STATUS = VEHICLE_MISC_STATUS
             floatArg = floatArgs[0]
             typeDescr = self.vehicleTypeDescriptor
-            if self.observedVehicleID is not None:
-                observedVehicle = BigWorld.entity(self.observedVehicleID)
-                if observedVehicle is not None:
-                    typeDescr = observedVehicle.typeDescriptor
+            if self.isObserver() or observedVehID == vehicleID:
+                observedVehicle = BigWorld.entity(observedVehID)
+                typeDescr = observedVehicle.typeDescriptor
             if code == STATUS.DESTROYED_DEVICE_IS_REPAIRING:
                 extraIndex = intArg & 255
                 progress = (intArg & 65280) >> 8
@@ -1173,12 +1189,12 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
     def showVehicleDamageInfo(self, vehicleID, damageIndex, extraIndex, entityID, equipmentID):
         damageCode = constants.DAMAGE_INFO_CODES[damageIndex]
         typeDescr = self.vehicleTypeDescriptor
-        if self.observedVehicleID is not None:
-            observedVehicle = BigWorld.entity(self.observedVehicleID)
-            if observedVehicle is not None:
-                typeDescr = observedVehicle.typeDescriptor
+        observedVehID = self.guiSessionProvider.shared.vehicleState.getControllingVehicleID()
+        if self.isObserver() or observedVehID == vehicleID:
+            observedVehicle = BigWorld.entity(observedVehID)
+            typeDescr = observedVehicle.typeDescriptor
         extra = typeDescr.extras[extraIndex] if extraIndex != 0 else None
-        if vehicleID == self.playerVehicleID or vehicleID == self.observedVehicleID or not self.__isVehicleAlive and vehicleID == self.inputHandler.ctrl.curVehicleID:
+        if vehicleID == self.playerVehicleID or vehicleID == observedVehID or not self.__isVehicleAlive and vehicleID == self.inputHandler.ctrl.curVehicleID:
             self.__showDamageIconAndPlaySound(damageCode, extra, vehicleID)
         if damageCode not in self.__damageInfoNoNotification:
             self.guiSessionProvider.shared.messages.showVehicleDamageInfo(self, damageCode, vehicleID, entityID, extra, equipmentID)
@@ -1555,7 +1571,7 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
         self.base.vehicle_changeSetting(VEHICLE_SETTING.AUTOROTATION_ENABLED, enable)
 
     def enableServerAim(self, enable):
-        self.base.setDevelopmentFeature('server_marker', enable, '')
+        self.base.setDevelopmentFeature(0, 'server_marker', enable, '')
 
     def autoAim(self, target=None, magnetic=False):
         if target is None:
@@ -1870,10 +1886,10 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
             LOG_CURRENT_EXCEPTION()
 
     def tuneupVehiclePhysics(self, jsonStr):
-        self.base.setDevelopmentFeature('tuneup_physics', 0, zlib.compress(jsonStr, 9))
+        self.base.setDevelopmentFeature(0, 'tuneup_physics', 0, zlib.compress(jsonStr, 9))
 
     def tuneupVehicle(self, jsonStr):
-        self.base.setDevelopmentFeature('tuneup_vehicle', 0, zlib.compress(jsonStr, 9))
+        self.base.setDevelopmentFeature(0, 'tuneup_vehicle', 0, zlib.compress(jsonStr, 9))
 
     def receiveNotification(self, notification):
         LOG_DEBUG('receiveNotification', notification)
@@ -2302,9 +2318,9 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
             self.base.controlAnotherVehicle(vehicleID, 2)
             self.gunRotator.clientMode = False
             self.gunRotator.start()
-            self.base.setDevelopmentFeature('server_marker', True, '')
-            self.base.setDevelopmentFeature('heal', 0, '')
-            self.base.setDevelopmentFeature('stop_bot', 0, '')
+            self.base.setDevelopmentFeature(0, 'server_marker', True, '')
+            self.base.setDevelopmentFeature(0, 'heal', 0, '')
+            self.base.setDevelopmentFeature(0, 'stop_bot', 0, '')
             self.inputHandler.setKillerVehicleID(None)
             self.inputHandler.onControlModeChanged('arcade')
             if callback is not None:
@@ -2346,7 +2362,7 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
         msg += '\tarena: %s\n' % self.arena.arenaType.geometryName
         msg += '\tposition: ' + str(self.position)
         LOG_NOTE(msg)
-        self.base.setDevelopmentFeature('log_lag', True, '')
+        self.base.setDevelopmentFeature(0, 'log_lag', True, '')
 
     def __updateCruiseControlPanel(self):
         if self.__stopUntilFire or not self.__isVehicleAlive:
@@ -2481,7 +2497,7 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
             return False
 
     def killEngine(self):
-        self.base.setDevelopmentFeature('kill_engine', 0, '')
+        self.base.setDevelopmentFeature(0, 'kill_engine', 0, '')
 
     def receivePhysicsDebugInfo(self, info):
         modifD = dict()

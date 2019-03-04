@@ -10,10 +10,10 @@ from gui.shared.events import LoadEvent
 from gui.Scaleform.daapi.view.bootcamp.component_override import BootcampComponentOverride
 
 def getContextMenuHandlers():
-    from gui.Scaleform.daapi.view.lobby.techtree.research_cm_handlers import ResearchVehicleContextMenuHandler, ResearchItemContextMenuHandler
+    from gui.Scaleform.daapi.view.lobby.techtree.research_cm_handlers import ResearchVehicleContextMenuHandler, ResearchItemContextMenuHandler, BlueprintVehicleContextMenuHandler
     from gui.Scaleform.daapi.view.bootcamp.bootcamp_cm_handlers import BCResearchVehicleContextMenuHandler
     from gui.Scaleform.daapi.view.bootcamp.bootcamp_cm_handlers import BCResearchItemContextMenuHandler
-    return ((CONTEXT_MENU_HANDLER_TYPE.RESEARCH_VEHICLE, BootcampComponentOverride(ResearchVehicleContextMenuHandler, BCResearchVehicleContextMenuHandler)), (CONTEXT_MENU_HANDLER_TYPE.RESEARCH_ITEM, BootcampComponentOverride(ResearchItemContextMenuHandler, BCResearchItemContextMenuHandler)))
+    return ((CONTEXT_MENU_HANDLER_TYPE.RESEARCH_VEHICLE, BootcampComponentOverride(ResearchVehicleContextMenuHandler, BCResearchVehicleContextMenuHandler)), (CONTEXT_MENU_HANDLER_TYPE.RESEARCH_ITEM, BootcampComponentOverride(ResearchItemContextMenuHandler, BCResearchItemContextMenuHandler)), (CONTEXT_MENU_HANDLER_TYPE.BLUEPRINT_VEHICLE, BlueprintVehicleContextMenuHandler))
 
 
 def getViewSettings():

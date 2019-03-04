@@ -226,7 +226,8 @@ g_defaultVehicleXPhysicsShapeCfg = {'useComplexForm': False,
  'auxClearance': 0.8}
 g_defaultWheeledVehicleXPhysicsShapeCfg = copy.deepcopy(g_defaultVehicleXPhysicsShapeCfg)
 g_defaultWheeledVehicleXPhysicsShapeCfg.update({'wheelZPenetration': 0.8,
- 'wheelSize': (0.0, 0.0, 0.0)})
+ 'wheelSize': (0.0, 0.0, 0.0),
+ 'wheelXOffset': 0.0})
 g_defaultVehicleXPhysicsCfg = {'mode_index': 0,
  'gravity': 9.81,
  'hullCOMShiftY': 0.0,
@@ -466,15 +467,15 @@ def configurePhysicsMode(cfg, typeDesc, gravityFactor):
     bmin, bmax, _ = typeDesc.chassis.hitTester.bbox
     sizeX = bmax[0] - bmin[0]
     offsZ = (bmin[2] + bmax[2]) * 0.5
+    bminHull, bmaxHull, _ = typeDesc.hull.hitTester.bbox
     if typeDesc.type.useHullZ:
-        bmin_, bmax_, _ = typeDesc.hull.hitTester.bbox
-        sizeZ = bmax_[2] - bmin_[2]
-        if typeDesc.isWheeledVehicle:
-            offsZ = (bmin_[2] + bmax_[2]) * 0.5
+        sizeZ = bmaxHull[2] - bminHull[2]
     else:
         sizeZ = bmax[2] - bmin[2]
     if typeDesc.isWheeledVehicle:
+        offsZ = (bminHull[2] + bmaxHull[2]) * 0.5
         wheelBbMin, wheelBbMax, _ = typeDesc.chassis.wheels.wheels[0].hitTester.bbox
+        cfg['shape']['wheelXOffset'] = max((abs(wheel.position.x) for wheel in typeDesc.chassis.wheels.wheels))
         wheelSize = wheelBbMax - wheelBbMin
         cfg['shape']['wheelSize'] = wheelSize
     cfg['hullSize'] = Math.Vector3((sizeX, cfg['bodyHeight'], sizeZ))

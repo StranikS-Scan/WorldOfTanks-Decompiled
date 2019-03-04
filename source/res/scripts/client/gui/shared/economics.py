@@ -1,9 +1,18 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/economics.py
 import typing
+from collections import namedtuple
 from ItemRestore import getVehicleRestorePrice
 from gui.shared.money import Money, Currency
 from rent_common import makeRentID
+
+class ActualPrice(object):
+    RESTORE_PRICE = 1
+    RENT_PRICE = 2
+    BUY_PRICE = 3
+
+
+_DisplayPrice = namedtuple('PriceTuple', ('type', 'cost'))
 
 def getActionPrc(price, defaultPrice):
 
@@ -71,3 +80,12 @@ def getGUIPrice(item, money, exchangeRate):
         if item.hasRestoreCooldown():
             return item.minRentPrice or item.restorePrice
     return item.minRentPrice or item.getBuyPrice(preferred=False).price
+
+
+def getPriceTypeAndValue(item, money, exchangeRate):
+    mayRent, _ = item.mayRent(money)
+    if item.isRestorePossible() and (item.isRestorePossible() and item.mayRestoreWithExchange(money, exchangeRate) or not mayRent):
+        return _DisplayPrice(ActualPrice.RESTORE_PRICE, item.restorePrice)
+    if item.hasRestoreCooldown() and not item.minRentPrice:
+        return _DisplayPrice(ActualPrice.RESTORE_PRICE, item.restorePrice)
+    return _DisplayPrice(ActualPrice.RENT_PRICE, item.minRentPrice) if item.minRentPrice else _DisplayPrice(ActualPrice.BUY_PRICE, item.getBuyPrice(preferred=False))

@@ -13,17 +13,23 @@ from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.game_control.restore_contoller import getTankmenRestoreInfo
 from gui.shared.formatters import text_styles, icons, currency
 from gui.shared.formatters.tankmen import formatDeletedTankmanStr
+from gui.shared.gui_items.Tankman import getCrewSkinIconBig
+from gui.shared.gui_items.crew_skin import localizedFullName
 from gui.shared.gui_items.serializers import packTankman
 from gui.shared.money import Currency
 from gui.shared.utils.functions import makeTooltip
 from helpers import time_utils, dependency
 from helpers.i18n import makeString as _ms
+from items.components.crewSkins_constants import NO_CREW_SKIN_ID
 from items.tankmen import MAX_SKILL_LEVEL
 from skeletons.gui.game_control import IRestoreController
 from skeletons.gui.shared import IItemsCache
+from skeletons.gui.lobby_context import ILobbyContext
 
 class _TankmanOperationDialogBase(TankmanOperationDialogMeta):
     restore = dependency.descriptor(IRestoreController)
+    itemsCache = dependency.descriptor(IItemsCache)
+    lobbyContext = dependency.instance(ILobbyContext)
 
     def __init__(self, meta, handler):
         super(_TankmanOperationDialogBase, self).__init__(text_styles.middleTitle(meta.getMessage()), meta.getTitle(), meta.getButtonLabels(), meta.getCallbackWrapper(handler))
@@ -46,9 +52,15 @@ class _TankmanOperationDialogBase(TankmanOperationDialogMeta):
     def _setTankmanData(self):
         packedTankman = packTankman(self._tankman)
         nation = nations.NAMES[packedTankman['nationID']]
-        tankmanName = self._tankman.fullUserName
         tankmanIcon = packedTankman['icon']['big']
         roleIcon = packedTankman['iconRole']['small']
+        skinID = self._tankman.skinID
+        if skinID != NO_CREW_SKIN_ID and self.lobbyContext.getServerSettings().isCrewSkinsEnabled():
+            skinItem = self.itemsCache.items.getCrewSkin(skinID)
+            tankmanIcon = getCrewSkinIconBig(skinItem.getIconID())
+            tankmanName = localizedFullName(skinItem)
+        else:
+            tankmanName = self._tankman.fullUserName
         skills = packedTankman['skills']
         lastSkillIcon = ''
         lastSkillLevel = 0

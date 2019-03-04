@@ -16,6 +16,7 @@ from gui.server_events.awards_formatters import TokenBonusFormatter, Preformatte
 from gui.server_events.bonuses import CustomizationsBonus
 from gui.server_events.cond_formatters.tooltips import MissionsAccountRequirementsFormatter
 from gui.shared.formatters import text_styles, icons
+from gui.shared.gui_items import GUI_ITEM_TYPE_NAMES, GUI_ITEM_TYPE
 from gui.shared.gui_items.Vehicle import getTypeSmallIconPath
 from gui.shared.tooltips import TOOLTIP_TYPE, formatters
 from gui.shared.tooltips.common import BlocksTooltipData
@@ -69,8 +70,12 @@ class QuestsPreviewTooltipData(BlocksTooltipData):
                     if bonusFormat:
                         if isinstance(bonus, CustomizationsBonus):
                             for item in bonus.getCustomizations():
-                                itemType = item.get('custType')
-                                bonusFmt = _ms(ITEM_TYPES.customization(itemType))
+                                itemTypeName = item.get('custType')
+                                if itemTypeName == 'projection_decal':
+                                    itemTypeName = GUI_ITEM_TYPE_NAMES[GUI_ITEM_TYPE.PROJECTION_DECAL]
+                                elif itemTypeName == 'personal_number':
+                                    itemTypeName = GUI_ITEM_TYPE_NAMES[GUI_ITEM_TYPE.PERSONAL_NUMBER]
+                                bonusFmt = _ms(ITEM_TYPES.customization(itemTypeName))
                                 bonusNames.append(bonusFmt)
 
                         else:

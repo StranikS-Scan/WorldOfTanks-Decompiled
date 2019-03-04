@@ -32,6 +32,7 @@ CAROUSEL_FILTER_2 = 'CAROUSEL_FILTER_2'
 CAROUSEL_FILTER_CLIENT_1 = 'CAROUSEL_FILTER_CLIENT_1'
 MISSION_SELECTOR_FILTER = 'MISSION_SELECTOR_FILTER'
 PM_SELECTOR_FILTER = 'PM_SELECTOR_FILTER'
+BLUEPRINTS_STORAGE_FILTER = 'BLUEPRINTS_STORAGE_FILTER'
 RANKED_CAROUSEL_FILTER_1 = 'RANKED_CAROUSEL_FILTER_1'
 RANKED_CAROUSEL_FILTER_2 = 'RANKED_CAROUSEL_FILTER_2'
 RANKED_CAROUSEL_FILTER_CLIENT_1 = 'RANKED_CAROUSEL_FILTER_CLIENT_1'
@@ -63,6 +64,7 @@ NEW_SETTINGS_COUNTER = 'newSettingsCounter'
 NEW_HOF_COUNTER = 'newHofCounter'
 NEW_LOBBY_TAB_COUNTER = 'newLobbyTabCounter'
 REFERRAL_COUNTER = 'referralButtonCounter'
+PROGRESSIVE_REWARD_VISITED = 'progressiveRewardVisited'
 PROFILE_TECHNIQUE = 'profileTechnique'
 PROFILE_TECHNIQUE_MEMBER = 'profileTechniqueMember'
 SHOW_CRYSTAL_HEADER_BAND = 'showCrystalHeaderBand'
@@ -89,15 +91,19 @@ CUSTOMIZATION_SECTION = 'customization'
 PROJECTION_DECAL_TAB_SHOWN_FIELD = CUSTOMIZATION_ALIASES.PROJECTION_DECAL_TAB_SHOWN_FIELD
 USER_NUMBER_TAB_SHOWN_FIELD = CUSTOMIZATION_ALIASES.USER_NUMBER_TAB_SHOWN_FIELD
 CAROUSEL_ARROWS_HINT_SHOWN_FIELD = 'isCarouselsArrowsHintShown'
-QUEST_PROGRESS_HINT_SECTION = 'questProgressHint'
-HELP_SCREEN_HINT_SECTION = 'helpScreenHint'
 SIEGE_HINT_SECTION = 'siegeModeHint'
 WHEELED_MODE_HINT_SECTION = 'wheeledModeScreenHint'
 TRAJECTORY_VIEW_HINT_SECTION = 'trajectoryViewHint'
+PRE_BATTLE_HINT_SECTION = 'preBattleHintSection'
+QUEST_PROGRESS_HINT_SECTION = 'questProgressHint'
+HELP_SCREEN_HINT_SECTION = 'helpScreenHint'
 LAST_DISPLAY_DAY = 'lastDisplayDay'
 HINTS_LEFT = 'hintsLeft'
 NUM_BATTLES = 'numBattles'
 SELECTED_INTRO_VEHICLES_FIELD = 'selectedIntroVehicles'
+CREW_SKINS_VIEWED = 'crew_skins_viewed'
+CREW_SKINS_HISTORICAL_VISIBLE = 'crew_skins_historical_visible'
+VEHICLES_WITH_BLUEPRINT_CONFIRM = 'showedBlueprintConfirm'
 KNOWN_SELECTOR_BATTLES = 'knownSelectorBattles'
 DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                'shop_current': (-1, STORE_CONSTANTS.VEHICLE, False),
@@ -266,6 +272,8 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                EPICBATTLE_CAROUSEL_FILTER_CLIENT_1: {'searchNameVehicle': ''},
                MISSION_SELECTOR_FILTER: {'inventory': False},
                PM_SELECTOR_FILTER: {'inventory': False},
+               BLUEPRINTS_STORAGE_FILTER: {'unlock_available': False,
+                                           'can_convert': False},
                BARRACKS_FILTER: {'nation': -1,
                                  'role': 'None',
                                  'tankType': 'None',
@@ -508,18 +516,19 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                 TRAJECTORY_VIEW_HINT_SECTION: {HINTS_LEFT: 3,
                                                LAST_DISPLAY_DAY: 0,
                                                NUM_BATTLES: 0},
-                QUEST_PROGRESS_HINT_SECTION: {HINTS_LEFT: 3,
-                                              LAST_DISPLAY_DAY: 0,
-                                              NUM_BATTLES: 0},
-                HELP_SCREEN_HINT_SECTION: {HINTS_LEFT: 1,
-                                           LAST_DISPLAY_DAY: 0,
-                                           NUM_BATTLES: 0},
+                PRE_BATTLE_HINT_SECTION: {QUEST_PROGRESS_HINT_SECTION: {HINTS_LEFT: 3,
+                                                                        LAST_DISPLAY_DAY: 0,
+                                                                        NUM_BATTLES: 0},
+                                          HELP_SCREEN_HINT_SECTION: {}},
                 SIEGE_HINT_SECTION: {HINTS_LEFT: 3,
                                      LAST_DISPLAY_DAY: 0,
                                      NUM_BATTLES: 0},
                 WHEELED_MODE_HINT_SECTION: {HINTS_LEFT: 3,
                                             LAST_DISPLAY_DAY: 0,
-                                            NUM_BATTLES: 0}},
+                                            NUM_BATTLES: 0},
+                CREW_SKINS_VIEWED: set(),
+                CREW_SKINS_HISTORICAL_VISIBLE: (True, True),
+                VEHICLES_WITH_BLUEPRINT_CONFIRM: {}},
  KEY_COUNTERS: {NEW_HOF_COUNTER: {PROFILE_CONSTANTS.HOF_ACHIEVEMENTS_BUTTON: True,
                                   PROFILE_CONSTANTS.HOF_VEHICLES_BUTTON: True,
                                   PROFILE_CONSTANTS.HOF_VIEW_RATING_BUTTON: True},
@@ -528,7 +537,8 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
  KEY_NOTIFICATIONS: {ELEN_NOTIFICATIONS: {MISSIONS_CONSTANTS.ELEN_EVENT_STARTED_NOTIFICATION: set(),
                                           MISSIONS_CONSTANTS.ELEN_EVENT_FINISHED_NOTIFICATION: set(),
                                           MISSIONS_CONSTANTS.ELEN_EVENT_TAB_VISITED: set()},
-                     RECRUIT_NOTIFICATIONS: set()},
+                     RECRUIT_NOTIFICATIONS: set(),
+                     PROGRESSIVE_REWARD_VISITED: False},
  KEY_SESSION_SETTINGS: {STORAGE_VEHICLES_CAROUSEL_FILTER_1: {'ussr': False,
                                                              'germany': False,
                                                              'usa': False,
@@ -604,7 +614,7 @@ def _recursiveStep(defaultDict, savedDict, finalDict):
 
 class AccountSettings(object):
     onSettingsChanging = Event.Event()
-    version = 39
+    version = 40
     settingsCore = dependency.descriptor(ISettingsCore)
     __cache = {'login': None,
      'section': None}
@@ -1020,6 +1030,14 @@ class AccountSettings(object):
                         if CAROUSEL_ARROWS_HINT_SHOWN_FIELD in custSett:
                             del custSett[CAROUSEL_ARROWS_HINT_SHOWN_FIELD]
                         accSettings.write(CUSTOMIZATION_SECTION, _pack(custSett))
+
+            if currVersion < 40:
+                for key, section in _filterAccountSection(ads):
+                    accSettings = AccountSettings.__readSection(section, KEY_SETTINGS)
+                    obsoleteKeys = ('questProgressHint', 'helpScreenHint')
+                    for sectionName in obsoleteKeys:
+                        if sectionName in accSettings.keys():
+                            accSettings.deleteSection(sectionName)
 
             ads.writeInt('version', AccountSettings.version)
         return

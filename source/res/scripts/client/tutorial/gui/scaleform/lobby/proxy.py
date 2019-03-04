@@ -13,13 +13,14 @@ from helpers.statistics import HANGAR_LOADING_STATE
 from messenger.m_constants import PROTO_TYPE, SCH_CLIENT_MSG_TYPE
 from messenger.proto import proto_getter
 from skeletons.helpers.statistics import IStatisticsCollector
-from tutorial.gui.commands import GUICommandsFactory
-from tutorial.logger import LOG_DEBUG, LOG_ERROR, LOG_WARNING
 from tutorial.data.events import ClickEvent, ClickOutsideEvent, EscEvent, EnableEvent, DisableEvent
+from tutorial.data.events import EnabledChangeEvent, VisibleChangeEvent
 from tutorial.doc_loader import gui_config
 from tutorial.gui import GUIProxy, GUI_EFFECT_NAME
+from tutorial.gui.commands import GUICommandsFactory
 from tutorial.gui.Scaleform.items_manager import ItemsManager
 from tutorial.gui.Scaleform.effects_player import GUIEffectScope
+from tutorial.logger import LOG_DEBUG, LOG_ERROR, LOG_WARNING
 from gui.app_loader import sf_lobby
 from soft_exception import SoftException
 _TEvent = events.TutorialEvent
@@ -27,7 +28,10 @@ _EventClassByTriggerType = {TUTORIAL_TRIGGER_TYPES.CLICK_TYPE: (ClickEvent, 'Pla
  TUTORIAL_TRIGGER_TYPES.CLICK_OUTSIDE_TYPE: (ClickOutsideEvent, 'Player has clicked outside'),
  TUTORIAL_TRIGGER_TYPES.ESCAPE: (EscEvent, 'Player has pressed ESC'),
  TUTORIAL_TRIGGER_TYPES.ENABLED: (EnableEvent, 'Button has been enabled'),
- TUTORIAL_TRIGGER_TYPES.DISABLED: (DisableEvent, 'Button has been disabled')}
+ TUTORIAL_TRIGGER_TYPES.DISABLED: (DisableEvent, 'Button has been disabled'),
+ TUTORIAL_TRIGGER_TYPES.VISIBLE_CHANGE: (VisibleChangeEvent, 'Component visibility has been changed'),
+ TUTORIAL_TRIGGER_TYPES.ENABLED_CHANGE: (EnabledChangeEvent, 'Component enables has been changed')}
+CLIENT_CHECKED_TRIGGERS = frozenset([TUTORIAL_TRIGGER_TYPES.VISIBLE_CHANGE, TUTORIAL_TRIGGER_TYPES.ENABLED_CHANGE])
 
 class SfLobbyProxy(GUIProxy):
     statsCollector = dependency.descriptor(IStatisticsCollector)

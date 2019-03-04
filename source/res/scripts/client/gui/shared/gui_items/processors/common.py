@@ -272,3 +272,15 @@ class EpicRewardsClaimer(Processor):
     def _request(self, callback):
         _logger.debug('Make server request to claim final reward')
         BigWorld.player().epicMetaGame.claimEpicMetaGameMaxPrestigeReward(lambda code, errStr: self._response(code, callback, errStr=errStr))
+
+
+class ConvertBlueprintFragmentProcessor(Processor):
+
+    def __init__(self, vehicleCD, count, fragmentPosition):
+        super(ConvertBlueprintFragmentProcessor, self).__init__()
+        self.__vehicleCD = vehicleCD
+        self.__position = fragmentPosition
+        self.__count = count
+
+    def _request(self, callback):
+        BigWorld.player().blueprints.convertBlueprintFragment(self.__vehicleCD, self.__position, self.__count, lambda code: self._response(code, callback))

@@ -6,8 +6,6 @@ class TUTORIAL_EFFECT_BUILDERS(object):
     DEFAULT_HINT = 'net.wg.infrastructure.tutorial.builders.TutorialHintBuilder'
     CUSTOM_HINT = 'net.wg.infrastructure.tutorial.builders.TutorialCustomHintBuilder'
     DEFAULT_OVERLAY = 'net.wg.infrastructure.tutorial.builders.TutorialOverlayBuilder'
-    RESEARCH_OVERLAY = 'net.wg.infrastructure.tutorial.builders.TutorialResearchOverlayBldr'
-    TECHTREE_OVERLAY = 'net.wg.infrastructure.tutorial.builders.TutorialTechTreeOverlayBldr'
     OVERLAY = 'net.wg.infrastructure.tutorial.builders.bootcamp.TutorialOverlayEffectBuilder'
     ENABLED = 'net.wg.infrastructure.tutorial.builders.bootcamp.TutorialEnabledEffectBuilder'
     DISPLAY = 'net.wg.infrastructure.tutorial.builders.bootcamp.TutorialVisibilityEffectBuilder'

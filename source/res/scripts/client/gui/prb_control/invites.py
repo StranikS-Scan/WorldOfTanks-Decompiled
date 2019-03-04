@@ -32,7 +32,7 @@ from skeletons.gui.battle_session import IBattleSessionProvider
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
 
-def isInviteSenderIgnoredInBattle(user, areFriendsOnly, isFromBattle):
+def isInviteSenderIgnored(user, areFriendsOnly, isFromBattle):
     return isNotFriendSenderIgnored(user, False) if isFromBattle else isNotFriendSenderIgnored(user, areFriendsOnly)
 
 
@@ -482,7 +482,7 @@ class InvitesManager(UsersInfoHelper):
         return inviteID
 
     def _addInvite(self, invite, userGetter):
-        if self.__isInviteSenderIgnoredInBattle(invite, userGetter):
+        if self.__isInviteSenderIgnored(invite, userGetter):
             return False
         self.__invites[invite.clientID] = invite
         if invite.isActive():
@@ -492,7 +492,7 @@ class InvitesManager(UsersInfoHelper):
     def _updateInvite(self, other, userGetter):
         inviteID = other.clientID
         invite = self.__invites[inviteID]
-        if invite == other or not invite.isActive() and self.__isInviteSenderIgnoredInBattle(invite, userGetter):
+        if invite == other or not invite.isActive() and self.__isInviteSenderIgnored(invite, userGetter):
             return False
         prevCount = invite.count
         invite = invite._merge(other)
@@ -699,8 +699,12 @@ class InvitesManager(UsersInfoHelper):
         self.__invites.clear()
         self.__unreadInvitesCount = 0
 
-    def __isInviteSenderIgnoredInBattle(self, invite, userGetter):
-        return isInviteSenderIgnoredInBattle(userGetter(invite.creatorDBID), g_settings.userPrefs.invitesFromFriendsOnly, invite.isCreatedInBattle())
+    def __isInviteSenderIgnored(self, invite, userGetter):
+        if self.__isInBattle and invite.isIncoming():
+            arenaDP = self.sessionProvider.getArenaDP()
+            if arenaDP and arenaDP.getVehicleInfo().prebattleID > 0:
+                return True
+        return isInviteSenderIgnored(userGetter(invite.creatorDBID), g_settings.userPrefs.invitesFromFriendsOnly, invite.isCreatedInBattle())
 
 
 class AutoInvitesNotifier(object):

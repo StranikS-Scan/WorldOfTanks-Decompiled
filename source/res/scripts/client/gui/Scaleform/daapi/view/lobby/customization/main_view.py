@@ -14,7 +14,7 @@ from gui.Scaleform.daapi.view.dialogs.confirm_customization_item_dialog_meta imp
 from gui.Scaleform.daapi.view.lobby.customization import CustomizationItemCMHandler
 from gui.Scaleform.daapi.view.lobby.customization.customization_cm_handlers import CustomizationOptions
 from gui.Scaleform.daapi.view.lobby.customization.customization_inscription_controller import PersonalNumEditStatuses, PersonalNumEditCommands
-from gui.Scaleform.daapi.view.lobby.customization.shared import C11nMode, TABS_ITEM_MAPPING, DRAG_AND_DROP_INACTIVE_TABS, C11nTabs, SEASON_TYPE_TO_NAME, SEASON_IDX_TO_TYPE, SEASON_TYPE_TO_IDX, SEASONS_ORDER, getTotalPurchaseInfo, containsVehicleBound
+from gui.Scaleform.daapi.view.lobby.customization.shared import C11nMode, TABS_SLOT_TYPE_MAPPING, DRAG_AND_DROP_INACTIVE_TABS, C11nTabs, SEASON_TYPE_TO_NAME, SEASON_IDX_TO_TYPE, SEASON_TYPE_TO_IDX, SEASONS_ORDER, getTotalPurchaseInfo, containsVehicleBound
 from gui.Scaleform.daapi.view.lobby.customization.sound_constants import SOUNDS, C11N_SOUND_SPACE
 from gui.Scaleform.daapi.view.lobby.header.LobbyHeader import HeaderMenuVisibilityState
 from gui.Scaleform.daapi.view.meta.CustomizationMainViewMeta import CustomizationMainViewMeta
@@ -67,9 +67,10 @@ class _ModalWindowsPopupHandler(IViewLifecycleHandler):
         self.service.suspendHighlighter()
 
     def onViewDestroyed(self, _):
-        self.__viewStack.pop()
-        if not self.__viewStack:
-            self.service.resumeHighlighter()
+        if self.__viewStack:
+            self.__viewStack.pop()
+            if not self.__viewStack:
+                self.service.resumeHighlighter()
 
 
 CustomizationAnchorInitVO = namedtuple('CustomizationAnchorInitVO', ('anchorUpdateVOs', 'typeRegions', 'maxItemsReached'))
@@ -128,12 +129,14 @@ class MainView(LobbySubView, CustomizationMainViewMeta):
         self.__locatedOnEmbelem = False
         self.itemIsPicked = False
         self.__propertiesSheet = None
+        self.__styleInfo = None
         self._seasonSoundAnimantion = None
         self._isPropertySheetShown = False
         self.__ctx = None
         self.__viewCtx = viewCtx or {}
         self.__renderEnv = None
         self.__needCheckDecalsAgainstGun = True
+        self.__styleInfoActive = False
         return
 
     def showBuyWindow(self, ctx=None):
@@ -208,29 +211,35 @@ class MainView(LobbySubView, CustomizationMainViewMeta):
     def _onRegisterFlashComponent(self, viewPy, alias):
         if alias == VIEW_ALIAS.CUSTOMIZATION_PROPERTIES_SHEET:
             self.__propertiesSheet = viewPy
+        elif alias == VIEW_ALIAS.CUSTOMIZATION_STYLE_INFO:
+            self.__styleInfo = viewPy
 
-    def changeSeason(self, seasonIdx):
+    def changeSeason(self, seasonIdx, needToKeepSelect):
+        currentSelected = self.__ctx.selectedCarouselItem.intCD
         if self.__ctx.numberEditModeActive:
             self.__ctx.sendNumberEditModeCommand(PersonalNumEditCommands.CANCEL_EDIT_MODE)
         if seasonIdx in SEASON_IDX_TO_TYPE:
             self.__ctx.changeSeason(SEASON_IDX_TO_TYPE[seasonIdx])
         else:
             _logger.error('Wrong season index %(seasonIdx)d', {'seasonIdx': seasonIdx})
-        if self.__ctx.isAnyAnchorSelected():
+        if self.__ctx.isAnyAnchorSelected() and not self.__styleInfoActive:
             self.__clearSelectionAndHidePropertySheet()
             self.__hidePropertiesSheet()
+        if needToKeepSelect:
+            self.as_reselectS(currentSelected)
 
     def __onSeasonChanged(self, seasonType):
         seasonName = SEASON_TYPE_TO_NAME.get(seasonType)
         self.soundManager.playInstantSound(SOUNDS.SEASON_SELECT.format(seasonName))
         self.__setAnchorsInitData(True)
         self.__setHeaderInitData()
+        self.__setNotificationCounters()
 
     def __onTabChanged(self, tabIndex):
         self.soundManager.playInstantSound(SOUNDS.TAB_SWITCH)
         self.service.stopHighlighter()
         if tabIndex in C11nTabs.REGIONS:
-            itemTypeID = TABS_ITEM_MAPPING[tabIndex]
+            itemTypeID = TABS_SLOT_TYPE_MAPPING[tabIndex]
             self.service.startHighlighter(chooseMode(itemTypeID, g_currentVehicle.item))
         self.__setAnchorsInitData()
         if self.__locatedOnEmbelem and self.__ctx.c11CameraManager is not None:
@@ -247,9 +256,10 @@ class MainView(LobbySubView, CustomizationMainViewMeta):
         self.__updateDnd()
         self.__hidePropertiesSheet()
         self.__setHeaderInitData()
+        self.__setNotificationCounters()
         return
 
-    def __onItemsInstalled(self, item, slotId, limitReached):
+    def __onItemsInstalled(self, item, component, slotId, limitReached):
         self.__setHeaderInitData()
         self.__setSeasonData()
         self.__setAnchorsInitData(True)
@@ -257,7 +267,7 @@ class MainView(LobbySubView, CustomizationMainViewMeta):
             self.soundManager.playInstantSound(SOUNDS.APPLY)
         else:
             areaId, slotType, regionIdx = self.__ctx.selectedAnchor
-            startNumberEditMode = item.itemTypeID == GUI_ITEM_TYPE.PERSONAL_NUMBER and not self.__ctx.storedInscriptionSlotInfo.number
+            startNumberEditMode = item.itemTypeID == GUI_ITEM_TYPE.PERSONAL_NUMBER and component is not None and not component.isFilled() and not self.__ctx.storedPersonalNumber
             if startNumberEditMode:
                 self.__ctx.onPersonalNumberEditModeChanged(PersonalNumEditStatuses.EDIT_MODE_STARTED)
             else:
@@ -265,6 +275,7 @@ class MainView(LobbySubView, CustomizationMainViewMeta):
                 self.__showPropertiesSheet(areaId, slotType, regionIdx, forceUpdate=True)
         if limitReached:
             self.as_releaseItemS()
+        return
 
     def __onItemsRemoved(self):
         self.soundManager.playInstantSound(SOUNDS.REMOVE)
@@ -309,6 +320,13 @@ class MainView(LobbySubView, CustomizationMainViewMeta):
     def playCustomSound(self, sound):
         self.soundManager.playInstantSound(sound)
 
+    def onRemoveSelectedItem(self):
+        if self.__propertiesSheet.isVisible and not self.__ctx.numberEditModeActive:
+            if self.__ctx.currentTab == C11nTabs.STYLE:
+                self.__ctx.removeStyle(self.__ctx.modifiedStyle.intCD)
+            else:
+                self.__ctx.removeItemFromSlot(self.__ctx.currentSeason, self.__ctx.selectedSlot)
+
     def onSelectAnchor(self, areaId, slotType, regionIdx):
         if self.__ctx.numberEditModeActive:
             self.__ctx.sendNumberEditModeCommand(PersonalNumEditCommands.CANCEL_EDIT_MODE)
@@ -318,13 +336,15 @@ class MainView(LobbySubView, CustomizationMainViewMeta):
         itemInstalled = self.__ctx.anchorSelected(slotType, areaId, regionIdx)
         if self.__ctx.isSlotFilled(self.__ctx.selectedAnchor):
             selectedItem = self.__ctx.getItemFromSelectedRegion()
-            startNumberEditMode = selectedItem.itemTypeID == GUI_ITEM_TYPE.PERSONAL_NUMBER and not self.__ctx.storedInscriptionSlotInfo.number
             if self.__ctx.isCaruselItemSelected():
                 if anchorSelected and not itemInstalled:
                     self.__locateCameraOnAnchor(areaId, slotType, regionIdx, False)
                     self.__showPropertiesSheet(areaId, slotType, regionIdx)
-                elif startNumberEditMode:
-                    self.__ctx.onPersonalNumberEditModeChanged(PersonalNumEditStatuses.EDIT_MODE_STARTED)
+                else:
+                    component = self.__ctx.getComponentFromSelectedRegion()
+                    startNumberEditMode = selectedItem.itemTypeID == GUI_ITEM_TYPE.PERSONAL_NUMBER and component is not None and not component.isFilled()
+                    if startNumberEditMode:
+                        self.__ctx.onPersonalNumberEditModeChanged(PersonalNumEditStatuses.EDIT_MODE_STARTED)
             else:
                 self.__locateCameraOnAnchor(areaId, slotType, regionIdx, False)
                 self.__showPropertiesSheet(areaId, slotType, regionIdx)
@@ -332,8 +352,16 @@ class MainView(LobbySubView, CustomizationMainViewMeta):
             self.soundManager.playInstantSound(SOUNDS.CHOOSE)
             self.__locateCameraOnAnchor(areaId, slotType, regionIdx, False)
             self.__hidePropertiesSheet()
+        self.__ctx.onSlotSelected(areaId, slotType, regionIdx)
+        return
 
-    def __locateCameraOnAnchor(self, areaId, slotType, regionIdx, disableMovement=False):
+    def onLockedAnchor(self):
+        self.__hidePropertiesSheet()
+
+    def resetC11nItemsNovelty(self, itemsList):
+        self.__ctx.resetC11nItemsNovelty(itemsList)
+
+    def __locateCameraOnAnchor(self, areaId, slotType, regionIdx, disableMovement=False, forceRotate=False):
         if self.__ctx.c11CameraManager is None:
             return
         else:
@@ -349,7 +377,7 @@ class MainView(LobbySubView, CustomizationMainViewMeta):
                 else:
                     emblemType = 'inscription'
                     zoom = MainView._ZOOM_ON_INSCRIPTION
-                self.__locatedOnEmbelem = self.__ctx.c11CameraManager.locateCameraOnEmblem(areaId == Area.HULL, emblemType, regionIdx, zoom, disableMovement, turretYaw)
+                self.__locatedOnEmbelem = self.__ctx.c11CameraManager.locateCameraOnEmblem(onHull=areaId == Area.HULL, emblemType=emblemType, emblemIdx=regionIdx, relativeSize=zoom, disableMovementByMouse=disableMovement, turretYaw=turretYaw, forceRotate=forceRotate)
             elif slotType == GUI_ITEM_TYPE.PROJECTION_DECAL:
                 normal = anchorParams.normal
                 if normal.dot((0.0, 1.0, 0.0)) > 0.99:
@@ -417,7 +445,10 @@ class MainView(LobbySubView, CustomizationMainViewMeta):
         self.__ctx.onPropertySheetShown += self.__onPropertySheetShown
         self.__ctx.onClearItem += self.__onClearItem
         self.__ctx.onProlongStyleRent += self.__onProlongStyleRent
+        self.__ctx.onShowStyleInfo += self.__onShowStyleInfo
+        self.__ctx.onStyleInfoHidden += self.__onStyleInfoHidden
         self.__ctx.onPersonalNumberEditModeChanged += self.__onNumberEditModeChanged
+        self.__ctx.onResetC11nItemsNovelty += self.__onResetC11nItemsNovelty
         self.__ctx.c11CameraManager.onTurretRotated += self.__onTurretRotated
         g_currentVehicle.onChanged += self.__onVehicleChanged
         self.soundManager.playInstantSound(SOUNDS.ENTER)
@@ -495,7 +526,10 @@ class MainView(LobbySubView, CustomizationMainViewMeta):
         self.__ctx.onCustomizationSeasonChanged -= self.__onSeasonChanged
         self.__ctx.onClearItem -= self.__onClearItem
         self.__ctx.onProlongStyleRent -= self.__onProlongStyleRent
+        self.__ctx.onShowStyleInfo -= self.__onShowStyleInfo
+        self.__ctx.onStyleInfoHidden -= self.__onStyleInfoHidden
         self.__ctx.onPersonalNumberEditModeChanged -= self.__onNumberEditModeChanged
+        self.__ctx.onResetC11nItemsNovelty -= self.__onResetC11nItemsNovelty
         self.__ctx.c11CameraManager.onTurretRotated -= self.__onTurretRotated
         g_currentVehicle.onChanged -= self.__onVehicleChanged
         self.__ctx = None
@@ -519,7 +553,7 @@ class MainView(LobbySubView, CustomizationMainViewMeta):
 
     def _getUpdatedAnchorsData(self):
         tabIndex = self.__ctx.currentTab
-        cType = TABS_ITEM_MAPPING[tabIndex]
+        cType = TABS_SLOT_TYPE_MAPPING[tabIndex]
         slotIds = []
         if tabIndex == C11nTabs.STYLE:
             slotId = CustomizationSlotIdVO(Area.MISC, GUI_ITEM_TYPE.STYLE, 0)
@@ -581,6 +615,7 @@ class MainView(LobbySubView, CustomizationMainViewMeta):
                         self.__resetCameraFocus()
                         self.__hidePropertiesSheet()
                     self.service.selectRegions(applyArea)
+                self.__ctx.onSlotSelected(areaId, slotType, regionIdx)
             else:
                 self.__clearItem()
         elif highlightingResult:
@@ -611,6 +646,7 @@ class MainView(LobbySubView, CustomizationMainViewMeta):
             return
         self.__setHeaderInitData()
         self.__setSeasonData()
+        self.__setNotificationCounters()
 
     def __onChangesCanceled(self):
         self.__setHeaderInitData()
@@ -678,6 +714,20 @@ class MainView(LobbySubView, CustomizationMainViewMeta):
         self._seasonSoundAnimantion.setFilledSeasonSlots(filledSeasonSlots, forceAnim)
         return
 
+    def __setNotificationCounters(self):
+        currentSeason = self.__ctx.currentSeason
+        newItems = g_currentVehicle.item.getNewC11nItems(g_currentVehicle.itemsCache.items)
+        seasonCounters = {season:0 for season in SEASONS_ORDER}
+        if self.__ctx.mode == C11nMode.STYLE:
+            itemTypes = (GUI_ITEM_TYPE.STYLE,)
+        else:
+            itemTypes = GUI_ITEM_TYPE.CUSTOMIZATIONS_WITHOUT_STYLE
+        for item in newItems:
+            if item.season != SeasonType.ALL and item.itemTypeID in itemTypes and not item.season & currentSeason:
+                seasonCounters[item.season] += 1
+
+        self.as_setNotificationCountersS([ seasonCounters[season] for season in SEASONS_ORDER ])
+
     def __setAnchorsInitData(self, update=False):
 
         def customizationSlotIdToUid(customizationSlotIdVO):
@@ -689,7 +739,7 @@ class MainView(LobbySubView, CustomizationMainViewMeta):
         else:
             tabIndex = self.__ctx.currentTab
             anchorVOs = []
-            slotType = TABS_ITEM_MAPPING[tabIndex]
+            slotType = TABS_SLOT_TYPE_MAPPING[tabIndex]
             maxItemsReached = False
             visibleAnchors = self.__getVisibleAnchors(slotType)
             if tabIndex == C11nTabs.STYLE:
@@ -789,7 +839,7 @@ class MainView(LobbySubView, CustomizationMainViewMeta):
             else:
                 itemsCounter = text_styles.stats(VEHICLE_CUSTOMIZATION.CUSTOMIZATION_HEADER_COUNTER_STYLE_NOTINSTALLED)
         else:
-            itemTypeID = TABS_ITEM_MAPPING[currentTab]
+            itemTypeID = TABS_SLOT_TYPE_MAPPING[currentTab]
             typeName = GUI_ITEM_TYPE_NAMES[itemTypeID]
             slotsCount, filledSlotsCount = self.__ctx.checkSlotsFilling(itemTypeID, self.__ctx.currentSeason)
             textStyle = text_styles.bonusPreviewText if slotsCount == filledSlotsCount else text_styles.stats
@@ -879,11 +929,31 @@ class MainView(LobbySubView, CustomizationMainViewMeta):
         ctx = {'prolongStyleRent': True}
         self.showBuyWindow(ctx=ctx)
 
+    def __onShowStyleInfo(self):
+        if self.__styleInfo is None:
+            return
+        else:
+            self.service.suspendHighlighter()
+            self.__styleInfo.show()
+            self.__ctx.c11CameraManager.locateCameraToStyleInfoPreview()
+            self.__styleInfoActive = True
+            return
+
+    def __onStyleInfoHidden(self, resumeHighlighter=True):
+        if self.__styleInfo is None:
+            return
+        else:
+            if resumeHighlighter:
+                self.service.resumeHighlighter()
+            self.__styleInfo.hide()
+            self.__ctx.c11CameraManager.locateCameraToCustomizationPreview()
+            return
+
     def __onNumberEditModeChanged(self, state, showPropSheetAfter=True):
         slotId = self.__ctx.selectedSlot
         if state is PersonalNumEditStatuses.EDIT_MODE_STARTED:
             self.__ctx.numberEditModeActive = True
-            self.__locateCameraOnAnchor(slotId.areaId, slotId.slotType, slotId.regionIdx)
+            self.__locateCameraOnAnchor(slotId.areaId, slotId.slotType, slotId.regionIdx, forceRotate=True)
             self.__showPropertiesSheet(slotId.areaId, slotId.slotType, slotId.regionIdx, forceUpdate=True)
         elif state is PersonalNumEditStatuses.EDIT_MODE_FINISHED:
             self.soundManager.playInstantSound(SOUNDS.CUST_CHOICE_ENTER)
@@ -898,6 +968,9 @@ class MainView(LobbySubView, CustomizationMainViewMeta):
             else:
                 self.__hidePropertiesSheet()
                 self.__clearItem()
+
+    def __onResetC11nItemsNovelty(self):
+        self.__setNotificationCounters()
 
     def __onTurretRotated(self):
         self.__setAnchorsInitData()

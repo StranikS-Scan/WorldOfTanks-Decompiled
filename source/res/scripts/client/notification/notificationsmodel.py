@@ -49,9 +49,14 @@ class NotificationsModel(object):
             self.onNotificationUpdated(self.__collection.getItem(typeID, entityID), isStateChanged)
 
     def removeNotification(self, typeID, entityID):
-        groupID = self.getNotification(typeID, entityID).getGroup()
-        if self.__collection.removeItem(typeID, entityID):
-            self.onNotificationRemoved(typeID, entityID, groupID)
+        notification = self.getNotification(typeID, entityID)
+        if notification is None:
+            return
+        else:
+            groupID = notification.getGroup()
+            if self.__collection.removeItem(typeID, entityID):
+                self.onNotificationRemoved(typeID, entityID, groupID)
+            return
 
     def removeNotificationsByType(self, typeID):
         self.__collection.removeItemsByType(typeID)

@@ -83,7 +83,7 @@ class AsynchFileStorage(IStorage):
 
 class ApplicationStorage(object):
 
-    def __init__(self, name, workersLimit, queueLimit):
+    def __init__(self, name, workersLimit, queueLimit=threads.INFINITE_QUEUE_SIZE):
         prefsPath = unicode(BigWorld.wg_getPreferencesFilePath(), 'utf-8', errors='ignore')
         self.__cacheDir = os.path.normpath(os.path.join(os.path.dirname(prefsPath), name))
         _expectDir(self.__cacheDir)

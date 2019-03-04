@@ -4,25 +4,31 @@ from debug_utils import LOG_DEBUG
 from gui import SystemMessages
 from gui.Scaleform.daapi import LobbySubView
 from gui.Scaleform.daapi.view.lobby.techtree.listeners import TTListenerDecorator
+from gui.Scaleform.daapi.view.lobby.techtree.sound_constants import TECHTREE_SOUND_SPACE
 from gui.Scaleform.daapi.view.lobby.vehicle_compare.formatters import getTreeNodeCompareData
 from gui.Scaleform.daapi.view.meta.ResearchViewMeta import ResearchViewMeta
 from gui.Scaleform.genConsts.NODE_STATE_FLAGS import NODE_STATE_FLAGS
 from gui.shared import event_dispatcher as shared_events
+from gui.sounds.ambients import LobbySubViewEnv
 from helpers import dependency
 from skeletons.gui.game_control import IWalletController, IVehicleComparisonBasket
 from skeletons.gui.shared import IItemsCache
 
 class ResearchView(LobbySubView, ResearchViewMeta):
-    __background_alpha__ = 0.0
-    itemsCache = dependency.descriptor(IItemsCache)
-    wallet = dependency.descriptor(IWalletController)
-    cmpBasket = dependency.descriptor(IVehicleComparisonBasket)
+    __sound_env__ = LobbySubViewEnv
+    _COMMON_SOUND_SPACE = TECHTREE_SOUND_SPACE
+    _itemsCache = dependency.descriptor(IItemsCache)
+    _wallet = dependency.descriptor(IWalletController)
+    _cmpBasket = dependency.descriptor(IVehicleComparisonBasket)
 
     def __init__(self, data):
         super(ResearchView, self).__init__()
         self._data = data
         self._canBeClosed = True
         self._listener = TTListenerDecorator()
+
+    def goToBlueprintView(self, vehicleCD):
+        shared_events.showBlueprintView(vehicleCD, self._blueprintExitEvent(vehicleCD))
 
     def redraw(self):
         raise NotImplementedError('Must be overridden in subclass')
@@ -76,6 +82,10 @@ class ResearchView(LobbySubView, ResearchViewMeta):
         if result:
             self.as_setInventoryItemsS(result)
 
+    def invalidateBlueprints(self, blueprints):
+        if blueprints:
+            self.redraw()
+
     def invalidatePrbState(self):
         result = self._data.invalidatePrbState()
         if result:
@@ -100,17 +110,20 @@ class ResearchView(LobbySubView, ResearchViewMeta):
         raise NotImplementedError('Must be overridden in subclass')
 
     def request4Info(self, itemCD, rootCD):
-        vehicle = self.itemsCache.items.getItemByCD(int(rootCD))
+        vehicle = self._itemsCache.items.getItemByCD(int(rootCD))
         if vehicle:
             shared_events.showModuleInfo(int(itemCD), vehicle.descriptor)
 
     def invalidateVehCompare(self):
-        getVehicle = self.itemsCache.items.getItemByCD
+        getVehicle = self._itemsCache.items.getItemByCD
 
         def getNodeData(vehCD):
             return getTreeNodeCompareData(getVehicle(vehCD))
 
         self.as_setNodeVehCompareDataS([ (v, getNodeData(v)) for v in self._data.getVehicleCDs() ])
+
+    def _blueprintExitEvent(self, vehicleCD):
+        return None
 
     def _populate(self):
         super(ResearchView, self)._populate()

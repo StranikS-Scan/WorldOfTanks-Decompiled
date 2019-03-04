@@ -13,6 +13,7 @@ from tutorial.logger import LOG_ERROR, LOG_DEBUG
 from gui.prb_control.events_dispatcher import g_eventDispatcher as prebattleControl
 from gui.Scaleform.framework.managers.containers import POP_UP_CRITERIA
 from skeletons.gui.shared import IItemsCache
+from skeletons.account_helpers.settings_core import ISettingsCore
 from CurrentVehicle import g_currentVehicle
 
 class FunctionalCondition(TutorialProxyHolder):
@@ -65,6 +66,31 @@ class FunctionalViewPresentCondition(FunctionalCondition):
         viewAlias = condition.getViewAlias()
         result = self._gui.isViewPresent(viewType, criteria={POP_UP_CRITERIA.VIEW_ALIAS: viewAlias})
         return result if condition.isPositiveState() else not result
+
+
+class FunctionalConnectedItemCondition(FunctionalCondition):
+    __settingsCore = dependency.descriptor(ISettingsCore)
+
+    def isConditionOk(self, condition):
+        shownHints = self.__settingsCore.serverSettings.getOnceOnlyHintsSettings()
+        isHintShown = shownHints.get(condition.getID(), None)
+        if isHintShown is None:
+            LOG_DEBUG('invalid hintID in condition: ', condition.getID())
+            return False
+        else:
+            return False if isHintShown != condition.isShown() else True
+
+
+class FunctionalComplexConditionAnd(FunctionalCondition):
+
+    def isConditionOk(self, conditions):
+        return FunctionalConditions(conditions.getConditionList()).evaluateWithAND()
+
+
+class FunctionalComplexConditionOr(FunctionalCondition):
+
+    def isConditionOk(self, conditions):
+        return FunctionalConditions(conditions.getConditionList()).evaluateWithOR()
 
 
 class FunctionalVarDefinedCondition(FunctionalCondition):
@@ -184,7 +210,10 @@ _SUPPORTED_CONDITIONS = {CONDITION_TYPE.FLAG: FunctionalFlagCondition,
  CONDITION_TYPE.SERVICE: FunctionalServiceCondition,
  CONDITION_TYPE.COMPONENT_ON_SCENE: FunctionalComponentOnSceneCondition,
  CONDITION_TYPE.CURRENT_SCENE: FunctionalCurrentSceneCondition,
- CONDITION_TYPE.VIEW_PRESENT: FunctionalViewPresentCondition}
+ CONDITION_TYPE.VIEW_PRESENT: FunctionalViewPresentCondition,
+ CONDITION_TYPE.CONNECTED_ITEM: FunctionalConnectedItemCondition,
+ CONDITION_TYPE.CONDITION_AND: FunctionalComplexConditionAnd,
+ CONDITION_TYPE.CONDITION_OR: FunctionalComplexConditionOr}
 
 def _areAllConditionsOk(item):
     return FunctionalConditions(item.getConditions()).allConditionsOk()
@@ -214,7 +243,7 @@ class FunctionalConditions(TutorialProxyHolder):
             result = True
             for condition in self._conditions:
                 if result:
-                    result = self._isConditionActive(condition)
+                    result = self.isConditionActive(condition)
 
             return result
 
@@ -225,11 +254,11 @@ class FunctionalConditions(TutorialProxyHolder):
             result = False
             for condition in self._conditions:
                 if not result:
-                    result = self._isConditionActive(condition)
+                    result = self.isConditionActive(condition)
 
             return result
 
-    def _isConditionActive(self, condition):
+    def isConditionActive(self, condition):
         functional = None
         if self._tutorial is not None:
             functional = self._ctrlFactory.createCustomFuncCondition(condition)

@@ -56,7 +56,7 @@ from messenger.m_constants import PROTO_TYPE
 from messenger.proto import proto_getter
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.connection_mgr import IConnectionManager
-from skeletons.gui.web import IWebController
+from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.sounds import ISoundsController
 from gui import makeHtmlString
 
@@ -703,10 +703,11 @@ class MessengerDateTimeSetting(MessengerSetting):
 
 
 class ClansSetting(MessengerSetting):
-    clanCtrl = dependency.descriptor(IWebController)
+    lobbyContext = dependency.descriptor(ILobbyContext)
 
     def _get(self):
-        return super(ClansSetting, self)._get() if self.clanCtrl.isEnabled() else None
+        isEnabled = self.lobbyContext.getServerSettings().clanProfile.isEnabled()
+        return super(ClansSetting, self)._get() if isEnabled else None
 
     def getDefaultValue(self):
         return True

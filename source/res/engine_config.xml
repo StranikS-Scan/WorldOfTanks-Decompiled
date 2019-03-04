@@ -1,6 +1,6 @@
 <engine_config.xml>
   <personality>	game	</personality>
-  <preferences>	preferences.xml	</preferences>
+  <preferences>	preferences_ct.xml	</preferences>
   <enableBalanceCPU>	true	</enableBalanceCPU>
   <enableServerTimeSync>	true	</enableServerTimeSync>
   <lod>
@@ -85,6 +85,7 @@
       <key>	GRAVE	</key>
     </combination>
     <enableEndStopApp>	false	</enableEndStopApp>
+    <benchmarkStartTime>	15.0	</benchmarkStartTime>
   </debugKeys>
   <entities>
     <disablePreloads>	false	</disablePreloads>
@@ -138,7 +139,7 @@
     <PS_PERFORMANCE_LOD_MULT>	1.2	</PS_PERFORMANCE_LOD_MULT>
   </ParticleSystem>
   <debug>
-    <fullDump>	true	</fullDump>
+    <fullDump>	false	</fullDump>
     <clientUrl></clientUrl>
     <botsUrl>	http://cat-st1.wargaming.net	</botsUrl>
     <dxdiag>	true	</dxdiag>
@@ -286,6 +287,12 @@
         </project>
         <project>
           <name>	gui_hangar.bnk	</name>
+        </project>
+        <project>
+          <name>	gui_blueprints.bnk	</name>
+        </project>
+        <project>
+          <name>	researches.bnk	</name>
         </project>
       </SFX_soundbanks_hangar>
       <SFX_soundbanks_login>

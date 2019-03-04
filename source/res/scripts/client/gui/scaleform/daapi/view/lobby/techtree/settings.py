@@ -1,15 +1,15 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/techtree/settings.py
 from collections import namedtuple, defaultdict
+import nations
 from debug_utils import LOG_DEBUG
 from gui.Scaleform.genConsts.NODE_STATE_FLAGS import NODE_STATE_FLAGS
 from gui.shared.gui_items import GUI_ITEM_TYPE, GUI_ITEM_TYPE_NAMES
 from items import getTypeInfoByName
 from items.vehicles import VEHICLE_CLASS_TAGS
-import nations
-__all__ = ('NODE_STATE', 'RequestState', 'SelectedNation', 'UnlockProps', 'DEFAULT_UNLOCK_PROPS', 'VehicleClassInfo', 'MAX_PATH_LIMIT', 'RESEARCH_ITEMS', 'TREE_SHARED_REL_FILE_PATH', 'NATION_TREE_REL_FILE_PATH')
+__all__ = ('NODE_STATE', 'RequestState', 'SelectedNation', 'UnlockProps', 'DEFAULT_UNLOCK_PROPS', 'BpfProps', '_DEFAULT_BPF_PROPS', 'VehicleClassInfo', 'MAX_PATH_LIMIT', 'RESEARCH_ITEMS', 'TREE_SHARED_REL_FILE_PATH', 'NATION_TREE_REL_FILE_PATH')
 TREE_SHARED_REL_FILE_PATH = 'gui/flash/techtree/tree-shared.xml'
-NATION_TREE_REL_FILE_PATH = 'gui/flash/techtree/%s-tree.xml'
+NATION_TREE_REL_FILE_PATH = 'gui/flash/techtree/{}-tree.xml'
 _VEHICLE_TYPE_NAME = GUI_ITEM_TYPE_NAMES[GUI_ITEM_TYPE.VEHICLE]
 RESEARCH_ITEMS = (GUI_ITEM_TYPE.GUN,
  GUI_ITEM_TYPE.TURRET,
@@ -17,6 +17,7 @@ RESEARCH_ITEMS = (GUI_ITEM_TYPE.GUN,
  GUI_ITEM_TYPE.ENGINE,
  GUI_ITEM_TYPE.CHASSIS)
 MAX_PATH_LIMIT = 5
+UNKNOWN_VEHICLE_LEVEL = -1
 
 class NODE_STATE(object):
 
@@ -43,6 +44,10 @@ class NODE_STATE(object):
         if state & flag > 0:
             state ^= flag
         return state
+
+    @classmethod
+    def isNext2Unlock(cls, state):
+        return state & NODE_STATE_FLAGS.NEXT_2_UNLOCK > 0
 
     @classmethod
     def isAvailable2Unlock(cls, state):
@@ -81,6 +86,10 @@ class NODE_STATE(object):
         return state & NODE_STATE_FLAGS.PREMIUM > 0
 
     @classmethod
+    def isActionVehicle(cls, state):
+        return state & NODE_STATE_FLAGS.ACTION > 0
+
+    @classmethod
     def isBuyForCredits(cls, state):
         return state & NODE_STATE_FLAGS.UNLOCKED and not state & NODE_STATE_FLAGS.IN_INVENTORY and not state & NODE_STATE_FLAGS.PREMIUM or state & NODE_STATE_FLAGS.RESTORE_AVAILABLE
 
@@ -106,6 +115,14 @@ class NODE_STATE(object):
         return state & NODE_STATE_FLAGS.VEHICLE_RENTAL_IS_OVER
 
     @classmethod
+    def isRestoreAvailable(cls, state):
+        return state & NODE_STATE_FLAGS.RESTORE_AVAILABLE
+
+    @classmethod
+    def isRentAvailable(cls, state):
+        return state & NODE_STATE_FLAGS.RENT_AVAILABLE
+
+    @classmethod
     def canTradeIn(cls, state):
         return state & NODE_STATE_FLAGS.CAN_TRADE_IN
 
@@ -116,6 +133,10 @@ class NODE_STATE(object):
     @classmethod
     def isAnnouncement(cls, state):
         return state & NODE_STATE_FLAGS.ANNOUNCEMENT
+
+    @classmethod
+    def hasBlueprints(cls, state):
+        return state & NODE_STATE_FLAGS.BLUEPRINT
 
     @classmethod
     def printStates(cls, state):
@@ -145,18 +166,24 @@ class UnlockStats(namedtuple('UnlockStats', 'unlocked xps freeXP')):
         return self.freeXP + self.getVehXP(nodeCD)
 
 
-class UnlockProps(namedtuple('UnlockProps', 'parentID unlockIdx xpCost required')):
+class UnlockProps(namedtuple('UnlockProps', ('parentID', 'unlockIdx', 'xpCost', 'required', 'discount', 'xpFullCost'))):
+    __slots__ = ()
 
     def makeTuple(self):
         return (self.parentID,
          self.unlockIdx,
          self.xpCost,
-         list(self.required))
+         list(self.required),
+         self.discount,
+         self.xpFullCost)
 
 
-DEFAULT_UNLOCK_PROPS = UnlockProps(0, -1, 0, set())
+DEFAULT_UNLOCK_PROPS = UnlockProps(0, -1, 0, set(), 0, 0)
+BpfProps = namedtuple('BpfProps', ('filledCount', 'totalCount', 'canConvert'))
+_DEFAULT_BPF_PROPS = BpfProps(0, 0, False)
 
 class SelectedNation(object):
+    __slots__ = ()
     __index = None
 
     @classmethod
@@ -186,6 +213,7 @@ class SelectedNation(object):
 
 
 class RequestState(object):
+    __slots__ = ()
     __states = set()
 
     @classmethod

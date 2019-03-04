@@ -8,6 +8,10 @@ from gui.app_loader import g_appLoader
 _STATE_TYPE_INFO = 'INFO'
 TooltipData = namedtuple('TooltipData', ('tooltip', 'isSpecial', 'specialAlias', 'specialArgs'))
 
+def createTooltipData(tooltip=None, isSpecial=False, specialAlias=None, specialArgs=None):
+    return TooltipData(tooltip, isSpecial, specialAlias, specialArgs)
+
+
 class _BackportTooltipContent(ViewImpl):
     __slots__ = ()
 

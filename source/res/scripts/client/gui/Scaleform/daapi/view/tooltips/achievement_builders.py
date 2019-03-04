@@ -14,5 +14,6 @@ def getTooltipBuilders():
      builders.DataBuilder(TOOLTIPS_CONSTANTS.MARKS_ON_GUN_ACHIEVEMENT, TOOLTIPS_CONSTANTS.MARKS_ON_GUN_UI, achievement.AchievementTooltipData(contexts.ProfileContext())),
      builders.DataBuilder(TOOLTIPS_CONSTANTS.GLOBAL_RATING, TOOLTIPS_CONSTANTS.ACHIEVEMENT_UI, achievement.GlobalRatingTooltipData(contexts.ProfileContext())),
      builders.DataBuilder(TOOLTIPS_CONSTANTS.MARK_OF_MASTERY, TOOLTIPS_CONSTANTS.MARK_OF_MASTERY_UI, achievement.AchievementTooltipData(contexts.BattleResultMarkOfMasteryContext(fieldsToExclude=('showCondSeparator',)))),
-     builders.DataBuilder(TOOLTIPS_CONSTANTS.SHOP_20_BADGE, TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI, achievement.BadgeTooltipData(contexts.ToolTipContext(None))),
+     builders.DataBuilder(TOOLTIPS_CONSTANTS.SHOP_20_BADGE, TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI, achievement.BadgeTooltipData(contexts.BadgeContext(None))),
+     builders.DataBuilder(TOOLTIPS_CONSTANTS.REFERRAL_BADGE, TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI, achievement.BadgeTooltipData(contexts.ReferralProgramBadgeContext(None))),
      builders.SimpleBuilder('achievementAttr', TOOLTIPS_CONSTANTS.ACHIEVEMENT_UI))

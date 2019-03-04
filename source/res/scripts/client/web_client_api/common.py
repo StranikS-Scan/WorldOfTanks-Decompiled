@@ -61,7 +61,7 @@ class ItemPackType(CONST_CONTAINER):
     CUSTOM_GOLD = 'custom/gold'
     CUSTOM_CREDITS = 'custom/credits'
     CUSTOM_SLOT = 'custom/slot'
-    CUSTOM_CREW = 'custom/crew'
+    CUSTOM_REFERRAL_CREW = 'custom/crew'
     CUSTOM_REWARD_POINT = 'custom/prestige_point'
     CUSTOM_SUPPLY_POINT = 'custom/supply_point'
     TOKEN = 'token'
@@ -79,6 +79,7 @@ class ItemPackType(CONST_CONTAINER):
     STYLE = 'style'
     ACHIEVEMENT = 'achievement'
     BADGE = 'badge'
+    REFERRAL_BADGE = 'referralBadge'
     PLAYER_BADGE = 'playerBadges'
     SINGLE_ACHIEVEMENTS = 'singleAchievements'
 
@@ -113,7 +114,7 @@ class ItemPackTypeGroup(CONST_CONTAINER):
      ItemPackType.CUSTOM_CRYSTAL,
      ItemPackType.CUSTOM_GOLD,
      ItemPackType.CUSTOM_CREDITS,
-     ItemPackType.CUSTOM_CREW,
+     ItemPackType.CUSTOM_REFERRAL_CREW,
      ItemPackType.CUSTOM_SLOT,
      ItemPackType.CUSTOM_REWARD_POINT,
      ItemPackType.CUSTOM_SUPPLY_POINT)

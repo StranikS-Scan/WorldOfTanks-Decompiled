@@ -81,7 +81,7 @@
     <hangarShadowTexture>	vehicles/russian/R18_SU-152/SU-152_HangarShadowMap.dds	</hangarShadowTexture>
     <customization>
       <customizableVehicleAreas>
-        <paint></paint>
+        <paint>	HULL	</paint>
         <camouflage>	HULL	</camouflage>
       </customizableVehicleAreas>
     </customization>
@@ -140,6 +140,12 @@
       <slot>
         <slotType>	camouflage	</slotType>
         <slotId>	3	</slotId>
+        <anchorPosition>	0.000088 0.522134 -2.4825	</anchorPosition>
+        <anchorDirection>	0.000000 0.707107 -0.707107	</anchorDirection>
+      </slot>
+      <slot>
+        <slotType>	paint	</slotType>
+        <slotId>	2	</slotId>
         <anchorPosition>	0.000088 0.522134 -2.4825	</anchorPosition>
         <anchorDirection>	0.000000 0.707107 -0.707107	</anchorDirection>
       </slot>
@@ -821,7 +827,7 @@
       </physicalTracks>
       <customization>
         <customizableVehicleAreas>
-          <paint></paint>
+          <paint>	CHASSIS	</paint>
           <camouflage></camouflage>
         </customizableVehicleAreas>
       </customization>
@@ -831,6 +837,12 @@
           <slotId>	257	</slotId>
           <anchorPosition>	-0.000000 2.20771 0.900168	</anchorPosition>
           <anchorDirection>	-0.000000 1 0.000000	</anchorDirection>
+        </slot>
+        <slot>
+          <slotType>	paint	</slotType>
+          <slotId>	256	</slotId>
+          <anchorPosition>	-1.37855 0.55943 0.000801075	</anchorPosition>
+          <anchorDirection>	0.000000 -1 -0.000000	</anchorDirection>
         </slot>
       </customizationSlots>
     </SU-152_mod_1943>
@@ -1505,7 +1517,7 @@
       </physicalTracks>
       <customization>
         <customizableVehicleAreas>
-          <paint></paint>
+          <paint>	CHASSIS	</paint>
           <camouflage></camouflage>
         </customizableVehicleAreas>
       </customization>
@@ -1515,6 +1527,12 @@
           <slotId>	257	</slotId>
           <anchorPosition>	0.000062 2.20741 0.900469	</anchorPosition>
           <anchorDirection>	-0.000000 1 0.000000	</anchorDirection>
+        </slot>
+        <slot>
+          <slotType>	paint	</slotType>
+          <slotId>	256	</slotId>
+          <anchorPosition>	-1.37855 0.559432 0.000760281	</anchorPosition>
+          <anchorDirection>	-0.000000 -1 -0.000000	</anchorDirection>
         </slot>
       </customizationSlots>
     </SU-152_mod_1944>
@@ -1582,7 +1600,7 @@
           <effects>	shot_huge_mb	</effects>
           <customization>
             <customizableVehicleAreas>
-              <paint></paint>
+              <paint>	GUN GUN_2	</paint>
               <camouflage>	GUN	</camouflage>
             </customizableVehicleAreas>
           </customization>
@@ -1603,6 +1621,20 @@
               <anchorPosition>	0.168706 0.0853627 1.57324	</anchorPosition>
               <anchorDirection>	-0.000000 0.000000 1	</anchorDirection>
               <applyTo>	4096	</applyTo>
+            </slot>
+            <slot>
+              <slotType>	paint	</slotType>
+              <slotId>	768	</slotId>
+              <anchorPosition>	0.168706 0.0853627 1.57324	</anchorPosition>
+              <anchorDirection>	-0.000000 0.000000 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+            <slot>
+              <slotType>	paint	</slotType>
+              <slotId>	769	</slotId>
+              <anchorPosition>	0.16802 0.257732 0.328565	</anchorPosition>
+              <anchorDirection>	-0.000000 0.000000 1	</anchorDirection>
+              <applyTo>	16384	</applyTo>
             </slot>
           </customizationSlots>
           <camouflage>
@@ -1646,7 +1678,7 @@
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <customization>
             <customizableVehicleAreas>
-              <paint></paint>
+              <paint>	GUN GUN_2	</paint>
               <camouflage>	GUN	</camouflage>
             </customizableVehicleAreas>
           </customization>
@@ -1667,6 +1699,20 @@
               <anchorPosition>	0.159561 0.059818 2.0717	</anchorPosition>
               <anchorDirection>	-0.000000 0.000000 1	</anchorDirection>
               <applyTo>	4096	</applyTo>
+            </slot>
+            <slot>
+              <slotType>	paint	</slotType>
+              <slotId>	768	</slotId>
+              <anchorPosition>	0.159561 0.059818 2.0717	</anchorPosition>
+              <anchorDirection>	-0.000000 0.000000 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+            <slot>
+              <slotType>	paint	</slotType>
+              <slotId>	769	</slotId>
+              <anchorPosition>	0.168022 0.257697 0.328573	</anchorPosition>
+              <anchorDirection>	-0.000000 0.000000 1	</anchorDirection>
+              <applyTo>	16384	</applyTo>
             </slot>
           </customizationSlots>
           <camouflage>
@@ -1704,7 +1750,7 @@
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <customization>
             <customizableVehicleAreas>
-              <paint></paint>
+              <paint>	GUN GUN_2	</paint>
               <camouflage>	GUN	</camouflage>
             </customizableVehicleAreas>
           </customization>
@@ -1725,6 +1771,20 @@
               <anchorPosition>	0.145061 0.00764406 2.03394	</anchorPosition>
               <anchorDirection>	-0.000000 0.000000 1	</anchorDirection>
               <applyTo>	4096	</applyTo>
+            </slot>
+            <slot>
+              <slotType>	paint	</slotType>
+              <slotId>	768	</slotId>
+              <anchorPosition>	0.145061 0.00764406 2.03394	</anchorPosition>
+              <anchorDirection>	-0.000000 0.000000 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+            <slot>
+              <slotType>	paint	</slotType>
+              <slotId>	769	</slotId>
+              <anchorPosition>	0.168025 0.257699 0.328563	</anchorPosition>
+              <anchorDirection>	-0.000000 0.000000 1	</anchorDirection>
+              <applyTo>	16384	</applyTo>
             </slot>
           </customizationSlots>
           <camouflage>

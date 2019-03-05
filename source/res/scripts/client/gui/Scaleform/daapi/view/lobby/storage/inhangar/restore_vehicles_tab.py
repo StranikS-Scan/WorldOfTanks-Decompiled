@@ -56,24 +56,6 @@ class _RestoreVehiclesDataProvider(StorageCarouselDataProvider):
 class RestoreVehiclesTabView(RestoreVehiclesTabViewMeta):
     _restoreCtrl = dependency.descriptor(IRestoreController)
 
-    def _populate(self):
-        super(RestoreVehiclesTabView, self)._populate()
-        self._dataProvider.setEnvironment(self.app)
-        self._itemsCache.onSyncCompleted += self.__onCacheResync
-        self._restoreCtrl.onRestoreChangeNotify += self.__updateVehicles
-        self.__updateVehicles()
-
-    def _dispose(self):
-        self._itemsCache.onSyncCompleted -= self.__onCacheResync
-        self._restoreCtrl.onRestoreChangeNotify -= self.__updateVehicles
-        super(RestoreVehiclesTabView, self)._dispose()
-
-    def _getVO(self, item):
-        pass
-
-    def _getItemTypeID(self):
-        return GUI_ITEM_TYPE.VEHICLE
-
     @process
     def restoreItem(self, itemId):
         itemCD = int(itemId)
@@ -89,13 +71,20 @@ class RestoreVehiclesTabView(RestoreVehiclesTabViewMeta):
     def showItemInfo(self, itemId):
         shared_events.showVehicleInfo(itemId)
 
-    def _buildItems(self):
-        pass
+    def _populate(self):
+        super(RestoreVehiclesTabView, self)._populate()
+        self._dataProvider.setEnvironment(self.app)
+        self._restoreCtrl.onRestoreChangeNotify += self.__updateVehicles
+        self.__updateVehicles()
+
+    def _dispose(self):
+        self._restoreCtrl.onRestoreChangeNotify -= self.__updateVehicles
+        super(RestoreVehiclesTabView, self)._dispose()
 
     def _createDataProvider(self):
         return _RestoreVehiclesDataProvider(_RestoreStorageCarouselFilter(), self._itemsCache, g_currentVehicle)
 
-    def __onCacheResync(self, reason, diff):
+    def _onCacheResync(self, reason, diff):
         forceUpdateReasons = (CACHE_SYNC_REASON.SHOP_RESYNC, CACHE_SYNC_REASON.DOSSIER_RESYNC, CACHE_SYNC_REASON.CLIENT_UPDATE)
         if reason in forceUpdateReasons:
             self.__updateVehicles()

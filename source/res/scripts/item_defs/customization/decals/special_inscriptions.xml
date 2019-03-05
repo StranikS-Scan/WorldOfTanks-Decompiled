@@ -406,7 +406,7 @@
     <vehicleFilter>
       <include>
         <nations>	ussr poland czech china germany italy japan	</nations>
-        <levels>	6 8 9 10	</levels>
+        <levels>	6 7 8 9 10	</levels>
       </include>
     </vehicleFilter>
     <type>	INSCRIPTION	</type>
@@ -426,7 +426,7 @@
     <vehicleFilter>
       <include>
         <nations>	france uk usa sweden	</nations>
-        <levels>	6 8 9 10	</levels>
+        <levels>	6 7 8 9 10	</levels>
       </include>
     </vehicleFilter>
     <type>	INSCRIPTION	</type>
@@ -810,6 +810,20 @@
       <id>	680	</id>
       <texture>	gui/maps/vehicles/decals/inscriptions/special/inscription_223.dds	</texture>
       <userString>	#vehicle_customization:inscription/special/special_223	</userString>
+      <mirror>	false	</mirror>
+    </decal>
+  </itemGroup>
+  <itemGroup>
+    <name>	inscriptions notInShop	</name>
+    <userString>	#vehicle_customization:inscription/special	</userString>
+    <season>	ALL	</season>
+    <historical>	false	</historical>
+    <priceGroup>	inscriptions notInShop	</priceGroup>
+    <type>	INSCRIPTION	</type>
+    <decal>
+      <id>	699	</id>
+      <texture>	gui/maps/vehicles/decals/inscriptions/special/inscription_236.dds	</texture>
+      <userString>	#vehicle_customization:inscription/special/special_236	</userString>
       <mirror>	false	</mirror>
     </decal>
   </itemGroup>

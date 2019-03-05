@@ -208,12 +208,6 @@ class Shop(object):
     def getDropSkillsCost(self, callback):
         self.__getValue('dropSkillsCost', callback)
 
-    def getPassportChangeCost(self, callback):
-        self.__getValue('passportChangeCost', callback)
-
-    def getFemalePassportChangeCost(self, callback):
-        self.__getValue('femalePassportChangeCost', callback)
-
     def getPaidRemovalCost(self, callback):
         self.__getValue('paidRemovalCost', callback)
 
@@ -413,6 +407,23 @@ class Shop(object):
             else:
                 proxy = None
             self.__account._doCmdInt4(AccountCommands.CMD_SELL_C11N_ITEMS, self.__getCacheRevision(), itemCD, count, vehInvID, proxy)
+            return
+
+    def resetC11nItemsNovelty(self, itemsList, callback):
+        if self.__ignore:
+            if callback is not None:
+                callback(AccountCommands.RES_NON_PLAYER, [])
+            return
+        else:
+            if callback is not None:
+                proxy = lambda requestID, resultID, errorStr, ext={}: callback(resultID)
+            else:
+                proxy = None
+            intArr = [self.__getCacheRevision()]
+            for item in itemsList:
+                intArr.extend(item)
+
+            self.__account._doCmdIntArr(AccountCommands.CMD_RESET_C11N_ITEMS_NOVELTY, intArr, proxy)
             return
 
     def __onSyncResponse(self, syncID, resultID, ext=None):

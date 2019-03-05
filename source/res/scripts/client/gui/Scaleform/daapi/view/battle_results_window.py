@@ -10,6 +10,7 @@ from gui.server_events import events_dispatcher as quests_events
 from gui.Scaleform.daapi.view.meta.BattleResultsMeta import BattleResultsMeta
 from gui.shared import event_bus_handlers, events, EVENT_BUS_SCOPE
 from gui.shared import event_dispatcher
+from gui.shared.event_dispatcher import showProgressiveRewardWindow
 from gui.sounds.ambients import BattleResultsEnv
 from helpers import dependency
 from skeletons.gui.battle_results import IBattleResultsService
@@ -64,6 +65,9 @@ class BattleResultsWindow(BattleResultsMeta):
             self.onWindowClose()
         elif unlockType == PROGRESS_ACTION.NEW_SKILL_UNLOCK_TYPE:
             event_dispatcher.showPersonalCase(itemID, 2, EVENT_BUS_SCOPE.LOBBY)
+
+    def showProgressiveRewardView(self, data):
+        showProgressiveRewardWindow()
 
     def _populate(self):
         super(BattleResultsWindow, self)._populate()

@@ -79,7 +79,7 @@
     <hangarShadowTexture>	vehicles/british/GB52_A45/A45_HangarShadowMap.dds	</hangarShadowTexture>
     <customization>
       <customizableVehicleAreas>
-        <paint></paint>
+        <paint>	HULL	</paint>
         <camouflage>	HULL	</camouflage>
       </customizableVehicleAreas>
     </customization>
@@ -117,6 +117,12 @@
       <slot>
         <slotType>	camouflage	</slotType>
         <slotId>	3	</slotId>
+        <anchorPosition>	0.000000 0.66153 -2.75248	</anchorPosition>
+        <anchorDirection>	0.000000 0.233685 -0.972312	</anchorDirection>
+      </slot>
+      <slot>
+        <slotType>	paint	</slotType>
+        <slotId>	2	</slotId>
         <anchorPosition>	0.000000 0.66153 -2.75248	</anchorPosition>
         <anchorDirection>	0.000000 0.233685 -0.972312	</anchorDirection>
       </slot>
@@ -174,7 +180,7 @@
           <isLeading>	true	</isLeading>
           <name>	WD_R0	</name>
           <radius>	0.381387	</radius>
-          <syncAngle>	20	</syncAngle>
+          <syncAngle>	28	</syncAngle>
         </wheel>
         <group>
           <isLeft>	false	</isLeft>
@@ -188,7 +194,7 @@
           <isLeading>	true	</isLeading>
           <name>	WD_R7	</name>
           <radius>	0.442342	</radius>
-          <syncAngle>	20	</syncAngle>
+          <syncAngle>	28	</syncAngle>
         </wheel>
         <group>
           <isLeft>	false	</isLeft>
@@ -202,7 +208,7 @@
           <isLeading>	true	</isLeading>
           <name>	WD_L0	</name>
           <radius>	0.381387	</radius>
-          <syncAngle>	20	</syncAngle>
+          <syncAngle>	28	</syncAngle>
         </wheel>
         <group>
           <isLeft>	true	</isLeft>
@@ -216,7 +222,7 @@
           <isLeading>	true	</isLeading>
           <name>	WD_L7	</name>
           <radius>	0.442342	</radius>
-          <syncAngle>	20	</syncAngle>
+          <syncAngle>	28	</syncAngle>
         </wheel>
         <group>
           <isLeft>	true	</isLeft>
@@ -823,7 +829,7 @@
       </physicalTracks>
       <customization>
         <customizableVehicleAreas>
-          <paint></paint>
+          <paint>	CHASSIS	</paint>
           <camouflage></camouflage>
         </customizableVehicleAreas>
       </customization>
@@ -831,8 +837,14 @@
         <slot>
           <slotType>	style	</slotType>
           <slotId>	257	</slotId>
-          <anchorPosition>	0.000073 2.6729 0.469329	</anchorPosition>
+          <anchorPosition>	0.000067 2.78931 0.000002	</anchorPosition>
           <anchorDirection>	0.000000 1 0.000000	</anchorDirection>
+        </slot>
+        <slot>
+          <slotType>	paint	</slotType>
+          <slotId>	256	</slotId>
+          <anchorPosition>	-1.92484 0.686773 -0.10714	</anchorPosition>
+          <anchorDirection>	-0.940554 0.335585 -0.0523529	</anchorDirection>
         </slot>
       </customizationSlots>
     </Chassis_GB52_A45>
@@ -916,7 +928,7 @@
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <customization>
             <customizableVehicleAreas>
-              <paint></paint>
+              <paint>	GUN GUN_2	</paint>
               <camouflage>	GUN	</camouflage>
             </customizableVehicleAreas>
           </customization>
@@ -926,7 +938,8 @@
               <slotId>	771	</slotId>
               <rayStart>	0.000000 0.012306 1.9053	</rayStart>
               <rayEnd>	-0.0605272 0.0615427 1.90526	</rayEnd>
-              <rayUp>	0.093 0.088 4	</rayUp>
+              <rayUp>	0.093 0.000000 0.000000	</rayUp>
+              <applyToFabric>	true	</applyToFabric>
               <size>	0.503	</size>
               <hideIfDamaged>	true	</hideIfDamaged>
               <isUVProportional>	true	</isUVProportional>
@@ -937,6 +950,20 @@
               <anchorPosition>	0.000000 0.00615302 1.91943	</anchorPosition>
               <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
               <applyTo>	4096	</applyTo>
+            </slot>
+            <slot>
+              <slotType>	paint	</slotType>
+              <slotId>	768	</slotId>
+              <anchorPosition>	0.000000 0.00615302 1.91943	</anchorPosition>
+              <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+            <slot>
+              <slotType>	paint	</slotType>
+              <slotId>	769	</slotId>
+              <anchorPosition>	0.000000 0.215465 0.215465	</anchorPosition>
+              <anchorDirection>	0.000000 0.707107 0.707107	</anchorDirection>
+              <applyTo>	16384	</applyTo>
             </slot>
           </customizationSlots>
           <camouflage>
@@ -959,7 +986,7 @@
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
       <customization>
         <customizableVehicleAreas>
-          <paint></paint>
+          <paint>	TURRET	</paint>
           <camouflage>	TURRET	</camouflage>
         </customizableVehicleAreas>
       </customization>
@@ -980,14 +1007,20 @@
           <rayStart>	1.10093 1.00629 -0.180399	</rayStart>
           <rayEnd>	0.927175 0.909085 -0.161428	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
+          <isMirrored>	true	</isMirrored>
           <size>	0.22	</size>
           <hideIfDamaged>	false	</hideIfDamaged>
-          <isMirrored>	true	</isMirrored>
           <isUVProportional>	true	</isUVProportional>
         </slot>
         <slot>
           <slotType>	camouflage	</slotType>
           <slotId>	513	</slotId>
+          <anchorPosition>	0.000000 1.11501 0.000000	</anchorPosition>
+          <anchorDirection>	0.000000 1 0.000000	</anchorDirection>
+        </slot>
+        <slot>
+          <slotType>	paint	</slotType>
+          <slotId>	512	</slotId>
           <anchorPosition>	0.000000 1.11501 0.000000	</anchorPosition>
           <anchorDirection>	0.000000 1 0.000000	</anchorDirection>
         </slot>

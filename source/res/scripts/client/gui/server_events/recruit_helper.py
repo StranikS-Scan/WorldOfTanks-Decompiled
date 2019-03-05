@@ -30,6 +30,8 @@ class RecruitSourceID(object):
 _NEW_SKILL = 'new_skill'
 _TANKWOMAN_ROLE_LEVEL = 100
 _TANKWOMAN_ICON = 'girl-empty.png'
+_TANKMAN_NAME = 'tankman'
+_TANKMAN_ICON = 'tankman.png'
 _TANKWOMAN_LEARNT_SKILLS = ['brotherhood']
 
 class _BaseRecruitInfo(object):
@@ -146,11 +148,11 @@ class _TokenRecruitInfo(_BaseRecruitInfo):
 
     def getLabel(self):
         label = TOOLTIPS.getNotRecruitedTankmanEventLabel(self._sourceID)
-        return label if label is not None else EMPTY_STRING
+        return label if label is not None else TOOLTIPS.getNotRecruitedTankmanEventLabel(_TANKMAN_NAME)
 
     def getDescription(self):
         description = TOOLTIPS.getNotRecruitedTankmanEventDesc(self._sourceID)
-        return description if description is not None else EMPTY_STRING
+        return description if description is not None else TOOLTIPS.getNotRecruitedTankmanEventDesc(_TANKMAN_NAME)
 
     def getFullUserNameByNation(self, nationID):
         _, firstName, lastName, _, _ = self.__parseTankmanData(nationID)
@@ -164,12 +166,27 @@ class _TokenRecruitInfo(_BaseRecruitInfo):
         found = [ c for c in config if c.name == self.__group ]
         if found:
             nationGroup = found[0]
-            if not nationGroup.firstNamesList or not nationGroup.lastNamesList or not nationGroup.iconsList:
+            firstNamesList = nationGroup.firstNamesList
+            lastNamesList = nationGroup.lastNamesList
+            iconsList = nationGroup.iconsList
+            if not firstNamesList or not lastNamesList or not iconsList:
                 return ([],
                  EMPTY_STRING,
                  EMPTY_STRING,
                  EMPTY_STRING,
                  False)
+            if len(firstNamesList) > 1 or len(lastNamesList) > 1 or len(iconsList) > 1:
+                if nationGroup.isFemales:
+                    return (nationGroup.rolesList,
+                     _ms(QUESTS.BONUSES_ITEM_TANKWOMAN),
+                     EMPTY_STRING,
+                     _TANKWOMAN_ICON,
+                     nationGroup.isFemales)
+                return (nationGroup.rolesList,
+                 _ms(QUESTS.BONUSES_ITEM_TANKMAN),
+                 EMPTY_STRING,
+                 _TANKMAN_ICON,
+                 nationGroup.isFemales)
             firstNameId = nationGroup.firstNamesList[0]
             lastNameId = nationGroup.lastNamesList[0]
             iconId = nationGroup.iconsList[0]

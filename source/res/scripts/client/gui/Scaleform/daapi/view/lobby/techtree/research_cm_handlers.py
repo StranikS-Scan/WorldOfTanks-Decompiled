@@ -2,7 +2,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/techtree/research_cm_handlers.py
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.hangar.hangar_cm_handlers import MODULE, SimpleVehicleCMHandler, VEHICLE
-from gui.Scaleform.daapi.view.lobby.techtree.settings import NODE_STATE
+from gui.Scaleform.daapi.view.lobby.techtree.settings import NODE_STATE, UnlockProps
 from gui.Scaleform.daapi.view.lobby.techtree.techtree_dp import g_techTreeDP
 from gui.Scaleform.framework.entities.EventSystemEntity import EventSystemEntity
 from gui.Scaleform.framework.managers.context_menu import AbstractContextMenuHandler
@@ -16,8 +16,8 @@ from skeletons.gui.shared import IItemsCache
 from skeletons.gui.shared.utils import IHangarSpace
 
 class ResearchItemContextMenuHandler(AbstractContextMenuHandler, EventSystemEntity):
-    itemsCache = dependency.descriptor(IItemsCache)
-    bootcampController = dependency.descriptor(IBootcampController)
+    _itemsCache = dependency.descriptor(IItemsCache)
+    _bootcampController = dependency.descriptor(IBootcampController)
 
     def __init__(self, cmProxy, ctx=None):
         super(ResearchItemContextMenuHandler, self).__init__(cmProxy, ctx, {MODULE.INFO: 'showModuleInfo',
@@ -25,18 +25,18 @@ class ResearchItemContextMenuHandler(AbstractContextMenuHandler, EventSystemEnti
          MODULE.BUY_AND_EQUIP: 'buyModule',
          MODULE.EQUIP: 'equipModule',
          MODULE.SELL: 'sellModule'})
-        self.__skipConfirm = self.bootcampController.isInBootcamp()
+        self.__skipConfirm = self._bootcampController.isInBootcamp()
 
     def showModuleInfo(self):
-        vehicle = self.itemsCache.items.getItemByCD(self._rootCD)
+        vehicle = self._itemsCache.items.getItemByCD(self._rootCD)
         if vehicle:
             shared_events.showModuleInfo(self._nodeCD, vehicle.descriptor)
 
     def unlockModule(self):
-        vehicle = self.itemsCache.items.getItemByCD(self._rootCD)
-        if vehicle:
-            unlockIdx, xpCost, _ = vehicle.getUnlockDescrByIntCD(self._nodeCD)
-            ItemsActionsFactory.doAction(ItemsActionsFactory.UNLOCK_ITEM, self._nodeCD, self._rootCD, unlockIdx, xpCost, skipConfirm=self.__skipConfirm)
+        vehicle = self._itemsCache.items.getItemByCD(self._rootCD)
+        unlockIdx, xpCost, required = vehicle.getUnlockDescrByIntCD(self._nodeCD)
+        unlockProps = UnlockProps(self._rootCD, unlockIdx, xpCost, required, 0, xpCost)
+        ItemsActionsFactory.doAction(ItemsActionsFactory.UNLOCK_ITEM, self._nodeCD, unlockProps, skipConfirm=self.__skipConfirm)
 
     def buyModule(self):
         ItemsActionsFactory.doAction(ItemsActionsFactory.BUY_AND_INSTALL_ITEM, self._nodeCD, self._rootCD, skipConfirm=self.__skipConfirm)
@@ -76,13 +76,13 @@ class ResearchItemContextMenuHandler(AbstractContextMenuHandler, EventSystemEnti
         return not NODE_STATE.isInstalled(self._nodeState) and NODE_STATE.isAvailable2Buy(self._nodeState) and self._canInstallItems()
 
     def _canInstallItems(self):
-        rootItem = self.itemsCache.items.getItemByCD(self._rootCD)
+        rootItem = self._itemsCache.items.getItemByCD(self._rootCD)
         return rootItem.isInInventory and not rootItem.isLocked and not rootItem.repairCost
 
 
 class ResearchVehicleContextMenuHandler(SimpleVehicleCMHandler):
-    comparisonBasket = dependency.descriptor(IVehicleComparisonBasket)
-    hangarSpace = dependency.descriptor(IHangarSpace)
+    _comparisonBasket = dependency.descriptor(IVehicleComparisonBasket)
+    _hangarSpace = dependency.descriptor(IHangarSpace)
 
     def __init__(self, cmProxy, ctx=None):
         super(ResearchVehicleContextMenuHandler, self).__init__(cmProxy, ctx, {VEHICLE.INFO: 'showVehicleInfo',
@@ -101,18 +101,20 @@ class ResearchVehicleContextMenuHandler(SimpleVehicleCMHandler):
         return self._nodeInvID
 
     def unlockVehicle(self):
-        unlockProps = g_techTreeDP.getUnlockProps(self._nodeCD)
-        ItemsActionsFactory.doAction(ItemsActionsFactory.UNLOCK_ITEM, self._nodeCD, unlockProps.parentID, unlockProps.unlockIdx, unlockProps.xpCost)
+        vehicleCD = self._nodeCD
+        level = self.itemsCache.items.getItemByCD(vehicleCD).level
+        unlockProps = g_techTreeDP.getUnlockProps(vehicleCD, level)
+        ItemsActionsFactory.doAction(ItemsActionsFactory.UNLOCK_ITEM, vehicleCD, unlockProps)
 
     def showVehiclePreview(self):
-        rootCD = self._rootCD
-        shared_events.showVehiclePreview(self._nodeCD, self._previewAlias, previewBackCb=lambda : shared_events.showResearchView(rootCD))
+        previewBackCb = self._getPreviewCallback()
+        shared_events.showVehiclePreview(self._nodeCD, self._previewAlias, previewBackCb=previewBackCb)
 
     def selectVehicle(self):
         shared_events.selectVehicleInHangar(self._nodeCD)
 
     def compareVehicle(self):
-        self.comparisonBasket.addVehicle(self._nodeCD)
+        self._comparisonBasket.addVehicle(self._nodeCD)
 
     def buyVehicle(self):
         vehicle = self.itemsCache.items.getItemByCD(self._nodeCD)
@@ -121,9 +123,15 @@ class ResearchVehicleContextMenuHandler(SimpleVehicleCMHandler):
         else:
             super(ResearchVehicleContextMenuHandler, self).buyVehicle()
 
+    def _getPreviewCallback(self):
+        descriptor = self._nodeCD
+        if self._previewAlias == VIEW_ALIAS.LOBBY_RESEARCH:
+            return lambda : shared_events.showResearchView(descriptor)
+        else:
+            return (lambda : shared_events.showTechTree(descriptor)) if self._previewAlias == VIEW_ALIAS.LOBBY_TECHTREE else None
+
     def _initFlashValues(self, ctx):
         self._nodeCD = int(ctx.nodeCD)
-        self._rootCD = int(ctx.rootCD)
         self._nodeState = int(ctx.nodeState)
         vehicle = self.itemsCache.items.getItemByCD(self._nodeCD)
         self._previewAlias = getattr(ctx, 'previewAlias', VIEW_ALIAS.LOBBY_TECHTREE)
@@ -132,7 +140,6 @@ class ResearchVehicleContextMenuHandler(SimpleVehicleCMHandler):
 
     def _clearFlashValues(self):
         self._nodeCD = None
-        self._rootCD = None
         self._nodeState = None
         self._nodeInvID = None
         return
@@ -141,7 +148,7 @@ class ResearchVehicleContextMenuHandler(SimpleVehicleCMHandler):
         vehicle = self.itemsCache.items.getItemByCD(self._nodeCD)
         options = [self._makeItem(VEHICLE.INFO, MENU.CONTEXTMENU_VEHICLEINFOEX)]
         if vehicle.isPreviewAllowed():
-            options.append(self._makeItem(VEHICLE.PREVIEW, MENU.CONTEXTMENU_SHOWVEHICLEPREVIEW, {'enabled': self.hangarSpace.spaceInited}))
+            options.append(self._makeItem(VEHICLE.PREVIEW, MENU.CONTEXTMENU_SHOWVEHICLEPREVIEW, {'enabled': self._hangarSpace.spaceInited}))
         if NODE_STATE.isWasInBattle(self._nodeState):
             options.append(self._makeItem(VEHICLE.STATS, MENU.CONTEXTMENU_SHOWVEHICLESTATISTICS))
         self._manageVehCompareItem(options, vehicle)
@@ -165,5 +172,43 @@ class ResearchVehicleContextMenuHandler(SimpleVehicleCMHandler):
         return options
 
     def _manageVehCompareItem(self, optionsRef, vehicle):
-        if self.comparisonBasket.isEnabled():
-            optionsRef.append(self._makeItem(VEHICLE.COMPARE, MENU.contextmenu(VEHICLE.COMPARE), {'enabled': self.comparisonBasket.isReadyToAdd(vehicle)}))
+        if self._comparisonBasket.isEnabled():
+            optionsRef.append(self._makeItem(VEHICLE.COMPARE, MENU.contextmenu(VEHICLE.COMPARE), {'enabled': self._comparisonBasket.isReadyToAdd(vehicle)}))
+
+
+class BlueprintVehicleContextMenuHandler(SimpleVehicleCMHandler):
+    __comparisonBasket = dependency.descriptor(IVehicleComparisonBasket)
+    __hangarSpace = dependency.descriptor(IHangarSpace)
+
+    def __init__(self, cmProxy, ctx=None):
+        super(BlueprintVehicleContextMenuHandler, self).__init__(cmProxy, ctx, {VEHICLE.UNLOCK: 'unlockVehicle',
+         VEHICLE.BLUEPRINT: 'showVehicleBlueprint'})
+
+    def getVehCD(self):
+        return self._nodeCD
+
+    def getVehInvID(self):
+        return None
+
+    def unlockVehicle(self):
+        level = self.itemsCache.items.getItemByCD(self._nodeCD).level
+        unlockProps = g_techTreeDP.getUnlockProps(self._nodeCD, level)
+        ItemsActionsFactory.doAction(ItemsActionsFactory.UNLOCK_ITEM, self._nodeCD, unlockProps)
+
+    def showVehicleBlueprint(self):
+        shared_events.showBlueprintView(self._nodeCD)
+
+    def _initFlashValues(self, ctx):
+        self._nodeCD = int(ctx.nodeCD)
+        self._nodeState = int(ctx.nodeState)
+        self._previewAlias = getattr(ctx, 'previewAlias', VIEW_ALIAS.LOBBY_TECHTREE)
+
+    def _clearFlashValues(self):
+        self._nodeCD = None
+        self._nodeState = None
+        self._previewAlias = None
+        return
+
+    def _generateOptions(self, ctx=None):
+        options = [self._makeItem(VEHICLE.BLUEPRINT, MENU.CONTEXTMENU_GOTOBLUEPRINT), self._makeItem(VEHICLE.UNLOCK, MENU.CONTEXTMENU_UNLOCK, {'enabled': NODE_STATE.isAvailable2Unlock(self._nodeState)})]
+        return options

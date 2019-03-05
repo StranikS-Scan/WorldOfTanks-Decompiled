@@ -36,21 +36,22 @@ class ToolTip(ToolTipMgrMeta):
         self.as_hideS()
 
     def handleKeyEvent(self, event):
+        if not self.isReadyToHandleKey(event):
+            return
         tooltipType = self.__tooltipID
+        args = self.__args
+        isSupportAdvanced = self.isSupportAdvanced(tooltipType, *args)
+        if isSupportAdvanced:
+            self.__fastRedraw = True
+            if self.__isComplex:
+                self.onCreateComplexTooltip(tooltipType, self.__stateType)
+            else:
+                self.onCreateTypedTooltip(tooltipType, args, self.__stateType)
+
+    def isReadyToHandleKey(self, event):
         altPressed = event.key == Keys.KEY_LALT or event.key == Keys.KEY_RALT
         self.__isAdvancedKeyPressed = event.isKeyDown() and altPressed
-        if tooltipType is None or not altPressed:
-            return
-        else:
-            args = self.__args
-            isSupportAdvanced = self.isSupportAdvanced(tooltipType, *args)
-            if isSupportAdvanced:
-                self.__fastRedraw = True
-                if self.__isComplex:
-                    self.onCreateComplexTooltip(tooltipType, self.__stateType)
-                else:
-                    self.onCreateTypedTooltip(tooltipType, args, self.__stateType)
-            return
+        return self.__tooltipID is not None and altPressed
 
     def onCreateTypedTooltip(self, tooltipType, args, stateType):
         if self._areTooltipsDisabled:

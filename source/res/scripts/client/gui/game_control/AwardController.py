@@ -2,7 +2,9 @@
 # Embedded file name: scripts/client/gui/game_control/AwardController.py
 import types
 import weakref
+from itertools import ifilter
 from abc import ABCMeta, abstractmethod
+from copy import deepcopy
 import ArenaType
 import gui.awards.event_dispatcher as shared_events
 import personal_missions
@@ -28,6 +30,7 @@ from gui.Scaleform.locale.MESSENGER import MESSENGER
 from gui.Scaleform.locale.SYSTEM_MESSAGES import SYSTEM_MESSAGES
 from gui.app_loader import g_appLoader
 from gui.gold_fish import isGoldFishActionActive, isTimeToShowGoldFishPromo
+from gui.impl.gen import R
 from gui.prb_control.entities.listener import IGlobalListener
 from gui.prb_control.settings import BATTLES_TO_SELECT_RANDOM_MIN_LIMIT
 from gui.ranked_battles import ranked_helpers
@@ -35,6 +38,7 @@ from gui.server_events import events_dispatcher as quests_events, recruit_helper
 from gui.server_events.events_dispatcher import showLootboxesAward
 from gui.server_events.finders import PM_FINAL_TOKEN_QUEST_IDS_BY_OPERATION_ID, getBranchByOperationId, BRANCH_TO_OPERATION_IDS, CHAMPION_BADGES_BY_BRANCH
 from gui.shared import EVENT_BUS_SCOPE, g_eventBus, events
+from gui.shared.event_dispatcher import showProgressiveRewardAwardWindow
 from gui.shared.events import PersonalMissionsEvent
 from gui.shared.gui_items.dossier.factories import getAchievementFactory
 from gui.shared.utils import isPopupsWindowsOpenDisabled
@@ -50,9 +54,11 @@ from messenger.proto.events import g_messengerEvents
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.game_control import IAwardController, IRankedBattlesController, IBootcampController
 from skeletons.gui.goodies import IGoodiesCache
+from skeletons.gui.impl import IGuiLoader
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.sounds import ISoundsController
+from gui.awards.event_dispatcher import showCrewSkinAward
 
 class AwardController(IAwardController, IGlobalListener):
     bootcampController = dependency.descriptor(IBootcampController)
@@ -80,10 +86,12 @@ class AwardController(IAwardController, IGlobalListener):
          RankedQuestsHandler(self),
          MarkByInvoiceHandler(self),
          MarkByQuestHandler(self),
+         CrewSkinsQuestHandler(self),
          RecruitHandler(self),
          SoundDeviceHandler(self),
          EliteWindowHandler(self),
-         LootBoxByInvoiceHandler(self)]
+         LootBoxByInvoiceHandler(self),
+         ProgressiveRewardHandler(self)]
         super(AwardController, self).__init__()
         self.__delayedHandlers = []
         self.__isLobbyLoaded = False
@@ -196,7 +204,23 @@ class ServiceChannelHandler(AwardHandler):
         return message is not None and message.type == self.__type and message.data is not None
 
 
+class MultiTypeServiceChannelHandler(ServiceChannelHandler):
+
+    def __init__(self, handledTypes, awardCtrl):
+        super(MultiTypeServiceChannelHandler, self).__init__(None, awardCtrl)
+        self.__types = handledTypes
+        return
+
+    def _needToShowAward(self, ctx):
+        _, message = ctx
+        return message is not None and message.type in self.__types and message.data is not None
+
+    def _showAward(self, ctx):
+        pass
+
+
 class EliteWindowHandler(AwardHandler):
+    __gui = dependency.descriptor(IGuiLoader)
 
     def init(self):
         g_playerEvents.onVehicleBecomeElite += self.handle
@@ -205,7 +229,7 @@ class EliteWindowHandler(AwardHandler):
         g_playerEvents.onVehicleBecomeElite -= self.handle
 
     def _needToShowAward(self, ctx):
-        return True
+        return self.__gui.windowsManager.getViewByLayoutID(R.views.blueprintScreen()) is None
 
     def _showAward(self, ctx):
         vehTypeCompDescrs = ctx
@@ -302,7 +326,9 @@ class TokenQuestsWindowHandler(ServiceChannelHandler):
                     vehiclesDict = vehiclesList[0] if vehiclesList else {}
                     windowCtx = {'eventsCache': self.eventsCache,
                      'bonusVehicles': vehiclesDict}
-                    completedQuests[qID] = (allQuests[qID], windowCtx)
+                    currentQuest = allQuests[qID]
+                    currentQuest = _getBlueprintActualBonus(data, currentQuest)
+                    completedQuests[qID] = (currentQuest, windowCtx)
 
         for quest, context in completedQuests.itervalues():
             self._showWindow(quest, context)
@@ -375,29 +401,59 @@ class MarkByInvoiceHandler(ServiceChannelHandler):
         SystemMessages.pushI18nMessage(SYSTEM_MESSAGES.TOKENS_NOTIFICATION_MARK_ACQUIRED, count=tokenCount, type=SystemMessages.SM_TYPE.tokenWithMarkAcquired)
 
 
-class MarkByQuestHandler(ServiceChannelHandler):
+class MarkByQuestHandler(MultiTypeServiceChannelHandler):
 
     def __init__(self, awardCtrl):
-        super(MarkByQuestHandler, self).__init__(SYS_MESSAGE_TYPE.battleResults.index(), awardCtrl)
-        self.__questTypes = [SYS_MESSAGE_TYPE.battleResults.index(), SYS_MESSAGE_TYPE.tokenQuests.index()]
+        super(MarkByQuestHandler, self).__init__((SYS_MESSAGE_TYPE.battleResults.index(), SYS_MESSAGE_TYPE.tokenQuests.index()), awardCtrl)
+        self.__tokenCounts = []
+
+    def _needToShowAward(self, ctx):
+        if not super(MarkByQuestHandler, self)._needToShowAward(ctx):
+            return False
+        _, message = ctx
+        self.__tokenCounts = self.__extractCounts(message)
+        return bool(self.__tokenCounts)
+
+    def _showAward(self, ctx):
+        self.__showMessage()
+
+    def __showMessage(self):
+        message = '\n'.join((i18n.makeString(SYSTEM_MESSAGES.TOKENS_NOTIFICATION_MARK_ACQUIRED, count=tokenCount) for tokenCount in self.__tokenCounts))
+        SystemMessages.pushI18nMessage(message, type=SystemMessages.SM_TYPE.tokenWithMarkAcquired)
+
+    @staticmethod
+    def __extractCounts(message):
+        marksCounts = []
+        tokensDict = message.data.get('tokens', {})
+        for tokenName, tokenData in tokensDict.iteritems():
+            if tokenName.startswith('img:'):
+                count = tokenData.get('count', 0)
+                if count:
+                    marksCounts.append(count)
+
+        return marksCounts
+
+
+class CrewSkinsQuestHandler(MultiTypeServiceChannelHandler):
+    QUEST_AWARD_POSTFIX = 'awardcrewskin'
+
+    def __init__(self, awardCtrl):
+        super(CrewSkinsQuestHandler, self).__init__((SYS_MESSAGE_TYPE.battleResults.index(), SYS_MESSAGE_TYPE.tokenQuests.index()), awardCtrl)
+        self.__singleShowGuard = True
 
     def _needToShowAward(self, ctx):
         _, message = ctx
-        return message is not None and message.type in self.__questTypes and message.data is not None
+        res = super(CrewSkinsQuestHandler, self)._needToShowAward(ctx)
+        questIDs = message.data.get('completedQuestIDs', set())
+        res = res and self.__singleShowGuard
+        res = res and 'crewSkins' in message.data
+        res = res and next(ifilter(lambda x: x.endswith(self.QUEST_AWARD_POSTFIX), questIDs), None) is not None
+        if res:
+            self.__singleShowGuard = False
+        return res
 
     def _showAward(self, ctx):
-        messageData = ctx[1].data
-        if 'tokens' in messageData:
-            tokensDict = messageData['tokens']
-            for tokenName, tokenData in tokensDict.iteritems():
-                if tokenName.startswith('img:'):
-                    count = tokenData.get('count', 0)
-                    if count:
-                        self._showWindow(count)
-
-    @staticmethod
-    def _showWindow(tokenCount):
-        SystemMessages.pushI18nMessage(SYSTEM_MESSAGES.TOKENS_NOTIFICATION_MARK_ACQUIRED, count=tokenCount, type=SystemMessages.SM_TYPE.tokenWithMarkAcquired)
+        showCrewSkinAward()
 
 
 class RecruitHandler(ServiceChannelHandler):
@@ -496,6 +552,7 @@ class BattleQuestsAutoWindowHandler(ServiceChannelHandler):
                     vehiclesDict = vehiclesList[0] if vehiclesList else {}
                     ctx.update({'eventsCache': self.eventsCache,
                      'bonusVehicles': vehiclesDict})
+                    quest = _getBlueprintActualBonus(message.data, quest)
                     completedQuests[questID] = (quest, ctx)
 
         values = sorted(completedQuests.values(), key=lambda v: v[0].getID())
@@ -890,26 +947,11 @@ class TelecomHandler(ServiceChannelHandler):
             LOG_ERROR("Can't show telecom award window!")
 
 
-class MultiTypeServiceChannelHandler(ServiceChannelHandler):
-
-    def __init__(self, awardCtrl, handledTypes):
-        super(MultiTypeServiceChannelHandler, self).__init__(None, awardCtrl)
-        self.__types = handledTypes
-        return
-
-    def _needToShowAward(self, ctx):
-        _, message = ctx
-        return message is not None and message.type in self.__types and message.data is not None
-
-    def _showAward(self, ctx):
-        pass
-
-
 class RankedQuestsHandler(MultiTypeServiceChannelHandler):
     rankedController = dependency.descriptor(IRankedBattlesController)
 
     def __init__(self, awardCtrl):
-        super(RankedQuestsHandler, self).__init__(awardCtrl, (SYS_MESSAGE_TYPE.rankedQuests.index(), SYS_MESSAGE_TYPE.tokenQuests.index()))
+        super(RankedQuestsHandler, self).__init__((SYS_MESSAGE_TYPE.rankedQuests.index(), SYS_MESSAGE_TYPE.tokenQuests.index()), awardCtrl)
         self.__pending = []
         self.__locked = False
 
@@ -994,3 +1036,28 @@ class SoundDeviceHandler(AwardHandler):
         else:
             _, currentDeviceID = deviceSetting.getSystemState()
             AccountSettings.setFilter(SPEAKERS_DEVICE, currentDeviceID)
+
+
+class ProgressiveRewardHandler(ServiceChannelHandler):
+    _gui = dependency.descriptor(IGuiLoader)
+
+    def __init__(self, awardCtrl):
+        super(ProgressiveRewardHandler, self).__init__(SYS_MESSAGE_TYPE.progressiveReward.index(), awardCtrl)
+
+    def _showAward(self, ctx):
+        _, message = ctx
+        if message.data:
+            self._showWindow(message.data['rewards'], message.data['level'])
+
+    @staticmethod
+    def _showWindow(rewards, currentStep):
+        showProgressiveRewardAwardWindow(rewards, currentStep)
+
+
+def _getBlueprintActualBonus(data, quest):
+    if 'blueprints' in data:
+        blueprintActualBonus = data.get('blueprints', {})
+        actualQuest = deepcopy(quest)
+        actualQuest.getData()['bonus'].update({'blueprints': blueprintActualBonus})
+        return actualQuest
+    return quest

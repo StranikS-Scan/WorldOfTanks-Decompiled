@@ -262,14 +262,6 @@ class ShopCommonStats(IShopCommonStats):
         return self.getValue('freeXPConversion', (25, 1))
 
     @property
-    def passportChangeCost(self):
-        return self.getValue('passportChangeCost', 50)
-
-    @property
-    def passportFemaleChangeCost(self):
-        return self.getValue('femalePassportChangeCost', 500)
-
-    @property
     def freeXPToTManXPRate(self):
         return self.getValue('freeXPToTManXPRate', 10)
 
@@ -698,14 +690,6 @@ class DefaultShopRequester(ShopCommonStats):
     @property
     def freeXPConversion(self):
         return self.getValue('freeXPConversion', self.__proxy.freeXPConversion)
-
-    @property
-    def passportChangeCost(self):
-        return self.getValue('passportChangeCost', self.__proxy.passportChangeCost)
-
-    @property
-    def passportFemaleChangeCost(self):
-        return self.getValue('femalePassportChangeCost', self.__proxy.passportFemaleChangeCost)
 
     @property
     def freeXPToTManXPRate(self):

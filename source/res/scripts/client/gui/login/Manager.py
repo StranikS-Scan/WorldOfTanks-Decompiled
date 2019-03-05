@@ -56,6 +56,9 @@ class Manager(ILoginManager):
         self._preferences = None
         self.__servers.fini()
         self.__servers = None
+        if self.__wgcManager is not None:
+            self.__wgcManager.destroy()
+            self.__wgcManager = None
         return
 
     def initiateLogin(self, email, password, serverName, isSocialToken2Login, rememberUser):
@@ -209,6 +212,12 @@ class Manager(ILoginManager):
             self.__wgcManager.login(hostName)
             return
 
+    def stopWgc(self):
+        if self.__wgcManager is not None:
+            self.__wgcManager.destroy()
+            self.__wgcManager = None
+        return
+
     def checkWgcAvailability(self):
         return self.__tryInitWgcManager() if self.__wgcManager is None else self.__wgcManager.checkWgcAvailability()
 
@@ -249,7 +258,7 @@ class _WgcModeManager(object):
         return BigWorld.WGC_prepareLogin()
 
     def onLoggedOn(self, responseData):
-        self.__token2ToStore = dict(userId=BigWorld.WGC_getUserId(), token=responseData['token2'])
+        self.__token2ToStore = responseData['token2']
         if BigWorld.WGC_processingState() == constants.WGC_STATE.LOGIN_IN_PROGRESS:
             BigWorld.WGC_onServerResponse(True)
             return True
@@ -272,8 +281,6 @@ class _WgcModeManager(object):
             if state == constants.WGC_STATE.LOGIN_IN_PROGRESS:
                 loginParams = BigWorld.WGC_loginData()
                 if loginParams is not None:
-                    loginParams['auth_realm'] = BigWorld.WGC_getRealm()
-                    loginParams['gameId'] = BigWorld.WGC_getGame()
                     self.connectionMgr.initiateConnection(loginParams, '', self.__selectedServer)
                     self.connectionMgr.setLastLogin('')
                     return
@@ -295,8 +302,8 @@ class _WgcModeManager(object):
         BigWorld.WGC_onServerResponse(False)
 
     def __onAccountDone(self, *args):
-        if self.__token2ToStore is not None:
-            if self.__token2ToStore['userId'] == BigWorld.player().databaseID:
-                BigWorld.WGC_storeToken2(self.__token2ToStore['token'])
+        if self.__token2ToStore:
+            if BigWorld.WGC_getUserId() == BigWorld.player().databaseID:
+                BigWorld.WGC_storeToken2(self.__token2ToStore, BigWorld.player().databaseID)
             self.__token2ToStore = None
         return

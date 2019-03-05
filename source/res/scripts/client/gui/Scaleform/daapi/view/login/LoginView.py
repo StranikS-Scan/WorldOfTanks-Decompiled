@@ -125,9 +125,6 @@ class LoginView(LoginPageMeta):
     def startListenCsisUpdate(self, startListenCsis):
         self.loginManager.servers.startListenCsisQuery(startListenCsis)
 
-    def saveLastSelectedServer(self, server):
-        pass
-
     @uniprof.regionDecorator(label='offline.login', scope='enter')
     def _populate(self):
         View._populate(self)

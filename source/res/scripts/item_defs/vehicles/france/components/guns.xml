@@ -84,6 +84,7 @@
     <_25mm_SA35>	102	</_25mm_SA35>
     <_47mm_SA37B_ameliore>	103	</_47mm_SA37B_ameliore>
     <_75mm_Gun_M6B>	104	</_75mm_Gun_M6B>
+    <_3_inch_AT_Gun_M7>	105	</_3_inch_AT_Gun_M7>
     <_120mm_SA_46_AC_IGR>	60001	</_120mm_SA_46_AC_IGR>
     <_90mm_F3M_IGR>	60002	</_90mm_F3M_IGR>
     <_100mm_SA_47_IGR>	60003	</_100mm_SA_47_IGR>
@@ -2198,6 +2199,64 @@
         </_75mm_M48>
       </shots>
     </_75mm_Gun_M6B>
+    <_3_inch_AT_Gun_M7>
+      <userString>	#france_vehicles:_3_inch_AT_Gun_M7	</userString>
+      <tags></tags>
+      <level>	5	</level>
+      <price>	33500	</price>
+      <notInShop>	true	</notInShop>
+      <impulse>	0.48	</impulse>
+      <recoil>
+        <lodDist>	FAR	</lodDist>
+        <amplitude>	0.13	</amplitude>
+        <recoilEffect>	medium	</recoilEffect>
+      </recoil>
+      <effects>	shot_medium	</effects>
+      <reloadEffect>	reload50_75	</reloadEffect>
+      <pitchLimits>
+        <minPitch>	0.0 -30.0 1.0 -30.0	</minPitch>
+        <maxPitch>	0.0 10.0 1.0 10.0	</maxPitch>
+      </pitchLimits>
+      <turretYawLimits>	-180 180	</turretYawLimits>
+      <rotationSpeed>	40.25	</rotationSpeed>
+      <reloadTime>	4	</reloadTime>
+      <maxAmmo>	75	</maxAmmo>
+      <aimingTime>	2	</aimingTime>
+      <weight>	903	</weight>
+      <maxHealth>	120	</maxHealth>
+      <maxRegenHealth>	60	</maxRegenHealth>
+      <repairCost>	5	</repairCost>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
+      <shotDispersionRadius>	0.4	</shotDispersionRadius>
+      <shotDispersionFactors>
+        <turretRotation>	0.16	</turretRotation>
+        <afterShot>	4.0	</afterShot>
+        <whileGunDamaged>	2.0	</whileGunDamaged>
+      </shotDispersionFactors>
+      <shots>
+        <_76mm_AP_M79>
+          <defaultPortion>	0.95	</defaultPortion>
+          <speed>	792	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	128 110	</piercingPower>
+        </_76mm_AP_M79>
+        <_76mm_HVAP_M93>
+          <defaultPortion>	0.0	</defaultPortion>
+          <speed>	1037	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	177 158	</piercingPower>
+        </_76mm_HVAP_M93>
+        <_76mm_HE_M42A1>
+          <defaultPortion>	0.05	</defaultPortion>
+          <speed>	853	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	38 38	</piercingPower>
+        </_76mm_HE_M42A1>
+      </shots>
+    </_3_inch_AT_Gun_M7>
     <_90mm_canon_DCA_30>
       <userString>	#france_vehicles:_90mm_canon_DCA_30	</userString>
       <tags></tags>

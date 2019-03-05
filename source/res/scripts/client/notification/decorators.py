@@ -147,6 +147,9 @@ class _NotificationDecorator(object):
     def getCounterInfo(self):
         return (self.getGroup(), self.getType(), self.getID())
 
+    def decrementCounterOnHidden(self):
+        return True
+
 
 class SearchCriteria(_NotificationDecorator):
     __slots__ = ('_typeID',)
@@ -221,14 +224,17 @@ class C11nMessageDecorator(MessageDecorator):
         self.__updateButtonsState()
 
     def __updateButtonsState(self, lock=False):
-        state = NOTIFICATION_BUTTON_STATE.VISIBLE
-        if self.__vehicle is not None:
-            if not lock and self.__vehicle.isCustomizationEnabled():
-                state = NOTIFICATION_BUTTON_STATE.DEFAULT
-        self._entity['buttonsStates'].update({'submit': state})
-        if self._model is not None:
-            self._model.updateNotification(self.getType(), self._entityID, self._entity, False)
-        return
+        if not self._entity.get('buttonsLayout'):
+            return
+        else:
+            state = NOTIFICATION_BUTTON_STATE.VISIBLE
+            if self.__vehicle is not None:
+                if not lock and self.__vehicle.isCustomizationEnabled():
+                    state = NOTIFICATION_BUTTON_STATE.DEFAULT
+            self._entity['buttonsStates'].update({'submit': state})
+            if self._model is not None:
+                self._model.updateNotification(self.getType(), self._entityID, self._entity, False)
+            return
 
     def __updateButtons(self, event):
         self.__updateButtonsState(lock=False)
@@ -239,7 +245,7 @@ class C11nMessageDecorator(MessageDecorator):
     @property
     def __vehicle(self):
         vehicle = None
-        if self.itemsCache is not None:
+        if self.itemsCache is not None and self.itemsCache.isSynced():
             savedData = self._entity.get('savedData')
             if savedData is not None:
                 vehicleIntCD = savedData.get('vehicleIntCD')
@@ -707,3 +713,32 @@ class ClanInvitesActionDecorator(_ClassBaseActionDecorator):
 
     def _getName(self, entity):
         return entity
+
+
+class ProgressiveRewardDecorator(_NotificationDecorator):
+    ENTITY_ID = 0
+
+    def __init__(self):
+        super(ProgressiveRewardDecorator, self).__init__(self.ENTITY_ID)
+
+    def getType(self):
+        return NOTIFICATION_TYPE.PROGRESSIVE_REWARD
+
+    def getGroup(self):
+        return NotificationGroup.OFFER
+
+    def update(self, entity):
+        super(ProgressiveRewardDecorator, self).update(entity)
+        self._make(entity)
+
+    def decrementCounterOnHidden(self):
+        return False
+
+    def _make(self, entity=None, settings=None):
+        self._settings = NotificationGuiSettings(isNotify=True, priorityLevel=NotificationPriorityLevel.MEDIUM)
+        message = g_settings.msgTemplates.format('ProgressiveRewardNotification', data={'icon': makePathToIcon('InformationIcon')})
+        self._vo = {'typeID': self.getType(),
+         'entityID': self.getID(),
+         'message': message,
+         'notify': self.isNotify(),
+         'auxData': []}

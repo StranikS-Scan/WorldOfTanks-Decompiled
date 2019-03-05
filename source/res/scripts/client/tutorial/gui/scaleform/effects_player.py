@@ -5,7 +5,7 @@ from gui.Scaleform.framework import ViewTypes
 from gui.Scaleform.framework.managers.containers import POP_UP_CRITERIA
 from gui.Scaleform.genConsts.TUTORIAL_TRIGGER_TYPES import TUTORIAL_TRIGGER_TYPES
 from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
-from tutorial.data.events import GUI_EVENT_TYPE
+from tutorial.data.events import GuiEventType
 from tutorial.logger import LOG_ERROR, LOG_DEBUG
 from shared_utils import first
 
@@ -198,11 +198,13 @@ class ShowWindowEffect(ApplicationEffect):
         return result
 
 
-_GUI_EVENT_TO_TRIGGER_TYPE = {GUI_EVENT_TYPE.CLICK: TUTORIAL_TRIGGER_TYPES.CLICK_TYPE,
- GUI_EVENT_TYPE.CLICK_OUTSIDE: TUTORIAL_TRIGGER_TYPES.CLICK_OUTSIDE_TYPE,
- GUI_EVENT_TYPE.ESC: TUTORIAL_TRIGGER_TYPES.ESCAPE,
- GUI_EVENT_TYPE.ENABLE: TUTORIAL_TRIGGER_TYPES.ENABLED,
- GUI_EVENT_TYPE.DISABLE: TUTORIAL_TRIGGER_TYPES.DISABLED}
+_GUI_EVENT_TO_TRIGGER_TYPE = {GuiEventType.CLICK: TUTORIAL_TRIGGER_TYPES.CLICK_TYPE,
+ GuiEventType.CLICK_OUTSIDE: TUTORIAL_TRIGGER_TYPES.CLICK_OUTSIDE_TYPE,
+ GuiEventType.ESC: TUTORIAL_TRIGGER_TYPES.ESCAPE,
+ GuiEventType.ENABLE: TUTORIAL_TRIGGER_TYPES.ENABLED,
+ GuiEventType.DISABLE: TUTORIAL_TRIGGER_TYPES.DISABLED,
+ GuiEventType.ENABLED_CHANGE: TUTORIAL_TRIGGER_TYPES.ENABLED_CHANGE,
+ GuiEventType.VISIBLE_CHANGE: TUTORIAL_TRIGGER_TYPES.VISIBLE_CHANGE}
 
 class ShowChainHint(ApplicationEffect):
     __slots__ = ('_hintID', '_itemID')
@@ -235,7 +237,9 @@ class ShowChainHint(ApplicationEffect):
                  'hasBox': hintProps.hasBox,
                  'hasArrow': False,
                  'arrowDir': '',
-                 'arrowLoop': False}
+                 'arrowLoop': False,
+                 'updateRuntime': hintProps.updateRuntime,
+                 'checkViewArea': hintProps.checkViewArea}
                 arrow = hintProps.arrow
                 if arrow is not None:
                     content['hasArrow'] = True
@@ -331,11 +335,13 @@ class SetViewCriteriaEffect(ApplicationEffect):
             return False
 
 
-_ACTION_TO_TRIGGER_TYPE = {GUI_EVENT_TYPE.CLICK: TUTORIAL_TRIGGER_TYPES.CLICK_TYPE,
- GUI_EVENT_TYPE.CLICK_OUTSIDE: TUTORIAL_TRIGGER_TYPES.CLICK_OUTSIDE_TYPE,
- GUI_EVENT_TYPE.ESC: TUTORIAL_TRIGGER_TYPES.ESCAPE,
- GUI_EVENT_TYPE.ENABLE: TUTORIAL_TRIGGER_TYPES.ENABLED,
- GUI_EVENT_TYPE.DISABLE: TUTORIAL_TRIGGER_TYPES.DISABLED}
+_ACTION_TO_TRIGGER_TYPE = {GuiEventType.CLICK: TUTORIAL_TRIGGER_TYPES.CLICK_TYPE,
+ GuiEventType.CLICK_OUTSIDE: TUTORIAL_TRIGGER_TYPES.CLICK_OUTSIDE_TYPE,
+ GuiEventType.ESC: TUTORIAL_TRIGGER_TYPES.ESCAPE,
+ GuiEventType.ENABLE: TUTORIAL_TRIGGER_TYPES.ENABLED,
+ GuiEventType.DISABLE: TUTORIAL_TRIGGER_TYPES.DISABLED,
+ GuiEventType.ENABLED_CHANGE: TUTORIAL_TRIGGER_TYPES.ENABLED_CHANGE,
+ GuiEventType.VISIBLE_CHANGE: TUTORIAL_TRIGGER_TYPES.VISIBLE_CHANGE}
 
 class SetTriggerEffect(ApplicationEffect):
     __slots__ = ('_triggersByItem',)

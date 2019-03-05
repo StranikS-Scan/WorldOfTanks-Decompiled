@@ -15,7 +15,7 @@ from gui.shared.utils.requesters import REQ_CRITERIA
 from gui.shared.gui_items import GUI_ITEM_TYPE, GUI_ITEM_ECONOMY_CODE
 from gui.shared.gui_items.Vehicle import VEHICLE_TAGS
 from gui.shared.money import Currency
-from gui.Scaleform.daapi.view.dialogs import I18nConfirmDialogMeta, I18nInfoDialogMeta, DIALOG_BUTTON_ID, IconPriceDialogMeta, IconDialogMeta, PMConfirmationDialogMeta, DemountDeviceDialogMeta, DestroyDeviceDialogMeta, TankmanOperationDialogMeta, HtmlMessageDialogMeta, HtmlMessageLocalDialogMeta, CheckBoxDialogMeta
+from gui.Scaleform.daapi.view.dialogs import I18nConfirmDialogMeta, I18nInfoDialogMeta, DIALOG_BUTTON_ID, IconPriceDialogMeta, IconDialogMeta, PMConfirmationDialogMeta, DemountDeviceDialogMeta, DestroyDeviceDialogMeta, TankmanOperationDialogMeta, HtmlMessageDialogMeta, HtmlMessageLocalDialogMeta, CheckBoxDialogMeta, CrewSkinsRemovalCompensationDialogMeta, CrewSkinsRemovalDialogMeta
 from helpers import dependency
 from items.components import skills_constants
 from skeletons.gui.server_events import IEventsCache
@@ -483,6 +483,22 @@ class BufferOverflowConfirmator(I18nMessageAbstractConfirmator):
         if self.ctx.get('multiple'):
             msgContext['extraCount'] = self.ctx['extraCount']
         return I18nConfirmDialogMeta(self.localeKey, messageCtx=msgContext, focusedID=DIALOG_BUTTON_ID.SUBMIT)
+
+
+class CrewSkinsCompensationDialogConfirmator(I18nMessageAbstractConfirmator):
+
+    def __init__(self, localeKey, reasonSuffix, ctx=None, activeHandler=None, isEnabled=True):
+        super(CrewSkinsCompensationDialogConfirmator, self).__init__(localeKey, ctx, activeHandler, isEnabled)
+        self.reasonSuffix = reasonSuffix
+
+    def _makeMeta(self):
+        return CrewSkinsRemovalCompensationDialogMeta(self.localeKey, self.reasonSuffix, self.ctx, self.ctx, focusedID=DIALOG_BUTTON_ID.SUBMIT)
+
+
+class CrewSkinsRoleChangeRemovalConfirmator(I18nMessageAbstractConfirmator):
+
+    def _makeMeta(self):
+        return CrewSkinsRemovalDialogMeta(self.localeKey, self.ctx, self.ctx, focusedID=DIALOG_BUTTON_ID.SUBMIT)
 
 
 class IconPriceMessageConfirmator(I18nMessageAbstractConfirmator):

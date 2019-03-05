@@ -157,6 +157,9 @@ class SerializableComponent(object):
 
         return o
 
+    def isFilled(self):
+        return True
+
     def __writeStr(self, stream):
         stream.write('{')
         i = 0
@@ -510,6 +513,9 @@ class ProjectionDecalComponent(SerializableComponent):
     def isMirrored(self):
         return self.options & Options.MIRRORED
 
+    def isFilled(self):
+        return any(self.position) or bool(self.slotId)
+
 
 class PersonalNumberComponent(SerializableComponent):
     customType = 8
@@ -521,6 +527,9 @@ class PersonalNumberComponent(SerializableComponent):
         self.number = number or ''
         self.appliedTo = appliedTo
         super(PersonalNumberComponent, self).__init__()
+
+    def isFilled(self):
+        return bool(self.number)
 
 
 class CustomizationOutfit(SerializableComponent):

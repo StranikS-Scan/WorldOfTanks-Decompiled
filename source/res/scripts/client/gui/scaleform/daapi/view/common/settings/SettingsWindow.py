@@ -9,7 +9,7 @@ from account_helpers.AccountSettings import COLOR_SETTINGS_TAB_IDX
 from account_helpers.settings_core.settings_constants import SETTINGS_GROUP
 from debug_utils import LOG_DEBUG, LOG_WARNING
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
-from gui.Scaleform.daapi.view.common.settings.new_settings_counter import getNewSettings, invalidateSettings
+from account_helpers.counter_settings import getNewSettings, invalidateSettings
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.SETTINGS import SETTINGS
 from Vibroeffects import VibroManager

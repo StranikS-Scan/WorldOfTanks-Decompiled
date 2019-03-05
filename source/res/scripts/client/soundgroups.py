@@ -594,14 +594,14 @@ class SoundGroups(object):
         if vehicleTypeDescriptor is not None:
             __ceilLess = vehicleTypeDescriptor.turret.ceilless
         if mode == 0:
-            self.__viewPlayModeParam.setGlobal(1)
+            self.__viewPlayModeParam.set(1)
             if __ceilLess is True:
                 WWISE.WW_setState('STATE_viewPlayMode', 'STATE_viewplaymode_arcade_ceilless')
             else:
                 WWISE.WW_setState('STATE_viewPlayMode', 'STATE_viewPlayMode_arcade')
             WWISE.WWsetCameraShift(None)
         elif mode == 1:
-            self.__viewPlayModeParam.setGlobal(0)
+            self.__viewPlayModeParam.set(0)
             if __ceilLess is True:
                 WWISE.WW_setState('STATE_viewPlayMode', 'STATE_viewplaymode_sniper_ceilless')
             else:
@@ -610,7 +610,7 @@ class SoundGroups(object):
                 compoundModel = BigWorld.player().getVehicleAttached().appearance.compoundModel
                 WWISE.WWsetCameraShift(compoundModel.node(TankPartNames.TURRET))
         elif mode == 2:
-            self.__viewPlayModeParam.setGlobal(2)
+            self.__viewPlayModeParam.set(2)
             WWISE.WW_setState('STATE_viewPlayMode', 'STATE_viewPlayMode_strategic')
             WWISE.WWsetCameraShift(None)
         return

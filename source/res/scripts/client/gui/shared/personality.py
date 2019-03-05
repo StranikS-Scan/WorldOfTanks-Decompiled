@@ -25,6 +25,7 @@ from gui.shared.utils import requesters
 from gui.shared.view_helpers.UsersInfoHelper import UsersInfoHelper
 from gui.wgnc import g_wgncProvider
 from helpers import isPlayerAccount, time_utils, dependency
+from helpers.blueprint_generator import g_blueprintGenerator
 from helpers.statistics import HANGAR_LOADING_STATE
 from skeletons.account_helpers.settings_core import ISettingsCache, ISettingsCore
 from skeletons.connection_mgr import IConnectionManager
@@ -118,6 +119,7 @@ def onAccountShowGUI(ctx):
     serverSettings = ServicesLocator.lobbyContext.getServerSettings()
     g_prbLoader.onAccountShowGUI(ServicesLocator.lobbyContext.getGuiCtx())
     g_clanCache.onAccountShowGUI()
+    g_blueprintGenerator.init()
     SoundGroups.g_instance.enableLobbySounds(True)
     onCenterIsLongDisconnected(True)
     guiModsSendEvent('onAccountShowGUI', ctx)
@@ -138,6 +140,7 @@ def onAccountBecomeNonPlayer():
     g_prbLoader.onAccountBecomeNonPlayer()
     guiModsSendEvent('onAccountBecomeNonPlayer')
     UsersInfoHelper.clear()
+    g_blueprintGenerator.fini()
 
 
 @process

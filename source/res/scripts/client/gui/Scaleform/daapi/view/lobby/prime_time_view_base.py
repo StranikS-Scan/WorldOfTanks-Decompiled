@@ -11,12 +11,11 @@ from gui.Scaleform.daapi.view.meta.PrimeTimeMeta import PrimeTimeMeta
 from gui.prb_control.entities.base.ctx import PrbAction
 from gui.prb_control.entities.base.pre_queue.listener import IPreQueueListener
 from gui.ranked_battles.constants import PRIME_TIME_STATUS
-from gui.shared import actions
+from gui.shared import actions, event_dispatcher
 from gui.shared.event_bus import EVENT_BUS_SCOPE
 from gui.shared import events
 from helpers import dependency, time_utils
 from predefined_hosts import g_preDefinedHosts, REQUEST_RATE, HOST_AVAILABILITY
-from shared_utils import findFirst
 from skeletons.connection_mgr import IConnectionManager
 from skeletons.gui.game_control import IReloginController
 from gui.shared.utils.scheduled_notifications import Notifiable, PeriodicNotifier
@@ -105,8 +104,10 @@ class ServerListItemPresenter(object):
         return self.orderID - other.orderID
 
 
-class StubPresenterClass(object):
-    pass
+class StubPresenterClass(ServerListItemPresenter):
+
+    def _buildTooltip(self):
+        pass
 
 
 class PrimeTimeViewBase(LobbySubView, PrimeTimeMeta, Notifiable, IPreQueueListener):
@@ -116,10 +117,7 @@ class PrimeTimeViewBase(LobbySubView, PrimeTimeMeta, Notifiable, IPreQueueListen
 
     def __init__(self, *_):
         super(PrimeTimeViewBase, self).__init__()
-        self.__serversList = None
         self.__allServers = {}
-        self._isEnabled = False
-        return
 
     def closeView(self):
         self.__close()
@@ -137,11 +135,15 @@ class PrimeTimeViewBase(LobbySubView, PrimeTimeMeta, Notifiable, IPreQueueListen
         else:
             self.relogin.doRelogin(selectedID, extraChainSteps=self.__getExtraSteps())
 
+    def as_setDataS(self, data):
+        raise NotImplementedError
+
     def _populate(self):
         super(PrimeTimeViewBase, self)._populate()
         self.__serversDP = self.__buildDataProvider()
         self.__serversDP.setFlashObject(self.as_getServersDPS())
         self.__updateList()
+        self.__updateSelectedServer()
         self.__updateData()
         self._getController().onUpdated += self.__onControllerUpdated
         if not constants.IS_CHINA:
@@ -163,7 +165,7 @@ class PrimeTimeViewBase(LobbySubView, PrimeTimeMeta, Notifiable, IPreQueueListen
             g_preDefinedHosts.onPingPerformed -= self.__onServersUpdate
         self.__serversDP.fini()
         self.__serversDP = None
-        self.__serversList = None
+        self.__allServers = {}
         super(PrimeTimeViewBase, self)._dispose()
         return
 
@@ -179,6 +181,20 @@ class PrimeTimeViewBase(LobbySubView, PrimeTimeMeta, Notifiable, IPreQueueListen
     def _getPrbForcedActionName(self):
         raise NotImplementedError
 
+    def _hasAvailableServers(self):
+        return any((server.isAvailable() for server in self.__getActualServers()))
+
+    def __getActualServers(self):
+        activeServers = []
+        availableServers = []
+        for server in self.__allServers.values():
+            if server.isActive():
+                activeServers.append(server)
+                if server.isAvailable():
+                    availableServers.append(server)
+
+        return sorted(availableServers if availableServers else activeServers)
+
     def __buildDataProvider(self):
         primeTimesForDay = self._getController().getPrimeTimesForDay(time.time(), groupIdentical=False)
         return PrimeTimesServersDataProvider(primeTimesForDay=primeTimesForDay)
@@ -186,7 +202,7 @@ class PrimeTimeViewBase(LobbySubView, PrimeTimeMeta, Notifiable, IPreQueueListen
     def __close(self):
         self.fireEvent(events.LoadViewEvent(VIEW_ALIAS.LOBBY_HANGAR), scope=EVENT_BUS_SCOPE.LOBBY)
 
-    def __updateList(self):
+    def __buildServersList(self):
         hostsList = g_preDefinedHosts.getSimpleHostsList(g_preDefinedHosts.hostsWithRoaming(), withShortName=True)
         if self._connectionMgr.isStandalone():
             hostsList.insert(0, (self._connectionMgr.url,
@@ -194,42 +210,36 @@ class PrimeTimeViewBase(LobbySubView, PrimeTimeMeta, Notifiable, IPreQueueListen
              self._connectionMgr.serverUserNameShort,
              HOST_AVAILABILITY.IGNORED,
              0))
-        serversList = []
-        availableServersList = []
         for idx, serverData in enumerate(hostsList):
             serverPresenter = self._serverPresenterClass(idx, *serverData)
             self.__allServers[serverPresenter.getPeripheryID()] = serverPresenter
-            if serverPresenter.isActive():
-                periphery = serverPresenter.asDict()
-                serversList.append(periphery)
-                if serverPresenter.isAvailable():
-                    availableServersList.append(periphery)
 
-        if availableServersList:
-            self._isEnabled = True
-            serversList = availableServersList
-        else:
-            self._isEnabled = False
-        self.__serversList = serversList
-        self.__serversDP.rebuildList(serversList)
-        self.__updateSelectedServer()
+    def __updateServersDP(self):
+        actualServers = sorted(self.__getActualServers())
+        self.__serversDP.rebuildList((server.asDict() for server in actualServers))
+
+    def __updateList(self):
+        if not self.__allServers:
+            self.__buildServersList()
+        self.__updateServersDP()
 
     def __updateData(self):
         serverPresenter = self.__allServers.get(self.__serversDP.getSelectedID())
-        self.as_setDataS(self._prepareData(self.__serversList, serverPresenter))
+        self.as_setDataS(self._prepareData(self.__getActualServers(), serverPresenter))
 
     def __updateSelectedServer(self):
+        actualServers = sorted(self.__getActualServers())
         if self.__serversDP.getSelectedIdx() == -1:
             currentServerID = self._connectionMgr.peripheryID
-            if findFirst(lambda s: s['id'] == currentServerID, self.__serversList) is not None:
+            if any((s.getPeripheryID() == currentServerID for s in actualServers)):
                 self.__serversDP.setSelectedID(currentServerID)
             else:
-                bestServer = self.__serversDP.getDefaultSelectedServer(self.__serversList)
-                for server in self.__serversList:
-                    if server['shortname'] == bestServer:
-                        self.__serversDP.setSelectedID(server['id'])
+                bestPeripheryID = self.__serversDP.getDefaultSelectedServer([ s.asDict() for s in actualServers ])
+                for server in actualServers:
+                    if server.getPeripheryID() == bestPeripheryID:
+                        self.__serversDP.setSelectedID(bestPeripheryID)
 
-        return
+        self.__serversDP.refresh()
 
     def __onServersUpdate(self, *_):
         self.__invalidateServersPing()
@@ -271,6 +281,9 @@ class PrimeTimeViewBase(LobbySubView, PrimeTimeMeta, Notifiable, IPreQueueListen
     def __tryGoToHangar(self):
         if self.__allServers[self._connectionMgr.peripheryID].isAvailable():
             self.__continue()
+            return True
+        if not self.__getActualServers():
+            event_dispatcher.showHangar()
             return True
         return False
 

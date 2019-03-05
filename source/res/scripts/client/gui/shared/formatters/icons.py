@@ -47,6 +47,10 @@ def credits():
     return _getIcon(Currency.CREDITS)
 
 
+def creditsBig():
+    return _getIcon('creditsBig')
+
+
 def notAvailable():
     return _getIcon('notAvailable')
 
@@ -79,12 +83,28 @@ def freeXP():
     return _getIcon('freeXP')
 
 
+def xpCost():
+    return _getIcon('xpCost')
+
+
+def xpCostBig():
+    return _getIcon('xpCostBig')
+
+
 def gold():
     return _getIcon(Currency.GOLD)
 
 
+def goldBig():
+    return _getIcon('goldBig')
+
+
 def crystal():
     return _getIcon(Currency.CRYSTAL)
+
+
+def crystalBig():
+    return _getIcon('crystalBig')
 
 
 def nut():
@@ -121,6 +141,14 @@ def inProgress(vspace=-2):
 
 def doubleCheckmark(vspace=0):
     return _getIcon('doubleCheckmark', vspace=vspace)
+
+
+def actionBlue():
+    return _getIcon('actionBlueBg')
+
+
+def actionRed():
+    return _getIcon('actionBlueBg')
 
 
 def makeImageTag(source, width=16, height=16, vSpace=-4, hSpace=0):

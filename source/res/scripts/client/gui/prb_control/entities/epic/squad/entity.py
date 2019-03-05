@@ -23,7 +23,7 @@ class EpicSquadEntryPoint(SquadEntryPoint):
         super(EpicSquadEntryPoint, self).__init__(FUNCTIONAL_FLAG.EPIC, accountsToInvite)
 
     def makeDefCtx(self):
-        return SquadSettingsCtx(PREBATTLE_TYPE.EPIC, waitingID='prebattle/create', accountsToInvite=self._accountsToInvite, flags=self.getFunctionalFlags())
+        return SquadSettingsCtx(PREBATTLE_TYPE.EPIC, waitingID='prebattle/create', accountsToInvite=self._accountsToInvite)
 
     def _doCreate(self, unitMgr, ctx):
         unitMgr.createEpicSquad()

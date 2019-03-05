@@ -25,6 +25,10 @@ class Browser(BrowserMeta):
         self.onError = Event()
         return
 
+    @property
+    def browser(self):
+        return self.__browser
+
     def init(self, browserID, webHandlersMap=None, alias=''):
         self.__browserID = browserID
         self.__browser = self.browserCtrl.getBrowser(self.__browserID)
@@ -89,6 +93,12 @@ class Browser(BrowserMeta):
         self.as_showServiceViewS(header, description)
         self.onError()
 
+    def showLoading(self, show):
+        if show:
+            self.as_loadingStartS()
+        else:
+            self.as_loadingStopS()
+
     def _dispose(self):
         if self.__browser:
             self.__browser.onLoadStart -= self.__onLoadStart
@@ -114,15 +124,14 @@ class Browser(BrowserMeta):
         self.__isLoaded = self.__isLoaded and isLoaded
         self.__httpStatusCode = httpStatusCode
 
-    def __onLoadingStateChange(self, isLoading, showLoading):
+    def __onLoadingStateChange(self, isLoading, manageLoadingScreen):
         if isLoading:
-            if showLoading:
-                self.as_loadingStartS()
+            self.as_loadingStartS()
         elif not self.__isLoaded:
             self.showDataUnavailableView()
         elif self.__httpStatusCode and self.__httpStatusCode >= 400:
             self.showDataUnavailableView()
-        else:
+        elif manageLoadingScreen:
             self.as_loadingStopS()
 
     def __onNavigate(self, _):

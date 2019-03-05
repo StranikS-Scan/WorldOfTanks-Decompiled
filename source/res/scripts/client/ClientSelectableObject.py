@@ -83,9 +83,6 @@ class ClientSelectableObject(BigWorld.Entity, ComponentSystem):
             self.__clickSound.play()
         return
 
-    def onReleased(self):
-        pass
-
     def _getModelHeight(self):
         return self.model.height
 

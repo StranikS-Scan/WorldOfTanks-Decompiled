@@ -9,6 +9,8 @@ class BATTLE_RESULTS(object):
     CYBERSPORT_STATUS_LOSE = '#battle_results:cyberSport/status/lose'
     CYBERSPORT_STATUS_TIE = '#battle_results:cyberSport/status/tie'
     NODATA = '#battle_results:noData'
+    COMMON_ARENA_FULLNAME = '#battle_results:common/arena/fullName'
+    FINISH_PLAYERTANK_SEPARATOR = '#battle_results:finish/playerTank/separator'
     FINISH_REASON_0 = '#battle_results:finish/reason/0'
     FINISH_CLANBATTLE_REASON_ATTACK_1WIN = '#battle_results:finish/clanBattle_reason_attack/1win'
     FINISH_CLANBATTLE_REASON_ATTACK_1LOSE = '#battle_results:finish/clanBattle_reason_attack/1lose'
@@ -314,6 +316,7 @@ class BATTLE_RESULTS(object):
     PERSONALQUEST_BONUS_DESCR = '#battle_results:personalQuest/bonus/descr'
     PERSONALQUEST_FAILED_ATTENTION = '#battle_results:personalQuest/failed/attention'
     PERSONALQUEST_FAILED_DESCR = '#battle_results:personalQuest/failed/descr'
+    PROGRESSIVEREWARD_DESCR = '#battle_results:progressiveReward/descr'
     DETAILS_TIME_LBL_ENUM = (DETAILS_TIME_LBL_OBJECTIVESREACHED,
      DETAILS_TIME_LBL_OBJECTIVESDESTROYED,
      DETAILS_TIME_LBL_BASESCAPTURED,

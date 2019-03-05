@@ -198,5 +198,5 @@ class RentalsController(IRentalsController):
             currentCycleID = self.seasonsController.getCurrentCycleID(seasonType)
             return currentCycleID in cyclesWithinSeasonRentIsActive
 
-    def __cycleFilter(self, cycleID, seasonType, package):
+    def __cycleFilter(self, cycleID, seasonType, _):
         return self.seasonsController.isSeasonCycleActive(cycleID, seasonType)

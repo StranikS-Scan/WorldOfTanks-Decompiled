@@ -105,11 +105,6 @@ class CompositionRule(object):
         return True
 
 
-class ChangePassportRule(CompositionRule):
-    collectionClass = ComposedActionsCollection
-    _applicableParamsNames = ('femalePassportChangeCost', 'passportChangeCost')
-
-
 class TankmenRule(CompositionRule):
     collectionClass = TankmenActionsCollection
     _applicableParamsNames = ('creditsTankmanCost', 'goldTankmanCost')
@@ -136,8 +131,7 @@ class PremiumRule(CompositionRule):
 
 
 class ActionComposer(object):
-    __compositionRules = (ChangePassportRule,
-     TankmenRule,
+    __compositionRules = (TankmenRule,
      DropSkillsRule,
      ShellsRule,
      EquipmentRule,

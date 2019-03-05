@@ -182,7 +182,7 @@ class GiveAwayRewardWindowContent(RewardWindowContent):
      'items')
 
     def handleNextButton(self):
-        self.getParentWindow().destroy()
+        self.destroyWindow()
 
     def _getAwardComposer(self):
         return AnniversaryAwardComposer(_ADDITIONAL_AWARDS_COUNT, getAnniversaryPacker())

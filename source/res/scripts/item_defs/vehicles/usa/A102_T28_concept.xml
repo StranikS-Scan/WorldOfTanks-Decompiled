@@ -83,7 +83,7 @@
     <hangarShadowTexture>	vehicles/american/A102_T28_concept/T28_concept_HangarShadowMap.dds	</hangarShadowTexture>
     <customization>
       <customizableVehicleAreas>
-        <paint></paint>
+        <paint>	HULL	</paint>
         <camouflage>	HULL	</camouflage>
       </customizableVehicleAreas>
     </customization>
@@ -114,9 +114,9 @@
         <rayStart>	1.92228 0.535632 -0.977752	</rayStart>
         <rayEnd>	1.72367 0.5355 -0.954201	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
+        <isMirrored>	true	</isMirrored>
         <size>	0.34	</size>
         <hideIfDamaged>	true	</hideIfDamaged>
-        <isMirrored>	true	</isMirrored>
         <isUVProportional>	true	</isUVProportional>
       </slot>
       <slot>
@@ -142,6 +142,12 @@
       <slot>
         <slotType>	camouflage	</slotType>
         <slotId>	3	</slotId>
+        <anchorPosition>	0.000000 1.2905 -2.07228	</anchorPosition>
+        <anchorDirection>	0.000000 0.528621 -0.848858	</anchorDirection>
+      </slot>
+      <slot>
+        <slotType>	paint	</slotType>
+        <slotId>	2	</slotId>
         <anchorPosition>	0.000000 1.2905 -2.07228	</anchorPosition>
         <anchorDirection>	0.000000 0.528621 -0.848858	</anchorDirection>
       </slot>
@@ -1024,7 +1030,7 @@
       </physicalTracks>
       <customization>
         <customizableVehicleAreas>
-          <paint></paint>
+          <paint>	CHASSIS	</paint>
           <camouflage></camouflage>
         </customizableVehicleAreas>
       </customization>
@@ -1034,6 +1040,12 @@
           <slotId>	257	</slotId>
           <anchorPosition>	0.000000 2.40802 0.000000	</anchorPosition>
           <anchorDirection>	0.000000 1 -0.000000	</anchorDirection>
+        </slot>
+        <slot>
+          <slotType>	paint	</slotType>
+          <slotId>	256	</slotId>
+          <anchorPosition>	-1.57374 0.732492 -0.000027	</anchorPosition>
+          <anchorDirection>	0.000000 -1 -0.000000	</anchorDirection>
         </slot>
       </customizationSlots>
     </Chassis_A102_T28_concept>
@@ -1111,7 +1123,7 @@
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <customization>
             <customizableVehicleAreas>
-              <paint></paint>
+              <paint>	GUN GUN_2	</paint>
               <camouflage>	GUN	</camouflage>
             </customizableVehicleAreas>
           </customization>
@@ -1132,6 +1144,20 @@
               <anchorPosition>	-0.000000 0.00655053 2.0415	</anchorPosition>
               <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
               <applyTo>	4096	</applyTo>
+            </slot>
+            <slot>
+              <slotType>	paint	</slotType>
+              <slotId>	768	</slotId>
+              <anchorPosition>	-0.000000 0.00655053 2.0415	</anchorPosition>
+              <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+            <slot>
+              <slotType>	paint	</slotType>
+              <slotId>	769	</slotId>
+              <anchorPosition>	0.000048 0.226692 -0.0973393	</anchorPosition>
+              <anchorDirection>	-0.000000 0.000000 1	</anchorDirection>
+              <applyTo>	16384	</applyTo>
             </slot>
           </customizationSlots>
           <camouflage>
@@ -1154,7 +1180,7 @@
       <physicsShape>	0.918 -0.043 1.000 0.000 0.429 0.327 0.684 0.306 0.500 0.500 0.000 0.500 0.000 0.100 0.000	</physicsShape>
       <customization>
         <customizableVehicleAreas>
-          <paint></paint>
+          <paint>	TURRET	</paint>
           <camouflage>	TURRET	</camouflage>
         </customizableVehicleAreas>
       </customization>
@@ -1162,6 +1188,12 @@
         <slot>
           <slotType>	camouflage	</slotType>
           <slotId>	513	</slotId>
+          <anchorPosition>	0.000000 0.312125 0.000000	</anchorPosition>
+          <anchorDirection>	0.000000 1 0.000000	</anchorDirection>
+        </slot>
+        <slot>
+          <slotType>	paint	</slotType>
+          <slotId>	512	</slotId>
           <anchorPosition>	0.000000 0.312125 0.000000	</anchorPosition>
           <anchorDirection>	0.000000 1 0.000000	</anchorDirection>
         </slot>

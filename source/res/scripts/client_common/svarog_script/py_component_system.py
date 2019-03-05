@@ -21,22 +21,6 @@ class ComponentDescriptor(AutoProperty):
 class ComponentSystem(object):
     __metaclass__ = AutoPropertyInitMetaclass
 
-    @staticmethod
-    def groupCall(func):
-
-        def wrapped(*args, **kwargs):
-            self = args[0]
-            processedArgs = args[1:]
-            for component in self._components:
-                attr = getattr(component, func.__name__, None)
-                if attr is not None:
-                    attr(*processedArgs, **kwargs)
-
-            func(*args, **kwargs)
-            return
-
-        return wrapped
-
     def __init__(self):
         self._components = []
         self._nativeSystem = Svarog.ComponentSystem()

@@ -1,9 +1,12 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/PersonalCase.py
 import operator
+import SoundGroups
 import constants
 from CurrentVehicle import g_currentVehicle
-from account_helpers.settings_core.settings_constants import TUTORIAL
+from account_helpers import AccountSettings
+from account_helpers.AccountSettings import CREW_SKINS_VIEWED, CREW_SKINS_HISTORICAL_VISIBLE
+from account_helpers.settings_core.settings_constants import TUTORIAL, GAME
 from adisp import async
 from debug_utils import LOG_ERROR
 from gui import SystemMessages
@@ -11,19 +14,25 @@ from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.AchievementsUtils import AchievementsUtils
 from gui.Scaleform.daapi.view.lobby.store.browser.ingameshop_helpers import isIngameShopEnabled
+from gui.Scaleform.daapi.view.lobby.PersonalCaseConstants import TABS
 from gui.Scaleform.daapi.view.meta.PersonalCaseMeta import PersonalCaseMeta
 from gui.Scaleform.locale.MENU import MENU
+from gui.Scaleform.locale.CREW_SKINS import CREW_SKINS
+from gui.Scaleform.locale.NATIONS import NATIONS
+from gui.Scaleform.locale.ITEM_TYPES import ITEM_TYPES
 from gui.ingame_shop import showBuyGoldForCrew
 from gui.prb_control.dispatcher import g_prbLoader
 from gui.prb_control.entities.listener import IGlobalListener
 from gui.shared import EVENT_BUS_SCOPE, events
+from gui.shared.gui_items.Tankman import getCrewSkinIconSmall, getCrewSkinRolePath, getCrewSkinNationPath
 from gui.shared.items_cache import CACHE_SYNC_REASON
 from gui.shared.events import LoadViewEvent
 from gui.shared.formatters import text_styles
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.gui_items.dossier import dumpDossier
-from gui.shared.gui_items.processors.tankman import TankmanDismiss, TankmanUnload, TankmanRetraining, TankmanAddSkill, TankmanChangePassport
-from gui.shared.gui_items.serializers import packTankman, packVehicle, packTraining
+from gui.shared.gui_items.crew_skin import GenderRestrictionsLocals, localizedFullName
+from gui.shared.gui_items.processors.tankman import TankmanDismiss, TankmanUnload, TankmanRetraining, TankmanAddSkill, TankmanChangePassport, CrewSkinEquip, CrewSkinUnequip
+from gui.shared.gui_items.serializers import packTankman, packVehicle, packTraining, repackTankmanWithSkinData
 from gui.shared.money import Money
 from gui.shared.tooltips import ACTION_TOOLTIPS_TYPE
 from gui.shared.tooltips.formatters import packActionTooltipData
@@ -33,67 +42,60 @@ from gui.shared.utils.requesters import REQ_CRITERIA
 from helpers import dependency
 from helpers import i18n, strcmp
 from items import tankmen
+from items.components.crewSkins_constants import CREW_SKIN_PROPERTIES_MASKS, NO_CREW_SKIN_ID, NO_CREW_SKIN_SOUND_SET, TANKMAN_SEX
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
+from skeletons.account_helpers.settings_core import ISettingsCore
+
+class CrewSkinsCache(object):
+    settingsCore = dependency.descriptor(ISettingsCore)
+
+    def __init__(self):
+        self.__viewedItems = set()
+
+    def initHistoricalSettings(self):
+        self.__isHistoricallyAccurate, self.__isHistoricallyAccurateNeedToSync = AccountSettings.getSettings(CREW_SKINS_HISTORICAL_VISIBLE)
+        if self.__isHistoricallyAccurateNeedToSync:
+            self.__isHistoricallyAccurate = self.settingsCore.getSetting(GAME.C11N_HISTORICALLY_ACCURATE)
+
+    def addViewedItem(self, skinID):
+        self.__viewedItems.add(int(skinID))
+
+    def changeHistoricalAccurate(self, historicallyAccurate):
+        self.__isHistoricallyAccurate = historicallyAccurate
+        AccountSettings.setSettings(CREW_SKINS_HISTORICAL_VISIBLE, (self.__isHistoricallyAccurate, False))
+
+    def saveViewedData(self):
+        crewSkins = AccountSettings.getSettings(CREW_SKINS_VIEWED)
+        crewSkins.update(self.__viewedItems)
+        AccountSettings.setSettings(CREW_SKINS_VIEWED, crewSkins)
+        self.__viewedItems.clear()
+
+    def isHistoricallyAccurate(self):
+        return self.__isHistoricallyAccurate
+
+    def checkForViewed(self, skinID):
+        return skinID in self.__viewedItems
+
+
+def countSkinAsNew(item):
+    return item.getHistorical() if PersonalCase.crewSkinsHAConfig.isHistoricallyAccurate() else True
+
 
 class PersonalCase(PersonalCaseMeta, IGlobalListener):
     itemsCache = dependency.descriptor(IItemsCache)
     lobbyContext = dependency.descriptor(ILobbyContext)
+    crewSkinsHAConfig = CrewSkinsCache()
 
     def __init__(self, ctx=None):
         super(PersonalCase, self).__init__()
+        self.crewSkinsHAConfig.initHistoricalSettings()
         self.tmanInvID = ctx.get('tankmanID')
         self.tabIndex = ctx.get('page', -1)
         self.dataProvider = PersonalCaseDataProvider(self.tmanInvID)
         tankman = self.itemsCache.items.getTankman(self.tmanInvID)
         self.vehicle = self.itemsCache.items.getItemByCD(tankman.vehicleNativeDescr.type.compactDescr)
-
-    def onClientChanged(self, diff):
-        inventory = diff.get('inventory', {})
-        stats = diff.get('stats', {})
-        cache = diff.get('cache', {})
-        isTankmanChanged = False
-        isTankmanVehicleChanged = False
-        if GUI_ITEM_TYPE.TANKMAN in inventory:
-            tankmanData = inventory[GUI_ITEM_TYPE.TANKMAN].get('compDescr')
-            if tankmanData is not None and self.tmanInvID in tankmanData:
-                isTankmanChanged = True
-                if tankmanData[self.tmanInvID] is None:
-                    return self.destroy()
-            if self.tmanInvID in inventory[GUI_ITEM_TYPE.TANKMAN].get('vehicle', {}):
-                isTankmanChanged = True
-        isVehsLockExist = 'vehsLock' in cache
-        isMoneyChanged = 'credits' in stats or 'gold' in stats or 'mayConsumeWalletResources' in cache
-        isVehicleChanged = 'unlocks' in stats or isVehsLockExist or GUI_ITEM_TYPE.VEHICLE in inventory
-        isFreeXpChanged = 'freeXP' in stats
-        if isVehicleChanged:
-            tankman = self.itemsCache.items.getTankman(self.tmanInvID)
-            if tankman.isInTank:
-                vehicle = self.itemsCache.items.getVehicle(tankman.vehicleInvID)
-                if vehicle.isLocked:
-                    return self.destroy()
-                vehsDiff = inventory.get(GUI_ITEM_TYPE.VEHICLE, {})
-                isTankmanVehicleChanged = any((vehicle.invID in hive or (vehicle.invID, '_r') in hive for hive in vehsDiff.itervalues()))
-        if isTankmanChanged or isTankmanVehicleChanged or isFreeXpChanged:
-            self.__setCommonData()
-        if isTankmanChanged or isTankmanVehicleChanged:
-            self.__setSkillsData()
-            self.__setDossierData()
-        if isTankmanChanged or isMoneyChanged or isTankmanVehicleChanged:
-            self.__setRetrainingData()
-        if isTankmanChanged or isMoneyChanged:
-            self.__setDocumentsData()
-        return
-
-    def _refreshData(self, reason, diff):
-        if reason != CACHE_SYNC_REASON.SHOP_RESYNC:
-            return
-        self.__setCommonData()
-        self.__setSkillsData()
-        self.__setDossierData()
-        self.__setRetrainingData()
-        self.__setDocumentsData()
 
     def onPrbEntitySwitched(self):
         self.__setCommonData()
@@ -107,6 +109,7 @@ class PersonalCase(PersonalCaseMeta, IGlobalListener):
             self.__setCommonData()
 
     def onWindowClose(self):
+        self.crewSkinsHAConfig.saveViewedData()
         self.destroy()
 
     def getCommonData(self):
@@ -124,6 +127,35 @@ class PersonalCase(PersonalCaseMeta, IGlobalListener):
     def getDocumentsData(self):
         self.__setDocumentsData()
 
+    def getCrewSkinsData(self):
+        self.crewSkinsHAConfig.saveViewedData()
+        self.__setCrewSkinsData()
+
+    @decorators.process('updating')
+    def equipCrewSkin(self, crewSkinID):
+        unloader = CrewSkinEquip(self.tmanInvID, crewSkinID)
+        result = yield unloader.request()
+        SystemMessages.pushMessages(result)
+
+    def takeOffNewMarkFromCrewSkin(self, crewSkinID):
+        self.crewSkinsHAConfig.addViewedItem(crewSkinID)
+        self._updateNewCrewSkinsCount()
+
+    def playCrewSkinSound(self, crewSkinID):
+        crewSkin = self.itemsCache.items.getCrewSkin(crewSkinID)
+        if crewSkin.getSoundSetID() != NO_CREW_SKIN_SOUND_SET:
+            SoundGroups.g_instance.playSound2D(crewSkin.getSoundSetID())
+
+    def changeHistoricallyAccurate(self, historicallyAccurate):
+        self.crewSkinsHAConfig.changeHistoricalAccurate(historicallyAccurate)
+        self._updateNewCrewSkinsCount()
+
+    @decorators.process('updating')
+    def unequipCrewSkin(self):
+        unloader = CrewSkinUnequip(self.tmanInvID)
+        result = yield unloader.request()
+        SystemMessages.pushMessages(result)
+
     def openChangeRoleWindow(self):
         ctx = {'tankmanID': self.tmanInvID}
         self.fireEvent(events.LoadViewEvent(VIEW_ALIAS.ROLE_CHANGE, VIEW_ALIAS.ROLE_CHANGE, ctx=ctx), scope=EVENT_BUS_SCOPE.LOBBY)
@@ -133,8 +165,7 @@ class PersonalCase(PersonalCaseMeta, IGlobalListener):
         tankman = self.itemsCache.items.getTankman(int(tmanInvID))
         proc = TankmanDismiss(tankman)
         result = yield proc.request()
-        if result.userMsg:
-            SystemMessages.pushMessage(result.userMsg, type=result.sysMsgType)
+        SystemMessages.pushMessages(result)
 
     @decorators.process('retraining')
     def retrainingTankman(self, inventoryID, tankmanCostTypeIdx):
@@ -165,16 +196,6 @@ class PersonalCase(PersonalCaseMeta, IGlobalListener):
 
     @decorators.process('updating')
     def changeTankmanPassport(self, inventoryID, firstNameID, firstNameGroup, lastNameID, lastNameGroup, iconID, iconGroup):
-        items = self.itemsCache.items
-        tankman = items.getTankman(inventoryID)
-        if tankman.descriptor.isFemale:
-            passportChangeCost = items.shop.passportFemaleChangeCost
-        else:
-            passportChangeCost = items.shop.passportChangeCost
-        currentGold = self.itemsCache.items.stats.gold
-        if currentGold < passportChangeCost and isIngameShopEnabled():
-            showBuyGoldForCrew(passportChangeCost)
-            return
 
         def checkFlashInt(value):
             return None if value == -1 else value
@@ -207,15 +228,15 @@ class PersonalCase(PersonalCaseMeta, IGlobalListener):
 
     def _populate(self):
         super(PersonalCase, self)._populate()
-        g_clientUpdateManager.addCallbacks({'': self.onClientChanged})
-        self.itemsCache.onSyncCompleted += self._refreshData
+        g_clientUpdateManager.addCallbacks({'': self.__onClientChanged})
+        self.itemsCache.onSyncCompleted += self.__refreshData
         self.startGlobalListening()
         self.setupContextHints(TUTORIAL.PERSONAL_CASE)
         self.addListener(events.FightButtonEvent.FIGHT_BUTTON_UPDATE, self.__updatePrbState, scope=EVENT_BUS_SCOPE.LOBBY)
 
     def _dispose(self):
         self.stopGlobalListening()
-        self.itemsCache.onSyncCompleted -= self._refreshData
+        self.itemsCache.onSyncCompleted -= self.__refreshData
         g_clientUpdateManager.removeObjectCallbacks(self)
         self.removeListener(events.FightButtonEvent.FIGHT_BUTTON_UPDATE, self.__updatePrbState, scope=EVENT_BUS_SCOPE.LOBBY)
         super(PersonalCase, self)._dispose()
@@ -240,28 +261,92 @@ class PersonalCase(PersonalCaseMeta, IGlobalListener):
     def __setDocumentsData(self):
         data = yield self.dataProvider.getDocumentsData()
         self.as_setDocumentsDataS(data)
+        self._updateDocumentsChangeStatus()
 
     @decorators.process('updating')
     def __setSkillsData(self):
         data = yield self.dataProvider.getSkillsData()
         self.as_setSkillsDataS(data)
 
+    @decorators.process('updating')
+    def __setCrewSkinsData(self):
+        data = yield self.dataProvider.getCrewSkinsData()
+        self.as_setCrewSkinsDataS(data)
+        self._updateDocumentsChangeStatus()
+
+    def _updateDocumentsChangeStatus(self):
+        changeDocumentsEnable, warning = self.dataProvider.getChangeDocumentEnableStatus()
+        self.as_setDocumentsIsChangeEnableS(changeDocumentsEnable, warning)
+
+    def _updateNewCrewSkinsCount(self):
+        items = self.itemsCache.items.getItems(GUI_ITEM_TYPE.CREW_SKINS, REQ_CRITERIA.CREW_SKIN.IN_ACCOUNT)
+        count = 0
+        for item in items.itervalues():
+            if item.isNew() and not self.crewSkinsHAConfig.checkForViewed(item.getID()) and countSkinAsNew(item):
+                count += 1
+
+        self.as_setCrewSkinsNewCountS(count)
+
     def __updatePrbState(self, *args):
         if not self.prbEntity.getPermissions().canChangeVehicle():
             self.destroy()
 
+    def __onClientChanged(self, diff):
+        inventory = diff.get('inventory', {})
+        stats = diff.get('stats', {})
+        cache = diff.get('cache', {})
+        isTankmanChanged = False
+        isTankmanVehicleChanged = False
+        if GUI_ITEM_TYPE.CREW_SKINS in inventory:
+            isTankmanChanged = True
+        if GUI_ITEM_TYPE.TANKMAN in inventory:
+            tankmanData = inventory[GUI_ITEM_TYPE.TANKMAN].get('compDescr')
+            if tankmanData is not None and self.tmanInvID in tankmanData:
+                isTankmanChanged = True
+                if tankmanData[self.tmanInvID] is None:
+                    return self.destroy()
+            if self.tmanInvID in inventory[GUI_ITEM_TYPE.TANKMAN].get('vehicle', {}):
+                isTankmanChanged = True
+        isVehsLockExist = 'vehsLock' in cache
+        isMoneyChanged = 'credits' in stats or 'gold' in stats or 'mayConsumeWalletResources' in cache
+        isVehicleChanged = 'unlocks' in stats or isVehsLockExist or GUI_ITEM_TYPE.VEHICLE in inventory
+        isFreeXpChanged = 'freeXP' in stats
+        if isVehicleChanged:
+            tankman = self.itemsCache.items.getTankman(self.tmanInvID)
+            if tankman.isInTank:
+                vehicle = self.itemsCache.items.getVehicle(tankman.vehicleInvID)
+                if vehicle.isLocked:
+                    return self.destroy()
+                vehsDiff = inventory.get(GUI_ITEM_TYPE.VEHICLE, {})
+                isTankmanVehicleChanged = any((vehicle.invID in hive or (vehicle.invID, '_r') in hive for hive in vehsDiff.itervalues()))
+        if isTankmanChanged or isTankmanVehicleChanged or isFreeXpChanged:
+            self.__setCommonData()
+        if isTankmanChanged or isTankmanVehicleChanged:
+            self.__setSkillsData()
+            self.__setDossierData()
+        if isTankmanChanged or isMoneyChanged or isTankmanVehicleChanged:
+            self.__setRetrainingData()
+        if isTankmanChanged or isMoneyChanged:
+            self.__setDocumentsData()
+        if isTankmanChanged:
+            self.crewSkinsHAConfig.saveViewedData()
+            self.__setCrewSkinsData()
+            self._updateNewCrewSkinsCount()
+        return
 
-STATS_TAB_INDEX = 0
-TRAINING_TAB_INDEX = 1
-SKILLS_TAB_INDEX = 2
-DOCS_TAB_INDEX = 3
-PERSONAL_CASE_STATS = 'crewTankmanStats'
-PERSONAL_CASE_RETRAINING = 'CrewTankmanRetraining'
-PERSONAL_CASE_SKILLS = 'PersonalCaseSkills'
-PERSONAL_CASE_DOCS = 'PersonalCaseDocs'
+    def __refreshData(self, reason, _):
+        if reason != CACHE_SYNC_REASON.SHOP_RESYNC:
+            return
+        self.__setCommonData()
+        self.__setSkillsData()
+        self.__setDossierData()
+        self.__setRetrainingData()
+        self.__setDocumentsData()
+
 
 class PersonalCaseDataProvider(object):
     itemsCache = dependency.descriptor(IItemsCache)
+    lobbyContext = dependency.instance(ILobbyContext)
 
     def __init__(self, tmanInvID):
         self.tmanInvID = tmanInvID
@@ -309,7 +394,9 @@ class PersonalCaseDataProvider(object):
         if bonuses[4]:
             modifiers.append({'id': 'penalty',
              'val': bonuses[4]})
-        callback({'tankman': packTankman(tankman),
+        tankmanData = packTankman(tankman)
+        repackTankmanWithSkinData(tankman, tankmanData)
+        callback({'tankman': tankmanData,
          'currentVehicle': packVehicle(currentVehicle) if currentVehicle is not None else None,
          'nativeVehicle': packVehicle(nativeVehicle),
          'isOpsLocked': isLocked,
@@ -327,17 +414,21 @@ class PersonalCaseDataProvider(object):
         return
 
     def getTabsButtons(self, showDocumentTab):
-        tabs = [{'index': STATS_TAB_INDEX,
+        tabs = [{'index': TABS.STATS_TAB_INDEX,
           'label': MENU.TANKMANPERSONALCASE_TABBATTLEINFO,
-          'linkage': PERSONAL_CASE_STATS}, {'index': TRAINING_TAB_INDEX,
+          'linkage': TABS.PERSONAL_CASE_STATS}, {'index': TABS.TRAINING_TAB_INDEX,
           'label': MENU.TANKMANPERSONALCASE_TABTRAINING,
-          'linkage': PERSONAL_CASE_RETRAINING}, {'index': SKILLS_TAB_INDEX,
+          'linkage': TABS.PERSONAL_CASE_RETRAINING}, {'index': TABS.SKILLS_TAB_INDEX,
           'label': MENU.TANKMANPERSONALCASE_TABSKILLS,
-          'linkage': PERSONAL_CASE_SKILLS}]
+          'linkage': TABS.PERSONAL_CASE_SKILLS}]
         if showDocumentTab:
-            tabs.append({'index': DOCS_TAB_INDEX,
+            tabs.append({'index': TABS.DOCS_TAB_INDEX,
              'label': MENU.TANKMANPERSONALCASE_TABDOCS,
-             'linkage': PERSONAL_CASE_DOCS})
+             'linkage': TABS.PERSONAL_CASE_DOCS})
+            if self.lobbyContext.getServerSettings().isCrewSkinsEnabled():
+                tabs.append({'index': TABS.CREW_SKINS_TAB_INDEX,
+                 'label': CREW_SKINS.FEATURE_SKINSTABHEADER,
+                 'linkage': TABS.PERSONAL_CASE_CREW_SKINS})
         return tabs
 
     @async
@@ -398,29 +489,75 @@ class PersonalCaseDataProvider(object):
         callback(tankman.getSkillsToLearn())
 
     @async
+    def getCrewSkinsData(self, callback):
+        tankman = self.itemsCache.items.getTankman(self.tmanInvID)
+        items = self.itemsCache.items.getItems(GUI_ITEM_TYPE.CREW_SKINS, REQ_CRITERIA.CREW_SKIN.IN_ACCOUNT)
+        crewSkins = []
+        newSkinsCount = 0
+        if self.lobbyContext.getServerSettings().isCrewSkinsEnabled():
+            for item in items.itervalues():
+                uiData = self.__convertCrewSkinData(item, tankman)
+                if uiData['isNew'] and countSkinAsNew(item):
+                    newSkinsCount += 1
+                crewSkins.append(uiData)
+
+        callback({'crewSkins': sorted(crewSkins, key=operator.itemgetter('rarity', 'id'), reverse=True),
+         'newSkinsCount': newSkinsCount,
+         'historicallyAccurate': bool(PersonalCase.crewSkinsHAConfig.isHistoricallyAccurate())})
+
+    def __convertCrewSkinData(self, crewSkin, tankman):
+        cache = tankmen.g_cache.crewSkins()
+        LOC_MAP = {}
+        if crewSkin.getRoleID() is not None:
+            LOC_MAP[CREW_SKIN_PROPERTIES_MASKS.ROLE] = i18n.makeString(ITEM_TYPES.tankman_roles(crewSkin.getRoleID()))
+        if crewSkin.getSex() in TANKMAN_SEX.ALL:
+            LOC_MAP[CREW_SKIN_PROPERTIES_MASKS.SEX] = i18n.makeString(GenderRestrictionsLocals.LOCALES[crewSkin.getSex()])
+        if crewSkin.getNation() is not None:
+            LOC_MAP[CREW_SKIN_PROPERTIES_MASKS.NATION] = i18n.makeString(NATIONS.all(crewSkin.getNation()))
+        validation, validationMask, _ = cache.validateCrewSkin(tankman.descriptor, crewSkin.getID())
+        soundValidation = crewSkin.getRoleID() == tankman.role if crewSkin.getRoleID() is not None else True
+        restrictionsMessage = i18n.makeString('#tooltips:crewSkins/restrictions')
+        if not validation:
+            restrictions = [ loc for key, loc in LOC_MAP.iteritems() if key & validationMask ]
+            restrictionsMessage += ' ' + ', '.join(restrictions)
+        soundSetID = crewSkin.getSoundSetID()
+        return {'id': crewSkin.getID(),
+         'fullName': localizedFullName(crewSkin),
+         'description': crewSkin.getDescription(),
+         'iconID': getCrewSkinIconSmall(crewSkin.getIconID()),
+         'roleIconID': getCrewSkinRolePath(crewSkin.getRoleID()),
+         'nationFlagIconID': getCrewSkinNationPath(crewSkin.getNation()),
+         'rarity': crewSkin.getRarity(),
+         'maxCount': crewSkin.getMaxCount(),
+         'freeCount': crewSkin.getFreeCount(),
+         'historical': crewSkin.getHistorical(),
+         'soundSetID': crewSkin.getSoundSetID(),
+         'useCount': len(crewSkin.getTankmenIDs()),
+         'isEquip': self.tmanInvID in crewSkin.getTankmenIDs(),
+         'isNew': crewSkin.isNew() and not PersonalCase.crewSkinsHAConfig.checkForViewed(crewSkin.getID()),
+         'isAvailable': validation,
+         'notAvailableMessage': restrictionsMessage,
+         'soundSetName': soundSetID if soundSetID != NO_CREW_SKIN_SOUND_SET else i18n.makeString('#crew_skins:feature/sound/noSound'),
+         'soundSetIsAvailable': soundValidation if crewSkin.getSoundSetID() != NO_CREW_SKIN_SOUND_SET else True}
+
+    @async
     def getDocumentsData(self, callback):
         items = self.itemsCache.items
         tankman = items.getTankman(self.tmanInvID)
         config = tankmen.getNationConfig(tankman.nationID)
-        if tankman.descriptor.isFemale:
-            shopPrice = items.shop.passportFemaleChangeCost
-            defaultPrice = items.shop.defaults.passportFemaleChangeCost
-        else:
-            shopPrice = items.shop.passportChangeCost
-            defaultPrice = items.shop.defaults.passportChangeCost
-        currentGold = self.itemsCache.items.stats.gold
-        enableSubmitButton = shopPrice <= currentGold or isIngameShopEnabled()
-        action = None
-        if shopPrice != defaultPrice:
-            action = packActionTooltipData(ACTION_TOOLTIPS_TYPE.ECONOMICS, 'passportChangeCost', True, Money(gold=shopPrice), Money(gold=defaultPrice))
-        callback({'money': items.stats.money.toMoneyTuple(),
-         'passportChangeCost': shopPrice,
-         'action': action,
+        callback({'firstName': tankman.firstUserName,
+         'lastName': tankman.lastUserName,
          'firstnames': self.__getDocGroupValues(tankman, config, operator.attrgetter('firstNamesList'), config.getFirstName),
          'lastnames': self.__getDocGroupValues(tankman, config, operator.attrgetter('lastNamesList'), config.getLastName),
-         'icons': self.__getDocGroupValues(tankman, config, operator.attrgetter('iconsList'), config.getIcon, sortNeeded=False),
-         'enableSubmitButton': enableSubmitButton})
-        return
+         'icons': self.__getDocGroupValues(tankman, config, operator.attrgetter('iconsList'), config.getIcon, sortNeeded=False)})
+
+    def getChangeDocumentEnableStatus(self):
+        if self.lobbyContext.getServerSettings().isCrewSkinsEnabled():
+            tankman = self.itemsCache.items.getTankman(self.tmanInvID)
+            isEnable = tankman.skinID == NO_CREW_SKIN_ID
+            warning = '' if isEnable else i18n.makeString('#crew_skins:feature/skinUsedWarning')
+            return (isEnable, warning)
+        return (True, '')
 
     @staticmethod
     def __getDocGroupValues(tankman, config, listGetter, valueGetter, sortNeeded=True):

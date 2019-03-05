@@ -46,9 +46,6 @@ class LoginPageMeta(View):
     def startListenCsisUpdate(self, startListenCsis):
         self._printOverrideError('startListenCsisUpdate')
 
-    def saveLastSelectedServer(self, server):
-        self._printOverrideError('saveLastSelectedServer')
-
     def showLegal(self):
         self._printOverrideError('showLegal')
 

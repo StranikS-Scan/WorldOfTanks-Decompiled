@@ -1,7 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/hangar/AmmunitionPanel.py
 import logging
-from account_helpers.AccountSettings import CUSTOMIZATION_SECTION, AccountSettings, PROJECTION_DECAL_TAB_SHOWN_FIELD, USER_NUMBER_TAB_SHOWN_FIELD
 from constants import QUEUE_TYPE, PREBATTLE_TYPE
 from gui.prb_control.entities.listener import IGlobalListener
 from items.vehicles import NUM_OPTIONAL_DEVICE_SLOTS
@@ -21,10 +20,8 @@ from gui.shared.gui_items.Vehicle import Vehicle
 from gui.shared.gui_items.vehicle_equipment import BATTLE_BOOSTER_LAYOUT_SIZE
 from gui.shared.utils.requesters import REQ_CRITERIA
 from helpers import i18n, dependency
-from skeletons.gui.game_control import IBootcampController
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.customization import ICustomizationService
-from inventory_update_helper import updateOnInventoryChanges
 ARTEFACTS_SLOTS = (GUI_ITEM_TYPE_NAMES[GUI_ITEM_TYPE.OPTIONALDEVICE], GUI_ITEM_TYPE_NAMES[GUI_ITEM_TYPE.EQUIPMENT])
 _BOOSTERS_SLOTS = (GUI_ITEM_TYPE_NAMES[GUI_ITEM_TYPE.BATTLE_BOOSTER],)
 _ABILITY_SLOTS = (GUI_ITEM_TYPE_NAMES[GUI_ITEM_TYPE.BATTLE_ABILITY],)
@@ -87,8 +84,8 @@ class AmmunitionPanel(AmmunitionPanelMeta, IGlobalListener):
         self.__hangarMessage = None
         return
 
-    def update(self, invDataDiff=None):
-        self._update(invDataDiff=invDataDiff)
+    def update(self):
+        self._update()
 
     def showTechnicalMaintenance(self):
         self.fireEvent(LoadViewEvent(VIEW_ALIAS.TECHNICAL_MAINTENANCE), EVENT_BUS_SCOPE.LOBBY)
@@ -122,15 +119,12 @@ class AmmunitionPanel(AmmunitionPanelMeta, IGlobalListener):
         super(AmmunitionPanel, self)._dispose()
         return
 
-    def _update(self, onlyMoneyUpdate=False, invDataDiff=None):
+    def _update(self, onlyMoneyUpdate=False):
         if g_currentVehicle.isPresent():
             hangarMessage = g_currentVehicle.getHangarMessage()
             if onlyMoneyUpdate and self.__hangarMessage == hangarMessage:
                 return
             vehicle = g_currentVehicle.item
-            isNeedToUpdate = updateOnInventoryChanges(self.itemsCache, vehicle, invDataDiff)
-            if not isNeedToUpdate:
-                return
             self.__hangarMessage = hangarMessage
             statusId, msg, msgLvl = hangarMessage
             rentAvailable = False
@@ -140,30 +134,19 @@ class AmmunitionPanel(AmmunitionPanelMeta, IGlobalListener):
             if msgLvl == Vehicle.VEHICLE_STATE_LEVEL.RENTABLE:
                 msgLvl = Vehicle.VEHICLE_STATE_LEVEL.INFO
             isBackground = statusId == Vehicle.VEHICLE_STATE.NOT_PRESENT
-            self.__applyCustomizationNewCounter()
+            self.__applyCustomizationNewCounter(vehicle)
             msgString = makeHtmlString('html_templates:vehicleStatus', msgLvl, {'message': i18n.makeString(msg)})
             self.__updateDevices(vehicle)
             self.as_updateVehicleStatusS({'message': msgString,
              'rentAvailable': rentAvailable,
              'isBackground': isBackground})
 
-    def __inventoryUpdateCallBack(self, invDiff):
-        self.update(invDiff)
+    def __inventoryUpdateCallBack(self, *args):
+        self.update()
 
-    def __applyCustomizationNewCounter(self):
-        custSett = AccountSettings.getSettings(CUSTOMIZATION_SECTION)
-        appliedProjectionDecals = self.itemsCache.items.getItems(itemTypeID=GUI_ITEM_TYPE.PROJECTION_DECAL, criteria=REQ_CRITERIA.CUSTOMIZATION.FOR_VEHICLE(g_currentVehicle.item)).values()
-        customizationCounter = 0
-        bootcampController = dependency.instance(IBootcampController)
-        if g_currentVehicle.getViewState().isCustomizationEnabled() and not bootcampController.isInBootcamp():
-            if not custSett.get(PROJECTION_DECAL_TAB_SHOWN_FIELD, False) and appliedProjectionDecals:
-                customizationCounter += 1
-            if not custSett.get(USER_NUMBER_TAB_SHOWN_FIELD, False):
-                customizationCounter += 1
-        if customizationCounter == 0:
-            customizationCounter = None
-        self.as_setCustomizationBtnCounterS(customizationCounter)
-        return
+    def __applyCustomizationNewCounter(self, vehicle):
+        counter = vehicle.getC11nItemsNoveltyCounter(self.itemsCache.items) if vehicle.isCustomizationEnabled() else 0
+        self.as_setCustomizationBtnCounterS(counter)
 
     def __moneyUpdateCallback(self, *_):
         self._update(onlyMoneyUpdate=True)

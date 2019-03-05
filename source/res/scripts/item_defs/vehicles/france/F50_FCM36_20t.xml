@@ -178,12 +178,6 @@
           <radius>	0.225	</radius>
           <syncAngle>	14.4	</syncAngle>
         </wheel>
-        <wheel>
-          <isLeft>	false	</isLeft>
-          <isLeading>	false	</isLeading>
-          <name>	WD_R1	</name>
-          <radius>	0.15	</radius>
-        </wheel>
         <group>
           <isLeft>	false	</isLeft>
           <template>	WD_R	</template>
@@ -211,12 +205,6 @@
           <name>	WD_L0	</name>
           <radius>	0.225	</radius>
           <syncAngle>	14.4	</syncAngle>
-        </wheel>
-        <wheel>
-          <isLeft>	true	</isLeft>
-          <isLeading>	false	</isLeading>
-          <name>	WD_L1	</name>
-          <radius>	0.15	</radius>
         </wheel>
         <group>
           <isLeft>	true	</isLeft>
@@ -278,14 +266,14 @@
           <VTiles>	1	</VTiles>
         </atlas>
       </splineDesc>
-      <trackThickness>	0.0055	</trackThickness>
+      <trackThickness>	-0.0055	</trackThickness>
       <trackNodes>
         <enable>	true	</enable>
         <linkBones>	false	</linkBones>
-        <maxAmplitude>	0.265	</maxAmplitude>
-        <maxOffset>	0.265	</maxOffset>
-        <gravity>	-7	</gravity>
-        <elasticity>	1033	</elasticity>
+        <maxAmplitude>	0.1	</maxAmplitude>
+        <maxOffset>	0.1	</maxOffset>
+        <gravity>	-9.8	</gravity>
+        <elasticity>	1300	</elasticity>
         <damping>	2	</damping>
         <node>
           <isLeft>	false	</isLeft>
@@ -1028,12 +1016,6 @@
           <radius>	0.225	</radius>
           <syncAngle>	14.4	</syncAngle>
         </wheel>
-        <wheel>
-          <isLeft>	false	</isLeft>
-          <isLeading>	false	</isLeading>
-          <name>	WD_R1	</name>
-          <radius>	0.15	</radius>
-        </wheel>
         <group>
           <isLeft>	false	</isLeft>
           <template>	WD_R	</template>
@@ -1061,12 +1043,6 @@
           <name>	WD_L0	</name>
           <radius>	0.225	</radius>
           <syncAngle>	14.4	</syncAngle>
-        </wheel>
-        <wheel>
-          <isLeft>	true	</isLeft>
-          <isLeading>	false	</isLeading>
-          <name>	WD_L1	</name>
-          <radius>	0.15	</radius>
         </wheel>
         <group>
           <isLeft>	true	</isLeft>
@@ -2061,9 +2037,9 @@
           <rayStart>	0.552223 0.290864 0.153606	</rayStart>
           <rayEnd>	0.378885 0.1911 0.153202	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
+          <isMirrored>	true	</isMirrored>
           <size>	0.2	</size>
           <hideIfDamaged>	false	</hideIfDamaged>
-          <isMirrored>	true	</isMirrored>
           <isUVProportional>	true	</isUVProportional>
         </slot>
         <slot>

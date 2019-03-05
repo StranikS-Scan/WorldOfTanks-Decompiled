@@ -288,7 +288,7 @@ def makeRankedNickNameHugeValue(name):
 class GroupMiddleLabelBlock(base.DirectStatsItem):
 
     def __init__(self, label):
-        super(GroupMiddleLabelBlock, self).__init__('', {'groupLabel': text_styles.middleTitle(label)})
+        super(GroupMiddleLabelBlock, self).__init__('', {'groupLabel': text_styles.main(label)})
 
 
 class _SlashedValueItem(base.StatsItem):

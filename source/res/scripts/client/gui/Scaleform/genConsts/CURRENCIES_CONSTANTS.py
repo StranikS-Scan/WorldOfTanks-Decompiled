@@ -6,6 +6,7 @@ class CURRENCIES_CONSTANTS(object):
     GOLD = 'gold'
     CREDITS = 'credits'
     CRYSTAL = 'crystal'
+    XP_COST = 'xp'
     FREE_XP = 'freeXP'
     ERROR = 'error'
     GOLD_COLOR = 16761699

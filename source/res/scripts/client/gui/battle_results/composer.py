@@ -69,6 +69,7 @@ class RegularStatsComposer(StatsComposer):
 
     def __init__(self, reusable):
         super(RegularStatsComposer, self).__init__(reusable, templates.REGULAR_COMMON_STATS_BLOCK.clone(), templates.REGULAR_PERSONAL_STATS_BLOCK.clone(), templates.REGULAR_TEAMS_STATS_BLOCK.clone(), templates.REGULAR_TEXT_STATS_BLOCK.clone())
+        self._block.addNextComponent(templates.PROGRESSIVE_REWARD_VO.clone())
 
 
 class EpicStatsComposer(StatsComposer):

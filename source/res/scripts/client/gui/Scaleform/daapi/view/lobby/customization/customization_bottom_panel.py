@@ -2,13 +2,12 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/customization/customization_bottom_panel.py
 from collections import namedtuple
 from CurrentVehicle import g_currentVehicle
-from account_helpers import AccountSettings
-from account_helpers.AccountSettings import CUSTOMIZATION_SECTION, PROJECTION_DECAL_TAB_SHOWN_FIELD, USER_NUMBER_TAB_SHOWN_FIELD
+from gui.customization.shared import C11nId
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
-from gui.Scaleform.daapi.view.lobby.customization.customization_carousel import CustomizationCarouselDataProvider
+from gui.Scaleform.daapi.view.lobby.customization.customization_carousel import CustomizationCarouselDataProvider, comparisonKey
 from gui.Scaleform.daapi.view.lobby.customization.customization_item_vo import buildCustomizationItemDataVO
-from gui.Scaleform.daapi.view.lobby.customization.shared import C11nMode, TABS_ITEM_MAPPING, C11nTabs, getTotalPurchaseInfo
+from gui.Scaleform.daapi.view.lobby.customization.shared import C11nMode, TABS_SLOT_TYPE_MAPPING, TABS_ITEM_TYPE_MAPPING, C11nTabs, getTotalPurchaseInfo
 from gui.Scaleform.daapi.view.meta.CustomizationBottomPanelMeta import CustomizationBottomPanelMeta
 from gui.Scaleform.locale.ITEM_TYPES import ITEM_TYPES
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
@@ -25,6 +24,7 @@ from helpers.i18n import makeString as _ms
 from items.components.c11n_constants import SeasonType
 from skeletons.gui.customization import ICustomizationService
 from skeletons.gui.shared import IItemsCache
+from gui.Scaleform.daapi.view.lobby.customization.shared import SEASON_TYPE_TO_NAME
 CustomizationCarouselDataVO = namedtuple('CustomizationCarouselDataVO', ('displayString', 'isZeroCount', 'shouldShow', 'itemLayoutSize', 'bookmarks'))
 
 class CustomizationBottomPanel(CustomizationBottomPanelMeta):
@@ -35,7 +35,6 @@ class CustomizationBottomPanel(CustomizationBottomPanelMeta):
         super(CustomizationBottomPanel, self).__init__()
         self.__ctx = None
         self._carouselDP = None
-        self.__switcherCounter = 0
         self.__needCaruselFullRebuild = False
         return
 
@@ -58,21 +57,15 @@ class CustomizationBottomPanel(CustomizationBottomPanelMeta):
         self.__ctx.onCustomizationItemSold += self.__onItemSold
         self.__ctx.onCustomizationItemDataChanged += self.__onItemDataChanged
         self.__ctx.onNextCarouselItemInstalled += self.__onNextCarouselItemInstalled
+        self.__ctx.onResetC11nItemsNovelty += self.__onResetC11nItemsNovelty
+        self.__ctx.onSlotSelected += self.__onSlotSelected
+        self.app.loaderManager.onViewLoaded += self.__onViewLoaded
         g_currentVehicle.onChanged += self.__onVehicleChanged
         g_clientUpdateManager.addMoneyCallback(self.__setBottomPanelBillData)
         self.__updateTabs(self.__ctx.currentTab)
         self.__setFooterInitData()
         self.__setBottomPanelBillData()
-        self.as_showPopoverBtnIconS(RES_ICONS.MAPS_ICONS_CUSTOMIZATION_ITEMS_POPOVER_SUMMER_LIST30X16)
-
-    def __setSwitcherCounters(self):
-        self.__switcherCounter = 0
-        custSett = AccountSettings.getSettings(CUSTOMIZATION_SECTION)
-        appliedProjectionDecals = C11nTabs.PROJECTION_DECAL in self.__ctx.visibleTabs
-        if not custSett.get(PROJECTION_DECAL_TAB_SHOWN_FIELD, False) and appliedProjectionDecals:
-            self.__switcherCounter += 1
-        if not custSett.get(USER_NUMBER_TAB_SHOWN_FIELD, False):
-            self.__switcherCounter += 1
+        self.__updatePopoverBtnIcon()
 
     def _dispose(self):
         super(CustomizationBottomPanel, self)._dispose()
@@ -89,6 +82,9 @@ class CustomizationBottomPanel(CustomizationBottomPanelMeta):
         self.__ctx.onCacheResync -= self.__onCacheResync
         self.__ctx.onCarouselFilter -= self.__onCarouselFilter
         self.__ctx.onNextCarouselItemInstalled -= self.__onNextCarouselItemInstalled
+        self.__ctx.onResetC11nItemsNovelty -= self.__onResetC11nItemsNovelty
+        self.__ctx.onSlotSelected -= self.__onSlotSelected
+        self.app.loaderManager.onViewLoaded -= self.__onViewLoaded
         g_currentVehicle.onChanged -= self.__onVehicleChanged
         self._carouselDP = None
         self.__ctx = None
@@ -116,9 +112,35 @@ class CustomizationBottomPanel(CustomizationBottomPanelMeta):
         self._carouselDP.selectItemIdx(index)
         self.__ctx.caruselItemSelected(index, intCD)
 
+    def blinkCounter(self):
+        self.as_playFilterBlinkS()
+
     def __onNextCarouselItemInstalled(self, index):
         self._carouselDP.selectItemIdx(index)
         self.__refreshCarousel()
+
+    def __onResetC11nItemsNovelty(self):
+        self.__setNotificationCounters()
+
+    def __onSlotSelected(self, areaId, slotType, regionIdx):
+        item = self.__ctx.getItemFromRegion(C11nId(areaId, slotType, regionIdx))
+        itemIdx = self._carouselDP.collection.index(item.intCD) if item is not None else -1
+        self._carouselDP.selectItemIdx(itemIdx)
+        return
+
+    def __setNotificationCounters(self):
+        vehicle = g_currentVehicle.item
+        proxy = g_currentVehicle.itemsCache.items
+        tabsCounters = []
+        for tabIdx in self.__ctx.visibleTabs:
+            tabsCounters.append(vehicle.getC11nItemsNoveltyCounter(proxy, itemTypes=TABS_ITEM_TYPE_MAPPING[tabIdx], season=self.__ctx.currentSeason))
+
+        if self.__ctx.mode == C11nMode.STYLE:
+            itemTypes = GUI_ITEM_TYPE.CUSTOMIZATIONS_WITHOUT_STYLE
+        else:
+            itemTypes = (GUI_ITEM_TYPE.STYLE,)
+        self.as_setNotificationCountersS({'tabsCounters': tabsCounters,
+         'switchersCounter': vehicle.getC11nItemsNoveltyCounter(proxy, itemTypes=itemTypes)})
 
     def resetFilter(self):
         self.__clearFilter()
@@ -152,31 +174,30 @@ class CustomizationBottomPanel(CustomizationBottomPanelMeta):
                                        'tooltip': VEHICLE_CUSTOMIZATION.CAROUSEL_FILTER_EQUIPPEDBTN,
                                        'selected': self._carouselDP.getAppliedFilter()}]}})
         self.__updateSetSwitcherData()
+        self.__setNotificationCounters()
 
     def __updateSetSwitcherData(self):
-        self.__setSwitcherCounters()
-        self.as_setSwitchersDataS(self.__getSwitcherInitData(self.__ctx.mode, self.__switcherCounter))
+        self.as_setSwitchersDataS(self.__getSwitcherInitData(self.__ctx.mode, self.__ctx.stylesTabEnabled))
 
     @staticmethod
     def __getCarouselInitData():
         return {'message': '{}{}\n{}'.format(icons.makeImageTag(RES_ICONS.MAPS_ICONS_LIBRARY_ATTENTIONICONFILLED, vSpace=-3), text_styles.neutral(VEHICLE_CUSTOMIZATION.CAROUSEL_MESSAGE_HEADER), text_styles.main(VEHICLE_CUSTOMIZATION.CAROUSEL_MESSAGE_DESCRIPTION))}
 
     @staticmethod
-    def __getSwitcherInitData(mode, switcherCounter):
+    def __getSwitcherInitData(mode, rightEnabled):
         data = {'leftLabel': VEHICLE_CUSTOMIZATION.SWITCHER_NAME_CUSTSOMSTYLE,
          'rightLabel': VEHICLE_CUSTOMIZATION.SWITCHER_NAME_DEFAULTSTYLE,
          'leftEvent': 'installStyle',
          'rightEvent': 'installStyles',
-         'isLeft': mode == C11nMode.CUSTOM}
-        if switcherCounter > 0:
-            data['leftCounter'] = switcherCounter
+         'isLeft': mode == C11nMode.CUSTOM,
+         'rightEnabled': rightEnabled}
         return data
 
     def __buildCustomizationCarouselDataVO(self):
         isZeroCount = self._carouselDP.itemCount == 0
         countStyle = text_styles.error if isZeroCount else text_styles.main
         displayString = text_styles.main('{} / {}'.format(countStyle(str(self._carouselDP.itemCount)), str(self._carouselDP.totalItemCount)))
-        shouldShow = self._carouselDP.itemCount < self._carouselDP.totalItemCount
+        shouldShow = self._carouselDP.hasAppliedFilter()
         return CustomizationCarouselDataVO(displayString, isZeroCount, shouldShow, itemLayoutSize=self._carouselDP.getItemSizeData(), bookmarks=self._carouselDP.getBookmarkData())._asdict()
 
     def __setBottomPanelBillData(self, *_):
@@ -213,6 +234,10 @@ class CustomizationBottomPanel(CustomizationBottomPanelMeta):
                     'fromStorageLbl': text_styles.main('{} {}'.format(_ms(VEHICLE_CUSTOMIZATION.BUYPOPOVER_FROMSTORAGE), fromStorageCount)),
                     'isEnoughStatuses': getMoneyVO(Money(True, True, True)),
                     'pricePanel': totalPriceVO[0]}})
+        itemsPopoverBtnEnabled = True
+        if self.__ctx.currentOutfit.isEmpty():
+            itemsPopoverBtnEnabled = False
+        self.as_setItemsPopoverBtnEnabledS(itemsPopoverBtnEnabled)
 
     def __showBill(self):
         self.as_showBillS()
@@ -245,30 +270,20 @@ class CustomizationBottomPanel(CustomizationBottomPanelMeta):
         isDarked = purchaseLimit == 0 and itemInventoryCount == 0
         isAlreadyUsed = isDarked and not isCurrentlyApplied
         autoRentEnabled = self.__ctx.autoRentEnabled()
-        return buildCustomizationItemDataVO(item, itemInventoryCount, showUnsupportedAlert=showUnsupportedAlert, isCurrentlyApplied=isCurrentlyApplied, isAlreadyUsed=isAlreadyUsed, forceLocked=isAlreadyUsed, isDarked=isDarked, noPrice=noPrice, autoRentEnabled=autoRentEnabled)
+        return buildCustomizationItemDataVO(item, itemInventoryCount, showUnsupportedAlert=showUnsupportedAlert, isCurrentlyApplied=isCurrentlyApplied, isAlreadyUsed=isAlreadyUsed, forceLocked=isAlreadyUsed, isDarked=isDarked, noPrice=noPrice, autoRentEnabled=autoRentEnabled, vehicle=g_currentVehicle.item)
 
     def __getItemTabsData(self):
         data = []
         pluses = []
-        custSett = AccountSettings.getSettings(CUSTOMIZATION_SECTION)
-        isProjectionDecalTabShown = custSett.get(PROJECTION_DECAL_TAB_SHOWN_FIELD, False)
-        isUserNumberTabShown = custSett.get(USER_NUMBER_TAB_SHOWN_FIELD, False)
         for tabIdx in self.__ctx.visibleTabs:
-            itemTypeID = TABS_ITEM_MAPPING[tabIdx]
+            itemTypeID = TABS_SLOT_TYPE_MAPPING[tabIdx]
             typeName = GUI_ITEM_TYPE_NAMES[itemTypeID]
             slotsCount, filledSlotsCount = self.__ctx.checkSlotsFilling(itemTypeID, self.__ctx.currentSeason)
             showPlus = filledSlotsCount < slotsCount
-            tabData = {'label': _ms(ITEM_TYPES.customizationPlural(typeName)),
+            data.append({'label': _ms(ITEM_TYPES.customizationPlural(typeName)),
              'icon': RES_ICONS.getCustomizationIcon(typeName),
              'tooltip': makeTooltip(ITEM_TYPES.customizationPlural(typeName), TOOLTIPS.customizationItemTab(typeName)),
-             'id': tabIdx}
-            if not isProjectionDecalTabShown and itemTypeID == GUI_ITEM_TYPE.PROJECTION_DECAL:
-                tabData['counter'] = 1
-                tabData['counterID'] = PROJECTION_DECAL_TAB_SHOWN_FIELD
-            if not isUserNumberTabShown and itemTypeID == GUI_ITEM_TYPE.INSCRIPTION:
-                tabData['counter'] = 1
-                tabData['counterID'] = USER_NUMBER_TAB_SHOWN_FIELD
-            data.append(tabData)
+             'id': tabIdx})
             pluses.append(showPlus)
 
         return (data, pluses)
@@ -292,6 +307,7 @@ class CustomizationBottomPanel(CustomizationBottomPanelMeta):
         self.__setBottomPanelBillData()
         self.__refreshCarousel(force=self.__needCaruselFullRebuild)
         self.__needCaruselFullRebuild = False
+        self.__setNotificationCounters()
 
     def __onVehicleChanged(self):
         self.__updateTabs(self.__ctx.currentTab)
@@ -300,12 +316,15 @@ class CustomizationBottomPanel(CustomizationBottomPanelMeta):
         self.__updatePopoverBtnIcon()
         self.__setBottomPanelBillData()
         self.__setFooterInitData()
+        self.__scrollToNewItem()
 
     def __onSeasonChanged(self, seasonType):
         self.__updateTabs(self.__ctx.currentTab)
         self.__refreshCarousel(force=True)
         self.__updatePopoverBtnIcon()
         self.__setBottomPanelBillData()
+        self.__setNotificationCounters()
+        self.__scrollToNewItem()
 
     def __updatePopoverBtnIcon(self):
         if self.__ctx.currentTab == 0:
@@ -316,9 +335,15 @@ class CustomizationBottomPanel(CustomizationBottomPanelMeta):
                 imgSrc = RES_ICONS.MAPS_ICONS_CUSTOMIZATION_ITEMS_POPOVER_WINTER_LIST30X16
             elif self.__ctx.currentSeason == SeasonType.SUMMER:
                 imgSrc = RES_ICONS.MAPS_ICONS_CUSTOMIZATION_ITEMS_POPOVER_SUMMER_LIST30X16
-        self.as_showPopoverBtnIconS(imgSrc)
+        if self.__ctx.mode == C11nMode.STYLE:
+            tooltip = VEHICLE_CUSTOMIZATION.CUSTOMIZATION_ITEMSPOPOVER_BTN_STYLE_DISABLED
+        else:
+            seasonName = SEASON_TYPE_TO_NAME.get(self.service.getCtx().currentSeason)
+            mapName = VEHICLE_CUSTOMIZATION.getMapName(seasonName)
+            tooltip = _ms(VEHICLE_CUSTOMIZATION.CUSTOMIZATION_ITEMSPOPOVER_BTN_DISABLED, mapType=_ms(mapName))
+        self.as_showPopoverBtnIconS(imgSrc, tooltip)
 
-    def __onItemsInstalled(self, item, slotId, buyLimitReached):
+    def __onItemsInstalled(self, *args):
         self.__updateTabs(self.__ctx.currentTab)
         self.__setBottomPanelBillData()
         self.__refreshCarousel()
@@ -326,20 +351,9 @@ class CustomizationBottomPanel(CustomizationBottomPanelMeta):
     def __onTabChanged(self, tabIndex):
         self.__refreshCarousel(force=True)
         self.__updateTabs(self.__ctx.currentTab)
-        needUpdateSwitchers = False
-        custSett = AccountSettings.getSettings(CUSTOMIZATION_SECTION)
-        if tabIndex == C11nTabs.PROJECTION_DECAL and not custSett.get(PROJECTION_DECAL_TAB_SHOWN_FIELD, False):
-            needUpdateSwitchers = True
-            custSett[PROJECTION_DECAL_TAB_SHOWN_FIELD] = True
-            AccountSettings.setSettings(CUSTOMIZATION_SECTION, custSett)
-            self.as_removeCountersS(PROJECTION_DECAL_TAB_SHOWN_FIELD)
-        if tabIndex == C11nTabs.INSCRIPTION and not custSett.get(USER_NUMBER_TAB_SHOWN_FIELD, False):
-            needUpdateSwitchers = True
-            custSett[USER_NUMBER_TAB_SHOWN_FIELD] = True
-            AccountSettings.setSettings(CUSTOMIZATION_SECTION, custSett)
-            self.as_removeCountersS(USER_NUMBER_TAB_SHOWN_FIELD)
-        if needUpdateSwitchers:
-            self.__updateSetSwitcherData()
+        self.__updateSetSwitcherData()
+        self.__setNotificationCounters()
+        self.__scrollToNewItem()
 
     def __onTabsUpdated(self, tabIndex):
         self.__updateTabs(tabIndex)
@@ -354,6 +368,7 @@ class CustomizationBottomPanel(CustomizationBottomPanelMeta):
         self._carouselDP.selectItem(self.__ctx.modifiedStyle if mode == C11nMode.STYLE else None)
         self.__setBottomPanelBillData()
         self.__setFooterInitData()
+        self.__scrollToNewItem()
         return
 
     def __onChangesCanceled(self):
@@ -369,3 +384,15 @@ class CustomizationBottomPanel(CustomizationBottomPanelMeta):
         self.__setBottomPanelBillData()
         if refreshCarousel:
             self.__refreshCarousel()
+
+    def __scrollToNewItem(self):
+        currentTypes = TABS_ITEM_TYPE_MAPPING[self.__ctx.currentTab]
+        newItems = sorted(g_currentVehicle.item.getNewC11nItems(g_currentVehicle.itemsCache.items), key=comparisonKey)
+        for item in newItems:
+            if item.itemTypeID in currentTypes and item.season & self.__ctx.currentSeason:
+                self.as_scrollToSlotS(item.intCD)
+                return
+
+    def __onViewLoaded(self, view, *args, **kwargs):
+        if view.alias == VIEW_ALIAS.CUSTOMIZATION_FILTER_POPOVER:
+            view.setBottomPanel(self)

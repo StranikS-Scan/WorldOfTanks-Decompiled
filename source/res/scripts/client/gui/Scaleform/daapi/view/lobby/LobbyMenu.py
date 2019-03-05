@@ -7,7 +7,7 @@ from async import async, await
 from gui import DialogsInterface
 from gui.Scaleform.daapi.view.dialogs import DIALOG_BUTTON_ID
 from gui.impl import dialogs
-from gui.Scaleform.daapi.view.common.settings.new_settings_counter import getCountNewSettings
+from account_helpers.counter_settings import getCountNewSettings
 from gui.Scaleform.daapi.view.meta.LobbyMenuMeta import LobbyMenuMeta
 from gui.Scaleform.genConsts.MENU_CONSTANTS import MENU_CONSTANTS
 from gui.Scaleform.locale.BOOTCAMP import BOOTCAMP

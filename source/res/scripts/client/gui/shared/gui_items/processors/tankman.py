@@ -3,18 +3,19 @@
 import logging
 import BigWorld
 from constants import EQUIP_TMAN_CODE
-from gui.Scaleform.locale.RES_ICONS import RES_ICONS
+from items.components.crewSkins_constants import NO_CREW_SKIN_ID
 from gui.SystemMessages import SM_TYPE, CURRENCY_TO_SM_TYPE
 from gui.game_control.restore_contoller import getTankmenRestoreInfo
-from gui.shared.formatters import formatPrice, formatPriceForCurrency, text_styles, icons
+from gui.shared.formatters import formatPrice, formatPriceForCurrency
 from gui.shared.gui_items import GUI_ITEM_TYPE, Tankman
-from gui.shared.gui_items.processors import Processor, ItemProcessor, makeI18nSuccess, makeSuccess, makeI18nError, plugins
+from gui.shared.gui_items.processors import Processor, ItemProcessor, makeI18nSuccess, makeSuccess, makeI18nError, plugins, makeCrewSkinCompensationMessage
 from gui.shared.money import Money, MONEY_UNDEFINED, Currency
 from helpers import dependency
 from gui import makeHtmlString
 from items import tankmen, makeIntCompactDescrByID
 from items.tankmen import SKILL_INDICES, SKILL_NAMES, getSkillsConfig
 from skeletons.gui.game_control import IRestoreController
+from skeletons.gui.lobby_context import ILobbyContext
 _logger = logging.getLogger(__name__)
 
 def _getSysMsgType(price):
@@ -34,13 +35,27 @@ class TankmanDismiss(ItemProcessor):
         if deletedTankmen and tankman.isRestorable():
             self.addPlugin(plugins.BufferOverflowConfirmator({'dismissed': tankman,
              'deleted': deletedTankmen[0]}))
+        self.__compensationPriceObject = None
+        self.__compensationRequired = False
+        lobbyContext = dependency.instance(ILobbyContext)
+        equippedSkinID = tankman.skinID
+        if equippedSkinID != NO_CREW_SKIN_ID and lobbyContext.getServerSettings().isCrewSkinsEnabled():
+            crewSkinItem = self.itemsCache.items.getCrewSkin(equippedSkinID)
+            self.__compensationPriceObject = crewSkinItem.getBuyPrice()
+            self.__compensationRequired = not crewSkinItem.isStorageAvailable()
+            self.addPlugin(plugins.CrewSkinsCompensationDialogConfirmator('crewSkins/skinWillBeDeleted', plugins.CrewSkinsRemovalCompensationDialogMeta.OUT_OF_STORAGE_SUFFIX, ctx={'price': self.__compensationPriceObject,
+             'action': None,
+             'items': [crewSkinItem]}, isEnabled=self.__compensationRequired))
         return
 
     def _errorHandler(self, code, errStr='', ctx=None):
         return makeI18nError(sysMsgKey='dismiss_tankman/{}'.format(errStr), defaultSysMsgKey='dismiss_tankman/server_error')
 
     def _successHandler(self, code, ctx=None):
-        return makeI18nSuccess('dismiss_tankman/success', type=SM_TYPE.Information)
+        compMsg = None
+        if self.__compensationRequired:
+            compMsg = makeCrewSkinCompensationMessage(self.__compensationPriceObject)
+        return makeI18nSuccess('dismiss_tankman/success', type=SM_TYPE.Information, auxData=compMsg)
 
     def _request(self, callback):
         _logger.debug('Make server request to dismiss tankman: %s', self.item)
@@ -184,6 +199,49 @@ class TankmanRecruitAndEquip(Processor):
 
     def __getSysMsgPrefix(self):
         return 'buy_and_equip_tankman' if not self.isReplace else 'buy_and_reequip_tankman'
+
+
+class CrewSkinsProcessorBase(Processor):
+
+    def __init__(self, tmanInvID):
+        super(CrewSkinsProcessorBase, self).__init__()
+        self._tmanInvID = tmanInvID
+        self.__compensationPriceObject = None
+        self.__compensationRequired = False
+        lobbyContext = dependency.instance(ILobbyContext)
+        equippedSkinID = self.itemsCache.items.getTankman(tmanInvID).skinID
+        if equippedSkinID != NO_CREW_SKIN_ID and lobbyContext.getServerSettings().isCrewSkinsEnabled():
+            crewSkinItem = self.itemsCache.items.getCrewSkin(equippedSkinID)
+            self.__compensationPriceObject = crewSkinItem.getBuyPrice()
+            self.__compensationRequired = not crewSkinItem.isStorageAvailable()
+            self.addPlugin(plugins.CrewSkinsCompensationDialogConfirmator('crewSkins/skinWillBeDeleted', plugins.CrewSkinsRemovalCompensationDialogMeta.OUT_OF_STORAGE_SUFFIX, ctx={'price': self.__compensationPriceObject,
+             'action': None,
+             'items': [crewSkinItem]}, isEnabled=not crewSkinItem.isStorageAvailable()))
+        return
+
+    def _successHandler(self, code, ctx=None):
+        compMsg = None
+        if self.__compensationRequired:
+            compMsg = makeCrewSkinCompensationMessage(self.__compensationPriceObject)
+        return makeI18nSuccess(sysMsgKey='crewSkinsNotification/SkinChanged', type=SM_TYPE.Information, auxData=compMsg)
+
+
+class CrewSkinUnequip(CrewSkinsProcessorBase):
+
+    def _request(self, callback):
+        _logger.debug('Make server request to equip crewSkin: %d', self._tmanInvID)
+        BigWorld.player().inventory.unequipCrewSkin(self._tmanInvID, lambda code: self._response(code, callback))
+
+
+class CrewSkinEquip(CrewSkinsProcessorBase):
+
+    def __init__(self, tmanInvID, skinID):
+        super(CrewSkinEquip, self).__init__(tmanInvID)
+        self.__skinID = skinID
+
+    def _request(self, callback):
+        _logger.debug('Make server request to equip crewSkin : %d, %d', self._tmanInvID, self.__skinID)
+        BigWorld.player().inventory.equipCrewSkin(self._tmanInvID, self.__skinID, lambda code: self._response(code, callback))
 
 
 class TankmanUnload(Processor):
@@ -373,6 +431,18 @@ class TankmanChangeRole(ItemProcessor):
          plugins.VehicleValidator(vehicle, False),
          plugins.VehicleRoleValidator(vehicle, role, tankman),
          plugins.MoneyValidator(Money(gold=self.__changeRoleCost))))
+        self.__compensationPriceObject = None
+        self.__compensationRequired = False
+        lobbyContext = dependency.instance(ILobbyContext)
+        equippedSkinID = tankman.skinID
+        if equippedSkinID != NO_CREW_SKIN_ID and lobbyContext.getServerSettings().isCrewSkinsEnabled():
+            crewSkinItem = self.itemsCache.items.getCrewSkin(equippedSkinID)
+            roleMismatch = crewSkinItem.getRoleID() is not None and crewSkinItem.getRoleID() != role
+            self.__compensationPriceObject = crewSkinItem.getBuyPrice()
+            self.__compensationRequired = roleMismatch and not crewSkinItem.isStorageAvailable()
+            self.addPlugins((plugins.CrewSkinsRoleChangeRemovalConfirmator('crewSkins/skinWillBeRemoved', ctx={'items': [crewSkinItem]}, isEnabled=roleMismatch and crewSkinItem.isStorageAvailable()), plugins.CrewSkinsCompensationDialogConfirmator('crewSkins/skinWillBeDeleted', plugins.CrewSkinsRemovalCompensationDialogMeta.ROLE_MISMATCH_SUFFIX, ctx={'price': self.__compensationPriceObject,
+              'items': [crewSkinItem]}, isEnabled=self.__compensationRequired)))
+        return
 
     def _errorHandler(self, code, errStr='', ctx=None):
         return makeI18nError(sysMsgKey='change_tankman_role/{}'.format(errStr), defaultSysMsgKey='change_tankman_role/server_error')
@@ -380,13 +450,16 @@ class TankmanChangeRole(ItemProcessor):
     def _successHandler(self, code, ctx=None):
         msgType = SM_TYPE.FinancialTransactionWithGold
         vehicle = self.itemsCache.items.getItemByCD(self.__vehTypeCompDescr)
+        compMsg = None
+        if self.__compensationRequired:
+            compMsg = makeCrewSkinCompensationMessage(self.__compensationPriceObject)
         if ctx == EQUIP_TMAN_CODE.OK:
-            auxData = makeI18nSuccess(sysMsgKey='change_tankman_role/installed', vehicle=vehicle.shortUserName)
+            auxData = makeI18nSuccess(sysMsgKey='change_tankman_role/installed', vehicle=vehicle.shortUserName, auxData=compMsg)
         elif ctx == EQUIP_TMAN_CODE.NO_FREE_SLOT:
             roleStr = Tankman.getRoleUserName(SKILL_NAMES[self.__roleIdx])
-            auxData = makeI18nSuccess(sysMsgKey='change_tankman_role/slot_is_taken', vehicle=vehicle.shortUserName, role=roleStr)
+            auxData = makeI18nSuccess(sysMsgKey='change_tankman_role/slot_is_taken', vehicle=vehicle.shortUserName, role=roleStr, auxData=compMsg)
         else:
-            auxData = makeI18nSuccess(sysMsgKey='change_tankman_role/no_vehicle')
+            auxData = makeI18nSuccess(sysMsgKey='change_tankman_role/no_vehicle', auxData=compMsg)
         return makeI18nSuccess('change_tankman_role/success', money=formatPrice(Money(gold=self.__changeRoleCost)), type=msgType, auxData=auxData)
 
     def _request(self, callback):
@@ -421,28 +494,21 @@ class TankmanDropSkills(ItemProcessor):
 class TankmanChangePassport(ItemProcessor):
 
     def __init__(self, tankman, firstNameID, firstNameGroup, lastNameID, lastNameGroup, iconID, iconGroup):
-        hasUniqueData = self.__hasUniqueData(tankman, firstNameID, lastNameID, iconID)
-        isFemale = tankman.descriptor.isFemale
-        if isFemale:
-            price = self.itemsCache.items.shop.passportFemaleChangeCost
-        else:
-            price = self.itemsCache.items.shop.passportChangeCost
-        super(TankmanChangePassport, self).__init__(tankman, (plugins.TankmanChangePassportValidator(tankman), plugins.MessageConfirmator('replacePassport/unique' if hasUniqueData else 'replacePassportConfirmation', ctx={Currency.GOLD: text_styles.concatStylesWithSpace(text_styles.gold(BigWorld.wg_getGoldFormat(price)), icons.makeImageTag(RES_ICONS.MAPS_ICONS_LIBRARY_GOLDICON_2))})))
+        super(TankmanChangePassport, self).__init__(tankman, (plugins.TankmanChangePassportValidator(tankman),))
         self.firstNameID = firstNameID
         self.firstNameGroup = firstNameGroup
         self.lastNameID = lastNameID
         self.lastNameGroup = lastNameGroup
         self.iconID = iconID
         self.iconGroup = iconGroup
-        self.isFemale = isFemale
+        self.isFemale = tankman.descriptor.isFemale
         self.isPremium = tankman.descriptor.isPremium
-        self.price = price
+
+    def _successHandler(self, code, ctx=None):
+        return makeI18nSuccess(sysMsgKey='replace_tankman/success', type=SM_TYPE.Information)
 
     def _errorHandler(self, code, errStr='', ctx=None):
         return makeI18nError(sysMsgKey='replace_tankman/{}'.format(errStr), defaultSysMsgKey='replace_tankman/server_error')
-
-    def _successHandler(self, code, ctx=None):
-        return makeI18nSuccess(sysMsgKey='replace_tankman/success', money=formatPrice(Money(gold=self.price)), type=SM_TYPE.PurchaseForGold)
 
     def _request(self, callback):
         _logger.debug('Make server request to change tankman passport: %s, %s, %s, %s, %s, %s, %s', self.item.invID, self.isPremium, self.isFemale, self.firstNameGroup, self.firstNameID, self.lastNameGroup, self.lastNameID)

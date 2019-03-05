@@ -8,8 +8,8 @@ from gui.shared.gui_items.dossier import dumpDossier
 from gui.shared.gui_items.dossier.achievements.abstract import isRareAchievement
 from gui.shared.utils import showInvitationInWindowsBar
 from gui.shared.event_dispatcher import runSalesChain
-from gui.shared.utils.functions import makeTooltip
 from gui.shared.view_helpers import UsersInfoHelper
+from gui.shared.utils.functions import makeTooltip
 from helpers import time_utils
 from helpers import dependency
 from messenger.storage import storage_getter
@@ -32,7 +32,6 @@ class _ShowToolTipSchema(W2CSchema):
     tooltipType = Field(required=True, type=basestring)
     itemId = Field(required=True, type=(int, basestring))
     blockId = Field(type=basestring, validator=lambda value, _: value in ACHIEVEMENT_BLOCK.ALL)
-    showVehicle = Field(type=bool, default=True)
 
 
 class _ShowCustomTooltipSchema(W2CSchema):
@@ -77,15 +76,14 @@ class UtilWebApiMixin(object):
         withLongOnlyArgs = (TC.AWARD_VEHICLE,
          TC.AWARD_MODULE,
          TC.INVENTORY_BATTLE_BOOSTER,
-         TC.BOOSTERS_BOOSTER_INFO)
+         TC.BOOSTERS_BOOSTER_INFO,
+         TC.BADGE)
         if tooltipType in withLongIntArgs:
             args = [itemId, 0]
         elif tooltipType in withLongBoolArgs:
             args = [itemId, False]
         elif tooltipType in withLongOnlyArgs:
             args = [itemId]
-        elif tooltipType == TC.BADGE:
-            args = [itemId, cmd.showVehicle]
         elif tooltipType == TC.ACHIEVEMENT:
             dossier = self.itemsCache.items.getAccountDossier()
             dossierCompDescr = dumpDossier(self.itemsCache.items.getAccountDossier())

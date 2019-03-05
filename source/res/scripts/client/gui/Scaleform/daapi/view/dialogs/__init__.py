@@ -221,6 +221,38 @@ class TankmanOperationDialogMeta(I18nConfirmDialogMeta):
         return self.__showPeriodEndWarning
 
 
+class CrewSkinsRemovalDialogMeta(I18nConfirmDialogMeta):
+
+    def getEventType(self):
+        return events.ShowDialogEvent.SHOW_CREW_SKINS_COMPENSATION_DIALOG
+
+    def getItems(self):
+        return self._messageCtx.get('items')
+
+    def getMessagePrice(self):
+        return self._messageCtx.get('price', None)
+
+
+class CrewSkinsRemovalCompensationDialogMeta(CrewSkinsRemovalDialogMeta):
+    ROLE_MISMATCH_SUFFIX = 1
+    OUT_OF_STORAGE_SUFFIX = 2
+
+    def __init__(self, key, reasonSuffix, titleCtx=None, messageCtx=None, meta=None, focusedID=None, scope=ScopeTemplates.VIEW_SCOPE):
+        super(CrewSkinsRemovalCompensationDialogMeta, self).__init__(key, titleCtx, messageCtx, meta, focusedID, scope)
+        self._reasonSuffix = reasonSuffix
+
+    def getMessage(self):
+        result = None
+        if self._meta is not None:
+            result = self._meta.getMessage()
+        if not result:
+            result = self._makeString('{0:>s}/message{1:d}'.format(self._key, self._reasonSuffix), self._messageCtx)
+        return result
+
+    def getCompensationMessage(self):
+        return self._makeString(I18N_PRICE_KEY.format(self._key), self._messageCtx)
+
+
 class IconDialogMeta(I18nConfirmDialogMeta):
 
     def getEventType(self):

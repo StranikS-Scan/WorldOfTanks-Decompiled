@@ -6,12 +6,12 @@ from adisp import process
 from gui import DialogsInterface
 from gui.Scaleform.daapi.view.dialogs.ConfirmModuleMeta import SellModuleMeta
 from gui.Scaleform.daapi.view.lobby.storage.category_view import StorageDataProvider
-from gui.Scaleform.daapi.view.lobby.storage.storage_helpers import getStorageItemDescr
 from gui.Scaleform.daapi.view.lobby.storage.storage_helpers import createStorageDefVO
-from gui.Scaleform.daapi.view.lobby.storage.storage_helpers import getStorageShellsData
-from gui.Scaleform.daapi.view.lobby.storage.storage_helpers import getStorageModuleName
 from gui.Scaleform.daapi.view.lobby.storage.storage_helpers import getBoosterType
+from gui.Scaleform.daapi.view.lobby.storage.storage_helpers import getStorageItemDescr
 from gui.Scaleform.daapi.view.lobby.storage.storage_helpers import getStorageItemIcon
+from gui.Scaleform.daapi.view.lobby.storage.storage_helpers import getStorageModuleName
+from gui.Scaleform.daapi.view.lobby.storage.storage_helpers import getStorageShellsData
 from gui.Scaleform.daapi.view.lobby.store.browser.ingameshop_helpers import getWebShopURL
 from gui.Scaleform.daapi.view.meta.StorageCategoryForSellViewMeta import StorageCategoryForSellViewMeta
 from gui.Scaleform.genConsts.CONTEXT_MENU_HANDLER_TYPE import CONTEXT_MENU_HANDLER_TYPE
@@ -35,6 +35,18 @@ _FOR_SELL_SORT_ORDER = (GUI_ITEM_TYPE.TURRET,
  GUI_ITEM_TYPE.RADIO,
  GUI_ITEM_TYPE.CHASSIS,
  GUI_ITEM_TYPE.SHELL)
+
+def _sortKey(item):
+    itemPrice = item.getSellPrice().price
+    if item.itemTypeID in _FOR_SELL_SORT_ORDER:
+        itemTypeIndex = _FOR_SELL_SORT_ORDER.index(item.itemTypeID)
+    else:
+        itemTypeIndex = len(_FOR_SELL_SORT_ORDER)
+    return (itemTypeIndex,
+     -itemPrice.gold if itemPrice.gold is not None else 0,
+     -itemPrice.credits if itemPrice.credits is not None else 0,
+     getStorageModuleName(item))
+
 
 class _StorageForSellCache(FileLocalCache):
 
@@ -106,19 +118,7 @@ class _SelectableDataProvider(StorageDataProvider):
         return
 
     def buildList(self, itemsVoList):
-
-        def sortKey(item):
-            itemPrice = item.getSellPrice().price
-            if item.itemTypeID in _FOR_SELL_SORT_ORDER:
-                itemTypeIndex = _FOR_SELL_SORT_ORDER.index(item.itemTypeID)
-            else:
-                itemTypeIndex = len(_FOR_SELL_SORT_ORDER)
-            return (itemTypeIndex,
-             -itemPrice.gold if itemPrice.gold is not None else 0,
-             -itemPrice.credits if itemPrice.credits is not None else 0,
-             getStorageModuleName(item))
-
-        newList = sorted(itemsVoList, key=sortKey)
+        newList = sorted(itemsVoList, key=_sortKey)
         self.__guiItems = []
         self.__totalPrice = Money()
         self.__isAllSelected = True

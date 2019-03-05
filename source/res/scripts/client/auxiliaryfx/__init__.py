@@ -56,10 +56,10 @@ class AuxiliaryFxManager(object):
 
 from PlayerEvents import g_playerEvents
 import gui.SystemMessages
-from gui.prb_control.dispatcher import g_prbLoader
 from messenger.proto.events import g_messengerEvents
 from messenger.m_constants import PROTO_TYPE
 from messenger.ext.player_helpers import isCurrentPlayer
+from gui.prb_control import prbInvitesProperty
 
 class _ChatActionsHandler(object):
     connectionMgr = dependency.descriptor(IConnectionManager)
@@ -68,8 +68,12 @@ class _ChatActionsHandler(object):
         g_playerEvents.onAccountBecomePlayer += self.__subscribe
         self.connectionMgr.onDisconnected += self.__onDisconnected
 
+    @prbInvitesProperty
+    def prbInvites(self):
+        return None
+
     def __subscribe(self):
-        invitesManager = g_prbLoader.getInvitesManager()
+        invitesManager = self.prbInvites
         if invitesManager is not None:
             invitesManager.onReceivedInviteListModified += self.__onReceivedInviteListModified
             invitesManager.onInvitesListInited += self.__onReceivedInviteListModified
@@ -79,7 +83,7 @@ class _ChatActionsHandler(object):
         return
 
     def destroy(self):
-        invitesManager = g_prbLoader.getInvitesManager()
+        invitesManager = self.prbInvites
         if invitesManager is not None:
             invitesManager.onReceivedInviteListModified -= self.__onReceivedInviteListModified
             invitesManager.onInvitesListInited -= self.__onReceivedInviteListModified
@@ -95,7 +99,7 @@ class _ChatActionsHandler(object):
         g_instance.execEffect('resetBackground')
 
     def __onReceivedInviteListModified(self, *args):
-        if g_prbLoader.getInvitesManager().getUnreadCount():
+        if self.prbInvites.getUnreadCount():
             g_instance.execEffect('startInvitationEffect')
         else:
             g_instance.execEffect('stopInvitationEffect')

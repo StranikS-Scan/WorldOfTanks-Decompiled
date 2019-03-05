@@ -587,8 +587,6 @@ class EconomicsSet(ActionModifier):
          'paidRemovalCost': bwr(self.handlerPaidRemovalCost),
          'paidDeluxeRemovalCost': bwr(self.handlerPaidDeluxeRemovalCost),
          'berthsPrices': bwr(self.handlerBerthsPrices),
-         'passportChangeCost': bwr(self.handlerPassportChangeCost),
-         'femalePassportChangeCost': bwr(self.handlerFemalePassportChangeCost),
          'freeXPToTManXPRate': bwr(self.handlerFreeXPToTManXPRate),
          'tradeInSellPriceFactor': bwr(self.handlerTradeInSellPriceFactor)}
 
@@ -691,14 +689,6 @@ class EconomicsSet(ActionModifier):
     def handlerPaidDeluxeRemovalCost(self, ctx):
         default = self.itemsCache.items.shop.defaults.paidDeluxeRemovalCost.get(ctx.getCurrency())
         return self._calculateDiscount('paidDeluxeRemovalCost', ctx.getValue(), default, _DT.PERCENT)
-
-    def handlerPassportChangeCost(self, ctx):
-        default = self.itemsCache.items.shop.defaults.passportChangeCost
-        return self._calculateDiscount('passportChangeCost', ctx.getValue(), default, _DT.PERCENT)
-
-    def handlerFemalePassportChangeCost(self, ctx):
-        default = self.itemsCache.items.shop.defaults.passportFemaleChangeCost
-        return self._calculateDiscount('femalePassportChangeCost', ctx.getValue(), default, _DT.PERCENT)
 
     def handlerClanCreationCost(self, ctx):
         default = self.itemsCache.items.shop.defaults.clanCreationCost

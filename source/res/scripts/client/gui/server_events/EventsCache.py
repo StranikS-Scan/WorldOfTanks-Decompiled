@@ -4,7 +4,7 @@ import cPickle as pickle
 import math
 import sys
 import zlib
-from collections import defaultdict
+from collections import defaultdict, namedtuple
 import BigWorld
 import motivation_quests
 import nations
@@ -34,6 +34,7 @@ from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.shared.utils import IRaresCache
 from skeletons.gui.linkedset import ILinkedSetController
+_ProgressiveReward = namedtuple('_ProgressiveReward', ('currentStep', 'probability', 'maxSteps'))
 
 def _defaultQuestMaker(qID, qData, progress):
     return createQuest(qData.get('type', 0), qID, qData, progress.getQuestProgress(qID), progress.getTokenExpiryTime(qData.get('requiredToken')))
@@ -325,8 +326,8 @@ class EventsCache(IEventsCache):
         intCD = item.intCD
         values = self.__actionsCache[ACTION_SECTION_TYPE.ALL][actionType].get(itemTypeID, {}).get(nationID, [])
         values += self.__actionsCache[ACTION_SECTION_TYPE.ALL][actionType].get(itemTypeID, {}).get(15, [])
-        for (key, value), actionID in values:
-            if item.isPremium and key in ('creditsPrice', 'creditsPriceMultiplier') and not forCredits:
+        for (_, value), actionID in values:
+            if item.isPremium and value in ('creditsPrice', 'creditsPriceMultiplier') and not forCredits:
                 continue
             result.append((value, actionID))
 
@@ -410,6 +411,16 @@ class EventsCache(IEventsCache):
 
     def hasQuestDelayedRewards(self, questID):
         return self.__questsProgress.hasQuestDelayedRewards(questID)
+
+    def getProgressiveReward(self):
+        progressiveConfig = self.lobbyContext.getServerSettings().getProgressiveRewardConfig()
+        if not progressiveConfig.isEnabled:
+            return None
+        else:
+            maxSteps = progressiveConfig.maxLevel
+            currentStep = self.questsProgress.getTokenCount(progressiveConfig.levelTokenID)
+            probability = self.questsProgress.getTokenCount(progressiveConfig.probabilityTokenID) / 100
+            return _ProgressiveReward(currentStep, probability, maxSteps)
 
     def _getQuests(self, filterFunc=None, includePersonalMissions=False):
         result = {}

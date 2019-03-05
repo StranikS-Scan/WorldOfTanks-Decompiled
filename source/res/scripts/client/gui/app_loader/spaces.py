@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client/gui/app_loader/spaces.py
 import BigWorld
 import BattleReplay
+from PlayerEvents import g_playerEvents
 from adisp import process
 from constants import ARENA_GUI_TYPE
 from gui import DialogsInterface
@@ -9,7 +10,7 @@ from gui.shared.utils.decorators import ReprInjector
 from gui.Scaleform.Waiting import Waiting
 from gui.app_loader.settings import GUI_GLOBAL_SPACE_ID as _SPACE_ID, APP_NAME_SPACE
 from gui.app_loader.settings import APP_STATE_ID as _STATE_ID
-from helpers import dependency
+from helpers import dependency, isPlayerAvatar
 from skeletons.connection_mgr import DisconnectReason
 from skeletons.gui.shared.utils import IHangarSpace
 _REASON = DisconnectReason
@@ -215,7 +216,8 @@ class BattleLoadingSpace(_ArenaSpace):
 
     def showGUI(self, appFactory, appNS, appState):
         appFactory.destroyLobby()
-        if appState == _STATE_ID.INITIALIZED:
+        isValidAvatar = isPlayerAvatar() and not g_playerEvents.isPlayerEntityChanging
+        if appState == _STATE_ID.INITIALIZED and isValidAvatar:
             appFactory.loadBattlePage(appNS, arenaGuiType=self._arenaGuiType)
 
     def updateGUI(self, appFactory, appNS):

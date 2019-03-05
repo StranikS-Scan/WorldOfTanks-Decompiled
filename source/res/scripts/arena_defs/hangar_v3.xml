@@ -1,6 +1,10 @@
 <hangar_v3.xml>
   <wwmusic>	hangar_premium_2018_music	</wwmusic>
   <wwambientSound>	hangar_premium_2018_wind_summer	</wwambientSound>
+  <wwDefaultReverb>
+    <auxBus>	AUX_reverb_hangar_Forest_env	</auxBus>
+    <controlValue>	1.0	</controlValue>
+  </wwDefaultReverb>
   <soundRemapping>
     <loadBanks>
       <bank>	hangar_premium_2018.bnk	</bank>

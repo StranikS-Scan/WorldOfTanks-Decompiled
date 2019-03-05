@@ -7,7 +7,7 @@
     <vehicleFilter>
       <include>
         <nations>	china	</nations>
-        <levels>	6 8 9 10	</levels>
+        <levels>	6 7 8 9 10	</levels>
       </include>
       <exclude>
         <vehicles>	china:Ch01_Type59_Gold	</vehicles>
@@ -46,7 +46,7 @@
     <vehicleFilter>
       <include>
         <nations>	ussr	</nations>
-        <levels>	6 8 9 10	</levels>
+        <levels>	6 7 8 9 10	</levels>
       </include>
       <exclude>
         <vehicles>	ussr:R61_Object252_BF	</vehicles>
@@ -85,7 +85,7 @@
     <vehicleFilter>
       <include>
         <nations>	germany czech france poland	</nations>
-        <levels>	6 8 9 10	</levels>
+        <levels>	6 7 8 9 10	</levels>
       </include>
       <exclude>
         <vehicles>	germany:G119_Panzer58_BF germany:G114_Rheinmetall_Skorpian	</vehicles>
@@ -124,7 +124,7 @@
     <vehicleFilter>
       <include>
         <nations>	usa uk sweden japan	</nations>
-        <levels>	6 8 9 10	</levels>
+        <levels>	6 7 8 9 10	</levels>
       </include>
       <exclude>
         <vehicles>	usa:A13_T34_hvy_BF	</vehicles>
@@ -162,7 +162,7 @@
     <priceGroup>	WG Fest style notInShop	</priceGroup>
     <vehicleFilter>
       <include>
-        <levels>	6 8 9 10	</levels>
+        <levels>	6 7 8 9 10	</levels>
       </include>
       <exclude>
         <vehicles>	china:Ch01_Type59_Gold germany:G119_Panzer58_BF germany:G114_Rheinmetall_Skorpian usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
@@ -341,7 +341,7 @@
     <priceGroup>	special style notInShop	</priceGroup>
     <vehicleFilter>
       <include>
-        <levels>	6 8 9 10	</levels>
+        <levels>	6 7 8 9 10	</levels>
       </include>
       <exclude>
         <vehicles>	china:Ch01_Type59_Gold germany:G119_Panzer58_BF germany:G114_Rheinmetall_Skorpian usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
@@ -400,7 +400,7 @@
     <vehicleFilter>
       <include>
         <nations>	ussr poland czech china	</nations>
-        <levels>	6 8 9 10	</levels>
+        <levels>	6 7 8 9 10	</levels>
       </include>
       <exclude>
         <vehicles>	china:Ch01_Type59_Gold germany:G119_Panzer58_BF germany:G114_Rheinmetall_Skorpian usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
@@ -440,7 +440,7 @@
     <vehicleFilter>
       <include>
         <nations>	france uk usa sweden	</nations>
-        <levels>	6 8 9 10	</levels>
+        <levels>	6 7 8 9 10	</levels>
       </include>
       <exclude>
         <vehicles>	china:Ch01_Type59_Gold germany:G119_Panzer58_BF germany:G114_Rheinmetall_Skorpian usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
@@ -480,7 +480,7 @@
     <vehicleFilter>
       <include>
         <nations>	germany italy japan	</nations>
-        <levels>	6 8 9 10	</levels>
+        <levels>	6 7 8 9 10	</levels>
       </include>
       <exclude>
         <vehicles>	china:Ch01_Type59_Gold germany:G119_Panzer58_BF germany:G114_Rheinmetall_Skorpian usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
@@ -523,7 +523,7 @@
     <priceGroup>	23feb style	</priceGroup>
     <vehicleFilter>
       <include>
-        <levels>	6 8 9 10	</levels>
+        <levels>	6 7 8 9 10	</levels>
       </include>
       <exclude>
         <vehicles>	china:Ch01_Type59_Gold germany:G119_Panzer58_BF germany:G114_Rheinmetall_Skorpian usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
@@ -2802,7 +2802,7 @@
     <priceGroup>	special style notInShop	</priceGroup>
     <vehicleFilter>
       <include>
-        <levels>	6 8 9 10	</levels>
+        <levels>	6 7 8 9 10	</levels>
       </include>
       <exclude>
         <vehicles>	china:Ch01_Type59_Gold germany:G119_Panzer58_BF germany:G114_Rheinmetall_Skorpian usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
@@ -2873,6 +2873,102 @@
           <decals>
             <item>
               <id>	681	</id>
+              <appliedTo>	13104	</appliedTo>
+            </item>
+          </decals>
+        </outfit>
+      </outfits>
+    </style>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/main_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	false	</historical>
+    <priceGroup>	generic custom look na	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G119_Panzer58_BF germany:G114_Rheinmetall_Skorpian usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <style>
+      <id>	252	</id>
+      <texture>	gui/maps/vehicles/styles/wot_birthday_na.png	</texture>
+      <description>	#vehicle_customization:main_style/wot_birthday_na_desc	</description>
+      <userString>	#vehicle_customization:main_style/wot_birthday_na	</userString>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	643	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+        </outfit>
+      </outfits>
+    </style>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/main_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	false	</historical>
+    <priceGroup>	generic custom look cn	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G119_Panzer58_BF germany:G114_Rheinmetall_Skorpian usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <style>
+      <id>	253	</id>
+      <texture>	gui/maps/vehicles/styles/wot_birthday_cn.png	</texture>
+      <description>	#vehicle_customization:main_style/wot_birthday_cn_desc	</description>
+      <userString>	#vehicle_customization:main_style/wot_birthday_cn	</userString>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	644	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+        </outfit>
+      </outfits>
+    </style>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/main_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	false	</historical>
+    <priceGroup>	generic custom look eu	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G119_Panzer58_BF germany:G114_Rheinmetall_Skorpian usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <style>
+      <id>	254	</id>
+      <texture>	gui/maps/vehicles/styles/wot_birthday_eu.png	</texture>
+      <description>	#vehicle_customization:main_style/wot_birthday_eu_desc	</description>
+      <userString>	#vehicle_customization:main_style/wot_birthday_eu	</userString>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	645	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <decals>
+            <item>
+              <id>	684	</id>
               <appliedTo>	13104	</appliedTo>
             </item>
           </decals>

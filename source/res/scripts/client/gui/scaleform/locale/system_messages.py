@@ -410,10 +410,6 @@ class SYSTEM_MESSAGES(object):
     VEHICLE_RENT_SUCCESS = '#system_messages:vehicle_rent/success'
     VEHICLE_RENT_BUYOPTION = '#system_messages:vehicle_rent/buyOption'
     VEHICLE_RENT_TIMERENT = '#system_messages:vehicle_rent/timeRent'
-    VEHICLE_RENT_EPIC_SEASON = '#system_messages:vehicle_rent/epic/season'
-    VEHICLE_RENT_EPIC_CYCLE = '#system_messages:vehicle_rent/epic/cycle'
-    VEHICLE_RENT_RANKED_SEASON = '#system_messages:vehicle_rent/ranked/season'
-    VEHICLE_RENT_RANKED_CYCLE = '#system_messages:vehicle_rent/ranked/cycle'
     VEHICLE_RENT_SERVER_ERROR = '#system_messages:vehicle_rent/server_error'
     VEHICLE_RENT_INVALID_VEHICLE = '#system_messages:vehicle_rent/invalid_vehicle'
     VEHICLE_RENT_SERVER_ERROR_CENTERDOWN = '#system_messages:vehicle_rent/server_error_centerDown'
@@ -1026,16 +1022,25 @@ class SYSTEM_MESSAGES(object):
     RANKED_NOTIFICATION_NOTAVAILABLE = '#system_messages:ranked/notification/notAvailable'
     RANKED_NOTIFICATION_AVAILABLE = '#system_messages:ranked/notification/available'
     TOKENS_NOTIFICATION_MARK_ACQUIRED = '#system_messages:tokens/notification/mark_acquired'
-    EPICBATTLES_NOTIFICATION_PRIMETIME = '#system_messages:epicBattles/notification/primeTime'
     EPICBATTLES_NOTIFICATION_NOTAVAILABLE = '#system_messages:epicBattles/notification/notAvailable'
-    EPICBATTLES_NOTIFICATION_AVAILABLE = '#system_messages:epicBattles/notification/available'
+    EPICBATTLES_PRESTIGETRIGGER_ERROR = '#system_messages:epicBattles/prestigeTrigger/error'
     LOOTBOXES_OPEN_SERVER_ERROR = '#system_messages:lootboxes/open/server_error'
     LOOTBOXES_OPEN_SERVER_ERROR_DISABLED = '#system_messages:lootboxes/open/server_error/DISABLED'
     LOOTBOXES_OPEN_SERVER_ERROR_COOLDOWN = '#system_messages:lootboxes/open/server_error/COOLDOWN'
-    EPICBATTLES_CLAIMREWARD_ERROR = '#system_messages:epicBattles/claimReward/error'
-    EPICBATTLES_PRESTIGETRIGGER_ERROR = '#system_messages:epicBattles/prestigeTrigger/error'
     BADGES_SELECT_SERVER_ERROR_COOLDOWN = '#system_messages:badges/select/server_error/COOLDOWN'
     BADGES_SELECT_SERVER_ERROR = '#system_messages:badges/select/server_error'
+    CREWSKINSCOMPENSATION_SUCCESS = '#system_messages:crewSkinsCompensation/success'
+    CREWSKINSNOTIFICATION_SKINGAIN = '#system_messages:crewSkinsNotification/SkinGain'
+    CREWSKINSNOTIFICATION_SKINCHANGED = '#system_messages:crewSkinsNotification/SkinChanged'
+    BLUEPRINTS_SWITCH_OFF = '#system_messages:blueprints/switch_off'
+    BLUEPRINTS_SWITCH_ON = '#system_messages:blueprints/switch_on'
+    BLUEPRINTS_CONVERSION_ERROR = '#system_messages:blueprints/conversion/error'
+    BLUEPRINTS_CONVERSION_DISABLE = '#system_messages:blueprints/conversion/disable'
+    PROGRESSIVEREWARD_SWITCH_OFF = '#system_messages:progressiveReward/switch_off'
+    PROGRESSIVEREWARD_SWITCH_ON = '#system_messages:progressiveReward/switch_on'
+    PROGRESSIVEREWARD_ERROR = '#system_messages:progressiveReward/error'
+    FRONTLINE_BUY_VEHICLE_SERVER_ERROR = '#system_messages:frontline_buy_vehicle/server_error'
+    FRONTLINE_BUY_VEHICLE_BUY = '#system_messages:frontline_buy_vehicle/buy'
     UNIT_WARNINGS_ENUM = (UNIT_WARNINGS_NO_CLAN_MEMBERS,
      UNIT_WARNINGS_CANT_PICK_LEADER,
      UNIT_WARNINGS_KICKED_CANDIDATE,
@@ -1459,10 +1464,6 @@ class SYSTEM_MESSAGES(object):
      VEHICLE_RENT_SUCCESS,
      VEHICLE_RENT_BUYOPTION,
      VEHICLE_RENT_TIMERENT,
-     VEHICLE_RENT_EPIC_SEASON,
-     VEHICLE_RENT_EPIC_CYCLE,
-     VEHICLE_RENT_RANKED_SEASON,
-     VEHICLE_RENT_RANKED_CYCLE,
      VEHICLE_RENT_SERVER_ERROR,
      VEHICLE_RENT_INVALID_VEHICLE,
      VEHICLE_RENT_SERVER_ERROR_CENTERDOWN,
@@ -2075,16 +2076,25 @@ class SYSTEM_MESSAGES(object):
      RANKED_NOTIFICATION_NOTAVAILABLE,
      RANKED_NOTIFICATION_AVAILABLE,
      TOKENS_NOTIFICATION_MARK_ACQUIRED,
-     EPICBATTLES_NOTIFICATION_PRIMETIME,
      EPICBATTLES_NOTIFICATION_NOTAVAILABLE,
-     EPICBATTLES_NOTIFICATION_AVAILABLE,
+     EPICBATTLES_PRESTIGETRIGGER_ERROR,
      LOOTBOXES_OPEN_SERVER_ERROR,
      LOOTBOXES_OPEN_SERVER_ERROR_DISABLED,
      LOOTBOXES_OPEN_SERVER_ERROR_COOLDOWN,
-     EPICBATTLES_CLAIMREWARD_ERROR,
-     EPICBATTLES_PRESTIGETRIGGER_ERROR,
      BADGES_SELECT_SERVER_ERROR_COOLDOWN,
-     BADGES_SELECT_SERVER_ERROR)
+     BADGES_SELECT_SERVER_ERROR,
+     CREWSKINSCOMPENSATION_SUCCESS,
+     CREWSKINSNOTIFICATION_SKINGAIN,
+     CREWSKINSNOTIFICATION_SKINCHANGED,
+     BLUEPRINTS_SWITCH_OFF,
+     BLUEPRINTS_SWITCH_ON,
+     BLUEPRINTS_CONVERSION_ERROR,
+     BLUEPRINTS_CONVERSION_DISABLE,
+     PROGRESSIVEREWARD_SWITCH_OFF,
+     PROGRESSIVEREWARD_SWITCH_ON,
+     PROGRESSIVEREWARD_ERROR,
+     FRONTLINE_BUY_VEHICLE_SERVER_ERROR,
+     FRONTLINE_BUY_VEHICLE_BUY)
     UNIT_NOTIFICATION_ENUM = (UNIT_NOTIFICATION_PLAYER_BECOME_EQUIPMENT_COMMANDER,
      UNIT_NOTIFICATION_PLAYEROFFLINE,
      UNIT_NOTIFICATION_PLAYERONLINE,

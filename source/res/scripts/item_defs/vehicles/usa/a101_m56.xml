@@ -66,7 +66,7 @@
     <hangarShadowTexture>	vehicles/american/A101_M56/M56_HangarShadowMap.dds	</hangarShadowTexture>
     <customization>
       <customizableVehicleAreas>
-        <paint></paint>
+        <paint>	HULL	</paint>
         <camouflage>	HULL	</camouflage>
       </customizableVehicleAreas>
     </customization>
@@ -97,9 +97,9 @@
         <rayStart>	1.34114 0.374292 -0.461429	</rayStart>
         <rayEnd>	1.14114 0.374287 -0.461533	</rayEnd>
         <rayUp>	0.000018 0.999391 -0.0348991	</rayUp>
+        <isMirrored>	true	</isMirrored>
         <size>	0.18	</size>
         <hideIfDamaged>	true	</hideIfDamaged>
-        <isMirrored>	true	</isMirrored>
         <isUVProportional>	true	</isUVProportional>
       </slot>
       <slot>
@@ -125,6 +125,12 @@
       <slot>
         <slotType>	camouflage	</slotType>
         <slotId>	3	</slotId>
+        <anchorPosition>	0.000000 0.521398 1.26465	</anchorPosition>
+        <anchorDirection>	0.000000 0.381162 0.924508	</anchorDirection>
+      </slot>
+      <slot>
+        <slotType>	paint	</slotType>
+        <slotId>	2	</slotId>
         <anchorPosition>	0.000000 0.521398 1.26465	</anchorPosition>
         <anchorDirection>	0.000000 0.381162 0.924508	</anchorDirection>
       </slot>
@@ -846,7 +852,7 @@
       </physicalTracks>
       <customization>
         <customizableVehicleAreas>
-          <paint></paint>
+          <paint>	CHASSIS	</paint>
           <camouflage></camouflage>
         </customizableVehicleAreas>
       </customization>
@@ -856,6 +862,12 @@
           <slotId>	257	</slotId>
           <anchorPosition>	-0.000000 1.82915 0.000000	</anchorPosition>
           <anchorDirection>	-0.000000 1 0.000000	</anchorDirection>
+        </slot>
+        <slot>
+          <slotType>	paint	</slotType>
+          <slotId>	256	</slotId>
+          <anchorPosition>	-1.03409 0.342796 -0.000018	</anchorPosition>
+          <anchorDirection>	-0.000000 -1 -0.000000	</anchorDirection>
         </slot>
       </customizationSlots>
     </Chassis_A101_M56>
@@ -923,7 +935,7 @@
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <customization>
             <customizableVehicleAreas>
-              <paint></paint>
+              <paint>	GUN GUN_2	</paint>
               <camouflage>	GUN	</camouflage>
             </customizableVehicleAreas>
           </customization>
@@ -933,7 +945,8 @@
               <slotId>	771	</slotId>
               <rayStart>	0.000141144 0.00793203 2.23638	</rayStart>
               <rayEnd>	-0.0227387 -0.00332442 2.23508	</rayEnd>
-              <rayUp>	0.081 0.08 3	</rayUp>
+              <rayUp>	0.081 0.000000 0.000000	</rayUp>
+              <applyToFabric>	true	</applyToFabric>
               <size>	0.323	</size>
               <hideIfDamaged>	true	</hideIfDamaged>
               <isUVProportional>	true	</isUVProportional>
@@ -944,6 +957,20 @@
               <anchorPosition>	0.000071 0.00396601 1.79948	</anchorPosition>
               <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
               <applyTo>	4096	</applyTo>
+            </slot>
+            <slot>
+              <slotType>	paint	</slotType>
+              <slotId>	768	</slotId>
+              <anchorPosition>	0.000071 0.00396601 1.79948	</anchorPosition>
+              <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+            <slot>
+              <slotType>	paint	</slotType>
+              <slotId>	769	</slotId>
+              <anchorPosition>	0.00010404 0.264863 0.580049	</anchorPosition>
+              <anchorDirection>	-0.000000 0.000000 1	</anchorDirection>
+              <applyTo>	16384	</applyTo>
             </slot>
           </customizationSlots>
         </_90mm_Gun_M54>
@@ -963,10 +990,18 @@
       <physicsShape>	0.980 0.000 1.000 0.000 1.000 0.000 0.500 0.500 0.500 0.500 0.500 0.500 0.600 0.100 0.500	</physicsShape>
       <customization>
         <customizableVehicleAreas>
-          <paint></paint>
+          <paint>	TURRET	</paint>
           <camouflage></camouflage>
         </customizableVehicleAreas>
       </customization>
+      <customizationSlots>
+        <slot>
+          <slotType>	paint	</slotType>
+          <slotId>	512	</slotId>
+          <anchorPosition>	-0.208509 0.638314 -0.00525966	</anchorPosition>
+          <anchorDirection>	-0.000000 1 0.000000	</anchorDirection>
+        </slot>
+      </customizationSlots>
     </Turret_1_A101_M56>
   </turrets0>
   <engines>

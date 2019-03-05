@@ -82,7 +82,8 @@ class VehiclesFilterPopover(TankCarouselFilterPopoverMeta):
          'hiddenSectionVisible': True,
          'specialSectionVisible': True,
          'tankTierSectionVisible': True,
-         'searchSectionVisible': True}
+         'searchSectionVisible': True,
+         'changeableArrowDirection': False}
 
         def isSelected(entry):
             return filters.get(entry, False)
@@ -209,4 +210,23 @@ class BattleTankCarouselFilterPopover(TankCarouselFilterPopover):
         mapping[_SECTION.SPECIALS] = []
         if constants.IS_KOREA:
             mapping[_SECTION.SPECIALS].append('igr')
+        return mapping
+
+
+class StorageBlueprintsFilterPopover(VehiclesFilterPopover):
+
+    def _getInitialVO(self, filters, xpRateMultiplier):
+        vo = super(StorageBlueprintsFilterPopover, self)._getInitialVO(filters, xpRateMultiplier)
+        vo['searchSectionVisible'] = False
+        vo['hiddenSectionVisible'] = True
+        vo['changeableArrowDirection'] = True
+        for entry in vo['hidden']:
+            entry['tooltip'] = None
+
+        return vo
+
+    @classmethod
+    def _generateMapping(cls, hasRented, hasEvent):
+        mapping = super(StorageBlueprintsFilterPopover, cls)._generateMapping(hasRented, hasEvent)
+        mapping[_SECTION.HIDDEN].append('unlock_available')
         return mapping

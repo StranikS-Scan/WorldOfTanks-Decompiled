@@ -1,23 +1,23 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/techtree/techtree_dp.py
-from collections import defaultdict, namedtuple
 import operator
-from soft_exception import SoftException
+from collections import defaultdict, namedtuple
+import ResMgr
+import nations
 from constants import IS_DEVELOPMENT
 from debug_utils import LOG_ERROR, LOG_DEBUG
 from gui import GUI_NATIONS_ORDER_INDEX
 from gui.Scaleform.daapi.view.lobby.techtree.nodes import BaseNode
-from gui.Scaleform.daapi.view.lobby.techtree.settings import TREE_SHARED_REL_FILE_PATH, UnlockStats
 from gui.Scaleform.daapi.view.lobby.techtree.settings import NATION_TREE_REL_FILE_PATH
-from gui.Scaleform.daapi.view.lobby.techtree.settings import DEFAULT_UNLOCK_PROPS
-from gui.Scaleform.daapi.view.lobby.techtree.settings import UnlockProps
+from gui.Scaleform.daapi.view.lobby.techtree.settings import TREE_SHARED_REL_FILE_PATH, UnlockStats
+from gui.Scaleform.daapi.view.lobby.techtree.settings import UNKNOWN_VEHICLE_LEVEL
+from gui.Scaleform.daapi.view.lobby.techtree.settings import UnlockProps, DEFAULT_UNLOCK_PROPS
 from gui.shared.gui_items import GUI_ITEM_TYPE, GUI_ITEM_TYPE_NAMES
 from gui.shared.utils.requesters.ItemsRequester import REQ_CRITERIA
 from helpers import dependency
 from items import _xml, vehicles, getTypeOfCompactDescr
-import nations
-import ResMgr
 from skeletons.gui.shared import IItemsCache
+from soft_exception import SoftException
 
 class _ConfigError(SoftException):
 
@@ -119,7 +119,7 @@ class _TechTreeDataProvider(object):
     def getNextLevel(self, vTypeCD):
         return self.__nextLevels[vTypeCD].keys()
 
-    def isNext2Unlock(self, vTypeCD, unlocked=None, xps=None, freeXP=0):
+    def isNext2Unlock(self, vTypeCD, unlocked=None, xps=None, freeXP=0, level=UNKNOWN_VEHICLE_LEVEL):
         unlocked = unlocked or set()
         topLevel = self.getTopLevel(vTypeCD)
         available = False
@@ -129,12 +129,13 @@ class _TechTreeDataProvider(object):
         for parentCD in topLevel:
             nextLevel = self.__nextLevels[parentCD]
             idx, xpCost, required = nextLevel[vTypeCD]
+            discount, newCost = self.getBlueprintDiscountData(vTypeCD, level, xpCost)
             if required.issubset(unlocked) and parentCD in unlocked:
                 topIDs.add(parentCD)
-                compare.append(UnlockProps(parentCD, idx, xpCost, topIDs))
+                compare.append(UnlockProps(parentCD, idx, newCost, topIDs, discount, xpCost))
                 available = True
             if not result.xpCost or result.xpCost > xpCost:
-                result = UnlockProps(parentCD, idx, xpCost, set())
+                result = UnlockProps(parentCD, idx, newCost, set(), discount, xpCost)
 
         if available:
             result = self._findNext2Unlock(compare, xps=xps, freeXP=freeXP)
@@ -142,11 +143,11 @@ class _TechTreeDataProvider(object):
 
     def getNext2UnlockByItems(self, itemCDs, unlocked=None, xps=None, freeXP=0):
         unlocked = unlocked or set()
-        filtered = filter(lambda item: item in self.__topItems, itemCDs)
+        filtered = [ item for item in itemCDs if item in self.__topItems ]
         if not filtered or not unlocked:
             return {}
         available = defaultdict(list)
-        parentCDs = set(filter(lambda item: getTypeOfCompactDescr(item) == _VEHICLE, itemCDs))
+        parentCDs = {item for item in itemCDs if getTypeOfCompactDescr(item) == _VEHICLE}
         for item in filtered:
             if item in unlocked:
                 parentCDs |= self.__topItems[item]
@@ -159,7 +160,7 @@ class _TechTreeDataProvider(object):
             for childCD, (idx, xpCost, required) in nextLevel.iteritems():
                 if childCD not in unlocked and required.issubset(unlocked):
                     topIDs.add(parentCD)
-                    available[childCD].append(UnlockProps(parentCD, idx, xpCost, topIDs))
+                    available[childCD].append(UnlockProps(parentCD, idx, xpCost, topIDs, 0, xpCost))
 
         result = {}
         for childCD, compare in available.iteritems():
@@ -177,7 +178,7 @@ class _TechTreeDataProvider(object):
         return self.__availableNations[:]
 
     def getAvailableNationsIndices(self):
-        return map(lambda nation: nations.INDICES[nation], self.getAvailableNations())
+        return [ nations.INDICES[nation] for nation in self.getAvailableNations() ]
 
     def getUnlockPrices(self, compactDescr):
         return self.__unlockPrices[compactDescr]
@@ -186,7 +187,9 @@ class _TechTreeDataProvider(object):
         items = {}
         for unlockIdx, xpCost, nodeCD, required in vehicle.getUnlocksDescrs():
             if required.issubset(unlocked) and nodeCD not in unlocked:
-                items[nodeCD] = UnlockProps(vehicle.intCD, unlockIdx, xpCost, required)
+                level = self.itemsCache.items.getItemByCD(nodeCD).level
+                discount, newCost = self.getBlueprintDiscountData(nodeCD, level, xpCost)
+                items[nodeCD] = UnlockProps(parentID=vehicle.intCD, unlockIdx=unlockIdx, xpCost=newCost, required=required, discount=discount, xpFullCost=xpCost)
 
         return items
 
@@ -194,7 +197,8 @@ class _TechTreeDataProvider(object):
         items = {}
         for unlockIdx, xpCost, nodeCD, required in vehicle.getUnlocksDescrs():
             if required.issubset(unlocked) and nodeCD in unlocked:
-                items[nodeCD] = UnlockProps(vehicle.intCD, unlockIdx, xpCost, required)
+                discountData = self.getBlueprintDiscountData(vehicle.intCD, vehicle.level, xpCost)
+                items[nodeCD] = UnlockProps(vehicle.intCD, unlockIdx, discountData[1], required, discountData[0], xpCost)
 
         return items
 
@@ -207,19 +211,29 @@ class _TechTreeDataProvider(object):
         result += unlockStats.getVehTotalXP(nodeCD)
         return result
 
-    def isVehicleAvailableToUnlock(self, nodeCD):
+    def isVehicleAvailableToUnlock(self, nodeCD, vehicleLevel=UNKNOWN_VEHICLE_LEVEL):
         unlocks = self.itemsCache.items.stats.unlocks
         xps = self.itemsCache.items.stats.vehiclesXPs
         freeXP = self.itemsCache.items.stats.actualFreeXP
-        unlockProps = g_techTreeDP.getUnlockProps(nodeCD)
+        unlockProps = g_techTreeDP.getUnlockProps(nodeCD, vehicleLevel)
         parentID = unlockProps.parentID
         allPossibleXp = self.getAllVehiclePossibleXP(parentID, UnlockStats(unlocks, xps, freeXP))
-        isAvailable, props = self.isNext2Unlock(nodeCD, unlocked=set(unlocks), xps=xps, freeXP=freeXP)
-        return (isAvailable and allPossibleXp >= props.xpCost, props.xpCost, allPossibleXp)
+        isNextToUnlock, props = self.isNext2Unlock(nodeCD, unlocked=set(unlocks), xps=xps, freeXP=freeXP, level=vehicleLevel)
+        return (isNextToUnlock, allPossibleXp >= props.xpCost)
 
-    def getUnlockProps(self, vehicleCD):
-        _, unlockProps = self.isNext2Unlock(vehicleCD, unlocked=self.itemsCache.items.stats.unlocks, xps=self.itemsCache.items.stats.vehiclesXPs, freeXP=self.itemsCache.items.stats.actualFreeXP)
+    def getUnlockProps(self, vehicleCD, vehicleLevel=UNKNOWN_VEHICLE_LEVEL):
+        _, unlockProps = self.isNext2Unlock(vehicleCD, unlocked=self.itemsCache.items.stats.unlocks, xps=self.itemsCache.items.stats.vehiclesXPs, freeXP=self.itemsCache.items.stats.actualFreeXP, level=vehicleLevel)
         return unlockProps
+
+    def getOldAndNewCost(self, vehicleCD, vehicleLevel):
+        unlockProps = self.getUnlockProps(vehicleCD, vehicleLevel)
+        return (unlockProps.xpCost, unlockProps.discount, unlockProps.xpFullCost) if unlockProps is not None else (0, 0, 0)
+
+    def getBlueprintDiscountData(self, vehicleCD, level, xpCost):
+        blueprints = self.itemsCache.items.blueprints
+        discount = blueprints.getBlueprintDiscount(vehicleCD, level)
+        newCost = blueprints.calculateCost(xpCost, discount)
+        return (discount, newCost)
 
     def getAnnouncementByName(self, name):
         return self.__announcements[name] if name in self.__announcements else None
@@ -256,15 +270,15 @@ class _TechTreeDataProvider(object):
 
         def getMinFreeXPSpent(props):
             _, _, minDelta = min(props, key=lambda item: item[2])
-            filtered = filter(lambda item: item[2] == minDelta, props)
+            filtered = (prop for prop in props if prop[2] == minDelta)
             recommended, _, _ = min(filtered, key=lambda item: item[1])
             return recommended
 
-        mapping = map(makeItem, compare)
+        mapping = [ makeItem(unlockProps) for unlockProps in compare ]
         filtered = []
         recommended = None
         if xps is not None:
-            filtered = filter(lambda item: item[0].xpCost <= item[1] + freeXP, mapping)
+            filtered = [ item for item in mapping if item[0].xpCost <= item[1] + freeXP ]
         if filtered:
             recommended = getMinFreeXPSpent(filtered)
         if recommended is None:
@@ -506,7 +520,7 @@ class _TechTreeDataProvider(object):
         return result.values()
 
     def __readNation(self, shared, nation, clearCache=False):
-        xmlPath = NATION_TREE_REL_FILE_PATH % nation
+        xmlPath = NATION_TREE_REL_FILE_PATH.format(nation)
         if clearCache:
             ResMgr.purge(xmlPath)
         section = ResMgr.openSection(xmlPath)
@@ -550,7 +564,7 @@ class _TechTreeDataProvider(object):
                     raise _ConfigError(xmlCtx, 'Unknown vehicle type name {0:>s}'.format(node.nodeName))
                 if not node.isAnnouncement:
                     vType = getVehicle(node.nationID, node.itemTypeID)
-                    nextLevel = filter(lambda data: getTypeOfCompactDescr(data[1][1]) == _VEHICLE, enumerate(vType.unlocksDescrs))
+                    nextLevel = [ (idx, descr) for idx, descr in enumerate(vType.unlocksDescrs) if getTypeOfCompactDescr(descr[1]) == _VEHICLE ]
                     for unlockDescr in vType.unlocksDescrs:
                         self.__unlockPrices[unlockDescr[1]][vType.compactDescr] = unlockDescr[0]
 
@@ -593,7 +607,7 @@ class _TechTreeDataProvider(object):
                         childPos = childInfo['position']
                         pinPos = pin['inPin']
                         pin['inPin'] = (pinPos[0] + childPos[0], pinPos[1] + childPos[1])
-                        pin['viaPins'] = map(lambda item, offset=nodePos: (item[0] + offset[0], item[1] + offset[1]), pin['viaPins'])
+                        pin['viaPins'] = [ (item[0] + nodePos[0], item[1] + nodePos[1]) for item in pin['viaPins'] ]
 
         return
 

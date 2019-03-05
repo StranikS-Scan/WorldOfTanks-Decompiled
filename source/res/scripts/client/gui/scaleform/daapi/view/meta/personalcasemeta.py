@@ -46,6 +46,24 @@ class PersonalCaseMeta(AbstractWindowView):
     def openChangeRoleWindow(self):
         self._printOverrideError('openChangeRoleWindow')
 
+    def getCrewSkinsData(self):
+        self._printOverrideError('getCrewSkinsData')
+
+    def equipCrewSkin(self, crewSkinID):
+        self._printOverrideError('equipCrewSkin')
+
+    def unequipCrewSkin(self):
+        self._printOverrideError('unequipCrewSkin')
+
+    def takeOffNewMarkFromCrewSkin(self, crewSkinID):
+        self._printOverrideError('takeOffNewMarkFromCrewSkin')
+
+    def changeHistoricallyAccurate(self, historicallyAccurate):
+        self._printOverrideError('changeHistoricallyAccurate')
+
+    def playCrewSkinSound(self, crewSkinID):
+        self._printOverrideError('playCrewSkinSound')
+
     def as_setCommonDataS(self, data):
         return self.flashObject.as_setCommonData(data) if self._isDAAPIInited() else None
 
@@ -58,5 +76,14 @@ class PersonalCaseMeta(AbstractWindowView):
     def as_setSkillsDataS(self, data):
         return self.flashObject.as_setSkillsData(data) if self._isDAAPIInited() else None
 
+    def as_setCrewSkinsNewCountS(self, count):
+        return self.flashObject.as_setCrewSkinsNewCount(count) if self._isDAAPIInited() else None
+
     def as_setDocumentsDataS(self, data):
         return self.flashObject.as_setDocumentsData(data) if self._isDAAPIInited() else None
+
+    def as_setDocumentsIsChangeEnableS(self, changeDocumentsEnable, warning):
+        return self.flashObject.as_setDocumentsIsChangeEnable(changeDocumentsEnable, warning) if self._isDAAPIInited() else None
+
+    def as_setCrewSkinsDataS(self, data):
+        return self.flashObject.as_setCrewSkinsData(data) if self._isDAAPIInited() else None

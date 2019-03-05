@@ -6,6 +6,8 @@ from gui.shared import events, event_dispatcher as shared_events
 from gui.shared.events import LoadViewEvent
 from gui.shared.event_bus import EVENT_BUS_SCOPE
 from gui.shared.gui_items import GUI_ITEM_TYPE, Tankman
+from gui.shared.gui_items.crew_skin import localizedFullName
+from gui.shared.gui_items.Tankman import getCrewSkinIconSmallWithoutPath
 from gui.shared.gui_items.processors.tankman import TankmanUnload, TankmanEquip
 from gui.shared.SoundEffectsId import SoundEffectsId
 from gui.shared.utils import decorators
@@ -15,14 +17,16 @@ from gui.Scaleform.daapi.view.meta.CrewMeta import CrewMeta
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.Waiting import Waiting
 from helpers import dependency
+from items.components.crewSkins_constants import NO_CREW_SKIN_ID
 from items.tankmen import getSkillsConfig, compareMastery
-from helpers.i18n import convert
+from helpers.i18n import convert, makeString
 from gui.ClientUpdateManager import g_clientUpdateManager
 from skeletons.gui.shared import IItemsCache
-from inventory_update_helper import updateOnInventoryChanges
+from skeletons.gui.lobby_context import ILobbyContext
 
 class Crew(CrewMeta):
     itemsCache = dependency.descriptor(IItemsCache)
+    lobbyContext = dependency.instance(ILobbyContext)
 
     def __init__(self):
         super(Crew, self).__init__()
@@ -41,16 +45,14 @@ class Crew(CrewMeta):
     def onInventoryUpdate(self, invDiff):
         if GUI_ITEM_TYPE.TANKMAN in invDiff:
             self.updateTankmen(invDiff)
+        if GUI_ITEM_TYPE.CREW_SKINS in invDiff:
+            self.updateTankmen(invDiff)
 
     def updateTankmen(self, diff=None):
         Waiting.show('updateTankmen')
         if g_currentVehicle.isPresent():
             vehicle = g_currentVehicle.item
-            isNeedToUpdate = updateOnInventoryChanges(self.itemsCache, vehicle, diff)
-            if not isNeedToUpdate:
-                Waiting.hide('updateTankmen')
-                return
-            tankmen = self.itemsCache.items.getTankmen()
+            allTankmen = self.itemsCache.items.getTankmen()
             commander_bonus = vehicle.bonuses['commander']
             roles = []
             lessMastered = 0
@@ -73,7 +75,7 @@ class Crew(CrewMeta):
                  'roles': list(vehicle.descriptor.type.crewRoles[slotIdx])})
 
             tankmenData = []
-            for tankman in tankmen.itervalues():
+            for tankman in allTankmen.itervalues():
                 if tankman.isInTank and tankman.vehicleInvID != vehicle.invID:
                     continue
                 tankmanVehicle = self.itemsCache.items.getItemByCD(tankman.vehicleNativeDescr.type.compactDescr)
@@ -95,7 +97,7 @@ class Crew(CrewMeta):
                      'buyCount': newSkillsCount - 1,
                      'tankmanID': tankman.invID,
                      'level': lastNewSkillLvl})
-                tankmanData = {'firstName': tankman.firstUserName,
+                tankmanData = {'fullName': tankman.fullUserName,
                  'lastName': tankman.lastUserName,
                  'rank': tankman.rankUserName,
                  'specializationLevel': tankman.realRoleLevel[0],
@@ -118,6 +120,7 @@ class Crew(CrewMeta):
                  'compact': tankman.strCD,
                  'availableSkillsCount': skills_count,
                  'skills': skillsList}
+                self.__updateTankmanDataByCrewSkin(tankman, tankmanData)
                 tankmenData.append(tankmanData)
 
             self.as_tankmenResponseS({'showRecruit': self._showRecruit,
@@ -129,6 +132,13 @@ class Crew(CrewMeta):
             self.as_dogResponseS(dogName)
         Waiting.hide('updateTankmen')
         return
+
+    def __updateTankmanDataByCrewSkin(self, tankman, tankmanData):
+        if tankman.skinID != NO_CREW_SKIN_ID and self.lobbyContext.getServerSettings().isCrewSkinsEnabled():
+            skinItem = self.itemsCache.items.getCrewSkin(tankman.skinID)
+            tankmanData['iconFile'] = getCrewSkinIconSmallWithoutPath(skinItem.getIconID())
+            tankmanData['fullName'] = localizedFullName(skinItem)
+            tankmanData['lastName'] = makeString(skinItem.getLastName())
 
     def onShowRecruitWindowClick(self, rendererData, menuEnabled):
         self.fireEvent(LoadViewEvent(VIEW_ALIAS.RECRUIT_WINDOW, ctx={'data': rendererData.clone(),

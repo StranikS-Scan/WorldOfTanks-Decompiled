@@ -5,7 +5,7 @@ import BattleReplay
 from adisp import process
 from gui import DialogsInterface, GUI_SETTINGS
 from gui import makeHtmlString
-from gui.Scaleform.daapi.view.common.settings.new_settings_counter import getCountNewSettings
+from account_helpers.counter_settings import getCountNewSettings
 from gui.Scaleform.daapi.view.dialogs import DIALOG_BUTTON_ID
 from gui.Scaleform.daapi.view.dialogs import I18nConfirmDialogMeta
 from gui.Scaleform.daapi.view.dialogs.deserter_meta import IngameDeserterDialogMeta

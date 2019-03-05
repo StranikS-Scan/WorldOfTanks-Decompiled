@@ -9,7 +9,7 @@ from gui.Scaleform.daapi.view.dialogs import DIALOG_BUTTON_ID, PMConfirmationDia
 from gui.Scaleform.daapi.view.lobby.customization.shared import SCALE_SIZE
 from gui.Scaleform.daapi.view.meta.CustomizationPropertiesSheetMeta import CustomizationPropertiesSheetMeta
 from gui.Scaleform.daapi.view.lobby.customization.customization_inscription_controller import PersonalNumEditStatuses
-from gui.Scaleform.daapi.view.lobby.customization.shared import C11nMode, C11nTabs
+from gui.Scaleform.daapi.view.lobby.customization.shared import C11nTabs
 from gui.Scaleform.genConsts.CUSTOMIZATION_ALIASES import CUSTOMIZATION_ALIASES
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.VEHICLE_CUSTOMIZATION import VEHICLE_CUSTOMIZATION
@@ -27,6 +27,7 @@ from items.components.c11n_constants import SeasonType
 from gui.customization.shared import getAppliedRegionsForCurrentHangarVehicle, getCustomizationTankPartName, C11nId
 from gui.shared.gui_items.customization.outfit import Area
 from skeletons.gui.shared.utils import IHangarSpace
+from constants import CLIENT_COMMAND_SOURCES
 CustomizationCamoSwatchVO = namedtuple('CustomizationCamoSwatchVO', 'paletteIcon selected')
 _MAX_PALETTES = 3
 _PALETTE_TEXTURE = 'gui/maps/vehicles/camouflages/camo_palette_{colornum}.dds'
@@ -161,7 +162,7 @@ class CustomizationPropertiesSheet(CustomizationPropertiesSheetMeta):
             self.__ctx.onPropertySheetShown()
         self.__ctx.vehicleAnchorsUpdater.displayMenu(True)
 
-    def hide(self):
+    def hide(self, storePeronalNumber=False):
         anchor = C11nId(self._areaID, self._slotID, self._regionID)
         if not self.isVisible:
             return
@@ -171,6 +172,8 @@ class CustomizationPropertiesSheet(CustomizationPropertiesSheetMeta):
             self.__inscriptionController.hide()
         self.__ctx.onPropertySheetHidden()
         self.__ctx.vehicleAnchorsUpdater.changeAnchorParams(anchor, True, True)
+        if not storePeronalNumber:
+            self.__ctx.clearStoredPersonalNumber()
 
     def elementControlsHide(self):
         self.__ctx.vehicleAnchorsUpdater.displayMenu(False)
@@ -184,7 +187,7 @@ class CustomizationPropertiesSheet(CustomizationPropertiesSheetMeta):
         elif actionType == CUSTOMIZATION_ALIASES.CUSTOMIZATION_SHEET_ACTION_REMOVE_ONE:
             self.__removeElement()
         elif actionType == CUSTOMIZATION_ALIASES.CUSTOMIZATION_SHEET_RENT_CHECKBOX_CHANGE:
-            self.__ctx.changeAutoRent()
+            self.__ctx.changeAutoRent(CLIENT_COMMAND_SOURCES.RENTED_STYLE_RADIAL_MENU)
             self.__update()
         elif actionType == CUSTOMIZATION_ALIASES.CUSTOMIZATION_SHEET_ACTION_REMOVE_FROM_ALL_PARTS:
             self.__removeFromAllAreas()
@@ -208,10 +211,10 @@ class CustomizationPropertiesSheet(CustomizationPropertiesSheetMeta):
             self.__ctx.moveProjectionDecal(self._areaID, self._regionID, actionData)
             self.__update()
         elif actionType == CUSTOMIZATION_ALIASES.CUSTOMIZATION_SHEET_ACTION_EDIT:
-            self.hide()
-            if GUI_ITEM_TYPE.PERSONAL_NUMBER == self.__ctx.getItemFromSelectedRegion().itemTypeID:
-                self.__ctx.storeInscriptionSlotInfo()
+            self.hide(storePeronalNumber=True)
             self.__ctx.onPersonalNumberEditModeChanged(PersonalNumEditStatuses.EDIT_MODE_STARTED)
+        elif actionType == CUSTOMIZATION_ALIASES.CUSTOMIZATION_SHEET_ACTION_INFO:
+            self.__ctx.onShowStyleInfo()
 
     def onClose(self):
         self.hide()
@@ -366,8 +369,7 @@ class CustomizationPropertiesSheet(CustomizationPropertiesSheetMeta):
     def __makeVO(self):
         currentElement = self._currentStyle if self._slotID == GUI_ITEM_TYPE.STYLE else self._currentItem
         isPersonalNumberEdit = self.__ctx.numberEditModeActive
-        vo = {'intCD': -1 if not currentElement and isPersonalNumberEdit else currentElement.intCD,
-         'renderersData': self.__makeRenderersVOs() if currentElement and not isPersonalNumberEdit else [],
+        vo = {'renderersData': self.__makeRenderersVOs() if currentElement and not isPersonalNumberEdit else [],
          'isProjectionEnable': self._slotID == GUI_ITEM_TYPE.PROJECTION_DECAL,
          'isBigRadius': self._slotID in (GUI_ITEM_TYPE.INSCRIPTION, GUI_ITEM_TYPE.PROJECTION_DECAL, GUI_ITEM_TYPE.EMBLEM),
          'showSwitchers': self._showSwitchers and not isPersonalNumberEdit,
@@ -531,6 +533,16 @@ class CustomizationPropertiesSheet(CustomizationPropertiesSheetMeta):
          'actionType': CUSTOMIZATION_ALIASES.CUSTOMIZATION_SHEET_ACTION_CLOSE,
          'enabled': True}
 
+    def __makeStyleInfoRendererVO(self):
+        enabled = True
+        return {'iconSrc': RES_ICONS.MAPS_ICONS_CUSTOMIZATION_PROPERTY_SHEET_IDLE_ICON_INFO,
+         'iconHoverSrc': RES_ICONS.MAPS_ICONS_CUSTOMIZATION_PROPERTY_SHEET_IDLE_ICON_INFO_HOVER,
+         'iconDisableSrc': RES_ICONS.MAPS_ICONS_CUSTOMIZATION_PROPERTY_SHEET_DISABLE_ICON_INFO_DISABLE,
+         'actionBtnLabel': VEHICLE_CUSTOMIZATION.CUSTOMIZATION_POPOVER_STYLE_INFO,
+         'rendererLnk': CUSTOMIZATION_ALIASES.CUSTOMIZATION_SHEET_BTN_RENDERER_UI,
+         'actionType': CUSTOMIZATION_ALIASES.CUSTOMIZATION_SHEET_ACTION_INFO,
+         'enabled': enabled}
+
     def __makeExtensionRendererVO(self):
         if self.__ctx.autoRentEnabled():
             icon = RES_ICONS.MAPS_ICONS_CUSTOMIZATION_PROPERTY_SHEET_REMOVE_ICON_DEL_RENT
@@ -667,10 +679,7 @@ class CustomizationPropertiesSheet(CustomizationPropertiesSheetMeta):
         if not g_currentVehicle.isPresent():
             self.hide()
             return
-        if self.__ctx.mode == C11nMode.CUSTOM:
-            self.hide()
-        else:
-            self.__update()
+        self.__update()
 
     def __onSeasonChanged(self, seasonType):
         self.hide()
@@ -687,7 +696,7 @@ class CustomizationPropertiesSheet(CustomizationPropertiesSheetMeta):
     def __onProjectionDecalMirrored(self, areaId, regionIdx):
         self.__update()
 
-    def __onItemsInstalled(self, item, slotId, buyLimitReached):
+    def __onItemsInstalled(self, *args):
         self.__update()
 
     def __onItemsRemoved(self):

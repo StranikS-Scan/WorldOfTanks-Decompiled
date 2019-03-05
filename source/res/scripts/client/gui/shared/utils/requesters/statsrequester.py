@@ -19,6 +19,10 @@ class StatsRequester(AbstractSyncDataRequester, IStatsRequester):
         return bool(self.getCacheValue('mayConsumeWalletResources', 0))
 
     @property
+    def currencyStatuses(self):
+        return self.wallet.componentsStatuses
+
+    @property
     def credits(self):
         return max(self.actualCredits, 0)
 

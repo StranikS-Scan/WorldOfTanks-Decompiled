@@ -1,9 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/marathon/marathon_constants.py
 from collections import namedtuple
-from gui.Scaleform.locale.QUESTS import QUESTS
-from gui.Scaleform.locale.RES_ICONS import RES_ICONS
-from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from shared_utils import CONST_CONTAINER
 MarathonData = namedtuple('MarathonData', 'prefix tokenPrefix url label tabTooltip tabTooltipDisabled\n                          vehiclePrefix vehicleID suspend completedTokenPostfix awardTokens questsInChain\n                          minVehicleLevel showInPostBattle tooltipHeaderType showFlagTooltipBottom showFlagIcons\n                          tooltips icons quests')
 TooltipsData = namedtuple('TooltipsData', 'header body bodyExtra errorBattleType errorVehType extraStateSteps extraStateDiscount\n                          extraStateCompleted stateStart stateEnd stateProgress daysShort hoursShort')
@@ -30,7 +27,6 @@ class MARATHON_WARNING(CONST_CONTAINER):
     NONE = ''
 
 
-MARATHONS_DATA = (MarathonData(prefix='event_marathon:', tokenPrefix='event_marathon:WLTM19', url='marathonWLTMUrl', label=QUESTS.MISSIONS_TAB_LABEL_PANHARD, tabTooltip=QUESTS.MISSIONS_TAB_PANHARD, tabTooltipDisabled=QUESTS.MISSIONS_TAB_PANHARD, vehiclePrefix='france:F106_Panhard_EBR_75_Mle1954', vehicleID=43585, suspend=':suspend', completedTokenPostfix='_PASS', awardTokens=('event_marathon:WLTM19_COMPLETE',), questsInChain=10, minVehicleLevel=6, showInPostBattle=True, tooltipHeaderType=COUNTDOWN_TOOLTIP_HEADER, showFlagTooltipBottom=True, showFlagIcons=True, tooltips=TooltipsData(header=TOOLTIPS.MARATHON_HEADER, body=TOOLTIPS.MARATHON_BODY, bodyExtra=TOOLTIPS.MARATHON_BODY_EXTRA, errorBattleType=TOOLTIPS.MARATHON_ERROR_BATTLE_TYPE, errorVehType=TOOLTIPS.MARATHON_ERROR_VEH_TYPE, extraStateSteps=TOOLTIPS.MARATHON_EXTRA_STATE_STEPS, extraStateDiscount=TOOLTIPS.MARATHON_EXTRA_STATE_DISCOUNT, extraStateCompleted=TOOLTIPS.MARATHON_EXTRA_STATE_COMPLETED, stateStart=TOOLTIPS.MARATHON_STATE_START, stateEnd=TOOLTIPS.MARATHON_STATE_END, stateProgress=TOOLTIPS.KURSK_PROGRESS, daysShort=TOOLTIPS.TEMPLATE_DAYS_SHORT, hoursShort=TOOLTIPS.TEMPLATE_HOURS_SHORT), icons=IconsData(tooltipHeader=RES_ICONS.MAPS_ICONS_QUESTS_PANHARDTOOLTIPHEADER, libraryOkIcon=RES_ICONS.MAPS_ICONS_LIBRARY_OKICON, mainHangarFlag=RES_ICONS.MAPS_ICONS_LIBRARY_HANGARFLAG_FLAG_FRENCH, okIcon=RES_ICONS.MAPS_ICONS_LIBRARY_MARATHON_OK_ICON, timeIcon=RES_ICONS.MAPS_ICONS_LIBRARY_MARATHON_TIME_ICON, alertIcon=RES_ICONS.MAPS_ICONS_LIBRARY_MARATHON_ALERT_ICON, iconFlag=RES_ICONS.MAPS_ICONS_LIBRARY_MARATHON_ICON_FLAG, saleIcon=RES_ICONS.MAPS_ICONS_LIBRARY_MARATHON_SALE_ICON, mapFlagHeaderIcon={MARATHON_STATE.ENABLED_STATE: RES_ICONS.MAPS_ICONS_LIBRARY_MARATHON_CUP_ICON,
-  MARATHON_STATE.DISABLED_STATE: RES_ICONS.MAPS_ICONS_LIBRARY_MARATHON_CUP_DISABLE_ICON}), quests=QuestsData(titleSetProgress=QUESTS.ACTIONCARD_TITLE_SET_MARATHONINPROGRESS, autoSetAnnounce=QUESTS.ACTION_AUTO_SET_MARATHONANNOUNCE, autoSetProgress=QUESTS.ACTION_AUTO_SET_MARATHONINPROGRESS, autoSetFinished=QUESTS.ACTION_AUTO_SET_MARATHONFINISHED, announceTime=QUESTS.ACTION_MARATHON_ANNOUNCETIME, timeFinish=QUESTS.ACTION_TIME_FINISH)),)
+MARATHONS_DATA = tuple()
 DEFAULT_MARATHON_PREFIX = MARATHONS_DATA[0].prefix if any(MARATHONS_DATA) else None
 ZERO_TIME = 0.0

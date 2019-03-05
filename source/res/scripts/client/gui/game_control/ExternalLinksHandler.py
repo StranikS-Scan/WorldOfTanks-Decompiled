@@ -9,6 +9,7 @@ from gui.shared import g_eventBus
 from gui.shared.events import OpenLinkEvent
 from skeletons.gui.game_control import IExternalLinksController
 _LISTENERS = {OpenLinkEvent.SPECIFIED: '_handleSpecifiedURL',
+ OpenLinkEvent.PARSED: '_handleParsedURL',
  OpenLinkEvent.REGISTRATION: '_handleOpenRegistrationURL',
  OpenLinkEvent.RECOVERY_PASSWORD: '_handleOpenRecoveryPasswordURL',
  OpenLinkEvent.PAYMENT: '_handleOpenPaymentURL',
@@ -89,6 +90,9 @@ class ExternalLinksHandler(IExternalLinksController):
     def __openParsedUrl(self, urlName, params=None):
         parsedUrl = yield self.getURL(urlName, params)
         self.open(parsedUrl)
+
+    def _handleParsedURL(self, event):
+        self.__openParsedUrl(event.url)
 
     def _handleOpenRegistrationURL(self, _):
         self.__openParsedUrl('registrationURL')

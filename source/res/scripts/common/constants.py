@@ -15,7 +15,7 @@ IS_BOT = BigWorld.component == 'bot'
 IS_CELLAPP = BigWorld.component == 'cell'
 IS_BASEAPP = BigWorld.component in ('base', 'service')
 IS_WEB = BigWorld.component == 'web'
-CURRENT_REALM = 'RU'
+CURRENT_REALM = 'CT'
 DEFAULT_LANGUAGE = 'ru'
 AUTH_REALM = 'RU'
 IS_DEVELOPMENT = CURRENT_REALM == 'DEV'
@@ -46,6 +46,13 @@ OVERRIDE_CODES = frozenset(['RU',
  'DEV',
  'SB',
  'PC'])
+REGIONAL_REALMS = frozenset(['RU',
+ 'EU',
+ 'NA',
+ 'ASIA',
+ 'CN',
+ 'KR'])
+CURRENT_REALM_IS_REGIONAL = CURRENT_REALM in REGIONAL_REALMS
 
 class REALM_HELPER:
 
@@ -1009,6 +1016,7 @@ VEHICLE_CLASSES = ('lightTank', 'mediumTank', 'heavyTank', 'SPG', 'AT-SPG')
 VEHICLE_CLASS_INDICES = dict(((x[1], x[0]) for x in enumerate(VEHICLE_CLASSES)))
 MIN_VEHICLE_LEVEL = 1
 MAX_VEHICLE_LEVEL = 10
+VEHICLE_NO_INV_ID = -1
 
 class TEAMS_IN_ARENA:
     MAX_TEAMS = 40
@@ -1219,6 +1227,9 @@ class REQUEST_COOLDOWN:
     PAWN_FREE_AWARD_LIST = 1.0
     LOOTBOX = 1.0
     BADGES = 2.0
+    CREW_SKINS = 0.3
+    BPF_COMMAND = 1.0
+    FL_REWARD = 5.0
 
 
 IS_SHOW_INGAME_HELP_FIRST_TIME = False
@@ -1632,6 +1643,12 @@ class EQUIP_TMAN_CODE:
 class CustomizationInvData(object):
     ITEMS = 1
     OUTFITS = 2
+    NOVELTY_DATA = 3
+
+
+class SkinInvData(object):
+    ITEMS = 1
+    OUTFITS = 2
 
 
 class EVENT_CLIENT_DATA:
@@ -2027,3 +2044,9 @@ class LOCALIZABLE_BOT_NAME:
     @staticmethod
     def parse(name):
         return (int(token) for token in name.split('_')[1:]) if name and name.startswith(LOCALIZABLE_BOT_NAME.PREFIX) else None
+
+
+class CLIENT_COMMAND_SOURCES:
+    UNDEFINED = 0
+    RENTED_STYLE_RADIAL_MENU = 1
+    RANGE = (UNDEFINED, RENTED_STYLE_RADIAL_MENU)

@@ -317,6 +317,12 @@
       <marksOnGun>
         <Type>	UINT8	</Type>
       </marksOnGun>
+      <crewGroup>
+        <Type>	UINT16	</Type>
+      </crewGroup>
+      <commanderSkinID>
+        <Type>	UINT16	</Type>
+      </commanderSkinID>
     </Properties>
   </PUBLIC_VEHICLE_INFO>
   <ATTACK_RESULTS>	FIXED_DICT	  <Properties>
@@ -607,6 +613,9 @@
         <Type>	TUPLE	  <of>	INT32	</of>
         </Type>
       </vehCrewInvIDs>
+      <vehCrewSkins>
+        <Type>	PYTHON	</Type>
+      </vehCrewSkins>
       <marksOnGun>
         <Type>	UINT8	</Type>
       </marksOnGun>
@@ -987,6 +996,9 @@
         <Type>	ARRAY	  <of>	STRING	</of>
         </Type>
       </crewCompactDescrs>
+      <commanderSkinID>
+        <Type>	UINT16	</Type>
+      </commanderSkinID>
       <marksOnGun>
         <Type>	UINT8	</Type>
       </marksOnGun>

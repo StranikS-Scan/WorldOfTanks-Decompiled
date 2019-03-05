@@ -3,9 +3,9 @@
 from collections import namedtuple, defaultdict
 import BigWorld
 from adisp import async
-from constants import CustomizationInvData
-from items import vehicles, tankmen, getTypeOfCompactDescr, parseIntCompactDescr
-from items.components.c11n_constants import SeasonType, CustomizationType, StyleFlags
+from constants import CustomizationInvData, SkinInvData, VEHICLE_NO_INV_ID
+from items import vehicles, tankmen, getTypeOfCompactDescr, parseIntCompactDescr, makeIntCompactDescrByID
+from items.components.c11n_constants import SeasonType, CustomizationType, StyleFlags, UNBOUND_VEH_KEY
 from debug_utils import LOG_DEBUG
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.gui_items.customization.outfit import Outfit
@@ -25,6 +25,8 @@ class InventoryRequester(AbstractSyncDataRequester, IInventoryRequester):
         self.__vehsCDsByID = {}
         self.__vehsIDsByCD = {}
         self.__c11nItemsAppliedCounts = defaultdict(lambda : defaultdict(int))
+        self.__newC11nItems = {}
+        self.__newC11nItemsByVehicleCache = {}
 
     def clear(self):
         self.__itemsCache.clear()
@@ -40,6 +42,8 @@ class InventoryRequester(AbstractSyncDataRequester, IInventoryRequester):
             self.__itemsPreviousCache[itemTypeID][invIdx] = cache[invIdx]
             del cache[invIdx]
             return True
+        if itemTypeID == GUI_ITEM_TYPE.CUSTOMIZATION:
+            self.updateC11nItemNoveltyData(invIdx)
         return False
 
     def updateC11nItemsAppliedCounts(self):
@@ -69,6 +73,53 @@ class InventoryRequester(AbstractSyncDataRequester, IInventoryRequester):
     def getC11nItemAppliedOnVehicleCount(self, itemCD, vehicleCD):
         return self.__c11nItemsAppliedCounts[itemCD][vehicleCD]
 
+    def updateC11nItemsNoveltyData(self):
+        self.__newC11nItems.clear()
+        self.__newC11nItemsByVehicleCache.clear()
+        customizationInvData = self.getCacheValue(GUI_ITEM_TYPE.CUSTOMIZATION, {})
+        newItemsInvData = customizationInvData.get(CustomizationInvData.NOVELTY_DATA, {})
+        for cType, itemsData in newItemsInvData.iteritems():
+            for itemId, itemData in itemsData.iteritems():
+                if itemData is not None:
+                    intCD = makeIntCompactDescrByID('customizationItem', cType, itemId)
+                    self.__newC11nItems[intCD] = itemData
+
+        return
+
+    def updateC11nItemNoveltyData(self, itemIntCD):
+        itemData = self.__getNewCustomizationsItemsData(itemIntCD)
+        if itemData:
+            self.__newC11nItems[itemIntCD] = itemData
+            itemDescriptor = vehicles.getItemByCompactDescr(itemIntCD)
+            for vehCD, vehData in self.__newC11nItemsByVehicleCache.iteritems():
+                counter = 0
+                vehicleType = vehicles.getVehicleType(vehCD)
+                if not itemDescriptor.filter or itemDescriptor.filter.matchVehicleType(vehicleType):
+                    counter += itemData.get(UNBOUND_VEH_KEY, 0)
+                    counter += itemData.get(vehCD, 0)
+                if counter:
+                    vehData[itemIntCD] = counter
+                vehData.pop(itemIntCD, None)
+
+        else:
+            self.__newC11nItems.pop(itemIntCD, None)
+            for vehData in self.__newC11nItemsByVehicleCache.itervalues():
+                vehData.pop(itemIntCD, None)
+
+        return
+
+    def getC11nItemNoveltyData(self, itemIntCD):
+        return self.__newC11nItems.get(itemIntCD, {})
+
+    def getC11nItemsNoveltyCounters(self, vehicleType):
+        vehicleIntCD = vehicleType.compactDescr
+        newC11nItems = self.__newC11nItemsByVehicleCache.get(vehicleIntCD)
+        if newC11nItems is not None:
+            return newC11nItems
+        else:
+            self.__newC11nItemsByVehicleCache[vehicleIntCD] = self.__getC11nItemNoveltyDataForVehicle(vehicleType)
+            return self.__newC11nItemsByVehicleCache[vehicleIntCD]
+
     def getItemsData(self, itemTypeID):
         invData = self.getCacheValue(itemTypeID, {})
         for invID in invData.get('compDescr', {}).iterkeys():
@@ -97,7 +148,9 @@ class InventoryRequester(AbstractSyncDataRequester, IInventoryRequester):
             return self.__getVehiclesData(dataIdx)
         if itemTypeIdx == GUI_ITEM_TYPE.TANKMAN:
             return self.__getTankmenData(dataIdx)
-        return self.__getCustomizationsData(dataIdx) if itemTypeIdx == GUI_ITEM_TYPE.CUSTOMIZATION else self.__getItemsData(itemTypeIdx, dataIdx)
+        if itemTypeIdx == GUI_ITEM_TYPE.CUSTOMIZATION:
+            return self.__getCustomizationsData(dataIdx)
+        return self.__getCrewSkinsData(dataIdx) if itemTypeIdx == GUI_ITEM_TYPE.CREW_SKINS else self.__getItemsData(itemTypeIdx, dataIdx)
 
     def getFreeSlots(self, vehiclesSlots):
         return vehiclesSlots - len(self.__getVehiclesData())
@@ -165,7 +218,7 @@ class InventoryRequester(AbstractSyncDataRequester, IInventoryRequester):
             compactDescr = value('compDescr')
             if compactDescr is None:
                 return
-            item = cache[tmanInvID] = self.TMAN_DATA(compactDescr, tankmen.TankmanDescr(compactDescr), value('vehicle', -1), tmanInvID)
+            item = cache[tmanInvID] = self.TMAN_DATA(compactDescr, tankmen.TankmanDescr(compactDescr), value('vehicle', VEHICLE_NO_INV_ID), tmanInvID)
             return item
 
     def __makeSimpleItem(self, typeCompDescr):
@@ -251,3 +304,28 @@ class InventoryRequester(AbstractSyncDataRequester, IInventoryRequester):
         itemsInvData = customizationInvData.get(CustomizationInvData.ITEMS, {})
         typeInvData = itemsInvData.get(cType, {})
         return typeInvData.get(idx, {})
+
+    def __getNewCustomizationsItemsData(self, intCD):
+        _, cType, idx = parseIntCompactDescr(intCD)
+        customizationInvData = self.getCacheValue(GUI_ITEM_TYPE.CUSTOMIZATION, {})
+        itemsInvData = customizationInvData.get(CustomizationInvData.NOVELTY_DATA, {})
+        typeInvData = itemsInvData.get(cType, {})
+        return typeInvData.get(idx, [])
+
+    def __getC11nItemNoveltyDataForVehicle(self, vehicleType):
+        vehCache = {}
+        for itemCD, itemData in self.__newC11nItems.iteritems():
+            counter = 0
+            itemDescriptor = vehicles.getItemByCompactDescr(itemCD)
+            if not itemDescriptor.filter or itemDescriptor.filter.matchVehicleType(vehicleType):
+                counter += itemData.get(UNBOUND_VEH_KEY, 0)
+                counter += itemData.get(vehicleType.compactDescr, 0)
+            if counter:
+                vehCache[itemCD] = counter
+
+        return vehCache
+
+    def __getCrewSkinsData(self, idx):
+        crewSkinsInvData = self.getCacheValue(GUI_ITEM_TYPE.CREW_SKINS, {})
+        itemsInvData = crewSkinsInvData.get(SkinInvData.ITEMS, {})
+        return itemsInvData.get(idx, 0) if idx is not None else itemsInvData

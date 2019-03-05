@@ -70,7 +70,7 @@
       <nodes>	HP_Track_Exhaus_1 HP_Track_Exhaus_2	</nodes>
     </exhaust>
     <turretPositions>
-      <turret>	0.2299 0.850054 2.22379	</turret>
+      <turret>	0.2299 0.844458 2.29774	</turret>
     </turretPositions>
     <hitTester>
       <collisionModelServer>	vehicles/russian/R47_ISU-152/collision/Hull.model	</collisionModelServer>
@@ -130,9 +130,9 @@
         <rayStart>	1.22238 1.01727 -0.252435	</rayStart>
         <rayEnd>	1.03059 0.963728 -0.23374	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
+        <isMirrored>	true	</isMirrored>
         <size>	0.34	</size>
         <hideIfDamaged>	true	</hideIfDamaged>
-        <isMirrored>	true	</isMirrored>
         <isUVProportional>	true	</isUVProportional>
       </slot>
       <slot>
@@ -146,6 +146,155 @@
         <slotId>	3	</slotId>
         <anchorPosition>	0.000088 0.76748 -2.15138	</anchorPosition>
         <anchorDirection>	0.000000 0.573591 -0.819142	</anchorDirection>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	68	</slotId>
+        <tags>	formfactor_any	</tags>
+        <position>	-0.000409881 2.7252 0.794096	</position>
+        <rotation>	0.000086 -0.000090 3.14153	</rotation>
+        <scale>	2.15043 1.20288 2.15043	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.983905	</clipAngle>
+        <anchorPosition>	-0.00043793 1.34489 0.794057	</anchorPosition>
+        <anchorDirection>	0.000063 1 0.000086	</anchorDirection>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	69	</slotId>
+        <tags>	formfactor_any direction_right_to_left	</tags>
+        <position>	-0.72409 1.57466 0.244243	</position>
+        <rotation>	1.28824 -1.56701 -3.04704	</rotation>
+        <scale>	1.05289 1.05289 1.05289	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	1.10474	</clipAngle>
+        <anchorPosition>	-1.22332 0.787241 0.196852	</anchorPosition>
+        <anchorDirection>	-0.956405 0.277571 -0.0907905	</anchorDirection>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	70	</slotId>
+        <tags>	formfactor_any direction_left_to_right	</tags>
+        <position>	0.762159 1.61735 0.496564	</position>
+        <rotation>	1.8417 -1.55232 -0.0709682	</rotation>
+        <scale>	1.03475 1.03475 1.03475	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.716352	</clipAngle>
+        <anchorPosition>	1.23365 0.816197 0.453006	</anchorPosition>
+        <anchorDirection>	0.95963 0.266929 -0.0886534	</anchorDirection>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	71	</slotId>
+        <tags>	formfactor_square	</tags>
+        <parentSlotId>	68	</parentSlotId>
+        <position>	-0.000073 1.31071 -1.2005	</position>
+        <rotation>	3.14159 -0.000180483 0.000000	</rotation>
+        <scale>	1.39504 0.780343 1.39504	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	1.09956	</clipAngle>
+        <anchorPosition>	-0.000073 0.740402 -1.2005	</anchorPosition>
+        <anchorDirection>	0.000000 1 -0.000003	</anchorDirection>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	72	</slotId>
+        <tags>	formfactor_square direction_right_to_left	</tags>
+        <parentSlotId>	69	</parentSlotId>
+        <position>	-1.48594 1.81461 1.34062	</position>
+        <rotation>	1.26566 -1.57077 2.9793	</rotation>
+        <scale>	1.06778 1.06778 1.06778	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	1.10474	</clipAngle>
+        <anchorPosition>	-1.28073 0.817672 1.30539	</anchorPosition>
+        <anchorDirection>	-0.941268 0.296475 0.161605	</anchorDirection>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	73	</slotId>
+        <tags>	formfactor_square direction_left_to_right	</tags>
+        <parentSlotId>	70	</parentSlotId>
+        <position>	0.84387 1.63316 1.2294	</position>
+        <rotation>	1.29847 1.48477 -3.09527	</rotation>
+        <scale>	1.03475 1.03475 1.03475	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.983905	</clipAngle>
+        <anchorPosition>	1.31288 0.832869 1.29268	</anchorPosition>
+        <anchorDirection>	0.954578 0.268684 0.1288	</anchorDirection>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	74	</slotId>
+        <tags>	formfactor_any	</tags>
+        <position>	-0.648393 1.74079 1.82557	</position>
+        <rotation>	1.00653 0.0151961 -3.11241	</rotation>
+        <scale>	0.775649 0.775651 0.775653	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	1.19381	</clipAngle>
+        <anchorPosition>	-0.653153 0.964227 2.07174	</anchorPosition>
+        <anchorDirection>	-0.0163406 0.534568 0.844967	</anchorDirection>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	75	</slotId>
+        <tags>	formfactor_square	</tags>
+        <parentSlotId>	74	</parentSlotId>
+        <position>	0.255402 2.63025 2.23554	</position>
+        <rotation>	-0.124047 -0.0064311 3.12587	</rotation>
+        <scale>	0.864277 0.864279 0.864276	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	1.48397	</clipAngle>
+        <anchorPosition>	0.248932 1.30932 2.28396	</anchorPosition>
+        <anchorDirection>	0.0165185 0.992193 -0.12361	</anchorDirection>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	76	</slotId>
+        <tags>	formfactor_square	</tags>
+        <parentSlotId>	74	</parentSlotId>
+        <position>	-0.45484 1.1732 2.78282	</position>
+        <rotation>	0.363833 -0.0143191 3.12489	</rotation>
+        <scale>	0.673461 0.172762 0.673467	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.950332	</clipAngle>
+        <anchorPosition>	-0.45436 0.279512 2.79753	</anchorPosition>
+        <anchorDirection>	0.0116054 0.934409 0.356012	</anchorDirection>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	77	</slotId>
+        <tags>	formfactor_square	</tags>
+        <parentSlotId>	68	</parentSlotId>
+        <position>	-0.000392797 2.67948 0.570468	</position>
+        <rotation>	3.14159 -0.000180483 0.000000	</rotation>
+        <scale>	2.01807 1.12884 2.01807	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.000000	</clipAngle>
+        <anchorPosition>	-0.000392797 1.32917 0.570469	</anchorPosition>
+        <anchorDirection>	0.000000 1 -0.000003	</anchorDirection>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	78	</slotId>
+        <tags>	formfactor_any	</tags>
+        <position>	0.000279017 1.47585 -3.14819	</position>
+        <rotation>	2.49632 -0.000180721 -0.000001	</rotation>
+        <scale>	1.39415 0.779845 1.39415	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.267554	</clipAngle>
+        <anchorPosition>	0.000252357 0.345404 -2.99903	</anchorPosition>
+        <anchorDirection>	0.000107497 0.798936 -0.601416	</anchorDirection>
       </slot>
     </customizationSlots>
     <camouflage>
@@ -400,7 +549,7 @@
       </effects>
       <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_med_npc	</wwsoundNPC>
-      <hullPosition>	0.000000 0.963746 0.000000	</hullPosition>
+      <hullPosition>	0.000000 0.932302 0.000000	</hullPosition>
       <hitTester>
         <collisionModelServer>	vehicles/russian/R47_ISU-152/collision/Chassis.model	</collisionModelServer>
         <collisionModelClient>	vehicles/russian/R47_ISU-152/collision_client/Chassis.model	</collisionModelClient>
@@ -1069,31 +1218,6 @@
         </node>
       </trackNodes>
       <trackThickness>	0.012	</trackThickness>
-      <effects>
-        <lodDist>	MEDIUM	</lodDist>
-        <mud>	largeTankMud	</mud>
-      </effects>
-      <wwsoundPC>	treads_type_pc	</wwsoundPC>
-      <wwsoundNPC>	trds_med_npc	</wwsoundNPC>
-      <hullPosition>	0.000000 0.963746 0.000000	</hullPosition>
-      <hitTester>
-        <collisionModelServer>	vehicles/russian/R47_ISU-152/collision/Chassis.model	</collisionModelServer>
-        <collisionModelClient>	vehicles/russian/R47_ISU-152/collision_client/Chassis.model	</collisionModelClient>
-      </hitTester>
-      <topRightCarryingPoint>	1.20331 2.20809	</topRightCarryingPoint>
-      <maxClimbAngle>	25	</maxClimbAngle>
-      <navmeshGirth>	6.0	</navmeshGirth>
-      <AODecals>
-        <decal>
-          <transform>
-            <row0>	4.318720 0.000000 0.000000	</row0>
-            <row1>	0.000000 1.471520 0.000000	</row1>
-            <row2>	0.000000 0.000000 8.467650	</row2>
-            <row3>	0.000000 0.000000 0.000000	</row3>
-          </transform>
-        </decal>
-      </AODecals>
-      <trackThickness>	0.012	</trackThickness>
       <physicalTracks>
         <left>
           <segmentsCount>	94	</segmentsCount>
@@ -1486,6 +1610,31 @@
           </sourceCollisionHullPoints>
         </right>
       </physicalTracks>
+      <effects>
+        <lodDist>	MEDIUM	</lodDist>
+        <mud>	largeTankMud	</mud>
+      </effects>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
+      <wwsoundNPC>	trds_med_npc	</wwsoundNPC>
+      <hullPosition>	0.000000 0.932302 0.000000	</hullPosition>
+      <hitTester>
+        <collisionModelServer>	vehicles/russian/R47_ISU-152/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/russian/R47_ISU-152/collision_client/Chassis.model	</collisionModelClient>
+      </hitTester>
+      <topRightCarryingPoint>	1.20342 2.28779	</topRightCarryingPoint>
+      <maxClimbAngle>	25	</maxClimbAngle>
+      <navmeshGirth>	6.0	</navmeshGirth>
+      <AODecals>
+        <decal>
+          <transform>
+            <row0>	4.318720 0.000000 0.000000	</row0>
+            <row1>	0.000000 1.471520 0.000000	</row1>
+            <row2>	0.000000 0.000000 8.467650	</row2>
+            <row3>	0.000000 0.000000 0.000000	</row3>
+          </transform>
+        </decal>
+      </AODecals>
+      <trackThickness>	0.012	</trackThickness>
       <customization>
         <customizableVehicleAreas>
           <paint>	CHASSIS	</paint>
@@ -1577,7 +1726,8 @@
               <slotId>	771	</slotId>
               <rayStart>	0.0264194 -0.00925501 1.75217	</rayStart>
               <rayEnd>	-0.00162107 -0.0289426 1.75042	</rayEnd>
-              <rayUp>	0.121 0.114 5	</rayUp>
+              <rayUp>	0.121 0.000000 0.000000	</rayUp>
+              <applyToFabric>	true	</applyToFabric>
               <size>	0.629	</size>
               <hideIfDamaged>	false	</hideIfDamaged>
               <isUVProportional>	true	</isUVProportional>
@@ -1655,7 +1805,8 @@
               <slotId>	771	</slotId>
               <rayStart>	0.0224194 -0.00945506 1.75	</rayStart>
               <rayEnd>	0.0931305 -0.0348368 1.21392	</rayEnd>
-              <rayUp>	0.134 0.126 5	</rayUp>
+              <rayUp>	0.134 0.000000 0.000000	</rayUp>
+              <applyToFabric>	true	</applyToFabric>
               <size>	0.629	</size>
               <hideIfDamaged>	false	</hideIfDamaged>
               <isUVProportional>	true	</isUVProportional>
@@ -1728,7 +1879,8 @@
               <slotId>	771	</slotId>
               <rayStart>	0.0264194 -0.00925501 2.03187	</rayStart>
               <rayEnd>	-0.0529346 0.0128328 2.03063	</rayEnd>
-              <rayUp>	0.155 0.141 5	</rayUp>
+              <rayUp>	0.155 0.000000 0.000000	</rayUp>
+              <applyToFabric>	true	</applyToFabric>
               <size>	0.645	</size>
               <hideIfDamaged>	false	</hideIfDamaged>
               <isUVProportional>	true	</isUVProportional>
@@ -1769,7 +1921,7 @@
         <collisionModelServer>	vehicles/russian/R47_ISU-152/collision/Turret_01.model	</collisionModelServer>
         <collisionModelClient>	vehicles/russian/R47_ISU-152/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
-      <gunPosition>	-0.003733 -0.002294 -0.0125	</gunPosition>
+      <gunPosition>	-0.003733 -0.002294 -0.012500	</gunPosition>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
       <physicsShape>	1.000 0.000 1.000 0.000 1.000 0.000 0.500 0.100 0.500 0.500 0.500 0.500 0.600 0.100 0.500	</physicsShape>
       <wwturretRotatorSoundManual>	tur_man_trav_06	</wwturretRotatorSoundManual>

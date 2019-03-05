@@ -191,18 +191,22 @@ def _getRentLeft(offer, epicCtrl=None):
     currentTimestamp = getCurrentLocalServerTimestamp()
     season = epicCtrl.getCurrentSeason()
     if season:
-        currentCycle = season.getCycleInfo()
         if key == 'season':
             lastCycle = season.getLastCycleInfo()
-            endDate = season.getEndDate()
+            endDate = season.getEndDate() if lastCycle else 0
         elif key in ('cycle', 'cycles'):
             lastCycle = season.getCycleInfo(value)
-            endDate = lastCycle.endDate
+            endDate = lastCycle.endDate if lastCycle else 0
         else:
-            raise SoftException('invalid rent info')
-        cyclesLeft = lastCycle.ordinalNumber + 1 - currentCycle.ordinalNumber
-        timeLeft = endDate - currentTimestamp
-        return (cyclesLeft, timeLeft if timeLeft >= 0 else 0)
+            lastCycle = None
+            endDate = 0
+        if lastCycle is not None:
+            currentCycle = season.getCycleInfo()
+            if currentCycle is not None:
+                cyclesLeft = lastCycle.ordinalNumber + 1 - currentCycle.ordinalNumber
+                timeLeft = endDate - currentTimestamp
+                return (cyclesLeft, timeLeft if timeLeft >= 0 else 0)
+    return (0, 0)
 
 
 def _parseRent(offer):
@@ -258,7 +262,6 @@ class _VehiclePreviewSchema(W2CSchema):
 
 class _VehicleOffersPreviewSchema(W2CSchema):
     vehicle_id = Field(required=True, type=int)
-    description = Field(required=False, type=dict)
     offers = Field(required=True, type=(list, NoneType))
     buy_params = Field(required=False, type=dict)
     back_url = Field(required=False, type=basestring)
@@ -329,7 +332,7 @@ class VehiclePreviewWebApiMixin(object):
 
     @w2c(_VehicleOffersPreviewSchema, 'vehicle_offers_preview')
     def openVehicleOffersPreview(self, cmd):
-        event_dispatcher.showVehiclePreview(vehTypeCompDescr=int(cmd.vehicle_id), offers=_parseOffers(cmd.offers), price=MONEY_UNDEFINED, oldPrice=MONEY_UNDEFINED, description=cmd.description, previewAlias=self._getVehiclePreviewReturnAlias(cmd), previewBackCb=self._getVehiclePreviewReturnCallback(cmd))
+        event_dispatcher.showVehiclePreview(vehTypeCompDescr=int(cmd.vehicle_id), offers=_parseOffers(cmd.offers), price=MONEY_UNDEFINED, oldPrice=MONEY_UNDEFINED, previewAlias=self._getVehiclePreviewReturnAlias(cmd), previewBackCb=self._getVehiclePreviewReturnCallback(cmd))
 
     @w2c(_VehiclePackPreviewSchema, 'vehicle_pack_preview')
     def openVehiclePackPreview(self, cmd):

@@ -27,7 +27,6 @@ from helpers import dependency, i18n
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.connection_mgr import IConnectionManager
 from skeletons.gui.game_control import IEpicBattleMetaGameController
-from skeletons.gui.lobby_context import ILobbyContext
 from predefined_hosts import g_preDefinedHosts
 
 class EpicSubscriber(PreQueueSubscriber):
@@ -96,9 +95,8 @@ class EpicForcedEntryPoint(EpicEntryPoint):
 
 
 class EpicEntity(PreQueueEntity):
-    settingsCore = dependency.descriptor(ISettingsCore)
-    lobbyContext = dependency.descriptor(ILobbyContext)
-    epicController = dependency.descriptor(IEpicBattleMetaGameController)
+    __settingsCore = dependency.descriptor(ISettingsCore)
+    __epicController = dependency.descriptor(IEpicBattleMetaGameController)
 
     def __init__(self):
         super(EpicEntity, self).__init__(FUNCTIONAL_FLAG.EPIC, QUEUE_TYPE.EPIC, EpicSubscriber())
@@ -106,7 +104,7 @@ class EpicEntity(PreQueueEntity):
         return
 
     def init(self, ctx=None):
-        self.lobbyContext.getServerSettings().onServerSettingsChange += self.__onServerSettingChanged
+        self.__epicController.onUpdated += self.__onEpicUpdated
         self.storage.release()
         self.__watcher = EpicVehiclesWatcher()
         self.__watcher.start()
@@ -118,7 +116,7 @@ class EpicEntity(PreQueueEntity):
         return None
 
     def fini(self, ctx=None, woEvents=False):
-        self.lobbyContext.getServerSettings().onServerSettingsChange -= self.__onServerSettingChanged
+        self.__epicController.onUpdated -= self.__onEpicUpdated
         if not woEvents:
             if not self.canSwitch(ctx):
                 g_eventDispatcher.loadHangar()
@@ -170,13 +168,21 @@ class EpicEntity(PreQueueEntity):
         g_eventDispatcher.loadHangar()
 
     def __processWelcome(self):
-        if not self.epicController.isWelcomeScreenUpToDate(self.settingsCore.serverSettings):
+        if not self.__epicController.isWelcomeScreenUpToDate(self.__settingsCore.serverSettings):
             g_eventDispatcher.loadEpicWelcome()
             return FUNCTIONAL_FLAG.LOAD_PAGE
         return FUNCTIONAL_FLAG.UNDEFINED
 
-    def __onServerSettingChanged(self, diff):
-        status, _, _ = self.epicController.getPrimeTimeStatus()
-        if 'epic_config' in diff and 'isEnabled' in diff['epic_config'] and not diff['epic_config']['isEnabled'] or not self.epicController.hasAnySeason() or status is not PRIME_TIME_STATUS.AVAILABLE:
+    def __onEpicUpdated(self, diff):
+        if 'epic_config' not in diff:
+            return
+        status, _, _ = self.__epicController.getPrimeTimeStatus()
+        isPlayable = self.__epicController.isEnabled() and not self.__epicController.isFrozen()
+        if not isPlayable or not self.__epicController.hasAnySeason() or status is not PRIME_TIME_STATUS.AVAILABLE:
             ctx = LeaveUnitCtx(waitingID='prebattle/leave', flags=FUNCTIONAL_FLAG.EXIT, entityType=self.getEntityType())
-            self.leave(ctx)
+
+            def showPrimeTime(_):
+                if isPlayable:
+                    event_dispatcher.showEpicBattlesPrimeTimeWindow()
+
+            self.leave(ctx, callback=showPrimeTime)

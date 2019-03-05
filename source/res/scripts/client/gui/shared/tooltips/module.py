@@ -310,7 +310,7 @@ class PriceBlockConstructor(ModuleTooltipBlockConstructor):
             leftPadding = 92
             if unlockPrice and not isEqOrDev:
                 parentCD = vehicle.intCD if vehicle is not None else None
-                _, cost, need = getUnlockPrice(module.intCD, parentCD)
+                _, cost, need, _, actionPercent = getUnlockPrice(module.intCD, parentCD)
                 neededValue = None
                 if not isUnlocked and isNextToUnlock and need > 0:
                     neededValue = need
@@ -616,7 +616,7 @@ class StatusBlockConstructor(ModuleTooltipBlockConstructor):
         nodeState = int(node.state)
         statusTemplate = '#tooltips:researchPage/module/status/%s'
         parentCD = vehicle.intCD if vehicle is not None else None
-        _, _, need = getUnlockPrice(module.intCD, parentCD)
+        _, _, need, _, _ = getUnlockPrice(module.intCD, parentCD, vehicle.level)
         if not nodeState & NODE_STATE_FLAGS.UNLOCKED:
             if not vehicle.isUnlocked:
                 header, text = getComplexStatus(statusTemplate % 'rootVehicleIsLocked')

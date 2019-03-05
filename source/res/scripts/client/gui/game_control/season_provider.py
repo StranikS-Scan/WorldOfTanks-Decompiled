@@ -26,14 +26,23 @@ class SeasonProvider(ISeasonProvider):
             return None
 
     def getCurrentSeason(self):
-        settings = self.__getSeasonSettings()
-        now = time_utils.getServerRegionalTime()
-        _, cycleInfo = season_common.getSeason(settings.asDict(), now)
-        if cycleInfo:
-            _, _, seasonID, _ = cycleInfo
-            return self._createSeason(cycleInfo, settings.seasons.get(seasonID, {}))
-        else:
-            return None
+        currTime = time_utils.getServerRegionalTime()
+        for seasonID, seasonData in self.__getSeasonSettings().seasons.iteritems():
+            if seasonData['startSeason'] <= currTime <= seasonData['endSeason']:
+                currCycleInfo = (None,
+                 None,
+                 seasonID,
+                 None)
+                for cycleID, cycleTimes in seasonData['cycles'].iteritems():
+                    if cycleTimes['start'] <= currTime <= cycleTimes['end']:
+                        currCycleInfo = (cycleTimes['start'],
+                         cycleTimes['end'],
+                         seasonID,
+                         cycleID)
+
+                return self._createSeason(currCycleInfo, seasonData)
+
+        return
 
     def getNextSeason(self):
         now = time_utils.getServerRegionalTime()

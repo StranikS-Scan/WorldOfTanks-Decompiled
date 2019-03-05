@@ -3,6 +3,8 @@
 import collections
 import weakref
 from collections import defaultdict
+from account_helpers import AccountSettings
+from account_helpers.AccountSettings import PROGRESSIVE_REWARD_VISITED
 from constants import AUTO_MAINTENANCE_RESULT
 from adisp import process
 from debug_utils import LOG_DEBUG, LOG_ERROR
@@ -11,9 +13,12 @@ from gui.Scaleform.locale.MESSENGER import MESSENGER
 from gui.clans.clan_account_profile import SYNC_KEYS
 from gui.clans.clan_helpers import ClanListener, isInClanEnterCooldown
 from gui.clans.settings import CLAN_APPLICATION_STATES
+from gui.impl import backport
+from gui.impl.gen import R
 from gui.prb_control import prbInvitesProperty
 from gui.prb_control.entities.listener import IGlobalListener
 from gui.server_events import recruit_helper
+from gui.shared import g_eventBus, events
 from gui.shared.utils import showInvitationInWindowsBar
 from gui.shared.view_helpers.UsersInfoHelper import UsersInfoHelper
 from gui.shared.notifications import NotificationPriorityLevel
@@ -27,8 +32,10 @@ from messenger.proto import proto_getter
 from messenger.proto.events import g_messengerEvents
 from messenger.proto.xmpp.xmpp_constants import XMPP_ITEM_TYPE
 from notification import tutorial_helper
-from notification.decorators import MessageDecorator, PrbInviteDecorator, C11nMessageDecorator, FriendshipRequestDecorator, WGNCPopUpDecorator, ClanAppsDecorator, ClanInvitesDecorator, ClanAppActionDecorator, ClanInvitesActionDecorator, ClanSingleAppDecorator, ClanSingleInviteDecorator
+from notification.decorators import MessageDecorator, PrbInviteDecorator, C11nMessageDecorator, FriendshipRequestDecorator, WGNCPopUpDecorator, ClanAppsDecorator, ClanInvitesDecorator, ClanAppActionDecorator, ClanInvitesActionDecorator, ClanSingleAppDecorator, ClanSingleInviteDecorator, ProgressiveRewardDecorator
 from notification.settings import NOTIFICATION_TYPE, NOTIFICATION_BUTTON_STATE
+from skeletons.gui.game_control import IBootcampController
+from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.login_manager import ILoginManager
 
 class _NotificationListener(object):
@@ -190,10 +197,10 @@ class FriendshipRqsListener(_NotificationListener):
     def start(self, model):
         result = super(FriendshipRqsListener, self).start(model)
         g_messengerEvents.onPluginDisconnected += self.__me_onPluginDisconnected
-        events = g_messengerEvents.users
-        events.onFriendshipRequestsAdded += self.__me_onFriendshipRequestsAdded
-        events.onFriendshipRequestsUpdated += self.__me_onFriendshipRequestsUpdated
-        events.onUserActionReceived += self.__me_onUserActionReceived
+        messengerEvents = g_messengerEvents.users
+        messengerEvents.onFriendshipRequestsAdded += self.__me_onFriendshipRequestsAdded
+        messengerEvents.onFriendshipRequestsUpdated += self.__me_onFriendshipRequestsUpdated
+        messengerEvents.onUserActionReceived += self.__me_onUserActionReceived
         contacts = self.proto.contacts.getFriendshipRqs()
         for contact in contacts:
             self.__setRequest(contact)
@@ -202,10 +209,10 @@ class FriendshipRqsListener(_NotificationListener):
 
     def stop(self):
         g_messengerEvents.onPluginDisconnected -= self.__me_onPluginDisconnected
-        events = g_messengerEvents.users
-        events.onFriendshipRequestsAdded -= self.__me_onFriendshipRequestsAdded
-        events.onFriendshipRequestsUpdated -= self.__me_onFriendshipRequestsUpdated
-        events.onUserActionReceived -= self.__me_onUserActionReceived
+        messengerEvents = g_messengerEvents.users
+        messengerEvents.onFriendshipRequestsAdded -= self.__me_onFriendshipRequestsAdded
+        messengerEvents.onFriendshipRequestsUpdated -= self.__me_onFriendshipRequestsUpdated
+        messengerEvents.onUserActionReceived -= self.__me_onUserActionReceived
         super(FriendshipRqsListener, self).stop()
 
     def __setRequest(self, contact):
@@ -684,7 +691,69 @@ class RecruitNotificationListener(_NotificationListener):
         priority = NotificationPriorityLevel.LOW
         if self.loginManager.getPreference('loginCount') == self._INCREASE_LIMIT_LOGIN:
             priority = NotificationPriorityLevel.MEDIUM
-        SystemMessages.pushMessage(i18n.makeString(MESSENGER.SERVICECHANNELMESSAGES_RECRUITREMINDER_TEXT, count=count, date=time), SystemMessages.SM_TYPE.RecruitReminder, priority=priority)
+        if time:
+            message = i18n.makeString(MESSENGER.SERVICECHANNELMESSAGES_RECRUITREMINDER_TEXT, count=count, date=time)
+        else:
+            message = i18n.makeString(MESSENGER.SERVICECHANNELMESSAGES_RECRUITREMINDERTERMLESS_TEXT, count=count)
+        SystemMessages.pushMessage(message, SystemMessages.SM_TYPE.RecruitReminder, priority=priority)
+
+
+class ProgressiveRewardListener(_NotificationListener):
+    __lobbyContext = dependency.descriptor(ILobbyContext)
+    __bootcampController = dependency.descriptor(IBootcampController)
+
+    def __init__(self):
+        super(ProgressiveRewardListener, self).__init__()
+        self.__isEnabled = None
+        return
+
+    def start(self, model):
+        super(ProgressiveRewardListener, self).start(model)
+        self.__isEnabled = self.__lobbyContext.getServerSettings().getProgressiveRewardConfig().isEnabled
+        self.__lobbyContext.getServerSettings().onServerSettingsChange += self.__onServerSettingsChange
+        g_eventBus.addListener(events.ProgressiveRewardEvent.WIDGET_WAS_SHOWN, self.__widgetWasShown)
+        self.__update()
+        return True
+
+    def stop(self):
+        self.__lobbyContext.getServerSettings().onServerSettingsChange -= self.__onServerSettingsChange
+        g_eventBus.removeListener(events.ProgressiveRewardEvent.WIDGET_WAS_SHOWN, self.__widgetWasShown)
+        super(ProgressiveRewardListener, self).stop()
+
+    def __widgetWasShown(self, _):
+        model = self._model()
+        if model is None:
+            return
+        else:
+            model.removeNotification(NOTIFICATION_TYPE.PROGRESSIVE_REWARD, ProgressiveRewardDecorator.ENTITY_ID)
+            AccountSettings.setNotifications(PROGRESSIVE_REWARD_VISITED, True)
+            return
+
+    def __onServerSettingsChange(self, diff):
+        if 'progressive_reward_config' in diff:
+            isEnabled = diff['progressive_reward_config'].get('isEnabled', self.__isEnabled)
+            if isEnabled != self.__isEnabled:
+                if isEnabled:
+                    SystemMessages.pushMessage(backport.text(R.strings.system_messages.progressiveReward.switch_on()))
+                else:
+                    SystemMessages.pushMessage(backport.text(R.strings.system_messages.progressiveReward.switch_off()))
+                self.__isEnabled = isEnabled
+            self.__update()
+
+    def __update(self):
+        model = self._model()
+        if model is None:
+            return
+        else:
+            model.removeNotificationsByType(NOTIFICATION_TYPE.PROGRESSIVE_REWARD)
+            wasVisited = AccountSettings.getNotifications(PROGRESSIVE_REWARD_VISITED)
+            if wasVisited:
+                return
+            progressiveConfig = self.__lobbyContext.getServerSettings().getProgressiveRewardConfig()
+            if not progressiveConfig.isEnabled or self.__bootcampController.isInBootcamp():
+                return
+            model.addNotification(ProgressiveRewardDecorator())
+            return
 
 
 class NotificationsListeners(_NotificationListener):
@@ -696,7 +765,8 @@ class NotificationsListeners(_NotificationListener):
          FriendshipRqsListener(),
          _WGNCListenersContainer(),
          BattleTutorialListener(),
-         RecruitNotificationListener())
+         RecruitNotificationListener(),
+         ProgressiveRewardListener())
 
     def start(self, model):
         for listener in self.__listeners:

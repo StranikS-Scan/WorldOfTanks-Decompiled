@@ -27,12 +27,14 @@ class ViewImpl(View):
         window = None
         if event.contentID == R.views.simpleTooltipContent():
             window = SimpleToolTipWindow(event, self.getParentWindow())
+        elif event.contentID == R.views.simpleTooltipHtmlContent():
+            window = SimpleToolTipWindow(event, self.getParentWindow(), useHtmlText=True)
         elif event.contentID == R.views.advandcedTooltipContent():
             normalContent = event.getArgument('normalContent')
             advancedContent = event.getArgument('advancedContent')
             window = AdvancedToolTipWindow(self.getParentWindow(), self.createToolTipContent(event, normalContent), self.createToolTipContent(event, advancedContent))
         else:
-            content = self.createToolTipContent(event, 0)
+            content = self.createToolTipContent(event, event.contentID)
             if content is not None:
                 window = ToolTipWindow(content, self.getParentWindow())
         if window is not None:

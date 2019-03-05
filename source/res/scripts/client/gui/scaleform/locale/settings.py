@@ -668,6 +668,7 @@ class SETTINGS(object):
     COLORSETTINGS_TAB_CUSTOMSETTINGS_SATURATION = '#settings:colorSettings/tab/customSettings/saturation'
     COLORSETTINGS_VIEW_BEFORE = '#settings:colorSettings/view/before'
     COLORSETTINGS_VIEW_AFTER = '#settings:colorSettings/view/after'
+    UNEQUIP_BUTTON = '#settings:unequip_button'
     GRAPHICSSETTINGSOPTIONS_ENUM = (GRAPHICSSETTINGSOPTIONS_DEFERRED,
      GRAPHICSSETTINGSOPTIONS_FORWARD,
      GRAPHICSSETTINGSOPTIONS_ON,

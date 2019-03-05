@@ -12,6 +12,7 @@ class BaseDAAPIComponent(BaseDAAPIComponentMeta):
         super(BaseDAAPIComponent, self).__init__()
         self.__components = {}
         self.__alias = None
+        self.__isActive = False
         return
 
     @property
@@ -30,6 +31,12 @@ class BaseDAAPIComponent(BaseDAAPIComponentMeta):
 
     def getAlias(self):
         return self.__alias
+
+    def setActive(self, isActive):
+        self.__isActive = isActive
+
+    def getActive(self):
+        return self.__isActive
 
     def reloadComponents(self):
         snapshot = [ (viewPy.flashObject, viewAlias) for viewAlias, viewPy in self.__components.iteritems() ]

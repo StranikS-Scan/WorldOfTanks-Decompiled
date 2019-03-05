@@ -9,12 +9,15 @@ from gui.Scaleform.locale.QUESTS import QUESTS
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.Scaleform.settings import ICONS_SIZES
+from gui.impl import backport
+from gui.impl.gen import R
 from gui.server_events.formatters import parseComplexToken, TOKEN_SIZES
 from gui.server_events.recruit_helper import getRecruitInfo
 from gui.shared.formatters import text_styles
-from gui.shared.gui_items import GUI_ITEM_TYPE, GUI_ITEM_TYPE_INDICES, getItemIconName
+from gui.shared.gui_items import GUI_ITEM_TYPE, getItemIconName
 from gui.shared.gui_items.Tankman import getRoleUserName
 from gui.shared.gui_items.badge import Badge
+from gui.shared.gui_items.crew_skin import localizedFullName, RarityLocals
 from gui.shared.money import Currency
 from gui.shared.utils.functions import makeTooltip
 from gui.shared.utils.requesters import REQ_CRITERIA
@@ -96,7 +99,8 @@ TEXT_ALIGNS = {'creditsFactor': LABEL_ALIGN.RIGHT,
  'xpFactor': LABEL_ALIGN.RIGHT}
 
 def getCompensationFormattersMap():
-    return {'vehicles': VehiclesCompensationFormatter()}
+    return {'vehicles': VehiclesCompensationFormatter(),
+     'crewSkins': CrewSkinsCompensationFormatter()}
 
 
 def getDefaultFormattersMap():
@@ -124,7 +128,9 @@ def getDefaultFormattersMap():
      'customizations': CustomizationsBonusFormatter(),
      'goodies': GoodiesBonusFormatter(),
      'items': ItemsBonusFormatter(),
-     'dossier': DossierBonusFormatter()}
+     'dossier': DossierBonusFormatter(),
+     'blueprints': BlueprintBonusFormatter(),
+     'crewSkins': CrewSkinsBonusFormatter()}
 
 
 def getMisssionsFormattersMap():
@@ -230,8 +236,8 @@ def getAnniversaryPacker():
     return AwardsPacker(formattersMap)
 
 
-def formatCountLabel(count):
-    return 'x{}'.format(count) if count > 1 else ''
+def formatCountLabel(count, defaultStr=''):
+    return 'x{}'.format(count) if count > 1 else defaultStr
 
 
 def formatTimeLabel(hours):
@@ -905,7 +911,8 @@ class CustomizationsBonusFormatter(SimpleBonusFormatter):
     def _format(self, bonus):
         result = []
         for item, data in zip(bonus.getCustomizations(), bonus.getList()):
-            result.append(PreformattedBonus(bonusName=bonus.getName(), images=self._getImages(item), userName=self._getUserName(item), isSpecial=True, label=self._formatBonusLabel(item.get('value')), labelFormatter=self._getLabelFormatter(bonus), specialAlias=TOOLTIPS_CONSTANTS.TECH_CUSTOMIZATION_ITEM_AWARD, specialArgs=[data.get('intCD'), False], align=LABEL_ALIGN.RIGHT, isCompensation=self._isCompensation(bonus)))
+            c11nItem = bonus.getC11nItem(item)
+            result.append(PreformattedBonus(bonusName=bonus.getName(), images=self._getImages(c11nItem), userName=self._getUserName(c11nItem), isSpecial=True, label=self._formatBonusLabel(item.get('value')), labelFormatter=self._getLabelFormatter(bonus), specialAlias=TOOLTIPS_CONSTANTS.TECH_CUSTOMIZATION_ITEM_AWARD, specialArgs=[data.get('intCD'), False], align=LABEL_ALIGN.RIGHT, isCompensation=self._isCompensation(bonus)))
 
         return result
 
@@ -913,25 +920,16 @@ class CustomizationsBonusFormatter(SimpleBonusFormatter):
         return formatCountLabel(count)
 
     @classmethod
-    def _getImages(cls, item):
+    def _getImages(cls, c11nItem):
         result = {}
-        c11nItem = cls.__getC11nItem(item)
         for size in AWARDS_SIZES.ALL():
             result[size] = RES_ICONS.getBonusIcon(size, c11nItem.itemTypeName)
 
         return result
 
     @classmethod
-    def _getUserName(cls, item):
-        c11nItem = cls.__getC11nItem(item)
+    def _getUserName(cls, c11nItem):
         return i18n.makeString(QUESTS.getBonusName(c11nItem.itemTypeName))
-
-    @classmethod
-    def __getC11nItem(cls, item):
-        itemTypeName = item.get('custType')
-        itemID = item.get('id')
-        itemTypeID = GUI_ITEM_TYPE_INDICES.get(itemTypeName)
-        return cls.c11n.getItemByID(itemTypeID, itemID)
 
 
 class LinkedSetCustomizationsBonusFormatter(CustomizationsBonusFormatter):
@@ -960,7 +958,8 @@ class OperationCustomizationsBonusFormatter(CustomizationsBonusFormatter):
             tooltip = None
         result = []
         for item, count in customizations.itervalues():
-            result.append(PreformattedBonus(bonusName=bonus.getName(), images=self._getImages(item), userName=self._getUserName(item), label=formatCountLabel(count), labelFormatter=self._getLabelFormatter(bonus), align=LABEL_ALIGN.RIGHT, isCompensation=self._isCompensation(bonus), isSpecial=False, tooltip=tooltip))
+            c11nItem = bonus.getC11nItem(item)
+            result.append(PreformattedBonus(bonusName=bonus.getName(), images=self._getImages(c11nItem), userName=self._getUserName(c11nItem), label=formatCountLabel(count), labelFormatter=self._getLabelFormatter(bonus), align=LABEL_ALIGN.RIGHT, isCompensation=self._isCompensation(bonus), isSpecial=False, tooltip=tooltip))
 
         return result
 
@@ -1127,3 +1126,76 @@ class EpicDossierBonusFormatter(DossierBonusFormatter):
         bonus, record = bonus.getRecordName()
         return {AWARDS_SIZES.SMALL: RES_ICONS.getEpicAchievementIcon(ICONS_SIZES.X48, record),
          AWARDS_SIZES.BIG: RES_ICONS.getEpicAchievementIcon(ICONS_SIZES.X80, record)}
+
+
+class BlueprintBonusFormatter(SimpleBonusFormatter):
+
+    def _format(self, bonuses):
+        return [PreformattedBonus(bonusName=bonuses.getBlueprintName(), label=bonuses.formatBlueprintValue(), userName='', labelFormatter=self._getLabelFormatter(bonuses), images=self.__getIcons(bonuses.getImage()), tooltip=bonuses.getTooltip(), align=LABEL_ALIGN.CENTER, isCompensation=self._isCompensation(bonuses), specialArgs=[bonuses.getBlueprintSpecialArgs()], isSpecial=True, specialAlias=bonuses.getBlueprintSpecialAlias())] * bonuses.getCount()
+
+    def __getIcons(self, iconPath):
+        res = {}
+        for size in AWARDS_SIZES.ALL():
+            res[size] = iconPath
+
+        return res
+
+
+class CrewSkinsBonusFormatter(SimpleBonusFormatter):
+
+    def _format(self, bonus):
+        result = []
+        compensationFormatter = SimpleBonusFormatter()
+        for item, count, customCompensation, compensatedNumber in bonus.getItems():
+            compensations = bonus.compensation(compensatedNumber, customCompensation, bonus)
+            if compensations:
+                for bonusComp in compensations:
+                    formattedComp = compensationFormatter.format(bonusComp)
+                    result.extend(formattedComp)
+
+            if item is not None and count:
+                result.append(PreformattedBonus(bonusName=bonus.getName(), images=self._getImages(item), isSpecial=True, label=self._formatBonusLabel(item, count, compensatedNumber), labelFormatter=self._getLabelFormatter(bonus), userName=self._getUserName(item), align=self._getLabelAlign(count), isCompensation=self._isCompensation(bonus), specialAlias=TOOLTIPS_CONSTANTS.CREW_SKIN, specialArgs=[item.getID(), count]))
+
+        return result
+
+    def _formatBonusLabel(self, item, count, _):
+        defaultStr = text_styles.stats(i18n.makeString(RarityLocals.LOCALES[item.getRarity()]))
+        formattedStr = formatCountLabel(count=count, defaultStr=defaultStr)
+        return formattedStr
+
+    @classmethod
+    def _getLabelAlign(cls, count):
+        return LABEL_ALIGN.RIGHT if count > 1 else LABEL_ALIGN.CENTER
+
+    @classmethod
+    def _getUserName(cls, item):
+        return localizedFullName(item)
+
+    @classmethod
+    def _getImages(cls, item):
+        result = {}
+        rarity = item.getRarity()
+        for size in AWARDS_SIZES.ALL():
+            sizePath = R.images.gui.maps.icons.quests.bonuses.dyn(size, None)
+            if sizePath is not None:
+                img = sizePath.dyn(item.itemTypeName + str(rarity))
+                if img is not None:
+                    result[size] = backport.image(img())
+
+        return result
+
+
+class CrewSkinsCompensationFormatter(CrewSkinsBonusFormatter):
+
+    def _format(self, bonus):
+        result = []
+        for item, count, _, compensatedNumber in bonus.getItems():
+            if item is not None and compensatedNumber > 0:
+                result.append(PreformattedBonus(bonusName=bonus.getName(), images=self._getImages(item), isSpecial=True, label=self._formatBonusLabel(item, count, compensatedNumber), labelFormatter=self._getLabelFormatter(bonus), userName=self._getUserName(item), align=self._getLabelAlign(compensatedNumber), isCompensation=self._isCompensation(bonus), specialAlias=TOOLTIPS_CONSTANTS.CREW_SKIN, specialArgs=[item.getID(), compensatedNumber]))
+
+        return result
+
+    def _formatBonusLabel(self, item, _, compensatedNumber):
+        defaultStr = text_styles.stats(i18n.makeString(RarityLocals.LOCALES[item.getRarity()]))
+        formattedStr = formatCountLabel(count=compensatedNumber, defaultStr=defaultStr)
+        return formattedStr

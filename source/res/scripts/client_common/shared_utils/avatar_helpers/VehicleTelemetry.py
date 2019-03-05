@@ -29,7 +29,7 @@ class VehicleTelemetry(object):
         else:
             shouldEnable = enabled if enabled is not None else not self.__physicsDebugInfoEnabled
             flag = 1 if shouldEnable else 0
-            self.avatar.base.setDevelopmentFeature('toggle_vehicle_debug_info', flag, '')
+            self.avatar.base.setDevelopmentFeature(0, 'toggle_vehicle_debug_info', flag, '')
             self.__physicsDebugInfoEnabled = shouldEnable
             return
 
@@ -81,7 +81,7 @@ class VehicleTelemetry(object):
         cmd = cmd.strip()
         zippedArg = zlib.compress(cPickle.dumps((isRapidMode, cmd)), 9)
         self.__completionFlag = False
-        self.avatar.base.setDevelopmentFeature('record_vehicle_dynamics', 0, zippedArg)
+        self.avatar.base.setDevelopmentFeature(0, 'record_vehicle_dynamics', 0, zippedArg)
 
     def isSimulationComplete(self):
         return self.__completionFlag

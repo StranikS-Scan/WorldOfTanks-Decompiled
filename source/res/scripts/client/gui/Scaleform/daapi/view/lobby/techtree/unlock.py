@@ -9,38 +9,37 @@ from gui.Scaleform.daapi.view.lobby.techtree.techtree_dp import g_techTreeDP
 from gui.shared.formatters import text_styles
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.gui_items.processors import Processor, plugins as proc_plugs
-UnlockItemCtx = namedtuple('UnlockItemCtx', ('unlockCD', 'vehCD', 'unlockIdx', 'xpCost'))
+UnlockItemCtx = namedtuple('UnlockItemCtx', ('itemCD', 'itemTypeID', 'parentCD', 'unlockIdx'))
 
-def makeCostCtx(vehXP, xpCost):
-    xp = vehXP - xpCost
-    freeXP = 0
-    if xp < 0:
-        xp = vehXP
-        freeXP = xpCost - xp
-    else:
-        xp = xpCost
-    return {'vehXP': xp,
+def makeCostCtx(vehXP, xpCost, xpDiscount):
+    freeXP = xpCost - vehXP
+    if freeXP < 0:
+        freeXP = 0
+    if xpCost < vehXP:
+        vehXP = 0
+    return {'xpCost': xpCost,
+     'vehXP': vehXP,
      'freeXP': freeXP,
-     'xpCost': xpCost}
+     'xpDiscount': xpDiscount}
 
 
 class UnlockItemConfirmator(proc_plugs.DialogAbstractConfirmator):
 
     def __init__(self, unlockCtx, costCtx, activeHandler=None, isEnabled=True):
         super(UnlockItemConfirmator, self).__init__(activeHandler, isEnabled)
-        self._unlockCtx = unlockCtx
-        self._costCtx = costCtx
+        self.__unlockCtx = unlockCtx
+        self.__costCtx = costCtx
 
     def __del__(self):
         super(UnlockItemConfirmator, self).__del__()
-        self._unlockCtx = None
-        self._costCtx = None
+        self.__unlockCtx = None
+        self.__costCtx = None
         return
 
     def _makeMeta(self):
-        item = self.itemsCache.items.getItemByCD(self._unlockCtx.unlockCD)
-        xpCost = BigWorld.wg_getIntegralFormat(self._costCtx['xpCost'])
-        freeXp = BigWorld.wg_getIntegralFormat(self._costCtx['freeXP'])
+        item = self.itemsCache.items.getItemByCD(self.__unlockCtx.itemCD)
+        xpCost = BigWorld.wg_getIntegralFormat(self.__costCtx['xpCost'])
+        freeXp = BigWorld.wg_getIntegralFormat(self.__costCtx['freeXP'])
         ctx = {'xpCost': text_styles.expText(xpCost),
          'freeXP': text_styles.expText(freeXp),
          'typeString': item.userType,
@@ -54,47 +53,50 @@ class UnlockItemConfirmator(proc_plugs.DialogAbstractConfirmator):
 
 class UnlockItemValidator(proc_plugs.SyncValidator):
 
-    def __init__(self, unlockCtx, isEnabled=True):
+    def __init__(self, unlockCtx, costCtx, isEnabled=True):
         super(UnlockItemValidator, self).__init__(isEnabled)
-        self._unlockCtx = unlockCtx
+        self.__unlockCtx = unlockCtx
+        self.__costCtx = costCtx
 
     def __del__(self):
-        self._unlockCtx = None
+        self.__unlockCtx = None
+        self.__costCtx = None
         return
 
     def _validate(self):
-        unlockCD, vehCD, _, xpCost = self._unlockCtx[:]
+        itemCD, itemTypeID, parentCD, unlockIdx = self.__unlockCtx[:]
         itemGetter = self.itemsCache.items.getItemByCD
-        vehicle = itemGetter(vehCD)
-        item = itemGetter(unlockCD)
+        vehicle = itemGetter(parentCD)
+        item = itemGetter(itemCD)
+        xpCost = self.__costCtx['xpCost']
         if vehicle.itemTypeID != GUI_ITEM_TYPE.VEHICLE:
-            LOG_ERROR('Int compact descriptor is not for vehicle', vehCD)
+            LOG_ERROR('Int compact descriptor is not for vehicle', parentCD)
             return proc_plugs.makeError('vehicle_invalid')
         if not vehicle.isUnlocked:
-            LOG_ERROR('Vehicle is not unlocked', unlockCD, vehCD)
+            LOG_ERROR('Vehicle is not unlocked', itemCD, parentCD)
             return proc_plugs.makeError('vehicle_locked')
         if item.isUnlocked:
             return proc_plugs.makeError('already_unlocked')
         stats = self.itemsCache.items.stats
         unlockStats = UnlockStats(stats.unlocks, stats.vehiclesXPs, stats.freeXP)
-        if item.itemTypeID == GUI_ITEM_TYPE.VEHICLE:
-            result, _ = g_techTreeDP.isNext2Unlock(unlockCD, **unlockStats._asdict())
+        if itemTypeID == GUI_ITEM_TYPE.VEHICLE:
+            result, _ = g_techTreeDP.isNext2Unlock(itemCD, **unlockStats._asdict())
             if not result:
-                LOG_ERROR('Required items are not unlocked', self._unlockCtx)
+                LOG_ERROR('Required items are not unlocked', self.__unlockCtx)
                 return proc_plugs.makeError('required_locked')
         else:
-            _xpCost, _itemCD, required = vehicle.getUnlocksDescr(self._unlockCtx.unlockIdx)
-            if _itemCD != unlockCD:
-                LOG_ERROR('Item is invalid', self._unlockCtx)
+            _xpCost, _itemCD, required = vehicle.getUnlocksDescr(unlockIdx)
+            if _itemCD != itemCD:
+                LOG_ERROR('Item is invalid', self.__unlockCtx)
                 return proc_plugs.makeError('item_invalid')
             if _xpCost != xpCost:
-                LOG_ERROR('XP cost is invalid', self._unlockCtx)
+                LOG_ERROR('XP cost is invalid', self.__unlockCtx)
                 return proc_plugs.makeError('xp_cost_invalid')
             if not unlockStats.isSeqUnlocked(required):
-                LOG_ERROR('Required items are not unlocked', self._unlockCtx)
+                LOG_ERROR('Required items are not unlocked', self.__unlockCtx)
                 return proc_plugs.makeError('required_locked')
-        if unlockStats.getVehTotalXP(vehCD) < xpCost:
-            LOG_ERROR('XP not enough for unlock', self._unlockCtx)
+        if unlockStats.getVehTotalXP(parentCD) < xpCost:
+            LOG_ERROR('XP not enough for unlock', self.__unlockCtx)
             return proc_plugs.makeError()
         return proc_plugs.makeError('in_processing') if RequestState.inProcess('unlock') else proc_plugs.makeSuccess()
 

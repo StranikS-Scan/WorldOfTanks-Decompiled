@@ -130,7 +130,7 @@ class BattleTeamsBasesController(ITeamsBasesController, ViewComponentsController
                     isCapturing = True
                     viewCmp.addCapturedTeamBase(clientID, playerTeam, timeLeft, invadersCnt)
 
-            if points:
+            if points and not BigWorld.player().isObserver():
                 for viewCmp in self._viewComponents:
                     isCapturing = True
                     viewCmp.addCapturingTeamBase(clientID, playerTeam, points, self._getProgressRate(), timeLeft, invadersCnt, stopped)

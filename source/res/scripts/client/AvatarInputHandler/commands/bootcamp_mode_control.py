@@ -11,14 +11,14 @@ class BootcampModeControl(InputHandlerCommand):
         playerBase = BigWorld.player().base
         if isDown and constants.HAS_DEV_RESOURCES:
             if key == Keys.KEY_F3:
-                playerBase.setDevelopmentFeature('heal', 0, '')
+                playerBase.setDevelopmentFeature(0, 'heal', 0, '')
                 return True
             if key == Keys.KEY_F4:
-                playerBase.setDevelopmentFeature('reload_gun', 0, '')
+                playerBase.setDevelopmentFeature(0, 'reload_gun', 0, '')
                 return True
             if key == Keys.KEY_F5:
-                playerBase.setDevelopmentFeature('teleportToShotPoint', 0, '')
+                playerBase.setDevelopmentFeature(0, 'teleportToShotPoint', 0, '')
                 return True
             if key == Keys.KEY_P and BigWorld.isKeyDown(Keys.KEY_CAPSLOCK):
-                playerBase.setDevelopmentFeature('kill_bots', 0, '')
+                playerBase.setDevelopmentFeature(0, 'kill_bots', 0, '')
                 return True

@@ -7,5 +7,3 @@ class ACTION_PRICE_CONSTANTS(object):
     STATE_ALIGN_MIDDLE_SMALL = 'alignMiddleSmall'
     STATE_ALIGN_TOP = 'alignTop'
     STATE_CAMOUFLAGE = 'camouflage'
-    STATE_TECH_TREE_VEHICLE = 'techTreeVeh'
-    STATE_TECH_TREE_MODULE = 'techTreeMod'

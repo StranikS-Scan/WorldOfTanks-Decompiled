@@ -1,18 +1,17 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/web/cache/web_cache.py
+import hashlib
 import json
 import logging
 import urlparse
-import hashlib
 from functools import partial
 import BigWorld
-from web.web_external_cache import IWebExternalCache
-from web.cache.web_downloader import WebDownloader
-from helpers.web.app_storage import ApplicationStorage
 from debug_utils import LOG_CURRENT_EXCEPTION
+from helpers.web.app_storage import ApplicationStorage
+from web.cache.web_downloader import WebDownloader
+from web.web_external_cache import IWebExternalCache
 _logger = logging.getLogger(__name__)
 _WORKERS_LIMIT = 2
-_QUEUE_LIMIT = -1
 
 def _generateKey(url):
     md = hashlib.md5()
@@ -31,10 +30,10 @@ class WebExternalCache(IWebExternalCache):
         self.__storedCnt = 0
         self.__notStoredCnt = 0
         self.__startTime = 0
-        self.__downloader = WebDownloader(_WORKERS_LIMIT, _QUEUE_LIMIT)
-        _logger.info('WebDownloader created. Workers: %r Queue: %r', _WORKERS_LIMIT, _QUEUE_LIMIT)
-        self.__storage = ApplicationStorage(cacheName, _WORKERS_LIMIT, _QUEUE_LIMIT)
-        _logger.info('WebStorage created. Name: %s Workers: %r Queue: %r', cacheName, _WORKERS_LIMIT, _QUEUE_LIMIT)
+        self.__downloader = WebDownloader(_WORKERS_LIMIT)
+        _logger.info('WebDownloader created. Workers: %r', _WORKERS_LIMIT)
+        self.__storage = ApplicationStorage(cacheName, _WORKERS_LIMIT)
+        _logger.info('WebStorage created. Name: %s Workers: %r', cacheName, _WORKERS_LIMIT)
 
     def close(self):
         self.__cache = {}

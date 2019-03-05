@@ -39,6 +39,7 @@ class FilterPopover(CustomizationFiltersPopoverMeta):
         super(FilterPopover, self).__init__()
         self.__groupsMap = []
         self.__ctx = None
+        self._bottomPanel = None
         data = ctx['data']
         self._purchasedToggleEnabled = data.purchasedEnabled
         self._historicToggleEnabled = data.historicEnabled
@@ -52,6 +53,9 @@ class FilterPopover(CustomizationFiltersPopoverMeta):
             self._isInit = False
         self.__updateVO = self.__createUpdateVO()
         return
+
+    def setBottomPanel(self, bottomPanel):
+        self._bottomPanel = bottomPanel
 
     def onFilterChange(self, index, value):
         (self.setShowOnlyHistoric, self.setShowOnlyAcquired, self.setShowOnlyApplied)[index](value)
@@ -103,6 +107,9 @@ class FilterPopover(CustomizationFiltersPopoverMeta):
     def _dispose(self):
         self.__groupsMap = []
         self.__ctx = None
+        if self._bottomPanel is not None:
+            self._bottomPanel.blinkCounter()
+            self._bottomPanel = None
         super(FilterPopover, self)._dispose()
         return
 

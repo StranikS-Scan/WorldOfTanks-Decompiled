@@ -9,7 +9,7 @@ from items import tankmen
 from gui import SystemMessages
 from gui.shared.utils import decorators
 from gui.shared.formatters import text_styles
-from gui.shared.gui_items.serializers import packTankman, packDropSkill
+from gui.shared.gui_items.serializers import packTankman, packDropSkill, repackTankmanWithSkinData
 from gui.shared.gui_items.Tankman import Tankman
 from gui.shared.gui_items.processors.tankman import TankmanDropSkills
 from gui.shared.money import Money, Currency
@@ -20,9 +20,11 @@ from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform.locale.MENU import MENU
 from helpers import i18n
 from skeletons.gui.shared import IItemsCache
+from skeletons.gui.lobby_context import ILobbyContext
 
 class SkillDropWindow(SkillDropMeta):
     itemsCache = dependency.descriptor(IItemsCache)
+    lobbyContext = dependency.instance(ILobbyContext)
 
     def __init__(self, ctx=None):
         super(SkillDropWindow, self).__init__()
@@ -52,7 +54,9 @@ class SkillDropWindow(SkillDropMeta):
             lenSkills = len(tankman.skills)
             availableSkillsCount = skills_count - lenSkills
             hasNewSkills = tankman.roleLevel == tankmen.MAX_SKILL_LEVEL and availableSkillsCount and (tankman.descriptor.lastSkillLevel == tankmen.MAX_SKILL_LEVEL or not lenSkills)
-            self.as_setDataS({'tankman': packTankman(tankman, isCountPermanentSkills=False),
+            tankmanData = packTankman(tankman, isCountPermanentSkills=False)
+            repackTankmanWithSkinData(tankman, tankmanData)
+            self.as_setDataS({'tankman': tankmanData,
              'dropSkillsCost': dropSkillsCost,
              'hasNewSkills': hasNewSkills,
              'newSkills': tankman.newSkillCount,

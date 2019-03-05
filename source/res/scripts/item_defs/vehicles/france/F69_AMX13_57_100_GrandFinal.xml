@@ -72,8 +72,8 @@
     <hangarShadowTexture>	vehicles/french/F69_AMX13_57_100/AMX13_57_100_HangarShadowMap.dds	</hangarShadowTexture>
     <customization>
       <customizableVehicleAreas>
-        <paint></paint>
-        <camouflage></camouflage>
+        <paint>	HULL	</paint>
+        <camouflage>	HULL	</camouflage>
       </customizableVehicleAreas>
     </customization>
     <customizationSlots>
@@ -86,6 +86,18 @@
         <size>	0.22	</size>
         <hideIfDamaged>	true	</hideIfDamaged>
         <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	camouflage	</slotType>
+        <slotId>	3	</slotId>
+        <anchorPosition>	0.000000 0.308433 1.41269	</anchorPosition>
+        <anchorDirection>	0.000000 0.213306 0.976985	</anchorDirection>
+      </slot>
+      <slot>
+        <slotType>	paint	</slotType>
+        <slotId>	2	</slotId>
+        <anchorPosition>	0.000072 0.308433 1.41256	</anchorPosition>
+        <anchorDirection>	0.000000 0.213306 0.976985	</anchorDirection>
       </slot>
     </customizationSlots>
     <camouflage>
@@ -476,6 +488,10 @@
           </snapWheels>
           <radiusOverrides>
             <wheel>
+              <name>	W_L4	</name>
+              <radius>	0.3215	</radius>
+            </wheel>
+            <wheel>
               <name>	WD_L0	</name>
               <radius>	0.312912	</radius>
             </wheel>
@@ -483,11 +499,6 @@
           <teethSyncs>
             <syncWithMainModel>	true	</syncWithMainModel>
             <segmentSyncPivotOffset>	-1.073	</segmentSyncPivotOffset>
-            <sync>
-              <name>	W_L4	</name>
-              <startAngle>	-7.43815	</startAngle>
-              <teethCount>	-2147483648	</teethCount>
-            </sync>
             <sync>
               <name>	WD_L0	</name>
               <startAngle>	-291.278	</startAngle>
@@ -834,10 +845,24 @@
       </physicalTracks>
       <customization>
         <customizableVehicleAreas>
-          <paint></paint>
+          <paint>	CHASSIS	</paint>
           <camouflage></camouflage>
         </customizableVehicleAreas>
       </customization>
+      <customizationSlots>
+        <slot>
+          <slotType>	style	</slotType>
+          <slotId>	257	</slotId>
+          <anchorPosition>	0.000000 0.000000 0.000000	</anchorPosition>
+          <anchorDirection>	0.000000 1 0.000000	</anchorDirection>
+        </slot>
+        <slot>
+          <slotType>	paint	</slotType>
+          <slotId>	256	</slotId>
+          <anchorPosition>	-1.11918 0.394736 0.406095	</anchorPosition>
+          <anchorDirection>	0.000000 1 -0.000000	</anchorDirection>
+        </slot>
+      </customizationSlots>
     </Chassis_AMX13_57_100_GrandFinal>
   </chassis>
   <turrets0>
@@ -919,8 +944,8 @@
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <customization>
             <customizableVehicleAreas>
-              <paint></paint>
-              <camouflage></camouflage>
+              <paint>	GUN GUN_2	</paint>
+              <camouflage>	GUN	</camouflage>
             </customizableVehicleAreas>
           </customization>
           <customizationSlots>
@@ -933,6 +958,20 @@
               <size>	0.339	</size>
               <hideIfDamaged>	false	</hideIfDamaged>
               <isUVProportional>	true	</isUVProportional>
+            </slot>
+            <slot>
+              <slotType>	paint	</slotType>
+              <slotId>	768	</slotId>
+              <anchorPosition>	-0.0122716 -0.00142233 2.86542	</anchorPosition>
+              <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+            <slot>
+              <slotType>	paint	</slotType>
+              <slotId>	769	</slotId>
+              <anchorPosition>	-0.0119287 0.279577 -0.387556	</anchorPosition>
+              <anchorDirection>	-0.000001 0.000001 1	</anchorDirection>
+              <applyTo>	16384	</applyTo>
             </slot>
           </customizationSlots>
           <camouflage>
@@ -955,8 +994,8 @@
       <physicsShape>	1.412 -0.382 0.971 0.000 0.735 0.529 0.743 0.735 0.500 0.500 0.279 0.500 0.309 0.000 0.000	</physicsShape>
       <customization>
         <customizableVehicleAreas>
-          <paint></paint>
-          <camouflage></camouflage>
+          <paint>	TURRET	</paint>
+          <camouflage>	TURRET	</camouflage>
         </customizableVehicleAreas>
       </customization>
       <customizationSlots>
@@ -1003,6 +1042,12 @@
           <size>	0.27	</size>
           <hideIfDamaged>	false	</hideIfDamaged>
           <isUVProportional>	true	</isUVProportional>
+        </slot>
+        <slot>
+          <slotType>	paint	</slotType>
+          <slotId>	512	</slotId>
+          <anchorPosition>	0.000000 0.00779152 0.000000	</anchorPosition>
+          <anchorDirection>	0.000000 1 0.000000	</anchorDirection>
         </slot>
       </customizationSlots>
       <camouflage>

@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/battle_results/components/progress.py
+import logging
 import math
 import operator
 from collections import namedtuple
@@ -7,18 +8,25 @@ import BigWorld
 import personal_missions
 from gui.Scaleform.daapi.view.lobby.server_events.events_helpers import getEventPostBattleInfo
 from gui.Scaleform.daapi.view.lobby.techtree.techtree_dp import g_techTreeDP
+from gui.Scaleform.genConsts.PROGRESSIVEREWARD_CONSTANTS import PROGRESSIVEREWARD_CONSTANTS as prConst
 from gui.Scaleform.locale.BATTLE_RESULTS import BATTLE_RESULTS
 from gui.battle_results.components import base
 from gui.battle_results.settings import PROGRESS_ACTION
-from gui.shared.formatters import text_styles, icons
+from gui.impl import backport
+from gui.impl.auxiliary.rewards_helper import getProgressiveRewardVO
+from gui.impl.gen import R
+from gui.shared.formatters import text_styles, getItemUnlockPricesVO, getItemPricesVO
 from gui.shared.gui_items import GUI_ITEM_TYPE, Tankman, getVehicleComponentsByType
 from gui.shared.gui_items.Vehicle import getLevelIconPath
+from gui.shared.gui_items.gui_item_economics import ItemPrice
 from gui.shared.money import Currency
 from helpers import dependency
 from helpers.i18n import makeString as _ms
+from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
 MIN_BATTLES_TO_SHOW_PROGRESS = 5
+_logger = logging.getLogger(__name__)
 
 class VehicleProgressHelper(object):
     itemsCache = dependency.descriptor(IItemsCache)
@@ -92,13 +100,13 @@ class VehicleProgressHelper(object):
                 priceCredits = price.credits
                 if creditsValue - priceCredits <= pureCreditsReceived and creditsValue > priceCredits:
                     if item.itemTypeID == GUI_ITEM_TYPE.VEHICLE:
-                        ready2BuyVehicles.append(self.__makeVehiclePurchaseVO(item, unlockProps, price.credits))
+                        ready2BuyVehicles.append(self.__makeVehiclePurchaseVO(item, unlockProps, price))
                     elif not item.isInstalled(self.__vehicle):
                         items = getVehicleComponentsByType(self.__vehicle, item.itemTypeID).values()
                         if items:
-                            installedModule = max(items, key=operator.itemgetter('level'))
+                            installedModule = max(items, key=lambda module: module.level)
                             if item.level > installedModule.level:
-                                ready2BuyModules.append(self.__makeModulePurchaseVO(item, unlockProps, price.credits))
+                                ready2BuyModules.append(self.__makeModulePurchaseVO(item, unlockProps, price))
 
         return (ready2BuyVehicles, ready2BuyModules)
 
@@ -149,15 +157,11 @@ class VehicleProgressHelper(object):
          'linkId': tman.invID}
 
     def __makeUnlockModuleVO(self, item, unlockProps):
-        isEnoughXp = self.__vehicleXp - unlockProps.xpCost >= 0
-        unlockXp = unlockProps.xpCost
-        formatter = text_styles.expText if isEnoughXp else text_styles.error
-        formattedPrice = BigWorld.wg_getIntegralFormat(unlockXp) + icons.xp()
         return {'title': _ms(BATTLE_RESULTS.COMMON_FITTING_RESEARCH),
          'description': text_styles.main(item.userName),
          'fittingType': item.getGUIEmblemID(),
          'lvlIcon': getLevelIconPath(item.level),
-         'price': formatter(formattedPrice),
+         'price': getItemUnlockPricesVO(unlockProps),
          'linkEvent': PROGRESS_ACTION.RESEARCH_UNLOCK_TYPE,
          'linkId': unlockProps.parentID}
 
@@ -165,36 +169,30 @@ class VehicleProgressHelper(object):
         prediction = ''
         if avgBattlesTillUnlock > 0:
             prediction = _ms(BATTLE_RESULTS.COMMON_RESEARCHPREDICTION, battles=avgBattlesTillUnlock)
-        isEnoughXp = self.__vehicleXp - unlockProps.xpCost >= 0
-        unlockXp = unlockProps.xpCost
-        formatter = text_styles.expText if isEnoughXp else text_styles.error
-        formattedPrice = BigWorld.wg_getIntegralFormat(unlockXp) + icons.xp()
         return {'title': _ms(BATTLE_RESULTS.COMMON_VEHICLE_RESEARCH),
          'description': self.__makeVehicleDescription(item),
          'vehicleIcon': item.iconSmall,
          'lvlIcon': getLevelIconPath(item.level),
          'prediction': prediction,
-         'price': formatter(formattedPrice),
+         'price': getItemUnlockPricesVO(unlockProps),
          'linkEvent': PROGRESS_ACTION.RESEARCH_UNLOCK_TYPE,
          'linkId': unlockProps.parentID}
 
-    def __makeVehiclePurchaseVO(self, item, unlockProps, creditPrice):
-        formattedPrice = BigWorld.wg_getIntegralFormat(creditPrice) + icons.credits()
+    def __makeVehiclePurchaseVO(self, item, unlockProps, price):
         return {'title': _ms(BATTLE_RESULTS.COMMON_VEHICLE_PURCHASE),
          'description': self.__makeVehicleDescription(item),
          'vehicleIcon': item.iconSmall,
          'lvlIcon': getLevelIconPath(item.level),
-         'price': text_styles.credits(formattedPrice),
+         'price': getItemPricesVO(ItemPrice(price=price, defPrice=price)),
          'linkEvent': PROGRESS_ACTION.PURCHASE_UNLOCK_TYPE,
          'linkId': unlockProps.parentID}
 
-    def __makeModulePurchaseVO(self, item, unlockProps, creditPrice):
-        formattedPrice = BigWorld.wg_getIntegralFormat(creditPrice) + icons.credits()
+    def __makeModulePurchaseVO(self, item, unlockProps, price):
         return {'title': _ms(BATTLE_RESULTS.COMMON_FITTING_PURCHASE),
          'description': text_styles.main(item.userName),
          'fittingType': item.itemTypeName,
          'lvlIcon': getLevelIconPath(item.level),
-         'price': text_styles.credits(formattedPrice),
+         'price': getItemPricesVO(ItemPrice(price=price, defPrice=price)),
          'linkEvent': PROGRESS_ACTION.PURCHASE_UNLOCK_TYPE,
          'linkId': unlockProps.parentID}
 
@@ -299,3 +297,25 @@ class QuestsProgressBlock(base.StatsBlock):
             if not res:
                 return res
         return cmp(aQuest.getID(), bQuest.getID())
+
+
+class ProgressiveRewardVO(base.StatsItem):
+    eventsCache = dependency.descriptor(IEventsCache)
+    lobbyContext = dependency.descriptor(ILobbyContext)
+    __slots__ = ()
+
+    def _convert(self, record, reusable):
+        progressiveReward = reusable.personal.getProgressiveReward()
+        if progressiveReward is None:
+            return
+        else:
+            progressiveConfig = self.lobbyContext.getServerSettings().getProgressiveRewardConfig()
+            maxSteps = progressiveConfig.maxLevel
+            hasCompleted, currentStep, probability = progressiveReward
+            if currentStep >= maxSteps:
+                _logger.warning('Current step more than max step in progressive reward')
+                return
+            if hasCompleted:
+                currentStep = currentStep - 1 if currentStep else maxSteps - 1
+            descText = text_styles.standard(backport.text(R.strings.battle_results.progressiveReward.descr()))
+            return getProgressiveRewardVO(currentStep=currentStep, probability=probability, maxSteps=maxSteps, showBg=True, align=prConst.WIDGET_LAYOUT_H, isHighTitle=True, hasCompleted=hasCompleted, descText=descText)

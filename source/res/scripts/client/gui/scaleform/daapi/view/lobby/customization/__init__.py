@@ -24,6 +24,7 @@ def getViewSettings():
     from gui.Scaleform.daapi.view.lobby.customization.installed_kit_popover import InstalledKitPopover
     from gui.Scaleform.daapi.view.lobby.customization.purchase_window import PurchaseWindow
     from gui.Scaleform.daapi.view.dialogs.confirm_customization_item_dialog import ConfirmCustomizationItemDialog
+    from gui.Scaleform.daapi.view.lobby.customization.customization_style_info import CustomizationStyleInfo
     return (GroupedViewSettings(VIEW_ALIAS.CUSTOMIZATION_FILTER_POPOVER, FilterPopover, 'customizationFiltersPopoverView.swf', ViewTypes.WINDOW, VIEW_ALIAS.CUSTOMIZATION_FILTER_POPOVER, VIEW_ALIAS.CUSTOMIZATION_FILTER_POPOVER, ScopeTemplates.DEFAULT_SCOPE),
      GroupedViewSettings(VIEW_ALIAS.CUSTOMIZATION_ITEMS_POPOVER, InstalledItemsPopover, 'customizationItemsPopover.swf', ViewTypes.WINDOW, VIEW_ALIAS.CUSTOMIZATION_ITEMS_POPOVER, VIEW_ALIAS.CUSTOMIZATION_ITEMS_POPOVER, ScopeTemplates.DEFAULT_SCOPE),
      GroupedViewSettings(VIEW_ALIAS.CUSTOMIZATION_KIT_POPOVER, InstalledKitPopover, 'customizationKitPopover.swf', ViewTypes.WINDOW, VIEW_ALIAS.CUSTOMIZATION_KIT_POPOVER, VIEW_ALIAS.CUSTOMIZATION_KIT_POPOVER, ScopeTemplates.DEFAULT_SCOPE),
@@ -31,7 +32,8 @@ def getViewSettings():
      GroupedViewSettings(CUSTOMIZATION_ALIASES.CONFIRM_CUSTOMIZATION_ITEM_DIALOG, ConfirmCustomizationItemDialog, 'confirmCustomizationItemDialog.swf', ViewTypes.TOP_WINDOW, 'confirmCustomizationItemDialog', None, ScopeTemplates.DEFAULT_SCOPE, isModal=True, canDrag=False),
      ViewSettings(VIEW_ALIAS.CUSTOMIZATION_PROPERTIES_SHEET, CustomizationPropertiesSheet, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
      ViewSettings(VIEW_ALIAS.CUSTOMIZATION_BOTTOM_PANEL, CustomizationBottomPanel, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
-     ViewSettings(VIEW_ALIAS.CUSTOMIZATION_INSCRIPTION_CONTROLLER, CustomizationInscriptionController, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE))
+     ViewSettings(VIEW_ALIAS.CUSTOMIZATION_INSCRIPTION_CONTROLLER, CustomizationInscriptionController, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
+     ViewSettings(VIEW_ALIAS.CUSTOMIZATION_STYLE_INFO, CustomizationStyleInfo, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE))
 
 
 CAMOUFLAGES_KIND_TEXTS = [VEHICLE_CUSTOMIZATION.CAMOUFLAGE_WINTER, VEHICLE_CUSTOMIZATION.CAMOUFLAGE_SUMMER, VEHICLE_CUSTOMIZATION.CAMOUFLAGE_DESERT]

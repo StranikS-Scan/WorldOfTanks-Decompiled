@@ -1,62 +1,62 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/tooltips/common.py
 import cPickle
-from collections import namedtuple
+import logging
 import math
-import ResMgr
+from collections import namedtuple
 import BigWorld
-import constants
+import ResMgr
 import ArenaType
+import constants
+from gui import g_htmlTemplates, makeHtmlString
+from gui.Scaleform.daapi.view.lobby.rally.vo_converters import getReserveNameVO, getDirection
+from gui.Scaleform.genConsts.BATTLE_EFFICIENCY_TYPES import BATTLE_EFFICIENCY_TYPES
+from gui.Scaleform.genConsts.BLOCKS_TOOLTIP_TYPES import BLOCKS_TOOLTIP_TYPES
 from gui.Scaleform.genConsts.CURRENCIES_CONSTANTS import CURRENCIES_CONSTANTS
 from gui.Scaleform.genConsts.ICON_TEXT_FRAMES import ICON_TEXT_FRAMES
 from gui.Scaleform.genConsts.SLOT_HIGHLIGHT_TYPES import SLOT_HIGHLIGHT_TYPES
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
-from gui.shared.formatters.servers import formatPingStatus, wrapServerName
-from helpers import dependency
+from gui.Scaleform.genConsts.VEHPREVIEW_CONSTANTS import VEHPREVIEW_CONSTANTS
+from gui.Scaleform.locale.ARENAS import ARENAS
+from gui.Scaleform.locale.FORTIFICATIONS import FORTIFICATIONS
+from gui.Scaleform.locale.MENU import MENU
+from gui.Scaleform.locale.MESSENGER import MESSENGER
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
+from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.clans import formatters as clans_fmts
 from gui.clans.items import formatField
+from gui.shared.formatters import formatActionPrices
+from gui.prb_control.items.stronghold_items import SUPPORT_TYPE, REQUISITION_TYPE, HEAVYTRUCKS_TYPE
+from gui.prb_control.settings import BATTLES_TO_SELECT_RANDOM_MIN_LIMIT
+from gui.server_events.events_helpers import missionsSortFunc
+from gui.server_events.formatters import TOKEN_SIZES, DISCOUNT_TYPE
 from gui.shared.formatters import icons, text_styles
+from gui.shared.formatters.servers import formatPingStatus, wrapServerName
 from gui.shared.formatters.text_styles import concatStylesToMultiLine
 from gui.shared.formatters.time_formatters import getTimeLeftStr
-from gui.shared.view_helpers import UsersInfoHelper
-from gui.shared.tooltips import efficiency
+from gui.shared.gui_items import GUI_ITEM_TYPE, ACTION_ENTITY_ITEM
 from gui.shared.money import Money, Currency, MONEY_UNDEFINED
-from messenger.gui.Scaleform.data.contacts_vo_converter import ContactConverter, makeClanFullName, makeContactStatusDescription
-from predefined_hosts import g_preDefinedHosts, HOST_AVAILABILITY, PING_STATUSES, PingData
-from constants import WG_GAMES, VISIBILITY
-from debug_utils import LOG_ERROR
+from gui.shared.tooltips import ToolTipBaseData, TOOLTIP_TYPE, ACTION_TOOLTIPS_TYPE, ToolTipParameterField
+from gui.shared.tooltips import efficiency
+from gui.shared.tooltips import formatters
+from gui.shared.view_helpers import UsersInfoHelper
+from helpers import dependency
 from helpers import i18n, time_utils, html, int2roman
 from helpers.i18n import makeString
-from gui import g_htmlTemplates, makeHtmlString
-from gui.Scaleform.daapi.view.lobby.rally.vo_converters import getReserveNameVO, getDirection
-from gui.Scaleform.locale.MENU import MENU
-from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
-from gui.prb_control.items.stronghold_items import SUPPORT_TYPE, REQUISITION_TYPE, HEAVYTRUCKS_TYPE
-from gui.server_events.formatters import TOKEN_SIZES, DISCOUNT_TYPE
-from gui.server_events.events_helpers import missionsSortFunc
-from gui.shared.gui_items import GUI_ITEM_TYPE, ACTION_ENTITY_ITEM
-from gui.shared.tooltips import ToolTipBaseData, TOOLTIP_TYPE, ACTION_TOOLTIPS_TYPE, ToolTipParameterField
-from gui.Scaleform.genConsts.BATTLE_EFFICIENCY_TYPES import BATTLE_EFFICIENCY_TYPES
-from gui.Scaleform.genConsts.VEHPREVIEW_CONSTANTS import VEHPREVIEW_CONSTANTS
-from gui.Scaleform.locale.MESSENGER import MESSENGER
-from gui.Scaleform.locale.FORTIFICATIONS import FORTIFICATIONS
-from messenger.storage import storage_getter
+from messenger.gui.Scaleform.data.contacts_vo_converter import ContactConverter, makeClanFullName, makeContactStatusDescription
 from messenger.m_constants import USER_TAG
-from gui.shared.tooltips import formatters
-from gui.Scaleform.genConsts.BLOCKS_TOOLTIP_TYPES import BLOCKS_TOOLTIP_TYPES
+from messenger.storage import storage_getter
+from predefined_hosts import g_preDefinedHosts, HOST_AVAILABILITY, PING_STATUSES, PingData
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.connection_mgr import IConnectionManager
-from skeletons.gui.web import IWebController
 from skeletons.gui.game_control import IIGRController, IServerStatsController
 from skeletons.gui.goodies import IGoodiesCache
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
-from gui.Scaleform.locale.ARENAS import ARENAS
-from gui.prb_control.settings import BATTLES_TO_SELECT_RANDOM_MIN_LIMIT
+from skeletons.gui.web import IWebController
 from soft_exception import SoftException
-from gui.Scaleform.daapi.view.lobby.store.browser.ingameshop_helpers import isIngameShopEnabled
+_logger = logging.getLogger(__name__)
 _UNAVAILABLE_DATA_PLACEHOLDER = '--'
 _ITEM_TYPE_TO_TOOLTIP_DICT = {GUI_ITEM_TYPE.SHELL: i18n.makeString(TOOLTIPS.ACTIONPRICE_SELL_TYPE_SHELL),
  GUI_ITEM_TYPE.EQUIPMENT: i18n.makeString(TOOLTIPS.ACTIONPRICE_SELL_TYPE_EQUIPMENT),
@@ -150,6 +150,14 @@ class BlocksTooltipData(ToolTipBaseData):
         block['data']['animated'] = not disableAnim
         displayableData['blocksData'].append(block)
 
+    def getDisplayableData(self, *args, **kwargs):
+        return {'blocksData': self._packBlocks(*args, **kwargs),
+         'marginAfterBlock': self.__marginAfterBlock,
+         'marginAfterSeparator': self.__marginAfterSeparator,
+         'contentMargin': self._getContentMargin(),
+         'width': self._getWidth(),
+         'highlightType': self._getHighLightType()}
+
     def _getContentMargin(self):
         return self.__contentMargin
 
@@ -179,14 +187,6 @@ class BlocksTooltipData(ToolTipBaseData):
 
     def _getHighLightType(self):
         return SLOT_HIGHLIGHT_TYPES.NO_HIGHLIGHT
-
-    def getDisplayableData(self, *args, **kwargs):
-        return {'blocksData': self._packBlocks(*args, **kwargs),
-         'marginAfterBlock': self.__marginAfterBlock,
-         'marginAfterSeparator': self.__marginAfterSeparator,
-         'contentMargin': self._getContentMargin(),
-         'width': self._getWidth(),
-         'highlightType': self._getHighLightType()}
 
 
 class FakeTooltipData(BlocksTooltipData):
@@ -282,7 +282,7 @@ class ContactTooltipData(ToolTipBaseData):
             commonGuiData = self.__converter.makeVO(userEntity, useBigIcons=True)
             tags = userEntity.getTags()
             resourceID = self.__converter.getGuiResourceID(userEntity)
-            if resourceID == WG_GAMES.TANKS:
+            if resourceID == constants.WG_GAMES.TANKS:
                 statusDescription = makeContactStatusDescription(userEntity.isOnline(), tags, userEntity.getClientInfo())
             else:
                 statusDescription = makeString('#tooltips:Contact/resource/%s' % resourceID)
@@ -418,18 +418,6 @@ class ReserveTooltipData(StrongholdTooltipData):
     def __init__(self, context):
         super(ReserveTooltipData, self).__init__(context, TOOLTIP_TYPE.RESERVE)
 
-    def __getSelectReason(self, reserve, selected):
-        reasonMap = {SUPPORT_TYPE: FORTIFICATIONS.STRONGHOLDRESERVE_TOOLTIP_SUPPORTACTIVATION,
-         REQUISITION_TYPE: FORTIFICATIONS.STRONGHOLDRESERVE_TOOLTIP_REQUISITIONACTIVATION,
-         HEAVYTRUCKS_TYPE: FORTIFICATIONS.STRONGHOLDRESERVE_TOOLTIP_HEAVYTRUCKSACTIVATION}
-        if selected:
-            title = i18n.makeString(FORTIFICATIONS.STRONGHOLDRESERVE_TOOLTIP_SELECTED)
-        else:
-            title = i18n.makeString(FORTIFICATIONS.STRONGHOLDRESERVE_TOOLTIP_READYTOSELECT)
-        groupType = reserve.getGroupType()
-        reason = i18n.makeString(reasonMap[groupType])
-        return (title, reason)
-
     def getDisplayableData(self, *args, **kwargs):
         data = self._getData()
         reserves = data.getReserve()
@@ -461,6 +449,18 @@ class ReserveTooltipData(StrongholdTooltipData):
         toolTipData['infoDescription3'] = infoDescription3
         toolTipData['infoStatus'] = infoStatus
         return toolTipData
+
+    def __getSelectReason(self, reserve, selected):
+        reasonMap = {SUPPORT_TYPE: FORTIFICATIONS.STRONGHOLDRESERVE_TOOLTIP_SUPPORTACTIVATION,
+         REQUISITION_TYPE: FORTIFICATIONS.STRONGHOLDRESERVE_TOOLTIP_REQUISITIONACTIVATION,
+         HEAVYTRUCKS_TYPE: FORTIFICATIONS.STRONGHOLDRESERVE_TOOLTIP_HEAVYTRUCKSACTIVATION}
+        if selected:
+            title = i18n.makeString(FORTIFICATIONS.STRONGHOLDRESERVE_TOOLTIP_SELECTED)
+        else:
+            title = i18n.makeString(FORTIFICATIONS.STRONGHOLDRESERVE_TOOLTIP_READYTOSELECT)
+        groupType = reserve.getGroupType()
+        reason = i18n.makeString(reasonMap[groupType])
+        return (title, reason)
 
 
 class MapTooltipData(ToolTipBaseData):
@@ -623,20 +623,7 @@ class ActionTooltipData(ToolTipBaseData):
         super(ActionTooltipData, self).__init__(context, TOOLTIP_TYPE.CONTROL)
 
     def getDisplayableData(self, itemType, key, newPrice, oldPrice, isBuying, forCredits=False, rentPackage=None):
-        makeSlotSellActionToolTip = False
         descr = ''
-        oldPrice = Money.makeFromMoneyTuple(oldPrice)
-        if not oldPrice.isDefined():
-            oldPrice = Money(credits=0)
-        currency = Currency.CREDITS
-        for currency in Currency.ALL:
-            currencyValue = oldPrice.get(currency)
-            if currencyValue is not None:
-                break
-
-        newPrice = Money.makeFromMoneyTuple(newPrice)
-        if not newPrice.isDefined():
-            newPrice = Money.makeFrom(currency, 0)
         hasRentCompensation = False
         hasPersonalDiscount = False
         rentCompensation = None
@@ -681,45 +668,8 @@ class ActionTooltipData(ToolTipBaseData):
             deviceNameType = ACTION_TOOLTIPS_TYPE.BOOSTER
         elif itemType == ACTION_TOOLTIPS_TYPE.ECONOMICS:
             itemName = key
-            if itemName == 'slotsPrices':
-                makeSlotSellActionToolTip = True
         template = 'html_templates:lobby/quests/actions'
-        format_ = BigWorld.wg_getGoldFormat
-        postfix = ''
-        if not self.__checkPriceIsAllowed(newPrice):
-            postfix = 'Error'
-        fmtNewGold = makeHtmlString(template, Currency.GOLD + postfix, {'value': format_(newPrice.gold)}) if newPrice.gold is not None else ''
-        fmtNewCredits = makeHtmlString(template, Currency.CREDITS + postfix, {'value': format_(newPrice.credits)}) if newPrice.credits is not None else ''
-        fmtNewCrystal = makeHtmlString(template, Currency.CRYSTAL + postfix, {'value': format_(newPrice.crystal)}) if newPrice.crystal is not None else ''
-        if not self.__checkPriceIsAllowed(oldPrice):
-            postfix = 'Error'
-        fmtOldGold = makeHtmlString(template, Currency.GOLD + postfix, {'value': format_(oldPrice.gold)}) if oldPrice.gold is not None else ''
-        fmtOldCredits = makeHtmlString(template, Currency.CREDITS + postfix, {'value': format_(oldPrice.credits)}) if oldPrice.credits is not None else ''
-        fmtOldCrystal = makeHtmlString(template, Currency.CRYSTAL + postfix, {'value': format_(oldPrice.crystal)}) if oldPrice.crystal is not None else ''
-        if newPrice.isCurrencyDefined(Currency.GOLD) and newPrice.isCurrencyDefined(Currency.CREDITS):
-            formatedNewPrice = i18n.makeString(TOOLTIPS.ACTIONPRICE_EXCHANGE_CURRENCYOR, credits=fmtNewCredits, gold=fmtNewGold)
-        elif newPrice.isCurrencyDefined(Currency.GOLD) and newPrice.isCurrencyDefined(Currency.CRYSTAL):
-            formatedNewPrice = i18n.makeString(TOOLTIPS.ACTIONPRICE_EXCHANGE_CURRENCYOR, credits=fmtNewCrystal, gold=fmtNewGold)
-        elif newPrice.isCurrencyDefined(Currency.CREDITS) and newPrice.isCurrencyDefined(Currency.CRYSTAL):
-            formatedNewPrice = i18n.makeString(TOOLTIPS.ACTIONPRICE_EXCHANGE_CURRENCYOR, credits=fmtNewCredits, gold=fmtNewCrystal)
-        elif newPrice.isCurrencyDefined(Currency.GOLD):
-            formatedNewPrice = fmtNewGold
-        elif newPrice.isCurrencyDefined(Currency.CRYSTAL):
-            formatedNewPrice = fmtNewCrystal
-        else:
-            formatedNewPrice = fmtNewCredits
-        if oldPrice.isCurrencyDefined(Currency.GOLD) and oldPrice.isCurrencyDefined(Currency.CREDITS):
-            formatedOldPrice = i18n.makeString(TOOLTIPS.ACTIONPRICE_EXCHANGE_CURRENCYOR, credits=fmtOldCredits, gold=fmtOldGold)
-        elif oldPrice.isCurrencyDefined(Currency.GOLD) and oldPrice.isCurrencyDefined(Currency.CRYSTAL):
-            formatedOldPrice = i18n.makeString(TOOLTIPS.ACTIONPRICE_EXCHANGE_CURRENCYOR, credits=fmtOldCrystal, gold=fmtOldGold)
-        elif oldPrice.isCurrencyDefined(Currency.CRYSTAL) and oldPrice.isCurrencyDefined(Currency.CREDITS):
-            formatedOldPrice = i18n.makeString(TOOLTIPS.ACTIONPRICE_EXCHANGE_CURRENCYOR, credits=fmtOldCredits, gold=fmtOldCrystal)
-        elif oldPrice.isCurrencyDefined(Currency.GOLD):
-            formatedOldPrice = fmtOldGold
-        elif oldPrice.isCurrencyDefined(Currency.CRYSTAL):
-            formatedOldPrice = fmtOldCrystal
-        else:
-            formatedOldPrice = fmtOldCredits
+        formatedOldPrice, formatedNewPrice = formatActionPrices(oldPrice, newPrice)
         body = i18n.makeString(TOOLTIPS.ACTIONPRICE_BODY, oldPrice=formatedOldPrice, newPrice=formatedNewPrice)
         actionUserName = ''
         if itemName:
@@ -727,10 +677,7 @@ class ActionTooltipData(ToolTipBaseData):
             if affectedAction:
                 action = self.eventsCache.getActions().get(affectedAction[ACTION_ENTITY_ITEM.ACTION_NAME_IDX])
                 if action:
-                    if makeSlotSellActionToolTip:
-                        actionUserName = i18n.makeString(TOOLTIPS.ACTIONPRICE_ACTIONNAMESLOT, actionName=action.getUserName())
-                    else:
-                        actionUserName = i18n.makeString(TOOLTIPS.ACTIONPRICE_ACTIONNAME, actionName=action.getUserName())
+                    actionUserName = i18n.makeString(TOOLTIPS.ACTIONPRICE_ACTIONNAME, actionName=action.getUserName())
                 deviceName = _ITEM_TYPE_TO_TOOLTIP_DICT.get(deviceNameType, '')
                 hasAffectedActions = affectedAction[ACTION_ENTITY_ITEM.AFFECTED_ACTIONS_IDX]
                 if hasAffectedActions or hasPersonalDiscount:
@@ -739,7 +686,7 @@ class ActionTooltipData(ToolTipBaseData):
                     else:
                         action = i18n.makeString(TOOLTIPS.ACTIONPRICE_SEVERALACTIONS_ACTION, actionName=actionUserName)
                     descr = i18n.makeString(TOOLTIPS.ACTIONPRICE_SEVERALACTIONS, deviceName=deviceName, action=action)
-                else:
+                elif actionUserName:
                     descr = i18n.makeString(TOOLTIPS.ACTIONPRICE_FORACTION, actionName=actionUserName)
         if hasRentCompensation:
             formattedRentCompensation = makeHtmlString(template, Currency.GOLD, {'value': BigWorld.wg_getGoldFormat(rentCompensation)})
@@ -753,11 +700,29 @@ class ActionTooltipData(ToolTipBaseData):
         else:
             headerText = i18n.makeString(TOOLTIPS.ACTIONPRICE_HEADER)
             bodyText = descr + '\n\n' + body if descr else body
-        if makeSlotSellActionToolTip:
-            template = 'html_templates:lobby/tooltips/'
-            headerText = i18n.makeString(TOOLTIPS.TANKS_CAROUSEL_BUY_SLOT_HEADER)
-            bodyText = i18n.makeString(TOOLTIPS.TANKS_CAROUSEL_BUY_SLOT_BODY) + '\n\n'
-            sep = icons.makeImageTag(RES_ICONS.MAPS_ICONS_TOOLTIP_TOOL_TIP_SEPARATOR, 283, 1, 15, 0)
+        return {'header': headerText,
+         'body': bodyText}
+
+
+class ActionSlotTooltipData(ToolTipBaseData):
+    eventsCache = dependency.descriptor(IEventsCache)
+
+    def __init__(self, context):
+        super(ActionSlotTooltipData, self).__init__(context, TOOLTIP_TYPE.CONTROL)
+
+    def getDisplayableData(self, newPrice, oldPrice):
+        affectedAction = self.eventsCache.getAffectedAction('slotsPrices')
+        actionUserName = None
+        if affectedAction:
+            action = self.eventsCache.getActions().get(affectedAction[ACTION_ENTITY_ITEM.ACTION_NAME_IDX])
+            if action:
+                actionUserName = i18n.makeString(TOOLTIPS.ACTIONPRICE_ACTIONNAMESLOT, actionName=action.getUserName())
+        formatedOldPrice, formatedNewPrice = formatActionPrices(oldPrice, newPrice)
+        template = 'html_templates:lobby/tooltips/'
+        headerText = i18n.makeString(TOOLTIPS.TANKS_CAROUSEL_BUY_SLOT_HEADER)
+        bodyText = i18n.makeString(''.join((TOOLTIPS.TANKS_CAROUSEL_BUY_SLOT_BODY, '\n\n')))
+        sep = icons.makeImageTag(RES_ICONS.MAPS_ICONS_TOOLTIP_TOOL_TIP_SEPARATOR, 283, 1, 15, 0)
+        if actionUserName is not None:
             fa = i18n.makeString(TOOLTIPS.ACTIONPRICE_FORACTION, actionName=text_styles.stats(actionUserName))
             pr = i18n.makeString(TOOLTIPS.ACTIONPRICE_BODY_SLOT, oldPrice=formatedOldPrice, newPrice=formatedNewPrice)
             bodyText += makeHtmlString(template, 'sell_slot_action', {'separator': sep,
@@ -766,20 +731,33 @@ class ActionTooltipData(ToolTipBaseData):
         return {'header': headerText,
          'body': bodyText}
 
-    def __checkPriceIsAllowed(self, price):
-        isPurchaseAllowed = isIngameShopEnabled()
-        if isPurchaseAllowed:
-            for currencyType in Currency.ALL:
-                if price.get(currencyType):
-                    isPurchaseAllowed &= currencyType == Currency.GOLD
 
-        return self.itemsCache.items.stats.money >= price or isPurchaseAllowed
-
-
-class ActionXPTooltipData(ToolTipBaseData):
+class BaseDiscountTooltipData(ToolTipBaseData):
 
     def __init__(self, context):
-        super(ActionXPTooltipData, self).__init__(context, TOOLTIP_TYPE.CONTROL)
+        super(BaseDiscountTooltipData, self).__init__(context, TOOLTIP_TYPE.CONTROL)
+
+    @classmethod
+    def _packDisplayableData(cls, cost, fullCost, currencyType=DISCOUNT_TYPE.GOLD):
+        headerText = i18n.makeString(TOOLTIPS.ACTIONPRICE_HEADER)
+        bodyText = i18n.makeString(TOOLTIPS.ACTIONPRICE_BODY, oldPrice=cls.__formatPrice(fullCost, currencyType), newPrice=cls.__formatPrice(cost, currencyType))
+        return {'header': headerText,
+         'body': bodyText}
+
+    @staticmethod
+    def __formatPrice(cost, currencyType):
+        template = 'html_templates:lobby/quests/actions'
+        format_ = BigWorld.wg_getGoldFormat
+        return makeHtmlString(template, currencyType, {'value': format_(cost)}) if cost is not None else ''
+
+
+class PriceDiscountTooltipData(BaseDiscountTooltipData):
+
+    def getDisplayableData(self, cost, fullCost, currencyType):
+        return self._packDisplayableData(cost, fullCost, currencyType)
+
+
+class ActionXPTooltipData(BaseDiscountTooltipData):
 
     def getDisplayableData(self, newPrice, oldPrice):
         oldPrice = Money.makeFromMoneyTuple(oldPrice)
@@ -794,21 +772,8 @@ class ActionXPTooltipData(ToolTipBaseData):
         newPrice = Money.makeFromMoneyTuple(newPrice)
         if not newPrice.isDefined():
             newPrice = Money.makeFrom(currency, 0)
-        headerText = i18n.makeString(TOOLTIPS.ACTIONPRICE_HEADER)
-        bodyText = i18n.makeString(TOOLTIPS.ACTIONPRICE_BODY, oldPrice=self.__formatPrice(oldPrice), newPrice=self.__formatPrice(newPrice))
-        return {'header': headerText,
-         'body': bodyText}
-
-    @staticmethod
-    def __formatPrice(price):
-        template = 'html_templates:lobby/quests/actions'
-        format_ = BigWorld.wg_getGoldFormat
-        if price.isCurrencyDefined(Currency.GOLD):
-            if price.gold is not None:
-                return makeHtmlString(template, DISCOUNT_TYPE.FREE_XP, {'value': format_(price.gold)})
-            return ''
-        else:
-            return makeHtmlString(template, DISCOUNT_TYPE.XP, {'value': format_(price.credits)}) if price.credits is not None else ''
+        isGoldPrice = newPrice.isCurrencyDefined(Currency.GOLD)
+        return self._packDisplayableData(newPrice.gold if isGoldPrice else newPrice.credits, oldPrice.gold if isGoldPrice else oldPrice.credits, DISCOUNT_TYPE.FREE_XP if isGoldPrice else DISCOUNT_TYPE.XP)
 
 
 class ToolTipFortWrongTime(ToolTipBaseData):
@@ -907,6 +872,12 @@ class SettingsMinimapCircles(BlocksTooltipData):
         self._setMargins(afterBlock=14)
         self._setWidth(364)
 
+    def getTextBlocksForCircleDescr(self, title, body):
+        blocks = []
+        blocks.append(formatters.packTextBlockData(title, padding={'bottom': 3}))
+        blocks.append(formatters.packTextBlockData(body, padding={'bottom': 9}))
+        return blocks
+
     def _packBlocks(self, *args):
         tooltipBlocks = super(SettingsMinimapCircles, self)._packBlocks()
         headerBlock = formatters.packTitleDescBlock(text_styles.middleTitle(TOOLTIPS.SETTINGS_MINIMAPCIRCLES_TITLE))
@@ -921,7 +892,7 @@ class SettingsMinimapCircles(BlocksTooltipData):
         textBlocks.extend(self.getTextBlocksForCircleDescr(viewRangeTitle, viewRangeBody))
         maxViewRangeHtml = makeHtmlString(templateName, 'max_view_range_title') + lineBreak
         maxViewRangeTitle = maxViewRangeHtml % i18n.makeString(TOOLTIPS.SETTINGS_MINIMAPCIRCLES_MAXVIEWRANGE_TITLE)
-        maxViewRangeBody = text_styles.main(TOOLTIPS.SETTINGS_MINIMAPCIRCLES_MAXVIEWRANGE_AS3_BODY) % VISIBILITY.MAX_RADIUS
+        maxViewRangeBody = text_styles.main(TOOLTIPS.SETTINGS_MINIMAPCIRCLES_MAXVIEWRANGE_AS3_BODY) % constants.VISIBILITY.MAX_RADIUS
         textBlocks.extend(self.getTextBlocksForCircleDescr(maxViewRangeTitle, maxViewRangeBody))
         drawRangeHtml = makeHtmlString(templateName, 'draw_range_title') + lineBreak
         drawRangeTitle = drawRangeHtml % i18n.makeString(TOOLTIPS.SETTINGS_MINIMAPCIRCLES_DRAWRANGE_TITLE)
@@ -929,12 +900,6 @@ class SettingsMinimapCircles(BlocksTooltipData):
         textBlocks.extend(self.getTextBlocksForCircleDescr(drawRangeTitle, drawRangeBody))
         tooltipBlocks.append(formatters.packBuildUpBlockData(textBlocks, padding={'top': -1}))
         return tooltipBlocks
-
-    def getTextBlocksForCircleDescr(self, title, body):
-        blocks = []
-        blocks.append(formatters.packTextBlockData(title, padding={'bottom': 3}))
-        blocks.append(formatters.packTextBlockData(body, padding={'bottom': 9}))
-        return blocks
 
 
 class SquadRestrictionsInfo(BlocksTooltipData):
@@ -954,7 +919,7 @@ class SquadRestrictionsInfo(BlocksTooltipData):
         return tooltipBlocks
 
 
-_CurrencySetting = namedtuple('_CurrencySetting', 'text, icon, textStyle, frame')
+_CurrencySetting = namedtuple('_CurrencySetting', ('text', 'icon', 'textStyle', 'frame'))
 
 class CURRENCY_SETTINGS(object):
     BUY_CREDITS_PRICE = 'buyCreditsPrice'
@@ -997,14 +962,14 @@ _OPERATIONS_SETTINGS = {CURRENCY_SETTINGS.BUY_CREDITS_PRICE: _CurrencySetting(TO
  CURRENCY_SETTINGS.RENT_CREDITS_PRICE: _CurrencySetting(TOOLTIPS.VEHICLE_MINRENTALSPRICE, icons.credits(), text_styles.credits, ICON_TEXT_FRAMES.CREDITS),
  CURRENCY_SETTINGS.RENT_GOLD_PRICE: _CurrencySetting(TOOLTIPS.VEHICLE_MINRENTALSPRICE, icons.gold(), text_styles.gold, ICON_TEXT_FRAMES.GOLD),
  CURRENCY_SETTINGS.SELL_PRICE: _CurrencySetting(TOOLTIPS.VEHICLE_SELL_PRICE, icons.credits(), text_styles.credits, ICON_TEXT_FRAMES.CREDITS),
- CURRENCY_SETTINGS.UNLOCK_PRICE: _CurrencySetting(TOOLTIPS.VEHICLE_UNLOCK_PRICE, icons.xp(), text_styles.expText, ICON_TEXT_FRAMES.XP),
+ CURRENCY_SETTINGS.UNLOCK_PRICE: _CurrencySetting(TOOLTIPS.VEHICLE_UNLOCK_PRICE, icons.xpCost(), text_styles.expText, ICON_TEXT_FRAMES.XP_PRICE),
  CURRENCY_SETTINGS.REMOVAL_CREDITS_PRICE: _CurrencySetting(TOOLTIPS.MODULEFITS_NOT_REMOVABLE_DISMANTLING_PRICE, icons.credits(), text_styles.credits, ICON_TEXT_FRAMES.CREDITS),
  CURRENCY_SETTINGS.REMOVAL_GOLD_PRICE: _CurrencySetting(TOOLTIPS.MODULEFITS_NOT_REMOVABLE_DISMANTLING_PRICE, icons.gold(), text_styles.gold, ICON_TEXT_FRAMES.GOLD),
  CURRENCY_SETTINGS.REMOVAL_CRYSTAL_PRICE: _CurrencySetting(TOOLTIPS.MODULEFITS_NOT_REMOVABLE_DISMANTLING_PRICE, icons.crystal(), text_styles.crystal, ICON_TEXT_FRAMES.CRYSTAL)}
 
 def _getCurrencySetting(key):
     if key not in _OPERATIONS_SETTINGS:
-        LOG_ERROR('Unsupported currency type "' + key + '"!')
+        _logger.error('Unsupported currency type "%s"!', key)
         return None
     else:
         return _OPERATIONS_SETTINGS[key]
@@ -1018,32 +983,40 @@ def makePriceBlock(price, currencySetting, neededValue=None, oldPrice=None, perc
     settings = _getCurrencySetting(currencySetting)
     if settings is None:
         return
+    valueFormatted = settings.textStyle(_int(price))
+    icon = settings.icon
+    if neededValue is not None:
+        needFormatted = settings.textStyle(_int(neededValue))
+    if hasAction:
+        oldPriceText = text_styles.concatStylesToSingleLine(icon, settings.textStyle(_int(oldPrice)))
+    neededText = ''
+    if neededValue is not None:
+        neededText = text_styles.concatStylesToSingleLine(text_styles.main('('), text_styles.error(TOOLTIPS.VEHICLE_GRAPH_BODY_NOTENOUGH), ' ', needFormatted, ' ', icon, text_styles.main(')'))
+    text = text_styles.concatStylesWithSpace(text_styles.main(settings.text if not forcedText else forcedText), neededText)
+    if hasAction:
+        actionText = text_styles.main(makeString(TOOLTIPS.VEHICLE_ACTION_PRC, actionPrc=text_styles.stats(str(percent) + '%'), oldPrice=oldPriceText))
+        text = text_styles.concatStylesToMultiLine(text, actionText)
+        settingsFrame = settings.frame
+        if settingsFrame in Currency.ALL:
+            newPrice = MONEY_UNDEFINED.replace(settingsFrame, price)
+            oldPrice = MONEY_UNDEFINED.replace(settingsFrame, oldPrice)
+        else:
+            newPrice = Money(credits=price)
+            oldPrice = Money(credits=oldPrice)
+        return formatters.packSaleTextParameterBlockData(name=text, saleData={'newPrice': newPrice.toMoneyTuple(),
+         'oldPrice': oldPrice.toMoneyTuple(),
+         'valuePadding': -8}, actionStyle='alignTop', padding=formatters.packPadding(left=leftPadding), currency=newPrice.getCurrency())
     else:
-        valueFormatted = settings.textStyle(_int(price))
-        icon = settings.icon
-        if neededValue is not None:
-            needFormatted = settings.textStyle(_int(neededValue))
-        if hasAction:
-            oldPriceText = text_styles.concatStylesToSingleLine(icon, settings.textStyle(_int(oldPrice)))
-        neededText = ''
-        if neededValue is not None:
-            neededText = text_styles.concatStylesToSingleLine(text_styles.main('('), text_styles.error(TOOLTIPS.VEHICLE_GRAPH_BODY_NOTENOUGH), ' ', needFormatted, ' ', icon, text_styles.main(')'))
-        text = text_styles.concatStylesWithSpace(text_styles.main(settings.text if not forcedText else forcedText), neededText)
-        if hasAction:
-            actionText = text_styles.main(makeString(TOOLTIPS.VEHICLE_ACTION_PRC, actionPrc=text_styles.stats(str(percent) + '%'), oldPrice=oldPriceText))
-            text = text_styles.concatStylesToMultiLine(text, actionText)
-            settingsFrame = settings.frame
-            if settingsFrame in Currency.ALL:
-                newPrice = MONEY_UNDEFINED.replace(settingsFrame, price)
-                oldPrice = MONEY_UNDEFINED.replace(settingsFrame, oldPrice)
-            else:
-                newPrice = Money(credits=price)
-                oldPrice = Money(credits=oldPrice)
-            return formatters.packSaleTextParameterBlockData(name=text, saleData={'newPrice': newPrice.toMoneyTuple(),
-             'oldPrice': oldPrice.toMoneyTuple(),
-             'valuePadding': -8}, actionStyle='alignTop', padding=formatters.packPadding(left=leftPadding), currency=newPrice.getCurrency())
         return formatters.packTextParameterWithIconBlockData(name=text, value=valueFormatted, icon=settings.frame, valueWidth=valueWidth, padding=formatters.packPadding(left=-5))
+
+
+def makeCompoundPriceBlock(currencySetting, itemPrice, blockWidth=150, forcedText=''):
+    settings = _getCurrencySetting(currencySetting)
+    if settings is None:
         return
+    else:
+        blocks = [formatters.packTextBlockData(text_styles.main(settings.text if not forcedText else forcedText)), formatters.packItemPriceBlockData(itemPrice, padding=formatters.packPadding(top=-4))]
+        return formatters.packBuildUpBlockData(blocks, blockWidth=blockWidth, padding=formatters.packPadding(bottom=-8))
 
 
 class SettingsBaseKey(BlocksTooltipData):
@@ -1151,7 +1124,7 @@ class HeaderMoneyAndXpTooltipData(BlocksTooltipData):
         tooltipBlocks = super(HeaderMoneyAndXpTooltipData, self)._packBlocks(*args, **kwargs)
         self._btnType = btnType
         if self._btnType is None:
-            LOG_ERROR('HeaderMoneyAndXpTooltipData empty btnType!')
+            _logger.error('HeaderMoneyAndXpTooltipData empty btnType!')
             return tooltipBlocks
         else:
             valueBlock = formatters.packMoneyAndXpValueBlock(value=self._getValue(), icon=self._getIcon(), iconYoffset=self._getIconYOffset())
@@ -1296,7 +1269,7 @@ class VehicleHistoricalReferenceTooltipData(BlocksTooltipData):
         item = self.context.buildItem(*args, **kwargs)
         content = super(VehicleHistoricalReferenceTooltipData, self)._packBlocks(*args, **kwargs)
         blocks = list()
-        blocks.append(formatters.packImageBlockData(img='../maps/icons/tooltip/flag_160x100/%s.png' % item.nationName, align=BLOCKS_TOOLTIP_TYPES.ALIGN_LEFT, padding={'left': -19}))
+        blocks.append(formatters.packImageBlockData(img='../maps/icons/tooltip/flag_160x100/{}.png'.format(item.nationName), align=BLOCKS_TOOLTIP_TYPES.ALIGN_LEFT, padding={'left': -19}))
         blocks.append(formatters.packTextBlockData(text_styles.highTitle(TOOLTIPS.VEHICLEPREVIEW_HISTORICALREFERENCE_TITLE), padding={'top': -72}))
         blocks.append(formatters.packTextBlockData(text_styles.main(item.fullDescription), padding={'top': 10}))
         content.append(formatters.packBuildUpBlockData(blocks))

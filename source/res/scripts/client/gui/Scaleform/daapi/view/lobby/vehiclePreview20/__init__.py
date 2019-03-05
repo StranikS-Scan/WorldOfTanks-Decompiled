@@ -3,7 +3,7 @@
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.vehiclePreview20.pack_items_popover import PackItemsPopover
 from gui.Scaleform.daapi.view.lobby.vehiclePreview20.vehicle_preview_buying_panel import VehiclePreviewBuyingPanel
-from gui.Scaleform.daapi.view.lobby.vehiclePreview20.info.vehicle_preview_epic_battle_panel import VehiclePreviewEpicBattlePanel
+from gui.Scaleform.daapi.view.lobby.vehiclePreview20.info.vehicle_preview_frontline_buying_panel import VehiclePreviewFrontlineBuyingPanel
 from gui.Scaleform.daapi.view.lobby.vehiclePreview20.info.vehicle_preview_browse_tab import VehiclePreviewBrowseTab
 from gui.Scaleform.daapi.view.lobby.vehiclePreview20.info.vehicle_preview_crew_tab import VehiclePreviewCrewTab
 from gui.Scaleform.daapi.view.lobby.vehiclePreview20.info.vehicle_preview_modules_tab import VehiclePreviewModulesTab
@@ -21,7 +21,7 @@ def getViewSettings():
     from gui.Scaleform.daapi.view.lobby.hangar.VehicleParameters import VehiclePreviewParameters
     return (ViewSettings(VEHPREVIEW_CONSTANTS.PARAMETERS_PY_ALIAS, VehiclePreviewParameters, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
      ViewSettings(VEHPREVIEW_CONSTANTS.BUYING_PANEL_PY_ALIAS, VehiclePreviewBuyingPanel, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
-     ViewSettings(VEHPREVIEW_CONSTANTS.EPIC_BATTLE_PANEL_PY_ALIAS, VehiclePreviewEpicBattlePanel, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
+     ViewSettings(VEHPREVIEW_CONSTANTS.FRONTLINE_BUYING_PANEL_PY_ALIAS, VehiclePreviewFrontlineBuyingPanel, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
      ViewSettings(VEHPREVIEW_CONSTANTS.BROWSE_LINKAGE, VehiclePreviewBrowseTab, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
      ViewSettings(VEHPREVIEW_CONSTANTS.MODULES_LINKAGE, VehiclePreviewModulesTab, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
      ViewSettings(VEHPREVIEW_CONSTANTS.CREW_LINKAGE, VehiclePreviewCrewTab, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),

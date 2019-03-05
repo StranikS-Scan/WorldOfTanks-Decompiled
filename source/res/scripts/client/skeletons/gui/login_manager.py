@@ -36,6 +36,9 @@ class ILoginManager(object):
     def tryWgcLogin(self, serverName=None):
         raise NotImplementedError
 
+    def stopWgc(self):
+        raise NotImplementedError
+
     def initiateRelogin(self, login, token2, serverName):
         raise NotImplementedError
 

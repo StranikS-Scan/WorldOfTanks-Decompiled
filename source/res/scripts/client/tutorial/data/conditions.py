@@ -18,6 +18,9 @@ class CONDITION_TYPE(object):
     COMPONENT_ON_SCENE = 11
     CURRENT_SCENE = 12
     VIEW_PRESENT = 13
+    CONNECTED_ITEM = 14
+    CONDITION_AND = 15
+    CONDITION_OR = 16
     FIRST_CUSTOM = 100
     BASE_RANGE = (FLAG,
      GLOBAL_FLAG,
@@ -31,7 +34,10 @@ class CONDITION_TYPE(object):
      SERVICE,
      COMPONENT_ON_SCENE,
      CURRENT_SCENE,
-     VIEW_PRESENT)
+     VIEW_PRESENT,
+     CONNECTED_ITEM,
+     CONDITION_AND,
+     CONDITION_OR)
 
 
 @functools.total_ordering
@@ -240,6 +246,39 @@ class ServiceCondition(ActiveCondition):
 
     def getServiceClass(self):
         return self.__serviceClass
+
+
+class ConnectedItemCondition(Condition):
+
+    def __init__(self, entityID, isShown, state=CONDITION_STATE.ACTIVE):
+        super(ConnectedItemCondition, self).__init__(entityID, CONDITION_TYPE.CONNECTED_ITEM, state)
+        self.__isShown = isShown
+
+    def isShown(self):
+        return self.__isShown
+
+
+class _ComplexCondition(Condition):
+
+    def __init__(self, items, conditionType):
+        super(_ComplexCondition, self).__init__(None, conditionType, state=CONDITION_STATE.ACTIVE)
+        self.__conditionList = items if items else []
+        return
+
+    def getConditionList(self):
+        return self.__conditionList
+
+
+class ComplexConditionAnd(_ComplexCondition):
+
+    def __init__(self, items):
+        super(ComplexConditionAnd, self).__init__(items, CONDITION_TYPE.CONDITION_AND)
+
+
+class ComplexConditionOr(_ComplexCondition):
+
+    def __init__(self, items):
+        super(ComplexConditionOr, self).__init__(items, CONDITION_TYPE.CONDITION_OR)
 
 
 class Conditions(list):

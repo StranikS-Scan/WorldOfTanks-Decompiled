@@ -4,6 +4,7 @@ import BigWorld
 import constants
 from gui.Scaleform.daapi.view.lobby.store.browser.ingameshop_helpers import isIngameShopEnabled
 from gui.ingame_shop import showBuyGoldForCrew
+from gui.shared.gui_items.Tankman import getCrewSkinIconBig
 from gui.shared.money import Money
 from gui.shared.tooltips import ACTION_TOOLTIPS_TYPE
 from gui.shared.tooltips.formatters import packActionTooltipData
@@ -15,6 +16,7 @@ from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform.daapi.view.meta.RoleChangeMeta import RoleChangeMeta
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.shared.gui_items import Tankman
+from gui.shared.gui_items.crew_skin import localizedFullName
 from gui.shared.gui_items.serializers import packTankman
 from gui.shared.gui_items.processors.tankman import TankmanChangeRole
 from gui.shared.money import Currency
@@ -22,8 +24,10 @@ from gui.shared.utils import decorators, isVehicleObserver
 from gui.shared.utils.requesters.ItemsRequester import REQ_CRITERIA
 from gui.shared.formatters import icons, text_styles
 from items import tankmen
+from items.components.crewSkins_constants import NO_CREW_SKIN_ID
 from nations import NAMES
 from skeletons.gui.shared import IItemsCache
+from skeletons.gui.lobby_context import ILobbyContext
 
 def _getTankmanVO(tankman):
     packedTankman = packTankman(tankman, isCountPermanentSkills=False)
@@ -87,6 +91,7 @@ def _getTooltipBody(sameTankmen, isAvailable, roleSlotIsTaken, role, selectedVeh
 
 class RoleChangeWindow(RoleChangeMeta):
     itemsCache = dependency.descriptor(IItemsCache)
+    lobbyContext = dependency.instance(ILobbyContext)
 
     def __init__(self, ctx=None):
         super(RoleChangeWindow, self).__init__()
@@ -140,10 +145,7 @@ class RoleChangeWindow(RoleChangeMeta):
             showBuyGoldForCrew(changeRoleCost)
             return
         result = yield TankmanChangeRole(self.__tankman, role, int(vehicleId)).request()
-        if result.userMsg:
-            SystemMessages.pushMessage(result.userMsg, type=result.sysMsgType)
-        if result.auxData:
-            SystemMessages.pushMessage(result.auxData.userMsg, type=result.auxData.sysMsgType)
+        SystemMessages.pushMessages(result)
         if result.success:
             self.onWindowClose()
 
@@ -190,9 +192,18 @@ class RoleChangeWindow(RoleChangeMeta):
         return
 
     def __setCommonData(self):
-        self.as_setCommonDataS({'tankmanModel': _getTankmanVO(self.__tankman),
+        commonData = {'tankmanModel': _getTankmanVO(self.__tankman),
          'role': self.__tankman.descriptor.role,
-         'vehicles': self.__getVehiclesData(self.__tankman.nationID, self.__nativeVehicleCD)})
+         'vehicles': self.__getVehiclesData(self.__tankman.nationID, self.__nativeVehicleCD)}
+        self.__updateIconForCrewSkin(commonData)
+        self.as_setCommonDataS(commonData)
+
+    def __updateIconForCrewSkin(self, commonData):
+        skinID = self.__tankman.skinID
+        if skinID != NO_CREW_SKIN_ID and self.lobbyContext.getServerSettings().isCrewSkinsEnabled():
+            skinItem = self.itemsCache.items.getCrewSkin(skinID)
+            commonData['tankmanModel']['faceIcon'] = getCrewSkinIconBig(skinItem.getIconID())
+            commonData['tankmanModel']['name'] = localizedFullName(skinItem)
 
     def __getVehiclesData(self, nationID, nativeVehicleCD):
         items = []

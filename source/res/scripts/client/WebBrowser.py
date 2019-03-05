@@ -12,6 +12,7 @@ from Event import Event, EventManager
 from debug_utils import LOG_CURRENT_EXCEPTION
 from gui import GUI_SETTINGS
 from web.cache.web_cache import WebExternalCache
+from gui.app_loader import g_appLoader
 _logger = logging.getLogger(__name__)
 _BROWSER_KEY_LOGGING = False
 _WOT_CLIENT_PARAM_NAME = 'wot_client_param'
@@ -348,6 +349,9 @@ class WebBrowser(object):
          e.isAltDown(),
          e.isShiftDown(),
          e.isCtrlDown())
+        toolTipMgr = g_appLoader.getApp().getToolTipMgr()
+        if toolTipMgr and toolTipMgr.isReadyToHandleKey(event):
+            return False
         if self.__ignoreAltKey and e.key in (Keys.KEY_LALT, Keys.KEY_RALT):
             return False
         if not (self.hasBrowser and self.enableUpdate):
@@ -485,7 +489,8 @@ class WebBrowser(object):
         if url == self.__browser.url:
             self.__isNavigationComplete = True
             self.__successfulLoad = isLoaded
-            _logger.debug('onLoadEnd %s - %r - %r', self.__browser.url, isLoaded, httpStatusCode)
+            if not isLoaded or httpStatusCode and httpStatusCode >= 400:
+                _logger.error('FAILED %s Code: %r', self.__browser.url, httpStatusCode)
             self.onLoadEnd(self.__browser.url, isLoaded, httpStatusCode)
 
     def __onLoadingStateChange(self, isLoading):
@@ -627,11 +632,10 @@ class EventListener(object):
     def onResourceLoadError(self, method, url):
         _logger.warn('failed %s %s', method, url)
 
-    def onWhitelistMiss(self, isMainFrame, failedURL):
-        _logger.error('Unable to load resource: %s. Main frame: %r', failedURL, isMainFrame)
+    def onWhitelistMiss(self, isMainFrame, failedURL, httpStatusCode=None):
         if isMainFrame:
             self.onLoadStart(failedURL)
-            self.onLoadEnd(failedURL, False)
+            self.onLoadEnd(failedURL, False, httpStatusCode)
 
     def onShowCreatedWebView(self, url, isPopup):
         _logger.debug('onShowCreatedWebView %s %r', url, isPopup)

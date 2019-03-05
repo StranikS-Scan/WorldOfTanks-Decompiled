@@ -10,11 +10,14 @@ class TutorialManagerMeta(BaseDAAPIComponent):
     def onComponentDisposed(self, componentId):
         self._printOverrideError('onComponentDisposed')
 
-    def onTriggerActivated(self, componentId, triggerId):
+    def onTriggerActivated(self, componentId, triggerId, state):
         self._printOverrideError('onTriggerActivated')
 
     def onEffectCompleted(self, componentId, effectType):
         self._printOverrideError('onEffectCompleted')
+
+    def onUbTrackedVarChanged(self, viewTutorialId, botNetID, varName, value):
+        self._printOverrideError('onUbTrackedVarChanged')
 
     def as_setSystemEnabledS(self, value):
         return self.flashObject.as_setSystemEnabled(value) if self._isDAAPIInited() else None
@@ -36,3 +39,12 @@ class TutorialManagerMeta(BaseDAAPIComponent):
 
     def as_setComponentViewCriteriaS(self, componentId, viewTutorialId):
         return self.flashObject.as_setComponentViewCriteria(componentId, viewTutorialId) if self._isDAAPIInited() else None
+
+    def as_getComponentGlobalBoundsS(self, viewTutorialId, componentID):
+        return self.flashObject.as_getComponentGlobalBounds(viewTutorialId, componentID) if self._isDAAPIInited() else None
+
+    def as_getComponentPathS(self, viewTutorialId, botNetID):
+        return self.flashObject.as_getComponentPath(viewTutorialId, botNetID) if self._isDAAPIInited() else None
+
+    def as_setConditionsS(self, conditions):
+        return self.flashObject.as_setConditions(conditions) if self._isDAAPIInited() else None

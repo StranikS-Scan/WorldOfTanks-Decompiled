@@ -51,6 +51,7 @@ class WgcMode(BaseMode):
 
     def changeAccount(self):
         if self.__wgcStoredUserSelected:
+            self._loginManager.stopWgc()
             message = _ms('#menu:login/status/WGC_LOGOUT', userName=self.login)
             self.__stop()
             self._view.as_setLoginWarningS(message)

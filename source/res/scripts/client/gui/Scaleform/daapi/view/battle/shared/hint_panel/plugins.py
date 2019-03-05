@@ -4,7 +4,7 @@ from collections import namedtuple
 from datetime import datetime
 import CommandMapping
 from account_helpers import AccountSettings
-from account_helpers.AccountSettings import TRAJECTORY_VIEW_HINT_SECTION, QUEST_PROGRESS_HINT_SECTION, HELP_SCREEN_HINT_SECTION, SIEGE_HINT_SECTION, WHEELED_MODE_HINT_SECTION, HINTS_LEFT, NUM_BATTLES, LAST_DISPLAY_DAY
+from account_helpers.AccountSettings import TRAJECTORY_VIEW_HINT_SECTION, PRE_BATTLE_HINT_SECTION, QUEST_PROGRESS_HINT_SECTION, HELP_SCREEN_HINT_SECTION, SIEGE_HINT_SECTION, WHEELED_MODE_HINT_SECTION, HINTS_LEFT, NUM_BATTLES, LAST_DISPLAY_DAY
 from constants import VEHICLE_SIEGE_STATE as _SIEGE_STATE, ARENA_PERIOD
 from debug_utils import LOG_DEBUG
 from gui import GUI_SETTINGS
@@ -18,6 +18,7 @@ from helpers import i18n, dependency, time_utils
 from helpers.CallbackDelayer import CallbackDelayer
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.battle_session import IBattleSessionProvider
+from items import makeIntCompactDescrByID
 HintData = namedtuple('HintData', ['key',
  'messageLeft',
  'messageRight',
@@ -59,6 +60,7 @@ class HintPanelPlugin(IPlugin):
         settings[LAST_DISPLAY_DAY] = datetime.now().timetuple().tm_yday
         settings[NUM_BATTLES] = 0
         settings[HINTS_LEFT] = max(0, settings[HINTS_LEFT] - 1)
+        return settings
 
     @staticmethod
     def _updateCounterOnStart(setting, dayCoolDown, battleCoolDown):
@@ -400,15 +402,18 @@ class PreBattleHintPlugin(HintPanelPlugin):
         self.__isActive = False
         self.__hintInQueue = None
         self.__callbackDelayer = CallbackDelayer()
-        self.__settings = []
+        self.__questHintSettings = {}
+        self.__helpHintSettings = {}
         self.__isInDisplayPeriod = False
         self.__haveReqLevel = False
+        self.__vehicleId = None
         return
 
     def start(self):
-        self.__settings = [dict(AccountSettings.getSettings(HELP_SCREEN_HINT_SECTION)), dict(AccountSettings.getSettings(QUEST_PROGRESS_HINT_SECTION))]
-        HintPanelPlugin._updateCounterOnStart(self.__settings[PRBSettings.HELP_IDX], PRBSettings.HINT_DAY_COOLDOWN, PRBSettings.HINT_BATTLES_COOLDOWN)
-        HintPanelPlugin._updateCounterOnStart(self.__settings[PRBSettings.QUEST_IDX], PRBSettings.HINT_DAY_COOLDOWN, PRBSettings.HINT_BATTLES_COOLDOWN)
+        prbSettings = dict(AccountSettings.getSettings(PRE_BATTLE_HINT_SECTION))
+        self.__questHintSettings = prbSettings[QUEST_PROGRESS_HINT_SECTION]
+        self.__helpHintSettings = prbSettings[HELP_SCREEN_HINT_SECTION]
+        HintPanelPlugin._updateCounterOnStart(self.__questHintSettings, PRBSettings.HINT_DAY_COOLDOWN, PRBSettings.HINT_BATTLES_COOLDOWN)
         self.__isActive = True
         g_eventBus.addListener(GameEvent.SHOW_BTN_HINT, self.__handleShowBtnHint, scope=EVENT_BUS_SCOPE.GLOBAL)
         g_eventBus.addListener(GameEvent.HELP_DETAILED, self.__handlePressHelpBtn, scope=EVENT_BUS_SCOPE.BATTLE)
@@ -430,8 +435,10 @@ class PreBattleHintPlugin(HintPanelPlugin):
                 vStateCtrl.onVehicleControlling -= self.__onVehicleControlling
             self.__callbackDelayer.destroy()
             self.__isActive = False
-            AccountSettings.setSettings(HELP_SCREEN_HINT_SECTION, self.__settings[PRBSettings.HELP_IDX])
-            AccountSettings.setSettings(QUEST_PROGRESS_HINT_SECTION, self.__settings[PRBSettings.QUEST_IDX])
+            prbHintSettings = {}
+            prbHintSettings[QUEST_PROGRESS_HINT_SECTION] = self.__questHintSettings
+            prbHintSettings[HELP_SCREEN_HINT_SECTION] = self.__helpHintSettings
+            AccountSettings.setSettings(PRE_BATTLE_HINT_SECTION, prbHintSettings)
             return
 
     def isActive(self):
@@ -440,8 +447,7 @@ class PreBattleHintPlugin(HintPanelPlugin):
     def setPeriod(self, period):
         self.__isInDisplayPeriod = period in (ARENA_PERIOD.PREBATTLE, ARENA_PERIOD.WAITING)
         if period is ARENA_PERIOD.BATTLE:
-            self._updateCounterOnBattle(self.__settings[PRBSettings.HELP_IDX])
-            self._updateCounterOnBattle(self.__settings[PRBSettings.QUEST_IDX])
+            self._updateCounterOnBattle(self.__questHintSettings)
 
     def updateMapping(self):
         if self.__hintInQueue is not None:
@@ -470,7 +476,11 @@ class PreBattleHintPlugin(HintPanelPlugin):
             return
         else:
             vTypeDesc = vehicle.typeDescriptor
+            vehicleType = vTypeDesc.type.id
+            self.__vehicleId = makeIntCompactDescrByID('vehicle', vehicleType[0], vehicleType[1])
             self.__haveReqLevel = vTypeDesc.level >= _HINT_MIN_VEHICLE_LEVEL
+            if vTypeDesc.isWheeledVehicle:
+                self.__updateHintCounteronStart(self.__helpHintSettings, self.__vehicleId)
             if self.__canDisplayHelpHint(vTypeDesc):
                 self.__displayHint(CommandMapping.CMD_SHOW_HELP)
                 return
@@ -483,6 +493,14 @@ class PreBattleHintPlugin(HintPanelPlugin):
                 self.__callbackDelayer.destroy()
             return
 
+    def __updateHintCounteronStart(self, setting, vehicleId):
+        if vehicleId not in setting:
+            setting[vehicleId] = {HINTS_LEFT: 1,
+             LAST_DISPLAY_DAY: 0,
+             NUM_BATTLES: 0}
+        self._updateCounterOnBattle(setting[vehicleId])
+        HintPanelPlugin._updateCounterOnStart(setting[vehicleId], PRBSettings.HINT_DAY_COOLDOWN, PRBSettings.HINT_BATTLES_COOLDOWN)
+
     def __onHintTimeOut(self):
         self._parentObj.removeBtnHint(self.__hintInQueue)
         if self.__hintInQueue is CommandMapping.CMD_SHOW_HELP:
@@ -491,10 +509,10 @@ class PreBattleHintPlugin(HintPanelPlugin):
         return
 
     def __canDisplayHelpHint(self, typeDescriptor):
-        return typeDescriptor.isWheeledVehicle and self.__isInDisplayPeriod and self._haveHintsLeft(self.__settings[PRBSettings.HELP_IDX])
+        return typeDescriptor.isWheeledVehicle and self.__isInDisplayPeriod and self._haveHintsLeft(self.__helpHintSettings[self.__vehicleId])
 
     def __canDisplayQuestHint(self):
-        return self.__isInDisplayPeriod and self._haveHintsLeft(self.__settings[PRBSettings.QUEST_IDX]) and self.__haveReqLevel
+        return self.__isInDisplayPeriod and self._haveHintsLeft(self.__questHintSettings) and self.__haveReqLevel
 
     def __onHintTimeCooldown(self):
         if self.__canDisplayQuestHint():
@@ -516,12 +534,13 @@ class PreBattleHintPlugin(HintPanelPlugin):
             self._parentObj.removeBtnHint(CommandMapping.CMD_SHOW_HELP)
             self.__hintInQueue = None
             self.__callbackDelayer.delayCallback(_HINT_COOLDOWN, self.__onHintTimeCooldown)
-        self._updateCounterOnUsed(self.__settings[PRBSettings.HELP_IDX])
+        hintStats = self.__helpHintSettings[self.__vehicleId]
+        self.__helpHintSettings[self.__vehicleId] = self._updateCounterOnUsed(hintStats)
         return
 
     def __handlePressQuestBtn(self, event):
         if self.__hintInQueue == CommandMapping.CMD_QUEST_PROGRESS_SHOW:
             self._parentObj.removeBtnHint(CommandMapping.CMD_QUEST_PROGRESS_SHOW)
             self.__hintInQueue = None
-        self._updateCounterOnUsed(self.__settings[PRBSettings.QUEST_IDX])
+        self.__questHintSettings = self._updateCounterOnUsed(self.__questHintSettings)
         return

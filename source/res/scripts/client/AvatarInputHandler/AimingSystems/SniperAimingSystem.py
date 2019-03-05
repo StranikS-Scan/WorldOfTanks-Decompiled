@@ -123,7 +123,7 @@ class SniperAimingSystem(IAimingSystem):
         self.__returningOscillator.velocity = Vector3(0.0, 0.0, 0.0)
         _, uncompensatedPitch = self.__getTurretYawGunPitch(self.getDesiredShotPoint())
         self.__pitchCompensating = mathUtils.clamp(math.radians(-2.0), math.radians(2.0), self.__idealGunPitch - uncompensatedPitch)
-        if abs(self.__pitchCompensating) < 0.01:
+        if abs(self.__pitchCompensating) < 1e-06:
             self.__pitchCompensating = 0.0
 
     def __clampToLimits(self, turretYaw, gunPitch):

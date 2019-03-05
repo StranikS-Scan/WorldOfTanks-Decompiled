@@ -272,7 +272,12 @@ class ServerSettingsManager(object):
                                          'PauseHint': 8,
                                          'HaveNewSuffixBadgeHint': 9,
                                          'BadgePageNewSuffixBadgeHint': 10,
-                                         'CustomizationAutoprolongationHint': 11}, offsets={}),
+                                         'CustomizationAutoprolongationHint': 11,
+                                         'BlueprintsSwitchButtonHint': 12,
+                                         'BlueprintsResearchButtonHint': 13,
+                                         'BlueprintsTechtreeConvertButtonHint': 14,
+                                         'BlueprintsResearchConvertButtonHint': 15,
+                                         'BlueprintScreenConvertFragmentHint': 16}, offsets={}),
      SETTINGS_SECTIONS.DAMAGE_INDICATOR: Section(masks={DAMAGE_INDICATOR.TYPE: 0,
                                           DAMAGE_INDICATOR.PRESETS: 1,
                                           DAMAGE_INDICATOR.DAMAGE_VALUE: 2,
@@ -402,6 +407,12 @@ class ServerSettingsManager(object):
         storageSection = self.getSection(SETTINGS_SECTIONS.UI_STORAGE)
         if key in storageSection:
             self.saveInUIStorage({key: storageSection[key] + step})
+
+    def setDisableAnimTooltipFlag(self):
+        self.saveInUIStorage({UI_STORAGE_KEYS.DISABLE_ANIMATED_TOOLTIP: 1})
+
+    def getDisableAnimTooltipFlag(self):
+        return self.getUIStorage().get(UI_STORAGE_KEYS.DISABLE_ANIMATED_TOOLTIP) == 1
 
     def getHasNewEncyclopediaRecommendations(self):
         return self.getSectionSettings(SETTINGS_SECTIONS.ENCYCLOPEDIA_RECOMMENDATIONS_1, 'hasNew')

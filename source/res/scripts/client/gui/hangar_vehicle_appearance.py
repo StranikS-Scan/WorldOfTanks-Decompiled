@@ -548,7 +548,7 @@ class HangarVehicleAppearance(ComponentSystem):
                     if not checkDecalsAgainstGun:
                         anchorParams = self.__slotPositions[anchor.areaId][slotType].get(index)
                         turretYaw = anchorParams.turretYaw if anchorParams is not None else None
-                    elif slotType == GUI_ITEM_TYPE.PROJECTION_DECAL and anchor.showOn & ApplyArea.HULL:
+                    elif slotType == GUI_ITEM_TYPE.PROJECTION_DECAL and anchor.showOn & ApplyArea.HULL and anchor.areaId not in (Area.TURRET, Area.GUN):
                         deculUp = worldNormal * (Math.Vector3(0, 1, 0) * worldNormal)
                         turretYaw = self.__correctTurretYaw(worldPos, -worldNormal, deculUp, anchor.descriptor)
                     else:

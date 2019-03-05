@@ -15,6 +15,7 @@ import BigWorld
 from debug_utils import LOG_WARNING, LOG_ERROR, LOG_CURRENT_EXCEPTION, LOG_DEBUG
 from helpers import getFullClientVersion
 from soft_exception import SoftException
+INFINITE_QUEUE_SIZE = 0
 _MIN_LIFE_TIME = 900
 _MAX_LIFE_TIME = 86400
 _LIFE_TIME_IN_MEMORY = 1200
@@ -152,7 +153,7 @@ class CFC_OP_TYPE(object):
 
 class WorkerThread(threading.Thread):
 
-    def __init__(self, queueLimit=60):
+    def __init__(self, queueLimit=INFINITE_QUEUE_SIZE):
         super(WorkerThread, self).__init__()
         self.input_queue = Queue(queueLimit)
         self.__terminate = False
@@ -197,11 +198,11 @@ class WorkerThread(threading.Thread):
 
 class ThreadPool(object):
 
-    def __init__(self, workersLimit=8, queueLimit=60):
+    def __init__(self, workersLimit=8):
         num = max(2, workersLimit)
         self.__workers = []
         for _ in range(num):
-            self.__workers.append(WorkerThread(queueLimit))
+            self.__workers.append(WorkerThread())
 
     def start(self):
         for w in self.__workers:

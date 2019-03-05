@@ -12,7 +12,7 @@ from account_helpers.AccountSettings import CURRENT_VEHICLE, AccountSettings
 from account_helpers.settings_core.settings_constants import BATTLE_EVENTS
 from account_helpers.settings_core.ServerSettingsManager import SETTINGS_SECTIONS
 from account_helpers.settings_core import ISettingsCore
-from gui.Scaleform.daapi.view.common.settings.new_settings_counter import dropCounters as dropNewSettingsCounters
+from account_helpers.counter_settings import dropCounters as dropNewSettingsCounters
 from adisp import process, async
 from debug_utils_bootcamp import LOG_DEBUG_DEV_BOOTCAMP
 from PlayerEvents import g_playerEvents

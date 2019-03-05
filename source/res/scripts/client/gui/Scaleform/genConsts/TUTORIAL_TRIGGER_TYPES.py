@@ -8,3 +8,5 @@ class TUTORIAL_TRIGGER_TYPES(object):
     ESCAPE = 'escape'
     ENABLED = 'enabled'
     DISABLED = 'disabled'
+    ENABLED_CHANGE = 'enabled_change'
+    VISIBLE_CHANGE = 'visible_change'

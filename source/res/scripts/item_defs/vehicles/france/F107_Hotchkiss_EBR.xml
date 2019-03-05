@@ -98,10 +98,16 @@
         <hideIfDamaged>	true	</hideIfDamaged>
         <isUVProportional>	true	</isUVProportional>
       </slot>
+      <slot>
+        <slotType>	paint	</slotType>
+        <slotId>	2	</slotId>
+        <anchorPosition>	0.000000 0.255983 1.58937	</anchorPosition>
+        <anchorDirection>	0.000000 0.159011 0.987277	</anchorDirection>
+      </slot>
     </customizationSlots>
     <customization>
       <customizableVehicleAreas>
-        <paint></paint>
+        <paint>	HULL	</paint>
         <camouflage>	HULL	</camouflage>
       </customizableVehicleAreas>
     </customization>
@@ -152,9 +158,9 @@
       <AODecals>
         <decal>
           <transform>
-            <row0>	2.830480 0.000000 0.000000	</row0>
+            <row0>	3.654020 0.000000 0.000000	</row0>
             <row1>	0.000000 1.342020 0.000000	</row1>
-            <row2>	0.000000 0.000000 3.952850	</row2>
+            <row2>	0.000000 0.000000 7.295120	</row2>
             <row3>	0.000000 0.000000 0.000000	</row3>
           </transform>
         </decal>
@@ -422,7 +428,7 @@
       </groundNodes>
       <customization>
         <customizableVehicleAreas>
-          <paint></paint>
+          <paint>	CHASSIS	</paint>
           <camouflage></camouflage>
         </customizableVehicleAreas>
       </customization>
@@ -432,6 +438,12 @@
           <slotId>	257	</slotId>
           <anchorPosition>	0.000069 2.33969 -0.97536	</anchorPosition>
           <anchorDirection>	0.000000 1 0.000000	</anchorDirection>
+        </slot>
+        <slot>
+          <slotType>	paint	</slotType>
+          <slotId>	256	</slotId>
+          <anchorPosition>	-1.28724 0.645635 0.00228655	</anchorPosition>
+          <anchorDirection>	-0.893865 0.448333 0.0015878	</anchorDirection>
         </slot>
       </customizationSlots>
     </Chassis_F107_Hotchkiss_EBR>
@@ -472,9 +484,9 @@
       <AODecals>
         <decal>
           <transform>
-            <row0>	2.830480 0.000000 0.000000	</row0>
+            <row0>	3.654020 0.000000 0.000000	</row0>
             <row1>	0.000000 1.342020 0.000000	</row1>
-            <row2>	0.000000 0.000000 3.952850	</row2>
+            <row2>	0.000000 0.000000 7.295120	</row2>
             <row3>	0.000000 0.000000 0.000000	</row3>
           </transform>
         </decal>
@@ -742,7 +754,7 @@
       </groundNodes>
       <customization>
         <customizableVehicleAreas>
-          <paint></paint>
+          <paint>	CHASSIS	</paint>
           <camouflage></camouflage>
         </customizableVehicleAreas>
       </customization>
@@ -752,6 +764,12 @@
           <slotId>	257	</slotId>
           <anchorPosition>	0.000183228 2.33968 -0.975397	</anchorPosition>
           <anchorDirection>	0.000000 1 -0.000000	</anchorDirection>
+        </slot>
+        <slot>
+          <slotType>	paint	</slotType>
+          <slotId>	256	</slotId>
+          <anchorPosition>	-1.28724 0.645635 0.00228655	</anchorPosition>
+          <anchorDirection>	-0.893865 0.448333 0.0015878	</anchorDirection>
         </slot>
       </customizationSlots>
     </Chassis_F107_Hotchkiss_EBR_2>
@@ -843,10 +861,24 @@
               <hideIfDamaged>	false	</hideIfDamaged>
               <isUVProportional>	true	</isUVProportional>
             </slot>
+            <slot>
+              <slotType>	paint	</slotType>
+              <slotId>	768	</slotId>
+              <anchorPosition>	-0.00104447 0.00107217 1.24994	</anchorPosition>
+              <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+            <slot>
+              <slotType>	paint	</slotType>
+              <slotId>	769	</slotId>
+              <anchorPosition>	0.000000 0.174792 0.174792	</anchorPosition>
+              <anchorDirection>	0.000000 0.707107 0.707107	</anchorDirection>
+              <applyTo>	16384	</applyTo>
+            </slot>
           </customizationSlots>
           <customization>
             <customizableVehicleAreas>
-              <paint></paint>
+              <paint>	GUN GUN_2	</paint>
               <camouflage>	GUN	</camouflage>
             </customizableVehicleAreas>
           </customization>
@@ -907,10 +939,24 @@
               <hideIfDamaged>	false	</hideIfDamaged>
               <isUVProportional>	true	</isUVProportional>
             </slot>
+            <slot>
+              <slotType>	paint	</slotType>
+              <slotId>	768	</slotId>
+              <anchorPosition>	0.000055 0.0014552 2.09926	</anchorPosition>
+              <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+            <slot>
+              <slotType>	paint	</slotType>
+              <slotId>	769	</slotId>
+              <anchorPosition>	0.000000 0.174792 0.174792	</anchorPosition>
+              <anchorDirection>	0.000000 0.707107 0.707107	</anchorDirection>
+              <applyTo>	16384	</applyTo>
+            </slot>
           </customizationSlots>
           <customization>
             <customizableVehicleAreas>
-              <paint></paint>
+              <paint>	GUN GUN_2	</paint>
               <camouflage>	GUN	</camouflage>
             </customizableVehicleAreas>
           </customization>
@@ -967,10 +1013,24 @@
               <hideIfDamaged>	false	</hideIfDamaged>
               <isUVProportional>	true	</isUVProportional>
             </slot>
+            <slot>
+              <slotType>	paint	</slotType>
+              <slotId>	768	</slotId>
+              <anchorPosition>	0.000055 0.00106533 2.0981	</anchorPosition>
+              <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+            <slot>
+              <slotType>	paint	</slotType>
+              <slotId>	769	</slotId>
+              <anchorPosition>	0.000000 0.174792 0.174792	</anchorPosition>
+              <anchorDirection>	0.000000 0.707107 0.707107	</anchorDirection>
+              <applyTo>	16384	</applyTo>
+            </slot>
           </customizationSlots>
           <customization>
             <customizableVehicleAreas>
-              <paint></paint>
+              <paint>	GUN GUN_2	</paint>
               <camouflage>	GUN	</camouflage>
             </customizableVehicleAreas>
           </customization>
@@ -1026,10 +1086,16 @@
           <hideIfDamaged>	false	</hideIfDamaged>
           <isUVProportional>	true	</isUVProportional>
         </slot>
+        <slot>
+          <slotType>	paint	</slotType>
+          <slotId>	512	</slotId>
+          <anchorPosition>	0.000000 0.723236 0.000000	</anchorPosition>
+          <anchorDirection>	0.000000 1 0.000000	</anchorDirection>
+        </slot>
       </customizationSlots>
       <customization>
         <customizableVehicleAreas>
-          <paint></paint>
+          <paint>	TURRET	</paint>
           <camouflage>	TURRET	</camouflage>
         </customizableVehicleAreas>
       </customization>

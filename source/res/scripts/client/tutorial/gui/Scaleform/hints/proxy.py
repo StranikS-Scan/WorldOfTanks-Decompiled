@@ -5,7 +5,7 @@ import Event
 from gui.Scaleform.genConsts.TUTORIAL_TRIGGER_TYPES import TUTORIAL_TRIGGER_TYPES
 from gui.shared import g_eventBus, events
 from gui.shared.event_bus import EVENT_BUS_SCOPE
-from tutorial.data.events import ClickEvent
+from tutorial.data.events import ClickEvent, EnabledChangeEvent, VisibleChangeEvent
 from tutorial.doc_loader.sub_parsers import ACTION_TAGS
 from tutorial.gui import GUI_EFFECT_NAME
 from tutorial.gui.Scaleform import effects_player
@@ -21,6 +21,8 @@ class HintsProxy(SfLobbyProxy):
         self.onHintClicked = Event.Event(self.__eManager)
         self.onHintItemFound = Event.Event(self.__eManager)
         self.onHintItemLost = Event.Event(self.__eManager)
+        self.onVisibleChanged = Event.Event(self.__eManager)
+        self.onEnabledChanged = Event.Event(self.__eManager)
 
     def init(self):
         addListener = g_eventBus.addListener
@@ -44,8 +46,9 @@ class HintsProxy(SfLobbyProxy):
         removeListener(events.TutorialEvent.ON_COMPONENT_LOST, self.__onItemLost, scope=EVENT_BUS_SCOPE.GLOBAL)
         removeListener(events.TutorialEvent.ON_TRIGGER_ACTIVATED, self.__onTriggerActivated, scope=EVENT_BUS_SCOPE.GLOBAL)
 
-    def showHint(self, props):
-        self.playEffect(GUI_EFFECT_NAME.SHOW_HINT, (props, (ACTION_TAGS['click'], ACTION_TAGS['click-outside'])))
+    def showHint(self, props, ignoreOutsideClick=False):
+        actionType = (ACTION_TAGS['click'],) if ignoreOutsideClick else (ACTION_TAGS['click'], ACTION_TAGS['click-outside'])
+        self.playEffect(GUI_EFFECT_NAME.SHOW_HINT, (props, actionType))
 
     def hideHint(self, hintID):
         self.stopEffect(GUI_EFFECT_NAME.SHOW_HINT, hintID)
@@ -63,3 +66,7 @@ class HintsProxy(SfLobbyProxy):
             self.onHintClicked(ClickEvent(event.targetID))
         elif event.settingsID == TUTORIAL_TRIGGER_TYPES.CLICK_OUTSIDE_TYPE and event.targetID:
             self.onHintItemLost(event.targetID)
+        elif event.settingsID == TUTORIAL_TRIGGER_TYPES.ENABLED_CHANGE and event.targetID:
+            self.onEnabledChanged(EnabledChangeEvent(event.targetID, event.componentState))
+        elif event.settingsID == TUTORIAL_TRIGGER_TYPES.VISIBLE_CHANGE and event.targetID:
+            self.onVisibleChanged(VisibleChangeEvent(event.targetID, event.componentState))

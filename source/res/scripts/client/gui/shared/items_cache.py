@@ -16,6 +16,7 @@ from gui.shared.utils.requesters import TokensRequester
 from gui.shared.utils.requesters.badges_requester import BadgesRequester
 from gui.shared.utils.requesters.RankedRequester import RankedRequester
 from gui.shared.utils.requesters.EpicMetaGameRequester import EpicMetaGameRequester
+from gui.shared.utils.requesters.blueprints_requester import BlueprintsRequester
 from helpers import dependency
 from skeletons.festivity_factory import IFestivityFactory
 from skeletons.gui.shared import IItemsCache
@@ -30,7 +31,7 @@ class ItemsCache(IItemsCache):
     def __init__(self):
         super(ItemsCache, self).__init__()
         goodies = GoodiesRequester()
-        self.__items = ItemsRequester.ItemsRequester(InventoryRequester(), StatsRequester(), DossierRequester(), goodies, ShopRequester(goodies), RecycleBinRequester(), VehicleRotationRequester(), RankedRequester(), BadgesRequester(), EpicMetaGameRequester(), TokensRequester(), dependency.instance(IFestivityFactory).getRequester())
+        self.__items = ItemsRequester.ItemsRequester(InventoryRequester(), StatsRequester(), DossierRequester(), goodies, ShopRequester(goodies), RecycleBinRequester(), VehicleRotationRequester(), RankedRequester(), BadgesRequester(), EpicMetaGameRequester(), TokensRequester(), dependency.instance(IFestivityFactory).getRequester(), BlueprintsRequester())
         self.__waitForSync = False
         self.__syncFailed = False
         self.onSyncStarted = Event()
@@ -121,6 +122,7 @@ class ItemsCache(IItemsCache):
                     invalidItems = {}
                 if updateReason == CACHE_SYNC_REASON.SHOW_GUI:
                     self.__items.inventory.updateC11nItemsAppliedCounts()
+                    self.__items.inventory.updateC11nItemsNoveltyData()
                 if notify:
                     self.onSyncCompleted(updateReason, invalidItems)
             callback(*args)

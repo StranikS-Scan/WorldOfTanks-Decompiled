@@ -9,14 +9,17 @@ from gui.shared.items_parameters import formatters
 from gui.shared.utils import AUTO_RELOAD_PROP_NAME
 from helpers import i18n, dependency
 from items import tankmen
+from items.components.crewSkins_constants import NO_CREW_SKIN_ID
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.game_control import IVehicleComparisonBasket
 from skeletons.gui.shared import IItemsCache
+from skeletons.gui.lobby_context import ILobbyContext
 
 class VehicleInfoWindow(VehicleInfoMeta):
     _itemsCache = dependency.descriptor(IItemsCache)
     _comparisonBasket = dependency.descriptor(IVehicleComparisonBasket)
     _settingsCore = dependency.descriptor(ISettingsCore)
+    _lobbyContext = dependency.instance(ILobbyContext)
 
     def __init__(self, ctx=None):
         super(VehicleInfoWindow, self).__init__()
@@ -42,7 +45,11 @@ class VehicleInfoWindow(VehicleInfoMeta):
                 role = vehicle.descriptor.type.crewRoles[slotIdx][0]
                 tankmanLabel = ''
                 if tankman is not None:
-                    tankmanLabel = '%s %s (%d%%)' % (tankman.rankUserName, tankman.lastUserName, tankman.roleLevel)
+                    lastUserName = tankman.lastUserName
+                    if tankman.skinID != NO_CREW_SKIN_ID and self._lobbyContext.getServerSettings().isCrewSkinsEnabled():
+                        skinItem = self._itemsCache.items.getCrewSkin(tankman.skinID)
+                        lastUserName = i18n.makeString(skinItem.getLastName())
+                    tankmanLabel = '%s %s (%d%%)' % (tankman.rankUserName, lastUserName, tankman.roleLevel)
                 tankmenParams.append({'tankmanType': i18n.convert(skillsConfig.getSkill(role).userString),
                  'value': tankmanLabel})
 

@@ -8,7 +8,9 @@ from gui.shared.utils.functions import getShortDescr
 from gui.shared.gui_items import ItemsCollection, GUI_ITEM_TYPE
 from gui.shared.gui_items.gui_item import HasStrCD, GUIItem
 from items.components import skills_constants
+from constants import SkinInvData
 from items.vehicles import VEHICLE_CLASS_TAGS
+from items.components.crewSkins_constants import NO_CREW_SKIN_ID
 
 class CrewTypes(object):
     SKILL_100 = 100
@@ -64,7 +66,7 @@ class TankmenComparator(object):
 
 
 class Tankman(GUIItem, HasStrCD):
-    __slots__ = ('__descriptor', '_invID', '_nationID', '_itemTypeID', '_itemTypeName', '_combinedRoles', '_dismissedAt', '_isDismissed', '_areClassesCompatible', '_vehicleNativeDescr', '_vehicleInvID', '_vehicleDescr', '_vehicleBonuses', '_vehicleSlotIdx', '_skills', '_skillsMap')
+    __slots__ = ('__descriptor', '_invID', '_nationID', '_itemTypeID', '_itemTypeName', '_combinedRoles', '_dismissedAt', '_isDismissed', '_areClassesCompatible', '_vehicleNativeDescr', '_vehicleInvID', '_vehicleDescr', '_vehicleBonuses', '_vehicleSlotIdx', '_skills', '_skillsMap', '_skinID')
 
     class ROLES(object):
         COMMANDER = 'commander'
@@ -108,6 +110,7 @@ class Tankman(GUIItem, HasStrCD):
             self._areClassesCompatible = bool(VEHICLE_CLASS_TAGS & self.vehicleDescr.type.tags & self.vehicleNativeDescr.type.tags)
         self._skills = self._buildSkills(proxy)
         self._skillsMap = self._buildSkillsMap()
+        self._skinID = self._equippedSkinID(proxy)
         self.__cmp__ = TankmenComparator()
         return
 
@@ -116,6 +119,14 @@ class Tankman(GUIItem, HasStrCD):
 
     def _buildSkillsMap(self):
         return dict([ (skill.name, skill) for skill in self.skills ])
+
+    def _equippedSkinID(self, proxy):
+        if proxy is not None and proxy.inventory.isSynced():
+            skinsPdata = proxy.inventory.getCacheValue(GUI_ITEM_TYPE.CREW_SKINS, {})
+            tankmanSkins = skinsPdata[SkinInvData.OUTFITS]
+            return tankmanSkins.get(self._invID, NO_CREW_SKIN_ID)
+        else:
+            return NO_CREW_SKIN_ID
 
     @property
     def invID(self):
@@ -176,6 +187,10 @@ class Tankman(GUIItem, HasStrCD):
     @property
     def skillsMap(self):
         return self._skillsMap
+
+    @property
+    def skinID(self):
+        return self._skinID
 
     @property
     def realRoleLevel(self):
@@ -547,7 +562,10 @@ def getFullUserName(nationID, firstNameID, lastNameID):
 
 
 def getRoleUserName(role):
-    return i18n.convert(tankmen.getSkillsConfig().getSkill(role).userString)
+    skillConf = tankmen.getSkillsConfig()
+    skill = skillConf.getSkill(role)
+    userString = skill.userString
+    return i18n.convert(userString)
 
 
 def getRoleIconName(role):
@@ -616,6 +634,26 @@ def getSkillSmallIconPath(skillName):
 
 def getSkillIconPath(skillName, size='big'):
     return '../maps/icons/tankmen/skills/{}/{}.png'.format(size, skillName)
+
+
+def getCrewSkinIconBig(iconID):
+    return '../maps/icons/tankmen/icons/big/crewSkins/%s' % iconID
+
+
+def getCrewSkinNationPath(nationID):
+    return '../maps/icons/tankmen/crewSkins/nations/{}.png'.format(nationID) if nationID is not None else ''
+
+
+def getCrewSkinRolePath(roleID):
+    return '../maps/icons/tankmen/roles/big/crewSkins/{}.png'.format(roleID) if roleID is not None else ''
+
+
+def getCrewSkinIconSmall(iconID):
+    return '../maps/icons/tankmen/icons/small/crewSkins/%s' % iconID
+
+
+def getCrewSkinIconSmallWithoutPath(iconID):
+    return 'crewSkins/%s' % iconID
 
 
 def getSkillUserName(skillName):

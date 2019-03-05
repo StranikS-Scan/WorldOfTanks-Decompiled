@@ -1,7 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/vehicle_compare/formatters.py
-from gui.Scaleform import MENU
-from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.Scaleform.locale.VEH_COMPARE import VEH_COMPARE
 from gui.game_control.veh_comparison_basket import isValidVehicleForComparing
 from helpers import dependency
@@ -26,15 +24,6 @@ def getTreeNodeCompareData(vehicle):
     comparisonBasket = dependency.instance(IVehicleComparisonBasket)
     return {'modeAvailable': comparisonBasket.isEnabled(),
      'cmpBasketFull': not comparisonBasket.isReadyToAdd(vehicle)}
-
-
-def getBtnCompareData(vehicle):
-    comparisonBasket = dependency.instance(IVehicleComparisonBasket)
-    state, tooltip = resolveStateTooltip(comparisonBasket, vehicle, enabledTooltip=TOOLTIPS.RESEARCHPAGE_VEHICLE_BUTTON_COMPARE_ADD, fullTooltip=TOOLTIPS.RESEARCHPAGE_VEHICLE_BUTTON_COMPARE_DISABLED)
-    return {'modeAvailable': comparisonBasket.isEnabled(),
-     'btnLabel': MENU.RESEARCH_LABELS_BUTTON_ADDTOCOMPARE,
-     'btnEnabled': state,
-     'btnTooltip': tooltip}
 
 
 def resolveStateTooltip(comparisonBasket, vehicle, enabledTooltip, fullTooltip, invalidTooltip=VEH_COMPARE.VEHPREVIEW_COMPAREVEHICLEBTN_TOOLTIPS_CANNOTADDTOCOMPARE, miniclientTooltip=VEH_COMPARE.COMPAREVEHICLEBTN_TOOLTIPS_MINICLIENT):

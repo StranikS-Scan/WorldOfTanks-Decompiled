@@ -13,7 +13,7 @@ class CustomizationMainViewMeta(View):
     def fadeOutAnchors(self, value):
         self._printOverrideError('fadeOutAnchors')
 
-    def changeSeason(self, season):
+    def changeSeason(self, season, keepSelect):
         self._printOverrideError('changeSeason')
 
     def itemContextMenuDisplayed(self):
@@ -24,6 +24,9 @@ class CustomizationMainViewMeta(View):
 
     def onSelectAnchor(self, areaID, slotID, regionID):
         self._printOverrideError('onSelectAnchor')
+
+    def onLockedAnchor(self):
+        self._printOverrideError('onLockedAnchor')
 
     def onReleaseItem(self):
         self._printOverrideError('onReleaseItem')
@@ -45,6 +48,12 @@ class CustomizationMainViewMeta(View):
 
     def playCustomSound(self, sound):
         self._printOverrideError('playCustomSound')
+
+    def onRemoveSelectedItem(self):
+        self._printOverrideError('onRemoveSelectedItem')
+
+    def resetC11nItemsNovelty(self, itemsList):
+        self._printOverrideError('resetC11nItemsNovelty')
 
     def as_hideS(self, value):
         return self.flashObject.as_hide(value) if self._isDAAPIInited() else None
@@ -81,3 +90,9 @@ class CustomizationMainViewMeta(View):
 
     def as_showCarouselsArrowsNotificationS(self, text):
         return self.flashObject.as_showCarouselsArrowsNotification(text) if self._isDAAPIInited() else None
+
+    def as_reselectS(self, intCd):
+        return self.flashObject.as_reselect(intCd) if self._isDAAPIInited() else None
+
+    def as_setNotificationCountersS(self, counters):
+        return self.flashObject.as_setNotificationCounters(counters) if self._isDAAPIInited() else None

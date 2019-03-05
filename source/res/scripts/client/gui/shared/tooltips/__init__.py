@@ -1,16 +1,17 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/tooltips/__init__.py
-import weakref
 import sys
-from helpers import dependency
-from shared_utils import CONST_CONTAINER
+import weakref
 from debug_utils import LOG_CURRENT_EXCEPTION
+from gui.Scaleform.daapi.view.lobby.techtree.settings import UNKNOWN_VEHICLE_LEVEL, UnlockProps
 from gui.Scaleform.daapi.view.lobby.techtree.techtree_dp import g_techTreeDP
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.app_loader import sf_lobby
 from gui.shared.formatters import icons
+from helpers import dependency
 from helpers.i18n import makeString
 from items import vehicles
+from shared_utils import CONST_CONTAINER
 from skeletons.gui.shared import IItemsCache
 
 class TOOLTIP_TYPE(CONST_CONTAINER):
@@ -18,6 +19,7 @@ class TOOLTIP_TYPE(CONST_CONTAINER):
     TANKMAN = 'tankman'
     NOT_RECRUITED_TANKMAN = 'notRecruitedTankman'
     SKILL = 'skill'
+    CREW_SKIN = 'crew_skin'
     ACHIEVEMENT = 'achievement'
     ACHIEVEMENT_ATTR = 'achievementAttr'
     MODULE = 'module'
@@ -52,6 +54,7 @@ class TOOLTIP_TYPE(CONST_CONTAINER):
     EPIC_SELECTOR_UNAVAILABLE_INFO = 'epicSelectorUnavailableInfo'
     EPIC_META_LEVEL_PROGRESS_INFO = 'epicMetaLevelProgressInfo'
     EPIC_PRESTIGE_PROGRESS_BLOCK_INFO = 'epicPrestigeProgressBlockInfo'
+    BLUEPRINTS = 'blueprintsInfo'
 
 
 class TOOLTIP_COMPONENT(CONST_CONTAINER):
@@ -74,8 +77,10 @@ class TOOLTIP_COMPONENT(CONST_CONTAINER):
     HANGAR_TUTORIAL = 'hangarTutorial'
     TECH_CUSTOMIZATION = 'techCustomization'
     BOOSTER = 'booster'
+    BADGE = 'badge'
     RANK = 'ranked'
     RESERVE = 'reserve'
+    BLUEPRINT = 'blueprints'
 
 
 class ACTION_TOOLTIPS_TYPE(CONST_CONTAINER):
@@ -242,31 +247,44 @@ def getComplexStatus(statusKey, **kwargs):
     return
 
 
-def getUnlockPrice(compactDescr, parentCD=None):
-    item_type_id, _, _ = vehicles.parseIntCompactDescr(compactDescr)
-    itemsCache = dependency.instance(IItemsCache)
+@dependency.replace_none_kwargs(itemsCache=IItemsCache)
+def getUnlockPrice(compactDescr, parentCD=None, vehicleLevel=UNKNOWN_VEHICLE_LEVEL, itemsCache=None):
+    itemTypeId, _, _ = vehicles.parseIntCompactDescr(compactDescr)
     freeXP = itemsCache.items.stats.actualFreeXP
     unlocks = itemsCache.items.stats.unlocks
     xpVehs = itemsCache.items.stats.vehiclesXPs
     g_techTreeDP.load()
     pricesDict = g_techTreeDP.getUnlockPrices(compactDescr)
 
-    def getUnlockProps(isAvailable, vehCompDescr):
-        unlockPrice = pricesDict.get(vehCompDescr, 0)
+    def getUnlockProps(isAvailable, vehCompDescr, unlockProps=None):
+        unlockPrice = unlockProps.xpCost if unlockProps is not None else pricesDict.get(vehCompDescr, 0)
+        oldPrice = unlockProps.xpFullCost if unlockProps is not None else unlockPrice
+        discount = unlockProps.discount if unlockProps is not None else 0
         pVehXp = xpVehs.get(vehCompDescr, 0)
         need = unlockPrice - pVehXp
         needWithFreeXP = need - freeXP
-        return (isAvailable, unlockPrice, min(need, needWithFreeXP))
+        return (isAvailable,
+         unlockPrice,
+         min(need, needWithFreeXP),
+         oldPrice,
+         discount)
 
-    if item_type_id == vehicles._VEHICLE:
-        isAvailable, props = g_techTreeDP.isNext2Unlock(compactDescr, unlocks, xpVehs, freeXP)
-        if parentCD is not None:
-            return getUnlockProps(isAvailable, parentCD)
-        return getUnlockProps(isAvailable, props.parentID)
+    if itemTypeId == vehicles._VEHICLE:
+        isAvailable, unlockProps = g_techTreeDP.isNext2Unlock(compactDescr, unlocks, xpVehs, freeXP, vehicleLevel)
+        if parentCD is not None and parentCD == unlockProps.parentID:
+            return getUnlockProps(isAvailable, parentCD, unlockProps)
+        xpCost = pricesDict.get(parentCD, 0)
+        discount, newCost = g_techTreeDP.getBlueprintDiscountData(compactDescr, vehicleLevel, xpCost)
+        unlockProps = UnlockProps(parentCD, -1, newCost, None, discount, xpCost)
+        return getUnlockProps(isAvailable, unlockProps.parentID, unlockProps)
     else:
         isAvailable = compactDescr in unlocks
         if not pricesDict:
-            return (isAvailable, 0, 0)
+            return (isAvailable,
+             0,
+             0,
+             0,
+             0)
         if parentCD is not None:
             return getUnlockProps(isAvailable, parentCD)
         vehsCompDescrs = [ compDescr for compDescr in pricesDict.keys() if compDescr in unlocks ]
@@ -280,6 +298,10 @@ def getUnlockPrice(compactDescr, parentCD=None):
                 minUnlockPriceVehCD = vcd
 
         if minUnlockPriceVehCD is None:
-            return (isAvailable, 0, 0)
+            return (isAvailable,
+             0,
+             0,
+             0,
+             0)
         return getUnlockProps(isAvailable, minUnlockPriceVehCD)
         return

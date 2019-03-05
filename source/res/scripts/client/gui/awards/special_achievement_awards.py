@@ -2,16 +2,21 @@
 # Embedded file name: scripts/client/gui/awards/special_achievement_awards.py
 import BigWorld
 from gui.Scaleform.locale.CLANS import CLANS
+from gui.Scaleform.locale.CREW_SKINS import CREW_SKINS
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
+from gui.Scaleform.daapi.view.lobby.PersonalCaseConstants import TABS
+from gui.referral_program import REFERRAL_PROGRAM_SOUNDS
 from gui.server_events.awards import AwardAbstract, ExplosionBackAward
-from gui.shared import event_dispatcher as shared_events
+from gui.shared import event_dispatcher as shared_events, EVENT_BUS_SCOPE
 from gui.shared.event_dispatcher import showReferralProgramWindow
 from gui.shared.formatters import text_styles
+from gui.shared.gui_items.Vehicle import sortCrew
 from helpers import dependency
 from helpers import i18n
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
+from CurrentVehicle import g_currentVehicle
 
 class ResearchAward(ExplosionBackAward):
 
@@ -71,6 +76,45 @@ class BattleAward(ExplosionBackAward):
 
     def getDescription(self):
         return text_styles.main(i18n.makeString('#menu:awardWindow/specialAchievement/battle/description%d' % self.messageNumber, battlesCount=BigWorld.wg_getIntegralFormat(self.battlesCount)))
+
+
+class CrewSkinAward(ExplosionBackAward):
+
+    def __init__(self):
+        super(CrewSkinAward, self).__init__(False)
+
+    def getWindowTitle(self):
+        return i18n.makeString(CREW_SKINS.FEATURE_POSTER_POSTERHEADER)
+
+    def getBackgroundImage(self):
+        return RES_ICONS.MAPS_ICONS_WINDOWS_REWARDWINDOW_CREWSKINS_PRESENTATION
+
+    def getHeader(self):
+        return text_styles.highTitle(i18n.makeString(CREW_SKINS.FEATURE_POSTER_GIFTNAME))
+
+    def getOkButtonText(self):
+        return i18n.makeString(CREW_SKINS.FEATURE_POSTER_CONFIRM) if self._getFirstEnableTankman() is not None else i18n.makeString(MENU.AWARDWINDOW_OKBUTTON)
+
+    def getDescription(self):
+        return text_styles.main(i18n.makeString(CREW_SKINS.FEATURE_POSTER_FEATUREDESCR))
+
+    @staticmethod
+    def _getFirstEnableTankman():
+        vehicleGuiItem = g_currentVehicle.item
+        if vehicleGuiItem is not None and not vehicleGuiItem.isLocked:
+            roles = g_currentVehicle.item.descriptor.type.crewRoles
+            crew = sortCrew(vehicleGuiItem.crew, roles)
+            for _, tankman in crew:
+                if tankman is not None and not tankman.descriptor.getRestrictions().isPassportReplacementForbidden():
+                    return tankman
+
+        return
+
+    def handleOkButton(self):
+        tankman = self._getFirstEnableTankman()
+        if tankman is not None:
+            shared_events.showPersonalCase(tankman.invID, TABS.CREW_SKINS_TAB_INDEX, EVENT_BUS_SCOPE.LOBBY)
+        return
 
 
 class PvEBattleAward(BattleAward):
@@ -228,7 +272,6 @@ class TelecomAward(AwardAbstract):
         return i18n.makeString(MENU.AWARDWINDOW_TELECOMAWARD_BUTTON_LABEL)
 
     def handleBodyButton(self):
-        from CurrentVehicle import g_currentVehicle
         item = self.itemsCache.items.getItemByCD(self.__vehicleDesrs[0])
         if hasattr(item, 'invID'):
             g_currentVehicle.selectVehicle(item.invID)
@@ -254,3 +297,6 @@ class RecruiterAward(ExplosionBackAward):
 
     def handleOkButton(self):
         showReferralProgramWindow()
+
+    def getSound(self):
+        return REFERRAL_PROGRAM_SOUNDS.RECRUITER_AWARD

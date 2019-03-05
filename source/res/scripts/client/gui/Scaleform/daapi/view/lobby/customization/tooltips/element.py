@@ -188,11 +188,11 @@ class ElementTooltip(BlocksTooltipData):
         blocks = []
         if self._item.isVehicleBound and not self._item.mayApply:
             return formatters.packTitleDescBlock(title=text_styles.middleTitle(VEHICLE_CUSTOMIZATION.CUSTOMIZATION_TOOLTIP_SUITABLE_TITLE), desc=text_styles.standard(makeVehiclesShortNamesString(set(self.boundVehs + self.installedToVehs), self.currentVehicle)), padding=formatters.packPadding(top=-2))
+        elif not self._item.descriptor.filter.include:
+            return None
         else:
             icn = getSuitableText(self._item, self.currentVehicle)
             blocks.append(formatters.packTextBlockData(text=icn, padding=formatters.packPadding(top=-2)))
-            if not blocks:
-                return None
             blocks.insert(0, formatters.packTitleDescBlock(title=text_styles.middleTitle(VEHICLE_CUSTOMIZATION.CUSTOMIZATION_TOOLTIP_SUITABLE_TITLE)))
             return formatters.packBuildUpBlockData(blocks=blocks, padding=formatters.packPadding(top=-3))
 

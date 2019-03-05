@@ -9,7 +9,6 @@ from CustomEffectManager import CustomEffectManager
 from vehicle_systems import model_assembler
 from vehicle_systems.CompoundAppearance import CompoundAppearance
 from vehicle_systems.components.peripherals_controller import PeripheralsController
-from vehicle_systems.components.world_connectors import GunRotatorConnector
 from vehicle_systems.model_assembler import prepareCompoundAssembler, createSwingingAnimator
 from vehicle_systems.components.tutorial_mat_kinds_controller import TutorialMatKindsController
 from vehicle_systems.tankStructure import ColliderTypes
@@ -131,6 +130,7 @@ class PanzerAssemblerWWISE(_CompoundAssembler):
 
     def _assembleParts(self, isPlayer, appearance, resourceRefs):
         appearance.filter = model_assembler.createVehicleFilter(appearance.typeDescriptor)
+        compoundModel = appearance.compoundModel
         if appearance.isAlive:
             appearance.detailedEngineState, appearance.gearbox = model_assembler.assembleDrivetrain(appearance, isPlayer)
             if not gEffectsDisabled():
@@ -140,12 +140,15 @@ class PanzerAssemblerWWISE(_CompoundAssembler):
                 model_assembler.assembleVehicleAudition(isPlayer, appearance)
                 model_assembler.subscribeEngineAuditionToEngineState(appearance.engineAudition, appearance.detailedEngineState)
             if isPlayer:
-                gunRotatorConnector = GunRotatorConnector(appearance)
-                appearance.addComponent(gunRotatorConnector)
+                turret = appearance.typeDescriptor.turret
+                gunRotatorAudition = Vehicular.GunRotatorAudition(turret.turretRotatorSoundManual, turret.weight / 1000.0, compoundModel.node(TankPartNames.TURRET))
+                gunRotatorAudition.vehicleMatrixLink = appearance.compoundModel.root
+                gunRotatorAudition.damaged = lambda : appearance.turretDamaged()
+                gunRotatorAudition.maxTurretRotationSpeed = lambda : appearance.maxTurretRotationSpeed()
+                appearance.gunRotatorAudition = gunRotatorAudition
                 appearance.frictionAudition = Vehicular.FrictionAudition(TANK_FRICTION_EVENT)
                 appearance.peripheralsController = PeripheralsController()
         appearance.highlighter = Highlighter()
-        compoundModel = appearance.compoundModel
         isLodTopPriority = isPlayer
         lodCalcInst = Vehicular.LodCalculator(DataLinks.linkMatrixTranslation(appearance.compoundModel.matrix), True, VEHICLE_PRIORITY_GROUP, isLodTopPriority)
         appearance.lodCalculator = lodCalcInst

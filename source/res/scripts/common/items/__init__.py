@@ -10,7 +10,7 @@ if IS_CLIENT:
 else:
     from realm_utils import ResMgr
 _g_itemTypes = None
-ITEM_TYPE_NAMES = ('_reserved', 'vehicle', 'vehicleChassis', 'vehicleTurret', 'vehicleGun', 'vehicleEngine', 'vehicleFuelTank', 'vehicleRadio', 'tankman', 'optionalDevice', 'shell', 'equipment', 'customizationItem')
+ITEM_TYPE_NAMES = ('_reserved', 'vehicle', 'vehicleChassis', 'vehicleTurret', 'vehicleGun', 'vehicleEngine', 'vehicleFuelTank', 'vehicleRadio', 'tankman', 'optionalDevice', 'shell', 'equipment', 'customizationItem', 'crewSkin')
 
 class ITEM_TYPES(dict):
 
@@ -145,7 +145,7 @@ def init(preloadEverything, pricesToCollect=None):
     from items import avatars
     avatars.init()
     from items import tankmen
-    tankmen.init(preloadEverything)
+    tankmen.init(preloadEverything, pricesToCollect)
     return
 
 

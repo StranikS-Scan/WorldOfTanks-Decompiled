@@ -1,9 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/vehiclePreview/vehicle_preview_dp.py
+from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.techtree.techtree_dp import g_techTreeDP
 from gui.Scaleform.daapi.view.lobby.vehicle_compare.formatters import resolveStateTooltip
-from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
-from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.Scaleform.genConsts.VEHPREVIEW_CONSTANTS import VEHPREVIEW_CONSTANTS
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.VEHICLE_PREVIEW import VEHICLE_PREVIEW
@@ -40,7 +39,7 @@ class IVehPreviewDataProvider(object):
     def getBuyingPanelData(self, item, data=None, isHeroTank=False):
         return NotImplementedError
 
-    def buyAction(self, actionType, vehicleCD, skipConfirm):
+    def buyAction(self, actionType, vehicleCD, skipConfirm, level=-1):
         return NotImplementedError
 
 
@@ -72,29 +71,27 @@ class DefaultVehPreviewDataProvider(IVehPreviewDataProvider):
          'vehCompareData': vcData,
          'vehCompareIcon': vcIcon}
 
+    def getBuyingPanelData(self, item, data=None, isHeroTank=False):
+        return {'buyButtonEnabled': data.enabled,
+         'buyButtonLabel': data.label,
+         'buyButtonTooltip': data.tooltip,
+         'itemPrice': data.itemPrice,
+         'isMoneyEnough': data.isMoneyEnough,
+         'showGlow': isHeroTank or item.isPremium and (not item.isHidden or item.isRentable or item.isRestorePossible()),
+         'showAction': data.isAction}
+
+    def buyAction(self, actionType, vehicleCD, skipConfirm, level=-1):
+        if actionType == factory.UNLOCK_ITEM:
+            unlockProps = g_techTreeDP.getUnlockProps(vehicleCD, level)
+            factory.doAction(factory.UNLOCK_ITEM, vehicleCD, unlockProps, skipConfirm=skipConfirm)
+        else:
+            factory.doAction(factory.BUY_VEHICLE, vehicleCD, False, None, VIEW_ALIAS.VEHICLE_PREVIEW, skipConfirm=skipConfirm)
+        return
+
     def __getVehCompareData(self, vehicle):
         state, tooltip = resolveStateTooltip(self.comparisonBasket, vehicle, enabledTooltip=VEH_COMPARE.VEHPREVIEW_COMPAREVEHICLEBTN_TOOLTIPS_ADDTOCOMPARE, fullTooltip=VEH_COMPARE.STORE_COMPAREVEHICLEBTN_TOOLTIPS_DISABLED)
         return {'btnEnabled': state,
          'btnTooltip': tooltip}
-
-    def getBuyingPanelData(self, item, data=None, isHeroTank=False):
-        isAction = data.isAction
-        return {'buyButtonEnabled': data.enabled,
-         'buyButtonLabel': data.label,
-         'buyButtonTooltip': data.tooltip,
-         'value': data.price,
-         'icon': data.currencyIcon,
-         'showGlow': isHeroTank or item.isPremium and (not item.isHidden or item.isRentable or item.isRestorePossible()),
-         'showAction': isAction,
-         'actionTooltipType': TOOLTIPS_CONSTANTS.ACTION_PRICE if isAction else None,
-         'actionData': data.action}
-
-    def buyAction(self, actionType, vehicleCD, skipConfirm):
-        if actionType == factory.UNLOCK_ITEM:
-            unlockProps = g_techTreeDP.getUnlockProps(vehicleCD)
-            factory.doAction(factory.UNLOCK_ITEM, vehicleCD, unlockProps.parentID, unlockProps.unlockIdx, unlockProps.xpCost, skipConfirm=skipConfirm)
-        else:
-            factory.doAction(factory.BUY_VEHICLE, vehicleCD, False, VIEW_ALIAS.VEHICLE_PREVIEW, skipConfirm=skipConfirm)
 
     def __packTabButtonsData(self, vehicle):
         data = []

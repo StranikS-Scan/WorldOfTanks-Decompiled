@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/helpers/OfflineMode.py
 import math
+import logging
 import sys
 import BigWorld
 import GUI
@@ -9,6 +10,7 @@ import Math
 import ResMgr
 import WWISE
 import game_mode_emulator
+_logger = logging.getLogger(__name__)
 g_offlineModeEnabled = False
 g_currentMoveRate = 0.5
 g_gui = None
@@ -30,33 +32,29 @@ class CameraTransform(object):
         BigWorld.camera().set(self.matrix)
 
 
-PROFILE_CAMERA_TRANSFORMS_XML_NAME = 'scripts/profile_camera_transforms.xml'
+CAMERAS_XML_NAME = ResMgr.appDirectory() + 'offline_mode_cameras.xml'
 g_cameraTransforms = list()
 g_curCameraTransform = 0
 
 def _clampCameraTransformIdx(val):
-    global g_cameraTransforms
     val = max(0, val)
     val = min(len(g_cameraTransforms) - 1, val)
     return val
 
 
 def _loadCameraTransforms():
-    rootDS = ResMgr.openSection(PROFILE_CAMERA_TRANSFORMS_XML_NAME)
+    rootDS = ResMgr.openSection(CAMERAS_XML_NAME)
     if rootDS is not None and rootDS['cameras'] is not None:
         for c in rootDS['cameras'].values():
             c = CameraTransform(c.readMatrix('transform'))
             g_cameraTransforms.append(c)
 
-    else:
-        m = Math.Matrix()
-        m.lookAt((41, 14, -337), (-0.2, -0.05, 0.97), (0, 1, 0))
-        g_cameraTransforms.append(CameraTransform(m))
+    _logger.info('Loaded %s', CAMERAS_XML_NAME)
     return
 
 
 def _saveCameraTransforms():
-    rootDS = ResMgr.openSection(PROFILE_CAMERA_TRANSFORMS_XML_NAME, True)
+    rootDS = ResMgr.openSection(CAMERAS_XML_NAME, True)
     rootDS.deleteSection('cameras')
     camerasDS = rootDS.createSection('cameras')
     for c in g_cameraTransforms:
@@ -65,18 +63,23 @@ def _saveCameraTransforms():
 
     rootDS.save()
     rootDS = None
+    _logger.info('Saved %s', CAMERAS_XML_NAME)
     return
 
 
 def _addCameraTransform():
     g_cameraTransforms.append(CameraTransform(Math.Matrix(BigWorld.camera().matrix)))
+    _saveCameraTransforms()
 
 
 def _setCameraTransform(idx):
     global g_curCameraTransform
     idx = _clampCameraTransformIdx(idx)
-    g_cameraTransforms[idx].apply()
-    g_curCameraTransform = idx
+    try:
+        g_cameraTransforms[idx].apply()
+        g_curCameraTransform = idx
+    except IndexError:
+        pass
 
 
 INSTRUCTIONS = '\nWSAD: move camera\nNumpad +/-: adjust FOV\nMouse Wheel: adjust speed\nEscape: toggle mouse mode\nF: toggle camera freeze mode\nR: add new camera view point\n0-7: change camera view point\nN: move to previous camera view point\nM: move to next camera view point\nP: toggle post-precessing\nC: toggle cinematic post-processing mode\nT: toggle temporal AA\n'

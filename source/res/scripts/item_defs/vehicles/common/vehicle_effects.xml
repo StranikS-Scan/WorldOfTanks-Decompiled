@@ -509,7 +509,7 @@
         </pixie>
         <collisionSound>
           <startKey>	start	</startKey>
-          <wwsoundPC>	collision_static_object_wheel_tech_hull_water; collision_static_object_wheel_tech_suspension_water	</wwsoundPC>
+          <wwsoundPC>	water_coll_light ; water_coll_light	</wwsoundPC>
           <wwsoundNPC>	water_coll_light ; water_coll_light	</wwsoundNPC>
         </collisionSound>
       </effects>
@@ -528,7 +528,7 @@
         </pixie>
         <collisionSound>
           <startKey>	start	</startKey>
-          <wwsoundPC>	collision_static_object_wheel_tech_hull_water; collision_static_object_wheel_tech_suspension_water	</wwsoundPC>
+          <wwsoundPC>	water_coll_heavy ; water_coll_heavy	</wwsoundPC>
           <wwsoundNPC>	water_coll_heavy ; water_coll_heavy	</wwsoundNPC>
         </collisionSound>
       </effects>

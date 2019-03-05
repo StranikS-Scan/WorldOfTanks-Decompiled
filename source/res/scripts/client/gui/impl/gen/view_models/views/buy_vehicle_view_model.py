@@ -7,7 +7,7 @@ from gui.impl.gen.view_models.views.buy_vehicle_view.equipment_block_model impor
 from gui.impl.gen.view_models.views.buy_vehicle_view.vehicle_congratulation_model import VehicleCongratulationModel
 
 class BuyVehicleViewModel(ViewModel):
-    __slots__ = ('onCloseBtnClick', 'onBuyBtnClick', 'onShowInHangarClick', 'onCommanderLvlChange', 'onToggleRentAndTradeIn', 'onCheckboxWithoutCrewChanged')
+    __slots__ = ('onCloseBtnClick', 'onBuyBtnClick', 'onInHangarClick', 'onBackClick', 'onCommanderLvlChange', 'onToggleRentAndTradeIn', 'onCheckboxWithoutCrewChanged')
 
     @property
     def tankPrice(self):
@@ -115,35 +115,35 @@ class BuyVehicleViewModel(ViewModel):
     def setWithoutCommanderAltText(self, value):
         self._setResource(18, value)
 
-    def getIsInBootcamp(self):
-        return self._getBool(19)
-
-    def setIsInBootcamp(self, value):
-        self._setBool(19, value)
-
     def getPriceDescription(self):
-        return self._getResource(20)
+        return self._getResource(19)
 
     def setPriceDescription(self, value):
-        self._setResource(20, value)
+        self._setResource(19, value)
 
     def getNoCrewCheckboxLabel(self):
-        return self._getResource(21)
+        return self._getResource(20)
 
     def setNoCrewCheckboxLabel(self, value):
-        self._setResource(21, value)
+        self._setResource(20, value)
 
     def getIsMovingTextEnabled(self):
-        return self._getBool(22)
+        return self._getBool(21)
 
     def setIsMovingTextEnabled(self, value):
-        self._setBool(22, value)
+        self._setBool(21, value)
 
     def getIsContentHidden(self):
-        return self._getBool(23)
+        return self._getBool(22)
 
     def setIsContentHidden(self, value):
-        self._setBool(23, value)
+        self._setBool(22, value)
+
+    def getBgSource(self):
+        return self._getResource(23)
+
+    def setBgSource(self, value):
+        self._setResource(23, value)
 
     def _initialize(self):
         super(BuyVehicleViewModel, self)._initialize()
@@ -166,14 +166,15 @@ class BuyVehicleViewModel(ViewModel):
         self._addBoolProperty('isRentSelected', False)
         self._addBoolProperty('isRestore', False)
         self._addResourceProperty('withoutCommanderAltText', R.invalid())
-        self._addBoolProperty('isInBootcamp', False)
         self._addResourceProperty('priceDescription', R.invalid())
         self._addResourceProperty('noCrewCheckboxLabel', R.invalid())
         self._addBoolProperty('isMovingTextEnabled', False)
         self._addBoolProperty('isContentHidden', False)
+        self._addResourceProperty('bgSource', R.invalid())
         self.onCloseBtnClick = self._addCommand('onCloseBtnClick')
         self.onBuyBtnClick = self._addCommand('onBuyBtnClick')
-        self.onShowInHangarClick = self._addCommand('onShowInHangarClick')
+        self.onInHangarClick = self._addCommand('onInHangarClick')
+        self.onBackClick = self._addCommand('onBackClick')
         self.onCommanderLvlChange = self._addCommand('onCommanderLvlChange')
         self.onToggleRentAndTradeIn = self._addCommand('onToggleRentAndTradeIn')
         self.onCheckboxWithoutCrewChanged = self._addCommand('onCheckboxWithoutCrewChanged')

@@ -10,10 +10,10 @@ class AdditionalEquipmentSlotModel(ViewModel):
     def actionPrices(self):
         return self._getViewModel(0)
 
-    def getIsBtnEnabled(self):
+    def getIsEnabled(self):
         return self._getBool(1)
 
-    def setIsBtnEnabled(self, value):
+    def setIsEnabled(self, value):
         self._setBool(1, value)
 
     def getIsSelected(self):
@@ -31,7 +31,7 @@ class AdditionalEquipmentSlotModel(ViewModel):
     def _initialize(self):
         super(AdditionalEquipmentSlotModel, self)._initialize()
         self._addViewModelProperty('actionPrices', ListModel())
-        self._addBoolProperty('isBtnEnabled', False)
+        self._addBoolProperty('isEnabled', False)
         self._addBoolProperty('isSelected', False)
         self._addBoolProperty('isDisabledTooltip', False)
         self.onSelectedChange = self._addCommand('onSelectedChange')

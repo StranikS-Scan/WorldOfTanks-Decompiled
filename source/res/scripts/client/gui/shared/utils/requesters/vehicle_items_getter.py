@@ -2,7 +2,7 @@
 # Embedded file name: scripts/client/gui/shared/utils/requesters/vehicle_items_getter.py
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.items_parameters import params
-from items import vehicles, EQUIPMENT_TYPES, ItemsPrices
+from items import vehicles, tankmen, EQUIPMENT_TYPES, ItemsPrices
 from items.components.c11n_constants import DecalType
 from soft_exception import SoftException
 import nations
@@ -81,6 +81,10 @@ def _getCamouflages(_):
     return vehicles.g_cache.customization20().camouflages.itervalues()
 
 
+def _getCrewSkins(_):
+    return tankmen.g_cache.crewSkins().skins.itervalues()
+
+
 def _getModifications(_):
     return vehicles.g_cache.customization20().modifications.itervalues()
 
@@ -130,7 +134,8 @@ _MODULES_GETTERS = {GUI_ITEM_TYPE.VEHICLE: _getVehicles,
  GUI_ITEM_TYPE.INSCRIPTION: _getInscriptions,
  GUI_ITEM_TYPE.STYLE: _getStyles,
  GUI_ITEM_TYPE.PROJECTION_DECAL: _getProjectionDecal,
- GUI_ITEM_TYPE.PERSONAL_NUMBER: _getPersonalNumber}
+ GUI_ITEM_TYPE.PERSONAL_NUMBER: _getPersonalNumber,
+ GUI_ITEM_TYPE.CREW_SKINS: _getCrewSkins}
 
 def getItemsIterator(data, nationID=None, itemTypeID=None, onlyWithPrices=False):
     if 'itemPrices' in data and onlyWithPrices:

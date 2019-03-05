@@ -2,15 +2,14 @@
 # Embedded file name: scripts/client/gui/shared/tooltips/builders.py
 import importlib
 import logging
-from account_helpers.settings_core.ServerSettingsManager import UI_STORAGE_KEYS
 from CurrentVehicle import g_currentVehicle
-from helpers import dependency
-from skeletons.account_helpers.settings_core import ISettingsCore
+from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
+from gui.shared.gui_items.artefacts import OptionalDevice
+from gui.shared.gui_items.vehicle_modules import VehicleChassis
 from gui.shared.tooltips import complex_formatters
 from gui.shared.tooltips import contexts, advanced
-from gui.shared.gui_items.vehicle_modules import VehicleChassis
-from gui.shared.gui_items.artefacts import OptionalDevice
-from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
+from helpers import dependency
+from skeletons.account_helpers.settings_core import ISettingsCore
 from soft_exception import SoftException
 _logger = logging.getLogger(__name__)
 _SUPPORT_ADVANCED = True
@@ -51,12 +50,10 @@ class AdvancedBuilder(TooltipBuilder):
     __settingsCore = dependency.descriptor(ISettingsCore)
 
     def _getDisableAnimFlag(self):
-        serverSettings = self.__settingsCore.serverSettings
-        return serverSettings.getUIStorage().get(UI_STORAGE_KEYS.DISABLE_ANIMATED_TOOLTIP) == 1
+        return self.__settingsCore.serverSettings.getDisableAnimTooltipFlag()
 
     def _setDisableAnimFlag(self):
-        serverSettings = self.__settingsCore.serverSettings
-        serverSettings.saveInUIStorage({UI_STORAGE_KEYS.DISABLE_ANIMATED_TOOLTIP: 1})
+        self.__settingsCore.serverSettings.setDisableAnimTooltipFlag()
 
 
 class DataBuilder(SimpleBuilder):

@@ -30,9 +30,12 @@ class BrowserView(LobbySubView, BrowserViewMeta):
         self.__ctx = ctx
         self.__hasFocus = False
         self.__browser = None
-        self.__browserView = None
+        self.__browserComponent = None
         self.__errorOccurred = False
         self.__closedByUser = False
+        self.__isBrowserLoading = True
+        self.__pendingRequest = None
+        self.__viewSize = None
         return
 
     def onFocusChange(self, hasFocus):
@@ -48,7 +51,8 @@ class BrowserView(LobbySubView, BrowserViewMeta):
         self.fireEvent(events.LoadViewEvent(returnAlias, ctx=self.__ctx), EVENT_BUS_SCOPE.LOBBY)
 
     def viewSize(self, width, height):
-        self.__loadBrowser(width, height)
+        self.__viewSize = (width, height)
+        self.__loadBrowser()
 
     def updateCtx(self, ctx):
         if ctx:
@@ -59,16 +63,29 @@ class BrowserView(LobbySubView, BrowserViewMeta):
         if alias == VIEW_ALIAS.BROWSER:
             viewPy.init(self.__browserId, self.__getFromCtx('webHandlers'), alias=self.alias)
             viewPy.onError += self.__onError
-            self.__browserView = viewPy
+            self.__browserComponent = viewPy
 
     def _populate(self):
         super(BrowserView, self)._populate()
         self.lobbyContext.getServerSettings().onServerSettingsChange += self.__onServerSettingChanged
         g_inputHandler.onKeyDown += self.__onKeyDown
 
+    def _invalidate(self, *args, **kwargs):
+        super(BrowserView, self)._invalidate(*args, **kwargs)
+        self.__ctx = args[0]
+        if self.__isBrowserLoading:
+            self.__pendingRequest = self.__getFromCtx('url')
+        elif self.__browser:
+            self.__configureBrowser()
+            self.__navigateTo(self.__getFromCtx('url'))
+        else:
+            self.__loadBrowser()
+        if self.__browserComponent:
+            self.__browserComponent.init(self.__browserId, self.__getFromCtx('webHandlers'), alias=self.alias)
+
     def _dispose(self):
-        if self.__browserView:
-            self.__browserView.onError -= self.__onError
+        if self.__browserComponent:
+            self.__browserComponent.onError -= self.__onError
         returnCallback = self.__getFromCtx('returnClb')
         if returnCallback is not None:
             callbackArgs = {'byUser': self.__closedByUser}
@@ -94,25 +111,23 @@ class BrowserView(LobbySubView, BrowserViewMeta):
         return ctx.get(name, default) if ctx else default
 
     @process
-    def __loadBrowser(self, width, height):
+    def __loadBrowser(self):
         url = self.__getFromCtx('url')
         if url is not None:
-            self.__browserId = yield self.browserCtrl.load(url=url, useBrowserWindow=False, showBrowserCallback=self.__showBrowser, browserSize=(width, height))
-            browser = self.browserCtrl.getBrowser(self.__browserId)
-            if browser:
-                browser.useSpecialKeys = self.__getFromCtx('useSpecialKeys', False)
-                browser.allowRightClick = self.__getFromCtx('allowRightClick', False)
-                browser.setDisabledKeys(self.__getFromCtx('disabledKeys', tuple()))
-                self.__browser = browser
-                self.__updateSkipEscape()
-            else:
-                LOG_ERROR('Failed to create browser!')
+            self.__isBrowserLoading = True
+            self.__browserId = yield self.browserCtrl.load(url=url, useBrowserWindow=False, showBrowserCallback=self.__showBrowser, browserSize=self.__viewSize, browserID=self.__browserId)
+            self.__isBrowserLoading = False
+            self.__configureBrowser()
         else:
             LOG_ERROR('Url is missing!')
         return
 
     def __showBrowser(self):
         BigWorld.callback(0.01, self.as_loadBrowserS)
+        if self.__pendingRequest:
+            self.__navigateTo(self.__pendingRequest)
+            self.__pendingRequest = None
+        return
 
     def __updateSkipEscape(self):
         if self.__browser is not None:
@@ -123,3 +138,19 @@ class BrowserView(LobbySubView, BrowserViewMeta):
         handler = self.__getFromCtx('onServerSettingsChange')
         if callable(handler):
             handler(self, diff)
+
+    def __configureBrowser(self):
+        browser = self.browserCtrl.getBrowser(self.__browserId)
+        if browser:
+            browser.useSpecialKeys = self.__getFromCtx('useSpecialKeys', False)
+            browser.allowRightClick = self.__getFromCtx('allowRightClick', False)
+            browser.setDisabledKeys(self.__getFromCtx('disabledKeys', tuple()))
+            self.__browser = browser
+            self.__updateSkipEscape()
+        else:
+            LOG_ERROR('Failed to create browser!')
+
+    def __navigateTo(self, url):
+        if url is not None and self.__browser is not None:
+            self.__browser.navigate(url)
+        return

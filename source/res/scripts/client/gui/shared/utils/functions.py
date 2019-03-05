@@ -4,14 +4,14 @@ import random
 import re
 import ArenaType
 from adisp import async, process
-from helpers import i18n
-from ids_generators import SequenceIDGenerator
-from helpers.i18n import makeString
-from gui import GUI_SETTINGS, SystemMessages
-from items import ITEM_TYPE_INDICES, vehicles as vehs_core
 from debug_utils import LOG_DEBUG
-from gui.shared.money import Currency, MONEY_UNDEFINED
+from gui import GUI_SETTINGS, SystemMessages
 from gui.Scaleform.locale.SYSTEM_MESSAGES import SYSTEM_MESSAGES
+from gui.shared.money import Currency, MONEY_UNDEFINED
+from helpers import i18n
+from helpers.i18n import makeString
+from ids_generators import SequenceIDGenerator
+from items import ITEM_TYPE_INDICES, vehicles as vehs_core
 
 def rnd_choice(*args):
     args = list(args)
@@ -254,3 +254,12 @@ def showSentInviteMessage(user=None):
         else:
             SystemMessages.pushI18nMessage(SYSTEM_MESSAGES.PREBATTLE_INVITES_SENDINVITE, type=SystemMessages.SM_TYPE.Information)
     return
+
+
+def replaceHyphenToUnderscore(text):
+    return text.replace('-', '_')
+
+
+def getVehTypeIconName(vType, isElite=False):
+    vType = replaceHyphenToUnderscore(vType)
+    return '{}_elite'.format(vType) if isElite else vType

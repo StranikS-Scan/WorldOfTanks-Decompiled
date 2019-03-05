@@ -259,8 +259,8 @@
         <segmentModelRight>	vehicles/japan/J21_Type_91/track/Type_91_Track.model	</segmentModelRight>
         <left>	vehicles/japan/J21_Type_91/track/left.track	</left>
         <right>	vehicles/japan/J21_Type_91/track/right.track	</right>
-        <segmentLength>	0.15	</segmentLength>
-        <segmentOffset>	0.162	</segmentOffset>
+        <segmentLength>	0.14	</segmentLength>
+        <segmentOffset>	0.192	</segmentOffset>
         <lodDist>	SPLINE_TRACK	</lodDist>
         <atlas>
           <UTiles>	1	</UTiles>
@@ -277,28 +277,112 @@
         <elasticity>	1873	</elasticity>
         <damping>	2	</damping>
         <node>
-          <isLeft>	true	</isLeft>
-          <name>	Track_VD_L0	</name>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R0	</name>
           <forwardElastK>	1	</forwardElastK>
           <backwardElastK>	1	</backwardElastK>
+          <offset>	-0.00185874	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R1	</name>
+          <forwardElastK>	0.95	</forwardElastK>
+          <backwardElastK>	1.1	</backwardElastK>
+          <offset>	-0.036	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R2	</name>
+          <forwardElastK>	1	</forwardElastK>
+          <backwardElastK>	1	</backwardElastK>
+          <offset>	-0.036	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R3	</name>
+          <forwardElastK>	0.5	</forwardElastK>
+          <backwardElastK>	1	</backwardElastK>
+          <offset>	-0.036	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R4	</name>
+          <forwardElastK>	0.5	</forwardElastK>
+          <backwardElastK>	1.9	</backwardElastK>
+          <offset>	-0.036	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R5	</name>
+          <forwardElastK>	1	</forwardElastK>
+          <backwardElastK>	1	</backwardElastK>
+          <offset>	-0.00185874	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L0	</name>
+          <forwardElastK>	1	</forwardElastK>
+          <backwardElastK>	1	</backwardElastK>
+          <offset>	-0.00185874	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L1	</name>
+          <forwardElastK>	0.95	</forwardElastK>
+          <backwardElastK>	1.1	</backwardElastK>
+          <offset>	-0.036	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L2	</name>
+          <forwardElastK>	1	</forwardElastK>
+          <backwardElastK>	1	</backwardElastK>
+          <offset>	-0.036	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L3	</name>
+          <forwardElastK>	0.5	</forwardElastK>
+          <backwardElastK>	1	</backwardElastK>
+          <offset>	-0.036	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L4	</name>
+          <forwardElastK>	0.5	</forwardElastK>
+          <backwardElastK>	1.9	</backwardElastK>
+          <offset>	-0.036	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L5	</name>
+          <forwardElastK>	1	</forwardElastK>
+          <backwardElastK>	1	</backwardElastK>
+          <offset>	-0.00185874	</offset>
         </node>
         <node>
           <isLeft>	false	</isLeft>
           <name>	Track_VD_R0	</name>
-          <forwardElastK>	1	</forwardElastK>
-          <backwardElastK>	1	</backwardElastK>
+          <forwardElastK>	0.78	</forwardElastK>
+          <backwardElastK>	1.5	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L0	</name>
+          <forwardElastK>	0.78	</forwardElastK>
+          <backwardElastK>	1.5	</backwardElastK>
         </node>
         <node>
           <isLeft>	true	</isLeft>
           <name>	Track_VD_L1	</name>
-          <forwardElastK>	1	</forwardElastK>
-          <backwardElastK>	2.59	</backwardElastK>
+          <forwardElastK>	1.5	</forwardElastK>
+          <backwardElastK>	0.78	</backwardElastK>
         </node>
         <node>
           <isLeft>	false	</isLeft>
           <name>	Track_VD_R1	</name>
-          <forwardElastK>	1	</forwardElastK>
-          <backwardElastK>	2.59	</backwardElastK>
+          <forwardElastK>	1.5	</forwardElastK>
+          <backwardElastK>	0.78	</backwardElastK>
         </node>
       </trackNodes>
       <groundNodes>
@@ -337,35 +421,51 @@
       </groundNodes>
       <physicalTracks>
         <left>
-          <segmentsCount>	92	</segmentsCount>
-          <segmentsOuterThickness>	0.0741157	</segmentsOuterThickness>
-          <segmentsInnerThickness>	-0.00289711	</segmentsInnerThickness>
+          <segmentsCount>	98	</segmentsCount>
+          <segmentsOuterThickness>	0.0741327	</segmentsOuterThickness>
+          <segmentsInnerThickness>	-0.00289671	</segmentsInnerThickness>
           <segmentsPlaneOffset>	-1.068	</segmentsPlaneOffset>
           <springsLength>
             <backwardMovement>
-              <back>	0.151737	</back>
-              <top>	0.13679	</top>
-              <front>	0.140005	</front>
-              <bottom>	0.0859709	</bottom>
+              <back>	0.143588	</back>
+              <top>	0.137889	</top>
+              <front>	0.136554	</front>
+              <bottom>	0.0775624	</bottom>
             </backwardMovement>
             <forwardMovement>
-              <back>	0.144169	</back>
-              <top>	0.146724	</top>
-              <front>	0.149553	</front>
-              <bottom>	0.0859709	</bottom>
+              <back>	0.136437	</back>
+              <top>	0.137889	</top>
+              <front>	0.143585	</front>
+              <bottom>	0.0775624	</bottom>
             </forwardMovement>
           </springsLength>
           <mainSegment>
             <model>	vehicles/japan/J21_Type_91/track/Type_91_Track.model	</model>
-            <length>	0.149551	</length>
+            <length>	0.139998	</length>
           </mainSegment>
           <collisionHull>
-            <bottom></bottom>
+            <bottom>
+              <part>
+                <xStart>	-3.01159	</xStart>
+                <xStep>	0.00999999	</xStep>
+                <ySamples>	0.464163 0.444169 0.427133 0.412226 0.398958 0.387017 0.376184	</ySamples>
+              </part>
+              <part>
+                <xStart>	-2.95159	</xStart>
+                <xStep>	0.118038	</xStep>
+                <ySamples>	0.376184 0.299536 0.280676 0.307956 0.399895 0.785851 0.709503 0.838767 0.918558 0.775318 0.784243 0.784243 0.868132 0.938666 0.912274 0.837892 0.837892 0.837892 0.837892 0.837892 0.837893 0.837892 0.837892 0.837892 0.837892 0.916719 0.998871 0.982071 0.837892 0.837892 0.837892 0.837893 0.88214 0.837892 0.837892 0.837892 0.837893 0.837892 0.837892 1.0313 1.08168 1.04405 1.07984 1.16445 1.17402 1.08126 1.10434 0.849274 0.686502 0.6287 0.617977 0.649441	</ySamples>
+              </part>
+              <part>
+                <xStart>	3.06834	</xStart>
+                <xStep>	0.00999999	</xStep>
+                <ySamples>	0.649441 0.654332 0.659633 0.665367 0.671558 0.678239 0.685442	</ySamples>
+              </part>
+            </bottom>
             <top>
               <part>
-                <xStart>	-3.03552	</xStart>
-                <xStep>	0.0747755	</xStep>
-                <ySamples>	0.869407 0.908195 0.933227 0.950966 0.957304 0.963096 0.968889 0.975013 0.980812 0.98661 0.992408 0.998206 1.00438 1.01018 1.01599 1.02283 1.02755 1.03151 1.03546 1.03662 1.04058 1.04455 1.04852 1.05248 1.05645 1.06041 1.06438 1.06835 1.07441 1.07628 1.08025 1.08421 1.08818 1.09215 1.09611 1.10008 1.10405 1.10801 1.11198 1.11594 1.14658 1.13921 1.12784 1.13181 1.13578 1.13974 1.14371 1.14768 1.15164 1.15561 1.15958 1.16354 1.16751 1.20395 1.18875 1.18119 1.18635 1.1915 1.19666 1.20181 1.20697 1.21197 1.21745 1.22294 1.22842 1.24386 1.27688 1.25347 1.24869 1.25418 1.30393 1.31109 1.31798 1.32322 1.33126 1.33943 1.33991 1.33725 1.33648 1.34008 1.34308 1.34112 1.33482	</ySamples>
+                <xStart>	-3.09158	</xStart>
+                <xStep>	0.111999	</xStep>
+                <ySamples>	0.816079 0.872392 0.914558 0.937057 0.953067 0.957687 0.962307 0.966927 0.984637 0.976166 0.983857 1.02306 0.990016 0.994636 0.999255 1.00389 1.00858 1.01329 1.01802 1.08343 1.02749 1.03224 1.03702 1.0418 1.04657 1.05135 1.05615 1.14577 1.13946 1.06851 1.07254 1.07657 1.0806 1.08463 1.08866 1.12672 1.21191 1.14347 1.10477 1.1088 1.11282 1.11685 1.12088 1.16183 1.26237 1.27592 1.23473 1.27046 1.30781 1.34072 1.34138 1.34122 1.34102 1.34084 1.34064 1.33165	</ySamples>
               </part>
             </top>
           </collisionHull>
@@ -393,49 +493,61 @@
           <snapWheels>
             <topFront>
               <wheelName>	WD_L0	</wheelName>
-              <basePos>	2.922 0.961235	</basePos>
-              <shiftVec>	0.260859 0.187296	</shiftVec>
+              <basePos>	2.92198 0.961348	</basePos>
+              <shiftVec>	0.292843 0.143454	</shiftVec>
               <jointIdx>	11	</jointIdx>
             </topFront>
             <topBack>
               <wheelName>	WD_L8	</wheelName>
-              <basePos>	-2.73158 0.597631	</basePos>
-              <shiftVec>	-0.2709 0.0982172	</shiftVec>
-              <jointIdx>	54	</jointIdx>
+              <basePos>	-2.72588 0.594557	</basePos>
+              <shiftVec>	-0.266638 0.126802	</shiftVec>
+              <jointIdx>	57	</jointIdx>
             </topBack>
             <bottomBack>
               <wheelName>	W_L16	</wheelName>
-              <basePos>	-2.176 0.182963	</basePos>
-              <shiftVec>	0.0214264 -0.128391	</shiftVec>
-              <jointIdx>	62	</jointIdx>
+              <basePos>	-2.176 0.182965	</basePos>
+              <shiftVec>	0.0589647 -0.128391	</shiftVec>
+              <jointIdx>	66	</jointIdx>
             </bottomBack>
             <bottomFront>
               <wheelName>	W_L1	</wheelName>
               <basePos>	2.17074 0.182954	</basePos>
-              <shiftVec>	0.0690598 -0.114742	</shiftVec>
+              <shiftVec>	0.116569 -0.102438	</shiftVec>
               <jointIdx>	0	</jointIdx>
             </bottomFront>
           </snapWheels>
           <radiusOverrides>
             <wheel>
               <name>	WD_L8	</name>
-              <radius>	0.286598	</radius>
-            </wheel>
-            <wheel>
-              <name>	WD_L5	</name>
-              <radius>	0.1	</radius>
-            </wheel>
-            <wheel>
-              <name>	WD_L3	</name>
-              <radius>	0.1	</radius>
-            </wheel>
-            <wheel>
-              <name>	W_L16	</name>
-              <radius>	0.18	</radius>
+              <radius>	0.293923	</radius>
             </wheel>
             <wheel>
               <name>	WD_L0	</name>
-              <radius>	0.319738	</radius>
+              <radius>	0.324888	</radius>
+            </wheel>
+            <wheel>
+              <name>	WD_L6	</name>
+              <radius>	0.095	</radius>
+            </wheel>
+            <wheel>
+              <name>	WD_L5	</name>
+              <radius>	0.08	</radius>
+            </wheel>
+            <wheel>
+              <name>	WD_L4	</name>
+              <radius>	0.08	</radius>
+            </wheel>
+            <wheel>
+              <name>	WD_L3	</name>
+              <radius>	0.08	</radius>
+            </wheel>
+            <wheel>
+              <name>	WD_L2	</name>
+              <radius>	0.08	</radius>
+            </wheel>
+            <wheel>
+              <name>	WD_L1	</name>
+              <radius>	0.09	</radius>
             </wheel>
           </radiusOverrides>
           <teethSyncs>
@@ -443,136 +555,180 @@
             <segmentSyncPivotOffset>	0.000000	</segmentSyncPivotOffset>
             <sync>
               <name>	WD_L8	</name>
-              <startAngle>	-75.2189	</startAngle>
+              <startAngle>	60.7915	</startAngle>
               <teethCount>	14	</teethCount>
             </sync>
             <sync>
               <name>	WD_L0	</name>
-              <startAngle>	-78.3313	</startAngle>
+              <startAngle>	57.6874	</startAngle>
               <teethCount>	14	</teethCount>
             </sync>
           </teethSyncs>
           <sourceCollisionHullPoints>
             <top>
               <range>
-                <point>	-0.892028 0.980204 -3.03587	</point>
-                <point>	-0.892029 1.01899 -2.96109	</point>
-                <point>	-0.89203 1.04402 -2.88632	</point>
-                <point>	-0.89203 1.06176 -2.81154	</point>
-                <point>	-0.89203 1.0681 -2.73677	</point>
-                <point>	-0.89203 1.07389 -2.66199	</point>
-                <point>	-0.89203 1.07969 -2.58722	</point>
-                <point>	-0.89203 1.08581 -2.51244	</point>
-                <point>	-0.89203 1.09161 -2.43766	</point>
-                <point>	-0.89203 1.09741 -2.36289	</point>
-                <point>	-0.89203 1.10321 -2.28811	</point>
-                <point>	-0.89203 1.10901 -2.21334	</point>
-                <point>	-0.89203 1.11518 -2.13856	</point>
-                <point>	-0.89203 1.12098 -2.06379	</point>
-                <point>	-0.89203 1.12678 -1.98901	</point>
-                <point>	-0.89203 1.13363 -1.91424	</point>
-                <point>	-0.89203 1.13835 -1.83946	</point>
-                <point>	-0.89203 1.14231 -1.76468	</point>
-                <point>	-0.89203 1.14626 -1.68991	</point>
-                <point>	-0.89203 1.14742 -1.61513	</point>
-                <point>	-0.89203 1.15138 -1.54036	</point>
-                <point>	-0.89203 1.15535 -1.46558	</point>
-                <point>	-0.892029 1.15932 -1.39081	</point>
-                <point>	-0.892029 1.16328 -1.31603	</point>
-                <point>	-0.892029 1.16725 -1.24126	</point>
-                <point>	-0.892029 1.17122 -1.16648	</point>
-                <point>	-0.892029 1.17518 -1.09171	</point>
-                <point>	-0.892029 1.17915 -1.01693	</point>
-                <point>	-0.892029 1.18312 -0.942155	</point>
-                <point>	-0.892029 1.18708 -0.86738	</point>
-                <point>	-0.892029 1.19105 -0.792604	</point>
-                <point>	-0.892029 1.19502 -0.717828	</point>
-                <point>	-0.892029 1.19898 -0.643053	</point>
-                <point>	-0.892029 1.20295 -0.568277	</point>
-                <point>	-0.892029 1.20692 -0.493502	</point>
-                <point>	-0.892028 1.21088 -0.418726	</point>
-                <point>	-0.892028 1.21485 -0.343951	</point>
-                <point>	-0.892028 1.21882 -0.269176	</point>
-                <point>	-0.892028 1.22278 -0.1944	</point>
-                <point>	-0.892028 1.22675 -0.119625	</point>
-                <point>	-0.892028 1.23072 -0.044849	</point>
-                <point>	-0.892028 1.23468 0.0299262	</point>
-                <point>	-0.892028 1.23865 0.104702	</point>
-                <point>	-0.892028 1.24262 0.179478	</point>
-                <point>	-0.892028 1.24658 0.254253	</point>
-                <point>	-0.892028 1.25055 0.329028	</point>
-                <point>	-0.892027 1.25452 0.403804	</point>
-                <point>	-0.892027 1.25848 0.478579	</point>
-                <point>	-0.892027 1.26245 0.553355	</point>
-                <point>	-0.892027 1.26642 0.62813	</point>
-                <point>	-0.892027 1.27038 0.702906	</point>
-                <point>	-0.892027 1.27435 0.777681	</point>
-                <point>	-0.892027 1.27832 0.852457	</point>
-                <point>	-0.892027 1.28228 0.927232	</point>
-                <point>	-0.902027 1.28684 1.00201	</point>
-                <point>	-0.922027 1.292 1.07678	</point>
-                <point>	-0.942027 1.29715 1.15156	</point>
-                <point>	-0.962027 1.30231 1.22633	</point>
-                <point>	-0.982027 1.30746 1.30111	</point>
-                <point>	-1.00203 1.31262 1.37589	</point>
-                <point>	-1.02203 1.31777 1.45066	</point>
-                <point>	-1.02203 1.32278 1.52544	</point>
-                <point>	-1.02203 1.32826 1.60021	</point>
-                <point>	-1.02203 1.33374 1.67499	</point>
-                <point>	-1.02203 1.33922 1.74976	</point>
-                <point>	-1.02203 1.3447 1.82454	</point>
-                <point>	-1.01203 1.34854 1.89931	</point>
-                <point>	-1.01203 1.35402 1.97409	</point>
-                <point>	-1.01203 1.3595 2.04886	</point>
-                <point>	-1.01203 1.36498 2.12364	</point>
-                <point>	-1.08203 1.41473 2.19842	</point>
-                <point>	-1.03203 1.42189 2.27319	</point>
-                <point>	-1.13203 1.42878 2.34797	</point>
-                <point>	-1.05203 1.43403 2.42274	</point>
-                <point>	-0.942028 1.44207 2.49752	</point>
-                <point>	-0.892028 1.45024 2.57229	</point>
-                <point>	-1.13203 1.45071 2.64707	</point>
-                <point>	-1.13203 1.44805 2.72184	</point>
-                <point>	-1.13203 1.44728 2.79662	</point>
-                <point>	-1.13203 1.45089 2.8714	</point>
-                <point>	-1.13203 1.45388 2.94617	</point>
-                <point>	-1.13203 1.45192 3.02095	</point>
-                <point>	-1.13203 1.44563 3.09572	</point>
+                <point>	0.11204 0.926913 -3.09156	</point>
+                <point>	0.05204 0.983225 -3.02156	</point>
+                <point>	0.892042 1.02541 -2.95156	</point>
+                <point>	0.892042 1.04791 -2.88156	</point>
+                <point>	0.892043 1.06392 -2.81156	</point>
+                <point>	0.892043 1.06854 -2.74157	</point>
+                <point>	0.892044 1.07316 -2.67157	</point>
+                <point>	0.892044 1.07778 -2.60157	</point>
+                <point>	0.892044 1.0824 -2.53157	</point>
+                <point>	0.892045 1.08702 -2.46157	</point>
+                <point>	0.892045 1.09163 -2.39157	</point>
+                <point>	0.892046 1.09625 -2.32157	</point>
+                <point>	0.892046 1.10087 -2.25157	</point>
+                <point>	0.892047 1.10549 -2.18157	</point>
+                <point>	0.892047 1.11011 -2.11157	</point>
+                <point>	0.892048 1.11474 -2.04157	</point>
+                <point>	0.892048 1.11944 -1.97158	</point>
+                <point>	0.892049 1.12415 -1.90158	</point>
+                <point>	0.892049 1.12888 -1.83158	</point>
+                <point>	0.89205 1.13362 -1.76158	</point>
+                <point>	0.89205 1.13835 -1.69158	</point>
+                <point>	0.902051 1.1431 -1.62158	</point>
+                <point>	0.922051 1.14788 -1.55158	</point>
+                <point>	0.942051 1.15266 -1.48158	</point>
+                <point>	0.962052 1.15743 -1.41158	</point>
+                <point>	0.982052 1.16221 -1.34158	</point>
+                <point>	0.00205 1.16699 -1.27159	</point>
+                <point>	0.892053 1.17132 -1.20159	</point>
+                <point>	0.892054 1.17535 -1.13159	</point>
+                <point>	0.892054 1.17937 -1.06159	</point>
+                <point>	0.892055 1.1834 -0.991588	</point>
+                <point>	0.892055 1.18743 -0.921589	</point>
+                <point>	0.892056 1.19146 -0.85159	</point>
+                <point>	0.892056 1.19549 -0.781591	</point>
+                <point>	0.892057 1.19952 -0.711591	</point>
+                <point>	0.892057 1.20354 -0.641593	</point>
+                <point>	0.892058 1.20757 -0.571594	</point>
+                <point>	0.892058 1.2116 -0.501594	</point>
+                <point>	0.892059 1.21563 -0.431595	</point>
+                <point>	0.892059 1.21966 -0.361596	</point>
+                <point>	0.89206 1.22368 -0.291597	</point>
+                <point>	0.89206 1.22771 -0.221598	</point>
+                <point>	0.892061 1.23174 -0.151599	</point>
+                <point>	0.892061 1.27269 0.0100615	</point>
+                <point>	0.892067 1.29616 0.655322	</point>
+                <point>	0.892071 1.35668 1.09334	</point>
+                <point>	0.892075 1.3456 1.47876	</point>
+                <point>	0.13208 1.3813 1.99327	</point>
+                <point>	0.13208 1.41866 2.41134	</point>
+                <point>	0.13208 1.45157 2.64836	</point>
+                <point>	0.892079 1.45225 2.71836	</point>
+                <point>	0.942079 1.45209 2.78836	</point>
+                <point>	0.98208 1.45189 2.85836	</point>
+                <point>	0.02208 1.45169 2.92836	</point>
+                <point>	0.06208 1.45149 2.99836	</point>
+                <point>	0.892082 1.44252 3.06836	</point>
               </range>
             </top>
-            <bottom></bottom>
+            <bottom>
+              <range>
+                <point>	0.89205 0.696728 -2.95156	</point>
+                <point>	0.892048 0.795223 -2.88156	</point>
+                <point>	0.892048 0.834934 -2.81156	</point>
+                <point>	0.892048 0.848808 -2.74156	</point>
+                <point>	0.892049 0.840505 -2.67157	</point>
+                <point>	0.892051 0.805543 -2.60157	</point>
+                <point>	0.892053 0.729195 -2.53157	</point>
+                <point>	0.02205 0.868484 -2.32157	</point>
+                <point>	0.97205 0.938253 -2.25157	</point>
+                <point>	0.01205 0.913186 -2.18157	</point>
+                <point>	0.06205 0.803917 -2.11157	</point>
+                <point>	0.06206 0.803917 -2.04157	</point>
+                <point>	0.02205 0.887806 -1.97158	</point>
+                <point>	0.972053 0.958362 -1.90158	</point>
+                <point>	0.01205 0.931948 -1.83158	</point>
+                <point>	0.892056 0.857587 -1.76158	</point>
+                <point>	0.892057 0.857587 -1.69158	</point>
+                <point>	0.892057 0.857587 -1.62158	</point>
+                <point>	0.892058 0.857587 -1.55158	</point>
+                <point>	0.892059 0.857587 -1.48158	</point>
+                <point>	0.892059 0.857588 -1.41158	</point>
+                <point>	0.89206 0.857588 -1.34158	</point>
+                <point>	0.89206 0.857588 -1.27158	</point>
+                <point>	0.892061 0.857588 -1.20158	</point>
+                <point>	0.892061 0.857588 -1.13159	</point>
+                <point>	0.02206 0.94542 -1.06159	</point>
+                <point>	0.972059 1.01857 -0.991588	</point>
+                <point>	0.97206 1.00177 -0.921589	</point>
+                <point>	0.892064 0.857589 -0.851589	</point>
+                <point>	0.892064 0.857589 -0.78159	</point>
+                <point>	0.892065 0.857589 -0.711591	</point>
+                <point>	0.892065 0.85759 -0.641592	</point>
+                <point>	0.03206 0.901818 -0.571594	</point>
+                <point>	0.892067 0.85759 -0.501593	</point>
+                <point>	0.892067 0.85759 -0.431594	</point>
+                <point>	0.892068 0.85759 -0.361595	</point>
+                <point>	0.892068 0.857591 -0.291596	</point>
+                <point>	0.892069 0.857591 -0.221597	</point>
+                <point>	0.89207 0.857591 -0.151598	</point>
+                <point>	0.01207 1.05098 -0.0816005	</point>
+                <point>	0.972065 1.10138 -0.0116011	</point>
+                <point>	0.02207 1.08015 0.111959	</point>
+                <point>	0.05207 1.09952 0.749253	</point>
+                <point>	0.962085 1.18415 1.85899	</point>
+                <point>	0.962084 1.19373 2.38255	</point>
+                <point>	0.962084 1.19701 2.64836	</point>
+                <point>	0.962085 1.19676 2.71836	</point>
+                <point>	0.962085 1.19652 2.78836	</point>
+                <point>	0.962086 1.19627 2.85836	</point>
+                <point>	0.962087 1.19603 2.92836	</point>
+                <point>	0.962087 1.19578 2.99836	</point>
+                <point>	0.962089 1.13161 3.06836	</point>
+              </range>
+            </bottom>
           </sourceCollisionHullPoints>
         </left>
         <right>
-          <segmentsCount>	92	</segmentsCount>
-          <segmentsOuterThickness>	0.0741516	</segmentsOuterThickness>
-          <segmentsInnerThickness>	-0.00289705	</segmentsInnerThickness>
+          <segmentsCount>	98	</segmentsCount>
+          <segmentsOuterThickness>	0.0741327	</segmentsOuterThickness>
+          <segmentsInnerThickness>	-0.00289577	</segmentsInnerThickness>
           <segmentsPlaneOffset>	1.068	</segmentsPlaneOffset>
           <springsLength>
             <backwardMovement>
-              <back>	0.151737	</back>
-              <top>	0.13679	</top>
-              <front>	0.140005	</front>
-              <bottom>	0.0859709	</bottom>
+              <back>	0.143588	</back>
+              <top>	0.137889	</top>
+              <front>	0.136554	</front>
+              <bottom>	0.0775624	</bottom>
             </backwardMovement>
             <forwardMovement>
-              <back>	0.144169	</back>
-              <top>	0.146724	</top>
-              <front>	0.149553	</front>
-              <bottom>	0.0859709	</bottom>
+              <back>	0.136437	</back>
+              <top>	0.137889	</top>
+              <front>	0.143585	</front>
+              <bottom>	0.0775624	</bottom>
             </forwardMovement>
           </springsLength>
           <mainSegment>
             <model>	vehicles/japan/J21_Type_91/track/Type_91_Track.model	</model>
-            <length>	0.149332	</length>
+            <length>	0.139998	</length>
           </mainSegment>
           <collisionHull>
-            <bottom></bottom>
+            <bottom>
+              <part>
+                <xStart>	-3.01159	</xStart>
+                <xStep>	0.00999999	</xStep>
+                <ySamples>	0.464114 0.44413 0.427102 0.4122 0.398936 0.386998 0.376167	</ySamples>
+              </part>
+              <part>
+                <xStart>	-2.95159	</xStart>
+                <xStep>	0.0734137	</xStep>
+                <ySamples>	0.376167 0.319894 0.29057 0.280553 0.287946 0.314121 0.365426 0.469733 0.918558 0.78489 0.76736 0.784243 0.868132 0.858697 0.783132 0.778337 0.828282 0.837892 0.837892 0.837892 0.837893 0.837892 0.837892 0.837892 0.837892 0.925744 0.871506 0.842438 0.837892 0.837892 0.837892 0.837893 0.88214 0.837892 0.837892 0.837892 0.837893 0.837892 0.837892 0.938512 0.915543 0.942489 0.837892 0.837892 0.837892 0.837892 0.837892 0.837893 0.88214 0.88214 0.837892 0.837892 0.837892 0.970908 0.992616 1.06118 0.837892 0.837892 0.837892 0.837892 0.837892 0.837892 0.837892 0.837892 0.837892 0.88214 1.04334 1.05995 1.1811 1.12626 1.09391 1.09842 1.0937 1.07506 1.09873 1.17749 0.782112 0.696911 0.649985 0.624916 0.616898 0.62471 0.64954	</ySamples>
+              </part>
+              <part>
+                <xStart>	3.06834	</xStart>
+                <xStep>	0.00999999	</xStep>
+                <ySamples>	0.64954 0.654433 0.659736 0.665473 0.671668 0.678351 0.685559	</ySamples>
+              </part>
+            </bottom>
             <top>
               <part>
-                <xStart>	-3.04001	</xStart>
-                <xStep>	0.0746659	</xStep>
-                <ySamples>	0.856937 0.906926 0.934063 0.952138 0.957686 0.962613 0.96754 0.972466 0.977393 0.98232 0.987247 0.992174 0.9971 1.00203 1.00702 1.01204 1.01708 1.02213 1.02718 1.03225 1.03734 1.04243 1.04752 1.05263 1.05773 1.06207 1.06637 1.07067 1.07567 1.07926 1.08355 1.08785 1.09215 1.09644 1.10074 1.10504 1.10933 1.11363 1.11793 1.12222 1.14403 1.14293 1.13511 1.13941 1.1437 1.148 1.1523 1.15659 1.16089 1.16519 1.16948 1.17378 1.17808 1.20199 1.19431 1.19097 1.19526 1.19956 1.20385 1.20815 1.21245 1.21674 1.22104 1.22534 1.22963 1.23393 1.27571 1.26144 1.24924 1.25478 1.32135 1.31676 1.32425 1.33419 1.33885 1.33954 1.3405 1.34143 1.34121 1.34102 1.3408 1.34061 1.33038	</ySamples>
+                <xStart>	-3.09158	</xStart>
+                <xStep>	0.0821323	</xStep>
+                <ySamples>	0.816079 0.872392 0.914558 0.937057 0.953067 0.957687 0.962307 0.966927 0.971546 0.976166 0.982402 0.985396 0.990016 0.994636 1.00792 1.02308 1.00858 1.01329 1.01802 1.02276 1.02749 1.03224 1.03702 1.0418 1.04657 1.05799 1.08317 1.06046 1.06449 1.06851 1.07254 1.07657 1.0806 1.08463 1.08866 1.09268 1.09671 1.15142 1.14706 1.1088 1.11282 1.11685 1.12088 1.12491 1.12894 1.13296 1.13699 1.14102 1.16827 1.21147 1.18853 1.15713 1.16116 1.16519 1.16922 1.17324 1.17727 1.1813 1.18533 1.18936 1.26935 1.28614 1.28123 1.31892 1.31985 1.32862 1.33795 1.33909 1.33974 1.34072 1.34138 1.34122 1.34102 1.34084 1.34064 1.33165	</ySamples>
               </part>
             </top>
           </collisionHull>
@@ -600,49 +756,61 @@
           <snapWheels>
             <topFront>
               <wheelName>	WD_R0	</wheelName>
-              <basePos>	2.922 0.961235	</basePos>
-              <shiftVec>	0.261085 0.186786	</shiftVec>
+              <basePos>	2.92198 0.961319	</basePos>
+              <shiftVec>	0.292963 0.142941	</shiftVec>
               <jointIdx>	11	</jointIdx>
             </topFront>
             <topBack>
               <wheelName>	WD_R8	</wheelName>
-              <basePos>	-2.73158 0.597631	</basePos>
-              <shiftVec>	-0.270905 0.0982096	</shiftVec>
-              <jointIdx>	54	</jointIdx>
+              <basePos>	-2.72589 0.594585	</basePos>
+              <shiftVec>	-0.266653 0.126832	</shiftVec>
+              <jointIdx>	57	</jointIdx>
             </topBack>
             <bottomBack>
               <wheelName>	W_R16	</wheelName>
               <basePos>	-2.176 0.182915	</basePos>
-              <shiftVec>	0.0214987 -0.128391	</shiftVec>
-              <jointIdx>	62	</jointIdx>
+              <shiftVec>	0.0589643 -0.128392	</shiftVec>
+              <jointIdx>	66	</jointIdx>
             </bottomBack>
             <bottomFront>
               <wheelName>	W_R1	</wheelName>
-              <basePos>	2.17074 0.182906	</basePos>
-              <shiftVec>	0.0695031 -0.114854	</shiftVec>
+              <basePos>	2.17074 0.182904	</basePos>
+              <shiftVec>	0.117022 -0.102834	</shiftVec>
               <jointIdx>	0	</jointIdx>
             </bottomFront>
           </snapWheels>
           <radiusOverrides>
             <wheel>
               <name>	WD_R8	</name>
-              <radius>	0.286606	</radius>
-            </wheel>
-            <wheel>
-              <name>	WD_R5	</name>
-              <radius>	0.1	</radius>
-            </wheel>
-            <wheel>
-              <name>	WD_R3	</name>
-              <radius>	0.1	</radius>
-            </wheel>
-            <wheel>
-              <name>	W_R16	</name>
-              <radius>	0.18	</radius>
+              <radius>	0.293949	</radius>
             </wheel>
             <wheel>
               <name>	WD_R0	</name>
-              <radius>	0.319629	</radius>
+              <radius>	0.32477	</radius>
+            </wheel>
+            <wheel>
+              <name>	WD_R6	</name>
+              <radius>	0.095	</radius>
+            </wheel>
+            <wheel>
+              <name>	WD_R5	</name>
+              <radius>	0.08	</radius>
+            </wheel>
+            <wheel>
+              <name>	WD_R4	</name>
+              <radius>	0.08	</radius>
+            </wheel>
+            <wheel>
+              <name>	WD_R3	</name>
+              <radius>	0.08	</radius>
+            </wheel>
+            <wheel>
+              <name>	WD_R2	</name>
+              <radius>	0.08	</radius>
+            </wheel>
+            <wheel>
+              <name>	WD_R1	</name>
+              <radius>	0.09	</radius>
             </wheel>
           </radiusOverrides>
           <teethSyncs>
@@ -650,104 +818,132 @@
             <segmentSyncPivotOffset>	0.000000	</segmentSyncPivotOffset>
             <sync>
               <name>	WD_R8	</name>
-              <startAngle>	-75.2189	</startAngle>
+              <startAngle>	60.7909	</startAngle>
               <teethCount>	14	</teethCount>
             </sync>
             <sync>
               <name>	WD_R0	</name>
-              <startAngle>	-78.3311	</startAngle>
+              <startAngle>	57.6879	</startAngle>
               <teethCount>	14	</teethCount>
             </sync>
           </teethSyncs>
           <sourceCollisionHullPoints>
             <top>
               <range>
-                <point>	1.09207 0.967812 -3.04037	</point>
-                <point>	0.892063 1.01779 -2.9657	</point>
-                <point>	0.892063 1.04493 -2.89104	</point>
-                <point>	0.892062 1.06301 -2.81637	</point>
-                <point>	0.892062 1.06855 -2.7417	</point>
-                <point>	0.892062 1.07348 -2.66704	</point>
-                <point>	0.892062 1.07841 -2.59237	</point>
-                <point>	0.892062 1.08334 -2.51771	</point>
-                <point>	0.892062 1.08826 -2.44304	</point>
-                <point>	0.892062 1.09319 -2.36837	</point>
-                <point>	0.892062 1.09812 -2.29371	</point>
-                <point>	0.892063 1.10304 -2.21904	</point>
-                <point>	0.892063 1.10797 -2.14438	</point>
-                <point>	0.892063 1.1129 -2.06971	</point>
-                <point>	0.892063 1.11789 -1.99505	</point>
-                <point>	0.892063 1.12291 -1.92038	</point>
-                <point>	0.892063 1.12795 -1.84571	</point>
-                <point>	0.892063 1.133 -1.77105	</point>
-                <point>	0.892063 1.13805 -1.69638	</point>
-                <point>	0.902063 1.14312 -1.62172	</point>
-                <point>	0.922063 1.14821 -1.54705	</point>
-                <point>	0.942063 1.1533 -1.47238	</point>
-                <point>	0.962063 1.1584 -1.39772	</point>
-                <point>	0.992063 1.16351 -1.32305	</point>
-                <point>	1.01206 1.1686 -1.24839	</point>
-                <point>	0.892063 1.17294 -1.17372	</point>
-                <point>	0.892063 1.17724 -1.09905	</point>
-                <point>	0.892063 1.18154 -1.02439	</point>
-                <point>	0.892063 1.18583 -0.949723	</point>
-                <point>	0.892063 1.19013 -0.875057	</point>
-                <point>	0.892063 1.19443 -0.800391	</point>
-                <point>	0.892063 1.19872 -0.725725	</point>
-                <point>	0.892064 1.20302 -0.651059	</point>
-                <point>	0.892064 1.20732 -0.576394	</point>
-                <point>	0.892064 1.21161 -0.501728	</point>
-                <point>	0.892064 1.21591 -0.427061	</point>
-                <point>	0.892064 1.22021 -0.352396	</point>
-                <point>	0.892064 1.2245 -0.27773	</point>
-                <point>	0.892064 1.2288 -0.203064	</point>
-                <point>	0.892064 1.2331 -0.128398	</point>
-                <point>	0.892064 1.23739 -0.0537324	</point>
-                <point>	0.892064 1.24169 0.0209336	</point>
-                <point>	0.892064 1.24599 0.0955996	</point>
-                <point>	0.892064 1.25028 0.170266	</point>
-                <point>	0.892064 1.25458 0.244931	</point>
-                <point>	0.892064 1.25888 0.319597	</point>
-                <point>	0.892065 1.26317 0.394263	</point>
-                <point>	0.892065 1.26747 0.468929	</point>
-                <point>	0.892065 1.27177 0.543595	</point>
-                <point>	0.892065 1.27606 0.618261	</point>
-                <point>	0.892065 1.28036 0.692927	</point>
-                <point>	0.892065 1.28466 0.767593	</point>
-                <point>	0.892065 1.28895 0.842258	</point>
-                <point>	0.892065 1.29325 0.916924	</point>
-                <point>	0.892065 1.29755 0.99159	</point>
-                <point>	0.892065 1.30184 1.06626	</point>
-                <point>	0.892065 1.30614 1.14092	</point>
-                <point>	0.892065 1.31044 1.21559	</point>
-                <point>	0.892065 1.31473 1.29025	</point>
-                <point>	0.892065 1.31903 1.36492	</point>
-                <point>	0.892065 1.32333 1.43959	</point>
-                <point>	0.892066 1.32762 1.51425	</point>
-                <point>	0.892066 1.33192 1.58892	</point>
-                <point>	0.892066 1.33622 1.66358	</point>
-                <point>	0.892066 1.34051 1.73825	</point>
-                <point>	0.892066 1.34481 1.81292	</point>
-                <point>	0.892066 1.34911 1.88758	</point>
-                <point>	0.892066 1.35459 1.96225	</point>
-                <point>	0.892066 1.36012 2.03691	</point>
-                <point>	0.892066 1.36566 2.11158	</point>
-                <point>	1.13206 1.43224 2.18624	</point>
-                <point>	1.13206 1.42765 2.26091	</point>
-                <point>	1.13206 1.43514 2.33558	</point>
-                <point>	1.13206 1.44509 2.41024	</point>
-                <point>	1.13206 1.44974 2.48491	</point>
-                <point>	1.13206 1.45043 2.55957	</point>
-                <point>	1.13206 1.45139 2.63424	</point>
-                <point>	0.892064 1.45232 2.7089	</point>
-                <point>	0.932065 1.45209 2.78357	</point>
-                <point>	0.982065 1.45191 2.85824	</point>
-                <point>	1.02207 1.45169 2.9329	</point>
-                <point>	1.07207 1.4515 3.00757	</point>
-                <point>	0.892066 1.44127 3.08224	</point>
+                <point>	0.11204 0.926913 -3.09156	</point>
+                <point>	0.05204 0.983225 -3.02156	</point>
+                <point>	0.892042 1.02541 -2.95156	</point>
+                <point>	0.892042 1.04791 -2.88156	</point>
+                <point>	0.892043 1.06392 -2.81156	</point>
+                <point>	0.892043 1.06854 -2.74157	</point>
+                <point>	0.892044 1.07316 -2.67157	</point>
+                <point>	0.892044 1.07778 -2.60157	</point>
+                <point>	0.892044 1.0824 -2.53157	</point>
+                <point>	0.892045 1.08702 -2.46157	</point>
+                <point>	0.892045 1.09163 -2.39157	</point>
+                <point>	0.892046 1.09625 -2.32157	</point>
+                <point>	0.892046 1.10087 -2.25157	</point>
+                <point>	0.892047 1.10549 -2.18157	</point>
+                <point>	0.892047 1.11011 -2.11157	</point>
+                <point>	0.892048 1.11474 -2.04157	</point>
+                <point>	0.892048 1.11944 -1.97158	</point>
+                <point>	0.892049 1.12415 -1.90158	</point>
+                <point>	0.892049 1.12888 -1.83158	</point>
+                <point>	0.89205 1.13362 -1.76158	</point>
+                <point>	0.89205 1.13835 -1.69158	</point>
+                <point>	0.902051 1.1431 -1.62158	</point>
+                <point>	0.922051 1.14788 -1.55158	</point>
+                <point>	0.942051 1.15266 -1.48158	</point>
+                <point>	0.962052 1.15743 -1.41158	</point>
+                <point>	0.982052 1.16221 -1.34158	</point>
+                <point>	0.00205 1.16699 -1.27159	</point>
+                <point>	0.892053 1.17132 -1.20159	</point>
+                <point>	0.892054 1.17535 -1.13159	</point>
+                <point>	0.892054 1.17937 -1.06159	</point>
+                <point>	0.892055 1.1834 -0.991588	</point>
+                <point>	0.892055 1.18743 -0.921589	</point>
+                <point>	0.892056 1.19146 -0.85159	</point>
+                <point>	0.892056 1.19549 -0.781591	</point>
+                <point>	0.892057 1.19952 -0.711591	</point>
+                <point>	0.892057 1.20354 -0.641593	</point>
+                <point>	0.892058 1.20757 -0.571594	</point>
+                <point>	0.892058 1.2116 -0.501594	</point>
+                <point>	0.892059 1.21563 -0.431595	</point>
+                <point>	0.892059 1.21966 -0.361596	</point>
+                <point>	0.89206 1.22368 -0.291597	</point>
+                <point>	0.89206 1.22771 -0.221598	</point>
+                <point>	0.892061 1.23174 -0.151599	</point>
+                <point>	0.892061 1.27269 0.0100615	</point>
+                <point>	0.892067 1.29616 0.655322	</point>
+                <point>	0.892071 1.35668 1.09334	</point>
+                <point>	0.892075 1.3456 1.47876	</point>
+                <point>	0.13208 1.3813 1.99327	</point>
+                <point>	0.13208 1.41866 2.41134	</point>
+                <point>	0.13208 1.45157 2.64836	</point>
+                <point>	0.892079 1.45225 2.71836	</point>
+                <point>	0.942079 1.45209 2.78836	</point>
+                <point>	0.98208 1.45189 2.85836	</point>
+                <point>	0.02208 1.45169 2.92836	</point>
+                <point>	0.06208 1.45149 2.99836	</point>
+                <point>	0.892082 1.44252 3.06836	</point>
               </range>
             </top>
-            <bottom></bottom>
+            <bottom>
+              <range>
+                <point>	0.89205 0.696728 -2.95156	</point>
+                <point>	0.892048 0.795223 -2.88156	</point>
+                <point>	0.892048 0.834934 -2.81156	</point>
+                <point>	0.892048 0.848808 -2.74156	</point>
+                <point>	0.892049 0.840505 -2.67157	</point>
+                <point>	0.892051 0.805543 -2.60157	</point>
+                <point>	0.892053 0.729195 -2.53157	</point>
+                <point>	0.02205 0.868484 -2.32157	</point>
+                <point>	0.97205 0.938253 -2.25157	</point>
+                <point>	0.01205 0.913186 -2.18157	</point>
+                <point>	0.06205 0.803917 -2.11157	</point>
+                <point>	0.06206 0.803917 -2.04157	</point>
+                <point>	0.02205 0.887806 -1.97158	</point>
+                <point>	0.972053 0.958362 -1.90158	</point>
+                <point>	0.01205 0.931948 -1.83158	</point>
+                <point>	0.892056 0.857587 -1.76158	</point>
+                <point>	0.892057 0.857587 -1.69158	</point>
+                <point>	0.892057 0.857587 -1.62158	</point>
+                <point>	0.892058 0.857587 -1.55158	</point>
+                <point>	0.892059 0.857587 -1.48158	</point>
+                <point>	0.892059 0.857588 -1.41158	</point>
+                <point>	0.89206 0.857588 -1.34158	</point>
+                <point>	0.89206 0.857588 -1.27158	</point>
+                <point>	0.892061 0.857588 -1.20158	</point>
+                <point>	0.892061 0.857588 -1.13159	</point>
+                <point>	0.02206 0.94542 -1.06159	</point>
+                <point>	0.972059 1.01857 -0.991588	</point>
+                <point>	0.97206 1.00177 -0.921589	</point>
+                <point>	0.892064 0.857589 -0.851589	</point>
+                <point>	0.892064 0.857589 -0.78159	</point>
+                <point>	0.892065 0.857589 -0.711591	</point>
+                <point>	0.892065 0.85759 -0.641592	</point>
+                <point>	0.03206 0.901818 -0.571594	</point>
+                <point>	0.892067 0.85759 -0.501593	</point>
+                <point>	0.892067 0.85759 -0.431594	</point>
+                <point>	0.892068 0.85759 -0.361595	</point>
+                <point>	0.892068 0.857591 -0.291596	</point>
+                <point>	0.892069 0.857591 -0.221597	</point>
+                <point>	0.89207 0.857591 -0.151598	</point>
+                <point>	0.01207 1.05098 -0.0816005	</point>
+                <point>	0.972065 1.10138 -0.0116011	</point>
+                <point>	0.02207 1.08015 0.111959	</point>
+                <point>	0.05207 1.09952 0.749253	</point>
+                <point>	0.962085 1.18415 1.85899	</point>
+                <point>	0.962084 1.19373 2.38255	</point>
+                <point>	0.962084 1.19701 2.64836	</point>
+                <point>	0.962085 1.19676 2.71836	</point>
+                <point>	0.962085 1.19652 2.78836	</point>
+                <point>	0.962086 1.19627 2.85836	</point>
+                <point>	0.962087 1.19603 2.92836	</point>
+                <point>	0.962087 1.19578 2.99836	</point>
+                <point>	0.962089 1.13161 3.06836	</point>
+              </range>
+            </bottom>
           </sourceCollisionHullPoints>
         </right>
       </physicalTracks>
@@ -907,46 +1103,130 @@
         <segmentModelRight>	vehicles/japan/J21_Type_91/track/Type_91_Track.model	</segmentModelRight>
         <left>	vehicles/japan/J21_Type_91/track/left.track	</left>
         <right>	vehicles/japan/J21_Type_91/track/right.track	</right>
-        <segmentLength>	0.15	</segmentLength>
-        <segmentOffset>	0.162	</segmentOffset>
+        <segmentLength>	0.14	</segmentLength>
+        <segmentOffset>	0.192	</segmentOffset>
         <lodDist>	SPLINE_TRACK	</lodDist>
         <atlas>
           <UTiles>	1	</UTiles>
           <VTiles>	1	</VTiles>
         </atlas>
       </splineDesc>
-      <trackThickness>	0.0212	</trackThickness>
+      <trackThickness>	0.0209	</trackThickness>
       <trackNodes>
         <enable>	true	</enable>
         <linkBones>	false	</linkBones>
         <maxAmplitude>	0.095	</maxAmplitude>
         <maxOffset>	0.095	</maxOffset>
         <gravity>	-9.8	</gravity>
-        <elasticity>	2132	</elasticity>
+        <elasticity>	1873	</elasticity>
         <damping>	2	</damping>
         <node>
-          <isLeft>	true	</isLeft>
-          <name>	Track_VD_L0	</name>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R0	</name>
           <forwardElastK>	1	</forwardElastK>
           <backwardElastK>	1	</backwardElastK>
+          <offset>	-0.00185874	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R1	</name>
+          <forwardElastK>	0.95	</forwardElastK>
+          <backwardElastK>	1.1	</backwardElastK>
+          <offset>	-0.036	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R2	</name>
+          <forwardElastK>	1	</forwardElastK>
+          <backwardElastK>	1	</backwardElastK>
+          <offset>	-0.036	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R3	</name>
+          <forwardElastK>	0.5	</forwardElastK>
+          <backwardElastK>	1	</backwardElastK>
+          <offset>	-0.036	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R4	</name>
+          <forwardElastK>	0.5	</forwardElastK>
+          <backwardElastK>	1.9	</backwardElastK>
+          <offset>	-0.036	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R5	</name>
+          <forwardElastK>	1	</forwardElastK>
+          <backwardElastK>	1	</backwardElastK>
+          <offset>	-0.00185874	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L0	</name>
+          <forwardElastK>	1	</forwardElastK>
+          <backwardElastK>	1	</backwardElastK>
+          <offset>	-0.00185874	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L1	</name>
+          <forwardElastK>	0.95	</forwardElastK>
+          <backwardElastK>	1.1	</backwardElastK>
+          <offset>	-0.036	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L2	</name>
+          <forwardElastK>	1	</forwardElastK>
+          <backwardElastK>	1	</backwardElastK>
+          <offset>	-0.036	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L3	</name>
+          <forwardElastK>	0.5	</forwardElastK>
+          <backwardElastK>	1	</backwardElastK>
+          <offset>	-0.036	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L4	</name>
+          <forwardElastK>	0.5	</forwardElastK>
+          <backwardElastK>	1.9	</backwardElastK>
+          <offset>	-0.036	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L5	</name>
+          <forwardElastK>	1	</forwardElastK>
+          <backwardElastK>	1	</backwardElastK>
+          <offset>	-0.00185874	</offset>
         </node>
         <node>
           <isLeft>	false	</isLeft>
           <name>	Track_VD_R0	</name>
-          <forwardElastK>	1	</forwardElastK>
-          <backwardElastK>	1	</backwardElastK>
+          <forwardElastK>	0.78	</forwardElastK>
+          <backwardElastK>	1.5	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L0	</name>
+          <forwardElastK>	0.78	</forwardElastK>
+          <backwardElastK>	1.5	</backwardElastK>
         </node>
         <node>
           <isLeft>	true	</isLeft>
           <name>	Track_VD_L1	</name>
-          <forwardElastK>	1	</forwardElastK>
-          <backwardElastK>	2.59	</backwardElastK>
+          <forwardElastK>	1.5	</forwardElastK>
+          <backwardElastK>	0.78	</backwardElastK>
         </node>
         <node>
           <isLeft>	false	</isLeft>
           <name>	Track_VD_R1	</name>
-          <forwardElastK>	1	</forwardElastK>
-          <backwardElastK>	2.59	</backwardElastK>
+          <forwardElastK>	1.5	</forwardElastK>
+          <backwardElastK>	0.78	</backwardElastK>
         </node>
       </trackNodes>
       <groundNodes>
@@ -985,35 +1265,51 @@
       </groundNodes>
       <physicalTracks>
         <left>
-          <segmentsCount>	92	</segmentsCount>
-          <segmentsOuterThickness>	0.0741157	</segmentsOuterThickness>
-          <segmentsInnerThickness>	-0.00289711	</segmentsInnerThickness>
+          <segmentsCount>	98	</segmentsCount>
+          <segmentsOuterThickness>	0.0741327	</segmentsOuterThickness>
+          <segmentsInnerThickness>	-0.00289671	</segmentsInnerThickness>
           <segmentsPlaneOffset>	-1.068	</segmentsPlaneOffset>
           <springsLength>
             <backwardMovement>
-              <back>	0.151737	</back>
-              <top>	0.13679	</top>
-              <front>	0.140005	</front>
-              <bottom>	0.0859709	</bottom>
+              <back>	0.143588	</back>
+              <top>	0.137889	</top>
+              <front>	0.136554	</front>
+              <bottom>	0.0775624	</bottom>
             </backwardMovement>
             <forwardMovement>
-              <back>	0.144169	</back>
-              <top>	0.146724	</top>
-              <front>	0.149553	</front>
-              <bottom>	0.0859709	</bottom>
+              <back>	0.136437	</back>
+              <top>	0.137889	</top>
+              <front>	0.143585	</front>
+              <bottom>	0.0775624	</bottom>
             </forwardMovement>
           </springsLength>
           <mainSegment>
             <model>	vehicles/japan/J21_Type_91/track/Type_91_Track.model	</model>
-            <length>	0.149551	</length>
+            <length>	0.139998	</length>
           </mainSegment>
           <collisionHull>
-            <bottom></bottom>
+            <bottom>
+              <part>
+                <xStart>	-3.01159	</xStart>
+                <xStep>	0.00999999	</xStep>
+                <ySamples>	0.464163 0.444169 0.427133 0.412226 0.398958 0.387017 0.376184	</ySamples>
+              </part>
+              <part>
+                <xStart>	-2.95159	</xStart>
+                <xStep>	0.118038	</xStep>
+                <ySamples>	0.376184 0.299536 0.280676 0.307956 0.399895 0.785851 0.709503 0.838767 0.918558 0.775318 0.784243 0.784243 0.868132 0.938666 0.912274 0.837892 0.837892 0.837892 0.837892 0.837892 0.837893 0.837892 0.837892 0.837892 0.837892 0.916719 0.998871 0.982071 0.837892 0.837892 0.837892 0.837893 0.88214 0.837892 0.837892 0.837892 0.837893 0.837892 0.837892 1.0313 1.08168 1.04405 1.07984 1.16445 1.17402 1.08126 1.10434 0.849274 0.686502 0.6287 0.617977 0.649441	</ySamples>
+              </part>
+              <part>
+                <xStart>	3.06834	</xStart>
+                <xStep>	0.00999999	</xStep>
+                <ySamples>	0.649441 0.654332 0.659633 0.665367 0.671558 0.678239 0.685442	</ySamples>
+              </part>
+            </bottom>
             <top>
               <part>
-                <xStart>	-3.03552	</xStart>
-                <xStep>	0.0747755	</xStep>
-                <ySamples>	0.869407 0.908195 0.933227 0.950966 0.957304 0.963096 0.968889 0.975013 0.980812 0.98661 0.992408 0.998206 1.00438 1.01018 1.01599 1.02283 1.02755 1.03151 1.03546 1.03662 1.04058 1.04455 1.04852 1.05248 1.05645 1.06041 1.06438 1.06835 1.07441 1.07628 1.08025 1.08421 1.08818 1.09215 1.09611 1.10008 1.10405 1.10801 1.11198 1.11594 1.14658 1.13921 1.12784 1.13181 1.13578 1.13974 1.14371 1.14768 1.15164 1.15561 1.15958 1.16354 1.16751 1.20395 1.18875 1.18119 1.18635 1.1915 1.19666 1.20181 1.20697 1.21197 1.21745 1.22294 1.22842 1.24386 1.27688 1.25347 1.24869 1.25418 1.30393 1.31109 1.31798 1.32322 1.33126 1.33943 1.33991 1.33725 1.33648 1.34008 1.34308 1.34112 1.33482	</ySamples>
+                <xStart>	-3.09158	</xStart>
+                <xStep>	0.111999	</xStep>
+                <ySamples>	0.816079 0.872392 0.914558 0.937057 0.953067 0.957687 0.962307 0.966927 0.984637 0.976166 0.983857 1.02306 0.990016 0.994636 0.999255 1.00389 1.00858 1.01329 1.01802 1.08343 1.02749 1.03224 1.03702 1.0418 1.04657 1.05135 1.05615 1.14577 1.13946 1.06851 1.07254 1.07657 1.0806 1.08463 1.08866 1.12672 1.21191 1.14347 1.10477 1.1088 1.11282 1.11685 1.12088 1.16183 1.26237 1.27592 1.23473 1.27046 1.30781 1.34072 1.34138 1.34122 1.34102 1.34084 1.34064 1.33165	</ySamples>
               </part>
             </top>
           </collisionHull>
@@ -1041,49 +1337,61 @@
           <snapWheels>
             <topFront>
               <wheelName>	WD_L0	</wheelName>
-              <basePos>	2.922 0.961235	</basePos>
-              <shiftVec>	0.260859 0.187296	</shiftVec>
+              <basePos>	2.92198 0.961348	</basePos>
+              <shiftVec>	0.292843 0.143454	</shiftVec>
               <jointIdx>	11	</jointIdx>
             </topFront>
             <topBack>
               <wheelName>	WD_L8	</wheelName>
-              <basePos>	-2.73158 0.597631	</basePos>
-              <shiftVec>	-0.2709 0.0982172	</shiftVec>
-              <jointIdx>	54	</jointIdx>
+              <basePos>	-2.72588 0.594557	</basePos>
+              <shiftVec>	-0.266638 0.126802	</shiftVec>
+              <jointIdx>	57	</jointIdx>
             </topBack>
             <bottomBack>
               <wheelName>	W_L16	</wheelName>
-              <basePos>	-2.176 0.182963	</basePos>
-              <shiftVec>	0.0214264 -0.128391	</shiftVec>
-              <jointIdx>	62	</jointIdx>
+              <basePos>	-2.176 0.182965	</basePos>
+              <shiftVec>	0.0589647 -0.128391	</shiftVec>
+              <jointIdx>	66	</jointIdx>
             </bottomBack>
             <bottomFront>
               <wheelName>	W_L1	</wheelName>
               <basePos>	2.17074 0.182954	</basePos>
-              <shiftVec>	0.0690598 -0.114742	</shiftVec>
+              <shiftVec>	0.116569 -0.102438	</shiftVec>
               <jointIdx>	0	</jointIdx>
             </bottomFront>
           </snapWheels>
           <radiusOverrides>
             <wheel>
               <name>	WD_L8	</name>
-              <radius>	0.286598	</radius>
-            </wheel>
-            <wheel>
-              <name>	WD_L5	</name>
-              <radius>	0.1	</radius>
-            </wheel>
-            <wheel>
-              <name>	WD_L3	</name>
-              <radius>	0.1	</radius>
-            </wheel>
-            <wheel>
-              <name>	W_L16	</name>
-              <radius>	0.18	</radius>
+              <radius>	0.293923	</radius>
             </wheel>
             <wheel>
               <name>	WD_L0	</name>
-              <radius>	0.319738	</radius>
+              <radius>	0.324888	</radius>
+            </wheel>
+            <wheel>
+              <name>	WD_L6	</name>
+              <radius>	0.095	</radius>
+            </wheel>
+            <wheel>
+              <name>	WD_L5	</name>
+              <radius>	0.08	</radius>
+            </wheel>
+            <wheel>
+              <name>	WD_L4	</name>
+              <radius>	0.08	</radius>
+            </wheel>
+            <wheel>
+              <name>	WD_L3	</name>
+              <radius>	0.08	</radius>
+            </wheel>
+            <wheel>
+              <name>	WD_L2	</name>
+              <radius>	0.08	</radius>
+            </wheel>
+            <wheel>
+              <name>	WD_L1	</name>
+              <radius>	0.09	</radius>
             </wheel>
           </radiusOverrides>
           <teethSyncs>
@@ -1091,136 +1399,180 @@
             <segmentSyncPivotOffset>	0.000000	</segmentSyncPivotOffset>
             <sync>
               <name>	WD_L8	</name>
-              <startAngle>	-75.2189	</startAngle>
+              <startAngle>	60.7915	</startAngle>
               <teethCount>	14	</teethCount>
             </sync>
             <sync>
               <name>	WD_L0	</name>
-              <startAngle>	-78.3313	</startAngle>
+              <startAngle>	57.6874	</startAngle>
               <teethCount>	14	</teethCount>
             </sync>
           </teethSyncs>
           <sourceCollisionHullPoints>
             <top>
               <range>
-                <point>	-0.892028 0.980204 -3.03587	</point>
-                <point>	-0.892029 1.01899 -2.96109	</point>
-                <point>	-0.89203 1.04402 -2.88632	</point>
-                <point>	-0.89203 1.06176 -2.81154	</point>
-                <point>	-0.89203 1.0681 -2.73677	</point>
-                <point>	-0.89203 1.07389 -2.66199	</point>
-                <point>	-0.89203 1.07969 -2.58722	</point>
-                <point>	-0.89203 1.08581 -2.51244	</point>
-                <point>	-0.89203 1.09161 -2.43766	</point>
-                <point>	-0.89203 1.09741 -2.36289	</point>
-                <point>	-0.89203 1.10321 -2.28811	</point>
-                <point>	-0.89203 1.10901 -2.21334	</point>
-                <point>	-0.89203 1.11518 -2.13856	</point>
-                <point>	-0.89203 1.12098 -2.06379	</point>
-                <point>	-0.89203 1.12678 -1.98901	</point>
-                <point>	-0.89203 1.13363 -1.91424	</point>
-                <point>	-0.89203 1.13835 -1.83946	</point>
-                <point>	-0.89203 1.14231 -1.76468	</point>
-                <point>	-0.89203 1.14626 -1.68991	</point>
-                <point>	-0.89203 1.14742 -1.61513	</point>
-                <point>	-0.89203 1.15138 -1.54036	</point>
-                <point>	-0.89203 1.15535 -1.46558	</point>
-                <point>	-0.892029 1.15932 -1.39081	</point>
-                <point>	-0.892029 1.16328 -1.31603	</point>
-                <point>	-0.892029 1.16725 -1.24126	</point>
-                <point>	-0.892029 1.17122 -1.16648	</point>
-                <point>	-0.892029 1.17518 -1.09171	</point>
-                <point>	-0.892029 1.17915 -1.01693	</point>
-                <point>	-0.892029 1.18312 -0.942155	</point>
-                <point>	-0.892029 1.18708 -0.86738	</point>
-                <point>	-0.892029 1.19105 -0.792604	</point>
-                <point>	-0.892029 1.19502 -0.717828	</point>
-                <point>	-0.892029 1.19898 -0.643053	</point>
-                <point>	-0.892029 1.20295 -0.568277	</point>
-                <point>	-0.892029 1.20692 -0.493502	</point>
-                <point>	-0.892028 1.21088 -0.418726	</point>
-                <point>	-0.892028 1.21485 -0.343951	</point>
-                <point>	-0.892028 1.21882 -0.269176	</point>
-                <point>	-0.892028 1.22278 -0.1944	</point>
-                <point>	-0.892028 1.22675 -0.119625	</point>
-                <point>	-0.892028 1.23072 -0.044849	</point>
-                <point>	-0.892028 1.23468 0.0299262	</point>
-                <point>	-0.892028 1.23865 0.104702	</point>
-                <point>	-0.892028 1.24262 0.179478	</point>
-                <point>	-0.892028 1.24658 0.254253	</point>
-                <point>	-0.892028 1.25055 0.329028	</point>
-                <point>	-0.892027 1.25452 0.403804	</point>
-                <point>	-0.892027 1.25848 0.478579	</point>
-                <point>	-0.892027 1.26245 0.553355	</point>
-                <point>	-0.892027 1.26642 0.62813	</point>
-                <point>	-0.892027 1.27038 0.702906	</point>
-                <point>	-0.892027 1.27435 0.777681	</point>
-                <point>	-0.892027 1.27832 0.852457	</point>
-                <point>	-0.892027 1.28228 0.927232	</point>
-                <point>	-0.902027 1.28684 1.00201	</point>
-                <point>	-0.922027 1.292 1.07678	</point>
-                <point>	-0.942027 1.29715 1.15156	</point>
-                <point>	-0.962027 1.30231 1.22633	</point>
-                <point>	-0.982027 1.30746 1.30111	</point>
-                <point>	-1.00203 1.31262 1.37589	</point>
-                <point>	-1.02203 1.31777 1.45066	</point>
-                <point>	-1.02203 1.32278 1.52544	</point>
-                <point>	-1.02203 1.32826 1.60021	</point>
-                <point>	-1.02203 1.33374 1.67499	</point>
-                <point>	-1.02203 1.33922 1.74976	</point>
-                <point>	-1.02203 1.3447 1.82454	</point>
-                <point>	-1.01203 1.34854 1.89931	</point>
-                <point>	-1.01203 1.35402 1.97409	</point>
-                <point>	-1.01203 1.3595 2.04886	</point>
-                <point>	-1.01203 1.36498 2.12364	</point>
-                <point>	-1.08203 1.41473 2.19842	</point>
-                <point>	-1.03203 1.42189 2.27319	</point>
-                <point>	-1.13203 1.42878 2.34797	</point>
-                <point>	-1.05203 1.43403 2.42274	</point>
-                <point>	-0.942028 1.44207 2.49752	</point>
-                <point>	-0.892028 1.45024 2.57229	</point>
-                <point>	-1.13203 1.45071 2.64707	</point>
-                <point>	-1.13203 1.44805 2.72184	</point>
-                <point>	-1.13203 1.44728 2.79662	</point>
-                <point>	-1.13203 1.45089 2.8714	</point>
-                <point>	-1.13203 1.45388 2.94617	</point>
-                <point>	-1.13203 1.45192 3.02095	</point>
-                <point>	-1.13203 1.44563 3.09572	</point>
+                <point>	0.11204 0.926913 -3.09156	</point>
+                <point>	0.05204 0.983225 -3.02156	</point>
+                <point>	0.892042 1.02541 -2.95156	</point>
+                <point>	0.892042 1.04791 -2.88156	</point>
+                <point>	0.892043 1.06392 -2.81156	</point>
+                <point>	0.892043 1.06854 -2.74157	</point>
+                <point>	0.892044 1.07316 -2.67157	</point>
+                <point>	0.892044 1.07778 -2.60157	</point>
+                <point>	0.892044 1.0824 -2.53157	</point>
+                <point>	0.892045 1.08702 -2.46157	</point>
+                <point>	0.892045 1.09163 -2.39157	</point>
+                <point>	0.892046 1.09625 -2.32157	</point>
+                <point>	0.892046 1.10087 -2.25157	</point>
+                <point>	0.892047 1.10549 -2.18157	</point>
+                <point>	0.892047 1.11011 -2.11157	</point>
+                <point>	0.892048 1.11474 -2.04157	</point>
+                <point>	0.892048 1.11944 -1.97158	</point>
+                <point>	0.892049 1.12415 -1.90158	</point>
+                <point>	0.892049 1.12888 -1.83158	</point>
+                <point>	0.89205 1.13362 -1.76158	</point>
+                <point>	0.89205 1.13835 -1.69158	</point>
+                <point>	0.902051 1.1431 -1.62158	</point>
+                <point>	0.922051 1.14788 -1.55158	</point>
+                <point>	0.942051 1.15266 -1.48158	</point>
+                <point>	0.962052 1.15743 -1.41158	</point>
+                <point>	0.982052 1.16221 -1.34158	</point>
+                <point>	0.00205 1.16699 -1.27159	</point>
+                <point>	0.892053 1.17132 -1.20159	</point>
+                <point>	0.892054 1.17535 -1.13159	</point>
+                <point>	0.892054 1.17937 -1.06159	</point>
+                <point>	0.892055 1.1834 -0.991588	</point>
+                <point>	0.892055 1.18743 -0.921589	</point>
+                <point>	0.892056 1.19146 -0.85159	</point>
+                <point>	0.892056 1.19549 -0.781591	</point>
+                <point>	0.892057 1.19952 -0.711591	</point>
+                <point>	0.892057 1.20354 -0.641593	</point>
+                <point>	0.892058 1.20757 -0.571594	</point>
+                <point>	0.892058 1.2116 -0.501594	</point>
+                <point>	0.892059 1.21563 -0.431595	</point>
+                <point>	0.892059 1.21966 -0.361596	</point>
+                <point>	0.89206 1.22368 -0.291597	</point>
+                <point>	0.89206 1.22771 -0.221598	</point>
+                <point>	0.892061 1.23174 -0.151599	</point>
+                <point>	0.892061 1.27269 0.0100615	</point>
+                <point>	0.892067 1.29616 0.655322	</point>
+                <point>	0.892071 1.35668 1.09334	</point>
+                <point>	0.892075 1.3456 1.47876	</point>
+                <point>	0.13208 1.3813 1.99327	</point>
+                <point>	0.13208 1.41866 2.41134	</point>
+                <point>	0.13208 1.45157 2.64836	</point>
+                <point>	0.892079 1.45225 2.71836	</point>
+                <point>	0.942079 1.45209 2.78836	</point>
+                <point>	0.98208 1.45189 2.85836	</point>
+                <point>	0.02208 1.45169 2.92836	</point>
+                <point>	0.06208 1.45149 2.99836	</point>
+                <point>	0.892082 1.44252 3.06836	</point>
               </range>
             </top>
-            <bottom></bottom>
+            <bottom>
+              <range>
+                <point>	0.89205 0.696728 -2.95156	</point>
+                <point>	0.892048 0.795223 -2.88156	</point>
+                <point>	0.892048 0.834934 -2.81156	</point>
+                <point>	0.892048 0.848808 -2.74156	</point>
+                <point>	0.892049 0.840505 -2.67157	</point>
+                <point>	0.892051 0.805543 -2.60157	</point>
+                <point>	0.892053 0.729195 -2.53157	</point>
+                <point>	0.02205 0.868484 -2.32157	</point>
+                <point>	0.97205 0.938253 -2.25157	</point>
+                <point>	0.01205 0.913186 -2.18157	</point>
+                <point>	0.06205 0.803917 -2.11157	</point>
+                <point>	0.06206 0.803917 -2.04157	</point>
+                <point>	0.02205 0.887806 -1.97158	</point>
+                <point>	0.972053 0.958362 -1.90158	</point>
+                <point>	0.01205 0.931948 -1.83158	</point>
+                <point>	0.892056 0.857587 -1.76158	</point>
+                <point>	0.892057 0.857587 -1.69158	</point>
+                <point>	0.892057 0.857587 -1.62158	</point>
+                <point>	0.892058 0.857587 -1.55158	</point>
+                <point>	0.892059 0.857587 -1.48158	</point>
+                <point>	0.892059 0.857588 -1.41158	</point>
+                <point>	0.89206 0.857588 -1.34158	</point>
+                <point>	0.89206 0.857588 -1.27158	</point>
+                <point>	0.892061 0.857588 -1.20158	</point>
+                <point>	0.892061 0.857588 -1.13159	</point>
+                <point>	0.02206 0.94542 -1.06159	</point>
+                <point>	0.972059 1.01857 -0.991588	</point>
+                <point>	0.97206 1.00177 -0.921589	</point>
+                <point>	0.892064 0.857589 -0.851589	</point>
+                <point>	0.892064 0.857589 -0.78159	</point>
+                <point>	0.892065 0.857589 -0.711591	</point>
+                <point>	0.892065 0.85759 -0.641592	</point>
+                <point>	0.03206 0.901818 -0.571594	</point>
+                <point>	0.892067 0.85759 -0.501593	</point>
+                <point>	0.892067 0.85759 -0.431594	</point>
+                <point>	0.892068 0.85759 -0.361595	</point>
+                <point>	0.892068 0.857591 -0.291596	</point>
+                <point>	0.892069 0.857591 -0.221597	</point>
+                <point>	0.89207 0.857591 -0.151598	</point>
+                <point>	0.01207 1.05098 -0.0816005	</point>
+                <point>	0.972065 1.10138 -0.0116011	</point>
+                <point>	0.02207 1.08015 0.111959	</point>
+                <point>	0.05207 1.09952 0.749253	</point>
+                <point>	0.962085 1.18415 1.85899	</point>
+                <point>	0.962084 1.19373 2.38255	</point>
+                <point>	0.962084 1.19701 2.64836	</point>
+                <point>	0.962085 1.19676 2.71836	</point>
+                <point>	0.962085 1.19652 2.78836	</point>
+                <point>	0.962086 1.19627 2.85836	</point>
+                <point>	0.962087 1.19603 2.92836	</point>
+                <point>	0.962087 1.19578 2.99836	</point>
+                <point>	0.962089 1.13161 3.06836	</point>
+              </range>
+            </bottom>
           </sourceCollisionHullPoints>
         </left>
         <right>
-          <segmentsCount>	92	</segmentsCount>
-          <segmentsOuterThickness>	0.0741516	</segmentsOuterThickness>
-          <segmentsInnerThickness>	-0.00289705	</segmentsInnerThickness>
+          <segmentsCount>	98	</segmentsCount>
+          <segmentsOuterThickness>	0.0741327	</segmentsOuterThickness>
+          <segmentsInnerThickness>	-0.00289577	</segmentsInnerThickness>
           <segmentsPlaneOffset>	1.068	</segmentsPlaneOffset>
           <springsLength>
             <backwardMovement>
-              <back>	0.151737	</back>
-              <top>	0.13679	</top>
-              <front>	0.140005	</front>
-              <bottom>	0.0859709	</bottom>
+              <back>	0.143588	</back>
+              <top>	0.137889	</top>
+              <front>	0.136554	</front>
+              <bottom>	0.0775624	</bottom>
             </backwardMovement>
             <forwardMovement>
-              <back>	0.144169	</back>
-              <top>	0.146724	</top>
-              <front>	0.149553	</front>
-              <bottom>	0.0859709	</bottom>
+              <back>	0.136437	</back>
+              <top>	0.137889	</top>
+              <front>	0.143585	</front>
+              <bottom>	0.0775624	</bottom>
             </forwardMovement>
           </springsLength>
           <mainSegment>
             <model>	vehicles/japan/J21_Type_91/track/Type_91_Track.model	</model>
-            <length>	0.149332	</length>
+            <length>	0.139998	</length>
           </mainSegment>
           <collisionHull>
-            <bottom></bottom>
+            <bottom>
+              <part>
+                <xStart>	-3.01159	</xStart>
+                <xStep>	0.00999999	</xStep>
+                <ySamples>	0.464114 0.44413 0.427102 0.4122 0.398936 0.386998 0.376167	</ySamples>
+              </part>
+              <part>
+                <xStart>	-2.95159	</xStart>
+                <xStep>	0.0734137	</xStep>
+                <ySamples>	0.376167 0.319894 0.29057 0.280553 0.287946 0.314121 0.365426 0.469733 0.918558 0.78489 0.76736 0.784243 0.868132 0.858697 0.783132 0.778337 0.828282 0.837892 0.837892 0.837892 0.837893 0.837892 0.837892 0.837892 0.837892 0.925744 0.871506 0.842438 0.837892 0.837892 0.837892 0.837893 0.88214 0.837892 0.837892 0.837892 0.837893 0.837892 0.837892 0.938512 0.915543 0.942489 0.837892 0.837892 0.837892 0.837892 0.837892 0.837893 0.88214 0.88214 0.837892 0.837892 0.837892 0.970908 0.992616 1.06118 0.837892 0.837892 0.837892 0.837892 0.837892 0.837892 0.837892 0.837892 0.837892 0.88214 1.04334 1.05995 1.1811 1.12626 1.09391 1.09842 1.0937 1.07506 1.09873 1.17749 0.782112 0.696911 0.649985 0.624916 0.616898 0.62471 0.64954	</ySamples>
+              </part>
+              <part>
+                <xStart>	3.06834	</xStart>
+                <xStep>	0.00999999	</xStep>
+                <ySamples>	0.64954 0.654433 0.659736 0.665473 0.671668 0.678351 0.685559	</ySamples>
+              </part>
+            </bottom>
             <top>
               <part>
-                <xStart>	-3.04001	</xStart>
-                <xStep>	0.0746659	</xStep>
-                <ySamples>	0.856937 0.906926 0.934063 0.952138 0.957686 0.962613 0.96754 0.972466 0.977393 0.98232 0.987247 0.992174 0.9971 1.00203 1.00702 1.01204 1.01708 1.02213 1.02718 1.03225 1.03734 1.04243 1.04752 1.05263 1.05773 1.06207 1.06637 1.07067 1.07567 1.07926 1.08355 1.08785 1.09215 1.09644 1.10074 1.10504 1.10933 1.11363 1.11793 1.12222 1.14403 1.14293 1.13511 1.13941 1.1437 1.148 1.1523 1.15659 1.16089 1.16519 1.16948 1.17378 1.17808 1.20199 1.19431 1.19097 1.19526 1.19956 1.20385 1.20815 1.21245 1.21674 1.22104 1.22534 1.22963 1.23393 1.27571 1.26144 1.24924 1.25478 1.32135 1.31676 1.32425 1.33419 1.33885 1.33954 1.3405 1.34143 1.34121 1.34102 1.3408 1.34061 1.33038	</ySamples>
+                <xStart>	-3.09158	</xStart>
+                <xStep>	0.0821323	</xStep>
+                <ySamples>	0.816079 0.872392 0.914558 0.937057 0.953067 0.957687 0.962307 0.966927 0.971546 0.976166 0.982402 0.985396 0.990016 0.994636 1.00792 1.02308 1.00858 1.01329 1.01802 1.02276 1.02749 1.03224 1.03702 1.0418 1.04657 1.05799 1.08317 1.06046 1.06449 1.06851 1.07254 1.07657 1.0806 1.08463 1.08866 1.09268 1.09671 1.15142 1.14706 1.1088 1.11282 1.11685 1.12088 1.12491 1.12894 1.13296 1.13699 1.14102 1.16827 1.21147 1.18853 1.15713 1.16116 1.16519 1.16922 1.17324 1.17727 1.1813 1.18533 1.18936 1.26935 1.28614 1.28123 1.31892 1.31985 1.32862 1.33795 1.33909 1.33974 1.34072 1.34138 1.34122 1.34102 1.34084 1.34064 1.33165	</ySamples>
               </part>
             </top>
           </collisionHull>
@@ -1248,49 +1600,61 @@
           <snapWheels>
             <topFront>
               <wheelName>	WD_R0	</wheelName>
-              <basePos>	2.922 0.961235	</basePos>
-              <shiftVec>	0.261085 0.186786	</shiftVec>
+              <basePos>	2.92198 0.961319	</basePos>
+              <shiftVec>	0.292963 0.142941	</shiftVec>
               <jointIdx>	11	</jointIdx>
             </topFront>
             <topBack>
               <wheelName>	WD_R8	</wheelName>
-              <basePos>	-2.73158 0.597631	</basePos>
-              <shiftVec>	-0.270905 0.0982096	</shiftVec>
-              <jointIdx>	54	</jointIdx>
+              <basePos>	-2.72589 0.594585	</basePos>
+              <shiftVec>	-0.266653 0.126832	</shiftVec>
+              <jointIdx>	57	</jointIdx>
             </topBack>
             <bottomBack>
               <wheelName>	W_R16	</wheelName>
               <basePos>	-2.176 0.182915	</basePos>
-              <shiftVec>	0.0214987 -0.128391	</shiftVec>
-              <jointIdx>	62	</jointIdx>
+              <shiftVec>	0.0589643 -0.128392	</shiftVec>
+              <jointIdx>	66	</jointIdx>
             </bottomBack>
             <bottomFront>
               <wheelName>	W_R1	</wheelName>
-              <basePos>	2.17074 0.182906	</basePos>
-              <shiftVec>	0.0695031 -0.114854	</shiftVec>
+              <basePos>	2.17074 0.182904	</basePos>
+              <shiftVec>	0.117022 -0.102834	</shiftVec>
               <jointIdx>	0	</jointIdx>
             </bottomFront>
           </snapWheels>
           <radiusOverrides>
             <wheel>
               <name>	WD_R8	</name>
-              <radius>	0.286606	</radius>
-            </wheel>
-            <wheel>
-              <name>	WD_R5	</name>
-              <radius>	0.1	</radius>
-            </wheel>
-            <wheel>
-              <name>	WD_R3	</name>
-              <radius>	0.1	</radius>
-            </wheel>
-            <wheel>
-              <name>	W_R16	</name>
-              <radius>	0.18	</radius>
+              <radius>	0.293949	</radius>
             </wheel>
             <wheel>
               <name>	WD_R0	</name>
-              <radius>	0.319629	</radius>
+              <radius>	0.32477	</radius>
+            </wheel>
+            <wheel>
+              <name>	WD_R6	</name>
+              <radius>	0.095	</radius>
+            </wheel>
+            <wheel>
+              <name>	WD_R5	</name>
+              <radius>	0.08	</radius>
+            </wheel>
+            <wheel>
+              <name>	WD_R4	</name>
+              <radius>	0.08	</radius>
+            </wheel>
+            <wheel>
+              <name>	WD_R3	</name>
+              <radius>	0.08	</radius>
+            </wheel>
+            <wheel>
+              <name>	WD_R2	</name>
+              <radius>	0.08	</radius>
+            </wheel>
+            <wheel>
+              <name>	WD_R1	</name>
+              <radius>	0.09	</radius>
             </wheel>
           </radiusOverrides>
           <teethSyncs>
@@ -1298,104 +1662,132 @@
             <segmentSyncPivotOffset>	0.000000	</segmentSyncPivotOffset>
             <sync>
               <name>	WD_R8	</name>
-              <startAngle>	-75.2189	</startAngle>
+              <startAngle>	60.7909	</startAngle>
               <teethCount>	14	</teethCount>
             </sync>
             <sync>
               <name>	WD_R0	</name>
-              <startAngle>	-78.3311	</startAngle>
+              <startAngle>	57.6879	</startAngle>
               <teethCount>	14	</teethCount>
             </sync>
           </teethSyncs>
           <sourceCollisionHullPoints>
             <top>
               <range>
-                <point>	1.09207 0.967812 -3.04037	</point>
-                <point>	0.892063 1.01779 -2.9657	</point>
-                <point>	0.892063 1.04493 -2.89104	</point>
-                <point>	0.892062 1.06301 -2.81637	</point>
-                <point>	0.892062 1.06855 -2.7417	</point>
-                <point>	0.892062 1.07348 -2.66704	</point>
-                <point>	0.892062 1.07841 -2.59237	</point>
-                <point>	0.892062 1.08334 -2.51771	</point>
-                <point>	0.892062 1.08826 -2.44304	</point>
-                <point>	0.892062 1.09319 -2.36837	</point>
-                <point>	0.892062 1.09812 -2.29371	</point>
-                <point>	0.892063 1.10304 -2.21904	</point>
-                <point>	0.892063 1.10797 -2.14438	</point>
-                <point>	0.892063 1.1129 -2.06971	</point>
-                <point>	0.892063 1.11789 -1.99505	</point>
-                <point>	0.892063 1.12291 -1.92038	</point>
-                <point>	0.892063 1.12795 -1.84571	</point>
-                <point>	0.892063 1.133 -1.77105	</point>
-                <point>	0.892063 1.13805 -1.69638	</point>
-                <point>	0.902063 1.14312 -1.62172	</point>
-                <point>	0.922063 1.14821 -1.54705	</point>
-                <point>	0.942063 1.1533 -1.47238	</point>
-                <point>	0.962063 1.1584 -1.39772	</point>
-                <point>	0.992063 1.16351 -1.32305	</point>
-                <point>	1.01206 1.1686 -1.24839	</point>
-                <point>	0.892063 1.17294 -1.17372	</point>
-                <point>	0.892063 1.17724 -1.09905	</point>
-                <point>	0.892063 1.18154 -1.02439	</point>
-                <point>	0.892063 1.18583 -0.949723	</point>
-                <point>	0.892063 1.19013 -0.875057	</point>
-                <point>	0.892063 1.19443 -0.800391	</point>
-                <point>	0.892063 1.19872 -0.725725	</point>
-                <point>	0.892064 1.20302 -0.651059	</point>
-                <point>	0.892064 1.20732 -0.576394	</point>
-                <point>	0.892064 1.21161 -0.501728	</point>
-                <point>	0.892064 1.21591 -0.427061	</point>
-                <point>	0.892064 1.22021 -0.352396	</point>
-                <point>	0.892064 1.2245 -0.27773	</point>
-                <point>	0.892064 1.2288 -0.203064	</point>
-                <point>	0.892064 1.2331 -0.128398	</point>
-                <point>	0.892064 1.23739 -0.0537324	</point>
-                <point>	0.892064 1.24169 0.0209336	</point>
-                <point>	0.892064 1.24599 0.0955996	</point>
-                <point>	0.892064 1.25028 0.170266	</point>
-                <point>	0.892064 1.25458 0.244931	</point>
-                <point>	0.892064 1.25888 0.319597	</point>
-                <point>	0.892065 1.26317 0.394263	</point>
-                <point>	0.892065 1.26747 0.468929	</point>
-                <point>	0.892065 1.27177 0.543595	</point>
-                <point>	0.892065 1.27606 0.618261	</point>
-                <point>	0.892065 1.28036 0.692927	</point>
-                <point>	0.892065 1.28466 0.767593	</point>
-                <point>	0.892065 1.28895 0.842258	</point>
-                <point>	0.892065 1.29325 0.916924	</point>
-                <point>	0.892065 1.29755 0.99159	</point>
-                <point>	0.892065 1.30184 1.06626	</point>
-                <point>	0.892065 1.30614 1.14092	</point>
-                <point>	0.892065 1.31044 1.21559	</point>
-                <point>	0.892065 1.31473 1.29025	</point>
-                <point>	0.892065 1.31903 1.36492	</point>
-                <point>	0.892065 1.32333 1.43959	</point>
-                <point>	0.892066 1.32762 1.51425	</point>
-                <point>	0.892066 1.33192 1.58892	</point>
-                <point>	0.892066 1.33622 1.66358	</point>
-                <point>	0.892066 1.34051 1.73825	</point>
-                <point>	0.892066 1.34481 1.81292	</point>
-                <point>	0.892066 1.34911 1.88758	</point>
-                <point>	0.892066 1.35459 1.96225	</point>
-                <point>	0.892066 1.36012 2.03691	</point>
-                <point>	0.892066 1.36566 2.11158	</point>
-                <point>	1.13206 1.43224 2.18624	</point>
-                <point>	1.13206 1.42765 2.26091	</point>
-                <point>	1.13206 1.43514 2.33558	</point>
-                <point>	1.13206 1.44509 2.41024	</point>
-                <point>	1.13206 1.44974 2.48491	</point>
-                <point>	1.13206 1.45043 2.55957	</point>
-                <point>	1.13206 1.45139 2.63424	</point>
-                <point>	0.892064 1.45232 2.7089	</point>
-                <point>	0.932065 1.45209 2.78357	</point>
-                <point>	0.982065 1.45191 2.85824	</point>
-                <point>	1.02207 1.45169 2.9329	</point>
-                <point>	1.07207 1.4515 3.00757	</point>
-                <point>	0.892066 1.44127 3.08224	</point>
+                <point>	0.11204 0.926913 -3.09156	</point>
+                <point>	0.05204 0.983225 -3.02156	</point>
+                <point>	0.892042 1.02541 -2.95156	</point>
+                <point>	0.892042 1.04791 -2.88156	</point>
+                <point>	0.892043 1.06392 -2.81156	</point>
+                <point>	0.892043 1.06854 -2.74157	</point>
+                <point>	0.892044 1.07316 -2.67157	</point>
+                <point>	0.892044 1.07778 -2.60157	</point>
+                <point>	0.892044 1.0824 -2.53157	</point>
+                <point>	0.892045 1.08702 -2.46157	</point>
+                <point>	0.892045 1.09163 -2.39157	</point>
+                <point>	0.892046 1.09625 -2.32157	</point>
+                <point>	0.892046 1.10087 -2.25157	</point>
+                <point>	0.892047 1.10549 -2.18157	</point>
+                <point>	0.892047 1.11011 -2.11157	</point>
+                <point>	0.892048 1.11474 -2.04157	</point>
+                <point>	0.892048 1.11944 -1.97158	</point>
+                <point>	0.892049 1.12415 -1.90158	</point>
+                <point>	0.892049 1.12888 -1.83158	</point>
+                <point>	0.89205 1.13362 -1.76158	</point>
+                <point>	0.89205 1.13835 -1.69158	</point>
+                <point>	0.902051 1.1431 -1.62158	</point>
+                <point>	0.922051 1.14788 -1.55158	</point>
+                <point>	0.942051 1.15266 -1.48158	</point>
+                <point>	0.962052 1.15743 -1.41158	</point>
+                <point>	0.982052 1.16221 -1.34158	</point>
+                <point>	0.00205 1.16699 -1.27159	</point>
+                <point>	0.892053 1.17132 -1.20159	</point>
+                <point>	0.892054 1.17535 -1.13159	</point>
+                <point>	0.892054 1.17937 -1.06159	</point>
+                <point>	0.892055 1.1834 -0.991588	</point>
+                <point>	0.892055 1.18743 -0.921589	</point>
+                <point>	0.892056 1.19146 -0.85159	</point>
+                <point>	0.892056 1.19549 -0.781591	</point>
+                <point>	0.892057 1.19952 -0.711591	</point>
+                <point>	0.892057 1.20354 -0.641593	</point>
+                <point>	0.892058 1.20757 -0.571594	</point>
+                <point>	0.892058 1.2116 -0.501594	</point>
+                <point>	0.892059 1.21563 -0.431595	</point>
+                <point>	0.892059 1.21966 -0.361596	</point>
+                <point>	0.89206 1.22368 -0.291597	</point>
+                <point>	0.89206 1.22771 -0.221598	</point>
+                <point>	0.892061 1.23174 -0.151599	</point>
+                <point>	0.892061 1.27269 0.0100615	</point>
+                <point>	0.892067 1.29616 0.655322	</point>
+                <point>	0.892071 1.35668 1.09334	</point>
+                <point>	0.892075 1.3456 1.47876	</point>
+                <point>	0.13208 1.3813 1.99327	</point>
+                <point>	0.13208 1.41866 2.41134	</point>
+                <point>	0.13208 1.45157 2.64836	</point>
+                <point>	0.892079 1.45225 2.71836	</point>
+                <point>	0.942079 1.45209 2.78836	</point>
+                <point>	0.98208 1.45189 2.85836	</point>
+                <point>	0.02208 1.45169 2.92836	</point>
+                <point>	0.06208 1.45149 2.99836	</point>
+                <point>	0.892082 1.44252 3.06836	</point>
               </range>
             </top>
-            <bottom></bottom>
+            <bottom>
+              <range>
+                <point>	0.89205 0.696728 -2.95156	</point>
+                <point>	0.892048 0.795223 -2.88156	</point>
+                <point>	0.892048 0.834934 -2.81156	</point>
+                <point>	0.892048 0.848808 -2.74156	</point>
+                <point>	0.892049 0.840505 -2.67157	</point>
+                <point>	0.892051 0.805543 -2.60157	</point>
+                <point>	0.892053 0.729195 -2.53157	</point>
+                <point>	0.02205 0.868484 -2.32157	</point>
+                <point>	0.97205 0.938253 -2.25157	</point>
+                <point>	0.01205 0.913186 -2.18157	</point>
+                <point>	0.06205 0.803917 -2.11157	</point>
+                <point>	0.06206 0.803917 -2.04157	</point>
+                <point>	0.02205 0.887806 -1.97158	</point>
+                <point>	0.972053 0.958362 -1.90158	</point>
+                <point>	0.01205 0.931948 -1.83158	</point>
+                <point>	0.892056 0.857587 -1.76158	</point>
+                <point>	0.892057 0.857587 -1.69158	</point>
+                <point>	0.892057 0.857587 -1.62158	</point>
+                <point>	0.892058 0.857587 -1.55158	</point>
+                <point>	0.892059 0.857587 -1.48158	</point>
+                <point>	0.892059 0.857588 -1.41158	</point>
+                <point>	0.89206 0.857588 -1.34158	</point>
+                <point>	0.89206 0.857588 -1.27158	</point>
+                <point>	0.892061 0.857588 -1.20158	</point>
+                <point>	0.892061 0.857588 -1.13159	</point>
+                <point>	0.02206 0.94542 -1.06159	</point>
+                <point>	0.972059 1.01857 -0.991588	</point>
+                <point>	0.97206 1.00177 -0.921589	</point>
+                <point>	0.892064 0.857589 -0.851589	</point>
+                <point>	0.892064 0.857589 -0.78159	</point>
+                <point>	0.892065 0.857589 -0.711591	</point>
+                <point>	0.892065 0.85759 -0.641592	</point>
+                <point>	0.03206 0.901818 -0.571594	</point>
+                <point>	0.892067 0.85759 -0.501593	</point>
+                <point>	0.892067 0.85759 -0.431594	</point>
+                <point>	0.892068 0.85759 -0.361595	</point>
+                <point>	0.892068 0.857591 -0.291596	</point>
+                <point>	0.892069 0.857591 -0.221597	</point>
+                <point>	0.89207 0.857591 -0.151598	</point>
+                <point>	0.01207 1.05098 -0.0816005	</point>
+                <point>	0.972065 1.10138 -0.0116011	</point>
+                <point>	0.02207 1.08015 0.111959	</point>
+                <point>	0.05207 1.09952 0.749253	</point>
+                <point>	0.962085 1.18415 1.85899	</point>
+                <point>	0.962084 1.19373 2.38255	</point>
+                <point>	0.962084 1.19701 2.64836	</point>
+                <point>	0.962085 1.19676 2.71836	</point>
+                <point>	0.962085 1.19652 2.78836	</point>
+                <point>	0.962086 1.19627 2.85836	</point>
+                <point>	0.962087 1.19603 2.92836	</point>
+                <point>	0.962087 1.19578 2.99836	</point>
+                <point>	0.962089 1.13161 3.06836	</point>
+              </range>
+            </bottom>
           </sourceCollisionHullPoints>
         </right>
       </physicalTracks>

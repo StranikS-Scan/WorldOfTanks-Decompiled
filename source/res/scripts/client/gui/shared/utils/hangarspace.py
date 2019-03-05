@@ -27,7 +27,6 @@ from gui.app_loader import g_appLoader, settings as app_settings
 from gui import GUI_CTRL_MODE_FLAG as _CTRL_FLAG
 from gui.hangar_cameras.hangar_camera_common import CameraMovementStates
 from gui.prb_control.events_dispatcher import g_eventDispatcher
-_MAX_HANDLERS_IN_Q = 100
 _Q_CHECK_DELAY = 0.0
 
 class _execute_after_hangar_space_inited(object):
@@ -35,7 +34,7 @@ class _execute_after_hangar_space_inited(object):
     __slots__ = ('__queue',)
 
     def __init__(self):
-        self.__queue = Queue(maxsize=_MAX_HANDLERS_IN_Q)
+        self.__queue = Queue()
 
     def __call__(self, func):
 

@@ -8,19 +8,20 @@ from account_helpers import AccountSettings
 from account_helpers.AccountSettings import PREVIEW_INFO_PANEL_IDX
 from gui import makeHtmlString
 from gui.ClientUpdateManager import g_clientUpdateManager
-from gui.Scaleform.daapi.view.lobby.store.browser.ingameshop_helpers import isIngameShopEnabled, getBuyVehiclesUrl
 from gui.Scaleform.daapi.view.lobby.vehiclePreview20.items_kit_helper import getActiveOffer
-from gui.Scaleform.genConsts.STORE_CONSTANTS import STORE_CONSTANTS
-from gui.Scaleform.genConsts.STORE_TYPES import STORE_TYPES
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.LobbySelectableView import LobbySelectableView
+from gui.Scaleform.daapi.view.lobby.store.browser.ingameshop_helpers import isIngameShopEnabled, getBuyVehiclesUrl
+from gui.Scaleform.daapi.view.lobby.vehiclePreview20.sound_constants import RESEARCH_PREVIEW_SOUND_SPACE
 from gui.Scaleform.daapi.view.lobby.vehicle_compare.formatters import resolveStateTooltip
 from gui.Scaleform.daapi.view.lobby.vehiclePreview20.info.vehicle_preview_crew_tab import getUniqueMembers
 from gui.Scaleform.daapi.view.meta.VehiclePreview20Meta import VehiclePreview20Meta
 from gui.Scaleform.framework import g_entitiesFactories
 from gui.Scaleform.genConsts.PERSONAL_MISSIONS_ALIASES import PERSONAL_MISSIONS_ALIASES
-from gui.Scaleform.genConsts.VEHPREVIEW_CONSTANTS import VEHPREVIEW_CONSTANTS
+from gui.Scaleform.genConsts.STORE_CONSTANTS import STORE_CONSTANTS
+from gui.Scaleform.genConsts.STORE_TYPES import STORE_TYPES
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
+from gui.Scaleform.genConsts.VEHPREVIEW_CONSTANTS import VEHPREVIEW_CONSTANTS
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.VEHICLE_PREVIEW import VEHICLE_PREVIEW
@@ -33,15 +34,15 @@ from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.gui_items.Vehicle import getTypeSmallIconPath
 from helpers import dependency
 from helpers.i18n import makeString as _ms
-from skeletons.gui.game_control import IVehicleComparisonBasket
-from skeletons.gui.game_control import ITradeInController
-from skeletons.gui.game_control import IRestoreController
 from skeletons.gui.game_control import IHeroTankController
+from skeletons.gui.game_control import IRestoreController
+from skeletons.gui.game_control import ITradeInController
+from skeletons.gui.game_control import IVehicleComparisonBasket
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.shared.utils import IHangarSpace
-from web_client_api.common import ItemPackTypeGroup, ItemPackEntry, ItemPackType
 from gui.Scaleform.daapi.view.lobby.store.browser.sound_constants import INGAMESHOP_PREVIEW_SOUND_SPACE
+from web_client_api.common import ItemPackTypeGroup, ItemPackEntry, ItemPackType
 _BACK_BTN_LABELS = {VIEW_ALIAS.LOBBY_HANGAR: 'hangar',
  VIEW_ALIAS.LOBBY_STORE: 'shop',
  VIEW_ALIAS.LOBBY_STORAGE: 'storage',
@@ -71,19 +72,21 @@ class VehiclePreview20(LobbySelectableView, VehiclePreview20Meta):
     hangarSpace = dependency.descriptor(IHangarSpace)
 
     def __init__(self, ctx=None):
-        if ctx.get('previewAlias') == VIEW_ALIAS.LOBBY_STORE or ctx.get('itemsPack') is not None:
+        self._backAlias = ctx.get('previewAlias', VIEW_ALIAS.LOBBY_HANGAR)
+        self.__itemsPack = ctx.get('itemsPack')
+        if self._backAlias == VIEW_ALIAS.LOBBY_STORE or self.__itemsPack is not None:
             self._COMMON_SOUND_SPACE = INGAMESHOP_PREVIEW_SOUND_SPACE
+        elif self._backAlias in (VIEW_ALIAS.LOBBY_TECHTREE, VIEW_ALIAS.LOBBY_RESEARCH):
+            self._COMMON_SOUND_SPACE = RESEARCH_PREVIEW_SOUND_SPACE
         super(VehiclePreview20, self).__init__(ctx)
         self._showCloseBtn = True
         self._vehicleCD = ctx['itemCD']
         self.__vehicleStrCD = ctx.get('vehicleStrCD')
         self._previousBackAlias = ctx.get('previousBackAlias')
         self._previewBackCb = ctx.get('previewBackCb')
-        self._backAlias = ctx.get('previewAlias', VIEW_ALIAS.LOBBY_HANGAR)
         self.__isHeroTank = ctx.get('isHeroTank', False)
         vehParams = ctx.get('vehParams') or {}
         self.__customizationCD = vehParams.get('styleCD')
-        self.__itemsPack = ctx.get('itemsPack')
         self.__offers = ctx.get('offers')
         self.__price = ctx.get('price')
         self.__oldPrice = ctx.get('oldPrice')
@@ -308,8 +311,8 @@ class VehiclePreview20(LobbySelectableView, VehiclePreview20Meta):
     def _processBackClick(self, ctx=None):
         if self._previewBackCb:
             self._previewBackCb()
-        elif self._backAlias == VIEW_ALIAS.LOBBY_RESEARCH:
-            event_dispatcher.showResearchView(self._vehicleCD)
+        elif self._backAlias == VIEW_ALIAS.LOBBY_RESEARCH and g_currentPreviewVehicle.isPresent():
+            event_dispatcher.showResearchView(self._vehicleCD, exitEvent=events.LoadViewEvent(VIEW_ALIAS.LOBBY_TECHTREE, ctx={'nation': g_currentPreviewVehicle.item.nationName}))
         elif self._backAlias == VIEW_ALIAS.VEHICLE_PREVIEW_20:
             entity = ctx.get('entity', None) if ctx else None
             if entity:

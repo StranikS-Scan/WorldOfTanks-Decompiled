@@ -117,6 +117,30 @@ class Inventory(object):
             self.__account._doCmdInt3(AccountCommands.CMD_DISMISS_TMAN, tmanInvID, 0, 0, proxy)
             return
 
+    def equipCrewSkin(self, tmanInvID, skinID, callback):
+        if self.__ignore:
+            if callback is not None:
+                callback(AccountCommands.RES_NON_PLAYER)
+            return
+        else:
+            proxy = None
+            if callback is not None:
+                proxy = lambda requestID, resultID, errorStr, ext={}: callback(resultID)
+            self.__account._doCmdInt3(AccountCommands.CMD_TMAN_EQUIP_CREW_SKIN, tmanInvID, skinID, 0, proxy)
+            return
+
+    def unequipCrewSkin(self, tmanInvID, callback):
+        if self.__ignore:
+            if callback is not None:
+                callback(AccountCommands.RES_NON_PLAYER)
+            return
+        else:
+            proxy = None
+            if callback is not None:
+                proxy = lambda requestID, resultID, errorStr, ext={}: callback(resultID)
+            self.__account._doCmdInt3(AccountCommands.CMD_TMAN_UNEQUIP_CREW_SKIN, tmanInvID, 0, 0, proxy)
+            return
+
     def equip(self, vehInvID, itemCompDescr, callback):
         if self.__ignore:
             if callback is not None:
@@ -305,7 +329,7 @@ class Inventory(object):
             self.__account.shop.waitForSync(partial(self.__freeXPToTankman_onShopSynced, tmanInvID, freeXP, callback))
             return
 
-    def changeVehicleSetting(self, vehInvID, setting, isOn, callback):
+    def changeVehicleSetting(self, vehInvID, setting, isOn, source, callback):
         if self.__ignore:
             if callback is not None:
                 callback(AccountCommands.RES_NON_PLAYER)
@@ -316,7 +340,7 @@ class Inventory(object):
                 proxy = lambda requestID, resultID, errorStr, ext={}: callback(resultID)
             else:
                 proxy = None
-            self.__account._doCmdInt3(AccountCommands.CMD_VEH_SETTINGS, vehInvID, setting, isOn, proxy)
+            self.__account._doCmdInt4(AccountCommands.CMD_VEH_SETTINGS, vehInvID, setting, isOn, source, proxy)
             return
 
     def addTankmanExperience(self, tmanInvID, xp, callback=None):
@@ -330,6 +354,23 @@ class Inventory(object):
             else:
                 proxy = None
             self.__account._doCmdInt3(AccountCommands.CMD_ADD_TMAN_XP, tmanInvID, xp, 0, proxy)
+            return
+
+    def addCrewSkin(self, skinsDict, callback=None):
+        if self.__ignore:
+            if callback is not None:
+                callback(AccountCommands.RES_NON_PLAYER)
+            return
+        else:
+            if callback is not None:
+                proxy = lambda requestID, resultID, errorStr, ext={}: callback(resultID)
+            else:
+                proxy = None
+            skinList = []
+            for k, v in skinsDict.items():
+                skinList.extend([k, v])
+
+            self.__account._doCmdIntArr(AccountCommands.CMD_TMAN_ADD_CREW_SKIN, skinList, proxy)
             return
 
     def getProviderForVehInvId(self, vehInvId, serverSettings):

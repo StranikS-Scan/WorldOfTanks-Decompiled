@@ -125,6 +125,7 @@ class CompoundAppearance(ComponentSystem, CallbackDelayer):
     collisionObstaclesCollector = ComponentDescriptor()
     tessellationCollisionSensor = ComponentDescriptor()
     burnoutProcessor = ComponentDescriptor()
+    gunRotatorAudition = ComponentDescriptor()
 
     def __init__(self):
         CallbackDelayer.__init__(self)
@@ -422,6 +423,7 @@ class CompoundAppearance(ComponentSystem, CallbackDelayer):
         self.trackNodesAnimator = None
         if self.wheelsAnimator is not None and not self.wheelsAnimator.activePostmortem:
             self.wheelsAnimator = None
+        self.gunRotatorAudition = None
         fashions = VehiclePartsTuple(BigWorld.WGVehicleFashion(True), None, None, None)
         self.__setFashions(fashions, isTurretDetached)
         model_assembler.setupTracksFashion(self.__typeDesc, self.__fashion)
@@ -541,15 +543,10 @@ class CompoundAppearance(ComponentSystem, CallbackDelayer):
                 self.__playEffect(currentState.effect)
             if vehicle.health <= 0:
                 BigWorld.player().inputHandler.onVehicleDeath(vehicle, currentState.state == 'ammoBayExplosion')
-                self.processVehicleDeath(currentState)
                 self.__requestModelsRefresh()
             elif not vehicle.isCrewActive:
                 self.__onCrewKilled()
         return
-
-    @ComponentSystem.groupCall
-    def processVehicleDeath(self, vehicleDamageState):
-        pass
 
     def showAmmoBayEffect(self, mode, fireballVolume):
         if mode == constants.AMMOBAY_DESTRUCTION_MODE.POWDER_BURN_OFF:
@@ -633,6 +630,26 @@ class CompoundAppearance(ComponentSystem, CallbackDelayer):
                 position = self.wheelsAnimator.getWheelWorldTransform(wheelsIdx).translation
                 materialType = 0 if self.wheelsAnimator.isWheelDeflatable(wheelsIdx) else 1
             self.engineAudition.onChassisDestroy(position, destroy, materialType)
+
+    def turretDamaged(self):
+        player = BigWorld.player()
+        if not self.__activated or player is None or not self.__vehicle.isPlayerVehicle:
+            return 0
+        else:
+            deviceStates = getattr(player, 'deviceStates', None)
+            if deviceStates is not None:
+                if deviceStates.get('turretRotator', None) is None:
+                    return 0
+                return 1
+            return 0
+
+    def maxTurretRotationSpeed(self):
+        player = BigWorld.player()
+        if not self.__activated or player is None or not self.__vehicle.isPlayerVehicle:
+            return 0
+        else:
+            gunRotator = getattr(player, 'gunRotator', None)
+            return gunRotator.maxturretRotationSpeed if gunRotator is not None else 0
 
     def __prepareOutfit(self, outfitCD):
         if self.__outfit:

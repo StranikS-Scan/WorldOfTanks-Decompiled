@@ -99,6 +99,8 @@
           </condition>
           <effects>
             <request-exclusive-hint>	VehiclePreviewUnlockOrBuyButton	</request-exclusive-hint>
+            <set-visible>	VehicleBuyCheckbox	  <val>	False	</val>
+            </set-visible>
             <request-exclusive-hint>	VehicleBuyAcademy	</request-exclusive-hint>
             <request-exclusive-hint>	VehicleBuyAccept	  <condition>
                 <active>	VehicleBuyAcademyClicked	</active>
@@ -109,7 +111,15 @@
       </runtime-effects>
       <gui-items>
         <gui-item>	VehicleBuyAcademy	  <on-scene-effects>
+            <set-button-enabled>	VehicleBuyAmmo	  <val>	False	</val>
+            </set-button-enabled>
+            <set-button-enabled>	VehicleBuySlot	  <val>	False	</val>
+            </set-button-enabled>
             <set-button-enabled>	VehicleBuyAccept	  <val>	False	</val>
+            </set-button-enabled>
+            <set-button-enabled>	VehicleBuyFreeCommanderBtn	  <val>	False	</val>
+            </set-button-enabled>
+            <set-button-enabled>	VehicleBuySchoolCommanderBtn	  <val>	False	</val>
             </set-button-enabled>
             <set-action>	VehicleBuyAcademyClick	</set-action>
             <set-action>	VehicleBuyAcceptClick	</set-action>

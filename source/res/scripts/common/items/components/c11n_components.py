@@ -4,7 +4,7 @@ import items
 import items.vehicles as iv
 from items.components import shared_components
 from soft_exception import SoftException
-from items.components.c11n_constants import ApplyArea, SeasonType, Options, ItemTags, CustomizationType, MAX_CAMOUFLAGE_PATTERN_SIZE, DecalType, PROJECTION_DECALS_SCALE_ID_VALUES, MAX_USERS_PROJECTION_DECALS, CustomizationTypeNames, DecalTypeNames, ProjectionDecalFormTags, CUSTOMIZATION_SLOTS_VEHICLE_PARTS, NUMBER_OF_PERSONAL_NUMBER_DIGITS
+from items.components.c11n_constants import ApplyArea, SeasonType, Options, ItemTags, CustomizationType, MAX_CAMOUFLAGE_PATTERN_SIZE, DecalType, PROJECTION_DECALS_SCALE_ID_VALUES, MAX_USERS_PROJECTION_DECALS, CustomizationTypeNames, DecalTypeNames, ProjectionDecalFormTags, CUSTOMIZATION_SLOTS_VEHICLE_PARTS, PERSONAL_NUMBER_DIGITS_COUNT
 from typing import List, Dict, Type, Tuple, Optional, Union, TypeVar, FrozenSet
 from string import lower
 Item = TypeVar('TypeVar')
@@ -149,7 +149,7 @@ class CamouflageItem(BaseCustomizationItem):
 class PersonalNumberItem(BaseCustomizationItem):
     itemType = CustomizationType.PERSONAL_NUMBER
     __prohibitedNumbers = ()
-    __slots__ = ('compatibleParts', 'texture', 'previewTexture', 'fontInfo', 'number', 'isMirrored')
+    __slots__ = ('compatibleParts', 'texture', 'previewTexture', 'fontInfo', 'isMirrored')
     allSlots = BaseCustomizationItem.__slots__ + __slots__
 
     def __init__(self, parentGroup=None):
@@ -157,7 +157,6 @@ class PersonalNumberItem(BaseCustomizationItem):
         self.texture = ''
         self.previewTexture = ''
         self.fontInfo = None
-        self.number = 0
         self.isMirrored = False
         super(PersonalNumberItem, self).__init__(parentGroup)
         return
@@ -187,7 +186,7 @@ class ModificationItem(BaseCustomizationItem):
 
 class StyleItem(BaseCustomizationItem):
     itemType = CustomizationType.STYLE
-    __slots__ = ('outfits', 'isRent', 'rentCount', 'texture', 'modelsSet')
+    __slots__ = ('outfits', 'isRent', 'rentCount', 'texture', 'modelsSet', 'textInfo')
     allSlots = BaseCustomizationItem.__slots__ + __slots__
 
     def __init__(self, parentGroup=None):
@@ -196,6 +195,7 @@ class StyleItem(BaseCustomizationItem):
         self.rentCount = 1
         self.texture = ''
         self.modelsSet = ''
+        self.textInfo = ''
         super(StyleItem, self).__init__(parentGroup)
 
     def isVictim(self, color):
@@ -488,7 +488,7 @@ def _validateProjectionDecal(component, item, vehDescr, usedParents):
 
 def _validatePersonalNumber(component):
     number = component.number
-    if not number or len(number) != NUMBER_OF_PERSONAL_NUMBER_DIGITS:
+    if not number or len(number) != PERSONAL_NUMBER_DIGITS_COUNT:
         raise SoftException('personal number {} has wrong number {}'.format(component.id, number))
     if not isPersonalNumberAllowed(number):
         raise SoftException('number {} of personal number {} is prohibited'.format(number, component.id))

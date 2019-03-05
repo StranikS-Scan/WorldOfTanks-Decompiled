@@ -2,21 +2,18 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/bootcamp/BCTechTree.py
 from gui.Scaleform.daapi.view.lobby.techtree.techtree_page import TechTree
 from gui.shared import event_dispatcher as shared_events
-from skeletons.gui.shared import IItemsCache
-from helpers import dependency
 from nations import NAMES as NATION_NAMES
 from bootcamp.Bootcamp import g_bootcamp
 from gui.Scaleform.genConsts.NODE_STATE_FLAGS import NODE_STATE_FLAGS
 from gui.Scaleform.daapi.view.lobby.techtree.settings import NODE_STATE
 
 class BCTechTree(TechTree):
-    itemsCache = dependency.descriptor(IItemsCache)
 
     def goToNextVehicle(self, vehCD):
         if not g_bootcamp.isResearchFreeLesson():
             nationData = g_bootcamp.getNationData()
             if nationData['vehicle_second'] == vehCD:
-                vehicle = self.itemsCache.items.getItemByCD(int(vehCD))
+                vehicle = self._itemsCache.items.getItemByCD(int(vehCD))
                 if vehicle.isInInventory:
                     shared_events.showResearchView(vehCD)
                     return
@@ -48,3 +45,4 @@ class BCTechTree(TechTree):
 
     def _populateAfter(self):
         self.as_hideNationsBarS(True)
+        self.as_setBlueprintsSwitchButtonStateS(enabled=False, selected=False, tooltip='', visible=False)

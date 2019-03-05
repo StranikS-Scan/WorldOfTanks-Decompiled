@@ -39,6 +39,9 @@ class CurtailingAwardsComposer(QuestsBonusComposer):
         return result
 
     def _packBonus(self, bonus, size=AWARDS_SIZES.SMALL):
+        compensationReason = None
+        if bonus.compensationReason is not None:
+            compensationReason = self._packBonus(bonus.compensationReason, size)
         return {'label': bonus.getFormattedLabel(),
          'imgSource': bonus.getImage(size),
          'tooltip': bonus.tooltip,
@@ -46,6 +49,7 @@ class CurtailingAwardsComposer(QuestsBonusComposer):
          'specialAlias': bonus.specialAlias,
          'specialArgs': bonus.specialArgs,
          'hasCompensation': bonus.isCompensation,
+         'compensationReason': compensationReason,
          'align': bonus.align,
          'highlightType': bonus.getHighlightType(size),
          'overlayType': bonus.getOverlayType(size),

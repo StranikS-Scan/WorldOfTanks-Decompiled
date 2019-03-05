@@ -166,8 +166,8 @@ class GameLights(object):
 
 
 from PlayerEvents import g_playerEvents
-from gui.prb_control.dispatcher import g_prbLoader
 from messenger.proto.events import g_messengerEvents
+from gui.prb_control import prbInvitesProperty
 _chatActionsHandler = None
 
 class _ChatActionsHandler(object):
@@ -177,8 +177,12 @@ class _ChatActionsHandler(object):
         g_playerEvents.onAccountBecomePlayer += self.__subscribe
         self.connectionMgr.onDisconnected += self.__onDisconnected
 
+    @prbInvitesProperty
+    def prbInvites(self):
+        return None
+
     def __subscribe(self):
-        invitesManager = g_prbLoader.getInvitesManager()
+        invitesManager = self.prbInvites
         if invitesManager is not None:
             invitesManager.onReceivedInviteListModified += self.__onReceivedInviteListModified
             invitesManager.onInvitesListInited += self.__onReceivedInviteListModified
@@ -188,7 +192,7 @@ class _ChatActionsHandler(object):
         return
 
     def destroy(self):
-        invitesManager = g_prbLoader.getInvitesManager()
+        invitesManager = self.prbInvites
         if invitesManager is not None:
             invitesManager.onReceivedInviteListModified -= self.__onReceivedInviteListModified
             invitesManager.onInvitesListInited -= self.__onReceivedInviteListModified
@@ -201,7 +205,7 @@ class _ChatActionsHandler(object):
         g_instance.setStartupLights()
 
     def __onReceivedInviteListModified(self, *args):
-        if g_prbLoader.getInvitesManager().getUnreadCount():
+        if self.prbInvites.getUnreadCount():
             g_instance.startLightEffect(GameLights.INVITATION_EFFECT)
         else:
             g_instance.stopLightEffect(GameLights.INVITATION_EFFECT)

@@ -44,6 +44,9 @@ class Array(PyObjectEntity):
     def addViewModel(self, value):
         self.proxy.addViewModel(value.proxy)
 
+    def addResource(self, value):
+        self.proxy.addResource(value)
+
     def addArray(self, value):
         self.proxy.addArray(value.proxy)
 
@@ -61,6 +64,9 @@ class Array(PyObjectEntity):
 
     def setViewModel(self, index, value):
         self.proxy.setViewModel(index, value.proxy)
+
+    def setResource(self, index, value):
+        self.proxy.setResource(index, value)
 
     def setArray(self, index, value):
         self.proxy.setArray(index, value.proxy)

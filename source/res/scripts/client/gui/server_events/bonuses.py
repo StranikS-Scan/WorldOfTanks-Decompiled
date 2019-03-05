@@ -4,6 +4,8 @@ import copy
 from collections import namedtuple
 from functools import partial
 import BigWorld
+from blueprints.BlueprintTypes import BlueprintTypes
+from blueprints.FragmentTypes import getFragmentType
 from constants import EVENT_TYPE as _ET, DOSSIER_TYPE, LOOTBOX_TOKEN_PREFIX
 from debug_utils import LOG_ERROR, LOG_CURRENT_EXCEPTION
 from dossiers2.custom.records import RECORD_DB_IDS
@@ -32,14 +34,18 @@ from helpers import time_utils
 from helpers.i18n import makeString as _ms
 from items import vehicles, tankmen
 from items.components import c11n_components as cc
+from items.components.crewSkins_constants import NO_CREW_SKIN_ID
 from items.tankmen import RECRUIT_TMAN_TOKEN_PREFIX
 from personal_missions import PM_BRANCH, PM_BRANCH_TO_FREE_TOKEN_NAME
-from shared_utils import makeTupleByDict
+from shared_utils import makeTupleByDict, CONST_CONTAINER
 from skeletons.gui.customization import ICustomizationService
 from skeletons.gui.goodies import IGoodiesCache
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
 from gui.server_events.awards_formatters import AWARDS_SIZES
+from gui.shared.utils.requesters.blueprints_requester import getFragmentNationID, getVehicleCDForNational
+from gui.shared.utils.requesters.blueprints_requester import getVehicleCDForIntelligence
+from gui.shared.utils.requesters.blueprints_requester import makeNationalCD, makeIntelligenceCD
 DEFAULT_CREW_LVL = 50
 _CUSTOMIZATIONS_SCALE = 44.0 / 128
 _EPIC_AWARD_STATIC_VO_ENTRIES = {'compensationTooltip': QUESTS.BONUSES_COMPENSATION,
@@ -122,9 +128,7 @@ class SimpleBonus(object):
         pass
 
     def getTooltip(self):
-        header = i18n.makeString(TOOLTIPS.getAwardHeader(self._name))
-        body = i18n.makeString(TOOLTIPS.getAwardBody(self._name))
-        return makeTooltip(header or None, body or None) if header or body else ''
+        return _getItemTooltip(self._name)
 
     def getDescription(self):
         return i18n.makeString('#quests:bonuses/%s/description' % self._name, value=self.formatValue())
@@ -1084,14 +1088,11 @@ class CustomizationsBonus(SimpleBonus):
         customizations = self.getCustomizations()
         customizationsCountMax = len(customizations) - 1
         if customizationsCountMax > 0:
-            separator = ','
+            separator = ', '
         for count, itemData in enumerate(customizations):
-            itemTypeName = itemData.get('custType')
-            itemID = itemData.get('id')
             boundVehicle = itemData.get('vehTypeCompDescr')
             boundToCurrentVehicle = itemData.get('boundToCurrentVehicle', False)
-            itemTypeID = GUI_ITEM_TYPE_INDICES.get(itemTypeName)
-            item = self.c11n.getItemByID(itemTypeID, itemID)
+            item = self.getC11nItem(itemData)
             value = itemData.get('value', 0)
             valueStr = None
             if value > 1:
@@ -1149,7 +1150,7 @@ class CustomizationsBonus(SimpleBonus):
         substitutes = []
         cache = vehicles.g_cache.customization20()
         for customizationItem in self._value:
-            c11nItem = self.__getC11nItem(customizationItem)
+            c11nItem = self.getC11nItem(customizationItem)
             itemType, itemId = cc.splitIntDescr(c11nItem.intCD)
             c11nComponent = cache.itemTypes[itemType][itemId]
             count = customizationItem.get('value')
@@ -1175,15 +1176,20 @@ class CustomizationsBonus(SimpleBonus):
         bonuses.insert(0, CustomizationsBonus('customizations', substitutes))
         return bonuses
 
-    def __getC11nItem(self, item):
+    def getC11nItem(self, item):
         itemTypeName = item.get('custType')
         itemID = item.get('id')
-        itemTypeID = GUI_ITEM_TYPE_INDICES.get(itemTypeName)
+        if itemTypeName == 'projection_decal':
+            itemTypeID = GUI_ITEM_TYPE.PROJECTION_DECAL
+        elif itemTypeName == 'personal_number':
+            itemTypeID = GUI_ITEM_TYPE.PERSONAL_NUMBER
+        else:
+            itemTypeID = GUI_ITEM_TYPE_INDICES.get(itemTypeName)
         c11nItem = self.c11n.getItemByID(itemTypeID, itemID)
         return c11nItem
 
     def __getCommonAwardsVOs(self, item, data, iconSize='small', align=TEXT_ALIGN.RIGHT, withCounts=False):
-        c11nItem = self.__getC11nItem(item)
+        c11nItem = self.getC11nItem(item)
         count = item.get('value', 1)
         itemData = {'imgSource': RES_ICONS.getBonusIcon(iconSize, c11nItem.itemTypeName),
          'label': text_styles.hightlight('x{}'.format(count)),
@@ -1209,7 +1215,7 @@ class CustomizationsBonus(SimpleBonus):
             itemData = self.__getCommonAwardsVOs(item, data, iconSize, align=TEXT_ALIGN.CENTER, withCounts=withCounts)
             itemData.update(_EPIC_AWARD_STATIC_VO_ENTRIES)
             if withDescription:
-                c11nItem = self.__getC11nItem(item)
+                c11nItem = self.getC11nItem(item)
                 itemData['description'] = c11nItem.userType
                 itemData['title'] = c11nItem.userName
             result.append(itemData)
@@ -1262,6 +1268,187 @@ class BoxBonus(SimpleBonus):
         return RES_ICONS.getRankedBoxIcon(size, boxType, '', number)
 
 
+def blueprintBonusFactory(name, value, isCompensation=False, ctx=None):
+    blueprintBonuses = []
+    for fragmentCD, fragmentCount in value.iteritems():
+        fragmentType = getFragmentType(fragmentCD)
+        if fragmentType == BlueprintTypes.VEHICLE:
+            blueprintBonuses.append(VehicleBlueprintBonus(name, (fragmentCD, fragmentCount), isCompensation, ctx))
+        if fragmentType == BlueprintTypes.INTELLIGENCE_DATA:
+            vehicleCD = getVehicleCDForIntelligence(fragmentCD)
+            blueprintBonuses.append(IntelligenceBlueprintBonus(name, (vehicleCD, fragmentCount), isCompensation, ctx))
+        if fragmentType == BlueprintTypes.NATIONAL:
+            vehicleCD = getVehicleCDForNational(fragmentCD)
+            blueprintBonuses.append(NationalBlueprintBonus(name, (vehicleCD, fragmentCount), isCompensation, ctx))
+
+    return blueprintBonuses
+
+
+def crewSkinsBonusFactory(name, value, isCompensation=False, ctx=None):
+    bonuses = []
+    for crewSkinData in value:
+        bonuses.append(CrewSkinsBonus(name=name, value=crewSkinData, isCompensation=isCompensation, ctx=ctx))
+
+    return bonuses
+
+
+class BlueprintsBonusSubtypes(CONST_CONTAINER):
+    FINAL_FRAGMENT = 'BlueprintFinalFragmentCongrats'
+    UNIVERSAL_FRAGMENT = 'BlueprintUniversalFragmentCongrats'
+    NATION_FRAGMENT = 'BlueprintNationFragmentCongrats'
+    VEHICLE_FRAGMENT = 'BlueprintVehicleFragmentCongrats'
+    USE_CONGRATS = (FINAL_FRAGMENT, VEHICLE_FRAGMENT)
+
+
+class VehicleBlueprintBonus(SimpleBonus):
+
+    def getBlueprintName(self):
+        return BlueprintsBonusSubtypes.FINAL_FRAGMENT if self.__isFinalFragment() else BlueprintsBonusSubtypes.VEHICLE_FRAGMENT
+
+    def getBlueprintSpecialAlias(self):
+        return TOOLTIPS_CONSTANTS.BLUEPRINT_INFO if self.__isFinalFragment() else TOOLTIPS_CONSTANTS.BLUEPRINT_FRAGMENT_INFO
+
+    def getBlueprintSpecialArgs(self):
+        return self._getFragmentCD()
+
+    def formatBlueprintValue(self):
+        return text_styles.neutral(self.itemsCache.items.getItemByCD(self._getFragmentCD()).shortUserName)
+
+    def getImage(self, size='big'):
+        return RES_ICONS.getBlueprintFragment(size, 'vehicle_complete') if self.__isFinalFragment() else RES_ICONS.getBlueprintFragment(size, 'vehicle')
+
+    def getCount(self):
+        return self._value[1]
+
+    def _getFragmentCD(self):
+        return self._value[0]
+
+    def __isFinalFragment(self):
+        level = self.itemsCache.items.getItemByCD(self._getFragmentCD()).level
+        filledCount, totalCount = self.itemsCache.items.blueprints.getBlueprintCount(self._getFragmentCD(), level)
+        return True if filledCount == totalCount else False
+
+
+class IntelligenceBlueprintBonus(VehicleBlueprintBonus):
+
+    def getBlueprintName(self):
+        return BlueprintsBonusSubtypes.UNIVERSAL_FRAGMENT
+
+    def getBlueprintSpecialArgs(self):
+        return int(makeIntelligenceCD(self._getFragmentCD()))
+
+    def getImage(self, size='big'):
+        return RES_ICONS.getBlueprintFragment(size, 'intelligence')
+
+    def getBlueprintSpecialAlias(self):
+        return TOOLTIPS_CONSTANTS.BLUEPRINT_FRAGMENT_INFO
+
+    def formatBlueprintValue(self):
+        pass
+
+
+class NationalBlueprintBonus(VehicleBlueprintBonus):
+
+    def getBlueprintName(self):
+        return BlueprintsBonusSubtypes.NATION_FRAGMENT
+
+    def getBlueprintSpecialArgs(self):
+        return int(makeNationalCD(self._getFragmentCD()))
+
+    def getImage(self, size='big'):
+        nationID = getFragmentNationID(self._getFragmentCD())
+        import nations
+        return RES_ICONS.getBlueprintFragment(size, nations.NAMES[nationID])
+
+    def getBlueprintSpecialAlias(self):
+        return TOOLTIPS_CONSTANTS.BLUEPRINT_FRAGMENT_INFO
+
+    def formatBlueprintValue(self):
+        pass
+
+
+class CrewSkinsBonus(SimpleBonus):
+
+    def getItems(self):
+        if self._value is None:
+            return []
+        else:
+            getItem = self.itemsCache.items.getCrewSkin
+            result = []
+            crewSkinID = self._value.get('id', NO_CREW_SKIN_ID)
+            count = self._value.get('count', 0)
+            customCompensation = self._value.get('customCompensation', None)
+            compensatedNumber = self._value.get('compensatedNumber', None)
+            if crewSkinID != NO_CREW_SKIN_ID and (count > 0 or customCompensation is not None):
+                crewSkinItem = getItem(crewSkinID)
+                if crewSkinItem is not None:
+                    if customCompensation is not None and compensatedNumber is not None:
+                        customCompensation = (customCompensation,)
+                    if compensatedNumber > 0:
+                        result.append((crewSkinItem,
+                         0,
+                         customCompensation,
+                         compensatedNumber))
+                    if count > 0:
+                        result.append((crewSkinItem,
+                         count,
+                         None,
+                         0))
+            return result
+
+    def format(self):
+        return ', '.join(self.formattedList())
+
+    def formattedList(self):
+        sortedByRarity = {}
+        for item, count, _, _ in self.getItems():
+            if count:
+                rarity = item.getRarity()
+                totalCount = sortedByRarity.setdefault(rarity, 0)
+                sortedByRarity[rarity] = totalCount + count
+
+        result = []
+        for rarity, count in sortedByRarity.iteritems():
+            result.append(makeHtmlString('html_templates:lobby/quests/bonuses', 'crewSkin', {'value': count,
+             'rarity': str(rarity)}))
+
+        return result
+
+    def getWrappedEpicBonusList(self):
+        result = []
+        for item, count, _, _ in self.getItems():
+            if item is not None:
+                result.append({'id': item.intCD,
+                 'type': 'item/{}'.format(item.itemTypeName),
+                 'value': count,
+                 'icon': {AWARDS_SIZES.SMALL: item.getBonusIcon(AWARDS_SIZES.SMALL),
+                          AWARDS_SIZES.BIG: item.getBonusIcon(AWARDS_SIZES.BIG)}})
+
+        return result
+
+    def compensation(self, compensatedNumber, customCompensation, bonus):
+        bonuses = []
+        if compensatedNumber > 0 and customCompensation is not None:
+            money = Money(*customCompensation)
+            currencies = money.getSetCurrencies(byWeight=True)
+            for currency in currencies:
+                cls = _BONUSES.get(currency)
+                bonuses.append(cls(currency, money.get(currency=currency), isCompensation=True, compensationReason=bonus))
+
+        return bonuses
+
+    def __getCommonAwardsVOs(self, item, count, iconSize='small', align=TEXT_ALIGN.RIGHT, withCounts=False):
+        itemInfo = {'imgSource': item.getBonusIcon(iconSize),
+         'label': text_styles.stats('x{}'.format(count)),
+         'align': align,
+         'isSpecial': True,
+         'specialArgs': [item.id],
+         'specialAlias': TOOLTIPS_CONSTANTS.CREW_SKIN}
+        if withCounts:
+            itemInfo['count'] = count
+        return itemInfo
+
+
 _BONUSES = {Currency.CREDITS: CreditsBonus,
  Currency.GOLD: GoldBonus,
  Currency.CRYSTAL: CrystalBonus,
@@ -1293,7 +1480,9 @@ _BONUSES = {Currency.CREDITS: CreditsBonus,
  'goodies': GoodiesBonus,
  'items': ItemsBonus,
  'oneof': BoxBonus,
- 'badgesGroup': BadgesGroupBonus}
+ 'badgesGroup': BadgesGroupBonus,
+ 'blueprints': blueprintBonusFactory,
+ 'crewSkins': crewSkinsBonusFactory}
 _BONUSES_PRIORITY = ('tokens', 'oneof')
 _BONUSES_ORDER = dict(((n, idx) for idx, n in enumerate(_BONUSES_PRIORITY)))
 

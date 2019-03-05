@@ -26,8 +26,9 @@ _PHYSICAL_TRACKS_LOD_SETTINGS = shared_components.LodSettings(_PHYSICAL_TRACKS_M
 _SPLINE_TRACKS_MAX_COUNT = 5
 _AREA_LOD_FOR_NONSIMPLE_TRACKS = 50
 _WHEEL_TO_TRACE_RATIO = 0.75
+_DEFAULT_LOD_INDEX = 0
 
-def prepareCompoundAssembler(vehicleDesc, modelsSetParams, spaceID, isTurretDetached=False):
+def prepareCompoundAssembler(vehicleDesc, modelsSetParams, spaceID, isTurretDetached=False, lodIdx=_DEFAULT_LOD_INDEX, geometryOnly=False):
     if constants.IS_DEVELOPMENT and modelsSetParams.state not in VehicleDamageState.MODEL_STATE_NAMES:
         raise SoftException('Invalid modelStateName %s, must be in %s' % (modelsSetParams.state, VehicleDamageState.MODEL_STATE_NAMES))
     if spaceID is None:
@@ -48,6 +49,8 @@ def prepareCompoundAssembler(vehicleDesc, modelsSetParams, spaceID, isTurretDeta
     assembler.addNode(TankNodeNames.CHASSIS_MID_TRAIL, TankPartNames.CHASSIS)
     assembler.name = vehicleDesc.name
     assembler.spaceID = spaceID
+    assembler.lodIdx = lodIdx
+    assembler.geometryOnly = geometryOnly
     return assembler
 
 

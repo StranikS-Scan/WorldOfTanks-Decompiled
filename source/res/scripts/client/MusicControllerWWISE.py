@@ -1,8 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/MusicControllerWWISE.py
+import WWISE
 import BigWorld
 import ResMgr
-import WWISE
 from PlayerEvents import g_playerEvents
 from constants import ARENA_PERIOD
 from helpers import isPlayerAvatar

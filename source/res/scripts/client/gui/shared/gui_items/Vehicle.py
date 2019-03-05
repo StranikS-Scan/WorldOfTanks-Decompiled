@@ -11,6 +11,7 @@ import constants
 from AccountCommands import LOCK_REASON, VEHICLE_SETTINGS_FLAG
 from account_shared import LayoutIterator
 from constants import WIN_XP_FACTOR_MODE, RentType
+from gui.impl.gen import R
 from rent_common import parseRentID
 from gui import makeHtmlString
 from gui.Scaleform.genConsts.STORE_CONSTANTS import STORE_CONSTANTS
@@ -32,13 +33,14 @@ from gui.shared.gui_items.Tankman import Tankman
 from gui.shared.money import MONEY_UNDEFINED, Currency, Money
 from gui.shared.gui_items.gui_item_economics import ItemPrice, ItemPrices, ITEM_PRICE_EMPTY
 from gui.shared.utils import makeSearchableString
-from helpers import i18n, time_utils, dependency
+from helpers import i18n, time_utils, dependency, func_utils
 from items import vehicles, tankmen, customizations, getTypeInfoByName, getTypeOfCompactDescr, makeIntCompactDescrByID
 from items.components.c11n_constants import SeasonType, CustomizationType, StyleFlags, HIDDEN_CAMOUFLAGE_ID
 from shared_utils import findFirst, CONST_CONTAINER
 from skeletons.gui.game_control import IIGRController, IRentalsController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
+from debug_utils import LOG_ERROR
 
 class VEHICLE_CLASS_NAME(CONST_CONTAINER):
     LIGHT_TANK = 'lightTank'
@@ -339,15 +341,21 @@ class Vehicle(FittingItem, HasStrCD):
             currentPrice = self._personalDiscountPrice
         else:
             currentPrice = self._buyPrices.itemPrice.price
+        buyPrice = currentPrice
         if self.isRented and not self.rentalIsOver:
-            buyPrice = currentPrice - self.rentCompensation
-        else:
-            buyPrice = currentPrice
+            if currency == self.rentCompensation.getCurrency():
+                buyPrice = currentPrice - self.rentCompensation
+            else:
+                LOG_ERROR('Compensation currency and purchase currency do not match')
         return ItemPrices(itemPrice=ItemPrice(price=buyPrice, defPrice=self._buyPrices.itemPrice.defPrice), itemAltPrice=self._buyPrices.itemAltPrice)
 
     @property
     def searchableUserName(self):
         return self._searchableUserName
+
+    @property
+    def searchableShortUserName(self):
+        return makeSearchableString(self.shortUserName)
 
     def getUnlockDescrByIntCD(self, intCD):
         for unlockIdx, data in enumerate(self.descriptor.type.unlocksDescrs):
@@ -509,7 +517,7 @@ class Vehicle(FittingItem, HasStrCD):
         return getUniqueIconPath(self.name, withLightning=True)
 
     def getShopIcon(self, size=STORE_CONSTANTS.ICON_SIZE_MEDIUM):
-        name = self.name.split(':')[1]
+        name = getNationLessName(self.name)
         return RES_SHOP_EXT.getVehicleIcon(size, name)
 
     @property
@@ -844,6 +852,25 @@ class Vehicle(FittingItem, HasStrCD):
     def isWheeledTech(self):
         return self._descriptor.type.isWheeledVehicle
 
+    def getC11nItemNoveltyCounter(self, proxy, item):
+        newItems = proxy.inventory.getC11nItemsNoveltyCounters(self._descriptor.type)
+        return newItems.get(item.intCD, 0)
+
+    def getC11nItemsNoveltyCounter(self, proxy, itemTypes=None, season=None):
+        count = 0
+        newItems = proxy.inventory.getC11nItemsNoveltyCounters(self._descriptor.type)
+        for itemCD, qtyItems in newItems.iteritems():
+            item = proxy.getItemByCD(itemCD)
+            if (itemTypes is None or item.itemTypeID in itemTypes) and (season is None or item.season & season):
+                count += qtyItems
+
+        return count
+
+    def getNewC11nItems(self, proxy):
+        newItemsIds = proxy.inventory.getC11nItemsNoveltyCounters(self._descriptor.type).iterkeys()
+        newItems = [ proxy.getItemByCD(itemCD) for itemCD in newItemsIds ]
+        return newItems
+
     def getState(self, isCurrentPlayer=True):
         ms = self.modelState
         if not self.isInInventory and isCurrentPlayer:
@@ -921,6 +948,7 @@ class Vehicle(FittingItem, HasStrCD):
          Vehicle.VEHICLE_STATE.SERVER_RESTRICTION,
          Vehicle.VEHICLE_STATE.RENTAL_IS_OVER,
          Vehicle.VEHICLE_STATE.IGR_RENTAL_IS_OVER,
+         Vehicle.VEHICLE_STATE.AMMO_NOT_FULL,
          Vehicle.VEHICLE_STATE.AMMO_NOT_FULL_EVENTS,
          Vehicle.VEHICLE_STATE.UNSUITABLE_TO_QUEUE,
          Vehicle.VEHICLE_STATE.DEAL_IS_OVER,
@@ -1436,6 +1464,25 @@ def getLevelIconPath(vehLevel):
 
 def getIconPath(vehicleName):
     return '../maps/icons/vehicle/%s' % getItemIconName(vehicleName)
+
+
+def getNationLessName(vehicleName):
+    return vehicleName.split(':')[1]
+
+
+def getIconShopPath(vehicleName, size=STORE_CONSTANTS.ICON_SIZE_MEDIUM):
+    name = getNationLessName(vehicleName)
+    path = RES_SHOP_EXT.getVehicleIcon(size, name)
+    return func_utils.makeFlashPath(path) if path is not None else '../maps/shop/vehicles/%s/empty_tank.png' % size
+
+
+def getIconResource(vehicleName):
+    rName = getIconResourceName(vehicleName=vehicleName)
+    return R.images.gui.maps.icons.vehicle.dyn(rName)
+
+
+def getIconResourceName(vehicleName):
+    return vehicleName.replace(':', '_').replace('-', '_')
 
 
 def getContourIconPath(vehicleName):

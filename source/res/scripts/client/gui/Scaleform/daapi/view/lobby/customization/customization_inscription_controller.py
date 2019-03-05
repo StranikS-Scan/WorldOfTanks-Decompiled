@@ -4,7 +4,7 @@ import SoundGroups
 from account_helpers.AccountSettings import AccountSettings, CUSTOMIZATION_SECTION
 from gui import makeHtmlString
 from gui import SystemMessages
-from gui.Scaleform.daapi.view.lobby.customization.shared import SEASON_TYPE_TO_INFOTYPE_MAP
+from gui.Scaleform.daapi.view.lobby.customization.shared import SEASON_TYPE_TO_INFOTYPE_MAP, formatPersonalNumber
 from gui.Scaleform.daapi.view.lobby.customization.sound_constants import SOUNDS
 from gui.Scaleform.daapi.view.meta.CustomizationInscriptionControllerMeta import CustomizationInscriptionControllerMeta
 from gui.Scaleform.locale.VEHICLE_CUSTOMIZATION import VEHICLE_CUSTOMIZATION
@@ -15,7 +15,7 @@ from gui.shared.formatters import text_styles
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from helpers import dependency
 from items.components.c11n_components import isPersonalNumberAllowed
-from items.components.c11n_constants import NUMBER_OF_PERSONAL_NUMBER_DIGITS
+from items.components.c11n_constants import PERSONAL_NUMBER_DIGITS_COUNT
 from helpers.i18n import makeString as _ms
 from skeletons.gui.customization import ICustomizationService
 _ERROR_ICON_DESC = {'image': RES_ICONS.MAPS_ICONS_CUSTOMIZATION_INSCRIPTION_CONTROLLER_ICON_ERROR}
@@ -60,7 +60,7 @@ class CustomizationInscriptionController(CustomizationInscriptionControllerMeta)
         return
 
     def show(self):
-        self.as_showS(NUMBER_OF_PERSONAL_NUMBER_DIGITS)
+        self.as_showS(PERSONAL_NUMBER_DIGITS_COUNT)
         self.__ctx.vehicleAnchorsUpdater.displayLine(True)
         if self.__shownNumber:
             self.__ctx.changePersonalNumberValue(self.__shownNumber)
@@ -72,18 +72,18 @@ class CustomizationInscriptionController(CustomizationInscriptionControllerMeta)
             self.as_showHintS(self.__getHintVO(VEHICLE_CUSTOMIZATION.PROPERTYSHEET_INSCRIPTIONCONTROLLER_PROMPT, duration=hintDuration, delay=hintDelay))
 
     def sendChar(self, char):
-        if len(self.__shownNumber) == NUMBER_OF_PERSONAL_NUMBER_DIGITS:
+        if len(self.__shownNumber) == PERSONAL_NUMBER_DIGITS_COUNT:
             SoundGroups.g_instance.playSound2D(SOUNDS.CUST_CHOISE_NUMBER_OVER)
             self.as_showHintS(self.__getHintVO(VEHICLE_CUSTOMIZATION.PROPERTYSHEET_INSCRIPTIONCONTROLLER_EDIT_BUTTONS, icons=[_BACKSPACE_ICON_DESC, _DEL_ICON_DESC], duration=_DEFAULT_HINT_DURATION))
             return
         newNumber = self.__shownNumber + char
-        if len(newNumber) == NUMBER_OF_PERSONAL_NUMBER_DIGITS and not isPersonalNumberAllowed(newNumber):
+        if len(newNumber) == PERSONAL_NUMBER_DIGITS_COUNT and not isPersonalNumberAllowed(newNumber):
             self.as_invalidInscriptionS(self.__getHintVO(makeHtmlString('html_templates:lobby/customization', 'inscription_hint', {'value': newNumber}), icons=[_ERROR_ICON_DESC], duration=_DEFAULT_HINT_DURATION))
         else:
             self.__shownNumber = newNumber
             self.__ctx.changePersonalNumberValue(self.__shownNumber)
             SoundGroups.g_instance.playSound2D(SOUNDS.CUST_CHOICE_NUMBER)
-            if len(self.__shownNumber) == NUMBER_OF_PERSONAL_NUMBER_DIGITS:
+            if len(self.__shownNumber) == PERSONAL_NUMBER_DIGITS_COUNT:
                 hintDelay, hintDuration = self.__calcHintTimings(_PRESS_ENTER_HINT_SHOWN_FIELD)
                 self.as_showHintS(self.__getHintVO(VEHICLE_CUSTOMIZATION.PROPERTYSHEET_INSCRIPTIONCONTROLLER_ENTRY_COMPLETED, icons=[_ENTER_ICON_DESC], duration=hintDuration, delay=hintDelay))
 
@@ -102,11 +102,12 @@ class CustomizationInscriptionController(CustomizationInscriptionControllerMeta)
         if self.__shownNumber == '':
             self.as_showHintS(self.__getHintVO(VEHICLE_CUSTOMIZATION.PROPERTYSHEET_INSCRIPTIONCONTROLLER_PROMPT, duration=_DEFAULT_HINT_DURATION))
             return
-        newNumber = '0' * (NUMBER_OF_PERSONAL_NUMBER_DIGITS - len(self.__shownNumber)) + self.__shownNumber
+        newNumber = formatPersonalNumber(self.__shownNumber)
         if not isPersonalNumberAllowed(newNumber):
             self.as_invalidInscriptionS(self.__getHintVO(makeHtmlString('html_templates:lobby/customization', 'inscription_hint', {'value': newNumber}), icons=[_ERROR_ICON_DESC], duration=_DEFAULT_HINT_DURATION))
         else:
             self.__ctx.changePersonalNumberValue(newNumber)
+            self.__ctx.storePersonalNumber(newNumber)
             self.hide()
             self.__ctx.onPersonalNumberEditModeChanged(PersonalNumEditStatuses.EDIT_MODE_FINISHED)
             self.__shownNumber = ''
@@ -116,10 +117,10 @@ class CustomizationInscriptionController(CustomizationInscriptionControllerMeta)
             if self.__shownNumber != '':
                 self.finish()
             else:
-                self.__cancelEditMode(showPropSheetAfter=False)
+                self.__cancelEditMode(showPropSheetAfter=True)
         elif state is PersonalNumEditCommands.CANCEL_EDIT_MODE:
             self.__ctx.numberEditModeActive = False
-            newNumber = '0' * (NUMBER_OF_PERSONAL_NUMBER_DIGITS - len(self.__shownNumber)) + self.__shownNumber
+            newNumber = formatPersonalNumber(self.__shownNumber)
             if self.__shownNumber != '' and isPersonalNumberAllowed(newNumber):
                 self.__ctx.changePersonalNumberValue(newNumber)
                 self.hide()
@@ -152,14 +153,15 @@ class CustomizationInscriptionController(CustomizationInscriptionControllerMeta)
         self.__ctx.numberEditModeActive = False
         selectedItem = self.__ctx.getItemFromSelectedRegion()
         SoundGroups.g_instance.playSound2D(SOUNDS.CUST_CHOICE_ESC)
-        if self.__ctx.storedInscriptionSlotInfo != (None, None) and selectedItem and selectedItem.itemTypeID == GUI_ITEM_TYPE.PERSONAL_NUMBER:
-            self.__ctx.restoreInscriptionSlotContent()
-        elif self.__ctx.isAnyAnchorSelected and selectedItem and selectedItem.itemTypeID == GUI_ITEM_TYPE.PERSONAL_NUMBER:
-            self.__ctx.removeItemFromSlot(self.__ctx.currentSeason, self.__ctx.selectedSlot, refresh=True)
+        if selectedItem is not None and selectedItem.itemTypeID == GUI_ITEM_TYPE.PERSONAL_NUMBER:
+            if self.__ctx.storedPersonalNumber:
+                self.__ctx.restorePersonalNumber()
+            elif self.__ctx.isAnyAnchorSelected:
+                self.__ctx.removeItemFromSlot(self.__ctx.currentSeason, self.__ctx.selectedSlot, refresh=True)
         self.hide()
         self.__ctx.onPersonalNumberEditModeChanged(PersonalNumEditStatuses.EDIT_MODE_CANCELLED, showPropSheetAfter)
         self.__ctx.refreshOutfit()
-        return None
+        return
 
     @staticmethod
     def __calcHintTimings(accountSettingName):

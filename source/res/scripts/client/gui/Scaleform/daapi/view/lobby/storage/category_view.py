@@ -1,13 +1,13 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/storage/category_view.py
 from gui.ClientUpdateManager import g_clientUpdateManager
+from gui.Scaleform.daapi.view.lobby.storage import storage_helpers
 from gui.Scaleform.daapi.view.meta.BaseStorageCategoryViewMeta import BaseStorageCategoryViewMeta
 from gui.Scaleform.framework.entities.DAAPIDataProvider import DAAPIDataProvider
+from gui.shared.formatters import text_styles
 from gui.shared.utils.requesters.ItemsRequester import REQ_CRITERIA
 from helpers import dependency
-from gui.Scaleform.daapi.view.lobby.storage import storage_helpers
 from skeletons.gui.shared import IItemsCache
-from gui.shared.formatters import text_styles
 
 class StorageDataProvider(DAAPIDataProvider):
 
@@ -39,10 +39,8 @@ class BaseCategoryView(BaseStorageCategoryViewMeta):
         super(BaseCategoryView, self).__init__()
         self._dataProvider = self._createDataProvider()
 
-    def _createDataProvider(self):
-        return StorageDataProvider()
-
     def setActiveState(self, isActive):
+        self.setActive(isActive)
         if isActive:
             self._update()
 
@@ -58,6 +56,9 @@ class BaseCategoryView(BaseStorageCategoryViewMeta):
         self._dataProvider.fini()
         self._dataProvider = None
         return
+
+    def _createDataProvider(self):
+        return StorageDataProvider()
 
     def _update(self, *args):
         pass
@@ -79,11 +80,21 @@ class BaseCategoryView(BaseStorageCategoryViewMeta):
 
 
 class InventoryCategoryView(BaseCategoryView):
-    _itemsCache = dependency.descriptor(IItemsCache)
 
     def __init__(self):
         super(InventoryCategoryView, self).__init__()
         self._invVehicles = None
+        return
+
+    def _populate(self):
+        super(InventoryCategoryView, self)._populate()
+        self._invVehicles = self._itemsCache.items.getVehicles(self._getInvVehicleCriteria()).values()
+        g_clientUpdateManager.addCallbacks({'inventory': self._inventoryUpdatesCallback})
+
+    def _dispose(self):
+        super(InventoryCategoryView, self)._dispose()
+        self._invVehicles = None
+        g_clientUpdateManager.removeObjectCallbacks(self)
         return
 
     def _getRequestCriteria(self, invVehicles):
@@ -112,17 +123,6 @@ class InventoryCategoryView(BaseCategoryView):
 
     def _getVO(self, item):
         raise NotImplementedError
-
-    def _populate(self):
-        super(InventoryCategoryView, self)._populate()
-        self._invVehicles = self._itemsCache.items.getVehicles(self._getInvVehicleCriteria()).values()
-        g_clientUpdateManager.addCallbacks({'inventory': self._inventoryUpdatesCallback})
-
-    def _dispose(self):
-        super(InventoryCategoryView, self)._dispose()
-        self._invVehicles = None
-        g_clientUpdateManager.removeObjectCallbacks(self)
-        return
 
     def _inventoryUpdatesCallback(self, *args):
         self._invVehicles = self._itemsCache.items.getVehicles(REQ_CRITERIA.INVENTORY).values()

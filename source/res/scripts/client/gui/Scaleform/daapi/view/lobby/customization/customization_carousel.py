@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/customization/customization_carousel.py
 from collections import defaultdict
-from gui.Scaleform.daapi.view.lobby.customization.shared import TABS_ITEM_MAPPING, TYPE_TO_TAB_IDX, TYPES_ORDER, C11nTabs
+from gui.Scaleform.daapi.view.lobby.customization.shared import TABS_ITEM_TYPE_MAPPING, TYPE_TO_TAB_IDX, TYPES_ORDER, C11nTabs
 from gui.Scaleform.framework.entities.DAAPIDataProvider import SortableDAAPIDataProvider
 from gui.Scaleform.locale.VEHICLE_CUSTOMIZATION import VEHICLE_CUSTOMIZATION
 from gui.shared.gui_items import GUI_ITEM_TYPE
@@ -60,18 +60,18 @@ class CustomizationCarouselDataProvider(SortableDAAPIDataProvider):
         self._proxy = proxy
         self._currentlyApplied = set()
         self._allSeasonAndTabFilterData = {}
-        self._userCreatedItems = None
         self.updateTabGroups()
         return
 
     def updateTabGroups(self):
         self._allSeasonAndTabFilterData.clear()
         visibleTabs = defaultdict(set)
+        stylesTabEnabled = {s:False for s in SeasonType.COMMON_SEASONS}
         c11nContext = self.service.getCtx()
         anchorsData = c11nContext.hangarSpace.getSlotPositions()
         requirement = createCustomizationBaseRequestCriteria(self._currentVehicle.item, self.eventsCache.questsProgress, self._proxy.getAppliedItems())
         allItems = self.itemsCache.items.getItems(GUI_ITEM_TYPE.CUSTOMIZATIONS, requirement)
-        for tabIndex in TABS_ITEM_MAPPING.iterkeys():
+        for tabIndex in C11nTabs.ALL:
             self._allSeasonAndTabFilterData[tabIndex] = {}
             for season in SeasonType.COMMON_SEASONS:
                 self._allSeasonAndTabFilterData[tabIndex][season] = CustomizationSeasonAndTypeFilterData()
@@ -87,6 +87,8 @@ class CustomizationCarouselDataProvider(SortableDAAPIDataProvider):
                     if groupName and groupName not in seasonAndTabData.allGroups:
                         seasonAndTabData.allGroups.append(groupName)
                     seasonAndTabData.itemCount += 1
+                    if tabIndex == C11nTabs.STYLE:
+                        stylesTabEnabled[seasonType] = True
                     if tabIndex not in C11nTabs.VISIBLE:
                         continue
                     if item.itemTypeID in (GUI_ITEM_TYPE.INSCRIPTION, GUI_ITEM_TYPE.EMBLEM):
@@ -97,8 +99,8 @@ class CustomizationCarouselDataProvider(SortableDAAPIDataProvider):
                             continue
                     visibleTabs[seasonType].add(tabIndex)
 
-        c11nContext.updateVisibleTabsList(visibleTabs)
-        for tabIndex in TABS_ITEM_MAPPING.iterkeys():
+        c11nContext.updateVisibleTabsList(visibleTabs, stylesTabEnabled)
+        for tabIndex in C11nTabs.ALL:
             for seasonType in SeasonType.COMMON_SEASONS:
                 seasonAndTabData = self._allSeasonAndTabFilterData[tabIndex][seasonType]
                 seasonAndTabData.allGroups.append(_ms(VEHICLE_CUSTOMIZATION.CUSTOMIZATION_FILTER_ALLGROUPS))
@@ -163,6 +165,10 @@ class CustomizationCarouselDataProvider(SortableDAAPIDataProvider):
         seasonAndTabData.selectedGroupIndex = len(seasonAndTabData.allGroups) - 1
         self.buildList(self._tabIndex, self._seasonID)
 
+    def hasAppliedFilter(self):
+        seasonAndTabData = self._allSeasonAndTabFilterData[self._tabIndex][self._seasonID]
+        return self._onlyOwnedAndFreeItems or self._historicOnlyItems or self._onlyAppliedItems or seasonAndTabData.selectedGroupIndex != len(seasonAndTabData.allGroups) - 1
+
     def selectItem(self, item=None):
         if not item:
             self._selectIntCD = None
@@ -190,10 +196,9 @@ class CustomizationCarouselDataProvider(SortableDAAPIDataProvider):
     def getCurrentlyApplied(self):
         return self._currentlyApplied
 
-    def buildList(self, tabIndex, season, refresh=True, userCreatedItems=None):
+    def buildList(self, tabIndex, season, refresh=True):
         self._tabIndex = tabIndex
         self._seasonID = season
-        self._userCreatedItems = userCreatedItems
         self.clear()
         self._buildCustomizationItems()
         if refresh:
@@ -239,11 +244,10 @@ class CustomizationCarouselDataProvider(SortableDAAPIDataProvider):
         if self._onlyAppliedItems:
             appliedItems = self._proxy.getAppliedItems(isOriginal=False)
             requirement |= REQ_CRITERIA.CUSTOM(lambda item: item.intCD in appliedItems)
-        allItems = self.itemsCache.items.getItems(TABS_ITEM_MAPPING[self._tabIndex], requirement)
-        if self._tabIndex == C11nTabs.INSCRIPTION:
-            allItems.update(self.itemsCache.items.getItems(GUI_ITEM_TYPE.PERSONAL_NUMBER, requirement))
-        if self._userCreatedItems:
-            allItems.update(self._userCreatedItems)
+        allItems = {}
+        for itemTypeId in TABS_ITEM_TYPE_MAPPING[self._tabIndex]:
+            allItems.update(self.itemsCache.items.getItems(itemTypeId, requirement))
+
         self._customizationItems = []
         self._customizationBookmarks = []
         lastGroupID = None

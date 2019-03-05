@@ -17,11 +17,7 @@
     <priceGroup>	projection_decals 110	</priceGroup>
     <vehicleFilter>
       <include>
-        <levels>	8	</levels>
-        <tags>	premium	</tags>
-      </include>
-      <include>
-        <levels>	10	</levels>
+        <levels>	8 10	</levels>
       </include>
       <exclude>
         <vehicles>	china:Ch01_Type59_Gold germany:G119_Panzer58_BF germany:G114_Rheinmetall_Skorpian usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
@@ -43,11 +39,7 @@
     <priceGroup>	projection_decals 100	</priceGroup>
     <vehicleFilter>
       <include>
-        <levels>	8	</levels>
-        <tags>	premium	</tags>
-      </include>
-      <include>
-        <levels>	10	</levels>
+        <levels>	8 10	</levels>
       </include>
       <exclude>
         <vehicles>	china:Ch01_Type59_Gold germany:G119_Panzer58_BF germany:G114_Rheinmetall_Skorpian usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
@@ -149,11 +141,7 @@
     <priceGroup>	projection_decals 100	</priceGroup>
     <vehicleFilter>
       <include>
-        <levels>	8	</levels>
-        <tags>	premium	</tags>
-      </include>
-      <include>
-        <levels>	10	</levels>
+        <levels>	8 10	</levels>
       </include>
       <exclude>
         <vehicles>	china:Ch01_Type59_Gold germany:G119_Panzer58_BF germany:G114_Rheinmetall_Skorpian usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
@@ -265,7 +253,7 @@
     <vehicleFilter>
       <include>
         <nations>	czech	</nations>
-        <levels>	6 8 9 10	</levels>
+        <levels>	6 7 8 9 10	</levels>
       </include>
     </vehicleFilter>
     <projection_decal>
@@ -283,11 +271,7 @@
     <priceGroup>	projection_decals 100	</priceGroup>
     <vehicleFilter>
       <include>
-        <levels>	8	</levels>
-        <tags>	premium	</tags>
-      </include>
-      <include>
-        <levels>	10	</levels>
+        <levels>	8 10	</levels>
       </include>
       <exclude>
         <vehicles>	china:Ch01_Type59_Gold germany:G119_Panzer58_BF germany:G114_Rheinmetall_Skorpian usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
@@ -406,11 +390,7 @@
     <priceGroup>	projection_decals 100	</priceGroup>
     <vehicleFilter>
       <include>
-        <levels>	8	</levels>
-        <tags>	premium	</tags>
-      </include>
-      <include>
-        <levels>	10	</levels>
+        <levels>	8 10	</levels>
       </include>
       <exclude>
         <vehicles>	china:Ch01_Type59_Gold germany:G119_Panzer58_BF germany:G114_Rheinmetall_Skorpian usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
@@ -481,11 +461,7 @@
     <priceGroup>	projection_decals 110	</priceGroup>
     <vehicleFilter>
       <include>
-        <levels>	8	</levels>
-        <tags>	premium	</tags>
-      </include>
-      <include>
-        <levels>	10	</levels>
+        <levels>	8 10	</levels>
       </include>
       <exclude>
         <vehicles>	china:Ch01_Type59_Gold germany:G119_Panzer58_BF germany:G114_Rheinmetall_Skorpian usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
@@ -528,11 +504,7 @@
     <priceGroup>	projection_decals 150	</priceGroup>
     <vehicleFilter>
       <include>
-        <levels>	8	</levels>
-        <tags>	premium	</tags>
-      </include>
-      <include>
-        <levels>	10	</levels>
+        <levels>	8 10	</levels>
       </include>
       <exclude>
         <vehicles>	china:Ch01_Type59_Gold germany:G119_Panzer58_BF germany:G114_Rheinmetall_Skorpian usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
@@ -554,11 +526,7 @@
     <priceGroup>	projection_decals 100	</priceGroup>
     <vehicleFilter>
       <include>
-        <levels>	8	</levels>
-        <tags>	premium	</tags>
-      </include>
-      <include>
-        <levels>	10	</levels>
+        <levels>	8 10	</levels>
       </include>
       <exclude>
         <vehicles>	china:Ch01_Type59_Gold germany:G119_Panzer58_BF germany:G114_Rheinmetall_Skorpian usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
@@ -569,7 +537,7 @@
       <texture>	gui/maps/vehicles/decals/projection_decals/identity_signs/projection_decal_01.dds	</texture>
       <userString>	#vehicle_customization:projection_decals/identity_signs/projection_decal_01	</userString>
       <tags>	direction_left_to_right formfactor_square	</tags>
-      <mirror>	True	</mirror>
+      <mirror>	False	</mirror>
       <priceGroup>	projection_decals 110 EU	</priceGroup>
     </projection_decal>
     <projection_decal>
@@ -618,6 +586,13 @@
         <vehicles>	china:Ch01_Type59_Gold germany:G119_Panzer58_BF germany:G114_Rheinmetall_Skorpian usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
       </exclude>
     </vehicleFilter>
+    <projection_decal>
+      <id>	60	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/holiday/projection_decal_01.dds	</texture>
+      <userString>	#vehicle_customization:projection_decals/holiday/projection_decal_01	</userString>
+      <tags>	formfactor_square	</tags>
+      <mirror>	False	</mirror>
+    </projection_decal>
     <projection_decal>
       <id>	61	</id>
       <texture>	gui/maps/vehicles/decals/projection_decals/holiday/projection_decal_02.dds	</texture>

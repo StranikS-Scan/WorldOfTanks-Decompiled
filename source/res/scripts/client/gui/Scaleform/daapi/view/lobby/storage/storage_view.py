@@ -5,45 +5,31 @@ from account_helpers.AccountSettings import LAST_STORAGE_VISITED_TIMESTAMP
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform.daapi import LobbySubView
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
+from gui.Scaleform.daapi.view.lobby.storage import getSectionsList
 from gui.Scaleform.daapi.view.lobby.storage.sound_constants import STORAGE_SOUND_SPACE
 from gui.Scaleform.daapi.view.lobby.storage.storage_helpers import getStorageShellsData
 from gui.Scaleform.daapi.view.lobby.store.browser.ingameshop_helpers import isIngameShopEnabled
 from gui.Scaleform.daapi.view.meta.StorageViewMeta import StorageViewMeta
 from gui.Scaleform.genConsts.STORAGE_CONSTANTS import STORAGE_CONSTANTS
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
-from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.shared import events, EVENT_BUS_SCOPE
 from gui.shared.event_dispatcher import showHangar
+from gui.shared.gui_items import GUI_ITEM_TYPE
+from gui.shared.utils.requesters.ItemsRequester import REQ_CRITERIA
 from helpers import dependency
 from helpers.time_utils import getCurrentTimestamp
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
-from gui.shared.utils.requesters.ItemsRequester import REQ_CRITERIA
-from gui.shared.gui_items import GUI_ITEM_TYPE
 
 class StorageView(LobbySubView, StorageViewMeta):
     __background_alpha__ = 1.0
-    _lobbyContext = dependency.descriptor(ILobbyContext)
-    _itemsCache = dependency.descriptor(IItemsCache)
+    __lobbyContext = dependency.descriptor(ILobbyContext)
+    __itemsCache = dependency.descriptor(IItemsCache)
     _COMMON_SOUND_SPACE = STORAGE_SOUND_SPACE
 
     def __init__(self, ctx=None):
         super(StorageView, self).__init__(ctx)
-        self.sections = [{'id': STORAGE_CONSTANTS.FOR_SELL,
-          'linkage': STORAGE_CONSTANTS.FOR_SELL_VIEW,
-          'tooltip': TOOLTIPS.STORAGE_MAINMENU_FOR_SELL},
-         {'id': STORAGE_CONSTANTS.STORAGE,
-          'linkage': STORAGE_CONSTANTS.STORAGE_VIEW,
-          'tooltip': TOOLTIPS.STORAGE_MAINMENU_STORAGE},
-         {'id': STORAGE_CONSTANTS.IN_HANGAR,
-          'linkage': STORAGE_CONSTANTS.IN_HANGAR_VIEW,
-          'tooltip': TOOLTIPS.STORAGE_MAINMENU_IN_HANGAR},
-         {'id': STORAGE_CONSTANTS.PERSONAL_RESERVES,
-          'linkage': STORAGE_CONSTANTS.PERSONAL_RESERVES_VIEW,
-          'tooltip': TOOLTIPS.STORAGE_MAINMENU_PERSONAL_RESERVES},
-         {'id': STORAGE_CONSTANTS.CUSTOMIZATION,
-          'linkage': STORAGE_CONSTANTS.CUSTOMIZATION_VIEW,
-          'tooltip': TOOLTIPS.STORAGE_MAINMENU_CUSTOMIZATION}]
+        self.__sections = self.__createSections()
         self.__showDummyScreen = False
         self.__isItemsForSellEmpty = self.__getItemsForSellEmpty()
         self.__activeSectionIdx = 0
@@ -51,11 +37,6 @@ class StorageView(LobbySubView, StorageViewMeta):
         self.__switchSection(sectionName=(ctx or {}).get('defaultSection', STORAGE_CONSTANTS.FOR_SELL), sectionTab=(ctx or {}).get('defaultTab'), skipRefresh=True)
         self.__addHandlers()
         return
-
-    def _onRegisterFlashComponent(self, viewPy, alias):
-        super(StorageView, self)._onRegisterFlashComponent(viewPy, alias)
-        if alias == STORAGE_CONSTANTS.IN_HANGAR_VIEW:
-            viewPy.setActiveTab(self.__activeTab)
 
     def onClose(self):
         self.fireEvent(events.LoadViewEvent(VIEW_ALIAS.LOBBY_HANGAR), scope=EVENT_BUS_SCOPE.LOBBY)
@@ -65,7 +46,7 @@ class StorageView(LobbySubView, StorageViewMeta):
 
     def _populate(self):
         super(StorageView, self)._populate()
-        self.__showDummyScreen = not self._lobbyContext.getServerSettings().isIngameStorageEnabled()
+        self.__showDummyScreen = not self.__lobbyContext.getServerSettings().isIngameStorageEnabled()
         self.__initialize()
 
     def _invalidate(self, *args, **kwargs):
@@ -77,30 +58,53 @@ class StorageView(LobbySubView, StorageViewMeta):
         self.__saveLastTimestamp()
         super(StorageView, self)._dispose()
 
+    def _onRegisterFlashComponent(self, viewPy, alias):
+        super(StorageView, self)._onRegisterFlashComponent(viewPy, alias)
+        if alias == STORAGE_CONSTANTS.IN_HANGAR_VIEW:
+            viewPy.setActiveTab(self.__activeTab)
+
+    def __initialize(self):
+        self.as_setDataS({'bgSource': RES_ICONS.MAPS_ICONS_STORAGE_BACKGROUND,
+         'sections': self.__sections,
+         'showDummyScreen': self.__showDummyScreen})
+        self.as_selectSectionS(self.__activeSectionIdx)
+
     def __saveLastTimestamp(self):
         AccountSettings.setSessionSettings(LAST_STORAGE_VISITED_TIMESTAMP, getCurrentTimestamp())
 
     def __addHandlers(self):
-        serverSettings = self._lobbyContext.getServerSettings()
+        serverSettings = self.__lobbyContext.getServerSettings()
         serverSettings.onServerSettingsChange += self.__onServerSettingChanged
-        g_clientUpdateManager.addCallbacks({'inventory': self.__onInventoryUpdated})
+        g_clientUpdateManager.addCallbacks({'inventory': self.__onInventoryUpdated,
+         'serverSettings.blueprints_config': self.__onBlueprintsModeChanged})
 
     def __removeHandlers(self):
         g_clientUpdateManager.removeObjectCallbacks(self)
-        serverSettings = self._lobbyContext.getServerSettings()
+        serverSettings = self.__lobbyContext.getServerSettings()
         serverSettings.onServerSettingsChange -= self.__onServerSettingChanged
 
     def __onServerSettingChanged(self, diff):
         if 'ingameShop' in diff:
-            storageEnabled = self._lobbyContext.getServerSettings().isIngameStorageEnabled()
+            storageEnabled = self.__lobbyContext.getServerSettings().isIngameStorageEnabled()
             if isIngameShopEnabled():
                 if not storageEnabled and not self.__showDummyScreen:
-                    showHangar()
+                    self.navigateToHangar()
                 if storageEnabled and self.__showDummyScreen:
                     self.__showDummyScreen = False
                     self.__initialize()
             else:
                 showHangar()
+
+    def __onBlueprintsModeChanged(self, _):
+        activeSectionAlias, activeTab = self.__findActiveSectionAndTab()
+        blueprintsEnabled = self.__lobbyContext.getServerSettings().blueprintsConfig.isBlueprintsAvailable()
+        if not blueprintsEnabled and activeSectionAlias == STORAGE_CONSTANTS.BLUEPRINTS_VIEW:
+            self.navigateToHangar()
+        else:
+            self.__sections = self.__createSections()
+            self.__getSectionIdx(activeSectionAlias)
+            self.__initialize()
+            self.__activeTab = activeTab
 
     def __onInventoryUpdated(self, diff):
         if diff:
@@ -109,7 +113,7 @@ class StorageView(LobbySubView, StorageViewMeta):
     def __switchSection(self, sectionName, sectionTab=None, skipRefresh=False):
         if sectionName == STORAGE_CONSTANTS.FOR_SELL and self.__isItemsForSellEmpty:
             sectionName = STORAGE_CONSTANTS.STORAGE
-        for i, section in enumerate(self.sections):
+        for i, section in enumerate(self.__sections):
             if section['id'] == sectionName:
                 self.__activeSectionIdx = i
                 break
@@ -118,17 +122,33 @@ class StorageView(LobbySubView, StorageViewMeta):
             self.as_selectSectionS(self.__activeSectionIdx)
         self.__activeTab = sectionTab
 
+    def __findActiveSectionAndTab(self):
+        for alias, section in self.components.iteritems():
+            if section.getActive():
+                return (alias, None)
+            if section.components:
+                for tabAlias, tab in section.components.iteritems():
+                    if tab.getActive():
+                        return (alias, tabAlias)
+
+        return None
+
     def __getItemsForSellEmpty(self):
-        invVehicles = self._itemsCache.items.getVehicles(REQ_CRITERIA.INVENTORY).values()
+        invVehicles = self.__itemsCache.items.getVehicles(REQ_CRITERIA.INVENTORY).values()
         requestTypeIds = GUI_ITEM_TYPE.VEHICLE_MODULES
         criteria = ~REQ_CRITERIA.VEHICLE.SUITABLE(invVehicles, requestTypeIds)
         criteria |= REQ_CRITERIA.INVENTORY
-        items = self._itemsCache.items.getItems(requestTypeIds, criteria, nationID=None)
+        items = self.__itemsCache.items.getItems(requestTypeIds, criteria, nationID=None)
         shellItems = getStorageShellsData(invVehicles, False)
         return not items and not shellItems
 
-    def __initialize(self):
-        self.as_setDataS({'bgSource': RES_ICONS.MAPS_ICONS_STORAGE_BACKGROUND,
-         'sections': self.sections,
-         'showDummyScreen': self.__showDummyScreen})
-        self.as_selectSectionS(self.__activeSectionIdx)
+    def __createSections(self):
+        if self.__lobbyContext.getServerSettings().blueprintsConfig.isBlueprintsAvailable():
+            return getSectionsList()
+        return [ section for section in getSectionsList() if section['id'] != STORAGE_CONSTANTS.BLUEPRINTS ]
+
+    def __getSectionIdx(self, sectionAlias):
+        for idx, section in enumerate(self.__sections):
+            if section['linkage'] == sectionAlias:
+                self.__activeSectionIdx = idx
+                return section['id']

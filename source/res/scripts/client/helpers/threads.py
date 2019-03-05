@@ -5,6 +5,7 @@ import weakref
 import threading
 from Queue import Queue, Empty as QueueEmptyError
 from debug_utils import LOG_ERROR, LOG_DEBUG, LOG_CURRENT_EXCEPTION
+INFINITE_QUEUE_SIZE = 0
 
 class Job(object):
 
@@ -54,7 +55,7 @@ class Worker(threading.Thread):
 
 class ThreadPool(object):
 
-    def __init__(self, workersLimit, queueLimit=-1):
+    def __init__(self, workersLimit, queueLimit=INFINITE_QUEUE_SIZE):
         self._jobs = Queue(queueLimit)
         self._running = False
         self._workers = []

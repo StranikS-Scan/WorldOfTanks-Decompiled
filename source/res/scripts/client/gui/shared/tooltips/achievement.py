@@ -22,7 +22,6 @@ from gui.shared.gui_items.dossier.achievements.abstract import achievementHasVeh
 from skeletons.gui.shared import IItemsCache
 _ACHIEVEMENT_VEHICLES_MAX = 5
 _ACHIEVEMENT_VEHICLES_SHOW = 5
-_REFERRAL_BADGES = (64, 65, 66)
 _logger = logging.getLogger(__name__)
 
 class AchievementParamsField(ToolTipParameterField):
@@ -224,7 +223,6 @@ class GlobalRatingTooltipData(ToolTipBaseData):
 
 
 class BadgeTooltipData(BlocksTooltipData):
-    __itemsCache = dependency.descriptor(IItemsCache)
 
     def __init__(self, context):
         super(BadgeTooltipData, self).__init__(context, TOOLTIP_TYPE.PRIVATE_QUESTS)
@@ -234,13 +232,14 @@ class BadgeTooltipData(BlocksTooltipData):
 
     def _packBlocks(self, badgeID):
         blocks = super(BadgeTooltipData, self)._packBlocks()
-        badge = self.__itemsCache.items.getBadges().get(int(badgeID))
+        badge = self._context.buildItem(badgeID)
+        paramsConfig = self._context.getParamsConfiguration(badge)
         if badge is None:
             _logger.warning('Missing tooltip text for %r, please check badge.po', int(badgeID))
             return blocks
         else:
             tooltipData = [formatters.packTextBlockData(text_styles.highTitle(badge.getUserName())), formatters.packImageBlockData(badge.getHugeIcon(), BLOCKS_TOOLTIP_TYPES.ALIGN_CENTER, padding=formatters.packPadding(top=-5, bottom=11))]
-            if g_currentVehicle.isPresent() and badgeID not in _REFERRAL_BADGES:
+            if g_currentVehicle.isPresent() and paramsConfig.showVehicle:
                 vehicle = g_currentVehicle.item
                 tooltipData.append(formatters.packBadgeInfoBlockData(badge.getThumbnailIcon(), vehicle.iconContour, text_styles.bonusPreviewText(getPlayerName()), text_styles.bonusPreviewText(vehicle.shortUserName)))
             blocks.append(formatters.packBuildUpBlockData(tooltipData))

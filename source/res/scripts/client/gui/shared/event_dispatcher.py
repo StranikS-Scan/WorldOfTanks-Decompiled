@@ -8,11 +8,15 @@ from constants import RentType, GameSeasonType
 from debug_utils import LOG_WARNING
 from gui import SystemMessages, DialogsInterface
 from gui.Scaleform import MENU
+from gui.Scaleform.framework import ScopeTemplates
+from gui.Scaleform.genConsts.STORAGE_CONSTANTS import STORAGE_CONSTANTS
+from gui.Scaleform.locale.MESSENGER import MESSENGER
+from gui.app_loader import g_appLoader
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.dialogs import I18nInfoDialogMeta, I18nConfirmDialogMeta, DIALOG_BUTTON_ID
 from gui.Scaleform.daapi.view.dialogs.ExchangeDialogMeta import ExchangeCreditsWebProductMeta
-from gui.Scaleform.daapi.view.dialogs.rent_confirm_dialog import RentConfirmDialogMeta
 from gui.Scaleform.daapi.view.lobby.referral_program.referral_program_helpers import getReferralProgramURL
+from gui.Scaleform.daapi.view.dialogs.rent_confirm_dialog import RentConfirmDialogMeta
 from gui.Scaleform.daapi.view.lobby.store.browser.ingameshop_helpers import getWebShopURL, isIngameShopEnabled
 from gui.Scaleform.framework.entities.View import ViewKey
 from gui.Scaleform.genConsts.BOOSTER_CONSTANTS import BOOSTER_CONSTANTS
@@ -20,10 +24,8 @@ from gui.Scaleform.genConsts.CLANS_ALIASES import CLANS_ALIASES
 from gui.Scaleform.genConsts.EPICBATTLES_ALIASES import EPICBATTLES_ALIASES
 from gui.Scaleform.genConsts.PERSONAL_MISSIONS_ALIASES import PERSONAL_MISSIONS_ALIASES
 from gui.Scaleform.genConsts.RANKEDBATTLES_ALIASES import RANKEDBATTLES_ALIASES
-from gui.Scaleform.genConsts.STORAGE_CONSTANTS import STORAGE_CONSTANTS
-from gui.Scaleform.locale.MESSENGER import MESSENGER
-from gui.SystemMessages import SM_TYPE, pushMessage
-from gui.app_loader import g_appLoader
+from gui.impl import backport
+from gui.impl.gen import R
 from gui.game_control.links import URLMacros
 from gui.ingame_shop import generateShopRentRenewProductID, showBuyGoldForRentWebOverlay
 from gui.ingame_shop import getShopProductInfo
@@ -40,11 +42,13 @@ from gui.shared.utils import isPopupsWindowsOpenDisabled
 from gui.shared.utils.functions import getViewName, getUniqueViewName
 from gui.shared.utils.requesters import REQ_CRITERIA
 from helpers import dependency
+from helpers.aop import pointcutable
 from helpers.i18n import makeString as _ms
 from skeletons.gui.game_control import IHeroTankController, IReferralProgramController
+from skeletons.gui.impl import IGuiLoader
+from skeletons.gui.shared import IItemsCache
 from skeletons.gui.goodies import IGoodiesCache
 from skeletons.gui.lobby_context import ILobbyContext
-from skeletons.gui.shared import IItemsCache
 from soft_exception import SoftException
 _logger = logging.getLogger(__name__)
 
@@ -85,6 +89,10 @@ def showRankedPrimeTimeWindow():
 
 def showEpicBattlesPrimeTimeWindow():
     g_eventBus.handleEvent(events.LoadViewEvent(alias=EPICBATTLES_ALIASES.EPIC_BATTLES_PRIME_TIME_ALIAS, ctx={}), EVENT_BUS_SCOPE.LOBBY)
+
+
+def showFrontlineBuyConfirmView(ctx):
+    g_eventBus.handleEvent(events.LoadViewEvent(alias=EPICBATTLES_ALIASES.FRONTLINE_BUY_CONFIRM_VIEW_ALIAS, ctx=ctx), EVENT_BUS_SCOPE.LOBBY)
 
 
 def showEpicBattlesWelcomeBackWindow():
@@ -141,7 +149,7 @@ def _doPurchaseOffer(vehicleCD, rentType, nums, price, seasonType, buyParams, re
         if mayObtainForMoney(price):
             showBuyVehicleOverlay(buyParams)
         else:
-            pushMessage(_ms(MESSENGER.SERVICECHANNELMESSAGES_VEHICLERENTERROR_NOTENOUGHMONEY), type=SM_TYPE.lookup('Error'))
+            _purchaseOffer(vehicleCD, rentType, nums, price, seasonType, buyParams, renew)
 
 
 @dependency.replace_none_kwargs(itemsCache=IItemsCache)
@@ -175,14 +183,28 @@ def showVehicleSellDialog(vehInvID):
     g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.VEHICLE_SELL_DIALOG, ctx={'vehInvID': int(vehInvID)}), EVENT_BUS_SCOPE.LOBBY)
 
 
-def showVehicleBuyDialog(vehicle, isTradeIn=False, previousAlias=None):
+def showVehicleBuyDialog(vehicle, actionType=None, isTradeIn=False, previousAlias=None, showOnlyCongrats=False, ctx=None):
     from gui.impl.lobby.buy_vehicle_view import BuyVehicleWindow
-    ctx = {'nationID': vehicle.nationID,
+    ctx = ctx or {}
+    ctx.update({'nationID': vehicle.nationID,
      'itemID': vehicle.innationID,
+     'actionType': actionType,
      'isTradeIn': isTradeIn,
-     'previousAlias': previousAlias}
+     'previousAlias': previousAlias,
+     'showOnlyCongrats': showOnlyCongrats})
     window = BuyVehicleWindow(ctx=ctx)
     window.load()
+    if showOnlyCongrats:
+        window.showCongratulations()
+
+
+@dependency.replace_none_kwargs(itemsCache=IItemsCache)
+def showBlueprintView(vehicleCD, exitEvent=None, itemsCache=None):
+    from gui.impl.lobby.blueprints.blueprint_screen import BlueprintScreen
+    exitEvent = exitEvent or events.LoadViewEvent(VIEW_ALIAS.LOBBY_TECHTREE, ctx={'nation': itemsCache.items.getItemByCD(vehicleCD).nationName,
+     'blueprintMode': True})
+    g_eventBus.handleEvent(events.LoadUnboundViewEvent(R.views.blueprintScreen(), BlueprintScreen, ScopeTemplates.LOBBY_SUB_SCOPE, ctx={'vehicleCD': vehicleCD,
+     'exitEvent': exitEvent}), scope=EVENT_BUS_SCOPE.LOBBY)
 
 
 def showBattleBoosterBuyDialog(battleBoosterIntCD, install=False):
@@ -353,6 +375,10 @@ def showAwardWindow(award, isUniqueName=True):
     g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.AWARD_WINDOW, name=name, ctx={'award': award}), EVENT_BUS_SCOPE.LOBBY)
 
 
+def showModalAwardWindow(award):
+    g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.AWARD_WINDOW_MODAL, name=getUniqueViewName(VIEW_ALIAS.AWARD_WINDOW_MODAL), ctx={'award': award}), EVENT_BUS_SCOPE.LOBBY)
+
+
 def showMissionAwardWindow(award):
     g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.MISSION_AWARD_WINDOW, name=getUniqueViewName(VIEW_ALIAS.MISSION_AWARD_WINDOW), ctx={'award': award}), EVENT_BUS_SCOPE.LOBBY)
 
@@ -485,18 +511,22 @@ def showVehicleCompare():
     g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.VEHICLE_COMPARE), scope=EVENT_BUS_SCOPE.LOBBY)
 
 
+@pointcutable
 def showCrystalWindow():
     g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.CRYSTALS_PROMO_WINDOW), EVENT_BUS_SCOPE.LOBBY)
 
 
+@pointcutable
 def openPaymentLink():
     g_eventBus.handleEvent(events.OpenLinkEvent(events.OpenLinkEvent.PAYMENT))
 
 
+@pointcutable
 def showExchangeCurrencyWindow():
     g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.EXCHANGE_WINDOW), EVENT_BUS_SCOPE.LOBBY)
 
 
+@pointcutable
 def showExchangeXPWindow():
     g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.EXCHANGE_XP_WINDOW), EVENT_BUS_SCOPE.LOBBY)
 
@@ -518,3 +548,24 @@ def showBrowserOverlayView(url, params=None):
     if url:
         url = yield URLMacros().parse(url, params=params)
         g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.OVERLAY_BROWSER_VIEW, ctx={'url': url}), EVENT_BUS_SCOPE.LOBBY)
+
+
+def showProgressiveRewardWindow():
+    lobbyContext = dependency.instance(ILobbyContext)
+    if not lobbyContext.getServerSettings().getProgressiveRewardConfig().isEnabled:
+        SystemMessages.pushMessage(backport.text(R.strings.system_messages.progressiveReward.error()), type=SystemMessages.SM_TYPE.Error)
+        return
+    else:
+        from gui.impl.lobby.progressive_reward.progressive_reward_view import ProgressiveRewardWindow
+        uiLoader = dependency.instance(IGuiLoader)
+        contentResId = R.views.progressiveRewardView()
+        if uiLoader.windowsManager.getViewByLayoutID(contentResId) is None:
+            window = ProgressiveRewardWindow(contentResId)
+            window.load()
+        return
+
+
+def showProgressiveRewardAwardWindow(rewards, currentStep):
+    from gui.impl.lobby.progressive_reward.progressive_reward_award_view import ProgressiveRewardAwardWindow
+    window = ProgressiveRewardAwardWindow(rewards, currentStep)
+    window.load()

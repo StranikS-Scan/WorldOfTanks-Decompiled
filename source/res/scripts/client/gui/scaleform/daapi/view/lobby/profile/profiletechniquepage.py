@@ -69,5 +69,6 @@ class ProfileTechniquePage(ProfileTechniquePageMeta):
 
     def invokeUpdate(self):
         super(ProfileTechniquePage, self).invokeUpdate()
-        self._receiveVehicleDossier(self._selectedVehicleIntCD, None)
+        if self._selectedVehicleIntCD is not None:
+            self._receiveVehicleDossier(self._selectedVehicleIntCD, None)
         return

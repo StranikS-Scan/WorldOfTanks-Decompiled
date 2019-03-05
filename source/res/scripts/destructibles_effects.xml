@@ -4215,6 +4215,16 @@
             <file>	particles/Environment/objects/hd_env_112_11_AdvertisingCloset_01.xml	</file>
             <force>	1	</force>
           </pixie>
+          <destructionSound>
+            <startKey>	base	</startKey>
+            <wwsound>	obj_generative	</wwsound>
+            <params>
+              <debrisAmount>	54.000000	</debrisAmount>
+              <metal_1>	5.000000	</metal_1>
+              <wood_1>	30.000000	</wood_1>
+              <wood_2>	10.000000	</wood_2>
+            </params>
+          </destructionSound>
         </effects>
       </variant1>
     </hd_env_112_11_AdvertisingCloset_01>
@@ -19392,6 +19402,29 @@
         </effects>
       </variant1>
     </inf_gaf013_FenceTile1_03>
+    <hd_gaf_EU_018_StoneFence_Corner>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/hd_gaf_EU_018_StoneFence_Corner.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <destructionSound>
+            <startKey>	base	</startKey>
+            <wwsound>	obj_generative	</wwsound>
+            <params>
+              <stone_2>	30	</stone_2>
+              <debrisAmount>	80	</debrisAmount>
+              <weight>	5100	</weight>
+            </params>
+          </destructionSound>
+        </effects>
+      </variant1>
+    </hd_gaf_EU_018_StoneFence_Corner>
     <inf_gaf020_CastleFenceCorner_02>
       <variant1>
         <stages>
@@ -24156,6 +24189,31 @@
         </effects>
       </variant1>
     </inf_envEU_009_TownEnv_flowerpot_02_09>
+    <inf_mle_UNI_820_EightyEight_01>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/inf_mle_UNI_820_EightyEight_01.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <destructionSound>
+            <startKey>	base	</startKey>
+            <wwsound>	obj_generative	</wwsound>
+            <params>
+              <metal_1>	24	</metal_1>
+              <metal_2>	49	</metal_2>
+              <wood_1>	24	</wood_1>
+              <debrisAmount>	60	</debrisAmount>
+              <weight>	7500	</weight>
+            </params>
+          </destructionSound>
+        </effects>
+      </variant1>
+    </inf_mle_UNI_820_EightyEight_01>
     <inf_mle_UNI_820_EightyEight_01_01>
       <variant1>
         <stages>
@@ -24229,30 +24287,6 @@
         </effects>
       </variant1>
     </inf_mle_UNI_820_EightyEight_03_01>
-    <inf_mle_UNI_820_EightyEight_05>
-      <variant1>
-        <stages>
-          <base>	4.0	</base>
-        </stages>
-        <effects>
-          <pixie>
-            <startKey>	base	</startKey>
-            <file>	particles/Environment/objects/inf_mle_UNI_820_EightyEight_05.xml	</file>
-            <force>	1	</force>
-          </pixie>
-          <destructionSound>
-            <startKey>	base	</startKey>
-            <wwsound>	obj_generative	</wwsound>
-            <params>
-              <metal_2>	24	</metal_2>
-              <debrisAmount>	30	</debrisAmount>
-              <weight>	7000	</weight>
-              <metal_1>	24	</metal_1>
-            </params>
-          </destructionSound>
-        </effects>
-      </variant1>
-    </inf_mle_UNI_820_EightyEight_05>
     <hd_mle_UNI_820_EightyEight_05>
       <variant1>
         <stages>
@@ -25034,6 +25068,31 @@
         </effects>
       </variant1>
     </hd_env_EU_057_CallBox>
+    <hd_env_AM_072_PhoneBooth>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/hd_env_AM_072_PhoneBooth.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <destructionSound>
+            <startKey>	base	</startKey>
+            <wwsound>	obj_generative	</wwsound>
+            <params>
+              <debrisAmount>	58.000000	</debrisAmount>
+              <weight>	6672.790039	</weight>
+              <glass>	47.610001	</glass>
+              <metal_1>	19.670000	</metal_1>
+              <metal_2>	30.330000	</metal_2>
+            </params>
+          </destructionSound>
+        </effects>
+      </variant1>
+    </hd_env_AM_072_PhoneBooth>
     <hd_env_SU_012_Newsstand>
       <variant1>
         <stages>
@@ -27391,6 +27450,29 @@
         </effects>
       </variant1>
     </hd_gaf_AM_007_Fence_end>
+    <hd_bld_UNI_745_Pavilion>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/hd_bld_UNI_745_Pavilion.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <destructionSound>
+            <startKey>	base	</startKey>
+            <wwsound>	obj_generative	</wwsound>
+            <params>
+              <wood_1>	77.99	</wood_1>
+              <debrisAmount>	56.6	</debrisAmount>
+              <weight>	6567.18	</weight>
+            </params>
+          </destructionSound>
+        </effects>
+      </variant1>
+    </hd_bld_UNI_745_Pavilion>
     <hd_bld_AM_035_SmallShed>
       <variant1>
         <stages>
@@ -49018,6 +49100,14 @@
             <file>	particles/Environment/buildings/hd_env_UNI_039_EngineerBridge.xml	</file>
             <force>	1	</force>
           </pixie>
+          <destructionSound>
+            <startKey>	base	</startKey>
+            <wwsound>	obj_generative	</wwsound>
+            <params>
+              <wood_1>	75.000000	</wood_1>
+              <debrisAmount>	67.000000	</debrisAmount>
+            </params>
+          </destructionSound>
         </effects>
       </variant1>
     </hd_env_UNI_039_EngineerBridge>
@@ -49032,6 +49122,14 @@
             <file>	particles/Environment/buildings/hd_env_UNI_039_EngineerBridge.xml	</file>
             <force>	1	</force>
           </pixie>
+          <destructionSound>
+            <startKey>	base	</startKey>
+            <wwsound>	obj_generative	</wwsound>
+            <params>
+              <wood_1>	75.000000	</wood_1>
+              <debrisAmount>	67.000000	</debrisAmount>
+            </params>
+          </destructionSound>
         </effects>
       </variant1>
     </hd_env_UNI_039_EngineerBridge_hit>
@@ -49046,6 +49144,14 @@
             <file>	particles/Environment/buildings/hd_env_UNI_039_EngineerBridge.xml	</file>
             <force>	1	</force>
           </pixie>
+          <destructionSound>
+            <startKey>	base	</startKey>
+            <wwsound>	obj_generative	</wwsound>
+            <params>
+              <wood_1>	75.000000	</wood_1>
+              <debrisAmount>	67.000000	</debrisAmount>
+            </params>
+          </destructionSound>
         </effects>
       </variant1>
     </hd_env_UNI_039_EngineerBridge_01_ram>
@@ -49060,6 +49166,14 @@
             <file>	particles/Environment/buildings/hd_env_UNI_039_EngineerBridge.xml	</file>
             <force>	1	</force>
           </pixie>
+          <destructionSound>
+            <startKey>	base	</startKey>
+            <wwsound>	obj_generative	</wwsound>
+            <params>
+              <wood_1>	75.000000	</wood_1>
+              <debrisAmount>	67.000000	</debrisAmount>
+            </params>
+          </destructionSound>
         </effects>
       </variant1>
     </hd_env_UNI_039_EngineerBridge_01_hit>
@@ -49074,6 +49188,14 @@
             <file>	particles/Environment/buildings/hd_env_UNI_039_EngineerBridge.xml	</file>
             <force>	1	</force>
           </pixie>
+          <destructionSound>
+            <startKey>	base	</startKey>
+            <wwsound>	obj_generative	</wwsound>
+            <params>
+              <wood_1>	75.000000	</wood_1>
+              <debrisAmount>	67.000000	</debrisAmount>
+            </params>
+          </destructionSound>
         </effects>
       </variant1>
     </hd_env_UNI_039_EngineerBridge_02_ram>
@@ -49088,6 +49210,14 @@
             <file>	particles/Environment/buildings/hd_env_UNI_039_EngineerBridge.xml	</file>
             <force>	1	</force>
           </pixie>
+          <destructionSound>
+            <startKey>	base	</startKey>
+            <wwsound>	obj_generative	</wwsound>
+            <params>
+              <debrisAmount>	67.000000	</debrisAmount>
+              <wood_1>	75.000000	</wood_1>
+            </params>
+          </destructionSound>
         </effects>
       </variant1>
     </hd_env_UNI_039_EngineerBridge_02_hit>
@@ -49102,6 +49232,14 @@
             <file>	particles/Environment/buildings/hd_env_UNI_039_EngineerBridge.xml	</file>
             <force>	1	</force>
           </pixie>
+          <destructionSound>
+            <startKey>	base	</startKey>
+            <wwsound>	obj_generative	</wwsound>
+            <params>
+              <wood_1>	75.000000	</wood_1>
+              <debrisAmount>	67.000000	</debrisAmount>
+            </params>
+          </destructionSound>
         </effects>
       </variant1>
     </hd_env_UNI_039_EngineerBridge_03_ram>
@@ -49116,6 +49254,14 @@
             <file>	particles/Environment/buildings/hd_env_UNI_039_EngineerBridge.xml	</file>
             <force>	1	</force>
           </pixie>
+          <destructionSound>
+            <startKey>	base	</startKey>
+            <wwsound>	obj_generative	</wwsound>
+            <params>
+              <wood_1>	75.000000	</wood_1>
+              <debrisAmount>	67.000000	</debrisAmount>
+            </params>
+          </destructionSound>
         </effects>
       </variant1>
     </hd_env_UNI_039_EngineerBridge_03_hit>

@@ -211,7 +211,7 @@
     <priceGroup>	legacy notInShop	</priceGroup>
     <vehicleFilter>
       <include>
-        <levels>	6 8 9 10	</levels>
+        <levels>	6 7 8 9 10	</levels>
       </include>
     </vehicleFilter>
     <type>	EMBLEM	</type>
@@ -250,7 +250,7 @@
     <vehicleFilter>
       <include>
         <nations>	germany italy japan	</nations>
-        <levels>	6 8 9 10	</levels>
+        <levels>	6 7 8 9 10	</levels>
       </include>
     </vehicleFilter>
     <type>	EMBLEM	</type>
@@ -977,6 +977,20 @@
     </decal>
   </itemGroup>
   <itemGroup>
+    <userString>	#vehicle_customization:emblem/special	</userString>
+    <season>	ALL	</season>
+    <historical>	false	</historical>
+    <priceGroup>	emblems notInShop	</priceGroup>
+    <decal>
+      <id>	684	</id>
+      <texture>	gui/maps/vehicles/decals/player_stickers/special/sticker_460.dds	</texture>
+      <userString>	#vehicle_customization:emblem/special/sticker_460	</userString>
+      <mirror>	false	</mirror>
+    </decal>
+    <name>	wot_birthday	</name>
+    <type>	EMBLEM	</type>
+  </itemGroup>
+  <itemGroup>
     <name>	defender_day_2	</name>
     <userString>	#vehicle_customization:emblem/special	</userString>
     <season>	ALL	</season>
@@ -1001,5 +1015,85 @@
       <userString>	#vehicle_customization:emblem/special/sticker_462	</userString>
       <mirror>	false	</mirror>
     </decal>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:emblem/special	</userString>
+    <season>	ALL	</season>
+    <historical>	false	</historical>
+    <priceGroup>	emblems notInShop	</priceGroup>
+    <decal>
+      <id>	687	</id>
+      <texture>	gui/maps/vehicles/decals/player_stickers/special/sticker_463.dds	</texture>
+      <userString>	#vehicle_customization:emblem/special/sticker_463	</userString>
+      <mirror>	false	</mirror>
+    </decal>
+    <decal>
+      <id>	688	</id>
+      <texture>	gui/maps/vehicles/decals/player_stickers/special/sticker_464.dds	</texture>
+      <userString>	#vehicle_customization:emblem/special/sticker_464	</userString>
+      <mirror>	false	</mirror>
+    </decal>
+    <decal>
+      <id>	689	</id>
+      <texture>	gui/maps/vehicles/decals/player_stickers/special/sticker_465.dds	</texture>
+      <userString>	#vehicle_customization:emblem/special/sticker_465	</userString>
+      <mirror>	false	</mirror>
+    </decal>
+    <decal>
+      <id>	690	</id>
+      <texture>	gui/maps/vehicles/decals/player_stickers/special/sticker_466.dds	</texture>
+      <userString>	#vehicle_customization:emblem/special/sticker_466	</userString>
+      <mirror>	false	</mirror>
+    </decal>
+    <decal>
+      <id>	691	</id>
+      <texture>	gui/maps/vehicles/decals/player_stickers/special/sticker_467.dds	</texture>
+      <userString>	#vehicle_customization:emblem/special/sticker_467	</userString>
+      <mirror>	false	</mirror>
+    </decal>
+    <decal>
+      <id>	692	</id>
+      <texture>	gui/maps/vehicles/decals/player_stickers/special/sticker_468.dds	</texture>
+      <userString>	#vehicle_customization:emblem/special/sticker_468	</userString>
+      <mirror>	false	</mirror>
+    </decal>
+    <decal>
+      <id>	693	</id>
+      <texture>	gui/maps/vehicles/decals/player_stickers/special/sticker_469.dds	</texture>
+      <userString>	#vehicle_customization:emblem/special/sticker_469	</userString>
+      <mirror>	false	</mirror>
+    </decal>
+    <decal>
+      <id>	694	</id>
+      <texture>	gui/maps/vehicles/decals/player_stickers/special/sticker_470.dds	</texture>
+      <userString>	#vehicle_customization:emblem/special/sticker_470	</userString>
+      <mirror>	false	</mirror>
+    </decal>
+    <decal>
+      <id>	695	</id>
+      <texture>	gui/maps/vehicles/decals/player_stickers/special/sticker_471.dds	</texture>
+      <userString>	#vehicle_customization:emblem/special/sticker_471	</userString>
+      <mirror>	false	</mirror>
+    </decal>
+    <decal>
+      <id>	696	</id>
+      <texture>	gui/maps/vehicles/decals/player_stickers/special/sticker_472.dds	</texture>
+      <userString>	#vehicle_customization:emblem/special/sticker_472	</userString>
+      <mirror>	false	</mirror>
+    </decal>
+    <decal>
+      <id>	697	</id>
+      <texture>	gui/maps/vehicles/decals/player_stickers/special/sticker_473.dds	</texture>
+      <userString>	#vehicle_customization:emblem/special/sticker_473	</userString>
+      <mirror>	false	</mirror>
+    </decal>
+    <decal>
+      <id>	698	</id>
+      <texture>	gui/maps/vehicles/decals/player_stickers/special/sticker_474.dds	</texture>
+      <userString>	#vehicle_customization:emblem/special/sticker_474	</userString>
+      <mirror>	false	</mirror>
+    </decal>
+    <name>	lunar_NY_low_bright	</name>
+    <type>	EMBLEM	</type>
   </itemGroup>
 </special_emblems.xml>

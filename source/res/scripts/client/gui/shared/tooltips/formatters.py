@@ -7,12 +7,12 @@ from gui.Scaleform.genConsts.BLOCKS_TOOLTIP_TYPES import BLOCKS_TOOLTIP_TYPES
 from gui.Scaleform.genConsts.CURRENCIES_CONSTANTS import CURRENCIES_CONSTANTS
 from gui.Scaleform.genConsts.RANKEDBATTLES_ALIASES import RANKEDBATTLES_ALIASES
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
+from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.ranked_battles.ranked_helpers import buildRankVO
 from gui.shared.formatters import text_styles
+from gui.shared.money import MONEY_UNDEFINED
 from gui.shared.tooltips import ACTION_TOOLTIPS_TYPE, ACTION_TOOLTIPS_STATE
 from gui.shared.utils.functions import makeTooltip, stripColorTagDescrTags
-from gui.shared.money import MONEY_UNDEFINED
-from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from helpers import i18n, time_utils
 TXT_GAP_FOR_BIG_TITLE = 2
 TXT_GAP_FOR_SMALL_TITLE = 3
@@ -33,9 +33,10 @@ def packPadding(top=0, left=0, bottom=0, right=0):
     return data
 
 
-def packBlockDataItem(linkage, data, padding=None):
+def packBlockDataItem(linkage, data, padding=None, blockWidth=0):
     data = {'linkage': linkage,
-     'data': data}
+     'data': data,
+     'blockWidth': blockWidth}
     if padding is not None:
         data['padding'] = padding
     return data
@@ -113,12 +114,14 @@ def packDashLineItemPriceBlockData(title, value, icon, desc=None, linkage=BLOCKS
     return packBlockDataItem(linkage, data, padding)
 
 
-def packBuildUpBlockData(blocks, gap=0, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_BUILDUP_BLOCK_LINKAGE, padding=None, stretchBg=True):
+def packBuildUpBlockData(blocks, gap=0, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_BUILDUP_BLOCK_LINKAGE, padding=None, stretchBg=True, layout=BLOCKS_TOOLTIP_TYPES.LAYOUT_VERTICAL, blockWidth=0, align=BLOCKS_TOOLTIP_TYPES.ALIGN_LEFT):
     data = {'blocksData': blocks,
-     'stretchBg': stretchBg}
+     'stretchBg': stretchBg,
+     'layout': layout,
+     'align': align}
     if gap != 0:
         data['gap'] = gap
-    return packBlockDataItem(linkage, data, padding)
+    return packBlockDataItem(linkage, data, padding, blockWidth)
 
 
 def packTitleDescBlock(title, desc=None, gap=TXT_GAP_FOR_BIG_TITLE, useHtml=True, textBlockLinkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_TEXT_BLOCK_LINKAGE, blocksLinkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_BUILDUP_BLOCK_LINKAGE, padding=None, descPadding=None):
@@ -136,8 +139,9 @@ def packResultBlockData(title, text):
     return packBuildUpBlockData([packTextBlockData(title, True, BATTLE_RESULT_TYPES.TOOLTIP_RESULT_TTILE_LEFT_LINKAGE), packTextBlockData(text, True, BATTLE_RESULT_TYPES.TOOLTIP_ICON_TEXT_PARAMETER_LINKAGE)])
 
 
-def packImageTextBlockData(title=None, desc=None, img=None, imgPadding=None, imgAtLeft=True, txtPadding=None, txtGap=0, txtOffset=-1, txtAlign='left', ignoreImageSize=False, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_IMAGETEXT_BLOCK_LINKAGE, padding=None, descPadding=None, flipHorizontal=False, titleAtMiddle=False):
+def packImageTextBlockData(title=None, desc=None, img=None, imgPadding=None, imgAtLeft=True, txtPadding=None, txtGap=0, txtOffset=-1, txtAlign='left', ignoreImageSize=False, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_IMAGETEXT_BLOCK_LINKAGE, padding=None, descPadding=None, descLeading=0, flipHorizontal=False, titleAtMiddle=False, blockWidth=0, snapImage=False):
     data = {'spriteAtLeft': imgAtLeft,
+     'snapImage': snapImage,
      'textsAlign': txtAlign,
      'ignoreImageSize': ignoreImageSize,
      'titleAtMiddle': titleAtMiddle}
@@ -157,9 +161,11 @@ def packImageTextBlockData(title=None, desc=None, img=None, imgPadding=None, img
         data['textsOffset'] = txtOffset
     if descPadding is not None:
         data['descPadding'] = descPadding
+    if descLeading != 0:
+        data['descLeading'] = descLeading
     if flipHorizontal:
         data['flipHorizontal'] = flipHorizontal
-    return packBlockDataItem(linkage, data, padding)
+    return packBlockDataItem(linkage, data, padding, blockWidth)
 
 
 def packItemTitleDescBlockData(title=None, desc=None, img=None, imgPadding=None, imgAtLeft=True, txtPadding=None, txtGap=0, txtOffset=-1, txtAlign='left', linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_ITEM_TITLE_DESC_BLOCK_LANKAGE, padding=None, overlayPath=None, overlayPadding=None, highlightPath=None, highlightPadding=None, descPadding=None):
@@ -214,14 +220,39 @@ def packRendererTextBlockData(rendererType, dataType, rendererData, title=None, 
     return packBlockDataItem(linkage, data, padding)
 
 
-def packImageBlockData(img=None, align=BLOCKS_TOOLTIP_TYPES.ALIGN_LEFT, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_IMAGE_BLOCK_LINKAGE, width=-1, height=-1, padding=None):
-    data = {'align': align}
+def packImageBlockData(img=None, align=BLOCKS_TOOLTIP_TYPES.ALIGN_LEFT, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_IMAGE_BLOCK_LINKAGE, width=-1, height=-1, padding=None, alpha=1.0):
+    data = {'align': align,
+     'alpha': alpha}
     if img is not None:
         data['imagePath'] = img
     if width != -1:
         data['width'] = width
     if height != -1:
         data['height'] = height
+    return packBlockDataItem(linkage, data, padding)
+
+
+def packBlueprintBlockData(blueprintImg, schemeImg, numCols, numRows, layout, align=BLOCKS_TOOLTIP_TYPES.ALIGN_LEFT, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_BLUEPRINT_BLOCK_LINKAGE, width=-1, height=-1, padding=None, alpha=1.0):
+    data = {'blueprintPath': blueprintImg,
+     'blueprintLayout': layout,
+     'imagePath': schemeImg,
+     'numCols': numCols,
+     'numRows': numRows,
+     'align': align,
+     'alpha': alpha}
+    if width != -1:
+        data['width'] = width
+    if height != -1:
+        data['height'] = height
+    return packBlockDataItem(linkage, data, padding)
+
+
+def packTextBetweenLineBlockData(text, useHtml=True, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_TEXT_BETWEEN_LINE_BLOCK_LINKAGE, customGap=5, lineAlpha=0.25, lineThickness=1, padding=None):
+    data = {'text': text,
+     'useHtml': useHtml,
+     'customGap': customGap,
+     'lineAlpha': lineAlpha,
+     'lineThickness': lineThickness}
     return packBlockDataItem(linkage, data, padding)
 
 
@@ -413,5 +444,11 @@ def packMoneyAndXpBlocks(tooltipBlocks, btnType, valueBlocks):
     return tooltipBlocks
 
 
-def packSeparatorBlockData():
-    return packImageBlockData(img=RES_ICONS.MAPS_ICONS_LIBRARY_SEPARATOR, align=BLOCKS_TOOLTIP_TYPES.ALIGN_LEFT, padding=packPadding(top=-40))
+def packSeparatorBlockData(paddings=None, align=BLOCKS_TOOLTIP_TYPES.ALIGN_LEFT):
+    if paddings is None:
+        paddings = packPadding(top=-40)
+    return packImageBlockData(img=RES_ICONS.MAPS_ICONS_LIBRARY_SEPARATOR, align=align, padding=paddings)
+
+
+def packItemPriceBlockData(price, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_COMPOUND_PRICE_BLOCK_LINKAGE, padding=None):
+    return packBlockDataItem(linkage, price, padding)

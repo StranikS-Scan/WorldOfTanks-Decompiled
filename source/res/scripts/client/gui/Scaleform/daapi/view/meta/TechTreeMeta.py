@@ -10,6 +10,9 @@ class TechTreeMeta(ResearchView):
     def getNationTreeData(self, nationName):
         self._printOverrideError('getNationTreeData')
 
+    def request4Unlock(self, itemCD):
+        self._printOverrideError('request4Unlock')
+
     def goToNextVehicle(self, vehCD):
         self._printOverrideError('goToNextVehicle')
 
@@ -18,6 +21,9 @@ class TechTreeMeta(ResearchView):
 
     def request4VehCompare(self, vehCD):
         self._printOverrideError('request4VehCompare')
+
+    def onBlueprintModeSwitch(self, enabled):
+        self._printOverrideError('onBlueprintModeSwitch')
 
     def as_setAvailableNationsS(self, nations):
         return self.flashObject.as_setAvailableNations(nations) if self._isDAAPIInited() else None
@@ -36,3 +42,12 @@ class TechTreeMeta(ResearchView):
 
     def as_showMiniClientInfoS(self, description, hyperlink):
         return self.flashObject.as_showMiniClientInfo(description, hyperlink) if self._isDAAPIInited() else None
+
+    def as_setBlueprintsSwitchButtonStateS(self, enabled, selected, tooltip, visible=True):
+        return self.flashObject.as_setBlueprintsSwitchButtonState(enabled, selected, tooltip, visible) if self._isDAAPIInited() else None
+
+    def as_setBlueprintModeS(self, enabled):
+        return self.flashObject.as_setBlueprintMode(enabled) if self._isDAAPIInited() else None
+
+    def as_setBlueprintBalanceS(self, balanceVO):
+        return self.flashObject.as_setBlueprintBalance(balanceVO) if self._isDAAPIInited() else None

@@ -106,6 +106,7 @@ class WAITING(object):
     DOWNLOAD_RANKED = '#waiting:download/ranked'
     DOWNLOAD_BADGES = '#waiting:download/badges'
     DOWNLOAD_EPICMETAGAME = '#waiting:download/epicMetaGame'
+    DOWNLOAD_BLUEPRINTS = '#waiting:download/blueprints'
     DOWNLOAD_TOKENS = '#waiting:download/tokens'
     UPDATINGSKILLWINDOW = '#waiting:updatingSkillWindow'
     PREBATTLE_CREATE = '#waiting:prebattle/create'
@@ -154,6 +155,7 @@ class WAITING(object):
     MESSENGER_SUBSCRIBE = '#waiting:messenger/subscribe'
     CLANS_INVITES_SEND = '#waiting:clans/invites/send'
     HOF_LOADING = '#waiting:hof/loading'
+    BLUEPRINTS_CONVERTFRAGMENTS = '#waiting:blueprints/convertFragments'
     TITLES_ENUM = (TITLES_QUEUE,
      TITLES_REGISTERING,
      TITLES_ANOTHER_PERIPHERY,

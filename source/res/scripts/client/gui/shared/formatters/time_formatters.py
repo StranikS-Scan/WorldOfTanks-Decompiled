@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client/gui/shared/formatters/time_formatters.py
 import math
 import time
+import BigWorld
 from gui.Scaleform.locale.MENU import MENU
 from helpers import i18n, time_utils
 from rent_common import SeasonRentDuration
@@ -60,6 +61,16 @@ def getTimeLeftStr(localization, timeLeft, timeStyle=None, ctx=None, formatter=N
     return result
 
 
+def getDueDateOrTimeStr(finishTime, localization=''):
+    if not finishTime or time_utils.isPast(finishTime):
+        return ''
+    if time_utils.isToday(finishTime):
+        strTime = BigWorld.wg_getShortTimeFormat(finishTime)
+    else:
+        strTime = BigWorld.wg_getLongDateFormat(finishTime)
+    return ' '.join([localization, strTime]) if localization else strTime
+
+
 def getTimeDurationStr(seconds, useRoundUp=False):
     return time_utils.getTillTimeString(seconds, MENU.TIME_TIMEVALUE, useRoundUp)
 
@@ -72,12 +83,16 @@ class RentLeftFormatter(object):
         self.__isIGR = isIGR
         self.__localizationRootKey = '#menu:vehicle/rentLeft/%s'
 
-    def getRentLeftStr(self, localization=None, timeStyle=None, ctx=None, formatter=None):
+    def getRentLeftStr(self, localization=None, timeStyle=None, ctx=None, formatter=None, strForSpecialTimeFormat=''):
         activeSeasonRent = self.__rentInfo.getActiveSeasonRent()
         if activeSeasonRent is not None:
             resultStr = self.getRentSeasonLeftStr(activeSeasonRent, localization, formatter, timeStyle, ctx)
         elif self.__rentInfo.getTimeLeft() > 0:
-            resultStr = self.getRentTimeLeftStr(localization, timeStyle, ctx, formatter)
+            if strForSpecialTimeFormat:
+                finishTime = self.__rentInfo.getTimeLeft() + time_utils.getCurrentTimestamp()
+                resultStr = self.getUntilTimeLeftStr(finishTime, strForSpecialTimeFormat)
+            else:
+                resultStr = self.getRentTimeLeftStr(localization, timeStyle, ctx, formatter)
         elif self.__rentInfo.battlesLeft:
             resultStr = self.getRentBattlesLeftStr(localization, formatter)
         elif self.__rentInfo.winsLeft > 0:
@@ -93,6 +108,9 @@ class RentLeftFormatter(object):
             if localization is None:
                 localization = self.__localizationRootKey
             return getTimeLeftStr(localization, self.__rentInfo.getTimeLeft(), timeStyle, ctx, formatter)
+
+    def getUntilTimeLeftStr(self, finishTime, localization=''):
+        return '' if self.__isIGR else getDueDateOrTimeStr(finishTime, localization)
 
     def getRentBattlesLeftStr(self, localization=None, formatter=None):
         if localization is None:
@@ -129,7 +147,7 @@ class RentLeftFormatter(object):
     def getRentEpicSeasonLeftStr(self, timeStyle):
         cycles = self.__rentInfo.getRentalPeriodInCycles()
         if not cycles:
-            return (None, None, None)
+            return (None, None, {})
         else:
             timeLeftString = '-'.join([ str(cycle.ordinalNumber) for cycle in cycles ])
             identifier = 'cycles' if len(cycles) > 1 else 'cycle'

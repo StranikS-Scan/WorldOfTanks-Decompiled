@@ -19,6 +19,7 @@ from gui.prb_control.entities.base.legacy.ctx import JoinLegacyModeCtx
 from gui.prb_control.entities.base.legacy.limits import LegacyLimits
 from gui.prb_control.entities.base.legacy.listener import ILegacyListener, ILegacyIntroListener
 from gui.prb_control.entities.base.legacy.permissions import ILegacyPermissions, LegacyIntroPermissions, LegacyPermissions
+from gui.prb_control.settings import PREBATTLE_RESTRICTION
 from gui.prb_control.items import prb_items
 from gui.prb_control.settings import FUNCTIONAL_FLAG, CTRL_ENTITY_TYPE, PREBATTLE_ROSTER, REQUEST_TYPE, PREBATTLE_INIT_STEP, makePrebattleSettings
 from gui.shared.utils.listeners_collection import ListenersCollection
@@ -678,7 +679,7 @@ class LegacyEntity(_LegacyEntity):
 
     def _processValidationResult(self, ctx, result):
         if result is not None and not result.isValid:
-            if not ctx.isInitial():
+            if not (ctx.isInitial() and result.restriction == PREBATTLE_RESTRICTION.VEHICLE_NOT_READY):
                 SystemMessages.pushMessage(messages.getInvalidVehicleMessage(result.restriction, self), type=SystemMessages.SM_TYPE.Error)
             return False
         else:

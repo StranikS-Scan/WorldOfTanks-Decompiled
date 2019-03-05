@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client/notification/NotificationListView.py
 from debug_utils import LOG_ERROR
 from gui.Scaleform.daapi.view.meta.NotificationsListMeta import NotificationsListMeta
+from gui.Scaleform.genConsts.NOTIFICATIONS_CONSTANTS import NOTIFICATIONS_CONSTANTS
 from gui.Scaleform.locale.MESSENGER import MESSENGER
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
@@ -59,7 +60,7 @@ class NotificationListView(NotificationsListMeta, BaseNotificationView):
             self.__currentGroup = NotificationGroup.INFO
         self.as_setInitDataS({'scrollStepFactor': LIST_SCROLL_STEP_FACTOR,
          'btnBarSelectedIdx': NotificationGroup.ALL.index(self.__currentGroup),
-         'tabsData': {'tabs': [self.__makeTabItemVO(icons.makeImageTag(RES_ICONS.MAPS_ICONS_LIBRARY_NOTIF_FILTERS_INFORMATION_16X16, 16, 16, -4, 0), TOOLTIPS.NOTIFICATIONSVIEW_TAB_INFO), self.__makeTabItemVO(icons.makeImageTag(RES_ICONS.MAPS_ICONS_LIBRARY_NOTIF_FILTERS_INVITATIONS_24X16, 24, 16, -5, 0), TOOLTIPS.NOTIFICATIONSVIEW_TAB_INVITES), self.__makeTabItemVO(icons.makeImageTag(RES_ICONS.MAPS_ICONS_LIBRARY_NOTIF_FILTERS_GIFT_16X16, 16, 16, -4, 0), TOOLTIPS.NOTIFICATIONSVIEW_TAB_OFFERS)]}})
+         'tabsData': {'tabs': [self.__makeTabItemVO(NOTIFICATIONS_CONSTANTS.TAB_INFO, icons.makeImageTag(RES_ICONS.MAPS_ICONS_LIBRARY_NOTIF_FILTERS_INFORMATION_16X16, 16, 16, -4, 0), TOOLTIPS.NOTIFICATIONSVIEW_TAB_INFO), self.__makeTabItemVO(NOTIFICATIONS_CONSTANTS.TAB_INVITES, icons.makeImageTag(RES_ICONS.MAPS_ICONS_LIBRARY_NOTIF_FILTERS_INVITATIONS_24X16, 24, 16, -5, 0), TOOLTIPS.NOTIFICATIONSVIEW_TAB_INVITES), self.__makeTabItemVO(NOTIFICATIONS_CONSTANTS.TAB_OFFERS, icons.makeImageTag(RES_ICONS.MAPS_ICONS_LIBRARY_NOTIF_FILTERS_GIFT_16X16, 16, 16, -4, 0), TOOLTIPS.NOTIFICATIONSVIEW_TAB_OFFERS)]}})
 
     def __updateCounters(self):
 
@@ -117,8 +118,9 @@ class NotificationListView(NotificationsListMeta, BaseNotificationView):
             self._model.decrementNotifiedMessagesCount(groupID, typeID, entityID)
         self.__updateCounters()
 
-    def __makeTabItemVO(self, label, tooltip):
-        return {'label': label,
+    def __makeTabItemVO(self, tabId, label, tooltip):
+        return {'id': tabId,
+         'label': label,
          'tooltip': tooltip}
 
     def __getListVO(self, notificaton):

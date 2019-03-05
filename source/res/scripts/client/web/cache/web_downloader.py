@@ -8,7 +8,7 @@ from shared_utils import nextTick
 
 class WebDownloader(IDownloader):
 
-    def __init__(self, workersLimit, queueLimit):
+    def __init__(self, workersLimit, queueLimit=threads.INFINITE_QUEUE_SIZE):
         self.__worker = threads.ThreadPool(workersLimit, queueLimit)
         self.__worker.start()
 

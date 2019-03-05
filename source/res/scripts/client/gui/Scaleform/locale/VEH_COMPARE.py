@@ -36,6 +36,7 @@ class VEH_COMPARE(object):
     VEHCONF_CANCELBTNLABEL_TOOLTIP = '#veh_compare:vehConf/cancelBtnLabel/tooltip'
     VEHCONF_COMPAREBTNLABEL_TOOLTIP = '#veh_compare:vehConf/compareBtnLabel/tooltip'
     VEHCONF_TOOLTIPS_BTNCLEANUP = '#veh_compare:vehConf/tooltips/btnCleanUp'
+    TECHTREE_TOOLTIPS_ADDTOCOMPARE = '#veh_compare:techTree/tooltips/addToCompare'
     ADDVEHPOPOVER_HEADER = '#veh_compare:addVehPopover/header'
     ADDVEHPOPOVER_BTNADD = '#veh_compare:addVehPopover/btnAdd'
     ADDVEHPOPOVER_BTNCANCEL = '#veh_compare:addVehPopover/btnCancel'

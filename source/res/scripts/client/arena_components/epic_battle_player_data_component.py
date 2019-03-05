@@ -45,7 +45,7 @@ class EpicBattlePlayerDataComponent(PlayerDataComponent):
         self.onPlayerXPUpdated = Event.Event(self._eventManager)
         self.onFrontlineCenterUpdated = Event.Event(self._eventManager)
         self.onRespawnOffsetsUpdated = Event.Event(self._eventManager)
-        g_playerEvents.onAvatarBecomePlayer += self.setPlayerLaneByPlayerGroups
+        g_playerEvents.onAvatarReady += self.setPlayerLaneByPlayerGroups
         return
 
     def destroy(self):
@@ -57,7 +57,7 @@ class EpicBattlePlayerDataComponent(PlayerDataComponent):
         self.removeSyncDataCallback(ARENA_SYNC_OBJECTS.RESPAWN, 'outOfLives', self.__onPlayerOutOfLivesAdded)
         self.removeSyncDataCallback(ARENA_SYNC_OBJECTS.RESPAWN, 'outOfLives_d', self.__onPlayerOutOfLivesDeleted)
         self.removeSyncDataCallback(ARENA_SYNC_OBJECTS.FRONT_LINE, 'CoM', self.__onFrontlineCenterOfMassUpdated)
-        g_playerEvents.onAvatarBecomePlayer -= self.setPlayerLaneByPlayerGroups
+        g_playerEvents.onAvatarReady -= self.setPlayerLaneByPlayerGroups
 
     def getPlayerLivesForTeam(self, teamId):
         lives = 0

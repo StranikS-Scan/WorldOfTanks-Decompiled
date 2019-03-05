@@ -21,6 +21,9 @@ class CMLabel(object):
     RESTORE = 'restore'
     ACTIVATE = 'activate'
     PREVIEW_CUSTOMIZATION = 'previewCustomization'
+    CONVERT_BLUEPRINT = 'convertBlueprint'
+    CONVERT_BLUEPRINT_MAX = 'convertBlueprintMax'
+    SHOW_BLUEPRINT = 'showBlueprint'
 
 
 def option(order, label):
@@ -49,9 +52,9 @@ class ContextMenu(AbstractContextMenuHandler):
         self._id = int(ctx.id)
 
     def _generateOptions(self, ctx=None):
-        return [ self.__makeOption(method.cm['label'], self._getOptionCustomData(method.cm['label']) or {}) for method in self.__handlerMethods ]
+        return [ self._makeOption(method.cm['label'], self._getOptionCustomData(method.cm['label']) or {}) for method in self.__handlerMethods ]
 
-    def __makeOption(self, label, data):
+    def _makeOption(self, label, data):
         return self._makeItem(label, _menuKey(data.pop('label', label)), data or None)
 
     def _getOptionCustomData(self, label):

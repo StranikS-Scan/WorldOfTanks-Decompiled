@@ -1,0 +1,26 @@
+<actions_by_groups.xml>
+  <tank>
+    <actions>	blockAndTakeDamage doNearDamage	</actions>
+  </tank>
+  <firstLineSupport1>
+    <actions>	doOwnDamage blockAndTakeDamage	</actions>
+  </firstLineSupport1>
+  <firstLineSupport2>
+    <actions>	doOwnDamage blockDamage	</actions>
+  </firstLineSupport2>
+  <fireSupport1>
+    <actions>	doOwnDamage searchEnemy	</actions>
+  </fireSupport1>
+  <fireSupport2>
+    <actions>	doOwnDamage searchEnemy	</actions>
+  </fireSupport2>
+  <sniper>
+    <actions>	doFarDamage	</actions>
+  </sniper>
+  <scout>
+    <actions>	searchEnemy fragAssist doOwnDamage	</actions>
+  </scout>
+  <SPG>
+    <actions>	doStun doSpgDamage	</actions>
+  </SPG>
+</actions_by_groups.xml>

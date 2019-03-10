@@ -185,7 +185,7 @@ class MainView(LobbySubView, CustomizationMainViewMeta):
 
     def onPressEscBtn(self):
         if self.__ctx.numberEditModeActive:
-            self.__ctx.sendNumberEditModeCommand(PersonalNumEditCommands.CANCEL_BY_ESC)
+            self.__ctx.sendNumberEditModeCommand(PersonalNumEditCommands.CANCEL_NUMBER)
             return
         tabIndex = self.__ctx.currentTab
         if tabIndex not in C11nTabs.REGIONS and self.__ctx.isAnyAnchorSelected() or self.service.isRegionSelected():

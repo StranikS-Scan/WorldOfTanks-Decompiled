@@ -25,6 +25,7 @@ from items import vehicle_items
 from items._xml import cachedFloat
 from constants import IS_BOT, IS_WEB, ITEM_DEFS_PATH, SHELL_TYPES, VEHICLE_SIEGE_STATE, VEHICLE_MODE
 from constants import IGR_TYPE, IS_RENTALS_ENABLED, IS_CELLAPP, IS_BASEAPP, IS_CLIENT
+from constants import ACTION_LABEL_TO_TYPE, ACTIONS_GROUP_LABEL_TO_TYPE, ROLE_LABEL_TO_TYPE, ACTIONS_GROUP_TYPE_TO_LABEL, ROLE_TYPE_TO_LABEL
 from debug_utils import LOG_WARNING, LOG_ERROR, LOG_CURRENT_EXCEPTION, LOG_DEBUG_DEV
 from items.stun import g_cfg as stunConfig
 from items import common_extras, decodeEnum
@@ -1171,7 +1172,10 @@ class VehicleType(object):
      'xphysics',
      'repaintParameters',
      'rollerExtras',
-     'hasBurnout')
+     'hasBurnout',
+     'role',
+     'actionsGroup',
+     'actions')
 
     def __init__(self, nationID, basicInfo, xmlPath, vehMode=VEHICLE_MODE.DEFAULT):
         self.name = basicInfo.name
@@ -1187,6 +1191,9 @@ class VehicleType(object):
         self.hasSiegeMode = 'siegeMode' in self.tags
         self.isWheeledVehicle = 'wheeledVehicle' in self.tags
         self.hasBurnout = 'burnout' in self.tags
+        self.role = self.__getRoleFromTags()
+        self.actionsGroup = self.__getActionsGroupFromRole(self.role)
+        self.actions = self.__getActionsFromActionsGroup(self.actionsGroup)
         VehicleType.currentReadingVeh = self
         self.baseColorID = section.readInt('baseColorID', 0)
         self.hasCustomDefaultCamouflage = section.readBool('customDefaultCamouflage', False)
@@ -1362,6 +1369,30 @@ class VehicleType(object):
         else:
             LOG_WARNING('Json vehicle reader is not found')
 
+    def __getRoleFromTags(self):
+        rolesTags = g_cache.rolesTags()
+        suitableRoles = []
+        vehicleTags = self.tags
+        for roleName, (includeTags, excludeTags) in rolesTags.iteritems():
+            if all((tag in vehicleTags for tag in includeTags)):
+                if not any((tag in vehicleTags for tag in excludeTags)):
+                    suitableRoles.append(roleName)
+
+        if not suitableRoles:
+            return None
+        else:
+            if len(suitableRoles) > 1:
+                raise SoftException("There are several roles for vehicle '%s': '%s'" % (self.name, suitableRoles))
+            return suitableRoles[0]
+
+    def __getActionsGroupFromRole(self, role):
+        rolesActionsGroup = g_cache.actionGroupsByRoles()
+        return rolesActionsGroup.get(role, None)
+
+    def __getActionsFromActionsGroup(self, actionsGroup):
+        actionsByGroups = g_cache.actionsByGroups()
+        return actionsByGroups.get(actionsGroup, None)
+
     def __convertAndValidateUnlocksDescrs(self, srcList):
         nationID = self.id[0]
         destList = []
@@ -1460,7 +1491,7 @@ class VehicleType(object):
 
 
 class Cache(object):
-    __slots__ = ('__vehicles', '__commonConfig', '__chassis', '__engines', '__fuelTanks', '__radios', '__turrets', '__guns', '__shells', '__optionalDevices', '__optionalDeviceIDs', '__equipments', '__equipmentIDs', '__chassisIDs', '__engineIDs', '__fuelTankIDs', '__radioIDs', '__turretIDs', '__gunIDs', '__shellIDs', '__customization', '__playerEmblems', '__shotEffects', '__shotEffectsIndexes', '__damageStickers', '__vehicleEffects', '__gunEffects', '__gunReloadEffects', '__gunRecoilEffects', '__turretDetachmentEffects', '__customEffects', '__requestOncePrereqs', '__customization20')
+    __slots__ = ('__vehicles', '__commonConfig', '__chassis', '__engines', '__fuelTanks', '__radios', '__turrets', '__guns', '__shells', '__optionalDevices', '__optionalDeviceIDs', '__equipments', '__equipmentIDs', '__chassisIDs', '__engineIDs', '__fuelTankIDs', '__radioIDs', '__turretIDs', '__gunIDs', '__shellIDs', '__customization', '__playerEmblems', '__shotEffects', '__shotEffectsIndexes', '__damageStickers', '__vehicleEffects', '__gunEffects', '__gunReloadEffects', '__gunRecoilEffects', '__turretDetachmentEffects', '__customEffects', '__requestOncePrereqs', '__customization20', '__rolesTags', '__actionsByGroups', '__rolesActionGroups', '__actionsByRoles')
 
     def __init__(self):
         self.__vehicles = {}
@@ -1489,6 +1520,10 @@ class Cache(object):
         self.__shotEffects = None
         self.__shotEffectsIndexes = None
         self.__damageStickers = None
+        self.__rolesTags = None
+        self.__rolesActionGroups = None
+        self.__actionsByGroups = None
+        self.__actionsByRoles = None
         if IS_CLIENT:
             self.__vehicleEffects = None
             self.__gunEffects = None
@@ -1621,6 +1656,37 @@ class Cache(object):
             self.__equipments, self.__equipmentIDs = _readArtefacts(_VEHICLE_TYPE_XML_PATH + 'common/equipments.xml')
             descr = self.__equipmentIDs
         return descr
+
+    def rolesTags(self):
+        rolesTags = self.__rolesTags
+        if rolesTags is None:
+            self.__rolesTags, self.__rolesActionGroups = _readVehicleRolesToTagsActionGroups(_VEHICLE_TYPE_XML_PATH + 'common/roleExp/roles.xml')
+            rolesTags = self.__rolesTags
+        return rolesTags
+
+    def actionGroupsByRoles(self):
+        rolesActionGroups = self.__rolesActionGroups
+        if rolesActionGroups is None:
+            self.__rolesTags, self.__rolesActionGroups = _readVehicleRolesToTagsActionGroups(_VEHICLE_TYPE_XML_PATH + 'common/roleExp/roles.xml')
+            rolesActionGroups = self.__rolesActionGroups
+        return rolesActionGroups
+
+    def actionsByGroups(self):
+        actionsByGroups = self.__actionsByGroups
+        if actionsByGroups is None:
+            self.__actionsByGroups = _readVehicleActionsByGroup(_VEHICLE_TYPE_XML_PATH + 'common/roleExp/actions_by_groups.xml')
+            actionsByGroups = self.__actionsByGroups
+        return actionsByGroups
+
+    def actionsByRoles(self):
+        actionsByRoles = self.__actionsByRoles
+        if actionsByRoles is None:
+            self.__actionsByRoles = {}
+            for role, actionGroup in self.actionGroupsByRoles().iteritems():
+                self.__actionsByRoles[role] = self.actionsByGroups()[actionGroup]
+
+            actionsByRoles = self.__actionsByRoles
+        return actionsByRoles
 
     @property
     def shotEffects(self):
@@ -2040,6 +2106,14 @@ def getUnlocksSources():
                 res.setdefault(cd, set()).add(vehicleType)
 
     return res
+
+
+def getActionsGroups():
+    return g_cache.actionsByGroups()
+
+
+def getRolesActions():
+    return g_cache.actionsByRoles()
 
 
 def isRestorable(vehTypeCD, gameParams):
@@ -3705,6 +3779,50 @@ def _readReloadEffectGroups(xmlPath):
         res[sname] = __readReloadEffect(ctx, subsection)
 
     ResMgr.purge(xmlPath, True)
+    return res
+
+
+def _readVehicleRolesToTagsActionGroups(xmlPath):
+    resTags, resActions = {}, {}
+    section = ResMgr.openSection(xmlPath)
+    if not section:
+        _xml.raiseWrongXml(None, xmlPath, 'can not open or read roles.xml')
+    xmlCtx = (None, xmlPath)
+    for roleName, subsection in section.items():
+        ctx = (xmlCtx, None)
+        roleType = ROLE_LABEL_TO_TYPE.get(roleName)
+        if roleType is None:
+            _xml.raiseWrongXml(ctx, roleName, 'no role with such name (roles.xml)')
+        if roleType in resTags:
+            _xml.raiseWrongXml(ctx, roleName, 'duplicated role name in roles.xml')
+        actionsGroup = _xml.readNonEmptyString(ctx, subsection, 'actionsGroup')
+        includeTags = _xml.readNonEmptyString(ctx, subsection, 'includeTags')
+        excludeTags = _xml.readStringOrEmpty(ctx, subsection, 'excludeTags')
+        resTags[roleType] = (frozenset(includeTags.split()), frozenset(excludeTags.split()))
+        actionsGroupType = ACTIONS_GROUP_LABEL_TO_TYPE.get(actionsGroup)
+        if actionsGroupType is None:
+            _xml.raiseWrongXml(ctx, roleName, 'no such actions group (roles.xml)')
+        resActions[roleType] = actionsGroupType
+
+    return (resTags, resActions)
+
+
+def _readVehicleActionsByGroup(xmlPath):
+    res = {}
+    section = ResMgr.openSection(xmlPath)
+    if not section:
+        _xml.raiseWrongXml(None, xmlPath, 'can not open or read actions_by_groups.xml')
+    xmlCtx = (None, xmlPath)
+    for actionsGroup, subsection in section.items():
+        ctx = (xmlCtx, None)
+        actionsGroupType = ACTIONS_GROUP_LABEL_TO_TYPE.get(actionsGroup)
+        if actionsGroupType is None:
+            _xml.raiseWrongXml(ctx, actionsGroup, 'no such actionsGroup (actions_by_groups.xml)')
+        if actionsGroupType in res:
+            _xml.raiseWrongXml(ctx, actionsGroup, 'duplicated actionsGroup name in actions_by_groups.xml')
+        actions = _xml.readNonEmptyString(ctx, subsection, 'actions')
+        res[actionsGroupType] = tuple([ ACTION_LABEL_TO_TYPE.get(label) for label in actions.split() ])
+
     return res
 
 

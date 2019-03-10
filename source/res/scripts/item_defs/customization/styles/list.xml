@@ -5181,6 +5181,43 @@
     </style>
   </itemGroup>
   <itemGroup>
+    <userString>	#vehicle_customization:styles/main_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	false	</historical>
+    <priceGroup>	WolvesOfOdin styles	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	sweden:S26_Lansen_C	</vehicles>
+      </include>
+    </vehicleFilter>
+    <style>
+      <id>	12	</id>
+      <texture>	gui/maps/vehicles/styles/WolvesOfOdin.png	</texture>
+      <description>	#vehicle_customization:special_style/wolves_of_odin_desc	</description>
+      <modelsSet>	WolvesOfOdin	</modelsSet>
+      <userString>	#vehicle_customization:special_style/wolves_of_odin	</userString>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	1	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <decals>
+            <item>
+              <id>	0	</id>
+              <appliedTo>	65520	</appliedTo>
+            </item>
+          </decals>
+        </outfit>
+      </outfits>
+    </style>
+  </itemGroup>
+  <itemGroup>
     <userString>	#vehicle_customization:styles/rented_styles	</userString>
     <season>	ALL	</season>
     <historical>	true	</historical>

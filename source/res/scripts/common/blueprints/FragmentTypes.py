@@ -136,10 +136,10 @@ def toIntFragmentCD(fragment):
     return fragment.makeIntCompDescr()
 
 
-def isValidFragment(maybeFragment, researchedVehicles=()):
+def isValidFragment(maybeFragment, defaultUnlocks=()):
     if type(maybeFragment) in (int, long):
-        if maybeFragment & 15 == 1 and researchedVehicles:
-            return maybeFragment in researchedVehicles
+        if maybeFragment & 15 == 1 and defaultUnlocks:
+            return maybeFragment not in defaultUnlocks
         else:
             return maybeFragment & 15 in BlueprintTypes.ALL
     return False

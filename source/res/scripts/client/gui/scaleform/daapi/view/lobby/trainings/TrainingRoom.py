@@ -7,6 +7,7 @@ from gui import SystemMessages, GUI_SETTINGS
 from gui.Scaleform.daapi import LobbySubView
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.trainings import formatters
+from gui.Scaleform.daapi.view.lobby.trainings.sound_constants import TRAININGS_SOUND_SPACE
 from gui.Scaleform.daapi.view.meta.TrainingRoomMeta import TrainingRoomMeta
 from gui.Scaleform.framework import ViewTypes
 from gui.Scaleform.framework.managers.containers import POP_UP_CRITERIA
@@ -40,6 +41,7 @@ from skeletons.helpers.statistics import IStatisticsCollector
 
 class TrainingRoom(LobbySubView, TrainingRoomMeta, ILegacyListener):
     __sound_env__ = LobbySubViewEnv
+    _COMMON_SOUND_SPACE = TRAININGS_SOUND_SPACE
     lobbyContext = dependency.descriptor(ILobbyContext)
     statsCollector = dependency.descriptor(IStatisticsCollector)
 

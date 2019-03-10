@@ -60,7 +60,7 @@ class FrontLineVehiclePreview20(VehiclePreview20):
         elif not gotMaxPrestige:
             key = 'notEnoughPrestigeLevel'
         if key:
-            buyButtonTooltip = makeTooltip(_ms(TOOLTIPS.vehiclepreview_buybutton_all(key, 'header'), points=points))
+            buyButtonTooltip = makeTooltip(None, _ms(TOOLTIPS.vehiclepreview_buybutton_all(key, 'header'), points=points))
         return {'title': title,
          'price': text_styles.concatStylesToSingleLine(text_styles.superPromoTitleEm(vehPrice), icons.makeImageTag(source=backport.image(R.images.gui.maps.icons.epicBattles.prestigePoints.c_24x24()), width=24, height=24, vSpace=-3, hSpace=3)),
          'buyButtonEnabled': haveEnoughPoints and not buyButtonTooltip,

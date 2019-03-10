@@ -2105,6 +2105,7 @@ class TOOLTIPS(object):
     ADVANCED_VEHICLERADIO = '#tooltips:advanced/vehicleRadio'
     ADVANCED_VEHICLEENGINE = '#tooltips:advanced/vehicleEngine'
     ADVANCED_VEHICLECHASSIS = '#tooltips:advanced/vehicleChassis'
+    ADVANCED_VEHICLEWHEELEDCHASSIS = '#tooltips:advanced/vehicleWheeledChassis'
     ADVANCED_VEHICLETURRET = '#tooltips:advanced/vehicleTurret'
     ADVANCED_COMMANDER = '#tooltips:advanced/commander'
     ADVANCED_DRIVER = '#tooltips:advanced/driver'
@@ -2980,6 +2981,7 @@ class TOOLTIPS(object):
      ADVANCED_VEHICLERADIO,
      ADVANCED_VEHICLEENGINE,
      ADVANCED_VEHICLECHASSIS,
+     ADVANCED_VEHICLEWHEELEDCHASSIS,
      ADVANCED_VEHICLETURRET,
      ADVANCED_COMMANDER,
      ADVANCED_DRIVER,

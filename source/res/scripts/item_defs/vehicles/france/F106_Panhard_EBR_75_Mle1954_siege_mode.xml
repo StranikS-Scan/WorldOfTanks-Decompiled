@@ -273,7 +273,7 @@
           <geometry>
             <radius>	0.611721	</radius>
             <width>	0.345	</width>
-            <pivotXOffset>	-0.05	</pivotXOffset>
+            <pivotXOffset>	0.05	</pivotXOffset>
           </geometry>
           <proceduralCollisionBody>	true	</proceduralCollisionBody>
           <hitTester>
@@ -298,7 +298,7 @@
           <geometry>
             <radius>	0.611721	</radius>
             <width>	0.345	</width>
-            <pivotXOffset>	-0.05	</pivotXOffset>
+            <pivotXOffset>	0.05	</pivotXOffset>
           </geometry>
           <proceduralCollisionBody>	true	</proceduralCollisionBody>
           <hitTester>
@@ -388,7 +388,7 @@
           <geometry>
             <radius>	0.611721	</radius>
             <width>	0.345	</width>
-            <pivotXOffset>	0.05	</pivotXOffset>
+            <pivotXOffset>	-0.05	</pivotXOffset>
           </geometry>
           <proceduralCollisionBody>	true	</proceduralCollisionBody>
           <hitTester>
@@ -413,7 +413,7 @@
           <geometry>
             <radius>	0.611721	</radius>
             <width>	0.345	</width>
-            <pivotXOffset>	0.05	</pivotXOffset>
+            <pivotXOffset>	-0.05	</pivotXOffset>
           </geometry>
           <proceduralCollisionBody>	true	</proceduralCollisionBody>
           <hitTester>
@@ -459,7 +459,7 @@
           <startNode>	Lever_Start_L1	</startNode>
           <jointNode>	Lever_Joint_L1	</jointNode>
           <trackNode>	Track_L1	</trackNode>
-          <limits>	-5.0 25.0	</limits>
+          <limits>	-25.0 10.0	</limits>
           <collisionSamplesCount>	5	</collisionSamplesCount>
           <hasLiftMode>	true	</hasLiftMode>
           <affectedWheelName>	W_L0	</affectedWheelName>
@@ -468,7 +468,7 @@
           <startNode>	Lever_Start_R1	</startNode>
           <jointNode>	Lever_Joint_R1	</jointNode>
           <trackNode>	Track_R1	</trackNode>
-          <limits>	-5.0 25.0	</limits>
+          <limits>	-25.0 10.0	</limits>
           <collisionSamplesCount>	5	</collisionSamplesCount>
           <hasLiftMode>	true	</hasLiftMode>
           <affectedWheelName>	W_R0	</affectedWheelName>
@@ -477,7 +477,7 @@
           <startNode>	Lever_Start_L2	</startNode>
           <jointNode>	Lever_Joint_L2	</jointNode>
           <trackNode>	Track_L2	</trackNode>
-          <limits>	185.0 155.0	</limits>
+          <limits>	205.0 170.0	</limits>
           <collisionSamplesCount>	5	</collisionSamplesCount>
           <hasLiftMode>	true	</hasLiftMode>
           <affectedWheelName>	W_L1	</affectedWheelName>
@@ -486,7 +486,7 @@
           <startNode>	Lever_Start_R2	</startNode>
           <jointNode>	Lever_Joint_R2	</jointNode>
           <trackNode>	Track_R2	</trackNode>
-          <limits>	185.0 155.0	</limits>
+          <limits>	205.0 170.0	</limits>
           <collisionSamplesCount>	5	</collisionSamplesCount>
           <hasLiftMode>	true	</hasLiftMode>
           <affectedWheelName>	W_R1	</affectedWheelName>

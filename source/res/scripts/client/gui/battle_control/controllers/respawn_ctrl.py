@@ -81,6 +81,7 @@ class RespawnsController(ViewComponentsController):
         self.__cooldowns = None
         self.__respawnInfo = None
         self.__limits = None
+        self.__battleCtx = None
         return
 
     def setViewComponents(self, *components):

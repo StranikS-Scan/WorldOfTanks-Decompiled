@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/epic/battle_carousel.py
+import Event
 from account_helpers.AccountSettings import EPICBATTLE_CAROUSEL_FILTER_1, EPICBATTLE_CAROUSEL_FILTER_2
 from account_helpers.AccountSettings import EPICBATTLE_CAROUSEL_FILTER_CLIENT_1
 from gui.Scaleform import getButtonsAssetPath
@@ -17,7 +18,6 @@ from skeletons.gui.battle_session import IBattleSessionProvider
 from gui.Scaleform.daapi.view.battle.shared.respawn import respawn_utils
 from gui.shared.gui_items import ItemsCollection
 from skeletons.gui.shared.gui_items import IGuiItemsFactory
-from Event import Event
 _DISABLED_FILTERS = ['bonus']
 _BATTLE_CAROUSEL_FILTERS = ('favorite',)
 
@@ -134,12 +134,13 @@ class VehicleData(object):
 
     def __init__(self, carousel):
         self.items = self
-        self.onSyncCompleted = Event()
         self.__carousel = carousel
         self.__vehicles = None
         ctrl = self.sessionProvider.dynamic.respawn
         if ctrl is not None:
             ctrl.onRespawnVehiclesUpdated += self.__updateVehiclesList
+        self.__eManager = Event.EventManager()
+        self.onSyncCompleted = Event.Event(self.__eManager)
         return
 
     def getVehicles(self, criteria=None):
@@ -155,6 +156,11 @@ class VehicleData(object):
         ctrl = self.sessionProvider.dynamic.respawn
         if ctrl is not None:
             ctrl.onRespawnVehiclesUpdated -= self.__updateVehiclesList
+        self.__carousel = None
+        self.__vehicles = None
+        self.__eManager.clear()
+        self.__eManager = None
+        self.items = None
         return
 
     def getRawVehicleData(self, invID):
@@ -225,7 +231,9 @@ class BattleTankCarousel(BattleTankCarouselMeta):
     def _dispose(self):
         self.app.loaderManager.onViewLoaded -= self.__onViewLoaded
         self.__vehicleData.dispose()
+        self.__vehicleData = None
         super(BattleTankCarousel, self)._dispose()
+        return
 
     def _initDataProvider(self):
         self._carouselDPConfig.update({'carouselFilter': self._carouselFilterCls(),

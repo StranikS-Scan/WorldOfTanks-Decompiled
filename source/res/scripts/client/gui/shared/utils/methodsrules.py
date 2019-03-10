@@ -1,9 +1,10 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/utils/MethodsRules.py
+import logging
 from collections import defaultdict
 from types import MethodType
-from debug_utils import LOG_DEBUG
 from helpers.aop import copy
+_logger = logging.getLogger(__name__)
 
 class MethodsRules(object):
     __slots__ = ('__listenersToSkip', '__notificationToDelay', '__delayersProcessed')
@@ -16,7 +17,7 @@ class MethodsRules(object):
         def __call__(self, *args, **kwargs):
             instance = args[0]
             if instance.skip(self.__listerner):
-                LOG_DEBUG('Notification skipped: ', instance, self.__listerner)
+                _logger.debug('Notification skipped: %r, %r', instance, self.__listerner)
                 return
             self.__listerner(*args, **kwargs)
 
@@ -33,7 +34,7 @@ class MethodsRules(object):
             def wrapper(*args, **kwargs):
                 instance = args[0]
                 if instance.delay(self.__delayerName, listener, *args, **kwargs):
-                    LOG_DEBUG('Notification delayed: ', listener, *args, **kwargs)
+                    _logger.debug('Notification delayed: %r, %r, %r', listener, *args, **kwargs)
                     return
                 result = listener(*args, **kwargs)
                 instance.processDelayer(listener.__name__)
@@ -79,12 +80,12 @@ class MethodsRules(object):
             return False
 
     def processDelayer(self, delayerName):
-        LOG_DEBUG('Delayer processed: ', delayerName)
+        _logger.debug('Delayer processed: %r', delayerName)
         self.__delayersProcessed.add(delayerName)
         pending = self.__notificationToDelay.pop(delayerName, ())
         delayers = set()
         for notification, args, kwargs in pending:
-            LOG_DEBUG('Notification processed: ', notification, args, kwargs)
+            _logger.debug('Notification processed: %r, %r, %r', notification, args, kwargs)
             notification(*args, **kwargs)
             delayers.add(notification.__name__)
 

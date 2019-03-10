@@ -54,6 +54,13 @@
       <undamaged>	vehicles/sweden/S26_Lansen_C/normal/lod0/Hull.model	</undamaged>
       <destroyed>	vehicles/sweden/S26_Lansen_C/crash/lod0/Hull.model	</destroyed>
       <exploded>	vehicles/sweden/S26_Lansen_C/crash/lod0/Hull.model	</exploded>
+      <sets>
+        <WolvesOfOdin>
+          <undamaged>	vehicles/sweden/S26_Lansen_C/_skins/WolvesOfOdin/normal/lod0/Hull.model	</undamaged>
+          <destroyed>	vehicles/sweden/S26_Lansen_C/_skins/WolvesOfOdin/crash/lod0/Hull.model	</destroyed>
+          <exploded>	vehicles/sweden/S26_Lansen_C/_skins/WolvesOfOdin/crash/lod0/Hull.model	</exploded>
+        </WolvesOfOdin>
+      </sets>
     </models>
     <swinging>
       <lodDist>	FAR	</lodDist>
@@ -146,6 +153,13 @@
         <undamaged>	vehicles/sweden/S26_Lansen_C/normal/lod0/Chassis.model	</undamaged>
         <destroyed>	vehicles/sweden/S26_Lansen_C/crash/lod0/Chassis.model	</destroyed>
         <exploded>	vehicles/sweden/S26_Lansen_C/crash/lod0/Chassis.model	</exploded>
+        <sets>
+          <WolvesOfOdin>
+            <undamaged>	vehicles/sweden/S26_Lansen_C/_skins/WolvesOfOdin/normal/lod0/Chassis.model	</undamaged>
+            <destroyed>	vehicles/sweden/S26_Lansen_C/_skins/WolvesOfOdin/crash/lod0/Chassis.model	</destroyed>
+            <exploded>	vehicles/sweden/S26_Lansen_C/_skins/WolvesOfOdin/crash/lod0/Chassis.model	</exploded>
+          </WolvesOfOdin>
+        </sets>
       </models>
       <traces>
         <lodDist>	MEDIUM	</lodDist>
@@ -898,6 +912,13 @@
             <undamaged>	vehicles/sweden/S26_Lansen_C/normal/lod0/Gun_01.model	</undamaged>
             <destroyed>	vehicles/sweden/S26_Lansen_C/crash/lod0/Gun_01.model	</destroyed>
             <exploded>	vehicles/sweden/S26_Lansen_C/crash/lod0/Gun_01.model	</exploded>
+            <sets>
+              <WolvesOfOdin>
+                <undamaged>	vehicles/sweden/S26_Lansen_C/_skins/WolvesOfOdin/normal/lod0/Gun_01.model	</undamaged>
+                <destroyed>	vehicles/sweden/S26_Lansen_C/_skins/WolvesOfOdin/crash/lod0/Gun_01.model	</destroyed>
+                <exploded>	vehicles/sweden/S26_Lansen_C/_skins/WolvesOfOdin/crash/lod0/Gun_01.model	</exploded>
+              </WolvesOfOdin>
+            </sets>
           </models>
           <hitTester>
             <collisionModelServer>	vehicles/sweden/S26_Lansen_C/collision/Gun_01.model	</collisionModelServer>
@@ -954,6 +975,13 @@
         <undamaged>	vehicles/sweden/S26_Lansen_C/normal/lod0/Turret_01.model	</undamaged>
         <destroyed>	vehicles/sweden/S26_Lansen_C/crash/lod0/Turret_01.model	</destroyed>
         <exploded>	vehicles/sweden/S26_Lansen_C/crash/lod0/Turret_01.model	</exploded>
+        <sets>
+          <WolvesOfOdin>
+            <undamaged>	vehicles/sweden/S26_Lansen_C/_skins/WolvesOfOdin/normal/lod0/Turret_01.model	</undamaged>
+            <destroyed>	vehicles/sweden/S26_Lansen_C/_skins/WolvesOfOdin/crash/lod0/Turret_01.model	</destroyed>
+            <exploded>	vehicles/sweden/S26_Lansen_C/_skins/WolvesOfOdin/crash/lod0/Turret_01.model	</exploded>
+          </WolvesOfOdin>
+        </sets>
       </models>
       <hitTester>
         <collisionModelServer>	vehicles/sweden/S26_Lansen_C/collision/Turret_01.model	</collisionModelServer>

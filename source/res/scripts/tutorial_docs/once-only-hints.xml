@@ -137,6 +137,7 @@
         </simple-state>
       </checked-ui-state>
       <ignore-outside-click>	True	</ignore-outside-click>
+      <update-runtime>	True	</update-runtime>
     </hint>
     <hint>	BlueprintsTechtreeConvertButtonHint	  <item-id>	BlueprintsTechtreeConvertButton	</item-id>
       <text>	_(#tutorial:blueprints/convertButton)	</text>
@@ -185,7 +186,6 @@
         </condition-and>
       </condition>
       <update-runtime>	True	</update-runtime>
-      <check-view-area>	True	</check-view-area>
       <ignore-outside-click>	True	</ignore-outside-click>
     </hint>
     <hint>	BlueprintScreenConvertFragmentHint	  <item-id>	BlueprintScreenConvertFragment	</item-id>

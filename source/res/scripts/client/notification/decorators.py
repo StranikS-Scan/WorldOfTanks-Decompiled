@@ -711,6 +711,10 @@ class ClanInvitesActionDecorator(_ClassBaseActionDecorator):
     def getType(self):
         return NOTIFICATION_TYPE.CLAN_INVITE_ACTION
 
+    def update(self, formatted):
+        super(ClanInvitesActionDecorator, self).update(formatted)
+        self._make(formatted)
+
     def _getName(self, entity):
         return entity
 

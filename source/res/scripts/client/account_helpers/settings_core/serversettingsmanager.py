@@ -532,9 +532,14 @@ class ServerSettingsManager(object):
         for section in sections:
             keys = self.SECTIONS[section].masks.keys() + self.SECTIONS[section].offsets.keys()
             currentSettings = {key:value for key, value in settings.items() if key in keys}
-            settingToServer[section] = self._buildSectionSettings(section, currentSettings)
+            stored = self.settingsCache.getSectionSettings(section, None)
+            storing = self._buildSectionSettings(section, currentSettings)
+            if stored != storing:
+                settingToServer[section] = storing
 
-        self.setSettings(settingToServer)
+        if settingToServer:
+            self.setSettings(settingToServer)
+        return
 
     def getSectionSettings(self, section, key, default=None):
         storedValue = self.settingsCache.getSectionSettings(section, None)

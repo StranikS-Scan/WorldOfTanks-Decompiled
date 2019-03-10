@@ -929,7 +929,7 @@ class SpeedometerWheeledTech(CrosshairPlugin):
         vTypeDesc = vehicle.typeDescriptor
         if vTypeDesc.isWheeledVehicle and vehicle.health > 0:
             self.__updateBurnoutWarning(vStateCtrl)
-            self.__updateCurBurnoutLevel(vehicle)
+            self.__updateCurrentBurnoutLevel(vehicle)
             self.__addSpedometer(vehicle)
             self.__updateCurStateSpeedMode(vStateCtrl)
         else:
@@ -987,16 +987,12 @@ class SpeedometerWheeledTech(CrosshairPlugin):
             self.__onVehicleStateUpdated(VEHICLE_VIEW_STATE.SIEGE_MODE, (_SIEGE_STATE.DISABLED, None))
         return
 
-    def __updateCurBurnoutLevel(self, vehicle):
+    def __updateCurrentBurnoutLevel(self, vehicle):
         self.__cachedBurnoutLevel = vehicle.burnoutLevel
 
     def __updateBurnoutWarning(self, vStateCtrl):
         value = vStateCtrl.getStateValue(VEHICLE_VIEW_STATE.BURNOUT_WARNING)
-        if value is not None:
-            self.__burnoutWarningOn = value
-        else:
-            self.__burnoutWarningOn = False
-        return
+        self.__burnoutWarningOn = value
 
     def __getMaxSpeeds(self, vehicle):
         typeDesc = vehicle.typeDescriptor

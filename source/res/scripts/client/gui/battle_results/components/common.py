@@ -22,7 +22,7 @@ from gui.battle_control.battle_constants import WinStatus
 _ARENA_TYPE_FORMAT = '#arenas:type/{0}/name'
 _ARENA_TYPE_EXT_FORMAT = '#menu:loading/battleTypes/{0}'
 _ARENA_FULL_NAME_FORMAT = '#battle_results:common/arena/fullName'
-_ARENA_ICON_PATH = '../maps/icons/map/stats/{0}/%s.png'
+_ARENA_ICON_PATH = '../maps/icons/map/stats/%s.png'
 _FULL_RESULT_LABEL = '#menu:finalStatistic/commonStats/resultlabel/{0}'
 _FINISH_REASON_LABEL = '#battle_results:finish/reason/{0}'
 _FINISH_PLAYER_TANK_SEPARATOR = '#battle_results:finish/playerTank/separator'
@@ -362,7 +362,7 @@ class ArenaIconItem(base.StatsItem):
     __slots__ = ()
 
     def _convert(self, record, reusable):
-        return reusable.common.getArenaIcon(_ARENA_ICON_PATH.format(BATTLE_RESULT_TYPES.MAP_SIZE_BIG))
+        return reusable.common.getArenaIcon(_ARENA_ICON_PATH)
 
 
 class ArenaDurationItem(base.StatsItem):

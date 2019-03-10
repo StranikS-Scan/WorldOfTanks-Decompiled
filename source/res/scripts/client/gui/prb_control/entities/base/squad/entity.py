@@ -65,6 +65,12 @@ class SquadEntity(UnitEntity):
         if updatedVehicles:
             g_prbCtrlEvents.onVehicleClientStateChanged(updatedVehicles)
 
+    def isBalancedSquadEnabled(self):
+        return False
+
+    def getSquadLevelBounds(self):
+        pass
+
     def _buildPermissions(self, roles, flags, isCurrentPlayer=False, isPlayerReady=False, hasLockedState=False):
         return SquadPermissions(roles, flags, isCurrentPlayer, isPlayerReady)
 

@@ -2,10 +2,8 @@
 # Embedded file name: scripts/client/gui/shared/tooltips/builders.py
 import importlib
 import logging
-from CurrentVehicle import g_currentVehicle
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.shared.gui_items.artefacts import OptionalDevice
-from gui.shared.gui_items.vehicle_modules import VehicleChassis
 from gui.shared.tooltips import complex_formatters
 from gui.shared.tooltips import contexts, advanced
 from helpers import dependency
@@ -13,7 +11,7 @@ from skeletons.account_helpers.settings_core import ISettingsCore
 from soft_exception import SoftException
 _logger = logging.getLogger(__name__)
 _SUPPORT_ADVANCED = True
-DISABLED_ITEMS_IDS = (12793, 37954)
+DISABLED_ITEMS_ID = 12793
 
 class TooltipBuilder(object):
     __slots__ = ('_tooltipType', '_linkage')
@@ -105,10 +103,8 @@ class AdvancedDataBuilder(AdvancedBuilder):
             item = self._provider.item
             disabledForWheeled = False
             if item is not None:
-                if isinstance(item, VehicleChassis):
-                    disabledForWheeled = item.intCD in DISABLED_ITEMS_IDS
-                elif isinstance(item, OptionalDevice):
-                    disabledForWheeled = g_currentVehicle.item.isWheeledTech and item.intCD in DISABLED_ITEMS_IDS
+                if isinstance(item, OptionalDevice):
+                    disabledForWheeled = item.intCD == DISABLED_ITEMS_ID
             if supportAdvanced and not disabledForWheeled:
                 self._provider.addAdvancedBlock(data, disableAnim)
         return data

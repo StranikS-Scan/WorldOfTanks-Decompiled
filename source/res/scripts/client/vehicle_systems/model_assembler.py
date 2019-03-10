@@ -28,7 +28,7 @@ _AREA_LOD_FOR_NONSIMPLE_TRACKS = 50
 _WHEEL_TO_TRACE_RATIO = 0.75
 _DEFAULT_LOD_INDEX = 0
 
-def prepareCompoundAssembler(vehicleDesc, modelsSetParams, spaceID, isTurretDetached=False, lodIdx=_DEFAULT_LOD_INDEX, geometryOnly=False):
+def prepareCompoundAssembler(vehicleDesc, modelsSetParams, spaceID, isTurretDetached=False, lodIdx=_DEFAULT_LOD_INDEX, skipMaterials=False):
     if constants.IS_DEVELOPMENT and modelsSetParams.state not in VehicleDamageState.MODEL_STATE_NAMES:
         raise SoftException('Invalid modelStateName %s, must be in %s' % (modelsSetParams.state, VehicleDamageState.MODEL_STATE_NAMES))
     if spaceID is None:
@@ -50,7 +50,7 @@ def prepareCompoundAssembler(vehicleDesc, modelsSetParams, spaceID, isTurretDeta
     assembler.name = vehicleDesc.name
     assembler.spaceID = spaceID
     assembler.lodIdx = lodIdx
-    assembler.geometryOnly = geometryOnly
+    assembler.skipMaterials = skipMaterials
     return assembler
 
 

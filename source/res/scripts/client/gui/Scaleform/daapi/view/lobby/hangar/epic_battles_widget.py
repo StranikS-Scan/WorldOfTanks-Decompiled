@@ -105,7 +105,10 @@ class EpicBattlesWidgetTooltip(BlocksTooltipData):
         famePtsToProgress = self.epicMetaGameCtrl.getPointsProgressForLevel(pMetaLevel)
         boundaryTime, isNow = self.epicMetaGameCtrl.getCurrentCycleInfo()
         blocks = super(EpicBattlesWidgetTooltip, self)._packBlocks()
-        cycleID = self.epicMetaGameCtrl.getCurrentSeason().getCycleInfo().getEpicCycleNumber()
+        currentTime = time_utils.getCurrentLocalServerTimestamp()
+        season = self.epicMetaGameCtrl.getCurrentSeason()
+        cycle = season.getLastActiveCycleInfo(currentTime) or season.getNextByTimeCycle(currentTime)
+        cycleID = cycle.getEpicCycleNumber()
         if isNow:
             title = text_styles.highTitle(_ms(TOOLTIPS.EPICBATTLEWIDGET_HEADER, season=cycleID))
         else:

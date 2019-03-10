@@ -32,7 +32,6 @@ from gui.shared.events import HasCtxEvent
 from gui.shared.formatters import icons, text_styles, formatPrice
 from gui.shared.economics import getPriceTypeAndValue
 from gui.shared.formatters import getItemPricesVO, getItemUnlockPricesVO, chooseItemPriceVO
-from gui.shared.tooltips.formatters import getActionPriceData
 from gui.shared.gui_items.items_actions import factory
 from gui.shared.gui_items.gui_item_economics import ItemPrice
 from gui.shared.money import Currency, MONEY_UNDEFINED
@@ -153,9 +152,8 @@ class VehiclePreviewBuyingPanel(VehiclePreviewBuyingPanelMeta):
         self.__description = description
         selectedID = getActiveOffer(self.__offers).id
         offersData = self.__previewDP.getOffersData(self.__offers, selectedID) if len(self.__offers) > 1 else []
-        if offersData:
-            self.as_setOffersDataS(offersData)
-            self.onOfferSelected(selectedID)
+        self.as_setOffersDataS(offersData)
+        self.onOfferSelected(selectedID)
 
     def onOfferSelected(self, offerID):
         self.__currentOffer = findFirst(lambda o: o.id == offerID, self.__offers)
@@ -321,7 +319,6 @@ class VehiclePreviewBuyingPanel(VehiclePreviewBuyingPanelMeta):
         money = self._itemsCache.items.stats.money
         money = self._tradeIn.addTradeInPriceIfNeeded(vehicle, money)
         notEnoughMoneyTooltip = ''
-        actionTooltip = getActionPriceData(vehicle)
         exchangeRate = self._itemsCache.items.shop.exchangeRate
         priceType, price = getPriceTypeAndValue(vehicle, money, exchangeRate)
         itemPrice = chooseItemPriceVO(priceType, price)
@@ -350,7 +347,7 @@ class VehiclePreviewBuyingPanel(VehiclePreviewBuyingPanelMeta):
         if self._disableBuyButton:
             mayObtain = False
             isMoneyEnough = False
-        return _ButtonState(enabled=mayObtain, itemPrice=itemPrice, label=backport.text(R.strings.vehicle_preview.buyingPanel.buyBtn.label.restore()) if vehicle.isRestorePossible() else backport.text(R.strings.vehicle_preview.buyingPanel.buyBtn.label.buy()), isAction=isAction, actionTooltip=actionTooltip, tooltip=notEnoughMoneyTooltip, title=self.__title, isMoneyEnough=isMoneyEnough, isUnlock=False, isPrevItemsUnlock=True)
+        return _ButtonState(enabled=mayObtain, itemPrice=itemPrice, label=backport.text(R.strings.vehicle_preview.buyingPanel.buyBtn.label.restore()) if vehicle.isRestorePossible() else backport.text(R.strings.vehicle_preview.buyingPanel.buyBtn.label.buy()), isAction=isAction, actionTooltip=None, tooltip=notEnoughMoneyTooltip, title=self.__title, isMoneyEnough=isMoneyEnough, isUnlock=False, isPrevItemsUnlock=True)
 
     def __getBtnDataLockedVehicle(self, vehicle):
         stats = self._itemsCache.items.stats

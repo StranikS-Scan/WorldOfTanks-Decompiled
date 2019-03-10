@@ -32,7 +32,7 @@ class PersonalNumEditStatuses(object):
 class PersonalNumEditCommands(object):
     CANCEL_EDIT_MODE = 1
     FINISH_BY_CLICK = 2
-    CANCEL_BY_ESC = 3
+    CANCEL_NUMBER = 3
     CANCEL_BY_INSCRIPTION_SELECT = 4
 
 
@@ -131,7 +131,7 @@ class CustomizationInscriptionController(CustomizationInscriptionControllerMeta)
                 self.__cancelEditMode(showPropSheetAfter=False)
             else:
                 self.__cancelEditMode(showPropSheetAfter=False)
-        elif state is PersonalNumEditCommands.CANCEL_BY_ESC:
+        elif state is PersonalNumEditCommands.CANCEL_NUMBER:
             self.__cancelEditMode(showPropSheetAfter=True)
         elif state is PersonalNumEditCommands.CANCEL_BY_INSCRIPTION_SELECT:
             self.__ctx.numberEditModeActive = False

@@ -472,7 +472,7 @@ class CustomizationContext(object):
 
     def cancelChanges(self):
         if self.numberEditModeActive:
-            self.sendNumberEditModeCommand(PersonalNumEditCommands.CANCEL_EDIT_MODE)
+            self.sendNumberEditModeCommand(PersonalNumEditCommands.CANCEL_NUMBER)
         if self._mode == C11nMode.STYLE:
             self.__cancelModifiedStyle()
         else:

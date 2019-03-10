@@ -197,6 +197,7 @@ class EpicMissionsController(IViewComponentsController):
         sectorBaseComp = getattr(componentSystem, 'sectorBaseComponent', None)
         if sectorBaseComp is not None:
             sectorBaseComp.onSectorBaseCaptured -= self.__onSectorBaseCaptured
+            sectorBaseComp.onSectorBasePointsUpdate -= self.__onSectorBaseActiveStateChanged
             sectorBaseComp.onSectorBasePointsUpdate -= self.__onSectorBasePointsUpdate
         playerDataComp = getattr(componentSystem, 'playerDataComponent', None)
         if playerDataComp is not None:
@@ -206,6 +207,7 @@ class EpicMissionsController(IViewComponentsController):
         destructibleEntityComp = getattr(componentSystem, 'destructibleEntityComponent', None)
         if destructibleEntityComp is not None:
             destructibleEntityComp.onDestructibleEntityHealthChanged -= self.__onDestructibleEntityHealthChanged
+            destructibleEntityComp.onDestructibleEntityHealthChanged -= self.__onDestructibleEntityIsActiveChanged
         sectorComp = getattr(componentSystem, 'sectorComponent', None)
         if sectorComp is not None:
             sectorComp.onWaypointsForPlayerActivated -= self.__onWaypointsForPlayerActivated
@@ -222,6 +224,8 @@ class EpicMissionsController(IViewComponentsController):
             arena = self.__sessionProvider.arenaVisitor.getArenaSubscription()
             if arena is not None:
                 arena.onPositionsUpdated -= self.__updatePositions
+        self.__sessionProvider = None
+        self._notificationTypeToMissionTriggerArgs.clear()
         return
 
     def getCurrentMission(self):

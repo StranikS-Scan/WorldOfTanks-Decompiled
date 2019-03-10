@@ -1,11 +1,12 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/helpers/PixieBG.py
+import weakref
+import functools
 import Pixie
-from vehicle_systems import stricted_loading
 from debug_utils import LOG_ERROR, LOG_CURRENT_EXCEPTION
 
 class PixieBG(object):
-    __slots__ = ('__loader', '__callback', '__data', 'name', 'pixie')
+    __slots__ = ('__loader', '__callback', '__data', 'name', 'pixie', '__weakref__')
 
     @staticmethod
     def enablePixie(pixie, turnOn):
@@ -17,12 +18,19 @@ class PixieBG(object):
             except Exception:
                 LOG_CURRENT_EXCEPTION()
 
+    @staticmethod
+    def onLoad(pixieBGRef, newPixie):
+        pixieBG = pixieBGRef()
+        if pixieBG is not None:
+            pixieBG.onPixieLoaded(newPixie)
+        return
+
     def __init__(self, name, onLoadCallback, pixie=None, data=None, modifiers=None):
         self.name = name
         self.pixie = pixie
         self.__data = data
         if pixie is None:
-            self.__loader = stricted_loading.restrictBySpace(self.__onLoad)
+            self.__loader = functools.partial(self.onLoad, weakref.ref(self))
             self.__callback = onLoadCallback
             Pixie.createBG(name, self.__loader, modifiers)
         else:
@@ -52,7 +60,7 @@ class PixieBG(object):
         self.name = None
         return
 
-    def __onLoad(self, newPixie):
+    def onPixieLoaded(self, newPixie):
         if newPixie is None:
             LOG_ERROR("Can't create pixie '%s'." % self.name)
             return

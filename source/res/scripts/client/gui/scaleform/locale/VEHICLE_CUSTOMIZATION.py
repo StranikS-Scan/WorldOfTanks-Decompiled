@@ -2336,6 +2336,8 @@ class VEHICLE_CUSTOMIZATION(object):
     MAIN_STYLE_WOT_BIRTHDAY_NA_DESC = '#vehicle_customization:main_style/wot_birthday_na_desc'
     MAIN_STYLE_WOT_BIRTHDAY_CN = '#vehicle_customization:main_style/wot_birthday_cn'
     MAIN_STYLE_WOT_BIRTHDAY_CN_DESC = '#vehicle_customization:main_style/wot_birthday_cn_desc'
+    SPECIAL_STYLE_WOLVES_OF_ODIN = '#vehicle_customization:special_style/wolves_of_odin'
+    SPECIAL_STYLE_WOLVES_OF_ODIN_DESC = '#vehicle_customization:special_style/wolves_of_odin_desc'
     CUSTOMIZATION_POPOVER_STYLE_SUMMER = '#vehicle_customization:customization/popover/style/summer'
     CUSTOMIZATION_POPOVER_STYLE_DESERT = '#vehicle_customization:customization/popover/style/desert'
     CUSTOMIZATION_POPOVER_STYLE_ANY = '#vehicle_customization:customization/popover/style/any'

@@ -138,11 +138,12 @@ class SectorBaseArenaComponent(ClientArenaComponent):
     def __getSectorBaseIdsByLaneAndCapturedState(self, lane, isCaptured):
         if not lane:
             return []
-        ids = []
-        for base in self.__sectorBases:
-            sector = self.getSectorForSectorBase(base.baseID)
-            if sector.playerGroup == lane and base.isCaptured == isCaptured:
-                ids.append(base.baseID)
+        else:
+            ids = []
+            for base in self.__sectorBases:
+                sector = self.getSectorForSectorBase(base.baseID)
+                if sector is not None and sector.playerGroup == lane and base.isCaptured == isCaptured:
+                    ids.append(base.baseID)
 
-        ids.sort()
-        return ids
+            ids.sort()
+            return ids

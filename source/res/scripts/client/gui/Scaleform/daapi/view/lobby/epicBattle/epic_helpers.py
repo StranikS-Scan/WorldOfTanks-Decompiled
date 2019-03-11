@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/epicBattle/epic_helpers.py
 import logging
+from web_client_api.common import ItemPackType
 from gui import SystemMessages
 from gui.shared.gui_items.processors.common import EpicPrestigeTrigger
 from gui.shared.items_parameters.formatters import _cutDigits
@@ -224,7 +225,7 @@ def _packBonuses(bonuses, packSP=False):
     icon = RES_ICONS.getEpicBattlesAwardIcon('80x80', 'abilityToken')
     if packSP:
         result = [{'id': 0,
-          'type': 'custom/supply_point',
+          'type': ItemPackType.CUSTOM_SUPPLY_POINT,
           'value': 1,
           'icon': {AWARDS_SIZES.SMALL: icon,
                    AWARDS_SIZES.BIG: icon}}]
@@ -292,3 +293,8 @@ def triggerPrestige():
     result = yield EpicPrestigeTrigger().request()
     if result.userMsg:
         SystemMessages.pushMessage(result.userMsg, type=result.sysMsgType)
+
+
+def getFrontlineRewardVehPrice(intCD):
+    epicMetaGameCtrl = dependency.instance(IEpicBattleMetaGameController)
+    return epicMetaGameCtrl.getRewardVehicles().get(intCD, 0)

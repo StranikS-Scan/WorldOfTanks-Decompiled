@@ -40,8 +40,8 @@ from helpers.i18n import makeString as _ms
 from items_kit_helper import lookupItem, BOX_TYPE, showItemTooltip, OFFER_CHANGED_EVENT
 from items_kit_helper import getActiveOffer, mayObtainForMoney, mayObtainWithMoneyExchange
 from shared_utils import findFirst, first
-from skeletons.gui.game_control import IVehicleComparisonBasket, ITradeInController
-from skeletons.gui.game_control import IRestoreController, IHeroTankController, IEpicBattleMetaGameController
+from skeletons.gui.game_control import IVehicleComparisonBasket
+from skeletons.gui.game_control import ITradeInController, IRestoreController, IHeroTankController
 from skeletons.gui.goodies import IGoodiesCache
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
@@ -59,7 +59,6 @@ class VehiclePreviewBuyingPanel(VehiclePreviewBuyingPanelMeta):
     tradeIn = dependency.descriptor(ITradeInController)
     restores = dependency.descriptor(IRestoreController)
     heroTanks = dependency.descriptor(IHeroTankController)
-    epicController = dependency.descriptor(IEpicBattleMetaGameController)
     lobbyContext = dependency.descriptor(ILobbyContext)
 
     def __init__(self, skipConfirm=False):

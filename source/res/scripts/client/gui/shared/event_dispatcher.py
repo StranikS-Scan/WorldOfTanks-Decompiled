@@ -87,6 +87,10 @@ def showEpicBattlesPrimeTimeWindow():
     g_eventBus.handleEvent(events.LoadViewEvent(alias=EPICBATTLES_ALIASES.EPIC_BATTLES_PRIME_TIME_ALIAS, ctx={}), EVENT_BUS_SCOPE.LOBBY)
 
 
+def showFrontlineBuyConfirmView(ctx):
+    g_eventBus.handleEvent(events.LoadViewEvent(alias=EPICBATTLES_ALIASES.FRONTLINE_BUY_CONFIRM_VIEW_ALIAS, ctx=ctx), EVENT_BUS_SCOPE.LOBBY)
+
+
 def showEpicBattlesWelcomeBackWindow():
     g_eventBus.handleEvent(events.LoadViewEvent(alias=EPICBATTLES_ALIASES.EPIC_BATTLES_WELCOME_BACK_ALIAS, ctx={}), EVENT_BUS_SCOPE.LOBBY)
 
@@ -175,14 +179,18 @@ def showVehicleSellDialog(vehInvID):
     g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.VEHICLE_SELL_DIALOG, ctx={'vehInvID': int(vehInvID)}), EVENT_BUS_SCOPE.LOBBY)
 
 
-def showVehicleBuyDialog(vehicle, isTradeIn=False, previousAlias=None):
+def showVehicleBuyDialog(vehicle, isTradeIn=False, previousAlias=None, showOnlyCongrats=False, ctx=None):
     from gui.impl.lobby.buy_vehicle_view import BuyVehicleWindow
-    ctx = {'nationID': vehicle.nationID,
+    ctx = ctx or {}
+    ctx.update({'nationID': vehicle.nationID,
      'itemID': vehicle.innationID,
      'isTradeIn': isTradeIn,
-     'previousAlias': previousAlias}
+     'previousAlias': previousAlias,
+     'showOnlyCongrats': showOnlyCongrats})
     window = BuyVehicleWindow(ctx=ctx)
     window.load()
+    if showOnlyCongrats:
+        window.showCongratulations()
 
 
 def showBattleBoosterBuyDialog(battleBoosterIntCD, install=False):

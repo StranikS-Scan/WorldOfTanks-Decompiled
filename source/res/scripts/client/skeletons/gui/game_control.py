@@ -866,7 +866,7 @@ class IEpicBattleMetaGameController(IGameController, ISeasonProvider):
     def openURL(self, url=None):
         raise NotImplementedError
 
-    def showBattleReservesScreen(self):
+    def showCustomScreen(self, screen):
         raise NotImplementedError
 
     def getStoredEpicDiscount(self):

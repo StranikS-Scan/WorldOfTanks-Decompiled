@@ -7,7 +7,7 @@ from gui.impl.gen.view_models.views.buy_vehicle_view.equipment_block_model impor
 from gui.impl.gen.view_models.views.buy_vehicle_view.vehicle_congratulation_model import VehicleCongratulationModel
 
 class BuyVehicleViewModel(ViewModel):
-    __slots__ = ('onCloseBtnClick', 'onBuyBtnClick', 'onShowInHangarClick', 'onCommanderLvlChange', 'onToggleRentAndTradeIn', 'onCheckboxWithoutCrewChanged')
+    __slots__ = ('onCloseBtnClick', 'onBuyBtnClick', 'onInHangarClick', 'onBackClick', 'onCommanderLvlChange', 'onToggleRentAndTradeIn', 'onCheckboxWithoutCrewChanged')
 
     @property
     def tankPrice(self):
@@ -145,6 +145,12 @@ class BuyVehicleViewModel(ViewModel):
     def setIsContentHidden(self, value):
         self._setBool(23, value)
 
+    def getBgSource(self):
+        return self._getResource(24)
+
+    def setBgSource(self, value):
+        self._setResource(24, value)
+
     def _initialize(self):
         super(BuyVehicleViewModel, self)._initialize()
         self._addViewModelProperty('tankPrice', ListModel())
@@ -171,9 +177,11 @@ class BuyVehicleViewModel(ViewModel):
         self._addResourceProperty('noCrewCheckboxLabel', R.invalid())
         self._addBoolProperty('isMovingTextEnabled', False)
         self._addBoolProperty('isContentHidden', False)
+        self._addResourceProperty('bgSource', R.invalid())
         self.onCloseBtnClick = self._addCommand('onCloseBtnClick')
         self.onBuyBtnClick = self._addCommand('onBuyBtnClick')
-        self.onShowInHangarClick = self._addCommand('onShowInHangarClick')
+        self.onInHangarClick = self._addCommand('onInHangarClick')
+        self.onBackClick = self._addCommand('onBackClick')
         self.onCommanderLvlChange = self._addCommand('onCommanderLvlChange')
         self.onToggleRentAndTradeIn = self._addCommand('onToggleRentAndTradeIn')
         self.onCheckboxWithoutCrewChanged = self._addCommand('onCheckboxWithoutCrewChanged')

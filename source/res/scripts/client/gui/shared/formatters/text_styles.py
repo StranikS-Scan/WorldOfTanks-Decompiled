@@ -39,6 +39,7 @@ __all__ = ('standard',
  'concatStylesToSingleLine',
  'concatStylesToMultiLine',
  'superPromoTitle',
+ 'superPromoTitleEm',
  'highlightText',
  'unavailable',
  'missionStatusAvailable',
@@ -71,6 +72,10 @@ def locked(text):
 
 def main(text):
     return _formatText('mainText', text)
+
+
+def mainBig(text):
+    return _formatText('mainBigText', text)
 
 
 def neutral(text):
@@ -289,6 +294,10 @@ def premiumVehicleName(text):
 
 def superPromoTitle(text):
     return _formatText('superPromoTitle', text)
+
+
+def superPromoTitleEm(text):
+    return _formatText('superPromoTitleEm', text)
 
 
 def highlightText(text):

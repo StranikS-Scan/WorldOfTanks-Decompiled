@@ -1740,6 +1740,7 @@ class RES_ICONS(object):
     MAPS_ICONS_LIBRARY_PREMIUM_SMALL = '../maps/icons/library/premium_small.png'
     MAPS_ICONS_LIBRARY_PREM_CHECKBOX = '../maps/icons/library/prem_checkbox.png'
     MAPS_ICONS_LIBRARY_PREM_SMALL_ICON = '../maps/icons/library/prem_small_icon.png'
+    MAPS_ICONS_LIBRARY_PRESTIGEPOINTS_1 = '../maps/icons/library/prestigePoints-1.png'
     MAPS_ICONS_LIBRARY_PROXYCURRENCYICON_1 = '../maps/icons/library/ProxyCurrencyIcon-1.png'
     MAPS_ICONS_LIBRARY_PROXYCURRENCYICON_2 = '../maps/icons/library/ProxyCurrencyIcon-2.png'
     MAPS_ICONS_LIBRARY_PROXYCURRENCYICON_3 = '../maps/icons/library/ProxyCurrencyIcon-3.png'

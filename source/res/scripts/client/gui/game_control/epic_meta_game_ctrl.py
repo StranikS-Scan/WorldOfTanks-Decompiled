@@ -8,7 +8,7 @@ import WWISE
 import Event
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.game_control.links import URLMacros
-from shared_utils import collapseIntervals
+from shared_utils import collapseIntervals, CONST_CONTAINER
 from gui.periodic_battles.models import PrimeTime
 from constants import ARENA_BONUS_TYPE, PREBATTLE_TYPE, QUEUE_TYPE
 from gui.ClientUpdateManager import g_clientUpdateManager
@@ -42,7 +42,11 @@ from season_provider import SeasonProvider
 from gui.Scaleform.daapi.view.lobby.epicBattle.epic_cycle_helpers import getCurrentWelcomeScreenVersion
 _logger = logging.getLogger(__name__)
 _VALID_PREBATTLE_TYPES = [PREBATTLE_TYPE.EPIC, PREBATTLE_TYPE.EPIC_TRAINING]
-_RESERVES_SCREEN = 'reserves/'
+
+class FRONTLINE_SCREENS(CONST_CONTAINER):
+    RESERVES_SCREEN = 'reserves/'
+    REWARDS_SCREEN = 'rewards/'
+
 
 def _showBrowserView(url):
     from gui.Scaleform.daapi.view.lobby.epicBattle.web_handlers import createFrontlineWebHandlers
@@ -193,9 +197,9 @@ class EpicBattleMetaGameController(IEpicBattleMetaGameController, Notifiable, Se
             if parsedUrl:
                 _showBrowserView(parsedUrl)
 
-    def showBattleReservesScreen(self):
-        if self.__baseUrl:
-            self.openURL(self.__baseUrl + _RESERVES_SCREEN)
+    def showCustomScreen(self, screen):
+        if self.__baseUrl and screen in FRONTLINE_SCREENS.ALL():
+            self.openURL(self.__baseUrl + screen)
 
     def getPerformanceGroup(self):
         if not self.__performanceGroup:

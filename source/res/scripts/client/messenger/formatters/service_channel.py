@@ -1749,6 +1749,7 @@ class BootcampResultsFormatter(WaitItemsSyncFormatter):
 class TokenQuestsFormatter(WaitItemsSyncFormatter):
     _eventsCache = dependency.descriptor(IEventsCache)
     __PERSONAL_MISSIONS_CUSTOM_TEMPLATE = 'personalMissionsCustom'
+    __FRONTLINE_REWARD_QUEST_TEMPLATE = 'bought_frontline_reward_veh_'
 
     @async
     @process
@@ -1766,6 +1767,9 @@ class TokenQuestsFormatter(WaitItemsSyncFormatter):
             if ranked_helpers.isRankedQuestID(first(completedQuestIDs, '')):
                 result = yield RankedQuestFormatter(forToken=True).format(message)
                 callback(result)
+                return
+            if self.__FRONTLINE_REWARD_QUEST_TEMPLATE in first(completedQuestIDs, ''):
+                callback([_MessageData(None, None)])
                 return
             if self.__processPersonalMissionsSpecial(completedQuestIDs, message, callback):
                 return

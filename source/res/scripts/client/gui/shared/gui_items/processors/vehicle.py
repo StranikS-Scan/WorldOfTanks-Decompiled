@@ -373,7 +373,11 @@ class VehicleSeller(ItemProcessor):
         for dev in self.optDevs:
             itemsFromVehicle.append(dev.intCD)
 
-        _logger.debug('Make server request: %s, %s, %s, %s, %s, %s, %s, %s, %s', self.vehicle.invID, isSellShells, isSellEqs, isSellFromInv, isSellOptDevs, self.isDismantlingForMoney, self.isCrewDismiss, itemsFromVehicle, itemsFromInventory)
+        for custItem in self.customizationItems:
+            customizationItems.append(custItem.intCD)
+            customizationItems.append(custItem.getInstalledOnVehicleCount(self.vehicle.intCD))
+
+        _logger.debug('Make server request: %s, %s, %s, %s, %s, %s, %s, %s, %s, %s', self.vehicle.invID, isSellShells, isSellEqs, isSellFromInv, isSellOptDevs, self.isDismantlingForMoney, self.isCrewDismiss, itemsFromVehicle, itemsFromInventory, customizationItems)
         BigWorld.player().inventory.sellVehicle(self.vehicle.invID, self.isCrewDismiss, itemsFromVehicle, itemsFromInventory, customizationItems, lambda code: self._response(code, callback))
 
     def __getGainSpendMoney(self, vehicle, vehShells, vehEqs, optDevicesToSell, inventory, customizationItems):

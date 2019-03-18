@@ -615,9 +615,9 @@ class BuyVehicleView(ViewImpl, EventSystemEntity):
     def __showHangar(self):
         if not self.__bootcamp.isInBootcamp() and self.__successOperation:
             if self.__previousAlias in (VIEW_ALIAS.VEHICLE_PREVIEW, VIEW_ALIAS.VEHICLE_PREVIEW_20):
-                if self.__previousAlias in (VIEW_ALIAS.VEHICLE_PREVIEW, VIEW_ALIAS.VEHICLE_PREVIEW_20):
-                    event_dispatcher.selectVehicleInHangar(self.__vehicle.intCD)
-                self.__previousAlias == VIEW_ALIAS.FRONTLINE_VEHICLE_PREVIEW_20 and self.__epicCtrl.showCustomScreen(FRONTLINE_SCREENS.REWARDS_SCREEN)
+                event_dispatcher.selectVehicleInHangar(self.__vehicle.intCD)
+            elif self.__previousAlias == VIEW_ALIAS.FRONTLINE_VEHICLE_PREVIEW_20:
+                self.__epicCtrl.showCustomScreen(FRONTLINE_SCREENS.REWARDS_SCREEN)
 
     def __onInHangar(self, *args):
         event_dispatcher.selectVehicleInHangar(self.__vehicle.intCD)

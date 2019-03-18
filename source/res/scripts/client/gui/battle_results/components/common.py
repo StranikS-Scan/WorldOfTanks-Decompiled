@@ -6,7 +6,6 @@ from account_helpers.AccountSettings import AccountSettings, ENABLE_RANKED_ANIMA
 from gui.Scaleform.locale.BATTLE_RESULTS import BATTLE_RESULTS
 from gui.Scaleform.locale.RANKED_BATTLES import RANKED_BATTLES
 from gui.Scaleform.genConsts.RANKEDBATTLES_ALIASES import RANKEDBATTLES_ALIASES
-from gui.Scaleform.genConsts.BATTLE_RESULT_TYPES import BATTLE_RESULT_TYPES
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.battle_results.components import base
 from gui.battle_results.components import style

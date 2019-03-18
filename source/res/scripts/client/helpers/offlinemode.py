@@ -21,6 +21,7 @@ FOV_ADJUST = math.radians(10)
 FOV_MIN = math.radians(10)
 FOV_MAX = math.radians(160)
 MOUSE_TOGGLE_KEYS = [Keys.KEY_ESCAPE, Keys.KEY_LEFTMOUSE]
+SPACE_LOAD_EPS = 0.0001
 
 class CameraTransform(object):
     matrix = Math.Matrix()
@@ -117,12 +118,12 @@ def _displayGUI(spaceName):
 
 
 def _offlineLoadCheck():
-    if BigWorld.spaceLoadStatus() > 0.5:
+    if BigWorld.spaceLoadStatus() > 1.0 - SPACE_LOAD_EPS:
         BigWorld.worldDrawEnabled(True)
         BigWorld.uniprofSceneStart()
         _clearGUI()
     else:
-        BigWorld.callback(1.0, _offlineLoadCheck)
+        BigWorld.callback(0.5, _offlineLoadCheck)
 
 
 g_spaceID = 0

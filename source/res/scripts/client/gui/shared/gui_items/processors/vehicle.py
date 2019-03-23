@@ -8,9 +8,10 @@ from AccountCommands import VEHICLE_SETTINGS_FLAG
 from bootcamp.Bootcamp import g_bootcamp
 from items import EQUIPMENT_TYPES
 from items.components.crewSkins_constants import NO_CREW_SKIN_ID
+from items.components.c11n_constants import SeasonType
 from account_shared import LayoutIterator
 from adisp import process, async
-from gui import SystemMessages
+from gui import SystemMessages, g_tankActiveCamouflage
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.SYSTEM_MESSAGES import SYSTEM_MESSAGES
 from gui.SystemMessages import SM_TYPE, CURRENCY_TO_SM_TYPE
@@ -334,6 +335,7 @@ class VehicleSeller(ItemProcessor):
         compMsg = None
         if self.__compensationRequired:
             compMsg = makeCrewSkinCompensationMessage(self.__compensationAmount)
+        g_tankActiveCamouflage[self.vehicle.intCD] = SeasonType.UNDEFINED
         if self.isDismantlingForMoney:
             localKey = 'vehicle_sell/success_dismantling'
             smType = SM_TYPE.Selling

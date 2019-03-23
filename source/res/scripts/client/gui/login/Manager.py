@@ -23,7 +23,7 @@ from soft_exception import SoftException
 from gui.Scaleform.Waiting import Waiting
 from Event import Event
 from PlayerEvents import g_playerEvents
-from connection_mgr import LOGIN_STATUS, INVALID_TOKEN2_EXPIRED
+from connection_mgr import LOGIN_STATUS
 _PERIPHERY_DEFAULT_LIFETIME = 15 * ONE_MINUTE
 _LIMIT_LOGIN_COUNT = 5
 _logger = logging.getLogger(__name__)
@@ -56,9 +56,7 @@ class Manager(ILoginManager):
         self._preferences = None
         self.__servers.fini()
         self.__servers = None
-        if self.__wgcManager is not None:
-            self.__wgcManager.destroy()
-            self.__wgcManager = None
+        self.stopWgc()
         return
 
     def initiateLogin(self, email, password, serverName, isSocialToken2Login, rememberUser):
@@ -219,7 +217,10 @@ class Manager(ILoginManager):
         return
 
     def checkWgcAvailability(self):
-        return self.__tryInitWgcManager() if self.__wgcManager is None else self.__wgcManager.checkWgcAvailability()
+        return self.__wgcManager.checkWgcAvailability() if self.__wgcManager is not None else self.__tryInitWgcManager()
+
+    def checkWgcCouldRetry(self, status):
+        return self.__wgcManager.checkWgcCouldRetry(status) if self.__wgcManager is not None else False
 
     def __tryInitWgcManager(self):
         if not self.__triedToInitWgc:
@@ -257,6 +258,9 @@ class _WgcModeManager(object):
     def checkWgcAvailability():
         return BigWorld.WGC_prepareLogin()
 
+    def checkWgcCouldRetry(self, status):
+        return self.connectionMgr.connectionMethod == CONNECTION_METHOD.TOKEN2 and (status == LOGIN_STATUS.SESSION_END or status == LOGIN_STATUS.LOGIN_REJECTED_INVALID_PASSWORD)
+
     def onLoggedOn(self, responseData):
         self.__token2ToStore = responseData['token2']
         if BigWorld.WGC_processingState() == constants.WGC_STATE.LOGIN_IN_PROGRESS:
@@ -292,11 +296,12 @@ class _WgcModeManager(object):
         Waiting.hide('login')
         return
 
-    def __onRejected(self, status, responseData):
-        errorMsg = responseData.get('errorMessage', '')
-        if status == LOGIN_STATUS.SESSION_END and errorMsg in INVALID_TOKEN2_EXPIRED:
+    def __onRejected(self, status, _):
+        if self.checkWgcCouldRetry(status):
             BigWorld.WGC_onToken2Expired()
             self.login(self.__selectedServer)
+        else:
+            BigWorld.WGC_onServerResponse(False)
 
     def __onDisconnected(self):
         BigWorld.WGC_onServerResponse(False)

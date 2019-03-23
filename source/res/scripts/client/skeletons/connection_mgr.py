@@ -51,6 +51,10 @@ class IConnectionManager(object):
     def databaseID(self):
         raise NotImplementedError
 
+    @property
+    def connectionMethod(self):
+        raise NotImplementedError
+
     def initiateConnection(self, params, password, serverName):
         raise NotImplementedError
 

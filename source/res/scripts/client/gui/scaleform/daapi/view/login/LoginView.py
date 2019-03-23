@@ -248,7 +248,7 @@ class LoginView(LoginPageMeta):
 
     def _onLoginRejected(self, loginStatus, responseData):
         Waiting.hide('login')
-        if not self._loginMode.skipRejectionError(loginStatus, responseData):
+        if not self._loginMode.skipRejectionError(loginStatus):
             if loginStatus == LOGIN_STATUS.LOGIN_REJECTED_BAN:
                 self.__loginRejectedBan(responseData)
             elif loginStatus == LOGIN_STATUS.LOGIN_REJECTED_RATE_LIMITED:

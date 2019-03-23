@@ -70,8 +70,8 @@ _COMPENSATION_TOOLTIP_CONTENT_RES_IDS = (R.views.lootBoxCompensationTooltipConte
 _COMPENSATION_TOOLTIP_CONTENT_CLASSES = {LootBoxCompensationTooltipTypes.CREW_SKINS: CrewSkinsCompensationTooltipContent,
  LootBoxCompensationTooltipTypes.BASE: CompensationTooltipContent,
  LootBoxCompensationTooltipTypes.VEHICLE: VehicleCompensationTooltipContent}
-_MIN_PROBABILITY = 33
-_MAX_PROBABILITY = 66
+_MIN_PROBABILITY = 7
+_MAX_PROBABILITY = 15
 _MIN_VEHICLE_LVL_BLUEPRINT_AWARD = 8
 
 class LootRewardDefModelPresenter(object):

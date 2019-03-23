@@ -8,7 +8,6 @@ from skeletons.account_helpers.settings_core import ISettingsCore
 from account_helpers.settings_core.settings_constants import GAME
 from base_mode import BaseMode
 from predefined_hosts import g_preDefinedHosts
-from connection_mgr import LOGIN_STATUS, INVALID_TOKEN2_EXPIRED
 _g_firstEntry = True
 
 class WgcMode(BaseMode):
@@ -67,11 +66,8 @@ class WgcMode(BaseMode):
     def doSocialLogin(self, *args):
         self._fallbackMode.doSocialLogin(*args)
 
-    def skipRejectionError(self, loginStatus, responseData):
-        if self.__wgcStoredUserSelected:
-            errorMsg = responseData.get('errorMessage', '')
-            return loginStatus == LOGIN_STATUS.SESSION_END and errorMsg in INVALID_TOKEN2_EXPIRED
-        return self._fallbackMode.skipRejectionError(loginStatus, responseData)
+    def skipRejectionError(self, loginStatus):
+        return self._loginManager.checkWgcCouldRetry(loginStatus) if self.__wgcStoredUserSelected else self._fallbackMode.skipRejectionError(loginStatus)
 
     def __onWgcError(self):
         self.__stop()

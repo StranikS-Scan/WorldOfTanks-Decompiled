@@ -14,6 +14,7 @@ from gui.impl.lobby.progressive_reward.progressive_award_sounds import setSoundS
 from gui.impl.pub import ViewImpl
 from gui.impl.pub.lobby_window import LobbyWindow
 from gui.impl.backport.backport_tooltip import createTooltipData, BackportTooltipWindow
+from gui.Scaleform.daapi.view.lobby.techtree.techtree_dp import g_techTreeDP
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.shared.event_dispatcher import showBlueprintView
 from helpers import dependency
@@ -29,6 +30,7 @@ class ProgressiveRewardAwardView(ViewImpl):
         self.__items = {}
         self.__rewards = {}
         self.__currentStep = 0
+        g_techTreeDP.load()
 
     @property
     def viewModel(self):

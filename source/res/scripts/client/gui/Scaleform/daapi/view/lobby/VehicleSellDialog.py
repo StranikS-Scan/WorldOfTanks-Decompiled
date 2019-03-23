@@ -3,8 +3,7 @@
 import BigWorld
 from account_helpers.AccountSettings import AccountSettings
 from debug_utils import LOG_ERROR, LOG_CURRENT_EXCEPTION
-from items.components.c11n_constants import SeasonType
-from gui import SystemMessages, makeHtmlString, g_tankActiveCamouflage
+from gui import SystemMessages, makeHtmlString
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform.daapi.view.lobby.customization.shared import TYPES_ORDER
 from gui.Scaleform.daapi.view.lobby.store.browser.ingameshop_helpers import isIngameShopEnabled
@@ -276,7 +275,6 @@ class VehicleSellDialog(VehicleSellDialogMeta):
         vehicleSeller = VehicleSeller(vehicle, shells, eqs, optDevicesToSell, inventory, customizationItems, isDismissCrew)
         currentMoneyGold = self.itemsCache.items.stats.money.get(Currency.GOLD, 0)
         spendMoneyGold = vehicleSeller.spendMoney.get(Currency.GOLD, 0)
-        g_tankActiveCamouflage[vehicle.intCD] = SeasonType.UNDEFINED
         if isIngameShopEnabled() and currentMoneyGold < spendMoneyGold:
             showBuyGoldForEquipment(spendMoneyGold)
         else:

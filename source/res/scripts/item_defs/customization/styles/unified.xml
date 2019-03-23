@@ -2884,6 +2884,46 @@
     <userString>	#vehicle_customization:styles/main_styles	</userString>
     <season>	ALL	</season>
     <historical>	false	</historical>
+    <priceGroup>	special style notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <nations>	japan	</nations>
+      </include>
+    </vehicleFilter>
+    <style>
+      <id>	251	</id>
+      <texture>	gui/maps/vehicles/styles/left_alive.png	</texture>
+      <description>	#vehicle_customization:main_style/left_alive_desc	</description>
+      <userString>	#vehicle_customization:main_style/left_alive	</userString>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	642	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <decals>
+            <item>
+              <id>	682	</id>
+              <appliedTo>	13104	</appliedTo>
+            </item>
+            <item>
+              <id>	683	</id>
+              <appliedTo>	52416	</appliedTo>
+            </item>
+          </decals>
+        </outfit>
+      </outfits>
+    </style>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/main_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	false	</historical>
     <priceGroup>	generic custom look na	</priceGroup>
     <vehicleFilter>
       <exclude>

@@ -15,6 +15,9 @@ class ILoginManager(object):
     def checkWgcAvailability(self):
         raise NotImplementedError
 
+    def checkWgcCouldRetry(self, loginStatus):
+        raise NotImplementedError
+
     def addOnWgcErrorListener(self, listener):
         raise NotImplementedError
 

@@ -1,15 +1,15 @@
 <japan.xml>
-  <xmlns:czech0>	ussr	</xmlns:czech0>
-  <xmlns:germany>	germany	</xmlns:germany>
-  <xmlns:usa>	usa	</xmlns:usa>
-  <xmlns:china>	china	</xmlns:china>
-  <xmlns:france>	france	</xmlns:france>
-  <xmlns:uk>	uk	</xmlns:uk>
-  <xmlns:japan>	japan	</xmlns:japan>
-  <xmlns:czech>	czech	</xmlns:czech>
-  <xmlns:sweden>	sweden	</xmlns:sweden>
-  <xmlns:poland>	poland	</xmlns:poland>
-  <xmlns:italy>	italy	</xmlns:italy>
+  <japan:J04_Ke_Ni9>	ussr	</japan:J04_Ke_Ni9>
+  <japan:J04_Ke_Ni2>	germany	</japan:J04_Ke_Ni2>
+  <japan:J04_Ke_Ni8>	usa	</japan:J04_Ke_Ni8>
+  <japan:J03_Ha_Go9>	china	</japan:J03_Ha_Go9>
+  <japan:J04_Ke_Ni1>	france	</japan:J04_Ke_Ni1>
+  <japan:J04_Ke_Ni7>	uk	</japan:J04_Ke_Ni7>
+  <japan:J04_Ke_Ni4>	japan	</japan:J04_Ke_Ni4>
+  <japan:J04_Ke_Ni0>	czech	</japan:J04_Ke_Ni0>
+  <japan:J04_Ke_Ni6>	sweden	</japan:J04_Ke_Ni6>
+  <japan:J04_Ke_Ni5>	poland	</japan:J04_Ke_Ni5>
+  <japan:J04_Ke_Ni3>	italy	</japan:J04_Ke_Ni3>
   <itemGroup>
     <userString>	#vehicle_customization:camouflage/opaque	</userString>
     <season>	winter	</season>
@@ -1438,6 +1438,64 @@
         <J26_Type_89>	1.82 1.82 0.000000 0.000000	</J26_Type_89>
         <J27_O_I_120>	3.2 3.2 0.000000 0.4	</J27_O_I_120>
         <J28_O_I_100>	1.73 1.73 0.000000 0.000000	</J28_O_I_100>
+      </tiling>
+    </camouflage>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:camouflage/opaque	</userString>
+    <season>	ALL	</season>
+    <historical>	false	</historical>
+    <priceGroup>	camouflages notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <nations>	japan	</nations>
+      </include>
+    </vehicleFilter>
+    <camouflage>
+      <id>	642	</id>
+      <texture>	vehicles/russian/Camouflage/left_alive.dds	</texture>
+      <description>	#vehicle_customization:camouflage/left_alive/description	</description>
+      <scales>	1.3 1 0.7	</scales>
+      <userString>	#vehicle_customization:camouflage/left_alive/label	</userString>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <palettes>
+        <palette>
+          <c0>	71 77 84 255	</c0>
+          <c1>	81 49 48 255	</c1>
+          <c2>	64 65 71 255	</c2>
+          <c3>	10 5 5 255	</c3>
+        </palette>
+      </palettes>
+      <tiling>
+        <japan:J01_NC27>	0.67 0.67 5.58 6.02	</japan:J01_NC27>
+        <japan:J02_Te_Ke>	2.5 2.5 9.64 0.91	</japan:J02_Te_Ke>
+        <japan:J03_Ha_Go>	1.84 1.84 0.07 0.12	</japan:J03_Ha_Go>
+        <japan:J04_Ke_Ni>	1.28 1.28 2.42 9.54	</japan:J04_Ke_Ni>
+        <japan:J05_Ke_Ni_B>	1.08 1.08 8.01 11.23	</japan:J05_Ke_Ni_B>
+        <japan:J06_Ke_Ho>	2.12 2.12 1.47 6.58	</japan:J06_Ke_Ho>
+        <japan:J07_Chi_Ha>	1.98 1.98 5.14 1.44	</japan:J07_Chi_Ha>
+        <japan:J08_Chi_Nu>	2.7 2.7 2.05 6.23	</japan:J08_Chi_Nu>
+        <japan:J09_Chi_He>	2.84 2.84 6.04 2.81	</japan:J09_Chi_He>
+        <japan:J10_Chi_To>	0.93 0.93 9.79 4.79	</japan:J10_Chi_To>
+        <japan:J02_Te_Ke0>	2.3 2.3 11.88 3.49	</japan:J02_Te_Ke0>
+        <japan:J02_Te_Ke1>	3.2 3.2 9.79 0.13	</japan:J02_Te_Ke1>
+        <japan:J02_Te_Ke2>	1.1 1.1 4.52 7.74	</japan:J02_Te_Ke2>
+        <japan:J02_Te_Ke3>	1.49 1.49 5.52 4.95	</japan:J02_Te_Ke3>
+        <japan:J02_Te_Ke4>	2 2 7.67 6.92	</japan:J02_Te_Ke4>
+        <japan:J02_Te_Ke5>	1.25 1.25 2.54 1.92	</japan:J02_Te_Ke5>
+        <japan:J02_Te_Ke6>	2.13 2.13 8.68 2.18	</japan:J02_Te_Ke6>
+        <japan:J02_Te_Ke7>	2.5 2.5 0.25 1.51	</japan:J02_Te_Ke7>
+        <japan:J02_Te_Ke8>	1.9 1.9 0.46 0.000000	</japan:J02_Te_Ke8>
+        <japan:J02_Te_Ke9>	1.3 1.3 7.64 4.06	</japan:J02_Te_Ke9>
+        <japan:J03_Ha_Go0>	0.94 0.94 0.09 8.7	</japan:J03_Ha_Go0>
+        <japan:J03_Ha_Go1>	1.59 1.59 4.93 4.17	</japan:J03_Ha_Go1>
+        <japan:J03_Ha_Go2>	1.25 1.25 2.12 7.36	</japan:J03_Ha_Go2>
+        <japan:J03_Ha_Go3>	1.83 1.83 5.83 5.62	</japan:J03_Ha_Go3>
+        <japan:J03_Ha_Go4>	1.3 1.3 6.3 3.63	</japan:J03_Ha_Go4>
+        <japan:J03_Ha_Go5>	1.83 1.83 1.96 5.96	</japan:J03_Ha_Go5>
+        <japan:J03_Ha_Go6>	0.94 0.94 3.97 0.13	</japan:J03_Ha_Go6>
+        <japan:J03_Ha_Go7>	1.85 1.85 8.7 4.66	</japan:J03_Ha_Go7>
+        <japan:J03_Ha_Go8>	2.01 2.01 4.32 0.000000	</japan:J03_Ha_Go8>
       </tiling>
     </camouflage>
   </itemGroup>

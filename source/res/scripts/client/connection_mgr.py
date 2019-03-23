@@ -247,6 +247,10 @@ class ConnectionManager(IConnectionManager):
     def databaseID(self):
         return BigWorld.player().databaseID if not self.isDisconnected() else None
 
+    @property
+    def connectionMethod(self):
+        return self.__connectionMethod
+
     def disconnect(self):
         BigWorld.disconnect()
 

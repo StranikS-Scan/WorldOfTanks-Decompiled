@@ -56,13 +56,14 @@ class InventoryRequester(AbstractSyncDataRequester, IInventoryRequester):
                     outfitData = self.getOutfitData(vehicleIntCD, season)
                     if outfitData:
                         outfit = Outfit(strCompactDescr=outfitData.compDescr)
-                        for itemCD, count in outfit.itemsCounter.iteritems():
-                            self.__c11nItemsAppliedCounts[itemCD][vehicleIntCD] = count
-
                         styleId = outfit.id
-                        if styleId != 0 and outfitData.flags & StyleFlags.INSTALLED:
-                            styleIntCD = vehicles.makeIntCompactDescrByID('customizationItem', CustomizationType.STYLE, styleId)
-                            self.__c11nItemsAppliedCounts[styleIntCD][vehicleIntCD] = 1
+                        if outfitData.flags == StyleFlags.ACTIVE:
+                            if styleId != 0:
+                                styleIntCD = vehicles.makeIntCompactDescrByID('customizationItem', CustomizationType.STYLE, styleId)
+                                self.__c11nItemsAppliedCounts[styleIntCD][vehicleIntCD] = 1
+                            else:
+                                for itemCD, count in outfit.itemsCounter.iteritems():
+                                    self.__c11nItemsAppliedCounts[itemCD][vehicleIntCD] = count
 
     def updateC11nItemAppliedCount(self, itemCD, vehicleIntCD, count):
         self.__c11nItemsAppliedCounts[itemCD][vehicleIntCD] = count

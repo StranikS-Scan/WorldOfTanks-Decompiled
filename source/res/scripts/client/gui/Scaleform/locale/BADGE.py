@@ -168,6 +168,8 @@ class BADGE(object):
     BADGE_69_DESCR = '#badge:badge_69_descr'
     BADGE_70 = '#badge:badge_70'
     BADGE_70_DESCR = '#badge:badge_70_descr'
+    BADGE_71 = '#badge:badge_71'
+    BADGE_71_DESCR = '#badge:badge_71_descr'
     BADGE_ALL_SHORT_ENUM = (BADGE_10_SHORT,
      BADGE_11_SHORT,
      BADGE_12_SHORT,
@@ -340,7 +342,9 @@ class BADGE(object):
      BADGE_69,
      BADGE_69_DESCR,
      BADGE_70,
-     BADGE_70_DESCR)
+     BADGE_70_DESCR,
+     BADGE_71,
+     BADGE_71_DESCR)
     BADGE_ALL_DESCR_ENUM = (BADGE_0_DESCR,
      BADGE_1_DESCR,
      BADGE_2_DESCR,
@@ -408,7 +412,8 @@ class BADGE(object):
      BADGE_67_DESCR,
      BADGE_68_DESCR,
      BADGE_69_DESCR,
-     BADGE_70_DESCR)
+     BADGE_70_DESCR,
+     BADGE_71_DESCR)
 
     @classmethod
     def badgeName(cls, key0):

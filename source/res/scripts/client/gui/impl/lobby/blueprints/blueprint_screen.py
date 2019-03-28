@@ -9,7 +9,6 @@ from frameworks.wulf.gui_constants import ViewFlags, ViewStatus
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.go_back_helper import getBackBtnLabel
-from gui.Scaleform.daapi.view.lobby.header.LobbyHeader import HeaderMenuVisibilityState
 from gui.Scaleform.daapi.view.lobby.techtree.techtree_dp import g_techTreeDP
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.impl import dialogs
@@ -23,7 +22,6 @@ from gui.impl.pub import ViewImpl
 from gui.server_events.formatters import DISCOUNT_TYPE
 from gui.shared import g_eventBus, event_dispatcher, events
 from gui.shared.event_bus import EVENT_BUS_SCOPE
-from gui.shared.events import LobbyHeaderMenuEvent
 from gui.shared.gui_items.items_actions import factory
 from gui.shared.gui_items.items_actions.actions import UnlockItemActionWithResult
 from gui.shared.utils.functions import getVehTypeIconName
@@ -69,7 +67,6 @@ class BlueprintScreen(ViewImpl):
     def _initialize(self):
         super(BlueprintScreen, self)._initialize()
         self.__addListeners()
-        self.__changeMainMenuVisibility(HeaderMenuVisibilityState.NOTHING)
         vehicle = self.__vehicle
         bpRequester = self.__itemsCache.items.blueprints
         vehType = getVehTypeIconName(vehicle.type, vehicle.isElite)
@@ -112,7 +109,6 @@ class BlueprintScreen(ViewImpl):
             g_blueprintGenerator.cancel(vehicleCD=self.__vehicle.intCD)
         self.__removeListeners()
         AccountSettings.setSettings(VEHICLES_WITH_BLUEPRINT_CONFIRM, self.__accountSettings)
-        self.__changeMainMenuVisibility(HeaderMenuVisibilityState.ALL)
         self.__exitEvent = None
         self.__convertedIndexes = None
         self.__accountSettings = None
@@ -270,10 +266,6 @@ class BlueprintScreen(ViewImpl):
 
         schemeItems.invalidate()
         model.setReceivedCount(receivedCount)
-
-    @staticmethod
-    def __changeMainMenuVisibility(state):
-        g_eventBus.handleEvent(LobbyHeaderMenuEvent(LobbyHeaderMenuEvent.TOGGLE_VISIBILITY, ctx={'state': state}), EVENT_BUS_SCOPE.LOBBY)
 
     def __getTooltipData(self, ttId):
         if ttId == BlueprintScreenTooltips.TOOLTIP_XP_DISCOUNT:

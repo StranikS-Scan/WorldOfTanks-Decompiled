@@ -648,3 +648,7 @@ class AdventCalendarEvent(HasCtxEvent):
 
 class ProgressiveRewardEvent(HasCtxEvent):
     WIDGET_WAS_SHOWN = 'progressiveWidgetWasShown'
+
+
+class HangarDogEvent(HasCtxEvent):
+    ON_BOWL_CLICKED = 'onDogBowlClicked'

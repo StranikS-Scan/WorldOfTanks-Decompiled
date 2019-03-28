@@ -106,6 +106,7 @@ def getCompensationFormattersMap():
 def getDefaultFormattersMap():
     simpleBonusFormatter = SimpleBonusFormatter()
     tokenBonusFormatter = TokenBonusFormatter()
+    countableIntegralBonusFormatter = CountableIntegralBonusFormatter()
     return {'strBonus': simpleBonusFormatter,
      Currency.GOLD: simpleBonusFormatter,
      Currency.CREDITS: simpleBonusFormatter,
@@ -130,34 +131,22 @@ def getDefaultFormattersMap():
      'items': ItemsBonusFormatter(),
      'dossier': DossierBonusFormatter(),
      'blueprints': BlueprintBonusFormatter(),
-     'crewSkins': CrewSkinsBonusFormatter()}
-
-
-def getMisssionsFormattersMap():
-    countableIntegralBonusFormatter = CountableIntegralBonusFormatter()
-    mapping = getDefaultFormattersMap()
-    mapping.update({'slots': countableIntegralBonusFormatter,
-     'berths': countableIntegralBonusFormatter})
-    return mapping
+     'crewSkins': CrewSkinsBonusFormatter(),
+     'slots': countableIntegralBonusFormatter,
+     'berths': countableIntegralBonusFormatter}
 
 
 def getEventBoardsFormattersMap():
-    countableIntegralBonusFormatter = CountableIntegralBonusFormatter()
     mapping = getDefaultFormattersMap()
     mapping.update({'dossier': EventBoardsDossierBonusFormatter(),
-     'badgesGroup': BadgesGroupBonusFormatter(),
-     'slots': countableIntegralBonusFormatter,
-     'berths': countableIntegralBonusFormatter})
+     'badgesGroup': BadgesGroupBonusFormatter()})
     return mapping
 
 
 def getLinkedSetFormattersMap():
-    countableIntegralBonusFormatter = CountableIntegralBonusFormatter()
     tokenBonusFormatter = LinkedSetTokenBonusFormatter()
     mapping = getDefaultFormattersMap()
-    mapping.update({'slots': countableIntegralBonusFormatter,
-     'berths': countableIntegralBonusFormatter,
-     'battleToken': tokenBonusFormatter,
+    mapping.update({'battleToken': tokenBonusFormatter,
      'tokens': tokenBonusFormatter,
      'items': LinkedSetItemsBonusFormatter(),
      'premium': LinkedSetPremiumDaysBonusFormatter(),
@@ -167,7 +156,7 @@ def getLinkedSetFormattersMap():
 
 
 def getEpicSetFormattersMap():
-    mapping = getMisssionsFormattersMap()
+    mapping = getDefaultFormattersMap()
     mapping.update({'items': EpicItemsBonusFormatter(),
      'dossier': EpicDossierBonusFormatter()})
     return mapping
@@ -180,7 +169,7 @@ def getPackRentVehiclesFormattersMap():
 
 
 def getLootboxesFormatterMap():
-    mapping = getMisssionsFormattersMap()
+    mapping = getDefaultFormattersMap()
     mapping.update({'vehicles': RentVehiclesBonusFormatter(),
      'tmanToken': TmanTemplateBonusFormatter()})
     return mapping
@@ -188,10 +177,6 @@ def getLootboxesFormatterMap():
 
 def getDefaultAwardFormatter():
     return AwardsPacker(getDefaultFormattersMap())
-
-
-def getMissionAwardPacker():
-    return AwardsPacker(getMisssionsFormattersMap())
 
 
 def getEpicViewAwardPacker():
@@ -217,8 +202,7 @@ def getLootboxesAwardsPacker():
 def getPersonalMissionAwardPacker():
     mapping = getDefaultFormattersMap()
     mapping.update({'completionTokens': CompletionTokensBonusFormatter(),
-     'freeTokens': FreeTokensBonusFormatter(),
-     'slots': CountableIntegralBonusFormatter()})
+     'freeTokens': FreeTokensBonusFormatter()})
     return AwardsPacker(mapping)
 
 
@@ -231,7 +215,6 @@ def getOperationPacker():
 
 def getAnniversaryPacker():
     formattersMap = getDefaultFormattersMap()
-    formattersMap['slots'] = CountableIntegralBonusFormatter()
     formattersMap['dossier'] = LoyalServiceBonusFormatter()
     return AwardsPacker(formattersMap)
 
@@ -309,7 +292,7 @@ PreformattedBonus.__new__.__defaults__ = (None,
 class QuestsBonusComposer(object):
 
     def __init__(self, awardsFormatter=None):
-        self.__bonusFormatter = awardsFormatter or getMissionAwardPacker()
+        self.__bonusFormatter = awardsFormatter or getDefaultAwardFormatter()
 
     def getPreformattedBonuses(self, bonuses):
         return self.__bonusFormatter.format(bonuses)

@@ -860,4 +860,32 @@
       <mirror>	false	</mirror>
     </decal>
   </itemGroup>
+  <itemGroup>
+    <name>	wot_classic	</name>
+    <userString>	#vehicle_customization:inscription/special	</userString>
+    <season>	ALL	</season>
+    <historical>	false	</historical>
+    <priceGroup>	inscriptions notInShop	</priceGroup>
+    <type>	INSCRIPTION	</type>
+    <decal>
+      <id>	702	</id>
+      <texture>	gui/maps/vehicles/decals/inscriptions/special/inscription_238.dds	</texture>
+      <userString>	#vehicle_customization:inscription/special/special_238	</userString>
+      <mirror>	false	</mirror>
+    </decal>
+  </itemGroup>
+  <itemGroup>
+    <name>	victory	</name>
+    <userString>	#vehicle_customization:inscription/special	</userString>
+    <season>	ALL	</season>
+    <historical>	true	</historical>
+    <priceGroup>	inscriptions notInShop	</priceGroup>
+    <type>	INSCRIPTION	</type>
+    <decal>
+      <id>	704	</id>
+      <texture>	gui/maps/vehicles/decals/inscriptions/special/inscription_243.dds	</texture>
+      <userString>	#vehicle_customization:inscription/special/special_243	</userString>
+      <mirror>	false	</mirror>
+    </decal>
+  </itemGroup>
 </special_inscriptions.xml>

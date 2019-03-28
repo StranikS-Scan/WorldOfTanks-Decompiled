@@ -114,6 +114,7 @@ class RewardWindowContent(ViewImpl):
 
 class TwitchRewardWindowContent(RewardWindowContent):
     __slots__ = ()
+    _BONUSES_ORDER = ('customizations', Currency.GOLD, 'vehicles')
 
     def handleNextButton(self):
         bonuses = self._quest.getBonuses('tokens')

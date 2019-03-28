@@ -1677,5 +1677,27 @@
         </item>
       </value>
     </badge>
+    <badge>
+      <name>	rng	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	71	  <name>	id	</name>
+          <type>	int	</type>
+        </item>
+        <item>
+          <name>	realm	</name>
+          <type>	dict	</type>
+          <value>
+            <item>
+              <name>	exclude	</name>
+              <type>	list	</type>
+              <value>
+                <item>	RU	</item>
+              </value>
+            </item>
+          </value>
+        </item>
+      </value>
+    </badge>
   </badges>
 </badges.xml>

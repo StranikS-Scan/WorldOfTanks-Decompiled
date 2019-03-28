@@ -641,4 +641,27 @@
       <mirror>	False	</mirror>
     </projection_decal>
   </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:projection_decals/special	</userString>
+    <season>	ALL	</season>
+    <historical>	false	</historical>
+    <priceGroup>	projection_decals notInShop 150	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <levels>	8 10	</levels>
+      </include>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G119_Panzer58_BF germany:G114_Rheinmetall_Skorpian usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <projection_decal>
+      <id>	56	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/special/projection_decal_16.dds	</texture>
+      <description>	#vehicle_customization:projection_decals/special/projection_decal_16/description	</description>
+      <userString>	#vehicle_customization:projection_decals/special/projection_decal_16	</userString>
+      <tags>	direction_left_to_right formfactor_square	</tags>
+      <mirror>	true	</mirror>
+    </projection_decal>
+    <name>	Apex Predator	</name>
+  </itemGroup>
 </projection_decals.xml>

@@ -74,5 +74,22 @@
         </effect>
       </effects>
     </modification>
+    <modification>
+      <id>	5	</id>
+      <texture>	gui/maps/vehicles/modifications/effect.png	</texture>
+      <effects>
+        <effect>
+          <type>	paint_age	</type>
+          <value>	-5.803	</value>
+        </effect>
+        <effect>
+          <type>	paint_fading	</type>
+          <value>	0.000000	</value>
+        </effect>
+      </effects>
+      <userString>	#vehicle_customization:modifications/age_effect_05	</userString>
+      <historical>	true	</historical>
+      <tags>	hiddenInUI	</tags>
+    </modification>
   </itemGroup>
 </modifications.xml>

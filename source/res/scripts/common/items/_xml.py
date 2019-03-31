@@ -1,10 +1,12 @@
+# Python bytecode 2.6 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/items/_xml.py
+# Compiled at: 2010-12-02 20:05:07
 import ResMgr
 
 def raiseWrongXml(xmlContext, subsectionName, msg):
     fileName = subsectionName
-    while xmlContext is not None:
-        fileName = xmlContext[1] + ('/' + fileName if fileName else '')
+    while 1:
+        fileName = xmlContext is not None and xmlContext[1] + ('/' + fileName if fileName else '')
         xmlContext = xmlContext[0]
 
     raise Exception, "error in '" + fileName + "': " + msg
@@ -36,14 +38,6 @@ def readString(xmlCtx, section, subsectionName):
     return subsection.asString
 
 
-def readStringOrNone(xmlCtx, section, subsectionName):
-    subsection = section[subsectionName]
-    if subsection is None:
-        return
-    else:
-        return subsection.asString
-
-
 def readNonEmptyString(xmlCtx, section, subsectionName):
     v = section.readString(subsectionName)
     if not v:
@@ -51,14 +45,7 @@ def readNonEmptyString(xmlCtx, section, subsectionName):
     return v
 
 
-def readBool(xmlCtx, section, subsectionName):
-    subsection = section[subsectionName]
-    if subsection is None:
-        raiseWrongSection(xmlCtx, subsectionName if subsectionName else section.name)
-    return subsection.asBool
-
-
-def readInt(xmlCtx, section, subsectionName, minVal = None, maxVal = None):
+def readInt(xmlCtx, section, subsectionName, minVal=None, maxVal=None):
     wrongVal = -123456789
     v = section.readInt(subsectionName, wrongVal)
     if v == wrongVal:
@@ -131,7 +118,7 @@ def readTupleOfFloats(xmlCtx, section, subsectionName, count):
         raiseWrongSection(xmlCtx, subsectionName if subsectionName else section.name)
 
 
-def readTupleOfInts(xmlCtx, section, subsectionName, count = None):
+def readTupleOfInts(xmlCtx, section, subsectionName, count=None):
     strings = getSubsection(xmlCtx, section, subsectionName).asString.split()
     if count is not None and len(strings) != count:
         raiseWrongXml(xmlCtx, subsectionName, '%d ints expected' % count)

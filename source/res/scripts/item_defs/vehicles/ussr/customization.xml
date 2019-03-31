@@ -1,0 +1,603 @@
+<customization.xml>
+  <armorColor>	61 62 42 0	</armorColor>
+  <inscriptionColors>
+    <c0>	0 0 0 4	</c0>
+    <c1>	0 0 0 5	</c1>
+    <c2>	0 0 0 6	</c2>
+    <c3>	0 0 0 0	</c3>
+    <c4>	0 0 0 0	</c4>
+    <c5>	0 0 0 0	</c5>
+    <c6>	0 0 0 0	</c6>
+    <c7>	0 0 0 0	</c7>
+    <c8>	0 0 0 0	</c8>
+    <c9>	0 0 0 0	</c9>
+    <c10>	0 0 0 0	</c10>
+    <c11>	0 0 0 0	</c11>
+    <c12>	0 0 0 0	</c12>
+    <c13>	0 0 0 0	</c13>
+    <c14>	0 0 0 0	</c14>
+    <c15>	0 0 0 0	</c15>
+  </inscriptionColors>
+  <camouflageGroups>
+    <bicolor>
+      <userString>	#vehicle_customization:camouflage/bicolor	</userString>
+    </bicolor>
+    <tricolor>
+      <userString>	#vehicle_customization:camouflage/tricolor	</userString>
+    </tricolor>
+  </camouflageGroups>
+  <camouflages>
+    <Katukov>
+      <texture>	vehicles/russian/Camouflage/Cussr_1_1Katukov.dds	</texture>
+      <priceFactor>	0.5	</priceFactor>
+      <description>	#vehicle_customization:camouflage/ussr/bicolor/Katukov	</description>
+      <id>	3	</id>
+      <groups>	bicolor	</groups>
+      <colors>
+        <c0>	182 242 145 7	</c0>
+        <c1>	255 255 255 255	</c1>
+        <c2>	248 249 193 214	</c2>
+        <c3>	176 255 243 32	</c3>
+      </colors>
+      <tiling>
+        <IS>	2.3 2.3 0.74 0.27	</IS>
+        <SU-85>	2.4 3 0.5 0.8	</SU-85>
+        <BT-7>	3.5 1.8 0.33 0.24	</BT-7>
+        <T-34>	3 2.3 0.16 0.21	</T-34>
+        <KV>	3.7 2.2 0.35 0.94	</KV>
+        <T-28>	3 3.9 0.2 0.6	</T-28>
+        <T-34-85>	3 3 0.06 0.09	</T-34-85>
+        <BT-2>	3 1.5 0.4 0.000000	</BT-2>
+        <T-26>	3.7 2 0.2 0.000000	</T-26>
+        <AT-1>	1.8 1.6 0.21 0.63	</AT-1>
+        <MS-1>	2.4 1.3 0.6 0.4	</MS-1>
+        <A-20>	2.4 2 0.63 0.44	</A-20>
+        <KV-1s>	3 3 1 0.67	</KV-1s>
+        <SU-5>	2.3 1.6 0.6 0.000000	</SU-5>
+        <S-51>	3 2.4 0.7 0.24	</S-51>
+        <SU-18>	2.6 1.3 1 0.000000	</SU-18>
+        <SU-100>	3 2.2 0.09 0.98	</SU-100>
+        <BT-SV>	2.4 1.8 0.4 0.000000	</BT-SV>
+        <SU-152>	2.3 2.8 0.06 0.2	</SU-152>
+        <IS-3>	3 2.3 0.41 0.000000	</IS-3>
+        <T-44>	3.3 2.3 0.2 0.13	</T-44>
+        <IS-4>	3 2.5 0.000000 0.6	</IS-4>
+        <T-46>	3 3.7 0.000000 0.2	</T-46>
+        <T-43>	3 3 0.01 0.07	</T-43>
+        <SU-76>	3 3.3 0.44 0.42	</SU-76>
+        <GAZ-74b>	2.5 3 0.28 0.000000	</GAZ-74b>
+        <SU-8>	3.4 2.4 0.19 0.93	</SU-8>
+        <SU-14>	3 3 0.37 0.68	</SU-14>
+        <Valentine_LL>	3 2.5 0.4 0.09	</Valentine_LL>
+        <Matilda_II_LL>	2 1.8 0.2 0.18	</Matilda_II_LL>
+        <Churchill_LL>	3 3 0.06 0.04	</Churchill_LL>
+        <KV-220>	3 3 0.000000 0.000000	</KV-220>
+        <KV-3>	3 3 0.54 0.16	</KV-3>
+        <T-54>	2.7 3 0.24 0.19	</T-54>
+        <IS-7>	2.5 1.7 0.19 0.09	</IS-7>
+        <ISU-152>	4.2 3.1 0.59 0.24	</ISU-152>
+        <Object_212>	2.7 2.3 0.2 0.6	</Object_212>
+        <Object_704>	2.3 2.5 0.3 0.000000	</Object_704>
+        <SU-26>	3 2.2 0.000000 0.000000	</SU-26>
+        <KV-13>	3 2 0.6 0.000000	</KV-13>
+        <Object_261>	3 3 0.000000 0.000000	</Object_261>
+        <KV-5>	3 3 0.000000 0.87	</KV-5>
+        <A-32>	2.2 3 0.2 0.2	</A-32>
+        <T-127>	4.7 2.8 1 0.54	</T-127>
+        <M3_Stuart_LL>	2.6 2.5 0.000000 0.52	</M3_Stuart_LL>
+        <T-50>	2.4 2.4 0.44 1	</T-50>
+        <T_50_2>	2.9 2.9 0.16 0.32	</T_50_2>
+        <SU_85I>	2.7 2.7 0.92 0.8	</SU_85I>
+      </tiling>
+    </Katukov>
+    <BrownStains>
+      <texture>	vehicles/russian/Camouflage/Cussr_1_2BrownStains.dds	</texture>
+      <priceFactor>	0.5	</priceFactor>
+      <description>	#vehicle_customization:camouflage/ussr/bicolor/BrownStains	</description>
+      <id>	4	</id>
+      <groups>	bicolor	</groups>
+      <colors>
+        <c0>	20 1 1 255	</c0>
+        <c1>	254 200 73 15	</c1>
+        <c2>	239 242 125 0	</c2>
+        <c3>	242 210 102 19	</c3>
+      </colors>
+      <tiling>
+        <IS>	2 2.7 0.27 0.86	</IS>
+        <SU-85>	3.6 3 0.46 0.63	</SU-85>
+        <BT-7>	3 3.2 0.04 0.6	</BT-7>
+        <T-34>	3 3.1 0.3 0.38	</T-34>
+        <KV>	2.6 4 0.64 0.8	</KV>
+        <T-28>	6.2 3.7 0.92 0.4	</T-28>
+        <T-34-85>	4 3.3 0.19 0.45	</T-34-85>
+        <BT-2>	4.2 2.4 0.05 0.4	</BT-2>
+        <T-26>	3.7 2.2 0.6 0.4	</T-26>
+        <AT-1>	3 3 0.2 0.15	</AT-1>
+        <MS-1>	2.6 2.8 0.4 0.12	</MS-1>
+        <A-20>	3 3 0.94 0.01	</A-20>
+        <KV-1s>	2.6 3 0.28 0.4	</KV-1s>
+        <SU-5>	3 3.3 0.000000 0.4	</SU-5>
+        <S-51>	3 2.6 0.000000 0.29	</S-51>
+        <SU-18>	2.4 2.5 0.03 0.21	</SU-18>
+        <SU-100>	3 1.7 0.6 0.26	</SU-100>
+        <BT-SV>	2.3 2.8 0.24 0.32	</BT-SV>
+        <SU-152>	3 3.1 0.000000 0.4	</SU-152>
+        <IS-3>	5 3 0.46 0.35	</IS-3>
+        <T-44>	3.5 2.4 0.22 0.78	</T-44>
+        <IS-4>	3 4.4 0.4 0.32	</IS-4>
+        <T-46>	5 3 0.000000 0.2	</T-46>
+        <T-43>	3 2.5 0.000000 0.76	</T-43>
+        <SU-76>	3 4.2 0.15 0.000000	</SU-76>
+        <GAZ-74b>	4.8 3.7 0.61 0.44	</GAZ-74b>
+        <SU-8>	4.1 3 0.26 0.05	</SU-8>
+        <SU-14>	3.6 3.1 0.2 0.56	</SU-14>
+        <Valentine_LL>	2.5 3.4 0.02 0.27	</Valentine_LL>
+        <Matilda_II_LL>	3 5 0.2 0.000000	</Matilda_II_LL>
+        <Churchill_LL>	3.6 3.1 0.25 0.15	</Churchill_LL>
+        <KV-220>	4.1 3.7 0.2 0.000000	</KV-220>
+        <KV-3>	3.8 3.4 0.2 0.4	</KV-3>
+        <T-54>	3.9 4.2 0.18 0.36	</T-54>
+        <IS-7>	6.3 3.9 0.4 0.000000	</IS-7>
+        <ISU-152>	5 4.6 0.6 0.000000	</ISU-152>
+        <Object_212>	4.8 3.7 0.4 0.000000	</Object_212>
+        <Object_704>	3 3 0.43 0.1	</Object_704>
+        <SU-26>	4.4 3.3 0.58 0.57	</SU-26>
+        <KV-13>	3.2 3.8 0.34 0.47	</KV-13>
+        <Object_261>	3.6 3.6 0.000000 0.000000	</Object_261>
+        <KV-5>	5 3.7 0.4 0.4	</KV-5>
+        <A-32>	3 3 0.22 0.21	</A-32>
+        <T-127>	5.5 2.4 0.89 0.25	</T-127>
+        <M3_Stuart_LL>	3.2 3 0.96 0.28	</M3_Stuart_LL>
+        <T-50>	3.5 3.5 0.61 0.5	</T-50>
+        <T_50_2>	3.7 3.7 0.27 0.1	</T_50_2>
+        <SU_85I>	3.5 3.5 0.06 0.4	</SU_85I>
+      </tiling>
+    </BrownStains>
+    <SpringGhost>
+      <texture>	vehicles/russian/Camouflage/Cussr_1_3SpringGhost.dds	</texture>
+      <priceFactor>	0.5	</priceFactor>
+      <description>	#vehicle_customization:camouflage/ussr/bicolor/SpringGhost	</description>
+      <id>	5	</id>
+      <groups>	bicolor	</groups>
+      <colors>
+        <c0>	215 247 255 188	</c0>
+        <c1>	162 192 126 21	</c1>
+        <c2>	239 242 125 0	</c2>
+        <c3>	230 253 255 0	</c3>
+      </colors>
+      <tiling>
+        <IS>	2.5 4.3 0.46 0.42	</IS>
+        <SU-85>	3.5 5.5 0.87 0.79	</SU-85>
+        <BT-7>	3 2.7 0.83 0.29	</BT-7>
+        <T-34>	3.6 4.2 0.34 0.28	</T-34>
+        <KV>	2.8 5 0.82 0.44	</KV>
+        <T-28>	5.4 4.7 0.43 0.000000	</T-28>
+        <T-34-85>	4.6 3.9 0.000000 0.74	</T-34-85>
+        <BT-2>	5.1 1.2 0.38 0.47	</BT-2>
+        <T-26>	4.2 2.6 0.54 0.47	</T-26>
+        <AT-1>	5 5 0.000000 0.09	</AT-1>
+        <MS-1>	3 3 0.78 0.22	</MS-1>
+        <A-20>	3 4.3 0.89 0.000000	</A-20>
+        <KV-1s>	5 5 0.6 0.2	</KV-1s>
+        <SU-5>	3 3.9 0.42 0.4	</SU-5>
+        <S-51>	3 3 0.61 0.56	</S-51>
+        <SU-18>	5 3 0.000000 0.6	</SU-18>
+        <SU-100>	5 3 0.06 0.28	</SU-100>
+        <BT-SV>	2.3 1.9 0.2 0.19	</BT-SV>
+        <SU-152>	4.8 5 0.26 0.000000	</SU-152>
+        <IS-3>	5 2.6 0.26 0.2	</IS-3>
+        <T-44>	5 3 0.54 0.4	</T-44>
+        <IS-4>	5 3 0.2 0.000000	</IS-4>
+        <T-46>	5 3 0.6 0.12	</T-46>
+        <T-43>	5 3.4 0.43 0.35	</T-43>
+        <SU-76>	5.1 5 0.2 0.2	</SU-76>
+        <GAZ-74b>	3 3 0.000000 0.2	</GAZ-74b>
+        <SU-8>	3 2.6 0.38 0.55	</SU-8>
+        <SU-14>	3 5 0.000000 0.2	</SU-14>
+        <Valentine_LL>	7 3 0.12 0.000000	</Valentine_LL>
+        <Matilda_II_LL>	3 3 0.000000 0.000000	</Matilda_II_LL>
+        <Churchill_LL>	3 5.7 0.91 0.35	</Churchill_LL>
+        <KV-220>	5 3 0.33 0.08	</KV-220>
+        <KV-3>	3.2 3.2 0.6 0.6	</KV-3>
+        <T-54>	5 3.8 0.2 0.000000	</T-54>
+        <IS-7>	7 3 0.4 0.000000	</IS-7>
+        <ISU-152>	5 3.9 0.27 0.000000	</ISU-152>
+        <Object_212>	3 4.1 0.000000 0.000000	</Object_212>
+        <Object_704>	3.4 5 0.2 0.75	</Object_704>
+        <SU-26>	4.5 3.2 0.000000 0.8	</SU-26>
+        <KV-13>	5.8 3 0.3 0.11	</KV-13>
+        <Object_261>	5 6.2 0.6 0.4	</Object_261>
+        <KV-5>	5 5 0.13 0.8	</KV-5>
+        <A-32>	3 3 0.1 0.000000	</A-32>
+        <T-127>	4.2 2.7 0.5 0.28	</T-127>
+        <M3_Stuart_LL>	2.5 2.5 0.95 0.15	</M3_Stuart_LL>
+        <T-50>	3.8 3.8 0.3 0.000000	</T-50>
+        <T_50_2>	3.4 3.1 0.6 0.14	</T_50_2>
+        <SU_85I>	4.3 4.2 0.12 0.48	</SU_85I>
+      </tiling>
+    </SpringGhost>
+    <Leningrad>
+      <texture>	vehicles/russian/Camouflage/Cussr_1_4Leningrad.dds	</texture>
+      <priceFactor>	1	</priceFactor>
+      <description>	#vehicle_customization:camouflage/ussr/tricolor/Leningrad	</description>
+      <id>	6	</id>
+      <groups>	tricolor	</groups>
+      <colors>
+        <c0>	38 56 27 51	</c0>
+        <c1>	56 3 3 255	</c1>
+        <c2>	247 197 121 150	</c2>
+        <c3>	145 134 6 6	</c3>
+      </colors>
+      <tiling>
+        <IS>	3.7 3.6 0.41 0.83	</IS>
+        <SU-85>	3.5 4.2 0.39 0.19	</SU-85>
+        <BT-7>	6.5 3.5 0.92 0.48	</BT-7>
+        <T-34>	2.8 4.8 0.14 0.41	</T-34>
+        <KV>	4.5 5.7 0.31 0.8	</KV>
+        <T-28>	5 4.2 0.5 0.98	</T-28>
+        <T-34-85>	3.4 5.2 0.2 0.15	</T-34-85>
+        <BT-2>	5.7 2.5 0.31 0.16	</BT-2>
+        <T-26>	3.6 3 0.36 0.26	</T-26>
+        <AT-1>	3 3.2 0.65 0.05	</AT-1>
+        <MS-1>	5 3 0.2 0.28	</MS-1>
+        <A-20>	4.9 3.5 0.58 0.64	</A-20>
+        <KV-1s>	2.9 4.9 0.4 0.16	</KV-1s>
+        <SU-5>	3.3 2.6 0.2 0.42	</SU-5>
+        <S-51>	5 3 0.05 0.000000	</S-51>
+        <SU-18>	5.7 3.7 0.37 0.32	</SU-18>
+        <SU-100>	3.3 3.5 0.2 0.03	</SU-100>
+        <BT-SV>	2.6 3 0.78 0.12	</BT-SV>
+        <SU-152>	4.2 3.7 0.56 0.94	</SU-152>
+        <IS-3>	3 5.3 0.85 0.03	</IS-3>
+        <T-44>	3 4.2 0.83 0.28	</T-44>
+        <IS-4>	3.9 4.3 0.000000 0.2	</IS-4>
+        <T-46>	5 3 0.2 0.6	</T-46>
+        <T-43>	5 4.5 0.2 0.2	</T-43>
+        <SU-76>	5 5 0.000000 0.2	</SU-76>
+        <GAZ-74b>	5 3 0.000000 0.000000	</GAZ-74b>
+        <SU-8>	3.5 5.4 0.66 0.41	</SU-8>
+        <SU-14>	3 5 0.000000 0.14	</SU-14>
+        <Valentine_LL>	4.5 4 0.69 0.26	</Valentine_LL>
+        <Matilda_II_LL>	3 6.3 0.000000 0.51	</Matilda_II_LL>
+        <Churchill_LL>	3 5 0.27 0.79	</Churchill_LL>
+        <KV-220>	6.2 5 0.21 0.17	</KV-220>
+        <KV-3>	5 3.6 0.35 0.3	</KV-3>
+        <T-54>	5 4.3 0.4 0.33	</T-54>
+        <IS-7>	4.5 5.2 0.000000 0.000000	</IS-7>
+        <ISU-152>	5 4.7 0.4 0.35	</ISU-152>
+        <Object_212>	4.9 5 0.06 0.67	</Object_212>
+        <Object_704>	3 5 0.33 0.81	</Object_704>
+        <SU-26>	5.1 4.4 0.25 0.66	</SU-26>
+        <KV-13>	3.6 3.4 0.54 0.57	</KV-13>
+        <Object_261>	4.8 5 0.000000 0.000000	</Object_261>
+        <KV-5>	5 5 0.6 0.000000	</KV-5>
+        <A-32>	4.2 3.4 0.67 0.29	</A-32>
+        <T-127>	7.3 4.2 0.4 0.49	</T-127>
+        <M3_Stuart_LL>	4.2 4.2 0.32 0.78	</M3_Stuart_LL>
+        <T-50>	4.1 4.1 0.55 0.37	</T-50>
+        <T_50_2>	4.6 4.5 0.12 0.000000	</T_50_2>
+        <SU_85I>	4.8 4.8 0.66 0.000000	</SU_85I>
+      </tiling>
+    </Leningrad>
+    <TricolorZebra>
+      <texture>	vehicles/russian/Camouflage/Cussr_1_5TricolorZebra.dds	</texture>
+      <priceFactor>	1	</priceFactor>
+      <description>	#vehicle_customization:camouflage/ussr/tricolor/TricolorZebra	</description>
+      <id>	7	</id>
+      <groups>	tricolor	</groups>
+      <colors>
+        <c0>	250 214 71 201	</c0>
+        <c1>	45 2 2 255	</c1>
+        <c2>	29 31 20 107	</c2>
+        <c3>	81 69 51 60	</c3>
+      </colors>
+      <tiling>
+        <IS>	7.1 6.2 0.24 0.1	</IS>
+        <SU-85>	3.9 7.3 0.000000 0.11	</SU-85>
+        <BT-7>	4.8 8.1 0.23 0.76	</BT-7>
+        <T-34>	8.1 4.8 0.6 0.25	</T-34>
+        <KV>	7.3 6.5 0.16 0.000000	</KV>
+        <T-28>	8 6.2 0.68 0.22	</T-28>
+        <T-34-85>	7.3 5.6 0.35 0.03	</T-34-85>
+        <BT-2>	9 5.4 0.4 0.4	</BT-2>
+        <T-26>	9 4.8 0.000000 0.2	</T-26>
+        <AT-1>	6 5 0.4 0.4	</AT-1>
+        <MS-1>	6.9 5 0.000000 0.000000	</MS-1>
+        <A-20>	5.1 4.4 0.6 0.000000	</A-20>
+        <KV-1s>	7 7 0.6 0.6	</KV-1s>
+        <SU-5>	5.7 5.5 0.6 0.34	</SU-5>
+        <S-51>	6 6.1 0.6 0.000000	</S-51>
+        <SU-18>	5 5 0.000000 0.4	</SU-18>
+        <SU-100>	7 5 0.2 0.000000	</SU-100>
+        <BT-SV>	5 7 0.2 0.000000	</BT-SV>
+        <SU-152>	4.2 5.8 0.13 0.000000	</SU-152>
+        <IS-3>	5.9 7 0.000000 0.000000	</IS-3>
+        <T-44>	7 3.3 0.2 1	</T-44>
+        <IS-4>	9 5.8 0.000000 0.000000	</IS-4>
+        <T-46>	9 7 0.2 0.2	</T-46>
+        <T-43>	7 7 0.2 0.000000	</T-43>
+        <SU-76>	8.2 6.4 0.000000 0.05	</SU-76>
+        <GAZ-74b>	9 6.3 0.8 0.34	</GAZ-74b>
+        <SU-8>	6.8 6.5 0.4 0.12	</SU-8>
+        <SU-14>	7 7 0.22 0.33	</SU-14>
+        <Valentine_LL>	6.7 7.6 0.000000 0.000000	</Valentine_LL>
+        <Matilda_II_LL>	5 7 0.000000 0.000000	</Matilda_II_LL>
+        <Churchill_LL>	8 5.4 0.000000 0.13	</Churchill_LL>
+        <KV-220>	3 9 0.000000 0.000000	</KV-220>
+        <KV-3>	9 7.2 0.000000 0.000000	</KV-3>
+        <T-54>	7.7 6 0.000000 0.000000	</T-54>
+        <IS-7>	7 6.6 0.000000 0.000000	</IS-7>
+        <ISU-152>	9 7 0.000000 0.000000	</ISU-152>
+        <Object_212>	9 7 0.000000 0.000000	</Object_212>
+        <Object_704>	7 5.9 0.000000 0.000000	</Object_704>
+        <SU-26>	10.2 5 0.000000 0.000000	</SU-26>
+        <KV-13>	7 5 0.000000 0.000000	</KV-13>
+        <Object_261>	9.1 9 0.000000 0.000000	</Object_261>
+        <KV-5>	7 7 0.000000 0.000000	</KV-5>
+        <A-32>	7 7 0.000000 0.000000	</A-32>
+        <T-127>	8.4 6.7 0.01 0.62	</T-127>
+        <M3_Stuart_LL>	6.4 6.5 0.98 0.000000	</M3_Stuart_LL>
+        <T-50>	7.9 8 0.000000 0.000000	</T-50>
+        <T_50_2>	6.8 6.9 0.000000 0.000000	</T_50_2>
+        <SU_85I>	6.1 6.2 0.46 0.000000	</SU_85I>
+      </tiling>
+    </TricolorZebra>
+    <OldschoolRkka>
+      <texture>	vehicles/russian/Camouflage/Cussr_1_6OldschoolRkka.dds	</texture>
+      <priceFactor>	1	</priceFactor>
+      <description>	#vehicle_customization:camouflage/ussr/tricolor/OldschoolRkka	</description>
+      <id>	8	</id>
+      <groups>	tricolor	</groups>
+      <colors>
+        <c0>	0 15 0 216	</c0>
+        <c1>	15 0 0 255	</c1>
+        <c2>	177 169 7 47	</c2>
+        <c3>	154 139 82 35	</c3>
+      </colors>
+      <tiling>
+        <IS>	4.3 2.3 0.53 0.51	</IS>
+        <SU-85>	3.2 1.9 0.32 0.45	</SU-85>
+        <BT-7>	1.3 4.8 0.46 0.3	</BT-7>
+        <T-34>	1.2 3 0.23 0.45	</T-34>
+        <KV>	4.5 2.3 0.56 0.38	</KV>
+        <T-28>	2.9 2 0.29 0.73	</T-28>
+        <T-34-85>	2.6 3 0.52 0.08	</T-34-85>
+        <BT-2>	2.6 1 0.4 0.000000	</BT-2>
+        <T-26>	3 1 0.2 0.69	</T-26>
+        <AT-1>	1.8 1.5 0.6 0.62	</AT-1>
+        <MS-1>	1 1 0.77 0.2	</MS-1>
+        <A-20>	2.4 2.1 1 0.52	</A-20>
+        <KV-1s>	1.9 3 0.000000 0.29	</KV-1s>
+        <SU-5>	2.7 1.9 0.15 0.15	</SU-5>
+        <S-51>	1.9 3.6 0.000000 0.2	</S-51>
+        <SU-18>	3 1.9 0.55 0.46	</SU-18>
+        <SU-100>	2 3 0.43 0.000000	</SU-100>
+        <BT-SV>	2.1 2.1 0.49 0.14	</BT-SV>
+        <SU-152>	2 2.3 0.2 0.74	</SU-152>
+        <IS-3>	2 5 0.71 0.27	</IS-3>
+        <T-44>	3 3 0.000000 0.2	</T-44>
+        <IS-4>	3 3 0.77 0.07	</IS-4>
+        <T-46>	3 1.5 0.4 0.4	</T-46>
+        <T-43>	2 3 0.37 0.000000	</T-43>
+        <SU-76>	1.7 3 0.43 0.81	</SU-76>
+        <GAZ-74b>	2.9 3 0.58 0.2	</GAZ-74b>
+        <SU-8>	3 3 0.56 0.41	</SU-8>
+        <SU-14>	2.5 1.4 0.08 0.000000	</SU-14>
+        <Valentine_LL>	3 1.7 0.2 0.000000	</Valentine_LL>
+        <Matilda_II_LL>	5 3 0.000000 0.26	</Matilda_II_LL>
+        <Churchill_LL>	3 3 0.19 0.4	</Churchill_LL>
+        <KV-220>	3 1 0.4 0.46	</KV-220>
+        <KV-3>	3 3 0.2 0.000000	</KV-3>
+        <T-54>	3 2.4 0.2 0.000000	</T-54>
+        <IS-7>	2.8 1.7 0.4 0.28	</IS-7>
+        <ISU-152>	3 2.2 0.4 0.000000	</ISU-152>
+        <Object_212>	2.9 2.8 0.48 0.2	</Object_212>
+        <Object_704>	1.9 3 0.32 0.41	</Object_704>
+        <SU-26>	3.2 1.6 0.4 0.000000	</SU-26>
+        <KV-13>	5 3 0.000000 0.000000	</KV-13>
+        <Object_261>	7 5 0.000000 0.4	</Object_261>
+        <KV-5>	3.8 2.8 0.000000 0.000000	</KV-5>
+        <A-32>	3 3.9 0.2 0.000000	</A-32>
+        <T-127>	3.8 1.6 0.53 0.24	</T-127>
+        <M3_Stuart_LL>	3.9 3 0.000000 0.42	</M3_Stuart_LL>
+        <T-50>	3.6 3.6 0.42 0.03	</T-50>
+        <T_50_2>	3.9 3.8 0.9 0.16	</T_50_2>
+        <SU_85I>	2.4 2.5 0.46 0.13	</SU_85I>
+      </tiling>
+    </OldschoolRkka>
+    <Talvisota>
+      <texture>	vehicles/russian/Camouflage/Cussr_1_7Talvisota.dds	</texture>
+      <priceFactor>	1	</priceFactor>
+      <description>	#vehicle_customization:camouflage/ussr/tricolor/Talvisota	</description>
+      <id>	9	</id>
+      <groups>	tricolor	</groups>
+      <colors>
+        <c0>	10 15 0 115	</c0>
+        <c1>	0 0 0 255	</c1>
+        <c2>	210 72 13 107	</c2>
+        <c3>	154 139 82 15	</c3>
+      </colors>
+      <tiling>
+        <IS>	4 3.4 0.31 0.27	</IS>
+        <SU-85>	2.7 3.2 0.14 0.33	</SU-85>
+        <BT-7>	3 5 0.07 0.11	</BT-7>
+        <T-34>	3.1 1.9 0.73 0.25	</T-34>
+        <KV>	4.1 3 0.83 0.22	</KV>
+        <T-28>	3.9 3 0.14 0.31	</T-28>
+        <T-34-85>	5 3 0.63 0.4	</T-34-85>
+        <BT-2>	5.7 1.9 0.8 0.06	</BT-2>
+        <T-26>	4.6 2 0.74 0.33	</T-26>
+        <AT-1>	3.1 3.2 0.62 0.05	</AT-1>
+        <MS-1>	2.6 3.4 0.6 0.000000	</MS-1>
+        <A-20>	3.2 2.8 0.61 0.86	</A-20>
+        <KV-1s>	3 3.8 0.000000 0.4	</KV-1s>
+        <SU-5>	2.7 2 0.81 0.2	</SU-5>
+        <S-51>	2 3.9 0.45 0.14	</S-51>
+        <SU-18>	2.6 1.5 0.5 0.53	</SU-18>
+        <SU-100>	3.6 2.3 0.96 0.96	</SU-100>
+        <BT-SV>	2.1 2.5 0.000000 0.33	</BT-SV>
+        <SU-152>	3.4 2.7 0.000000 0.77	</SU-152>
+        <IS-3>	3 5 0.6 0.4	</IS-3>
+        <T-44>	3.6 3.3 0.4 0.27	</T-44>
+        <IS-4>	4.2 3.5 0.54 0.19	</IS-4>
+        <T-46>	3 2.4 0.000000 0.000000	</T-46>
+        <T-43>	3.5 3.1 0.44 0.4	</T-43>
+        <SU-76>	4.9 4 0.35 0.08	</SU-76>
+        <GAZ-74b>	4.3 3 0.74 0.06	</GAZ-74b>
+        <SU-8>	4.3 3.7 0.27 0.78	</SU-8>
+        <SU-14>	3 3.3 0.02 0.22	</SU-14>
+        <Valentine_LL>	3 3 0.08 0.13	</Valentine_LL>
+        <Matilda_II_LL>	5.3 3 0.3 0.6	</Matilda_II_LL>
+        <Churchill_LL>	3.3 3.6 0.92 0.08	</Churchill_LL>
+        <KV-220>	3 4.2 0.000000 0.2	</KV-220>
+        <KV-3>	4.4 3 0.79 0.1	</KV-3>
+        <T-54>	6.4 2.7 0.18 0.000000	</T-54>
+        <IS-7>	5 3 0.2 0.5	</IS-7>
+        <ISU-152>	5 5 0.13 0.3	</ISU-152>
+        <Object_212>	3 3.8 0.42 0.78	</Object_212>
+        <Object_704>	3 2.7 0.31 0.22	</Object_704>
+        <SU-26>	3.7 2.6 0.2 0.16	</SU-26>
+        <KV-13>	4.1 3.9 0.63 0.2	</KV-13>
+        <Object_261>	5 4.4 0.000000 0.2	</Object_261>
+        <KV-5>	3 3 0.000000 0.48	</KV-5>
+        <A-32>	3.3 2.8 0.78 0.58	</A-32>
+        <T-127>	5.8 3.4 0.26 0.47	</T-127>
+        <M3_Stuart_LL>	3.4 3.6 0.8 0.84	</M3_Stuart_LL>
+        <T-50>	4 3.9 0.36 0.21	</T-50>
+        <T_50_2>	4.4 4.4 0.66 1	</T_50_2>
+        <SU_85I>	4.4 4.5 0.12 0.16	</SU_85I>
+      </tiling>
+    </Talvisota>
+    <GasolinePellicle>
+      <texture>	vehicles/russian/Camouflage/Cussr_1_8GasolinePellicle.dds	</texture>
+      <priceFactor>	1	</priceFactor>
+      <description>	#vehicle_customization:camouflage/ussr/tricolor/GasolinePellicle	</description>
+      <id>	10	</id>
+      <groups>	tricolor	</groups>
+      <colors>
+        <c0>	10 15 0 0	</c0>
+        <c1>	13 1 0 255	</c1>
+        <c2>	233 207 131 158	</c2>
+        <c3>	154 139 82 0	</c3>
+      </colors>
+      <tiling>
+        <IS>	2.7 2.4 0.26 0.75	</IS>
+        <SU-85>	3.6 2.5 0.37 0.88	</SU-85>
+        <BT-7>	3.6 2.8 0.58 0.38	</BT-7>
+        <T-34>	4.3 2.7 0.000000 0.37	</T-34>
+        <KV>	3.9 2.7 0.4 0.94	</KV>
+        <T-28>	4 1.7 0.2 0.000000	</T-28>
+        <T-34-85>	3.9 1.9 0.18 0.2	</T-34-85>
+        <BT-2>	4 1 0.6 0.4	</BT-2>
+        <T-26>	5.1 2.3 0.000000 0.000000	</T-26>
+        <AT-1>	4.3 2.6 0.65 0.68	</AT-1>
+        <MS-1>	1.7 6.8 0.000000 0.2	</MS-1>
+        <A-20>	2.5 1.4 0.000000 0.000000	</A-20>
+        <KV-1s>	2.8 2.1 0.6 0.23	</KV-1s>
+        <SU-5>	3.7 2.2 0.4 0.62	</SU-5>
+        <S-51>	2.4 3 0.000000 0.12	</S-51>
+        <SU-18>	3.1 1.4 0.07 0.22	</SU-18>
+        <SU-100>	3.1 1.9 0.2 0.73	</SU-100>
+        <BT-SV>	3.5 1.8 0.33 0.06	</BT-SV>
+        <SU-152>	3.4 2.1 0.09 0.33	</SU-152>
+        <IS-3>	2.3 3.9 0.76 0.4	</IS-3>
+        <T-44>	3.2 1.6 0.38 0.92	</T-44>
+        <IS-4>	4.1 2 0.4 0.6	</IS-4>
+        <T-46>	3.8 2 0.27 0.6	</T-46>
+        <T-43>	3.8 2 0.32 0.23	</T-43>
+        <SU-76>	5 3.1 0.6 0.3	</SU-76>
+        <GAZ-74b>	4.1 1.5 0.44 0.27	</GAZ-74b>
+        <SU-8>	3.4 1 0.23 0.000000	</SU-8>
+        <SU-14>	5.5 2.3 0.88 0.19	</SU-14>
+        <Valentine_LL>	3 1.4 0.6 0.000000	</Valentine_LL>
+        <Matilda_II_LL>	6.2 1.8 0.6 0.2	</Matilda_II_LL>
+        <Churchill_LL>	4.2 2 0.4 0.2	</Churchill_LL>
+        <KV-220>	5.5 3 0.48 0.07	</KV-220>
+        <KV-3>	3.8 1.8 0.61 0.18	</KV-3>
+        <T-54>	5 2.3 0.2 0.77	</T-54>
+        <IS-7>	4.7 2.2 0.4 0.03	</IS-7>
+        <ISU-152>	4.8 1.7 0.2 0.000000	</ISU-152>
+        <Object_212>	3.9 3 0.2 0.37	</Object_212>
+        <Object_704>	3.8 1.4 0.65 0.12	</Object_704>
+        <SU-26>	4.5 1.5 0.95 0.05	</SU-26>
+        <KV-13>	5 2.3 0.05 0.2	</KV-13>
+        <Object_261>	6.5 2.6 0.2 0.4	</Object_261>
+        <KV-5>	4.4 1.5 0.67 0.4	</KV-5>
+        <A-32>	4.8 1.8 0.63 0.67	</A-32>
+        <T-127>	7.1 2.5 0.37 0.76	</T-127>
+        <M3_Stuart_LL>	3.9 1.8 0.82 0.3	</M3_Stuart_LL>
+        <T-50>	4.3 2 0.36 0.74	</T-50>
+        <T_50_2>	5 2 0.2 0.62	</T_50_2>
+        <SU_85I>	4.1 2.4 0.48 0.5	</SU_85I>
+      </tiling>
+    </GasolinePellicle>
+    <Rus_Victim_Black>
+      <texture>	vehicles/russian/Camouflage/Rus_Victim_Black.dds	</texture>
+      <priceFactor>	0.000000	</priceFactor>
+      <description></description>
+      <id>	29	</id>
+      <groups>	bicolor	</groups>
+      <colors>
+        <c0>	0 0 0 255	</c0>
+        <c1>	18 18 18 194	</c1>
+        <c2>	0 0 0 0	</c2>
+        <c3>	0 128 255 2	</c3>
+      </colors>
+      <tiling>
+        <KV-5>	5.3 5.3 0.75 0.75	</KV-5>
+      </tiling>
+      <notInShop>	true	</notInShop>
+    </Rus_Victim_Black>
+    <Rus_Victim_Gold>
+      <texture>	vehicles/russian/Camouflage/Rus_Victim_Black.dds	</texture>
+      <priceFactor>	0.000000	</priceFactor>
+      <description></description>
+      <id>	30	</id>
+      <groups>	bicolor	</groups>
+      <colors>
+        <c0>	103 84 7 203	</c0>
+        <c1>	221 197 23 129	</c1>
+        <c2>	0 0 0 0	</c2>
+        <c3>	0 64 128 14	</c3>
+      </colors>
+      <tiling>
+        <KV-5>	4.8 4.8 0.04 0.61	</KV-5>
+      </tiling>
+      <notInShop>	true	</notInShop>
+    </Rus_Victim_Gold>
+    <Rus_Victim_Red>
+      <texture>	vehicles/russian/Camouflage/Rus_Victim_Black.dds	</texture>
+      <priceFactor>	0.000000	</priceFactor>
+      <description></description>
+      <id>	31	</id>
+      <groups>	bicolor	</groups>
+      <colors>
+        <c0>	94 0 0 255	</c0>
+        <c1>	115 15 13 148	</c1>
+        <c2>	0 0 0 0	</c2>
+        <c3>	0 64 128 18	</c3>
+      </colors>
+      <tiling>
+        <KV-5>	4.9 4.9 0.12 1	</KV-5>
+      </tiling>
+      <notInShop>	true	</notInShop>
+    </Rus_Victim_Red>
+    <Rus_Victim_Silver>
+      <texture>	vehicles/russian/Camouflage/Rus_Victim_Black.dds	</texture>
+      <priceFactor>	0.000000	</priceFactor>
+      <description></description>
+      <id>	32	</id>
+      <groups>	bicolor	</groups>
+      <colors>
+        <c0>	110 110 110 228	</c0>
+        <c1>	188 190 197 181	</c1>
+        <c2>	0 0 0 0	</c2>
+        <c3>	0 128 255 2	</c3>
+      </colors>
+      <tiling>
+        <KV-5>	5.7 5.9 0.09 0.34	</KV-5>
+      </tiling>
+      <notInShop>	true	</notInShop>
+    </Rus_Victim_Silver>
+  </camouflages>
+</customization.xml>

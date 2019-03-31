@@ -1,0 +1,495 @@
+<Account.def>
+  <Implements>
+    <Interface>	Chat	</Interface>
+    <Interface>	AccountEditor	</Interface>
+    <Interface>	TransactionUser	</Interface>
+  </Implements>
+  <Properties>
+    <name>
+      <Type>	STRING	</Type>
+      <Flags>	BASE_AND_CLIENT	</Flags>
+      <Persistent>	true	</Persistent>
+      <DatabaseLength>	96	</DatabaseLength>
+    </name>
+    <normalizedName>
+      <Type>	STRING	</Type>
+      <Flags>	BASE_AND_CLIENT	</Flags>
+      <Persistent>	true	</Persistent>
+      <DatabaseLength>	96	</DatabaseLength>
+      <Identifier>	true	</Identifier>
+    </normalizedName>
+    <spaID>
+      <Type>	INT64	</Type>
+      <Flags>	BASE	</Flags>
+      <Persistent>	true	</Persistent>
+    </spaID>
+    <ver>
+      <Type>	INT16	</Type>
+      <Flags>	BASE	</Flags>
+      <Persistent>	true	</Persistent>
+    </ver>
+    <accountType>
+      <Type>	UINT32	</Type>
+      <Flags>	BASE	</Flags>
+      <Persistent>	true	</Persistent>
+    </accountType>
+    <attrs>
+      <Type>	UINT64	</Type>
+      <Flags>	BASE	</Flags>
+      <Persistent>	true	</Persistent>
+    </attrs>
+    <premiumExpiryTime>
+      <Type>	UINT32	</Type>
+      <Flags>	BASE	</Flags>
+      <Persistent>	true	</Persistent>
+    </premiumExpiryTime>
+    <autoBanTime>
+      <Type>	UINT32	</Type>
+      <Flags>	BASE	</Flags>
+      <Persistent>	true	</Persistent>
+    </autoBanTime>
+    <restrictions>
+      <Type>	ARRAY	  <of>	ACCOUNT_RESTRICTION	</of>
+      </Type>
+      <Flags>	BASE	</Flags>
+      <Persistent>	true	</Persistent>
+    </restrictions>
+    <clanDBID>
+      <Type>	DB_ID	</Type>
+      <Flags>	BASE	</Flags>
+      <Persistent>	true	</Persistent>
+    </clanDBID>
+    <lastUserMessageID>
+      <Type>	DB_ID	</Type>
+      <Flags>	BASE	</Flags>
+      <Persistent>	true	</Persistent>
+      <Default>	-1	</Default>
+    </lastUserMessageID>
+    <lastSystemMessageID>
+      <Type>	DB_ID	</Type>
+      <Flags>	BASE	</Flags>
+      <Persistent>	true	</Persistent>
+      <Default>	-1	</Default>
+    </lastSystemMessageID>
+    <vivoxCredentials>
+      <Type>	STRING	</Type>
+      <Flags>	BASE	</Flags>
+      <Persistent>	true	</Persistent>
+      <DatabaseLength>	36	</DatabaseLength>
+    </vivoxCredentials>
+    <jabberCredentials>
+      <Type>	STRING	</Type>
+      <Flags>	BASE	</Flags>
+      <Persistent>	true	</Persistent>
+      <DatabaseLength>	36	</DatabaseLength>
+    </jabberCredentials>
+    <vhID>
+      <Type>	UINT64	</Type>
+      <Flags>	BASE	</Flags>
+      <Persistent>	true	</Persistent>
+    </vhID>
+    <peripheryID>
+      <Type>	INT32	</Type>
+      <Flags>	BASE	</Flags>
+      <Persistent>	true	</Persistent>
+    </peripheryID>
+    <saveTime>
+      <Type>	INT32	</Type>
+      <Flags>	BASE	</Flags>
+      <Persistent>	true	</Persistent>
+    </saveTime>
+    <pdata>
+      <Type>	PYTHON	</Type>
+      <Flags>	BASE	</Flags>
+      <Persistent>	true	</Persistent>
+      <DatabaseLength>	1024000	</DatabaseLength>
+    </pdata>
+    <bp>
+      <Type>	PYTHON	</Type>
+      <Flags>	BASE	</Flags>
+    </bp>
+    <serverSettings>
+      <Type>	PYTHON	</Type>
+      <Flags>	BASE_AND_CLIENT	</Flags>
+    </serverSettings>
+  </Properties>
+  <ClientMethods>
+    <version_1></version_1>
+    <onCmdResponse>
+      <Arg>	INT16	</Arg>
+      <Arg>	INT16	</Arg>
+      <Arg>	STRING	</Arg>
+    </onCmdResponse>
+    <onCmdResponseExt>
+      <Arg>	INT16	</Arg>
+      <Arg>	INT16	</Arg>
+      <Arg>	STRING	</Arg>
+      <Arg>	STRING	</Arg>
+    </onCmdResponseExt>
+    <onKickedFromServer>
+      <Arg>	STRING	</Arg>
+      <Arg>	BOOL	</Arg>
+      <Arg>	UINT32	</Arg>
+    </onKickedFromServer>
+    <onEnqueued></onEnqueued>
+    <onEnqueueFailure>
+      <Arg>	UINT8	</Arg>
+      <Arg>	STRING	</Arg>
+    </onEnqueueFailure>
+    <onDequeued></onDequeued>
+    <onArenaCreated></onArenaCreated>
+    <onArenaJoinFailure>
+      <Arg>	UINT8	</Arg>
+      <Arg>	STRING	</Arg>
+    </onArenaJoinFailure>
+    <onPrebattleJoined>
+      <Arg>	OBJECT_ID	</Arg>
+    </onPrebattleJoined>
+    <onPrebattleJoinFailure>
+      <Arg>	UINT8	</Arg>
+    </onPrebattleJoinFailure>
+    <onPrebattleLeft></onPrebattleLeft>
+    <onKickedFromQueue></onKickedFromQueue>
+    <onKickedFromArena>
+      <Arg>	UINT8	</Arg>
+    </onKickedFromArena>
+    <onKickedFromPrebattle>
+      <Arg>	UINT8	</Arg>
+    </onKickedFromPrebattle>
+    <onCenterIsLongDisconnected>
+      <Arg>	BOOL	</Arg>
+    </onCenterIsLongDisconnected>
+    <showGUI>
+      <Arg>	STRING	</Arg>
+    </showGUI>
+    <receiveActiveArenas>
+      <Arg>	ARRAY	  <of>	PUBLIC_ARENA_INFO	</of>
+      </Arg>
+    </receiveActiveArenas>
+    <receiveServerStats>
+      <Arg>	SERVER_STATISTICS	</Arg>
+    </receiveServerStats>
+    <receiveQueueInfo>
+      <Arg>	RANDOMS_QUEUE_INFO	</Arg>
+      <Arg>	COMPANIES_QUEUE_INFO	</Arg>
+    </receiveQueueInfo>
+    <updatePrebattle>
+      <Arg>	UINT8	</Arg>
+      <Arg>	STRING	</Arg>
+    </updatePrebattle>
+    <update>
+      <Arg>	STRING	</Arg>
+    </update>
+    <resyncDossiers></resyncDossiers>
+    <reloadShop></reloadShop>
+  </ClientMethods>
+  <BaseMethods>
+    <onEnqueued></onEnqueued>
+    <onDequeued></onDequeued>
+    <onArenaCreated>
+      <Arg>	MAILBOX	</Arg>
+      <Arg>	UINT64	</Arg>
+      <Arg>	OBJECT_ID	</Arg>
+      <Arg>	UINT8	</Arg>
+      <Arg>	INT32	</Arg>
+    </onArenaCreated>
+    <onArenaJoined>
+      <Arg>	UINT64	</Arg>
+      <Arg>	INT32	</Arg>
+    </onArenaJoined>
+    <onArenaJoinFailure>
+      <Arg>	UINT64	</Arg>
+      <Arg>	UINT8	</Arg>
+      <Arg>	STRING	</Arg>
+    </onArenaJoinFailure>
+    <onPrebattleJoined>
+      <Arg>	OBJECT_ID	</Arg>
+      <Arg>	BOOL	</Arg>
+      <Arg>	UINT8	</Arg>
+    </onPrebattleJoined>
+    <onPrebattleJoinFailure>
+      <Arg>	OBJECT_ID	</Arg>
+      <Arg>	UINT8	</Arg>
+    </onPrebattleJoinFailure>
+    <onPrebattleLeft>
+      <Arg>	OBJECT_ID	</Arg>
+    </onPrebattleLeft>
+    <onKickedFromQueue></onKickedFromQueue>
+    <onKickedFromArena>
+      <Arg>	UINT64	</Arg>
+      <Arg>	UINT8	</Arg>
+    </onKickedFromArena>
+    <onKickedFromPrebattle>
+      <Arg>	OBJECT_ID	</Arg>
+      <Arg>	UINT8	</Arg>
+    </onKickedFromPrebattle>
+    <onVehicleLeftArena>
+      <Arg>	INT32	</Arg>
+      <Arg>	BATTLE_RESULTS_EXT	</Arg>
+    </onVehicleLeftArena>
+    <onPrebattleResponse>
+      <Arg>	OBJECT_ID	</Arg>
+      <Arg>	INT16	</Arg>
+      <Arg>	BOOL	</Arg>
+      <Arg>	STRING	</Arg>
+      <Arg>	INT32	</Arg>
+    </onPrebattleResponse>
+    <onPrebattleVehicleChanged>
+      <Arg>	OBJECT_ID	</Arg>
+      <Arg>	INT32	</Arg>
+    </onPrebattleVehicleChanged>
+    <onVoipAccountCreated>
+      <Arg>	STRING	</Arg>
+    </onVoipAccountCreated>
+    <doCmdStr>
+      <Arg>	INT16	</Arg>
+      <Arg>	INT16	</Arg>
+      <Arg>	STRING	</Arg>
+      <Exposed></Exposed>
+    </doCmdStr>
+    <doCmdInt3>
+      <Arg>	INT16	</Arg>
+      <Arg>	INT16	</Arg>
+      <Arg>	INT64	</Arg>
+      <Arg>	INT32	</Arg>
+      <Arg>	INT32	</Arg>
+      <Exposed></Exposed>
+    </doCmdInt3>
+    <doCmdInt4>
+      <Arg>	INT16	</Arg>
+      <Arg>	INT16	</Arg>
+      <Arg>	INT32	</Arg>
+      <Arg>	INT32	</Arg>
+      <Arg>	INT32	</Arg>
+      <Arg>	INT32	</Arg>
+      <Exposed></Exposed>
+    </doCmdInt4>
+    <doCmdInt2Str>
+      <Arg>	INT16	</Arg>
+      <Arg>	INT16	</Arg>
+      <Arg>	INT32	</Arg>
+      <Arg>	INT32	</Arg>
+      <Arg>	STRING	</Arg>
+      <Exposed></Exposed>
+    </doCmdInt2Str>
+    <doCmdIntArr>
+      <Arg>	INT16	</Arg>
+      <Arg>	INT16	</Arg>
+      <Arg>	ARRAY	  <of>	INT32	</of>
+      </Arg>
+      <Exposed></Exposed>
+    </doCmdIntArr>
+    <makeTradeOfferByClient>
+      <Arg>	INT16	</Arg>
+      <Arg>	STRING	</Arg>
+      <Arg>	UINT16	</Arg>
+      <Arg>	DB_ID	</Arg>
+      <Arg>	INT32	</Arg>
+      <Arg>	INT32	</Arg>
+      <Arg>	INT32	</Arg>
+      <Arg>	INT32	</Arg>
+      <Exposed></Exposed>
+    </makeTradeOfferByClient>
+    <createTraining>
+      <Arg>	INT32	</Arg>
+      <Arg>	INT32	</Arg>
+      <Arg>	BOOL	</Arg>
+      <Arg>	STRING	</Arg>
+      <Exposed></Exposed>
+    </createTraining>
+    <createSquad>
+      <Exposed></Exposed>
+    </createSquad>
+    <createCompany>
+      <Arg>	BOOL	</Arg>
+      <Arg>	STRING	</Arg>
+      <Arg>	INT8	</Arg>
+      <Exposed></Exposed>
+    </createCompany>
+    <sendPrebattleInvites>
+      <Arg>	ARRAY	  <of>	INT64	</of>
+      </Arg>
+      <Arg>	STRING	</Arg>
+      <Exposed></Exposed>
+    </sendPrebattleInvites>
+    <receiveActiveArenas>
+      <Arg>	PYTHON	</Arg>
+    </receiveActiveArenas>
+    <receivePrebattleRoster>
+      <Arg>	OBJECT_ID	</Arg>
+      <Arg>	PYTHON	</Arg>
+    </receivePrebattleRoster>
+    <updatePrebattle>
+      <Arg>	OBJECT_ID	</Arg>
+      <Arg>	UINT8	</Arg>
+      <Arg>	STRING	</Arg>
+    </updatePrebattle>
+    <addPrebattleInvite>
+      <Arg>	OBJECT_ID	</Arg>
+      <Arg>	INT32	</Arg>
+      <Arg>	PREBATTLE_INVITE	</Arg>
+    </addPrebattleInvite>
+    <createAvatar>
+      <Arg>	MAILBOX	</Arg>
+      <Arg>	UINT64	</Arg>
+      <Arg>	INT32	</Arg>
+      <Arg>	UINT8	</Arg>
+      <Arg>	PYTHON	</Arg>
+      <Arg>	UINT8	</Arg>
+      <Arg>	UINT8	</Arg>
+      <Arg>	UINT8	</Arg>
+      <Arg>	VECTOR3	</Arg>
+      <Arg>	FLOAT32	</Arg>
+      <Arg>	PYTHON	</Arg>
+    </createAvatar>
+    <setActiveVehicle>
+      <Arg>	UINT64	</Arg>
+      <Arg>	MAILBOX	</Arg>
+    </setActiveVehicle>
+    <releaseClient>
+      <Arg>	MAILBOX	</Arg>
+    </releaseClient>
+    <keepAliveFor>
+      <Arg>	MAILBOX	</Arg>
+      <Arg>	INT32	</Arg>
+      <Arg>	UINT8	</Arg>
+      <Arg>	UINT16	</Arg>
+    </keepAliveFor>
+    <stopKeepingAlive>
+      <Arg>	UINT8	</Arg>
+    </stopKeepingAlive>
+    <kickSelf>
+      <Arg>	STRING	</Arg>
+      <Arg>	BOOL	</Arg>
+      <Arg>	UINT32	</Arg>
+    </kickSelf>
+    <destroyIfNoKeepers></destroyIfNoKeepers>
+    <destroySelfForPeriphery>
+      <Arg>	INT32	</Arg>
+      <Arg>	MAILBOX	</Arg>
+    </destroySelfForPeriphery>
+    <processInvoices></processInvoices>
+    <fetchPrebattleAutoInvites></fetchPrebattleAutoInvites>
+    <setRestriction>
+      <Arg>	MAILBOX	</Arg>
+      <Arg>	INT32	</Arg>
+      <Arg>	UINT8	</Arg>
+      <Arg>	STRING	</Arg>
+      <Arg>	UINT32	</Arg>
+      <Arg>	UINT16	</Arg>
+      <Arg>	STRING	</Arg>
+      <Arg>	INT32	</Arg>
+      <Arg>	UINT32	</Arg>
+    </setRestriction>
+    <delRestriction>
+      <Arg>	MAILBOX	</Arg>
+      <Arg>	INT32	</Arg>
+      <Arg>	UINT8	</Arg>
+      <Arg>	UINT64	</Arg>
+      <Arg>	INT32	</Arg>
+      <Arg>	UINT32	</Arg>
+    </delRestriction>
+    <setType>
+      <Arg>	MAILBOX	</Arg>
+      <Arg>	INT32	</Arg>
+      <Arg>	INT16	</Arg>
+      <Arg>	INT16	</Arg>
+      <Arg>	INT32	</Arg>
+      <Arg>	UINT32	</Arg>
+    </setType>
+    <setLoginPriority>
+      <Arg>	MAILBOX	</Arg>
+      <Arg>	INT32	</Arg>
+      <Arg>	ARRAY	  <of>	STRING	</of>
+      </Arg>
+      <Arg>	ARRAY	  <of>	STRING	</of>
+      </Arg>
+      <Arg>	INT32	</Arg>
+      <Arg>	UINT32	</Arg>
+    </setLoginPriority>
+    <setFinPassword>
+      <Arg>	MAILBOX	</Arg>
+      <Arg>	INT32	</Arg>
+      <Arg>	STRING	</Arg>
+      <Arg>	STRING	</Arg>
+      <Arg>	BOOL	</Arg>
+      <Arg>	INT32	</Arg>
+      <Arg>	UINT32	</Arg>
+    </setFinPassword>
+    <setAutoBanTime>
+      <Arg>	MAILBOX	</Arg>
+      <Arg>	INT32	</Arg>
+      <Arg>	UINT32	</Arg>
+      <Arg>	INT32	</Arg>
+      <Arg>	UINT32	</Arg>
+    </setAutoBanTime>
+    <setNextBanLevel>
+      <Arg>	MAILBOX	</Arg>
+      <Arg>	INT32	</Arg>
+      <Arg>	STRING	</Arg>
+      <Arg>	UINT8	</Arg>
+      <Arg>	INT32	</Arg>
+      <Arg>	UINT32	</Arg>
+    </setNextBanLevel>
+    <sendPropertiesTo>
+      <Arg>	MAILBOX	</Arg>
+      <Arg>	INT32	</Arg>
+      <Arg>	ARRAY	  <of>	STRING	</of>
+      </Arg>
+    </sendPropertiesTo>
+    <sendRosterInfoTo>
+      <Arg>	MAILBOX	</Arg>
+      <Arg>	INT32	</Arg>
+      <Arg>	UINT64	</Arg>
+    </sendRosterInfoTo>
+    <wipe>
+      <Arg>	MAILBOX	</Arg>
+      <Arg>	INT32	</Arg>
+      <Arg>	BOOL	</Arg>
+      <Arg>	INT32	</Arg>
+      <Arg>	UINT32	</Arg>
+    </wipe>
+    <processSpaAttributes>
+      <Arg>	MAILBOX	</Arg>
+      <Arg>	INT32	</Arg>
+      <Arg>	PYTHON	</Arg>
+    </processSpaAttributes>
+    <exportToWeb></exportToWeb>
+    <extraWriteToDB>
+      <Arg>	BOOL	</Arg>
+    </extraWriteToDB>
+    <createClan>
+      <Arg>	MAILBOX	</Arg>
+      <Arg>	INT32	</Arg>
+      <Arg>	STRING	</Arg>
+      <Arg>	STRING	</Arg>
+      <Arg>	STRING	</Arg>
+      <Arg>	STRING	</Arg>
+      <Arg>	INT32	</Arg>
+      <Arg>	UINT32	</Arg>
+    </createClan>
+    <enterLeaveClan>
+      <Arg>	MAILBOX	</Arg>
+      <Arg>	INT32	</Arg>
+      <Arg>	DB_ID	</Arg>
+      <Arg>	BOOL	</Arg>
+    </enterLeaveClan>
+    <receiveClanMemberInfo>
+      <Arg>	DB_ID	</Arg>
+      <Arg>	DB_ID	</Arg>
+      <Arg>	STRING	</Arg>
+      <Arg>	STRING	</Arg>
+      <Arg>	DB_ID	</Arg>
+      <Arg>	INT32	</Arg>
+      <Arg>	INT32	</Arg>
+    </receiveClanMemberInfo>
+    <receiveClanMembersListDiff>
+      <Arg>	DB_ID	</Arg>
+      <Arg>	STRING	</Arg>
+    </receiveClanMembersListDiff>
+    <debugRunMethod>
+      <Arg>	STRING	</Arg>
+      <Arg>	PYTHON	</Arg>
+    </debugRunMethod>
+  </BaseMethods>
+</Account.def>

@@ -1,0 +1,698 @@
+<VK3001H.xml>
+  <crew>
+    <commander></commander>
+    <gunner></gunner>
+    <driver></driver>
+    <radioman></radioman>
+    <loader></loader>
+  </crew>
+  <speedLimits>
+    <forward>	55	</forward>
+    <backward>	20	</backward>
+  </speedLimits>
+  <repairCost>	7.57	</repairCost>
+  <effects>
+    <destruction>	mediumDestruction	</destruction>
+    <explosion>	mediumExplosion	</explosion>
+    <flaming>	mediumFlaming	</flaming>
+    <collision>	collision	</collision>
+  </effects>
+  <camouflage>
+    <priceFactor>	1.2	</priceFactor>
+    <tiling>	1 1 0 0	</tiling>
+    <exclusionMask>	vehicles/german/G13_VK3001H/VK3001H_CM.dds	</exclusionMask>
+  </camouflage>
+  <emblems>
+    <default>	germany_cross	</default>
+    <lodDist>	MEDIUM	</lodDist>
+    <alpha>	0.9	</alpha>
+  </emblems>
+  <horns>
+    <priceFactor>	1	</priceFactor>
+    <distanceFactor>	1	</distanceFactor>
+    <volumeFactor>	1	</volumeFactor>
+  </horns>
+  <hull>
+    <models>
+      <undamaged>	vehicles/german/G13_VK3001H/normal/lod0/Hull.model	</undamaged>
+      <destroyed>	vehicles/german/G13_VK3001H/crash/lod0/Hull.model	</destroyed>
+      <exploded>	vehicles/german/G13_VK3001H/crash/lod0/Hull.model	</exploded>
+    </models>
+    <swinging>
+      <lodDist>	FAR	</lodDist>
+      <pitchParams>	0.26 34.00 0.42 1.00 0.05 0.30	</pitchParams>
+      <rollParams>	1.00 0.26 34.00 0.42 1.00 0.05 0.30	</rollParams>
+      <sensitivityToImpulse>	0.48	</sensitivityToImpulse>
+    </swinging>
+    <exhaust>
+      <pixie>	particles/Tank/engine_exit_gass.xml	</pixie>
+      <nodes>	HP_Track_Exhaus_1	</nodes>
+      <rates>	5.0 10.0 25.0	</rates>
+    </exhaust>
+    <turretPositions>
+      <turret>	0.025462 0.618402 -0.103566	</turret>
+    </turretPositions>
+    <hitTester>
+      <collisionModel>	vehicles/german/G13_VK3001H/collision/Hull.model	</collisionModel>
+    </hitTester>
+    <armor>
+      <armor_1>	50	</armor_1>
+      <armor_2>	50	</armor_2>
+      <armor_3>	30	</armor_3>
+      <armor_4>	50	</armor_4>
+      <armor_5>	35	</armor_5>
+      <armor_6>	30	</armor_6>
+      <armor_7>	25	</armor_7>
+      <armor_8>	20	</armor_8>
+      <armor_9>	10	</armor_9>
+      <armor_10>	0	</armor_10>
+      <armor_11>	25	  <noDamage>	true	</noDamage>
+      </armor_11>
+    </armor>
+    <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
+    <weight>	16700	</weight>
+    <maxHealth>	470	</maxHealth>
+    <ammoBayHealth>
+      <maxHealth>	160	</maxHealth>
+      <maxRegenHealth>	130	</maxRegenHealth>
+      <repairCost>	1.0	</repairCost>
+    </ammoBayHealth>
+    <emblemSlots>
+      <clan>
+        <rayStart>	0.261925 0.482205 1.98037	</rayStart>
+        <rayEnd>	0.261925 0.418117 1.58553	</rayEnd>
+        <rayUp>	0.000000 1 0.000000	</rayUp>
+        <size>	0.3	</size>
+        <hideIfDamaged>	false	</hideIfDamaged>
+      </clan>
+    </emblemSlots>
+  </hull>
+  <chassis>
+    <VK3001H>
+      <userString>	#germany_vehicles:VK3001H	</userString>
+      <description>	#germany_vehicles:VK3001H_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 8 1	</icon>
+      <tags></tags>
+      <level>	5	</level>
+      <price>	10170.0	</price>
+      <unlocks>
+        <chassis>	VK3001H_ausf_B	  <cost>	5340	</cost>
+        </chassis>
+      </unlocks>
+      <models>
+        <undamaged>	vehicles/german/G13_VK3001H/normal/lod0/Chassis.model	</undamaged>
+        <destroyed>	vehicles/german/G13_VK3001H/crash/lod0/Chassis.model	</destroyed>
+        <exploded>	vehicles/german/G13_VK3001H/crash/lod0/Chassis.model	</exploded>
+      </models>
+      <traces>
+        <lodDist>	FAR	</lodDist>
+        <bufferPrefs>	mediumTank	</bufferPrefs>
+        <textureSet>	germany_01	</textureSet>
+        <size>	0.44 0.52	</size>
+      </traces>
+      <tracks>
+        <lodDist>	MEDIUM	</lodDist>
+        <leftMaterial>	track_mat_L_skinned	</leftMaterial>
+        <rightMaterial>	track_mat_R_skinned	</rightMaterial>
+        <textureScale>	-0.97	</textureScale>
+      </tracks>
+      <wheels>
+        <lodDist>	MEDIUM	</lodDist>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	W_L	</template>
+          <radius>	0.357	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	7	</count>
+        </group>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	W_R	</template>
+          <radius>	0.357	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	7	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <name>	WD_L0	</name>
+          <radius>	0.433	</radius>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	WD_L	</template>
+          <radius>	0.186	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	3	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <name>	WD_L4	</name>
+          <radius>	0.413	</radius>
+        </wheel>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <name>	WD_R0	</name>
+          <radius>	0.433	</radius>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	WD_R	</template>
+          <radius>	0.186	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	3	</count>
+        </group>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <name>	WD_R4	</name>
+          <radius>	0.413	</radius>
+        </wheel>
+      </wheels>
+      <drivingWheels>	WD_L0 WD_L4	</drivingWheels>
+      <effects>
+        <lodDist>	MEDIUM	</lodDist>
+        <dust>	smallTankDust	</dust>
+        <mud>	smallTankMud	</mud>
+      </effects>
+      <sound>	/vehicles/tanks/treads/treads_2	</sound>
+      <hullPosition>	0.000000 1.14206 -0.079319	</hullPosition>
+      <hitTester>
+        <collisionModel>	vehicles/german/G13_VK3001H/collision/Chassis.model	</collisionModel>
+      </hitTester>
+      <armor>
+        <leftTrack>	20	</leftTrack>
+        <rightTrack>	20	</rightTrack>
+      </armor>
+      <topRightCarryingPoint>	1.32525 1.51208	</topRightCarryingPoint>
+      <maxClimbAngle>	25	</maxClimbAngle>
+      <navmeshGirth>	6.0	</navmeshGirth>
+      <weight>	9950	</weight>
+      <maxLoad>	36000	</maxLoad>
+      <terrainResistance>	0.9 1.3 2.5	</terrainResistance>
+      <brakeForce>	37000	</brakeForce>
+      <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
+      <rotationSpeed>	38	</rotationSpeed>
+      <shotDispersionFactors>
+        <vehicleMovement>	0.25	</vehicleMovement>
+        <vehicleRotation>	0.25	</vehicleRotation>
+      </shotDispersionFactors>
+      <bulkHealthFactor>	3.0	</bulkHealthFactor>
+      <maxHealth>	130	</maxHealth>
+      <maxRegenHealth>	100	</maxRegenHealth>
+      <repairCost>	5.0	</repairCost>
+    </VK3001H>
+    <VK3001H_ausf_B>
+      <userString>	#germany_vehicles:VK3001H_ausf_B	</userString>
+      <description>	#germany_vehicles:VK3001H_ausf_B_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 8 1	</icon>
+      <tags></tags>
+      <level>	6	</level>
+      <price>	16720.0	</price>
+      <models>
+        <undamaged>	vehicles/german/G13_VK3001H/normal/lod0/Chassis.model	</undamaged>
+        <destroyed>	vehicles/german/G13_VK3001H/crash/lod0/Chassis.model	</destroyed>
+        <exploded>	vehicles/german/G13_VK3001H/crash/lod0/Chassis.model	</exploded>
+      </models>
+      <traces>
+        <lodDist>	FAR	</lodDist>
+        <bufferPrefs>	mediumTank	</bufferPrefs>
+        <textureSet>	germany_01	</textureSet>
+        <size>	0.44 0.52	</size>
+      </traces>
+      <tracks>
+        <lodDist>	MEDIUM	</lodDist>
+        <leftMaterial>	track_mat_L_skinned	</leftMaterial>
+        <rightMaterial>	track_mat_R_skinned	</rightMaterial>
+        <textureScale>	-0.97	</textureScale>
+      </tracks>
+      <wheels>
+        <lodDist>	MEDIUM	</lodDist>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	W_L	</template>
+          <radius>	0.357	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	7	</count>
+        </group>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	W_R	</template>
+          <radius>	0.357	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	7	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <name>	WD_L0	</name>
+          <radius>	0.433	</radius>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	WD_L	</template>
+          <radius>	0.186	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	3	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <name>	WD_L4	</name>
+          <radius>	0.413	</radius>
+        </wheel>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <name>	WD_R0	</name>
+          <radius>	0.433	</radius>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	WD_R	</template>
+          <radius>	0.186	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	3	</count>
+        </group>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <name>	WD_R4	</name>
+          <radius>	0.413	</radius>
+        </wheel>
+      </wheels>
+      <drivingWheels>	WD_L0 WD_L4	</drivingWheels>
+      <effects>
+        <lodDist>	MEDIUM	</lodDist>
+        <dust>	smallTankDust	</dust>
+        <mud>	smallTankMud	</mud>
+      </effects>
+      <sound>	/vehicles/tanks/treads/treads_2	</sound>
+      <hullPosition>	0.000000 1.14206 -0.079319	</hullPosition>
+      <hitTester>
+        <collisionModel>	vehicles/german/G13_VK3001H/collision/Chassis.model	</collisionModel>
+      </hitTester>
+      <armor>
+        <leftTrack>	20	</leftTrack>
+        <rightTrack>	20	</rightTrack>
+      </armor>
+      <topRightCarryingPoint>	1.32525 1.51208	</topRightCarryingPoint>
+      <maxClimbAngle>	25	</maxClimbAngle>
+      <navmeshGirth>	6.0	</navmeshGirth>
+      <weight>	9950	</weight>
+      <maxLoad>	36300	</maxLoad>
+      <terrainResistance>	0.9 1.0 2.0	</terrainResistance>
+      <brakeForce>	37000	</brakeForce>
+      <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
+      <rotationSpeed>	40	</rotationSpeed>
+      <shotDispersionFactors>
+        <vehicleMovement>	0.23	</vehicleMovement>
+        <vehicleRotation>	0.23	</vehicleRotation>
+      </shotDispersionFactors>
+      <bulkHealthFactor>	3.0	</bulkHealthFactor>
+      <maxHealth>	140	</maxHealth>
+      <maxRegenHealth>	105	</maxRegenHealth>
+      <repairCost>	5.0	</repairCost>
+    </VK3001H_ausf_B>
+  </chassis>
+  <turrets0>
+    <VK3001H_Standardturm>
+      <userString>	#germany_vehicles:VK3001H_Standardturm	</userString>
+      <description>	#germany_vehicles:VK3001H_Standardturm_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 6 1	</icon>
+      <tags></tags>
+      <level>	5	</level>
+      <price>	10260.0	</price>
+      <unlocks>
+        <turret>	VK3001H_Eliteturm	  <cost>	5215	</cost>
+        </turret>
+      </unlocks>
+      <models>
+        <undamaged>	vehicles/german/G13_VK3001H/normal/lod0/Turret_01.model	</undamaged>
+        <destroyed>	vehicles/german/G13_VK3001H/crash/lod0/Turret_01.model	</destroyed>
+        <exploded>	vehicles/german/G13_VK3001H/crash/lod0/Turret_01.model	</exploded>
+      </models>
+      <hitTester>
+        <collisionModel>	vehicles/german/G13_VK3001H/collision/Turret_01.model	</collisionModel>
+      </hitTester>
+      <yawLimits>	-180 180	</yawLimits>
+      <gunPosition>	-0.025462 0.311366 0.942285	</gunPosition>
+      <armor>
+        <armor_1>	50	</armor_1>
+        <armor_2>	35	</armor_2>
+        <armor_3>	30	</armor_3>
+        <armor_4>	30	</armor_4>
+        <armor_5>	50	</armor_5>
+        <armor_6>	35	</armor_6>
+        <armor_7>	25	</armor_7>
+        <armor_8>	15	</armor_8>
+        <armor_9>	10	</armor_9>
+        <armor_10>	0	</armor_10>
+        <armor_11>	10	  <noDamage>	true	</noDamage>
+        </armor_11>
+      </armor>
+      <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
+      <weight>	2500	</weight>
+      <maxHealth>	200	</maxHealth>
+      <rotationSpeed>	56	</rotationSpeed>
+      <turretRotatorHealth>
+        <maxHealth>	80	</maxHealth>
+        <maxRegenHealth>	39	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </turretRotatorHealth>
+      <circularVisionRadius>	400	</circularVisionRadius>
+      <surveyingDeviceHealth>
+        <maxHealth>	60	</maxHealth>
+        <maxRegenHealth>	29	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </surveyingDeviceHealth>
+      <guns>
+        <_75mm_KwK_40_L43>	shared	  <pitchLimits>	-18 6	</pitchLimits>
+          <maxAmmo>	78	</maxAmmo>
+          <unlocks>
+            <gun>	_75mm_KwK_40_L48	  <cost>	3400	</cost>
+            </gun>
+            <gun>	_105mm_StuH42_L28Pz	  <cost>	3800.0	</cost>
+            </gun>
+          </unlocks>
+          <models>
+            <undamaged>	vehicles/german/G13_VK3001H/normal/lod0/Gun_01.model	</undamaged>
+            <destroyed>	vehicles/german/G13_VK3001H/crash/lod0/Gun_01.model	</destroyed>
+            <exploded>	vehicles/german/G13_VK3001H/crash/lod0/Gun_01.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/german/G13_VK3001H/collision/Gun_01.model	</collisionModel>
+          </hitTester>
+          <armor>
+            <armor_1>	120	  <noDamage>	true	</noDamage>
+            </armor_1>
+            <armor_2>	100	  <noDamage>	true	</noDamage>
+            </armor_2>
+            <armor_3>	60	  <noDamage>	true	</noDamage>
+            </armor_3>
+            <armor_4>	30	  <noDamage>	true	</noDamage>
+            </armor_4>
+            <gun>	20	</gun>
+          </armor>
+        </_75mm_KwK_40_L43>
+        <_75mm_KwK_40_L48>	shared	  <pitchLimits>	-18 6	</pitchLimits>
+          <maxAmmo>	78	</maxAmmo>
+          <unlocks>
+            <vehicle>	VK3601H	  <cost>	13225	</cost>
+            </vehicle>
+            <vehicle>	VK3002DB	  <cost>	41180	</cost>
+            </vehicle>
+          </unlocks>
+          <models>
+            <undamaged>	vehicles/german/G13_VK3001H/normal/lod0/Gun_02.model	</undamaged>
+            <destroyed>	vehicles/german/G13_VK3001H/crash/lod0/Gun_02.model	</destroyed>
+            <exploded>	vehicles/german/G13_VK3001H/crash/lod0/Gun_02.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/german/G13_VK3001H/collision/Gun_02.model	</collisionModel>
+          </hitTester>
+          <armor>
+            <armor_1>	120	  <noDamage>	true	</noDamage>
+            </armor_1>
+            <armor_2>	100	  <noDamage>	true	</noDamage>
+            </armor_2>
+            <armor_3>	60	  <noDamage>	true	</noDamage>
+            </armor_3>
+            <armor_4>	30	  <noDamage>	true	</noDamage>
+            </armor_4>
+            <gun>	20	</gun>
+          </armor>
+        </_75mm_KwK_40_L48>
+        <_105mm_StuH42_L28Pz>	shared	  <pitchLimits>	-18 6	</pitchLimits>
+          <maxAmmo>	30	</maxAmmo>
+          <reloadTime>	8.57	</reloadTime>
+          <shotDispersionFactors>
+            <turretRotation>	0.2	</turretRotation>
+            <afterShot>	4.0	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <models>
+            <undamaged>	vehicles/german/G13_VK3001H/normal/lod0/Gun_08.model	</undamaged>
+            <destroyed>	vehicles/german/G13_VK3001H/crash/lod0/Gun_08.model	</destroyed>
+            <exploded>	vehicles/german/G13_VK3001H/crash/lod0/Gun_08.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/german/G13_VK3001H/collision/Gun_08.model	</collisionModel>
+          </hitTester>
+          <armor>
+            <armor_1>	120	  <noDamage>	true	</noDamage>
+            </armor_1>
+            <armor_2>	100	  <noDamage>	true	</noDamage>
+            </armor_2>
+            <armor_3>	60	  <noDamage>	true	</noDamage>
+            </armor_3>
+            <armor_4>	30	  <noDamage>	true	</noDamage>
+            </armor_4>
+            <gun>	40	</gun>
+          </armor>
+        </_105mm_StuH42_L28Pz>
+      </guns>
+      <emblemSlots>
+        <player>
+          <rayStart>	1.01875 0.387883 0.528455	</rayStart>
+          <rayEnd>	0.636528 0.278883 0.483455	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.3	</size>
+          <hideIfDamaged>	true	</hideIfDamaged>
+        </player>
+        <player>
+          <rayStart>	-1.01875 0.387883 0.528455	</rayStart>
+          <rayEnd>	-0.636528 0.278883 0.483455	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.3	</size>
+          <hideIfDamaged>	false	</hideIfDamaged>
+        </player>
+      </emblemSlots>
+      <showEmblemsOnGun>	false	</showEmblemsOnGun>
+      <physicsShape>	1.000 0.000 1.000 0.000 1.000 0.000 0.500 0.100 0.500 0.500 0.500 0.500 0.600 0.100 0.500	</physicsShape>
+    </VK3001H_Standardturm>
+    <VK3001H_Eliteturm>
+      <userString>	#germany_vehicles:VK3001H_Eliteturm	</userString>
+      <description>	#germany_vehicles:VK3001H_Eliteturm_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 6 1	</icon>
+      <tags></tags>
+      <level>	6	</level>
+      <price>	17210.0	</price>
+      <unlocks>
+        <gun>	_75mm_KwK_L70	  <cost>	4600	</cost>
+        </gun>
+      </unlocks>
+      <models>
+        <undamaged>	vehicles/german/G13_VK3001H/normal/lod0/Turret_02.model	</undamaged>
+        <destroyed>	vehicles/german/G13_VK3001H/crash/lod0/Turret_02.model	</destroyed>
+        <exploded>	vehicles/german/G13_VK3001H/crash/lod0/Turret_02.model	</exploded>
+      </models>
+      <hitTester>
+        <collisionModel>	vehicles/german/G13_VK3001H/collision/Turret_02.model	</collisionModel>
+      </hitTester>
+      <yawLimits>	-180 180	</yawLimits>
+      <gunPosition>	-0.025462 0.414437 1.02078	</gunPosition>
+      <armor>
+        <armor_1>	120	</armor_1>
+        <armor_2>	100	</armor_2>
+        <armor_3>	60	</armor_3>
+        <armor_4>	60	</armor_4>
+        <armor_5>	120	</armor_5>
+        <armor_6>	40	</armor_6>
+        <armor_7>	40	</armor_7>
+        <armor_8>	20	</armor_8>
+        <armor_9>	20	</armor_9>
+        <armor_10>	0	</armor_10>
+        <armor_11>	40	  <noDamage>	true	</noDamage>
+        </armor_11>
+      </armor>
+      <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
+      <weight>	4600	</weight>
+      <maxHealth>	280	</maxHealth>
+      <rotationSpeed>	28	</rotationSpeed>
+      <turretRotatorHealth>
+        <maxHealth>	100	</maxHealth>
+        <maxRegenHealth>	49	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </turretRotatorHealth>
+      <circularVisionRadius>	420	</circularVisionRadius>
+      <surveyingDeviceHealth>
+        <maxHealth>	60	</maxHealth>
+        <maxRegenHealth>	29	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </surveyingDeviceHealth>
+      <guns>
+        <_75mm_KwK_40_L43>	shared	  <pitchLimits>	-18 6	</pitchLimits>
+          <maxAmmo>	92	</maxAmmo>
+          <reloadTime>	3.53	</reloadTime>
+          <shotDispersionFactors>
+            <turretRotation>	0.12	</turretRotation>
+            <afterShot>	4.0	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <models>
+            <undamaged>	vehicles/german/G13_VK3001H/normal/lod0/Gun_03.model	</undamaged>
+            <destroyed>	vehicles/german/G13_VK3001H/crash/lod0/Gun_03.model	</destroyed>
+            <exploded>	vehicles/german/G13_VK3001H/crash/lod0/Gun_03.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/german/G13_VK3001H/collision/Gun_03.model	</collisionModel>
+          </hitTester>
+          <armor>
+            <armor_1>	120	  <noDamage>	true	</noDamage>
+            </armor_1>
+            <armor_2>	100	  <noDamage>	true	</noDamage>
+            </armor_2>
+            <armor_3>	60	  <noDamage>	true	</noDamage>
+            </armor_3>
+            <armor_4>	30	  <noDamage>	true	</noDamage>
+            </armor_4>
+            <gun>	20	</gun>
+          </armor>
+        </_75mm_KwK_40_L43>
+        <_75mm_KwK_40_L48>	shared	  <pitchLimits>	-18 6	</pitchLimits>
+          <maxAmmo>	92	</maxAmmo>
+          <reloadTime>	3.53	</reloadTime>
+          <shotDispersionFactors>
+            <turretRotation>	0.12	</turretRotation>
+            <afterShot>	4.0	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <models>
+            <undamaged>	vehicles/german/G13_VK3001H/normal/lod0/Gun_04.model	</undamaged>
+            <destroyed>	vehicles/german/G13_VK3001H/crash/lod0/Gun_04.model	</destroyed>
+            <exploded>	vehicles/german/G13_VK3001H/crash/lod0/Gun_04.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/german/G13_VK3001H/collision/Gun_04.model	</collisionModel>
+          </hitTester>
+          <armor>
+            <armor_1>	120	  <noDamage>	true	</noDamage>
+            </armor_1>
+            <armor_2>	100	  <noDamage>	true	</noDamage>
+            </armor_2>
+            <armor_3>	60	  <noDamage>	true	</noDamage>
+            </armor_3>
+            <armor_4>	30	  <noDamage>	true	</noDamage>
+            </armor_4>
+            <gun>	20	</gun>
+          </armor>
+        </_75mm_KwK_40_L48>
+        <_75mm_KwK_L70>	shared	  <pitchLimits>	-18 6	</pitchLimits>
+          <maxAmmo>	60	</maxAmmo>
+          <unlocks>
+            <gun>	_88mm_KwK_36_L56	  <cost>	9500	</cost>
+            </gun>
+            <vehicle>	PzV	  <cost>	47145	</cost>
+            </vehicle>
+          </unlocks>
+          <models>
+            <undamaged>	vehicles/german/G13_VK3001H/normal/lod0/Gun_05.model	</undamaged>
+            <destroyed>	vehicles/german/G13_VK3001H/crash/lod0/Gun_05.model	</destroyed>
+            <exploded>	vehicles/german/G13_VK3001H/crash/lod0/Gun_05.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/german/G13_VK3001H/collision/Gun_05.model	</collisionModel>
+          </hitTester>
+          <armor>
+            <armor_1>	120	  <noDamage>	true	</noDamage>
+            </armor_1>
+            <armor_2>	100	  <noDamage>	true	</noDamage>
+            </armor_2>
+            <armor_3>	60	  <noDamage>	true	</noDamage>
+            </armor_3>
+            <armor_4>	30	  <noDamage>	true	</noDamage>
+            </armor_4>
+            <gun>	20	</gun>
+          </armor>
+        </_75mm_KwK_L70>
+        <_88mm_KwK_36_L56>	shared	  <pitchLimits>	-18 6	</pitchLimits>
+          <maxAmmo>	52	</maxAmmo>
+          <reloadTime>	6.5	</reloadTime>
+          <models>
+            <undamaged>	vehicles/german/G13_VK3001H/normal/lod0/Gun_07.model	</undamaged>
+            <destroyed>	vehicles/german/G13_VK3001H/crash/lod0/Gun_07.model	</destroyed>
+            <exploded>	vehicles/german/G13_VK3001H/crash/lod0/Gun_07.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/german/G13_VK3001H/collision/Gun_07.model	</collisionModel>
+          </hitTester>
+          <armor>
+            <armor_1>	120	  <noDamage>	true	</noDamage>
+            </armor_1>
+            <armor_2>	100	  <noDamage>	true	</noDamage>
+            </armor_2>
+            <armor_3>	60	  <noDamage>	true	</noDamage>
+            </armor_3>
+            <armor_4>	30	  <noDamage>	true	</noDamage>
+            </armor_4>
+            <gun>	35	</gun>
+          </armor>
+        </_88mm_KwK_36_L56>
+        <_105mm_StuH42_L28Pz>	shared	  <pitchLimits>	-18 6	</pitchLimits>
+          <maxAmmo>	30	</maxAmmo>
+          <models>
+            <undamaged>	vehicles/german/G13_VK3001H/normal/lod0/Gun_06.model	</undamaged>
+            <destroyed>	vehicles/german/G13_VK3001H/crash/lod0/Gun_06.model	</destroyed>
+            <exploded>	vehicles/german/G13_VK3001H/crash/lod0/Gun_06.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/german/G13_VK3001H/collision/Gun_06.model	</collisionModel>
+          </hitTester>
+          <armor>
+            <armor_1>	120	  <noDamage>	true	</noDamage>
+            </armor_1>
+            <armor_2>	100	  <noDamage>	true	</noDamage>
+            </armor_2>
+            <armor_3>	60	  <noDamage>	true	</noDamage>
+            </armor_3>
+            <armor_4>	30	  <noDamage>	true	</noDamage>
+            </armor_4>
+            <gun>	40	</gun>
+          </armor>
+        </_105mm_StuH42_L28Pz>
+      </guns>
+      <emblemSlots>
+        <player>
+          <rayStart>	1.20134 0.478906 0.00141376	</rayStart>
+          <rayEnd>	0.846654 0.327636 -0.104945	</rayEnd>
+          <rayUp>	0.00907539 0.999478 0.0310075	</rayUp>
+          <size>	0.3	</size>
+          <hideIfDamaged>	true	</hideIfDamaged>
+        </player>
+        <player>
+          <rayStart>	-1.20134 0.478906 0.00141376	</rayStart>
+          <rayEnd>	-0.846654 0.327636 -0.104945	</rayEnd>
+          <rayUp>	0.00907539 0.999478 0.0310075	</rayUp>
+          <size>	0.3	</size>
+          <hideIfDamaged>	true	</hideIfDamaged>
+        </player>
+      </emblemSlots>
+      <showEmblemsOnGun>	false	</showEmblemsOnGun>
+      <physicsShape>	1.000 0.000 1.000 0.000 1.000 0.000 0.500 0.100 0.500 0.500 0.500 0.500 0.600 0.100 0.500	</physicsShape>
+    </VK3001H_Eliteturm>
+  </turrets0>
+  <engines>
+    <Maybach_HL_157P>	shared	  <unlocks>
+        <engine>	Maybach_HL_174	  <cost>	6200	</cost>
+        </engine>
+      </unlocks>
+    </Maybach_HL_157P>
+    <Maybach_HL_174>	shared	  <unlocks>
+        <engine>	Maybach_HL_210P30	  <cost>	11000	</cost>
+        </engine>
+      </unlocks>
+    </Maybach_HL_174>
+    <Maybach_HL_210P30>	shared	</Maybach_HL_210P30>
+  </engines>
+  <fuelTanks>
+    <Average>	shared	</Average>
+  </fuelTanks>
+  <radios>
+    <FuG5>	shared	  <unlocks>
+        <radio>	FuG7	  <cost>	1360.0	</cost>
+        </radio>
+      </unlocks>
+    </FuG5>
+    <FuG7>	shared	  <unlocks>
+        <radio>	FuG12	  <cost>	7200.0	</cost>
+        </radio>
+      </unlocks>
+    </FuG7>
+    <FuG12>	shared	</FuG12>
+  </radios>
+</VK3001H.xml>

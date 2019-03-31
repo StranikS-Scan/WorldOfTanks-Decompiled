@@ -1,0 +1,18 @@
+<AccountEditor.def>
+  <BaseMethods>
+    <onAccountKept>
+      <Arg>	OBJECT_ID	</Arg>
+      <Arg>	INT32	</Arg>
+    </onAccountKept>
+    <onAccountPropertiesChanged>
+      <Arg>	INT32	</Arg>
+      <Arg>	INT32	</Arg>
+    </onAccountPropertiesChanged>
+    <receiveProperties>
+      <Arg>	OBJECT_ID	</Arg>
+      <Arg>	DB_ID	</Arg>
+      <Arg>	INT32	</Arg>
+      <Arg>	PYTHON	</Arg>
+    </receiveProperties>
+  </BaseMethods>
+</AccountEditor.def>

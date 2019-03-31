@@ -1,0 +1,65 @@
+<post_effects.xml>
+  <common>
+    <effect>
+      <file>	wg_common_environment	</file>
+      <qualityMask>	1 1 1	</qualityMask>
+    </effect>
+    <effect>
+      <file>	wg_bloom	</file>
+      <qualityMask>	1 1 1	</qualityMask>
+      <mapDepended></mapDepended>
+    </effect>
+  </common>
+  <arcade>
+    <effect>
+      <file>	wg_motion_blur	</file>
+      <qualityMask>	1 1 1	</qualityMask>
+      <advanced></advanced>
+    </effect>
+  </arcade>
+  <sniper>
+    <effect>
+      <file>	wg_depth_of_field	</file>
+      <qualityMask>	1 1 1	</qualityMask>
+      <controller>	DofEffectCtrl	</controller>
+      <advanced></advanced>
+    </effect>
+    <effect>
+      <file>	wg_motion_blur	</file>
+      <qualityMask>	1 1 1	</qualityMask>
+      <advanced></advanced>
+    </effect>
+    <effect>
+      <file>	wg_lens_effect	</file>
+      <qualityMask>	1 1 1	</qualityMask>
+    </effect>
+  </sniper>
+  <strategic>
+    <effect>
+      <file>	wg_depth_of_field	</file>
+      <qualityMask>	1 1 1	</qualityMask>
+      <controller>	DofEffectCtrl	</controller>
+      <advanced></advanced>
+    </effect>
+  </strategic>
+  <postmortem>
+    <effect>
+      <file>	wg_postmortem	</file>
+      <qualityMask>	1 1 1	</qualityMask>
+      <optional>	mortem_post_effect	</optional>
+    </effect>
+  </postmortem>
+  <debug>
+    <effect>
+      <file>	wg_depth_of_field	</file>
+      <qualityMask>	1 1 1	</qualityMask>
+      <controller>	DofEffectManualDistanceCtrl	</controller>
+      <advanced></advanced>
+    </effect>
+    <effect>
+      <file>	wg_motion_blur	</file>
+      <qualityMask>	1 1 1	</qualityMask>
+      <advanced></advanced>
+    </effect>
+  </debug>
+</post_effects.xml>

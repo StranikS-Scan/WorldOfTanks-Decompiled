@@ -1,0 +1,223 @@
+<gun_effects.xml>
+  <shot_small>
+    <stages>
+      <shooting>	4.0	</shooting>
+    </stages>
+    <effects>
+      <pixie>
+        <startKey>	shooting	</startKey>
+        <file>	particles/Tank/shot_small_01.xml	</file>
+        <force>	1	</force>
+        <position>	HP_gunFire	</position>
+      </pixie>
+      <sound>
+        <startKey>	shooting	</startKey>
+        <name>	/weapons/small_fire/machine_gun_fire	</name>
+      </sound>
+    </effects>
+  </shot_small>
+  <shot_Breda_auto>
+    <stages>
+      <shooting>	4.0	</shooting>
+    </stages>
+    <effects>
+      <pixie>
+        <startKey>	shooting	</startKey>
+        <file>	particles/Tank/shot_small_01.xml	</file>
+        <force>	1	</force>
+        <position>	HP_gunFire	</position>
+      </pixie>
+      <sound>
+        <startKey>	shooting	</startKey>
+        <name>	/weapons/small_fire/Breda	</name>
+      </sound>
+    </effects>
+  </shot_Breda_auto>
+  <shot_MTLS_auto>
+    <stages>
+      <shooting>	4.0	</shooting>
+    </stages>
+    <effects>
+      <pixie>
+        <startKey>	shooting	</startKey>
+        <file>	particles/Tank/shot_MTLS.xml	</file>
+        <force>	1	</force>
+        <position>	HP_gunFire	</position>
+      </pixie>
+      <sound>
+        <startKey>	shooting	</startKey>
+        <name>	/weapons/small_fire/machine_gun_fire	</name>
+      </sound>
+    </effects>
+  </shot_MTLS_auto>
+  <shot_TNSH_auto>
+    <stages>
+      <shooting>	4.0	</shooting>
+    </stages>
+    <effects>
+      <pixie>
+        <startKey>	shooting	</startKey>
+        <file>	particles/Tank/shot_TNSH.xml	</file>
+        <force>	1	</force>
+        <position>	HP_gunFire	</position>
+      </pixie>
+      <sound>
+        <startKey>	shooting	</startKey>
+        <name>	/weapons/small_fire/TNSH	</name>
+      </sound>
+    </effects>
+  </shot_TNSH_auto>
+  <shot_Gochkins_auto>
+    <stages>
+      <shooting>	4.0	</shooting>
+    </stages>
+    <effects>
+      <pixie>
+        <startKey>	shooting	</startKey>
+        <file>	particles/Tank/shot_TNSH.xml	</file>
+        <force>	1	</force>
+        <position>	HP_gunFire	</position>
+      </pixie>
+      <sound>
+        <startKey>	shooting	</startKey>
+        <name>	/weapons/small_fire/Gochkis	</name>
+      </sound>
+    </effects>
+  </shot_Gochkins_auto>
+  <shot_KwK_L46>
+    <stages>
+      <shooting>	4.0	</shooting>
+    </stages>
+    <effects>
+      <pixie>
+        <startKey>	shooting	</startKey>
+        <file>	particles/Tank/shot_medium_01.xml	</file>
+        <force>	1	</force>
+        <position>	HP_gunFire	</position>
+      </pixie>
+      <sound>
+        <startKey>	shooting	</startKey>
+        <name>	/weapons/small_fire/KwK_L46	</name>
+      </sound>
+    </effects>
+  </shot_KwK_L46>
+  <shot_medium>
+    <stages>
+      <shooting>	4.0	</shooting>
+    </stages>
+    <effects>
+      <pixie>
+        <startKey>	shooting	</startKey>
+        <file>	particles/Tank/shot_medium_01.xml	</file>
+        <force>	1	</force>
+        <position>	HP_gunFire	</position>
+      </pixie>
+      <sound>
+        <startKey>	shooting	</startKey>
+        <name>	/weapons/small_fire/small_fire	</name>
+      </sound>
+    </effects>
+  </shot_medium>
+  <shot_medium_mb>
+    <stages>
+      <shooting>	4.0	</shooting>
+    </stages>
+    <effects>
+      <pixie>
+        <startKey>	shooting	</startKey>
+        <file>	particles/Tank/shot_medium_02.xml	</file>
+        <force>	1	</force>
+        <position>	HP_gunFire	</position>
+      </pixie>
+      <sound>
+        <startKey>	shooting	</startKey>
+        <name>	/weapons/small_fire/small_fire	</name>
+      </sound>
+    </effects>
+  </shot_medium_mb>
+  <shot_main>
+    <stages>
+      <shooting>	6.0	</shooting>
+    </stages>
+    <effects>
+      <pixie>
+        <startKey>	shooting	</startKey>
+        <file>	particles/Tank/shot_main_01.xml	</file>
+        <force>	1	</force>
+        <position>	HP_gunFire	</position>
+      </pixie>
+      <sound>
+        <startKey>	shooting	</startKey>
+        <name>	/weapons/medium_fire/medium_fire	</name>
+      </sound>
+    </effects>
+  </shot_main>
+  <shot_main_mb>
+    <stages>
+      <shooting>	6.0	</shooting>
+    </stages>
+    <effects>
+      <pixie>
+        <startKey>	shooting	</startKey>
+        <file>	particles/Tank/shot_main_02.xml	</file>
+        <force>	1	</force>
+        <position>	HP_gunFire	</position>
+      </pixie>
+      <sound>
+        <startKey>	shooting	</startKey>
+        <name>	/weapons/large_fire/large_fire	</name>
+      </sound>
+    </effects>
+  </shot_main_mb>
+  <shot_large>
+    <stages>
+      <shooting>	6.0	</shooting>
+    </stages>
+    <effects>
+      <pixie>
+        <startKey>	shooting	</startKey>
+        <file>	particles/Tank/shot_large_01.xml	</file>
+        <force>	1	</force>
+        <position>	HP_gunFire	</position>
+      </pixie>
+      <sound>
+        <startKey>	shooting	</startKey>
+        <name>	/weapons/medium_fire/medium_fire	</name>
+      </sound>
+    </effects>
+  </shot_large>
+  <shot_large_mb>
+    <stages>
+      <shooting>	6.0	</shooting>
+    </stages>
+    <effects>
+      <pixie>
+        <startKey>	shooting	</startKey>
+        <file>	particles/Tank/shot_large_02.xml	</file>
+        <force>	1	</force>
+        <position>	HP_gunFire	</position>
+      </pixie>
+      <sound>
+        <startKey>	shooting	</startKey>
+        <name>	/weapons/large_fire/large_fire	</name>
+      </sound>
+    </effects>
+  </shot_large_mb>
+  <shot_huge>
+    <stages>
+      <shooting>	6.0	</shooting>
+    </stages>
+    <effects>
+      <pixie>
+        <startKey>	shooting	</startKey>
+        <file>	particles/Tank/shot_huge_01.xml	</file>
+        <force>	1	</force>
+        <position>	HP_gunFire	</position>
+      </pixie>
+      <sound>
+        <startKey>	shooting	</startKey>
+        <name>	/weapons/medium_fire/medium_fire	</name>
+      </sound>
+    </effects>
+  </shot_huge>
+</gun_effects.xml>

@@ -1,4 +1,6 @@
+# Python bytecode 2.6 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/enumerations.py
+# Compiled at: 2010-04-28 21:40:03
 from debug_utils import deprecated, LOG_DEBUG
 import types, exceptions
 
@@ -41,7 +43,7 @@ class AttributeEnumItem(EnumItem):
         super(AttributeEnumItem, self).__init__(name, index, data, *args, **kwargs)
         self.__data = data
 
-    def get(self, attr, defval = None):
+    def get(self, attr, defval=None):
         return self.__data.get(attr, defval)
 
     def __getattr__(self, attr):
@@ -52,7 +54,7 @@ class AttributeEnumItem(EnumItem):
 
 class Enumeration:
 
-    def __init__(self, name, enumList, instance = EnumItem):
+    def __init__(self, name, enumList, instance=EnumItem):
         self.__doc__ = name
         lookup = {}
         idxLookup = {}
@@ -60,7 +62,7 @@ class Enumeration:
 
         def appendEnumItem(idx, enumItem):
             if type(enumItem) == types.TupleType:
-                x, = enumItem[0:1]
+                x = enumItem[0:1]
             else:
                 x = enumItem
             if type(x) != types.StringType:
@@ -83,7 +85,7 @@ class Enumeration:
             i = 0
             for e in enumList:
                 appendEnumItem(i, e)
-                i += 1
+                i = i + 1
 
         self.__lookup = lookup
         self.__idxLookup = idxLookup

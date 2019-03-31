@@ -1,12 +1,11 @@
+# Python bytecode 2.6 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/chat_shared.py
-import time
-import constants
-import zlib
-import cPickle
-from Event import Event
-from functools import wraps
+# Compiled at: 2011-09-01 18:07:09
 from wotdecorators import noexcept
+import time
+from Event import Event
 from debug_utils import LOG_RF, LOG_ERROR
+import constants
 from constants import CHAT_LOG, RESTRICTION_TYPE
 from enumerations import Enumeration, AttributeEnumItem
 __all__ = ['CHAT_ACTIONS', 'CHAT_ACTION_RESPONSES']
@@ -176,7 +175,6 @@ else:
 CHAT_RESPONSES = Enumeration('chatActionResponses', ('success', 'internalError', 'channelAlreadyExists', 'channelDestroyed', 'passwordRequired', 'incorrectPassword', 'channelNotExists', 'memberBanned', 'memberDisconnecting', 'notAllowed', 'connectTimeout', 'initializationFailure', 'userNotExists', 'usersRosterLimitReached', 'activeChannelsLimitReached', 'sqlError', 'incorrectCharacter', 'addFriendError', 'addIgnoredError', 'userIgnoredError', 'chatCommandError', 'memberAlreadyBanned', 'memberAlreadyModerator', 'memberNotModerator', 'commandInCooldown', 'createPrivateError', 'actionInCooldown', 'chatBanned', 'inviteCommandError', 'unknownCommand', 'inviteCreateError', 'membersLimitReached', 'notSupported', 'inviteCreationNotAllowed', 'incorrectCommandArgument', 'invalidChannelName', 'setMutedError', 'unsetMutedError'))
 __DEFAULT_COOLDOWN = 0.5
 __BATTLE_COMMANDS_DEFAULT_COOLDOWN = __DEFAULT_COOLDOWN
-__CHINA_USER_MESSAGE_COOLDOWN = 3.0
 __COOLDOWN_CHECK_CLIENT = 1
 __COOLDOWN_CHECK_BASE = 2
 __COOLDOWN_CHECK_ALL = __COOLDOWN_CHECK_CLIENT | __COOLDOWN_CHECK_BASE
@@ -234,14 +232,14 @@ CHAT_COMMANDS = Enumeration('chatCommands', [('initAck', {'chnlCmd': 0}),
                 'side': __COOLDOWN_CHECK_ALL}}),
  ('HELPME', {'battleCmd': 1,
    'argsCnt': 0,
-   'cooldown': {'period': 5.0,
+   'cooldown': {'period': __BATTLE_COMMANDS_DEFAULT_COOLDOWN,
                 'side': __COOLDOWN_CHECK_ALL},
    'msgText': '#ingame_gui:chat_shortcuts/help_me',
    'vehMarker': 'help_me',
    'sound_notification': 'help_me'}),
  ('FOLLOWME', {'battleCmd': 1,
-   'argsCnt': 1,
-   'cooldown': {'period': 5.0,
+   'argsCnt': 0,
+   'cooldown': {'period': __BATTLE_COMMANDS_DEFAULT_COOLDOWN,
                 'side': __COOLDOWN_CHECK_ALL},
    'msgText': '#ingame_gui:chat_shortcuts/follow_me',
    'vehMarker': 'follow_me',
@@ -263,14 +261,12 @@ CHAT_COMMANDS = Enumeration('chatCommands', [('initAck', {'chnlCmd': 0}),
    'cooldown': {'period': 5.0,
                 'side': __COOLDOWN_CHECK_ALL},
    'msgText': '#ingame_gui:chat_shortcuts/positive',
-   'vehMarker': 'positive',
    'sound_notification': 'positive'}),
  ('NEGATIVE', {'battleCmd': 1,
    'argsCnt': 0,
    'cooldown': {'period': 5.0,
                 'side': __COOLDOWN_CHECK_ALL},
    'msgText': '#ingame_gui:chat_shortcuts/negative',
-   'vehMarker': 'negative',
    'sound_notification': 'negative'}),
  ('ATTENTIONTOCELL', {'battleCmd': 1,
    'argsCnt': 1,
@@ -279,7 +275,7 @@ CHAT_COMMANDS = Enumeration('chatCommands', [('initAck', {'chnlCmd': 0}),
    'msgText': '#ingame_gui:chat_shortcuts/attention_to_cell'}),
  ('ATTACKENEMY', {'battleCmd': 1,
    'argsCnt': 1,
-   'cooldown': {'period': 5.0,
+   'cooldown': {'period': __BATTLE_COMMANDS_DEFAULT_COOLDOWN,
                 'side': __COOLDOWN_CHECK_ALL},
    'msgText': '#ingame_gui:chat_shortcuts/attack_enemy',
    'vehMarker': 'attack',
@@ -327,7 +323,7 @@ CHAT_COMMANDS = Enumeration('chatCommands', [('initAck', {'chnlCmd': 0}),
    'cooldown': {'period': __DEFAULT_COOLDOWN,
                 'side': 0}}),
  ('broadcast', {'chnlCmd': 0,
-   'cooldown': {'period': __DEFAULT_COOLDOWN if not constants.IS_CHINA else __CHINA_USER_MESSAGE_COOLDOWN,
+   'cooldown': {'period': __DEFAULT_COOLDOWN,
                 'side': __COOLDOWN_CHECK_ALL}}),
  ('USERBAN', {'userCmd': 1,
    'argsCnt': 4,
@@ -351,64 +347,7 @@ CHAT_COMMANDS = Enumeration('chatCommands', [('initAck', {'chnlCmd': 0}),
                 'side': __COOLDOWN_CHECK_ALL}}),
  ('logVivoxLogin', {'chnlCmd': 0,
    'cooldown': {'period': __DEFAULT_COOLDOWN,
-                'side': __COOLDOWN_CHECK_ALL}}),
- ('TURNBACK', {'battleCmd': 1,
-   'argsCnt': 1,
-   'cooldown': {'period': 5.0,
-                'side': __COOLDOWN_CHECK_ALL},
-   'msgText': '#ingame_gui:chat_shortcuts/turn_back',
-   'vehMarker': 'turn_back',
-   'sound_notification': 'turn_back'}),
- ('HELPMEEX', {'battleCmd': 1,
-   'argsCnt': 1,
-   'cooldown': {'period': 5.0,
-                'side': __COOLDOWN_CHECK_ALL},
-   'msgText': '#ingame_gui:chat_shortcuts/help_me_ex',
-   'vehMarker': 'help_me_ex',
-   'sound_notification': 'help_me_ex'}),
- ('SUPPORTMEWITHFIRE', {'battleCmd': 1,
-   'argsCnt': 1,
-   'cooldown': {'period': 5.0,
-                'side': __COOLDOWN_CHECK_ALL},
-   'msgText': '#ingame_gui:chat_shortcuts/support_me_with_fire',
-   'vehMarker': 'attack',
-   'sound_notification': 'support_me_with_fire'}),
- ('RELOADINGGUN', {'battleCmd': 1,
-   'argsCnt': 1,
-   'cooldown': {'period': 5.0,
-                'side': __COOLDOWN_CHECK_ALL},
-   'msgText': '#ingame_gui:chat_shortcuts/reloading_gun',
-   'vehMarker': 'reloading_gun',
-   'sound_notification': 'reloading_gun'}),
- ('STOP', {'battleCmd': 1,
-   'argsCnt': 1,
-   'cooldown': {'period': 5.0,
-                'side': __COOLDOWN_CHECK_ALL},
-   'msgText': '#ingame_gui:chat_shortcuts/stop',
-   'vehMarker': 'stop',
-   'sound_notification': 'stop'}),
- ('RELOADING_CASSETE', {'battleCmd': 1,
-   'argsCnt': 2,
-   'cooldown': {'period': 5.0,
-                'side': __COOLDOWN_CHECK_ALL},
-   'msgText': '#ingame_gui:chat_shortcuts/reloading_cassette',
-   'vehMarker': 'reloading_gun',
-   'sound_notification': 'reloading_gun'}),
- ('RELOADING_READY', {'battleCmd': 1,
-   'argsCnt': 0,
-   'cooldown': {'period': 5.0,
-                'side': __COOLDOWN_CHECK_ALL},
-   'msgText': '#ingame_gui:chat_shortcuts/reloading_ready'}),
- ('RELOADING_READY_CASSETE', {'battleCmd': 1,
-   'argsCnt': 1,
-   'cooldown': {'period': 5.0,
-                'side': __COOLDOWN_CHECK_ALL},
-   'msgText': '#ingame_gui:chat_shortcuts/reloading_ready_cassette'}),
- ('RELOADING_UNAVAILABLE', {'battleCmd': 1,
-   'argsCnt': 0,
-   'cooldown': {'period': 5.0,
-                'side': __COOLDOWN_CHECK_ALL},
-   'msgText': '#ingame_gui:chat_shortcuts/reloading_unavailable'})], instance=AttributeEnumItem)
+                'side': __COOLDOWN_CHECK_ALL}})], instance=AttributeEnumItem)
 CHAT_MEMBER_STATUSES = Enumeration('chatMemberStatuses', ['available', 'inBattle'])
 CHAT_MEMBER_BAN_TYPE = Enumeration('chatMemberBanType', ['none', 'readonly', 'full'])
 CHAT_MEMBER_ROLE = Enumeration('chatMemberRole', ['member', 'visitor', 'moderator'])
@@ -428,7 +367,6 @@ CHAT_CHANNEL_VOICE = 256
 CHAT_CHANNEL_CLAN = 512
 CHAT_CHANNEL_PREBATTLE_CLAN = 1024
 CHAT_CHANNEL_TOURNAMENT = 2048
-CHAT_CHANNEL_UNIT = 4096
 CHAT_CHANNEL_NOTIFY_MEMBERS_MASK = 3
 CHAT_CHANNEL_NOTIFY_MEMBERS_IN_OUT = 0
 CHAT_CHANNEL_NOT_NOTIFY_MEMBERS_IN_OUT = 1
@@ -449,7 +387,7 @@ def boundActionResponseFilter(response):
     return wrap
 
 
-def buildChatActionData(action, channelId = None, **kwArgs):
+def buildChatActionData(action, channelId=None, **kwArgs):
     data = {}
     data['requestID'] = kwArgs.get('requestID', -1)
     data['action'] = action.index()
@@ -476,14 +414,13 @@ def getChannelsIDFromKey(key):
     if key.startswith(ChatChannelKeyPrefix):
         strID = key.replace(ChatChannelKeyPrefix, '')
         return int(strID)
-    return 0
 
 
 def isChannelSecured(channelInfo):
     return channelInfo is not None and channelInfo.get('isReadOnly', False)
 
 
-def _testChannelFlag(channelInfo, testedFlag, resultForNone = True):
+def _testChannelFlag(channelInfo, testedFlag, resultForNone=True):
     if channelInfo is None:
         return resultForNone
     else:
@@ -531,10 +468,6 @@ def isBattleTeamFlags(flags):
     return _testFlags(flags, CHAT_CHANNEL_BATTLE)
 
 
-def isArenaBattleTeamFlags(flags):
-    return _testFlags(flags, CHAT_CHANNEL_BATTLE_TEAM)
-
-
 def isChannelHasVoice(channelInfo):
     return _testChannelFlag(channelInfo, CHAT_CHANNEL_VOICE)
 
@@ -575,7 +508,7 @@ class BaseChatCommandProcessor(object):
     def __init__(self, comand):
         self._command = comand
 
-    def parseRawData(self, rawData, verifyData = True):
+    def parseRawData(self, rawData, verifyData=True):
         if verifyData:
             self.__verifyRawData(rawData)
         parsedData = self._makeTuple(rawData)
@@ -583,7 +516,7 @@ class BaseChatCommandProcessor(object):
             self._verifyTupledData(parsedData)
         return self._adjustTupleDataTypes(parsedData)
 
-    def verifyParsedData(self, int64Arg = 0, int16arg = 0, stringArg1 = '', stringArg2 = ''):
+    def verifyParsedData(self, int64Arg=0, int16arg=0, stringArg1='', stringArg2=''):
         return True
 
     def _verifyTupledData(self, dataAsTuple):
@@ -646,7 +579,7 @@ class BanCommandProcessor(BaseChatCommandProcessor):
          rawData[0],
          rawData[2])
 
-    def verifyParsedData(self, int64Arg = 0, int16arg = 0, stringArg1 = '', stringArg2 = ''):
+    def verifyParsedData(self, int64Arg=0, int16arg=0, stringArg1='', stringArg2=''):
         errorMessage = '#chat:errors/timeincorrect'
         timeArg = int16arg
         if isinstance(timeArg, basestring) and timeArg.isdigit() or isinstance(timeArg, (int, long)):
@@ -702,7 +635,7 @@ class UserBanCommandProcessor(UserCommandProcessor):
                 elif 'y' == timeSpec:
                     multiplier = 43200
                 if '-' == sign:
-                    multiplier *= -1
+                    multiplier = -1 * multiplier
                 banPeriod = long(amount) * multiplier
         elif isinstance(rawData[2], long):
             banPeriod = rawData[2]
@@ -710,7 +643,7 @@ class UserBanCommandProcessor(UserCommandProcessor):
             raise IncorrectCommandArgumentError(rawData[2])
         words = rawData[3].split()
         if words and 'kick' == words[0].lower():
-            banTypeIdx *= -1
+            banTypeIdx = -1 * banTypeIdx
             rawData[3] = ' '.join(words[1:])
         return (self._command,
          banPeriod,
@@ -718,9 +651,9 @@ class UserBanCommandProcessor(UserCommandProcessor):
          rawData[1],
          rawData[3])
 
-    def verifyParsedData(self, banPeriod = 0, banTypeIdx = 0, username = '', reason = ''):
-        if not (isinstance(banPeriod, basestring) and banPeriod.isdigit() or isinstance(banPeriod, (int, long))):
-            raise IncorrectCommandArgumentError(banPeriod)
+    def verifyParsedData(self, banPeriod=0, banTypeIdx=0, username='', reason=''):
+        if not (isinstance(banPeriod, basestring) and banPeriod.isdigit()):
+            raise isinstance(banPeriod, (int, long)) or IncorrectCommandArgumentError(banPeriod)
         try:
             _ = UserCommandProcessor._USER_BAN_TYPES[banTypeIdx]
         except:
@@ -748,7 +681,7 @@ class UserUnbanCommandProcessor(UserCommandProcessor):
          rawData[1],
          '')
 
-    def verifyParsedData(self, banPeriod = 0, banTypeIdx = 0, username = '', reason = ''):
+    def verifyParsedData(self, banPeriod=0, banTypeIdx=0, username='', reason=''):
         try:
             _ = UserCommandProcessor._USER_BAN_TYPES[banTypeIdx]
         except:
@@ -787,10 +720,10 @@ def initChatCooldownData():
     return cooldDownData
 
 
-if constants.IS_CLIENT or constants.IS_BOT:
+if constants.IS_CLIENT:
     g_chatCooldownData = initChatCooldownData()
 
-def __isOperationInCooldown(cooldownDataInfo, operation, update = True):
+def __isOperationInCooldown(cooldownDataInfo, operation, update=True):
     cooldDownData = cooldownDataInfo.get(operation.index(), None)
     if cooldDownData:
         checkSide = __COOLDOWN_CHECK_CLIENT if constants.IS_CLIENT else __COOLDOWN_CHECK_BASE
@@ -807,7 +740,7 @@ def __isOperationInCooldown(cooldownDataInfo, operation, update = True):
     return False
 
 
-def isOperationInCooldown(cooldownData, operation, update = True):
+def isOperationInCooldown(cooldownData, operation, update=True):
     return __isOperationInCooldown(cooldownData, operation, update=update)
 
 
@@ -822,7 +755,7 @@ def isChatAdmin(username):
     return username in _g_chatadmins
 
 
-def __isCommandFromCategory(category, cmdName = None, cmdIdx = None):
+def __isCommandFromCategory(category, cmdName=None, cmdIdx=None):
     try:
         if cmdIdx is None:
             cmdItem = CHAT_COMMANDS.lookup(cmdName)
@@ -882,7 +815,7 @@ def isCommandMessage(message):
     return False
 
 
-def parseCommandMessage(message, verifyArgs = True):
+def parseCommandMessage(message, verifyArgs=True):
     if isCommandMessage(message):
         data = message[1:].split(None, 1)
         cmd = CHAT_COMMANDS.lookup(data[0])
@@ -897,7 +830,7 @@ def parseCommandMessage(message, verifyArgs = True):
     return
 
 
-def verifyCommandData(command, int64Arg = 0, int16arg = 0, stringArg1 = '', stringArg2 = ''):
+def verifyCommandData(command, int64Arg=0, int16arg=0, stringArg1='', stringArg2=''):
     cmdProcessor = _g_chatCommandProcessors.get(command, None)
     if cmdProcessor is None:
         LOG_ERROR('Can`t process arguments: command %s hasn`t argument processor. command ignored' % (command,))
@@ -955,7 +888,7 @@ class ChatActionHandlers(object):
 
 class ChatError:
 
-    def __init__(self, response = None, auxMessage = None, messageArgs = None):
+    def __init__(self, response=None, auxMessage=None, messageArgs=None):
         self.__response = CHAT_RESPONSES.internalError if response is None else response
         self.__auxMessage = auxMessage
         self._messageArgs = messageArgs
@@ -988,7 +921,7 @@ class UserBannedError(ChatError):
         if self.__banEndTime is not None:
             return 'You are banned by user %s till %s. Reason: %s.' % (self.__banOwnerNick, self.__banEndTime, self.__banReason)
         else:
-            return 'You are banned by user %s till %s. Reason: %s.' % (self.__banOwnerNick, self.__banEndTime, self.__banReason)
+            return 'You are banned by user %s till %s. Reason: %s.' % (self.__banOwnerNick, self.__banReason)
             return
 
 
@@ -1011,7 +944,7 @@ class ChatBannedError(ChatError):
 
 class ChatSQLError(ChatError):
 
-    def __init__(self, error = None):
+    def __init__(self, error=None):
         ChatError.__init__(self, CHAT_RESPONSES.sqlError)
         self.__error = error
         self._messageArgs = {'error': error}
@@ -1026,7 +959,7 @@ class IncorrectCharacter(ChatError):
         ChatError.__init__(self, CHAT_RESPONSES.incorrectCharacter)
 
     def _getMessage(self):
-        return 'String contains incorrect character(s)'
+        pass
 
 
 class AddFriendError(ChatError):
@@ -1119,7 +1052,7 @@ class UsersRosterLimitReached(ChatError):
 
 class ChatCommandError(ChatError):
 
-    def __init__(self, response = None, error = None):
+    def __init__(self, response=None, error=None):
         ChatError.__init__(self, CHAT_RESPONSES.chatCommandError if response is None else response)
         self.__error = error
         if error is not None:
@@ -1132,7 +1065,7 @@ class ChatCommandError(ChatError):
 
 class InviteCommandError(ChatError):
 
-    def __init__(self, inviteID, response = None, error = None):
+    def __init__(self, inviteID, response=None, error=None):
         ChatError.__init__(self, CHAT_RESPONSES.inviteCommandError if response is None else response)
         self.__error = error
         self.__inviteID = inviteID
@@ -1147,14 +1080,14 @@ class InviteCommandError(ChatError):
 
 class InviteCreateError(InviteCommandError):
 
-    def __init__(self, response = None, error = None):
+    def __init__(self, response=None, error=None):
         InviteCommandError.__init__(self, None, response=CHAT_RESPONSES.inviteCreateError if response is None else response, error=error)
         return
 
 
 class InviteCreationNotAllowed(InviteCreateError):
 
-    def __init__(self, response = None, error = None):
+    def __init__(self, response=None, error=None):
         InviteCreateError.__init__(self, response=CHAT_RESPONSES.inviteCreationNotAllowed if response is None else response, error=error)
         return
 
@@ -1206,7 +1139,7 @@ class IncorrectCommandArgumentError(ChatCommandError):
 
 class ChatException(ChatError, Exception):
 
-    def __init__(self, response = None):
+    def __init__(self, response=None):
         ChatError.__init__(self, response)
 
 
@@ -1254,21 +1187,10 @@ SYS_MESSAGE_TYPE = Enumeration('systemMessageType', ['serverReboot',
  'prbDestruction',
  'vehicleCamouflageTimedOut',
  'vehTypeLockExpired',
- 'accountDeleted',
- 'serverDowntimeCompensation',
- 'vehiclePlayerEmblemTimedOut',
- 'vehiclePlayerInscriptionTimedOut',
- 'achievementReceived',
- 'converter',
- 'tokenQuests',
- 'notificationsCenter',
- 'historicalCostsReserved',
- 'clanEvent',
- 'fortEvent'])
+ 'accountDeleted'])
 SYS_MESSAGE_IMPORTANCE = Enumeration('systemMessageImportance', ['normal', 'high'])
 SM_REQUEST_PERSONAL_MESSAGES_FLAG = 1
 SM_REQUEST_SYSTEM_MESSAGES_FLAG = 2
-SM_REQUEST_INTERNAL_SYS_MESSAGES_FLAG = 4
 
 def isMembersListSupported(channelInfo):
     if channelInfo is None:
@@ -1317,18 +1239,3 @@ def _checkRosterAccessBitmask(rosterData, bitmask):
 class MESSAGE_FILTER_TYPE(object):
     EXCLUDE = 1
     INCLUDE = 2
-
-
-def compressSysMessage(message):
-    if isinstance(message, dict):
-        message = zlib.compress(cPickle.dumps(message, -1), 1)
-    return message
-
-
-def decompressSysMessage(message):
-    try:
-        message = cPickle.loads(zlib.decompress(message))
-    except:
-        pass
-
-    return message

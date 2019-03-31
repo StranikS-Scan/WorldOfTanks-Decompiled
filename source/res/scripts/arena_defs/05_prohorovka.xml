@@ -1,0 +1,20 @@
+<05_prohorovka.xml>
+  <name>	#arenas:05_prohorovka/name	</name>
+  <description>	#arenas:05_prohorovka/description	</description>
+  <geometry>	spaces/05_prohorovka	</geometry>
+  <boundingBox>
+    <bottomLeft>	-500.0 -500.0	</bottomLeft>
+    <upperRight>	500.0 500.0	</upperRight>
+  </boundingBox>
+  <roundLength>	900	</roundLength>
+  <defaultMinimap>	spaces/05_prohorovka/mmap.dds	</defaultMinimap>
+  <umbraEnabled>	1	</umbraEnabled>
+  <batchingEnabled>	0	</batchingEnabled>
+  <defaultGroundEffect>	ground	</defaultGroundEffect>
+  <loadingMusic>	/music/intro/rus_village	</loadingMusic>
+  <water>
+    <texScale>	0	</texScale>
+    <freqX>	0	</freqX>
+    <freqZ>	0	</freqZ>
+  </water>
+</05_prohorovka.xml>

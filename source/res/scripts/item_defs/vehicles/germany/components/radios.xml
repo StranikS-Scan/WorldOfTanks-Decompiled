@@ -1,0 +1,235 @@
+<radios.xml>
+  <ids>
+    <Die_Signalfahnen>	0	</Die_Signalfahnen>
+    <FuG2>	1	</FuG2>
+    <FuG5>	2	</FuG5>
+    <FuG6>	3	</FuG6>
+    <FuG7>	4	</FuG7>
+    <FuG8>	5	</FuG8>
+    <FuG10>	6	</FuG10>
+    <FuG11>	7	</FuG11>
+    <FuG12>	8	</FuG12>
+    <FuG_Spr.A>	10	</FuG_Spr.A>
+    <FuG37>	11	</FuG37>
+    <FuG_Spr.1>	12	</FuG_Spr.1>
+    <_10WSc>	13	</_10WSc>
+    <FuG8f>	14	</FuG8f>
+    <FuG7A>	15	</FuG7A>
+    <FuG12A>	16	</FuG12A>
+  </ids>
+  <shared>
+    <Die_Signalfahnen>
+      <userString>	#germany_vehicles:Die_Signalfahnen	</userString>
+      <description>	#germany_vehicles:Die_Signalfahnen_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 9 1	</icon>
+      <tags></tags>
+      <Level>	1	</Level>
+      <price>	0	</price>
+      <weight>	1	</weight>
+      <distance>	100	</distance>
+      <maxHealth>	90	</maxHealth>
+      <maxRegenHealth>	75	</maxRegenHealth>
+      <repairCost>	0	</repairCost>
+    </Die_Signalfahnen>
+    <FuG2>
+      <userString>	#germany_vehicles:FuG2	</userString>
+      <description>	#germany_vehicles:FuG2_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 9 1	</icon>
+      <tags></tags>
+      <level>	2	</level>
+      <price>	180.0	</price>
+      <weight>	40	</weight>
+      <distance>	300	</distance>
+      <maxHealth>	100	</maxHealth>
+      <maxRegenHealth>	49	</maxRegenHealth>
+      <repairCost>	0.5	</repairCost>
+    </FuG2>
+    <FuG5>
+      <userString>	#germany_vehicles:FuG5	</userString>
+      <description>	#germany_vehicles:FuG5_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 9 1	</icon>
+      <tags></tags>
+      <level>	3	</level>
+      <price>	630.0	</price>
+      <weight>	50	</weight>
+      <distance>	350	</distance>
+      <maxHealth>	100	</maxHealth>
+      <maxRegenHealth>	49	</maxRegenHealth>
+      <repairCost>	0.5	</repairCost>
+    </FuG5>
+    <FuG6>
+      <userString>	#germany_vehicles:FuG6	</userString>
+      <description>	#germany_vehicles:FuG6_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 9 1	</icon>
+      <tags></tags>
+      <level>	4	</level>
+      <price>	2220.0	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	70	</weight>
+      <distance>	390	</distance>
+      <maxHealth>	100	</maxHealth>
+      <maxRegenHealth>	60	</maxRegenHealth>
+      <repairCost>	1	</repairCost>
+    </FuG6>
+    <FuG7>
+      <userString>	#germany_vehicles:FuG7	</userString>
+      <description>	#germany_vehicles:FuG7_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 9 1	</icon>
+      <tags></tags>
+      <level>	6	</level>
+      <price>	8160.0	</price>
+      <weight>	70	</weight>
+      <distance>	470	</distance>
+      <maxHealth>	120	</maxHealth>
+      <maxRegenHealth>	60	</maxRegenHealth>
+      <repairCost>	1.5	</repairCost>
+    </FuG7>
+    <FuG7A>
+      <userString>	#germany_vehicles:FuG7A	</userString>
+      <description>	#germany_vehicles:FuG7A_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 9 1	</icon>
+      <tags></tags>
+      <level>	6	</level>
+      <price>	8160.0	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	150	</weight>
+      <distance>	810	</distance>
+      <maxHealth>	150	</maxHealth>
+      <maxRegenHealth>	75	</maxRegenHealth>
+      <repairCost>	3	</repairCost>
+    </FuG7A>
+    <FuG8>
+      <userString>	#germany_vehicles:FuG8	</userString>
+      <description>	#germany_vehicles:FuG8_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 9 1	</icon>
+      <tags></tags>
+      <level>	8	</level>
+      <price>	24240.0	</price>
+      <weight>	50	</weight>
+      <distance>	600	</distance>
+      <maxHealth>	100	</maxHealth>
+      <maxRegenHealth>	50	</maxRegenHealth>
+      <repairCost>	2.5	</repairCost>
+    </FuG8>
+    <FuG10>
+      <userString>	#germany_vehicles:FuG10	</userString>
+      <description>	#germany_vehicles:FuG10_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 9 1	</icon>
+      <tags></tags>
+      <level>	7	</level>
+      <price>	21600.0	</price>
+      <weight>	100	</weight>
+      <distance>	520	</distance>
+      <maxHealth>	150	</maxHealth>
+      <maxRegenHealth>	75	</maxRegenHealth>
+      <repairCost>	1.5	</repairCost>
+    </FuG10>
+    <FuG11>
+      <userString>	#germany_vehicles:FuG11	</userString>
+      <description>	#germany_vehicles:FuG11_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 9 1	</icon>
+      <tags></tags>
+      <level>	8	</level>
+      <price>	33600.0	</price>
+      <weight>	70	</weight>
+      <distance>	700	</distance>
+      <maxHealth>	150	</maxHealth>
+      <maxRegenHealth>	75	</maxRegenHealth>
+      <repairCost>	2.5	</repairCost>
+    </FuG11>
+    <FuG12>
+      <userString>	#germany_vehicles:FuG12	</userString>
+      <description>	#germany_vehicles:FuG12_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 9 1	</icon>
+      <tags></tags>
+      <level>	9	</level>
+      <price>	43200.0	</price>
+      <weight>	150	</weight>
+      <distance>	810	</distance>
+      <maxHealth>	150	</maxHealth>
+      <maxRegenHealth>	75	</maxRegenHealth>
+      <repairCost>	3	</repairCost>
+    </FuG12>
+    <FuG_Spr.1>
+      <userString>	#germany_vehicles:FuG_Spr.1	</userString>
+      <description>	#germany_vehicles:FuG_Spr.1_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 9 1	</icon>
+      <tags></tags>
+      <level>	7	</level>
+      <price>	21600.0	</price>
+      <weight>	150	</weight>
+      <distance>	520	</distance>
+      <maxHealth>	150	</maxHealth>
+      <maxRegenHealth>	75	</maxRegenHealth>
+      <repairCost>	1.5	</repairCost>
+    </FuG_Spr.1>
+    <FuG_Spr.A>
+      <userString>	#germany_vehicles:FuG_Spr.A	</userString>
+      <description>	#germany_vehicles:FuG_Spr.A_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 9 1	</icon>
+      <tags></tags>
+      <level>	8	</level>
+      <price>	27000.0	</price>
+      <weight>	150	</weight>
+      <distance>	800	</distance>
+      <maxHealth>	150	</maxHealth>
+      <maxRegenHealth>	75	</maxRegenHealth>
+      <repairCost>	2.5	</repairCost>
+    </FuG_Spr.A>
+    <FuG37>
+      <userString>	#germany_vehicles:FuG37	</userString>
+      <description>	#germany_vehicles:FuG37_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 9 1	</icon>
+      <tags></tags>
+      <level>	3	</level>
+      <price>	690.0	</price>
+      <weight>	40	</weight>
+      <distance>	360	</distance>
+      <maxHealth>	100	</maxHealth>
+      <maxRegenHealth>	49	</maxRegenHealth>
+      <repairCost>	0.5	</repairCost>
+    </FuG37>
+    <_10WSc>
+      <userString>	#germany_vehicles:_10WSc	</userString>
+      <description>	#germany_vehicles:_10WSc_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 9 1	</icon>
+      <tags></tags>
+      <level>	10	</level>
+      <notInShop>	true	</notInShop>
+      <price>	51600.0	</price>
+      <weight>	160	</weight>
+      <distance>	820	</distance>
+      <maxHealth>	250	</maxHealth>
+      <maxRegenHealth>	75	</maxRegenHealth>
+      <repairCost>	3.5	</repairCost>
+    </_10WSc>
+    <FuG8f>
+      <userString>	#germany_vehicles:FuG8	</userString>
+      <description>	#germany_vehicles:FuG8_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 9 1	</icon>
+      <tags></tags>
+      <level>	8	</level>
+      <price>	20300	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	50	</weight>
+      <distance>	600	</distance>
+      <maxHealth>	100	</maxHealth>
+      <maxRegenHealth>	50	</maxRegenHealth>
+      <repairCost>	2.5	</repairCost>
+    </FuG8f>
+    <FuG12A>
+      <userString>	#germany_vehicles:FuG12A	</userString>
+      <description>	#germany_vehicles:FuG12A_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 9 1	</icon>
+      <notInShop>	true	</notInShop>
+      <tags></tags>
+      <level>	9	</level>
+      <price>	7200	</price>
+      <weight>	150	</weight>
+      <distance>	810	</distance>
+      <maxHealth>	150	</maxHealth>
+      <maxRegenHealth>	75	</maxRegenHealth>
+      <repairCost>	3	</repairCost>
+    </FuG12A>
+  </shared>
+</radios.xml>

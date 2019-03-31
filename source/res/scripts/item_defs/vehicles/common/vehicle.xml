@@ -1,0 +1,276 @@
+<vehicle.xml>
+  <balance>
+    <byVehicleModule>
+      <name>	ussr:T-54	  <weight>	87.0	</weight>
+      </name>
+      <name>	usa:M46_Patton	  <weight>	87.0	</weight>
+      </name>
+      <name>	germany:E-50	  <weight>	87.0	</weight>
+      </name>
+      <name>	ussr:Object_704	  <weight>	87.0	</weight>
+      </name>
+      <name>	germany:JagdTiger	  <weight>	87.0	</weight>
+      </name>
+      <name>	usa:T95	  <weight>	87.0	</weight>
+      </name>
+      <name>	germany:H39_captured	  <weight>	7.0	</weight>
+      </name>
+      <name>	ussr:ISU-152	  <weight>	58.0	</weight>
+      </name>
+      <name>	germany:Ferdinand	  <weight>	58.0	</weight>
+      </name>
+      <name>	usa:T28	  <weight>	58.0	</weight>
+      </name>
+      <name>	ussr:T_50_2	  <weight>	18.0	</weight>
+      </name>
+      <name>	germany:VK2801	  <weight>	18.0	</weight>
+      </name>
+      <name>	usa:M24_Chaffee	  <weight>	18.0	</weight>
+      </name>
+    </byVehicleModule>
+    <byComponentLevels>	2.0 3.0 5.0 8.0 12.0 18.0 27.0 40.0 60.0 100.0	</byComponentLevels>
+    <byVehicleClasses>
+      <lightTank>	1.0	</lightTank>
+      <mediumTank>	1.0	</mediumTank>
+      <heavyTank>	1.45	</heavyTank>
+      <AT-SPG>	1.0	</AT-SPG>
+      <SPG>	1.2	</SPG>
+    </byVehicleClasses>
+    <modulesWeightMultipliers>
+      <vehicle>	1.0	</vehicle>
+      <gun>	0.0	</gun>
+      <turret>	0.0	</turret>
+      <engine>	0.0	</engine>
+      <chassis>	0.0	</chassis>
+      <radio>	0.0	</radio>
+    </modulesWeightMultipliers>
+    <bySquadSize>	1.0 1.0 1.0	</bySquadSize>
+  </balance>
+  <lodLevels>
+    <NEAR>	30	</NEAR>
+    <MEDIUM>	70	</MEDIUM>
+    <FAR>	120	</FAR>
+  </lodLevels>
+  <miscParams>
+    <damageStickersLodDist>	MEDIUM	</damageStickersLodDist>
+    <projectileSpeedFactor>	0.8	</projectileSpeedFactor>
+    <minFireStartingDamage>	21	</minFireStartingDamage>
+    <hornCooldown>
+      <window>	25	</window>
+      <clientWindowExpansion>	5	</clientWindowExpansion>
+      <maxSignals>	3	</maxSignals>
+    </hornCooldown>
+  </miscParams>
+  <materialDevices>
+    <armor_1>	armor	</armor_1>
+    <armor_2>	armor	</armor_2>
+    <armor_3>	armor	</armor_3>
+    <armor_4>	armor	</armor_4>
+    <armor_5>	armor	</armor_5>
+    <armor_6>	armor	</armor_6>
+    <armor_7>	armor	</armor_7>
+    <armor_8>	armor	</armor_8>
+    <armor_9>	armor	</armor_9>
+    <armor_10>	armor	</armor_10>
+    <armor_11>	armor	</armor_11>
+    <armor_12>	armor	</armor_12>
+    <armor_13>	armor	</armor_13>
+    <armor_14>	armor	</armor_14>
+    <armor_15>	armor	</armor_15>
+    <armor_16>	armor	</armor_16>
+    <engine>	engineHealth	</engine>
+    <ammoBay>	ammoBayHealth	</ammoBay>
+    <fuelTank>	fuelTankHealth	</fuelTank>
+    <radio>	radioHealth	</radio>
+    <leftTrack>	leftTrackHealth	</leftTrack>
+    <rightTrack>	rightTrackHealth	</rightTrack>
+    <gun>	gunHealth	</gun>
+    <turretRotator>	turretRotatorHealth	</turretRotator>
+    <surveyingDevice>	surveyingDeviceHealth	</surveyingDevice>
+    <commander>	commanderHealth	</commander>
+    <driver>	driverHealth	</driver>
+    <radioman_1>	radioman1Health	</radioman_1>
+    <radioman_2>	radioman2Health	</radioman_2>
+    <gunner_1>	gunner1Health	</gunner_1>
+    <gunner_2>	gunner2Health	</gunner_2>
+    <loader_1>	loader1Health	</loader_1>
+    <loader_2>	loader2Health	</loader_2>
+  </materialDevices>
+  <devices>	engineHealth
+		ammoBayHealth
+		fuelTankHealth
+		radioHealth
+		leftTrackHealth
+		rightTrackHealth
+		gunHealth
+		turretRotatorHealth
+		surveyingDeviceHealth	</devices>
+  <extras>
+    <shoot>	ShowShooting : Shoot	</shoot>
+    <noAmmo>	NoneExtra : NoAmmo	</noAmmo>
+    <gunReload>	NoneExtra : GunReload	</gunReload>
+    <fire>	Fire : Fire	  <sounds>
+        <fireStarted>	fire_started	</fireStarted>
+        <fireStopped>	fire_stopped	</fireStopped>
+      </sounds>
+    </fire>
+    <stereoscope>	NoneExtra : Stereoscope	</stereoscope>
+    <camouflageNet>	NoneExtra : StillVehicleFactor	</camouflageNet>
+    <handExtinguishers>	NoneExtra : Extinguisher	</handExtinguishers>
+    <autoExtinguishers>	NoneExtra : Extinguisher	</autoExtinguishers>
+    <smallMedkit>	NoneExtra : Repairkit	</smallMedkit>
+    <largeMedkit>	NoneExtra : Repairkit	</largeMedkit>
+    <smallRepairkit>	NoneExtra : Repairkit	</smallRepairkit>
+    <largeRepairkit>	NoneExtra : Repairkit	</largeRepairkit>
+    <lendLeaseOil>	NoneExtra : Fuel	</lendLeaseOil>
+    <gasoline100>	NoneExtra : Fuel	</gasoline100>
+    <gasoline105>	NoneExtra : Fuel	</gasoline105>
+    <chocolate>	NoneExtra : Stimulator	</chocolate>
+    <cocacola>	NoneExtra : Stimulator	</cocacola>
+    <ration>	NoneExtra : Stimulator	</ration>
+    <ration_china>	NoneExtra : Stimulator	</ration_china>
+    <removedRpmLimiter>	NoneExtra : RemovedRpmLimiter	</removedRpmLimiter>
+    <qualityOil>	NoneExtra : Fuel	</qualityOil>
+    <engineHealth>	DamageMarker : EngineHealth	  <chanceToHit>	0.45	</chanceToHit>
+      <sounds>
+        <critical>	engine_damaged	</critical>
+        <destroyed>	engine_destroyed	</destroyed>
+        <functional>	engine_functional	</functional>
+      </sounds>
+      <deviceUserString>	#ingame_gui:devices/engine	</deviceUserString>
+    </engineHealth>
+    <ammoBayHealth>	DamageMarker : AmmoBayHealth	  <chanceToHit>	0.27	</chanceToHit>
+      <sounds>
+        <critical>	ammo_bay_damaged	</critical>
+      </sounds>
+      <deviceUserString>	#ingame_gui:devices/ammo_bay	</deviceUserString>
+    </ammoBayHealth>
+    <fuelTankHealth>	DamageMarker : FuelTankHealth	  <chanceToHit>	0.45	</chanceToHit>
+      <sounds>
+        <critical>	fuel_tank_damaged	</critical>
+      </sounds>
+      <deviceUserString>	#ingame_gui:devices/fuel_tank	</deviceUserString>
+    </fuelTankHealth>
+    <radioHealth>	DamageMarker : RadioHealth	  <chanceToHit>	0.45	</chanceToHit>
+      <sounds>
+        <critical>	radio_damaged	</critical>
+        <destroyed>	radio_damaged	</destroyed>
+      </sounds>
+      <deviceUserString>	#ingame_gui:devices/radio	</deviceUserString>
+    </radioHealth>
+    <leftTrackHealth>	TrackHealth : TrackHealth	  <isLeft>	true	</isLeft>
+      <sounds>
+        <destroyed>	track_destroyed	</destroyed>
+        <critical>	track_damaged	</critical>
+        <functional>	track_functional	</functional>
+        <functionalCanMove>	track_functional_can_move	</functionalCanMove>
+      </sounds>
+      <deviceUserString>	#ingame_gui:devices/left_track	</deviceUserString>
+    </leftTrackHealth>
+    <rightTrackHealth>	TrackHealth : TrackHealth	  <isLeft>	false	</isLeft>
+      <sounds>
+        <destroyed>	track_destroyed	</destroyed>
+        <critical>	track_damaged	</critical>
+        <functional>	track_functional	</functional>
+        <functionalCanMove>	track_functional_can_move	</functionalCanMove>
+      </sounds>
+      <deviceUserString>	#ingame_gui:devices/right_track	</deviceUserString>
+    </rightTrackHealth>
+    <gunHealth>	DamageMarker : GunHealth	  <chanceToHit>	0.33	</chanceToHit>
+      <sounds>
+        <critical>	gun_damaged	</critical>
+        <destroyed>	gun_destroyed	</destroyed>
+        <functional>	gun_functional	</functional>
+      </sounds>
+      <deviceUserString>	#ingame_gui:devices/gun	</deviceUserString>
+    </gunHealth>
+    <turretRotatorHealth>	DamageMarker : TurretRotatorHealth	  <chanceToHit>	0.45	</chanceToHit>
+      <sounds>
+        <critical>	turret_rotator_damaged	</critical>
+        <destroyed>	turret_rotator_destroyed	</destroyed>
+        <functional>	turret_rotator_functional	</functional>
+      </sounds>
+      <deviceUserString>	#ingame_gui:devices/turret_rotator	</deviceUserString>
+    </turretRotatorHealth>
+    <surveyingDeviceHealth>	DamageMarker : SurveyingDeviceHealth	  <chanceToHit>	0.45	</chanceToHit>
+      <sounds>
+        <critical>	surveying_devices_damaged	</critical>
+        <destroyed>	surveying_devices_destroyed	</destroyed>
+        <functional>	surveying_devices_functional	</functional>
+      </sounds>
+      <deviceUserString>	#ingame_gui:devices/surveing_device	</deviceUserString>
+    </surveyingDeviceHealth>
+    <commanderHealth>	DamageMarker : TankmanHealth	  <chanceToHit>	0.33	</chanceToHit>
+      <tankmanRole>	commander	</tankmanRole>
+      <indexInRole>	1	</indexInRole>
+      <sounds>
+        <critical>	commander_killed	</critical>
+        <destroyed>	commander_killed	</destroyed>
+      </sounds>
+      <deviceUserString>	#ingame_gui:tankmen/commander	</deviceUserString>
+    </commanderHealth>
+    <driverHealth>	DamageMarker : TankmanHealth	  <chanceToHit>	0.33	</chanceToHit>
+      <tankmanRole>	driver	</tankmanRole>
+      <indexInRole>	1	</indexInRole>
+      <sounds>
+        <critical>	driver_killed	</critical>
+        <destroyed>	driver_killed	</destroyed>
+      </sounds>
+      <deviceUserString>	#ingame_gui:tankmen/driver	</deviceUserString>
+    </driverHealth>
+    <radioman1Health>	DamageMarker : TankmanHealth	  <chanceToHit>	0.33	</chanceToHit>
+      <tankmanRole>	radioman	</tankmanRole>
+      <indexInRole>	1	</indexInRole>
+      <sounds>
+        <critical>	radioman_killed	</critical>
+        <destroyed>	radioman_killed	</destroyed>
+      </sounds>
+      <deviceUserString>	#ingame_gui:tankmen/radioman	</deviceUserString>
+    </radioman1Health>
+    <radioman2Health>	DamageMarker : TankmanHealth	  <chanceToHit>	0.33	</chanceToHit>
+      <tankmanRole>	radioman	</tankmanRole>
+      <indexInRole>	2	</indexInRole>
+      <sounds>
+        <critical>	radioman_killed	</critical>
+        <destroyed>	radioman_killed	</destroyed>
+      </sounds>
+      <deviceUserString>	#ingame_gui:tankmen/radioman	</deviceUserString>
+    </radioman2Health>
+    <gunner1Health>	DamageMarker : TankmanHealth	  <chanceToHit>	0.33	</chanceToHit>
+      <tankmanRole>	gunner	</tankmanRole>
+      <indexInRole>	1	</indexInRole>
+      <sounds>
+        <critical>	gunner_killed	</critical>
+        <destroyed>	gunner_killed	</destroyed>
+      </sounds>
+      <deviceUserString>	#ingame_gui:tankmen/gunner	</deviceUserString>
+    </gunner1Health>
+    <gunner2Health>	DamageMarker : TankmanHealth	  <chanceToHit>	0.33	</chanceToHit>
+      <tankmanRole>	gunner	</tankmanRole>
+      <indexInRole>	2	</indexInRole>
+      <sounds>
+        <critical>	gunner_killed	</critical>
+        <destroyed>	gunner_killed	</destroyed>
+      </sounds>
+      <deviceUserString>	#ingame_gui:tankmen/gunner	</deviceUserString>
+    </gunner2Health>
+    <loader1Health>	DamageMarker : TankmanHealth	  <chanceToHit>	0.33	</chanceToHit>
+      <tankmanRole>	loader	</tankmanRole>
+      <indexInRole>	1	</indexInRole>
+      <sounds>
+        <critical>	loader_killed	</critical>
+        <destroyed>	loader_killed	</destroyed>
+      </sounds>
+      <deviceUserString>	#ingame_gui:tankmen/loader	</deviceUserString>
+    </loader1Health>
+    <loader2Health>	DamageMarker : TankmanHealth	  <chanceToHit>	0.33	</chanceToHit>
+      <tankmanRole>	loader	</tankmanRole>
+      <indexInRole>	2	</indexInRole>
+      <sounds>
+        <critical>	loader_killed	</critical>
+        <destroyed>	loader_killed	</destroyed>
+      </sounds>
+      <deviceUserString>	#ingame_gui:tankmen/loader	</deviceUserString>
+    </loader2Health>
+  </extras>
+</vehicle.xml>

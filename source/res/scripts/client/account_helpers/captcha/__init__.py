@@ -1,4 +1,6 @@
+# Python bytecode 2.6 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/account_helpers/captcha/__init__.py
+# Compiled at: 2011-03-17 19:45:58
 from constants import CAPTCHA_API, CURRENT_CAPTCHA_API
 from helpers import i18n
 SUPPORTED_CAPTCHA_APIS = {CAPTCHA_API.RE_CAPTCHA: ('account_helpers.captcha.reCAPTCHA', 'reCAPTCHA'),
@@ -10,7 +12,7 @@ class _BASE_CAPTCHA_API(object):
     _RESPONSE_IS_INCORRECT_CODE = None
     _IMAGE_SIZE = (0, 0)
 
-    def getI18nServerErrorText(self, errorCode, defaultErrorCode = 'unknown'):
+    def getI18nServerErrorText(self, errorCode, defaultErrorCode='unknown'):
         key = self._SERVER_ERROR_CODES.get(errorCode)
         if key is None:
             key = self._SERVER_ERROR_CODES.get(defaultErrorCode)

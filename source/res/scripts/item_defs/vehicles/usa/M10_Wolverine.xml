@@ -1,0 +1,636 @@
+<M10_Wolverine.xml>
+  <crew>
+    <commander></commander>
+    <driver></driver>
+    <gunner></gunner>
+    <radioman></radioman>
+    <loader></loader>
+  </crew>
+  <speedLimits>
+    <forward>	48	</forward>
+    <backward>	12	</backward>
+  </speedLimits>
+  <repairCost>	6.43	</repairCost>
+  <effects>
+    <destruction>	mediumDestruction	</destruction>
+    <explosion>	mediumExplosion	</explosion>
+    <flaming>	mediumFlaming	</flaming>
+    <collision>	collision	</collision>
+  </effects>
+  <camouflage>
+    <priceFactor>	1.0	</priceFactor>
+    <tiling>	1 1 0 0	</tiling>
+    <exclusionMask>	vehicles/american/A30_M10_Wolverine/M10_Wolverine_CM.dds	</exclusionMask>
+  </camouflage>
+  <emblems>
+    <default>	usa_star	</default>
+    <lodDist>	MEDIUM	</lodDist>
+    <alpha>	0.9	</alpha>
+  </emblems>
+  <horns>
+    <priceFactor>	1.0	</priceFactor>
+    <distanceFactor>	1.0	</distanceFactor>
+    <volumeFactor>	1.0	</volumeFactor>
+  </horns>
+  <hull>
+    <models>
+      <undamaged>	vehicles/american/A30_M10_Wolverine/normal/lod0/Hull.model	</undamaged>
+      <destroyed>	vehicles/american/A30_M10_Wolverine/crash/lod0/Hull.model	</destroyed>
+      <exploded>	vehicles/american/A30_M10_Wolverine/crash/lod0/Hull.model	</exploded>
+    </models>
+    <swinging>
+      <lodDist>	FAR	</lodDist>
+      <pitchParams>	0.24 36.00 0.40 1.00 0.05 0.32	</pitchParams>
+      <rollParams>	1.00 0.24 36.00 0.40 1.00 0.05 0.32	</rollParams>
+      <sensitivityToImpulse>	0.32	</sensitivityToImpulse>
+    </swinging>
+    <exhaust>
+      <pixie>	particles/Tank/engine_exit_gass.xml	</pixie>
+      <nodes>	HP_Track_Exhaus_1 HP_Track_Exhaus_2	</nodes>
+      <rates>	5.0 10.0 25.0	</rates>
+    </exhaust>
+    <turretPositions>
+      <turret>	0.005961 0.803962 -0.026929	</turret>
+    </turretPositions>
+    <hitTester>
+      <collisionModel>	vehicles/american/A30_M10_Wolverine/collision/Hull.model	</collisionModel>
+    </hitTester>
+    <armor>
+      <armor_1>	51	</armor_1>
+      <armor_2>	114	</armor_2>
+      <armor_3>	19	</armor_3>
+      <armor_4>	25	</armor_4>
+      <armor_5>	25	</armor_5>
+      <armor_6>	51	</armor_6>
+      <armor_7>	19	</armor_7>
+      <armor_8>	10	</armor_8>
+      <armor_9>	19	  <noDamage>	true	</noDamage>
+      </armor_9>
+    </armor>
+    <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
+    <weight>	14800	</weight>
+    <maxHealth>	240.0	</maxHealth>
+    <ammoBayHealth>
+      <maxHealth>	140	</maxHealth>
+      <maxRegenHealth>	75	</maxRegenHealth>
+      <repairCost>	1.0	</repairCost>
+    </ammoBayHealth>
+    <emblemSlots>
+      <clan>
+        <rayStart>	0.60327 0.709077 1.87845	</rayStart>
+        <rayEnd>	0.60327 0.384454 1.64474	</rayEnd>
+        <rayUp>	0.000000 0.000000 -1	</rayUp>
+        <size>	0.32	</size>
+        <hideIfDamaged>	false	</hideIfDamaged>
+      </clan>
+    </emblemSlots>
+  </hull>
+  <chassis>
+    <Chassis_M10_Wolverine>
+      <userString>	#usa_vehicles:Chassis_M10_Wolverine	</userString>
+      <description>	#usa_vehicles:Chassis_M10_Wolverine_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 8 0	</icon>
+      <tags></tags>
+      <level>	4	</level>
+      <price>	4300	</price>
+      <unlocks>
+        <chassis>	Chassis_M10_Wolverine_2	  <cost>	2550	</cost>
+        </chassis>
+      </unlocks>
+      <models>
+        <undamaged>	vehicles/american/A30_M10_Wolverine/normal/lod0/Chassis.model	</undamaged>
+        <destroyed>	vehicles/american/A30_M10_Wolverine/crash/lod0/Chassis.model	</destroyed>
+        <exploded>	vehicles/american/A30_M10_Wolverine/crash/lod0/Chassis.model	</exploded>
+      </models>
+      <traces>
+        <lodDist>	FAR	</lodDist>
+        <bufferPrefs>	mediumTank	</bufferPrefs>
+        <textureSet>	usa_02	</textureSet>
+        <size>	0.4 0.46	</size>
+      </traces>
+      <tracks>
+        <lodDist>	MEDIUM	</lodDist>
+        <leftMaterial>	track_mat_L_skinned	</leftMaterial>
+        <rightMaterial>	track_mat_R_skinned	</rightMaterial>
+        <textureScale>	-0.84	</textureScale>
+      </tracks>
+      <wheels>
+        <lodDist>	MEDIUM	</lodDist>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <name>	WD_R0	</name>
+          <radius>	0.366868	</radius>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	WD_R	</template>
+          <radius>	0.12745	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	3	</count>
+        </group>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <name>	WD_R4	</name>
+          <radius>	0.288602	</radius>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	W_R	</template>
+          <radius>	0.265456	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	6	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <name>	WD_L0	</name>
+          <radius>	0.366867	</radius>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	WD_L	</template>
+          <radius>	0.127449	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	3	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <name>	WD_L4	</name>
+          <radius>	0.288618	</radius>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	W_L	</template>
+          <radius>	0.265456	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	6	</count>
+        </group>
+      </wheels>
+      <drivingWheels>	WD_L0 WD_L4	</drivingWheels>
+      <effects>
+        <lodDist>	MEDIUM	</lodDist>
+        <dust>	smallTankDust	</dust>
+        <mud>	smallTankMud	</mud>
+      </effects>
+      <sound>	/vehicles/tanks/treads/treads_1	</sound>
+      <hullPosition>	0.000000 0.972605 0.000000	</hullPosition>
+      <hitTester>
+        <collisionModel>	vehicles/american/A30_M10_Wolverine/collision/Chassis.model	</collisionModel>
+      </hitTester>
+      <armor>
+        <leftTrack>	20	</leftTrack>
+        <rightTrack>	20	</rightTrack>
+      </armor>
+      <topRightCarryingPoint>	1.04518 1.88264	</topRightCarryingPoint>
+      <maxClimbAngle>	25	</maxClimbAngle>
+      <navmeshGirth>	6.0	</navmeshGirth>
+      <weight>	7000	</weight>
+      <maxLoad>	28490	</maxLoad>
+      <terrainResistance>	1.1 1.5 2.2	</terrainResistance>
+      <brakeForce>	35500	</brakeForce>
+      <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
+      <rotationSpeed>	28	</rotationSpeed>
+      <shotDispersionFactors>
+        <vehicleMovement>	0.25	</vehicleMovement>
+        <vehicleRotation>	0.25	</vehicleRotation>
+      </shotDispersionFactors>
+      <bulkHealthFactor>	3.0	</bulkHealthFactor>
+      <maxHealth>	90	</maxHealth>
+      <maxRegenHealth>	70	</maxRegenHealth>
+      <repairCost>	5.0	</repairCost>
+    </Chassis_M10_Wolverine>
+    <Chassis_M10_Wolverine_2>
+      <userString>	#usa_vehicles:Chassis_M10_Wolverine_2	</userString>
+      <description>	#usa_vehicles:Chassis_M10_Wolverine_2_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 8 0	</icon>
+      <tags></tags>
+      <level>	5	</level>
+      <price>	10000	</price>
+      <models>
+        <undamaged>	vehicles/american/A30_M10_Wolverine/normal/lod0/Chassis.model	</undamaged>
+        <destroyed>	vehicles/american/A30_M10_Wolverine/crash/lod0/Chassis.model	</destroyed>
+        <exploded>	vehicles/american/A30_M10_Wolverine/crash/lod0/Chassis.model	</exploded>
+      </models>
+      <traces>
+        <lodDist>	FAR	</lodDist>
+        <bufferPrefs>	mediumTank	</bufferPrefs>
+        <textureSet>	usa_01	</textureSet>
+        <size>	0.4 0.46	</size>
+      </traces>
+      <tracks>
+        <lodDist>	MEDIUM	</lodDist>
+        <leftMaterial>	track_mat_L_skinned	</leftMaterial>
+        <rightMaterial>	track_mat_R_skinned	</rightMaterial>
+        <textureScale>	-0.84	</textureScale>
+      </tracks>
+      <wheels>
+        <lodDist>	MEDIUM	</lodDist>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <name>	WD_R0	</name>
+          <radius>	0.366868	</radius>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	WD_R	</template>
+          <radius>	0.12745	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	3	</count>
+        </group>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <name>	WD_R4	</name>
+          <radius>	0.288602	</radius>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	W_R	</template>
+          <radius>	0.265456	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	6	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <name>	WD_L0	</name>
+          <radius>	0.366867	</radius>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	WD_L	</template>
+          <radius>	0.127449	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	3	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <name>	WD_L4	</name>
+          <radius>	0.288618	</radius>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	W_L	</template>
+          <radius>	0.265456	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	6	</count>
+        </group>
+      </wheels>
+      <drivingWheels>	WD_L0 WD_L4	</drivingWheels>
+      <effects>
+        <lodDist>	MEDIUM	</lodDist>
+        <dust>	smallTankDust	</dust>
+        <mud>	smallTankMud	</mud>
+      </effects>
+      <sound>	/vehicles/tanks/treads/treads_1	</sound>
+      <hullPosition>	0.000000 0.972605 0.000000	</hullPosition>
+      <hitTester>
+        <collisionModel>	vehicles/american/A30_M10_Wolverine/collision/Chassis.model	</collisionModel>
+      </hitTester>
+      <armor>
+        <leftTrack>	20	</leftTrack>
+        <rightTrack>	20	</rightTrack>
+      </armor>
+      <topRightCarryingPoint>	1.04518 1.88264	</topRightCarryingPoint>
+      <maxClimbAngle>	25	</maxClimbAngle>
+      <navmeshGirth>	6.0	</navmeshGirth>
+      <weight>	7000	</weight>
+      <maxLoad>	31700	</maxLoad>
+      <terrainResistance>	1.0 1.1 2.0	</terrainResistance>
+      <brakeForce>	35500	</brakeForce>
+      <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
+      <rotationSpeed>	30	</rotationSpeed>
+      <shotDispersionFactors>
+        <vehicleMovement>	0.23	</vehicleMovement>
+        <vehicleRotation>	0.23	</vehicleRotation>
+      </shotDispersionFactors>
+      <bulkHealthFactor>	3.0	</bulkHealthFactor>
+      <maxHealth>	100	</maxHealth>
+      <maxRegenHealth>	75	</maxRegenHealth>
+      <repairCost>	5.0	</repairCost>
+    </Chassis_M10_Wolverine_2>
+  </chassis>
+  <turrets0>
+    <Turret_1_M10_Wolverine>
+      <userString>	#usa_vehicles:Turret_1_M10_Wolverine	</userString>
+      <description>	#usa_vehicles:Turret_1_M10_Wolverine_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 6 0	</icon>
+      <tags></tags>
+      <level>	4	</level>
+      <price>	4400.0	</price>
+      <models>
+        <undamaged>	vehicles/american/A30_M10_Wolverine/normal/lod0/Turret_01.model	</undamaged>
+        <destroyed>	vehicles/american/A30_M10_Wolverine/crash/lod0/Turret_01.model	</destroyed>
+        <exploded>	vehicles/american/A30_M10_Wolverine/crash/lod0/Turret_01.model	</exploded>
+      </models>
+      <hitTester>
+        <collisionModel>	vehicles/american/A30_M10_Wolverine/collision/Turret_01.model	</collisionModel>
+      </hitTester>
+      <yawLimits>	-180 180	</yawLimits>
+      <gunPosition>	-0.005961 0.30517 0.978646	</gunPosition>
+      <armor>
+        <armor_1>	57	</armor_1>
+        <armor_2>	0	</armor_2>
+        <armor_3>	25	</armor_3>
+        <armor_4>	25	</armor_4>
+        <armor_5>	19	</armor_5>
+        <armor_6>	0	</armor_6>
+        <armor_7>	0	</armor_7>
+        <armor_8>	0	</armor_8>
+      </armor>
+      <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
+      <weight>	3700	</weight>
+      <maxHealth>	100	</maxHealth>
+      <rotationSpeed>	19	</rotationSpeed>
+      <turretRotatorHealth>
+        <maxHealth>	100	</maxHealth>
+        <maxRegenHealth>	49	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </turretRotatorHealth>
+      <circularVisionRadius>	420	</circularVisionRadius>
+      <surveyingDeviceHealth>
+        <maxHealth>	100	</maxHealth>
+        <maxRegenHealth>	49	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </surveyingDeviceHealth>
+      <guns>
+        <_75mm_AT_Gun_M7_L50>	shared	  <maxAmmo>	54	</maxAmmo>
+          <unlocks>
+            <gun>	_76mm_AT_Gun_M1A1	  <cost>	4750	</cost>
+            </gun>
+            <gun>	_105mm_AT_SPH_M4_L23	  <cost>	1550	</cost>
+            </gun>
+          </unlocks>
+          <reloadTime>	3.7	</reloadTime>
+          <shotDispersionFactors>
+            <turretRotation>	0.16	</turretRotation>
+            <afterShot>	4.0	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <models>
+            <undamaged>	vehicles/american/A30_M10_Wolverine/normal/lod0/Gun_01.model	</undamaged>
+            <destroyed>	vehicles/american/A30_M10_Wolverine/crash/lod0/Gun_01.model	</destroyed>
+            <exploded>	vehicles/american/A30_M10_Wolverine/crash/lod0/Gun_01.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/american/A30_M10_Wolverine/collision/Gun_01.model	</collisionModel>
+          </hitTester>
+          <armor>
+            <armor_1>	57	  <noDamage>	true	</noDamage>
+            </armor_1>
+            <gun>	20	</gun>
+          </armor>
+        </_75mm_AT_Gun_M7_L50>
+        <_76mm_AT_Gun_M1A1>	shared	  <maxAmmo>	54	</maxAmmo>
+          <reloadTime>	3.2	</reloadTime>
+          <unlocks>
+            <gun>	_76mm_AT_Gun_M1A2	  <cost>	6100	</cost>
+            </gun>
+          </unlocks>
+          <models>
+            <undamaged>	vehicles/american/A30_M10_Wolverine/normal/lod0/Gun_02.model	</undamaged>
+            <destroyed>	vehicles/american/A30_M10_Wolverine/crash/lod0/Gun_02.model	</destroyed>
+            <exploded>	vehicles/american/A30_M10_Wolverine/crash/lod0/Gun_02.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/american/A30_M10_Wolverine/collision/Gun_02.model	</collisionModel>
+          </hitTester>
+          <armor>
+            <armor_1>	57	  <noDamage>	true	</noDamage>
+            </armor_1>
+            <gun>	20	</gun>
+          </armor>
+        </_76mm_AT_Gun_M1A1>
+        <_76mm_AT_Gun_M1A2>	shared	  <maxAmmo>	54	</maxAmmo>
+          <reloadTime>	2.9	</reloadTime>
+          <unlocks>
+            <turret>	Turret_2_M10_Wolverine	  <cost>	2100	</cost>
+            </turret>
+          </unlocks>
+          <shotDispersionFactors>
+            <turretRotation>	0.16	</turretRotation>
+            <afterShot>	3.5	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <models>
+            <undamaged>	vehicles/american/A30_M10_Wolverine/normal/lod0/Gun_03.model	</undamaged>
+            <destroyed>	vehicles/american/A30_M10_Wolverine/crash/lod0/Gun_03.model	</destroyed>
+            <exploded>	vehicles/american/A30_M10_Wolverine/crash/lod0/Gun_03.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/american/A30_M10_Wolverine/collision/Gun_03.model	</collisionModel>
+          </hitTester>
+          <armor>
+            <armor_1>	57	  <noDamage>	true	</noDamage>
+            </armor_1>
+            <gun>	20	</gun>
+          </armor>
+        </_76mm_AT_Gun_M1A2>
+        <_105mm_AT_SPH_M4_L23>	shared	  <maxAmmo>	30	</maxAmmo>
+          <reloadTime>	6.9	</reloadTime>
+          <shotDispersionFactors>
+            <turretRotation>	0.16	</turretRotation>
+            <afterShot>	4.0	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <models>
+            <undamaged>	vehicles/american/A30_M10_Wolverine/normal/lod0/Gun_07.model	</undamaged>
+            <destroyed>	vehicles/american/A30_M10_Wolverine/crash/lod0/Gun_07.model	</destroyed>
+            <exploded>	vehicles/american/A30_M10_Wolverine/crash/lod0/Gun_07.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/american/A30_M10_Wolverine/collision/Gun_07.model	</collisionModel>
+          </hitTester>
+          <armor>
+            <armor_1>	57	  <noDamage>	true	</noDamage>
+            </armor_1>
+            <gun>	40	</gun>
+          </armor>
+        </_105mm_AT_SPH_M4_L23>
+      </guns>
+      <emblemSlots>
+        <player>
+          <rayStart>	-0.981277 0.395368 0.0313732	</rayStart>
+          <rayEnd>	-0.768623 0.301504 -0.0283599	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.3	</size>
+          <hideIfDamaged>	true	</hideIfDamaged>
+        </player>
+        <player>
+          <rayStart>	0.981277 0.395368 0.0313733	</rayStart>
+          <rayEnd>	0.768623 0.301504 -0.0283599	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.3	</size>
+          <hideIfDamaged>	false	</hideIfDamaged>
+        </player>
+      </emblemSlots>
+      <showEmblemsOnGun>	false	</showEmblemsOnGun>
+    </Turret_1_M10_Wolverine>
+    <Turret_2_M10_Wolverine>
+      <userString>	#usa_vehicles:Turret_2_M10_Wolverine	</userString>
+      <description>	#usa_vehicles:Turret_2_M10_Wolverine_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 6 0	</icon>
+      <tags></tags>
+      <level>	5	</level>
+      <price>	10300	</price>
+      <unlocks>
+        <vehicle>	M36_Slagger	  <cost>	21850	</cost>
+        </vehicle>
+      </unlocks>
+      <models>
+        <undamaged>	vehicles/american/A30_M10_Wolverine/normal/lod0/Turret_02.model	</undamaged>
+        <destroyed>	vehicles/american/A30_M10_Wolverine/crash/lod0/Turret_02.model	</destroyed>
+        <exploded>	vehicles/american/A30_M10_Wolverine/crash/lod0/Turret_02.model	</exploded>
+      </models>
+      <hitTester>
+        <collisionModel>	vehicles/american/A30_M10_Wolverine/collision/Turret_02.model	</collisionModel>
+      </hitTester>
+      <yawLimits>	-180 180	</yawLimits>
+      <gunPosition>	-0.005961 0.30517 0.978646	</gunPosition>
+      <armor>
+        <armor_1>	57	</armor_1>
+        <armor_2>	0	</armor_2>
+        <armor_3>	25	</armor_3>
+        <armor_4>	25	</armor_4>
+        <armor_5>	19	</armor_5>
+        <armor_6>	0	</armor_6>
+        <armor_7>	19	  <noDamage>	true	</noDamage>
+        </armor_7>
+        <armor_8>	25	  <noDamage>	true	</noDamage>
+        </armor_8>
+        <armor_9>	25	  <noDamage>	true	</noDamage>
+        </armor_9>
+      </armor>
+      <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
+      <weight>	4400	</weight>
+      <maxHealth>	120	</maxHealth>
+      <rotationSpeed>	18	</rotationSpeed>
+      <turretRotatorHealth>
+        <maxHealth>	100	</maxHealth>
+        <maxRegenHealth>	49	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </turretRotatorHealth>
+      <circularVisionRadius>	420	</circularVisionRadius>
+      <surveyingDeviceHealth>
+        <maxHealth>	100	</maxHealth>
+        <maxRegenHealth>	49	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </surveyingDeviceHealth>
+      <guns>
+        <_75mm_AT_Gun_M7_L50>	shared	  <maxAmmo>	54	</maxAmmo>
+          <reloadTime>	3.6	</reloadTime>
+          <shotDispersionFactors>
+            <turretRotation>	0.12	</turretRotation>
+            <afterShot>	4.0	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <models>
+            <undamaged>	vehicles/american/A30_M10_Wolverine/normal/lod0/Gun_01.model	</undamaged>
+            <destroyed>	vehicles/american/A30_M10_Wolverine/crash/lod0/Gun_01.model	</destroyed>
+            <exploded>	vehicles/american/A30_M10_Wolverine/crash/lod0/Gun_01.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/american/A30_M10_Wolverine/collision/Gun_01.model	</collisionModel>
+          </hitTester>
+          <armor>
+            <armor_1>	57	  <noDamage>	true	</noDamage>
+            </armor_1>
+            <gun>	20	</gun>
+          </armor>
+        </_75mm_AT_Gun_M7_L50>
+        <_76mm_AT_Gun_M1A1>	shared	  <maxAmmo>	54	</maxAmmo>
+          <reloadTime>	3.1	</reloadTime>
+          <shotDispersionFactors>
+            <turretRotation>	0.12	</turretRotation>
+            <afterShot>	4.0	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <models>
+            <undamaged>	vehicles/american/A30_M10_Wolverine/normal/lod0/Gun_02.model	</undamaged>
+            <destroyed>	vehicles/american/A30_M10_Wolverine/crash/lod0/Gun_02.model	</destroyed>
+            <exploded>	vehicles/american/A30_M10_Wolverine/crash/lod0/Gun_02.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/american/A30_M10_Wolverine/collision/Gun_02.model	</collisionModel>
+          </hitTester>
+          <armor>
+            <armor_1>	57	  <noDamage>	true	</noDamage>
+            </armor_1>
+            <gun>	20	</gun>
+          </armor>
+        </_76mm_AT_Gun_M1A1>
+        <_76mm_AT_Gun_M1A2>	shared	  <maxAmmo>	54	</maxAmmo>
+          <reloadTime>	2.8	</reloadTime>
+          <shotDispersionRadius>	0.33	</shotDispersionRadius>
+          <models>
+            <undamaged>	vehicles/american/A30_M10_Wolverine/normal/lod0/Gun_03.model	</undamaged>
+            <destroyed>	vehicles/american/A30_M10_Wolverine/crash/lod0/Gun_03.model	</destroyed>
+            <exploded>	vehicles/american/A30_M10_Wolverine/crash/lod0/Gun_03.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/american/A30_M10_Wolverine/collision/Gun_03.model	</collisionModel>
+          </hitTester>
+          <armor>
+            <armor_1>	57	  <noDamage>	true	</noDamage>
+            </armor_1>
+            <gun>	20	</gun>
+          </armor>
+        </_76mm_AT_Gun_M1A2>
+        <_105mm_AT_SPH_M4_L23>	shared	  <maxAmmo>	30	</maxAmmo>
+          <reloadTime>	6.8	</reloadTime>
+          <models>
+            <undamaged>	vehicles/american/A30_M10_Wolverine/normal/lod0/Gun_07.model	</undamaged>
+            <destroyed>	vehicles/american/A30_M10_Wolverine/crash/lod0/Gun_07.model	</destroyed>
+            <exploded>	vehicles/american/A30_M10_Wolverine/crash/lod0/Gun_07.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/american/A30_M10_Wolverine/collision/Gun_07.model	</collisionModel>
+          </hitTester>
+          <armor>
+            <armor_1>	57	  <noDamage>	true	</noDamage>
+            </armor_1>
+            <gun>	40	</gun>
+          </armor>
+        </_105mm_AT_SPH_M4_L23>
+      </guns>
+      <emblemSlots>
+        <player>
+          <rayStart>	-0.966645 0.429874 0.0214061	</rayStart>
+          <rayEnd>	-0.754554 0.333609 -0.0364766	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.28	</size>
+          <hideIfDamaged>	true	</hideIfDamaged>
+        </player>
+        <player>
+          <rayStart>	0.966645 0.429874 0.0214061	</rayStart>
+          <rayEnd>	0.754554 0.333609 -0.0364766	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.28	</size>
+          <hideIfDamaged>	true	</hideIfDamaged>
+        </player>
+      </emblemSlots>
+      <showEmblemsOnGun>	false	</showEmblemsOnGun>
+    </Turret_2_M10_Wolverine>
+  </turrets0>
+  <engines>
+    <Wright_Continental_R-975EC2>	shared	  <unlocks>
+        <engine>	Wright_Continental_R-975C1	  <cost>	900.0	</cost>
+        </engine>
+      </unlocks>
+    </Wright_Continental_R-975EC2>
+    <Wright_Continental_R-975C1>	shared	  <unlocks>
+        <engine>	GMC_6046	  <cost>	1410.0	</cost>
+        </engine>
+      </unlocks>
+    </Wright_Continental_R-975C1>
+    <GMC_6046>	shared	</GMC_6046>
+  </engines>
+  <fuelTanks>
+    <Heavy>	shared	</Heavy>
+  </fuelTanks>
+  <radios>
+    <SCR_508>	shared	  <unlocks>
+        <radio>	SCR_506	  <cost>	5600	</cost>
+        </radio>
+      </unlocks>
+    </SCR_508>
+    <SCR_506>	shared	</SCR_506>
+  </radios>
+</M10_Wolverine.xml>

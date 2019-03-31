@@ -1,0 +1,3995 @@
+<shot_effects.xml>
+  <smallArmorPiercing>
+    <projectile>
+      <model>	objects/fake_model.model	</model>
+      <effects>
+        <pixie>
+          <startKey>	flying	</startKey>
+          <position>	Scene Root	</position>
+          <file>	particles/Shells_Eff/trace_1.xml	</file>
+          <force>	1	</force>
+        </pixie>
+        <sound>
+          <startKey>	flying	</startKey>
+          <endKey>	stopFlying	</endKey>
+          <name>	/weapons/tracer/tracer_light	</name>
+        </sound>
+      </effects>
+    </projectile>
+    <targetImpulse>	0.06	</targetImpulse>
+    <targetStickers>
+      <armorResisted>	small_ricochet	</armorResisted>
+      <armorHit>	small_hole	</armorHit>
+    </targetStickers>
+    <groundHit>
+      <stages>
+        <impact>	8.0	</impact>
+      </stages>
+      <effects>
+        <pixie>
+          <startKey>	impact	</startKey>
+          <file>	particles/Shells_Eff/groundHit_AP_1.xml	</file>
+          <force>	1	</force>
+        </pixie>
+        <decal>
+          <startKey>	impact	</startKey>
+          <groupName>	slow	</groupName>
+          <texName>	explosion	</texName>
+          <size>	2.2 2.2	</size>
+          <variation>	0.25	</variation>
+          <randomYaw>	True	</randomYaw>
+        </decal>
+        <sound>
+          <startKey>	impact	</startKey>
+          <name>	/hits/hits/hits_ground_bullet	</name>
+        </sound>
+      </effects>
+    </groundHit>
+    <armorRicochet>
+      <stages>
+        <impact>	8.0	</impact>
+      </stages>
+      <effects>
+        <pixie>
+          <startKey>	impact	</startKey>
+          <file>	particles/Shells_Eff/ricochet_AP_1.xml	</file>
+          <force>	1	</force>
+        </pixie>
+        <sound>
+          <startKey>	impact	</startKey>
+          <name>	/hits/hits/tank_hit_armor_ricochet	</name>
+        </sound>
+      </effects>
+    </armorRicochet>
+    <armorResisted>
+      <stages>
+        <impact>	8.0	</impact>
+      </stages>
+      <effects>
+        <pixie>
+          <startKey>	impact	</startKey>
+          <file>	particles/Shells_Eff/shellFall_AP_1.xml	</file>
+          <force>	1	</force>
+        </pixie>
+        <sound>
+          <startKey>	impact	</startKey>
+          <name>	/hits/hits/tank_hit_armor_not_pierce_small	</name>
+        </sound>
+      </effects>
+    </armorResisted>
+    <armorHit>
+      <stages>
+        <impact>	8.0	</impact>
+      </stages>
+      <effects>
+        <shockWave>
+          <startKey>	impact	</startKey>
+          <duration>	0.6	</duration>
+        </shockWave>
+        <flashBang>
+          <startKey>	impact	</startKey>
+          <stages>
+            <stage>	0.1	  <color>	0 0 0 0	</color>
+            </stage>
+            <stage>	1.1	  <color>	1.0 0.0 0.0 0.5	</color>
+            </stage>
+            <stage>	0.0	  <color>	0 0 0 0	</color>
+            </stage>
+          </stages>
+        </flashBang>
+        <pixie>
+          <startKey>	impact	</startKey>
+          <file>	particles/Shells_Eff/armorHit_AP_1.xml	</file>
+          <force>	1	</force>
+        </pixie>
+        <sound>
+          <startKey>	impact	</startKey>
+          <name>	/hits/hits/tank_hit_armor_pierce	</name>
+        </sound>
+      </effects>
+    </armorHit>
+    <armorCriticalHit>
+      <stages>
+        <impact>	8.0	</impact>
+      </stages>
+      <effects>
+        <shockWave>
+          <startKey>	impact	</startKey>
+          <duration>	1.2	</duration>
+        </shockWave>
+        <flashBang>
+          <startKey>	impact	</startKey>
+          <stages>
+            <stage>	0.1	  <color>	0 0 0 0	</color>
+            </stage>
+            <stage>	1.4	  <color>	1.0 0.0 0.0 0.7	</color>
+            </stage>
+            <stage>	0.0	  <color>	0 0 0 0	</color>
+            </stage>
+          </stages>
+        </flashBang>
+        <pixie>
+          <startKey>	impact	</startKey>
+          <file>	particles/Shells_Eff/armorHit_AP_1.xml	</file>
+          <force>	1	</force>
+        </pixie>
+        <sound>
+          <startKey>	impact	</startKey>
+          <name>	/hits/hits/armor_hit_fougasse_small	</name>
+        </sound>
+      </effects>
+    </armorCriticalHit>
+    <woodHit>
+      <stages>
+        <impact>	6.0	</impact>
+      </stages>
+      <effects>
+        <decal>
+          <startKey>	impact	</startKey>
+          <groupName>	slow	</groupName>
+          <texName>	explosion	</texName>
+          <size>	6.0 6.0	</size>
+          <variation>	0.25	</variation>
+          <randomYaw>	True	</randomYaw>
+        </decal>
+        <pixie>
+          <startKey>	impact	</startKey>
+          <file>	particles/Shells_Eff/woodHit_AP.xml	</file>
+          <force>	1	</force>
+        </pixie>
+        <sound>
+          <startKey>	impact	</startKey>
+          <name>	/hits/explosions/medium_explosions	</name>
+        </sound>
+      </effects>
+    </woodHit>
+    <stoneHit>
+      <stages>
+        <impact>	6.0	</impact>
+      </stages>
+      <effects>
+        <decal>
+          <startKey>	impact	</startKey>
+          <groupName>	slow	</groupName>
+          <texName>	explosion	</texName>
+          <size>	6.0 6.0	</size>
+          <variation>	0.25	</variation>
+          <randomYaw>	True	</randomYaw>
+        </decal>
+        <pixie>
+          <startKey>	impact	</startKey>
+          <file>	particles/Shells_Eff/stoneHit_AP_1.xml	</file>
+          <force>	1	</force>
+        </pixie>
+        <sound>
+          <startKey>	impact	</startKey>
+          <name>	/hits/explosions/medium_explosions	</name>
+        </sound>
+      </effects>
+    </stoneHit>
+    <waterParams>
+      <shallowWaterDepth>	1.0	</shallowWaterDepth>
+      <rippleDiameter>	0.6	</rippleDiameter>
+    </waterParams>
+    <shallowWaterHit>
+      <stages>
+        <impact>	4.0	</impact>
+      </stages>
+      <effects>
+        <pixie>
+          <startKey>	impact	</startKey>
+          <file>	particles/Shells_Eff/waterHit_shallow_AP_1.xml	</file>
+          <force>	1	</force>
+        </pixie>
+        <sound>
+          <startKey>	impact	</startKey>
+          <name>	/hits/explosions/small_explosions_water	</name>
+        </sound>
+      </effects>
+    </shallowWaterHit>
+    <deepWaterHit>
+      <stages>
+        <impact>	4.0	</impact>
+      </stages>
+      <effects>
+        <pixie>
+          <startKey>	impact	</startKey>
+          <file>	particles/Shells_Eff/waterHit_AP_1.xml	</file>
+          <force>	1	</force>
+        </pixie>
+        <sound>
+          <startKey>	impact	</startKey>
+          <name>	/hits/explosions/small_explosions_water	</name>
+        </sound>
+      </effects>
+    </deepWaterHit>
+  </smallArmorPiercing>
+  <smallAPCR>
+    <projectile>
+      <model>	objects/fake_model.model	</model>
+      <effects>
+        <pixie>
+          <startKey>	flying	</startKey>
+          <position>	Scene Root	</position>
+          <file>	particles/Shells_Eff/trace_APCR_1.xml	</file>
+          <force>	1	</force>
+        </pixie>
+        <sound>
+          <startKey>	flying	</startKey>
+          <endKey>	stopFlying	</endKey>
+          <name>	/weapons/tracer/tracer_light	</name>
+        </sound>
+      </effects>
+    </projectile>
+    <targetImpulse>	0.06	</targetImpulse>
+    <targetStickers>
+      <armorResisted>	small_ricochet	</armorResisted>
+      <armorHit>	small_hole	</armorHit>
+    </targetStickers>
+    <groundHit>
+      <stages>
+        <impact>	8.0	</impact>
+      </stages>
+      <effects>
+        <pixie>
+          <startKey>	impact	</startKey>
+          <file>	particles/Shells_Eff/groundHit_AP_CR_1.xml	</file>
+          <force>	1	</force>
+        </pixie>
+        <decal>
+          <startKey>	impact	</startKey>
+          <groupName>	slow	</groupName>
+          <texName>	explosion	</texName>
+          <size>	2.2 2.2	</size>
+          <variation>	0.26	</variation>
+          <randomYaw>	True	</randomYaw>
+        </decal>
+        <sound>
+          <startKey>	impact	</startKey>
+          <name>	/hits/hits/hits_ground_bullet	</name>
+        </sound>
+      </effects>
+    </groundHit>
+    <armorRicochet>
+      <stages>
+        <impact>	8.0	</impact>
+      </stages>
+      <effects>
+        <pixie>
+          <startKey>	impact	</startKey>
+          <file>	particles/Shells_Eff/ricochet_AP_1.xml	</file>
+          <force>	1	</force>
+        </pixie>
+        <sound>
+          <startKey>	impact	</startKey>
+          <name>	/hits/hits/tank_hit_armor_ricochet	</name>
+        </sound>
+      </effects>
+    </armorRicochet>
+    <armorResisted>
+      <stages>
+        <impact>	8.0	</impact>
+      </stages>
+      <effects>
+        <pixie>
+          <startKey>	impact	</startKey>
+          <file>	particles/Shells_Eff/shellFall_AP_CR_1.xml	</file>
+          <force>	1	</force>
+        </pixie>
+        <sound>
+          <startKey>	impact	</startKey>
+          <name>	/hits/hits/tank_hit_armor_not_pierce_small	</name>
+        </sound>
+      </effects>
+    </armorResisted>
+    <armorHit>
+      <stages>
+        <impact>	8.0	</impact>
+      </stages>
+      <effects>
+        <shockWave>
+          <startKey>	impact	</startKey>
+          <duration>	0.6	</duration>
+        </shockWave>
+        <flashBang>
+          <startKey>	impact	</startKey>
+          <stages>
+            <stage>	0.1	  <color>	0 0 0 0	</color>
+            </stage>
+            <stage>	1.1	  <color>	1.0 0.0 0.0 0.5	</color>
+            </stage>
+            <stage>	0.0	  <color>	0 0 0 0	</color>
+            </stage>
+          </stages>
+        </flashBang>
+        <pixie>
+          <startKey>	impact	</startKey>
+          <file>	particles/Shells_Eff/armorHit_AP_CR_1.xml	</file>
+          <force>	1	</force>
+        </pixie>
+        <sound>
+          <startKey>	impact	</startKey>
+          <name>	/hits/hits/tank_hit_armor_pierce	</name>
+        </sound>
+      </effects>
+    </armorHit>
+    <armorCriticalHit>
+      <stages>
+        <impact>	8.0	</impact>
+      </stages>
+      <effects>
+        <shockWave>
+          <startKey>	impact	</startKey>
+          <duration>	1.2	</duration>
+        </shockWave>
+        <flashBang>
+          <startKey>	impact	</startKey>
+          <stages>
+            <stage>	0.1	  <color>	0 0 0 0	</color>
+            </stage>
+            <stage>	1.4	  <color>	1.0 0.0 0.0 0.7	</color>
+            </stage>
+            <stage>	0.0	  <color>	0 0 0 0	</color>
+            </stage>
+          </stages>
+        </flashBang>
+        <pixie>
+          <startKey>	impact	</startKey>
+          <file>	particles/Shells_Eff/armorHit_AP_CR_1.xml	</file>
+          <force>	1	</force>
+        </pixie>
+        <sound>
+          <startKey>	impact	</startKey>
+          <name>	/hits/hits/armor_hit_fougasse_small	</name>
+        </sound>
+      </effects>
+    </armorCriticalHit>
+    <woodHit>
+      <stages>
+        <impact>	6.0	</impact>
+      </stages>
+      <effects>
+        <decal>
+          <startKey>	impact	</startKey>
+          <groupName>	slow	</groupName>
+          <texName>	explosion	</texName>
+          <size>	6.0 6.0	</size>
+          <variation>	0.25	</variation>
+          <randomYaw>	True	</randomYaw>
+        </decal>
+        <pixie>
+          <startKey>	impact	</startKey>
+          <file>	particles/Shells_Eff/woodHit_AP.xml	</file>
+          <force>	1	</force>
+        </pixie>
+        <sound>
+          <startKey>	impact	</startKey>
+          <name>	/hits/explosions/medium_explosions	</name>
+        </sound>
+      </effects>
+    </woodHit>
+    <stoneHit>
+      <stages>
+        <impact>	6.0	</impact>
+      </stages>
+      <effects>
+        <decal>
+          <startKey>	impact	</startKey>
+          <groupName>	slow	</groupName>
+          <texName>	explosion	</texName>
+          <size>	6.0 6.0	</size>
+          <variation>	0.25	</variation>
+          <randomYaw>	True	</randomYaw>
+        </decal>
+        <pixie>
+          <startKey>	impact	</startKey>
+          <file>	particles/Shells_Eff/stoneHit_AP_1.xml	</file>
+          <force>	1	</force>
+        </pixie>
+        <sound>
+          <startKey>	impact	</startKey>
+          <name>	/hits/explosions/medium_explosions	</name>
+        </sound>
+      </effects>
+    </stoneHit>
+    <waterParams>
+      <shallowWaterDepth>	1.0	</shallowWaterDepth>
+      <rippleDiameter>	0.6	</rippleDiameter>
+    </waterParams>
+    <shallowWaterHit>
+      <stages>
+        <impact>	4.0	</impact>
+      </stages>
+      <effects>
+        <pixie>
+          <startKey>	impact	</startKey>
+          <file>	particles/Shells_Eff/waterHit_shallow_AP_1.xml	</file>
+          <force>	1	</force>
+        </pixie>
+        <sound>
+          <startKey>	impact	</startKey>
+          <name>	/hits/explosions/small_explosions_water	</name>
+        </sound>
+      </effects>
+    </shallowWaterHit>
+    <deepWaterHit>
+      <stages>
+        <impact>	4.0	</impact>
+      </stages>
+      <effects>
+        <pixie>
+          <startKey>	impact	</startKey>
+          <file>	particles/Shells_Eff/waterHit_AP_1.xml	</file>
+          <force>	1	</force>
+        </pixie>
+        <sound>
+          <startKey>	impact	</startKey>
+          <name>	/hits/explosions/small_explosions_water	</name>
+        </sound>
+      </effects>
+    </deepWaterHit>
+  </smallAPCR>
+  <mediumArmorPiercing>
+    <projectile>
+      <model>	objects/misc/shell_glow/shell_medium.model	</model>
+      <effects>
+        <pixie>
+          <startKey>	flying	</startKey>
+          <position>	Scene Root	</position>
+          <file>	particles/Shells_Eff/trace_2.xml	</file>
+          <force>	1	</force>
+        </pixie>
+        <sound>
+          <startKey>	flying	</startKey>
+          <endKey>	stopFlying	</endKey>
+          <name>	/weapons/tracer/tracer	</name>
+        </sound>
+      </effects>
+    </projectile>
+    <targetImpulse>	0.24	</targetImpulse>
+    <targetStickers>
+      <armorResisted>	medium_ricochet	</armorResisted>
+      <armorHit>	medium_hole	</armorHit>
+    </targetStickers>
+    <groundHit>
+      <stages>
+        <impact>	8.0	</impact>
+      </stages>
+      <effects>
+        <pixie>
+          <startKey>	impact	</startKey>
+          <alwaysUpdateModel>	true	</alwaysUpdateModel>
+          <file>	particles/Shells_Eff/groundHit_AP_2.xml	</file>
+          <force>	1	</force>
+        </pixie>
+        <decal>
+          <startKey>	impact	</startKey>
+          <groupName>	slow	</groupName>
+          <texName>	explosion	</texName>
+          <size>	4.0 4.0	</size>
+          <variation>	0.2	</variation>
+          <randomYaw>	True	</randomYaw>
+        </decal>
+        <sound>
+          <startKey>	impact	</startKey>
+          <name>	/hits/explosions/medium_explosions	</name>
+        </sound>
+      </effects>
+    </groundHit>
+    <armorRicochet>
+      <stages>
+        <impact>	8.0	</impact>
+      </stages>
+      <effects>
+        <pixie>
+          <startKey>	impact	</startKey>
+          <file>	particles/Shells_Eff/ricochet_AP_1.xml	</file>
+          <force>	1	</force>
+        </pixie>
+        <sound>
+          <startKey>	impact	</startKey>
+          <name>	/hits/hits/tank_hit_armor_ricochet	</name>
+        </sound>
+      </effects>
+    </armorRicochet>
+    <armorResisted>
+      <stages>
+        <impact>	8.0	</impact>
+      </stages>
+      <effects>
+        <pixie>
+          <startKey>	impact	</startKey>
+          <file>	particles/Shells_Eff/shellFall_AP_2.xml	</file>
+          <force>	1	</force>
+        </pixie>
+        <sound>
+          <startKey>	impact	</startKey>
+          <name>	/hits/hits/tank_hit_armor_not_pierce	</name>
+        </sound>
+      </effects>
+    </armorResisted>
+    <armorHit>
+      <stages>
+        <impact>	8.0	</impact>
+      </stages>
+      <effects>
+        <shockWave>
+          <startKey>	impact	</startKey>
+          <duration>	1.2	</duration>
+        </shockWave>
+        <flashBang>
+          <startKey>	impact	</startKey>
+          <stages>
+            <stage>	0.1	  <color>	0 0 0 0	</color>
+            </stage>
+            <stage>	1.1	  <color>	1.0 0.0 0.0 0.5	</color>
+            </stage>
+            <stage>	0.0	  <color>	0 0 0 0	</color>
+            </stage>
+          </stages>
+        </flashBang>
+        <pixie>
+          <startKey>	impact	</startKey>
+          <file>	particles/Shells_Eff/armorHit_AP_2.xml	</file>
+          <force>	1	</force>
+        </pixie>
+        <sound>
+          <startKey>	impact	</startKey>
+          <name>	/hits/hits/tank_hit_armor_pierce	</name>
+        </sound>
+      </effects>
+    </armorHit>
+    <armorCriticalHit>
+      <stages>
+        <impact>	8.0	</impact>
+      </stages>
+      <effects>
+        <shockWave>
+          <startKey>	impact	</startKey>
+          <duration>	1.5	</duration>
+        </shockWave>
+        <flashBang>
+          <startKey>	impact	</startKey>
+          <stages>
+            <stage>	0.1	  <color>	0 0 0 0	</color>
+            </stage>
+            <stage>	1.4	  <color>	1.0 0.0 0.0 0.7	</color>
+            </stage>
+            <stage>	0.0	  <color>	0 0 0 0	</color>
+            </stage>
+          </stages>
+        </flashBang>
+        <pixie>
+          <startKey>	impact	</startKey>
+          <file>	particles/Shells_Eff/armorHit_AP_2.xml	</file>
+          <force>	1	</force>
+        </pixie>
+        <sound>
+          <startKey>	impact	</startKey>
+          <name>	/hits/hits/tank_hit_armor_crit	</name>
+        </sound>
+      </effects>
+    </armorCriticalHit>
+    <woodHit>
+      <stages>
+        <impact>	6.0	</impact>
+      </stages>
+      <effects>
+        <decal>
+          <startKey>	impact	</startKey>
+          <groupName>	slow	</groupName>
+          <texName>	explosion	</texName>
+          <size>	6.0 6.0	</size>
+          <variation>	0.25	</variation>
+          <randomYaw>	True	</randomYaw>
+        </decal>
+        <pixie>
+          <startKey>	impact	</startKey>
+          <file>	particles/Shells_Eff/woodHit_AP.xml	</file>
+          <force>	1	</force>
+        </pixie>
+        <sound>
+          <startKey>	impact	</startKey>
+          <name>	/hits/explosions/medium_explosions	</name>
+        </sound>
+      </effects>
+    </woodHit>
+    <stoneHit>
+      <stages>
+        <impact>	6.0	</impact>
+      </stages>
+      <effects>
+        <decal>
+          <startKey>	impact	</startKey>
+          <groupName>	slow	</groupName>
+          <texName>	explosion	</texName>
+          <size>	6.0 6.0	</size>
+          <variation>	0.25	</variation>
+          <randomYaw>	True	</randomYaw>
+        </decal>
+        <pixie>
+          <startKey>	impact	</startKey>
+          <file>	particles/Shells_Eff/stoneHit_AP_1.xml	</file>
+          <force>	1	</force>
+        </pixie>
+        <sound>
+          <startKey>	impact	</startKey>
+          <name>	/hits/explosions/medium_explosions	</name>
+        </sound>
+      </effects>
+    </stoneHit>
+    <waterParams>
+      <shallowWaterDepth>	1.0	</shallowWaterDepth>
+      <rippleDiameter>	0.6	</rippleDiameter>
+    </waterParams>
+    <shallowWaterHit>
+      <stages>
+        <impact>	4.0	</impact>
+      </stages>
+      <effects>
+        <pixie>
+          <startKey>	impact	</startKey>
+          <file>	particles/Shells_Eff/waterHit_shallow_AP_2.xml	</file>
+          <force>	1	</force>
+        </pixie>
+        <sound>
+          <startKey>	impact	</startKey>
+          <name>	/hits/explosions/medium_explosions_water	</name>
+        </sound>
+      </effects>
+    </shallowWaterHit>
+    <deepWaterHit>
+      <stages>
+        <impact>	4.0	</impact>
+      </stages>
+      <effects>
+        <pixie>
+          <startKey>	impact	</startKey>
+          <file>	particles/Shells_Eff/waterHit_AP_2.xml	</file>
+          <force>	1	</force>
+        </pixie>
+        <sound>
+          <startKey>	impact	</startKey>
+          <name>	/hits/explosions/medium_explosions_water	</name>
+        </sound>
+      </effects>
+    </deepWaterHit>
+  </mediumArmorPiercing>
+  <mediumHighExplosive>
+    <projectile>
+      <model>	objects/fake_model.model	</model>
+      <effects>
+        <pixie>
+          <startKey>	flying	</startKey>
+          <position>	Scene Root	</position>
+          <file>	particles/Shells_Eff/trace_2.xml	</file>
+          <force>	1	</force>
+        </pixie>
+        <sound>
+          <startKey>	flying	</startKey>
+          <endKey>	stopFlying	</endKey>
+          <name>	/weapons/tracer/tracer	</name>
+        </sound>
+      </effects>
+    </projectile>
+    <targetImpulse>	0.32	</targetImpulse>
+    <targetStickers>
+      <armorResisted>	medium_ricochet	</armorResisted>
+      <armorHit>	medium_hole	</armorHit>
+    </targetStickers>
+    <groundHit>
+      <stages>
+        <impact>	8.0	</impact>
+      </stages>
+      <effects>
+        <pixie>
+          <startKey>	impact	</startKey>
+          <alwaysUpdateModel>	true	</alwaysUpdateModel>
+          <file>	particles/Shells_Eff/groundHit_HE_2.xml	</file>
+          <force>	1	</force>
+        </pixie>
+        <decal>
+          <startKey>	impact	</startKey>
+          <groupName>	slow	</groupName>
+          <texName>	explosion	</texName>
+          <size>	5.0 5.0	</size>
+          <variation>	0.25	</variation>
+          <randomYaw>	True	</randomYaw>
+        </decal>
+        <sound>
+          <startKey>	impact	</startKey>
+          <name>	/hits/explosions/medium_explosions	</name>
+        </sound>
+      </effects>
+    </groundHit>
+    <armorResisted>
+      <stages>
+        <impact>	8.0	</impact>
+      </stages>
+      <effects>
+        <pixie>
+          <startKey>	impact	</startKey>
+          <file>	particles/Shells_Eff/shallFall_HE_2.xml	</file>
+          <force>	1	</force>
+        </pixie>
+        <sound>
+          <startKey>	impact	</startKey>
+          <name>	/hits/hits/tank_hit_armor_not_pierce	</name>
+        </sound>
+      </effects>
+    </armorResisted>
+    <armorHit>
+      <stages>
+        <impact>	8.0	</impact>
+      </stages>
+      <effects>
+        <shockWave>
+          <startKey>	impact	</startKey>
+          <duration>	1.2	</duration>
+        </shockWave>
+        <flashBang>
+          <startKey>	impact	</startKey>
+          <stages>
+            <stage>	0.1	  <color>	0 0 0 0	</color>
+            </stage>
+            <stage>	1.1	  <color>	1.0 0.0 0.0 0.5	</color>
+            </stage>
+            <stage>	0.0	  <color>	0 0 0 0	</color>
+            </stage>
+          </stages>
+        </flashBang>
+        <pixie>
+          <startKey>	impact	</startKey>
+          <file>	particles/Shells_Eff/armorHit_HE_2.xml	</file>
+          <force>	1	</force>
+        </pixie>
+        <sound>
+          <startKey>	impact	</startKey>
+          <name>	/hits/hits/armor_hit_fougasse	</name>
+        </sound>
+      </effects>
+    </armorHit>
+    <armorCriticalHit>
+      <stages>
+        <impact>	8.0	</impact>
+      </stages>
+      <effects>
+        <shockWave>
+          <startKey>	impact	</startKey>
+          <duration>	1.5	</duration>
+        </shockWave>
+        <flashBang>
+          <startKey>	impact	</startKey>
+          <stages>
+            <stage>	0.1	  <color>	0 0 0 0	</color>
+            </stage>
+            <stage>	1.4	  <color>	1.0 0.0 0.0 0.7	</color>
+            </stage>
+            <stage>	0.0	  <color>	0 0 0 0	</color>
+            </stage>
+          </stages>
+        </flashBang>
+        <pixie>
+          <startKey>	impact	</startKey>
+          <file>	particles/Shells_Eff/armorHit_HE_2.xml	</file>
+          <force>	1	</force>
+        </pixie>
+        <sound>
+          <startKey>	impact	</startKey>
+          <name>	/hits/hits/armor_hit_fougasse	</name>
+        </sound>
+      </effects>
+    </armorCriticalHit>
+    <woodHit>
+      <stages>
+        <impact>	6.0	</impact>
+      </stages>
+      <effects>
+        <decal>
+          <startKey>	impact	</startKey>
+          <groupName>	slow	</groupName>
+          <texName>	explosion	</texName>
+          <size>	6.0 6.0	</size>
+          <variation>	0.25	</variation>
+          <randomYaw>	True	</randomYaw>
+        </decal>
+        <pixie>
+          <startKey>	impact	</startKey>
+          <file>	particles/Shells_Eff/woodHit_AP.xml	</file>
+          <force>	1	</force>
+        </pixie>
+        <sound>
+          <startKey>	impact	</startKey>
+          <name>	/hits/explosions/medium_explosions	</name>
+        </sound>
+      </effects>
+    </woodHit>
+    <stoneHit>
+      <stages>
+        <impact>	6.0	</impact>
+      </stages>
+      <effects>
+        <decal>
+          <startKey>	impact	</startKey>
+          <groupName>	slow	</groupName>
+          <texName>	explosion	</texName>
+          <size>	6.0 6.0	</size>
+          <variation>	0.25	</variation>
+          <randomYaw>	True	</randomYaw>
+        </decal>
+        <pixie>
+          <startKey>	impact	</startKey>
+          <file>	particles/Shells_Eff/stoneHit_AP_1.xml	</file>
+          <force>	1	</force>
+        </pixie>
+        <sound>
+          <startKey>	impact	</startKey>
+          <name>	/hits/explosions/medium_explosions	</name>
+        </sound>
+      </effects>
+    </stoneHit>
+    <waterParams>
+      <shallowWaterDepth>	1.0	</shallowWaterDepth>
+      <rippleDiameter>	1.0	</rippleDiameter>
+    </waterParams>
+    <shallowWaterHit>
+      <stages>
+        <impact>	4.0	</impact>
+      </stages>
+      <effects>
+        <pixie>
+          <startKey>	impact	</startKey>
+          <file>	particles/Shells_Eff/waterHit_shallow_HE_2.xml	</file>
+          <force>	1	</force>
+        </pixie>
+        <sound>
+          <startKey>	impact	</startKey>
+          <name>	/hits/explosions/medium_explosions_water	</name>
+        </sound>
+      </effects>
+    </shallowWaterHit>
+    <deepWaterHit>
+      <stages>
+        <impact>	4.0	</impact>
+      </stages>
+      <effects>
+        <pixie>
+          <startKey>	impact	</startKey>
+          <file>	particles/Shells_Eff/waterHit_HE_2.xml	</file>
+          <force>	1	</force>
+        </pixie>
+        <sound>
+          <startKey>	impact	</startKey>
+          <name>	/hits/explosions/medium_explosions_water	</name>
+        </sound>
+      </effects>
+    </deepWaterHit>
+  </mediumHighExplosive>
+  <mediumHollowCharge>
+    <projectile>
+      <model>	objects/fake_model.model	</model>
+      <effects>
+        <pixie>
+          <startKey>	flying	</startKey>
+          <position>	Scene Root	</position>
+          <file>	particles/Shells_Eff/trace_HC_3.xml	</file>
+          <force>	1	</force>
+        </pixie>
+        <sound>
+          <startKey>	flying	</startKey>
+          <endKey>	stopFlying	</endKey>
+          <name>	/weapons/tracer/tracer	</name>
+        </sound>
+      </effects>
+    </projectile>
+    <targetImpulse>	0.24	</targetImpulse>
+    <targetStickers>
+      <armorResisted>	medium_ricochet	</armorResisted>
+      <armorHit>	medium_hole	</armorHit>
+    </targetStickers>
+    <groundHit>
+      <stages>
+        <impact>	8.0	</impact>
+      </stages>
+      <effects>
+        <pixie>
+          <startKey>	impact	</startKey>
+          <file>	particles/Shells_Eff/groundHit_HC_2.xml	</file>
+          <force>	1	</force>
+        </pixie>
+        <decal>
+          <startKey>	impact	</startKey>
+          <groupName>	slow	</groupName>
+          <texName>	explosion	</texName>
+          <size>	4.0 4.0	</size>
+          <variation>	0.2	</variation>
+          <randomYaw>	True	</randomYaw>
+        </decal>
+        <sound>
+          <startKey>	impact	</startKey>
+          <name>	/hits/explosions/medium_explosions	</name>
+        </sound>
+      </effects>
+    </groundHit>
+    <armorResisted>
+      <stages>
+        <impact>	8.0	</impact>
+      </stages>
+      <effects>
+        <pixie>
+          <startKey>	impact	</startKey>
+          <file>	particles/Shells_Eff/shellFall_HC_2.xml	</file>
+          <force>	1	</force>
+        </pixie>
+        <sound>
+          <startKey>	impact	</startKey>
+          <name>	/hits/hits/tank_hit_armor_not_pierce	</name>
+        </sound>
+      </effects>
+    </armorResisted>
+    <armorHit>
+      <stages>
+        <impact>	8.0	</impact>
+      </stages>
+      <effects>
+        <shockWave>
+          <startKey>	impact	</startKey>
+          <duration>	1.2	</duration>
+        </shockWave>
+        <flashBang>
+          <startKey>	impact	</startKey>
+          <stages>
+            <stage>	0.1	  <color>	0 0 0 0	</color>
+            </stage>
+            <stage>	1.1	  <color>	1.0 0.0 0.0 0.5	</color>
+            </stage>
+            <stage>	0.0	  <color>	0 0 0 0	</color>
+            </stage>
+          </stages>
+        </flashBang>
+        <pixie>
+          <startKey>	impact	</startKey>
+          <file>	particles/Shells_Eff/armorHit_HC_2.xml	</file>
+          <force>	1	</force>
+        </pixie>
+        <sound>
+          <startKey>	impact	</startKey>
+          <name>	/hits/hits/tank_hit_armor_pierce	</name>
+        </sound>
+      </effects>
+    </armorHit>
+    <armorCriticalHit>
+      <stages>
+        <impact>	8.0	</impact>
+      </stages>
+      <effects>
+        <shockWave>
+          <startKey>	impact	</startKey>
+          <duration>	1.5	</duration>
+        </shockWave>
+        <flashBang>
+          <startKey>	impact	</startKey>
+          <stages>
+            <stage>	0.1	  <color>	0 0 0 0	</color>
+            </stage>
+            <stage>	1.4	  <color>	1.0 0.0 0.0 0.7	</color>
+            </stage>
+            <stage>	0.0	  <color>	0 0 0 0	</color>
+            </stage>
+          </stages>
+        </flashBang>
+        <pixie>
+          <startKey>	impact	</startKey>
+          <file>	particles/Shells_Eff/armorHit_HC_2.xml	</file>
+          <force>	1	</force>
+        </pixie>
+        <sound>
+          <startKey>	impact	</startKey>
+          <name>	/hits/hits/tank_hit_armor_crit	</name>
+        </sound>
+      </effects>
+    </armorCriticalHit>
+    <woodHit>
+      <stages>
+        <impact>	6.0	</impact>
+      </stages>
+      <effects>
+        <decal>
+          <startKey>	impact	</startKey>
+          <groupName>	slow	</groupName>
+          <texName>	explosion	</texName>
+          <size>	6.0 6.0	</size>
+          <variation>	0.25	</variation>
+          <randomYaw>	True	</randomYaw>
+        </decal>
+        <pixie>
+          <startKey>	impact	</startKey>
+          <file>	particles/Shells_Eff/woodHit_AP.xml	</file>
+          <force>	1	</force>
+        </pixie>
+        <sound>
+          <startKey>	impact	</startKey>
+          <name>	/hits/explosions/medium_explosions	</name>
+        </sound>
+      </effects>
+    </woodHit>
+    <stoneHit>
+      <stages>
+        <impact>	6.0	</impact>
+      </stages>
+      <effects>
+        <decal>
+          <startKey>	impact	</startKey>
+          <groupName>	slow	</groupName>
+          <texName>	explosion	</texName>
+          <size>	6.0 6.0	</size>
+          <variation>	0.25	</variation>
+          <randomYaw>	True	</randomYaw>
+        </decal>
+        <pixie>
+          <startKey>	impact	</startKey>
+          <file>	particles/Shells_Eff/stoneHit_AP_1.xml	</file>
+          <force>	1	</force>
+        </pixie>
+        <sound>
+          <startKey>	impact	</startKey>
+          <name>	/hits/explosions/medium_explosions	</name>
+        </sound>
+      </effects>
+    </stoneHit>
+    <waterParams>
+      <shallowWaterDepth>	1.0	</shallowWaterDepth>
+      <rippleDiameter>	0.6	</rippleDiameter>
+    </waterParams>
+    <shallowWaterHit>
+      <stages>
+        <impact>	4.0	</impact>
+      </stages>
+      <effects>
+        <pixie>
+          <startKey>	impact	</startKey>
+          <file>	particles/Shells_Eff/waterHit_shallow_AP_2.xml	</file>
+          <force>	1	</force>
+        </pixie>
+        <sound>
+          <startKey>	impact	</startKey>
+          <name>	/hits/explosions/medium_explosions_water	</name>
+        </sound>
+      </effects>
+    </shallowWaterHit>
+    <deepWaterHit>
+      <stages>
+        <impact>	4.0	</impact>
+      </stages>
+      <effects>
+        <pixie>
+          <startKey>	impact	</startKey>
+          <file>	particles/Shells_Eff/waterHit_AP_2.xml	</file>
+          <force>	1	</force>
+        </pixie>
+        <sound>
+          <startKey>	impact	</startKey>
+          <name>	/hits/explosions/medium_explosions_water	</name>
+        </sound>
+      </effects>
+    </deepWaterHit>
+  </mediumHollowCharge>
+  <mediumAPCR>
+    <projectile>
+      <model>	objects/misc/shell_glow/shell_medium.model	</model>
+      <effects>
+        <pixie>
+          <startKey>	flying	</startKey>
+          <position>	Scene Root	</position>
+          <file>	particles/Shells_Eff/trace_APCR_1.xml	</file>
+          <force>	1	</force>
+        </pixie>
+        <sound>
+          <startKey>	flying	</startKey>
+          <endKey>	stopFlying	</endKey>
+          <name>	/weapons/tracer/tracer	</name>
+        </sound>
+      </effects>
+    </projectile>
+    <targetImpulse>	0.24	</targetImpulse>
+    <targetStickers>
+      <armorResisted>	medium_ricochet	</armorResisted>
+      <armorHit>	medium_hole	</armorHit>
+    </targetStickers>
+    <groundHit>
+      <stages>
+        <impact>	8.0	</impact>
+      </stages>
+      <effects>
+        <pixie>
+          <startKey>	impact	</startKey>
+          <file>	particles/Shells_Eff/groundHit_AP_CR_2.xml	</file>
+          <force>	1	</force>
+        </pixie>
+        <decal>
+          <startKey>	impact	</startKey>
+          <groupName>	slow	</groupName>
+          <texName>	explosion	</texName>
+          <size>	4.0 4.0	</size>
+          <variation>	0.2	</variation>
+          <randomYaw>	True	</randomYaw>
+        </decal>
+        <sound>
+          <startKey>	impact	</startKey>
+          <name>	/hits/explosions/medium_explosions	</name>
+        </sound>
+      </effects>
+    </groundHit>
+    <armorRicochet>
+      <stages>
+        <impact>	8.0	</impact>
+      </stages>
+      <effects>
+        <pixie>
+          <startKey>	impact	</startKey>
+          <file>	particles/Shells_Eff/ricochet_AP_1.xml	</file>
+          <force>	1	</force>
+        </pixie>
+        <sound>
+          <startKey>	impact	</startKey>
+          <name>	/hits/hits/tank_hit_armor_ricochet	</name>
+        </sound>
+      </effects>
+    </armorRicochet>
+    <armorResisted>
+      <stages>
+        <impact>	8.0	</impact>
+      </stages>
+      <effects>
+        <pixie>
+          <startKey>	impact	</startKey>
+          <file>	particles/Shells_Eff/shellFall_AP_CR_2.xml	</file>
+          <force>	1	</force>
+        </pixie>
+        <sound>
+          <startKey>	impact	</startKey>
+          <name>	/hits/hits/tank_hit_armor_not_pierce	</name>
+        </sound>
+      </effects>
+    </armorResisted>
+    <armorHit>
+      <stages>
+        <impact>	8.0	</impact>
+      </stages>
+      <effects>
+        <shockWave>
+          <startKey>	impact	</startKey>
+          <duration>	1.2	</duration>
+        </shockWave>
+        <flashBang>
+          <startKey>	impact	</startKey>
+          <stages>
+            <stage>	0.1	  <color>	0 0 0 0	</color>
+            </stage>
+            <stage>	1.1	  <color>	1.0 0.0 0.0 0.5	</color>
+            </stage>
+            <stage>	0.0	  <color>	0 0 0 0	</color>
+            </stage>
+          </stages>
+        </flashBang>
+        <pixie>
+          <startKey>	impact	</startKey>
+          <file>	particles/Shells_Eff/armorHit_AP_CR_2.xml	</file>
+          <force>	1	</force>
+        </pixie>
+        <sound>
+          <startKey>	impact	</startKey>
+          <name>	/hits/hits/tank_hit_armor_pierce	</name>
+        </sound>
+      </effects>
+    </armorHit>
+    <armorCriticalHit>
+      <stages>
+        <impact>	8.0	</impact>
+      </stages>
+      <effects>
+        <shockWave>
+          <startKey>	impact	</startKey>
+          <duration>	1.5	</duration>
+        </shockWave>
+        <flashBang>
+          <startKey>	impact	</startKey>
+          <stages>
+            <stage>	0.1	  <color>	0 0 0 0	</color>
+            </stage>
+            <stage>	1.4	  <color>	1.0 0.0 0.0 0.7	</color>
+            </stage>
+            <stage>	0.0	  <color>	0 0 0 0	</color>
+            </stage>
+          </stages>
+        </flashBang>
+        <pixie>
+          <startKey>	impact	</startKey>
+          <file>	particles/Shells_Eff/armorHit_AP_CR_2.xml	</file>
+          <force>	1	</force>
+        </pixie>
+        <sound>
+          <startKey>	impact	</startKey>
+          <name>	/hits/hits/tank_hit_armor_crit	</name>
+        </sound>
+      </effects>
+    </armorCriticalHit>
+    <woodHit>
+      <stages>
+        <impact>	6.0	</impact>
+      </stages>
+      <effects>
+        <decal>
+          <startKey>	impact	</startKey>
+          <groupName>	slow	</groupName>
+          <texName>	explosion	</texName>
+          <size>	6.0 6.0	</size>
+          <variation>	0.25	</variation>
+          <randomYaw>	True	</randomYaw>
+        </decal>
+        <pixie>
+          <startKey>	impact	</startKey>
+          <file>	particles/Shells_Eff/woodHit_AP.xml	</file>
+          <force>	1	</force>
+        </pixie>
+        <sound>
+          <startKey>	impact	</startKey>
+          <name>	/hits/explosions/medium_explosions	</name>
+        </sound>
+      </effects>
+    </woodHit>
+    <stoneHit>
+      <stages>
+        <impact>	6.0	</impact>
+      </stages>
+      <effects>
+        <decal>
+          <startKey>	impact	</startKey>
+          <groupName>	slow	</groupName>
+          <texName>	explosion	</texName>
+          <size>	6.0 6.0	</size>
+          <variation>	0.25	</variation>
+          <randomYaw>	True	</randomYaw>
+        </decal>
+        <pixie>
+          <startKey>	impact	</startKey>
+          <file>	particles/Shells_Eff/stoneHit_AP_1.xml	</file>
+          <force>	1	</force>
+        </pixie>
+        <sound>
+          <startKey>	impact	</startKey>
+          <name>	/hits/explosions/medium_explosions	</name>
+        </sound>
+      </effects>
+    </stoneHit>
+    <waterParams>
+      <shallowWaterDepth>	1.0	</shallowWaterDepth>
+      <rippleDiameter>	0.6	</rippleDiameter>
+    </waterParams>
+    <shallowWaterHit>
+      <stages>
+        <impact>	4.0	</impact>
+      </stages>
+      <effects>
+        <pixie>
+          <startKey>	impact	</startKey>
+          <file>	particles/Shells_Eff/waterHit_shallow_AP_2.xml	</file>
+          <force>	1	</force>
+        </pixie>
+        <sound>
+          <startKey>	impact	</startKey>
+          <name>	/hits/explosions/medium_explosions_water	</name>
+        </sound>
+      </effects>
+    </shallowWaterHit>
+    <deepWaterHit>
+      <stages>
+        <impact>	4.0	</impact>
+      </stages>
+      <effects>
+        <pixie>
+          <startKey>	impact	</startKey>
+          <file>	particles/Shells_Eff/waterHit_AP_2.xml	</file>
+          <force>	1	</force>
+        </pixie>
+        <sound>
+          <startKey>	impact	</startKey>
+          <name>	/hits/explosions/medium_explosions_water	</name>
+        </sound>
+      </effects>
+    </deepWaterHit>
+  </mediumAPCR>
+  <mainArmorPiercing>
+    <projectile>
+      <model>	objects/misc/shell_glow/shell_heavy.model	</model>
+      <effects>
+        <pixie>
+          <startKey>	flying	</startKey>
+          <position>	Scene Root	</position>
+          <file>	particles/Shells_Eff/trace_3.xml	</file>
+          <force>	1	</force>
+        </pixie>
+        <sound>
+          <startKey>	flying	</startKey>
+          <endKey>	stopFlying	</endKey>
+          <name>	/weapons/tracer/tracer	</name>
+        </sound>
+      </effects>
+    </projectile>
+    <targetImpulse>	0.46	</targetImpulse>
+    <targetStickers>
+      <armorResisted>	main_ricochet	</armorResisted>
+      <armorHit>	main_hole	</armorHit>
+    </targetStickers>
+    <groundHit>
+      <stages>
+        <impact>	8.0	</impact>
+      </stages>
+      <effects>
+        <pixie>
+          <startKey>	impact	</startKey>
+          <alwaysUpdateModel>	true	</alwaysUpdateModel>
+          <file>	particles/Shells_Eff/groundHit_AP_3.xml	</file>
+          <force>	1	</force>
+        </pixie>
+        <decal>
+          <startKey>	impact	</startKey>
+          <groupName>	slow	</groupName>
+          <texName>	explosion	</texName>
+          <size>	6.0 6.0	</size>
+          <variation>	0.25	</variation>
+          <randomYaw>	True	</randomYaw>
+        </decal>
+        <sound>
+          <startKey>	impact	</startKey>
+          <name>	/hits/explosions/medium_explosions	</name>
+        </sound>
+      </effects>
+    </groundHit>
+    <armorRicochet>
+      <stages>
+        <impact>	8.0	</impact>
+      </stages>
+      <effects>
+        <shockWave>
+          <startKey>	impact	</startKey>
+          <duration>	0.8	</duration>
+        </shockWave>
+        <pixie>
+          <startKey>	impact	</startKey>
+          <file>	particles/Shells_Eff/ricochet_AP_3.xml	</file>
+          <force>	1	</force>
+        </pixie>
+        <sound>
+          <startKey>	impact	</startKey>
+          <name>	/hits/hits/tank_hit_armor_ricochet	</name>
+        </sound>
+      </effects>
+    </armorRicochet>
+    <armorResisted>
+      <stages>
+        <impact>	8.0	</impact>
+      </stages>
+      <effects>
+        <shockWave>
+          <startKey>	impact	</startKey>
+          <duration>	0.8	</duration>
+        </shockWave>
+        <pixie>
+          <startKey>	impact	</startKey>
+          <file>	particles/Shells_Eff/shellFall_AP_3.xml	</file>
+          <force>	1	</force>
+        </pixie>
+        <sound>
+          <startKey>	impact	</startKey>
+          <name>	/hits/hits/tank_hit_armor_not_pierce	</name>
+        </sound>
+      </effects>
+    </armorResisted>
+    <armorHit>
+      <stages>
+        <impact>	8.0	</impact>
+      </stages>
+      <effects>
+        <shockWave>
+          <startKey>	impact	</startKey>
+          <duration>	1.2	</duration>
+        </shockWave>
+        <flashBang>
+          <startKey>	impact	</startKey>
+          <stages>
+            <stage>	0.1	  <color>	0 0 0 0	</color>
+            </stage>
+            <stage>	1.1	  <color>	1.0 0.0 0.0 0.5	</color>
+            </stage>
+            <stage>	0.0	  <color>	0 0 0 0	</color>
+            </stage>
+          </stages>
+        </flashBang>
+        <pixie>
+          <startKey>	impact	</startKey>
+          <file>	particles/Shells_Eff/armorHit_AP_3.xml	</file>
+          <force>	1	</force>
+        </pixie>
+        <sound>
+          <startKey>	impact	</startKey>
+          <name>	/hits/hits/tank_hit_armor_pierce	</name>
+        </sound>
+      </effects>
+    </armorHit>
+    <armorCriticalHit>
+      <stages>
+        <impact>	8.0	</impact>
+      </stages>
+      <effects>
+        <shockWave>
+          <startKey>	impact	</startKey>
+          <duration>	1.5	</duration>
+        </shockWave>
+        <flashBang>
+          <startKey>	impact	</startKey>
+          <stages>
+            <stage>	0.1	  <color>	0 0 0 0	</color>
+            </stage>
+            <stage>	1.4	  <color>	1.0 0.0 0.0 0.7	</color>
+            </stage>
+            <stage>	0.0	  <color>	0 0 0 0	</color>
+            </stage>
+          </stages>
+        </flashBang>
+        <pixie>
+          <startKey>	impact	</startKey>
+          <file>	particles/Shells_Eff/armorHit_AP_3.xml	</file>
+          <force>	1	</force>
+        </pixie>
+        <sound>
+          <startKey>	impact	</startKey>
+          <name>	/hits/hits/tank_hit_armor_crit	</name>
+        </sound>
+      </effects>
+    </armorCriticalHit>
+    <woodHit>
+      <stages>
+        <impact>	8.0	</impact>
+      </stages>
+      <effects>
+        <pixie>
+          <startKey>	impact	</startKey>
+          <file>	particles/Shells_Eff/woodHit_AP.xml	</file>
+          <force>	1	</force>
+        </pixie>
+        <decal>
+          <startKey>	impact	</startKey>
+          <groupName>	slow	</groupName>
+          <texName>	explosion	</texName>
+          <size>	6.0 6.0	</size>
+          <variation>	0.25	</variation>
+          <randomYaw>	True	</randomYaw>
+        </decal>
+        <sound>
+          <startKey>	impact	</startKey>
+          <name>	/hits/explosions/medium_explosions	</name>
+        </sound>
+      </effects>
+    </woodHit>
+    <stoneHit>
+      <stages>
+        <impact>	8.0	</impact>
+      </stages>
+      <effects>
+        <decal>
+          <startKey>	impact	</startKey>
+          <groupName>	slow	</groupName>
+          <texName>	explosion	</texName>
+          <size>	6.0 6.0	</size>
+          <variation>	0.25	</variation>
+          <randomYaw>	True	</randomYaw>
+        </decal>
+        <pixie>
+          <startKey>	impact	</startKey>
+          <file>	particles/Shells_Eff/stoneHit_AP_3.xml	</file>
+          <force>	1	</force>
+        </pixie>
+        <sound>
+          <startKey>	impact	</startKey>
+          <name>	/hits/explosions/medium_explosions	</name>
+        </sound>
+      </effects>
+    </stoneHit>
+    <waterParams>
+      <shallowWaterDepth>	1.2	</shallowWaterDepth>
+      <rippleDiameter>	4.0	</rippleDiameter>
+    </waterParams>
+    <shallowWaterHit>
+      <stages>
+        <impact>	8.0	</impact>
+      </stages>
+      <effects>
+        <pixie>
+          <startKey>	impact	</startKey>
+          <file>	particles/Shells_Eff/waterHit_shallow_AP_3.xml	</file>
+          <force>	1	</force>
+        </pixie>
+        <sound>
+          <startKey>	impact	</startKey>
+          <name>	/hits/explosions/medium_explosions_water	</name>
+        </sound>
+      </effects>
+    </shallowWaterHit>
+    <deepWaterHit>
+      <stages>
+        <impact>	8.0	</impact>
+      </stages>
+      <effects>
+        <pixie>
+          <startKey>	impact	</startKey>
+          <file>	particles/Shells_Eff/waterHit_AP_3.xml	</file>
+          <force>	1	</force>
+        </pixie>
+        <sound>
+          <startKey>	impact	</startKey>
+          <name>	/hits/explosions/medium_explosions_water	</name>
+        </sound>
+      </effects>
+    </deepWaterHit>
+  </mainArmorPiercing>
+  <mainHighExplosive>
+    <projectile>
+      <model>	objects/fake_model.model	</model>
+      <effects>
+        <pixie>
+          <startKey>	flying	</startKey>
+          <position>	Scene Root	</position>
+          <file>	particles/Shells_Eff/trace_HE_3.xml	</file>
+          <force>	1	</force>
+        </pixie>
+        <sound>
+          <startKey>	flying	</startKey>
+          <endKey>	stopFlying	</endKey>
+          <name>	/weapons/tracer/tracer	</name>
+        </sound>
+      </effects>
+    </projectile>
+    <targetImpulse>	0.56	</targetImpulse>
+    <targetStickers>
+      <armorResisted>	main_ricochet	</armorResisted>
+      <armorHit>	main_hole	</armorHit>
+    </targetStickers>
+    <groundHit>
+      <stages>
+        <impact>	8.0	</impact>
+      </stages>
+      <effects>
+        <pixie>
+          <startKey>	impact	</startKey>
+          <alwaysUpdateModel>	true	</alwaysUpdateModel>
+          <file>	particles/Shells_Eff/groundHit_HE_3.xml	</file>
+          <force>	1	</force>
+        </pixie>
+        <decal>
+          <startKey>	impact	</startKey>
+          <groupName>	slow	</groupName>
+          <texName>	explosion	</texName>
+          <size>	7.0 7.0	</size>
+          <variation>	0.2	</variation>
+          <randomYaw>	True	</randomYaw>
+        </decal>
+        <sound>
+          <startKey>	impact	</startKey>
+          <name>	/hits/explosions/medium_explosions	</name>
+        </sound>
+      </effects>
+    </groundHit>
+    <armorResisted>
+      <stages>
+        <impact>	8.0	</impact>
+      </stages>
+      <effects>
+        <shockWave>
+          <startKey>	impact	</startKey>
+          <duration>	1.0	</duration>
+        </shockWave>
+        <pixie>
+          <startKey>	impact	</startKey>
+          <file>	particles/Shells_Eff/shellFall_HE_3.xml	</file>
+          <force>	1	</force>
+        </pixie>
+        <sound>
+          <startKey>	impact	</startKey>
+          <name>	/hits/hits/tank_hit_armor_not_pierce	</name>
+        </sound>
+      </effects>
+    </armorResisted>
+    <armorHit>
+      <stages>
+        <impact>	8.0	</impact>
+      </stages>
+      <effects>
+        <shockWave>
+          <startKey>	impact	</startKey>
+          <duration>	1.2	</duration>
+        </shockWave>
+        <flashBang>
+          <startKey>	impact	</startKey>
+          <stages>
+            <stage>	0.1	  <color>	0 0 0 0	</color>
+            </stage>
+            <stage>	1.1	  <color>	1.0 0.0 0.0 0.5	</color>
+            </stage>
+            <stage>	0.0	  <color>	0 0 0 0	</color>
+            </stage>
+          </stages>
+        </flashBang>
+        <pixie>
+          <startKey>	impact	</startKey>
+          <file>	particles/Shells_Eff/armorHit_HE_3.xml	</file>
+          <force>	1	</force>
+        </pixie>
+        <sound>
+          <startKey>	impact	</startKey>
+          <name>	/hits/hits/armor_hit_fougasse	</name>
+        </sound>
+      </effects>
+    </armorHit>
+    <armorCriticalHit>
+      <stages>
+        <impact>	8.0	</impact>
+      </stages>
+      <effects>
+        <shockWave>
+          <startKey>	impact	</startKey>
+          <duration>	1.4	</duration>
+        </shockWave>
+        <flashBang>
+          <startKey>	impact	</startKey>
+          <stages>
+            <stage>	0.1	  <color>	0.9 0 0 0.8	</color>
+            </stage>
+            <stage>	1.4	  <color>	1.0 0.0 0.0 0.7	</color>
+            </stage>
+            <stage>	0.0	  <color>	0 0 0 0	</color>
+            </stage>
+          </stages>
+        </flashBang>
+        <pixie>
+          <startKey>	impact	</startKey>
+          <file>	particles/Shells_Eff/armorHit_HE_3.xml	</file>
+          <force>	1	</force>
+        </pixie>
+        <sound>
+          <startKey>	impact	</startKey>
+          <name>	/hits/hits/armor_hit_fougasse	</name>
+        </sound>
+      </effects>
+    </armorCriticalHit>
+    <woodHit>
+      <stages>
+        <impact>	8.0	</impact>
+      </stages>
+      <effects>
+        <pixie>
+          <startKey>	impact	</startKey>
+          <file>	particles/Shells_Eff/woodHit_AP.xml	</file>
+          <force>	1	</force>
+        </pixie>
+        <decal>
+          <startKey>	impact	</startKey>
+          <groupName>	slow	</groupName>
+          <texName>	explosion	</texName>
+          <size>	6.0 6.0	</size>
+          <variation>	0.25	</variation>
+          <randomYaw>	True	</randomYaw>
+        </decal>
+        <sound>
+          <startKey>	impact	</startKey>
+          <name>	/hits/explosions/medium_explosions	</name>
+        </sound>
+      </effects>
+    </woodHit>
+    <stoneHit>
+      <stages>
+        <impact>	8.0	</impact>
+      </stages>
+      <effects>
+        <decal>
+          <startKey>	impact	</startKey>
+          <groupName>	slow	</groupName>
+          <texName>	explosion	</texName>
+          <size>	6.0 6.0	</size>
+          <variation>	0.25	</variation>
+          <randomYaw>	True	</randomYaw>
+        </decal>
+        <pixie>
+          <startKey>	impact	</startKey>
+          <file>	particles/Shells_Eff/stoneHit_AP_3.xml	</file>
+          <force>	1	</force>
+        </pixie>
+        <sound>
+          <startKey>	impact	</startKey>
+          <name>	/hits/explosions/medium_explosions	</name>
+        </sound>
+      </effects>
+    </stoneHit>
+    <waterParams>
+      <shallowWaterDepth>	1.2	</shallowWaterDepth>
+      <rippleDiameter>	6.0	</rippleDiameter>
+    </waterParams>
+    <shallowWaterHit>
+      <stages>
+        <impact>	8.0	</impact>
+      </stages>
+      <effects>
+        <pixie>
+          <startKey>	impact	</startKey>
+          <file>	particles/Shells_Eff/waterHit_shallow_HE_3.xml	</file>
+          <force>	1	</force>
+        </pixie>
+        <sound>
+          <startKey>	impact	</startKey>
+          <name>	/hits/explosions/medium_explosions_water	</name>
+        </sound>
+      </effects>
+    </shallowWaterHit>
+    <deepWaterHit>
+      <stages>
+        <impact>	8.0	</impact>
+      </stages>
+      <effects>
+        <pixie>
+          <startKey>	impact	</startKey>
+          <file>	particles/Shells_Eff/waterHit_HE_3.xml	</file>
+          <force>	1	</force>
+        </pixie>
+        <sound>
+          <startKey>	impact	</startKey>
+          <name>	/hits/explosions/medium_explosions_water	</name>
+        </sound>
+      </effects>
+    </deepWaterHit>
+  </mainHighExplosive>
+  <mainHollowCharge>
+    <projectile>
+      <model>	objects/fake_model.model	</model>
+      <effects>
+        <pixie>
+          <startKey>	flying	</startKey>
+          <position>	Scene Root	</position>
+          <file>	particles/Shells_Eff/trace_HC_3.xml	</file>
+          <force>	1	</force>
+        </pixie>
+        <sound>
+          <startKey>	flying	</startKey>
+          <endKey>	stopFlying	</endKey>
+          <name>	/weapons/tracer/tracer	</name>
+        </sound>
+      </effects>
+    </projectile>
+    <targetImpulse>	0.46	</targetImpulse>
+    <targetStickers>
+      <armorResisted>	medium_ricochet	</armorResisted>
+      <armorHit>	medium_hole	</armorHit>
+    </targetStickers>
+    <groundHit>
+      <stages>
+        <impact>	8.0	</impact>
+      </stages>
+      <effects>
+        <pixie>
+          <startKey>	impact	</startKey>
+          <file>	particles/Shells_Eff/groundHit_HC_3.xml	</file>
+          <force>	1	</force>
+        </pixie>
+        <decal>
+          <startKey>	impact	</startKey>
+          <groupName>	slow	</groupName>
+          <texName>	explosion	</texName>
+          <size>	4.0 4.0	</size>
+          <variation>	0.2	</variation>
+          <randomYaw>	True	</randomYaw>
+        </decal>
+        <sound>
+          <startKey>	impact	</startKey>
+          <name>	/hits/explosions/medium_explosions	</name>
+        </sound>
+      </effects>
+    </groundHit>
+    <armorResisted>
+      <stages>
+        <impact>	8.0	</impact>
+      </stages>
+      <effects>
+        <pixie>
+          <startKey>	impact	</startKey>
+          <file>	particles/Shells_Eff/shellFall_HC_2.xml	</file>
+          <force>	1	</force>
+        </pixie>
+        <sound>
+          <startKey>	impact	</startKey>
+          <name>	/hits/hits/tank_hit_armor_not_pierce	</name>
+        </sound>
+      </effects>
+    </armorResisted>
+    <armorHit>
+      <stages>
+        <impact>	8.0	</impact>
+      </stages>
+      <effects>
+        <shockWave>
+          <startKey>	impact	</startKey>
+          <duration>	1.2	</duration>
+        </shockWave>
+        <flashBang>
+          <startKey>	impact	</startKey>
+          <stages>
+            <stage>	0.1	  <color>	0 0 0 0	</color>
+            </stage>
+            <stage>	1.1	  <color>	1.0 0.0 0.0 0.5	</color>
+            </stage>
+            <stage>	0.0	  <color>	0 0 0 0	</color>
+            </stage>
+          </stages>
+        </flashBang>
+        <pixie>
+          <startKey>	impact	</startKey>
+          <file>	particles/Shells_Eff/armorHit_HC_2.xml	</file>
+          <force>	1	</force>
+        </pixie>
+        <sound>
+          <startKey>	impact	</startKey>
+          <name>	/hits/hits/tank_hit_armor_pierce	</name>
+        </sound>
+      </effects>
+    </armorHit>
+    <armorCriticalHit>
+      <stages>
+        <impact>	8.0	</impact>
+      </stages>
+      <effects>
+        <shockWave>
+          <startKey>	impact	</startKey>
+          <duration>	1.5	</duration>
+        </shockWave>
+        <flashBang>
+          <startKey>	impact	</startKey>
+          <stages>
+            <stage>	0.1	  <color>	0 0 0 0	</color>
+            </stage>
+            <stage>	1.4	  <color>	1.0 0.0 0.0 0.7	</color>
+            </stage>
+            <stage>	0.0	  <color>	0 0 0 0	</color>
+            </stage>
+          </stages>
+        </flashBang>
+        <pixie>
+          <startKey>	impact	</startKey>
+          <file>	particles/Shells_Eff/armorHit_HC_3.xml	</file>
+          <force>	1	</force>
+        </pixie>
+        <sound>
+          <startKey>	impact	</startKey>
+          <name>	/hits/hits/tank_hit_armor_crit	</name>
+        </sound>
+      </effects>
+    </armorCriticalHit>
+    <woodHit>
+      <stages>
+        <impact>	8.0	</impact>
+      </stages>
+      <effects>
+        <pixie>
+          <startKey>	impact	</startKey>
+          <file>	particles/Shells_Eff/woodHit_AP.xml	</file>
+          <force>	1	</force>
+        </pixie>
+        <decal>
+          <startKey>	impact	</startKey>
+          <groupName>	slow	</groupName>
+          <texName>	explosion	</texName>
+          <size>	6.0 6.0	</size>
+          <variation>	0.25	</variation>
+          <randomYaw>	True	</randomYaw>
+        </decal>
+        <sound>
+          <startKey>	impact	</startKey>
+          <name>	/hits/explosions/medium_explosions	</name>
+        </sound>
+      </effects>
+    </woodHit>
+    <stoneHit>
+      <stages>
+        <impact>	6.0	</impact>
+      </stages>
+      <effects>
+        <decal>
+          <startKey>	impact	</startKey>
+          <groupName>	slow	</groupName>
+          <texName>	explosion	</texName>
+          <size>	6.0 6.0	</size>
+          <variation>	0.25	</variation>
+          <randomYaw>	True	</randomYaw>
+        </decal>
+        <pixie>
+          <startKey>	impact	</startKey>
+          <file>	particles/Shells_Eff/stoneHit_AP_3.xml	</file>
+          <force>	1	</force>
+        </pixie>
+        <sound>
+          <startKey>	impact	</startKey>
+          <name>	/hits/explosions/medium_explosions	</name>
+        </sound>
+      </effects>
+    </stoneHit>
+    <waterParams>
+      <shallowWaterDepth>	1.2	</shallowWaterDepth>
+      <rippleDiameter>	4.0	</rippleDiameter>
+    </waterParams>
+    <shallowWaterHit>
+      <stages>
+        <impact>	8.0	</impact>
+      </stages>
+      <effects>
+        <pixie>
+          <startKey>	impact	</startKey>
+          <file>	particles/Shells_Eff/waterHit_shallow_AP_3.xml	</file>
+          <force>	1	</force>
+        </pixie>
+        <sound>
+          <startKey>	impact	</startKey>
+          <name>	/hits/explosions/medium_explosions_water	</name>
+        </sound>
+      </effects>
+    </shallowWaterHit>
+    <deepWaterHit>
+      <stages>
+        <impact>	8.0	</impact>
+      </stages>
+      <effects>
+        <pixie>
+          <startKey>	impact	</startKey>
+          <file>	particles/Shells_Eff/waterHit_AP_3.xml	</file>
+          <force>	1	</force>
+        </pixie>
+        <sound>
+          <startKey>	impact	</startKey>
+          <name>	/hits/explosions/medium_explosions_water	</name>
+        </sound>
+      </effects>
+    </deepWaterHit>
+  </mainHollowCharge>
+  <mainAPCR>
+    <projectile>
+      <model>	objects/misc/shell_glow/shell_heavy.model	</model>
+      <effects>
+        <pixie>
+          <startKey>	flying	</startKey>
+          <position>	Scene Root	</position>
+          <file>	particles/Shells_Eff/trace_APCR_1.xml	</file>
+          <force>	1	</force>
+        </pixie>
+        <sound>
+          <startKey>	flying	</startKey>
+          <endKey>	stopFlying	</endKey>
+          <name>	/weapons/tracer/tracer	</name>
+        </sound>
+      </effects>
+    </projectile>
+    <targetImpulse>	0.46	</targetImpulse>
+    <targetStickers>
+      <armorResisted>	main_ricochet	</armorResisted>
+      <armorHit>	main_hole	</armorHit>
+    </targetStickers>
+    <groundHit>
+      <stages>
+        <impact>	8.0	</impact>
+      </stages>
+      <effects>
+        <pixie>
+          <startKey>	impact	</startKey>
+          <alwaysUpdateModel>	true	</alwaysUpdateModel>
+          <file>	particles/Shells_Eff/groundHit_AP_CR_3.xml	</file>
+          <force>	1	</force>
+        </pixie>
+        <decal>
+          <startKey>	impact	</startKey>
+          <groupName>	slow	</groupName>
+          <texName>	explosion	</texName>
+          <size>	6.0 6.0	</size>
+          <variation>	0.25	</variation>
+          <randomYaw>	True	</randomYaw>
+        </decal>
+        <sound>
+          <startKey>	impact	</startKey>
+          <name>	/hits/explosions/medium_explosions	</name>
+        </sound>
+      </effects>
+    </groundHit>
+    <armorRicochet>
+      <stages>
+        <impact>	8.0	</impact>
+      </stages>
+      <effects>
+        <shockWave>
+          <startKey>	impact	</startKey>
+          <duration>	0.8	</duration>
+        </shockWave>
+        <pixie>
+          <startKey>	impact	</startKey>
+          <file>	particles/Shells_Eff/ricochet_AP_3.xml	</file>
+          <force>	1	</force>
+        </pixie>
+        <sound>
+          <startKey>	impact	</startKey>
+          <name>	/hits/hits/tank_hit_armor_ricochet	</name>
+        </sound>
+      </effects>
+    </armorRicochet>
+    <armorResisted>
+      <stages>
+        <impact>	8.0	</impact>
+      </stages>
+      <effects>
+        <shockWave>
+          <startKey>	impact	</startKey>
+          <duration>	0.8	</duration>
+        </shockWave>
+        <pixie>
+          <startKey>	impact	</startKey>
+          <file>	particles/Shells_Eff/shellFall_AP_CR_3.xml	</file>
+          <force>	1	</force>
+        </pixie>
+        <sound>
+          <startKey>	impact	</startKey>
+          <name>	/hits/hits/tank_hit_armor_not_pierce	</name>
+        </sound>
+      </effects>
+    </armorResisted>
+    <armorHit>
+      <stages>
+        <impact>	8.0	</impact>
+      </stages>
+      <effects>
+        <shockWave>
+          <startKey>	impact	</startKey>
+          <duration>	1.2	</duration>
+        </shockWave>
+        <flashBang>
+          <startKey>	impact	</startKey>
+          <stages>
+            <stage>	0.1	  <color>	0 0 0 0	</color>
+            </stage>
+            <stage>	1.1	  <color>	1.0 0.0 0.0 0.5	</color>
+            </stage>
+            <stage>	0.0	  <color>	0 0 0 0	</color>
+            </stage>
+          </stages>
+        </flashBang>
+        <pixie>
+          <startKey>	impact	</startKey>
+          <file>	particles/Shells_Eff/armorHit_AP_CR_3.xml	</file>
+          <force>	1	</force>
+        </pixie>
+        <sound>
+          <startKey>	impact	</startKey>
+          <name>	/hits/hits/tank_hit_armor_pierce	</name>
+        </sound>
+      </effects>
+    </armorHit>
+    <armorCriticalHit>
+      <stages>
+        <impact>	8.0	</impact>
+      </stages>
+      <effects>
+        <shockWave>
+          <startKey>	impact	</startKey>
+          <duration>	1.5	</duration>
+        </shockWave>
+        <flashBang>
+          <startKey>	impact	</startKey>
+          <stages>
+            <stage>	0.1	  <color>	0 0 0 0	</color>
+            </stage>
+            <stage>	1.4	  <color>	1.0 0.0 0.0 0.7	</color>
+            </stage>
+            <stage>	0.0	  <color>	0 0 0 0	</color>
+            </stage>
+          </stages>
+        </flashBang>
+        <pixie>
+          <startKey>	impact	</startKey>
+          <file>	particles/Shells_Eff/armorHit_AP_CR_3.xml	</file>
+          <force>	1	</force>
+        </pixie>
+        <sound>
+          <startKey>	impact	</startKey>
+          <name>	/hits/hits/tank_hit_armor_crit	</name>
+        </sound>
+      </effects>
+    </armorCriticalHit>
+    <woodHit>
+      <stages>
+        <impact>	8.0	</impact>
+      </stages>
+      <effects>
+        <pixie>
+          <startKey>	impact	</startKey>
+          <file>	particles/Shells_Eff/woodHit_AP.xml	</file>
+          <force>	1	</force>
+        </pixie>
+        <decal>
+          <startKey>	impact	</startKey>
+          <groupName>	slow	</groupName>
+          <texName>	explosion	</texName>
+          <size>	6.0 6.0	</size>
+          <variation>	0.25	</variation>
+          <randomYaw>	True	</randomYaw>
+        </decal>
+        <sound>
+          <startKey>	impact	</startKey>
+          <name>	/hits/explosions/medium_explosions	</name>
+        </sound>
+      </effects>
+    </woodHit>
+    <stoneHit>
+      <stages>
+        <impact>	6.0	</impact>
+      </stages>
+      <effects>
+        <decal>
+          <startKey>	impact	</startKey>
+          <groupName>	slow	</groupName>
+          <texName>	explosion	</texName>
+          <size>	6.0 6.0	</size>
+          <variation>	0.25	</variation>
+          <randomYaw>	True	</randomYaw>
+        </decal>
+        <pixie>
+          <startKey>	impact	</startKey>
+          <file>	particles/Shells_Eff/stoneHit_AP_3.xml	</file>
+          <force>	1	</force>
+        </pixie>
+        <sound>
+          <startKey>	impact	</startKey>
+          <name>	/hits/explosions/medium_explosions	</name>
+        </sound>
+      </effects>
+    </stoneHit>
+    <waterParams>
+      <shallowWaterDepth>	1.2	</shallowWaterDepth>
+      <rippleDiameter>	4.0	</rippleDiameter>
+    </waterParams>
+    <shallowWaterHit>
+      <stages>
+        <impact>	8.0	</impact>
+      </stages>
+      <effects>
+        <pixie>
+          <startKey>	impact	</startKey>
+          <file>	particles/Shells_Eff/waterHit_shallow_AP_3.xml	</file>
+          <force>	1	</force>
+        </pixie>
+        <sound>
+          <startKey>	impact	</startKey>
+          <name>	/hits/explosions/medium_explosions_water	</name>
+        </sound>
+      </effects>
+    </shallowWaterHit>
+    <deepWaterHit>
+      <stages>
+        <impact>	8.0	</impact>
+      </stages>
+      <effects>
+        <pixie>
+          <startKey>	impact	</startKey>
+          <file>	particles/Shells_Eff/waterHit_AP_3.xml	</file>
+          <force>	1	</force>
+        </pixie>
+        <sound>
+          <startKey>	impact	</startKey>
+          <name>	/hits/explosions/medium_explosions_water	</name>
+        </sound>
+      </effects>
+    </deepWaterHit>
+  </mainAPCR>
+  <largeArmorPiercing>
+    <projectile>
+      <model>	objects/misc/shell_glow/shell_heavy.model	</model>
+      <effects>
+        <pixie>
+          <startKey>	flying	</startKey>
+          <position>	Scene Root	</position>
+          <file>	particles/Shells_Eff/trace_4.xml	</file>
+          <force>	1	</force>
+        </pixie>
+        <sound>
+          <startKey>	flying	</startKey>
+          <endKey>	stopFlying	</endKey>
+          <name>	/weapons/tracer/tracer	</name>
+        </sound>
+      </effects>
+    </projectile>
+    <targetImpulse>	0.7	</targetImpulse>
+    <targetStickers>
+      <armorResisted>	large_ricochet	</armorResisted>
+      <armorHit>	large_hole	</armorHit>
+    </targetStickers>
+    <groundHit>
+      <stages>
+        <impact>	8.0	</impact>
+      </stages>
+      <effects>
+        <pixie>
+          <startKey>	impact	</startKey>
+          <alwaysUpdateModel>	true	</alwaysUpdateModel>
+          <file>	particles/Shells_Eff/groundHit_AP_4.xml	</file>
+          <force>	1	</force>
+        </pixie>
+        <decal>
+          <startKey>	impact	</startKey>
+          <groupName>	slow	</groupName>
+          <texName>	explosion	</texName>
+          <size>	7.0 7.0	</size>
+          <variation>	0.2	</variation>
+          <randomYaw>	True	</randomYaw>
+        </decal>
+        <sound>
+          <startKey>	impact	</startKey>
+          <name>	/hits/explosions/medium_explosions	</name>
+        </sound>
+      </effects>
+    </groundHit>
+    <armorRicochet>
+      <stages>
+        <impact>	8.0	</impact>
+      </stages>
+      <effects>
+        <shockWave>
+          <startKey>	impact	</startKey>
+          <duration>	1.2	</duration>
+        </shockWave>
+        <pixie>
+          <startKey>	impact	</startKey>
+          <file>	particles/Shells_Eff/ricochet_AP_3.xml	</file>
+          <force>	1	</force>
+        </pixie>
+        <sound>
+          <startKey>	impact	</startKey>
+          <name>	/hits/hits/tank_hit_armor_ricochet	</name>
+        </sound>
+      </effects>
+    </armorRicochet>
+    <armorResisted>
+      <stages>
+        <impact>	8.0	</impact>
+      </stages>
+      <effects>
+        <shockWave>
+          <startKey>	impact	</startKey>
+          <duration>	1.2	</duration>
+        </shockWave>
+        <pixie>
+          <startKey>	impact	</startKey>
+          <file>	particles/Shells_Eff/shellFall_AP_3.xml	</file>
+          <force>	1	</force>
+        </pixie>
+        <sound>
+          <startKey>	impact	</startKey>
+          <name>	/hits/hits/tank_hit_armor_not_pierce	</name>
+        </sound>
+      </effects>
+    </armorResisted>
+    <armorHit>
+      <stages>
+        <impact>	8.0	</impact>
+      </stages>
+      <effects>
+        <shockWave>
+          <startKey>	impact	</startKey>
+          <duration>	1.2	</duration>
+        </shockWave>
+        <flashBang>
+          <startKey>	impact	</startKey>
+          <stages>
+            <stage>	0.1	  <color>	0 0 0 0	</color>
+            </stage>
+            <stage>	1.1	  <color>	1.0 0.0 0.0 0.5	</color>
+            </stage>
+            <stage>	0.0	  <color>	0 0 0 0	</color>
+            </stage>
+          </stages>
+        </flashBang>
+        <pixie>
+          <startKey>	impact	</startKey>
+          <file>	particles/Shells_Eff/armorHit_AP_3.xml	</file>
+          <force>	1	</force>
+        </pixie>
+        <sound>
+          <startKey>	impact	</startKey>
+          <name>	/hits/hits/tank_hit_armor_large	</name>
+        </sound>
+      </effects>
+    </armorHit>
+    <armorCriticalHit>
+      <stages>
+        <impact>	8.0	</impact>
+      </stages>
+      <effects>
+        <shockWave>
+          <startKey>	impact	</startKey>
+          <duration>	1.5	</duration>
+        </shockWave>
+        <flashBang>
+          <startKey>	impact	</startKey>
+          <stages>
+            <stage>	0.1	  <color>	0 0 0 0	</color>
+            </stage>
+            <stage>	1.4	  <color>	1.0 0.0 0.0 0.7	</color>
+            </stage>
+            <stage>	0.0	  <color>	0 0 0 0	</color>
+            </stage>
+          </stages>
+        </flashBang>
+        <pixie>
+          <startKey>	impact	</startKey>
+          <file>	particles/Shells_Eff/armorHit_AP_4.xml	</file>
+          <force>	1	</force>
+        </pixie>
+        <sound>
+          <startKey>	impact	</startKey>
+          <name>	/hits/hits/tank_hit_armor_crit	</name>
+        </sound>
+      </effects>
+    </armorCriticalHit>
+    <woodHit>
+      <stages>
+        <impact>	8.0	</impact>
+      </stages>
+      <effects>
+        <pixie>
+          <startKey>	impact	</startKey>
+          <file>	particles/Shells_Eff/woodHit_AP.xml	</file>
+          <force>	1	</force>
+        </pixie>
+        <decal>
+          <startKey>	impact	</startKey>
+          <groupName>	slow	</groupName>
+          <texName>	explosion	</texName>
+          <size>	6.0 6.0	</size>
+          <variation>	0.25	</variation>
+          <randomYaw>	True	</randomYaw>
+        </decal>
+        <sound>
+          <startKey>	impact	</startKey>
+          <name>	/hits/explosions/medium_explosions	</name>
+        </sound>
+      </effects>
+    </woodHit>
+    <stoneHit>
+      <stages>
+        <impact>	6.0	</impact>
+      </stages>
+      <effects>
+        <decal>
+          <startKey>	impact	</startKey>
+          <groupName>	slow	</groupName>
+          <texName>	explosion	</texName>
+          <size>	6.0 6.0	</size>
+          <variation>	0.25	</variation>
+          <randomYaw>	True	</randomYaw>
+        </decal>
+        <pixie>
+          <startKey>	impact	</startKey>
+          <file>	particles/Shells_Eff/stoneHit_AP_3.xml	</file>
+          <force>	1	</force>
+        </pixie>
+        <sound>
+          <startKey>	impact	</startKey>
+          <name>	/hits/explosions/medium_explosions	</name>
+        </sound>
+      </effects>
+    </stoneHit>
+    <waterParams>
+      <shallowWaterDepth>	1.2	</shallowWaterDepth>
+      <rippleDiameter>	6.0	</rippleDiameter>
+    </waterParams>
+    <shallowWaterHit>
+      <stages>
+        <impact>	8.0	</impact>
+      </stages>
+      <effects>
+        <pixie>
+          <startKey>	impact	</startKey>
+          <file>	particles/Shells_Eff/waterHit_shallow_AP_4.xml	</file>
+          <force>	1	</force>
+        </pixie>
+        <sound>
+          <startKey>	impact	</startKey>
+          <name>	/hits/explosions/medium_explosions_water	</name>
+        </sound>
+      </effects>
+    </shallowWaterHit>
+    <deepWaterHit>
+      <stages>
+        <impact>	8.0	</impact>
+      </stages>
+      <effects>
+        <pixie>
+          <startKey>	impact	</startKey>
+          <file>	particles/Shells_Eff/waterHit_AP_4.xml	</file>
+          <force>	1	</force>
+        </pixie>
+        <sound>
+          <startKey>	impact	</startKey>
+          <name>	/hits/explosions/medium_explosions_water	</name>
+        </sound>
+      </effects>
+    </deepWaterHit>
+  </largeArmorPiercing>
+  <largeHighExplosive>
+    <projectile>
+      <model>	objects/fake_model.model	</model>
+      <effects>
+        <pixie>
+          <startKey>	flying	</startKey>
+          <position>	Scene Root	</position>
+          <file>	particles/Shells_Eff/trace_HE_4.xml	</file>
+          <force>	1	</force>
+        </pixie>
+        <sound>
+          <startKey>	flying	</startKey>
+          <endKey>	stopFlying	</endKey>
+          <name>	/weapons/tracer/tracer	</name>
+        </sound>
+      </effects>
+    </projectile>
+    <targetImpulse>	0.88	</targetImpulse>
+    <targetStickers>
+      <armorResisted>	main_ricochet	</armorResisted>
+      <armorHit>	main_hole	</armorHit>
+    </targetStickers>
+    <groundHit>
+      <stages>
+        <impact>	14.0	</impact>
+      </stages>
+      <effects>
+        <pixie>
+          <startKey>	impact	</startKey>
+          <alwaysUpdateModel>	true	</alwaysUpdateModel>
+          <file>	particles/Shells_Eff/groundHit_HE_3.xml	</file>
+          <force>	1	</force>
+        </pixie>
+        <decal>
+          <startKey>	impact	</startKey>
+          <groupName>	slow	</groupName>
+          <texName>	explosion	</texName>
+          <size>	10.0 10.0	</size>
+          <variation>	0.15	</variation>
+          <randomYaw>	True	</randomYaw>
+        </decal>
+        <sound>
+          <startKey>	impact	</startKey>
+          <name>	/hits/explosions/medium_explosions	</name>
+        </sound>
+      </effects>
+    </groundHit>
+    <armorResisted>
+      <stages>
+        <impact>	8.0	</impact>
+      </stages>
+      <effects>
+        <shockWave>
+          <startKey>	impact	</startKey>
+          <duration>	1.0	</duration>
+        </shockWave>
+        <pixie>
+          <startKey>	impact	</startKey>
+          <file>	particles/Shells_Eff/shallFall_HE_3.xml	</file>
+          <force>	1	</force>
+        </pixie>
+        <sound>
+          <startKey>	impact	</startKey>
+          <name>	/hits/hits/tank_hit_armor_not_pierce	</name>
+        </sound>
+      </effects>
+    </armorResisted>
+    <armorHit>
+      <stages>
+        <impact>	8.0	</impact>
+      </stages>
+      <effects>
+        <shockWave>
+          <startKey>	impact	</startKey>
+          <duration>	1.2	</duration>
+        </shockWave>
+        <flashBang>
+          <startKey>	impact	</startKey>
+          <stages>
+            <stage>	0.1	  <color>	0 0 0 0	</color>
+            </stage>
+            <stage>	1.1	  <color>	1.0 0.0 0.0 0.5	</color>
+            </stage>
+            <stage>	0.0	  <color>	0 0 0 0	</color>
+            </stage>
+          </stages>
+        </flashBang>
+        <pixie>
+          <startKey>	impact	</startKey>
+          <file>	particles/Shells_Eff/armorHit_HE_4.xml	</file>
+          <force>	1	</force>
+        </pixie>
+        <sound>
+          <startKey>	impact	</startKey>
+          <name>	/hits/hits/armor_hit_fougasse	</name>
+        </sound>
+      </effects>
+    </armorHit>
+    <armorCriticalHit>
+      <stages>
+        <impact>	8.0	</impact>
+      </stages>
+      <effects>
+        <shockWave>
+          <startKey>	impact	</startKey>
+          <duration>	1.4	</duration>
+        </shockWave>
+        <flashBang>
+          <startKey>	impact	</startKey>
+          <stages>
+            <stage>	0.1	  <color>	0.9 0 0 0.8	</color>
+            </stage>
+            <stage>	1.4	  <color>	1.0 0.0 0.0 0.7	</color>
+            </stage>
+            <stage>	0.0	  <color>	0 0 0 0	</color>
+            </stage>
+          </stages>
+        </flashBang>
+        <pixie>
+          <startKey>	impact	</startKey>
+          <file>	particles/Shells_Eff/armorHit_HE_4.xml	</file>
+          <force>	1	</force>
+        </pixie>
+        <sound>
+          <startKey>	impact	</startKey>
+          <name>	/hits/hits/armor_hit_fougasse	</name>
+        </sound>
+      </effects>
+    </armorCriticalHit>
+    <woodHit>
+      <stages>
+        <impact>	8.0	</impact>
+      </stages>
+      <effects>
+        <pixie>
+          <startKey>	impact	</startKey>
+          <file>	particles/Shells_Eff/woodHit_AP.xml	</file>
+          <force>	1	</force>
+        </pixie>
+        <decal>
+          <startKey>	impact	</startKey>
+          <groupName>	slow	</groupName>
+          <texName>	explosion	</texName>
+          <size>	6.0 6.0	</size>
+          <variation>	0.25	</variation>
+          <randomYaw>	True	</randomYaw>
+        </decal>
+        <sound>
+          <startKey>	impact	</startKey>
+          <name>	/hits/explosions/medium_explosions	</name>
+        </sound>
+      </effects>
+    </woodHit>
+    <stoneHit>
+      <stages>
+        <impact>	6.0	</impact>
+      </stages>
+      <effects>
+        <decal>
+          <startKey>	impact	</startKey>
+          <groupName>	slow	</groupName>
+          <texName>	explosion	</texName>
+          <size>	6.0 6.0	</size>
+          <variation>	0.25	</variation>
+          <randomYaw>	True	</randomYaw>
+        </decal>
+        <pixie>
+          <startKey>	impact	</startKey>
+          <file>	particles/Shells_Eff/stoneHit_AP_3.xml	</file>
+          <force>	1	</force>
+        </pixie>
+        <sound>
+          <startKey>	impact	</startKey>
+          <name>	/hits/explosions/medium_explosions	</name>
+        </sound>
+      </effects>
+    </stoneHit>
+    <waterParams>
+      <shallowWaterDepth>	1.2	</shallowWaterDepth>
+      <rippleDiameter>	6.0	</rippleDiameter>
+    </waterParams>
+    <shallowWaterHit>
+      <stages>
+        <impact>	8.0	</impact>
+      </stages>
+      <effects>
+        <pixie>
+          <startKey>	impact	</startKey>
+          <file>	particles/Shells_Eff/waterHit_shallow_HE_4.xml	</file>
+          <force>	1	</force>
+        </pixie>
+        <sound>
+          <startKey>	impact	</startKey>
+          <name>	/hits/explosions/medium_explosions_water	</name>
+        </sound>
+      </effects>
+    </shallowWaterHit>
+    <deepWaterHit>
+      <stages>
+        <impact>	8.0	</impact>
+      </stages>
+      <effects>
+        <pixie>
+          <startKey>	impact	</startKey>
+          <file>	particles/Shells_Eff/waterHit_HE_4.xml	</file>
+          <force>	1	</force>
+        </pixie>
+        <sound>
+          <startKey>	impact	</startKey>
+          <name>	/hits/explosions/medium_explosions_water	</name>
+        </sound>
+      </effects>
+    </deepWaterHit>
+  </largeHighExplosive>
+  <largeHollowCharge>
+    <projectile>
+      <model>	objects/fake_model.model	</model>
+      <effects>
+        <pixie>
+          <startKey>	flying	</startKey>
+          <position>	Scene Root	</position>
+          <file>	particles/Shells_Eff/trace_HC_3.xml	</file>
+          <force>	1	</force>
+        </pixie>
+        <sound>
+          <startKey>	flying	</startKey>
+          <endKey>	stopFlying	</endKey>
+          <name>	/weapons/tracer/tracer	</name>
+        </sound>
+      </effects>
+    </projectile>
+    <targetImpulse>	0.7	</targetImpulse>
+    <targetStickers>
+      <armorResisted>	medium_ricochet	</armorResisted>
+      <armorHit>	medium_hole	</armorHit>
+    </targetStickers>
+    <groundHit>
+      <stages>
+        <impact>	8.0	</impact>
+      </stages>
+      <effects>
+        <pixie>
+          <startKey>	impact	</startKey>
+          <file>	particles/Shells_Eff/groundHit_HC_3.xml	</file>
+          <force>	1	</force>
+        </pixie>
+        <decal>
+          <startKey>	impact	</startKey>
+          <groupName>	slow	</groupName>
+          <texName>	explosion	</texName>
+          <size>	4.0 4.0	</size>
+          <variation>	0.2	</variation>
+          <randomYaw>	True	</randomYaw>
+        </decal>
+        <sound>
+          <startKey>	impact	</startKey>
+          <name>	/hits/explosions/medium_explosions	</name>
+        </sound>
+      </effects>
+    </groundHit>
+    <armorResisted>
+      <stages>
+        <impact>	8.0	</impact>
+      </stages>
+      <effects>
+        <pixie>
+          <startKey>	impact	</startKey>
+          <file>	particles/Shells_Eff/shellFall_HC_2.xml	</file>
+          <force>	1	</force>
+        </pixie>
+        <sound>
+          <startKey>	impact	</startKey>
+          <name>	/hits/hits/tank_hit_armor_not_pierce	</name>
+        </sound>
+      </effects>
+    </armorResisted>
+    <armorHit>
+      <stages>
+        <impact>	8.0	</impact>
+      </stages>
+      <effects>
+        <shockWave>
+          <startKey>	impact	</startKey>
+          <duration>	1.2	</duration>
+        </shockWave>
+        <flashBang>
+          <startKey>	impact	</startKey>
+          <stages>
+            <stage>	0.1	  <color>	0 0 0 0	</color>
+            </stage>
+            <stage>	1.1	  <color>	1.0 0.0 0.0 0.5	</color>
+            </stage>
+            <stage>	0.0	  <color>	0 0 0 0	</color>
+            </stage>
+          </stages>
+        </flashBang>
+        <pixie>
+          <startKey>	impact	</startKey>
+          <file>	particles/Shells_Eff/armorHit_HC_2.xml	</file>
+          <force>	1	</force>
+        </pixie>
+        <sound>
+          <startKey>	impact	</startKey>
+          <name>	/hits/hits/tank_hit_armor_large	</name>
+        </sound>
+      </effects>
+    </armorHit>
+    <armorCriticalHit>
+      <stages>
+        <impact>	8.0	</impact>
+      </stages>
+      <effects>
+        <shockWave>
+          <startKey>	impact	</startKey>
+          <duration>	1.5	</duration>
+        </shockWave>
+        <flashBang>
+          <startKey>	impact	</startKey>
+          <stages>
+            <stage>	0.1	  <color>	0 0 0 0	</color>
+            </stage>
+            <stage>	1.4	  <color>	1.0 0.0 0.0 0.7	</color>
+            </stage>
+            <stage>	0.0	  <color>	0 0 0 0	</color>
+            </stage>
+          </stages>
+        </flashBang>
+        <pixie>
+          <startKey>	impact	</startKey>
+          <file>	particles/Shells_Eff/armorHit_HC_4.xml	</file>
+          <force>	1	</force>
+        </pixie>
+        <sound>
+          <startKey>	impact	</startKey>
+          <name>	/hits/hits/tank_hit_armor_crit	</name>
+        </sound>
+      </effects>
+    </armorCriticalHit>
+    <woodHit>
+      <stages>
+        <impact>	8.0	</impact>
+      </stages>
+      <effects>
+        <pixie>
+          <startKey>	impact	</startKey>
+          <file>	particles/Shells_Eff/woodHit_AP.xml	</file>
+          <force>	1	</force>
+        </pixie>
+        <decal>
+          <startKey>	impact	</startKey>
+          <groupName>	slow	</groupName>
+          <texName>	explosion	</texName>
+          <size>	6.0 6.0	</size>
+          <variation>	0.25	</variation>
+          <randomYaw>	True	</randomYaw>
+        </decal>
+        <sound>
+          <startKey>	impact	</startKey>
+          <name>	/hits/explosions/medium_explosions	</name>
+        </sound>
+      </effects>
+    </woodHit>
+    <stoneHit>
+      <stages>
+        <impact>	6.0	</impact>
+      </stages>
+      <effects>
+        <decal>
+          <startKey>	impact	</startKey>
+          <groupName>	slow	</groupName>
+          <texName>	explosion	</texName>
+          <size>	6.0 6.0	</size>
+          <variation>	0.25	</variation>
+          <randomYaw>	True	</randomYaw>
+        </decal>
+        <pixie>
+          <startKey>	impact	</startKey>
+          <file>	particles/Shells_Eff/stoneHit_AP_3.xml	</file>
+          <force>	1	</force>
+        </pixie>
+        <sound>
+          <startKey>	impact	</startKey>
+          <name>	/hits/explosions/medium_explosions	</name>
+        </sound>
+      </effects>
+    </stoneHit>
+    <waterParams>
+      <shallowWaterDepth>	1.2	</shallowWaterDepth>
+      <rippleDiameter>	6.0	</rippleDiameter>
+    </waterParams>
+    <shallowWaterHit>
+      <stages>
+        <impact>	8.0	</impact>
+      </stages>
+      <effects>
+        <pixie>
+          <startKey>	impact	</startKey>
+          <file>	particles/Shells_Eff/waterHit_shallow_AP_4.xml	</file>
+          <force>	1	</force>
+        </pixie>
+        <sound>
+          <startKey>	impact	</startKey>
+          <name>	/hits/explosions/medium_explosions_water	</name>
+        </sound>
+      </effects>
+    </shallowWaterHit>
+    <deepWaterHit>
+      <stages>
+        <impact>	8.0	</impact>
+      </stages>
+      <effects>
+        <pixie>
+          <startKey>	impact	</startKey>
+          <file>	particles/Shells_Eff/waterHit_AP_4.xml	</file>
+          <force>	1	</force>
+        </pixie>
+        <sound>
+          <startKey>	impact	</startKey>
+          <name>	/hits/explosions/medium_explosions_water	</name>
+        </sound>
+      </effects>
+    </deepWaterHit>
+  </largeHollowCharge>
+  <largeAPCR>
+    <projectile>
+      <model>	objects/misc/shell_glow/shell_heavy.model	</model>
+      <effects>
+        <pixie>
+          <startKey>	flying	</startKey>
+          <position>	Scene Root	</position>
+          <file>	particles/Shells_Eff/trace_APCR_4.xml	</file>
+          <force>	1	</force>
+        </pixie>
+        <sound>
+          <startKey>	flying	</startKey>
+          <endKey>	stopFlying	</endKey>
+          <name>	/weapons/tracer/tracer	</name>
+        </sound>
+      </effects>
+    </projectile>
+    <targetImpulse>	0.7	</targetImpulse>
+    <targetStickers>
+      <armorResisted>	large_ricochet	</armorResisted>
+      <armorHit>	large_hole	</armorHit>
+    </targetStickers>
+    <groundHit>
+      <stages>
+        <impact>	8.0	</impact>
+      </stages>
+      <effects>
+        <pixie>
+          <startKey>	impact	</startKey>
+          <alwaysUpdateModel>	true	</alwaysUpdateModel>
+          <file>	particles/Shells_Eff/groundHit_AP_CR_3.xml	</file>
+          <force>	1	</force>
+        </pixie>
+        <decal>
+          <startKey>	impact	</startKey>
+          <groupName>	slow	</groupName>
+          <texName>	explosion	</texName>
+          <size>	7.0 7.0	</size>
+          <variation>	0.2	</variation>
+          <randomYaw>	True	</randomYaw>
+        </decal>
+        <sound>
+          <startKey>	impact	</startKey>
+          <name>	/hits/explosions/medium_explosions	</name>
+        </sound>
+      </effects>
+    </groundHit>
+    <armorRicochet>
+      <stages>
+        <impact>	8.0	</impact>
+      </stages>
+      <effects>
+        <shockWave>
+          <startKey>	impact	</startKey>
+          <duration>	1.2	</duration>
+        </shockWave>
+        <pixie>
+          <startKey>	impact	</startKey>
+          <file>	particles/Shells_Eff/ricochet_AP_3.xml	</file>
+          <force>	1	</force>
+        </pixie>
+        <sound>
+          <startKey>	impact	</startKey>
+          <name>	/hits/hits/tank_hit_armor_ricochet	</name>
+        </sound>
+      </effects>
+    </armorRicochet>
+    <armorResisted>
+      <stages>
+        <impact>	8.0	</impact>
+      </stages>
+      <effects>
+        <shockWave>
+          <startKey>	impact	</startKey>
+          <duration>	1.2	</duration>
+        </shockWave>
+        <pixie>
+          <startKey>	impact	</startKey>
+          <file>	particles/Shells_Eff/shellFall_AP_CR_3.xml	</file>
+          <force>	1	</force>
+        </pixie>
+        <sound>
+          <startKey>	impact	</startKey>
+          <name>	/hits/hits/tank_hit_armor_not_pierce	</name>
+        </sound>
+      </effects>
+    </armorResisted>
+    <armorHit>
+      <stages>
+        <impact>	8.0	</impact>
+      </stages>
+      <effects>
+        <shockWave>
+          <startKey>	impact	</startKey>
+          <duration>	1.2	</duration>
+        </shockWave>
+        <flashBang>
+          <startKey>	impact	</startKey>
+          <stages>
+            <stage>	0.1	  <color>	0 0 0 0	</color>
+            </stage>
+            <stage>	1.1	  <color>	1.0 0.0 0.0 0.5	</color>
+            </stage>
+            <stage>	0.0	  <color>	0 0 0 0	</color>
+            </stage>
+          </stages>
+        </flashBang>
+        <pixie>
+          <startKey>	impact	</startKey>
+          <file>	particles/Shells_Eff/armorHit_AP_CR_3.xml	</file>
+          <force>	1	</force>
+        </pixie>
+        <sound>
+          <startKey>	impact	</startKey>
+          <name>	/hits/hits/tank_hit_armor_large	</name>
+        </sound>
+      </effects>
+    </armorHit>
+    <armorCriticalHit>
+      <stages>
+        <impact>	8.0	</impact>
+      </stages>
+      <effects>
+        <shockWave>
+          <startKey>	impact	</startKey>
+          <duration>	1.5	</duration>
+        </shockWave>
+        <flashBang>
+          <startKey>	impact	</startKey>
+          <stages>
+            <stage>	0.1	  <color>	0 0 0 0	</color>
+            </stage>
+            <stage>	1.4	  <color>	1.0 0.0 0.0 0.7	</color>
+            </stage>
+            <stage>	0.0	  <color>	0 0 0 0	</color>
+            </stage>
+          </stages>
+        </flashBang>
+        <pixie>
+          <startKey>	impact	</startKey>
+          <file>	particles/Shells_Eff/armorHit_AP_CR_4.xml	</file>
+          <force>	1	</force>
+        </pixie>
+        <sound>
+          <startKey>	impact	</startKey>
+          <name>	/hits/hits/tank_hit_armor_crit	</name>
+        </sound>
+      </effects>
+    </armorCriticalHit>
+    <woodHit>
+      <stages>
+        <impact>	8.0	</impact>
+      </stages>
+      <effects>
+        <pixie>
+          <startKey>	impact	</startKey>
+          <file>	particles/Shells_Eff/woodHit_AP.xml	</file>
+          <force>	1	</force>
+        </pixie>
+        <decal>
+          <startKey>	impact	</startKey>
+          <groupName>	slow	</groupName>
+          <texName>	explosion	</texName>
+          <size>	6.0 6.0	</size>
+          <variation>	0.25	</variation>
+          <randomYaw>	True	</randomYaw>
+        </decal>
+        <sound>
+          <startKey>	impact	</startKey>
+          <name>	/hits/explosions/medium_explosions	</name>
+        </sound>
+      </effects>
+    </woodHit>
+    <stoneHit>
+      <stages>
+        <impact>	6.0	</impact>
+      </stages>
+      <effects>
+        <decal>
+          <startKey>	impact	</startKey>
+          <groupName>	slow	</groupName>
+          <texName>	explosion	</texName>
+          <size>	6.0 6.0	</size>
+          <variation>	0.25	</variation>
+          <randomYaw>	True	</randomYaw>
+        </decal>
+        <pixie>
+          <startKey>	impact	</startKey>
+          <file>	particles/Shells_Eff/stoneHit_AP_3.xml	</file>
+          <force>	1	</force>
+        </pixie>
+        <sound>
+          <startKey>	impact	</startKey>
+          <name>	/hits/explosions/medium_explosions	</name>
+        </sound>
+      </effects>
+    </stoneHit>
+    <waterParams>
+      <shallowWaterDepth>	1.2	</shallowWaterDepth>
+      <rippleDiameter>	6.0	</rippleDiameter>
+    </waterParams>
+    <shallowWaterHit>
+      <stages>
+        <impact>	8.0	</impact>
+      </stages>
+      <effects>
+        <pixie>
+          <startKey>	impact	</startKey>
+          <file>	particles/Shells_Eff/waterHit_shallow_AP_4.xml	</file>
+          <force>	1	</force>
+        </pixie>
+        <sound>
+          <startKey>	impact	</startKey>
+          <name>	/hits/explosions/medium_explosions_water	</name>
+        </sound>
+      </effects>
+    </shallowWaterHit>
+    <deepWaterHit>
+      <stages>
+        <impact>	8.0	</impact>
+      </stages>
+      <effects>
+        <pixie>
+          <startKey>	impact	</startKey>
+          <file>	particles/Shells_Eff/waterHit_AP_4.xml	</file>
+          <force>	1	</force>
+        </pixie>
+        <sound>
+          <startKey>	impact	</startKey>
+          <name>	/hits/explosions/medium_explosions_water	</name>
+        </sound>
+      </effects>
+    </deepWaterHit>
+  </largeAPCR>
+  <hugeArmorPiercing>
+    <projectile>
+      <model>	objects/misc/shell_glow/shell_heavy.model	</model>
+      <effects>
+        <pixie>
+          <startKey>	flying	</startKey>
+          <position>	Scene Root	</position>
+          <file>	particles/Shells_Eff/trace_4.xml	</file>
+          <force>	1	</force>
+        </pixie>
+        <sound>
+          <startKey>	flying	</startKey>
+          <endKey>	stopFlying	</endKey>
+          <name>	/weapons/tracer/tracer	</name>
+        </sound>
+      </effects>
+    </projectile>
+    <targetImpulse>	1.04	</targetImpulse>
+    <targetStickers>
+      <armorResisted>	large_ricochet	</armorResisted>
+      <armorHit>	large_hole	</armorHit>
+    </targetStickers>
+    <groundHit>
+      <stages>
+        <impact>	8.0	</impact>
+      </stages>
+      <effects>
+        <pixie>
+          <startKey>	impact	</startKey>
+          <alwaysUpdateModel>	true	</alwaysUpdateModel>
+          <file>	particles/Shells_Eff/groundHit_AP_4.xml	</file>
+          <force>	1	</force>
+        </pixie>
+        <decal>
+          <startKey>	impact	</startKey>
+          <groupName>	slow	</groupName>
+          <texName>	explosion	</texName>
+          <size>	7.0 7.0	</size>
+          <variation>	0.2	</variation>
+          <randomYaw>	True	</randomYaw>
+        </decal>
+        <sound>
+          <startKey>	impact	</startKey>
+          <name>	/hits/explosions/medium_explosions	</name>
+        </sound>
+      </effects>
+    </groundHit>
+    <armorRicochet>
+      <stages>
+        <impact>	8.0	</impact>
+      </stages>
+      <effects>
+        <shockWave>
+          <startKey>	impact	</startKey>
+          <duration>	1.2	</duration>
+        </shockWave>
+        <pixie>
+          <startKey>	impact	</startKey>
+          <file>	particles/Shells_Eff/ricochet_AP_3.xml	</file>
+          <force>	1	</force>
+        </pixie>
+        <sound>
+          <startKey>	impact	</startKey>
+          <name>	/hits/hits/tank_hit_armor_ricochet	</name>
+        </sound>
+      </effects>
+    </armorRicochet>
+    <armorResisted>
+      <stages>
+        <impact>	8.0	</impact>
+      </stages>
+      <effects>
+        <shockWave>
+          <startKey>	impact	</startKey>
+          <duration>	1.2	</duration>
+        </shockWave>
+        <pixie>
+          <startKey>	impact	</startKey>
+          <file>	particles/Shells_Eff/shellFall_AP_3.xml	</file>
+          <force>	1	</force>
+        </pixie>
+        <sound>
+          <startKey>	impact	</startKey>
+          <name>	/hits/hits/tank_hit_armor_not_pierce	</name>
+        </sound>
+      </effects>
+    </armorResisted>
+    <armorHit>
+      <stages>
+        <impact>	8.0	</impact>
+      </stages>
+      <effects>
+        <shockWave>
+          <startKey>	impact	</startKey>
+          <duration>	1.2	</duration>
+        </shockWave>
+        <flashBang>
+          <startKey>	impact	</startKey>
+          <stages>
+            <stage>	0.1	  <color>	0 0 0 0	</color>
+            </stage>
+            <stage>	1.1	  <color>	1.0 0.0 0.0 0.5	</color>
+            </stage>
+            <stage>	0.0	  <color>	0 0 0 0	</color>
+            </stage>
+          </stages>
+        </flashBang>
+        <pixie>
+          <startKey>	impact	</startKey>
+          <file>	particles/Shells_Eff/armorHit_AP_3.xml	</file>
+          <force>	1	</force>
+        </pixie>
+        <sound>
+          <startKey>	impact	</startKey>
+          <name>	/hits/hits/tank_hit_armor_large	</name>
+        </sound>
+      </effects>
+    </armorHit>
+    <armorCriticalHit>
+      <stages>
+        <impact>	8.0	</impact>
+      </stages>
+      <effects>
+        <shockWave>
+          <startKey>	impact	</startKey>
+          <duration>	1.5	</duration>
+        </shockWave>
+        <flashBang>
+          <startKey>	impact	</startKey>
+          <stages>
+            <stage>	0.1	  <color>	0 0 0 0	</color>
+            </stage>
+            <stage>	1.4	  <color>	1.0 0.0 0.0 0.7	</color>
+            </stage>
+            <stage>	0.0	  <color>	0 0 0 0	</color>
+            </stage>
+          </stages>
+        </flashBang>
+        <pixie>
+          <startKey>	impact	</startKey>
+          <file>	particles/Shells_Eff/armorHit_AP_3.xml	</file>
+          <force>	1	</force>
+        </pixie>
+        <sound>
+          <startKey>	impact	</startKey>
+          <name>	/hits/hits/tank_hit_armor_crit	</name>
+        </sound>
+      </effects>
+    </armorCriticalHit>
+    <woodHit>
+      <stages>
+        <impact>	8.0	</impact>
+      </stages>
+      <effects>
+        <pixie>
+          <startKey>	impact	</startKey>
+          <file>	particles/Shells_Eff/woodHit_AP.xml	</file>
+          <force>	1	</force>
+        </pixie>
+        <decal>
+          <startKey>	impact	</startKey>
+          <groupName>	slow	</groupName>
+          <texName>	explosion	</texName>
+          <size>	6.0 6.0	</size>
+          <variation>	0.25	</variation>
+          <randomYaw>	True	</randomYaw>
+        </decal>
+        <sound>
+          <startKey>	impact	</startKey>
+          <name>	/hits/explosions/medium_explosions	</name>
+        </sound>
+      </effects>
+    </woodHit>
+    <stoneHit>
+      <stages>
+        <impact>	6.0	</impact>
+      </stages>
+      <effects>
+        <decal>
+          <startKey>	impact	</startKey>
+          <groupName>	slow	</groupName>
+          <texName>	explosion	</texName>
+          <size>	6.0 6.0	</size>
+          <variation>	0.25	</variation>
+          <randomYaw>	True	</randomYaw>
+        </decal>
+        <pixie>
+          <startKey>	impact	</startKey>
+          <file>	particles/Shells_Eff/stoneHit_AP_3.xml	</file>
+          <force>	1	</force>
+        </pixie>
+        <sound>
+          <startKey>	impact	</startKey>
+          <name>	/hits/explosions/medium_explosions	</name>
+        </sound>
+      </effects>
+    </stoneHit>
+    <waterParams>
+      <shallowWaterDepth>	1.2	</shallowWaterDepth>
+      <rippleDiameter>	6.0	</rippleDiameter>
+    </waterParams>
+    <shallowWaterHit>
+      <stages>
+        <impact>	8.0	</impact>
+      </stages>
+      <effects>
+        <pixie>
+          <startKey>	impact	</startKey>
+          <file>	particles/Shells_Eff/waterHit_shallow_AP_4.xml	</file>
+          <force>	1	</force>
+        </pixie>
+        <sound>
+          <startKey>	impact	</startKey>
+          <name>	/hits/explosions/medium_explosions_water	</name>
+        </sound>
+      </effects>
+    </shallowWaterHit>
+    <deepWaterHit>
+      <stages>
+        <impact>	8.0	</impact>
+      </stages>
+      <effects>
+        <pixie>
+          <startKey>	impact	</startKey>
+          <file>	particles/Shells_Eff/waterHit_AP_4.xml	</file>
+          <force>	1	</force>
+        </pixie>
+        <sound>
+          <startKey>	impact	</startKey>
+          <name>	/hits/explosions/medium_explosions_water	</name>
+        </sound>
+      </effects>
+    </deepWaterHit>
+  </hugeArmorPiercing>
+  <hugeHighExplosive>
+    <projectile>
+      <model>	objects/fake_model.model	</model>
+      <effects>
+        <pixie>
+          <startKey>	flying	</startKey>
+          <position>	Scene Root	</position>
+          <file>	particles/Shells_Eff/trace_HE_4.xml	</file>
+          <force>	1	</force>
+        </pixie>
+        <sound>
+          <startKey>	flying	</startKey>
+          <endKey>	stopFlying	</endKey>
+          <name>	/weapons/tracer/tracer	</name>
+        </sound>
+      </effects>
+    </projectile>
+    <targetImpulse>	1.28	</targetImpulse>
+    <targetStickers>
+      <armorResisted>	main_ricochet	</armorResisted>
+      <armorHit>	main_hole	</armorHit>
+    </targetStickers>
+    <groundHit>
+      <stages>
+        <impact>	14.0	</impact>
+      </stages>
+      <effects>
+        <pixie>
+          <startKey>	impact	</startKey>
+          <alwaysUpdateModel>	true	</alwaysUpdateModel>
+          <file>	particles/Shells_Eff/groundHit_HE_3.xml	</file>
+          <force>	1	</force>
+        </pixie>
+        <decal>
+          <startKey>	impact	</startKey>
+          <groupName>	slow	</groupName>
+          <texName>	explosion	</texName>
+          <size>	10.0 10.0	</size>
+          <variation>	0.15	</variation>
+          <randomYaw>	True	</randomYaw>
+        </decal>
+        <sound>
+          <startKey>	impact	</startKey>
+          <name>	/hits/explosions/medium_explosions	</name>
+        </sound>
+      </effects>
+    </groundHit>
+    <armorResisted>
+      <stages>
+        <impact>	8.0	</impact>
+      </stages>
+      <effects>
+        <shockWave>
+          <startKey>	impact	</startKey>
+          <duration>	1.0	</duration>
+        </shockWave>
+        <pixie>
+          <startKey>	impact	</startKey>
+          <file>	particles/Shells_Eff/shallFall_HE_3.xml	</file>
+          <force>	1	</force>
+        </pixie>
+        <sound>
+          <startKey>	impact	</startKey>
+          <name>	/hits/hits/tank_hit_armor_not_pierce	</name>
+        </sound>
+      </effects>
+    </armorResisted>
+    <armorHit>
+      <stages>
+        <impact>	8.0	</impact>
+      </stages>
+      <effects>
+        <shockWave>
+          <startKey>	impact	</startKey>
+          <duration>	1.2	</duration>
+        </shockWave>
+        <flashBang>
+          <startKey>	impact	</startKey>
+          <stages>
+            <stage>	0.1	  <color>	0 0 0 0	</color>
+            </stage>
+            <stage>	1.1	  <color>	1.0 0.0 0.0 0.5	</color>
+            </stage>
+            <stage>	0.0	  <color>	0 0 0 0	</color>
+            </stage>
+          </stages>
+        </flashBang>
+        <pixie>
+          <startKey>	impact	</startKey>
+          <file>	particles/Shells_Eff/armorHit_HE_4.xml	</file>
+          <force>	1	</force>
+        </pixie>
+        <sound>
+          <startKey>	impact	</startKey>
+          <name>	/hits/hits/armor_hit_fougasse	</name>
+        </sound>
+      </effects>
+    </armorHit>
+    <armorCriticalHit>
+      <stages>
+        <impact>	8.0	</impact>
+      </stages>
+      <effects>
+        <shockWave>
+          <startKey>	impact	</startKey>
+          <duration>	1.4	</duration>
+        </shockWave>
+        <flashBang>
+          <startKey>	impact	</startKey>
+          <stages>
+            <stage>	0.1	  <color>	0.9 0 0 0.8	</color>
+            </stage>
+            <stage>	1.4	  <color>	1.0 0.0 0.0 0.7	</color>
+            </stage>
+            <stage>	0.0	  <color>	0 0 0 0	</color>
+            </stage>
+          </stages>
+        </flashBang>
+        <pixie>
+          <startKey>	impact	</startKey>
+          <file>	particles/Shells_Eff/armorHit_HE_3.xml	</file>
+          <force>	1	</force>
+        </pixie>
+        <sound>
+          <startKey>	impact	</startKey>
+          <name>	/hits/hits/armor_hit_fougasse	</name>
+        </sound>
+      </effects>
+    </armorCriticalHit>
+    <woodHit>
+      <stages>
+        <impact>	8.0	</impact>
+      </stages>
+      <effects>
+        <pixie>
+          <startKey>	impact	</startKey>
+          <file>	particles/Shells_Eff/woodHit_AP.xml	</file>
+          <force>	1	</force>
+        </pixie>
+        <decal>
+          <startKey>	impact	</startKey>
+          <groupName>	slow	</groupName>
+          <texName>	explosion	</texName>
+          <size>	6.0 6.0	</size>
+          <variation>	0.25	</variation>
+          <randomYaw>	True	</randomYaw>
+        </decal>
+        <sound>
+          <startKey>	impact	</startKey>
+          <name>	/hits/explosions/medium_explosions	</name>
+        </sound>
+      </effects>
+    </woodHit>
+    <stoneHit>
+      <stages>
+        <impact>	6.0	</impact>
+      </stages>
+      <effects>
+        <decal>
+          <startKey>	impact	</startKey>
+          <groupName>	slow	</groupName>
+          <texName>	explosion	</texName>
+          <size>	6.0 6.0	</size>
+          <variation>	0.25	</variation>
+          <randomYaw>	True	</randomYaw>
+        </decal>
+        <pixie>
+          <startKey>	impact	</startKey>
+          <file>	particles/Shells_Eff/stoneHit_AP_3.xml	</file>
+          <force>	1	</force>
+        </pixie>
+        <sound>
+          <startKey>	impact	</startKey>
+          <name>	/hits/explosions/medium_explosions	</name>
+        </sound>
+      </effects>
+    </stoneHit>
+    <waterParams>
+      <shallowWaterDepth>	1.2	</shallowWaterDepth>
+      <rippleDiameter>	6.0	</rippleDiameter>
+    </waterParams>
+    <shallowWaterHit>
+      <stages>
+        <impact>	8.0	</impact>
+      </stages>
+      <effects>
+        <pixie>
+          <startKey>	impact	</startKey>
+          <file>	particles/Shells_Eff/waterHit_shallow_HE_4.xml	</file>
+          <force>	1	</force>
+        </pixie>
+        <sound>
+          <startKey>	impact	</startKey>
+          <name>	/hits/explosions/medium_explosions_water	</name>
+        </sound>
+      </effects>
+    </shallowWaterHit>
+    <deepWaterHit>
+      <stages>
+        <impact>	8.0	</impact>
+      </stages>
+      <effects>
+        <pixie>
+          <startKey>	impact	</startKey>
+          <file>	particles/Shells_Eff/waterHit_HE_4.xml	</file>
+          <force>	1	</force>
+        </pixie>
+        <sound>
+          <startKey>	impact	</startKey>
+          <name>	/hits/explosions/medium_explosions_water	</name>
+        </sound>
+      </effects>
+    </deepWaterHit>
+  </hugeHighExplosive>
+  <hugeHollowCharge>
+    <projectile>
+      <model>	objects/fake_model.model	</model>
+      <effects>
+        <pixie>
+          <startKey>	flying	</startKey>
+          <position>	Scene Root	</position>
+          <file>	particles/Shells_Eff/trace_HC_3.xml	</file>
+          <force>	1	</force>
+        </pixie>
+        <sound>
+          <startKey>	flying	</startKey>
+          <endKey>	stopFlying	</endKey>
+          <name>	/weapons/tracer/tracer	</name>
+        </sound>
+      </effects>
+    </projectile>
+    <targetImpulse>	1.04	</targetImpulse>
+    <targetStickers>
+      <armorResisted>	medium_ricochet	</armorResisted>
+      <armorHit>	medium_hole	</armorHit>
+    </targetStickers>
+    <groundHit>
+      <stages>
+        <impact>	8.0	</impact>
+      </stages>
+      <effects>
+        <pixie>
+          <startKey>	impact	</startKey>
+          <file>	particles/Shells_Eff/groundHit_HC_3.xml	</file>
+          <force>	1	</force>
+        </pixie>
+        <decal>
+          <startKey>	impact	</startKey>
+          <groupName>	slow	</groupName>
+          <texName>	explosion	</texName>
+          <size>	4.0 4.0	</size>
+          <variation>	0.2	</variation>
+          <randomYaw>	True	</randomYaw>
+        </decal>
+        <sound>
+          <startKey>	impact	</startKey>
+          <name>	/hits/explosions/medium_explosions	</name>
+        </sound>
+      </effects>
+    </groundHit>
+    <armorResisted>
+      <stages>
+        <impact>	8.0	</impact>
+      </stages>
+      <effects>
+        <pixie>
+          <startKey>	impact	</startKey>
+          <file>	particles/Shells_Eff/shellFall_HC_2.xml	</file>
+          <force>	1	</force>
+        </pixie>
+        <sound>
+          <startKey>	impact	</startKey>
+          <name>	/hits/hits/tank_hit_armor_not_pierce	</name>
+        </sound>
+      </effects>
+    </armorResisted>
+    <armorHit>
+      <stages>
+        <impact>	8.0	</impact>
+      </stages>
+      <effects>
+        <shockWave>
+          <startKey>	impact	</startKey>
+          <duration>	1.2	</duration>
+        </shockWave>
+        <flashBang>
+          <startKey>	impact	</startKey>
+          <stages>
+            <stage>	0.1	  <color>	0 0 0 0	</color>
+            </stage>
+            <stage>	1.1	  <color>	1.0 0.0 0.0 0.5	</color>
+            </stage>
+            <stage>	0.0	  <color>	0 0 0 0	</color>
+            </stage>
+          </stages>
+        </flashBang>
+        <pixie>
+          <startKey>	impact	</startKey>
+          <file>	particles/Shells_Eff/armorHit_HC_2.xml	</file>
+          <force>	1	</force>
+        </pixie>
+        <sound>
+          <startKey>	impact	</startKey>
+          <name>	/hits/hits/tank_hit_armor_large	</name>
+        </sound>
+      </effects>
+    </armorHit>
+    <armorCriticalHit>
+      <stages>
+        <impact>	8.0	</impact>
+      </stages>
+      <effects>
+        <shockWave>
+          <startKey>	impact	</startKey>
+          <duration>	1.5	</duration>
+        </shockWave>
+        <flashBang>
+          <startKey>	impact	</startKey>
+          <stages>
+            <stage>	0.1	  <color>	0 0 0 0	</color>
+            </stage>
+            <stage>	1.4	  <color>	1.0 0.0 0.0 0.7	</color>
+            </stage>
+            <stage>	0.0	  <color>	0 0 0 0	</color>
+            </stage>
+          </stages>
+        </flashBang>
+        <pixie>
+          <startKey>	impact	</startKey>
+          <file>	particles/Shells_Eff/armorHit_HC_3.xml	</file>
+          <force>	1	</force>
+        </pixie>
+        <sound>
+          <startKey>	impact	</startKey>
+          <name>	/hits/hits/tank_hit_armor_crit	</name>
+        </sound>
+      </effects>
+    </armorCriticalHit>
+    <woodHit>
+      <stages>
+        <impact>	8.0	</impact>
+      </stages>
+      <effects>
+        <pixie>
+          <startKey>	impact	</startKey>
+          <file>	particles/Shells_Eff/woodHit_AP.xml	</file>
+          <force>	1	</force>
+        </pixie>
+        <decal>
+          <startKey>	impact	</startKey>
+          <groupName>	slow	</groupName>
+          <texName>	explosion	</texName>
+          <size>	6.0 6.0	</size>
+          <variation>	0.25	</variation>
+          <randomYaw>	True	</randomYaw>
+        </decal>
+        <sound>
+          <startKey>	impact	</startKey>
+          <name>	/hits/explosions/medium_explosions	</name>
+        </sound>
+      </effects>
+    </woodHit>
+    <stoneHit>
+      <stages>
+        <impact>	6.0	</impact>
+      </stages>
+      <effects>
+        <decal>
+          <startKey>	impact	</startKey>
+          <groupName>	slow	</groupName>
+          <texName>	explosion	</texName>
+          <size>	6.0 6.0	</size>
+          <variation>	0.25	</variation>
+          <randomYaw>	True	</randomYaw>
+        </decal>
+        <pixie>
+          <startKey>	impact	</startKey>
+          <file>	particles/Shells_Eff/stoneHit_AP_3.xml	</file>
+          <force>	1	</force>
+        </pixie>
+        <sound>
+          <startKey>	impact	</startKey>
+          <name>	/hits/explosions/medium_explosions	</name>
+        </sound>
+      </effects>
+    </stoneHit>
+    <waterParams>
+      <shallowWaterDepth>	1.2	</shallowWaterDepth>
+      <rippleDiameter>	6.0	</rippleDiameter>
+    </waterParams>
+    <shallowWaterHit>
+      <stages>
+        <impact>	8.0	</impact>
+      </stages>
+      <effects>
+        <pixie>
+          <startKey>	impact	</startKey>
+          <file>	particles/Shells_Eff/waterHit_shallow_AP_4.xml	</file>
+          <force>	1	</force>
+        </pixie>
+        <sound>
+          <startKey>	impact	</startKey>
+          <name>	/hits/explosions/medium_explosions_water	</name>
+        </sound>
+      </effects>
+    </shallowWaterHit>
+    <deepWaterHit>
+      <stages>
+        <impact>	8.0	</impact>
+      </stages>
+      <effects>
+        <pixie>
+          <startKey>	impact	</startKey>
+          <file>	particles/Shells_Eff/waterHit_AP_4.xml	</file>
+          <force>	1	</force>
+        </pixie>
+        <sound>
+          <startKey>	impact	</startKey>
+          <name>	/hits/explosions/medium_explosions_water	</name>
+        </sound>
+      </effects>
+    </deepWaterHit>
+  </hugeHollowCharge>
+  <hugeAPCR>
+    <projectile>
+      <model>	objects/misc/shell_glow/shell_heavy.model	</model>
+      <effects>
+        <pixie>
+          <startKey>	flying	</startKey>
+          <position>	Scene Root	</position>
+          <file>	particles/Shells_Eff/trace_APCR_4.xml	</file>
+          <force>	1	</force>
+        </pixie>
+        <sound>
+          <startKey>	flying	</startKey>
+          <endKey>	stopFlying	</endKey>
+          <name>	/weapons/tracer/tracer	</name>
+        </sound>
+      </effects>
+    </projectile>
+    <targetImpulse>	1.04	</targetImpulse>
+    <targetStickers>
+      <armorResisted>	large_ricochet	</armorResisted>
+      <armorHit>	large_hole	</armorHit>
+    </targetStickers>
+    <groundHit>
+      <stages>
+        <impact>	8.0	</impact>
+      </stages>
+      <effects>
+        <pixie>
+          <startKey>	impact	</startKey>
+          <alwaysUpdateModel>	true	</alwaysUpdateModel>
+          <file>	particles/Shells_Eff/groundHit_AP_CR_3.xml	</file>
+          <force>	1	</force>
+        </pixie>
+        <decal>
+          <startKey>	impact	</startKey>
+          <groupName>	slow	</groupName>
+          <texName>	explosion	</texName>
+          <size>	7.0 7.0	</size>
+          <variation>	0.2	</variation>
+          <randomYaw>	True	</randomYaw>
+        </decal>
+        <sound>
+          <startKey>	impact	</startKey>
+          <name>	/hits/explosions/medium_explosions	</name>
+        </sound>
+      </effects>
+    </groundHit>
+    <armorRicochet>
+      <stages>
+        <impact>	8.0	</impact>
+      </stages>
+      <effects>
+        <shockWave>
+          <startKey>	impact	</startKey>
+          <duration>	1.2	</duration>
+        </shockWave>
+        <pixie>
+          <startKey>	impact	</startKey>
+          <file>	particles/Shells_Eff/ricochet_AP_3.xml	</file>
+          <force>	1	</force>
+        </pixie>
+        <sound>
+          <startKey>	impact	</startKey>
+          <name>	/hits/hits/tank_hit_armor_ricochet	</name>
+        </sound>
+      </effects>
+    </armorRicochet>
+    <armorResisted>
+      <stages>
+        <impact>	8.0	</impact>
+      </stages>
+      <effects>
+        <shockWave>
+          <startKey>	impact	</startKey>
+          <duration>	1.2	</duration>
+        </shockWave>
+        <pixie>
+          <startKey>	impact	</startKey>
+          <file>	particles/Shells_Eff/shellFall_AP_CR_3.xml	</file>
+          <force>	1	</force>
+        </pixie>
+        <sound>
+          <startKey>	impact	</startKey>
+          <name>	/hits/hits/tank_hit_armor_not_pierce	</name>
+        </sound>
+      </effects>
+    </armorResisted>
+    <armorHit>
+      <stages>
+        <impact>	8.0	</impact>
+      </stages>
+      <effects>
+        <shockWave>
+          <startKey>	impact	</startKey>
+          <duration>	1.2	</duration>
+        </shockWave>
+        <flashBang>
+          <startKey>	impact	</startKey>
+          <stages>
+            <stage>	0.1	  <color>	0 0 0 0	</color>
+            </stage>
+            <stage>	1.1	  <color>	1.0 0.0 0.0 0.5	</color>
+            </stage>
+            <stage>	0.0	  <color>	0 0 0 0	</color>
+            </stage>
+          </stages>
+        </flashBang>
+        <pixie>
+          <startKey>	impact	</startKey>
+          <file>	particles/Shells_Eff/armorHit_AP_CR_3.xml	</file>
+          <force>	1	</force>
+        </pixie>
+        <sound>
+          <startKey>	impact	</startKey>
+          <name>	/hits/hits/tank_hit_armor_large	</name>
+        </sound>
+      </effects>
+    </armorHit>
+    <armorCriticalHit>
+      <stages>
+        <impact>	8.0	</impact>
+      </stages>
+      <effects>
+        <shockWave>
+          <startKey>	impact	</startKey>
+          <duration>	1.5	</duration>
+        </shockWave>
+        <flashBang>
+          <startKey>	impact	</startKey>
+          <stages>
+            <stage>	0.1	  <color>	0 0 0 0	</color>
+            </stage>
+            <stage>	1.4	  <color>	1.0 0.0 0.0 0.7	</color>
+            </stage>
+            <stage>	0.0	  <color>	0 0 0 0	</color>
+            </stage>
+          </stages>
+        </flashBang>
+        <pixie>
+          <startKey>	impact	</startKey>
+          <file>	particles/Shells_Eff/armorHit_AP_3.xml	</file>
+          <force>	1	</force>
+        </pixie>
+        <sound>
+          <startKey>	impact	</startKey>
+          <name>	/hits/hits/tank_hit_armor_crit	</name>
+        </sound>
+      </effects>
+    </armorCriticalHit>
+    <woodHit>
+      <stages>
+        <impact>	8.0	</impact>
+      </stages>
+      <effects>
+        <pixie>
+          <startKey>	impact	</startKey>
+          <file>	particles/Shells_Eff/woodHit_AP.xml	</file>
+          <force>	1	</force>
+        </pixie>
+        <decal>
+          <startKey>	impact	</startKey>
+          <groupName>	slow	</groupName>
+          <texName>	explosion	</texName>
+          <size>	6.0 6.0	</size>
+          <variation>	0.25	</variation>
+          <randomYaw>	True	</randomYaw>
+        </decal>
+        <sound>
+          <startKey>	impact	</startKey>
+          <name>	/hits/explosions/medium_explosions	</name>
+        </sound>
+      </effects>
+    </woodHit>
+    <stoneHit>
+      <stages>
+        <impact>	6.0	</impact>
+      </stages>
+      <effects>
+        <decal>
+          <startKey>	impact	</startKey>
+          <groupName>	slow	</groupName>
+          <texName>	explosion	</texName>
+          <size>	6.0 6.0	</size>
+          <variation>	0.25	</variation>
+          <randomYaw>	True	</randomYaw>
+        </decal>
+        <pixie>
+          <startKey>	impact	</startKey>
+          <file>	particles/Shells_Eff/stoneHit_AP_3.xml	</file>
+          <force>	1	</force>
+        </pixie>
+        <sound>
+          <startKey>	impact	</startKey>
+          <name>	/hits/explosions/medium_explosions	</name>
+        </sound>
+      </effects>
+    </stoneHit>
+    <waterParams>
+      <shallowWaterDepth>	1.2	</shallowWaterDepth>
+      <rippleDiameter>	6.0	</rippleDiameter>
+    </waterParams>
+    <shallowWaterHit>
+      <stages>
+        <impact>	8.0	</impact>
+      </stages>
+      <effects>
+        <pixie>
+          <startKey>	impact	</startKey>
+          <file>	particles/Shells_Eff/waterHit_shallow_AP_4.xml	</file>
+          <force>	1	</force>
+        </pixie>
+        <sound>
+          <startKey>	impact	</startKey>
+          <name>	/hits/explosions/medium_explosions_water	</name>
+        </sound>
+      </effects>
+    </shallowWaterHit>
+    <deepWaterHit>
+      <stages>
+        <impact>	8.0	</impact>
+      </stages>
+      <effects>
+        <pixie>
+          <startKey>	impact	</startKey>
+          <file>	particles/Shells_Eff/waterHit_AP_4.xml	</file>
+          <force>	1	</force>
+        </pixie>
+        <sound>
+          <startKey>	impact	</startKey>
+          <name>	/hits/explosions/medium_explosions_water	</name>
+        </sound>
+      </effects>
+    </deepWaterHit>
+  </hugeAPCR>
+</shot_effects.xml>

@@ -1,12 +1,13 @@
+# Python bytecode 2.6 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/material_kinds.py
+# Compiled at: 2010-11-26 00:26:41
 import ResMgr
 IDS_BY_NAMES = None
 GROUND_STRENGTHS_BY_IDS = None
-EFFECT_MATERIALS = ('ground', 'stone', 'wood', 'metal', 'snow', 'sand', 'water')
+EFFECT_MATERIALS = ('ground', 'stone', 'wood', 'metal', 'snow', 'sand')
 EFFECT_MATERIAL_INDEXES_BY_NAMES = dict(((name, idx) for idx, name in enumerate(EFFECT_MATERIALS)))
 EFFECT_MATERIAL_INDEXES_BY_IDS = None
 EFFECT_MATERIAL_IDS_BY_NAMES = None
-WATER_MATERIAL_KIND = -100
 
 def _init():
     global IDS_BY_NAMES
@@ -47,10 +48,6 @@ def _init():
                 EFFECT_MATERIAL_IDS_BY_NAMES[matName] = []
             EFFECT_MATERIAL_IDS_BY_NAMES[matName].append(id)
 
-    IDS_BY_NAMES['water'] = WATER_MATERIAL_KIND
-    EFFECT_MATERIAL_INDEXES_BY_IDS[WATER_MATERIAL_KIND] = EFFECT_MATERIAL_INDEXES_BY_NAMES['water']
-    EFFECT_MATERIAL_IDS_BY_NAMES['water'] = []
-    EFFECT_MATERIAL_IDS_BY_NAMES['water'].append(WATER_MATERIAL_KIND)
     return
 
 

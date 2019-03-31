@@ -1,0 +1,15 @@
+<AccountRegistrator.def>
+  <Properties>
+    <consumer_tag>
+      <Type>	STRING	</Type>
+      <Flags>	BASE	</Flags>
+      <Persistent>	false	</Persistent>
+    </consumer_tag>
+  </Properties>
+  <BaseMethods>
+    <createAccount>
+      <Arg>	PYTHON	</Arg>
+    </createAccount>
+    <start></start>
+  </BaseMethods>
+</AccountRegistrator.def>

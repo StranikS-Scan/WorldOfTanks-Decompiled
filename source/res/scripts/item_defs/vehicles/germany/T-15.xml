@@ -1,0 +1,289 @@
+<T-15.xml>
+  <crew>
+    <commander>	gunner	</commander>
+    <driver></driver>
+    <radioman></radioman>
+    <loader></loader>
+  </crew>
+  <speedLimits>
+    <forward>	60	</forward>
+    <backward>	20	</backward>
+  </speedLimits>
+  <repairCost>	3.17	</repairCost>
+  <effects>
+    <destruction>	smallDestruction	</destruction>
+    <explosion>	smallExplosion	</explosion>
+    <flaming>	smallFlaming	</flaming>
+    <collision>	collision	</collision>
+  </effects>
+  <camouflage>
+    <priceFactor>	0.6	</priceFactor>
+    <tiling>	1 1 0 0	</tiling>
+    <exclusionMask>	vehicles/german/G50_T-15/T-15_CM.dds	</exclusionMask>
+  </camouflage>
+  <emblems>
+    <default>	germany_cross	</default>
+    <lodDist>	MEDIUM	</lodDist>
+    <alpha>	0.843137	</alpha>
+  </emblems>
+  <horns>
+    <priceFactor>	1.0	</priceFactor>
+    <distanceFactor>	1.0	</distanceFactor>
+    <volumeFactor>	1.0	</volumeFactor>
+  </horns>
+  <hull>
+    <models>
+      <undamaged>	vehicles/german/G50_T-15/normal/lod0/Hull.model	</undamaged>
+      <destroyed>	vehicles/german/G50_T-15/crash/lod0/Hull.model	</destroyed>
+      <exploded>	vehicles/german/G50_T-15/crash/lod0/Hull.model	</exploded>
+    </models>
+    <swinging>
+      <lodDist>	FAR	</lodDist>
+      <pitchParams>	0.28 34.00 0.34 1.00 0.05 0.30	</pitchParams>
+      <rollParams>	1.00 0.28 34.00 0.34 1.00 0.05 0.30	</rollParams>
+      <sensitivityToImpulse>	0.15	</sensitivityToImpulse>
+    </swinging>
+    <exhaust>
+      <pixie>	particles/Tank/engine_exit_gass.xml	</pixie>
+      <nodes>	HP_Track_Exhaus_1 HP_Track_Exhaus_2	</nodes>
+      <rates>	6.0 12.0 22.0	</rates>
+    </exhaust>
+    <turretPositions>
+      <turret>	0.000000 0.418419 0.339533	</turret>
+    </turretPositions>
+    <hitTester>
+      <collisionModel>	vehicles/german/G50_T-15/collision/Hull.model	</collisionModel>
+    </hitTester>
+    <armor>
+      <armor_1>	30	</armor_1>
+      <armor_2>	20	</armor_2>
+      <armor_3>	20	</armor_3>
+      <armor_4>	12	</armor_4>
+      <armor_5>	8	</armor_5>
+      <armor_6>	8	</armor_6>
+      <armor_7>	0	</armor_7>
+      <armor_8>	0	</armor_8>
+    </armor>
+    <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
+    <weight>	7200	</weight>
+    <maxHealth>	200.0	</maxHealth>
+    <ammoBayHealth>
+      <maxHealth>	100.0	</maxHealth>
+      <maxRegenHealth>	75	</maxRegenHealth>
+      <repairCost>	1.0	</repairCost>
+    </ammoBayHealth>
+    <emblemSlots>
+      <clan>
+        <rayStart>	-0.347434 0.153476 1.95704	</rayStart>
+        <rayEnd>	-0.347434 -0.240246 1.88645	</rayEnd>
+        <rayUp>	0.000000 0.000000 -1	</rayUp>
+        <size>	0.22	</size>
+        <hideIfDamaged>	false	</hideIfDamaged>
+      </clan>
+    </emblemSlots>
+  </hull>
+  <chassis>
+    <Chassis_T-15>
+      <userString>	#germany_vehicles:Chassis_T-15	</userString>
+      <description>	#germany_vehicles:Chassis_T-15_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 8 0	</icon>
+      <tags></tags>
+      <level>	3	</level>
+      <notInShop>	true	</notInShop>
+      <price>	3600	</price>
+      <models>
+        <undamaged>	vehicles/german/G50_T-15/normal/lod0/Chassis.model	</undamaged>
+        <destroyed>	vehicles/german/G50_T-15/crash/lod0/Chassis.model	</destroyed>
+        <exploded>	vehicles/german/G50_T-15/crash/lod0/Chassis.model	</exploded>
+      </models>
+      <traces>
+        <lodDist>	FAR	</lodDist>
+        <bufferPrefs>	mediumTank	</bufferPrefs>
+        <textureSet>	germany_01	</textureSet>
+        <size>	0.42 0.34	</size>
+      </traces>
+      <tracks>
+        <lodDist>	MEDIUM	</lodDist>
+        <leftMaterial>	track_mat_L_skinned	</leftMaterial>
+        <rightMaterial>	track_mat_R_skinned	</rightMaterial>
+        <textureScale>	-0.98	</textureScale>
+      </tracks>
+      <wheels>
+        <lodDist>	MEDIUM	</lodDist>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <name>	WD_R0	</name>
+          <radius>	0.259259	</radius>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	WD_R	</template>
+          <radius>	0.138407	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	3	</count>
+        </group>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <name>	WD_R4	</name>
+          <radius>	0.259259	</radius>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	W_R	</template>
+          <radius>	0.361069	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	4	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <name>	WD_L0	</name>
+          <radius>	0.259259	</radius>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	WD_L	</template>
+          <radius>	0.138407	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	3	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <name>	WD_L4	</name>
+          <radius>	0.259259	</radius>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	W_L	</template>
+          <radius>	0.361069	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	4	</count>
+        </group>
+      </wheels>
+      <drivingWheels>	WD_L0 WD_L4	</drivingWheels>
+      <effects>
+        <lodDist>	MEDIUM	</lodDist>
+        <dust>	smallTankDust	</dust>
+        <mud>	smallTankMud	</mud>
+      </effects>
+      <sound>	/vehicles/tanks/treads/treads_1	</sound>
+      <hullPosition>	0.000000 0.9 0.000000	</hullPosition>
+      <hitTester>
+        <collisionModel>	vehicles/german/G50_T-15/collision/Chassis.model	</collisionModel>
+      </hitTester>
+      <armor>
+        <leftTrack>	15	</leftTrack>
+        <rightTrack>	15	</rightTrack>
+      </armor>
+      <topRightCarryingPoint>	0.912609 1.30341	</topRightCarryingPoint>
+      <maxClimbAngle>	25	</maxClimbAngle>
+      <navmeshGirth>	6.0	</navmeshGirth>
+      <weight>	1200	</weight>
+      <maxLoad>	12200	</maxLoad>
+      <terrainResistance>	0.9 1.0 1.8	</terrainResistance>
+      <brakeForce>	35500	</brakeForce>
+      <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
+      <rotationSpeed>	46	</rotationSpeed>
+      <shotDispersionFactors>
+        <vehicleMovement>	0.2	</vehicleMovement>
+        <vehicleRotation>	0.2	</vehicleRotation>
+      </shotDispersionFactors>
+      <bulkHealthFactor>	3.0	</bulkHealthFactor>
+      <maxHealth>	70	</maxHealth>
+      <maxRegenHealth>	55	</maxRegenHealth>
+      <repairCost>	5.0	</repairCost>
+    </Chassis_T-15>
+  </chassis>
+  <turrets0>
+    <Turret_1_T-15>
+      <userString>	#germany_vehicles:Turret_1_T-15	</userString>
+      <description>	#germany_vehicles:Turret_1_T-15_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 6 0	</icon>
+      <tags></tags>
+      <level>	3	</level>
+      <notInShop>	true	</notInShop>
+      <price>	3500	</price>
+      <models>
+        <undamaged>	vehicles/german/G50_T-15/normal/lod0/Turret_01.model	</undamaged>
+        <destroyed>	vehicles/german/G50_T-15/crash/lod0/Turret_01.model	</destroyed>
+        <exploded>	vehicles/german/G50_T-15/crash/lod0/Turret_01.model	</exploded>
+      </models>
+      <hitTester>
+        <collisionModel>	vehicles/german/G50_T-15/collision/Turret_01.model	</collisionModel>
+      </hitTester>
+      <yawLimits>	-180 180	</yawLimits>
+      <gunPosition>	-0.000000 0.28504 0.489166	</gunPosition>
+      <armor>
+        <armor_1>	30	</armor_1>
+        <armor_2>	30	</armor_2>
+        <armor_3>	25	</armor_3>
+        <armor_4>	25	</armor_4>
+        <armor_5>	15	</armor_5>
+        <armor_6>	8	</armor_6>
+        <armor_7>	30	</armor_7>
+        <armor_8>	0	</armor_8>
+        <armor_9>	25	</armor_9>
+        <surveyingDevice>	25	</surveyingDevice>
+      </armor>
+      <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
+      <weight>	1200	</weight>
+      <maxHealth>	60.0	</maxHealth>
+      <rotationSpeed>	50	</rotationSpeed>
+      <turretRotatorHealth>
+        <maxHealth>	80	</maxHealth>
+        <maxRegenHealth>	39	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </turretRotatorHealth>
+      <circularVisionRadius>	400	</circularVisionRadius>
+      <surveyingDeviceHealth>
+        <maxHealth>	60	</maxHealth>
+        <maxRegenHealth>	29	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </surveyingDeviceHealth>
+      <guns>
+        <_37mm_KwK_38t_L47_A>	shared	  <maxAmmo>	78	</maxAmmo>
+          <models>
+            <undamaged>	vehicles/german/G50_T-15/normal/lod0/Gun_01.model	</undamaged>
+            <destroyed>	vehicles/german/G50_T-15/crash/lod0/Gun_01.model	</destroyed>
+            <exploded>	vehicles/german/G50_T-15/crash/lod0/Gun_01.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/german/G50_T-15/collision/Gun_01.model	</collisionModel>
+          </hitTester>
+          <armor>
+            <armor_1>	30	  <noDamage>	true	</noDamage>
+            </armor_1>
+            <armor_2>	15	  <noDamage>	true	</noDamage>
+            </armor_2>
+            <gun>	10	</gun>
+          </armor>
+        </_37mm_KwK_38t_L47_A>
+      </guns>
+      <emblemSlots>
+        <player>
+          <rayStart>	0.801369 0.363006 0.156873	</rayStart>
+          <rayEnd>	0.41752 0.273037 0.089308	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.22	</size>
+          <hideIfDamaged>	false	</hideIfDamaged>
+        </player>
+        <player>
+          <rayStart>	-0.801369 0.363006 0.156873	</rayStart>
+          <rayEnd>	-0.41752 0.273037 0.089308	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.22	</size>
+          <hideIfDamaged>	false	</hideIfDamaged>
+        </player>
+      </emblemSlots>
+      <showEmblemsOnGun>	false	</showEmblemsOnGun>
+    </Turret_1_T-15>
+  </turrets0>
+  <engines>
+    <Praga_NRi>	shared	</Praga_NRi>
+  </engines>
+  <fuelTanks>
+    <Medium>	shared	</Medium>
+  </fuelTanks>
+  <radios>
+    <FuG7A>	shared	</FuG7A>
+  </radios>
+</T-15.xml>

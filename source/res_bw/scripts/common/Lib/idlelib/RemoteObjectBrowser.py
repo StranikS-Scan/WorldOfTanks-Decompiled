@@ -1,0 +1,39 @@
+# Python bytecode 2.6 (decompiled from Python 2.7)
+# Embedded file name: scripts/common/Lib/idlelib/RemoteObjectBrowser.py
+# Compiled at: 2010-05-25 20:46:16
+import rpc
+
+def remote_object_tree_item(item):
+    wrapper = WrappedObjectTreeItem(item)
+    oid = id(wrapper)
+    rpc.objecttable[oid] = wrapper
+    return oid
+
+
+class WrappedObjectTreeItem:
+
+    def __init__(self, item):
+        self.__item = item
+
+    def __getattr__(self, name):
+        value = getattr(self.__item, name)
+        return value
+
+    def _GetSubList(self):
+        list = self.__item._GetSubList()
+        return map(remote_object_tree_item, list)
+
+
+class StubObjectTreeItem:
+
+    def __init__(self, sockio, oid):
+        self.sockio = sockio
+        self.oid = oid
+
+    def __getattr__(self, name):
+        value = rpc.MethodProxy(self.sockio, self.oid, name)
+        return value
+
+    def _GetSubList(self):
+        list = self.sockio.remotecall(self.oid, '_GetSubList', (), {})
+        return [ StubObjectTreeItem(self.sockio, oid) for oid in list ]

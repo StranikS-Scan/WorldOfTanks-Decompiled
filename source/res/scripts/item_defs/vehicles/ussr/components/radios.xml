@@ -1,0 +1,308 @@
+<radios.xml>
+  <ids>
+    <Alarm_flags>	0	</Alarm_flags>
+    <_71-TK-1>	1	</_71-TK-1>
+    <_71-TK-3>	2	</_71-TK-3>
+    <_9R>	3	</_9R>
+    <_10R>	4	</_10R>
+    <_9RM>	5	</_9RM>
+    <_9RK>	7	</_9RK>
+    <_10RK>	8	</_10RK>
+    <_12RT>	9	</_12RT>
+    <Mk19R>	10	</Mk19R>
+    <_10RK-26>	11	</_10RK-26>
+    <_55RK>	12	</_55RK>
+    <R113>	13	</R113>
+    <_12LL>	14	</_12LL>
+    <SCR_209>	15	</SCR_209>
+    <_71-TK-3U>	16	</_71-TK-3U>
+    <_10RB>	17	</_10RB>
+    <_71-TK-3A>	18	</_71-TK-3A>
+    <_10RT-26E>	19	</_10RT-26E>
+    <_10RKM>	20	</_10RKM>
+    <KRSTB>	21	</KRSTB>
+    <_9RM_O>	22	</_9RM_O>
+  </ids>
+  <shared>
+    <Alarm_flags>
+      <userString>	#ussr_vehicles:Alarm_flags	</userString>
+      <description>	#ussr_vehicles:Alarm_flags_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 9 0	</icon>
+      <tags></tags>
+      <level>	1	</level>
+      <price>	0	</price>
+      <weight>	1	</weight>
+      <distance>	100	</distance>
+      <maxHealth>	90	</maxHealth>
+      <maxRegenHealth>	75	</maxRegenHealth>
+      <repairCost>	0	</repairCost>
+    </Alarm_flags>
+    <_71-TK-1>
+      <userString>	#ussr_vehicles:_71-TK-1	</userString>
+      <description>	#ussr_vehicles:_71-TK-1_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 9 0	</icon>
+      <tags></tags>
+      <level>	2	</level>
+      <price>	180.0	</price>
+      <weight>	50	</weight>
+      <distance>	300	</distance>
+      <maxHealth>	100	</maxHealth>
+      <maxRegenHealth>	49	</maxRegenHealth>
+      <repairCost>	0.5	</repairCost>
+    </_71-TK-1>
+    <_71-TK-3>
+      <userString>	#ussr_vehicles:_71-TK-3	</userString>
+      <description>	#ussr_vehicles:_71-TK-3_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 9 0	</icon>
+      <tags></tags>
+      <level>	3	</level>
+      <price>	570.0	</price>
+      <weight>	100	</weight>
+      <distance>	340	</distance>
+      <maxHealth>	100	</maxHealth>
+      <maxRegenHealth>	49	</maxRegenHealth>
+      <repairCost>	0.5	</repairCost>
+    </_71-TK-3>
+    <_71-TK-3A>
+      <userString>	#ussr_vehicles:_71-TK-3	</userString>
+      <description>	#ussr_vehicles:_71-TK-3_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 9 0	</icon>
+      <tags></tags>
+      <level>	3	</level>
+      <price>	570.0	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	100	</weight>
+      <distance>	340	</distance>
+      <maxHealth>	100	</maxHealth>
+      <maxRegenHealth>	49	</maxRegenHealth>
+      <repairCost>	0.5	</repairCost>
+    </_71-TK-3A>
+    <_9R>
+      <userString>	#ussr_vehicles:_9R	</userString>
+      <description>	#ussr_vehicles:_9R_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 9 0	</icon>
+      <tags></tags>
+      <level>	4	</level>
+      <price>	1980.0	</price>
+      <weight>	80	</weight>
+      <distance>	370	</distance>
+      <maxHealth>	110	</maxHealth>
+      <maxRegenHealth>	55	</maxRegenHealth>
+      <repairCost>	1	</repairCost>
+    </_9R>
+    <_71-TK-3U>
+      <userString>	#ussr_vehicles:_71-TK-3U	</userString>
+      <description>	#ussr_vehicles:_71-TK-3U_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 9 0	</icon>
+      <tags></tags>
+      <level>	4	</level>
+      <price>	570.0	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	100	</weight>
+      <distance>	500	</distance>
+      <maxHealth>	100	</maxHealth>
+      <maxRegenHealth>	49	</maxRegenHealth>
+      <repairCost>	0.5	</repairCost>
+    </_71-TK-3U>
+    <_9RK>
+      <userString>	#ussr_vehicles:_9RK	</userString>
+      <description>	#ussr_vehicles:_9RK_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 9 0	</icon>
+      <tags></tags>
+      <level>	5	</level>
+      <price>	3240.0	</price>
+      <weight>	80	</weight>
+      <distance>	400	</distance>
+      <maxHealth>	110	</maxHealth>
+      <maxRegenHealth>	55	</maxRegenHealth>
+      <repairCost>	1	</repairCost>
+    </_9RK>
+    <_9RM>
+      <userString>	#ussr_vehicles:_9RM	</userString>
+      <description>	#ussr_vehicles:_9RM_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 9 0	</icon>
+      <tags></tags>
+      <level>	8	</level>
+      <price>	24240.0	</price>
+      <weight>	100	</weight>
+      <distance>	600	</distance>
+      <maxHealth>	120	</maxHealth>
+      <maxRegenHealth>	60	</maxRegenHealth>
+      <repairCost>	1.5	</repairCost>
+    </_9RM>
+    <_9RM_O>
+      <userString>	#ussr_vehicles:_9RM	</userString>
+      <description>	#ussr_vehicles:_9RM_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 9 0	</icon>
+      <tags></tags>
+      <level>	8	</level>
+      <price>	24240.0	</price>
+      <weight>	100	</weight>
+      <distance>	600	</distance>
+      <maxHealth>	120	</maxHealth>
+      <maxRegenHealth>	60	</maxRegenHealth>
+      <repairCost>	1.5	</repairCost>
+    </_9RM_O>
+    <KRSTB>
+      <userString>	#ussr_vehicles:KRSTB	</userString>
+      <description>	#ussr_vehicles:KRSTB_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 9 0	</icon>
+      <tags></tags>
+      <level>	8	</level>
+      <price>	30150	</price>
+      <weight>	100	</weight>
+      <distance>	720	</distance>
+      <maxHealth>	120	</maxHealth>
+      <maxRegenHealth>	60	</maxRegenHealth>
+      <repairCost>	1.5	</repairCost>
+    </KRSTB>
+    <_10R>
+      <userString>	#ussr_vehicles:_10R	</userString>
+      <description>	#ussr_vehicles:_10R_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 9 0	</icon>
+      <tags></tags>
+      <level>	5	</level>
+      <price>	3660.0	</price>
+      <weight>	100	</weight>
+      <distance>	410	</distance>
+      <maxHealth>	140	</maxHealth>
+      <maxRegenHealth>	100	</maxRegenHealth>
+      <repairCost>	1	</repairCost>
+    </_10R>
+    <_10RB>
+      <userString>	#ussr_vehicles:_10R	</userString>
+      <description>	#ussr_vehicles:_10R_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 9 0	</icon>
+      <tags></tags>
+      <level>	5	</level>
+      <price>	3660.0	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	100	</weight>
+      <distance>	410	</distance>
+      <maxHealth>	140	</maxHealth>
+      <maxRegenHealth>	100	</maxRegenHealth>
+      <repairCost>	1	</repairCost>
+    </_10RB>
+    <_10RK>
+      <userString>	#ussr_vehicles:_10RK	</userString>
+      <description>	#ussr_vehicles:_10RK_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 9 0	</icon>
+      <tags></tags>
+      <level>	7	</level>
+      <price>	18600.0	</price>
+      <weight>	100	</weight>
+      <distance>	500	</distance>
+      <maxHealth>	150	</maxHealth>
+      <maxRegenHealth>	125	</maxRegenHealth>
+      <repairCost>	1.5	</repairCost>
+    </_10RK>
+    <_12RT>
+      <userString>	#ussr_vehicles:_12RT	</userString>
+      <description>	#ussr_vehicles:_12RT_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 9 0	</icon>
+      <tags></tags>
+      <level>	9	</level>
+      <price>	33600.0	</price>
+      <weight>	110	</weight>
+      <distance>	700	</distance>
+      <maxHealth>	200	</maxHealth>
+      <maxRegenHealth>	150	</maxRegenHealth>
+      <repairCost>	3	</repairCost>
+    </_12RT>
+    <Mk19R>
+      <userString>	#ussr_vehicles:Mk19R	</userString>
+      <description>	#ussr_vehicles:Mk19R_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 9 0	</icon>
+      <tags></tags>
+      <level>	9	</level>
+      <price>	29400.0	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	110	</weight>
+      <distance>	650	</distance>
+      <maxHealth>	200	</maxHealth>
+      <maxRegenHealth>	150	</maxRegenHealth>
+      <repairCost>	3	</repairCost>
+    </Mk19R>
+    <_10RK-26>
+      <userString>	#ussr_vehicles:_10RK-26	</userString>
+      <description>	#ussr_vehicles:_10RK-26_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 9 0	</icon>
+      <tags></tags>
+      <level>	10	</level>
+      <notInShop>	true	</notInShop>
+      <price>	51600.0	</price>
+      <weight>	160	</weight>
+      <distance>	820	</distance>
+      <maxHealth>	250	</maxHealth>
+      <maxRegenHealth>	75	</maxRegenHealth>
+      <repairCost>	3.5	</repairCost>
+    </_10RK-26>
+    <R113>
+      <userString>	#ussr_vehicles:R113	</userString>
+      <description>	#ussr_vehicles:R113_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 9 0	</icon>
+      <tags></tags>
+      <level>	10	</level>
+      <price>	52200.0	</price>
+      <weight>	80	</weight>
+      <distance>	830	</distance>
+      <maxHealth>	200	</maxHealth>
+      <maxRegenHealth>	150	</maxRegenHealth>
+      <repairCost>	3	</repairCost>
+    </R113>
+    <_12LL>
+      <userString>	#ussr_vehicles:_12LL	</userString>
+      <description>	#ussr_vehicles:_12LL_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 9 0	</icon>
+      <tags></tags>
+      <level>	9	</level>
+      <price>	33600.0	</price>
+      <weight>	110	</weight>
+      <distance>	700	</distance>
+      <maxHealth>	200	</maxHealth>
+      <maxRegenHealth>	150	</maxRegenHealth>
+      <repairCost>	3	</repairCost>
+    </_12LL>
+    <SCR_209>
+      <userString>	#ussr_vehicles:SCR_209	</userString>
+      <description>	#ussr_vehicles:SCR_209_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 9 0	</icon>
+      <tags></tags>
+      <level>	4	</level>
+      <price>	1980.0	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	80	</weight>
+      <distance>	370	</distance>
+      <maxHealth>	110	</maxHealth>
+      <maxRegenHealth>	55	</maxRegenHealth>
+      <repairCost>	1	</repairCost>
+    </SCR_209>
+    <_10RT-26E>
+      <userString>	#ussr_vehicles:_10RT-26E	</userString>
+      <description>	#ussr_vehicles:_10RT-26E_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 9 0	</icon>
+      <tags></tags>
+      <level>	10	</level>
+      <price>	56500.0	</price>
+      <weight>	120	</weight>
+      <distance>	870	</distance>
+      <maxHealth>	200	</maxHealth>
+      <maxRegenHealth>	150	</maxRegenHealth>
+      <repairCost>	4	</repairCost>
+    </_10RT-26E>
+    <_10RKM>
+      <userString>	#ussr_vehicles:_10RKM	</userString>
+      <description>	#ussr_vehicles:_10RKM_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 9 0	</icon>
+      <tags></tags>
+      <level>	7	</level>
+      <price>	18600.0	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	100	</weight>
+      <distance>	500	</distance>
+      <maxHealth>	150	</maxHealth>
+      <maxRegenHealth>	125	</maxRegenHealth>
+      <repairCost>	1.5	</repairCost>
+    </_10RKM>
+  </shared>
+</radios.xml>

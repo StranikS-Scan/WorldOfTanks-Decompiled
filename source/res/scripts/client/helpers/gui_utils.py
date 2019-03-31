@@ -1,4 +1,6 @@
+# Python bytecode 2.6 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/helpers/gui_utils.py
+# Compiled at: 2009-08-14 21:38:29
 import GUI
 import Math
 

@@ -1,129 +1,33 @@
+# Python bytecode 2.6 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/gun_rotation_shared.py
+# Compiled at: 2011-10-06 14:54:10
 import BigWorld
-import Math
 from math import pi
-from constants import DEFAULT_GUN_PITCH_LIMITS_TRANSITION, IS_CLIENT, IS_CELLAPP
-if IS_CELLAPP:
-    from server_constants import MAX_VEHICLE_RADIUS
-
-def calcPitchLimitsFromDesc(turretYaw, pitchLimitsDesc):
-    basicLimits = pitchLimitsDesc['basic']
-    frontLimits = pitchLimitsDesc.get('front')
-    backLimits = pitchLimitsDesc.get('back')
-    if frontLimits is None and backLimits is None:
-        return basicLimits
-    else:
-        if frontLimits is None:
-            frontLimits = (basicLimits[0], basicLimits[1], 0.0)
-        if backLimits is None:
-            backLimits = (basicLimits[0], basicLimits[1], 0.0)
-        transition = pitchLimitsDesc.get('transition')
-        if transition is None:
-            transition = DEFAULT_GUN_PITCH_LIMITS_TRANSITION
-        return BigWorld.wg_calcGunPitchLimits(turretYaw, basicLimits, frontLimits, backLimits, transition)
-
+from constants import DEFAULT_GUN_PITCH_LIMITS_TRANSITION
 
 def calcPitchLimits(turretYaw, basicLimits, frontLimits, backLimits, transition):
-    return calcPitchLimitsFromDesc(turretYaw, {'basic': basicLimits,
-     'front': frontLimits,
-     'back': backLimits,
-     'transition': transition})
+    if transition is None:
+        transition = DEFAULT_GUN_PITCH_LIMITS_TRANSITION
+    if frontLimits is not None:
+        absYaw = abs(turretYaw)
+        if absYaw < frontLimits[2]:
+            return (frontLimits[0], frontLimits[1])
+        if absYaw < frontLimits[2] + transition:
+            t = (absYaw - frontLimits[2]) / transition
+            minPitch = frontLimits[0] * (1.0 - t) + basicLimits[0] * t
+            maxPitch = frontLimits[1] * (1.0 - t) + basicLimits[1] * t
+            return (minPitch, maxPitch)
+    if backLimits is not None:
+        absYawDiff = abs(abs(turretYaw) - pi)
+        if absYawDiff < backLimits[2]:
+            return (backLimits[0], backLimits[1])
+        if absYawDiff < backLimits[2] + transition:
+            t = (absYawDiff - backLimits[2]) / transition
+            minPitch = backLimits[0] * (1.0 - t) + basicLimits[0] * t
+            maxPitch = backLimits[1] * (1.0 - t) + basicLimits[1] * t
+            return (minPitch, maxPitch)
+    return basicLimits
 
 
-def encodeAngleToUint(angle, bits):
-    mask = (1 << bits) - 1
-    return int(round((mask + 1) * (angle + pi) / (pi * 2.0))) & mask
-
-
-def decodeAngleFromUint(code, bits):
-    return pi * 2.0 * code / (1 << bits) - pi
-
-
-def encodeRestrictedAngleToUint(angle, bits, minBound, maxBound):
-    t = (angle - minBound) / (maxBound - minBound)
-    t = _clamp(0.0, t, 1.0)
-    mask = (1 << bits) - 1
-    return int(round(mask * t)) & mask
-
-
-def decodeRestrictedAngleFromUint(code, bits, minBound, maxBound):
-    t = float(code) / ((1 << bits) - 1)
-    return minBound + t * (maxBound - minBound)
-
-
-def encodeGunAngles(yaw, pitch, pitchLimits):
-    return encodeAngleToUint(yaw, 10) << 6 | encodeRestrictedAngleToUint(pitch, 6, *pitchLimits)
-
-
-def decodeGunAngles(code, pitchLimits):
-    return (decodeAngleFromUint(code >> 6 & 1023, 10), decodeRestrictedAngleFromUint((code & 63), 6, *pitchLimits))
-
-
-def _clamp(minBound, value, maxBound):
-    if value < minBound:
-        return minBound
-    if value > maxBound:
-        return maxBound
-    return value
-
-
-def isShootPositionInsideOtherVehicle(vehicle, turretPosition, shootPosition):
-    if IS_CLIENT:
-
-        def getNearVehicles(vehicle, shootPosition):
-            nearVehicles = []
-            arenaVehicles = BigWorld.player().arena.vehicles
-            for id in arenaVehicles.iterkeys():
-                v = BigWorld.entities.get(id)
-                if v and not v.isPlayer:
-                    nearVehicles.append(v)
-
-            return nearVehicles
-
-    elif IS_CELLAPP:
-
-        def getNearVehicles(vehicle, shootPosition):
-            return vehicle.entitiesInRange(MAX_VEHICLE_RADIUS, 'Vehicle', shootPosition)
-
-    nearVehicles = getNearVehicles(vehicle, shootPosition)
-    for v in nearVehicles:
-        if shootPosition.distTo(v.position) < v.typeDescriptor.boundingRadius and isSegmentCollideWithVehicle(v, turretPosition, shootPosition):
-            return True
-
-    return False
-
-
-def isSegmentCollideWithVehicle(vehicle, startPoint, endPoint):
-    if IS_CLIENT:
-
-        def getVehicleSpaceMatrix(vehicle):
-            toVehSpace = Math.Matrix(vehicle.model.matrix)
-            toVehSpace.invert()
-            return toVehSpace
-
-        def getVehicleComponents(vehicle):
-            return vehicle.getComponents()
-
-    elif IS_CELLAPP:
-
-        def getVehicleSpaceMatrix(vehicle):
-            toVehSpace = Math.Matrix(vehicle.mover.exactMatrix)
-            toVehSpace.invert()
-            return toVehSpace
-
-        def getVehicleComponents(vehicle):
-            return vehicle.getComponents(vehicle.gunAngles)
-
-    toVehSpace = getVehicleSpaceMatrix(vehicle)
-    vehStartPoint = toVehSpace.applyPoint(startPoint)
-    vehEndPoint = toVehSpace.applyPoint(endPoint)
-    for compDescr, toCompSpace, isAttached in getVehicleComponents(vehicle):
-        if not isAttached or compDescr.get('itemTypeName') == 'vehicleGun':
-            continue
-        compStartPoint = toCompSpace.applyPoint(vehStartPoint)
-        compEndPoint = toCompSpace.applyPoint(vehEndPoint)
-        collisions = compDescr['hitTester'].localAnyHitTest(compStartPoint, compEndPoint)
-        if collisions is not None:
-            return True
-
-    return False
+def calcPitchLimitsFromDesc(turretYaw, pitchLimitsDesc):
+    return calcPitchLimits(turretYaw, pitchLimitsDesc['basic'], pitchLimitsDesc.get('front'), pitchLimitsDesc.get('back'), pitchLimitsDesc.get('transition'))

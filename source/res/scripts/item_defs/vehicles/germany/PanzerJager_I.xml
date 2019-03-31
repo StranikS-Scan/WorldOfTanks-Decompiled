@@ -1,0 +1,461 @@
+<PanzerJager_I.xml>
+  <crew>
+    <commander>	radioman
+      loader	</commander>
+    <driver></driver>
+    <gunner></gunner>
+  </crew>
+  <speedLimits>
+    <forward>	40	</forward>
+    <backward>	10	</backward>
+  </speedLimits>
+  <repairCost>	2.5	</repairCost>
+  <effects>
+    <destruction>	smallDestruction	</destruction>
+    <explosion>	smallExplosion	</explosion>
+    <flaming>	smallFlaming	</flaming>
+    <collision>	collision	</collision>
+  </effects>
+  <camouflage>
+    <priceFactor>	0.4	</priceFactor>
+    <tiling>	1 1 0 0	</tiling>
+    <exclusionMask>	vehicles/german/G21_PanzerJager_I/PanzerJager_I_CM.dds	</exclusionMask>
+  </camouflage>
+  <emblems>
+    <default>	germany_cross	</default>
+    <lodDist>	MEDIUM	</lodDist>
+    <alpha>	0.86	</alpha>
+  </emblems>
+  <horns>
+    <priceFactor>	1	</priceFactor>
+    <distanceFactor>	1	</distanceFactor>
+    <volumeFactor>	1	</volumeFactor>
+  </horns>
+  <hull>
+    <models>
+      <undamaged>	vehicles/german/G21_PanzerJager_I/normal/lod0/Hull.model	</undamaged>
+      <destroyed>	vehicles/german/G21_PanzerJager_I/crash/lod0/Hull.model	</destroyed>
+      <exploded>	vehicles/german/G21_PanzerJager_I/crash/lod0/Hull.model	</exploded>
+    </models>
+    <swinging>
+      <lodDist>	FAR	</lodDist>
+      <pitchParams>	0.26 32.00 0.38 1.00 0.05 0.29	</pitchParams>
+      <rollParams>	1.00 0.26 32.00 0.38 1.00 0.05 0.29	</rollParams>
+      <sensitivityToImpulse>	0.7	</sensitivityToImpulse>
+    </swinging>
+    <exhaust>
+      <pixie>	particles/Tank/engine_exit_gass.xml	</pixie>
+      <nodes>	HP_Track_Exhaus_1	</nodes>
+      <rates>	5.0 10.0 25.0	</rates>
+    </exhaust>
+    <turretPositions>
+      <turret>	0.000331 0.581575 0.155083	</turret>
+    </turretPositions>
+    <fakeTurrets>
+      <lobby>	0	</lobby>
+      <battle>	0	</battle>
+    </fakeTurrets>
+    <hitTester>
+      <collisionModel>	vehicles/german/G21_PanzerJager_I/collision/Hull.model	</collisionModel>
+    </hitTester>
+    <armor>
+      <armor_1>	13	</armor_1>
+      <armor_2>	6	</armor_2>
+      <armor_3>	13	</armor_3>
+      <armor_4>	13	</armor_4>
+      <armor_5>	13	</armor_5>
+      <armor_6>	15	</armor_6>
+      <armor_7>	6	</armor_7>
+      <armor_8>	0	</armor_8>
+    </armor>
+    <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
+    <weight>	3600	</weight>
+    <maxHealth>	110.0	</maxHealth>
+    <ammoBayHealth>
+      <maxHealth>	100	</maxHealth>
+      <maxRegenHealth>	80	</maxRegenHealth>
+      <repairCost>	1.0	</repairCost>
+    </ammoBayHealth>
+    <emblemSlots>
+      <clan>
+        <rayStart>	0.476396 0.14446 1.82091	</rayStart>
+        <rayEnd>	0.476396 -0.234888 1.69405	</rayEnd>
+        <rayUp>	0.000000 0.000000 -1	</rayUp>
+        <size>	0.28	</size>
+        <hideIfDamaged>	false	</hideIfDamaged>
+      </clan>
+      <player>
+        <rayStart>	0.97091 0.982283 -0.0191944	</rayStart>
+        <rayEnd>	0.58657 0.871458 -0.0191944	</rayEnd>
+        <rayUp>	0.000000 1 0.000000	</rayUp>
+        <size>	0.28	</size>
+        <hideIfDamaged>	false	</hideIfDamaged>
+      </player>
+      <player>
+        <rayStart>	-0.97091 0.982283 -0.0191944	</rayStart>
+        <rayEnd>	-0.58657 0.871458 -0.0191944	</rayEnd>
+        <rayUp>	0.000000 1 0.000000	</rayUp>
+        <size>	0.28	</size>
+        <hideIfDamaged>	true	</hideIfDamaged>
+      </player>
+    </emblemSlots>
+  </hull>
+  <chassis>
+    <PzJgd_ketten_I>
+      <userString>	#germany_vehicles:PzJgd_ketten_I	</userString>
+      <description>	#germany_vehicles:PzJgd_ketten_I_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 8 1	</icon>
+      <tags></tags>
+      <level>	1	</level>
+      <price>	280.0	</price>
+      <unlocks>
+        <chassis>	PzJgd_ketten_II	  <cost>	95	</cost>
+        </chassis>
+      </unlocks>
+      <models>
+        <undamaged>	vehicles/german/G21_PanzerJager_I/normal/lod0/Chassis.model	</undamaged>
+        <destroyed>	vehicles/german/G21_PanzerJager_I/crash/lod0/Chassis.model	</destroyed>
+        <exploded>	vehicles/german/G21_PanzerJager_I/crash/lod0/Chassis.model	</exploded>
+      </models>
+      <traces>
+        <lodDist>	FAR	</lodDist>
+        <bufferPrefs>	smallTank	</bufferPrefs>
+        <textureSet>	germany_01	</textureSet>
+        <size>	0.4 0.3	</size>
+      </traces>
+      <tracks>
+        <lodDist>	MEDIUM	</lodDist>
+        <leftMaterial>	track_mat_L_skinned	</leftMaterial>
+        <rightMaterial>	track_mat_R_skinned	</rightMaterial>
+        <textureScale>	-1.599	</textureScale>
+      </tracks>
+      <wheels>
+        <lodDist>	MEDIUM	</lodDist>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	W_L	</template>
+          <radius>	0.273374	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	5	</count>
+        </group>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	W_R	</template>
+          <radius>	0.273374	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	5	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <name>	WD_L0	</name>
+          <radius>	0.312084	</radius>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	WD_L	</template>
+          <radius>	0.102454	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	4	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <name>	WD_L5	</name>
+          <radius>	0.303287	</radius>
+        </wheel>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <name>	WD_R0	</name>
+          <radius>	0.312084	</radius>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	WD_R	</template>
+          <radius>	0.102454	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	4	</count>
+        </group>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <name>	WD_R5	</name>
+          <radius>	0.303287	</radius>
+        </wheel>
+      </wheels>
+      <drivingWheels>	WD_L0 WD_L5	</drivingWheels>
+      <effects>
+        <lodDist>	MEDIUM	</lodDist>
+        <dust>	smallTankDust	</dust>
+        <mud>	smallTankMud	</mud>
+      </effects>
+      <sound>	/vehicles/tanks/treads/treads_1	</sound>
+      <hullPosition>	-0.000636 0.8307 0.010558	</hullPosition>
+      <hitTester>
+        <collisionModel>	vehicles/german/G21_PanzerJager_I/collision/Chassis.model	</collisionModel>
+      </hitTester>
+      <armor>
+        <leftTrack>	10	</leftTrack>
+        <rightTrack>	10	</rightTrack>
+      </armor>
+      <topRightCarryingPoint>	0.824332 1.247	</topRightCarryingPoint>
+      <maxClimbAngle>	25	</maxClimbAngle>
+      <navmeshGirth>	6.0	</navmeshGirth>
+      <weight>	2000	</weight>
+      <maxLoad>	7100	</maxLoad>
+      <terrainResistance>	1.1 1.25 2.2	</terrainResistance>
+      <brakeForce>	33000	</brakeForce>
+      <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
+      <rotationSpeed>	34	</rotationSpeed>
+      <shotDispersionFactors>
+        <vehicleMovement>	0.34	</vehicleMovement>
+        <vehicleRotation>	0.34	</vehicleRotation>
+      </shotDispersionFactors>
+      <bulkHealthFactor>	3.0	</bulkHealthFactor>
+      <maxHealth>	50	</maxHealth>
+      <maxRegenHealth>	40	</maxRegenHealth>
+      <repairCost>	0.5	</repairCost>
+    </PzJgd_ketten_I>
+    <PzJgd_ketten_II>
+      <userString>	#germany_vehicles:PzJgd_ketten_II	</userString>
+      <description>	#germany_vehicles:PzJgd_ketten_II_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 8 1	</icon>
+      <tags></tags>
+      <level>	2	</level>
+      <price>	570.0	</price>
+      <models>
+        <undamaged>	vehicles/german/G21_PanzerJager_I/normal/lod0/Chassis.model	</undamaged>
+        <destroyed>	vehicles/german/G21_PanzerJager_I/crash/lod0/Chassis.model	</destroyed>
+        <exploded>	vehicles/german/G21_PanzerJager_I/crash/lod0/Chassis.model	</exploded>
+      </models>
+      <traces>
+        <lodDist>	FAR	</lodDist>
+        <bufferPrefs>	smallTank	</bufferPrefs>
+        <textureSet>	germany_01	</textureSet>
+        <size>	0.4 0.3	</size>
+      </traces>
+      <tracks>
+        <lodDist>	MEDIUM	</lodDist>
+        <leftMaterial>	track_mat_L_skinned	</leftMaterial>
+        <rightMaterial>	track_mat_R_skinned	</rightMaterial>
+        <textureScale>	-1.599	</textureScale>
+      </tracks>
+      <wheels>
+        <lodDist>	MEDIUM	</lodDist>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	W_L	</template>
+          <radius>	0.273374	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	5	</count>
+        </group>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	W_R	</template>
+          <radius>	0.273374	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	5	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <name>	WD_L0	</name>
+          <radius>	0.312084	</radius>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	WD_L	</template>
+          <radius>	0.102454	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	4	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <name>	WD_L5	</name>
+          <radius>	0.303287	</radius>
+        </wheel>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <name>	WD_R0	</name>
+          <radius>	0.312084	</radius>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	WD_R	</template>
+          <radius>	0.102454	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	4	</count>
+        </group>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <name>	WD_R5	</name>
+          <radius>	0.303287	</radius>
+        </wheel>
+      </wheels>
+      <drivingWheels>	WD_L0 WD_L5	</drivingWheels>
+      <effects>
+        <lodDist>	MEDIUM	</lodDist>
+        <dust>	smallTankDust	</dust>
+        <mud>	smallTankMud	</mud>
+      </effects>
+      <sound>	/vehicles/tanks/treads/treads_1	</sound>
+      <hullPosition>	-0.000636 0.8307 0.010558	</hullPosition>
+      <hitTester>
+        <collisionModel>	vehicles/german/G21_PanzerJager_I/collision/Chassis.model	</collisionModel>
+      </hitTester>
+      <armor>
+        <leftTrack>	10	</leftTrack>
+        <rightTrack>	10	</rightTrack>
+      </armor>
+      <topRightCarryingPoint>	0.824332 1.247	</topRightCarryingPoint>
+      <maxClimbAngle>	25	</maxClimbAngle>
+      <navmeshGirth>	6.0	</navmeshGirth>
+      <weight>	2000	</weight>
+      <maxLoad>	7800	</maxLoad>
+      <terrainResistance>	1.0 1.1 2.0	</terrainResistance>
+      <brakeForce>	33000	</brakeForce>
+      <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
+      <rotationSpeed>	36	</rotationSpeed>
+      <shotDispersionFactors>
+        <vehicleMovement>	0.31	</vehicleMovement>
+        <vehicleRotation>	0.31	</vehicleRotation>
+      </shotDispersionFactors>
+      <bulkHealthFactor>	3.0	</bulkHealthFactor>
+      <maxHealth>	60	</maxHealth>
+      <maxRegenHealth>	45	</maxRegenHealth>
+      <repairCost>	0.5	</repairCost>
+    </PzJgd_ketten_II>
+  </chassis>
+  <turrets0>
+    <PanzerJager>
+      <userString>	#germany_vehicles:PanzerJager	</userString>
+      <description>	#germany_vehicles:PanzerJager_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 6 1	</icon>
+      <tags></tags>
+      <level>	2	</level>
+      <price>	100	</price>
+      <notInShop>	true	</notInShop>
+      <models>
+        <undamaged>	vehicles/german/G21_PanzerJager_I/normal/lod0/Turret_01.model	</undamaged>
+        <destroyed>	vehicles/german/G21_PanzerJager_I/crash/lod0/Turret_01.model	</destroyed>
+        <exploded>	vehicles/german/G21_PanzerJager_I/crash/lod0/Turret_01.model	</exploded>
+      </models>
+      <hitTester>
+        <collisionModel>	vehicles/german/G21_PanzerJager_I/collision/Turret_01.model	</collisionModel>
+      </hitTester>
+      <yawLimits>	-10 10	</yawLimits>
+      <gunPosition>	0.000305 0.212824 -0.00264	</gunPosition>
+      <armor>
+        <armor_1>	10	</armor_1>
+        <armor_2>	0	</armor_2>
+        <armor_3>	10	</armor_3>
+        <armor_4>	10	</armor_4>
+        <armor_5>	0	</armor_5>
+        <armor_6>	0	</armor_6>
+        <armor_7>	0	</armor_7>
+        <armor_8>	0	</armor_8>
+      </armor>
+      <weight>	0	</weight>
+      <maxHealth>	10.0	</maxHealth>
+      <rotationSpeed>	50	</rotationSpeed>
+      <turretRotatorHealth>
+        <maxHealth>	100	</maxHealth>
+        <maxRegenHealth>	49	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </turretRotatorHealth>
+      <circularVisionRadius>	360	</circularVisionRadius>
+      <surveyingDeviceHealth>
+        <maxHealth>	60	</maxHealth>
+        <maxRegenHealth>	29	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </surveyingDeviceHealth>
+      <guns>
+        <_37mm_PaK_38t_L47>	shared	  <pitchLimits>	-15 10	</pitchLimits>
+          <maxAmmo>	96	</maxAmmo>
+          <aimingTime>	1.0	</aimingTime>
+          <reloadTime>	1.8	</reloadTime>
+          <unlocks>
+            <gun>	_47mm_PaK_38t_L43	  <cost>	130	</cost>
+            </gun>
+          </unlocks>
+          <models>
+            <undamaged>	vehicles/german/G21_PanzerJager_I/normal/lod0/Gun_01.model	</undamaged>
+            <destroyed>	vehicles/german/G21_PanzerJager_I/crash/lod0/Gun_01.model	</destroyed>
+            <exploded>	vehicles/german/G21_PanzerJager_I/crash/lod0/Gun_01.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/german/G21_PanzerJager_I/collision/Gun_01.model	</collisionModel>
+          </hitTester>
+          <armor>
+            <gun>	10	</gun>
+          </armor>
+        </_37mm_PaK_38t_L47>
+        <_47mm_PaK_38t_L43>	shared	  <pitchLimits>	-10 10	</pitchLimits>
+          <maxAmmo>	86	</maxAmmo>
+          <shotDispersionRadius>	0.32	</shotDispersionRadius>
+          <aimingTime>	1.1	</aimingTime>
+          <shotDispersionFactors>
+            <turretRotation>	0.12	</turretRotation>
+            <afterShot>	3.0	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <unlocks>
+            <gun>	_50mm_PaK_39_L60	  <cost>	550	</cost>
+            </gun>
+          </unlocks>
+          <models>
+            <undamaged>	vehicles/german/G21_PanzerJager_I/normal/lod0/Gun_02.model	</undamaged>
+            <destroyed>	vehicles/german/G21_PanzerJager_I/crash/lod0/Gun_02.model	</destroyed>
+            <exploded>	vehicles/german/G21_PanzerJager_I/crash/lod0/Gun_02.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/german/G21_PanzerJager_I/collision/Gun_02.model	</collisionModel>
+          </hitTester>
+          <armor>
+            <gun>	10	</gun>
+          </armor>
+        </_47mm_PaK_38t_L43>
+        <_50mm_PaK_39_L60>	shared	  <pitchLimits>	-12 8	</pitchLimits>
+          <maxAmmo>	75	</maxAmmo>
+          <shotDispersionFactors>
+            <turretRotation>	0.12	</turretRotation>
+            <afterShot>	3.0	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <unlocks>
+            <vehicle>	G20_Marder_II	  <cost>	745	</cost>
+            </vehicle>
+          </unlocks>
+          <models>
+            <undamaged>	vehicles/german/G21_PanzerJager_I/normal/lod0/Gun_03.model	</undamaged>
+            <destroyed>	vehicles/german/G21_PanzerJager_I/crash/lod0/Gun_03.model	</destroyed>
+            <exploded>	vehicles/german/G21_PanzerJager_I/crash/lod0/Gun_03.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/german/G21_PanzerJager_I/collision/Gun_03.model	</collisionModel>
+          </hitTester>
+          <armor>
+            <gun>	10	</gun>
+          </armor>
+        </_50mm_PaK_39_L60>
+      </guns>
+      <emblemSlots></emblemSlots>
+      <showEmblemsOnGun>	false	</showEmblemsOnGun>
+    </PanzerJager>
+  </turrets0>
+  <engines>
+    <Krupp_M311>	shared	  <unlocks>
+        <engine>	Maybach_NL38TR	  <cost>	100	</cost>
+        </engine>
+      </unlocks>
+    </Krupp_M311>
+    <Maybach_NL38TR>	shared	</Maybach_NL38TR>
+  </engines>
+  <fuelTanks>
+    <Small>	shared	</Small>
+  </fuelTanks>
+  <radios>
+    <FuG2>	shared	  <unlocks>
+        <radio>	FuG5	  <cost>	105.0	</cost>
+        </radio>
+      </unlocks>
+    </FuG2>
+    <FuG5>	shared	</FuG5>
+  </radios>
+</PanzerJager_I.xml>

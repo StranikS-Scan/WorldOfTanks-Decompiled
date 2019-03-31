@@ -1,0 +1,770 @@
+<engines.xml>
+  <ids>
+    <V-2>	0	</V-2>
+    <V-2-34>	1	</V-2-34>
+    <M-17F>	2	</M-17F>
+    <V-2IS>	3	</V-2IS>
+    <V-5>	4	</V-5>
+    <M-17T>	6	</M-17T>
+    <M-5-400>	9	</M-5-400>
+    <V-2K>	10	</V-2K>
+    <V-4>	11	</V-4>
+    <V-2-34M>	12	</V-2-34M>
+    <MT-5-1>	13	</MT-5-1>
+    <MS-1>	14	</MS-1>
+    <GAZ-M1>	15	</GAZ-M1>
+    <AMO-3>	16	</AMO-3>
+    <V-2-44>	17	</V-2-44>
+    <V-2-54>	18	</V-2-54>
+    <T-26>	19	</T-26>
+    <T-26M>	20	</T-26M>
+    <T-26F>	21	</T-26F>
+    <V-11>	22	</V-11>
+    <V-12>	23	</V-12>
+    <GAZ-11>	24	</GAZ-11>
+    <GAZ-203>	27	</GAZ-203>
+    <M-80>	28	</M-80>
+    <V-2KT>	29	</V-2KT>
+    <AEC3>	31	</AEC3>
+    <GAZ-203F>	33	</GAZ-203F>
+    <GMC>	34	</GMC>
+    <M-5-400F>	35	</M-5-400F>
+    <M-50T>	36	</M-50T>
+    <Bedford_Twin-Six>	37	</Bedford_Twin-Six>
+    <AEC_A190>	39	</AEC_A190>
+    <V-2-54IS>	40	</V-2-54IS>
+    <Continental_W-670_LL>	41	</Continental_W-670_LL>
+    <BD-2>	42	</BD-2>
+    <M-17FA>	43	</M-17FA>
+    <V-55U>	44	</V-55U>
+    <V-5U>	45	</V-5U>
+    <TD-30>	47	</TD-30>
+    <M-50TD>	48	</M-50TD>
+    <M500>	49	</M500>
+    <D-744>	50	</D-744>
+    <V-2-34A>	51	</V-2-34A>
+    <M-5-400F_Bis>	52	</M-5-400F_Bis>
+    <M-17E>	53	</M-17E>
+    <Maybach_HL_120_TRM_A>	54	</Maybach_HL_120_TRM_A>
+    <V-54-6>	57	</V-54-6>
+  </ids>
+  <shared>
+    <V-2>
+      <userString>	#ussr_vehicles:V-2	</userString>
+      <description>	#ussr_vehicles:V-2_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 7 0	</icon>
+      <tags>	diesel	</tags>
+      <level>	5	</level>
+      <price>	18750	</price>
+      <sound>	/vehicles/tanks/medium/tiger	</sound>
+      <power>	480	</power>
+      <weight>	750	</weight>
+      <maxHealth>	105	</maxHealth>
+      <maxRegenHealth>	52	</maxRegenHealth>
+      <repairCost>	4	</repairCost>
+      <fireStartingChance>	0.15	</fireStartingChance>
+    </V-2>
+    <V-2-34>
+      <userString>	#ussr_vehicles:V-2-34	</userString>
+      <description>	#ussr_vehicles:V-2-34_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 7 0	</icon>
+      <tags>	diesel	</tags>
+      <level>	6	</level>
+      <price>	27860	</price>
+      <sound>	/vehicles/tanks/medium/tiger	</sound>
+      <power>	500	</power>
+      <weight>	750	</weight>
+      <maxHealth>	145	</maxHealth>
+      <maxRegenHealth>	72	</maxRegenHealth>
+      <repairCost>	6	</repairCost>
+      <fireStartingChance>	0.15	</fireStartingChance>
+    </V-2-34>
+    <V-2-34A>
+      <userString>	#ussr_vehicles:V-2-34	</userString>
+      <description>	#ussr_vehicles:V-2-34_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 7 0	</icon>
+      <tags>	diesel	</tags>
+      <level>	6	</level>
+      <price>	27860	</price>
+      <notInShop>	true	</notInShop>
+      <sound>	/vehicles/tanks/medium/tiger	</sound>
+      <power>	500	</power>
+      <weight>	750	</weight>
+      <maxHealth>	145	</maxHealth>
+      <maxRegenHealth>	72	</maxRegenHealth>
+      <repairCost>	6	</repairCost>
+      <fireStartingChance>	0.15	</fireStartingChance>
+    </V-2-34A>
+    <M-17F>
+      <userString>	#ussr_vehicles:M-17F	</userString>
+      <description>	#ussr_vehicles:M-17F_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 7 0	</icon>
+      <tags>	gasoline	</tags>
+      <level>	4	</level>
+      <price>	13460	</price>
+      <sound>	/vehicles/tanks/medium/tiger	</sound>
+      <power>	500	</power>
+      <weight>	610	</weight>
+      <maxHealth>	90	</maxHealth>
+      <maxRegenHealth>	44	</maxRegenHealth>
+      <repairCost>	4	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+    </M-17F>
+    <M-17FA>
+      <userString>	#ussr_vehicles:M-17FA	</userString>
+      <description>	#ussr_vehicles:M-17FA_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 7 0	</icon>
+      <tags>	gasoline	</tags>
+      <notInShop>	true	</notInShop>
+      <level>	4	</level>
+      <price>	13460	</price>
+      <sound>	/vehicles/tanks/medium/tiger	</sound>
+      <power>	500	</power>
+      <weight>	610	</weight>
+      <maxHealth>	90	</maxHealth>
+      <maxRegenHealth>	44	</maxRegenHealth>
+      <repairCost>	4	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+    </M-17FA>
+    <M-17E>
+      <userString>	#ussr_vehicles:M-17E	</userString>
+      <description>	#ussr_vehicles:M-17E_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 7 0	</icon>
+      <tags>	gasoline	</tags>
+      <level>	6	</level>
+      <price>	25540	</price>
+      <sound>	/vehicles/tanks/medium/tiger	</sound>
+      <power>	550	</power>
+      <weight>	610	</weight>
+      <maxHealth>	120	</maxHealth>
+      <maxRegenHealth>	60	</maxRegenHealth>
+      <repairCost>	7	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+    </M-17E>
+    <V-2IS>
+      <userString>	#ussr_vehicles:V-2IS	</userString>
+      <description>	#ussr_vehicles:V-2IS_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 7 0	</icon>
+      <tags>	diesel	</tags>
+      <level>	7	</level>
+      <price>	36000	</price>
+      <sound>	/vehicles/tanks/heavy/IS_2	</sound>
+      <power>	600	</power>
+      <weight>	750	</weight>
+      <maxHealth>	190	</maxHealth>
+      <maxRegenHealth>	95	</maxRegenHealth>
+      <repairCost>	7	</repairCost>
+      <fireStartingChance>	0.15	</fireStartingChance>
+    </V-2IS>
+    <V-5>
+      <userString>	#ussr_vehicles:V-5	</userString>
+      <description>	#ussr_vehicles:V-5_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 7 0	</icon>
+      <tags>	diesel	</tags>
+      <level>	6	</level>
+      <price>	27860	</price>
+      <sound>	/vehicles/tanks/heavy/IS_2	</sound>
+      <power>	560	</power>
+      <weight>	700	</weight>
+      <maxHealth>	120	</maxHealth>
+      <maxRegenHealth>	60	</maxRegenHealth>
+      <repairCost>	7	</repairCost>
+      <fireStartingChance>	0.15	</fireStartingChance>
+    </V-5>
+    <M-17T>
+      <userString>	#ussr_vehicles:M-17T	</userString>
+      <description>	#ussr_vehicles:M-17T_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 7 0	</icon>
+      <tags>	gasoline	</tags>
+      <level>	4	</level>
+      <price>	10770	</price>
+      <sound>	/vehicles/tanks/light/PzIII	</sound>
+      <power>	450	</power>
+      <weight>	610	</weight>
+      <maxHealth>	85	</maxHealth>
+      <maxRegenHealth>	42	</maxRegenHealth>
+      <repairCost>	4	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+    </M-17T>
+    <M-5-400>
+      <userString>	#ussr_vehicles:M-5-400	</userString>
+      <description>	#ussr_vehicles:M-5-400_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 7 0	</icon>
+      <tags>	gasoline	</tags>
+      <level>	4	</level>
+      <price>	10230	</price>
+      <sound>	/vehicles/tanks/light/PzIII	</sound>
+      <power>	400	</power>
+      <weight>	410	</weight>
+      <maxHealth>	85	</maxHealth>
+      <maxRegenHealth>	43	</maxRegenHealth>
+      <repairCost>	4	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+    </M-5-400>
+    <V-2K>
+      <userString>	#ussr_vehicles:V-2K	</userString>
+      <description>	#ussr_vehicles:V-2K_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 7 0	</icon>
+      <tags>	diesel	</tags>
+      <level>	6	</level>
+      <price>	23050	</price>
+      <sound>	/vehicles/tanks/medium/tiger	</sound>
+      <power>	500	</power>
+      <weight>	750	</weight>
+      <maxHealth>	145	</maxHealth>
+      <maxRegenHealth>	72	</maxRegenHealth>
+      <repairCost>	6	</repairCost>
+      <fireStartingChance>	0.15	</fireStartingChance>
+    </V-2K>
+    <V-4>
+      <userString>	#ussr_vehicles:V-4	</userString>
+      <description>	#ussr_vehicles:V-4_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 7 0	</icon>
+      <tags>	diesel	</tags>
+      <level>	4	</level>
+      <price>	9000	</price>
+      <sound>	/vehicles/tanks/light/PzIII	</sound>
+      <power>	300	</power>
+      <weight>	500	</weight>
+      <maxHealth>	93	</maxHealth>
+      <maxRegenHealth>	45	</maxRegenHealth>
+      <repairCost>	4	</repairCost>
+      <fireStartingChance>	0.15	</fireStartingChance>
+    </V-4>
+    <V-2-34M>
+      <userString>	#ussr_vehicles:V-2-34M	</userString>
+      <description>	#ussr_vehicles:V-2-34M_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 7 0	</icon>
+      <tags>	diesel	</tags>
+      <level>	7	</level>
+      <price>	36000	</price>
+      <sound>	/vehicles/tanks/medium/tiger	</sound>
+      <power>	520	</power>
+      <weight>	750	</weight>
+      <maxHealth>	190	</maxHealth>
+      <maxRegenHealth>	95	</maxRegenHealth>
+      <repairCost>	7	</repairCost>
+      <fireStartingChance>	0.15	</fireStartingChance>
+    </V-2-34M>
+    <MT-5-1>
+      <userString>	#ussr_vehicles:MT-5-1	</userString>
+      <description>	#ussr_vehicles:MT-5-1_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 7 0	</icon>
+      <tags>	gasoline	</tags>
+      <level>	4	</level>
+      <price>	10200	</price>
+      <sound>	/vehicles/tanks/light/PzIII	</sound>
+      <power>	350	</power>
+      <weight>	920	</weight>
+      <maxHealth>	95	</maxHealth>
+      <maxRegenHealth>	45	</maxRegenHealth>
+      <repairCost>	4	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+    </MT-5-1>
+    <MS-1>
+      <userString>	#ussr_vehicles:MS-1	</userString>
+      <description>	#ussr_vehicles:MS-1_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 7 0	</icon>
+      <tags>	gasoline	</tags>
+      <level>	1	</level>
+      <price>	260	</price>
+      <sound>	/vehicles/tanks/light/MC-1	</sound>
+      <power>	43	</power>
+      <weight>	266	</weight>
+      <maxHealth>	25	</maxHealth>
+      <maxRegenHealth>	17	</maxRegenHealth>
+      <repairCost>	1	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+    </MS-1>
+    <GAZ-M1>
+      <userString>	#ussr_vehicles:GAZ-M1	</userString>
+      <description>	#ussr_vehicles:GAZ-M1_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 7 0	</icon>
+      <tags>	gasoline	</tags>
+      <level>	1	</level>
+      <price>	310	</price>
+      <sound>	/vehicles/tanks/light/MC-1	</sound>
+      <power>	55	</power>
+      <weight>	215	</weight>
+      <maxHealth>	30	</maxHealth>
+      <maxRegenHealth>	20	</maxRegenHealth>
+      <repairCost>	1	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+    </GAZ-M1>
+    <AMO-3>
+      <userString>	#ussr_vehicles:AMO-3	</userString>
+      <description>	#ussr_vehicles:AMO-3_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 7 0	</icon>
+      <tags>	gasoline	</tags>
+      <level>	1	</level>
+      <price>	340	</price>
+      <sound>	/vehicles/tanks/light/MC-1	</sound>
+      <power>	70	</power>
+      <weight>	920	</weight>
+      <maxHealth>	35	</maxHealth>
+      <maxRegenHealth>	27	</maxRegenHealth>
+      <repairCost>	4	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+    </AMO-3>
+    <V-2-44>
+      <userString>	#ussr_vehicles:V-2-44	</userString>
+      <description>	#ussr_vehicles:V-2-44_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 7 0	</icon>
+      <tags>	diesel	</tags>
+      <level>	8	</level>
+      <price>	49740	</price>
+      <sound>	/vehicles/tanks/heavy/IS_2	</sound>
+      <power>	560	</power>
+      <weight>	750	</weight>
+      <maxHealth>	260	</maxHealth>
+      <maxRegenHealth>	130	</maxRegenHealth>
+      <repairCost>	8	</repairCost>
+      <fireStartingChance>	0.12	</fireStartingChance>
+    </V-2-44>
+    <V-2-54>
+      <userString>	#ussr_vehicles:V-2-54	</userString>
+      <description>	#ussr_vehicles:V-2-54_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 7 0	</icon>
+      <tags>	diesel	</tags>
+      <level>	9	</level>
+      <price>	79290	</price>
+      <sound>	/vehicles/tanks/heavy/IS_2	</sound>
+      <power>	620	</power>
+      <weight>	700	</weight>
+      <maxHealth>	370	</maxHealth>
+      <maxRegenHealth>	185	</maxRegenHealth>
+      <repairCost>	9	</repairCost>
+      <fireStartingChance>	0.12	</fireStartingChance>
+    </V-2-54>
+    <V-55U>
+      <userString>	#ussr_vehicles:V-55U	</userString>
+      <description>	#ussr_vehicles:V-55U_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 7 0	</icon>
+      <tags>	diesel	</tags>
+      <level>	9	</level>
+      <price>	82300	</price>
+      <sound>	/vehicles/tanks/heavy/IS_2	</sound>
+      <power>	700	</power>
+      <weight>	700	</weight>
+      <maxHealth>	370	</maxHealth>
+      <maxRegenHealth>	185	</maxRegenHealth>
+      <repairCost>	9	</repairCost>
+      <fireStartingChance>	0.12	</fireStartingChance>
+    </V-55U>
+    <V-54-6>
+      <userString>	#ussr_vehicles:V-54-6	</userString>
+      <description>	#ussr_vehicles:V-54-6_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 7 0	</icon>
+      <tags>	diesel	</tags>
+      <level>	9	</level>
+      <price>	82300	</price>
+      <sound>	/vehicles/tanks/heavy/IS_2	</sound>
+      <power>	680	</power>
+      <weight>	700	</weight>
+      <maxHealth>	370	</maxHealth>
+      <maxRegenHealth>	185	</maxRegenHealth>
+      <repairCost>	9	</repairCost>
+      <fireStartingChance>	0.12	</fireStartingChance>
+    </V-54-6>
+    <T-26>
+      <userString>	#ussr_vehicles:T-26	</userString>
+      <description>	#ussr_vehicles:T-26_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 7 0	</icon>
+      <tags>	gasoline	</tags>
+      <level>	1	</level>
+      <price>	770	</price>
+      <sound>	/vehicles/tanks/light/PzIII	</sound>
+      <power>	90	</power>
+      <weight>	545	</weight>
+      <maxHealth>	40	</maxHealth>
+      <maxRegenHealth>	20	</maxRegenHealth>
+      <repairCost>	2	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+    </T-26>
+    <T-26M>
+      <userString>	#ussr_vehicles:T-26M	</userString>
+      <description>	#ussr_vehicles:T-26M_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 7 0	</icon>
+      <tags>	gasoline	</tags>
+      <level>	2	</level>
+      <price>	830	</price>
+      <sound>	/vehicles/tanks/light/PzIII	</sound>
+      <power>	100	</power>
+      <weight>	545	</weight>
+      <maxHealth>	42	</maxHealth>
+      <maxRegenHealth>	21	</maxRegenHealth>
+      <repairCost>	2	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+    </T-26M>
+    <T-26F>
+      <userString>	#ussr_vehicles:T-26F	</userString>
+      <description>	#ussr_vehicles:T-26F_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 7 0	</icon>
+      <tags>	gasoline	</tags>
+      <level>	2	</level>
+      <price>	900	</price>
+      <sound>	/vehicles/tanks/light/PzIII	</sound>
+      <power>	130	</power>
+      <weight>	545	</weight>
+      <maxHealth>	50	</maxHealth>
+      <maxRegenHealth>	25	</maxRegenHealth>
+      <repairCost>	2	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+    </T-26F>
+    <V-11>
+      <userString>	#ussr_vehicles:V-11	</userString>
+      <description>	#ussr_vehicles:V-11_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 7 0	</icon>
+      <tags>	diesel	</tags>
+      <level>	8	</level>
+      <price>	55270	</price>
+      <sound>	/vehicles/tanks/medium/tiger	</sound>
+      <power>	650	</power>
+      <weight>	750	</weight>
+      <maxHealth>	260	</maxHealth>
+      <maxRegenHealth>	130	</maxRegenHealth>
+      <repairCost>	8	</repairCost>
+      <fireStartingChance>	0.15	</fireStartingChance>
+    </V-11>
+    <V-12>
+      <userString>	#ussr_vehicles:V-12	</userString>
+      <description>	#ussr_vehicles:V-12_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 7 0	</icon>
+      <tags>	diesel	</tags>
+      <level>	9	</level>
+      <price>	84000	</price>
+      <sound>	/vehicles/tanks/heavy/IS_2	</sound>
+      <power>	700	</power>
+      <weight>	700	</weight>
+      <maxHealth>	370	</maxHealth>
+      <maxRegenHealth>	185	</maxRegenHealth>
+      <repairCost>	9	</repairCost>
+      <fireStartingChance>	0.15	</fireStartingChance>
+    </V-12>
+    <GAZ-11>
+      <userString>	#ussr_vehicles:GAZ-11	</userString>
+      <description>	#ussr_vehicles:GAZ-11_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 7 0	</icon>
+      <tags>	gasoline	</tags>
+      <level>	2	</level>
+      <price>	810	</price>
+      <sound>	/vehicles/tanks/light/PzIII	</sound>
+      <power>	80	</power>
+      <weight>	275	</weight>
+      <maxHealth>	40	</maxHealth>
+      <maxRegenHealth>	21	</maxRegenHealth>
+      <repairCost>	2	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+    </GAZ-11>
+    <M-80>
+      <userString>	#ussr_vehicles:M-80	</userString>
+      <description>	#ussr_vehicles:M-80_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 7 0	</icon>
+      <tags>	gasoline	</tags>
+      <level>	3	</level>
+      <price>	4130	</price>
+      <sound>	/vehicles/tanks/light/PzIII	</sound>
+      <power>	170	</power>
+      <weight>	362	</weight>
+      <maxHealth>	60	</maxHealth>
+      <maxRegenHealth>	30	</maxRegenHealth>
+      <repairCost>	3	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+    </M-80>
+    <GAZ-203>
+      <userString>	#ussr_vehicles:GAZ-203	</userString>
+      <description>	#ussr_vehicles:GAZ-203_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 7 0	</icon>
+      <tags>	gasoline	</tags>
+      <level>	3	</level>
+      <price>	3830	</price>
+      <sound>	/vehicles/tanks/light/PzIII	</sound>
+      <power>	140	</power>
+      <weight>	362	</weight>
+      <maxHealth>	60	</maxHealth>
+      <maxRegenHealth>	30	</maxRegenHealth>
+      <repairCost>	3	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+    </GAZ-203>
+    <V-2KT>
+      <userString>	#ussr_vehicles:V-2KT	</userString>
+      <description>	#ussr_vehicles:V-2KT_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 7 0	</icon>
+      <tags>	diesel	</tags>
+      <level>	6	</level>
+      <price>	23050	</price>
+      <notInShop>	true	</notInShop>
+      <sound>	/vehicles/tanks/heavy/IS_2	</sound>
+      <power>	650	</power>
+      <weight>	700	</weight>
+      <maxHealth>	120	</maxHealth>
+      <maxRegenHealth>	60	</maxRegenHealth>
+      <repairCost>	7	</repairCost>
+      <fireStartingChance>	0.15	</fireStartingChance>
+    </V-2KT>
+    <AEC3>
+      <userString>	#ussr_vehicles:AEC3	</userString>
+      <description>	#ussr_vehicles:AEC3_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 7 0	</icon>
+      <tags>	gasoline	</tags>
+      <level>	3	</level>
+      <price>	4220	</price>
+      <notInShop>	true	</notInShop>
+      <sound>	/vehicles/tanks/medium/tiger	</sound>
+      <power>	274	</power>
+      <weight>	400	</weight>
+      <maxHealth>	75	</maxHealth>
+      <maxRegenHealth>	30	</maxRegenHealth>
+      <repairCost>	3	</repairCost>
+      <fireStartingChance>	0.15	</fireStartingChance>
+    </AEC3>
+    <GAZ-203F>
+      <userString>	#ussr_vehicles:GAZ-203F	</userString>
+      <description>	#ussr_vehicles:GAZ-203F_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 7 0	</icon>
+      <tags>	gasoline	</tags>
+      <level>	3	</level>
+      <price>	4120	</price>
+      <sound>	/vehicles/tanks/light/PzIII	</sound>
+      <power>	158	</power>
+      <weight>	362	</weight>
+      <maxHealth>	60	</maxHealth>
+      <maxRegenHealth>	30	</maxRegenHealth>
+      <repairCost>	3	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+    </GAZ-203F>
+    <GMC>
+      <userString>	#ussr_vehicles:GMC	</userString>
+      <description>	#ussr_vehicles:GMC_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 7 0	</icon>
+      <tags>	diesel	</tags>
+      <level>	3	</level>
+      <price>	4500	</price>
+      <sound>	/vehicles/tanks/light/PzIII	</sound>
+      <power>	210	</power>
+      <weight>	400	</weight>
+      <maxHealth>	100	</maxHealth>
+      <maxRegenHealth>	50	</maxRegenHealth>
+      <repairCost>	3	</repairCost>
+      <fireStartingChance>	0.15	</fireStartingChance>
+    </GMC>
+    <M-5-400F>
+      <userString>	#ussr_vehicles:M-5-400F	</userString>
+      <description>	#ussr_vehicles:M-5-400F_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 7 0	</icon>
+      <tags>	gasoline	</tags>
+      <level>	4	</level>
+      <price>	11260	</price>
+      <sound>	/vehicles/tanks/medium/tiger	</sound>
+      <power>	440	</power>
+      <weight>	410	</weight>
+      <maxHealth>	85	</maxHealth>
+      <maxRegenHealth>	43	</maxRegenHealth>
+      <repairCost>	4	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+    </M-5-400F>
+    <M-5-400F_Bis>
+      <userString>	#ussr_vehicles:M-5-400F_Bis	</userString>
+      <description>	#ussr_vehicles:M-5-400F_Bis_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 7 0	</icon>
+      <tags>	gasoline	</tags>
+      <level>	4	</level>
+      <price>	11560	</price>
+      <sound>	/vehicles/tanks/medium/tiger	</sound>
+      <power>	440	</power>
+      <weight>	410	</weight>
+      <maxHealth>	85	</maxHealth>
+      <maxRegenHealth>	43	</maxRegenHealth>
+      <repairCost>	4	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+    </M-5-400F_Bis>
+    <M-50T>
+      <userString>	#ussr_vehicles:M-50T	</userString>
+      <description>	#ussr_vehicles:M-50T_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 7 0	</icon>
+      <tags>	gasoline	</tags>
+      <level>	10	</level>
+      <notInShop>	true	</notInShop>
+      <price>	132000	</price>
+      <sound>	/vehicles/tanks/heavy/IS_2	</sound>
+      <power>	1050	</power>
+      <weight>	700	</weight>
+      <maxHealth>	360	</maxHealth>
+      <maxRegenHealth>	180	</maxRegenHealth>
+      <repairCost>	10	</repairCost>
+      <fireStartingChance>	0.15	</fireStartingChance>
+    </M-50T>
+    <Bedford_Twin-Six>
+      <userString>	#ussr_vehicles:Bedford_Twin-Six	</userString>
+      <description>	#ussr_vehicles:Bedford_Twin-Six_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 7 0	</icon>
+      <tags>	gasoline	</tags>
+      <level>	5	</level>
+      <price>	18000	</price>
+      <notInShop>	true	</notInShop>
+      <sound>	/vehicles/tanks/medium/tiger	</sound>
+      <power>	374	</power>
+      <weight>	400	</weight>
+      <maxHealth>	75	</maxHealth>
+      <maxRegenHealth>	30	</maxRegenHealth>
+      <repairCost>	3	</repairCost>
+      <fireStartingChance>	0.15	</fireStartingChance>
+    </Bedford_Twin-Six>
+    <AEC_A190>
+      <userString>	#ussr_vehicles:AEC_A190	</userString>
+      <description>	#ussr_vehicles:AEC_A190_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 7 0	</icon>
+      <tags>	gasoline	</tags>
+      <level>	3	</level>
+      <price>	4500	</price>
+      <notInShop>	true	</notInShop>
+      <sound>	/vehicles/tanks/light/PzIII	</sound>
+      <power>	140	</power>
+      <weight>	400	</weight>
+      <maxHealth>	100	</maxHealth>
+      <maxRegenHealth>	50	</maxRegenHealth>
+      <repairCost>	3	</repairCost>
+      <fireStartingChance>	0.15	</fireStartingChance>
+    </AEC_A190>
+    <V-2-54IS>
+      <userString>	#ussr_vehicles:V-2-54IS	</userString>
+      <description>	#ussr_vehicles:V-2-54IS_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 7 0	</icon>
+      <tags>	diesel	</tags>
+      <level>	9	</level>
+      <price>	79290	</price>
+      <sound>	/vehicles/tanks/medium/tiger	</sound>
+      <power>	700	</power>
+      <weight>	700	</weight>
+      <maxHealth>	370	</maxHealth>
+      <maxRegenHealth>	185	</maxRegenHealth>
+      <repairCost>	9	</repairCost>
+      <fireStartingChance>	0.12	</fireStartingChance>
+    </V-2-54IS>
+    <Continental_W-670_LL>
+      <userString>	#ussr_vehicles:Continental_W-670_LL	</userString>
+      <description>	#ussr_vehicles:Continental_W-670_LL_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 7 0	</icon>
+      <tags>	gasoline	</tags>
+      <level>	4	</level>
+      <price>	8610	</price>
+      <notInShop>	true	</notInShop>
+      <sound>	/vehicles/tanks/light/PzIII	</sound>
+      <power>	268	</power>
+      <weight>	256	</weight>
+      <maxHealth>	80	</maxHealth>
+      <maxRegenHealth>	40	</maxRegenHealth>
+      <repairCost>	4	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+    </Continental_W-670_LL>
+    <BD-2>
+      <userString>	#ussr_vehicles:BD-2	</userString>
+      <description>	#ussr_vehicles:BD-2_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 7 0	</icon>
+      <tags>	diesel	</tags>
+      <level>	5	</level>
+      <price>	18750	</price>
+      <notInShop>	true	</notInShop>
+      <sound>	/vehicles/tanks/medium/tiger	</sound>
+      <power>	540	</power>
+      <weight>	750	</weight>
+      <maxHealth>	105	</maxHealth>
+      <maxRegenHealth>	52	</maxRegenHealth>
+      <repairCost>	4	</repairCost>
+      <fireStartingChance>	0.15	</fireStartingChance>
+    </BD-2>
+    <V-5U>
+      <userString>	#ussr_vehicles:V-5U	</userString>
+      <description>	#ussr_vehicles:V-5U_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 7 0	</icon>
+      <tags>	diesel	</tags>
+      <level>	6	</level>
+      <price>	27860	</price>
+      <sound>	/vehicles/tanks/heavy/IS_2	</sound>
+      <power>	580	</power>
+      <weight>	700	</weight>
+      <maxHealth>	120	</maxHealth>
+      <maxRegenHealth>	60	</maxRegenHealth>
+      <repairCost>	7	</repairCost>
+      <fireStartingChance>	0.15	</fireStartingChance>
+    </V-5U>
+    <TD-30>
+      <userString>	#ussr_vehicles:TD-30	</userString>
+      <description>	#ussr_vehicles:TD-30_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 7 0	</icon>
+      <tags>	diesel	</tags>
+      <level>	9	</level>
+      <price>	87000	</price>
+      <sound>	/vehicles/tanks/heavy/IS_2	</sound>
+      <power>	900	</power>
+      <weight>	700	</weight>
+      <maxHealth>	360	</maxHealth>
+      <maxRegenHealth>	180	</maxRegenHealth>
+      <repairCost>	10	</repairCost>
+      <fireStartingChance>	0.15	</fireStartingChance>
+    </TD-30>
+    <M-50TD>
+      <userString>	#ussr_vehicles:M-50TD	</userString>
+      <description>	#ussr_vehicles:M-50TD_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 7 0	</icon>
+      <tags>	diesel	</tags>
+      <level>	9	</level>
+      <price>	98000	</price>
+      <sound>	/vehicles/tanks/heavy/IS_2	</sound>
+      <power>	950	</power>
+      <weight>	700	</weight>
+      <maxHealth>	360	</maxHealth>
+      <maxRegenHealth>	180	</maxRegenHealth>
+      <repairCost>	10	</repairCost>
+      <fireStartingChance>	0.15	</fireStartingChance>
+    </M-50TD>
+    <Maybach_HL_120_TRM_A>
+      <userString>	#ussr_vehicles:Maybach_HL_120_TRM_A	</userString>
+      <description>	#ussr_vehicles:Maybach_HL_120_TRM_A_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 7 1	</icon>
+      <tags>	gasoline	</tags>
+      <level>	4	</level>
+      <notInShop>	true	</notInShop>
+      <price>	13900	</price>
+      <sound>	/vehicles/tanks/medium/tiger	</sound>
+      <power>	440	</power>
+      <weight>	510	</weight>
+      <maxHealth>	86	</maxHealth>
+      <maxRegenHealth>	42	</maxRegenHealth>
+      <repairCost>	4	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+    </Maybach_HL_120_TRM_A>
+    <M500>
+      <userString>	#ussr_vehicles:TD-30	</userString>
+      <description>	#ussr_vehicles:TD-30_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 7 0	</icon>
+      <tags>	diesel	</tags>
+      <level>	9	</level>
+      <notInShop>	true	</notInShop>
+      <price>	85000	</price>
+      <sound>	/vehicles/tanks/heavy/IS_2	</sound>
+      <power>	1200	</power>
+      <weight>	700	</weight>
+      <maxHealth>	360	</maxHealth>
+      <maxRegenHealth>	180	</maxRegenHealth>
+      <repairCost>	10	</repairCost>
+      <fireStartingChance>	0.15	</fireStartingChance>
+    </M500>
+    <D-744>
+      <userString>	#ussr_vehicles:D-744	</userString>
+      <description>	#ussr_vehicles:D-744_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 7 0	</icon>
+      <tags>	diesel	</tags>
+      <level>	4	</level>
+      <notInShop>	true	</notInShop>
+      <price>	8500	</price>
+      <sound>	/vehicles/tanks/light/PzIII	</sound>
+      <power>	250	</power>
+      <weight>	500	</weight>
+      <maxHealth>	93	</maxHealth>
+      <maxRegenHealth>	45	</maxRegenHealth>
+      <repairCost>	4	</repairCost>
+      <fireStartingChance>	0.15	</fireStartingChance>
+    </D-744>
+  </shared>
+</engines.xml>

@@ -1,0 +1,582 @@
+<KV-1s.xml>
+  <crew>
+    <commander></commander>
+    <gunner></gunner>
+    <radioman></radioman>
+    <driver></driver>
+    <loader></loader>
+  </crew>
+  <speedLimits>
+    <forward>	43	</forward>
+    <backward>	11	</backward>
+  </speedLimits>
+  <repairCost>	5.16	</repairCost>
+  <effects>
+    <destruction>	mediumDestruction	</destruction>
+    <explosion>	mediumExplosion	</explosion>
+    <flaming>	mediumFlaming	</flaming>
+    <collision>	collision	</collision>
+  </effects>
+  <camouflage>
+    <priceFactor>	1.2	</priceFactor>
+    <tiling>	1 1 0 0	</tiling>
+    <exclusionMask>	vehicles/russian/R13_KV-1s/KV-1s_CM.dds	</exclusionMask>
+  </camouflage>
+  <emblems>
+    <default>	ussr_star	</default>
+    <lodDist>	MEDIUM	</lodDist>
+    <alpha>	0.9	</alpha>
+  </emblems>
+  <horns>
+    <priceFactor>	1.0	</priceFactor>
+    <distanceFactor>	1.0	</distanceFactor>
+    <volumeFactor>	1.0	</volumeFactor>
+  </horns>
+  <hull>
+    <models>
+      <undamaged>	vehicles/russian/R13_KV-1s/normal/lod0/Hull.model	</undamaged>
+      <destroyed>	vehicles/russian/R13_KV-1s/crash/lod0/Hull.model	</destroyed>
+      <exploded>	vehicles/russian/R13_KV-1s/crash/lod0/Hull.model	</exploded>
+    </models>
+    <swinging>
+      <lodDist>	FAR	</lodDist>
+      <pitchParams>	0.26 36.00 0.48 1.00 0.05 0.32	</pitchParams>
+      <rollParams>	1.00 0.26 36.00 0.48 1.00 0.05 0.32	</rollParams>
+      <sensitivityToImpulse>	0.28	</sensitivityToImpulse>
+    </swinging>
+    <exhaust>
+      <pixie>	particles/Tank/engine_exit_diesel.xml	</pixie>
+      <nodes>	HP_Track_Exhaus_1 HP_Track_Exhaus_2	</nodes>
+      <rates>	5.0 10.0 25.0	</rates>
+    </exhaust>
+    <turretPositions>
+      <turret>	-0.000172 0.571521 0.563271	</turret>
+    </turretPositions>
+    <hitTester>
+      <collisionModel>	vehicles/russian/R13_KV-1s/collision/Hull.model	</collisionModel>
+    </hitTester>
+    <armor>
+      <armor_1>	75	</armor_1>
+      <armor_2>	60	</armor_2>
+      <armor_3>	60	</armor_3>
+      <armor_4>	60	</armor_4>
+      <armor_5>	60	</armor_5>
+      <armor_6>	30	</armor_6>
+      <armor_7>	30	</armor_7>
+      <armor_8>	0	</armor_8>
+    </armor>
+    <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
+    <weight>	21150	</weight>
+    <maxHealth>	550.0	</maxHealth>
+    <ammoBayHealth>
+      <maxHealth>	150	</maxHealth>
+      <maxRegenHealth>	100	</maxRegenHealth>
+      <repairCost>	1.0	</repairCost>
+    </ammoBayHealth>
+    <emblemSlots>
+      <clan>
+        <rayStart>	0.0563564 4.84637 4.19905	</rayStart>
+        <rayEnd>	0.0563603 -4.62246 0.983271	</rayEnd>
+        <rayUp>	0.000000 0.000000 -1	</rayUp>
+        <size>	0.4	</size>
+        <hideIfDamaged>	false	</hideIfDamaged>
+      </clan>
+    </emblemSlots>
+  </hull>
+  <chassis>
+    <KV-1s>
+      <userString>	#ussr_vehicles:KV-1s	</userString>
+      <description>	#ussr_vehicles:KV-1s_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 8 0	</icon>
+      <tags></tags>
+      <level>	5	</level>
+      <price>	9100.0	</price>
+      <unlocks>
+        <chassis>	KV-1s_bis	  <cost>	4915	</cost>
+        </chassis>
+      </unlocks>
+      <models>
+        <undamaged>	vehicles/russian/R13_KV-1s/normal/lod0/Chassis.model	</undamaged>
+        <destroyed>	vehicles/russian/R13_KV-1s/crash/lod0/Chassis.model	</destroyed>
+        <exploded>	vehicles/russian/R13_KV-1s/crash/lod0/Chassis.model	</exploded>
+      </models>
+      <traces>
+        <lodDist>	FAR	</lodDist>
+        <bufferPrefs>	mediumTank	</bufferPrefs>
+        <textureSet>	germany_01	</textureSet>
+        <size>	0.5 0.62	</size>
+      </traces>
+      <tracks>
+        <lodDist>	MEDIUM	</lodDist>
+        <leftMaterial>	track_mat_L_skinned	</leftMaterial>
+        <rightMaterial>	track_mat_R_skinned	</rightMaterial>
+        <textureScale>	-0.618	</textureScale>
+      </tracks>
+      <wheels>
+        <lodDist>	MEDIUM	</lodDist>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	W_L	</template>
+          <count>	6	</count>
+          <radius>	0.3025	</radius>
+        </group>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	W_R	</template>
+          <count>	6	</count>
+          <radius>	0.3025	</radius>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <name>	WD_L0	</name>
+          <radius>	0.341	</radius>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	WD_L	</template>
+          <count>	3	</count>
+          <startIndex>	1	</startIndex>
+          <radius>	0.196	</radius>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <name>	WD_L4	</name>
+          <radius>	0.454	</radius>
+        </wheel>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <name>	WD_R0	</name>
+          <radius>	0.341	</radius>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	WD_R	</template>
+          <count>	3	</count>
+          <startIndex>	1	</startIndex>
+          <radius>	0.196	</radius>
+        </group>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <name>	WD_R4	</name>
+          <radius>	0.454	</radius>
+        </wheel>
+      </wheels>
+      <drivingWheels>	WD_L0 WD_L4	</drivingWheels>
+      <effects>
+        <lodDist>	MEDIUM	</lodDist>
+        <dust>	mediumTankDust	</dust>
+        <mud>	mediumTankMud	</mud>
+      </effects>
+      <sound>	/vehicles/tanks/treads/treads_3	</sound>
+      <hullPosition>	-0.000713 1.06168 0.082464	</hullPosition>
+      <hitTester>
+        <collisionModel>	vehicles/russian/R13_KV-1s/collision/Chassis.model	</collisionModel>
+      </hitTester>
+      <armor>
+        <leftTrack>	20	</leftTrack>
+        <rightTrack>	20	</rightTrack>
+      </armor>
+      <topRightCarryingPoint>	1.26945 2.11688	</topRightCarryingPoint>
+      <maxClimbAngle>	25	</maxClimbAngle>
+      <navmeshGirth>	6.0	</navmeshGirth>
+      <weight>	11500	</weight>
+      <maxLoad>	42800	</maxLoad>
+      <terrainResistance>	1.0 1.1 2.0	</terrainResistance>
+      <brakeForce>	37500	</brakeForce>
+      <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
+      <rotationSpeed>	28	</rotationSpeed>
+      <shotDispersionFactors>
+        <vehicleMovement>	0.24	</vehicleMovement>
+        <vehicleRotation>	0.24	</vehicleRotation>
+      </shotDispersionFactors>
+      <bulkHealthFactor>	3.0	</bulkHealthFactor>
+      <maxHealth>	130	</maxHealth>
+      <maxRegenHealth>	100	</maxRegenHealth>
+      <repairCost>	5.0	</repairCost>
+    </KV-1s>
+    <KV-1s_bis>
+      <userString>	#ussr_vehicles:KV-1s_bis	</userString>
+      <description>	#ussr_vehicles:KV-1s_bis_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 8 0	</icon>
+      <tags></tags>
+      <level>	6	</level>
+      <price>	15390.0	</price>
+      <models>
+        <undamaged>	vehicles/russian/R13_KV-1s/normal/lod0/Chassis.model	</undamaged>
+        <destroyed>	vehicles/russian/R13_KV-1s/crash/lod0/Chassis.model	</destroyed>
+        <exploded>	vehicles/russian/R13_KV-1s/crash/lod0/Chassis.model	</exploded>
+      </models>
+      <traces>
+        <lodDist>	FAR	</lodDist>
+        <bufferPrefs>	mediumTank	</bufferPrefs>
+        <textureSet>	germany_01	</textureSet>
+        <size>	0.5 0.62	</size>
+      </traces>
+      <tracks>
+        <lodDist>	MEDIUM	</lodDist>
+        <leftMaterial>	track_mat_L_skinned	</leftMaterial>
+        <rightMaterial>	track_mat_R_skinned	</rightMaterial>
+        <textureScale>	-0.618	</textureScale>
+      </tracks>
+      <wheels>
+        <lodDist>	MEDIUM	</lodDist>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	W_L	</template>
+          <count>	6	</count>
+          <radius>	0.3025	</radius>
+        </group>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	W_R	</template>
+          <count>	6	</count>
+          <radius>	0.3025	</radius>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <name>	WD_L0	</name>
+          <radius>	0.341	</radius>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	WD_L	</template>
+          <count>	3	</count>
+          <startIndex>	1	</startIndex>
+          <radius>	0.196	</radius>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <name>	WD_L4	</name>
+          <radius>	0.454	</radius>
+        </wheel>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <name>	WD_R0	</name>
+          <radius>	0.341	</radius>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	WD_R	</template>
+          <count>	3	</count>
+          <startIndex>	1	</startIndex>
+          <radius>	0.196	</radius>
+        </group>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <name>	WD_R4	</name>
+          <radius>	0.454	</radius>
+        </wheel>
+      </wheels>
+      <drivingWheels>	WD_L0 WD_L4	</drivingWheels>
+      <effects>
+        <lodDist>	MEDIUM	</lodDist>
+        <dust>	mediumTankDust	</dust>
+        <mud>	mediumTankMud	</mud>
+      </effects>
+      <sound>	/vehicles/tanks/treads/treads_3	</sound>
+      <hullPosition>	-0.000713 1.06168 0.082464	</hullPosition>
+      <hitTester>
+        <collisionModel>	vehicles/russian/R13_KV-1s/collision/Chassis.model	</collisionModel>
+      </hitTester>
+      <armor>
+        <leftTrack>	20	</leftTrack>
+        <rightTrack>	20	</rightTrack>
+      </armor>
+      <topRightCarryingPoint>	1.26945 2.11688	</topRightCarryingPoint>
+      <maxClimbAngle>	25	</maxClimbAngle>
+      <navmeshGirth>	6.0	</navmeshGirth>
+      <weight>	11500	</weight>
+      <maxLoad>	48200	</maxLoad>
+      <terrainResistance>	0.9 1.0 1.8	</terrainResistance>
+      <brakeForce>	37500	</brakeForce>
+      <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
+      <rotationSpeed>	30	</rotationSpeed>
+      <shotDispersionFactors>
+        <vehicleMovement>	0.22	</vehicleMovement>
+        <vehicleRotation>	0.22	</vehicleRotation>
+      </shotDispersionFactors>
+      <bulkHealthFactor>	3.0	</bulkHealthFactor>
+      <maxHealth>	140	</maxHealth>
+      <maxRegenHealth>	105	</maxRegenHealth>
+      <repairCost>	5.0	</repairCost>
+    </KV-1s_bis>
+  </chassis>
+  <turrets0>
+    <KV1S_mod_42>
+      <userString>	#ussr_vehicles:KV1S_mod_42	</userString>
+      <description>	#ussr_vehicles:KV1S_mod_42_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 6 0	</icon>
+      <tags></tags>
+      <level>	5	</level>
+      <price>	9900.0	</price>
+      <models>
+        <undamaged>	vehicles/russian/R13_KV-1s/normal/lod0/Turret_01.model	</undamaged>
+        <destroyed>	vehicles/russian/R13_KV-1s/crash/lod0/Turret_01.model	</destroyed>
+        <exploded>	vehicles/russian/R13_KV-1s/crash/lod0/Turret_01.model	</exploded>
+      </models>
+      <hitTester>
+        <collisionModel>	vehicles/russian/R13_KV-1s/collision/Turret_01.model	</collisionModel>
+      </hitTester>
+      <yawLimits>	-180 180	</yawLimits>
+      <gunPosition>	-0.000397 0.412196 0.953242	</gunPosition>
+      <armor>
+        <armor_1>	82	</armor_1>
+        <armor_2>	82	</armor_2>
+        <armor_3>	75	</armor_3>
+        <armor_4>	75	</armor_4>
+        <armor_5>	75	</armor_5>
+        <armor_6>	60	</armor_6>
+        <armor_7>	40	</armor_7>
+        <armor_8>	0	</armor_8>
+      </armor>
+      <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
+      <weight>	7020	</weight>
+      <maxHealth>	210.0	</maxHealth>
+      <rotationSpeed>	32	</rotationSpeed>
+      <turretRotatorHealth>
+        <maxHealth>	100	</maxHealth>
+        <maxRegenHealth>	49	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </turretRotatorHealth>
+      <circularVisionRadius>	360	</circularVisionRadius>
+      <surveyingDeviceHealth>
+        <maxHealth>	100	</maxHealth>
+        <maxRegenHealth>	49	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </surveyingDeviceHealth>
+      <guns>
+        <_76mm_ZiS-5>	shared	  <maxAmmo>	94	</maxAmmo>
+          <pitchLimits>	-25 5	</pitchLimits>
+          <unlocks>
+            <gun>	_76mm_S-54	  <cost>	4300	</cost>
+            </gun>
+            <gun>	_122mm_cannon_U-11	  <cost>	3750.0	</cost>
+            </gun>
+          </unlocks>
+          <models>
+            <undamaged>	vehicles/russian/R13_KV-1s/normal/lod0/Gun_01.model	</undamaged>
+            <destroyed>	vehicles/russian/R13_KV-1s/crash/lod0/Gun_01.model	</destroyed>
+            <exploded>	vehicles/russian/R13_KV-1s/crash/lod0/Gun_01.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/russian/R13_KV-1s/collision/Gun_01.model	</collisionModel>
+          </hitTester>
+          <armor>
+            <gun>	20	</gun>
+          </armor>
+        </_76mm_ZiS-5>
+        <_76mm_S-54>	shared	  <maxAmmo>	94	</maxAmmo>
+          <pitchLimits>	-25 5	</pitchLimits>
+          <unlocks>
+            <turret>	KV1S_mod_43	  <cost>	5305	</cost>
+            </turret>
+            <vehicle>	KV-13	  <cost>	63300.0	</cost>
+            </vehicle>
+          </unlocks>
+          <models>
+            <undamaged>	vehicles/russian/R13_KV-1s/normal/lod0/Gun_03.model	</undamaged>
+            <destroyed>	vehicles/russian/R13_KV-1s/crash/lod0/Gun_03.model	</destroyed>
+            <exploded>	vehicles/russian/R13_KV-1s/crash/lod0/Gun_03.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/russian/R13_KV-1s/collision/Gun_03.model	</collisionModel>
+          </hitTester>
+          <armor>
+            <gun>	20	</gun>
+          </armor>
+        </_76mm_S-54>
+        <_122mm_cannon_U-11>	shared	  <maxAmmo>	60	</maxAmmo>
+          <pitchLimits>	-25 8	</pitchLimits>
+          <models>
+            <undamaged>	vehicles/russian/R13_KV-1s/normal/lod0/Gun_04.model	</undamaged>
+            <destroyed>	vehicles/russian/R13_KV-1s/crash/lod0/Gun_04.model	</destroyed>
+            <exploded>	vehicles/russian/R13_KV-1s/crash/lod0/Gun_04.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/russian/R13_KV-1s/collision/Gun_04.model	</collisionModel>
+          </hitTester>
+          <armor>
+            <gun>	50	</gun>
+          </armor>
+        </_122mm_cannon_U-11>
+      </guns>
+      <emblemSlots>
+        <player>
+          <rayStart>	0.942335 0.639802 0.448052	</rayStart>
+          <rayEnd>	0.566214 0.507663 0.415301	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.34	</size>
+          <hideIfDamaged>	true	</hideIfDamaged>
+        </player>
+        <player>
+          <rayStart>	-0.942335 0.639802 0.448052	</rayStart>
+          <rayEnd>	-0.566214 0.507663 0.415301	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.34	</size>
+          <hideIfDamaged>	false	</hideIfDamaged>
+        </player>
+      </emblemSlots>
+    </KV1S_mod_42>
+    <KV1S_mod_43>
+      <userString>	#ussr_vehicles:KV1S_mod_43	</userString>
+      <description>	#ussr_vehicles:KV1S_mod_43_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 6 0	</icon>
+      <tags></tags>
+      <level>	6	</level>
+      <price>	17500.0	</price>
+      <unlocks>
+        <gun>	_85mm_D-5T	  <cost>	4500	</cost>
+        </gun>
+        <gun>	_122-mm_D-25T_with_a_piston_shutter	  <cost>	17000.0	</cost>
+        </gun>
+      </unlocks>
+      <models>
+        <undamaged>	vehicles/russian/R13_KV-1s/normal/lod0/Turret_02.model	</undamaged>
+        <destroyed>	vehicles/russian/R13_KV-1s/crash/lod0/Turret_02.model	</destroyed>
+        <exploded>	vehicles/russian/R13_KV-1s/crash/lod0/Turret_02.model	</exploded>
+      </models>
+      <hitTester>
+        <collisionModel>	vehicles/russian/R13_KV-1s/collision/Turret_02.model	</collisionModel>
+      </hitTester>
+      <yawLimits>	-180 180	</yawLimits>
+      <gunPosition>	0.000884 0.449383 1.24014	</gunPosition>
+      <armor>
+        <armor_1>	100	</armor_1>
+        <armor_2>	100	</armor_2>
+        <armor_3>	100	</armor_3>
+        <armor_4>	100	</armor_4>
+        <armor_5>	100	</armor_5>
+        <armor_6>	90	</armor_6>
+        <armor_7>	30	</armor_7>
+        <armor_8>	0	</armor_8>
+      </armor>
+      <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
+      <weight>	7620	</weight>
+      <maxHealth>	260.0	</maxHealth>
+      <rotationSpeed>	32	</rotationSpeed>
+      <turretRotatorHealth>
+        <maxHealth>	100	</maxHealth>
+        <maxRegenHealth>	49	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </turretRotatorHealth>
+      <circularVisionRadius>	380	</circularVisionRadius>
+      <surveyingDeviceHealth>
+        <maxHealth>	100	</maxHealth>
+        <maxRegenHealth>	49	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </surveyingDeviceHealth>
+      <guns>
+        <_76mm_ZiS-5>	shared	  <maxAmmo>	114	</maxAmmo>
+          <pitchLimits>	-25 5	</pitchLimits>
+          <models>
+            <undamaged>	vehicles/russian/R13_KV-1s/normal/lod0/Gun_05.model	</undamaged>
+            <destroyed>	vehicles/russian/R13_KV-1s/crash/lod0/Gun_05.model	</destroyed>
+            <exploded>	vehicles/russian/R13_KV-1s/crash/lod0/Gun_05.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/russian/R13_KV-1s/collision/Gun_05.model	</collisionModel>
+          </hitTester>
+          <armor>
+            <gun>	20	</gun>
+          </armor>
+        </_76mm_ZiS-5>
+        <_76mm_S-54>	shared	  <maxAmmo>	114	</maxAmmo>
+          <pitchLimits>	-25 5	</pitchLimits>
+          <models>
+            <undamaged>	vehicles/russian/R13_KV-1s/normal/lod0/Gun_07.model	</undamaged>
+            <destroyed>	vehicles/russian/R13_KV-1s/crash/lod0/Gun_07.model	</destroyed>
+            <exploded>	vehicles/russian/R13_KV-1s/crash/lod0/Gun_07.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/russian/R13_KV-1s/collision/Gun_07.model	</collisionModel>
+          </hitTester>
+          <armor>
+            <gun>	20	</gun>
+          </armor>
+        </_76mm_S-54>
+        <_122mm_cannon_U-11>	shared	  <maxAmmo>	64	</maxAmmo>
+          <pitchLimits>	-25 8	</pitchLimits>
+          <models>
+            <undamaged>	vehicles/russian/R13_KV-1s/normal/lod0/Gun_08.model	</undamaged>
+            <destroyed>	vehicles/russian/R13_KV-1s/crash/lod0/Gun_08.model	</destroyed>
+            <exploded>	vehicles/russian/R13_KV-1s/crash/lod0/Gun_08.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/russian/R13_KV-1s/collision/Gun_09.model	</collisionModel>
+          </hitTester>
+          <armor>
+            <gun>	50	</gun>
+          </armor>
+        </_122mm_cannon_U-11>
+        <_85mm_D-5T>	shared	  <maxAmmo>	76	</maxAmmo>
+          <pitchLimits>	-25 5	</pitchLimits>
+          <unlocks>
+            <vehicle>	IS	  <cost>	49480	</cost>
+            </vehicle>
+          </unlocks>
+          <models>
+            <undamaged>	vehicles/russian/R13_KV-1s/normal/lod0/Gun_09.model	</undamaged>
+            <destroyed>	vehicles/russian/R13_KV-1s/crash/lod0/Gun_09.model	</destroyed>
+            <exploded>	vehicles/russian/R13_KV-1s/crash/lod0/Gun_09.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/russian/R13_KV-1s/collision/Gun_09.model	</collisionModel>
+          </hitTester>
+          <armor>
+            <gun>	30	</gun>
+          </armor>
+        </_85mm_D-5T>
+        <_122-mm_D-25T_with_a_piston_shutter>	shared	  <maxAmmo>	26	</maxAmmo>
+          <pitchLimits>	-25 8	</pitchLimits>
+          <reloadTime>	14.0	</reloadTime>
+          <models>
+            <undamaged>	vehicles/russian/R13_KV-1s/normal/lod0/Gun_10.model	</undamaged>
+            <destroyed>	vehicles/russian/R13_KV-1s/crash/lod0/Gun_10.model	</destroyed>
+            <exploded>	vehicles/russian/R13_KV-1s/crash/lod0/Gun_10.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/russian/R13_KV-1s/collision/Gun_10.model	</collisionModel>
+          </hitTester>
+          <armor>
+            <gun>	50	</gun>
+          </armor>
+        </_122-mm_D-25T_with_a_piston_shutter>
+      </guns>
+      <emblemSlots>
+        <player>
+          <rayStart>	1.17702 0.564656 -0.522188	</rayStart>
+          <rayEnd>	0.800835 0.434313 -0.48355	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.36	</size>
+          <hideIfDamaged>	true	</hideIfDamaged>
+        </player>
+        <player>
+          <rayStart>	-1.17702 0.564656 -0.522188	</rayStart>
+          <rayEnd>	-0.800835 0.434313 -0.48355	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.36	</size>
+          <hideIfDamaged>	false	</hideIfDamaged>
+        </player>
+      </emblemSlots>
+    </KV1S_mod_43>
+  </turrets0>
+  <engines>
+    <V-2K>	shared	  <unlocks>
+        <engine>	V-2IS	  <cost>	11000	</cost>
+        </engine>
+      </unlocks>
+    </V-2K>
+    <V-2IS>	shared	</V-2IS>
+  </engines>
+  <fuelTanks>
+    <Average>	shared	</Average>
+  </fuelTanks>
+  <radios>
+    <_10R>	shared	  <unlocks>
+        <radio>	_10RK	  <cost>	3100.0	</cost>
+        </radio>
+      </unlocks>
+    </_10R>
+    <_10RK>	shared	</_10RK>
+  </radios>
+</KV-1s.xml>

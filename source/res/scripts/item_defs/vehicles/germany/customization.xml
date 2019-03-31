@@ -1,0 +1,643 @@
+<customization.xml>
+  <armorColor>	90 103 94 0	</armorColor>
+  <inscriptionColors>
+    <c0>	0 0 0 4	</c0>
+    <c1>	0 0 0 5	</c1>
+    <c2>	0 0 0 6	</c2>
+    <c3>	0 0 0 0	</c3>
+    <c4>	0 0 0 0	</c4>
+    <c5>	0 0 0 0	</c5>
+    <c6>	0 0 0 0	</c6>
+    <c7>	0 0 0 0	</c7>
+    <c8>	0 0 0 0	</c8>
+    <c9>	0 0 0 0	</c9>
+    <c10>	0 0 0 0	</c10>
+    <c11>	0 0 0 0	</c11>
+    <c12>	0 0 0 0	</c12>
+    <c13>	0 0 0 0	</c13>
+    <c14>	0 0 0 0	</c14>
+    <c15>	0 0 0 0	</c15>
+  </inscriptionColors>
+  <camouflageGroups>
+    <bicolor>
+      <userString>	#vehicle_customization:camouflage/bicolor	</userString>
+    </bicolor>
+    <tricolor>
+      <userString>	#vehicle_customization:camouflage/tricolor	</userString>
+    </tricolor>
+  </camouflageGroups>
+  <camouflages>
+    <Feldgrau>
+      <texture>	vehicles/german/Camouflage/Cger_1_1Feldgrau.dds	</texture>
+      <priceFactor>	0.5	</priceFactor>
+      <description>	#vehicle_customization:camouflage/germany/bicolor/Feldgrau	</description>
+      <id>	3	</id>
+      <groups>	bicolor	</groups>
+      <colors>
+        <c0>	120 37 16 101	</c0>
+        <c1>	231 162 33 0	</c1>
+        <c2>	186 137 16 33	</c2>
+        <c3>	186 147 12 0	</c3>
+      </colors>
+      <tiling>
+        <PzIV>	3 1.8 0.4 0.41	</PzIV>
+        <Hummel>	4 2.2 0.23 0.54	</Hummel>
+        <PzV>	4.3 1.7 0.2 0.67	</PzV>
+        <PzVI>	3.8 1.2 0.57 0.49	</PzVI>
+        <StuGIII>	5.7 1.3 0.52 0.52	</StuGIII>
+        <PzII>	2.1 1 0.03 0.36	</PzII>
+        <Pz35t>	5.2 1 0.3 0.47	</Pz35t>
+        <Pz38t>	3.2 1 0.01 0.4	</Pz38t>
+        <Hetzer>	3 1.5 0.12 0.34	</Hetzer>
+        <PzIII>	4.5 1.7 0.23 0.44	</PzIII>
+        <Bison_I>	4.2 1.2 0.87 0.2	</Bison_I>
+        <Ltraktor>	3.2 1 0.1 0.8	</Ltraktor>
+        <VK3001H>	5 1 0.000000 0.38	</VK3001H>
+        <PzIII_A>	4.1 1.7 0.15 0.42	</PzIII_A>
+        <VK3601H>	5.2 1.7 0.000000 0.25	</VK3601H>
+        <PzVIB_Tiger_II>	3.8 1.7 0.51 0.28	</PzVIB_Tiger_II>
+        <JagdPzIV>	3 2 0.15 0.29	</JagdPzIV>
+        <JagdPanther>	3.7 1.2 0.09 0.29	</JagdPanther>
+        <Wespe>	4 1.7 0.000000 0.000000	</Wespe>
+        <G20_Marder_II>	3.9 1.2 0.2 0.5	</G20_Marder_II>
+        <PanzerJager_I>	4.8 1.3 0.55 0.22	</PanzerJager_I>
+        <Sturmpanzer_II>	5 1.5 0.2 0.26	</Sturmpanzer_II>
+        <Grille>	4 2.2 0.18 0.27	</Grille>
+        <VK3002DB>	3.8 1.5 0.88 0.31	</VK3002DB>
+        <PzII_Luchs>	3.5 2 0.12 0.2	</PzII_Luchs>
+        <VK1602>	4.1 1 0.62 0.41	</VK1602>
+        <VK3001P>	3.1 1 0.11 0.36	</VK3001P>
+        <PzIII_IV>	4.1 1.2 0.94 0.27	</PzIII_IV>
+        <PzV_PzIV>	3.8 1.2 0.000000 0.32	</PzV_PzIV>
+        <PzV_PzIV_ausf_Alfa>	5.2 1.2 0.37 0.12	</PzV_PzIV_ausf_Alfa>
+        <H39_captured>	3.7 1.6 0.18 0.39	</H39_captured>
+        <S35_captured>	3 1.6 0.83 0.31	</S35_captured>
+        <B-1bis_captured>	4.2 1.5 0.000000 0.26	</B-1bis_captured>
+        <PzII_J>	5.3 1.5 0.37 0.28	</PzII_J>
+        <Ferdinand>	5 1.5 0.02 0.02	</Ferdinand>
+        <Maus>	3.9 1.2 0.4 0.43	</Maus>
+        <JagdTiger>	3.3 1.5 0.2 0.09	</JagdTiger>
+        <G_Tiger>	4.7 1 0.93 0.32	</G_Tiger>
+        <G_Panther>	3.7 1 0.18 0.8	</G_Panther>
+        <Lowe>	3.7 1.2 0.47 0.25	</Lowe>
+        <Pz38_NA>	5 1.2 0.000000 0.2	</Pz38_NA>
+        <VK4502P>	3.7 1 0.000000 0.37	</VK4502P>
+        <Panther_II>	3.7 1.2 0.41 0.2	</Panther_II>
+        <G_E>	4.4 1.7 0.28 0.33	</G_E>
+        <T-25>	4.2 2.2 0.99 0.41	</T-25>
+        <T-15>	4.2 1.7 0.37 0.43	</T-15>
+        <E-75>	3.4 2.7 0.34 0.03	</E-75>
+        <E-100>	3.9 2.3 0.59 0.13	</E-100>
+        <VK2801>	3.5 1.6 0.56 0.2	</VK2801>
+        <E-50>	3.8 1.7 0.05 0.000000	</E-50>
+        <PzVI_Tiger_P>	4.1 2 0.34 0.000000	</PzVI_Tiger_P>
+        <VK4502A>	4.2 1 0.1 0.28	</VK4502A>
+        <PzIV_Hydro>	3.3 2.2 0.93 0.63	</PzIV_Hydro>
+      </tiling>
+    </Feldgrau>
+    <WhiteDiagonal>
+      <texture>	vehicles/german/Camouflage/Cger_1_2WhiteDiagonal.dds	</texture>
+      <priceFactor>	0.5	</priceFactor>
+      <description>	#vehicle_customization:camouflage/germany/bicolor/WhiteDiagonal	</description>
+      <id>	4	</id>
+      <groups>	bicolor	</groups>
+      <colors>
+        <c0>	7 38 54 51	</c0>
+        <c1>	11 26 43 153	</c1>
+        <c2>	235 253 254 255	</c2>
+        <c3>	226 233 241 82	</c3>
+      </colors>
+      <tiling>
+        <PzV>	4.2 3.9 0.24 0.85	</PzV>
+        <PzIV>	3.4 4.7 0.91 0.07	</PzIV>
+        <Hummel>	3.7 4.9 1 0.12	</Hummel>
+        <PzVI>	3.8 5 0.55 0.31	</PzVI>
+        <StuGIII>	3.4 2.5 0.12 0.22	</StuGIII>
+        <PzII>	4.1 4.5 0.38 0.09	</PzII>
+        <Pz35t>	3.1 3.3 0.22 0.11	</Pz35t>
+        <Pz38t>	4.1 2.5 0.09 0.15	</Pz38t>
+        <Hetzer>	3.5 3.2 0.000000 0.49	</Hetzer>
+        <PzIII>	3.7 3.7 0.31 0.32	</PzIII>
+        <Bison_I>	3.8 3.3 0.38 0.41	</Bison_I>
+        <Ltraktor>	3 3.9 0.06 0.61	</Ltraktor>
+        <VK3001H>	3 4 0.2 0.15	</VK3001H>
+        <PzIII_A>	3 3.1 0.000000 0.000000	</PzIII_A>
+        <VK3601H>	3 4.1 0.37 0.13	</VK3601H>
+        <PzVIB_Tiger_II>	4 3.4 0.71 0.23	</PzVIB_Tiger_II>
+        <JagdPzIV>	3 3.7 0.41 0.44	</JagdPzIV>
+        <JagdPanther>	4.3 4.4 0.51 0.26	</JagdPanther>
+        <Wespe>	4 3.9 0.32 0.21	</Wespe>
+        <G20_Marder_II>	4.9 5 0.19 0.39	</G20_Marder_II>
+        <PanzerJager_I>	4 4.9 0.38 0.09	</PanzerJager_I>
+        <Sturmpanzer_II>	5.4 4.9 0.4 0.000000	</Sturmpanzer_II>
+        <Grille>	4.7 4.8 0.9 0.24	</Grille>
+        <VK3002DB>	4.9 4.2 0.65 0.97	</VK3002DB>
+        <PzII_Luchs>	3.7 3 0.19 0.42	</PzII_Luchs>
+        <VK1602>	3.2 3.5 0.13 0.69	</VK1602>
+        <VK3001P>	4.1 3.3 0.32 1	</VK3001P>
+        <PzIII_IV>	4.3 4.8 0.52 0.16	</PzIII_IV>
+        <PzV_PzIV>	4.8 4.2 0.3 0.1	</PzV_PzIV>
+        <PzV_PzIV_ausf_Alfa>	5 5 0.17 0.92	</PzV_PzIV_ausf_Alfa>
+        <H39_captured>	2.3 2.5 0.26 0.48	</H39_captured>
+        <S35_captured>	2.5 2.9 0.48 0.22	</S35_captured>
+        <B-1bis_captured>	3 3.6 0.03 0.25	</B-1bis_captured>
+        <PzII_J>	2.2 2.7 0.41 0.38	</PzII_J>
+        <Ferdinand>	2.8 3.8 0.32 0.65	</Ferdinand>
+        <Maus>	2.6 2.9 0.73 0.8	</Maus>
+        <JagdTiger>	2.3 3 0.51 0.08	</JagdTiger>
+        <G_Tiger>	3.9 3.5 0.000000 0.4	</G_Tiger>
+        <G_Panther>	3 3 0.4 0.05	</G_Panther>
+        <Lowe>	3 3 0.85 0.01	</Lowe>
+        <Pz38_NA>	3.7 3 0.28 0.76	</Pz38_NA>
+        <VK4502P>	3.3 3.3 0.56 0.78	</VK4502P>
+        <Panther_II>	3.9 3.9 0.21 0.99	</Panther_II>
+        <G_E>	3 3.5 0.000000 0.000000	</G_E>
+        <T-25>	4.2 2.6 0.5 0.6	</T-25>
+        <T-15>	3 2 0.000000 0.000000	</T-15>
+        <E-75>	6.3 6.3 0.000000 0.1	</E-75>
+        <E-100>	4.9 4.9 0.65 0.58	</E-100>
+        <VK2801>	3.8 4 0.24 0.08	</VK2801>
+        <E-50>	4.7 4.7 0.14 0.000000	</E-50>
+        <PzVI_Tiger_P>	3.1 3 0.25 0.000000	</PzVI_Tiger_P>
+        <VK4502A>	3.8 3.7 0.24 0.26	</VK4502A>
+        <PzIV_Hydro>	3.9 3.9 0.5 0.38	</PzIV_Hydro>
+      </tiling>
+    </WhiteDiagonal>
+    <YellowBacillus>
+      <texture>	vehicles/german/Camouflage/Cger_1_3YellowBacillus.dds	</texture>
+      <priceFactor>	0.5	</priceFactor>
+      <description>	#vehicle_customization:camouflage/germany/bicolor/YellowBacillus	</description>
+      <id>	5	</id>
+      <groups>	bicolor	</groups>
+      <colors>
+        <c0>	198 108 66 116	</c0>
+        <c1>	244 248 126 117	</c1>
+        <c2>	75 14 30 190	</c2>
+        <c3>	239 208 33 65	</c3>
+      </colors>
+      <tiling>
+        <PzV>	3 3.5 0.92 0.45	</PzV>
+        <PzIV>	2.9 2.7 0.46 0.43	</PzIV>
+        <Hummel>	2.8 3.5 0.000000 0.6	</Hummel>
+        <PzVI>	3.1 3.1 0.24 0.38	</PzVI>
+        <StuGIII>	4 2.9 0.29 0.28	</StuGIII>
+        <PzII>	2.9 3.3 0.49 0.12	</PzII>
+        <Pz35t>	2.5 2.6 0.51 0.000000	</Pz35t>
+        <Pz38t>	3.1 1.5 0.55 0.42	</Pz38t>
+        <Hetzer>	2.1 1.9 0.5 0.000000	</Hetzer>
+        <PzIII>	3.4 3.2 0.12 0.55	</PzIII>
+        <Bison_I>	2.6 2.8 0.14 0.94	</Bison_I>
+        <Ltraktor>	2.4 2.2 0.000000 0.18	</Ltraktor>
+        <VK3001H>	3 2.7 0.94 0.11	</VK3001H>
+        <PzIII_A>	3.2 3 0.000000 0.000000	</PzIII_A>
+        <VK3601H>	2.4 3.2 0.97 0.26	</VK3601H>
+        <PzVIB_Tiger_II>	2.9 3.2 0.17 0.43	</PzVIB_Tiger_II>
+        <JagdPzIV>	3 3.2 0.000000 0.000000	</JagdPzIV>
+        <JagdPanther>	3 2.8 0.91 0.19	</JagdPanther>
+        <Wespe>	3 3.2 0.18 0.98	</Wespe>
+        <G20_Marder_II>	3.5 3.5 0.000000 0.28	</G20_Marder_II>
+        <PanzerJager_I>	1.9 2.9 0.000000 0.09	</PanzerJager_I>
+        <Sturmpanzer_II>	3.7 2.7 0.37 0.51	</Sturmpanzer_II>
+        <Grille>	3.7 3.8 0.1 0.97	</Grille>
+        <VK3002DB>	3 2.6 0.9 0.33	</VK3002DB>
+        <PzII_Luchs>	3 2.2 0.000000 0.08	</PzII_Luchs>
+        <VK1602>	2.8 3 0.000000 0.61	</VK1602>
+        <VK3001P>	2.9 2.8 0.44 0.58	</VK3001P>
+        <PzIII_IV>	2.7 2.8 0.12 0.06	</PzIII_IV>
+        <PzV_PzIV>	3.1 3.4 0.19 0.67	</PzV_PzIV>
+        <PzV_PzIV_ausf_Alfa>	3 3.6 0.16 0.28	</PzV_PzIV_ausf_Alfa>
+        <H39_captured>	3.7 2.5 0.42 0.08	</H39_captured>
+        <S35_captured>	3 3 0.1 0.01	</S35_captured>
+        <B-1bis_captured>	3.3 3.1 0.13 0.000000	</B-1bis_captured>
+        <PzII_J>	3 3 0.000000 0.45	</PzII_J>
+        <Ferdinand>	3 3 0.88 0.56	</Ferdinand>
+        <Maus>	3.1 3.3 0.000000 0.6	</Maus>
+        <JagdTiger>	3 3 0.6 0.000000	</JagdTiger>
+        <G_Tiger>	3.9 3.6 0.34 0.8	</G_Tiger>
+        <G_Panther>	3 3 0.74 0.56	</G_Panther>
+        <Lowe>	3 3 0.17 0.63	</Lowe>
+        <Pz38_NA>	3 3.2 0.000000 0.6	</Pz38_NA>
+        <VK4502P>	3 3 0.6 0.000000	</VK4502P>
+        <Panther_II>	3 3 0.11 0.59	</Panther_II>
+        <G_E>	3 3 0.03 0.2	</G_E>
+        <T-25>	3.5 1.9 0.96 0.24	</T-25>
+        <T-15>	3 1.7 0.1 0.22	</T-15>
+        <E-75>	3.6 3.6 0.87 0.8	</E-75>
+        <E-100>	3.3 3.3 0.000000 0.000000	</E-100>
+        <VK2801>	2.9 2.6 0.12 0.1	</VK2801>
+        <E-50>	4.4 4.4 0.49 0.17	</E-50>
+        <PzVI_Tiger_P>	2.7 2.7 0.2 0.55	</PzVI_Tiger_P>
+        <VK4502A>	3.7 3.7 0.000000 0.3	</VK4502A>
+        <PzIV_Hydro>	4.2 4.2 0.38 0.28	</PzIV_Hydro>
+      </tiling>
+    </YellowBacillus>
+    <SnowOnSpots>
+      <texture>	vehicles/german/Camouflage/Cger_1_4SnowOnSpots.dds	</texture>
+      <priceFactor>	1	</priceFactor>
+      <description>	#vehicle_customization:camouflage/germany/tricolor/SnowOnSpots	</description>
+      <id>	6	</id>
+      <groups>	tricolor	</groups>
+      <colors>
+        <c0>	120 37 16 128	</c0>
+        <c1>	17 31 12 78	</c1>
+        <c2>	247 222 147 178	</c2>
+        <c3>	236 207 119 204	</c3>
+      </colors>
+      <tiling>
+        <PzV>	3.5 3.8 0.84 0.37	</PzV>
+        <PzIV>	3 3.7 0.76 0.12	</PzIV>
+        <Hummel>	3.2 3.6 0.38 0.67	</Hummel>
+        <PzVI>	3.9 4.1 0.11 0.54	</PzVI>
+        <StuGIII>	3.8 2.3 0.61 0.25	</StuGIII>
+        <PzII>	2.8 2.9 0.36 0.49	</PzII>
+        <Pz35t>	2.7 2.2 0.000000 0.38	</Pz35t>
+        <Pz38t>	3.8 1.6 0.75 0.21	</Pz38t>
+        <Hetzer>	2.3 1.9 0.43 0.16	</Hetzer>
+        <PzIII>	3 2.6 0.000000 0.1	</PzIII>
+        <Bison_I>	2.6 2.5 0.15 0.63	</Bison_I>
+        <Ltraktor>	2.7 2.1 0.000000 0.44	</Ltraktor>
+        <VK3001H>	3 2.7 0.13 0.98	</VK3001H>
+        <PzIII_A>	2.9 2.7 0.17 0.42	</PzIII_A>
+        <VK3601H>	3 2.8 0.25 0.03	</VK3601H>
+        <PzVIB_Tiger_II>	3 3 0.78 0.26	</PzVIB_Tiger_II>
+        <JagdPzIV>	3.7 3 0.63 0.69	</JagdPzIV>
+        <JagdPanther>	3.3 3.7 0.8 0.24	</JagdPanther>
+        <Wespe>	3 2.9 0.9 0.63	</Wespe>
+        <G20_Marder_II>	3 3 0.59 0.34	</G20_Marder_II>
+        <PanzerJager_I>	2.5 2.2 0.29 0.5	</PanzerJager_I>
+        <Sturmpanzer_II>	3.9 3.5 0.72 0.46	</Sturmpanzer_II>
+        <Grille>	3.6 3.2 0.62 0.34	</Grille>
+        <VK3002DB>	3.3 3.6 0.16 0.63	</VK3002DB>
+        <PzII_Luchs>	3.3 2.2 0.23 0.96	</PzII_Luchs>
+        <VK1602>	2.7 3 0.7 0.14	</VK1602>
+        <VK3001P>	3.2 3 0.74 0.98	</VK3001P>
+        <PzIII_IV>	3 3 0.18 0.56	</PzIII_IV>
+        <PzV_PzIV>	3.3 3.4 0.74 0.07	</PzV_PzIV>
+        <PzV_PzIV_ausf_Alfa>	3.3 3 0.31 0.08	</PzV_PzIV_ausf_Alfa>
+        <H39_captured>	3 2.4 0.29 0.82	</H39_captured>
+        <S35_captured>	3 2.7 0.37 0.14	</S35_captured>
+        <B-1bis_captured>	2.8 2.8 0.000000 0.000000	</B-1bis_captured>
+        <PzII_J>	2.7 3 0.2 0.03	</PzII_J>
+        <Ferdinand>	3 2.4 0.83 0.06	</Ferdinand>
+        <Maus>	3.1 2.7 0.16 0.49	</Maus>
+        <JagdTiger>	2.7 3 0.05 0.11	</JagdTiger>
+        <G_Tiger>	4 3.6 0.69 0.42	</G_Tiger>
+        <G_Panther>	3 3.4 0.33 0.45	</G_Panther>
+        <Lowe>	3 3.3 0.94 0.13	</Lowe>
+        <Pz38_NA>	3 3 0.2 0.000000	</Pz38_NA>
+        <VK4502P>	3.7 3 0.4 0.85	</VK4502P>
+        <Panther_II>	4 4 0.54 0.22	</Panther_II>
+        <G_E>	3.4 3.3 0.45 0.88	</G_E>
+        <T-25>	4.5 2.2 0.34 0.38	</T-25>
+        <T-15>	3.5 2 0.08 0.000000	</T-15>
+        <E-75>	3.6 3.5 0.000000 0.000000	</E-75>
+        <E-100>	4 4 0.14 0.000000	</E-100>
+        <VK2801>	2.9 3 0.3 0.7	</VK2801>
+        <E-50>	4.3 4.3 0.32 0.37	</E-50>
+        <PzVI_Tiger_P>	3.3 3.4 0.36 0.000000	</PzVI_Tiger_P>
+        <VK4502A>	3.8 3.8 0.08 0.14	</VK4502A>
+        <PzIV_Hydro>	4 4 0.84 0.32	</PzIV_Hydro>
+      </tiling>
+    </SnowOnSpots>
+    <SnowOnBands>
+      <texture>	vehicles/german/Camouflage/Cger_1_5SnowOnBands.dds	</texture>
+      <priceFactor>	1	</priceFactor>
+      <description>	#vehicle_customization:camouflage/germany/tricolor/SnowOnBands	</description>
+      <id>	7	</id>
+      <groups>	tricolor	</groups>
+      <colors>
+        <c0>	69 75 44 143	</c0>
+        <c1>	241 71 22 59	</c1>
+        <c2>	255 224 100 175	</c2>
+        <c3>	221 176 0 203	</c3>
+      </colors>
+      <tiling>
+        <PzV>	4.8 5.4 0.38 0.05	</PzV>
+        <PzIV>	3.7 4.7 1 0.000000	</PzIV>
+        <Hummel>	4 4 0.03 0.45	</Hummel>
+        <PzVI>	4.7 4.5 0.79 0.86	</PzVI>
+        <StuGIII>	3.9 3.5 0.22 0.55	</StuGIII>
+        <PzII>	3.1 3.1 0.75 0.27	</PzII>
+        <Pz35t>	3.2 2.9 0.000000 0.53	</Pz35t>
+        <Pz38t>	2.6 1.7 0.31 0.87	</Pz38t>
+        <Hetzer>	2.8 3.1 0.64 0.36	</Hetzer>
+        <PzIII>	4 3.7 0.08 0.22	</PzIII>
+        <Bison_I>	3.5 4.3 0.17 0.4	</Bison_I>
+        <Ltraktor>	2.1 2.2 0.13 0.000000	</Ltraktor>
+        <VK3001H>	4.5 3 0.11 0.000000	</VK3001H>
+        <PzIII_A>	3 2.5 0.000000 0.13	</PzIII_A>
+        <VK3601H>	3.3 3 0.01 0.21	</VK3601H>
+        <PzVIB_Tiger_II>	3 5.6 0.01 0.86	</PzVIB_Tiger_II>
+        <JagdPzIV>	3.2 3.6 0.05 0.36	</JagdPzIV>
+        <JagdPanther>	3.4 3.1 0.58 0.08	</JagdPanther>
+        <Wespe>	3.5 4.3 0.15 0.84	</Wespe>
+        <G20_Marder_II>	4.4 3.7 0.17 0.33	</G20_Marder_II>
+        <PanzerJager_I>	3.4 3.7 0.87 0.71	</PanzerJager_I>
+        <Sturmpanzer_II>	3.7 3.1 0.08 0.25	</Sturmpanzer_II>
+        <Grille>	4.3 4.4 0.64 0.02	</Grille>
+        <VK3002DB>	4.6 3.6 0.21 0.44	</VK3002DB>
+        <PzII_Luchs>	3.1 3.4 0.000000 0.39	</PzII_Luchs>
+        <VK1602>	3 3.4 0.01 0.37	</VK1602>
+        <VK3001P>	3 3 0.16 0.71	</VK3001P>
+        <PzIII_IV>	3.2 3.8 0.39 0.44	</PzIII_IV>
+        <PzV_PzIV>	3.6 4 0.000000 0.09	</PzV_PzIV>
+        <PzV_PzIV_ausf_Alfa>	5 2.9 0.4 0.67	</PzV_PzIV_ausf_Alfa>
+        <H39_captured>	4.7 2.6 0.38 0.22	</H39_captured>
+        <S35_captured>	3 3 0.8 0.72	</S35_captured>
+        <B-1bis_captured>	3.3 3.5 0.64 0.79	</B-1bis_captured>
+        <PzII_J>	3.2 3 0.13 0.62	</PzII_J>
+        <Ferdinand>	3 3 0.6 0.000000	</Ferdinand>
+        <Maus>	3.8 2.9 0.85 0.05	</Maus>
+        <JagdTiger>	3 3.3 0.92 0.82	</JagdTiger>
+        <G_Tiger>	5 5 0.000000 0.000000	</G_Tiger>
+        <G_Panther>	4.3 4.4 0.95 0.6	</G_Panther>
+        <Lowe>	3.4 3.5 0.59 0.33	</Lowe>
+        <Pz38_NA>	3.9 3.9 0.96 0.06	</Pz38_NA>
+        <VK4502P>	4.1 4.3 0.13 0.000000	</VK4502P>
+        <Panther_II>	4.9 5 0.09 0.29	</Panther_II>
+        <G_E>	4.4 5.5 0.25 0.46	</G_E>
+        <T-25>	3.9 2.3 0.000000 0.000000	</T-25>
+        <T-15>	3.9 2.4 0.54 0.08	</T-15>
+        <E-75>	3.9 3.8 0.04 0.04	</E-75>
+        <E-100>	3.5 3.5 0.52 0.36	</E-100>
+        <VK2801>	2.7 2.8 0.32 0.34	</VK2801>
+        <E-50>	4.1 4.1 0.58 0.38	</E-50>
+        <PzVI_Tiger_P>	3 3.2 0.000000 0.32	</PzVI_Tiger_P>
+        <VK4502A>	3.4 3.3 0.12 0.34	</VK4502A>
+        <PzIV_Hydro>	4.1 4 0.24 0.22	</PzIV_Hydro>
+      </tiling>
+    </SnowOnBands>
+    <RedClouds>
+      <texture>	vehicles/german/Camouflage/Cger_1_6RedClouds.dds	</texture>
+      <priceFactor>	0.5	</priceFactor>
+      <description>	#vehicle_customization:camouflage/germany/bicolor/RedClouds	</description>
+      <id>	8	</id>
+      <groups>	bicolor	</groups>
+      <colors>
+        <c0>	193 228 247 243	</c0>
+        <c1>	57 17 21 206	</c1>
+        <c2>	254 204 33 125	</c2>
+        <c3>	241 139 48 79	</c3>
+      </colors>
+      <tiling>
+        <PzV>	1.7 1.7 0.000000 0.87	</PzV>
+        <PzIV>	2.2 2.3 0.81 0.19	</PzIV>
+        <Hummel>	2.1 2.3 0.19 1	</Hummel>
+        <PzVI>	2 2.6 0.6 0.16	</PzVI>
+        <StuGIII>	2.7 2.2 0.39 0.2	</StuGIII>
+        <PzII>	1.3 2.1 0.8 0.35	</PzII>
+        <Pz35t>	2.5 1 0.12 0.72	</Pz35t>
+        <Pz38t>	1.9 1.3 0.18 0.05	</Pz38t>
+        <Hetzer>	1.8 1.5 0.06 0.63	</Hetzer>
+        <PzIII>	1.8 2 0.000000 0.46	</PzIII>
+        <Bison_I>	2.1 1.8 0.42 0.000000	</Bison_I>
+        <Ltraktor>	1.7 2 0.45 0.000000	</Ltraktor>
+        <VK3001H>	1.4 1.5 0.49 0.08	</VK3001H>
+        <PzIII_A>	1.9 1.7 0.4 0.13	</PzIII_A>
+        <VK3601H>	1.8 1.6 0.11 0.000000	</VK3601H>
+        <PzVIB_Tiger_II>	2.6 2 0.23 0.11	</PzVIB_Tiger_II>
+        <JagdPzIV>	1.9 1.5 0.000000 0.000000	</JagdPzIV>
+        <JagdPanther>	2.1 1.8 0.26 0.28	</JagdPanther>
+        <Wespe>	2.1 3 0.000000 0.000000	</Wespe>
+        <G20_Marder_II>	2.1 2.2 0.33 0.09	</G20_Marder_II>
+        <PanzerJager_I>	2.5 2.1 0.000000 0.000000	</PanzerJager_I>
+        <Sturmpanzer_II>	2.4 1.6 0.1 0.28	</Sturmpanzer_II>
+        <Grille>	2.3 2.2 0.000000 0.000000	</Grille>
+        <VK3002DB>	2 2.5 0.89 0.67	</VK3002DB>
+        <PzII_Luchs>	2.6 1.7 0.51 0.02	</PzII_Luchs>
+        <VK1602>	1.3 1.8 0.000000 0.000000	</VK1602>
+        <VK3001P>	2.3 1.9 0.92 0.12	</VK3001P>
+        <PzIII_IV>	2.9 1.8 0.000000 0.000000	</PzIII_IV>
+        <PzV_PzIV>	3 2.6 0.000000 0.65	</PzV_PzIV>
+        <PzV_PzIV_ausf_Alfa>	3 3 0.08 0.1	</PzV_PzIV_ausf_Alfa>
+        <H39_captured>	2.1 1.6 0.52 0.000000	</H39_captured>
+        <S35_captured>	2.6 2.3 0.000000 0.52	</S35_captured>
+        <B-1bis_captured>	1.9 2.4 0.98 0.2	</B-1bis_captured>
+        <PzII_J>	1.2 1.4 0.39 0.12	</PzII_J>
+        <Ferdinand>	2.4 2 0.2 0.000000	</Ferdinand>
+        <Maus>	2.6 3.1 0.000000 0.2	</Maus>
+        <JagdTiger>	2.2 2.5 0.000000 0.6	</JagdTiger>
+        <G_Tiger>	5 4.4 0.000000 1	</G_Tiger>
+        <G_Panther>	4.2 2.4 0.8 0.2	</G_Panther>
+        <Lowe>	2.5 3 0.000000 0.82	</Lowe>
+        <Pz38_NA>	2.9 4 0.4 0.000000	</Pz38_NA>
+        <VK4502P>	3 2.4 0.8 0.2	</VK4502P>
+        <Panther_II>	3.1 3.1 0.4 0.000000	</Panther_II>
+        <G_E>	3 3 0.000000 0.000000	</G_E>
+        <T-25>	2.6 1.4 0.32 0.54	</T-25>
+        <T-15>	2.6 1.6 0.16 0.000000	</T-15>
+        <E-75>	3.7 3.7 0.000000 0.04	</E-75>
+        <E-100>	3.3 3.2 0.000000 0.000000	</E-100>
+        <VK2801>	3.3 3 0.36 0.56	</VK2801>
+        <E-50>	3.9 4 0.28 0.46	</E-50>
+        <PzVI_Tiger_P>	2.9 3 0.000000 0.000000	</PzVI_Tiger_P>
+        <VK4502A>	3.6 3.7 0.24 0.6	</VK4502A>
+        <PzIV_Hydro>	3.8 3.8 0.18 0.000000	</PzIV_Hydro>
+      </tiling>
+    </RedClouds>
+    <GrayZigzag>
+      <texture>	vehicles/german/Camouflage/Cger_1_7GrayZigzag.dds	</texture>
+      <priceFactor>	0.5	</priceFactor>
+      <description>	#vehicle_customization:camouflage/germany/bicolor/GrayZigzag	</description>
+      <id>	9	</id>
+      <groups>	bicolor	</groups>
+      <colors>
+        <c0>	236 189 4 0	</c0>
+        <c1>	251 206 113 187	</c1>
+        <c2>	11 22 64 51	</c2>
+        <c3>	174 194 95 0	</c3>
+      </colors>
+      <tiling>
+        <PzV>	1.3 1.4 0.000000 0.4	</PzV>
+        <PzIV>	1.7 1.8 0.000000 0.88	</PzIV>
+        <Hummel>	1.5 1.3 0.13 0.81	</Hummel>
+        <PzVI>	1.3 1.4 0.56 0.15	</PzVI>
+        <StuGIII>	1.4 1 0.75 0.13	</StuGIII>
+        <PzII>	1 1 0.000000 0.48	</PzII>
+        <Pz35t>	1.4 1 0.000000 0.000000	</Pz35t>
+        <Pz38t>	1.5 1 0.18 0.12	</Pz38t>
+        <Hetzer>	1 1 0.02 0.26	</Hetzer>
+        <PzIII>	1 1.5 0.63 0.000000	</PzIII>
+        <Bison_I>	1.2 1 0.39 0.38	</Bison_I>
+        <Ltraktor>	1 1 0.31 0.05	</Ltraktor>
+        <VK3001H>	1.5 1.3 0.02 0.28	</VK3001H>
+        <PzIII_A>	1.2 1.6 0.000000 0.000000	</PzIII_A>
+        <VK3601H>	1.3 1.3 0.000000 0.000000	</VK3601H>
+        <PzVIB_Tiger_II>	1.1 1.3 0.14 0.25	</PzVIB_Tiger_II>
+        <JagdPzIV>	1.1 1.2 0.02 0.09	</JagdPzIV>
+        <JagdPanther>	1.4 1.2 0.000000 0.05	</JagdPanther>
+        <Wespe>	1.5 1.6 0.79 0.12	</Wespe>
+        <G20_Marder_II>	1.5 1.6 0.13 0.3	</G20_Marder_II>
+        <PanzerJager_I>	1.3 1.7 0.000000 0.25	</PanzerJager_I>
+        <Sturmpanzer_II>	1.5 1.6 0.33 0.11	</Sturmpanzer_II>
+        <Grille>	1.2 1.4 0.03 0.09	</Grille>
+        <VK3002DB>	1.2 1.2 0.08 0.000000	</VK3002DB>
+        <PzII_Luchs>	1.3 1.4 0.25 0.32	</PzII_Luchs>
+        <VK1602>	1.3 1.2 0.34 0.55	</VK1602>
+        <VK3001P>	1.3 1 0.69 0.1	</VK3001P>
+        <PzIII_IV>	1.2 1 0.000000 0.000000	</PzIII_IV>
+        <PzV_PzIV>	1.4 1.5 0.000000 0.000000	</PzV_PzIV>
+        <PzV_PzIV_ausf_Alfa>	1 1.1 0.11 0.06	</PzV_PzIV_ausf_Alfa>
+        <H39_captured>	1 1 0.000000 0.15	</H39_captured>
+        <S35_captured>	1 1 0.000000 0.24	</S35_captured>
+        <B-1bis_captured>	1.3 1.4 0.95 0.09	</B-1bis_captured>
+        <PzII_J>	1 1 0.27 0.06	</PzII_J>
+        <Ferdinand>	1.2 1.3 0.8 0.000000	</Ferdinand>
+        <Maus>	1.2 1.4 0.000000 0.8	</Maus>
+        <JagdTiger>	1 1.4 0.16 0.98	</JagdTiger>
+        <G_Tiger>	1.2 1.7 0.8 0.26	</G_Tiger>
+        <G_Panther>	1.5 1.2 0.2 0.65	</G_Panther>
+        <Lowe>	1 1.3 0.37 0.000000	</Lowe>
+        <Pz38_NA>	1.2 1.4 0.000000 0.000000	</Pz38_NA>
+        <VK4502P>	1.3 1.5 0.2 0.000000	</VK4502P>
+        <Panther_II>	1.2 1.3 0.66 0.8	</Panther_II>
+        <G_E>	1.4 1.5 0.2 0.000000	</G_E>
+        <T-25>	2 1 0.28 0.22	</T-25>
+        <T-15>	2.3 1 0.000000 0.000000	</T-15>
+        <E-75>	2.5 2.6 0.38 0.000000	</E-75>
+        <E-100>	2.7 2.4 0.06 0.1	</E-100>
+        <VK2801>	1.8 2 0.36 0.000000	</VK2801>
+        <E-50>	2.7 2.8 0.000000 0.000000	</E-50>
+        <PzVI_Tiger_P>	1.8 1.7 0.04 0.04	</PzVI_Tiger_P>
+        <VK4502A>	2.2 2.2 0.16 0.000000	</VK4502A>
+        <PzIV_Hydro>	2.5 2.4 0.16 0.000000	</PzIV_Hydro>
+      </tiling>
+    </GrayZigzag>
+    <Honeycomb>
+      <texture>	vehicles/german/Camouflage/Cger_1_8Honeycomb.dds	</texture>
+      <priceFactor>	1	</priceFactor>
+      <description>	#vehicle_customization:camouflage/germany/tricolor/Honeycomb	</description>
+      <id>	10	</id>
+      <groups>	tricolor	</groups>
+      <colors>
+        <c0>	10 10 3 196	</c0>
+        <c1>	166 40 4 121	</c1>
+        <c2>	250 213 86 229	</c2>
+        <c3>	186 147 12 62	</c3>
+      </colors>
+      <tiling>
+        <PzV>	3.2 4 0.4 1	</PzV>
+        <PzIV>	3.6 3.7 0.34 0.000000	</PzIV>
+        <Hummel>	2.5 3 0.83 0.66	</Hummel>
+        <PzVI>	3.4 3.2 0.72 0.000000	</PzVI>
+        <StuGIII>	2.7 2.7 0.000000 0.6	</StuGIII>
+        <PzII>	2.2 3.1 0.59 0.72	</PzII>
+        <Pz35t>	2.5 2.1 0.2 0.54	</Pz35t>
+        <Pz38t>	2.2 1.8 0.1 0.31	</Pz38t>
+        <Hetzer>	1.7 2 0.37 0.000000	</Hetzer>
+        <PzIII>	2.7 2.5 0.000000 0.26	</PzIII>
+        <Bison_I>	2.3 2.3 0.000000 0.21	</Bison_I>
+        <Ltraktor>	2.3 2.3 0.27 0.08	</Ltraktor>
+        <VK3001H>	2.3 2.5 0.32 0.05	</VK3001H>
+        <PzIII_A>	3 3 0.94 0.18	</PzIII_A>
+        <VK3601H>	2.6 3 0.73 0.78	</VK3601H>
+        <PzVIB_Tiger_II>	2.6 2.7 0.6 0.48	</PzVIB_Tiger_II>
+        <JagdPzIV>	2.1 3 0.74 0.08	</JagdPzIV>
+        <JagdPanther>	2.9 3 0.96 0.27	</JagdPanther>
+        <Wespe>	3 4.1 0.88 0.97	</Wespe>
+        <G20_Marder_II>	2.9 3.3 0.97 0.49	</G20_Marder_II>
+        <PanzerJager_I>	3 3 0.000000 0.000000	</PanzerJager_I>
+        <Sturmpanzer_II>	3 3 0.01 0.6	</Sturmpanzer_II>
+        <Grille>	2.8 2.9 0.14 0.09	</Grille>
+        <VK3002DB>	3 3 0.21 0.06	</VK3002DB>
+        <PzII_Luchs>	2.7 3.6 0.03 0.16	</PzII_Luchs>
+        <VK1602>	2.2 2.4 0.13 0.79	</VK1602>
+        <VK3001P>	2.7 3 0.95 0.67	</VK3001P>
+        <PzIII_IV>	3 3.1 0.24 0.04	</PzIII_IV>
+        <PzV_PzIV>	3 3 0.000000 0.1	</PzV_PzIV>
+        <PzV_PzIV_ausf_Alfa>	3 3 0.000000 0.16	</PzV_PzIV_ausf_Alfa>
+        <S35_captured>	2.4 3 0.000000 0.000000	</S35_captured>
+        <H39_captured>	2.3 2.4 0.000000 0.38	</H39_captured>
+        <B-1bis_captured>	3 3.3 0.19 0.54	</B-1bis_captured>
+        <PzII_J>	2.3 2.8 0.33 0.19	</PzII_J>
+        <Ferdinand>	2.5 3.6 0.93 0.17	</Ferdinand>
+        <Maus>	2.3 3 0.22 0.96	</Maus>
+        <JagdTiger>	2.9 3.4 0.13 0.6	</JagdTiger>
+        <G_Tiger>	3 3.8 0.8 0.2	</G_Tiger>
+        <G_Panther>	2.7 3.3 0.77 0.28	</G_Panther>
+        <Lowe>	3.1 3.6 0.4 0.46	</Lowe>
+        <Pz38_NA>	3.1 3.1 0.000000 0.000000	</Pz38_NA>
+        <VK4502P>	3.7 3.9 0.6 0.000000	</VK4502P>
+        <Panther_II>	4.6 5.8 0.000000 0.4	</Panther_II>
+        <G_E>	3.3 3.8 0.41 0.000000	</G_E>
+        <T-25>	2.7 1.9 0.18 0.07	</T-25>
+        <T-15>	3 1.6 0.000000 0.000000	</T-15>
+        <E-75>	3.9 3.9 0.68 0.26	</E-75>
+        <E-100>	3.4 3.5 0.000000 0.04	</E-100>
+        <VK2801>	2.9 2.8 0.14 0.2	</VK2801>
+        <E-50>	3.5 3.7 0.14 0.000000	</E-50>
+        <PzVI_Tiger_P>	2.9 2.9 0.1 0.000000	</PzVI_Tiger_P>
+        <VK4502A>	2.6 2.6 0.44 0.1	</VK4502A>
+        <PzIV_Hydro>	3.5 3.4 0.06 0.000000	</PzIV_Hydro>
+      </tiling>
+    </Honeycomb>
+    <Germany_Victim_Black>
+      <texture>	vehicles/german/Camouflage/Germany_Victim_Black.dds	</texture>
+      <priceFactor>	0.000000	</priceFactor>
+      <description></description>
+      <id>	25	</id>
+      <groups>	bicolor	</groups>
+      <colors>
+        <c0>	0 0 0 201	</c0>
+        <c1>	32 32 32 176	</c1>
+        <c2>	0 0 0 255	</c2>
+        <c3>	0 0 0 62	</c3>
+      </colors>
+      <tiling>
+        <Maus>	1.2 2 0.81 0.47	</Maus>
+      </tiling>
+      <notInShop>	true	</notInShop>
+    </Germany_Victim_Black>
+    <Germany_Victim_Gold>
+      <texture>	vehicles/german/Camouflage/Germany_Victim_Black.dds	</texture>
+      <priceFactor>	0.000000	</priceFactor>
+      <description></description>
+      <id>	26	</id>
+      <groups>	bicolor	</groups>
+      <colors>
+        <c0>	238 218 72 157	</c0>
+        <c1>	218 188 16 123	</c1>
+        <c2>	0 0 0 0	</c2>
+        <c3>	0 0 0 0	</c3>
+      </colors>
+      <tiling>
+        <Maus>	1.2 1.6 0.42 0.1	</Maus>
+      </tiling>
+      <notInShop>	true	</notInShop>
+    </Germany_Victim_Gold>
+    <Germany_Victim_Red>
+      <texture>	vehicles/german/Camouflage/Germany_Victim_Black.dds	</texture>
+      <priceFactor>	0.000000	</priceFactor>
+      <description></description>
+      <id>	27	</id>
+      <groups>	bicolor	</groups>
+      <colors>
+        <c0>	91 0 0 218	</c0>
+        <c1>	115 13 13 142	</c1>
+        <c2>	0 0 0 0	</c2>
+        <c3>	0 0 0 17	</c3>
+      </colors>
+      <tiling>
+        <Maus>	1.2 2 0.38 0.31	</Maus>
+      </tiling>
+      <notInShop>	true	</notInShop>
+    </Germany_Victim_Red>
+    <Germany_Victim_Silver>
+      <texture>	vehicles/german/Camouflage/Germany_Victim_Black.dds	</texture>
+      <priceFactor>	0.000000	</priceFactor>
+      <description></description>
+      <id>	28	</id>
+      <groups>	bicolor	</groups>
+      <colors>
+        <c0>	173 173 173 220	</c0>
+        <c1>	144 144 144 177	</c1>
+        <c2>	0 0 0 0	</c2>
+        <c3>	0 0 0 0	</c3>
+      </colors>
+      <tiling>
+        <Maus>	1.3 1.7 0.54 0.46	</Maus>
+      </tiling>
+      <notInShop>	true	</notInShop>
+    </Germany_Victim_Silver>
+  </camouflages>
+</customization.xml>

@@ -1,0 +1,131 @@
+<weather.xml>
+  <Clear></Clear>
+  <Cloudy>
+    <skyBox>	weather/models/clear_overhead.model	</skyBox>
+    <skyBox>	weather/models/horizon_ring_cloud.model	</skyBox>
+    <windSpeed>	1.0 0	</windSpeed>
+    <windGustiness>	1.0	</windGustiness>
+    <default>	spaces/highlands	</default>
+  </Cloudy>
+  <Cloudy2>
+    <skyBox>	weather/models/overhead02.model	</skyBox>
+    <skyBox>	weather/models/horizon_ring_cloud02.model	</skyBox>
+    <windSpeed>	1.5 0	</windSpeed>
+    <windGustiness>	1.0	</windGustiness>
+  </Cloudy2>
+  <Urban>
+    <skyBox>	weather/models/overhead02.model	</skyBox>
+    <rain>	0.25	</rain>
+    <sun>	1.2 1.5 1.9 1.0	</sun>
+    <ambient>	1.1 1.1 1.2 1.0	</ambient>
+    <fog>	0.5 0.5 0.5 2.0	</fog>
+    <sfx>	sfx/rain.xml	</sfx>
+    <windSpeed>	6.0 0	</windSpeed>
+    <windGustiness>	2.0	</windGustiness>
+    <default>	spaces/urban	</default>
+  </Urban>
+  <Cloudy3>
+    <skyBox>	weather/models/overhead03.model	</skyBox>
+    <windSpeed>	2.0 0	</windSpeed>
+    <windGustiness>	1.0	</windGustiness>
+    <default>	spaces/desert	</default>
+  </Cloudy3>
+  <Cloudy4>
+    <skyBox>	weather/models/overhead04.model	</skyBox>
+    <skyBox>	weather/models/horizon_ring_cloud.model	</skyBox>
+    <windSpeed>	1.0 0	</windSpeed>
+    <windGustiness>	1.0	</windGustiness>
+  </Cloudy4>
+  <Stormy>
+    <skyBox>	weather/models/storm_overhead.model	</skyBox>
+    <skyBox>	weather/models/horizon_ring_storm.model	</skyBox>
+    <sun>	1.101961 1.113726 1.011765 1.000000	</sun>
+    <ambient>	0.9 0.9 0.95 1.0	</ambient>
+    <fog>	0.7 0.7 0.75 2.0	</fog>
+    <windSpeed>	7.0 0	</windSpeed>
+    <windGustiness>	1.0	</windGustiness>
+  </Stormy>
+  <Rainy>
+    <skyBox>	weather/models/storm_overhead.model	</skyBox>
+    <skyBox>	weather/models/horizon_ring_storm.model	</skyBox>
+    <rain>	0.25	</rain>
+    <sun>	1.109804 1.109804 1.019608 1.000000	</sun>
+    <ambient>	0.592157 0.913725 0.984314 1.000000	</ambient>
+    <fog>	0.5 0.5 0.5 2.0	</fog>
+    <sfx>	sfx/rain.xml	</sfx>
+    <windSpeed>	6.0 0	</windSpeed>
+    <windGustiness>	2.0	</windGustiness>
+  </Rainy>
+  <Hail>
+    <skyBox>	weather/models/storm_overhead.model	</skyBox>
+    <skyBox>	weather/models/horizon_ring_storm.model	</skyBox>
+    <rain>	1	</rain>
+    <sun>	1.000000 1.078431 1.000000 1.000000	</sun>
+    <ambient>	1.000000 0.890196 0.666667 1.000000	</ambient>
+    <fog>	0.803922 0.992157 0.921569 3.000000	</fog>
+    <sfx>	sfx/hail.xml	</sfx>
+    <windSpeed>	4.0 0	</windSpeed>
+    <windGustiness>	1.0	</windGustiness>
+  </Hail>
+  <DustStorm>
+    <skyBox>	weather/models/storm_overhead.model	</skyBox>
+    <skyBox>	weather/models/horizon_ring_storm.model	</skyBox>
+    <sun>	0.8 0.7 0.7 1.0	</sun>
+    <ambient>	1.1 0.9 0.9 1.0	</ambient>
+    <fog>	0.9 0.7 0.7 5.0	</fog>
+    <sfx>	sfx/dust_storm.xml	</sfx>
+    <windSpeed>	10.0 0	</windSpeed>
+    <windGustiness>	1.0	</windGustiness>
+    <exclude>	spaces/arctic	</exclude>
+  </DustStorm>
+  <Snow>
+    <skyBox>	weather/models/storm_overhead.model	</skyBox>
+    <skyBox>	weather/models/horizon_ring_storm.model	</skyBox>
+    <sun>	1.0 1.4 1.8 1.0	</sun>
+    <ambient>	1.1 1.1 1.1 1.0	</ambient>
+    <fog>	0.8 0.8 1.0 2.0	</fog>
+    <temperature>	-5.0	</temperature>
+    <sfx>	sfx/snow.xml	</sfx>
+    <windSpeed>	5.0 0	</windSpeed>
+    <windGustiness>	1.0	</windGustiness>
+    <exclude>	spaces/desert	</exclude>
+    <default>	spaces/arctic	</default>
+  </Snow>
+  <Blizzard>
+    <skyBox>	weather/models/storm_overhead.model	</skyBox>
+    <skyBox>	weather/models/horizon_ring_storm.model	</skyBox>
+    <sun>	1.1 1.3 1.7 1.0	</sun>
+    <ambient>	0.9 0.9 0.9 1.0	</ambient>
+    <fog>	0.9 0.9 1.0 8.0	</fog>
+    <temperature>	-5.0	</temperature>
+    <sfx>	sfx/blizzard.xml	</sfx>
+    <fogFactor>	0.06	</fogFactor>
+    <windSpeed>	9.0 0	</windSpeed>
+    <windGustiness>	1.0	</windGustiness>
+    <exclude>	spaces/desert	</exclude>
+  </Blizzard>
+  <Fog>
+    <skyBox>	weather/models/storm_overhead.model	</skyBox>
+    <skyBox>	weather/models/horizon_ring_storm.model	</skyBox>
+    <sun>	1.000000 1.000000 1.000000 1.000000	</sun>
+    <ambient>	1.0 1.0 1.0 1.0	</ambient>
+    <fog>	1.0 1.0 1.0 7.0	</fog>
+    <temperature>	-5.0	</temperature>
+    <sfx>	sfx/fog.xml	</sfx>
+    <fogFactor>	0.06	</fogFactor>
+    <windSpeed>	0.1 0	</windSpeed>
+    <windGustiness>	0.0	</windGustiness>
+  </Fog>
+  <PeaSoup>
+    <skyBox>	weather/models/storm_overhead.model	</skyBox>
+    <skyBox>	weather/models/horizon_ring_storm.model	</skyBox>
+    <sun>	1.000000 1.000000 1.000000 1.000000	</sun>
+    <ambient>	1.0 1.0 1.0 1.0	</ambient>
+    <fog>	1.0 1.0 1.0 8.0	</fog>
+    <temperature>	-5.0	</temperature>
+    <sfx>	sfx/fog_pea_soup.xml	</sfx>
+    <fogFactor>	0.06	</fogFactor>
+    <windSpeed>	0.0 0	</windSpeed>
+    <windGustiness>	0.0	</windGustiness>
+  </PeaSoup>
+</weather.xml>

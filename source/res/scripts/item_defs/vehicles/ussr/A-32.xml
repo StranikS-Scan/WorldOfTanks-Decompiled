@@ -1,0 +1,270 @@
+<A-32.xml>
+  <crew>
+    <commander>	gunner	</commander>
+    <radioman></radioman>
+    <driver></driver>
+    <loader></loader>
+  </crew>
+  <speedLimits>
+    <forward>	70	</forward>
+    <backward>	20	</backward>
+  </speedLimits>
+  <repairCost>	4.0	</repairCost>
+  <effects>
+    <destruction>	mediumDestruction	</destruction>
+    <explosion>	mediumExplosion	</explosion>
+    <flaming>	mediumFlaming	</flaming>
+    <collision>	collision	</collision>
+  </effects>
+  <camouflage>
+    <priceFactor>	0.8	</priceFactor>
+    <tiling>	1 1 0 0	</tiling>
+    <exclusionMask>	vehicles/russian/R68_A-32/A-32_CM.DDS	</exclusionMask>
+  </camouflage>
+  <emblems>
+    <default>	ussr_star	</default>
+    <lodDist>	MEDIUM	</lodDist>
+    <alpha>	0.82	</alpha>
+  </emblems>
+  <horns>
+    <priceFactor>	1.0	</priceFactor>
+    <distanceFactor>	1.0	</distanceFactor>
+    <volumeFactor>	1.0	</volumeFactor>
+  </horns>
+  <hull>
+    <models>
+      <undamaged>	vehicles/russian/R68_A-32/normal/lod0/Hull.model	</undamaged>
+      <destroyed>	vehicles/russian/R68_A-32/crash/lod0/Hull.model	</destroyed>
+      <exploded>	vehicles/russian/R68_A-32/crash/lod0/Hull.model	</exploded>
+    </models>
+    <swinging>
+      <lodDist>	FAR	</lodDist>
+      <pitchParams>	0.28 34.00 0.42 1.00 0.05 0.3	</pitchParams>
+      <rollParams>	1.00 0.28 34.00 0.42 1.00 0.05 0.3	</rollParams>
+      <sensitivityToImpulse>	0.56	</sensitivityToImpulse>
+    </swinging>
+    <exhaust>
+      <pixie>	particles/Tank/engine_exit_diesel.xml	</pixie>
+      <nodes>	HP_Track_Exhaus_1 HP_Track_Exhaus_2	</nodes>
+      <rates>	5.0 10.0 25.0	</rates>
+    </exhaust>
+    <turretPositions>
+      <turret>	0.000000 0.692409 0.640146	</turret>
+    </turretPositions>
+    <hitTester>
+      <collisionModel>	vehicles/russian/R68_A-32/collision/Hull.model	</collisionModel>
+    </hitTester>
+    <armor>
+      <armor_1>	35	</armor_1>
+      <armor_2>	30	</armor_2>
+      <armor_3>	16	</armor_3>
+      <armor_4>	10	</armor_4>
+      <armor_5>	10	</armor_5>
+      <armor_6>	35	</armor_6>
+      <armor_7>	30	</armor_7>
+      <armor_8>	10	</armor_8>
+    </armor>
+    <primaryArmor>	armor_1 armor_2 armor_3	</primaryArmor>
+    <weight>	9600	</weight>
+    <maxHealth>	300.0	</maxHealth>
+    <ammoBayHealth>
+      <maxHealth>	140	</maxHealth>
+      <maxRegenHealth>	80	</maxRegenHealth>
+      <repairCost>	1.0	</repairCost>
+    </ammoBayHealth>
+    <emblemSlots>
+      <clan>
+        <rayStart>	-0.742102 0.684931 1.96678	</rayStart>
+        <rayEnd>	-0.742102 0.353315 1.7431	</rayEnd>
+        <rayUp>	0.000000 0.000000 -1	</rayUp>
+        <size>	0.32	</size>
+        <hideIfDamaged>	false	</hideIfDamaged>
+      </clan>
+    </emblemSlots>
+  </hull>
+  <chassis>
+    <A-32>
+      <userString>	#ussr_vehicles:A-32	</userString>
+      <description>	#ussr_vehicles:A-32_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 8 0	</icon>
+      <tags></tags>
+      <level>	5	</level>
+      <price>	7960.0	</price>
+      <notInShop>	true	</notInShop>
+      <models>
+        <undamaged>	vehicles/russian/R68_A-32/normal/lod0/Chassis.model	</undamaged>
+        <destroyed>	vehicles/russian/R68_A-32/crash/lod0/Chassis.model	</destroyed>
+        <exploded>	vehicles/russian/R68_A-32/crash/lod0/Chassis.model	</exploded>
+      </models>
+      <traces>
+        <lodDist>	FAR	</lodDist>
+        <bufferPrefs>	mediumTank	</bufferPrefs>
+        <textureSet>	usa_02	</textureSet>
+        <size>	0.32 0.46	</size>
+      </traces>
+      <tracks>
+        <lodDist>	MEDIUM	</lodDist>
+        <leftMaterial>	track_mat_L_skinned	</leftMaterial>
+        <rightMaterial>	track_mat_R_skinned	</rightMaterial>
+        <textureScale>	-0.805	</textureScale>
+      </tracks>
+      <wheels>
+        <lodDist>	MEDIUM	</lodDist>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	W_L	</template>
+          <radius>	0.424778	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	5	</count>
+        </group>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	W_R	</template>
+          <radius>	0.424778	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	5	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <name>	WD_L0	</name>
+          <radius>	0.275369	</radius>
+        </wheel>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <name>	WD_L1	</name>
+          <radius>	0.308868	</radius>
+        </wheel>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <name>	WD_R0	</name>
+          <radius>	0.275369	</radius>
+        </wheel>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <name>	WD_R1	</name>
+          <radius>	0.308868	</radius>
+        </wheel>
+      </wheels>
+      <drivingWheels>	WD_L0 WD_L1	</drivingWheels>
+      <effects>
+        <lodDist>	MEDIUM	</lodDist>
+        <dust>	mediumTankDust	</dust>
+        <mud>	mediumTankMud	</mud>
+      </effects>
+      <sound>	/vehicles/tanks/treads/treads_2	</sound>
+      <hullPosition>	0.000000 0.83347 0.000000	</hullPosition>
+      <hitTester>
+        <collisionModel>	vehicles/russian/R68_A-32/collision/Chassis.model	</collisionModel>
+      </hitTester>
+      <armor>
+        <leftTrack>	15	</leftTrack>
+        <rightTrack>	15	</rightTrack>
+      </armor>
+      <topRightCarryingPoint>	1.12499 1.79732	</topRightCarryingPoint>
+      <maxClimbAngle>	25	</maxClimbAngle>
+      <navmeshGirth>	6.0	</navmeshGirth>
+      <weight>	5000	</weight>
+      <maxLoad>	21300	</maxLoad>
+      <terrainResistance>	0.9 1.0 1.8	</terrainResistance>
+      <brakeForce>	36500	</brakeForce>
+      <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
+      <rotationSpeed>	40	</rotationSpeed>
+      <shotDispersionFactors>
+        <vehicleMovement>	0.22	</vehicleMovement>
+        <vehicleRotation>	0.22	</vehicleRotation>
+      </shotDispersionFactors>
+      <bulkHealthFactor>	3.0	</bulkHealthFactor>
+      <maxHealth>	100	</maxHealth>
+      <maxRegenHealth>	75	</maxRegenHealth>
+      <repairCost>	5.0	</repairCost>
+    </A-32>
+  </chassis>
+  <turrets0>
+    <A-32_mod_1939>
+      <userString>	#ussr_vehicles:A-32_mod_1939	</userString>
+      <description>	#ussr_vehicles:A-32_mod_1939_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 6 0	</icon>
+      <tags></tags>
+      <level>	4	</level>
+      <price>	3980.0	</price>
+      <notInShop>	true	</notInShop>
+      <models>
+        <undamaged>	vehicles/russian/R68_A-32/normal/lod0/Turret_01.model	</undamaged>
+        <destroyed>	vehicles/russian/R68_A-32/crash/lod0/Turret_01.model	</destroyed>
+        <exploded>	vehicles/russian/R68_A-32/crash/lod0/Turret_01.model	</exploded>
+      </models>
+      <hitTester>
+        <collisionModel>	vehicles/russian/R68_A-32/collision/Turret_01.model	</collisionModel>
+      </hitTester>
+      <yawLimits>	-180 180	</yawLimits>
+      <gunPosition>	0.000000 0.393613 0.725464	</gunPosition>
+      <armor>
+        <armor_1>	25	</armor_1>
+        <armor_2>	25	</armor_2>
+        <armor_3>	25	</armor_3>
+        <armor_4>	25	</armor_4>
+        <armor_5>	10	</armor_5>
+        <armor_6>	10	</armor_6>
+        <armor_7>	0	</armor_7>
+        <armor_8>	0	</armor_8>
+      </armor>
+      <primaryArmor>	armor_1 armor_2 armor_3	</primaryArmor>
+      <weight>	3200	</weight>
+      <maxHealth>	60	</maxHealth>
+      <rotationSpeed>	46	</rotationSpeed>
+      <turretRotatorHealth>
+        <maxHealth>	100	</maxHealth>
+        <maxRegenHealth>	49	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </turretRotatorHealth>
+      <circularVisionRadius>	360	</circularVisionRadius>
+      <surveyingDeviceHealth>
+        <maxHealth>	100	</maxHealth>
+        <maxRegenHealth>	49	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </surveyingDeviceHealth>
+      <guns>
+        <_76mm_L-10U>	shared	  <maxAmmo>	72	</maxAmmo>
+          <models>
+            <undamaged>	vehicles/russian/R68_A-32/normal/lod0/Gun_01.model	</undamaged>
+            <destroyed>	vehicles/russian/R68_A-32/crash/lod0/Gun_01.model	</destroyed>
+            <exploded>	vehicles/russian/R68_A-32/crash/lod0/Gun_01.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/russian/R68_A-32/collision/Gun_01.model	</collisionModel>
+          </hitTester>
+          <armor>
+            <armor_1>	25	  <noDamage>	true	</noDamage>
+            </armor_1>
+            <gun>	20	</gun>
+          </armor>
+        </_76mm_L-10U>
+      </guns>
+      <emblemSlots>
+        <player>
+          <rayStart>	-0.697149 0.481497 0.626581	</rayStart>
+          <rayEnd>	-0.343639 0.314275 0.542514	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.3	</size>
+          <hideIfDamaged>	true	</hideIfDamaged>
+        </player>
+        <player>
+          <rayStart>	0.697149 0.481497 0.626581	</rayStart>
+          <rayEnd>	0.343639 0.314275 0.542514	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.3	</size>
+          <hideIfDamaged>	false	</hideIfDamaged>
+        </player>
+      </emblemSlots>
+    </A-32_mod_1939>
+  </turrets0>
+  <engines>
+    <BD-2>	shared	</BD-2>
+  </engines>
+  <fuelTanks>
+    <Average>	shared	</Average>
+  </fuelTanks>
+  <radios>
+    <_71-TK-3U>	shared	</_71-TK-3U>
+  </radios>
+</A-32.xml>

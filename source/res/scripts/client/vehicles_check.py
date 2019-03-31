@@ -1,4 +1,6 @@
+# Python bytecode 2.6 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/vehicles_check.py
+# Compiled at: 2010-01-13 16:20:32
 import BigWorld
 from items import vehicles
 from debug_utils import *

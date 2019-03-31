@@ -1,0 +1,433 @@
+<T95.xml>
+  <crew>
+    <commander>	radioman	</commander>
+    <gunner></gunner>
+    <driver></driver>
+    <loader></loader>
+  </crew>
+  <speedLimits>
+    <forward>	13	</forward>
+    <backward>	6	</backward>
+  </speedLimits>
+  <repairCost>	9	</repairCost>
+  <effects>
+    <destruction>	smallDestruction	</destruction>
+    <explosion>	smallExplosion	</explosion>
+    <flaming>	smallFlaming	</flaming>
+    <collision>	collision	</collision>
+  </effects>
+  <camouflage>
+    <priceFactor>	1.8	</priceFactor>
+    <tiling>	1 1 0 0	</tiling>
+    <exclusionMask>	vehicles/american/A40_T95/T95_CM.dds	</exclusionMask>
+  </camouflage>
+  <emblems>
+    <default>	usa_star	</default>
+    <lodDist>	MEDIUM	</lodDist>
+    <alpha>	0.886275	</alpha>
+  </emblems>
+  <horns>
+    <priceFactor>	1.0	</priceFactor>
+    <distanceFactor>	1.0	</distanceFactor>
+    <volumeFactor>	1.0	</volumeFactor>
+  </horns>
+  <hull>
+    <models>
+      <undamaged>	vehicles/american/A40_T95/normal/lod0/Hull.model	</undamaged>
+      <destroyed>	vehicles/american/A40_T95/crash/lod0/Hull.model	</destroyed>
+      <exploded>	vehicles/american/A40_T95/crash/lod0/Hull.model	</exploded>
+    </models>
+    <swinging>
+      <lodDist>	FAR	</lodDist>
+      <pitchParams>	0.2 38.00 0.40 1.00 0.04 0.27	</pitchParams>
+      <rollParams>	1.00 0.2 38.00 0.40 1.00 0.04 0.27	</rollParams>
+      <sensitivityToImpulse>	0.1	</sensitivityToImpulse>
+    </swinging>
+    <exhaust>
+      <pixie>	particles/Tank/engine_exit_gass.xml	</pixie>
+      <nodes>	HP_Track_Exhaus_1	</nodes>
+      <rates>	5.0 10.0 25.0	</rates>
+    </exhaust>
+    <turretPositions>
+      <turret>	0.000000 0.599013 2.27255	</turret>
+    </turretPositions>
+    <fakeTurrets>
+      <lobby>	0	</lobby>
+      <battle>	0	</battle>
+    </fakeTurrets>
+    <hitTester>
+      <collisionModel>	vehicles/american/A40_T95/collision/Hull.model	</collisionModel>
+    </hitTester>
+    <armor>
+      <armor_1>	305	</armor_1>
+      <armor_2>	133	</armor_2>
+      <armor_3>	64	</armor_3>
+      <armor_4>	51	</armor_4>
+      <armor_5>	25	</armor_5>
+      <armor_6>	51	</armor_6>
+      <armor_7>	25	</armor_7>
+      <armor_8>	38	</armor_8>
+      <armor_9>	152	</armor_9>
+      <armor_10>	51	  <noDamage>	true	</noDamage>
+      </armor_10>
+      <armor_11>	38	  <noDamage>	true	</noDamage>
+      </armor_11>
+      <armor_12>	100	  <noDamage>	true	</noDamage>
+      </armor_12>
+      <armor_13>	25	  <noDamage>	true	</noDamage>
+      </armor_13>
+      <armor_14>	50	</armor_14>
+      <armor_15>	152	</armor_15>
+      <surveyingDevice>	40	</surveyingDevice>
+    </armor>
+    <primaryArmor>	armor_1 armor_15 armor_4	</primaryArmor>
+    <weight>	63750	</weight>
+    <maxHealth>	1690	</maxHealth>
+    <ammoBayHealth>
+      <maxHealth>	260	</maxHealth>
+      <maxRegenHealth>	180	</maxRegenHealth>
+      <repairCost>	1.0	</repairCost>
+    </ammoBayHealth>
+    <emblemSlots>
+      <clan>
+        <rayStart>	1.81476 0.312036 3.94355	</rayStart>
+        <rayEnd>	1.81475 0.0983984 3.60538	</rayEnd>
+        <rayUp>	0.000000 1 0.000000	</rayUp>
+        <size>	0.32	</size>
+        <hideIfDamaged>	true	</hideIfDamaged>
+      </clan>
+      <player>
+        <rayStart>	1.96353 0.717602 0.84167	</rayStart>
+        <rayEnd>	1.75434 0.376664 0.84167	</rayEnd>
+        <rayUp>	0.680713 -0.41767 -0.601815	</rayUp>
+        <size>	0.32	</size>
+        <hideIfDamaged>	false	</hideIfDamaged>
+      </player>
+    </emblemSlots>
+  </hull>
+  <chassis>
+    <Chassis_T95>
+      <userString>	#usa_vehicles:Chassis_T95	</userString>
+      <description>	#usa_vehicles:Chassis_T95_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 8 0	</icon>
+      <tags></tags>
+      <level>	8	</level>
+      <price>	29300	</price>
+      <unlocks>
+        <chassis>	Chassis_T95_2	  <cost>	23400	</cost>
+        </chassis>
+      </unlocks>
+      <models>
+        <undamaged>	vehicles/american/A40_T95/normal/lod0/Chassis.model	</undamaged>
+        <destroyed>	vehicles/american/A40_T95/crash/lod0/Chassis.model	</destroyed>
+        <exploded>	vehicles/american/A40_T95/crash/lod0/Chassis.model	</exploded>
+      </models>
+      <traces>
+        <lodDist>	FAR	</lodDist>
+        <bufferPrefs>	largeTank	</bufferPrefs>
+        <textureSet>	usa_T95	</textureSet>
+        <size>	0.32 1.06	</size>
+      </traces>
+      <tracks>
+        <lodDist>	MEDIUM	</lodDist>
+        <leftMaterial>	track_mat_L_skinned	</leftMaterial>
+        <rightMaterial>	track_mat_R_skinned	</rightMaterial>
+        <textureScale>	-0.76	</textureScale>
+      </tracks>
+      <wheels>
+        <lodDist>	MEDIUM	</lodDist>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <name>	WD_R0	</name>
+          <radius>	0.303639	</radius>
+        </wheel>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <name>	WD_R1	</name>
+          <radius>	0.354779	</radius>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	W_R	</template>
+          <radius>	0.266031	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	8	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <name>	WD_L0	</name>
+          <radius>	0.302982	</radius>
+        </wheel>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <name>	WD_L1	</name>
+          <radius>	0.354012	</radius>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	W_L	</template>
+          <radius>	0.265456	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	8	</count>
+        </group>
+      </wheels>
+      <drivingWheels>	WD_L0 WD_L1	</drivingWheels>
+      <effects>
+        <lodDist>	MEDIUM	</lodDist>
+        <dust>	largeTankDust	</dust>
+        <mud>	largeTankMud	</mud>
+      </effects>
+      <sound>	/vehicles/tanks/treads/treads_1	</sound>
+      <hullPosition>	0.000000 0.9 0.000000	</hullPosition>
+      <hitTester>
+        <collisionModel>	vehicles/american/A40_T95/collision/Chassis.model	</collisionModel>
+      </hitTester>
+      <armor>
+        <leftTrack>	40	</leftTrack>
+        <rightTrack>	40	</rightTrack>
+      </armor>
+      <topRightCarryingPoint>	1.53048 2.69324	</topRightCarryingPoint>
+      <maxClimbAngle>	25	</maxClimbAngle>
+      <navmeshGirth>	6.0	</navmeshGirth>
+      <weight>	18000	</weight>
+      <maxLoad>	86890	</maxLoad>
+      <terrainResistance>	1.2 1.5 2.5	</terrainResistance>
+      <brakeForce>	35500	</brakeForce>
+      <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
+      <rotationSpeed>	16	</rotationSpeed>
+      <shotDispersionFactors>
+        <vehicleMovement>	0.2	</vehicleMovement>
+        <vehicleRotation>	0.2	</vehicleRotation>
+      </shotDispersionFactors>
+      <bulkHealthFactor>	3.0	</bulkHealthFactor>
+      <maxHealth>	220	</maxHealth>
+      <maxRegenHealth>	165	</maxRegenHealth>
+      <repairCost>	5.0	</repairCost>
+    </Chassis_T95>
+    <Chassis_T95_2>
+      <userString>	#usa_vehicles:Chassis_T95_2	</userString>
+      <description>	#usa_vehicles:Chassis_T95_2_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 8 0	</icon>
+      <tags></tags>
+      <level>	9	</level>
+      <price>	62500	</price>
+      <models>
+        <undamaged>	vehicles/american/A40_T95/normal/lod0/Chassis.model	</undamaged>
+        <destroyed>	vehicles/american/A40_T95/crash/lod0/Chassis.model	</destroyed>
+        <exploded>	vehicles/american/A40_T95/crash/lod0/Chassis.model	</exploded>
+      </models>
+      <traces>
+        <lodDist>	FAR	</lodDist>
+        <bufferPrefs>	largeTank	</bufferPrefs>
+        <textureSet>	usa_T95	</textureSet>
+        <size>	0.32 1.06	</size>
+      </traces>
+      <tracks>
+        <lodDist>	MEDIUM	</lodDist>
+        <leftMaterial>	track_mat_L_skinned	</leftMaterial>
+        <rightMaterial>	track_mat_R_skinned	</rightMaterial>
+        <textureScale>	-0.76	</textureScale>
+      </tracks>
+      <wheels>
+        <lodDist>	MEDIUM	</lodDist>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <name>	WD_R0	</name>
+          <radius>	0.303639	</radius>
+        </wheel>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <name>	WD_R1	</name>
+          <radius>	0.354779	</radius>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	W_R	</template>
+          <radius>	0.266031	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	8	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <name>	WD_L0	</name>
+          <radius>	0.302982	</radius>
+        </wheel>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <name>	WD_L1	</name>
+          <radius>	0.354012	</radius>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	W_L	</template>
+          <radius>	0.265456	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	8	</count>
+        </group>
+      </wheels>
+      <drivingWheels>	WD_L0 WD_L1	</drivingWheels>
+      <effects>
+        <lodDist>	MEDIUM	</lodDist>
+        <dust>	largeTankDust	</dust>
+        <mud>	largeTankMud	</mud>
+      </effects>
+      <sound>	/vehicles/tanks/treads/treads_1	</sound>
+      <hullPosition>	0.000000 0.9 0.000000	</hullPosition>
+      <hitTester>
+        <collisionModel>	vehicles/american/A40_T95/collision/Chassis.model	</collisionModel>
+      </hitTester>
+      <armor>
+        <leftTrack>	40	</leftTrack>
+        <rightTrack>	40	</rightTrack>
+      </armor>
+      <topRightCarryingPoint>	1.53048 2.69324	</topRightCarryingPoint>
+      <maxClimbAngle>	25	</maxClimbAngle>
+      <navmeshGirth>	6.0	</navmeshGirth>
+      <weight>	18000	</weight>
+      <maxLoad>	91890	</maxLoad>
+      <terrainResistance>	1.1 1.2 2.0	</terrainResistance>
+      <brakeForce>	35500	</brakeForce>
+      <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
+      <rotationSpeed>	18	</rotationSpeed>
+      <shotDispersionFactors>
+        <vehicleMovement>	0.17	</vehicleMovement>
+        <vehicleRotation>	0.17	</vehicleRotation>
+      </shotDispersionFactors>
+      <bulkHealthFactor>	3.0	</bulkHealthFactor>
+      <maxHealth>	250	</maxHealth>
+      <maxRegenHealth>	190	</maxRegenHealth>
+      <repairCost>	5.0	</repairCost>
+    </Chassis_T95_2>
+  </chassis>
+  <turrets0>
+    <Turret_1_T95>
+      <userString>	#usa_vehicles:Turret_1_T95	</userString>
+      <description>	#usa_vehicles:Turret_1_T95_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 6 0	</icon>
+      <tags></tags>
+      <level>	9	</level>
+      <price>	120.0	</price>
+      <notInShop>	true	</notInShop>
+      <models>
+        <undamaged>	vehicles/american/A40_T95/normal/lod0/Turret_01.model	</undamaged>
+        <destroyed>	vehicles/american/A40_T95/crash/lod0/Turret_01.model	</destroyed>
+        <exploded>	vehicles/american/A40_T95/crash/lod0/Turret_01.model	</exploded>
+      </models>
+      <hitTester>
+        <collisionModel>	vehicles/american/A40_T95/collision/Turret_01.model	</collisionModel>
+      </hitTester>
+      <yawLimits>	-10 11	</yawLimits>
+      <gunPosition>	0.000000 0.000000 0.000000	</gunPosition>
+      <armor>
+        <armor_1>	0	</armor_1>
+        <armor_2>	0	</armor_2>
+        <armor_3>	0	</armor_3>
+        <armor_4>	0	</armor_4>
+        <armor_5>	0	</armor_5>
+        <armor_6>	0	</armor_6>
+        <armor_7>	0	</armor_7>
+        <armor_8>	0	</armor_8>
+      </armor>
+      <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
+      <weight>	1700	</weight>
+      <maxHealth>	10	</maxHealth>
+      <rotationSpeed>	30	</rotationSpeed>
+      <turretRotatorHealth>
+        <maxHealth>	100	</maxHealth>
+        <maxRegenHealth>	49	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </turretRotatorHealth>
+      <circularVisionRadius>	440	</circularVisionRadius>
+      <surveyingDeviceHealth>
+        <maxHealth>	100	</maxHealth>
+        <maxRegenHealth>	49	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </surveyingDeviceHealth>
+      <guns>
+        <_105mm_AT_Gun_T5E1>	shared	  <maxAmmo>	62	</maxAmmo>
+          <pitchLimits>	-20 5	</pitchLimits>
+          <reloadTime>	6.5	</reloadTime>
+          <unlocks>
+            <gun>	_120mm_AT_Gun_T53	  <cost>	63000	</cost>
+            </gun>
+          </unlocks>
+          <shotDispersionFactors>
+            <turretRotation>	0.08	</turretRotation>
+            <afterShot>	4.0	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <models>
+            <undamaged>	vehicles/american/A40_T95/normal/lod0/Gun_01.model	</undamaged>
+            <destroyed>	vehicles/american/A40_T95/crash/lod0/Gun_01.model	</destroyed>
+            <exploded>	vehicles/american/A40_T95/crash/lod0/Gun_01.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/american/A40_T95/collision/Gun_01.model	</collisionModel>
+          </hitTester>
+          <armor>
+            <armor_1>	292	  <noDamage>	true	</noDamage>
+            </armor_1>
+            <gun>	40	</gun>
+          </armor>
+        </_105mm_AT_Gun_T5E1>
+        <_120mm_AT_Gun_T53>	shared	  <maxAmmo>	42	</maxAmmo>
+          <pitchLimits>	-20 5	</pitchLimits>
+          <reloadTime>	7.6	</reloadTime>
+          <unlocks>
+            <gun>	_155mm_AT_Gun_T7	  <cost>	66500	</cost>
+            </gun>
+          </unlocks>
+          <models>
+            <undamaged>	vehicles/american/A40_T95/normal/lod0/Gun_02.model	</undamaged>
+            <destroyed>	vehicles/american/A40_T95/crash/lod0/Gun_02.model	</destroyed>
+            <exploded>	vehicles/american/A40_T95/crash/lod0/Gun_02.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/american/A40_T95/collision/Gun_02.model	</collisionModel>
+          </hitTester>
+          <armor>
+            <armor_1>	292	  <noDamage>	true	</noDamage>
+            </armor_1>
+            <gun>	50	</gun>
+          </armor>
+        </_120mm_AT_Gun_T53>
+        <_155mm_AT_Gun_T7>	shared	  <maxAmmo>	30	</maxAmmo>
+          <pitchLimits>	-20 5	</pitchLimits>
+          <models>
+            <undamaged>	vehicles/american/A40_T95/normal/lod0/Gun_03.model	</undamaged>
+            <destroyed>	vehicles/american/A40_T95/crash/lod0/Gun_03.model	</destroyed>
+            <exploded>	vehicles/american/A40_T95/crash/lod0/Gun_03.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/american/A40_T95/collision/Gun_03.model	</collisionModel>
+          </hitTester>
+          <armor>
+            <armor_1>	292	  <noDamage>	true	</noDamage>
+            </armor_1>
+            <gun>	70	</gun>
+          </armor>
+        </_155mm_AT_Gun_T7>
+      </guns>
+      <emblemSlots></emblemSlots>
+    </Turret_1_T95>
+  </turrets0>
+  <engines>
+    <Ford_GAF>	shared	  <unlocks>
+        <engine>	Ford_GAFM2	  <cost>	5250	</cost>
+        </engine>
+      </unlocks>
+    </Ford_GAF>
+    <Ford_GAFM2>	shared	</Ford_GAFM2>
+  </engines>
+  <fuelTanks>
+    <Heavy>	shared	</Heavy>
+  </fuelTanks>
+  <radios>
+    <SCR_508>	shared	  <unlocks>
+        <radio>	SCR_528	  <cost>	9000	</cost>
+        </radio>
+      </unlocks>
+    </SCR_508>
+    <SCR_528>	shared	</SCR_528>
+  </radios>
+</T95.xml>

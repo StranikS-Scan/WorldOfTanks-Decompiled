@@ -1,0 +1,4080 @@
+<destructibles_effects.xml>
+  <trees>
+    <lifetime_appletree_petal>
+      <variant1>
+        <stages>
+          <base>	10000.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/trees/lifetime_appletree_petal.xml	</file>
+            <force>	1	</force>
+          </pixie>
+        </effects>
+      </variant1>
+    </lifetime_appletree_petal>
+    <lifetime_greenleafs>
+      <variant1>
+        <stages>
+          <base>	10000.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/trees/lifetime_greenleafs.xml	</file>
+            <force>	1	</force>
+          </pixie>
+        </effects>
+      </variant1>
+    </lifetime_greenleafs>
+    <lifetime_yellowleafs>
+      <variant1>
+        <stages>
+          <base>	10000.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/trees/lifetime_yellowleafs.xml	</file>
+            <force>	1	</force>
+          </pixie>
+        </effects>
+      </variant1>
+    </lifetime_yellowleafs>
+    <treeFracture_yellow>
+      <variant1>
+        <stages>
+          <base>	6.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/trees/tree_fall_yellow.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <name>	/objects/treefall/treefall_creak	</name>
+          </sound>
+        </effects>
+      </variant1>
+    </treeFracture_yellow>
+    <treeTouchdown_yellow>
+      <variant1>
+        <stages>
+          <base>	5.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/trees/tree_touchdown_yellow.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <name>	/objects/treefall/treefall_down	</name>
+          </sound>
+        </effects>
+      </variant1>
+    </treeTouchdown_yellow>
+    <treeFracture_green>
+      <variant1>
+        <stages>
+          <base>	6.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/trees/tree_fall_green.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <name>	/objects/treefall/treefall_creak	</name>
+          </sound>
+        </effects>
+      </variant1>
+    </treeFracture_green>
+    <treeTouchdown_green>
+      <variant1>
+        <stages>
+          <base>	5.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/trees/tree_touchdown_green.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <name>	/objects/treefall/treefall_down	</name>
+          </sound>
+        </effects>
+      </variant1>
+    </treeTouchdown_green>
+    <appletreeFracture>
+      <variant1>
+        <stages>
+          <base>	6.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/trees/appletree_fall.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <name>	/objects/treefall/treefall_creak	</name>
+          </sound>
+        </effects>
+      </variant1>
+    </appletreeFracture>
+    <appletreeTouchdown>
+      <variant1>
+        <stages>
+          <base>	5.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/trees/appletree_touchdown.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <name>	/objects/treefall/treefall_down	</name>
+          </sound>
+        </effects>
+      </variant1>
+    </appletreeTouchdown>
+    <deadtreeFracture>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/trees/deadtree_fall.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <name>	/objects/treefall/treefall_creak	</name>
+          </sound>
+        </effects>
+      </variant1>
+    </deadtreeFracture>
+    <deadtreeTouchdown>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/trees/deadtree_touchdown.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <name>	/objects/treefall/treefall_down	</name>
+          </sound>
+        </effects>
+      </variant1>
+    </deadtreeTouchdown>
+    <deadtreesmall_Fracture>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/trees/deadtree_small_fall.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <name>	/objects/treefall/treefall_creak	</name>
+          </sound>
+        </effects>
+      </variant1>
+    </deadtreesmall_Fracture>
+    <deadtreesmall_Touchdown>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/trees/deadtree_small_touchdown.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <name>	/objects/treefall/treefall_down	</name>
+          </sound>
+        </effects>
+      </variant1>
+    </deadtreesmall_Touchdown>
+    <deadtreeTouchdown_s>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/trees/deadtree_touchdown_s.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <name>	/objects/treefall/treefall_down	</name>
+          </sound>
+        </effects>
+      </variant1>
+    </deadtreeTouchdown_s>
+    <deadtreesmall_Touchdown_s>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/trees/deadtree_small_touchdown_s.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <name>	/objects/treefall/treefall_down	</name>
+          </sound>
+        </effects>
+      </variant1>
+    </deadtreesmall_Touchdown_s>
+    <palmFracture_01>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/trees/palm01_fall.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <name>	/objects/treefall/treefall_creak	</name>
+          </sound>
+        </effects>
+      </variant1>
+    </palmFracture_01>
+    <palmTouchdown_01>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/trees/palm01_touchdown.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <name>	/objects/treefall/treefall_down	</name>
+          </sound>
+        </effects>
+      </variant1>
+    </palmTouchdown_01>
+    <palmFracture_02>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/trees/palm02_fall.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <name>	/objects/treefall/treefall_creak	</name>
+          </sound>
+        </effects>
+      </variant1>
+    </palmFracture_02>
+    <palmTouchdown_02>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/trees/palm02_touchdown.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <name>	/objects/treefall/treefall_down	</name>
+          </sound>
+        </effects>
+      </variant1>
+    </palmTouchdown_02>
+    <palmFracture_03>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/trees/palm03_fall.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <name>	/objects/treefall/treefall_creak	</name>
+          </sound>
+        </effects>
+      </variant1>
+    </palmFracture_03>
+    <palmTouchdown_03>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/trees/palm03_touchdown.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <name>	/objects/treefall/treefall_down	</name>
+          </sound>
+        </effects>
+      </variant1>
+    </palmTouchdown_03>
+  </trees>
+  <fallingAtoms>
+    <envAM_sign_fracture>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/envAM_005_sign_fracture.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <name>	/objects/fuel_barrel/fuel_barrel_mid	</name>
+          </sound>
+        </effects>
+      </variant1>
+    </envAM_sign_fracture>
+    <envAM_sign_touchdown>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/envAM_005_sign_touchdown.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <name>	/objects/telegraph_pole/pole_metall_touch	</name>
+          </sound>
+        </effects>
+      </variant1>
+    </envAM_sign_touchdown>
+    <env201_Fracture>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/env201_Fracture.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <name>	/objects/fuel_barrel/fuel_barrel_mid	</name>
+          </sound>
+        </effects>
+      </variant1>
+    </env201_Fracture>
+    <env201_Touchdown>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/env201_Touchdown.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <name>	/objects/fuel_barrel/fuel_barrel_mid	</name>
+          </sound>
+        </effects>
+      </variant1>
+    </env201_Touchdown>
+    <env403_Fracture>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/env403_Fracture.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <name>	/objects/fuel_barrel/fuel_barrel_mid	</name>
+          </sound>
+        </effects>
+      </variant1>
+    </env403_Fracture>
+    <env403_Touchdown>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/env403_Touchdown.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <name>	/objects/fuel_barrel/fuel_barrel_mid	</name>
+          </sound>
+        </effects>
+      </variant1>
+    </env403_Touchdown>
+    <signFracture>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/sign_fall.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <name>	/objects/fuel_barrel/fuel_barrel_mid	</name>
+          </sound>
+        </effects>
+      </variant1>
+    </signFracture>
+    <signTouchdown>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/sign_touchdown.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <name>	/objects/telegraph_pole/pole_metall_touch	</name>
+          </sound>
+        </effects>
+      </variant1>
+    </signTouchdown>
+    <smallpole>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/metallbin_des.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <name>	/objects/telegraph_pole/pole	</name>
+          </sound>
+        </effects>
+      </variant1>
+    </smallpole>
+    <poleFracture>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/pillar_fall.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <name>	/objects/telegraph_pole/pole	</name>
+          </sound>
+        </effects>
+      </variant1>
+    </poleFracture>
+    <poleTouchdown>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/pillar_touchdown.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <name>	/objects/telegraph_pole/pole_down	</name>
+          </sound>
+        </effects>
+      </variant1>
+    </poleTouchdown>
+    <small_streetLampFracture>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/streetlamp_fall.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <name>	/objects/fuel_barrel/fuel_barrel_mid	</name>
+          </sound>
+        </effects>
+      </variant1>
+    </small_streetLampFracture>
+    <small_streetLampTouchdown>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/streetlamp_touchdown.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <name>	/objects/telegraph_pole/pole_metall_touch	</name>
+          </sound>
+        </effects>
+      </variant1>
+    </small_streetLampTouchdown>
+    <streetlightTouchdown>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/pillar_touchdown.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <name>	/objects/telegraph_pole/touchdown_street_lights	</name>
+          </sound>
+        </effects>
+      </variant1>
+    </streetlightTouchdown>
+    <metallpoleFracture>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/metallpillar_fall.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <name>	/objects/fuel_barrel/fuel_barrel_mid	</name>
+          </sound>
+        </effects>
+      </variant1>
+    </metallpoleFracture>
+    <metallpoleTouchdown>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/metallpillar_touchdown.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <name>	/objects/telegraph_pole/pole_metall_touch	</name>
+          </sound>
+        </effects>
+      </variant1>
+    </metallpoleTouchdown>
+    <metallpole_huge_Fracture>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/metallpillar_fall.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <name>	/objects/metall_pole_huge/squeak	</name>
+          </sound>
+        </effects>
+      </variant1>
+    </metallpole_huge_Fracture>
+    <metallpole_huge_Touchdown>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/metallpillar_touchdown.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <name>	/objects/metall_pole_huge/touch	</name>
+          </sound>
+        </effects>
+      </variant1>
+    </metallpole_huge_Touchdown>
+  </fallingAtoms>
+  <fragiles>
+    <armybox>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/gerbox_expl.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <name>	/objects/wood_box_mid/wood_box_mid	</name>
+          </sound>
+        </effects>
+      </variant1>
+    </armybox>
+    <AF_jug_01>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/AF_jug_01.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <name>	/objects/fence/stone_crash_mid	</name>
+          </sound>
+        </effects>
+      </variant1>
+    </AF_jug_01>
+    <AF_jug_02>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/AF_jug_02.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <name>	/objects/fence/stone_crash_mid	</name>
+          </sound>
+        </effects>
+      </variant1>
+    </AF_jug_02>
+    <AF_shed>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/AF_shed01.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <name>	/objects/structures/wood_barrel	</name>
+          </sound>
+        </effects>
+      </variant1>
+    </AF_shed>
+    <blrSC_004_column>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/blrSC_004.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <name>	/objects/fence/stone_crash_mid	</name>
+          </sound>
+        </effects>
+      </variant1>
+    </blrSC_004_column>
+    <barrel_wooden>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/barrel_expl_01.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <name>	/objects/structures/wood_barrel	</name>
+          </sound>
+        </effects>
+      </variant1>
+    </barrel_wooden>
+    <barrel_big_wooden>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/barrel_big_expl_01.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <name>	/objects/structures/wood_barrel	</name>
+          </sound>
+        </effects>
+      </variant1>
+    </barrel_big_wooden>
+    <bench_wooden>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/wooden_bench.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <name>	/objects/buildings/toilet	</name>
+          </sound>
+        </effects>
+      </variant1>
+    </bench_wooden>
+    <boat>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/boat_des.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <name>	/objects/buildings/toilet	</name>
+          </sound>
+        </effects>
+      </variant1>
+    </boat>
+    <bobbin_01>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/bobbin_01.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <name>	/objects/buildings/toilet	</name>
+          </sound>
+        </effects>
+      </variant1>
+    </bobbin_01>
+    <bobbin_03>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/bobbin_03.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <name>	/objects/buildings/toilet	</name>
+          </sound>
+        </effects>
+      </variant1>
+    </bobbin_03>
+    <canisters>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/canisters_expl.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <name>	/objects/structures/car_corps	</name>
+          </sound>
+        </effects>
+      </variant1>
+    </canisters>
+    <cafe_01>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/env037_Cafe_01.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <name>	/objects/buildings/toilet	</name>
+          </sound>
+        </effects>
+      </variant1>
+    </cafe_01>
+    <cafe_02>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/env037_Cafe_02.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <name>	/objects/buildings/toilet	</name>
+          </sound>
+        </effects>
+      </variant1>
+    </cafe_02>
+    <cistern>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/cistern_expl.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <name>	/objects/fuel_tank/fuel_tank	</name>
+          </sound>
+        </effects>
+      </variant1>
+    </cistern>
+    <cart01>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/cart_expl_01.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <name>	/objects/buildings/toilet	</name>
+          </sound>
+        </effects>
+      </variant1>
+    </cart01>
+    <cart02>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/cart_expl_02.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <name>	/objects/buildings/toilet	</name>
+          </sound>
+        </effects>
+      </variant1>
+    </cart02>
+    <carcrash>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/carcrash.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <name>	/objects/structures/car_corps	</name>
+          </sound>
+        </effects>
+      </variant1>
+    </carcrash>
+    <callbox_01>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/callbox_01.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <name>	/objects/structures/car_corps	</name>
+          </sound>
+        </effects>
+      </variant1>
+    </callbox_01>
+    <callbox_02>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/callbox_02.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <name>	/objects/structures/car_corps	</name>
+          </sound>
+        </effects>
+      </variant1>
+    </callbox_02>
+    <churchgate>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/churchgate.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <name>	/objects/fence//objects/buildings/toilet	</name>
+          </sound>
+        </effects>
+      </variant1>
+    </churchgate>
+    <doghouse>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/doghouse_des.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <name>	/objects/dog_house/dog_house	</name>
+          </sound>
+        </effects>
+      </variant1>
+    </doghouse>
+    <envAF_015_skeleton>
+      <variant1>
+        <stages>
+          <base>	5.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/envAF_015_Skeleton_01.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <name>	/objects/buildings/toilet	</name>
+          </sound>
+        </effects>
+      </variant1>
+    </envAF_015_skeleton>
+    <envAM_002_Barrel>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/envAM_002_Barrel.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <name>	/objects/fuel_tank/fuel_tank	</name>
+          </sound>
+        </effects>
+      </variant1>
+    </envAM_002_Barrel>
+    <envAM_011_Truck01>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/envAM_011_Truck01.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <name>	/objects/structures/car_corps	</name>
+          </sound>
+        </effects>
+      </variant1>
+    </envAM_011_Truck01>
+    <envAM_014_PetrolPump>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/envAM_014_PetrolPump.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <name>	/objects/structures/car_corps	</name>
+          </sound>
+        </effects>
+      </variant1>
+    </envAM_014_PetrolPump>
+    <envAM_016_01>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/envAM_016_01.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <name>	/objects/buildings/toilet	</name>
+          </sound>
+        </effects>
+      </variant1>
+    </envAM_016_01>
+    <envAM_016_02>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/envAM_016_02.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <name>	/objects/buildings/toilet	</name>
+          </sound>
+        </effects>
+      </variant1>
+    </envAM_016_02>
+    <envAM_021_basket>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/envAM_021_basket.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <name>	/objects/hay_stack/hay_stack	</name>
+          </sound>
+        </effects>
+      </variant1>
+    </envAM_021_basket>
+    <envAM_035_Scarecrow>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/envAM_035_Scarecrow.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <name>	/objects/hay_stack/hay_stack	</name>
+          </sound>
+        </effects>
+      </variant1>
+    </envAM_035_Scarecrow>
+    <env037_fence_corner>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/env037_fence_corner.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <name>	/objects/buildings/toilet	</name>
+          </sound>
+        </effects>
+      </variant1>
+    </env037_fence_corner>
+    <env037_fence_end>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/env037_fence_end.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <name>	/objects/buildings/toilet	</name>
+          </sound>
+        </effects>
+      </variant1>
+    </env037_fence_end>
+    <env037_fence_tile>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/env037_fence_tile.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <name>	/objects/buildings/toilet	</name>
+          </sound>
+        </effects>
+      </variant1>
+    </env037_fence_tile>
+    <env037_umbrella>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/env037_umbrella.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <name>	/objects/hay_stack/hay_stack	</name>
+          </sound>
+        </effects>
+      </variant1>
+    </env037_umbrella>
+    <env052_01>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/env052_01.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <name>	/objects/buildings/toilet	</name>
+          </sound>
+        </effects>
+      </variant1>
+    </env052_01>
+    <env052_02>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/env052_02.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <name>	/objects/hay_stack/hay_stack	</name>
+          </sound>
+        </effects>
+      </variant1>
+    </env052_02>
+    <env427_sculpture_01>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/env427_sculpture01.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <name>	/objects/fence/stone_crash_mid	</name>
+          </sound>
+        </effects>
+      </variant1>
+    </env427_sculpture_01>
+    <env427_sculpture_02>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/env427_sculpture02.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <name>	/objects/fence/stone_crash_mid	</name>
+          </sound>
+        </effects>
+      </variant1>
+    </env427_sculpture_02>
+    <env427_sculpture_03>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/env427_sculpture03.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <name>	/objects/fence/stone_crash_mid	</name>
+          </sound>
+        </effects>
+      </variant1>
+    </env427_sculpture_03>
+    <firewood01>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/firewood_01.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <name>	/objects/structures/firewood	</name>
+          </sound>
+        </effects>
+      </variant1>
+    </firewood01>
+    <firewood_small>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/firewood_01.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <name>	/objects/structures/firewood_small	</name>
+          </sound>
+        </effects>
+      </variant1>
+    </firewood_small>
+    <firewood_stuck>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/firewood_stack.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <name>	/objects/structures/firewood_small	</name>
+          </sound>
+        </effects>
+      </variant1>
+    </firewood_stuck>
+    <flowerbed>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/flowerbox.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <name>	/objects/fence/stone_crash_mid	</name>
+          </sound>
+        </effects>
+      </variant1>
+    </flowerbed>
+    <fuel>
+      <variant1>
+        <stages>
+          <base>	5.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/fuel_expl.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <name>	/objects/fuel_tank/fuel_tank	</name>
+          </sound>
+        </effects>
+      </variant1>
+    </fuel>
+    <gaf001_Fence>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/gaf001_fence.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <name>	/objects/fence/fence_light_wood	</name>
+          </sound>
+        </effects>
+      </variant1>
+    </gaf001_Fence>
+    <gaf002_Fence>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/gaf002_fence.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <name>	/objects/buildings/toilet	</name>
+          </sound>
+        </effects>
+      </variant1>
+    </gaf002_Fence>
+    <gaf003_Fence_01>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/gaf003_fence_01.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <name>	/objects/buildings/toilet	</name>
+          </sound>
+        </effects>
+      </variant1>
+    </gaf003_Fence_01>
+    <gaf003_Fence_02>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/gaf003_fence_02.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <name>	/objects/fence/fence_wire	</name>
+          </sound>
+        </effects>
+      </variant1>
+    </gaf003_Fence_02>
+    <gaf004_Fence_01>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/gaf004_fence_01.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <name>	/objects/fence/stone_wood	</name>
+          </sound>
+        </effects>
+      </variant1>
+    </gaf004_Fence_01>
+    <gaf004_Fence_02>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/gaf004_fence_02.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <name>	/objects/fence/fence_stone_mid	</name>
+          </sound>
+        </effects>
+      </variant1>
+    </gaf004_Fence_02>
+    <gaf005_Fence>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/gaf005_fence_01.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <name>	/objects/fence/fence_stone_metall_mid	</name>
+          </sound>
+        </effects>
+      </variant1>
+    </gaf005_Fence>
+    <gaf011_Fence>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/gaf011_fence.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <name>	/objects/buildings/toilet	</name>
+          </sound>
+        </effects>
+      </variant1>
+    </gaf011_Fence>
+    <gaf013_Fence>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/gaf013_fence.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <name>	/objects/buildings/toilet	</name>
+          </sound>
+        </effects>
+      </variant1>
+    </gaf013_Fence>
+    <gaf018_Fence>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/gaf018_fence.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <name>	/objects/buildings/toilet	</name>
+          </sound>
+        </effects>
+      </variant1>
+    </gaf018_Fence>
+    <gaf022_Fence>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/gaf022_fence_01.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <name>	/objects/fence/fence_stone_metall_mid	</name>
+          </sound>
+        </effects>
+      </variant1>
+    </gaf022_Fence>
+    <gafAM_001_WhiteFence_end>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/gafAM_001_WhiteFence_end.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <name>	/objects/fence/stone_wood	</name>
+          </sound>
+        </effects>
+      </variant1>
+    </gafAM_001_WhiteFence_end>
+    <gafAM_001_WhiteFence_gate>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/gafAM_001_WhiteFence_gate.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <name>	/objects/fence/stone_wood	</name>
+          </sound>
+        </effects>
+      </variant1>
+    </gafAM_001_WhiteFence_gate>
+    <gafAM_001_WhiteFence_tile>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/gafAM_001_WhiteFence_tile.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <name>	/objects/fence/stone_wood	</name>
+          </sound>
+        </effects>
+      </variant1>
+    </gafAM_001_WhiteFence_tile>
+    <gafAM_002_1>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/gafAM_002_1.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <name>	/objects/fence/stone_wood	</name>
+          </sound>
+        </effects>
+      </variant1>
+    </gafAM_002_1>
+    <gafAM_002_2>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/gafAM_002_2.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <name>	/objects/fence/stone_wood	</name>
+          </sound>
+        </effects>
+      </variant1>
+    </gafAM_002_2>
+    <gafAM_002_3>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/gafAM_002_3.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <name>	/objects/fence/stone_wood	</name>
+          </sound>
+        </effects>
+      </variant1>
+    </gafAM_002_3>
+    <gafAM_003_WhiteFence_gate>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/gafAM_003_WhiteFence_gate.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <name>	/objects/fence/stone_wood	</name>
+          </sound>
+        </effects>
+      </variant1>
+    </gafAM_003_WhiteFence_gate>
+    <gafAM_003_WhiteFence_tile>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/gafAM_003_WhiteFence_tile.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <name>	/objects/fence/stone_wood	</name>
+          </sound>
+        </effects>
+      </variant1>
+    </gafAM_003_WhiteFence_tile>
+    <gafAM_004_1>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/gafAM_004_1.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <name>	/objects/fence/fence_light_wood	</name>
+          </sound>
+        </effects>
+      </variant1>
+    </gafAM_004_1>
+    <gafAM_004_2>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/gafAM_004_2.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <name>	/objects/fence/fence_light_wood	</name>
+          </sound>
+        </effects>
+      </variant1>
+    </gafAM_004_2>
+    <gafAF_002_Fence>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/gafAF_002.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <name>	/objects/buildings/toilet	</name>
+          </sound>
+        </effects>
+      </variant1>
+    </gafAF_002_Fence>
+    <gafAF_big_01>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/gafAF_big_01.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <name>	/objects/fence/stone_crash_mid	</name>
+          </sound>
+        </effects>
+      </variant1>
+    </gafAF_big_01>
+    <gafAF_big_02>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/gafAF_big_02.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <name>	/objects/fence/stone_crash_mid	</name>
+          </sound>
+        </effects>
+      </variant1>
+    </gafAF_big_02>
+    <gafAF_small_01>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/gafAF_small_01.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <name>	/objects/fence/stone_crash_mid	</name>
+          </sound>
+        </effects>
+      </variant1>
+    </gafAF_small_01>
+    <gafAF_small_02>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/gafAF_small_02.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <name>	/objects/fence/stone_crash_mid	</name>
+          </sound>
+        </effects>
+      </variant1>
+    </gafAF_small_02>
+    <gafBR_001_fence>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/gafBR_001_fence.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <name>	/objects/treefall/treefall_down	</name>
+          </sound>
+        </effects>
+      </variant1>
+    </gafBR_001_fence>
+    <gafBR_002>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/gafBR_002.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <name>	/objects/fence/stone_wood	</name>
+          </sound>
+        </effects>
+      </variant1>
+    </gafBR_002>
+    <gafBR_002_new>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/gafBR_002_new.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <name>	/objects/fence/stone_wood	</name>
+          </sound>
+        </effects>
+      </variant1>
+    </gafBR_002_new>
+    <gafBR_002_Gates>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/gafBR_002_Gates.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <name>	/objects/buildings/toilet	</name>
+          </sound>
+        </effects>
+      </variant1>
+    </gafBR_002_Gates>
+    <gafBR_002_Gates_new>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/gafBR_002_Gates_new.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <name>	/objects/buildings/toilet	</name>
+          </sound>
+        </effects>
+      </variant1>
+    </gafBR_002_Gates_new>
+    <gafNW_002>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/gafNW_002.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <name>	/objects/buildings/toilet	</name>
+          </sound>
+        </effects>
+      </variant1>
+    </gafNW_002>
+    <gafNW_002_new>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/gafNW_002_new.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <name>	/objects/buildings/toilet	</name>
+          </sound>
+        </effects>
+      </variant1>
+    </gafNW_002_new>
+    <gafNW_002_Gates>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/gafNW_002_Gates.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <name>	/objects/buildings/toilet	</name>
+          </sound>
+        </effects>
+      </variant1>
+    </gafNW_002_Gates>
+    <gafNW_002_Gates_new>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/gafNW_002_Gates_new.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <name>	/objects/buildings/toilet	</name>
+          </sound>
+        </effects>
+      </variant1>
+    </gafNW_002_Gates_new>
+    <gafF_001_end>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/gafF_001_end.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <name>	/objects/fence/fence_stone_mid	</name>
+          </sound>
+        </effects>
+      </variant1>
+    </gafF_001_end>
+    <gafF_001_tile>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/gafF_001_tile.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <name>	/objects/fence/fence_stone_mid	</name>
+          </sound>
+        </effects>
+      </variant1>
+    </gafF_001_tile>
+    <haystack>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/hay_stack.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <name>	/objects/hay_stack/hay_stack	</name>
+          </sound>
+        </effects>
+      </variant1>
+    </haystack>
+    <hay_envNW_008>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/hay_envNW_008.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <name>	/objects/hay_stack/hay_stack	</name>
+          </sound>
+        </effects>
+      </variant1>
+    </hay_envNW_008>
+    <kiosk>
+      <variant1>
+        <stages>
+          <base>	5.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/env607_kiosk.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <name>	/objects/buildings/toilet	</name>
+          </sound>
+        </effects>
+      </variant1>
+    </kiosk>
+    <envBR_004_pillar>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/envBR_004_pillar.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <name>	/objects/fuel_barrel/fuel_barrel_mid	</name>
+          </sound>
+        </effects>
+      </variant1>
+    </envBR_004_pillar>
+    <env053_Carousel>
+      <variant1>
+        <stages>
+          <base>	5.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/env053_carousel.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <name>	/objects/buildings/toilet	</name>
+          </sound>
+        </effects>
+      </variant1>
+    </env053_Carousel>
+    <env603_WashingLine>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/env603_WashingLine.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <name>	/objects/structures/linen	</name>
+          </sound>
+        </effects>
+      </variant1>
+    </env603_WashingLine>
+    <env605_Dovecote>
+      <variant1>
+        <stages>
+          <base>	5.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/env605_dovecote.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <name>	/objects/buildings/toilet	</name>
+          </sound>
+        </effects>
+      </variant1>
+    </env605_Dovecote>
+    <env606_Slide>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/env606_Slide.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <name>	/objects/buildings/toilet	</name>
+          </sound>
+        </effects>
+      </variant1>
+    </env606_Slide>
+    <env610_HorizontalBar>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/env610_HorizontalBar.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <name>	/objects/buildings/toilet	</name>
+          </sound>
+        </effects>
+      </variant1>
+    </env610_HorizontalBar>
+    <env612_Swing>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/env612_Swing.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <name>	/objects/buildings/toilet	</name>
+          </sound>
+        </effects>
+      </variant1>
+    </env612_Swing>
+    <locomotive>
+      <variant1>
+        <stages>
+          <base>	6.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/train_expl.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <name>	/objects/fuel_tank/fuel_tank	</name>
+          </sound>
+        </effects>
+      </variant1>
+    </locomotive>
+    <metallBin>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/metallbin_des.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <name>	/objects/fuel_barrel/fuel_barrel_mid	</name>
+          </sound>
+        </effects>
+      </variant1>
+    </metallBin>
+    <metall_expl>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/metall_expl.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <name>	/objects/fuel_barrel/fuel_barrel_mid	</name>
+          </sound>
+        </effects>
+      </variant1>
+    </metall_expl>
+    <metallcan>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/metallcan02_des.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <name>	/objects/structures/bidon	</name>
+          </sound>
+        </effects>
+      </variant1>
+    </metallcan>
+    <metallplate_01>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/metallplate_01.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <name>	/objects/fuel_barrel/fuel_barrel_mid	</name>
+          </sound>
+        </effects>
+      </variant1>
+    </metallplate_01>
+    <metallplate_02>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/metallplate_02.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <name>	/objects/fuel_barrel/fuel_barrel_mid	</name>
+          </sound>
+        </effects>
+      </variant1>
+      <variant2>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/metallplate_02_v2.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <name>	/objects/fuel_barrel/fuel_barrel_mid	</name>
+          </sound>
+        </effects>
+      </variant2>
+    </metallplate_02>
+    <metallStand>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/metallstand_des.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <name>	/objects/fuel_barrel/fuel_barrel_mid	</name>
+          </sound>
+        </effects>
+      </variant1>
+    </metallStand>
+    <mleAF_003_Airplane>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/mleAF_003_Airplane.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <name>	/objects/fuel_tank/fuel_tank	</name>
+          </sound>
+        </effects>
+      </variant1>
+    </mleAF_003_Airplane>
+    <mle013_WatchTower>
+      <variant1>
+        <stages>
+          <base>	6.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/mle013_WatchTower.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <name>	/objects/buildings/toilet	</name>
+          </sound>
+        </effects>
+      </variant1>
+    </mle013_WatchTower>
+    <oldVan_des_01>
+      <variant1>
+        <stages>
+          <base>	8.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/oldVan_01.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <name>	/objects/structures/car_corps	</name>
+          </sound>
+        </effects>
+      </variant1>
+    </oldVan_des_01>
+    <posterPillar>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/posterpillar.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <name>	/objects/fence/stone_crash_mid	</name>
+          </sound>
+        </effects>
+      </variant1>
+    </posterPillar>
+    <pole_laying>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/woodenbox_des.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <name>	/objects/structures/pole_laying	</name>
+          </sound>
+        </effects>
+      </variant1>
+    </pole_laying>
+    <rw_01>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/rw_01.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <name>	/objects/fence/stone_crash_mid	</name>
+          </sound>
+        </effects>
+      </variant1>
+    </rw_01>
+    <rw004_01>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/rw004_01.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <name>	/objects/fence/stone_crash_mid	</name>
+          </sound>
+        </effects>
+      </variant1>
+    </rw004_01>
+    <rw004_02>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/rw004_02.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <name>	/objects/fence/stone_crash_mid	</name>
+          </sound>
+        </effects>
+      </variant1>
+    </rw004_02>
+    <rw004_03>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/rw004_03.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <name>	/objects/fuel_barrel/fuel_barrel_mid	</name>
+          </sound>
+        </effects>
+      </variant1>
+    </rw004_03>
+    <rw004_06>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/rw004_06.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <name>	/objects/fuel_barrel/fuel_barrel_mid	</name>
+          </sound>
+        </effects>
+      </variant1>
+    </rw004_06>
+    <rwAM_006_RailwayCrane>
+      <variant1>
+        <stages>
+          <base>	6.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/rwAM_006_RailwayCrane.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <name>	/objects/fuel_tank/fuel_tank	</name>
+          </sound>
+        </effects>
+      </variant1>
+    </rwAM_006_RailwayCrane>
+    <small_ConcretePole>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/small_ConcretePole.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <name>	/objects/fence/stone_crash_mid	</name>
+          </sound>
+        </effects>
+      </variant1>
+    </small_ConcretePole>
+    <snowman>
+      <variant1>
+        <stages>
+          <base>	5.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/snowman_01.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <name>	/objects/hay_stack/hay_stack	</name>
+          </sound>
+        </effects>
+      </variant1>
+    </snowman>
+    <summerhouse>
+      <variant1>
+        <stages>
+          <base>	5.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/env604_sommerhouse.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <name>	/objects/buildings/toilet	</name>
+          </sound>
+        </effects>
+      </variant1>
+    </summerhouse>
+    <sandbag>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/sandbag.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <name>	/objects/hay_stack/hay_stack	</name>
+          </sound>
+        </effects>
+      </variant1>
+    </sandbag>
+    <SovietBus>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/env608_sovbas.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <name>	/objects/structures/car_corps	</name>
+          </sound>
+        </effects>
+      </variant1>
+    </SovietBus>
+    <stone_fence>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/stone_fence.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <name>	/objects/fence/stone_crash_mid	</name>
+          </sound>
+        </effects>
+      </variant1>
+    </stone_fence>
+    <stone_cross>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/stone_cross.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <name>	/objects/fence/stone_crash_mid	</name>
+          </sound>
+        </effects>
+      </variant1>
+    </stone_cross>
+    <stone_crypt_01>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/stone_crypt_01.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <name>	/objects/fence/fence_stone_mid	</name>
+          </sound>
+        </effects>
+      </variant1>
+    </stone_crypt_01>
+    <stone_crypt_02>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/stone_crypt_02.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <name>	/objects/fence/fence_stone_mid	</name>
+          </sound>
+        </effects>
+      </variant1>
+    </stone_crypt_02>
+    <trafficController>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/env609.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <name>	/objects/fence/stone_crash_mid	</name>
+          </sound>
+        </effects>
+      </variant1>
+    </trafficController>
+    <toilet>
+      <variant1>
+        <stages>
+          <base>	6.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/env014_toilet.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <name>	/objects/buildings/toilet	</name>
+          </sound>
+        </effects>
+      </variant1>
+    </toilet>
+    <Truck_des_01>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/oldTruck_01.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <name>	/objects/structures/car_corps	</name>
+          </sound>
+        </effects>
+      </variant1>
+    </Truck_des_01>
+    <Truck_des_02>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/oldTruck_02.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <name>	/objects/structures/car_corps	</name>
+          </sound>
+        </effects>
+      </variant1>
+      <variant2>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/oldTruck_03.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <name>	/objects/structures/car_corps	</name>
+          </sound>
+        </effects>
+      </variant2>
+    </Truck_des_02>
+    <Truck_des_03>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/oldTruck_03.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <name>	/objects/structures/car_corps	</name>
+          </sound>
+        </effects>
+      </variant1>
+    </Truck_des_03>
+    <townbench>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/town_bench_des.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <name>	/objects/buildings/toilet	</name>
+          </sound>
+        </effects>
+      </variant1>
+    </townbench>
+    <watchtower_1>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/watchtower_1.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <name>	/objects/buildings/toilet	</name>
+          </sound>
+        </effects>
+      </variant1>
+    </watchtower_1>
+    <watchtower_2>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/watchtower_2.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <name>	/objects/buildings/toilet	</name>
+          </sound>
+        </effects>
+      </variant1>
+    </watchtower_2>
+    <well_01>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/well_01.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <name>	/objects/fence/stone_crash_mid	</name>
+          </sound>
+        </effects>
+      </variant1>
+    </well_01>
+    <well_02>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/well_02.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <name>	/objects/buildings/toilet	</name>
+          </sound>
+        </effects>
+      </variant1>
+    </well_02>
+    <well_03>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/well_03.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <name>	/objects/fence/stone_crash_mid	</name>
+          </sound>
+        </effects>
+      </variant1>
+    </well_03>
+    <wirebarricade>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/wirebarricade.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <name>	/objects/wire_barricade/barricade_crash	</name>
+          </sound>
+        </effects>
+      </variant1>
+    </wirebarricade>
+    <woodenbox>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/woodenbox_des.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <name>	/objects/buildings/toilet	</name>
+          </sound>
+        </effects>
+      </variant1>
+    </woodenbox>
+    <wooden_cross>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/wooden_cross.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <name>	/objects/buildings/toilet	</name>
+          </sound>
+        </effects>
+      </variant1>
+    </wooden_cross>
+    <wooden_fence>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/wooden_fence.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <name>	/objects/telegraph_pole/pole	</name>
+          </sound>
+        </effects>
+      </variant1>
+    </wooden_fence>
+    <woodenstage>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/woodenstage_des.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <name>	/objects/fence/fence_light_wood	</name>
+          </sound>
+        </effects>
+      </variant1>
+    </woodenstage>
+    <wooden_chaiselongue>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/wooden_chaiselongue.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <name>	/objects/fence/fence_light_wood	</name>
+          </sound>
+        </effects>
+      </variant1>
+    </wooden_chaiselongue>
+    <wooden_pole>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/wooden_pole.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <name>	/objects/fence/fence_light_wood	</name>
+          </sound>
+        </effects>
+      </variant1>
+    </wooden_pole>
+    <wooden_booth>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/wooden_booth.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <name>	/objects/fence/fence_light_wood	</name>
+          </sound>
+        </effects>
+      </variant1>
+    </wooden_booth>
+    <beach_umbrella>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/beach_umbrella.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <name>	/objects/fence/fence_light_wood	</name>
+          </sound>
+        </effects>
+      </variant1>
+    </beach_umbrella>
+    <rescue_tower>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/rescue_tower.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <name>	/objects/fence/fence_light_wood	</name>
+          </sound>
+        </effects>
+      </variant1>
+    </rescue_tower>
+    <hedgehog>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/hedgehog.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <name>	/objects/fuel_barrel/fuel_barrel_mid	</name>
+          </sound>
+        </effects>
+      </variant1>
+    </hedgehog>
+    <waterpump>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/waterpump.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <name>	/objects/fuel_barrel/fuel_barrel_mid	</name>
+          </sound>
+        </effects>
+      </variant1>
+    </waterpump>
+  </fragiles>
+  <structures>
+    <AF_module_Up>
+      <variant1>
+        <stages>
+          <base>	6.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/buildings/AF_module_Up_expl.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <name>	/objects/buildings/wood_house	</name>
+          </sound>
+        </effects>
+      </variant1>
+    </AF_module_Up>
+    <AF_module_Down>
+      <variant1>
+        <stages>
+          <base>	6.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/buildings/AF_module_Down_expl.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <name>	/objects/buildings/wood_house	</name>
+          </sound>
+        </effects>
+      </variant1>
+    </AF_module_Down>
+    <AF_bld006>
+      <variant1>
+        <stages>
+          <base>	6.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/buildings/AF_bld006.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <name>	/objects/buildings/wood_house	</name>
+          </sound>
+        </effects>
+      </variant1>
+    </AF_bld006>
+    <buildings_fire>
+      <variant1>
+        <stages>
+          <delay>	4.0	</delay>
+          <base>	36000.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/buildings/building_fire_01.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <name>	/objects/fire/house_burn	</name>
+          </sound>
+        </effects>
+      </variant1>
+      <variant2>
+        <stages>
+          <delay>	3.0	</delay>
+          <base>	36000.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/buildings/building_fire_02.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <name>	/objects/fire/house_burn	</name>
+          </sound>
+        </effects>
+      </variant2>
+    </buildings_fire>
+    <bld_705>
+      <variant1>
+        <stages>
+          <base>	6.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/buildings/bld_705.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <name>	/objects/buildings/wood_house	</name>
+          </sound>
+        </effects>
+      </variant1>
+    </bld_705>
+    <bldAM_003_01>
+      <variant1>
+        <stages>
+          <base>	6.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/buildings/bldAM_003_01.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <name>	/objects/buildings/wood_house	</name>
+          </sound>
+        </effects>
+      </variant1>
+    </bldAM_003_01>
+    <bldAM_003_02>
+      <variant1>
+        <stages>
+          <base>	6.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/buildings/bldAM_003_02.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <name>	/objects/buildings/wood_house	</name>
+          </sound>
+        </effects>
+      </variant1>
+    </bldAM_003_02>
+    <bldAM_006_01_1>
+      <variant1>
+        <stages>
+          <base>	6.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/buildings/bldAM_006_01_1.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <name>	/objects/buildings/wood_house	</name>
+          </sound>
+        </effects>
+      </variant1>
+    </bldAM_006_01_1>
+    <bldAM_006_01_2>
+      <variant1>
+        <stages>
+          <base>	6.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/buildings/bldAM_006_01_2.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <name>	/objects/buildings/wood_house	</name>
+          </sound>
+        </effects>
+      </variant1>
+    </bldAM_006_01_2>
+    <bldAM_006_02_1>
+      <variant1>
+        <stages>
+          <base>	6.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/buildings/bldAM_006_02_1.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <name>	/objects/buildings/wood_house	</name>
+          </sound>
+        </effects>
+      </variant1>
+    </bldAM_006_02_1>
+    <bldAM_006_02_2>
+      <variant1>
+        <stages>
+          <base>	6.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/buildings/bldAM_006_02_2.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <name>	/objects/buildings/wood_house	</name>
+          </sound>
+        </effects>
+      </variant1>
+    </bldAM_006_02_2>
+    <bldAM_008_1>
+      <variant1>
+        <stages>
+          <base>	6.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/buildings/bldAM_008_1.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <name>	/objects/buildings/wood_house	</name>
+          </sound>
+        </effects>
+      </variant1>
+    </bldAM_008_1>
+    <bldAM_008_2>
+      <variant1>
+        <stages>
+          <base>	6.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/buildings/bldAM_008_2.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <name>	/objects/buildings/wood_house	</name>
+          </sound>
+        </effects>
+      </variant1>
+    </bldAM_008_2>
+    <bldAM_011_ServiceStation_HP1>
+      <variant1>
+        <stages>
+          <base>	6.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/buildings/bldAM_011_HP1.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <name>	/objects/buildings/wood_house	</name>
+          </sound>
+        </effects>
+      </variant1>
+    </bldAM_011_ServiceStation_HP1>
+    <bldAM_011_ServiceStation_HP4>
+      <variant1>
+        <stages>
+          <base>	6.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/buildings/bldAM_011_HP4.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <name>	/objects/buildings/wood_house	</name>
+          </sound>
+        </effects>
+      </variant1>
+    </bldAM_011_ServiceStation_HP4>
+    <bldAM_011_ServiceStation_HP5>
+      <variant1>
+        <stages>
+          <base>	6.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/buildings/bldAM_011_HP5.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <name>	/objects/buildings/wood_house	</name>
+          </sound>
+        </effects>
+      </variant1>
+    </bldAM_011_ServiceStation_HP5>
+    <bldAM_011_ServiceStation_HP6>
+      <variant1>
+        <stages>
+          <base>	6.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/buildings/bldAM_011_HP6.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <name>	/objects/buildings/wood_house	</name>
+          </sound>
+        </effects>
+      </variant1>
+    </bldAM_011_ServiceStation_HP6>
+    <bldAM_012>
+      <variant1>
+        <stages>
+          <base>	6.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/buildings/bldAM_012.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <name>	/objects/buildings/wood_house	</name>
+          </sound>
+        </effects>
+      </variant1>
+    </bldAM_012>
+    <bldF_006_Factory>
+      <variant1>
+        <stages>
+          <base>	6.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/buildings/bldF_006_Factory.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <name>	/objects/buildings/wood_house	</name>
+          </sound>
+        </effects>
+      </variant1>
+    </bldF_006_Factory>
+    <Elevator_expl>
+      <variant1>
+        <stages>
+          <base>	6.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/buildings/Elevator_01.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <name>	/objects/buildings/wood_house	</name>
+          </sound>
+        </effects>
+      </variant1>
+    </Elevator_expl>
+    <gafF_001_gate>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/gafF_001_gate.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <name>	/objects/fence/fence_stone_mid	</name>
+          </sound>
+        </effects>
+      </variant1>
+    </gafF_001_gate>
+    <Factory_01>
+      <variant1>
+        <stages>
+          <base>	6.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/buildings/Factory_01.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <name>	/objects/buildings/wood_house	</name>
+          </sound>
+        </effects>
+      </variant1>
+    </Factory_01>
+    <Factory_02>
+      <variant1>
+        <stages>
+          <base>	6.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/buildings/Factory_02.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <name>	/objects/buildings/wood_house	</name>
+          </sound>
+        </effects>
+      </variant1>
+    </Factory_02>
+    <KPP_01>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/buildings/KPP_01_des.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <name>	/objects/fuel_barrel/fuel_barrel_mid	</name>
+          </sound>
+        </effects>
+      </variant1>
+    </KPP_01>
+    <KPP_02>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/buildings/KPP_02_des.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <name>	/objects/telegraph_pole/pole	</name>
+          </sound>
+        </effects>
+      </variant1>
+    </KPP_02>
+    <roofmetal_ram>
+      <variant1>
+        <stages>
+          <base>	6.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/buildings/roof_metal_ram.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <name>	/objects/buildings/wood_house	</name>
+          </sound>
+        </effects>
+      </variant1>
+    </roofmetal_ram>
+    <roofmetal_expl>
+      <variant1>
+        <stages>
+          <base>	6.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/buildings/roof_metal_expl.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <name>	/objects/buildings/wood_house	</name>
+          </sound>
+        </effects>
+      </variant1>
+    </roofmetal_expl>
+    <roofwooden_expl>
+      <variant1>
+        <stages>
+          <base>	6.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/buildings/roof_wooden_crash.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <name>	/objects/buildings/wood_house	</name>
+          </sound>
+        </effects>
+      </variant1>
+    </roofwooden_expl>
+    <roofhay_expl>
+      <variant1>
+        <stages>
+          <base>	6.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/buildings/roof_hay_expl.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <name>	/objects/buildings/wood_house	</name>
+          </sound>
+        </effects>
+      </variant1>
+    </roofhay_expl>
+    <rooftiling_expl>
+      <variant1>
+        <stages>
+          <base>	6.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/buildings/roof_tiling_expl.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <name>	/objects/buildings/wood_house	</name>
+          </sound>
+        </effects>
+      </variant1>
+    </rooftiling_expl>
+    <wallwooden_ram>
+      <variant1>
+        <stages>
+          <base>	6.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/buildings/wall_wooden_ram.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <name>	/objects/buildings/wood_house	</name>
+          </sound>
+        </effects>
+      </variant1>
+    </wallwooden_ram>
+    <wallwooden_expl>
+      <variant1>
+        <stages>
+          <base>	6.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/buildings/wall_wooden_expl.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <name>	/objects/buildings/wood_house	</name>
+          </sound>
+        </effects>
+      </variant1>
+    </wallwooden_expl>
+    <wallstone_ram>
+      <variant1>
+        <stages>
+          <base>	6.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/buildings/wall_stone_ram.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <name>	/objects/buildings/wood_house	</name>
+          </sound>
+        </effects>
+      </variant1>
+    </wallstone_ram>
+    <wallstone_expl>
+      <variant1>
+        <stages>
+          <base>	6.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/buildings/wall_stone_expl.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <name>	/objects/buildings/wood_house	</name>
+          </sound>
+        </effects>
+      </variant1>
+    </wallstone_expl>
+    <sc_vhouse_wall_expl>
+      <variant1>
+        <stages>
+          <base>	6.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/buildings/sc_vhouse_wall_expl.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <name>	/objects/buildings/wood_house	</name>
+          </sound>
+        </effects>
+      </variant1>
+    </sc_vhouse_wall_expl>
+    <sc_vhouse_wall_ram>
+      <variant1>
+        <stages>
+          <base>	6.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/buildings/sc_vhouse_wall_ram.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <name>	/objects/buildings/wood_house	</name>
+          </sound>
+        </effects>
+      </variant1>
+    </sc_vhouse_wall_ram>
+    <ruins_column_hit>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/buildings/ruins_column_hit.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <name>	/objects/fence/fence_stone_mid	</name>
+          </sound>
+        </effects>
+      </variant1>
+    </ruins_column_hit>
+    <ruins_column_ram>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/buildings/ruins_column_ram.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <name>	/objects/fence/fence_stone_mid	</name>
+          </sound>
+        </effects>
+      </variant1>
+    </ruins_column_ram>
+    <ruins_wall_hit>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/buildings/ruins_wall_hit.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <name>	/objects/fence/fence_stone_mid	</name>
+          </sound>
+        </effects>
+      </variant1>
+    </ruins_wall_hit>
+    <ruins_wall_ram>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/buildings/ruins_wall_ram.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <name>	/objects/fence/fence_stone_mid	</name>
+          </sound>
+        </effects>
+      </variant1>
+    </ruins_wall_ram>
+    <brick_wall_ram>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/buildings/brick_wall_ram.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <name>	/objects/fence/fence_stone_mid	</name>
+          </sound>
+        </effects>
+      </variant1>
+    </brick_wall_ram>
+    <brick_wall_expl>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/buildings/brick_wall_expl.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <name>	/objects/fence/fence_stone_mid	</name>
+          </sound>
+        </effects>
+      </variant1>
+    </brick_wall_expl>
+    <summerhouse_ram>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/buildings/summerhouse_ram.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <name>	/objects/buildings/wood_house	</name>
+          </sound>
+        </effects>
+      </variant1>
+    </summerhouse_ram>
+    <woodenShed>
+      <variant1>
+        <stages>
+          <base>	6.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/buildings/woodenShed.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <name>	/objects/buildings/wood_house	</name>
+          </sound>
+        </effects>
+      </variant1>
+    </woodenShed>
+  </structures>
+</destructibles_effects.xml>

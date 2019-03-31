@@ -1,0 +1,661 @@
+<M4A3E8_Sherman.xml>
+  <crew>
+    <commander></commander>
+    <gunner></gunner>
+    <driver></driver>
+    <radioman></radioman>
+    <loader></loader>
+  </crew>
+  <speedLimits>
+    <forward>	48	</forward>
+    <backward>	18	</backward>
+  </speedLimits>
+  <repairCost>	4.15	</repairCost>
+  <effects>
+    <destruction>	mediumDestruction	</destruction>
+    <explosion>	mediumExplosion	</explosion>
+    <flaming>	mediumFlaming	</flaming>
+    <collision>	collision	</collision>
+  </effects>
+  <camouflage>
+    <priceFactor>	1.2	</priceFactor>
+    <tiling>	1 1 0 0	</tiling>
+    <exclusionMask>	vehicles/american/A06_M4A3E8_Sherman/M4A3_Sherman_CM.DDS	</exclusionMask>
+  </camouflage>
+  <emblems>
+    <default>	usa_star	</default>
+    <lodDist>	MEDIUM	</lodDist>
+    <alpha>	1	</alpha>
+  </emblems>
+  <horns>
+    <priceFactor>	1	</priceFactor>
+    <distanceFactor>	1	</distanceFactor>
+    <volumeFactor>	1	</volumeFactor>
+  </horns>
+  <hull>
+    <models>
+      <undamaged>	vehicles/american/A06_M4A3E8_Sherman/normal/lod0/Hull.model	</undamaged>
+      <destroyed>	vehicles/american/A06_M4A3E8_Sherman/crash/lod0/Hull.model	</destroyed>
+      <exploded>	vehicles/american/A06_M4A3E8_Sherman/crash/lod0/Hull.model	</exploded>
+    </models>
+    <swinging>
+      <lodDist>	FAR	</lodDist>
+      <pitchParams>	0.26 34.00 0.42 1.00 0.06 0.36	</pitchParams>
+      <rollParams>	1.00 0.28 38.00 0.42 1.00 0.06 0.40	</rollParams>
+      <sensitivityToImpulse>	0.58	</sensitivityToImpulse>
+    </swinging>
+    <exhaust>
+      <pixie>	particles/Tank/engine_exit_gass.xml	</pixie>
+      <nodes>	HP_Track_Exhaus_1 HP_Track_Exhaus_2	</nodes>
+      <rates>	5.0 10.0 25.0	</rates>
+    </exhaust>
+    <turretPositions>
+      <turret>	-0.018056 1.01692 -0.08262	</turret>
+    </turretPositions>
+    <hitTester>
+      <collisionModel>	vehicles/american/A06_M4A3E8_Sherman/collision/Hull.model	</collisionModel>
+    </hitTester>
+    <armor>
+      <armor_1>	63.5	</armor_1>
+      <armor_2>	101	</armor_2>
+      <armor_3>	38	</armor_3>
+      <armor_4>	38	</armor_4>
+      <armor_5>	38	</armor_5>
+      <armor_6>	12.7	</armor_6>
+      <armor_7>	19.5	</armor_7>
+      <armor_8>	0	</armor_8>
+    </armor>
+    <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
+    <weight>	14600	</weight>
+    <maxHealth>	490.0	</maxHealth>
+    <ammoBayHealth>
+      <maxHealth>	182	</maxHealth>
+      <maxRegenHealth>	97	</maxRegenHealth>
+      <repairCost>	1.0	</repairCost>
+    </ammoBayHealth>
+    <emblemSlots>
+      <clan>
+        <rayStart>	-0.0143232 0.410156 2.66341	</rayStart>
+        <rayEnd>	-0.0143232 -0.0980835 2.34452	</rayEnd>
+        <rayUp>	0.000000 1 0.000000	</rayUp>
+        <size>	0.34	</size>
+        <hideIfDamaged>	false	</hideIfDamaged>
+      </clan>
+    </emblemSlots>
+  </hull>
+  <chassis>
+    <NVSS_T66>
+      <userString>	#usa_vehicles:NVSS_T66	</userString>
+      <description>	#usa_vehicles:NVSS_T66_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 8 0	</icon>
+      <tags></tags>
+      <level>	5	</level>
+      <price>	9600.0	</price>
+      <unlocks>
+        <chassis>	NVSS_T80	  <cost>	5145	</cost>
+        </chassis>
+      </unlocks>
+      <models>
+        <undamaged>	vehicles/american/A06_M4A3E8_Sherman/normal/lod0/Chassis.model	</undamaged>
+        <destroyed>	vehicles/american/A06_M4A3E8_Sherman/crash/lod0/Chassis.model	</destroyed>
+        <exploded>	vehicles/american/A06_M4A3E8_Sherman/crash/lod0/Chassis.model	</exploded>
+      </models>
+      <traces>
+        <lodDist>	FAR	</lodDist>
+        <bufferPrefs>	mediumTank	</bufferPrefs>
+        <textureSet>	usa_01	</textureSet>
+        <size>	0.54 0.62	</size>
+      </traces>
+      <tracks>
+        <lodDist>	MEDIUM	</lodDist>
+        <leftMaterial>	track_mat_L_skinned	</leftMaterial>
+        <rightMaterial>	track_mat_R_skinned	</rightMaterial>
+        <textureScale>	-0.6	</textureScale>
+      </tracks>
+      <wheels>
+        <lodDist>	MEDIUM	</lodDist>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	W_L	</template>
+          <radius>	0.270365	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	6	</count>
+        </group>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	W_R	</template>
+          <radius>	0.270365	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	6	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <name>	WD_L0	</name>
+          <radius>	0.344508	</radius>
+        </wheel>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <name>	WD_L1	</name>
+          <radius>	0.126247	</radius>
+        </wheel>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <name>	WD_L2	</name>
+          <radius>	0.165303	</radius>
+        </wheel>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <name>	WD_L3	</name>
+          <radius>	0.126247	</radius>
+        </wheel>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <name>	WD_L4	</name>
+          <radius>	0.165303	</radius>
+        </wheel>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <name>	WD_L5	</name>
+          <radius>	0.126247	</radius>
+        </wheel>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <name>	WD_L6	</name>
+          <radius>	0.289788	</radius>
+        </wheel>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <name>	WD_R0	</name>
+          <radius>	0.344508	</radius>
+        </wheel>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <name>	WD_R1	</name>
+          <radius>	0.126247	</radius>
+        </wheel>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <name>	WD_R2	</name>
+          <radius>	0.165303	</radius>
+        </wheel>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <name>	WD_R3	</name>
+          <radius>	0.126247	</radius>
+        </wheel>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <name>	WD_R4	</name>
+          <radius>	0.165303	</radius>
+        </wheel>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <name>	WD_R5	</name>
+          <radius>	0.126247	</radius>
+        </wheel>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <name>	WD_R6	</name>
+          <radius>	0.289788	</radius>
+        </wheel>
+      </wheels>
+      <drivingWheels>	WD_L0 WD_L6	</drivingWheels>
+      <effects>
+        <lodDist>	MEDIUM	</lodDist>
+        <dust>	mediumTankDust	</dust>
+        <mud>	mediumTankMud	</mud>
+      </effects>
+      <sound>	/vehicles/tanks/treads/treads_3	</sound>
+      <hullPosition>	0.000000 0.818455 0.000000	</hullPosition>
+      <hitTester>
+        <collisionModel>	vehicles/american/A06_M4A3E8_Sherman/collision/Chassis.model	</collisionModel>
+      </hitTester>
+      <armor>
+        <leftTrack>	20	</leftTrack>
+        <rightTrack>	20	</rightTrack>
+      </armor>
+      <topRightCarryingPoint>	1.10719 1.88969	</topRightCarryingPoint>
+      <maxClimbAngle>	25	</maxClimbAngle>
+      <navmeshGirth>	6.0	</navmeshGirth>
+      <weight>	8300	</weight>
+      <maxLoad>	33000	</maxLoad>
+      <terrainResistance>	1.0 1.4 2.0	</terrainResistance>
+      <brakeForce>	36500	</brakeForce>
+      <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
+      <rotationSpeed>	37	</rotationSpeed>
+      <shotDispersionFactors>
+        <vehicleMovement>	0.23	</vehicleMovement>
+        <vehicleRotation>	0.23	</vehicleRotation>
+      </shotDispersionFactors>
+      <bulkHealthFactor>	3.0	</bulkHealthFactor>
+      <maxHealth>	110	</maxHealth>
+      <maxRegenHealth>	85	</maxRegenHealth>
+      <repairCost>	5.0	</repairCost>
+    </NVSS_T66>
+    <NVSS_T80>
+      <userString>	#usa_vehicles:NVSS_T80	</userString>
+      <description>	#usa_vehicles:NVSS_T80_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 8 0	</icon>
+      <tags></tags>
+      <level>	6	</level>
+      <price>	16300.0	</price>
+      <unlocks>
+        <vehicle>	M36_Slagger	  <cost>	58910	</cost>
+        </vehicle>
+      </unlocks>
+      <models>
+        <undamaged>	vehicles/american/A06_M4A3E8_Sherman/normal/lod0/Chassis.model	</undamaged>
+        <destroyed>	vehicles/american/A06_M4A3E8_Sherman/crash/lod0/Chassis.model	</destroyed>
+        <exploded>	vehicles/american/A06_M4A3E8_Sherman/crash/lod0/Chassis.model	</exploded>
+      </models>
+      <traces>
+        <lodDist>	FAR	</lodDist>
+        <bufferPrefs>	mediumTank	</bufferPrefs>
+        <textureSet>	usa_01	</textureSet>
+        <size>	0.54 0.62	</size>
+      </traces>
+      <tracks>
+        <lodDist>	MEDIUM	</lodDist>
+        <leftMaterial>	track_mat_L_skinned	</leftMaterial>
+        <rightMaterial>	track_mat_R_skinned	</rightMaterial>
+        <textureScale>	-0.6	</textureScale>
+      </tracks>
+      <wheels>
+        <lodDist>	MEDIUM	</lodDist>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	W_L	</template>
+          <radius>	0.270365	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	6	</count>
+        </group>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	W_R	</template>
+          <radius>	0.270365	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	6	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <name>	WD_L0	</name>
+          <radius>	0.344508	</radius>
+        </wheel>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <name>	WD_L1	</name>
+          <radius>	0.126247	</radius>
+        </wheel>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <name>	WD_L2	</name>
+          <radius>	0.165303	</radius>
+        </wheel>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <name>	WD_L3	</name>
+          <radius>	0.126247	</radius>
+        </wheel>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <name>	WD_L4	</name>
+          <radius>	0.165303	</radius>
+        </wheel>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <name>	WD_L5	</name>
+          <radius>	0.126247	</radius>
+        </wheel>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <name>	WD_L6	</name>
+          <radius>	0.289788	</radius>
+        </wheel>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <name>	WD_R0	</name>
+          <radius>	0.344508	</radius>
+        </wheel>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <name>	WD_R1	</name>
+          <radius>	0.126247	</radius>
+        </wheel>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <name>	WD_R2	</name>
+          <radius>	0.165303	</radius>
+        </wheel>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <name>	WD_R3	</name>
+          <radius>	0.126247	</radius>
+        </wheel>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <name>	WD_R4	</name>
+          <radius>	0.165303	</radius>
+        </wheel>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <name>	WD_R5	</name>
+          <radius>	0.126247	</radius>
+        </wheel>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <name>	WD_R6	</name>
+          <radius>	0.289788	</radius>
+        </wheel>
+      </wheels>
+      <drivingWheels>	WD_L0 WD_L6	</drivingWheels>
+      <effects>
+        <lodDist>	MEDIUM	</lodDist>
+        <dust>	mediumTankDust	</dust>
+        <mud>	mediumTankMud	</mud>
+      </effects>
+      <sound>	/vehicles/tanks/treads/treads_3	</sound>
+      <hullPosition>	0.000000 0.818455 0.000000	</hullPosition>
+      <hitTester>
+        <collisionModel>	vehicles/american/A06_M4A3E8_Sherman/collision/Chassis.model	</collisionModel>
+      </hitTester>
+      <armor>
+        <leftTrack>	20	</leftTrack>
+        <rightTrack>	20	</rightTrack>
+      </armor>
+      <topRightCarryingPoint>	1.10719 1.88969	</topRightCarryingPoint>
+      <maxClimbAngle>	25	</maxClimbAngle>
+      <navmeshGirth>	6.0	</navmeshGirth>
+      <weight>	8300	</weight>
+      <maxLoad>	34500	</maxLoad>
+      <terrainResistance>	0.9 1.0 1.5	</terrainResistance>
+      <brakeForce>	36500	</brakeForce>
+      <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
+      <rotationSpeed>	40	</rotationSpeed>
+      <shotDispersionFactors>
+        <vehicleMovement>	0.19	</vehicleMovement>
+        <vehicleRotation>	0.19	</vehicleRotation>
+      </shotDispersionFactors>
+      <bulkHealthFactor>	3.0	</bulkHealthFactor>
+      <maxHealth>	120	</maxHealth>
+      <maxRegenHealth>	90	</maxRegenHealth>
+      <repairCost>	5.0	</repairCost>
+    </NVSS_T80>
+  </chassis>
+  <turrets0>
+    <D51074>
+      <userString>	#usa_vehicles:D51072	</userString>
+      <description>	#usa_vehicles:D51072_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 6 0	</icon>
+      <tags></tags>
+      <level>	5	</level>
+      <price>	10300	</price>
+      <models>
+        <undamaged>	vehicles/american/A06_M4A3E8_Sherman/normal/lod0/Turret_01.model	</undamaged>
+        <destroyed>	vehicles/american/A06_M4A3E8_Sherman/crash/lod0/Turret_01.model	</destroyed>
+        <exploded>	vehicles/american/A06_M4A3E8_Sherman/crash/lod0/Turret_01.model	</exploded>
+      </models>
+      <hitTester>
+        <collisionModel>	vehicles/american/A06_M4A3E8_Sherman/collision/Turret_01.model	</collisionModel>
+      </hitTester>
+      <yawLimits>	-180 180	</yawLimits>
+      <gunPosition>	0.000000 0.373119 0.875236	</gunPosition>
+      <armor>
+        <armor_1>	63.5	</armor_1>
+        <armor_2>	89	</armor_2>
+        <armor_3>	63.5	</armor_3>
+        <armor_4>	63.5	</armor_4>
+        <armor_5>	63.5	</armor_5>
+        <armor_6>	25.4	</armor_6>
+        <armor_7>	25.4	</armor_7>
+        <armor_8>	25.4	</armor_8>
+      </armor>
+      <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
+      <weight>	4800	</weight>
+      <maxHealth>	230	</maxHealth>
+      <rotationSpeed>	43	</rotationSpeed>
+      <turretRotatorHealth>
+        <maxHealth>	100	</maxHealth>
+        <maxRegenHealth>	49	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </turretRotatorHealth>
+      <circularVisionRadius>	380	</circularVisionRadius>
+      <surveyingDeviceHealth>
+        <maxHealth>	100	</maxHealth>
+        <maxRegenHealth>	49	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </surveyingDeviceHealth>
+      <guns>
+        <_75mm_Gun_M3_L37>	shared	  <maxAmmo>	71	</maxAmmo>
+          <pitchLimits>	-25 12	</pitchLimits>
+          <unlocks>
+            <gun>	_76mm_Gun_M1A1	  <cost>	4600	</cost>
+            </gun>
+            <gun>	_105mm_SPH_M4_L23	  <cost>	1500	</cost>
+            </gun>
+          </unlocks>
+          <models>
+            <undamaged>	vehicles/american/A06_M4A3E8_Sherman/normal/lod0/Gun_01.model	</undamaged>
+            <destroyed>	vehicles/american/A06_M4A3E8_Sherman/crash/lod0/Gun_01.model	</destroyed>
+            <exploded>	vehicles/american/A06_M4A3E8_Sherman/crash/lod0/Gun_01.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/american/A06_M4A3E8_Sherman/collision/Gun_01.model	</collisionModel>
+          </hitTester>
+          <armor>
+            <gun>	20	</gun>
+          </armor>
+        </_75mm_Gun_M3_L37>
+        <_76mm_Gun_M1A1>	shared	  <maxAmmo>	71	</maxAmmo>
+          <pitchLimits>	-25 12	</pitchLimits>
+          <unlocks>
+            <turret>	D51080	  <cost>	5170	</cost>
+            </turret>
+          </unlocks>
+          <models>
+            <undamaged>	vehicles/american/A06_M4A3E8_Sherman/normal/lod0/Gun_02.model	</undamaged>
+            <destroyed>	vehicles/american/A06_M4A3E8_Sherman/crash/lod0/Gun_02.model	</destroyed>
+            <exploded>	vehicles/american/A06_M4A3E8_Sherman/crash/lod0/Gun_02.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/american/A06_M4A3E8_Sherman/collision/Gun_02.model	</collisionModel>
+          </hitTester>
+          <armor>
+            <gun>	20	</gun>
+          </armor>
+        </_76mm_Gun_M1A1>
+        <_105mm_SPH_M4_L23>	shared	  <pitchLimits>	-25 12	</pitchLimits>
+          <models>
+            <undamaged>	vehicles/american/A06_M4A3E8_Sherman/normal/lod0/Gun_06.model	</undamaged>
+            <destroyed>	vehicles/american/A06_M4A3E8_Sherman/crash/lod0/Gun_06.model	</destroyed>
+            <exploded>	vehicles/american/A06_M4A3E8_Sherman/crash/lod0/Gun_06.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/american/A06_M4A3E8_Sherman/collision/Gun_06.model	</collisionModel>
+          </hitTester>
+          <armor>
+            <gun>	40	</gun>
+          </armor>
+        </_105mm_SPH_M4_L23>
+      </guns>
+      <emblemSlots>
+        <player>
+          <rayStart>	-1.20633 0.368057 0.239622	</rayStart>
+          <rayEnd>	-0.606331 0.368057 0.241	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.34	</size>
+          <hideIfDamaged>	false	</hideIfDamaged>
+        </player>
+        <player>
+          <rayStart>	1.24131 0.394024 0.292854	</rayStart>
+          <rayEnd>	0.641316 0.394024 0.291475	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.34	</size>
+          <hideIfDamaged>	false	</hideIfDamaged>
+        </player>
+      </emblemSlots>
+      <showEmblemsOnGun>	false	</showEmblemsOnGun>
+    </D51074>
+    <D51080>
+      <userString>	#usa_vehicles:D51080	</userString>
+      <description>	#usa_vehicles:D51080_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 6 0	</icon>
+      <tags></tags>
+      <level>	6	</level>
+      <price>	17050	</price>
+      <unlocks>
+        <gun>	_76mm_Gun_M1A2	  <cost>	5800	</cost>
+        </gun>
+        <vehicle>	T20	  <cost>	51690	</cost>
+        </vehicle>
+      </unlocks>
+      <models>
+        <undamaged>	vehicles/american/A06_M4A3E8_Sherman/normal/lod0/Turret_02.model	</undamaged>
+        <destroyed>	vehicles/american/A06_M4A3E8_Sherman/crash/lod0/Turret_02.model	</destroyed>
+        <exploded>	vehicles/american/A06_M4A3E8_Sherman/crash/lod0/Turret_02.model	</exploded>
+      </models>
+      <hitTester>
+        <collisionModel>	vehicles/american/A06_M4A3E8_Sherman/collision/Turret_02.model	</collisionModel>
+      </hitTester>
+      <yawLimits>	-180 180	</yawLimits>
+      <gunPosition>	0.000000 0.373119 0.890862	</gunPosition>
+      <armor>
+        <armor_1>	76.2	</armor_1>
+        <armor_2>	89	</armor_2>
+        <armor_3>	51	</armor_3>
+        <armor_4>	51	</armor_4>
+        <armor_5>	51	</armor_5>
+        <armor_6>	25.4	</armor_6>
+        <armor_7>	25.4	</armor_7>
+        <armor_8>	25.4	</armor_8>
+      </armor>
+      <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
+      <weight>	4800	</weight>
+      <maxHealth>	260	</maxHealth>
+      <rotationSpeed>	45	</rotationSpeed>
+      <turretRotatorHealth>
+        <maxHealth>	100	</maxHealth>
+        <maxRegenHealth>	49	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </turretRotatorHealth>
+      <circularVisionRadius>	420	</circularVisionRadius>
+      <surveyingDeviceHealth>
+        <maxHealth>	100	</maxHealth>
+        <maxRegenHealth>	49	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </surveyingDeviceHealth>
+      <guns>
+        <_75mm_Gun_M3_L37>	shared	  <maxAmmo>	71	</maxAmmo>
+          <pitchLimits>	-25 12	</pitchLimits>
+          <shotDispersionFactors>
+            <turretRotation>	0.12	</turretRotation>
+            <afterShot>	4.0	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <models>
+            <undamaged>	vehicles/american/A06_M4A3E8_Sherman/normal/lod0/Gun_03.model	</undamaged>
+            <destroyed>	vehicles/american/A06_M4A3E8_Sherman/crash/lod0/Gun_03.model	</destroyed>
+            <exploded>	vehicles/american/A06_M4A3E8_Sherman/crash/lod0/Gun_03.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/american/A06_M4A3E8_Sherman/collision/Gun_03.model	</collisionModel>
+          </hitTester>
+          <armor>
+            <gun>	20	</gun>
+          </armor>
+        </_75mm_Gun_M3_L37>
+        <_76mm_Gun_M1A1>	shared	  <maxAmmo>	71	</maxAmmo>
+          <pitchLimits>	-25 12	</pitchLimits>
+          <shotDispersionFactors>
+            <turretRotation>	0.12	</turretRotation>
+            <afterShot>	4.0	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <models>
+            <undamaged>	vehicles/american/A06_M4A3E8_Sherman/normal/lod0/Gun_04.model	</undamaged>
+            <destroyed>	vehicles/american/A06_M4A3E8_Sherman/crash/lod0/Gun_04.model	</destroyed>
+            <exploded>	vehicles/american/A06_M4A3E8_Sherman/crash/lod0/Gun_04.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/american/A06_M4A3E8_Sherman/collision/Gun_04.model	</collisionModel>
+          </hitTester>
+          <armor>
+            <gun>	20	</gun>
+          </armor>
+        </_76mm_Gun_M1A1>
+        <_76mm_Gun_M1A2>	shared	  <maxAmmo>	71	</maxAmmo>
+          <pitchLimits>	-25 12	</pitchLimits>
+          <models>
+            <undamaged>	vehicles/american/A06_M4A3E8_Sherman/normal/lod0/Gun_05.model	</undamaged>
+            <destroyed>	vehicles/american/A06_M4A3E8_Sherman/crash/lod0/Gun_05.model	</destroyed>
+            <exploded>	vehicles/american/A06_M4A3E8_Sherman/crash/lod0/Gun_05.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/american/A06_M4A3E8_Sherman/collision/Gun_05.model	</collisionModel>
+          </hitTester>
+          <armor>
+            <gun>	20	</gun>
+          </armor>
+        </_76mm_Gun_M1A2>
+        <_105mm_SPH_M4_L23>	shared	  <pitchLimits>	-25 12	</pitchLimits>
+          <shotDispersionFactors>
+            <turretRotation>	0.12	</turretRotation>
+            <afterShot>	4.0	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <models>
+            <undamaged>	vehicles/american/A06_M4A3E8_Sherman/normal/lod0/Gun_07.model	</undamaged>
+            <destroyed>	vehicles/american/A06_M4A3E8_Sherman/crash/lod0/Gun_07.model	</destroyed>
+            <exploded>	vehicles/american/A06_M4A3E8_Sherman/crash/lod0/Gun_07.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/american/A06_M4A3E8_Sherman/collision/Gun_07.model	</collisionModel>
+          </hitTester>
+          <armor>
+            <gun>	40	</gun>
+          </armor>
+        </_105mm_SPH_M4_L23>
+      </guns>
+      <emblemSlots>
+        <player>
+          <rayStart>	-1.21819 0.383709 0.187679	</rayStart>
+          <rayEnd>	-0.624871 0.353046 0.103788	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.34	</size>
+          <hideIfDamaged>	false	</hideIfDamaged>
+        </player>
+        <player>
+          <rayStart>	1.2171 0.400528 0.317352	</rayStart>
+          <rayEnd>	0.620607 0.35659 0.269775	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.34	</size>
+          <hideIfDamaged>	false	</hideIfDamaged>
+        </player>
+      </emblemSlots>
+      <showEmblemsOnGun>	false	</showEmblemsOnGun>
+    </D51080>
+  </turrets0>
+  <engines>
+    <Wright_Continental_R-975C1>	shared	  <unlocks>
+        <engine>	Wright_Continental_R-975C4	  <cost>	1500.0	</cost>
+        </engine>
+      </unlocks>
+    </Wright_Continental_R-975C1>
+    <Wright_Continental_R-975C4>	shared	  <unlocks>
+        <engine>	Ford_GAA	  <cost>	11000.0	</cost>
+        </engine>
+      </unlocks>
+    </Wright_Continental_R-975C4>
+    <Ford_GAA>	shared	</Ford_GAA>
+  </engines>
+  <fuelTanks>
+    <Average>	shared	</Average>
+  </fuelTanks>
+  <radios>
+    <SCR_508>	shared	  <unlocks>
+        <radio>	SCR_506	  <cost>	5600	</cost>
+        </radio>
+      </unlocks>
+    </SCR_508>
+    <SCR_506>	shared	</SCR_506>
+  </radios>
+</M4A3E8_Sherman.xml>

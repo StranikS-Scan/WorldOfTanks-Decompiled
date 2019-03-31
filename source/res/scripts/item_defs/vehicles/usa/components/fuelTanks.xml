@@ -1,0 +1,66 @@
+<fuelTanks.xml>
+  <ids>
+    <Small>	201	</Small>
+    <Medium>	202	</Medium>
+    <Average>	203	</Average>
+    <Heavy>	204	</Heavy>
+    <Large>	205	</Large>
+  </ids>
+  <shared>
+    <Small>
+      <userString>	#ussr_vehicles:Small	</userString>
+      <description>	#ussr_vehicles:Small_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 0 0	</icon>
+      <tags></tags>
+      <price>	100	</price>
+      <weight>	200	</weight>
+      <maxHealth>	100	</maxHealth>
+      <maxRegenHealth>	40	</maxRegenHealth>
+      <repairCost>	1.0	</repairCost>
+    </Small>
+    <Medium>
+      <userString>	#ussr_vehicles:Small	</userString>
+      <description>	#ussr_vehicles:Small_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 0 0	</icon>
+      <tags></tags>
+      <price>	100	</price>
+      <weight>	250	</weight>
+      <maxHealth>	125	</maxHealth>
+      <maxRegenHealth>	50	</maxRegenHealth>
+      <repairCost>	1.0	</repairCost>
+    </Medium>
+    <Average>
+      <userString>	#ussr_vehicles:Average	</userString>
+      <description>	#ussr_vehicles:Average_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 0 0	</icon>
+      <tags></tags>
+      <price>	100	</price>
+      <weight>	250	</weight>
+      <maxHealth>	150	</maxHealth>
+      <maxRegenHealth>	50	</maxRegenHealth>
+      <repairCost>	1.0	</repairCost>
+    </Average>
+    <Heavy>
+      <userString>	#ussr_vehicles:Heavy	</userString>
+      <description>	#ussr_vehicles:Heavy_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 0 0	</icon>
+      <tags></tags>
+      <price>	100	</price>
+      <weight>	275	</weight>
+      <maxHealth>	175	</maxHealth>
+      <maxRegenHealth>	70	</maxRegenHealth>
+      <repairCost>	1.0	</repairCost>
+    </Heavy>
+    <Large>
+      <userString>	#ussr_vehicles:Large	</userString>
+      <description>	#ussr_vehicles:Large_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 0 0	</icon>
+      <tags></tags>
+      <price>	100	</price>
+      <weight>	300	</weight>
+      <maxHealth>	200	</maxHealth>
+      <maxRegenHealth>	70	</maxRegenHealth>
+      <repairCost>	1.0	</repairCost>
+    </Large>
+  </shared>
+</fuelTanks.xml>

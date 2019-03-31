@@ -1,14 +1,9 @@
+# Python bytecode 2.6 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/helpers/time_utils.py
-import time
-import BigWorld
+# Compiled at: 2011-06-21 13:32:19
+import time, BigWorld
 import datetime
 import calendar
-from debug_utils import *
-from helpers import i18n
-ONE_MINUTE = 60
-ONE_HOUR = 60 * ONE_MINUTE
-ONE_DAY = 24 * ONE_HOUR
-HALF_YEAR = 183 * ONE_DAY
 
 class _TimeCorrector(object):
 
@@ -24,17 +19,6 @@ class _TimeCorrector(object):
 
     timeCorrection = property(lambda self: self.serverUTCTime - time.time())
     serverUTCTime = property(lambda self: self.__serverLoginUTCTime + self.__loginDelta())
-
-    @property
-    def serverRegionalTime(self):
-        regionalSecondsOffset = 0
-        try:
-            serverRegionalSettings = BigWorld.player().serverSettings['regional_settings']
-            regionalSecondsOffset = serverRegionalSettings['starting_time_of_a_new_day']
-        except Exception:
-            LOG_CURRENT_EXCEPTION()
-
-        return _g_instance.serverUTCTime + regionalSecondsOffset
 
 
 _g_instance = _TimeCorrector()
@@ -59,38 +43,3 @@ def makeLocalServerDatetime(serverDatetime):
 
 def utcToLocalDatetime(utcDatetime):
     return datetime.datetime.fromtimestamp(calendar.timegm(utcDatetime.timetuple()))
-
-
-def getServerRegionalTime():
-    return _g_instance.serverRegionalTime
-
-
-def getServerRegionalTimeCurrentDay():
-    ts = time.gmtime(_g_instance.serverRegionalTime)
-    return ts.tm_hour * ONE_HOUR + ts.tm_min * ONE_MINUTE + ts.tm_sec
-
-
-def getServerRegionalWeekDay():
-    return datetime.datetime.utcfromtimestamp(_g_instance.serverRegionalTime).isoweekday()
-
-
-def getTimeDeltaFromNow(t):
-    if t and datetime.datetime.utcfromtimestamp(t) > datetime.datetime.utcnow():
-        delta = datetime.datetime.utcfromtimestamp(t) - datetime.datetime.utcnow()
-        return delta.days * ONE_DAY + delta.seconds
-    return 0
-
-
-def getTillTimeString(timeValue, keyNamespace):
-    gmtime = time.gmtime(timeValue)
-    fmtValues = {'day': str(time.struct_time(gmtime).tm_yday),
-     'hour': time.strftime('%H', gmtime),
-     'min': time.strftime('%M', gmtime),
-     'sec': time.strftime('%S', gmtime)}
-    if timeValue > ONE_DAY:
-        fmtKey = 'days'
-    elif ONE_DAY >= timeValue >= ONE_HOUR:
-        fmtKey = 'hours'
-    else:
-        fmtKey = 'min'
-    return i18n.makeString(('%s/%s' % (keyNamespace, fmtKey)), **fmtValues)

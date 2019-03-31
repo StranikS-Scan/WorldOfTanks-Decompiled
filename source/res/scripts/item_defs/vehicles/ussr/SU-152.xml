@@ -1,0 +1,456 @@
+<SU-152.xml>
+  <crew>
+    <commander>	radioman	</commander>
+    <gunner></gunner>
+    <driver></driver>
+    <loader></loader>
+    <loader></loader>
+  </crew>
+  <speedLimits>
+    <forward>	43	</forward>
+    <backward>	11	</backward>
+  </speedLimits>
+  <repairCost>	6.20	</repairCost>
+  <effects>
+    <destruction>	mediumDestruction	</destruction>
+    <explosion>	mediumExplosion	</explosion>
+    <flaming>	mediumFlaming	</flaming>
+    <collision>	collision	</collision>
+  </effects>
+  <camouflage>
+    <priceFactor>	1.4	</priceFactor>
+    <tiling>	1 1 0 0	</tiling>
+    <exclusionMask>	vehicles/russian/R18_SU-152/SU-152_CM.dds	</exclusionMask>
+  </camouflage>
+  <emblems>
+    <default>	ussr_star	</default>
+    <lodDist>	MEDIUM	</lodDist>
+    <alpha>	0.9	</alpha>
+  </emblems>
+  <horns>
+    <priceFactor>	1.0	</priceFactor>
+    <distanceFactor>	1.0	</distanceFactor>
+    <volumeFactor>	1.0	</volumeFactor>
+  </horns>
+  <hull>
+    <models>
+      <undamaged>	vehicles/russian/R18_SU-152/normal/lod0/Hull.model	</undamaged>
+      <destroyed>	vehicles/russian/R18_SU-152/crash/lod0/Hull.model	</destroyed>
+      <exploded>	vehicles/russian/R18_SU-152/crash/lod0/Hull.model	</exploded>
+    </models>
+    <swinging>
+      <lodDist>	FAR	</lodDist>
+      <pitchParams>	0.24 36.00 0.40 1.00 0.05 0.32	</pitchParams>
+      <rollParams>	1.00 0.24 36.00 0.40 1.00 0.05 0.32	</rollParams>
+      <sensitivityToImpulse>	0.35	</sensitivityToImpulse>
+    </swinging>
+    <exhaust>
+      <pixie>	particles/Tank/engine_exit_diesel.xml	</pixie>
+      <nodes>	HP_Track_Exhaus_1 HP_Track_Exhaus_2	</nodes>
+      <rates>	5.0 10.0 25.0	</rates>
+    </exhaust>
+    <turretPositions>
+      <turret>	0.1524 0.788667 2.1531	</turret>
+    </turretPositions>
+    <fakeTurrets>
+      <lobby>	0	</lobby>
+      <battle>	0	</battle>
+    </fakeTurrets>
+    <hitTester>
+      <collisionModel>	vehicles/russian/R18_SU-152/collision/Hull.model	</collisionModel>
+    </hitTester>
+    <armor>
+      <armor_1>	75	</armor_1>
+      <armor_2>	60	</armor_2>
+      <armor_3>	60	</armor_3>
+      <armor_4>	60	</armor_4>
+      <armor_5>	60	</armor_5>
+      <armor_6>	30	</armor_6>
+      <armor_7>	100	</armor_7>
+      <armor_8>	0	</armor_8>
+      <armor_9>	20	</armor_9>
+      <armor_10>	20	</armor_10>
+      <armor_11>	30	</armor_11>
+      <armor_12>	25	</armor_12>
+      <armor_13>	50	</armor_13>
+      <armor_14>	60	  <noDamage>	true	</noDamage>
+      </armor_14>
+    </armor>
+    <primaryArmor>	armor_1 armor_5 armor_4	</primaryArmor>
+    <weight>	30000	</weight>
+    <maxHealth>	860	</maxHealth>
+    <ammoBayHealth>
+      <maxHealth>	200	</maxHealth>
+      <maxRegenHealth>	140	</maxRegenHealth>
+      <repairCost>	1.0	</repairCost>
+    </ammoBayHealth>
+    <emblemSlots>
+      <clan>
+        <rayStart>	-0.597412 0.987702 2.16669	</rayStart>
+        <rayEnd>	-0.597412 0.783922 1.82249	</rayEnd>
+        <rayUp>	0.000000 1 0.000000	</rayUp>
+        <size>	0.36	</size>
+        <hideIfDamaged>	true	</hideIfDamaged>
+      </clan>
+      <player>
+        <rayStart>	-1.28435 0.935697 0.0751301	</rayStart>
+        <rayEnd>	-0.924099 0.779383 0.151181	</rayEnd>
+        <rayUp>	0.000000 1 0.000000	</rayUp>
+        <size>	0.36	</size>
+        <hideIfDamaged>	true	</hideIfDamaged>
+      </player>
+    </emblemSlots>
+  </hull>
+  <chassis>
+    <SU-152_mod_1943>
+      <userString>	#ussr_vehicles:SU-152_mod_1943	</userString>
+      <description>	#ussr_vehicles:SU-152_mod_1943_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 8 0	</icon>
+      <tags></tags>
+      <level>	7	</level>
+      <price>	20090.0	</price>
+      <unlocks>
+        <chassis>	SU-152_mod_1944	  <cost>	14765	</cost>
+        </chassis>
+      </unlocks>
+      <models>
+        <undamaged>	vehicles/russian/R18_SU-152/normal/lod0/Chassis.model	</undamaged>
+        <destroyed>	vehicles/russian/R18_SU-152/crash/lod0/Chassis.model	</destroyed>
+        <exploded>	vehicles/russian/R18_SU-152/crash/lod0/Chassis.model	</exploded>
+      </models>
+      <traces>
+        <lodDist>	FAR	</lodDist>
+        <bufferPrefs>	mediumTank	</bufferPrefs>
+        <textureSet>	ussr_01	</textureSet>
+        <size>	0.48 0.6	</size>
+      </traces>
+      <tracks>
+        <lodDist>	MEDIUM	</lodDist>
+        <leftMaterial>	track_mat_L_skinned	</leftMaterial>
+        <rightMaterial>	track_mat_R_skinned	</rightMaterial>
+        <textureScale>	-0.7	</textureScale>
+      </tracks>
+      <wheels>
+        <lodDist>	MEDIUM	</lodDist>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	W_L	</template>
+          <count>	6	</count>
+          <radius>	0.302	</radius>
+        </group>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	W_R	</template>
+          <count>	6	</count>
+          <radius>	0.302	</radius>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <name>	WD_L0	</name>
+          <radius>	0.34	</radius>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	WD_L	</template>
+          <count>	3	</count>
+          <startIndex>	1	</startIndex>
+          <radius>	0.195	</radius>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <name>	WD_L4	</name>
+          <radius>	0.453	</radius>
+        </wheel>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <name>	WD_R0	</name>
+          <radius>	0.34	</radius>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	WD_R	</template>
+          <count>	3	</count>
+          <startIndex>	1	</startIndex>
+          <radius>	0.195	</radius>
+        </group>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <name>	WD_R4	</name>
+          <radius>	0.453	</radius>
+        </wheel>
+      </wheels>
+      <drivingWheels>	WD_L0 WD_L4	</drivingWheels>
+      <effects>
+        <lodDist>	MEDIUM	</lodDist>
+        <dust>	mediumTankDust	</dust>
+        <mud>	mediumTankMud	</mud>
+      </effects>
+      <sound>	/vehicles/tanks/treads/treads_3	</sound>
+      <hullPosition>	0.000000 0.991833 0.000000	</hullPosition>
+      <hitTester>
+        <collisionModel>	vehicles/russian/R18_SU-152/collision/Chassis.model	</collisionModel>
+      </hitTester>
+      <armor>
+        <leftTrack>	20	</leftTrack>
+        <rightTrack>	20	</rightTrack>
+      </armor>
+      <topRightCarryingPoint>	1.24871 2.07936	</topRightCarryingPoint>
+      <maxClimbAngle>	25	</maxClimbAngle>
+      <navmeshGirth>	6.0	</navmeshGirth>
+      <weight>	12000	</weight>
+      <maxLoad>	45900	</maxLoad>
+      <terrainResistance>	1.1 1.6 2.5	</terrainResistance>
+      <brakeForce>	35500	</brakeForce>
+      <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
+      <rotationSpeed>	20	</rotationSpeed>
+      <shotDispersionFactors>
+        <vehicleMovement>	0.23	</vehicleMovement>
+        <vehicleRotation>	0.20	</vehicleRotation>
+      </shotDispersionFactors>
+      <bulkHealthFactor>	3.0	</bulkHealthFactor>
+      <maxHealth>	170	</maxHealth>
+      <maxRegenHealth>	130	</maxRegenHealth>
+      <repairCost>	5.0	</repairCost>
+    </SU-152_mod_1943>
+    <SU-152_mod_1944>
+      <userString>	#ussr_vehicles:SU-152_mod_1944	</userString>
+      <description>	#ussr_vehicles:SU-152_mod_1944_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 8 0	</icon>
+      <tags></tags>
+      <level>	8	</level>
+      <price>	32710.0	</price>
+      <models>
+        <undamaged>	vehicles/russian/R18_SU-152/normal/lod0/Chassis.model	</undamaged>
+        <destroyed>	vehicles/russian/R18_SU-152/crash/lod0/Chassis.model	</destroyed>
+        <exploded>	vehicles/russian/R18_SU-152/crash/lod0/Chassis.model	</exploded>
+      </models>
+      <traces>
+        <lodDist>	FAR	</lodDist>
+        <bufferPrefs>	mediumTank	</bufferPrefs>
+        <textureSet>	ussr_01	</textureSet>
+        <size>	0.48 0.62	</size>
+      </traces>
+      <tracks>
+        <lodDist>	MEDIUM	</lodDist>
+        <leftMaterial>	track_mat_L_skinned	</leftMaterial>
+        <rightMaterial>	track_mat_R_skinned	</rightMaterial>
+        <textureScale>	-0.7	</textureScale>
+      </tracks>
+      <wheels>
+        <lodDist>	MEDIUM	</lodDist>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	W_L	</template>
+          <count>	6	</count>
+          <radius>	0.302	</radius>
+        </group>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	W_R	</template>
+          <count>	6	</count>
+          <radius>	0.302	</radius>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <name>	WD_L0	</name>
+          <radius>	0.34	</radius>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	WD_L	</template>
+          <count>	3	</count>
+          <startIndex>	1	</startIndex>
+          <radius>	0.195	</radius>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <name>	WD_L4	</name>
+          <radius>	0.453	</radius>
+        </wheel>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <name>	WD_R0	</name>
+          <radius>	0.34	</radius>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	WD_R	</template>
+          <count>	3	</count>
+          <startIndex>	1	</startIndex>
+          <radius>	0.195	</radius>
+        </group>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <name>	WD_R4	</name>
+          <radius>	0.453	</radius>
+        </wheel>
+      </wheels>
+      <drivingWheels>	WD_L0 WD_L4	</drivingWheels>
+      <effects>
+        <lodDist>	MEDIUM	</lodDist>
+        <dust>	mediumTankDust	</dust>
+        <mud>	mediumTankMud	</mud>
+      </effects>
+      <sound>	/vehicles/tanks/treads/treads_3	</sound>
+      <hullPosition>	0.000000 0.991833 0.000000	</hullPosition>
+      <hitTester>
+        <collisionModel>	vehicles/russian/R18_SU-152/collision/Chassis.model	</collisionModel>
+      </hitTester>
+      <armor>
+        <leftTrack>	20	</leftTrack>
+        <rightTrack>	20	</rightTrack>
+      </armor>
+      <topRightCarryingPoint>	1.24871 2.07936	</topRightCarryingPoint>
+      <maxClimbAngle>	25	</maxClimbAngle>
+      <navmeshGirth>	6.0	</navmeshGirth>
+      <weight>	12000	</weight>
+      <maxLoad>	48300	</maxLoad>
+      <terrainResistance>	1.0 1.25 2.0	</terrainResistance>
+      <brakeForce>	35500	</brakeForce>
+      <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
+      <rotationSpeed>	23	</rotationSpeed>
+      <shotDispersionFactors>
+        <vehicleMovement>	0.21	</vehicleMovement>
+        <vehicleRotation>	0.18	</vehicleRotation>
+      </shotDispersionFactors>
+      <bulkHealthFactor>	3.0	</bulkHealthFactor>
+      <maxHealth>	180	</maxHealth>
+      <maxRegenHealth>	135	</maxRegenHealth>
+      <repairCost>	5.0	</repairCost>
+    </SU-152_mod_1944>
+  </chassis>
+  <turrets0>
+    <SU-152_01>
+      <userString>	#ussr_vehicles:SU-152_01	</userString>
+      <description>	#ussr_vehicles:SU-152_01_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 6 0	</icon>
+      <tags></tags>
+      <level>	7	</level>
+      <price>	1200	</price>
+      <notInShop>	true	</notInShop>
+      <models>
+        <undamaged>	vehicles/russian/R18_SU-152/normal/lod0/Turret_01.model	</undamaged>
+        <destroyed>	vehicles/russian/R18_SU-152/crash/lod0/Turret_01.model	</destroyed>
+        <exploded>	vehicles/russian/R18_SU-152/crash/lod0/Turret_01.model	</exploded>
+      </models>
+      <hitTester>
+        <collisionModel>	vehicles/russian/R18_SU-152/collision/Turret_01.model	</collisionModel>
+      </hitTester>
+      <yawLimits>	-8 8	</yawLimits>
+      <gunPosition>	-0.002798 -0.008931 -0.000303	</gunPosition>
+      <armor>
+        <armor_1>	70	</armor_1>
+        <armor_2>	0	</armor_2>
+        <armor_3>	0	</armor_3>
+        <armor_4>	0	</armor_4>
+        <armor_5>	0	</armor_5>
+        <armor_6>	0	</armor_6>
+        <armor_7>	0	</armor_7>
+        <armor_8>	0	</armor_8>
+      </armor>
+      <weight>	100	</weight>
+      <maxHealth>	10	</maxHealth>
+      <rotationSpeed>	30	</rotationSpeed>
+      <turretRotatorHealth>
+        <maxHealth>	100	</maxHealth>
+        <maxRegenHealth>	49	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </turretRotatorHealth>
+      <circularVisionRadius>	380	</circularVisionRadius>
+      <surveyingDeviceHealth>
+        <maxHealth>	100	</maxHealth>
+        <maxRegenHealth>	49	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </surveyingDeviceHealth>
+      <guns>
+        <_152mm_ML-20_mod_1937>	shared	  <maxAmmo>	26	</maxAmmo>
+          <unlocks>
+            <gun>	_122mm_A-19	  <cost>	21500.0	</cost>
+            </gun>
+          </unlocks>
+          <models>
+            <undamaged>	vehicles/russian/R18_SU-152/normal/lod0/Gun_03.model	</undamaged>
+            <destroyed>	vehicles/russian/R18_SU-152/crash/lod0/Gun_03.model	</destroyed>
+            <exploded>	vehicles/russian/R18_SU-152/crash/lod0/Gun_03.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/russian/R18_SU-152/collision/Gun_03.model	</collisionModel>
+          </hitTester>
+          <armor>
+            <armor_1>	65	  <noDamage>	true	</noDamage>
+            </armor_1>
+            <armor_2>	5	  <noDamage>	true	</noDamage>
+            </armor_2>
+            <gun>	70	</gun>
+          </armor>
+        </_152mm_ML-20_mod_1937>
+        <_122mm_A-19>	shared	  <maxAmmo>	28	</maxAmmo>
+          <unlocks>
+            <gun>	_122mm_D-25C_mod1944	  <cost>	26700.0	</cost>
+            </gun>
+          </unlocks>
+          <models>
+            <undamaged>	vehicles/russian/R18_SU-152/normal/lod0/Gun_04.model	</undamaged>
+            <destroyed>	vehicles/russian/R18_SU-152/crash/lod0/Gun_04.model	</destroyed>
+            <exploded>	vehicles/russian/R18_SU-152/crash/lod0/Gun_04.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/russian/R18_SU-152/collision/Gun_04.model	</collisionModel>
+          </hitTester>
+          <armor>
+            <armor_1>	65	  <noDamage>	true	</noDamage>
+            </armor_1>
+            <armor_2>	5	  <noDamage>	true	</noDamage>
+            </armor_2>
+            <gun>	50	</gun>
+          </armor>
+        </_122mm_A-19>
+        <_122mm_D-25C_mod1944>	shared	  <maxAmmo>	32	</maxAmmo>
+          <models>
+            <undamaged>	vehicles/russian/R18_SU-152/normal/lod0/Gun_06.model	</undamaged>
+            <destroyed>	vehicles/russian/R18_SU-152/crash/lod0/Gun_06.model	</destroyed>
+            <exploded>	vehicles/russian/R18_SU-152/crash/lod0/Gun_06.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/russian/R18_SU-152/collision/Gun_06.model	</collisionModel>
+          </hitTester>
+          <armor>
+            <armor_1>	65	  <noDamage>	true	</noDamage>
+            </armor_1>
+            <armor_2>	5	  <noDamage>	true	</noDamage>
+            </armor_2>
+            <gun>	50	</gun>
+          </armor>
+        </_122mm_D-25C_mod1944>
+      </guns>
+      <emblemSlots></emblemSlots>
+    </SU-152_01>
+  </turrets0>
+  <engines>
+    <V-2K>	shared	  <unlocks>
+        <engine>	V-2IS	  <cost>	11000	</cost>
+        </engine>
+      </unlocks>
+    </V-2K>
+    <V-2IS>	shared	  <unlocks>
+        <vehicle>	ISU-152	  <cost>	79135	</cost>
+        </vehicle>
+      </unlocks>
+    </V-2IS>
+  </engines>
+  <fuelTanks>
+    <Heavy>	shared	</Heavy>
+  </fuelTanks>
+  <radios>	&gt;	  <_10R>	shared	  <unlocks>
+        <radio>	_10RK	  <cost>	3100.0	</cost>
+        </radio>
+      </unlocks>
+    </_10R>
+    <_10RK>	shared	  <unlocks>
+        <radio>	_12RT	  <cost>	5600.0	</cost>
+        </radio>
+      </unlocks>
+    </_10RK>
+    <_12RT>	shared	</_12RT>
+  </radios>
+</SU-152.xml>

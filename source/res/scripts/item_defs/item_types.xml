@@ -1,0 +1,117 @@
+<item_types.xml>
+  <vehicle>
+    <userString>	#item_types:vehicle/name	</userString>
+    <description>	#item_types:vehicle/desc	</description>
+    <tags>
+      <lightTank>
+        <userString>	#item_types:vehicle/tags/light_tank/name	</userString>
+        <description>	#item_types:vehicle/tags/light_tank/desc	</description>
+      </lightTank>
+      <mediumTank>
+        <userString>	#item_types:vehicle/tags/medium_tank/name	</userString>
+        <description>	#item_types:vehicle/tags/medium_tank/desc	</description>
+      </mediumTank>
+      <heavyTank>
+        <userString>	#item_types:vehicle/tags/heavy_tank/name	</userString>
+        <description>	#item_types:vehicle/tags/heavy_tank/desc	</description>
+      </heavyTank>
+      <SPG>
+        <userString>	#item_types:vehicle/tags/spg/name	</userString>
+        <description>	#item_types:vehicle/tags/spg/desc	</description>
+      </SPG>
+      <AT-SPG>
+        <userString>	#item_types:vehicle/tags/at-spg/name	</userString>
+        <description>	#item_types:vehicle/tags/at-spg/desc	</description>
+      </AT-SPG>
+      <lightSPG></lightSPG>
+      <mediumSPG></mediumSPG>
+      <heavySPG></heavySPG>
+      <lightAT-SPG></lightAT-SPG>
+      <mediumAT-SPG></mediumAT-SPG>
+      <heavyAT-SPG></heavyAT-SPG>
+      <premium></premium>
+      <beast></beast>
+      <enhancedSuspension_Vikkers_user></enhancedSuspension_Vikkers_user>
+      <enhancedSuspension_candle_user></enhancedSuspension_candle_user>
+      <enhancedSuspension_Christie_user></enhancedSuspension_Christie_user>
+      <enhancedTorsions1t_user></enhancedTorsions1t_user>
+      <enhancedTorsions3t_user></enhancedTorsions3t_user>
+      <enhancedTorsions5t_user></enhancedTorsions5t_user>
+      <enhancedSprings_user></enhancedSprings_user>
+      <enhancedLevers_user></enhancedLevers_user>
+      <enhancedBelwillWashers_user></enhancedBelwillWashers_user>
+      <enhancedLongitudinalTorsions_user></enhancedLongitudinalTorsions_user>
+      <improvedVentilation_class1_user></improvedVentilation_class1_user>
+      <improvedVentilation_class3_user></improvedVentilation_class3_user>
+      <grousers_user></grousers_user>
+      <mediumCaliberTankRammer_user></mediumCaliberTankRammer_user>
+      <largeCaliberTankRammer_user></largeCaliberTankRammer_user>
+      <mediumCaliberHowitzerRammer_user></mediumCaliberHowitzerRammer_user>
+      <largeCaliberHowitzerRammer_user></largeCaliberHowitzerRammer_user>
+      <wetCombatPack_class1_user></wetCombatPack_class1_user>
+      <wetCombatPack_class2_user></wetCombatPack_class2_user>
+      <aimingStabilizer_Mk1_user></aimingStabilizer_Mk1_user>
+      <aimingStabilizer_Mk2_user></aimingStabilizer_Mk2_user>
+      <afterburning_user></afterburning_user>
+      <noImprovedVentilation></noImprovedVentilation>
+      <lendLeaseVehicle></lendLeaseVehicle>
+    </tags>
+  </vehicle>
+  <vehicleChassis>
+    <userString>	#item_types:chassis/name	</userString>
+    <description>	#item_types:chassis/desc	</description>
+    <tags></tags>
+  </vehicleChassis>
+  <vehicleTurret>
+    <userString>	#item_types:turret/name	</userString>
+    <description>	#item_types:turret/desc	</description>
+    <tags></tags>
+  </vehicleTurret>
+  <vehicleGun>
+    <userString>	#item_types:gun/name	</userString>
+    <description>	#item_types:gun/desc	</description>
+    <tags></tags>
+  </vehicleGun>
+  <vehicleEngine>
+    <userString>	#item_types:engine/name	</userString>
+    <description>	#item_types:engine/desc	</description>
+    <tags>
+      <diesel></diesel>
+      <gasoline></gasoline>
+    </tags>
+  </vehicleEngine>
+  <vehicleFuelTank>
+    <userString>	#item_types:fuel_tank/name	</userString>
+    <description>	#item_types:fuel_tank/desc	</description>
+    <tags></tags>
+  </vehicleFuelTank>
+  <vehicleRadio>
+    <userString>	#item_types:radio/name	</userString>
+    <description>	#item_types:radio/desc	</description>
+    <tags></tags>
+  </vehicleRadio>
+  <tankman>
+    <userString></userString>
+    <description></description>
+  </tankman>
+  <optionalDevice>
+    <userString>	#item_types:optionalDevice/name	</userString>
+    <description>	#item_types:optionalDevice/desc	</description>
+  </optionalDevice>
+  <shell>
+    <userString>	#item_types:shot/name	</userString>
+    <description>	#item_types:shot/desc	</description>
+  </shell>
+  <equipment>
+    <userString>	#item_types:equipment/name	</userString>
+    <description>	#item_types:equipment/desc	</description>
+    <tags>
+      <extinguisher></extinguisher>
+      <medkit></medkit>
+      <repairkit></repairkit>
+      <fuel></fuel>
+      <stimulator></stimulator>
+      <trigger></trigger>
+    </tags>
+  </equipment>
+</item_types.xml>

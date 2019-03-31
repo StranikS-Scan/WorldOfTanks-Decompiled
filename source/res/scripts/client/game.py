@@ -1,8 +1,6 @@
+# Python bytecode 2.6 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/game.py
-import cPickle
-import zlib
-import sys
-import asyncore
+# Compiled at: 2018-11-29 14:33:44
 import AreaDestructibles
 import BigWorld
 import constants
@@ -10,41 +8,31 @@ import CommandMapping
 import ResMgr
 from post_processing import g_postProcessing
 from ConnectionManager import connectionManager
+from CurrentVehicle import g_currentVehicle
 from debug_utils import LOG_CURRENT_EXCEPTION, LOG_DEBUG, LOG_ERROR
 import GUI
-from gui import CLIENT_ENCODING, onRepeatKeyEvent, g_keyEventHandlers, g_mouseEventHandlers, InputHandler, GUI_SETTINGS
+from gui import AOGAS, CLIENT_ENCODING, SystemMessages
+from gui.WindowsManager import g_windowsManager
 from gui.Scaleform.GameLoading import GameLoading
-from gui.Scaleform import VoiceChatInterface
-from gui.shared import personality as gui_personality
-from messenger import MessengerEntry
+from messenger import gui as messengerGUI
+from messenger.gui import MessengerDispatcher
 import MusicController
-import TriggersManager
-from helpers import RSSDownloader
 import Settings
+from TmpConsoleCmds import *
 from MemoryCriticalController import g_critMemHandler
-import VOIP
-import WebBrowser
-loadingScreenClass = None
-tutorialLoaderInit = lambda : None
-tutorialLoaderFini = lambda : None
-if GUI_SETTINGS.isGuiEnabled():
-    try:
-        from tutorial.loader import init as tutorialLoaderInit
-        from tutorial.loader import fini as tutorialLoaderFini
-    except ImportError:
-        LOG_ERROR('Module tutorial not found')
-
-    loadingScreenClass = GameLoading
-__import__('__main__').GameLoading = loadingScreenClass
+import Vivox
+from gui.Scaleform import VoiceChatInterface
+from gui import InputHandler
+from gui.Scaleform.Disconnect import Disconnect
+import sys
+import asyncore
+__import__('__main__').GameLoading = GameLoading
 import locale
-try:
-    locale.setlocale(locale.LC_TIME, '')
-except locale.Error:
-    LOG_CURRENT_EXCEPTION()
-
-if GUI_SETTINGS.isGuiEnabled():
-    from gui.Scaleform import fonts_config
-    fonts_config.g_fontConfigMap.load()
+locale.setlocale(locale.LC_TIME, '')
+from gui.Scaleform import fonts_config
+fonts_config.g_fontConfigMap.load()
+g_guiResetters = set()
+g_repeatKeyHandlers = set()
 g_replayCtrl = None
 
 def autoFlushPythonLog():
@@ -52,7 +40,7 @@ def autoFlushPythonLog():
     BigWorld.callback(5.0, autoFlushPythonLog)
 
 
-def init(scriptConfig, engineConfig, userPreferences, loadingScreenGUI = None):
+def init(scriptConfig, engineConfig, userPreferences, loadingScreenGUI=None):
     global g_replayCtrl
     try:
         if constants.IS_DEVELOPMENT:
@@ -77,71 +65,45 @@ def init(scriptConfig, engineConfig, userPreferences, loadingScreenGUI = None):
         except:
             LOG_CURRENT_EXCEPTION()
 
-        tutorialLoaderInit()
+        AOGAS.init()
         BigWorld.callback(0.1, asyncore_call)
-        MessengerEntry.g_instance.init()
+        messengerGUI.init()
+        from gui.Scaleform import SystemMessagesInterface
+        SystemMessages.g_instance = SystemMessagesInterface.SystemMessagesInterface()
+        SystemMessages.g_instance.init()
         import items
-        items.init(True, None if not constants.IS_DEVELOPMENT else {})
+        items.init(False)
         import ArenaType
         ArenaType.init()
-        import dossiers1
-        dossiers1.init()
-        import dossiers2
-        dossiers2.init()
-        import fortified_regions
-        fortified_regions.init()
+        import dossiers
+        dossiers.init()
         BigWorld.worldDrawEnabled(False)
-        import LcdKeyboard
-        LcdKeyboard.enableLcdKeyboardSpecificKeys(True)
-        gui_personality.init(loadingScreenGUI=loadingScreenGUI)
+        if loadingScreenGUI:
+            loadingScreenGUI.script.active(False)
         AreaDestructibles.init()
         MusicController.init()
-        TriggersManager.init()
-        RSSDownloader.init()
+        SoundGroups.g_instance.loadSounds('arena')
         g_postProcessing.init()
-        SoundGroups.loadLightSoundsDB()
+        import LcdKeyboard
+        LcdKeyboard.enableLcdKeyboardSpecificKeys(True)
         try:
             from LightFx import LightManager
             LightManager.g_instance = LightManager.LightManager()
-            import AuxiliaryFx
-            AuxiliaryFx.g_instance = AuxiliaryFx.AuxiliaryFxManager()
         except:
             LOG_CURRENT_EXCEPTION()
 
-        from AvatarInputHandler.cameras import FovExtended
-        FovExtended.instance().resetFov()
-        SoundGroups.loadPluginDB()
     except Exception:
         LOG_CURRENT_EXCEPTION()
         BigWorld.quit()
-
-    return
 
 
 def start():
     LOG_DEBUG('start')
     connectionManager.onConnected += onConnected
     connectionManager.onDisconnected += onDisconnected
+    messengerGUI.start()
     if len(sys.argv) > 2:
-        if sys.argv[1] == 'scriptedTest':
-            try:
-                scriptName = sys.argv[2]
-                if scriptName[-3:] == '.py':
-                    scriptName = scriptName[:-3]
-                try:
-                    __import__(scriptName)
-                except ImportError:
-                    try:
-                        __import__('tests.' + scriptName)
-                    except ImportError:
-                        __import__('cat.' + scriptName)
-
-            except:
-                LOG_CURRENT_EXCEPTION()
-                BigWorld.wg_writeToStdOut('Failed to run scripted test, Python exception was thrown, see python.log')
-                BigWorld.quit()
-
-        elif sys.argv[1] == 'offlineTest':
+        if sys.argv[1] == 'offlineTest':
             try:
                 from cat.tasks.TestArena2 import TestArena2Object
                 LOG_DEBUG(sys.argv)
@@ -156,7 +118,7 @@ def start():
 
         elif sys.argv[1] == 'validationTest':
             try:
-                gui_personality.start()
+                g_windowsManager.start()
                 LOG_DEBUG('starting validationTest')
                 import Cat
                 Cat.Tasks.Validation.ParamsObject.setResultFileName(sys.argv[2])
@@ -165,19 +127,8 @@ def start():
                 LOG_DEBUG('Game start FAILED with:')
                 LOG_CURRENT_EXCEPTION()
 
-        elif sys.argv[1] == 'resourcesValidationTest':
-            try:
-                gui_personality.start()
-                LOG_DEBUG('starting resourcesValidationTest')
-                import Cat
-                Cat.Tasks.Validation.ParamsObject.setResultFileName(sys.argv[2])
-                BigWorld.callback(10, Cat.Tasks.Validation.startResourcesValidationTest)
-            except:
-                LOG_DEBUG('Game start FAILED with:')
-                LOG_CURRENT_EXCEPTION()
-
     else:
-        gui_personality.start()
+        g_windowsManager.start()
     try:
         import Vibroeffects
         Vibroeffects.VibroManager.g_instance.start()
@@ -186,69 +137,50 @@ def start():
 
     try:
         import LightFx
-        if LightFx.LightManager.g_instance is not None:
-            LightFx.LightManager.g_instance.start()
-        import AuxiliaryFx
-        AuxiliaryFx.g_instance.start()
+        LightFx.LightManager.g_instance.start()
     except:
         LOG_CURRENT_EXCEPTION()
 
-    return
-
 
 def fini():
+    global g_replayCtrl
     LOG_DEBUG('fini')
     BigWorld.wg_setScreenshotNotifyCallback(None)
-    if g_postProcessing is None:
-        return
-    else:
-        g_critMemHandler.restore()
-        g_critMemHandler.destroy()
-        if constants.IS_CAT_LOADED:
-            import Cat
-            Cat.fini()
-        if MusicController.g_musicController is not None:
-            MusicController.g_musicController.destroy()
-        if TriggersManager.g_manager is not None:
-            TriggersManager.g_manager.destroy()
-        if RSSDownloader.g_downloader is not None:
-            RSSDownloader.g_downloader.destroy()
-        connectionManager.onConnected -= onConnected
-        connectionManager.onDisconnected -= onDisconnected
-        MessengerEntry.g_instance.fini()
-        g_postProcessing.fini()
-        from helpers import EdgeDetectColorController
-        if EdgeDetectColorController.g_instance is not None:
-            EdgeDetectColorController.g_instance.destroy()
-            EdgeDetectColorController.g_instance = None
-        BigWorld.resetEntityManager(False, False)
-        BigWorld.clearAllSpaces()
-        gui_personality.fini()
-        tutorialLoaderFini()
-        import LcdKeyboard
-        LcdKeyboard.finalize()
-        import Vibroeffects
-        if Vibroeffects.VibroManager.g_instance is not None:
-            Vibroeffects.VibroManager.g_instance.destroy()
-            Vibroeffects.VibroManager.g_instance = None
-        if g_replayCtrl is not None:
-            g_replayCtrl.destroy()
-        from LightFx import LightManager
-        if LightManager.g_instance is not None:
-            LightManager.g_instance.destroy()
-            LightManager.g_instance = None
-        import AuxiliaryFx
-        if AuxiliaryFx.g_instance is not None:
-            AuxiliaryFx.g_instance.destroy()
-            AuxiliaryFx.g_instance = None
-        from predefined_hosts import g_preDefinedHosts
-        if g_preDefinedHosts is not None:
-            g_preDefinedHosts.fini()
-        voipRespHandler = VOIP.getVOIPManager()
-        if voipRespHandler is not None:
-            VOIP.getVOIPManager().destroy()
-        Settings.g_instance.save()
-        return
+    g_critMemHandler.restore()
+    g_critMemHandler.destroy()
+    if constants.IS_CAT_LOADED:
+        import Cat
+        Cat.fini()
+    connectionManager.onConnected -= onConnected
+    connectionManager.onDisconnected -= onDisconnected
+    messengerGUI.fini()
+    g_postProcessing.fini()
+    from helpers import EdgeDetectColorController
+    EdgeDetectColorController.g_instance.destroy()
+    EdgeDetectColorController.g_instance = None
+    BigWorld.resetEntityManager(False, False)
+    BigWorld.clearAllSpaces()
+    from gui.Scaleform.Waiting import Waiting
+    Waiting.close()
+    g_windowsManager.destroy()
+    SystemMessages.g_instance.destroy()
+    AOGAS.fini()
+    g_currentVehicle.cleanup()
+    import LcdKeyboard
+    LcdKeyboard.finalize()
+    import Vibroeffects
+    Vibroeffects.VibroManager.g_instance.destroy()
+    Vibroeffects.VibroManager.g_instance = None
+    g_replayCtrl.stop()
+    g_replayCtrl = None
+    import BattleReplay
+    BattleReplay.g_replayCtrl = None
+    from LightFx import LightManager
+    LightManager.g_instance.destroy()
+    LightManager.g_instance = None
+    Vivox.getResponseHandler().destroy()
+    Settings.g_instance.save()
+    return
 
 
 def onChangeEnvironments(inside):
@@ -257,44 +189,31 @@ def onChangeEnvironments(inside):
 
 def onRecreateDevice():
     LOG_DEBUG('onRecreateDevice')
-    gui_personality.onRecreateDevice()
+    for c in g_guiResetters:
+        try:
+            c()
+        except Exception:
+            LOG_CURRENT_EXCEPTION()
 
 
 def onStreamComplete(id, desc, data):
-    try:
-        origPacketLen, origCrc32 = cPickle.loads(desc)
-    except:
-        origPacketLen, origCrc32 = (-1, -1)
-
-    packetLen = len(data)
-    crc32 = zlib.crc32(data)
-    isCorrupted = origPacketLen != packetLen or origCrc32 != crc32
-    desc = (isCorrupted,
-     origPacketLen,
-     packetLen,
-     origCrc32,
-     crc32)
     player = BigWorld.player()
     if player is None:
         LOG_ERROR('onStreamComplete: no player entity available for process stream (%d, %s) data' % (id, desc))
     else:
-        player.onStreamComplete(id, desc, data)
+        player.onStreamComplete(id, data)
     return
 
 
 def onConnected():
-    gui_personality.onConnected()
-    VOIP.getVOIPManager().onConnected()
-
-
-def onGeometryMapped(spaceID, path):
-    sys.stderr.write('[SPACE] Loading space: ' + path + '\n')
+    Vivox.getResponseHandler().subscribeChatActions()
 
 
 def onDisconnected():
-    gui_personality.onDisconnected()
-    VOIP.getVOIPManager().logout()
-    VOIP.getVOIPManager().onDisconnected()
+    g_currentVehicle.firstTimeInitialized = False
+    g_currentVehicle.reset(True)
+    Vivox.getResponseHandler().logout()
+    Vivox.getResponseHandler().unsubscribeChatActions()
     VoiceChatInterface.g_instance.reset()
 
 
@@ -311,42 +230,32 @@ def handleAxisEvent(event):
 
 def handleKeyEvent(event):
     isDown, key, mods, isRepeat = convertKeyEvent(event)
-    if WebBrowser.g_mgr.handleKeyEvent(event):
-        return True
-    else:
-        if g_replayCtrl.isPlaying:
-            if g_replayCtrl.handleKeyEvent(isDown, key, mods, isRepeat, event):
-                return True
-        if isRepeat:
-            if onRepeatKeyEvent(event):
-                return True
-        if constants.IS_CAT_LOADED:
-            import Cat
-            if Cat.handleKeyEventBeforeGUI(isDown, key, mods, event):
-                return True
-        if not isRepeat:
-            InputHandler.g_instance.handleKeyEvent(event)
-            if GUI.handleKeyEvent(event):
-                return True
-        if constants.IS_CAT_LOADED:
-            import Cat
-            if Cat.handleKeyEventAfterGUI(isDown, key, mods, event):
-                return True
-        if not isRepeat:
-            if MessengerEntry.g_instance.gui.isEditing(event):
-                return True
-        inputHandler = getattr(BigWorld.player(), 'inputHandler', None)
-        if inputHandler is not None:
-            if inputHandler.handleKeyEvent(event):
-                return True
-        for handler in g_keyEventHandlers:
-            try:
-                if handler(event):
-                    return True
-            except Exception:
-                LOG_CURRENT_EXCEPTION()
-
-        return False
+    if isRepeat:
+        if onRepeatKeyEvent(event):
+            return True
+    if g_replayCtrl.isPlaying:
+        if g_replayCtrl.handleKeyEvent(isDown, key, mods, isRepeat, event):
+            return True
+    if constants.IS_CAT_LOADED:
+        import Cat
+        if Cat.handleKeyEventBeforeGUI(isDown, key, mods, event):
+            return True
+    if not isRepeat:
+        InputHandler.g_instance.handleKeyEvent(event)
+        if GUI.handleKeyEvent(event):
+            return True
+    if constants.IS_CAT_LOADED:
+        import Cat
+        if Cat.handleKeyEventAfterGUI(isDown, key, mods, event):
+            return True
+    if not isRepeat:
+        if MessengerDispatcher.g_instance.editing():
+            return True
+    inputHandler = getattr(BigWorld.player(), 'inputHandler', None)
+    if inputHandler is not None:
+        if inputHandler.handleKeyEvent(event):
+            return True
+    return False
 
 
 def handleMouseEvent(event):
@@ -355,24 +264,19 @@ def handleMouseEvent(event):
         import Cat
         if Cat.handleMouseEvent(dx, dy, dz):
             return True
+    if Disconnect.getWindow() is not None:
+        Disconnect.getWindow().handleMouseEvent(event)
+        return True
     if g_replayCtrl.isPlaying:
         if g_replayCtrl.handleMouseEvent(dx, dy, dz):
             return True
     if GUI.handleMouseEvent(event):
         return True
-    else:
-        inputHandler = getattr(BigWorld.player(), 'inputHandler', None)
-        if inputHandler is not None:
-            if inputHandler.handleMouseEvent(dx, dy, dz):
-                return True
-        for handler in g_mouseEventHandlers:
-            try:
-                if handler(event):
-                    return True
-            except Exception:
-                LOG_CURRENT_EXCEPTION()
-
+    inputHandler = getattr(BigWorld.player(), 'inputHandler', None)
+    if inputHandler is None:
         return False
+    else:
+        return inputHandler.handleMouseEvent(dx, dy, dz)
 
 
 def handleInputLangChangeEvent():
@@ -392,7 +296,6 @@ _PYTHON_MACROS = {'p': 'BigWorld.player()',
  'cam_pos': 'BigWorld.player().inputHandler._AvatarInputHandler__curCtrl.setCameraPosition',
  'gc': 'import gc; gc.set_debug(gc.DEBUG_LEAK | gc.DEBUG_STATS);gc.collect(2)',
  'gcd': 'import gc; gc.set_debug(gc.DEBUG_LEAK | gc.DEBUG_STATS);from debug_utils import dump_garbage; dump_garbage()',
- 'gcd2': 'from debug_utils import dump_garbage_2; dump_garbage_2',
  'connect': 'ls=game.LanServers();ls.searchAndConnect',
  'create': 'BigWorld.player().createArena',
  'list': 'alr = game.ArenaListRequester',
@@ -400,19 +303,8 @@ _PYTHON_MACROS = {'p': 'BigWorld.player()',
  'join': 'BigWorld.player().joinArena',
  'leave': 'BigWorld.player().leaveArena',
  'cv': 'import vehicles_check;vehicles_check.check',
- 'chat': 'from messenger.MessengerEntry import g_instance;g_instance',
- 'battleUI': 'from gui.WindowsManager import g_windowsManager; g_windowsManager.battleWindow',
- 'wm': 'from gui.WindowsManager import g_windowsManager; wm = g_windowsManager; wm',
- 'cm': 'from gui.WindowsManager import g_windowsManager; cm = g_windowsManager.window.containerManager; cm',
- 'cls': "print '\\n' * 100",
- 'items': 'from gui.shared import g_itemsCache, REQ_CRITERIA; items = g_itemsCache.items; items',
- 'unlockAll': 'BigWorld.player().stats.unlockAll(lambda *args:None)',
- 'hangar': 'from gui.ClientHangarSpace import g_clientHangarSpaceOverride; g_clientHangarSpaceOverride',
- 'cvi': 'from CurrentVehicle import g_currentVehicle; cvi = g_currentVehicle.item; cvi',
- 'sc': 'from account_helpers.settings_core.SettingsCore import g_settingsCore; sc = g_settingsCore; sc',
- 'quests': 'from gui.shared import g_eventsCache; events = g_eventsCache; events',
- 'wc': 'from gui.Scaleform.Waiting import Waiting; Waiting.close()',
- 'clan': 'from gui.shared.ClanCache import g_clanCache; clan = g_clanCache'}
+ 'chat': 'from messenger.gui.MessengerDispatcher import g_instance;g_instance',
+ 'battleUI': 'from gui.WindowsManager import g_windowsManager; g_windowsManager.battleWindow'}
 
 def expandMacros(line):
     import re
@@ -455,6 +347,21 @@ def convertMouseEvent(event):
      event.dy,
      event.dz,
      event.cursorPosition)
+
+
+def onRepeatKeyEvent(event):
+    safeCopy = frozenset(g_repeatKeyHandlers)
+    processed = False
+    for handler in safeCopy:
+        try:
+            processed = handler(event)
+            if processed:
+                break
+        except Exception:
+            LOG_CURRENT_EXCEPTION()
+
+    safeCopy = None
+    return processed
 
 
 def onMemoryCritical():

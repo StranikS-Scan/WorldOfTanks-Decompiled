@@ -1,0 +1,44 @@
+<scripts_config.xml>
+  <login>
+    <host>
+      <name>	WoT v0.7.0	</name>
+      <url>	wotsandbox.login.wargaming.net:20014	</url>
+    </host>
+  </login>
+  <updateUrl>	http://game.worldoftanks.ru/update	</updateUrl>
+  <csisUrl>	http://csis.worldoftanks.ru/csis/wotru1/	</csisUrl>
+  <fakeModel>	objects/fake_model.model	</fakeModel>
+  <silhouetteColors>
+    <common>
+      <self>	0.5 0.5 0.5 1	</self>
+      <enemy>	1.0 0.070 0.027 1	</enemy>
+      <friend>	0.488 0.839 0.023 1	</friend>
+    </common>
+    <colorBlind>
+      <self>	0.5 0.5 0.5 1	</self>
+      <enemy>	0.511 0.472 0.992 1	</enemy>
+      <friend>	0.488 0.839 0.023 1	</friend>
+    </colorBlind>
+  </silhouetteColors>
+  <decal>
+    <groups>
+      <slow>
+        <lifeTime>	100	</lifeTime>
+        <trianglesCount>	10000	</trianglesCount>
+      </slow>
+      <medium>
+        <lifeTime>	50	</lifeTime>
+        <trianglesCount>	5000	</trianglesCount>
+      </medium>
+      <fast>
+        <lifeTime>	25	</lifeTime>
+        <trianglesCount>	2500	</trianglesCount>
+      </fast>
+    </groups>
+    <textures>
+      <explosion>
+        <texture>	maps/fx/explosion_decal.dds	</texture>
+      </explosion>
+    </textures>
+  </decal>
+</scripts_config.xml>

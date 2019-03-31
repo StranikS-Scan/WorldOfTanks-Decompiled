@@ -1,0 +1,65 @@
+<ArenaMgr.def>
+  <Properties></Properties>
+  <BaseMethods>
+    <onArenaCreated>
+      <Arg>	MAILBOX	</Arg>
+      <Arg>	UINT64	</Arg>
+      <Arg>	PYTHON	</Arg>
+      <Arg>	INT32	</Arg>
+    </onArenaCreated>
+    <sendActiveArenasTo>
+      <Arg>	MAILBOX	</Arg>
+    </sendActiveArenasTo>
+    <createArena>
+      <Arg>	ARRAY	  <of>	INT32	</of>
+      </Arg>
+      <Arg>	UINT8	</Arg>
+      <Arg>	PYTHON	</Arg>
+      <Arg>	INT32	</Arg>
+      <Arg>	PYTHON	</Arg>
+      <Arg>	UINT8	</Arg>
+      <Arg>	BOOL	</Arg>
+      <Arg>	UINT8	</Arg>
+      <Arg>	UINT8	</Arg>
+    </createArena>
+    <addActiveArena>
+      <Arg>	MAILBOX	</Arg>
+      <Arg>	UINT64	</Arg>
+      <Arg>	PUBLIC_ARENA_INFO	</Arg>
+      <Arg>	INT32	</Arg>
+      <Arg>	UINT16	</Arg>
+    </addActiveArena>
+    <removeArena>
+      <Arg>	OBJECT_ID	</Arg>
+    </removeArena>
+    <addArenaToPool>
+      <Arg>	MAILBOX	</Arg>
+      <Arg>	INT32	</Arg>
+      <Arg>	INT32	</Arg>
+      <Arg>	UINT16	</Arg>
+    </addArenaToPool>
+    <removeArenaFromPool>
+      <Arg>	OBJECT_ID	</Arg>
+      <Arg>	INT32	</Arg>
+    </removeArenaFromPool>
+    <updateArenaCellappID>
+      <Arg>	OBJECT_ID	</Arg>
+      <Arg>	INT32	</Arg>
+    </updateArenaCellappID>
+    <enqueue>
+      <Arg>	MAILBOX	</Arg>
+      <Arg>	PYTHON	</Arg>
+      <Arg>	INT32	</Arg>
+      <Arg>	INT32	</Arg>
+      <Arg>	UINT8	</Arg>
+    </enqueue>
+    <dequeue>
+      <Arg>	MAILBOX	</Arg>
+      <Arg>	UINT8	</Arg>
+    </dequeue>
+    <dequeueFromAll>
+      <Arg>	MAILBOX	</Arg>
+    </dequeueFromAll>
+    <createArenaFromQueue></createArenaFromQueue>
+  </BaseMethods>
+</ArenaMgr.def>

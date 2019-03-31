@@ -1,0 +1,25 @@
+<InvoiceManager.def>
+  <Properties>
+    <consumer_tag>
+      <Type>	STRING	</Type>
+      <Flags>	BASE	</Flags>
+      <Persistent>	false	</Persistent>
+    </consumer_tag>
+  </Properties>
+  <BaseMethods>
+    <addInvoice>
+      <Arg>	UINT32	</Arg>
+      <Arg>	UINT16	</Arg>
+      <Arg>	UINT64	</Arg>
+      <Arg>	UINT16	</Arg>
+      <Arg>	UINT64	</Arg>
+      <Arg>	UINT16	</Arg>
+      <Arg>	UINT64	</Arg>
+      <Arg>	INT16	</Arg>
+      <Arg>	INT64	</Arg>
+      <Arg>	PYTHON	</Arg>
+      <Arg>	UINT32	</Arg>
+      <Arg>	INT32	</Arg>
+    </addInvoice>
+  </BaseMethods>
+</InvoiceManager.def>

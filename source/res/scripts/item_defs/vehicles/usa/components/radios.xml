@@ -1,0 +1,221 @@
+<radios.xml>
+  <ids>
+    <SCR_508_1>	0	</SCR_508_1>
+    <SCR_210>	1	</SCR_210>
+    <SCR_506>	2	</SCR_506>
+    <Alarm_flags>	3	</Alarm_flags>
+    <SCR_200>	4	</SCR_200>
+    <SCR_538>	7	</SCR_538>
+    <SCR_508>	8	</SCR_508>
+    <SCR_528>	9	</SCR_528>
+    <British_Wireless_set_N19>	10	</British_Wireless_set_N19>
+    <AN_VRC-3>	11	</AN_VRC-3>
+    <SCR_510>	12	</SCR_510>
+    <SCR_610>	13	</SCR_610>
+    <SCR_619>	14	</SCR_619>
+    <SCR_210A>	15	</SCR_210A>
+    <SCR_510M2>	16	</SCR_510M2>
+  </ids>
+  <shared>
+    <Alarm_flags>
+      <userString>	#usa_vehicles:Alarm_flags	</userString>
+      <description>	#usa_vehicles:Alarm_flags_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 9 0	</icon>
+      <tags></tags>
+      <level>	1	</level>
+      <price>	0	</price>
+      <weight>	1	</weight>
+      <distance>	100	</distance>
+      <maxHealth>	90	</maxHealth>
+      <maxRegenHealth>	75	</maxRegenHealth>
+      <repairCost>	0	</repairCost>
+    </Alarm_flags>
+    <SCR_200>
+      <userString>	#usa_vehicles:SCR_200	</userString>
+      <description>	#usa_vehicles:SCR_200_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 9 0	</icon>
+      <tags></tags>
+      <level>	2	</level>
+      <price>	180.0	</price>
+      <weight>	40	</weight>
+      <distance>	300	</distance>
+      <maxHealth>	100	</maxHealth>
+      <maxRegenHealth>	49	</maxRegenHealth>
+      <repairCost>	0.5	</repairCost>
+    </SCR_200>
+    <SCR_508_1>
+      <userString>	#usa_vehicles:SCR_508_1	</userString>
+      <description>	#usa_vehicles:SCR_508_1_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 9 1	</icon>
+      <tags></tags>
+      <notInShop>	true	</notInShop>
+      <level>	8	</level>
+      <price>	21600.0	</price>
+      <weight>	100	</weight>
+      <distance>	650	</distance>
+      <maxHealth>	200	</maxHealth>
+      <maxRegenHealth>	150	</maxRegenHealth>
+      <repairCost>	3	</repairCost>
+    </SCR_508_1>
+    <SCR_210>
+      <userString>	#usa_vehicles:SCR_210	</userString>
+      <description>	#usa_vehicles:SCR_210_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 9 0	</icon>
+      <tags></tags>
+      <level>	4	</level>
+      <price>	1980.0	</price>
+      <weight>	80	</weight>
+      <distance>	370	</distance>
+      <maxHealth>	110	</maxHealth>
+      <maxRegenHealth>	55	</maxRegenHealth>
+      <repairCost>	1	</repairCost>
+    </SCR_210>
+    <SCR_210A>
+      <userString>	#usa_vehicles:SCR_210	</userString>
+      <description>	#usa_vehicles:SCR_210_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 9 0	</icon>
+      <tags></tags>
+      <notInShop>	true	</notInShop>
+      <level>	4	</level>
+      <price>	1980.0	</price>
+      <weight>	80	</weight>
+      <distance>	370	</distance>
+      <maxHealth>	110	</maxHealth>
+      <maxRegenHealth>	55	</maxRegenHealth>
+      <repairCost>	1	</repairCost>
+    </SCR_210A>
+    <SCR_506>
+      <userString>	#usa_vehicles:SCR_506	</userString>
+      <description>	#usa_vehicles:SCR_506_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 9 0	</icon>
+      <tags></tags>
+      <level>	9	</level>
+      <price>	33600.0	</price>
+      <weight>	110	</weight>
+      <distance>	700	</distance>
+      <maxHealth>	200	</maxHealth>
+      <maxRegenHealth>	150	</maxRegenHealth>
+      <repairCost>	3	</repairCost>
+    </SCR_506>
+    <SCR_508>
+      <userString>	#usa_vehicles:SCR_508	</userString>
+      <description>	#usa_vehicles:SCR_508_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 9 1	</icon>
+      <tags></tags>
+      <level>	6	</level>
+      <price>	21600.0	</price>
+      <weight>	100	</weight>
+      <distance>	450	</distance>
+      <maxHealth>	120	</maxHealth>
+      <maxRegenHealth>	60	</maxRegenHealth>
+      <repairCost>	1.2	</repairCost>
+    </SCR_508>
+    <SCR_538>
+      <userString>	#usa_vehicles:SCR_538	</userString>
+      <description>	#usa_vehicles:SCR_538_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 9 1	</icon>
+      <tags></tags>
+      <level>	7	</level>
+      <price>	22800.0	</price>
+      <weight>	100	</weight>
+      <distance>	550	</distance>
+      <maxHealth>	150	</maxHealth>
+      <maxRegenHealth>	75	</maxRegenHealth>
+      <repairCost>	1.5	</repairCost>
+    </SCR_538>
+    <SCR_528>
+      <userString>	#usa_vehicles:SCR_528	</userString>
+      <description>	#usa_vehicles:SCR_528_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 9 0	</icon>
+      <tags></tags>
+      <level>	10	</level>
+      <price>	54000.0	</price>
+      <weight>	80	</weight>
+      <distance>	850	</distance>
+      <maxHealth>	200	</maxHealth>
+      <maxRegenHealth>	150	</maxRegenHealth>
+      <repairCost>	3	</repairCost>
+    </SCR_528>
+    <British_Wireless_set_N19>
+      <userString>	#usa_vehicles:British_Wireless_set_N19	</userString>
+      <description>	#usa_vehicles:British_Wireless_set_N19_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 9 0	</icon>
+      <tags></tags>
+      <notInShop>	true	</notInShop>
+      <level>	9	</level>
+      <price>	29400.0	</price>
+      <weight>	110	</weight>
+      <distance>	650	</distance>
+      <maxHealth>	200	</maxHealth>
+      <maxRegenHealth>	150	</maxRegenHealth>
+      <repairCost>	3	</repairCost>
+    </British_Wireless_set_N19>
+    <AN_VRC-3>
+      <userString>	#usa_vehicles:AN_VRC-3	</userString>
+      <description>	#usa_vehicles:AN_VRC-3_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 9 0	</icon>
+      <tags></tags>
+      <level>	10	</level>
+      <notInShop>	true	</notInShop>
+      <price>	51600.0	</price>
+      <weight>	160	</weight>
+      <distance>	850	</distance>
+      <maxHealth>	250	</maxHealth>
+      <maxRegenHealth>	75	</maxRegenHealth>
+      <repairCost>	3.5	</repairCost>
+    </AN_VRC-3>
+    <SCR_510>
+      <userString>	#usa_vehicles:SCR_510	</userString>
+      <description>	#usa_vehicles:SCR_510_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 9 0	</icon>
+      <tags></tags>
+      <level>	4	</level>
+      <price>	1980.0	</price>
+      <weight>	80	</weight>
+      <distance>	370	</distance>
+      <maxHealth>	110	</maxHealth>
+      <maxRegenHealth>	55	</maxRegenHealth>
+      <repairCost>	1	</repairCost>
+    </SCR_510>
+    <SCR_510M2>
+      <userString>	#usa_vehicles:SCR_510M2	</userString>
+      <description>	#usa_vehicles:SCR_510M2_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 9 0	</icon>
+      <tags></tags>
+      <level>	4	</level>
+      <notInShop>	true	</notInShop>
+      <price>	1980.0	</price>
+      <weight>	80	</weight>
+      <distance>	450	</distance>
+      <maxHealth>	110	</maxHealth>
+      <maxRegenHealth>	55	</maxRegenHealth>
+      <repairCost>	1	</repairCost>
+    </SCR_510M2>
+    <SCR_610>
+      <userString>	#usa_vehicles:SCR_610	</userString>
+      <description>	#usa_vehicles:SCR_610_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 9 1	</icon>
+      <tags></tags>
+      <level>	6	</level>
+      <price>	24600.0	</price>
+      <weight>	100	</weight>
+      <distance>	480	</distance>
+      <maxHealth>	120	</maxHealth>
+      <maxRegenHealth>	60	</maxRegenHealth>
+      <repairCost>	1.2	</repairCost>
+    </SCR_610>
+    <SCR_619>
+      <userString>	#usa_vehicles:SCR_619	</userString>
+      <description>	#usa_vehicles:SCR_619_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 9 0	</icon>
+      <tags></tags>
+      <level>	10	</level>
+      <price>	54000.0	</price>
+      <weight>	80	</weight>
+      <distance>	850	</distance>
+      <maxHealth>	200	</maxHealth>
+      <maxRegenHealth>	150	</maxRegenHealth>
+      <repairCost>	3	</repairCost>
+    </SCR_619>
+  </shared>
+</radios.xml>

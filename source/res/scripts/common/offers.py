@@ -1,4 +1,6 @@
+# Python bytecode 2.6 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/offers.py
+# Compiled at: 2011-06-20 16:18:55
 import time
 from collections import namedtuple
 import BigWorld
@@ -55,7 +57,7 @@ def parseDstEntityTypeFromFlags(flags):
 class OutOffers(object):
     Offer = namedtuple('Offer', 'flags dstDBID dstName srcWares dstWares validTill fee')
 
-    def __init__(self, offersDict, outWriterGetter = None):
+    def __init__(self, offersDict, outWriterGetter=None):
         offersDict.setdefault('nextID', 0)
         offersDict.setdefault('done', {})
         offersDict.setdefault('out', {})
@@ -73,7 +75,7 @@ class OutOffers(object):
         else:
             return
 
-    def getExt(self, offerID, default = None):
+    def getExt(self, offerID, default=None):
         outExt = self.__data.get('outExt')
         if outExt is None:
             return default
@@ -139,9 +141,9 @@ class OutOffers(object):
         return
 
     def updateDestination(self, offerID, dstEntityType, dstEntityDBID, dstEntityName):
-        raise self.__data['out'][offerID][1] == dstEntityDBID or AssertionError
+        assert self.__data['out'][offerID][1] == dstEntityDBID
 
-    def createOffer(self, flags, srcDBID, srcName, dstDBID, dstName, validSec, srcWares, srcFee, dstWares, dstFee, ext = None):
+    def createOffer(self, flags, srcDBID, srcName, dstDBID, dstName, validSec, srcWares, srcFee, dstWares, dstFee, ext=None):
         currTime = int(time.time())
         validTill = currTime + int(validSec)
         offer = (flags,
@@ -154,10 +156,10 @@ class OutOffers(object):
         data = self.__data
         offerID = ((currTime & 1048575) << 12) + (data['nextID'] & 4095)
         data['nextID'] += 1
-        if not (offerID not in data['out'] and offerID not in data['done']):
-            raise AssertionError
-            self.__outWriter()[offerID] = offer
-            data.setdefault('outExt', {})[offerID] = ext is not None and ext
+        assert offerID not in data['out'] and offerID not in data['done']
+        self.__outWriter()[offerID] = offer
+        if ext is not None:
+            data.setdefault('outExt', {})[offerID] = ext
         return (offerID, (offerID,
           flags,
           srcDBID,
@@ -171,7 +173,7 @@ class OutOffers(object):
 class InOffers(object):
     Offer = namedtuple('Offer', 'srcOfferID flags srcDBID srcName srcWares dstWares validTill fee')
 
-    def __init__(self, offersDict, inWriterGetter = None):
+    def __init__(self, offersDict, inWriterGetter=None):
         offersDict.setdefault('nextID', 0)
         offersDict.setdefault('in', {})
         self.__data = offersDict

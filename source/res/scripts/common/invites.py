@@ -1,4 +1,6 @@
+# Python bytecode 2.6 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/invites.py
+# Compiled at: 2010-07-14 16:49:38
 from enumerations import Enumeration
 INVITE_TYPES = Enumeration('InviteTypes', ['BARTER',
  'TEAM',

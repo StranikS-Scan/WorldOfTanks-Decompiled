@@ -1,0 +1,47 @@
+<player_emblems.xml>
+  <textureSize>	64	</textureSize>
+  <common>
+    <ussr_star>
+      <id>	1	</id>
+      <gold>	0	</gold>
+      <texture>	gui/maps/vehicles/decals/graffiti_stickers.dds 0 0	</texture>
+    </ussr_star>
+    <germany_cross>
+      <id>	2	</id>
+      <gold>	0	</gold>
+      <texture>	gui/maps/vehicles/decals/graffiti_stickers.dds 1 0	</texture>
+    </germany_cross>
+    <usa_star>
+      <id>	3	</id>
+      <gold>	0	</gold>
+      <texture>	gui/maps/vehicles/decals/graffiti_stickers.dds 0 1	</texture>
+    </usa_star>
+    <french_rose>
+      <id>	4	</id>
+      <gold>	0	</gold>
+      <texture>	gui/maps/vehicles/decals/graffiti_stickers.dds 1 1	</texture>
+    </french_rose>
+    <china_star>
+      <id>	5	</id>
+      <gold>	0	</gold>
+      <texture>	gui/maps/vehicles/decals/graffiti_stickers.dds 0 2	</texture>
+    </china_star>
+    <britain_color>
+      <id>	6	</id>
+      <gold>	0	</gold>
+      <texture>	gui/maps/vehicles/decals/graffiti_stickers.dds 1 2	</texture>
+    </britain_color>
+  </common>
+  <restricted>
+    <alpha_tester>
+      <id>	100	</id>
+      <gold>	0	</gold>
+      <texture>	gui/maps/vehicles/decals/graffiti_stickers.dds 2 2	</texture>
+    </alpha_tester>
+    <beta_tester>
+      <id>	101	</id>
+      <gold>	0	</gold>
+      <texture>	gui/maps/vehicles/decals/graffiti_stickers.dds 3 2	</texture>
+    </beta_tester>
+  </restricted>
+</player_emblems.xml>

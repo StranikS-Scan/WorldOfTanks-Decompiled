@@ -1,0 +1,57 @@
+<AreaDestructibles.def>
+  <Properties>
+    <chunkID>
+      <Type>	UINT16	</Type>
+      <Flags>	CELL_PUBLIC	</Flags>
+    </chunkID>
+    <destroyedModules>
+      <Type>	ARRAY	  <of>	UINT16	</of>
+      </Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </destroyedModules>
+    <destroyedFragiles>
+      <Type>	ARRAY	  <of>	UINT8	</of>
+      </Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </destroyedFragiles>
+    <fallenDestructibles>
+      <Type>	ARRAY	  <of>	UINT16	</of>
+      </Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </fallenDestructibles>
+    <destructibles>
+      <Type>	PYTHON	</Type>
+      <Flags>	CELL_PUBLIC	</Flags>
+    </destructibles>
+    <waters>
+      <Type>	ARRAY	  <of>	TUPLE	  <of>	FLOAT32	</of>
+          <size>	6	</size>
+        </of>
+      </Type>
+      <Flags>	CELL_PUBLIC	</Flags>
+    </waters>
+    <arena>
+      <Type>	MAILBOX	</Type>
+      <Flags>	BASE	</Flags>
+    </arena>
+  </Properties>
+  <ClientMethods></ClientMethods>
+  <CellMethods>
+    <damageDestructible>
+      <Arg>	UINT8	</Arg>
+      <Arg>	UINT8	</Arg>
+      <Arg>	UINT16	</Arg>
+      <Arg>	FLOAT32	</Arg>
+      <Arg>	INT32	</Arg>
+      <Arg>	INT8	</Arg>
+    </damageDestructible>
+    <reset></reset>
+  </CellMethods>
+  <BaseMethods>
+    <createCellNearHere>
+      <Arg>	MAILBOX	</Arg>
+    </createCellNearHere>
+    <reset></reset>
+    <smartDestroy></smartDestroy>
+  </BaseMethods>
+</AreaDestructibles.def>

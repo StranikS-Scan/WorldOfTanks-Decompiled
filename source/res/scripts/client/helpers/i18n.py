@@ -1,25 +1,12 @@
+# Python bytecode 2.6 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/helpers/i18n.py
-import types
-import json
-import gettext
-import BigWorld
-from collections import defaultdict
+# Compiled at: 2012-01-23 14:10:35
 from encodings import utf_8
-from debug_utils import LOG_WARNING, LOG_CURRENT_EXCEPTION, LOG_DEBUG
-
-def _getTranslator(domain):
-    path = convert(BigWorld.wg_resolveFileName('text')[:-5])
-    return gettext.translation(domain, path, languages=['text'])
-
-
-class _TranslatorsCache(defaultdict):
-
-    def __missing__(self, key):
-        self[key] = value = _getTranslator(key)
-        return value
-
-
-g_translators = _TranslatorsCache()
+import gettext, constants
+import BigWorld
+import json
+from debug_utils import LOG_WARNING, LOG_CURRENT_EXCEPTION
+g_translators = {}
 
 def convert(utf8String):
     try:
@@ -30,25 +17,19 @@ def convert(utf8String):
         return utf_8.decode('----')[0]
 
 
-def doesTextExist(key):
-    if not key or key[0] != '#':
-        return False
-    moName, subkey = key[1:].split(':', 1)
-    if not moName or not subkey:
-        return False
-    translator = g_translators[moName]
-    text = translator.gettext(subkey)
-    return text != subkey
-
-
-def makeString(key, *args, **kwargs):
+def makeString(key, *args, **kargs):
+    global g_translators
     try:
         if not key or key[0] != '#':
             return key
         moName, subkey = key[1:].split(':', 1)
         if not moName or not subkey:
             return key
-        translator = g_translators[moName]
+        translator = g_translators.get(moName)
+        if translator is None:
+            path = convert(BigWorld.wg_resolveFileName('text')[:-5])
+            translator = gettext.translation(moName, path, languages=['text'])
+            g_translators[moName] = translator
         text = translator.gettext(subkey)
         if text == '?empty?':
             text = ''
@@ -59,18 +40,20 @@ def makeString(key, *args, **kwargs):
                 LOG_WARNING("Arguments do not match string read by key '%s': %s", (key, args))
                 return key
 
-        elif kwargs:
+        elif kargs:
             try:
-                text = text % kwargs
+                text = text % kargs
             except TypeError:
-                LOG_WARNING("Arguments do not match string read by key '%s': %s", (key, kwargs))
+                LOG_WARNING("Arguments do not match string read by key '%s': %s", (key, kargs))
                 return key
 
         return text
     except Exception:
         LOG_CURRENT_EXCEPTION()
-        LOG_WARNING('Key string incompatible with args', key, args, kwargs)
+        LOG_WARNING('Key string incompatible with args', key, args, kargs)
         return key
+
+    return
 
 
 def makeStringJSON(key, argsStr):
@@ -94,9 +77,3 @@ def makeStringJSON(key, argsStr):
         LOG_CURRENT_EXCEPTION()
         LOG_WARNING('Failed to translate JSON-encoded string to dict or list', key, argsStr)
         return key
-
-
-def encodeUtf8(string):
-    if isinstance(string, types.UnicodeType):
-        return string.encode('utf-8', 'ignore')
-    return string

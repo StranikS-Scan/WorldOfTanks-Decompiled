@@ -1,0 +1,40 @@
+<Admin.def>
+  <Implements>
+    <Interface>	AccountEditor	</Interface>
+  </Implements>
+  <Properties>
+    <consumer_tag>
+      <Type>	STRING	</Type>
+      <Flags>	BASE	</Flags>
+      <Persistent>	false	</Persistent>
+    </consumer_tag>
+    <consumer_tag2>
+      <Type>	STRING	</Type>
+      <Flags>	BASE	</Flags>
+      <Persistent>	false	</Persistent>
+    </consumer_tag2>
+    <consumer_tag3>
+      <Type>	STRING	</Type>
+      <Flags>	BASE	</Flags>
+      <Persistent>	false	</Persistent>
+    </consumer_tag3>
+    <consumer_tag4>
+      <Type>	STRING	</Type>
+      <Flags>	BASE	</Flags>
+      <Persistent>	false	</Persistent>
+    </consumer_tag4>
+  </Properties>
+  <BaseMethods>
+    <onCreateClanForAccountResponse>
+      <Arg>	INT32	</Arg>
+      <Arg>	STRING	</Arg>
+      <Arg>	UINT64	</Arg>
+    </onCreateClanForAccountResponse>
+    <onClanChangedResponse>
+      <Arg>	INT32	</Arg>
+      <Arg>	STRING	</Arg>
+      <Arg>	UINT64	</Arg>
+      <Arg>	INT32	</Arg>
+    </onClanChangedResponse>
+  </BaseMethods>
+</Admin.def>

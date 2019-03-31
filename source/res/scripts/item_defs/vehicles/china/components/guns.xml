@@ -1,0 +1,62 @@
+<guns.xml>
+  <ids>
+    <_100mm_59>	0	</_100mm_59>
+  </ids>
+  <shared>
+    <_100mm_59>
+      <userString>	#china_vehicles:_100mm_59	</userString>
+      <description>	#china_vehicles:_100mm_59	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 5 0	</icon>
+      <tags></tags>
+      <level>	7	</level>
+      <price>	78180.0	</price>
+      <notInShop>	true	</notInShop>
+      <impulse>	0.44	</impulse>
+      <recoil>
+        <lodDist>	MEDIUM	</lodDist>
+        <amplitude>	0.56	</amplitude>
+        <backoffTime>	0.1	</backoffTime>
+        <returnTime>	0.54	</returnTime>
+      </recoil>
+      <effects>	shot_main	</effects>
+      <pitchLimits>	-20 7	</pitchLimits>
+      <rotationSpeed>	38.0	</rotationSpeed>
+      <reloadTime>	7.0	</reloadTime>
+      <maxAmmo>	34	</maxAmmo>
+      <aimingTime>	2.5	</aimingTime>
+      <weight>	2257	</weight>
+      <maxHealth>	160	</maxHealth>
+      <maxRegenHealth>	79	</maxRegenHealth>
+      <repairCost>	8	</repairCost>
+      <shotDispersionRadius>	0.34	</shotDispersionRadius>
+      <shotDispersionFactors>
+        <turretRotation>	0.16	</turretRotation>
+        <afterShot>	4.0	</afterShot>
+        <whileGunDamaged>	2.0	</whileGunDamaged>
+      </shotDispersionFactors>
+      <shots>
+        <_100mm_UBR-412>
+          <defaultPortion>	0.80	</defaultPortion>
+          <speed>	895	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	175 155	</piercingPower>
+        </_100mm_UBR-412>
+        <_100mm_UBR-412P>
+          <defaultPortion>	0.0	</defaultPortion>
+          <speed>	1119	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	235 208	</piercingPower>
+        </_100mm_UBR-412P>
+        <_100mm_UOF-412>
+          <defaultPortion>	0.20	</defaultPortion>
+          <speed>	895	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	50 50	</piercingPower>
+        </_100mm_UOF-412>
+      </shots>
+    </_100mm_59>
+  </shared>
+</guns.xml>

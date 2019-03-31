@@ -1,4 +1,6 @@
+# Python bytecode 2.6 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/helpers/obfuscators.py
+# Compiled at: 2010-07-14 20:16:35
 import base64
 from debug_utils import LOG_CURRENT_EXCEPTION
 

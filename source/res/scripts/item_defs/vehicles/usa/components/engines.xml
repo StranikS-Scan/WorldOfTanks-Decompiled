@@ -1,0 +1,706 @@
+<engines.xml>
+  <ids>
+    <Ford_GAC>	0	</Ford_GAC>
+    <Continental_W-670>	1	</Continental_W-670>
+    <Guiberson_T-1020-4>	2	</Guiberson_T-1020-4>
+    <Twin_Cadillac_42series>	3	</Twin_Cadillac_42series>
+    <Cunningham>	4	</Cunningham>
+    <Cunningham_type_3>	7	</Cunningham_type_3>
+    <Continental_R-670-5>	9	</Continental_R-670-5>
+    <Wright_G200_m_795C9GC1>	10	</Wright_G200_m_795C9GC1>
+    <Wright_G2X_m_781C9GC1>	11	</Wright_G2X_m_781C9GC1>
+    <Wright_Continental_R-975EC2>	12	</Wright_Continental_R-975EC2>
+    <Wright_Continental_R-975C1>	13	</Wright_Continental_R-975C1>
+    <Wright_Continental_R-975C4>	14	</Wright_Continental_R-975C4>
+    <Ford_GAA>	15	</Ford_GAA>
+    <Ford_GAN>	16	</Ford_GAN>
+    <Cuiberson_T-10204>	17	</Cuiberson_T-10204>
+    <Continental_W670-7>	18	</Continental_W670-7>
+    <Continental_R-975-C1>	19	</Continental_R-975-C1>
+    <Continental_AV-1790-1>	20	</Continental_AV-1790-1>
+    <Continental_AV-1790-3>	22	</Continental_AV-1790-3>
+    <Continental_AV-1790-5>	23	</Continental_AV-1790-5>
+    <Wright_R-975EC2>	24	</Wright_R-975EC2>
+    <Crysler_A57>	25	</Crysler_A57>
+    <Twin_Cadillac_series_44T4>	26	</Twin_Cadillac_series_44T4>
+    <Wright_Continental_R-975C2>	27	</Wright_Continental_R-975C2>
+    <Hercules_HXE>	28	</Hercules_HXE>
+    <Wright_G200_m_781C9GC1>	29	</Wright_G200_m_781C9GC1>
+    <Twin_Cadillac_42A_series>	30	</Twin_Cadillac_42A_series>
+    <GMC_Allison_V1710-E32>	31	</GMC_Allison_V1710-E32>
+    <Ford_GAC_1>	32	</Ford_GAC_1>
+    <Liberty>	33	</Liberty>
+    <Ford_GAA_1>	34	</Ford_GAA_1>
+    <Continental_AV-1790-1M2>	35	</Continental_AV-1790-1M2>
+    <GMC_6046>	36	</GMC_6046>
+    <Ford_GAF>	37	</Ford_GAF>
+    <Ford_GAFM2>	38	</Ford_GAFM2>
+    <Ford_GAFM4>	39	</Ford_GAFM4>
+    <Ford_GAA_2>	40	</Ford_GAA_2>
+    <Wright_G200_m_781C9GC5>	41	</Wright_G200_m_781C9GC5>
+    <Licoming_0-435t>	42	</Licoming_0-435t>
+    <General_Motors_6046>	43	</General_Motors_6046>
+    <Wright_R-975EC2A1>	46	</Wright_R-975EC2A1>
+    <_2x44E24_V-8_Cadillac>	47	</_2x44E24_V-8_Cadillac>
+    <Continental_AOS-895-1>	48	</Continental_AOS-895-1>
+  </ids>
+  <shared>
+    <Ford_GAC>
+      <userString>	#usa_vehicles:Ford_GAC	</userString>
+      <description>	#usa_vehicles:Ford_GAC_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 7 1	</icon>
+      <tags>	gasoline	</tags>
+      <level>	7	</level>
+      <price>	43500	</price>
+      <sound>	/vehicles/tanks/medium/tiger	</sound>
+      <power>	720	</power>
+      <weight>	556	</weight>
+      <maxHealth>	338	</maxHealth>
+      <maxRegenHealth>	169	</maxRegenHealth>
+      <repairCost>	6	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+    </Ford_GAC>
+    <Ford_GAC_1>
+      <userString>	#usa_vehicles:Ford_GAC	</userString>
+      <description>	#usa_vehicles:Ford_GAC_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 7 1	</icon>
+      <tags>	gasoline	</tags>
+      <notInShop>	true	</notInShop>
+      <level>	7	</level>
+      <price>	43500	</price>
+      <sound>	/vehicles/tanks/medium/tiger	</sound>
+      <power>	720	</power>
+      <weight>	556	</weight>
+      <maxHealth>	338	</maxHealth>
+      <maxRegenHealth>	169	</maxRegenHealth>
+      <repairCost>	6	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+    </Ford_GAC_1>
+    <Guiberson_T-1020-4>
+      <userString>	#usa_vehicles:Guiberson_T-1020-4	</userString>
+      <description>	#usa_vehicles:Guiberson_T-1020-4_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 7 0	</icon>
+      <tags>	diesel	</tags>
+      <level>	3	</level>
+      <price>	5000	</price>
+      <sound>	/vehicles/tanks/light/PzIII	</sound>
+      <power>	245	</power>
+      <weight>	331	</weight>
+      <maxHealth>	78	</maxHealth>
+      <maxRegenHealth>	41	</maxRegenHealth>
+      <repairCost>	2	</repairCost>
+      <fireStartingChance>	0.12	</fireStartingChance>
+    </Guiberson_T-1020-4>
+    <Continental_W-670>
+      <userString>	#usa_vehicles:Continental_W-670	</userString>
+      <description>	#usa_vehicles:Continental_W-670_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 7 0	</icon>
+      <tags>	gasoline	</tags>
+      <level>	4	</level>
+      <price>	8200	</price>
+      <sound>	/vehicles/tanks/light/PzIII	</sound>
+      <power>	268	</power>
+      <weight>	256	</weight>
+      <maxHealth>	104	</maxHealth>
+      <maxRegenHealth>	52	</maxRegenHealth>
+      <repairCost>	3	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+    </Continental_W-670>
+    <Twin_Cadillac_42series>
+      <userString>	#usa_vehicles:Twin_Cadillac_42series	</userString>
+      <description>	#usa_vehicles:Twin_Cadillac_42series_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 7 0	</icon>
+      <tags>	gasoline	</tags>
+      <level>	4	</level>
+      <price>	10350	</price>
+      <sound>	/vehicles/tanks/light/PzIII	</sound>
+      <power>	320	</power>
+      <weight>	530	</weight>
+      <maxHealth>	123	</maxHealth>
+      <maxRegenHealth>	58	</maxRegenHealth>
+      <repairCost>	3	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+    </Twin_Cadillac_42series>
+    <Twin_Cadillac_42A_series>
+      <userString>	#usa_vehicles:Twin_Cadillac_42A_series	</userString>
+      <description>	#usa_vehicles:Twin_Cadillac_42A_series_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 7 0	</icon>
+      <tags>	gasoline	</tags>
+      <level>	4	</level>
+      <price>	10350	</price>
+      <sound>	/vehicles/tanks/light/PzIII	</sound>
+      <power>	320	</power>
+      <weight>	530	</weight>
+      <maxHealth>	123	</maxHealth>
+      <maxRegenHealth>	58	</maxRegenHealth>
+      <repairCost>	3	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+    </Twin_Cadillac_42A_series>
+    <Cunningham>
+      <userString>	#usa_vehicles:Cunningham	</userString>
+      <description>	#usa_vehicles:Cunningham_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 7 0	</icon>
+      <tags>	gasoline	</tags>
+      <level>	1	</level>
+      <price>	300	</price>
+      <sound>	/vehicles/tanks/light/PzIII	</sound>
+      <power>	110	</power>
+      <weight>	200	</weight>
+      <maxHealth>	32	</maxHealth>
+      <maxRegenHealth>	15	</maxRegenHealth>
+      <repairCost>	1	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+    </Cunningham>
+    <Cunningham_type_3>
+      <userString>	#usa_vehicles:Cunningham_type_3	</userString>
+      <description>	#usa_vehicles:Cunningham_type_3_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 7 0	</icon>
+      <tags>	gasoline	</tags>
+      <level>	2	</level>
+      <price>	1100	</price>
+      <sound>	/vehicles/tanks/light/PzIII	</sound>
+      <power>	132	</power>
+      <weight>	300	</weight>
+      <maxHealth>	58	</maxHealth>
+      <maxRegenHealth>	26	</maxRegenHealth>
+      <repairCost>	1	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+    </Cunningham_type_3>
+    <Continental_R-670-5>
+      <userString>	#usa_vehicles:Continental_R-670-5	</userString>
+      <description>	#usa_vehicles:Continental_R-670-5_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 7 0	</icon>
+      <tags>	gasoline	</tags>
+      <level>	4	</level>
+      <price>	8600	</price>
+      <notInShop>	true	</notInShop>
+      <sound>	/vehicles/tanks/light/PzIII	</sound>
+      <power>	265	</power>
+      <weight>	256	</weight>
+      <maxHealth>	104	</maxHealth>
+      <maxRegenHealth>	52	</maxRegenHealth>
+      <repairCost>	2	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+    </Continental_R-670-5>
+    <Wright_G200_m_795C9GC1>
+      <userString>	#usa_vehicles:Wright_G200_m_795C9GC1	</userString>
+      <description>	#usa_vehicles:Wright_G200_m_795C9GC1_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 7 0	</icon>
+      <tags>	gasoline	</tags>
+      <level>	5	</level>
+      <price>	22500	</price>
+      <sound>	/vehicles/tanks/heavy/IS_2	</sound>
+      <power>	700	</power>
+      <weight>	612	</weight>
+      <maxHealth>	247	</maxHealth>
+      <maxRegenHealth>	123	</maxRegenHealth>
+      <repairCost>	5	</repairCost>
+      <fireStartingChance>	0.20	</fireStartingChance>
+    </Wright_G200_m_795C9GC1>
+    <Wright_G2X_m_781C9GC1>
+      <userString>	#usa_vehicles:Wright_G2X_m_781C9GC1	</userString>
+      <description>	#usa_vehicles:Wright_G2X_m_781C9GC1_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 7 0	</icon>
+      <tags>	gasoline	</tags>
+      <level>	6	</level>
+      <price>	34700	</price>
+      <sound>	/vehicles/tanks/heavy/IS_2	</sound>
+      <power>	825	</power>
+      <weight>	612	</weight>
+      <maxHealth>	247	</maxHealth>
+      <maxRegenHealth>	123	</maxRegenHealth>
+      <repairCost>	6	</repairCost>
+      <fireStartingChance>	0.20	</fireStartingChance>
+    </Wright_G2X_m_781C9GC1>
+    <Wright_G200_m_781C9GC1>
+      <userString>	#usa_vehicles:Wright_G200_m_781C9GC1	</userString>
+      <description>	#usa_vehicles:Wright_G200_m_781C9GC1_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 7 0	</icon>
+      <tags>	gasoline	</tags>
+      <level>	7	</level>
+      <price>	47600	</price>
+      <sound>	/vehicles/tanks/heavy/IS_2	</sound>
+      <power>	960	</power>
+      <weight>	612	</weight>
+      <maxHealth>	247	</maxHealth>
+      <maxRegenHealth>	123	</maxRegenHealth>
+      <repairCost>	6	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+    </Wright_G200_m_781C9GC1>
+    <Wright_G200_m_781C9GC5>
+      <userString>	#usa_vehicles:Wright_G200_m_781C9GC5	</userString>
+      <description>	#usa_vehicles:Wright_G200_m_781C9GC5_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 7 0	</icon>
+      <tags>	gasoline	</tags>
+      <level>	10	</level>
+      <notInShop>	true	</notInShop>
+      <price>	100000	</price>
+      <sound>	/vehicles/tanks/heavy/IS_2	</sound>
+      <power>	960	</power>
+      <weight>	612	</weight>
+      <maxHealth>	260	</maxHealth>
+      <maxRegenHealth>	130	</maxRegenHealth>
+      <repairCost>	6	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+    </Wright_G200_m_781C9GC5>
+    <Wright_Continental_R-975EC2>
+      <userString>	#usa_vehicles:Wright_Continental_R-975EC2	</userString>
+      <description>	#usa_vehicles:Wright_Continental_R-975EC2_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 7 0	</icon>
+      <tags>	gasoline	</tags>
+      <level>	4	</level>
+      <price>	10500	</price>
+      <sound>	/vehicles/tanks/light/PzIII	</sound>
+      <power>	350	</power>
+      <weight>	515	</weight>
+      <maxHealth>	104	</maxHealth>
+      <maxRegenHealth>	52	</maxRegenHealth>
+      <repairCost>	2	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+    </Wright_Continental_R-975EC2>
+    <Wright_Continental_R-975C1>
+      <userString>	#usa_vehicles:Wright_Continental_R-975C1	</userString>
+      <description>	#usa_vehicles:Wright_Continental_R-975C1_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 7 0	</icon>
+      <tags>	gasoline	</tags>
+      <level>	4	</level>
+      <price>	11000	</price>
+      <sound>	/vehicles/tanks/light/PzIII	</sound>
+      <power>	380	</power>
+      <weight>	549	</weight>
+      <maxHealth>	104	</maxHealth>
+      <maxRegenHealth>	52	</maxRegenHealth>
+      <repairCost>	2	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+    </Wright_Continental_R-975C1>
+    <Wright_Continental_R-975C4>
+      <userString>	#usa_vehicles:Wright_Continental_R-975C4	</userString>
+      <description>	#usa_vehicles:Wright_Continental_R-975C4_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 7 0	</icon>
+      <tags>	gasoline	</tags>
+      <level>	5	</level>
+      <price>	13900	</price>
+      <sound>	/vehicles/tanks/medium/tiger	</sound>
+      <power>	440	</power>
+      <weight>	549	</weight>
+      <maxHealth>	136	</maxHealth>
+      <maxRegenHealth>	67	</maxRegenHealth>
+      <repairCost>	3	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+    </Wright_Continental_R-975C4>
+    <Ford_GAA>
+      <userString>	#usa_vehicles:Ford_GAA	</userString>
+      <description>	#usa_vehicles:Ford_GAA_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 7 0	</icon>
+      <tags>	gasoline	</tags>
+      <level>	7	</level>
+      <price>	36000	</price>
+      <sound>	/vehicles/tanks/medium/tiger	</sound>
+      <power>	520	</power>
+      <weight>	569	</weight>
+      <maxHealth>	234	</maxHealth>
+      <maxRegenHealth>	123	</maxRegenHealth>
+      <repairCost>	5	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+    </Ford_GAA>
+    <Ford_GAN>
+      <userString>	#usa_vehicles:Ford_GAN	</userString>
+      <description>	#usa_vehicles:Ford_GAN_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 7 0	</icon>
+      <tags>	gasoline	</tags>
+      <level>	7	</level>
+      <price>	37200	</price>
+      <sound>	/vehicles/tanks/medium/tiger	</sound>
+      <power>	560	</power>
+      <weight>	569	</weight>
+      <maxHealth>	234	</maxHealth>
+      <maxRegenHealth>	123	</maxRegenHealth>
+      <repairCost>	5	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+    </Ford_GAN>
+    <Cuiberson_T-10204>
+      <userString>	#usa_vehicles:Cuiberson_T-10204	</userString>
+      <description>	#usa_vehicles:Cuiberson_T-10204_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 7 0	</icon>
+      <tags>	gasoline	</tags>
+      <level>	3	</level>
+      <price>	4550	</price>
+      <sound>	/vehicles/tanks/light/PzIII	</sound>
+      <power>	220	</power>
+      <weight>	331	</weight>
+      <maxHealth>	65	</maxHealth>
+      <maxRegenHealth>	32	</maxRegenHealth>
+      <repairCost>	1	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+    </Cuiberson_T-10204>
+    <Continental_W670-7>
+      <userString>	#usa_vehicles:Continental_W670-7	</userString>
+      <description>	#usa_vehicles:Continental_W670-7_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 7 0	</icon>
+      <tags>	gasoline	</tags>
+      <level>	3	</level>
+      <price>	7600	</price>
+      <sound>	/vehicles/tanks/light/PzIII	</sound>
+      <power>	262	</power>
+      <weight>	256	</weight>
+      <maxHealth>	58	</maxHealth>
+      <maxRegenHealth>	32	</maxRegenHealth>
+      <repairCost>	1	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+    </Continental_W670-7>
+    <Continental_R-975-C1>
+      <userString>	#usa_vehicles:Continental_R-975-C1	</userString>
+      <description>	#usa_vehicles:Continental_R-975-C1_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 7 0	</icon>
+      <tags>	gasoline	</tags>
+      <level>	4	</level>
+      <price>	10500	</price>
+      <sound>	/vehicles/tanks/light/PzIII	</sound>
+      <power>	350	</power>
+      <weight>	500	</weight>
+      <maxHealth>	104	</maxHealth>
+      <maxRegenHealth>	52	</maxRegenHealth>
+      <repairCost>	3	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+    </Continental_R-975-C1>
+    <Continental_AV-1790-1>
+      <userString>	#usa_vehicles:Continental_AV-1790-1	</userString>
+      <description>	#usa_vehicles:Continental_AV-1790-1_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 7 0	</icon>
+      <tags>	gasoline	</tags>
+      <level>	8	</level>
+      <price>	45000	</price>
+      <sound>	/vehicles/tanks/medium/tiger	</sound>
+      <power>	704	</power>
+      <weight>	569	</weight>
+      <maxHealth>	260	</maxHealth>
+      <maxRegenHealth>	130	</maxRegenHealth>
+      <repairCost>	5	</repairCost>
+      <fireStartingChance>	0.20	</fireStartingChance>
+    </Continental_AV-1790-1>
+    <Continental_AV-1790-1M2>
+      <userString>	#usa_vehicles:Continental_AV-1790-1M2	</userString>
+      <description>	#usa_vehicles:Continental_AV-1790-1M2_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 7 0	</icon>
+      <tags>	gasoline	</tags>
+      <level>	9	</level>
+      <price>	81000	</price>
+      <sound>	/vehicles/tanks/medium/tiger	</sound>
+      <power>	820	</power>
+      <weight>	569	</weight>
+      <maxHealth>	260	</maxHealth>
+      <maxRegenHealth>	130	</maxRegenHealth>
+      <repairCost>	5	</repairCost>
+      <fireStartingChance>	0.20	</fireStartingChance>
+    </Continental_AV-1790-1M2>
+    <GMC_Allison_V1710-E32>
+      <userString>	#usa_vehicles:GMC_Allison_V1710-E32	</userString>
+      <description>	#usa_vehicles:GMC_Allison_V1710-E32_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 7 1	</icon>
+      <tags>	gasoline	</tags>
+      <level>	8	</level>
+      <price>	48500	</price>
+      <sound>	/vehicles/tanks/medium/tiger	</sound>
+      <power>	760	</power>
+      <weight>	556	</weight>
+      <maxHealth>	338	</maxHealth>
+      <maxRegenHealth>	169	</maxRegenHealth>
+      <repairCost>	6	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+    </GMC_Allison_V1710-E32>
+    <Continental_AV-1790-3>
+      <userString>	#usa_vehicles:Continental_AV-1790-3	</userString>
+      <description>	#usa_vehicles:Continental_AV-1790-3_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 7 0	</icon>
+      <tags>	gasoline	</tags>
+      <level>	9	</level>
+      <price>	67000	</price>
+      <sound>	/vehicles/tanks/medium/tiger	</sound>
+      <power>	800	</power>
+      <weight>	569	</weight>
+      <maxHealth>	260	</maxHealth>
+      <maxRegenHealth>	130	</maxRegenHealth>
+      <repairCost>	6	</repairCost>
+      <fireStartingChance>	0.20	</fireStartingChance>
+    </Continental_AV-1790-3>
+    <Continental_AV-1790-5>
+      <userString>	#usa_vehicles:Continental_AV-1790-5	</userString>
+      <description>	#usa_vehicles:Continental_AV-1790-5_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 7 0	</icon>
+      <tags>	gasoline	</tags>
+      <level>	10	</level>
+      <price>	100000	</price>
+      <sound>	/vehicles/tanks/medium/tiger	</sound>
+      <power>	860	</power>
+      <weight>	569	</weight>
+      <maxHealth>	260	</maxHealth>
+      <maxRegenHealth>	130	</maxRegenHealth>
+      <repairCost>	6	</repairCost>
+      <fireStartingChance>	0.20	</fireStartingChance>
+    </Continental_AV-1790-5>
+    <Wright_R-975EC2>
+      <userString>	#usa_vehicles:Wright_R-975EC2	</userString>
+      <description>	#usa_vehicles:Wright_R-975EC2_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 7 0	</icon>
+      <tags>	gasoline	</tags>
+      <level>	4	</level>
+      <price>	11600	</price>
+      <sound>	/vehicles/tanks/light/PzIII	</sound>
+      <power>	400	</power>
+      <weight>	515	</weight>
+      <maxHealth>	156	</maxHealth>
+      <maxRegenHealth>	78	</maxRegenHealth>
+      <repairCost>	3	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+    </Wright_R-975EC2>
+    <Wright_R-975EC2A1>
+      <userString>	#usa_vehicles:Wright_R-975EC2	</userString>
+      <description>	#usa_vehicles:Wright_R-975EC2_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 7 0	</icon>
+      <tags>	gasoline	</tags>
+      <level>	4	</level>
+      <notInShop>	true	</notInShop>
+      <price>	11600	</price>
+      <sound>	/vehicles/tanks/light/PzIII	</sound>
+      <power>	400	</power>
+      <weight>	515	</weight>
+      <maxHealth>	156	</maxHealth>
+      <maxRegenHealth>	78	</maxRegenHealth>
+      <repairCost>	3	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+    </Wright_R-975EC2A1>
+    <Crysler_A57>
+      <userString>	#usa_vehicles:Crysler_A57	</userString>
+      <description>	#usa_vehicles:Crysler_A57_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 7 0	</icon>
+      <tags>	gasoline	</tags>
+      <level>	5	</level>
+      <price>	13900	</price>
+      <sound>	/vehicles/tanks/light/PzIII	</sound>
+      <power>	440	</power>
+      <weight>	570	</weight>
+      <maxHealth>	104	</maxHealth>
+      <maxRegenHealth>	52	</maxRegenHealth>
+      <repairCost>	3	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+    </Crysler_A57>
+    <Twin_Cadillac_series_44T4>
+      <userString>	#usa_vehicles:Twin_Cadillac_series_44T4	</userString>
+      <description>	#usa_vehicles:Twin_Cadillac_series_44T4_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 7 0	</icon>
+      <tags>	gasoline	</tags>
+      <level>	4	</level>
+      <price>	8100	</price>
+      <sound>	/vehicles/tanks/light/PzIII	</sound>
+      <power>	240	</power>
+      <weight>	529	</weight>
+      <maxHealth>	123	</maxHealth>
+      <maxRegenHealth>	58	</maxRegenHealth>
+      <repairCost>	3	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+    </Twin_Cadillac_series_44T4>
+    <Wright_Continental_R-975C2>
+      <userString>	#usa_vehicles:Wright_Continental_R-975C2	</userString>
+      <description>	#usa_vehicles:Wright_Continental_R-975C2_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 7 0	</icon>
+      <tags>	gasoline	</tags>
+      <level>	3	</level>
+      <price>	10200	</price>
+      <sound>	/vehicles/tanks/light/PzIII	</sound>
+      <power>	340	</power>
+      <weight>	549	</weight>
+      <maxHealth>	104	</maxHealth>
+      <maxRegenHealth>	52	</maxRegenHealth>
+      <repairCost>	2	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+    </Wright_Continental_R-975C2>
+    <Hercules_HXE>
+      <userString>	#usa_vehicles:Hercules_HXE	</userString>
+      <description>	#usa_vehicles:Hercules_HXE_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 7 0	</icon>
+      <tags>	gasoline	</tags>
+      <level>	3	</level>
+      <price>	6500	</price>
+      <notInShop>	true	</notInShop>
+      <sound>	/vehicles/tanks/light/PzIII	</sound>
+      <power>	240	</power>
+      <weight>	331	</weight>
+      <maxHealth>	78	</maxHealth>
+      <maxRegenHealth>	39	</maxRegenHealth>
+      <repairCost>	2	</repairCost>
+      <fireStartingChance>	0.12	</fireStartingChance>
+    </Hercules_HXE>
+    <Liberty>
+      <userString>	#usa_vehicles:Liberty	</userString>
+      <description>	#usa_vehicles:Liberty_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 7 0	</icon>
+      <tags>	gasoline	</tags>
+      <level>	3	</level>
+      <price>	9900	</price>
+      <sound>	/vehicles/tanks/light/PzIII	</sound>
+      <power>	330	</power>
+      <weight>	450	</weight>
+      <maxHealth>	104	</maxHealth>
+      <maxRegenHealth>	52	</maxRegenHealth>
+      <repairCost>	2	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+    </Liberty>
+    <Ford_GAA_1>
+      <userString>	#usa_vehicles:Wright_Continental_R-975C3	</userString>
+      <description>	#usa_vehicles:Wright_Continental_R-975C3_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 7 0	</icon>
+      <tags>	gasoline	</tags>
+      <notInShop>	true	</notInShop>
+      <level>	5	</level>
+      <price>	33000	</price>
+      <notInShop>	true	</notInShop>
+      <sound>	/vehicles/tanks/medium/tiger	</sound>
+      <power>	440	</power>
+      <weight>	569	</weight>
+      <maxHealth>	234	</maxHealth>
+      <maxRegenHealth>	123	</maxRegenHealth>
+      <repairCost>	5	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+    </Ford_GAA_1>
+    <GMC_6046>
+      <userString>	#usa_vehicles:GMC_6046	</userString>
+      <description>	#usa_vehicles:GMC_6046_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 7 0	</icon>
+      <tags>	diesel	</tags>
+      <level>	5	</level>
+      <price>	13500	</price>
+      <sound>	/vehicles/tanks/medium/tiger	</sound>
+      <power>	420	</power>
+      <weight>	549	</weight>
+      <maxHealth>	176	</maxHealth>
+      <maxRegenHealth>	100	</maxRegenHealth>
+      <repairCost>	3	</repairCost>
+      <fireStartingChance>	0.15	</fireStartingChance>
+    </GMC_6046>
+    <General_Motors_6046>
+      <userString>	#usa_vehicles:General_Motors_6046	</userString>
+      <description>	#usa_vehicles:General_Motors_6046_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 7 0	</icon>
+      <tags>	diesel	</tags>
+      <level>	5	</level>
+      <price>	13500	</price>
+      <notInShop>	true	</notInShop>
+      <sound>	/vehicles/tanks/medium/tiger	</sound>
+      <power>	420	</power>
+      <weight>	549	</weight>
+      <maxHealth>	176	</maxHealth>
+      <maxRegenHealth>	100	</maxRegenHealth>
+      <repairCost>	3	</repairCost>
+      <fireStartingChance>	0.15	</fireStartingChance>
+    </General_Motors_6046>
+    <Ford_GAF>
+      <userString>	#usa_vehicles:Ford_GAF	</userString>
+      <description>	#usa_vehicles:Ford_GAF_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 7 0	</icon>
+      <tags>	gasoline	</tags>
+      <level>	6	</level>
+      <price>	25300	</price>
+      <sound>	/vehicles/tanks/medium/tiger	</sound>
+      <power>	440	</power>
+      <weight>	569	</weight>
+      <maxHealth>	234	</maxHealth>
+      <maxRegenHealth>	123	</maxRegenHealth>
+      <repairCost>	5	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+    </Ford_GAF>
+    <Ford_GAFM2>
+      <userString>	#usa_vehicles:Ford_GAFM2	</userString>
+      <description>	#usa_vehicles:Ford_GAFM2_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 7 0	</icon>
+      <tags>	gasoline	</tags>
+      <level>	6	</level>
+      <price>	34600	</price>
+      <sound>	/vehicles/tanks/medium/tiger	</sound>
+      <power>	510	</power>
+      <weight>	569	</weight>
+      <maxHealth>	234	</maxHealth>
+      <maxRegenHealth>	123	</maxRegenHealth>
+      <repairCost>	5	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+    </Ford_GAFM2>
+    <Ford_GAFM4>
+      <userString>	#usa_vehicles:Ford_GAFM4	</userString>
+      <description>	#usa_vehicles:Ford_GAFM4_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 7 0	</icon>
+      <tags>	gasoline	</tags>
+      <level>	6	</level>
+      <price>	38700	</price>
+      <sound>	/vehicles/tanks/medium/tiger	</sound>
+      <power>	530	</power>
+      <weight>	569	</weight>
+      <maxHealth>	234	</maxHealth>
+      <maxRegenHealth>	123	</maxRegenHealth>
+      <repairCost>	5	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+    </Ford_GAFM4>
+    <Ford_GAA_2>
+      <userString>	#usa_vehicles:Ford_GAA	</userString>
+      <description>	#usa_vehicles:Ford_GAA_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 7 0	</icon>
+      <tags>	gasoline	</tags>
+      <notInShop>	true	</notInShop>
+      <level>	7	</level>
+      <price>	36000	</price>
+      <notInShop>	true	</notInShop>
+      <sound>	/vehicles/tanks/medium/tiger	</sound>
+      <power>	520	</power>
+      <weight>	569	</weight>
+      <maxHealth>	234	</maxHealth>
+      <maxRegenHealth>	123	</maxRegenHealth>
+      <repairCost>	5	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+    </Ford_GAA_2>
+    <Licoming_0-435t>
+      <userString>	#usa_vehicles:Licoming_0-435t	</userString>
+      <description>	#usa_vehicles:Licoming_0-435t_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 7 0	</icon>
+      <tags>	gasoline	</tags>
+      <level>	4	</level>
+      <notInShop>	true	</notInShop>
+      <price>	7600	</price>
+      <sound>	/vehicles/tanks/light/PzIII	</sound>
+      <power>	192	</power>
+      <weight>	256	</weight>
+      <maxHealth>	104	</maxHealth>
+      <maxRegenHealth>	52	</maxRegenHealth>
+      <repairCost>	3	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+    </Licoming_0-435t>
+    <_2x44E24_V-8_Cadillac>
+      <userString>	#usa_vehicles:_2x44E24_V-8_Cadillac	</userString>
+      <description>	#usa_vehicles:_2x4EЕ24_V-8_Cadillac_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 7 0	</icon>
+      <tags>	gasoline	</tags>
+      <level>	4	</level>
+      <price>	8000	</price>
+      <notInShop>	true	</notInShop>
+      <sound>	/vehicles/tanks/light/PzIII	</sound>
+      <power>	300	</power>
+      <weight>	256	</weight>
+      <maxHealth>	104	</maxHealth>
+      <maxRegenHealth>	52	</maxRegenHealth>
+      <repairCost>	2	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+    </_2x44E24_V-8_Cadillac>
+    <Continental_AOS-895-1>
+      <userString>	#usa_vehicles:Continental_AOS-895-1	</userString>
+      <description>	#usa_vehicles:Continental_AOS-895-1_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 7 0	</icon>
+      <tags>	gasoline	</tags>
+      <level>	7	</level>
+      <price>	38500	</price>
+      <sound>	/vehicles/tanks/light/PzIII	</sound>
+      <power>	500	</power>
+      <weight>	256	</weight>
+      <maxHealth>	234	</maxHealth>
+      <maxRegenHealth>	123	</maxRegenHealth>
+      <repairCost>	5	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+    </Continental_AOS-895-1>
+  </shared>
+</engines.xml>

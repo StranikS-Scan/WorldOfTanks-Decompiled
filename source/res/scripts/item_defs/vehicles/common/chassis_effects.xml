@@ -1,0 +1,90 @@
+<chassis_effects.xml>
+  <decals>
+    <bufferPrefs>
+      <smallTank>
+        <lifeTime>	6	</lifeTime>
+        <trianglesCount>	10000	</trianglesCount>
+      </smallTank>
+      <mediumTank>
+        <lifeTime>	7	</lifeTime>
+        <trianglesCount>	10000	</trianglesCount>
+      </mediumTank>
+      <largeTank>
+        <lifeTime>	8	</lifeTime>
+        <trianglesCount>	10000	</trianglesCount>
+      </largeTank>
+    </bufferPrefs>
+    <textureSets>
+      <ussr_01>
+        <default>	maps/fx/ussr01_ground.dds	</default>
+        <snow>	maps/fx/ussr01_snow.dds	</snow>
+        <sand>	maps/fx/ussr01_sand.dds	</sand>
+        <stone>	maps/fx/ussr01_stone.dds	</stone>
+      </ussr_01>
+      <ussr_02>
+        <default>	maps/fx/ussr02_ground.dds	</default>
+        <snow>	maps/fx/ussr02_snow.dds	</snow>
+        <sand>	maps/fx/ussr02_sand.dds	</sand>
+        <stone>	maps/fx/ussr02_stone.dds	</stone>
+      </ussr_02>
+      <germany_01>
+        <default>	maps/fx/german01_ground.dds	</default>
+        <snow>	maps/fx/german01_snow.dds	</snow>
+        <sand>	maps/fx/german01_sand.dds	</sand>
+        <stone>	maps/fx/german01_stone.dds	</stone>
+      </germany_01>
+      <germany_02>
+        <default>	maps/fx/german02_ground.dds	</default>
+        <snow>	maps/fx/german02_snow.dds	</snow>
+        <sand>	maps/fx/german02_sand.dds	</sand>
+        <stone>	maps/fx/german02_stone.dds	</stone>
+      </germany_02>
+      <usa_01>
+        <default>	maps/fx/usa01_ground.dds	</default>
+        <snow>	maps/fx/usa01_snow.dds	</snow>
+        <sand>	maps/fx/usa01_sand.dds	</sand>
+        <stone>	maps/fx/usa01_stone.dds	</stone>
+      </usa_01>
+      <usa_02>
+        <default>	maps/fx/usa02_ground.dds	</default>
+        <snow>	maps/fx/usa02_snow.dds	</snow>
+        <sand>	maps/fx/usa02_sand.dds	</sand>
+        <stone>	maps/fx/usa02_stone.dds	</stone>
+      </usa_02>
+      <usa_T95>
+        <default>	maps/fx/usa_T95_ground.dds	</default>
+        <snow>	maps/fx/usa_T95_snow.dds	</snow>
+        <sand>	maps/fx/usa_T95_sand.dds	</sand>
+      </usa_T95>
+    </textureSets>
+  </decals>
+  <particles>
+    <smallTankDust>
+      <default>	particles/Tank/dust_trail_l.xml | particles/Tank/dust_trail_r.xml	</default>
+      <sand>	particles/Tank/dust_trail_l.xml | particles/Tank/dust_trail_r.xml	</sand>
+      <stone>	none	</stone>
+    </smallTankDust>
+    <smallTankMud>
+      <ground>	particles/Tank/burst_dirt_small.xml	</ground>
+      <snow>	particles/Tank/burst_snow_small.xml	</snow>
+    </smallTankMud>
+    <mediumTankDust>
+      <default>	particles/Tank/dust_trail_l_medium.xml | particles/Tank/dust_trail_r_medium.xml	</default>
+      <sand>	particles/Tank/dust_trail_l_medium.xml | particles/Tank/dust_trail_r_medium.xml	</sand>
+      <stone>	none	</stone>
+    </mediumTankDust>
+    <mediumTankMud>
+      <ground>	particles/Tank/burst_dirt_medium.xml	</ground>
+      <snow>	particles/Tank/burst_snow_medium.xml	</snow>
+    </mediumTankMud>
+    <largeTankDust>
+      <default>	particles/Tank/dust_trail_l_medium.xml | particles/Tank/dust_trail_r_medium.xml	</default>
+      <sand>	particles/Tank/dust_trail_l_medium.xml | particles/Tank/dust_trail_r_medium.xml	</sand>
+      <stone>	none	</stone>
+    </largeTankDust>
+    <largeTankMud>
+      <ground>	particles/Tank/burst_dirt_medium.xml	</ground>
+      <snow>	particles/Tank/burst_snow_large.xml	</snow>
+    </largeTankMud>
+  </particles>
+</chassis_effects.xml>

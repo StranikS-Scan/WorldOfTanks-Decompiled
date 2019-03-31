@@ -1,0 +1,20 @@
+<11_murovanka.xml>
+  <name>	#arenas:11_murovanka/name	</name>
+  <description>	#arenas:11_murovanka/description	</description>
+  <geometry>	spaces/11_murovanka	</geometry>
+  <roundLength>	900	</roundLength>
+  <boundingBox>
+    <bottomLeft>	-400.0 -400.0	</bottomLeft>
+    <upperRight>	400.0 400.0	</upperRight>
+  </boundingBox>
+  <defaultMinimap>	spaces/11_murovanka/mmap.dds	</defaultMinimap>
+  <defaultGroundEffect>	None	</defaultGroundEffect>
+  <umbraEnabled>	1	</umbraEnabled>
+  <batchingEnabled>	0	</batchingEnabled>
+  <loadingMusic>	/music/intro/Intro_Malinovka	</loadingMusic>
+  <water>
+    <texScale>	0	</texScale>
+    <freqX>	0	</freqX>
+    <freqZ>	0	</freqZ>
+  </water>
+</11_murovanka.xml>

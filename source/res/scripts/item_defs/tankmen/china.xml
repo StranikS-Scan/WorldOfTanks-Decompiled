@@ -1,0 +1,233 @@
+<china.xml>
+  <ranks>
+    <private>
+      <userString>	#china_tankmen:ranksCHI/private	</userString>
+      <icon>	china-1.tga	</icon>
+    </private>
+    <lance_corporal>
+      <userString>	#china_tankmen:ranksCHI/lance_corporal	</userString>
+      <icon>	china-2.tga	</icon>
+    </lance_corporal>
+    <junior_sergeant>
+      <userString>	#china_tankmen:ranksCHI/junior_sergeant	</userString>
+      <icon>	china-3.tga	</icon>
+    </junior_sergeant>
+    <sergeant>
+      <userString>	#china_tankmen:ranksCHI/sergeant	</userString>
+      <icon>	china-4.tga	</icon>
+    </sergeant>
+    <senior_sergeant>
+      <userString>	#china_tankmen:ranksCHI/senior_sergeant	</userString>
+      <icon>	china-5.tga	</icon>
+    </senior_sergeant>
+    <sergeant_major>
+      <userString>	#china_tankmen:ranksCHI/sergeant_major	</userString>
+      <icon>	china-6.tga	</icon>
+    </sergeant_major>
+    <junior_lieutenant>
+      <userString>	#china_tankmen:ranksCHI/junior_lieutenant	</userString>
+      <icon>	china-7.tga	</icon>
+    </junior_lieutenant>
+    <lieutenant>
+      <userString>	#china_tankmen:ranksCHI/lieutenant	</userString>
+      <icon>	china-8.tga	</icon>
+    </lieutenant>
+    <senior_lieutenant>
+      <userString>	#china_tankmen:ranksCHI/senior_lieutenant	</userString>
+      <icon>	china-9.tga	</icon>
+    </senior_lieutenant>
+    <captain>
+      <userString>	#china_tankmen:ranksCHI/captain	</userString>
+      <icon>	china-10.tga	</icon>
+    </captain>
+    <major>
+      <userString>	#china_tankmen:ranksCHI/major	</userString>
+      <icon>	china-11.tga	</icon>
+    </major>
+  </ranks>
+  <roleRanks>
+    <commander>	junior_sergeant sergeant senior_sergeant sergeant_major
+            junior_lieutenant lieutenant senior_lieutenant captain major	</commander>
+    <driver>	lance_corporal junior_sergeant sergeant senior_sergeant sergeant_major
+            junior_lieutenant lieutenant senior_lieutenant captain	</driver>
+    <gunner>	lance_corporal junior_sergeant sergeant senior_sergeant sergeant_major
+            junior_lieutenant lieutenant senior_lieutenant captain	</gunner>
+    <radioman>	private lance_corporal junior_sergeant sergeant senior_sergeant sergeant_major
+            junior_lieutenant lieutenant senior_lieutenant	</radioman>
+    <loader>	private lance_corporal junior_sergeant sergeant senior_sergeant sergeant_major
+            junior_lieutenant lieutenant senior_lieutenant	</loader>
+  </roleRanks>
+  <normalGroups>
+    <men1>
+      <weight>	1.0	</weight>
+      <sex>	male	</sex>
+      <firstNames>
+        <_1>	#china_tankmen:names/chinn1	</_1>
+        <_2>	#china_tankmen:names/chinn2	</_2>
+        <_3>	#china_tankmen:names/chinn3	</_3>
+        <_4>	#china_tankmen:names/chinn4	</_4>
+        <_5>	#china_tankmen:names/chinn5	</_5>
+        <_6>	#china_tankmen:names/chinn6	</_6>
+        <_7>	#china_tankmen:names/chinn7	</_7>
+        <_8>	#china_tankmen:names/chinn8	</_8>
+        <_9>	#china_tankmen:names/chinn9	</_9>
+        <_10>	#china_tankmen:names/chinn10	</_10>
+        <_11>	#china_tankmen:names/chinn11	</_11>
+        <_12>	#china_tankmen:names/chinn12	</_12>
+        <_13>	#china_tankmen:names/chinn13	</_13>
+        <_14>	#china_tankmen:names/chinn14	</_14>
+        <_15>	#china_tankmen:names/chinn15	</_15>
+        <_16>	#china_tankmen:names/chinn16	</_16>
+        <_17>	#china_tankmen:names/chinn17	</_17>
+        <_18>	#china_tankmen:names/chinn18	</_18>
+        <_19>	#china_tankmen:names/chinn19	</_19>
+        <_20>	#china_tankmen:names/chinn20	</_20>
+      </firstNames>
+      <lastNames>
+        <_1>	#china_tankmen:names/chin1	</_1>
+        <_2>	#china_tankmen:names/chin2	</_2>
+        <_3>	#china_tankmen:names/chin3	</_3>
+        <_4>	#china_tankmen:names/chin4	</_4>
+        <_5>	#china_tankmen:names/chin5	</_5>
+        <_6>	#china_tankmen:names/chin6	</_6>
+        <_7>	#china_tankmen:names/chin7	</_7>
+        <_8>	#china_tankmen:names/chin8	</_8>
+        <_9>	#china_tankmen:names/chin9	</_9>
+        <_10>	#china_tankmen:names/chin10	</_10>
+        <_11>	#china_tankmen:names/chin11	</_11>
+        <_12>	#china_tankmen:names/chin12	</_12>
+        <_13>	#china_tankmen:names/chin13	</_13>
+        <_14>	#china_tankmen:names/chin14	</_14>
+        <_15>	#china_tankmen:names/chin15	</_15>
+        <_16>	#china_tankmen:names/chin16	</_16>
+        <_17>	#china_tankmen:names/chin17	</_17>
+        <_18>	#china_tankmen:names/chin18	</_18>
+        <_19>	#china_tankmen:names/chin19	</_19>
+        <_20>	#china_tankmen:names/chin20	</_20>
+        <_21>	#china_tankmen:names/chin21	</_21>
+        <_22>	#china_tankmen:names/chin22	</_22>
+        <_23>	#china_tankmen:names/chin23	</_23>
+        <_24>	#china_tankmen:names/chin24	</_24>
+        <_25>	#china_tankmen:names/chin25	</_25>
+        <_26>	#china_tankmen:names/chin26	</_26>
+        <_27>	#china_tankmen:names/chin27	</_27>
+        <_28>	#china_tankmen:names/chin28	</_28>
+        <_29>	#china_tankmen:names/chin29	</_29>
+        <_30>	#china_tankmen:names/chin30	</_30>
+        <_31>	#china_tankmen:names/chin31	</_31>
+        <_32>	#china_tankmen:names/chin32	</_32>
+        <_33>	#china_tankmen:names/chin33	</_33>
+        <_34>	#china_tankmen:names/chin34	</_34>
+        <_35>	#china_tankmen:names/chin35	</_35>
+        <_36>	#china_tankmen:names/chin36	</_36>
+        <_37>	#china_tankmen:names/chin37	</_37>
+        <_38>	#china_tankmen:names/chin38	</_38>
+        <_39>	#china_tankmen:names/chin39	</_39>
+        <_40>	#china_tankmen:names/chin40	</_40>
+        <_41>	#china_tankmen:names/chin41	</_41>
+        <_42>	#china_tankmen:names/chin42	</_42>
+        <_43>	#china_tankmen:names/chin43	</_43>
+        <_44>	#china_tankmen:names/chin44	</_44>
+        <_45>	#china_tankmen:names/chin45	</_45>
+        <_46>	#china_tankmen:names/chin46	</_46>
+        <_47>	#china_tankmen:names/chin47	</_47>
+        <_48>	#china_tankmen:names/chin48	</_48>
+        <_49>	#china_tankmen:names/chin49	</_49>
+        <_50>	#china_tankmen:names/chin50	</_50>
+        <_51>	#china_tankmen:names/chin51	</_51>
+        <_52>	#china_tankmen:names/chin52	</_52>
+        <_53>	#china_tankmen:names/chin53	</_53>
+        <_54>	#china_tankmen:names/chin54	</_54>
+        <_55>	#china_tankmen:names/chin55	</_55>
+        <_56>	#china_tankmen:names/chin56	</_56>
+        <_57>	#china_tankmen:names/chin57	</_57>
+        <_58>	#china_tankmen:names/chin58	</_58>
+        <_59>	#china_tankmen:names/chin59	</_59>
+        <_60>	#china_tankmen:names/chin60	</_60>
+        <_61>	#china_tankmen:names/chin61	</_61>
+        <_62>	#china_tankmen:names/chin62	</_62>
+        <_63>	#china_tankmen:names/chin63	</_63>
+        <_64>	#china_tankmen:names/chin64	</_64>
+        <_65>	#china_tankmen:names/chin65	</_65>
+        <_66>	#china_tankmen:names/chin66	</_66>
+        <_67>	#china_tankmen:names/chin67	</_67>
+        <_68>	#china_tankmen:names/chin68	</_68>
+        <_69>	#china_tankmen:names/chin69	</_69>
+      </lastNames>
+      <icons>
+        <_1>	china-1.tga	</_1>
+        <_2>	china-2.tga	</_2>
+        <_3>	china-3.tga	</_3>
+        <_4>	china-4.tga	</_4>
+        <_5>	china-5.tga	</_5>
+        <_6>	china-6.tga	</_6>
+        <_7>	china-7.tga	</_7>
+        <_8>	china-8.tga	</_8>
+        <_9>	china-9.tga	</_9>
+        <_10>	china-10.tga	</_10>
+        <_11>	china-11.tga	</_11>
+        <_12>	china-12.tga	</_12>
+        <_13>	china-13.tga	</_13>
+        <_14>	china-14.tga	</_14>
+        <_15>	china-15.tga	</_15>
+        <_16>	china-16.tga	</_16>
+        <_17>	china-17.tga	</_17>
+        <_18>	china-18.tga	</_18>
+        <_19>	china-19.tga	</_19>
+        <_20>	china-20.tga	</_20>
+      </icons>
+    </men1>
+  </normalGroups>
+  <premiumGroups>
+    <men1>
+      <weight>	1.0	</weight>
+      <sex>	male	</sex>
+      <firstNames>
+        <_2001>	#ussr_tankmen:names/rusn1	</_2001>
+        <_2002>	#ussr_tankmen:names/rusn2	</_2002>
+        <_2003>	#ussr_tankmen:names/rusn3	</_2003>
+        <_2004>	#ussr_tankmen:names/rusn4	</_2004>
+        <_2005>	#ussr_tankmen:names/rusn5	</_2005>
+      </firstNames>
+      <lastNames>
+        <_2001>	#ussr_tankmen:names/rus1	</_2001>
+        <_2002>	#ussr_tankmen:names/rus2	</_2002>
+        <_2003>	#ussr_tankmen:names/rus3	</_2003>
+        <_2004>	#ussr_tankmen:names/rus4	</_2004>
+        <_2005>	#ussr_tankmen:names/rus5	</_2005>
+      </lastNames>
+      <icons>
+        <_2001>	ussr-1.tga	</_2001>
+        <_2002>	ussr-2.tga	</_2002>
+        <_2003>	ussr-3.tga	</_2003>
+        <_2004>	ussr-4.tga	</_2004>
+        <_2005>	ussr-5.tga	</_2005>
+      </icons>
+    </men1>
+    <women1>
+      <weight>	1.0	</weight>
+      <sex>	female	</sex>
+      <firstNames>
+        <_10000>	#ussr_tankmen:names/rusn10	</_10000>
+        <_10001>	#ussr_tankmen:names/rusn11	</_10001>
+        <_10002>	#ussr_tankmen:names/rusn12	</_10002>
+        <_10003>	#ussr_tankmen:names/rusn13	</_10003>
+        <_10004>	#ussr_tankmen:names/rusn14	</_10004>
+      </firstNames>
+      <lastNames>
+        <_10000>	#ussr_tankmen:names/rus100	</_10000>
+        <_10001>	#ussr_tankmen:names/rus101	</_10001>
+        <_10002>	#ussr_tankmen:names/rus102	</_10002>
+        <_10003>	#ussr_tankmen:names/rus103	</_10003>
+        <_10004>	#ussr_tankmen:names/rus104	</_10004>
+      </lastNames>
+      <icons>
+        <_10000>	ussr-1.tga	</_10000>
+        <_10001>	ussr-2.tga	</_10001>
+        <_10002>	ussr-3.tga	</_10002>
+        <_10003>	ussr-4.tga	</_10003>
+        <_10004>	ussr-5.tga	</_10004>
+      </icons>
+    </women1>
+  </premiumGroups>
+</china.xml>

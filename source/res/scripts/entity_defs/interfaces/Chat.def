@@ -1,0 +1,61 @@
+<Chat.def>
+  <BaseMethods>
+    <onVOIPCredentialsReceived>
+      <Arg>	STRING	</Arg>
+      <Arg>	STRING	</Arg>
+    </onVOIPCredentialsReceived>
+    <joinChatChannel>
+      <Arg>	OBJECT_ID	</Arg>
+      <Arg>	STRING	</Arg>
+    </joinChatChannel>
+    <leaveChatChannel>
+      <Arg>	OBJECT_ID	</Arg>
+    </leaveChatChannel>
+    <onChatAction>
+      <Arg>	CHAT_ACTION_DATA	</Arg>
+    </onChatAction>
+    <onUserChatChannelCreated>
+      <Arg>	MAILBOX	</Arg>
+      <Arg>	PYTHON	</Arg>
+    </onUserChatChannelCreated>
+    <chatCommand>
+      <Exposed></Exposed>
+      <Arg>	MAILBOX	</Arg>
+      <Arg>	INT64	</Arg>
+      <Arg>	UINT8	</Arg>
+      <Arg>	OBJECT_ID	</Arg>
+      <Arg>	INT64	</Arg>
+      <Arg>	INT16	</Arg>
+      <Arg>	STRING	</Arg>
+      <Arg>	STRING	</Arg>
+    </chatCommand>
+    <inviteCommand>
+      <Exposed></Exposed>
+      <Arg>	INT64	</Arg>
+      <Arg>	UINT8	</Arg>
+      <Arg>	INT8	</Arg>
+      <Arg>	STRING	</Arg>
+      <Arg>	INT64	</Arg>
+      <Arg>	INT16	</Arg>
+      <Arg>	STRING	</Arg>
+      <Arg>	STRING	</Arg>
+    </inviteCommand>
+    <ackCommand>
+      <Exposed></Exposed>
+      <Arg>	INT64	</Arg>
+      <Arg>	UINT8	</Arg>
+      <Arg>	FLOAT64	</Arg>
+      <Arg>	INT64	</Arg>
+      <Arg>	INT64	</Arg>
+    </ackCommand>
+    <keepAlive>
+      <Arg>	OBJECT_ID	</Arg>
+      <Arg>	INT16	</Arg>
+    </keepAlive>
+  </BaseMethods>
+  <ClientMethods>
+    <onChatAction>
+      <Arg>	CHAT_ACTION_DATA	</Arg>
+    </onChatAction>
+  </ClientMethods>
+</Chat.def>

@@ -1,0 +1,605 @@
+<PzVIB_Tiger_II.xml>
+  <crew>
+    <commander>	radioman	</commander>
+    <gunner></gunner>
+    <driver></driver>
+    <radioman></radioman>
+    <loader></loader>
+  </crew>
+  <speedLimits>
+    <forward>	28	</forward>
+    <backward>	12	</backward>
+  </speedLimits>
+  <repairCost>	7.92	</repairCost>
+  <effects>
+    <destruction>	mediumDestruction	</destruction>
+    <explosion>	mediumExplosion	</explosion>
+    <flaming>	mediumFlaming	</flaming>
+    <collision>	collision	</collision>
+  </effects>
+  <camouflage>
+    <priceFactor>	1.6	</priceFactor>
+    <tiling>	1 1 0 0	</tiling>
+    <exclusionMask>	vehicles/german/G16_PzVIB_Tiger_II/PzVIB_Tiger_II_CM.dds	</exclusionMask>
+  </camouflage>
+  <emblems>
+    <default>	germany_cross	</default>
+    <lodDist>	MEDIUM	</lodDist>
+    <alpha>	0.8	</alpha>
+  </emblems>
+  <horns>
+    <priceFactor>	1.0	</priceFactor>
+    <distanceFactor>	1.0	</distanceFactor>
+    <volumeFactor>	1.0	</volumeFactor>
+  </horns>
+  <hull>
+    <models>
+      <undamaged>	vehicles/german/G16_PzVIB_Tiger_II/normal/lod0/Hull.model	</undamaged>
+      <destroyed>	vehicles/german/G16_PzVIB_Tiger_II/crash/lod0/Hull.model	</destroyed>
+      <exploded>	vehicles/german/G16_PzVIB_Tiger_II/crash/lod0/Hull.model	</exploded>
+    </models>
+    <swinging>
+      <lodDist>	FAR	</lodDist>
+      <pitchParams>	0.22 36.00 0.36 1.00 0.04 0.26	</pitchParams>
+      <rollParams>	1.00 0.22 36.00 0.36 1.00 0.04 0.26	</rollParams>
+      <sensitivityToImpulse>	0.22	</sensitivityToImpulse>
+    </swinging>
+    <exhaust>
+      <pixie>	particles/Tank/engine_exit_gass.xml	</pixie>
+      <nodes>	HP_Track_Exhaus_1 HP_Track_Exhaus_2	</nodes>
+      <rates>	8.0 16.0 40.0	</rates>
+    </exhaust>
+    <turretPositions>
+      <turret>	-0.010441 0.896305 -0.075461	</turret>
+    </turretPositions>
+    <hitTester>
+      <collisionModel>	vehicles/german/G16_PzVIB_Tiger_II/collision/Hull.model	</collisionModel>
+    </hitTester>
+    <armor>
+      <armor_1>	150	</armor_1>
+      <armor_2>	120	</armor_2>
+      <armor_3>	80	</armor_3>
+      <armor_4>	80	</armor_4>
+      <armor_5>	80	</armor_5>
+      <armor_6>	40	</armor_6>
+      <armor_7>	40	</armor_7>
+      <armor_8>	0	</armor_8>
+    </armor>
+    <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
+    <weight>	33400	</weight>
+    <maxHealth>	900.0	</maxHealth>
+    <ammoBayHealth>
+      <maxHealth>	250	</maxHealth>
+      <maxRegenHealth>	200	</maxRegenHealth>
+      <repairCost>	1.0	</repairCost>
+    </ammoBayHealth>
+    <emblemSlots>
+      <clan>
+        <rayStart>	-1.04752 0.848107 2.6537	</rayStart>
+        <rayEnd>	-1.04454 0.542715 2.39539	</rayEnd>
+        <rayUp>	0.000000 0.000000 -1	</rayUp>
+        <size>	0.34	</size>
+        <hideIfDamaged>	false	</hideIfDamaged>
+      </clan>
+    </emblemSlots>
+  </hull>
+  <chassis>
+    <PzVIB_Standardketten>
+      <userString>	#germany_vehicles:PzVIB_Standardketten	</userString>
+      <description>	#germany_vehicles:PzVIB_Standardketten_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 8 1	</icon>
+      <tags></tags>
+      <level>	7	</level>
+      <price>	20080.0	</price>
+      <unlocks>
+        <chassis>	PzVIB_Vetstaerktketten	  <cost>	16940	</cost>
+        </chassis>
+      </unlocks>
+      <models>
+        <undamaged>	vehicles/german/G16_PzVIB_Tiger_II/normal/lod0/Chassis.model	</undamaged>
+        <destroyed>	vehicles/german/G16_PzVIB_Tiger_II/crash/lod0/Chassis.model	</destroyed>
+        <exploded>	vehicles/german/G16_PzVIB_Tiger_II/crash/lod0/Chassis.model	</exploded>
+      </models>
+      <traces>
+        <lodDist>	FAR	</lodDist>
+        <bufferPrefs>	mediumTank	</bufferPrefs>
+        <textureSet>	germany_02	</textureSet>
+        <size>	0.6 0.76	</size>
+      </traces>
+      <tracks>
+        <lodDist>	MEDIUM	</lodDist>
+        <leftMaterial>	track_mat_L_skinned	</leftMaterial>
+        <rightMaterial>	track_mat_R_skinned	</rightMaterial>
+        <textureScale>	-0.734	</textureScale>
+      </tracks>
+      <wheels>
+        <lodDist>	MEDIUM	</lodDist>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	W_L	</template>
+          <count>	9	</count>
+          <radius>	0.398044	</radius>
+        </group>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	W_R	</template>
+          <count>	9	</count>
+          <radius>	0.398044	</radius>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <name>	WD_L0	</name>
+          <radius>	0.4375765	</radius>
+        </wheel>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <name>	WD_L1	</name>
+          <radius>	0.3253955	</radius>
+        </wheel>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <name>	WD_R0	</name>
+          <radius>	0.4375765	</radius>
+        </wheel>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <name>	WD_R1	</name>
+          <radius>	0.3253955	</radius>
+        </wheel>
+      </wheels>
+      <drivingWheels>	WD_L0 WD_L1	</drivingWheels>
+      <effects>
+        <lodDist>	MEDIUM	</lodDist>
+        <dust>	largeTankDust	</dust>
+        <mud>	largeTankMud	</mud>
+      </effects>
+      <sound>	/vehicles/tanks/treads/treads_3	</sound>
+      <hullPosition>	0.000000 1 0.000000	</hullPosition>
+      <hitTester>
+        <collisionModel>	vehicles/german/G16_PzVIB_Tiger_II/collision/Chassis.model	</collisionModel>
+      </hitTester>
+      <armor>
+        <leftTrack>	40	</leftTrack>
+        <rightTrack>	40	</rightTrack>
+      </armor>
+      <topRightCarryingPoint>	1.36777 2.26339	</topRightCarryingPoint>
+      <maxClimbAngle>	25	</maxClimbAngle>
+      <navmeshGirth>	6.0	</navmeshGirth>
+      <weight>	19000	</weight>
+      <maxLoad>	68500	</maxLoad>
+      <terrainResistance>	1.0 1.5 3.0	</terrainResistance>
+      <brakeForce>	36500	</brakeForce>
+      <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
+      <rotationSpeed>	23	</rotationSpeed>
+      <shotDispersionFactors>
+        <vehicleMovement>	0.21	</vehicleMovement>
+        <vehicleRotation>	0.21	</vehicleRotation>
+      </shotDispersionFactors>
+      <bulkHealthFactor>	3.0	</bulkHealthFactor>
+      <maxHealth>	220	</maxHealth>
+      <maxRegenHealth>	165	</maxRegenHealth>
+      <repairCost>	5.0	</repairCost>
+    </PzVIB_Standardketten>
+    <PzVIB_Vetstaerktketten>
+      <userString>	#germany_vehicles:PzVIB_Vetstaerktketten	</userString>
+      <description>	#germany_vehicles:PzVIB_Vetstaerktketten_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 8 1	</icon>
+      <tags></tags>
+      <level>	8	</level>
+      <price>	37520.0	</price>
+      <models>
+        <undamaged>	vehicles/german/G16_PzVIB_Tiger_II/normal/lod0/Chassis.model	</undamaged>
+        <destroyed>	vehicles/german/G16_PzVIB_Tiger_II/crash/lod0/Chassis.model	</destroyed>
+        <exploded>	vehicles/german/G16_PzVIB_Tiger_II/crash/lod0/Chassis.model	</exploded>
+      </models>
+      <traces>
+        <lodDist>	FAR	</lodDist>
+        <bufferPrefs>	mediumTank	</bufferPrefs>
+        <textureSet>	germany_02	</textureSet>
+        <size>	0.6 0.76	</size>
+      </traces>
+      <tracks>
+        <lodDist>	MEDIUM	</lodDist>
+        <leftMaterial>	track_mat_L_skinned	</leftMaterial>
+        <rightMaterial>	track_mat_R_skinned	</rightMaterial>
+        <textureScale>	-0.734	</textureScale>
+      </tracks>
+      <wheels>
+        <lodDist>	MEDIUM	</lodDist>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	W_L	</template>
+          <count>	9	</count>
+          <radius>	0.398044	</radius>
+        </group>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	W_R	</template>
+          <count>	9	</count>
+          <radius>	0.398044	</radius>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <name>	WD_L0	</name>
+          <radius>	0.4375765	</radius>
+        </wheel>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <name>	WD_L1	</name>
+          <radius>	0.3253955	</radius>
+        </wheel>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <name>	WD_R0	</name>
+          <radius>	0.4375765	</radius>
+        </wheel>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <name>	WD_R1	</name>
+          <radius>	0.3253955	</radius>
+        </wheel>
+      </wheels>
+      <drivingWheels>	WD_L0 WD_L1	</drivingWheels>
+      <effects>
+        <lodDist>	MEDIUM	</lodDist>
+        <dust>	largeTankDust	</dust>
+        <mud>	largeTankMud	</mud>
+      </effects>
+      <sound>	/vehicles/tanks/treads/treads_3	</sound>
+      <hullPosition>	0.000000 1 0.000000	</hullPosition>
+      <hitTester>
+        <collisionModel>	vehicles/german/G16_PzVIB_Tiger_II/collision/Chassis.model	</collisionModel>
+      </hitTester>
+      <armor>
+        <leftTrack>	40	</leftTrack>
+        <rightTrack>	40	</rightTrack>
+      </armor>
+      <topRightCarryingPoint>	1.36777 2.26339	</topRightCarryingPoint>
+      <maxClimbAngle>	25	</maxClimbAngle>
+      <navmeshGirth>	6.0	</navmeshGirth>
+      <weight>	19000	</weight>
+      <maxLoad>	72970	</maxLoad>
+      <terrainResistance>	1.0 1.2 2.0	</terrainResistance>
+      <brakeForce>	36500	</brakeForce>
+      <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
+      <rotationSpeed>	26	</rotationSpeed>
+      <shotDispersionFactors>
+        <vehicleMovement>	0.19	</vehicleMovement>
+        <vehicleRotation>	0.19	</vehicleRotation>
+      </shotDispersionFactors>
+      <bulkHealthFactor>	3.0	</bulkHealthFactor>
+      <maxHealth>	240	</maxHealth>
+      <maxRegenHealth>	180	</maxRegenHealth>
+      <repairCost>	5.0	</repairCost>
+    </PzVIB_Vetstaerktketten>
+  </chassis>
+  <turrets0>
+    <PzVIB_Porsche_Turm>
+      <userString>	#germany_vehicles:PzVIB_Porsche_Turm	</userString>
+      <description>	#germany_vehicles:PzVIB_Porsche_Turm_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 6 1	</icon>
+      <tags></tags>
+      <level>	8	</level>
+      <price>	28320.0	</price>
+      <unlocks>
+        <turret>	PzVIB_Heinschel_Turm	  <cost>	22260	</cost>
+        </turret>
+      </unlocks>
+      <models>
+        <undamaged>	vehicles/german/G16_PzVIB_Tiger_II/normal/lod0/Turret_01.model	</undamaged>
+        <destroyed>	vehicles/german/G16_PzVIB_Tiger_II/crash/lod0/Turret_01.model	</destroyed>
+        <exploded>	vehicles/german/G16_PzVIB_Tiger_II/crash/lod0/Turret_01.model	</exploded>
+      </models>
+      <hitTester>
+        <collisionModel>	vehicles/german/G16_PzVIB_Tiger_II/collision/Turret_01.model	</collisionModel>
+      </hitTester>
+      <yawLimits>	-180 180	</yawLimits>
+      <gunPosition>	0.032003 0.360901 1.2236	</gunPosition>
+      <armor>
+        <armor_1>	100	</armor_1>
+        <armor_2>	80	</armor_2>
+        <armor_3>	80	</armor_3>
+        <armor_4>	80	</armor_4>
+        <armor_5>	0	</armor_5>
+        <armor_6>	80	</armor_6>
+        <armor_7>	70	</armor_7>
+        <armor_8>	25	</armor_8>
+        <armor_9>	0	</armor_9>
+        <armor_10>	40	</armor_10>
+        <surveyingDevice>	40	</surveyingDevice>
+      </armor>
+      <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
+      <weight>	11200	</weight>
+      <maxHealth>	600.0	</maxHealth>
+      <rotationSpeed>	34	</rotationSpeed>
+      <turretRotatorHealth>
+        <maxHealth>	120	</maxHealth>
+        <maxRegenHealth>	59	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </turretRotatorHealth>
+      <circularVisionRadius>	460	</circularVisionRadius>
+      <surveyingDeviceHealth>
+        <maxHealth>	80	</maxHealth>
+        <maxRegenHealth>	39	</maxRegenHealth>
+        <repairCost>	2.0	</repairCost>
+      </surveyingDeviceHealth>
+      <guns>
+        <_88mm_KwK_43_L71>	shared	  <maxAmmo>	72	</maxAmmo>
+          <pitchLimits>	-17 7	</pitchLimits>
+          <reloadTime>	7.2	</reloadTime>
+          <shotDispersionFactors>
+            <turretRotation>	0.16	</turretRotation>
+            <afterShot>	4.0	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <unlocks>
+            <gun>	_105mm_KwK45_L52	  <cost>	16800	</cost>
+            </gun>
+          </unlocks>
+          <models>
+            <undamaged>	vehicles/german/G16_PzVIB_Tiger_II/normal/lod0/Gun_02.model	</undamaged>
+            <destroyed>	vehicles/german/G16_PzVIB_Tiger_II/crash/lod0/Gun_02.model	</destroyed>
+            <exploded>	vehicles/german/G16_PzVIB_Tiger_II/crash/lod0/Gun_02.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/german/G16_PzVIB_Tiger_II/collision/Gun_02.model	</collisionModel>
+          </hitTester>
+          <armor>
+            <armor_1>	100	  <noDamage>	true	</noDamage>
+            </armor_1>
+            <armor_2>	80	  <noDamage>	true	</noDamage>
+            </armor_2>
+            <armor_3>	50	  <noDamage>	true	</noDamage>
+            </armor_3>
+            <gun>	35	</gun>
+          </armor>
+        </_88mm_KwK_43_L71>
+        <_105mm_KwK45_L52>	shared	  <maxAmmo>	42	</maxAmmo>
+          <pitchLimits>	-17 6	</pitchLimits>
+          <unlocks>
+            <gun>	_105mm_KwK46_L68	  <cost>	46000	</cost>
+            </gun>
+          </unlocks>
+          <reloadTime>	9.5	</reloadTime>
+          <shotDispersionFactors>
+            <turretRotation>	0.12	</turretRotation>
+            <afterShot>	3.0	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <models>
+            <undamaged>	vehicles/german/G16_PzVIB_Tiger_II/normal/lod0/Gun_07.model	</undamaged>
+            <destroyed>	vehicles/german/G16_PzVIB_Tiger_II/crash/lod0/Gun_07.model	</destroyed>
+            <exploded>	vehicles/german/G16_PzVIB_Tiger_II/crash/lod0/Gun_07.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/german/G16_PzVIB_Tiger_II/collision/Gun_07.model	</collisionModel>
+          </hitTester>
+          <armor>
+            <armor_1>	100	  <noDamage>	true	</noDamage>
+            </armor_1>
+            <armor_2>	80	  <noDamage>	true	</noDamage>
+            </armor_2>
+            <armor_3>	50	  <noDamage>	true	</noDamage>
+            </armor_3>
+            <gun>	40	</gun>
+          </armor>
+        </_105mm_KwK45_L52>
+        <_105mm_KwK46_L68>	shared	  <maxAmmo>	36	</maxAmmo>
+          <pitchLimits>	-17 7	</pitchLimits>
+          <reloadTime>	11	</reloadTime>
+          <shotDispersionFactors>
+            <turretRotation>	0.12	</turretRotation>
+            <afterShot>	3.0	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <models>
+            <undamaged>	vehicles/german/G16_PzVIB_Tiger_II/normal/lod0/Gun_08.model	</undamaged>
+            <destroyed>	vehicles/german/G16_PzVIB_Tiger_II/crash/lod0/Gun_08.model	</destroyed>
+            <exploded>	vehicles/german/G16_PzVIB_Tiger_II/crash/lod0/Gun_08.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/german/G16_PzVIB_Tiger_II/collision/Gun_08.model	</collisionModel>
+          </hitTester>
+          <armor>
+            <armor_1>	100	  <noDamage>	true	</noDamage>
+            </armor_1>
+            <armor_2>	80	  <noDamage>	true	</noDamage>
+            </armor_2>
+            <armor_3>	50	  <noDamage>	true	</noDamage>
+            </armor_3>
+            <gun>	40	</gun>
+          </armor>
+        </_105mm_KwK46_L68>
+      </guns>
+      <emblemSlots>
+        <player>
+          <rayStart>	0.984029 0.549456 0.941855	</rayStart>
+          <rayEnd>	0.648107 0.354257 0.846704	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.32	</size>
+          <hideIfDamaged>	false	</hideIfDamaged>
+        </player>
+        <player>
+          <rayStart>	-0.984029 0.549456 0.941855	</rayStart>
+          <rayEnd>	-0.648107 0.354257 0.846704	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.32	</size>
+          <hideIfDamaged>	false	</hideIfDamaged>
+        </player>
+      </emblemSlots>
+    </PzVIB_Porsche_Turm>
+    <PzVIB_Heinschel_Turm>
+      <userString>	#germany_vehicles:PzVIB_Heinschel_Turm	</userString>
+      <description>	#germany_vehicles:PzVIB_Heinschel_Turm_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 6 1	</icon>
+      <tags></tags>
+      <level>	9	</level>
+      <price>	52370.0	</price>
+      <unlocks>
+        <vehicle>	E-75	  <cost>	163490	</cost>
+        </vehicle>
+      </unlocks>
+      <models>
+        <undamaged>	vehicles/german/G16_PzVIB_Tiger_II/normal/lod0/Turret_02.model	</undamaged>
+        <destroyed>	vehicles/german/G16_PzVIB_Tiger_II/crash/lod0/Turret_02.model	</destroyed>
+        <exploded>	vehicles/german/G16_PzVIB_Tiger_II/crash/lod0/Turret_02.model	</exploded>
+      </models>
+      <hitTester>
+        <collisionModel>	vehicles/german/G16_PzVIB_Tiger_II/collision/Turret_02.model	</collisionModel>
+      </hitTester>
+      <yawLimits>	-180 180	</yawLimits>
+      <gunPosition>	0.062704 0.350518 1.3563	</gunPosition>
+      <armor>
+        <armor_1>	185	</armor_1>
+        <armor_2>	80	</armor_2>
+        <armor_3>	80	</armor_3>
+        <armor_4>	80	</armor_4>
+        <armor_5>	265	</armor_5>
+        <armor_6>	80	</armor_6>
+        <armor_7>	70	</armor_7>
+        <armor_8>	140	</armor_8>
+        <armor_9>	60	</armor_9>
+        <armor_10>	40	</armor_10>
+        <armor_11>	40	</armor_11>
+        <armor_13>	0	</armor_13>
+        <surveyingDevice>	40	</surveyingDevice>
+      </armor>
+      <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
+      <weight>	13520	</weight>
+      <maxHealth>	700.0	</maxHealth>
+      <rotationSpeed>	28	</rotationSpeed>
+      <turretRotatorHealth>
+        <maxHealth>	120	</maxHealth>
+        <maxRegenHealth>	59	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </turretRotatorHealth>
+      <circularVisionRadius>	460	</circularVisionRadius>
+      <surveyingDeviceHealth>
+        <maxHealth>	80	</maxHealth>
+        <maxRegenHealth>	39	</maxRegenHealth>
+        <repairCost>	2.0	</repairCost>
+      </surveyingDeviceHealth>
+      <guns>
+        <_88mm_KwK_43_L71>	shared	  <maxAmmo>	72	</maxAmmo>
+          <pitchLimits>	-17 7	</pitchLimits>
+          <reloadTime>	6.7	</reloadTime>
+          <shotDispersionFactors>
+            <turretRotation>	0.1	</turretRotation>
+            <afterShot>	4.0	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <models>
+            <undamaged>	vehicles/german/G16_PzVIB_Tiger_II/normal/lod0/Gun_04.model	</undamaged>
+            <destroyed>	vehicles/german/G16_PzVIB_Tiger_II/crash/lod0/Gun_04.model	</destroyed>
+            <exploded>	vehicles/german/G16_PzVIB_Tiger_II/crash/lod0/Gun_04.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/german/G16_PzVIB_Tiger_II/collision/Gun_04.model	</collisionModel>
+          </hitTester>
+          <armor>
+            <armor_1>	145	  <noDamage>	true	</noDamage>
+            </armor_1>
+            <armor_2>	100	  <noDamage>	true	</noDamage>
+            </armor_2>
+            <armor_4>	80	  <noDamage>	true	</noDamage>
+            </armor_4>
+            <gun>	35	</gun>
+          </armor>
+        </_88mm_KwK_43_L71>
+        <_105mm_KwK45_L52>	shared	  <maxAmmo>	42	</maxAmmo>
+          <pitchLimits>	-17 6	</pitchLimits>
+          <invisibilityFactorAtShot>	0.220	</invisibilityFactorAtShot>
+          <reloadTime>	8.8	</reloadTime>
+          <shotDispersionFactors>
+            <turretRotation>	0.1	</turretRotation>
+            <afterShot>	3.0	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <models>
+            <undamaged>	vehicles/german/G16_PzVIB_Tiger_II/normal/lod0/Gun_09.model	</undamaged>
+            <destroyed>	vehicles/german/G16_PzVIB_Tiger_II/crash/lod0/Gun_09.model	</destroyed>
+            <exploded>	vehicles/german/G16_PzVIB_Tiger_II/crash/lod0/Gun_09.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/german/G16_PzVIB_Tiger_II/collision/Gun_09.model	</collisionModel>
+          </hitTester>
+          <armor>
+            <armor_1>	145	  <noDamage>	true	</noDamage>
+            </armor_1>
+            <armor_2>	100	  <noDamage>	true	</noDamage>
+            </armor_2>
+            <armor_4>	80	  <noDamage>	true	</noDamage>
+            </armor_4>
+            <gun>	40	</gun>
+          </armor>
+        </_105mm_KwK45_L52>
+        <_105mm_KwK46_L68>	shared	  <maxAmmo>	36	</maxAmmo>
+          <pitchLimits>	-17 7	</pitchLimits>
+          <reloadTime>	10	</reloadTime>
+          <shotDispersionFactors>
+            <turretRotation>	0.1	</turretRotation>
+            <afterShot>	3.0	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <models>
+            <undamaged>	vehicles/german/G16_PzVIB_Tiger_II/normal/lod0/Gun_10.model	</undamaged>
+            <destroyed>	vehicles/german/G16_PzVIB_Tiger_II/crash/lod0/Gun_10.model	</destroyed>
+            <exploded>	vehicles/german/G16_PzVIB_Tiger_II/crash/lod0/Gun_10.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/german/G16_PzVIB_Tiger_II/collision/Gun_10.model	</collisionModel>
+          </hitTester>
+          <armor>
+            <armor_1>	145	  <noDamage>	true	</noDamage>
+            </armor_1>
+            <armor_2>	100	  <noDamage>	true	</noDamage>
+            </armor_2>
+            <armor_4>	80	  <noDamage>	true	</noDamage>
+            </armor_4>
+            <gun>	40	</gun>
+          </armor>
+        </_105mm_KwK46_L68>
+      </guns>
+      <emblemSlots>
+        <player>
+          <rayStart>	1.25052 0.554354 -0.0865986	</rayStart>
+          <rayEnd>	0.878492 0.412537 -0.125106	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.34	</size>
+          <hideIfDamaged>	true	</hideIfDamaged>
+        </player>
+        <player>
+          <rayStart>	-1.25052 0.554354 -0.0865986	</rayStart>
+          <rayEnd>	-0.878492 0.412537 -0.125106	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.34	</size>
+          <hideIfDamaged>	false	</hideIfDamaged>
+        </player>
+      </emblemSlots>
+    </PzVIB_Heinschel_Turm>
+  </turrets0>
+  <engines>
+    <Maybach_HL_210P30>	shared	  <unlocks>
+        <engine>	Maybach_HL_230P45	  <cost>	23000	</cost>
+        </engine>
+      </unlocks>
+    </Maybach_HL_210P30>
+    <Maybach_HL_230P45>	shared	  <unlocks>
+        <engine>	Maybach_HL_234P45	  <cost>	25100	</cost>
+        </engine>
+      </unlocks>
+    </Maybach_HL_230P45>
+    <Maybach_HL_234P45>	shared	</Maybach_HL_234P45>
+  </engines>
+  <fuelTanks>
+    <Large>	shared	</Large>
+  </fuelTanks>
+  <radios>
+    <FuG7>	shared	  <unlocks>
+        <radio>	FuG12	  <cost>	7200.0	</cost>
+        </radio>
+      </unlocks>
+    </FuG7>
+    <FuG12>	shared	</FuG12>
+  </radios>
+</PzVIB_Tiger_II.xml>

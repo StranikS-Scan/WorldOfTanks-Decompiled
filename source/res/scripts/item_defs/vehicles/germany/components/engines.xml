@@ -1,0 +1,769 @@
+<engines.xml>
+  <ids>
+    <Maybach_HL_108TR>	0	</Maybach_HL_108TR>
+    <Maybach_HL_120_TR>	1	</Maybach_HL_120_TR>
+    <Maybach_HL_120_TRM>	2	</Maybach_HL_120_TRM>
+    <Maybach_HL_157P>	3	</Maybach_HL_157P>
+    <Maybach_HL_174>	4	</Maybach_HL_174>
+    <Maybach_HL_210P30>	5	</Maybach_HL_210P30>
+    <Maybach_HL_230P45>	6	</Maybach_HL_230P45>
+    <Skoda_T-11>	7	</Skoda_T-11>
+    <Skoda_T-15>	8	</Skoda_T-15>
+    <Praga_TN_100>	9	</Praga_TN_100>
+    <Praga_TNPS>	10	</Praga_TNPS>
+    <Scania_Vabis1664>	11	</Scania_Vabis1664>
+    <Maybach_HL57TR>	12	</Maybach_HL57TR>
+    <Maybach_HL62TR>	13	</Maybach_HL62TR>
+    <Maybach_HL62TRM>	14	</Maybach_HL62TRM>
+    <Krupp_M301>	15	</Krupp_M301>
+    <Krupp_M305>	16	</Krupp_M305>
+    <Krupp_M311>	17	</Krupp_M311>
+    <Maybach_NL38TR>	18	</Maybach_NL38TR>
+    <Daimler-Benz_DB-603A2>	19	</Daimler-Benz_DB-603A2>
+    <Maybach_HL66P>	20	</Maybach_HL66P>
+    <Praga_EPA_3>	21	</Praga_EPA_3>
+    <Maybach_HL45P>	22	</Maybach_HL45P>
+    <Maybach_HL_234P45>	23	</Maybach_HL_234P45>
+    <Praga_EPA_2>	24	</Praga_EPA_2>
+    <MB507>	25	</MB507>
+    <Maybach_HL90>	26	</Maybach_HL90>
+    <Somua_S-40>	27	</Somua_S-40>
+    <Renault>	28	</Renault>
+    <Porsche_Typ_100>	29	</Porsche_Typ_100>
+    <Porsche_Typ_100_1>	30	</Porsche_Typ_100_1>
+    <Porsche_Typ_100_3>	31	</Porsche_Typ_100_3>
+    <Porsche_Deutz_Typ180_2>	32	</Porsche_Deutz_Typ180_2>
+    <Hotchkiss>	33	</Hotchkiss>
+    <Maybach_HL_210P30A>	34	</Maybach_HL_210P30A>
+    <Praga_NR>	35	</Praga_NR>
+    <Maybach_HL_234P50>	36	</Maybach_HL_234P50>
+    <Maybach_HL_174_05>	37	</Maybach_HL_174_05>
+    <Maybach_HL_210P30_05>	38	</Maybach_HL_210P30_05>
+    <Maybach_HL_230P45_05>	39	</Maybach_HL_230P45_05>
+    <Maybach_HL_234P30_Ausf_A>	40	</Maybach_HL_234P30_Ausf_A>
+    <Tatra_V-103>	41	</Tatra_V-103>
+    <Praga_C9>	42	</Praga_C9>
+    <Praga_NRi>	43	</Praga_NRi>
+    <Maybach_HL_234P60>	44	</Maybach_HL_234P60>
+    <Porsche_Typ_100_1A>	47	</Porsche_Typ_100_1A>
+    <Maybach_HL_120_TRM_A>	48	</Maybach_HL_120_TRM_A>
+  </ids>
+  <shared>
+    <Maybach_HL_120_TR>
+      <userString>	#germany_vehicles:Maybach_HL_120_TR	</userString>
+      <description>	#germany_vehicles:Maybach_HL_120_TR_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 7 1	</icon>
+      <tags>	gasoline	</tags>
+      <level>	4	</level>
+      <price>	10430	</price>
+      <sound>	/vehicles/tanks/medium/tiger	</sound>
+      <power>	350	</power>
+      <weight>	465	</weight>
+      <maxHealth>	84	</maxHealth>
+      <maxRegenHealth>	41	</maxRegenHealth>
+      <repairCost>	4	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+    </Maybach_HL_120_TR>
+    <Maybach_HL_108TR>
+      <userString>	#germany_vehicles:Maybach_HL_108TR	</userString>
+      <description>	#germany_vehicles:Maybach_HL_108TR_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 7 1	</icon>
+      <tags>	gasoline	</tags>
+      <level>	4	</level>
+      <price>	9460	</price>
+      <sound>	/vehicles/tanks/medium/tiger	</sound>
+      <power>	320	</power>
+      <weight>	450	</weight>
+      <maxHealth>	82	</maxHealth>
+      <maxRegenHealth>	40	</maxRegenHealth>
+      <repairCost>	4	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+    </Maybach_HL_108TR>
+    <Maybach_HL_120_TRM>
+      <userString>	#germany_vehicles:Maybach_HL_120_TRM	</userString>
+      <description>	#germany_vehicles:Maybach_HL_120_TRM_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 7 1	</icon>
+      <tags>	gasoline	</tags>
+      <level>	4	</level>
+      <price>	13900	</price>
+      <sound>	/vehicles/tanks/medium/tiger	</sound>
+      <power>	440	</power>
+      <weight>	510	</weight>
+      <maxHealth>	86	</maxHealth>
+      <maxRegenHealth>	42	</maxRegenHealth>
+      <repairCost>	4	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+    </Maybach_HL_120_TRM>
+    <Maybach_HL_120_TRM_A>
+      <userString>	#germany_vehicles:Maybach_HL_120_TRM	</userString>
+      <description>	#germany_vehicles:Maybach_HL_120_TRM_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 7 1	</icon>
+      <tags>	gasoline	</tags>
+      <level>	4	</level>
+      <notInShop>	true	</notInShop>
+      <price>	13900	</price>
+      <sound>	/vehicles/tanks/medium/tiger	</sound>
+      <power>	440	</power>
+      <weight>	510	</weight>
+      <maxHealth>	86	</maxHealth>
+      <maxRegenHealth>	42	</maxRegenHealth>
+      <repairCost>	4	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+    </Maybach_HL_120_TRM_A>
+    <Praga_C9>
+      <userString>	#germany_vehicles:Praga_C9	</userString>
+      <description>	#germany_vehicles:Praga_C9_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 7 1	</icon>
+      <tags>	gasoline	</tags>
+      <level>	4	</level>
+      <notInShop>	true	</notInShop>
+      <price>	14300	</price>
+      <sound>	/vehicles/tanks/medium/tiger	</sound>
+      <power>	450	</power>
+      <weight>	510	</weight>
+      <maxHealth>	86	</maxHealth>
+      <maxRegenHealth>	42	</maxRegenHealth>
+      <repairCost>	4	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+    </Praga_C9>
+    <Maybach_HL_157P>
+      <userString>	#germany_vehicles:Maybach_HL_157P	</userString>
+      <description>	#germany_vehicles:Maybach_HL_157P_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 7 1	</icon>
+      <tags>	gasoline	</tags>
+      <level>	5	</level>
+      <price>	22330	</price>
+      <sound>	/vehicles/tanks/medium/tiger	</sound>
+      <power>	585	</power>
+      <weight>	580	</weight>
+      <maxHealth>	105	</maxHealth>
+      <maxRegenHealth>	52	</maxRegenHealth>
+      <repairCost>	5	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+    </Maybach_HL_157P>
+    <Maybach_HL_174>
+      <userString>	#germany_vehicles:Maybach_HL_174	</userString>
+      <description>	#germany_vehicles:Maybach_HL_174_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 7 1	</icon>
+      <tags>	gasoline	</tags>
+      <level>	6	</level>
+      <price>	26250	</price>
+      <sound>	/vehicles/tanks/heavy/IS_2	</sound>
+      <power>	610	</power>
+      <weight>	670	</weight>
+      <maxHealth>	145	</maxHealth>
+      <maxRegenHealth>	73	</maxRegenHealth>
+      <repairCost>	7	</repairCost>
+      <fireStartingChance>	0.20	</fireStartingChance>
+    </Maybach_HL_174>
+    <Maybach_HL_210P30>
+      <userString>	#germany_vehicles:Maybach_HL_210P30	</userString>
+      <description>	#germany_vehicles:Maybach_HL_210P30_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 7 1	</icon>
+      <tags>	gasoline	</tags>
+      <level>	7	</level>
+      <price>	36000	</price>
+      <sound>	/vehicles/tanks/heavy/IS_2	</sound>
+      <power>	650	</power>
+      <weight>	720	</weight>
+      <maxHealth>	200	</maxHealth>
+      <maxRegenHealth>	100	</maxRegenHealth>
+      <repairCost>	8	</repairCost>
+      <fireStartingChance>	0.20	</fireStartingChance>
+    </Maybach_HL_210P30>
+    <Maybach_HL_210P30A>
+      <userString>	#germany_vehicles:Maybach_HL_210P30	</userString>
+      <description>	#germany_vehicles:Maybach_HL_210P30_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 7 1	</icon>
+      <tags>	gasoline	</tags>
+      <level>	7	</level>
+      <price>	36000	</price>
+      <notInShop>	true	</notInShop>
+      <sound>	/vehicles/tanks/heavy/IS_2	</sound>
+      <power>	870	</power>
+      <weight>	750	</weight>
+      <maxHealth>	260	</maxHealth>
+      <maxRegenHealth>	129	</maxRegenHealth>
+      <repairCost>	8	</repairCost>
+      <fireStartingChance>	0.20	</fireStartingChance>
+    </Maybach_HL_210P30A>
+    <Maybach_HL_230P45>
+      <userString>	#germany_vehicles:Maybach_HL_230P45	</userString>
+      <description>	#germany_vehicles:Maybach_HL_230P45_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 7 1	</icon>
+      <tags>	gasoline	</tags>
+      <level>	8	</level>
+      <price>	66750	</price>
+      <sound>	/vehicles/tanks/heavy/IS_2	</sound>
+      <power>	750	</power>
+      <weight>	750	</weight>
+      <maxHealth>	260	</maxHealth>
+      <maxRegenHealth>	129	</maxRegenHealth>
+      <repairCost>	8	</repairCost>
+      <fireStartingChance>	0.20	</fireStartingChance>
+    </Maybach_HL_230P45>
+    <Praga_TN_100>
+      <userString>	#germany_vehicles:Praga_TN_100	</userString>
+      <description>	#germany_vehicles:Praga_TN_100_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 7 1	</icon>
+      <tags>	gasoline	</tags>
+      <level>	2	</level>
+      <price>	800	</price>
+      <sound>	/vehicles/tanks/light/PzIII	</sound>
+      <power>	100	</power>
+      <weight>	340	</weight>
+      <maxHealth>	40	</maxHealth>
+      <maxRegenHealth>	19	</maxRegenHealth>
+      <repairCost>	2	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+    </Praga_TN_100>
+    <Skoda_T-11>
+      <userString>	#germany_vehicles:Skoda_T-11	</userString>
+      <description>	#germany_vehicles:Skoda_T-11_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 7 1	</icon>
+      <tags>	gasoline	</tags>
+      <level>	2	</level>
+      <price>	840	</price>
+      <sound>	/vehicles/tanks/light/PzIII	</sound>
+      <power>	120	</power>
+      <weight>	320	</weight>
+      <maxHealth>	40	</maxHealth>
+      <maxRegenHealth>	19	</maxRegenHealth>
+      <repairCost>	2	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+    </Skoda_T-11>
+    <Skoda_T-15>
+      <userString>	#germany_vehicles:Skoda_T-15	</userString>
+      <description>	#germany_vehicles:Skoda_T-15_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 7 1	</icon>
+      <tags>	gasoline	</tags>
+      <level>	4	</level>
+      <price>	9110	</price>
+      <sound>	/vehicles/tanks/light/PzIII	</sound>
+      <power>	220	</power>
+      <weight>	420	</weight>
+      <maxHealth>	80	</maxHealth>
+      <maxRegenHealth>	39	</maxRegenHealth>
+      <repairCost>	2	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+    </Skoda_T-15>
+    <Praga_TNPS>
+      <userString>	#germany_vehicles:Praga_TNPS	</userString>
+      <description>	#germany_vehicles:Praga_TNPS_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 7 1	</icon>
+      <tags>	gasoline	</tags>
+      <level>	3	</level>
+      <price>	1150	</price>
+      <sound>	/vehicles/tanks/light/PzIII	</sound>
+      <power>	120	</power>
+      <weight>	350	</weight>
+      <maxHealth>	40	</maxHealth>
+      <maxRegenHealth>	19	</maxRegenHealth>
+      <repairCost>	2	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+    </Praga_TNPS>
+    <Scania_Vabis1664>
+      <userString>	#germany_vehicles:Scania_Vabis1664	</userString>
+      <description>	#germany_vehicles:Scania_Vabis1664_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 7 1	</icon>
+      <tags>	diesel	</tags>
+      <level>	3	</level>
+      <price>	4980	</price>
+      <sound>	/vehicles/tanks/light/PzIII	</sound>
+      <power>	165	</power>
+      <weight>	400	</weight>
+      <maxHealth>	55	</maxHealth>
+      <maxRegenHealth>	27	</maxRegenHealth>
+      <repairCost>	3	</repairCost>
+      <fireStartingChance>	0.15	</fireStartingChance>
+    </Scania_Vabis1664>
+    <Maybach_HL57TR>
+      <userString>	#germany_vehicles:Maybach_HL57TR	</userString>
+      <description>	#germany_vehicles:Maybach_HL57TR_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 7 1	</icon>
+      <tags>	gasoline	</tags>
+      <level>	2	</level>
+      <price>	1120	</price>
+      <sound>	/vehicles/tanks/light/PzIII	</sound>
+      <power>	130	</power>
+      <weight>	540	</weight>
+      <maxHealth>	55	</maxHealth>
+      <maxRegenHealth>	27	</maxRegenHealth>
+      <repairCost>	3	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+    </Maybach_HL57TR>
+    <Maybach_HL62TR>
+      <userString>	#germany_vehicles:Maybach_HL62TR	</userString>
+      <description>	#germany_vehicles:Maybach_HL62TR_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 7 1	</icon>
+      <tags>	gasoline	</tags>
+      <level>	3	</level>
+      <price>	4220	</price>
+      <sound>	/vehicles/tanks/light/PzIII	</sound>
+      <power>	140	</power>
+      <weight>	550	</weight>
+      <maxHealth>	55	</maxHealth>
+      <maxRegenHealth>	27	</maxRegenHealth>
+      <repairCost>	3	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+    </Maybach_HL62TR>
+    <Maybach_HL62TRM>
+      <userString>	#germany_vehicles:Maybach_HL62TRM	</userString>
+      <description>	#germany_vehicles:Maybach_HL62TRM_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 7 1	</icon>
+      <tags>	gasoline	</tags>
+      <level>	3	</level>
+      <price>	4960	</price>
+      <sound>	/vehicles/tanks/light/PzIII	</sound>
+      <power>	160	</power>
+      <weight>	550	</weight>
+      <maxHealth>	65	</maxHealth>
+      <maxRegenHealth>	32	</maxRegenHealth>
+      <repairCost>	3	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+    </Maybach_HL62TRM>
+    <Krupp_M301>
+      <userString>	#germany_vehicles:Krupp_M301	</userString>
+      <description>	#germany_vehicles:Krupp_M301_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 7 1	</icon>
+      <tags>	gasoline	</tags>
+      <level>	1	</level>
+      <price>	280	</price>
+      <sound>	/vehicles/tanks/light/LightTraktor	</sound>
+      <power>	51	</power>
+      <weight>	200	</weight>
+      <maxHealth>	25	</maxHealth>
+      <maxRegenHealth>	12	</maxRegenHealth>
+      <repairCost>	1	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+    </Krupp_M301>
+    <Krupp_M305>
+      <userString>	#germany_vehicles:Krupp_M305	</userString>
+      <description>	#germany_vehicles:Krupp_M305_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 7 1	</icon>
+      <tags>	gasoline	</tags>
+      <level>	1	</level>
+      <price>	290	</price>
+      <sound>	/vehicles/tanks/light/PzIII	</sound>
+      <power>	65	</power>
+      <weight>	220	</weight>
+      <maxHealth>	25	</maxHealth>
+      <maxRegenHealth>	12	</maxRegenHealth>
+      <repairCost>	1	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+    </Krupp_M305>
+    <Krupp_M311>
+      <userString>	#germany_vehicles:Krupp_M311	</userString>
+      <description>	#germany_vehicles:Krupp_M311_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 7 1	</icon>
+      <tags>	gasoline	</tags>
+      <level>	2	</level>
+      <price>	300	</price>
+      <sound>	/vehicles/tanks/light/LightTraktor	</sound>
+      <power>	85	</power>
+      <weight>	300	</weight>
+      <maxHealth>	38	</maxHealth>
+      <maxRegenHealth>	19	</maxRegenHealth>
+      <repairCost>	2	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+    </Krupp_M311>
+    <Maybach_NL38TR>
+      <userString>	#germany_vehicles:Maybach_NL38TR	</userString>
+      <description>	#germany_vehicles:Maybach_NL38TR_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 7 1	</icon>
+      <tags>	gasoline	</tags>
+      <level>	2	</level>
+      <price>	410	</price>
+      <sound>	/vehicles/tanks/light/LightTraktor	</sound>
+      <power>	100	</power>
+      <weight>	500	</weight>
+      <maxHealth>	44	</maxHealth>
+      <maxRegenHealth>	22	</maxRegenHealth>
+      <repairCost>	2	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+    </Maybach_NL38TR>
+    <Daimler-Benz_DB-603A2>
+      <userString>	#germany_vehicles:Daimler-Benz_DB-603A2	</userString>
+      <description>	#germany_vehicles:Daimler-Benz_DB-603A2_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 7 1	</icon>
+      <tags>	diesel	</tags>
+      <level>	8	</level>
+      <price>	54520	</price>
+      <sound>	/vehicles/tanks/heavy/IS_2	</sound>
+      <power>	750	</power>
+      <weight>	900	</weight>
+      <maxHealth>	260	</maxHealth>
+      <maxRegenHealth>	129	</maxRegenHealth>
+      <repairCost>	8	</repairCost>
+      <fireStartingChance>	0.15	</fireStartingChance>
+    </Daimler-Benz_DB-603A2>
+    <Maybach_HL66P>
+      <userString>	#germany_vehicles:Maybach_HL66P	</userString>
+      <description>	#germany_vehicles:Maybach_HL66P_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 7 1	</icon>
+      <tags>	gasoline	</tags>
+      <level>	4	</level>
+      <price>	8650	</price>
+      <sound>	/vehicles/tanks/light/PzIII	</sound>
+      <power>	200	</power>
+      <weight>	550	</weight>
+      <maxHealth>	80	</maxHealth>
+      <maxRegenHealth>	40	</maxRegenHealth>
+      <repairCost>	4	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+    </Maybach_HL66P>
+    <Praga_EPA_3>
+      <userString>	#germany_vehicles:Praga_EPA_3	</userString>
+      <description>	#germany_vehicles:Praga_EPA_3_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 7 1	</icon>
+      <tags>	gasoline	</tags>
+      <level>	4	</level>
+      <price>	10810	</price>
+      <sound>	/vehicles/tanks/light/PzIII	</sound>
+      <power>	200	</power>
+      <weight>	470	</weight>
+      <maxHealth>	100	</maxHealth>
+      <maxRegenHealth>	49	</maxRegenHealth>
+      <repairCost>	4	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+    </Praga_EPA_3>
+    <Praga_NR>
+      <userString>	#germany_vehicles:Praga_NR	</userString>
+      <description>	#germany_vehicles:Praga_NR_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 7 1	</icon>
+      <tags>	gasoline	</tags>
+      <level>	4	</level>
+      <price>	12300	</price>
+      <sound>	/vehicles/tanks/light/PzIII	</sound>
+      <power>	274	</power>
+      <weight>	470	</weight>
+      <maxHealth>	100	</maxHealth>
+      <maxRegenHealth>	49	</maxRegenHealth>
+      <repairCost>	4	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+    </Praga_NR>
+    <Praga_NRi>
+      <userString>	#germany_vehicles:Praga_NRi	</userString>
+      <description>	#germany_vehicles:Praga_NRi_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 7 1	</icon>
+      <tags>	gasoline	</tags>
+      <level>	4	</level>
+      <price>	12000	</price>
+      <notInShop>	true	</notInShop>
+      <sound>	/vehicles/tanks/light/PzIII	</sound>
+      <power>	274	</power>
+      <weight>	470	</weight>
+      <maxHealth>	100	</maxHealth>
+      <maxRegenHealth>	49	</maxRegenHealth>
+      <repairCost>	4	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+    </Praga_NRi>
+    <Maybach_HL45P>
+      <userString>	#germany_vehicles:Maybach_HL45P	</userString>
+      <description>	#germany_vehicles:Maybach_HL45P_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 7 1	</icon>
+      <tags>	gasoline	</tags>
+      <level>	4	</level>
+      <price>	10000	</price>
+      <notInShop>	true	</notInShop>
+      <sound>	/vehicles/tanks/light/PzIII	</sound>
+      <power>	160	</power>
+      <weight>	500	</weight>
+      <maxHealth>	70	</maxHealth>
+      <maxRegenHealth>	40	</maxRegenHealth>
+      <repairCost>	4	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+    </Maybach_HL45P>
+    <Maybach_HL_234P45>
+      <userString>	#germany_vehicles:Maybach_HL_234P45	</userString>
+      <description>	#germany_vehicles:Maybach_HL_234P45_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 7 1	</icon>
+      <tags>	gasoline	</tags>
+      <level>	9	</level>
+      <price>	98730	</price>
+      <sound>	/vehicles/tanks/heavy/IS_2	</sound>
+      <power>	870	</power>
+      <weight>	750	</weight>
+      <maxHealth>	320	</maxHealth>
+      <maxRegenHealth>	160	</maxRegenHealth>
+      <repairCost>	9	</repairCost>
+      <fireStartingChance>	0.20	</fireStartingChance>
+    </Maybach_HL_234P45>
+    <Maybach_HL_234P50>
+      <userString>	#germany_vehicles:Maybach_HL_234P50	</userString>
+      <description>	#germany_vehicles:Maybach_HL_234P50_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 7 1	</icon>
+      <tags>	gasoline	</tags>
+      <level>	10	</level>
+      <price>	123000	</price>
+      <sound>	/vehicles/tanks/heavy/IS_2	</sound>
+      <power>	1200	</power>
+      <weight>	750	</weight>
+      <maxHealth>	360	</maxHealth>
+      <maxRegenHealth>	170	</maxRegenHealth>
+      <repairCost>	9	</repairCost>
+      <fireStartingChance>	0.15	</fireStartingChance>
+    </Maybach_HL_234P50>
+    <Maybach_HL_234P60>
+      <userString>	#germany_vehicles:Maybach_HL_234P60	</userString>
+      <description>	#germany_vehicles:Maybach_HL_234P60_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 7 1	</icon>
+      <tags>	gasoline	</tags>
+      <level>	10	</level>
+      <price>	135000	</price>
+      <notInShop>	true	</notInShop>
+      <sound>	/vehicles/tanks/heavy/IS_2	</sound>
+      <power>	1200	</power>
+      <weight>	750	</weight>
+      <maxHealth>	360	</maxHealth>
+      <maxRegenHealth>	170	</maxRegenHealth>
+      <repairCost>	9	</repairCost>
+      <fireStartingChance>	0.15	</fireStartingChance>
+    </Maybach_HL_234P60>
+    <Praga_EPA_2>
+      <userString>	#germany_vehicles:Praga_EPA_2	</userString>
+      <description>	#germany_vehicles:Praga_EPA_2_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 7 1	</icon>
+      <tags>	gasoline	</tags>
+      <level>	3	</level>
+      <price>	4220	</price>
+      <sound>	/vehicles/tanks/light/PzIII	</sound>
+      <power>	140	</power>
+      <weight>	470	</weight>
+      <maxHealth>	100	</maxHealth>
+      <maxRegenHealth>	49	</maxRegenHealth>
+      <repairCost>	4	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+    </Praga_EPA_2>
+    <MB507>
+      <userString>	#germany_vehicles:MB507	</userString>
+      <description>	#germany_vehicles:MB507_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 7 1	</icon>
+      <tags>	diesel	</tags>
+      <level>	10	</level>
+      <notInShop>	true	</notInShop>
+      <price>	132000	</price>
+      <sound>	/vehicles/tanks/heavy/IS_2	</sound>
+      <power>	1750	</power>
+      <weight>	750	</weight>
+      <maxHealth>	360	</maxHealth>
+      <maxRegenHealth>	160	</maxRegenHealth>
+      <repairCost>	10	</repairCost>
+      <fireStartingChance>	0.12	</fireStartingChance>
+    </MB507>
+    <Maybach_HL90>
+      <userString>	#germany_vehicles:Maybach_HL90	</userString>
+      <description>	#germany_vehicles:Maybach_HL90_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 7 1	</icon>
+      <tags>	gasoline	</tags>
+      <level>	5	</level>
+      <price>	18400	</price>
+      <sound>	/vehicles/tanks/medium/tiger	</sound>
+      <power>	360	</power>
+      <weight>	550	</weight>
+      <maxHealth>	80	</maxHealth>
+      <maxRegenHealth>	40	</maxRegenHealth>
+      <repairCost>	5	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+    </Maybach_HL90>
+    <Somua_S-40>
+      <userString>	#germany_vehicles:Somua_S-40	</userString>
+      <description>	#germany_vehicles:Somua_S-40_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 7 1	</icon>
+      <tags>	gasoline	</tags>
+      <level>	4	</level>
+      <price>	10420	</price>
+      <notInShop>	true	</notInShop>
+      <sound>	/vehicles/tanks/light/PzIII	</sound>
+      <power>	220	</power>
+      <weight>	400	</weight>
+      <maxHealth>	80	</maxHealth>
+      <maxRegenHealth>	39	</maxRegenHealth>
+      <repairCost>	2	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+    </Somua_S-40>
+    <Renault>
+      <userString>	#germany_vehicles:Renault	</userString>
+      <description>	#germany_vehicles:Renault_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 7 1	</icon>
+      <tags>	gasoline	</tags>
+      <level>	5	</level>
+      <price>	19370	</price>
+      <notInShop>	true	</notInShop>
+      <sound>	/vehicles/tanks/medium/tiger	</sound>
+      <power>	340	</power>
+      <weight>	400	</weight>
+      <maxHealth>	80	</maxHealth>
+      <maxRegenHealth>	39	</maxRegenHealth>
+      <repairCost>	5	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+    </Renault>
+    <Porsche_Typ_100>
+      <userString>	#germany_vehicles:Porsche_Typ_100	</userString>
+      <description>	#germany_vehicles:Porsche_Typ_100_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 7 1	</icon>
+      <tags>	gasoline	</tags>
+      <level>	6	</level>
+      <price>	24850	</price>
+      <sound>	/vehicles/tanks/medium/tiger	</sound>
+      <power>	420	</power>
+      <weight>	670	</weight>
+      <maxHealth>	160	</maxHealth>
+      <maxRegenHealth>	80	</maxRegenHealth>
+      <repairCost>	7	</repairCost>
+      <fireStartingChance>	0.20	</fireStartingChance>
+    </Porsche_Typ_100>
+    <Porsche_Typ_100_1>
+      <userString>	#germany_vehicles:Porsche_Typ_100_1	</userString>
+      <description>	#germany_vehicles:Porsche_Typ_100_1_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 7 1	</icon>
+      <tags>	gasoline	</tags>
+      <level>	6	</level>
+      <price>	29900	</price>
+      <sound>	/vehicles/tanks/medium/tiger	</sound>
+      <power>	600	</power>
+      <weight>	670	</weight>
+      <maxHealth>	170	</maxHealth>
+      <maxRegenHealth>	85	</maxRegenHealth>
+      <repairCost>	7	</repairCost>
+      <fireStartingChance>	0.20	</fireStartingChance>
+    </Porsche_Typ_100_1>
+    <Porsche_Typ_100_1A>
+      <userString>	#germany_vehicles:Porsche_Typ_100_1A	</userString>
+      <description>	#germany_vehicles:Porsche_Typ_100_1A_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 7 1	</icon>
+      <tags>	gasoline	</tags>
+      <level>	6	</level>
+      <price>	27500	</price>
+      <sound>	/vehicles/tanks/medium/tiger	</sound>
+      <power>	550	</power>
+      <weight>	670	</weight>
+      <maxHealth>	170	</maxHealth>
+      <maxRegenHealth>	85	</maxRegenHealth>
+      <repairCost>	7	</repairCost>
+      <fireStartingChance>	0.20	</fireStartingChance>
+    </Porsche_Typ_100_1A>
+    <Porsche_Typ_100_3>
+      <userString>	#germany_vehicles:Porsche_Typ_100_3	</userString>
+      <description>	#germany_vehicles:Porsche_Typ_100_3_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 7 1	</icon>
+      <tags>	gasoline	</tags>
+      <level>	7	</level>
+      <price>	39850	</price>
+      <sound>	/vehicles/tanks/heavy/IS_2	</sound>
+      <power>	670	</power>
+      <weight>	720	</weight>
+      <maxHealth>	255	</maxHealth>
+      <maxRegenHealth>	127	</maxRegenHealth>
+      <repairCost>	8	</repairCost>
+      <fireStartingChance>	0.20	</fireStartingChance>
+    </Porsche_Typ_100_3>
+    <Porsche_Deutz_Typ180_2>
+      <userString>	#germany_vehicles:Porsche_Deutz_Typ180_2	</userString>
+      <description>	#germany_vehicles:Porsche_Deutz_Typ180_2_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 7 1	</icon>
+      <tags>	diesel	</tags>
+      <level>	8	</level>
+      <price>	45300	</price>
+      <sound>	/vehicles/tanks/heavy/IS_2	</sound>
+      <power>	840	</power>
+      <weight>	720	</weight>
+      <maxHealth>	255	</maxHealth>
+      <maxRegenHealth>	127	</maxRegenHealth>
+      <repairCost>	8	</repairCost>
+      <fireStartingChance>	0.15	</fireStartingChance>
+    </Porsche_Deutz_Typ180_2>
+    <Hotchkiss>
+      <userString>	#germany_vehicles:Hotchkiss	</userString>
+      <description>	#germany_vehicles:Hotchkiss_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 7 1	</icon>
+      <tags>	gasoline	</tags>
+      <level>	1	</level>
+      <price>	290	</price>
+      <notInShop>	true	</notInShop>
+      <sound>	/vehicles/tanks/light/PzIII	</sound>
+      <power>	75	</power>
+      <weight>	200	</weight>
+      <maxHealth>	25	</maxHealth>
+      <maxRegenHealth>	12	</maxRegenHealth>
+      <repairCost>	1	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+    </Hotchkiss>
+    <Maybach_HL_174_05>
+      <userString>	#germany_vehicles:Maybach_HL_174_05	</userString>
+      <description>	#germany_vehicles:Maybach_HL_174_05_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 7 1	</icon>
+      <tags>	gasoline	</tags>
+      <level>	5	</level>
+      <price>	13200	</price>
+      <sound>	/vehicles/tanks/heavy/IS_2	</sound>
+      <power>	330	</power>
+      <weight>	370	</weight>
+      <maxHealth>	100	</maxHealth>
+      <maxRegenHealth>	50	</maxRegenHealth>
+      <repairCost>	7	</repairCost>
+      <fireStartingChance>	0.20	</fireStartingChance>
+    </Maybach_HL_174_05>
+    <Maybach_HL_210P30_05>
+      <userString>	#germany_vehicles:Maybach_HL_210P30_05	</userString>
+      <description>	#germany_vehicles:Maybach_HL_210P30_05_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 7 1	</icon>
+      <tags>	gasoline	</tags>
+      <level>	5	</level>
+      <price>	17400	</price>
+      <sound>	/vehicles/tanks/heavy/IS_2	</sound>
+      <power>	380	</power>
+      <weight>	370	</weight>
+      <maxHealth>	120	</maxHealth>
+      <maxRegenHealth>	100	</maxRegenHealth>
+      <repairCost>	8	</repairCost>
+      <fireStartingChance>	0.20	</fireStartingChance>
+    </Maybach_HL_210P30_05>
+    <Maybach_HL_230P45_05>
+      <userString>	#germany_vehicles:Maybach_HL_230P45_05	</userString>
+      <description>	#germany_vehicles:Maybach_HL_230P45_05_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 7 1	</icon>
+      <tags>	gasoline	</tags>
+      <level>	6	</level>
+      <price>	26500	</price>
+      <sound>	/vehicles/tanks/heavy/IS_2	</sound>
+      <power>	460	</power>
+      <weight>	370	</weight>
+      <maxHealth>	160	</maxHealth>
+      <maxRegenHealth>	100	</maxRegenHealth>
+      <repairCost>	8	</repairCost>
+      <fireStartingChance>	0.20	</fireStartingChance>
+    </Maybach_HL_230P45_05>
+    <Maybach_HL_234P30_Ausf_A>
+      <userString>	#germany_vehicles:Maybach_HL_234P30_Ausf_A	</userString>
+      <description>	#germany_vehicles:Maybach_HL_234P30_Ausf_A_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 7 1	</icon>
+      <notInShop>	true	</notInShop>
+      <tags>	gasoline	</tags>
+      <level>	8	</level>
+      <price>	45000	</price>
+      <sound>	/vehicles/tanks/heavy/IS_2	</sound>
+      <power>	800	</power>
+      <weight>	750	</weight>
+      <maxHealth>	260	</maxHealth>
+      <maxRegenHealth>	129	</maxRegenHealth>
+      <repairCost>	8	</repairCost>
+      <fireStartingChance>	0.20	</fireStartingChance>
+    </Maybach_HL_234P30_Ausf_A>
+    <Tatra_V-103>
+      <userString>	#germany_vehicles:Tatra_V-103	</userString>
+      <description>	#germany_vehicles:Tatra_V-103_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 7 1	</icon>
+      <tags>	diesel	</tags>
+      <level>	4	</level>
+      <price>	9120	</price>
+      <sound>	/vehicles/tanks/light/PzIII	</sound>
+      <power>	220	</power>
+      <weight>	500	</weight>
+      <maxHealth>	80	</maxHealth>
+      <maxRegenHealth>	40	</maxRegenHealth>
+      <repairCost>	4	</repairCost>
+      <fireStartingChance>	0.15	</fireStartingChance>
+    </Tatra_V-103>
+  </shared>
+</engines.xml>

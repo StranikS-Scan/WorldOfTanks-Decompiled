@@ -1,0 +1,428 @@
+<M41.xml>
+  <crew>
+    <commander></commander>
+    <gunner></gunner>
+    <driver></driver>
+    <radioman></radioman>
+    <loader></loader>
+  </crew>
+  <speedLimits>
+    <forward>	56	</forward>
+    <backward>	14	</backward>
+  </speedLimits>
+  <repairCost>	5	</repairCost>
+  <effects>
+    <destruction>	mediumDestruction	</destruction>
+    <explosion>	mediumExplosion	</explosion>
+    <flaming>	mediumFlaming	</flaming>
+    <collision>	collision	</collision>
+  </effects>
+  <camouflage>
+    <priceFactor>	1.0	</priceFactor>
+    <tiling>	1 1 0 0	</tiling>
+    <exclusionMask>	vehicles/american/A18_M41/M41_CM.dds	</exclusionMask>
+  </camouflage>
+  <emblems>
+    <default>	usa_star	</default>
+    <lodDist>	MEDIUM	</lodDist>
+    <alpha>	1	</alpha>
+  </emblems>
+  <horns>
+    <priceFactor>	1	</priceFactor>
+    <distanceFactor>	1	</distanceFactor>
+    <volumeFactor>	1	</volumeFactor>
+  </horns>
+  <hull>
+    <models>
+      <undamaged>	vehicles/american/A18_M41/normal/lod0/Hull.model	</undamaged>
+      <destroyed>	vehicles/american/A18_M41/crash/lod0/Hull.model	</destroyed>
+      <exploded>	vehicles/american/A18_M41/crash/lod0/Hull.model	</exploded>
+    </models>
+    <swinging>
+      <lodDist>	FAR	</lodDist>
+      <pitchParams>	0.26 34.00 0.38 1.00 0.05 0.30	</pitchParams>
+      <rollParams>	1.00 0.26 34.00 0.38 1.00 0.05 0.30	</rollParams>
+      <sensitivityToImpulse>	0.79	</sensitivityToImpulse>
+    </swinging>
+    <exhaust>
+      <pixie>	particles/Tank/engine_exit_gass.xml	</pixie>
+      <nodes>	HP_Track_Exhaus_1 HP_Track_Exhaus_2	</nodes>
+      <rates>	6.0 18.0 32.0	</rates>
+    </exhaust>
+    <turretPositions>
+      <turret>	-0.000000 0.73146 -0.967903	</turret>
+    </turretPositions>
+    <fakeTurrets>
+      <lobby>	0	</lobby>
+      <battle></battle>
+    </fakeTurrets>
+    <hitTester>
+      <collisionModel>	vehicles/american/A18_M41/collision/Hull.model	</collisionModel>
+    </hitTester>
+    <armor>
+      <armor_1>	13	</armor_1>
+      <armor_2>	13	</armor_2>
+      <armor_3>	13	</armor_3>
+      <armor_4>	13	</armor_4>
+      <armor_5>	6	</armor_5>
+      <armor_6>	6	</armor_6>
+      <armor_7>	10	</armor_7>
+      <armor_8>	0	</armor_8>
+    </armor>
+    <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
+    <weight>	10000	</weight>
+    <maxHealth>	290.0	</maxHealth>
+    <ammoBayHealth>
+      <maxHealth>	130	</maxHealth>
+      <maxRegenHealth>	91	</maxRegenHealth>
+      <repairCost>	1.0	</repairCost>
+    </ammoBayHealth>
+    <emblemSlots>
+      <clan>
+        <rayStart>	0.000796061 0.571266 2.31499	</rayStart>
+        <rayEnd>	0.000796061 0.0256805 2.06531	</rayEnd>
+        <rayUp>	0.000000 1 0.000000	</rayUp>
+        <size>	0.34	</size>
+        <hideIfDamaged>	false	</hideIfDamaged>
+      </clan>
+      <player>
+        <rayStart>	-1.72571 0.770264 -1.36058	</rayStart>
+        <rayEnd>	-1.12572 0.772667 -1.35877	</rayEnd>
+        <rayUp>	0.000000 1 0.000000	</rayUp>
+        <size>	0.34	</size>
+        <hideIfDamaged>	true	</hideIfDamaged>
+      </player>
+    </emblemSlots>
+  </hull>
+  <chassis>
+    <T72>
+      <userString>	#usa_vehicles:T72	</userString>
+      <description>	#usa_vehicles:T72_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 8 1	</icon>
+      <tags></tags>
+      <level>	4	</level>
+      <price>	4300.0	</price>
+      <unlocks>
+        <chassis>	T72E1	  <cost>	2180	</cost>
+        </chassis>
+      </unlocks>
+      <models>
+        <undamaged>	vehicles/american/A18_M41/normal/lod0/Chassis.model	</undamaged>
+        <destroyed>	vehicles/american/A18_M41/crash/lod0/Chassis.model	</destroyed>
+        <exploded>	vehicles/american/A18_M41/crash/lod0/Chassis.model	</exploded>
+      </models>
+      <traces>
+        <lodDist>	FAR	</lodDist>
+        <bufferPrefs>	mediumTank	</bufferPrefs>
+        <textureSet>	usa_02	</textureSet>
+        <size>	0.48 0.5	</size>
+      </traces>
+      <tracks>
+        <lodDist>	MEDIUM	</lodDist>
+        <leftMaterial>	track_mat_L_skinned	</leftMaterial>
+        <rightMaterial>	track_mat_R_skinned	</rightMaterial>
+        <textureScale>	-0.96	</textureScale>
+      </tracks>
+      <wheels>
+        <lodDist>	MEDIUM	</lodDist>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	W_L	</template>
+          <radius>	0.339556	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	5	</count>
+        </group>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	W_R	</template>
+          <radius>	0.339556	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	5	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <name>	WD_L0	</name>
+          <radius>	0.288634	</radius>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	WD_L	</template>
+          <radius>	0.164957	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	4	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <name>	WD_L5	</name>
+          <radius>	0.308681	</radius>
+        </wheel>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <name>	WD_R0	</name>
+          <radius>	0.288634	</radius>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	WD_R	</template>
+          <radius>	0.164957	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	4	</count>
+        </group>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <name>	WD_R5	</name>
+          <radius>	0.308681	</radius>
+        </wheel>
+      </wheels>
+      <drivingWheels>	WD_L0 WD_L5	</drivingWheels>
+      <effects>
+        <lodDist>	MEDIUM	</lodDist>
+        <dust>	mediumTankDust	</dust>
+        <mud>	mediumTankMud	</mud>
+      </effects>
+      <sound>	/vehicles/tanks/treads/treads_1	</sound>
+      <hullPosition>	0.000000 0.824181 0.000000	</hullPosition>
+      <hitTester>
+        <collisionModel>	vehicles/american/A18_M41/collision/Chassis.model	</collisionModel>
+      </hitTester>
+      <armor>
+        <leftTrack>	10	</leftTrack>
+        <rightTrack>	10	</rightTrack>
+      </armor>
+      <topRightCarryingPoint>	1.23407 1.51613	</topRightCarryingPoint>
+      <maxClimbAngle>	25	</maxClimbAngle>
+      <navmeshGirth>	6.0	</navmeshGirth>
+      <weight>	6200	</weight>
+      <maxLoad>	19200	</maxLoad>
+      <terrainResistance>	1.0 1.7 2.7	</terrainResistance>
+      <brakeForce>	33000	</brakeForce>
+      <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
+      <rotationSpeed>	18	</rotationSpeed>
+      <shotDispersionFactors>
+        <vehicleMovement>	0.35	</vehicleMovement>
+        <vehicleRotation>	0.35	</vehicleRotation>
+      </shotDispersionFactors>
+      <bulkHealthFactor>	3.0	</bulkHealthFactor>
+      <maxHealth>	80	</maxHealth>
+      <maxRegenHealth>	60	</maxRegenHealth>
+      <repairCost>	0.5	</repairCost>
+    </T72>
+    <T72E1>
+      <userString>	#usa_vehicles:T72E1	</userString>
+      <description>	#usa_vehicles:T72E1_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 8 1	</icon>
+      <tags></tags>
+      <level>	5	</level>
+      <price>	8700.0	</price>
+      <models>
+        <undamaged>	vehicles/american/A18_M41/normal/lod0/Chassis.model	</undamaged>
+        <destroyed>	vehicles/american/A18_M41/crash/lod0/Chassis.model	</destroyed>
+        <exploded>	vehicles/american/A18_M41/crash/lod0/Chassis.model	</exploded>
+      </models>
+      <traces>
+        <lodDist>	FAR	</lodDist>
+        <bufferPrefs>	mediumTank	</bufferPrefs>
+        <textureSet>	usa_02	</textureSet>
+        <size>	0.48 0.5	</size>
+      </traces>
+      <tracks>
+        <lodDist>	MEDIUM	</lodDist>
+        <leftMaterial>	track_mat_L_skinned	</leftMaterial>
+        <rightMaterial>	track_mat_R_skinned	</rightMaterial>
+        <textureScale>	-0.96	</textureScale>
+      </tracks>
+      <wheels>
+        <lodDist>	MEDIUM	</lodDist>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	W_L	</template>
+          <radius>	0.339556	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	5	</count>
+        </group>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	W_R	</template>
+          <radius>	0.339556	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	5	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <name>	WD_L0	</name>
+          <radius>	0.288634	</radius>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	WD_L	</template>
+          <radius>	0.164957	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	4	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <name>	WD_L5	</name>
+          <radius>	0.308681	</radius>
+        </wheel>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <name>	WD_R0	</name>
+          <radius>	0.288634	</radius>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	WD_R	</template>
+          <radius>	0.164957	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	4	</count>
+        </group>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <name>	WD_R5	</name>
+          <radius>	0.308681	</radius>
+        </wheel>
+      </wheels>
+      <drivingWheels>	WD_L0 WD_L5	</drivingWheels>
+      <effects>
+        <lodDist>	MEDIUM	</lodDist>
+        <dust>	mediumTankDust	</dust>
+        <mud>	mediumTankMud	</mud>
+      </effects>
+      <sound>	/vehicles/tanks/treads/treads_1	</sound>
+      <hullPosition>	0.000000 0.824181 0.000000	</hullPosition>
+      <hitTester>
+        <collisionModel>	vehicles/american/A18_M41/collision/Chassis.model	</collisionModel>
+      </hitTester>
+      <armor>
+        <leftTrack>	12	</leftTrack>
+        <rightTrack>	12	</rightTrack>
+      </armor>
+      <topRightCarryingPoint>	1.23407 1.51613	</topRightCarryingPoint>
+      <maxClimbAngle>	25	</maxClimbAngle>
+      <navmeshGirth>	6.0	</navmeshGirth>
+      <weight>	6200	</weight>
+      <maxLoad>	25200	</maxLoad>
+      <terrainResistance>	0.9 1.2 2.3	</terrainResistance>
+      <brakeForce>	33000	</brakeForce>
+      <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
+      <rotationSpeed>	21	</rotationSpeed>
+      <shotDispersionFactors>
+        <vehicleMovement>	0.3	</vehicleMovement>
+        <vehicleRotation>	0.3	</vehicleRotation>
+      </shotDispersionFactors>
+      <bulkHealthFactor>	3.0	</bulkHealthFactor>
+      <maxHealth>	90	</maxHealth>
+      <maxRegenHealth>	70	</maxRegenHealth>
+      <repairCost>	0.5	</repairCost>
+    </T72E1>
+  </chassis>
+  <turrets0>
+    <M14>
+      <userString>	#usa_vehicles:T51D1	</userString>
+      <description>	#usa_vehicles:T51D1_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 6 0	</icon>
+      <tags></tags>
+      <level>	6	</level>
+      <price>	200	</price>
+      <notInShop>	true	</notInShop>
+      <models>
+        <undamaged>	vehicles/american/A18_M41/normal/lod0/Turret_01.model	</undamaged>
+        <destroyed>	vehicles/american/A18_M41/crash/lod0/Turret_01.model	</destroyed>
+        <exploded>	vehicles/american/A18_M41/crash/lod0/Turret_01.model	</exploded>
+      </models>
+      <hitTester>
+        <collisionModel>	vehicles/american/A15_T57/collision/Turret_01.model	</collisionModel>
+      </hitTester>
+      <yawLimits>	-21 17	</yawLimits>
+      <gunPosition>	0.000000 0.397754 -0.417628	</gunPosition>
+      <armor>
+        <armor_1>	0	</armor_1>
+        <armor_2>	0	</armor_2>
+        <armor_3>	0	</armor_3>
+        <armor_4>	0	</armor_4>
+        <armor_5>	0	</armor_5>
+        <armor_6>	0	</armor_6>
+        <armor_7>	15	</armor_7>
+        <armor_8>	0	</armor_8>
+      </armor>
+      <weight>	0	</weight>
+      <maxHealth>	10.0	</maxHealth>
+      <rotationSpeed>	18	</rotationSpeed>
+      <turretRotatorHealth>
+        <maxHealth>	100	</maxHealth>
+        <maxRegenHealth>	49	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </turretRotatorHealth>
+      <circularVisionRadius>	450	</circularVisionRadius>
+      <surveyingDeviceHealth>
+        <maxHealth>	60	</maxHealth>
+        <maxRegenHealth>	29	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </surveyingDeviceHealth>
+      <guns>
+        <_155mm_Howitzer_M1>	shared	  <unlocks>
+            <gun>	_155mm_Gun_M1918M1	  <cost>	12500	</cost>
+            </gun>
+          </unlocks>
+          <reloadTime>	15	</reloadTime>
+          <maxAmmo>	22	</maxAmmo>
+          <models>
+            <undamaged>	vehicles/american/A18_M41/normal/lod0/Gun_01.model	</undamaged>
+            <destroyed>	vehicles/american/A18_M41/crash/lod0/Gun_01.model	</destroyed>
+            <exploded>	vehicles/american/A18_M41/crash/lod0/Gun_01.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/american/A18_M41/collision/Gun_01.model	</collisionModel>
+          </hitTester>
+          <armor>
+            <gun>	70	</gun>
+          </armor>
+        </_155mm_Howitzer_M1>
+        <_155mm_Gun_M1918M1>	shared	  <reloadTime>	18.2	</reloadTime>
+          <maxAmmo>	18	</maxAmmo>
+          <unlocks>
+            <vehicle>	M12	  <cost>	112250	</cost>
+            </vehicle>
+          </unlocks>
+          <models>
+            <undamaged>	vehicles/american/A18_M41/normal/lod0/Gun_02.model	</undamaged>
+            <destroyed>	vehicles/american/A18_M41/crash/lod0/Gun_02.model	</destroyed>
+            <exploded>	vehicles/american/A18_M41/crash/lod0/Gun_02.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/american/A18_M41/collision/Gun_02.model	</collisionModel>
+          </hitTester>
+          <armor>
+            <gun>	70	</gun>
+          </armor>
+        </_155mm_Gun_M1918M1>
+      </guns>
+      <emblemSlots></emblemSlots>
+      <showEmblemsOnGun>	false	</showEmblemsOnGun>
+    </M14>
+  </turrets0>
+  <engines>
+    <Twin_Cadillac_series_44T4>	shared	  <unlocks>
+        <engine>	Twin_Cadillac_42A_series	  <cost>	820	</cost>
+        </engine>
+      </unlocks>
+    </Twin_Cadillac_series_44T4>
+    <Twin_Cadillac_42A_series>	shared	</Twin_Cadillac_42A_series>
+  </engines>
+  <fuelTanks>
+    <Average>	shared	</Average>
+  </fuelTanks>
+  <radios>
+    <SCR_510>	shared	  <unlocks>
+        <radio>	SCR_610	  <cost>	1480.0	</cost>
+        </radio>
+      </unlocks>
+    </SCR_510>
+    <SCR_610>	shared	  <unlocks>
+        <radio>	SCR_619	  <cost>	9000.0	</cost>
+        </radio>
+      </unlocks>
+    </SCR_610>
+    <SCR_619>	shared	</SCR_619>
+  </radios>
+</M41.xml>

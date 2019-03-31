@@ -1,0 +1,57 @@
+<shells.xml>
+  <icons>
+    <ap>	ARMOR_PIERCING.tga 0 0	</ap>
+    <ap_he>	ARMOR_PIERCING_HE.tga 0 0	</ap_he>
+    <ap_cr>	ARMOR_PIERCING_CR.tga 0 0	</ap_cr>
+    <he>	HIGH_EXPLOSIVE.tga 0 0	</he>
+    <he_premium>	HIGH_EXPLOSIVE_PREMIUM.tga 0 0	</he_premium>
+    <hc>	HOLLOW_CHARGE.tga 0 0	</hc>
+  </icons>
+  <_100mm_UBR-412>
+    <id>	0	</id>
+    <userString>	#china_vehicles:_100mm_UBR-412	</userString>
+    <description>	#china_vehicles:_100mm_UBR-412_descr	</description>
+    <icon>	ap	</icon>
+    <price>	252	</price>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	100	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainArmorPiercing	</effects>
+    <damage>
+      <armor>	230	</armor>
+      <devices>	150	</devices>
+    </damage>
+  </_100mm_UBR-412>
+  <_100mm_UBR-412P>
+    <id>	1	</id>
+    <userString>	#china_vehicles:_100mm_UBR-412P	</userString>
+    <description>	#china_vehicles:_100mm_UBR-412P_descr	</description>
+    <icon>	ap_cr	</icon>
+    <price>	10	  <gold></gold>
+    </price>
+    <kind>	ARMOR_PIERCING_CR	</kind>
+    <caliber>	100	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainAPCR	</effects>
+    <damage>
+      <armor>	230	</armor>
+      <devices>	140	</devices>
+    </damage>
+  </_100mm_UBR-412P>
+  <_100mm_UOF-412>
+    <id>	2	</id>
+    <userString>	#china_vehicles:_100mm_UOF-412	</userString>
+    <description>	#china_vehicles:_100mm_UOF-412_descr	</description>
+    <icon>	he	</icon>
+    <price>	252	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <caliber>	100	</caliber>
+    <explosionRadius>	1.81	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	mainHighExplosive	</effects>
+    <damage>
+      <armor>	330	</armor>
+      <devices>	150	</devices>
+    </damage>
+  </_100mm_UOF-412>
+</shells.xml>

@@ -1,66 +1,18 @@
+# Python bytecode 2.6 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/helpers/__init__.py
-import types
-import BigWorld
-import ResMgr
-import Settings
-import i18n
-import constants
-from debug_utils import LOG_CURRENT_EXCEPTION
-
-def isPlayerAccount():
-    return hasattr(BigWorld.player(), 'databaseID')
-
-
-def isPlayerAvatar():
-    return hasattr(BigWorld.player(), 'arena')
-
-
-def getLanguageCode():
-    if i18n.doesTextExist('#settings:LANGUAGE_CODE'):
-        return i18n.makeString('#settings:LANGUAGE_CODE')
-    else:
-        return None
+# Compiled at: 2011-05-14 18:13:47
 
 
 def getClientLanguage():
     """
     Return client string of language code
     """
-    lng = constants.DEFAULT_LANGUAGE
-    try:
-        lng = getLanguageCode()
-        if lng is None:
-            lng = constants.DEFAULT_LANGUAGE
-    except Exception:
-        LOG_CURRENT_EXCEPTION()
-
+    import ResMgr
+    lng = 'en'
+    ds = ResMgr.openSection('text/settings.xml')
+    if ds is not None:
+        lng = ds.readString('clientLangID')
     return lng
-
-
-def getClientOverride():
-    if constants.IS_KOREA:
-        return 'KR'
-    elif constants.IS_CHINA:
-        return 'CN'
-    elif constants.IS_VIETNAM:
-        return 'VN'
-    else:
-        return None
-
-
-def getLocalizedData(dataDict, key, defVal = ''):
-    resVal = defVal
-    if dataDict:
-        lng = getClientLanguage()
-        localesDict = dataDict.get(key, {})
-        if localesDict:
-            if lng in localesDict:
-                resVal = localesDict[lng]
-            elif constants.DEFAULT_LANGUAGE in localesDict:
-                resVal = localesDict[constants.DEFAULT_LANGUAGE]
-            else:
-                resVal = localesDict.items()[0][1]
-    return resVal
 
 
 def int2roman(number):
@@ -84,41 +36,8 @@ def int2roman(number):
      1000: 'M'}
     result = ''
     for value, numeral in sorted(numerals.items(), reverse=True):
-        while number >= value:
-            result += numeral
+        while 1:
+            number >= value and result += numeral
             number -= value
 
     return result
-
-
-def getClientVersion():
-    sec = ResMgr.openSection('../version.xml')
-    version = i18n.makeString(sec.readString('appname')) + ' ' + sec.readString('version')
-    return version
-
-
-def isShowStartupVideo():
-    if not BigWorld.wg_isSSE2Supported():
-        return False
-    else:
-        p = Settings.g_instance.userPrefs
-        return p is None or p.readInt(Settings.KEY_SHOW_STARTUP_MOVIE, 1) == 1
-
-
-_g_alphabetOrderExcept = {1105: 1077.5,
- 1025: 1045.5}
-
-def _getSymOrderIdx(symbol):
-    raise type(symbol) is types.UnicodeType or AssertionError
-    symIdx = ord(symbol)
-    return _g_alphabetOrderExcept.get(symIdx, symIdx)
-
-
-def strcmp(word1, word2):
-    raise type(word1) is types.UnicodeType or AssertionError
-    raise type(word2) is types.UnicodeType or AssertionError
-    for sym1, sym2 in zip(word1, word2):
-        if sym1 != sym2:
-            return int(round(_getSymOrderIdx(sym1) - _getSymOrderIdx(sym2)))
-
-    return len(word1) - len(word2)

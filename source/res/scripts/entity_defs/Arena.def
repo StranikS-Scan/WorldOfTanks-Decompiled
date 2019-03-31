@@ -1,0 +1,203 @@
+<Arena.def>
+  <Properties>
+    <state>
+      <Type>	UINT16	</Type>
+      <Flags>	BASE	</Flags>
+    </state>
+    <typeID>
+      <Type>	INT32	</Type>
+      <Flags>	BASE	</Flags>
+    </typeID>
+    <roundLength>
+      <Type>	INT32	</Type>
+      <Flags>	BASE	</Flags>
+    </roundLength>
+    <roster>
+      <Type>	PYTHON	</Type>
+      <Flags>	BASE	</Flags>
+    </roster>
+    <bonusType>
+      <Type>	UINT8	</Type>
+      <Flags>	BASE	</Flags>
+    </bonusType>
+    <guiType>
+      <Type>	UINT8	</Type>
+      <Flags>	BASE	</Flags>
+    </guiType>
+    <extraData>
+      <Type>	PYTHON	</Type>
+      <Flags>	BASE	</Flags>
+    </extraData>
+    <fogOfWar>
+      <Type>	UINT8	</Type>
+      <Flags>	BASE	</Flags>
+    </fogOfWar>
+    <voipChannels>
+      <Type>	UINT8	</Type>
+      <Flags>	BASE	</Flags>
+    </voipChannels>
+    <vehicleLockMode>
+      <Type>	UINT8	</Type>
+      <Flags>	BASE	</Flags>
+    </vehicleLockMode>
+    <geometry_cell>
+      <Type>	STRING	</Type>
+      <Flags>	CELL_PUBLIC	</Flags>
+    </geometry_cell>
+    <gameplayType>
+      <Type>	UINT8	</Type>
+      <Flags>	CELL_PUBLIC	</Flags>
+    </gameplayType>
+    <bp>
+      <Type>	PYTHON	</Type>
+      <Flags>	BASE	</Flags>
+    </bp>
+    <cp>
+      <Type>	PYTHON	</Type>
+      <Flags>	CELL_PRIVATE	</Flags>
+    </cp>
+  </Properties>
+  <TempProperties>
+    <_Arena__p></_Arena__p>
+  </TempProperties>
+  <CellMethods>
+    <onVehicleCreated>
+      <Arg>	UINT8	</Arg>
+      <Arg>	OBJECT_ID	</Arg>
+      <Arg>	BOOL	</Arg>
+    </onVehicleCreated>
+    <receiveFarStatusAndPositionUpdate>
+      <Arg>	OBJECT_ID	</Arg>
+      <Arg>	VECTOR3	</Arg>
+      <Arg>	FLOAT32	</Arg>
+      <Arg>	BOOL	</Arg>
+    </receiveFarStatusAndPositionUpdate>
+    <receiveVehicleVisibilityInfo>
+      <Arg>	OBJECT_ID	</Arg>
+      <Arg>	ARRAY	  <of>	OBJECT_ID	</of>
+      </Arg>
+      <Arg>	ARRAY	  <of>	FLOAT32	</of>
+      </Arg>
+      <Arg>	ARRAY	  <of>	FLOAT32	</of>
+      </Arg>
+    </receiveVehicleVisibilityInfo>
+    <assignAvatarToVehicle>
+      <Arg>	MAILBOX	</Arg>
+      <Arg>	OBJECT_ID	</Arg>
+    </assignAvatarToVehicle>
+    <notifyVehicleOnObservationByEnemy>
+      <Arg>	OBJECT_ID	</Arg>
+      <Arg>	BOOL	</Arg>
+    </notifyVehicleOnObservationByEnemy>
+    <setRetransmissionFactorForVehicle>
+      <Arg>	OBJECT_ID	</Arg>
+      <Arg>	FLOAT32	</Arg>
+    </setRetransmissionFactorForVehicle>
+    <reuse>
+      <Arg>	UINT8	</Arg>
+    </reuse>
+    <stop></stop>
+  </CellMethods>
+  <BaseMethods>
+    <onAllSpaceGeometryLoaded></onAllSpaceGeometryLoaded>
+    <onPrebattleDestroyed>
+      <Arg>	OBJECT_ID	</Arg>
+    </onPrebattleDestroyed>
+    <onVehicleCreated>
+      <Arg>	OBJECT_ID	</Arg>
+    </onVehicleCreated>
+    <onCreateVehicleFailure>
+      <Arg>	OBJECT_ID	</Arg>
+    </onCreateVehicleFailure>
+    <onTeamBaseCaptured>
+      <Arg>	UINT8	</Arg>
+      <Arg>	UINT8	</Arg>
+    </onTeamBaseCaptured>
+    <onVehicleKilled>
+      <Arg>	OBJECT_ID	</Arg>
+      <Arg>	OBJECT_ID	</Arg>
+      <Arg>	UINT8	</Arg>
+    </onVehicleKilled>
+    <onVehicleDisclosed>
+      <Arg>	OBJECT_ID	</Arg>
+      <Arg>	OBJECT_ID	</Arg>
+      <Arg>	BOOL	</Arg>
+      <Arg>	BOOL	</Arg>
+    </onVehicleDisclosed>
+    <updateCellappID>
+      <Arg>	INT32	</Arg>
+    </updateCellappID>
+    <stopByFailure>
+      <Arg>	BOOL	</Arg>
+    </stopByFailure>
+    <reuse>
+      <Arg>	UINT8	</Arg>
+      <Arg>	UINT8	</Arg>
+      <Arg>	UINT8	</Arg>
+      <Arg>	PYTHON	</Arg>
+      <Arg>	INT32	</Arg>
+      <Arg>	PYTHON	</Arg>
+      <Arg>	BOOL	</Arg>
+      <Arg>	UINT8	</Arg>
+      <Arg>	UINT8	</Arg>
+    </reuse>
+    <receiveTeamBasePoints>
+      <Arg>	UINT8	</Arg>
+      <Arg>	UINT8	</Arg>
+      <Arg>	ARRAY	  <of>	UINT16	</of>
+      </Arg>
+    </receiveTeamBasePoints>
+    <receiveVehicleFinalStats>
+      <Arg>	OBJECT_ID	</Arg>
+      <Arg>	BATTLE_RESULTS	</Arg>
+    </receiveVehicleFinalStats>
+    <createCellNearSelf>
+      <Arg>	MAILBOX	</Arg>
+    </createCellNearSelf>
+    <doFarCall>
+      <Arg>	OBJECT_ID	</Arg>
+      <Arg>	STRING	</Arg>
+      <Arg>	PYTHON	</Arg>
+    </doFarCall>
+    <addPlayer>
+      <Arg>	MAILBOX	</Arg>
+      <Arg>	ARENA_ADDPLAYER_INFO	</Arg>
+    </addPlayer>
+    <registerAvatar>
+      <Arg>	OBJECT_ID	</Arg>
+      <Arg>	MAILBOX	</Arg>
+    </registerAvatar>
+    <setAvatarReady>
+      <Arg>	OBJECT_ID	</Arg>
+      <Arg>	OBJECT_ID	</Arg>
+    </setAvatarReady>
+    <removeAccount>
+      <Arg>	OBJECT_ID	</Arg>
+    </removeAccount>
+    <removeAvatar>
+      <Arg>	OBJECT_ID	</Arg>
+    </removeAvatar>
+    <sendArenaStateTo>
+      <Arg>	MAILBOX	</Arg>
+    </sendArenaStateTo>
+    <compressAndSendMinimapPositions>
+      <Arg>	MAILBOX	</Arg>
+      <Arg>	UINT8	</Arg>
+      <Arg>	ARRAY	  <of>	OBJECT_ID	</of>
+      </Arg>
+      <Arg>	ARRAY	  <of>	FLOAT32	</of>
+      </Arg>
+    </compressAndSendMinimapPositions>
+    <setTeamKiller>
+      <Arg>	OBJECT_ID	</Arg>
+    </setTeamKiller>
+    <addBot>
+      <Arg>	STRING	</Arg>
+      <Arg>	UINT8	</Arg>
+      <Arg>	STRING	</Arg>
+    </addBot>
+    <smartDestroy>
+      <Arg>	UINT8	</Arg>
+    </smartDestroy>
+  </BaseMethods>
+</Arena.def>

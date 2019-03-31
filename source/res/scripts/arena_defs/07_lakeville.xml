@@ -1,0 +1,21 @@
+<07_lakeville.xml>
+  <name>	#arenas:07_lakeville/name	</name>
+  <description>	#arenas:07_lakeville/description	</description>
+  <geometry>	spaces/07_lakeville	</geometry>
+  <boundingBox>
+    <bottomLeft>	-400.0 -400.0	</bottomLeft>
+    <upperRight>	400.0 400.0	</upperRight>
+  </boundingBox>
+  <roundLength>	900	</roundLength>
+  <defaultMinimap>	spaces/07_lakeville/mmap.dds	</defaultMinimap>
+  <maxPlayersInTeam>	15	</maxPlayersInTeam>
+  <umbraEnabled>	1	</umbraEnabled>
+  <batchingEnabled>	0	</batchingEnabled>
+  <defaultGroundEffect>	None	</defaultGroundEffect>
+  <loadingMusic>	/music/intro/Intro_Himmelsdorf	</loadingMusic>
+  <water>
+    <texScale>	0	</texScale>
+    <freqX>	0	</freqX>
+    <freqZ>	0	</freqZ>
+  </water>
+</07_lakeville.xml>

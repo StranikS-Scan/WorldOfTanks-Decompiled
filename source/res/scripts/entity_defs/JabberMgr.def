@@ -1,0 +1,17 @@
+<JabberMgr.def>
+  <Properties></Properties>
+  <BaseMethods>
+    <createClanChatChannel>
+      <Arg>	STRING	</Arg>
+      <Arg>	STRING	</Arg>
+    </createClanChatChannel>
+    <destroyClanChatChannel>
+      <Arg>	STRING	</Arg>
+    </destroyClanChatChannel>
+    <setClanChannelMembership>
+      <Arg>	STRING	</Arg>
+      <Arg>	STRING	</Arg>
+      <Arg>	BOOL	</Arg>
+    </setClanChannelMembership>
+  </BaseMethods>
+</JabberMgr.def>

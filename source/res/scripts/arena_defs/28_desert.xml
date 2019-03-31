@@ -1,0 +1,19 @@
+<28_desert.xml>
+  <name>	#arenas:28_desert/name	</name>
+  <description>	#arenas:28_desert/description	</description>
+  <geometry>	spaces/28_desert	</geometry>
+  <roundLength>	900	</roundLength>
+  <boundingBox>
+    <bottomLeft>	-500.0 -500.0	</bottomLeft>
+    <upperRight>	500.0 500.0	</upperRight>
+  </boundingBox>
+  <defaultMinimap>	spaces/28_desert/mmap.dds	</defaultMinimap>
+  <umbraEnabled>	1	</umbraEnabled>
+  <batchingEnabled>	0	</batchingEnabled>
+  <loadingMusic>	/music/intro/desert	</loadingMusic>
+  <water>
+    <texScale>	0	</texScale>
+    <freqX>	0	</freqX>
+    <freqZ>	0	</freqZ>
+  </water>
+</28_desert.xml>

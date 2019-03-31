@@ -1,5 +1,6 @@
+# Python bytecode 2.6 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/debug_utils.py
-from collections import defaultdict
+# Compiled at: 2019-03-27 02:48:07
 import sys
 from functools import wraps
 from warnings import warn_explicit
@@ -17,6 +18,13 @@ def LOG_CURRENT_EXCEPTION():
     print _makeMsgHeader('EXCEPTION', sys._getframe(1))
     from traceback import print_exc
     print_exc()
+
+
+def LOG_TRACEBACK():
+    if IS_DEVELOPMENT:
+        print _makeMsgHeader('STACKTRACE', sys._getframe(1))
+        from traceback import print_stack
+        print_stack()
 
 
 def LOG_WRAPPED_CURRENT_EXCEPTION(wrapperName, orgName, orgSource, orgLineno):
@@ -40,16 +48,11 @@ def LOG_WRAPPED_CURRENT_EXCEPTION(wrapperName, orgName, orgSource, orgLineno):
 
 
 def LOG_CODEPOINT_WARNING(*kargs):
-    _doLog('WARNING', 'this code point should have never been reached', kargs)
+    _doLog('WARNING', 'see the source code for details', kargs)
 
 
 def LOG_ERROR(msg, *kargs):
     _doLog('ERROR', msg, kargs)
-
-
-def LOG_ERROR_DEV(msg, *kargs):
-    if IS_DEVELOPMENT:
-        _doLog('ERROR', msg, kargs)
 
 
 def LOG_WARNING(msg, *kargs):
@@ -100,34 +103,9 @@ def LOG_RF(msg, *kargs):
         _doLog('RF', msg, kargs)
 
 
-def LOG_DAN(msg, *kargs):
-    if IS_DEVELOPMENT or not IS_CLIENT:
-        _doLog('DAN', msg, kargs)
-
-
-def LOG_DAN_DEV(msg, *kargs):
-    if IS_DEVELOPMENT:
-        _doLog('DAN', msg, kargs)
-
-
-def LOG_VLK(msg, *kargs):
-    if IS_DEVELOPMENT:
-        _doLog('VLK', msg, kargs)
-
-
 def LOG_GUI(msg, *kargs):
     if IS_DEVELOPMENT or not IS_CLIENT:
         _doLog('GUI', msg, kargs)
-
-
-def LOG_VOIP(msg, *kargs):
-    if IS_DEVELOPMENT or not IS_CLIENT:
-        _doLog('VOIP', msg, kargs)
-
-
-def FLUSH_LOG():
-    import BigWorld
-    BigWorld.flushPythonLog()
 
 
 def LOG_UNEXPECTED(msg, *kargs):
@@ -191,7 +169,7 @@ def disabled(func):
     return empty_func
 
 
-def dump_garbage(source = False):
+def dump_garbage(source=False):
     """
     show us what's the garbage about
     """
@@ -221,45 +199,8 @@ def dump_garbage(source = False):
             pass
 
 
-def dump_garbage_2(verbose = True, generation = 2):
-    import gc
-    from weakref import ProxyType, ReferenceType
-    gc.set_debug(gc.DEBUG_LEAK | gc.DEBUG_STATS)
-    if generation is None:
-        gc.collect()
-    elif generation in xrange(0, 3):
-        gc.collect(generation)
-    else:
-        LOG_ERROR('Value of generation is invalid. Generation may be an integer specifying which generation to collect (from 0 to 2)')
-        return
-    if verbose:
-        print '========================================='
-        print '##DUMPSTART'
-    del gc.garbage[:]
-    d = defaultdict(lambda : 0)
-    for i in gc.get_objects():
-        if not isinstance(i, ProxyType) and not isinstance(i, ReferenceType):
-            if hasattr(i, '__class__'):
-                t = i.__class__
-            else:
-                t = type(i)
-            d[t] += 1
-
-    if verbose:
-        for t, cnt in d.iteritems():
-            print '%d %s' % (cnt, t)
-
-    d.clear()
-    del gc.garbage[:]
-    del d
-    if verbose:
-        print '##DUMPEND'
-        print '========================================='
-    return
-
-
 def verify(expression):
     try:
-        raise expression or AssertionError
+        assert expression
     except AssertionError:
         LOG_CURRENT_EXCEPTION()

@@ -1,0 +1,714 @@
+<T_50_2.xml>
+  <crew>
+    <commander>	radioman	</commander>
+    <gunner></gunner>
+    <driver></driver>
+    <loader></loader>
+  </crew>
+  <speedLimits>
+    <forward>	72	</forward>
+    <backward>	23	</backward>
+  </speedLimits>
+  <repairCost>	16	</repairCost>
+  <effects>
+    <destruction>	mediumDestruction	</destruction>
+    <explosion>	mediumExplosion	</explosion>
+    <flaming>	mediumFlaming	</flaming>
+    <collision>	collision	</collision>
+  </effects>
+  <camouflage>
+    <priceFactor>	1.0	</priceFactor>
+    <tiling>	1 1 0 0	</tiling>
+    <exclusionMask>	vehicles/russian/R70_T_50_2/T-50_2_CM.dds	</exclusionMask>
+  </camouflage>
+  <emblems>
+    <default>	ussr_star	</default>
+    <lodDist>	MEDIUM	</lodDist>
+    <alpha>	0.9	</alpha>
+  </emblems>
+  <horns>
+    <priceFactor>	1	</priceFactor>
+    <distanceFactor>	1	</distanceFactor>
+    <volumeFactor>	1	</volumeFactor>
+  </horns>
+  <hull>
+    <models>
+      <undamaged>	vehicles/russian/R70_T_50_2/normal/lod0/Hull.model	</undamaged>
+      <destroyed>	vehicles/russian/R70_T_50_2/crash/lod0/Hull.model	</destroyed>
+      <exploded>	vehicles/russian/R70_T_50_2/crash/lod0/Hull.model	</exploded>
+    </models>
+    <swinging>
+      <lodDist>	FAR	</lodDist>
+      <pitchParams>	0.28 34.00 0.42 1.00 0.05 0.30	</pitchParams>
+      <rollParams>	1.00 0.28 34.00 0.42 1.00 0.05 0.30	</rollParams>
+      <sensitivityToImpulse>	0.56	</sensitivityToImpulse>
+    </swinging>
+    <exhaust>
+      <pixie>	particles/Tank/engine_exit_gass.xml	</pixie>
+      <nodes>	HP_Track_Exhaus_1	</nodes>
+      <rates>	5.0 10.0 25.0	</rates>
+    </exhaust>
+    <turretPositions>
+      <turret>	0.000000 0.669703 0.3602	</turret>
+    </turretPositions>
+    <hitTester>
+      <collisionModel>	vehicles/russian/R70_T_50_2/collision/Hull.model	</collisionModel>
+    </hitTester>
+    <armor>
+      <armor_1>	37	</armor_1>
+      <armor_2>	25	</armor_2>
+      <armor_3>	37	</armor_3>
+      <armor_4>	37	</armor_4>
+      <armor_5>	37	</armor_5>
+      <armor_6>	30	</armor_6>
+      <armor_7>	25	</armor_7>
+      <armor_8>	15	</armor_8>
+      <armor_9>	15	</armor_9>
+      <armor_10>	15	  <noDamage>	true	</noDamage>
+      </armor_10>
+      <surveyingDevice>	25	</surveyingDevice>
+    </armor>
+    <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
+    <weight>	8700	</weight>
+    <maxHealth>	400	</maxHealth>
+    <ammoBayHealth>
+      <maxHealth>	140	</maxHealth>
+      <maxRegenHealth>	100	</maxRegenHealth>
+      <repairCost>	1.0	</repairCost>
+    </ammoBayHealth>
+    <emblemSlots>
+      <clan>
+        <rayStart>	-0.245608 0.368268 1.94712	</rayStart>
+        <rayEnd>	-0.245608 0.14024 1.87227	</rayEnd>
+        <rayUp>	0.000000 0.000000 -1	</rayUp>
+        <size>	0.24	</size>
+        <hideIfDamaged>	false	</hideIfDamaged>
+      </clan>
+    </emblemSlots>
+  </hull>
+  <chassis>
+    <Chassis_T_50_2_1>
+      <userString>	#ussr_vehicles:Chassis_T_50_2_1	</userString>
+      <description>	#ussr_vehicles:Chassis_T_50_2_1_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 8 0	</icon>
+      <tags></tags>
+      <level>	4	</level>
+      <price>	4800.0	</price>
+      <unlocks>
+        <chassis>	Chassis_T_50_2_2	  <cost>	7640	</cost>
+        </chassis>
+      </unlocks>
+      <models>
+        <undamaged>	vehicles/russian/R70_T_50_2/normal/lod0/Chassis.model	</undamaged>
+        <destroyed>	vehicles/russian/R70_T_50_2/crash/lod0/Chassis.model	</destroyed>
+        <exploded>	vehicles/russian/R70_T_50_2/crash/lod0/Chassis.model	</exploded>
+      </models>
+      <traces>
+        <lodDist>	FAR	</lodDist>
+        <bufferPrefs>	smallTank	</bufferPrefs>
+        <textureSet>	ussr_01	</textureSet>
+        <size>	0.4 0.38	</size>
+      </traces>
+      <tracks>
+        <lodDist>	MEDIUM	</lodDist>
+        <leftMaterial>	track_mat_L_skinned	</leftMaterial>
+        <rightMaterial>	track_mat_R_skinned	</rightMaterial>
+        <textureScale>	-1.16	</textureScale>
+      </tracks>
+      <wheels>
+        <lodDist>	MEDIUM	</lodDist>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <name>	WD_R0	</name>
+          <radius>	0.246392	</radius>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	WD_R	</template>
+          <radius>	0.112767	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	3	</count>
+        </group>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <name>	WD_R4	</name>
+          <radius>	0.347595	</radius>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	W_R	</template>
+          <radius>	0.221891	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	6	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <name>	WD_L0	</name>
+          <radius>	0.246392	</radius>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	WD_L	</template>
+          <radius>	0.112767	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	3	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <name>	WD_L4	</name>
+          <radius>	0.347595	</radius>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	W_L	</template>
+          <radius>	0.221891	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	6	</count>
+        </group>
+      </wheels>
+      <drivingWheels>	WD_L0 WD_L4	</drivingWheels>
+      <effects>
+        <lodDist>	MEDIUM	</lodDist>
+        <dust>	smallTankDust	</dust>
+        <mud>	smallTankMud	</mud>
+      </effects>
+      <sound>	/vehicles/tanks/treads/treads_1	</sound>
+      <hullPosition>	0.000000 0.870697 0.000000	</hullPosition>
+      <hitTester>
+        <collisionModel>	vehicles/russian/R70_T_50_2/collision/Chassis.model	</collisionModel>
+      </hitTester>
+      <armor>
+        <leftTrack>	20	</leftTrack>
+        <rightTrack>	20	</rightTrack>
+      </armor>
+      <topRightCarryingPoint>	0.914741 1.82041	</topRightCarryingPoint>
+      <maxClimbAngle>	25	</maxClimbAngle>
+      <navmeshGirth>	6.0	</navmeshGirth>
+      <weight>	2000	</weight>
+      <maxLoad>	14000	</maxLoad>
+      <terrainResistance>	0.9 1.1 1.9	</terrainResistance>
+      <brakeForce>	40500	</brakeForce>
+      <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
+      <rotationSpeed>	42	</rotationSpeed>
+      <shotDispersionFactors>
+        <vehicleMovement>	0.18	</vehicleMovement>
+        <vehicleRotation>	0.18	</vehicleRotation>
+      </shotDispersionFactors>
+      <bulkHealthFactor>	3.0	</bulkHealthFactor>
+      <maxHealth>	110	</maxHealth>
+      <maxRegenHealth>	85	</maxRegenHealth>
+      <repairCost>	5.0	</repairCost>
+    </Chassis_T_50_2_1>
+    <Chassis_T_50_2_2>
+      <userString>	#ussr_vehicles:Chassis_T_50_2_2	</userString>
+      <description>	#ussr_vehicles:Chassis_T_50_2_2_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 8 0	</icon>
+      <tags></tags>
+      <level>	5	</level>
+      <price>	9100	</price>
+      <models>
+        <undamaged>	vehicles/russian/R70_T_50_2/normal/lod0/Chassis.model	</undamaged>
+        <destroyed>	vehicles/russian/R70_T_50_2/crash/lod0/Chassis.model	</destroyed>
+        <exploded>	vehicles/russian/R70_T_50_2/crash/lod0/Chassis.model	</exploded>
+      </models>
+      <traces>
+        <lodDist>	FAR	</lodDist>
+        <bufferPrefs>	smallTank	</bufferPrefs>
+        <textureSet>	ussr_01	</textureSet>
+        <size>	0.4 0.38	</size>
+      </traces>
+      <tracks>
+        <lodDist>	MEDIUM	</lodDist>
+        <leftMaterial>	track_mat_L_skinned	</leftMaterial>
+        <rightMaterial>	track_mat_R_skinned	</rightMaterial>
+        <textureScale>	-1.16	</textureScale>
+      </tracks>
+      <wheels>
+        <lodDist>	MEDIUM	</lodDist>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <name>	WD_R0	</name>
+          <radius>	0.246392	</radius>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	WD_R	</template>
+          <radius>	0.112767	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	3	</count>
+        </group>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <name>	WD_R4	</name>
+          <radius>	0.347595	</radius>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	W_R	</template>
+          <radius>	0.221891	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	6	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <name>	WD_L0	</name>
+          <radius>	0.246392	</radius>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	WD_L	</template>
+          <radius>	0.112767	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	3	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <name>	WD_L4	</name>
+          <radius>	0.347595	</radius>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	W_L	</template>
+          <radius>	0.221891	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	6	</count>
+        </group>
+      </wheels>
+      <drivingWheels>	WD_L0 WD_L4	</drivingWheels>
+      <effects>
+        <lodDist>	MEDIUM	</lodDist>
+        <dust>	smallTankDust	</dust>
+        <mud>	smallTankMud	</mud>
+      </effects>
+      <sound>	/vehicles/tanks/treads/treads_1	</sound>
+      <hullPosition>	0.000000 0.870697 0.000000	</hullPosition>
+      <hitTester>
+        <collisionModel>	vehicles/russian/R70_T_50_2/collision/Chassis.model	</collisionModel>
+      </hitTester>
+      <armor>
+        <leftTrack>	20	</leftTrack>
+        <rightTrack>	20	</rightTrack>
+      </armor>
+      <topRightCarryingPoint>	0.914741 1.82041	</topRightCarryingPoint>
+      <maxClimbAngle>	25	</maxClimbAngle>
+      <navmeshGirth>	6.0	</navmeshGirth>
+      <weight>	2000	</weight>
+      <maxLoad>	18000	</maxLoad>
+      <terrainResistance>	0.8 0.9 1.7	</terrainResistance>
+      <brakeForce>	40500	</brakeForce>
+      <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
+      <rotationSpeed>	46	</rotationSpeed>
+      <shotDispersionFactors>
+        <vehicleMovement>	0.14	</vehicleMovement>
+        <vehicleRotation>	0.14	</vehicleRotation>
+      </shotDispersionFactors>
+      <bulkHealthFactor>	3.0	</bulkHealthFactor>
+      <maxHealth>	120	</maxHealth>
+      <maxRegenHealth>	90	</maxRegenHealth>
+      <repairCost>	5.0	</repairCost>
+    </Chassis_T_50_2_2>
+  </chassis>
+  <turrets0>
+    <Turret_1_T_50_2>
+      <userString>	#ussr_vehicles:Turret_1_T_50_2	</userString>
+      <description>	#ussr_vehicles:Turret_1_T_50_2_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 6 0	</icon>
+      <tags></tags>
+      <level>	4	</level>
+      <price>	4100	</price>
+      <models>
+        <undamaged>	vehicles/russian/R70_T_50_2/normal/lod0/Turret_01.model	</undamaged>
+        <destroyed>	vehicles/russian/R70_T_50_2/crash/lod0/Turret_01.model	</destroyed>
+        <exploded>	vehicles/russian/R70_T_50_2/crash/lod0/Turret_01.model	</exploded>
+      </models>
+      <hitTester>
+        <collisionModel>	vehicles/russian/R70_T_50_2/collision/Turret_01.model	</collisionModel>
+      </hitTester>
+      <yawLimits>	-180 180	</yawLimits>
+      <gunPosition>	-0.000011 0.2316 0.7838	</gunPosition>
+      <armor>
+        <armor_1>	37	</armor_1>
+        <armor_2>	37	</armor_2>
+        <armor_3>	37	</armor_3>
+        <armor_4>	37	</armor_4>
+        <armor_5>	37	</armor_5>
+        <armor_6>	25	</armor_6>
+        <armor_7>	15	</armor_7>
+        <armor_8>	0	</armor_8>
+        <armor_9>	25	  <noDamage>	true	</noDamage>
+        </armor_9>
+        <surveyingDevice>	25	</surveyingDevice>
+      </armor>
+      <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
+      <weight>	1300	</weight>
+      <maxHealth>	100.0	</maxHealth>
+      <rotationSpeed>	51	</rotationSpeed>
+      <turretRotatorHealth>
+        <maxHealth>	100	</maxHealth>
+        <maxRegenHealth>	49	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </turretRotatorHealth>
+      <circularVisionRadius>	380	</circularVisionRadius>
+      <surveyingDeviceHealth>
+        <maxHealth>	100	</maxHealth>
+        <maxRegenHealth>	49	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </surveyingDeviceHealth>
+      <guns>
+        <_45mm_20K>	shared	  <maxAmmo>	150	</maxAmmo>
+          <pitchLimits>	-25 7	</pitchLimits>
+          <aimingTime>	2	</aimingTime>
+          <unlocks>
+            <gun>	_45mm_VT-42	  <cost>	550.0	</cost>
+            </gun>
+            <gun>	_57mm_ZiS-8	  <cost>	550	</cost>
+            </gun>
+          </unlocks>
+          <models>
+            <undamaged>	vehicles/russian/R70_T_50_2/normal/lod0/Gun_01.model	</undamaged>
+            <destroyed>	vehicles/russian/R70_T_50_2/crash/lod0/Gun_01.model	</destroyed>
+            <exploded>	vehicles/russian/R70_T_50_2/crash/lod0/Gun_01.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/russian/R70_T_50_2/collision/Gun_01.model	</collisionModel>
+          </hitTester>
+          <armor>
+            <armor_1>	37	  <noDamage>	true	</noDamage>
+            </armor_1>
+            <gun>	10	</gun>
+          </armor>
+        </_45mm_20K>
+        <_57mm_ZiS-8>	shared	  <maxAmmo>	76	</maxAmmo>
+          <pitchLimits>	-25 7	</pitchLimits>
+          <reloadTime>	2.5	</reloadTime>
+          <aimingTime>	2	</aimingTime>
+          <unlocks>
+            <turret>	Turret_2_T_50_2	  <cost>	4550	</cost>
+            </turret>
+          </unlocks>
+          <models>
+            <undamaged>	vehicles/russian/R70_T_50_2/normal/lod0/Gun_02.model	</undamaged>
+            <destroyed>	vehicles/russian/R70_T_50_2/crash/lod0/Gun_02.model	</destroyed>
+            <exploded>	vehicles/russian/R70_T_50_2/crash/lod0/Gun_02.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/russian/R70_T_50_2/collision/Gun_02.model	</collisionModel>
+          </hitTester>
+          <armor>
+            <armor_1>	37	  <noDamage>	true	</noDamage>
+            </armor_1>
+            <gun>	15	</gun>
+          </armor>
+        </_57mm_ZiS-8>
+        <_45mm_VT-42>	shared	  <maxAmmo>	140	</maxAmmo>
+          <pitchLimits>	-25 7	</pitchLimits>
+          <reloadTime>	2.0	</reloadTime>
+          <aimingTime>	2	</aimingTime>
+          <unlocks>
+            <gun>	_37mm_automatic_SH-37	  <cost>	2600.0	</cost>
+            </gun>
+          </unlocks>
+          <models>
+            <undamaged>	vehicles/russian/R70_T_50_2/normal/lod0/Gun_03.model	</undamaged>
+            <destroyed>	vehicles/russian/R70_T_50_2/crash/lod0/Gun_03.model	</destroyed>
+            <exploded>	vehicles/russian/R70_T_50_2/crash/lod0/Gun_03.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/russian/R70_T_50_2/collision/Gun_03.model	</collisionModel>
+          </hitTester>
+          <armor>
+            <armor_1>	37	  <noDamage>	true	</noDamage>
+            </armor_1>
+            <gun>	10	</gun>
+          </armor>
+        </_45mm_VT-42>
+        <_37mm_automatic_SH-37>	shared	  <maxAmmo>	170	</maxAmmo>
+          <pitchLimits>	-25 7	</pitchLimits>
+          <reloadTime>	3.2	</reloadTime>
+          <aimingTime>	2	</aimingTime>
+          <models>
+            <undamaged>	vehicles/russian/R70_T_50_2/normal/lod0/Gun_04.model	</undamaged>
+            <destroyed>	vehicles/russian/R70_T_50_2/crash/lod0/Gun_04.model	</destroyed>
+            <exploded>	vehicles/russian/R70_T_50_2/crash/lod0/Gun_04.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/russian/R70_T_50_2/collision/Gun_04.model	</collisionModel>
+          </hitTester>
+          <armor>
+            <armor_1>	37	  <noDamage>	true	</noDamage>
+            </armor_1>
+            <gun>	10	</gun>
+          </armor>
+        </_37mm_automatic_SH-37>
+      </guns>
+      <emblemSlots>
+        <player>
+          <rayStart>	-0.978573 0.329952 0.045442	</rayStart>
+          <rayEnd>	-0.593335 0.23015 0.00508259	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.24	</size>
+          <hideIfDamaged>	true	</hideIfDamaged>
+        </player>
+        <player>
+          <rayStart>	0.978573 0.329952 0.045442	</rayStart>
+          <rayEnd>	0.593335 0.23015 0.00508259	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.24	</size>
+          <hideIfDamaged>	false	</hideIfDamaged>
+        </player>
+      </emblemSlots>
+      <showEmblemsOnGun>	false	</showEmblemsOnGun>
+    </Turret_1_T_50_2>
+    <Turret_2_T_50_2>
+      <userString>	#ussr_vehicles:Turret_2_T_50_2	</userString>
+      <description>	#ussr_vehicles:Turret_2_T_50_2_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 6 0	</icon>
+      <tags></tags>
+      <level>	5	</level>
+      <price>	9660	</price>
+      <unlocks>
+        <gun>	_76mm_L-11	  <cost>	450.0	</cost>
+        </gun>
+        <gun>	_57mm_ZiS-4	  <cost>	2200	</cost>
+        </gun>
+      </unlocks>
+      <models>
+        <undamaged>	vehicles/russian/R70_T_50_2/normal/lod0/Turret_02.model	</undamaged>
+        <destroyed>	vehicles/russian/R70_T_50_2/crash/lod0/Turret_02.model	</destroyed>
+        <exploded>	vehicles/russian/R70_T_50_2/crash/lod0/Turret_02.model	</exploded>
+      </models>
+      <hitTester>
+        <collisionModel>	vehicles/russian/R70_T_50_2/collision/Turret_02.model	</collisionModel>
+      </hitTester>
+      <yawLimits>	-180 180	</yawLimits>
+      <gunPosition>	-0.000011 0.336206 0.6448	</gunPosition>
+      <armor>
+        <armor_1>	60	</armor_1>
+        <armor_2>	60	</armor_2>
+        <armor_3>	40	</armor_3>
+        <armor_4>	60	</armor_4>
+        <armor_5>	15	</armor_5>
+        <armor_6>	15	</armor_6>
+        <armor_7>	0	</armor_7>
+        <armor_8>	25	  <noDamage>	true	</noDamage>
+        </armor_8>
+        <surveyingDevice>	25	</surveyingDevice>
+      </armor>
+      <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
+      <weight>	3200	</weight>
+      <maxHealth>	160.0	</maxHealth>
+      <rotationSpeed>	51	</rotationSpeed>
+      <turretRotatorHealth>
+        <maxHealth>	100	</maxHealth>
+        <maxRegenHealth>	49	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </turretRotatorHealth>
+      <circularVisionRadius>	420	</circularVisionRadius>
+      <surveyingDeviceHealth>
+        <maxHealth>	100	</maxHealth>
+        <maxRegenHealth>	49	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </surveyingDeviceHealth>
+      <guns>
+        <_45mm_20K>	shared	  <maxAmmo>	140	</maxAmmo>
+          <aimingTime>	2	</aimingTime>
+          <shotDispersionFactors>
+            <turretRotation>	0.12	</turretRotation>
+            <afterShot>	4.0	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <models>
+            <undamaged>	vehicles/russian/R70_T_50_2/normal/lod0/Gun_05.model	</undamaged>
+            <destroyed>	vehicles/russian/R70_T_50_2/crash/lod0/Gun_05.model	</destroyed>
+            <exploded>	vehicles/russian/R70_T_50_2/crash/lod0/Gun_05.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/russian/R70_T_50_2/collision/Gun_05.model	</collisionModel>
+          </hitTester>
+          <armor>
+            <armor_1>	60	  <noDamage>	true	</noDamage>
+            </armor_1>
+            <gun>	10	</gun>
+          </armor>
+        </_45mm_20K>
+        <_57mm_ZiS-8>	shared	  <maxAmmo>	76	</maxAmmo>
+          <reloadTime>	2.5	</reloadTime>
+          <aimingTime>	2	</aimingTime>
+          <shotDispersionFactors>
+            <turretRotation>	0.12	</turretRotation>
+            <afterShot>	4.0	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <models>
+            <undamaged>	vehicles/russian/R70_T_50_2/normal/lod0/Gun_06.model	</undamaged>
+            <destroyed>	vehicles/russian/R70_T_50_2/crash/lod0/Gun_06.model	</destroyed>
+            <exploded>	vehicles/russian/R70_T_50_2/crash/lod0/Gun_06.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/russian/R70_T_50_2/collision/Gun_06.model	</collisionModel>
+          </hitTester>
+          <armor>
+            <armor_1>	60	  <noDamage>	true	</noDamage>
+            </armor_1>
+            <gun>	15	</gun>
+          </armor>
+        </_57mm_ZiS-8>
+        <_45mm_VT-42>	shared	  <maxAmmo>	140	</maxAmmo>
+          <reloadTime>	2.0	</reloadTime>
+          <shotDispersionFactors>
+            <turretRotation>	0.12	</turretRotation>
+            <afterShot>	4.0	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <aimingTime>	2	</aimingTime>
+          <models>
+            <undamaged>	vehicles/russian/R70_T_50_2/normal/lod0/Gun_07.model	</undamaged>
+            <destroyed>	vehicles/russian/R70_T_50_2/crash/lod0/Gun_07.model	</destroyed>
+            <exploded>	vehicles/russian/R70_T_50_2/crash/lod0/Gun_07.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/russian/R70_T_50_2/collision/Gun_07.model	</collisionModel>
+          </hitTester>
+          <armor>
+            <armor_1>	60	  <noDamage>	true	</noDamage>
+            </armor_1>
+            <gun>	10	</gun>
+          </armor>
+        </_45mm_VT-42>
+        <_37mm_automatic_SH-37>	shared	  <maxAmmo>	170	</maxAmmo>
+          <reloadTime>	3.2	</reloadTime>
+          <aimingTime>	2	</aimingTime>
+          <models>
+            <undamaged>	vehicles/russian/R70_T_50_2/normal/lod0/Gun_08.model	</undamaged>
+            <destroyed>	vehicles/russian/R70_T_50_2/crash/lod0/Gun_08.model	</destroyed>
+            <exploded>	vehicles/russian/R70_T_50_2/crash/lod0/Gun_08.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/russian/R70_T_50_2/collision/Gun_08.model	</collisionModel>
+          </hitTester>
+          <armor>
+            <armor_1>	37	  <noDamage>	true	</noDamage>
+            </armor_1>
+            <gun>	10	</gun>
+          </armor>
+        </_37mm_automatic_SH-37>
+        <_76mm_L-11>	shared	  <maxAmmo>	70	</maxAmmo>
+          <unlocks>
+            <gun>	_76mm_F-34	  <cost>	450.0	</cost>
+            </gun>
+          </unlocks>
+          <reloadTime>	3.2	</reloadTime>
+          <shotDispersionFactors>
+            <turretRotation>	0.12	</turretRotation>
+            <afterShot>	4.0	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <aimingTime>	2.5	</aimingTime>
+          <models>
+            <undamaged>	vehicles/russian/R70_T_50_2/normal/lod0/Gun_09.model	</undamaged>
+            <destroyed>	vehicles/russian/R70_T_50_2/crash/lod0/Gun_09.model	</destroyed>
+            <exploded>	vehicles/russian/R70_T_50_2/crash/lod0/Gun_09.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/russian/R70_T_50_2/collision/Gun_09.model	</collisionModel>
+          </hitTester>
+          <armor>
+            <armor_1>	60	  <noDamage>	true	</noDamage>
+            </armor_1>
+            <gun>	20	</gun>
+          </armor>
+        </_76mm_L-11>
+        <_76mm_F-34>	shared	  <maxAmmo>	70	</maxAmmo>
+          <reloadTime>	3.2	</reloadTime>
+          <shotDispersionFactors>
+            <turretRotation>	0.12	</turretRotation>
+            <afterShot>	4.0	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <aimingTime>	2	</aimingTime>
+          <models>
+            <undamaged>	vehicles/russian/R70_T_50_2/normal/lod0/Gun_10.model	</undamaged>
+            <destroyed>	vehicles/russian/R70_T_50_2/crash/lod0/Gun_10.model	</destroyed>
+            <exploded>	vehicles/russian/R70_T_50_2/crash/lod0/Gun_10.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/russian/R70_T_50_2/collision/Gun_10.model	</collisionModel>
+          </hitTester>
+          <armor>
+            <armor_1>	60	  <noDamage>	true	</noDamage>
+            </armor_1>
+            <gun>	10	</gun>
+          </armor>
+        </_76mm_F-34>
+        <_57mm_ZiS-4>	shared	  <maxAmmo>	76	</maxAmmo>
+          <reloadTime>	2.5	</reloadTime>
+          <shotDispersionFactors>
+            <turretRotation>	0.12	</turretRotation>
+            <afterShot>	4.0	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <aimingTime>	2	</aimingTime>
+          <models>
+            <undamaged>	vehicles/russian/R70_T_50_2/normal/lod0/Gun_11.model	</undamaged>
+            <destroyed>	vehicles/russian/R70_T_50_2/crash/lod0/Gun_11.model	</destroyed>
+            <exploded>	vehicles/russian/R70_T_50_2/crash/lod0/Gun_11.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/russian/R70_T_50_2/collision/Gun_11.model	</collisionModel>
+          </hitTester>
+          <armor>
+            <armor_1>	60	  <noDamage>	true	</noDamage>
+            </armor_1>
+            <gun>	10	</gun>
+          </armor>
+        </_57mm_ZiS-4>
+      </guns>
+      <emblemSlots>
+        <player>
+          <rayStart>	-0.954605 0.461741 0.291777	</rayStart>
+          <rayEnd>	-0.38347 0.320091 0.174598	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.24	</size>
+          <hideIfDamaged>	false	</hideIfDamaged>
+        </player>
+        <player>
+          <rayStart>	0.954605 0.461741 0.291777	</rayStart>
+          <rayEnd>	0.38347 0.320091 0.174598	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.24	</size>
+          <hideIfDamaged>	true	</hideIfDamaged>
+        </player>
+      </emblemSlots>
+      <showEmblemsOnGun>	false	</showEmblemsOnGun>
+    </Turret_2_T_50_2>
+  </turrets0>
+  <engines>
+    <V-4>	shared	  <unlocks>
+        <engine>	M-5-400F_Bis	  <cost>	840	</cost>
+        </engine>
+      </unlocks>
+    </V-4>
+    <M-5-400F_Bis>	shared	  <unlocks>
+        <engine>	M-17E	  <cost>	5600	</cost>
+        </engine>
+      </unlocks>
+    </M-5-400F_Bis>
+    <M-17E>	shared	</M-17E>
+  </engines>
+  <fuelTanks>
+    <Heavy>	shared	</Heavy>
+  </fuelTanks>
+  <radios>
+    <_71-TK-3>	shared	  <unlocks>
+        <radio>	KRSTB	  <cost>	4700	</cost>
+        </radio>
+      </unlocks>
+    </_71-TK-3>
+    <KRSTB>	shared	  <unlocks>
+        <radio>	R113	  <cost>	8700.0	</cost>
+        </radio>
+      </unlocks>
+    </KRSTB>
+    <R113>	shared	</R113>
+  </radios>
+</T_50_2.xml>

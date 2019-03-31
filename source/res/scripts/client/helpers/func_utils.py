@@ -1,4 +1,6 @@
+# Python bytecode 2.6 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/helpers/func_utils.py
+# Compiled at: 2009-09-29 15:37:47
 import BigWorld
 from functools import partial
 

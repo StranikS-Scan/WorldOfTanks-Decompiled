@@ -1,0 +1,129 @@
+<engine_config.xml>
+  <personality>	game	</personality>
+  <preferences>	preferences_wot_classic.xml	</preferences>
+  <renderer>
+    <cacheEffects>	true	</cacheEffects>
+    <gammaCorrectionOutside>	1.0	</gammaCorrectionOutside>
+    <gammaCorrectionInside>	1.0	</gammaCorrectionInside>
+    <gammaCorrectionSpeed>	0.2	</gammaCorrectionSpeed>
+    <maxFrameRate>	120	</maxFrameRate>
+    <settings>
+      <effect>	shaders/terrain/terrain.fx	</effect>
+    </settings>
+    <useLatentOcclusionQueries>	true	</useLatentOcclusionQueries>
+  </renderer>
+  <influx>
+    <force_use_bw_collision>	true	</force_use_bw_collision>
+    <control_point_hmap_offset>	0.1f	</control_point_hmap_offset>
+    <control_point_grid_step>	1.0f	</control_point_grid_step>
+  </influx>
+  <animation>
+    <streamCacheSizeKB>	2048	</streamCacheSizeKB>
+  </animation>
+  <screenShot>
+    <extension>	jpg	</extension>
+    <name>	screenshots/shot	</name>
+  </screenShot>
+  <superShot>
+    <hRes>	2048	</hRes>
+    <farPlaneDist>	1500	</farPlaneDist>
+    <floraVBSize>	16000000	</floraVBSize>
+    <disableGUI>	true	</disableGUI>
+  </superShot>
+  <accessMonitor>	false	</accessMonitor>
+  <hasDevelopmentAssertions>	true	</hasDevelopmentAssertions>
+  <debugKeys>
+    <combination>
+      <key>	APPS	</key>
+    </combination>
+    <combination>
+      <key>	GRAVE	</key>
+    </combination>
+  </debugKeys>
+  <entities>
+    <disablePreloads>	false	</disablePreloads>
+    <enforcePreloads>	false	</enforcePreloads>
+    <entityCollision>	false	</entityCollision>
+    <particlesActive>	true	</particlesActive>
+    <movementThreshold>	0.25	</movementThreshold>
+  </entities>
+  <ui>
+    <straferate>	5.0	</straferate>
+    <loadingText>	151 231 233	</loadingText>
+  </ui>
+  <camera>
+    <lookTable>	0.00	0.00	</lookTable>
+    <lookTable>	0.10	0.05	</lookTable>
+    <lookTable>	0.30	0.10	</lookTable>
+    <lookTable>	0.50	0.15	</lookTable>
+    <lookTable>	0.70	0.30	</lookTable>
+    <lookTable>	0.90	1.00	</lookTable>
+    <lookAxisMin>	0.10	</lookAxisMin>
+    <lookAxisMax>	0.91	</lookAxisMax>
+    <cameraYawSpeed>	90	</cameraYawSpeed>
+    <cameraPitchSpeed>	60	</cameraPitchSpeed>
+    <accelerateStart>	0.00	</accelerateStart>
+    <accelerateRate>	2.00	</accelerateRate>
+    <accelerateEnd>	1.00	</accelerateEnd>
+  </camera>
+  <directionCursor>
+    <invertVerticalMovement>	false	</invertVerticalMovement>
+    <mouseSensitivity>	0.005	</mouseSensitivity>
+    <mouseHVBias>	0.667	</mouseHVBias>
+    <maxPitch>	50.0	</maxPitch>
+    <minPitch>	-65.0	</minPitch>
+    <yaw>	0.000	</yaw>
+    <pitch>	0.000	</pitch>
+    <lookSpring>	false	</lookSpring>
+    <lookSpringRate>	0.75	</lookSpringRate>
+    <lookSpringIdleTime>	3600.0	</lookSpringIdleTime>
+    <lookSpringOnMove>	true	</lookSpringOnMove>
+  </directionCursor>
+  <simpleGui>
+    <breakOnLeak>	false	</breakOnLeak>
+    <breakOnAllocId>	0	</breakOnAllocId>
+  </simpleGui>
+  <debug>
+    <framesCount>	0	</framesCount>
+  </debug>
+  <soundMgr>
+    <enabled>	true	</enabled>
+    <errorLevel>	warning	</errorLevel>
+    <channels>	64	</channels>
+    <mediaPath>	audio	</mediaPath>
+    <soundbanks>
+      <project>
+        <name>	vehicles	</name>
+      </project>
+      <project>
+        <name>	weapons	</name>
+      </project>
+      <project>
+        <name>	hits	</name>
+      </project>
+      <project>
+        <name>	GUI	</name>
+      </project>
+      <project>
+        <name>	ingame_voice	</name>
+      </project>
+      <project>
+        <name>	music	</name>
+      </project>
+      <project>
+        <name>	ambient	</name>
+      </project>
+      <project>
+        <name>	objects	</name>
+      </project>
+      <project>
+        <name>	horns	</name>
+      </project>
+    </soundbanks>
+    <networkUpdates>	false	</networkUpdates>
+    <enableProfiler>	false	</enableProfiler>
+    <allowUnload>	false	</allowUnload>
+    <maxSpeed>	100.0	</maxSpeed>
+  </soundMgr>
+  <loggerID>	111	</loggerID>
+</engine_config.xml>

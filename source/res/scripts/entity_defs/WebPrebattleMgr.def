@@ -1,0 +1,27 @@
+<WebPrebattleMgr.def>
+  <Properties>
+    <consumer_tag>
+      <Type>	STRING	</Type>
+      <Flags>	BASE	</Flags>
+      <Persistent>	false	</Persistent>
+    </consumer_tag>
+  </Properties>
+  <BaseMethods>
+    <removePeripheryInvites>
+      <Arg>	INT32	</Arg>
+      <Arg>	UINT32	</Arg>
+    </removePeripheryInvites>
+    <removePrebattleInvites>
+      <Arg>	INT32	</Arg>
+      <Arg>	OBJECT_ID	</Arg>
+      <Arg>	ARRAY	  <of>	DB_ID	</of>
+      </Arg>
+      <Arg>	ARRAY	  <of>	DB_ID	</of>
+      </Arg>
+    </removePrebattleInvites>
+    <notifyWeb>
+      <Arg>	INT64	</Arg>
+      <Arg>	PYTHON	</Arg>
+    </notifyWeb>
+  </BaseMethods>
+</WebPrebattleMgr.def>

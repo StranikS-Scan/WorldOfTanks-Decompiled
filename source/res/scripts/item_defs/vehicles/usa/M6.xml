@@ -1,0 +1,581 @@
+<M6.xml>
+  <crew>
+    <commander></commander>
+    <gunner></gunner>
+    <gunner></gunner>
+    <driver></driver>
+    <radioman></radioman>
+    <loader></loader>
+  </crew>
+  <speedLimits>
+    <forward>	35	</forward>
+    <backward>	10	</backward>
+  </speedLimits>
+  <repairCost>	5.16	</repairCost>
+  <effects>
+    <destruction>	mediumDestruction	</destruction>
+    <explosion>	mediumExplosion	</explosion>
+    <flaming>	mediumFlaming	</flaming>
+    <collision>	collision	</collision>
+  </effects>
+  <camouflage>
+    <priceFactor>	1.2	</priceFactor>
+    <tiling>	1 1 0 0	</tiling>
+    <exclusionMask>	vehicles/american/A10_M6/M6_CM.DDS	</exclusionMask>
+  </camouflage>
+  <emblems>
+    <default>	usa_star	</default>
+    <lodDist>	MEDIUM	</lodDist>
+    <alpha>	1	</alpha>
+  </emblems>
+  <horns>
+    <priceFactor>	1	</priceFactor>
+    <distanceFactor>	1	</distanceFactor>
+    <volumeFactor>	1	</volumeFactor>
+  </horns>
+  <hull>
+    <models>
+      <undamaged>	vehicles/american/A10_M6/normal/lod0/Hull.model	</undamaged>
+      <destroyed>	vehicles/american/A10_M6/crash/lod0/Hull.model	</destroyed>
+      <exploded>	vehicles/american/A10_M6/crash/lod0/Hull.model	</exploded>
+    </models>
+    <swinging>
+      <lodDist>	FAR	</lodDist>
+      <pitchParams>	0.26 38.00 0.34 1.00 0.04 0.27	</pitchParams>
+      <rollParams>	1.00 0.26 38.00 0.34 1.00 0.04 0.27	</rollParams>
+      <sensitivityToImpulse>	0.3	</sensitivityToImpulse>
+    </swinging>
+    <exhaust>
+      <pixie>	particles/Tank/engine_exit_diesel.xml	</pixie>
+      <nodes>	HP_Track_Exhaus_1	</nodes>
+      <rates>	5.0 10.0 25.0	</rates>
+    </exhaust>
+    <turretPositions>
+      <turret>	-0.031772 1.06627 0.840679	</turret>
+    </turretPositions>
+    <hitTester>
+      <collisionModel>	vehicles/american/A10_M6/collision/Hull.model	</collisionModel>
+    </hitTester>
+    <armor>
+      <armor_1>	83	</armor_1>
+      <armor_2>	102	</armor_2>
+      <armor_3>	44	</armor_3>
+      <armor_4>	41	</armor_4>
+      <armor_5>	44	</armor_5>
+      <armor_6>	70	</armor_6>
+      <armor_7>	25	</armor_7>
+      <armor_8>	25	</armor_8>
+      <armor_9>	26	  <noDamage>	true	</noDamage>
+      </armor_9>
+      <surveyingDevice>	30	</surveyingDevice>
+    </armor>
+    <primaryArmor>	armor_2 armor_3 armor_4	</primaryArmor>
+    <weight>	32000	</weight>
+    <maxHealth>	600.0	</maxHealth>
+    <ammoBayHealth>
+      <maxHealth>	221	</maxHealth>
+      <maxRegenHealth>	130	</maxRegenHealth>
+      <repairCost>	1.0	</repairCost>
+    </ammoBayHealth>
+    <emblemSlots>
+      <clan>
+        <rayStart>	0.00774616 0.399574 3.25653	</rayStart>
+        <rayEnd>	0.00774616 0.0334473 2.78119	</rayEnd>
+        <rayUp>	0.000000 1 0.000000	</rayUp>
+        <size>	0.34	</size>
+        <hideIfDamaged>	false	</hideIfDamaged>
+      </clan>
+    </emblemSlots>
+  </hull>
+  <chassis>
+    <HVS1>
+      <userString>	#usa_vehicles:HVS1	</userString>
+      <description>	#usa_vehicles:HVS1_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 8 0	</icon>
+      <tags></tags>
+      <level>	5	</level>
+      <price>	9700.0	</price>
+      <unlocks>
+        <chassis>	HVS2	  <cost>	5050	</cost>
+        </chassis>
+      </unlocks>
+      <models>
+        <undamaged>	vehicles/american/A10_M6/normal/lod0/Chassis.model	</undamaged>
+        <destroyed>	vehicles/american/A10_M6/crash/lod0/Chassis.model	</destroyed>
+        <exploded>	vehicles/american/A10_M6/crash/lod0/Chassis.model	</exploded>
+      </models>
+      <traces>
+        <lodDist>	FAR	</lodDist>
+        <bufferPrefs>	mediumTank	</bufferPrefs>
+        <textureSet>	usa_01	</textureSet>
+        <size>	0.34 0.74	</size>
+      </traces>
+      <tracks>
+        <lodDist>	MEDIUM	</lodDist>
+        <leftMaterial>	track_mat_L_skinned	</leftMaterial>
+        <rightMaterial>	track_mat_R_skinned	</rightMaterial>
+        <textureScale>	-0.56	</textureScale>
+      </tracks>
+      <wheels>
+        <lodDist>	MEDIUM	</lodDist>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	W_L	</template>
+          <radius>	0.243052	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	8	</count>
+        </group>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	W_R	</template>
+          <radius>	0.243052	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	8	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <name>	WD_L0	</name>
+          <radius>	0.400842	</radius>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	WD_L	</template>
+          <radius>	0.218171	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	1	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <name>	WD_L2	</name>
+          <radius>	0.366955	</radius>
+        </wheel>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <name>	WD_R0	</name>
+          <radius>	0.400842	</radius>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	WD_R	</template>
+          <radius>	0.218171	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	1	</count>
+        </group>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <name>	WD_R2	</name>
+          <radius>	0.366955	</radius>
+        </wheel>
+      </wheels>
+      <drivingWheels>	WD_L0 WD_L2	</drivingWheels>
+      <effects>
+        <lodDist>	MEDIUM	</lodDist>
+        <dust>	mediumTankDust	</dust>
+        <mud>	mediumTankMud	</mud>
+      </effects>
+      <sound>	/vehicles/tanks/treads/treads_3	</sound>
+      <hullPosition>	0.000000 1.0859 0.000000	</hullPosition>
+      <hitTester>
+        <collisionModel>	vehicles/american/A10_M6/collision/Chassis.model	</collisionModel>
+      </hitTester>
+      <armor>
+        <leftTrack>	20	</leftTrack>
+        <rightTrack>	20	</rightTrack>
+      </armor>
+      <topRightCarryingPoint>	1.19205 2.39881	</topRightCarryingPoint>
+      <maxClimbAngle>	25	</maxClimbAngle>
+      <navmeshGirth>	6.0	</navmeshGirth>
+      <weight>	15000	</weight>
+      <maxLoad>	57600	</maxLoad>
+      <terrainResistance>	1.0 1.5 2.5	</terrainResistance>
+      <brakeForce>	45500	</brakeForce>
+      <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
+      <rotationSpeed>	21	</rotationSpeed>
+      <shotDispersionFactors>
+        <vehicleMovement>	0.23	</vehicleMovement>
+        <vehicleRotation>	0.23	</vehicleRotation>
+      </shotDispersionFactors>
+      <bulkHealthFactor>	3.0	</bulkHealthFactor>
+      <maxHealth>	130	</maxHealth>
+      <maxRegenHealth>	100	</maxRegenHealth>
+      <repairCost>	5.0	</repairCost>
+    </HVS1>
+    <HVS2>
+      <userString>	#usa_vehicles:HVS2	</userString>
+      <description>	#usa_vehicles:HVS2_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 8 0	</icon>
+      <tags></tags>
+      <level>	6	</level>
+      <price>	15900	</price>
+      <models>
+        <undamaged>	vehicles/american/A10_M6/normal/lod0/Chassis.model	</undamaged>
+        <destroyed>	vehicles/american/A10_M6/crash/lod0/Chassis.model	</destroyed>
+        <exploded>	vehicles/american/A10_M6/crash/lod0/Chassis.model	</exploded>
+      </models>
+      <traces>
+        <lodDist>	FAR	</lodDist>
+        <bufferPrefs>	mediumTank	</bufferPrefs>
+        <textureSet>	usa_01	</textureSet>
+        <size>	0.34 0.74	</size>
+      </traces>
+      <tracks>
+        <lodDist>	MEDIUM	</lodDist>
+        <leftMaterial>	track_mat_L_skinned	</leftMaterial>
+        <rightMaterial>	track_mat_R_skinned	</rightMaterial>
+        <textureScale>	-0.56	</textureScale>
+      </tracks>
+      <wheels>
+        <lodDist>	MEDIUM	</lodDist>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	W_L	</template>
+          <radius>	0.243052	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	8	</count>
+        </group>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	W_R	</template>
+          <radius>	0.243052	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	8	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <name>	WD_L0	</name>
+          <radius>	0.400842	</radius>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	WD_L	</template>
+          <radius>	0.218171	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	1	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <name>	WD_L2	</name>
+          <radius>	0.366955	</radius>
+        </wheel>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <name>	WD_R0	</name>
+          <radius>	0.400842	</radius>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	WD_R	</template>
+          <radius>	0.218171	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	1	</count>
+        </group>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <name>	WD_R2	</name>
+          <radius>	0.366955	</radius>
+        </wheel>
+      </wheels>
+      <drivingWheels>	WD_L0 WD_L2	</drivingWheels>
+      <effects>
+        <lodDist>	MEDIUM	</lodDist>
+        <dust>	mediumTankDust	</dust>
+        <mud>	mediumTankMud	</mud>
+      </effects>
+      <sound>	/vehicles/tanks/treads/treads_3	</sound>
+      <hullPosition>	0.000000 1.0859 0.000000	</hullPosition>
+      <hitTester>
+        <collisionModel>	vehicles/american/A10_M6/collision/Chassis.model	</collisionModel>
+      </hitTester>
+      <armor>
+        <leftTrack>	20	</leftTrack>
+        <rightTrack>	20	</rightTrack>
+      </armor>
+      <topRightCarryingPoint>	1.19205 2.39881	</topRightCarryingPoint>
+      <maxClimbAngle>	25	</maxClimbAngle>
+      <navmeshGirth>	6.0	</navmeshGirth>
+      <weight>	15000	</weight>
+      <maxLoad>	61000	</maxLoad>
+      <terrainResistance>	1.0 1.2 2.0	</terrainResistance>
+      <brakeForce>	43500	</brakeForce>
+      <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
+      <rotationSpeed>	25	</rotationSpeed>
+      <shotDispersionFactors>
+        <vehicleMovement>	0.21	</vehicleMovement>
+        <vehicleRotation>	0.21	</vehicleRotation>
+      </shotDispersionFactors>
+      <bulkHealthFactor>	3.0	</bulkHealthFactor>
+      <maxHealth>	140	</maxHealth>
+      <maxRegenHealth>	105	</maxRegenHealth>
+      <repairCost>	5.0	</repairCost>
+    </HVS2>
+  </chassis>
+  <turrets0>
+    <M6D1>
+      <userString>	#usa_vehicles:M6D1	</userString>
+      <description>	#usa_vehicles:M6D1_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 6 0	</icon>
+      <tags></tags>
+      <level>	5	</level>
+      <price>	10000	</price>
+      <models>
+        <undamaged>	vehicles/american/A10_M6/normal/lod0/Turret_01.model	</undamaged>
+        <destroyed>	vehicles/american/A10_M6/crash/lod0/Turret_01.model	</destroyed>
+        <exploded>	vehicles/american/A10_M6/crash/lod0/Turret_01.model	</exploded>
+      </models>
+      <hitTester>
+        <collisionModel>	vehicles/american/A10_M6/collision/Turret_01.model	</collisionModel>
+      </hitTester>
+      <yawLimits>	-180 180	</yawLimits>
+      <gunPosition>	0.14005 0.361855 0.966905	</gunPosition>
+      <armor>
+        <armor_1>	83	</armor_1>
+        <armor_2>	102	</armor_2>
+        <armor_3>	83	</armor_3>
+        <armor_4>	83	</armor_4>
+        <armor_5>	83	</armor_5>
+        <armor_6>	35	</armor_6>
+        <armor_7>	25	</armor_7>
+        <armor_8>	25	</armor_8>
+        <surveyingDevice>	30	</surveyingDevice>
+      </armor>
+      <primaryArmor>	armor_2 armor_3 armor_4	</primaryArmor>
+      <weight>	8000	</weight>
+      <maxHealth>	240.0	</maxHealth>
+      <rotationSpeed>	28	</rotationSpeed>
+      <turretRotatorHealth>
+        <maxHealth>	100	</maxHealth>
+        <maxRegenHealth>	49	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </turretRotatorHealth>
+      <circularVisionRadius>	360	</circularVisionRadius>
+      <surveyingDeviceHealth>
+        <maxHealth>	100	</maxHealth>
+        <maxRegenHealth>	49	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </surveyingDeviceHealth>
+      <guns>
+        <_75mm_Gun_M7_L50>	shared	  <maxAmmo>	75	</maxAmmo>
+          <pitchLimits>	-30 10	</pitchLimits>
+          <unlocks>
+            <gun>	_76mm_Gun_M1A1	  <cost>	4600	</cost>
+            </gun>
+          </unlocks>
+          <models>
+            <undamaged>	vehicles/american/A10_M6/normal/lod0/Gun_02.model	</undamaged>
+            <destroyed>	vehicles/american/A10_M6/crash/lod0/Gun_02.model	</destroyed>
+            <exploded>	vehicles/american/A10_M6/crash/lod0/Gun_02.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/american/A10_M6/collision/Gun_02.model	</collisionModel>
+          </hitTester>
+          <armor>
+            <gun>	20	</gun>
+          </armor>
+        </_75mm_Gun_M7_L50>
+        <_76mm_Gun_M1A1>	shared	  <maxAmmo>	75	</maxAmmo>
+          <pitchLimits>	-30 10	</pitchLimits>
+          <reloadTime>	3.16	</reloadTime>
+          <unlocks>
+            <gun>	_76mm_Gun_M1A2	  <cost>	5800	</cost>
+            </gun>
+          </unlocks>
+          <models>
+            <undamaged>	vehicles/american/A10_M6/normal/lod0/Gun_04.model	</undamaged>
+            <destroyed>	vehicles/american/A10_M6/crash/lod0/Gun_04.model	</destroyed>
+            <exploded>	vehicles/american/A10_M6/crash/lod0/Gun_04.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/american/A10_M6/collision/Gun_04.model	</collisionModel>
+          </hitTester>
+          <armor>
+            <gun>	20	</gun>
+          </armor>
+        </_76mm_Gun_M1A1>
+        <_76mm_Gun_M1A2>	shared	  <maxAmmo>	75	</maxAmmo>
+          <pitchLimits>	-30 10	</pitchLimits>
+          <reloadTime>	3.14	</reloadTime>
+          <unlocks>
+            <turret>	M6D2	  <cost>	5380	</cost>
+            </turret>
+            <vehicle>	T29	  <cost>	35070	</cost>
+            </vehicle>
+          </unlocks>
+          <models>
+            <undamaged>	vehicles/american/A10_M6/normal/lod0/Gun_08.model	</undamaged>
+            <destroyed>	vehicles/american/A10_M6/crash/lod0/Gun_08.model	</destroyed>
+            <exploded>	vehicles/american/A10_M6/crash/lod0/Gun_08.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/american/A10_M6/collision/Gun_08.model	</collisionModel>
+          </hitTester>
+          <armor>
+            <gun>	20	</gun>
+          </armor>
+        </_76mm_Gun_M1A2>
+      </guns>
+      <emblemSlots>
+        <player>
+          <rayStart>	1.27255 0.485954 -0.0324834	</rayStart>
+          <rayEnd>	0.673469 0.504288 -0.0602453	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.476	</size>
+          <hideIfDamaged>	false	</hideIfDamaged>
+        </player>
+        <player>
+          <rayStart>	-1.19292 0.50507 0.0926956	</rayStart>
+          <rayEnd>	-0.599465 0.460148 0.0166217	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.476	</size>
+          <hideIfDamaged>	false	</hideIfDamaged>
+        </player>
+      </emblemSlots>
+      <showEmblemsOnGun>	false	</showEmblemsOnGun>
+    </M6D1>
+    <M6D2>
+      <userString>	#usa_vehicles:M6D2	</userString>
+      <description>	#usa_vehicles:M6D2_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 6 0	</icon>
+      <tags></tags>
+      <level>	6	</level>
+      <price>	18250	</price>
+      <unlocks>
+        <gun>	_90mm_Gun_M3	  <cost>	9500	</cost>
+        </gun>
+      </unlocks>
+      <models>
+        <undamaged>	vehicles/american/A10_M6/normal/lod0/Turret_01.model	</undamaged>
+        <destroyed>	vehicles/american/A10_M6/crash/lod0/Turret_01.model	</destroyed>
+        <exploded>	vehicles/american/A10_M6/crash/lod0/Turret_01.model	</exploded>
+      </models>
+      <hitTester>
+        <collisionModel>	vehicles/american/A10_M6/collision/Turret_01.model	</collisionModel>
+      </hitTester>
+      <yawLimits>	-180 180	</yawLimits>
+      <gunPosition>	0.14005 0.361855 0.966905	</gunPosition>
+      <armor>
+        <armor_1>	83	</armor_1>
+        <armor_2>	102	</armor_2>
+        <armor_3>	83	</armor_3>
+        <armor_4>	83	</armor_4>
+        <armor_5>	83	</armor_5>
+        <armor_6>	35	</armor_6>
+        <armor_7>	25	</armor_7>
+        <armor_8>	25	</armor_8>
+        <surveyingDevice>	30	</surveyingDevice>
+      </armor>
+      <primaryArmor>	armor_2 armor_3 armor_4	</primaryArmor>
+      <weight>	8400	</weight>
+      <maxHealth>	270.0	</maxHealth>
+      <rotationSpeed>	32	</rotationSpeed>
+      <turretRotatorHealth>
+        <maxHealth>	100	</maxHealth>
+        <maxRegenHealth>	49	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </turretRotatorHealth>
+      <circularVisionRadius>	400	</circularVisionRadius>
+      <surveyingDeviceHealth>
+        <maxHealth>	100	</maxHealth>
+        <maxRegenHealth>	49	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </surveyingDeviceHealth>
+      <guns>
+        <_75mm_Gun_M7_L50>	shared	  <maxAmmo>	75	</maxAmmo>
+          <pitchLimits>	-30 10	</pitchLimits>
+          <models>
+            <undamaged>	vehicles/american/A10_M6/normal/lod0/Gun_02.model	</undamaged>
+            <destroyed>	vehicles/american/A10_M6/crash/lod0/Gun_02.model	</destroyed>
+            <exploded>	vehicles/american/A10_M6/crash/lod0/Gun_02.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/american/A10_M6/collision/Gun_02.model	</collisionModel>
+          </hitTester>
+          <armor>
+            <gun>	20	</gun>
+          </armor>
+        </_75mm_Gun_M7_L50>
+        <_76mm_Gun_M1A1>	shared	  <maxAmmo>	75	</maxAmmo>
+          <pitchLimits>	-30 10	</pitchLimits>
+          <reloadTime>	3.16	</reloadTime>
+          <models>
+            <undamaged>	vehicles/american/A10_M6/normal/lod0/Gun_04.model	</undamaged>
+            <destroyed>	vehicles/american/A10_M6/crash/lod0/Gun_04.model	</destroyed>
+            <exploded>	vehicles/american/A10_M6/crash/lod0/Gun_04.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/american/A10_M6/collision/Gun_04.model	</collisionModel>
+          </hitTester>
+          <armor>
+            <gun>	20	</gun>
+          </armor>
+        </_76mm_Gun_M1A1>
+        <_76mm_Gun_M1A2>	shared	  <maxAmmo>	75	</maxAmmo>
+          <pitchLimits>	-30 10	</pitchLimits>
+          <reloadTime>	3.14	</reloadTime>
+          <models>
+            <undamaged>	vehicles/american/A10_M6/normal/lod0/Gun_08.model	</undamaged>
+            <destroyed>	vehicles/american/A10_M6/crash/lod0/Gun_08.model	</destroyed>
+            <exploded>	vehicles/american/A10_M6/crash/lod0/Gun_08.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/american/A10_M6/collision/Gun_08.model	</collisionModel>
+          </hitTester>
+          <armor>
+            <gun>	20	</gun>
+          </armor>
+        </_76mm_Gun_M1A2>
+        <_90mm_Gun_M3>	shared	  <maxAmmo>	52	</maxAmmo>
+          <pitchLimits>	-30 10	</pitchLimits>
+          <reloadTime>	6.66	</reloadTime>
+          <invisibilityFactorAtShot>	0.250	</invisibilityFactorAtShot>
+          <models>
+            <undamaged>	vehicles/american/A10_M6/normal/lod0/Gun_10.model	</undamaged>
+            <destroyed>	vehicles/american/A10_M6/crash/lod0/Gun_10.model	</destroyed>
+            <exploded>	vehicles/american/A10_M6/crash/lod0/Gun_10.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/american/A10_M6/collision/Gun_10.model	</collisionModel>
+          </hitTester>
+          <armor>
+            <gun>	35	</gun>
+          </armor>
+        </_90mm_Gun_M3>
+      </guns>
+      <emblemSlots>
+        <player>
+          <rayStart>	-1.18204 0.537605 0.158403	</rayStart>
+          <rayEnd>	-0.588578 0.492683 0.0823287	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.34	</size>
+          <hideIfDamaged>	false	</hideIfDamaged>
+        </player>
+        <player>
+          <rayStart>	1.26961 0.505344 0.0437685	</rayStart>
+          <rayEnd>	0.670528 0.523678 0.0160065	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.34	</size>
+          <hideIfDamaged>	false	</hideIfDamaged>
+        </player>
+      </emblemSlots>
+      <showEmblemsOnGun>	false	</showEmblemsOnGun>
+    </M6D2>
+  </turrets0>
+  <engines>
+    <Wright_G2X_m_781C9GC1>	shared	  <unlocks>
+        <engine>	Wright_G200_m_781C9GC1	  <cost>	10900	</cost>
+        </engine>
+      </unlocks>
+    </Wright_G2X_m_781C9GC1>
+    <Wright_G200_m_781C9GC1>	shared	</Wright_G200_m_781C9GC1>
+  </engines>
+  <fuelTanks>
+    <Average>	shared	</Average>
+  </fuelTanks>
+  <radios>
+    <SCR_508>	shared	  <unlocks>
+        <radio>	SCR_538	  <cost>	3800.0	</cost>
+        </radio>
+      </unlocks>
+    </SCR_508>
+    <SCR_538>	shared	</SCR_538>
+  </radios>
+</M6.xml>

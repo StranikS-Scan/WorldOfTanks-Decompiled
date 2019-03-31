@@ -1,4 +1,6 @@
+# Python bytecode 2.6 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/post_processing/post_effect_controllers.py
+# Compiled at: 2010-12-06 15:18:34
 import BigWorld, Math
 import Event
 from PostProcessing.Effects import *

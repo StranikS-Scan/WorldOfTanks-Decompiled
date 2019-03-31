@@ -1,5 +1,8 @@
+# Python bytecode 2.6 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/items/__init__.py
+# Compiled at: 2011-10-21 19:10:55
 import ResMgr
+import struct
 from types import IntType
 from items import _xml
 from constants import IS_CLIENT, ITEM_DEFS_PATH
@@ -7,28 +10,17 @@ if IS_CLIENT:
     from helpers import i18n
 ITEM_TYPE_NAMES = ('reserved', 'vehicle', 'vehicleChassis', 'vehicleTurret', 'vehicleGun', 'vehicleEngine', 'vehicleFuelTank', 'vehicleRadio', 'tankman', 'optionalDevice', 'shell', 'equipment')
 MAX_ITEM_TYPE_INDEX = len(ITEM_TYPE_NAMES) - 1
-
-class ITEM_TYPES(dict):
-
-    def __init__(self):
-        for idx, name in enumerate(ITEM_TYPE_NAMES):
-            if name != 'reserved':
-                self[name] = idx
-                setattr(self, name, idx)
-
-
-ITEM_TYPES = ITEM_TYPES()
-ITEM_TYPE_INDICES = dict(((x[1], x[0]) for x in enumerate(ITEM_TYPE_NAMES) if x[1] != 'reserved'))
+ITEM_TYPE_INDICES = dict(((x[1], x[0]) for x in enumerate(ITEM_TYPE_NAMES)))
 SIMPLE_ITEM_TYPE_NAMES = ('vehicleChassis', 'vehicleTurret', 'vehicleGun', 'vehicleEngine', 'vehicleFuelTank', 'vehicleRadio', 'optionalDevice', 'shell', 'equipment')
 SIMPLE_ITEM_TYPE_INDICES = tuple((ITEM_TYPE_INDICES[x] for x in SIMPLE_ITEM_TYPE_NAMES))
 VEHICLE_COMPONENT_TYPE_NAMES = ('vehicleChassis', 'vehicleTurret', 'vehicleGun', 'vehicleEngine', 'vehicleFuelTank', 'vehicleRadio')
-VEHICLE_COMPONENT_TYPE_INDICES = tuple((ITEM_TYPE_INDICES[x] for x in VEHICLE_COMPONENT_TYPE_NAMES))
+VEHICLE_COMPONENT_TYPE_INDICES = tuple((ITEM_TYPE_INDICES[x] for x in SIMPLE_ITEM_TYPE_NAMES))
 
-def init(preloadEverything, pricesToCollect = None):
+def init(preloadEverything):
     global _g_itemTypes
     _g_itemTypes = _readItemTypes()
     from items import vehicles
-    vehicles.init(preloadEverything, pricesToCollect)
+    vehicles.init(preloadEverything)
     from items import tankmen
     tankmen.init(preloadEverything)
 
@@ -45,7 +37,7 @@ def getTypeOfCompactDescr(compactDescr):
     if type(compactDescr) is IntType:
         typeID = compactDescr & 15
     else:
-        typeID = ord(compactDescr[0]) & 15
+        typeID = struct.unpack('B', compactDescr[0:1]) & 15
     if typeID >= len(ITEM_TYPE_NAMES):
         raise Exception, "is not a 'compact descriptor'"
     return typeID

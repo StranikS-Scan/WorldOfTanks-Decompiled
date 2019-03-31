@@ -1,0 +1,523 @@
+<M24_Chaffee.xml>
+  <crew>
+    <commander></commander>
+    <gunner></gunner>
+    <driver></driver>
+    <radioman></radioman>
+    <loader></loader>
+  </crew>
+  <speedLimits>
+    <forward>	56	</forward>
+    <backward>	21	</backward>
+  </speedLimits>
+  <repairCost>	15.5	</repairCost>
+  <effects>
+    <destruction>	smallDestruction	</destruction>
+    <explosion>	smallExplosion	</explosion>
+    <flaming>	smallFlaming	</flaming>
+    <collision>	collision	</collision>
+  </effects>
+  <camouflage>
+    <priceFactor>	1.0	</priceFactor>
+    <tiling>	1 1 0 0	</tiling>
+    <exclusionMask>	vehicles/american/A34_M24_Chaffee/M24_Chaffee_CM.dds	</exclusionMask>
+  </camouflage>
+  <emblems>
+    <default>	usa_star	</default>
+    <lodDist>	MEDIUM	</lodDist>
+    <alpha>	0.878431	</alpha>
+  </emblems>
+  <horns>
+    <priceFactor>	1	</priceFactor>
+    <distanceFactor>	1	</distanceFactor>
+    <volumeFactor>	1	</volumeFactor>
+  </horns>
+  <hull>
+    <models>
+      <undamaged>	vehicles/american/A34_M24_Chaffee/normal/lod0/Hull.model	</undamaged>
+      <destroyed>	vehicles/american/A34_M24_Chaffee/crash/lod0/Hull.model	</destroyed>
+      <exploded>	vehicles/american/A34_M24_Chaffee/crash/lod0/Hull.model	</exploded>
+    </models>
+    <swinging>
+      <lodDist>	FAR	</lodDist>
+      <pitchParams>	0.28 34.00 0.42 1.00 0.05 0.30	</pitchParams>
+      <rollParams>	1.00 0.28 34.00 0.42 1.00 0.05 0.30	</rollParams>
+      <sensitivityToImpulse>	0.56	</sensitivityToImpulse>
+    </swinging>
+    <exhaust>
+      <pixie>	particles/Tank/engine_exit_gass.xml	</pixie>
+      <nodes>	HP_Track_Exhaus_1 HP_Track_Exhaus_2	</nodes>
+      <rates>	5.0 10.0 25.0	</rates>
+    </exhaust>
+    <turretPositions>
+      <turret>	-0 0.679132 0.218009	</turret>
+    </turretPositions>
+    <hitTester>
+      <collisionModel>	vehicles/american/A34_M24_Chaffee/collision/Hull.model	</collisionModel>
+    </hitTester>
+    <armor>
+      <armor_1>	25	</armor_1>
+      <armor_2>	20	</armor_2>
+      <armor_3>	25	</armor_3>
+      <armor_4>	19	</armor_4>
+      <armor_5>	19	</armor_5>
+      <armor_6>	19	</armor_6>
+      <armor_7>	13	</armor_7>
+      <armor_8>	13	</armor_8>
+      <armor_9>	10	</armor_9>
+      <armor_10>	0	</armor_10>
+      <armor_11>	25	</armor_11>
+      <armor_12>	10	</armor_12>
+      <surveyingDevice>	10	</surveyingDevice>
+    </armor>
+    <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
+    <weight>	10100	</weight>
+    <maxHealth>	400	</maxHealth>
+    <ammoBayHealth>
+      <maxHealth>	180	</maxHealth>
+      <maxRegenHealth>	140	</maxRegenHealth>
+      <repairCost>	1.0	</repairCost>
+    </ammoBayHealth>
+    <emblemSlots>
+      <clan>
+        <rayStart>	-0.00670882 0.280771 2.13291	</rayStart>
+        <rayEnd>	-0.00670881 0.270586 2.12657	</rayEnd>
+        <rayUp>	0.000000 0.000000 -1	</rayUp>
+        <size>	0.3	</size>
+        <hideIfDamaged>	false	</hideIfDamaged>
+      </clan>
+    </emblemSlots>
+  </hull>
+  <chassis>
+    <Chassis_M24_Chaffee>
+      <userString>	#usa_vehicles:Chassis_M24_Chaffee	</userString>
+      <description>	#usa_vehicles:Chassis_M24_Chaffee_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 8 0	</icon>
+      <tags></tags>
+      <level>	4	</level>
+      <price>	4450	</price>
+      <unlocks>
+        <chassis>	Chassis_M24_Chaffee_2	  <cost>	4670	</cost>
+        </chassis>
+      </unlocks>
+      <models>
+        <undamaged>	vehicles/american/A34_M24_Chaffee/normal/lod0/Chassis.model	</undamaged>
+        <destroyed>	vehicles/american/A34_M24_Chaffee/crash/lod0/Chassis.model	</destroyed>
+        <exploded>	vehicles/american/A34_M24_Chaffee/crash/lod0/Chassis.model	</exploded>
+      </models>
+      <traces>
+        <lodDist>	FAR	</lodDist>
+        <bufferPrefs>	smallTank	</bufferPrefs>
+        <textureSet>	usa_02	</textureSet>
+        <size>	0.44 0.38	</size>
+      </traces>
+      <tracks>
+        <lodDist>	MEDIUM	</lodDist>
+        <leftMaterial>	track_mat_L_skinned	</leftMaterial>
+        <rightMaterial>	track_mat_R_skinned	</rightMaterial>
+        <textureScale>	-1.1	</textureScale>
+      </tracks>
+      <wheels>
+        <lodDist>	MEDIUM	</lodDist>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <name>	WD_R0	</name>
+          <radius>	0.286072	</radius>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	WD_R	</template>
+          <radius>	0.16541	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	3	</count>
+        </group>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <name>	WD_R4	</name>
+          <radius>	0.309528	</radius>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	W_R	</template>
+          <radius>	0.340487	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	5	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <name>	WD_L0	</name>
+          <radius>	0.286072	</radius>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	WD_L	</template>
+          <radius>	0.16541	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	3	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <name>	WD_L4	</name>
+          <radius>	0.309528	</radius>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	W_L	</template>
+          <radius>	0.340487	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	5	</count>
+        </group>
+      </wheels>
+      <drivingWheels>	WD_L0 WD_L4	</drivingWheels>
+      <effects>
+        <lodDist>	MEDIUM	</lodDist>
+        <dust>	smallTankDust	</dust>
+        <mud>	smallTankMud	</mud>
+      </effects>
+      <sound>	/vehicles/tanks/treads/treads_1	</sound>
+      <hullPosition>	0.000000 0.9 0.000000	</hullPosition>
+      <hitTester>
+        <collisionModel>	vehicles/american/A34_M24_Chaffee/collision/Chassis.model	</collisionModel>
+      </hitTester>
+      <armor>
+        <leftTrack>	20	</leftTrack>
+        <rightTrack>	20	</rightTrack>
+      </armor>
+      <topRightCarryingPoint>	1.21571 1.4587	</topRightCarryingPoint>
+      <maxClimbAngle>	25	</maxClimbAngle>
+      <navmeshGirth>	6.0	</navmeshGirth>
+      <weight>	4200	</weight>
+      <maxLoad>	18300	</maxLoad>
+      <terrainResistance>	0.9 1.05 1.8	</terrainResistance>
+      <brakeForce>	45500	</brakeForce>
+      <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
+      <rotationSpeed>	42	</rotationSpeed>
+      <shotDispersionFactors>
+        <vehicleMovement>	0.16	</vehicleMovement>
+        <vehicleRotation>	0.16	</vehicleRotation>
+      </shotDispersionFactors>
+      <bulkHealthFactor>	3.0	</bulkHealthFactor>
+      <maxHealth>	110	</maxHealth>
+      <maxRegenHealth>	85	</maxRegenHealth>
+      <repairCost>	5.0	</repairCost>
+    </Chassis_M24_Chaffee>
+    <Chassis_M24_Chaffee_2>
+      <userString>	#usa_vehicles:Chassis_M24_Chaffee_2	</userString>
+      <description>	#usa_vehicles:Chassis_M24_Chaffee_2_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 8 0	</icon>
+      <tags></tags>
+      <level>	5	</level>
+      <price>	9750	</price>
+      <models>
+        <undamaged>	vehicles/american/A34_M24_Chaffee/normal/lod0/Chassis.model	</undamaged>
+        <destroyed>	vehicles/american/A34_M24_Chaffee/crash/lod0/Chassis.model	</destroyed>
+        <exploded>	vehicles/american/A34_M24_Chaffee/crash/lod0/Chassis.model	</exploded>
+      </models>
+      <traces>
+        <lodDist>	FAR	</lodDist>
+        <bufferPrefs>	smallTank	</bufferPrefs>
+        <textureSet>	usa_02	</textureSet>
+        <size>	0.44 0.38	</size>
+      </traces>
+      <tracks>
+        <lodDist>	MEDIUM	</lodDist>
+        <leftMaterial>	track_mat_L_skinned	</leftMaterial>
+        <rightMaterial>	track_mat_R_skinned	</rightMaterial>
+        <textureScale>	-1.1	</textureScale>
+      </tracks>
+      <wheels>
+        <lodDist>	MEDIUM	</lodDist>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <name>	WD_R0	</name>
+          <radius>	0.286072	</radius>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	WD_R	</template>
+          <radius>	0.16541	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	3	</count>
+        </group>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <name>	WD_R4	</name>
+          <radius>	0.309528	</radius>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	W_R	</template>
+          <radius>	0.340487	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	5	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <name>	WD_L0	</name>
+          <radius>	0.286072	</radius>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	WD_L	</template>
+          <radius>	0.16541	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	3	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <name>	WD_L4	</name>
+          <radius>	0.309528	</radius>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	W_L	</template>
+          <radius>	0.340487	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	5	</count>
+        </group>
+      </wheels>
+      <drivingWheels>	WD_L0 WD_L4	</drivingWheels>
+      <effects>
+        <lodDist>	MEDIUM	</lodDist>
+        <dust>	smallTankDust	</dust>
+        <mud>	smallTankMud	</mud>
+      </effects>
+      <sound>	/vehicles/tanks/treads/treads_1	</sound>
+      <hullPosition>	0.000000 0.9 0.000000	</hullPosition>
+      <hitTester>
+        <collisionModel>	vehicles/american/A34_M24_Chaffee/collision/Chassis.model	</collisionModel>
+      </hitTester>
+      <armor>
+        <leftTrack>	20	</leftTrack>
+        <rightTrack>	20	</rightTrack>
+      </armor>
+      <topRightCarryingPoint>	1.21571 1.4587	</topRightCarryingPoint>
+      <maxClimbAngle>	25	</maxClimbAngle>
+      <navmeshGirth>	6.0	</navmeshGirth>
+      <weight>	4200	</weight>
+      <maxLoad>	21000	</maxLoad>
+      <terrainResistance>	0.8 0.9 1.5	</terrainResistance>
+      <brakeForce>	45500	</brakeForce>
+      <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
+      <rotationSpeed>	46	</rotationSpeed>
+      <shotDispersionFactors>
+        <vehicleMovement>	0.1	</vehicleMovement>
+        <vehicleRotation>	0.1	</vehicleRotation>
+      </shotDispersionFactors>
+      <bulkHealthFactor>	3.0	</bulkHealthFactor>
+      <maxHealth>	120	</maxHealth>
+      <maxRegenHealth>	90	</maxRegenHealth>
+      <repairCost>	5.0	</repairCost>
+    </Chassis_M24_Chaffee_2>
+  </chassis>
+  <turrets0>
+    <Turret_1_M24_Chaffee>
+      <userString>	#usa_vehicles:Turret_1_M24_Chaffee	</userString>
+      <description>	#usa_vehicles:Turret_1_M24_Chaffee_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 6 0	</icon>
+      <tags></tags>
+      <level>	4	</level>
+      <price>	4500	</price>
+      <unlocks>
+        <turret>	Turret_2_M24_Chaffee	  <cost>	4440	</cost>
+        </turret>
+      </unlocks>
+      <models>
+        <undamaged>	vehicles/american/A34_M24_Chaffee/normal/lod0/Turret_01.model	</undamaged>
+        <destroyed>	vehicles/american/A34_M24_Chaffee/crash/lod0/Turret_01.model	</destroyed>
+        <exploded>	vehicles/american/A34_M24_Chaffee/crash/lod0/Turret_01.model	</exploded>
+      </models>
+      <hitTester>
+        <collisionModel>	vehicles/american/A34_M24_Chaffee/collision/Turret_01.model	</collisionModel>
+      </hitTester>
+      <yawLimits>	-180 180	</yawLimits>
+      <gunPosition>	0.000000 0.306318 0.648156	</gunPosition>
+      <armor>
+        <armor_1>	38	</armor_1>
+        <armor_2>	25	</armor_2>
+        <armor_3>	25	</armor_3>
+        <armor_4>	25	</armor_4>
+        <armor_5>	38	</armor_5>
+        <armor_6>	13	</armor_6>
+        <armor_7>	0	</armor_7>
+        <armor_8>	25	  <noDamage>	true	</noDamage>
+        </armor_8>
+        <surveyingDevice>	25	</surveyingDevice>
+      </armor>
+      <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
+      <weight>	1700	</weight>
+      <maxHealth>	130	</maxHealth>
+      <rotationSpeed>	46	</rotationSpeed>
+      <turretRotatorHealth>
+        <maxHealth>	80	</maxHealth>
+        <maxRegenHealth>	39	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </turretRotatorHealth>
+      <circularVisionRadius>	420	</circularVisionRadius>
+      <surveyingDeviceHealth>
+        <maxHealth>	60	</maxHealth>
+        <maxRegenHealth>	29	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </surveyingDeviceHealth>
+      <guns>
+        <_75mm_Gun_M6>	shared	  <maxAmmo>	48	</maxAmmo>
+          <models>
+            <undamaged>	vehicles/american/A34_M24_Chaffee/normal/lod0/Gun_01.model	</undamaged>
+            <destroyed>	vehicles/american/A34_M24_Chaffee/crash/lod0/Gun_01.model	</destroyed>
+            <exploded>	vehicles/american/A34_M24_Chaffee/crash/lod0/Gun_01.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/american/A34_M24_Chaffee/collision/Gun_01.model	</collisionModel>
+          </hitTester>
+          <armor>
+            <armor_1>	38	  <noDamage>	true	</noDamage>
+            </armor_1>
+            <armor_2>	25	  <noDamage>	true	</noDamage>
+            </armor_2>
+            <gun>	20	</gun>
+          </armor>
+        </_75mm_Gun_M6>
+      </guns>
+      <emblemSlots>
+        <player>
+          <rayStart>	1.14135 0.531729 0.155266	</rayStart>
+          <rayEnd>	0.611674 0.255539 0.0990628	</rayEnd>
+          <rayUp>	-0.00302155 0.99952 0.0308351	</rayUp>
+          <size>	0.24	</size>
+          <hideIfDamaged>	false	</hideIfDamaged>
+        </player>
+      </emblemSlots>
+      <showEmblemsOnGun>	false	</showEmblemsOnGun>
+    </Turret_1_M24_Chaffee>
+    <Turret_2_M24_Chaffee>
+      <userString>	#usa_vehicles:Turret_2_M24_Chaffee	</userString>
+      <description>	#usa_vehicles:Turret_2_M24_Chaffee_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 6 0	</icon>
+      <tags></tags>
+      <level>	5	</level>
+      <price>	12100.0	</price>
+      <unlocks>
+        <gun>	_76mm_Gun_T94	  <cost>	6100	</cost>
+        </gun>
+      </unlocks>
+      <models>
+        <undamaged>	vehicles/american/A34_M24_Chaffee/normal/lod0/Turret_02.model	</undamaged>
+        <destroyed>	vehicles/american/A34_M24_Chaffee/crash/lod0/Turret_02.model	</destroyed>
+        <exploded>	vehicles/american/A34_M24_Chaffee/crash/lod0/Turret_02.model	</exploded>
+      </models>
+      <hitTester>
+        <collisionModel>	vehicles/american/A34_M24_Chaffee/collision/Turret_02.model	</collisionModel>
+      </hitTester>
+      <yawLimits>	-180 180	</yawLimits>
+      <gunPosition>	0.000000 0.304265 1.08545	</gunPosition>
+      <armor>
+        <armor_1>	38	</armor_1>
+        <armor_2>	25	</armor_2>
+        <armor_3>	25	</armor_3>
+        <armor_4>	25	</armor_4>
+        <armor_5>	38	</armor_5>
+        <armor_6>	13	</armor_6>
+        <armor_7>	0	</armor_7>
+        <armor_8>	25	  <noDamage>	true	</noDamage>
+        </armor_8>
+      </armor>
+      <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
+      <weight>	3200	</weight>
+      <maxHealth>	180	</maxHealth>
+      <rotationSpeed>	44	</rotationSpeed>
+      <turretRotatorHealth>
+        <maxHealth>	80	</maxHealth>
+        <maxRegenHealth>	39	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </turretRotatorHealth>
+      <circularVisionRadius>	460	</circularVisionRadius>
+      <surveyingDeviceHealth>
+        <maxHealth>	60	</maxHealth>
+        <maxRegenHealth>	29	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </surveyingDeviceHealth>
+      <guns>
+        <_75mm_Gun_M6>	shared	  <maxAmmo>	60	</maxAmmo>
+          <reloadTime>	3.33	</reloadTime>
+          <aimingTime>	1.3	</aimingTime>
+          <shotDispersionFactors>
+            <turretRotation>	0.08	</turretRotation>
+            <afterShot>	3.5	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <models>
+            <undamaged>	vehicles/american/A34_M24_Chaffee/normal/lod0/Gun_02.model	</undamaged>
+            <destroyed>	vehicles/american/A34_M24_Chaffee/crash/lod0/Gun_02.model	</destroyed>
+            <exploded>	vehicles/american/A34_M24_Chaffee/crash/lod0/Gun_02.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/american/A34_M24_Chaffee/collision/Gun_02.model	</collisionModel>
+          </hitTester>
+          <armor>
+            <armor_1>	38	  <noDamage>	true	</noDamage>
+            </armor_1>
+            <armor_2>	25	  <noDamage>	true	</noDamage>
+            </armor_2>
+            <gun>	20	</gun>
+          </armor>
+        </_75mm_Gun_M6>
+        <_76mm_Gun_T94>	shared	  <maxAmmo>	60	</maxAmmo>
+          <models>
+            <undamaged>	vehicles/american/A34_M24_Chaffee/normal/lod0/Gun_03.model	</undamaged>
+            <destroyed>	vehicles/american/A34_M24_Chaffee/crash/lod0/Gun_03.model	</destroyed>
+            <exploded>	vehicles/american/A34_M24_Chaffee/crash/lod0/Gun_03.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/american/A34_M24_Chaffee/collision/Gun_03.model	</collisionModel>
+          </hitTester>
+          <armor>
+            <armor_1>	38	  <noDamage>	true	</noDamage>
+            </armor_1>
+            <armor_2>	25	  <noDamage>	true	</noDamage>
+            </armor_2>
+            <gun>	20	</gun>
+          </armor>
+        </_76mm_Gun_T94>
+      </guns>
+      <emblemSlots>
+        <player>
+          <rayStart>	-1.24429 0.498554 0.0831733	</rayStart>
+          <rayEnd>	-0.661686 0.388734 -0.00910132	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.28	</size>
+          <hideIfDamaged>	false	</hideIfDamaged>
+        </player>
+      </emblemSlots>
+      <showEmblemsOnGun>	false	</showEmblemsOnGun>
+    </Turret_2_M24_Chaffee>
+  </turrets0>
+  <engines>
+    <_2x44E24_V-8_Cadillac>	shared	  <unlocks>
+        <engine>	Wright_Continental_R-975C1	  <cost>	900.0	</cost>
+        </engine>
+      </unlocks>
+    </_2x44E24_V-8_Cadillac>
+    <Wright_Continental_R-975C1>	shared	  <unlocks>
+        <engine>	Continental_AOS-895-1	  <cost>	11700	</cost>
+        </engine>
+      </unlocks>
+    </Wright_Continental_R-975C1>
+    <Continental_AOS-895-1>	shared	</Continental_AOS-895-1>
+  </engines>
+  <fuelTanks>
+    <Heavy>	shared	</Heavy>
+  </fuelTanks>
+  <radios>
+    <SCR_508>	shared	  <unlocks>
+        <radio>	SCR_506	  <cost>	5600.0	</cost>
+        </radio>
+      </unlocks>
+    </SCR_508>
+    <SCR_506>	shared	  <unlocks>
+        <radio>	SCR_528	  <cost>	9000	</cost>
+        </radio>
+      </unlocks>
+    </SCR_506>
+    <SCR_528>	shared	</SCR_528>
+  </radios>
+</M24_Chaffee.xml>

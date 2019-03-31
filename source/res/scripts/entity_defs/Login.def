@@ -1,0 +1,38 @@
+<Login.def>
+  <Properties>
+    <accountDBID_s>
+      <Type>	STRING	</Type>
+      <Flags>	BASE_AND_CLIENT	</Flags>
+      <Persistent>	true	</Persistent>
+      <DatabaseLength>	96	</DatabaseLength>
+      <Identifier>	true	</Identifier>
+    </accountDBID_s>
+    <loginPriority>
+      <Type>	UINT32	</Type>
+      <Flags>	BASE	</Flags>
+      <Persistent>	true	</Persistent>
+    </loginPriority>
+  </Properties>
+  <ClientMethods>
+    <onKickedFromServer>
+      <Arg>	UINT32	</Arg>
+    </onKickedFromServer>
+    <receiveLoginQueueNumber>
+      <Arg>	UINT64	</Arg>
+    </receiveLoginQueueNumber>
+  </ClientMethods>
+  <BaseMethods>
+    <onEnqueued>
+      <Arg>	STRING	</Arg>
+      <Arg>	UINT64	</Arg>
+    </onEnqueued>
+    <onQueueTurn></onQueueTurn>
+    <onAccountClientReleased>
+      <Arg>	MAILBOX	</Arg>
+      <Arg>	UINT16	</Arg>
+    </onAccountClientReleased>
+    <changeLoginPriority>
+      <Arg>	UINT16	</Arg>
+    </changeLoginPriority>
+  </BaseMethods>
+</Login.def>

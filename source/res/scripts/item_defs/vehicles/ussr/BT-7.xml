@@ -1,0 +1,546 @@
+<BT-7.xml>
+  <crew>
+    <commander>	radioman	</commander>
+    <driver></driver>
+    <gunner>	loader	</gunner>
+  </crew>
+  <speedLimits>
+    <forward>	66	</forward>
+    <backward>	20	</backward>
+  </speedLimits>
+  <repairCost>	4.7	</repairCost>
+  <effects>
+    <destruction>	smallDestruction	</destruction>
+    <explosion>	smallExplosion	</explosion>
+    <flaming>	smallFlaming	</flaming>
+    <collision>	collision	</collision>
+  </effects>
+  <camouflage>
+    <priceFactor>	0.6	</priceFactor>
+    <tiling>	1 1 0 0	</tiling>
+    <exclusionMask>	vehicles/russian/R03_BT-7/BT-7_CM.dds	</exclusionMask>
+  </camouflage>
+  <emblems>
+    <default>	ussr_star	</default>
+    <lodDist>	MEDIUM	</lodDist>
+    <alpha>	0.819608	</alpha>
+  </emblems>
+  <horns>
+    <priceFactor>	1	</priceFactor>
+    <distanceFactor>	1	</distanceFactor>
+    <volumeFactor>	1	</volumeFactor>
+  </horns>
+  <hull>
+    <models>
+      <undamaged>	vehicles/russian/R03_BT-7/normal/lod0/Hull.model	</undamaged>
+      <destroyed>	vehicles/russian/R03_BT-7/crash/lod0/Hull.model	</destroyed>
+      <exploded>	vehicles/russian/R03_BT-7/crash/lod0/Hull.model	</exploded>
+    </models>
+    <swinging>
+      <lodDist>	FAR	</lodDist>
+      <pitchParams>	0.30 32.00 0.38 1.00 0.06 0.34	</pitchParams>
+      <rollParams>	1.00 0.30 32.00 0.38 1.00 0.06 0.34	</rollParams>
+      <sensitivityToImpulse>	0.78	</sensitivityToImpulse>
+    </swinging>
+    <exhaust>
+      <pixie>	particles/Tank/engine_exit_diesel.xml	</pixie>
+      <nodes>	HP_Track_Exhaus_1 HP_Track_Exhaus_2	</nodes>
+      <rates>	5.0 10.0 25.0	</rates>
+    </exhaust>
+    <turretPositions>
+      <turret>	-0.000000 0.5097 0.5236	</turret>
+    </turretPositions>
+    <hitTester>
+      <collisionModel>	vehicles/russian/R03_BT-7/collision/Hull.model	</collisionModel>
+    </hitTester>
+    <armor>
+      <armor_1>	20	</armor_1>
+      <armor_2>	15	</armor_2>
+      <armor_3>	15	</armor_3>
+      <armor_4>	13	</armor_4>
+      <armor_5>	15	</armor_5>
+      <armor_6>	15	</armor_6>
+      <armor_7>	10	</armor_7>
+      <armor_8>	6	</armor_8>
+      <armor_9>	0	</armor_9>
+      <armor_10>	15	</armor_10>
+      <armor_11>	20	</armor_11>
+    </armor>
+    <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
+    <weight>	8000	</weight>
+    <maxHealth>	130.0	</maxHealth>
+    <ammoBayHealth>
+      <maxHealth>	100	</maxHealth>
+      <maxRegenHealth>	80	</maxRegenHealth>
+      <repairCost>	1.0	</repairCost>
+    </ammoBayHealth>
+    <emblemSlots>
+      <clan>
+        <rayStart>	-0.0191707 3.78301 5.40426	</rayStart>
+        <rayEnd>	-0.0191707 -4.06219 -0.79674	</rayEnd>
+        <rayUp>	0.000000 0.000000 -1	</rayUp>
+        <size>	0.24	</size>
+        <hideIfDamaged>	true	</hideIfDamaged>
+      </clan>
+    </emblemSlots>
+  </hull>
+  <chassis>
+    <BT-5>
+      <userString>	#ussr_vehicles:BT-5	</userString>
+      <description>	#ussr_vehicles:BT-5_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 8 0	</icon>
+      <tags></tags>
+      <level>	2	</level>
+      <price>	600.0	</price>
+      <unlocks>
+        <chassis>	BT-7	  <cost>	315	</cost>
+        </chassis>
+      </unlocks>
+      <models>
+        <undamaged>	vehicles/russian/R03_BT-7/normal/lod0/Chassis.model	</undamaged>
+        <destroyed>	vehicles/russian/R03_BT-7/crash/lod0/Chassis.model	</destroyed>
+        <exploded>	vehicles/russian/R03_BT-7/crash/lod0/Chassis.model	</exploded>
+      </models>
+      <traces>
+        <lodDist>	FAR	</lodDist>
+        <bufferPrefs>	mediumTank	</bufferPrefs>
+        <textureSet>	germany_01	</textureSet>
+        <size>	0.34 0.28	</size>
+      </traces>
+      <tracks>
+        <lodDist>	MEDIUM	</lodDist>
+        <leftMaterial>	track_mat_L_skinned	</leftMaterial>
+        <rightMaterial>	track_mat_R_skinned	</rightMaterial>
+        <textureScale>	-1.18	</textureScale>
+      </tracks>
+      <wheels>
+        <lodDist>	MEDIUM	</lodDist>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	W_L	</template>
+          <radius>	0.415	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	4	</count>
+        </group>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	W_R	</template>
+          <radius>	0.415	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	4	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <name>	WD_L0	</name>
+          <radius>	0.27	</radius>
+        </wheel>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <name>	WD_L1	</name>
+          <radius>	0.305	</radius>
+        </wheel>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <name>	WD_R0	</name>
+          <radius>	0.27	</radius>
+        </wheel>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <name>	WD_R1	</name>
+          <radius>	0.305	</radius>
+        </wheel>
+      </wheels>
+      <drivingWheels>	WD_L0 WD_L1	</drivingWheels>
+      <effects>
+        <lodDist>	MEDIUM	</lodDist>
+        <dust>	smallTankDust	</dust>
+        <mud>	smallTankMud	</mud>
+      </effects>
+      <sound>	/vehicles/tanks/treads/treads_1	</sound>
+      <hullPosition>	0.000000 0.9982 0.000000	</hullPosition>
+      <hitTester>
+        <collisionModel>	vehicles/russian/R03_BT-7/collision/Chassis.model	</collisionModel>
+      </hitTester>
+      <armor>
+        <leftTrack>	7	</leftTrack>
+        <rightTrack>	7	</rightTrack>
+      </armor>
+      <topRightCarryingPoint>	0.978438 1.54198	</topRightCarryingPoint>
+      <maxClimbAngle>	25	</maxClimbAngle>
+      <navmeshGirth>	6.0	</navmeshGirth>
+      <weight>	4000	</weight>
+      <maxLoad>	14200	</maxLoad>
+      <terrainResistance>	0.8 1.2 3.0	</terrainResistance>
+      <brakeForce>	31000	</brakeForce>
+      <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
+      <rotationSpeed>	40	</rotationSpeed>
+      <shotDispersionFactors>
+        <vehicleMovement>	0.3	</vehicleMovement>
+        <vehicleRotation>	0.3	</vehicleRotation>
+      </shotDispersionFactors>
+      <bulkHealthFactor>	3.0	</bulkHealthFactor>
+      <maxHealth>	60	</maxHealth>
+      <maxRegenHealth>	45	</maxRegenHealth>
+      <repairCost>	2.5	</repairCost>
+    </BT-5>
+    <BT-7>
+      <userString>	#ussr_vehicles:BT-7	</userString>
+      <description>	#ussr_vehicles:BT-7_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 8 0	</icon>
+      <tags></tags>
+      <level>	3	</level>
+      <price>	1700.0	</price>
+      <models>
+        <undamaged>	vehicles/russian/R03_BT-7/normal/lod0/Chassis.model	</undamaged>
+        <destroyed>	vehicles/russian/R03_BT-7/crash/lod0/Chassis.model	</destroyed>
+        <exploded>	vehicles/russian/R03_BT-7/crash/lod0/Chassis.model	</exploded>
+      </models>
+      <traces>
+        <lodDist>	FAR	</lodDist>
+        <bufferPrefs>	mediumTank	</bufferPrefs>
+        <textureSet>	germany_01	</textureSet>
+        <size>	0.32 0.28	</size>
+      </traces>
+      <tracks>
+        <lodDist>	MEDIUM	</lodDist>
+        <leftMaterial>	track_mat_L_skinned	</leftMaterial>
+        <rightMaterial>	track_mat_R_skinned	</rightMaterial>
+        <textureScale>	-1.18	</textureScale>
+      </tracks>
+      <wheels>
+        <lodDist>	MEDIUM	</lodDist>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	W_L	</template>
+          <radius>	0.415	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	4	</count>
+        </group>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	W_R	</template>
+          <radius>	0.415	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	4	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <name>	WD_L0	</name>
+          <radius>	0.27	</radius>
+        </wheel>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <name>	WD_L1	</name>
+          <radius>	0.305	</radius>
+        </wheel>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <name>	WD_R0	</name>
+          <radius>	0.27	</radius>
+        </wheel>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <name>	WD_R1	</name>
+          <radius>	0.305	</radius>
+        </wheel>
+      </wheels>
+      <drivingWheels>	WD_L0 WD_L1	</drivingWheels>
+      <effects>
+        <lodDist>	MEDIUM	</lodDist>
+        <dust>	smallTankDust	</dust>
+        <mud>	smallTankMud	</mud>
+      </effects>
+      <sound>	/vehicles/tanks/treads/treads_1	</sound>
+      <hullPosition>	0.000000 0.9982 0.000000	</hullPosition>
+      <hitTester>
+        <collisionModel>	vehicles/russian/R03_BT-7/collision/Chassis.model	</collisionModel>
+      </hitTester>
+      <armor>
+        <leftTrack>	10	</leftTrack>
+        <rightTrack>	10	</rightTrack>
+      </armor>
+      <topRightCarryingPoint>	0.978438 1.54198	</topRightCarryingPoint>
+      <maxClimbAngle>	25	</maxClimbAngle>
+      <navmeshGirth>	6.0	</navmeshGirth>
+      <weight>	4000	</weight>
+      <maxLoad>	15500	</maxLoad>
+      <terrainResistance>	0.8 0.9 2.1	</terrainResistance>
+      <brakeForce>	31000	</brakeForce>
+      <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
+      <rotationSpeed>	47	</rotationSpeed>
+      <shotDispersionFactors>
+        <vehicleMovement>	0.26	</vehicleMovement>
+        <vehicleRotation>	0.26	</vehicleRotation>
+      </shotDispersionFactors>
+      <bulkHealthFactor>	3.0	</bulkHealthFactor>
+      <maxHealth>	70	</maxHealth>
+      <maxRegenHealth>	55	</maxRegenHealth>
+      <repairCost>	2.5	</repairCost>
+    </BT-7>
+  </chassis>
+  <turrets0>
+    <BT-5_cylindrical>
+      <userString>	#ussr_vehicles:BT-5_cylindrical	</userString>
+      <description>	#ussr_vehicles:BT-5_cylindrical_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 6 0	</icon>
+      <tags></tags>
+      <level>	2	</level>
+      <price>	750.0	</price>
+      <unlocks>
+        <turret>	BT-7_conic	  <cost>	325	</cost>
+        </turret>
+      </unlocks>
+      <models>
+        <undamaged>	vehicles/russian/R03_BT-7/normal/lod0/Turret_01.model	</undamaged>
+        <destroyed>	vehicles/russian/R03_BT-7/crash/lod0/Turret_01.model	</destroyed>
+        <exploded>	vehicles/russian/R03_BT-7/crash/lod0/Turret_01.model	</exploded>
+      </models>
+      <hitTester>
+        <collisionModel>	vehicles/russian/R03_BT-7/collision/Turret_01.model	</collisionModel>
+      </hitTester>
+      <yawLimits>	-180 180	</yawLimits>
+      <gunPosition>	0.000000 0.3536 0.7553	</gunPosition>
+      <armor>
+        <armor_1>	20	</armor_1>
+        <armor_2>	15	</armor_2>
+        <armor_3>	15	</armor_3>
+        <armor_4>	15	</armor_4>
+        <armor_5>	10	</armor_5>
+        <armor_6>	10	</armor_6>
+        <armor_7>	15	</armor_7>
+        <armor_8>	0	</armor_8>
+        <armor_9>	15	</armor_9>
+      </armor>
+      <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
+      <weight>	950	</weight>
+      <maxHealth>	50.0	</maxHealth>
+      <rotationSpeed>	50	</rotationSpeed>
+      <turretRotatorHealth>
+        <maxHealth>	40	</maxHealth>
+        <maxRegenHealth>	20	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </turretRotatorHealth>
+      <circularVisionRadius>	270	</circularVisionRadius>
+      <surveyingDeviceHealth>
+        <maxHealth>	40	</maxHealth>
+        <maxRegenHealth>	19	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </surveyingDeviceHealth>
+      <guns>
+        <_45mm_20K>	shared	  <maxAmmo>	84	</maxAmmo>
+          <unlocks>
+            <gun>	_23mm_VJA	  <cost>	180.0	</cost>
+            </gun>
+          </unlocks>
+          <models>
+            <undamaged>	vehicles/russian/R03_BT-7/normal/lod0/Gun_08.model	</undamaged>
+            <destroyed>	vehicles/russian/R03_BT-7/crash/lod0/Gun_08.model	</destroyed>
+            <exploded>	vehicles/russian/R03_BT-7/crash/lod0/Gun_08.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/russian/R03_BT-7/collision/Gun_08.model	</collisionModel>
+          </hitTester>
+          <armor>
+            <armor_1>	25	  <noDamage>	true	</noDamage>
+            </armor_1>
+            <armor_2>	15	  <noDamage>	true	</noDamage>
+            </armor_2>
+            <armor_3>	10	  <noDamage>	true	</noDamage>
+            </armor_3>
+            <gun>	10	</gun>
+          </armor>
+        </_45mm_20K>
+        <_23mm_VJA>	shared	  <maxAmmo>	180	</maxAmmo>
+          <models>
+            <undamaged>	vehicles/russian/R03_BT-7/normal/lod0/Gun_01.model	</undamaged>
+            <destroyed>	vehicles/russian/R03_BT-7/crash/lod0/Gun_01.model	</destroyed>
+            <exploded>	vehicles/russian/R03_BT-7/crash/lod0/Gun_01.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/russian/R03_BT-7/collision/Gun_01.model	</collisionModel>
+          </hitTester>
+          <armor>
+            <armor_1>	25	  <noDamage>	true	</noDamage>
+            </armor_1>
+            <armor_2>	15	  <noDamage>	true	</noDamage>
+            </armor_2>
+            <armor_3>	10	  <noDamage>	true	</noDamage>
+            </armor_3>
+            <gun>	10	</gun>
+          </armor>
+        </_23mm_VJA>
+      </guns>
+      <emblemSlots>
+        <player>
+          <rayStart>	-0.681524 0.427374 -0.617612	</rayStart>
+          <rayEnd>	-0.300368 0.427374 -0.496286	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.24	</size>
+          <hideIfDamaged>	true	</hideIfDamaged>
+        </player>
+        <player>
+          <rayStart>	0.681524 0.427374 -0.617612	</rayStart>
+          <rayEnd>	0.300368 0.427374 -0.496286	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.24	</size>
+          <hideIfDamaged>	true	</hideIfDamaged>
+        </player>
+      </emblemSlots>
+      <showEmblemsOnGun>	false	</showEmblemsOnGun>
+      <physicsShape>	1.000 0.000 1.000 0.000 1.000 0.000 0.500 0.500 0.500 0.500 0.500 0.500 0.600 0.100 0.500	</physicsShape>
+    </BT-5_cylindrical>
+    <BT-7_conic>
+      <userString>	#ussr_vehicles:BT-7_conic	</userString>
+      <description>	#ussr_vehicles:BT-7_conic_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 6 0	</icon>
+      <tags></tags>
+      <level>	3	</level>
+      <price>	1730.0	</price>
+      <unlocks>
+        <gun>	_37mm_ZiS-19	  <cost>	160.0	</cost>
+        </gun>
+      </unlocks>
+      <models>
+        <undamaged>	vehicles/russian/R03_BT-7/normal/lod0/Turret_02.model	</undamaged>
+        <destroyed>	vehicles/russian/R03_BT-7/crash/lod0/Turret_02.model	</destroyed>
+        <exploded>	vehicles/russian/R03_BT-7/crash/lod0/Turret_02.model	</exploded>
+      </models>
+      <hitTester>
+        <collisionModel>	vehicles/russian/R03_BT-7/collision/Turret_02.model	</collisionModel>
+      </hitTester>
+      <yawLimits>	-180 180	</yawLimits>
+      <gunPosition>	0.000000 0.3498 0.6528	</gunPosition>
+      <armor>
+        <armor_1>	20	</armor_1>
+        <armor_2>	15	</armor_2>
+        <armor_3>	15	</armor_3>
+        <armor_4>	15	</armor_4>
+        <armor_5>	10	</armor_5>
+        <armor_6>	10	</armor_6>
+        <armor_7>	15	</armor_7>
+        <armor_8>	0	</armor_8>
+        <armor_9>	15	</armor_9>
+      </armor>
+      <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
+      <weight>	1050	</weight>
+      <maxHealth>	90.0	</maxHealth>
+      <rotationSpeed>	52	</rotationSpeed>
+      <turretRotatorHealth>
+        <maxHealth>	40	</maxHealth>
+        <maxRegenHealth>	20	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </turretRotatorHealth>
+      <circularVisionRadius>	285	</circularVisionRadius>
+      <surveyingDeviceHealth>
+        <maxHealth>	40	</maxHealth>
+        <maxRegenHealth>	19	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </surveyingDeviceHealth>
+      <guns>
+        <_45mm_20K>	shared	  <maxAmmo>	84	</maxAmmo>
+          <models>
+            <undamaged>	vehicles/russian/R03_BT-7/normal/lod0/Gun_07.model	</undamaged>
+            <destroyed>	vehicles/russian/R03_BT-7/crash/lod0/Gun_07.model	</destroyed>
+            <exploded>	vehicles/russian/R03_BT-7/crash/lod0/Gun_07.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/russian/R03_BT-7/collision/Gun_07.model	</collisionModel>
+          </hitTester>
+          <armor>
+            <armor_1>	25	  <noDamage>	true	</noDamage>
+            </armor_1>
+            <armor_2>	15	  <noDamage>	true	</noDamage>
+            </armor_2>
+            <armor_3>	10	  <noDamage>	true	</noDamage>
+            </armor_3>
+            <gun>	10	</gun>
+          </armor>
+        </_45mm_20K>
+        <_23mm_VJA>	shared	  <maxAmmo>	380	</maxAmmo>
+          <models>
+            <undamaged>	vehicles/russian/R03_BT-7/normal/lod0/Gun_02.model	</undamaged>
+            <destroyed>	vehicles/russian/R03_BT-7/crash/lod0/Gun_02.model	</destroyed>
+            <exploded>	vehicles/russian/R03_BT-7/crash/lod0/Gun_02.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/russian/R03_BT-7/collision/Gun_02.model	</collisionModel>
+          </hitTester>
+          <armor>
+            <armor_1>	25	  <noDamage>	true	</noDamage>
+            </armor_1>
+            <armor_2>	15	  <noDamage>	true	</noDamage>
+            </armor_2>
+            <armor_3>	10	  <noDamage>	true	</noDamage>
+            </armor_3>
+            <gun>	10	</gun>
+          </armor>
+        </_23mm_VJA>
+        <_37mm_ZiS-19>	shared	  <maxAmmo>	84	</maxAmmo>
+          <models>
+            <undamaged>	vehicles/russian/R03_BT-7/normal/lod0/Gun_05.model	</undamaged>
+            <destroyed>	vehicles/russian/R03_BT-7/crash/lod0/Gun_05.model	</destroyed>
+            <exploded>	vehicles/russian/R03_BT-7/crash/lod0/Gun_05.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/russian/R03_BT-7/collision/Gun_05.model	</collisionModel>
+          </hitTester>
+          <armor>
+            <armor_1>	25	  <noDamage>	true	</noDamage>
+            </armor_1>
+            <armor_2>	15	  <noDamage>	true	</noDamage>
+            </armor_2>
+            <armor_3>	10	  <noDamage>	true	</noDamage>
+            </armor_3>
+            <gun>	10	</gun>
+          </armor>
+        </_37mm_ZiS-19>
+      </guns>
+      <emblemSlots>
+        <player>
+          <rayStart>	0.659153 0.455167 -0.816745	</rayStart>
+          <rayEnd>	0.283571 0.359734 -0.717596	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.28	</size>
+          <hideIfDamaged>	false	</hideIfDamaged>
+        </player>
+        <player>
+          <rayStart>	-0.659153 0.455167 -0.816745	</rayStart>
+          <rayEnd>	-0.283571 0.359734 -0.717596	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.28	</size>
+          <hideIfDamaged>	true	</hideIfDamaged>
+        </player>
+      </emblemSlots>
+      <showEmblemsOnGun>	false	</showEmblemsOnGun>
+      <physicsShape>	1.000 0.000 1.000 0.000 1.000 0.000 0.500 0.500 0.500 0.500 0.500 0.500 0.600 0.100 0.500	</physicsShape>
+    </BT-7_conic>
+  </turrets0>
+  <engines>
+    <M-17T>	shared	  <unlocks>
+        <engine>	M-17F	  <cost>	500.0	</cost>
+        </engine>
+      </unlocks>
+    </M-17T>
+    <M-17F>	shared	  <unlocks>
+        <engine>	V-2	  <cost>	1250.0	</cost>
+        </engine>
+      </unlocks>
+    </M-17F>
+    <V-2>	shared	  <unlocks>
+        <vehicle>	A-20	  <cost>	3040.0	</cost>
+        </vehicle>
+      </unlocks>
+    </V-2>
+  </engines>
+  <fuelTanks>
+    <Small>	shared	</Small>
+  </fuelTanks>
+  <radios>
+    <_71-TK-3>	shared	  <unlocks>
+        <radio>	_12LL	  <cost>	5600.0	</cost>
+        </radio>
+      </unlocks>
+    </_71-TK-3>
+    <_12LL>	shared	</_12LL>
+  </radios>
+</BT-7.xml>

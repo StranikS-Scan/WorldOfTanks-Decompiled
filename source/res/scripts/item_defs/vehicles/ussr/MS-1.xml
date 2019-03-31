@@ -1,0 +1,661 @@
+<MS-1.xml>
+  <crew>
+    <commander>	gunner
+      radioman
+      loader	</commander>
+    <driver></driver>
+  </crew>
+  <speedLimits>
+    <forward>	32	</forward>
+    <backward>	7	</backward>
+  </speedLimits>
+  <repairCost>	0	</repairCost>
+  <effects>
+    <destruction>	smallDestruction	</destruction>
+    <explosion>	smallExplosion	</explosion>
+    <flaming>	smallFlaming	</flaming>
+    <collision>	collision	</collision>
+  </effects>
+  <camouflage>
+    <priceFactor>	0.2	</priceFactor>
+    <tiling>	1 1 0 0	</tiling>
+    <exclusionMask>	vehicles/russian/R11_MS-1/MS-1_SU-18_CM.dds	</exclusionMask>
+  </camouflage>
+  <emblems>
+    <default>	ussr_star	</default>
+    <lodDist>	MEDIUM	</lodDist>
+    <alpha>	0.9	</alpha>
+  </emblems>
+  <horns>
+    <priceFactor>	1.0	</priceFactor>
+    <distanceFactor>	1.0	</distanceFactor>
+    <volumeFactor>	1.0	</volumeFactor>
+  </horns>
+  <hull>
+    <models>
+      <undamaged>	vehicles/russian/R11_MS-1/normal/lod0/Hull.model	</undamaged>
+      <destroyed>	vehicles/russian/R11_MS-1/crash/lod0/Hull.model	</destroyed>
+      <exploded>	vehicles/russian/R11_MS-1/crash/lod0/Hull.model	</exploded>
+    </models>
+    <swinging>
+      <lodDist>	FAR	</lodDist>
+      <pitchParams>	0.30 38.00 0.36 1.00 0.05 0.34	</pitchParams>
+      <rollParams>	1.00 0.30 38.00 0.36 1.00 0.05 0.34	</rollParams>
+      <sensitivityToImpulse>	0.94	</sensitivityToImpulse>
+    </swinging>
+    <exhaust>
+      <pixie>	particles/Tank/engine_exit_gass.xml	</pixie>
+      <nodes>	HP_Track_Exhaus_1 HP_Track_Exhaus_2	</nodes>
+      <rates>	5.0 10.0 25.0	</rates>
+    </exhaust>
+    <turretPositions>
+      <turret>	0.013778 0.421721 0.08902	</turret>
+    </turretPositions>
+    <hitTester>
+      <collisionModel>	vehicles/russian/R11_MS-1/collision/Hull.model	</collisionModel>
+    </hitTester>
+    <armor>
+      <armor_1>	18	</armor_1>
+      <armor_2>	16	</armor_2>
+      <armor_3>	16	</armor_3>
+      <armor_4>	16	</armor_4>
+      <armor_5>	16	</armor_5>
+      <armor_6>	16	</armor_6>
+      <armor_7>	16	</armor_7>
+      <armor_8>	8	</armor_8>
+      <armor_9>	8	</armor_9>
+      <armor_10>	0	</armor_10>
+      <armor_11>	10	  <noDamage>	true	</noDamage>
+      </armor_11>
+    </armor>
+    <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
+    <weight>	2750	</weight>
+    <maxHealth>	60	</maxHealth>
+    <ammoBayHealth>
+      <maxHealth>	70	</maxHealth>
+      <maxRegenHealth>	60	</maxRegenHealth>
+      <repairCost>	1.0	</repairCost>
+    </ammoBayHealth>
+    <emblemSlots>
+      <clan>
+        <rayStart>	0.24 1.4 1.1	</rayStart>
+        <rayEnd>	0.24 -1 0.9	</rayEnd>
+        <rayUp>	0.000000 1 0.000000	</rayUp>
+        <size>	0.3	</size>
+        <hideIfDamaged>	true	</hideIfDamaged>
+      </clan>
+    </emblemSlots>
+  </hull>
+  <chassis>
+    <T-18>
+      <userString>	#ussr_vehicles:T-18	</userString>
+      <description>	#ussr_vehicles:T-18_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 8 0	</icon>
+      <tags></tags>
+      <level>	1	</level>
+      <price>	240	</price>
+      <unlocks>
+        <chassis>	T-18Bis	  <cost>	45	</cost>
+        </chassis>
+      </unlocks>
+      <models>
+        <undamaged>	vehicles/russian/R11_MS-1/normal/lod0/Chassis.model	</undamaged>
+        <destroyed>	vehicles/russian/R11_MS-1/crash/lod0/Chassis.model	</destroyed>
+        <exploded>	vehicles/russian/R11_MS-1/crash/lod0/Chassis.model	</exploded>
+      </models>
+      <traces>
+        <lodDist>	FAR	</lodDist>
+        <bufferPrefs>	mediumTank	</bufferPrefs>
+        <textureSet>	ussr_01	</textureSet>
+        <size>	0.28 0.26	</size>
+      </traces>
+      <tracks>
+        <lodDist>	MEDIUM	</lodDist>
+        <leftMaterial>	track_mat_L_skinned	</leftMaterial>
+        <rightMaterial>	track_mat_R_skinned	</rightMaterial>
+        <textureScale>	-1.57	</textureScale>
+      </tracks>
+      <wheels>
+        <lodDist>	MEDIUM	</lodDist>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	W_L	</template>
+          <count>	7	</count>
+          <radius>	0.12421	</radius>
+        </group>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	W_R	</template>
+          <count>	7	</count>
+          <radius>	0.12421	</radius>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <name>	WD_L0	</name>
+          <radius>	0.3315305	</radius>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	WD_L	</template>
+          <count>	4	</count>
+          <startIndex>	1	</startIndex>
+          <radius>	0.072709	</radius>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <name>	WD_L5	</name>
+          <radius>	0.270818	</radius>
+        </wheel>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <name>	WD_R0	</name>
+          <radius>	0.3315305	</radius>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	WD_R	</template>
+          <count>	4	</count>
+          <startIndex>	1	</startIndex>
+          <radius>	0.072709	</radius>
+        </group>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <name>	WD_R5	</name>
+          <radius>	0.270818	</radius>
+        </wheel>
+      </wheels>
+      <drivingWheels>	WD_L0 WD_L5	</drivingWheels>
+      <effects>
+        <lodDist>	MEDIUM	</lodDist>
+        <dust>	smallTankDust	</dust>
+        <mud>	smallTankMud	</mud>
+      </effects>
+      <sound>	/vehicles/tanks/treads/treads_1	</sound>
+      <hullPosition>	-0.012 0.894681 -0.055245	</hullPosition>
+      <hitTester>
+        <collisionModel>	vehicles/russian/R11_MS-1/collision/Chassis.model	</collisionModel>
+      </hitTester>
+      <armor>
+        <leftTrack>	5	</leftTrack>
+        <rightTrack>	5	</rightTrack>
+      </armor>
+      <topRightCarryingPoint>	0.730381 0.961277	</topRightCarryingPoint>
+      <maxClimbAngle>	25	</maxClimbAngle>
+      <navmeshGirth>	6.0	</navmeshGirth>
+      <weight>	1200	</weight>
+      <maxLoad>	4890	</maxLoad>
+      <terrainResistance>	1.0 1.35 1.95	</terrainResistance>
+      <brakeForce>	35500	</brakeForce>
+      <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
+      <rotationSpeed>	34	</rotationSpeed>
+      <shotDispersionFactors>
+        <vehicleMovement>	0.42	</vehicleMovement>
+        <vehicleRotation>	0.42	</vehicleRotation>
+      </shotDispersionFactors>
+      <bulkHealthFactor>	3.0	</bulkHealthFactor>
+      <maxHealth>	40	</maxHealth>
+      <maxRegenHealth>	30	</maxRegenHealth>
+      <repairCost>	1.0	</repairCost>
+    </T-18>
+    <T-18Bis>
+      <userString>	#ussr_vehicles:T-18Bis	</userString>
+      <description>	#ussr_vehicles:T-18Bis_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 8 0	</icon>
+      <tags></tags>
+      <level>	2	</level>
+      <price>	480.0	</price>
+      <unlocks>
+        <vehicle>	SU-18	  <cost>	125	</cost>
+        </vehicle>
+      </unlocks>
+      <models>
+        <undamaged>	vehicles/russian/R11_MS-1/normal/lod0/Chassis.model	</undamaged>
+        <destroyed>	vehicles/russian/R11_MS-1/crash/lod0/Chassis.model	</destroyed>
+        <exploded>	vehicles/russian/R11_MS-1/crash/lod0/Chassis.model	</exploded>
+      </models>
+      <traces>
+        <lodDist>	FAR	</lodDist>
+        <bufferPrefs>	mediumTank	</bufferPrefs>
+        <textureSet>	ussr_01	</textureSet>
+        <size>	0.28 0.26	</size>
+      </traces>
+      <tracks>
+        <lodDist>	MEDIUM	</lodDist>
+        <leftMaterial>	track_mat_L_skinned	</leftMaterial>
+        <rightMaterial>	track_mat_R_skinned	</rightMaterial>
+        <textureScale>	-1.57	</textureScale>
+      </tracks>
+      <wheels>
+        <lodDist>	MEDIUM	</lodDist>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	W_L	</template>
+          <count>	7	</count>
+          <radius>	0.12421	</radius>
+        </group>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	W_R	</template>
+          <count>	7	</count>
+          <radius>	0.12421	</radius>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <name>	WD_L0	</name>
+          <radius>	0.3315305	</radius>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	WD_L	</template>
+          <count>	4	</count>
+          <startIndex>	1	</startIndex>
+          <radius>	0.072709	</radius>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <name>	WD_L5	</name>
+          <radius>	0.270818	</radius>
+        </wheel>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <name>	WD_R0	</name>
+          <radius>	0.3315305	</radius>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	WD_R	</template>
+          <count>	4	</count>
+          <startIndex>	1	</startIndex>
+          <radius>	0.072709	</radius>
+        </group>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <name>	WD_R5	</name>
+          <radius>	0.270818	</radius>
+        </wheel>
+      </wheels>
+      <drivingWheels>	WD_L0 WD_L5	</drivingWheels>
+      <effects>
+        <lodDist>	MEDIUM	</lodDist>
+        <dust>	smallTankDust	</dust>
+        <mud>	smallTankMud	</mud>
+      </effects>
+      <sound>	/vehicles/tanks/treads/treads_1	</sound>
+      <hullPosition>	-0.012 0.894681 -0.055245	</hullPosition>
+      <hitTester>
+        <collisionModel>	vehicles/russian/R11_MS-1/collision/Chassis.model	</collisionModel>
+      </hitTester>
+      <armor>
+        <leftTrack>	5	</leftTrack>
+        <rightTrack>	5	</rightTrack>
+      </armor>
+      <topRightCarryingPoint>	0.730381 0.961277	</topRightCarryingPoint>
+      <maxClimbAngle>	25	</maxClimbAngle>
+      <navmeshGirth>	6.0	</navmeshGirth>
+      <weight>	1200	</weight>
+      <maxLoad>	6500	</maxLoad>
+      <terrainResistance>	1.0 1.1 1.95	</terrainResistance>
+      <brakeForce>	35500	</brakeForce>
+      <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
+      <rotationSpeed>	38	</rotationSpeed>
+      <shotDispersionFactors>
+        <vehicleMovement>	0.38	</vehicleMovement>
+        <vehicleRotation>	0.38	</vehicleRotation>
+      </shotDispersionFactors>
+      <bulkHealthFactor>	3.0	</bulkHealthFactor>
+      <maxHealth>	50	</maxHealth>
+      <maxRegenHealth>	40	</maxRegenHealth>
+      <repairCost>	1.0	</repairCost>
+    </T-18Bis>
+  </chassis>
+  <turrets0>
+    <T-18_Standart>
+      <userString>	#ussr_vehicles:T-18_Standart	</userString>
+      <description>	#ussr_vehicles:T-18_Standart_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 6 0	</icon>
+      <tags></tags>
+      <level>	1	</level>
+      <price>	120.0	</price>
+      <models>
+        <undamaged>	vehicles/russian/R11_MS-1/normal/lod0/Turret_01.model	</undamaged>
+        <destroyed>	vehicles/russian/R11_MS-1/crash/lod0/Turret_01.model	</destroyed>
+        <exploded>	vehicles/russian/R11_MS-1/crash/lod0/Turret_01.model	</exploded>
+      </models>
+      <hitTester>
+        <collisionModel>	vehicles/russian/R11_MS-1/collision/Turret_01.model	</collisionModel>
+      </hitTester>
+      <yawLimits>	-180 180	</yawLimits>
+      <gunPosition>	-0.238144 0.234668 0.410043	</gunPosition>
+      <armor>
+        <armor_1>	18	</armor_1>
+        <armor_2>	16	</armor_2>
+        <armor_3>	16	</armor_3>
+        <armor_4>	16	</armor_4>
+        <armor_5>	18	</armor_5>
+        <armor_6>	16	</armor_6>
+        <armor_7>	8	</armor_7>
+        <armor_8>	0	</armor_8>
+        <armor_9>	8	</armor_9>
+      </armor>
+      <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
+      <weight>	170	</weight>
+      <maxHealth>	30	</maxHealth>
+      <rotationSpeed>	50	</rotationSpeed>
+      <turretRotatorHealth>
+        <maxHealth>	50	</maxHealth>
+        <maxRegenHealth>	25	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </turretRotatorHealth>
+      <circularVisionRadius>	270	</circularVisionRadius>
+      <surveyingDeviceHealth>
+        <maxHealth>	40	</maxHealth>
+        <maxRegenHealth>	19	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </surveyingDeviceHealth>
+      <guns>
+        <_37mm_Gochkins>	shared	  <maxAmmo>	74	</maxAmmo>
+          <unlocks>
+            <gun>	_20mm_TNSH	  <cost>	35	</cost>
+            </gun>
+            <gun>	_37mm_B-3	  <cost>	30.0	</cost>
+            </gun>
+          </unlocks>
+          <models>
+            <undamaged>	vehicles/russian/R11_MS-1/normal/lod0/Gun_02.model	</undamaged>
+            <destroyed>	vehicles/russian/R11_MS-1/crash/lod0/Gun_02.model	</destroyed>
+            <exploded>	vehicles/russian/R11_MS-1/crash/lod0/Gun_02.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/russian/R11_MS-1/collision/Gun_02.model	</collisionModel>
+          </hitTester>
+          <armor>
+            <armor_1>	18	  <noDamage>	true	</noDamage>
+            </armor_1>
+            <armor_2>	16	  <noDamage>	true	</noDamage>
+            </armor_2>
+            <armor_3>	8	  <noDamage>	true	</noDamage>
+            </armor_3>
+            <gun>	10	</gun>
+          </armor>
+        </_37mm_Gochkins>
+        <_37mm_B-3>	shared	  <maxAmmo>	52	</maxAmmo>
+          <unlocks>
+            <turret>	T-18_mod	  <cost>	45	</cost>
+            </turret>
+          </unlocks>
+          <models>
+            <undamaged>	vehicles/russian/R11_MS-1/normal/lod0/Gun_04.model	</undamaged>
+            <destroyed>	vehicles/russian/R11_MS-1/crash/lod0/Gun_04.model	</destroyed>
+            <exploded>	vehicles/russian/R11_MS-1/crash/lod0/Gun_04.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/russian/R11_MS-1/collision/Gun_04.model	</collisionModel>
+          </hitTester>
+          <armor>
+            <armor_1>	18	  <noDamage>	true	</noDamage>
+            </armor_1>
+            <armor_2>	16	  <noDamage>	true	</noDamage>
+            </armor_2>
+            <armor_3>	8	  <noDamage>	true	</noDamage>
+            </armor_3>
+            <gun>	10	</gun>
+          </armor>
+        </_37mm_B-3>
+        <_20mm_TNSH>	shared	  <maxAmmo>	620	</maxAmmo>
+          <unlocks>
+            <gun>	_23mm_VJA	  <cost>	180.0	</cost>
+            </gun>
+          </unlocks>
+          <models>
+            <undamaged>	vehicles/russian/R11_MS-1/normal/lod0/Gun_01.model	</undamaged>
+            <destroyed>	vehicles/russian/R11_MS-1/crash/lod0/Gun_01.model	</destroyed>
+            <exploded>	vehicles/russian/R11_MS-1/crash/lod0/Gun_01.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/russian/R11_MS-1/collision/Gun_01.model	</collisionModel>
+          </hitTester>
+          <armor>
+            <armor_1>	18	  <noDamage>	true	</noDamage>
+            </armor_1>
+            <armor_2>	16	  <noDamage>	true	</noDamage>
+            </armor_2>
+            <armor_3>	8	  <noDamage>	true	</noDamage>
+            </armor_3>
+            <gun>	10	</gun>
+          </armor>
+        </_20mm_TNSH>
+        <_23mm_VJA>	shared	  <maxAmmo>	420	</maxAmmo>
+          <models>
+            <undamaged>	vehicles/russian/R11_MS-1/normal/lod0/Gun_03.model	</undamaged>
+            <destroyed>	vehicles/russian/R11_MS-1/crash/lod0/Gun_03.model	</destroyed>
+            <exploded>	vehicles/russian/R11_MS-1/crash/lod0/Gun_03.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/russian/R11_MS-1/collision/Gun_03.model	</collisionModel>
+          </hitTester>
+          <armor>
+            <armor_1>	18	  <noDamage>	true	</noDamage>
+            </armor_1>
+            <armor_2>	16	  <noDamage>	true	</noDamage>
+            </armor_2>
+            <armor_3>	8	  <noDamage>	true	</noDamage>
+            </armor_3>
+            <gun>	10	</gun>
+          </armor>
+        </_23mm_VJA>
+      </guns>
+      <emblemSlots>
+        <player>
+          <rayStart>	-5.36622 1.24099 -0.141006	</rayStart>
+          <rayEnd>	4.43769 -0.729623 -0.141007	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.28	</size>
+          <hideIfDamaged>	true	</hideIfDamaged>
+        </player>
+        <player>
+          <rayStart>	5.36622 1.24099 -0.141006	</rayStart>
+          <rayEnd>	-4.43769 -0.729623 -0.141007	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.28	</size>
+          <hideIfDamaged>	true	</hideIfDamaged>
+        </player>
+      </emblemSlots>
+    </T-18_Standart>
+    <T-18_mod>
+      <userString>	#ussr_vehicles:T-18_mod	</userString>
+      <description>	#ussr_vehicles:T-18_mod_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 6 0	</icon>
+      <tags></tags>
+      <level>	2	</level>
+      <price>	250.0	</price>
+      <unlocks>
+        <vehicle>	T-26	  <cost>	115	</cost>
+        </vehicle>
+        <gun>	_45mm_mod_1932	  <cost>	40.0	</cost>
+        </gun>
+      </unlocks>
+      <models>
+        <undamaged>	vehicles/russian/R11_MS-1/normal/lod0/Turret_02.model	</undamaged>
+        <destroyed>	vehicles/russian/R11_MS-1/crash/lod0/Turret_02.model	</destroyed>
+        <exploded>	vehicles/russian/R11_MS-1/crash/lod0/Turret_02.model	</exploded>
+      </models>
+      <hitTester>
+        <collisionModel>	vehicles/russian/R11_MS-1/collision/Turret_02.model	</collisionModel>
+      </hitTester>
+      <yawLimits>	-180 180	</yawLimits>
+      <gunPosition>	-0.001778 0.253745 0.517208	</gunPosition>
+      <armor>
+        <armor_1>	18	</armor_1>
+        <armor_2>	16	</armor_2>
+        <armor_3>	16	</armor_3>
+        <armor_4>	16	</armor_4>
+        <armor_5>	18	</armor_5>
+        <armor_6>	16	</armor_6>
+        <armor_7>	12	</armor_7>
+        <armor_8>	8	</armor_8>
+        <armor_9>	8	</armor_9>
+        <armor_10>	0	</armor_10>
+      </armor>
+      <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
+      <weight>	240	</weight>
+      <maxHealth>	40	</maxHealth>
+      <rotationSpeed>	45	</rotationSpeed>
+      <turretRotatorHealth>
+        <maxHealth>	50	</maxHealth>
+        <maxRegenHealth>	25	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </turretRotatorHealth>
+      <circularVisionRadius>	320	</circularVisionRadius>
+      <surveyingDeviceHealth>
+        <maxHealth>	40	</maxHealth>
+        <maxRegenHealth>	19	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </surveyingDeviceHealth>
+      <guns>
+        <_37mm_Gochkins>	shared	  <maxAmmo>	94	</maxAmmo>
+          <models>
+            <undamaged>	vehicles/russian/R11_MS-1/normal/lod0/Gun_06.model	</undamaged>
+            <destroyed>	vehicles/russian/R11_MS-1/crash/lod0/Gun_06.model	</destroyed>
+            <exploded>	vehicles/russian/R11_MS-1/crash/lod0/Gun_06.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/russian/R11_MS-1/collision/Gun_06.model	</collisionModel>
+          </hitTester>
+          <armor>
+            <armor_1>	18	  <noDamage>	true	</noDamage>
+            </armor_1>
+            <armor_2>	16	  <noDamage>	true	</noDamage>
+            </armor_2>
+            <armor_3>	8	  <noDamage>	true	</noDamage>
+            </armor_3>
+            <gun>	10	</gun>
+          </armor>
+        </_37mm_Gochkins>
+        <_37mm_B-3>	shared	  <maxAmmo>	72	</maxAmmo>
+          <models>
+            <undamaged>	vehicles/russian/R11_MS-1/normal/lod0/Gun_08.model	</undamaged>
+            <destroyed>	vehicles/russian/R11_MS-1/crash/lod0/Gun_08.model	</destroyed>
+            <exploded>	vehicles/russian/R11_MS-1/crash/lod0/Gun_08.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/russian/R11_MS-1/collision/Gun_08.model	</collisionModel>
+          </hitTester>
+          <armor>
+            <armor_1>	18	  <noDamage>	true	</noDamage>
+            </armor_1>
+            <armor_2>	16	  <noDamage>	true	</noDamage>
+            </armor_2>
+            <armor_3>	8	  <noDamage>	true	</noDamage>
+            </armor_3>
+            <gun>	10	</gun>
+          </armor>
+        </_37mm_B-3>
+        <_20mm_TNSH>	shared	  <maxAmmo>	920	</maxAmmo>
+          <models>
+            <undamaged>	vehicles/russian/R11_MS-1/normal/lod0/Gun_05.model	</undamaged>
+            <destroyed>	vehicles/russian/R11_MS-1/crash/lod0/Gun_05.model	</destroyed>
+            <exploded>	vehicles/russian/R11_MS-1/crash/lod0/Gun_05.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/russian/R11_MS-1/collision/Gun_05.model	</collisionModel>
+          </hitTester>
+          <armor>
+            <armor_1>	18	  <noDamage>	true	</noDamage>
+            </armor_1>
+            <armor_2>	16	  <noDamage>	true	</noDamage>
+            </armor_2>
+            <armor_3>	8	  <noDamage>	true	</noDamage>
+            </armor_3>
+            <gun>	10	</gun>
+          </armor>
+        </_20mm_TNSH>
+        <_23mm_VJA>	shared	  <maxAmmo>	520	</maxAmmo>
+          <models>
+            <undamaged>	vehicles/russian/R11_MS-1/normal/lod0/Gun_07.model	</undamaged>
+            <destroyed>	vehicles/russian/R11_MS-1/crash/lod0/Gun_07.model	</destroyed>
+            <exploded>	vehicles/russian/R11_MS-1/crash/lod0/Gun_07.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/russian/R11_MS-1/collision/Gun_07.model	</collisionModel>
+          </hitTester>
+          <armor>
+            <armor_1>	18	  <noDamage>	true	</noDamage>
+            </armor_1>
+            <armor_2>	16	  <noDamage>	true	</noDamage>
+            </armor_2>
+            <armor_3>	8	  <noDamage>	true	</noDamage>
+            </armor_3>
+            <gun>	10	</gun>
+          </armor>
+        </_23mm_VJA>
+        <_45mm_mod_1932>	shared	  <maxAmmo>	54	</maxAmmo>
+          <unlocks>
+            <vehicle>	AT-1	  <cost>	75	</cost>
+            </vehicle>
+          </unlocks>
+          <models>
+            <undamaged>	vehicles/russian/R11_MS-1/normal/lod0/Gun_09.model	</undamaged>
+            <destroyed>	vehicles/russian/R11_MS-1/crash/lod0/Gun_09.model	</destroyed>
+            <exploded>	vehicles/russian/R11_MS-1/crash/lod0/Gun_09.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/russian/R11_MS-1/collision/Gun_09.model	</collisionModel>
+          </hitTester>
+          <armor>
+            <armor_1>	18	  <noDamage>	true	</noDamage>
+            </armor_1>
+            <armor_2>	16	  <noDamage>	true	</noDamage>
+            </armor_2>
+            <armor_3>	8	  <noDamage>	true	</noDamage>
+            </armor_3>
+            <gun>	10	</gun>
+          </armor>
+        </_45mm_mod_1932>
+      </guns>
+      <emblemSlots>
+        <player>
+          <rayStart>	0.655258 0.337595 -0.53898	</rayStart>
+          <rayEnd>	0.263103 0.258766 -0.53898	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.24	</size>
+          <hideIfDamaged>	true	</hideIfDamaged>
+        </player>
+        <player>
+          <rayStart>	-0.655258 0.337595 -0.53898	</rayStart>
+          <rayEnd>	-0.263103 0.258766 -0.53898	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.24	</size>
+          <hideIfDamaged>	true	</hideIfDamaged>
+        </player>
+      </emblemSlots>
+    </T-18_mod>
+  </turrets0>
+  <engines>
+    <MS-1>	shared	  <unlocks>
+        <engine>	GAZ-M1	  <cost>	30.0	</cost>
+        </engine>
+      </unlocks>
+    </MS-1>
+    <GAZ-M1>	shared	  <unlocks>
+        <engine>	AMO-3	  <cost>	45.0	</cost>
+        </engine>
+      </unlocks>
+    </GAZ-M1>
+    <AMO-3>	shared	  <unlocks>
+        <vehicle>	BT-2	  <cost>	115	</cost>
+        </vehicle>
+      </unlocks>
+    </AMO-3>
+  </engines>
+  <fuelTanks>
+    <Small>	shared	</Small>
+  </fuelTanks>
+  <radios>
+    <Alarm_flags>	shared	  <unlocks>
+        <radio>	_71-TK-1	  <cost>	30.0	</cost>
+        </radio>
+      </unlocks>
+    </Alarm_flags>
+    <_71-TK-1>	shared	</_71-TK-1>
+  </radios>
+</MS-1.xml>

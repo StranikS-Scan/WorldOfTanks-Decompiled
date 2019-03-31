@@ -1,0 +1,273 @@
+#--------------------------------------------------------------------------------------------------
+# Inventory related:
+#--------------------------------------------------------------------------------------------------
+
+# ---
+# Abbreviations.
+
+compDescr, compactDescr - compact descriptor.
+
+vehTypeCompDescr - vehicle type compact descriptor.
+
+eqCompDescr - compact descriptor of the equipment.
+
+vehInvID - vehicle inventory id.
+
+tmanInvID - tankman inventory id.
+
+# ---
+# Definitions.
+
+shells list.
+	Format:
+		[ shellCompDescr, shells count, .. , shellCompDescr, shells count,].
+
+shells layout.
+	Description:
+		Last loaded shells list for each turret/gun pair.
+	Format:
+		{ ( turretCompDescr, gunCompDescr ) : shells list }.
+
+equipments list.
+	Abbreviation:
+		eqs list.
+	Format:
+		[ eqCompDescr, ].
+	Comment:
+		eqCompDescr is 0 for empty slot.
+
+equipments layout.
+	Abbreviation:
+		eqs layout.
+	Description:
+		Last loaded equipments list.
+	Format:
+ 		[ eqCompDescr, ].
+	Comment:
+		eqCompDescr is 0 for empty slot.
+
+ vehicle crew.
+ 	Format:
+ 		[ tmanInvID, ].
+
+ repair info.
+ 	Format:
+ 		Vehicle broken:
+ 			( repair cost, vehicle health ).
+ 		Not broken:
+ 			None.
+
+ vehicle settings:
+ 	Format:
+ 		combination of VEHICLE_SETTINGS_FLAG.* flags.
+ 		
+ vehicle inventory (server).
+ 	Description:
+ 		Account vehicles with related info. Server parts format.
+ 	Format:
+ 		{
+			'compDescr' :		{ vehInvID : compact descriptor },
+			'shellsLayout' :	{ vehInvID : shells layout },
+			'shells' :			{ vehInvID : shells list },
+			'crew' :			{ vehInvID : vehicle crew },
+			'repair' :			{ vehInvID : repair info },
+				# Optional. Only broken vehicles.
+			'eqsLayout' :		{ vehInvID : equipments layout },
+			'eqs' :				{ vehInvID : equipments },
+			'settings' :		{ vehInvID : settings },
+				# Optional. Default: VEHICLE_SETTINGS_FLAG.NONE.
+		}.
+
+vehicle inventory (client).
+ 	Description:
+ 		Account vehicles with related info. Client parts format.
+ 	Format:
+ 		{
+			'compDescr' :		{ vehInvID : compact descriptor },
+			'shellsLayout' :	{ vehInvID : shells layout },
+			'shells' :			{ vehInvID : shells list },
+			'crew' :			{ vehInvID : vehicle crew },
+			'repair' :			{ vehInvID : repair info },
+				# Optional. Only broken vehicles.
+			'eqsLayout' :		{ vehInvID : equipments layout },
+			'eqs' :				{ vehInvID : equipments },
+			'settings' :		{ vehInvID : settings },
+				# Optional. Default: VEHICLE_SETTINGS_FLAG.NONE.
+			'lock' :			{ vehInvID : LOCK_REASON_* }.
+				# Optional. Only locked vehicles.
+		}.
+
+tankman inventory.
+	Description:
+		Account tankmen with related info.
+	Format:
+		{
+			'compDescr' :	{ tmanInvID : compact descriptor },
+			'vehicle' :		{ tmanInvID : vehInvID },
+				# Optional. Only tankmen in vehicles.
+		}.
+
+simple item type inventory.
+	Description:
+		Account items of one of the simple item type. See items.SIMPLE_ITEM_TYPE_NAMES.
+	Format:
+		{ 'compDescr' : count }.
+
+#--------------------------------------------------------------------------------------------------
+# Stats related:
+#--------------------------------------------------------------------------------------------------
+
+# ---
+# Stat names with descriptions and stat value formats.
+
+'credits' :
+	# credits on the player's account
+	int,
+'gold' :
+	# gold on the player's account
+	int,
+'slots' :
+	# number of vehicle slots
+	int,
+'berths' :
+	# number of berths
+	int,
+'freeXP' :
+	# player's free experience
+	int,
+(server) 'unlocks' :
+	# player's unlocks, not including automatically unlocked.
+	set([ itemCompDescr, ]),
+(client) 'unlocks' :
+	# player's unlocks, including automatically unlocked.
+	set([ itemCompDescr, ]),
+(server) 'eliteVehicles' :
+	# set of elite vehicles, not including elite by default.
+	set([ vehTypeCompDescr, ]),
+(client) 'eliteVehicles' :
+	# set of elite vehicles, including elite by default.
+	set([ vehTypeCompDescr, ]),
+'dossier' :
+	# compact descriptor of the account dossier.
+	string,
+'vehTypeXP' :
+	# unspent experience for each vehicle type.
+	{ vehTypeCompDescr : unspent experience },
+'vehTypeLocks' :
+	# locks for each vehicle type.
+	{ vehTypeCompDescr : { vehicle lock mode : expiry time in UTC } }.
+'globalVehicleLocks' :
+	# locks for all vehicle types.
+	{ vehicle lock mode : expiry time in UTC },
+(server) 'invoiceIDs' :
+	{ emitter id : last processed invoice id },
+(server)  'lastGameDay' :
+	# last day account was in game.
+	int,
+(server) 'lastMultipliedXPDay' :
+	# last day when any vehicle received multiplied experience.
+	int,
+'multipliedXPVehs' :
+	 Set of vehicles that received multiplied experience on lastMultipliedXPDay.
+	set([ vehTypeCompDescr, ]),
+'clanInfo' :
+	# raw (non-named) tuple with cached clan-related info, in format of AccountClan.Info;
+	# None if account is not in clan.
+'accOnline' :
+	# Accumulated online duration, seconds.
+	int,
+'accOffline' :
+	# Accumulated offline duration, seconds.
+	int,
+(server) 'logOutTime' :
+	# Last log out time, UTC.
+	int,
+(client) 'clanDBID' :
+	# Account clan database id.
+	# Stored in account.clanDBID.
+	DB_ID,
+(client) 'attrs' :
+	# Account attributes.
+	# Stored in account.attrs.
+	Combination of ACCOUNT_ATTR.*,
+(client) 'premiumExpiryTime' :
+	# Premium account expiry time, UTC.
+	# Stored in account.premiumExpiryTime.
+	int,
+(client) 'autoBanTime' :
+	# Time when account is banned automaticaly, UTC.
+	# Stored in autoBanTime.
+	int,
+'freeTMenLeft' :
+	# Number of free tankmen player could recruit during the current game day.
+	# Each day player could recruit not more than Account._FREE_TMAN_DAILY_LIMIT free tankmen.
+	int,
+'freeVehiclesLeft' :
+	# Number of free vehicles player could buy during the current game day.
+	# Each day player could buy not more than Account._FREE_VEHS_DAILY_LIMIT free vehicles.
+	int,
+'vehicleSellsLeft' :
+	# Number of vehicle sells player could make during the current game day.
+	# Each day player could sell not more that Economics['limits/vehicleSellsDailyLimit'] vehicles (default=5).
+	int,
+(server) 'finPassword' :
+	# MD5 of the password for financial operations.
+	str,
+(client) 'hasFinPassword' :
+	# True if account has financial password set.
+	bool,
+'finPswdAttemptsLeft' :
+	# Attempts to enter fin password left.
+	# Each day player has FIN_PSWD_ATTEMPTS_DAILY_LIMIT attempts to enter financial password.
+	int,
+(client) 'isFinPswdVerified' :
+	# True if financial password has already been verified during the client session.
+	bool,
+(server) 'language' :
+	# Preferred language.
+	str,
+(client) 'tkillIsSuspected' :
+	# True if tkill status is "suspected" or "team killer".
+	bool,
+'restrictions' :
+	{ RESTRICTION_TYPE.* : { 
+		# Set time x10, UTC.
+		setTime10 : { 
+		'expiryTime' : expiry time in UTC, 
+		'reason' : string, 
+		'source' : RESTRICTION_SOURCE.*, 
+		'setter' : string, 
+		'displayTime' : expiry time showed user in UTC, },
+		},
+	},
+'denunciationsLeft' :
+	# Number of denunciations left (per day)
+	int,
+'tutorialsCompleted' :
+	# List of completed tutorials (in form of bitmask, 1st=0x1, 2nd=0x2, 3rd=0x4, etc)
+	int,
+'battlesTillCaptcha' :
+	# Number of battles before CAPTCHA is required.
+	int,
+'captchaTriesLeft' :
+	# Number of tries left to pass CAPTCHA.
+	int,
+'lastVivoxLogTime' :
+	# last vivox log time
+	float, 
+
+#--------------------------------------------------------------------------------------------------
+# Prebattles related:
+#--------------------------------------------------------------------------------------------------
+
+prebattle info.
+	Format:
+		{ PREBATTLE_CACHE_KEY.* : value }.
+
+#--------------------------------------------------------------------------------------------------
+# Trade offers related:
+#--------------------------------------------------------------------------------------------------
+
+Subdicts of 'offers':
+'out': dict {id: offer_data}, see offers.OutOffers.
+'in': dict {id: offer_data}, see offers.InOffers.

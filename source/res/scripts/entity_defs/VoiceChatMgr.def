@@ -1,0 +1,28 @@
+<VoiceChatMgr.def>
+  <Properties>
+    <pdata>
+      <Type>	PYTHON	</Type>
+      <Flags>	BASE	</Flags>
+      <Persistent>	true	</Persistent>
+      <DatabaseLength>	10240	</DatabaseLength>
+    </pdata>
+    <name>
+      <Type>	STRING	</Type>
+      <Flags>	BASE	</Flags>
+      <Persistent>	true	</Persistent>
+      <DatabaseLength>	16	</DatabaseLength>
+      <Identifier>	true	</Identifier>
+    </name>
+  </Properties>
+  <BaseMethods>
+    <registerAccount>
+      <Arg>	MAILBOX	</Arg>
+      <Arg>	STRING	</Arg>
+      <Arg>	STRING	</Arg>
+    </registerAccount>
+    <onVoiceChatCreated>
+      <Arg>	MAILBOX	</Arg>
+    </onVoiceChatCreated>
+    <increaseUniqueLoginCounter></increaseUniqueLoginCounter>
+  </BaseMethods>
+</VoiceChatMgr.def>

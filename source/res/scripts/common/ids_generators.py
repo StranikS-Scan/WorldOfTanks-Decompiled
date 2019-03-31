@@ -1,4 +1,6 @@
+# Python bytecode 2.6 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/ids_generators.py
+# Compiled at: 2011-11-02 18:32:17
 import time
 
 class Int32IDGenerator(object):
@@ -16,7 +18,7 @@ class Int32IDGenerator(object):
 
 class SequenceIDGenerator(object):
 
-    def __init__(self, lowBound = 0, highBound = 32767):
+    def __init__(self, lowBound=0, highBound=32767):
         self.__lowBound = lowBound
         self.__highBound = highBound
         self.__sequenceID = lowBound

@@ -1,0 +1,584 @@
+<alias.xml>
+  <BOOL>	UINT8	</BOOL>
+  <OBJECT_ID>	INT32	</OBJECT_ID>
+  <SHOT_ID>	UINT32	</SHOT_ID>
+  <DB_ID>	INT64	</DB_ID>
+  <EXTRA_ID>	UINT8	</EXTRA_ID>
+  <ACCOUNT_RESTRICTION>	FIXED_DICT	  <Properties>
+      <type>
+        <Type>	UINT16	</Type>
+      </type>
+      <setTime>
+        <Type>	UINT32	</Type>
+      </setTime>
+      <expiryTime>
+        <Type>	UINT32	</Type>
+      </expiryTime>
+      <reason>
+        <Type>	STRING	</Type>
+      </reason>
+      <source>
+        <Type>	UINT16	</Type>
+      </source>
+      <setter>
+        <Type>	STRING	</Type>
+      </setter>
+    </Properties>
+  </ACCOUNT_RESTRICTION>
+  <SERVER_STATISTICS>	FIXED_DICT	  <Properties>
+      <playersCount>
+        <Type>	UINT32	</Type>
+      </playersCount>
+      <arenasCount>
+        <Type>	UINT32	</Type>
+      </arenasCount>
+    </Properties>
+  </SERVER_STATISTICS>
+  <RANDOMS_QUEUE_INFO>	FIXED_DICT	  <AllowNone>	true	</AllowNone>
+    <Properties>
+      <levels>
+        <Type>	ARRAY	  <of>	UINT32	</of>
+        </Type>
+      </levels>
+      <classes>
+        <Type>	ARRAY	  <of>	UINT32	</of>
+        </Type>
+      </classes>
+    </Properties>
+  </RANDOMS_QUEUE_INFO>
+  <COMPANIES_QUEUE_INFO>	FIXED_DICT	  <AllowNone>	true	</AllowNone>
+    <Properties>
+      <divisions>
+        <Type>	ARRAY	  <of>	UINT32	</of>
+        </Type>
+      </divisions>
+      <divisionsTotal>
+        <Type>	ARRAY	  <of>	UINT32	</of>
+        </Type>
+      </divisionsTotal>
+    </Properties>
+  </COMPANIES_QUEUE_INFO>
+  <PUBLIC_ARENA_INFO>	FIXED_DICT	  <Properties>
+      <id>
+        <Type>	OBJECT_ID	</Type>
+      </id>
+      <typeID>
+        <Type>	INT32	</Type>
+      </typeID>
+      <roundLength>
+        <Type>	INT32	</Type>
+      </roundLength>
+      <roundStart>
+        <Type>	FLOAT32	</Type>
+      </roundStart>
+    </Properties>
+  </PUBLIC_ARENA_INFO>
+  <PUBLIC_VEHICLE_INFO>	FIXED_DICT	  <Properties>
+      <name>
+        <Type>	STRING	</Type>
+      </name>
+      <compDescr>
+        <Type>	STRING	</Type>
+      </compDescr>
+      <team>
+        <Type>	UINT8	</Type>
+      </team>
+      <prebattleID>
+        <Type>	OBJECT_ID	</Type>
+      </prebattleID>
+    </Properties>
+  </PUBLIC_VEHICLE_INFO>
+  <ATTACK_RESULTS>	FIXED_DICT	  <AllowNone>	false	</AllowNone>
+    <Properties>
+      <targetID>
+        <Type>	OBJECT_ID	</Type>
+      </targetID>
+      <targetTeam>
+        <Type>	UINT8	</Type>
+      </targetTeam>
+      <targetPrebattle>
+        <Type>	OBJECT_ID	</Type>
+      </targetPrebattle>
+      <targetLevel>
+        <Type>	UINT8	</Type>
+      </targetLevel>
+      <targetIsHeavyTank>
+        <Type>	BOOL	</Type>
+      </targetIsHeavyTank>
+      <targetIsTeamKiller>
+        <Type>	BOOL	</Type>
+      </targetIsTeamKiller>
+      <targetIsOnTheIgnoredBase>
+        <Type>	BOOL	</Type>
+      </targetIsOnTheIgnoredBase>
+      <targetIsOnTheCapturableBase>
+        <Type>	BOOL	</Type>
+      </targetIsOnTheCapturableBase>
+      <isRecoil>
+        <Type>	BOOL	</Type>
+      </isRecoil>
+      <damage>
+        <Type>	FLOAT32	</Type>
+      </damage>
+      <numCrits>
+        <Type>	UINT8	</Type>
+      </numCrits>
+      <isTargetKilled>
+        <Type>	BOOL	</Type>
+      </isTargetKilled>
+      <reason>
+        <Type>	UINT8	</Type>
+      </reason>
+      <pierced>
+        <Type>	BOOL	</Type>
+      </pierced>
+      <droppedCapturePoints>
+        <Type>	FLOAT32	</Type>
+      </droppedCapturePoints>
+      <directHitShell>
+        <Type>	INT32	</Type>
+      </directHitShell>
+      <shotID>
+        <Type>	INT32	</Type>
+      </shotID>
+      <assistants>
+        <Type>	ARRAY	  <of>	OBJECT_ID	</of>
+        </Type>
+      </assistants>
+    </Properties>
+  </ATTACK_RESULTS>
+  <TKILL_VICTIM>	FIXED_DICT	  <AllowNone>	false	</AllowNone>
+    <Properties>
+      <targetID>
+        <Type>	DB_ID	</Type>
+      </targetID>
+      <isKill>
+        <Type>	BOOL	</Type>
+      </isKill>
+      <means>
+        <Type>	UINT8	</Type>
+      </means>
+      <creditsContribution>
+        <Type>	UINT32	</Type>
+      </creditsContribution>
+      <creditsPenalty>
+        <Type>	UINT32	</Type>
+      </creditsPenalty>
+      <xpPenalty>
+        <Type>	UINT32	</Type>
+      </xpPenalty>
+    </Properties>
+  </TKILL_VICTIM>
+  <BATTLE_RESULTS>	FIXED_DICT	  <AllowNone>	true	</AllowNone>
+    <Properties>
+      <xp>
+        <Type>	UINT32	</Type>
+      </xp>
+      <credits>
+        <Type>	UINT32	</Type>
+      </credits>
+      <freeXP>
+        <Type>	UINT32	</Type>
+      </freeXP>
+      <repair>
+        <Type>	UINT32	</Type>
+      </repair>
+      <health>
+        <Type>	INT16	</Type>
+      </health>
+      <ammo>
+        <Type>	ARRAY	  <of>	INT32	</of>
+        </Type>
+      </ammo>
+      <crewActivityFlags>
+        <Type>	ARRAY	  <of>	BOOL	</of>
+        </Type>
+      </crewActivityFlags>
+      <vehicleID>
+        <Type>	OBJECT_ID	</Type>
+      </vehicleID>
+      <arenaUniqueID>
+        <Type>	UINT64	</Type>
+      </arenaUniqueID>
+      <isWinner>
+        <Type>	INT8	</Type>
+      </isWinner>
+      <bonusType>
+        <Type>	BOOL	</Type>
+      </bonusType>
+      <killerID>
+        <Type>	OBJECT_ID	</Type>
+      </killerID>
+      <killed>
+        <Type>	ARRAY	  <of>	OBJECT_ID	</of>
+        </Type>
+      </killed>
+      <killReasons>
+        <Type>	ARRAY	  <of>	UINT8	</of>
+        </Type>
+      </killReasons>
+      <damaged>
+        <Type>	ARRAY	  <of>	OBJECT_ID	</of>
+        </Type>
+      </damaged>
+      <spotted>
+        <Type>	ARRAY	  <of>	OBJECT_ID	</of>
+        </Type>
+      </spotted>
+      <shots>
+        <Type>	UINT16	</Type>
+      </shots>
+      <hits>
+        <Type>	UINT16	</Type>
+      </hits>
+      <damageDealt>
+        <Type>	UINT32	</Type>
+      </damageDealt>
+      <potentialDamageDealt>
+        <Type>	UINT32	</Type>
+      </potentialDamageDealt>
+      <shotsReceived>
+        <Type>	UINT16	</Type>
+      </shotsReceived>
+      <damageReceived>
+        <Type>	UINT32	</Type>
+      </damageReceived>
+      <potentialDamageReceived>
+        <Type>	UINT32	</Type>
+      </potentialDamageReceived>
+      <capturePoints>
+        <Type>	UINT16	</Type>
+      </capturePoints>
+      <isEnemyBaseCaptured>
+        <Type>	BOOL	</Type>
+      </isEnemyBaseCaptured>
+      <droppedCapturePoints>
+        <Type>	UINT16	</Type>
+      </droppedCapturePoints>
+      <lifeTime>
+        <Type>	UINT16	</Type>
+      </lifeTime>
+      <damagedAllies>
+        <Type>	ARRAY	  <of>	OBJECT_ID	</of>
+        </Type>
+      </damagedAllies>
+      <epicAchievements>
+        <Type>	ARRAY	  <of>	UINT8	</of>
+        </Type>
+      </epicAchievements>
+      <honorTitles>
+        <Type>	ARRAY	  <of>	UINT32	</of>
+        </Type>
+      </honorTitles>
+      <tkillRating>
+        <Type>	FLOAT	</Type>
+      </tkillRating>
+      <tkillLog>
+        <Type>	ARRAY	  <of>	TKILL_VICTIM	</of>
+        </Type>
+      </tkillLog>
+    </Properties>
+  </BATTLE_RESULTS>
+  <BATTLE_RESULTS_FACTORS>	FIXED_DICT	  <AllowNone>	true	</AllowNone>
+    <Properties>
+      <dailyXPFactor10>
+        <Type>	UINT16	</Type>
+      </dailyXPFactor10>
+      <aogasFactor10>
+        <Type>	UINT16	</Type>
+      </aogasFactor10>
+      <xpFactor10>
+        <Type>	UINT16	</Type>
+      </xpFactor10>
+      <freeXPFactor10>
+        <Type>	UINT16	</Type>
+      </freeXPFactor10>
+      <creditsFactor10>
+        <Type>	UINT16	</Type>
+      </creditsFactor10>
+    </Properties>
+  </BATTLE_RESULTS_FACTORS>
+  <BATTLE_RESULTS_EXT>	FIXED_DICT	  <AllowNone>	true	</AllowNone>
+    <Properties>
+      <xp>
+        <Type>	UINT32	</Type>
+      </xp>
+      <credits>
+        <Type>	UINT32	</Type>
+      </credits>
+      <freeXP>
+        <Type>	UINT32	</Type>
+      </freeXP>
+      <factors>
+        <Type>	BATTLE_RESULTS_FACTORS	</Type>
+      </factors>
+      <repair>
+        <Type>	UINT32	</Type>
+      </repair>
+      <health>
+        <Type>	INT16	</Type>
+      </health>
+      <ammo>
+        <Type>	ARRAY	  <of>	INT32	</of>
+        </Type>
+      </ammo>
+      <crewActivityFlags>
+        <Type>	ARRAY	  <of>	BOOL	</of>
+        </Type>
+      </crewActivityFlags>
+      <vehicleID>
+        <Type>	OBJECT_ID	</Type>
+      </vehicleID>
+      <arenaUniqueID>
+        <Type>	UINT64	</Type>
+      </arenaUniqueID>
+      <isWinner>
+        <Type>	INT8	</Type>
+      </isWinner>
+      <bonusType>
+        <Type>	BOOL	</Type>
+      </bonusType>
+      <killerID>
+        <Type>	OBJECT_ID	</Type>
+      </killerID>
+      <killed>
+        <Type>	ARRAY	  <of>	OBJECT_ID	</of>
+        </Type>
+      </killed>
+      <killedTypeCompDescrs>
+        <Type>	ARRAY	  <of>	UINT32	</of>
+        </Type>
+      </killedTypeCompDescrs>
+      <damaged>
+        <Type>	ARRAY	  <of>	OBJECT_ID	</of>
+        </Type>
+      </damaged>
+      <spotted>
+        <Type>	ARRAY	  <of>	OBJECT_ID	</of>
+        </Type>
+      </spotted>
+      <shots>
+        <Type>	UINT16	</Type>
+      </shots>
+      <hits>
+        <Type>	UINT16	</Type>
+      </hits>
+      <damageDealt>
+        <Type>	UINT32	</Type>
+      </damageDealt>
+      <potentialDamageDealt>
+        <Type>	UINT32	</Type>
+      </potentialDamageDealt>
+      <shotsReceived>
+        <Type>	UINT16	</Type>
+      </shotsReceived>
+      <damageReceived>
+        <Type>	UINT32	</Type>
+      </damageReceived>
+      <potentialDamageReceived>
+        <Type>	UINT32	</Type>
+      </potentialDamageReceived>
+      <capturePoints>
+        <Type>	UINT16	</Type>
+      </capturePoints>
+      <droppedCapturePoints>
+        <Type>	UINT16	</Type>
+      </droppedCapturePoints>
+      <lifeTime>
+        <Type>	UINT16	</Type>
+      </lifeTime>
+      <arenaTypeID>
+        <Type>	UINT32	</Type>
+      </arenaTypeID>
+      <arenaCreateTime>
+        <Type>	UINT32	</Type>
+      </arenaCreateTime>
+      <achieveIndices>
+        <Type>	ARRAY	  <of>	UINT8	</of>
+        </Type>
+      </achieveIndices>
+      <heroVehicleIDs>
+        <Type>	ARRAY	  <of>	OBJECT_ID	</of>
+        </Type>
+      </heroVehicleIDs>
+      <epicAchievements>
+        <Type>	ARRAY	  <of>	UINT8	</of>
+        </Type>
+      </epicAchievements>
+      <honorTitles>
+        <Type>	ARRAY	  <of>	UINT32	</of>
+        </Type>
+      </honorTitles>
+      <tkillRating>
+        <Type>	FLOAT	</Type>
+      </tkillRating>
+      <tkillLog>
+        <Type>	ARRAY	  <of>	TKILL_VICTIM	</of>
+        </Type>
+      </tkillLog>
+      <xpPenalty>
+        <Type>	INT32	</Type>
+      </xpPenalty>
+      <creditsPenalty>
+        <Type>	INT32	</Type>
+      </creditsPenalty>
+      <creditsContributionIn>
+        <Type>	INT32	</Type>
+      </creditsContributionIn>
+      <creditsContributionOut>
+        <Type>	INT32	</Type>
+      </creditsContributionOut>
+      <vehicleLockMode>
+        <Type>	UINT8	</Type>
+      </vehicleLockMode>
+      <actionParams>
+        <Type>	ARRAY	  <of>	UINT32	</of>
+        </Type>
+      </actionParams>
+    </Properties>
+  </BATTLE_RESULTS_EXT>
+  <PREBATTLE_INVITE>	FIXED_DICT	  <Properties>
+      <createTime>
+        <Type>	UINT32	</Type>
+      </createTime>
+      <type>
+        <Type>	UINT16	</Type>
+      </type>
+      <comment>
+        <Type>	STRING	</Type>
+      </comment>
+      <creator>
+        <Type>	STRING	</Type>
+      </creator>
+      <creatorDBID>
+        <Type>	DB_ID	</Type>
+      </creatorDBID>
+    </Properties>
+  </PREBATTLE_INVITE>
+  <PREBATTLE_RESULTS>	FIXED_DICT	  <AllowNone>	true	</AllowNone>
+    <Properties>
+      <winner>
+        <Type>	UINT8	</Type>
+      </winner>
+      <finishReason>
+        <Type>	UINT8	</Type>
+      </finishReason>
+      <kickReason>
+        <Type>	UINT8	</Type>
+      </kickReason>
+    </Properties>
+  </PREBATTLE_RESULTS>
+  <PUBLIC_CHAT_CHANNEL_INFO>	FIXED_DICT	  <Properties>
+      <id>
+        <Type>	OBJECT_ID	</Type>
+      </id>
+      <channelName>
+        <Type>	STRING	</Type>
+      </channelName>
+      <isReadOnly>
+        <Type>	BOOL	</Type>
+      </isReadOnly>
+      <isSecured>
+        <Type>	BOOL	</Type>
+      </isSecured>
+      <flags>
+        <Type>	UINT8	</Type>
+      </flags>
+    </Properties>
+  </PUBLIC_CHAT_CHANNEL_INFO>
+  <PUBLIC_USERS_ROSTER_MEMBER_INFO>	FIXED_DICT	  <Properties>
+      <id>
+        <Type>	DB_ID	</Type>
+      </id>
+      <nickName>
+        <Type>	STRING	</Type>
+      </nickName>
+      <accessFlags>
+        <Type>	UINT8	</Type>
+      </accessFlags>
+    </Properties>
+  </PUBLIC_USERS_ROSTER_MEMBER_INFO>
+  <CHAT_ACTION_DATA>	FIXED_DICT	  <Properties>
+      <requestID>
+        <Type>	INT64	</Type>
+      </requestID>
+      <action>
+        <Type>	UINT8	</Type>
+      </action>
+      <actionResponse>
+        <Type>	UINT8	</Type>
+      </actionResponse>
+      <time>
+        <Type>	FLOAT64	</Type>
+      </time>
+      <sentTime>
+        <Type>	FLOAT64	</Type>
+      </sentTime>
+      <channel>
+        <Type>	OBJECT_ID	</Type>
+      </channel>
+      <originator>
+        <Type>	DB_ID	</Type>
+      </originator>
+      <originatorNickName>
+        <Type>	STRING	</Type>
+      </originatorNickName>
+      <group>
+        <Type>	UINT8	</Type>
+      </group>
+      <data>
+        <Type>	PYTHON	</Type>
+      </data>
+      <flags>
+        <Type>	UINT8	</Type>
+      </flags>
+    </Properties>
+  </CHAT_ACTION_DATA>
+  <POSITION_AND_RADIO>	FIXED_DICT	  <Properties>
+      <position>
+        <Type>	VECTOR3	</Type>
+      </position>
+      <radioDistance>
+        <Type>	FLOAT32	</Type>
+      </radioDistance>
+    </Properties>
+  </POSITION_AND_RADIO>
+  <ARENA_ADDPLAYER_INFO>	FIXED_DICT	  <Properties>
+      <name>
+        <Type>	STRING	</Type>
+      </name>
+      <databaseID>
+        <Type>	DB_ID	</Type>
+      </databaseID>
+      <clanAbbrev>
+        <Type>	STRING	</Type>
+      </clanAbbrev>
+      <clanDBID>
+        <Type>	DB_ID	</Type>
+      </clanDBID>
+      <prebattleID>
+        <Type>	OBJECT_ID	</Type>
+      </prebattleID>
+      <team>
+        <Type>	UINT8	</Type>
+      </team>
+      <vehInvID>
+        <Type>	INT32	</Type>
+      </vehInvID>
+      <vehCompDescr>
+        <Type>	STRING	</Type>
+      </vehCompDescr>
+      <vehAmmo>
+        <Type>	ARRAY	  <of>	INT32	</of>
+        </Type>
+      </vehAmmo>
+      <vehCrew>
+        <Type>	TUPLE	  <of>	STRING	</of>
+        </Type>
+      </vehCrew>
+      <tkillRating>
+        <Type>	FLOAT	</Type>
+      </tkillRating>
+    </Properties>
+  </ARENA_ADDPLAYER_INFO>
+</alias.xml>

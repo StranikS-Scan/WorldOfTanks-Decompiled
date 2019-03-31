@@ -1,0 +1,569 @@
+<T1_Cunningham.xml>
+  <crew>
+    <commander>	radioman
+      gunner
+      loader	</commander>
+    <driver></driver>
+  </crew>
+  <speedLimits>
+    <forward>	41	</forward>
+    <backward>	10	</backward>
+  </speedLimits>
+  <repairCost>	0	</repairCost>
+  <effects>
+    <destruction>	smallDestruction	</destruction>
+    <explosion>	smallExplosion	</explosion>
+    <flaming>	smallFlaming	</flaming>
+    <collision>	collision	</collision>
+  </effects>
+  <camouflage>
+    <priceFactor>	0.2	</priceFactor>
+    <tiling>	1 1 0 0	</tiling>
+    <exclusionMask>	vehicles/american/A01_T1_Cunningham/T1_Cunningham_CM.dds	</exclusionMask>
+  </camouflage>
+  <emblems>
+    <default>	usa_star	</default>
+    <lodDist>	MEDIUM	</lodDist>
+    <alpha>	1	</alpha>
+  </emblems>
+  <horns>
+    <priceFactor>	1	</priceFactor>
+    <distanceFactor>	1	</distanceFactor>
+    <volumeFactor>	1	</volumeFactor>
+  </horns>
+  <hull>
+    <models>
+      <undamaged>	vehicles/american/A01_T1_Cunningham/normal/lod0/Hull.model	</undamaged>
+      <destroyed>	vehicles/american/A01_T1_Cunningham/crash/lod0/Hull.model	</destroyed>
+      <exploded>	vehicles/american/A01_T1_Cunningham/crash/lod0/Hull.model	</exploded>
+    </models>
+    <swinging>
+      <lodDist>	FAR	</lodDist>
+      <pitchParams>	0.32 34.00 0.32 1.00 0.05 0.30	</pitchParams>
+      <rollParams>	1.00 0.32 34.00 0.32 1.00 0.05 0.30	</rollParams>
+      <sensitivityToImpulse>	0.91	</sensitivityToImpulse>
+    </swinging>
+    <exhaust>
+      <pixie>	particles/Tank/engine_exit_gass.xml	</pixie>
+      <nodes>	HP_Track_Exhaus_1 HP_Track_Exhaus_2	</nodes>
+      <rates>	5.0 10.0 25.0	</rates>
+    </exhaust>
+    <turretPositions>
+      <turret>	-0.000030 0.839977 -0.685944	</turret>
+    </turretPositions>
+    <hitTester>
+      <collisionModel>	vehicles/american/A01_T1_Cunningham/collision/Hull.model	</collisionModel>
+    </hitTester>
+    <armor>
+      <armor_1>	10	</armor_1>
+      <armor_2>	10	</armor_2>
+      <armor_3>	10	</armor_3>
+      <armor_4>	10	</armor_4>
+      <armor_5>	6	</armor_5>
+      <armor_6>	6	</armor_6>
+      <armor_7>	10	</armor_7>
+      <armor_8>	10	</armor_8>
+    </armor>
+    <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
+    <weight>	4000	</weight>
+    <maxHealth>	80	</maxHealth>
+    <ammoBayHealth>
+      <maxHealth>	78	</maxHealth>
+      <maxRegenHealth>	65	</maxRegenHealth>
+      <repairCost>	1.0	</repairCost>
+    </ammoBayHealth>
+    <emblemSlots>
+      <clan>
+        <rayStart>	0.000400846 0.24818 2.09451	</rayStart>
+        <rayEnd>	0.000400777 0.264385 1.49473	</rayEnd>
+        <rayUp>	0.000000 1 0.000000	</rayUp>
+        <size>	0.34	</size>
+        <hideIfDamaged>	false	</hideIfDamaged>
+      </clan>
+    </emblemSlots>
+  </hull>
+  <chassis>
+    <Cunningham_E1>
+      <userString>	#usa_vehicles:Cunningham_E1	</userString>
+      <description>	#usa_vehicles:Cunningham_E1_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 8 1	</icon>
+      <tags></tags>
+      <level>	1	</level>
+      <price>	240.0	</price>
+      <unlocks>
+        <chassis>	Cunningham_E2	  <cost>	85	</cost>
+        </chassis>
+      </unlocks>
+      <models>
+        <undamaged>	vehicles/american/A01_T1_Cunningham/normal/lod0/Chassis.model	</undamaged>
+        <destroyed>	vehicles/american/A01_T1_Cunningham/crash/lod0/Chassis.model	</destroyed>
+        <exploded>	vehicles/american/A01_T1_Cunningham/crash/lod0/Chassis.model	</exploded>
+      </models>
+      <traces>
+        <lodDist>	FAR	</lodDist>
+        <bufferPrefs>	smallTank	</bufferPrefs>
+        <textureSet>	germany_01	</textureSet>
+        <size>	0.6 0.34	</size>
+      </traces>
+      <tracks>
+        <lodDist>	MEDIUM	</lodDist>
+        <leftMaterial>	track_mat_L_skinned	</leftMaterial>
+        <rightMaterial>	track_mat_R_skinned	</rightMaterial>
+        <textureScale>	-1.6	</textureScale>
+      </tracks>
+      <wheels>
+        <lodDist>	MEDIUM	</lodDist>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	W_L	</template>
+          <radius>	0.107951	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	8	</count>
+        </group>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	W_R	</template>
+          <radius>	0.107951	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	8	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <name>	WD_L0	</name>
+          <radius>	0.379263	</radius>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	WD_L	</template>
+          <radius>	0.113702	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	2	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <name>	WD_L3	</name>
+          <radius>	0.406772	</radius>
+        </wheel>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <name>	WD_R0	</name>
+          <radius>	0.379263	</radius>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	WD_R	</template>
+          <radius>	0.113702	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	2	</count>
+        </group>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <name>	WD_R3	</name>
+          <radius>	0.406772	</radius>
+        </wheel>
+      </wheels>
+      <drivingWheels>	WD_L0 WD_L3	</drivingWheels>
+      <effects>
+        <lodDist>	MEDIUM	</lodDist>
+        <dust>	smallTankDust	</dust>
+        <mud>	smallTankMud	</mud>
+      </effects>
+      <sound>	/vehicles/tanks/treads/treads_1	</sound>
+      <hullPosition>	0.000000 0.67 0.000000	</hullPosition>
+      <hitTester>
+        <collisionModel>	vehicles/american/A01_T1_Cunningham/collision/Chassis.model	</collisionModel>
+      </hitTester>
+      <armor>
+        <leftTrack>	10	</leftTrack>
+        <rightTrack>	10	</rightTrack>
+      </armor>
+      <topRightCarryingPoint>	0.722697 1.12184	</topRightCarryingPoint>
+      <maxClimbAngle>	25	</maxClimbAngle>
+      <navmeshGirth>	6.0	</navmeshGirth>
+      <weight>	2000	</weight>
+      <maxLoad>	7600	</maxLoad>
+      <terrainResistance>	1.0 1.2 2.0	</terrainResistance>
+      <brakeForce>	35500	</brakeForce>
+      <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
+      <rotationSpeed>	34	</rotationSpeed>
+      <shotDispersionFactors>
+        <vehicleMovement>	0.42	</vehicleMovement>
+        <vehicleRotation>	0.42	</vehicleRotation>
+      </shotDispersionFactors>
+      <bulkHealthFactor>	3.0	</bulkHealthFactor>
+      <maxHealth>	40	</maxHealth>
+      <maxRegenHealth>	30	</maxRegenHealth>
+      <repairCost>	1.0	</repairCost>
+    </Cunningham_E1>
+    <Cunningham_E2>
+      <userString>	#usa_vehicles:Cunningham_E2	</userString>
+      <description>	#usa_vehicles:Cunningham_E2_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 8 1	</icon>
+      <tags></tags>
+      <level>	2	</level>
+      <price>	500	</price>
+      <models>
+        <undamaged>	vehicles/american/A01_T1_Cunningham/normal/lod0/Chassis.model	</undamaged>
+        <destroyed>	vehicles/american/A01_T1_Cunningham/crash/lod0/Chassis.model	</destroyed>
+        <exploded>	vehicles/american/A01_T1_Cunningham/crash/lod0/Chassis.model	</exploded>
+      </models>
+      <traces>
+        <lodDist>	FAR	</lodDist>
+        <bufferPrefs>	mediumTank	</bufferPrefs>
+        <textureSet>	germany_01	</textureSet>
+        <size>	0.6 0.32	</size>
+      </traces>
+      <tracks>
+        <lodDist>	MEDIUM	</lodDist>
+        <leftMaterial>	track_mat_L_skinned	</leftMaterial>
+        <rightMaterial>	track_mat_R_skinned	</rightMaterial>
+        <textureScale>	-1.6	</textureScale>
+      </tracks>
+      <wheels>
+        <lodDist>	MEDIUM	</lodDist>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	W_L	</template>
+          <radius>	0.107951	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	8	</count>
+        </group>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	W_R	</template>
+          <radius>	0.107951	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	8	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <name>	WD_L0	</name>
+          <radius>	0.379263	</radius>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	WD_L	</template>
+          <radius>	0.113702	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	2	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <name>	WD_L3	</name>
+          <radius>	0.406772	</radius>
+        </wheel>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <name>	WD_R0	</name>
+          <radius>	0.379263	</radius>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	WD_R	</template>
+          <radius>	0.113702	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	2	</count>
+        </group>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <name>	WD_R3	</name>
+          <radius>	0.406772	</radius>
+        </wheel>
+      </wheels>
+      <drivingWheels>	WD_L0 WD_L3	</drivingWheels>
+      <effects>
+        <lodDist>	MEDIUM	</lodDist>
+        <dust>	smallTankDust	</dust>
+        <mud>	smallTankMud	</mud>
+      </effects>
+      <sound>	/vehicles/tanks/treads/treads_1	</sound>
+      <hullPosition>	0.000000 0.67 0.000000	</hullPosition>
+      <hitTester>
+        <collisionModel>	vehicles/american/A01_T1_Cunningham/collision/Chassis.model	</collisionModel>
+      </hitTester>
+      <armor>
+        <leftTrack>	10	</leftTrack>
+        <rightTrack>	10	</rightTrack>
+      </armor>
+      <topRightCarryingPoint>	0.722697 1.12184	</topRightCarryingPoint>
+      <maxClimbAngle>	25	</maxClimbAngle>
+      <navmeshGirth>	6.0	</navmeshGirth>
+      <weight>	2000	</weight>
+      <maxLoad>	8300	</maxLoad>
+      <terrainResistance>	0.9 1.0 1.8	</terrainResistance>
+      <brakeForce>	35500	</brakeForce>
+      <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
+      <rotationSpeed>	38	</rotationSpeed>
+      <shotDispersionFactors>
+        <vehicleMovement>	0.38	</vehicleMovement>
+        <vehicleRotation>	0.38	</vehicleRotation>
+      </shotDispersionFactors>
+      <bulkHealthFactor>	3.0	</bulkHealthFactor>
+      <maxHealth>	50	</maxHealth>
+      <maxRegenHealth>	40	</maxRegenHealth>
+      <repairCost>	1.0	</repairCost>
+    </Cunningham_E2>
+  </chassis>
+  <turrets0>
+    <Cunningham_D1>
+      <userString>	#usa_vehicles:Cunningham_D1	</userString>
+      <description>	#usa_vehicles:Cunningham_D1_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 6 1	</icon>
+      <tags></tags>
+      <level>	1	</level>
+      <price>	120.0	</price>
+      <models>
+        <undamaged>	vehicles/american/A01_T1_Cunningham/normal/lod0/Turret_01.model	</undamaged>
+        <destroyed>	vehicles/american/A01_T1_Cunningham/crash/lod0/Turret_01.model	</destroyed>
+        <exploded>	vehicles/american/A01_T1_Cunningham/crash/lod0/Turret_01.model	</exploded>
+      </models>
+      <hitTester>
+        <collisionModel>	vehicles/american/A01_T1_Cunningham/collision/Turret_01.model	</collisionModel>
+      </hitTester>
+      <yawLimits>	-180 180	</yawLimits>
+      <gunPosition>	0.096655 0.207266 0.506634	</gunPosition>
+      <armor>
+        <armor_1>	10	</armor_1>
+        <armor_2>	0	</armor_2>
+        <armor_3>	10	</armor_3>
+        <armor_4>	10	</armor_4>
+        <armor_5>	6	</armor_5>
+        <armor_6>	6	</armor_6>
+        <armor_7>	0	</armor_7>
+        <armor_8>	0	</armor_8>
+      </armor>
+      <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
+      <weight>	700	</weight>
+      <maxHealth>	30	</maxHealth>
+      <rotationSpeed>	45	</rotationSpeed>
+      <turretRotatorHealth>
+        <maxHealth>	40	</maxHealth>
+        <maxRegenHealth>	20	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </turretRotatorHealth>
+      <circularVisionRadius>	270	</circularVisionRadius>
+      <surveyingDeviceHealth>
+        <maxHealth>	40	</maxHealth>
+        <maxRegenHealth>	19	</maxRegenHealth>
+        <repairCost>	2.0	</repairCost>
+      </surveyingDeviceHealth>
+      <guns>
+        <_37mm_Gun_M1916>	shared	  <pitchLimits>	-20 7	</pitchLimits>
+          <unlocks>
+            <gun>	_37mm_semiautomatic_gun_M1924	  <cost>	30	</cost>
+            </gun>
+            <turret>	Cunningham_D2	  <cost>	50	</cost>
+            </turret>
+          </unlocks>
+          <models>
+            <undamaged>	vehicles/american/A01_T1_Cunningham/normal/lod0/Gun_01.model	</undamaged>
+            <destroyed>	vehicles/american/A01_T1_Cunningham/crash/lod0/Gun_01.model	</destroyed>
+            <exploded>	vehicles/american/A01_T1_Cunningham/crash/lod0/Gun_01.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/american/A01_T1_Cunningham/collision/Gun_01.model	</collisionModel>
+          </hitTester>
+          <armor>
+            <armor_1>	15	  <noDamage>	true	</noDamage>
+            </armor_1>
+            <armor_2>	10	  <noDamage>	true	</noDamage>
+            </armor_2>
+            <gun>	10	</gun>
+          </armor>
+        </_37mm_Gun_M1916>
+        <_37mm_semiautomatic_gun_M1924>	shared	  <pitchLimits>	-20 7	</pitchLimits>
+          <unlocks>
+            <vehicle>	T2_med	  <cost>	90	</cost>
+            </vehicle>
+          </unlocks>
+          <models>
+            <undamaged>	vehicles/american/A01_T1_Cunningham/normal/lod0/Gun_02.model	</undamaged>
+            <destroyed>	vehicles/american/A01_T1_Cunningham/crash/lod0/Gun_02.model	</destroyed>
+            <exploded>	vehicles/american/A01_T1_Cunningham/crash/lod0/Gun_02.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/american/A01_T1_Cunningham/collision/Gun_02.model	</collisionModel>
+          </hitTester>
+          <armor>
+            <armor_1>	15	  <noDamage>	true	</noDamage>
+            </armor_1>
+            <armor_2>	10	  <noDamage>	true	</noDamage>
+            </armor_2>
+            <gun>	10	</gun>
+          </armor>
+        </_37mm_semiautomatic_gun_M1924>
+      </guns>
+      <emblemSlots>
+        <player>
+          <rayStart>	-0.770035 0.320087 -0.174681	</rayStart>
+          <rayEnd>	-0.205408 0.320087 0.0282859	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.34	</size>
+          <hideIfDamaged>	false	</hideIfDamaged>
+        </player>
+      </emblemSlots>
+      <showEmblemsOnGun>	false	</showEmblemsOnGun>
+      <physicsShape>	1.000 0.000 1.000 0.000 1.000 0.000 0.500 0.500 0.500 0.500 0.500 0.500 0.600 0.100 0.500	</physicsShape>
+    </Cunningham_D1>
+    <Cunningham_D2>
+      <userString>	#usa_vehicles:Cunningham_D2	</userString>
+      <description>	#usa_vehicles:Cunningham_D2_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 6 1	</icon>
+      <tags></tags>
+      <level>	2	</level>
+      <price>	300.0	</price>
+      <unlocks>
+        <vehicle>	M2_lt	  <cost>	90	</cost>
+        </vehicle>
+        <gun>	_37mm_Browning_semiautomatic_gun	  <cost>	40	</cost>
+        </gun>
+      </unlocks>
+      <models>
+        <undamaged>	vehicles/american/A01_T1_Cunningham/normal/lod0/Turret_02.model	</undamaged>
+        <destroyed>	vehicles/american/A01_T1_Cunningham/crash/lod0/Turret_02.model	</destroyed>
+        <exploded>	vehicles/american/A01_T1_Cunningham/crash/lod0/Turret_02.model	</exploded>
+      </models>
+      <hitTester>
+        <collisionModel>	vehicles/american/A01_T1_Cunningham/collision/Turret_02.model	</collisionModel>
+      </hitTester>
+      <yawLimits>	-180 180	</yawLimits>
+      <gunPosition>	0.184753 0.207885 0.525484	</gunPosition>
+      <armor>
+        <armor_1>	10	</armor_1>
+        <armor_2>	0	</armor_2>
+        <armor_3>	10	</armor_3>
+        <armor_4>	10	</armor_4>
+        <armor_5>	6	</armor_5>
+        <armor_6>	6	</armor_6>
+        <armor_7>	0	</armor_7>
+        <armor_8>	0	</armor_8>
+      </armor>
+      <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
+      <weight>	950	</weight>
+      <maxHealth>	45	</maxHealth>
+      <rotationSpeed>	40	</rotationSpeed>
+      <turretRotatorHealth>
+        <maxHealth>	44	</maxHealth>
+        <maxRegenHealth>	20	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </turretRotatorHealth>
+      <circularVisionRadius>	320	</circularVisionRadius>
+      <surveyingDeviceHealth>
+        <maxHealth>	40	</maxHealth>
+        <maxRegenHealth>	19	</maxRegenHealth>
+        <repairCost>	2.0	</repairCost>
+      </surveyingDeviceHealth>
+      <guns>
+        <_37mm_Gun_M1916>	shared	  <pitchLimits>	-20 7	</pitchLimits>
+          <models>
+            <undamaged>	vehicles/american/A01_T1_Cunningham/normal/lod0/Gun_03.model	</undamaged>
+            <destroyed>	vehicles/american/A01_T1_Cunningham/crash/lod0/Gun_03.model	</destroyed>
+            <exploded>	vehicles/american/A01_T1_Cunningham/crash/lod0/Gun_03.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/american/A01_T1_Cunningham/collision/Gun_03.model	</collisionModel>
+          </hitTester>
+          <armor>
+            <armor_1>	15	  <noDamage>	true	</noDamage>
+            </armor_1>
+            <armor_2>	10	  <noDamage>	true	</noDamage>
+            </armor_2>
+            <gun>	10	</gun>
+          </armor>
+        </_37mm_Gun_M1916>
+        <_37mm_semiautomatic_gun_M1924>	shared	  <pitchLimits>	-20 7	</pitchLimits>
+          <models>
+            <undamaged>	vehicles/american/A01_T1_Cunningham/normal/lod0/Gun_04.model	</undamaged>
+            <destroyed>	vehicles/american/A01_T1_Cunningham/crash/lod0/Gun_04.model	</destroyed>
+            <exploded>	vehicles/american/A01_T1_Cunningham/crash/lod0/Gun_04.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/american/A01_T1_Cunningham/collision/Gun_04.model	</collisionModel>
+          </hitTester>
+          <armor>
+            <armor_1>	15	  <noDamage>	true	</noDamage>
+            </armor_1>
+            <armor_2>	10	  <noDamage>	true	</noDamage>
+            </armor_2>
+            <gun>	10	</gun>
+          </armor>
+        </_37mm_semiautomatic_gun_M1924>
+        <_37mm_Browning_semiautomatic_gun>	shared	  <pitchLimits>	-20 7	</pitchLimits>
+          <unlocks>
+            <gun>	_20mm_Hispano_Suiza_Birgikt_gun	  <cost>	180	</cost>
+            </gun>
+          </unlocks>
+          <models>
+            <undamaged>	vehicles/american/A01_T1_Cunningham/normal/lod0/Gun_05.model	</undamaged>
+            <destroyed>	vehicles/american/A01_T1_Cunningham/crash/lod0/Gun_05.model	</destroyed>
+            <exploded>	vehicles/american/A01_T1_Cunningham/crash/lod0/Gun_05.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/american/A01_T1_Cunningham/collision/Gun_05.model	</collisionModel>
+          </hitTester>
+          <armor>
+            <armor_1>	15	  <noDamage>	true	</noDamage>
+            </armor_1>
+            <armor_2>	10	  <noDamage>	true	</noDamage>
+            </armor_2>
+            <gun>	10	</gun>
+          </armor>
+        </_37mm_Browning_semiautomatic_gun>
+        <_20mm_Hispano_Suiza_Birgikt_gun>	shared	  <pitchLimits>	-20 7	</pitchLimits>
+          <maxAmmo>	1200	</maxAmmo>
+          <models>
+            <undamaged>	vehicles/american/A01_T1_Cunningham/normal/lod0/Gun_06.model	</undamaged>
+            <destroyed>	vehicles/american/A01_T1_Cunningham/crash/lod0/Gun_06.model	</destroyed>
+            <exploded>	vehicles/american/A01_T1_Cunningham/crash/lod0/Gun_06.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/american/A01_T1_Cunningham/collision/Gun_06.model	</collisionModel>
+          </hitTester>
+          <armor>
+            <armor_1>	15	  <noDamage>	true	</noDamage>
+            </armor_1>
+            <armor_2>	10	  <noDamage>	true	</noDamage>
+            </armor_2>
+            <gun>	10	</gun>
+          </armor>
+        </_20mm_Hispano_Suiza_Birgikt_gun>
+      </guns>
+      <emblemSlots>
+        <player>
+          <rayStart>	-0.759431 0.263889 0.298362	</rayStart>
+          <rayEnd>	-0.188798 0.263889 0.112952	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.34	</size>
+          <hideIfDamaged>	false	</hideIfDamaged>
+        </player>
+      </emblemSlots>
+      <showEmblemsOnGun>	false	</showEmblemsOnGun>
+      <physicsShape>	1.000 0.000 1.000 0.000 1.000 0.000 0.500 0.500 0.500 0.500 0.500 0.500 0.600 0.100 0.500	</physicsShape>
+    </Cunningham_D2>
+  </turrets0>
+  <engines>
+    <Cunningham>	shared	  <unlocks>
+        <engine>	Cunningham_type_3	  <cost>	100	</cost>
+        </engine>
+      </unlocks>
+    </Cunningham>
+    <Cunningham_type_3>	shared	</Cunningham_type_3>
+  </engines>
+  <fuelTanks>
+    <Small>	shared	</Small>
+  </fuelTanks>
+  <radios>
+    <Alarm_flags>	shared	  <unlocks>
+        <radio>	SCR_200	  <cost>	30.0	</cost>
+        </radio>
+      </unlocks>
+    </Alarm_flags>
+    <SCR_200>	shared	  <unlocks>
+        <vehicle>	T57	  <cost>	125	</cost>
+        </vehicle>
+        <vehicle>	T18	  <cost>	135	</cost>
+        </vehicle>
+      </unlocks>
+    </SCR_200>
+  </radios>
+</T1_Cunningham.xml>

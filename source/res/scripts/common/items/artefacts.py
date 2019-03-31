@@ -1,18 +1,31 @@
+# Python bytecode 2.6 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/items/artefacts.py
+# Compiled at: 2019-03-03 18:25:48
 from types import IntType
 import items, nations
 from items import _xml, vehicles
 from debug_utils import *
 from constants import IS_CLIENT, IS_BASEAPP, IS_CELLAPP, IS_WEB, IS_DEVELOPMENT
-from functools import partial
 if IS_CLIENT:
     from helpers import i18n
 elif IS_WEB:
-    from web_stubs import *
+
+    class i18n:
+
+        @staticmethod
+        def makeString(name):
+            return name
+
+
+_EQUIPMENT_GOLD_PRICE_MULTIPIER = 1.0 / 50
+_EQUIPMENT_CREDITS_PRICE_MULTIPIER = 1.0 / 50
+_OPTIONAL_DEVICE_GOLD_PRICE_MULTIPIER = 1
+_OPTIONAL_DEVICE_CREDITS_PRICE_MULTIPIER = 1.0 / 1000
+_multiply = vehicles._multiply
 
 class OptionalDevice(object):
 
-    def get(self, key, defVal = None):
+    def get(self, key, defVal=None):
         return self.__dict__.get(key, defVal)
 
     def __getitem__(self, key):
@@ -57,6 +70,10 @@ class OptionalDevice(object):
             self.userString = i18n.makeString(section.readString('userString'))
             self.description = i18n.makeString(section.readString('description'))
             self.icon = _xml.readIcon(xmlCtx, section, 'icon')
+        price = _xml.readPrice(xmlCtx, section, 'price')
+        if IS_BASEAPP or IS_WEB:
+            self.price = (_multiply(price[0], _OPTIONAL_DEVICE_CREDITS_PRICE_MULTIPIER), _multiply(price[1], _OPTIONAL_DEVICE_GOLD_PRICE_MULTIPIER))
+            self.showInShop = not section.readBool('notInShop', False)
         if IS_CELLAPP or not section.has_key('vehicleFilter'):
             self.__filter = None
         else:
@@ -105,23 +122,15 @@ class StaticAdditiveDevice(OptionalDevice):
         self.__attr = _xml.readNonEmptyString(xmlCtx, section, 'attribute').split('/', 1)
 
 
-class Stereoscope(OptionalDevice):
+class StillVehicleFactorDevice(OptionalDevice):
 
     def extraName(self):
         return self.name
 
     def _readConfig(self, xmlCtx, section):
         self.activateWhenStillSec = _xml.readNonNegativeFloat(xmlCtx, section, 'activateWhenStillSec')
-        self.circularVisionRadiusFactor = _xml.readPositiveFloat(xmlCtx, section, 'circularVisionRadiusFactor')
-
-
-class CamouflageNet(OptionalDevice):
-
-    def extraName(self):
-        return self.name
-
-    def _readConfig(self, xmlCtx, section):
-        self.activateWhenStillSec = _xml.readNonNegativeFloat(xmlCtx, section, 'activateWhenStillSec')
+        self.attributeName = _xml.readNonEmptyString(xmlCtx, section, 'attribute')
+        self.factor = _xml.readPositiveFloat(xmlCtx, section, 'factor')
 
 
 class EnhancedSuspension(OptionalDevice):
@@ -131,15 +140,11 @@ class EnhancedSuspension(OptionalDevice):
         return (self._vehWeightFraction, self._weight, chassis['maxLoad'] * (self.__chassisMaxLoadFactor - 1.0))
 
     def _readConfig(self, xmlCtx, section):
-        reader = partial(_xml.readPositiveFloat, xmlCtx, section)
-        self.__chassisMaxLoadFactor = reader('chassisMaxLoadFactor')
-        self.__chassisHealthFactor = reader('chassisHealthFactor')
-        self.__vehicleByChassisDamageFactor = reader('vehicleByChassisDamageFactor')
+        self.__chassisMaxLoadFactor = _xml.readPositiveFloat(xmlCtx, section, 'chassisMaxLoadFactor')
+        self.__chassisHealthFactor = _xml.readPositiveFloat(xmlCtx, section, 'chassisHealthFactor')
 
     def updateVehicleDescrAttrs(self, vehicleDescr):
-        miscAttrs = vehicleDescr.miscAttrs
-        miscAttrs['chassisHealthFactor'] *= self.__chassisHealthFactor
-        miscAttrs['vehicleByChassisDamageFactor'] *= self.__vehicleByChassisDamageFactor
+        vehicleDescr.miscAttrs['chassisHealthFactor'] *= self.__chassisHealthFactor
 
 
 class Grousers(OptionalDevice):
@@ -159,22 +164,9 @@ class Grousers(OptionalDevice):
         self.__factorMedium = _xml.readPositiveFloat(xmlCtx, section, 'mediumGroundResistanceFactor')
 
 
-class AntifragmentationLining(OptionalDevice):
-
-    def updateVehicleDescrAttrs(self, vehicleDescr):
-        miscAttrs = vehicleDescr.miscAttrs
-        miscAttrs['antifragmentationLiningFactor'] *= self.__antifragmentationLiningFactor
-        miscAttrs['crewChanceToHitFactor'] *= 1.0 - self.__increaseCrewChanceToEvadeHit
-
-    def _readConfig(self, xmlCtx, section):
-        reader = partial(_xml.readPositiveFloat, xmlCtx, section)
-        self.__antifragmentationLiningFactor = reader('antifragmentationLiningFactor')
-        self.__increaseCrewChanceToEvadeHit = reader('increaseCrewChanceToEvadeHit')
-
-
 class Equipment(object):
 
-    def get(self, key, defVal = None):
+    def get(self, key, defVal=None):
         return self.__dict__.get(key, defVal)
 
     def __getitem__(self, key):
@@ -231,6 +223,10 @@ class Equipment(object):
             self.userString = i18n.makeString(section.readString('userString'))
             self.description = i18n.makeString(section.readString('description'))
             self.icon = _xml.readIcon(xmlCtx, section, 'icon')
+        price = _xml.readPrice(xmlCtx, section, 'price')
+        if IS_BASEAPP or IS_WEB:
+            self.price = (_multiply(price[0], _EQUIPMENT_CREDITS_PRICE_MULTIPIER), _multiply(price[1], _EQUIPMENT_GOLD_PRICE_MULTIPIER))
+            self.showInShop = not section.readBool('notInShop', False)
         if IS_CELLAPP or not section.has_key('vehicleFilter'):
             self.__vehicleFilter = None
         else:
@@ -269,7 +265,6 @@ class Repairkit(Equipment):
 
     def _readConfig(self, xmlCtx, section):
         self.repairAll = section.readBool('repairAll', False)
-        self.bonusValue = _xml.readFraction(xmlCtx, section, 'bonusValue')
 
 
 class RemovedRpmLimiter(Equipment):
@@ -302,8 +297,10 @@ class _VehicleFilter(object):
     def checkCompatibility(self, vehicleDescr):
         if self.__exclude:
             isVehicleTypeMatched, isVehicleMatched = _matchSubfilter(vehicleDescr, self.__exclude)
-            if isVehicleMatched and isVehicleTypeMatched:
+            if isVehicleMatched:
                 return (False, 'not for current vehicle')
+            if isVehicleTypeMatched:
+                return (False, 'not for this vehicle type')
         if self.__include:
             isVehicleTypeMatched, isVehicleMatched = _matchSubfilter(vehicleDescr, self.__include)
             if not isVehicleMatched:
@@ -418,8 +415,7 @@ _vehicleFilterItemTypes = {'vehicle': 'vehicle',
  'chassis': 'vehicleChassis',
  'engine': 'vehicleEngine',
  'fuelTank': 'vehicleFuelTank',
- 'radio': 'vehicleRadio',
- 'gun': 'vehicleGun'}
+ 'radio': 'vehicleRadio'}
 
 def _readWeight(xmlCtx, section):
     fraction = 0.0

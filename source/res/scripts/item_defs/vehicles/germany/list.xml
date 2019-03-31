@@ -1,0 +1,539 @@
+<list.xml>
+  <PzIV>
+    <id>	0	</id>
+    <userString>	#germany_vehicles:PzIV	</userString>
+    <shortUserString>	#germany_vehicles:PzIV_short	</shortUserString>
+    <description>	#germany_vehicles:PzIV_descr	</description>
+    <icon>	gui/maps/icons_vehicle_components.dds 1 1	</icon>
+    <price>	244300	</price>
+    <tags>	mediumTank enhancedLevers_user grousers_user mediumCaliberTankRammer_user wetCombatPack_class1_user	</tags>
+    <level>	5	</level>
+  </PzIV>
+  <Hummel>
+    <id>	1	</id>
+    <userString>	#germany_vehicles:Hummel	</userString>
+    <shortUserString>	#germany_vehicles:Hummel_short	</shortUserString>
+    <description>	#germany_vehicles:Hummel_descr	</description>
+    <icon>	gui/maps/icons_vehicle_components.dds 4 1	</icon>
+    <price>	512700	</price>
+    <tags>	SPG mediumSPG enhancedLevers_user grousers_user mediumCaliberHowitzerRammer_user wetCombatPack_class1_user	</tags>
+    <level>	5	</level>
+  </Hummel>
+  <PzVI>
+    <id>	2	</id>
+    <userString>	#germany_vehicles:PzVI	</userString>
+    <shortUserString>	#germany_vehicles:Tiger_short	</shortUserString>
+    <description>	#germany_vehicles:PzVI_descr	</description>
+    <icon>	gui/maps/icons_vehicle_components.dds 2 1	</icon>
+    <price>	1256700	</price>
+    <tags>	heavyTank beast enhancedTorsions5t_user largeCaliberTankRammer_user wetCombatPack_class2_user	</tags>
+    <level>	7	</level>
+  </PzVI>
+  <Pz35t>
+    <id>	3	</id>
+    <userString>	#germany_vehicles:Pz35t	</userString>
+    <shortUserString>	#germany_vehicles:Pz35t_short	</shortUserString>
+    <description>	#germany_vehicles:Pz35t_descr	</description>
+    <icon>	gui/maps/icons_vehicle_components.dds 0 1	</icon>
+    <price>	4300	</price>
+    <tags>	lightTank enhancedSprings_user	</tags>
+    <level>	2	</level>
+  </Pz35t>
+  <StuGIII>
+    <id>	4	</id>
+    <userString>	#germany_vehicles:StuGIII	</userString>
+    <shortUserString>	#germany_vehicles:StuGIII_short	</shortUserString>
+    <description>	#germany_vehicles:StuGIII_descr	</description>
+    <icon>	gui/maps/icons_vehicle_components.dds 3 1	</icon>
+    <price>	340600	</price>
+    <tags>	AT-SPG mediumAT-SPG enhancedTorsions3t_user grousers_user wetCombatPack_class1_user mediumCaliberTankRammer_user	</tags>
+    <level>	5	</level>
+  </StuGIII>
+  <PzV>
+    <id>	5	</id>
+    <userString>	#germany_vehicles:PzV	</userString>
+    <shortUserString>	#germany_vehicles:PzV_short	</shortUserString>
+    <description>	#germany_vehicles:PzV_descr	</description>
+    <icon>	gui/maps/icons_vehicle_components.dds 1 1	</icon>
+    <price>	1411800	</price>
+    <tags>	mediumTank beast enhancedTorsions5t_user mediumCaliberTankRammer_user wetCombatPack_class1_user	</tags>
+    <level>	7	</level>
+  </PzV>
+  <JagdPzIV>
+    <id>	6	</id>
+    <userString>	#germany_vehicles:JagdPzIV	</userString>
+    <shortUserString>	#germany_vehicles:JagdPzIV_short	</shortUserString>
+    <description>	#germany_vehicles:JagdPzIV_descr	</description>
+    <icon>	gui/maps/icons_vehicle_components.dds 3 1	</icon>
+    <price>	840500	</price>
+    <tags>	AT-SPG mediumAT-SPG enhancedLevers_user grousers_user mediumCaliberTankRammer_user wetCombatPack_class1_user	</tags>
+    <level>	6	</level>
+  </JagdPzIV>
+  <Hetzer>
+    <id>	7	</id>
+    <userString>	#germany_vehicles:Hetzer	</userString>
+    <shortUserString>	#germany_vehicles:Hetzer_short	</shortUserString>
+    <description>	#germany_vehicles:Hetzer_descr	</description>
+    <icon>	gui/maps/icons_vehicle_components.dds 3 1	</icon>
+    <price>	164800	</price>
+    <tags>	AT-SPG lightAT-SPG enhancedSprings_user mediumCaliberTankRammer_user wetCombatPack_class1_user improvedVentilation_class1_user	</tags>
+    <level>	4	</level>
+  </Hetzer>
+  <PzII>
+    <id>	8	</id>
+    <userString>	#germany_vehicles:PzII	</userString>
+    <shortUserString>	#germany_vehicles:PzII_short	</shortUserString>
+    <description>	#germany_vehicles:PzII_descr	</description>
+    <icon>	gui/maps/icons_vehicle_components.dds 0 1	</icon>
+    <price>	4100	</price>
+    <tags>	lightTank enhancedSprings_user	</tags>
+    <level>	2	</level>
+  </PzII>
+  <VK3601H>
+    <id>	9	</id>
+    <userString>	#germany_vehicles:VK3601H	</userString>
+    <shortUserString>	#germany_vehicles:VK3601H_short	</shortUserString>
+    <description>	#germany_vehicles:VK3601H_descr	</description>
+    <icon>	gui/maps/icons_vehicle_components.dds 1 1	</icon>
+    <price>	736500	</price>
+    <tags>	mediumTank mediumCaliberTankRammer_user wetCombatPack_class1_user	</tags>
+    <level>	6	</level>
+  </VK3601H>
+  <VK3001H>
+    <id>	10	</id>
+    <userString>	#germany_vehicles:VK3001H	</userString>
+    <shortUserString>	#germany_vehicles:VK3001H_short	</shortUserString>
+    <description>	#germany_vehicles:VK3001H_descr	</description>
+    <icon>	gui/maps/icons_vehicle_components.dds 1 1	</icon>
+    <price>	623100	</price>
+    <tags>	mediumTank enhancedTorsions3t_user grousers_user mediumCaliberTankRammer_user wetCombatPack_class1_user	</tags>
+    <level>	6	</level>
+  </VK3001H>
+  <Bison_I>
+    <id>	11	</id>
+    <userString>	#germany_vehicles:Bison_I	</userString>
+    <shortUserString>	#germany_vehicles:Bison_I_short	</shortUserString>
+    <description>	#germany_vehicles:Bison_I_descr	</description>
+    <icon>	gui/maps/icons_vehicle_components.dds 4 1	</icon>
+    <price>	6000	</price>
+    <tags>	SPG lightSPG mediumCaliberHowitzerRammer_user wetCombatPack_class1_user	</tags>
+    <level>	2	</level>
+  </Bison_I>
+  <Ltraktor>
+    <id>	12	</id>
+    <userString>	#germany_vehicles:Ltraktor	</userString>
+    <shortUserString>	#germany_vehicles:Ltraktor_short	</shortUserString>
+    <description>	#germany_vehicles:Ltraktor_descr	</description>
+    <icon>	gui/maps/icons_vehicle_components.dds 0 1	</icon>
+    <price>	0	</price>
+    <tags>	lightTank	</tags>
+    <level>	1	</level>
+  </Ltraktor>
+  <Pz38t>
+    <id>	13	</id>
+    <userString>	#germany_vehicles:Pz38t	</userString>
+    <shortUserString>	#germany_vehicles:Pz38t_short	</shortUserString>
+    <description>	#germany_vehicles:Pz38t_descr	</description>
+    <icon>	gui/maps/icons_vehicle_components.dds 0 1	</icon>
+    <price>	36000	</price>
+    <tags>	lightTank enhancedSprings_user	</tags>
+    <level>	3	</level>
+  </Pz38t>
+  <PanzerJager_I>
+    <id>	14	</id>
+    <userString>	#germany_vehicles:PanzerJager_I	</userString>
+    <shortUserString>	#germany_vehicles:PanzerJager_I_short	</shortUserString>
+    <description>	#germany_vehicles:PanzerJager_I_descr	</description>
+    <icon>	gui/maps/icons_vehicle_components.dds 3 1	</icon>
+    <price>	3800	</price>
+    <tags>	AT-SPG lightAT-SPG	</tags>
+    <level>	2	</level>
+  </PanzerJager_I>
+  <JagdPanther>
+    <id>	15	</id>
+    <userString>	#germany_vehicles:JagdPanther	</userString>
+    <shortUserString>	#germany_vehicles:JagdPanther_short	</shortUserString>
+    <description>	#germany_vehicles:JagdPanther_descr	</description>
+    <icon>	gui/maps/icons_vehicle_components.dds 3 1	</icon>
+    <price>	1304200	</price>
+    <tags>	AT-SPG mediumAT-SPG beast enhancedTorsions5t_user mediumCaliberTankRammer_user wetCombatPack_class1_user	</tags>
+    <level>	7	</level>
+  </JagdPanther>
+  <VK3002DB>
+    <id>	16	</id>
+    <userString>	#germany_vehicles:VK3002DB	</userString>
+    <shortUserString>	#germany_vehicles:VK3002DB_short	</shortUserString>
+    <description>	#germany_vehicles:VK3002DB_descr	</description>
+    <icon>	gui/maps/icons_vehicle_components.dds 1 1	</icon>
+    <price>	1386100	</price>
+    <tags>	mediumTank enhancedTorsions3t_user mediumCaliberTankRammer_user wetCombatPack_class1_user	</tags>
+    <level>	7	</level>
+  </VK3002DB>
+  <PzIII>
+    <id>	17	</id>
+    <userString>	#germany_vehicles:PzIII	</userString>
+    <shortUserString>	#germany_vehicles:PzIII_short	</shortUserString>
+    <description>	#germany_vehicles:PzIII_descr	</description>
+    <icon>	gui/maps/icons_vehicle_components.dds 1 1	</icon>
+    <price>	182500	</price>
+    <tags>	mediumTank enhancedTorsions3t_user grousers_user mediumCaliberTankRammer_user wetCombatPack_class1_user	</tags>
+    <level>	4	</level>
+  </PzIII>
+  <Sturmpanzer_II>
+    <id>	18	</id>
+    <userString>	#germany_vehicles:Sturmpanzer_II	</userString>
+    <shortUserString>	#germany_vehicles:Sturmpanzer_II_short	</shortUserString>
+    <description>	#germany_vehicles:Sturmpanzer_II_descr	</description>
+    <icon>	gui/maps/icons_vehicle_components.dds 4 1	</icon>
+    <price>	45000	</price>
+    <tags>	SPG lightSPG enhancedSprings_user grousers_user mediumCaliberHowitzerRammer_user wetCombatPack_class1_user	</tags>
+    <level>	3	</level>
+  </Sturmpanzer_II>
+  <PzIII_A>
+    <id>	19	</id>
+    <userString>	#germany_vehicles:PzIII_A	</userString>
+    <shortUserString>	#germany_vehicles:PzIII_A_short	</shortUserString>
+    <description>	#germany_vehicles:PzIII_A_descr	</description>
+    <icon>	gui/maps/icons_vehicle_components.dds 0 1	</icon>
+    <price>	53100	</price>
+    <tags>	lightTank grousers_user	</tags>
+    <level>	3	</level>
+  </PzIII_A>
+  <PzVIB_Tiger_II>
+    <id>	20	</id>
+    <userString>	#germany_vehicles:PzVIB_Tiger_II	</userString>
+    <shortUserString>	#germany_vehicles:PzVIB_Tiger_II_short	</shortUserString>
+    <description>	#germany_vehicles:PzVIB_Tiger_II_descr	</description>
+    <icon>	gui/maps/icons_vehicle_components.dds 2 1	</icon>
+    <price>	2392000	</price>
+    <tags>	heavyTank beast enhancedTorsions5t_user largeCaliberTankRammer_user wetCombatPack_class2_user aimingStabilizer_Mk2_user	</tags>
+    <level>	8	</level>
+  </PzVIB_Tiger_II>
+  <VK1602>
+    <id>	21	</id>
+    <userString>	#germany_vehicles:VK1602	</userString>
+    <shortUserString>	#germany_vehicles:VK1602_short	</shortUserString>
+    <description>	#germany_vehicles:VK1602_descr	</description>
+    <icon>	gui/maps/icons_vehicle_components.dds 0 1	</icon>
+    <price>	255100	</price>
+    <tags>	lightTank enhancedTorsions1t_user	</tags>
+    <level>	4	</level>
+  </VK1602>
+  <Grille>
+    <id>	22	</id>
+    <userString>	#germany_vehicles:Grille	</userString>
+    <shortUserString>	#germany_vehicles:Grille_short	</shortUserString>
+    <description>	#germany_vehicles:Grille_descr	</description>
+    <icon>	gui/maps/icons_vehicle_components.dds 4 1	</icon>
+    <price>	147100	</price>
+    <tags>	SPG lightSPG enhancedSprings_user mediumCaliberHowitzerRammer_user wetCombatPack_class1_user	</tags>
+    <level>	4	</level>
+  </Grille>
+  <Wespe>
+    <id>	23	</id>
+    <userString>	#germany_vehicles:Wespe	</userString>
+    <shortUserString>	#germany_vehicles:Wespe_short	</shortUserString>
+    <description>	#germany_vehicles:Wespe_descr	</description>
+    <icon>	gui/maps/icons_vehicle_components.dds 4 1	</icon>
+    <price>	53500	</price>
+    <tags>	SPG lightSPG enhancedSprings_user mediumCaliberHowitzerRammer_user wetCombatPack_class1_user	</tags>
+    <level>	3	</level>
+  </Wespe>
+  <PzII_Luchs>
+    <id>	24	</id>
+    <userString>	#germany_vehicles:PzII_Luchs	</userString>
+    <shortUserString>	#germany_vehicles:PzII_Luchs_short	</shortUserString>
+    <description>	#germany_vehicles:PzII_Luchs_descr	</description>
+    <icon>	gui/maps/icons_vehicle_components.dds 0 1	</icon>
+    <price>	55200	</price>
+    <tags>	lightTank enhancedTorsions1t_user	</tags>
+    <level>	3	</level>
+  </PzII_Luchs>
+  <PzIII_IV>
+    <id>	25	</id>
+    <userString>	#germany_vehicles:PzIII_IV	</userString>
+    <shortUserString>	#germany_vehicles:PzIII_IV_short	</shortUserString>
+    <description>	#germany_vehicles:PzIII_IV_descr	</description>
+    <icon>	gui/maps/icons_vehicle_components.dds 1 1	</icon>
+    <price>	190800	</price>
+    <tags>	mediumTank enhancedLevers_user grousers_user wetCombatPack_class1_user mediumCaliberTankRammer_user	</tags>
+    <level>	5	</level>
+  </PzIII_IV>
+  <G20_Marder_II>
+    <id>	26	</id>
+    <userString>	#germany_vehicles:G20_Marder_II	</userString>
+    <shortUserString>	#germany_vehicles:G20_Marder_II_short	</shortUserString>
+    <description>	#germany_vehicles:G20_Marder_II_descr	</description>
+    <icon>	gui/maps/icons_vehicle_components.dds 3 1	</icon>
+    <price>	52100	</price>
+    <tags>	AT-SPG lightAT-SPG enhancedSprings_user wetCombatPack_class1_user	</tags>
+    <level>	3	</level>
+  </G20_Marder_II>
+  <Maus>
+    <id>	27	</id>
+    <userString>	#germany_vehicles:Maus	</userString>
+    <shortUserString>	#germany_vehicles:Maus_short	</shortUserString>
+    <description>	#germany_vehicles:Maus_descr	</description>
+    <icon>	gui/maps/icons_vehicle_components.dds 2 1	</icon>
+    <price>	6100000	</price>
+    <tags>	heavyTank largeCaliberTankRammer_user wetCombatPack_class2_user aimingStabilizer_Mk2_user	</tags>
+    <level>	10	</level>
+  </Maus>
+  <VK3001P>
+    <id>	28	</id>
+    <userString>	#germany_vehicles:VK3001P	</userString>
+    <shortUserString>	#germany_vehicles:VK3001P_short	</shortUserString>
+    <description>	#germany_vehicles:VK3001P_descr	</description>
+    <icon>	gui/maps/icons_vehicle_components.dds 1 1	</icon>
+    <price>	720400	</price>
+    <tags>	mediumTank enhancedLongitudinalTorsions_user mediumCaliberTankRammer_user wetCombatPack_class1_user	</tags>
+    <level>	6	</level>
+  </VK3001P>
+  <VK4502P>
+    <id>	29	</id>
+    <userString>	#germany_vehicles:VK4502P	</userString>
+    <shortUserString>	#germany_vehicles:VK4502P_short	</shortUserString>
+    <description>	#germany_vehicles:VK4502P_descr	</description>
+    <icon>	gui/maps/icons_vehicle_components.dds 2 1	</icon>
+    <price>	3557000	</price>
+    <tags>	heavyTank enhancedLongitudinalTorsions_user largeCaliberTankRammer_user wetCombatPack_class2_user aimingStabilizer_Mk2_user	</tags>
+    <level>	9	</level>
+  </VK4502P>
+  <Ferdinand>
+    <id>	30	</id>
+    <userString>	#germany_vehicles:Ferdinand	</userString>
+    <description>	#germany_vehicles:Ferdinand_descr	</description>
+    <icon>	gui/maps/icons_vehicle_components.dds 3 1	</icon>
+    <price>	2570000	</price>
+    <tags>	AT-SPG heavyAT-SPG enhancedLongitudinalTorsions_user largeCaliberTankRammer_user wetCombatPack_class2_user	</tags>
+    <level>	8	</level>
+  </Ferdinand>
+  <JagdTiger>
+    <id>	31	</id>
+    <userString>	#germany_vehicles:JagdTiger	</userString>
+    <description>	#germany_vehicles:JagdTiger_descr	</description>
+    <icon>	gui/maps/icons_vehicle_components.dds 3 1	</icon>
+    <price>	3550000	</price>
+    <tags>	AT-SPG heavyAT-SPG beast enhancedTorsions5t_user largeCaliberTankRammer_user wetCombatPack_class2_user	</tags>
+    <level>	9	</level>
+  </JagdTiger>
+  <Pz38_NA>
+    <id>	32	</id>
+    <userString>	#germany_vehicles:Pz38_NA	</userString>
+    <shortUserString>	#germany_vehicles:Pz38_NA_short	</shortUserString>
+    <description>	#germany_vehicles:Pz38_NA_descr	</description>
+    <icon>	gui/maps/icons_vehicle_components.dds 0 1	</icon>
+    <price>	185600	</price>
+    <tags>	lightTank enhancedSprings_user	</tags>
+    <level>	4	</level>
+  </Pz38_NA>
+  <Panther_II>
+    <id>	33	</id>
+    <userString>	#germany_vehicles:Panther_II	</userString>
+    <shortUserString>	#germany_vehicles:Panther_II_short	</shortUserString>
+    <description>	#germany_vehicles:Panther_II_descr	</description>
+    <icon>	gui/maps/icons_vehicle_components.dds 1 1	</icon>
+    <price>	1991000	</price>
+    <tags>	mediumTank beast enhancedTorsions5t_user mediumCaliberTankRammer_user wetCombatPack_class1_user aimingStabilizer_Mk1_user	</tags>
+    <level>	8	</level>
+  </Panther_II>
+  <G_Tiger>
+    <id>	34	</id>
+    <userString>	#germany_vehicles:G_Tiger	</userString>
+    <shortUserString>	#germany_vehicles:G_Tiger_short	</shortUserString>
+    <description>	#germany_vehicles:G_Tiger_descr	</description>
+    <icon>	gui/maps/icons_vehicle_components.dds 1 1	</icon>
+    <price>	2560000	</price>
+    <tags>	SPG heavySPG beast largeCaliberHowitzerRammer_user wetCombatPack_class2_user enhancedTorsions5t_user	</tags>
+    <level>	7	</level>
+  </G_Tiger>
+  <G_Panther>
+    <id>	35	</id>
+    <userString>	#germany_vehicles:G_Panther	</userString>
+    <shortUserString>	#germany_vehicles:G_Panther_short	</shortUserString>
+    <description>	#germany_vehicles:G_Panther_descr	</description>
+    <icon>	gui/maps/icons_vehicle_components.dds 4 1	</icon>
+    <price>	1250300	</price>
+    <tags>	SPG mediumSPG beast mediumCaliberHowitzerRammer_user wetCombatPack_class1_user enhancedTorsions5t_user	</tags>
+    <level>	6	</level>
+  </G_Panther>
+  <G_E>
+    <id>	36	</id>
+    <userString>	#germany_vehicles:G_E	</userString>
+    <shortUserString>	#germany_vehicles:G_E_short	</shortUserString>
+    <description>	#germany_vehicles:G_E_descr	</description>
+    <icon>	gui/maps/icons_vehicle_components.dds 1 1	</icon>
+    <price>	3540000	</price>
+    <tags>	SPG heavySPG beast largeCaliberHowitzerRammer_user improvedVentilation_class3_user wetCombatPack_class2_user noImprovedVentilation	</tags>
+    <level>	8	</level>
+  </G_E>
+  <E-100>
+    <id>	37	</id>
+    <userString>	#germany_vehicles:E-100	</userString>
+    <shortUserString>	#germany_vehicles:E-100_short	</shortUserString>
+    <description>	#germany_vehicles:E-100_descr	</description>
+    <icon>	gui/maps/icons_vehicle_components.dds 2 1	</icon>
+    <price>	6154000	</price>
+    <tags>	heavyTank largeCaliberTankRammer_user wetCombatPack_class2_user aimingStabilizer_Mk2_user enhancedBelwillWashers_user	</tags>
+    <level>	10	</level>
+  </E-100>
+  <E-75>
+    <id>	38	</id>
+    <userString>	#germany_vehicles:E-75	</userString>
+    <shortUserString>	#germany_vehicles:E-75_short	</shortUserString>
+    <description>	#germany_vehicles:E-75_descr	</description>
+    <icon>	gui/maps/icons_vehicle_components.dds 2 1	</icon>
+    <price>	3561000	</price>
+    <tags>	heavyTank largeCaliberTankRammer_user wetCombatPack_class2_user aimingStabilizer_Mk2_user enhancedBelwillWashers_user	</tags>
+    <level>	9	</level>
+  </E-75>
+  <VK2801>
+    <id>	39	</id>
+    <userString>	#germany_vehicles:VK2801	</userString>
+    <shortUserString>	#germany_vehicles:VK2801_short	</shortUserString>
+    <description>	#germany_vehicles:VK2801_descr	</description>
+    <icon>	gui/maps/icons_vehicle_components.dds 0 1	</icon>
+    <price>	621200	</price>
+    <tags>	lightTank enhancedTorsions1t_user mediumCaliberTankRammer_user wetCombatPack_class1_user	</tags>
+    <level>	5	</level>
+  </VK2801>
+  <E-50>
+    <id>	40	</id>
+    <userString>	#germany_vehicles:E-50	</userString>
+    <shortUserString>	#germany_vehicles:E-50_short	</shortUserString>
+    <description>	#germany_vehicles:E-50_descr	</description>
+    <icon>	gui/maps/icons_vehicle_components.dds 1 1	</icon>
+    <price>	2890000	</price>
+    <tags>	mediumTank beast enhancedBelwillWashers_user mediumCaliberTankRammer_user wetCombatPack_class1_user aimingStabilizer_Mk1_user	</tags>
+    <level>	9	</level>
+  </E-50>
+  <VK4502A>
+    <id>	41	</id>
+    <userString>	#germany_vehicles:VK4502A	</userString>
+    <shortUserString>	#germany_vehicles:VK4502A_short	</shortUserString>
+    <description>	#germany_vehicles:VK4502A_descr	</description>
+    <icon>	gui/maps/icons_vehicle_components.dds 2 1	</icon>
+    <price>	2387000	</price>
+    <tags>	heavyTank enhancedLongitudinalTorsions_user largeCaliberTankRammer_user wetCombatPack_class2_user aimingStabilizer_Mk2_user	</tags>
+    <level>	8	</level>
+  </VK4502A>
+  <PzVI_Tiger_P>
+    <id>	42	</id>
+    <userString>	#germany_vehicles:PzVI_Tiger_P	</userString>
+    <shortUserString>	#germany_vehicles:PzVI_Tiger_P_short	</shortUserString>
+    <description>	#germany_vehicles:PzVI_Tiger_P_descr	</description>
+    <icon>	gui/maps/icons_vehicle_components.dds 2 1	</icon>
+    <price>	1276500	</price>
+    <tags>	heavyTank beast enhancedLongitudinalTorsions_user largeCaliberTankRammer_user wetCombatPack_class2_user	</tags>
+    <level>	7	</level>
+  </PzVI_Tiger_P>
+  <PzV_PzIV>
+    <id>	201	</id>
+    <userString>	#germany_vehicles:PzV_PzIV	</userString>
+    <shortUserString>	#germany_vehicles:PzV_PzIV_short	</shortUserString>
+    <description>	#germany_vehicles:PzV_PzIV_descr	</description>
+    <icon>	gui/maps/icons_vehicle_components.dds 1 1	</icon>
+    <price>	3000	  <gold></gold>
+    </price>
+    <tags>	mediumTank enhancedTorsions5t_user mediumCaliberTankRammer_user wetCombatPack_class1_user	</tags>
+    <level>	6	</level>
+  </PzV_PzIV>
+  <PzII_J>
+    <id>	202	</id>
+    <userString>	#germany_vehicles:PzII_J	</userString>
+    <shortUserString>	#germany_vehicles:PzII_J_short	</shortUserString>
+    <description>	#germany_vehicles:PzII_J_descr	</description>
+    <icon>	gui/maps/icons_vehicle_components.dds 0 1	</icon>
+    <price>	1000	  <gold></gold>
+    </price>
+    <tags>	lightTank enhancedTorsions1t_user	</tags>
+    <level>	3	</level>
+  </PzII_J>
+  <S35_captured>
+    <id>	203	</id>
+    <userString>	#germany_vehicles:S35_captured	</userString>
+    <shortUserString>	#germany_vehicles:S35_captured_short	</shortUserString>
+    <description>	#germany_vehicles:S35_captured_descr	</description>
+    <icon>	gui/maps/icons_vehicle_components.dds 0 1	</icon>
+    <price>	1000	  <gold></gold>
+    </price>
+    <tags>	mediumTank	</tags>
+    <level>	3	</level>
+  </S35_captured>
+  <B-1bis_captured>
+    <id>	204	</id>
+    <userString>	#germany_vehicles:B-1bis_captured	</userString>
+    <shortUserString>	#germany_vehicles:B-1bis_captured_short	</shortUserString>
+    <description>	#germany_vehicles:B-1bis_captured_descr	</description>
+    <icon>	gui/maps/icons_vehicle_components.dds 0 1	</icon>
+    <price>	1250	  <gold></gold>
+    </price>
+    <tags>	heavyTank	</tags>
+    <level>	4	</level>
+  </B-1bis_captured>
+  <H39_captured>
+    <id>	205	</id>
+    <userString>	#germany_vehicles:H39_captured	</userString>
+    <shortUserString>	#germany_vehicles:H39_captured_short	</shortUserString>
+    <description>	#germany_vehicles:H39_captured_descr	</description>
+    <icon>	gui/maps/icons_vehicle_components.dds 0 1	</icon>
+    <price>	750	  <gold></gold>
+    </price>
+    <tags>	lightTank	</tags>
+    <level>	2	</level>
+  </H39_captured>
+  <PzV_PzIV_ausf_Alfa>
+    <id>	211	</id>
+    <userString>	#germany_vehicles:PzV_PzIV_ausf_Alfa	</userString>
+    <description>	#germany_vehicles:PzV_PzIV_ausf_Alfa_descr	</description>
+    <shortUserString>	#germany_vehicles:PzV_PzIV_ausf_Alfa_short	</shortUserString>
+    <icon>	gui/maps/icons_vehicle_components.dds 1 1	</icon>
+    <price>	3000	  <gold></gold>
+    </price>
+    <tags>	mediumTank enhancedTorsions5t_user mediumCaliberTankRammer_user wetCombatPack_class1_user	</tags>
+    <level>	6	</level>
+  </PzV_PzIV_ausf_Alfa>
+  <Lowe>
+    <id>	212	</id>
+    <userString>	#germany_vehicles:Lowe	</userString>
+    <description>	#germany_vehicles:Lowe_descr	</description>
+    <icon>	gui/maps/icons_vehicle_components.dds 2 1	</icon>
+    <price>	12500	  <gold></gold>
+    </price>
+    <tags>	heavyTank beast enhancedTorsions5t_user largeCaliberTankRammer_user wetCombatPack_class2_user aimingStabilizer_Mk2_user	</tags>
+    <level>	8	</level>
+  </Lowe>
+  <T-25>
+    <id>	213	</id>
+    <userString>	#germany_vehicles:T-25	</userString>
+    <shortUserString>	#germany_vehicles:T-25_short	</shortUserString>
+    <description>	#germany_vehicles:T-25_descr	</description>
+    <icon>	gui/maps/icons_vehicle_components.dds 1 1	</icon>
+    <price>	1500	  <gold></gold>
+    </price>
+    <tags>	mediumTank enhancedSprings_user mediumCaliberTankRammer_user wetCombatPack_class1_user	</tags>
+    <level>	5	</level>
+  </T-25>
+  <T-15>
+    <id>	214	</id>
+    <userString>	#germany_vehicles:T-15	</userString>
+    <shortUserString>	#germany_vehicles:T-15_short	</shortUserString>
+    <description>	#germany_vehicles:T-15_descr	</description>
+    <icon>	gui/maps/icons_vehicle_components.dds 0 1	</icon>
+    <price>	900	  <gold></gold>
+    </price>
+    <tags>	lightTank enhancedSprings_user wetCombatPack_class1_user	</tags>
+    <level>	3	</level>
+  </T-15>
+  <PzIV_Hydro>
+    <id>	215	</id>
+    <userString>	#germany_vehicles:PzIV_Hydro	</userString>
+    <shortUserString>	#germany_vehicles:PzIV_Hydro_short	</shortUserString>
+    <description>	#germany_vehicles:PzIV_Hydro_descr	</description>
+    <icon>	gui/maps/icons_vehicle_components.dds 1 1	</icon>
+    <price>	2500	  <gold></gold>
+    </price>
+    <tags>	mediumTank enhancedLevers_user grousers_user mediumCaliberTankRammer_user wetCombatPack_class1_user	</tags>
+    <level>	5	</level>
+  </PzIV_Hydro>
+</list.xml>

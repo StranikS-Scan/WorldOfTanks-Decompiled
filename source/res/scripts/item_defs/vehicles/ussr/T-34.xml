@@ -1,0 +1,591 @@
+<T-34.xml>
+  <crew>
+    <commander>	gunner	</commander>
+    <radioman></radioman>
+    <driver></driver>
+    <loader></loader>
+  </crew>
+  <speedLimits>
+    <forward>	56	</forward>
+    <backward>	20	</backward>
+  </speedLimits>
+  <repairCost>	5.34	</repairCost>
+  <effects>
+    <destruction>	mediumDestruction	</destruction>
+    <explosion>	mediumExplosion	</explosion>
+    <flaming>	mediumFlaming	</flaming>
+    <collision>	collision	</collision>
+  </effects>
+  <camouflage>
+    <priceFactor>	1.0	</priceFactor>
+    <tiling>	1 1 0 0	</tiling>
+    <exclusionMask>	vehicles/russian/R04_T-34/T-34_CM.dds	</exclusionMask>
+  </camouflage>
+  <emblems>
+    <default>	ussr_star	</default>
+    <lodDist>	MEDIUM	</lodDist>
+    <alpha>	0.803922	</alpha>
+  </emblems>
+  <horns>
+    <priceFactor>	1	</priceFactor>
+    <distanceFactor>	1	</distanceFactor>
+    <volumeFactor>	1	</volumeFactor>
+  </horns>
+  <hull>
+    <models>
+      <undamaged>	vehicles/russian/R04_T-34/normal/lod0/Hull.model	</undamaged>
+      <destroyed>	vehicles/russian/R04_T-34/crash/lod0/Hull.model	</destroyed>
+      <exploded>	vehicles/russian/R04_T-34/crash/lod0/Hull.model	</exploded>
+    </models>
+    <swinging>
+      <lodDist>	FAR	</lodDist>
+      <pitchParams>	0.28 34.00 0.42 1.00 0.05 0.30	</pitchParams>
+      <rollParams>	1.00 0.28 34.00 0.42 1.00 0.05 0.30	</rollParams>
+      <sensitivityToImpulse>	0.56	</sensitivityToImpulse>
+    </swinging>
+    <exhaust>
+      <pixie>	particles/Tank/engine_exit_diesel.xml	</pixie>
+      <nodes>	HP_Track_Exhaus_1 HP_Track_Exhaus_2	</nodes>
+      <rates>	5.0 10.0 25.0	</rates>
+    </exhaust>
+    <turretPositions>
+      <turret>	0.018293 0.791155 0.613583	</turret>
+    </turretPositions>
+    <hitTester>
+      <collisionModel>	vehicles/russian/R04_T-34/collision/Hull.model	</collisionModel>
+    </hitTester>
+    <armor>
+      <armor_1>	45	</armor_1>
+      <armor_2>	60	</armor_2>
+      <armor_3>	45	</armor_3>
+      <armor_4>	45	</armor_4>
+      <armor_5>	16	</armor_5>
+      <armor_6>	16	</armor_6>
+      <armor_7>	20	</armor_7>
+      <armor_8>	0	</armor_8>
+      <armor_9>	40	</armor_9>
+    </armor>
+    <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
+    <weight>	15000	</weight>
+    <maxHealth>	300.0	</maxHealth>
+    <ammoBayHealth>
+      <maxHealth>	140	</maxHealth>
+      <maxRegenHealth>	75	</maxRegenHealth>
+      <repairCost>	1.0	</repairCost>
+    </ammoBayHealth>
+    <emblemSlots>
+      <clan>
+        <rayStart>	-0.770497 0.779843 2.08726	</rayStart>
+        <rayEnd>	-0.770497 0.43853 1.87868	</rayEnd>
+        <rayUp>	0.000000 0.000000 -1	</rayUp>
+        <size>	0.34	</size>
+        <hideIfDamaged>	false	</hideIfDamaged>
+      </clan>
+    </emblemSlots>
+  </hull>
+  <chassis>
+    <T-34_mod_1941>
+      <userString>	#ussr_vehicles:T-34_mod_1941	</userString>
+      <description>	#ussr_vehicles:T-34_mod_1941_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 8 0	</icon>
+      <tags></tags>
+      <level>	4	</level>
+      <price>	2680.0	</price>
+      <unlocks>
+        <chassis>	T-34_mod_1943	  <cost>	1940	</cost>
+        </chassis>
+      </unlocks>
+      <models>
+        <undamaged>	vehicles/russian/R04_T-34/normal/lod0/Chassis.model	</undamaged>
+        <destroyed>	vehicles/russian/R04_T-34/crash/lod0/Chassis.model	</destroyed>
+        <exploded>	vehicles/russian/R04_T-34/crash/lod0/Chassis.model	</exploded>
+      </models>
+      <traces>
+        <lodDist>	FAR	</lodDist>
+        <bufferPrefs>	mediumTank	</bufferPrefs>
+        <textureSet>	ussr_02	</textureSet>
+        <size>	0.44 0.52	</size>
+      </traces>
+      <tracks>
+        <lodDist>	MEDIUM	</lodDist>
+        <leftMaterial>	track_mat_L_skinned	</leftMaterial>
+        <rightMaterial>	track_mat_R_skinned	</rightMaterial>
+        <textureScale>	-1.13	</textureScale>
+      </tracks>
+      <wheels>
+        <lodDist>	MEDIUM	</lodDist>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	W_L	</template>
+          <radius>	0.413	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	5	</count>
+        </group>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	W_R	</template>
+          <radius>	0.413	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	5	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <name>	WD_L0	</name>
+          <radius>	0.253	</radius>
+        </wheel>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <name>	WD_L1	</name>
+          <radius>	0.305	</radius>
+        </wheel>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <name>	WD_R0	</name>
+          <radius>	0.253	</radius>
+        </wheel>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <name>	WD_R1	</name>
+          <radius>	0.305	</radius>
+        </wheel>
+      </wheels>
+      <drivingWheels>	WD_L0 WD_L1	</drivingWheels>
+      <effects>
+        <lodDist>	MEDIUM	</lodDist>
+        <dust>	mediumTankDust	</dust>
+        <mud>	mediumTankMud	</mud>
+      </effects>
+      <sound>	/vehicles/tanks/treads/treads_2	</sound>
+      <hullPosition>	-0.012 0.7449 0.000000	</hullPosition>
+      <hitTester>
+        <collisionModel>	vehicles/russian/R04_T-34/collision/Chassis.model	</collisionModel>
+      </hitTester>
+      <armor>
+        <leftTrack>	20	</leftTrack>
+        <rightTrack>	20	</rightTrack>
+      </armor>
+      <topRightCarryingPoint>	1.22718 1.88347	</topRightCarryingPoint>
+      <maxClimbAngle>	25	</maxClimbAngle>
+      <navmeshGirth>	6.0	</navmeshGirth>
+      <weight>	8000	</weight>
+      <maxLoad>	30000	</maxLoad>
+      <terrainResistance>	1.1 1.5 2.0	</terrainResistance>
+      <brakeForce>	46500	</brakeForce>
+      <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
+      <rotationSpeed>	37	</rotationSpeed>
+      <shotDispersionFactors>
+        <vehicleMovement>	0.28	</vehicleMovement>
+        <vehicleRotation>	0.28	</vehicleRotation>
+      </shotDispersionFactors>
+      <bulkHealthFactor>	3.0	</bulkHealthFactor>
+      <maxHealth>	90	</maxHealth>
+      <maxRegenHealth>	70	</maxRegenHealth>
+      <repairCost>	5.0	</repairCost>
+    </T-34_mod_1941>
+    <T-34_mod_1943>
+      <userString>	#ussr_vehicles:T-34_mod_1943	</userString>
+      <description>	#ussr_vehicles:T-34_mod_1943_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 8 0	</icon>
+      <tags></tags>
+      <level>	5	</level>
+      <price>	7960.0	</price>
+      <models>
+        <undamaged>	vehicles/russian/R04_T-34/normal/lod0/Chassis.model	</undamaged>
+        <destroyed>	vehicles/russian/R04_T-34/crash/lod0/Chassis.model	</destroyed>
+        <exploded>	vehicles/russian/R04_T-34/crash/lod0/Chassis.model	</exploded>
+      </models>
+      <traces>
+        <lodDist>	FAR	</lodDist>
+        <bufferPrefs>	mediumTank	</bufferPrefs>
+        <textureSet>	ussr_02	</textureSet>
+        <size>	0.44 0.52	</size>
+      </traces>
+      <tracks>
+        <lodDist>	MEDIUM	</lodDist>
+        <leftMaterial>	track_mat_L_skinned	</leftMaterial>
+        <rightMaterial>	track_mat_R_skinned	</rightMaterial>
+        <textureScale>	-1.12	</textureScale>
+      </tracks>
+      <wheels>
+        <lodDist>	MEDIUM	</lodDist>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	W_L	</template>
+          <radius>	0.413	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	5	</count>
+        </group>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	W_R	</template>
+          <radius>	0.413	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	5	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <name>	WD_L0	</name>
+          <radius>	0.253	</radius>
+        </wheel>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <name>	WD_L1	</name>
+          <radius>	0.305	</radius>
+        </wheel>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <name>	WD_R0	</name>
+          <radius>	0.253	</radius>
+        </wheel>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <name>	WD_R1	</name>
+          <radius>	0.305	</radius>
+        </wheel>
+      </wheels>
+      <drivingWheels>	WD_L0 WD_L1	</drivingWheels>
+      <effects>
+        <lodDist>	MEDIUM	</lodDist>
+        <dust>	mediumTankDust	</dust>
+        <mud>	mediumTankMud	</mud>
+      </effects>
+      <sound>	/vehicles/tanks/treads/treads_2	</sound>
+      <hullPosition>	-0.012 0.7449 0.000000	</hullPosition>
+      <hitTester>
+        <collisionModel>	vehicles/russian/R04_T-34/collision/Chassis.model	</collisionModel>
+      </hitTester>
+      <armor>
+        <leftTrack>	20	</leftTrack>
+        <rightTrack>	20	</rightTrack>
+      </armor>
+      <topRightCarryingPoint>	1.22718 1.88347	</topRightCarryingPoint>
+      <maxClimbAngle>	25	</maxClimbAngle>
+      <navmeshGirth>	6.0	</navmeshGirth>
+      <weight>	8000	</weight>
+      <maxLoad>	31300	</maxLoad>
+      <terrainResistance>	1.0 1.12 2.0	</terrainResistance>
+      <brakeForce>	36500	</brakeForce>
+      <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
+      <rotationSpeed>	40	</rotationSpeed>
+      <shotDispersionFactors>
+        <vehicleMovement>	0.25	</vehicleMovement>
+        <vehicleRotation>	0.25	</vehicleRotation>
+      </shotDispersionFactors>
+      <bulkHealthFactor>	3.0	</bulkHealthFactor>
+      <maxHealth>	100	</maxHealth>
+      <maxRegenHealth>	75	</maxRegenHealth>
+      <repairCost>	5.0	</repairCost>
+    </T-34_mod_1943>
+  </chassis>
+  <turrets0>
+    <T-34_mod_1940>
+      <userString>	#ussr_vehicles:T-34_mod_1940	</userString>
+      <description>	#ussr_vehicles:T-34_mod_1940_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 6 0	</icon>
+      <tags></tags>
+      <level>	4	</level>
+      <price>	3980.0	</price>
+      <unlocks>
+        <turret>	T-34_mod_1942	  <cost>	1735	</cost>
+        </turret>
+      </unlocks>
+      <models>
+        <undamaged>	vehicles/russian/R04_T-34/normal/lod0/Turret_01.model	</undamaged>
+        <destroyed>	vehicles/russian/R04_T-34/crash/lod0/Turret_01.model	</destroyed>
+        <exploded>	vehicles/russian/R04_T-34/crash/lod0/Turret_01.model	</exploded>
+      </models>
+      <hitTester>
+        <collisionModel>	vehicles/russian/R04_T-34/collision/Turret_01.model	</collisionModel>
+      </hitTester>
+      <yawLimits>	-180 180	</yawLimits>
+      <gunPosition>	-0.017092 0.318654 0.639117	</gunPosition>
+      <armor>
+        <armor_1>	45	</armor_1>
+        <armor_2>	45	</armor_2>
+        <armor_3>	45	</armor_3>
+        <armor_4>	45	</armor_4>
+        <armor_5>	15	</armor_5>
+        <armor_6>	40	</armor_6>
+        <armor_7>	0	</armor_7>
+        <armor_8>	0	</armor_8>
+        <armor_9>	16	</armor_9>
+        <surveyingDevice>	15	</surveyingDevice>
+      </armor>
+      <primaryArmor>	armor_1 armor_2 armor_3	</primaryArmor>
+      <weight>	3200	</weight>
+      <maxHealth>	100	</maxHealth>
+      <rotationSpeed>	46	</rotationSpeed>
+      <turretRotatorHealth>
+        <maxHealth>	100	</maxHealth>
+        <maxRegenHealth>	49	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </turretRotatorHealth>
+      <circularVisionRadius>	270	</circularVisionRadius>
+      <surveyingDeviceHealth>
+        <maxHealth>	100	</maxHealth>
+        <maxRegenHealth>	49	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </surveyingDeviceHealth>
+      <guns>
+        <_76mm_L-11>	shared	  <maxAmmo>	77	</maxAmmo>
+          <reloadTime>	5.28	</reloadTime>
+          <unlocks>
+            <gun>	_76mm_F-34	  <cost>	450.0	</cost>
+            </gun>
+          </unlocks>
+          <models>
+            <undamaged>	vehicles/russian/R04_T-34/normal/lod0/Gun_01.model	</undamaged>
+            <destroyed>	vehicles/russian/R04_T-34/crash/lod0/Gun_01.model	</destroyed>
+            <exploded>	vehicles/russian/R04_T-34/crash/lod0/Gun_01.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/russian/R04_T-34/collision/Gun_01.model	</collisionModel>
+          </hitTester>
+          <armor>
+            <armor_1>	45	  <noDamage>	true	</noDamage>
+            </armor_1>
+            <armor_2>	60	  <noDamage>	true	</noDamage>
+            </armor_2>
+            <armor_3>	20	  <noDamage>	true	</noDamage>
+            </armor_3>
+            <gun>	20	</gun>
+          </armor>
+        </_76mm_L-11>
+        <_76mm_F-34>	shared	  <maxAmmo>	77	</maxAmmo>
+          <reloadTime>	4.5	</reloadTime>
+          <unlocks>
+            <gun>	_57mm_ZiS-4	  <cost>	2200	</cost>
+            </gun>
+          </unlocks>
+          <models>
+            <undamaged>	vehicles/russian/R04_T-34/normal/lod0/Gun_05.model	</undamaged>
+            <destroyed>	vehicles/russian/R04_T-34/crash/lod0/Gun_05.model	</destroyed>
+            <exploded>	vehicles/russian/R04_T-34/crash/lod0/Gun_05.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/russian/R04_T-34/collision/Gun_05.model	</collisionModel>
+          </hitTester>
+          <armor>
+            <armor_1>	45	  <noDamage>	true	</noDamage>
+            </armor_1>
+            <armor_2>	60	  <noDamage>	true	</noDamage>
+            </armor_2>
+            <armor_3>	20	  <noDamage>	true	</noDamage>
+            </armor_3>
+            <gun>	20	</gun>
+          </armor>
+        </_76mm_F-34>
+        <_57mm_ZiS-4>	shared	  <maxAmmo>	77	</maxAmmo>
+          <reloadTime>	3.0	</reloadTime>
+          <models>
+            <undamaged>	vehicles/russian/R04_T-34/normal/lod0/Gun_06.model	</undamaged>
+            <destroyed>	vehicles/russian/R04_T-34/crash/lod0/Gun_06.model	</destroyed>
+            <exploded>	vehicles/russian/R04_T-34/crash/lod0/Gun_06.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/russian/R04_T-34/collision/Gun_06.model	</collisionModel>
+          </hitTester>
+          <armor>
+            <armor_1>	45	  <noDamage>	true	</noDamage>
+            </armor_1>
+            <armor_2>	60	  <noDamage>	true	</noDamage>
+            </armor_2>
+            <armor_3>	20	  <noDamage>	true	</noDamage>
+            </armor_3>
+            <gun>	10	</gun>
+          </armor>
+        </_57mm_ZiS-4>
+      </guns>
+      <emblemSlots>
+        <player>
+          <rayStart>	-0.69096 0.521066 0.572186	</rayStart>
+          <rayEnd>	-0.365659 0.308271 0.477859	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.3	</size>
+          <hideIfDamaged>	false	</hideIfDamaged>
+        </player>
+        <player>
+          <rayStart>	0.69096 0.521066 0.572186	</rayStart>
+          <rayEnd>	0.365659 0.308271 0.477859	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.3	</size>
+          <hideIfDamaged>	false	</hideIfDamaged>
+        </player>
+      </emblemSlots>
+      <showEmblemsOnGun>	false	</showEmblemsOnGun>
+    </T-34_mod_1940>
+    <T-34_mod_1942>
+      <userString>	#ussr_vehicles:T-34_mod_1942	</userString>
+      <description>	#ussr_vehicles:T-34_mod_1942_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 6 0	</icon>
+      <tags></tags>
+      <level>	5	</level>
+      <price>	7300.0	</price>
+      <unlocks>
+        <gun>	_76mm_S-54	  <cost>	4300	</cost>
+        </gun>
+      </unlocks>
+      <models>
+        <undamaged>	vehicles/russian/R04_T-34/normal/lod0/Turret_02.model	</undamaged>
+        <destroyed>	vehicles/russian/R04_T-34/crash/lod0/Turret_02.model	</destroyed>
+        <exploded>	vehicles/russian/R04_T-34/crash/lod0/Turret_02.model	</exploded>
+      </models>
+      <hitTester>
+        <collisionModel>	vehicles/russian/R04_T-34/collision/Turret_02.model	</collisionModel>
+      </hitTester>
+      <yawLimits>	-180 180	</yawLimits>
+      <gunPosition>	-0.018293 0.430745 0.731017	</gunPosition>
+      <armor>
+        <armor_1>	60	</armor_1>
+        <armor_2>	60	</armor_2>
+        <armor_3>	45	</armor_3>
+        <armor_4>	45	</armor_4>
+        <armor_5>	45	</armor_5>
+        <armor_6>	16	</armor_6>
+        <armor_7>	40	</armor_7>
+        <armor_8>	40	</armor_8>
+        <armor_9>	0	</armor_9>
+        <armor_10>	10	  <noDamage>	true	</noDamage>
+        </armor_10>
+        <surveyingDevice>	15	</surveyingDevice>
+      </armor>
+      <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
+      <weight>	3900	</weight>
+      <maxHealth>	150.0	</maxHealth>
+      <rotationSpeed>	56	</rotationSpeed>
+      <turretRotatorHealth>
+        <maxHealth>	100	</maxHealth>
+        <maxRegenHealth>	49	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </turretRotatorHealth>
+      <circularVisionRadius>	400	</circularVisionRadius>
+      <surveyingDeviceHealth>
+        <maxHealth>	100	</maxHealth>
+        <maxRegenHealth>	49	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </surveyingDeviceHealth>
+      <guns>
+        <_76mm_L-11>	shared	  <maxAmmo>	77	</maxAmmo>
+          <models>
+            <undamaged>	vehicles/russian/R04_T-34/normal/lod0/Gun_07.model	</undamaged>
+            <destroyed>	vehicles/russian/R04_T-34/crash/lod0/Gun_07.model	</destroyed>
+            <exploded>	vehicles/russian/R04_T-34/crash/lod0/Gun_07.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/russian/R04_T-34/collision/Gun_07.model	</collisionModel>
+          </hitTester>
+          <armor>
+            <armor_1>	45	  <noDamage>	true	</noDamage>
+            </armor_1>
+            <armor_2>	60	  <noDamage>	true	</noDamage>
+            </armor_2>
+            <armor_3>	20	  <noDamage>	true	</noDamage>
+            </armor_3>
+            <gun>	20	</gun>
+          </armor>
+        </_76mm_L-11>
+        <_76mm_F-34>	shared	  <maxAmmo>	77	</maxAmmo>
+          <models>
+            <undamaged>	vehicles/russian/R04_T-34/normal/lod0/Gun_11.model	</undamaged>
+            <destroyed>	vehicles/russian/R04_T-34/crash/lod0/Gun_11.model	</destroyed>
+            <exploded>	vehicles/russian/R04_T-34/crash/lod0/Gun_11.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/russian/R04_T-34/collision/Gun_11.model	</collisionModel>
+          </hitTester>
+          <armor>
+            <armor_1>	45	  <noDamage>	true	</noDamage>
+            </armor_1>
+            <armor_2>	60	  <noDamage>	true	</noDamage>
+            </armor_2>
+            <armor_3>	20	  <noDamage>	true	</noDamage>
+            </armor_3>
+            <gun>	20	</gun>
+          </armor>
+        </_76mm_F-34>
+        <_57mm_ZiS-4>	shared	  <maxAmmo>	77	</maxAmmo>
+          <reloadTime>	2.0	</reloadTime>
+          <models>
+            <undamaged>	vehicles/russian/R04_T-34/normal/lod0/Gun_12.model	</undamaged>
+            <destroyed>	vehicles/russian/R04_T-34/crash/lod0/Gun_12.model	</destroyed>
+            <exploded>	vehicles/russian/R04_T-34/crash/lod0/Gun_12.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/russian/R04_T-34/collision/Gun_12.model	</collisionModel>
+          </hitTester>
+          <armor>
+            <armor_1>	45	  <noDamage>	true	</noDamage>
+            </armor_1>
+            <armor_2>	60	  <noDamage>	true	</noDamage>
+            </armor_2>
+            <armor_3>	20	  <noDamage>	true	</noDamage>
+            </armor_3>
+            <gun>	10	</gun>
+          </armor>
+        </_57mm_ZiS-4>
+        <_76mm_S-54>	shared	  <maxAmmo>	70	</maxAmmo>
+          <reloadTime>	5	</reloadTime>
+          <unlocks>
+            <vehicle>	SU-85	  <cost>	40480	</cost>
+            </vehicle>
+            <vehicle>	T-34-85	  <cost>	27825	</cost>
+            </vehicle>
+          </unlocks>
+          <models>
+            <undamaged>	vehicles/russian/R04_T-34/normal/lod0/Gun_13.model	</undamaged>
+            <destroyed>	vehicles/russian/R04_T-34/crash/lod0/Gun_13.model	</destroyed>
+            <exploded>	vehicles/russian/R04_T-34/crash/lod0/Gun_13.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/russian/R04_T-34/collision/Gun_12.model	</collisionModel>
+          </hitTester>
+          <armor>
+            <armor_1>	45	  <noDamage>	true	</noDamage>
+            </armor_1>
+            <armor_2>	60	  <noDamage>	true	</noDamage>
+            </armor_2>
+            <armor_3>	20	  <noDamage>	true	</noDamage>
+            </armor_3>
+            <gun>	20	</gun>
+          </armor>
+        </_76mm_S-54>
+      </guns>
+      <emblemSlots>
+        <player>
+          <rayStart>	-0.941975 0.590149 0.37733	</rayStart>
+          <rayEnd>	-0.578064 0.448286 0.291052	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.36	</size>
+          <hideIfDamaged>	true	</hideIfDamaged>
+        </player>
+        <player>
+          <rayStart>	0.941975 0.590149 0.37733	</rayStart>
+          <rayEnd>	0.578064 0.448286 0.291052	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.36	</size>
+          <hideIfDamaged>	false	</hideIfDamaged>
+        </player>
+      </emblemSlots>
+      <showEmblemsOnGun>	false	</showEmblemsOnGun>
+    </T-34_mod_1942>
+  </turrets0>
+  <engines>
+    <V-2>	shared	  <unlocks>
+        <engine>	V-2-34	  <cost>	2000.0	</cost>
+        </engine>
+      </unlocks>
+    </V-2>
+    <V-2-34>	shared	</V-2-34>
+  </engines>
+  <fuelTanks>
+    <Average>	shared	</Average>
+  </fuelTanks>
+  <radios>
+    <_9R>	shared	  <unlocks>
+        <radio>	_9RM	  <cost>	4040.0	</cost>
+        </radio>
+      </unlocks>
+    </_9R>
+    <_9RM>	shared	</_9RM>
+  </radios>
+</T-34.xml>

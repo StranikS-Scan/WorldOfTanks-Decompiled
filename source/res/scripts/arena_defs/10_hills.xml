@@ -1,0 +1,21 @@
+<10_hills.xml>
+  <name>	#arenas:10_hills/name	</name>
+  <description>	#arenas:10_hills/description	</description>
+  <geometry>	spaces/10_hills	</geometry>
+  <roundLength>	900	</roundLength>
+  <boundingBox>
+    <bottomLeft>	-400.0 -400.0	</bottomLeft>
+    <upperRight>	400.0 400.0	</upperRight>
+  </boundingBox>
+  <defaultMinimap>	spaces/10_hills/mmap.dds	</defaultMinimap>
+  <defaultGroundEffect>	None	</defaultGroundEffect>
+  <umbraEnabled>	1	</umbraEnabled>
+  <batchingEnabled>	0	</batchingEnabled>
+  <loadingMusic>	/music/intro/euro_village	</loadingMusic>
+  <water>
+    <texScale>	0	</texScale>
+    <freqX>	0	</freqX>
+    <freqZ>	0	</freqZ>
+  </water>
+  <useAdvancedPhysics>	True	</useAdvancedPhysics>
+</10_hills.xml>

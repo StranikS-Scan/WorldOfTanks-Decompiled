@@ -1,0 +1,469 @@
+<VK1602.xml>
+  <crew>
+    <commander>	gunner	</commander>
+    <radioman></radioman>
+    <driver></driver>
+    <loader></loader>
+  </crew>
+  <speedLimits>
+    <forward>	68	</forward>
+    <backward>	20	</backward>
+  </speedLimits>
+  <repairCost>	5.6	</repairCost>
+  <effects>
+    <destruction>	mediumDestruction	</destruction>
+    <explosion>	mediumExplosion	</explosion>
+    <flaming>	mediumFlaming	</flaming>
+    <collision>	collision	</collision>
+  </effects>
+  <camouflage>
+    <priceFactor>	0.8	</priceFactor>
+    <tiling>	1 1 0 0	</tiling>
+    <exclusionMask>	vehicles/german/G26_VK1602/VK1602_CM.dds	</exclusionMask>
+  </camouflage>
+  <emblems>
+    <default>	germany_cross	</default>
+    <lodDist>	MEDIUM	</lodDist>
+    <alpha>	0.84	</alpha>
+  </emblems>
+  <horns>
+    <priceFactor>	1	</priceFactor>
+    <distanceFactor>	1	</distanceFactor>
+    <volumeFactor>	1	</volumeFactor>
+  </horns>
+  <hull>
+    <models>
+      <undamaged>	vehicles/german/G26_VK1602/normal/lod0/Hull.model	</undamaged>
+      <destroyed>	vehicles/german/G26_VK1602/crash/lod0/Hull.model	</destroyed>
+      <exploded>	vehicles/german/G26_VK1602/crash/lod0/Hull.model	</exploded>
+    </models>
+    <swinging>
+      <lodDist>	FAR	</lodDist>
+      <pitchParams>	0.28 34.00 0.34 1.00 0.05 0.30	</pitchParams>
+      <rollParams>	1.00 0.28 34.00 0.34 1.00 0.05 0.30	</rollParams>
+      <sensitivityToImpulse>	0.74	</sensitivityToImpulse>
+    </swinging>
+    <exhaust>
+      <pixie>	particles/Tank/engine_exit_gass.xml	</pixie>
+      <nodes>	HP_Track_Exhaus_1 HP_Track_Exhaus_2	</nodes>
+      <rates>	6.0 12.0 30.0	</rates>
+    </exhaust>
+    <turretPositions>
+      <turret>	0.000792 0.726103 -0.204257	</turret>
+    </turretPositions>
+    <hitTester>
+      <collisionModel>	vehicles/german/G26_VK1602/collision/Hull.model	</collisionModel>
+    </hitTester>
+    <armor>
+      <armor_1>	50	</armor_1>
+      <armor_2>	50	</armor_2>
+      <armor_3>	30	</armor_3>
+      <armor_4>	20	</armor_4>
+      <armor_5>	50	</armor_5>
+      <armor_6>	65	</armor_6>
+      <armor_7>	30	</armor_7>
+      <armor_8>	25	</armor_8>
+      <armor_9>	20	</armor_9>
+      <armor_10>	25	</armor_10>
+      <armor_11>	0	</armor_11>
+      <armor_12>	15	  <noDamage>	true	</noDamage>
+      </armor_12>
+    </armor>
+    <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
+    <weight>	10000	</weight>
+    <maxHealth>	240	</maxHealth>
+    <ammoBayHealth>
+      <maxHealth>	100	</maxHealth>
+      <maxRegenHealth>	70	</maxRegenHealth>
+      <repairCost>	1.0	</repairCost>
+    </ammoBayHealth>
+    <emblemSlots>
+      <clan>
+        <rayStart>	0.557114 0.747595 1.72501	</rayStart>
+        <rayEnd>	0.557114 0.42727 1.48544	</rayEnd>
+        <rayUp>	0.000000 0.000000 -1	</rayUp>
+        <size>	0.32	</size>
+        <hideIfDamaged>	false	</hideIfDamaged>
+      </clan>
+    </emblemSlots>
+  </hull>
+  <chassis>
+    <Leopardketten_Ausf_A>
+      <userString>	#germany_vehicles:Leopardketten_Ausf_A	</userString>
+      <description>	#germany_vehicles:Leopardketten_Ausf_A_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 8 1	</icon>
+      <tags></tags>
+      <level>	4	</level>
+      <price>	4230.0	</price>
+      <unlocks>
+        <chassis>	Leopardketten_Ausf_B	  <cost>	2615	</cost>
+        </chassis>
+      </unlocks>
+      <models>
+        <undamaged>	vehicles/german/G26_VK1602/normal/lod0/Chassis.model	</undamaged>
+        <destroyed>	vehicles/german/G26_VK1602/crash/lod0/Chassis.model	</destroyed>
+        <exploded>	vehicles/german/G26_VK1602/crash/lod0/Chassis.model	</exploded>
+      </models>
+      <traces>
+        <lodDist>	FAR	</lodDist>
+        <bufferPrefs>	mediumTank	</bufferPrefs>
+        <textureSet>	germany_01	</textureSet>
+        <size>	0.48 0.62	</size>
+      </traces>
+      <tracks>
+        <lodDist>	MEDIUM	</lodDist>
+        <leftMaterial>	track_mat_L_skinned	</leftMaterial>
+        <rightMaterial>	track_mat_R_skinned	</rightMaterial>
+        <textureScale>	-1.01	</textureScale>
+      </tracks>
+      <wheels>
+        <lodDist>	MEDIUM	</lodDist>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	W_L	</template>
+          <radius>	0.44	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	5	</count>
+        </group>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	W_R	</template>
+          <radius>	0.44	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	5	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <name>	WD_L0	</name>
+          <radius>	0.396782	</radius>
+        </wheel>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <name>	WD_L1	</name>
+          <radius>	0.323227	</radius>
+        </wheel>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <name>	WD_R0	</name>
+          <radius>	0.396782	</radius>
+        </wheel>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <name>	WD_R1	</name>
+          <radius>	0.323227	</radius>
+        </wheel>
+      </wheels>
+      <drivingWheels>	WD_L0 WD_L1	</drivingWheels>
+      <effects>
+        <lodDist>	MEDIUM	</lodDist>
+        <dust>	mediumTankDust	</dust>
+        <mud>	mediumTankMud	</mud>
+      </effects>
+      <sound>	/vehicles/tanks/treads/treads_1	</sound>
+      <hullPosition>	0.000000 0.9 0.000000	</hullPosition>
+      <hitTester>
+        <collisionModel>	vehicles/german/G26_VK1602/collision/Chassis.model	</collisionModel>
+      </hitTester>
+      <armor>
+        <leftTrack>	15	</leftTrack>
+        <rightTrack>	15	</rightTrack>
+      </armor>
+      <topRightCarryingPoint>	1.1413 1.15009	</topRightCarryingPoint>
+      <maxClimbAngle>	25	</maxClimbAngle>
+      <navmeshGirth>	6.0	</navmeshGirth>
+      <weight>	7200	</weight>
+      <maxLoad>	22250	</maxLoad>
+      <terrainResistance>	1.0 1.5 2.2	</terrainResistance>
+      <brakeForce>	33000	</brakeForce>
+      <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
+      <rotationSpeed>	30	</rotationSpeed>
+      <shotDispersionFactors>
+        <vehicleMovement>	0.23	</vehicleMovement>
+        <vehicleRotation>	0.23	</vehicleRotation>
+      </shotDispersionFactors>
+      <bulkHealthFactor>	3.0	</bulkHealthFactor>
+      <maxHealth>	100	</maxHealth>
+      <maxRegenHealth>	75	</maxRegenHealth>
+      <repairCost>	5.0	</repairCost>
+    </Leopardketten_Ausf_A>
+    <Leopardketten_Ausf_B>
+      <userString>	#germany_vehicles:Leopardketten_Ausf_B	</userString>
+      <description>	#germany_vehicles:Leopardketten_Ausf_B_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 8 1	</icon>
+      <tags></tags>
+      <level>	5	</level>
+      <price>	10740.0	</price>
+      <models>
+        <undamaged>	vehicles/german/G26_VK1602/normal/lod0/Chassis.model	</undamaged>
+        <destroyed>	vehicles/german/G26_VK1602/crash/lod0/Chassis.model	</destroyed>
+        <exploded>	vehicles/german/G26_VK1602/crash/lod0/Chassis.model	</exploded>
+      </models>
+      <traces>
+        <lodDist>	FAR	</lodDist>
+        <bufferPrefs>	mediumTank	</bufferPrefs>
+        <textureSet>	germany_01	</textureSet>
+        <size>	0.48 0.62	</size>
+      </traces>
+      <tracks>
+        <lodDist>	MEDIUM	</lodDist>
+        <leftMaterial>	track_mat_L_skinned	</leftMaterial>
+        <rightMaterial>	track_mat_R_skinned	</rightMaterial>
+        <textureScale>	-1.01	</textureScale>
+      </tracks>
+      <wheels>
+        <lodDist>	MEDIUM	</lodDist>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	W_L	</template>
+          <radius>	0.44	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	5	</count>
+        </group>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	W_R	</template>
+          <radius>	0.44	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	5	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <name>	WD_L0	</name>
+          <radius>	0.396782	</radius>
+        </wheel>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <name>	WD_L1	</name>
+          <radius>	0.323227	</radius>
+        </wheel>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <name>	WD_R0	</name>
+          <radius>	0.396782	</radius>
+        </wheel>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <name>	WD_R1	</name>
+          <radius>	0.323227	</radius>
+        </wheel>
+      </wheels>
+      <drivingWheels>	WD_L0 WD_L1	</drivingWheels>
+      <effects>
+        <lodDist>	MEDIUM	</lodDist>
+        <dust>	mediumTankDust	</dust>
+        <mud>	mediumTankMud	</mud>
+      </effects>
+      <sound>	/vehicles/tanks/treads/treads_1	</sound>
+      <hullPosition>	0.000000 0.9 0.000000	</hullPosition>
+      <hitTester>
+        <collisionModel>	vehicles/german/G26_VK1602/collision/Chassis.model	</collisionModel>
+      </hitTester>
+      <armor>
+        <leftTrack>	20	</leftTrack>
+        <rightTrack>	20	</rightTrack>
+      </armor>
+      <topRightCarryingPoint>	1.1413 1.15009	</topRightCarryingPoint>
+      <maxClimbAngle>	25	</maxClimbAngle>
+      <navmeshGirth>	6.0	</navmeshGirth>
+      <weight>	7200	</weight>
+      <maxLoad>	25550	</maxLoad>
+      <terrainResistance>	0.9 1.3 2.0	</terrainResistance>
+      <brakeForce>	33000	</brakeForce>
+      <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
+      <rotationSpeed>	33	</rotationSpeed>
+      <shotDispersionFactors>
+        <vehicleMovement>	0.20	</vehicleMovement>
+        <vehicleRotation>	0.20	</vehicleRotation>
+      </shotDispersionFactors>
+      <bulkHealthFactor>	3.0	</bulkHealthFactor>
+      <maxHealth>	110	</maxHealth>
+      <maxRegenHealth>	85	</maxRegenHealth>
+      <repairCost>	5.0	</repairCost>
+    </Leopardketten_Ausf_B>
+  </chassis>
+  <turrets0>
+    <Leopardturm>
+      <userString>	#germany_vehicles:Leopardturm	</userString>
+      <description>	#germany_vehicles:Leopardturm_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 6 1	</icon>
+      <tags></tags>
+      <level>	5	</level>
+      <price>	9380.0	</price>
+      <models>
+        <undamaged>	vehicles/german/G26_VK1602/normal/lod0/Turret_01.model	</undamaged>
+        <destroyed>	vehicles/german/G26_VK1602/crash/lod0/Turret_01.model	</destroyed>
+        <exploded>	vehicles/german/G26_VK1602/crash/lod0/Turret_01.model	</exploded>
+      </models>
+      <hitTester>
+        <collisionModel>	vehicles/german/G26_VK1602/collision/Turret_01.model	</collisionModel>
+      </hitTester>
+      <yawLimits>	-180 180	</yawLimits>
+      <gunPosition>	0.035928 0.23607 0.839433	</gunPosition>
+      <armor>
+        <armor_1>	50	</armor_1>
+        <armor_2>	75	</armor_2>
+        <armor_3>	30	</armor_3>
+        <armor_4>	30	</armor_4>
+        <armor_5>	50	</armor_5>
+        <armor_6>	30	</armor_6>
+        <armor_7>	20	</armor_7>
+        <armor_8>	30	</armor_8>
+        <armor_9>	0	</armor_9>
+      </armor>
+      <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
+      <weight>	3000	</weight>
+      <maxHealth>	150	</maxHealth>
+      <rotationSpeed>	48	</rotationSpeed>
+      <turretRotatorHealth>
+        <maxHealth>	80	</maxHealth>
+        <maxRegenHealth>	39	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </turretRotatorHealth>
+      <circularVisionRadius>	400	</circularVisionRadius>
+      <surveyingDeviceHealth>
+        <maxHealth>	60	</maxHealth>
+        <maxRegenHealth>	29	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </surveyingDeviceHealth>
+      <guns>
+        <_37mm_KwK_L46>	shared	  <maxAmmo>	64	</maxAmmo>
+          <unlocks>
+            <gun>	_20mm_Flak_38_L112	  <cost>	180	</cost>
+            </gun>
+            <gun>	_50mm_KwK_38_L42	  <cost>	500	</cost>
+            </gun>
+          </unlocks>
+          <models>
+            <undamaged>	vehicles/german/G26_VK1602/normal/lod0/Gun_01.model	</undamaged>
+            <destroyed>	vehicles/german/G26_VK1602/crash/lod0/Gun_01.model	</destroyed>
+            <exploded>	vehicles/german/G26_VK1602/crash/lod0/Gun_01.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/german/G26_VK1602/collision/Gun_01.model	</collisionModel>
+          </hitTester>
+          <armor>
+            <armor_1>	50	  <noDamage>	true	</noDamage>
+            </armor_1>
+            <armor_2>	30	  <noDamage>	true	</noDamage>
+            </armor_2>
+            <armor_3>	20	  <noDamage>	true	</noDamage>
+            </armor_3>
+            <gun>	10	</gun>
+          </armor>
+        </_37mm_KwK_L46>
+        <_50mm_KwK_38_L42>	shared	  <maxAmmo>	64	</maxAmmo>
+          <unlocks>
+            <gun>	_50mm_KwK_39_L60	  <cost>	550	</cost>
+            </gun>
+          </unlocks>
+          <models>
+            <undamaged>	vehicles/german/G26_VK1602/normal/lod0/Gun_02.model	</undamaged>
+            <destroyed>	vehicles/german/G26_VK1602/crash/lod0/Gun_02.model	</destroyed>
+            <exploded>	vehicles/german/G26_VK1602/crash/lod0/Gun_02.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/german/G26_VK1602/collision/Gun_02.model	</collisionModel>
+          </hitTester>
+          <armor>
+            <armor_1>	50	  <noDamage>	true	</noDamage>
+            </armor_1>
+            <armor_2>	30	  <noDamage>	true	</noDamage>
+            </armor_2>
+            <armor_3>	20	  <noDamage>	true	</noDamage>
+            </armor_3>
+            <gun>	10	</gun>
+          </armor>
+        </_50mm_KwK_38_L42>
+        <_50mm_KwK_39_L60>	shared	  <maxAmmo>	64	</maxAmmo>
+          <models>
+            <undamaged>	vehicles/german/G26_VK1602/normal/lod0/Gun_03.model	</undamaged>
+            <destroyed>	vehicles/german/G26_VK1602/crash/lod0/Gun_03.model	</destroyed>
+            <exploded>	vehicles/german/G26_VK1602/crash/lod0/Gun_03.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/german/G26_VK1602/collision/Gun_03.model	</collisionModel>
+          </hitTester>
+          <armor>
+            <armor_1>	50	  <noDamage>	true	</noDamage>
+            </armor_1>
+            <armor_2>	30	  <noDamage>	true	</noDamage>
+            </armor_2>
+            <armor_3>	20	  <noDamage>	true	</noDamage>
+            </armor_3>
+            <gun>	10	</gun>
+          </armor>
+        </_50mm_KwK_39_L60>
+        <_20mm_Flak_38_L112>	shared	  <maxAmmo>	420	</maxAmmo>
+          <models>
+            <undamaged>	vehicles/german/G26_VK1602/normal/lod0/Gun_05.model	</undamaged>
+            <destroyed>	vehicles/german/G26_VK1602/crash/lod0/Gun_05.model	</destroyed>
+            <exploded>	vehicles/german/G26_VK1602/crash/lod0/Gun_05.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/german/G26_VK1602/collision/Gun_05.model	</collisionModel>
+          </hitTester>
+          <armor>
+            <armor_1>	50	  <noDamage>	true	</noDamage>
+            </armor_1>
+            <armor_2>	30	  <noDamage>	true	</noDamage>
+            </armor_2>
+            <armor_3>	20	  <noDamage>	true	</noDamage>
+            </armor_3>
+            <gun>	10	</gun>
+          </armor>
+        </_20mm_Flak_38_L112>
+      </guns>
+      <emblemSlots>
+        <player>
+          <rayStart>	0.869311 0.385395 0.332832	</rayStart>
+          <rayEnd>	0.528215 0.20556 0.22647	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.3	</size>
+          <hideIfDamaged>	false	</hideIfDamaged>
+        </player>
+        <player>
+          <rayStart>	-0.869311 0.385395 0.332832	</rayStart>
+          <rayEnd>	-0.528215 0.20556 0.22647	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.3	</size>
+          <hideIfDamaged>	true	</hideIfDamaged>
+        </player>
+      </emblemSlots>
+      <showEmblemsOnGun>	false	</showEmblemsOnGun>
+      <physicsShape>	1.000 0.000 1.000 0.000 1.000 0.000 0.500 0.100 0.500 0.500 0.500 0.500 0.600 0.100 0.500	</physicsShape>
+    </Leopardturm>
+  </turrets0>
+  <engines>
+    <Maybach_HL_120_TR>	shared	  <unlocks>
+        <engine>	Maybach_HL_120_TRM	  <cost>	1500	</cost>
+        </engine>
+      </unlocks>
+    </Maybach_HL_120_TR>
+    <Maybach_HL_120_TRM>	shared	  <unlocks>
+        <engine>	Maybach_HL_157P	  <cost>	2400	</cost>
+        </engine>
+      </unlocks>
+    </Maybach_HL_120_TRM>
+    <Maybach_HL_157P>	shared	  <unlocks>
+        <vehicle>	VK2801	  <cost>	56230	</cost>
+        </vehicle>
+      </unlocks>
+    </Maybach_HL_157P>
+  </engines>
+  <fuelTanks>
+    <Medium>	shared	</Medium>
+  </fuelTanks>
+  <radios>
+    <FuG5>	shared	  <unlocks>
+        <radio>	FuG7	  <cost>	1360.0	</cost>
+        </radio>
+      </unlocks>
+    </FuG5>
+    <FuG7>	shared	  <unlocks>
+        <radio>	FuG_Spr.A	  <cost>	4500.0	</cost>
+        </radio>
+      </unlocks>
+    </FuG7>
+    <FuG_Spr.A>	shared	</FuG_Spr.A>
+  </radios>
+</VK1602.xml>

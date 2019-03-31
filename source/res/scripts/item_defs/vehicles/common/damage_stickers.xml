@@ -1,0 +1,51 @@
+<damage_stickers.xml>
+  <texture>	particles/Decals/damage_stickers.dds	</texture>
+  <small_ricochet>
+    <priority>	1	</priority>
+    <texCoords>	0 170	</texCoords>
+    <texSizes>	170 170	</texSizes>
+    <modelSizes>	0.04 0.04	</modelSizes>
+  </small_ricochet>
+  <small_hole>
+    <priority>	1	</priority>
+    <texCoords>	0 0	</texCoords>
+    <texSizes>	170 170	</texSizes>
+    <modelSizes>	0.05 0.05	</modelSizes>
+  </small_hole>
+  <medium_ricochet>
+    <priority>	1	</priority>
+    <texCoords>	170 170	</texCoords>
+    <texSizes>	170 170	</texSizes>
+    <modelSizes>	0.1 0.1	</modelSizes>
+  </medium_ricochet>
+  <medium_hole>
+    <priority>	1	</priority>
+    <texCoords>	170 0	</texCoords>
+    <texSizes>	170 170	</texSizes>
+    <modelSizes>	0.2 0.2	</modelSizes>
+  </medium_hole>
+  <main_ricochet>
+    <priority>	2	</priority>
+    <texCoords>	170 170	</texCoords>
+    <texSizes>	170 170	</texSizes>
+    <modelSizes>	0.24 0.24	</modelSizes>
+  </main_ricochet>
+  <main_hole>
+    <priority>	2	</priority>
+    <texCoords>	170 0	</texCoords>
+    <texSizes>	170 170	</texSizes>
+    <modelSizes>	0.3 0.3	</modelSizes>
+  </main_hole>
+  <large_ricochet>
+    <priority>	3	</priority>
+    <texCoords>	340 170	</texCoords>
+    <texSizes>	170 170	</texSizes>
+    <modelSizes>	0.3 0.3	</modelSizes>
+  </large_ricochet>
+  <large_hole>
+    <priority>	3	</priority>
+    <texCoords>	340 0	</texCoords>
+    <texSizes>	170 170	</texSizes>
+    <modelSizes>	0.36 0.36	</modelSizes>
+  </large_hole>
+</damage_stickers.xml>

@@ -1,0 +1,60 @@
+<TeamBase.def>
+  <Properties>
+    <arena>
+      <Type>	MAILBOX	</Type>
+      <Flags>	CELL_PRIVATE	</Flags>
+    </arena>
+    <radius>
+      <Type>	FLOAT32	</Type>
+      <Flags>	CELL_PUBLIC	</Flags>
+      <Default>	25.0	</Default>
+      <Editable>	true	</Editable>
+    </radius>
+    <team>
+      <Type>	UINT8	</Type>
+      <Flags>	CELL_PUBLIC	</Flags>
+      <Editable>	true	</Editable>
+    </team>
+    <baseID>
+      <Type>	UINT8	</Type>
+      <Flags>	CELL_PRIVATE	</Flags>
+      <Default>	1	</Default>
+      <Editable>	true	</Editable>
+    </baseID>
+    <pointsPerSecond>
+      <Type>	FLOAT32	</Type>
+      <Flags>	CELL_PRIVATE	</Flags>
+      <Default>	1.0	</Default>
+      <Editable>	true	</Editable>
+    </pointsPerSecond>
+    <maxPointsPerSecond>
+      <Type>	FLOAT32	</Type>
+      <Flags>	CELL_PRIVATE	</Flags>
+      <Default>	3.0	</Default>
+      <Editable>	true	</Editable>
+    </maxPointsPerSecond>
+    <ownerStopsCapturing>
+      <Type>	BOOL	</Type>
+      <Flags>	CELL_PRIVATE	</Flags>
+      <Default>	0	</Default>
+      <Editable>	true	</Editable>
+    </ownerStopsCapturing>
+    <cp>
+      <Type>	PYTHON	</Type>
+      <Flags>	CELL_PRIVATE	</Flags>
+    </cp>
+  </Properties>
+  <TempProperties>
+    <_TeamBase__p></_TeamBase__p>
+  </TempProperties>
+  <CellMethods>
+    <start></start>
+    <stop></stop>
+  </CellMethods>
+  <BaseMethods>
+    <createCellNearHere>
+      <Arg>	MAILBOX	</Arg>
+    </createCellNearHere>
+    <smartDestroy></smartDestroy>
+  </BaseMethods>
+</TeamBase.def>

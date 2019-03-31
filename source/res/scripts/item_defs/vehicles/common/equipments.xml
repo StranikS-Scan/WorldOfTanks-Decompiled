@@ -1,0 +1,228 @@
+<equipments.xml>
+  <handExtinguishers>
+    <id>	0	</id>
+    <userString>	#artefacts:handExtinguishers/name	</userString>
+    <description>	#artefacts:handExtinguishers/descr	</description>
+    <icon>	../maps/icons/artefact/handExtinguishers.tga 0 0	</icon>
+    <price>	3000	</price>
+    <tags>	extinguisher	</tags>
+    <script>	Extinguisher	</script>
+  </handExtinguishers>
+  <autoExtinguishers>
+    <id>	1	</id>
+    <userString>	#artefacts:autoExtinguishers/name	</userString>
+    <description>	#artefacts:autoExtinguishers/descr	</description>
+    <icon>	../maps/icons/artefact/autoExtinguishers.tga 0 0	</icon>
+    <price>	50	  <gold></gold>
+    </price>
+    <tags>	extinguisher	</tags>
+    <script>	Extinguisher	  <fireStartingChanceFactor>	0.9	</fireStartingChanceFactor>
+      <autoactivate>	true	</autoactivate>
+    </script>
+  </autoExtinguishers>
+  <smallMedkit>
+    <id>	2	</id>
+    <userString>	#artefacts:smallMedkit/name	</userString>
+    <description>	#artefacts:smallMedkit/descr	</description>
+    <icon>	../maps/icons/artefact/smallMedkit.tga 0 0	</icon>
+    <price>	3000	</price>
+    <tags>	medkit	</tags>
+    <script>	Repairkit	  <repairAll>	false	</repairAll>
+    </script>
+  </smallMedkit>
+  <largeMedkit>
+    <id>	3	</id>
+    <userString>	#artefacts:largeMedkit/name	</userString>
+    <description>	#artefacts:largeMedkit/descr	</description>
+    <icon>	../maps/icons/artefact/largeMedkit.tga 0 0	</icon>
+    <price>	50	  <gold></gold>
+    </price>
+    <tags>	medkit	</tags>
+    <script>	Repairkit	  <repairAll>	true	</repairAll>
+    </script>
+  </largeMedkit>
+  <smallRepairkit>
+    <id>	4	</id>
+    <userString>	#artefacts:smallRepairkit/name	</userString>
+    <description>	#artefacts:smallRepairkit/descr	</description>
+    <icon>	../maps/icons/artefact/smallRepairkit.tga 0 0	</icon>
+    <price>	3000	</price>
+    <tags>	repairkit	</tags>
+    <script>	Repairkit	  <repairAll>	false	</repairAll>
+    </script>
+  </smallRepairkit>
+  <largeRepairkit>
+    <id>	5	</id>
+    <userString>	#artefacts:largeRepairkit/name	</userString>
+    <description>	#artefacts:largeRepairkit/descr	</description>
+    <icon>	../maps/icons/artefact/largeRepairkit.tga 0 0	</icon>
+    <price>	50	  <gold></gold>
+    </price>
+    <tags>	repairkit	</tags>
+    <script>	Repairkit	  <repairAll>	true	</repairAll>
+    </script>
+  </largeRepairkit>
+  <lendLeaseOil>
+    <id>	6	</id>
+    <userString>	#artefacts:lendLeaseOil/name	</userString>
+    <description>	#artefacts:lendLeaseOil/descr	</description>
+    <icon>	../maps/icons/artefact/lendLeaseGasoline.tga 0 0	</icon>
+    <price>	5000	</price>
+    <tags>	fuel	</tags>
+    <incompatibleTags>
+      <installed>	fuel	</installed>
+    </incompatibleTags>
+    <vehicleFilter>
+      <include>
+        <nations>	ussr	</nations>
+      </include>
+    </vehicleFilter>
+    <script>	Fuel	  <enginePowerFactor>	1.05	</enginePowerFactor>
+      <turretRotationSpeedFactor>	1.0	</turretRotationSpeedFactor>
+    </script>
+  </lendLeaseOil>
+  <gasoline100>
+    <id>	7	</id>
+    <userString>	#artefacts:gasoline100/name	</userString>
+    <description>	#artefacts:gasoline100/descr	</description>
+    <icon>	../maps/icons/artefact/gasoline100.tga 0 0	</icon>
+    <price>	5000	</price>
+    <tags>	fuel	</tags>
+    <incompatibleTags>
+      <installed>	fuel	</installed>
+    </incompatibleTags>
+    <vehicleFilter>
+      <include>
+        <nations>	usa germany	</nations>
+        <engine>
+          <tags>	gasoline	</tags>
+        </engine>
+      </include>
+    </vehicleFilter>
+    <script>	Fuel	  <enginePowerFactor>	1.05	</enginePowerFactor>
+      <turretRotationSpeedFactor>	1.05	</turretRotationSpeedFactor>
+    </script>
+  </gasoline100>
+  <gasoline105>
+    <id>	8	</id>
+    <userString>	#artefacts:gasoline105/name	</userString>
+    <description>	#artefacts:gasoline105/descr	</description>
+    <icon>	../maps/icons/artefact/gasoline105.tga 0 0	</icon>
+    <price>	50	  <gold></gold>
+    </price>
+    <tags>	fuel	</tags>
+    <incompatibleTags>
+      <installed>	fuel	</installed>
+    </incompatibleTags>
+    <vehicleFilter>
+      <include>
+        <nations>	usa germany	</nations>
+        <engine>
+          <tags>	gasoline	</tags>
+        </engine>
+      </include>
+    </vehicleFilter>
+    <script>	Fuel	  <enginePowerFactor>	1.1	</enginePowerFactor>
+      <turretRotationSpeedFactor>	1.1	</turretRotationSpeedFactor>
+    </script>
+  </gasoline105>
+  <chocolate>
+    <id>	9	</id>
+    <userString>	#artefacts:chocolate/name	</userString>
+    <description>	#artefacts:chocolate/descr	</description>
+    <icon>	../maps/icons/artefact/chocolate.tga 0 0	</icon>
+    <price>	50	  <gold></gold>
+    </price>
+    <tags>	stimulator	</tags>
+    <vehicleFilter>
+      <include>
+        <nations>	germany	</nations>
+      </include>
+    </vehicleFilter>
+    <script>	Stimulator	  <crewLevelIncrease>	10	</crewLevelIncrease>
+    </script>
+  </chocolate>
+  <cocacola>
+    <id>	100	</id>
+    <userString>	#artefacts:cocacola/name	</userString>
+    <description>	#artefacts:cocacola/descr	</description>
+    <icon>	../maps/icons/artefact/cocacola.tga 0 0	</icon>
+    <price>	50	  <gold></gold>
+    </price>
+    <tags>	stimulator	</tags>
+    <vehicleFilter>
+      <include>
+        <nations>	usa	</nations>
+      </include>
+    </vehicleFilter>
+    <script>	Stimulator	  <crewLevelIncrease>	10	</crewLevelIncrease>
+    </script>
+  </cocacola>
+  <ration>
+    <id>	11	</id>
+    <userString>	#artefacts:ration/name	</userString>
+    <description>	#artefacts:ration/descr	</description>
+    <icon>	../maps/icons/artefact/russ-food.tga 0 0	</icon>
+    <price>	50	  <gold></gold>
+    </price>
+    <tags>	stimulator	</tags>
+    <vehicleFilter>
+      <include>
+        <nations>	ussr	</nations>
+      </include>
+    </vehicleFilter>
+    <script>	Stimulator	  <crewLevelIncrease>	10	</crewLevelIncrease>
+    </script>
+  </ration>
+  <removedRpmLimiter>
+    <id>	12	</id>
+    <userString>	#artefacts:removedRpmLimiter/name	</userString>
+    <description>	#artefacts:removedRpmLimiter/descr	</description>
+    <icon>	../maps/icons/artefact/removedRpmLimiter.tga 0 0	</icon>
+    <price>	3000	</price>
+    <tags>	trigger	</tags>
+    <vehicleFilter>
+      <include>
+        <nations>	ussr china	</nations>
+      </include>
+    </vehicleFilter>
+    <script>	RemovedRpmLimiter	  <enginePowerFactor>	1.1	</enginePowerFactor>
+      <engineHpLossPerSecond>	1.5	</engineHpLossPerSecond>
+    </script>
+  </removedRpmLimiter>
+  <ration_china>
+    <id>	15	</id>
+    <userString>	#artefacts:ration_china/name	</userString>
+    <description>	#artefacts:ration_china/descr	</description>
+    <icon>	../maps/icons/artefact/chines_pork.tga 0 0	</icon>
+    <price>	50	  <gold></gold>
+    </price>
+    <tags>	stimulator	</tags>
+    <vehicleFilter>
+      <include>
+        <nations>	china	</nations>
+      </include>
+    </vehicleFilter>
+    <script>	Stimulator	  <crewLevelIncrease>	10	</crewLevelIncrease>
+    </script>
+  </ration_china>
+  <qualityOil>
+    <id>	16	</id>
+    <userString>	#artefacts:qualityOil/name	</userString>
+    <description>	#artefacts:qualityOil/descr	</description>
+    <icon>	../maps/icons/artefact/qualityOil.tga 0 0	</icon>
+    <price>	5000	</price>
+    <tags>	fuel	</tags>
+    <incompatibleTags>
+      <installed>	fuel	</installed>
+    </incompatibleTags>
+    <vehicleFilter>
+      <include>
+        <nations>	china	</nations>
+      </include>
+    </vehicleFilter>
+    <script>	Fuel	  <enginePowerFactor>	1.05	</enginePowerFactor>
+      <turretRotationSpeedFactor>	1.0	</turretRotationSpeedFactor>
+    </script>
+  </qualityOil>
+</equipments.xml>

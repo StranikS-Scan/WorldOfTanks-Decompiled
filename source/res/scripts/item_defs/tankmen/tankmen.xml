@@ -1,0 +1,164 @@
+<tankmen.xml>
+  <roles>
+    <commander>
+      <userString>	#item_types:tankman/roles/commander	</userString>
+      <description></description>
+      <icon>	../maps/icons/tankmen/roles/commander.tga	</icon>
+      <influence>	0.5	</influence>
+    </commander>
+    <radioman>
+      <userString>	#item_types:tankman/roles/radioman	</userString>
+      <description></description>
+      <icon>	../maps/icons/tankmen/roles/radioman.tga	</icon>
+      <influence>	0.5	</influence>
+    </radioman>
+    <driver>
+      <userString>	#item_types:tankman/roles/driver	</userString>
+      <description></description>
+      <icon>	../maps/icons/tankmen/roles/driver.tga	</icon>
+      <influence>	0.5	</influence>
+    </driver>
+    <gunner>
+      <userString>	#item_types:tankman/roles/gunner	</userString>
+      <description></description>
+      <icon>	../maps/icons/tankmen/roles/gunner.tga	</icon>
+      <influence>	0.5	</influence>
+    </gunner>
+    <loader>
+      <userString>	#item_types:tankman/roles/loader	</userString>
+      <description></description>
+      <icon>	../maps/icons/tankmen/roles/loader.tga	</icon>
+      <influence>	0.5	</influence>
+    </loader>
+  </roles>
+  <skills>
+    <repair>
+      <userString>	#item_types:tankman/skills/repair	</userString>
+      <description>	#item_types:tankman/skills/repair_descr	</description>
+      <icon>	repair.tga	</icon>
+      <influence>	0.5	</influence>
+    </repair>
+    <fireFighting>
+      <userString>	#item_types:tankman/skills/fire_fighting	</userString>
+      <description>	#item_types:tankman/skills/fire_fighting_descr	</description>
+      <icon>	fireFighting.tga	</icon>
+      <influence>	0.5	</influence>
+    </fireFighting>
+    <camouflage>
+      <userString>	#item_types:tankman/skills/camouflage	</userString>
+      <description>	#item_types:tankman/skills/camouflage_descr	</description>
+      <icon>	camouflage.tga	</icon>
+      <influence>	0.5	</influence>
+    </camouflage>
+    <brotherhood>
+      <userString>	#item_types:tankman/skills/brotherhood	</userString>
+      <description>	#item_types:tankman/skills/brotherhood_descr	</description>
+      <icon>	brotherhood.tga	</icon>
+      <crewLevelIncrease>	5	</crewLevelIncrease>
+    </brotherhood>
+    <commander_tutor>
+      <userString>	#item_types:tankman/skills/commander_tutor	</userString>
+      <description>	#item_types:tankman/skills/commander_tutor_descr	</description>
+      <icon>	commander_tutor.tga	</icon>
+      <xpBonusFactorPerLevel>	0.001	</xpBonusFactorPerLevel>
+    </commander_tutor>
+    <commander_expert>
+      <userString>	#item_types:tankman/skills/commander_expert	</userString>
+      <description>	#item_types:tankman/skills/commander_expert_descr	</description>
+      <icon>	commander_expert.tga	</icon>
+    </commander_expert>
+    <commander_universalist>
+      <userString>	#item_types:tankman/skills/commander_universalist	</userString>
+      <description>	#item_types:tankman/skills/commander_universalist_descr	</description>
+      <icon>	commander_universalist.tga	</icon>
+      <efficiency>	0.5	</efficiency>
+    </commander_universalist>
+    <commander_sixthSense>
+      <userString>	#item_types:tankman/skills/commander_sixthSense	</userString>
+      <description>	#item_types:tankman/skills/commander_sixthSense_descr	</description>
+      <icon>	commander_sixthSense.tga	</icon>
+      <delay>	2.0	</delay>
+    </commander_sixthSense>
+    <commander_eagleEye>
+      <userString>	#item_types:tankman/skills/commander_eagleEye	</userString>
+      <description>	#item_types:tankman/skills/commander_eagleEye_descr	</description>
+      <icon>	commander_eagleEye.tga	</icon>
+      <distanceFactorPerLevelWhenDeviceWorking>	0.001	</distanceFactorPerLevelWhenDeviceWorking>
+      <distanceFactorPerLevelWhenDeviceDestroyed>	0.002	</distanceFactorPerLevelWhenDeviceDestroyed>
+    </commander_eagleEye>
+    <driver_tidyPerson>
+      <userString>	#item_types:tankman/skills/driver_tidyPerson	</userString>
+      <description>	#item_types:tankman/skills/driver_tidyPerson_descr	</description>
+      <icon>	driver_tidyPerson.tga	</icon>
+      <fireStartingChanceFactor>	0.75	</fireStartingChanceFactor>
+    </driver_tidyPerson>
+    <driver_smoothDriving>
+      <userString>	#item_types:tankman/skills/driver_smoothDriving	</userString>
+      <description>	#item_types:tankman/skills/driver_smoothDriving_descr	</description>
+      <icon>	driver_smoothDriving.tga	</icon>
+      <shotDispersionFactorPerLevel>	0.001	</shotDispersionFactorPerLevel>
+    </driver_smoothDriving>
+    <gunner_smoothTurret>
+      <userString>	#item_types:tankman/skills/gunner_smoothTurret	</userString>
+      <description>	#item_types:tankman/skills/gunner_smoothTurret_descr	</description>
+      <icon>	gunner_smoothTurret.tga	</icon>
+      <shotDispersionFactorPerLevel>	0.001	</shotDispersionFactorPerLevel>
+    </gunner_smoothTurret>
+    <gunner_gunsmith>
+      <userString>	#item_types:tankman/skills/gunner_gunsmith	</userString>
+      <description>	#item_types:tankman/skills/gunner_gunsmith_descr	</description>
+      <icon>	gunner_gunsmith.tga	</icon>
+      <shotDispersionFactorPerLevel>	0.002	</shotDispersionFactorPerLevel>
+      <aimingTimeFactorPerLevel>	0.004	</aimingTimeFactorPerLevel>
+    </gunner_gunsmith>
+    <gunner_sniper>
+      <userString>	#item_types:tankman/skills/gunner_sniper	</userString>
+      <description>	#item_types:tankman/skills/gunner_sniper_descr	</description>
+      <icon>	gunner_sniper.tga	</icon>
+      <deviceChanceToHitBoost>	0.05	</deviceChanceToHitBoost>
+    </gunner_sniper>
+    <gunner_rancorous>
+      <userString>	#item_types:tankman/skills/gunner_rancorous	</userString>
+      <description>	#item_types:tankman/skills/gunner_rancorous_descr	</description>
+      <icon>	gunner_rancorous.tga	</icon>
+      <duration>	5.0	</duration>
+      <sectorHalfAngle>	15	</sectorHalfAngle>
+    </gunner_rancorous>
+    <gunner_woodHunter>
+      <userString>	#item_types:tankman/skills/gunner_woodHunter	</userString>
+      <description>	#item_types:tankman/skills/gunner_woodHunter_descr	</description>
+      <icon>	gunner_woodHunter.tga	</icon>
+      <curtainEffectDistanceBonus>	5.0	</curtainEffectDistanceBonus>
+    </gunner_woodHunter>
+    <loader_pedant>
+      <userString>	#item_types:tankman/skills/loader_pedant	</userString>
+      <description>	#item_types:tankman/skills/loader_pedant_descr	</description>
+      <icon>	loader_pedant.tga	</icon>
+      <ammoBayHealthFactor>	1.2	</ammoBayHealthFactor>
+    </loader_pedant>
+    <radioman_finder>
+      <userString>	#item_types:tankman/skills/radioman_finder	</userString>
+      <description>	#item_types:tankman/skills/radioman_finder_descr	</description>
+      <icon>	radioman_finder.tga	</icon>
+      <visionRadiusFactorPerLevel>	0.001	</visionRadiusFactorPerLevel>
+    </radioman_finder>
+    <radioman_inventor>
+      <userString>	#item_types:tankman/skills/radioman_inventor	</userString>
+      <description>	#item_types:tankman/skills/radioman_inventor_descr	</description>
+      <icon>	radioman_inventor.tga	</icon>
+      <radioDistanceFactorPerLevel>	0.001	</radioDistanceFactorPerLevel>
+    </radioman_inventor>
+    <radioman_lastEffort>
+      <userString>	#item_types:tankman/skills/radioman_lastEffort	</userString>
+      <description>	#item_types:tankman/skills/radioman_lastEffort_descr	</description>
+      <icon>	radioman_lastEffort.tga	</icon>
+      <duration>	10	</duration>
+    </radioman_lastEffort>
+    <radioman_retransmitter>
+      <userString>	#item_types:tankman/skills/radioman_retransmitter	</userString>
+      <description>	#item_types:tankman/skills/radioman_retransmitter_descr	</description>
+      <icon>	radioman_retransmitter.tga	</icon>
+      <distanceFactorPerLevel>	0.002	</distanceFactorPerLevel>
+    </radioman_retransmitter>
+  </skills>
+</tankmen.xml>

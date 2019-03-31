@@ -1,0 +1,23 @@
+<Projectile.def>
+  <Volatile>
+    <position></position>
+  </Volatile>
+  <Properties>
+    <arenaBase>
+      <Type>	MAILBOX	</Type>
+      <Flags>	CELL_PRIVATE	</Flags>
+    </arenaBase>
+    <vehicleCompDescr>
+      <Type>	STRING	</Type>
+      <Flags>	CELL_PRIVATE	</Flags>
+    </vehicleCompDescr>
+    <shotData>
+      <Type>	PYTHON	</Type>
+      <Flags>	CELL_PRIVATE	</Flags>
+    </shotData>
+  </Properties>
+  <TempProperties>
+    <_Projectile__extra></_Projectile__extra>
+  </TempProperties>
+  <CellMethods></CellMethods>
+</Projectile.def>

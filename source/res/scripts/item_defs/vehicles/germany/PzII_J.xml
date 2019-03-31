@@ -1,0 +1,277 @@
+<PzII_J.xml>
+  <crew>
+    <commander>	gunner	</commander>
+    <driver></driver>
+    <loader>	radioman	</loader>
+  </crew>
+  <speedLimits>
+    <forward>	31	</forward>
+    <backward>	12	</backward>
+  </speedLimits>
+  <repairCost>	2.60	</repairCost>
+  <effects>
+    <destruction>	mediumDestruction	</destruction>
+    <explosion>	mediumExplosion	</explosion>
+    <flaming>	mediumFlaming	</flaming>
+    <collision>	collision	</collision>
+  </effects>
+  <camouflage>
+    <priceFactor>	0.6	</priceFactor>
+    <tiling>	1 1 0 0	</tiling>
+    <exclusionMask>	vehicles/german/G36_PzII_J/PzII_J_CM.dds	</exclusionMask>
+  </camouflage>
+  <emblems>
+    <default>	germany_cross	</default>
+    <lodDist>	MEDIUM	</lodDist>
+    <alpha>	0.9	</alpha>
+  </emblems>
+  <horns>
+    <priceFactor>	1	</priceFactor>
+    <distanceFactor>	1	</distanceFactor>
+    <volumeFactor>	1	</volumeFactor>
+  </horns>
+  <hull>
+    <models>
+      <undamaged>	vehicles/german/G36_PzII_J/normal/lod0/Hull.model	</undamaged>
+      <destroyed>	vehicles/german/G36_PzII_J/crash/lod0/Hull.model	</destroyed>
+      <exploded>	vehicles/german/G36_PzII_J/crash/lod0/Hull.model	</exploded>
+    </models>
+    <swinging>
+      <lodDist>	FAR	</lodDist>
+      <pitchParams>	0.28 34.00 0.34 1.00 0.05 0.30	</pitchParams>
+      <rollParams>	1.00 0.28 34.00 0.34 1.00 0.05 0.30	</rollParams>
+      <sensitivityToImpulse>	0.74	</sensitivityToImpulse>
+    </swinging>
+    <exhaust>
+      <pixie>	particles/Tank/engine_exit_gass.xml	</pixie>
+      <nodes>	HP_Track_Exhaus_1	</nodes>
+      <rates>	6.0 12.0 30.0	</rates>
+    </exhaust>
+    <turretPositions>
+      <turret>	0.000000 0.800898 0.039508	</turret>
+    </turretPositions>
+    <hitTester>
+      <collisionModel>	vehicles/german/G36_PzII_J/collision/Hull.model	</collisionModel>
+    </hitTester>
+    <armor>
+      <armor_1>	80	</armor_1>
+      <armor_2>	70	</armor_2>
+      <armor_3>	50	</armor_3>
+      <armor_4>	50	</armor_4>
+      <armor_5>	50	</armor_5>
+      <armor_6>	40	</armor_6>
+      <armor_7>	25	</armor_7>
+      <armor_8>	0	</armor_8>
+      <armor_9>	25	</armor_9>
+      <armor_10>	25	</armor_10>
+      <armor_11>	50	  <noDamage>	true	</noDamage>
+      </armor_11>
+    </armor>
+    <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
+    <weight>	10800	</weight>
+    <maxHealth>	160	</maxHealth>
+    <ammoBayHealth>
+      <maxHealth>	100	</maxHealth>
+      <maxRegenHealth>	70	</maxRegenHealth>
+      <repairCost>	1.0	</repairCost>
+    </ammoBayHealth>
+    <emblemSlots>
+      <clan>
+        <rayStart>	-0.321158 0.537987 1.78635	</rayStart>
+        <rayEnd>	-0.321158 0.151102 1.68476	</rayEnd>
+        <rayUp>	0.000000 0.000000 -1	</rayUp>
+        <size>	0.3	</size>
+        <hideIfDamaged>	false	</hideIfDamaged>
+      </clan>
+    </emblemSlots>
+  </hull>
+  <chassis>
+    <PzII_ausf_J>
+      <userString>	#germany_vehicles:PzII_ausf_J	</userString>
+      <description>	#germany_vehicles:PzII_ausf_J_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 8 1	</icon>
+      <tags></tags>
+      <level>	6	</level>
+      <price>	4510.0	</price>
+      <notInShop>	true	</notInShop>
+      <models>
+        <undamaged>	vehicles/german/G36_PzII_J/normal/lod0/Chassis.model	</undamaged>
+        <destroyed>	vehicles/german/G36_PzII_J/crash/lod0/Chassis.model	</destroyed>
+        <exploded>	vehicles/german/G36_PzII_J/crash/lod0/Chassis.model	</exploded>
+      </models>
+      <traces>
+        <lodDist>	FAR	</lodDist>
+        <bufferPrefs>	mediumTank	</bufferPrefs>
+        <textureSet>	germany_01	</textureSet>
+        <size>	0.48 0.5	</size>
+      </traces>
+      <tracks>
+        <lodDist>	MEDIUM	</lodDist>
+        <leftMaterial>	track_mat_L_skinned	</leftMaterial>
+        <rightMaterial>	track_mat_R_skinned	</rightMaterial>
+        <textureScale>	-1.12	</textureScale>
+      </tracks>
+      <wheels>
+        <lodDist>	MEDIUM	</lodDist>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	W_L	</template>
+          <radius>	0.343736	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	5	</count>
+        </group>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	W_R	</template>
+          <radius>	0.343736	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	5	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <name>	WD_L0	</name>
+          <radius>	0.360081	</radius>
+        </wheel>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <name>	WD_L1	</name>
+          <radius>	0.299577	</radius>
+        </wheel>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <name>	WD_R0	</name>
+          <radius>	0.360081	</radius>
+        </wheel>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <name>	WD_R1	</name>
+          <radius>	0.299577	</radius>
+        </wheel>
+      </wheels>
+      <drivingWheels>	WD_L0 WD_L1	</drivingWheels>
+      <effects>
+        <lodDist>	MEDIUM	</lodDist>
+        <dust>	smallTankDust	</dust>
+        <mud>	smallTankMud	</mud>
+      </effects>
+      <sound>	/vehicles/tanks/treads/treads_1	</sound>
+      <hullPosition>	0.000000 0.753264 0.000000	</hullPosition>
+      <hitTester>
+        <collisionModel>	vehicles/german/G36_PzII_J/collision/Chassis.model	</collisionModel>
+      </hitTester>
+      <armor>
+        <leftTrack>	24	</leftTrack>
+        <rightTrack>	24	</rightTrack>
+      </armor>
+      <topRightCarryingPoint>	1.16522 0.988896	</topRightCarryingPoint>
+      <maxClimbAngle>	25	</maxClimbAngle>
+      <navmeshGirth>	6.0	</navmeshGirth>
+      <weight>	4200	</weight>
+      <maxLoad>	18850	</maxLoad>
+      <terrainResistance>	1.0 1.4 2.20	</terrainResistance>
+      <brakeForce>	36000	</brakeForce>
+      <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
+      <rotationSpeed>	32	</rotationSpeed>
+      <shotDispersionFactors>
+        <vehicleMovement>	0.2	</vehicleMovement>
+        <vehicleRotation>	0.2	</vehicleRotation>
+      </shotDispersionFactors>
+      <bulkHealthFactor>	3.0	</bulkHealthFactor>
+      <maxHealth>	80	</maxHealth>
+      <maxRegenHealth>	60	</maxRegenHealth>
+      <repairCost>	5.0	</repairCost>
+    </PzII_ausf_J>
+  </chassis>
+  <turrets0>
+    <PzIIturm_ausf_J>
+      <userString>	#germany_vehicles:PzIIturm_ausf_J	</userString>
+      <description>	#germany_vehicles:PzIIturm_ausf_J_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 6 1	</icon>
+      <tags></tags>
+      <level>	4	</level>
+      <price>	4500.0	</price>
+      <notInShop>	true	</notInShop>
+      <models>
+        <undamaged>	vehicles/german/G36_PzII_J/normal/lod0/Turret_01.model	</undamaged>
+        <destroyed>	vehicles/german/G36_PzII_J/crash/lod0/Turret_01.model	</destroyed>
+        <exploded>	vehicles/german/G36_PzII_J/crash/lod0/Turret_01.model	</exploded>
+      </models>
+      <hitTester>
+        <collisionModel>	vehicles/german/G36_PzII_J/collision/Turret_01.model	</collisionModel>
+      </hitTester>
+      <yawLimits>	-180 180	</yawLimits>
+      <gunPosition>	0.000000 0.204535 0.752474	</gunPosition>
+      <armor>
+        <armor_1>	80	</armor_1>
+        <armor_2>	50	</armor_2>
+        <armor_3>	50	</armor_3>
+        <armor_4>	50	</armor_4>
+        <armor_5>	80	</armor_5>
+        <armor_6>	25	</armor_6>
+        <armor_7>	25	</armor_7>
+        <armor_8>	0	</armor_8>
+      </armor>
+      <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
+      <weight>	2000	</weight>
+      <maxHealth>	100	</maxHealth>
+      <rotationSpeed>	45	</rotationSpeed>
+      <turretRotatorHealth>
+        <maxHealth>	80	</maxHealth>
+        <maxRegenHealth>	39	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </turretRotatorHealth>
+      <circularVisionRadius>	370	</circularVisionRadius>
+      <surveyingDeviceHealth>
+        <maxHealth>	60	</maxHealth>
+        <maxRegenHealth>	29	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </surveyingDeviceHealth>
+      <guns>
+        <_20mm_KwK_38_L55A>	shared	  <maxAmmo>	400	</maxAmmo>
+          <models>
+            <undamaged>	vehicles/german/G36_PzII_J/normal/lod0/Gun_01.model	</undamaged>
+            <destroyed>	vehicles/german/G36_PzII_J/crash/lod0/Gun_01.model	</destroyed>
+            <exploded>	vehicles/german/G36_PzII_J/crash/lod0/Gun_01.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/german/G36_PzII_J/collision/Gun_01.model	</collisionModel>
+          </hitTester>
+          <armor>
+            <armor_1>	80	  <noDamage>	true	</noDamage>
+            </armor_1>
+            <armor_2>	20	  <noDamage>	true	</noDamage>
+            </armor_2>
+            <gun>	10	</gun>
+          </armor>
+        </_20mm_KwK_38_L55A>
+      </guns>
+      <emblemSlots>
+        <player>
+          <rayStart>	-0.811738 0.326667 0.412359	</rayStart>
+          <rayEnd>	-0.447623 0.164384 0.379432	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.3	</size>
+          <hideIfDamaged>	false	</hideIfDamaged>
+        </player>
+        <player>
+          <rayStart>	0.811738 0.326667 0.412359	</rayStart>
+          <rayEnd>	0.447623 0.164384 0.379432	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.3	</size>
+          <hideIfDamaged>	true	</hideIfDamaged>
+        </player>
+      </emblemSlots>
+      <showEmblemsOnGun>	false	</showEmblemsOnGun>
+      <physicsShape>	1.000 0.000 1.000 0.000 1.000 0.000 0.500 0.100 0.500 0.500 0.500 0.500 0.600 0.100 0.500	</physicsShape>
+    </PzIIturm_ausf_J>
+  </turrets0>
+  <engines>
+    <Maybach_HL45P>	shared	</Maybach_HL45P>
+  </engines>
+  <fuelTanks>
+    <Medium>	shared	</Medium>
+  </fuelTanks>
+  <radios>
+    <FuG6>	shared	</FuG6>
+  </radios>
+</PzII_J.xml>

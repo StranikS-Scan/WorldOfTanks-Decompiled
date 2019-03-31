@@ -1,0 +1,37 @@
+<BaseAppChatManager.def>
+  <Properties></Properties>
+  <BaseMethods>
+    <receiveMemebersDelta>
+      <Arg>	UINT8	</Arg>
+      <Arg>	OBJECT_ID	</Arg>
+      <Arg>	ARRAY	  <of>	INT32	</of>
+      </Arg>
+    </receiveMemebersDelta>
+    <relayCommand>
+      <Arg>	UINT8	</Arg>
+      <Arg>	OBJECT_ID	</Arg>
+      <Arg>	PYTHON	</Arg>
+    </relayCommand>
+    <sendChannelsToPeriphery>
+      <Arg>	BOOL	</Arg>
+      <Arg>	INT32	</Arg>
+    </sendChannelsToPeriphery>
+    <setRateOfChannelSendingToPeriphery>
+      <Arg>	BOOL	</Arg>
+      <Arg>	INT32	</Arg>
+    </setRateOfChannelSendingToPeriphery>
+    <createUserChannel>
+      <Arg>	MAILBOX	</Arg>
+      <Arg>	STRING	</Arg>
+      <Arg>	DB_ID	</Arg>
+      <Arg>	STRING	</Arg>
+      <Arg>	STRING	</Arg>
+    </createUserChannel>
+    <createPrivateChannel>
+      <Arg>	MAILBOX	</Arg>
+      <Arg>	STRING	</Arg>
+      <Arg>	DB_ID	</Arg>
+      <Arg>	STRING	</Arg>
+    </createPrivateChannel>
+  </BaseMethods>
+</BaseAppChatManager.def>

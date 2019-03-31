@@ -1,0 +1,495 @@
+<customization.xml>
+  <armorColor>	82 72 51 0	</armorColor>
+  <inscriptionColors>
+    <c0>	0 0 0 4	</c0>
+    <c1>	0 0 0 5	</c1>
+    <c2>	0 0 0 6	</c2>
+    <c3>	0 0 0 0	</c3>
+    <c4>	0 0 0 0	</c4>
+    <c5>	0 0 0 0	</c5>
+    <c6>	0 0 0 0	</c6>
+    <c7>	0 0 0 0	</c7>
+    <c8>	0 0 0 0	</c8>
+    <c9>	0 0 0 0	</c9>
+    <c10>	0 0 0 0	</c10>
+    <c11>	0 0 0 0	</c11>
+    <c12>	0 0 0 0	</c12>
+    <c13>	0 0 0 0	</c13>
+    <c14>	0 0 0 0	</c14>
+    <c15>	0 0 0 0	</c15>
+  </inscriptionColors>
+  <camouflageGroups>
+    <bicolor>
+      <userString>	#vehicle_customization:camouflage/bicolor	</userString>
+    </bicolor>
+    <tricolor>
+      <userString>	#vehicle_customization:camouflage/tricolor	</userString>
+    </tricolor>
+  </camouflageGroups>
+  <camouflages>
+    <GuamBicolor>
+      <texture>	vehicles/american/Camouflage/Cusa_1_1GuamBicolor.dds	</texture>
+      <priceFactor>	0.5	</priceFactor>
+      <description>	#vehicle_customization:camouflage/usa/bicolor/GuamBicolor	</description>
+      <id>	12	</id>
+      <groups>	bicolor	</groups>
+      <colors>
+        <c0>	244 233 151 155	</c0>
+        <c1>	17 19 9 44	</c1>
+        <c2>	239 242 125 24	</c2>
+        <c3>	125 170 152 29	</c3>
+      </colors>
+      <tiling>
+        <M4_Sherman>	3.4 2.9 0.4 1	</M4_Sherman>
+        <T1_Cunningham>	3 1 0.2 0.000000	</T1_Cunningham>
+        <M2_lt>	1.4 1.2 0.41 0.000000	</M2_lt>
+        <M3_Stuart>	1.3 1.6 0.2 0.000000	</M3_Stuart>
+        <M3_Grant>	1.7 2.6 0.63 0.6	</M3_Grant>
+        <M4A3E8_Sherman>	2.9 1.9 0.72 0.4	</M4A3E8_Sherman>
+        <T20>	2.6 2.4 0.51 0.43	</T20>
+        <T1_hvy>	2.2 2 0.2 0.2	</T1_hvy>
+        <M6>	1.7 2.3 0.4 0.2	</M6>
+        <T29>	1.7 3 0.3 0.23	</T29>
+        <T32>	1.5 2.3 0.6 0.000000	</T32>
+        <T34_hvy>	2.3 2.5 0.01 0.02	</T34_hvy>
+        <T30>	3 3 0.000000 0.25	</T30>
+        <T57>	3 1.9 0.18 0.03	</T57>
+        <M7_Priest>	2.1 2.3 0.72 0.2	</M7_Priest>
+        <M37>	2.3 3 0.32 0.12	</M37>
+        <M41>	2.3 2 0.45 0.87	</M41>
+        <T2_lt>	1.2 1.7 0.6 0.000000	</T2_lt>
+        <T14>	1 2.1 0.16 0.08	</T14>
+        <M5_Stuart>	1.6 2.4 0.2 0.2	</M5_Stuart>
+        <M7_med>	1.2 2.5 0.4 0.34	</M7_med>
+        <T2_med>	1 1 0.6 0.06	</T2_med>
+        <M2_med>	1.2 1.3 0.4 0.000000	</M2_med>
+        <T18>	1.2 1.4 0.000000 0.03	</T18>
+        <T82>	1.4 1.2 0.4 0.05	</T82>
+        <T40>	2.3 1.6 0.17 0.12	</T40>
+        <M10_Wolverine>	2.2 1.3 0.75 0.56	</M10_Wolverine>
+        <M12>	1.5 2.1 0.000000 0.04	</M12>
+        <MTLS-1G14>	1 1.6 0.28 0.27	</MTLS-1G14>
+        <Pershing>	1.5 1.3 0.94 0.39	</Pershing>
+        <M40M43>	2.3 2 0.2 0.000000	</M40M43>
+        <T92>	2 1.6 0.07 0.43	</T92>
+        <T28>	1.5 2.2 0.6 0.82	</T28>
+        <M4A2E4>	1 1.4 0.02 0.1	</M4A2E4>
+        <M6A2E1>	1.6 2.2 0.2 0.2	</M6A2E1>
+        <Ram-II>	1.4 1.2 0.6 0.61	</Ram-II>
+        <M36_Slagger>	1.2 1.7 0.25 0.6	</M36_Slagger>
+        <T95>	3 3 0.39 0.6	</T95>
+        <M22_Locust>	1.3 3.9 0.4 0.2	</M22_Locust>
+        <M46_Patton>	3.7 2.9 0.04 0.3	</M46_Patton>
+        <T25_AT>	2.7 2.7 0.04 0.51	</T25_AT>
+        <M24_Chaffee>	2 2 0.32 0.12	</M24_Chaffee>
+        <Sherman_Jumbo>	2 2 0.48 1	</Sherman_Jumbo>
+      </tiling>
+    </GuamBicolor>
+    <IvozimaBicolor>
+      <texture>	vehicles/american/Camouflage/Cusa_1_2IvozimaBicolor.dds	</texture>
+      <priceFactor>	0.5	</priceFactor>
+      <description>	#vehicle_customization:camouflage/usa/bicolor/IvozimaBicolor	</description>
+      <id>	13	</id>
+      <groups>	bicolor	</groups>
+      <colors>
+        <c0>	240 171 43 104	</c0>
+        <c1>	16 14 7 102	</c1>
+        <c2>	239 242 125 0	</c2>
+        <c3>	242 216 66 28	</c3>
+      </colors>
+      <tiling>
+        <M4_Sherman>	3 2.5 0.49 0.34	</M4_Sherman>
+        <T1_Cunningham>	2.8 2.1 0.6 0.19	</T1_Cunningham>
+        <M2_lt>	3.9 2.3 0.4 0.2	</M2_lt>
+        <M3_Stuart>	3 3 0.4 0.000000	</M3_Stuart>
+        <M3_Grant>	3 3.8 0.56 0.000000	</M3_Grant>
+        <M4A3E8_Sherman>	3.3 3.1 0.4 0.000000	</M4A3E8_Sherman>
+        <T20>	3.9 3.2 0.6 0.000000	</T20>
+        <T1_hvy>	2.6 2.2 0.05 0.01	</T1_hvy>
+        <M6>	3 3 0.000000 0.000000	</M6>
+        <T29>	1.9 3.4 0.4 0.000000	</T29>
+        <T32>	1.6 3 0.6 0.000000	</T32>
+        <T34_hvy>	2.4 2.3 0.1 0.56	</T34_hvy>
+        <T30>	1 3 0.000000 0.000000	</T30>
+        <T57>	3 1.7 0.4 0.000000	</T57>
+        <M7_Priest>	3 2 0.52 0.2	</M7_Priest>
+        <M37>	2.6 1.1 0.2 0.000000	</M37>
+        <M41>	3 3 0.8 0.000000	</M41>
+        <T2_lt>	2.7 2.5 0.4 0.000000	</T2_lt>
+        <T14>	1.7 1.5 0.4 0.8	</T14>
+        <M5_Stuart>	3 2.3 0.2 0.4	</M5_Stuart>
+        <M7_med>	3.1 1.6 0.2 0.09	</M7_med>
+        <T2_med>	3 2.1 0.29 0.8	</T2_med>
+        <M2_med>	1.8 2.3 0.93 0.65	</M2_med>
+        <T18>	1.9 1.7 0.36 0.67	</T18>
+        <T82>	1.8 1.4 0.38 0.48	</T82>
+        <T40>	1.5 1.7 0.4 0.65	</T40>
+        <M10_Wolverine>	1.5 2.6 0.56 0.5	</M10_Wolverine>
+        <M12>	3 2 0.000000 0.000000	</M12>
+        <MTLS-1G14>	1.9 1.4 0.2 0.19	</MTLS-1G14>
+        <Pershing>	3.3 1.5 0.6 0.06	</Pershing>
+        <M40M43>	3 3 0.07 0.09	</M40M43>
+        <T92>	5 3 0.11 0.96	</T92>
+        <T28>	3.7 1.9 0.4 0.2	</T28>
+        <M4A2E4>	3 1.8 0.000000 0.000000	</M4A2E4>
+        <M6A2E1>	1.3 3 0.4 0.4	</M6A2E1>
+        <Ram-II>	1.2 2.3 0.4 0.2	</Ram-II>
+        <M36_Slagger>	3 3 0.6 0.000000	</M36_Slagger>
+        <T95>	1 3 0.2 0.6	</T95>
+        <M22_Locust>	3 3 0.2 0.000000	</M22_Locust>
+        <M46_Patton>	2.7 4.2 0.04 0.64	</M46_Patton>
+        <T25_AT>	2.1 2 0.42 0.32	</T25_AT>
+        <M24_Chaffee>	2.9 3.7 0.78 0.16	</M24_Chaffee>
+        <Sherman_Jumbo>	3 3 0.6 0.48	</Sherman_Jumbo>
+      </tiling>
+    </IvozimaBicolor>
+    <BretagneSky>
+      <texture>	vehicles/american/Camouflage/Cusa_1_3BretagneSky.dds	</texture>
+      <priceFactor>	0.5	</priceFactor>
+      <description>	#vehicle_customization:camouflage/usa/bicolor/BretagneSky	</description>
+      <id>	14	</id>
+      <groups>	bicolor	</groups>
+      <colors>
+        <c0>	82 79 35 115	</c0>
+        <c1>	255 255 255 174	</c1>
+        <c2>	239 242 125 0	</c2>
+        <c3>	125 170 152 0	</c3>
+      </colors>
+      <tiling>
+        <M4_Sherman>	4.1 4 0.49 0.46	</M4_Sherman>
+        <T1_Cunningham>	4.6 3 0.54 0.39	</T1_Cunningham>
+        <M2_lt>	4.2 2.9 0.06 0.2	</M2_lt>
+        <M3_Stuart>	4.4 4.6 0.2 0.2	</M3_Stuart>
+        <M3_Grant>	3.7 3.6 0.93 0.13	</M3_Grant>
+        <M4A3E8_Sherman>	5 5 0.000000 0.81	</M4A3E8_Sherman>
+        <T20>	5 5.8 0.4 0.000000	</T20>
+        <T1_hvy>	5.7 5 0.2 0.48	</T1_hvy>
+        <M6>	5.6 5 0.2 0.000000	</M6>
+        <T29>	7 7 0.4 0.000000	</T29>
+        <T32>	6.1 5.3 0.000000 0.000000	</T32>
+        <T34_hvy>	7.4 7.5 0.2 0.000000	</T34_hvy>
+        <T30>	7 7 0.000000 0.000000	</T30>
+        <T57>	6.7 4.6 0.2 0.2	</T57>
+        <M7_Priest>	6.5 6.5 0.000000 0.2	</M7_Priest>
+        <M37>	7 7 0.000000 0.000000	</M37>
+        <M41>	6.5 6.7 0.2 0.000000	</M41>
+        <T2_lt>	5 2.6 0.6 0.2	</T2_lt>
+        <T14>	4.7 4.7 0.2 0.000000	</T14>
+        <M5_Stuart>	6 6.2 0.2 0.000000	</M5_Stuart>
+        <M7_med>	5.7 5.2 0.51 0.01	</M7_med>
+        <T2_med>	5 4.8 0.24 0.000000	</T2_med>
+        <M2_med>	5.1 5 0.31 0.4	</M2_med>
+        <T18>	6.9 4 0.000000 0.000000	</T18>
+        <T82>	5 5 0.13 0.93	</T82>
+        <T40>	6.3 6.3 0.6 0.42	</T40>
+        <M10_Wolverine>	5.6 5.4 0.4 0.12	</M10_Wolverine>
+        <M12>	7 7 0.21 0.24	</M12>
+        <MTLS-1G14>	6.8 4 0.45 0.6	</MTLS-1G14>
+        <Pershing>	5 5.7 0.24 0.17	</Pershing>
+        <M40M43>	7 7 0.6 0.000000	</M40M43>
+        <T92>	7.8 8 0.000000 0.2	</T92>
+        <T28>	6.3 6.3 0.000000 0.000000	</T28>
+        <M4A2E4>	5 5 0.81 0.18	</M4A2E4>
+        <M6A2E1>	4.8 4.4 0.6 0.2	</M6A2E1>
+        <Ram-II>	6.3 6.3 0.2 0.2	</Ram-II>
+        <M36_Slagger>	6.2 6.2 0.000000 0.000000	</M36_Slagger>
+        <T95>	7 7 0.2 0.2	</T95>
+        <M22_Locust>	5.4 5.4 0.000000 0.000000	</M22_Locust>
+        <M46_Patton>	6.4 6.4 0.48 0.27	</M46_Patton>
+        <T25_AT>	6.8 6.8 0.26 0.06	</T25_AT>
+        <M24_Chaffee>	7.6 7.5 0.000000 0.000000	</M24_Chaffee>
+        <Sherman_Jumbo>	7.9 7.9 0.000000 0.000000	</Sherman_Jumbo>
+      </tiling>
+    </BretagneSky>
+    <WhiteScar>
+      <texture>	vehicles/american/Camouflage/Cusa_1_4WhiteScar.dds	</texture>
+      <priceFactor>	0.5	</priceFactor>
+      <description>	#vehicle_customization:camouflage/usa/bicolor/WhiteScar	</description>
+      <id>	15	</id>
+      <groups>	bicolor	</groups>
+      <colors>
+        <c0>	250 244 203 225	</c0>
+        <c1>	82 79 35 0	</c1>
+        <c2>	239 242 125 0	</c2>
+        <c3>	125 170 152 0	</c3>
+      </colors>
+      <tiling>
+        <M4_Sherman>	5 4.1 0.63 0.18	</M4_Sherman>
+        <T1_Cunningham>	5 3 0.000000 0.000000	</T1_Cunningham>
+        <M2_lt>	3.7 3 0.61 0.69	</M2_lt>
+        <M3_Stuart>	3 5 0.25 0.6	</M3_Stuart>
+        <M3_Grant>	5 5 0.82 0.04	</M3_Grant>
+        <M4A3E8_Sherman>	5 5 0.34 0.26	</M4A3E8_Sherman>
+        <T20>	5 5 0.6 0.000000	</T20>
+        <T1_hvy>	5 5 0.6 0.2	</T1_hvy>
+        <M6>	4.6 5.9 0.4 1	</M6>
+        <T29>	7 7 0.6 0.9	</T29>
+        <T32>	6.3 5.4 0.2 0.42	</T32>
+        <T34_hvy>	7 6.8 0.62 0.3	</T34_hvy>
+        <T30>	5 3.7 0.95 0.12	</T30>
+        <T57>	7 5 0.2 0.2	</T57>
+        <M7_Priest>	7 5 0.2 0.000000	</M7_Priest>
+        <M37>	5 7 0.2 0.2	</M37>
+        <M41>	7.6 8.6 0.2 0.000000	</M41>
+        <T2_lt>	5 3 0.28 0.71	</T2_lt>
+        <T14>	5 5 0.000000 1	</T14>
+        <M5_Stuart>	5.5 6.3 0.4 0.2	</M5_Stuart>
+        <M7_med>	5 7 0.27 0.11	</M7_med>
+        <T2_med>	7 7 0.4 0.43	</T2_med>
+        <M2_med>	5 5 0.000000 0.000000	</M2_med>
+        <T18>	6.8 4.3 0.000000 0.000000	</T18>
+        <T82>	4.8 5.1 0.2 0.2	</T82>
+        <T40>	6.6 6.5 0.000000 0.4	</T40>
+        <M10_Wolverine>	7 6 0.48 0.2	</M10_Wolverine>
+        <M12>	7 8.1 0.48 0.51	</M12>
+        <MTLS-1G14>	5.8 4.3 0.19 0.89	</MTLS-1G14>
+        <Pershing>	7 7 0.4 0.2	</Pershing>
+        <M40M43>	7.1 7.9 0.05 0.59	</M40M43>
+        <T92>	9.8 8.1 0.58 0.45	</T92>
+        <T28>	5 7 0.5 0.07	</T28>
+        <M4A2E4>	6.1 5 0.99 0.4	</M4A2E4>
+        <M6A2E1>	6.6 6.4 0.000000 0.4	</M6A2E1>
+        <Ram-II>	6 6.1 0.000000 0.2	</Ram-II>
+        <M36_Slagger>	7 7 0.6 0.59	</M36_Slagger>
+        <T95>	5 5 0.000000 0.000000	</T95>
+        <M22_Locust>	5 5 0.37 0.42	</M22_Locust>
+        <M46_Patton>	5.8 5.9 0.8 0.4	</M46_Patton>
+        <T25_AT>	6.4 6.2 0.000000 0.000000	</T25_AT>
+        <M24_Chaffee>	7.2 7.1 0.000000 0.56	</M24_Chaffee>
+        <Sherman_Jumbo>	7.6 7.6 0.000000 0.000000	</Sherman_Jumbo>
+      </tiling>
+    </WhiteScar>
+    <RudesheimTricolor>
+      <texture>	vehicles/american/Camouflage/Cusa_1_5RudesheimTricolor.dds	</texture>
+      <priceFactor>	1	</priceFactor>
+      <description>	#vehicle_customization:camouflage/usa/tricolor/RudesheimTricolor	</description>
+      <id>	16	</id>
+      <groups>	tricolor	</groups>
+      <colors>
+        <c0>	83 75 30 121	</c0>
+        <c1>	11 15 11 255	</c1>
+        <c2>	236 238 149 114	</c2>
+        <c3>	169 199 187 23	</c3>
+      </colors>
+      <tiling>
+        <M4_Sherman>	4.2 6.3 0.7 0.12	</M4_Sherman>
+        <T1_Cunningham>	3 3 1 0.4	</T1_Cunningham>
+        <M2_lt>	3.9 3 0.2 0.27	</M2_lt>
+        <M3_Stuart>	2.9 2.9 0.4 0.000000	</M3_Stuart>
+        <M3_Grant>	4 5 0.45 0.76	</M3_Grant>
+        <M4A3E8_Sherman>	3.9 5 0.56 0.15	</M4A3E8_Sherman>
+        <T20>	3.3 4.3 0.69 0.27	</T20>
+        <T1_hvy>	3.5 2.3 0.57 0.67	</T1_hvy>
+        <M6>	3 5 0.68 0.6	</M6>
+        <T29>	3.8 6.6 0.21 0.53	</T29>
+        <T32>	5 3.9 0.4 0.6	</T32>
+        <T34_hvy>	2.2 2.2 0.24 0.24	</T34_hvy>
+        <T30>	5 5 0.31 0.11	</T30>
+        <T57>	3 3 0.2 0.4	</T57>
+        <M7_Priest>	3 5 0.000000 0.000000	</M7_Priest>
+        <M37>	3 3 0.2 0.49	</M37>
+        <M41>	3 5 0.59 0.61	</M41>
+        <T2_lt>	3 2.4 0.36 0.83	</T2_lt>
+        <T14>	1.5 2.3 0.84 0.32	</T14>
+        <M5_Stuart>	5 7 0.43 0.49	</M5_Stuart>
+        <M7_med>	3 5 0.2 0.12	</M7_med>
+        <T2_med>	3.3 5 0.6 0.4	</T2_med>
+        <M2_med>	3 3 0.000000 0.000000	</M2_med>
+        <T18>	2.7 1.8 0.29 0.59	</T18>
+        <T82>	3 5 0.4 0.34	</T82>
+        <T40>	3 3 0.54 0.000000	</T40>
+        <M10_Wolverine>	3.5 3.1 0.86 0.23	</M10_Wolverine>
+        <M12>	5 3 0.000000 0.27	</M12>
+        <MTLS-1G14>	5 2.3 0.88 0.000000	</MTLS-1G14>
+        <Pershing>	5 5.1 0.8 0.22	</Pershing>
+        <M40M43>	3 5 0.35 0.75	</M40M43>
+        <T92>	7 4.3 0.4 0.6	</T92>
+        <T28>	3 3 0.000000 0.2	</T28>
+        <M4A2E4>	3 3 0.000000 0.15	</M4A2E4>
+        <M6A2E1>	2.3 4.3 0.05 0.12	</M6A2E1>
+        <Ram-II>	3 3 0.25 0.06	</Ram-II>
+        <M36_Slagger>	3 3 0.8 0.2	</M36_Slagger>
+        <T95>	3.3 2.9 0.44 0.4	</T95>
+        <M22_Locust>	3 5 0.000000 0.000000	</M22_Locust>
+        <M46_Patton>	3 2.6 0.18 0.14	</M46_Patton>
+        <T25_AT>	2.9 2.6 0.26 0.15	</T25_AT>
+        <M24_Chaffee>	3.1 3 0.94 0.86	</M24_Chaffee>
+        <Sherman_Jumbo>	2.8 3 0.22 0.5	</Sherman_Jumbo>
+      </tiling>
+    </RudesheimTricolor>
+    <IvozimaTricolor>
+      <texture>	vehicles/american/Camouflage/Cusa_1_6IvozimaTricolor.dds	</texture>
+      <priceFactor>	1	</priceFactor>
+      <description>	#vehicle_customization:camouflage/usa/tricolor/IvozimaTricolor	</description>
+      <id>	17	</id>
+      <groups>	tricolor	</groups>
+      <colors>
+        <c0>	250 166 10 141	</c0>
+        <c1>	16 16 10 127	</c1>
+        <c2>	244 237 142 127	</c2>
+        <c3>	151 62 9 148	</c3>
+      </colors>
+      <tiling>
+        <M4_Sherman>	4.4 4.7 0.63 0.19	</M4_Sherman>
+        <T1_Cunningham>	3 3 0.46 0.4	</T1_Cunningham>
+        <M2_lt>	5 3 0.2 0.4	</M2_lt>
+        <M3_Stuart>	3.8 5.2 0.2 0.000000	</M3_Stuart>
+        <M3_Grant>	5 3 0.000000 0.000000	</M3_Grant>
+        <M4A3E8_Sherman>	5 5.9 0.73 0.07	</M4A3E8_Sherman>
+        <T20>	4.8 5 0.3 0.19	</T20>
+        <T1_hvy>	5.4 2.6 0.000000 0.000000	</T1_hvy>
+        <M6>	4.2 5 0.2 0.2	</M6>
+        <T29>	2.6 5 1 0.000000	</T29>
+        <T32>	5 4.5 0.000000 0.2	</T32>
+        <T34_hvy>	4.6 4.6 0.38 0.3	</T34_hvy>
+        <T30>	5.1 6.5 0.83 0.2	</T30>
+        <T57>	5 3.4 0.74 0.2	</T57>
+        <M7_Priest>	5.9 5.6 0.09 0.8	</M7_Priest>
+        <M37>	5 5 0.69 0.2	</M37>
+        <M41>	5 9 1 0.4	</M41>
+        <T2_lt>	5 3 0.000000 0.000000	</T2_lt>
+        <T14>	3 4.4 0.6 0.000000	</T14>
+        <M5_Stuart>	5 7 0.74 0.4	</M5_Stuart>
+        <M7_med>	4.8 5.2 0.38 0.8	</M7_med>
+        <T2_med>	3.1 4 0.44 0.42	</T2_med>
+        <M2_med>	3.8 4.7 0.74 0.92	</M2_med>
+        <T18>	4.7 5.4 0.51 0.4	</T18>
+        <T82>	4.4 3.8 0.64 0.3	</T82>
+        <T40>	5 5 0.22 0.24	</T40>
+        <M10_Wolverine>	5.7 6.4 0.81 0.27	</M10_Wolverine>
+        <M12>	6.4 5.3 0.58 0.31	</M12>
+        <MTLS-1G14>	4.9 4.3 0.31 0.88	</MTLS-1G14>
+        <Pershing>	4.5 3.6 0.79 0.06	</Pershing>
+        <M40M43>	5.3 3.7 0.32 0.42	</M40M43>
+        <T92>	7 7 0.000000 1	</T92>
+        <T28>	5 5 0.8 0.32	</T28>
+        <M4A2E4>	5 5 0.68 0.6	</M4A2E4>
+        <M6A2E1>	5 5 0.2 0.6	</M6A2E1>
+        <Ram-II>	5 7 0.53 0.000000	</Ram-II>
+        <M36_Slagger>	5 5 0.04 0.4	</M36_Slagger>
+        <T95>	5 7 0.64 0.15	</T95>
+        <M22_Locust>	4.5 4.3 0.04 0.000000	</M22_Locust>
+        <M46_Patton>	3.9 3.2 0.4 0.4	</M46_Patton>
+        <T25_AT>	4.5 4.5 0.15 0.000000	</T25_AT>
+        <M24_Chaffee>	5.7 5.6 0.33 0.24	</M24_Chaffee>
+        <Sherman_Jumbo>	7 6.6 0.5 0.5	</Sherman_Jumbo>
+      </tiling>
+    </IvozimaTricolor>
+    <OldschoolUsa>
+      <texture>	vehicles/american/Camouflage/Cusa_1_7OldschoolUsa.dds	</texture>
+      <priceFactor>	1	</priceFactor>
+      <description>	#vehicle_customization:camouflage/usa/tricolor/OldschoolUsa	</description>
+      <id>	18	</id>
+      <groups>	tricolor	</groups>
+      <colors>
+        <c0>	52 87 95 0	</c0>
+        <c1>	239 169 105 158	</c1>
+        <c2>	138 21 39 96	</c2>
+        <c3>	52 87 95 148	</c3>
+      </colors>
+      <tiling>
+        <M4_Sherman>	7 5.5 0.8 0.6	</M4_Sherman>
+        <T1_Cunningham>	4.6 3 0.4 0.4	</T1_Cunningham>
+        <M2_lt>	5 3 0.4 0.13	</M2_lt>
+        <M3_Stuart>	3 5 0.22 0.62	</M3_Stuart>
+        <M3_Grant>	5 5 0.4 0.000000	</M3_Grant>
+        <M4A3E8_Sherman>	5 5 0.4 0.2	</M4A3E8_Sherman>
+        <T20>	5 5 0.6 0.2	</T20>
+        <T1_hvy>	5 5 0.6 0.000000	</T1_hvy>
+        <M6>	5 5 0.2 0.000000	</M6>
+        <T29>	4.1 6.8 0.4 0.000000	</T29>
+        <T32>	5 5 0.000000 0.000000	</T32>
+        <T34_hvy>	5.5 5.7 0.14 0.15	</T34_hvy>
+        <T30>	5.7 7.6 0.000000 0.000000	</T30>
+        <T57>	5 5 0.8 0.4	</T57>
+        <M7_Priest>	7 7 0.4 0.000000	</M7_Priest>
+        <M37>	5 5 0.06 0.000000	</M37>
+        <M41>	5 7 0.2 0.000000	</M41>
+        <T2_lt>	5 3 0.47 0.8	</T2_lt>
+        <T14>	3 5 0.000000 0.000000	</T14>
+        <M5_Stuart>	7 7 0.4 0.000000	</M5_Stuart>
+        <M7_med>	7 7 0.95 0.12	</M7_med>
+        <T2_med>	5 3 0.2 0.6	</T2_med>
+        <M2_med>	5 5 0.54 0.4	</M2_med>
+        <T18>	4.9 3.9 0.6 0.2	</T18>
+        <T82>	7 7 0.59 0.53	</T82>
+        <T40>	5.3 5 0.54 0.2	</T40>
+        <M10_Wolverine>	7.5 5.5 0.68 0.000000	</M10_Wolverine>
+        <M12>	7.5 7.4 0.6 0.000000	</M12>
+        <MTLS-1G14>	7 4.2 0.8 0.07	</MTLS-1G14>
+        <Pershing>	7 7 0.000000 0.2	</Pershing>
+        <M40M43>	5 5 0.05 0.04	</M40M43>
+        <T92>	7 7 0.31 0.71	</T92>
+        <T28>	5.6 5 0.000000 0.4	</T28>
+        <M4A2E4>	5 5.3 0.52 0.6	</M4A2E4>
+        <M6A2E1>	3.9 4 0.2 0.6	</M6A2E1>
+        <Ram-II>	5 5 0.25 0.4	</Ram-II>
+        <M36_Slagger>	5.8 5.5 0.56 0.93	</M36_Slagger>
+        <T95>	5 5 0.2 0.2	</T95>
+        <M22_Locust>	5 5 0.6 0.4	</M22_Locust>
+        <M46_Patton>	4 3.9 0.37 0.16	</M46_Patton>
+        <T25_AT>	3.8 3.8 0.3 0.32	</T25_AT>
+        <M24_Chaffee>	7.6 7.7 1 0.44	</M24_Chaffee>
+        <Sherman_Jumbo>	6 6.2 0.68 0.5	</Sherman_Jumbo>
+      </tiling>
+    </OldschoolUsa>
+    <Membane>
+      <texture>	vehicles/american/Camouflage/Cusa_1_8Membane.dds	</texture>
+      <priceFactor>	0.5	</priceFactor>
+      <description>	#vehicle_customization:camouflage/usa/bicolor/Membane	</description>
+      <id>	19	</id>
+      <groups>	bicolor	</groups>
+      <colors>
+        <c0>	22 31 22 255	</c0>
+        <c1>	254 233 148 109	</c1>
+        <c2>	41 39 3 0	</c2>
+        <c3>	21 100 125 0	</c3>
+      </colors>
+      <tiling>
+        <M4_Sherman>	3.4 3.4 0.000000 0.31	</M4_Sherman>
+        <T1_Cunningham>	3.3 2.7 0.000000 0.000000	</T1_Cunningham>
+        <M2_lt>	5 3 0.06 0.08	</M2_lt>
+        <M3_Stuart>	3.9 3 0.000000 0.000000	</M3_Stuart>
+        <M3_Grant>	4 4 0.000000 0.000000	</M3_Grant>
+        <M4A3E8_Sherman>	5 5 0.000000 0.000000	</M4A3E8_Sherman>
+        <T20>	5 5 0.000000 0.000000	</T20>
+        <T1_hvy>	3.8 3.5 0.000000 0.000000	</T1_hvy>
+        <M6>	3.9 3.9 0.000000 0.000000	</M6>
+        <T29>	5 5 0.25 0.07	</T29>
+        <T32>	4.8 5.7 0.000000 0.000000	</T32>
+        <T34_hvy>	6.7 5.6 0.07 0.000000	</T34_hvy>
+        <T30>	5.6 6.5 0.000000 0.000000	</T30>
+        <T57>	5 3.5 0.000000 0.000000	</T57>
+        <M7_Priest>	7 7 0.000000 0.000000	</M7_Priest>
+        <M37>	5 5 0.000000 0.6	</M37>
+        <M41>	6.3 6.5 0.000000 0.000000	</M41>
+        <T2_lt>	3.8 3 0.000000 0.000000	</T2_lt>
+        <T14>	5 5 0.31 0.33	</T14>
+        <M5_Stuart>	5 5 0.000000 0.000000	</M5_Stuart>
+        <M7_med>	4.6 4.4 0.000000 0.000000	</M7_med>
+        <T2_med>	5 5 0.000000 0.000000	</T2_med>
+        <M2_med>	5 5 0.000000 0.000000	</M2_med>
+        <T18>	5 3 0.000000 0.000000	</T18>
+        <T82>	4.9 4.8 0.000000 0.000000	</T82>
+        <T40>	5 5 0.000000 0.000000	</T40>
+        <M10_Wolverine>	4.5 4.8 0.000000 0.42	</M10_Wolverine>
+        <M12>	7 7 0.000000 0.000000	</M12>
+        <MTLS-1G14>	4.6 2.8 0.000000 0.000000	</MTLS-1G14>
+        <Pershing>	5 5 0.2 0.2	</Pershing>
+        <M40M43>	5.6 5.3 0.000000 0.000000	</M40M43>
+        <T92>	7 7 0.000000 0.000000	</T92>
+        <T28>	5 5 0.000000 0.000000	</T28>
+        <M4A2E4>	5 5 0.000000 0.000000	</M4A2E4>
+        <M6A2E1>	3.9 4.9 0.000000 0.000000	</M6A2E1>
+        <Ram-II>	4.3 4.4 0.000000 0.2	</Ram-II>
+        <M36_Slagger>	5.4 5.2 0.000000 0.000000	</M36_Slagger>
+        <T95>	5 5 0.000000 0.000000	</T95>
+        <M22_Locust>	5 5 0.000000 0.000000	</M22_Locust>
+        <M46_Patton>	3.8 3.9 0.000000 0.000000	</M46_Patton>
+        <T25_AT>	3.6 3.7 0.000000 0.000000	</T25_AT>
+        <M24_Chaffee>	4.9 5 0.000000 0.000000	</M24_Chaffee>
+        <Sherman_Jumbo>	5.3 5.3 0.000000 0.000000	</Sherman_Jumbo>
+      </tiling>
+    </Membane>
+  </camouflages>
+</customization.xml>

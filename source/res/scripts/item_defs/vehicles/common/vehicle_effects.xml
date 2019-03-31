@@ -1,0 +1,705 @@
+<vehicle_effects.xml>
+  <collision>
+    <variant1>
+      <stages>
+        <impact>	2.0	</impact>
+      </stages>
+      <effects>
+        <pixie>
+          <startKey>	impact	</startKey>
+          <file>	particles/Tank/tank_collision_01.xml	</file>
+          <force>	1	</force>
+        </pixie>
+        <sound>
+          <startKey>	impact	</startKey>
+          <name>	/hits/hits/tank_hit_armor_ricochet	</name>
+        </sound>
+      </effects>
+    </variant1>
+    <variant2>
+      <stages>
+        <impact>	2.0	</impact>
+      </stages>
+      <effects>
+        <pixie>
+          <startKey>	impact	</startKey>
+          <file>	particles/Tank/tank_collision_02.xml	</file>
+          <force>	1	</force>
+        </pixie>
+        <sound>
+          <startKey>	impact	</startKey>
+          <name>	/objects/fuel_barrel/fuel_barrel_mid	</name>
+        </sound>
+      </effects>
+    </variant2>
+  </collision>
+  <smallDestruction>
+    <variant1>
+      <stages>
+        <death>	0.25	</death>
+        <static>	5.0	</static>
+        <stopDeath>	36000	</stopDeath>
+      </stages>
+      <effects>
+        <shockWave>
+          <startKey>	death	</startKey>
+          <duration>	2.0	</duration>
+        </shockWave>
+        <flashBang>
+          <startKey>	death	</startKey>
+          <stages>
+            <stage>	0.1	  <color>	0 0 0 0	</color>
+            </stage>
+            <stage>	2.0	  <color>	1.0 0.0 0.0 0.7	</color>
+            </stage>
+            <stage>	0.0	  <color>	0 0 0 0	</color>
+            </stage>
+          </stages>
+        </flashBang>
+        <pixie>
+          <startKey>	death	</startKey>
+          <endKey>	stopDeath	</endKey>
+          <alwaysUpdateModel>	true	</alwaysUpdateModel>
+          <file>	particles/Tank/tank_destroy_small_01.xml	</file>
+          <position>	Scene Root	</position>
+          <force>	1	</force>
+        </pixie>
+        <sound>
+          <startKey>	death	</startKey>
+          <name>	/hits/tank_death/tank_death	</name>
+        </sound>
+        <decal>
+          <startKey>	static	</startKey>
+          <groupName>	slow	</groupName>
+          <texName>	explosion	</texName>
+          <size>	10 10	</size>
+          <randomYaw>	true	</randomYaw>
+        </decal>
+        <pixie>
+          <startKey>	static	</startKey>
+          <file>	particles/Tank/fire_small_01.xml	</file>
+          <position>	HP_Fire_1	</position>
+        </pixie>
+        <sound>
+          <startKey>	static	</startKey>
+          <name>	/objects/fire/house_burn	</name>
+        </sound>
+      </effects>
+    </variant1>
+    <variant2>
+      <stages>
+        <death>	0.25	</death>
+        <static>	5.0	</static>
+        <stopDeath>	36000	</stopDeath>
+      </stages>
+      <effects>
+        <shockWave>
+          <startKey>	death	</startKey>
+          <duration>	2.0	</duration>
+        </shockWave>
+        <flashBang>
+          <startKey>	death	</startKey>
+          <stages>
+            <stage>	0.1	  <color>	0 0 0 0	</color>
+            </stage>
+            <stage>	2.0	  <color>	1.0 0.0 0.0 0.7	</color>
+            </stage>
+            <stage>	0.0	  <color>	0 0 0 0	</color>
+            </stage>
+          </stages>
+        </flashBang>
+        <pixie>
+          <startKey>	death	</startKey>
+          <endKey>	stopDeath	</endKey>
+          <alwaysUpdateModel>	true	</alwaysUpdateModel>
+          <file>	particles/Tank/tank_destroy_small_02.xml	</file>
+          <position>	Scene Root	</position>
+          <force>	1	</force>
+        </pixie>
+        <sound>
+          <startKey>	death	</startKey>
+          <name>	/hits/tank_death/tank_death	</name>
+        </sound>
+        <decal>
+          <startKey>	static	</startKey>
+          <groupName>	slow	</groupName>
+          <texName>	explosion	</texName>
+          <size>	8 8	</size>
+          <randomYaw>	true	</randomYaw>
+        </decal>
+        <pixie>
+          <startKey>	static	</startKey>
+          <file>	particles/Tank/fire_small_02.xml	</file>
+          <position>	HP_Fire_1	</position>
+        </pixie>
+        <sound>
+          <startKey>	static	</startKey>
+          <name>	/objects/fire/house_burn	</name>
+        </sound>
+      </effects>
+    </variant2>
+    <variant3>
+      <stages>
+        <death>	0.25	</death>
+        <static>	5.0	</static>
+        <stopDeath>	36000	</stopDeath>
+      </stages>
+      <effects>
+        <shockWave>
+          <startKey>	death	</startKey>
+          <duration>	2.0	</duration>
+        </shockWave>
+        <flashBang>
+          <startKey>	death	</startKey>
+          <stages>
+            <stage>	0.1	  <color>	0 0 0 0	</color>
+            </stage>
+            <stage>	2.0	  <color>	1.0 0.0 0.0 0.7	</color>
+            </stage>
+            <stage>	0.0	  <color>	0 0 0 0	</color>
+            </stage>
+          </stages>
+        </flashBang>
+        <pixie>
+          <startKey>	death	</startKey>
+          <endKey>	stopDeath	</endKey>
+          <alwaysUpdateModel>	true	</alwaysUpdateModel>
+          <file>	particles/Tank/tank_destroy_small_02.xml	</file>
+          <position>	Scene Root	</position>
+          <force>	1	</force>
+        </pixie>
+        <sound>
+          <startKey>	death	</startKey>
+          <name>	/hits/tank_death/tank_death	</name>
+        </sound>
+        <decal>
+          <startKey>	static	</startKey>
+          <groupName>	slow	</groupName>
+          <texName>	explosion	</texName>
+          <size>	8 8	</size>
+          <randomYaw>	true	</randomYaw>
+        </decal>
+        <pixie>
+          <startKey>	static	</startKey>
+          <file>	particles/Tank/fire_first_01.xml	</file>
+          <position>	HP_Fire_2	</position>
+        </pixie>
+        <sound>
+          <startKey>	static	</startKey>
+          <name>	/objects/fire/house_burn_light	</name>
+        </sound>
+      </effects>
+    </variant3>
+  </smallDestruction>
+  <smallExplosion>
+    <variant1>
+      <stages>
+        <explosion>	0.25	</explosion>
+        <static>	5.0	</static>
+        <stopExplosion>	36000	</stopExplosion>
+      </stages>
+      <effects>
+        <shockWave>
+          <startKey>	explosion	</startKey>
+          <duration>	2.0	</duration>
+        </shockWave>
+        <flashBang>
+          <startKey>	explosion	</startKey>
+          <stages>
+            <stage>	0.1	  <color>	0 0 0 0	</color>
+            </stage>
+            <stage>	2.0	  <color>	1.0 0.0 0.0 0.7	</color>
+            </stage>
+            <stage>	0.0	  <color>	0 0 0 0	</color>
+            </stage>
+          </stages>
+        </flashBang>
+        <pixie>
+          <startKey>	explosion	</startKey>
+          <endKey>	stopExplosion	</endKey>
+          <alwaysUpdateModel>	true	</alwaysUpdateModel>
+          <file>	particles/Tank/tank_explosion_small.xml	</file>
+          <position>	Scene Root	</position>
+          <force>	1	</force>
+        </pixie>
+        <sound>
+          <startKey>	explosion	</startKey>
+          <name>	/hits/tank_death/tank_death	</name>
+        </sound>
+        <decal>
+          <startKey>	static	</startKey>
+          <groupName>	slow	</groupName>
+          <texName>	explosion	</texName>
+          <size>	10 10	</size>
+          <randomYaw>	true	</randomYaw>
+        </decal>
+        <pixie>
+          <startKey>	static	</startKey>
+          <file>	particles/Tank/fire_01.xml	</file>
+          <position>	HP_Fire_1	</position>
+        </pixie>
+        <sound>
+          <startKey>	static	</startKey>
+          <name>	/objects/fire/house_burn	</name>
+        </sound>
+      </effects>
+    </variant1>
+    <variant2>
+      <stages>
+        <explosion>	0.25	</explosion>
+        <static>	5.0	</static>
+        <stopExplosion>	36000	</stopExplosion>
+      </stages>
+      <effects>
+        <shockWave>
+          <startKey>	explosion	</startKey>
+          <duration>	2.0	</duration>
+        </shockWave>
+        <flashBang>
+          <startKey>	explosion	</startKey>
+          <stages>
+            <stage>	0.1	  <color>	0 0 0 0	</color>
+            </stage>
+            <stage>	2.0	  <color>	1.0 0.0 0.0 0.7	</color>
+            </stage>
+            <stage>	0.0	  <color>	0 0 0 0	</color>
+            </stage>
+          </stages>
+        </flashBang>
+        <pixie>
+          <startKey>	explosion	</startKey>
+          <endKey>	stopExplosion	</endKey>
+          <alwaysUpdateModel>	true	</alwaysUpdateModel>
+          <file>	particles/Tank/tank_explosion_small.xml	</file>
+          <position>	Scene Root	</position>
+          <force>	1	</force>
+        </pixie>
+        <sound>
+          <startKey>	explosion	</startKey>
+          <name>	/hits/tank_death/tank_death	</name>
+        </sound>
+        <decal>
+          <startKey>	static	</startKey>
+          <groupName>	slow	</groupName>
+          <texName>	explosion	</texName>
+          <size>	10 10	</size>
+          <randomYaw>	true	</randomYaw>
+        </decal>
+        <pixie>
+          <startKey>	static	</startKey>
+          <file>	particles/Tank/fire_first_01.xml	</file>
+          <position>	HP_Fire_2	</position>
+        </pixie>
+        <sound>
+          <startKey>	static	</startKey>
+          <name>	/objects/fire/house_burn_light	</name>
+        </sound>
+      </effects>
+    </variant2>
+  </smallExplosion>
+  <smallFlaming>
+    <variant1>
+      <stages>
+        <fire>	0.0	</fire>
+        <noEmission>	4.0	</noEmission>
+      </stages>
+      <effects>
+        <pixie>
+          <startKey>	fire	</startKey>
+          <file>	particles/Tank/flaming_01.xml	</file>
+          <position>	HP_Fire_1	</position>
+        </pixie>
+        <sound>
+          <startKey>	static	</startKey>
+          <name>	/objects/fire/house_burn_light	</name>
+        </sound>
+        <stopEmission>
+          <startKey>	noEmission	</startKey>
+        </stopEmission>
+      </effects>
+    </variant1>
+    <variant2>
+      <stages>
+        <fire>	0.0	</fire>
+        <noEmission>	4.0	</noEmission>
+      </stages>
+      <effects>
+        <pixie>
+          <startKey>	fire	</startKey>
+          <file>	particles/Tank/flaming_02.xml	</file>
+          <position>	HP_Fire_1	</position>
+        </pixie>
+        <sound>
+          <startKey>	static	</startKey>
+          <name>	/objects/fire/house_burn	</name>
+        </sound>
+        <stopEmission>
+          <startKey>	noEmission	</startKey>
+        </stopEmission>
+      </effects>
+    </variant2>
+  </smallFlaming>
+  <mediumDestruction>
+    <variant1>
+      <stages>
+        <death>	0.25	</death>
+        <static>	5.0	</static>
+        <stopDeath>	36000	</stopDeath>
+      </stages>
+      <effects>
+        <shockWave>
+          <startKey>	death	</startKey>
+          <duration>	2.0	</duration>
+        </shockWave>
+        <flashBang>
+          <startKey>	death	</startKey>
+          <stages>
+            <stage>	0.1	  <color>	0 0 0 0	</color>
+            </stage>
+            <stage>	2.0	  <color>	1.0 0.0 0.0 0.7	</color>
+            </stage>
+            <stage>	0.0	  <color>	0 0 0 0	</color>
+            </stage>
+          </stages>
+        </flashBang>
+        <pixie>
+          <startKey>	death	</startKey>
+          <endKey>	stopDeath	</endKey>
+          <alwaysUpdateModel>	true	</alwaysUpdateModel>
+          <file>	particles/Tank/tank_destroy_01.xml	</file>
+          <position>	Scene Root	</position>
+          <force>	1	</force>
+        </pixie>
+        <sound>
+          <startKey>	death	</startKey>
+          <name>	/hits/tank_death/tank_death	</name>
+        </sound>
+        <decal>
+          <startKey>	static	</startKey>
+          <groupName>	slow	</groupName>
+          <texName>	explosion	</texName>
+          <size>	12 12	</size>
+          <randomYaw>	true	</randomYaw>
+        </decal>
+        <pixie>
+          <startKey>	static	</startKey>
+          <file>	particles/Tank/fire_01.xml	</file>
+          <position>	HP_Fire_1	</position>
+        </pixie>
+        <sound>
+          <startKey>	static	</startKey>
+          <name>	/objects/fire/house_burn	</name>
+        </sound>
+      </effects>
+    </variant1>
+    <variant2>
+      <stages>
+        <death>	0.25	</death>
+        <static>	5.0	</static>
+        <stopDeath>	36000	</stopDeath>
+      </stages>
+      <effects>
+        <shockWave>
+          <startKey>	death	</startKey>
+          <duration>	2.0	</duration>
+        </shockWave>
+        <flashBang>
+          <startKey>	death	</startKey>
+          <stages>
+            <stage>	0.1	  <color>	0 0 0 0	</color>
+            </stage>
+            <stage>	2.0	  <color>	1.0 0.0 0.0 0.7	</color>
+            </stage>
+            <stage>	0.0	  <color>	0 0 0 0	</color>
+            </stage>
+          </stages>
+        </flashBang>
+        <pixie>
+          <startKey>	death	</startKey>
+          <endKey>	stopDeath	</endKey>
+          <alwaysUpdateModel>	true	</alwaysUpdateModel>
+          <file>	particles/Tank/tank_destroy_02.xml	</file>
+          <position>	Scene Root	</position>
+          <force>	1	</force>
+        </pixie>
+        <sound>
+          <startKey>	death	</startKey>
+          <name>	/hits/tank_death/tank_death	</name>
+        </sound>
+        <decal>
+          <startKey>	static	</startKey>
+          <groupName>	slow	</groupName>
+          <texName>	explosion	</texName>
+          <size>	12 12	</size>
+          <randomYaw>	true	</randomYaw>
+        </decal>
+        <pixie>
+          <startKey>	static	</startKey>
+          <file>	particles/Tank/fire_02.xml	</file>
+          <position>	HP_Fire_1	</position>
+        </pixie>
+        <sound>
+          <startKey>	static	</startKey>
+          <name>	/objects/fire/house_burn	</name>
+        </sound>
+      </effects>
+    </variant2>
+    <variant3>
+      <stages>
+        <death>	0.25	</death>
+        <static>	5.0	</static>
+        <stopDeath>	36000	</stopDeath>
+      </stages>
+      <effects>
+        <shockWave>
+          <startKey>	death	</startKey>
+          <duration>	2.0	</duration>
+        </shockWave>
+        <flashBang>
+          <startKey>	death	</startKey>
+          <stages>
+            <stage>	0.1	  <color>	0 0 0 0	</color>
+            </stage>
+            <stage>	2.0	  <color>	1.0 0.0 0.0 0.7	</color>
+            </stage>
+            <stage>	0.0	  <color>	0 0 0 0	</color>
+            </stage>
+          </stages>
+        </flashBang>
+        <pixie>
+          <startKey>	death	</startKey>
+          <endKey>	stopDeath	</endKey>
+          <alwaysUpdateModel>	true	</alwaysUpdateModel>
+          <file>	particles/Tank/tank_destroy_03.xml	</file>
+          <position>	Scene Root	</position>
+          <force>	1	</force>
+        </pixie>
+        <sound>
+          <startKey>	death	</startKey>
+          <name>	/hits/tank_death/tank_death	</name>
+        </sound>
+        <decal>
+          <startKey>	static	</startKey>
+          <groupName>	slow	</groupName>
+          <texName>	explosion	</texName>
+          <size>	10 10	</size>
+          <randomYaw>	true	</randomYaw>
+        </decal>
+        <pixie>
+          <startKey>	static	</startKey>
+          <file>	particles/Tank/fire_03.xml	</file>
+          <position>	HP_Fire_1	</position>
+        </pixie>
+        <sound>
+          <startKey>	static	</startKey>
+          <name>	/objects/fire/house_burn_light	</name>
+        </sound>
+      </effects>
+    </variant3>
+    <variant4>
+      <stages>
+        <death>	0.25	</death>
+        <static>	5.0	</static>
+        <stopDeath>	36000	</stopDeath>
+      </stages>
+      <effects>
+        <shockWave>
+          <startKey>	death	</startKey>
+          <duration>	2.0	</duration>
+        </shockWave>
+        <flashBang>
+          <startKey>	death	</startKey>
+          <stages>
+            <stage>	0.1	  <color>	0 0 0 0	</color>
+            </stage>
+            <stage>	2.0	  <color>	1.0 0.0 0.0 0.7	</color>
+            </stage>
+            <stage>	0.0	  <color>	0 0 0 0	</color>
+            </stage>
+          </stages>
+        </flashBang>
+        <pixie>
+          <startKey>	death	</startKey>
+          <endKey>	stopDeath	</endKey>
+          <alwaysUpdateModel>	true	</alwaysUpdateModel>
+          <file>	particles/Tank/tank_destroy_04.xml	</file>
+          <position>	Scene Root	</position>
+          <force>	1	</force>
+        </pixie>
+        <sound>
+          <startKey>	death	</startKey>
+          <name>	/hits/tank_death/tank_death	</name>
+        </sound>
+        <decal>
+          <startKey>	static	</startKey>
+          <groupName>	slow	</groupName>
+          <texName>	explosion	</texName>
+          <size>	14 14	</size>
+          <randomYaw>	true	</randomYaw>
+        </decal>
+        <pixie>
+          <startKey>	static	</startKey>
+          <file>	particles/Tank/fire_first_01.xml	</file>
+          <position>	HP_Fire_2	</position>
+        </pixie>
+        <sound>
+          <startKey>	static	</startKey>
+          <name>	/objects/fire/house_burn_light	</name>
+        </sound>
+      </effects>
+    </variant4>
+  </mediumDestruction>
+  <mediumExplosion>
+    <variant1>
+      <stages>
+        <explosion>	0.25	</explosion>
+        <static>	5.0	</static>
+        <stopExplosion>	36000	</stopExplosion>
+      </stages>
+      <effects>
+        <shockWave>
+          <startKey>	explosion	</startKey>
+          <duration>	2.0	</duration>
+        </shockWave>
+        <flashBang>
+          <startKey>	explosion	</startKey>
+          <stages>
+            <stage>	0.1	  <color>	0 0 0 0	</color>
+            </stage>
+            <stage>	2.0	  <color>	1.0 0.0 0.0 0.7	</color>
+            </stage>
+            <stage>	0.0	  <color>	0 0 0 0	</color>
+            </stage>
+          </stages>
+        </flashBang>
+        <pixie>
+          <startKey>	explosion	</startKey>
+          <endKey>	stopExplosion	</endKey>
+          <alwaysUpdateModel>	true	</alwaysUpdateModel>
+          <file>	particles/Tank/tank_2_destroy_01.xml	</file>
+          <position>	Scene Root	</position>
+          <force>	1	</force>
+        </pixie>
+        <sound>
+          <startKey>	explosion	</startKey>
+          <name>	/hits/tank_death/tank_death	</name>
+        </sound>
+        <decal>
+          <startKey>	static	</startKey>
+          <groupName>	slow	</groupName>
+          <texName>	explosion	</texName>
+          <size>	12 12	</size>
+          <randomYaw>	true	</randomYaw>
+        </decal>
+        <pixie>
+          <startKey>	static	</startKey>
+          <file>	particles/Tank/fire_01.xml	</file>
+          <position>	HP_Fire_1	</position>
+        </pixie>
+        <pixie>
+          <startKey>	static	</startKey>
+          <file>	particles/Tank/fire_first_01.xml	</file>
+          <position>	HP_Fire_2	</position>
+        </pixie>
+        <sound>
+          <startKey>	static	</startKey>
+          <name>	/objects/fire/house_burn_light	</name>
+        </sound>
+      </effects>
+    </variant1>
+    <variant2>
+      <stages>
+        <explosion>	0.25	</explosion>
+        <static>	5.0	</static>
+        <stopExplosion>	36000	</stopExplosion>
+      </stages>
+      <effects>
+        <shockWave>
+          <startKey>	explosion	</startKey>
+          <duration>	2.0	</duration>
+        </shockWave>
+        <flashBang>
+          <startKey>	explosion	</startKey>
+          <stages>
+            <stage>	0.1	  <color>	0 0 0 0	</color>
+            </stage>
+            <stage>	2.0	  <color>	1.0 0.0 0.0 0.7	</color>
+            </stage>
+            <stage>	0.0	  <color>	0 0 0 0	</color>
+            </stage>
+          </stages>
+        </flashBang>
+        <pixie>
+          <startKey>	explosion	</startKey>
+          <endKey>	stopExplosion	</endKey>
+          <alwaysUpdateModel>	true	</alwaysUpdateModel>
+          <file>	particles/Tank/tank_2_destroy_02.xml	</file>
+          <position>	Scene Root	</position>
+          <force>	1	</force>
+        </pixie>
+        <sound>
+          <startKey>	explosion	</startKey>
+          <name>	/hits/tank_death/tank_death	</name>
+        </sound>
+        <decal>
+          <startKey>	static	</startKey>
+          <groupName>	slow	</groupName>
+          <texName>	explosion	</texName>
+          <size>	12 12	</size>
+          <randomYaw>	true	</randomYaw>
+        </decal>
+        <pixie>
+          <startKey>	static	</startKey>
+          <file>	particles/Tank/fire_03.xml	</file>
+          <position>	HP_Fire_2	</position>
+        </pixie>
+        <sound>
+          <startKey>	static	</startKey>
+          <name>	/objects/fire/house_burn_light	</name>
+        </sound>
+      </effects>
+    </variant2>
+  </mediumExplosion>
+  <mediumFlaming>
+    <variant1>
+      <stages>
+        <fire>	0.0	</fire>
+        <noEmission>	4.0	</noEmission>
+      </stages>
+      <effects>
+        <pixie>
+          <startKey>	fire	</startKey>
+          <file>	particles/Tank/flaming_01.xml	</file>
+          <position>	HP_Fire_1	</position>
+        </pixie>
+        <sound>
+          <startKey>	static	</startKey>
+          <name>	/objects/fire/house_burn_light	</name>
+        </sound>
+        <stopEmission>
+          <startKey>	noEmission	</startKey>
+        </stopEmission>
+      </effects>
+    </variant1>
+    <variant2>
+      <stages>
+        <fire>	0.0	</fire>
+        <noEmission>	4.0	</noEmission>
+      </stages>
+      <effects>
+        <pixie>
+          <startKey>	fire	</startKey>
+          <file>	particles/Tank/flaming_02.xml	</file>
+          <position>	HP_Fire_1	</position>
+        </pixie>
+        <sound>
+          <startKey>	static	</startKey>
+          <name>	/objects/fire/house_burn	</name>
+        </sound>
+        <stopEmission>
+          <startKey>	noEmission	</startKey>
+        </stopEmission>
+      </effects>
+    </variant2>
+  </mediumFlaming>
+</vehicle_effects.xml>

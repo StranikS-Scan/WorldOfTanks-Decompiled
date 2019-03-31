@@ -1,0 +1,569 @@
+<M5_Stuart.xml>
+  <crew>
+    <commander></commander>
+    <gunner>	loader	</gunner>
+    <driver></driver>
+    <radioman></radioman>
+    <loader></loader>
+  </crew>
+  <speedLimits>
+    <forward>	58	</forward>
+    <backward>	20	</backward>
+  </speedLimits>
+  <repairCost>	5.80	</repairCost>
+  <effects>
+    <destruction>	mediumDestruction	</destruction>
+    <explosion>	mediumExplosion	</explosion>
+    <flaming>	mediumFlaming	</flaming>
+    <collision>	collision	</collision>
+  </effects>
+  <camouflage>
+    <priceFactor>	0.8	</priceFactor>
+    <tiling>	1 1 0 0	</tiling>
+    <exclusionMask>	vehicles/american/A22_M5_Stuart/M5_Stuart_CM.DDS	</exclusionMask>
+  </camouflage>
+  <emblems>
+    <default>	usa_star	</default>
+    <lodDist>	MEDIUM	</lodDist>
+    <alpha>	0.956863	</alpha>
+  </emblems>
+  <horns>
+    <priceFactor>	1	</priceFactor>
+    <distanceFactor>	1	</distanceFactor>
+    <volumeFactor>	1	</volumeFactor>
+  </horns>
+  <hull>
+    <models>
+      <undamaged>	vehicles/american/A22_M5_Stuart/normal/lod0/Hull.model	</undamaged>
+      <destroyed>	vehicles/american/A22_M5_Stuart/crash/lod0/Hull.model	</destroyed>
+      <exploded>	vehicles/american/A22_M5_Stuart/crash/lod0/Hull.model	</exploded>
+    </models>
+    <swinging>
+      <lodDist>	FAR	</lodDist>
+      <pitchParams>	0.28 34.00 0.36 1.00 0.05 0.30	</pitchParams>
+      <rollParams>	1.00 0.28 34.00 0.36 1.00 0.05 0.30	</rollParams>
+      <sensitivityToImpulse>	0.71	</sensitivityToImpulse>
+    </swinging>
+    <exhaust>
+      <pixie>	particles/Tank/engine_exit_gass.xml	</pixie>
+      <nodes>	HP_Track_Exhaus_1	</nodes>
+      <rates>	8.0 14.0 36.0	</rates>
+    </exhaust>
+    <turretPositions>
+      <turret>	0.02289 0.754712 0.19701	</turret>
+    </turretPositions>
+    <hitTester>
+      <collisionModel>	vehicles/american/A22_M5_Stuart/collision/Hull.model	</collisionModel>
+    </hitTester>
+    <armor>
+      <armor_1>	29	</armor_1>
+      <armor_2>	64	</armor_2>
+      <armor_3>	15	</armor_3>
+      <armor_4>	25	</armor_4>
+      <armor_5>	38	</armor_5>
+      <armor_6>	13	</armor_6>
+      <armor_7>	10	</armor_7>
+      <armor_8>	0	</armor_8>
+      <armor_9>	13	</armor_9>
+      <armor_10>	0	</armor_10>
+      <armor_11>	25	</armor_11>
+      <armor_12>	0	</armor_12>
+      <armor_13>	25	</armor_13>
+      <surveyingDevice>	20	</surveyingDevice>
+    </armor>
+    <primaryArmor>	armor_1 armor_4 armor_4	</primaryArmor>
+    <weight>	9680	</weight>
+    <maxHealth>	220	</maxHealth>
+    <ammoBayHealth>
+      <maxHealth>	156	</maxHealth>
+      <maxRegenHealth>	89	</maxRegenHealth>
+      <repairCost>	1.0	</repairCost>
+    </ammoBayHealth>
+    <emblemSlots>
+      <clan>
+        <rayStart>	-0.0336959 0.274345 2.21734	</rayStart>
+        <rayEnd>	-0.0336959 -0.176277 1.82118	</rayEnd>
+        <rayUp>	0.000000 1 0.000000	</rayUp>
+        <size>	0.34	</size>
+        <hideIfDamaged>	false	</hideIfDamaged>
+      </clan>
+    </emblemSlots>
+  </hull>
+  <chassis>
+    <VVSS_T16E3>
+      <userString>	#usa_vehicles:VVSS_T16E3	</userString>
+      <description>	#usa_vehicles:VVSS_T16E3_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 8 0	</icon>
+      <tags></tags>
+      <level>	3	</level>
+      <price>	1500	</price>
+      <unlocks>
+        <chassis>	VVSS_T36E8	  <cost>	1500	</cost>
+        </chassis>
+      </unlocks>
+      <models>
+        <undamaged>	vehicles/american/A22_M5_Stuart/normal/lod0/Chassis.model	</undamaged>
+        <destroyed>	vehicles/american/A22_M5_Stuart/crash/lod0/Chassis.model	</destroyed>
+        <exploded>	vehicles/american/A22_M5_Stuart/crash/lod0/Chassis.model	</exploded>
+      </models>
+      <traces>
+        <lodDist>	FAR	</lodDist>
+        <bufferPrefs>	mediumTank	</bufferPrefs>
+        <textureSet>	usa_02	</textureSet>
+        <size>	0.3 0.34	</size>
+      </traces>
+      <tracks>
+        <lodDist>	MEDIUM	</lodDist>
+        <leftMaterial>	track_mat_L_skinned	</leftMaterial>
+        <rightMaterial>	track_mat_R_skinned	</rightMaterial>
+        <textureScale>	-1.46	</textureScale>
+      </tracks>
+      <wheels>
+        <lodDist>	MEDIUM	</lodDist>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	W_L	</template>
+          <radius>	0.270196	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	4	</count>
+        </group>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	W_R	</template>
+          <radius>	0.270196	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	4	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <name>	W_L4	</name>
+          <radius>	0.382037	</radius>
+        </wheel>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <name>	W_R4	</name>
+          <radius>	0.382037	</radius>
+        </wheel>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <name>	WD_L0	</name>
+          <radius>	0.316837	</radius>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	WD_L	</template>
+          <radius>	0.116192	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	3	</count>
+        </group>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <name>	WD_R0	</name>
+          <radius>	0.316837	</radius>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	WD_R	</template>
+          <radius>	0.116192	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	3	</count>
+        </group>
+      </wheels>
+      <drivingWheels>	WD_L0 W_L4	</drivingWheels>
+      <effects>
+        <lodDist>	MEDIUM	</lodDist>
+        <dust>	mediumTankDust	</dust>
+        <mud>	mediumTankMud	</mud>
+      </effects>
+      <sound>	/vehicles/tanks/treads/treads_2	</sound>
+      <hullPosition>	0.000000 0.836116 0.000000	</hullPosition>
+      <hitTester>
+        <collisionModel>	vehicles/american/A22_M5_Stuart/collision/Chassis.model	</collisionModel>
+      </hitTester>
+      <armor>
+        <leftTrack>	20	</leftTrack>
+        <rightTrack>	20	</rightTrack>
+      </armor>
+      <topRightCarryingPoint>	0.936752 1.48011	</topRightCarryingPoint>
+      <maxClimbAngle>	25	</maxClimbAngle>
+      <navmeshGirth>	6.0	</navmeshGirth>
+      <weight>	3000	</weight>
+      <maxLoad>	15500	</maxLoad>
+      <terrainResistance>	1.0 1.1 2.0	</terrainResistance>
+      <brakeForce>	35500	</brakeForce>
+      <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
+      <rotationSpeed>	40	</rotationSpeed>
+      <shotDispersionFactors>
+        <vehicleMovement>	0.25	</vehicleMovement>
+        <vehicleRotation>	0.25	</vehicleRotation>
+      </shotDispersionFactors>
+      <bulkHealthFactor>	3.0	</bulkHealthFactor>
+      <maxHealth>	70	</maxHealth>
+      <maxRegenHealth>	55	</maxRegenHealth>
+      <repairCost>	5.0	</repairCost>
+    </VVSS_T16E3>
+    <VVSS_T36E8>
+      <userString>	#usa_vehicles:VVSS_T36E8	</userString>
+      <description>	#usa_vehicles:VVSS_T36E8_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 8 0	</icon>
+      <tags></tags>
+      <level>	4	</level>
+      <price>	6350	</price>
+      <models>
+        <undamaged>	vehicles/american/A22_M5_Stuart/normal/lod0/Chassis.model	</undamaged>
+        <destroyed>	vehicles/american/A22_M5_Stuart/crash/lod0/Chassis.model	</destroyed>
+        <exploded>	vehicles/american/A22_M5_Stuart/crash/lod0/Chassis.model	</exploded>
+      </models>
+      <traces>
+        <lodDist>	FAR	</lodDist>
+        <bufferPrefs>	mediumTank	</bufferPrefs>
+        <textureSet>	usa_02	</textureSet>
+        <size>	0.3 0.34	</size>
+      </traces>
+      <tracks>
+        <lodDist>	MEDIUM	</lodDist>
+        <leftMaterial>	track_mat_L_skinned	</leftMaterial>
+        <rightMaterial>	track_mat_R_skinned	</rightMaterial>
+        <textureScale>	-1.46	</textureScale>
+      </tracks>
+      <wheels>
+        <lodDist>	MEDIUM	</lodDist>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	W_L	</template>
+          <radius>	0.270196	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	4	</count>
+        </group>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	W_R	</template>
+          <radius>	0.270196	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	4	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <name>	W_L4	</name>
+          <radius>	0.382037	</radius>
+        </wheel>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <name>	W_R4	</name>
+          <radius>	0.382037	</radius>
+        </wheel>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <name>	WD_L0	</name>
+          <radius>	0.316837	</radius>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	WD_L	</template>
+          <radius>	0.116192	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	3	</count>
+        </group>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <name>	WD_R0	</name>
+          <radius>	0.316837	</radius>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	WD_R	</template>
+          <radius>	0.116192	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	3	</count>
+        </group>
+      </wheels>
+      <drivingWheels>	WD_L0 W_L4	</drivingWheels>
+      <effects>
+        <lodDist>	MEDIUM	</lodDist>
+        <dust>	mediumTankDust	</dust>
+        <mud>	mediumTankMud	</mud>
+      </effects>
+      <sound>	/vehicles/tanks/treads/treads_2	</sound>
+      <hullPosition>	0.000000 0.836116 0.000000	</hullPosition>
+      <hitTester>
+        <collisionModel>	vehicles/american/A22_M5_Stuart/collision/Chassis.model	</collisionModel>
+      </hitTester>
+      <armor>
+        <leftTrack>	20	</leftTrack>
+        <rightTrack>	20	</rightTrack>
+      </armor>
+      <topRightCarryingPoint>	0.936752 1.48011	</topRightCarryingPoint>
+      <maxClimbAngle>	25	</maxClimbAngle>
+      <navmeshGirth>	6.0	</navmeshGirth>
+      <weight>	3000	</weight>
+      <maxLoad>	17400	</maxLoad>
+      <terrainResistance>	0.7 0.8 1.7	</terrainResistance>
+      <brakeForce>	35500	</brakeForce>
+      <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
+      <rotationSpeed>	45	</rotationSpeed>
+      <shotDispersionFactors>
+        <vehicleMovement>	0.21	</vehicleMovement>
+        <vehicleRotation>	0.21	</vehicleRotation>
+      </shotDispersionFactors>
+      <bulkHealthFactor>	3.0	</bulkHealthFactor>
+      <maxHealth>	80	</maxHealth>
+      <maxRegenHealth>	60	</maxRegenHealth>
+      <repairCost>	5.0	</repairCost>
+    </VVSS_T36E8>
+  </chassis>
+  <turrets0>
+    <M44>
+      <userString>	#usa_vehicles:M44	</userString>
+      <description>	#usa_vehicles:M44_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 6 0	</icon>
+      <tags></tags>
+      <level>	3	</level>
+      <price>	1890.0	</price>
+      <models>
+        <undamaged>	vehicles/american/A22_M5_Stuart/normal/lod0/Turret_01.model	</undamaged>
+        <destroyed>	vehicles/american/A22_M5_Stuart/crash/lod0/Turret_01.model	</destroyed>
+        <exploded>	vehicles/american/A22_M5_Stuart/crash/lod0/Turret_01.model	</exploded>
+      </models>
+      <hitTester>
+        <collisionModel>	vehicles/american/A22_M5_Stuart/collision/Turret_01.model	</collisionModel>
+      </hitTester>
+      <yawLimits>	-180 180	</yawLimits>
+      <gunPosition>	-0.002753 0.232825 0.709603	</gunPosition>
+      <armor>
+        <armor_1>	51	</armor_1>
+        <armor_2>	44	</armor_2>
+        <armor_3>	32	</armor_3>
+        <armor_4>	32	</armor_4>
+        <armor_5>	25	</armor_5>
+        <armor_6>	13	</armor_6>
+        <armor_7>	13	</armor_7>
+        <armor_8>	0	</armor_8>
+        <armor_9>	13	  <noDamage>	true	</noDamage>
+        </armor_9>
+        <surveyingDevice>	13	</surveyingDevice>
+      </armor>
+      <primaryArmor>	armor_2 armor_3 armor_4	</primaryArmor>
+      <weight>	1200	</weight>
+      <maxHealth>	70.0	</maxHealth>
+      <rotationSpeed>	46	</rotationSpeed>
+      <turretRotatorHealth>
+        <maxHealth>	100	</maxHealth>
+        <maxRegenHealth>	49	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </turretRotatorHealth>
+      <circularVisionRadius>	300	</circularVisionRadius>
+      <surveyingDeviceHealth>
+        <maxHealth>	100	</maxHealth>
+        <maxRegenHealth>	49	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </surveyingDeviceHealth>
+      <guns>
+        <_20mm_Hispano_Suiza_Birgikt_gun>	shared	  <maxAmmo>	860	</maxAmmo>
+          <unlocks>
+            <gun>	_37mm_M-6_L53	  <cost>	350	</cost>
+            </gun>
+          </unlocks>
+          <pitchLimits>	-20 5	</pitchLimits>
+          <models>
+            <undamaged>	vehicles/american/A22_M5_Stuart/normal/lod0/Gun_01.model	</undamaged>
+            <destroyed>	vehicles/american/A22_M5_Stuart/crash/lod0/Gun_01.model	</destroyed>
+            <exploded>	vehicles/american/A22_M5_Stuart/crash/lod0/Gun_01.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/american/A22_M5_Stuart/collision/Gun_01.model	</collisionModel>
+          </hitTester>
+          <armor>
+            <armor_1>	51	  <noDamage>	true	</noDamage>
+            </armor_1>
+            <armor_2>	38	  <noDamage>	true	</noDamage>
+            </armor_2>
+            <armor_3>	13	  <noDamage>	true	</noDamage>
+            </armor_3>
+            <gun>	10	</gun>
+          </armor>
+        </_20mm_Hispano_Suiza_Birgikt_gun>
+        <_37mm_M-6_L53>	shared	  <maxAmmo>	147	</maxAmmo>
+          <unlocks>
+            <turret>	M7	  <cost>	1220	</cost>
+            </turret>
+          </unlocks>
+          <pitchLimits>	-25 5	</pitchLimits>
+          <models>
+            <undamaged>	vehicles/american/A22_M5_Stuart/normal/lod0/Gun_02.model	</undamaged>
+            <destroyed>	vehicles/american/A22_M5_Stuart/crash/lod0/Gun_02.model	</destroyed>
+            <exploded>	vehicles/american/A22_M5_Stuart/crash/lod0/Gun_02.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/american/A22_M5_Stuart/collision/Gun_02.model	</collisionModel>
+          </hitTester>
+          <armor>
+            <armor_1>	51	  <noDamage>	true	</noDamage>
+            </armor_1>
+            <armor_2>	38	  <noDamage>	true	</noDamage>
+            </armor_2>
+            <armor_3>	13	  <noDamage>	true	</noDamage>
+            </armor_3>
+            <gun>	10	</gun>
+          </armor>
+        </_37mm_M-6_L53>
+      </guns>
+      <emblemSlots>
+        <player>
+          <rayStart>	-0.914793 0.32423 0.0709685	</rayStart>
+          <rayEnd>	-0.320372 0.32423 -0.0106642	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.34	</size>
+          <hideIfDamaged>	false	</hideIfDamaged>
+        </player>
+      </emblemSlots>
+      <showEmblemsOnGun>	false	</showEmblemsOnGun>
+    </M44>
+    <M7>
+      <userString>	#usa_vehicles:M7	</userString>
+      <description>	#usa_vehicles:M7_descr	</description>
+      <icon>	gui/maps/icons_vehicle_components.dds 6 0	</icon>
+      <tags></tags>
+      <level>	4	</level>
+      <price>	5180	</price>
+      <unlocks>
+        <vehicle>	M7_med	  <cost>	13060	</cost>
+        </vehicle>
+        <gun>	_75mm_Howitzer_M3	  <cost>	1100	</cost>
+        </gun>
+      </unlocks>
+      <models>
+        <undamaged>	vehicles/american/A22_M5_Stuart/normal/lod0/Turret_02.model	</undamaged>
+        <destroyed>	vehicles/american/A22_M5_Stuart/crash/lod0/Turret_02.model	</destroyed>
+        <exploded>	vehicles/american/A22_M5_Stuart/crash/lod0/Turret_02.model	</exploded>
+      </models>
+      <hitTester>
+        <collisionModel>	vehicles/american/A22_M5_Stuart/collision/Turret_02.model	</collisionModel>
+      </hitTester>
+      <yawLimits>	-180 180	</yawLimits>
+      <gunPosition>	0.001681 0.270601 0.741406	</gunPosition>
+      <armor>
+        <armor_1>	38	</armor_1>
+        <armor_2>	38	</armor_2>
+        <armor_3>	25	</armor_3>
+        <armor_4>	25	</armor_4>
+        <armor_5>	9	</armor_5>
+        <armor_6>	0	</armor_6>
+        <armor_7>	9	</armor_7>
+        <armor_8>	18	</armor_8>
+        <armor_9>	18	  <noDamage>	true	</noDamage>
+        </armor_9>
+        <surveyingDevice>	18	</surveyingDevice>
+      </armor>
+      <primaryArmor>	armor_2 armor_3 armor_4	</primaryArmor>
+      <weight>	1350	</weight>
+      <maxHealth>	120.0	</maxHealth>
+      <rotationSpeed>	50	</rotationSpeed>
+      <turretRotatorHealth>
+        <maxHealth>	100	</maxHealth>
+        <maxRegenHealth>	49	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </turretRotatorHealth>
+      <circularVisionRadius>	420	</circularVisionRadius>
+      <surveyingDeviceHealth>
+        <maxHealth>	100	</maxHealth>
+        <maxRegenHealth>	49	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </surveyingDeviceHealth>
+      <guns>
+        <_20mm_Hispano_Suiza_Birgikt_gun>	shared	  <maxAmmo>	860	</maxAmmo>
+          <pitchLimits>	-20 5	</pitchLimits>
+          <models>
+            <undamaged>	vehicles/american/A22_M5_Stuart/normal/lod0/Gun_03.model	</undamaged>
+            <destroyed>	vehicles/american/A22_M5_Stuart/crash/lod0/Gun_03.model	</destroyed>
+            <exploded>	vehicles/american/A22_M5_Stuart/crash/lod0/Gun_03.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/american/A22_M5_Stuart/collision/Gun_03.model	</collisionModel>
+          </hitTester>
+          <armor>
+            <armor_1>	51	  <noDamage>	true	</noDamage>
+            </armor_1>
+            <armor_2>	38	  <noDamage>	true	</noDamage>
+            </armor_2>
+            <armor_3>	13	  <noDamage>	true	</noDamage>
+            </armor_3>
+            <gun>	10	</gun>
+          </armor>
+        </_20mm_Hispano_Suiza_Birgikt_gun>
+        <_37mm_M-6_L53>	shared	  <maxAmmo>	147	</maxAmmo>
+          <pitchLimits>	-25 5	</pitchLimits>
+          <models>
+            <undamaged>	vehicles/american/A22_M5_Stuart/normal/lod0/Gun_04.model	</undamaged>
+            <destroyed>	vehicles/american/A22_M5_Stuart/crash/lod0/Gun_04.model	</destroyed>
+            <exploded>	vehicles/american/A22_M5_Stuart/crash/lod0/Gun_04.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/american/A22_M5_Stuart/collision/Gun_02.model	</collisionModel>
+          </hitTester>
+          <armor>
+            <armor_1>	51	  <noDamage>	true	</noDamage>
+            </armor_1>
+            <armor_2>	38	  <noDamage>	true	</noDamage>
+            </armor_2>
+            <armor_3>	13	  <noDamage>	true	</noDamage>
+            </armor_3>
+            <gun>	10	</gun>
+          </armor>
+        </_37mm_M-6_L53>
+        <_75mm_Howitzer_M3>	shared	  <pitchLimits>	-40 12	</pitchLimits>
+          <maxAmmo>	40	</maxAmmo>
+          <unlocks>
+            <vehicle>	M24_Chaffee	  <cost>	55820	</cost>
+            </vehicle>
+          </unlocks>
+          <models>
+            <undamaged>	vehicles/american/A22_M5_Stuart/normal/lod0/Gun_05.model	</undamaged>
+            <destroyed>	vehicles/american/A22_M5_Stuart/crash/lod0/Gun_05.model	</destroyed>
+            <exploded>	vehicles/american/A22_M5_Stuart/crash/lod0/Gun_05.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/american/A22_M5_Stuart/collision/Gun_05.model	</collisionModel>
+          </hitTester>
+          <armor>
+            <armor_1>	51	  <noDamage>	true	</noDamage>
+            </armor_1>
+            <armor_2>	38	  <noDamage>	true	</noDamage>
+            </armor_2>
+            <armor_3>	13	  <noDamage>	true	</noDamage>
+            </armor_3>
+            <gun>	20	</gun>
+          </armor>
+        </_75mm_Howitzer_M3>
+      </guns>
+      <emblemSlots>
+        <player>
+          <rayStart>	-0.922186 0.323966 -0.0533083	</rayStart>
+          <rayEnd>	-0.538425 0.212154 -0.0382933	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.34	</size>
+          <hideIfDamaged>	false	</hideIfDamaged>
+        </player>
+      </emblemSlots>
+      <showEmblemsOnGun>	false	</showEmblemsOnGun>
+    </M7>
+  </turrets0>
+  <engines>
+    <Twin_Cadillac_42series>	shared	  <unlocks>
+        <engine>	Continental_R-975-C1	  <cost>	850	</cost>
+        </engine>
+      </unlocks>
+    </Twin_Cadillac_42series>
+    <Continental_R-975-C1>	shared	</Continental_R-975-C1>
+  </engines>
+  <fuelTanks>
+    <Medium>	shared	</Medium>
+  </fuelTanks>
+  <radios>
+    <SCR_508>	shared	  <unlocks>
+        <radio>	SCR_506	  <cost>	5600.0	</cost>
+        </radio>
+      </unlocks>
+    </SCR_508>
+    <SCR_506>	shared	</SCR_506>
+  </radios>
+</M5_Stuart.xml>

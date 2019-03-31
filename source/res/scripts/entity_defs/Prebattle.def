@@ -1,0 +1,126 @@
+<Prebattle.def>
+  <Properties>
+    <settings>
+      <Type>	PYTHON	</Type>
+      <Flags>	BASE	</Flags>
+    </settings>
+    <webID>
+      <Type>	UINT64	</Type>
+      <Flags>	BASE	</Flags>
+    </webID>
+    <bp>
+      <Type>	PYTHON	</Type>
+      <Flags>	BASE	</Flags>
+    </bp>
+  </Properties>
+  <BaseMethods>
+    <onEnqueued></onEnqueued>
+    <onDequeued></onDequeued>
+    <onKickedFromQueue></onKickedFromQueue>
+    <onArenaCreated>
+      <Arg>	MAILBOX	</Arg>
+      <Arg>	UINT64	</Arg>
+      <Arg>	OBJECT_ID	</Arg>
+      <Arg>	UINT8	</Arg>
+      <Arg>	INT32	</Arg>
+    </onArenaCreated>
+    <onArenaFinished>
+      <Arg>	OBJECT_ID	</Arg>
+      <Arg>	UINT64	</Arg>
+      <Arg>	PREBATTLE_RESULTS	</Arg>
+    </onArenaFinished>
+    <addPlayer>
+      <Arg>	MAILBOX	</Arg>
+      <Arg>	STRING	</Arg>
+      <Arg>	DB_ID	</Arg>
+      <Arg>	STRING	</Arg>
+      <Arg>	DB_ID	</Arg>
+      <Arg>	STRING	</Arg>
+    </addPlayer>
+    <removePlayer>
+      <Arg>	INT32	</Arg>
+      <Arg>	OBJECT_ID	</Arg>
+    </removePlayer>
+    <setPlayerNotReady>
+      <Arg>	INT32	</Arg>
+      <Arg>	OBJECT_ID	</Arg>
+      <Arg>	UINT16	</Arg>
+      <Arg>	BOOL	</Arg>
+    </setPlayerNotReady>
+    <setPlayerReady>
+      <Arg>	INT32	</Arg>
+      <Arg>	OBJECT_ID	</Arg>
+      <Arg>	INT32	</Arg>
+      <Arg>	STRING	</Arg>
+      <Arg>	ARRAY	  <of>	INT32	</of>
+      </Arg>
+      <Arg>	ARRAY	  <of>	INT32	</of>
+      </Arg>
+    </setPlayerReady>
+    <setPlayerOnline>
+      <Arg>	OBJECT_ID	</Arg>
+      <Arg>	BOOL	</Arg>
+    </setPlayerOnline>
+    <kickPlayer>
+      <Arg>	MAILBOX	</Arg>
+      <Arg>	INT32	</Arg>
+      <Arg>	OBJECT_ID	</Arg>
+    </kickPlayer>
+    <changePlayerRoster>
+      <Arg>	MAILBOX	</Arg>
+      <Arg>	INT32	</Arg>
+      <Arg>	OBJECT_ID	</Arg>
+      <Arg>	UINT8	</Arg>
+    </changePlayerRoster>
+    <changeArenaType>
+      <Arg>	MAILBOX	</Arg>
+      <Arg>	INT32	</Arg>
+      <Arg>	INT32	</Arg>
+    </changeArenaType>
+    <changeRoundLength>
+      <Arg>	MAILBOX	</Arg>
+      <Arg>	INT32	</Arg>
+      <Arg>	INT32	</Arg>
+    </changeRoundLength>
+    <changeOpenStatus>
+      <Arg>	MAILBOX	</Arg>
+      <Arg>	INT32	</Arg>
+      <Arg>	BOOL	</Arg>
+    </changeOpenStatus>
+    <changeComment>
+      <Arg>	MAILBOX	</Arg>
+      <Arg>	INT32	</Arg>
+      <Arg>	STRING	</Arg>
+    </changeComment>
+    <changeArenaVoip>
+      <Arg>	MAILBOX	</Arg>
+      <Arg>	INT32	</Arg>
+      <Arg>	UINT8	</Arg>
+    </changeArenaVoip>
+    <changeMaxCountLimitForSquad>
+      <Arg>	UINT8	</Arg>
+    </changeMaxCountLimitForSquad>
+    <changeCompanyDivision>
+      <Arg>	MAILBOX	</Arg>
+      <Arg>	INT32	</Arg>
+      <Arg>	INT8	</Arg>
+    </changeCompanyDivision>
+    <setTeamReady>
+      <Arg>	MAILBOX	</Arg>
+      <Arg>	INT32	</Arg>
+      <Arg>	UINT8	</Arg>
+      <Arg>	BOOL	</Arg>
+    </setTeamReady>
+    <setTeamNotReady>
+      <Arg>	MAILBOX	</Arg>
+      <Arg>	INT32	</Arg>
+      <Arg>	UINT8	</Arg>
+    </setTeamNotReady>
+    <sendPrebattleStateTo>
+      <Arg>	MAILBOX	</Arg>
+    </sendPrebattleStateTo>
+    <sendRosterTo>
+      <Arg>	MAILBOX	</Arg>
+    </sendRosterTo>
+  </BaseMethods>
+</Prebattle.def>

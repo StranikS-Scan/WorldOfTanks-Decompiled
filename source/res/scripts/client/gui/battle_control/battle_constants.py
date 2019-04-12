@@ -325,3 +325,8 @@ class DeathZoneTimerViewState(object):
     @classmethod
     def makeCloseAllState(cls):
         return cls.makeCloseTimerState(zoneID=None)
+
+
+class BonusRibbonLabel(CONST_CONTAINER):
+    NO_BONUS = -1
+    BASE_BONUS_LABEL = 0

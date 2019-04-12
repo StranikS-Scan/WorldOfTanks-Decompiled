@@ -16,12 +16,15 @@ class BrowserInViewComponent(BrowserInViewComponentMeta):
         self.__browserId = None
         self.__url = None
         self.__size = None
+        self.__browserViewCreated = False
         return
 
     def viewSize(self, width, height):
         self.__size = (width, height)
 
     def setUrl(self, url):
+        if self.__url == url:
+            return
         self.__url = url
         self.__loadBrowser()
 
@@ -43,4 +46,6 @@ class BrowserInViewComponent(BrowserInViewComponentMeta):
             LOG_ERROR('Failed to create browser!')
 
     def __showBrowser(self):
-        BigWorld.callback(0.01, self.as_loadBrowserS)
+        if not self.__browserViewCreated:
+            BigWorld.callback(0.01, self.as_loadBrowserS)
+            self.__browserViewCreated = True

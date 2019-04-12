@@ -1,13 +1,14 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/Vehicle.py
+import logging
 import math
 import random
 import weakref
 from collections import namedtuple
 import BigWorld
-import WoT
 import Math
 import NetworkFilters
+import WoT
 import AreaDestructibles
 import ArenaType
 import BattleReplay
@@ -16,12 +17,10 @@ import TriggersManager
 import constants
 import physics_shared
 from AvatarInputHandler.aih_constants import ShakeReason
-from special_sound import setSpecialVoice
 from TriggersManager import TRIGGER_TYPE
 from VehicleEffects import DamageFromShotDecoder
 from constants import SPT_MATKIND
 from constants import VEHICLE_HIT_EFFECT, VEHICLE_SIEGE_STATE
-from debug_utils import LOG_ERROR, LOG_WARNING, LOG_DEBUG, LOG_CODEPOINT_WARNING, LOG_CURRENT_EXCEPTION
 from gui.battle_control.battle_constants import FEEDBACK_EVENT_ID as _GUI_EVENT_ID, VEHICLE_VIEW_STATE
 from gun_rotation_shared import decodeGunAngles
 from helpers import dependency
@@ -31,11 +30,13 @@ from items import vehicles
 from material_kinds import EFFECT_MATERIAL_INDEXES_BY_NAMES, EFFECT_MATERIALS
 from skeletons.gui.battle_session import IBattleSessionProvider
 from skeletons.gui.lobby_context import ILobbyContext
-from vehicle_systems import appearance_cache
-from vehicle_systems.tankStructure import TankPartNames, TankPartIndexes, TankSoundObjectsIndexes
-from vehicle_systems.stricted_loading import loadingPriority
-from vehicle_systems.entity_components.battle_abilities_component import BattleAbilitiesComponent
 from soft_exception import SoftException
+from special_sound import setSpecialVoice
+from vehicle_systems import appearance_cache
+from vehicle_systems.entity_components.battle_abilities_component import BattleAbilitiesComponent
+from vehicle_systems.stricted_loading import loadingPriority
+from vehicle_systems.tankStructure import TankPartNames, TankPartIndexes, TankSoundObjectsIndexes
+_logger = logging.getLogger(__name__)
 LOW_ENERGY_COLLISION_D = 0.3
 HIGH_ENERGY_COLLISION_D = 0.6
 _g_waitingVehicle = dict()
@@ -72,6 +73,10 @@ SegmentCollisionResultExt = namedtuple('SegmentCollisionResultExt', ('dist',
  'hitAngleCos',
  'matInfo',
  'compName'))
+StunInfo = namedtuple('StunInfo', ('startTime',
+ 'endTime',
+ 'duration',
+ 'totalTime'))
 VEHICLE_COMPONENTS = {BattleAbilitiesComponent}
 
 class Vehicle(BigWorld.Entity, BattleAbilitiesComponent):
@@ -136,7 +141,7 @@ class Vehicle(BigWorld.Entity, BattleAbilitiesComponent):
         _g_waitingVehicle[self.id] = weakref.ref(self)
         self.respawnCompactDescr = None
         self.respawnOutfitCompactDescr = None
-        self.__prevStunInfo = 0.0
+        self.__cachedStunInfo = StunInfo(0.0, 0.0, 0.0, 0.0)
         self.__burnoutStarted = False
         self.__handbrakeFired = False
         self.__wheelsScrollFilter = None
@@ -188,12 +193,12 @@ class Vehicle(BigWorld.Entity, BattleAbilitiesComponent):
                 vehicle.respawnCompactDescr = compactDescr
                 vehicle.respawnOutfitCompactDescr = outfitCompactDescr
                 if not BigWorld.entities.get(vID):
-                    LOG_ERROR('respawn vehicle: Vehicle ref is not None but entity does not exist anymore. Skip wg_respawn ')
+                    _logger.error('respawn vehicle: Vehicle ref is not None but entity does not exist anymore. Skip wg_respawn')
                 else:
                     try:
                         vehicle.wg_respawn()
                     except Exception:
-                        LOG_ERROR('respawn vehicle: Vehicle ref is not None but failed to call respawn: ', vID)
+                        _logger.error('respawn vehicle: Vehicle ref is not None but failed to call respawn: %s', vID)
 
         return
 
@@ -229,7 +234,7 @@ class Vehicle(BigWorld.Entity, BattleAbilitiesComponent):
         player.initSpace()
         self.__isEnteringWorld = False
         if self.respawnCompactDescr:
-            LOG_DEBUG('respawn compact descr is still valid, request reloading of tank resources')
+            _logger.debug('respawn compact descr is still valid, request reloading of tank resources')
             BigWorld.callback(0.0, lambda : Vehicle.respawnVehicle(self.id, self.respawnCompactDescr))
 
     def onLeaveWorld(self):
@@ -276,10 +281,13 @@ class Vehicle(BigWorld.Entity, BattleAbilitiesComponent):
                 self.appearance.executeHitVibrations(maxHitEffectCode)
                 player = BigWorld.player()
                 player.inputHandler.onVehicleShaken(self, compMatrix.translation, firstHitDir, effectsDescr['caliber'], ShakeReason.HIT if hasPiercedHit else ShakeReason.HIT_NO_DAMAGE)
+            sessionProvider = self.guiSessionProvider
+            isAlly = sessionProvider.getArenaDP().isAlly(attackerID)
+            showFriendlyFlashBang = sessionProvider.arenaVisitor.hasCustomAllyDamageEffect() and isAlly
             for shotPoint in decodedPoints:
                 showFullscreenEffs = self.isPlayerVehicle and self.isAlive()
                 keyPoints, effects, _ = effectsDescr[shotPoint.hitEffectGroup]
-                self.appearance.boundEffects.addNewToNode(shotPoint.componentName, shotPoint.matrix, effects, keyPoints, isPlayerVehicle=self.isPlayerVehicle, showShockWave=showFullscreenEffs, showFlashBang=showFullscreenEffs, entity_id=self.id, damageFactor=damageFactor, attackerID=attackerID, hitdir=firstHitDir)
+                self.appearance.boundEffects.addNewToNode(shotPoint.componentName, shotPoint.matrix, effects, keyPoints, isPlayerVehicle=self.isPlayerVehicle, showShockWave=showFullscreenEffs, showFlashBang=showFullscreenEffs and not showFriendlyFlashBang, showFriendlyFlashBang=showFullscreenEffs and showFriendlyFlashBang, entity_id=self.id, damageFactor=damageFactor, attackerID=attackerID, hitdir=firstHitDir)
 
             if not self.isAlive():
                 return
@@ -429,7 +437,8 @@ class Vehicle(BigWorld.Entity, BattleAbilitiesComponent):
             curr = frozenset(self.publicStateModifiers)
             self.__prevPublicStateModifiers = curr
             self.__updateModifiers(curr.difference(prev), prev.difference(curr))
-            self.updateStunInfo()
+            if not self.isPlayerVehicle:
+                self.updateStunInfo()
 
     def set_engineMode(self, prev):
         if self.isStarted and self.isAlive():
@@ -465,7 +474,7 @@ class Vehicle(BigWorld.Entity, BattleAbilitiesComponent):
             self.onSiegeStateUpdated(self.siegeState, 0.0)
 
     def set_isSpeedCapturing(self, prev=None):
-        LOG_DEBUG('set_isSpeedCapturing ', self.isSpeedCapturing)
+        _logger.debug('set_isSpeedCapturing %s', self.isSpeedCapturing)
         if not self.isPlayerVehicle:
             ctrl = self.guiSessionProvider.shared.feedback
             if ctrl is not None:
@@ -473,7 +482,7 @@ class Vehicle(BigWorld.Entity, BattleAbilitiesComponent):
         return
 
     def set_isBlockingCapture(self, prev=None):
-        LOG_DEBUG('set_isBlockingCapture ', self.isBlockingCapture)
+        _logger.debug('set_isBlockingCapture %s', self.isBlockingCapture)
         if not self.isPlayerVehicle:
             ctrl = self.guiSessionProvider.shared.feedback
             if ctrl is not None:
@@ -511,26 +520,35 @@ class Vehicle(BigWorld.Entity, BattleAbilitiesComponent):
             TriggersManager.g_manager.activateTrigger(TRIGGER_TYPE.PLAYER_RECEIVE_DAMAGE, attackerId=attackerID)
 
     def set_stunInfo(self, prev):
-        LOG_DEBUG('Set stun info(curr,~ prev): ', self.stunInfo, prev)
+        _logger.debug('Set stun info(curr,~ prev): %s, %s', self.stunInfo, prev)
         self.updateStunInfo()
+
+    def __updateCachedStunInfo(self, endTime):
+        if endTime:
+            cachedStartTime = self.__cachedStunInfo.startTime
+            startTime = cachedStartTime if cachedStartTime > 0.0 else BigWorld.serverTime()
+            totalTime = max(self.__cachedStunInfo.duration, endTime - startTime)
+            duration = endTime - BigWorld.serverTime() if endTime > 0.0 else 0.0
+            self.__cachedStunInfo = StunInfo(startTime, endTime, duration, totalTime)
+        else:
+            self.__cachedStunInfo = StunInfo(0.0, 0.0, 0.0, 0.0)
 
     def updateStunInfo(self):
         attachedVehicle = BigWorld.player().getVehicleAttached()
-        if attachedVehicle is None or self.__prevStunInfo == self.stunInfo:
+        if attachedVehicle is None:
             return
         else:
-            self.__prevStunInfo = self.stunInfo
-            isAttachedVehicle = self.id == attachedVehicle.id
+            self.__updateCachedStunInfo(self.stunInfo)
             if self.lobbyContext.getServerSettings().spgRedesignFeatures.isStunEnabled():
-                stunDuration = self.stunInfo - BigWorld.serverTime() if self.stunInfo else 0.0
+                isAttachedVehicle = self.id == attachedVehicle.id
                 if isAttachedVehicle:
-                    self.guiSessionProvider.invalidateVehicleState(VEHICLE_VIEW_STATE.STUN, stunDuration)
+                    self.guiSessionProvider.invalidateVehicleState(VEHICLE_VIEW_STATE.STUN, self.__cachedStunInfo)
                 if not self.isPlayerVehicle:
                     ctrl = self.guiSessionProvider.shared.feedback
                     if ctrl is not None:
-                        ctrl.invalidateStun(self.id, stunDuration)
+                        ctrl.invalidateStun(self.id, self.__cachedStunInfo)
             else:
-                LOG_WARNING('Stun features is disabled!')
+                _logger.warning('Stun features is disabled!')
             return
 
     def showAmmoBayEffect(self, mode, fireballVolume, projectedTurretSpeed):
@@ -596,7 +614,7 @@ class Vehicle(BigWorld.Entity, BattleAbilitiesComponent):
                 inputHandler = BigWorld.player().inputHandler
                 inputHandler.siegeModeControl.notifySiegeModeChanged(self, newState, timeToNextMode)
         else:
-            LOG_ERROR('Wrong usage! Should be called only on vehicle with validtypeDescriptor and siege mode')
+            _logger.error('Wrong usage! Should be called only on vehicle with valid typeDescriptor and siege mode')
         return
 
     def collideSegmentExt(self, startPoint, endPoint):
@@ -671,7 +689,7 @@ class Vehicle(BigWorld.Entity, BattleAbilitiesComponent):
         self.__prereqs = None
         self.appearance.highlighter.setVehicleOwnership()
         if self.respawnCompactDescr:
-            LOG_DEBUG('respawn compact descr is still valid, request reloading of tank resources ', self.id)
+            _logger.debug('respawn compact descr is still valid, request reloading of tank resources %s', self.id)
             BigWorld.callback(0.0, lambda : Vehicle.respawnVehicle(self.id, self.respawnCompactDescr))
         return
 
@@ -799,7 +817,7 @@ class Vehicle(BigWorld.Entity, BattleAbilitiesComponent):
             extraTypes[index].stop(data)
 
         if self.extras:
-            LOG_CODEPOINT_WARNING()
+            _logger.warning('this code point should have never been reached')
 
     def __updateModifiers(self, addedExtras, removedExtras):
         extraTypes = self.typeDescriptor.extras
@@ -810,7 +828,7 @@ class Vehicle(BigWorld.Entity, BattleAbilitiesComponent):
             try:
                 extraTypes[idx].startFor(self)
             except Exception:
-                LOG_CURRENT_EXCEPTION()
+                _logger.exception('Update modifiers')
 
     def __onVehicleDeath(self, isDeadStarted=False):
         if not self.isPlayerVehicle:
@@ -827,7 +845,7 @@ class Vehicle(BigWorld.Entity, BattleAbilitiesComponent):
     def confirmTurretDetachment(self):
         self.__turretDetachmentConfirmed = True
         if not self.isTurretDetached:
-            LOG_ERROR('Vehicle::confirmTurretDetachment: Confirming turret detachment, though the turret is not detached')
+            _logger.error('Vehicle::confirmTurretDetachment: Confirming turret detachment, though the turret is not detached')
         self.appearance.updateTurretVisibility()
 
     def drawEdge(self, forceSimpleEdge=False):

@@ -1,19 +1,18 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/gui_items/dossier/stats.py
 import itertools
+import logging
 from abc import ABCMeta, abstractmethod
 from collections import namedtuple, defaultdict
-from helpers import dependency
-import nations
 import constants
-from items import vehicles
+import nations
 from dossiers2.ui import layouts
 from dossiers2.ui.achievements import ACHIEVEMENT_MODE, ACHIEVEMENT_SECTION, ACHIEVEMENT_SECTIONS_INDICES, makeAchievesStorageName, ACHIEVEMENT_SECTIONS_ORDER, getSection as getAchieveSection
-from debug_utils import LOG_CURRENT_EXCEPTION, LOG_ERROR
-from gui.shared.gui_items.dossier.factories import getAchievementFactory, _SequenceAchieveFactory
 from gui.shared.gui_items.dossier.achievements.MarkOfMasteryAchievement import MarkOfMasteryAchievement, MASTERY_IS_NOT_ACHIEVED, isMarkOfMasteryAchieved
-from skeletons.gui.shared import IItemsCache
+from gui.shared.gui_items.dossier.factories import getAchievementFactory, _SequenceAchieveFactory
+from items import vehicles
 from soft_exception import SoftException
+_logger = logging.getLogger(__name__)
 UNAVAILABLE_MARKS_OF_MASTERY = (-1, -1, -1, -1)
 _BATTLE_SECTION = ACHIEVEMENT_SECTIONS_INDICES[ACHIEVEMENT_SECTION.BATTLE]
 _EPIC_SECTION = ACHIEVEMENT_SECTIONS_INDICES[ACHIEVEMENT_SECTION.EPIC]
@@ -419,8 +418,7 @@ class _AchievementsBlock(_StatsBlockAbstract):
                 if factory is not None:
                     return factory.create()
         except Exception:
-            LOG_ERROR('There is exception while achievement creating', record)
-            LOG_CURRENT_EXCEPTION()
+            _logger.exception('There is exception while achievement creating %s', record)
 
         return
 
@@ -446,8 +444,7 @@ class _AchievementsBlock(_StatsBlockAbstract):
                                     result[section].append(a)
 
             except Exception:
-                LOG_ERROR('There is exception while achievement creating', record)
-                LOG_CURRENT_EXCEPTION()
+                _logger.exception('There is exception while achievement creating %s', record)
                 continue
 
         return tuple((sorted(result[section]) for section in ACHIEVEMENT_SECTIONS_ORDER))
@@ -492,28 +489,6 @@ class _AchievementsBlock(_StatsBlockAbstract):
         return (block, name) in self.__acceptableAchieves or makeAchievesStorageName(block) in self.__acceptableAchieves and name in self.__dossier.getBlock(block)
 
 
-class _RankedCurrentSeasonStatsBlock(_StatsBlock):
-    itemsCache = dependency.descriptor(IItemsCache)
-
-    def getLadderPts(self):
-        return self._stats.get('seasonLadderPts', 0)
-
-    def getStepsCount(self):
-        return self._stats.get('seasonStepsCount', 0)
-
-    def hasAchievedRank(self):
-        rank, _ = self._stats.get('accRank', (0, 0))
-        return rank > 0
-
-    def _getStatsBlock(self, dossier):
-        if dossier.isCurrentUser():
-            rankedRequester = self.itemsCache.items.ranked
-            return {'seasonLadderPts': rankedRequester.seasonLadderPts,
-             'seasonStepsCount': rankedRequester.seasonStepsCount,
-             'accRank': rankedRequester.accRank}
-        return dossier.getRankedCurrentSeason()
-
-
 class _RankedSeasonsStatsBlock(_StatsBlock):
 
     def _getStatsBlock(self, dossier):
@@ -523,20 +498,16 @@ class _RankedSeasonsStatsBlock(_StatsBlock):
 class _StoredRankedSeasonsStatsBlock(_RankedSeasonsStatsBlock):
     _RANK_IDX = 0
     _STEPS_COUNT_IDX = 4
-    _LADDER_PTS_IDX = 3
 
-    def getPrevSeasonLadderPts(self):
-        prevSeasonData = self.__getPreviousSeasonData()
-        return prevSeasonData[self._LADDER_PTS_IDX] if prevSeasonData else 0
+    def getSeasonStepsCount(self, seasonID):
+        seasonData = self.__getSeasonData(seasonID)
+        return seasonData[self._STEPS_COUNT_IDX] if seasonData else 0
 
-    def getPrevSeasonsLadderPts(self):
-        return self.__getTotalStatistics(self._LADDER_PTS_IDX)
+    def getAchievedRank(self, seasonID):
+        seasonData = self.__getSeasonData(seasonID)
+        return seasonData[self._RANK_IDX] if seasonData else 0
 
-    def getPrevSeasonStepsCount(self):
-        prevSeasonData = self.__getPreviousSeasonData()
-        return prevSeasonData[self._STEPS_COUNT_IDX] if prevSeasonData else 0
-
-    def getPrevSeasonsStepsCount(self):
+    def getSeasonsStepsCount(self):
         return self.__getTotalStatistics(self._STEPS_COUNT_IDX)
 
     def hadAchievedRank(self):
@@ -553,14 +524,18 @@ class _StoredRankedSeasonsStatsBlock(_RankedSeasonsStatsBlock):
             if len(stats) > statsIdx:
                 if cycleID == 0:
                     total += stats[statsIdx]
-            LOG_ERROR('Incorrect data format:', stats)
+            _logger.error('Incorrect data format: %s', stats)
 
         return total
 
-    def __getPreviousSeasonData(self):
-        seasonIDs = [ seasonID for seasonID, cycleID in self._stats.iterkeys() if cycleID == 0 ]
-        prevSeasonID = max(seasonIDs) if seasonIDs else 0
-        return self._stats.get((prevSeasonID, 0))
+    def __getSeasonData(self, seasonID):
+        finishedSeasonStats = self._stats.get((seasonID, 0))
+        if not finishedSeasonStats:
+            for (statSeasonID, _), stats in self._stats.iteritems():
+                if statSeasonID == seasonID:
+                    return stats
+
+        return finishedSeasonStats
 
 
 class _StoredVehRankedSeasonsStatsBlock(_RankedSeasonsStatsBlock):
@@ -572,40 +547,6 @@ class _StoredVehRankedSeasonsStatsBlock(_RankedSeasonsStatsBlock):
                 sumPoints += rank
 
         return sumPoints
-
-
-class _TotalVehRankedSeasonsStatsBlock(_StoredVehRankedSeasonsStatsBlock):
-    itemsCache = dependency.descriptor(IItemsCache)
-
-    def __init__(self, dossier):
-        super(_StoredVehRankedSeasonsStatsBlock, self).__init__(dossier)
-        self._vehIntCD = dossier.getCompactDescriptor()
-        self._dossier = dossier
-
-    def getTotalRanksCount(self):
-        passedSeasonsRanks = super(_TotalVehRankedSeasonsStatsBlock, self).getTotalRanksCount()
-        currentSeasonRankCount, _ = (0, 0)
-        if self._dossier.isCurrentUser():
-            currentSeasonRankCount, _ = self.itemsCache.items.ranked.maxVehRanks.get(self._vehIntCD, (0, 0))
-        else:
-            maxVehRanks = self._dossier.getRankedCurrentSeason().get('maxVehRanks', {})
-            if maxVehRanks:
-                currentSeasonRankCount, _ = maxVehRanks.get(self._vehIntCD, (0, 0))
-        return passedSeasonsRanks + currentSeasonRankCount
-
-
-class _VehRankedCurrentSeasonStatsBlock(_StatsBlock):
-    itemsCache = dependency.descriptor(IItemsCache)
-
-    def _getStatsBlock(self, dossier):
-        if dossier.isCurrentUser():
-            vehIntCD = dossier.getCompactDescriptor()
-            return {'vehRanks': self.itemsCache.items.ranked.vehRanks.get(vehIntCD, (0, 0))}
-        return dossier.getRankedCurrentSeason()
-
-    def getRanksCount(self):
-        rank, _ = self._stats.get('vehRanks', (0, 0))
-        return rank
 
 
 class GlobalStatsBlock(_StatsBlock):
@@ -1539,11 +1480,8 @@ class AccountDossierStats(_DossierStats):
     def getRankedStats(self):
         return TotalAccountRankedStatsBlock(self._getDossierItem())
 
-    def getCurrentSeasonRankedStats(self):
-        return CurrentSeasonRankedStatsBlock(self._getDossierItem())
-
-    def getPreviousSeasonRankedStats(self):
-        return PreviousSeasonRankedStatsBlock(self._getDossierItem())
+    def getSeasonRankedStats(self, seasonKey, seasonID):
+        return SeasonRankedStatsBlock(self._getDossierItem(), seasonKey, seasonID)
 
     def getEpicRandomStats(self):
         return AccountEpicRandomStatsBlock(self._getDossierItem())
@@ -1768,8 +1706,7 @@ class RankedStatsBlock(_BattleStatsBlock, _Battle2StatsBlock, _MaxStatsBlock, _A
         _Battle2StatsBlock.__init__(self, dossier)
         _MaxStatsBlock.__init__(self, dossier)
         _AchievementsBlock.__init__(self, dossier)
-        self._rankedSeasons = self._getPrevSeasonsBlock(dossier)
-        self._rankedCurrentSeason = self._getCurrentSeasonBlock(dossier)
+        self._rankedSeasons = self._getSeasonsBlock(dossier)
 
     def getBattlesCountVer2(self):
         return self.getBattlesCount()
@@ -1777,10 +1714,7 @@ class RankedStatsBlock(_BattleStatsBlock, _Battle2StatsBlock, _MaxStatsBlock, _A
     def getBattlesCountVer3(self):
         return self.getBattlesCount()
 
-    def _getPrevSeasonsBlock(self, dossier):
-        raise NotImplementedError
-
-    def _getCurrentSeasonBlock(self, dossier):
+    def _getSeasonsBlock(self, dossier):
         raise NotImplementedError
 
     def _getStatsBlock(self, dossier):
@@ -1802,9 +1736,6 @@ class AccountRankedStatsBlock(RankedStatsBlock, _VehiclesStatsBlock):
         super(AccountRankedStatsBlock, self).__init__(dossier, blockName, maxBlockName)
         _VehiclesStatsBlock.__init__(self, dossier)
 
-    def getLadderPts(self):
-        raise NotImplementedError
-
     def getStepsCount(self):
         raise NotImplementedError
 
@@ -1817,44 +1748,25 @@ class AccountRankedStatsBlock(RankedStatsBlock, _VehiclesStatsBlock):
     def _packVehicle(self, battlesCount=0, wins=0, xp=0):
         return self.VehiclesDossiersCut(battlesCount, wins, xp)
 
-    def _getPrevSeasonsBlock(self, dossier):
+    def _getSeasonsBlock(self, dossier):
         return _StoredRankedSeasonsStatsBlock(dossier)
 
-    def _getCurrentSeasonBlock(self, dossier):
-        return _RankedCurrentSeasonStatsBlock(dossier)
 
+class SeasonRankedStatsBlock(AccountRankedStatsBlock):
 
-class CurrentSeasonRankedStatsBlock(AccountRankedStatsBlock):
-
-    def __init__(self, dossier):
-        super(CurrentSeasonRankedStatsBlock, self).__init__(dossier, 'rankedCurrent', 'maxRankedCurrent')
-
-    def _getVehDossiersCut(self, dossier):
-        return dossier.getDossierDescr()['rankedCurrentCut']
-
-    def getLadderPts(self):
-        return self._rankedCurrentSeason.getLadderPts()
-
-    def getStepsCount(self):
-        return self._rankedCurrentSeason.getStepsCount()
-
-    def hasAchievedRank(self):
-        return self._rankedCurrentSeason.hasAchievedRank()
-
-
-class PreviousSeasonRankedStatsBlock(AccountRankedStatsBlock):
-
-    def __init__(self, dossier):
-        super(PreviousSeasonRankedStatsBlock, self).__init__(dossier, 'rankedPrevious', 'maxRankedPrevious')
+    def __init__(self, dossier, seasonKey, seasonID):
+        self.__seasonKey = seasonKey
+        self.__seasonID = seasonID
+        super(SeasonRankedStatsBlock, self).__init__(dossier, 'ranked%s' % seasonKey, 'maxRanked%s' % seasonKey)
 
     def _getVehDossiersCut(self, dossier):
-        return dossier.getDossierDescr()['rankedPreviousCut']
-
-    def getLadderPts(self):
-        return self._rankedSeasons.getPrevSeasonLadderPts()
+        return dossier.getDossierDescr()['rankedCut%s' % self.__seasonKey]
 
     def getStepsCount(self):
-        return self._rankedSeasons.getPrevSeasonStepsCount()
+        return self._rankedSeasons.getSeasonStepsCount(self.__seasonID)
+
+    def getAchievedRank(self):
+        return self._rankedSeasons.getAchievedRank(self.__seasonID)
 
     def hasAchievedRank(self):
         return self._rankedSeasons.hadAchievedRank()
@@ -1868,14 +1780,11 @@ class TotalAccountRankedStatsBlock(AccountRankedStatsBlock, _VehiclesStatsBlock)
     def _getVehDossiersCut(self, dossier):
         return dossier.getDossierDescr()['rankedCut']
 
-    def getLadderPts(self):
-        return self._rankedSeasons.getPrevSeasonsLadderPts() + self._rankedCurrentSeason.getLadderPts()
-
     def getStepsCount(self):
-        return self._rankedSeasons.getPrevSeasonsStepsCount() + self._rankedCurrentSeason.getStepsCount()
+        return self._rankedSeasons.getSeasonsStepsCount()
 
     def hasAchievedRank(self):
-        return self._rankedSeasons.hadAchievedRank() or self._rankedCurrentSeason.hasAchievedRank()
+        return self._rankedSeasons.hadAchievedRank()
 
 
 class VehRankedStatsBlock(RankedStatsBlock, _VehiclesStatsBlock):
@@ -1892,8 +1801,5 @@ class VehRankedStatsBlock(RankedStatsBlock, _VehiclesStatsBlock):
     def _packVehicle(self, battlesCount=0, wins=0, xp=0):
         return self.VehiclesDossiersCut(battlesCount, wins, xp)
 
-    def _getPrevSeasonsBlock(self, dossier):
-        return _TotalVehRankedSeasonsStatsBlock(dossier)
-
-    def _getCurrentSeasonBlock(self, dossier):
-        return _VehRankedCurrentSeasonStatsBlock(dossier)
+    def _getSeasonsBlock(self, dossier):
+        return _StoredVehRankedSeasonsStatsBlock(dossier)

@@ -13,6 +13,9 @@ class ToolTipMgrMeta(BaseDAAPIComponent):
     def onHideTooltip(self, tooltipId):
         self._printOverrideError('onHideTooltip')
 
+    def onCreateWulfTooltip(self, tooltipType, args, x, y):
+        self._printOverrideError('onCreateWulfTooltip')
+
     def as_showS(self, tooltipData, linkage, redraw=False):
         return self.flashObject.as_show(tooltipData, linkage, redraw) if self._isDAAPIInited() else None
 

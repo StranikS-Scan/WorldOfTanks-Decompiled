@@ -15,6 +15,8 @@ from gui.battle_results.components import shared
 from gui.battle_results.components import style
 from gui.battle_results.components import vehicles
 from gui.battle_results.settings import BATTLE_RESULTS_RECORD as _RECORD
+from gui.impl import backport
+from gui.impl.gen.resources import R
 from helpers import i18n
 _REGULAR_TABS_VO_META = base.ListMeta([{'label': i18n.makeString(MENU.FINALSTATISTIC_TABS_COMMONSTATS),
   'linkage': 'CommonStats',
@@ -119,20 +121,13 @@ REGULAR_COMMON_STATS_BLOCK.addComponent(12, shared.ClientIndexItem('clientArenaI
 REGULAR_COMMON_STATS_BLOCK.addComponent(13, common.TeamsUiVisibility('uiVisibility'))
 REGULAR_COMMON_STATS_BLOCK.addComponent(14, common.EligibleForCrystalRewards('eligibleForCrystalRewards'))
 _PERSONAL_VO_META = base.DictMeta({'isPremium': False,
- 'hasGetPremBtn': False,
- 'getPremVO': {},
  'isLegionnaire': False,
  'creditsStr': '0',
  'xpStr': '0',
  'fortResourceTotal': '',
  'efficiencyHeader': {},
  'details': [],
- 'creditsNoPremValues': [],
- 'creditsPremValues': [],
  'creditsData': [],
- 'xpTitleStrings': [],
- 'xpNoPremValues': [],
- 'xpPremValues': [],
  'xpData': [],
  'resValues': [],
  'resPremValues': [],
@@ -146,9 +141,19 @@ _PERSONAL_VO_META = base.DictMeta({'isPremium': False,
  'crystalStr': '0',
  'crystalData': [],
  'playerRank': 0,
- 'isTeamKiller': False})
-_PREMIUM_BUY_VO_META = base.PropertyMeta((('arenaUniqueID', 0, 'clientIndex'), ('creditsDiff', 0, 'creditsDiff'), ('xpDiff', 0, 'xpDiff')))
-_PREMIUM_BUY_VO_META.bind(personal.PremiumBuyBlock)
+ 'isTeamKiller': False,
+ 'isPremiumPlus': False,
+ 'dynamicPremiumState': '',
+ 'premiumInfo': {},
+ 'premiumBonus': {},
+ 'premiumEarnings': {}})
+_PREMIUM_BLOCK_VO_META = base.PropertyMeta((('creditsPremiumBonusStr', '', 'creditsPremiumBonusStr'),
+ ('xpPremiumBonusStr', '', 'xpPremiumBonusStr'),
+ ('premiumBonusStr', '', 'premiumBonusStr'),
+ ('backgroundIcon', '', 'backgroundIcon'),
+ ('isGetPremium', False, 'isGetPremium'),
+ ('isUpgradeToPremiumPlus', False, 'isUpgradeToPremiumPlus')))
+_PREMIUM_BLOCK_VO_META.bind(personal.PremiumInfoBlock)
 _DAMAGE_DETAILS_VO_META = base.PropertyMeta((('damageTotalItems', 0, 'piercings'), ('damageDealtVals', None, 'damageDealtValues'), ('damageDealtNames', None, 'damageDealtNames')))
 _DAMAGE_DETAILS_VO_META.bind(personal.DamageDetailsBlock)
 _ARMOR_USING_DETAILS_VO_META = base.PropertyMeta((('armorTotalItems', 0, 'usedArmorCount'), ('armorVals', None, 'armorValues'), ('armorNames', None, 'armorNames')))
@@ -229,27 +234,43 @@ _TOTAL_EFFICIENCY_HEADER_META = base.PropertyMeta(((BATTLE_EFFICIENCY_TYPES.DEST
  ('stunTooltip', None, 'damageAssistedStunTooltip'),
  ('hasEfficencyStats', None, 'hasEfficencyStats')))
 _TOTAL_EFFICIENCY_HEADER_META.bind(personal.TotalEfficiencyDetailsHeader)
+_PREMIUM_BONUS_VO_META = base.PropertyMeta((('description', '', 'description'),
+ ('bonusLeft', '', 'bonusLeft'),
+ ('xpValue', '', 'xpValue'),
+ ('statusBonusLabel', '', 'statusBonusLabel'),
+ ('bonusIcon', '', 'bonusIcon')))
+_PREMIUM_BONUS_VO_META.bind(details.PremiumBonusDetailsBlock)
+_PREMIUM_EARNINGS_VO_META = base.DictMeta({'xpTitleStrings': [],
+ 'xpPremValues': [],
+ 'xpNoPremValues': [],
+ 'creditsPremValues': [],
+ 'creditsNoPremValues': [],
+ 'backgroundIcon': backport.image(R.images.gui.maps.icons.premacc.battleResult.premium())})
+_PREMIUM_EARNINGS_BLOCK = base.StatsBlock(_PREMIUM_EARNINGS_VO_META.clone(), 'premiumEarnings', _RECORD.PERSONAL)
+_PREMIUM_EARNINGS_BLOCK.addComponent(0, details.XPTitleBlock(base.ListMeta(), 'xpTitleStrings', 'premiumEarnings'))
+_PREMIUM_EARNINGS_BLOCK.addComponent(1, details.PremiumXPBlock(base.ListMeta(), 'xpPremValues', 'premiumEarnings'))
+_PREMIUM_EARNINGS_BLOCK.addComponent(3, details.BaseXPBlock(base.ListMeta(), 'xpNoPremValues', 'premiumEarnings'))
+_PREMIUM_EARNINGS_BLOCK.addComponent(4, details.PremiumCreditsBlock(base.ListMeta(), 'creditsPremValues', 'premiumEarnings'))
+_PREMIUM_EARNINGS_BLOCK.addComponent(5, details.BaseCreditsBlock(base.ListMeta(), 'creditsNoPremValues', 'premiumEarnings'))
 REGULAR_PERSONAL_STATS_BLOCK = base.StatsBlock(_PERSONAL_VO_META, 'personal')
 REGULAR_PERSONAL_STATS_BLOCK.addComponent(0, personal.TotalEfficiencyDetailsHeader(_TOTAL_EFFICIENCY_HEADER_META, 'efficiencyHeader', _RECORD.PERSONAL))
 REGULAR_PERSONAL_STATS_BLOCK.addComponent(1, personal.TotalEfficiencyDetailsBlock(base.ListMeta(), 'details', _RECORD.PERSONAL))
 REGULAR_PERSONAL_STATS_BLOCK.addComponent(2, _PERSONAL_ACHIEVEMENTS_BLOCK)
 REGULAR_PERSONAL_STATS_BLOCK.addComponent(3, personal.PremiumAccountFlag('isPremium'))
-REGULAR_PERSONAL_STATS_BLOCK.addComponent(4, personal.CanUpgradeToPremiumFlag('hasGetPremBtn'))
-REGULAR_PERSONAL_STATS_BLOCK.addComponent(5, personal.PremiumBuyBlock(field='getPremVO'))
-REGULAR_PERSONAL_STATS_BLOCK.addComponent(6, details.GainCreditsInBattleItem('creditsStr'))
-REGULAR_PERSONAL_STATS_BLOCK.addComponent(7, details.GainXPInBattleItem('xpStr'))
-REGULAR_PERSONAL_STATS_BLOCK.addComponent(8, details.BaseCreditsBlock(base.ListMeta(), 'creditsNoPremValues', _RECORD.PERSONAL))
-REGULAR_PERSONAL_STATS_BLOCK.addComponent(9, details.PremiumCreditsBlock(base.ListMeta(), 'creditsPremValues', _RECORD.PERSONAL))
-REGULAR_PERSONAL_STATS_BLOCK.addComponent(10, details.TotalMoneyDetailsBlock(base.ListMeta(), 'creditsData', _RECORD.PERSONAL))
-REGULAR_PERSONAL_STATS_BLOCK.addComponent(11, details.XPTitleBlock(base.ListMeta(), 'xpTitleStrings', _RECORD.PERSONAL))
-REGULAR_PERSONAL_STATS_BLOCK.addComponent(12, details.BaseXPBlock(base.ListMeta(), 'xpNoPremValues', _RECORD.PERSONAL))
-REGULAR_PERSONAL_STATS_BLOCK.addComponent(13, details.PremiumXPBlock(base.ListMeta(), 'xpPremValues', _RECORD.PERSONAL))
-REGULAR_PERSONAL_STATS_BLOCK.addComponent(14, details.TotalXPDetailsBlock(base.ListMeta(), 'xpData', _RECORD.PERSONAL))
-REGULAR_PERSONAL_STATS_BLOCK.addComponent(15, vehicles.PersonalVehiclesRegularStatsBlock(base.ListMeta(), 'statValues', _RECORD.PERSONAL))
-REGULAR_PERSONAL_STATS_BLOCK.addComponent(16, personal.StunDataFlag('isStunDataEnabled'))
-REGULAR_PERSONAL_STATS_BLOCK.addComponent(17, details.GainCrystalInBattleItem('crystalStr'))
-REGULAR_PERSONAL_STATS_BLOCK.addComponent(18, details.TotalCrystalDetailsBlock(base.ListMeta(), 'crystalData', _RECORD.PERSONAL))
-REGULAR_PERSONAL_STATS_BLOCK.addComponent(20, personal.IsTeamKillerFlag('isTeamKiller'))
+REGULAR_PERSONAL_STATS_BLOCK.addComponent(4, details.GainCreditsInBattleItem('creditsStr'))
+REGULAR_PERSONAL_STATS_BLOCK.addComponent(5, details.GainXPInBattleItem('xpStr'))
+REGULAR_PERSONAL_STATS_BLOCK.addComponent(6, details.TotalMoneyDetailsBlock(base.ListMeta(), 'creditsData', _RECORD.PERSONAL))
+REGULAR_PERSONAL_STATS_BLOCK.addComponent(7, details.TotalXPDetailsBlock(base.ListMeta(), 'xpData', _RECORD.PERSONAL))
+REGULAR_PERSONAL_STATS_BLOCK.addComponent(8, vehicles.PersonalVehiclesRegularStatsBlock(base.ListMeta(), 'statValues', _RECORD.PERSONAL))
+REGULAR_PERSONAL_STATS_BLOCK.addComponent(9, personal.StunDataFlag('isStunDataEnabled'))
+REGULAR_PERSONAL_STATS_BLOCK.addComponent(10, details.GainCrystalInBattleItem('crystalStr'))
+REGULAR_PERSONAL_STATS_BLOCK.addComponent(11, details.TotalCrystalDetailsBlock(base.ListMeta(), 'crystalData', _RECORD.PERSONAL))
+REGULAR_PERSONAL_STATS_BLOCK.addComponent(12, personal.IsTeamKillerFlag('isTeamKiller'))
+REGULAR_PERSONAL_STATS_BLOCK.addComponent(13, personal.PremiumPlusFlag('isPremiumPlus'))
+REGULAR_PERSONAL_STATS_BLOCK.addComponent(14, personal.PremiumInfoBlock(_PREMIUM_BLOCK_VO_META, 'premiumInfo', _RECORD.PERSONAL))
+REGULAR_PERSONAL_STATS_BLOCK.addComponent(15, details.PremiumBonusDetailsBlock(_PREMIUM_BONUS_VO_META, 'premiumBonus', _RECORD.PERSONAL))
+REGULAR_PERSONAL_STATS_BLOCK.addComponent(16, _PREMIUM_EARNINGS_BLOCK.clone())
+REGULAR_PERSONAL_STATS_BLOCK.addComponent(17, personal.DynamicPremiumState('dynamicPremiumState'))
 _TEAM_PLAYER_VO_META = base.PropertyMeta((('userName', '', 'nameLabel'),
  ('fullName', '', 'fullNameLabel'),
  ('clanAbbrev', '', 'clanLabel'),

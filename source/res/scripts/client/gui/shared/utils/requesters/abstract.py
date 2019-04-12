@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/utils/requesters/abstract.py
+import logging
 from collections import namedtuple
 import BigWorld
 from AccountCommands import isCodeValid, RES_FAILURE, RES_SUCCESS
@@ -7,9 +8,9 @@ from helpers import isPlayerAccount
 from ids_generators import Int32IDGenerator
 from gui.shared.utils import code2str
 from adisp import async, process
-from debug_utils import LOG_ERROR, LOG_WARNING
 from gui.Scaleform.Waiting import Waiting
 from gui.shared.utils.decorators import ReprInjector
+_logger = logging.getLogger(__name__)
 
 class AbstractRequester(object):
 
@@ -20,11 +21,13 @@ class AbstractRequester(object):
     @async
     @process
     def request(self, callback):
+        _logger.debug('Prepare requester %s', self.__class__.__name__)
         self.__synced = False
         if not isPlayerAccount():
             yield lambda callback: callback(None)
-            LOG_ERROR('[class %s] Player is not account.' % self.__class__.__name__)
+            _logger.error('Player is not account, requester %s can not be invoked.', self.__class__.__name__)
         else:
+            _logger.debug('Invoke requester %s', self.__class__.__name__)
             self._data = yield self._requestCache()
         callback(self)
 
@@ -37,9 +40,10 @@ class AbstractRequester(object):
         return
 
     def _response(self, resID, value, callback=None):
+        _logger.debug('Response %r is received for requester %s', resID, self.__class__.__name__)
         self.__synced = resID >= 0
         if resID < 0:
-            LOG_ERROR('There is error while getting data from cache', self.__class__.__name__, code2str(resID), resID)
+            _logger.error('There is error while getting data from cache: %r, %r, %r', self.__class__.__name__, code2str(resID), resID)
             if callback is not None:
                 callback(self._getDefaultDataValue())
         elif callback is not None:
@@ -93,7 +97,7 @@ class RequestCtx(object):
         if not self.isProcessing():
             self._waitingID = waitingID
         else:
-            LOG_ERROR('In processing', self)
+            _logger.error('In processing: %r', self)
 
     def isProcessing(self):
         return self._callback is not None
@@ -107,15 +111,16 @@ class RequestCtx(object):
 
     def stopProcessing(self, result=False):
         if self._callback is not None:
-            self._callback(result)
+            callback = self._callback
             self._callback = None
+            callback(result)
         if self._waitingID:
             Waiting.hide(self._waitingID)
         return
 
     def onResponseReceived(self, code):
         if code < 0:
-            LOG_ERROR('Server return error for request', code, self)
+            _logger.error('Server return error for request: %r, %r', code, self)
         self.stopProcessing(result=code >= 0)
 
     def clear(self):
@@ -194,7 +199,7 @@ class RequestsByIDProcessor(object):
             method(*args, **kwargs)
             result = True
         else:
-            LOG_ERROR('Name of method is invalid', methodName)
+            _logger.error('Name of method is invalid: %r', methodName)
         return result
 
     def _startProcessing(self, requestID, ctx, callback=None):
@@ -228,7 +233,7 @@ class RequestsByIDProcessor(object):
         result, requestID = False, 0
         requester = self.getSender()
         if not requester:
-            LOG_WARNING('There is not sender is present', self)
+            _logger.warning('There is not sender is present: %r', self)
             return (result, requestID)
         method = self._getSenderMethod(requester, methodName)
         if callable(method):
@@ -237,9 +242,9 @@ class RequestsByIDProcessor(object):
                 self._requests[requestID] = (ctx, chain)
                 result = True
             else:
-                LOG_ERROR('Request ID can not be null')
+                _logger.error('Request ID can not be null')
         else:
-            LOG_ERROR('Name of method is invalid', methodName)
+            _logger.error('Name of method is invalid: %r', methodName)
         return (result, requestID)
 
     def _sendNextRequest(self, ctx, chain):
@@ -329,5 +334,5 @@ class ClientRequestsByIDProcessor(RequestsByIDProcessor):
     def _makeResponse(self, code=0, txtMsg='', data=None, ctx=None, extraCode=0, headers=None):
         response = self.__responseClass(code, txtMsg, data, extraCode, headers)
         if not response.isSuccess():
-            LOG_WARNING('Client request error', ctx, response)
+            _logger.warning('Client request error: %r, %r', ctx, response)
         return response

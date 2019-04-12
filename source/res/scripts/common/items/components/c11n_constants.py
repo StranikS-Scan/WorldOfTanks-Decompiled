@@ -66,6 +66,8 @@ class ProjectionDecalDirectionTags(object):
 
 class ProjectionDecalFormTags(object):
     PREFIX = 'formfactor_'
+    DENY = 'deny_'
+    DENY_PREFIX = DENY + PREFIX
     ANY = PREFIX + 'any'
     SQUARE = PREFIX + 'square'
     RECT1X2 = PREFIX + 'rect1x2'
@@ -74,6 +76,40 @@ class ProjectionDecalFormTags(object):
     RECT1X6 = PREFIX + 'rect1x6'
     ALL = (ANY,
      SQUARE,
+     RECT1X2,
+     RECT1X3,
+     RECT1X4,
+     RECT1X6)
+    ALL_FACTORS = (SQUARE,
+     RECT1X2,
+     RECT1X3,
+     RECT1X4,
+     RECT1X6)
+    DENY_ALL = [ DENY + tag for tag in ALL ]
+
+
+class ProjectionDecalPreferredTags(object):
+    PREFIX = 'preferred_'
+    SQUARE = PREFIX + ProjectionDecalFormTags.SQUARE
+    RECT1X2 = PREFIX + ProjectionDecalFormTags.RECT1X2
+    RECT1X3 = PREFIX + ProjectionDecalFormTags.RECT1X3
+    RECT1X4 = PREFIX + ProjectionDecalFormTags.RECT1X4
+    RECT1X6 = PREFIX + ProjectionDecalFormTags.RECT1X6
+    ALL = (SQUARE,
+     RECT1X2,
+     RECT1X3,
+     RECT1X4,
+     RECT1X6)
+
+
+class ProjectionDecalDenyTags(object):
+    PREFIX = 'deny_'
+    SQUARE = PREFIX + ProjectionDecalFormTags.SQUARE
+    RECT1X2 = PREFIX + ProjectionDecalFormTags.RECT1X2
+    RECT1X3 = PREFIX + ProjectionDecalFormTags.RECT1X3
+    RECT1X4 = PREFIX + ProjectionDecalFormTags.RECT1X4
+    RECT1X6 = PREFIX + ProjectionDecalFormTags.RECT1X6
+    ALL = (SQUARE,
      RECT1X2,
      RECT1X3,
      RECT1X4,

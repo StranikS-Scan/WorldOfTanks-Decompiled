@@ -6,13 +6,12 @@ import functools
 import logging
 import BigWorld
 import Keys
-from gui.Scaleform.managers.Cursor import Cursor
+from gui.Scaleform.managers.cursor_mgr import CursorManager
 from gui.shared import event_dispatcher
 from Event import Event, EventManager
 from debug_utils import LOG_CURRENT_EXCEPTION
 from gui import GUI_SETTINGS
 from web.cache.web_cache import WebExternalCache
-from gui.app_loader import g_appLoader
 _logger = logging.getLogger(__name__)
 _BROWSER_KEY_LOGGING = False
 _WOT_CLIENT_PARAM_NAME = 'wot_client_param'
@@ -270,7 +269,7 @@ class WebBrowser(object):
             self.__cbID = None
         self.__ui = None
         self.__navigationFilters = None
-        self.__setUICursor(self.__uiObj, Cursor.ARROW)
+        self.__setUICursor(self.__uiObj, CursorManager.ARROW)
         g_mgr.delBrowser(self)
         return
 
@@ -349,7 +348,7 @@ class WebBrowser(object):
          e.isAltDown(),
          e.isShiftDown(),
          e.isCtrlDown())
-        toolTipMgr = g_appLoader.getApp().getToolTipMgr()
+        toolTipMgr = self.__uiObj.getToolTipMgr()
         if toolTipMgr and toolTipMgr.isReadyToHandleKey(event):
             return False
         if self.__ignoreAltKey and e.key in (Keys.KEY_LALT, Keys.KEY_RALT):
@@ -550,12 +549,12 @@ class EventListener(object):
     cursorType = property(lambda self: self.__cursorType)
 
     def __init__(self, browser):
-        self.__cursorTypes = {CURSOR_TYPES.Hand: Cursor.HAND,
-         CURSOR_TYPES.Pointer: Cursor.ARROW,
-         CURSOR_TYPES.IBeam: Cursor.IBEAM,
-         CURSOR_TYPES.Grab: Cursor.DRAG_OPEN,
-         CURSOR_TYPES.Grabbing: Cursor.DRAG_CLOSE,
-         CURSOR_TYPES.ColumnResize: Cursor.MOVE}
+        self.__cursorTypes = {CURSOR_TYPES.Hand: CursorManager.HAND,
+         CURSOR_TYPES.Pointer: CursorManager.ARROW,
+         CURSOR_TYPES.IBeam: CursorManager.IBEAM,
+         CURSOR_TYPES.Grab: CursorManager.DRAG_OPEN,
+         CURSOR_TYPES.Grabbing: CursorManager.DRAG_CLOSE,
+         CURSOR_TYPES.ColumnResize: CursorManager.MOVE}
         self.__cursorType = None
         self.__eventMgr = EventManager()
         self.onLoadStart = Event(self.__eventMgr)
@@ -578,7 +577,7 @@ class EventListener(object):
         self.__urlFailed = False
 
     def onChangeCursor(self, cursorType):
-        self.__cursorType = self.__cursorTypes.get(cursorType) or Cursor.ARROW
+        self.__cursorType = self.__cursorTypes.get(cursorType) or CursorManager.ARROW
         self.onCursorUpdated()
 
     def onChangeTitle(self, title):

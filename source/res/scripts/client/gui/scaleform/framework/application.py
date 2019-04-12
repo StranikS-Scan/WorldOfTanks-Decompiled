@@ -3,13 +3,11 @@
 import logging
 import weakref
 from account_helpers.settings_core import settings_constants
+from frameworks.wulf import WindowStatus
 from gui import g_guiResetters, g_repeatKeyHandlers, GUI_CTRL_MODE_FLAG
-from gui.Scaleform import SCALEFORM_SWF_PATH_V3
-from gui.Scaleform.Flash import Flash
-from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
+from gui.Scaleform.flash_wrapper import FlashComponentWrapper
 from gui.Scaleform.framework.view_events_listener import ViewEventsListener
 from gui.Scaleform.framework.entities.abstract.ApplicationMeta import ApplicationMeta
-from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
 from gui.impl.pub.main_window import MainWindow
 from gui.shared.events import AppLifeCycleEvent, GameEvent, DirectLoadViewEvent
 from gui.shared import EVENT_BUS_SCOPE
@@ -58,15 +56,13 @@ class DAAPIRootBridge(object):
             _logger.error('Flash root is not found: %s', self.__rootPath)
 
 
-class AppEntry(Flash, ApplicationMeta):
+class AppEntry(FlashComponentWrapper, ApplicationMeta):
     settingsCore = dependency.descriptor(ISettingsCore)
     connectionMgr = dependency.descriptor(IConnectionManager)
     guiApp = dependency.descriptor(IGuiLoader)
 
-    def __init__(self, entryID, appNS, swf='', daapiBridge=None):
-        self.__mainWnd = MainWindow(entryID)
-        self.__mainWnd.load()
-        super(AppEntry, self).__init__(swf=swf, path=SCALEFORM_SWF_PATH_V3, descriptor=self.__mainWnd.descriptor)
+    def __init__(self, entryID, appNS, ctrlModeFlag, daapiBridge=None):
+        super(AppEntry, self).__init__()
         self.proxy = weakref.proxy(self)
         self._loaderMgr = None
         self._containerMgr = None
@@ -85,15 +81,19 @@ class AppEntry(Flash, ApplicationMeta):
         self._tutorialMgr = None
         self._imageManager = None
         self._graphicsOptimizationMgr = None
+        self._cursorMgr = None
         self.__initialized = False
         self.__ns = appNS
         self.__viewEventsListener = ViewEventsListener(weakref.proxy(self))
         self.__viewEventsListener.create()
         self.__firingsAfterInit = {}
-        self.__guiCtrlModeFlags = GUI_CTRL_MODE_FLAG.CURSOR_DETACHED
+        self.__guiCtrlModeFlags = ctrlModeFlag
         self.__daapiBridge = daapiBridge or DAAPIRootBridge()
         self.__daapiBridge.setPyScript(self.proxy)
         self.fireEvent(AppLifeCycleEvent(self.__ns, AppLifeCycleEvent.CREATING))
+        self.__mainWnd = MainWindow(entryID)
+        self.__mainWnd.onStatusChanged += self.__onMainWindowStatusChanged
+        self.__mainWnd.load()
         return
 
     @property
@@ -154,7 +154,7 @@ class AppEntry(Flash, ApplicationMeta):
 
     @property
     def cursorMgr(self):
-        return None
+        return self._cursorMgr
 
     @property
     def imageManager(self):
@@ -187,10 +187,12 @@ class AppEntry(Flash, ApplicationMeta):
     def active(self, state):
         if state is not self.isActive:
             if state:
-                self._setup()
+                if self.component is not None:
+                    self._setup()
             else:
                 self.__guiCtrlModeFlags = GUI_CTRL_MODE_FLAG.CURSOR_DETACHED
             super(AppEntry, self).active(state)
+        return
 
     def afterCreate(self):
         self.fireEvent(AppLifeCycleEvent(self.__ns, AppLifeCycleEvent.INITIALIZING))
@@ -205,7 +207,6 @@ class AppEntry(Flash, ApplicationMeta):
         self.addListener(GameEvent.CHANGE_APP_RESOLUTION, self.__onAppResolutionChanged, scope=EVENT_BUS_SCOPE.GLOBAL)
         self.updateScale()
         self.__viewEventsListener.handleWaitingEvents()
-        self._loadCursor()
         self._loadWaiting()
         self.connectionMgr.onDisconnected += self.__cm_onDisconnected
 
@@ -253,6 +254,9 @@ class AppEntry(Flash, ApplicationMeta):
         if self._gameInputMgr is not None:
             self._gameInputMgr.destroy()
             self._gameInputMgr = None
+        if self._cursorMgr is not None:
+            self._cursorMgr.destroy()
+            self._cursorMgr = None
         if self._utilsMgr is not None:
             self._utilsMgr.destroy()
             self._utilsMgr = None
@@ -269,6 +273,7 @@ class AppEntry(Flash, ApplicationMeta):
             self._graphicsOptimizationMgr.destroy()
             self._graphicsOptimizationMgr = None
         if self.__mainWnd is not None:
+            self.__mainWnd.onStatusChanged -= self.__onMainWindowStatusChanged
             self.__mainWnd.destroy()
             self.__mainWnd = None
         super(AppEntry, self).beforeDelete()
@@ -341,6 +346,10 @@ class AppEntry(Flash, ApplicationMeta):
     def setSoundMgr(self, flashObject):
         if self._soundMgr and flashObject:
             self._soundMgr.setFlashObject(flashObject)
+
+    def setCursorMgr(self, flashObject):
+        if self._cursorMgr and flashObject:
+            self._cursorMgr.setFlashObject(flashObject)
 
     def getToolTipMgr(self):
         return self._toolTip
@@ -422,6 +431,7 @@ class AppEntry(Flash, ApplicationMeta):
         self._toolTip = self._createToolTipManager()
         self._varsMgr = self._createGlobalVarsManager()
         self._soundMgr = self._createSoundManager()
+        self._cursorMgr = self._createCursorManager()
         self._colorSchemeMgr = self._createColorSchemeManager()
         self._eventLogMgr = self._createEventLogMgr()
         self._contextMgr = self._createContextMenuManager()
@@ -441,7 +451,9 @@ class AppEntry(Flash, ApplicationMeta):
 
     def _removeGameCallbacks(self):
         g_guiResetters.discard(self.__onScreenResolutionChanged)
-        g_repeatKeyHandlers.discard(self.component.handleKeyEvent)
+        if self.component is not None:
+            g_repeatKeyHandlers.discard(self.component.handleKeyEvent)
+        return
 
     def _getRequiredLibraries(self):
         pass
@@ -459,6 +471,9 @@ class AppEntry(Flash, ApplicationMeta):
         return None
 
     def _createSoundManager(self):
+        return None
+
+    def _createCursorManager(self):
         return None
 
     def _createColorSchemeManager(self):
@@ -500,11 +515,14 @@ class AppEntry(Flash, ApplicationMeta):
     def _setup(self):
         raise NotImplementedError('App._setup must be overridden')
 
-    def _loadCursor(self):
-        self._containerMgr.load(SFViewLoadParams(VIEW_ALIAS.CURSOR))
-
     def _loadWaiting(self):
         raise NotImplementedError('App._loadWaiting must be overridden')
+
+    def __onMainWindowStatusChanged(self, newState):
+        if newState == WindowStatus.LOADED:
+            self.createComponent(descriptor=self.__mainWnd.descriptor)
+            if self.isActive:
+                self._setup()
 
     def __onScreenResolutionChanged(self):
         self.updateScale()

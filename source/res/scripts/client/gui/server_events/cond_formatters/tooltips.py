@@ -30,6 +30,7 @@ class MissionsAccountRequirementsFormatter(ConditionsFormatter):
     def __init__(self):
         super(MissionsAccountRequirementsFormatter, self).__init__({'token': _TokenRequirementFormatter(),
          'premiumAccount': requirements.PremiumAccountFormatter(),
+         'premiumPlusAccount': requirements.PremiumPlusAccountFormatter(),
          'inClan': requirements.InClanRequirementFormatter(),
          'igrType': requirements.IgrTypeRequirementFormatter(),
          'GR': requirements.GlobalRatingRequirementFormatter(),

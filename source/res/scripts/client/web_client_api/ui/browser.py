@@ -5,8 +5,8 @@ from gui.shared.event_dispatcher import showBrowserOverlayView
 from helpers import dependency
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.framework import ViewTypes
-from gui.app_loader import g_appLoader
 from gui.shared.utils.functions import getViewName
+from skeletons.gui.app_loader import IAppLoader
 from skeletons.gui.game_control import IBrowserController, IExternalLinksController
 from web_client_api import WebCommandException, w2c, W2CSchema, Field
 from gui.Scaleform.framework.managers.containers import POP_UP_CRITERIA
@@ -60,7 +60,8 @@ class CloseBrowserWindowWebApiMixin(object):
     def browser(self, cmd, ctx):
         if 'browser_id' in ctx:
             windowAlias = getViewName(ctx['browser_alias'], ctx['browser_id'])
-            app = g_appLoader.getApp()
+            appLoader = dependency.instance(IAppLoader)
+            app = appLoader.getApp()
             if app is not None and app.containerManager is not None:
                 supportedBrowserViewTypes = (ViewTypes.WINDOW, ViewTypes.OVERLAY, ViewTypes.LOBBY_TOP_SUB)
                 browserWindow = None
@@ -84,7 +85,8 @@ class CloseBrowserViewWebApiMixin(object):
 
     @w2c(W2CSchema, 'browser')
     def browser(self, cmd, ctx):
-        app = g_appLoader.getApp()
+        appLoader = dependency.instance(IAppLoader)
+        app = appLoader.getApp()
         if app is not None and app.containerManager is not None:
             browserView = app.containerManager.getView(ViewTypes.LOBBY_SUB, criteria={POP_UP_CRITERIA.VIEW_ALIAS: ctx.get('browser_alias')})
             if browserView is not None:

@@ -4,7 +4,8 @@ from collections import namedtuple
 from frameworks.wulf import ViewFlags, ViewModel, Window, WindowFlags
 from gui.impl.pub import ViewImpl
 from gui.impl.gen import R
-from gui.app_loader import g_appLoader
+from helpers import dependency
+from skeletons.gui.app_loader import IAppLoader
 _STATE_TYPE_INFO = 'INFO'
 TooltipData = namedtuple('TooltipData', ('tooltip', 'isSpecial', 'specialAlias', 'specialArgs'))
 
@@ -13,6 +14,7 @@ def createTooltipData(tooltip=None, isSpecial=False, specialAlias=None, specialA
 
 
 class _BackportTooltipContent(ViewImpl):
+    appLoader = dependency.descriptor(IAppLoader)
     __slots__ = ()
 
     def __init__(self, tooltipData):
@@ -20,7 +22,7 @@ class _BackportTooltipContent(ViewImpl):
 
     def _initialize(self, tooltipData):
         super(_BackportTooltipContent, self)._initialize()
-        toolTipMgr = g_appLoader.getApp().getToolTipMgr()
+        toolTipMgr = self.appLoader.getApp().getToolTipMgr()
         if toolTipMgr is not None:
             if tooltipData.isSpecial:
                 toolTipMgr.onCreateTypedTooltip(tooltipData.specialAlias, tooltipData.specialArgs, _STATE_TYPE_INFO)
@@ -29,7 +31,7 @@ class _BackportTooltipContent(ViewImpl):
         return
 
     def _finalize(self):
-        toolTipMgr = g_appLoader.getApp().getToolTipMgr()
+        toolTipMgr = self.appLoader.getApp().getToolTipMgr()
         if toolTipMgr is not None:
             toolTipMgr.hide()
         return

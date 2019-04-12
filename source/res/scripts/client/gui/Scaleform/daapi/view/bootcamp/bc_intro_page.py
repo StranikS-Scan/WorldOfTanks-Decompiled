@@ -7,7 +7,6 @@ from constants import WOT_GAMEPLAY
 from gui.Scaleform.daapi.view.meta.BCIntroVideoPageMeta import BCIntroVideoPageMeta
 from gui.Scaleform.Waiting import Waiting
 from gui.app_loader.settings import APP_NAME_SPACE
-from gui.app_loader import g_appLoader
 from bootcamp.BootCampEvents import g_bootcampEvents
 from bootcamp.BootcampSettings import getBattleDefaults
 from debug_utils_bootcamp import LOG_ERROR_BOOTCAMP
@@ -16,6 +15,7 @@ from gui.shared.events import BootcampEvent
 from gui.Scaleform.locale.BOOTCAMP import BOOTCAMP
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from helpers import dependency
+from skeletons.gui.app_loader import IAppLoader
 from skeletons.gui.game_control import IBootcampController
 PATH_BACKGROUNDS = '../maps/icons/bootcamp/loading/{0}_{1}.png'
 PATH_BACKGROUNDS_CORE = '../maps/icons/bootcamp/loading/{0}_{1}_core.png'
@@ -28,6 +28,7 @@ class INTRO_HIGHLIGHT_TYPE(object):
 
 class BCIntroPage(BCIntroVideoPageMeta):
     bootcampCtrl = dependency.descriptor(IBootcampController)
+    appLoader = dependency.descriptor(IAppLoader)
 
     def __init__(self, settings):
         super(BCIntroPage, self).__init__()
@@ -94,7 +95,7 @@ class BCIntroPage(BCIntroVideoPageMeta):
             if self._isCurrentlyHighlighting(highlightType):
                 self._setHighlighting(highlightType, False)
 
-        g_appLoader.detachCursor(APP_NAME_SPACE.SF_BATTLE)
+        self.appLoader.detachCursor(APP_NAME_SPACE.SF_BATTLE)
         super(BCIntroPage, self)._dispose()
 
     def __start(self):

@@ -631,7 +631,8 @@
     <longDescriptionSpecial>	#usa_vehicles:T2_lt_long_special	</longDescriptionSpecial>
     <price>	750	  <gold></gold>
     </price>
-    <tags>	lightTank improvedVentilation_class1_user excluded_from_sandbox HD	</tags>
+    <notInShop>	true	</notInShop>
+    <tags>	lightTank improvedVentilation_class1_user excluded_from_sandbox HD bonds	</tags>
     <level>	2	</level>
   </A19_T2_lt>
   <A62_Ram-II>
@@ -862,7 +863,7 @@
     <price>	9700	  <gold></gold>
     </price>
     <notInShop>	true	</notInShop>
-    <tags>	heavyTank improvedVentilation_class3_user aimingStabilizer_Mk2_user mediumCaliberTankRammer_user wetCombatPack_class2_user enhancedTorsions5t_user HD	</tags>
+    <tags>	heavyTank improvedVentilation_class3_user aimingStabilizer_Mk2_user mediumCaliberTankRammer_user wetCombatPack_class2_user enhancedTorsions5t_user HD bonds	</tags>
     <level>	8	</level>
   </A117_T26E5>
   <A117_T26E5_Patriot>
@@ -938,6 +939,19 @@
     <tags>	AT-SPG heavyAT-SPG improvedVentilation_class3_user largeCaliberTankRammer_user wetCombatPack_class2_user enhancedTorsions5t_user HD	</tags>
     <level>	8	</level>
   </A122_TS-5>
+  <A123_T78>
+    <id>	239	</id>
+    <userString>	#usa_vehicles:A123_T78	</userString>
+    <description>	#usa_vehicles:A123_T78_descr	</description>
+    <shortUserString>	#usa_vehicles:A123_T78_short	</shortUserString>
+    <shortDescriptionSpecial>	#usa_vehicles:A123_T78_short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#usa_vehicles:A123_T78_long_special	</longDescriptionSpecial>
+    <price>	100	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	AT-SPG mediumAT-SPG mediumCaliberTankRammer_user wetCombatPack_class1_user enhancedTorsions1t_user HD secret testTank	</tags>
+    <level>	6	</level>
+  </A123_T78>
   <A103_T71E1_IGR>
     <id>	151	</id>
     <userString>	#igr_vehicles:T71_IGR	</userString>

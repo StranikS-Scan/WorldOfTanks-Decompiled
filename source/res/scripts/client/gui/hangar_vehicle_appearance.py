@@ -14,7 +14,7 @@ from dossiers2.ui.achievements import MARK_ON_GUN_RECORD
 from gui import g_tankActiveCamouflage
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.gui_items.customization.outfit import Area, REGIONS_BY_SLOT_TYPE
-from gui.shared.gui_items.customization.slots import ANCHOR_TYPE_TO_SLOT_TYPE_MAP, SLOT_TYPE_TO_ANCHOR_TYPE_MAP
+from gui.shared.gui_items.customization.slots import ANCHOR_TYPE_TO_SLOT_TYPE_MAP, SLOT_ASPECT_RATIO, SLOT_TYPES, BaseCustomizationSlot, EmblemSlot
 from gui.shared.items_cache import CACHE_SYNC_REASON
 from helpers import dependency
 from items.components.c11n_constants import ApplyArea, SeasonType
@@ -25,7 +25,7 @@ from vehicle_systems import camouflages
 from vehicle_systems.components.vehicle_shadow_manager import VehicleShadowManager
 from vehicle_systems.tankStructure import ModelsSetParams, TankPartNames, ColliderTypes, TankPartIndexes
 from vehicle_systems.tankStructure import VehiclePartsTuple
-from svarog_script.py_component_system import ComponentDescriptor, ComponentSystem
+from svarog_script.script_game_object import ComponentDescriptor, ScriptGameObject
 from vehicle_systems.stricted_loading import makeCallbackWeak
 from CurrentVehicle import g_currentVehicle, g_currentPreviewVehicle
 from gui.hangar_cameras.hangar_camera_common import CameraMovementStates, CameraRelatedEvents
@@ -34,16 +34,13 @@ from gui.ClientHangarSpace import hangarCFG
 from gui.battle_control.vehicle_getter import hasTurretRotator
 _SHOULD_CHECK_DECAL_UNDER_GUN = True
 _HANGAR_TURRET_SHIFT = math.pi / 8
-EmblemPositionParams = namedtuple('EmblemPositionParams', ['position',
- 'direction',
- 'up',
- 'emblemDescription'])
-Anchor = namedtuple('Anchor', ['pos',
- 'normal',
- 'applyTo',
- 'vehicleSlotId',
- 'slotDescriptor',
- 'turretYaw'])
+AnchorLocation = namedtuple('AnchorLocation', ['position', 'normal', 'up'])
+AnchorHelper = namedtuple('AnchorHelper', ['location',
+ 'descriptor',
+ 'turretYaw',
+ 'partIdx',
+ 'attachedPartIdx'])
+AnchorParams = namedtuple('AnchorParams', ['location', 'descriptor', 'turretYaw'])
 
 class _LoadStateNotifier(object):
     __em = Event.EventManager()
@@ -77,7 +74,7 @@ class _LoadStateNotifier(object):
         self._onUnloaded()
 
 
-class HangarVehicleAppearance(ComponentSystem):
+class HangarVehicleAppearance(ScriptGameObject):
     __ROOT_NODE_NAME = 'V'
     itemsCache = dependency.descriptor(IItemsCache)
     itemsFactory = dependency.descriptor(IGuiItemsFactory)
@@ -96,10 +93,18 @@ class HangarVehicleAppearance(ComponentSystem):
     def compoundModel(self):
         return self.__vEntity.model if self.__vEntity else None
 
+    @property
+    def id(self):
+        return self.__vEntity.id
+
     fashion = property(lambda self: self.__fashions[0])
 
+    @property
+    def filter(self):
+        return None
+
     def __init__(self, spaceId, vEntity):
-        ComponentSystem.__init__(self)
+        ScriptGameObject.__init__(self, vEntity.spaceID)
         self.__loadState = _LoadStateNotifier()
         self.__curBuildInd = 0
         self.__vDesc = None
@@ -119,7 +124,8 @@ class HangarVehicleAppearance(ComponentSystem):
         self.__outfit = None
         self.__staticTurretYaw = 0.0
         self.__staticGunPitch = 0.0
-        self.__slotPositions = None
+        self.__anchorsHelpers = None
+        self.__anchorsParams = None
         self.shadowManager = None
         cfg = hangarCFG()
         self.__currentEmblemsAlpha = cfg['emblems_alpha_undamaged']
@@ -154,8 +160,8 @@ class HangarVehicleAppearance(ComponentSystem):
         return
 
     def destroy(self):
-        ComponentSystem.deactivate(self)
-        ComponentSystem.destroy(self)
+        ScriptGameObject.deactivate(self)
+        ScriptGameObject.destroy(self)
         self.__vDesc = None
         self.__vState = None
         self.__loadState.unload()
@@ -209,7 +215,7 @@ class HangarVehicleAppearance(ComponentSystem):
 
     def __reload(self, vDesc, vState, outfit):
         self.__loadState.unload()
-        ComponentSystem.deactivate(self)
+        ScriptGameObject.deactivate(self)
         self.tracks = None
         self.collisionObstaclesCollector = None
         self.tessellationCollisionSensor = None
@@ -272,7 +278,7 @@ class HangarVehicleAppearance(ComponentSystem):
         resources.append(collisionAssembler)
         physicalTracksBuilders = vDesc.chassis.physicalTracks
         for name, builder in physicalTracksBuilders.iteritems():
-            resources.append(builder.createLoader('{0}PhysicalTrack'.format(name), modelsSet))
+            resources.append(builder.createLoader(self.__spaceId, '{0}PhysicalTrack'.format(name), modelsSet))
 
         BigWorld.loadResourceListBG(tuple(resources), makeCallbackWeak(self.__onResourcesLoaded, self.__curBuildInd))
         return
@@ -337,8 +343,8 @@ class HangarVehicleAppearance(ComponentSystem):
                 steerableWheelsCount = self.__vDesc.chassis.generalWheelsAnimatorConfig.getSteerableWheelsCount()
                 wheelsSteering = [ (lambda : 0.0) for _ in xrange(steerableWheelsCount) ]
             chassisFashion = self.__fashions.chassis
-            self.wheelsAnimator = model_assembler.createWheelsAnimator(self.__vEntity.model, self.collisions, ColliderTypes.VEHICLE_COLLIDER, self.__vDesc, None, lambda : 0, wheelsScroll, wheelsSteering, self.__vEntity.id, chassisFashion)
-            self.trackNodesAnimator = model_assembler.createTrackNodesAnimator(self.__vEntity.model, self.__vDesc, self.wheelsAnimator)
+            self.wheelsAnimator = model_assembler.createWheelsAnimator(self, ColliderTypes.VEHICLE_COLLIDER, self.__vDesc, lambda : 0, wheelsScroll, wheelsSteering, None)
+            self.trackNodesAnimator = model_assembler.createTrackNodesAnimator(self, self.__vDesc)
             splineTracksImpl = model_assembler.setupSplineTracks(chassisFashion, self.__vDesc, self.__vEntity.model, self.__resources, self.__outfit.modelsSet)
             model_assembler.assembleTracks(self.__resources, self.__vDesc, self, splineTracksImpl, True)
             dirtEnabled = BigWorld.WG_dirtEnabled() and 'HD' in self.__vDesc.type.tags
@@ -348,13 +354,13 @@ class HangarVehicleAppearance(ComponentSystem):
                  BigWorld.PyDirtHandler(False, self.__vEntity.model.node(TankPartNames.TURRET).position.y),
                  BigWorld.PyDirtHandler(False, self.__vEntity.model.node(TankPartNames.GUN).position.y)]
                 modelHeight, _ = self.computeVehicleHeight()
-                self.dirtComponent = Vehicular.DirtComponent(dirtHandlers, modelHeight)
+                self.dirtComponent = self.createComponent(Vehicular.DirtComponent, dirtHandlers, modelHeight)
                 for fashionIdx, _ in enumerate(TankPartNames.ALL):
                     self.__fashions[fashionIdx].addMaterialHandler(dirtHandlers[fashionIdx])
 
                 self.dirtComponent.setBase()
             outfitData = camouflages.getOutfitData(self.__outfit, self.__vDesc, self.__vState != 'undamaged')
-            self.c11nComponent = Vehicular.C11nEditComponent(self.__fashions, self.compoundModel, outfitData)
+            self.c11nComponent = self.createComponent(Vehicular.C11nEditComponent, self.__fashions, self.compoundModel, outfitData)
             self.__updateDecals(self.__outfit)
         else:
             self.__fashions = VehiclePartsTuple(BigWorld.WGBaseFashion(), BigWorld.WGBaseFashion(), BigWorld.WGBaseFashion(), BigWorld.WGBaseFashion())
@@ -473,121 +479,18 @@ class HangarVehicleAppearance(ComponentSystem):
                 self.__vEntity.model.visible = False
             return
 
-    def getSlotPositions(self):
-        if self.__slotPositions is None:
-            self.__getSlotPositions(checkDecalsAgainstGun=True)
-        return self.__slotPositions
+    def getAnchorParams(self, slotId, areaId, regionIdx):
+        if self.__anchorsParams is None:
+            self.__initAnchorsParams()
+        anchorParams = self.__anchorsParams.get(slotId, {}).get(areaId, {}).get(regionIdx)
+        return anchorParams
 
-    def updateSlotPositions(self, checkDecalsAgainstGun=False):
-        self.__getSlotPositions(checkDecalsAgainstGun)
-
-    def __getSlotPositions(self, checkDecalsAgainstGun):
-        slots = {area:{GUI_ITEM_TYPE.INSCRIPTION: {},
-         GUI_ITEM_TYPE.EMBLEM: {},
-         GUI_ITEM_TYPE.PAINT: {},
-         GUI_ITEM_TYPE.CAMOUFLAGE: {},
-         GUI_ITEM_TYPE.PROJECTION_DECAL: {},
-         GUI_ITEM_TYPE.MODIFICATION: {},
-         GUI_ITEM_TYPE.STYLE: {}} for area in Area.ALL}
-        emblemSlotTypes = (GUI_ITEM_TYPE.INSCRIPTION, GUI_ITEM_TYPE.EMBLEM)
-        customizationSlotTypes = (GUI_ITEM_TYPE.PAINT,
-         GUI_ITEM_TYPE.CAMOUFLAGE,
-         GUI_ITEM_TYPE.PROJECTION_DECAL,
-         GUI_ITEM_TYPE.MODIFICATION,
-         GUI_ITEM_TYPE.STYLE)
-        for slotType in emblemSlotTypes:
-            for areaId in Area.ALL:
-                for emblemSlot in g_currentVehicle.item.getAnchors(slotType, areaId).itervalues():
-                    worldMatrix = Math.Matrix(self.__vEntity.model.node(Area.getName(areaId)))
-                    startPos = emblemSlot.rayStart
-                    endPos = emblemSlot.rayEnd
-                    normal = startPos - endPos
-                    normal.normalise()
-                    worldEmblemNormal = worldMatrix.applyVector(normal)
-                    sub = endPos - startPos
-                    half = sub / 2.0
-                    midPos = startPos + half
-                    worldEmblemPos = worldMatrix.applyPoint(midPos)
-                    container = slots[areaId]
-                    regionIdx = len(container[slotType])
-                    if not checkDecalsAgainstGun:
-                        anchorParams = self.__slotPositions[areaId][slotType].get(regionIdx)
-                        turretYaw = anchorParams.turretYaw if anchorParams is not None else None
-                    elif areaId == Area.HULL:
-                        anchorType = SLOT_TYPE_TO_ANCHOR_TYPE_MAP[slotType]
-                        emblemParams = self.getEmblemPos(areaId == Area.HULL, anchorType, regionIdx)
-                        turretYaw = self.__correctTurretYaw(emblemParams.position, emblemParams.direction, emblemParams.up, emblemParams.emblemDescription)
-                    else:
-                        turretYaw = None
-                    container[slotType][regionIdx] = Anchor(worldEmblemPos, worldEmblemNormal, 0, emblemSlot.slotId, emblemSlot, turretYaw)
-
-        for slotType in customizationSlotTypes:
-            for areaId in Area.ALL:
-                for anchor in g_currentVehicle.item.getAnchors(slotType, areaId).itervalues():
-                    worldMatrix = Math.Matrix(self.__vEntity.model.node(Area.getName(anchor.areaId)))
-                    container = slots[anchor.areaId]
-                    applyTo = anchor.descriptor.applyTo
-                    if applyTo is not None:
-                        index = -1
-                        if slotType in REGIONS_BY_SLOT_TYPE[areaId]:
-                            regions = REGIONS_BY_SLOT_TYPE[areaId][slotType]
-                            index = next((i for i, region in enumerate(regions) if applyTo == region), -1)
-                    else:
-                        index = len(container[slotType])
-                    if index == -1:
-                        continue
-                    if slotType in (GUI_ITEM_TYPE.MODIFICATION, GUI_ITEM_TYPE.STYLE):
-                        hullAABB = self.collisions.getBoundingBox(TankPartIndexes.HULL)
-                        anchorPosition = Math.Vector3((hullAABB[1].x + hullAABB[0].x) / 2.0, hullAABB[1].y / 2.0, (hullAABB[1].z + hullAABB[0].z) / 2.0)
-                        hullWorldMatrix = Math.Matrix(self.__vEntity.model.node(TankPartNames.HULL))
-                        worldPos = hullWorldMatrix.applyPoint(anchorPosition)
-                    else:
-                        worldPos = worldMatrix.applyPoint(anchor.anchorPosition)
-                    worldNormal = worldMatrix.applyVector(anchor.anchorDirection)
-                    worldNormal.normalise()
-                    if not checkDecalsAgainstGun:
-                        anchorParams = self.__slotPositions[anchor.areaId][slotType].get(index)
-                        turretYaw = anchorParams.turretYaw if anchorParams is not None else None
-                    elif slotType == GUI_ITEM_TYPE.PROJECTION_DECAL and anchor.showOn & ApplyArea.HULL and anchor.areaId not in (Area.TURRET, Area.GUN):
-                        deculUp = worldNormal * (Math.Vector3(0, 1, 0) * worldNormal)
-                        turretYaw = self.__correctTurretYaw(worldPos, -worldNormal, deculUp, anchor.descriptor)
-                    else:
-                        turretYaw = None
-                    container[slotType][index] = Anchor(worldPos, worldNormal, applyTo, anchor.slotId, anchor.descriptor, turretYaw)
-
-        self.__slotPositions = slots
-        return
-
-    def getEmblemPos(self, onHull, emblemType, emblemIdx):
-        if onHull:
-            emblemsDesc = self.__vDesc.hull.emblemSlots
-            worldMat = Math.Matrix(self.__vEntity.model.node(TankPartNames.HULL))
+    def updateAnchorsParams(self, tankPartsToUpdate=TankPartIndexes.ALL):
+        if self.__anchorsHelpers is None or self.__anchorsParams is None:
+            return
         else:
-            if self.__vDesc.turret.showEmblemsOnGun:
-                node = self.__vEntity.model.node(TankPartNames.GUN)
-            else:
-                node = self.__vEntity.model.node(TankPartNames.TURRET)
-            emblemsDesc = self.__vDesc.turret.emblemSlots
-            worldMat = Math.Matrix(node)
-        desiredEmblems = [ emblem for emblem in emblemsDesc if emblem.type == emblemType ]
-        if emblemIdx >= len(desiredEmblems):
-            return None
-        else:
-            emblem = desiredEmblems[emblemIdx]
-            startPos = emblem.rayStart
-            endPos = emblem.rayEnd
-            direction = endPos - startPos
-            direction.normalise()
-            sub = endPos - startPos
-            half = sub / 2.0
-            hitPos = startPos + half
-            hitPos = worldMat.applyPoint(hitPos)
-            upVecWorld = worldMat.applyVector(emblem.rayUp)
-            upVecWorld.normalise()
-            if abs(direction.pitch - math.pi / 2) < 0.1:
-                direction = Math.Vector3(0, -1, 0) + upVecWorld * 0.01
-                direction.normalise()
-            return EmblemPositionParams(hitPos, direction, upVecWorld, emblem)
+            self.__updateAnchorsParams(tankPartsToUpdate)
+            return
 
     def getCentralPointForArea(self, areaIdx):
 
@@ -616,53 +519,6 @@ class HangarVehicleAppearance(ComponentSystem):
         else:
             position = _getBBCenter(TankPartNames.CHASSIS)
         return position
-
-    def __getDecalCorners(self, hitPos, dir, up, decal):
-        cfg = hangarCFG()
-        vScale = cfg['v_scale']
-        slotType = ANCHOR_TYPE_TO_SLOT_TYPE_MAP[decal.type]
-        if slotType == GUI_ITEM_TYPE.PROJECTION_DECAL:
-            width = decal.scale[0] * vScale
-            height = decal.scale[2] * vScale
-        elif slotType == GUI_ITEM_TYPE.INSCRIPTION:
-            width = decal.size * vScale
-            height = width * 0.5
-        elif slotType == GUI_ITEM_TYPE.EMBLEM:
-            width = height = decal.size * vScale
-        else:
-            return []
-        m = Math.Matrix()
-        m.lookAt(hitPos, dir, up)
-        m.invert()
-        result = (Math.Vector3(width * 0.5, height * 0.5, 0),
-         Math.Vector3(width * 0.5, -height * 0.5, 0),
-         Math.Vector3(-width * 0.5, -height * 0.5, 0),
-         Math.Vector3(-width * 0.5, height * 0.5, 0))
-        return [ m.applyPoint(vec) for vec in result ]
-
-    def __correctTurretYaw(self, hitPos, dir, up, emblem):
-        if not _SHOULD_CHECK_DECAL_UNDER_GUN:
-            return None
-        else:
-            turretMat = Math.Matrix(self.__vEntity.model.node(TankPartNames.TURRET))
-            fromTurretToHit = hitPos - turretMat.translation
-            if fromTurretToHit.z < 0:
-                return None
-            checkDirWorld = dir * -10.0
-            cornersWorld = self.__getDecalCorners(hitPos, dir, up, emblem)
-            if not cornersWorld:
-                return None
-            result = self.collisions.collideShape(TankPartNames.getIdx(TankPartNames.GUN), (cornersWorld[0],
-             cornersWorld[1],
-             cornersWorld[2],
-             cornersWorld[3]), checkDirWorld)
-            if result < 0.0:
-                return None
-            turretYaw = _HANGAR_TURRET_SHIFT
-            gunDir = turretMat.applyVector(Math.Vector3(0, 0, 1))
-            if Math.Vector3(0, 1, 0).dot(gunDir * fromTurretToHit) > 0.0:
-                turretYaw = -turretYaw
-            return turretYaw
 
     def updateCustomization(self, outfit=None, callback=None):
         if self.__isVehicleDestroyed:
@@ -711,5 +567,164 @@ class HangarVehicleAppearance(ComponentSystem):
         self.c11nComponent.setDecals(decals)
 
     def __onVehicleChanged(self):
-        self.__slotPositions = None
+        self.__anchorsParams = None
+        self.__anchorsHelpers = None
         return
+
+    def __initAnchorsParams(self):
+        self.__anchorsParams = {cType:{area:{} for area in Area.ALL} for cType in SLOT_TYPES}
+        if self.__anchorsHelpers is None:
+            self.__initAnchorsHelpers()
+        self.__updateAnchorsParams(TankPartIndexes.ALL)
+        return
+
+    def __updateAnchorsParams(self, tankPartsToUpdate):
+        tankPartsMatrices = {}
+        for tankPartIdx in TankPartIndexes.ALL:
+            tankPartName = TankPartIndexes.getName(tankPartIdx)
+            tankPartsMatrices[tankPartIdx] = Math.Matrix(self.__vEntity.model.node(tankPartName))
+
+        for slotType in SLOT_TYPES:
+            for areaId in Area.ALL:
+                anchorHelpers = self.__anchorsHelpers[slotType][areaId]
+                for regionIdx, anchorHelper in anchorHelpers.iteritems():
+                    attachedPartIdx = anchorHelper.attachedPartIdx
+                    if attachedPartIdx not in tankPartsToUpdate:
+                        continue
+                    anchorLocationWS = self.__getAnchorLocationWS(anchorHelper.location, anchorHelper.partIdx)
+                    self.__anchorsParams[slotType][areaId][regionIdx] = AnchorParams(anchorLocationWS, anchorHelper.descriptor, anchorHelper.turretYaw)
+
+    def __initAnchorsHelpers(self):
+        anchorsHelpers = {cType:{area:{} for area in Area.ALL} for cType in SLOT_TYPES}
+        for slotType in SLOT_TYPES:
+            for areaId in Area.ALL:
+                for anchor in g_currentVehicle.item.getAnchors(slotType, areaId):
+                    if isinstance(anchor, EmblemSlot):
+                        getAnchorHelper = self.__getEmblemAnchorHelper
+                        applyTo = None
+                    elif isinstance(anchor, BaseCustomizationSlot):
+                        getAnchorHelper = self.__getAnchorHelper
+                        applyTo = anchor.descriptor.applyTo
+                    else:
+                        continue
+                    if applyTo is not None:
+                        regions = REGIONS_BY_SLOT_TYPE[areaId].get(slotType, ())
+                        regionIdx = next((i for i, region in enumerate(regions) if applyTo == region), -1)
+                    else:
+                        regionIdx = len(anchorsHelpers[slotType][areaId])
+                    if regionIdx == -1:
+                        continue
+                    anchorsHelpers[slotType][areaId][regionIdx] = getAnchorHelper(anchor)
+
+        self.__anchorsHelpers = anchorsHelpers
+        return
+
+    def __getEmblemAnchorHelper(self, anchor):
+        startPos = anchor.rayStart
+        endPos = anchor.rayEnd
+        normal = startPos - endPos
+        normal.normalise()
+        up = normal * (anchor.descriptor.rayUp * normal)
+        up.normalise()
+        position = startPos + (endPos - startPos) * 0.5
+        anchorLocation = AnchorLocation(position, normal, up)
+        partIdx = anchor.areaId
+        attachedPartIdx = self.__getAttachedPartIdx(position, normal, partIdx)
+        if attachedPartIdx == TankPartIndexes.HULL:
+            turretYaw = self.__correctTurretYaw(anchorLocation, partIdx, anchor.descriptor)
+        else:
+            turretYaw = None
+        return AnchorHelper(anchorLocation, anchor.descriptor, turretYaw, partIdx, attachedPartIdx)
+
+    def __getAnchorHelper(self, anchor):
+        slotType = ANCHOR_TYPE_TO_SLOT_TYPE_MAP[anchor.descriptor.type]
+        if slotType in (GUI_ITEM_TYPE.MODIFICATION, GUI_ITEM_TYPE.STYLE):
+            hullAABB = self.collisions.getBoundingBox(TankPartIndexes.HULL)
+            position = Math.Vector3((hullAABB[1].x + hullAABB[0].x) / 2.0, hullAABB[1].y / 2.0, (hullAABB[1].z + hullAABB[0].z) / 2.0)
+            partIdx = TankPartIndexes.HULL
+        else:
+            position = anchor.anchorPosition
+            partIdx = anchor.areaId
+        normal = anchor.anchorDirection
+        normal.normalise()
+        up = normal * (Math.Vector3(0, 1, 0) * normal)
+        anchorLocation = AnchorLocation(position, normal, up)
+        attachedPartIdx = self.__getAttachedPartIdx(position, normal, partIdx)
+        if slotType == GUI_ITEM_TYPE.PROJECTION_DECAL and attachedPartIdx == TankPartIndexes.HULL:
+            turretYaw = self.__correctTurretYaw(anchorLocation, partIdx, anchor.descriptor)
+        else:
+            turretYaw = None
+        return AnchorHelper(anchorLocation, anchor.descriptor, turretYaw, partIdx, attachedPartIdx)
+
+    def __getAttachedPartIdx(self, position, normal, tankPartIdx):
+        partMatrix = Math.Matrix(self.__vEntity.model.node(TankPartIndexes.getName(tankPartIdx)))
+        startPos = position + normal * 0.1
+        endPos = position - normal * 0.6
+        startPos = partMatrix.applyPoint(startPos)
+        endPos = partMatrix.applyPoint(endPos)
+        collisions = self.collisions.collideAllWorld(startPos, endPos)
+        if collisions is not None:
+            for collision in collisions:
+                partIdx = collision[3]
+                if partIdx in TankPartIndexes.ALL:
+                    return partIdx
+
+        return tankPartIdx
+
+    def __correctTurretYaw(self, anchorLocation, partIdx, slotDescriptor):
+        if not _SHOULD_CHECK_DECAL_UNDER_GUN:
+            return
+        else:
+            anchorLocationWS = self.__getAnchorLocationWS(anchorLocation, partIdx)
+            position = anchorLocationWS.position
+            direction = -anchorLocationWS.normal
+            up = anchorLocationWS.up
+            turretMat = Math.Matrix(self.__vEntity.model.node(TankPartNames.TURRET))
+            fromTurretToHit = position - turretMat.translation
+            if fromTurretToHit.z < 0:
+                return
+            checkDirWorld = direction * -10.0
+            cornersWorldSpace = self.__getDecalCorners(position, direction, up, slotDescriptor)
+            if cornersWorldSpace is None:
+                return
+            result = self.collisions.collideShape(TankPartIndexes.GUN, cornersWorldSpace, checkDirWorld)
+            if result < 0.0:
+                return
+            turretYaw = _HANGAR_TURRET_SHIFT
+            gunDir = turretMat.applyVector(Math.Vector3(0, 0, 1))
+            if Math.Vector3(0, 1, 0).dot(gunDir * fromTurretToHit) > 0.0:
+                turretYaw = -turretYaw
+            return turretYaw
+
+    def __getDecalCorners(self, position, direction, up, slotDescriptor):
+        cfg = hangarCFG()
+        vScale = cfg['v_scale']
+        slotType = ANCHOR_TYPE_TO_SLOT_TYPE_MAP[slotDescriptor.type]
+        if slotType == GUI_ITEM_TYPE.PROJECTION_DECAL:
+            width = slotDescriptor.scale[0] * vScale
+            height = slotDescriptor.scale[2] * vScale
+        else:
+            width = slotDescriptor.size * vScale
+            aspect = SLOT_ASPECT_RATIO.get(slotType)
+            if aspect is not None:
+                height = width * aspect
+            else:
+                return
+        transformMatrix = Math.Matrix()
+        transformMatrix.lookAt(position, direction, up)
+        transformMatrix.invert()
+        result = (Math.Vector3(width * 0.5, height * 0.5, 0),
+         Math.Vector3(width * 0.5, -height * 0.5, 0),
+         Math.Vector3(-width * 0.5, -height * 0.5, 0),
+         Math.Vector3(-width * 0.5, height * 0.5, 0))
+        return tuple((transformMatrix.applyPoint(vec) for vec in result))
+
+    def __getAnchorLocationWS(self, anchorLocation, partIdx):
+        partMatrix = Math.Matrix(self.__vEntity.model.node(TankPartIndexes.getName(partIdx)))
+        position = partMatrix.applyPoint(anchorLocation.position)
+        normal = partMatrix.applyVector(anchorLocation.normal)
+        up = partMatrix.applyVector(anchorLocation.up)
+        if abs(normal.pitch - math.pi / 2) < 0.1:
+            normal = Math.Vector3(0, -1, 0) + up * 0.01
+            normal.normalise()
+        return AnchorLocation(position, normal, up)

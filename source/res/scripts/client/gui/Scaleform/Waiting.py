@@ -1,209 +1,91 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/Waiting.py
-import BigWorld
-from helpers import i18n
+import logging
+import typing
+from gui.impl.gen import R
+from helpers import dependency
+from skeletons.gui.app_loader import IAppLoader, IWaitingWidget
+_logger = logging.getLogger(__name__)
 
-class _WaitingEntity(object):
+def convertToResource(message):
+    splitted = message.split('/')
+    resourceID = R.invalid
+    if splitted:
+        resourceID = R.strings.waiting
+        for item in splitted:
+            resourceID = resourceID.dyn(item.replace('-', '_'))
 
-    def __init__(self, message, interruptCallback=None, overlapsUI=True):
-        super(_WaitingEntity, self).__init__()
-        self.__message = message
-        self.__overlapsUI = overlapsUI
-        if interruptCallback is not None:
-            self.__interruptCallbacks = [interruptCallback]
-        else:
-            self.__interruptCallbacks = []
-        return
+    return resourceID
 
-    def __repr__(self):
-        return '{}: message={}, interruptCallbacks={}, isOnTop={}'.format(super(_WaitingEntity, self).__repr__(), self.__message, self.__interruptCallbacks, self.__overlapsUI)
 
-    @property
-    def overlapsUI(self):
-        return self.__overlapsUI
-
-    @property
-    def message(self):
-        return self.__message
-
-    def updateOverlapsUI(self, overlapsUI):
-        self.__overlapsUI = overlapsUI
-
-    def clear(self):
-        self.__interruptCallbacks = []
-
-    def addInterruptCallback(self, interruptCallback):
-        if interruptCallback is not None and interruptCallback not in self.__interruptCallbacks:
-            self.__interruptCallbacks.append(interruptCallback)
-        return
-
-    def interrupt(self):
-        for c in self.__interruptCallbacks:
-            c()
-
-        self.clear()
+@dependency.replace_none_kwargs(appLoader=IAppLoader)
+def worker(appLoader=None):
+    return appLoader.getWaitingWorker()
 
 
 class Waiting(object):
-    __waitingViewGetter = None
-    __lobbyPageWaitingKeeper = None
-    __waitingStack = []
-    __suspendStack = []
-    __isVisible = False
-
-    @classmethod
-    def setWaitingViewGetter(cls, getter):
-        cls.__waitingViewGetter = getter
-
-    @classmethod
-    def setLobbyPageWaitingKeeper(cls, waitingKeeper):
-        cls.__lobbyPageWaitingKeeper = waitingKeeper
+    __appLoader = dependency.descriptor(IAppLoader)
 
     @classmethod
     def getWaitingView(cls, overlapsUI):
-        view = None
-        if overlapsUI:
-            if callable(cls.__waitingViewGetter):
-                view = cls.__waitingViewGetter()
-        elif cls.__lobbyPageWaitingKeeper is not None:
-            view = cls.__lobbyPageWaitingKeeper
-        return view
+        return cls.__getWaiting().getWaitingView(overlapsUI)
 
     @classmethod
     def isVisible(cls):
-        return cls.__isVisible
+        return cls.__getWaiting().isWaitingShown()
 
     @classmethod
     def isOpened(cls, msg):
-        return cls.getWaiting(msg) is not None
-
-    @classmethod
-    def _hasOverlapsUIWaiting(cls):
-        for w in cls.__waitingStack:
-            if w.overlapsUI:
-                return True
-
-        return False
-
-    @classmethod
-    def _addToStack(cls, message, interruptCallback, overlapsUI):
-        overlapsUI = overlapsUI or cls._hasOverlapsUIWaiting()
-        w = _WaitingEntity(message, interruptCallback, overlapsUI)
-        cls.__waitingStack.append(w)
-        return w
+        return cls.__getWaiting().isWaitingShown(convertToResource(msg)())
 
     @classmethod
     def getWaiting(cls, msg):
-        for w in cls.__waitingStack:
-            if w.message == msg:
-                return w
-
-        return None
+        return cls.__getWaiting().getWaitingTask(convertToResource(msg)())
 
     @classmethod
     def getSuspendedWaiting(cls, msg):
-        for w in cls.__suspendStack:
-            if w.message == msg:
-                return w
-
-        return None
+        return cls.__getWaiting().getSuspendedWaitingTask(convertToResource(msg)())
 
     @classmethod
     def show(cls, message, isSingle=False, interruptCallback=None, overlapsUI=True):
-        BigWorld.Screener.setEnabled(False)
-        w = cls.getWaiting(message)
-        if w is not None:
-            if isSingle:
-                w.addInterruptCallback(interruptCallback)
-            else:
-                w = cls._addToStack(message, interruptCallback, overlapsUI)
-        else:
-            w = cls._addToStack(message, interruptCallback, overlapsUI)
-        cls._showWaiting(w)
-        return
+        resourceID = convertToResource(message)
+        if not resourceID:
+            _logger.error('Waiting can not be shown. Resource is not found: %s', message)
+            return
+        cls.__getWaiting().show(resourceID(), isSingle=isSingle, interruptCallback=interruptCallback, isBlocking=overlapsUI)
 
     @classmethod
     def hide(cls, message):
-        w = cls.getSuspendedWaiting(message)
-        if w is not None:
-            w.clear()
-            view = cls.getWaitingView(w.overlapsUI)
-            if view:
-                view.waitingHide()
-            cls.__suspendStack.remove(w)
-        w = cls.getWaiting(message)
-        if w is not None:
-            w.clear()
-            view = cls.getWaitingView(w.overlapsUI)
-            if view:
-                view.waitingHide()
-            cls.__waitingStack.remove(w)
-        if cls.__waitingStack:
-            cls._showWaiting(cls.__waitingStack[-1])
-        else:
-            cls.close()
-        return
+        resourceID = convertToResource(message)
+        if not resourceID:
+            _logger.error('Waiting can not be hidden. Resource is not found: %s', message)
+            return
+        cls.__getWaiting().hide(resourceID())
 
     @classmethod
     def suspend(cls):
-        if cls.isSuspended():
-            return
-        cls.__suspendStack = cls.__waitingStack[:]
-        cls.close()
+        cls.__getWaiting().suspend()
 
     @classmethod
     def resume(cls):
-        if not cls.isSuspended():
-            return
-        if cls.__suspendStack:
-            cls._showWaiting(cls.__suspendStack[-1])
-            cls.__waitingStack = cls.__suspendStack[:]
-        cls.__suspendStack = []
+        cls.__getWaiting().resume()
 
     @classmethod
     def isSuspended(cls):
-        return len(cls.__suspendStack) > 0
+        return cls.__getWaiting().isSuspended()
 
     @classmethod
     def close(cls):
-        BigWorld.Screener.setEnabled(True)
-        cls.__isVisible = False
-        for w in cls.__waitingStack:
-            w.clear()
-            view = cls.getWaitingView(w.overlapsUI)
-            if view:
-                view.waitingHide()
-
-        cls.__waitingStack = []
+        cls.__getWaiting().close()
 
     @classmethod
     def rollback(cls):
-        for w in cls.__suspendStack:
-            w.clear()
-
-        cls.__suspendStack = []
-        cls.close()
+        cls.__getWaiting().rollback()
 
     @classmethod
     def cancelCallback(cls):
-        view = cls.getWaitingView(True)
-        if view is not None:
-            view.cancelCallback()
-        return
+        cls.__getWaiting().cancelCallback()
 
     @classmethod
-    def _showWaiting(cls, w):
-        view = cls.getWaitingView(w.overlapsUI)
-        if view is None and w.overlapsUI is False:
-            view = cls.getWaitingView(True)
-            if view is not None:
-                w.updateOverlapsUI(True)
-        if view is not None:
-            view.waitingShow(i18n.makeString('#waiting:%s' % w.message))
-            cls.__isVisible = True
-            if w.overlapsUI:
-                view.setCallback(w.interrupt)
-                from gui.shared.events import LobbySimpleEvent
-                from gui.shared import EVENT_BUS_SCOPE
-                view.fireEvent(LobbySimpleEvent(LobbySimpleEvent.WAITING_SHOWN), scope=EVENT_BUS_SCOPE.LOBBY)
-        return
+    def __getWaiting(cls):
+        return cls.__appLoader.getWaitingWorker()

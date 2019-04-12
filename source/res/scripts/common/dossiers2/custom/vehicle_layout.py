@@ -47,6 +47,9 @@ _max30x30BlockBuilder = StaticSizeBlockBuilder('max30x30', MAX_BLOCK_LAYOUT, {},
 _maxEpicBattleBlockBuilder = StaticSizeBlockBuilder('maxEpicBattle', MAX_BLOCK_LAYOUT, {}, _maxPopUps)
 _vehTypeFragsBlockBuilder = DictBlockBuilder('vehTypeFrags', 'I', 'H', VEH_TYPE_FRAGS_DEPENDENCIES)
 _rankedSeasonsBlockBuilder = DictBlockBuilder('rankedSeasons', 'II', 'BB', {})
+_maxRankedSeason1BlockBuilder = StaticSizeBlockBuilder('maxRankedSeason1', MAX_BLOCK_LAYOUT, {}, _maxPopUps)
+_maxRankedSeason2BlockBuilder = StaticSizeBlockBuilder('maxRankedSeason2', MAX_BLOCK_LAYOUT, {}, _maxPopUps)
+_maxRankedSeason3BlockBuilder = StaticSizeBlockBuilder('maxRankedSeason3', MAX_BLOCK_LAYOUT, {}, _maxPopUps)
 _ACHIEVEMENTS15X15_BLOCK_LAYOUT = ['fragsBeast',
  'sniperSeries',
  'maxSniperSeries',
@@ -298,4 +301,7 @@ vehicleDossierLayout = (_a15x15BlockBuilder,
  _max30x30BlockBuilder,
  _epicBattleBlockBuilder,
  _maxEpicBattleBlockBuilder,
- _epicBattleAchievementsBlockBuilder)
+ _epicBattleAchievementsBlockBuilder,
+ _maxRankedSeason1BlockBuilder,
+ _maxRankedSeason2BlockBuilder,
+ _maxRankedSeason3BlockBuilder)

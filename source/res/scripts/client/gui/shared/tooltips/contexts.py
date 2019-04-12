@@ -39,7 +39,7 @@ def _getCmpInitialVehicle():
 
 
 class StatsConfiguration(object):
-    __slots__ = ('vehicle', 'sellPrice', 'buyPrice', 'unlockPrice', 'inventoryCount', 'vehiclesCount', 'node', 'xp', 'dailyXP', 'minRentPrice', 'restorePrice', 'rentals', 'slotIdx', 'futureRentals', 'isAwardWindow', 'showBonus')
+    __slots__ = ('vehicle', 'sellPrice', 'buyPrice', 'unlockPrice', 'inventoryCount', 'vehiclesCount', 'node', 'xp', 'dailyXP', 'minRentPrice', 'restorePrice', 'rentals', 'slotIdx', 'futureRentals', 'isAwardWindow', 'showBonus', 'showRankedBonusBattle')
 
     def __init__(self):
         self.vehicle = None
@@ -55,6 +55,7 @@ class StatsConfiguration(object):
         self.node = None
         self.xp = True
         self.dailyXP = True
+        self.showRankedBonusBattle = False
         self.slotIdx = 0
         self.isAwardWindow = False
         self.showBonus = True
@@ -243,7 +244,7 @@ class RankedRankContext(ToolTipContext):
         super(RankedRankContext, self).__init__(TOOLTIP_COMPONENT.RANK, fieldsToExclude)
 
     def buildItem(self, rankID):
-        return self.rankedController.getRank(int(rankID), g_currentVehicle.item)
+        return self.rankedController.getRank(int(rankID))
 
 
 class InventoryContext(ToolTipContext):
@@ -272,6 +273,7 @@ class InventoryContext(ToolTipContext):
 
 
 class CarouselContext(InventoryContext):
+    __rankedController = dependency.descriptor(IRankedBattlesController)
 
     def __init__(self, fieldsToExclude=None):
         super(InventoryContext, self).__init__(fieldsToExclude)
@@ -284,6 +286,8 @@ class CarouselContext(InventoryContext):
 
     def getStatsConfiguration(self, item):
         value = super(CarouselContext, self).getStatsConfiguration(item)
+        if self.__rankedController.isRankedPrbActive():
+            value.showRankedBonusBattle = self.__rankedController.hasVehicleRankedBonus(item.intCD)
         value.rentals = True
         value.buyPrice = True
         return value

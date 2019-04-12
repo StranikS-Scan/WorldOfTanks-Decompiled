@@ -64,5 +64,5 @@ class SoundsController(ISoundsController):
         self.__setAccountAttrs(restartSounds=True)
 
     def __setAccountAttrs(self, restartSounds=False):
-        SOUND_DEBUG('Set current account attributes', self.itemsCache.items.stats.attributes, restartSounds)
-        _MC.g_musicController.setAccountAttrs(self.itemsCache.items.stats.attributes, restart=restartSounds)
+        SOUND_DEBUG('Set current account premium state', self.itemsCache.items.stats.isPremium, restartSounds)
+        _MC.g_musicController.setAccountPremiumState(self.itemsCache.items.stats.isPremium, restart=restartSounds)

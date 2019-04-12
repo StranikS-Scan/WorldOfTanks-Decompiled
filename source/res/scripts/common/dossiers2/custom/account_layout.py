@@ -36,12 +36,12 @@ _globalMapChampionBlockBuilder = StaticSizeBlockBuilder('globalMapChampion', GLO
 _globalMapAbsoluteBlockBuilder = StaticSizeBlockBuilder('globalMapAbsolute', GLOBAL_MAP_BLOCK_LAYOUT, GLOBAL_MAP_STATS_DEPENDENCIES, [])
 _falloutBlockBuilder = StaticSizeBlockBuilder('fallout', FALLOUT_BLOCK_LAYOUT, FALLOUT_STATS_DEPENDENCIES, [])
 _rankedBlockBuilder = StaticSizeBlockBuilder('ranked', RANKED_BLOCK_LAYOUT, RANKED_STATS_DEPENDENCIES, [])
-_rankedCurrentBlockBuilder = StaticSizeBlockBuilder('rankedCurrent', RANKED_BLOCK_LAYOUT, {}, [])
-_rankedPreviousBlockBuilder = StaticSizeBlockBuilder('rankedPrevious', RANKED_BLOCK_LAYOUT, {}, [])
-_rankedCurrentCycleBlockBuilder = StaticSizeBlockBuilder('rankedCurrentCycle', RANKED_BLOCK_LAYOUT, {}, [])
-_rankedPreviousCycleBlockBuilder = StaticSizeBlockBuilder('rankedPreviousCycle', RANKED_BLOCK_LAYOUT, {}, [])
 _a30x30BlockBuilder = StaticSizeBlockBuilder('a30x30', A30X30_BLOCK_LAYOUT, A30X30_STATS_DEPENDENCIES, [])
 _epicBattleBlockBuilder = StaticSizeBlockBuilder('epicBattle', EPIC_BATTLE_BLOCK_LAYOUT, EPIC_BATTLE_STATS_DEPENDENCIES, [])
+_rankedSeason1BlockBuilder = StaticSizeBlockBuilder('rankedSeason1', RANKED_BLOCK_LAYOUT, {}, [])
+_rankedSeason2BlockBuilder = StaticSizeBlockBuilder('rankedSeason2', RANKED_BLOCK_LAYOUT, {}, [])
+_rankedSeason3BlockBuilder = StaticSizeBlockBuilder('rankedSeason3', RANKED_BLOCK_LAYOUT, {}, [])
+_rankedArchiveBlockBuilder = StaticSizeBlockBuilder('rankedArchive', RANKED_BLOCK_LAYOUT, {}, [])
 _max15x15BlockBuilder = StaticSizeBlockBuilder('max15x15', MAX_AND_BEST_VEHICLE_BLOCK_LAYOUT, {}, [])
 _max7x7BlockBuilder = StaticSizeBlockBuilder('max7x7', MAX_AND_BEST_VEHICLE_BLOCK_LAYOUT, {}, [])
 _maxRated7x7BlockBuilder = StaticSizeBlockBuilder('maxRated7x7', MAX_AND_BEST_VEHICLE_BLOCK_LAYOUT, {}, [])
@@ -55,10 +55,12 @@ _maxGlobalMapChampionBlockBuilder = StaticSizeBlockBuilder('maxGlobalMapChampion
 _maxGlobalMapAbsoluteBlockBuilder = StaticSizeBlockBuilder('maxGlobalMapAbsolute', MAX_AND_BEST_VEHICLE_BLOCK_LAYOUT, {}, [])
 _maxFalloutBlockBuilder = StaticSizeBlockBuilder('maxFallout', MAX_FALLOUT_BLOCK_LAYOUT_WITH_AVATAR, {}, [])
 _maxRankedBlockBuilder = StaticSizeBlockBuilder('maxRanked', MAX_AND_BEST_VEHICLE_BLOCK_LAYOUT, {}, [])
-_maxRankedCurrentBlockBuilder = StaticSizeBlockBuilder('maxRankedCurrent', MAX_AND_BEST_VEHICLE_BLOCK_LAYOUT, {}, [])
-_maxRankedPreviousBlockBuilder = StaticSizeBlockBuilder('maxRankedPrevious', MAX_AND_BEST_VEHICLE_BLOCK_LAYOUT, {}, [])
 _max30x30BlockBuilder = StaticSizeBlockBuilder('max30x30', MAX_AND_BEST_VEHICLE_BLOCK_LAYOUT, {}, [])
 _maxEpicBattleBlockBuilder = StaticSizeBlockBuilder('maxEpicBattle', MAX_AND_BEST_VEHICLE_BLOCK_LAYOUT, {}, [])
+_maxRankedSeason1BlockBuilder = StaticSizeBlockBuilder('maxRankedSeason1', MAX_AND_BEST_VEHICLE_BLOCK_LAYOUT, {}, [])
+_maxRankedSeason2BlockBuilder = StaticSizeBlockBuilder('maxRankedSeason2', MAX_AND_BEST_VEHICLE_BLOCK_LAYOUT, {}, [])
+_maxRankedSeason3BlockBuilder = StaticSizeBlockBuilder('maxRankedSeason3', MAX_AND_BEST_VEHICLE_BLOCK_LAYOUT, {}, [])
+_maxRankedArchiveBlockBuilder = StaticSizeBlockBuilder('maxRankedArchive', MAX_AND_BEST_VEHICLE_BLOCK_LAYOUT, {}, [])
 _vehTypeFragsBlockBuilder = DictBlockBuilder('vehTypeFrags', 'I', 'H', VEH_TYPE_FRAGS_DEPENDENCIES)
 _a15x15CutBlockBuilder = DictBlockBuilder('a15x15Cut', 'I', 'III', {})
 _a7x7CutBlockBuilder = DictBlockBuilder('a7x7Cut', 'I', 'IIIIIII', {})
@@ -69,8 +71,10 @@ _fortSortiesCutBlockBuilder = DictBlockBuilder('fortSortiesCut', 'I', 'III', {})
 _globalMapCommonCutBlockBuilder = DictBlockBuilder('globalMapCommonCut', 'I', 'III', {})
 _falloutCutBlockBuilder = DictBlockBuilder('falloutCut', 'I', 'IIII', {})
 _rankedCutBlockBuilder = DictBlockBuilder('rankedCut', 'I', 'III', {})
-_rankedCurrentCutBlockBuilder = DictBlockBuilder('rankedCurrentCut', 'I', 'III', {})
-_rankedPreviousCutBlockBuilder = DictBlockBuilder('rankedPreviousCut', 'I', 'III', {})
+_rankedCutSeason1BlockBuilder = DictBlockBuilder('rankedCutSeason1', 'I', 'III', {})
+_rankedCutSeason2BlockBuilder = DictBlockBuilder('rankedCutSeason2', 'I', 'III', {})
+_rankedCutSeason3BlockBuilder = DictBlockBuilder('rankedCutSeason3', 'I', 'III', {})
+_rankedCutArchiveBlockBuilder = DictBlockBuilder('rankedCutArchive', 'I', 'III', {})
 _a30x30CutBlockBuilder = DictBlockBuilder('a30x30Cut', 'I', 'III', {})
 _markOfMasteryCut = DictBlockBuilder('markOfMasteryCut', 'I', 'B', {})
 _epicBattleCutBlockBuilder = DictBlockBuilder('epicBattleCut', 'I', 'III', {})
@@ -190,7 +194,9 @@ _ACHIEVEMENTS15X15_BLOCK_LAYOUT = ['fragsBeast',
  'RP2018firstmed',
  'RP2018secondmed',
  'RP2018thirdmed',
- 'RP2018sergeant']
+ 'RP2018sergeant',
+ 'rankedDivisionFighter',
+ 'rankedStayingPower']
 _achievements15x15PopUps = ['warrior',
  'invader',
  'sniper',
@@ -663,14 +669,6 @@ accountDossierLayout = (_a15x15BlockBuilder,
  _maxRankedBlockBuilder,
  _rankedCutBlockBuilder,
  _rankedSeasonsBlockBuilder,
- _rankedCurrentBlockBuilder,
- _rankedPreviousBlockBuilder,
- _maxRankedCurrentBlockBuilder,
- _maxRankedPreviousBlockBuilder,
- _rankedCurrentCutBlockBuilder,
- _rankedPreviousCutBlockBuilder,
- _rankedCurrentCycleBlockBuilder,
- _rankedPreviousCycleBlockBuilder,
  _a30x30BlockBuilder,
  _a30x30CutBlockBuilder,
  _max30x30BlockBuilder,
@@ -679,7 +677,19 @@ accountDossierLayout = (_a15x15BlockBuilder,
  _epicBattleBlockBuilder,
  _epicBattleCutBlockBuilder,
  _maxEpicBattleBlockBuilder,
- _epicBattleAchievementsBlockBuilder)
+ _epicBattleAchievementsBlockBuilder,
+ _rankedSeason1BlockBuilder,
+ _rankedSeason2BlockBuilder,
+ _rankedSeason3BlockBuilder,
+ _maxRankedSeason1BlockBuilder,
+ _maxRankedSeason2BlockBuilder,
+ _maxRankedSeason3BlockBuilder,
+ _rankedCutSeason1BlockBuilder,
+ _rankedCutSeason2BlockBuilder,
+ _rankedCutSeason3BlockBuilder,
+ _rankedArchiveBlockBuilder,
+ _maxRankedArchiveBlockBuilder,
+ _rankedCutArchiveBlockBuilder)
 ACCOUNT_DOSSIER_BLOCKS = {b.name:b for b in accountDossierLayout}
 ACCOUNT_DOSSIER_STATIC_BLOCKS = frozenset((b.name for b in accountDossierLayout if type(b) == StaticSizeBlockBuilder))
 ACCOUNT_DOSSIER_BINARY_SET_BLOCKS = [ b.name for b in accountDossierLayout if type(b) == BinarySetDossierBlockBuilder ]

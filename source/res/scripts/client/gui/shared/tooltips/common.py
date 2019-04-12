@@ -21,6 +21,7 @@ from gui.Scaleform.locale.ARENAS import ARENAS
 from gui.Scaleform.locale.FORTIFICATIONS import FORTIFICATIONS
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.MESSENGER import MESSENGER
+from gui.impl.lobby.premacc.squad_bonus_tooltip_content import SquadBonusTooltipContent
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.clans import formatters as clans_fmts
@@ -1287,3 +1288,12 @@ class BattleTraining(BlocksTooltipData):
         items = super(BattleTraining, self)._packBlocks(*args, **kwargs)
         items.append(formatters.packImageTextBlockData(title=text_styles.middleTitle(TOOLTIPS.BATTLETYPES_BATTLETEACHING_HEADER), desc=text_styles.main(i18n.makeString(TOOLTIPS.BATTLETYPES_BATTLETEACHING_BODY, map1=i18n.makeString(ARENAS.C_10_HILLS_NAME), battles=BATTLES_TO_SELECT_RANDOM_MIN_LIMIT))))
         return items
+
+
+class SquadBonusTooltipWindowData(ToolTipBaseData):
+
+    def __init__(self, context):
+        super(SquadBonusTooltipWindowData, self).__init__(context, TOOLTIP_TYPE.SQUAD_BONUS)
+
+    def getDisplayableData(self, *args, **kwargs):
+        return SquadBonusTooltipContent()

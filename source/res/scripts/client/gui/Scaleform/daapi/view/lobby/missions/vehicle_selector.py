@@ -141,14 +141,6 @@ class _MissionsCarouselDataProvider(CarouselDataProvider):
     def getSuitableVehiclesCount(self):
         return len(self.__suitableVehiclesIDs)
 
-    def applyFilter(self):
-        super(_MissionsCarouselDataProvider, self).applyFilter()
-        if not self._filteredIndices:
-            self._filteredIndices = self._getSortedIndices()
-            self._filteredIndices += self._getAdditionalItemsIndexes()
-            if self._filteredIndices:
-                self._filterByIndices()
-
     def _dispose(self):
         self.__extraConditions = []
         super(_MissionsCarouselDataProvider, self)._dispose()

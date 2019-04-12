@@ -71,6 +71,13 @@ class DataBuilder(SimpleBuilder):
         return self._provider.buildToolTip(*args, **kwargs)
 
 
+class TooltipWindowBuilder(DataBuilder):
+
+    def build(self, manager, formatType, advanced_, *args, **kwargs):
+        self._buildData(advanced_, *args, **kwargs)
+        return self._provider
+
+
 class AdvancedDataBuilder(AdvancedBuilder):
     __slots__ = ('_provider', '_adProvider', '_condition')
 

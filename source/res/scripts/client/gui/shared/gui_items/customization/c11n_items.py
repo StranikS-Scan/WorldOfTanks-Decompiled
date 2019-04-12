@@ -1,7 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/gui_items/customization/c11n_items.py
+import os
 from collections import defaultdict
 import Math
+import ResMgr
 from gui.Scaleform.locale.ITEM_TYPES import ITEM_TYPES
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.VEHICLE_CUSTOMIZATION import VEHICLE_CUSTOMIZATION
@@ -387,6 +389,13 @@ class ProjectionDecal(Decal):
     def formfactor(self):
         formTags = (tag for tag in self.tags if tag.startswith(ProjectionDecalFormTags.PREFIX))
         return first(formTags, ProjectionDecalFormTags.ANY)
+
+    @property
+    def icon(self):
+        path = self.descriptor.texture
+        f, _ = os.path.splitext(path)
+        iconPath = '{}_preview.{}'.format(f, 'png')
+        return iconPath.replace('gui/', '../', 1) if ResMgr.isFile(iconPath) else path.replace('gui/', '../', 1)
 
     def isWide(self):
         return True

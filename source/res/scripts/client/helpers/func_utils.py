@@ -36,7 +36,7 @@ def logFunc(func):
 
 
 def makeFlashPath(s):
-    return '..' + s[3:]
+    return '..' + s[3:] if s else None
 
 
 def freeze(seconds, nextFrame=True):

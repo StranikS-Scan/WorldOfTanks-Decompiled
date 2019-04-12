@@ -10,13 +10,13 @@ from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.framework import ViewTypes
 from gui.Scaleform.framework.managers.containers import POP_UP_CRITERIA
 from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
-from gui.app_loader.settings import GUI_GLOBAL_SPACE_ID
 from gui.game_control import CalendarInvokeOrigin
 from gui.game_control.links import URLMacros
 from gui.server_events.modifiers import CalendarSplashModifier
 from gui.shared import g_eventBus, events, EVENT_BUS_SCOPE
 from helpers import dependency, time_utils, i18n
 from helpers.time_utils import ONE_HOUR
+from skeletons.gui.app_loader import IAppLoader, GuiGlobalSpaceID
 from skeletons.gui.game_control import ICalendarController, IBrowserController
 from skeletons.gui.game_window_controller import GameWindowController
 from skeletons.gui.server_events import IEventsCache
@@ -24,7 +24,6 @@ from skeletons.gui.lobby_context import ILobbyContext
 from web_client_api import webApiCollection
 from web_client_api.request import RequestWebApi
 from web_client_api.sound import SoundWebApi
-from gui.app_loader import g_appLoader
 from web_client_api import w2capi
 from web_client_api.ui import ShopWebApiMixin, CloseWindowWebApi
 
@@ -50,6 +49,7 @@ class CalendarController(GameWindowController, ICalendarController):
     browserCtrl = dependency.descriptor(IBrowserController)
     eventsCache = dependency.descriptor(IEventsCache)
     lobbyContext = dependency.descriptor(ILobbyContext)
+    appLoader = dependency.descriptor(IAppLoader)
 
     def __init__(self):
         super(CalendarController, self).__init__()
@@ -97,7 +97,7 @@ class CalendarController(GameWindowController, ICalendarController):
             return result
 
     def _openWindow(self, url, invokedFrom=None):
-        if g_appLoader.getSpaceID() != GUI_GLOBAL_SPACE_ID.LOBBY:
+        if self.appLoader.getSpaceID() != GuiGlobalSpaceID.LOBBY:
             return
         else:
             try:
@@ -119,7 +119,7 @@ class CalendarController(GameWindowController, ICalendarController):
         if self.__browserID is None:
             return
         else:
-            app = g_appLoader.getApp()
+            app = self.appLoader.getApp()
             if app is not None and app.containerManager is not None:
                 browserWindow = app.containerManager.getView(ViewTypes.WINDOW, criteria={POP_UP_CRITERIA.UNIQUE_NAME: VIEW_ALIAS.ADVENT_CALENDAR})
                 if browserWindow is not None:

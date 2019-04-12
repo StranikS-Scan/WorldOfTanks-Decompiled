@@ -4,7 +4,7 @@ import copy
 import types
 from collections import namedtuple
 from Event import Event
-from constants import IS_TUTORIAL_ENABLED, SWITCH_STATE
+from constants import IS_TUTORIAL_ENABLED, SWITCH_STATE, PremiumConfigs
 from debug_utils import LOG_WARNING, LOG_ERROR, LOG_DEBUG
 from gui import GUI_SETTINGS, SystemMessages
 from gui.SystemMessages import SM_TYPE
@@ -207,15 +207,15 @@ class _SpgRedesignFeatures(namedtuple('_SpgRedesignFeatures', ('stunEnabled', 'm
         return cls(False, False)
 
 
-class _BwRankedBattles(namedtuple('_BwRankedBattles', ('rblbHostUrl',))):
+class _BwRankedBattles(namedtuple('_BwRankedBattles', ('rblbHostUrl', 'infoPageUrl', 'introPageUrl'))):
     __slots__ = ()
 
-    def __new__(cls, rblbHostUrl=None):
-        return super(_BwRankedBattles, cls).__new__(cls, rblbHostUrl)
+    def __new__(cls, rblbHostUrl=None, infoPageUrl=None, introPageUrl=None):
+        return super(_BwRankedBattles, cls).__new__(cls, rblbHostUrl, infoPageUrl, introPageUrl)
 
     @classmethod
     def defaults(cls):
-        return cls()
+        return cls(None, None, None)
 
 
 class _BwHallOfFame(namedtuple('_BwHallOfFame', ('hofHostUrl', 'isHofEnabled', 'isStatusEnabled'))):
@@ -243,11 +243,11 @@ _BwIngameShop.__new__.__defaults__ = ('',
  False,
  False)
 
-class _RankedBattlesConfig(namedtuple('_RankedBattlesConfig', ('isEnabled', 'peripheryIDs', 'winnerRankChanges', 'loserRankChanges', 'minXP', 'unburnableRanks', 'unburnableStepRanks', 'unburnableVehRanks', 'unburnableVehStepRanks', 'minLevel', 'maxLevel', 'accRanks', 'accSteps', 'vehRanks', 'vehSteps', 'cycleFinishSeconds', 'primeTimes', 'seasons', 'cycleTimes', 'accLadderPts', 'vehLadderPts', 'shields'))):
+class _RankedBattlesConfig(namedtuple('_RankedBattlesConfig', ('isEnabled', 'peripheryIDs', 'winnerRankChanges', 'loserRankChanges', 'minXP', 'unburnableRanks', 'unburnableStepRanks', 'unburnableVehRanks', 'unburnableVehStepRanks', 'minLevel', 'maxLevel', 'accRanks', 'accSteps', 'vehRanks', 'vehSteps', 'cycleFinishSeconds', 'primeTimes', 'seasons', 'cycleTimes', 'accLadderPts', 'vehLadderPts', 'shields', 'divisions', 'bonusBattlesMultiplier'))):
     __slots__ = ()
 
     def __new__(cls, **kwargs):
-        defaults = dict(isEnabled=False, peripheryIDs={}, winnerRankChanges=(), loserRankChanges=(), minXP=0, unburnableRanks={}, unburnableStepRanks={}, unburnableVehRanks={}, unburnableVehStepRanks={}, minLevel=0, maxLevel=0, accRanks=(), accSteps=(), vehRanks=(), vehSteps=(), cycleFinishSeconds=0, primeTimes={}, seasons={}, cycleTimes=(), accLadderPts=(), vehLadderPts=(), shields={})
+        defaults = dict(isEnabled=False, peripheryIDs={}, winnerRankChanges=(), loserRankChanges=(), minXP=0, unburnableRanks={}, unburnableStepRanks={}, unburnableVehRanks={}, unburnableVehStepRanks={}, minLevel=0, maxLevel=0, accRanks=(), accSteps=(), vehRanks=(), vehSteps=(), cycleFinishSeconds=0, primeTimes={}, seasons={}, cycleTimes=(), accLadderPts=(), vehLadderPts=(), shields={}, divisions={}, bonusBattlesMultiplier=0)
         defaults.update(kwargs)
         return super(_RankedBattlesConfig, cls).__new__(cls, **defaults)
 
@@ -317,6 +317,38 @@ class _EpicGameConfig(namedtuple('_EpicGameConfig', ('isEnabled', 'validVehicleL
         return cls()
 
 
+class _SquadPremiumBonus(namedtuple('_SquadPremiumBonus', ('isEnabled', 'ownCredits', 'mateCredits'))):
+    __slots__ = ()
+
+    def __new__(cls, **kwargs):
+        defaults = dict(isEnabled=True, ownCredits=0, mateCredits=0)
+        defaults.update(kwargs)
+        return super(_SquadPremiumBonus, cls).__new__(cls, **defaults)
+
+    def replace(self, data):
+        return self._replace(**self.__extractFields(data))
+
+    @classmethod
+    def create(cls, data):
+        return cls(**cls.__extractFields(data))
+
+    @classmethod
+    def defaults(cls):
+        return cls()
+
+    @staticmethod
+    def __extractFields(data):
+        creditsSettings = data.get('creditsFactor', {})
+        result = {}
+        if 'enabled' in data:
+            result['isEnabled'] = data['enabled']
+        if 'premium_plus' in creditsSettings:
+            result['ownCredits'] = creditsSettings['premium_plus']
+        if 'premium_owner_squadmate' in creditsSettings:
+            result['mateCredits'] = creditsSettings['premium_owner_squadmate']
+        return result
+
+
 class _TelecomConfig(object):
     __slots__ = ('__config',)
 
@@ -381,6 +413,23 @@ class ServerSettings(object):
     def __init__(self, serverSettings):
         self.onServerSettingsChange = Event()
         self.__serverSettings = {}
+        self.__roamingSettings = RoamingSettings.defaults()
+        self.__fileServerSettings = _FileServerSettings.defaults()
+        self.__regionalSettings = _RegionalSettings.defaults()
+        self.__eSportCurrentSeason = _ESportCurrentSeason.defaults()
+        self.__wgcg = _Wgcg.defaults()
+        self.__clanProfile = _ClanProfile.defaults()
+        self.__spgRedesignFeatures = _SpgRedesignFeatures.defaults()
+        self.__strongholdSettings = _StrongholdSettings.defaults()
+        self.__frontlineSettings = _FrontlineSettings.defaults()
+        self.__bwRankedBattles = _BwRankedBattles.defaults()
+        self.__bwHallOfFame = _BwHallOfFame.defaults()
+        self.__bwIngameShop = _BwIngameShop()
+        self.__rankedBattlesSettings = _RankedBattlesConfig.defaults()
+        self.__epicMetaGameSettings = _EpicMetaGameConfig()
+        self.__epicGameSettings = _EpicGameConfig()
+        self.__telecomConfig = _TelecomConfig.defaults()
+        self.__squadPremiumBonus = _SquadPremiumBonus.defaults()
         self.set(serverSettings)
 
     def set(self, serverSettings):
@@ -388,16 +437,10 @@ class ServerSettings(object):
         if 'roaming' in self.__serverSettings:
             roamingSettings = self.__serverSettings['roaming']
             self.__roamingSettings = RoamingSettings(roamingSettings[0], roamingSettings[1], [ _ServerInfo(*s) for s in roamingSettings[2] ])
-        else:
-            self.__roamingSettings = RoamingSettings.defaults()
         if 'file_server' in self.__serverSettings:
             self.__fileServerSettings = _FileServerSettings(self.__serverSettings['file_server'])
-        else:
-            self.__fileServerSettings = _FileServerSettings.defaults()
         if 'regional_settings' in self.__serverSettings:
             self.__regionalSettings = makeTupleByDict(_RegionalSettings, self.__serverSettings['regional_settings'])
-        else:
-            self.__regionalSettings = _RegionalSettings.defaults()
         try:
             self.__eSportCurrentSeason = makeTupleByDict(_ESportCurrentSeason, self.__serverSettings)
         except TypeError:
@@ -405,53 +448,32 @@ class ServerSettings(object):
 
         if 'wgcg' in self.__serverSettings:
             self.__updateWgcg(self.__serverSettings)
-        else:
-            self.__wgcg = _Wgcg.defaults()
         if 'clanProfile' in self.__serverSettings:
             self.__updateClanProfile(self.__serverSettings)
-        else:
-            self.__clanProfile = _ClanProfile.defaults()
         if 'spgRedesignFeatures' in self.__serverSettings:
             self.__spgRedesignFeatures = makeTupleByDict(_SpgRedesignFeatures, self.__serverSettings['spgRedesignFeatures'])
-        else:
-            self.__spgRedesignFeatures = _SpgRedesignFeatures.defaults()
         if 'strongholdSettings' in self.__serverSettings:
             settings = self.__serverSettings['strongholdSettings']
             self.__strongholdSettings = _StrongholdSettings(settings.get('wgshHostUrl', ''))
-        else:
-            self.__strongholdSettings = _StrongholdSettings.defaults()
         if 'frontlineSettings' in self.__serverSettings:
             settings = self.__serverSettings['frontlineSettings']
             self.__frontlineSettings = _FrontlineSettings(settings.get('flHostUrl', ''))
-        else:
-            self.__frontlineSettings = _FrontlineSettings.defaults()
         if 'rankedBattles' in self.__serverSettings:
             self.__bwRankedBattles = makeTupleByDict(_BwRankedBattles, self.__serverSettings['rankedBattles'])
-        else:
-            self.__bwRankedBattles = _BwRankedBattles.defaults()
         if 'hallOfFame' in self.__serverSettings:
             self.__bwHallOfFame = makeTupleByDict(_BwHallOfFame, self.__serverSettings['hallOfFame'])
-        else:
-            self.__bwHallOfFame = _BwHallOfFame.defaults()
         if 'ingameShop' in self.__serverSettings:
             self.__bwIngameShop = makeTupleByDict(_BwIngameShop, self.__serverSettings['ingameShop'])
-        else:
-            self.__bwIngameShop = _BwIngameShop()
         if 'ranked_config' in self.__serverSettings:
             self.__rankedBattlesSettings = makeTupleByDict(_RankedBattlesConfig, self.__serverSettings['ranked_config'])
-        else:
-            self.__rankedBattlesSettings = _RankedBattlesConfig.defaults()
         if 'epic_config' in self.__serverSettings:
             LOG_DEBUG('epic_config', self.__serverSettings['epic_config'])
             self.__epicMetaGameSettings = makeTupleByDict(_EpicMetaGameConfig, self.__serverSettings['epic_config']['epicMetaGame'])
             self.__epicGameSettings = makeTupleByDict(_EpicGameConfig, self.__serverSettings['epic_config'])
-        else:
-            self.__epicMetaGameSettings = _EpicMetaGameConfig()
-            self.__epicGameSettings = _EpicGameConfig()
+        if PremiumConfigs.PREM_SQUAD in self.__serverSettings:
+            self.__squadPremiumBonus = _SquadPremiumBonus.create(self.__serverSettings[PremiumConfigs.PREM_SQUAD])
         if 'telecom_config' in self.__serverSettings:
             self.__telecomConfig = _TelecomConfig(self.__serverSettings['telecom_config'])
-        else:
-            self.__telecomConfig = _TelecomConfig.defaults()
         if 'blueprints_config' in self.__serverSettings:
             self.__blueprintsConfig = makeTupleByDict(_BlueprintsConfig, self.__serverSettings['blueprints_config'])
         else:
@@ -491,6 +513,16 @@ class ServerSettings(object):
             self.__serverSettings['lootBoxes_config'] = serverSettingsDiff['lootBoxes_config']
         if 'progressive_reward_config' in serverSettingsDiff:
             self.__updateProgressiveReward(serverSettingsDiff)
+        if PremiumConfigs.PIGGYBANK in serverSettingsDiff:
+            self.__serverSettings[PremiumConfigs.PIGGYBANK] = serverSettingsDiff[PremiumConfigs.PIGGYBANK]
+        if PremiumConfigs.DAILY_BONUS in serverSettingsDiff:
+            self.__serverSettings[PremiumConfigs.DAILY_BONUS] = serverSettingsDiff[PremiumConfigs.DAILY_BONUS]
+        if PremiumConfigs.PREM_QUESTS in serverSettingsDiff:
+            self.__serverSettings[PremiumConfigs.PREM_QUESTS] = serverSettingsDiff[PremiumConfigs.PREM_QUESTS]
+        if PremiumConfigs.PREM_SQUAD in serverSettingsDiff:
+            self.__updateSquadBonus(serverSettingsDiff)
+        if PremiumConfigs.PREFERRED_MAPS in serverSettingsDiff:
+            self.__serverSettings[PremiumConfigs.PREFERRED_MAPS] = serverSettingsDiff[PremiumConfigs.PREFERRED_MAPS]
         self.onServerSettingsChange(serverSettingsDiff)
 
     def clear(self):
@@ -562,6 +594,10 @@ class ServerSettings(object):
     @property
     def blueprintsConfig(self):
         return self.__blueprintsConfig
+
+    @property
+    def squadPremiumBonus(self):
+        return self.__squadPremiumBonus
 
     def isEpicBattleEnabled(self):
         return self.epicBattles.isEnabled
@@ -638,6 +674,18 @@ class ServerSettings(object):
     def getLootBoxConfig(self):
         return self.__getGlobalSetting('lootBoxes_config', {})
 
+    def getPiggyBankConfig(self):
+        return self.__getGlobalSetting(PremiumConfigs.PIGGYBANK, {})
+
+    def getAdditionalBonusConfig(self):
+        return self.__getGlobalSetting(PremiumConfigs.DAILY_BONUS, {})
+
+    def getPremQuestsConfig(self):
+        return self.__getGlobalSetting(PremiumConfigs.PREM_QUESTS, {})
+
+    def getPreferredMapsConfig(self):
+        return self.__getGlobalSetting(PremiumConfigs.PREFERRED_MAPS, {})
+
     def isEpicRandomEnabled(self):
         return self.__getGlobalSetting('isEpicRandomEnabled', False)
 
@@ -705,6 +753,15 @@ class ServerSettings(object):
     def isCrewSkinsEnabled(self):
         return self.__getGlobalSetting('isCrewSkinsEnabled', False)
 
+    def getPremiumXPBonus(self):
+        return self.__getGlobalSetting('tankPremiumBonus', {}).get('xp', 0.5)
+
+    def getPremiumCreditsBonus(self):
+        return self.__getGlobalSetting('tankPremiumBonus', {}).get('credits', 0.5)
+
+    def isPreferredMapsEnabled(self):
+        return self.__getGlobalSetting('isPreferredMapsEnabled', False)
+
     def getProgressiveRewardConfig(self):
         return self.__progressiveReward
 
@@ -725,6 +782,9 @@ class ServerSettings(object):
     def __updateEpic(self, targetSettings):
         self.__epicMetaGameSettings = self.__epicMetaGameSettings.replace(targetSettings['epic_config'].get('epicMetaGame', {}))
         self.__epicGameSettings = self.__epicGameSettings.replace(targetSettings['epic_config'])
+
+    def __updateSquadBonus(self, sourceSettings):
+        self.__squadPremiumBonus = self.__squadPremiumBonus.replace(sourceSettings[PremiumConfigs.PREM_SQUAD])
 
     def __updateIngameShop(self, targetSettings):
         self.__bwIngameShop = self.__bwIngameShop.replace(targetSettings['ingameShop'])

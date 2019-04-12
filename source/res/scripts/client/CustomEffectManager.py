@@ -35,27 +35,39 @@ class CustomEffectManager(Component):
         self.__prevWaterHeight = None
         self.__gearUP = False
         self.__trailParticleNodes = None
+        typeDesc = appearance.typeDescriptor
         args = {}
         args['chassis'] = {}
         args['chassis']['model'] = appearance.compoundModel
         args['hull'] = {}
         args['hull']['model'] = appearance.compoundModel
-        args['engineTags'] = appearance.typeDescriptor.engine.tags
-        args['vehicleTags'] = appearance.typeDescriptor.type.tags
+        args['engineTags'] = typeDesc.engine.tags
+        args['vehicleTags'] = typeDesc.type.tags
         args['drawOrderBase'] = CustomEffectManager._DRAW_ORDER_IDX
-        for desc in appearance.typeDescriptor.hull.customEffects:
+        for desc in typeDesc.hull.customEffects:
             if desc is not None:
                 selector = desc.create(args)
                 if selector is not None:
                     self.__selectors.append(selector)
 
-        for desc in appearance.typeDescriptor.chassis.customEffects:
+        for desc in typeDesc.chassis.customEffects:
             if desc is not None:
                 selector = desc.create(args)
                 if selector is not None:
                     self.__selectors.append(selector)
 
         self.__createChassisCenterNodes()
+        wheelsConfig = typeDesc.chassis.generalWheelsAnimatorConfig
+        if wheelsConfig is not None:
+            self.__wheelsData = [None] * wheelsConfig.getWheelsCount()
+            nodeNames = wheelsConfig.getWheelNodeNames()
+            for wheelIndex in xrange(0, wheelsConfig.getWheelsCount()):
+                if wheelIndex >= len(nodeNames):
+                    break
+                self.__wheelsData[wheelIndex] = nodeNames[wheelIndex]
+
+        else:
+            self.__wheelsData = [None]
         PixieCache.incref()
         return
 
@@ -148,6 +160,11 @@ class CustomEffectManager(Component):
         self.__variableArgs['engineState'] = self.__engineState.engineState
         self.__variableArgs['engineStart'] = self.__engineState.starting
         self.__variableArgs['physicLoad'] = self.__engineState.physicLoad
+        for wheelIndex in xrange(0, len(self.__wheelsData)):
+            nodeName = self.__wheelsData[wheelIndex]
+            if nodeName is not None:
+                self.__variableArgs[nodeName + ':contact'] = 0 if appearance.wheelsAnimator.wheelIsFlying(wheelIndex) else 1
+
         for effectSelector in self.__selectors:
             effectSelector.update(self.__variableArgs)
 
@@ -179,6 +196,7 @@ class CustomEffectManager(Component):
             self.__vt.addValue2('physicLoad', self.__engineState.physicLoad)
         if _ENABLE_PIXIE_TRACKER:
             self.__vt.addValue2('Pixie Count', PixieCache.pixiesCount)
+        return
 
     @staticmethod
     def __getScrollParams(trackScrolldelta, hasContact, matKindsUnderTrack, direction):

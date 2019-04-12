@@ -4,8 +4,8 @@ import BigWorld
 import nations
 from dossiers2.ui import layouts
 from gui import GUI_NATIONS, getNationIndex
-from gui.Scaleform.daapi.view.lobby.profile.ProfileUtils import ProfileUtils as PUtils, FALLOUT_STATISTICS_LAYOUT, STATISTICS_LAYOUT
 from gui.Scaleform.daapi.view.lobby.profile.ProfileUtils import DetailedStatisticsUtils as DSUtils
+from gui.Scaleform.daapi.view.lobby.profile.ProfileUtils import ProfileUtils as PUtils, FALLOUT_STATISTICS_LAYOUT, STATISTICS_LAYOUT
 from gui.Scaleform.genConsts.PROFILE_DROPDOWN_KEYS import PROFILE_DROPDOWN_KEYS
 from gui.Scaleform.locale.DIALOGS import DIALOGS
 from gui.Scaleform.locale.MENU import MENU
@@ -310,14 +310,15 @@ class ProfileRankedStatisticsVO(ProfileDictStatisticsVO):
 
     def _getHeaderData(self, data):
         targetData = data[0]
-        avgPointsPercent = PUtils.formatFloatPercent(PUtils.getValueOrUnavailable(targetData.getStepsEfficiency()))
-        avgPointsTooltipData = (BigWorld.wg_getIntegralFormat(targetData.getStepsCount()), BigWorld.wg_getIntegralFormat(targetData.getBattlesCount()))
+        stepsEfficiency = targetData.getStepsEfficiency()
+        avgPointsPercent = PUtils.formatFloatPercent(stepsEfficiency) if stepsEfficiency > 0 else PUtils.UNAVAILABLE_SYMBOL
+        stepsCount = targetData.getStepsCount()
+        stepsCount = BigWorld.wg_getIntegralFormat(stepsCount) if stepsCount >= 0 else PUtils.UNAVAILABLE_SYMBOL
+        avgPointsTooltipData = (stepsCount, BigWorld.wg_getIntegralFormat(targetData.getBattlesCount()))
         return (PUtils.getTotalBattlesHeaderParam(targetData, PROFILE.SECTION_STATISTICS_SCORES_TOTALBATTLES, PROFILE.PROFILE_PARAMS_TOOLTIP_BATTLESCOUNT),
-         PUtils.packLditItemData(BigWorld.wg_getIntegralFormat(targetData.getLadderPts()), PROFILE.SECTION_STATISTICS_SCORES_RANKED_POINTS, PROFILE.PROFILE_PARAMS_TOOLTIP_RANKED_POINTS, 'rankPoints40x32.png'),
          PUtils.packLditItemData(avgPointsPercent, PROFILE.SECTION_STATISTICS_SCORES_RANKED_AVGPOINTS, PROFILE.PROFILE_PARAMS_TOOLTIP_RANKED_AVGPOINTS, 'rankStageFactor40x32.png', PUtils.createToolTipData(avgPointsTooltipData)),
          _packAvgDmgLditItemData(self._avgDmg),
-         _packAvgXPLditItemData(self._avgXP),
-         PUtils.packLditItemData(BigWorld.wg_getNiceNumberFormat(PUtils.getValueOrUnavailable(targetData.getAvgFrags())), PROFILE.SECTION_STATISTICS_SCORES_RANKED_AVGFRAGS, PROFILE.PROFILE_PARAMS_TOOLTIP_RANKED_AVGFRAGS, 'icon_statistics_average_frags_40x32.png'))
+         _packAvgXPLditItemData(self._avgXP))
 
     def _getDetailedData(self, data):
         targetData = data[0]

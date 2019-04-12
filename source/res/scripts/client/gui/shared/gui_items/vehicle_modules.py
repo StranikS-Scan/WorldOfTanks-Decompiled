@@ -70,6 +70,9 @@ class VehicleChassis(VehicleModule):
     def isWheeledChassis(self):
         return g_paramsCache.isChassisWheeled(self.intCD)
 
+    def hasAutoSiege(self):
+        return g_paramsCache.isChassisAutoSiege(self.intCD)
+
     @property
     def icon(self):
         return RES_ICONS.MAPS_ICONS_MODULES_WHEELEDCHASSIS if self.isWheeledChassis() else RES_ICONS.MAPS_ICONS_MODULES_CHASSIS

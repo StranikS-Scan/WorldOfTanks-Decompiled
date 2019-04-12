@@ -241,6 +241,9 @@ class IClientArenaVisitor(object):
     def hasGameEndMessage(self):
         raise NotImplementedError
 
+    def hasCustomAllyDamageEffect(self):
+        raise NotImplementedError
+
 
 class IBattleClientCache(object):
 
@@ -381,6 +384,9 @@ class IArenaDataProvider(object):
         raise NotImplementedError
 
     def getEnemiesVehiclesNumber(self):
+        raise NotImplementedError
+
+    def isAlly(self, attackerID):
         raise NotImplementedError
 
 

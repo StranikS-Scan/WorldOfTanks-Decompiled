@@ -13,7 +13,7 @@ from items.components import shared_components, component_constants
 from tankmen import MAX_SKILL_LEVEL
 
 class Artefact(BasicItem):
-    __slots__ = ('name', 'id', 'compactDescr', 'tags', 'i18n', 'icon', 'removable', 'price', 'showInShop', 'stunResistanceEffect', 'stunResistanceDuration', '_vehWeightFraction', '_weight', '_maxWeightChange', '__vehicleFilter', '__artefactFilter', 'isImproved', 'kpi', 'iconName')
+    __slots__ = ('name', 'id', 'compactDescr', 'tags', 'i18n', 'icon', 'removable', 'price', 'showInShop', 'stunResistanceEffect', 'stunResistanceDuration', 'repeatedStunDurationFactor', '_vehWeightFraction', '_weight', '_maxWeightChange', '__vehicleFilter', '__artefactFilter', 'isImproved', 'kpi', 'iconName')
 
     def __init__(self, typeID, itemID, itemName, compactDescr):
         super(Artefact, self).__init__(typeID, itemID, itemName, compactDescr)
@@ -24,6 +24,7 @@ class Artefact(BasicItem):
         self.showInShop = False
         self.stunResistanceEffect = component_constants.ZERO_FLOAT
         self.stunResistanceDuration = component_constants.ZERO_FLOAT
+        self.repeatedStunDurationFactor = 1.0
         self._vehWeightFraction = component_constants.ZERO_FLOAT
         self._weight = component_constants.ZERO_FLOAT
         self._maxWeightChange = component_constants.ZERO_FLOAT
@@ -60,7 +61,7 @@ class Artefact(BasicItem):
         self._maxWeightChange = 0.0
 
     def _readStun(self, xmlCtx, section):
-        self.stunResistanceEffect, self.stunResistanceDuration = _readStun(xmlCtx, section)
+        self.stunResistanceEffect, self.stunResistanceDuration, self.repeatedStunDurationFactor = _readStun(xmlCtx, section)
 
     def weightOnVehicle(self, vehicleDescr):
         return (self._vehWeightFraction, self._weight, 0.0)
@@ -182,6 +183,7 @@ class StaticFactorDevice(OptionalDevice):
         miscAttrs = vehicleDescr.miscAttrs
         miscAttrs['stunResistanceEffect'] += self.stunResistanceEffect
         miscAttrs['stunResistanceDuration'] += self.stunResistanceDuration
+        miscAttrs['repeatedStunDurationFactor'] *= self.repeatedStunDurationFactor
 
     def _readConfig(self, xmlCtx, section):
         self.__factor = _xml.readPositiveFloat(xmlCtx, section, 'factor')
@@ -215,6 +217,7 @@ class StaticAdditiveDevice(OptionalDevice):
         miscAttrs = vehicleDescr.miscAttrs
         miscAttrs['stunResistanceEffect'] += self.stunResistanceEffect
         miscAttrs['stunResistanceDuration'] += self.stunResistanceDuration
+        miscAttrs['repeatedStunDurationFactor'] *= self.repeatedStunDurationFactor
 
     def _readConfig(self, xmlCtx, section):
         self.__value = _xml.readFloat(xmlCtx, section, 'value')
@@ -295,6 +298,7 @@ class EnhancedSuspension(OptionalDevice):
         miscAttrs['vehicleByChassisDamageFactor'] *= self.vehicleByChassisDamageFactor
         miscAttrs['stunResistanceEffect'] += self.stunResistanceEffect
         miscAttrs['stunResistanceDuration'] += self.stunResistanceDuration
+        miscAttrs['repeatedStunDurationFactor'] *= self.repeatedStunDurationFactor
 
 
 class Grousers(OptionalDevice):
@@ -331,6 +335,7 @@ class AntifragmentationLining(OptionalDevice):
         miscAttrs['crewChanceToHitFactor'] *= 1.0 - self.increaseCrewChanceToEvadeHit
         miscAttrs['stunResistanceEffect'] += self.stunResistanceEffect
         miscAttrs['stunResistanceDuration'] += self.stunResistanceDuration
+        miscAttrs['repeatedStunDurationFactor'] *= self.repeatedStunDurationFactor
 
     def _readConfig(self, xmlCtx, section):
         reader = partial(_xml.readPositiveFloat, xmlCtx, section)
@@ -1264,7 +1269,8 @@ _readTags = vehicles._readTags
 def _readStun(xmlCtx, scriptSection):
     stunResistanceEffect = _xml.readFraction(xmlCtx, scriptSection, 'stunResistanceEffect') if scriptSection.has_key('stunResistanceEffect') else 0.0
     stunResistanceDuration = _xml.readFraction(xmlCtx, scriptSection, 'stunResistanceDuration') if scriptSection.has_key('stunResistanceDuration') else 0.0
-    return (stunResistanceEffect, stunResistanceDuration)
+    repeatedStunDurationFactor = _xml.readFraction(xmlCtx, scriptSection, 'repeatedStunDurationFactor') if scriptSection.has_key('repeatedStunDurationFactor') else 1.0
+    return (stunResistanceEffect, stunResistanceDuration, repeatedStunDurationFactor)
 
 
 def _readReuseParams(xmlCtx, scriptSection):

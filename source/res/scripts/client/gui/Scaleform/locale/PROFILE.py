@@ -380,9 +380,10 @@ class PROFILE(object):
     PROFILE_SEASONSDROPDOWN_ALL = '#profile:profile/seasonsdropdown/all'
     PROFILE_SEASONSDROPDOWN_CURRENT = '#profile:profile/seasonsdropdown/current'
     PROFILE_SEASONSDROPDOWN_SPECIFIC = '#profile:profile/seasonsdropdown/specific'
-    PROFILE_RANKED_SEASONSDROPDOWN_ALL = '#profile:profile/ranked/seasonsdropdown/all'
-    PROFILE_RANKED_SEASONSDROPDOWN_CURRENT = '#profile:profile/ranked/seasonsdropdown/current'
-    PROFILE_RANKED_SEASONSDROPDOWN_PREVIOUS = '#profile:profile/ranked/seasonsdropdown/previous'
+    PROFILE_RANKED_SEASONSDROPDOWN_ARCHIVE = '#profile:profile/ranked/seasonsdropdown/archive'
+    PROFILE_RANKED_SEASONSDROPDOWN_1 = '#profile:profile/ranked/seasonsdropdown/1'
+    PROFILE_RANKED_SEASONSDROPDOWN_2 = '#profile:profile/ranked/seasonsdropdown/2'
+    PROFILE_RANKED_SEASONSDROPDOWN_3 = '#profile:profile/ranked/seasonsdropdown/3'
     PROFILE_PARAMS_TOOLTIP_RANKED_POINTS_HEADER = '#profile:profile/params/tooltip/ranked/points/header'
     PROFILE_PARAMS_TOOLTIP_RANKED_POINTS_BODY = '#profile:profile/params/tooltip/ranked/points/body'
     PROFILE_PARAMS_TOOLTIP_RANKED_AVGPOINTS_HEADER = '#profile:profile/params/tooltip/ranked/avgPoints/header'
@@ -539,7 +540,6 @@ class PROFILE(object):
     PROFILE_PARAMS_TOOLTIP_FORT_RESOURCE_BODY = '#profile:profile/params/tooltip/fort/resource/body'
     PROFILE_PARAMS_TOOLTIP_CLAN_SUMMARYDAMAGECOEFFICIENT_HEADER = '#profile:profile/params/tooltip/clan/summaryDamageCoefficient/header'
     PROFILE_PARAMS_TOOLTIP_CLAN_SUMMARYDAMAGECOEFFICIENT_BODY = '#profile:profile/params/tooltip/clan/summaryDamageCoefficient/body'
-    PROFILE_RANKED_SEASONSDROPDOWN_ENUM = (PROFILE_RANKED_SEASONSDROPDOWN_ALL, PROFILE_RANKED_SEASONSDROPDOWN_CURRENT, PROFILE_RANKED_SEASONSDROPDOWN_PREVIOUS)
     PROFILE_DROPDOWN_LABELS_ENUM = (PROFILE_DROPDOWN_LABELS_ALL,
      PROFILE_DROPDOWN_LABELS_RANDOM,
      PROFILE_DROPDOWN_LABELS_EPICRANDOM,
@@ -553,6 +553,10 @@ class PROFILE(object):
      PROFILE_DROPDOWN_LABELS_FORTIFICATIONS_BATTLES,
      PROFILE_DROPDOWN_LABELS_FORTIFICATIONS_SORTIES,
      PROFILE_DROPDOWN_LABELS_RANKED)
+    PROFILE_RANKED_SEASONSDROPDOWN_ENUM = (PROFILE_RANKED_SEASONSDROPDOWN_ARCHIVE,
+     PROFILE_RANKED_SEASONSDROPDOWN_1,
+     PROFILE_RANKED_SEASONSDROPDOWN_2,
+     PROFILE_RANKED_SEASONSDROPDOWN_3)
 
     @classmethod
     def profile_dropdown_labels(cls, key0):

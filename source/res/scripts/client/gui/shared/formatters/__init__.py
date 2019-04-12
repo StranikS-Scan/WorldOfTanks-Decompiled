@@ -71,7 +71,7 @@ def formatPrice(price, reverse=False, currency=Currency.CREDITS, useIcon=False, 
         currencies = [currency]
     for c in currencies:
         value = price.get(c, 0)
-        if value == 0 and ignoreZeros:
+        if value == 0 and ignoreZeros and not (c == Currency.CREDITS and not price.getSetCurrencies()):
             continue
         formatter = getBWFormatter(c)
         cFormatted = formatter(value) if formatter else value

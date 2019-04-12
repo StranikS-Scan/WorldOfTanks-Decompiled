@@ -152,6 +152,7 @@ class MESSENGER(object):
     DIALOGS_SQUADCHANNEL_VEHICLES = '#messenger:dialogs/squadChannel/vehicles'
     DIALOGS_SQUADCHANNEL_VEHICLESLBL = '#messenger:dialogs/squadChannel/vehiclesLbl'
     DIALOGS_SIMPLESQUAD_VEHICLELEVEL = '#messenger:dialogs/simpleSquad/vehicleLevel'
+    DIALOGS_SIMPLESQUAD_EPICBATTLE_VEHICLERESTRICTION = '#messenger:dialogs/simpleSquad/epicBattle/VehicleRestriction'
     DIALOGS_EVENTSQUAD_VEHICLE = '#messenger:dialogs/eventSquad/vehicle'
     DIALOGS_SQUADCHANNEL_BATTLETYPE = '#messenger:dialogs/squadChannel/battleType'
     DIALOGS_SQUADCHANNEL_BATTLETYPEDOMINATION = '#messenger:dialogs/squadChannel/battleTypeDomination'
@@ -169,7 +170,8 @@ class MESSENGER(object):
     DIALOGS_SQUADCHANNEL_HEADERMSG_SQUADFORMATIONRESTRICTION = '#messenger:dialogs/squadChannel/headerMsg/squadFormationRestriction'
     DIALOGS_SQUADCHANNEL_HEADERMSG_EVENTFORMATIONRESTRICTION = '#messenger:dialogs/squadChannel/headerMsg/eventFormationRestriction'
     DIALOGS_SQUADCHANNEL_HEADERMSG_EPICBATTLEFORMATIONRESTRICTION = '#messenger:dialogs/squadChannel/headerMsg/epicBattleFormationRestriction'
-    DIALOGS_SQUADCHANNEL_HEADERMSG_DYNSQUAD = '#messenger:dialogs/squadChannel/headerMsg/dynSquad'
+    DIALOGS_SQUADCHANNEL_BONUSES_CREDITS = '#messenger:dialogs/squadChannel/bonuses/credits'
+    DIALOGS_SQUADCHANNEL_BONUSES_EXPERIENCE = '#messenger:dialogs/squadChannel/bonuses/experience'
     DIALOGS_BSCHANNEL_CONTEXT_KICKPLAYER = '#messenger:dialogs/bsChannel/context/kickPlayer'
     DIALOGS_TEAMCHANNEL_BUTTONS_DISMISS = '#messenger:dialogs/teamChannel/buttons/dismiss'
     DIALOGS_TEAMCHANNEL_BUTTONS_INVITE = '#messenger:dialogs/teamChannel/buttons/invite'
@@ -319,11 +321,14 @@ class MESSENGER(object):
     SERVICECHANNELMESSAGES_BATTLERESULTS_CONTRIBUTIONFORDAMAGEALLIES = '#messenger:serviceChannelMessages/battleResults/contributionForDamageAllies'
     SERVICECHANNELMESSAGES_BATTLERESULTS_ACTION = '#messenger:serviceChannelMessages/battleResults/action'
     SERVICECHANNELMESSAGES_BATTLERESULTS_ACTIONS = '#messenger:serviceChannelMessages/battleResults/actions'
+    SERVICECHANNELMESSAGES_BATTLERESULTS_PIGGYBANK = '#messenger:serviceChannelMessages/battleResults/piggyBank'
     SERVICECHANNELMESSAGES_BATTLERESULTS_ACTIONSRESULTSGOLD = '#messenger:serviceChannelMessages/battleResults/actionsResultsGold'
     SERVICECHANNELMESSAGES_BATTLERESULTS_ACTIONSRESULTSCREDITS = '#messenger:serviceChannelMessages/battleResults/actionsResultsCredits'
     SERVICECHANNELMESSAGES_BATTLERESULTS_ACTIONSRESULTSCRYSTAL = '#messenger:serviceChannelMessages/battleResults/actionsResultsCrystal'
     SERVICECHANNELMESSAGES_BATTLERESULTS_ACTIONSRESULTSFREEXP = '#messenger:serviceChannelMessages/battleResults/actionsResultsFreeXP'
     SERVICECHANNELMESSAGES_BATTLERESULTS_ACHIEVES = '#messenger:serviceChannelMessages/battleResults/achieves'
+    SERVICECHANNELMESSAGES_BATTLERESULTS_RANKEDPROGRESS = '#messenger:serviceChannelMessages/battleResults/rankedProgress'
+    SERVICECHANNELMESSAGES_BATTLERESULTS_RANKEDBONUSBATTLES = '#messenger:serviceChannelMessages/battleResults/rankedBonusBattles'
     SERVICECHANNELMESSAGES_BATTLERESULTS_QUESTS = '#messenger:serviceChannelMessages/battleResults/quests'
     SERVICECHANNELMESSAGES_BATTLERESULTS_QUESTS_VEHICLESLOTS = '#messenger:serviceChannelMessages/battleResults/quests/vehicleSlots'
     SERVICECHANNELMESSAGES_BATTLERESULTS_QUESTS_FREEXP = '#messenger:serviceChannelMessages/battleResults/quests/freeXP'
@@ -333,6 +338,7 @@ class MESSENGER(object):
     SERVICECHANNELMESSAGES_BATTLERESULTS_QUESTS_BERTHS = '#messenger:serviceChannelMessages/battleResults/quests/berths'
     SERVICECHANNELMESSAGES_BATTLERESULTS_QUESTS_ACHIEVEMENTS = '#messenger:serviceChannelMessages/battleResults/quests/achievements'
     SERVICECHANNELMESSAGES_BATTLERESULTS_QUESTS_PREMIUM = '#messenger:serviceChannelMessages/battleResults/quests/premium'
+    SERVICECHANNELMESSAGES_BATTLERESULTS_QUESTS_PREMIUM_PLUS = '#messenger:serviceChannelMessages/battleResults/quests/premium_plus'
     SERVICECHANNELMESSAGES_BATTLERESULTS_QUESTS_ITEMS = '#messenger:serviceChannelMessages/battleResults/quests/items'
     SERVICECHANNELMESSAGES_BATTLERESULTS_QUESTS_ITEMS_NAME = '#messenger:serviceChannelMessages/battleResults/quests/items/name'
     SERVICECHANNELMESSAGES_BATTLERESULTS_PERSONALMISSIONS = '#messenger:serviceChannelMessages/battleResults/personalMissions'
@@ -344,22 +350,23 @@ class MESSENGER(object):
     SERVICECHANNELMESSAGES_BATTLERESULTS_FORTRESOURCE_CLAN = '#messenger:serviceChannelMessages/battleResults/fortResource/clan'
     SERVICECHANNELMESSAGES_BATTLERESULTS_FORTRESOURCE_PLAYER = '#messenger:serviceChannelMessages/battleResults/fortResource/player'
     SERVICECHANNELMESSAGES_BATTLERESULTS_FORT_CLAN = '#messenger:serviceChannelMessages/battleResults/fort/clan'
-    SERVICECHANNELMESSAGES_BATTLERESULTS_RANKEDSTATE_WIN_RANKEARNED = '#messenger:serviceChannelMessages/battleResults/rankedState/win/rankEarned'
-    SERVICECHANNELMESSAGES_BATTLERESULTS_RANKEDSTATE_WIN_RANKLOST = '#messenger:serviceChannelMessages/battleResults/rankedState/win/rankLost'
-    SERVICECHANNELMESSAGES_BATTLERESULTS_RANKEDSTATE_WIN_STEPSEARNED = '#messenger:serviceChannelMessages/battleResults/rankedState/win/stepsEarned'
-    SERVICECHANNELMESSAGES_BATTLERESULTS_RANKEDSTATE_WIN_STEPEARNED = '#messenger:serviceChannelMessages/battleResults/rankedState/win/stepEarned'
-    SERVICECHANNELMESSAGES_BATTLERESULTS_RANKEDSTATE_WIN_STEPLOST = '#messenger:serviceChannelMessages/battleResults/rankedState/win/stepLost'
-    SERVICECHANNELMESSAGES_BATTLERESULTS_RANKEDSTATE_WIN_NOTHINGCHANGED = '#messenger:serviceChannelMessages/battleResults/rankedState/win/nothingChanged'
-    SERVICECHANNELMESSAGES_BATTLERESULTS_RANKEDSTATE_WIN_RANKPOINT = '#messenger:serviceChannelMessages/battleResults/rankedState/win/rankPoint'
-    SERVICECHANNELMESSAGES_BATTLERESULTS_RANKEDSTATE_LOSE_RANKEARNED = '#messenger:serviceChannelMessages/battleResults/rankedState/lose/rankEarned'
-    SERVICECHANNELMESSAGES_BATTLERESULTS_RANKEDSTATE_LOSE_RANKLOST = '#messenger:serviceChannelMessages/battleResults/rankedState/lose/rankLost'
-    SERVICECHANNELMESSAGES_BATTLERESULTS_RANKEDSTATE_LOSE_STEPSEARNED = '#messenger:serviceChannelMessages/battleResults/rankedState/lose/stepsEarned'
-    SERVICECHANNELMESSAGES_BATTLERESULTS_RANKEDSTATE_LOSE_STEPEARNED = '#messenger:serviceChannelMessages/battleResults/rankedState/lose/stepEarned'
-    SERVICECHANNELMESSAGES_BATTLERESULTS_RANKEDSTATE_LOSE_STEPLOST = '#messenger:serviceChannelMessages/battleResults/rankedState/lose/stepLost'
-    SERVICECHANNELMESSAGES_BATTLERESULTS_RANKEDSTATE_LOSE_NOTHINGCHANGED = '#messenger:serviceChannelMessages/battleResults/rankedState/lose/nothingChanged'
-    SERVICECHANNELMESSAGES_BATTLERESULTS_RANKEDSTATE_LOSE_RANKPOINT = '#messenger:serviceChannelMessages/battleResults/rankedState/lose/rankPoint'
-    SERVICECHANNELMESSAGES_BATTLERESULTS_RANKEDSTATE_SHIELD_SHIELD_LOSE = '#messenger:serviceChannelMessages/battleResults/rankedState/shield/shield_lose'
-    SERVICECHANNELMESSAGES_BATTLERESULTS_RANKEDSTATE_SHIELD_SHIELD_LOSE_STEP = '#messenger:serviceChannelMessages/battleResults/rankedState/shield/shield_lose_step'
+    SERVICECHANNELMESSAGES_BATTLERESULTS_RANKEDSTATE_LEAGUEEARNED = '#messenger:serviceChannelMessages/battleResults/rankedState/leagueEarned'
+    SERVICECHANNELMESSAGES_BATTLERESULTS_RANKEDSTATE_DIVISIONEARNED = '#messenger:serviceChannelMessages/battleResults/rankedState/divisionEarned'
+    SERVICECHANNELMESSAGES_BATTLERESULTS_DIVISIONS_BRONZE = '#messenger:serviceChannelMessages/battleResults/divisions/bronze'
+    SERVICECHANNELMESSAGES_BATTLERESULTS_DIVISIONS_SILVER = '#messenger:serviceChannelMessages/battleResults/divisions/silver'
+    SERVICECHANNELMESSAGES_BATTLERESULTS_DIVISIONS_GOLD = '#messenger:serviceChannelMessages/battleResults/divisions/gold'
+    SERVICECHANNELMESSAGES_BATTLERESULTS_RANKEDSTATE_RANKEARNED = '#messenger:serviceChannelMessages/battleResults/rankedState/rankEarned'
+    SERVICECHANNELMESSAGES_BATTLERESULTS_RANKEDSTATE_RANKUNBURNPROTECTED = '#messenger:serviceChannelMessages/battleResults/rankedState/rankUnburnProtected'
+    SERVICECHANNELMESSAGES_BATTLERESULTS_RANKEDSTATE_RANKSHIELDPROTECTED = '#messenger:serviceChannelMessages/battleResults/rankedState/rankShieldProtected'
+    SERVICECHANNELMESSAGES_BATTLERESULTS_RANKEDSTATE_RANKLOST = '#messenger:serviceChannelMessages/battleResults/rankedState/rankLost'
+    SERVICECHANNELMESSAGES_BATTLERESULTS_RANKEDSTATE_STEPEARNED = '#messenger:serviceChannelMessages/battleResults/rankedState/stepEarned'
+    SERVICECHANNELMESSAGES_BATTLERESULTS_RANKEDSTATE_BONUSSTEPEARNED = '#messenger:serviceChannelMessages/battleResults/rankedState/bonusStepEarned'
+    SERVICECHANNELMESSAGES_BATTLERESULTS_RANKEDSTATE_STEPSEARNED = '#messenger:serviceChannelMessages/battleResults/rankedState/stepsEarned'
+    SERVICECHANNELMESSAGES_BATTLERESULTS_RANKEDSTATE_BONUSSTEPSEARNED = '#messenger:serviceChannelMessages/battleResults/rankedState/bonusStepsEarned'
+    SERVICECHANNELMESSAGES_BATTLERESULTS_RANKEDSTATE_STEPLOST = '#messenger:serviceChannelMessages/battleResults/rankedState/stepLost'
+    SERVICECHANNELMESSAGES_BATTLERESULTS_RANKEDSTATE_NOTHINGCHANGED = '#messenger:serviceChannelMessages/battleResults/rankedState/nothingChanged'
+    SERVICECHANNELMESSAGES_BATTLERESULTS_RANKEDSTATE_STAGENOTEARNED = '#messenger:serviceChannelMessages/battleResults/rankedState/stageNotEarned'
+    SERVICECHANNELMESSAGES_BATTLERESULTS_RANKEDSTATE_SHIELDLOSE = '#messenger:serviceChannelMessages/battleResults/rankedState/shieldLose'
     SERVICECHANNELMESSAGES_BATTLERESULTS_TANKWOMAN = '#messenger:serviceChannelMessages/battleResults/tankwoman'
     SERVICECHANNELMESSAGES_BATTLERESULTS_TANKMAN = '#messenger:serviceChannelMessages/battleResults/tankman'
     SERVICECHANNELMESSAGES_BATTLETUTORIAL_RESULTS_FINISHED = '#messenger:serviceChannelMessages/battleTutorial/results/finished'
@@ -390,6 +397,9 @@ class MESSENGER(object):
     SERVICECHANNELMESSAGES_INVOICERECEIVED_PREMIUM_ACCOUNT = '#messenger:serviceChannelMessages/invoiceReceived/premium_account'
     SERVICECHANNELMESSAGES_INVOICERECEIVED_PREMIUMACCRUED = '#messenger:serviceChannelMessages/invoiceReceived/premiumAccrued'
     SERVICECHANNELMESSAGES_INVOICERECEIVED_PREMIUMDEBITED = '#messenger:serviceChannelMessages/invoiceReceived/premiumDebited'
+    SERVICECHANNELMESSAGES_INVOICERECEIVED_TANKPREMIUMACCOUNT = '#messenger:serviceChannelMessages/invoiceReceived/tankPremiumAccount'
+    SERVICECHANNELMESSAGES_INVOICERECEIVED_TANKPREMIUMACCRUED = '#messenger:serviceChannelMessages/invoiceReceived/tankPremiumAccrued'
+    SERVICECHANNELMESSAGES_INVOICERECEIVED_TANKPREMIUMDEBITED = '#messenger:serviceChannelMessages/invoiceReceived/tankPremiumDebited'
     SERVICECHANNELMESSAGES_INVOICERECEIVED_FREEXP = '#messenger:serviceChannelMessages/invoiceReceived/freeXp'
     SERVICECHANNELMESSAGES_INVOICERECEIVED_FREEXPACCRUED = '#messenger:serviceChannelMessages/invoiceReceived/freeXpAccrued'
     SERVICECHANNELMESSAGES_INVOICERECEIVED_FREEXPDEBITED = '#messenger:serviceChannelMessages/invoiceReceived/freeXpDebited'
@@ -441,10 +451,13 @@ class MESSENGER(object):
     SERVICECHANNELMESSAGES_INVOICERECEIVED_FREEAWARDLISTSDEBITED = '#messenger:serviceChannelMessages/invoiceReceived/freeAwardListsDebited'
     SERVICECHANNELMESSAGES_INVOICERECEIVED_CREWSKINSACCRUED = '#messenger:serviceChannelMessages/invoiceReceived/crewSkinsAccrued'
     SERVICECHANNELMESSAGES_INVOICERECEIVED_CREWSKINSDEBITED = '#messenger:serviceChannelMessages/invoiceReceived/crewSkinsDebited'
-    SERVICECHANNELMESSAGES_DURATIONOFPREMIUMACCOUNEXPIRES = '#messenger:serviceChannelMessages/durationOfPremiumAccounExpires'
+    SERVICECHANNELMESSAGES_DURATIONOFPREMIUMACCOUNTEXPIRES = '#messenger:serviceChannelMessages/durationOfPremiumAccountExpires'
     SERVICECHANNELMESSAGES_PREMIUMBOUGHT = '#messenger:serviceChannelMessages/premiumBought'
     SERVICECHANNELMESSAGES_PREMIUMEXTENDED = '#messenger:serviceChannelMessages/premiumExtended'
     SERVICECHANNELMESSAGES_PREMIUMEXPIRED = '#messenger:serviceChannelMessages/premiumExpired'
+    SERVICECHANNELMESSAGES_PREMIUMPLUSBOUGHT = '#messenger:serviceChannelMessages/premiumPlusBought'
+    SERVICECHANNELMESSAGES_PREMIUMPLUSEXTENDED = '#messenger:serviceChannelMessages/premiumPlusExtended'
+    SERVICECHANNELMESSAGES_PREMIUMPLUSEXPIRED = '#messenger:serviceChannelMessages/premiumPlusExpired'
     SERVICECHANNELMESSAGES_BOOSTEREXPIRED = '#messenger:serviceChannelMessages/boosterExpired'
     SERVICECHANNELMESSAGES_BOOSTERDISABLED = '#messenger:serviceChannelMessages/boosterDisabled'
     SERVICECHANNELMESSAGES_CREDITSANDGOLDRECEIVEDASGIFT = '#messenger:serviceChannelMessages/creditsAndGoldReceivedAsGift'
@@ -452,6 +465,7 @@ class MESSENGER(object):
     SERVICECHANNELMESSAGES_GOLDRECEIVEDASGIFT = '#messenger:serviceChannelMessages/goldReceivedAsGift'
     SERVICECHANNELMESSAGES_XPRECEIVEDASGIFT = '#messenger:serviceChannelMessages/xpReceivedAsGift'
     SERVICECHANNELMESSAGES_PREMIUMRECEIVEDASGIFT = '#messenger:serviceChannelMessages/premiumReceivedAsGift'
+    SERVICECHANNELMESSAGES_TANKPREMIUMRECEIVEDASGIFT = '#messenger:serviceChannelMessages/tankPremiumReceivedAsGift'
     SERVICECHANNELMESSAGES_ITEMRECEIVEDASGIFT = '#messenger:serviceChannelMessages/itemReceivedAsGift'
     SERVICECHANNELMESSAGES_VEHICLERECEIVEDASGIFT = '#messenger:serviceChannelMessages/vehicleReceivedAsGift'
     SERVICECHANNELMESSAGES_FORTIFICATIONSTARTUP = '#messenger:serviceChannelMessages/fortificationStartUp'
@@ -535,8 +549,9 @@ class MESSENGER(object):
     PREBATTLE_REMOVEALLBTN_TOOLTIP_BODY = '#messenger:prebattle/removeAllBtn/tooltip/body'
     PREBATTLE_REMOVEBTN_TOOLTIP_HEADER = '#messenger:prebattle/removeBtn/tooltip/header'
     PREBATTLE_REMOVEBTN_TOOLTIP_BODY = '#messenger:prebattle/removeBtn/tooltip/body'
-    SERVICECHANNELMESSAGES_SERVERDOWNTIMECOMPENSATION = '#messenger:serviceChannelMessages/serverDowntimeCompensation'
+    SERVICECHANNELMESSAGES_SERVERDOWNTIMECOMPENSATION_MESSAGE = '#messenger:serviceChannelMessages/serverDowntimeCompensation/message'
     SERVICECHANNELMESSAGES_SERVERDOWNTIMECOMPENSATION_PREMIUM = '#messenger:serviceChannelMessages/serverDowntimeCompensation/premium'
+    SERVICECHANNELMESSAGES_SERVERDOWNTIMECOMPENSATION_PREMIUM_PLUS = '#messenger:serviceChannelMessages/serverDowntimeCompensation/premium_plus'
     SERVICECHANNELMESSAGES_SERVERDOWNTIMECOMPENSATION_CAMOUFLAGES = '#messenger:serviceChannelMessages/serverDowntimeCompensation/camouflages'
     SERVICECHANNELMESSAGES_SERVERDOWNTIMECOMPENSATION_PLAYEREMBLEMS = '#messenger:serviceChannelMessages/serverDowntimeCompensation/playerEmblems'
     SERVICECHANNELMESSAGES_SERVERDOWNTIMECOMPENSATION_PLAYERINSCRIPTIONS = '#messenger:serviceChannelMessages/serverDowntimeCompensation/playerInscriptions'
@@ -827,30 +842,12 @@ class MESSENGER(object):
     SERVICECHANNELMESSAGES_PROGRESSIVEREWARDNOTIFICATION_TEXT = '#messenger:serviceChannelMessages/progressiveRewardNotification/text'
     SERVICECHANNELMESSAGES_PROGRESSIVEREWARDNOTIFICATION_BUTTON = '#messenger:serviceChannelMessages/progressiveRewardNotification/button'
     SERVICECHANNELMESSAGES_CREWSKINSCOUNT = '#messenger:serviceChannelMessages/crewSkinsCount'
-    CHAT_ERROR_ENUM = (CHAT_ERROR_NOT_ALLOWED,
-     CHAT_ERROR_USER_NOT_FOUND,
-     CHAT_ERROR_CANNOT_BAN_ONESELF,
-     CHAT_ERROR_WRONG_ARGS,
-     CHAT_ERROR_NOT_READY,
-     CHAT_ERROR_IS_BUSY,
-     CHAT_ERROR_GENERIC_ERROR)
-    SERVICECHANNELMESSAGES_BATTLERESULTS_PERSONALMISSIONS_ENUM = (SERVICECHANNELMESSAGES_BATTLERESULTS_PERSONALMISSIONS_1, SERVICECHANNELMESSAGES_BATTLERESULTS_PERSONALMISSIONS_2, SERVICECHANNELMESSAGES_BATTLERESULTS_PERSONALMISSIONS_BOTH)
-    SERVER_ERROR_USER_ROOM_CREATION_ENUM = (SERVER_ERROR_USER_ROOM_CREATION_NAME_EXISTS,
-     SERVER_ERROR_USER_ROOM_CREATION_LIMIT_COUNT,
-     SERVER_ERROR_USER_ROOM_CREATION_LIMIT_PASS,
-     SERVER_ERROR_USER_ROOM_CREATION_LIMIT_NAME,
-     SERVER_ERROR_USER_ROOM_CREATION_WRONG_SYMBOL,
-     SERVER_ERROR_USER_ROOM_CREATION_WRONG_WORD)
-    CHAT_ACTION_ENUM = (CHAT_ACTION_BROADCAST_UNIT_MESSAGE,
-     CHAT_ACTION_BROADCAST_BATTLE_MESSAGE,
-     CHAT_ACTION_FIND_USERS_BY_NAME,
-     CHAT_ACTION_GET_VOIP_CREDENTIALS)
-    SERVICECHANNELMESSAGES_CURRENCYUPDATE_ALL_ENUM = (SERVICECHANNELMESSAGES_CURRENCYUPDATE_RECEIVED_CREDITS,
-     SERVICECHANNELMESSAGES_CURRENCYUPDATE_RECEIVED_GOLD,
-     SERVICECHANNELMESSAGES_CURRENCYUPDATE_RECEIVED_CRYSTAL,
-     SERVICECHANNELMESSAGES_CURRENCYUPDATE_DEBITED_CREDITS,
-     SERVICECHANNELMESSAGES_CURRENCYUPDATE_DEBITED_GOLD,
-     SERVICECHANNELMESSAGES_CURRENCYUPDATE_DEBITED_CRYSTAL)
+    SERVICECHANNELMESSAGES_PIGGYBANK_TITLE = '#messenger:serviceChannelMessages/piggyBank/title'
+    SERVICECHANNELMESSAGES_PIGGYBANK_CONTINUEAFTERSMASHED = '#messenger:serviceChannelMessages/piggyBank/continueAfterSmashed'
+    SERVICECHANNELMESSAGES_PIGGYBANK_ONPAUSE = '#messenger:serviceChannelMessages/piggyBank/onPause'
+    SERVICECHANNELMESSAGES_BLACKMAPREMOVED_MAPDISABLED = '#messenger:serviceChannelMessages/blackMapRemoved/mapDisabled'
+    SERVICECHANNELMESSAGES_BLACKMAPREMOVED_SLOTDISABLED = '#messenger:serviceChannelMessages/blackMapRemoved/slotDisabled'
+    SERVICECHANNELMESSAGES_BLACKMAPDISABLED = '#messenger:serviceChannelMessages/blackMapDisabled'
     CLIENT_ERROR_SHARED_ENUM = (CLIENT_ERROR_SHARED_TRY_LATER,
      CLIENT_ERROR_SHARED_GENERIC,
      CLIENT_ERROR_SHARED_LOCKED,
@@ -885,26 +882,6 @@ class MESSENGER(object):
      CLIENT_ERROR_CHANNEL_PASSWORDS_NOT_EQUALS,
      CLIENT_ERROR_CHANNEL_LIMIT_REACHED,
      CLIENT_ERROR_CHANNEL_NAME_ALREADY_EXISTS)
-    LISTVIEW_EMPTYLIST_ENUM = (LISTVIEW_EMPTYLIST_TEMPLATE,
-     LISTVIEW_EMPTYLIST_INFO,
-     LISTVIEW_EMPTYLIST_INVITE,
-     LISTVIEW_EMPTYLIST_OFFER)
-    SERVICECHANNELMESSAGES_BATTLERESULTS_RANKEDSTATE_ALL_ENUM = (SERVICECHANNELMESSAGES_BATTLERESULTS_RANKEDSTATE_WIN_RANKEARNED,
-     SERVICECHANNELMESSAGES_BATTLERESULTS_RANKEDSTATE_WIN_RANKLOST,
-     SERVICECHANNELMESSAGES_BATTLERESULTS_RANKEDSTATE_WIN_STEPSEARNED,
-     SERVICECHANNELMESSAGES_BATTLERESULTS_RANKEDSTATE_WIN_STEPEARNED,
-     SERVICECHANNELMESSAGES_BATTLERESULTS_RANKEDSTATE_WIN_STEPLOST,
-     SERVICECHANNELMESSAGES_BATTLERESULTS_RANKEDSTATE_WIN_NOTHINGCHANGED,
-     SERVICECHANNELMESSAGES_BATTLERESULTS_RANKEDSTATE_WIN_RANKPOINT,
-     SERVICECHANNELMESSAGES_BATTLERESULTS_RANKEDSTATE_LOSE_RANKEARNED,
-     SERVICECHANNELMESSAGES_BATTLERESULTS_RANKEDSTATE_LOSE_RANKLOST,
-     SERVICECHANNELMESSAGES_BATTLERESULTS_RANKEDSTATE_LOSE_STEPSEARNED,
-     SERVICECHANNELMESSAGES_BATTLERESULTS_RANKEDSTATE_LOSE_STEPEARNED,
-     SERVICECHANNELMESSAGES_BATTLERESULTS_RANKEDSTATE_LOSE_STEPLOST,
-     SERVICECHANNELMESSAGES_BATTLERESULTS_RANKEDSTATE_LOSE_NOTHINGCHANGED,
-     SERVICECHANNELMESSAGES_BATTLERESULTS_RANKEDSTATE_LOSE_RANKPOINT,
-     SERVICECHANNELMESSAGES_BATTLERESULTS_RANKEDSTATE_SHIELD_SHIELD_LOSE,
-     SERVICECHANNELMESSAGES_BATTLERESULTS_RANKEDSTATE_SHIELD_SHIELD_LOSE_STEP)
     CLIENT_ERROR_LIMIT_ENUM = (CLIENT_ERROR_LIMIT_MAX_ROSTER_ITEMS,
      CLIENT_ERROR_LIMIT_MAX_GROUP,
      CLIENT_ERROR_LIMIT_MAX_BLOCK_ITEMS,
@@ -912,6 +889,12 @@ class MESSENGER(object):
      CLIENT_ERROR_LIMIT_NOTE_INVALID_LENGTH,
      CLIENT_ERROR_LIMIT_CHANNEL_INVALID_LENGTH,
      CLIENT_ERROR_LIMIT_PWD_INVALID_LENGTH)
+    SERVER_ERROR_USER_ROOM_CREATION_ENUM = (SERVER_ERROR_USER_ROOM_CREATION_NAME_EXISTS,
+     SERVER_ERROR_USER_ROOM_CREATION_LIMIT_COUNT,
+     SERVER_ERROR_USER_ROOM_CREATION_LIMIT_PASS,
+     SERVER_ERROR_USER_ROOM_CREATION_LIMIT_NAME,
+     SERVER_ERROR_USER_ROOM_CREATION_WRONG_SYMBOL,
+     SERVER_ERROR_USER_ROOM_CREATION_WRONG_WORD)
     CLIENT_ACTION_ENUM = (CLIENT_ACTION_ADD_FRIEND,
      CLIENT_ACTION_REMOVE_FRIEND,
      CLIENT_ACTION_ADD_IGNORED,
@@ -932,8 +915,29 @@ class MESSENGER(object):
      CLIENT_ACTION_LEAVE_USER_ROOM,
      CLIENT_ACTION_SEARCH_USER_ROOM,
      CLIENT_ACTION_FIND_USERS_BY_PREFIX)
-    SERVICECHANNELMESSAGES_BATTLERESULTS_RANKEDSTATE_SHIELD_ENUM = (SERVICECHANNELMESSAGES_BATTLERESULTS_RANKEDSTATE_SHIELD_SHIELD_LOSE, SERVICECHANNELMESSAGES_BATTLERESULTS_RANKEDSTATE_SHIELD_SHIELD_LOSE_STEP)
+    CHAT_ERROR_ENUM = (CHAT_ERROR_NOT_ALLOWED,
+     CHAT_ERROR_USER_NOT_FOUND,
+     CHAT_ERROR_CANNOT_BAN_ONESELF,
+     CHAT_ERROR_WRONG_ARGS,
+     CHAT_ERROR_NOT_READY,
+     CHAT_ERROR_IS_BUSY,
+     CHAT_ERROR_GENERIC_ERROR)
+    CHAT_ACTION_ENUM = (CHAT_ACTION_BROADCAST_UNIT_MESSAGE,
+     CHAT_ACTION_BROADCAST_BATTLE_MESSAGE,
+     CHAT_ACTION_FIND_USERS_BY_NAME,
+     CHAT_ACTION_GET_VOIP_CREDENTIALS)
     COMMAND_SUCCESS_ENUM = (COMMAND_SUCCESS_USERBAN, COMMAND_SUCCESS_USERUNBAN)
+    LISTVIEW_EMPTYLIST_ENUM = (LISTVIEW_EMPTYLIST_TEMPLATE,
+     LISTVIEW_EMPTYLIST_INFO,
+     LISTVIEW_EMPTYLIST_INVITE,
+     LISTVIEW_EMPTYLIST_OFFER)
+    SERVICECHANNELMESSAGES_BATTLERESULTS_PERSONALMISSIONS_ENUM = (SERVICECHANNELMESSAGES_BATTLERESULTS_PERSONALMISSIONS_1, SERVICECHANNELMESSAGES_BATTLERESULTS_PERSONALMISSIONS_2, SERVICECHANNELMESSAGES_BATTLERESULTS_PERSONALMISSIONS_BOTH)
+    SERVICECHANNELMESSAGES_CURRENCYUPDATE_ALL_ENUM = (SERVICECHANNELMESSAGES_CURRENCYUPDATE_RECEIVED_CREDITS,
+     SERVICECHANNELMESSAGES_CURRENCYUPDATE_RECEIVED_GOLD,
+     SERVICECHANNELMESSAGES_CURRENCYUPDATE_RECEIVED_CRYSTAL,
+     SERVICECHANNELMESSAGES_CURRENCYUPDATE_DEBITED_CREDITS,
+     SERVICECHANNELMESSAGES_CURRENCYUPDATE_DEBITED_GOLD,
+     SERVICECHANNELMESSAGES_CURRENCYUPDATE_DEBITED_CRYSTAL)
 
     @classmethod
     def client_error_shared(cls, key0):
@@ -1020,24 +1024,6 @@ class MESSENGER(object):
     def listview_emptylist(cls, key0):
         outcome = '#messenger:listView/emptyList/{}'.format(key0)
         if outcome not in cls.LISTVIEW_EMPTYLIST_ENUM:
-            LOG_WARNING('Localization key "{}" not found'.format(outcome))
-            return None
-        else:
-            return outcome
-
-    @classmethod
-    def rankedStateChange(cls, isWon, key0):
-        outcome = '#messenger:serviceChannelMessages/battleResults/rankedState/{}/{}'.format(isWon, key0)
-        if outcome not in cls.SERVICECHANNELMESSAGES_BATTLERESULTS_RANKEDSTATE_ALL_ENUM:
-            LOG_WARNING('Localization key "{}" not found'.format(outcome))
-            return None
-        else:
-            return outcome
-
-    @classmethod
-    def rankedShieldStateChange(cls, key0):
-        outcome = '#messenger:serviceChannelMessages/battleResults/rankedState/shield/{}'.format(key0)
-        if outcome not in cls.SERVICECHANNELMESSAGES_BATTLERESULTS_RANKEDSTATE_SHIELD_ENUM:
             LOG_WARNING('Localization key "{}" not found'.format(outcome))
             return None
         else:

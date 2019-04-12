@@ -129,7 +129,7 @@ class EventDispatcher(object):
         self.__fireShowEvent(VIEW_ALIAS.SANDBOX_QUEUE_DIALOG)
 
     def loadRanked(self):
-        self.__fireShowEvent(RANKEDBATTLES_ALIASES.RANKED_BATTLES_WELCOME_VIEW_ALIAS)
+        self.__fireShowEvent(RANKEDBATTLES_ALIASES.RANKED_BATTLES_INTRO_ALIAS)
 
     def loadEpicWelcome(self):
         self.__fireShowEvent(EPICBATTLES_ALIASES.EPIC_BATTLES_WELCOME_BACK_ALIAS)

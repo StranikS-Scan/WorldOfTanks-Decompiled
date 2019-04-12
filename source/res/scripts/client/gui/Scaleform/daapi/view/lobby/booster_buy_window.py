@@ -7,7 +7,6 @@ from gui.Scaleform.genConsts.SLOT_HIGHLIGHT_TYPES import SLOT_HIGHLIGHT_TYPES
 from CurrentVehicle import g_currentVehicle
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.formatters import text_styles
-from gui.shared.tooltips.formatters import packItemActionTooltipData
 from gui.shared.utils.decorators import process
 from gui.shared.utils import decorators
 from gui.shared.gui_items.processors.module import ModuleBuyer
@@ -63,8 +62,7 @@ class BoosterBuyWindow(BoosterBuyWindowMeta):
         itemPrice = self.__getItemPrice()
         currency = itemPrice.getCurrency(byWeight=True)
         vehicle = g_currentVehicle.item
-        self.as_updateDataS({'actionPriceData': packItemActionTooltipData(self.__item, isBuying=True),
-         'itemPrice': itemPrice.price.getSignValue(currency),
+        self.as_updateDataS({'itemPrice': itemPrice.price.getSignValue(currency),
          'itemCount': self.__item.inventoryCount,
          'currency': currency,
          'currencyCount': stats.money.getSignValue(currency),

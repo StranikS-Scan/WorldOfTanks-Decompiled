@@ -3,6 +3,8 @@
 import time
 import Event
 import constants
+from account_helpers import AccountSettings
+from account_helpers.AccountSettings import MARATHON_REWARD_WAS_SHOWN
 from adisp import process, async
 from debug_utils import LOG_ERROR
 from gui import GUI_SETTINGS
@@ -11,23 +13,29 @@ from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.game_control.links import URLMacros
+from gui.impl.lobby.marathon.marathon_reward_helper import showMarathonReward
 from gui.marathon.marathon_constants import MARATHONS_DATA, MARATHON_STATE, MARATHON_WARNING, PROGRESS_TOOLTIP_HEADER, COUNTDOWN_TOOLTIP_HEADER, ZERO_TIME, TEXT_TOOLTIP_HEADER
 from gui.prb_control import prbEntityProperty
 from gui.shared.formatters import text_styles
+from gui.shared.gui_items import GUI_ITEM_TYPE
+from gui.shared.items_cache import CACHE_SYNC_REASON
 from gui.shared.utils.scheduled_notifications import Notifiable, PeriodicNotifier
 from helpers import dependency, i18n
 from helpers.i18n import makeString as _ms
 from helpers.time_utils import ONE_DAY, ONE_HOUR, getTimeStructInLocal
 from skeletons.gui.game_control import IMarathonEventsController, IBootcampController
 from skeletons.gui.server_events import IEventsCache
+from skeletons.gui.shared import IItemsCache
 
 class MarathonEventsController(IMarathonEventsController, Notifiable):
     _eventsCache = dependency.descriptor(IEventsCache)
+    _itemsCache = dependency.descriptor(IItemsCache)
 
     def __init__(self):
         super(MarathonEventsController, self).__init__()
         self.__eventManager = Event.EventManager()
         self.onFlagUpdateNotify = Event.Event(self.__eventManager)
+        self.onVehicleReceived = Event.Event()
         self.__marathons = [ MarathonEvent(data) for data in MARATHONS_DATA ]
 
     def addMarathon(self, data):
@@ -92,7 +100,22 @@ class MarathonEventsController(IMarathonEventsController, Notifiable):
         super(MarathonEventsController, self).onLobbyStarted(ctx)
         self._eventsCache.onSyncCompleted += self.__onSyncCompleted
         self._eventsCache.onProgressUpdated += self.__onSyncCompleted
+        self._itemsCache.onSyncCompleted += self.__updateInventoryVehsData
         self.__onSyncCompleted()
+
+    def __updateInventoryVehsData(self, reason, diff):
+        if reason != CACHE_SYNC_REASON.CLIENT_UPDATE:
+            return
+        else:
+            if diff is not None and GUI_ITEM_TYPE.VEHICLE in diff:
+                vehDiff = diff[GUI_ITEM_TYPE.VEHICLE]
+                for marathon in self.__marathons:
+                    for vehIntCD in vehDiff:
+                        if vehIntCD == marathon.data.vehicleID and marathon.isEnabled():
+                            marathon.setVehicleObtained(True)
+                            self.onVehicleReceived(marathon.prefix)
+
+            return
 
     def __onSyncCompleted(self, *args):
         self.__checkEvents()
@@ -122,6 +145,7 @@ class MarathonEventsController(IMarathonEventsController, Notifiable):
         self.clearNotification()
         self._eventsCache.onSyncCompleted -= self.__onSyncCompleted
         self._eventsCache.onProgressUpdated -= self.__onSyncCompleted
+        self._itemsCache.onSyncCompleted -= self.__updateInventoryVehsData
 
     def __findByPrefix(self, prefix):
         for marathon in self.__marathons:
@@ -228,6 +252,9 @@ class MarathonEvent(object):
         wrongVehicleLevel = vehicle.level < self.data.minVehicleLevel
         return MARATHON_WARNING.WRONG_VEH_TYPE if wrongVehicleLevel else ''
 
+    def setVehicleObtained(self, obtained):
+        self.__vehInInventory = obtained
+
     def isVehicleObtained(self):
         return self.__vehInInventory
 
@@ -328,7 +355,7 @@ class MarathonEvent(object):
         else:
             self.__group = None
         tokens = self.getTokensData(prefix=self.data.tokenPrefix).keys()
-        self.__vehInInventory = any((t in tokens for t in self.data.awardTokens))
+        self.setVehicleObtained(any((t in tokens for t in self.data.awardTokens)))
         return
 
     def getClosestStatusUpdateTime(self):
@@ -341,6 +368,10 @@ class MarathonEvent(object):
         if self.__state == MARATHON_STATE.FINISHED:
             _, timeLeft = self.__getGroupTimeInterval()
             return timeLeft
+
+    def showRewardVideo(self):
+        if self.isVehicleObtained() and self.data.showRewardVideo and not AccountSettings.getFilter(MARATHON_REWARD_WAS_SHOWN):
+            showMarathonReward(self.data.vehicleID)
 
     def __marathonFilterFunc(self, q):
         return q.getID().startswith(self.prefix)
@@ -373,7 +404,7 @@ class MarathonEvent(object):
             return ''
         if self.__state not in MARATHON_STATE.ENABLED_STATE:
             return ''
-        if self.__vehInInventory:
+        if self.isVehicleObtained():
             return self.data.icons.okIcon
         if self.__state == MARATHON_STATE.NOT_STARTED:
             return self.data.icons.timeIcon

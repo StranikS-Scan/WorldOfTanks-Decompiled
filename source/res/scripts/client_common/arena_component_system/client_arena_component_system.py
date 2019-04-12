@@ -7,7 +7,7 @@ from debug_utils import LOG_ERROR
 import Event
 from arena_sync_object import ArenaSyncObject
 from svarog_script.py_component import Component
-from svarog_script.py_component_system import ComponentSystem
+from svarog_script.script_game_object import ScriptGameObject
 
 class ClientArenaComponent(Component):
 
@@ -36,10 +36,10 @@ class ClientArenaComponent(Component):
         return self._componentSystem().getSyncDataObjectData(syncDataObjectType, key)
 
 
-class ClientArenaComponentSystem(ComponentSystem):
+class ClientArenaComponentSystem(ScriptGameObject):
 
     def __init__(self, arena, bonusType, arenaType):
-        ComponentSystem.__init__(self)
+        ScriptGameObject.__init__(self, 0)
         self.bonusType = bonusType
         self.arenaType = arenaType
         self.arena = weakref.ref(arena)
@@ -50,7 +50,7 @@ class ClientArenaComponentSystem(ComponentSystem):
             self.__syncDataObjects[k] = ArenaSyncObject()
 
     def destroy(self):
-        ComponentSystem.destroy(self)
+        ScriptGameObject.destroy(self)
         self._onUpdate.clear()
         self.__syncDataObjects.clear()
 

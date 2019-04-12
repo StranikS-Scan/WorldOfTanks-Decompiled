@@ -198,6 +198,12 @@ class IHangarSpace(object):
     def getCentralPointForArea(self, areaID):
         raise NotImplementedError
 
+    def getAnchorParams(self, slotId, areaId, regionId):
+        raise NotImplementedError
+
+    def updateAnchorsParams(self, *args):
+        raise NotImplementedError
+
 
 class IRaresCache(object):
     onTextReceived = None

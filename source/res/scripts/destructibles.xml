@@ -5693,8 +5693,19 @@
       <filename>	content/Environment/hd_envAF_006_BarellFuel/normal/lod1/hd_envAF_006_BarellFuel3.model	</filename>
       <health>	14	</health>
       <decayEffect>	none	</decayEffect>
-      <effect>	inf_envAF_006_BarrelFuel_02_03	</effect>
-      <hitEffect>	inf_envAF_006_BarrelFuel_02_03	</hitEffect>
+      <effect>	hd_envAF_006_BarellFuel3	</effect>
+      <hitEffect>	hd_envAF_006_BarellFuel3	</hitEffect>
+      <effectHP>	HP_module0	</effectHP>
+      <effectScale>	1	</effectScale>
+      <matName>	n_metal0	</matName>
+      <lifetimeEffect>	none	</lifetimeEffect>
+    </entry>
+    <entry>
+      <filename>	content/Environment/hd_envAF_006_BarellFuel/normal/lod0/hd_envAF_006_BarellFuel3.model	</filename>
+      <health>	14	</health>
+      <decayEffect>	none	</decayEffect>
+      <effect>	hd_envAF_006_BarellFuel3	</effect>
+      <hitEffect>	hd_envAF_006_BarellFuel3	</hitEffect>
       <effectHP>	HP_module0	</effectHP>
       <effectScale>	1	</effectScale>
       <matName>	n_metal0	</matName>
@@ -5728,17 +5739,6 @@
       <decayEffect>	none	</decayEffect>
       <effect>	inf_envAF_006_BarrelFuel_02_04	</effect>
       <hitEffect>	inf_envAF_006_BarrelFuel_02_04	</hitEffect>
-      <effectHP>	HP_module0	</effectHP>
-      <effectScale>	1	</effectScale>
-      <matName>	n_metal0	</matName>
-      <lifetimeEffect>	none	</lifetimeEffect>
-    </entry>
-    <entry>
-      <filename>	content/Environment/hd_envAF_006_BarellFuel/normal/lod0/hd_envAF_006_BarellFuel3.model	</filename>
-      <health>	14	</health>
-      <decayEffect>	none	</decayEffect>
-      <effect>	inf_envAF_006_BarrelFuel_02_05	</effect>
-      <hitEffect>	inf_envAF_006_BarrelFuel_02_05	</hitEffect>
       <effectHP>	HP_module0	</effectHP>
       <effectScale>	1	</effectScale>
       <matName>	n_metal0	</matName>
@@ -13266,28 +13266,17 @@
       <effectHP>	HP_module0	</effectHP>
       <effectScale>	1	</effectScale>
       <matName>	n_metal0	</matName>
-      <entry>
-        <filename>	content/GatesAndFences/hd_gaf_SU_011_StarFence/normal/lod0/hd_gaf_SU_011_StarFence_End.model	</filename>
-        <health>	1	</health>
-        <decayEffect>	none	</decayEffect>
-        <effect>	hd_gaf_SU_011_StarFence_End	</effect>
-        <hitEffect>	hd_gaf_SU_011_StarFence_End	</hitEffect>
-        <effectHP>	HP_module0	</effectHP>
-        <effectScale>	1	</effectScale>
-        <matName>	n_metal0	</matName>
-        <lifetimeEffect>	none	</lifetimeEffect>
-      </entry>
-      <entry>
-        <filename>	content/GatesAndFences/hd_gaf_SU_011_StarFence/normal/lod0/hd_gaf_SU_011_StarFence_Tile.model	</filename>
-        <health>	1	</health>
-        <decayEffect>	none	</decayEffect>
-        <effect>	hd_gaf_SU_011_StarFence_Tile	</effect>
-        <hitEffect>	hd_gaf_SU_011_StarFence_Tile	</hitEffect>
-        <effectHP>	HP_module0	</effectHP>
-        <effectScale>	1	</effectScale>
-        <matName>	n_metal0	</matName>
-        <lifetimeEffect>	none	</lifetimeEffect>
-      </entry>
+      <lifetimeEffect>	none	</lifetimeEffect>
+    </entry>
+    <entry>
+      <filename>	content/GatesAndFences/hd_gaf_SU_011_StarFence/normal/lod0/hd_gaf_SU_011_StarFence_Tile.model	</filename>
+      <health>	1	</health>
+      <decayEffect>	none	</decayEffect>
+      <effect>	hd_gaf_SU_011_StarFence_Tile	</effect>
+      <hitEffect>	hd_gaf_SU_011_StarFence_Tile	</hitEffect>
+      <effectHP>	HP_module0	</effectHP>
+      <effectScale>	1	</effectScale>
+      <matName>	n_metal0	</matName>
       <lifetimeEffect>	none	</lifetimeEffect>
     </entry>
     <entry>
@@ -13718,6 +13707,17 @@
     </entry>
     <entry>
       <filename>	content/Environment/hd_env_SU_070_RoadSigns/normal/lod0/hd_env_SU_070_RoadSigns_21.model	</filename>
+      <health>	5	</health>
+      <decayEffect>	none	</decayEffect>
+      <effect>	hd_env_UNI_055_GardenBench	</effect>
+      <hitEffect>	hd_env_UNI_055_GardenBench	</hitEffect>
+      <effectHP>	HP_module0	</effectHP>
+      <effectScale>	1	</effectScale>
+      <matName>	n_wood0	</matName>
+      <lifetimeEffect>	none	</lifetimeEffect>
+    </entry>
+    <entry>
+      <filename>	content/Environment/hd_env_SU_070_RoadSigns/normal/lod0/hd_env_SU_070_RoadSigns_22.model	</filename>
       <health>	5	</health>
       <decayEffect>	none	</decayEffect>
       <effect>	hd_env_UNI_055_GardenBench	</effect>
@@ -14714,6 +14714,16 @@
       <matName>	n_metal0	</matName>
       <lifetimeEffect>	none	</lifetimeEffect>
     </entry>
+    <entry>
+      <filename>	content/Buildings/hd_bld_EU_258_PMill/normal/lod0/hd_bld_EU_258_PMill_01_anim.model	</filename>
+      <health>	25	</health>
+      <decayEffect>	none	</decayEffect>
+      <effect>	inf_bld_EU_258_PMill	</effect>
+      <effectHP>	HP_module0	</effectHP>
+      <effectScale>	1.000000	</effectScale>
+      <matName>	n_wood0	</matName>
+      <lifetimeEffect>	none	</lifetimeEffect>
+    </entry>
   </fragiles>
   <structures>
     <entry>
@@ -14724,6 +14734,7 @@
           <health>	40	</health>
           <decayEffect>	none	</decayEffect>
           <ramEffect>	none	</ramEffect>
+          <hitEffect>	none	</hitEffect>
           <effectHP>	HP_module_7	</effectHP>
           <effectScale>	1	</effectScale>
         </module>
@@ -14732,6 +14743,7 @@
           <health>	40	</health>
           <decayEffect>	none	</decayEffect>
           <ramEffect>	none	</ramEffect>
+          <hitEffect>	none	</hitEffect>
           <effectHP>	HP_module_0	</effectHP>
           <effectScale>	1	</effectScale>
         </module>
@@ -14740,6 +14752,7 @@
           <health>	40	</health>
           <decayEffect>	none	</decayEffect>
           <ramEffect>	none	</ramEffect>
+          <hitEffect>	none	</hitEffect>
           <effectHP>	HP_module_1	</effectHP>
           <effectScale>	1	</effectScale>
         </module>
@@ -14748,6 +14761,7 @@
           <health>	40	</health>
           <decayEffect>	none	</decayEffect>
           <ramEffect>	none	</ramEffect>
+          <hitEffect>	none	</hitEffect>
           <effectHP>	HP_module_2	</effectHP>
           <effectScale>	1	</effectScale>
         </module>
@@ -14756,6 +14770,7 @@
           <health>	40	</health>
           <decayEffect>	none	</decayEffect>
           <ramEffect>	none	</ramEffect>
+          <hitEffect>	none	</hitEffect>
           <effectHP>	HP_module_3	</effectHP>
           <effectScale>	1	</effectScale>
         </module>
@@ -14764,6 +14779,7 @@
           <health>	40	</health>
           <decayEffect>	none	</decayEffect>
           <ramEffect>	none	</ramEffect>
+          <hitEffect>	none	</hitEffect>
           <effectHP>	HP_module_4	</effectHP>
           <effectScale>	1	</effectScale>
         </module>
@@ -14772,6 +14788,7 @@
           <health>	40	</health>
           <decayEffect>	none	</decayEffect>
           <ramEffect>	none	</ramEffect>
+          <hitEffect>	none	</hitEffect>
           <effectHP>	HP_module_5	</effectHP>
           <effectScale>	1	</effectScale>
         </module>
@@ -14780,6 +14797,7 @@
           <health>	40	</health>
           <decayEffect>	none	</decayEffect>
           <ramEffect>	none	</ramEffect>
+          <hitEffect>	none	</hitEffect>
           <effectHP>	HP_module_6	</effectHP>
           <effectScale>	1	</effectScale>
         </module>

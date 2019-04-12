@@ -28,9 +28,6 @@ class SquadWindow(SquadWindowMeta):
     def squadViewComponent(self):
         return self.components.get(self._getSquadViewAlias())
 
-    def _getSquadViewAlias(self):
-        return PREBATTLE_ALIASES.SQUAD_VIEW_PY
-
     def onUnitRejoin(self):
         self.as_enableWndCloseBtnS(not self.prbEntity.hasLockedState())
 
@@ -75,6 +72,9 @@ class SquadWindow(SquadWindowMeta):
     def _showLeadershipNotification(self):
         pass
 
+    def _getSquadViewAlias(self):
+        return PREBATTLE_ALIASES.SQUAD_VIEW_PY
+
     def __handleSquadWindowHide(self, _):
         self.destroy()
 
@@ -86,11 +86,11 @@ class SquadWindow(SquadWindowMeta):
 
 class EventSquadWindow(SquadWindow):
 
-    def _getTitle(self):
-        return ''.join((i18n.makeString(MENU.HEADERBUTTONS_BATTLE_TYPES_SQUAD), i18n.makeString(MENU.HEADERBUTTONS_BATTLE_TYPES_SQUAD_EVENT)))
-
     def getPrbType(self):
         return PREBATTLE_TYPE.EVENT
+
+    def _getTitle(self):
+        return ''.join((i18n.makeString(MENU.HEADERBUTTONS_BATTLE_TYPES_SQUAD), i18n.makeString(MENU.HEADERBUTTONS_BATTLE_TYPES_SQUAD_EVENT)))
 
     def _getSquadViewAlias(self):
         return PREBATTLE_ALIASES.EVENT_SQUAD_VIEW_PY
@@ -98,11 +98,11 @@ class EventSquadWindow(SquadWindow):
 
 class EpicSquadWindow(SquadWindow):
 
-    def _getTitle(self):
-        return ''.join((i18n.makeString(MENU.HEADERBUTTONS_BATTLE_TYPES_SQUAD), i18n.makeString(MENU.HEADERBUTTONS_BATTLE_TYPES_SQUAD_EPIC)))
-
     def getPrbType(self):
         return PREBATTLE_TYPE.EPIC
+
+    def _getTitle(self):
+        return ''.join((i18n.makeString(MENU.HEADERBUTTONS_BATTLE_TYPES_SQUAD), i18n.makeString(MENU.HEADERBUTTONS_BATTLE_TYPES_SQUAD_EPIC)))
 
     def _getSquadViewAlias(self):
         return PREBATTLE_ALIASES.EPIC_SQUAD_VIEW_PY

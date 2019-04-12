@@ -1,22 +1,18 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/shared/battle_timers.py
-import BigWorld
 import SoundGroups
 import CommandMapping
-from constants import ARENA_PERIOD
+from constants import ARENA_GUI_TYPE
 from gui.Scaleform.daapi.view.meta.BattleTimerMeta import BattleTimerMeta
 from gui.Scaleform.daapi.view.meta.PrebattleTimerMeta import PrebattleTimerMeta
-from gui.Scaleform.locale.INGAME_GUI import INGAME_GUI
-from gui.battle_control.arena_info.interfaces import IArenaVehiclesController
-from gui.battle_control.battle_constants import COUNTDOWN_STATE, BATTLE_CTRL_ID
+from gui.Scaleform.genConsts.PREBATTLE_TIMER import PREBATTLE_TIMER
+from gui.impl import backport
+from gui.impl.gen import R
+from gui.battle_control.battle_constants import COUNTDOWN_STATE
 from gui.battle_control.controllers.period_ctrl import IAbstractPeriodView
 from helpers import dependency
-from helpers import i18n
 from skeletons.gui.battle_session import IBattleSessionProvider
-from gui.Scaleform.locale.PREBATTLE import PREBATTLE
 from gui.shared.utils.key_mapping import getReadableKey
-from helpers.i18n import makeString as _ms
-_TIMER_ANIMATION_SHIFT = 0.4
 
 class _WWISE_EVENTS(object):
     BATTLE_ENDING_SOON = 'time_buzzer_02'
@@ -27,81 +23,47 @@ class _WWISE_EVENTS(object):
 
 
 _BATTLE_END_TIME = 0
-_STATE_TO_MESSAGE = {COUNTDOWN_STATE.WAIT: INGAME_GUI.TIMER_WAITING,
- COUNTDOWN_STATE.START: INGAME_GUI.TIMER_STARTING,
- COUNTDOWN_STATE.STOP: INGAME_GUI.TIMER_STARTED}
 
-class PreBattleTimer(PrebattleTimerMeta, IAbstractPeriodView, IArenaVehiclesController):
-    sessionProvider = dependency.descriptor(IBattleSessionProvider)
+class PreBattleTimer(PrebattleTimerMeta):
 
     def __init__(self):
-        self._state = COUNTDOWN_STATE.WAIT
-        self._battleTypeStr = None
-        self.__timeLeft = None
-        self.__callbackID = None
-        self.__arenaPeriod = None
+        self.__isPMBattleProgressEnabled = False
+        self.__isRankedBattle = False
         self.__sounds = dict()
         super(PreBattleTimer, self).__init__()
-        return
-
-    def onShowFlag(self):
-        self.__callWWISE(_WWISE_EVENTS.FLAG_APPEAR)
-
-    def onHideFlag(self):
-        self.__callWWISE(_WWISE_EVENTS.FLAG_DISAPPEAR)
-
-    def getControllerID(self):
-        return BATTLE_CTRL_ID.GUI
-
-    def updateBattleCtx(self, battleCtx):
-        self._battleTypeStr = battleCtx.getArenaDescriptionString(isInBattle=False)
-        self.as_setMessageS(self._getMessage())
-        self.as_setWinConditionTextS(battleCtx.getArenaWinString())
-
-    def setPeriod(self, period):
-        if self.__arenaPeriod is None and period == ARENA_PERIOD.BATTLE:
-            self.as_hideAllS(False)
-        self.__arenaPeriod = period
-        return
-
-    def setCountdown(self, state, timeLeft):
-        self.__timeLeft = timeLeft
-        if self._state != state:
-            self._state = state
-            self.as_setMessageS(self._getMessage())
-        if state == COUNTDOWN_STATE.WAIT:
-            self.__clearTimeShiftCallback()
-            self.as_setTimerS(0)
-        else:
-            self.__setTimeShitCallback()
-
-    def hideCountdown(self, state, speed):
-        self.as_setMessageS(i18n.makeString(_STATE_TO_MESSAGE[state]))
-        self.__clearTimeShiftCallback()
-        self.as_hideAllS(speed != 0)
-
-    def _getMessage(self):
-        if self._state == COUNTDOWN_STATE.WAIT:
-            msg = _STATE_TO_MESSAGE[self._state]
-        else:
-            msg = self._battleTypeStr
-        return i18n.makeString(msg)
 
     def _populate(self):
         super(PreBattleTimer, self)._populate()
-        self.sessionProvider.addArenaCtrl(self)
+        self.__isRankedBattle = self.sessionProvider.arenaVisitor.getArenaGuiType() == ARENA_GUI_TYPE.RANKED
+        if not self.__isRankedBattle:
+            self.__isPMBattleProgressEnabled = self.lobbyContext.getServerSettings().isPMBattleProgressEnabled()
+            qProgressCtrl = self.sessionProvider.shared.questProgress
+            if qProgressCtrl is not None and self.__isPMBattleProgressEnabled:
+                qProgressCtrl.onFullConditionsUpdate += self._onPersonalQuestConditionsUpdate
+                qProgressCtrl.onQuestProgressInited += self._onPersonalQuestConditionsUpdate
+                if qProgressCtrl.isInited():
+                    self._onPersonalQuestConditionsUpdate()
         CommandMapping.g_instance.onMappingChanged += self.__onMappingChanged
         self.__onMappingChanged()
+        return
 
-    def _dispose(self):
-        for sound in self.__sounds.values():
-            sound.stop()
+    def onShowInfo(self):
+        self.__callWWISE(_WWISE_EVENTS.FLAG_APPEAR)
 
-        self.__sounds.clear()
-        self.sessionProvider.removeArenaCtrl(self)
-        self.__clearTimeShiftCallback()
-        CommandMapping.g_instance.onMappingChanged -= self.__onMappingChanged
-        super(PreBattleTimer, self)._dispose()
+    def onHideInfo(self):
+        self.__callWWISE(_WWISE_EVENTS.FLAG_DISAPPEAR)
+
+    def _onPersonalQuestConditionsUpdate(self, *args):
+        questProgress = self.sessionProvider.shared.questProgress
+        if questProgress.hasQuestsToPerform():
+            self.as_addInfoS(PREBATTLE_TIMER.QP_ANIM_FLAG_LINKAGE, questProgress.getQuestShortInfoData())
+
+    def __onMappingChanged(self, *args):
+        msg = ''
+        if self.__isPMBattleProgressEnabled and not self.__isRankedBattle:
+            msg = backport.text(R.strings.prebattle.battleProgress.hint(), hintKey=getReadableKey(CommandMapping.CMD_QUEST_PROGRESS_SHOW))
+        if msg:
+            self.as_setInfoHintS(msg)
 
     def __callWWISE(self, wwiseEventName):
         sound = SoundGroups.g_instance.getSound2D(wwiseEventName)
@@ -110,24 +72,18 @@ class PreBattleTimer(PrebattleTimerMeta, IAbstractPeriodView, IArenaVehiclesCont
             self.__sounds[wwiseEventName] = sound
         return
 
-    def __setTimeShitCallback(self):
-        self.__callbackID = BigWorld.callback(_TIMER_ANIMATION_SHIFT, self.__updateTimer)
+    def _dispose(self):
+        for sound in self.__sounds.values():
+            sound.stop()
 
-    def __updateTimer(self):
-        self.__callbackID = None
-        if self.__timeLeft > 0:
-            timeLeftWithShift = self.__timeLeft - 1
-            self.as_setTimerS(timeLeftWithShift)
+        self.__sounds.clear()
+        CommandMapping.g_instance.onMappingChanged -= self.__onMappingChanged
+        qProgressCtrl = self.sessionProvider.shared.questProgress
+        if qProgressCtrl is not None and self.__isPMBattleProgressEnabled:
+            qProgressCtrl.onFullConditionsUpdate -= self._onPersonalQuestConditionsUpdate
+            qProgressCtrl.onQuestProgressInited -= self._onPersonalQuestConditionsUpdate
+        super(PreBattleTimer, self)._dispose()
         return
-
-    def __clearTimeShiftCallback(self):
-        if self.__callbackID is not None:
-            BigWorld.cancelCallback(self.__callbackID)
-            self.__callbackID = None
-        return
-
-    def __onMappingChanged(self, *args):
-        self.as_setQuestHintS(_ms(PREBATTLE.BATTLEPROGRESS_HINT, hintKey=getReadableKey(CommandMapping.CMD_QUEST_PROGRESS_SHOW)))
 
 
 class BattleTimer(BattleTimerMeta, IAbstractPeriodView):

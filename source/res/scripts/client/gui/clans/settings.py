@@ -137,6 +137,10 @@ def getNoClanEmblem32x32():
     return _getNoClanEmblemPath(32)
 
 
+def getClanRoleName(role):
+    return CLAN_MEMBERS[role] if role in CLAN_MEMBERS else ''
+
+
 def _getDefaultEmblemPath(size):
     return '%s/%s%dx%d.png' % (DEFAULT_EMBLEM_PATH,
      DEFAULT_EMBLEM_NAME_PREFIX,

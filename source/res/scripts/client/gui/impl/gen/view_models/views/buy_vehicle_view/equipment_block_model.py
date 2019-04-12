@@ -2,8 +2,8 @@
 # Embedded file name: scripts/client/gui/impl/gen/view_models/views/buy_vehicle_view/equipment_block_model.py
 from gui.impl.gen import R
 from frameworks.wulf import ViewModel
+from gui.impl.gen.view_models.ui_kit.button_icon_text_model import ButtonIconTextModel
 from gui.impl.gen.view_models.ui_kit.list_model import ListModel
-from gui.impl.gen.view_models.ui_kit.vehicle_action_btn_model import VehicleActionBtnModel
 from gui.impl.gen.view_models.ui_kit.vehicle_btn_model import VehicleBtnModel
 from gui.impl.gen.view_models.views.buy_vehicle_view.additional_equipment_slot_model import AdditionalEquipmentSlotModel
 
@@ -130,8 +130,8 @@ class EquipmentBlockModel(ViewModel):
         self._addViewModelProperty('ammo', AdditionalEquipmentSlotModel())
         self._addViewModelProperty('slot', AdditionalEquipmentSlotModel())
         self._addViewModelProperty('vehicleBtn', VehicleBtnModel())
-        self._addViewModelProperty('vehicleRentBtn', VehicleActionBtnModel())
-        self._addViewModelProperty('vehicleTradeInBtn', VehicleActionBtnModel())
+        self._addViewModelProperty('vehicleRentBtn', ButtonIconTextModel())
+        self._addViewModelProperty('vehicleTradeInBtn', ButtonIconTextModel())
         self._addBoolProperty('buyBtnIsEnabled', False)
         self._addBoolProperty('tradeInIsEnabled', False)
         self._addNumberProperty('tradeOffVehicleIntCD', -1)

@@ -240,6 +240,8 @@ _ACHIEVEMENTS_BY_NAME = {(_AB.TOTAL, 'warrior'): _CustomAchieveFactory.get(_as.W
  (_AB.TOTAL, 'RP2018secondmed'): _AchieveFactory.get(_as.ReferralProgramSingleAchievement),
  (_AB.TOTAL, 'RP2018thirdmed'): _AchieveFactory.get(_as.ReferralProgramSingleAchievement),
  (_AB.TOTAL, 'RP2018sergeant'): _CustomAchieveFactory.get(_as.ReferralProgramClassAchievement),
+ (_AB.TOTAL, 'rankedDivisionFighter'): _CustomAchieveFactory.get(_as.RankedDivisionFighterAchievement),
+ (_AB.TOTAL, 'rankedStayingPower'): _CustomAchieveFactory.get(_as.RankedStayingPowerAchievement),
  (_AB.TEAM_7X7, 'geniusForWarMedal'): _CustomAchieveFactory.get(_as.GeniusForWarAchievement),
  (_AB.TEAM_7X7, 'wolfAmongSheepMedal'): _CustomAchieveFactory.get(_as.WolfAmongSheepAchievement),
  (_AB.TEAM_7X7, 'fightingReconnaissanceMedal'): _CustomAchieveFactory.get(_as.FightingReconnaissanceAchievement),

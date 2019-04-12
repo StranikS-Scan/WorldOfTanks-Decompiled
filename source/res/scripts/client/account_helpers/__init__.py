@@ -12,10 +12,6 @@ def __checkAccountAttr(attrs, attrID):
     return attrs is not None and attrs & attrID != 0
 
 
-def isPremiumAccount(attrs):
-    return __checkAccountAttr(attrs, ACCOUNT_ATTR.PREMIUM)
-
-
 def isMoneyTransfer(attrs):
     return __checkAccountAttr(attrs, ACCOUNT_ATTR.TRADING)
 

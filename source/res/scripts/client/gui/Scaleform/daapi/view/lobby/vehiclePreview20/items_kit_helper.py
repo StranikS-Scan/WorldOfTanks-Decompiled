@@ -32,7 +32,7 @@ _NUM_REGULAR_EQUIPMENT_SLOTS = NUM_EQUIPMENT_SLOTS_BY_TYPE[EQUIPMENT_TYPES.regul
 _UNLIMITED_ITEMS_COUNT = -1
 _ANY_ITEM_TYPE = {v for _, v in ItemPackType.getIterator()} - set(ItemPackTypeGroup.CREW)
 _NATIVE_ITEM_TYPE = set(itertools.chain(ItemPackTypeGroup.VEHICLE, ItemPackTypeGroup.ITEM))
-_CUSTOMIZATION_ITEM_TYPE = set(itertools.chain(ItemPackTypeGroup.STYLE, ItemPackTypeGroup.CAMOUFLAGE, ItemPackTypeGroup.PAINT, ItemPackTypeGroup.DECAL, ItemPackTypeGroup.MODIFICATION))
+_CUSTOMIZATION_ITEM_TYPE = set(itertools.chain(ItemPackTypeGroup.STYLE, ItemPackTypeGroup.CAMOUFLAGE, ItemPackTypeGroup.PAINT, ItemPackTypeGroup.DECAL, ItemPackTypeGroup.PROJECTION_DECAL, ItemPackTypeGroup.PERSONAL_NUMBER, ItemPackTypeGroup.MODIFICATION))
 _CUSTOMIZATION_TYPES_MAP = {ItemPackType.STYLE: CustomizationType.STYLE,
  ItemPackType.CAMOUFLAGE_ALL: CustomizationType.CAMOUFLAGE,
  ItemPackType.CAMOUFLAGE_SUMMER: CustomizationType.CAMOUFLAGE,
@@ -44,6 +44,8 @@ _CUSTOMIZATION_TYPES_MAP = {ItemPackType.STYLE: CustomizationType.STYLE,
  ItemPackType.PAINT_DESERT: CustomizationType.PAINT,
  ItemPackType.DECAL_1: CustomizationType.DECAL,
  ItemPackType.DECAL_2: CustomizationType.DECAL,
+ ItemPackType.PROJECTION_DECAL: CustomizationType.PROJECTION_DECAL,
+ ItemPackType.PERSONAL_NUMBER: CustomizationType.PERSONAL_NUMBER,
  ItemPackType.MODIFICATION: CustomizationType.MODIFICATION}
 _BOOSTER_ITEM_TYPE = set(ItemPackTypeGroup.GOODIE)
 _UNCOUNTABLE_ITEM_TYPE = {ItemPackType.CUSTOM_PREMIUM,
@@ -54,7 +56,6 @@ _PACK_ITEMS_SORT_ORDER = list(itertools.chain(ItemPackTypeGroup.CUSTOM, ItemPack
 _TOOLTIP_TYPE = {ItemPackType.ITEM_DEVICE: TOOLTIPS_CONSTANTS.SHOP_20_MODULE,
  ItemPackType.ITEM_EQUIPMENT: TOOLTIPS_CONSTANTS.SHOP_20_MODULE,
  ItemPackType.ITEM_SHELL: TOOLTIPS_CONSTANTS.SHOP_20_SHELL,
- ItemPackType.ITEM_BATTLE_BOOSTER: TOOLTIPS_CONSTANTS.SHOP_20_BATTLE_BOOSTER,
  ItemPackType.GOODIE_CREDITS: TOOLTIPS_CONSTANTS.SHOP_20_BOOSTER,
  ItemPackType.GOODIE_EXPERIENCE: TOOLTIPS_CONSTANTS.SHOP_20_BOOSTER,
  ItemPackType.GOODIE_CREW_EXPERIENCE: TOOLTIPS_CONSTANTS.SHOP_20_BOOSTER,
@@ -71,6 +72,8 @@ _TOOLTIP_TYPE = {ItemPackType.ITEM_DEVICE: TOOLTIPS_CONSTANTS.SHOP_20_MODULE,
  ItemPackType.PAINT_WINTER: TOOLTIPS_CONSTANTS.SHOP_20_CUSTOMIZATION_ITEM,
  ItemPackType.DECAL_1: TOOLTIPS_CONSTANTS.SHOP_20_CUSTOMIZATION_ITEM,
  ItemPackType.DECAL_2: TOOLTIPS_CONSTANTS.SHOP_20_CUSTOMIZATION_ITEM,
+ ItemPackType.PROJECTION_DECAL: TOOLTIPS_CONSTANTS.SHOP_20_CUSTOMIZATION_ITEM,
+ ItemPackType.PERSONAL_NUMBER: TOOLTIPS_CONSTANTS.SHOP_20_CUSTOMIZATION_ITEM,
  ItemPackType.MODIFICATION: TOOLTIPS_CONSTANTS.SHOP_20_CUSTOMIZATION_ITEM,
  ItemPackType.CAMOUFLAGE_ALL: TOOLTIPS_CONSTANTS.SHOP_20_CUSTOMIZATION_ITEM,
  ItemPackType.CAMOUFLAGE_DESERT: TOOLTIPS_CONSTANTS.SHOP_20_CUSTOMIZATION_ITEM,
@@ -266,7 +269,7 @@ def showItemTooltip(toolTipMgr, rawItem, item):
     if tooltipType is not None:
         toolTipMgr.onCreateTypedTooltip(tooltipType, [rawItem.id], 'INFO')
     else:
-        header = getItemTitle(rawItem, item)
+        header = getItemTitle(rawItem, item).decode('utf-8').capitalize().encode('utf-8')
         body = getItemDescription(rawItem, item)
         tooltip = makeTooltip(header, body)
         toolTipMgr.onCreateComplexTooltip(tooltip, 'INFO')

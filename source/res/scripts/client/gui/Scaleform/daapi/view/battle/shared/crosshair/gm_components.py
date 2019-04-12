@@ -4,6 +4,7 @@ import logging
 from collections import namedtuple
 import GUI
 from gui.Scaleform.daapi.view.battle.shared.crosshair import settings
+from gui.Scaleform.flash_wrapper import InputKeyMode
 from gui.battle_control.battle_constants import CROSSHAIR_VIEW_ID
 from soft_exception import SoftException
 _logger = logging.getLogger(__name__)
@@ -146,7 +147,7 @@ class DefaultGunMarkerComponent(GunMarkerComponent):
 
     def _createView(self, container):
         view = GUI.WGCrosshairFlash(container.movie, settings.CROSSHAIR_ITEM_PATH_FORMAT.format(self._name), settings.CROSSHAIR_RADIUS_MC_NAME)
-        view.wg_inputKeyMode = 2
+        view.wg_inputKeyMode = InputKeyMode.NO_HANDLE
         view.focus = False
         view.moveFocus = False
         view.heightMode = 'PIXEL'
@@ -164,7 +165,7 @@ class SPGGunMarkerComponent(GunMarkerComponent):
 
     def _createView(self, container):
         view = GUI.WGSPGCrosshairFlash(container.movie, settings.CROSSHAIR_ITEM_PATH_FORMAT.format(self._name), settings.SPG_GUN_MARKER_ELEMENTS_COUNT)
-        view.wg_inputKeyMode = 2
+        view.wg_inputKeyMode = InputKeyMode.NO_HANDLE
         view.focus = False
         view.moveFocus = False
         view.heightMode = 'PIXEL'

@@ -1,9 +1,10 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/tutorial/control/listener.py
-from gui.app_loader import g_appLoader, settings
-_SPACE_ID = settings.GUI_GLOBAL_SPACE_ID
+from helpers import dependency
+from skeletons.gui.app_loader import IAppLoader, GuiGlobalSpaceID
 
 class AppLoaderListener(object):
+    appLoader = dependency.descriptor(IAppLoader)
 
     def __init__(self):
         super(AppLoaderListener, self).__init__()
@@ -12,25 +13,25 @@ class AppLoaderListener(object):
 
     def start(self, loader):
         self.__loader = loader
-        g_appLoader.onGUISpaceEntered += self.__onGUISpaceEntered
-        g_appLoader.onGUISpaceLeft += self.__onGUISpaceLeft
+        self.appLoader.onGUISpaceEntered += self.__onGUISpaceEntered
+        self.appLoader.onGUISpaceLeft += self.__onGUISpaceLeft
 
     def stop(self):
-        g_appLoader.onGUISpaceEntered -= self.__onGUISpaceEntered
-        g_appLoader.onGUISpaceLeft -= self.__onGUISpaceLeft
+        self.appLoader.onGUISpaceEntered -= self.__onGUISpaceEntered
+        self.appLoader.onGUISpaceLeft -= self.__onGUISpaceLeft
 
     def __onGUISpaceEntered(self, spaceID):
-        if spaceID == _SPACE_ID.LOGIN:
+        if spaceID == GuiGlobalSpaceID.LOGIN:
             self.__loader.goToLogin()
-        elif spaceID == _SPACE_ID.LOBBY:
+        elif spaceID == GuiGlobalSpaceID.LOBBY:
             self.__loader.goToLobby()
-        elif spaceID == _SPACE_ID.BATTLE_LOADING:
+        elif spaceID == GuiGlobalSpaceID.BATTLE_LOADING:
             self.__loader.goToBattleLoading()
-        elif spaceID == _SPACE_ID.BATTLE:
+        elif spaceID == GuiGlobalSpaceID.BATTLE:
             self.__loader.goToBattle()
 
     def __onGUISpaceLeft(self, spaceID):
-        if spaceID == _SPACE_ID.LOBBY:
+        if spaceID == GuiGlobalSpaceID.LOBBY:
             self.__loader.leaveLobby()
-        elif spaceID == _SPACE_ID.BATTLE:
+        elif spaceID == GuiGlobalSpaceID.BATTLE:
             self.__loader.leaveBattle()

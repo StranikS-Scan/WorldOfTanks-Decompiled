@@ -266,8 +266,7 @@ class HideWindowEvent(HasCtxEvent):
     HIDE_BROWSER_WINDOW = 'hideBrowserWindow'
     HIDE_BOOSTERS_WINDOW = 'hideBoostersWindow'
     HIDE_VEHICLE_PREVIEW = 'hideVehiclePreview'
-    HIDE_BUTTON_TEST_DEMO = 'hideButtonTestDemo'
-    HIDE_BUTTON_TEST_DEMO1 = 'hideButtonTestDemo1'
+    HIDE_OVERLAY_BROWSER_VIEW = 'hideOverlayBrowserView'
 
 
 class HidePopoverEvent(HasCtxEvent):
@@ -285,6 +284,7 @@ class LobbySimpleEvent(HasCtxEvent):
     NOTIFY_CURSOR_DRAGGING = 'notifyCursorDragging'
     NOTIFY_SPACE_MOVED = 'notifySpaceMoved'
     PREMIUM_BOUGHT = 'premiumBought'
+    PREMIUM_XP_BONUS_CHANGED = 'premiumXPBonusChanged'
     WAITING_SHOWN = 'waitingShown'
     BATTLE_RESULTS_POSTED = 'battleResultsPosted'
 
@@ -648,7 +648,3 @@ class AdventCalendarEvent(HasCtxEvent):
 
 class ProgressiveRewardEvent(HasCtxEvent):
     WIDGET_WAS_SHOWN = 'progressiveWidgetWasShown'
-
-
-class HangarDogEvent(HasCtxEvent):
-    ON_BOWL_CLICKED = 'onDogBowlClicked'

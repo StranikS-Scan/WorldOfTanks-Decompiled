@@ -1372,11 +1372,18 @@ SYS_MESSAGE_TYPE = Enumeration('systemMessageType', ['serverReboot',
  'personalMissionFailed',
  'customizationChanged',
  'lootBoxesAutoOpenReward',
- 'progressiveReward'])
+ 'progressiveReward',
+ 'piggyBankSmashed',
+ 'blackMapRemoved'])
 SYS_MESSAGE_IMPORTANCE = Enumeration('systemMessageImportance', ['normal', 'high'])
 SM_REQUEST_PERSONAL_MESSAGES_FLAG = 1
 SM_REQUEST_SYSTEM_MESSAGES_FLAG = 2
 SM_REQUEST_INTERNAL_SYS_MESSAGES_FLAG = 4
+
+class MapRemovedFromBLReason(object):
+    MAP_DISABLED = 1
+    SLOT_DISABLED = 2
+
 
 def isMembersListSupported(channelInfo):
     if channelInfo is None:

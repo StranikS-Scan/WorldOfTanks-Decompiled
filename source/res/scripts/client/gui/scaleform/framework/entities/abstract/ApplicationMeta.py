@@ -13,6 +13,9 @@ class ApplicationMeta(BaseDAAPIComponent):
     def setSoundMgr(self, mgr):
         self._printOverrideError('setSoundMgr')
 
+    def setCursorMgr(self, mgr):
+        self._printOverrideError('setCursorMgr')
+
     def setContainerMgr(self, mgr):
         self._printOverrideError('setContainerMgr')
 

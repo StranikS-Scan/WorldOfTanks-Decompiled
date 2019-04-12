@@ -13,7 +13,7 @@ from account_helpers.AccountSettings import AccountSettings, AWARDS, SPEAKERS_DE
 from account_helpers.settings_core.settings_constants import SOUND
 from account_shared import getFairPlayViolationName
 from chat_shared import SYS_MESSAGE_TYPE
-from constants import EVENT_TYPE, INVOICE_ASSET
+from constants import EVENT_TYPE, INVOICE_ASSET, PREMIUM_TYPE
 from debug_utils import LOG_ERROR, LOG_DEBUG
 from dossiers2.custom.records import DB_ID_TO_RECORD
 from dossiers2.ui.layouts import PERSONAL_MISSIONS_GROUP
@@ -28,14 +28,13 @@ from gui.Scaleform.genConsts.RANKEDBATTLES_ALIASES import RANKEDBATTLES_ALIASES
 from gui.Scaleform.locale.DIALOGS import DIALOGS
 from gui.Scaleform.locale.MESSENGER import MESSENGER
 from gui.Scaleform.locale.SYSTEM_MESSAGES import SYSTEM_MESSAGES
-from gui.app_loader import g_appLoader
 from gui.gold_fish import isGoldFishActionActive, isTimeToShowGoldFishPromo
 from gui.impl.gen import R
 from gui.prb_control.entities.listener import IGlobalListener
 from gui.prb_control.settings import BATTLES_TO_SELECT_RANDOM_MIN_LIMIT
 from gui.ranked_battles import ranked_helpers
 from gui.server_events import events_dispatcher as quests_events, recruit_helper
-from gui.server_events.events_dispatcher import showLootboxesAward
+from gui.server_events.events_dispatcher import showLootboxesAward, showPiggyBankRewardWindow
 from gui.server_events.finders import PM_FINAL_TOKEN_QUEST_IDS_BY_OPERATION_ID, getBranchByOperationId, BRANCH_TO_OPERATION_IDS, CHAMPION_BADGES_BY_BRANCH
 from gui.shared import EVENT_BUS_SCOPE, g_eventBus, events
 from gui.shared.event_dispatcher import showProgressiveRewardAwardWindow
@@ -52,6 +51,7 @@ from messenger.formatters import TimeFormatter
 from messenger.formatters.service_channel import TelecomReceivedInvoiceFormatter
 from messenger.proto.events import g_messengerEvents
 from skeletons.account_helpers.settings_core import ISettingsCore
+from skeletons.gui.app_loader import IAppLoader
 from skeletons.gui.game_control import IAwardController, IRankedBattlesController, IBootcampController
 from skeletons.gui.goodies import IGoodiesCache
 from skeletons.gui.impl import IGuiLoader
@@ -91,7 +91,8 @@ class AwardController(IAwardController, IGlobalListener):
          SoundDeviceHandler(self),
          EliteWindowHandler(self),
          LootBoxByInvoiceHandler(self),
-         ProgressiveRewardHandler(self)]
+         ProgressiveRewardHandler(self),
+         PiggyBankOpenHandler(self)]
         super(AwardController, self).__init__()
         self.__delayedHandlers = []
         self.__isLobbyLoaded = False
@@ -340,6 +341,7 @@ class TokenQuestsWindowHandler(ServiceChannelHandler):
 
 class LootBoxByInvoiceHandler(ServiceChannelHandler):
     itemsCache = dependency.descriptor(IItemsCache)
+    appLoader = dependency.descriptor(IAppLoader)
 
     def __init__(self, awardCtrl):
         super(LootBoxByInvoiceHandler, self).__init__(SYS_MESSAGE_TYPE.invoiceReceived.index(), awardCtrl)
@@ -366,16 +368,37 @@ class LootBoxByInvoiceHandler(ServiceChannelHandler):
             self._showWindow(lootBoxes)
         return
 
-    @staticmethod
-    def _showWindow(lootBoxes):
+    @classmethod
+    def _showWindow(cls, lootBoxes):
         for lootBoxType, lootBoxInfo in lootBoxes.iteritems():
             lootboxesCount = lootBoxInfo.get('count', 0)
-            app = g_appLoader.getApp()
+            app = cls.appLoader.getApp()
             view = app.containerManager.getViewByKey(ViewKey(VIEW_ALIAS.LOBBY_HANGAR))
             if view is not None:
                 showLootboxesAward(lootboxId=lootBoxType, lootboxCount=lootboxesCount, isFree=lootBoxInfo['isFree'])
 
         return
+
+
+class PiggyBankOpenHandler(ServiceChannelHandler):
+    itemsCache = dependency.descriptor(IItemsCache)
+
+    def __init__(self, awardCtrl):
+        super(PiggyBankOpenHandler, self).__init__(SYS_MESSAGE_TYPE.piggyBankSmashed.index(), awardCtrl)
+
+    def _showAward(self, ctx):
+        if ctx[1].data:
+            data = ctx[1].data
+            credits_ = data.get('credits')
+            if credits_ and credits_ > 0:
+                self._showWindow(credits_, self.__isPremiumEnable())
+
+    @staticmethod
+    def _showWindow(credits_, isPremium):
+        showPiggyBankRewardWindow(credits_, isPremium)
+
+    def __isPremiumEnable(self):
+        return self.itemsCache.items.stats.isActivePremium(PREMIUM_TYPE.PLUS)
 
 
 class MarkByInvoiceHandler(ServiceChannelHandler):
@@ -385,6 +408,7 @@ class MarkByInvoiceHandler(ServiceChannelHandler):
 
     def _showAward(self, ctx):
         invoiceData = ctx[1].data
+        totalCount = 0
         if 'assetType' in invoiceData and invoiceData['assetType'] == INVOICE_ASSET.DATA:
             if 'data' in invoiceData:
                 data = invoiceData['data']
@@ -392,12 +416,13 @@ class MarkByInvoiceHandler(ServiceChannelHandler):
                     tokensDict = data['tokens']
                     for tokenName, tokenData in tokensDict.iteritems():
                         if tokenName.startswith('img:'):
-                            count = tokenData.get('count', 0)
-                            if count:
-                                self._showWindow(count)
+                            totalCount += tokenData.get('count', 0)
+
+        if totalCount:
+            self._showMessage(totalCount)
 
     @staticmethod
-    def _showWindow(tokenCount):
+    def _showMessage(tokenCount):
         SystemMessages.pushI18nMessage(SYSTEM_MESSAGES.TOKENS_NOTIFICATION_MARK_ACQUIRED, count=tokenCount, type=SystemMessages.SM_TYPE.tokenWithMarkAcquired)
 
 
@@ -405,33 +430,30 @@ class MarkByQuestHandler(MultiTypeServiceChannelHandler):
 
     def __init__(self, awardCtrl):
         super(MarkByQuestHandler, self).__init__((SYS_MESSAGE_TYPE.battleResults.index(), SYS_MESSAGE_TYPE.tokenQuests.index()), awardCtrl)
-        self.__tokenCounts = []
+        self.__tokenCount = 0
 
     def _needToShowAward(self, ctx):
         if not super(MarkByQuestHandler, self)._needToShowAward(ctx):
             return False
         _, message = ctx
-        self.__tokenCounts = self.__extractCounts(message)
-        return bool(self.__tokenCounts)
+        self.__tokenCount = self.__extractCount(message)
+        return bool(self.__tokenCount)
 
     def _showAward(self, ctx):
         self.__showMessage()
 
     def __showMessage(self):
-        message = '\n'.join((i18n.makeString(SYSTEM_MESSAGES.TOKENS_NOTIFICATION_MARK_ACQUIRED, count=tokenCount) for tokenCount in self.__tokenCounts))
-        SystemMessages.pushI18nMessage(message, type=SystemMessages.SM_TYPE.tokenWithMarkAcquired)
+        SystemMessages.pushI18nMessage(SYSTEM_MESSAGES.TOKENS_NOTIFICATION_MARK_ACQUIRED, count=self.__tokenCount, type=SystemMessages.SM_TYPE.tokenWithMarkAcquired)
 
     @staticmethod
-    def __extractCounts(message):
-        marksCounts = []
+    def __extractCount(message):
+        totalCounts = 0
         tokensDict = message.data.get('tokens', {})
         for tokenName, tokenData in tokensDict.iteritems():
             if tokenName.startswith('img:'):
-                count = tokenData.get('count', 0)
-                if count:
-                    marksCounts.append(count)
+                totalCounts += tokenData.get('count', 0)
 
-        return marksCounts
+        return totalCounts
 
 
 class CrewSkinsQuestHandler(MultiTypeServiceChannelHandler):
@@ -962,9 +984,7 @@ class RankedQuestsHandler(MultiTypeServiceChannelHandler):
             if message.type == SYS_MESSAGE_TYPE.rankedQuests.index():
                 quest = self.eventsCache.getRankedQuests().get(questID)
                 if quest:
-                    if quest.isProcessedAtCycleEnd():
-                        self.__processOrHold(self.__showCycleAward, (quest, data))
-                    elif quest.isBooby():
+                    if quest.isBooby():
                         self.__processOrHold(self.__showBoobyAwardWindow, (quest,))
             if message.type == SYS_MESSAGE_TYPE.tokenQuests.index():
                 quest = self.eventsCache.getHiddenQuests().get(questID)
@@ -983,19 +1003,8 @@ class RankedQuestsHandler(MultiTypeServiceChannelHandler):
         if self.__pending:
             self.__processOrHold(*self.__pending.pop(0))
 
-    def __showCycleAward(self, quest, data):
-        season = self.rankedController.getSeason(quest.getSeasonID())
-        if season is not None:
-            g_eventBus.handleEvent(events.LoadViewEvent(RANKEDBATTLES_ALIASES.RANKED_BATTLES_STAGE_COMPLETE, ctx={'quest': quest,
-             'awards': data,
-             'closeClb': self.__unlock,
-             'season': season}), scope=EVENT_BUS_SCOPE.LOBBY)
-        else:
-            self.__unlock()
-        return
-
     def __showSeasonAward(self, quest, data):
-        seasonID, _, _ = ranked_helpers.getRankedDataFromTokenQuestID(quest.getID())
+        seasonID, _ = ranked_helpers.getRankedDataFromTokenQuestID(quest.getID())
         season = self.rankedController.getSeason(seasonID)
         if season is not None:
             g_eventBus.handleEvent(events.LoadViewEvent(RANKEDBATTLES_ALIASES.RANKED_BATTLES_SEASON_COMPLETE, ctx={'quest': quest,

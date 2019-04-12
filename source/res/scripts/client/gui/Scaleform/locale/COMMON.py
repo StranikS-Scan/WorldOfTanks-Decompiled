@@ -9,3 +9,4 @@ class COMMON(object):
     COMMON_SLASH = '#common:common/slash'
     COMMON_OPEN_QUOTES = '#common:common/open_quotes'
     COMMON_CLOSE_QUOTES = '#common:common/close_quotes'
+    CLANTAG = '#common:clanTag'

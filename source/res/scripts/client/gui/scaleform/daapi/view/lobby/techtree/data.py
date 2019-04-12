@@ -127,6 +127,7 @@ class _ItemsData(object):
                 state = NODE_STATE.removeIfHas(state, NODE_STATE_FLAGS.CAN_SELL)
                 state = NODE_STATE.removeIfHas(state, NODE_STATE_FLAGS.SELECTED)
                 state = self._checkMoney(state, nodeCD)
+            state = self._checkBuyingActionState(state, item)
             state = self._checkRestoreState(state, item)
             state = self._checkRentableState(state, item)
             state = self._checkTradeInState(state, item)
@@ -232,6 +233,14 @@ class _ItemsData(object):
         state = NODE_STATE.removeIfHas(state, NODE_STATE_FLAGS.CAN_TRADE_OFF)
         if item.canTradeOff:
             state = NODE_STATE.addIfNot(state, NODE_STATE_FLAGS.CAN_TRADE_OFF)
+        return state
+
+    def _checkBuyingActionState(self, state, item):
+        if item.buyPrices.itemPrice.isActionPrice():
+            if item.isRestorePossible():
+                state = NODE_STATE.removeIfHas(state, NODE_STATE_FLAGS.ACTION)
+            else:
+                state = NODE_STATE.addIfNot(state, NODE_STATE_FLAGS.ACTION)
         return state
 
     def _addNode(self, nodeCD, node):
@@ -679,6 +688,8 @@ class NationTreeData(_ItemsData):
 
         ResearchItemsData.clearRootCD()
         self._findSelectedNode(nationID)
+        if self._scrollIndex < 0:
+            self._scrollIndex = 0
 
     def getRootItem(self):
         return self._nodes[0] if self._nodes else None
@@ -752,7 +763,7 @@ class NationTreeData(_ItemsData):
                 state |= NODE_STATE_FLAGS.ENOUGH_MONEY
             if nodeCD in self._wereInBattle:
                 state |= NODE_STATE_FLAGS.WAS_IN_BATTLE
-            if guiItem.buyPrices.itemPrice.isActionPrice():
+            if guiItem.buyPrices.itemPrice.isActionPrice() and not guiItem.isRestorePossible():
                 state |= NODE_STATE_FLAGS.ACTION
         else:
             if available:

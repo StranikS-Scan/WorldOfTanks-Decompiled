@@ -1,7 +1,11 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/battle_results/components/personal.py
+import random
+from math import ceil
 import BigWorld
-from constants import DEATH_REASON_ALIVE
+from arena_bonus_type_caps import ARENA_BONUS_TYPE_CAPS
+from constants import DEATH_REASON_ALIVE, PREMIUM_TYPE
+from gui.Scaleform.genConsts.BATTLE_RESULTS_PREMIUM_STATES import BATTLE_RESULTS_PREMIUM_STATES
 from gui.Scaleform.genConsts.STORE_CONSTANTS import STORE_CONSTANTS
 from gui.Scaleform.locale.BATTLE_RESULTS import BATTLE_RESULTS
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
@@ -9,12 +13,18 @@ from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.battle_results.components import base
 from gui.battle_results.components import shared
 from gui.battle_results.components import style
+from gui.impl import backport
+from gui.impl.gen import R
+from gui.impl.lobby.premacc import premacc_helpers
 from gui.shared.crits_mask_parser import CRIT_MASK_SUB_TYPES
-from gui.shared.formatters import numbers
+from gui.shared.formatters import numbers, icons
 from gui.shared.formatters import text_styles
 from gui.shared.gui_items.Vehicle import getSmallIconPath, getTypeBigIconPath, getNationLessName, getIconShopPath
 from gui.shared.utils.functions import makeTooltip
-from helpers import i18n
+from helpers import i18n, dependency, time_utils
+from skeletons.gui.battle_results import IBattleResultsService
+from skeletons.gui.lobby_context import ILobbyContext
+from skeletons.gui.shared import IItemsCache
 _UNDEFINED_EFFICIENCY_VALUE = '-'
 
 class PremiumAccountFlag(base.StatsItem):
@@ -24,6 +34,125 @@ class PremiumAccountFlag(base.StatsItem):
         return reusable.isPostBattlePremium
 
 
+class PremiumPlusFlag(base.StatsItem):
+    __slots__ = ()
+
+    def _convert(self, value, reusable):
+        return reusable.isPostBattlePremiumPlus
+
+
+class DynamicPremiumState(base.StatsItem):
+    __slots__ = ('__arenaBonusType', '__arenaUniqueID', '__postBattlePremium', '__postBattlePremiumPlus')
+    __itemsCache = dependency.descriptor(IItemsCache)
+    __battleResults = dependency.descriptor(IBattleResultsService)
+    __lobbyContext = dependency.descriptor(ILobbyContext)
+
+    def __init__(self, field, *path):
+        super(DynamicPremiumState, self).__init__(field, *path)
+        self.__arenaBonusType = None
+        self.__arenaUniqueID = 0
+        self.__postBattlePremium = False
+        self.__postBattlePremiumPlus = False
+        return
+
+    def setRecord(self, record, reusable):
+        self.__arenaBonusType = reusable.common.arenaBonusType
+        self.__arenaUniqueID = reusable.arenaUniqueID
+        self.__postBattlePremium = reusable.isPostBattlePremium
+        self.__postBattlePremiumPlus = reusable.isPostBattlePremiumPlus
+
+    def getVO(self):
+        hasPremiumPlus = self.__itemsCache.items.stats.isActivePremium(PREMIUM_TYPE.PLUS)
+        hasBasicPremium = self.__itemsCache.items.stats.isActivePremium(PREMIUM_TYPE.BASIC)
+        if hasBasicPremium and not (hasPremiumPlus or self.__postBattlePremiumPlus):
+            self._value = BATTLE_RESULTS_PREMIUM_STATES.PREMIUM_ADVERTISING
+        elif hasPremiumPlus:
+            if self.__isDailyBonusVisible():
+                self._value = BATTLE_RESULTS_PREMIUM_STATES.PREMIUM_BONUS
+            else:
+                self._value = BATTLE_RESULTS_PREMIUM_STATES.PREMIUM_EARNINGS
+        elif self.__postBattlePremiumPlus:
+            self._value = BATTLE_RESULTS_PREMIUM_STATES.PREMIUM_EARNINGS
+        elif self.__getIsApplied():
+            self._value = BATTLE_RESULTS_PREMIUM_STATES.PREMIUM_BONUS
+        else:
+            self._value = BATTLE_RESULTS_PREMIUM_STATES.PREMIUM_INFO
+        return super(DynamicPremiumState, self).getVO()
+
+    def __isDailyBonusVisible(self):
+        if self.__getIsApplied():
+            return True
+        isBonusEnabled = self.__lobbyContext.getServerSettings().getAdditionalBonusConfig().get('enabled', False)
+        bonusLeft = self.__itemsCache.items.stats.applyAdditionalXPCount
+        hasPremium = self.__itemsCache.items.stats.isActivePremium(PREMIUM_TYPE.PLUS)
+        isProperArena = ARENA_BONUS_TYPE_CAPS.checkAny(self.__arenaBonusType, ARENA_BONUS_TYPE_CAPS.ADDITIONAL_XP_POSTBATTLE)
+        return hasPremium and isBonusEnabled and isProperArena and bonusLeft > 0
+
+    def __getIsApplied(self):
+        return self.__battleResults.isAddXPBonusApplied(self.__arenaUniqueID)
+
+
+class PremiumInfoBlock(base.StatsBlock):
+    __slots__ = ('creditsPremiumBonusStr', 'xpPremiumBonusStr', 'premiumBonusStr', 'isGetPremium', 'isUpgradeToPremiumPlus', 'backgroundIcon', '__xpDiff', '__creditsDiff', '__canUpgradeToBasic', '__canUpgradeToPlus')
+    __lobbyContext = dependency.descriptor(ILobbyContext)
+    __itemsCache = dependency.descriptor(IItemsCache)
+
+    def __init__(self, meta=None, field='', *path):
+        super(PremiumInfoBlock, self).__init__(meta, field, *path)
+        self.creditsPremiumBonusStr = ''
+        self.xpPremiumBonusStr = ''
+        self.premiumBonusStr = ''
+        self.backgroundIcon = ''
+        self.isGetPremium = False
+        self.isUpgradeToPremiumPlus = False
+        self.__xpDiff = 0
+        self.__creditsDiff = 0
+        self.__canUpgradeToBasic = False
+        self.__canUpgradeToPlus = False
+
+    def setRecord(self, result, reusable):
+        self.__xpDiff = reusable.personal.getXPDiff()
+        self.__creditsDiff = reusable.personal.getCreditsDiff()
+        self.__canUpgradeToBasic = reusable.canUpgradeToPremium
+        self.__canUpgradeToPlus = reusable.canUpgradeToPremiumPlus
+
+    def getVO(self):
+        stats = self.__itemsCache.items.stats
+        self.isGetPremium = self.__canUpgradeToBasic and self.__xpDiff > 0 and self.__creditsDiff > 0 and not stats.isPremium
+        self.isUpgradeToPremiumPlus = self.__canUpgradeToPlus and stats.isActivePremium(PREMIUM_TYPE.BASIC) and not stats.isActivePremium(PREMIUM_TYPE.PLUS)
+        self.__setPremiumBonusData()
+        if self.isGetPremium:
+            self.creditsPremiumBonusStr = style.makeCreditsLabel(self.__creditsDiff, isDiff=True, useBigIcon=True)
+            self.xpPremiumBonusStr = style.makeXpLabel(self.__xpDiff, isDiff=True, useBigIcon=True)
+        else:
+            self.creditsPremiumBonusStr = ''
+            self.xpPremiumBonusStr = ''
+        result = super(PremiumInfoBlock, self).getVO()
+        return result
+
+    def __setPremiumBonusData(self):
+        value = ''
+        icon = backport.image(R.images.gui.maps.icons.premacc.battleResult.premium())
+        piggyBankConfig = self.__lobbyContext.getServerSettings().getPiggyBankConfig()
+        piggyBankMaxAmount = piggyBankConfig.get('threshold', 0)
+        period = piggyBankConfig.get('cycleLength', time_utils.ONE_DAY)
+        periodInDays = ceil(period / time_utils.ONE_DAY)
+        bonusConfig = self.__lobbyContext.getServerSettings().getAdditionalBonusConfig()
+        multiplier = premacc_helpers.validateAdditionalBonusMultiplier(bonusConfig.get('bonusFactor', 1))
+        if not self.__itemsCache.items.stats.isActivePremium(PREMIUM_TYPE.PLUS):
+            if self.__itemsCache.items.stats.isActivePremium(PREMIUM_TYPE.BASIC):
+                cases = ('credits', 'premium', 'squad', 'bonus', 'quests')
+                randCase = random.choice(cases)
+                value = backport.text(R.strings.battle_results.common.details.premiumPlus.dyn(randCase)(), bonusCredits=text_styles.concatStylesToSingleLine(text_styles.credits(BigWorld.wg_getGoldFormat(piggyBankMaxAmount)), icons.makeImageTag(backport.image(R.images.gui.maps.icons.library.CreditsIcon_2()), vSpace=-5)), durationInDays=periodInDays, multiplier=multiplier)
+                if randCase == 'bonus':
+                    randCase = 'bonus_x{}'.format(multiplier)
+                icon = backport.image(R.images.gui.maps.icons.premacc.battleResult.dyn(randCase)())
+            else:
+                value = backport.text(R.strings.battle_results.common.premiumBonus())
+        self.premiumBonusStr = value
+        self.backgroundIcon = icon
+
+
 class IsTeamKillerFlag(base.StatsItem):
     __slots__ = ()
 
@@ -31,33 +160,11 @@ class IsTeamKillerFlag(base.StatsItem):
         return reusable.personal.isTeamKiller
 
 
-class CanUpgradeToPremiumFlag(base.StatsItem):
-    __slots__ = ()
-
-    def _convert(self, value, reusable):
-        return reusable.canUpgradeToPremium and reusable.personal.getCreditsDiff() > 0 and reusable.personal.getXPDiff() > 0
-
-
 class StunDataFlag(base.StatsItem):
     __slots__ = ()
 
     def _convert(self, value, reusable):
         return reusable.isStunEnabled
-
-
-class PremiumBuyBlock(base.StatsBlock):
-    __slots__ = ('clientIndex', 'creditsDiff', 'xpDiff')
-
-    def __init__(self, meta=None, field='', *path):
-        super(PremiumBuyBlock, self).__init__(meta, field, *path)
-        self.clientIndex = 0
-        self.creditsDiff = 0
-        self.xpDiff = 0
-
-    def setRecord(self, result, reusable):
-        self.clientIndex = reusable.clientIndex
-        self.creditsDiff = reusable.personal.getCreditsDiff()
-        self.xpDiff = reusable.personal.getXPDiff()
 
 
 class PlayerNoClanFlag(base.StatsItem):

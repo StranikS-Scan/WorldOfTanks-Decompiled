@@ -7,23 +7,25 @@ from gui.Scaleform.daapi.view.lobby.rally.vo_converters import makeVehicleVO
 from gui.Scaleform.daapi.view.meta.SquadViewMeta import SquadViewMeta
 from gui.Scaleform.genConsts.PREBATTLE_ALIASES import PREBATTLE_ALIASES
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
-from gui.Scaleform.locale.MENU import MENU
-from gui.Scaleform.locale.MESSENGER import MESSENGER
-from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
+from gui.impl import backport
+from gui.impl.gen.resources import R
 from gui.prb_control import settings
 from gui.prb_control.settings import CTRL_ENTITY_TYPE, REQUEST_TYPE
 from gui.shared import events, EVENT_BUS_SCOPE
 from gui.shared.formatters import text_styles
 from gui.shared.utils.functions import makeTooltip
 from helpers import dependency
-from helpers import i18n
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.lobby_context import ILobbyContext
 
+def _unitWithPremium(unitData):
+    return any((slot.player.hasPremium for slot in unitData.slotsIterator if slot.player))
+
+
 class SquadView(SquadViewMeta):
-    eventsCache = dependency.descriptor(IEventsCache)
-    lobbyContext = dependency.descriptor(ILobbyContext)
+    __eventsCache = dependency.descriptor(IEventsCache)
+    __lobbyContext = dependency.descriptor(ILobbyContext)
 
     def inviteFriendRequest(self):
         if self.__canSendInvite():
@@ -34,14 +36,14 @@ class SquadView(SquadViewMeta):
     def toggleReadyStateRequest(self):
         changeStatePossible = True
         if not self.prbEntity.getPlayerInfo().isReady:
-            changeStatePossible = yield self.lobbyContext.isHeaderNavigationPossible()
+            changeStatePossible = yield self.__lobbyContext.isHeaderNavigationPossible()
         if changeStatePossible:
             self.prbEntity.togglePlayerReadyAction(True)
 
     def onUnitVehiclesChanged(self, dbID, vInfos):
         entity = self.prbEntity
         pInfo = entity.getPlayerInfo(dbID=dbID)
-        needToUpdateSlots = self.eventsCache.isSquadXpFactorsEnabled()
+        needToUpdateSlots = self.__eventsCache.isSquadXpFactorsEnabled()
         if pInfo.isInSlot:
             slotIdx = pInfo.slotIdx
             if vInfos and not vInfos[0].isEmpty():
@@ -61,7 +63,7 @@ class SquadView(SquadViewMeta):
                     needToUpdateSlots = True
             elif vehicleVO is None:
                 needToUpdateSlots = True
-        if self.eventsCache.isSquadXpFactorsEnabled() or self.eventsCache.isBalancedSquadEnabled():
+        if self.__eventsCache.isSquadXpFactorsEnabled() or self.__eventsCache.isBalancedSquadEnabled():
             self.as_setActionButtonStateS(self.__getActionButtonStateVO())
         if needToUpdateSlots:
             self._updateMembersData()
@@ -110,11 +112,14 @@ class SquadView(SquadViewMeta):
     def _populate(self):
         super(SquadView, self)._populate()
         self.addListener(events.CoolDownEvent.PREBATTLE, self.__handleSetPrebattleCoolDown, scope=EVENT_BUS_SCOPE.LOBBY)
-        self._updateHeader()
+        self.__updateHeader()
 
     def _dispose(self):
         self.removeListener(events.CoolDownEvent.PREBATTLE, self.__handleSetPrebattleCoolDown, scope=EVENT_BUS_SCOPE.LOBBY)
         super(SquadView, self)._dispose()
+
+    def _getHeaderPresenter(self):
+        return _BonusHeaderPresenter(self.prbEntity) if self._isPremiumBonusEnabled() else _HeaderPresenter(self.prbEntity)
 
     def _setActionButtonState(self):
         entity = self.prbEntity
@@ -130,88 +135,27 @@ class SquadView(SquadViewMeta):
         self.as_updateInviteBtnStateS(enabled)
         self.as_setActionButtonStateS(self.__getActionButtonStateVO())
 
-    def _updateHeader(self):
-        isSquadXpFactorsEnabled = self.eventsCache.isSquadXpFactorsEnabled()
-        isArtVisible = isSquadXpFactorsEnabled
-        if isArtVisible:
-            tooltip, tooltipType = self._getInfoIconTooltipParams()
-            hdrIconSource, iXPadding, iYPadding, hdrMessageText = self._getHeaderMessageParams()
-        else:
-            tooltip = ''
-            tooltipType = ''
-            hdrIconSource = ''
-            hdrMessageText = ''
-            iXPadding = 0
-            iYPadding = 0
-        data = {'infoIconTooltip': tooltip,
-         'infoIconTooltipType': tooltipType,
-         'isVisibleInfoIcon': isArtVisible,
-         'isVisibleHeaderIcon': isArtVisible,
-         'headerIconSource': hdrIconSource,
-         'icoXPadding': iXPadding,
-         'icoYPadding': iYPadding,
-         'headerMessageText': hdrMessageText,
-         'isVisibleHeaderMessage': isArtVisible}
-        self.as_setSimpleTeamSectionDataS(data)
-
-    def _getHeaderMessageParams(self):
-        entity = self.prbEntity
-        isBalancedSquadEnabled = self.eventsCache.isBalancedSquadEnabled()
-        if isBalancedSquadEnabled:
-            if entity.isDynamic():
-                headerIconSource = RES_ICONS.MAPS_ICONS_SQUAD_SQUAD_SILVER_STARS_ATTENTION
-                headerMessageText = text_styles.middleTitle(i18n.makeString(MESSENGER.DIALOGS_SQUADCHANNEL_HEADERMSG_DYNSQUAD))
-                iconXPadding = 0
-                iconYPadding = 0
-            else:
-                headerIconSource = RES_ICONS.MAPS_ICONS_SQUAD_SQUAD_SILVER_STARS
-                headerMessageText = text_styles.main(i18n.makeString(MESSENGER.DIALOGS_SQUADCHANNEL_HEADERMSG_SQUADFORMATION))
-                iconXPadding = 9
-                iconYPadding = 9
-        else:
-            headerIconSource = RES_ICONS.MAPS_ICONS_SQUAD_SQUAD_SILVER_STARS
-            headerMessageText = text_styles.main(i18n.makeString(MESSENGER.DIALOGS_SQUADCHANNEL_HEADERMSG_SQUADFORMATIONRESTRICTION))
-            iconXPadding = 9
-            iconYPadding = 9
-        return (headerIconSource,
-         iconXPadding,
-         iconYPadding,
-         headerMessageText)
-
-    def _getInfoIconTooltipParams(self):
-        isBalancedSquadEnabled = self.eventsCache.isBalancedSquadEnabled()
-        if isBalancedSquadEnabled:
-            tooltipType = TOOLTIPS_CONSTANTS.COMPLEX
-            tooltip = TOOLTIPS.SQUADWINDOW_INFOICON_TECH
-        else:
-            tooltipType = TOOLTIPS_CONSTANTS.SPECIAL
-            tooltip = TOOLTIPS_CONSTANTS.SQUAD_RESTRICTIONS_INFO
-        return (tooltip, tooltipType)
-
     def _updateMembersData(self):
         entity = self.prbEntity
-        self.as_setMembersS(*vo_converters.makeSlotsVOs(entity, entity.getID(), app=self.app))
+        self.as_setMembersS(*vo_converters.makeSlotsVOs(entity, entity.getID(), withPrem=True))
         self._setActionButtonState()
+        self.__updateHeader()
 
     def _updateRallyData(self):
         entity = self.prbEntity
-        data = vo_converters.makeUnitVO(entity, unitMgrID=entity.getID(), app=self.app)
+        data = vo_converters.makeUnitVO(entity, unitMgrID=entity.getID(), withPrem=True)
         self.as_updateRallyS(data)
-        self.as_updateBattleTypeS({'battleTypeName': '',
-         'isNew': self._isNew(),
-         'leaveBtnTooltip': self._getLeaveBtnTooltip()})
+        self.as_updateBattleTypeS({'leaveBtnTooltip': self._getLeaveBtnTooltip()})
+        self.__updateHeader()
 
     def _getLeaveBtnTooltip(self):
         return TOOLTIPS.SQUADWINDOW_BUTTONS_LEAVESQUAD
 
-    def _getBattleTypeName(self):
-        return text_styles.main(MESSENGER.DIALOGS_SQUADCHANNEL_BATTLETYPE) + '\n' + i18n.makeString(MENU.HEADERBUTTONS_BATTLE_MENU_STANDART)
+    def _isPremiumBonusEnabled(self):
+        return self.__lobbyContext.getServerSettings().squadPremiumBonus.isEnabled
 
-    def _isEvent(self):
-        return False
-
-    def _isNew(self):
-        return False
+    def __updateHeader(self):
+        self.as_setSimpleTeamSectionDataS(self._getHeaderPresenter().getData())
 
     def __getActionButtonStateVO(self):
         return SquadActionButtonStateVO(self.prbEntity)
@@ -226,26 +170,8 @@ class SquadView(SquadViewMeta):
 
 class EventSquadView(SquadView):
 
-    def _getBattleTypeName(self):
-        return text_styles.main(MESSENGER.DIALOGS_SQUADCHANNEL_BATTLETYPE) + '\n' + i18n.makeString(MENU.HEADERBUTTONS_BATTLE_MENU_EVENT)
-
-    def _isEvent(self):
-        return True
-
-    def _getInfoIconTooltipParams(self):
-        vehiclesNames = [ veh.userName for veh in self.eventsCache.getEventVehicles() ]
-        tooltip = i18n.makeString(TOOLTIPS.SQUADWINDOW_EVENTVEHICLE, tankName=', '.join(vehiclesNames))
-        return (makeTooltip(body=tooltip), TOOLTIPS_CONSTANTS.COMPLEX)
-
-    def _getHeaderMessageParams(self):
-        headerIconSource = RES_ICONS.MAPS_ICONS_SQUAD_EVENT
-        headerMessageText = text_styles.main(i18n.makeString(MESSENGER.DIALOGS_SQUADCHANNEL_HEADERMSG_EVENTFORMATIONRESTRICTION))
-        iconXPadding = 0
-        iconYPadding = 0
-        return (headerIconSource,
-         iconXPadding,
-         iconYPadding,
-         headerMessageText)
+    def _getHeaderPresenter(self):
+        return _EventHeaderPresenter(self.prbEntity)
 
     def _getLeaveBtnTooltip(self):
         return TOOLTIPS.SQUADWINDOW_BUTTONS_LEAVEEVENTSQUAD
@@ -253,15 +179,107 @@ class EventSquadView(SquadView):
 
 class EpicSquadView(SquadView):
 
-    def _getBattleTypeName(self):
-        return text_styles.main(MESSENGER.DIALOGS_SQUADCHANNEL_BATTLETYPE) + '\n' + i18n.makeString(MENU.HEADERBUTTONS_BATTLE_MENU_EPICBATTLE)
+    def _getHeaderPresenter(self):
+        return _BonusHeaderPresenter(self.prbEntity) if self._isPremiumBonusEnabled() else _EpicHeaderPresenter(self.prbEntity)
 
-    def _getHeaderMessageParams(self):
-        headerIconSource = RES_ICONS.MAPS_ICONS_SQUAD_EPICBATTLE
-        headerMessageText = text_styles.main(i18n.makeString(MESSENGER.DIALOGS_SQUADCHANNEL_HEADERMSG_EPICBATTLEFORMATIONRESTRICTION))
-        iconXPadding = 0
-        iconYPadding = 0
-        return (headerIconSource,
-         iconXPadding,
-         iconYPadding,
-         headerMessageText)
+
+class _HeaderPresenter(object):
+    _eventsCache = dependency.descriptor(IEventsCache)
+
+    def __init__(self, prbEntity):
+        self._prbEntity = prbEntity
+        self._bgImage = backport.image(R.images.gui.maps.icons.squad.backgrounds.without_prem())
+        self._isArtVisible = self._eventsCache.isSquadXpFactorsEnabled()
+
+    def getData(self):
+        iconSource = ''
+        messageText = ''
+        bonuses = self._packBonuses()
+        tooltip, tooltipType = self._getInfoIconTooltipParams()
+        if self._isArtVisible and not bonuses:
+            iconSource, messageText = self._getMessageParams()
+        return {'isVisibleInfoIcon': self._isArtVisible,
+         'isVisibleHeaderIcon': self._isArtVisible,
+         'isVisibleHeaderMessage': self._isArtVisible,
+         'bonuses': bonuses,
+         'backgroundHeaderSource': self._bgImage,
+         'infoIconTooltip': tooltip,
+         'infoIconTooltipType': tooltipType,
+         'headerIconSource': iconSource,
+         'headerMessageText': messageText}
+
+    def _packBonuses(self):
+        result = []
+        bonusFactor = self._eventsCache.getSquadXPFactor() * 100
+        result.append(self._makeBonus(bonusFactor, 'experience'))
+        if result:
+            bonusFormatted = text_styles.neutral('{}{}'.format(bonusFactor, backport.text(R.strings.common.common.percent())))
+            result[-1]['tooltip'] = makeTooltip(header=backport.text(R.strings.tooltips.squadBonus.complex.header()), body=backport.text(R.strings.tooltips.squadBonus.complex.body(), bonus=bonusFormatted))
+            result[-1]['tooltipType'] = TOOLTIPS_CONSTANTS.COMPLEX
+        return result
+
+    @staticmethod
+    def _makeBonus(value, bonusType):
+        return {'icon': backport.image(R.images.gui.maps.icons.squad.bonuses.dyn(bonusType)()),
+         'bonusValue': text_styles.creditsTextBig(str(int(value)) + backport.text(R.strings.common.common.percent())),
+         'label': text_styles.playerOnline(backport.text(R.strings.messenger.dialogs.squadChannel.bonuses.dyn(bonusType)())),
+         'tooltipType': None,
+         'tooltip': None}
+
+    def _getMessageParams(self):
+        return (None, None)
+
+    def _getInfoIconTooltipParams(self):
+        isBalancedSquadEnabled = self._eventsCache.isBalancedSquadEnabled()
+        if isBalancedSquadEnabled:
+            tooltipType = TOOLTIPS_CONSTANTS.COMPLEX
+            tooltip = TOOLTIPS.SQUADWINDOW_INFOICON_TECH
+        else:
+            tooltipType = TOOLTIPS_CONSTANTS.SPECIAL
+            tooltip = TOOLTIPS_CONSTANTS.SQUAD_RESTRICTIONS_INFO
+        return (tooltip, tooltipType)
+
+
+class _BonusHeaderPresenter(_HeaderPresenter):
+    __lobbyContext = dependency.descriptor(ILobbyContext)
+
+    def __init__(self, prbEntity):
+        super(_BonusHeaderPresenter, self).__init__(prbEntity)
+        if _unitWithPremium(self._prbEntity.getUnitFullData()):
+            self._bgImage = backport.image(R.images.gui.maps.icons.squad.backgrounds.with_prem())
+
+    def _packBonuses(self):
+        result = super(_BonusHeaderPresenter, self)._packBonuses()
+        unitData = self._prbEntity.getUnitFullData()
+        if _unitWithPremium(self._prbEntity.getUnitFullData()):
+            creditsBonuses = self.__lobbyContext.getServerSettings().squadPremiumBonus
+            bonusValue = creditsBonuses.ownCredits if unitData.playerInfo.hasPremium else creditsBonuses.mateCredits
+            result.insert(0, self._makeBonus(bonusValue * 100, 'credits'))
+        if result:
+            result[-1]['tooltip'] = TOOLTIPS_CONSTANTS.SQUAD_BONUS
+            result[-1]['tooltipType'] = TOOLTIPS_CONSTANTS.SPECIAL
+        return result
+
+
+class _EpicHeaderPresenter(_HeaderPresenter):
+
+    def _getMessageParams(self):
+        iconSource = backport.image(R.images.gui.maps.icons.squad.epicBattle())
+        messageText = text_styles.main(backport.text(R.strings.messenger.dialogs.squadChannel.headerMsg.epicBattleFormationRestriction()))
+        return (iconSource, messageText)
+
+    def _packBonuses(self):
+        return []
+
+
+class _EventHeaderPresenter(_HeaderPresenter):
+
+    def _getInfoIconTooltipParams(self):
+        vehiclesNames = [ veh.userName for veh in self._eventsCache.getEventVehicles() ]
+        tooltip = backport.text(R.strings.tooltips.squadWindow.eventVehicle(), tankName=', '.join(vehiclesNames))
+        return (makeTooltip(body=tooltip), TOOLTIPS_CONSTANTS.COMPLEX)
+
+    def _getMessageParams(self):
+        iconSource = backport.image(R.images.gui.maps.icons.squad.event())
+        messageText = text_styles.main(backport.text(R.strings.messenger.dialogs.squadChannel.headerMsg.eventFormationRestriction()))
+        return (iconSource, messageText)

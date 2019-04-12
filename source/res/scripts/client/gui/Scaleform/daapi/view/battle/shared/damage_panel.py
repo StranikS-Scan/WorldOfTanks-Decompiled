@@ -12,6 +12,7 @@ from debug_utils import LOG_DEBUG
 from gui.Scaleform.daapi.view.battle.shared.formatters import formatHealthProgress, normalizeHealthPercent
 from gui.Scaleform.daapi.view.battle.shared.timers_common import PythonTimer
 from gui.Scaleform.daapi.view.meta.DamagePanelMeta import DamagePanelMeta
+from gui.Scaleform.flash_wrapper import InputKeyMode
 from gui.Scaleform.genConsts.APP_CONTAINERS_NAMES import APP_CONTAINERS_NAMES
 from gui.Scaleform.locale.INGAME_GUI import INGAME_GUI
 from gui.battle_control import vehicle_getter
@@ -105,7 +106,7 @@ class _TankIndicatorCtrl(object):
 
     def __init__(self, app):
         self.__component = GUI.WGTankIndicatorFlash(app.movie, '_level0.root.{}.main.damagePanel.tankIndicator'.format(APP_CONTAINERS_NAMES.VIEWS))
-        self.__component.wg_inputKeyMode = 2
+        self.__component.wg_inputKeyMode = InputKeyMode.NO_HANDLE
         self.__app = app
         self.__app.component.addChild(self.__component, 'tankIndicator')
 
@@ -253,7 +254,8 @@ class DamagePanel(DamagePanelMeta):
         self.as_resetS()
         self.hideStatusImmediate()
 
-    def _updateStun(self, stunDuration):
+    def _updateStun(self, stunInfo):
+        stunDuration = stunInfo.duration
         if stunDuration > 0:
             self.__statusAnimPlayers[STATUS_ID.STUN].showStatus(stunDuration, True)
         else:

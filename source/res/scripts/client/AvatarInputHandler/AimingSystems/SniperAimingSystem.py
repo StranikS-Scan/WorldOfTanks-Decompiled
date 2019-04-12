@@ -3,6 +3,7 @@
 import math
 import BigWorld
 import Math
+from constants import VEHICLE_SIEGE_STATE
 from Math import Vector3, Matrix
 from AvatarInputHandler import mathUtils
 from AvatarInputHandler import AimingSystems
@@ -38,6 +39,15 @@ class SniperAimingSystem(IAimingSystem):
         self.__worldPitch = 0.0
         self.__vehicleTypeDescriptor = None
         self.__vehicleMProv = None
+        self.__siegeModeControl = None
+        player = BigWorld.player()
+        if player.vehicleTypeDescriptor is not None:
+            typeDesc = player.vehicleTypeDescriptor
+            if typeDesc.hasSiegeMode:
+                self.__siegeModeControl = player.inputHandler.siegeModeControl
+                self.__siegeModeControl.onSiegeStateChanged += self.onSiegeStateChanged
+            else:
+                self.__siegeModeState = VEHICLE_SIEGE_STATE.DISABLED
         self.__yprDeviationConstraints = Vector3(SniperAimingSystem.__STABILIZED_CONSTRAINTS)
         self.__oscillator = Math.PyOscillator(1.0, Vector3(0.0, 0.0, 15.0), Vector3(0.0, 0.0, 3.5), self.__yprDeviationConstraints)
         self.__returningOscillator = Math.PyOscillator(1.0, Vector3(0.0, 15.0, 15.0), Vector3(0.0, 3.5, 3.5), self.__yprDeviationConstraints)
@@ -51,6 +61,8 @@ class SniperAimingSystem(IAimingSystem):
     def destroy(self):
         IAimingSystem.destroy(self)
         SniperAimingSystem.__activeSystem = None
+        if self.__siegeModeControl:
+            self.__siegeModeControl.onSiegeStateChanged -= self.onSiegeStateChanged
         return
 
     def enableHorizontalStabilizerRuntime(self, enable):
@@ -60,19 +72,58 @@ class SniperAimingSystem(IAimingSystem):
     def forceFullStabilization(self, enable):
         self.__forceFullStabilization = enable
 
-    def getPitchLimits(self):
-        return self.__vehicleTypeDescriptor.gun.combinedPitchLimits
+    def getDynamicPitchLimits(self, turretYaw=0.0):
+
+        def _getCorrectGunPitch(vehicleMatrix, turretYaw, gunPitch, overrideTurretLocalZ=None, useGunCamPosition=False):
+            turretMat = AimingSystems.getTurretJointMat(self.__vehicleTypeDescriptor, vehicleMatrix, turretYaw, overrideTurretLocalZ)
+            if not useGunCamPosition:
+                gunMat = AimingSystems.getGunJointMat(self.__vehicleTypeDescriptor, turretMat, gunPitch, overrideTurretLocalZ)
+            else:
+                gunMat = AimingSystems.getGunCameraJointMat(self.__vehicleTypeDescriptor, turretMat, gunPitch)
+            return gunMat.pitch
+
+        typeDescr = self.__vehicleTypeDescriptor
+        gunLimits = typeDescr.gun.pitchLimits
+        gunAngleMin = gunLimits['minPitch'][0][1]
+        gunAngleMax = gunLimits['maxPitch'][0][1]
+        hullAngleMin = typeDescr.type.hullAimingParams['pitch']['wheelsCorrectionAngles']['pitchMin']
+        hullAngleMax = typeDescr.type.hullAimingParams['pitch']['wheelsCorrectionAngles']['pitchMax']
+        isBackTurretSector = turretYaw < math.pi * -0.5 or turretYaw > math.pi * 0.5
+        if isBackTurretSector:
+            hullAngleMin, hullAngleMax = hullAngleMax, hullAngleMin
+        hullMatrixAngleMin = mathUtils.createRotationMatrix((0, hullAngleMin, 0))
+        hullMatrixAngleMax = mathUtils.createRotationMatrix((0, hullAngleMax, 0))
+        maxPitch = _getCorrectGunPitch(hullMatrixAngleMax, turretYaw, gunAngleMax)
+        minPitch = _getCorrectGunPitch(hullMatrixAngleMin, turretYaw, gunAngleMin)
+        return {'absolute': (minPitch, maxPitch),
+         'maxPitch': ((0.0, maxPitch), (math.pi * 2.0, maxPitch)),
+         'minPitch': ((0.0, minPitch), (math.pi * 2.0, minPitch))}
+
+    def getPitchLimits(self, turretYaw=0.0):
+        return self.getDynamicPitchLimits(turretYaw) if self.__vehicleTypeDescriptor.isHullAimingAvailable and self.__siegeModeState == VEHICLE_SIEGE_STATE.ENABLED else self.__vehicleTypeDescriptor.gun.pitchLimits
+
+    def onSiegeStateChanged(self, newState, timeToNextMode):
+        if newState == VEHICLE_SIEGE_STATE.SWITCHING_ON:
+            self.__siegeModeState = VEHICLE_SIEGE_STATE.ENABLED
+        elif newState == VEHICLE_SIEGE_STATE.SWITCHING_OFF:
+            self.__siegeModeState = VEHICLE_SIEGE_STATE.DISABLED
+        else:
+            self.__siegeModeState = newState
 
     def enable(self, targetPos, playerGunMatFunction=AimingSystems.getPlayerGunMat):
         player = BigWorld.player()
         self.__playerGunMatFunction = playerGunMatFunction
         self.__vehicleTypeDescriptor = player.vehicleTypeDescriptor
         self.__vehicleMProv = player.inputHandler.steadyVehicleMatrixCalculator.outputMProv
+        if self.__siegeModeControl is None and self.__vehicleTypeDescriptor.hasSiegeMode:
+            self.__siegeModeControl = player.inputHandler.siegeModeControl
+            self.__siegeModeControl.onSiegeStateChanged += self.onSiegeStateChanged
         IAimingSystem.enable(self, targetPos)
         self.focusOnPos(targetPos)
         self.__oscillator.reset()
         SniperAimingSystem.__activeSystem = self
         self.__timeBeyondLimits = 0.0
+        return
 
     def disable(self):
         SniperAimingSystem.__activeSystem = None
@@ -129,7 +180,7 @@ class SniperAimingSystem(IAimingSystem):
     def __clampToLimits(self, turretYaw, gunPitch):
         if self.__yawLimits is not None:
             turretYaw = mathUtils.clamp(self.__yawLimits[0], self.__yawLimits[1], turretYaw)
-        pitchLimits = calcPitchLimitsFromDesc(turretYaw, self.getPitchLimits())
+        pitchLimits = calcPitchLimitsFromDesc(turretYaw, self.getPitchLimits(turretYaw))
         adjustment = max(0, self.__returningOscillator.deviation.y)
         pitchLimits[0] -= adjustment
         pitchLimits[1] += adjustment
@@ -149,7 +200,7 @@ class SniperAimingSystem(IAimingSystem):
     def __calcPitchExcess(self, turretYaw, gunPitch):
         if self.__yawLimits is not None:
             turretYaw = mathUtils.clamp(self.__yawLimits[0], self.__yawLimits[1], turretYaw)
-        pitchLimits = calcPitchLimitsFromDesc(turretYaw, self.getPitchLimits())
+        pitchLimits = calcPitchLimitsFromDesc(turretYaw, self.getPitchLimits(turretYaw))
         if pitchLimits[0] > gunPitch:
             return pitchLimits[0] - gunPitch
         else:

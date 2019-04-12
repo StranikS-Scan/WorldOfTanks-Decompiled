@@ -35,7 +35,8 @@ class CustomizationBottomPanel(CustomizationBottomPanelMeta):
         super(CustomizationBottomPanel, self).__init__()
         self.__ctx = None
         self._carouselDP = None
-        self.__needCaruselFullRebuild = False
+        self._currentParentSlot = None
+        self._propertySheetShow = False
         return
 
     def _populate(self):
@@ -44,7 +45,6 @@ class CustomizationBottomPanel(CustomizationBottomPanelMeta):
         self._carouselDP = CustomizationCarouselDataProvider(g_currentVehicle, self._carouseItemWrapper, self.__ctx)
         self._carouselDP.setFlashObject(self.getDp())
         self._carouselDP.setEnvironment(self.app)
-        self.__needCaruselFullRebuild = False
         self.__ctx.onCarouselFilter += self.__onCarouselFilter
         self.__ctx.onCacheResync += self.__onCacheResync
         self.__ctx.onCustomizationSeasonChanged += self.__onSeasonChanged
@@ -59,7 +59,10 @@ class CustomizationBottomPanel(CustomizationBottomPanelMeta):
         self.__ctx.onNextCarouselItemInstalled += self.__onNextCarouselItemInstalled
         self.__ctx.onResetC11nItemsNovelty += self.__onResetC11nItemsNovelty
         self.__ctx.onSlotSelected += self.__onSlotSelected
-        self.app.loaderManager.onViewLoaded += self.__onViewLoaded
+        self.__ctx.onSlotUnselected += self.__onSlotUnselected
+        self.__ctx.onFilterPopoverClosed += self.__onFilterPopoverClosed
+        self.__ctx.onPropertySheetShown += self.onPropertySheetShown
+        self.__ctx.onPropertySheetHidden += self.onPropertySheetHidden
         g_currentVehicle.onChanged += self.__onVehicleChanged
         g_clientUpdateManager.addMoneyCallback(self.__setBottomPanelBillData)
         self.__updateTabs(self.__ctx.currentTab)
@@ -84,7 +87,10 @@ class CustomizationBottomPanel(CustomizationBottomPanelMeta):
         self.__ctx.onNextCarouselItemInstalled -= self.__onNextCarouselItemInstalled
         self.__ctx.onResetC11nItemsNovelty -= self.__onResetC11nItemsNovelty
         self.__ctx.onSlotSelected -= self.__onSlotSelected
-        self.app.loaderManager.onViewLoaded -= self.__onViewLoaded
+        self.__ctx.onSlotUnselected -= self.__onSlotUnselected
+        self.__ctx.onFilterPopoverClosed -= self.__onFilterPopoverClosed
+        self.__ctx.onPropertySheetShown -= self.onPropertySheetShown
+        self.__ctx.onPropertySheetHidden -= self.onPropertySheetHidden
         g_currentVehicle.onChanged -= self.__onVehicleChanged
         self._carouselDP = None
         self.__ctx = None
@@ -103,7 +109,7 @@ class CustomizationBottomPanel(CustomizationBottomPanelMeta):
 
     def onSelectHotFilter(self, index, value):
         (self._carouselDP.setOwnedFilter, self._carouselDP.setAppliedFilter)[index](value)
-        self.__refreshCarousel(force=True)
+        self.__refreshCarousel(rebuild=False, force=True)
 
     def showGroupFromTab(self, tabIndex):
         self.__ctx.tabChanged(tabIndex)
@@ -117,15 +123,28 @@ class CustomizationBottomPanel(CustomizationBottomPanelMeta):
 
     def __onNextCarouselItemInstalled(self, index):
         self._carouselDP.selectItemIdx(index)
-        self.__refreshCarousel()
 
     def __onResetC11nItemsNovelty(self):
         self.__setNotificationCounters()
 
     def __onSlotSelected(self, areaId, slotType, regionIdx):
-        item = self.__ctx.getItemFromRegion(C11nId(areaId, slotType, regionIdx))
-        itemIdx = self._carouselDP.collection.index(item.intCD) if item is not None else -1
+        anchorId = C11nId(areaId, slotType, regionIdx)
+        slotId = self.__ctx.getSlotIdByAnchorId(anchorId)
+        itemIdx = -1
+        if slotId is not None:
+            item = self.__ctx.getItemFromRegion(slotId)
+            if item is not None and item.intCD in self._carouselDP.collection:
+                itemIdx = self._carouselDP.collection.index(item.intCD)
+        slot = g_currentVehicle.item.getAnchorBySlotId(slotType, areaId, regionIdx)
+        if slotType == GUI_ITEM_TYPE.PROJECTION_DECAL:
+            parent = slot if slot.isParent else g_currentVehicle.item.getAnchorById(slot.parentSlotId)
+            self._currentParentSlot = parent
         self._carouselDP.selectItemIdx(itemIdx)
+        return
+
+    def __onSlotUnselected(self):
+        self._currentParentSlot = None
+        self._carouselDP.refresh()
         return
 
     def __setNotificationCounters(self):
@@ -146,7 +165,7 @@ class CustomizationBottomPanel(CustomizationBottomPanelMeta):
         self.__clearFilter()
         self.refreshFilterData()
         self.__refreshHotFilters()
-        self.__refreshCarousel(force=True)
+        self.__refreshCarousel(rebuild=False, force=True)
 
     def refreshFilterData(self):
         self.as_setFilterDataS(self._carouselDP.getFilterData())
@@ -251,9 +270,12 @@ class CustomizationBottomPanel(CustomizationBottomPanelMeta):
     def __clearFilter(self):
         self._carouselDP.clearFilter()
 
-    def __refreshCarousel(self, force=False):
+    def __refreshCarousel(self, rebuild=False, force=False):
         if force or self._carouselDP.getAppliedFilter() or self._carouselDP.getOwnedFilter():
-            self._carouselDP.buildList(self.__ctx.currentTab, self.__ctx.currentSeason, refresh=False)
+            if rebuild:
+                self._carouselDP.buildList(self.__ctx.currentTab, self.__ctx.currentSeason, refresh=False)
+            else:
+                self._carouselDP.updateList(refresh=False)
             self.as_setCarouselDataS(self.__buildCustomizationCarouselDataVO())
         self._carouselDP.refresh()
 
@@ -269,8 +291,13 @@ class CustomizationBottomPanel(CustomizationBottomPanelMeta):
         noPrice = item.buyCount <= 0
         isDarked = purchaseLimit == 0 and itemInventoryCount == 0
         isAlreadyUsed = isDarked and not isCurrentlyApplied
+        forceLocked = isAlreadyUsed
+        isUnsupportedForm = False
         autoRentEnabled = self.__ctx.autoRentEnabled()
-        return buildCustomizationItemDataVO(item, itemInventoryCount, showUnsupportedAlert=showUnsupportedAlert, isCurrentlyApplied=isCurrentlyApplied, isAlreadyUsed=isAlreadyUsed, forceLocked=isAlreadyUsed, isDarked=isDarked, noPrice=noPrice, autoRentEnabled=autoRentEnabled, vehicle=g_currentVehicle.item)
+        if item.itemTypeID == GUI_ITEM_TYPE.PROJECTION_DECAL and self._currentParentSlot is not None and (not self.__ctx.isSlotFilled(self.__ctx.selectedAnchor) or self._propertySheetShow):
+            isUnsupportedForm = item.formfactor in self._currentParentSlot.getUnsupportedForms(g_currentVehicle.item)
+            forceLocked = forceLocked or isUnsupportedForm
+        return buildCustomizationItemDataVO(item, itemInventoryCount, showUnsupportedAlert=showUnsupportedAlert, isCurrentlyApplied=isCurrentlyApplied, isAlreadyUsed=isAlreadyUsed, forceLocked=forceLocked, isDarked=isDarked, noPrice=noPrice, autoRentEnabled=autoRentEnabled, vehicle=g_currentVehicle.item, isUnsupportedForm=isUnsupportedForm)
 
     def __getItemTabsData(self):
         data = []
@@ -297,7 +324,9 @@ class CustomizationBottomPanel(CustomizationBottomPanelMeta):
             self._carouselDP.setOwnedFilter(kwargs['inventory'])
         if 'applied' in kwargs:
             self._carouselDP.setAppliedFilter(kwargs['applied'])
-        self.__refreshCarousel(force=True)
+        if 'formfactorGroups' in kwargs:
+            self._carouselDP.setFormfactorGroupsFilter(kwargs['formfactorGroups'])
+        self.__refreshCarousel(rebuild=False, force=True)
         self.__refreshHotFilters()
 
     def __onCacheResync(self, *_):
@@ -305,8 +334,7 @@ class CustomizationBottomPanel(CustomizationBottomPanelMeta):
             return
         self.__updateTabs()
         self.__setBottomPanelBillData()
-        self.__refreshCarousel(force=self.__needCaruselFullRebuild)
-        self.__needCaruselFullRebuild = False
+        self.__refreshCarousel(rebuild=True, force=False)
         self.__setNotificationCounters()
 
     def __onVehicleChanged(self):
@@ -320,7 +348,7 @@ class CustomizationBottomPanel(CustomizationBottomPanelMeta):
 
     def __onSeasonChanged(self, seasonType):
         self.__updateTabs(self.__ctx.currentTab)
-        self.__refreshCarousel(force=True)
+        self.__refreshCarousel(rebuild=True, force=True)
         self.__updatePopoverBtnIcon()
         self.__setBottomPanelBillData()
         self.__setNotificationCounters()
@@ -346,10 +374,10 @@ class CustomizationBottomPanel(CustomizationBottomPanelMeta):
     def __onItemsInstalled(self, *args):
         self.__updateTabs(self.__ctx.currentTab)
         self.__setBottomPanelBillData()
-        self.__refreshCarousel()
+        self.__refreshCarousel(rebuild=False, force=False)
 
     def __onTabChanged(self, tabIndex):
-        self.__refreshCarousel(force=True)
+        self.__refreshCarousel(rebuild=True, force=True)
         self.__updateTabs(self.__ctx.currentTab)
         self.__updateSetSwitcherData()
         self.__setNotificationCounters()
@@ -357,12 +385,12 @@ class CustomizationBottomPanel(CustomizationBottomPanelMeta):
 
     def __onTabsUpdated(self, tabIndex):
         self.__updateTabs(tabIndex)
-        self.__refreshCarousel(force=True)
+        self.__refreshCarousel(rebuild=True, force=True)
 
     def __onItemsRemoved(self):
         self.__updateTabs(self.__ctx.currentTab)
         self.__setBottomPanelBillData()
-        self.__refreshCarousel()
+        self.__refreshCarousel(rebuild=False, force=False)
 
     def __onModeChanged(self, mode):
         self._carouselDP.selectItem(self.__ctx.modifiedStyle if mode == C11nMode.STYLE else None)
@@ -374,8 +402,7 @@ class CustomizationBottomPanel(CustomizationBottomPanelMeta):
     def __onChangesCanceled(self):
         self.__updateTabs(self.__ctx.currentTab)
         self.__setBottomPanelBillData()
-        self.__refreshCarousel(force=self.__needCaruselFullRebuild)
-        self.__needCaruselFullRebuild = False
+        self.__refreshCarousel(rebuild=False, force=False)
 
     def __onItemSold(self, item, count):
         self._needCaruselFullRebuild = self._carouselDP.getOwnedFilter()
@@ -383,7 +410,7 @@ class CustomizationBottomPanel(CustomizationBottomPanelMeta):
     def __onItemDataChanged(self, areaId, slotId, regionIdx, changeAnchor, updatePropertiesSheet, refreshCarousel):
         self.__setBottomPanelBillData()
         if refreshCarousel:
-            self.__refreshCarousel()
+            self.__refreshCarousel(rebuild=False, force=False)
 
     def __scrollToNewItem(self):
         currentTypes = TABS_ITEM_TYPE_MAPPING[self.__ctx.currentTab]
@@ -393,6 +420,11 @@ class CustomizationBottomPanel(CustomizationBottomPanelMeta):
                 self.as_scrollToSlotS(item.intCD)
                 return
 
-    def __onViewLoaded(self, view, *args, **kwargs):
-        if view.alias == VIEW_ALIAS.CUSTOMIZATION_FILTER_POPOVER:
-            view.setBottomPanel(self)
+    def __onFilterPopoverClosed(self):
+        self.blinkCounter()
+
+    def onPropertySheetShown(self):
+        self._propertySheetShow = True
+
+    def onPropertySheetHidden(self):
+        self._propertySheetShow = False

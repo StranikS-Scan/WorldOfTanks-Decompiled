@@ -21,13 +21,6 @@ class EpicBattlePlayerDataComponent(PlayerDataComponent):
 
     def __init__(self, componentSystem):
         super(EpicBattlePlayerDataComponent, self).__init__(componentSystem)
-        self.addSyncDataCallback(ARENA_SYNC_OBJECTS.SECTOR, 'playerSectorInfo', self.__vehiclePlayerSectorUpdated)
-        self.addSyncDataCallback(ARENA_SYNC_OBJECTS.RESPAWN, 'nextLiveUpdateTimer', self.__onLiveUpdateTimerUpdated)
-        self.addSyncDataCallback(ARENA_SYNC_OBJECTS.RESPAWN, 'livesByTeamGroup', self.__onLivesPerTeamGroupUpdated)
-        self.addSyncDataCallback(ARENA_SYNC_OBJECTS.RESPAWN, 'respawnOffsets', self.__onRespawnOffsetsUpdated)
-        self.addSyncDataCallback(ARENA_SYNC_OBJECTS.RESPAWN, 'outOfLives', self.__onPlayerOutOfLivesAdded)
-        self.addSyncDataCallback(ARENA_SYNC_OBJECTS.RESPAWN, 'outOfLives_d', self.__onPlayerOutOfLivesDeleted)
-        self.addSyncDataCallback(ARENA_SYNC_OBJECTS.FRONT_LINE, 'CoM', self.__onFrontlineCenterOfMassUpdated)
         self.__playerLives = -1
         self.__respawnLane = None
         self.__physicalLane = None
@@ -45,11 +38,21 @@ class EpicBattlePlayerDataComponent(PlayerDataComponent):
         self.onPlayerXPUpdated = Event.Event(self._eventManager)
         self.onFrontlineCenterUpdated = Event.Event(self._eventManager)
         self.onRespawnOffsetsUpdated = Event.Event(self._eventManager)
-        g_playerEvents.onAvatarReady += self.setPlayerLaneByPlayerGroups
         return
 
-    def destroy(self):
-        super(EpicBattlePlayerDataComponent, self).destroy()
+    def activate(self):
+        super(EpicBattlePlayerDataComponent, self).activate()
+        self.addSyncDataCallback(ARENA_SYNC_OBJECTS.SECTOR, 'playerSectorInfo', self.__vehiclePlayerSectorUpdated)
+        self.addSyncDataCallback(ARENA_SYNC_OBJECTS.RESPAWN, 'nextLiveUpdateTimer', self.__onLiveUpdateTimerUpdated)
+        self.addSyncDataCallback(ARENA_SYNC_OBJECTS.RESPAWN, 'livesByTeamGroup', self.__onLivesPerTeamGroupUpdated)
+        self.addSyncDataCallback(ARENA_SYNC_OBJECTS.RESPAWN, 'respawnOffsets', self.__onRespawnOffsetsUpdated)
+        self.addSyncDataCallback(ARENA_SYNC_OBJECTS.RESPAWN, 'outOfLives', self.__onPlayerOutOfLivesAdded)
+        self.addSyncDataCallback(ARENA_SYNC_OBJECTS.RESPAWN, 'outOfLives_d', self.__onPlayerOutOfLivesDeleted)
+        self.addSyncDataCallback(ARENA_SYNC_OBJECTS.FRONT_LINE, 'CoM', self.__onFrontlineCenterOfMassUpdated)
+        g_playerEvents.onAvatarReady += self.setPlayerLaneByPlayerGroups
+
+    def deactivate(self):
+        super(EpicBattlePlayerDataComponent, self).deactivate()
         self.removeSyncDataCallback(ARENA_SYNC_OBJECTS.SECTOR, 'playerSectorInfo', self.__vehiclePlayerSectorUpdated)
         self.removeSyncDataCallback(ARENA_SYNC_OBJECTS.RESPAWN, 'nextLiveUpdateTimer', self.__onLiveUpdateTimerUpdated)
         self.removeSyncDataCallback(ARENA_SYNC_OBJECTS.RESPAWN, 'livesByTeamGroup', self.__onLivesPerTeamGroupUpdated)

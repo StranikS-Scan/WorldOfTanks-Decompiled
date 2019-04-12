@@ -63,4 +63,6 @@ RECORD_CONFIGS = {'medalKay': (1, 10, 100, 1000),
  'victoryMarch': 3,
  'stormLord': (10, 100, 500, 1000),
  'winnerLaurels': (1000, 10000, 100000, 1000000),
- 'RP2018sergeant': (5, 10, 25, 50)}
+ 'RP2018sergeant': (5, 10, 25, 50),
+ 'rankedDivisionFighter': (20, 200, 500, 1000),
+ 'rankedStayingPower': (20, 200, 500, 1000)}

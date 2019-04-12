@@ -4,7 +4,6 @@ import BigWorld
 import SoundGroups
 from CurrentVehicle import g_currentVehicle, g_currentPreviewVehicle
 from PlayerEvents import g_playerEvents
-from account_helpers import isPremiumAccount
 from account_helpers.AccountValidator import AccountValidator
 from adisp import process
 from constants import HAS_DEV_RESOURCES
@@ -15,7 +14,6 @@ from gui.Scaleform.Waiting import Waiting
 from gui.Scaleform.daapi.view.login.EULADispatcher import EULADispatcher
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.SYSTEM_MESSAGES import SYSTEM_MESSAGES
-from gui.app_loader import g_appLoader
 from gui.prb_control.dispatcher import g_prbLoader
 from gui.shared import g_eventBus, events, EVENT_BUS_SCOPE
 from gui.shared.ClanCache import g_clanCache
@@ -30,6 +28,7 @@ from helpers.statistics import HANGAR_LOADING_STATE
 from skeletons.account_helpers.settings_core import ISettingsCache, ISettingsCore
 from skeletons.connection_mgr import IConnectionManager
 from skeletons.gameplay import IGameplayLogic, PlayerEventID
+from skeletons.gui.app_loader import IAppLoader
 from skeletons.gui.battle_results import IBattleResultsService
 from skeletons.gui.shared.utils import IHangarSpace, IRaresCache
 from skeletons.gui.web import IWebController
@@ -69,6 +68,7 @@ class ServicesLocator(object):
     gameplay = dependency.descriptor(IGameplayLogic)
     hangarSpace = dependency.descriptor(IHangarSpace)
     rareAchievesCache = dependency.descriptor(IRaresCache)
+    appLoader = dependency.descriptor(IAppLoader)
 
     @classmethod
     def clear(cls):
@@ -106,7 +106,7 @@ def onAccountShowGUI(ctx):
     ServicesLocator.gameState.onAccountShowGUI(ServicesLocator.lobbyContext.getGuiCtx())
     accDossier = ServicesLocator.itemsCache.items.getAccountDossier()
     ServicesLocator.rareAchievesCache.request(accDossier.getBlock('rareAchievements'))
-    premium = isPremiumAccount(ServicesLocator.itemsCache.items.stats.attributes)
+    premium = ServicesLocator.itemsCache.items.stats.isPremium
     if ServicesLocator.hangarSpace.inited:
         ServicesLocator.hangarSpace.refreshSpace(premium)
     else:
@@ -230,7 +230,7 @@ def init(loadingScreenGUI=None):
     g_playerEvents.onCenterIsLongDisconnected += onCenterIsLongDisconnected
     g_playerEvents.onIGRTypeChanged += onIGRTypeChanged
     from gui.Scaleform.app_factory import createAppFactory
-    g_appLoader.init(createAppFactory())
+    ServicesLocator.appLoader.init(createAppFactory())
     g_paramsCache.init()
     if loadingScreenGUI and loadingScreenGUI.script:
         loadingScreenGUI.script.active(False)
@@ -253,7 +253,7 @@ def init(loadingScreenGUI=None):
 def fini():
     guiModsFini()
     Waiting.close()
-    g_appLoader.fini()
+    ServicesLocator.appLoader.fini()
     g_eventBus.clear()
     g_prbLoader.fini()
     g_clanCache.fini()

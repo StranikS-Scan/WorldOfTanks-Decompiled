@@ -21,7 +21,6 @@ from gui.Scaleform.framework.managers.containers import POP_UP_CRITERIA
 from gui.Scaleform.genConsts.FORTIFICATION_ALIASES import FORTIFICATION_ALIASES
 from gui.Scaleform.locale.FORTIFICATIONS import FORTIFICATIONS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
-from gui.app_loader import g_appLoader
 from gui.clans.clan_helpers import getStrongholdUrl
 from gui.prb_control import settings
 from gui.prb_control.entities.base.unit.listener import IStrongholdListener
@@ -41,12 +40,14 @@ from messenger.ext import channel_num_gen
 from messenger.gui import events_dispatcher
 from messenger.proto.events import g_messengerEvents
 from shared_utils import CONST_CONTAINER
+from skeletons.gui.app_loader import IAppLoader
 from skeletons.gui.game_control import IBrowserController
 from skeletons.gui.shared import IItemsCache
 
 class StrongholdBattleRoom(FortClanBattleRoomMeta, IUnitListener, IStrongholdListener, MethodsRules, UsersInfoHelper):
     browserCtrl = dependency.descriptor(IBrowserController)
     itemsCache = dependency.descriptor(IItemsCache)
+    appLoader = dependency.descriptor(IAppLoader)
 
     class TIMER_GLOW_COLORS(CONST_CONTAINER):
         NORMAL = int('BB6200', 16)
@@ -286,7 +287,7 @@ class StrongholdBattleRoom(FortClanBattleRoomMeta, IUnitListener, IStrongholdLis
             maxPlayerCount = entity.getStrongholdSettings().getHeader().getMaxPlayersCount()
         else:
             maxPlayerCount = vo_converters.MAX_PLAYER_COUNT_ALL
-        data = makeSortieVO(entity, havePermissions, unitMgrID=entity.getID(), app=self.app, canInvite=canInvite, maxPlayerCount=maxPlayerCount)
+        data = makeSortieVO(entity, havePermissions, unitMgrID=entity.getID(), canInvite=canInvite, maxPlayerCount=maxPlayerCount)
         if self.__changeModeBrowserId and not havePermissions:
             self.__destroyChangeModeWindow()
         if self.__minimapGrid:
@@ -305,7 +306,7 @@ class StrongholdBattleRoom(FortClanBattleRoomMeta, IUnitListener, IStrongholdLis
             header = entity.getStrongholdSettings().getHeader()
             maxPlayerCount = header.getMaxPlayersCount()
             self._updateTableHeader(maxPlayerCount, header.getMaxLegionariesCount())
-            isRosterSet, slots = makeStrongholdsSlotsVOs(entity, entity.getID(), app=self.app, maxPlayerCount=maxPlayerCount)
+            isRosterSet, slots = makeStrongholdsSlotsVOs(entity, entity.getID(), maxPlayerCount=maxPlayerCount)
             self.as_setMembersS(isRosterSet, slots)
 
     def _getVehicleSelectorDescription(self):
@@ -534,7 +535,7 @@ class StrongholdBattleRoom(FortClanBattleRoomMeta, IUnitListener, IStrongholdLis
 
     def __destroyChangeModeWindow(self):
         if self.browserCtrl.getBrowser(self.__changeModeBrowserId):
-            app = g_appLoader.getApp()
+            app = self.appLoader.getApp()
             if app is not None and app.containerManager is not None:
                 windowAlias = getViewName(VIEW_ALIAS.BROWSER_WINDOW_MODAL, self.__changeModeBrowserId)
                 window = app.containerManager.getView(ViewTypes.WINDOW, criteria={POP_UP_CRITERIA.UNIQUE_NAME: windowAlias})

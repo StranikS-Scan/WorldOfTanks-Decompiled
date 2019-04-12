@@ -4,7 +4,7 @@ import BattleReplay
 from ReplayEvents import g_replayEvents
 from account_helpers import AccountSettings
 from account_helpers.AccountSettings import SELECTED_QUEST_IN_REPLAY
-from gui.Scaleform.daapi.view.meta.FullStatsMeta import FullStatsMeta
+from gui.Scaleform.daapi.view.meta.TabbedFullStatsMeta import TabbedFullStatsMeta
 from account_helpers.settings_core.options import QuestsProgressViewType
 from account_helpers.settings_core.settings_constants import QUESTS_PROGRESS
 from gui.Scaleform.genConsts.QUESTSPROGRESS import QUESTSPROGRESS
@@ -18,7 +18,7 @@ from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
 
-class FullStatsComponent(FullStatsMeta):
+class FullStatsComponent(TabbedFullStatsMeta):
     settingsCore = dependency.descriptor(ISettingsCore)
     eventsCache = dependency.descriptor(IEventsCache)
     lobbyContext = dependency.descriptor(ILobbyContext)
@@ -26,6 +26,10 @@ class FullStatsComponent(FullStatsMeta):
     def __init__(self):
         super(FullStatsComponent, self).__init__()
         self.__isProgressTrackingEnabled = False
+
+    @property
+    def hasTabs(self):
+        return True
 
     def setActiveTabIndex(self, index):
         if index is not None:

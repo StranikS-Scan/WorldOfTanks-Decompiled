@@ -115,6 +115,7 @@ class GUI_CTRL_MODE_FLAG(object):
 
 
 def getGuiServicesConfig(manager):
+    from gui import app_loader
     from gui import battle_control
     from gui import battle_results
     from gui import wgcg
@@ -131,6 +132,7 @@ def getGuiServicesConfig(manager):
     from gui import hangar_cameras
     from gui import impl
     from skeletons.gui.lobby_context import ILobbyContext
+    manager.addConfig(app_loader.getAppLoaderConfig)
     manager.addConfig(shared.getSharedServices)
     manager.addConfig(game_control.getGameControllersConfig)
     manager.addConfig(_sf.getScaleformConfig)

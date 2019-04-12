@@ -4,6 +4,7 @@ import cPickle
 from functools import partial
 import AccountCommands
 import items
+from account_helpers.premium_info import PremiumInfo
 from debug_utils import LOG_DEBUG_DEV, LOG_WARNING, LOG_ERROR
 from shared_utils.account_helpers.diff_utils import synchronizeDicts
 from items import vehicles
@@ -19,11 +20,13 @@ _TANKMAN = items.ITEM_TYPE_INDICES['tankman']
 _OPTIONALDEVICE = items.ITEM_TYPE_INDICES['optionalDevice']
 _SHELL = items.ITEM_TYPE_INDICES['shell']
 _EQUIPMENT = items.ITEM_TYPE_INDICES['equipment']
-_SIMPLE_VALUE_STATS = ('fortResource', 'slots', 'berths', 'freeXP', 'dossier', 'clanInfo', 'accOnline', 'accOffline', 'freeTMenLeft', 'freeVehiclesLeft', 'vehicleSellsLeft', 'captchaTriesLeft', 'hasFinPassword', 'finPswdAttemptsLeft', 'tkillIsSuspected', 'denunciationsLeft', 'tutorialsCompleted', 'battlesTillCaptcha', 'dailyPlayHours', 'playLimits') + Currency.ALL
-_DICT_STATS = ('vehTypeXP', 'vehTypeLocks', 'restrictions', 'globalVehicleLocks')
-_GROWING_SET_STATS = ('unlocks', 'eliteVehicles', 'multipliedXPVehs')
+_SIMPLE_VALUE_STATS = ('fortResource', 'slots', 'berths', 'freeXP', 'dossier', 'clanInfo', 'accOnline', 'accOffline', 'freeTMenLeft', 'freeVehiclesLeft', 'vehicleSellsLeft', 'captchaTriesLeft', 'hasFinPassword', 'finPswdAttemptsLeft', 'tkillIsSuspected', 'denunciationsLeft', 'tutorialsCompleted', 'battlesTillCaptcha', 'dailyPlayHours', 'playLimits', 'applyAdditionalXPCount') + Currency.ALL
+_DICT_STATS = ('vehTypeXP', 'vehTypeLocks', 'restrictions', 'globalVehicleLocks', 'dummySessionStats')
+_GROWING_SET_STATS = ('unlocks', 'eliteVehicles', 'multipliedXPVehs', 'multipliedRankedBattlesVehs')
 _ACCOUNT_STATS = ('clanDBID', 'attrs', 'premiumExpiryTime', 'autoBanTime', 'globalRating')
 _CACHE_STATS = ('isFinPswdVerified', 'mayConsumeWalletResources', 'unitAcceptDeadline', 'oldVehInvIDs')
+_PREFERRED_MAPS_KEY = 'preferredMaps'
+_ADDITIONAL_XP_CACHE_KEY = '_additionalXPCache'
 
 class Stats(object):
 
@@ -73,6 +76,13 @@ class Stats(object):
                 if stat in accountDiff:
                     cache[stat] = accountDiff[stat]
 
+            if _ADDITIONAL_XP_CACHE_KEY in accountDiff:
+                synchronizeDicts(accountDiff[_ADDITIONAL_XP_CACHE_KEY], cache.setdefault(_ADDITIONAL_XP_CACHE_KEY, {}))
+        if cache.get('premiumInfo') is None:
+            cache['premiumInfo'] = PremiumInfo()
+        premiumDiff = diff.get('premium')
+        if premiumDiff is not None:
+            cache['premiumInfo'].update(premiumDiff)
         economicsDiff = diff.get('economics', None)
         if economicsDiff is not None:
             for stat in ('unlocks', 'eliteVehicles'):
@@ -90,6 +100,11 @@ class Stats(object):
             spaDiff = cacheDiff.get('SPA', None)
             if spaDiff:
                 synchronizeDicts(spaDiff, cache.setdefault('SPA', dict()))
+        piggyBankDiff = diff.get('piggyBank', None)
+        if piggyBankDiff is not None:
+            synchronizeDicts(piggyBankDiff, cache.setdefault('piggyBank', dict()))
+        if _PREFERRED_MAPS_KEY in diff:
+            synchronizeDicts(diff[_PREFERRED_MAPS_KEY], cache.setdefault(_PREFERRED_MAPS_KEY, {}))
         return
 
     def getCache(self, callback=None):
@@ -169,6 +184,15 @@ class Stats(object):
             return
         else:
             self.__account.shop.waitForSync(partial(self.__berths_onShopSynced, callback))
+            return
+
+    def setMapsBlackList(self, selectedMaps, callback=None):
+        if self.__ignore:
+            if callback is not None:
+                callback(AccountCommands.RES_NON_PLAYER, 0)
+            return
+        else:
+            self.__account._doCmdIntArr(AccountCommands.CMD_SET_MAPS_BLACK_LIST, selectedMaps, None if callback is None else (lambda reqID, resID, errorStr, ext={}: callback(resID, errorStr, ext)))
             return
 
     def setMoney(self, credit, gold=0, freeXP=0, crystal=0, callback=None):

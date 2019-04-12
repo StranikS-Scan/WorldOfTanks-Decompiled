@@ -77,7 +77,7 @@ def createReusableInfo(results):
 
 
 class _ReusableInfo(object):
-    __slots__ = ('__arenaUniqueID', '__clientIndex', '__premiumState', '__common', '__personal', '__players', '__vehicles', '__avatars', '__squadFinder')
+    __slots__ = ('__arenaUniqueID', '__clientIndex', '__premiumState', '__common', '__personal', '__players', '__vehicles', '__avatars', '__squadFinder', '__premiumPlusState', '__isAddXPBonusApplied')
     itemsCache = dependency.descriptor(IItemsCache)
     lobbyContext = dependency.descriptor(ILobbyContext)
 
@@ -86,6 +86,8 @@ class _ReusableInfo(object):
         self.__arenaUniqueID = arenaUniqueID
         self.__clientIndex = 0
         self.__premiumState = PREMIUM_STATE.NONE
+        self.__premiumPlusState = PREMIUM_STATE.NONE
+        self.__isAddXPBonusApplied = False
         self.__common = common
         self.__personal = personal
         self.__players = players
@@ -107,6 +109,10 @@ class _ReusableInfo(object):
         self.__clientIndex = index
 
     @property
+    def hasAnyPremiumInPostBattle(self):
+        return self.__personal.hasAnyPremium
+
+    @property
     def premiumState(self):
         return self.__premiumState
 
@@ -115,16 +121,44 @@ class _ReusableInfo(object):
         self.__premiumState = state
 
     @property
+    def premiumPlusState(self):
+        return self.__premiumPlusState
+
+    @premiumPlusState.setter
+    def premiumPlusState(self, state):
+        self.__premiumPlusState = state
+
+    @property
     def isPremiumBought(self):
         return self.__premiumState & PREMIUM_STATE.BOUGHT > 0
+
+    @property
+    def isPremiumPlusBought(self):
+        return self.__premiumPlusState & PREMIUM_STATE.BOUGHT > 0
 
     @property
     def isPostBattlePremium(self):
         return self.__personal.isPremium or self.isPremiumBought
 
     @property
+    def isPostBattlePremiumPlus(self):
+        return self.__personal.isPremiumPlus or self.isPremiumPlusBought
+
+    @property
+    def isAddXPBonusApplied(self):
+        return self.__personal.isAddXPBonusApplied
+
+    @isAddXPBonusApplied.setter
+    def isAddXPBonusApplied(self, state):
+        self.__personal.isAddXPBonusApplied = state
+
+    @property
     def canUpgradeToPremium(self):
-        return self.__premiumState & PREMIUM_STATE.BUY_ENABLED > 0 and self.__premiumState & PREMIUM_STATE.HAS_ALREADY == 0 and not self.isPostBattlePremium and self.__common.arenaBonusType in (ARENA_BONUS_TYPE.REGULAR, ARENA_BONUS_TYPE.EPIC_RANDOM, ARENA_BONUS_TYPE.EPIC_BATTLE) and self.__personal.getXPDiff() > 0 and self.__personal.getCreditsDiff() > 0
+        return self.__premiumState & PREMIUM_STATE.BUY_ENABLED > 0 and self.__premiumState & PREMIUM_STATE.HAS_ALREADY == 0 and not self.isPostBattlePremium and self.__common.arenaBonusType in (ARENA_BONUS_TYPE.REGULAR, ARENA_BONUS_TYPE.EPIC_RANDOM, ARENA_BONUS_TYPE.EPIC_BATTLE)
+
+    @property
+    def canUpgradeToPremiumPlus(self):
+        return self.__premiumPlusState & PREMIUM_STATE.BUY_ENABLED > 0 and self.__premiumPlusState & PREMIUM_STATE.HAS_ALREADY == 0 and not self.isPostBattlePremiumPlus and self.__common.arenaBonusType in (ARENA_BONUS_TYPE.REGULAR, ARENA_BONUS_TYPE.EPIC_RANDOM, ARENA_BONUS_TYPE.EPIC_BATTLE)
 
     @property
     def canResourceBeFaded(self):
@@ -291,7 +325,7 @@ class _ReusableInfo(object):
 
     def getPersonalSquadFlags(self):
         playerInfo = self.getPlayerInfo()
-        showSquadLabels = playerInfo.squadIndex and self.__common.canTakeSquadXP()
+        showSquadLabels = playerInfo.squadIndex and self.__common.canTakeAnySquadBonus()
         squadHasBonus = False
         if showSquadLabels:
             showSquadLabels, squadHasBonus = self.__personal.avatar.getPersonalSquadFlags(self.__vehicles)

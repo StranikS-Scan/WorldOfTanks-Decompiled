@@ -1,13 +1,15 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/prb_control/entities/ranked/pre_queue/vehicles_watcher.py
+import typing
 from itertools import chain
 from constants import MAX_VEHICLE_LEVEL, MIN_VEHICLE_LEVEL
 from gui.prb_control.entities.base.pre_queue.vehicles_watcher import BaseVehiclesWatcher
-from gui.shared.gui_items.Vehicle import Vehicle
 from gui.shared.utils.requesters import REQ_CRITERIA
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
 from helpers import dependency
+if typing.TYPE_CHECKING:
+    from gui.shared.gui_items.Vehicle import Vehicle
 
 class RankedVehiclesWatcher(BaseVehiclesWatcher):
     itemsCache = dependency.descriptor(IItemsCache)

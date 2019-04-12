@@ -37,7 +37,7 @@ class ClientArena(object):
      ARENA_UPDATE.VEHICLE_RECOVERED: '_ClientArena__onVehicleRecovered',
      ARENA_UPDATE.FOG_OF_WAR: '_ClientArena__onFogOfWar'}
 
-    def __init__(self, arenaUniqueID, arenaTypeID, arenaBonusType, arenaGuiType, arenaExtraData, weatherPresetID):
+    def __init__(self, arenaUniqueID, arenaTypeID, arenaBonusType, arenaGuiType, arenaExtraData):
         self.__vehicles = {}
         self.__vehicleIndexToId = {}
         self.__positions = {}

@@ -76,7 +76,6 @@ class DevelopmentServers(Servers):
     def __init__(self, loginPreferences):
         Servers.__init__(self, loginPreferences)
         BigWorld.serverDiscovery.changeNotifier = self.updateServerList
-        BigWorld.serverDiscovery.searching = 1
 
     def fini(self):
         Servers.fini(self)

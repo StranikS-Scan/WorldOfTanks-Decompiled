@@ -85,7 +85,7 @@
     <hangarShadowTexture>	vehicles/russian/R50_SU76I/SU76I_HangarShadowMap.dds	</hangarShadowTexture>
     <customization>
       <customizableVehicleAreas>
-        <paint></paint>
+        <paint>	HULL	</paint>
         <camouflage>	HULL	</camouflage>
       </customizableVehicleAreas>
     </customization>
@@ -106,9 +106,9 @@
         <rayStart>	1.02336 0.908064 0.844836	</rayStart>
         <rayEnd>	0.652778 0.757515 0.844828	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
+        <isMirrored>	true	</isMirrored>
         <size>	0.31	</size>
         <hideIfDamaged>	false	</hideIfDamaged>
-        <isMirrored>	true	</isMirrored>
         <isUVProportional>	true	</isUVProportional>
       </slot>
       <slot>
@@ -144,8 +144,14 @@
       <slot>
         <slotType>	camouflage	</slotType>
         <slotId>	3	</slotId>
-        <anchorPosition>	0.00128381 0.463896 -1.69342	</anchorPosition>
-        <anchorDirection>	0.000000 0.742236 -0.670138	</anchorDirection>
+        <anchorPosition>	0.000000 0.549002 -0.7515	</anchorPosition>
+        <anchorDirection>	0.000000 0.589897 -0.807479	</anchorDirection>
+      </slot>
+      <slot>
+        <slotType>	paint	</slotType>
+        <slotId>	2	</slotId>
+        <anchorPosition>	0.000000 0.549002 -0.7515	</anchorPosition>
+        <anchorDirection>	0.000000 0.589897 -0.807479	</anchorDirection>
       </slot>
     </customizationSlots>
     <camouflage>
@@ -1014,7 +1020,7 @@
       </physicalTracks>
       <customization>
         <customizableVehicleAreas>
-          <paint></paint>
+          <paint>	CHASSIS	</paint>
           <camouflage></camouflage>
         </customizableVehicleAreas>
       </customization>
@@ -1022,8 +1028,14 @@
         <slot>
           <slotType>	style	</slotType>
           <slotId>	257	</slotId>
-          <anchorPosition>	-0.000000 2.21112 0.249066	</anchorPosition>
-          <anchorDirection>	-0.000000 1 0.000000	</anchorDirection>
+          <anchorPosition>	-0.000442422 2.21112 0.249042	</anchorPosition>
+          <anchorDirection>	-0.000305539 1 0.000000	</anchorDirection>
+        </slot>
+        <slot>
+          <slotType>	paint	</slotType>
+          <slotId>	256	</slotId>
+          <anchorPosition>	-1.40787 0.607255 0.00752497	</anchorPosition>
+          <anchorDirection>	-0.918215 0.396052 0.00490779	</anchorDirection>
         </slot>
       </customizationSlots>
     </Chassis_SU76I>
@@ -1090,7 +1102,7 @@
           </hitTester>
           <customization>
             <customizableVehicleAreas>
-              <paint></paint>
+              <paint>	GUN GUN_2	</paint>
               <camouflage>	GUN	</camouflage>
             </customizableVehicleAreas>
           </customization>
@@ -1098,9 +1110,23 @@
             <slot>
               <slotType>	camouflage	</slotType>
               <slotId>	770	</slotId>
-              <anchorPosition>	0.0368381 0.0594368 1.13873	</anchorPosition>
+              <anchorPosition>	0.0426796 0.0501013 1.15738	</anchorPosition>
               <anchorDirection>	-0.000000 0.000000 1	</anchorDirection>
               <applyTo>	4096	</applyTo>
+            </slot>
+            <slot>
+              <slotType>	paint	</slotType>
+              <slotId>	768	</slotId>
+              <anchorPosition>	0.0426797 0.0501046 1.15738	</anchorPosition>
+              <anchorDirection>	-0.000000 0.000000 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+            <slot>
+              <slotType>	paint	</slotType>
+              <slotId>	769	</slotId>
+              <anchorPosition>	-0.000004 0.242596 0.315559	</anchorPosition>
+              <anchorDirection>	0.000000 0.707107 0.707107	</anchorDirection>
+              <applyTo>	16384	</applyTo>
             </slot>
           </customizationSlots>
           <camouflage>

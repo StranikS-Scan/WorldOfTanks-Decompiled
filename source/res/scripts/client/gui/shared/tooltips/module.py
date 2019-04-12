@@ -251,6 +251,8 @@ class HeaderBlockConstructor(ModuleTooltipBlockConstructor):
             if module.isHydraulicChassis():
                 if module.isWheeledChassis():
                     title = text_styles.standard(MENU.MODULEINFO_HYDRAULICWHEELEDCHASSISLABEL)
+                elif module.hasAutoSiege():
+                    title = text_styles.standard(MENU.MODULEINFO_HYDRAULICAUTOSIEGECHASSISLABEL)
                 else:
                     title = text_styles.standard(MENU.MODULEINFO_HYDRAULICCHASSISLABEL)
                 block.append(formatters.packImageTextBlockData(title=title, desc='', img=module.getExtraIconInfo(), imgPadding=formatters.packPadding(top=3), padding=formatters.packPadding(left=108, top=9)))

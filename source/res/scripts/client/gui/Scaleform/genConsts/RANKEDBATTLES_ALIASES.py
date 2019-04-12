@@ -3,75 +3,107 @@
 
 
 class RANKEDBATTLES_ALIASES(object):
+    RANKED_BATTLES_PAGE_ALIAS = 'rankedBattlesPageAlias'
+    RANKED_BATTLES_REWARDS_UI = 'RankedBattlesRewardsUI'
+    RANKED_BATTLES_REWARDS_RANKS_UI = 'RankedBattlesRewardsRanksUI'
+    RANKED_BATTLES_REWARDS_LEAGUES_UI = 'RankedBattlesRewardsLeaguesUI'
+    RANKED_BATTLES_REWARDS_YEAR_UI = 'RankedBattlesRewardsYearUI'
+    RANKED_BATTLES_REWARD_RANK_RENDERER_UI = 'RBRewardRankRendererUI'
+    RANKED_BATTLES_REWARD_LEAGUE_RENDERER_UI = 'RBRewardLeagueRendererUI'
+    RANKED_BATTLES_INTRO_ALIAS = 'rankedBattlesIntro'
+    RANKED_BATTLES_RANG_REWARDS_UI = 'RankedBattlesRangsRewardsUI'
+    RANKED_BATTLES_DIVISIONS_VIEW_UI = 'RankedBattlesDivisionsViewUI'
+    RANKED_BATTLES_LEAGUES_VIEW_UI = 'RankedBattlesLeaguesViewUI'
+    RANKED_BATTLES_RAITING_ALIAS = 'RankedBattlesRatingAlias'
+    RANKED_BATTLES_INFO_ALIAS = 'RankedBattlesInfoAlias'
     RANKED_BATTLES_VIEW_ALIAS = 'rankedBattlesViewAlias'
-    RANKED_BATTLES_WELCOME_VIEW_ALIAS = 'rankedBattlesWelcomeView'
     RANKED_BATTLES_UNREACHABLE_VIEW_ALIAS = 'rankedBattlesUnreachableView'
-    RANKED_BATTLES_CYCLES_VIEW_ALIAS = 'rankedBattlesCyclesView'
-    RANKED_BATTLES_CALENDAR_POPOVER = 'rankedBattlesCalendarPopoverAlias'
     RANKED_BATTLES_BATTLE_RESULTS = 'rankedBattlesBattleResults'
     RANKED_BATTLES_AWARD = 'rankedBattlesAwardView'
     RANKED_BATTLES_SEASON_COMPLETE = 'rankedBattlesSeasonCompleteView'
-    RANKED_BATTLES_STAGE_COMPLETE = 'rankedBattlesStageCompleteView'
-    RANKED_BATTLES_BROWSER_VIEW = 'rankedBattlesBrowserView'
     RANKED_BATTLE_RESULTS_WIDGET = 'battleResWidget'
     RANKED_BATTLE_PRIME_TIME = 'rankedBattlesPrimeTime'
     RANKED_AWARD_RENDERER_ALIAS = 'AwardItemRendererExUI'
     RANKED_SEASON_AWARDS_RENDERER_ALIAS = 'SeasonAwardsRendererUI'
-    SOUND_WIDGET_FLICKER = 'gui_rb_rank_flicker'
-    SOUND_WIDGET_CENTER_LEFT_RECEIVE = 'gui_rb_rank_back'
-    SOUND_WIDGET_CENTER_LEFT_LOST = 'gui_rb_rank_back2'
-    SOUND_POST_BATTLE_SHIELD_DAMAGED = 'gui_rb_rank_shield_damage'
-    SOUND_POST_BATTLE_SHIELD_HEALED = 'gui_rb_rank_shield_restore'
-    SOUND_POST_BATTLE_SHIELD_LOST = 'gui_rb_rank_shield_break'
-    SOUND_POST_BATTLE_SHIELD_RECEIVED = 'gui_rb_rank_shield_receive'
-    SOUND_SHIELD_DAMAGED = 'gui_rb_rank_shield_damage_small'
-    SOUND_SHIELD_HEALED = 'gui_rb_rank_shield_restore_small'
-    SOUND_SHIELD_LOST = 'gui_rb_rank_shield_break_small'
-    SOUND_SHIELD_RECEIVED = 'gui_rb_rank_shield_receive_small'
-    SOUND_STEP_EARNED = 'gui_rb_rank_arrow_up'
-    SOUND_STEP_LOST = 'gui_rb_rank_arrow_down'
-    SOUND_RANK_1_EARNED = 'gui_rb_rank_1'
-    SOUND_RANK_2_EARNED = 'gui_rb_rank_2'
-    SOUND_RANK_3_EARNED = 'gui_rb_rank_3'
-    SOUND_RANK_4_EARNED = 'gui_rb_rank_4'
-    SOUND_RANK_5_EARNED = 'gui_rb_rank_5'
-    SOUND_VEH_RANK_EARNED = 'gui_rb_rank_max'
-    SOUND_RANK_LOST = 'gui_rb_rank_down'
-    SOUND_RANK_EARNED_POST_BATTLE = 'gui_rb_rank_up_postmortem'
+    SOUND_WIDGET_OVER = 'highlight'
+    SOUND_RANK_BLINK = 'gui_rb_rank_flicker'
+    SOUND_RANK_FIRST_RECEIVE = 'gui_rb_rank_up_initial_first_hangar'
+    SOUND_RANK_RECEIVE = 'gui_rb_rank_up_first_hangar'
+    SOUND_RANK_LAST_RECEIVE = 'gui_rb_rank_up_last_first_hangar'
+    SOUND_RANK_REACHIVE = 'gui_rb_rank_up_hangar'
+    SOUND_RANK_LOST = 'gui_rb_rank_down_hangar'
+    SOUND_RANK_REACHIVE_POST_BATTLE = 'gui_rb_rank_up_postmortem'
     SOUND_RANK_LOST_POST_BATTLE = 'gui_rb_rank_down_postmortem'
-    SOUND_STEP_EARNED_POST_BATTLE = 'gui_rb_rank_arrow_up_final'
-    SOUND_STEP_LOST_POST_BATTLE = 'gui_rb_rank_arrow_down_final'
-    SOUND_STEP_NOT_CHANGED_POST_BATTLE = 'gui_rb_rank_arrow_up_nothing'
-    RANKED_BATTLES_VIEW_UI = 'rankedBattlesView.swf'
-    RANKED_BATTLES_WELCOME_VIEW_UI = 'rankedBattlesWelcomeView.swf'
+    SOUND_RANK_NOTHING_POST_BATTLE = 'gui_rb_rank_arrow_up_nothing_postmortem'
+    SOUND_SHIELD_LOSE_STEP = 'gui_rb_rank_shield_damage_hangar'
+    SOUND_SHIELD_LOSE = 'gui_rb_rank_shield_break_hangar'
+    SOUND_SHIELD_RENEW = 'gui_rb_rank_shield_restore_hangar'
+    SOUND_SHIELD_FULL_RENEW = 'gui_rb_rank_shield_receive_hangar'
+    SOUND_SHIELD_LOSE_STEP_POST_BATTLE = 'gui_rb_rank_shield_damage_postmortem'
+    SOUND_SHIELD_LOSE_POST_BATTLE = 'gui_rb_rank_shield_break_postmortem'
+    SOUND_SHIELD_RENEW_POST_BATTLE = 'gui_rb_rank_shield_restore_postmortem'
+    SOUND_SHIELD_FULL_RENEW_POST_BATTLE = 'gui_rb_rank_shield_receive_postmortem'
+    SOUND_STEP_RECEIVE = 'gui_rb_rank_arrow_up_hangar'
+    SOUND_STEP_RECEIVE_SHORT = 'gui_rb_rank_arrow_up_short_hangar'
+    SOUND_STEP_LOST = 'gui_rb_rank_arrow_down_hangar'
+    SOUND_STEP_LOST_SHORT = 'gui_rb_rank_arrow_down_short_hangar'
+    SOUND_STEP_RECEIVE_POST_BATTLE = 'gui_rb_rank_arrow_up_postmortem'
+    SOUND_STEP_RECEIVE_SHORT_POST_BATTLE = 'gui_rb_rank_arrow_up_postmortem'
+    SOUND_STEP_BONUS_POST_BATTLE = 'gui_rb_rank_arrow_up_bonus_postmortem'
+    SOUND_STEP_BONUS_SHORT_POST_BATTLE = 'gui_rb_rank_arrow_up_bonus_postmortem'
+    SOUND_STEP_LOST_POST_BATTLE = 'gui_rb_rank_arrow_down_postmortem'
+    SOUND_STEP_LOST_SHORT_POST_BATTLE = 'gui_rb_rank_arrow_down_postmortem'
+    SOUND_DIVISION_RECEIVE = 'gui_rb_division_hangar'
+    SOUND_LEAGUE_RECEIVE = 'gui_rb_rank_league_unknown_hangar'
+    SOUND_LEAGUE_INCREASE = 'gui_rb_rank_league_up_hangar'
+    SOUND_LEAGUE_DECREASE = 'gui_rb_rank_league_down_hangar'
     RANKED_BATTLES_UNREACHABLE_VIEW_UI = 'rankedBattlesUnreachableView.swf'
-    RANKED_BATTLES_CYCLES_VIEW_UI = 'rankedBattlesCyclesView.swf'
-    RANKED_BATTLES_CALENDAR_POPOVER_UI = 'rankedBattlesCalendarPopover.swf'
     RANKED_BATTLES_BATTLE_RESULTS_UI = 'rankedBattlesBattleResults.swf'
     RANKED_BATTLES_AWARD_UI = 'rankedBattlesAwardView.swf'
     RANKED_BATTLES_SEASON_COMPLETE_UI = 'rankedBattlesSeasonCompleteView.swf'
-    RANKED_BATTLES_STAGE_COMPLETE_UI = 'rankedBattlesStageCompleteView.swf'
-    RANKED_BATTLES_BROWSER_VIEW_UI = 'rankedBattlesBrowserView.swf'
     STEP_RECEIVED_STATE = 'received'
+    STEP_RECEIVED_POSITIVE_STATE = 'received_positive'
+    STEP_RECEIVED_BONUS_STATE = 'received_bonus'
     STEP_RECEIVED_BLINK_STATE = 'received_blink'
+    STEP_RECEIVED_BLINK_BONUS_STATE = 'received_blink_bonus'
     STEP_NOT_RECEIVED_STATE = 'not_received'
     STEP_JUST_RECEIVED_STATE = 'just_received'
+    STEP_JUST_RECEIVED_BONUS_STATE = 'just_received_bonus'
     STEP_JUST_RECEIVED_SHORT_STATE = 'just_received_short'
+    STEP_JUST_RECEIVED_SHORT_BONUS_STATE = 'just_received_short_bonus'
     STEP_JUST_LOST_STATE = 'just_lost'
+    STEP_JUST_LOST_SHORT_STATE = 'just_lost_short'
+    STEP_LOST_BLINK_STATE = 'lost_blink'
     STEP_RECEIVED_STATES = [STEP_RECEIVED_STATE,
+     STEP_RECEIVED_POSITIVE_STATE,
+     STEP_RECEIVED_BONUS_STATE,
      STEP_RECEIVED_BLINK_STATE,
      STEP_JUST_RECEIVED_STATE,
-     STEP_JUST_RECEIVED_SHORT_STATE]
-    STEP_NOT_RECEIVED_STATES = [STEP_JUST_LOST_STATE, STEP_NOT_RECEIVED_STATE]
+     STEP_JUST_RECEIVED_SHORT_STATE,
+     STEP_JUST_RECEIVED_BONUS_STATE,
+     STEP_JUST_RECEIVED_SHORT_BONUS_STATE,
+     STEP_RECEIVED_BLINK_BONUS_STATE]
+    STEP_NOT_RECEIVED_STATES = [STEP_JUST_LOST_STATE,
+     STEP_NOT_RECEIVED_STATE,
+     STEP_JUST_LOST_SHORT_STATE,
+     STEP_LOST_BLINK_STATE]
+    STEP_NOT_ANIMATED_STATES = [STEP_RECEIVED_STATE, STEP_NOT_RECEIVED_STATE]
     RANK_IDLE_STATE = 'rank_idle'
     RANK_INIT_STATE = 'rank_init'
     FIRST_RANK_RECEIVE_STATE = 'first_rank_receive'
     FIRST_RANK_REACHIVE_STATE = 'first_rank_reachive'
+    FIRST_RANK_LOST_STATE = 'first_rank_lost'
     NEW_RANK_CONGRAT_STATE = 'new_rank_congrat'
-    RANK_RECEIVE_FOR_FIRST_TIME_STATE = 'rank_receive_for_first_time'
     RANK_RECEIVE_STATE = 'rank_receive'
-    VEH_RANK_RECEIVE_STATE = 'veh_rank_receive'
+    RANK_REACHIVE_STATE = 'rank_reachive'
     RANK_LOST_STATE = 'rank_lost'
+    DIVISION_RECEIVE_STATE = 'division_receive'
+    LEAGUE_RECEIVE_STATE = 'league_receive'
+    LEAGUE_IDLE_STATE = 'league_idle'
+    LEAGUE_INCREASE_STATE = 'league_increase'
+    LEAGUE_DECREASE_STATE = 'league_decrease'
+    LEAGUE_UPDATE_STATE = 'league_update'
+    VEH_RANK_RECEIVE_STATE = 'veh_rank_receive'
     ANIM_SHIELD_LOSE = 'anim_shield_lose'
     ANIM_SHIELD_LOSE_STEP = 'anim_shield_lose_step'
     ANIM_SHIELD_LOSE_STEP_FROM_FULL = 'anim_shield_lose_step_from_full'
@@ -81,23 +113,25 @@ class RANKEDBATTLES_ALIASES(object):
     ANIM_SHIELD_NOT_FULL = 'anim_shield_not_full'
     ANIM_ACHIEVE_LADDER_POINT = 'anim_achive_ladder_point'
     ANIM_SHIELD_ONE_RANK_STATES = [ANIM_SHIELD_NOT_FULL, ANIM_SHIELD_LOSE_STEP_FROM_FULL, ANIM_SHIELD_LOSE_STEP]
-    RANK_ANIMATED_STATES = [FIRST_RANK_RECEIVE_STATE,
-     RANK_RECEIVE_FOR_FIRST_TIME_STATE,
-     RANK_RECEIVE_STATE,
-     RANK_LOST_STATE,
+    RANK_ANIMATED_STATES = [RANK_INIT_STATE,
+     FIRST_RANK_RECEIVE_STATE,
      FIRST_RANK_REACHIVE_STATE,
+     FIRST_RANK_LOST_STATE,
+     RANK_RECEIVE_STATE,
+     RANK_REACHIVE_STATE,
+     RANK_LOST_STATE,
      ANIM_SHIELD_LOSE,
      ANIM_SHIELD_LOSE_STEP,
      ANIM_SHIELD_LOSE_STEP_FROM_FULL,
      ANIM_SHIELD_RENEW,
      ANIM_SHIELD_FULL_RENEW,
      ANIM_SHIELD_LOSE_FROM_FULL,
-     ANIM_ACHIEVE_LADDER_POINT]
-    RANK_LEFT_BACK_FLASH_STATES = [RANK_LOST_STATE,
-     FIRST_RANK_RECEIVE_STATE,
-     NEW_RANK_CONGRAT_STATE,
-     RANK_IDLE_STATE]
-    RANK_LOOPED_REFLECTION_STATES = [RANK_INIT_STATE, NEW_RANK_CONGRAT_STATE]
+     ANIM_ACHIEVE_LADDER_POINT,
+     DIVISION_RECEIVE_STATE,
+     LEAGUE_RECEIVE_STATE,
+     LEAGUE_INCREASE_STATE,
+     LEAGUE_DECREASE_STATE]
+    RANK_LEFT_BACK_FLASH_STATES = [RANK_LOST_STATE, FIRST_RANK_LOST_STATE, RANK_IDLE_STATE]
     BLINK_BACKGROUND_SHOW = 'show'
     WIDGET_SMALL = 'small'
     WIDGET_MEDIUM = 'medium'
@@ -115,6 +149,9 @@ class RANKEDBATTLES_ALIASES(object):
     FUTURE = 'future'
     FINAL = 'final'
     BATTLE_RESULTS_SUB_TASK_UI = 'RankedBattleSubTaskUI'
+    BATTLE_RESULTS_NORMAL_STATE = 'normal'
+    BATTLE_RESULTS_POSITIVE_STATE = 'positive'
+    BATTLE_RESULTS_NEGATIVE_STATE = 'negative'
     BACKGROUND_STATE_TOP2 = 'top2'
     BACKGROUND_STATE_TOP = 'top'
     BACKGROUND_STATE_LOSE = 'lose'
@@ -127,16 +164,26 @@ class RANKEDBATTLES_ALIASES(object):
     GUI_RB_INPUT_RANK_MAX = 'gui_rb_input_rank_max'
     GUI_RB_INPUT_RANK_BACK = 'gui_rb_input_rank_back'
     GUI_RB_INPUT_RULE = 'gui_rb_input_rule'
+    SEASON_COMPLETE_VIEW_LEAGUE_STATE = 'league_state'
+    SEASON_COMPLETE_VIEW_DIVISION_STATE = 'division_state'
     SOUND_INFO_ANIMATION_START = 'sound_info_animation_start'
     SOUND_BOX_ANIMATION_START = 'sound_box_animation_start'
     SOUND_AWARD_ANIMATION_START = 'sound_award_animation_start'
     SOUND_BTN_ANIMATION_START = 'sound_btn_animation_start'
     SUBTASK_STATE_STAGE = 'stage'
     SUBTASK_STATE_RANK = 'rank'
-    SUBTASK_STATE_MASTER = 'master'
+    SUBTASK_STATE_RANK_LOST = 'rank_lost'
+    SUBTASK_STATE_DIVISION = 'division'
+    SUBTASK_STATE_LEAGUE = 'league'
     STEP_VALUE_EARN = 1
     STEP_VALUE_LOSE = -1
     STEP_VALUE_NO_CHANGE = 0
+    AWARD_VIEW_RANK_STATE = 'award_view_rank_state'
+    AWARD_VIEW_DIVISION_STATE = 'award_view_division_state'
+    AWARD_VIEW_LEAGUE_STATE = 'award_view_league_state'
+    SOUND_AWARD_DIVISION = 'gui_rb_division_award'
+    SOUND_AWARD_LEAGUE = 'gui_rb_league_award'
+    SOUND_AWARD_RANK = 'gui_rb_rank_award'
     SHIELD_DISABLED = 'shield_disabled'
     SHIELD_ENABLED = 'shield_enabled'
     SHIELD_LOSE_STEP = 'shield_lose_step'
@@ -174,4 +221,13 @@ class RANKEDBATTLES_ALIASES(object):
     STANDOFF_DOT = 3
     STANDOFF_MINUS_BLIND = 4
     STANDOFF_PLUS_2 = 5
+    STANDOFF_RPOTECTED = 6
     NON_NEGATIVE_STANDOFFS = [STANDOFF_INVISIBLE, STANDOFF_PLUS, STANDOFF_PLUS_2]
+    DIVISIONS_CLASSIFICATION = 'classification'
+    DIVISIONS_BRONZE = 'bronze'
+    DIVISIONS_SILVER = 'silver'
+    DIVISIONS_GOLD = 'gold'
+    DIVISIONS_ORDER = [DIVISIONS_CLASSIFICATION,
+     DIVISIONS_BRONZE,
+     DIVISIONS_SILVER,
+     DIVISIONS_GOLD]

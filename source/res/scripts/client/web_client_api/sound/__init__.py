@@ -2,8 +2,9 @@
 # Embedded file name: scripts/client/web_client_api/sound/__init__.py
 import SoundGroups
 import WWISE
+from helpers import dependency
+from skeletons.gui.app_loader import IAppLoader
 from web_client_api import w2c, w2capi, W2CSchema, Field
-from gui.app_loader import g_appLoader
 
 class _SoundSchema(W2CSchema):
     sound_id = Field(required=True, type=basestring)
@@ -23,7 +24,8 @@ class SoundWebApi(object):
 
     @w2c(_SoundSchema, 'sound')
     def sound(self, cmd):
-        app = g_appLoader.getApp()
+        appLoader = dependency.instance(IAppLoader)
+        app = appLoader.getApp()
         if app and app.soundManager:
             app.soundManager.playEffectSound(cmd.sound_id)
 

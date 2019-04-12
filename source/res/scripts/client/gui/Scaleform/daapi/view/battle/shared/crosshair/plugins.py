@@ -834,7 +834,7 @@ class SiegeModePlugin(CrosshairPlugin):
         if ctrl.isInPostmortem:
             return
         else:
-            if vTypeDesc.hasSiegeMode and not vTypeDesc.isWheeledVehicle:
+            if vTypeDesc.hasSiegeMode and not vTypeDesc.isWheeledVehicle and not vTypeDesc.hasAutoSiegeMode:
                 value = ctrl.getStateValue(VEHICLE_VIEW_STATE.SIEGE_MODE)
                 if value is not None:
                     self.__onVehicleStateUpdated(VEHICLE_VIEW_STATE.SIEGE_MODE, value)
@@ -854,16 +854,19 @@ class SiegeModePlugin(CrosshairPlugin):
     def __updateView(self):
         vStateCtrl = self.sessionProvider.shared.vehicleState
         vehicle = vStateCtrl.getControllingVehicle()
-        if vehicle is not None and vehicle.typeDescriptor.isWheeledVehicle:
-            return
+        if vehicle is not None:
+            vTypeDescr = vehicle.typeDescriptor
+            if vTypeDescr.isWheeledVehicle or vTypeDescr.hasAutoSiegeMode:
+                return
         else:
-            if self.__siegeState == _SIEGE_STATE.ENABLED:
-                self._parentObj.as_setNetTypeS(NET_TYPE_OVERRIDE.SIEGE_MODE)
-            elif self.__siegeState == _SIEGE_STATE.DISABLED:
-                self._parentObj.as_setNetTypeS(NET_TYPE_OVERRIDE.DISABLED)
-            visibleMask = CROSSHAIR_CONSTANTS.VISIBLE_ALL if self.__siegeState not in _SIEGE_STATE.SWITCHING else 0
-            self._parentObj.as_setNetVisibleS(visibleMask)
             return
+        if self.__siegeState == _SIEGE_STATE.ENABLED:
+            self._parentObj.as_setNetTypeS(NET_TYPE_OVERRIDE.SIEGE_MODE)
+        elif self.__siegeState == _SIEGE_STATE.DISABLED:
+            self._parentObj.as_setNetTypeS(NET_TYPE_OVERRIDE.DISABLED)
+        visibleMask = CROSSHAIR_CONSTANTS.VISIBLE_ALL if self.__siegeState not in _SIEGE_STATE.SWITCHING else 0
+        self._parentObj.as_setNetVisibleS(visibleMask)
+        return
 
 
 class ShotDonePlugin(CrosshairPlugin):
@@ -928,6 +931,8 @@ class SpeedometerWheeledTech(CrosshairPlugin):
         vStateCtrl = self.sessionProvider.shared.vehicleState
         vTypeDesc = vehicle.typeDescriptor
         if vTypeDesc.isWheeledVehicle and vehicle.health > 0:
+            if vStateCtrl.isInPostmortem:
+                self.__resetSpeedometer()
             self.__updateBurnoutWarning(vStateCtrl)
             self.__updateCurrentBurnoutLevel(vehicle)
             self.__addSpedometer(vehicle)
@@ -969,7 +974,7 @@ class SpeedometerWheeledTech(CrosshairPlugin):
                 self.__updateCurStateSpeedMode(vStateCtrl)
             return
 
-    def __onReplayTimeWarpStart(self):
+    def __resetSpeedometer(self):
         self.parentObj.as_updateSpeedS(0)
         if self.__cachedBurnoutLevel is not None:
             self.parentObj.as_updateBurnoutS(self.__cachedBurnoutLevel)
@@ -978,6 +983,9 @@ class SpeedometerWheeledTech(CrosshairPlugin):
         else:
             self.parentObj.as_stopBurnoutWarningS()
         return
+
+    def __onReplayTimeWarpStart(self):
+        self.__resetSpeedometer()
 
     def __updateCurStateSpeedMode(self, vStateCtrl):
         value = vStateCtrl.getStateValue(VEHICLE_VIEW_STATE.SIEGE_MODE)

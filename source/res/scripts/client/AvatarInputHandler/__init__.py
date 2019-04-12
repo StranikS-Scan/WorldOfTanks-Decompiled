@@ -32,13 +32,14 @@ from constants import ARENA_PERIOD, AIMING_MODE
 from control_modes import _ARCADE_CAM_PIVOT_POS
 from debug_utils import LOG_ERROR, LOG_DEBUG, LOG_CURRENT_EXCEPTION, LOG_WARNING
 from gui import g_guiResetters, GUI_CTRL_MODE_FLAG, GUI_SETTINGS
-from gui.app_loader import g_appLoader, settings
+from gui.app_loader import settings
 from gui.battle_control import event_dispatcher as gui_event_dispatcher
 from helpers import dependency
 from helpers.CallbackDelayer import CallbackDelayer
 from skeletons.account_helpers.settings_core import ISettingsCore
+from skeletons.gui.app_loader import IAppLoader
 from skeletons.gui.game_control import IBootcampController
-from svarog_script.py_component_system import ComponentSystem, ComponentDescriptor
+from svarog_script.script_game_object import ScriptGameObject, ComponentDescriptor
 INPUT_HANDLER_CFG = 'gui/avatar_input_handler.xml'
 
 class _CTRL_TYPE(object):
@@ -122,7 +123,7 @@ class DynamicCameraSettings(object):
         return ranges
 
 
-class AvatarInputHandler(CallbackDelayer, ComponentSystem):
+class AvatarInputHandler(CallbackDelayer, ScriptGameObject):
     bootcampCtrl = dependency.descriptor(IBootcampController)
     ctrl = property(lambda self: self.__curCtrl)
     ctrls = property(lambda self: self.__ctrls)
@@ -139,6 +140,7 @@ class AvatarInputHandler(CallbackDelayer, ComponentSystem):
     __aimOffset = aih_global_binding.bindRW(_BINDING_ID.AIM_OFFSET)
     _DYNAMIC_CAMERAS_ENABLED_KEY = 'global/dynamicCameraEnabled'
     settingsCore = dependency.descriptor(ISettingsCore)
+    appLoader = dependency.descriptor(IAppLoader)
 
     @staticmethod
     def enableDynamicCamera(enable, useHorizontalStabilizer=True):
@@ -169,7 +171,7 @@ class AvatarInputHandler(CallbackDelayer, ComponentSystem):
 
     def __init__(self):
         CallbackDelayer.__init__(self)
-        ComponentSystem.__init__(self)
+        ScriptGameObject.__init__(self, BigWorld.player().spaceID)
         self.__alwaysShowAimKey = None
         self.__showMarkersKey = None
         sec = self._readCfg()
@@ -207,8 +209,9 @@ class AvatarInputHandler(CallbackDelayer, ComponentSystem):
                 self.siegeModeControl = SiegeModeControl()
             self.__commands.append(self.siegeModeControl)
             self.siegeModeControl.onSiegeStateChanged += lambda *args: self.steadyVehicleMatrixCalculator.relinkSources()
-            self.siegeModeSoundNotifications = SiegeModeSoundNotifications()
-            self.siegeModeControl.onSiegeStateChanged += self.siegeModeSoundNotifications.onSiegeStateChanged
+            if self.isATSPG:
+                self.siegeModeSoundNotifications = SiegeModeSoundNotifications()
+                self.siegeModeControl.onSiegeStateChanged += self.siegeModeSoundNotifications.onSiegeStateChanged
             self.siegeModeControl.onRequestFail += self.__onRequestFail
             self.siegeModeControl.onSiegeStateChanged += SiegeModeCameraShaker.shake
         if self.bootcampCtrl.isInBootcamp() and constants.HAS_DEV_RESOURCES:
@@ -262,16 +265,16 @@ class AvatarInputHandler(CallbackDelayer, ComponentSystem):
             self.__isDetached = detached
             self.__targeting.detach(self.__isDetached)
             if detached:
-                g_appLoader.attachCursor(settings.APP_NAME_SPACE.SF_BATTLE, flags=flags)
+                self.appLoader.attachCursor(settings.APP_NAME_SPACE.SF_BATTLE, flags=flags)
                 result = True
                 if flags & GUI_CTRL_MODE_FLAG.AIMING_ENABLED > 0:
                     self.setAimingMode(False, AIMING_MODE.USER_DISABLED)
             else:
-                g_appLoader.detachCursor(settings.APP_NAME_SPACE.SF_BATTLE)
+                self.appLoader.detachCursor(settings.APP_NAME_SPACE.SF_BATTLE)
                 result = True
             self.__curCtrl.setForcedGuiControlMode(detached)
         elif detached:
-            g_appLoader.syncCursor(settings.APP_NAME_SPACE.SF_BATTLE, flags=flags)
+            self.appLoader.syncCursor(settings.APP_NAME_SPACE.SF_BATTLE, flags=flags)
         return result
 
     def updateShootingStatus(self, canShoot):
@@ -427,7 +430,7 @@ class AvatarInputHandler(CallbackDelayer, ComponentSystem):
         BigWorld.player().arena.onPeriodChange -= self.__onArenaStarted
         self.settingsCore.onSettingsChanged -= self.__onSettingsChanged
         BigWorld.player().consistentMatrices.onVehicleMatrixBindingChanged -= self.__onVehicleChanged
-        ComponentSystem.destroy(self)
+        ScriptGameObject.destroy(self)
         CallbackDelayer.destroy(self)
         return
 

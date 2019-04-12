@@ -5,7 +5,7 @@ import weakref
 from collections import defaultdict
 from account_helpers import AccountSettings
 from account_helpers.AccountSettings import PROGRESSIVE_REWARD_VISITED
-from constants import AUTO_MAINTENANCE_RESULT
+from constants import AUTO_MAINTENANCE_RESULT, PremiumConfigs
 from adisp import process
 from debug_utils import LOG_DEBUG, LOG_ERROR
 from gui.Scaleform.locale.CLANS import CLANS
@@ -13,7 +13,9 @@ from gui.Scaleform.locale.MESSENGER import MESSENGER
 from gui.clans.clan_account_profile import SYNC_KEYS
 from gui.clans.clan_helpers import ClanListener, isInClanEnterCooldown
 from gui.clans.settings import CLAN_APPLICATION_STATES
+from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.impl import backport
+from gui.impl.lobby.premacc.premacc_helpers import PiggyBankConstants, getDeltaTimeHelper
 from gui.impl.gen import R
 from gui.prb_control import prbInvitesProperty
 from gui.prb_control.entities.listener import IGlobalListener
@@ -22,6 +24,7 @@ from gui.shared import g_eventBus, events
 from gui.shared.utils import showInvitationInWindowsBar
 from gui.shared.view_helpers.UsersInfoHelper import UsersInfoHelper
 from gui.shared.notifications import NotificationPriorityLevel
+from gui.shared.formatters import time_formatters
 from gui.wgcg.clan.contexts import GetClanInfoCtx
 from gui.wgnc import g_wgncProvider, g_wgncEvents, wgnc_settings
 from gui.wgnc.settings import WGNC_DATA_PROXY_TYPE
@@ -34,9 +37,57 @@ from messenger.proto.xmpp.xmpp_constants import XMPP_ITEM_TYPE
 from notification import tutorial_helper
 from notification.decorators import MessageDecorator, PrbInviteDecorator, C11nMessageDecorator, FriendshipRequestDecorator, WGNCPopUpDecorator, ClanAppsDecorator, ClanInvitesDecorator, ClanAppActionDecorator, ClanInvitesActionDecorator, ClanSingleAppDecorator, ClanSingleInviteDecorator, ProgressiveRewardDecorator
 from notification.settings import NOTIFICATION_TYPE, NOTIFICATION_BUTTON_STATE
-from skeletons.gui.game_control import IBootcampController
+from skeletons.gui.game_control import IBootcampController, IGameSessionController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.login_manager import ILoginManager
+from skeletons.gui.shared import IItemsCache
+
+class _FeatureState(object):
+    OFF = 0
+    ON = 1
+
+
+_FUNCTION = 'function'
+
+class _StateExtractor(object):
+    __lobbyContext = dependency.descriptor(ILobbyContext)
+
+    @classmethod
+    def getAdditionalBonusState(cls):
+        return cls.__lobbyContext.getServerSettings().getAdditionalBonusConfig().get('enabled')
+
+    @classmethod
+    def getPiggyBankState(cls):
+        return cls.__lobbyContext.getServerSettings().getPiggyBankConfig().get('enabled')
+
+    @classmethod
+    def getPremQuestsState(cls):
+        return cls.__lobbyContext.getServerSettings().getPremQuestsConfig().get('enabled')
+
+    @classmethod
+    def getSquadPremiumState(cls):
+        return cls.__lobbyContext.getServerSettings().squadPremiumBonus.isEnabled
+
+    @classmethod
+    def getPreferredMapsState(cls):
+        return cls.__lobbyContext.getServerSettings().isPreferredMapsEnabled()
+
+
+_FEATURES_DATA = {PremiumConfigs.DAILY_BONUS: {_FeatureState.ON: (R.strings.system_messages.daily_xp_bonus.switch_on.title(), R.strings.system_messages.daily_xp_bonus.switch_on.body()),
+                              _FeatureState.OFF: (R.strings.system_messages.daily_xp_bonus.switch_off.title(), R.strings.system_messages.daily_xp_bonus.switch_off.body()),
+                              _FUNCTION: _StateExtractor.getAdditionalBonusState},
+ PremiumConfigs.PREM_SQUAD: {_FeatureState.ON: (R.strings.system_messages.squad_bonus.switch_on.title(), R.strings.system_messages.squad_bonus.switch_on.body()),
+                             _FeatureState.OFF: (R.strings.system_messages.squad_bonus.switch_off.title(), R.strings.system_messages.squad_bonus.switch_off.body()),
+                             _FUNCTION: _StateExtractor.getSquadPremiumState},
+ PremiumConfigs.IS_PREFERRED_MAPS_ENABLED: {_FeatureState.ON: (R.strings.system_messages.maps_black_list.switch_on.title(), R.strings.system_messages.maps_black_list.switch_on.body()),
+                                            _FeatureState.OFF: (R.strings.system_messages.maps_black_list.switch_off.title(), R.strings.system_messages.maps_black_list.switch_off.body()),
+                                            _FUNCTION: _StateExtractor.getPreferredMapsState},
+ PremiumConfigs.PIGGYBANK: {_FeatureState.ON: (R.strings.system_messages.piggybank.switch_on.title(), R.strings.system_messages.piggybank.switch_on.body()),
+                            _FeatureState.OFF: (R.strings.system_messages.piggybank.switch_off.title(), R.strings.system_messages.piggybank.switch_off.body()),
+                            _FUNCTION: _StateExtractor.getPiggyBankState},
+ PremiumConfigs.PREM_QUESTS: {_FeatureState.ON: (R.strings.system_messages.premium_quests.switch_on.title(), R.strings.system_messages.premium_quests.switch_on.body()),
+                              _FeatureState.OFF: (R.strings.system_messages.premium_quests.switch_off.title(), R.strings.system_messages.premium_quests.switch_off.body()),
+                              _FUNCTION: _StateExtractor.getPremQuestsState}}
 
 class _NotificationListener(object):
 
@@ -733,10 +784,11 @@ class ProgressiveRewardListener(_NotificationListener):
         if 'progressive_reward_config' in diff:
             isEnabled = diff['progressive_reward_config'].get('isEnabled', self.__isEnabled)
             if isEnabled != self.__isEnabled:
+                priority = NotificationPriorityLevel.MEDIUM
                 if isEnabled:
-                    SystemMessages.pushMessage(backport.text(R.strings.system_messages.progressiveReward.switch_on()))
+                    SystemMessages.pushMessage(backport.text(R.strings.system_messages.progressiveReward.switch_on()), priority=priority)
                 else:
-                    SystemMessages.pushMessage(backport.text(R.strings.system_messages.progressiveReward.switch_off()))
+                    SystemMessages.pushMessage(backport.text(R.strings.system_messages.progressiveReward.switch_off()), priority=priority)
                 self.__isEnabled = isEnabled
             self.__update()
 
@@ -756,6 +808,82 @@ class ProgressiveRewardListener(_NotificationListener):
             return
 
 
+class SwitcherListener(_NotificationListener):
+    slots = ('__currentStates',)
+    __lobbyContext = dependency.descriptor(ILobbyContext)
+
+    def __init__(self):
+        super(SwitcherListener, self).__init__()
+        self.__currentStates = {}
+
+    def start(self, model):
+        super(SwitcherListener, self).start(model)
+        self.__fillCurrentStates()
+        self.__lobbyContext.getServerSettings().onServerSettingsChange += self.__onServerSettingsChange
+        return True
+
+    def stop(self):
+        self.__currentStates = None
+        self.__lobbyContext.getServerSettings().onServerSettingsChange -= self.__onServerSettingsChange
+        super(SwitcherListener, self).stop()
+        return
+
+    def __onServerSettingsChange(self, diff):
+        for feature, data in _FEATURES_DATA.iteritems():
+            if feature in diff:
+                isEnabled = data[_FUNCTION]()
+                self.__addMessage(feature, isEnabled)
+                self.__currentStates[feature] = isEnabled
+
+    def __fillCurrentStates(self):
+        for featureName, value in _FEATURES_DATA.iteritems():
+            self.__currentStates[featureName] = value[_FUNCTION]()
+
+    def __addMessage(self, featureName, newState):
+        if self.__currentStates[featureName] != newState:
+            msg = _FEATURES_DATA[featureName]
+            if newState:
+                SystemMessages.pushMessage(type=SystemMessages.SM_TYPE.PremiumFeatureOn, text=backport.text(msg[_FeatureState.ON][1]), messageData={'header': backport.text(msg[_FeatureState.ON][0])})
+            else:
+                SystemMessages.pushMessage(type=SystemMessages.SM_TYPE.PremiumFeatureOff, text=backport.text(msg[_FeatureState.OFF][1]), messageData={'header': backport.text(msg[_FeatureState.OFF][0])})
+
+
+class TankPremiumListener(_NotificationListener):
+    __gameSession = dependency.descriptor(IGameSessionController)
+    __lobbyContext = dependency.descriptor(ILobbyContext)
+    __itemsCache = dependency.descriptor(IItemsCache)
+
+    def start(self, model):
+        super(TankPremiumListener, self).start(model)
+        self.__addListeners()
+        return True
+
+    def stop(self):
+        super(TankPremiumListener, self).stop()
+        self.__removeListeners()
+
+    def __addListeners(self):
+        self.__gameSession.onPremiumNotify += self.__onTankPremiumActiveChanged
+        g_clientUpdateManager.addCallbacks({PiggyBankConstants.PIGGY_BANK_CREDITS: self.__onPiggyBankCreditsChanged})
+
+    def __removeListeners(self):
+        self.__gameSession.onPremiumNotify -= self.__onTankPremiumActiveChanged
+        g_clientUpdateManager.removeCallback(PiggyBankConstants.PIGGY_BANK_CREDITS, self.__onPiggyBankCreditsChanged)
+
+    def __onPiggyBankCreditsChanged(self, credits_=None):
+        config = self.__lobbyContext.getServerSettings().getPiggyBankConfig()
+        maxAmount = config.get('threshold', PiggyBankConstants.MAX_AMOUNT)
+        data = self.__itemsCache.items.stats.piggyBank
+        if credits_ >= maxAmount:
+            timeLeft = time_formatters.getTillTimeByResource(getDeltaTimeHelper(config, data), R.strings.premacc.piggyBankCard.timeLeft)
+            SystemMessages.pushMessage(priority=NotificationPriorityLevel.MEDIUM, text=backport.text(R.strings.system_messages.piggyBank.piggyBankFull(), timeValue=timeLeft))
+
+    def __onTankPremiumActiveChanged(self, isPremActive, *_):
+        if not isPremActive:
+            priority = NotificationPriorityLevel.LOW
+            SystemMessages.pushMessage(priority=priority, text=backport.text(R.strings.messenger.serviceChannelMessages.piggyBank.onPause()))
+
+
 class NotificationsListeners(_NotificationListener):
 
     def __init__(self):
@@ -766,7 +894,9 @@ class NotificationsListeners(_NotificationListener):
          _WGNCListenersContainer(),
          BattleTutorialListener(),
          RecruitNotificationListener(),
-         ProgressiveRewardListener())
+         ProgressiveRewardListener(),
+         SwitcherListener(),
+         TankPremiumListener())
 
     def start(self, model):
         for listener in self.__listeners:

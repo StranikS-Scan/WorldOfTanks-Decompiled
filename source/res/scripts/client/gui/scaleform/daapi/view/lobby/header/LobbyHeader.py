@@ -5,12 +5,12 @@ import weakref
 from itertools import ifilter
 import BigWorld
 import WWISE
-import account_helpers
 import constants
 from CurrentVehicle import g_currentVehicle, g_currentPreviewVehicle
 from account_helpers.AccountSettings import AccountSettings, BOOSTERS, KNOWN_SELECTOR_BATTLES, NEW_LOBBY_TAB_COUNTER, RECRUIT_NOTIFICATIONS
 from adisp import process
 from debug_utils import LOG_ERROR
+from frameworks.wulf import ViewFlags
 from gui import makeHtmlString
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform.Waiting import Waiting
@@ -42,7 +42,7 @@ from gui.shared import event_dispatcher as shared_events
 from gui.shared import events
 from gui.shared.ClanCache import g_clanCache
 from gui.shared.event_bus import EVENT_BUS_SCOPE
-from gui.shared.event_dispatcher import showWebShop, showStorage
+from gui.shared.event_dispatcher import showWebShop, showStorage, hideWebBrowserOverlay
 from gui.shared.formatters import text_styles
 from gui.shared.formatters.currency import getBWFormatter
 from gui.shared.formatters.ranges import toRomanRangeString
@@ -64,6 +64,7 @@ from skeletons.gui.game_control import IIGRController, IChinaController, IServer
 from skeletons.gui.game_control import IRankedBattlesController
 from skeletons.gui.game_control import IWalletController, IGameSessionController, IBoostersController
 from skeletons.gui.goodies import IGoodiesCache
+from skeletons.gui.impl import IGuiLoader
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.shared.utils import IHangarSpace
@@ -71,7 +72,7 @@ from SoundGroups import g_instance as SoundGroupsInstance
 from skeletons.gui.linkedset import ILinkedSetController
 from gui.impl import backport
 from gui.impl.gen import R
-_MAX_BOOSTERS_TO_DISPLAY = 99
+from constants import PREMIUM_TYPE
 _MAX_HEADER_SERVER_NAME_LEN = 6
 _SERVER_NAME_PREFIX = '%s..'
 _SHORT_VALUE_DIVIDER = 1000000
@@ -79,6 +80,11 @@ _SHORT_VALUE_PRECISION = 1
 _SHORT_VALUE_D = 10 ** _SHORT_VALUE_PRECISION
 _SHORT_VALUE_THRESHOLD = _SHORT_VALUE_DIVIDER / _SHORT_VALUE_D
 _SHORT_VALUE_FMT_PATTERN = MENU.HANGAR_HEADER_MILLION
+_DASHBOARD_SUPPRESSED_VIEWS = [VIEW_ALIAS.BADGES_PAGE]
+
+def _predicateLobbyTopSubViews(view):
+    return view.layoutID != R.views.premDashboardView() and view.viewFlags & ViewFlags.LOBBY_TOP_SUB_VIEW
+
 
 class TOOLTIP_TYPES(object):
     COMPLEX = 'complex'
@@ -97,7 +103,7 @@ class HeaderMenuVisibilityState(BitmaskHelper):
 class _RankedBattlesWelcomeViewLifecycleHandler(IViewLifecycleHandler):
 
     def __init__(self, lobbyHeader):
-        super(_RankedBattlesWelcomeViewLifecycleHandler, self).__init__([ViewKey(RANKEDBATTLES_ALIASES.RANKED_BATTLES_WELCOME_VIEW_ALIAS)])
+        super(_RankedBattlesWelcomeViewLifecycleHandler, self).__init__([ViewKey(RANKEDBATTLES_ALIASES.RANKED_BATTLES_INTRO_ALIAS)])
         self.__lobbyHeader = weakref.proxy(lobbyHeader)
 
     def onViewCreated(self, view):
@@ -111,6 +117,7 @@ class _RankedBattlesWelcomeViewLifecycleHandler(IViewLifecycleHandler):
 
 
 class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
+    __PREM_WARNING_LIMIT = time_utils.ONE_DAY
 
     class BUTTONS(CONST_CONTAINER):
         SETTINGS = 'settings'
@@ -167,6 +174,7 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
     hangarSpace = dependency.descriptor(IHangarSpace)
     linkedSetController = dependency.descriptor(ILinkedSetController)
     badgesController = dependency.descriptor(IBadgesController)
+    gui = dependency.descriptor(IGuiLoader)
 
     def __init__(self):
         super(LobbyHeader, self).__init__()
@@ -202,8 +210,8 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
     def updateAccountInfo(self):
         self.updateMoneyStats()
         self.updateXPInfo()
-        self.updateClanInfo()
-        self.updateAccountAttrs()
+        self.__updatePlayerInfoPanel(g_clanCache.clanInfo)
+        self.__updateAccountAttrs()
         self.__updateBadge()
 
     def updateMoneyStats(self):
@@ -214,20 +222,6 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
 
     def updateXPInfo(self):
         self.__setFreeXP(self.itemsCache.items.stats.actualFreeXP)
-
-    def updateClanInfo(self, diff=None):
-        self.__setClanInfo(g_clanCache.clanInfo, diff)
-
-    def updateAccountAttrs(self):
-        stats = self.itemsCache.items.stats
-        accAttrs = stats.attributes
-        isPremium = account_helpers.isPremiumAccount(accAttrs)
-        if isPremium:
-            premiumExpiryTime = stats.premiumExpiryTime
-        else:
-            premiumExpiryTime = 0
-        battle_selector_items.getItems().validateAccountAttrs(accAttrs)
-        self.__setAccountsAttrs(isPremium, premiumExpiryTime=premiumExpiryTime)
 
     def showLobbyMenu(self):
         self.fireEvent(events.LoadViewEvent(VIEW_ALIAS.LOBBY_MENU), scope=EVENT_BUS_SCOPE.LOBBY)
@@ -265,6 +259,21 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
 
     def onPremShopClick(self):
         self.fireEvent(events.OpenLinkEvent(events.OpenLinkEvent.PREM_SHOP))
+
+    def showDashboard(self):
+        for alias in _DASHBOARD_SUPPRESSED_VIEWS:
+            self.app.containerManager.destroyViews(alias)
+
+        views = self.gui.windowsManager.findViews(_predicateLobbyTopSubViews)
+        for view in views:
+            view.destroyWindow()
+
+        dashbordView = self.gui.windowsManager.getViewByLayoutID(R.views.premDashboardView())
+        if dashbordView is None:
+            shared_events.showDashboardView()
+        else:
+            hideWebBrowserOverlay()
+        return
 
     @process
     def fightClick(self, mapID, actionName):
@@ -313,17 +322,19 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
         self._removeListeners()
         super(LobbyHeader, self)._dispose()
 
-    def _getPremiumLabelText(self, isPremiumAccount, canUpdatePremium):
-        if isPremiumAccount:
-            if canUpdatePremium and not self.__isSubscriptionEnabled:
-                return makeHtmlString('html_templates:lobby/header', 'account-doLabel', {'doLabel': i18n.makeString('#menu:headerButtons/doLabel/premium')})
+    def _getPremiumLabelText(self, premiumState, canUpdatePremium):
+        if not canUpdatePremium or self.__isSubscriptionEnabled:
             return ''
-        return makeHtmlString('html_templates:lobby/header', 'account-buyLabel', {'doLabel': i18n.makeString('#menu:common/premiumBuy')})
+        if premiumState & PREMIUM_TYPE.PLUS:
+            return text_styles.main(backport.text(R.strings.menu.headerButtons.doLabel.premium()))
+        return text_styles.main(backport.text(R.strings.menu.common.premiumBuy())) if premiumState & PREMIUM_TYPE.BASIC else text_styles.gold(backport.text(R.strings.menu.common.premiumBuy()))
 
-    def _getPremiumTooltipText(self, isPremiumAccount, canUpdatePremium):
+    def _getPremiumTooltipText(self, premiumState, canUpdatePremium):
         if not canUpdatePremium:
             return formatters.getLimitExceededPremiumTooltip()
-        return TOOLTIPS.HEADER_PREMIUM_EXTEND if isPremiumAccount else TOOLTIPS.HEADER_PREMIUM_BUY
+        if premiumState & PREMIUM_TYPE.PLUS:
+            return TOOLTIPS.HEADER_PREMIUM_EXTEND
+        return TOOLTIPS.HEADER_PREMIUM_UPGRADE if premiumState & PREMIUM_TYPE.BASIC else TOOLTIPS.HEADER_PREMIUM_BUY
 
     def _addListeners(self):
         self.startGlobalListening()
@@ -345,6 +356,7 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
         self.linkedSetController.onStateChanged += self.__onLinkedSetStateChanged
         self.boosters.onBoosterChangeNotify += self.__onUpdateGoodies
         self.rankedController.onUpdated += self.__updateRanked
+        self.rankedController.onPrimeTimeStatusUpdated += self.__updateRanked
         self.epicController.onUpdated += self.__updateEpic
         self.epicController.onPrimeTimeStatusUpdated += self.__updateEpic
         self.badgesController.onUpdated += self.__updateBadge
@@ -356,9 +368,9 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
         g_clientUpdateManager.addCurrencyCallback(Currency.GOLD, self.__setGold)
         g_clientUpdateManager.addCurrencyCallback(Currency.CRYSTAL, self.__setCrystal)
         g_clientUpdateManager.addCallbacks({'stats.freeXP': self.__setFreeXP,
-         'stats.clanInfo': self.__setClanInfo,
+         'stats.clanInfo': self.__updatePlayerInfoPanel,
          'goodies': self.__updateGoodies,
-         'account.premiumExpiryTime': self.__onPremiumExpireTimeChanged,
+         'account.activePremiumExpiryTime': self.__onPremiumExpireTimeChanged,
          'cache.SPA': self.__onSPAUpdated})
         self.as_setFightButtonS(i18n.makeString('#menu:headerButtons/battle'))
         self.as_setWalletStatusS(self.wallet.componentsStatuses)
@@ -422,6 +434,11 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
         self.removeListener(events.LobbyHeaderMenuEvent.TOGGLE_VISIBILITY, self.__onToggleVisibilityMenu, scope=EVENT_BUS_SCOPE.LOBBY)
         AccountSettings.onSettingsChanging -= self.__onAccountSettingsChanging
 
+    def __updateAccountAttrs(self):
+        accAttrs = self.itemsCache.items.stats.attributes
+        battle_selector_items.getItems().validateAccountAttrs(accAttrs)
+        self.__setAccountsAttrs()
+
     def __updateIngameShopState(self):
         newIngameShopEnabled = isIngameShopEnabled()
         if self.__isIngameShopEnabled != newIngameShopEnabled:
@@ -446,7 +463,7 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
             serverShortName = _SERVER_NAME_PREFIX % serverShortName[:_MAX_HEADER_SERVER_NAME_LEN]
         self.as_setServerS(serverShortName, TOOLTIPS_CONSTANTS.SETTINGS_BUTTON, TOOLTIP_TYPES.SPECIAL)
 
-    def __setClanInfo(self, clanInfo, diff=None):
+    def __updatePlayerInfoPanel(self, clanInfo, diff=None):
         if not isPlayerAccount():
             return
         else:
@@ -455,35 +472,19 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
                 clanAbbrev = clanInfo[1]
             else:
                 clanAbbrev = None
-            hasNew = not AccountSettings.getFilter(BOOSTERS)['wasShown']
-            activeBoosters = self.goodiesCache.getBoosters(criteria=REQ_CRITERIA.BOOSTER.ACTIVE).values()
-            hasActiveBooster = len(activeBoosters) > 0
-            readyBoosters = self.goodiesCache.getBoosters(criteria=REQ_CRITERIA.BOOSTER.IS_READY_TO_ACTIVATE).values()
-            boostersAvailable = sum((booster.count for booster in readyBoosters))
-            hasAvailableBoosters = boostersAvailable > 0
-            boosterIcon, boosterText = (None, None)
-            if hasActiveBooster:
-                boosterIcon = RES_ICONS.MAPS_ICONS_BOOSTERS_ACTIVEBOOSTERICON
-                booster = sorted(activeBoosters, key=lambda x: x.getUsageLeftTime())[0]
-                boosterText = booster.getShortLeftTimeStr()
-            elif hasAvailableBoosters:
-                boosterIcon = RES_ICONS.MAPS_ICONS_BOOSTERS_AVAILABLEBOOSTERICON
-                if boostersAvailable <= _MAX_BOOSTERS_TO_DISPLAY:
-                    boosterText = str(boostersAvailable)
-                else:
-                    boosterText = str(_MAX_BOOSTERS_TO_DISPLAY) + '+'
+            boosterPresenter = _BoosterInfoPresenter(self.goodiesCache)
             self.as_nameResponseS({'userVO': {'fullName': self.lobbyContext.getPlayerFullName(name, clanInfo=clanInfo),
                         'userName': name,
                         'clanAbbrev': clanAbbrev},
              'isTeamKiller': self.itemsCache.items.stats.isTeamKiller,
-             'hasNew': hasNew,
-             'hasActiveBooster': hasActiveBooster,
-             'hasAvailableBoosters': hasAvailableBoosters,
              'tooltip': TOOLTIPS.HEADER_ACCOUNT,
-             'tooltipType': TOOLTIP_TYPES.COMPLEX,
-             'boosterIcon': boosterIcon,
-             'boosterBg': RES_ICONS.MAPS_ICONS_BOOSTERS_ACTIVEBOOSTERBG,
-             'boosterText': boosterText})
+             'tooltipType': TOOLTIP_TYPES.COMPLEX})
+            self.as_setBoosterDataS({'hasNew': boosterPresenter.hasNew(),
+             'hasActiveBooster': boosterPresenter.hasActiveBoosters(),
+             'hasAvailableBoosters': boosterPresenter.hasAvailableBoosters(),
+             'boosterIcon': boosterPresenter.getIcon(),
+             'boosterText': boosterPresenter.getText(),
+             'boosterBg': boosterPresenter.getBg()})
             if g_clanCache.clanDBID:
                 self.requestClanEmblem16x16(g_clanCache.clanDBID)
             else:
@@ -497,8 +498,8 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
         self.as_setBadgeIconS(badge.getSmallIcon() if badge is not None else None)
         return
 
-    def __onPremiumExpireTimeChanged(self, timestamp):
-        self.updateAccountAttrs()
+    def __onPremiumExpireTimeChanged(self, _):
+        self.__updateAccountAttrs()
 
     def __getWalletTooltipSettings(self, btnType):
         currencyStatus = self.wallet.componentsStatuses.get(btnType, WalletController.STATUS.SYNCING)
@@ -562,59 +563,68 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
             return i18n.makeString(_SHORT_VALUE_FMT_PATTERN, value=formattedValue)
         return defFormatter(value)
 
-    def __setAccountsAttrs(self, isPremiumAccount, premiumExpiryTime=0):
-        timeLabel = ''
-        timeBottomLabel = ''
+    def __setAccountsAttrs(self):
+        premiumExpiryTime = self.itemsCache.items.stats.activePremiumExpiryTime
+        isPremiumAccount = self.itemsCache.items.stats.isPremium
         if isPremiumAccount:
+            iconName = 'premiumPlus'
             deltaInSeconds = float(time_utils.getTimeDeltaFromNow(time_utils.makeLocalServerTime(premiumExpiryTime)))
-            timeLeft, timeMetric = self.__getPremiumExpiryTimeAttrs(deltaInSeconds)
-            if self.__isSubscriptionEnabled:
-                premiumBtnLbl = makeHtmlString('html_templates:lobby/header', 'subscription-account-label')
-                timeBottomLabel = '{0:.0f} {1}'.format(timeLeft, timeMetric)
+            if self.itemsCache.items.stats.isActivePremium(PREMIUM_TYPE.PLUS):
+                premiumBtnLbl = text_styles.gold(backport.text(R.strings.menu.accountTypes.premiumPlus()))
+                premiumBtnLblShort = text_styles.gold(backport.text(R.strings.menu.accountTypes.premiumPlusShort()))
             else:
-                premiumBtnLbl = makeHtmlString('html_templates:lobby/header', 'premium-account-label')
-                if timeLeft < 10:
-                    timeLabel = makeHtmlString('html_templates:lobby/header', 'account-timeLabel', {'time': timeLeft,
-                     'metric': timeMetric})
-                else:
-                    timeLabel = '%.0f' % timeLeft
-                    timeBottomLabel = timeMetric
+                premiumBtnLbl = text_styles.neutral(backport.text(R.strings.menu.accountTypes.premium()))
+                premiumBtnLblShort = text_styles.neutral(backport.text(R.strings.menu.accountTypes.premiumShort()))
+                if deltaInSeconds > self.__PREM_WARNING_LIMIT:
+                    iconName = 'premium'
+            if deltaInSeconds <= self.__PREM_WARNING_LIMIT:
+                htmlKey = 'premiumEnd-timeLabel'
+            elif self.itemsCache.items.stats.isActivePremium(PREMIUM_TYPE.PLUS):
+                htmlKey = 'premiumPlus-timeLabel'
+            else:
+                htmlKey = 'premium-timeLabel'
+            timeLeft, timeMetric = self.__getPremiumExpiryTimeAttrs(deltaInSeconds)
+            timeLabel = makeHtmlString('html_templates:lobby/header', htmlKey, {'time': timeLeft,
+             'metric': timeMetric})
+            premiumIcon = backport.image(R.images.gui.maps.icons.premacc.lobbyHeader.dyn(iconName)())
         else:
-            premiumBtnLbl = makeHtmlString('html_templates:lobby/header', 'base-account-label')
-        hasPersonalDiscount = self.__hasPremiumPacketDiscount()
-        canUpdatePremium = self.__canUpdatePremiumFromClient(isPremiumAccount, premiumExpiryTime)
-        buyPremiumLabel = self._getPremiumLabelText(isPremiumAccount, canUpdatePremium)
-        tooltip = self._getPremiumTooltipText(isPremiumAccount, canUpdatePremium)
+            premiumBtnLbl = text_styles.main(backport.text(R.strings.menu.accountTypes.base()))
+            premiumBtnLblShort = premiumBtnLbl
+            timeLabel = ''
+            premiumIcon = None
+        premiumState = self.itemsCache.items.stats.activePremiumType
+        canUpdatePremium = self.__canUpdatePremiumFromClient(premiumState, premiumExpiryTime)
+        buyPremiumLabel = self._getPremiumLabelText(premiumState, canUpdatePremium)
+        tooltip = self._getPremiumTooltipText(premiumState, canUpdatePremium)
         self.as_setPremiumParamsS({'btnLabel': premiumBtnLbl,
+         'btnLabelShort': premiumBtnLblShort,
          'doLabel': buyPremiumLabel,
          'timeLabel': timeLabel,
-         'timeBottomLabel': timeBottomLabel,
-         'isHasAction': hasPersonalDiscount,
+         'isHasAction': self.__hasPremiumPacketDiscount(),
          'isPremium': isPremiumAccount,
          'isSubscription': self.__isSubscriptionEnabled and isPremiumAccount,
+         'premiumIcon': premiumIcon,
          'tooltip': tooltip,
          'tooltipType': TOOLTIP_TYPES.COMPLEX})
+        return
 
     @staticmethod
     def __getPremiumExpiryTimeAttrs(deltaInSeconds):
         if deltaInSeconds > time_utils.ONE_DAY:
             timeLeft = math.ceil(deltaInSeconds / time_utils.ONE_DAY)
-            timeMetric = i18n.makeString(MENU.HEADER_ACCOUNT_PREMIUM_DAYS)
+            timeMetric = backport.text(R.strings.menu.header.account.premium.days())
         else:
             timeLeft = math.ceil(deltaInSeconds / time_utils.ONE_HOUR)
-            timeMetric = i18n.makeString(MENU.HEADER_ACCOUNT_PREMIUM_HOURS)
+            timeMetric = backport.text(R.strings.menu.header.account.premium.hours())
         return (timeLeft, timeMetric)
 
-    def __canUpdatePremiumFromClient(self, isPremiumAccount, premiumExpiryTime):
-        if not isPremiumAccount or self.__isIngameShopEnabled:
+    def __canUpdatePremiumFromClient(self, premiumState, premiumExpiryTime):
+        if not bool(premiumState & PREMIUM_TYPE.PLUS) or self.__isIngameShopEnabled:
             return True
-        deltaInSeconds = float(time_utils.getTimeDeltaFromNow(time_utils.makeLocalServerTime(premiumExpiryTime)))
+        deltaInSeconds = time_utils.getTimeDeltaFromNow(time_utils.makeLocalServerTime(premiumExpiryTime))
         return deltaInSeconds < time_utils.ONE_YEAR
 
     def __hasPremiumPacketDiscount(self):
-        hasPersonalDiscount = len(self.itemsCache.items.shop.personalPremiumPacketsDiscounts) > 0
-        if hasPersonalDiscount:
-            return True
         premiumCost = self.itemsCache.items.shop.getPremiumCostWithDiscount()
         defaultPremiumCost = self.itemsCache.items.shop.defaults.premiumCost
         for days, price in premiumCost.iteritems():
@@ -652,8 +662,8 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
         self.__setFreeXP(self.itemsCache.items.stats.actualFreeXP)
         self.as_setWalletStatusS(status)
 
-    def __onPremiumTimeChanged(self, isPremium, _, premiumExpiryTime):
-        self.__setAccountsAttrs(isPremium, premiumExpiryTime=premiumExpiryTime)
+    def __onPremiumTimeChanged(self, *args):
+        self.__updateAccountAttrs()
 
     def __onViewAddedToContainer(self, _, pyEntity):
         if pyEntity.viewType is ViewTypes.LOBBY_SUB:
@@ -837,7 +847,7 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
             self.as_doDisableNavigationS()
         else:
             self.as_setScreenS(self.__currentScreen)
-        self.updateAccountAttrs()
+        self.__updateAccountAttrs()
 
     def __onHangarSpaceCreated(self):
         if self.bootcampController.isInBootcamp():
@@ -930,12 +940,12 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
     def __onIGRChanged(self, *args):
         self._updatePrebattleControls()
 
-    def __updateGoodies(self, diff, *args):
-        self.updateClanInfo(diff)
+    def __updateGoodies(self, *_):
+        self.__updatePlayerInfoPanel(g_clanCache.clanInfo)
         self.updateXPInfo()
-        self.updateAccountAttrs()
+        self.__updateAccountAttrs()
 
-    def __updateRanked(self):
+    def __updateRanked(self, *_):
         self._updatePrebattleControls()
 
     def __updateEpic(self, *_):
@@ -1043,7 +1053,7 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
         subscriptionEnabled = isSubscriptionEnabled()
         if subscriptionEnabled != self.__isSubscriptionEnabled:
             self.__isSubscriptionEnabled = subscriptionEnabled
-            self.updateAccountAttrs()
+            self.__updateAccountAttrs()
 
     def __onServerSettingChanged(self, diff):
         strongholdSettingsChanged = 'strongholdSettings' in diff
@@ -1097,7 +1107,7 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
             self.__hideCounter(alias)
 
     def __onUpdateGoodies(self, *args):
-        self.__setClanInfo(g_clanCache.clanInfo)
+        self.__updatePlayerInfoPanel(g_clanCache.clanInfo)
 
     def __onPingPerformed(self, result):
         self.__updatePing()
@@ -1185,3 +1195,68 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
     def __onAccountSettingsChanging(self, key, _):
         if key == RECRUIT_NOTIFICATIONS:
             self.__updateRecruitsTabCounter(self.TABS.BARRACKS)
+
+
+class _BoosterInfoPresenter(object):
+    __MAX_BOOSTERS_TO_DISPLAY = 99
+
+    def __init__(self, goodiesCache, clanBoosterTimeLeft=0):
+        self.__goodiesCache = goodiesCache
+        self.__activeBoosters = goodiesCache.getBoosters(criteria=REQ_CRITERIA.BOOSTER.ACTIVE).values()
+        self.__clanBoosterTimeLeft = clanBoosterTimeLeft
+
+    @staticmethod
+    def hasNew():
+        return not AccountSettings.getFilter(BOOSTERS)['wasShown']
+
+    def hasActiveBoosters(self):
+        return self.__hasActiveAccountBooster() or self.__hasActiveClanBooster()
+
+    def hasAvailableBoosters(self):
+        return self.__getAvailableBoostersCount() > 0
+
+    def getIcon(self):
+        if self.__hasActiveAccountBooster() and self.__hasActiveClanBooster():
+            return backport.image(R.images.gui.maps.icons.boosters.mixedBoosterIcon())
+        elif self.__hasActiveAccountBooster():
+            return backport.image(R.images.gui.maps.icons.boosters.activeBoosterIcon())
+        elif self.__hasActiveClanBooster():
+            return backport.image(R.images.gui.maps.icons.boosters.clanBoosterIcon())
+        else:
+            return backport.image(R.images.gui.maps.icons.boosters.availableBoosterIcon()) if self.hasAvailableBoosters else None
+
+    def getBg(self):
+        if self.__hasActiveClanBooster() and not self.__hasActiveAccountBooster():
+            return backport.image(R.images.gui.maps.icons.boosters.clanBoosterBg())
+        else:
+            return backport.image(R.images.gui.maps.icons.boosters.activeBoosterBg()) if self.hasActiveBoosters() or self.hasAvailableBoosters() else None
+
+    def getText(self):
+        if not self.hasActiveBoosters() and not self.hasAvailableBoosters():
+            return None
+        else:
+            templateKey = 'accountBooster'
+            if self.hasActiveBoosters():
+                if not self.__hasActiveAccountBooster():
+                    templateKey = 'clanBooster'
+                minUsageTime = min((booster.getUsageLeftTime() for booster in self.__activeBoosters)) or 0
+                if self.__clanBoosterTimeLeft:
+                    minUsageTime = min(minUsageTime, self.__clanBoosterTimeLeft)
+                message = time_utils.getTillTimeString(minUsageTime, MENU.TIME_TIMEVALUESHORT)
+            else:
+                boostersAvailable = self.__getAvailableBoostersCount()
+                if boostersAvailable <= self.__MAX_BOOSTERS_TO_DISPLAY:
+                    message = str(boostersAvailable)
+                else:
+                    message = str(self.__MAX_BOOSTERS_TO_DISPLAY) + '+'
+            return makeHtmlString('html_templates:lobby/header', templateKey, {'message': message})
+
+    def __getAvailableBoostersCount(self):
+        readyBoosters = self.__goodiesCache.getBoosters(criteria=REQ_CRITERIA.BOOSTER.IS_READY_TO_ACTIVATE).values()
+        return sum((booster.count for booster in readyBoosters))
+
+    def __hasActiveAccountBooster(self):
+        return len(self.__activeBoosters) > 0
+
+    def __hasActiveClanBooster(self):
+        return self.__clanBoosterTimeLeft > 0

@@ -1,29 +1,33 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/app_loader/decorators.py
-from gui.app_loader.loader import g_appLoader
 from gui.app_loader.settings import APP_NAME_SPACE as _SPACE
+from helpers import dependency
+from skeletons.gui.app_loader import IAppLoader
 __all__ = ('app_getter', 'def_lobby', 'def_battle', 'sf_lobby', 'sf_battle')
 
 class app_getter(property):
+    appLoader = dependency.descriptor(IAppLoader)
 
     def __init__(self, fget=None, doc=None, space=None):
         super(app_getter, self).__init__(fget=fget, doc=doc)
         self._space = space
 
     def __get__(self, obj, objType=None):
-        return g_appLoader.getApp(self._space)
+        return self.appLoader.getApp(self._space)
 
 
 class def_lobby(property):
+    appLoader = dependency.descriptor(IAppLoader)
 
     def __get__(self, obj, objType=None):
-        return g_appLoader.getDefLobbyApp()
+        return self.appLoader.getDefLobbyApp()
 
 
 class def_battle(property):
+    appLoader = dependency.descriptor(IAppLoader)
 
     def __get__(self, obj, objType=None):
-        return g_appLoader.getDefBattleApp()
+        return self.appLoader.getDefBattleApp()
 
 
 class sf_lobby(app_getter):

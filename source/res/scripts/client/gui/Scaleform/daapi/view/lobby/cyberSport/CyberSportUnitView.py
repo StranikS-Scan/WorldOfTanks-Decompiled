@@ -134,7 +134,7 @@ class CyberSportUnitView(CyberSportUnitMeta):
 
     def _updateRallyData(self):
         entity = self.prbEntity
-        data = vo_converters.makeUnitVO(entity, unitMgrID=entity.getID(), app=self.app)
+        data = vo_converters.makeUnitVO(entity, unitMgrID=entity.getID())
         self.as_updateRallyS(data)
         self._updateLabels(entity)
 

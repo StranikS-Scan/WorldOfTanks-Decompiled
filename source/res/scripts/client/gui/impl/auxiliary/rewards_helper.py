@@ -629,19 +629,24 @@ def _formatEliteVehicle(isElite, typeName):
 def _fillVehicleBlueprintCongratsModel(vehicle, model, itemsCache, congratsType):
     if vehicle.level < _MIN_VEHICLE_LVL_BLUEPRINT_AWARD:
         return
-    filledCount, totalCount, canConvert = itemsCache.items.blueprints.getBlueprintData(vehicle.intCD, vehicle.level)
-    with model.congratsViewModel.transaction() as tx:
-        vehicleType = _formatEliteVehicle(vehicle.isElite, vehicle.type)
-        image = makeFlashPath(vehicle.getShopIcon())
-        tx.setVehicleIsElite(vehicle.isElite)
-        tx.setVehicleType(vehicleType)
-        tx.setVehicleLvl(int2roman(vehicle.level))
-        tx.setVehicleName(vehicle.userName)
-        tx.setVehicleImage(image)
-        tx.setCongratsType(congratsType)
-        tx.setCongratsSourceId(str(vehicle.intCD))
-        tx.setFragments(filledCount)
-        tx.setFragmentsTotal(totalCount)
-        tx.setCanConvert(canConvert)
-        tx.setShineSwfAlias(CongratsViewModel.SHINE_BLUE_ALIAS)
-        tx.setAdvancedShineName(CongratsViewModel.ADVANCED_SHINE_BLUE)
+    else:
+        blueprintData = itemsCache.items.blueprints.getBlueprintData(vehicle.intCD, vehicle.level)
+        if blueprintData is None:
+            return
+        filledCount, totalCount, canConvert = blueprintData
+        with model.congratsViewModel.transaction() as tx:
+            vehicleType = _formatEliteVehicle(vehicle.isElite, vehicle.type)
+            image = makeFlashPath(vehicle.getShopIcon())
+            tx.setVehicleIsElite(vehicle.isElite)
+            tx.setVehicleType(vehicleType)
+            tx.setVehicleLvl(int2roman(vehicle.level))
+            tx.setVehicleName(vehicle.userName)
+            tx.setVehicleImage(image)
+            tx.setCongratsType(congratsType)
+            tx.setCongratsSourceId(str(vehicle.intCD))
+            tx.setFragments(filledCount)
+            tx.setFragmentsTotal(totalCount)
+            tx.setCanConvert(canConvert)
+            tx.setShineSwfAlias(CongratsViewModel.SHINE_BLUE_ALIAS)
+            tx.setAdvancedShineName(CongratsViewModel.ADVANCED_SHINE_BLUE)
+        return

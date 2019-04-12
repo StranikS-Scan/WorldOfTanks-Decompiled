@@ -4,6 +4,7 @@ import itertools
 from collections import namedtuple
 from ValueReplay import ValueReplay, ValueReplayConnector
 from battle_results_shared import VEH_FULL_RESULTS
+from constants import PREMIUM_TYPE
 from debug_utils import LOG_ERROR
 from dossiers2.custom.records import RECORD_DB_IDS
 from gui.battle_results.reusable import records
@@ -14,6 +15,7 @@ from gui.battle_results.settings import FACTOR_VALUE
 from gui.ranked_battles.ranked_models import PostBattleRankInfo
 from gui.shared.money import Currency
 from helpers import dependency
+from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
 _LifeTimeInfo = namedtuple('_LifeTimeInfo', ('isKilled', 'lifeTime'))
@@ -108,7 +110,7 @@ class _PersonalAvatarInfo(object):
         return self.__fairplayViolations.getPenaltyDetails()
 
 
-class _AutoCompletionRecords(records.RawRecords):
+class _AdditionalRecords(records.RawRecords):
     __slots__ = ()
 
     def __init__(self, results):
@@ -127,22 +129,27 @@ class _AutoCompletionRecords(records.RawRecords):
             if cost is not None:
                 rawRecords['autoEquipCredits'] = -cost[0]
                 rawRecords['autoEquipGold'] = -cost[1]
-        super(_AutoCompletionRecords, self).__init__(rawRecords)
+        if 'piggyBank' in results:
+            cost = results['piggyBank']
+            if cost is not None:
+                rawRecords['piggyBank'] = cost
+        super(_AdditionalRecords, self).__init__(rawRecords)
         return
 
 
 class _CreditsReplayRecords(records.ReplayRecords):
     __slots__ = ()
 
-    def __init__(self, replay, originalCreditsToDraw, achievementCredits):
+    def __init__(self, replay, results, squadCreditsFactor=0):
         super(_CreditsReplayRecords, self).__init__(replay, 'credits')
-        self._addRecord(ValueReplay.SUB, 'originalCreditsToDraw', originalCreditsToDraw, 0)
-        self._addRecord(ValueReplay.SET, 'achievementCredits', achievementCredits, 0)
+        self._addRecord(ValueReplay.SUB, 'originalCreditsToDraw', results['originalCreditsToDraw'], 0)
+        self._addRecord(ValueReplay.SET, 'achievementCredits', results['achievementCredits'], 0)
+        self._addRecord(ValueReplay.FACTOR, 'premSquadCreditsFactor100', squadCreditsFactor, 0)
 
     def _getRecord(self, name):
         value = super(_CreditsReplayRecords, self)._getRecord(name)
         if name in ('originalCreditsToDraw', 'achievementCredits'):
-            value = records.makeReplayValueRound(value * self.getFactor('appliedPremiumCreditsFactor10'))
+            value = records.makeReplayValueRound(value * self.getFactor('appliedPremiumCreditsFactor100'))
         return value
 
 
@@ -159,7 +166,7 @@ class _XPReplayRecords(records.ReplayRecords):
     def _getRecord(self, name):
         value = super(_XPReplayRecords, self)._getRecord(name)
         if name in ('achievementXP',):
-            value = records.makeReplayValueRound(value * self.getFactor('appliedPremiumXPFactor10'))
+            value = records.makeReplayValueRound(value * self.getFactor('appliedPremiumXPFactor100'))
         return value
 
 
@@ -173,23 +180,28 @@ class _FreeXPReplayRecords(records.ReplayRecords):
     def _getRecord(self, name):
         value = super(_FreeXPReplayRecords, self)._getRecord(name)
         if name in ('achievementFreeXP',):
-            value = records.makeReplayValueRound(value * self.getFactor('appliedPremiumXPFactor10'))
+            value = records.makeReplayValueRound(value * self.getFactor('appliedPremiumXPFactor100'))
         return value
 
 
 class _EconomicsRecordsChains(object):
-    __slots__ = ('_baseCredits', '_premiumCredits', '_goldRecords', '_autoRecords', '_baseXP', '_premiumXP', '_baseFreeXP', '_premiumFreeXP', '_fortResource', '_crystal', '_crystalDetails')
+    __slots__ = ('_baseCredits', '_premiumCredits', '_premiumPlusCredits', '_goldRecords', '_additionalRecords', '_baseXP', '_premiumXP', '_premiumPlusXP', '_premiumXPAdd', '_baseFreeXP', '_premiumFreeXP', '_premiumPlusFreeXP', '_premiumFreeXPAdd', '_crystal', '_crystalDetails')
 
     def __init__(self):
         super(_EconomicsRecordsChains, self).__init__()
         self._baseCredits = records.RecordsIterator()
         self._premiumCredits = records.RecordsIterator()
+        self._premiumPlusCredits = records.RecordsIterator()
         self._goldRecords = records.RecordsIterator()
-        self._autoRecords = records.RecordsIterator()
+        self._additionalRecords = records.RecordsIterator()
         self._baseXP = records.RecordsIterator()
         self._premiumXP = records.RecordsIterator()
+        self._premiumPlusXP = records.RecordsIterator()
+        self._premiumXPAdd = records.RecordsIterator()
         self._baseFreeXP = records.RecordsIterator()
         self._premiumFreeXP = records.RecordsIterator()
+        self._premiumPlusFreeXP = records.RecordsIterator()
+        self._premiumFreeXPAdd = records.RecordsIterator()
         self._crystal = records.RecordsIterator()
         self._crystalDetails = []
 
@@ -208,8 +220,15 @@ class _EconomicsRecordsChains(object):
     def getPremiumXPRecords(self):
         return self._premiumXP
 
-    def getMoneyRecords(self):
-        return itertools.izip(self._baseCredits, self._premiumCredits, self._goldRecords, self._autoRecords)
+    def getPremiumXPAddRecords(self):
+        return self._premiumXPAdd
+
+    def getMoneyRecords(self, premiumType=PREMIUM_TYPE.NONE):
+        if premiumType == PREMIUM_TYPE.NONE or premiumType & (PREMIUM_TYPE.VIP | PREMIUM_TYPE.PLUS):
+            resultPremiumData = self._premiumPlusCredits
+        else:
+            resultPremiumData = self._premiumCredits
+        return itertools.izip(self._baseCredits, resultPremiumData, self._goldRecords, self._additionalRecords)
 
     def getCrystalRecords(self):
         return itertools.izip(self._crystal, self._crystal)
@@ -217,8 +236,18 @@ class _EconomicsRecordsChains(object):
     def getCrystalDetails(self):
         return self._crystalDetails
 
-    def getXPRecords(self):
-        return itertools.izip(self._baseXP, self._premiumXP, self._baseFreeXP, self._premiumFreeXP)
+    def getXPRecords(self, premiumType=PREMIUM_TYPE.NONE, addBonusApplied=False):
+        if premiumType == PREMIUM_TYPE.NONE or premiumType & (PREMIUM_TYPE.VIP | PREMIUM_TYPE.PLUS):
+            if addBonusApplied:
+                resultXPData = self._premiumXPAdd
+                resultFreeXPData = self._premiumFreeXPAdd
+            else:
+                resultXPData = self._premiumPlusXP
+                resultFreeXPData = self._premiumPlusFreeXP
+        else:
+            resultXPData = self._premiumXP
+            resultFreeXPData = self._premiumFreeXP
+        return itertools.izip(self._baseXP, resultXPData, self._baseFreeXP, resultFreeXPData)
 
     def getXPDiff(self):
         return self._premiumXP.getRecord('xp') - self._baseXP.getRecord('xp')
@@ -232,12 +261,22 @@ class _EconomicsRecordsChains(object):
     def _addMoneyResults(self, connector, results):
         if 'creditsReplay' in results and results['creditsReplay'] is not None:
             replay = ValueReplay(connector, recordName='credits', replay=results['creditsReplay'])
-            if 'appliedPremiumCreditsFactor10' in replay:
-                replay['appliedPremiumCreditsFactor10'] = FACTOR_VALUE.BASE_CREDITS_FACTOR
-            self._baseCredits.addRecords(_CreditsReplayRecords(replay, results['originalCreditsToDraw'], results['achievementCredits']))
-            if 'appliedPremiumCreditsFactor10' in replay:
-                replay['appliedPremiumCreditsFactor10'] = results['premiumCreditsFactor10']
-            self._premiumCredits.addRecords(_CreditsReplayRecords(replay, results['originalCreditsToDraw'], results['achievementCredits']))
+            appliedPremiumCreditsFactor100Exists = 'appliedPremiumCreditsFactor100' in replay
+            if appliedPremiumCreditsFactor100Exists:
+                replay['appliedPremiumCreditsFactor100'] = FACTOR_VALUE.BASE_CREDITS_FACTOR
+            squadCreditsFactor = self.__getPremiumSquadCreditsFactor(results, PREMIUM_TYPE.NONE)
+            self.__updatePremiumSquadCredits(replay, results, squadCreditsFactor)
+            self._baseCredits.addRecords(_CreditsReplayRecords(replay, results, squadCreditsFactor))
+            if appliedPremiumCreditsFactor100Exists:
+                replay['appliedPremiumCreditsFactor100'] = results['premiumCreditsFactor100']
+            squadCreditsFactor = self.__getPremiumSquadCreditsFactor(results, PREMIUM_TYPE.BASIC)
+            self.__updatePremiumSquadCredits(replay, results, squadCreditsFactor)
+            self._premiumCredits.addRecords(_CreditsReplayRecords(replay, results, squadCreditsFactor))
+            if appliedPremiumCreditsFactor100Exists:
+                replay['appliedPremiumCreditsFactor100'] = results['premiumPlusCreditsFactor100']
+            squadCreditsFactor = self.__getPremiumSquadCreditsFactor(results, PREMIUM_TYPE.PLUS)
+            self.__updatePremiumSquadCredits(replay, results, squadCreditsFactor)
+            self._premiumPlusCredits.addRecords(_CreditsReplayRecords(replay, results, squadCreditsFactor))
         else:
             LOG_ERROR('Credits replay is not found', results)
         if 'goldReplay' in results and results['goldReplay'] is not None:
@@ -245,29 +284,35 @@ class _EconomicsRecordsChains(object):
             self._goldRecords.addRecords(records.ReplayRecords(replay, 'gold'))
         else:
             LOG_ERROR('Gold replay is not found', results)
-        self._autoRecords.addRecords(_AutoCompletionRecords(results))
+        self._additionalRecords.addRecords(_AdditionalRecords(results))
         return
 
     def _addXPResults(self, connector, results):
         if 'xpReplay' in results and results['xpReplay'] is not None:
             replay = ValueReplay(connector, recordName='xp', replay=results['xpReplay'])
+            self.__updateAdditionalFactorFromReplay(replay, results, setDefault=True)
             isHighScope = RECORD_DB_IDS[('max15x15', 'maxXP')] in [ recordID for recordID, _ in results.get('dossierPopUps', []) ]
-            if 'appliedPremiumXPFactor10' in replay:
-                replay['appliedPremiumXPFactor10'] = FACTOR_VALUE.BASE_XP_FACTOR
+            self.__updatePremiumXPFactor(replay, results, premType=PREMIUM_TYPE.NONE)
             self._baseXP.addRecords(_XPReplayRecords(replay, isHighScope, results['achievementXP']))
-            if 'appliedPremiumXPFactor10' in replay:
-                replay['appliedPremiumXPFactor10'] = results['premiumXPFactor10']
+            self.__updatePremiumXPFactor(replay, results, premType=PREMIUM_TYPE.BASIC)
             self._premiumXP.addRecords(_XPReplayRecords(replay, isHighScope, results['achievementXP']))
+            self.__updatePremiumXPFactor(replay, results, premType=PREMIUM_TYPE.PLUS)
+            self._premiumPlusXP.addRecords(_XPReplayRecords(replay, isHighScope, results['achievementXP']))
+            self.__updateAdditionalFactorFromReplay(replay, results, setDefault=False)
+            self._premiumXPAdd.addRecords(_XPReplayRecords(replay, isHighScope, results['achievementXP']))
         else:
             LOG_ERROR('XP replay is not found', results)
         if 'freeXPReplay' in results and results['freeXPReplay'] is not None:
             replay = ValueReplay(connector, recordName='freeXP', replay=results['freeXPReplay'])
-            if 'appliedPremiumXPFactor10' in replay:
-                replay['appliedPremiumXPFactor10'] = FACTOR_VALUE.BASE_XP_FACTOR
+            self.__updateAdditionalFactorFromReplay(replay, results, setDefault=True)
+            self.__updatePremiumXPFactor(replay, results, premType=PREMIUM_TYPE.NONE)
             self._baseFreeXP.addRecords(_FreeXPReplayRecords(replay, results['achievementFreeXP']))
-            if 'appliedPremiumXPFactor10' in replay:
-                replay['appliedPremiumXPFactor10'] = results['premiumXPFactor10']
+            self.__updatePremiumXPFactor(replay, results, premType=PREMIUM_TYPE.BASIC)
             self._premiumFreeXP.addRecords(_FreeXPReplayRecords(replay, results['achievementFreeXP']))
+            self.__updatePremiumXPFactor(replay, results, premType=PREMIUM_TYPE.PLUS)
+            self._premiumPlusFreeXP.addRecords(_FreeXPReplayRecords(replay, results['achievementFreeXP']))
+            self.__updateAdditionalFactorFromReplay(replay, results, setDefault=False)
+            self._premiumFreeXPAdd.addRecords(_FreeXPReplayRecords(replay, results['achievementFreeXP']))
         else:
             LOG_ERROR('Free XP replay is not found', results)
         return
@@ -290,9 +335,46 @@ class _EconomicsRecordsChains(object):
                 achievementName = appliedName.split(medalToken)[1]
                 self._crystalDetails.append((achievementName, appliedValue))
 
+    @staticmethod
+    def __updateAdditionalFactorFromReplay(replay, results, setDefault=False):
+        if 'additionalXPFactor10' not in replay:
+            return
+        if setDefault:
+            if 'dailyXPFactor10' in replay:
+                replay['additionalXPFactor10'] = FACTOR_VALUE.ADDITIONAL_BONUS_ZERO_FACTOR
+            else:
+                replay['additionalXPFactor10'] = FACTOR_VALUE.ADDITIONAL_BONUS_ONE_FACTOR
+        else:
+            replay['additionalXPFactor10'] = results['additionalXPFactor10']
+
+    @staticmethod
+    def __updatePremiumXPFactor(replay, results, premType=PREMIUM_TYPE.NONE):
+        if 'appliedPremiumXPFactor100' not in replay:
+            return
+        if premType == PREMIUM_TYPE.PLUS:
+            replay['appliedPremiumXPFactor100'] = results['premiumPlusXPFactor100']
+        elif premType == PREMIUM_TYPE.BASIC:
+            replay['appliedPremiumXPFactor100'] = results['premiumXPFactor100']
+        else:
+            replay['appliedPremiumXPFactor100'] = FACTOR_VALUE.BASE_XP_FACTOR
+
+    @staticmethod
+    def __updatePremiumSquadCredits(replay, results, factor):
+        if 'originalPremSquadCredits' not in replay:
+            return
+        replay['originalPremSquadCredits'] = results['originalCredits'] * (factor * 0.01)
+
+    @staticmethod
+    @dependency.replace_none_kwargs(lobbyContext=ILobbyContext)
+    def __getPremiumSquadCreditsFactor(results, targetPremiumType, lobbyContext=None):
+        premiumType = PREMIUM_TYPE.activePremium(results.get('premMask', PREMIUM_TYPE.NONE))
+        if targetPremiumType > premiumType:
+            return lobbyContext.getServerSettings().squadPremiumBonus.ownCredits * 100
+        return 0 if targetPremiumType < premiumType else results.get('premSquadCreditsFactor100', 0)
+
 
 class PersonalInfo(shared.UnpackedInfo):
-    __slots__ = ('__avatar', '__vehicles', '__lifeTimeInfo', '__isObserver', '__economicsRecords', '__isPremium', '__questsProgress', '__PM2Progress', '__rankInfo', '__isTeamKiller', '__progressiveReward')
+    __slots__ = ('__avatar', '__vehicles', '__lifeTimeInfo', '__isObserver', '_economicsRecords', '__questsProgress', '__PM2Progress', '__rankInfo', '__isTeamKiller', '__progressiveReward', '__premiumMask', '__isAddXPBonusApplied')
     itemsCache = dependency.descriptor(IItemsCache)
 
     def __init__(self, personal):
@@ -305,12 +387,13 @@ class PersonalInfo(shared.UnpackedInfo):
         self.__vehicles = []
         self.__isObserver = False
         self.__isTeamKiller = False
-        self.__isPremium = False
-        self.__economicsRecords = _EconomicsRecordsChains()
+        self.__premiumMask = 0
+        self.__isAddXPBonusApplied = False
+        self._economicsRecords = _EconomicsRecordsChains()
         self.__lifeTimeInfo = _LifeTimeInfo(False, 0)
         self.__questsProgress = {}
         self.__PM2Progress = {}
-        self.__rankInfo = PostBattleRankInfo(0, 0, 0, 0, 0, 0, 0, 0, 0, {}, {})
+        self.__rankInfo = PostBattleRankInfo(0, 0, 0, 0, 0, 0, {}, {}, False, 0)
         if not self.hasUnpackedItems():
             self.__collectRequiredData(personal)
         return
@@ -324,8 +407,28 @@ class PersonalInfo(shared.UnpackedInfo):
         return self.__isObserver
 
     @property
+    def hasAnyPremium(self):
+        return bool(self.__premiumMask & PREMIUM_TYPE.ANY)
+
+    @property
     def isPremium(self):
-        return self.__isPremium
+        return bool(PREMIUM_TYPE.activePremium(self.__premiumMask) & PREMIUM_TYPE.BASIC)
+
+    @property
+    def isPremiumPlus(self):
+        return bool(PREMIUM_TYPE.activePremium(self.__premiumMask) & PREMIUM_TYPE.PLUS)
+
+    @property
+    def isPremiumVIP(self):
+        return bool(PREMIUM_TYPE.activePremium(self.__premiumMask) & PREMIUM_TYPE.VIP)
+
+    @property
+    def isAddXPBonusApplied(self):
+        return self.__isAddXPBonusApplied
+
+    @isAddXPBonusApplied.setter
+    def isAddXPBonusApplied(self, state):
+        self.__isAddXPBonusApplied = state
 
     @property
     def isTeamKiller(self):
@@ -377,34 +480,37 @@ class PersonalInfo(shared.UnpackedInfo):
         return self.__progressiveReward
 
     def getBaseCreditsRecords(self):
-        return self.__economicsRecords.getBaseCreditsRecords()
+        return self._economicsRecords.getBaseCreditsRecords()
 
     def getPremiumCreditsRecords(self):
-        return self.__economicsRecords.getPremiumCreditsRecords()
+        return self._economicsRecords.getPremiumCreditsRecords()
 
     def getCreditsDiff(self):
-        return self.__economicsRecords.getCreditsDiff()
+        return self._economicsRecords.getCreditsDiff()
 
     def getMoneyRecords(self):
-        return self.__economicsRecords.getMoneyRecords()
+        return self._economicsRecords.getMoneyRecords(self.__premiumMask)
 
     def getCrystalRecords(self):
-        return self.__economicsRecords.getCrystalRecords()
+        return self._economicsRecords.getCrystalRecords()
 
     def getBaseXPRecords(self):
-        return self.__economicsRecords.getBaseXPRecords()
+        return self._economicsRecords.getBaseXPRecords()
 
     def getPremiumXPRecords(self):
-        return self.__economicsRecords.getPremiumXPRecords()
+        return self._economicsRecords.getPremiumXPRecords()
+
+    def getPremiumXPAddRecords(self):
+        return self._economicsRecords.getPremiumXPAddRecords()
 
     def getXPRecords(self):
-        return self.__economicsRecords.getXPRecords()
+        return self._economicsRecords.getXPRecords(self.__premiumMask, self.__isAddXPBonusApplied)
 
     def getXPDiff(self):
-        return self.__economicsRecords.getXPDiff()
+        return self._economicsRecords.getXPDiff()
 
     def getCrystalDetails(self):
-        return self.__economicsRecords.getCrystalDetails()
+        return self._economicsRecords.getCrystalDetails()
 
     def __collectRequiredData(self, info):
         getItemByCD = self.itemsCache.items.getItemByCD
@@ -424,7 +530,7 @@ class PersonalInfo(shared.UnpackedInfo):
                 self._addUnpackedItemID(intCD)
                 continue
             self.__vehicles.append(intCD)
-            self.__economicsRecords.addResults(intCD, data)
+            self._economicsRecords.addResults(intCD, data)
             if not self.__isObserver:
                 self.__isObserver = item.isObserver
             killerID = data['killerID'] if 'killerID' in data else 0
@@ -432,8 +538,7 @@ class PersonalInfo(shared.UnpackedInfo):
             if killerID and lifeTime:
                 lifeTimes.append(lifeTime)
             self.__isTeamKiller = data['isTeamKiller'] if 'isTeamKiller' in data else False
-            if not self.__isPremium and data.get('isPremium', False):
-                self.__isPremium = True
+            self.__premiumMask = data.get('premMask', PREMIUM_TYPE.NONE)
             self.__questsProgress.update(data.get('questsProgress', {}))
             self.__PM2Progress.update(data.get('PM2Progress', {}))
 

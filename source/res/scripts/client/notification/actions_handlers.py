@@ -6,7 +6,6 @@ from adisp import process
 from debug_utils import LOG_ERROR, LOG_DEBUG
 from gui import DialogsInterface, makeHtmlString, SystemMessages
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
-from gui.Scaleform.genConsts.CLANS_ALIASES import CLANS_ALIASES
 from gui.Scaleform.genConsts.FORTIFICATION_ALIASES import FORTIFICATION_ALIASES
 from gui.Scaleform.genConsts.QUESTS_ALIASES import QUESTS_ALIASES
 from gui.Scaleform.genConsts.RANKEDBATTLES_ALIASES import RANKEDBATTLES_ALIASES
@@ -185,7 +184,7 @@ class _ShowClanInvitesHandler(_ActionHandler):
 
     def handleAction(self, model, entityID, action):
         super(_ShowClanInvitesHandler, self).handleAction(model, entityID, action)
-        g_eventBus.handleEvent(events.LoadViewEvent(CLANS_ALIASES.CLAN_PERSONAL_INVITES_WINDOW_PY), scope=EVENT_BUS_SCOPE.LOBBY)
+        shared_events.showClanPersonalInvitesWindow()
 
 
 class _ClanAppHandler(_ActionHandler):
@@ -330,7 +329,7 @@ class ShowRankedSeasonCompleteHandler(_ActionHandler):
         return
 
     def __showSeasonAward(self, quest, data):
-        seasonID, _, _ = ranked_helpers.getRankedDataFromTokenQuestID(quest.getID())
+        seasonID, _ = ranked_helpers.getRankedDataFromTokenQuestID(quest.getID())
         season = self.rankedController.getSeason(seasonID)
         if season is not None:
             g_eventBus.handleEvent(events.LoadViewEvent(RANKEDBATTLES_ALIASES.RANKED_BATTLES_SEASON_COMPLETE, ctx={'quest': quest,

@@ -406,7 +406,6 @@
     <vehicleFilter>
       <include>
         <nations>	ussr poland czech china germany italy japan	</nations>
-        <levels>	6 7 8 9 10	</levels>
       </include>
     </vehicleFilter>
     <type>	INSCRIPTION	</type>
@@ -426,7 +425,6 @@
     <vehicleFilter>
       <include>
         <nations>	france uk usa sweden	</nations>
-        <levels>	6 7 8 9 10	</levels>
       </include>
     </vehicleFilter>
     <type>	INSCRIPTION	</type>
@@ -560,7 +558,6 @@
     <vehicleFilter>
       <include>
         <nations>	uk	</nations>
-        <levels>	6 7 8 9 10	</levels>
       </include>
     </vehicleFilter>
     <type>	INSCRIPTION	</type>
@@ -885,6 +882,38 @@
       <id>	704	</id>
       <texture>	gui/maps/vehicles/decals/inscriptions/special/inscription_243.dds	</texture>
       <userString>	#vehicle_customization:inscription/special/special_243	</userString>
+      <mirror>	false	</mirror>
+    </decal>
+  </itemGroup>
+  <itemGroup>
+    <name>	ranked 4th	</name>
+    <userString>	#vehicle_customization:inscription/special	</userString>
+    <season>	ALL	</season>
+    <historical>	false	</historical>
+    <priceGroup>	inscriptions notInShop	</priceGroup>
+    <type>	INSCRIPTION	</type>
+    <tags>	hiddenInUI	</tags>
+    <vehicleFilter>
+      <include>
+        <levels>	10	</levels>
+      </include>
+    </vehicleFilter>
+    <decal>
+      <id>	706	</id>
+      <texture>	gui/maps/vehicles/decals/inscriptions/special/inscription_244.dds	</texture>
+      <userString>	#vehicle_customization:inscription/special/special_244	</userString>
+      <mirror>	false	</mirror>
+    </decal>
+    <decal>
+      <id>	707	</id>
+      <texture>	gui/maps/vehicles/decals/inscriptions/special/inscription_245.dds	</texture>
+      <userString>	#vehicle_customization:inscription/special/special_245	</userString>
+      <mirror>	false	</mirror>
+    </decal>
+    <decal>
+      <id>	708	</id>
+      <texture>	gui/maps/vehicles/decals/inscriptions/special/inscription_258.dds	</texture>
+      <userString>	#vehicle_customization:inscription/special/special_258	</userString>
       <mirror>	false	</mirror>
     </decal>
   </itemGroup>

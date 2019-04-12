@@ -203,23 +203,27 @@ class PreQueueEntity(BasePreQueueEntity, ListenersCollection):
             __leave()
 
     def onEnqueued(self, *args):
-        self._requestCtx.stopProcessing(True)
+        if self._requestCtx.getRequestType() == REQUEST_TYPE.QUEUE:
+            self._requestCtx.stopProcessing(True)
         self._invokeListeners('onEnqueued', self.getQueueType(), *args)
         self._goToQueueUI()
 
     def onDequeued(self, *args):
-        self._requestCtx.stopProcessing(True)
+        if self._requestCtx.getRequestType() == REQUEST_TYPE.DEQUEUE:
+            self._requestCtx.stopProcessing(True)
         self._invokeListeners('onDequeued', self.getQueueType(), *args)
         self._exitFromQueueUI()
 
     def onEnqueueError(self, errorCode, *args):
-        self._requestCtx.stopProcessing(True)
+        if self._requestCtx.getRequestType() == REQUEST_TYPE.QUEUE:
+            self._requestCtx.stopProcessing(True)
         self._invokeListeners('onEnqueueError', self.getQueueType(), *args)
         self._exitFromQueueUI()
         SystemMessages.pushMessage(messages.getJoinFailureMessage(errorCode), type=SystemMessages.SM_TYPE.Error)
 
     def onKickedFromQueue(self, *args):
-        self._requestCtx.stopProcessing(True)
+        if self._requestCtx.getRequestType() == REQUEST_TYPE.QUEUE:
+            self._requestCtx.stopProcessing(True)
         self._invokeListeners('onKickedFromQueue', self.getQueueType(), *args)
         self._exitFromQueueUI()
         SystemMessages.pushI18nMessage('#system_messages:arena_start_errors/prb/kick/timeout', type=SystemMessages.SM_TYPE.Warning)

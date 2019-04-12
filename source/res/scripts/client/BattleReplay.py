@@ -26,6 +26,7 @@ from helpers import dependency
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.connection_mgr import IConnectionManager
 from skeletons.gameplay import IGameplayLogic, ReplayEventID
+from skeletons.gui.app_loader import IAppLoader
 from skeletons.gui.battle_session import IBattleSessionProvider
 from skeletons.gui.lobby_context import ILobbyContext
 from soft_exception import SoftException
@@ -104,6 +105,7 @@ class BattleReplay(object):
     settingsCore = dependency.descriptor(ISettingsCore)
     lobbyContext = dependency.descriptor(ILobbyContext)
     connectionMgr = dependency.descriptor(IConnectionManager)
+    appLoader = dependency.descriptor(IAppLoader)
 
     def __init__(self):
         userPrefs = Settings.g_instance.userPrefs
@@ -582,8 +584,8 @@ class BattleReplay(object):
                 AreaDestructibles.g_destructiblesManager.onAfterReplayTimeWarp()
                 if isPlayerAvatar():
                     BigWorld.player().onVehicleEnterWorld += self.__onVehicleEnterWorld
-                from gui.app_loader import g_appLoader, settings
-                g_appLoader.attachCursor(settings.APP_NAME_SPACE.SF_BATTLE, flags=GUI_CTRL_MODE_FLAG.CURSOR_ATTACHED)
+                from gui.app_loader import settings
+                self.appLoader.attachCursor(settings.APP_NAME_SPACE.SF_BATTLE, flags=GUI_CTRL_MODE_FLAG.CURSOR_ATTACHED)
             if self.isRecording:
                 player = BigWorld.player()
                 arena = player.arena

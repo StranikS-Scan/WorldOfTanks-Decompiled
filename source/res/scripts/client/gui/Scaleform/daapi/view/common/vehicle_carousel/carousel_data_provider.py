@@ -222,13 +222,12 @@ class CarouselDataProvider(SortableDAAPIDataProvider):
                     self._selectedIdx = len(self._filteredIndices) - 1
 
         self._filteredIndices += self._getAdditionalItemsIndexes()
-        needUpdate = not self._filteredIndices or prevFilteredIndices != self._filteredIndices or prevSelectedIdx != self._selectedIdx
+        needUpdate = prevFilteredIndices != self._filteredIndices or prevSelectedIdx != self._selectedIdx
         if needUpdate:
             self._filterByIndices()
 
     def _filterByIndices(self):
-        if self._filteredIndices:
-            self.flashObject.as_setFilter(self._filteredIndices)
+        self.flashObject.as_setFilter(self._filteredIndices)
 
     def _getSortedIndices(self):
         return self._getCachedSortedIndices(False)

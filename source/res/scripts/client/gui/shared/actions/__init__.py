@@ -5,7 +5,6 @@ from adisp import process
 from debug_utils import LOG_DEBUG, LOG_ERROR
 from gui.Scaleform.Waiting import Waiting
 from gui.Scaleform.framework import ViewTypes
-from gui.app_loader import g_appLoader
 from gui.prb_control.settings import FUNCTIONAL_FLAG
 from gui.shared import g_eventBus, EVENT_BUS_SCOPE
 from gui.shared.actions.chains import ActionsChain
@@ -14,6 +13,7 @@ from helpers import dependency
 from predefined_hosts import g_preDefinedHosts, getHostURL
 from skeletons.connection_mgr import IConnectionManager
 from skeletons.gameplay import IGameplayLogic
+from skeletons.gui.app_loader import IAppLoader
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.login_manager import ILoginManager
 from constants import WGC_STATE
@@ -110,6 +110,7 @@ class SelectPrb(Action):
 class DisconnectFromPeriphery(Action):
     connectionMgr = dependency.descriptor(IConnectionManager)
     gameplay = dependency.descriptor(IGameplayLogic)
+    appLoader = dependency.descriptor(IAppLoader)
 
     def isInstantaneous(self):
         return False
@@ -119,7 +120,7 @@ class DisconnectFromPeriphery(Action):
         self.gameplay.goToLoginByRQ()
 
     def isRunning(self):
-        app = g_appLoader.getApp()
+        app = self.appLoader.getApp()
         if app:
             from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
             view = app.containerManager.getView(ViewTypes.DEFAULT)

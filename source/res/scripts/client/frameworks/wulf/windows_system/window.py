@@ -86,6 +86,9 @@ class Window(PyObjectEntity):
     def isResizable(self):
         return self.proxy.isResizable()
 
+    def isCloseByEscape(self):
+        return self.proxy.isCloseByEscape()
+
     def setDecorator(self, decorator):
         self.__hasDecorator = True
         contentProxy = None if decorator is None else decorator.proxy

@@ -13,6 +13,4 @@ class QUEST_PROGRESS_BATTLE(object):
     QP_ANIM_STATUS_FAILD = 'animStatusFaild'
     QP_ANIM_STATUS_COMPLETED = 'animStatusCompleted'
     QP_ANIM_STATUS_PROGRESS = 'animStatusProgress'
-    QP_ANIM_FLAG = 'QuestInfoFlagUI'
     QP_TRACKING_BTN = 'QuestTrackingButtonUI'
-    APP_MIN_HEIGHT_BREAKING = 800

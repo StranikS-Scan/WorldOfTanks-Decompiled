@@ -106,18 +106,24 @@ class ArenaEquipmentComponent(ClientArenaComponent):
 
     def __init__(self, componentSystem):
         ClientArenaComponent.__init__(self, componentSystem)
-        self.addSyncDataCallback(ARENA_SYNC_OBJECTS.SMOKE, '', self.__onSmokeScreenUpdated)
         self.onSmokeScreenStarted = Event.Event(self._eventManager)
         self.onSmokeScreenEnded = Event.Event(self._eventManager)
         self.__smokeScreen = dict()
         self.__inspiredData = dict()
         self.__inspiringData = dict()
 
-    def destroy(self):
-        super(ArenaEquipmentComponent, self).destroy()
+    def activate(self):
+        super(ArenaEquipmentComponent, self).activate()
+        self.addSyncDataCallback(ARENA_SYNC_OBJECTS.SMOKE, '', self.__onSmokeScreenUpdated)
+
+    def deactivate(self):
+        super(ArenaEquipmentComponent, self).deactivate()
         self.removeSyncDataCallback(ARENA_SYNC_OBJECTS.SMOKE, '', self.__onSmokeScreenUpdated)
         self.__smokeScreen.clear()
         SmokeScreen.enableSmokePostEffect(False)
+
+    def destroy(self):
+        super(ArenaEquipmentComponent, self).destroy()
         for inspireData in (data for data in self.__inspiredData.itervalues() if data is not None):
             inspireData.destroy()
 

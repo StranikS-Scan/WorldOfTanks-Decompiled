@@ -963,6 +963,7 @@
         <collisionModelClient>	vehicles/russian/R156_IS_2M/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	-0.001907 0.398964 1.36137	</gunPosition>
+      <gunCamPosition>	-0.001907 0.398964 1.186	</gunCamPosition>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
       <physicsShape>	1.079 -0.103 1.083 -0.040 0.699 0.133 0.582 0.283 0.522 0.533 0.266 0.500 0.212 0.840 0.234	</physicsShape>
@@ -1089,14 +1090,6 @@
       </chassis>
     </detailed>
   </physics>
-  <clientAdjustmentFactors>
-    <guns>
-      <_122-mm_D-25T_with_wedges_shutter_B>
-        <delta>	1.23	</delta>
-      </_122-mm_D-25T_with_wedges_shutter_B>
-    </guns>
-    <armour>	1.194832217	</armour>
-  </clientAdjustmentFactors>
   <effects>
     <collision></collision>
     <damagedStateGroup>	large	</damagedStateGroup>

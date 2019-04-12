@@ -60,10 +60,7 @@ def prettyPrint(dictValue, sort_keys=True, indent=4):
 
 
 def findFirst(function_or_None, sequence, default=None):
-    try:
-        return next(itertools.ifilter(function_or_None, sequence))
-    except StopIteration:
-        return default
+    return next(itertools.ifilter(function_or_None, sequence), default)
 
 
 def first(sequence, default=None):

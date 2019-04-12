@@ -6,6 +6,7 @@ from gui.Scaleform.daapi.view.battle.shared.crosshair import gm_factory, plugins
 from gui.Scaleform.daapi.view.external_components import ExternalFlashComponent
 from gui.Scaleform.daapi.view.external_components import ExternalFlashSettings
 from gui.Scaleform.daapi.view.meta.CrosshairPanelContainerMeta import CrosshairPanelContainerMeta
+from gui.Scaleform.flash_wrapper import InputKeyMode
 from gui.Scaleform.genConsts.BATTLE_VIEW_ALIASES import BATTLE_VIEW_ALIASES
 from gui.Scaleform.locale.INGAME_GUI import INGAME_GUI
 from gui.battle_control.battle_constants import CROSSHAIR_VIEW_ID
@@ -26,7 +27,6 @@ class CrosshairPanelContainer(ExternalFlashComponent, CrosshairPanelContainerMet
         self.__scale = 1.0
         self.__distance = 0
         self.__hasAmmo = True
-        self.__configure()
         return
 
     def getViewID(self):
@@ -127,6 +127,10 @@ class CrosshairPanelContainer(ExternalFlashComponent, CrosshairPanelContainerMet
         self.__clearGunMarkers()
         self.__plugins.stop()
 
+    def createExternalComponent(self):
+        super(CrosshairPanelContainer, self).createExternalComponent()
+        self.__configure()
+
     def _populate(self):
         super(CrosshairPanelContainer, self)._populate()
         self.__plugins.init()
@@ -138,7 +142,7 @@ class CrosshairPanelContainer(ExternalFlashComponent, CrosshairPanelContainerMet
         super(CrosshairPanelContainer, self)._dispose()
 
     def __configure(self):
-        self.component.wg_inputKeyMode = 2
+        self.component.wg_inputKeyMode = InputKeyMode.NO_HANDLE
         self.component.position.z = DEPTH_OF_Aim
         self.component.focus = False
         self.component.moveFocus = False

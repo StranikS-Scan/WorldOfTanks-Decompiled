@@ -1,12 +1,11 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/vehicle_systems/appearance_cache.py
 import weakref
-from functools import partial
 from collections import namedtuple
 import BigWorld
 from debug_utils import LOG_DEBUG, LOG_WARNING
 from vehicle_systems import vehicle_assembler
-from vehicle_systems.stricted_loading import loadingPriority
+from vehicle_systems.stricted_loading import loadingPriority, makeCallbackWeak
 _ENABLE_CACHE_TRACKER = False
 _ENABLE_PRECACHE = True
 _g_cache = None
@@ -155,7 +154,7 @@ class _AppearanceCache(object):
             del self.__assemblersCache[vId]
         self.__assemblersCache[vId] = _AssemblerData(compoundAssembler, assembler, info, prereqs)
         if self.__spaceLoaded:
-            BigWorld.loadResourceListBG(prereqs, partial(_resourceLoaded, prereqs, vId), loadingPriority(vId))
+            BigWorld.loadResourceListBG(prereqs, makeCallbackWeak(_resourceLoaded, prereqs, vId), loadingPriority(vId))
         return (compoundAssembler, prereqs)
 
     def __validateAppearanceWithInfo(self, appearance, info):

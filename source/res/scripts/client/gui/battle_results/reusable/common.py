@@ -80,6 +80,12 @@ class CommonInfo(shared.UnpackedInfo):
     def canTakeSquadXP(self):
         return self.__arenaVisitor.bonus.canTakeSquadXP()
 
+    def canTakeSquadCredits(self):
+        return self.__arenaVisitor.bonus.canTakeSquadCredits()
+
+    def canTakeAnySquadBonus(self):
+        return self.__arenaVisitor.bonus.canTakeAnySquadBonus()
+
     def getArenaIcon(self, iconKey):
         return self.__arenaVisitor.getArenaIcon(iconKey)
 

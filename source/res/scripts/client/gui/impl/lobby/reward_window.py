@@ -1,31 +1,34 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/reward_window.py
+import logging
 from frameworks.wulf import ViewFlags
 from frameworks.wulf.gui_constants import WindowFlags
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
-from gui.Scaleform.daapi.view.lobby.missions.awards_formatters import PackRentVehiclesAwardComposer, AnniversaryAwardComposer
+from gui.Scaleform.daapi.view.lobby.missions.awards_formatters import PackRentVehiclesAwardComposer, AnniversaryAwardComposer, CurtailingAwardsComposer, RawLabelBonusComposer
 from gui.Scaleform.daapi.view.lobby.missions.missions_helper import getMissionInfoData
 from gui.Scaleform.framework.entities.View import ViewKey
 from gui.Scaleform.genConsts.BARRACKS_CONSTANTS import BARRACKS_CONSTANTS
-from gui.app_loader import g_appLoader
-from gui.impl.backport import TooltipData, BackportTooltipWindow
+from gui.impl.backport.backport_tooltip import TooltipData, BackportTooltipWindow
 from gui.impl.gen import R
 from gui.impl.gen.view_models.ui_kit.reward_renderer_model import RewardRendererModel
+from gui.impl.gen.view_models.windows.piggy_bank_reward_window_content_model import PiggyBankRewardWindowContentModel
 from gui.impl.gen.view_models.windows.reward_window_content_model import RewardWindowContentModel
-from gui.impl.gen.view_models.windows.twitch_reward_window_content_model import TwitchRewardWindowContentModel
 from gui.impl.pub import ViewImpl
 from gui.impl.pub.window_impl import WindowImpl
 from gui.impl.pub.window_view import WindowView
-from gui.server_events.awards_formatters import getPackRentVehiclesAwardPacker, getAnniversaryPacker
-from gui.server_events.bonuses import getTutorialBonuses
+from gui.server_events.awards_formatters import getPackRentVehiclesAwardPacker, getAnniversaryPacker, getDefaultAwardFormatter
+from gui.server_events.bonuses import getTutorialBonuses, CreditsBonus
 from gui.server_events.recruit_helper import getRecruitInfo
-from gui.shared import g_eventBus, events, EVENT_BUS_SCOPE
+from gui.shared import g_eventBus, events, EVENT_BUS_SCOPE, event_dispatcher
 from gui.shared.money import Currency
+from helpers import dependency
+from skeletons.gui.app_loader import IAppLoader
+_logger = logging.getLogger(__name__)
 BASE_EVENT_NAME = 'base'
 _ADDITIONAL_AWARDS_COUNT = 5
 
-class RewardWindowContent(ViewImpl):
-    __slots__ = ('__items', '_eventName', '_quest', '_vehicles')
+class BaseRewardWindowContent(ViewImpl):
+    __slots__ = ('__items', '_eventName')
     _BONUSES_ORDER = ('vehicles',
      'premium',
      Currency.CRYSTAL,
@@ -44,20 +47,16 @@ class RewardWindowContent(ViewImpl):
      'goodies')
 
     def __init__(self, layoutID, viewModelClazz, ctx=None):
-        super(RewardWindowContent, self).__init__(layoutID, ViewFlags.VIEW, viewModelClazz)
+        super(BaseRewardWindowContent, self).__init__(layoutID, ViewFlags.VIEW, viewModelClazz)
         self.__items = {}
         if ctx is not None:
             self._eventName = ctx.get('eventName', BASE_EVENT_NAME)
-            self._quest = ctx.get('quest', None)
-            self._vehicles = ctx.get('bonusVehicles', {})
         else:
             self._eventName = BASE_EVENT_NAME
-            self._quest = None
-            self._vehicles = {}
         return
 
     def handleNextButton(self):
-        g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.LOBBY_BARRACKS, ctx={'location': BARRACKS_CONSTANTS.LOCATION_FILTER_NOT_RECRUITED}), scope=EVENT_BUS_SCOPE.LOBBY)
+        pass
 
     def createToolTip(self, event):
         if event.contentID == R.views.backportTooltipContent():
@@ -67,52 +66,113 @@ class RewardWindowContent(ViewImpl):
                 window.load()
             return window
         else:
-            return super(RewardWindowContent, self).createToolTip(event)
+            return super(BaseRewardWindowContent, self).createToolTip(event)
 
     def _keySortOrder(self, bonus):
         return self._BONUSES_ORDER.index(bonus.getName()) if bonus.getName() in self._BONUSES_ORDER else len(self._BONUSES_ORDER)
 
     def _initialize(self, *args, **kwargs):
-        super(RewardWindowContent, self)._initialize(*args, **kwargs)
+        super(BaseRewardWindowContent, self)._initialize(*args, **kwargs)
         self.getViewModel().setEventName(self._eventName)
         self._initRewardsList()
 
+    def _getBonuses(self):
+        return []
+
     def _getAwardComposer(self):
-        return PackRentVehiclesAwardComposer(_ADDITIONAL_AWARDS_COUNT, getPackRentVehiclesAwardPacker())
+        return CurtailingAwardsComposer(_ADDITIONAL_AWARDS_COUNT, getDefaultAwardFormatter())
+
+    def _getRewardRendererModelCls(self):
+        return RewardRendererModel
 
     def _initRewardsList(self):
         with self.getViewModel().transaction() as tx:
             rewardsList = tx.rewardsList.getItems()
-            if self._quest is not None:
-                allBonuses = getMissionInfoData(self._quest).getSubstituteBonuses()
-                bonuses = [ bonus for bonus in allBonuses if bonus.getName() != 'vehicles' ]
-                vehBonus = getTutorialBonuses('vehicles', self._vehicles)
-                bonuses.extend(vehBonus)
-                bonuses.sort(key=self._keySortOrder)
-                formatter = self._getAwardComposer()
-                for index, bonus in enumerate(formatter.getFormattedBonuses(bonuses)):
-                    rendererModel = RewardRendererModel()
-                    with rendererModel.transaction() as rewardTx:
-                        rewardTx.setIcon(bonus.get('imgSource', ''))
-                        rewardTx.setLabelStr(bonus.get('label', '') or '')
-                        rewardTx.setTooltipId(index)
-                        rewardTx.setHighlightType(bonus.get('highlightIcon', '') or '')
-                        rewardTx.setOverlayType(bonus.get('overlayIcon', '') or '')
-                        rewardTx.setHasCompensation(bonus.get('hasCompensation', False) or False)
-                        rewardTx.setLabelAlign(bonus.get('align', 'center') or 'center')
-                    rewardsList.addViewModel(rendererModel)
-                    self.__items[index] = TooltipData(tooltip=bonus.get('tooltip', None), isSpecial=bonus.get('isSpecial', False), specialAlias=bonus.get('specialAlias', ''), specialArgs=bonus.get('specialArgs', None))
+            bonuses = self._getBonuses()
+            bonuses.sort(key=self._keySortOrder)
+            formatter = self._getAwardComposer()
+            for index, bonus in enumerate(formatter.getFormattedBonuses(bonuses)):
+                rendererModel = self._getRewardRendererModelCls()()
+                with rendererModel.transaction() as rewardTx:
+                    rewardTx.setIcon(bonus.get('imgSource', ''))
+                    rewardTx.setLabelStr(bonus.get('label', '') or '')
+                    rewardTx.setTooltipId(index)
+                    rewardTx.setHighlightType(bonus.get('highlightIcon', '') or '')
+                    rewardTx.setOverlayType(bonus.get('overlayIcon', '') or '')
+                    rewardTx.setHasCompensation(bonus.get('hasCompensation', False) or False)
+                    rewardTx.setLabelAlign(bonus.get('align', 'center') or 'center')
+                rewardsList.addViewModel(rendererModel)
+                self.__items[index] = TooltipData(tooltip=bonus.get('tooltip', None), isSpecial=bonus.get('isSpecial', False), specialAlias=bonus.get('specialAlias', ''), specialArgs=bonus.get('specialArgs', None))
 
             tx.setShowRewards(bool(self.__items))
         return
 
+
+class PiggyBankRewardWindowContent(BaseRewardWindowContent):
+    __slots__ = ('_credits', '_isPremActive')
+
+    def __init__(self, layoutID, viewModelClazz, ctx=None):
+        super(PiggyBankRewardWindowContent, self).__init__(layoutID, viewModelClazz, ctx)
+        if ctx is not None:
+            self._isPremActive = ctx.get('isPremActive', False)
+            self._credits = ctx.get('credits', 0)
+        else:
+            self._isPremActive = False
+            self._credits = 0
+        return
+
+    def _initialize(self, *args, **kwargs):
+        super(PiggyBankRewardWindowContent, self)._initialize(*args, **kwargs)
+        self.getViewModel().onHyperLinkClicked += self.onHyperLinkClicked
+        self.getViewModel().setShowDescription(not self._isPremActive)
+
     def _finalize(self):
-        super(RewardWindowContent, self)._finalize()
+        super(PiggyBankRewardWindowContent, self)._finalize()
+        self.getViewModel().onHyperLinkClicked -= self.onHyperLinkClicked
+
+    def _getBonuses(self):
+        return [CreditsBonus('credits', self._credits)]
+
+    def handleNextButton(self):
+        self.getParentWindow().destroy()
+
+    def onHyperLinkClicked(self):
+        event_dispatcher.showPremiumDialog()
+
+    def _getAwardComposer(self):
+        return RawLabelBonusComposer(getDefaultAwardFormatter())
+
+
+class QuestRewardWindowContent(BaseRewardWindowContent):
+    __slots__ = ('_quest', '_vehicles')
+
+    def __init__(self, layoutID, viewModelClazz, ctx=None):
+        super(QuestRewardWindowContent, self).__init__(layoutID, viewModelClazz, ctx)
+        if ctx is not None:
+            self._quest = ctx.get('quest', None)
+            self._vehicles = ctx.get('bonusVehicles', {})
+        else:
+            self._quest = None
+            self._vehicles = {}
+        return
+
+    def _getBonuses(self):
+        allBonuses = getMissionInfoData(self._quest).getSubstituteBonuses()
+        bonuses = [ bonus for bonus in allBonuses if bonus.getName() != 'vehicles' ]
+        vehBonus = getTutorialBonuses('vehicles', self._vehicles)
+        bonuses.extend(vehBonus)
+        return bonuses
+
+    def _getAwardComposer(self):
+        return PackRentVehiclesAwardComposer(_ADDITIONAL_AWARDS_COUNT, getPackRentVehiclesAwardPacker())
+
+    def _finalize(self):
+        super(QuestRewardWindowContent, self)._finalize()
         self._quest = None
         return
 
 
-class TwitchRewardWindowContent(RewardWindowContent):
+class TwitchRewardWindowContent(QuestRewardWindowContent):
     __slots__ = ()
     _BONUSES_ORDER = ('customizations', Currency.GOLD, 'vehicles')
 
@@ -126,20 +186,21 @@ class TwitchRewardWindowContent(RewardWindowContent):
                     break
 
         if needContinue:
-            super(TwitchRewardWindowContent, self).handleNextButton()
+            g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.LOBBY_BARRACKS, ctx={'location': BARRACKS_CONSTANTS.LOCATION_FILTER_NOT_RECRUITED}), scope=EVENT_BUS_SCOPE.LOBBY)
         return
 
 
 class RewardWindowBase(WindowImpl):
+    appLoader = dependency.descriptor(IAppLoader)
     __slots__ = ()
 
     def __init__(self, parent, content):
         if parent is None:
-            app = g_appLoader.getApp()
+            app = self.appLoader.getApp()
             view = app.containerManager.getViewByKey(ViewKey(VIEW_ALIAS.LOBBY))
             if view is not None:
                 parent = view.getParentWindow()
-        super(RewardWindowBase, self).__init__(WindowFlags.DIALOG | WindowFlags.RESIZABLE, decorator=WindowView(), parent=parent, content=content, areaID=R.areas.default())
+        super(RewardWindowBase, self).__init__(WindowFlags.DIALOG | WindowFlags.RESIZABLE | WindowFlags.CLOSE_BY_ESCAPE, decorator=WindowView(), parent=parent, content=content, areaID=R.areas.default())
         return
 
     def _initialize(self):
@@ -162,17 +223,17 @@ class RewardWindow(RewardWindowBase):
     __slots__ = ()
 
     def __init__(self, ctx=None, parent=None):
-        super(RewardWindow, self).__init__(parent=parent, content=RewardWindowContent(layoutID=R.views.rewardWindowContent(), viewModelClazz=RewardWindowContentModel, ctx=ctx))
+        super(RewardWindow, self).__init__(parent=parent, content=QuestRewardWindowContent(layoutID=R.views.rewardWindowContent(), viewModelClazz=RewardWindowContentModel, ctx=ctx))
 
 
 class TwitchRewardWindow(RewardWindowBase):
     __slots__ = ()
 
     def __init__(self, ctx=None, parent=None):
-        super(TwitchRewardWindow, self).__init__(parent=parent, content=TwitchRewardWindowContent(layoutID=R.views.twitchRewardWindowContent(), viewModelClazz=TwitchRewardWindowContentModel, ctx=ctx))
+        super(TwitchRewardWindow, self).__init__(parent=parent, content=TwitchRewardWindowContent(layoutID=R.views.twitchRewardWindowContent(), viewModelClazz=RewardWindowContentModel, ctx=ctx))
 
 
-class GiveAwayRewardWindowContent(RewardWindowContent):
+class GiveAwayRewardWindowContent(QuestRewardWindowContent):
     __slots__ = ('__items', '_eventName', '_quest', '_vehicles')
     _BONUSES_ORDER = (Currency.CRYSTAL,
      'badgesGroup',
@@ -198,3 +259,14 @@ class GiveAwayRewardWindow(RewardWindowBase):
     def _initialize(self):
         super(GiveAwayRewardWindow, self)._initialize()
         self.windowModel.setTitle(R.strings.ingame_gui.rewardWindow.anniversary_ga.winHeaderText())
+
+
+class PiggyBankRewardWindow(RewardWindowBase):
+    __slots__ = ()
+
+    def __init__(self, ctx=None, parent=None):
+        super(PiggyBankRewardWindow, self).__init__(parent=parent, content=PiggyBankRewardWindowContent(layoutID=R.views.piggyBankRewardWindowContent(), viewModelClazz=PiggyBankRewardWindowContentModel, ctx=ctx))
+
+    def _initialize(self):
+        super(PiggyBankRewardWindow, self)._initialize()
+        self.windowModel.setTitle(R.strings.ingame_gui.rewardWindow.piggyBank.winHeaderText())

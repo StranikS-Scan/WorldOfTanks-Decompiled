@@ -23,11 +23,12 @@ from gui.prb_control.settings import PREBATTLE_ROSTER, REQUEST_TYPE
 from gui.prb_control.settings import PREBATTLE_SETTING_NAME, PREBATTLE_RESTRICTION
 from gui.prb_control.storages import legacy_storage_getter
 from gui.shared import g_eventBus, EVENT_BUS_SCOPE
+from helpers import dependency
 from prebattle_shared import decodeRoster
 from gui.Scaleform.genConsts.PREBATTLE_ALIASES import PREBATTLE_ALIASES
 from gui.Scaleform.framework import ViewTypes
-from gui.app_loader import g_appLoader
 from gui.prb_control.entities.training.pre_queue.vehicles_watcher import TrainingVehiclesWatcher
+from skeletons.gui.app_loader import IAppLoader
 
 class TrainingEntryPoint(LegacyEntryPoint):
 
@@ -63,6 +64,7 @@ class TrainingIntroEntryPoint(LegacyIntroEntryPoint):
 
 
 class TrainingIntroEntity(LegacyIntroEntity):
+    appLoader = dependency.descriptor(IAppLoader)
 
     def __init__(self):
         super(TrainingIntroEntity, self).__init__(FUNCTIONAL_FLAG.TRAINING, PREBATTLE_TYPE.TRAINING, TrainingListRequester())
@@ -81,8 +83,8 @@ class TrainingIntroEntity(LegacyIntroEntity):
         res = False
         aliasToLoad = [PREBATTLE_ALIASES.TRAINING_LIST_VIEW_PY, PREBATTLE_ALIASES.TRAINING_ROOM_VIEW_PY]
         inView = None
-        if g_appLoader is not None and g_appLoader.getApp() is not None and g_appLoader.getApp().containerManager is not None:
-            inView = g_appLoader.getApp().containerManager.getView(ViewTypes.LOBBY_SUB)
+        if self.appLoader is not None and self.appLoader.getApp() is not None and self.appLoader.getApp().containerManager is not None:
+            inView = self.appLoader.getApp().containerManager.getView(ViewTypes.LOBBY_SUB)
         if inView is not None:
             if inView.alias in aliasToLoad:
                 res = True
@@ -116,6 +118,7 @@ class TrainingIntroEntity(LegacyIntroEntity):
 
 
 class TrainingEntity(LegacyEntity):
+    appLoader = dependency.descriptor(IAppLoader)
     __loadEvents = (VIEW_ALIAS.LOBBY_HANGAR,
      VIEW_ALIAS.LOBBY_INVENTORY,
      VIEW_ALIAS.LOBBY_STORE,
@@ -162,8 +165,8 @@ class TrainingEntity(LegacyEntity):
         res = False
         aliasToLoad = [PREBATTLE_ALIASES.TRAINING_LIST_VIEW_PY, PREBATTLE_ALIASES.TRAINING_ROOM_VIEW_PY]
         inView = None
-        if g_appLoader is not None and g_appLoader.getApp() is not None and g_appLoader.getApp().containerManager is not None:
-            inView = g_appLoader.getApp().containerManager.getView(ViewTypes.LOBBY_SUB)
+        if self.appLoader is not None and self.appLoader.getApp() is not None and self.appLoader.getApp().containerManager is not None:
+            inView = self.appLoader.getApp().containerManager.getView(ViewTypes.LOBBY_SUB)
         if inView is not None:
             if inView.alias in aliasToLoad:
                 res = True

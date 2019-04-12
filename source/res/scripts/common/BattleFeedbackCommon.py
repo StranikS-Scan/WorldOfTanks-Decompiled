@@ -74,8 +74,8 @@ class BATTLE_EVENT_TYPE:
      BASE_CAPTURE_BLOCKED])
 
     @staticmethod
-    def packDamage(damage, attackReasonID, isBurst=False, shellTypeID=NONE_SHELL_TYPE, shellIsGold=False, secondaryAttackReasonID=ATTACK_REASON_INDICES[ATTACK_REASON.NONE]):
-        return (int(damage) & 65535) << 25 | (int(attackReasonID) & 255) << 17 | (1 if isBurst else 0) << 16 | (int(shellTypeID) & 127) << 9 | (1 if shellIsGold else 0) << 8 | int(secondaryAttackReasonID) & 255
+    def packDamage(damage, attackReasonID, isBurst=False, shellTypeID=NONE_SHELL_TYPE, shellIsGold=False, secondaryAttackReasonID=ATTACK_REASON_INDICES[ATTACK_REASON.NONE], isRoleAction=False):
+        return (int(damage) & 65535) << 25 | (int(attackReasonID) & 255) << 17 | (1 if isBurst else 0) << 16 | (int(shellTypeID) & 127) << 9 | (1 if shellIsGold else 0) << 8 | int(secondaryAttackReasonID) & 255 | (1 if isRoleAction else 0) << 41
 
     @staticmethod
     def unpackDamage(packedDamage):
@@ -84,7 +84,8 @@ class BATTLE_EVENT_TYPE:
          packedDamage >> 16 & 1,
          packedDamage >> 9 & 127,
          packedDamage >> 8 & 1,
-         packedDamage & 255)
+         packedDamage & 255,
+         packedDamage >> 41 & 1)
 
     @staticmethod
     def packCrits(critsCount, attackReasonID, shellTypeID=NONE_SHELL_TYPE, shellIsGold=False, secondaryAttackReasonID=ATTACK_REASON_INDICES[ATTACK_REASON.NONE]):
@@ -99,9 +100,9 @@ class BATTLE_EVENT_TYPE:
          packedCrits & 255)
 
     @staticmethod
-    def packVisibility(isVisible, isDirect):
-        return (1 if isVisible else 0) | (2 if isDirect else 0)
+    def packVisibility(isVisible, isDirect, isRoleAction):
+        return (1 if isVisible else 0) | (2 if isDirect else 0) | (4 if isRoleAction else 0)
 
     @staticmethod
     def unpackVisibility(packedVisibility):
-        return (packedVisibility & 1, packedVisibility & 2)
+        return (packedVisibility & 1, packedVisibility & 2, packedVisibility & 4)

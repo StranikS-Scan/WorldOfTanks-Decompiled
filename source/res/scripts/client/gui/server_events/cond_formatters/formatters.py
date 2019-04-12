@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/server_events/cond_formatters/formatters.py
 import weakref
+import typing
 import nations
 from debug_utils import LOG_ERROR
 from gui.Scaleform.genConsts.MISSIONS_ALIASES import MISSIONS_ALIASES

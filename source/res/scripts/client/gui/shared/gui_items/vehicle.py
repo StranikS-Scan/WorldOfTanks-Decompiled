@@ -2,7 +2,6 @@
 # Embedded file name: scripts/client/gui/shared/gui_items/Vehicle.py
 import math
 import random
-from copy import copy
 from itertools import izip
 from operator import itemgetter
 from collections import namedtuple
@@ -40,7 +39,6 @@ from shared_utils import findFirst, CONST_CONTAINER
 from skeletons.gui.game_control import IIGRController, IRentalsController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
-from debug_utils import LOG_ERROR
 
 class VEHICLE_CLASS_NAME(CONST_CONTAINER):
     LIGHT_TANK = 'lightTank'
@@ -326,7 +324,7 @@ class Vehicle(FittingItem, HasStrCD):
         return (slotsAnchorsById, slotsAnchors)
 
     def getAnchors(self, slotType, areaId):
-        return copy(self._slotsAnchors[slotType][areaId])
+        return self._slotsAnchors[slotType][areaId].itervalues()
 
     def getAnchorBySlotId(self, slotType, areaId, regionIdx):
         return self._slotsAnchors[slotType][areaId].get(regionIdx, None)
@@ -341,12 +339,10 @@ class Vehicle(FittingItem, HasStrCD):
             currentPrice = self._personalDiscountPrice
         else:
             currentPrice = self._buyPrices.itemPrice.price
-        buyPrice = currentPrice
         if self.isRented and not self.rentalIsOver:
-            if currency == self.rentCompensation.getCurrency():
-                buyPrice = currentPrice - self.rentCompensation
-            else:
-                LOG_ERROR('Compensation currency and purchase currency do not match')
+            buyPrice = currentPrice - self.rentCompensation
+        else:
+            buyPrice = currentPrice
         return ItemPrices(itemPrice=ItemPrice(price=buyPrice, defPrice=self._buyPrices.itemPrice.defPrice), itemAltPrice=self._buyPrices.itemAltPrice)
 
     @property

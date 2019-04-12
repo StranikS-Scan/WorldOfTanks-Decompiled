@@ -62,4 +62,4 @@ class GuiSoundsLoader(object):
             return self.__schemas[controlType].get(state) if controlType in self.__schemas else self.__default.get(state)
 
     def getEffectSound(self, effectName):
-        return self.__effects[effectName] if effectName in self.__effects else None
+        return self.__effects.get(effectName)

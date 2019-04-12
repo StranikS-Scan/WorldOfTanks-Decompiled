@@ -6,8 +6,10 @@ import nations
 from constants import EVENT_TYPE, IGR_TYPE, IS_CHINA
 from gui import makeHtmlString
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
+from gui.impl import backport
+from gui.impl.gen import R
 from gui.server_events.cond_formatters import packText, packTokenProgress, getSeparatorBlock
-from gui.server_events.cond_formatters.formatters import ConditionFormatter, ConditionsFormatter
+from gui.server_events.cond_formatters.formatters import ConditionsFormatter, ConditionFormatter
 from gui.server_events.conditions import GROUP_TYPE, AndGroup
 from gui.server_events.formatters import TOKEN_SIZES
 from gui.shared.formatters import text_styles, icons
@@ -28,8 +30,8 @@ def relate(relation, value, label):
         value = BigWorld.wg_getNiceNumberFormat(value)
     else:
         value = value
-    relation = ms('#quests:details/requirementsRelation/{}'.format(relation))
-    rlabel = ms('#quests:details/requirements/relation', relation=relation, value=value)
+    relation = backport.text(R.strings.quests.details.requirementsRelation.dyn(relation)())
+    rlabel = backport.text(R.strings.quests.details.requirements.relation(), relation=relation, value=value)
     return '{}{}'.format(label, rlabel)
 
 
@@ -178,6 +180,7 @@ class SingleGroupFormatter(ConditionsFormatter):
 
     def __init__(self):
         super(SingleGroupFormatter, self).__init__({'premiumAccount': PremiumAccountFormatter(),
+         'premiumPlusAccount': PremiumPlusAccountFormatter(),
          'inClan': InClanRequirementFormatter(),
          'igrType': IgrTypeRequirementFormatter(),
          'GR': GlobalRatingRequirementFormatter(),
@@ -232,6 +235,7 @@ class RecursiveGroupFormatter(RecursiveFormatter):
 
     def __init__(self, formatters=None):
         super(RecursiveGroupFormatter, self).__init__(formatters=formatters or {'premiumAccount': PremiumAccountFormatter(),
+         'premiumPlusAccount': PremiumPlusAccountFormatter(),
          'inClan': InClanRequirementFormatter(),
          'igrType': IgrTypeRequirementFormatter(),
          'GR': GlobalRatingRequirementFormatter(),
@@ -341,6 +345,7 @@ class TQRecursiveGroupFormatter(RecursiveGroupFormatter):
 
     def __init__(self):
         super(TQRecursiveGroupFormatter, self).__init__(formatters={'premiumAccount': PremiumAccountFormatter(),
+         'premiumPlusAccount': PremiumPlusAccountFormatter(),
          'inClan': InClanRequirementFormatter(),
          'igrType': IgrTypeRequirementFormatter(),
          'GR': GlobalRatingRequirementFormatter(),
@@ -358,7 +363,20 @@ class PremiumAccountFormatter(ConditionFormatter):
             labelKey = 'premiumAccount'
         else:
             labelKey = 'notPremiumAccount'
-        label = ms('#quests:details/requirements/{}'.format(labelKey))
+        label = backport.text(R.strings.quests.details.requirements.dyn(labelKey)())
+        style = styler(condition.isAvailable())
+        return [packText(style(label))]
+
+
+class PremiumPlusAccountFormatter(ConditionFormatter):
+
+    @classmethod
+    def format(cls, condition, event, styler):
+        if condition.isPremiumNeeded():
+            labelKey = 'premiumPlusAccount'
+        else:
+            labelKey = 'notPremiumAccount'
+        label = backport.text(R.strings.quests.details.requirements.dyn(labelKey)())
         style = styler(condition.isAvailable())
         return [packText(style(label))]
 
@@ -387,7 +405,7 @@ class InClanRequirementFormatter(ConditionFormatter):
             elif clanDBID and clanDBID in condition.getClanIds():
                 labelKey = 'notForCurrentClan'
         if labelKey is not None:
-            label = ms('#quests:details/requirements/{}'.format(labelKey))
+            label = backport.text(R.strings.quests.details.requirements.dyn(labelKey)())
             style = styler(condition.isAvailable())
             return [packText(style(label))]
         else:
@@ -407,7 +425,7 @@ class IgrTypeRequirementFormatter(ConditionFormatter):
             key = 'igrPremium'
         else:
             key = 'igr'
-        label = ms('#quests:details/requirements/{}'.format(key))
+        label = backport.text(R.strings.quests.details.requirements.dyn(key)())
         style = styler(condition.isAvailable())
         return [packText(makeHtmlString('html_templates:lobby/quests', 'playInIgr', {'label': style(label)}))]
 
@@ -417,7 +435,7 @@ class GlobalRatingRequirementFormatter(ConditionFormatter):
     @classmethod
     def format(cls, condition, event, styler):
         relation, value = condition.relation, condition.relationValue
-        label = ms('#quests:details/requirements/globalRating')
+        label = backport.text(R.strings.quests.details.requirements.globalRating())
         label = relate(relation, value, label)
         style = styler(condition.isAvailable())
         return [packText(style(label))]
@@ -470,8 +488,9 @@ class HasReceivedMultipliedXPFormatter(ConditionFormatter):
     @classmethod
     def format(cls, condition, event, styler):
         style = styler(condition.isAvailable())
-        key = '#quests:details/requirements/vehicle/%s' % ('receivedMultXp' if condition.getValue() else 'notReceivedMultXp')
-        label = ms(key, mult=cls.itemsCache.items.shop.dailyXPFactor)
+        xpKey = 'receivedMultXp' if condition.getValue() else 'notReceivedMultXp'
+        key = R.strings.quests.details.requirements.vehicle.dyn(xpKey)()
+        label = backport.text(key, mult=cls.itemsCache.items.shop.dailyXPFactor)
         return [packText(style(label))]
 
 
@@ -481,13 +500,13 @@ class AccountDossierRequirementFormatter(ConditionFormatter):
     def format(cls, condition, event, styler):
         style = styler(condition.isAvailable())
         if condition.average:
-            titleKey = '#quests:details/requirements/dossierAvgValue'
+            titleKey = R.strings.quests.details.requirements.dossierAvgValue()
         else:
-            titleKey = '#quests:details/requirements/dossierValue'
+            titleKey = R.strings.quests.details.requirements.dossierValue()
         block, record = condition.recordName
         battleMode = cls._dossierBlock2BattleMode(block)
-        labelKey = '#quests:details/dossier/{}/{}'.format(battleMode, record)
-        label = ms(titleKey, label=ms(labelKey))
+        labelKey = R.strings.quests.details.dossier.dyn(battleMode).dyn(record)()
+        label = backport.text(titleKey, label=backport.text(labelKey))
         label = relate(condition.relation, condition.relationValue, label)
         return [packText(style(label))]
 

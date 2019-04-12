@@ -46,7 +46,6 @@ class ItemPackType(CONST_CONTAINER):
     ITEM_EQUIPMENT = 'item/equipment'
     ITEM_DEVICE = 'item/optionalDevice'
     ITEM_SHELL = 'item/shell'
-    ITEM_BATTLE_BOOSTER = 'item/battleBooster'
     GOODIE_GOLD = 'goodie/gold'
     GOODIE_CREDITS = 'goodie/credits'
     GOODIE_EXPERIENCE = 'goodie/experience'
@@ -75,8 +74,10 @@ class ItemPackType(CONST_CONTAINER):
     CAMOUFLAGE_DESERT = 'camouflage/desert'
     DECAL_1 = 'decal/1'
     DECAL_2 = 'decal/2'
-    MODIFICATION = 'modification'
-    STYLE = 'style'
+    PROJECTION_DECAL = 'projection_decal/all'
+    PERSONAL_NUMBER = 'personal_number/all'
+    MODIFICATION = 'modification/all'
+    STYLE = 'style/all'
     ACHIEVEMENT = 'achievement'
     BADGE = 'badge'
     REFERRAL_BADGE = 'referralBadge'
@@ -85,10 +86,7 @@ class ItemPackType(CONST_CONTAINER):
 
 
 class ItemPackTypeGroup(CONST_CONTAINER):
-    ITEM = (ItemPackType.ITEM_SHELL,
-     ItemPackType.ITEM_DEVICE,
-     ItemPackType.ITEM_EQUIPMENT,
-     ItemPackType.ITEM_BATTLE_BOOSTER)
+    ITEM = (ItemPackType.ITEM_SHELL, ItemPackType.ITEM_DEVICE, ItemPackType.ITEM_EQUIPMENT)
     VEHICLE = (ItemPackType.VEHICLE_SPG,
      ItemPackType.VEHICLE_AT_SPG,
      ItemPackType.VEHICLE_HEAVY,
@@ -110,6 +108,8 @@ class ItemPackTypeGroup(CONST_CONTAINER):
     STYLE = (ItemPackType.STYLE,)
     MODIFICATION = (ItemPackType.MODIFICATION,)
     DECAL = (ItemPackType.DECAL_1, ItemPackType.DECAL_2)
+    PROJECTION_DECAL = (ItemPackType.PROJECTION_DECAL,)
+    PERSONAL_NUMBER = (ItemPackType.PERSONAL_NUMBER,)
     CUSTOM = (ItemPackType.CUSTOM_PREMIUM,
      ItemPackType.CUSTOM_CRYSTAL,
      ItemPackType.CUSTOM_GOLD,

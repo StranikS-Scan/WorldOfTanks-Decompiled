@@ -15,11 +15,6 @@
     <season>	ALL	</season>
     <historical>	false	</historical>
     <priceGroup>	legacy notInShop	</priceGroup>
-    <vehicleFilter>
-      <include>
-        <levels>	6 7 8 9 10	</levels>
-      </include>
-    </vehicleFilter>
     <type>	INSCRIPTION	</type>
     <decal>
       <id>	549	</id>
@@ -95,6 +90,20 @@
       <id>	703	</id>
       <texture>	gui/maps/vehicles/decals/inscriptions/special/inscription_240.dds	</texture>
       <userString>	#vehicle_customization:inscription/special/special_240	</userString>
+      <mirror>	false	</mirror>
+    </decal>
+  </itemGroup>
+  <itemGroup>
+    <name>	Cosmonautics Day	</name>
+    <userString>	#vehicle_customization:inscription/special	</userString>
+    <season>	ALL	</season>
+    <historical>	false	</historical>
+    <priceGroup>	inscriptions notInShop	</priceGroup>
+    <type>	INSCRIPTION	</type>
+    <decal>
+      <id>	1	</id>
+      <texture>	gui/maps/vehicles/decals/inscriptions/special/inscription_241.dds	</texture>
+      <userString>	#vehicle_customization:inscription/special/special_241	</userString>
       <mirror>	false	</mirror>
     </decal>
   </itemGroup>

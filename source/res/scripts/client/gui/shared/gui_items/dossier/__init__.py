@@ -27,12 +27,11 @@ def dumpDossier(dossierItem):
 class _Dossier(GUIItem):
     lobbyContext = dependency.descriptor(ILobbyContext)
 
-    def __init__(self, dossier, dossierType, playerDBID=None, rankedCurrentSeason=None):
+    def __init__(self, dossier, dossierType, playerDBID=None):
         super(GUIItem, self).__init__()
         self._dossier = dossier
         self._dossierType = dossierType
         self._playerDBID = playerDBID
-        self._rankedCurrentSeason = rankedCurrentSeason or {}
 
     def getBlock(self, blockName):
         return self._dossier[blockName]
@@ -60,14 +59,11 @@ class _Dossier(GUIItem):
     def isCurrentUser(self):
         return self._playerDBID is None
 
-    def getRankedCurrentSeason(self):
-        return self._rankedCurrentSeason
-
 
 class VehicleDossier(_Dossier, stats.VehicleDossierStats):
 
-    def __init__(self, dossier, vehTypeCompDescr, playerDBID=None, rankedCurrentSeason=None):
-        super(VehicleDossier, self).__init__(dossier, DOSSIER_TYPE.VEHICLE, playerDBID, rankedCurrentSeason)
+    def __init__(self, dossier, vehTypeCompDescr, playerDBID=None):
+        super(VehicleDossier, self).__init__(dossier, DOSSIER_TYPE.VEHICLE, playerDBID)
         self.__vehTypeCompDescr = vehTypeCompDescr
 
     def getCompactDescriptor(self):
@@ -77,12 +73,11 @@ class VehicleDossier(_Dossier, stats.VehicleDossierStats):
         return (VehicleDossier,
          self._dossier.makeCompDescr(),
          self.__vehTypeCompDescr,
-         self._playerDBID,
-         self._rankedCurrentSeason)
+         self._playerDBID)
 
     @staticmethod
-    def unpack(dossierCD, vehTypeCD, playerDBID, rankedCurrentSeason):
-        return VehicleDossier(dossiers2.getVehicleDossierDescr(dossierCD), vehTypeCD, playerDBID, rankedCurrentSeason=rankedCurrentSeason)
+    def unpack(dossierCD, vehTypeCD, playerDBID):
+        return VehicleDossier(dossiers2.getVehicleDossierDescr(dossierCD), vehTypeCD, playerDBID)
 
     def _getDossierItem(self):
         return self
@@ -94,8 +89,8 @@ class VehicleDossier(_Dossier, stats.VehicleDossierStats):
 class AccountDossier(_Dossier, stats.AccountDossierStats):
     itemsCache = dependency.descriptor(IItemsCache)
 
-    def __init__(self, dossier, playerDBID=None, rated7x7Seasons=None, rankedCurrentSeason=None):
-        super(AccountDossier, self).__init__(dossier, DOSSIER_TYPE.ACCOUNT, playerDBID, rankedCurrentSeason)
+    def __init__(self, dossier, playerDBID=None, rated7x7Seasons=None):
+        super(AccountDossier, self).__init__(dossier, DOSSIER_TYPE.ACCOUNT, playerDBID)
         self._rated7x7Seasons = rated7x7Seasons or {}
 
     def getGlobalRating(self):
@@ -105,12 +100,11 @@ class AccountDossier(_Dossier, stats.AccountDossierStats):
         return (AccountDossier,
          self._dossier.makeCompDescr(),
          self._playerDBID,
-         self._rated7x7Seasons,
-         self._rankedCurrentSeason)
+         self._rated7x7Seasons)
 
     @staticmethod
-    def unpack(dossierCD, playerDBID, seasons, rankedCurrentSeason):
-        return AccountDossier(dossiers2.getAccountDossierDescr(dossierCD), playerDBID, seasons, rankedCurrentSeason)
+    def unpack(dossierCD, playerDBID, seasons):
+        return AccountDossier(dossiers2.getAccountDossierDescr(dossierCD), playerDBID, seasons)
 
     def getRated7x7SeasonDossier(self, seasonID):
         return self._makeSeasonDossier(self._rated7x7Seasons.get(seasonID) or dossiers2.getRated7x7DossierDescr())

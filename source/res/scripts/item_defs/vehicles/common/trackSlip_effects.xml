@@ -4792,52 +4792,52 @@
         <selector>
           <type>	template	</type>
           <name>	Drift	</name>
-          <parameters>	_matkind:matkindR;     _direction:directionR;     _const1:_frontOrRear;     _delta:deltaR;     _hullAngle:hullAngle;     _TrackFront:_RFrontLogicalNode;     _TrackRear:_RRearLogicalNode;     _Turret:DM_Mid_Trail	</parameters>
+          <parameters>	_matkind:matkindR;      _direction:directionR;      _const1:_frontOrRear;      _delta:deltaR;      _hullAngle:hullAngle;      _TrackFront:_RFrontLogicalNode;      _TrackRear:_RRearLogicalNode;      _Turret:DM_Mid_Trail	</parameters>
         </selector>
         <selector>
           <type>	template	</type>
           <name>	Drift	</name>
-          <parameters>	_matkind:matkindL;     _direction:directionL;     _const1:_frontOrRear;     _delta:deltaL;     _hullAngle:hullAngle;     _TrackFront:_LFrontLogicalNode;     _TrackRear:_LRearLogicalNode;     _Turret:DM_Mid_Trail	</parameters>
+          <parameters>	_matkind:matkindL;      _direction:directionL;      _const1:_frontOrRear;      _delta:deltaL;      _hullAngle:hullAngle;      _TrackFront:_LFrontLogicalNode;      _TrackRear:_LRearLogicalNode;      _Turret:DM_Mid_Trail	</parameters>
         </selector>
         <selector>
           <type>	template	</type>
           <name>	Turn	</name>
-          <parameters>	_matkind:matkindR;     _direction:directionR;     _speed:speed;     _const1:_frontOrRear;     _delta:deltaR;     _TrackFront:_RFrontLogicalNode;     _TrackRear:_RRearLogicalNode;     _rotSpeed:rotSpeed	</parameters>
+          <parameters>	_matkind:matkindR;      _direction:directionR;      _speed:speed;      _const1:_frontOrRear;      _delta:deltaR;      _TrackFront:_RFrontLogicalNode;      _TrackRear:_RRearLogicalNode;      _rotSpeed:rotSpeed	</parameters>
         </selector>
         <selector>
           <type>	template	</type>
           <name>	Turn	</name>
-          <parameters>	_matkind:matkindL;     _direction:directionL;     _speed:speed;     _const1:_frontOrRear;     _delta:deltaL;     _TrackFront:_LFrontLogicalNode;     _TrackRear:_LRearLogicalNode;     _rotSpeed:rotSpeed	</parameters>
+          <parameters>	_matkind:matkindL;      _direction:directionL;      _speed:speed;      _const1:_frontOrRear;      _delta:deltaL;      _TrackFront:_LFrontLogicalNode;      _TrackRear:_LRearLogicalNode;      _rotSpeed:rotSpeed	</parameters>
         </selector>
         <selector>
           <type>	template	</type>
           <name>	SlipR	</name>
-          <parameters>	_matkind:matkindR;     _direction:directionR;     _const1:_frontOrRear;     _delta:deltaR;     _speed:speed;     _isUnderWater:isUnderWater;     _TrackRear:_RRearLogicalNode;     _TrackFront:_RFrontLogicalNode;     _TrackUpRear:_RRearLogicalUpNode;     _TrackUpFront:_RFrontLogicalUpNode;     _TankDust:DM_Mid_Trail	</parameters>
+          <parameters>	_matkind:matkindR;      _direction:directionR;      _const1:_frontOrRear;      _delta:deltaR;      _speed:speed;      _isUnderWater:isUnderWater;      _TrackRear:_RRearLogicalNode;      _TrackFront:_RFrontLogicalNode;      _TrackUpRear:_RRearLogicalUpNode;      _TrackUpFront:_RFrontLogicalUpNode;      _TankDust:DM_Mid_Trail	</parameters>
         </selector>
         <selector>
           <type>	template	</type>
           <name>	SlipL	</name>
-          <parameters>	_matkind:matkindL;     _direction:directionL;     _const1:_frontOrRear;     _delta:deltaL;     _speed:speed;     _isUnderWater:isUnderWater;     _TrackRear:_LRearLogicalNode;     _TrackFront:_LFrontLogicalNode;     _TrackUpRear:_LRearLogicalUpNode;     _TrackUpFront:_LFrontLogicalUpNode;     _TankDust:DM_Mid_Trail	</parameters>
+          <parameters>	_matkind:matkindL;      _direction:directionL;      _const1:_frontOrRear;      _delta:deltaL;      _speed:speed;      _isUnderWater:isUnderWater;      _TrackRear:_LRearLogicalNode;      _TrackFront:_LFrontLogicalNode;      _TrackUpRear:_LRearLogicalUpNode;      _TrackUpFront:_LFrontLogicalUpNode;      _TankDust:DM_Mid_Trail	</parameters>
         </selector>
         <selector>
           <type>	template	</type>
           <name>	ForceFieldR	</name>
-          <parameters>	_direction:directionR;     _const1:_frontOrRear;     _speed:speed;     _isUnderWater:isUnderWater;     _TrackRear:_RRearLogicalNode;     _TrackFront:_RFrontLogicalNode;     _TankDust:DM_Mid_Trail	</parameters>
+          <parameters>	_direction:directionR;      _const1:_frontOrRear;      _speed:speed;      _isUnderWater:isUnderWater;      _TrackRear:_RRearLogicalNode;      _TrackFront:_RFrontLogicalNode;      _TankDust:DM_Mid_Trail	</parameters>
         </selector>
         <selector>
           <type>	template	</type>
           <name>	ForceFieldL	</name>
-          <parameters>	_direction:directionL;     _const1:_frontOrRear;     _speed:speed;     _isUnderWater:isUnderWater;     _TrackRear:_LRearLogicalNode;     _TrackFront:_LFrontLogicalNode;     _TankDust:DM_Mid_Trail	</parameters>
+          <parameters>	_direction:directionL;      _const1:_frontOrRear;      _speed:speed;      _isUnderWater:isUnderWater;      _TrackRear:_LRearLogicalNode;      _TrackFront:_LFrontLogicalNode;      _TankDust:DM_Mid_Trail	</parameters>
         </selector>
         <selector>
           <type>	template	</type>
           <name>	TrailR	</name>
-          <parameters>	_matkind:matkindR;     _direction:directionR;     _const1:_frontOrRear;     _delta:deltaR;     _speed:speed;     _isUnderWater:isUnderWater;     _TrackRear:_RRearLogicalNode;     _TrackFront:_RFrontLogicalNode;     _TrackUpRear:_RRearLogicalUpNode;     _TrackUpFront:_RFrontLogicalUpNode;     _TankDust:DM_Mid_Trail	</parameters>
+          <parameters>	_matkind:matkindR;      _direction:directionR;      _const1:_frontOrRear;      _delta:deltaR;      _speed:speed;      _isUnderWater:isUnderWater;      _TrackRear:_RRearLogicalNode;      _TrackFront:_RFrontLogicalNode;      _TrackUpRear:_RRearLogicalUpNode;      _TrackUpFront:_RFrontLogicalUpNode;      _TankDust:DM_Mid_Trail	</parameters>
         </selector>
         <selector>
           <type>	template	</type>
           <name>	TrailL	</name>
-          <parameters>	_matkind:matkindL;     _direction:directionL;     _const1:_frontOrRear;     _delta:deltaL;     _speed:speed;     _isUnderWater:isUnderWater;     _TrackRear:_LRearLogicalNode;     _TrackFront:_LFrontLogicalNode;     _TrackUpRear:_LRearLogicalUpNode;     _TrackUpFront:_LFrontLogicalUpNode;     _TankDust:DM_Mid_Trail	</parameters>
+          <parameters>	_matkind:matkindL;      _direction:directionL;      _const1:_frontOrRear;      _delta:deltaL;      _speed:speed;      _isUnderWater:isUnderWater;      _TrackRear:_LRearLogicalNode;      _TrackFront:_LFrontLogicalNode;      _TrackUpRear:_LRearLogicalUpNode;      _TrackUpFront:_LFrontLogicalUpNode;      _TankDust:DM_Mid_Trail	</parameters>
         </selector>
       </selector>
     </template>
@@ -4848,12 +4848,12 @@
         <selector>
           <type>	template	</type>
           <name>	ChassisOneDirEffectsSet	</name>
-          <parameters>	_RRearLogicalNode:_RRearActualNode;     _RFrontLogicalNode:_RFrontActualNode;     _RRearLogicalUpNode:_RRearActualUpNode;     _RFrontLogicalUpNode:_RFrontActualUpNode;     _LRearLogicalNode:_LRearActualNode;     _LFrontLogicalNode:_LFrontActualNode;     _LRearLogicalUpNode:_LRearActualUpNode;     _LFrontLogicalUpNode:_LFrontActualUpNode;     _frontOrRear:1	</parameters>
+          <parameters>	_RRearLogicalNode:_RRearActualNode;      _RFrontLogicalNode:_RFrontActualNode;      _RRearLogicalUpNode:_RRearActualUpNode;      _RFrontLogicalUpNode:_RFrontActualUpNode;      _LRearLogicalNode:_LRearActualNode;      _LFrontLogicalNode:_LFrontActualNode;      _LRearLogicalUpNode:_LRearActualUpNode;      _LFrontLogicalUpNode:_LFrontActualUpNode;      _frontOrRear:1	</parameters>
         </selector>
         <selector>
           <type>	template	</type>
           <name>	ChassisOneDirEffectsSet	</name>
-          <parameters>	_RRearLogicalNode:_RFrontActualNode;     _RFrontLogicalNode:_RRearActualNode;     _RRearLogicalUpNode:_RFrontActualUpNode;     _RFrontLogicalUpNode:_RRearActualUpNode;     _LRearLogicalNode:_LFrontActualNode;     _LFrontLogicalNode:_LRearActualNode;     _LRearLogicalUpNode:_LFrontActualUpNode;     _LFrontLogicalUpNode:_LRearActualUpNode;     _frontOrRear:-1	</parameters>
+          <parameters>	_RRearLogicalNode:_RFrontActualNode;      _RFrontLogicalNode:_RRearActualNode;      _RRearLogicalUpNode:_RFrontActualUpNode;      _RFrontLogicalUpNode:_RRearActualUpNode;      _LRearLogicalNode:_LFrontActualNode;      _LFrontLogicalNode:_LRearActualNode;      _LRearLogicalUpNode:_LFrontActualUpNode;      _LFrontLogicalUpNode:_LRearActualUpNode;      _frontOrRear:-1	</parameters>
         </selector>
       </selector>
     </template>
@@ -4864,12 +4864,12 @@
         <selector>
           <type>	template	</type>
           <name>	Slip_R_NPC	</name>
-          <parameters>	_matkind:matkindR;     _direction:directionR;     _const1:_frontOrRear;     _delta:deltaR;     _speed:speed;     _isUnderWater:isUnderWater;     _TrackRear:_RRearLogicalNode;     _TrackFront:_RFrontLogicalNode;     _TrackUpFront:_RFrontLogicalUpNode;     _TankDust:DM_Mid_Trail	</parameters>
+          <parameters>	_matkind:matkindR;      _direction:directionR;      _const1:_frontOrRear;      _delta:deltaR;      _speed:speed;      _isUnderWater:isUnderWater;      _TrackRear:_RRearLogicalNode;      _TrackFront:_RFrontLogicalNode;      _TrackUpFront:_RFrontLogicalUpNode;      _TankDust:DM_Mid_Trail	</parameters>
         </selector>
         <selector>
           <type>	template	</type>
           <name>	Slip_L_NPC	</name>
-          <parameters>	_matkind:matkindL;     _direction:directionL;     _const1:_frontOrRear;     _delta:deltaL;     _speed:speed;     _isUnderWater:isUnderWater;     _TrackRear:_LRearLogicalNode;     _TrackFront:_LFrontLogicalNode;     _TrackUpFront:_LFrontLogicalUpNode;     _TankDust:DM_Mid_Trail	</parameters>
+          <parameters>	_matkind:matkindL;      _direction:directionL;      _const1:_frontOrRear;      _delta:deltaL;      _speed:speed;      _isUnderWater:isUnderWater;      _TrackRear:_LRearLogicalNode;      _TrackFront:_LFrontLogicalNode;      _TrackUpFront:_LFrontLogicalUpNode;      _TankDust:DM_Mid_Trail	</parameters>
         </selector>
       </selector>
     </template>
@@ -4880,12 +4880,12 @@
         <selector>
           <type>	template	</type>
           <name>	ChassisOneDirEffectsSet_NPC	</name>
-          <parameters>	_RRearLogicalNode:_RRearActualNode;     _RFrontLogicalNode:_RFrontActualNode;     _RFrontLogicalUpNode:_RFrontActualUpNode;     _LRearLogicalNode:_LRearActualNode;     _LFrontLogicalNode:_LFrontActualNode;     _LFrontLogicalUpNode:_LFrontActualUpNode;     _frontOrRear:1	</parameters>
+          <parameters>	_RRearLogicalNode:_RRearActualNode;      _RFrontLogicalNode:_RFrontActualNode;      _RFrontLogicalUpNode:_RFrontActualUpNode;      _LRearLogicalNode:_LRearActualNode;      _LFrontLogicalNode:_LFrontActualNode;      _LFrontLogicalUpNode:_LFrontActualUpNode;      _frontOrRear:1	</parameters>
         </selector>
         <selector>
           <type>	template	</type>
           <name>	ChassisOneDirEffectsSet_NPC	</name>
-          <parameters>	_RRearLogicalNode:_RFrontActualNode;     _RFrontLogicalNode:_RRearActualNode;     _RFrontLogicalUpNode:_RRearActualUpNode;     _LRearLogicalNode:_LFrontActualNode;     _LFrontLogicalNode:_LRearActualNode;     _LFrontLogicalUpNode:_LRearActualUpNode;     _frontOrRear:-1	</parameters>
+          <parameters>	_RRearLogicalNode:_RFrontActualNode;      _RFrontLogicalNode:_RRearActualNode;      _RFrontLogicalUpNode:_RRearActualUpNode;      _LRearLogicalNode:_LFrontActualNode;      _LFrontLogicalNode:_LRearActualNode;      _LFrontLogicalUpNode:_LRearActualUpNode;      _frontOrRear:-1	</parameters>
         </selector>
       </selector>
     </template>
@@ -4897,7 +4897,7 @@
         <selector>
           <type>	template	</type>
           <name>	ChassisBiDirEffectsSet	</name>
-          <parameters>	_RRearActualNode:HP_Track_RRear;     _RFrontActualNode:HP_Track_RFront;     _RRearActualUpNode:HP_TrackUp_RRear;     _RFrontActualUpNode:HP_TrackUp_RFront;     _LRearActualNode:HP_Track_LRear;     _LFrontActualNode:HP_Track_LFront;     _LRearActualUpNode:HP_TrackUp_LRear;     _LFrontActualUpNode:HP_TrackUp_LFront	</parameters>
+          <parameters>	_RRearActualNode:HP_Track_RRear;      _RFrontActualNode:HP_Track_RFront;      _RRearActualUpNode:HP_TrackUp_RRear;      _RFrontActualUpNode:HP_TrackUp_RFront;      _LRearActualNode:HP_Track_LRear;      _LFrontActualNode:HP_Track_LFront;      _LRearActualUpNode:HP_TrackUp_LRear;      _LFrontActualUpNode:HP_TrackUp_LFront	</parameters>
         </selector>
       </selector>
     </template>
@@ -4909,104 +4909,109 @@
         <selector>
           <type>	template	</type>
           <name>	ChassisBiDirEffectsSet_NPC	</name>
-          <parameters>	_RRearActualNode:HP_Track_RRear;     _RFrontActualNode:HP_Track_RFront;     _RRearActualUpNode:HP_TrackUp_RRear;     _RFrontActualUpNode:HP_TrackUp_RFront;     _LRearActualNode:HP_Track_LRear;     _LFrontActualNode:HP_Track_LFront;     _LRearActualUpNode:HP_TrackUp_LRear;     _LFrontActualUpNode:HP_TrackUp_LFront	</parameters>
+          <parameters>	_RRearActualNode:HP_Track_RRear;      _RFrontActualNode:HP_Track_RFront;      _RRearActualUpNode:HP_TrackUp_RRear;      _RFrontActualUpNode:HP_TrackUp_RFront;      _LRearActualNode:HP_Track_LRear;      _LFrontActualNode:HP_Track_LFront;      _LRearActualUpNode:HP_TrackUp_LRear;      _LFrontActualUpNode:HP_TrackUp_LFront	</parameters>
         </selector>
       </selector>
     </template>
     <template>
       <name>	WheelEffectdust	</name>
       <selector>
-        <type>	range	</type>
-        <variable>	RPM	</variable>
+        <type>	discrete	</type>
+        <variable>	_Wheel:contact	</variable>
         <selector>
-          <key>	0.0	</key>
-          <type>	matkind	</type>
-          <variable>	_matkind	</variable>
+          <key>	1	</key>
+          <type>	range	</type>
+          <variable>	RPM	</variable>
           <selector>
-            <key>	sand	</key>
-            <type>	effect	</type>
-            <name>	particles/Tank/movement/sand/wheeltrail_dust_{0}_spd1.xml	</name>
-            <effectHP>	_Node	</effectHP>
-          </selector>
-          <selector>
-            <key>	ground	</key>
-            <type>	effect	</type>
-            <name>	particles/Tank/movement/ground/wheeltrail_dust_{0}_spd1.xml	</name>
-            <effectHP>	_Node	</effectHP>
-          </selector>
-          <selector>
-            <key>	snow	</key>
-            <type>	effect	</type>
-            <name>	particles/Tank/movement/snow/wheeltrail_dust_{0}_spd1.xml	</name>
-            <effectHP>	_Node	</effectHP>
-          </selector>
-          <selector>
-            <key>	stone	</key>
-            <type>	effect	</type>
-            <name>	particles/Tank/movement/stone/wheeltrail_dust_{0}_spd1.xml	</name>
-            <effectHP>	_Node	</effectHP>
-          </selector>
-          <selector>
-            <key>	water	</key>
-            <type>	discrete	</type>
-            <variable>	isUnderWater	</variable>
+            <key>	0.0	</key>
+            <type>	matkind	</type>
+            <variable>	_matkind	</variable>
             <selector>
-              <key>	0	</key>
+              <key>	sand	</key>
               <type>	effect	</type>
-              <name>	particles/Tank/movement/water/wheeltrail_water_{0}_spd1.xml	</name>
+              <name>	particles/Tank/movement/sand/wheeltrail_dust_{0}_spd1.xml	</name>
               <effectHP>	_Node	</effectHP>
             </selector>
             <selector>
-              <key>	1	</key>
+              <key>	ground	</key>
               <type>	effect	</type>
-              <name>	particles/Tank/movement/water/wheeltrail_underwater_{0}_spd1.xml	</name>
-              <effectHP>	_Node	</effectHP>
-            </selector>
-          </selector>
-        </selector>
-        <selector>
-          <key>	0.4	</key>
-          <type>	matkind	</type>
-          <variable>	_matkind	</variable>
-          <selector>
-            <key>	sand	</key>
-            <type>	effect	</type>
-            <name>	particles/Tank/movement/sand/wheeltrail_dust_{0}_spd2.xml	</name>
-            <effectHP>	_Node	</effectHP>
-          </selector>
-          <selector>
-            <key>	ground	</key>
-            <type>	effect	</type>
-            <name>	particles/Tank/movement/ground/wheeltrail_dust_{0}_spd2.xml	</name>
-            <effectHP>	_Node	</effectHP>
-          </selector>
-          <selector>
-            <key>	snow	</key>
-            <type>	effect	</type>
-            <name>	particles/Tank/movement/snow/wheeltrail_dust_{0}_spd2.xml	</name>
-            <effectHP>	_Node	</effectHP>
-          </selector>
-          <selector>
-            <key>	stone	</key>
-            <type>	effect	</type>
-            <name>	particles/Tank/movement/stone/wheeltrail_dust_{0}_spd2.xml	</name>
-            <effectHP>	_Node	</effectHP>
-          </selector>
-          <selector>
-            <key>	water	</key>
-            <type>	discrete	</type>
-            <variable>	isUnderWater	</variable>
-            <selector>
-              <key>	0	</key>
-              <type>	effect	</type>
-              <name>	particles/Tank/movement/water/wheeltrail_water_{0}_spd1.xml	</name>
+              <name>	particles/Tank/movement/ground/wheeltrail_dust_{0}_spd1.xml	</name>
               <effectHP>	_Node	</effectHP>
             </selector>
             <selector>
-              <key>	1	</key>
+              <key>	snow	</key>
               <type>	effect	</type>
-              <name>	particles/Tank/movement/water/wheeltrail_underwater_{0}_spd1.xml	</name>
+              <name>	particles/Tank/movement/snow/wheeltrail_dust_{0}_spd1.xml	</name>
               <effectHP>	_Node	</effectHP>
+            </selector>
+            <selector>
+              <key>	stone	</key>
+              <type>	effect	</type>
+              <name>	particles/Tank/movement/stone/wheeltrail_dust_{0}_spd1.xml	</name>
+              <effectHP>	_Node	</effectHP>
+            </selector>
+            <selector>
+              <key>	water	</key>
+              <type>	discrete	</type>
+              <variable>	isUnderWater	</variable>
+              <selector>
+                <key>	0	</key>
+                <type>	effect	</type>
+                <name>	particles/Tank/movement/water/wheeltrail_water_{0}_spd1.xml	</name>
+                <effectHP>	_Node	</effectHP>
+              </selector>
+              <selector>
+                <key>	1	</key>
+                <type>	effect	</type>
+                <name>	particles/Tank/movement/water/wheeltrail_underwater_{0}_spd1.xml	</name>
+                <effectHP>	_Node	</effectHP>
+              </selector>
+            </selector>
+          </selector>
+          <selector>
+            <key>	0.4	</key>
+            <type>	matkind	</type>
+            <variable>	_matkind	</variable>
+            <selector>
+              <key>	sand	</key>
+              <type>	effect	</type>
+              <name>	particles/Tank/movement/sand/wheeltrail_dust_{0}_spd2.xml	</name>
+              <effectHP>	_Node	</effectHP>
+            </selector>
+            <selector>
+              <key>	ground	</key>
+              <type>	effect	</type>
+              <name>	particles/Tank/movement/ground/wheeltrail_dust_{0}_spd2.xml	</name>
+              <effectHP>	_Node	</effectHP>
+            </selector>
+            <selector>
+              <key>	snow	</key>
+              <type>	effect	</type>
+              <name>	particles/Tank/movement/snow/wheeltrail_dust_{0}_spd2.xml	</name>
+              <effectHP>	_Node	</effectHP>
+            </selector>
+            <selector>
+              <key>	stone	</key>
+              <type>	effect	</type>
+              <name>	particles/Tank/movement/stone/wheeltrail_dust_{0}_spd2.xml	</name>
+              <effectHP>	_Node	</effectHP>
+            </selector>
+            <selector>
+              <key>	water	</key>
+              <type>	discrete	</type>
+              <variable>	isUnderWater	</variable>
+              <selector>
+                <key>	0	</key>
+                <type>	effect	</type>
+                <name>	particles/Tank/movement/water/wheeltrail_water_{0}_spd1.xml	</name>
+                <effectHP>	_Node	</effectHP>
+              </selector>
+              <selector>
+                <key>	1	</key>
+                <type>	effect	</type>
+                <name>	particles/Tank/movement/water/wheeltrail_underwater_{0}_spd1.xml	</name>
+                <effectHP>	_Node	</effectHP>
+              </selector>
             </selector>
           </selector>
         </selector>
@@ -5015,97 +5020,102 @@
     <template>
       <name>	WheelEffectsolid	</name>
       <selector>
-        <type>	range	</type>
-        <variable>	RPM	</variable>
+        <type>	discrete	</type>
+        <variable>	_Wheel:contact	</variable>
         <selector>
-          <key>	0.0	</key>
-          <type>	matkind	</type>
-          <variable>	_matkind	</variable>
+          <key>	1	</key>
+          <type>	range	</type>
+          <variable>	RPM	</variable>
           <selector>
-            <key>	sand	</key>
-            <type>	effect	</type>
-            <name>	particles/Tank/movement/sand/wheeltrail_solid_{0}_spd1.xml	</name>
-            <effectHP>	_Node	</effectHP>
-          </selector>
-          <selector>
-            <key>	ground	</key>
-            <type>	effect	</type>
-            <name>	particles/Tank/movement/ground/wheeltrail_solid_{0}_spd1.xml	</name>
-            <effectHP>	_Node	</effectHP>
-          </selector>
-          <selector>
-            <key>	snow	</key>
-            <type>	effect	</type>
-            <name>	particles/Tank/movement/snow/wheeltrail_solid_{0}_spd1.xml	</name>
-            <effectHP>	_Node	</effectHP>
-          </selector>
-          <selector>
-            <key>	stone	</key>
-            <type>	effect	</type>
-            <name>	particles/Tank/movement/stone/wheeltrail_solid_{0}_spd1.xml	</name>
-            <effectHP>	_Node	</effectHP>
-          </selector>
-          <selector>
-            <key>	water	</key>
-            <type>	discrete	</type>
-            <variable>	isUnderWater	</variable>
+            <key>	0.0	</key>
+            <type>	matkind	</type>
+            <variable>	_matkind	</variable>
             <selector>
-              <key>	0	</key>
+              <key>	sand	</key>
               <type>	effect	</type>
-              <name>	particles/Tank/movement/water/wheeltrail_water_{0}_spd1.xml	</name>
+              <name>	particles/Tank/movement/sand/wheeltrail_solid_{0}_spd1.xml	</name>
               <effectHP>	_Node	</effectHP>
             </selector>
             <selector>
-              <key>	1	</key>
+              <key>	ground	</key>
               <type>	effect	</type>
-              <name>	particles/Tank/movement/water/wheeltrail_underwater_{0}_spd1.xml	</name>
-              <effectHP>	_Node	</effectHP>
-            </selector>
-          </selector>
-        </selector>
-        <selector>
-          <key>	0.4	</key>
-          <type>	matkind	</type>
-          <variable>	_matkind	</variable>
-          <selector>
-            <key>	sand	</key>
-            <type>	effect	</type>
-            <name>	particles/Tank/movement/sand/wheeltrail_solid_{0}_spd2.xml	</name>
-            <effectHP>	_Node	</effectHP>
-          </selector>
-          <selector>
-            <key>	ground	</key>
-            <type>	effect	</type>
-            <name>	particles/Tank/movement/ground/wheeltrail_solid_{0}_spd2.xml	</name>
-            <effectHP>	_Node	</effectHP>
-          </selector>
-          <selector>
-            <key>	snow	</key>
-            <type>	effect	</type>
-            <name>	particles/Tank/movement/snow/wheeltrail_solid_{0}_spd2.xml	</name>
-            <effectHP>	_Node	</effectHP>
-          </selector>
-          <selector>
-            <key>	stone	</key>
-            <type>	effect	</type>
-            <name>	particles/Tank/movement/stone/wheeltrail_solid_{0}_spd2.xml	</name>
-            <effectHP>	_Node	</effectHP>
-          </selector>
-          <selector>
-            <key>	water	</key>
-            <type>	discrete	</type>
-            <variable>	isUnderWater	</variable>
-            <selector>
-              <key>	0	</key>
-              <type>	effect	</type>
-              <name>	particles/Tank/movement/water/wheeltrail_water_{0}_spd1.xml	</name>
+              <name>	particles/Tank/movement/ground/wheeltrail_solid_{0}_spd1.xml	</name>
               <effectHP>	_Node	</effectHP>
             </selector>
             <selector>
-              <key>	1	</key>
+              <key>	snow	</key>
               <type>	effect	</type>
-              <name>	particles/Tank/movement/water/wheeltrail_underwater_{0}_spd1.xml	</name>
+              <name>	particles/Tank/movement/snow/wheeltrail_solid_{0}_spd1.xml	</name>
               <effectHP>	_Node	</effectHP>
+            </selector>
+            <selector>
+              <key>	stone	</key>
+              <type>	effect	</type>
+              <name>	particles/Tank/movement/stone/wheeltrail_solid_{0}_spd1.xml	</name>
+              <effectHP>	_Node	</effectHP>
+            </selector>
+            <selector>
+              <key>	water	</key>
+              <type>	discrete	</type>
+              <variable>	isUnderWater	</variable>
+              <selector>
+                <key>	0	</key>
+                <type>	effect	</type>
+                <name>	particles/Tank/movement/water/wheeltrail_water_{0}_spd1.xml	</name>
+                <effectHP>	_Node	</effectHP>
+              </selector>
+              <selector>
+                <key>	1	</key>
+                <type>	effect	</type>
+                <name>	particles/Tank/movement/water/wheeltrail_underwater_{0}_spd1.xml	</name>
+                <effectHP>	_Node	</effectHP>
+              </selector>
+            </selector>
+          </selector>
+          <selector>
+            <key>	0.4	</key>
+            <type>	matkind	</type>
+            <variable>	_matkind	</variable>
+            <selector>
+              <key>	sand	</key>
+              <type>	effect	</type>
+              <name>	particles/Tank/movement/sand/wheeltrail_solid_{0}_spd2.xml	</name>
+              <effectHP>	_Node	</effectHP>
+            </selector>
+            <selector>
+              <key>	ground	</key>
+              <type>	effect	</type>
+              <name>	particles/Tank/movement/ground/wheeltrail_solid_{0}_spd2.xml	</name>
+              <effectHP>	_Node	</effectHP>
+            </selector>
+            <selector>
+              <key>	snow	</key>
+              <type>	effect	</type>
+              <name>	particles/Tank/movement/snow/wheeltrail_solid_{0}_spd2.xml	</name>
+              <effectHP>	_Node	</effectHP>
+            </selector>
+            <selector>
+              <key>	stone	</key>
+              <type>	effect	</type>
+              <name>	particles/Tank/movement/stone/wheeltrail_solid_{0}_spd2.xml	</name>
+              <effectHP>	_Node	</effectHP>
+            </selector>
+            <selector>
+              <key>	water	</key>
+              <type>	discrete	</type>
+              <variable>	isUnderWater	</variable>
+              <selector>
+                <key>	0	</key>
+                <type>	effect	</type>
+                <name>	particles/Tank/movement/water/wheeltrail_water_{0}_spd1.xml	</name>
+                <effectHP>	_Node	</effectHP>
+              </selector>
+              <selector>
+                <key>	1	</key>
+                <type>	effect	</type>
+                <name>	particles/Tank/movement/water/wheeltrail_underwater_{0}_spd1.xml	</name>
+                <effectHP>	_Node	</effectHP>
+              </selector>
             </selector>
           </selector>
         </selector>
@@ -5114,97 +5124,102 @@
     <template>
       <name>	WheelEffectfinish	</name>
       <selector>
-        <type>	range	</type>
-        <variable>	RPM	</variable>
+        <type>	discrete	</type>
+        <variable>	_Wheel:contact	</variable>
         <selector>
-          <key>	0.0	</key>
-          <type>	matkind	</type>
-          <variable>	_matkind	</variable>
+          <key>	1	</key>
+          <type>	range	</type>
+          <variable>	RPM	</variable>
           <selector>
-            <key>	sand	</key>
-            <type>	effect	</type>
-            <name>	particles/Tank/movement/sand/wheeltrail_finish_{0}_spd1.xml	</name>
-            <effectHP>	_Node	</effectHP>
-          </selector>
-          <selector>
-            <key>	ground	</key>
-            <type>	effect	</type>
-            <name>	particles/Tank/movement/ground/wheeltrail_finish_{0}_spd1.xml	</name>
-            <effectHP>	_Node	</effectHP>
-          </selector>
-          <selector>
-            <key>	snow	</key>
-            <type>	effect	</type>
-            <name>	particles/Tank/movement/snow/wheeltrail_finish_{0}_spd1.xml	</name>
-            <effectHP>	_Node	</effectHP>
-          </selector>
-          <selector>
-            <key>	stone	</key>
-            <type>	effect	</type>
-            <name>	particles/Tank/movement/stone/wheeltrail_finish_{0}_spd1.xml	</name>
-            <effectHP>	_Node	</effectHP>
-          </selector>
-          <selector>
-            <key>	water	</key>
-            <type>	discrete	</type>
-            <variable>	isUnderWater	</variable>
+            <key>	0.0	</key>
+            <type>	matkind	</type>
+            <variable>	_matkind	</variable>
             <selector>
-              <key>	0	</key>
+              <key>	sand	</key>
               <type>	effect	</type>
-              <name>	particles/Tank/movement/water/wheeltrail_water_{0}_spd1.xml	</name>
+              <name>	particles/Tank/movement/sand/wheeltrail_finish_{0}_spd1.xml	</name>
               <effectHP>	_Node	</effectHP>
             </selector>
             <selector>
-              <key>	1	</key>
+              <key>	ground	</key>
               <type>	effect	</type>
-              <name>	particles/Tank/movement/water/wheeltrail_underwater_{0}_spd1.xml	</name>
-              <effectHP>	_Node	</effectHP>
-            </selector>
-          </selector>
-        </selector>
-        <selector>
-          <key>	0.4	</key>
-          <type>	matkind	</type>
-          <variable>	_matkind	</variable>
-          <selector>
-            <key>	sand	</key>
-            <type>	effect	</type>
-            <name>	particles/Tank/movement/sand/wheeltrail_finish_{0}_spd2.xml	</name>
-            <effectHP>	_Node	</effectHP>
-          </selector>
-          <selector>
-            <key>	ground	</key>
-            <type>	effect	</type>
-            <name>	particles/Tank/movement/ground/wheeltrail_finish_{0}_spd2.xml	</name>
-            <effectHP>	_Node	</effectHP>
-          </selector>
-          <selector>
-            <key>	snow	</key>
-            <type>	effect	</type>
-            <name>	particles/Tank/movement/snow/wheeltrail_finish_{0}_spd2.xml	</name>
-            <effectHP>	_Node	</effectHP>
-          </selector>
-          <selector>
-            <key>	stone	</key>
-            <type>	effect	</type>
-            <name>	particles/Tank/movement/stone/wheeltrail_finish_{0}_spd2.xml	</name>
-            <effectHP>	_Node	</effectHP>
-          </selector>
-          <selector>
-            <key>	water	</key>
-            <type>	discrete	</type>
-            <variable>	isUnderWater	</variable>
-            <selector>
-              <key>	0	</key>
-              <type>	effect	</type>
-              <name>	particles/Tank/movement/water/wheeltrail_water_{0}_spd1.xml	</name>
+              <name>	particles/Tank/movement/ground/wheeltrail_finish_{0}_spd1.xml	</name>
               <effectHP>	_Node	</effectHP>
             </selector>
             <selector>
-              <key>	1	</key>
+              <key>	snow	</key>
               <type>	effect	</type>
-              <name>	particles/Tank/movement/water/wheeltrail_underwater_{0}_spd1.xml	</name>
+              <name>	particles/Tank/movement/snow/wheeltrail_finish_{0}_spd1.xml	</name>
               <effectHP>	_Node	</effectHP>
+            </selector>
+            <selector>
+              <key>	stone	</key>
+              <type>	effect	</type>
+              <name>	particles/Tank/movement/stone/wheeltrail_finish_{0}_spd1.xml	</name>
+              <effectHP>	_Node	</effectHP>
+            </selector>
+            <selector>
+              <key>	water	</key>
+              <type>	discrete	</type>
+              <variable>	isUnderWater	</variable>
+              <selector>
+                <key>	0	</key>
+                <type>	effect	</type>
+                <name>	particles/Tank/movement/water/wheeltrail_water_{0}_spd1.xml	</name>
+                <effectHP>	_Node	</effectHP>
+              </selector>
+              <selector>
+                <key>	1	</key>
+                <type>	effect	</type>
+                <name>	particles/Tank/movement/water/wheeltrail_underwater_{0}_spd1.xml	</name>
+                <effectHP>	_Node	</effectHP>
+              </selector>
+            </selector>
+          </selector>
+          <selector>
+            <key>	0.4	</key>
+            <type>	matkind	</type>
+            <variable>	_matkind	</variable>
+            <selector>
+              <key>	sand	</key>
+              <type>	effect	</type>
+              <name>	particles/Tank/movement/sand/wheeltrail_finish_{0}_spd2.xml	</name>
+              <effectHP>	_Node	</effectHP>
+            </selector>
+            <selector>
+              <key>	ground	</key>
+              <type>	effect	</type>
+              <name>	particles/Tank/movement/ground/wheeltrail_finish_{0}_spd2.xml	</name>
+              <effectHP>	_Node	</effectHP>
+            </selector>
+            <selector>
+              <key>	snow	</key>
+              <type>	effect	</type>
+              <name>	particles/Tank/movement/snow/wheeltrail_finish_{0}_spd2.xml	</name>
+              <effectHP>	_Node	</effectHP>
+            </selector>
+            <selector>
+              <key>	stone	</key>
+              <type>	effect	</type>
+              <name>	particles/Tank/movement/stone/wheeltrail_finish_{0}_spd2.xml	</name>
+              <effectHP>	_Node	</effectHP>
+            </selector>
+            <selector>
+              <key>	water	</key>
+              <type>	discrete	</type>
+              <variable>	isUnderWater	</variable>
+              <selector>
+                <key>	0	</key>
+                <type>	effect	</type>
+                <name>	particles/Tank/movement/water/wheeltrail_water_{0}_spd1.xml	</name>
+                <effectHP>	_Node	</effectHP>
+              </selector>
+              <selector>
+                <key>	1	</key>
+                <type>	effect	</type>
+                <name>	particles/Tank/movement/water/wheeltrail_underwater_{0}_spd1.xml	</name>
+                <effectHP>	_Node	</effectHP>
+              </selector>
             </selector>
           </selector>
         </selector>
@@ -5213,31 +5228,36 @@
     <template>
       <name>	WheelSlipEffect	</name>
       <selector>
-        <type>	matkind	</type>
-        <variable>	_matkind	</variable>
+        <type>	discrete	</type>
+        <variable>	_Wheel:contact	</variable>
         <selector>
-          <key>	sand	</key>
-          <type>	effect	</type>
-          <name>	particles/Tank/movement/sand/wheelslip_{0}_spd1.xml	</name>
-          <effectHP>	_Node	</effectHP>
-        </selector>
-        <selector>
-          <key>	ground	</key>
-          <type>	effect	</type>
-          <name>	particles/Tank/movement/ground/wheelslip_{0}_spd1.xml	</name>
-          <effectHP>	_Node	</effectHP>
-        </selector>
-        <selector>
-          <key>	snow	</key>
-          <type>	effect	</type>
-          <name>	particles/Tank/movement/snow/wheelslip_{0}_spd1.xml	</name>
-          <effectHP>	_Node	</effectHP>
-        </selector>
-        <selector>
-          <key>	stone	</key>
-          <type>	effect	</type>
-          <name>	particles/Tank/movement/stone/wheelslip_{0}_spd1.xml	</name>
-          <effectHP>	_Node	</effectHP>
+          <key>	1	</key>
+          <type>	matkind	</type>
+          <variable>	_matkind	</variable>
+          <selector>
+            <key>	sand	</key>
+            <type>	effect	</type>
+            <name>	particles/Tank/movement/sand/wheelslip_{0}_spd1.xml	</name>
+            <effectHP>	_Node	</effectHP>
+          </selector>
+          <selector>
+            <key>	ground	</key>
+            <type>	effect	</type>
+            <name>	particles/Tank/movement/ground/wheelslip_{0}_spd1.xml	</name>
+            <effectHP>	_Node	</effectHP>
+          </selector>
+          <selector>
+            <key>	snow	</key>
+            <type>	effect	</type>
+            <name>	particles/Tank/movement/snow/wheelslip_{0}_spd1.xml	</name>
+            <effectHP>	_Node	</effectHP>
+          </selector>
+          <selector>
+            <key>	stone	</key>
+            <type>	effect	</type>
+            <name>	particles/Tank/movement/stone/wheelslip_{0}_spd1.xml	</name>
+            <effectHP>	_Node	</effectHP>
+          </selector>
         </selector>
       </selector>
     </template>
@@ -5248,12 +5268,12 @@
         <selector>
           <type>	template	</type>
           <name>	WheelEffectdust	</name>
-          <parameters>	_Node:_Node1	</parameters>
+          <parameters>	_Node:_Node1;_Wheel:_W1	</parameters>
         </selector>
         <selector>
           <type>	template	</type>
           <name>	WheelEffectsolid	</name>
-          <parameters>	_Node:_Node2	</parameters>
+          <parameters>	_Node:_Node2;_Wheel:_W2	</parameters>
         </selector>
         <selector>
           <type>	effect	</type>
@@ -5269,17 +5289,17 @@
         <selector>
           <type>	template	</type>
           <name>	WheelEffectdust	</name>
-          <parameters>	_Node:_Node1	</parameters>
+          <parameters>	_Node:_Node1;_Wheel:_W1	</parameters>
         </selector>
         <selector>
           <type>	template	</type>
           <name>	WheelEffectsolid	</name>
-          <parameters>	_Node:_Node2	</parameters>
+          <parameters>	_Node:_Node2;_Wheel:_W2	</parameters>
         </selector>
         <selector>
           <type>	template	</type>
           <name>	WheelEffectsolid	</name>
-          <parameters>	_Node:_Node3	</parameters>
+          <parameters>	_Node:_Node3;_Wheel:_W3	</parameters>
         </selector>
         <selector>
           <type>	effect	</type>
@@ -5295,22 +5315,22 @@
         <selector>
           <type>	template	</type>
           <name>	WheelEffectdust	</name>
-          <parameters>	_Node:_Node1	</parameters>
+          <parameters>	_Node:_Node1;_Wheel:_W1	</parameters>
         </selector>
         <selector>
           <type>	template	</type>
           <name>	WheelEffectsolid	</name>
-          <parameters>	_Node:_Node2	</parameters>
+          <parameters>	_Node:_Node2;_Wheel:_W2	</parameters>
         </selector>
         <selector>
           <type>	template	</type>
           <name>	WheelEffectsolid	</name>
-          <parameters>	_Node:_Node3	</parameters>
+          <parameters>	_Node:_Node3;_Wheel:_W3	</parameters>
         </selector>
         <selector>
           <type>	template	</type>
           <name>	WheelEffectfinish	</name>
-          <parameters>	_Node:_Node4	</parameters>
+          <parameters>	_Node:_Node4;_Wheel:_W4	</parameters>
         </selector>
         <selector>
           <type>	effect	</type>
@@ -5328,12 +5348,12 @@
           <selector>
             <type>	template	</type>
             <name>	4WheeledTrailSide	</name>
-            <parameters>	_Node1:_RNode1;      _Node2:_RNode2;      _matkind:matkindR      	</parameters>
+            <parameters>	_Node1:_RNode1;       _Node2:_RNode2;       _W1:_RW1;       _W2:_RW2;       _matkind:matkindR       	</parameters>
           </selector>
           <selector>
             <type>	template	</type>
             <name>	4WheeledTrailSide	</name>
-            <parameters>	_Node1:_LNode1;      _Node2:_LNode2;      _matkind:matkindL      	</parameters>
+            <parameters>	_Node1:_LNode1;       _Node2:_LNode2;       _W1:_LW1;       _W2:_LW2;       _matkind:matkindL       	</parameters>
           </selector>
         </selector>
       </selector>
@@ -5347,12 +5367,12 @@
           <selector>
             <type>	template	</type>
             <name>	6WheeledTrailSide	</name>
-            <parameters>	_Node1:_RNode1;      _Node2:_RNode2;      _Node3:_RNode3;      _matkind:matkindR      	</parameters>
+            <parameters>	_Node1:_RNode1;       _Node2:_RNode2;       _Node3:_RNode3;       _W1:_RW1;       _W2:_RW2;       _W3:_RW3;       _matkind:matkindR       	</parameters>
           </selector>
           <selector>
             <type>	template	</type>
             <name>	6WheeledTrailSide	</name>
-            <parameters>	_Node1:_LNode1;      _Node2:_LNode2;      _Node3:_LNode3;      _matkind:matkindL      	</parameters>
+            <parameters>	_Node1:_LNode1;       _Node2:_LNode2;       _Node3:_LNode3;       _W1:_LW1;       _W2:_LW2;       _W3:_LW3;       _matkind:matkindL       	</parameters>
           </selector>
         </selector>
       </selector>
@@ -5366,12 +5386,12 @@
           <selector>
             <type>	template	</type>
             <name>	8WheeledTrailSide	</name>
-            <parameters>	_Node1:_RNode1;      _Node2:_RNode2;      _Node3:_RNode3;      _Node4:_RNode4;      _matkind:matkindR      	</parameters>
+            <parameters>	_Node1:_RNode1;       _Node2:_RNode2;       _Node3:_RNode3;       _Node4:_RNode4;       _W1:_RW1;       _W2:_RW2;       _W3:_RW3;       _W4:_RW4;       _matkind:matkindR       	</parameters>
           </selector>
           <selector>
             <type>	template	</type>
             <name>	8WheeledTrailSide	</name>
-            <parameters>	_Node1:_LNode1;      _Node2:_LNode2;      _Node3:_LNode3;      _Node4:_LNode4;      _matkind:matkindL      	</parameters>
+            <parameters>	_Node1:_LNode1;       _Node2:_LNode2;       _Node3:_LNode3;       _Node4:_LNode4;       _W1:_LW1;       _W2:_LW2;       _W3:_LW3;       _W4:_LW4;       _matkind:matkindL       	</parameters>
           </selector>
         </selector>
       </selector>
@@ -5383,12 +5403,12 @@
         <selector>
           <type>	template	</type>
           <name>	WheelSlipEffect	</name>
-          <parameters>	_Node:_RNode1;_matkind:matkindR	</parameters>
+          <parameters>	_Node:_RNode;_Wheel:_RW;_matkind:matkindR	</parameters>
         </selector>
         <selector>
           <type>	template	</type>
           <name>	WheelSlipEffect	</name>
-          <parameters>	_Node:_LNode1;_matkind:matkindL	</parameters>
+          <parameters>	_Node:_LNode;_Wheel:_LW;_matkind:matkindL	</parameters>
         </selector>
       </selector>
     </template>
@@ -5403,7 +5423,7 @@
             <key>	-200	</key>
             <type>	template	</type>
             <name>	4WheeledEffectsSet	</name>
-            <parameters>	_RNode1:HP_Wheel_R_02_Front;       _RNode2:HP_Wheel_R_01_Front;       _LNode1:HP_Wheel_L_02_Front;       _LNode2:HP_Wheel_L_01_Front	</parameters>
+            <parameters>	_RNode1:HP_Wheel_R_02_Front;       _RNode2:HP_Wheel_R_01_Front;       _LNode1:HP_Wheel_L_02_Front;       _LNode2:HP_Wheel_L_01_Front;       _RW1:WD_R1;       _RW2:WD_R0;       _LW1:WD_L1;       _LW2:WD_L0	</parameters>
           </selector>
           <selector>
             <key>	-1	</key>
@@ -5413,7 +5433,7 @@
             <key>	1	</key>
             <type>	template	</type>
             <name>	4WheeledEffectsSet	</name>
-            <parameters>	_RNode1:HP_Wheel_R_01_Rear;       _RNode2:HP_Wheel_R_02_Rear;       _LNode1:HP_Wheel_L_01_Rear;       _LNode2:HP_Wheel_L_02_Rear;	</parameters>
+            <parameters>	_RNode1:HP_Wheel_R_01_Rear;       _RNode2:HP_Wheel_R_02_Rear;       _LNode1:HP_Wheel_L_01_Rear;       _LNode2:HP_Wheel_L_02_Rear;       _RW1:WD_R1;       _RW3:WD_R0;       _LW1:WD_L1;       _LW3:WD_L0	</parameters>
           </selector>
         </selector>
         <selector>
@@ -5423,7 +5443,7 @@
             <key>	-200	</key>
             <type>	template	</type>
             <name>	WheeledSlipEffectsSet	</name>
-            <parameters>	_RNode1:HP_Wheel_R_02_Front;       _LNode1:HP_Wheel_L_02_Front	</parameters>
+            <parameters>	_RNode:HP_Wheel_R_02_Front;       _RW:WD_R0;       _LNode:HP_Wheel_L_02_Front;       _LW:WD_L0	</parameters>
           </selector>
           <selector>
             <key>	-1	</key>
@@ -5433,7 +5453,7 @@
             <key>	1	</key>
             <type>	template	</type>
             <name>	WheeledSlipEffectsSet	</name>
-            <parameters>	_RNode1:HP_Wheel_R_01_Rear;       _LNode1:HP_Wheel_L_01_Rear	</parameters>
+            <parameters>	_RNode:HP_Wheel_R_01_Rear;       _RW:WD_R1;       _LNode:HP_Wheel_L_01_Rear;       _LW:WD_L1	</parameters>
           </selector>
         </selector>
       </selector>
@@ -5449,7 +5469,7 @@
             <key>	-200	</key>
             <type>	template	</type>
             <name>	6WheeledEffectsSet	</name>
-            <parameters>	_RNode1:HP_Wheel_R_03_Front;       _RNode2:HP_Wheel_R_02_Front;       _RNode3:HP_Wheel_R_01_Front;       _LNode1:HP_Wheel_L_03_Front;       _LNode2:HP_Wheel_L_02_Front;       _LNode3:HP_Wheel_L_01_Front	</parameters>
+            <parameters>	_RNode1:HP_Wheel_R_03_Front;       _RNode2:HP_Wheel_R_02_Front;       _RNode3:HP_Wheel_R_01_Front;       _LNode1:HP_Wheel_L_03_Front;       _LNode2:HP_Wheel_L_02_Front;       _LNode3:HP_Wheel_L_01_Front;       _RW1:WD_R1;       _RW2:W_R0;       _RW3:WD_R0;       _LW1:WD_L1;       _LW2:W_L0;       _LW3:WD_L0	</parameters>
           </selector>
           <selector>
             <key>	-1	</key>
@@ -5459,7 +5479,7 @@
             <key>	1	</key>
             <type>	template	</type>
             <name>	6WheeledEffectsSet	</name>
-            <parameters>	_RNode1:HP_Wheel_R_01_Rear;       _RNode2:HP_Wheel_R_02_Rear;       _RNode3:HP_Wheel_R_03_Rear;       _LNode1:HP_Wheel_L_01_Rear;       _LNode2:HP_Wheel_L_02_Rear;       _LNode3:HP_Wheel_L_03_Rear;	</parameters>
+            <parameters>	_RNode1:HP_Wheel_R_01_Rear;       _RNode2:HP_Wheel_R_02_Rear;       _RNode3:HP_Wheel_R_03_Rear;       _LNode1:HP_Wheel_L_01_Rear;       _LNode2:HP_Wheel_L_02_Rear;       _LNode3:HP_Wheel_L_03_Rear;       _RW1:WD_R1;       _RW2:W_R0;       _RW3:WD_R0;       _LW1:WD_L1;       _LW2:W_L0;       _LW3:WD_L0	</parameters>
           </selector>
         </selector>
         <selector>
@@ -5469,7 +5489,7 @@
             <key>	-200	</key>
             <type>	template	</type>
             <name>	WheeledSlipEffectsSet	</name>
-            <parameters>	_RNode1:HP_Wheel_R_03_Front;       _LNode1:HP_Wheel_L_03_Front	</parameters>
+            <parameters>	_RNode:HP_Wheel_R_03_Front;       _RW:WD_R0;       _LNode:HP_Wheel_L_03_Front;       _LW:WD_L0	</parameters>
           </selector>
           <selector>
             <key>	-1	</key>
@@ -5479,7 +5499,7 @@
             <key>	1	</key>
             <type>	template	</type>
             <name>	WheeledSlipEffectsSet	</name>
-            <parameters>	_RNode1:HP_Wheel_R_01_Rear;       _LNode1:HP_Wheel_L_01_Rear	</parameters>
+            <parameters>	_RNode:HP_Wheel_R_01_Rear;       _RW:WD_R1;       _LNode:HP_Wheel_L_01_Rear;       _LW:WD_L1	</parameters>
           </selector>
         </selector>
       </selector>
@@ -5495,7 +5515,7 @@
             <key>	-200	</key>
             <type>	template	</type>
             <name>	4WheeledEffectsSet	</name>
-            <parameters>	_RNode1:HP_Wheel_R_03_Front;       _RNode2:HP_Wheel_R_01_Front;       _LNode1:HP_Wheel_L_03_Front;       _LNode2:HP_Wheel_L_01_Front	</parameters>
+            <parameters>	_RNode1:HP_Wheel_R_03_Front;       _RNode2:HP_Wheel_R_01_Front;       _LNode1:HP_Wheel_L_03_Front;       _LNode2:HP_Wheel_L_01_Front;       _RW1:WD_R1;       _RW2:W_R0;       _RW3:WD_R0;       _LW1:WD_L1;       _LW2:W_L0;       _LW3:WD_L0	</parameters>
           </selector>
           <selector>
             <key>	-1	</key>
@@ -5505,7 +5525,7 @@
             <key>	1	</key>
             <type>	template	</type>
             <name>	4WheeledEffectsSet	</name>
-            <parameters>	_RNode1:HP_Wheel_R_01_Rear;       _RNode2:HP_Wheel_R_03_Rear;       _LNode1:HP_Wheel_L_01_Rear;       _LNode2:HP_Wheel_L_03_Rear;	</parameters>
+            <parameters>	_RNode1:HP_Wheel_R_01_Rear;       _RNode2:HP_Wheel_R_03_Rear;       _LNode1:HP_Wheel_L_01_Rear;       _LNode2:HP_Wheel_L_03_Rear;       _RW1:WD_R0;       _RW2:W_R0;       _RW3:WD_R1;       _LW1:WD_L0;       _LW2:W_L0;       _LW3:WD_L1	</parameters>
           </selector>
         </selector>
         <selector>
@@ -5515,7 +5535,7 @@
             <key>	-200	</key>
             <type>	template	</type>
             <name>	WheeledSlipEffectsSet	</name>
-            <parameters>	_RNode1:HP_Wheel_R_03_Front;       _LNode1:HP_Wheel_L_03_Front	</parameters>
+            <parameters>	_RNode:HP_Wheel_R_03_Front;       _RW:WD_R0;       _LNode:HP_Wheel_L_03_Front;       _LW:WD_L0	</parameters>
           </selector>
           <selector>
             <key>	-1	</key>
@@ -5525,7 +5545,7 @@
             <key>	1	</key>
             <type>	template	</type>
             <name>	WheeledSlipEffectsSet	</name>
-            <parameters>	_RNode1:HP_Wheel_R_01_Rear;       _LNode1:HP_Wheel_L_01_Rear	</parameters>
+            <parameters>	_RNode:HP_Wheel_R_01_Rear;       _RW:WD_R1;       _LNode:HP_Wheel_L_01_Rear;       _RW:WD_L1	</parameters>
           </selector>
         </selector>
       </selector>
@@ -5541,7 +5561,7 @@
             <key>	-200	</key>
             <type>	template	</type>
             <name>	8WheeledEffectsSet	</name>
-            <parameters>	_RNode1:HP_Wheel_R_04_Front;       _RNode2:HP_Wheel_R_03_Front;       _RNode3:HP_Wheel_R_02_Front;       _RNode4:HP_Wheel_R_01_Front;       _LNode1:HP_Wheel_L_04_Front;       _LNode2:HP_Wheel_L_03_Front;       _LNode3:HP_Wheel_L_02_Front;       _LNode4:HP_Wheel_L_01_Front	</parameters>
+            <parameters>	_RNode1:HP_Wheel_R_04_Front;       _RNode2:HP_Wheel_R_03_Front;       _RNode3:HP_Wheel_R_02_Front;       _RNode4:HP_Wheel_R_01_Front;       _LNode1:HP_Wheel_L_04_Front;       _LNode2:HP_Wheel_L_03_Front;       _LNode3:HP_Wheel_L_02_Front;       _LNode4:HP_Wheel_L_01_Front;       _RW1:WD_R1;       _RW2:W_R1;       _RW3:W_R0;       _RW4:WD_R0;       _LW1:WD_L1;       _LW2:W_L1;       _LW3:W_L0;       _LW4:WD_L0	</parameters>
           </selector>
           <selector>
             <key>	-1	</key>
@@ -5551,7 +5571,7 @@
             <key>	1	</key>
             <type>	template	</type>
             <name>	8WheeledEffectsSet	</name>
-            <parameters>	_RNode1:HP_Wheel_R_01_Rear;       _RNode2:HP_Wheel_R_02_Rear;       _RNode3:HP_Wheel_R_03_Rear;       _RNode4:HP_Wheel_R_04_Rear;       _LNode1:HP_Wheel_L_01_Rear;       _LNode2:HP_Wheel_L_02_Rear;       _LNode3:HP_Wheel_L_03_Rear;       _LNode4:HP_Wheel_L_04_Rear	</parameters>
+            <parameters>	_RNode1:HP_Wheel_R_01_Rear;       _RNode2:HP_Wheel_R_02_Rear;       _RNode3:HP_Wheel_R_03_Rear;       _RNode4:HP_Wheel_R_04_Rear;       _LNode1:HP_Wheel_L_01_Rear;       _LNode2:HP_Wheel_L_02_Rear;       _LNode3:HP_Wheel_L_03_Rear;       _LNode4:HP_Wheel_L_04_Rear;       _RW1:WD_R0;       _RW2:W_R0;       _RW3:W_R1;       _RW4:WD_R1;       _LW1:WD_L0;       _LW2:W_L0;       _LW3:W_L1;       _LW4:WD_L1	</parameters>
           </selector>
         </selector>
         <selector>
@@ -5561,7 +5581,7 @@
             <key>	-200	</key>
             <type>	template	</type>
             <name>	WheeledSlipEffectsSet	</name>
-            <parameters>	_RNode1:HP_Wheel_R_04_Front;       _LNode1:HP_Wheel_L_04_Front	</parameters>
+            <parameters>	_RNode:HP_Wheel_R_04_Front;       _LNode:HP_Wheel_L_04_Front;       _RW:WD_R0;       _LW:WD_L0	</parameters>
           </selector>
           <selector>
             <key>	-1	</key>
@@ -5571,7 +5591,7 @@
             <key>	1	</key>
             <type>	template	</type>
             <name>	WheeledSlipEffectsSet	</name>
-            <parameters>	_RNode1:HP_Wheel_R_01_Rear;       _LNode1:HP_Wheel_L_01_Rear	</parameters>
+            <parameters>	_RNode:HP_Wheel_R_01_Rear;       _LNode:HP_Wheel_L_01_Rear;       _RW:WD_R1;       _LW:WD_L1	</parameters>
           </selector>
         </selector>
       </selector>

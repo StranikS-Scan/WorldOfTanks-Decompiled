@@ -5,13 +5,15 @@ from gui.Scaleform.Waiting import Waiting
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.framework import ViewTypes
 from gui.Scaleform.framework.managers.containers import POP_UP_CRITERIA
-from gui.app_loader import g_appLoader, settings as app_settings
+from gui.app_loader import settings as app_settings
 from AccountCommands import CMD_PRB_TEAM_READY
 from helpers import dependency
 from skeletons.connection_mgr import IConnectionManager
+from skeletons.gui.app_loader import IAppLoader
 
 def _getLobby():
-    return g_appLoader.getApp(app_settings.APP_NAME_SPACE.SF_LOBBY)
+    appLoader = dependency.descriptor(IAppLoader)
+    return appLoader.getApp(app_settings.APP_NAME_SPACE.SF_LOBBY)
 
 
 _isConnecting = False

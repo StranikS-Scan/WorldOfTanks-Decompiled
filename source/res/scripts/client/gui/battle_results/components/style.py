@@ -4,9 +4,8 @@ from collections import namedtuple
 import BigWorld
 from constants import IGR_TYPE
 from gui import makeHtmlString
-from gui.Scaleform.locale.BATTLE_RESULTS import BATTLE_RESULTS
-from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform import settings
+from gui.Scaleform.locale.BATTLE_RESULTS import BATTLE_RESULTS
 from gui.battle_results.components import base
 from gui.shared.formatters import text_styles
 from gui.shared.utils.functions import makeTooltip
@@ -143,13 +142,15 @@ def makeStatRow(label='', labelArgs=None, column1=None, column2=None, column3=No
      'lineType': lineType}
 
 
-def makeCreditsLabel(value, canBeFaded=False, isDiff=False):
+def makeCreditsLabel(value, canBeFaded=False, isDiff=False, useBigIcon=False):
     formatted = BigWorld.wg_getGoldFormat(int(value))
     if value < 0:
         formatted = markValueAsError(formatted)
     if isDiff:
         formatted = _DIFF_FORMAT.format(formatted)
-    if canBeFaded and not value:
+    if useBigIcon:
+        template = 'credits_label'
+    elif canBeFaded and not value:
         template = 'credits_small_inactive_label'
     else:
         template = 'credits_small_label'
@@ -165,13 +166,15 @@ def makeGoldLabel(value, canBeFaded=False):
     return makeHtmlString('html_templates:lobby/battle_results', template, {'value': formatted})
 
 
-def makeXpLabel(value, canBeFaded=False, isDiff=False):
+def makeXpLabel(value, canBeFaded=False, isDiff=False, useBigIcon=False):
     formatted = BigWorld.wg_getIntegralFormat(int(value))
     if value < 0:
         formatted = markValueAsError(formatted)
     if isDiff:
         formatted = _DIFF_FORMAT.format(formatted)
-    if canBeFaded and not value:
+    if useBigIcon:
+        template = 'xp_label'
+    elif canBeFaded and not value:
         template = 'xp_small_inactive_label'
     else:
         template = 'xp_small_label'
@@ -215,8 +218,17 @@ def makeIGRBonusValue(factor):
     return makeHtmlString('html_templates:lobby/battle_results', 'igr_bonus', {'value': BigWorld.wg_getNiceNumberFormat(factor)})
 
 
-def makeDailyXPFactorValue(value):
-    return makeHtmlString('html_templates:lobby/battle_results', 'multy_xp_small_label', {'value': int(value)})
+def makeMultiXPFactorValue(value, useFreeXPStyle=False):
+    if value > 0:
+        if useFreeXPStyle:
+            template = 'multy_xp_small_multiplier_free'
+        else:
+            template = 'multy_xp_small_multiplier'
+    elif useFreeXPStyle:
+        template = 'multy_xp_small_label_free'
+    else:
+        template = 'multy_xp_small_label'
+    return makeHtmlString('html_templates:lobby/battle_results', template, {'value': int(value)})
 
 
 def makeAOGASFactorValue(value):
@@ -242,14 +254,6 @@ def makeStatValue(field, value):
 def makeTimeStatsVO(field, value):
     return {'label': i18n.makeString(BATTLE_RESULTS.getDetailsTimeLbl(statName=field)),
      'value': value}
-
-
-def makeRankIcon(rank):
-    if not rank:
-        return ''
-    else:
-        icon = RES_ICONS.getRankIcon('24x24', rank)
-        return icon if icon is not None else RES_ICONS.getRankIcon('24x24', 0)
 
 
 def makeBadgeIcon(badge):

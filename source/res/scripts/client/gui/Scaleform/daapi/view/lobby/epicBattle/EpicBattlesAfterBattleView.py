@@ -14,7 +14,7 @@ from skeletons.gui.server_events import IEventsCache
 from gui.shared.formatters import text_styles
 from gui.Scaleform.daapi.view.lobby.epicBattle.epic_meta_level_icon import getEpicMetaIconVODict
 from gui.sounds.epic_sound_constants import EPIC_METAGAME_WWISE_SOUND_EVENTS
-from gui.server_events.bonuses import CreditsBonus, CrystalBonus, ItemsBonus, GoodiesBonus, PremiumDaysBonus
+from gui.server_events.bonuses import CreditsBonus, CrystalBonus, ItemsBonus, GoodiesBonus, BasicPremiumDaysBonus, PlusPremiumDaysBonus
 from web_stubs import i18n
 _LEVELUP_TOKEN_TEMPLATE = 'epicmetagame:levelup:%d'
 
@@ -29,8 +29,11 @@ def _AccumulateBonuses(bonuses):
     def accumulateCrystals(bonuses):
         return __accumulateIntegralBonus(CrystalBonus, bonuses)
 
-    def accumulatePremiumDays(bonuses):
-        return __accumulateIntegralBonus(PremiumDaysBonus, bonuses)
+    def accumulateBasicPremiumDays(bonuses):
+        return __accumulateIntegralBonus(BasicPremiumDaysBonus, bonuses)
+
+    def accumulatePlusPremiumDays(bonuses):
+        return __accumulateIntegralBonus(PlusPremiumDaysBonus, bonuses)
 
     def accumulateItems(bonuses):
         values = dict()
@@ -55,7 +58,8 @@ def _AccumulateBonuses(bonuses):
      CrystalBonus: accumulateCrystals,
      ItemsBonus: accumulateItems,
      GoodiesBonus: accumulateGoodies,
-     PremiumDaysBonus: accumulatePremiumDays}
+     BasicPremiumDaysBonus: accumulateBasicPremiumDays,
+     PlusPremiumDaysBonus: accumulatePlusPremiumDays}
     accumulatedBonuses = []
     for bonusType in set((type(b) for b in bonuses)):
         bonusesOfType = [ b for b in bonuses if isinstance(b, bonusType) ]

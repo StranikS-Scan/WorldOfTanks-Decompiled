@@ -8,8 +8,9 @@ from helpers import dependency
 from gui.sounds.ambients import BattleResultsEnv
 import SoundGroups
 from bootcamp.BootCampEvents import g_bootcampEvents
-from gui.app_loader import g_appLoader, settings as app_settings
+from gui.app_loader import settings as app_settings
 from gui import GUI_CTRL_MODE_FLAG as _CTRL_FLAG
+from skeletons.gui.app_loader import IAppLoader
 from skeletons.gui.battle_results import IBattleResultsService
 from bootcamp.Bootcamp import g_bootcamp
 _SNDID_ACHIEVEMENT = 'result_screen_achievements'
@@ -17,6 +18,7 @@ _SNDID_BONUS = 'result_screen_bonus'
 
 class BCBattleResult(BCBattleResultMeta):
     battleResults = dependency.descriptor(IBattleResultsService)
+    appLoader = dependency.descriptor(IAppLoader)
     __sound_env__ = BattleResultsEnv
     __metaclass__ = event_bus_handlers.EventBusListener
 
@@ -89,7 +91,7 @@ class BCBattleResult(BCBattleResultMeta):
     def __setBattleResults(self):
         if not self.__isResultsSet:
             self.__isResultsSet = True
-            g_appLoader.attachCursor(app_settings.APP_NAME_SPACE.SF_LOBBY, _CTRL_FLAG.GUI_ENABLED)
+            self.appLoader.attachCursor(app_settings.APP_NAME_SPACE.SF_LOBBY, _CTRL_FLAG.GUI_ENABLED)
             g_bootcampEvents.onResultScreenFinished += self.onResultScreenFinished
             vo = self.battleResults.getResultsVO(self.__arenaUniqueID)
             self.as_setDataS(vo)

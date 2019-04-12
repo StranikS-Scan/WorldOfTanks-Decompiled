@@ -1,12 +1,13 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/shared/game_messages_panel.py
 from collections import namedtuple
+from gui.impl import backport
+from gui.impl.gen import R
 from gui.Scaleform.daapi.view.meta.GameMessagesPanelMeta import GameMessagesPanelMeta
 from gui.Scaleform.genConsts.GAME_MESSAGES_CONSTS import GAME_MESSAGES_CONSTS
 from gui.battle_control import avatar_getter
-from gui.battle_results.components.common import makeRegularFinishResultLabel, _FULL_RESULT_LABEL
+from gui.battle_results.components.common import makeRegularFinishResultLabel
 from gui.shared.utils import toUpper
-from helpers import i18n
 
 class PlayerMessageData(namedtuple('playerMessageData', ('messageType', 'length', 'priority', 'msgData'))):
 
@@ -33,7 +34,7 @@ class GameMessagesPanel(GameMessagesPanelMeta):
                 messageType = GAME_MESSAGES_CONSTS.WIN
             else:
                 messageType = GAME_MESSAGES_CONSTS.DEFEAT
-        endGameMsgData = {'title': toUpper(i18n.makeString(_FULL_RESULT_LABEL.format(messageType))),
+        endGameMsgData = {'title': toUpper(backport.text(R.strings.menu.finalStatistic.commonStats.resultlabel.dyn(messageType)())),
          'subTitle': makeRegularFinishResultLabel(reason, messageType)}
         msg = PlayerMessageData(messageType, GAME_MESSAGES_CONSTS.DEFAULT_MESSAGE_LENGTH, GAME_MESSAGES_CONSTS.GAME_MESSAGE_PRIORITY_END_GAME, endGameMsgData)
         self._addMessage(msg.getDict())

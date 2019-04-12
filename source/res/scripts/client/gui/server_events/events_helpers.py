@@ -16,7 +16,7 @@ from shared_utils import CONST_CONTAINER
 from skeletons.gui.game_control import IMarathonEventsController
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
-from gui.server_events.events_constants import LINKEDSET_GROUP_PREFIX, MARATHON_GROUP_PREFIX
+from gui.server_events.events_constants import LINKEDSET_GROUP_PREFIX, MARATHON_GROUP_PREFIX, PREMIUM_GROUP_PREFIX
 from helpers.i18n import makeString as _ms
 from gui.Scaleform.locale.LINKEDSET import LINKEDSET
 from gui.server_events.conditions import getProgressFromQuestWithSingleAccumulative
@@ -159,6 +159,14 @@ def missionsSortFunc(a, b):
     return res if res else cmp(a.getUserName(), b.getUserName())
 
 
+def premMissionsSortFunc(a, b):
+
+    def isChild(a, b):
+        return 0 if not b.getParents() else a.getID() in b.getParents().values()[0]
+
+    return isChild(a, b) - isChild(b, a)
+
+
 def hasAnySavedProgresses(savedProgresses):
     return True if savedProgresses else False
 
@@ -207,8 +215,12 @@ def isLinkedSet(eventID):
     return eventID.startswith(LINKEDSET_GROUP_PREFIX) if eventID else False
 
 
+def isPremium(eventID):
+    return eventID.startswith(PREMIUM_GROUP_PREFIX) if eventID else False
+
+
 def isRegularQuest(eventID):
-    return not (isMarathon(eventID) or isLinkedSet(eventID))
+    return not (isMarathon(eventID) or isLinkedSet(eventID) or isPremium(eventID))
 
 
 def getLocalizedMissionNameForLinkedSet(missionID):

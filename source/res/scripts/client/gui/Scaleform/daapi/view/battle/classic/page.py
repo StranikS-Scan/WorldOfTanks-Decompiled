@@ -81,20 +81,22 @@ class ClassicPage(SharedPage):
             elif self.as_isComponentVisibleS(BATTLE_VIEW_ALIASES.RADIAL_MENU):
                 return
             if self.as_isComponentVisibleS(self._fullStatsAlias) != isShown:
+                hasTabs = fullStats.hasTabs
                 if isShown:
                     if not self._fsToggling:
                         self._fsToggling.update(self.as_getComponentsVisibilityS())
                     if permanent is not None:
                         self._fsToggling.difference_update(permanent)
-                    if tabIndex is not None:
+                    if hasTabs and tabIndex is not None:
                         fullStats.setActiveTabIndex(tabIndex)
                     self._setComponentsVisibility(visible={self._fullStatsAlias}, hidden=self._fsToggling)
                 else:
                     self._setComponentsVisibility(visible=self._fsToggling, hidden={self._fullStatsAlias})
-                    if tabIndex is not None:
-                        fullStats.setActiveTabIndex(None)
+                    if hasTabs:
+                        if tabIndex is not None:
+                            fullStats.setActiveTabIndex(None)
+                        fullStats.showQuestProgressAnimation()
                     self._fsToggling.clear()
-                    fullStats.showQuestProgressAnimation()
                 if self._isInPostmortem:
                     self.as_setPostmortemTipsVisibleS(not isShown)
                     if self.__hideDamageLogPanel():

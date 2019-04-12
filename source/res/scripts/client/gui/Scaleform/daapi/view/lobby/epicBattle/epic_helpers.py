@@ -11,7 +11,6 @@ from shared_utils import first
 from gui.shared.utils import decorators
 from skeletons.gui.game_control import IEpicBattleMetaGameController
 from skeletons.gui.server_events import IEventsCache
-from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.server_events.awards_formatters import AWARDS_SIZES
 from gui.impl import backport
 from gui.impl.gen import R
@@ -222,13 +221,12 @@ def _getAwardsForTokenBase(tokenBase, level=None, eventsCache=None):
 
 
 def _packBonuses(bonuses, packSP=False):
-    icon = RES_ICONS.getEpicBattlesAwardIcon('80x80', 'abilityToken')
     if packSP:
         result = [{'id': 0,
           'type': ItemPackType.CUSTOM_SUPPLY_POINT,
           'value': 1,
-          'icon': {AWARDS_SIZES.SMALL: icon,
-                   AWARDS_SIZES.BIG: icon}}]
+          'icon': {AWARDS_SIZES.SMALL: backport.image(R.images.gui.maps.icons.epicBattles.awards.c_48x48.abilityToken()),
+                   AWARDS_SIZES.BIG: backport.image(R.images.gui.maps.icons.epicBattles.awards.c_80x80.abilityToken())}}]
     else:
         result = []
     for bonus in bonuses:

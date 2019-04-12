@@ -20,6 +20,12 @@ def isIngameShopEnabled(itemsCache=None):
     return itemsCache.items.stats.isIngameShopEnabled
 
 
+@dependency.replace_none_kwargs(lobbyCtx=ILobbyContext)
+def shouldOpenNewStorage(lobbyCtx=None):
+    isStorageEnabled = lobbyCtx.getServerSettings().isIngameStorageEnabled()
+    return isIngameShopEnabled() and isStorageEnabled
+
+
 @dependency.replace_none_kwargs(itemsCache=IItemsCache)
 def isSubscriptionEnabled(itemsCache=None):
     return itemsCache.items.stats.isSubscriptionEnabled

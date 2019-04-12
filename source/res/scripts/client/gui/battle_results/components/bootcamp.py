@@ -1,26 +1,38 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/battle_results/components/bootcamp.py
 from __future__ import absolute_import
+import logging
+from shared_utils import first
+import BigWorld
+from bootcamp.Bootcamp import g_bootcamp
+from bootcamp.BootcampConstants import BATTLE_STATS_RESULT_FIELDS, BATTLE_STATS_ICONS
+from constants import PREMIUM_ENTITLEMENTS
+from gui import makeHtmlString
+from gui.impl import backport
+from gui.impl.gen import R
 from gui.battle_results.components import base
 from gui.battle_results.components.common import makeRegularFinishResultLabel
 from gui.battle_results.settings import PLAYER_TEAM_RESULT
 from gui.shared.gui_items.Vehicle import getTypeBigIconPath
-from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.BOOTCAMP import BOOTCAMP
-from gui import makeHtmlString
 from helpers.i18n import makeString
 from helpers import dependency
-from bootcamp.Bootcamp import g_bootcamp
-from bootcamp.BootcampConstants import BATTLE_STATS_RESULT_FIELDS, BATTLE_STATS_ICONS
 from skeletons.gui.game_control import IBootcampController
-from shared_utils import first
-import BigWorld
+_logger = logging.getLogger(__name__)
 _BG_FOLDER_PATH = '../maps/icons/bootcamp/battle_result/background/'
 _BG_IMAGE_FORMATS = {PLAYER_TEAM_RESULT.WIN: 'bcVictoryBg_{0}.png',
  PLAYER_TEAM_RESULT.DEFEAT: 'bcDefeat.png',
  PLAYER_TEAM_RESULT.DRAW: 'bcDraw.png'}
 _STAT_ICON_PATH = '../maps/icons/bootcamp/battle_result/{0}.png'
 _STAT_ICON_TOOLTIP_PATH = '../maps/icons/bootcamp/battle_result/tooltip/{0}.png'
+_PREMIUM_RESOURCES = {PREMIUM_ENTITLEMENTS.BASIC: {'icon': backport.image(R.images.gui.maps.icons.bootcamp.rewards.bcPremium()),
+                              'iconTooltip': backport.image(R.images.gui.maps.icons.bootcamp.rewards.tooltips.bcPremium()),
+                              'label': backport.text(R.strings.bootcamp.result.award.premium.label()),
+                              'description': backport.text(R.strings.bootcamp.result.award.premium.text())},
+ PREMIUM_ENTITLEMENTS.PLUS: {'icon': backport.image(R.images.gui.maps.icons.bootcamp.rewards.bcPremiumPlus()),
+                             'iconTooltip': backport.image(R.images.gui.maps.icons.bootcamp.rewards.tooltips.bcPremiumPlus()),
+                             'label': backport.text(R.strings.bootcamp.result.award.premiumPlus.label()),
+                             'description': backport.text(R.strings.bootcamp.result.award.premiumPlus.text())}}
 
 class BackgroundItem(base.StatsItem):
     __slots__ = ()
@@ -51,11 +63,15 @@ class UnlocksAndMedalsBlock(base.StatsBlock):
         lastLessonNum = g_bootcamp.getContextIntParameter('lastLessonNum')
         showPremium = lessonNum == lastLessonNum and bootcampController.needAwarding()
         if showPremium:
-            self.addNextComponent(base.DirectStatsItem('', {'id': 'premium',
-             'label': makeString(BOOTCAMP.RESULT_AWARD_PREMIUM_LABEL),
-             'description': makeString(BOOTCAMP.RESULT_AWARD_PREMIUM_TEXT),
-             'icon': RES_ICONS.MAPS_ICONS_BOOTCAMP_REWARDS_BCPREMIUM,
-             'iconTooltip': RES_ICONS.MAPS_ICONS_BOOTCAMP_REWARDS_TOOLTIPS_BCPREMIUM}))
+            premiumType = g_bootcamp.getPremiumType(lessonNum)
+            if premiumType not in _PREMIUM_RESOURCES:
+                _logger.error('Premium type %s is not supported or it is not in the bonuses')
+                return
+            self.addNextComponent(base.DirectStatsItem('', {'id': premiumType,
+             'label': _PREMIUM_RESOURCES[premiumType]['label'],
+             'description': _PREMIUM_RESOURCES[premiumType]['description'],
+             'icon': _PREMIUM_RESOURCES[premiumType]['icon'],
+             'iconTooltip': _PREMIUM_RESOURCES[premiumType]['iconTooltip']}))
 
 
 class HasUnlocksFlag(base.StatsItem):

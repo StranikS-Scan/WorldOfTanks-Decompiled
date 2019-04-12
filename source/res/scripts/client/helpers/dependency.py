@@ -3,8 +3,10 @@
 import functools
 import inspect
 import logging
+import typing
 from ids_generators import SequenceIDGenerator
 from soft_exception import SoftException
+InterfaceType = typing.TypeVar('InterfaceType')
 _logger = logging.getLogger(__name__)
 _logger.addHandler(logging.NullHandler())
 _g_manager = None

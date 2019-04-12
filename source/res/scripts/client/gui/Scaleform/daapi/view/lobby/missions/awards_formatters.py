@@ -14,7 +14,7 @@ _OPERATION_AWARDS_COUNT = 3
 class CurtailingAwardsComposer(QuestsBonusComposer):
 
     def __init__(self, displayedAwardsCount, awardsFormatter=None):
-        self._displayedAwardsCount = displayedAwardsCount
+        self._displayedRewardsCount = displayedAwardsCount
         super(CurtailingAwardsComposer, self).__init__(awardsFormatter)
 
     def getShortBonusesData(self, bonuses):
@@ -23,7 +23,7 @@ class CurtailingAwardsComposer(QuestsBonusComposer):
     def _packBonuses(self, preformattedBonuses, size):
         bonusCount = len(preformattedBonuses)
         mergedBonuses = []
-        awardsCount = self._displayedAwardsCount
+        awardsCount = self._displayedRewardsCount
         if bonusCount > awardsCount:
             sliceIdx = awardsCount - 1
             displayBonuses = preformattedBonuses[:sliceIdx]
@@ -74,6 +74,15 @@ class CurtailingAwardsComposer(QuestsBonusComposer):
             bonuses.append(shortData)
 
         return bonuses
+
+
+class RawLabelBonusComposer(QuestsBonusComposer):
+    __slots__ = ()
+
+    def _packBonus(self, bonus, size=AWARDS_SIZES.SMALL):
+        res = super(RawLabelBonusComposer, self)._packBonus(bonus, size)
+        res.update({'label': bonus.label})
+        return res
 
 
 class AwardsWindowComposer(CurtailingAwardsComposer):
@@ -130,7 +139,7 @@ class PackRentVehiclesAwardComposer(CurtailingAwardsComposer):
                 packRentVehicles = preformattedBonuses.pop(index)
                 break
 
-        awardsCount = self._displayedAwardsCount
+        awardsCount = self._displayedRewardsCount
         if packRentVehicles:
             awardsCount -= 1
         if bonusCount > awardsCount:
@@ -166,8 +175,8 @@ class LootBoxBonusComposer(BonusNameQuestsBonusComposer):
         alwaysVisibleCount = len(alwaysPreformatedBonuses)
         if alwaysVisibleCount:
             totalCount = alwaysVisibleCount + len(preformattedBonuses)
-            if alwaysVisibleCount and totalCount > self._displayedAwardsCount:
-                insertPos = self._displayedAwardsCount - alwaysVisibleCount - 1
+            if alwaysVisibleCount and totalCount > self._displayedRewardsCount:
+                insertPos = self._displayedRewardsCount - alwaysVisibleCount - 1
                 if insertPos < 0:
                     insertPos = 0
                 preformattedBonuses[insertPos:insertPos] = alwaysPreformatedBonuses
@@ -363,13 +372,13 @@ class MarathonAwardComposer(CurtailingAwardsComposer):
     def _packBonuses(self, preformattedBonuses, size):
         bonusCount = len(preformattedBonuses)
         mergedBonuses = []
-        if self._displayedAwardsCount > bonusCount > self.AWARDS_PER_LINE_COUNT:
+        if self._displayedRewardsCount > bonusCount > self.AWARDS_PER_LINE_COUNT:
             awardsCount = self.AWARDS_PER_LINE_COUNT
             sliceIdx = awardsCount - 1
             displayBonuses = preformattedBonuses[:sliceIdx]
             mergedBonuses = preformattedBonuses[sliceIdx:]
-        elif bonusCount > self.AWARDS_PER_LINE_COUNT and bonusCount > self._displayedAwardsCount:
-            awardsCount = self._displayedAwardsCount
+        elif bonusCount > self.AWARDS_PER_LINE_COUNT and bonusCount > self._displayedRewardsCount:
+            awardsCount = self._displayedRewardsCount
             sliceIdx = awardsCount - 1
             displayBonuses = preformattedBonuses[:sliceIdx]
             mergedBonuses = preformattedBonuses[sliceIdx:]

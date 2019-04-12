@@ -2,8 +2,8 @@
 # Embedded file name: scripts/client/web_client_api/ui/menu.py
 from gui.Scaleform.daapi.view.lobby.user_cm_handlers import CustomUserCMHandler
 from gui.Scaleform.genConsts.CONTEXT_MENU_HANDLER_TYPE import CONTEXT_MENU_HANDLER_TYPE
-from gui.app_loader import g_appLoader
 from helpers import dependency
+from skeletons.gui.app_loader import IAppLoader
 from skeletons.gui.game_control import IBrowserController
 from web_client_api import WebCommandException, w2c, W2CSchema, Field
 
@@ -27,7 +27,8 @@ class UserMenuWebApiMixin(object):
          'customItemsAfterEnd': cmd.custom_items_after_end}
         callback = ctx.get('callback')
         browserView = ctx.get('browser_view')
-        app = g_appLoader.getApp()
+        appLoader = dependency.instance(IAppLoader)
+        app = appLoader.getApp()
         try:
             browserView.as_showContextMenuS(CONTEXT_MENU_HANDLER_TYPE.CUSTOM_USER, context)
             cmHandler = app.contextMenuManager.getCurrentHandler()

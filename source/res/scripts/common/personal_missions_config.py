@@ -1,7 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/personal_missions_config.py
 from personal_missions_constants import PROGRESS_TEMPLATE, CONDITION_ICON, VISIBLE_SCOPE, MULTIPLIER_TYPE
-from personal_missions_constants import ASSIST_TYPES, TARGET_NATIONS, DESCRIPTIONS, DISPLAY_TYPE, CRIT_TYPES
+from personal_missions_constants import TARGET_NATIONS, DESCRIPTIONS, DISPLAY_TYPE, CRIT_TYPES
+from constants import ASSIST_TYPES
 _config = {'regular_1_1_1': {'win': {'type': PROGRESS_TEMPLATE.BINARY,
                            'config': {'isMain': True,
                                       'isAward': True,
@@ -4184,7 +4185,7 @@ _config = {'regular_1_1_1': {'win': {'type': PROGRESS_TEMPLATE.BINARY,
                                         'isAward': True,
                                         'visibleScope': [VISIBLE_SCOPE.HANGAR, VISIBLE_SCOPE.BATTLE],
                                         'params': {'attackReasons': ['fire'],
-                                                   'targetLevelDiff': 1}},
+                                                   'targetLevelGreaterOrEqual': True}},
                              'description': DESCRIPTIONS.REGULAR(iconID=CONDITION_ICON.FIRE)},
                     'damage': {'type': PROGRESS_TEMPLATE.VALUE,
                                'config': {'goal': 3000,

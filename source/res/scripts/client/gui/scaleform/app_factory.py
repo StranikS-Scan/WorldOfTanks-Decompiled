@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/app_factory.py
 import logging
+import weakref
 import BattleReplay
 from constants import ARENA_GUI_TYPE
 from gui import GUI_SETTINGS
@@ -8,19 +9,21 @@ from gui import GUI_CTRL_MODE_FLAG as _CTRL_FLAG
 from gui.Scaleform.battle_entry import BattleEntry
 from gui.Scaleform.daapi.settings import config as sf_config
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
+from gui.Scaleform.waiting_worker import WaitingWorker
 from gui.Scaleform.framework.package_layout import PackageImporter
 from gui.Scaleform.lobby_entry import LobbyEntry
 from gui.Scaleform.managers.windows_stored_data import g_windowsStoredData
-from gui.app_loader import interfaces, settings as app_settings
+from gui.app_loader import settings as app_settings
 from gui.shared import g_eventBus, events, EVENT_BUS_SCOPE
 from helpers import dependency
 from shared_utils import AlwaysValidObject
+from skeletons.gui.app_loader import IAppFactory
 from skeletons.gui.game_control import IBootcampController
 _logger = logging.getLogger(__name__)
 _logger.addHandler(logging.NullHandler())
 _SPACE = app_settings.APP_NAME_SPACE
 
-class NoAppFactory(AlwaysValidObject, interfaces.IAppFactory):
+class NoAppFactory(AlwaysValidObject, IAppFactory):
 
     def createLobby(self):
         _logger.debug('NoAppFactory.createLobby')
@@ -38,8 +41,8 @@ class NoAppFactory(AlwaysValidObject, interfaces.IAppFactory):
         _logger.debug('NoAppFactory.destroyBattle')
 
 
-class AS3_AppFactory(interfaces.IAppFactory):
-    __slots__ = ('__apps', '__packages', '__importer')
+class AS3_AppFactory(IAppFactory):
+    __slots__ = ('__apps', '__packages', '__importer', '__waiting', '__ctrlModeFlags', '__weakref__')
     bootcampCtrl = dependency.descriptor(IBootcampController)
 
     def __init__(self):
@@ -47,9 +50,9 @@ class AS3_AppFactory(interfaces.IAppFactory):
         self.__apps = dict.fromkeys(_SPACE.RANGE)
         self.__packages = dict.fromkeys(_SPACE.RANGE)
         self.__importer = PackageImporter()
-
-    def getPackageImporter(self):
-        return self.__importer
+        self.__waiting = WaitingWorker()
+        self.__waiting.start(weakref.proxy(self))
+        self.__ctrlModeFlags = dict.fromkeys(_SPACE.RANGE, _CTRL_FLAG.CURSOR_DETACHED)
 
     def hasApp(self, appNS):
         return appNS in self.__apps.keys()
@@ -71,11 +74,14 @@ class AS3_AppFactory(interfaces.IAppFactory):
     def getDefBattleApp(self):
         return self.__apps[_SPACE.SF_BATTLE]
 
+    def getWaitingWorker(self):
+        return self.__waiting
+
     def createLobby(self):
         _logger.info('Creating app: %s', _SPACE.SF_LOBBY)
         lobby = self.__apps[_SPACE.SF_LOBBY]
         if lobby is None:
-            lobby = LobbyEntry(_SPACE.SF_LOBBY)
+            lobby = LobbyEntry(_SPACE.SF_LOBBY, self.__ctrlModeFlags[_SPACE.SF_LOBBY])
             self.__packages[_SPACE.SF_LOBBY] = sf_config.LOBBY_PACKAGES
             self.__importer.load(lobby.proxy, sf_config.COMMON_PACKAGES + self.__packages[_SPACE.SF_LOBBY])
             self.__apps[_SPACE.SF_LOBBY] = lobby
@@ -98,6 +104,7 @@ class AS3_AppFactory(interfaces.IAppFactory):
                 lobby.close()
                 self.__importer.unload(self.__packages[_SPACE.SF_LOBBY])
                 self.__apps[_SPACE.SF_LOBBY] = None
+                self.__ctrlModeFlags[_SPACE.SF_LOBBY] = _CTRL_FLAG.CURSOR_DETACHED
         g_windowsStoredData.stop()
         return
 
@@ -122,7 +129,7 @@ class AS3_AppFactory(interfaces.IAppFactory):
         _logger.info('Creating app: %s', _SPACE.SF_BATTLE)
         battle = self.__apps[_SPACE.SF_BATTLE]
         if not battle:
-            battle = BattleEntry(_SPACE.SF_BATTLE)
+            battle = BattleEntry(_SPACE.SF_BATTLE, self.__ctrlModeFlags[_SPACE.SF_BATTLE])
             packages = sf_config.BATTLE_PACKAGES
             if arenaGuiType in sf_config.BATTLE_PACKAGES_BY_ARENA_TYPE:
                 packages += sf_config.BATTLE_PACKAGES_BY_ARENA_TYPE[arenaGuiType]
@@ -134,7 +141,7 @@ class AS3_AppFactory(interfaces.IAppFactory):
         BattleReplay.g_replayCtrl.enableTimeWrap()
         BattleReplay.g_replayCtrl.loadServerSettings()
         battle.active(True)
-        battle.component.visible = False
+        battle.setVisible(False)
         battle.detachCursor()
 
     def destroyBattle(self):
@@ -145,6 +152,7 @@ class AS3_AppFactory(interfaces.IAppFactory):
                 battle.close()
             self.__importer.unload(self.__packages[_SPACE.SF_BATTLE])
             self.__apps[_SPACE.SF_BATTLE] = None
+            self.__ctrlModeFlags[_SPACE.SF_BATTLE] = _CTRL_FLAG.CURSOR_DETACHED
         return
 
     def attachCursor(self, appNS, flags=_CTRL_FLAG.GUI_ENABLED):
@@ -152,6 +160,7 @@ class AS3_AppFactory(interfaces.IAppFactory):
             return
         else:
             _logger.debug('Attach cursor: %s', appNS)
+            self.__ctrlModeFlags[appNS] = flags
             app = self.__apps[appNS]
             if app is not None:
                 app.attachCursor(flags=flags)
@@ -164,6 +173,7 @@ class AS3_AppFactory(interfaces.IAppFactory):
             return
         else:
             _logger.debug('Detach cursor: %s', appNS)
+            self.__ctrlModeFlags[appNS] = _CTRL_FLAG.CURSOR_DETACHED
             app = self.__apps[appNS]
             if app is not None:
                 app.detachCursor()
@@ -175,7 +185,8 @@ class AS3_AppFactory(interfaces.IAppFactory):
         if appNS not in self.__apps:
             return
         else:
-            _logger.debug('Attach cursor: %s', appNS)
+            _logger.debug('Sync cursor: %s', appNS)
+            self.__ctrlModeFlags[appNS] = flags
             app = self.__apps[appNS]
             if app is not None:
                 app.syncCursor(flags=flags)
@@ -191,6 +202,9 @@ class AS3_AppFactory(interfaces.IAppFactory):
                 entry.close()
             self.__apps[appNS] = None
 
+        if self.__waiting is not None:
+            self.__waiting.stop()
+            self.__waiting = None
         self.__packages = dict.fromkeys(_SPACE.RANGE)
         g_windowsStoredData.stop()
         if self.__importer is not None:
@@ -254,7 +268,7 @@ class AS3_AppFactory(interfaces.IAppFactory):
     def _setActive(self, appNS, isActive):
         app = self.__apps[appNS]
         if app:
-            app.component.visible = isActive
+            app.setVisible(isActive)
             app.active(isActive)
 
     @staticmethod

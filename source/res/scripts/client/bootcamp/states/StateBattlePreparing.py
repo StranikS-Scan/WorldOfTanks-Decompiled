@@ -13,19 +13,21 @@ from bootcamp.aop.battle_preparing import weave
 from debug_utils_bootcamp import LOG_DEBUG_DEV_BOOTCAMP
 from gui.prb_control.events_dispatcher import g_eventDispatcher
 from helpers import dependency, aop
+from skeletons.gui.app_loader import IAppLoader, GuiGlobalSpaceID
 from skeletons.gui.sounds import ISoundsController
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.shared import events, g_eventBus, EVENT_BUS_SCOPE
 from gui.sounds.filters import WWISEFilteredBootcampArenaFilter as BCFilter
 from bootcamp.BootcampLobbyHintsConfig import g_bootcampHintsConfig
 from gui import GUI_CTRL_MODE_FLAG as _CTRL_FLAG
-from gui.app_loader import g_appLoader, settings as app_settings
+from gui.app_loader import settings as app_settings
 from gui.Scaleform.daapi.view.bootcamp.BCBattleLoadingSpaceEnv import BCBattleLoadingSpaceEnv
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from soft_exception import SoftException
 
 class StateBattlePreparing(AbstractState):
     soundController = dependency.instance(ISoundsController)
+    appLoader = dependency.descriptor(IAppLoader)
 
     def __init__(self, lessonNum, account):
         super(StateBattlePreparing, self).__init__(STATE.BATTLE_PREPARING)
@@ -56,7 +58,7 @@ class StateBattlePreparing(AbstractState):
         if self.isVideoPlayingLesson:
             self.__isIntroVideoFinished = False
             BigWorld.delaySpaceLoad(True)
-            self.__oldSpaceEnv = self.soundController.setEnvForSpace(app_settings.GUI_GLOBAL_SPACE_ID.BATTLE_LOADING, BCBattleLoadingSpaceEnv)
+            self.__oldSpaceEnv = self.soundController.setEnvForSpace(GuiGlobalSpaceID.BATTLE_LOADING, BCBattleLoadingSpaceEnv)
 
     def deactivate(self):
         LOG_DEBUG_DEV_BOOTCAMP('StateBattlePreparing.deactivate')
@@ -66,7 +68,7 @@ class StateBattlePreparing(AbstractState):
         g_bootcampEvents.onBootcampGoNext -= self.__onBootcampGoNext
         g_bootcampEvents.onArenaLoadCompleted -= self.onArenaLoadCompleted
         if self.isVideoPlayingLesson and self.__oldSpaceEnv is not None:
-            self.soundController.setEnvForSpace(app_settings.GUI_GLOBAL_SPACE_ID.BATTLE_LOADING, self.__oldSpaceEnv)
+            self.soundController.setEnvForSpace(GuiGlobalSpaceID.BATTLE_LOADING, self.__oldSpaceEnv)
         self.onAvatarBecomeNonPlayer()
         self.__weaver.clear()
         return
@@ -162,7 +164,7 @@ class StateBattlePreparing(AbstractState):
     def __onBootcampGoNext(self):
         LOG_DEBUG_DEV_BOOTCAMP('__onBootcampGoNext')
         BigWorld.player().onSpaceLoaded()
-        app = g_appLoader.getDefBattleApp()
+        app = self.appLoader.getDefBattleApp()
         app.cursorMgr.resetMousePosition()
 
     def __onBCIntroVideoStop(self):
@@ -181,5 +183,5 @@ class StateBattlePreparing(AbstractState):
         if self.__prereqs is not None:
             BigWorld.player().onEnterWorld(self.__prereqs)
             self.__prereqs = None
-        g_appLoader.attachCursor(app_settings.APP_NAME_SPACE.SF_BATTLE, _CTRL_FLAG.GUI_ENABLED)
+        self.appLoader.attachCursor(app_settings.APP_NAME_SPACE.SF_BATTLE, _CTRL_FLAG.GUI_ENABLED)
         return

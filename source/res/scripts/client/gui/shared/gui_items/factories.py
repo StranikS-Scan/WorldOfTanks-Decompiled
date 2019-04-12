@@ -78,11 +78,11 @@ class GuiItemFactory(IGuiItemsFactory):
     def createTankmanDossier(self, tmanDescr, tankmanDossierDescr, extDossier, playerDBID=None, currentVehicleItem=None):
         return TankmanDossier(tmanDescr, tankmanDossierDescr, extDossier, playerDBID, currentVehicleItem)
 
-    def createAccountDossier(self, dossier, playerDBID=None, rated7x7Seasons=None, rankedCurrentSeason=None):
-        return AccountDossier(dossier, playerDBID, rated7x7Seasons, rankedCurrentSeason)
+    def createAccountDossier(self, dossier, playerDBID=None, rated7x7Seasons=None):
+        return AccountDossier(dossier, playerDBID, rated7x7Seasons)
 
-    def createVehicleDossier(self, dossier, vehTypeCompDescr, playerDBID=None, rankedCurrentSeason=None):
-        return VehicleDossier(dossier, vehTypeCompDescr, playerDBID, rankedCurrentSeason)
+    def createVehicleDossier(self, dossier, vehTypeCompDescr, playerDBID=None):
+        return VehicleDossier(dossier, vehTypeCompDescr, playerDBID)
 
     def createBadge(self, descriptor, proxy=None):
         return Badge(descriptor, proxy)

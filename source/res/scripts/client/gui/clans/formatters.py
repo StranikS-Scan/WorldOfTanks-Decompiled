@@ -3,10 +3,12 @@
 import BigWorld
 from client_request_lib.exceptions import ResponseCodes
 from gui import makeHtmlString
+from gui.impl import backport
+from gui.impl.gen import R
 from gui.shared.formatters.text_styles import standard as standard_text_style, alert as alert_text_style
 from helpers.i18n import doesTextExist, makeString
 from gui.wgcg.settings import WebRequestDataType as REQUEST_TYPE
-from gui.clans.settings import CLAN_MEMBERS
+from gui.clans.settings import getClanRoleName
 ERROR_SYS_MSG_TPL = '#system_messages:clans/request/errors/%s'
 DUMMY_UNAVAILABLE_DATA = '--'
 DUMMY_NULL_DATA = '--'
@@ -80,11 +82,13 @@ def getRequestUserName(rqTypeID):
 
 
 def getClanRoleString(position):
-    return makeString('#menu:profile/header/clan/position/%s' % CLAN_MEMBERS[position]) if position in CLAN_MEMBERS else ''
+    roleStr = getClanRoleName(position)
+    return backport.text(R.strings.menu.profile.header.clan.position.dyn(roleStr)()) if roleStr is not None else ''
 
 
 def getClanRoleIcon(role):
-    return '../maps/icons/clans/roles/%s.png' % CLAN_MEMBERS[role] if role in CLAN_MEMBERS else ''
+    roleStr = getClanRoleName(role)
+    return '../maps/icons/clans/roles/%s.png' % roleStr if roleStr is not None else ''
 
 
 def getClanAbbrevString(clanAbbrev):

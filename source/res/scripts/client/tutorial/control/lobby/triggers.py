@@ -218,7 +218,7 @@ class PremiumPeriodChangedTrigger(Trigger):
 
     def run(self):
         if not self.isSubscribed:
-            g_clientUpdateManager.addCallbacks({'account.premiumExpiryTime': self.__onPremiumExpiryTimeChanged})
+            g_clientUpdateManager.addCallbacks({'account.activePremiumExpiryTime': self.__onPremiumExpiryTimeChanged})
             self.isSubscribed = True
 
     def clear(self):

@@ -14,8 +14,6 @@ class OvertimeComponent(ClientArenaComponent, CallbackDelayer):
     def __init__(self, componentSystem):
         ClientArenaComponent.__init__(self, componentSystem)
         CallbackDelayer.__init__(self)
-        self.addSyncDataCallback(ARENA_SYNC_OBJECTS.OVERTIME, 'duration', self.__onDurationUpdated)
-        self.addSyncDataCallback(ARENA_SYNC_OBJECTS.OVERTIME, 'endTime', self.__onEndTimeUpdated)
         self.__duration = None
         self.__endTime = None
         self.__isActive = False
@@ -24,11 +22,19 @@ class OvertimeComponent(ClientArenaComponent, CallbackDelayer):
         self.onOvertimeOver = Event.Event(self._eventManager)
         return
 
+    def activate(self):
+        super(OvertimeComponent, self).activate()
+        self.addSyncDataCallback(ARENA_SYNC_OBJECTS.OVERTIME, 'duration', self.__onDurationUpdated)
+        self.addSyncDataCallback(ARENA_SYNC_OBJECTS.OVERTIME, 'endTime', self.__onEndTimeUpdated)
+
+    def deactivate(self):
+        super(OvertimeComponent, self).deactivate()
+        self.removeSyncDataCallback(ARENA_SYNC_OBJECTS.OVERTIME, 'duration', self.__onDurationUpdated)
+        self.removeSyncDataCallback(ARENA_SYNC_OBJECTS.OVERTIME, 'endTime', self.__onEndTimeUpdated)
+
     def destroy(self):
         ClientArenaComponent.destroy(self)
         CallbackDelayer.destroy(self)
-        self.removeSyncDataCallback(ARENA_SYNC_OBJECTS.OVERTIME, 'duration', self.__onDurationUpdated)
-        self.removeSyncDataCallback(ARENA_SYNC_OBJECTS.OVERTIME, 'endTime', self.__onEndTimeUpdated)
 
     def __onDurationUpdated(self, duration):
         self.__duration = duration

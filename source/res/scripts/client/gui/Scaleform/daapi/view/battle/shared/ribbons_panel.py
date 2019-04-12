@@ -1,20 +1,22 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/shared/ribbons_panel.py
+import logging
 import BigWorld
 from account_helpers.settings_core.settings_constants import BATTLE_EVENTS, GRAPHICS
-from debug_utils import LOG_DEBUG_DEV, LOG_UNEXPECTED
+from gui.battle_control.battle_constants import BonusRibbonLabel as _BRL
+from gui.impl import backport
+from gui.impl.gen import R
 from gui.Scaleform.daapi.view.battle.shared import ribbons_aggregator
 from gui.Scaleform.daapi.view.meta.RibbonsPanelMeta import RibbonsPanelMeta
 from gui.Scaleform.genConsts.BATTLE_EFFICIENCY_TYPES import BATTLE_EFFICIENCY_TYPES as _BET
-from gui.Scaleform.locale.INGAME_GUI import INGAME_GUI
 from gui.battle_control import avatar_getter
 from gui.shared import g_eventBus, EVENT_BUS_SCOPE
 from gui.shared.events import GameEvent
 from helpers import dependency
-from helpers import i18n
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.battle_session import IBattleSessionProvider
 from gui.Scaleform.daapi.view.battle.shared.ribbons_aggregator import DAMAGE_SOURCE
+_logger = logging.getLogger(__name__)
 _RIBBON_SOUNDS_ENABLED = True
 _SHOW_RIBBON_SOUND_NAME = 'show_ribbon'
 _HIDE_RIBBON_SOUND_NAME = 'hide_ribbon'
@@ -53,7 +55,7 @@ def _getVehicleData(arenaDP, vehArenaID):
 
 
 def _formatCounter(counter):
-    return i18n.makeString(INGAME_GUI.COUNTRIBBONS_MULTISEPARATOR, multiplier=counter)
+    return backport.text(R.strings.ingame_gui.countRibbons.multiSeparator(), multiplier=counter)
 
 
 def _baseRibbonFormatter(ribbon, arenaDP, updater):
@@ -62,17 +64,18 @@ def _baseRibbonFormatter(ribbon, arenaDP, updater):
 
 def _enemyDetectionRibbonFormatter(ribbon, arenaDP, updater):
     count = ribbon.getCount()
+    bonusRibbonLabelID = _BRL.BASE_BONUS_LABEL if ribbon.isRoleBonus() else _BRL.NO_BONUS
     if count > 1:
-        updater(ribbonID=ribbon.getID(), ribbonType=ribbon.getType(), leftFieldStr=_formatCounter(count))
+        updater(ribbonID=ribbon.getID(), ribbonType=ribbon.getType(), leftFieldStr=_formatCounter(count), bonusRibbonLabelID=bonusRibbonLabelID)
     else:
         vIDs = ribbon.getVehIDs()
         if vIDs:
             vehicleName, vehicleClassTag = _getVehicleData(arenaDP, vIDs[0])
         else:
-            LOG_UNEXPECTED('Enemy detection ribbon has no vehicle ID!', ribbon)
+            _logger.error('Enemy detection ribbon has no vehicle ID! %s', ribbon)
             vehicleName = ''
             vehicleClassTag = ''
-        updater(ribbonID=ribbon.getID(), ribbonType=ribbon.getType(), vehName=vehicleName, vehType=vehicleClassTag)
+        updater(ribbonID=ribbon.getID(), ribbonType=ribbon.getType(), vehName=vehicleName, vehType=vehicleClassTag, bonusRibbonLabelID=bonusRibbonLabelID)
 
 
 def _singleVehRibbonFormatter(ribbon, arenaDP, updater):
@@ -80,7 +83,8 @@ def _singleVehRibbonFormatter(ribbon, arenaDP, updater):
         vehicleName, vehicleClassTag = _getVehicleData(arenaDP, ribbon.getVehicleID())
     else:
         vehicleName, vehicleClassTag = '', ribbon.getDamageSource()
-    updater(ribbonID=ribbon.getID(), ribbonType=ribbon.getType(), vehName=vehicleName, vehType=vehicleClassTag, leftFieldStr=BigWorld.wg_getIntegralFormat(ribbon.getExtraValue()))
+    bonusRibbonLabelID = _BRL.BASE_BONUS_LABEL if ribbon.isRoleBonus() else _BRL.NO_BONUS
+    updater(ribbonID=ribbon.getID(), ribbonType=ribbon.getType(), vehName=vehicleName, vehType=vehicleClassTag, leftFieldStr=BigWorld.wg_getIntegralFormat(ribbon.getExtraValue()), bonusRibbonLabelID=bonusRibbonLabelID)
 
 
 def _receivedRamRibbonFormatter(ribbon, arenaDP, updater):
@@ -88,7 +92,8 @@ def _receivedRamRibbonFormatter(ribbon, arenaDP, updater):
     if arenaDP.getPlayerVehicleID() == ribbon.getVehicleID():
         vehicleName = ''
         vehicleClassTag = ''
-    updater(ribbonID=ribbon.getID(), ribbonType=ribbon.getType(), vehName=vehicleName, vehType=vehicleClassTag, leftFieldStr=BigWorld.wg_getIntegralFormat(ribbon.getExtraValue()))
+    bonusRibbonLabelID = _BRL.BASE_BONUS_LABEL if ribbon.isRoleBonus() else _BRL.NO_BONUS
+    updater(ribbonID=ribbon.getID(), ribbonType=ribbon.getType(), vehName=vehicleName, vehType=vehicleClassTag, leftFieldStr=BigWorld.wg_getIntegralFormat(ribbon.getExtraValue()), bonusRibbonLabelID=bonusRibbonLabelID)
 
 
 def _criticalHitRibbonFormatter(ribbon, arenaDP, updater):
@@ -110,7 +115,8 @@ def _killRibbonFormatter(ribbon, arenaDP, updater):
     vehicleName, vehicleClassTag = _getVehicleData(arenaDP, ribbon.getVehicleID())
     value = ribbon.getExtraValue()
     leftFieldStr = BigWorld.wg_getIntegralFormat(value) if value else ''
-    updater(ribbonID=ribbon.getID(), ribbonType=ribbon.getType(), vehName=vehicleName, vehType=vehicleClassTag, leftFieldStr=leftFieldStr)
+    bonusRibbonLabelID = _BRL.BASE_BONUS_LABEL if ribbon.isRoleBonus() else _BRL.NO_BONUS
+    updater(ribbonID=ribbon.getID(), ribbonType=ribbon.getType(), vehName=vehicleName, vehType=vehicleClassTag, leftFieldStr=leftFieldStr, bonusRibbonLabelID=bonusRibbonLabelID)
 
 
 def _epicEventRibbonFormatter(ribbon, arenaDP, updater):
@@ -171,7 +177,7 @@ class BattleRibbonsPanel(RibbonsPanelMeta):
 
     def onHide(self, ribbonID):
         ribbon = self.__ribbonsAggregator.getRibbon(ribbonID)
-        LOG_DEBUG_DEV('RIBBON PANEL: onHide: ribbonID={}, ribbon="{}"'.format(ribbonID, ribbon))
+        _logger.debug('RIBBON PANEL: onHide: ribbonID=%s, ribbon="%s"', ribbonID, ribbon)
         if ribbon is not None:
             self.__ribbonsAggregator.resetRibbonData(ribbonID)
             self.__playSound(_HIDE_RIBBON_SOUND_NAME)
@@ -219,13 +225,13 @@ class BattleRibbonsPanel(RibbonsPanelMeta):
             else:
                 soundNotifications.play(eventName)
 
-    def _addRibbon(self, ribbonID, ribbonType='', leftFieldStr='', vehName='', vehType='', rightFieldStr=''):
-        LOG_DEBUG_DEV('RIBBON PANEL: as_addBattleEfficiencyEventS: ribbonID={}, ribbonType="{}", ", leftFieldStr="{}, vehName="{}", vehType="{}", rightFieldStr="{}".'.format(ribbonID, ribbonType, leftFieldStr, vehName, vehType, rightFieldStr))
-        self.as_addBattleEfficiencyEventS(ribbonType, ribbonID, leftFieldStr, vehName, vehType, rightFieldStr)
+    def _addRibbon(self, ribbonID, ribbonType='', leftFieldStr='', vehName='', vehType='', rightFieldStr='', bonusRibbonLabelID=_BRL.NO_BONUS):
+        _logger.debug('RIBBON PANEL: as_addBattleEfficiencyEventS: ribbonID=%s, ribbonType="%s", ", leftFieldStr="%s, vehName="%s", vehType="%s", rightFieldStr="%s", ribbonBonusLabelID=%s.', ribbonID, ribbonType, leftFieldStr, vehName, vehType, rightFieldStr, bonusRibbonLabelID)
+        self.as_addBattleEfficiencyEventS(ribbonType, ribbonID, leftFieldStr, vehName, vehType, rightFieldStr, bonusRibbonLabelID)
 
-    def _updateRibbon(self, ribbonID, ribbonType='', leftFieldStr='', vehName='', vehType='', rightFieldStr=''):
-        LOG_DEBUG_DEV('RIBBON PANEL: as_updateBattleEfficiencyEventS: ribbonID={}, ribbonType="{}", ", leftFieldStr="{}, vehName="{}", vehType="{}", rightFieldStr="{}".'.format(ribbonID, ribbonType, leftFieldStr, vehName, vehType, rightFieldStr))
-        self.as_updateBattleEfficiencyEventS(ribbonType, ribbonID, leftFieldStr, vehName, vehType, rightFieldStr)
+    def _updateRibbon(self, ribbonID, ribbonType='', leftFieldStr='', vehName='', vehType='', rightFieldStr='', bonusRibbonLabelID=_BRL.NO_BONUS):
+        _logger.debug('RIBBON PANEL: as_updateBattleEfficiencyEventS: ribbonID=%s, ribbonType="%s", ", leftFieldStr="%s, vehName="%s", vehType="%s", rightFieldStr="%s", ribbonBonusLabelID=%s.', ribbonID, ribbonType, leftFieldStr, vehName, vehType, rightFieldStr, bonusRibbonLabelID)
+        self.as_updateBattleEfficiencyEventS(ribbonType, ribbonID, leftFieldStr, vehName, vehType, rightFieldStr, bonusRibbonLabelID)
 
     def __onRibbonAdded(self, ribbon):
         self.__invalidateRibbon(ribbon, self._addRibbon)
@@ -239,7 +245,7 @@ class BattleRibbonsPanel(RibbonsPanelMeta):
                 updater = _RIBBONS_FMTS[ribbon.getType()]
                 updater(ribbon, self.__arenaDP, method)
             else:
-                LOG_UNEXPECTED('Could not find formatter for ribbon ', ribbon)
+                _logger.error('Could not find formatter for ribbon %s', ribbon)
         else:
             self.__ribbonsAggregator.resetRibbonData(ribbon.getID())
 
@@ -277,29 +283,29 @@ class BattleRibbonsPanel(RibbonsPanelMeta):
         return self.__userPreferences.get(ribbon.getType(), True)
 
     def __setupView(self):
-        self.as_setupS([[_BET.ARMOR, i18n.makeString(INGAME_GUI.efficiencyribbons(_BET.ARMOR))],
-         [_BET.DEFENCE, i18n.makeString(INGAME_GUI.efficiencyribbons(_BET.DEFENCE))],
-         [_BET.DAMAGE, i18n.makeString(INGAME_GUI.efficiencyribbons(_BET.DAMAGE))],
-         [_BET.ASSIST_SPOT, i18n.makeString(INGAME_GUI.efficiencyribbons(_BET.ASSIST_SPOT))],
-         [_BET.ASSIST_TRACK, i18n.makeString(INGAME_GUI.efficiencyribbons(_BET.ASSIST_TRACK))],
-         [_BET.BURN, i18n.makeString(INGAME_GUI.efficiencyribbons(_BET.BURN))],
-         [_BET.CAPTURE, i18n.makeString(INGAME_GUI.efficiencyribbons(_BET.CAPTURE))],
-         [_BET.DESTRUCTION, i18n.makeString(INGAME_GUI.efficiencyribbons(_BET.DESTRUCTION))],
-         [_BET.DETECTION, i18n.makeString(INGAME_GUI.efficiencyribbons(_BET.DETECTION))],
-         [_BET.RAM, i18n.makeString(INGAME_GUI.efficiencyribbons(_BET.RAM))],
-         [_BET.CRITS, i18n.makeString(INGAME_GUI.efficiencyribbons(_BET.CRITS))],
-         [_BET.WORLD_COLLISION, i18n.makeString(INGAME_GUI.efficiencyribbons(_BET.WORLD_COLLISION))],
-         [_BET.RECEIVED_CRITS, i18n.makeString(INGAME_GUI.efficiencyribbons(_BET.RECEIVED_CRITS))],
-         [_BET.RECEIVED_DAMAGE, i18n.makeString(INGAME_GUI.efficiencyribbons(_BET.RECEIVED_DAMAGE))],
-         [_BET.RECEIVED_BURN, i18n.makeString(INGAME_GUI.efficiencyribbons(_BET.RECEIVED_BURN))],
-         [_BET.RECEIVED_RAM, i18n.makeString(INGAME_GUI.efficiencyribbons(_BET.RECEIVED_RAM))],
-         [_BET.RECEIVED_WORLD_COLLISION, i18n.makeString(INGAME_GUI.efficiencyribbons(_BET.RECEIVED_WORLD_COLLISION))],
-         [_BET.STUN, i18n.makeString(INGAME_GUI.efficiencyribbons(_BET.STUN))],
-         [_BET.VEHICLE_RECOVERY, i18n.makeString(INGAME_GUI.efficiencyribbons(_BET.VEHICLE_RECOVERY))],
-         [_BET.ENEMY_SECTOR_CAPTURED, i18n.makeString(INGAME_GUI.efficiencyribbons(_BET.ENEMY_SECTOR_CAPTURED))],
-         [_BET.DESTRUCTIBLE_DAMAGED, i18n.makeString(INGAME_GUI.efficiencyribbons(_BET.DESTRUCTIBLE_DAMAGED))],
-         [_BET.DESTRUCTIBLE_DESTROYED, i18n.makeString(INGAME_GUI.efficiencyribbons(_BET.DESTRUCTIBLE_DESTROYED))],
-         [_BET.DESTRUCTIBLES_DEFENDED, i18n.makeString(INGAME_GUI.efficiencyribbons(_BET.DESTRUCTIBLES_DEFENDED))],
-         [_BET.DEFENDER_BONUS, i18n.makeString(INGAME_GUI.efficiencyribbons(_BET.DEFENDER_BONUS))],
-         [_BET.BASE_CAPTURE_BLOCKED, i18n.makeString(INGAME_GUI.efficiencyribbons(_BET.DEFENCE))],
-         [_BET.ASSIST_BY_ABILITY, i18n.makeString(INGAME_GUI.efficiencyribbons(_BET.ASSIST_BY_ABILITY))]], self.__isExtendedAnim, self.__enabled, self.__isWithRibbonName, self.__isWithVehName)
+        self.as_setupS([[_BET.ARMOR, backport.text(R.strings.ingame_gui.efficiencyRibbons.armor())],
+         [_BET.DEFENCE, backport.text(R.strings.ingame_gui.efficiencyRibbons.defence())],
+         [_BET.DAMAGE, backport.text(R.strings.ingame_gui.efficiencyRibbons.damage())],
+         [_BET.ASSIST_SPOT, backport.text(R.strings.ingame_gui.efficiencyRibbons.assistSpot())],
+         [_BET.ASSIST_TRACK, backport.text(R.strings.ingame_gui.efficiencyRibbons.assistTrack())],
+         [_BET.BURN, backport.text(R.strings.ingame_gui.efficiencyRibbons.burn())],
+         [_BET.CAPTURE, backport.text(R.strings.ingame_gui.efficiencyRibbons.capture())],
+         [_BET.DESTRUCTION, backport.text(R.strings.ingame_gui.efficiencyRibbons.kill())],
+         [_BET.DETECTION, backport.text(R.strings.ingame_gui.efficiencyRibbons.spotted())],
+         [_BET.RAM, backport.text(R.strings.ingame_gui.efficiencyRibbons.ram())],
+         [_BET.CRITS, backport.text(R.strings.ingame_gui.efficiencyRibbons.crits())],
+         [_BET.WORLD_COLLISION, backport.text(R.strings.ingame_gui.efficiencyRibbons.worldCollision())],
+         [_BET.RECEIVED_CRITS, backport.text(R.strings.ingame_gui.efficiencyRibbons.receivedCrits())],
+         [_BET.RECEIVED_DAMAGE, backport.text(R.strings.ingame_gui.efficiencyRibbons.receivedDamage())],
+         [_BET.RECEIVED_BURN, backport.text(R.strings.ingame_gui.efficiencyRibbons.receivedBurn())],
+         [_BET.RECEIVED_RAM, backport.text(R.strings.ingame_gui.efficiencyRibbons.receivedRam())],
+         [_BET.RECEIVED_WORLD_COLLISION, backport.text(R.strings.ingame_gui.efficiencyRibbons.receivedWorldCollision())],
+         [_BET.STUN, backport.text(R.strings.ingame_gui.efficiencyRibbons.stun())],
+         [_BET.VEHICLE_RECOVERY, backport.text(R.strings.ingame_gui.efficiencyRibbons.vehicleRecovery())],
+         [_BET.ENEMY_SECTOR_CAPTURED, backport.text(R.strings.ingame_gui.efficiencyRibbons.enemySectorCaptured())],
+         [_BET.DESTRUCTIBLE_DAMAGED, backport.text(R.strings.ingame_gui.efficiencyRibbons.destructibleDamaged())],
+         [_BET.DESTRUCTIBLE_DESTROYED, backport.text(R.strings.ingame_gui.efficiencyRibbons.destructibleDestroyed())],
+         [_BET.DESTRUCTIBLES_DEFENDED, backport.text(R.strings.ingame_gui.efficiencyRibbons.destructiblesDefended())],
+         [_BET.DEFENDER_BONUS, backport.text(R.strings.ingame_gui.efficiencyRibbons.defenderBonus())],
+         [_BET.BASE_CAPTURE_BLOCKED, backport.text(R.strings.ingame_gui.efficiencyRibbons.defence())],
+         [_BET.ASSIST_BY_ABILITY, backport.text(R.strings.ingame_gui.efficiencyRibbons.assistByAbility())]], self.__isExtendedAnim, self.__enabled, self.__isWithRibbonName, self.__isWithVehName, [backport.text(R.strings.ingame_gui.efficiencyRibbons.bonusRibbon())])

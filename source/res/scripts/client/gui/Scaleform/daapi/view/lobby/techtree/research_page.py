@@ -255,12 +255,16 @@ class Research(ResearchMeta):
         result = self.__getBackBtnData()
         result['isPremiumLayout'] = root.isPremium
         if root.isPremium:
-            result['benefit1IconSrc'] = RES_SHOP.MAPS_SHOP_KPI_STAR_ICON_BENEFITS
-            result['benefit1LabelStr'] = text_styles.concatStylesToMultiLine(text_styles.highTitle(VEHICLE_PREVIEW.INFOPANEL_PREMIUM_FREEEXPMULTIPLIER), text_styles.main(VEHICLE_PREVIEW.INFOPANEL_PREMIUM_FREEEXPTEXT))
-            result['benefit2IconSrc'] = RES_SHOP.MAPS_SHOP_KPI_MONEY_BENEFITS
-            result['benefit2LabelStr'] = text_styles.concatStylesToMultiLine(text_styles.highTitle(VEHICLE_PREVIEW.INFOPANEL_PREMIUM_CREDITSMULTIPLIER), text_styles.main(VEHICLE_PREVIEW.INFOPANEL_PREMIUM_CREDITSTEXT))
-            result['benefit3IconSrc'] = RES_SHOP.MAPS_SHOP_KPI_CROW_BENEFITS
-            result['benefit3LabelStr'] = text_styles.concatStylesToMultiLine(text_styles.highTitle(VEHICLE_PREVIEW.INFOPANEL_PREMIUM_CREWTRANSFERTITLE), text_styles.main(VEHICLE_PREVIEW.INFOPANEL_PREMIUM_CREWTRANSFERTEXT))
+            benefitIconPattern = 'benefit%dIconSrc'
+            benefitLabelPattern = 'benefit%dLabelStr'
+            benefitData = [(RES_SHOP.MAPS_SHOP_KPI_STAR_ICON_BENEFITS, VEHICLE_PREVIEW.INFOPANEL_PREMIUM_FREEEXPMULTIPLIER, VEHICLE_PREVIEW.INFOPANEL_PREMIUM_FREEEXPTEXT)]
+            if not root.isSpecial:
+                benefitData.append((RES_SHOP.MAPS_SHOP_KPI_MONEY_BENEFITS, VEHICLE_PREVIEW.INFOPANEL_PREMIUM_CREDITSMULTIPLIER, VEHICLE_PREVIEW.INFOPANEL_PREMIUM_CREDITSTEXT))
+            benefitData.append((RES_SHOP.MAPS_SHOP_KPI_CROW_BENEFITS, VEHICLE_PREVIEW.INFOPANEL_PREMIUM_CREWTRANSFERTITLE, VEHICLE_PREVIEW.INFOPANEL_PREMIUM_CREWTRANSFERTEXT))
+            for i, (icon, title, body) in enumerate(benefitData, 1):
+                result[benefitIconPattern % i] = icon
+                result[benefitLabelPattern % i] = text_styles.concatStylesToMultiLine(text_styles.highTitle(title), text_styles.main(body))
+
         return result
 
     def __getBackBtnData(self):

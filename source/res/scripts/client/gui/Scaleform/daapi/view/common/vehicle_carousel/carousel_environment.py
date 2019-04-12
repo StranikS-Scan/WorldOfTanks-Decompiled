@@ -16,7 +16,7 @@ from gui.shared.utils.functions import makeTooltip
 from gui.shared.utils.requesters.ItemsRequester import REQ_CRITERIA
 from helpers import dependency
 from skeletons.account_helpers.settings_core import ISettingsCore
-from skeletons.gui.game_control import IRentalsController, IIGRController, IClanLockController, IEpicBattleMetaGameController
+from skeletons.gui.game_control import IRentalsController, IIGRController, IClanLockController, IEpicBattleMetaGameController, IRankedBattlesController
 from skeletons.gui.shared import IItemsCache
 _CAROUSEL_FILTERS = ('bonus', 'favorite', 'elite', 'premium')
 if constants.IS_KOREA:
@@ -56,6 +56,7 @@ class CarouselEnvironment(CarouselEnvironmentMeta, IGlobalListener, ICarouselEnv
     settingsCore = dependency.descriptor(ISettingsCore)
     itemsCache = dependency.descriptor(IItemsCache)
     epicController = dependency.descriptor(IEpicBattleMetaGameController)
+    rankedController = dependency.descriptor(IRankedBattlesController)
 
     def __init__(self):
         super(CarouselEnvironment, self).__init__()
@@ -152,6 +153,7 @@ class CarouselEnvironment(CarouselEnvironmentMeta, IGlobalListener, ICarouselEnv
         self.itemsCache.onSyncCompleted += self.__onCacheResync
         self._currentVehicle.onChanged += self.__onCurrentVehicleChanged
         self.epicController.onUpdated += self.__updateEpicSeasonRent
+        self.rankedController.onUpdated += self.__updateRankedBonusBattles
         self.settingsCore.onSettingsChanged += self._onCarouselSettingsChange
         g_playerEvents.onVehicleBecomeElite += self.__onVehicleBecomeElite
         g_prbCtrlEvents.onVehicleClientStateChanged += self.__onVehicleClientStateChanged
@@ -167,6 +169,7 @@ class CarouselEnvironment(CarouselEnvironmentMeta, IGlobalListener, ICarouselEnv
         self.itemsCache.onSyncCompleted -= self.__onCacheResync
         self._currentVehicle.onChanged -= self.__onCurrentVehicleChanged
         self.epicController.onUpdated -= self.__updateEpicSeasonRent
+        self.rankedController.onUpdated -= self.__updateRankedBonusBattles
         self.settingsCore.onSettingsChanged -= self._onCarouselSettingsChange
         g_playerEvents.onVehicleBecomeElite -= self.__onVehicleBecomeElite
         g_prbCtrlEvents.onVehicleClientStateChanged -= self.__onVehicleClientStateChanged
@@ -195,6 +198,9 @@ class CarouselEnvironment(CarouselEnvironmentMeta, IGlobalListener, ICarouselEnv
 
     def __updateEpicSeasonRent(self, diff):
         self.updateVehicles(filterCriteria=REQ_CRITERIA.VEHICLE.SEASON_RENT)
+
+    def __updateRankedBonusBattles(self):
+        self.updateVehicles()
 
     def __updateIgrType(self, roomType, xpFactor):
         self.updateVehicles(filterCriteria=REQ_CRITERIA.VEHICLE.IS_PREMIUM_IGR)

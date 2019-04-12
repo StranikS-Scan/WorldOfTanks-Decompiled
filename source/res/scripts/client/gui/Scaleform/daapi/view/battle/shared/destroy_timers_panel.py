@@ -42,9 +42,9 @@ _SECONDARY_TIMERS = (_TIMER_STATES.STUN,
  _TIMER_STATES.INSPIRE_CD)
 _MAX_DISPLAYED_SECONDARY_STATUS_TIMERS = 2
 
-def _showTimerView(typeID, viewID, view, totalTime, isBubble, currentTime=0):
+def _showTimerView(typeID, viewID, view, totalTime, isBubble, currentTime=0, secondInRow=False):
     if typeID in _SECONDARY_TIMERS:
-        view.as_showSecondaryTimerS(typeID, totalTime, currentTime)
+        view.as_showSecondaryTimerS(typeID, totalTime, currentTime, secondInRow)
     else:
         view.as_showS(typeID, viewID, isBubble)
     gui_event_dispatcher.destroyTimersPanelShown(shown=True)
@@ -68,7 +68,7 @@ class _ActionScriptTimer(TimerComponent):
         pass
 
     def _showView(self, isBubble):
-        _showTimerView(self._typeID, self._viewID, self._viewObject, self._totalTime, isBubble, BigWorld.serverTime() - self._startTime)
+        _showTimerView(self._typeID, self._viewID, self._viewObject, self._totalTime, isBubble, BigWorld.serverTime() - self._startTime, secondInRow=self._secondInRow)
 
     def _hideView(self):
         _hideTimerView(self._typeID, self._viewObject)
@@ -77,7 +77,7 @@ class _ActionScriptTimer(TimerComponent):
 class _PythonTimer(PythonTimer):
 
     def _showView(self, isBubble):
-        _showTimerView(self._typeID, self._viewID, self._viewObject, self._totalTime, isBubble)
+        _showTimerView(self._typeID, self._viewID, self._viewObject, self._totalTime, isBubble, BigWorld.serverTime() - self._startTime, secondInRow=self._secondInRow)
 
     def _hideView(self):
         _hideTimerView(self._typeID, self._viewObject)
@@ -85,7 +85,7 @@ class _PythonTimer(PythonTimer):
     def _setViewSnapshot(self, timeLeft):
         totalTime = math.ceil(self._totalTime)
         if self._typeID in _SECONDARY_TIMERS:
-            self._viewObject.as_setSecondaryTimeSnapshotS(self._typeID, totalTime, totalTime - math.ceil(timeLeft))
+            self._viewObject.as_setSecondaryTimeSnapshotS(self._typeID, totalTime, totalTime - timeLeft)
         else:
             self._viewObject.as_setTimeSnapshotS(self._typeID, totalTime, totalTime - math.ceil(timeLeft))
 
@@ -199,26 +199,30 @@ class _StackTimersCollection(_BaseTimersCollection):
         return
 
     def addSecondaryTimer(self, typeID, viewID, totalTime, finishTime, startTime=None):
+        secondInRow = self.hasActiveSecondaryTimer(typeID)
         self.removeSecondaryTimer(typeID)
-        timer = self._clazz(self._panel, typeID, viewID, totalTime, finishTime, startTime)
+        timer = self._clazz(self._panel, typeID, viewID, totalTime, finishTime, startTime, secondInRow=secondInRow)
         LOG_DEBUG('Adds secondary timer', timer)
         self._timers[typeID] = timer
         timerPriority = _TIMERS_PRIORITY[timer.typeID, timer.viewID]
         self._prioritySecondaryMap[timerPriority].add(timer.typeID)
         if not self._currentSecondaryTimers:
             self._currentSecondaryTimers.append(timer)
-            currentSecondaryTimer = self._currentSecondaryTimers[self._currentSecondaryTimers.index(timer)]
-            if currentSecondaryTimer is not None:
-                currentSecondaryTimer.show()
-        elif len(self._currentSecondaryTimers) >= _MAX_DISPLAYED_SECONDARY_STATUS_TIMERS:
-            if timer not in self._currentSecondaryTimers:
-                self._currentSecondaryTimers.append(timer)
-            self.__evaluateMultipleStatusStates()
+            timer.show()
         else:
             if timer not in self._currentSecondaryTimers:
                 self._currentSecondaryTimers.append(timer)
-            timer.show()
-        return
+            if len(self._currentSecondaryTimers) >= _MAX_DISPLAYED_SECONDARY_STATUS_TIMERS:
+                self.__evaluateMultipleStatusStates()
+            else:
+                timer.show()
+
+    def hasActiveSecondaryTimer(self, typeID):
+        for timer in self._currentSecondaryTimers:
+            if timer.typeID == typeID:
+                return True
+
+        return False
 
     def removeTimer(self, typeID):
         if typeID in self._timers:
@@ -457,11 +461,10 @@ class DestroyTimersPanel(DestroyTimersPanelMeta):
         return
 
     def __showStunTimer(self, value):
-        if value:
-            self._showTimer(_TIMER_STATES.STUN, value, _TIMER_STATES.WARNING_VIEW, None)
+        if value.duration > 0.0:
+            self._showTimer(_TIMER_STATES.STUN, value.totalTime, _TIMER_STATES.WARNING_VIEW, value.endTime, value.startTime)
         else:
             self._hideTimer(_TIMER_STATES.STUN)
-        return
 
     def __showCaptureBlockTimer(self, value):
         if value:
@@ -512,6 +515,8 @@ class DestroyTimersPanel(DestroyTimersPanelMeta):
             stateValue = ctrl.getStateValue(stateID)
             if stateValue:
                 self._onVehicleStateUpdated(stateID, stateValue)
+
+        vehicle.updateStunInfo()
 
     def _onVehicleStateUpdated(self, state, value):
         if state == VEHICLE_VIEW_STATE.SWITCHING:

@@ -98,6 +98,7 @@ class SharedPage(BattlePageMeta):
         self._startBattleSession()
         super(SharedPage, self)._populate()
         for component in self._external:
+            component.createExternalComponent()
             component.setOwner(self.app)
 
         self.addListener(events.GameEvent.RADIAL_MENU_CMD, self._handleRadialMenuCmd, scope=EVENT_BUS_SCOPE.BATTLE)

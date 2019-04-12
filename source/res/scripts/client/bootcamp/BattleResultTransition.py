@@ -11,6 +11,7 @@ class BattleResultTransition(ExternalFlashComponent, BCBattleResultTransitionMet
 
     def __init__(self):
         super(BattleResultTransition, self).__init__(ExternalFlashSettings('transitionFlash', 'bootcampBattleResultTransitionsApp.swf', 'root.main', ''))
+        self.createExternalComponent()
         self.movie.scaleMode = 'NoScale'
 
     def _populate(self):

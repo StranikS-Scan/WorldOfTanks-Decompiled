@@ -4,8 +4,8 @@ import typing
 from CurrentVehicle import g_currentPreviewVehicle
 from gui.Scaleform.daapi.view.lobby.vehiclePreview20.items_kit_helper import lookupItem, showItemTooltip
 from gui.Scaleform.daapi.view.meta.VehiclePreviewFrontlineBuyingPanelMeta import VehiclePreviewFrontlineBuyingPanelMeta
-from gui.app_loader import g_appLoader
 from helpers import dependency
+from skeletons.gui.app_loader import IAppLoader
 from skeletons.gui.goodies import IGoodiesCache
 from skeletons.gui.shared import IItemsCache
 from gui.shared import event_dispatcher
@@ -13,6 +13,7 @@ from gui.shared import event_dispatcher
 class VehiclePreviewFrontlineBuyingPanel(VehiclePreviewFrontlineBuyingPanelMeta):
     _itemsCache = dependency.descriptor(IItemsCache)
     _goodiesCache = dependency.descriptor(IGoodiesCache)
+    _appLoader = dependency.descriptor(IAppLoader)
 
     def __init__(self, ctx=None):
         super(VehiclePreviewFrontlineBuyingPanel, self).__init__()
@@ -27,7 +28,7 @@ class VehiclePreviewFrontlineBuyingPanel(VehiclePreviewFrontlineBuyingPanelMeta)
         event_dispatcher.showFrontlineBuyConfirmView(ctx={'vehicle': g_currentPreviewVehicle.item})
 
     def showTooltip(self, intCD, itemType):
-        toolTipMgr = g_appLoader.getApp().getToolTipMgr()
+        toolTipMgr = self._appLoader.getApp().getToolTipMgr()
         try:
             try:
                 itemId = int(intCD)

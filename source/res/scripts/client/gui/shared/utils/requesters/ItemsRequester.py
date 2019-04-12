@@ -497,6 +497,9 @@ class ItemsRequester(IItemsRequester):
                     getter = vehicles.getVehicleTypeCompactDescr
                     inventoryVehiclesCDs = [ getter(v['compDescr']) for v in self.__inventory.getItems(GUI_ITEM_TYPE.VEHICLE).itervalues() ]
                     invalidate[GUI_ITEM_TYPE.VEHICLE].update(inventoryVehiclesCDs)
+                if statName in (('multipliedRankedBattlesVehs', '_r'),):
+                    inventoryVehiclesCDs = [ getter(v['compDescr']) for v in self.__inventory.getItems(GUI_ITEM_TYPE.VEHICLE).itervalues() ]
+                    invalidate[GUI_ITEM_TYPE.VEHICLE].update(inventoryVehiclesCDs)
                 if statName in ('oldVehInvIDs',):
                     invalidate[GUI_ITEM_TYPE.VEHICLE].update(data)
 
@@ -754,14 +757,13 @@ class ItemsRequester(IItemsRequester):
     def getVehicleDossier(self, vehTypeCompDescr, databaseID=None):
         if databaseID is None:
             return self.itemsFactory.createVehicleDossier(self.__getVehicleDossierDescr(vehTypeCompDescr), vehTypeCompDescr)
+        container = self.__itemsCache[GUI_ITEM_TYPE.VEHICLE_DOSSIER]
+        dossier = container.get((int(databaseID), vehTypeCompDescr))
+        if dossier is None:
+            LOG_WARNING('Vehicle dossier for this user is empty', vehTypeCompDescr, databaseID)
+            return
         else:
-            container = self.__itemsCache[GUI_ITEM_TYPE.VEHICLE_DOSSIER]
-            dossier = container.get((int(databaseID), vehTypeCompDescr))
-            if dossier is None:
-                LOG_WARNING('Vehicle dossier for this user is empty', vehTypeCompDescr, databaseID)
-                return
-            playerDossier = self.getAccountDossier(databaseID)
-            return self.itemsFactory.createVehicleDossier(dossier, vehTypeCompDescr, playerDBID=databaseID, rankedCurrentSeason=playerDossier.getRankedCurrentSeason())
+            return self.itemsFactory.createVehicleDossier(dossier, vehTypeCompDescr, playerDBID=databaseID)
 
     def getVehicleDossiersIterator(self):
         for intCD, dossier in self.__dossiers.getVehDossiersIterator():
@@ -772,12 +774,12 @@ class ItemsRequester(IItemsRequester):
             dossierDescr = self.__getAccountDossierDescr()
             return self.itemsFactory.createAccountDossier(dossierDescr)
         container = self.__itemsCache[GUI_ITEM_TYPE.ACCOUNT_DOSSIER]
-        dossier, _, _, ranked = container.get(int(databaseID))
+        dossier, _, _, _ = container.get(int(databaseID))
         if dossier is None:
             LOG_WARNING('Trying to get empty user dossier', databaseID)
             return
         else:
-            return self.itemsFactory.createAccountDossier(dossier, databaseID, rankedCurrentSeason=ranked)
+            return self.itemsFactory.createAccountDossier(dossier, databaseID)
 
     def getClanInfo(self, databaseID=None):
         if databaseID is None:

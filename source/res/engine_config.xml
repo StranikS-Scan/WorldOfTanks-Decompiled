@@ -1,6 +1,6 @@
 <engine_config.xml>
   <personality>	game	</personality>
-  <preferences>	preferences.xml	</preferences>
+  <preferences>	preferences_ct.xml	</preferences>
   <enableBalanceCPU>	true	</enableBalanceCPU>
   <enableServerTimeSync>	true	</enableServerTimeSync>
   <lod>
@@ -139,7 +139,7 @@
     <PS_PERFORMANCE_LOD_MULT>	1.2	</PS_PERFORMANCE_LOD_MULT>
   </ParticleSystem>
   <debug>
-    <fullDump>	true	</fullDump>
+    <fullDump>	false	</fullDump>
     <clientUrl></clientUrl>
     <botsUrl>	http://cat-st1.wargaming.net	</botsUrl>
     <dxdiag>	true	</dxdiag>
@@ -543,6 +543,16 @@
     </file>
     <file>	python.log	  <enabled>	true	</enabled>
       <source>	SCRIPT	</source>
+      <source>	UI	</source>
+      <openMode>	a	</openMode>
+      <maxSizeKB>	2048	</maxSizeKB>
+      <trimToKB>	512	</trimToKB>
+      <showTime>	true	</showTime>
+      <disableBuffering>	false	</disableBuffering>
+      <messageLength>	8192	</messageLength>
+    </file>
+    <file>	ui.log	  <enabled>	true	</enabled>
+      <source>	UI	</source>
       <openMode>	a	</openMode>
       <maxSizeKB>	2048	</maxSizeKB>
       <trimToKB>	512	</trimToKB>

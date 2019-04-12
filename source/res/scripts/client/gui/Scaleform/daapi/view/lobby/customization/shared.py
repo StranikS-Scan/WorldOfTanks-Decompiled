@@ -10,6 +10,7 @@ from gui.hangar_cameras.hangar_camera_common import CameraMovementStates
 from gui.shared.formatters import icons, text_styles
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.gui_items.Vehicle import VEHICLE_TYPES_ORDER, VEHICLE_TAGS
+from gui.shared.gui_items.customization.outfit import Area
 from gui.shared.gui_items.gui_item_economics import ITEM_PRICE_EMPTY
 from gui.Scaleform.daapi.view.lobby.store.browser.ingameshop_helpers import isIngameShopEnabled
 from gui.Scaleform.genConsts.SEASONS_CONSTANTS import SEASONS_CONSTANTS
@@ -394,3 +395,7 @@ def isTransactionValid(moneyState, price):
 
 def formatPersonalNumber(number):
     return number.rjust(PERSONAL_NUMBER_DIGITS_COUNT, '0')
+
+
+def getAllParentProjectionSlots(vehicle):
+    return [ anchor for anchor in vehicle.item.getAnchors(GUI_ITEM_TYPE.PROJECTION_DECAL, Area.MISC) if anchor.isParent ]

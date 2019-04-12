@@ -4,6 +4,7 @@ from collections import namedtuple
 import SoundGroups
 from gui.Scaleform import MENU
 from gui.Scaleform.daapi.view.lobby.epicBattle.epic_meta_level_icon import getEpicMetaIconVODict
+from gui.periodic_battles.models import CalendarStatusVO
 from gui.Scaleform.daapi.view.meta.EpicBattlesWidgetMeta import EpicBattlesWidgetMeta
 from gui.Scaleform.genConsts.BLOCKS_TOOLTIP_TYPES import BLOCKS_TOOLTIP_TYPES
 from gui.Scaleform.locale.EPIC_BATTLE import EPIC_BATTLE
@@ -23,7 +24,6 @@ from skeletons.gui.game_control import IEpicBattleMetaGameController
 from skeletons.gui.lobby_context import ILobbyContext
 EpicBattlesWidgetVO = namedtuple('EpicBattlesWidgetVO', ('skillPoints', 'calendarStatus', 'canPrestige', 'showAlert', 'epicMetaLevelIconData'))
 EpicBattlesWidgetTooltipVO = namedtuple('EpicBattlesWidgetTooltipVO', 'progressBarData')
-CalendarStatusVO = namedtuple('CalendarStatusVO', ('alertIcon', 'buttonIcon', 'buttonLabel', 'buttonVisible', 'buttonTooltip', 'statusText', 'popoverAlias', 'bgVisible', 'shadowFilterVisible'))
 
 class EpicBattlesWidget(EpicBattlesWidgetMeta):
     epicMetaGameCtrl = dependency.descriptor(IEpicBattleMetaGameController)
@@ -51,7 +51,7 @@ class EpicBattlesWidget(EpicBattlesWidgetMeta):
         status, timeLeft, _ = self.epicMetaGameCtrl.getPrimeTimeStatus()
         showPrimeTimeAlert = status != PRIME_TIME_STATUS.AVAILABLE
         hasAvailableServers = self.epicMetaGameCtrl.hasAvailablePrimeTimeServers()
-        return CalendarStatusVO(alertIcon=RES_ICONS.MAPS_ICONS_LIBRARY_ALERTBIGICON if showPrimeTimeAlert else None, buttonIcon='', buttonLabel=i18n.makeString(EPIC_BATTLE.WIDGETALERTMESSAGEBLOCK_BUTTON), buttonVisible=showPrimeTimeAlert and hasAvailableServers, buttonTooltip=None, statusText=self.__getAlertStatusText(timeLeft, hasAvailableServers), popoverAlias=None, bgVisible=True, shadowFilterVisible=showPrimeTimeAlert)
+        return CalendarStatusVO(alertIcon=RES_ICONS.MAPS_ICONS_LIBRARY_ALERTBIGICON if showPrimeTimeAlert else None, buttonIcon='', buttonLabel=i18n.makeString(EPIC_BATTLE.WIDGETALERTMESSAGEBLOCK_BUTTON), buttonVisible=showPrimeTimeAlert and hasAvailableServers, buttonTooltip=None, statusText=self.__getAlertStatusText(timeLeft, hasAvailableServers), popoverAlias=None, bgVisible=True, shadowFilterVisible=showPrimeTimeAlert, tooltip=None)
 
     def __getAlertStatusText(self, timeLeft, hasAvailableServers):
         alertStr = ''

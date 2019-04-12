@@ -8,6 +8,10 @@ from skeletons.gui.battle_session import IBattleSessionProvider
 class StatsBase(StatsBaseMeta):
     sessionProvider = dependency.descriptor(IBattleSessionProvider)
 
+    @property
+    def hasTabs(self):
+        return False
+
     def acceptSquad(self, playerID):
         self.sessionProvider.invitations.accept(long(playerID))
 

@@ -12,7 +12,7 @@ def isForcedGuiControlMode(avatar=None):
     try:
         result = avatar.isForcedGuiControlMode()
     except AttributeError:
-        _logger.warning('Attribute "isForcedGuiControlMode" not found')
+        _logger.exception('Attribute "isForcedGuiControlMode" not found')
         result = False
 
     return result
@@ -24,7 +24,7 @@ def getForcedGuiControlModeFlags(avatar=None):
     try:
         result = avatar.getForcedGuiControlModeFlags()
     except AttributeError:
-        _logger.warning('Attribute "getForcedGuiControlModeFlags" not found')
+        _logger.exception('Attribute "getForcedGuiControlModeFlags" not found')
         result = 0
 
     return result
@@ -54,7 +54,7 @@ def getPlayerName(avatar=None):
     try:
         result = avatar.name
     except AttributeError:
-        _logger.warning('Attribute "name" not found')
+        _logger.exception('Attribute "name" not found')
         result = ''
 
     return result
@@ -82,7 +82,7 @@ def isVehicleAlive(avatar=None):
     try:
         result = avatar.isVehicleAlive
     except AttributeError:
-        _logger.warning('Attribute "isVehicleAlive" not found')
+        _logger.exception('Attribute "isVehicleAlive" not found')
         result = False
 
     return result
@@ -94,7 +94,7 @@ def isVehicleOverturned(avatar=None):
     try:
         result = avatar.isVehicleOverturned
     except AttributeError:
-        _logger.warning('Attribute "isVehicleOverturned" not found')
+        _logger.exception('Attribute "isVehicleOverturned" not found')
         result = False
 
     return result
@@ -106,7 +106,7 @@ def isVehicleBarrelUnderWater(avatar=None):
     try:
         result = avatar.isOwnBarrelUnderWater
     except AttributeError:
-        _logger.warning('Attribute "isOwnBarrelUnderWater" not found')
+        _logger.exception('Attribute "isOwnBarrelUnderWater" not found')
         result = False
 
     return result
@@ -118,7 +118,7 @@ def isVehicleInFire(avatar=None):
     try:
         result = avatar.fireInVehicle
     except AttributeError:
-        _logger.warning('Attribute "fireInVehicle" not found')
+        _logger.exception('Attribute "fireInVehicle" not found')
         result = False
 
     return result
@@ -130,7 +130,7 @@ def getVehicleDeviceStates(avatar=None):
     try:
         result = avatar.deviceStates
     except AttributeError:
-        _logger.warning('Attribute "deviceStates" not found')
+        _logger.exception('Attribute "deviceStates" not found')
         result = {}
 
     return result
@@ -142,7 +142,7 @@ def getVehicleTypeDescriptor(avatar=None):
     try:
         result = avatar.vehicleTypeDescriptor
     except AttributeError:
-        _logger.warning('Attribute "vehicleTypeDescriptor" not found')
+        _logger.exception('Attribute "vehicleTypeDescriptor" not found')
         result = None
 
     return result
@@ -154,7 +154,7 @@ def getVehicleExtrasDict(avatar=None):
     try:
         result = avatar.vehicleTypeDescriptor.extrasDict
     except AttributeError:
-        _logger.warning('Attribute "vehicleTypeDescriptor.extrasDict" not found')
+        _logger.exception('Attribute "vehicleTypeDescriptor.extrasDict" not found')
         result = {}
 
     return result
@@ -166,7 +166,7 @@ def getSoundNotifications(avatar=None):
     try:
         result = avatar.soundNotifications
     except AttributeError:
-        _logger.warning('Attribute "soundNotifications" not found')
+        _logger.exception('Attribute "soundNotifications" not found')
         result = None
 
     return result
@@ -178,7 +178,7 @@ def isPlayerOnArena(avatar=None):
     try:
         result = avatar.isOnArena
     except AttributeError:
-        _logger.warning('Attribute "isOnArena" not found')
+        _logger.exception('Attribute "isOnArena" not found')
         result = False
 
     return result
@@ -187,10 +187,12 @@ def isPlayerOnArena(avatar=None):
 def getInputHandler(avatar=None):
     if avatar is None:
         avatar = BigWorld.player()
+        if avatar is None:
+            return
     try:
         result = avatar.inputHandler
     except AttributeError:
-        _logger.warning('Attribute "inputHandler" not found')
+        _logger.exception('Attribute "inputHandler" not found')
         result = None
 
     return result
@@ -199,10 +201,12 @@ def getInputHandler(avatar=None):
 def getArena(avatar=None):
     if avatar is None:
         avatar = BigWorld.player()
+        if avatar is None:
+            return
     try:
         result = avatar.arena
     except AttributeError:
-        _logger.warning('Attribute "arena" not found')
+        _logger.exception('Attribute "arena" not found')
         result = None
 
     return result
@@ -212,7 +216,7 @@ def getArenaUniqueID(avatar=None):
     try:
         return getArena(avatar).arenaUniqueID
     except AttributeError:
-        _logger.warning('Attribute "arenaUniqueID" not found')
+        _logger.exception('Attribute "arenaUniqueID" not found')
 
     return None
 
@@ -237,7 +241,7 @@ def changeVehicleSetting(code, value, avatar=None):
     try:
         avatar.base.vehicle_changeSetting(code, value)
     except AttributeError:
-        _logger.warning('Attribute "base.vehicle_changeSetting" not found')
+        _logger.exception('Attribute "base.vehicle_changeSetting" not found')
 
     return
 
@@ -248,7 +252,7 @@ def activateAvatarEquipment(equipmentID, avatar=None):
     try:
         avatar.cell.activateEquipment(equipmentID)
     except AttributeError:
-        _logger.warning('Attribute "cell.activateEquipment" not found')
+        _logger.exception('Attribute "cell.activateEquipment" not found')
 
     return
 
@@ -259,7 +263,7 @@ def leaveArena(avatar=None):
     try:
         avatar.leaveArena()
     except AttributeError:
-        _logger.warning('Attribute "leaveArena" not found')
+        _logger.exception('Attribute "leaveArena" not found')
 
     return
 
@@ -270,7 +274,7 @@ def switchToOtherPlayer(vehicleID, avatar=None):
     try:
         avatar.selectPlayer(vehicleID)
     except AttributeError:
-        _logger.warning('Attribute "selectPlayer" not found')
+        _logger.exception('Attribute "selectPlayer" not found')
 
     return
 
@@ -281,7 +285,7 @@ def setComponentsVisibility(flag, avatar=None):
     try:
         avatar.setComponentsVisibility(flag)
     except AttributeError:
-        _logger.warning('Attribute "setComponentsVisibility" not found')
+        _logger.exception('Attribute "setComponentsVisibility" not found')
 
     return
 
@@ -293,7 +297,7 @@ def getOwnVehiclePosition(avatar=None):
         position = avatar.getOwnVehiclePosition()
     except AttributeError:
         position = None
-        _logger.warning('Attribute "getOwnVehiclePosition" not found')
+        _logger.exception('Attribute "getOwnVehiclePosition" not found')
 
     return position
 
@@ -342,7 +346,7 @@ def getLastRecoveryArgs(avatar=None):
     try:
         result = avatar.getLastRecoveryArgs()
     except AttributeError:
-        _logger.warning('Attribute "getLastRecoveryArgs" not found')
+        _logger.exception('Attribute "getLastRecoveryArgs" not found')
         result = None
 
     return result
@@ -354,7 +358,7 @@ def getVehicleIDAttached(avatar=None):
     try:
         result = avatar.getVehicleAttached().id
     except AttributeError:
-        _logger.warning('Attribute "getVehicleAttached" is not found')
+        _logger.exception('Attribute "getVehicleAttached" is not found')
         result = None
 
     return result
@@ -366,6 +370,18 @@ def setClientReady(avatar=None):
     try:
         avatar.setClientReady()
     except AttributeError:
-        _logger.warning('Attribute "setClientReady" not found')
+        _logger.exception('Attribute "setClientReady" not found')
 
     return
+
+
+def isObserver(avatar=None):
+    if avatar is None:
+        avatar = BigWorld.player()
+    try:
+        result = avatar.isObserver()
+    except AttributeError:
+        _logger.exception('Attribute "isObserved" is not found')
+        result = False
+
+    return result

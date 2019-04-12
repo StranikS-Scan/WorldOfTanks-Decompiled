@@ -4,6 +4,7 @@ from functools import partial
 import BigWorld
 from adisp import process
 from async import async, await
+from constants import PremiumConfigs
 from debug_utils import LOG_ERROR
 from gui import DialogsInterface
 from gui.Scaleform.Waiting import Waiting
@@ -28,14 +29,16 @@ from gui.server_events import settings, caches
 from gui.server_events.event_items import DEFAULTS_GROUPS
 from gui.server_events.events_dispatcher import hideMissionDetails
 from gui.server_events.events_dispatcher import showMissionsCategories
-from gui.server_events.events_helpers import isMarathon, isRegularQuest
+from gui.server_events.events_helpers import isMarathon, isRegularQuest, isPremium
 from gui.shared import actions
 from gui.shared import events, g_eventBus
 from gui.shared.event_bus import EVENT_BUS_SCOPE
+from gui.shared.event_dispatcher import showTankPremiumAboutPage
 from gui.shared.formatters import text_styles, icons
 from helpers import dependency
 from helpers.i18n import makeString as _ms
 from skeletons.gui.game_control import IReloginController, IMarathonEventsController, IBrowserController
+from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
 
 class _GroupedMissionsView(MissionsGroupedViewMeta):
@@ -153,6 +156,7 @@ class MissionsMarathonView(MissionsMarathonViewMeta):
 
     def _populate(self):
         super(MissionsMarathonView, self)._populate()
+        self._marathonEvent.showRewardVideo()
         Waiting.hide('loadPage')
         self.__loadBrowserCallbackID = BigWorld.callback(0.01, self.__loadBrowser)
 
@@ -325,6 +329,7 @@ class MissionsEventBoardsView(MissionsEventBoardsViewMeta):
 
 class MissionsCategoriesView(_GroupedMissionsView):
     QUESTS_COUNT_LINKEDSET_BLOCK = 1
+    _lobbyContext = dependency.descriptor(ILobbyContext)
 
     def openMissionDetailsView(self, eventID, blockID):
         if blockID == DEFAULTS_GROUPS.LINKEDSET_QUESTS:
@@ -341,12 +346,17 @@ class MissionsCategoriesView(_GroupedMissionsView):
          'levelsRange': [level],
          'section': 'linkedset_view_vehicle'}), scope=EVENT_BUS_SCOPE.LOBBY)
 
+    def onClickButtonDetails(self):
+        showTankPremiumAboutPage()
+
     def _populate(self):
         super(MissionsCategoriesView, self)._populate()
         g_eventBus.addListener(events.MissionsEvent.ON_LINKEDSET_STATE_UPDATED, self.onLinkedSetUpdated, EVENT_BUS_SCOPE.LOBBY)
+        self._lobbyContext.getServerSettings().onServerSettingsChange += self.__onServerSettingsChange
 
     def _dispose(self):
         g_eventBus.removeListener(events.MissionsEvent.ON_LINKEDSET_STATE_UPDATED, self.onLinkedSetUpdated, EVENT_BUS_SCOPE.LOBBY)
+        self._lobbyContext.getServerSettings().onServerSettingsChange -= self.__onServerSettingsChange
         super(MissionsCategoriesView, self)._dispose()
 
     def _appendBlockDataToResult(self, result, data):
@@ -367,7 +377,14 @@ class MissionsCategoriesView(_GroupedMissionsView):
         return RES_ICONS.MAPS_ICONS_MISSIONS_BACKGROUNDS_CATEGORIES
 
     def _getViewQuestFilter(self):
-        return lambda q: isRegularQuest(q.getGroupID())
+        return lambda q: isRegularQuest(q.getGroupID()) or isPremium(q.getGroupID())
+
+    def __onServerSettingsChange(self, diff):
+        if PremiumConfigs.PREM_QUESTS not in diff:
+            return
+        diffConfig = diff.get(PremiumConfigs.PREM_QUESTS)
+        if 'enabled' in diffConfig:
+            self._onEventsUpdate()
 
 
 class CurrentVehicleMissionsView(CurrentVehicleMissionsViewMeta):

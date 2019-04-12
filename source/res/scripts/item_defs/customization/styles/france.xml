@@ -64,7 +64,6 @@
     <vehicleFilter>
       <include>
         <nations>	france	</nations>
-        <levels>	6 7 8 9 10	</levels>
       </include>
     </vehicleFilter>
     <style>
@@ -200,7 +199,6 @@
     <vehicleFilter>
       <include>
         <nations>	france	</nations>
-        <levels>	6 7 8 9 10	</levels>
       </include>
     </vehicleFilter>
     <style>
@@ -394,6 +392,43 @@
         </outfit>
         <outfit>
           <season>	event	</season>
+        </outfit>
+      </outfits>
+    </style>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	true	</historical>
+    <priceGroup>	2d common styles notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	france:F112_M10_RBFM	</vehicles>
+      </include>
+    </vehicleFilter>
+    <style>
+      <id>	13	</id>
+      <texture>	gui/maps/vehicles/styles/Siroco.png	</texture>
+      <description>	#vehicle_customization:special_style/siroco_desc	</description>
+      <modelsSet>	Siroco	</modelsSet>
+      <userString>	#vehicle_customization:special_style/siroco	</userString>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	1	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <decals>
+            <item>
+              <id>	0	</id>
+              <appliedTo>	65520	</appliedTo>
+            </item>
+          </decals>
         </outfit>
       </outfits>
     </style>

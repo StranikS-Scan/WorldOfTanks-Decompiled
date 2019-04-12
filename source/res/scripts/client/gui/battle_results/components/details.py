@@ -2,17 +2,22 @@
 # Embedded file name: scripts/client/gui/battle_results/components/details.py
 import operator
 import BigWorld
-from constants import IGR_TYPE
+from constants import IGR_TYPE, PREMIUM_TYPE
 from gui import makeHtmlString
-from gui.Scaleform.locale.BATTLE_RESULTS import BATTLE_RESULTS
-from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.battle_results.components import base
 from gui.battle_results.components import style
 from gui.battle_results.reusable.records import convertFactorToPercent
-from gui.shared.formatters import icons
+from gui.impl import backport
+from gui.impl.gen.resources import R
+from gui.impl.lobby.premacc import premacc_helpers
+from gui.shared.formatters import icons, text_styles
+from gui.shared.formatters.icons import makeImageTag
 from gui.shared.money import Currency
-from helpers import i18n
-from shared_utils import findFirst
+from helpers import i18n, dependency
+from shared_utils import first
+from skeletons.gui.battle_results import IBattleResultsService
+from skeletons.gui.lobby_context import ILobbyContext
+from skeletons.gui.shared import IItemsCache
 
 class _GainResourceInBattleItem(base.StatsItem):
     __slots__ = ('__records', '__method')
@@ -24,10 +29,10 @@ class _GainResourceInBattleItem(base.StatsItem):
 
     def _convert(self, value, reusable):
         personal = reusable.personal
-        baseRecords, premiumRecords = findFirst(None, operator.methodcaller(self.__method)(personal), (None, None))[:2]
+        baseRecords, premiumRecords = first(operator.methodcaller(self.__method)(personal), default=(None, None))[:2]
         resource = 0
         if baseRecords is not None and not personal.avatar.hasPenalties():
-            if reusable.isPostBattlePremium:
+            if reusable.hasAnyPremiumInPostBattle:
                 records = premiumRecords
             else:
                 records = baseRecords
@@ -75,7 +80,7 @@ class PremiumCreditsBlock(base.StatsBlock):
 
     def setRecord(self, result, reusable):
         canBeFaded = reusable.isPostBattlePremium and reusable.canResourceBeFaded
-        isDiffShow = reusable.canUpgradeToPremium
+        isDiffShow = reusable.canUpgradeToPremiumPlus
         for records in reusable.personal.getMoneyRecords():
             baseCredits, premiumCredits = records[:2]
             value = premiumCredits.getRecord('credits', 'originalCreditsToDraw')
@@ -91,13 +96,13 @@ class XPTitleBlock(base.StatsBlock):
     def setRecord(self, result, reusable):
         showSquadLabels, squadHasBonus = reusable.getPersonalSquadFlags()
         for records in reusable.personal.getBaseXPRecords():
-            factor = records.getFactor('dailyXPFactor10')
+            factor = int(records.getFactor('dailyXPFactor10'))
             if factor == 1 and showSquadLabels and squadHasBonus:
-                result = i18n.makeString(BATTLE_RESULTS.COMMON_DETAILS_XPTITLESQUAD, img=icons.makeImageTag(RES_ICONS.MAPS_ICONS_LIBRARY_PREBATTLEINVITEICON_1))
+                result = i18n.makeString(backport.text(R.strings.battle_results.common.details.xpTitleSquad()), img=icons.makeImageTag(backport.image(R.images.gui.maps.icons.library.prebattleInviteIcon_1())))
             else:
-                result = i18n.makeString(BATTLE_RESULTS.COMMON_DETAILS_XPTITLE)
+                result = backport.text(R.strings.battle_results.common.details.xpTitle())
             if factor > 1:
-                result = ' '.join((result, i18n.makeString(BATTLE_RESULTS.COMMON_DETAILS_XPTITLEFIRSTVICTORY, factor)))
+                result = ' '.join((result, icons.makeImageTag(backport.image(R.images.gui.maps.icons.library.dyn('bonus_x{}'.format(factor))()), 46, 18)))
             self.addNextComponent(base.DirectStatsItem('', result))
 
 
@@ -105,7 +110,7 @@ class BaseXPBlock(base.StatsBlock):
     __slots__ = ()
 
     def setRecord(self, result, reusable):
-        isPremuim = not reusable.isPostBattlePremium and reusable.canResourceBeFaded
+        isPremuim = not reusable.hasAnyPremiumInPostBattle and reusable.canResourceBeFaded
         for records in reusable.personal.getBaseXPRecords():
             value = style.makeXpLabel(records.getRecord('xpToShow'), canBeFaded=isPremuim)
             self.addNextComponent(base.DirectStatsItem('', value))
@@ -115,8 +120,8 @@ class PremiumXPBlock(base.StatsBlock):
     __slots__ = ()
 
     def setRecord(self, result, reusable):
-        canBeFaded = reusable.isPostBattlePremium and reusable.canResourceBeFaded
-        isDiffShow = reusable.canUpgradeToPremium
+        canBeFaded = reusable.hasAnyPremiumInPostBattle and reusable.canResourceBeFaded
+        isDiffShow = reusable.canUpgradeToPremiumPlus
         for records in reusable.personal.getXPRecords():
             baseXP, premiumXP = records[:2]
             xp = premiumXP.getRecord('xpToShow')
@@ -129,11 +134,11 @@ class PremiumXPBlock(base.StatsBlock):
 
 
 class _EconomicsDetailsBlock(base.StatsBlock):
-    __slots__ = ('isPremium', 'canResourceBeFaded', 'igrType', 'penaltyDetails')
+    __slots__ = ('premiumMask', 'hasAnyPremium', 'canResourceBeFaded', 'igrType', 'penaltyDetails')
 
     def __init__(self, meta=None, field='', *path):
         super(_EconomicsDetailsBlock, self).__init__(meta, field, *path)
-        self.isPremium = False
+        self.hasAnyPremium = False
         self.canResourceBeFaded = True
         self.penaltyDetails = None
         self.igrType = IGR_TYPE.NONE
@@ -161,11 +166,15 @@ class _EconomicsDetailsBlock(base.StatsBlock):
 
 class MoneyDetailsBlock(_EconomicsDetailsBlock):
     __slots__ = ()
+    __lobbyContext = dependency.descriptor(ILobbyContext)
 
     def setRecord(self, result, reusable):
-        baseCredits, premiumCredits, goldRecords, autoRecords = result
+        baseCredits, premiumCredits, goldRecords, additionalRecords = result
         isTotalShown = False
         self.__addBaseCredits(baseCredits, premiumCredits)
+        showSquadLabels, _ = reusable.getPersonalSquadFlags()
+        if showSquadLabels:
+            self.__addSquadBonus(baseCredits, premiumCredits)
         isTotalShown |= self.__addStatsItemIfExists('noPenalty', baseCredits, premiumCredits, None, 'achievementCredits')
         isTotalShown |= self.__addStatsItemIfExists('boosters', baseCredits, premiumCredits, None, 'boosterCredits', 'boosterCreditsFactor100')
         isTotalShown |= self.__addStatsItemIfExists('battlePayments', baseCredits, premiumCredits, None, 'orderCreditsFactor100')
@@ -173,25 +182,27 @@ class MoneyDetailsBlock(_EconomicsDetailsBlock):
         isTotalShown |= self.__addReferralSystemFactor(baseCredits, premiumCredits)
         self._addEmptyRow()
         self.__addViolationPenalty()
-        isTotalShown |= self.__addStatsItem('friendlyFirePenalty', baseCredits, premiumCredits, 'originalCreditsPenalty', 'originalCreditsContributionOut')
-        isTotalShown |= self.__addStatsItem('friendlyFireCompensation', baseCredits, premiumCredits, 'originalCreditsContributionIn')
+        isTotalShown |= self.__addStatsItem('friendlyFirePenalty', baseCredits, premiumCredits, 'originalCreditsPenalty', 'originalCreditsContributionOut', 'originalCreditsPenaltySquad', 'originalCreditsContributionOutSquad')
+        isTotalShown |= self.__addStatsItem('friendlyFireCompensation', baseCredits, premiumCredits, 'originalCreditsContributionIn', 'originalCreditsContributionInSquad')
         self._addEmptyRow()
         isTotalShown |= self.__addAOGASFactor(baseCredits)
         if isTotalShown:
             self.__addBattleResults(baseCredits, premiumCredits, goldRecords)
             self._addEmptyRow()
-        self.__addStatsItem('autoRepair', autoRecords, autoRecords, 'autoRepairCost')
-        self.__addAutoCompletion('autoLoad', autoRecords, 'autoLoadCredits', 'autoLoadGold')
-        self.__addAutoCompletion('autoEquip', autoRecords, 'autoEquipCredits', 'autoEquipGold')
+        self.__addStatsItem('autoRepair', additionalRecords, additionalRecords, 'autoRepairCost')
+        self.__addAutoCompletion('autoLoad', additionalRecords, 'autoLoadCredits', 'autoLoadGold')
+        self.__addAutoCompletion('autoEquip', additionalRecords, 'autoEquipCredits', 'autoEquipGold')
         self._addEmptyRow()
-        self.__addTotalResults(baseCredits, premiumCredits, goldRecords, autoRecords)
+        self.__addTotalResults(baseCredits, premiumCredits, goldRecords, additionalRecords)
+        self._addEmptyRow()
+        self.__addPiggyBankInfo(premiumCredits, additionalRecords)
         return
 
     def __addStatsItem(self, label, baseRecords, premiumRecords, *names):
         baseValue = baseRecords.getRecord(*names)
         premiumValue = premiumRecords.getRecord(*names)
-        baseLabel = style.makeCreditsLabel(baseValue, canBeFaded=not self.isPremium)
-        premiumLabel = style.makeCreditsLabel(premiumValue, canBeFaded=self.isPremium)
+        baseLabel = style.makeCreditsLabel(baseValue, canBeFaded=not self.hasAnyPremium)
+        premiumLabel = style.makeCreditsLabel(premiumValue, canBeFaded=self.hasAnyPremium)
         self._addStatsRow(label, column1=baseLabel, column3=premiumLabel)
         return baseValue != 0 or premiumValue != 0
 
@@ -201,8 +212,8 @@ class MoneyDetailsBlock(_EconomicsDetailsBlock):
         result = False
         if baseValue or premiumValue:
             result = True
-            baseValue = style.makeCreditsLabel(baseValue, canBeFaded=not self.isPremium)
-            premiumValue = style.makeCreditsLabel(premiumValue, canBeFaded=self.isPremium)
+            baseValue = style.makeCreditsLabel(baseValue, canBeFaded=not self.hasAnyPremium)
+            premiumValue = style.makeCreditsLabel(premiumValue, canBeFaded=self.hasAnyPremium)
             self._addStatsRow(label, labelArgs, column1=baseValue, column3=premiumValue)
         return result
 
@@ -210,10 +221,30 @@ class MoneyDetailsBlock(_EconomicsDetailsBlock):
         baseCredits = baseRecords.getRecord('originalCredits')
         baseCredits += baseRecords.getRecord('originalCreditsToDraw')
         baseCredits -= baseRecords.getRecord('achievementCredits')
-        premiumCredits = premiumRecords.getRecord('originalCredits', 'appliedPremiumCreditsFactor10')
+        premiumCredits = premiumRecords.getRecord('originalCredits', 'appliedPremiumCreditsFactor100')
         premiumCredits += premiumRecords.getRecord('originalCreditsToDraw')
         premiumCredits -= premiumRecords.getRecord('achievementCredits')
-        self._addStatsRow('base', column1=style.makeCreditsLabel(baseCredits, canBeFaded=not self.isPremium), column3=style.makeCreditsLabel(premiumCredits, canBeFaded=self.isPremium))
+        self._addStatsRow('base', column1=style.makeCreditsLabel(baseCredits, canBeFaded=not self.hasAnyPremium), column3=style.makeCreditsLabel(premiumCredits, canBeFaded=self.hasAnyPremium))
+
+    def __addSquadBonus(self, baseRecords, premiumRecords):
+        baseCredits = baseRecords.getRecord('originalCredits')
+        premiumCredits = premiumRecords.getRecord('originalCredits')
+        baseFactor = baseRecords.getFactor('premSquadCreditsFactor100')
+        premiumFactor = premiumRecords.getFactor('premSquadCreditsFactor100')
+        if not self.hasAnyPremium and baseFactor or self.hasAnyPremium and premiumFactor:
+            self._addStatsRow('squadBonus', column1=style.makeCreditsLabel(baseCredits * baseFactor, canBeFaded=not self.hasAnyPremium), column3=style.makeCreditsLabel(premiumCredits * premiumFactor, canBeFaded=self.hasAnyPremium))
+
+    def __addPiggyBankInfo(self, premiumRecords, additionalRecords):
+        piggyBankCredits = additionalRecords.getRecord('piggyBank')
+        if self.hasAnyPremium:
+            baseCredits = 0
+            premiumCredits = piggyBankCredits
+        else:
+            piggyBankMultiplier = self.__lobbyContext.getServerSettings().getPiggyBankConfig().get('multiplier')
+            baseCredits = piggyBankCredits
+            premiumCredits = premiumRecords.getRecord('credits', 'originalCreditsToDraw') * piggyBankMultiplier
+        if baseCredits or premiumCredits:
+            self._addStatsRow('piggyBankInfo', column1=style.makeCreditsLabel(baseCredits, canBeFaded=not self.hasAnyPremium, isDiff=baseCredits > 0), column3=style.makeCreditsLabel(premiumCredits, canBeFaded=self.hasAnyPremium, isDiff=premiumCredits > 0))
 
     def __addReferralSystemFactor(self, baseCredits, premiumCredits):
         referralFactor = baseCredits.getFactor('referral20CreditsFactor100')
@@ -229,12 +260,12 @@ class MoneyDetailsBlock(_EconomicsDetailsBlock):
             result = True
             columns = {}
             if baseEventCredits:
-                columns['column1'] = style.makeCreditsLabel(baseEventCredits, canBeFaded=not self.isPremium)
+                columns['column1'] = style.makeCreditsLabel(baseEventCredits, canBeFaded=not self.hasAnyPremium)
             if premiumEventCredits:
-                columns['column3'] = style.makeCreditsLabel(premiumEventCredits, canBeFaded=self.isPremium)
+                columns['column3'] = style.makeCreditsLabel(premiumEventCredits, canBeFaded=self.hasAnyPremium)
             if baseEventGold:
-                columns['column2'] = style.makeGoldLabel(baseEventGold, canBeFaded=not self.isPremium)
-                columns['column4'] = style.makeGoldLabel(baseEventGold, canBeFaded=self.isPremium)
+                columns['column2'] = style.makeGoldLabel(baseEventGold, canBeFaded=not self.hasAnyPremium)
+                columns['column4'] = style.makeGoldLabel(baseEventGold, canBeFaded=self.hasAnyPremium)
             self._addStatsRow('event', **columns)
         return result
 
@@ -255,37 +286,37 @@ class MoneyDetailsBlock(_EconomicsDetailsBlock):
     def __addBattleResults(self, baseRecords, premiumRecords, goldRecords):
         baseCredits = baseRecords.getRecord('credits', 'originalCreditsToDraw')
         premiumCredits = premiumRecords.getRecord('credits', 'originalCreditsToDraw')
-        baseCreditsLabel = style.makeCreditsLabel(baseCredits, canBeFaded=not self.isPremium)
-        premiumCreditsLabel = style.makeCreditsLabel(premiumCredits, canBeFaded=self.isPremium)
+        baseCreditsLabel = style.makeCreditsLabel(baseCredits, canBeFaded=not self.hasAnyPremium)
+        premiumCreditsLabel = style.makeCreditsLabel(premiumCredits, canBeFaded=self.hasAnyPremium)
         gold = goldRecords.getRecord('gold')
         if gold != 0:
-            baseGoldLabel = style.makeGoldLabel(gold, canBeFaded=not self.isPremium)
-            premiumGoldLabel = style.makeGoldLabel(gold, canBeFaded=self.isPremium)
+            baseGoldLabel = style.makeGoldLabel(gold, canBeFaded=not self.hasAnyPremium)
+            premiumGoldLabel = style.makeGoldLabel(gold, canBeFaded=self.hasAnyPremium)
         else:
             baseGoldLabel = None
             premiumGoldLabel = None
         self._addStatsRow('intermediateTotal', column1=baseCreditsLabel, column3=premiumCreditsLabel, column2=baseGoldLabel, column4=premiumGoldLabel)
         return
 
-    def __addAutoCompletion(self, label, autoRecords, creditsRecord, goldRecord):
-        credit = autoRecords.getRecord(creditsRecord)
-        gold = autoRecords.getRecord(goldRecord)
-        columns = {'column1': style.makeCreditsLabel(credit, canBeFaded=not self.isPremium),
-         'column3': style.makeCreditsLabel(credit, canBeFaded=self.isPremium)}
+    def __addAutoCompletion(self, label, additionalRecords, creditsRecord, goldRecord):
+        credit = additionalRecords.getRecord(creditsRecord)
+        gold = additionalRecords.getRecord(goldRecord)
+        columns = {'column1': style.makeCreditsLabel(credit, canBeFaded=not self.hasAnyPremium),
+         'column3': style.makeCreditsLabel(credit, canBeFaded=self.hasAnyPremium)}
         if gold:
-            columns.update({'column2': style.makeGoldLabel(gold, canBeFaded=not self.isPremium),
-             'column4': style.makeGoldLabel(gold, canBeFaded=self.isPremium)})
+            columns.update({'column2': style.makeGoldLabel(gold, canBeFaded=not self.hasAnyPremium),
+             'column4': style.makeGoldLabel(gold, canBeFaded=self.hasAnyPremium)})
         self._addStatsRow(label, **columns)
 
-    def __addTotalResults(self, baseCredits, premiumCredits, goldRecords, autoRecords):
-        baseCanBeFaded = not self.isPremium and self.canResourceBeFaded
-        premiumCanBeFaded = self.isPremium and self.canResourceBeFaded
-        autoCredits = autoRecords.getRecord('autoRepairCost', 'autoLoadCredits', 'autoEquipCredits')
-        autoGold = autoRecords.getRecord('autoLoadGold', 'autoEquipGold')
+    def __addTotalResults(self, baseCredits, premiumCredits, goldRecords, additionalRecords):
+        baseCanBeFaded = not self.hasAnyPremium and self.canResourceBeFaded
+        premiumCanBeFaded = self.hasAnyPremium and self.canResourceBeFaded
+        autoCredits = additionalRecords.getRecord('autoRepairCost', 'autoLoadCredits', 'autoEquipCredits')
+        autoGold = additionalRecords.getRecord('autoLoadGold', 'autoEquipGold')
         columns = {'column1': style.makeCreditsLabel(baseCredits.getRecord('credits', 'originalCreditsToDraw') + autoCredits, canBeFaded=baseCanBeFaded),
          'column3': style.makeCreditsLabel(premiumCredits.getRecord('credits', 'originalCreditsToDraw') + autoCredits, canBeFaded=premiumCanBeFaded),
-         'column2': style.makeGoldLabel(goldRecords.getRecord('gold') + autoGold, canBeFaded=not self.isPremium),
-         'column4': style.makeGoldLabel(goldRecords.getRecord('gold') + autoGold, canBeFaded=self.isPremium)}
+         'column2': style.makeGoldLabel(goldRecords.getRecord('gold') + autoGold, canBeFaded=not self.hasAnyPremium),
+         'column4': style.makeGoldLabel(goldRecords.getRecord('gold') + autoGold, canBeFaded=self.hasAnyPremium)}
         self._addStatsRow('total', htmlKey='lightText', **columns)
 
 
@@ -296,39 +327,45 @@ class XPDetailsBlock(_EconomicsDetailsBlock):
         baseXP, premiumXP, baseFreeXP, premiumFreeXP = result
         self.__addBaseXPs(baseXP, premiumXP, baseFreeXP, premiumFreeXP)
         self.__addComplexXPsItemIfExists('noPenalty', baseXP, premiumXP, baseFreeXP, premiumFreeXP, 'achievementXP', 'achievementFreeXP')
-        self.__addXPsItem('friendlyFirePenalty', baseXP, premiumXP, 'originalXPPenalty')
+        penaltyKey = 'friendlyFirePenalty'
+        if reusable.common.arenaVisitor.gui.isRankedBattle():
+            penaltyKey = 'friendlyFireRankedXpPenalty'
+        self.__addXPsItem(penaltyKey, baseXP, premiumXP, 'originalXPPenalty')
         if reusable.common.arenaVisitor.gui.isInEpicRange():
             self.__addXPsItem('playerRankXP', baseXP, premiumXP, 'playerRankXPFactor100')
         self.__addIGRFactor(baseXP)
         self.__addDailyXPFactor(baseXP)
+        self.__addAdditionalXPBonus(baseXP, premiumXP, baseFreeXP, premiumFreeXP)
         self.__addBoosterXPs(baseXP, premiumXP, baseFreeXP, premiumFreeXP)
         self.__addXPsItemIfExists('tacticalTraining', baseXP, premiumXP, 'orderXPFactor100')
         self.__addFreeXPsItemIfExists('militaryManeuvers', baseFreeXP, premiumFreeXP, 'orderFreeXPFactor100')
         self.__addEventXPs(baseXP, premiumXP, baseFreeXP, premiumFreeXP)
         self.__addReferralSystemFactor(baseXP, premiumXP)
         self.__addComplexXPsItemIfExists('premiumVehicleXP', baseXP, premiumXP, baseFreeXP, premiumFreeXP, 'premiumVehicleXPFactor100', 'premiumVehicleXPFactor100')
-        if reusable.getPersonalSquadFlags()[0]:
-            self.__getSquadXPDetails(baseXP, premiumXP)
+        showSquadLabels, _ = reusable.getPersonalSquadFlags()
+        if showSquadLabels:
+            self.__addSquadXPDetails(baseXP, premiumXP)
         self._addAOGASFactor(baseXP)
         rows = self.getNextComponentIndex()
         if rows < 3 or rows < 7:
             self._addEmptyRow()
         self.__addXPsViolationPenalty()
         self.__addTotalResults(baseXP, premiumXP, baseFreeXP, premiumFreeXP)
+        self._addEmptyRow()
 
     def __addXPsItem(self, label, baseXP, premiumXP, xpRecord, labelArgs=None):
-        columns = {'column1': style.makeXpLabel(baseXP.getRecord(xpRecord), canBeFaded=not self.isPremium),
-         'column3': style.makeXpLabel(premiumXP.getRecord(xpRecord), canBeFaded=self.isPremium)}
+        columns = {'column1': style.makeXpLabel(baseXP.getRecord(xpRecord), canBeFaded=not self.hasAnyPremium),
+         'column3': style.makeXpLabel(premiumXP.getRecord(xpRecord), canBeFaded=self.hasAnyPremium)}
         self._addStatsRow(label, labelArgs=labelArgs, **columns)
 
     def __addFreeXPsItem(self, label, baseFreeXP, premiumFreeXP, freeXPRecord):
-        columns = {'column2': style.makeFreeXpLabel(baseFreeXP.getRecord(freeXPRecord), canBeFaded=not self.isPremium),
-         'column4': style.makeFreeXpLabel(premiumFreeXP.getRecord(freeXPRecord), canBeFaded=self.isPremium)}
+        columns = {'column2': style.makeFreeXpLabel(baseFreeXP.getRecord(freeXPRecord), canBeFaded=not self.hasAnyPremium),
+         'column4': style.makeFreeXpLabel(premiumFreeXP.getRecord(freeXPRecord), canBeFaded=self.hasAnyPremium)}
         self._addStatsRow(label, **columns)
 
     def __addComplexXPsItem(self, label, baseXP, premiumXP, baseFreeXP, premiumFreeXP, xpRecord, freeXPRecord, htmlKey=''):
-        baseCanBeFaded = not self.isPremium
-        premiumCanBeFaded = self.isPremium
+        baseCanBeFaded = not self.hasAnyPremium
+        premiumCanBeFaded = self.hasAnyPremium
         columns = {'column1': style.makeXpLabel(baseXP.getRecord(xpRecord), canBeFaded=baseCanBeFaded),
          'column3': style.makeXpLabel(premiumXP.getRecord(xpRecord), canBeFaded=premiumCanBeFaded),
          'column2': style.makeFreeXpLabel(baseFreeXP.getRecord(freeXPRecord), canBeFaded=baseCanBeFaded),
@@ -358,14 +395,14 @@ class XPDetailsBlock(_EconomicsDetailsBlock):
             label, htmlKey = ('base', '')
         baseXPValue = baseXP.getRecord('originalXP')
         baseXPValue -= baseXP.getRecord('achievementXP')
-        premiumXPValue = premiumXP.getRecord('originalXP', 'appliedPremiumXPFactor10')
+        premiumXPValue = premiumXP.getRecord('originalXP', 'appliedPremiumXPFactor100')
         premiumXPValue -= premiumXP.getRecord('achievementXP')
         baseFreeXPValue = baseFreeXP.getRecord('originalFreeXP')
         baseFreeXPValue -= baseFreeXP.getRecord('achievementFreeXP')
-        premiumFreeXPValue = premiumFreeXP.getRecord('originalFreeXP', 'appliedPremiumXPFactor10')
+        premiumFreeXPValue = premiumFreeXP.getRecord('originalFreeXP', 'appliedPremiumXPFactor100')
         premiumFreeXPValue -= premiumFreeXP.getRecord('achievementFreeXP')
-        baseCanBeFaded = not self.isPremium
-        premiumCanBeFaded = self.isPremium
+        baseCanBeFaded = not self.hasAnyPremium
+        premiumCanBeFaded = self.hasAnyPremium
         columns = {'column1': style.makeXpLabel(baseXPValue, canBeFaded=baseCanBeFaded),
          'column3': style.makeXpLabel(premiumXPValue, canBeFaded=premiumCanBeFaded),
          'column2': style.makeFreeXpLabel(baseFreeXPValue, canBeFaded=baseCanBeFaded),
@@ -378,8 +415,8 @@ class XPDetailsBlock(_EconomicsDetailsBlock):
         baseFreeXPValue = baseFreeXP.getRecord('boosterFreeXP', 'boosterFreeXPFactor100')
         premiumFreeXPValue = premiumFreeXP.getRecord('boosterFreeXP', 'boosterFreeXPFactor100')
         if baseXPValue or premiumXPValue or baseFreeXPValue or premiumFreeXPValue:
-            baseCanBeFaded = not self.isPremium
-            premiumCanBeFaded = self.isPremium
+            baseCanBeFaded = not self.hasAnyPremium
+            premiumCanBeFaded = self.hasAnyPremium
             columns = {'column1': style.makeXpLabel(baseXPValue, canBeFaded=baseCanBeFaded),
              'column3': style.makeXpLabel(premiumXPValue, canBeFaded=premiumCanBeFaded),
              'column2': style.makeFreeXpLabel(baseFreeXPValue, canBeFaded=baseCanBeFaded),
@@ -392,8 +429,8 @@ class XPDetailsBlock(_EconomicsDetailsBlock):
         baseFreeXPValue = baseFreeXP.findRecord('eventFreeXPList_') + baseFreeXP.findRecord('eventFreeXPFactor100List_')
         premiumFreeXPValue = premiumFreeXP.findRecord('eventFreeXPList_') + premiumFreeXP.findRecord('eventFreeXPFactor100List_')
         if baseXPValue or premiumXPValue or baseFreeXPValue or premiumFreeXPValue:
-            baseCanBeFaded = not self.isPremium
-            premiumCanBeFaded = self.isPremium
+            baseCanBeFaded = not self.hasAnyPremium
+            premiumCanBeFaded = self.hasAnyPremium
             columns = {'column1': style.makeXpLabel(baseXPValue, canBeFaded=baseCanBeFaded),
              'column3': style.makeXpLabel(premiumXPValue, canBeFaded=premiumCanBeFaded),
              'column2': style.makeFreeXpLabel(baseFreeXPValue, canBeFaded=baseCanBeFaded),
@@ -417,17 +454,31 @@ class XPDetailsBlock(_EconomicsDetailsBlock):
     def __addDailyXPFactor(self, baseXP):
         factor = baseXP.getFactor('dailyXPFactor10')
         if factor > 1:
-            value = style.makeDailyXPFactorValue(factor)
-            self._addStatsRow('firstWin', column1=value, column2=value, column3=value, column4=value)
+            columns = self.__getFormattedColumnsWithFreeXP([factor] * 4)
+            self._addStatsRow('firstWin', **columns)
 
-    def __getSquadXPDetails(self, baseXP, premiumXP):
+    def __addAdditionalXPBonus(self, baseXP, premiumXP, baseFreeXP, premiumFreeXP):
+
+        def getAdditionalXPFactor(item):
+            factor = item.getFactor('additionalXPFactor10')
+            return factor if factor > 1 else 0
+
+        factors = tuple((getAdditionalXPFactor(xp) for xp in (baseXP,
+         baseFreeXP,
+         premiumXP,
+         premiumFreeXP)))
+        if any(factors):
+            columns = self.__getFormattedColumnsWithFreeXP(factors)
+            self._addStatsRow('additionalBonus', **columns)
+
+    def __addSquadXPDetails(self, baseXP, premiumXP):
         squadXP = baseXP.getRecord('squadXPFactor100')
         premiumSquadXP = premiumXP.getRecord('squadXPFactor100')
-        baseLabel = style.makeXpLabel(squadXP, canBeFaded=not self.isPremium)
-        premiumLabel = style.makeXpLabel(premiumSquadXP, canBeFaded=not self.isPremium)
+        baseLabel = style.makeXpLabel(squadXP, canBeFaded=not self.hasAnyPremium)
+        premiumLabel = style.makeXpLabel(premiumSquadXP, canBeFaded=not self.hasAnyPremium)
         if squadXP < 0 or premiumSquadXP < 0:
             label = 'squadXPPenalty'
-            if self.isPremium:
+            if self.hasAnyPremium:
                 baseLabel = None
             else:
                 premiumLabel = None
@@ -445,13 +496,17 @@ class XPDetailsBlock(_EconomicsDetailsBlock):
             self.__addXPsItem('referralBonus', baseXP, premiumXP, 'referral20XPFactor100', labelArgs=labelArgs)
 
     def __addTotalResults(self, baseXP, premiumXP, baseFreeXP, premiumFreeXP):
-        baseCanBeFaded = not self.isPremium and self.canResourceBeFaded
-        premiumCanBeFaded = self.isPremium and self.canResourceBeFaded
+        baseCanBeFaded = not self.hasAnyPremium and self.canResourceBeFaded
+        premiumCanBeFaded = self.hasAnyPremium and self.canResourceBeFaded
         columns = {'column1': style.makeXpLabel(baseXP.getRecord('xp'), canBeFaded=baseCanBeFaded),
          'column3': style.makeXpLabel(premiumXP.getRecord('xp'), canBeFaded=premiumCanBeFaded),
          'column2': style.makeFreeXpLabel(baseFreeXP.getRecord('freeXP'), canBeFaded=baseCanBeFaded),
          'column4': style.makeFreeXpLabel(premiumFreeXP.getRecord('freeXP'), canBeFaded=premiumCanBeFaded)}
         self._addStatsRow('total', htmlKey='lightText', **columns)
+
+    @staticmethod
+    def __getFormattedColumnsWithFreeXP(factors):
+        return {'column{}'.format(n):style.makeMultiXPFactorValue(factor, useFreeXPStyle=not bool(n % 2)) for n, factor in enumerate(factors, 1)}
 
 
 class CrystalDetailsBlock(_EconomicsDetailsBlock):
@@ -465,15 +520,15 @@ class CrystalDetailsBlock(_EconomicsDetailsBlock):
             if achievementName == 'originalCrystal':
                 if value > 0:
                     crystalTotal += value
-                    self._addRecord(i18n.makeString(BATTLE_RESULTS.DETAILS_CALCULATIONS_CRYSTAL_TOTAL), value)
+                    self._addRecord(backport.text(R.strings.battle_results.details.calculations.crystal.total()), value)
             crystalAchive += value
 
         if crystalAchive > 0:
-            self._addRecord(i18n.makeString(BATTLE_RESULTS.DETAILS_CALCULATIONS_CRYSTAL_ACHIEVEMENT), crystalAchive)
+            self._addRecord(backport.text(R.strings.battle_results.details.calculations.crystal.achievement()), crystalAchive)
         crystalTotal += crystalAchive
         if crystalTotal > 0:
             self.addNextComponent(style.EmptyStatRow())
-            i18nText = i18n.makeString(BATTLE_RESULTS.DETAILS_CALCULATIONS_TOTAL)
+            i18nText = backport.text(R.strings.battle_results.details.calculations.total())
             totalStr = makeHtmlString('html_templates:lobby/battle_results', 'lightText', {'value': i18nText})
             self._addRecord(totalStr, crystalTotal)
 
@@ -493,11 +548,11 @@ class _TotalEconomicsDetailsBlock(base.StatsBlock):
         igrType = reusable.getPlayerInfo().igrType
         personal = reusable.personal
         penaltyDetails = personal.avatar.getPenaltyDetails()
-        isPremuim = reusable.isPostBattlePremium
+        hasAnyPremium = reusable.hasAnyPremiumInPostBattle
         canResourceBeFaded = reusable.canResourceBeFaded
         for records in operator.methodcaller(self.__iteratorName)(personal):
             block = self.__blockClass(base.ListMeta(registered=True))
-            block.isPremium = isPremuim
+            block.hasAnyPremium = hasAnyPremium
             block.canResourceBeFaded = canResourceBeFaded
             block.igrType = igrType
             block.penaltyDetails = penaltyDetails
@@ -527,3 +582,85 @@ class TotalCrystalDetailsBlock(base.StatsBlock):
         block = CrystalDetailsBlock(base.ListMeta(registered=True))
         block.setRecord(personal.getCrystalDetails(), reusable)
         self.addNextComponent(block)
+
+
+class PremiumBonusDetailsBlock(base.StatsBlock):
+    __slots__ = ('description', 'bonusLeft', 'xpValue', 'statusBonusLabel', 'bonusIcon', '__isPersonalTeamWin', '__arenaUniqueID', '__arenaBonusType', '__xpFactor')
+    __itemsCache = dependency.descriptor(IItemsCache)
+    __battleResults = dependency.descriptor(IBattleResultsService)
+
+    def __init__(self, meta=None, field='', *path):
+        super(PremiumBonusDetailsBlock, self).__init__(meta, field, *path)
+        self.__arenaUniqueID = 0
+        self.__isPersonalTeamWin = False
+        self.__arenaBonusType = None
+        self.__xpFactor = 0
+        self.bonusIcon = ''
+        self.description = ''
+        self.bonusLeft = ''
+        self.xpValue = ''
+        self.statusBonusLabel = ''
+        return
+
+    def getVO(self):
+        self.__updateStatus()
+        return super(PremiumBonusDetailsBlock, self).getVO()
+
+    def setRecord(self, result, reusable):
+        self.__arenaUniqueID = reusable.arenaUniqueID
+        self.__isPersonalTeamWin = reusable.isPersonalTeamWin()
+        self.__arenaBonusType = reusable.common.arenaBonusType
+        self.__xpFactor = reusable.personal.getPremiumXPAddRecords().getFactor('additionalXPFactor10')
+
+    def __getIsApplied(self):
+        return self.__battleResults.isAddXPBonusApplied(self.__arenaUniqueID)
+
+    def __updateStatus(self):
+        self.__setBonusLeft()
+        if self.__arenaUniqueID == 0:
+            return
+        self.__setBaseState()
+        if self.__getIsApplied():
+            self.__setAppliedState()
+        elif not self.__isPersonalTeamWin:
+            self.__setLostBattleState()
+        elif not self.__battleResults.isAddXPBonusEnabled(self.__arenaUniqueID):
+            self.__setExcludedState()
+        else:
+            self.__setShowButtonState()
+
+    def __setBaseState(self):
+        self.bonusIcon = self.__getAddXPBonusIcon(self.__xpFactor)
+        self.description = text_styles.highlightText(backport.text(R.strings.battle_results.common.premiumBonus.description()))
+
+    def __setBonusLeft(self):
+        if self.__itemsCache.items.stats.isActivePremium(PREMIUM_TYPE.PLUS):
+            applyAdditionalXPCount = self.__itemsCache.items.stats.applyAdditionalXPCount
+        else:
+            applyAdditionalXPCount = '-'
+        self.bonusLeft = self.__getBonusLeftStr(applyAdditionalXPCount)
+
+    def __setAppliedState(self):
+        self.xpValue = ''
+        self.statusBonusLabel = '{}{}'.format(makeImageTag(source=backport.image(R.images.gui.maps.icons.library.ConfirmIcon_1())), text_styles.bonusAppliedText(backport.text(R.strings.battle_results.common.premiumBonus.appliedBonus())))
+
+    def __setExcludedState(self):
+        self.xpValue = ''
+        self.statusBonusLabel = '{}{}'.format(makeImageTag(source=backport.image(R.images.gui.maps.icons.library.attentionIconFilled()), vSpace=-3), text_styles.neutral(backport.text(R.strings.battle_results.common.premiumBonus.expiredBattleResult())))
+
+    def __setLostBattleState(self):
+        self.xpValue = ''
+        self.bonusIcon = self.__getAddXPBonusIcon(premacc_helpers.BattleResultsBonusConstants.LOST_BATTLE_BACKGROUND_MULTIPLIER)
+        self.statusBonusLabel = '{}{}'.format(makeImageTag(source=backport.image(R.images.gui.maps.icons.library.attentionIconFilled()), vSpace=-3), text_styles.neutral(backport.text(R.strings.battle_results.common.premiumBonus.rule())))
+
+    def __setShowButtonState(self):
+        self.statusBonusLabel = ''
+        bonusValue = self.__battleResults.getAdditionalXPValue(self.__arenaUniqueID)
+        self.xpValue = style.makeXpLabel(bonusValue, isDiff=True, useBigIcon=True)
+
+    def __getAddXPBonusIcon(self, multiplier):
+        multiplier = premacc_helpers.validateAdditionalBonusMultiplier(multiplier)
+        return backport.image(R.images.gui.maps.icons.premacc.battleResult.dyn('bonus_x{}'.format(multiplier))())
+
+    def __getBonusLeftStr(self, applyAdditionalXPCount):
+        return text_styles.main(backport.text(R.strings.battle_results.common.premiumBonus.bonusLeft(), count=text_styles.stats(applyAdditionalXPCount)))

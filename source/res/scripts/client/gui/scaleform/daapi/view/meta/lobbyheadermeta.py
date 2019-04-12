@@ -10,6 +10,9 @@ class LobbyHeaderMeta(BaseDAAPIComponent):
     def showLobbyMenu(self):
         self._printOverrideError('showLobbyMenu')
 
+    def showDashboard(self):
+        self._printOverrideError('showDashboard')
+
     def showExchangeWindow(self):
         self._printOverrideError('showExchangeWindow')
 
@@ -60,6 +63,9 @@ class LobbyHeaderMeta(BaseDAAPIComponent):
 
     def as_setBadgeIconS(self, tID):
         return self.flashObject.as_setBadgeIcon(tID) if self._isDAAPIInited() else None
+
+    def as_setBoosterDataS(self, data):
+        return self.flashObject.as_setBoosterData(data) if self._isDAAPIInited() else None
 
     def as_setPremiumParamsS(self, data):
         return self.flashObject.as_setPremiumParams(data) if self._isDAAPIInited() else None

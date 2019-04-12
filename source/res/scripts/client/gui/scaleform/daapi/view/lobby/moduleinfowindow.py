@@ -96,6 +96,8 @@ class ModuleInfoWindow(ModuleInfoMeta):
             if moduleParameters['isHydraulic']:
                 if module.isWheeledChassis():
                     description = _ms(MENU.MODULEINFO_HYDRAULICWHEELEDCHASSISLABEL)
+                elif module.hasAutoSiege():
+                    description = _ms(MENU.MODULEINFO_HYDRAULICAUTOSIEGECHASSISLABEL)
                 else:
                     description = _ms(MENU.MODULEINFO_HYDRAULICCHASSISLABEL)
         moduleData['description'] = description

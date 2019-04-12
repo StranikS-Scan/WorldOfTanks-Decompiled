@@ -26,9 +26,6 @@ class ClientRanked(object):
     def setClientMaxRank(self, clientRank, clientStep, callback=_skipResponse):
         self.__account._doCmdInt3(AccountCommands.CMD_SET_CLIENT_MAX_RANK, clientRank, clientStep, 0, lambda requestID, resultID, errorCode: callback(resultID, errorCode))
 
-    def setClientVehRank(self, vehTypeCompDescr, clientRank, clientStep, callback=_skipResponse):
-        self.__account._doCmdInt3(AccountCommands.CMD_SET_CLIENT_VEH_RANK, vehTypeCompDescr, clientRank, clientStep, lambda requestID, resultID, errorCode: callback(resultID, errorCode))
-
     def setClientShields(self, shieldsStatus, callback=_skipResponse):
         self.__account._doCmdIntArr(AccountCommands.CMD_SET_CLIENT_SHIELDS, shieldsStatus, lambda requestID, resultID, errorCode: callback(resultID, errorCode))
 

@@ -83,7 +83,7 @@ class GameSessionController(IGameSessionController, Notifiable):
             self.__notifyClient()
         self.startNotification()
         self.__loadBanCallback()
-        g_clientUpdateManager.addCallbacks({'account': self.__onAccountChanged,
+        g_clientUpdateManager.addCallbacks({'premium': self.__onAccountChanged,
          'stats.restrictions': self.__onRestrictionsChanged,
          'stats.playLimits': self.__onPlayLimitsChanged})
         return
@@ -200,7 +200,7 @@ class GameSessionController(IGameSessionController, Notifiable):
         return time_utils.ONE_DAY - _getSvrLocalToday()
 
     def __getClosestPremiumNotification(self):
-        return time_utils.getTimeDeltaFromNow(time_utils.makeLocalServerTime(self._stats.premiumExpiryTime))
+        return time_utils.getTimeDeltaFromNow(time_utils.makeLocalServerTime(self._stats.activePremiumExpiryTime))
 
     def __getClosestSessionTimeNotification(self):
         delay = self.NOTIFY_PERIOD
@@ -249,7 +249,7 @@ class GameSessionController(IGameSessionController, Notifiable):
 
     def __notifyPremiumTime(self):
         stats = self._stats
-        self.onPremiumNotify(stats.isPremium, stats.attributes, stats.premiumExpiryTime)
+        self.onPremiumNotify(stats.isPremium, stats.attributes, stats.activePremiumExpiryTime)
 
     def __onBanNotifyHandler(self):
         LOG_DEBUG('GameSessionController:__onBanNotifyHandler')
@@ -259,10 +259,9 @@ class GameSessionController(IGameSessionController, Notifiable):
         self.__loadBanCallback()
 
     def __onAccountChanged(self, diff):
-        if 'attrs' in diff or 'premiumExpiryTime' in diff:
-            self.startNotification()
-            stats = self._stats
-            self.onPremiumNotify(stats.isPremium, stats.attributes, stats.premiumExpiryTime)
+        self.startNotification()
+        stats = self._stats
+        self.onPremiumNotify(stats.isPremium, stats.attributes, stats.activePremiumExpiryTime)
 
     def __onRestrictionsChanged(self, _):
         self.__curfewBlockTime, self.__curfewUnblockTime = self.__getCurfewBlockTime(self._stats.restrictions)

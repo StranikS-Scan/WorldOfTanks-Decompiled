@@ -94,6 +94,8 @@ class AccountRequirements(ConditionsParser):
             return conditions.Token(uniqueName, data)
         if name == 'premium':
             return conditions.PremiumAccount(uniqueName, data)
+        if name == 'premiumPlus':
+            return conditions.PremiumPlusAccount(uniqueName, data)
         if name == 'inClan':
             return conditions.InClan(uniqueName, data)
         if name == 'igrType':

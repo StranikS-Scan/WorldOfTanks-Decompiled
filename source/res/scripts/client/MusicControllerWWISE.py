@@ -233,10 +233,9 @@ class MusicController(object):
         self.__isOnArena = False
         BigWorld.player().arena.onPeriodChange -= self.__onArenaStateChanged
 
-    def setAccountAttrs(self, accAttrs, restart=False):
+    def setAccountPremiumState(self, isPremium, restart=False):
         wasPremiumAccount = self.__isPremiumAccount
-        from account_helpers import isPremiumAccount
-        self.__isPremiumAccount = isPremiumAccount(accAttrs)
+        self.__isPremiumAccount = isPremium
         musicEventId = self.__music.getEventId()
         if restart and self.__isPremiumAccount != wasPremiumAccount and musicEventId == MUSIC_EVENT_LOBBY:
             self.play(musicEventId)

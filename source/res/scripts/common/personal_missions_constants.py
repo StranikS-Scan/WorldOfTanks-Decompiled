@@ -68,14 +68,6 @@ class TARGET_NATIONS:
     ANOTHER_ALLIANCE = 'anotherAlliance'
 
 
-class ASSIST_TYPES(object):
-    TRACK = 0
-    RADIO = 1
-    STUN = 2
-    SMOKE = 3
-    INSPIRE = 4
-
-
 class CRIT_TYPES(object):
     INNER_MODULES_AND_TANKMEN = 0
     DESTROYED_TRACKS = 1

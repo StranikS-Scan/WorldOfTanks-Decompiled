@@ -31,8 +31,8 @@ def _convertVehClassNamesToState(vehClassNames):
     return state
 
 
-def makeStrongholdsSlotsVOs(unitEntity, unitMgrID=None, app=None, maxPlayerCount=MAX_PLAYER_COUNT_ALL):
-    isRosterSet, slots = makeSlotsVOs(unitEntity, unitMgrID, app, maxPlayerCount)
+def makeStrongholdsSlotsVOs(unitEntity, unitMgrID=None, maxPlayerCount=MAX_PLAYER_COUNT_ALL):
+    isRosterSet, slots = makeSlotsVOs(unitEntity, unitMgrID, maxPlayerCount)
     isCommander = unitEntity.isCommander()
     fullData = unitEntity.getUnitFullData(unitMgrID=unitMgrID)
     isPlayersMatchingAvailable = unitEntity.isPlayersMatchingAvailable()
@@ -76,12 +76,12 @@ def makeStrongholdsSlotsVOs(unitEntity, unitMgrID=None, app=None, maxPlayerCount
     return (isRosterSet, slots)
 
 
-def makeSortieVO(unitEntity, isCommander, unitMgrID=None, app=None, canInvite=True, maxPlayerCount=MAX_PLAYER_COUNT_ALL):
+def makeSortieVO(unitEntity, isCommander, unitMgrID=None, canInvite=True, maxPlayerCount=MAX_PLAYER_COUNT_ALL):
     fullData = unitEntity.getUnitFullData(unitMgrID=unitMgrID)
     levelsValidation = unitEntity.validateLevels()
     canDoAction, restriction = levelsValidation.isValid, levelsValidation.restriction
     sumLevelsStr = makeTotalLevelLabel(fullData.stats, restriction)
-    _, slots = makeStrongholdsSlotsVOs(unitEntity, unitMgrID, app, maxPlayerCount)
+    _, slots = makeStrongholdsSlotsVOs(unitEntity, unitMgrID, maxPlayerCount)
     if fullData.playerInfo.isInSlot:
         disableCanBeTakenButtonInSlots(slots)
     if fullData.flags.isLocked() or unitEntity.isStrongholdUnitFreezed() or unitEntity.inPlayersMatchingMode():

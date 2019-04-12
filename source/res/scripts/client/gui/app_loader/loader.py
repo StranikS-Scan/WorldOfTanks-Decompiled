@@ -1,26 +1,72 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/app_loader/loader.py
 import logging
+import typing
 import Event
 from constants import ARENA_GUI_TYPE
 from gui import GUI_CTRL_MODE_FLAG as _CTRL_FLAG
 from gui.app_loader.observers import GameplayStatesObserver
-from gui.app_loader.interfaces import IAppFactory
 from gui.shared import g_eventBus, events
-from gui.app_loader.settings import APP_STATE_ID as _STATE_ID
 from gui.app_loader import spaces
+from skeletons.gui.app_loader import IAppLoader, IAppFactory, ApplicationStateID
+from skeletons.gui.app_loader import IWaitingWorker, IGlobalSpace
 _logger = logging.getLogger(__name__)
 _logger.addHandler(logging.NullHandler())
 
+class _EmptyWaitingWorker(IWaitingWorker):
+    __slots__ = ()
+
+    def getWaitingView(self, isBlocking):
+        _logger.error('Waiting widget is not defined')
+        return None
+
+    def isWaitingShown(self, messageID=None):
+        return False
+
+    def getWaitingTask(self, messageID):
+        _logger.error('Waiting task is not defined')
+        return None
+
+    def getSuspendedWaitingTask(self, messageID):
+        _logger.error('Waiting suspended task is not defined')
+        return None
+
+    def show(self, messageID, isSingle=False, interruptCallback=None, isBlocking=True):
+        _logger.error('Waiting is not found. Method "show" is ignored: %r', messageID)
+
+    def hide(self, messageID):
+        _logger.error('Waiting is not found. Method "hide" is ignored: %r', messageID)
+
+    def suspend(self):
+        _logger.error('Waiting is not found. Method "suspend" is ignored')
+
+    def resume(self):
+        _logger.error('Waiting is not found. Method "resumed" is ignored')
+
+    def isSuspended(self):
+        return False
+
+    def close(self):
+        _logger.error('Waiting is not found. Method "close" is ignored')
+
+    def rollback(self):
+        _logger.error('Waiting is not found. Method "rollback" is ignored')
+
+    def cancelCallback(self):
+        _logger.error('Waiting is not found. Method "cancelCallback" is ignored')
+
+
 class _EmptyFactory(IAppFactory):
-    pass
+    __slots__ = ()
+
+    def getWaitingWorker(self):
+        return _EmptyWaitingWorker()
 
 
-class _AppLoader(object):
-    __slots__ = ('__weakref__', '__space', '__appsStates', '__appFactory', '__observer', 'onGUISpaceLeft', 'onGUISpaceEntered')
+class AppLoader(IAppLoader):
 
     def __init__(self):
-        super(_AppLoader, self).__init__()
+        super(AppLoader, self).__init__()
         self.__space = spaces.WaitingSpace()
         self.__appsStates = {}
         self.__appFactory = _EmptyFactory()
@@ -52,14 +98,8 @@ class _AppLoader(object):
     def getSpaceID(self):
         return self.__space.getSpaceID()
 
-    def getPackageImporter(self):
-        importer = None
-        if self.__appFactory:
-            importer = self.__appFactory.getPackageImporter()
-        return importer
-
     def getAppStateID(self, appNS):
-        return self.__appsStates.get(appNS, _STATE_ID.NOT_CREATED)
+        return self.__appsStates.get(appNS, ApplicationStateID.NOT_CREATED)
 
     def getApp(self, appNS=None):
         app = None
@@ -79,11 +119,18 @@ class _AppLoader(object):
             app = self.__appFactory.getDefBattleApp()
         return app
 
+    def getWaitingWorker(self):
+        return self.__appFactory.getWaitingWorker()
+
     def changeSpace(self, space):
         return self.__updateSpace(space)
 
     def createLobby(self):
         self.__appFactory.createLobby()
+
+    def destroyLobby(self):
+        self.changeSpace(spaces.WaitingSpace())
+        self.__appFactory.destroyLobby()
 
     def showLobby(self):
         return self.changeSpace(spaces.LobbySpace())
@@ -95,6 +142,10 @@ class _AppLoader(object):
 
     def createBattle(self, arenaGuiType=ARENA_GUI_TYPE.UNKNOWN):
         self.__appFactory.createBattle(arenaGuiType)
+
+    def destroyBattle(self):
+        self.changeSpace(spaces.WaitingSpace())
+        self.__appFactory.destroyBattle()
 
     def attachCursor(self, appNS, flags=_CTRL_FLAG.CURSOR_VISIBLE):
         self.__appFactory.attachCursor(appNS, flags=flags)
@@ -132,28 +183,25 @@ class _AppLoader(object):
 
     def __getCreatedApps(self):
         for appNS, appState in self.__appsStates.iteritems():
-            if appState != _STATE_ID.NOT_CREATED:
+            if appState != ApplicationStateID.NOT_CREATED:
                 yield (appNS, appState)
 
     def __onAppInitializing(self, event):
         appNS = event.ns
         if self.__appFactory.hasApp(appNS):
             _logger.info('App is initializing: %s', appNS)
-            self.__appsStates[appNS] = _STATE_ID.INITIALIZING
-            self.__space.showGUI(self.__appFactory, appNS, _STATE_ID.INITIALIZING)
+            self.__appsStates[appNS] = ApplicationStateID.INITIALIZING
+            self.__space.showGUI(self.__appFactory, appNS, ApplicationStateID.INITIALIZING)
 
     def __onAppInitialized(self, event):
         appNS = event.ns
         if self.__appFactory.hasApp(appNS):
             _logger.info('App is initialized: %s', appNS)
-            self.__appsStates[appNS] = _STATE_ID.INITIALIZED
-            self.__space.showGUI(self.__appFactory, appNS, _STATE_ID.INITIALIZED)
+            self.__appsStates[appNS] = ApplicationStateID.INITIALIZED
+            self.__space.showGUI(self.__appFactory, appNS, ApplicationStateID.INITIALIZED)
 
     def __onAppDestroyed(self, event):
         appNS = event.ns
         if self.__appFactory.hasApp(appNS):
             _logger.info('App is destroyed: %s', appNS)
-            self.__appsStates[appNS] = _STATE_ID.NOT_CREATED
-
-
-g_appLoader = _AppLoader()
+            self.__appsStates[appNS] = ApplicationStateID.NOT_CREATED

@@ -8,12 +8,16 @@ import Settings
 import Event
 from PlayerEvents import g_playerEvents
 from debug_utils import LOG_DEBUG
+from helpers import dependency
+from skeletons.gui.app_loader import IAppLoader, GuiGlobalSpaceID
 g_instance = None
 
 class VibroManager(object):
 
     class GroupSettings(object):
         pass
+
+    appLoader = dependency.descriptor(IAppLoader)
 
     def __init__(self):
         self.__effects = {}
@@ -42,12 +46,10 @@ class VibroManager(object):
         return
 
     def start(self):
-        from gui.app_loader import g_appLoader
-        g_appLoader.onGUISpaceEntered += self.__onGUISpaceEntered
+        self.appLoader.onGUISpaceEntered += self.__onGUISpaceEntered
 
     def __onGUISpaceEntered(self, spaceID):
-        from gui.app_loader import settings
-        if spaceID == settings.GUI_GLOBAL_SPACE_ID.LOGIN:
+        if spaceID == GuiGlobalSpaceID.LOGIN:
             self.stopAllEffects()
 
     def __onAccountShowGUI(self, ctx):
@@ -67,8 +69,7 @@ class VibroManager(object):
                 effect.destroy()
 
     def destroy(self):
-        from gui.app_loader import g_appLoader
-        g_appLoader.onGUISpaceEntered -= self.__onGUISpaceEntered
+        self.appLoader.onGUISpaceEntered -= self.__onGUISpaceEntered
         self.clearEffects()
         self.__effects = None
         self.__quickEffects = None

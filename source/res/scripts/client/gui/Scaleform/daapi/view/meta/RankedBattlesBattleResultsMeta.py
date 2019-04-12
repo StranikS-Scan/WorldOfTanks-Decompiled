@@ -1,11 +1,14 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/meta/RankedBattlesBattleResultsMeta.py
-from gui.Scaleform.daapi.view.meta.WrapperViewMeta import WrapperViewMeta
+from gui.Scaleform.framework.entities.View import View
 
-class RankedBattlesBattleResultsMeta(WrapperViewMeta):
+class RankedBattlesBattleResultsMeta(View):
 
-    def closeView(self):
-        self._printOverrideError('closeView')
+    def onClose(self):
+        self._printOverrideError('onClose')
+
+    def onWidgetUpdate(self):
+        self._printOverrideError('onWidgetUpdate')
 
     def animationCheckBoxSelected(self, value):
         self._printOverrideError('animationCheckBoxSelected')

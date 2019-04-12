@@ -273,7 +273,7 @@ class SettingsWindow(SettingsWindowMeta):
             rh.leaveTestChannel()
         return False
 
-    @decorators.process('__updateCaptureDevices')
+    @decorators.process('updateCaptureDevices')
     def updateCaptureDevices(self):
         yield self.bwProto.voipController.requestCaptureDevices()
         opt = self.settingsCore.options.getSetting(settings_constants.SOUND.CAPTURE_DEVICES)

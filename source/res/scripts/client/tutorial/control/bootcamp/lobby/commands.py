@@ -1,8 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/tutorial/control/bootcamp/lobby/commands.py
+from helpers import dependency
+from skeletons.gui.app_loader import IAppLoader
 from tutorial.loader import g_loader
 from tutorial.logger import LOG_ERROR
-from gui.app_loader import g_appLoader
 
 def overrideHangarMenuButtons(buttonsListVarID=None):
     _getTutorialManager().overrideHangarMenuButtons(_getListByVarID(buttonsListVarID))
@@ -20,8 +21,9 @@ def overrideBattleSelectorHint(overrideType=None):
     _getTutorialManager().overrideBattleSelectorHint(overrideType)
 
 
-def _getTutorialManager():
-    return g_appLoader.getApp().tutorialManager
+@dependency.replace_none_kwargs(appLoader=IAppLoader)
+def _getTutorialManager(appLoader=None):
+    return appLoader.getApp().tutorialManager
 
 
 def _getListByVarID(varID):

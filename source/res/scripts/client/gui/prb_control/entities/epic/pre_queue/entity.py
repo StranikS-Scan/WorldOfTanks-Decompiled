@@ -11,8 +11,8 @@ from gui.Scaleform.locale.SYSTEM_MESSAGES import SYSTEM_MESSAGES
 from gui.prb_control import prb_getters
 from gui.prb_control.ctrl_events import g_prbCtrlEvents
 from gui.prb_control.entities.base import vehicleAmmoCheck
+from gui.prb_control.entities.base.pre_queue.ctx import LeavePreQueueCtx
 from gui.prb_control.entities.base.pre_queue.entity import PreQueueSubscriber, PreQueueEntryPoint, PreQueueEntity
-from gui.prb_control.entities.base.unit.ctx import LeaveUnitCtx
 from gui.prb_control.entities.epic.pre_queue.actions_validator import EpicActionsValidator
 from gui.prb_control.entities.epic.pre_queue.ctx import EpicQueueCtx
 from gui.prb_control.entities.epic.pre_queue.vehicles_watcher import EpicVehiclesWatcher
@@ -179,7 +179,7 @@ class EpicEntity(PreQueueEntity):
         status, _, _ = self.__epicController.getPrimeTimeStatus()
         isPlayable = self.__epicController.isEnabled() and not self.__epicController.isFrozen()
         if not isPlayable or not self.__epicController.hasAnySeason() or status is not PRIME_TIME_STATUS.AVAILABLE:
-            ctx = LeaveUnitCtx(waitingID='prebattle/leave', flags=FUNCTIONAL_FLAG.EXIT, entityType=self.getEntityType())
+            ctx = LeavePreQueueCtx(waitingID='prebattle/leave', flags=FUNCTIONAL_FLAG.EXIT, entityType=self.getEntityType())
 
             def showPrimeTime(_):
                 if isPlayable:

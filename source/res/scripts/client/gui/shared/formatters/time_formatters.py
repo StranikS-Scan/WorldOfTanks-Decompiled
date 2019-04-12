@@ -4,6 +4,7 @@ import math
 import time
 import BigWorld
 from gui.Scaleform.locale.MENU import MENU
+from gui.impl import backport
 from helpers import i18n, time_utils
 from rent_common import SeasonRentDuration
 from constants import GameSeasonType
@@ -73,6 +74,14 @@ def getDueDateOrTimeStr(finishTime, localization=''):
 
 def getTimeDurationStr(seconds, useRoundUp=False):
     return time_utils.getTillTimeString(seconds, MENU.TIME_TIMEVALUE, useRoundUp)
+
+
+def getTillTimeByResource(seconds, resource, useRoundUp=False, removeLeadingZeros=False):
+
+    def stringGen(key, **kwargs):
+        return backport.text(resource.dyn(key)(), **kwargs)
+
+    return time_utils.getTillTimeString(seconds, isRoundUp=useRoundUp, sourceStrGenerator=stringGen, removeLeadingZeros=removeLeadingZeros)
 
 
 class RentLeftFormatter(object):

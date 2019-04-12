@@ -1609,7 +1609,7 @@
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_105mm_TK_105_9>	shared	  <maxAmmo>	40	</maxAmmo>
+        <_105mm_TK_105_9>	shared	  <maxAmmo>	60	</maxAmmo>
           <unlocks>
             <gun>	_120mm_akan_L_40	  <cost>	62600	</cost>
             </gun>
@@ -1635,12 +1635,12 @@
             <maxPitch>	0 12 0.388889 12 0.430556 6 0.569444 6 0.611111 12 1 12	</maxPitch>
           </pitchLimits>
           <clip>
-            <count>	4	</count>
+            <count>	3	</count>
             <rate>	20	</rate>
           </clip>
           <invisibilityFactorAtShot>	0.198	</invisibilityFactorAtShot>
           <shotDispersionRadius>	0.36	</shotDispersionRadius>
-          <reloadTime>	30	</reloadTime>
+          <reloadTime>	22	</reloadTime>
           <aimingTime>	3	</aimingTime>
           <shotDispersionFactors>
             <turretRotation>	0.12	</turretRotation>
@@ -1700,7 +1700,7 @@
             <tiling>	1.5 1.5 0.000000 0.000000	</tiling>
           </camouflage>
         </_105mm_TK_105_9>
-        <_120mm_akan_L_40>	shared	  <maxAmmo>	40	</maxAmmo>
+        <_120mm_akan_L_40>	shared	  <maxAmmo>	48	</maxAmmo>
           <unlocks>
             <vehicle>	S16_Kranvagn	  <cost>	238000	</cost>
             </vehicle>
@@ -1726,12 +1726,12 @@
             <maxPitch>	0 12 0.388889 12 0.430556 6 0.569444 6 0.611111 12 1 12	</maxPitch>
           </pitchLimits>
           <clip>
-            <count>	4	</count>
-            <rate>	18	</rate>
+            <count>	3	</count>
+            <rate>	20	</rate>
           </clip>
           <invisibilityFactorAtShot>	0.18	</invisibilityFactorAtShot>
           <shotDispersionRadius>	0.38	</shotDispersionRadius>
-          <reloadTime>	40	</reloadTime>
+          <reloadTime>	25	</reloadTime>
           <aimingTime>	2.8	</aimingTime>
           <shotDispersionFactors>
             <turretRotation>	0.12	</turretRotation>
@@ -1891,11 +1891,11 @@
     <detailed>
       <engines>
         <AV_1195>
-          <smplEnginePower>	400	</smplEnginePower>
+          <smplEnginePower>	420	</smplEnginePower>
           <smplFwMaxSpeed>	56	</smplFwMaxSpeed>
         </AV_1195>
         <AVS_1195>
-          <smplEnginePower>	520	</smplEnginePower>
+          <smplEnginePower>	550	</smplEnginePower>
           <smplFwMaxSpeed>	56	</smplFwMaxSpeed>
         </AVS_1195>
       </engines>

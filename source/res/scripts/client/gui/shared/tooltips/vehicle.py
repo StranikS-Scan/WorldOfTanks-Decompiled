@@ -4,6 +4,8 @@ import collections
 import logging
 import BigWorld
 import constants
+from gui.impl.gen import R
+from gui.impl import backport
 from gui.Scaleform.daapi.view.lobby.techtree.settings import UnlockProps
 from gui.Scaleform.genConsts.BLOCKS_TOOLTIP_TYPES import BLOCKS_TOOLTIP_TYPES
 from gui.Scaleform.genConsts.ICON_TEXT_FRAMES import ICON_TEXT_FRAMES
@@ -139,7 +141,8 @@ class VehicleInfoTooltipData(BlocksTooltipData):
         return block
 
     def __createStatusBlock(self, vehicle, items, statsConfig, paramsConfig, valueWidth):
-        frontlineBlock = FrontlineRentBlockConstructor(vehicle, statsConfig, self.context.getParams(), valueWidth, leftPadding=20, rightPadding=20).construct()
+        ctxParams = self.context.getParams()
+        frontlineBlock = FrontlineRentBlockConstructor(vehicle, statsConfig, ctxParams, valueWidth, leftPadding=20, rightPadding=20).construct()
         if frontlineBlock:
             items.append(formatters.packBuildUpBlockData(frontlineBlock, gap=-4, padding=formatters.packPadding(left=25, right=20, top=0, bottom=-11)))
         if vehicle.canTradeIn:
@@ -149,7 +152,7 @@ class VehicleInfoTooltipData(BlocksTooltipData):
         if statsConfig.rentals and not vehicle.isPremiumIGR and not frontlineBlock:
             if statsConfig.futureRentals:
                 rentLeftKey = '#tooltips:vehicle/rentLeftFuture/%s'
-                rentInfo = RentalInfoProvider(time=paramsConfig.params.get('rentExpiryTime'), battles=paramsConfig.params.get('rentBattlesLeft'), wins=paramsConfig.params.get('rentWinsLeft'), seasonRent=paramsConfig.params.get('rentSeason'), isRented=True)
+                rentInfo = RentalInfoProvider(time=ctxParams.get('rentExpiryTime'), battles=ctxParams.get('rentBattlesLeft'), wins=ctxParams.get('rentWinsLeft'), seasonRent=ctxParams.get('rentSeason'), isRented=True)
             else:
                 rentLeftKey = '#tooltips:vehicle/rentLeft/%s'
                 rentInfo = vehicle.rentInfo
@@ -158,6 +161,8 @@ class VehicleInfoTooltipData(BlocksTooltipData):
              'descr': i18n.makeString(key % countType)})
             if rentLeftInfo:
                 items.append(formatters.packTextParameterWithIconBlockData(name=text_styles.main(rentLeftInfo['descr']), value=text_styles.main(rentLeftInfo['left']), icon=ICON_TEXT_FRAMES.RENTALS, iconYOffset=2, gap=0, valueWidth=valueWidth, padding=formatters.packPadding(left=0, bottom=-10)))
+        if statsConfig.showRankedBonusBattle:
+            items.append(formatters.packTextParameterWithIconBlockData(name=text_styles.main(backport.text(R.strings.tooltips.vehicle.rankedBonusBattle())), value='', icon=ICON_TEXT_FRAMES.BONUS_BATTLE, iconYOffset=2, valueWidth=valueWidth, gap=0, padding=formatters.packPadding(left=0, top=-2, bottom=5)))
         if statsConfig.dailyXP:
             attrs = self.__itemsCache.items.stats.attributes
             if attrs & constants.ACCOUNT_ATTR.DAILY_MULTIPLIED_XP and vehicle.dailyXPFactor > 0:

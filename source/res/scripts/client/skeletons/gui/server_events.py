@@ -55,6 +55,9 @@ class IEventsCache(object):
     def getLinkedSetQuests(self, filterFunc=None):
         raise NotImplementedError
 
+    def getPremiumQuests(self, filterFunc=None):
+        raise NotImplementedError
+
     def getBattleQuests(self, filterFunc=None):
         raise NotImplementedError
 
@@ -128,6 +131,9 @@ class IEventsCache(object):
         raise NotImplementedError
 
     def getSquadZeroBonuses(self):
+        raise NotImplementedError
+
+    def getSquadXPFactor(self):
         raise NotImplementedError
 
     def getQuestsDossierBonuses(self):

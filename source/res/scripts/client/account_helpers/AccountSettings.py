@@ -53,6 +53,7 @@ AWARDS = 'awards'
 CONTACTS = 'CONTACTS'
 BOOSTERS = 'BOOSTERS'
 FALLOUT_VEHICLES = 'FALLOUT_VEHICLES'
+MARATHON_REWARD_WAS_SHOWN = 'marathonRewardWasShown'
 GOLD_FISH_LAST_SHOW_TIME = 'goldFishWindowShowCooldown'
 BOOSTERS_FILTER = 'boostersFilter'
 LAST_PROMO_PATCH_VERSION = 'lastPromoPatchVersion'
@@ -65,6 +66,8 @@ NEW_HOF_COUNTER = 'newHofCounter'
 NEW_LOBBY_TAB_COUNTER = 'newLobbyTabCounter'
 REFERRAL_COUNTER = 'referralButtonCounter'
 PROGRESSIVE_REWARD_VISITED = 'progressiveRewardVisited'
+RANKED_AWARDS_COUNTER = 'rankedAwardsCounter'
+RANKED_INFO_COUNTER = 'rankedInfoCounter'
 PROFILE_TECHNIQUE = 'profileTechnique'
 PROFILE_TECHNIQUE_MEMBER = 'profileTechniqueMember'
 SHOW_CRYSTAL_HEADER_BAND = 'showCrystalHeaderBand'
@@ -104,6 +107,11 @@ SELECTED_INTRO_VEHICLES_FIELD = 'selectedIntroVehicles'
 CREW_SKINS_VIEWED = 'crew_skins_viewed'
 CREW_SKINS_HISTORICAL_VISIBLE = 'crew_skins_historical_visible'
 VEHICLES_WITH_BLUEPRINT_CONFIRM = 'showedBlueprintConfirm'
+IS_FIRST_DIVISION_ENTRY = 'isFirstDivisionEntry'
+RANKED_STYLED_VEHICLES_POOL = 'rankedStyledVehiclesPool'
+RANKED_WEB_LEAGUE = 'rankedWebLeague'
+RANKED_WEB_LEAGUE_UPDATE = 'rankedWebLeagueUpdate'
+RANKED_AWARDS_BUBBLE_WAS_SHOWN = 'rankedAwardsBubbleWasShown'
 KNOWN_SELECTOR_BATTLES = 'knownSelectorBattles'
 DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                'shop_current': (-1, STORE_CONSTANTS.VEHICLE, False),
@@ -288,6 +296,7 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                                     'lastShownEpicWelcomeScreen': 0},
                EULA_VERSION: {'version': 0},
                LINKEDSET_QUESTS: {'shown': 0},
+               MARATHON_REWARD_WAS_SHOWN: False,
                FORT_MEMBER_TUTORIAL: {'wasShown': False},
                IGR_PROMO: {'wasShown': False},
                BOOSTERS: {'wasShown': False},
@@ -528,12 +537,19 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                                             NUM_BATTLES: 0},
                 CREW_SKINS_VIEWED: set(),
                 CREW_SKINS_HISTORICAL_VISIBLE: (True, True),
-                VEHICLES_WITH_BLUEPRINT_CONFIRM: {}},
+                VEHICLES_WITH_BLUEPRINT_CONFIRM: {},
+                IS_FIRST_DIVISION_ENTRY: True,
+                RANKED_STYLED_VEHICLES_POOL: [],
+                RANKED_WEB_LEAGUE: None,
+                RANKED_WEB_LEAGUE_UPDATE: None,
+                RANKED_AWARDS_BUBBLE_WAS_SHOWN: False},
  KEY_COUNTERS: {NEW_HOF_COUNTER: {PROFILE_CONSTANTS.HOF_ACHIEVEMENTS_BUTTON: True,
                                   PROFILE_CONSTANTS.HOF_VEHICLES_BUTTON: True,
                                   PROFILE_CONSTANTS.HOF_VIEW_RATING_BUTTON: True},
                 NEW_LOBBY_TAB_COUNTER: {},
-                REFERRAL_COUNTER: 1},
+                REFERRAL_COUNTER: 1,
+                RANKED_AWARDS_COUNTER: 0,
+                RANKED_INFO_COUNTER: 1},
  KEY_NOTIFICATIONS: {ELEN_NOTIFICATIONS: {MISSIONS_CONSTANTS.ELEN_EVENT_STARTED_NOTIFICATION: set(),
                                           MISSIONS_CONSTANTS.ELEN_EVENT_FINISHED_NOTIFICATION: set(),
                                           MISSIONS_CONSTANTS.ELEN_EVENT_TAB_VISITED: set()},

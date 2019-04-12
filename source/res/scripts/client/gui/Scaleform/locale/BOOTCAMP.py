@@ -144,6 +144,8 @@ class BOOTCAMP(object):
     MESSAGE_GOLD_TEXT = '#bootcamp:message/gold/text'
     MESSAGE_PREMIUM_LABEL = '#bootcamp:message/premium/label'
     MESSAGE_PREMIUM_TEXT = '#bootcamp:message/premium/text'
+    MESSAGE_PREMIUMPLUS_LABEL = '#bootcamp:message/premiumPlus/label'
+    MESSAGE_PREMIUMPLUS_TEXT = '#bootcamp:message/premiumPlus/text'
     MESSAGE_BONUS_PREMIUM_DAYS = '#bootcamp:message/bonus/premium/days'
     MESSAGE_BONUS_PREMIUM_HOURS = '#bootcamp:message/bonus/premium/hours'
     MESSAGE_MISSION_ACCOMPLISHED_LABEL = '#bootcamp:message/mission/accomplished/label'
@@ -184,6 +186,8 @@ class BOOTCAMP(object):
     RESULT_AWARD_SHOOT_TEXT = '#bootcamp:result/award/shoot/text'
     RESULT_AWARD_PREMIUM_LABEL = '#bootcamp:result/award/premium/label'
     RESULT_AWARD_PREMIUM_TEXT = '#bootcamp:result/award/premium/text'
+    RESULT_AWARD_PREMIUMPLUS_LABEL = '#bootcamp:result/award/premiumPlus/label'
+    RESULT_AWARD_PREMIUMPLUS_TEXT = '#bootcamp:result/award/premiumPlus/text'
     RESULT_AWARD_GOLD_LABEL = '#bootcamp:result/award/gold/label'
     RESULT_AWARD_GOLD_TEXT = '#bootcamp:result/award/gold/text'
     RESULT_AWARD_MISSION_LABEL = '#bootcamp:result/award/mission/label'
@@ -297,17 +301,17 @@ class BOOTCAMP(object):
     LUDVIK_BENES = '#bootcamp:Ludvik Benes'
     JURGEN_WOLF = '#bootcamp:Jurgen Wolf'
     JOSEPH_ONEAL = '#bootcamp:Joseph ONeal'
-    BATTLE_RESULT_DESCRIPTION_ENUM = (BATTLE_RESULT_DESCRIPTION_DESTROYED,
-     BATTLE_RESULT_DESCRIPTION_DAMAGE,
-     BATTLE_RESULT_DESCRIPTION_BLOCKED,
-     BATTLE_RESULT_DESCRIPTION_DETECTED,
-     BATTLE_RESULT_DESCRIPTION_ASSISTED)
     BATTLE_RESULT_ENUM = (BATTLE_RESULT_DESTROYED,
      BATTLE_RESULT_DAMAGE,
      BATTLE_RESULT_BLOCKED,
      BATTLE_RESULT_DETECTED,
      BATTLE_RESULT_ASSISTED,
      BATTLE_RESULT_DESCRIPTION_DESTROYED,
+     BATTLE_RESULT_DESCRIPTION_DAMAGE,
+     BATTLE_RESULT_DESCRIPTION_BLOCKED,
+     BATTLE_RESULT_DESCRIPTION_DETECTED,
+     BATTLE_RESULT_DESCRIPTION_ASSISTED)
+    BATTLE_RESULT_DESCRIPTION_ENUM = (BATTLE_RESULT_DESCRIPTION_DESTROYED,
      BATTLE_RESULT_DESCRIPTION_DAMAGE,
      BATTLE_RESULT_DESCRIPTION_BLOCKED,
      BATTLE_RESULT_DESCRIPTION_DETECTED,

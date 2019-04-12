@@ -4,13 +4,14 @@ import weakref
 from collections import namedtuple
 from account_helpers.settings_core import settings_constants
 from account_helpers.settings_core.migrations import migrateToVersion
-from account_helpers.settings_core.settings_constants import TUTORIAL, VERSION
+from account_helpers.settings_core.settings_constants import TUTORIAL, VERSION, GuiSettingsBehavior
 from adisp import process, async
 from debug_utils import LOG_ERROR, LOG_DEBUG
 from gui.server_events.pm_constants import PM_TUTOR_FIELDS
 from helpers import dependency
 from shared_utils import CONST_CONTAINER
 from skeletons.account_helpers.settings_core import ISettingsCache
+GUI_START_BEHAVIOR = 'guiStartBehavior'
 
 class SETTINGS_SECTIONS(CONST_CONTAINER):
     GAME = 'GAME'
@@ -239,11 +240,11 @@ class ServerSettingsManager(object):
                                                       'favorite': 5,
                                                       'bonus': 6,
                                                       'event': 7}, offsets={}),
-     SETTINGS_SECTIONS.GUI_START_BEHAVIOR: Section(masks={'isFreeXPInfoDialogShowed': 0,
-                                            'isRankedWelcomeViewShowed': 1,
-                                            'isRankedWelcomeViewStarted': 2,
-                                            'isEpicRandomCheckboxClicked': 3,
-                                            'isEpicWelcomeViewShowed': 5}, offsets={'lastShownEpicWelcomeScreen': Offset(6, 4194240)}),
+     SETTINGS_SECTIONS.GUI_START_BEHAVIOR: Section(masks={GuiSettingsBehavior.FREE_XP_INFO_DIALOG_SHOWED: 0,
+                                            GuiSettingsBehavior.RANKED_WELCOME_VIEW_SHOWED: 1,
+                                            GuiSettingsBehavior.RANKED_WELCOME_VIEW_STARTED: 2,
+                                            GuiSettingsBehavior.EPIC_RANDOM_CHECKBOX_CLICKED: 3,
+                                            GuiSettingsBehavior.EPIC_WELCOME_VIEW_SHOWED: 5}, offsets={GuiSettingsBehavior.LAST_SHOWN_EPIC_WELCOME_SCREEN: Offset(6, 4194240)}),
      SETTINGS_SECTIONS.EULA_VERSION: Section(masks={}, offsets={'version': Offset(0, 4294967295L)}),
      SETTINGS_SECTIONS.MARKS_ON_GUN: Section(masks={}, offsets={GAME.SHOW_MARKS_ON_GUN: Offset(0, 4294967295L)}),
      SETTINGS_SECTIONS.CONTACTS: Section(masks={CONTACTS.SHOW_OFFLINE_USERS: 0,
@@ -615,6 +616,7 @@ class ServerSettingsManager(object):
          'feedbackBattleEvents': {},
          'onceOnlyHints': {},
          'uiStorage': {},
+         GUI_START_BEHAVIOR: {},
          'clear': {},
          'delete': []}
         yield migrateToVersion(currentVersion, self._core, data)
@@ -676,6 +678,10 @@ class ServerSettingsManager(object):
         clearUIStorage = clear.get('uiStorage', 0)
         if uiStorage or clearUIStorage:
             settings[SETTINGS_SECTIONS.UI_STORAGE] = self._buildSectionSettings(SETTINGS_SECTIONS.UI_STORAGE, uiStorage) ^ clearUIStorage
+        guiStartBehavior = data.get(GUI_START_BEHAVIOR, {})
+        clearGuiStartBehavior = clear.get(GUI_START_BEHAVIOR, 0)
+        if guiStartBehavior or clearGuiStartBehavior:
+            settings[SETTINGS_SECTIONS.GUI_START_BEHAVIOR] = self._buildSectionSettings(SETTINGS_SECTIONS.GUI_START_BEHAVIOR, guiStartBehavior) ^ clearGuiStartBehavior
         version = data.get(VERSION)
         if version is not None:
             settings[VERSION] = version

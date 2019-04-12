@@ -5,7 +5,7 @@ from gui.shared.utils.TimeInterval import TimeInterval
 from constants import VEHICLE_SIEGE_STATE
 
 class _ComponentUpdater(object):
-    __slots__ = ('_parentObj', '_totalTime', '_timeLeft', '_siegeState', '_engineState', '_isSmooth')
+    __slots__ = ('_parentObj', '_totalTime', '_timeLeft', '_siegeState', '_engineState', '_isSmooth', '_staticMode')
 
     def __init__(self, parentObj, totalTime, timeLeft, siegeState, engineState, isSmooth):
         super(_ComponentUpdater, self).__init__()
@@ -15,6 +15,7 @@ class _ComponentUpdater(object):
         self._siegeState = siegeState
         self._engineState = engineState
         self._isSmooth = isSmooth
+        self._staticMode = False
 
     def __repr__(self):
         return '_UpdaterComponent(totalTime = {}, timeLeft = {}, siegeState = {}, engineState = {})'.format(self._totalTime, self._timeLeft, self._siegeState, self._engineState)
@@ -33,12 +34,20 @@ class _ComponentUpdater(object):
     def _stopTick(self):
         raise NotImplementedError
 
+    def set_staticMode(self, value):
+        self._staticMode = value
+
+    staticMode = property(lambda self: self._staticMode, set_staticMode)
+
 
 class _ActionScriptUpdater(_ComponentUpdater):
     __slots__ = ()
 
     def _startTick(self):
-        self._parentObj.as_switchSiegeStateS(self._totalTime, self._timeLeft, self._siegeState, self._engineState, self._isSmooth)
+        if self._staticMode:
+            self._parentObj.as_setAutoSiegeModeStateS(self._siegeState, self._engineState)
+        else:
+            self._parentObj.as_switchSiegeStateS(self._totalTime, self._timeLeft, self._siegeState, self._engineState, self._isSmooth)
 
     def _stopTick(self):
         pass
@@ -58,7 +67,7 @@ class _PythonUpdater(_ComponentUpdater):
         super(_PythonUpdater, self).clear()
 
     def _startTick(self):
-        if self._siegeState in VEHICLE_SIEGE_STATE.SWITCHING:
+        if self._siegeState in VEHICLE_SIEGE_STATE.SWITCHING and not self._staticMode:
             timeLeft = max(0, self._finishTime - BigWorld.serverTime())
             if timeLeft:
                 self._updateSnapshot(timeLeft)
@@ -71,27 +80,34 @@ class _PythonUpdater(_ComponentUpdater):
         self._timeInterval.stop()
 
     def _tick(self):
+        if self._staticMode:
+            return
         timeLeft = self._finishTime - BigWorld.serverTime()
         if timeLeft >= 0 and self._engineState != 'destroyed':
             self._updateSnapshot(timeLeft)
 
     def _updateSnapshot(self, timeLeft):
-        self._parentObj.as_switchSiegeStateSnapshotS(self._totalTime, timeLeft, self._siegeState, self._engineState, self._isSmooth)
+        if self._staticMode:
+            self._parentObj.as_setAutoSiegeModeStateS(self._siegeState, self._engineState)
+        else:
+            self._parentObj.as_switchSiegeStateSnapshotS(self._totalTime, timeLeft, self._siegeState, self._engineState, self._isSmooth)
 
 
 class _SiegeComponent(object):
-    __slots__ = ('_componentUpdater', '_parentObj', '_clazz')
+    __slots__ = ('_componentUpdater', '_parentObj', '_clazz', '_staticMode')
 
     def __init__(self, parentObj, clazz):
         super(_SiegeComponent, self).__init__()
         self._componentUpdater = None
         self._parentObj = parentObj
         self._clazz = clazz
+        self._staticMode = False
         return
 
     def invalidate(self, totalTime, timeLeft, siegeState, engineState, isSmooth):
         self._clearUpdater()
         self._componentUpdater = self._clazz(self._parentObj, totalTime, timeLeft, siegeState, engineState, isSmooth)
+        self._componentUpdater.staticMode = self._staticMode
         self._componentUpdater.show()
 
     def clear(self):
@@ -103,6 +119,14 @@ class _SiegeComponent(object):
         if self._componentUpdater is not None:
             self._componentUpdater.clear()
         return
+
+    def set_staticMode(self, value):
+        self._staticMode = value
+        if self._componentUpdater is not None:
+            self._componentUpdater.staticMode = self._staticMode
+        return
+
+    staticMode = property(lambda self: self._staticMode, set_staticMode)
 
 
 class _DefaultSiegeComponent(_SiegeComponent):

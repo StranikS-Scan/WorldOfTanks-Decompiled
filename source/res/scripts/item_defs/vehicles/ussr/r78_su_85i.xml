@@ -86,7 +86,7 @@
     <hangarShadowTexture>	vehicles/russian/R78_SU_85I/SU_85I_HangarShadowMap.dds	</hangarShadowTexture>
     <customization>
       <customizableVehicleAreas>
-        <paint></paint>
+        <paint>	HULL	</paint>
         <camouflage>	HULL	</camouflage>
       </customizableVehicleAreas>
     </customization>
@@ -107,9 +107,9 @@
         <rayStart>	1.03839 0.891972 0.965977	</rayStart>
         <rayEnd>	0.663331 0.752937 0.965816	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
+        <isMirrored>	true	</isMirrored>
         <size>	0.2	</size>
         <hideIfDamaged>	false	</hideIfDamaged>
-        <isMirrored>	true	</isMirrored>
         <isUVProportional>	true	</isUVProportional>
       </slot>
       <slot>
@@ -145,8 +145,14 @@
       <slot>
         <slotType>	camouflage	</slotType>
         <slotId>	3	</slotId>
-        <anchorPosition>	-0.0166172 0.444515 -1.79245	</anchorPosition>
-        <anchorDirection>	0.000059 0.642787 -0.766044	</anchorDirection>
+        <anchorPosition>	-0.000012 0.534395 -1.08744	</anchorPosition>
+        <anchorDirection>	0.000000 0.623839 -0.781553	</anchorDirection>
+      </slot>
+      <slot>
+        <slotType>	paint	</slotType>
+        <slotId>	2	</slotId>
+        <anchorPosition>	-0.000012 0.534394 -1.08744	</anchorPosition>
+        <anchorDirection>	0.000000 0.623839 -0.781553	</anchorDirection>
       </slot>
     </customizationSlots>
     <camouflage>
@@ -816,7 +822,7 @@
       </physicalTracks>
       <customization>
         <customizableVehicleAreas>
-          <paint></paint>
+          <paint>	CHASSIS	</paint>
           <camouflage></camouflage>
         </customizableVehicleAreas>
       </customization>
@@ -824,8 +830,14 @@
         <slot>
           <slotType>	style	</slotType>
           <slotId>	257	</slotId>
-          <anchorPosition>	-0.000000 2.20618 0.265989	</anchorPosition>
-          <anchorDirection>	0.000000 1 0.000000	</anchorDirection>
+          <anchorPosition>	-0.00708628 2.16769 0.251084	</anchorPosition>
+          <anchorDirection>	0.000000 1 -0.000000	</anchorDirection>
+        </slot>
+        <slot>
+          <slotType>	paint	</slotType>
+          <slotId>	256	</slotId>
+          <anchorPosition>	-1.46136 0.61048 0.015765	</anchorPosition>
+          <anchorDirection>	-0.922677 0.385446 0.00995371	</anchorDirection>
         </slot>
       </customizationSlots>
     </Chassis_SU_85I>
@@ -888,7 +900,7 @@
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <customization>
             <customizableVehicleAreas>
-              <paint></paint>
+              <paint>	GUN GUN_2	</paint>
               <camouflage>	GUN	</camouflage>
             </customizableVehicleAreas>
           </customization>
@@ -906,9 +918,23 @@
             <slot>
               <slotType>	camouflage	</slotType>
               <slotId>	770	</slotId>
-              <anchorPosition>	0.00324375 0.0336022 1.6683	</anchorPosition>
+              <anchorPosition>	0.00324471 0.033306 1.6683	</anchorPosition>
               <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
               <applyTo>	4096	</applyTo>
+            </slot>
+            <slot>
+              <slotType>	paint	</slotType>
+              <slotId>	768	</slotId>
+              <anchorPosition>	0.00324471 0.0333107 1.6683	</anchorPosition>
+              <anchorDirection>	-0.000000 0.000000 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+            <slot>
+              <slotType>	paint	</slotType>
+              <slotId>	769	</slotId>
+              <anchorPosition>	0.000000 0.343983 0.343983	</anchorPosition>
+              <anchorDirection>	0.000000 0.707107 0.707107	</anchorDirection>
+              <applyTo>	16384	</applyTo>
             </slot>
           </customizationSlots>
         </_85mm_D-5S-85A_1>

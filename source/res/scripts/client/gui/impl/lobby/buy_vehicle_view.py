@@ -10,7 +10,6 @@ from gui.game_control.epic_meta_game_ctrl import FRONTLINE_SCREENS
 from rent_common import parseRentID
 from gui import GUI_SETTINGS
 from gui import SystemMessages
-from gui.app_loader import g_appLoader
 from gui.DialogsInterface import showI18nConfirmDialog
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.ingame_shop import showBuyGoldForVehicleWebOverlay
@@ -25,7 +24,7 @@ from gui.Scaleform.framework.entities.EventSystemEntity import EventSystemEntity
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.Scaleform.genConsts.STORE_CONSTANTS import STORE_CONSTANTS
 from gui.impl.pub import ViewImpl
-from gui.impl.backport import BackportTooltipWindow, TooltipData
+from gui.impl.backport.backport_tooltip import BackportTooltipWindow, TooltipData
 from gui.impl.gen.resources import R
 from gui.impl.gen.view_models.views.buy_vehicle_view_model import BuyVehicleViewModel
 from gui.impl.gen.view_models.views.buy_vehicle_view.commander_slot_model import CommanderSlotModel
@@ -34,9 +33,7 @@ from gui.shared.event_bus import EVENT_BUS_SCOPE
 from gui.shared.events import ShopEvent
 from gui.shared.tooltips import ACTION_TOOLTIPS_TYPE
 from gui.shared.gui_items.Tankman import CrewTypes
-from helpers import i18n, dependency, int2roman, func_utils
-from skeletons.gui.game_control import IRentalsController, ITradeInController, IRestoreController, IBootcampController, IWalletController, IEpicBattleMetaGameController
-from skeletons.gui.shared import IItemsCache
+from skeletons.gui.app_loader import IAppLoader
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.money import ZERO_MONEY
 from gui.shared.gui_items.Vehicle import getTypeUserName, getSmallIconPath, getLevelSmallIconPath, getTypeSmallIconPath
@@ -48,7 +45,10 @@ from gui.shared.gui_items.gui_item_economics import ItemPrice
 from gui.shared.utils import decorators
 from gui.shared.events import VehicleBuyEvent
 from gui.shared.gui_items.processors.vehicle import VehicleBuyer, VehicleSlotBuyer, VehicleRenter, VehicleTradeInProcessor, VehicleRestoreProcessor
+from helpers import i18n, dependency, int2roman, func_utils
 from shared_utils import CONST_CONTAINER
+from skeletons.gui.game_control import IRentalsController, ITradeInController, IRestoreController, IBootcampController, IWalletController, IEpicBattleMetaGameController
+from skeletons.gui.shared import IItemsCache
 from frameworks.wulf import ViewFlags, WindowFlags, ViewStatus, Window
 
 class VehicleBuyActionTypes(CONST_CONTAINER):
@@ -160,9 +160,8 @@ class BuyVehicleView(ViewImpl, EventSystemEntity):
             vm.setTankName(self.__vehicle.shortUserName)
             vm.setCountCrew(len(self.__vehicle.crew))
             vm.setBuyVehicleIntCD(self.__vehicle.intCD)
-            vm.setIsToggleBtnVisible(self.__isTradeIn() and self.__vehicle.hasRentPackages)
+            vm.toggleTradeInBtn.setIsVisible(self.__isTradeIn() and self.__vehicle.hasRentPackages)
             vm.setIsElite(isElite)
-            vm.setIsRentVisible(self.__isRentVisible)
             vm.setIsMovingTextEnabled(constants.IS_CHINA and GUI_SETTINGS.movingText.show)
             if self.__vehicle.hasCrew:
                 vm.setWithoutCommanderAltText(R.strings.store.buyVehicleWindow.crewInVehicle())
@@ -172,6 +171,7 @@ class BuyVehicleView(ViewImpl, EventSystemEntity):
             emtySlotAvailable = self.__itemsCache.items.inventory.getFreeSlots(self.__stats.vehicleSlots) > 0
             equipmentBlock.setEmtySlotAvailable(emtySlotAvailable)
             equipmentBlock.setIsRestore(isRestore)
+            self.__updateToggleTradeInBtn()
             if self.__vehicle.hasRentPackages and (not isRestore or self.__actionType == VehicleBuyActionTypes.RENT) and self.__actionType != VehicleBuyActionTypes.BUY:
                 self.__selectedRentIdx = 0
                 self.__selectedRentID = self.__vehicle.rentPackages[self.__selectedRentIdx]['rentID']
@@ -243,7 +243,7 @@ class BuyVehicleView(ViewImpl, EventSystemEntity):
         self.viewModel.onCheckboxWithoutCrewChanged += self.__onCheckboxWithoutCrewChanged
         self.viewModel.onBuyBtnClick += self.__onBuyBtnClick
         self.viewModel.onCommanderLvlChange += self.__onCommanderLvlChange
-        self.viewModel.onToggleRentAndTradeIn += self.__onToggleRentAndTradeIn
+        self.viewModel.toggleTradeInBtn.onClicked += self.__onToggleRentAndTradeIn
         self.viewModel.onBackClick += self.__onWindowClose
         equipmentBlock = self.viewModel.equipmentBlock
         equipmentBlock.onCancelTradeOffVehicle += self.__onCancelTradeOffVehicle
@@ -263,7 +263,7 @@ class BuyVehicleView(ViewImpl, EventSystemEntity):
         self.viewModel.onCheckboxWithoutCrewChanged -= self.__onCheckboxWithoutCrewChanged
         self.viewModel.onBuyBtnClick -= self.__onBuyBtnClick
         self.viewModel.onCommanderLvlChange -= self.__onCommanderLvlChange
-        self.viewModel.onToggleRentAndTradeIn -= self.__onToggleRentAndTradeIn
+        self.viewModel.toggleTradeInBtn.onClicked -= self.__onToggleRentAndTradeIn
         self.viewModel.onBackClick -= self.__onWindowClose
         equipmentBlock = self.viewModel.equipmentBlock
         equipmentBlock.onCancelTradeOffVehicle -= self.__onCancelTradeOffVehicle
@@ -442,10 +442,10 @@ class BuyVehicleView(ViewImpl, EventSystemEntity):
                 vm.equipmentBlock.setTradeOffVehicleIntCD(self.__TRADE_OFF_NOT_SELECTED)
             with vm.equipmentBlock.vehicleTradeInBtn.transaction() as vehicleTradeInBtnVm:
                 if self.__isTradeIn():
-                    vehicleTradeInBtnVm.setImage(R.images.gui.maps.icons.library.trade_in())
-                    vehicleTradeInBtnVm.setText(STORE.BUYVEHICLEWINDOW_TRADEINBTNLABEL)
+                    vehicleTradeInBtnVm.setIcon(R.images.gui.maps.icons.library.trade_in())
+                    vehicleTradeInBtnVm.setLabel(R.strings.store.buyVehicleWindow.tradeInBtnLabel())
                 isTradeIn = not self.__isRentVisible and self.__isTradeIn()
-                vehicleTradeInBtnVm.setVisible(isTradeIn and self.__tradeOffVehicle is None)
+                vehicleTradeInBtnVm.setIsVisible(isTradeIn and self.__tradeOffVehicle is None)
             self.__updateTradeOffVehicleBtnData()
         return
 
@@ -470,10 +470,10 @@ class BuyVehicleView(ViewImpl, EventSystemEntity):
             equipmentBlockVm.setSelectedRentSeason(selectedRentSeason)
             with equipmentBlockVm.vehicleRentBtn.transaction() as vehicleRentBtnVm:
                 if self.__vehicle.hasRentPackages:
-                    vehicleRentBtnVm.setImage(R.images.gui.maps.icons.library.rent_ico_big())
+                    vehicleRentBtnVm.setIcon(R.images.gui.maps.icons.library.rent_ico_big())
                 rentBtnAvailable = self.__isToggleRentAndTradeInState() and self.__isRentVisible
                 rentBtnAvailable |= not self.__isToggleRentAndTradeInState() and self.__vehicle.hasRentPackages
-                vehicleRentBtnVm.setVisible(rentBtnAvailable)
+                vehicleRentBtnVm.setIsVisible(rentBtnAvailable)
             self.__updateTankPrice()
 
     def __updateTradeOffVehicleBtnData(self):
@@ -619,12 +619,18 @@ class BuyVehicleView(ViewImpl, EventSystemEntity):
             elif self.__previousAlias == VIEW_ALIAS.FRONTLINE_VEHICLE_PREVIEW_20:
                 self.__epicCtrl.showCustomScreen(FRONTLINE_SCREENS.REWARDS_SCREEN)
 
+    def __updateToggleTradeInBtn(self):
+        with self.viewModel.toggleTradeInBtn.transaction() as toggleTradeInBtnVm:
+            toggleTradeInBtnVm.setIcon(R.images.gui.maps.icons.library.trade_in() if self.__isRentVisible else R.images.gui.maps.icons.library.rent_ico_big())
+            toggleTradeInBtnVm.setLabel(R.strings.store.buyVehicleWindow.toggleBtn.rent() if self.__isRentVisible else R.strings.store.buyVehicleWindow.toggleBtn.buy())
+            toggleTradeInBtnVm.setIsRent(self.__isRentVisible)
+
     def __onInHangar(self, *args):
         event_dispatcher.selectVehicleInHangar(self.__vehicle.intCD)
         self.__destroyWindow()
 
     def __onCheckboxWithoutCrewChanged(self, args):
-        self.__isWithoutCommander = args['value']
+        self.__isWithoutCommander = args['selected']
         with self.viewModel.transaction() as vm:
             cardVMs = vm.commanderLvlCards.getItems()
             for vm in cardVMs:
@@ -659,13 +665,13 @@ class BuyVehicleView(ViewImpl, EventSystemEntity):
         cardModels[self.__selectedCardIdx].setIsSelected(True)
         self.__updateTotalPrice()
 
-    def __onToggleRentAndTradeIn(self, args):
+    def __onToggleRentAndTradeIn(self):
         self.__isRentVisible = not self.__isRentVisible
-        self.viewModel.setIsRentVisible(self.__isRentVisible)
+        self.__updateToggleTradeInBtn()
         with self.viewModel.equipmentBlock.transaction() as equipmentBlockVm:
-            equipmentBlockVm.vehicleTradeInBtn.setVisible(not self.__isRentVisible and self.__tradeOffVehicle is None)
+            equipmentBlockVm.vehicleTradeInBtn.setIsVisible(not self.__isRentVisible and self.__tradeOffVehicle is None)
             equipmentBlockVm.vehicleBtn.setVisible(not self.__isRentVisible and self.__tradeOffVehicle is not None)
-            equipmentBlockVm.vehicleRentBtn.setVisible(self.__isRentVisible)
+            equipmentBlockVm.vehicleRentBtn.setIsVisible(self.__isRentVisible)
             equipmentBlockVm.setIsRentVisible(self.__isRentVisible)
             if self.__isRentVisible:
                 equipmentBlockVm.setPopoverIsAvailable(False)
@@ -844,10 +850,11 @@ class BuyVehicleView(ViewImpl, EventSystemEntity):
 
 
 class BuyVehicleWindow(Window):
+    appLoader = dependency.descriptor(IAppLoader)
     __slots__ = ()
 
     def __init__(self, *args, **kwargs):
-        app = g_appLoader.getApp()
+        app = self.appLoader.getApp()
         view = app.containerManager.getViewByKey(ViewKey(VIEW_ALIAS.LOBBY))
         if view is not None:
             parent = view.getParentWindow()

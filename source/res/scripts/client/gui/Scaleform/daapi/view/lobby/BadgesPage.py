@@ -3,6 +3,8 @@
 import operator
 from collections import defaultdict
 import BigWorld
+from gui.impl import backport
+from gui.impl.gen.resources import R
 from gui.shared.gui_items.badge import Badge
 from gui.shared.tutorial_helper import getTutorialGlobalStorage
 from helpers import dependency, i18n
@@ -13,7 +15,6 @@ from skeletons.gui.game_control import IBadgesController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
 from gui.Scaleform.daapi.view.meta.BadgesPageMeta import BadgesPageMeta
-from gui.shared.event_dispatcher import showHangar
 from gui.shared.formatters import text_styles
 from gui.Scaleform.locale.BADGE import BADGE
 from tutorial.control.context import GLOBAL_FLAG
@@ -48,9 +49,9 @@ class BadgesPage(BadgesPageMeta):
                 self.__tutorStorage.setValue(GLOBAL_FLAG.BADGE_PAGE_HAS_NEW_SUFFIX_BADGE, True)
         return
 
-    def onCloseView(self):
+    def onBackClick(self):
         AccountSettings.setSettings(LAST_BADGES_VISIT, getServerUTCTime())
-        showHangar()
+        self.destroy()
 
     def onSelectBadge(self, badgeID):
         self.__prefixBadgeID = badgeID
@@ -74,7 +75,8 @@ class BadgesPage(BadgesPageMeta):
     def _populate(self):
         super(BadgesPage, self)._populate()
         userName = BigWorld.player().name
-        self.as_setStaticDataS({'header': {'closeBtnLabel': BADGE.BADGESPAGE_HEADER_CLOSEBTN_LABEL,
+        self.as_setStaticDataS({'header': {'backBtnLabel': backport.text(R.strings.badge.badgesPage.header.backBtn.label()),
+                    'backBtnDescrLabel': backport.text(R.strings.badge.badgesPage.header.backBtn.descrLabel()),
                     'descrTf': text_styles.main(BADGE.BADGESPAGE_HEADER_DESCR),
                     'playerText': text_styles.grandTitle(self.lobbyContext.getPlayerFullName(userName))}})
         self.__updateBadges()

@@ -8,7 +8,6 @@ from account_helpers import isRoamingEnabled
 from constants import PREBATTLE_INVITE_STATUS, PREBATTLE_INVITE_STATUS_NAMES
 from debug_utils import LOG_ERROR, LOG_DEBUG, LOG_WARNING
 from gui import SystemMessages
-from gui.app_loader import g_appLoader, settings as app_settings
 from gui.prb_control.prb_helpers import BadgesHelper
 from gui.prb_control import prb_getters
 from gui.prb_control.events_dispatcher import g_eventDispatcher
@@ -28,6 +27,7 @@ from messenger.storage import storage_getter
 from predefined_hosts import g_preDefinedHosts
 from shared_utils.account_helpers.ClientInvitations import UniqueId
 from skeletons.connection_mgr import IConnectionManager
+from skeletons.gui.app_loader import IAppLoader, GuiGlobalSpaceID
 from skeletons.gui.battle_session import IBattleSessionProvider
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
@@ -268,6 +268,7 @@ class InvitesManager(UsersInfoHelper):
     itemsCache = dependency.descriptor(IItemsCache)
     sessionProvider = dependency.descriptor(IBattleSessionProvider)
     lobbyContext = dependency.descriptor(ILobbyContext)
+    appLoader = dependency.descriptor(IAppLoader)
 
     def __init__(self, loader):
         super(InvitesManager, self).__init__()
@@ -518,7 +519,7 @@ class InvitesManager(UsersInfoHelper):
                 if invite:
                     self._addInvite(invite, userGetter)
 
-        if g_appLoader.getSpaceID() != app_settings.GUI_GLOBAL_SPACE_ID.BATTLE:
+        if self.appLoader.getSpaceID() != GuiGlobalSpaceID.BATTLE:
             self.syncUsersInfo()
 
     def _rebuildInvitesLists(self):
@@ -546,7 +547,7 @@ class InvitesManager(UsersInfoHelper):
         def _getUserName(userDBID):
             name, abbrev = ('', None)
             if userDBID:
-                if g_appLoader.getSpaceID() == app_settings.GUI_GLOBAL_SPACE_ID.BATTLE:
+                if self.appLoader.getSpaceID() == GuiGlobalSpaceID.BATTLE:
                     ctx = self.sessionProvider.getCtx()
                     isUserInBattle = ctx.getVehIDByAccDBID(userDBID) != 0
                     if isUserInBattle:

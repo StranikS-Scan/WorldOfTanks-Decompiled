@@ -700,6 +700,50 @@
       <devices>	100	</devices>
     </damage>
   </_75mm_OE_mle_54>
+  <_75mm_POT_mle_51>
+    <id>	148	</id>
+    <userString>	#france_vehicles:_75mm_POT_mle_51	</userString>
+    <icon>	ap	</icon>
+    <price>	128	</price>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	75	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mediumArmorPiercing	</effects>
+    <damage>
+      <armor>	135	</armor>
+      <devices>	100	</devices>
+    </damage>
+  </_75mm_POT_mle_51>
+  <_75mm_PCOT_mle_51>
+    <id>	149	</id>
+    <userString>	#france_vehicles:_75mm_PCOT_mle_51	</userString>
+    <icon>	ap	</icon>
+    <price>	2800	</price>
+    <improved>	true	</improved>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	75	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mediumArmorPiercing	</effects>
+    <damage>
+      <armor>	135	</armor>
+      <devices>	100	</devices>
+    </damage>
+  </_75mm_PCOT_mle_51>
+  <_75mm_OE_mle_51>
+    <id>	150	</id>
+    <userString>	#france_vehicles:_75mm_OE_mle_51	</userString>
+    <icon>	he	</icon>
+    <price>	80	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <caliber>	75	</caliber>
+    <explosionRadius>	1.06	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	mediumHighExplosive	</effects>
+    <damage>
+      <armor>	175	</armor>
+      <devices>	100	</devices>
+    </damage>
+  </_75mm_OE_mle_51>
   <_75mm_M61>
     <id>	142	</id>
     <userString>	#france_vehicles:_75mm_M61	</userString>
@@ -1690,8 +1734,8 @@
     <explosionRadius>	7	</explosionRadius>
     <hasStun>	true	</hasStun>
     <stunDuration>	10.5	</stunDuration>
-    <guaranteedStunDuration>	0.65	</guaranteedStunDuration>
-    <damageDurationCoeff>	0.35	</damageDurationCoeff>
+    <guaranteedStunDuration>	0.60	</guaranteedStunDuration>
+    <damageDurationCoeff>	0.40	</damageDurationCoeff>
     <isTracer>	true	</isTracer>
     <effects>	hugeHighExplosive	</effects>
     <damage>
@@ -1726,8 +1770,8 @@
     <explosionRadius>	8	</explosionRadius>
     <hasStun>	true	</hasStun>
     <stunDuration>	27	</stunDuration>
-    <guaranteedStunDuration>	0.50	</guaranteedStunDuration>
-    <damageDurationCoeff>	0.50	</damageDurationCoeff>
+    <guaranteedStunDuration>	0.45	</guaranteedStunDuration>
+    <damageDurationCoeff>	0.55	</damageDurationCoeff>
     <isTracer>	true	</isTracer>
     <effects>	hugeHighExplosive	</effects>
     <damage>
@@ -1746,8 +1790,8 @@
     <explosionRadius>	9	</explosionRadius>
     <hasStun>	true	</hasStun>
     <stunDuration>	27	</stunDuration>
-    <guaranteedStunDuration>	0.50	</guaranteedStunDuration>
-    <damageDurationCoeff>	0.50	</damageDurationCoeff>
+    <guaranteedStunDuration>	0.45	</guaranteedStunDuration>
+    <damageDurationCoeff>	0.55	</damageDurationCoeff>
     <isTracer>	true	</isTracer>
     <effects>	hugeHighExplosive	</effects>
     <damage>
@@ -1765,8 +1809,8 @@
     <explosionRadius>	8	</explosionRadius>
     <hasStun>	true	</hasStun>
     <stunDuration>	22	</stunDuration>
-    <guaranteedStunDuration>	0.55	</guaranteedStunDuration>
-    <damageDurationCoeff>	0.45	</damageDurationCoeff>
+    <guaranteedStunDuration>	0.50	</guaranteedStunDuration>
+    <damageDurationCoeff>	0.50	</damageDurationCoeff>
     <isTracer>	true	</isTracer>
     <effects>	hugeHighExplosive	</effects>
     <damage>
@@ -1830,8 +1874,8 @@
     <explosionRadius>	9	</explosionRadius>
     <hasStun>	true	</hasStun>
     <stunDuration>	22	</stunDuration>
-    <guaranteedStunDuration>	0.55	</guaranteedStunDuration>
-    <damageDurationCoeff>	0.45	</damageDurationCoeff>
+    <guaranteedStunDuration>	0.50	</guaranteedStunDuration>
+    <damageDurationCoeff>	0.50	</damageDurationCoeff>
     <isTracer>	true	</isTracer>
     <effects>	hugeHighExplosive	</effects>
     <damage>

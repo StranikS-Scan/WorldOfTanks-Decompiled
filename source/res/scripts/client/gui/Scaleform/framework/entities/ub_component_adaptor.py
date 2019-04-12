@@ -22,6 +22,12 @@ class UnboundComponentAdaptor(BaseDAAPIComponent):
     def unregisterFlashComponent(self, alias):
         _logger.warning('UnboundComponentAdaptor %s does not support internal components', self.getAlias())
 
+    def setParentId(self, parentId):
+        if self.__unbound:
+            self.__unbound.setParentId(parentId)
+        else:
+            _logger.error("Unbound view doesn't exist")
+
     def _populate(self):
         super(UnboundComponentAdaptor, self)._populate()
         self.__createUnboundView()

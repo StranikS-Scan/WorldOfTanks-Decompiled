@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client/gui/shared/gui_items/processors/common.py
 import logging
 import BigWorld
+from constants import EMPTY_GEOMETRY_ID
 from gui import SystemMessages
 from gui.Scaleform.locale.MESSENGER import MESSENGER
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
@@ -284,3 +285,85 @@ class ConvertBlueprintFragmentProcessor(Processor):
 
     def _request(self, callback):
         BigWorld.player().blueprints.convertBlueprintFragment(self.__vehicleCD, self.__position, self.__count, lambda code: self._response(code, callback))
+
+
+class _MapsBlackListSelector(Processor):
+
+    def __init__(self, selectedMaps=None):
+        super(_MapsBlackListSelector, self).__init__()
+        if selectedMaps is None:
+            selectedMaps = ()
+        self.__selectedMaps = selectedMaps
+        return
+
+    def _getMessagePrefix(self):
+        pass
+
+    def _errorHandler(self, code, errStr='', ctx=None):
+        return makeI18nError(sysMsgKey='{}/server_error/{}'.format(self._getMessagePrefix(), errStr), defaultSysMsgKey='{}/server_error'.format(self._getMessagePrefix()))
+
+    def _successHandler(self, code, ctx=None):
+        return makeI18nSuccess(sysMsgKey='{}/success'.format(self._getMessagePrefix()))
+
+    def _request(self, callback):
+        _logger.debug('Make server request to select black maps %r', self.__selectedMaps)
+        BigWorld.player().stats.setMapsBlackList(self.__selectedMaps, lambda code, errStr, ext: self._response(code, callback, ctx=ext, errStr=errStr))
+
+    def _getLayout(self):
+        return [ mapID for mapID, _ in self.itemsCache.items.stats.getMapsBlackList() ]
+
+
+class MapsBlackListSetter(_MapsBlackListSelector):
+
+    def __init__(self, selectedMapID):
+        layout = self._getLayout()
+        wasInserted = False
+        for idx, mapID in enumerate(layout):
+            if mapID == EMPTY_GEOMETRY_ID:
+                layout[idx] = selectedMapID
+                wasInserted = True
+                break
+
+        if not wasInserted:
+            layout.append(selectedMapID)
+        super(MapsBlackListSetter, self).__init__(layout)
+
+
+class MapsBlackListRemover(_MapsBlackListSelector):
+
+    def __init__(self, removeMapID):
+        layout = self._getLayout()
+        if removeMapID in layout:
+            layout[layout.index(removeMapID)] = EMPTY_GEOMETRY_ID
+        else:
+            _logger.error('Cannot remove mapID %d from layout %r', removeMapID, layout)
+        super(MapsBlackListRemover, self).__init__(layout)
+
+
+class MapsBlackListChanger(_MapsBlackListSelector):
+
+    def __init__(self, srcMapID, destMapID):
+        layout = self._getLayout()
+        if srcMapID in layout:
+            layout[layout.index(srcMapID)] = destMapID
+        else:
+            _logger.error('Cannot change srcMapID %d from layout %r', srcMapID, layout)
+        super(MapsBlackListChanger, self).__init__(layout)
+
+
+class PremiumBonusApplier(Processor):
+
+    def __init__(self, arenaUniqueID=None, vehTypeCompDescr=None):
+        super(PremiumBonusApplier, self).__init__()
+        self.__arenaUniqueID = arenaUniqueID
+        self.__vehTypeCompDescr = vehTypeCompDescr
+
+    def _getMessagePrefix(self):
+        pass
+
+    def _errorHandler(self, code, errStr='', ctx=None):
+        return makeI18nError(sysMsgKey='{}/server_error/{}'.format(self._getMessagePrefix(), errStr), defaultSysMsgKey='{}/server_error'.format(self._getMessagePrefix()))
+
+    def _request(self, callback):
+        _logger.debug('Make server request to apply premium XP bonus %d', self.__arenaUniqueID)
+        BigWorld.player().shop.applyPremiumXPBonus(self.__arenaUniqueID, self.__vehTypeCompDescr, lambda resID, code, errStr: self._response(code, callback, errStr))

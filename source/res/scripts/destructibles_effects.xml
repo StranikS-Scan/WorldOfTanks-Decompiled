@@ -8476,7 +8476,13 @@
           </pixie>
           <destructionSound>
             <startKey>	base	</startKey>
-            <wwsound>	obj_sandbag	</wwsound>
+            <wwsound>	obj_generative	</wwsound>
+            <params>
+              <weight>	2500.000000	</weight>
+              <stone_2>	5.000000	</stone_2>
+              <cloth>	100.000000	</cloth>
+              <debrisAmount>	30.000000	</debrisAmount>
+            </params>
           </destructionSound>
         </effects>
       </variant1>
@@ -8494,7 +8500,13 @@
           </pixie>
           <destructionSound>
             <startKey>	base	</startKey>
-            <wwsound>	obj_sandbag	</wwsound>
+            <wwsound>	obj_generative	</wwsound>
+            <params>
+              <weight>	2500.000000	</weight>
+              <stone_2>	5.000000	</stone_2>
+              <cloth>	100.000000	</cloth>
+              <debrisAmount>	30.000000	</debrisAmount>
+            </params>
           </destructionSound>
         </effects>
       </variant1>
@@ -8512,7 +8524,13 @@
           </pixie>
           <destructionSound>
             <startKey>	base	</startKey>
-            <wwsound>	obj_sandbag	</wwsound>
+            <wwsound>	obj_generative	</wwsound>
+            <params>
+              <weight>	2500.000000	</weight>
+              <stone_2>	5.000000	</stone_2>
+              <cloth>	100.000000	</cloth>
+              <debrisAmount>	30.000000	</debrisAmount>
+            </params>
           </destructionSound>
         </effects>
       </variant1>
@@ -8530,7 +8548,13 @@
           </pixie>
           <destructionSound>
             <startKey>	base	</startKey>
-            <wwsound>	obj_sandbag	</wwsound>
+            <wwsound>	obj_generative	</wwsound>
+            <params>
+              <debrisAmount>	30.000000	</debrisAmount>
+              <cloth>	100.000000	</cloth>
+              <stone_2>	5.000000	</stone_2>
+              <weight>	2500.000000	</weight>
+            </params>
           </destructionSound>
         </effects>
       </variant1>
@@ -8548,7 +8572,13 @@
           </pixie>
           <destructionSound>
             <startKey>	base	</startKey>
-            <wwsound>	obj_sandbag	</wwsound>
+            <wwsound>	obj_generative	</wwsound>
+            <params>
+              <weight>	2500.000000	</weight>
+              <stone_2>	5.000000	</stone_2>
+              <cloth>	100.000000	</cloth>
+              <debrisAmount>	30.000000	</debrisAmount>
+            </params>
           </destructionSound>
         </effects>
       </variant1>
@@ -8566,7 +8596,13 @@
           </pixie>
           <destructionSound>
             <startKey>	base	</startKey>
-            <wwsound>	obj_sandbag	</wwsound>
+            <wwsound>	obj_generative	</wwsound>
+            <params>
+              <weight>	2500.000000	</weight>
+              <stone_2>	5.000000	</stone_2>
+              <cloth>	100.000000	</cloth>
+              <debrisAmount>	30.000000	</debrisAmount>
+            </params>
           </destructionSound>
         </effects>
       </variant1>
@@ -13165,6 +13201,24 @@
         </effects>
       </variant1>
     </inf_envAF_006_BarrelFuel_02_02>
+    <hd_envAF_006_BarellFuel3>
+      <variant1>
+        <stages>
+          <base>	5.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/hd_envAF_006_BarellFuel3.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <destructionSound>
+            <startKey>	base	</startKey>
+            <wwsound>	obj_fuel_tank	</wwsound>
+          </destructionSound>
+        </effects>
+      </variant1>
+    </hd_envAF_006_BarellFuel3>
     <inf_envAF_006_BarrelFuel_02_03>
       <variant1>
         <stages>
@@ -27009,12 +27063,10 @@
             <startKey>	base	</startKey>
             <wwsound>	obj_generative	</wwsound>
             <params>
-              <metal_1>	76.48	</metal_1>
-              <metal_2>	12.31	</metal_2>
-              <wood_1>	3.36	</wood_1>
-              <glass>	22.39	</glass>
-              <debrisAmount>	70.15	</debrisAmount>
-              <weight>	6828.36	</weight>
+              <wood_1>	68.000000	</wood_1>
+              <debrisAmount>	75.000000	</debrisAmount>
+              <weight>	4572.000000	</weight>
+              <wood_2>	20.000000	</wood_2>
             </params>
           </destructionSound>
         </effects>
@@ -27890,29 +27942,6 @@
         </effects>
       </variant1>
     </hd_env_SU_055_Rubbish>
-    <hd_gaf_SU_011_StarFence_End>
-      <variant1>
-        <stages>
-          <base>	4.0	</base>
-        </stages>
-        <effects>
-          <pixie>
-            <startKey>	base	</startKey>
-            <file>	particles/Environment/objects/hd_gaf_SU_011_StarFence_End.xml	</file>
-            <force>	1	</force>
-          </pixie>
-          <destructionSound>
-            <startKey>	base	</startKey>
-            <wwsound>	obj_generative	</wwsound>
-            <params>
-              <debrisAmount>	15.14	</debrisAmount>
-              <weight>	3577.98	</weight>
-              <metal_2>	3.66	</metal_2>
-            </params>
-          </destructionSound>
-        </effects>
-      </variant1>
-    </hd_gaf_SU_011_StarFence_End>
     <hd_gaf_SU_011_StarFence_Tile>
       <variant1>
         <stages>
@@ -37212,7 +37241,13 @@
           </pixie>
           <destructionSound>
             <startKey>	base	</startKey>
-            <wwsound>	obj_wood_house	</wwsound>
+            <wwsound>	obj_generative	</wwsound>
+            <params>
+              <weight>	5000.000000	</weight>
+              <stone_1>	9.650000	</stone_1>
+              <wood_1>	50.000000	</wood_1>
+              <debrisAmount>	40.000000	</debrisAmount>
+            </params>
           </destructionSound>
         </effects>
       </variant1>
@@ -37230,7 +37265,13 @@
           </pixie>
           <destructionSound>
             <startKey>	base	</startKey>
-            <wwsound>	obj_wood_house	</wwsound>
+            <wwsound>	obj_generative	</wwsound>
+            <params>
+              <weight>	5000.000000	</weight>
+              <debrisAmount>	40.000000	</debrisAmount>
+              <wood_1>	50.000000	</wood_1>
+              <stone_1>	9.650000	</stone_1>
+            </params>
           </destructionSound>
         </effects>
       </variant1>

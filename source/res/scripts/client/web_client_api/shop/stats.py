@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/web_client_api/shop/stats.py
 import logging
+from constants import PREM_TYPE_TO_ENTITLEMENT
 from gui.game_control.wallet import WalletController
 from gui.shared.money import Currency
 from helpers import dependency
@@ -16,8 +17,8 @@ class BalanceWebApiMixin(object):
     def getBalance(self, cmd):
         stats = self.itemsCache.items.stats
         money = stats.actualMoney
-        premiumExpireLocalTime = time_utils.makeLocalServerTime(stats.premiumExpiryTime)
-        if premiumExpireLocalTime is not None:
+        premiumExpireLocalTime = time_utils.makeLocalServerTime(stats.activePremiumExpiryTime)
+        if premiumExpireLocalTime:
             premiumExpireISOTime = time_utils.timestampToISO(premiumExpireLocalTime)
         else:
             premiumExpireISOTime = None
@@ -58,3 +59,7 @@ class BalanceWebApiMixin(object):
         defaultStats = self.itemsCache.items.shop.defaults
         return {key:{'current': getter(currentStats),
          'default': getter(defaultStats)} for key, getter in getters.iteritems()}
+
+    @w2c(W2CSchema, 'get_premium_info')
+    def getPremiumInfo(self, cmd):
+        return {PREM_TYPE_TO_ENTITLEMENT[k]:v for k, v in self.itemsCache.items.stats.premiumInfo.items()}

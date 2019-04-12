@@ -11,7 +11,8 @@ import MusicControllerWWISE
 import Windowing
 from ReplayEvents import g_replayEvents
 from debug_utils import LOG_ERROR, LOG_WARNING, LOG_DEBUG
-from helpers import i18n
+from helpers import i18n, dependency
+from skeletons.gui.app_loader import IAppLoader, GuiGlobalSpaceID
 from soft_exception import SoftException
 from vehicle_systems.tankStructure import TankPartNames
 ENABLE_LS = True
@@ -262,8 +263,7 @@ class SoundGroups(object):
         self.__activeStingerPriority = None
         self.__muffled = False
         self.__muffledByReplay = False
-        from gui.app_loader import g_appLoader
-        self.__spaceID = g_appLoader.getSpaceID()
+        self.__spaceID = GuiGlobalSpaceID.UNDEFINED
         PlayerEvents.g_playerEvents.onAvatarReady += self.onAvatarReady
         self.__categories = {'vehicles': ('outside/vehicles', 'vehicles'),
          'effects': ('hits', 'outside/hits', 'inside/weapons', 'outside/weapons', 'outside/environment', 'battle_gui'),
@@ -328,7 +328,6 @@ class SoundGroups(object):
         if not self.applyPreferences():
             Windowing.addWindowAccessibilitynHandler(self.__onWindowAccessibilityChanged)
         g_replayEvents.onMuteSound += self.__onReplayMute
-        g_appLoader.onGUISpaceEntered += self.__onGUISpaceEntered
         return
 
     def __del__(self):
@@ -339,14 +338,21 @@ class SoundGroups(object):
         self.onMusicVolumeChanged.clear()
         PlayerEvents.g_playerEvents.onAvatarReady -= self.onAvatarReady
         g_replayEvents.onMuteSound -= self.__onReplayMute
-        from gui.app_loader import g_appLoader
-        g_appLoader.onGUISpaceEntered -= self.__onGUISpaceEntered
         player = BigWorld.player()
         if player is not None and player.inputHandler is not None:
             player.inputHandler.onCameraChanged -= self.__onCameraChanged
         self.onVolumeChanged.clear()
         Windowing.removeWindowAccessibilityHandler(self.__onWindowAccessibilityChanged)
         return
+
+    def startListeningGUISpaceChanges(self):
+        appLoader = dependency.instance(IAppLoader)
+        self.__spaceID = appLoader.getSpaceID()
+        appLoader.onGUISpaceEntered += self.__onGUISpaceEntered
+
+    def stopListeningGUISpaceChanges(self):
+        appLoader = dependency.instance(IAppLoader)
+        appLoader.onGUISpaceEntered -= self.__onGUISpaceEntered
 
     def enableLobbySounds(self, enable):
         for categoryName in ('ambient', 'gui'):
@@ -380,9 +386,8 @@ class SoundGroups(object):
             self.setVolume(categoryName, volume, False)
 
     def __onGUISpaceEntered(self, spaceID):
-        from gui.app_loader import settings
         if WWISE.enabled:
-            if spaceID == settings.GUI_GLOBAL_SPACE_ID.LOGIN:
+            if spaceID == GuiGlobalSpaceID.LOGIN:
                 WWISE.WG_loadLogin()
         self.__spaceID = spaceID
 

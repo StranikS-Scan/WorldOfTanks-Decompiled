@@ -96,3 +96,6 @@ class CustomizationMainViewMeta(View):
 
     def as_setNotificationCountersS(self, counters):
         return self.flashObject.as_setNotificationCounters(counters) if self._isDAAPIInited() else None
+
+    def as_setAnchorsLockStateS(self, data):
+        return self.flashObject.as_setAnchorsLockState(data) if self._isDAAPIInited() else None

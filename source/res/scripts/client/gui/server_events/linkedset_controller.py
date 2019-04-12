@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client/gui/server_events/linkedset_controller.py
 import BigWorld
 from constants import EVENT_TYPE
+from skeletons.gui.app_loader import IAppLoader
 from skeletons.gui.linkedset import ILinkedSetController
 from gui.shared import g_eventBus, events
 from gui.shared.event_bus import EVENT_BUS_SCOPE
@@ -22,7 +23,6 @@ from skeletons.gui.server_events import IEventsCache
 from helpers.i18n import makeString as _ms
 from skeletons.account_helpers.settings_core import ISettingsCore
 from gui.Scaleform.genConsts.QUESTS_ALIASES import QUESTS_ALIASES
-from gui.app_loader import g_appLoader
 from gui.Scaleform.framework import ViewTypes
 from gui.Scaleform.framework.managers.containers import POP_UP_CRITERIA
 from gui.server_events.events_helpers import hasAtLeastOneCompletedQuest, isAllQuestsCompleted
@@ -39,6 +39,7 @@ class LinkedSetController(ILinkedSetController):
     lobbyContext = dependency.descriptor(ILobbyContext)
     eventsCache = dependency.descriptor(IEventsCache)
     settingsCore = dependency.descriptor(ISettingsCore)
+    appLoader = dependency.descriptor(IAppLoader)
 
     def __init__(self):
         self.needToShowAward = False
@@ -179,7 +180,7 @@ class LinkedSetController(ILinkedSetController):
             self.onStateChanged(self.isLinkedSetEnabled())
 
     def _isLinkedSetViewOnScene(self):
-        app = g_appLoader.getApp()
+        app = self.appLoader.getApp()
         if app is not None and app.containerManager is not None:
             lobbySubContainer = app.containerManager.getContainer(ViewTypes.LOBBY_SUB)
             if lobbySubContainer is not None:

@@ -1,9 +1,10 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/bootcamp/ReloadLobbyHelper.py
 from gui.shared import events, g_eventBus, EVENT_BUS_SCOPE
-from gui.app_loader import g_appLoader
 from BootcampTransition import BootcampTransition
-from helpers import aop
+from helpers import aop, dependency
+from skeletons.gui.app_loader import IAppLoader
+from skeletons.gui.game_control import IGameStateTracker
 
 class _PointcutGameSessionControllerFix(aop.Pointcut):
 
@@ -18,6 +19,8 @@ class _AspectGameSessionControllerFix(aop.Aspect):
 
 
 class ReloadLobbyHelper(object):
+    appLoader = dependency.descriptor(IAppLoader)
+    gameState = dependency.descriptor(IGameStateTracker)
 
     def __init__(self):
         super(ReloadLobbyHelper, self).__init__()
@@ -33,12 +36,11 @@ class ReloadLobbyHelper(object):
         self.__isReloading = True
         g_eventBus.addListener(events.GUICommonEvent.LOBBY_VIEW_LOADED, self.__onLobbyViewLoaded, EVENT_BUS_SCOPE.DEFAULT)
         from gui.prb_control.dispatcher import g_prbLoader
-        from gui.shared.personality import ServicesLocator
         pc = _PointcutGameSessionControllerFix()
         BootcampTransition.start()
         g_prbLoader.onAccountBecomeNonPlayer()
-        ServicesLocator.gameState.onAvatarBecomePlayer()
-        g_appLoader.switchAccountEntity()
+        self.gameState.onAvatarBecomePlayer()
+        self.appLoader.switchAccountEntity()
         g_prbLoader.onAccountShowGUI({})
         pc.clear()
 

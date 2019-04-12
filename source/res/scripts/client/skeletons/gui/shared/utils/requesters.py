@@ -127,6 +127,14 @@ class IStatsRequester(IRequester):
         raise NotImplementedError
 
     @property
+    def applyAdditionalXPCount(self):
+        raise NotImplementedError
+
+    @property
+    def multipliedRankedVehicles(self):
+        raise NotImplementedError
+
+    @property
     def eliteVehicles(self):
         raise NotImplementedError
 
@@ -142,12 +150,27 @@ class IStatsRequester(IRequester):
     def attributes(self):
         raise NotImplementedError
 
+    def isActivePremium(self, checkPremiumType):
+        raise NotImplementedError
+
     @property
-    def premiumExpiryTime(self):
+    def activePremiumType(self):
         raise NotImplementedError
 
     @property
     def isPremium(self):
+        raise NotImplementedError
+
+    @property
+    def totalPremiumExpiryTime(self):
+        raise NotImplementedError
+
+    @property
+    def activePremiumExpiryTime(self):
+        raise NotImplementedError
+
+    @property
+    def premiumInfo(self):
         raise NotImplementedError
 
     @property
@@ -236,6 +259,18 @@ class IStatsRequester(IRequester):
         raise NotImplementedError
 
     @property
+    def piggyBank(self):
+        raise NotImplementedError
+
+    @property
+    def dummySessionStats(self):
+        raise NotImplementedError
+
+    @property
+    def additionalXPCache(self):
+        raise NotImplementedError
+
+    @property
     def isGoldFishBonusApplied(self):
         raise NotImplementedError
 
@@ -245,6 +280,9 @@ class IStatsRequester(IRequester):
 
     @property
     def oldVehInvIDs(self):
+        raise NotImplementedError
+
+    def getMapsBlackList(self):
         raise NotImplementedError
 
 
@@ -587,39 +625,11 @@ class IRankedRequester(IRequester):
         raise NotImplementedError
 
     @property
-    def vehRanks(self):
-        raise NotImplementedError
-
-    @property
-    def clientRank(self):
-        raise NotImplementedError
-
-    @property
-    def clientVehRanks(self):
-        raise NotImplementedError
-
-    @property
     def season(self):
         raise NotImplementedError
 
     @property
     def maxRank(self):
-        raise NotImplementedError
-
-    @property
-    def maxVehRanks(self):
-        raise NotImplementedError
-
-    @property
-    def ladderPoints(self):
-        raise NotImplementedError
-
-    @property
-    def maxRankWithAwardReceived(self):
-        raise NotImplementedError
-
-    @property
-    def seasonLadderPts(self):
         raise NotImplementedError
 
     @property
@@ -631,11 +641,19 @@ class IRankedRequester(IRequester):
         raise NotImplementedError
 
     @property
+    def seasonEfficiencyStamp(self):
+        raise NotImplementedError
+
+    @property
     def shields(self):
         raise NotImplementedError
 
     @property
-    def clientShields(self):
+    def bonusBattlesCount(self):
+        raise NotImplementedError
+
+    @property
+    def divisionsStats(self):
         raise NotImplementedError
 
 

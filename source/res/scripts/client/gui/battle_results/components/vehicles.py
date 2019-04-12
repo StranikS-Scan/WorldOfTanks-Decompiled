@@ -1,20 +1,23 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/battle_results/components/vehicles.py
 from constants import DEATH_REASON_ALIVE
+from epic_constants import EPIC_BATTLE_TEAM_ID
+from gui.Scaleform.genConsts.RANKEDBATTLES_ALIASES import RANKEDBATTLES_ALIASES
 from gui.Scaleform.locale.BATTLE_RESULTS import BATTLE_RESULTS
 from gui.Scaleform.locale.RANKED_BATTLES import RANKED_BATTLES
-from gui.Scaleform.genConsts.RANKEDBATTLES_ALIASES import RANKEDBATTLES_ALIASES
-from gui.battle_results.components import base, shared, style, common
+from gui.Scaleform.locale.RES_ICONS import RES_ICONS
+from gui.battle_results.components import base, shared, style, ranked
 from gui.battle_results.components.base import PropertyValue
 from gui.battle_results.components.personal import fillKillerInfoBlock
 from gui.battle_results.reusable import sort_keys
-from gui.shared.gui_items.Vehicle import getSmallIconPath, getIconPath
+from gui.impl import backport
+from gui.impl.gen import R
 from gui.shared.formatters import text_styles
+from gui.shared.gui_items.Vehicle import getSmallIconPath, getIconPath
 from helpers import dependency, i18n
 from skeletons.account_helpers.settings_core import ISettingsCore
+from skeletons.gui.game_control import IRankedBattlesController
 from skeletons.gui.lobby_context import ILobbyContext
-from gui.Scaleform.locale.RES_ICONS import RES_ICONS
-from epic_constants import EPIC_BATTLE_TEAM_ID
 _STAT_VALUES_VO_REPLACER = {'damageAssisted': 'damageAssistedSelf',
  'damageAssistedStun': 'damageAssistedStunSelf'}
 _STAT_STUN_FIELD_NAMES = ('damageAssistedStun', 'stunNum', 'stunDuration')
@@ -134,6 +137,7 @@ class RegularVehicleStatsBlock(base.StatsBlock):
 
 class RankedBattlesVehicleStatsBlock(RegularVehicleStatsBlock):
     __slots__ = ('rank', 'rankIcon')
+    __rankedController = dependency.descriptor(IRankedBattlesController)
 
     def __init__(self, meta=None, field='', *path):
         super(RankedBattlesVehicleStatsBlock, self).__init__(meta, field, *path)
@@ -146,8 +150,20 @@ class RankedBattlesVehicleStatsBlock(RegularVehicleStatsBlock):
         player = result.player
         avatar = reusable.avatars.getAvatarInfo(player.dbID)
         prevRank = avatar.prevAccRank
-        self.rankIcon = style.makeRankIcon(prevRank)
+        self.rankIcon = self.__makeRankIcon(prevRank)
         self.rank = prevRank
+
+    def _setTotalStats(self, result, noPenalties):
+        super(RankedBattlesVehicleStatsBlock, self)._setTotalStats(result, noPenalties)
+        if noPenalties:
+            self.xp = result.xp - result.xpPenalty
+            self.xpSort = result.xp - result.xpPenalty
+
+    def __makeRankIcon(self, rankID):
+        if not rankID:
+            return ''
+        division = self.__rankedController.getDivision(rankID)
+        return backport.image(R.images.gui.maps.icons.rankedBattles.ranks.c_24x24.dyn('rank%s_%s' % (division.getID(), division.getRankUserName(rankID)))())
 
 
 class EpicVehicleStatsBlock(RegularVehicleStatsBlock):
@@ -242,8 +258,8 @@ class RankedVehicleStatValuesBlock(RegularVehicleStatValuesBlock):
 
     def setRecord(self, result, reusable):
         super(RankedVehicleStatValuesBlock, self).setRecord(result, reusable)
-        self.xp = result.xp
-        self.xpForAttack = result.xpForAttack
+        self.xp = result.xp - result.xpPenalty
+        self.xpForAttack = result.xpForAttack - result.xpPenalty
         self.xpForAssist = result.xpForAssist
         self.xpOther = result.xpOther
 
@@ -468,7 +484,7 @@ class RankedResultsTeamStatsBlock(shared.BiDiStatsBlock):
     __slots__ = ()
 
     def setRecord(self, result, reusable):
-        allies, enemies = reusable.getBiDirectionTeamsIterator(result, sort_keys.VehicleXpSortKey)
+        allies, enemies = reusable.getBiDirectionTeamsIterator(result, sort_keys.RankedVehicleXpSortKey)
         self.left.setRecord(allies, reusable)
         self.right.setRecord(enemies, reusable)
 
@@ -477,7 +493,7 @@ class RankedResultsTeamDataStatsBlock(base.StatsBlock):
     __slots__ = ('title', 'titleAlpha', 'teamList')
 
     def setRecord(self, result, reusable):
-        helper = common.RankInfoHelper(reusable)
+        helper = ranked.RankedResultsInfoHelper(reusable)
         winTeam = reusable.common.winnerTeam
         playerTeam = reusable.personal.avatar.team
         lists = []
@@ -503,14 +519,15 @@ class RankedResultsTeamDataStatsBlock(base.StatsBlock):
             isTopList = dataList.isTopList()
             if isPlayer:
                 stepChanges = reusable.personal.getRankInfo().stepChanges
-                standoffInfo = helper.getPlayerStandoff(team=playerTeam, position=idx, stepChanges=stepChanges)
+                updatedStepChanges = reusable.personal.getRankInfo().updatedStepChanges
+                standoffInfo = helper.getPlayerStandoff(team=playerTeam, position=idx, stepChanges=stepChanges, updatedStepChanges=updatedStepChanges)
                 if isTopList and not topListBlink:
                     topListBlink = True
                     dataList.setListBlink(True)
             else:
-                standoffInfo = helper.getStandoff(isTop=isTopList, xp=item.xp, xpToCompare=xpAtBorder, position=idx, isLoser=not isWon, lastStandoffInfo=standoffInfo)
+                standoffInfo = helper.getStandoff(isTop=isTopList, xp=item.xp - item.xpPenalty, xpToCompare=xpAtBorder, position=idx, isLoser=not isWon, lastStandoffInfo=standoffInfo)
             standoff, _ = standoffInfo
-            lastXP = item.xp
+            lastXP = item.xp - item.xpPenalty
             listItem = RankedResultsListItemStatsBlock()
             listItem.setRecord((item, standoff), reusable)
             dataList.appendPlayer(listItem.getVO())
@@ -522,7 +539,7 @@ class RankedResultsTeamDataStatsBlock(base.StatsBlock):
             else:
                 isWon = playerTeam != winTeam
             lists, listsSteps = self.__createListsAndSteps(listsData=helper.getListsData(isLoser=not isWon))
-        self.__fillIncompleteTeam(playerCount, helper.getPlayerNumber(), lists, listsSteps)
+        self.__fillIncompleteTeam(playerCount, helper.getPlayersNumber(), lists, listsSteps)
         if isWon:
             self.title = text_styles.highTitle(RANKED_BATTLES.BATTLERESULT_WINNERS)
             self.titleAlpha = 1.0
@@ -628,8 +645,8 @@ class RankedResultsListItemStatsBlock(base.StatsBlock):
         item, standoff = result
         self.nickName = style.makeRankedNickNameValue(item.player.name)
         self.nickNameHuge = style.makeRankedNickNameHugeValue(item.player.name)
-        self.points = style.makeRankedPointValue(item.xp)
-        self.pointsHuge = style.makeRankedPointHugeValue(item.xp)
+        self.points = style.makeRankedPointValue(item.xp - item.xpPenalty)
+        self.pointsHuge = style.makeRankedPointHugeValue(item.xp - item.xpPenalty)
         self.selected = item.player.dbID == reusable.personal.avatar.accountDBID
         if self.settingsCore.getSetting('isColorBlind') and standoff == RANKEDBATTLES_ALIASES.STANDOFF_MINUS:
             standoff = RANKEDBATTLES_ALIASES.STANDOFF_MINUS_BLIND

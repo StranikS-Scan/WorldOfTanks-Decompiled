@@ -334,11 +334,20 @@ class _ArenaBonusTypeVisitor(IArenaVisitor):
     def canTakeSquadXP(self):
         return _CAPS.checkAny(self._bonusType, _CAPS.SQUAD_XP)
 
+    def canTakeSquadCredits(self):
+        return _CAPS.checkAny(self._bonusType, _CAPS.SQUAD_CREDITS)
+
+    def canTakeAnySquadBonus(self):
+        return _CAPS.checkAny(self._bonusType, _CAPS.SQUAD_XP, _CAPS.SQUAD_CREDITS)
+
     def hasHealthBar(self):
         return _CAPS.checkAny(self._bonusType, _CAPS.TEAM_HEALTH_BAR)
 
     def hasGameEndMessage(self):
         return _CAPS.checkAny(self._bonusType, _CAPS.VICTORY_DEFEAT_MESSAGE)
+
+    def hasCustomAllyDamageEffect(self):
+        return _CAPS.checkAny(self._bonusType, _CAPS.CUSTOM_ALLY_DAMAGE_EFFECT)
 
     def hasSectors(self):
         return _CAPS.checkAny(self._bonusType, _CAPS.SECTOR_MECHANICS)
@@ -485,6 +494,9 @@ class _ClientArenaVisitor(IClientArenaVisitor):
 
     def hasGameEndMessage(self):
         return self._bonus.hasGameEndMessage()
+
+    def hasCustomAllyDamageEffect(self):
+        return self._bonus.hasCustomAllyDamageEffect()
 
     def hasPlayerGroups(self):
         return self._arena.arenaType.numPlayerGroups > 0

@@ -523,12 +523,12 @@
     <model>
       <modelName>	vegetation/Broadleaves/Shrubs/Shoe/Shoe_City_Cluster.srt	</modelName>
       <offset>	0 0.5 0	</offset>
-      <wwsound>	ambient_trees_green_bush_few_foliage_01	</wwsound>
+      <wwsoundName></wwsoundName>
     </model>
     <model>
       <modelName>	vegetation/Broadleaves/Shrubs/Shoe/Shoe_City_Single.srt	</modelName>
       <offset>	0 0.5 0	</offset>
-      <wwsound>	ambient_trees_green_bush_few_foliage_01	</wwsound>
+      <wwsoundName></wwsoundName>
     </model>
     <model>
       <modelName>	vegetation/Conifers/Cypress_regular/Cypress_regular_6m.srt	</modelName>
@@ -953,7 +953,7 @@
     <model>
       <modelName>	vegetation/Misc/Dune_Grass/Dune_Grass_02.srt	</modelName>
       <offset>	0.000000 0.700000 0.000000	</offset>
-      <wwsound>	ambient_trees_green_bush_few_foliage_01	</wwsound>
+      <wwsoundName></wwsoundName>
     </model>
     <model>
       <modelName>	vegetation/Conifers/Spruce_Fall/Spruce_Fall_ragged_24m.srt	</modelName>
@@ -962,8 +962,8 @@
     </model>
     <model>
       <modelName>	vegetation/Broadleaves/Shrubs/Hawthorn/Hawthorn_07_small.srt	</modelName>
-      <offset>	0.000000 0.800000 0.000000	</offset>
-      <wwsound>	ambient_bush_yellow_dry_small_01	</wwsound>
+      <offset>	0.000000 0.500000 0.000000	</offset>
+      <wwsound>	ambient_trees_green_bush_few_foliage_01	</wwsound>
     </model>
     <model>
       <modelName>	vegetation/Broadleaves/Birch_Fall/Birch_Fall_02.srt	</modelName>
@@ -1128,7 +1128,7 @@
     <model>
       <modelName>	particles/Environment/interior/08_ruinberg_firesmoke.xml	</modelName>
       <offset>	0.000000 0.000000 0.000000	</offset>
-      <wwsound>	ambient_burn_static_small	</wwsound>
+      <wwsound>	ambient_burn_static_mid	</wwsound>
     </model>
     <model>
       <modelName>	particles/Environment/interior/08_ruinberg_fires_small.xml	</modelName>
@@ -1194,6 +1194,11 @@
       <modelName>	vegetation/Broadleaves/Shrubs/Bush_Wild_Autumn/Bush_Wild_Autumn_4m_Tall.srt	</modelName>
       <offset>	0.000000 2.000000 0.000000	</offset>
       <wwsound>	ambient_bush_yellow_dry_big_01	</wwsound>
+    </model>
+    <model>
+      <modelName>	vegetation/Broadleaves/Shrubs/Rose/Rose_Red_1m_small.srt	</modelName>
+      <offset>	0 0 0	</offset>
+      <wwsound>	ambient_trees_green_bush_few_foliage_01	</wwsound>
     </model>
     <model>
       <modelName>	vegetation/Conifers/Scots_Pine/Scots_Pine_Dry.srt	</modelName>
@@ -1628,7 +1633,7 @@
     <model>
       <modelName>	vegetation/Misc/Dune_Grass/Dune_Grass_01.srt	</modelName>
       <offset>	0.000000 0.500000 0.000000	</offset>
-      <wwsound>	ambient_bush_yellow_dry_small_01	</wwsound>
+      <wwsoundName></wwsoundName>
     </model>
     <model>
       <modelName>	particles/content_deferred/GFX_models/environment/99_poland/Fire_elevator_01.model	</modelName>
@@ -5043,6 +5048,894 @@
         <oscillation0>	0.500000 0.500000	</oscillation0>
       </point>
     </h04_remday_storm_sound>
+    <victory_day_comet_1_center>
+      <channel0>
+        <modelName>	content/Hangars/hangar_victory_day/tanks/normal/lod0/hd_hangar_victory_day_026_Comet_02.model	</modelName>
+        <rollMagnitude>	0.000000	</rollMagnitude>
+        <rollRelaxation>	0.000000	</rollRelaxation>
+        <oscillationFreqHorz>	1.000000	</oscillationFreqHorz>
+        <oscillationFreqVert>	0.000000	</oscillationFreqVert>
+        <tesselationFactor>	50	</tesselationFactor>
+        <alphaFadeDistances>	15.000000 15.000000	</alphaFadeDistances>
+        <wwsoundName>	hangar_victory_day_scenario_truck_01	</wwsoundName>
+        <effectHardpoint>	HP_module_0	</effectHardpoint>
+        <effectName>	particles/Environment/scenarios/victory_day_tank_dust.xml	</effectName>
+      </channel0>
+      <point>
+        <position>	167.011002 0.020000 258.070007	</position>
+        <speed0>	24.500000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	56.257507 0.019992 147.429626	</position>
+        <speed0>	3.5	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-9.272429 0.019992 81.610428	</position>
+        <speed0>	3.2	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-21.629036 0.019992 71.153435	</position>
+        <speed0>	3.7	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-42.109238 0.020004 62.068935	</position>
+        <speed0>	3.4	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-64.894043 0.020002 59.744686	</position>
+        <speed0>	3.6	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-97.102364 0.019996 68.215576	</position>
+        <speed0>	3.5	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-123.378922 0.020002 93.790802	</position>
+        <speed0>	3.5	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-139.859421 0.020000 115.203308	</position>
+        <speed0>	3.5	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-188.810196 0.020000 183.957672	</position>
+        <speed0>	3.5	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+    </victory_day_comet_1_center>
+    <victory_day_sexton_2_left>
+      <channel0>
+        <modelName>	content/Hangars/hangar_victory_day/tanks/normal/lod0/hd_hangar_victory_day_033_Sexton_02.model	</modelName>
+        <rollMagnitude>	0.000000	</rollMagnitude>
+        <rollRelaxation>	0.000000	</rollRelaxation>
+        <oscillationFreqHorz>	1.000000	</oscillationFreqHorz>
+        <oscillationFreqVert>	0.000000	</oscillationFreqVert>
+        <tesselationFactor>	50	</tesselationFactor>
+        <alphaFadeDistances>	15.000000 15.000000	</alphaFadeDistances>
+        <wwsoundName>	hangar_victory_day_scenario_tank_01	</wwsoundName>
+        <effectHardpoint>	HP_module_0	</effectHardpoint>
+        <effectName>	particles/Environment/scenarios/victory_day_tank_dust.xml	</effectName>
+      </channel0>
+      <point>
+        <position>	169.091995 0.020000 255.934998	</position>
+        <speed0>	24.500000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	58.288025 0.020000 144.932861	</position>
+        <speed0>	3.5	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-7.082530 0.020000 79.398537	</position>
+        <speed0>	3.5	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-20.706469 0.020000 67.965881	</position>
+        <speed0>	3.3	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-43.256939 0.020000 58.463638	</position>
+        <speed0>	3.6	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-67.693779 0.020000 57.065548	</position>
+        <speed0>	3.5	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-100.082932 0.019996 66.535057	</position>
+        <speed0>	3.6	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-126.030441 0.019998 91.722122	</position>
+        <speed0>	3.5	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-142.968613 0.020000 114.019333	</position>
+        <speed0>	3.5	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-190.398636 0.020004 180.149597	</position>
+        <speed0>	3.5	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+    </victory_day_sexton_2_left>
+    <victory_day_sexton_2_right>
+      <channel0>
+        <modelName>	content/Hangars/hangar_victory_day/tanks/normal/lod0/hd_hangar_victory_day_033_Sexton_02.model	</modelName>
+        <rollMagnitude>	0.000000	</rollMagnitude>
+        <rollRelaxation>	0.000000	</rollRelaxation>
+        <oscillationFreqHorz>	1.000000	</oscillationFreqHorz>
+        <oscillationFreqVert>	0.000000	</oscillationFreqVert>
+        <tesselationFactor>	50	</tesselationFactor>
+        <alphaFadeDistances>	15.000000 15.000000	</alphaFadeDistances>
+        <wwsoundName>	hangar_victory_day_scenario_metal_squeak	</wwsoundName>
+        <effectHardpoint>	HP_module_0	</effectHardpoint>
+        <effectName>	particles/Environment/scenarios/victory_day_tank_dust.xml	</effectName>
+      </channel0>
+      <point>
+        <position>	164.824005 0.253041 260.083008	</position>
+        <speed0>	24.500000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	53.950687 0.089286 149.435226	</position>
+        <speed0>	3.5	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-11.016118 0.020015 84.751648	</position>
+        <speed0>	3.5	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-23.721987 0.020000 73.683548	</position>
+        <speed0>	3	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-44.788975 0.020000 64.630249	</position>
+        <speed0>	3	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-63.866974 0.019996 62.906574	</position>
+        <speed0>	3.5	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-95.244949 0.163160 71.374046	</position>
+        <speed0>	3	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-121.152390 0.073752 96.217819	</position>
+        <speed0>	3.5	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-136.171494 0.020000 116.252106	</position>
+        <speed0>	3.5	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-185.950745 0.020000 186.246780	</position>
+        <speed0>	3.5	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+    </victory_day_sexton_2_right>
+    <victory_day_chaffee_3_left>
+      <channel0>
+        <modelName>	content/Hangars/hangar_victory_day/tanks/normal/lod0/hd_hangar_victory_day_032_Chaffee_02.model	</modelName>
+        <rollMagnitude>	0.000000	</rollMagnitude>
+        <rollRelaxation>	0.000000	</rollRelaxation>
+        <oscillationFreqHorz>	1.000000	</oscillationFreqHorz>
+        <oscillationFreqVert>	0.000000	</oscillationFreqVert>
+        <tesselationFactor>	50	</tesselationFactor>
+        <alphaFadeDistances>	15.000000 15.000000	</alphaFadeDistances>
+        <wwsoundName>	hangar_victory_day_scenario_tank_02	</wwsoundName>
+        <effectHardpoint>	HP_module_0	</effectHardpoint>
+        <effectName>	particles/Environment/scenarios/victory_day_tank_dust.xml	</effectName>
+      </channel0>
+      <point>
+        <position>	169.091751 0.020000 255.934753	</position>
+        <speed0>	24.5	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	58.288025 0.020000 144.932861	</position>
+        <speed0>	3.5	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-7.082530 0.020000 79.398537	</position>
+        <speed0>	3.5	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-20.706469 0.020000 67.965881	</position>
+        <speed0>	3.5	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-43.256939 0.020000 58.463638	</position>
+        <speed0>	3.5	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-67.693779 0.020000 57.065548	</position>
+        <speed0>	3.5	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-100.082932 0.019996 66.535057	</position>
+        <speed0>	3.5	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-126.030441 0.019998 91.722122	</position>
+        <speed0>	3.5	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-142.968613 0.020000 114.019333	</position>
+        <speed0>	3.5	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-190.420944 0.019996 180.180664	</position>
+        <speed0>	3.5	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+    </victory_day_chaffee_3_left>
+    <victory_day_chaffee_3_right>
+      <channel0>
+        <modelName>	content/Hangars/hangar_victory_day/tanks/normal/lod0/hd_hangar_victory_day_032_Chaffee_02.model	</modelName>
+        <rollMagnitude>	0.000000	</rollMagnitude>
+        <rollRelaxation>	0.000000	</rollRelaxation>
+        <oscillationFreqHorz>	1.000000	</oscillationFreqHorz>
+        <oscillationFreqVert>	0.000000	</oscillationFreqVert>
+        <tesselationFactor>	50	</tesselationFactor>
+        <alphaFadeDistances>	15.000000 15.000000	</alphaFadeDistances>
+        <wwsoundName>	hangar_victory_day_scenario_car_01	</wwsoundName>
+        <effectHardpoint>	HP_module_0	</effectHardpoint>
+        <effectName>	particles/Environment/scenarios/victory_day_tank_dust.xml	</effectName>
+      </channel0>
+      <point>
+        <position>	164.824051 0.253041 260.082794	</position>
+        <speed0>	24.5	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	53.950687 0.089286 149.435226	</position>
+        <speed0>	3.5	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-11.016118 0.020015 84.751648	</position>
+        <speed0>	3.5	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-23.721987 0.020000 73.683548	</position>
+        <speed0>	3.2	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-44.788975 0.020000 64.630249	</position>
+        <speed0>	3	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-63.866974 0.019996 62.906574	</position>
+        <speed0>	3.4	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-95.244949 0.163160 71.374046	</position>
+        <speed0>	3.1	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-121.152390 0.073752 96.217819	</position>
+        <speed0>	3.5	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-136.171494 0.020000 116.252106	</position>
+        <speed0>	3.5	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-186.058899 0.019996 186.313797	</position>
+        <speed0>	3.5	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+    </victory_day_chaffee_3_right>
+    <victory_day_challenger_4_center>
+      <channel0>
+        <modelName>	content/Hangars/hangar_victory_day/tanks/normal/lod0/envIN_20_GB41_Challenger.model	</modelName>
+        <rollMagnitude>	0.000000	</rollMagnitude>
+        <rollRelaxation>	0.000000	</rollRelaxation>
+        <oscillationFreqHorz>	1.000000	</oscillationFreqHorz>
+        <oscillationFreqVert>	0.000000	</oscillationFreqVert>
+        <tesselationFactor>	50	</tesselationFactor>
+        <alphaFadeDistances>	15.000000 15.000000	</alphaFadeDistances>
+        <wwsoundName>	hangar_victory_day_scenario_tank_03	</wwsoundName>
+        <effectHardpoint>	HP_module_0	</effectHardpoint>
+        <effectName>	particles/Environment/scenarios/victory_day_tank_dust.xml	</effectName>
+      </channel0>
+      <point>
+        <position>	167.010834 0.020000 258.070313	</position>
+        <speed0>	24.5	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	56.257507 0.019992 147.429626	</position>
+        <speed0>	3.5	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-9.272429 0.019992 81.610428	</position>
+        <speed0>	3.7	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-21.629036 0.019992 71.153435	</position>
+        <speed0>	3.2	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-42.109238 0.020004 62.068935	</position>
+        <speed0>	3.4	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-64.894043 0.020002 59.744686	</position>
+        <speed0>	3.6	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-97.102364 0.019996 68.215576	</position>
+        <speed0>	3.5	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-123.378922 0.020002 93.790802	</position>
+        <speed0>	3.5	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-139.859421 0.020000 115.203308	</position>
+        <speed0>	3.5	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-188.842178 0.020000 183.932114	</position>
+        <speed0>	3.5	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+    </victory_day_challenger_4_center>
+    <victory_day_cromvel_5_left>
+      <channel0>
+        <modelName>	content/Hangars/hangar_victory_day/tanks/normal/lod0/hd_hangar_victory_day_025_Cromwell_02.model	</modelName>
+        <rollMagnitude>	0.000000	</rollMagnitude>
+        <rollRelaxation>	0.000000	</rollRelaxation>
+        <oscillationFreqHorz>	1.000000	</oscillationFreqHorz>
+        <oscillationFreqVert>	0.000000	</oscillationFreqVert>
+        <tesselationFactor>	50	</tesselationFactor>
+        <alphaFadeDistances>	15.000000 15.000000	</alphaFadeDistances>
+        <wwsoundName>	hangar_victory_day_scenario_tank_04	</wwsoundName>
+        <effectHardpoint>	HP_module_0	</effectHardpoint>
+        <effectName>	particles/Environment/scenarios/victory_day_tank_dust.xml	</effectName>
+      </channel0>
+      <point>
+        <position>	169.091751 0.020000 255.934753	</position>
+        <speed0>	24.5	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	58.288025 0.020000 144.932861	</position>
+        <speed0>	3.5	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-7.082530 0.020000 79.398537	</position>
+        <speed0>	3.5	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-20.706469 0.020000 67.965881	</position>
+        <speed0>	3.2	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-43.256939 0.020000 58.463638	</position>
+        <speed0>	3.3	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-67.693779 0.020000 57.065548	</position>
+        <speed0>	3.6	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-100.082932 0.019996 66.535057	</position>
+        <speed0>	3.5	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-126.030441 0.019998 91.722122	</position>
+        <speed0>	3.4	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-142.968613 0.020000 114.019333	</position>
+        <speed0>	3.5	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-190.395416 0.020000 180.146561	</position>
+        <speed0>	3.5	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+    </victory_day_cromvel_5_left>
+    <victory_day_cromvel_5_right>
+      <channel0>
+        <modelName>	content/Hangars/hangar_victory_day/tanks/normal/lod0/hd_hangar_victory_day_025_Cromwell_02.model	</modelName>
+        <rollMagnitude>	0.000000	</rollMagnitude>
+        <rollRelaxation>	0.000000	</rollRelaxation>
+        <oscillationFreqHorz>	1.000000	</oscillationFreqHorz>
+        <oscillationFreqVert>	0.000000	</oscillationFreqVert>
+        <tesselationFactor>	50	</tesselationFactor>
+        <alphaFadeDistances>	15.000000 15.000000	</alphaFadeDistances>
+        <wwsoundName>	hangar_victory_day_scenario_truck_02	</wwsoundName>
+        <effectHardpoint>	HP_module_0	</effectHardpoint>
+        <effectName>	particles/Environment/scenarios/victory_day_tank_dust.xml	</effectName>
+      </channel0>
+      <point>
+        <position>	164.824051 0.253041 260.082794	</position>
+        <speed0>	24.5	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	53.950687 0.089286 149.435226	</position>
+        <speed0>	3.5	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-11.016118 0.020015 84.751648	</position>
+        <speed0>	3.5	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-23.721987 0.020000 73.683548	</position>
+        <speed0>	3	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-44.788975 0.020000 64.630249	</position>
+        <speed0>	3	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-63.866974 0.019996 62.906574	</position>
+        <speed0>	3.5	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-95.244949 0.163160 71.374046	</position>
+        <speed0>	3	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-121.152390 0.073752 96.217819	</position>
+        <speed0>	3.5	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-136.171494 0.020000 116.252106	</position>
+        <speed0>	3.5	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-186.088303 0.020000 186.342575	</position>
+        <speed0>	3.5	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+    </victory_day_cromvel_5_right>
+    <victory_day_sherman_6_left>
+      <channel0>
+        <modelName>	content/Hangars/hangar_victory_day/tanks/normal/lod0/hd_hangar_victory_day_034_ShermanIII_02.model	</modelName>
+        <rollMagnitude>	0.000000	</rollMagnitude>
+        <rollRelaxation>	0.000000	</rollRelaxation>
+        <oscillationFreqHorz>	1.000000	</oscillationFreqHorz>
+        <oscillationFreqVert>	0.000000	</oscillationFreqVert>
+        <tesselationFactor>	50	</tesselationFactor>
+        <alphaFadeDistances>	15.000000 15.000000	</alphaFadeDistances>
+        <wwsoundName>	hangar_victory_day_scenario_tank_01	</wwsoundName>
+        <effectHardpoint>	HP_module_0	</effectHardpoint>
+        <effectName>	particles/Environment/scenarios/victory_day_tank_dust.xml	</effectName>
+      </channel0>
+      <point>
+        <position>	169.091751 0.020000 255.934753	</position>
+        <speed0>	24.5	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	58.288025 0.020000 144.932861	</position>
+        <speed0>	3.5	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-7.082530 0.020000 79.398537	</position>
+        <speed0>	3.5	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-20.706469 0.020000 67.965881	</position>
+        <speed0>	3.5	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-43.256939 0.020000 58.463638	</position>
+        <speed0>	3.5	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-67.693779 0.020000 57.065548	</position>
+        <speed0>	3.5	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-100.082932 0.019996 66.535057	</position>
+        <speed0>	3.5	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-126.030441 0.019998 91.722122	</position>
+        <speed0>	3.5	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-142.968613 0.020000 114.019333	</position>
+        <speed0>	3.5	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-190.487183 0.020000 180.128250	</position>
+        <speed0>	3.5	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+    </victory_day_sherman_6_left>
+    <victory_day_sherman_6_right>
+      <channel0>
+        <modelName>	content/Hangars/hangar_victory_day/tanks/normal/lod0/hd_hangar_victory_day_034_ShermanIII_02.model	</modelName>
+        <rollMagnitude>	0.000000	</rollMagnitude>
+        <rollRelaxation>	0.000000	</rollRelaxation>
+        <oscillationFreqHorz>	1.000000	</oscillationFreqHorz>
+        <oscillationFreqVert>	0.000000	</oscillationFreqVert>
+        <tesselationFactor>	50	</tesselationFactor>
+        <alphaFadeDistances>	15.000000 15.000000	</alphaFadeDistances>
+        <wwsoundName>	hangar_victory_day_scenario_metal_squeak	</wwsoundName>
+        <effectHardpoint>	HP_module_0	</effectHardpoint>
+        <effectName>	particles/Environment/scenarios/victory_day_tank_dust.xml	</effectName>
+      </channel0>
+      <point>
+        <position>	164.824051 0.253041 260.082794	</position>
+        <speed0>	24.5	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	53.950687 0.089286 149.435226	</position>
+        <speed0>	3.5	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-11.016118 0.020015 84.751648	</position>
+        <speed0>	3.5	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-23.721987 0.020000 73.683548	</position>
+        <speed0>	3	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-44.788975 0.020000 64.630249	</position>
+        <speed0>	3	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-63.866974 0.019996 62.906574	</position>
+        <speed0>	3.5	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-95.244949 0.163160 71.374046	</position>
+        <speed0>	3	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-121.152390 0.073752 96.217819	</position>
+        <speed0>	3.5	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-136.171494 0.020000 116.252106	</position>
+        <speed0>	3.5	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-186.059219 0.020000 186.312714	</position>
+        <speed0>	3.5	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+    </victory_day_sherman_6_right>
+    <victory_day_is3_7_left>
+      <channel0>
+        <modelName>	content/Hangars/hangar_victory_day/tanks/normal/lod0/hd_hangar_victory_day_024_IS_3_02.model	</modelName>
+        <rollMagnitude>	0.000000	</rollMagnitude>
+        <rollRelaxation>	0.000000	</rollRelaxation>
+        <oscillationFreqHorz>	1.000000	</oscillationFreqHorz>
+        <oscillationFreqVert>	0.000000	</oscillationFreqVert>
+        <tesselationFactor>	50	</tesselationFactor>
+        <alphaFadeDistances>	15.000000 15.000000	</alphaFadeDistances>
+        <wwsoundName>	hangar_victory_day_scenario_car_02	</wwsoundName>
+        <effectHardpoint>	HP_module_0	</effectHardpoint>
+        <effectName>	particles/Environment/scenarios/victory_day_tank_dust.xml	</effectName>
+      </channel0>
+      <point>
+        <position>	169.091751 0.020000 255.934753	</position>
+        <speed0>	24.5	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	58.288025 0.020000 144.932861	</position>
+        <speed0>	3.5	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-7.082530 0.020000 79.398537	</position>
+        <speed0>	3.5	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-20.706469 0.020000 67.965881	</position>
+        <speed0>	3.5	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-43.256939 0.020000 58.463638	</position>
+        <speed0>	3.5	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-67.693779 0.020000 57.065548	</position>
+        <speed0>	3.5	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-100.082932 0.019996 66.535057	</position>
+        <speed0>	3.5	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-126.030441 0.019998 91.722122	</position>
+        <speed0>	3.5	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-142.968613 0.020000 114.019333	</position>
+        <speed0>	3.5	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-190.476456 0.020000 180.182846	</position>
+        <speed0>	3.5	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+    </victory_day_is3_7_left>
+    <victory_day_is3_7_right>
+      <channel0>
+        <modelName>	content/Hangars/hangar_victory_day/tanks/normal/lod0/hd_hangar_victory_day_024_IS_3_02.model	</modelName>
+        <rollMagnitude>	0.000000	</rollMagnitude>
+        <rollRelaxation>	0.000000	</rollRelaxation>
+        <oscillationFreqHorz>	1.000000	</oscillationFreqHorz>
+        <oscillationFreqVert>	0.000000	</oscillationFreqVert>
+        <tesselationFactor>	50	</tesselationFactor>
+        <alphaFadeDistances>	15.000000 15.000000	</alphaFadeDistances>
+        <wwsoundName>	hangar_victory_day_scenario_tank_02	</wwsoundName>
+        <effectHardpoint>	HP_module_0	</effectHardpoint>
+        <effectName>	particles/Environment/scenarios/victory_day_tank_dust.xml	</effectName>
+      </channel0>
+      <point>
+        <position>	164.824051 0.253041 260.082794	</position>
+        <speed0>	24.5	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	53.950687 0.089286 149.435226	</position>
+        <speed0>	3.5	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-11.016118 0.020015 84.751648	</position>
+        <speed0>	3.4	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-23.721987 0.020000 73.683548	</position>
+        <speed0>	3.1	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-44.788975 0.020000 64.630249	</position>
+        <speed0>	3.1	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-63.866974 0.019996 62.906574	</position>
+        <speed0>	3.3	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-95.244949 0.163160 71.374046	</position>
+        <speed0>	3	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-121.152390 0.073752 96.217819	</position>
+        <speed0>	3.6	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-136.171494 0.020000 116.252106	</position>
+        <speed0>	3.5	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-186.084885 0.019996 186.342255	</position>
+        <speed0>	3.5	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+    </victory_day_is3_7_right>
     <show_waypoint_Plane_1>
       <channel0>
         <modelName>	content/Environment/env713_BF109G/normal/lod0/env713_BF109G.model	</modelName>

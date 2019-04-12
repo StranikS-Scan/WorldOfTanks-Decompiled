@@ -11,6 +11,7 @@ from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.store.browser.ingameshop_helpers import isIngameShopEnabled
 from gui.Scaleform.daapi.view.meta.BarracksMeta import BarracksMeta
 from gui.Scaleform.daapi.view.lobby.barracks.sound_constants import BARRACKS_SOUND_SPACE
+from gui.Scaleform.flash_wrapper import InputKeyMode
 from gui.Scaleform.genConsts.BARRACKS_CONSTANTS import BARRACKS_CONSTANTS
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
@@ -287,7 +288,7 @@ class Barracks(BarracksMeta, LobbySubView, IGlobalListener):
 
     def _populate(self):
         super(Barracks, self)._populate()
-        self.app.component.wg_inputKeyMode = 1
+        self.app.component.wg_inputKeyMode = InputKeyMode.IGNORE_RESULT
         self.startGlobalListening()
         self.itemsCache.onSyncCompleted += self.__updateTankmen
         g_clientUpdateManager.addCallbacks({'inventory.8': self.__updateTankmen,

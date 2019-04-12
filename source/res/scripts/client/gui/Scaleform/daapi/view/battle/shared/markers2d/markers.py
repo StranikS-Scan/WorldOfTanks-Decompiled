@@ -94,4 +94,4 @@ class VehicleTargetMarker(VehicleMarker):
     @classmethod
     def fetchMatrixProvider(cls, vProxy):
         pointOffset = getLocalAimPoint(vProxy.typeDescriptor)
-        return GUI.WGVehicleMarkersMatrixProvider(vProxy.matrix, pointOffset)
+        return GUI.WGVehicleMagneticAimMarkerMatrixProvider(vProxy.matrix, pointOffset)

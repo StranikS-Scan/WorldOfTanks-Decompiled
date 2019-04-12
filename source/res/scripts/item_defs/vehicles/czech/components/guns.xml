@@ -21,6 +21,7 @@
     <_100mm_A20>	18	</_100mm_A20>
     <_100mm_R11>	19	</_100mm_R11>
     <_100mm_AK1>	20	</_100mm_AK1>
+    <_88mm_vz_41N_A>	21	</_88mm_vz_41N_A>
   </ids>
   <shared>
     <_37mm_Pechotni_delo_Skoda_L_27>
@@ -937,6 +938,64 @@
         </_88mm_Narazovy>
       </shots>
     </_88mm_vz_41N>
+    <_88mm_vz_41N_A>
+      <userString>	#czech_vehicles:_88mm_vz_41N_A	</userString>
+      <tags></tags>
+      <level>	8	</level>
+      <price>	105800	</price>
+      <notInShop>	true	</notInShop>
+      <impulse>	0.38	</impulse>
+      <recoil>
+        <lodDist>	MEDIUM	</lodDist>
+        <amplitude>	0.4	</amplitude>
+        <recoilEffect>	main	</recoilEffect>
+      </recoil>
+      <effects>	shot_main_mb	</effects>
+      <reloadEffect>	reload85_107	</reloadEffect>
+      <pitchLimits>
+        <minPitch>	0.0 -20.0 1.0 -20.0	</minPitch>
+        <maxPitch>	0.0 5.0 1.0 5.0	</maxPitch>
+      </pitchLimits>
+      <turretYawLimits>	-180 180	</turretYawLimits>
+      <rotationSpeed>	30	</rotationSpeed>
+      <reloadTime>	4.04	</reloadTime>
+      <maxAmmo>	57	</maxAmmo>
+      <aimingTime>	4.04	</aimingTime>
+      <weight>	2700	</weight>
+      <maxHealth>	170	</maxHealth>
+      <maxRegenHealth>	85	</maxRegenHealth>
+      <repairCost>	7	</repairCost>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
+      <shotDispersionRadius>	0.4	</shotDispersionRadius>
+      <shotDispersionFactors>
+        <turretRotation>	0.08	</turretRotation>
+        <afterShot>	3.0	</afterShot>
+        <whileGunDamaged>	2.0	</whileGunDamaged>
+      </shotDispersionFactors>
+      <shots>
+        <_88mm_vz_41N_OPG>
+          <defaultPortion>	0.95	</defaultPortion>
+          <speed>	1050	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	202 182	</piercingPower>
+        </_88mm_vz_41N_OPG>
+        <_88mm_vz_42N_OPG>
+          <defaultPortion>	0.0	</defaultPortion>
+          <speed>	1220	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	242 224	</piercingPower>
+        </_88mm_vz_42N_OPG>
+        <_88mm_Narazovy>
+          <defaultPortion>	0.05	</defaultPortion>
+          <speed>	520	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	44 44	</piercingPower>
+        </_88mm_Narazovy>
+      </shots>
+    </_88mm_vz_41N_A>
     <_100mm_vz_44S>
       <userString>	#czech_vehicles:_100mm_vz_44S	</userString>
       <tags></tags>

@@ -203,6 +203,10 @@ class ChassisParams(WeightedParam):
     def isWheeled(self):
         return self._getPrecachedInfo().isWheeled
 
+    @property
+    def hasAutoSiege(self):
+        return self._getPrecachedInfo().hasAutoSiege
+
 
 class TurretParams(WeightedParam):
 

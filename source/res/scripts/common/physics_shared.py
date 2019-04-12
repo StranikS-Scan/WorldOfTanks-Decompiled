@@ -267,14 +267,15 @@ g_defaultVehicleXPhysicsCfg = {'mode_index': 0,
  'pushRotOnMoveFixedPeriod': 0.2,
  'pushRotOnSpotGrowPeriod': 2.0,
  'pushRotOnMoveGrowPeriod': 2.0,
- 'swingCompensatorCollisionExtend': 0.2,
- 'swingCompensatorStiffnesFactor0': 1.0,
- 'swingCompensatorStiffnesFactor1': 1.0,
- 'swingCompensatorDampingFactor': 1.0,
- 'swingCompensatorMaxPitchDeviation': 0.1,
- 'swingCompensatorMaxRollDeviation': 0.1,
- 'swingCompensatorRestitution': 0.8,
- 'swingCompensatorStabilisationCenter': (0.0, 0.0, 0.0),
+ 'swingCompensator': {'enable': True,
+                      'collisionExtend': 0.2,
+                      'stiffnesFactor0': 1.0,
+                      'stiffnesFactor1': 1.0,
+                      'dampingFactor': 1.0,
+                      'maxPitchDeviation': 0.1,
+                      'maxRollDeviation': 0.1,
+                      'restitution': 0.8,
+                      'stabilisationCenter': (0.0, 0.0, 0.0)},
  'powerFactor': 1.0,
  'angVelocityFactor': 1.0,
  'angVelocityFactor0': 1.0,
@@ -296,7 +297,7 @@ g_defaultVehicleXPhysicsCfg = {'mode_index': 0,
                         'preciseYawDist': 0.03}},
  'hullInertiaFactors': (1.0, 1.0, 1.8),
  'engineLoses': (0.5, 0.8),
- 'enableSabilization': True,
+ 'enableStabilization': True,
  'modes': {'siegeMode': {'mode_index': 1,
                          'engine': {'smplEnginePower': 1.0},
                          'powerFactor': 1.0,
@@ -372,6 +373,9 @@ def updatePhysicsCfg(baseCfg, typeDesc, cfg):
     fakeGearBox = baseCfg.get('fakegearbox')
     if fakeGearBox is not None:
         cfg['fakegearbox'] = fakeGearBox
+    swingCompensator = baseCfg.get('swingCompensator')
+    if swingCompensator is not None:
+        cfg.setdefault('swingCompensator', {}).update(swingCompensator)
     return
 
 
@@ -506,8 +510,7 @@ def configurePhysicsMode(cfg, typeDesc, gravityFactor):
     hullAimingPitchCfg['correctionSpeed'] = hullAimingParamsPitch['wheelsCorrectionSpeed']
     hullAimingPitchCfg['pitchMin'] = -hullAimingParamsPitch['wheelsCorrectionAngles']['pitchMax']
     hullAimingPitchCfg['pitchMax'] = -hullAimingParamsPitch['wheelsCorrectionAngles']['pitchMin']
-    withHullAiming = hullAimingParams['yaw']['isAvailable'] or hullAimingParamsPitch['isAvailable']
-    cfg['enableSabilization'] = not withHullAiming
+    cfg['enableStabilization'] = cfg['swingCompensator']['enable']
     cfg['gimlet']['wPushedRot'] = cfg['wPushedRot']
     cfg['gimlet']['wPushedDiag'] = cfg['wPushedDiag']
     cfg['gimlet']['wPushedHB'] = cfg['wPushedHB']
@@ -700,11 +703,12 @@ def initVehiclePhysicsClient(physics, typeDesc):
     indent = boxHeight / 2
     hardRatio = _computeHardRatio(clearance, blen)
     if IS_CLIENT and typeDesc.isPitchHullAimingAvailable:
+        springExtendMultiplier = 2.0
         hardRatio = 0
         hullAngleMin = typeDesc.type.hullAimingParams['pitch']['wheelsCorrectionAngles']['pitchMin']
         hullAngleMax = typeDesc.type.hullAimingParams['pitch']['wheelsCorrectionAngles']['pitchMax']
-        backSpringLength = blen * math.sin(abs(hullAngleMax)) * 1.25
-        frontSpringLength = blen * math.sin(abs(hullAngleMin)) * 1.25
+        backSpringLength = blen * math.sin(abs(hullAngleMax)) * springExtendMultiplier
+        frontSpringLength = blen * math.sin(abs(hullAngleMin)) * springExtendMultiplier
         hullAimingLength = max(backSpringLength, frontSpringLength)
     if IS_CLIENT and typeDesc.hasSiegeMode and typeDesc.isPitchHullAimingAvailable:
         springsLengthList = tuple((length for _ in xrange(0, carrierSpringPairs)))

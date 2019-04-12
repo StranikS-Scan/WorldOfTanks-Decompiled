@@ -89,7 +89,6 @@ def init(scriptConfig, engineConfig, userPreferences, loadingScreenGUI=None):
         except Exception:
             LOG_CURRENT_EXCEPTION()
 
-        tutorialLoaderInit()
         BigWorld.callback(0.1, asyncore_call)
         import items
         items.init(True, None if not constants.IS_DEVELOPMENT else {})
@@ -107,6 +106,8 @@ def init(scriptConfig, engineConfig, userPreferences, loadingScreenGUI=None):
         motivation_quests.init()
         BigWorld.worldDrawEnabled(False)
         dependency.configure(services_config.getClientServicesConfig)
+        tutorialLoaderInit()
+        SoundGroups.g_instance.startListeningGUISpaceChanges()
         gui_personality.init(loadingScreenGUI=loadingScreenGUI)
         EdgeDetectColorController.g_instance.create()
         g_replayCtrl.subscribe()
@@ -304,6 +305,7 @@ def fini():
         from predefined_hosts import g_preDefinedHosts
         if g_preDefinedHosts is not None:
             g_preDefinedHosts.fini()
+        SoundGroups.g_instance.startListeningGUISpaceChanges()
         dependency.clear()
         if g_replayCtrl is not None:
             g_replayCtrl.destroy()

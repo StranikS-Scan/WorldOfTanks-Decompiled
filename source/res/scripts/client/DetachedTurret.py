@@ -9,7 +9,7 @@ import material_kinds
 from VehicleEffects import DamageFromShotDecoder
 from VehicleStickers import VehicleStickers
 from svarog_script.py_component import Component
-from svarog_script.py_component_system import ComponentSystem, ComponentDescriptor
+from svarog_script.script_game_object import ScriptGameObject, ComponentDescriptor
 from vehicle_systems.tankStructure import TankPartNames, TankNodeNames, ColliderTypes
 from helpers.EffectMaterialCalculation import calcSurfaceMaterialNearPoint
 from helpers.EffectsList import EffectsListPlayer, SoundStartParam, SpecialKeyPointNames
@@ -18,12 +18,12 @@ from items import vehicles
 from constants import SERVER_TICK_LENGTH
 _MIN_COLLISION_SPEED = 3.5
 
-class DetachedTurret(BigWorld.Entity, ComponentSystem):
+class DetachedTurret(BigWorld.Entity, ScriptGameObject):
     allTurrets = list()
     collisions = ComponentDescriptor()
 
     def __init__(self):
-        ComponentSystem.__init__(self)
+        ScriptGameObject.__init__(self, self.spaceID)
         self.__vehDescr = vehicles.VehicleDescr(compactDescr=self.vehicleCompDescr)
         self.filter = BigWorld.WGTurretFilter()
         self.__detachConfirmationTimer = SynchronousDetachment(self)
@@ -75,7 +75,7 @@ class DetachedTurret(BigWorld.Entity, ComponentSystem):
         DetachedTurret.allTurrets.append(self)
         collisionData = ((TankPartNames.getIdx(TankPartNames.TURRET), self.model.matrix), (TankPartNames.getIdx(TankPartNames.GUN), self.model.node(TankPartNames.GUN)))
         self.collisions.connect(self.id, ColliderTypes.DYNAMIC_COLLIDER, collisionData)
-        ComponentSystem.activate(self)
+        ScriptGameObject.activate(self)
         return
 
     def isAlive(self):
@@ -98,8 +98,8 @@ class DetachedTurret(BigWorld.Entity, ComponentSystem):
         self.__vehicleStickers.attach(self.model, True, False, True)
 
     def onLeaveWorld(self):
-        ComponentSystem.deactivate(self)
-        ComponentSystem.destroy(self)
+        ScriptGameObject.deactivate(self)
+        ScriptGameObject.destroy(self)
         DetachedTurret.allTurrets.remove(self)
         self.__detachConfirmationTimer.cancel()
         self.__detachConfirmationTimer = None

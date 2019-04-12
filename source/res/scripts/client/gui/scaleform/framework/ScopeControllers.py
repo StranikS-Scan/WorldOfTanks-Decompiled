@@ -177,8 +177,6 @@ class ScopeController(DisposableEntity):
             self.__loadingViews.remove(pyView)
         elif pyView in self.__views:
             self.__views.remove(pyView)
-        if not self.__views and not self.__loadingViews:
-            self.destroy()
 
     def _getScopeControllerForScope(self, scope):
         scopeType = scope.getScopeType()

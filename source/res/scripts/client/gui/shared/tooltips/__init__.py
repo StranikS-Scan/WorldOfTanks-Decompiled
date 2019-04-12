@@ -45,6 +45,8 @@ class TOOLTIP_TYPE(CONST_CONTAINER):
     RANKED_RANK = 'rankedRank'
     RANKED_CALENDAR_DAY = 'rankedCalendarDayInfo'
     RANKED_SELECTOR_INFO = 'rankedSelectorInfo'
+    RANKED_DIVISION_INFO = 'rankedDivisionInfo'
+    RANKED_YEAR_REWARD = 'rankedYearReward'
     FAKE = 'fake'
     VEHICLE_ELITE_BONUS = 'vehicleEliteBonus'
     VEHICLE_HISTORICAL_REFERENCE = 'vehicleHistoricalReference'
@@ -55,6 +57,7 @@ class TOOLTIP_TYPE(CONST_CONTAINER):
     EPIC_META_LEVEL_PROGRESS_INFO = 'epicMetaLevelProgressInfo'
     EPIC_PRESTIGE_PROGRESS_BLOCK_INFO = 'epicPrestigeProgressBlockInfo'
     BLUEPRINTS = 'blueprintsInfo'
+    SQUAD_BONUS = 'squadBonus'
 
 
 class TOOLTIP_COMPONENT(CONST_CONTAINER):

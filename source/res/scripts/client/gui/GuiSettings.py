@@ -139,6 +139,7 @@ _DEFAULT_SETTINGS = {'registrationURL': '',
  'easterEgg': EasterEggProps(True, []),
  'adventCalendar': {'popupIntervalInHours': 24,
                     'baseURL': ''},
+ 'premiumInfo': {},
  'checkPromoFrequencyInBattles': 5}
 
 class GuiSettings(object):

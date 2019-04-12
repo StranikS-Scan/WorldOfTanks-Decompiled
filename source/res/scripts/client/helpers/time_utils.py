@@ -10,6 +10,7 @@ from helpers.i18n import makeString as _ms
 from soft_exception import SoftException
 DAYS_IN_YEAR = 365
 HOURS_IN_DAY = 24
+MINUTES_IN_HOUR = 60
 ONE_MINUTE = 60
 QUARTER = 15
 QUARTER_HOUR = QUARTER * ONE_MINUTE
@@ -118,7 +119,7 @@ def getTimeDeltaTillNow(t):
         return delta.days * ONE_DAY + delta.seconds
 
 
-def getTillTimeString(timeValue, keyNamespace, isRoundUp=False):
+def getTillTimeString(timeValue, keyNamespace='', isRoundUp=False, sourceStrGenerator=None, removeLeadingZeros=False):
     gmtime = time.gmtime(timeValue)
     if isRoundUp and gmtime.tm_sec > 0:
         timeValue += ONE_MINUTE
@@ -133,10 +134,10 @@ def getTillTimeString(timeValue, keyNamespace, isRoundUp=False):
     else:
         fmtKey = 'lessMin'
     fmtValues = {'day': str(time.struct_time(gmtime).tm_yday),
-     'hour': time.strftime('%H', gmtime),
-     'min': time.strftime('%M', gmtime),
+     'hour': time.strftime('%H', gmtime) if not removeLeadingZeros else time.strftime('%H', gmtime).lstrip('0'),
+     'min': time.strftime('%M', gmtime) if not removeLeadingZeros else time.strftime('%M', gmtime).lstrip('0'),
      'sec': time.strftime('%S', gmtime)}
-    return _ms('{}/{}'.format(keyNamespace, fmtKey), **fmtValues)
+    return sourceStrGenerator(fmtKey, **fmtValues) if sourceStrGenerator else _ms('{}/{}'.format(keyNamespace, fmtKey), **fmtValues)
 
 
 def getCurrentTimestamp():

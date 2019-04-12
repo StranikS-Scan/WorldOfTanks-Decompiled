@@ -7,8 +7,6 @@ from constants import ARENA_PERIOD as _PERIOD
 from gui.Scaleform.daapi.view.meta.WindowViewMeta import WindowViewMeta
 from gui.Scaleform.framework import ViewTypes
 from gui.Scaleform.framework.managers.containers import POP_UP_CRITERIA
-from gui.app_loader import g_appLoader
-from gui.app_loader import settings as app_settings
 from gui.app_loader import sf_lobby
 from gui.battle_control.arena_info.interfaces import IArenaPeriodController
 from gui.battle_control.battle_constants import WinStatus
@@ -18,6 +16,7 @@ from gui.sounds import filters as snd_filters
 from gui.sounds.sound_constants import SoundFilters, PLAYING_SOUND_CHECK_PERIOD
 from gui.sounds.sound_utils import SOUND_DEBUG
 from helpers import dependency
+from skeletons.gui.app_loader import IAppLoader, GuiGlobalSpaceID
 from skeletons.gui.battle_session import IBattleSessionProvider
 from skeletons.gui.shared.utils import IHangarSpace
 
@@ -357,11 +356,12 @@ class BattleResultsEnv(SoundEnv):
 
 
 class GuiAmbientsCtrl(object):
-    _spaces = {app_settings.GUI_GLOBAL_SPACE_ID.LOGIN: LoginSpaceEnv,
-     app_settings.GUI_GLOBAL_SPACE_ID.LOBBY: LobbySpaceEnv,
-     app_settings.GUI_GLOBAL_SPACE_ID.BATTLE_LOADING: BattleLoadingSpaceEnv,
-     app_settings.GUI_GLOBAL_SPACE_ID.BATTLE: BattleSpaceEnv}
+    _spaces = {GuiGlobalSpaceID.LOGIN: LoginSpaceEnv,
+     GuiGlobalSpaceID.LOBBY: LobbySpaceEnv,
+     GuiGlobalSpaceID.BATTLE_LOADING: BattleLoadingSpaceEnv,
+     GuiGlobalSpaceID.BATTLE: BattleSpaceEnv}
     hangarSpace = dependency.descriptor(IHangarSpace)
+    appLoader = dependency.descriptor(IAppLoader)
 
     def __init__(self, soundsCtrl):
         self._spaceEnv = EmptySpaceEnv(soundsCtrl)
@@ -370,13 +370,13 @@ class GuiAmbientsCtrl(object):
         self._customEnvs = defaultdict(dict)
 
     def init(self):
-        g_appLoader.onGUISpaceEntered += self.__onGUISpaceEntered
-        g_appLoader.onGUISpaceLeft += self.__onGUISpaceLeft
+        self.appLoader.onGUISpaceEntered += self.__onGUISpaceEntered
+        self.appLoader.onGUISpaceLeft += self.__onGUISpaceLeft
         self.hangarSpace.onSpaceChanged += self.__onSpaceChanged
 
     def fini(self):
-        g_appLoader.onGUISpaceEntered -= self.__onGUISpaceEntered
-        g_appLoader.onGUISpaceLeft -= self.__onGUISpaceLeft
+        self.appLoader.onGUISpaceEntered -= self.__onGUISpaceEntered
+        self.appLoader.onGUISpaceLeft -= self.__onGUISpaceLeft
         self.hangarSpace.onSpaceChanged -= self.__onSpaceChanged
         self.stopAllSounds()
         if self._spaceEnv is not None:
@@ -393,7 +393,7 @@ class GuiAmbientsCtrl(object):
         if self.app and self.app.loaderManager:
             self.app.loaderManager.onViewLoaded -= self.__onViewLoaded
         if isDisconnected:
-            if g_appLoader.getSpaceID() == app_settings.GUI_GLOBAL_SPACE_ID.LOGIN:
+            if self.appLoader.getSpaceID() == GuiGlobalSpaceID.LOGIN:
                 SOUND_DEBUG('Restart login space sound environment after banks reloading')
                 self._restartSounds()
 

@@ -4,8 +4,8 @@ from gui.Scaleform.daapi.view.meta.WrapperViewMeta import WrapperViewMeta
 
 class BadgesPageMeta(WrapperViewMeta):
 
-    def onCloseView(self):
-        self._printOverrideError('onCloseView')
+    def onBackClick(self):
+        self._printOverrideError('onBackClick')
 
     def onSelectBadge(self, badgeID):
         self._printOverrideError('onSelectBadge')

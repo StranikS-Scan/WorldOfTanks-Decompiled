@@ -71,7 +71,7 @@ def getVehiclesByLevel(level, researchOnly=True, itemsCache=None):
 
 @dependency.replace_none_kwargs(itemsCache=IItemsCache)
 def getPremiumExpiryTime(itemsCache=None):
-    return itemsCache.items.stats.premiumExpiryTime if itemsCache is not None else 0
+    return itemsCache.items.stats.activePremiumExpiryTime if itemsCache is not None else 0
 
 
 def getCurrentVehicleLevel():

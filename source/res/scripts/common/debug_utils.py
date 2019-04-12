@@ -202,20 +202,6 @@ def LOG_DEBUG_DEV(msg, *kargs, **kwargs):
     _doLog('DEBUG', msg, kargs, kwargs)
 
 
-@_LogWrapper(LOG_LEVEL.CT)
-def LOG_GUI(msg, *kargs):
-    _doLog('GUI', msg, kargs)
-
-
-@_LogWrapper(LOG_LEVEL.SVR_RELEASE)
-def LOG_VOIP(msg, *kargs):
-    _doLog('VOIP', msg, kargs)
-
-
-def FLUSH_LOG():
-    BigWorld.flushPythonLog()
-
-
 @_LogWrapper(LOG_LEVEL.RELEASE)
 def LOG_UNEXPECTED(msg, *kargs):
     _doLog('LOG_UNEXPECTED', msg, kargs)

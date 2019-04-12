@@ -43,7 +43,7 @@ class DialogWindow(Window):
     def __init__(self, content=None, bottomContent=None, parent=None, balanceContent=None, enableBlur=True, layer=DialogLayer.TOP_WINDOW):
         if content is not None:
             pass
-        super(DialogWindow, self).__init__(wndFlags=layer | WindowFlags.RESIZABLE, decorator=ViewImpl(R.views.dialogWindow(), ViewFlags.WINDOW_DECORATOR, DialogWindowModel), content=content, parent=parent)
+        super(DialogWindow, self).__init__(wndFlags=layer | WindowFlags.RESIZABLE | WindowFlags.CLOSE_BY_ESCAPE, decorator=ViewImpl(R.views.dialogWindow(), ViewFlags.WINDOW_DECORATOR, DialogWindowModel), content=content, parent=parent)
         if bottomContent is not None:
             self._setBottomContent(bottomContent)
         self.__blur = WGUIBackgroundBlurSupportImpl()
@@ -98,11 +98,12 @@ class DialogWindow(Window):
     def _removeAllButtons(self):
         self.viewModel.buttons.setItems([])
 
-    def _addButton(self, name, label, isFocused=False, invalidateAll=False):
+    def _addButton(self, name, label, isFocused=False, invalidateAll=False, isEnabled=True):
         button = DialogButtonModel()
         button.setName(name)
         button.setLabel(label)
         button.setDoSetFocus(isFocused)
+        button.setIsEnabled(isEnabled)
         self.viewModel.buttons.addViewModel(button, isSelected=isFocused)
         if invalidateAll:
             self.viewModel.buttons.invalidate()
@@ -115,8 +116,9 @@ class DialogWindow(Window):
         return None
 
     def _onButtonClick(self, item):
-        self.__result = item.getName()
-        self.__event.set()
+        if item.getIsEnabled():
+            self.__result = item.getName()
+            self.__event.set()
 
     def _setBackgroundImage(self, value):
         self.viewModel.setBackgroundImage(value)
@@ -138,3 +140,9 @@ class DialogWindow(Window):
 
     def _serShowSoundId(self, value):
         self.viewModel.setShowSoundId(value)
+
+    def _setButtonEnabled(self, buttonName, value):
+        button = self._getButton(buttonName)
+        if button is not None:
+            button.setIsEnabled(value)
+        return

@@ -35,3 +35,5 @@ class ICON_TEXT_FRAMES(object):
     TRADE = 'trade'
     ATTENTION = 'attention'
     LOCK = 'lock'
+    RANKED_POINTS = 'rankedPoints'
+    BONUS_BATTLE = 'bonusBattle'

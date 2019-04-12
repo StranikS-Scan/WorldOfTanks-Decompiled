@@ -3,21 +3,14 @@
 import BigWorld
 from gui.Scaleform import MENU
 from gui.Scaleform.daapi.view.lobby.prime_time_view_base import ServerListItemPresenter
-from gui.Scaleform.daapi.view.meta.EpicPrimeTimeMeta import EpicPrimeTimeMeta
+from gui.Scaleform.daapi.view.lobby.prime_time_view_base import PrimeTimeViewBase
 from gui.Scaleform.locale.EPIC_BATTLE import EPIC_BATTLE
-from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.prb_control.settings import PREBATTLE_ACTION_NAME
 from gui.shared.formatters import text_styles
-from gui.shared.formatters.servers import makePingStatusIcon
 from helpers import dependency
 from helpers import time_utils
 from helpers.i18n import makeString as _ms
 from skeletons.gui.game_control import IEpicBattleMetaGameController
-
-def _makeServerString(serverInfo):
-    pingStr = text_styles.neutral(text_styles.concatStylesToSingleLine(serverInfo.getName(), ' (', text_styles.neutral(serverInfo.getPingValue()), makePingStatusIcon(serverInfo.getPingStatus()), ')'))
-    return _ms(EPIC_BATTLE.PRIMETIME_ONESERVERAVAILABLE, serverPing=pingStr)
-
 
 class FrontLineServerPresenter(ServerListItemPresenter):
     _periodsController = dependency.descriptor(IEpicBattleMetaGameController)
@@ -32,7 +25,7 @@ class FrontLineServerPresenter(ServerListItemPresenter):
         return self.isActive()
 
 
-class EpicBattlesPrimeTimeView(EpicPrimeTimeMeta):
+class EpicBattlesPrimeTimeView(PrimeTimeViewBase):
     __epicController = dependency.descriptor(IEpicBattleMetaGameController)
     _serverPresenterClass = FrontLineServerPresenter
 
@@ -42,23 +35,15 @@ class EpicBattlesPrimeTimeView(EpicPrimeTimeMeta):
     def _prepareData(self, serverList, serverInfo):
         if len(serverList) == 1:
             serversDDEnabled = serverDDVisible = False
-            serversText = _makeServerString(serverInfo)
         else:
             serversDDEnabled = serverDDVisible = True
-            serversText = EPIC_BATTLE.PRIMETIME_MANYSERVERSAVAILABLE
-        isAlert = False
-        if self.__epicController.hasAvailablePrimeTimeServers():
-            warningIconSrc = RES_ICONS.MAPS_ICONS_LIBRARY_ICON_CLOCK_100X100
-        else:
-            warningIconSrc = RES_ICONS.MAPS_ICONS_LIBRARY_ICON_ALERT_90X84
-            isAlert = True
-        return {'warningIconSrc': warningIconSrc,
+        return {'warningIconSrc': self._getWarningIcon(),
          'status': text_styles.grandTitle(self.__getStatusText()),
-         'serversText': text_styles.expText(serversText),
+         'serversText': text_styles.expText(self._getServerText(serverList, serverInfo)),
          'serversDDEnabled': serversDDEnabled,
          'serverDDVisible': serverDDVisible,
          'timeText': text_styles.expText(self.__getTimeText(serverInfo)),
-         'showAlertBG': isAlert}
+         'showAlertBG': not self.__epicController.hasAvailablePrimeTimeServers()}
 
     def _getPrbActionName(self):
         if self._hasAvailableServers():

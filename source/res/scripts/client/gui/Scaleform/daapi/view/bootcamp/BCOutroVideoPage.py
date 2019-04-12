@@ -6,11 +6,14 @@ from gui.Scaleform.daapi.view.meta.BCOutroVideoPageMeta import BCOutroVideoPageM
 from gui.Scaleform.daapi.view.bootcamp.BCLobbySpaceEnv import BCLobbySpaceEnv
 from bootcamp.BootCampEvents import g_bootcampEvents
 from bootcamp.BootcampTransition import BootcampTransition
-from gui.app_loader import g_appLoader, settings as app_settings
+from gui.app_loader import settings as app_settings
 from gui import GUI_CTRL_MODE_FLAG as _CTRL_FLAG
+from helpers import dependency
+from skeletons.gui.app_loader import IAppLoader
 
 class BCOutroVideoPage(BCOutroVideoPageMeta):
     __sound_env__ = BCLobbySpaceEnv
+    appLoader = dependency.descriptor(IAppLoader)
 
     def __init__(self, settings):
         super(BCOutroVideoPage, self).__init__()
@@ -33,7 +36,7 @@ class BCOutroVideoPage(BCOutroVideoPageMeta):
 
     def _populate(self):
         super(BCOutroVideoPage, self)._populate()
-        g_appLoader.detachCursor(app_settings.APP_NAME_SPACE.SF_LOBBY)
+        self.appLoader.detachCursor(app_settings.APP_NAME_SPACE.SF_LOBBY)
         if self.__movieFiles:
             self.__showNextMovie()
         else:
@@ -41,7 +44,7 @@ class BCOutroVideoPage(BCOutroVideoPageMeta):
 
     def _dispose(self):
         super(BCOutroVideoPage, self)._dispose()
-        g_appLoader.attachCursor(app_settings.APP_NAME_SPACE.SF_LOBBY, _CTRL_FLAG.GUI_ENABLED)
+        self.appLoader.attachCursor(app_settings.APP_NAME_SPACE.SF_LOBBY, _CTRL_FLAG.GUI_ENABLED)
 
     def __showNextMovie(self):
         moviePath = self.__movieFiles.pop(0)

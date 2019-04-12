@@ -16,7 +16,7 @@ from debug_utils import LOG_CURRENT_EXCEPTION, LOG_DEBUG
 from dossiers2.ui.achievements import ACHIEVEMENT_BLOCK
 from gui.server_events import caches as quests_caches
 from gui.server_events.event_items import EventBattles, createQuest, createAction, MotiveQuest
-from gui.server_events.events_helpers import isMarathon, isLinkedSet
+from gui.server_events.events_helpers import isMarathon, isLinkedSet, isPremium
 from gui.server_events.formatters import getLinkedActionID
 from gui.server_events.modifiers import ACTION_SECTION_TYPE, ACTION_MODIFIER_TYPE, clearModifiersCache
 from gui.server_events.personal_missions_cache import PersonalMissionsCache
@@ -191,9 +191,12 @@ class EventsCache(IEventsCache):
 
     def getActiveQuests(self, filterFunc=None):
         filterFunc = filterFunc or (lambda a: True)
+        isPremiumQuestsEnable = self.lobbyContext.getServerSettings().getPremQuestsConfig().get('enabled', False)
 
         def userFilterFunc(q):
-            return False if isLinkedSet(q.getGroupID()) and not self.linkedSet.isLinkedSetEnabled() else q.getFinishTimeLeft() and filterFunc(q)
+            if isLinkedSet(q.getGroupID()) and not self.linkedSet.isLinkedSetEnabled():
+                return False
+            return False if not isPremiumQuestsEnable and isPremium(q.getGroupID()) else q.getFinishTimeLeft() and filterFunc(q)
 
         return self.getQuests(userFilterFunc)
 
@@ -222,6 +225,14 @@ class EventsCache(IEventsCache):
 
         def userFilterFunc(q):
             return isLinkedSet(q.getGroupID()) and filterFunc(q)
+
+        return self.getQuests(userFilterFunc)
+
+    def getPremiumQuests(self, filterFunc=None):
+        filterFunc = filterFunc or (lambda a: True)
+
+        def userFilterFunc(q):
+            return isPremium(q.getGroupID()) and filterFunc(q)
 
         return self.getQuests(userFilterFunc)
 
@@ -384,6 +395,9 @@ class EventsCache(IEventsCache):
 
     def getSquadZeroBonuses(self):
         return set(self.__getUnitXpFactors().get('zeroBonusesFor', ()))
+
+    def getSquadXPFactor(self):
+        return self.__getUnitXpFactors().get('factor', 0)
 
     def getQuestsDossierBonuses(self):
         return self.__questsDossierBonuses

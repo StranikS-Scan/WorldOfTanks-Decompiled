@@ -113,15 +113,18 @@ class EpicSectorWarningComponent(ClientArenaComponent, CallbackDelayer):
         self.__protectionZones = None
         self.__activeWarnings = None
         self.__transitionEndTimes = None
+        self.__visual = None
         self.onShowSectorWarning = Event.Event(self._eventManager)
         self.onTransitionTimerUpdated = Event.Event(self._eventManager)
-        g_playerEvents.onAvatarReady += self.__onAvatarReady
         return
 
-    def destroy(self):
+    def activate(self):
+        super(EpicSectorWarningComponent, self).activate()
+        g_playerEvents.onAvatarReady += self.__onAvatarReady
+
+    def deactivate(self):
+        super(EpicSectorWarningComponent, self).deactivate()
         g_playerEvents.onAvatarReady -= self.__onAvatarReady
-        if self.__visual:
-            self.__visual.destroy()
         if self.__sectorComponent:
             self.__sectorComponent.onSectorAdded -= self.__onSectorAdded
             self.__sectorComponent.onSectorGroupUpdated -= self.__onSectorGroupUpdated
@@ -131,6 +134,11 @@ class EpicSectorWarningComponent(ClientArenaComponent, CallbackDelayer):
             self.__protectionZoneComponent.onProtectionZoneAdded -= self.__onProtectionZoneAdded
             self.__protectionZoneComponent.onProtectionZoneActive -= self.__onProtectionZoneActive
             self.__protectionZoneComponent.onPlayerInProtectedZoneAction -= self.__onPlayerInProtectionZone
+        if self.__visual is not None:
+            self.__visual.destroy()
+        return
+
+    def destroy(self):
         self.__teamId = None
         self.__nodes = None
         self.__edges = None

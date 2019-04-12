@@ -7,7 +7,7 @@ from debug_utils import LOG_ERROR
 from gui.InputHandler import g_instance as g_inputHandler
 from gui.Scaleform.daapi import LobbySubView
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
-from gui.Scaleform.daapi.view.meta.BrowserViewMeta import BrowserViewMeta
+from gui.Scaleform.daapi.view.meta.BrowserScreenMeta import BrowserScreenMeta
 from gui.Scaleform.locale.WAITING import WAITING
 from gui.shared import events, EVENT_BUS_SCOPE
 from helpers import dependency
@@ -19,7 +19,7 @@ def makeBrowserParams(waitingMessage=WAITING.LOADCONTENT, isTransparent=False):
      'isTransparent': isTransparent}
 
 
-class BrowserView(LobbySubView, BrowserViewMeta):
+class BrowserView(LobbySubView, BrowserScreenMeta):
     __background_alpha__ = 1.0
     browserCtrl = dependency.descriptor(IBrowserController)
     lobbyContext = dependency.descriptor(ILobbyContext)

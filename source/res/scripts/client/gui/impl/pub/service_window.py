@@ -8,4 +8,4 @@ class ServiceWindow(WindowImpl):
     __slots__ = ()
 
     def __init__(self, content=None, parent=None, areaID=0):
-        super(ServiceWindow, self).__init__(wndFlags=WindowFlags.SERVICE_WINDOW | WindowFlags.RESIZABLE, decorator=WindowView(), content=content, parent=parent, areaID=areaID)
+        super(ServiceWindow, self).__init__(wndFlags=WindowFlags.SERVICE_WINDOW | WindowFlags.RESIZABLE | WindowFlags.CLOSE_BY_ESCAPE, decorator=WindowView(), content=content, parent=parent, areaID=areaID)

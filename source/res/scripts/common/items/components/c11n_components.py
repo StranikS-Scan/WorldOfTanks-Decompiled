@@ -6,7 +6,7 @@ from items.components import shared_components
 from soft_exception import SoftException
 from items.components.c11n_constants import ApplyArea, SeasonType, Options, ItemTags, CustomizationType, MAX_CAMOUFLAGE_PATTERN_SIZE, DecalType, PROJECTION_DECALS_SCALE_ID_VALUES, MAX_USERS_PROJECTION_DECALS, CustomizationTypeNames, DecalTypeNames, ProjectionDecalFormTags, CUSTOMIZATION_SLOTS_VEHICLE_PARTS, PERSONAL_NUMBER_DIGITS_COUNT
 from typing import List, Dict, Type, Tuple, Optional, Union, TypeVar, FrozenSet
-from string import lower
+from string import lower, upper
 Item = TypeVar('TypeVar')
 
 class BaseCustomizationItem(object):
@@ -477,12 +477,17 @@ def _validateProjectionDecal(component, item, vehDescr, usedParents):
     if options & Options.MIRRORED and not item.canBeMirrored:
         raise SoftException('projection decal {} wrong mirrored option'.format(component.id))
     slotFormFactors = set([ tag for tag in slotParams.tags if tag.startswith(ProjectionDecalFormTags.PREFIX) ])
-    if slotFormFactors and ProjectionDecalFormTags.ANY not in slotFormFactors:
+    denyLen = len(ProjectionDecalFormTags.DENY)
+    denySlotFormFactors = set([ tag[denyLen:] for tag in slotParams.tags if tag.startswith(ProjectionDecalFormTags.DENY_PREFIX) ])
+    if slotFormFactors:
         formfactor = next((tag for tag in item.tags if tag.startswith(ProjectionDecalFormTags.PREFIX)), '')
-        if not formfactor:
-            raise SoftException('projection decal {} wrong XML. formfactor is missing'.format(component.id, formfactor))
-        if formfactor not in slotFormFactors:
-            raise SoftException('projection decal {} wrong formfactor {}'.format(component.id, formfactor))
+        if ProjectionDecalFormTags.ANY not in slotFormFactors:
+            if not formfactor:
+                raise SoftException('projection decal {} wrong XML. formfactor is missing'.format(component.id, formfactor))
+            if formfactor not in slotFormFactors:
+                raise SoftException('projection decal {} wrong formfactor {}'.format(component.id, formfactor))
+        if formfactor in denySlotFormFactors:
+            raise SoftException('projection decal {} formfactor {} restricted'.format(component.id, formfactor))
     return
 
 
@@ -511,14 +516,30 @@ def validateCustomizationTypeEnabled(gameParams, customizationType):
 
 def getVehicleProjectionDecalSlotParams(vehicleDescr, vehicleSlotId, partNames=CUSTOMIZATION_SLOTS_VEHICLE_PARTS):
     slotTypeName = 'projectionDecal'
-    for partName in partNames:
-        for vehicleSlot in getattr(vehicleDescr, partName).slotsAnchors:
-            if vehicleSlot.type != slotTypeName or vehicleSlot.slotId != vehicleSlotId:
-                continue
-            return vehicleSlot
+    for wantedPartName in partNames:
+        partApplyArea = getattr(ApplyArea, '{}_REGIONS_VALUE'.format(upper(wantedPartName)))
+        for partName in CUSTOMIZATION_SLOTS_VEHICLE_PARTS:
+            for vehicleSlot in getattr(vehicleDescr, partName).slotsAnchors:
+                if vehicleSlot.type == slotTypeName and vehicleSlot.slotId == vehicleSlotId:
+                    if partName in partNames or partApplyArea & vehicleSlot.showOn:
+                        return vehicleSlot
 
     return None
 
 
 def isPersonalNumberAllowed(personalNumber):
     return personalNumber not in PersonalNumberItem.getProhibitedNumbers()
+
+
+def isSlotFitsVehicle(slotDescriptor, vehicleDescriptor):
+    if slotDescriptor.attachedParts is None:
+        return True
+    else:
+        for partType, attachedParts in slotDescriptor.attachedParts.iteritems():
+            part = getattr(vehicleDescriptor, partType, None)
+            if part is None:
+                raise SoftException('projection decal {} wrong attached part type: {}'.format(slotDescriptor.slotId, partType))
+            if part.name not in attachedParts:
+                return False
+
+        return True

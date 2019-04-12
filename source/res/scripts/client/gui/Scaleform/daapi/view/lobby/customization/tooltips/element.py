@@ -11,6 +11,7 @@ from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.Scaleform.locale.VEHICLE_CUSTOMIZATION import VEHICLE_CUSTOMIZATION
+from gui.customization.shared import PROJECTION_DECAL_IMAGE_FORM_TAG
 from gui.shared.formatters import text_styles, icons
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.gui_items.customization.packers import pickPacker
@@ -26,6 +27,8 @@ from helpers.i18n import makeString as _ms
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.customization import ICustomizationService
+from gui.impl import backport
+from gui.impl.gen import R
 
 class SimplifiedStatsBlockConstructor(object):
 
@@ -110,6 +113,7 @@ class ElementTooltip(BlocksTooltipData):
         self._setWidth(self.CUSTOMIZATION_TOOLTIP_WIDTH)
         self._item = None
         self._specialArgs = None
+        self._isUnsupportedForm = None
         return
 
     def _packBlocks(self, *args):
@@ -120,7 +124,8 @@ class ElementTooltip(BlocksTooltipData):
             statsConfig.buyPrice = showInventoryBlock
             statsConfig.sellPrice = showInventoryBlock
             statsConfig.inventoryCount = showInventoryBlock
-        self._specialArgs = args[2] if len(args) > 2 else []
+        self._isUnsupportedForm = args[2] if len(args) > 2 else False
+        self._specialArgs = args[3] if len(args) > 3 else []
         return self._packItemBlocks(statsConfig)
 
     def _packItemBlocks(self, statsConfig):
@@ -176,6 +181,8 @@ class ElementTooltip(BlocksTooltipData):
             block = self._packAppliedBlock()
             if block:
                 items.append(block)
+        if self._isUnsupportedForm:
+            items.append(self._packUnsupportedFormBlock())
         if self._item.isVehicleBound or self._item.isLimited:
             block = self._packSpecialBlock()
             if block:
@@ -207,6 +214,10 @@ class ElementTooltip(BlocksTooltipData):
         else:
             blocks = [formatters.packImageTextBlockData(title=text_styles.critical(VEHICLE_CUSTOMIZATION.CUSTOMIZATION_LIMITED_ON_OTHER_VEHICLE), img=RES_ICONS.MAPS_ICONS_LIBRARY_MARKER_BLOCKED, imgPadding=formatters.packPadding(left=-3, top=2)), formatters.packTextBlockData(text=text_styles.main(_ms(makeVehiclesShortNamesString(vehicles, self.currentVehicle))))]
             return formatters.packBuildUpBlockData(blocks, gap=3, padding=formatters.packPadding(bottom=-5))
+
+    def _packUnsupportedFormBlock(self):
+        blocks = [formatters.packImageTextBlockData(title=text_styles.critical(VEHICLE_CUSTOMIZATION.CUSTOMIZATION_UNSUPPORTEDFORM), img=RES_ICONS.MAPS_ICONS_LIBRARY_MARKER_BLOCKED, imgPadding=formatters.packPadding(left=-3, right=5, top=2)), formatters.packTextBlockData(text=text_styles.main(VEHICLE_CUSTOMIZATION.CUSTOMIZATION_UNSUPPORTEDFORM_DESCR))]
+        return formatters.packBuildUpBlockData(blocks, gap=3, padding=formatters.packPadding(bottom=-5))
 
     def _packSpecialBlock(self):
         blocks = []
@@ -321,20 +332,20 @@ class ElementTooltip(BlocksTooltipData):
                 iconWidth = self.CUSTOMIZATION_TOOLTIP_ICON_WIDTH_WIDE
             elif self._item.itemTypeID == GUI_ITEM_TYPE.PERSONAL_NUMBER:
                 iconWidth = self.CUSTOMIZATION_TOOLTIP_ICON_WIDTH_PERSONAL_NUMBER
-            elif self._item.itemTypeID in (GUI_ITEM_TYPE.MODIFICATION, GUI_ITEM_TYPE.STYLE):
+            elif self._item.itemTypeID in (GUI_ITEM_TYPE.MODIFICATION, GUI_ITEM_TYPE.STYLE, GUI_ITEM_TYPE.PROJECTION_DECAL):
                 iconWidth = self.CUSTOMIZATION_TOOLTIP_ICON_WIDTH_OTHER_BIG
         return iconWidth
 
     def _packIconBlock(self, isHistorical=False):
-        linkAs = BLOCKS_TOOLTIP_TYPES.TOOLTIP_IMAGE_BLOCK_LINKAGE
         width = self._countImageWidth()
         if self._specialArgs:
             component = pickPacker(self._item.itemTypeID).getRawComponent()(*self._specialArgs)
         else:
             component = None
-        if isHistorical is not True:
-            linkAs = BLOCKS_TOOLTIP_TYPES.TOOLTIP_IMAGE_BLOCK_NON_HISTORICAL_LINKAGE
-        return formatters.packImageBlockData(img=self._item.getIconApplied(component), linkage=linkAs, align=BLOCKS_TOOLTIP_TYPES.ALIGN_CENTER, width=width, height=self.CUSTOMIZATION_TOOLTIP_ICON_HEIGHT, padding=formatters.packPadding(bottom=2))
+        formfactor = ''
+        if self._item.itemTypeID == GUI_ITEM_TYPE.PROJECTION_DECAL:
+            formfactor = self._item.formfactor
+        return formatters.packCustomizationImageBlockData(img=self._item.getIconApplied(component), linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_IMAGE_BLOCK_NON_HISTORICAL_LINKAGE, align=BLOCKS_TOOLTIP_TYPES.ALIGN_CENTER, width=width, height=self.CUSTOMIZATION_TOOLTIP_ICON_HEIGHT, padding=formatters.packPadding(bottom=2), isHistorical=isHistorical, formfactor=formfactor)
 
     def _packBonusBlock(self, bonus, camo, isApplied):
         blocks = []

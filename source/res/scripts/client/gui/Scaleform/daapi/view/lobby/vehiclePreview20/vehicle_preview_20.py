@@ -59,6 +59,8 @@ _TABS_DATA = ({'id': VEHPREVIEW_CONSTANTS.BROWSE_LINKAGE,
   'linkage': VEHPREVIEW_CONSTANTS.MODULES_LINKAGE}, {'id': VEHPREVIEW_CONSTANTS.CREW_LINKAGE,
   'label': VEHICLE_PREVIEW.INFOPANEL_TAB_CREWINFO_NAME,
   'linkage': VEHPREVIEW_CONSTANTS.CREW_LINKAGE})
+_SHOW_CLOSE_BTN = True
+_SHOW_BACK_BTN = True
 
 class VehiclePreview20(LobbySelectableView, VehiclePreview20Meta):
     __background_alpha__ = 0.0
@@ -79,7 +81,6 @@ class VehiclePreview20(LobbySelectableView, VehiclePreview20Meta):
         elif self._backAlias in (VIEW_ALIAS.LOBBY_TECHTREE, VIEW_ALIAS.LOBBY_RESEARCH):
             self._COMMON_SOUND_SPACE = RESEARCH_PREVIEW_SOUND_SPACE
         super(VehiclePreview20, self).__init__(ctx)
-        self._showCloseBtn = True
         self._vehicleCD = ctx['itemCD']
         self.__vehicleStrCD = ctx.get('vehicleStrCD')
         self._previousBackAlias = ctx.get('previousBackAlias')
@@ -275,12 +276,13 @@ class VehiclePreview20(LobbySelectableView, VehiclePreview20Meta):
         result = {'closeBtnLabel': VEHICLE_PREVIEW.HEADER_CLOSEBTN_LABEL,
          'backBtnLabel': VEHICLE_PREVIEW.HEADER_BACKBTN_LABEL,
          'backBtnDescrLabel': self._getBackBtnLabel(),
+         'showCloseBtn': _SHOW_CLOSE_BTN,
+         'showBackButton': _SHOW_BACK_BTN,
          'vehicleTitle': vehicleTitle,
          'vehicleTypeIcon': getTypeSmallIconPath(vehicle.type, vehicle.isElite),
          'nationFlagIcon': RES_ICONS.getFilterNation(vehicle.nationName),
          'vehicleName': vehicleName,
          'nationName': MENU.nations(vehicle.nationName),
-         'showCloseBtn': self._showCloseBtn,
          'compareBtnTooltip': compareBtnTooltip,
          'showCompareBtn': compareBtnEnabled,
          'listDesc': self.__getInfoPanelListDescription(vehicle)}

@@ -21,6 +21,7 @@
     <Skoda_16_AH_145>	19	</Skoda_16_AH_145>
     <Skoda_AHK>	20	</Skoda_AHK>
     <Praga_AXK>	21	</Praga_AXK>
+    <Skoda_16_AH_145_A>	22	</Skoda_16_AH_145_A>
   </ids>
   <shared>
     <Hanomag_WD_50PS>
@@ -362,5 +363,22 @@
       <rpm_min>	253	</rpm_min>
       <rpm_max>	2440	</rpm_max>
     </Praga_AXK>
+    <Skoda_16_AH_145_A>
+      <userString>	#czech_vehicles:Skoda_16_AH_145_A	</userString>
+      <tags>	diesel	</tags>
+      <level>	8	</level>
+      <price>	70000	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
+      <power>	900	</power>
+      <weight>	1400	</weight>
+      <maxHealth>	320	</maxHealth>
+      <maxRegenHealth>	160	</maxRegenHealth>
+      <repairCost>	9	</repairCost>
+      <fireStartingChance>	0.12	</fireStartingChance>
+      <rpm_min>	280	</rpm_min>
+      <rpm_max>	2360	</rpm_max>
+    </Skoda_16_AH_145_A>
   </shared>
 </engines.xml>

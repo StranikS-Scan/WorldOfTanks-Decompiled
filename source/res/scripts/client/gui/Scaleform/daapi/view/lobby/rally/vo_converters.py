@@ -5,6 +5,8 @@ from constants import MAX_VEHICLE_LEVEL, MIN_VEHICLE_LEVEL, PREBATTLE_TYPE
 from constants import VEHICLE_CLASS_INDICES, VEHICLE_CLASSES
 from gui import makeHtmlString
 from helpers import dependency
+from gui.impl import backport
+from gui.impl.gen.resources import R
 from gui.shared.utils.functions import getArenaShortName
 from gui.Scaleform.daapi.view.lobby.cyberSport import PLAYER_GUI_STATUS, SLOT_LABEL
 from gui.Scaleform.genConsts.FORTIFICATION_ALIASES import FORTIFICATION_ALIASES as FORT_ALIAS
@@ -237,7 +239,7 @@ def makeUnitStateLabel(unitState):
     return makeHtmlString('html_templates:lobby/cyberSport', 'teamUnlocked' if unitState.isOpened() else 'teamLocked', {})
 
 
-def _getSlotsData(unitMgrID, fullData, app=None, levelsRange=None, checkForVehicles=True, maxPlayerCount=MAX_PLAYER_COUNT_ALL):
+def _getSlotsData(unitMgrID, fullData, levelsRange=None, checkForVehicles=True, maxPlayerCount=MAX_PLAYER_COUNT_ALL, withPrem=False):
     pInfo = fullData.playerInfo
     isPlayerCreator = pInfo.isCommander()
     isPlayerInSlot = pInfo.isInSlot
@@ -246,11 +248,12 @@ def _getSlotsData(unitMgrID, fullData, app=None, levelsRange=None, checkForVehic
     colorGetter = g_settings.getColorScheme('rosters').getColors
     itemsCache = dependency.instance(IItemsCache)
     vehicleGetter = itemsCache.items.getItemByCD
+    lobbyContext = dependency.instance(ILobbyContext)
+    squadPremBonusEnabled = lobbyContext.getServerSettings().squadPremiumBonus.isEnabled
     canTakeSlot = not pInfo.isLegionary()
     bwPlugin = proto_getter(PROTO_TYPE.BW_CHAT2)(None)
     isPlayerSpeaking = bwPlugin.voipController.isPlayerSpeaking
     unit = fullData.unit
-    makeVO = makePlayerVO
     rosterSlots = {}
     isDefaultSlot = False
     if unit is not None:
@@ -273,7 +276,7 @@ def _getSlotsData(unitMgrID, fullData, app=None, levelsRange=None, checkForVehic
         slotPlayerUI = None
         if player is not None:
             dbID = player.dbID
-            slotPlayerUI = makeVO(player, userGetter(dbID), colorGetter, isPlayerSpeaking(dbID))
+            slotPlayerUI = makePlayerVO(player, userGetter(dbID), colorGetter, isPlayerSpeaking(dbID))
             isCurrentPlayer = player.isCurrentPlayer()
             if vehicle:
                 slotLevel = vehicle.vehLevel
@@ -318,6 +321,8 @@ def _getSlotsData(unitMgrID, fullData, app=None, levelsRange=None, checkForVehic
          'isLegionaries': isLegionaries,
          'isLocked': isLocked,
          'role': role}
+        if withPrem:
+            slot['hasPremiumAccount'] = player and player.hasPremium
         if unit.isSquad():
             eventsCache = dependency.instance(IEventsCache)
             if eventsCache.isBalancedSquadEnabled():
@@ -330,36 +335,7 @@ def _getSlotsData(unitMgrID, fullData, app=None, levelsRange=None, checkForVehic
                 slot.update({'isVisibleAdtMsg': isVisibleAdtMsg,
                  'additionalMsg': additionMsg})
             elif eventsCache.isSquadXpFactorsEnabled():
-                vehicles = unit.getVehicles()
-                levels = unit.getSelectedVehicleLevels()
-                isVisibleAdtMsg = False
-                additionalMsg = ''
-                unitHasXpBonus = True
-                unitHasXpPenalty = False
-                if vehicles:
-                    distance = levels[-1] - levels[0]
-                    unitHasXpBonus = distance in eventsCache.getSquadBonusLevelDistance()
-                    unitHasXpPenalty = distance in eventsCache.getSquadPenaltyLevelDistance()
-                    isVisibleAdtMsg = unitHasXpBonus and player and player.isCurrentPlayer() and not vehicle
-                    if isVisibleAdtMsg:
-                        maxDistance = max(eventsCache.getSquadBonusLevelDistance())
-                        minLevel = max(MIN_VEHICLE_LEVEL, levels[0] - maxDistance)
-                        maxLevel = min(MAX_VEHICLE_LEVEL, levels[0] + maxDistance)
-                        rangeString = toRomanRangeString(range(minLevel, maxLevel + 1), 1)
-                        additionalMsg = text_styles.main(i18n.makeString(MESSENGER.DIALOGS_SIMPLESQUAD_VEHICLELEVEL, level=rangeString))
-                slotNotificationIcon = ''
-                slotNotificationIconTooltip = ''
-                if vehicle:
-                    if unitHasXpPenalty:
-                        slotNotificationIcon = RES_ICONS.MAPS_ICONS_LIBRARY_CYBERSPORT_ALERTICON
-                        slotNotificationIconTooltip = makeTooltip(TOOLTIPS.SQUADWINDOW_SIMPLESLOTNOTIFICATION_ALERT_HEADER, TOOLTIPS.SQUADWINDOW_SIMPLESLOTNOTIFICATION_ALERT_BODY, None, TOOLTIPS.SQUADWINDOW_SIMPLESLOTNOTIFICATION_ALERT_ALERT)
-                    elif not unitHasXpBonus:
-                        slotNotificationIcon = RES_ICONS.MAPS_ICONS_LIBRARY_ATTENTIONICON
-                        slotNotificationIconTooltip = makeTooltip(TOOLTIPS.SQUADWINDOW_SIMPLESLOTNOTIFICATION_INFO_HEADER, TOOLTIPS.SQUADWINDOW_SIMPLESLOTNOTIFICATION_INFO_BODY)
-                slot.update({'isVisibleAdtMsg': isVisibleAdtMsg,
-                 'additionalMsg': additionalMsg,
-                 'slotNotificationIconTooltip': slotNotificationIconTooltip,
-                 'slotNotificationIcon': slotNotificationIcon})
+                slot.update(_getXPFactorSlotInfo(unit, eventsCache, slotInfo))
         if unit.isEvent():
             isVisibleAdtMsg = player and player.isCurrentPlayer() and not vehicle
             additionMsg = ''
@@ -369,24 +345,69 @@ def _getSlotsData(unitMgrID, fullData, app=None, levelsRange=None, checkForVehic
                 additionMsg = text_styles.main(i18n.makeString(MESSENGER.DIALOGS_EVENTSQUAD_VEHICLE, vehName=', '.join(vehiclesNames)))
             slot.update({'isVisibleAdtMsg': isVisibleAdtMsg,
              'additionalMsg': additionMsg})
+        elif unit.getPrebattleType() == PREBATTLE_TYPE.EPIC and squadPremBonusEnabled:
+            slot.update(_updateEpicBattleSlotInfo(player, vehicle))
         slots.append(slot)
         playerCount += 1
 
     return slots
 
 
-def makeSlotsVOs(unitEntity, unitMgrID=None, app=None, maxPlayerCount=MAX_PLAYER_COUNT_ALL):
+def _updateEpicBattleSlotInfo(player, vehicle):
+    result = {}
+    if vehicle is None:
+        isVisibleAdtMsg = player and player.isCurrentPlayer()
+        additionalMsg = text_styles.main(backport.text(R.strings.messenger.dialogs.simpleSquad.epicBattle.VehicleRestriction()))
+        result = {'isVisibleAdtMsg': isVisibleAdtMsg,
+         'additionalMsg': additionalMsg}
+    return result
+
+
+def _getXPFactorSlotInfo(unit, eventsCache, slotInfo):
+    vehicles = unit.getVehicles()
+    levels = unit.getSelectedVehicleLevels()
+    isVisibleAdtMsg = False
+    additionalMsg = ''
+    unitHasXpBonus = True
+    unitHasXpPenalty = False
+    if vehicles:
+        distance = levels[-1] - levels[0]
+        unitHasXpBonus = distance in eventsCache.getSquadBonusLevelDistance()
+        unitHasXpPenalty = distance in eventsCache.getSquadPenaltyLevelDistance()
+        isVisibleAdtMsg = unitHasXpBonus and slotInfo.player and slotInfo.player.isCurrentPlayer() and not slotInfo.vehicle
+        if isVisibleAdtMsg:
+            maxDistance = max(eventsCache.getSquadBonusLevelDistance())
+            minLevel = max(MIN_VEHICLE_LEVEL, levels[0] - maxDistance)
+            maxLevel = min(MAX_VEHICLE_LEVEL, levels[0] + maxDistance)
+            rangeString = toRomanRangeString(range(minLevel, maxLevel + 1), 1)
+            additionalMsg = text_styles.main(i18n.makeString(MESSENGER.DIALOGS_SIMPLESQUAD_VEHICLELEVEL, level=rangeString))
+    slotNotificationIcon = ''
+    slotNotificationIconTooltip = ''
+    if slotInfo.vehicle:
+        if unitHasXpPenalty:
+            slotNotificationIcon = RES_ICONS.MAPS_ICONS_LIBRARY_CYBERSPORT_ALERTICON
+            slotNotificationIconTooltip = makeTooltip(TOOLTIPS.SQUADWINDOW_SIMPLESLOTNOTIFICATION_ALERT_HEADER, TOOLTIPS.SQUADWINDOW_SIMPLESLOTNOTIFICATION_ALERT_BODY, None, TOOLTIPS.SQUADWINDOW_SIMPLESLOTNOTIFICATION_ALERT_ALERT)
+        elif not unitHasXpBonus:
+            slotNotificationIcon = RES_ICONS.MAPS_ICONS_LIBRARY_ATTENTIONICON
+            slotNotificationIconTooltip = makeTooltip(TOOLTIPS.SQUADWINDOW_SIMPLESLOTNOTIFICATION_INFO_HEADER, TOOLTIPS.SQUADWINDOW_SIMPLESLOTNOTIFICATION_INFO_BODY)
+    return {'isVisibleAdtMsg': isVisibleAdtMsg,
+     'additionalMsg': additionalMsg,
+     'slotNotificationIconTooltip': slotNotificationIconTooltip,
+     'slotNotificationIcon': slotNotificationIcon}
+
+
+def makeSlotsVOs(unitEntity, unitMgrID=None, maxPlayerCount=MAX_PLAYER_COUNT_ALL, withPrem=False):
     fullData = unitEntity.getUnitFullData(unitMgrID=unitMgrID)
-    slots = _getSlotsData(unitMgrID, fullData, app, unitEntity.getRosterSettings().getLevelsRange(), maxPlayerCount=maxPlayerCount)
+    slots = _getSlotsData(unitMgrID, fullData, unitEntity.getRosterSettings().getLevelsRange(), maxPlayerCount=maxPlayerCount, withPrem=withPrem)
     isRosterSet = fullData.unit.isRosterSet(ignored=settings.CREATOR_ROSTER_SLOT_INDEXES)
     return (isRosterSet, slots)
 
 
-def makeUnitShortVO(unitEntity, unitMgrID=None, app=None, maxPlayerCount=MAX_PLAYER_COUNT_ALL):
+def makeUnitShortVO(unitEntity, unitMgrID=None, maxPlayerCount=MAX_PLAYER_COUNT_ALL):
     fullData = unitEntity.getUnitFullData(unitMgrID=unitMgrID)
     return {'isFreezed': fullData.flags.isLocked(),
      'hasRestrictions': fullData.unit.isRosterSet(ignored=settings.CREATOR_ROSTER_SLOT_INDEXES),
-     'slots': _getSlotsData(unitMgrID, fullData, app, unitEntity.getRosterSettings().getLevelsRange(), maxPlayerCount=maxPlayerCount),
+     'slots': _getSlotsData(unitMgrID, fullData, unitEntity.getRosterSettings().getLevelsRange(), maxPlayerCount=maxPlayerCount),
      'description': unitEntity.getCensoredComment(unitMgrID=unitMgrID)}
 
 
@@ -411,7 +432,7 @@ def makeSimpleClanListRenderVO(member, intTotalMining, intWeekMining, role, role
      'fullName': member.getFullName()}
 
 
-def makeUnitVO(unitEntity, unitMgrID=None, app=None, maxPlayerCount=MAX_PLAYER_COUNT_ALL):
+def makeUnitVO(unitEntity, unitMgrID=None, maxPlayerCount=MAX_PLAYER_COUNT_ALL, withPrem=False):
     fullData = unitEntity.getUnitFullData(unitMgrID=unitMgrID)
     isPlayerCreator = fullData.playerInfo.isCommander()
     levelsValidation = unitEntity.validateLevels()
@@ -425,7 +446,7 @@ def makeUnitVO(unitEntity, unitMgrID=None, app=None, maxPlayerCount=MAX_PLAYER_C
      'sumLevelsInt': fullData.stats.curTotalLevel,
      'sumLevels': sumLevelsStr,
      'sumLevelsError': canDoAction,
-     'slots': _getSlotsData(unitMgrID, fullData, app, unitEntity.getRosterSettings().getLevelsRange(), maxPlayerCount=maxPlayerCount),
+     'slots': _getSlotsData(unitMgrID, fullData, unitEntity.getRosterSettings().getLevelsRange(), maxPlayerCount=maxPlayerCount, withPrem=withPrem),
      'description': unitEntity.getCensoredComment(unitMgrID=unitMgrID)}
 
 

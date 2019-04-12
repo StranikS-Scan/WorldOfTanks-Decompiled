@@ -5,6 +5,7 @@ import BigWorld
 from gui import DEPTH_OF_Battle
 from gui.Scaleform import SCALEFORM_SWF_PATH_V3
 from gui.Scaleform.daapi.settings.config import BATTLE_TOOLTIPS_BUILDERS_PATHS
+from gui.Scaleform.flash_wrapper import InputKeyMode
 from gui.Scaleform.framework import ViewTypes
 from gui.Scaleform.framework.tooltip_mgr import ToolTip
 from gui.Scaleform.framework.application import AppEntry, DAAPIRootBridge
@@ -16,6 +17,7 @@ from gui.Scaleform.framework.managers.context_menu import ContextMenuManager
 from gui.Scaleform.framework.managers.optimization_manager import GraphicsOptimizationManager, OptimizationSetting
 from gui.Scaleform.genConsts.BATTLE_VIEW_ALIASES import BATTLE_VIEW_ALIASES
 from gui.Scaleform.managers.ColorSchemeManager import BattleColorSchemeManager
+from gui.Scaleform.managers.cursor_mgr import CursorManager
 from gui.Scaleform.managers.GlobalVarsManager import GlobalVarsManager
 from gui.Scaleform.managers.PopoverManager import PopoverManager
 from gui.Scaleform.framework.managers.ImageManager import ImageManager
@@ -24,10 +26,10 @@ from gui.Scaleform.managers.TweenSystem import TweenManager
 from gui.Scaleform.managers.UtilsManager import UtilsManager
 from gui.Scaleform.managers.battle_input import BattleGameInputMgr
 from gui.Scaleform.managers.voice_chat import BattleVoiceChatManager
-from gui.app_loader import settings as app_settings
 from gui.impl.gen import R
 from gui.shared import EVENT_BUS_SCOPE
 from helpers import uniprof
+from skeletons.gui.app_loader import GuiGlobalSpaceID
 
 class TopWindowContainer(PopUpContainer):
 
@@ -58,14 +60,10 @@ BATTLE_OPTIMIZATION_CONFIG = {BATTLE_VIEW_ALIASES.MINIMAP: OptimizationSetting('
 
 class BattleEntry(AppEntry):
 
-    def __init__(self, appNS):
-        super(BattleEntry, self).__init__(R.entries.battle(), appNS, swf='battle.swf', daapiBridge=DAAPIRootBridge(initCallback='registerBattleTest'))
+    def __init__(self, appNS, ctrlModeFlags):
+        super(BattleEntry, self).__init__(R.entries.battle(), appNS, ctrlModeFlags, daapiBridge=DAAPIRootBridge(initCallback='registerBattleTest'))
         self.__input = None
         return
-
-    @property
-    def cursorMgr(self):
-        return self.__getCursorFromContainer()
 
     @uniprof.regionDecorator(label='gui.battle', scope='enter')
     def afterCreate(self):
@@ -114,7 +112,7 @@ class BattleEntry(AppEntry):
         return ContainerManager(self._loaderMgr, DefaultContainer(ViewTypes.DEFAULT), DefaultContainer(ViewTypes.CURSOR), PopUpContainer(ViewTypes.WINDOW), TopWindowContainer(ViewTypes.TOP_WINDOW, weakref.proxy(self)), DefaultContainer(ViewTypes.SERVICE_LAYOUT), PopUpContainer(ViewTypes.OVERLAY))
 
     def _createToolTipManager(self):
-        tooltip = ToolTip(BATTLE_TOOLTIPS_BUILDERS_PATHS, {}, app_settings.GUI_GLOBAL_SPACE_ID.BATTLE_LOADING)
+        tooltip = ToolTip(BATTLE_TOOLTIPS_BUILDERS_PATHS, {}, GuiGlobalSpaceID.BATTLE_LOADING)
         tooltip.setEnvironment(self)
         return tooltip
 
@@ -123,6 +121,11 @@ class BattleEntry(AppEntry):
 
     def _createSoundManager(self):
         return SoundManager()
+
+    def _createCursorManager(self):
+        cursor = CursorManager()
+        cursor.setEnvironment(self)
+        return cursor
 
     def _createColorSchemeManager(self):
         return BattleColorSchemeManager()
@@ -152,7 +155,7 @@ class BattleEntry(AppEntry):
         return GraphicsOptimizationManager(config=BATTLE_OPTIMIZATION_CONFIG)
 
     def _setup(self):
-        self.component.wg_inputKeyMode = 1
+        self.component.wg_inputKeyMode = InputKeyMode.IGNORE_RESULT
         self.component.position.z = DEPTH_OF_Battle
         self.movie.backgroundAlpha = 0.0
         self.movie.setFocussed(SCALEFORM_SWF_PATH_V3)

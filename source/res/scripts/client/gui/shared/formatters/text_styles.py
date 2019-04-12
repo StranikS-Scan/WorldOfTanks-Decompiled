@@ -49,8 +49,10 @@ __all__ = ('standard',
  'epicTitleYellow',
  'heroTitle',
  'heroTitleYellow',
+ 'heroTitleTK',
  'grandTitle',
- 'grandTitleYellow')
+ 'grandTitleYellow',
+ 'grandTitleTK')
 
 def _getStyle(style, ctx=None):
     if ctx is None:
@@ -74,6 +76,10 @@ def locked(text):
 
 def main(text):
     return _formatText('mainText', text)
+
+
+def mainSmall(text):
+    return _formatText('mainTextSmall', text)
 
 
 def mainBig(text):
@@ -330,12 +336,20 @@ def heroTitleYellow(text):
     return _formatText('heroTitleYellow', text)
 
 
+def heroTitleTK(text):
+    return _formatText('heroTitleTK', text)
+
+
 def grandTitle(text):
     return _formatText('grandTitle', text)
 
 
 def grandTitleYellow(text):
     return _formatText('grandTitleYellow', text)
+
+
+def grandTitleTK(text):
+    return _formatText('grandTitleTK', text)
 
 
 def failedStatusText(text):

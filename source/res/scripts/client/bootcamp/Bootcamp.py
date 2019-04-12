@@ -8,6 +8,7 @@ import BattleReplay
 import TriggersManager
 import WWISE
 import MusicControllerWWISE as MC
+from constants import PREMIUM_ENTITLEMENTS
 from account_helpers.AccountSettings import CURRENT_VEHICLE, AccountSettings
 from account_helpers.settings_core.settings_constants import BATTLE_EVENTS
 from account_helpers.settings_core.ServerSettingsManager import SETTINGS_SECTIONS
@@ -19,7 +20,6 @@ from PlayerEvents import g_playerEvents
 from bootcamp_shared import BOOTCAMP_BATTLE_ACTION
 from gui import makeHtmlString
 from gui.Scaleform.daapi.view.lobby.referral_program.referral_program_helpers import isReferralProgramEnabled, isCurrentUserRecruit
-from gui.app_loader import g_appLoader
 from gui.prb_control.dispatcher import g_prbLoader
 from gui.Scaleform.Waiting import Waiting
 from gui.Scaleform.daapi.view.login.EULADispatcher import EULADispatcher
@@ -30,7 +30,9 @@ from gui.shared.items_cache import CACHE_SYNC_REASON
 from gui.battle_control.arena_info import player_format
 from helpers import dependency, aop, i18n
 from skeletons.connection_mgr import IConnectionManager
+from skeletons.gui.app_loader import IAppLoader
 from skeletons.gui.battle_session import IBattleSessionProvider
+from skeletons.gui.shared import IItemsCache
 from .BootcampGUI import BootcampGUI
 from .BootcampReplayController import BootcampReplayController
 from .BootcampConstants import BOOTCAMP_BATTLE_RESULT_MESSAGE
@@ -70,6 +72,8 @@ class Bootcamp(EventSystemEntity):
     settingsCore = dependency.descriptor(ISettingsCore)
     connectionMgr = dependency.descriptor(IConnectionManager)
     sessionProvider = dependency.descriptor(IBattleSessionProvider)
+    itemsCache = dependency.descriptor(IItemsCache)
+    appLoader = dependency.descriptor(IAppLoader)
     BOOTCAMP_SOUND_BANKS = ('bootcamp.pck', 'bootcamp_gui.bnk', 'bootcamp_hangar.bnk', 'bootcamp_hangar_voiceover.bnk', 'bootcamp_voiceover.bnk', 'bootcamp_result_screen.bnk')
 
     def __init__(self):
@@ -211,7 +215,6 @@ class Bootcamp(EventSystemEntity):
     @process
     def start(self, lessonNum, isBattleLesson):
         LOG_DEBUG_DEV_BOOTCAMP('Starting bootcamp', lessonNum, isBattleLesson)
-        from gui.shared.personality import ServicesLocator
         if BattleReplay.g_replayCtrl.isPlaying:
             self.__replayController = BootcampReplayController()
             self.__replayController.init()
@@ -247,7 +250,7 @@ class Bootcamp(EventSystemEntity):
         self.__lessonType = BOOTCAMP_LESSON.BATTLE if isBattleLesson else BOOTCAMP_LESSON.GARAGE
         if (lessonNum == 0 or not isBattleLesson) and not autoStartBattle:
             self.showActionWaitWindow()
-            yield ServicesLocator.itemsCache.update(CACHE_SYNC_REASON.SHOW_GUI)
+            yield self.itemsCache.update(CACHE_SYNC_REASON.SHOW_GUI)
             self.__isRecruit = isCurrentUserRecruit()
             self.hideActionWaitWindow()
         if self.__currentState is not None:
@@ -412,7 +415,7 @@ class Bootcamp(EventSystemEntity):
             if not isVictory:
                 g_prbLoader.createBattleDispatcher()
                 g_prbLoader.setEnabled(True)
-                g_appLoader.showLobby()
+                self.appLoader.showLobby()
                 self.__currentState = StateInitial()
                 self.enqueueBattleLesson()
             else:
@@ -526,6 +529,17 @@ class Bootcamp(EventSystemEntity):
 
     def getBonuses(self):
         return self.__bonuses
+
+    def getPremiumType(self, lessonNumber):
+        if self.__bonuses is None:
+            return
+        else:
+            bonuses = self.__bonuses['battle'][lessonNumber - 1]
+            for premiumType in PREMIUM_ENTITLEMENTS.ALL_TYPES:
+                if premiumType in bonuses:
+                    return premiumType
+
+            return
 
     @property
     def nation(self):

@@ -15,6 +15,7 @@ from gui.Scaleform.Waiting import Waiting
 from helpers import dependency, uniprof
 from helpers.statistics import HANGAR_LOADING_STATE
 from shared_utils import BoundMethodWeakref
+from skeletons.gui.app_loader import IAppLoader
 from skeletons.gui.game_control import IGameSessionController, IIGRController
 from skeletons.gui.shared.utils import IHangarSpace
 from skeletons.helpers.statistics import IStatisticsCollector
@@ -23,7 +24,7 @@ from gui.shared import g_eventBus, events
 from constants import IS_DEVELOPMENT
 import AvatarInputHandler
 from AvatarInputHandler.VideoCamera import VideoCamera
-from gui.app_loader import g_appLoader, settings as app_settings
+from gui.app_loader import settings as app_settings
 from gui import GUI_CTRL_MODE_FLAG as _CTRL_FLAG
 from gui.hangar_cameras.hangar_camera_common import CameraMovementStates
 from gui.prb_control.events_dispatcher import g_eventDispatcher
@@ -64,6 +65,7 @@ g_execute_after_hangar_space_inited = _execute_after_hangar_space_inited()
 
 class HangarVideoCameraController(object):
     hangarSpace = dependency.descriptor(IHangarSpace)
+    appLoader = dependency.descriptor(IAppLoader)
 
     def __init__(self):
         self.__videoCamera = None
@@ -117,7 +119,7 @@ class HangarVideoCameraController(object):
             return
         else:
             self.__videoCamera.enable()
-            g_appLoader.detachCursor(app_settings.APP_NAME_SPACE.SF_LOBBY)
+            self.appLoader.detachCursor(app_settings.APP_NAME_SPACE.SF_LOBBY)
             BigWorld.player().objectsSelectionEnabled(False)
             g_eventDispatcher.loadHangar()
             return
@@ -125,7 +127,7 @@ class HangarVideoCameraController(object):
     def __disableVideoCamera(self):
         self.__videoCamera.disable()
         BigWorld.camera(self.hangarSpace.space.camera)
-        g_appLoader.attachCursor(app_settings.APP_NAME_SPACE.SF_LOBBY, _CTRL_FLAG.GUI_ENABLED)
+        self.appLoader.attachCursor(app_settings.APP_NAME_SPACE.SF_LOBBY, _CTRL_FLAG.GUI_ENABLED)
         BigWorld.player().objectsSelectionEnabled(True)
 
     def handleMouseEvent(self, event):
@@ -191,8 +193,11 @@ class HangarSpace(IHangarSpace):
     def spaceLoading(self):
         return self.__space.spaceLoading() if self.__space is not None else False
 
-    def getSlotPositions(self):
-        return self.__space.getSlotPositions()
+    def getAnchorParams(self, slotId, areaId, regionId):
+        return self.__space.getAnchorParams(slotId, areaId, regionId)
+
+    def updateAnchorsParams(self, *args):
+        self.__space.updateAnchorsParams(*args)
 
     def __onNotifyCursorOver3dScene(self, event):
         self.__isCursorOver3DScene = event.ctx.get('isOver3dScene', False)

@@ -1,32 +1,45 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/hangar_cameras/c11n_hangar_camera_manager.py
 import math
+from copy import copy
+from collections import namedtuple
 import BigWorld
 import Math
 import Event
-from AvatarInputHandler.cameras import FovExtended
 from gui import g_guiResetters
+from gui.shared.utils.graphics import isRendererPipelineDeferred
 from helpers import dependency
 from helpers.CallbackDelayer import CallbackDelayer, TimeDeltaMeter
 from skeletons.account_helpers.settings_core import ISettingsCore
+from skeletons.gui.customization import ICustomizationService
 from vehicle_systems.tankStructure import TankPartIndexes, TankPartNames
 from gui.hangar_cameras.hangar_camera_manager import IMMEDIATE_CAMERA_MOVEMENT_MODE
 from ClientSelectableCameraVehicle import ClientSelectableCameraVehicle
 _VERTICAL_OFFSET = 0.2
 _TRANSITION_DURATION = 0.8
 _WORLD_UP = Math.Vector3(0, 1, 0)
-_STYLE_INFO_HORIZONTAL_ANGLE_SHIFT = 45
-_STYLE_INFO_VERTICAL_ANGLE_SHIFT = 5
+_STYLE_INFO_YAW = math.radians(-135)
+_STYLE_INFO_PITCH = math.radians(-5)
+_STYLE_INFO_MAX_CAMERA_DIST = 15
+_STYLE_INFO_MAX_VEHICLE_WIDTH = 0.45
+_STYLE_INFO_MAX_VEHICLE_HEIGHT = 0.3
+_STYLE_INFO_VEHICLE_SCREEN_X_SHIFT = 1.0 / 3
+DOFParams = namedtuple('DOFParams', ['nearStart',
+ 'nearDist',
+ 'farStart',
+ 'farDist'])
 
 class C11nCameraModes(object):
     START_STATE = 0
     PREVIEW = 1
     EMBLEM = 2
     ANCHOR = 3
+    STYLE_INFO = 4
 
 
 class C11nHangarCameraManager(CallbackDelayer, TimeDeltaMeter):
     _settingsCore = dependency.descriptor(ISettingsCore)
+    _service = dependency.descriptor(ICustomizationService)
 
     def __init__(self, hangarCameraManager):
         CallbackDelayer.__init__(self)
@@ -44,11 +57,10 @@ class C11nHangarCameraManager(CallbackDelayer, TimeDeltaMeter):
         return
 
     def init(self):
-        g_guiResetters.add(self.__onProjectionChanged)
-        self._settingsCore.onSettingsApplied += self.__onProjectionChanged
+        g_guiResetters.add(self.__projectionChangeHandler)
+        self._settingsCore.onSettingsApplied += self.__projectionChangeHandler
         self.__hangarCamera = self.__hangarCameraManager.camera
         self.__c11nCamera = BigWorld.SphericalTransitionCamera(self.__hangarCamera, _VERTICAL_OFFSET)
-        self.__screenSpaceOffset = _VERTICAL_OFFSET
         targetPos = Math.Matrix(self.__hangarCamera.target).translation
         self.__c11nCamera.moveTo(targetPos, 0.0)
         BigWorld.camera(self.__c11nCamera)
@@ -58,10 +70,11 @@ class C11nHangarCameraManager(CallbackDelayer, TimeDeltaMeter):
         self.__hangarCamera.maxDistHalfLife = customCfg['cam_fluency']
         self.__hangarCamera.turningHalfLife = customCfg['cam_fluency']
         self.__hangarCamera.movementHalfLife = customCfg['cam_fluency']
+        self.__updateScreenSpaceOffset(_VERTICAL_OFFSET)
 
     def fini(self):
-        g_guiResetters.remove(self.__onProjectionChanged)
-        self._settingsCore.onSettingsApplied -= self.__onProjectionChanged
+        g_guiResetters.remove(self.__projectionChangeHandler)
+        self._settingsCore.onSettingsApplied -= self.__projectionChangeHandler
         self._eventsManager.clear()
         if self.__c11nCamera is not None:
             self.__c11nCamera.stop()
@@ -105,7 +118,6 @@ class C11nHangarCameraManager(CallbackDelayer, TimeDeltaMeter):
             else:
                 previewYaw = math.radians(cfg['cam_start_angles'][0])
                 previewPitch = math.radians(cfg['cam_start_angles'][1])
-            self.__updateScreenSpaceOffset(_VERTICAL_OFFSET)
             self._setCameraLocation(targetPos=worldPos, pivotPos=pivotPos, yaw=previewYaw, pitch=previewPitch, dist=cfg['cam_start_dist'], camConstraints=[hangarConfig['cam_pitch_constr'], hangarConfig['cam_yaw_constr'], cfg['cam_dist_constr']], forceLocate=forceLocate)
             self.__currentMode = C11nCameraModes.PREVIEW
             self.disableMovementByMouse(disableMovementByMouse)
@@ -118,46 +130,35 @@ class C11nHangarCameraManager(CallbackDelayer, TimeDeltaMeter):
         else:
             from gui.ClientHangarSpace import hangarCFG
             cfg = hangarCFG()
-            self.__updateScreenSpaceOffset(_VERTICAL_OFFSET)
             self.__hangarCameraManager.setCameraLocation(targetPos=cfg['cam_start_target_pos'], pivotPos=cfg['cam_pivot_pos'], yaw=math.radians(cfg['cam_start_angles'][0]), pitch=math.radians(cfg['cam_start_angles'][1]), dist=cfg['cam_start_dist'], camConstraints=[cfg['cam_pitch_constr'], cfg['cam_yaw_constr'], cfg['cam_dist_constr']])
             self.__currentMode = C11nCameraModes.START_STATE
             self.disableMovementByMouse(False)
             return
 
-    def locateCameraOnEmblem(self, onHull, emblemType, emblemIdx, relativeSize=0.5, disableMovementByMouse=False, turretYaw=None, forceRotate=False):
+    def locateCameraOnDecal(self, location, width, relativeSize=0.5, disableMovementByMouse=False, turretYaw=None, forceRotate=False):
         if self.__hangarCamera is None:
             return False
         else:
             self.__savePitch()
-            if self.vEntity is None:
-                return False
-            emblemPositionParams = self.vEntity.appearance.getEmblemPos(onHull, emblemType, emblemIdx)
-            if emblemPositionParams is None:
-                return False
             self.__rotateTurret(turretYaw)
-            position = emblemPositionParams.position
-            direction = emblemPositionParams.direction
-            emblemPositionParams = emblemPositionParams.emblemDescription
             from gui.ClientHangarSpace import hangarCFG
             hangarCfg = hangarCFG()
-            emblemSize = emblemPositionParams.size * hangarCfg['v_scale']
-            halfF = emblemSize / (2 * relativeSize)
-            dist = halfF / math.tan(BigWorld.projection().fov / 2)
-            distConstraints = self.__getDistConstraints(position)
+            width = width * hangarCfg['v_scale']
+            halfF = width / (2 * relativeSize)
+            dist = halfF / math.tan(BigWorld.projection().fov * 0.5)
+            distConstraints = self.__getDistConstraints(location.position)
             constraints = [hangarCfg['cam_pitch_constr'], hangarCfg['cam_yaw_constr'], distConstraints]
-            transformMatrix = Math.Matrix()
-            transformMatrix.lookAt(position, direction, emblemPositionParams.rayUp)
-            transformMatrix.invert()
-            emblemUp = transformMatrix.applyVector(_WORLD_UP)
-            if not emblemUp.dot(_WORLD_UP) > 0.99:
-                direction = emblemUp * (emblemUp * _WORLD_UP)
+            if not location.up.dot(_WORLD_UP) > 0.99:
+                direction = location.up * (location.up * _WORLD_UP)
                 direction.normalise()
-            self._setCameraLocation(targetPos=position, pivotPos=Math.Vector3(0, 0, 0), yaw=direction.yaw, pitch=-direction.pitch, dist=dist, camConstraints=constraints, previewMode=False, forceRotate=forceRotate)
+            else:
+                direction = -location.normal
+            self._setCameraLocation(targetPos=location.position, pivotPos=Math.Vector3(0, 0, 0), yaw=direction.yaw, pitch=-direction.pitch, dist=dist, camConstraints=constraints, forceRotate=forceRotate)
             self.__currentMode = C11nCameraModes.EMBLEM
             self.disableMovementByMouse(disableMovementByMouse)
             return True
 
-    def locateCameraOnAnchor(self, position, normal, disableMovementByMouse=False, turretYaw=None):
+    def locateCameraOnAnchor(self, position, normal, disableMovementByMouse=False, turretYaw=None, forceRotate=False):
         if self.__hangarCamera is None:
             return False
         else:
@@ -174,42 +175,56 @@ class C11nHangarCameraManager(CallbackDelayer, TimeDeltaMeter):
             from gui.ClientHangarSpace import hangarCFG
             hangarCfg = hangarCFG()
             constraints = (hangarCfg['cam_pitch_constr'], hangarCfg['cam_yaw_constr'], distConstraints)
-            self._setCameraLocation(targetPos=position, pivotPos=Math.Vector3(0, 0, 0), yaw=yaw, pitch=pitch, camConstraints=constraints)
+            self._setCameraLocation(targetPos=position, pivotPos=Math.Vector3(0, 0, 0), yaw=yaw, pitch=pitch, camConstraints=constraints, forceRotate=forceRotate)
             self.__currentMode = C11nCameraModes.ANCHOR
             self.disableMovementByMouse(disableMovementByMouse)
             return True
 
-    def locateCameraToStyleInfoPreview(self):
-        if self.__hangarCameraManager is None or self.__hangarCameraManager.camera is None:
+    def locateCameraToStyleInfoPreview(self, forceLocate=False):
+        if self.__hangarCamera is None:
             return
-        elif self.__hangarCamera is None:
-            return False
         else:
-            self.__updateScreenSpaceOffset(0.0)
             self.__savePitch()
             from gui.ClientHangarSpace import customizationHangarCFG, hangarCFG
             cfg = customizationHangarCFG()
             hangarConfig = hangarCFG()
             if self.__tankCentralPoint is None:
                 self.__tankCentralPoint = self.__getTankCentralPoint()
-            previewYaw = math.radians(_STYLE_INFO_HORIZONTAL_ANGLE_SHIFT - 180)
+            dist = cfg['cam_start_dist']
+            targetPos = copy(self.__tankCentralPoint)
+            distConstraints = copy(cfg['cam_dist_constr'])
             if self.vEntity is not None and self.vEntity.appearance is not None and self.vEntity.appearance.compoundModel is not None:
                 appearance = self.vEntity.appearance
+                mat = Math.Matrix()
+                mat.setRotateYPR((_STYLE_INFO_YAW, -_STYLE_INFO_PITCH, 0.0))
+                pivotDir = mat.applyVector(Math.Vector3(1, 0, 0))
+                pivotDir = Math.Vector3(pivotDir.x, 0, pivotDir.z)
+                pivotDir.normalise()
                 hullAABB = appearance.collisions.getBoundingBox(TankPartIndexes.HULL)
                 width = hullAABB[1].x - hullAABB[0].x
                 length = hullAABB[1].z - hullAABB[0].z
-                diag = math.sqrt(pow(width, 2) + pow(length, 2))
-                diagProjectionAngle = math.acos(length / diag) + math.radians(_STYLE_INFO_HORIZONTAL_ANGLE_SHIFT)
-                diagProjectionLength = diag * abs(math.sin(diagProjectionAngle))
-            else:
-                diagProjectionLength = 0
-            shiftZ = -(0.2 * diagProjectionLength) / math.sin(math.radians(_STYLE_INFO_HORIZONTAL_ANGLE_SHIFT))
-            shiftX = 0.2 * diagProjectionLength / math.cos(math.radians(_STYLE_INFO_HORIZONTAL_ANGLE_SHIFT))
-            dist = 1.25 * diagProjectionLength / math.tan(FovExtended.calcHorizontalFov(BigWorld.projection().fov) / 2)
-            worldPos = self.__tankCentralPoint - Math.Vector3(shiftX, 0, shiftZ)
-            pivotPos = Math.Vector3(0, 0, 0)
-            self._setCameraLocation(targetPos=worldPos, pivotPos=pivotPos, yaw=previewYaw, pitch=math.radians(_STYLE_INFO_VERTICAL_ANGLE_SHIFT), dist=dist, camConstraints=[hangarConfig['cam_pitch_constr'], hangarConfig['cam_yaw_constr'], cfg['cam_dist_constr']], forceLocate=False, ignoreConstraints=True)
-            self.__currentMode = C11nCameraModes.PREVIEW
+                height = hullAABB[1].y - hullAABB[0].y
+                hullViewSpaceX = width * abs(math.cos(_STYLE_INFO_YAW)) + length * abs(math.sin(_STYLE_INFO_YAW))
+                hullViewSpaceZ = width * abs(math.sin(_STYLE_INFO_YAW)) + length * abs(math.cos(_STYLE_INFO_YAW))
+                aspect = BigWorld.getAspectRatio()
+                halfFOVTan = math.tan(BigWorld.projection().fov * 0.5)
+                distW = hullViewSpaceX / (_STYLE_INFO_MAX_VEHICLE_WIDTH * 2 * halfFOVTan * aspect)
+                distH = height / (_STYLE_INFO_MAX_VEHICLE_HEIGHT * 2 * halfFOVTan) + hullViewSpaceZ * 0.5
+                dist = max(distH, distW)
+                distConstraints.y = _STYLE_INFO_MAX_CAMERA_DIST
+                halfHeight = dist * halfFOVTan
+                halfWidth = halfHeight * aspect
+                targetPos += pivotDir * halfWidth * _STYLE_INFO_VEHICLE_SCREEN_X_SHIFT
+                futureCamDir = mat.applyVector(Math.Vector3(0, 0, 1))
+                futureCamPos = targetPos - futureCamDir * dist
+                if isRendererPipelineDeferred():
+                    from gui.Scaleform.daapi.view.lobby.customization.customization_style_info import STYLE_INFO_BLUR_DELAY
+                    paramsDOF = self.__getStyleInfoDOFParams(futureCamPos)
+                    if paramsDOF is not None:
+                        self._service.setDOFparams(paramsDOF)
+                        BigWorld.callback(STYLE_INFO_BLUR_DELAY, lambda : self._service.setDOFenabled(True))
+            self._setCameraLocation(targetPos=targetPos, pivotPos=-Math.Vector3(0, 0, 0), yaw=_STYLE_INFO_YAW, pitch=_STYLE_INFO_PITCH, dist=dist, camConstraints=[hangarConfig['cam_pitch_constr'], hangarConfig['cam_yaw_constr'], distConstraints], forceLocate=forceLocate, forceRotate=True)
+            self.__currentMode = C11nCameraModes.STYLE_INFO
             self.disableMovementByMouse(True)
             return
 
@@ -222,12 +237,12 @@ class C11nHangarCameraManager(CallbackDelayer, TimeDeltaMeter):
         if self.vEntity is not None:
             rotated = self.vEntity.appearance.rotateTurret(turretYaw)
             if rotated:
-                BigWorld.callback(0.0, lambda : BigWorld.callback(0.0, self.__onTurretRotated))
+                BigWorld.callback(0.0, lambda : BigWorld.callback(0.0, self.__onTurretRotatedCallback))
         return
 
-    def __onTurretRotated(self):
+    def __onTurretRotatedCallback(self):
         if self.vEntity is not None:
-            self.vEntity.appearance.updateSlotPositions(checkDecalsAgainstGun=False)
+            self.vEntity.appearance.updateAnchorsParams(tankPartsToUpdate=(TankPartIndexes.TURRET, TankPartIndexes.GUN))
             self.onTurretRotated()
         return
 
@@ -270,7 +285,12 @@ class C11nHangarCameraManager(CallbackDelayer, TimeDeltaMeter):
             currentMatrix = Math.Matrix(self.__hangarCamera.invViewMatrix)
             self.__prevPitch = -currentMatrix.pitch
 
-    def __onProjectionChanged(self, *args, **kwargs):
+    def __projectionChangeHandler(self, *args, **kwargs):
+        BigWorld.callback(0.0, self.__onProjectionChanged)
+
+    def __onProjectionChanged(self):
+        if self.__currentMode == C11nCameraModes.STYLE_INFO:
+            self.locateCameraToStyleInfoPreview(forceLocate=True)
         self.__c11nCamera.updateProjection()
 
     def __updateScreenSpaceOffset(self, val):
@@ -278,3 +298,21 @@ class C11nHangarCameraManager(CallbackDelayer, TimeDeltaMeter):
             self.__screenSpaceOffset = val
             self.__c11nCamera.updateScreenSpaceOffset(val)
             self.__c11nCamera.updateProjection()
+
+    def __getStyleInfoDOFParams(self, cameraPos):
+        if self.vEntity is None or self.vEntity.appearance is None:
+            return
+        else:
+            compoundModel = self.vEntity.appearance.compoundModel
+            chassisBounds = Math.Matrix(compoundModel.getBoundsForPart(TankPartIndexes.CHASSIS))
+            outsidePoints = (chassisBounds.applyPoint((0, 1, 0)),
+             chassisBounds.applyPoint((0, 1, 1)),
+             chassisBounds.applyPoint((1, 1, 0)),
+             chassisBounds.applyPoint((1, 1, 1)))
+            dists = []
+            for point in outsidePoints:
+                dist = point - cameraPos
+                dists.append(dist.length)
+
+            dists.sort()
+            return DOFParams(nearStart=0, nearDist=0, farStart=dists[2], farDist=1)

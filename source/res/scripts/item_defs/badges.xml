@@ -1699,5 +1699,68 @@
         </item>
       </value>
     </badge>
+    <badge>
+      <name>	ranked_s4_gold	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	72	  <name>	id	</name>
+          <type>	int	</type>
+        </item>
+        <item>	5.01	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	20	  <name>	group	</name>
+          <type>	int	</type>
+        </item>
+        <item>	3	  <name>	class	</name>
+          <type>	int	</type>
+        </item>
+        <item>	red	  <name>	highlight	</name>
+          <type>	string	</type>
+        </item>
+      </value>
+    </badge>
+    <badge>
+      <name>	ranked_s4_silver	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	73	  <name>	id	</name>
+          <type>	int	</type>
+        </item>
+        <item>	5.02	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	20	  <name>	group	</name>
+          <type>	int	</type>
+        </item>
+        <item>	2	  <name>	class	</name>
+          <type>	int	</type>
+        </item>
+        <item>	red	  <name>	highlight	</name>
+          <type>	string	</type>
+        </item>
+      </value>
+    </badge>
+    <badge>
+      <name>	ranked_s4_bronze	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	74	  <name>	id	</name>
+          <type>	int	</type>
+        </item>
+        <item>	5.03	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	20	  <name>	group	</name>
+          <type>	int	</type>
+        </item>
+        <item>	1	  <name>	class	</name>
+          <type>	int	</type>
+        </item>
+        <item>	red	  <name>	highlight	</name>
+          <type>	string	</type>
+        </item>
+      </value>
+    </badge>
   </badges>
 </badges.xml>

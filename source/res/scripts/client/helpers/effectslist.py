@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/helpers/EffectsList.py
+import logging
 import random
 import string
 from collections import namedtuple
@@ -8,17 +9,17 @@ import AnimationSequence
 import BigWorld
 import Math
 import DecalMap
-import material_kinds
+import SoundGroups
 import helpers
+import material_kinds
 from PixieBG import PixieBG
-from debug_utils import LOG_ERROR, LOG_CURRENT_EXCEPTION, LOG_DEBUG, LOG_OBSOLETE
-from vehicle_systems.tankStructure import TankSoundObjectsIndexes
 from ReplayEvents import g_replayEvents
-from soft_exception import SoftException
+from gui.Scaleform.genConsts.EPIC_CONSTS import EPIC_CONSTS
 from helpers import dependency
 from skeletons.gui.battle_session import IBattleSessionProvider
-from gui.Scaleform.genConsts.EPIC_CONSTS import EPIC_CONSTS
-import SoundGroups
+from soft_exception import SoftException
+from vehicle_systems.tankStructure import TankSoundObjectsIndexes
+_logger = logging.getLogger(__name__)
 COLOR_WHITE = 4294967295L
 _ALLOW_DYNAMIC_LIGHTS = True
 KeyPoint = namedtuple('KeyPoint', ('name', 'time'))
@@ -169,7 +170,7 @@ class EffectsListPlayer(object):
             if newKey is not None:
                 startKeyPoint = newKey
             if self.__isStarted:
-                LOG_ERROR('player already started. To restart it you must before call stop().')
+                _logger.error('player already started. To restart it you must before call stop().')
                 return
             import BattleReplay
             if BattleReplay.g_replayCtrl.isPlaying:
@@ -267,7 +268,7 @@ class EffectsListPlayer(object):
             elif not waitForKeyOff:
                 self.__callbackID = BigWorld.callback(deltaTime, self.__playKeyPoint)
         except Exception:
-            LOG_CURRENT_EXCEPTION()
+            _logger.exception('Play key point exception')
 
         return
 
@@ -663,7 +664,7 @@ class _NodeSoundEffectDesc(_BaseSoundEvent):
                             damage_size = 'SWITCH_ext_damage_size_small'
                         elif factor > 8925.0 / 100.0:
                             damage_size = 'SWITCH_ext_damage_size_large'
-                        LOG_DEBUG('Sound Name = {0} Damage Size = {1}'.format(soundName[0], damage_size))
+                        _logger.debug('Sound Name = %s Damage Size = %s', soundName[0], damage_size)
                         soundObject.setSwitch('SWITCH_ext_damage_size', damage_size)
                     startParams = args.get('soundParams', ())
                     for soundStartParam in startParams:
@@ -811,9 +812,12 @@ class _DestructionSoundEffectDesc(_BaseSoundEvent):
             return
 
 
+ImpactNames = namedtuple('ImpactNames', ('impactNPC_PC', 'impactPC_NPC', 'impactNPC_NPC', 'impactFNPC_PC'))
+
 class _SoundEffectDesc(_EffectDesc):
     __slots__ = ('_soundName', '_soundNames', '_switch_impact_surface', '_switch_shell_type', '_dynamic', '_stopSyncVisual', '_impactNames')
     TYPE = '_SoundEffectDesc'
+    __sessionProvider = dependency.descriptor(IBattleSessionProvider)
 
     def __init__(self, dataSection):
         super(_SoundEffectDesc, self).__init__(dataSection)
@@ -826,7 +830,7 @@ class _SoundEffectDesc(_EffectDesc):
             self._soundNames = (intern(dataSection.readString('wwsoundPC')), intern(dataSection.readString('wwsoundNPC')))
         else:
             self._soundName = intern(dataSection.readString('wwsound'))
-        self._impactNames = (intern(dataSection.readString('impactNPC_PC', '')), intern(dataSection.readString('impactPC_NPC', '')), intern(dataSection.readString('impactNPC_NPC', '')))
+        self._impactNames = ImpactNames(intern(dataSection.readString('impactNPC_PC', '')), intern(dataSection.readString('impactPC_NPC', '')), intern(dataSection.readString('impactNPC_NPC', '')), intern(dataSection.readString('impactFNPC_PC', '')))
         if dataSection.has_key('SWITCH_ext_impact_surface'):
             self._switch_impact_surface = intern(dataSection.readString('SWITCH_ext_impact_surface'))
         if dataSection.has_key('SWITCH_ext_shell_type'):
@@ -878,7 +882,7 @@ class _SoundEffectDesc(_EffectDesc):
             objectName = soundName + '_NODE_' + str(entityID) + '_' + str(self._nodeName)
             elem['sound'] = SoundGroups.g_instance.WWgetSoundObject(objectName, node.actualNode)
             if SoundGroups.DEBUG_TRACE_EFFECTLIST is True:
-                LOG_DEBUG('SOUND: EffectList dynamic, ', soundName, args, node.actualNode, self._nodeName, elem['sound'])
+                _logger.debug('SOUND: EffectList dynamic, %s, %s, %s, %s, %s', soundName, args, node.actualNode, self._nodeName, elem['sound'])
             if SoundGroups.DEBUG_TRACE_STACK is True:
                 import traceback
                 traceback.print_stack()
@@ -897,24 +901,27 @@ class _SoundEffectDesc(_EffectDesc):
             if hitdir is not None:
                 m.translation -= hitdir
             if fromPC:
-                soundName = self._impactNames[1]
+                soundName = self._impactNames.impactPC_NPC
             elif isPlayerVehicle:
-                soundName = self._impactNames[0]
+                isCustomAllyDamageEffect = self.__sessionProvider.arenaVisitor.hasCustomAllyDamageEffect()
+                isAlly = self.__sessionProvider.getArenaDP().isAlly(attackerID)
+                soundName = self._impactNames.impactNPC_PC
+                if isCustomAllyDamageEffect and isAlly:
+                    soundName = self._impactNames.impactFNPC_PC or self._impactNames.impactNPC_PC
                 if not BigWorld.entity(playerID).isAlive():
-                    sessionProvider = dependency.instance(IBattleSessionProvider)
-                    if sessionProvider is not None:
-                        spectator = sessionProvider.dynamic.spectator
+                    if self.__sessionProvider is not None:
+                        spectator = self.__sessionProvider.dynamic.spectator
                         if spectator is not None and spectator.spectatorViewMode in (EPIC_CONSTS.SPECTATOR_MODE_FREECAM, EPIC_CONSTS.SPECTATOR_MODE_FOLLOW):
-                            soundName = self._impactNames[2]
+                            soundName = self._impactNames.impactNPC_NPC
             else:
-                soundName = self._impactNames[2]
+                soundName = self._impactNames.impactNPC_NPC
             if hitdir is not None:
                 t = m.applyToOrigin()
                 m.setRotateY(hitdir.yaw)
                 m.translation = t
             sound = SoundGroups.g_instance.WWgetSoundObject(soundName + '_MODEL_' + str(id(model)), None, m.translation)
             if SoundGroups.DEBUG_TRACE_EFFECTLIST is True:
-                LOG_DEBUG('SOUND: EffectList impacts, ', soundName, args, str(id(model)), sound)
+                _logger.debug('SOUND: EffectList impacts, %s, %s, %s, %s', soundName, args, str(id(model)), sound)
             if SoundGroups.DEBUG_TRACE_STACK is True:
                 import traceback
                 traceback.print_stack()
@@ -930,6 +937,7 @@ class _SoundEffectDesc(_EffectDesc):
                     elif factor > 8925.0 / 100.0:
                         damage_size = 'SWITCH_ext_damage_size_large'
                 sound.setSwitch('SWITCH_ext_damage_size', damage_size)
+                self.__setFriendlyFireRTPC(attackerID, sound, soundName)
                 sound.play(soundName)
                 for soundStartParam in startParams:
                     sound.setRTPC(soundStartParam.name, soundStartParam.value)
@@ -937,7 +945,7 @@ class _SoundEffectDesc(_EffectDesc):
         elif startParams:
             sound = SoundGroups.g_instance.WWgetSoundObject(soundName + '_POS_' + str(id(pos)), None, pos)
             if SoundGroups.DEBUG_TRACE_EFFECTLIST is True:
-                LOG_DEBUG('SOUND: EffectList WWgetSoundPos, ', soundName, args, sound, pos)
+                _logger.debug('SOUND: EffectList WWgetSoundPos, %s, %s, %s, %s', soundName, args, sound, pos)
             if SoundGroups.DEBUG_TRACE_STACK is True:
                 import traceback
                 traceback.print_stack()
@@ -949,12 +957,12 @@ class _SoundEffectDesc(_EffectDesc):
         else:
             idd = SoundGroups.g_instance.playSoundPos(soundName, pos)
             if SoundGroups.DEBUG_TRACE_EFFECTLIST is True:
-                LOG_DEBUG('SOUND: EffectList playSoundPos, ', soundName, args, idd, pos)
+                _logger.debug('SOUND: EffectList playSoundPos, %s, %s, %s, %s', soundName, args, idd, pos)
             if SoundGroups.DEBUG_TRACE_STACK is True:
                 import traceback
                 traceback.print_stack()
             if idd == 0:
-                LOG_ERROR('Failed to start sound effect, event ' + soundName)
+                _logger.error('Failed to start sound effect, event ' + soundName)
         effects.append(elem)
         return
 
@@ -968,6 +976,14 @@ class _SoundEffectDesc(_EffectDesc):
 
     def prerequisites(self):
         return []
+
+    def __setFriendlyFireRTPC(self, attackerID, sound, soundName):
+        if soundName == self._impactNames.impactFNPC_PC and attackerID is not None:
+            playerVehiclePosition = BigWorld.player().vehicle.position
+            attackerVehiclePosition = BigWorld.entity(attackerID).position
+            distance = (playerVehiclePosition - attackerVehiclePosition).length
+            sound.setRTPC('RTPC_ext_distance_friendly_attacker', distance)
+        return
 
 
 class _DecalEffectDesc(_EffectDesc):
@@ -1053,23 +1069,27 @@ class _FlashBangEffectDesc(_EffectDesc):
 
     def create(self, model, list, args):
         inputHandler = getattr(BigWorld.player(), 'inputHandler')
-        if args.get('showFlashBang', True) and (inputHandler is None or inputHandler.isFlashBangAllowed):
+        if self._isMarkedForPlay(args) and (inputHandler is None or inputHandler.isFlashBangAllowed):
             if self.__fba is not None:
-                _FlashBangEffectDesc.renderSettings.removeFlashBangAnimation(self.__fba)
+                self.renderSettings.removeFlashBangAnimation(self.__fba)
                 BigWorld.cancelCallback(self.__clbackId)
             self.__fba = Math.Vector4Animation()
             self.__fba.keyframes = self._keyframes
             self.__fba.duration = self._duration
-            _FlashBangEffectDesc.renderSettings.flashBangAnimation(self.__fba)
+            self.renderSettings.flashBangAnimation(self.__fba)
             self.__clbackId = BigWorld.callback(self._duration - 0.05, self.__removeMe)
         elem = {}
         elem['typeDesc'] = self
         list.append(elem)
         return
 
+    @classmethod
+    def _isMarkedForPlay(cls, args):
+        return args.get('showFlashBang', True)
+
     def __removeMe(self):
         if self.__fba is not None:
-            _FlashBangEffectDesc.renderSettings.removeFlashBangAnimation(self.__fba)
+            self.renderSettings.removeFlashBangAnimation(self.__fba)
             self.__clbackId = None
             self.__fba = None
         return
@@ -1079,6 +1099,14 @@ class _FlashBangEffectDesc(_EffectDesc):
             BigWorld.cancelCallback(self.__clbackId)
         self.__removeMe()
         return True
+
+
+class _FriendlyFlashBangEffectDesc(_FlashBangEffectDesc):
+    TYPE = '_FriendlyFlashBangEffectDesc'
+
+    @classmethod
+    def _isMarkedForPlay(cls, args):
+        return args.get('showFriendlyFlashBang', False)
 
 
 class _StopEmissionEffectDesc(_EffectDesc):
@@ -1198,6 +1226,7 @@ _effectDescFactory = {'pixie': _PixieEffectDesc,
  'decal': _DecalEffectDesc,
  'shockWave': _ShockWaveEffectDesc,
  'flashBang': _FlashBangEffectDesc,
+ 'friendlyFlashBang': _FriendlyFlashBangEffectDesc,
  'stopEmission': _StopEmissionEffectDesc,
  'posteffect': _PostProcessEffectDesc,
  'light': _LightEffectDesc,
@@ -1309,7 +1338,7 @@ class _NodeWithLocal(object):
 
 def _findTargetNode(model, nodes, localTransform=None, orientByClosestSurfaceNormal=False, precalculatedNormal=None):
     if len(nodes) > 1:
-        LOG_OBSOLETE('Slashed nodepath is not supported any longer')
+        _logger.debug('Slashed nodepath is not supported any longer')
     if not nodes:
         if orientByClosestSurfaceNormal:
             localTransform = _getSurfaceAlignedTransform(model, '', localTransform, precalculatedNormal)
@@ -1329,7 +1358,7 @@ def _findTargetNodeSafe(model, nodes, local=None):
 
 
 def _findTargetModel(model, nodes):
-    LOG_OBSOLETE('THIS FEATURE IS NOT SUPPORTED')
+    _logger.debug('THIS FEATURE IS NOT SUPPORTED')
     targetNode = model
     for iter in xrange(0, len(nodes)):
         found = False

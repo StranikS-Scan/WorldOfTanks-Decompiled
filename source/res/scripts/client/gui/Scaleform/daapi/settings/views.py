@@ -95,6 +95,7 @@ class VIEW_ALIAS(COMMON_VIEW_ALIAS):
     DEMONSTRATOR_WINDOW = 'demonstratorWindow'
     VEHICLE_PREVIEW = 'vehiclePreview'
     VEHICLE_PREVIEW_20 = 'vehiclePreview20Page'
+    STYLE_PREVIEW = 'vehicleStylePreview'
     IMAGE_VIEW = 'imageView'
     HERO_VEHICLE_PREVIEW = 'heroVehiclePreview'
     HERO_VEHICLE_PREVIEW_20 = 'heroVehiclePreview20Page'

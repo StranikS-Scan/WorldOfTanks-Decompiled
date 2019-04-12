@@ -15,3 +15,6 @@ class MissionsGroupedViewMeta(MissionView):
 
     def useTokenClick(self, eventID):
         self._printOverrideError('useTokenClick')
+
+    def onClickButtonDetails(self):
+        self._printOverrideError('onClickButtonDetails')

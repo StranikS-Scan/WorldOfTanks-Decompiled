@@ -16,18 +16,20 @@ from soft_exception import SoftException
 PrecachedShell = namedtuple('PrecachedShell', 'guns params')
 PrecachedEquipment = namedtuple('PrecachedEquipment', 'nations params')
 PrecachedOptionalDevice = namedtuple('PrecachedOptionalDevice', 'weight nations')
-PrecachedChassis = namedtuple('PrecachedChassis', 'isHydraulic, isWheeled')
+PrecachedChassis = namedtuple('PrecachedChassis', 'isHydraulic, isWheeled, hasAutoSiege')
 
 class _PrecachedChassisTypes(object):
-    DEFAULT = PrecachedChassis(isHydraulic=False, isWheeled=False)
-    HYDRAULIC = PrecachedChassis(isHydraulic=True, isWheeled=False)
-    WHEELED = PrecachedChassis(isHydraulic=False, isWheeled=True)
-    HYDRAULIC_WHEELED = PrecachedChassis(isHydraulic=True, isWheeled=True)
+    DEFAULT = PrecachedChassis(isHydraulic=False, isWheeled=False, hasAutoSiege=False)
+    HYDRAULIC = PrecachedChassis(isHydraulic=True, isWheeled=False, hasAutoSiege=False)
+    WHEELED = PrecachedChassis(isHydraulic=False, isWheeled=True, hasAutoSiege=False)
+    HYDRAULIC_WHEELED = PrecachedChassis(isHydraulic=True, isWheeled=True, hasAutoSiege=False)
+    HYDRAULIC_AUTO_SIEGE = PrecachedChassis(isHydraulic=True, isWheeled=False, hasAutoSiege=True)
     ALL = (DEFAULT,
      HYDRAULIC,
      WHEELED,
-     HYDRAULIC_WHEELED)
-    MAP = dict((((pC.isHydraulic, pC.isWheeled), pC) for pC in ALL))
+     HYDRAULIC_WHEELED,
+     HYDRAULIC_AUTO_SIEGE)
+    MAP = dict((((pC.isHydraulic, pC.isWheeled, pC.hasAutoSiege), pC) for pC in ALL))
 
 
 class PrecachedGun(namedtuple('PrecachedGun', 'clipVehicles autoReloadVehicles params turretsByVehicles')):
@@ -163,6 +165,9 @@ class _ParamsCache(object):
     def isChassisWheeled(self, itemCD):
         return self.getPrecachedParameters(itemCD).isWheeled
 
+    def isChassisAutoSiege(self, itemCD):
+        return self.getPrecachedParameters(itemCD).hasAutoSiege
+
     def getWheeledChassisAxleLockAngles(self, itemCD):
         return self.__wheeledChassisParams.get(itemCD)
 
@@ -294,7 +299,7 @@ class _ParamsCache(object):
             for vDescr in vehiclesCache.generator(nationIdx):
                 for vChs in vDescr.type.chassis:
                     chassisCD = vChs.compactDescr
-                    cachedChassisByNation[chassisCD] = _PrecachedChassisTypes.MAP[vDescr.hasSiegeMode, vDescr.isWheeledVehicle]
+                    cachedChassisByNation[chassisCD] = _PrecachedChassisTypes.MAP[vDescr.hasSiegeMode, vDescr.isWheeledVehicle, vDescr.hasAutoSiegeMode]
                     processedItems.add(chassisCD)
                     if vDescr.isWheeledVehicle:
                         chassisPhysics = vDescr.type.xphysics['chassis'][vChs.name]

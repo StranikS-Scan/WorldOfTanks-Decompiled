@@ -10,11 +10,8 @@ class CustomizationStyleInfoMeta(BaseDAAPIComponent):
     def onApply(self):
         self._printOverrideError('onApply')
 
-    def as_setStyleInfoS(self, data):
-        return self.flashObject.as_setStyleInfo(data) if self._isDAAPIInited() else None
-
-    def as_setStylePriceS(self, data):
-        return self.flashObject.as_setStylePrice(data) if self._isDAAPIInited() else None
+    def as_setDataS(self, data):
+        return self.flashObject.as_setData(data) if self._isDAAPIInited() else None
 
     def as_showS(self):
         return self.flashObject.as_show() if self._isDAAPIInited() else None

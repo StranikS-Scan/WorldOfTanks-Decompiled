@@ -129,6 +129,12 @@ class QuestProgressController(IArenaPeriodController, IArenaVehiclesController):
              'bodyProgress': formatter.bodyFormat()}
         return {}
 
+    def getQuestShortInfoData(self):
+        selectedQuest = self.__selectedQuest
+        return {'questName': selectedQuest.getUserName(),
+         'questIndexStr': str(selectedQuest.getInternalID()),
+         'questIcon': RES_ICONS.getAllianceGoldIcon(selectedQuest.getMajorTag())} if selectedQuest else {}
+
     def getQuestHeaderProgresses(self):
         formatter = self.__getFormatter(self.__selectedQuest)
         return formatter.headerFormat()

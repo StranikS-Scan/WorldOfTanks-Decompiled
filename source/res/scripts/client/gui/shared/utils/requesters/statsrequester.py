@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/utils/requesters/StatsRequester.py
 import BigWorld
-from account_helpers import isPremiumAccount
+from account_helpers.premium_info import PremiumInfo
 from adisp import async
 from gui.shared.money import Money, Currency
 from gui.shared.utils.requesters.abstract import AbstractSyncDataRequester
@@ -71,6 +71,15 @@ class StatsRequester(AbstractSyncDataRequester, IStatsRequester):
         return self.getCacheValue('multipliedXPVehs', list())
 
     @property
+    def applyAdditionalXPCount(self):
+        maxCount = self.lobbyContext.getServerSettings().getAdditionalBonusConfig().get('applyCount', 0)
+        return max(maxCount - self.getCacheValue('applyAdditionalXPCount', maxCount), 0)
+
+    @property
+    def multipliedRankedVehicles(self):
+        return self.getCacheValue('multipliedRankedBattlesVehs', set())
+
+    @property
     def eliteVehicles(self):
         return self.getCacheValue('eliteVehicles', list())
 
@@ -86,13 +95,28 @@ class StatsRequester(AbstractSyncDataRequester, IStatsRequester):
     def attributes(self):
         return self.getCacheValue('attrs', 0)
 
+    def isActivePremium(self, checkPremiumType):
+        return self.getCacheValue('premiumInfo', PremiumInfo()).isActivePremium(checkPremiumType)
+
     @property
-    def premiumExpiryTime(self):
-        return self.getCacheValue('premiumExpiryTime', 0)
+    def activePremiumType(self):
+        return self.getCacheValue('premiumInfo', PremiumInfo()).activePremiumType
 
     @property
     def isPremium(self):
-        return isPremiumAccount(self.attributes)
+        return self.getCacheValue('premiumInfo', PremiumInfo()).isPremium
+
+    @property
+    def totalPremiumExpiryTime(self):
+        return self.getCacheValue('premiumInfo', PremiumInfo()).totalPremiumExpiryTime
+
+    @property
+    def activePremiumExpiryTime(self):
+        return self.getCacheValue('premiumInfo', PremiumInfo()).activePremiumExpiryTime
+
+    @property
+    def premiumInfo(self):
+        return self.getCacheValue('premiumInfo', PremiumInfo()).data
 
     @property
     def isIngameShopEnabled(self):
@@ -187,6 +211,18 @@ class StatsRequester(AbstractSyncDataRequester, IStatsRequester):
         return self.getCacheValue('SPA', {})
 
     @property
+    def piggyBank(self):
+        return self.getCacheValue('piggyBank', {})
+
+    @property
+    def dummySessionStats(self):
+        return self.getCacheValue('dummySessionStats', {})
+
+    @property
+    def additionalXPCache(self):
+        return self.getCacheValue('_additionalXPCache', {})
+
+    @property
     def isGoldFishBonusApplied(self):
         gfKey = '/common/goldfish_bonus_applied/'
         result = False
@@ -202,6 +238,10 @@ class StatsRequester(AbstractSyncDataRequester, IStatsRequester):
     @property
     def oldVehInvIDs(self):
         return self.getCacheValue('oldVehInvIDs', ())
+
+    def getMapsBlackList(self):
+        blackList = self.getCacheValue('preferredMaps', {}).get('blackList', ())
+        return blackList
 
     @async
     def _requestCache(self, callback):

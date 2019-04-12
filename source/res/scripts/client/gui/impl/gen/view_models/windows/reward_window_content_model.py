@@ -4,7 +4,7 @@ from frameworks.wulf import ViewModel
 from gui.impl.gen.view_models.ui_kit.list_model import ListModel
 
 class RewardWindowContentModel(ViewModel):
-    __slots__ = ('onConfirmBtnClicked',)
+    __slots__ = ('onConfirmBtnClicked', 'onHyperLinkClicked')
 
     @property
     def rewardsList(self):
@@ -28,3 +28,4 @@ class RewardWindowContentModel(ViewModel):
         self._addStringProperty('eventName', '')
         self._addBoolProperty('showRewards', False)
         self.onConfirmBtnClicked = self._addCommand('onConfirmBtnClicked')
+        self.onHyperLinkClicked = self._addCommand('onHyperLinkClicked')

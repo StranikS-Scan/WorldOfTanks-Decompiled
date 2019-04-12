@@ -8,10 +8,10 @@ from debug_utils import LOG_DEBUG
 from gui import GUI_SETTINGS, SystemMessages
 from gui.Scaleform.locale.SYSTEM_MESSAGES import SYSTEM_MESSAGES
 from gui.shared.money import Currency, MONEY_UNDEFINED
-from helpers import i18n
 from helpers.i18n import makeString
 from ids_generators import SequenceIDGenerator
 from items import ITEM_TYPE_INDICES, vehicles as vehs_core
+from gui.Scaleform.locale.ARENAS import ARENAS
 
 def rnd_choice(*args):
     args = list(args)
@@ -188,9 +188,11 @@ def getArenaFullName(arenaTypeID):
 
 
 def getBattleSubTypeWinText(arenaTypeID, teamID):
-    key = 'type/%s/description' % ArenaType.g_cache[arenaTypeID].gameplayName
-    winText = i18n.makeString('#arenas:%s' % key)
-    return i18n.makeString('#arenas:%s%d' % (key, teamID)) if winText == key else winText
+    key = 'type/{}/description'.format(ArenaType.g_cache[arenaTypeID].gameplayName)
+    arenasKey = ARENAS.all(key)
+    if arenasKey is None:
+        arenasKey = ARENAS.all('{}{}'.format(key, teamID))
+    return makeString(arenasKey)
 
 
 def getBattleSubTypeBaseNumber(arenaTypeID, team, baseID):

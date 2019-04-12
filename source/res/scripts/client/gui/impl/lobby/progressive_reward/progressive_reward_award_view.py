@@ -5,7 +5,7 @@ from frameworks.wulf import ViewFlags
 from frameworks.wulf import WindowFlags
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.impl.auxiliary.rewards_helper import getRewardTooltipContent, getRewardRendererModelPresenter, getProgressiveRewardBonuses, BLUEPRINTS_CONGRAT_TYPES, fillStepsModel
-from gui.impl.backport import TooltipData
+from gui.impl.backport.backport_tooltip import TooltipData
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.progressive_reward.progressive_reward_award_model import ProgressiveRewardAwardModel
 from gui.impl.gen.view_models.views.loot_box_view.loot_congrats_types import LootCongratsTypes

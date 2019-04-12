@@ -3,7 +3,6 @@
 from dossiers2.ui.achievements import ACHIEVEMENT_BLOCK
 from gui.Scaleform.daapi.view.lobby.vehiclePreview20.items_kit_helper import lookupItem, showItemTooltip, getCDFromId
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS as TC
-from gui.app_loader import g_appLoader
 from gui.shared.gui_items.dossier import dumpDossier
 from gui.shared.gui_items.dossier.achievements.abstract import isRareAchievement
 from gui.shared.utils import showInvitationInWindowsBar
@@ -13,6 +12,7 @@ from gui.shared.utils.functions import makeTooltip
 from helpers import time_utils
 from helpers import dependency
 from messenger.storage import storage_getter
+from skeletons.gui.app_loader import IAppLoader
 from skeletons.gui.goodies import IGoodiesCache
 from skeletons.gui.shared import IItemsCache
 from web_client_api import w2c, W2CSchema, Field, WebCommandException
@@ -46,7 +46,7 @@ class _ShowItemTooltipSchema(W2CSchema):
 
 
 class _ChatAvailabilitySchema(W2CSchema):
-    receiver_id = Field(required=True, type=int)
+    receiver_id = Field(required=True, type=long)
 
 
 class UtilWebApiMixin(object):
@@ -139,4 +139,5 @@ class UtilWebApiMixin(object):
             return isAvailable()
 
     def __getTooltipMgr(self):
-        return g_appLoader.getApp().getToolTipMgr()
+        appLoader = dependency.instance(IAppLoader)
+        return appLoader.getApp().getToolTipMgr()

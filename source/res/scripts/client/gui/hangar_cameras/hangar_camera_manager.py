@@ -175,18 +175,26 @@ class HangarCameraManager(object):
             dist = self.__cam.pivotMaxDist
         if movementMode != IMMEDIATE_CAMERA_MOVEMENT_MODE:
             self.__cam.movementMode = movementMode
-        if camConstraints is not None:
-            self.__camConstraints = list(camConstraints)
-        else:
+        if camConstraints is None or camConstraints[0] is None:
             self.__camConstraints[0] = cfg['cam_pitch_constr']
+        else:
+            self.__camConstraints[0] = camConstraints[0]
+        if camConstraints is None or camConstraints[1] is None:
             self.__camConstraints[1] = cfg['cam_yaw_constr']
+        else:
+            self.__camConstraints[1] = camConstraints[1]
+        if camConstraints is None or camConstraints[2] is None:
+            self.__updateCameraDistanceLimits()
+        else:
+            self.__camConstraints[2] = camConstraints[2]
         if not ignoreConstraints:
-            if yaw is not None or pitch is not None:
+            if yaw is not None:
                 camYawConstr = self.__camConstraints[1]
                 startYaw, endYaw = camYawConstr
                 self.__yawCameraFilter.setConstraints(math.radians(startYaw), math.radians(endYaw))
                 self.__yawCameraFilter.setYawLimits(camYawConstr)
                 yawS = self.__yawCameraFilter.toLimit(yawS)
+            if pitch is not None:
                 camPitchConstr = self.__camConstraints[0]
                 startPitch, endPitch = (math.radians(pc) for pc in camPitchConstr)
                 pitchS = mathUtils.clamp(startPitch, endPitch, pitchS)

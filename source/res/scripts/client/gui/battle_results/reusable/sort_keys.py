@@ -78,3 +78,10 @@ class VehicleXpSortKey(_VehicleSortKey):
 
     def _cmp(self, other):
         return cmp(other.info.xp, self.info.xp)
+
+
+class RankedVehicleXpSortKey(_VehicleSortKey):
+    __slots__ = ()
+
+    def _cmp(self, other):
+        return cmp(other.info.xp - other.info.xpPenalty, self.info.xp - self.info.xpPenalty)

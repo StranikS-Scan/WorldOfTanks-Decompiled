@@ -55,7 +55,7 @@ class ListenersCollection(IListenersCollection):
             else:
                 LOG_ERROR('Listener already added', listener)
         else:
-            LOG_ERROR('Object is not extend {0:>s}'.format(self._clazz.__name__), listener)
+            LOG_ERROR('Object does not extend {0:>s}'.format(self._clazz.__name__), listener)
 
     def hasListener(self, listener):
         return listener in self._listeners

@@ -55,9 +55,7 @@ class CustomizationPropertiesSheet(CustomizationPropertiesSheetMeta):
     def __init__(self):
         super(CustomizationPropertiesSheet, self).__init__()
         self.__ctx = None
-        self._slotID = -1
-        self._regionID = -1
-        self._areaID = -1
+        self._attachedAnchor = C11nId()
         self._isVisible = False
         self._editMode = False
         self._extraMoney = None
@@ -78,8 +76,8 @@ class CustomizationPropertiesSheet(CustomizationPropertiesSheetMeta):
         return self._isVisible
 
     @property
-    def attachedSlot(self):
-        return C11nId(areaId=self._areaID, slotType=self._slotID, regionIdx=self._regionID)
+    def attachedAnchor(self):
+        return self._attachedAnchor
 
     def editMode(self, value, interactionType):
         self._editMode = value
@@ -104,6 +102,7 @@ class CustomizationPropertiesSheet(CustomizationPropertiesSheetMeta):
     def _populate(self):
         super(CustomizationPropertiesSheet, self)._populate()
         self.__ctx = self.service.getCtx()
+        self._attachedAnchor = C11nId()
         self._extraMoney = None
         self._isItemAppliedToAll = False
         self.__ctx.onCacheResync += self.__onCacheResync
@@ -133,24 +132,19 @@ class CustomizationPropertiesSheet(CustomizationPropertiesSheetMeta):
         self.__ctx.onChangeAutoRent -= self.onChangeAutoRent
         self._extraMoney = None
         self._isItemAppliedToAll = False
-        self._slotID = -1
-        self._regionID = -1
-        self._areaID = -1
+        self._attachedAnchor = C11nId()
         self.__ctx = None
         self.__inscriptionController = None
         super(CustomizationPropertiesSheet, self)._dispose()
         return
 
     def show(self, areaID, slotID, regionID, showSwitchers, isNarrowSlot, forceUpdate=False):
-        prevAnchor = C11nId(self._areaID, self._slotID, self._regionID)
-        newAnchor = C11nId(areaID, slotID, regionID)
+        prevAnchor = self._attachedAnchor
+        self._attachedAnchor = C11nId(areaID, slotID, regionID)
         self.__ctx.vehicleAnchorsUpdater.changeAnchorParams(prevAnchor, isDisplayed=True, isAutoScalable=True)
-        self.__ctx.vehicleAnchorsUpdater.changeAnchorParams(newAnchor, isDisplayed=not showSwitchers, isAutoScalable=False)
-        if self._slotID == slotID and self._regionID == regionID and self._areaID == areaID and self.isVisible and not forceUpdate:
+        self.__ctx.vehicleAnchorsUpdater.changeAnchorParams(self._attachedAnchor, isDisplayed=not showSwitchers, isAutoScalable=False)
+        if prevAnchor == self._attachedAnchor and self.isVisible and not forceUpdate:
             return
-        self._slotID = slotID
-        self._regionID = regionID
-        self._areaID = areaID
         self._isVisible = True
         self._showSwitchers = showSwitchers
         self._isNarrowSlot = isNarrowSlot
@@ -162,17 +156,18 @@ class CustomizationPropertiesSheet(CustomizationPropertiesSheetMeta):
             self.__ctx.onPropertySheetShown()
         self.__ctx.vehicleAnchorsUpdater.displayMenu(True)
 
-    def hide(self, storePeronalNumber=False):
-        anchor = C11nId(self._areaID, self._slotID, self._regionID)
+    def hide(self, storePersonalNumber=False):
         if not self.isVisible:
             return
+        if self._attachedAnchor != self.__ctx.selectedAnchor:
+            self.__changeAttachedAnchor()
         self._isVisible = False
         self.as_hideS()
         if self.__inscriptionController:
             self.__inscriptionController.hide()
         self.__ctx.onPropertySheetHidden()
-        self.__ctx.vehicleAnchorsUpdater.changeAnchorParams(anchor, True, True)
-        if not storePeronalNumber:
+        self.__ctx.vehicleAnchorsUpdater.changeAnchorParams(self._attachedAnchor, True, True)
+        if not storePersonalNumber:
             self.__ctx.clearStoredPersonalNumber()
 
     def elementControlsHide(self):
@@ -192,26 +187,26 @@ class CustomizationPropertiesSheet(CustomizationPropertiesSheetMeta):
         elif actionType == CUSTOMIZATION_ALIASES.CUSTOMIZATION_SHEET_ACTION_REMOVE_FROM_ALL_PARTS:
             self.__removeFromAllAreas()
         elif actionType == CUSTOMIZATION_ALIASES.CUSTOMIZATION_SHEET_ACTION_SCALE_CHANGE:
-            if self._slotID == GUI_ITEM_TYPE.CAMOUFLAGE:
+            if self._attachedAnchor.slotType == GUI_ITEM_TYPE.CAMOUFLAGE:
                 if self._currentComponent.patternSize != actionData:
-                    self.__ctx.changeCamouflageScale(self._areaID, self._regionID, actionData)
-            elif self._slotID == GUI_ITEM_TYPE.PROJECTION_DECAL:
+                    self.__ctx.changeCamouflageScale(self._attachedAnchor.areaId, self._attachedAnchor.regionIdx, actionData)
+            elif self._attachedAnchor.slotType == GUI_ITEM_TYPE.PROJECTION_DECAL:
                 actionData += 1
                 if self._currentComponent.scaleFactorId != actionData:
-                    self.__ctx.changeProjectionDecalScale(self._areaID, self._regionID, actionData)
+                    self.__ctx.changeProjectionDecalScale(self._attachedAnchor.areaId, self._attachedAnchor.regionIdx, actionData)
         elif actionType == CUSTOMIZATION_ALIASES.CUSTOMIZATION_SHEET_ACTION_COLOR_CHANGE:
             if self._currentComponent.palette != actionData:
-                self.__ctx.changeCamouflageColor(self._areaID, self._regionID, actionData)
+                self.__ctx.changeCamouflageColor(self._attachedAnchor.areaId, self._attachedAnchor.regionIdx, actionData)
         elif actionType == CUSTOMIZATION_ALIASES.CUSTOMIZATION_SHEET_ACTION_CLOSE:
             self.hide()
             self.__ctx.onClearItem()
         elif actionType == CUSTOMIZATION_ALIASES.CUSTOMIZATION_SHEET_ACTION_MIRROR:
-            self.__ctx.mirrorProjectionDecal(self._areaID, self._regionID)
+            self.__ctx.mirrorProjectionDecal(self._attachedAnchor.areaId, self._attachedAnchor.regionIdx)
         elif actionType == CUSTOMIZATION_ALIASES.CUSTOMIZATION_SHEET_ACTION_MOVE:
-            self.__ctx.moveProjectionDecal(self._areaID, self._regionID, actionData)
+            self.__ctx.moveProjectionDecal(self._attachedAnchor.areaId, self._attachedAnchor.regionIdx, actionData)
             self.__update()
         elif actionType == CUSTOMIZATION_ALIASES.CUSTOMIZATION_SHEET_ACTION_EDIT:
-            self.hide(storePeronalNumber=True)
+            self.hide(storePersonalNumber=True)
             self.__ctx.onPersonalNumberEditModeChanged(PersonalNumEditStatuses.EDIT_MODE_STARTED)
         elif actionType == CUSTOMIZATION_ALIASES.CUSTOMIZATION_SHEET_ACTION_INFO:
             self.__ctx.onShowStyleInfo()
@@ -221,13 +216,13 @@ class CustomizationPropertiesSheet(CustomizationPropertiesSheetMeta):
 
     @property
     def _currentSlotData(self):
-        if self._slotID == -1 or self._areaID == -1 or self._slotID == GUI_ITEM_TYPE.STYLE:
+        if self._attachedAnchor.slotType == -1 or self._attachedAnchor.areaId == -1 or self._attachedAnchor.slotType == GUI_ITEM_TYPE.STYLE:
             return
         else:
-            slot = self.__ctx.currentOutfit.getContainer(self._areaID).slotFor(self._slotID)
-            if slot is None or self._regionID == -1:
+            slot = self.__ctx.currentOutfit.getContainer(self._attachedAnchor.areaId).slotFor(self._attachedAnchor.slotType)
+            if slot is None or self._attachedAnchor.regionIdx == -1:
                 return
-            slotId = self.__ctx.getSlotIdByAnchorId(C11nId(self._areaID, self._slotID, self._regionID))
+            slotId = self.__ctx.getSlotIdByAnchorId(self._attachedAnchor)
             return slot.getSlotData(slotId.regionIdx)
 
     @property
@@ -242,10 +237,12 @@ class CustomizationPropertiesSheet(CustomizationPropertiesSheetMeta):
 
     @property
     def _currentStyle(self):
-        return self.__ctx.modifiedStyle if self._slotID == GUI_ITEM_TYPE.STYLE else None
+        return self.__ctx.modifiedStyle if self._attachedAnchor.slotType == GUI_ITEM_TYPE.STYLE else None
 
     def __update(self):
-        if self._isVisible and self._slotID != -1 and self._regionID != -1 and self._areaID != -1:
+        if self._attachedAnchor != self.__ctx.selectedAnchor:
+            self.__changeAttachedAnchor()
+        if self._isVisible and self._attachedAnchor.slotType != -1 and self._attachedAnchor.regionIdx != -1 and self._attachedAnchor.areaId != -1:
             self.__updateItemAppliedToAllFlag()
             self.__updateExtraPrice()
             if self._currentStyle or self._currentItem:
@@ -255,19 +252,25 @@ class CustomizationPropertiesSheet(CustomizationPropertiesSheetMeta):
             return True
         return False
 
+    def __changeAttachedAnchor(self):
+        prevAnchor = self._attachedAnchor
+        self._attachedAnchor = self.__ctx.selectedAnchor
+        self.__ctx.vehicleAnchorsUpdater.changeAnchorParams(prevAnchor, isDisplayed=True, isAutoScalable=True)
+        self.__ctx.vehicleAnchorsUpdater.changeAnchorParams(self._attachedAnchor, isDisplayed=not self._isVisible, isAutoScalable=not self._isVisible)
+
     def __applyToOtherAreas(self, installItem):
         if self.__ctx.currentTab not in (C11nTabs.PAINT, C11nTabs.CAMOUFLAGE):
             return
         currentSeason = self.__ctx.currentSeason
         if installItem:
-            self.__ctx.installItemToAllTankAreas(currentSeason, self._slotID, self._currentSlotData)
+            self.__ctx.installItemToAllTankAreas(currentSeason, self._attachedAnchor.slotType, self._currentSlotData)
         else:
-            self.__ctx.removeItemFromAllTankAreas(currentSeason, self._slotID)
+            self.__ctx.removeItemFromAllTankAreas(currentSeason, self._attachedAnchor.slotType)
         self.__update()
 
     def __removeFromAllAreas(self):
         currentSeason = self.__ctx.currentSeason
-        self.__ctx.removeItemFromAllTankAreas(currentSeason, self._slotID)
+        self.__ctx.removeItemFromAllTankAreas(currentSeason, self._attachedAnchor.slotType)
         self.__update()
 
     def __applyToOtherSeasons(self):
@@ -278,14 +281,14 @@ class CustomizationPropertiesSheet(CustomizationPropertiesSheetMeta):
             return
         if not self._isItemAppliedToAll:
             if self.__ctx.currentTab == C11nTabs.PROJECTION_DECAL:
-                lockedSeasons = self.__ctx.getLockedProjectionDecalSeasons(self._regionID)
+                lockedSeasons = self.__ctx.getLockedProjectionDecalSeasons(self._attachedAnchor.regionIdx)
                 if lockedSeasons:
                     self.__showApplyToOtherSeasonsDialog(lockedSeasons)
                     return
-            self.__ctx.installItemForAllSeasons(self._areaID, self._slotID, self._regionID, self._currentSlotData)
+            self.__ctx.installItemForAllSeasons(self._attachedAnchor.areaId, self._attachedAnchor.slotType, self._attachedAnchor.regionIdx, self._currentSlotData)
             self._isItemAppliedToAll = True
         else:
-            self.__ctx.removeItemForAllSeasons(self._areaID, self._slotID, self._regionID)
+            self.__ctx.removeItemForAllSeasons(self._attachedAnchor.areaId, self._attachedAnchor.slotType, self._attachedAnchor.regionIdx)
             self._isItemAppliedToAll = False
         self.__update()
 
@@ -301,22 +304,25 @@ class CustomizationPropertiesSheet(CustomizationPropertiesSheetMeta):
          'icon': RES_ICONS.MAPS_ICONS_LIBRARY_ICON_ALERT_90X84}, focusedID=DIALOG_BUTTON_ID.CLOSE), self.__installProjectionDecalToAllSeasonsDialogCallback)
 
     def __installProjectionDecalToAllSeasonsDialogCallback(self, confirmed):
+
+        def projectionDecalsFilter(item):
+            return item.itemTypeID == GUI_ITEM_TYPE.PROJECTION_DECAL
+
         if not confirmed:
             return
-        lockedSeasons = self.__ctx.getLockedProjectionDecalSeasons(self._regionID)
-        projectionDecalsFilter = lambda item: item.itemTypeID == GUI_ITEM_TYPE.PROJECTION_DECAL
+        lockedSeasons = self.__ctx.getLockedProjectionDecalSeasons(self._attachedAnchor.regionIdx)
         for season in lockedSeasons:
             outfit = self.__ctx.getModifiedOutfit(season)
             self.__ctx.removeItemsFromOutfit(outfit, projectionDecalsFilter, refresh=False)
 
-        self.__ctx.installItemForAllSeasons(self._areaID, self._slotID, self._regionID, self._currentSlotData)
+        self.__ctx.installItemForAllSeasons(self._attachedAnchor.areaId, self._attachedAnchor.slotType, self._attachedAnchor.regionIdx, self._currentSlotData)
         self._isItemAppliedToAll = True
 
     def __removeElement(self):
-        if self._slotID == GUI_ITEM_TYPE.STYLE:
+        if self._attachedAnchor.slotType == GUI_ITEM_TYPE.STYLE:
             self.__ctx.removeStyle(self._currentStyle.intCD)
         else:
-            slotId = self.__ctx.getSlotIdByAnchorId(C11nId(areaId=self._areaID, slotType=self._slotID, regionIdx=self._regionID))
+            slotId = self.__ctx.getSlotIdByAnchorId(self._attachedAnchor)
             if slotId is not None:
                 self.__ctx.removeItemFromSlot(self.__ctx.currentSeason, slotId)
         return
@@ -326,8 +332,8 @@ class CustomizationPropertiesSheet(CustomizationPropertiesSheetMeta):
         if self.__ctx.currentTab in (C11nTabs.PAINT, C11nTabs.CAMOUFLAGE):
             self._isItemAppliedToAll = True
             for areaId in Area.TANK_PARTS:
-                regionsIndexes = getAppliedRegionsForCurrentHangarVehicle(areaId, self._slotID)
-                multiSlot = self.__ctx.currentOutfit.getContainer(areaId).slotFor(self._slotID)
+                regionsIndexes = getAppliedRegionsForCurrentHangarVehicle(areaId, self._attachedAnchor.slotType)
+                multiSlot = self.__ctx.currentOutfit.getContainer(areaId).slotFor(self._attachedAnchor.slotType)
                 for regionIdx in regionsIndexes:
                     slotData = multiSlot.getSlotData(regionIdx)
                     df = self._currentSlotData.weakDiff(slotData)
@@ -345,14 +351,14 @@ class CustomizationPropertiesSheet(CustomizationPropertiesSheetMeta):
          C11nTabs.PROJECTION_DECAL):
             self._isItemAppliedToAll = True
             firstSeason = SeasonType.COMMON_SEASONS[0]
-            firstSlotId = self.__ctx.getSlotIdByAnchorId(self.attachedSlot, firstSeason)
+            firstSlotId = self.__ctx.getSlotIdByAnchorId(self._attachedAnchor, firstSeason)
             if firstSlotId is None:
                 self._isItemAppliedToAll = False
                 return
             fistSlotData = self.__ctx.getModifiedOutfit(firstSeason).getContainer(firstSlotId.areaId).slotFor(firstSlotId.slotType).getSlotData(firstSlotId.regionIdx)
             if fistSlotData.item is not None:
                 for season in SeasonType.COMMON_SEASONS[1:]:
-                    slotId = self.__ctx.getSlotIdByAnchorId(self.attachedSlot, season)
+                    slotId = self.__ctx.getSlotIdByAnchorId(self._attachedAnchor, season)
                     if slotId is None:
                         self._isItemAppliedToAll = False
                         break
@@ -367,11 +373,11 @@ class CustomizationPropertiesSheet(CustomizationPropertiesSheetMeta):
         return
 
     def __makeVO(self):
-        currentElement = self._currentStyle if self._slotID == GUI_ITEM_TYPE.STYLE else self._currentItem
+        currentElement = self._currentStyle if self._attachedAnchor.slotType == GUI_ITEM_TYPE.STYLE else self._currentItem
         isPersonalNumberEdit = self.__ctx.numberEditModeActive
         vo = {'renderersData': self.__makeRenderersVOs() if currentElement and not isPersonalNumberEdit else [],
-         'isProjectionEnable': self._slotID == GUI_ITEM_TYPE.PROJECTION_DECAL,
-         'isBigRadius': self._slotID in (GUI_ITEM_TYPE.INSCRIPTION, GUI_ITEM_TYPE.PROJECTION_DECAL, GUI_ITEM_TYPE.EMBLEM),
+         'isProjectionEnable': self._attachedAnchor.slotType == GUI_ITEM_TYPE.PROJECTION_DECAL,
+         'isBigRadius': self._attachedAnchor.slotType in (GUI_ITEM_TYPE.INSCRIPTION, GUI_ITEM_TYPE.PROJECTION_DECAL, GUI_ITEM_TYPE.EMBLEM),
          'showSwitchers': self._showSwitchers and not isPersonalNumberEdit,
          'isNarrowSlot': self._isNarrowSlot}
         return vo
@@ -384,21 +390,21 @@ class CustomizationPropertiesSheet(CustomizationPropertiesSheetMeta):
 
     def __makeRenderersVOs(self):
         renderers = []
-        if self._slotID == GUI_ITEM_TYPE.PAINT:
+        if self._attachedAnchor.slotType == GUI_ITEM_TYPE.PAINT:
             renderers.append(self.__makeSetOnOtherTankPartsRendererVO())
-        elif self._slotID == GUI_ITEM_TYPE.CAMOUFLAGE:
+        elif self._attachedAnchor.slotType == GUI_ITEM_TYPE.CAMOUFLAGE:
             renderers.append(self.__makeCamoColorRendererVO())
             renderers.append(self.__makeScaleRendererVO())
             renderers.append(self.__makeSetOnOtherTankPartsRendererVO())
-        elif self._slotID in (GUI_ITEM_TYPE.EMBLEM, GUI_ITEM_TYPE.INSCRIPTION, GUI_ITEM_TYPE.MODIFICATION):
+        elif self._attachedAnchor.slotType in (GUI_ITEM_TYPE.EMBLEM, GUI_ITEM_TYPE.INSCRIPTION, GUI_ITEM_TYPE.MODIFICATION):
             if self._currentItem.itemTypeID == GUI_ITEM_TYPE.PERSONAL_NUMBER:
                 renderers.append(self.__makeEditInscriptionRendererVO())
             renderers.append(self.__makeSetOnOtherSeasonsRendererVO())
-        elif self._slotID == GUI_ITEM_TYPE.STYLE:
+        elif self._attachedAnchor.slotType == GUI_ITEM_TYPE.STYLE:
             isExtentionEnabled = self._currentStyle and self._currentStyle.isRentable
             if isExtentionEnabled:
                 renderers.append(self.__makeExtensionRendererVO())
-        elif self._slotID == GUI_ITEM_TYPE.PROJECTION_DECAL:
+        elif self._attachedAnchor.slotType == GUI_ITEM_TYPE.PROJECTION_DECAL:
             renderers.append(self.__makeMirorRendererVO())
             renderers.append(self.__makeScaleRendererVO())
             renderers.append(self.__makeMoveRendererVO())
@@ -413,7 +419,7 @@ class CustomizationPropertiesSheet(CustomizationPropertiesSheetMeta):
             if self.__ctx.currentTab in (C11nTabs.PAINT, C11nTabs.CAMOUFLAGE):
                 appliedIems = tuple((it for it in appliedIems if it.group == self.__ctx.currentSeason))
             outfit = self.__ctx.originalOutfit
-            slotData = outfit.getContainer(self._areaID).slotFor(self._slotID).getSlotData(self._regionID)
+            slotData = outfit.getContainer(self._attachedAnchor.areaId).slotFor(self._attachedAnchor.slotType).getSlotData(self._attachedAnchor.regionIdx)
             isCurrentlyApplied = slotData.item == self._currentItem
             itemCache = self.itemsCache.items.getItemByCD(self._currentItem.intCD)
             inventoryCount = itemCache.inventoryCount
@@ -435,7 +441,7 @@ class CustomizationPropertiesSheet(CustomizationPropertiesSheetMeta):
             hoverIcon = RES_ICONS.MAPS_ICONS_CUSTOMIZATION_PROPERTY_SHEET_REMOVE_ICON_DEL_TANK_HOVER
             actionBtnLabel = VEHICLE_CUSTOMIZATION.PROPERTYSHEET_ACTIONBTN_CANCEL
         else:
-            enabled = self.__ctx.isPossibleToInstallToAllTankAreas(self.__ctx.currentSeason, self._slotID, self._currentSlotData)
+            enabled = self.__ctx.isPossibleToInstallToAllTankAreas(self.__ctx.currentSeason, self._attachedAnchor.slotType, self._currentSlotData)
         return {'iconSrc': icon,
          'iconHoverSrc': hoverIcon,
          'iconDisableSrc': RES_ICONS.MAPS_ICONS_CUSTOMIZATION_PROPERTY_SHEET_DISABLE_ICON_FULL_TANK_DISABLE,
@@ -447,7 +453,7 @@ class CustomizationPropertiesSheet(CustomizationPropertiesSheetMeta):
          'enabled': enabled}
 
     def __makeMirorRendererVO(self):
-        if self._slotID not in (GUI_ITEM_TYPE.PROJECTION_DECAL,):
+        if self._attachedAnchor.slotType not in (GUI_ITEM_TYPE.PROJECTION_DECAL,):
             return {'iconSrc': '',
              'iconHoverSrc': '',
              'iconDisableSrc': '',
@@ -475,43 +481,44 @@ class CustomizationPropertiesSheet(CustomizationPropertiesSheetMeta):
     def __makeMoveRendererVO(self):
         anchor = g_currentVehicle.item.getAnchorById(self._currentComponent.slotId)
         parent = anchor if anchor.isParent else g_currentVehicle.item.getAnchorById(anchor.parentSlotId)
-        availableAnchors = parent.getChilds(self._currentItem.formfactor)
-        currentIdx = availableAnchors.index(anchor.slotId)
-        actionBtnLabel = _ms(VEHICLE_CUSTOMIZATION.PROPERTYSHEET_ACTIONBTN_MOVE, current=str(currentIdx + 1), total=str(len(availableAnchors)))
+        formfactor = self._currentItem.formfactor
+        availableAnchorsIds = [ anch.slotId for anch in parent.getChilds(formfactor, g_currentVehicle.item) ]
+        currentIdx = availableAnchorsIds.index(anchor.slotId)
+        actionBtnLabel = _ms(VEHICLE_CUSTOMIZATION.PROPERTYSHEET_ACTIONBTN_MOVE, current=str(currentIdx + 1), total=str(len(availableAnchorsIds)))
         return {'actionBtnLabel': actionBtnLabel,
          'actionType': CUSTOMIZATION_ALIASES.CUSTOMIZATION_SHEET_ACTION_MOVE,
          'rendererLnk': CUSTOMIZATION_ALIASES.CUSTOMIZATION_SHEET_SWITCH_RENDERER_UI,
          'disableTooltip': VEHICLE_CUSTOMIZATION.CUSTOMIZATION_PROPERTYSHEET_DISABLED_MOVE,
          'buttonMode': True,
-         'enabled': len(availableAnchors) > 1}
+         'enabled': len(availableAnchorsIds) > 1}
 
     def __makeRemoveRendererVO(self):
         iconSrc = RES_ICONS.MAPS_ICONS_CUSTOMIZATION_PROPERTY_SHEET_REMOVE_STYLE_X
         hoverIcon = RES_ICONS.MAPS_ICONS_CUSTOMIZATION_PROPERTY_SHEET_REMOVE_STYLE_X_HOVER
-        if self._slotID == GUI_ITEM_TYPE.MODIFICATION:
+        if self._attachedAnchor.slotType == GUI_ITEM_TYPE.MODIFICATION:
             actionBtnLabel = VEHICLE_CUSTOMIZATION.PROPERTYSHEET_ACTIONBTN_REMOVE_TANK
             iconSrc = RES_ICONS.MAPS_ICONS_CUSTOMIZATION_PROPERTY_SHEET_REMOVE_ICON_DEL_TANK
             hoverIcon = RES_ICONS.MAPS_ICONS_CUSTOMIZATION_PROPERTY_SHEET_REMOVE_ICON_DEL_TANK_HOVER
-        elif self._slotID == GUI_ITEM_TYPE.EMBLEM:
+        elif self._attachedAnchor.slotType == GUI_ITEM_TYPE.EMBLEM:
             actionBtnLabel = VEHICLE_CUSTOMIZATION.PROPERTYSHEET_ACTIONBTN_REMOVE_EMBLEM
             iconSrc = RES_ICONS.MAPS_ICONS_CUSTOMIZATION_PROPERTY_SHEET_REMOVE_EMBLEM_X
             hoverIcon = RES_ICONS.MAPS_ICONS_CUSTOMIZATION_PROPERTY_SHEET_REMOVE_EMBLEM_X_HOVER
-        elif self._slotID == GUI_ITEM_TYPE.INSCRIPTION:
+        elif self._attachedAnchor.slotType == GUI_ITEM_TYPE.INSCRIPTION:
             actionBtnLabel = VEHICLE_CUSTOMIZATION.PROPERTYSHEET_ACTIONBTN_REMOVE_INSCRIPTION
             iconSrc = RES_ICONS.MAPS_ICONS_CUSTOMIZATION_PROPERTY_SHEET_REMOVE_TYPE_X
             hoverIcon = RES_ICONS.MAPS_ICONS_CUSTOMIZATION_PROPERTY_SHEET_REMOVE_TYPE_X_HOVER
-        elif self._slotID == GUI_ITEM_TYPE.PROJECTION_DECAL:
+        elif self._attachedAnchor.slotType == GUI_ITEM_TYPE.PROJECTION_DECAL:
             actionBtnLabel = VEHICLE_CUSTOMIZATION.PROPERTYSHEET_ACTIONBTN_REMOVE_PROJECTIONDECAL
             iconSrc = RES_ICONS.MAPS_ICONS_CUSTOMIZATION_PROPERTY_SHEET_REMOVE_ICON_DECAL_X_HOVER
             hoverIcon = RES_ICONS.MAPS_ICONS_CUSTOMIZATION_PROPERTY_SHEET_REMOVE_ICON_DECAL_X_NORMAL
-        elif self._slotID == GUI_ITEM_TYPE.STYLE:
+        elif self._attachedAnchor.slotType == GUI_ITEM_TYPE.STYLE:
             actionBtnLabel = VEHICLE_CUSTOMIZATION.PROPERTYSHEET_ACTIONBTN_REMOVESTYLE
         else:
-            actionBtnLabel = VEHICLE_CUSTOMIZATION.getSheetBtnRemoveText(getCustomizationTankPartName(self._areaID, self._regionID))
-        if self._slotID == GUI_ITEM_TYPE.CAMOUFLAGE:
+            actionBtnLabel = VEHICLE_CUSTOMIZATION.getSheetBtnRemoveText(getCustomizationTankPartName(self._attachedAnchor.areaId, self._attachedAnchor.regionIdx))
+        if self._attachedAnchor.slotType == GUI_ITEM_TYPE.CAMOUFLAGE:
             iconSrc = RES_ICONS.MAPS_ICONS_CUSTOMIZATION_PROPERTY_SHEET_REMOVE_CAMO_X
             hoverIcon = RES_ICONS.MAPS_ICONS_CUSTOMIZATION_PROPERTY_SHEET_REMOVE_CAMO_X_HOVER
-        elif self._slotID == GUI_ITEM_TYPE.PAINT:
+        elif self._attachedAnchor.slotType == GUI_ITEM_TYPE.PAINT:
             iconSrc = RES_ICONS.MAPS_ICONS_CUSTOMIZATION_PROPERTY_SHEET_REMOVE_COLORS_X
             hoverIcon = RES_ICONS.MAPS_ICONS_CUSTOMIZATION_PROPERTY_SHEET_REMOVE_COLORS_X_HOVER
         return {'iconSrc': iconSrc,
@@ -583,9 +590,9 @@ class CustomizationPropertiesSheet(CustomizationPropertiesSheetMeta):
 
     def __makeScaleRendererVO(self):
         btnsBlockVO = []
-        if self._slotID == GUI_ITEM_TYPE.CAMOUFLAGE:
+        if self._attachedAnchor.slotType == GUI_ITEM_TYPE.CAMOUFLAGE:
             selected = self._currentComponent.patternSize
-        elif self._slotID == GUI_ITEM_TYPE.PROJECTION_DECAL:
+        elif self._attachedAnchor.slotType == GUI_ITEM_TYPE.PROJECTION_DECAL:
             selected = self._currentComponent.scaleFactorId - 1
         else:
             return {'iconSrc': '',
@@ -622,16 +629,16 @@ class CustomizationPropertiesSheet(CustomizationPropertiesSheetMeta):
             icon = RES_ICONS.MAPS_ICONS_CUSTOMIZATION_PROPERTY_SHEET_REMOVE_ICON_DEL_ALL_SEASON
             hoverIcon = RES_ICONS.MAPS_ICONS_CUSTOMIZATION_PROPERTY_SHEET_REMOVE_ICON_SEASON_X_HOVER
         else:
-            enabled = self.__ctx.isPossibleToInstallItemForAllSeasons(self._areaID, self._slotID, self._regionID, self._currentSlotData)
-        if self._slotID == GUI_ITEM_TYPE.MODIFICATION:
+            enabled = self.__ctx.isPossibleToInstallItemForAllSeasons(self._attachedAnchor.areaId, self._attachedAnchor.slotType, self._attachedAnchor.regionIdx, self._currentSlotData)
+        if self._attachedAnchor.slotType == GUI_ITEM_TYPE.MODIFICATION:
             disableTooltip = VEHICLE_CUSTOMIZATION.CUSTOMIZATION_PROPERTYSHEET_DISABLED_SEASONEFFECT
-        elif self._slotID == GUI_ITEM_TYPE.EMBLEM:
+        elif self._attachedAnchor.slotType == GUI_ITEM_TYPE.EMBLEM:
             disableTooltip = VEHICLE_CUSTOMIZATION.CUSTOMIZATION_PROPERTYSHEET_DISABLED_SEASONEMBLEM
-        elif self._slotID == GUI_ITEM_TYPE.INSCRIPTION:
+        elif self._attachedAnchor.slotType == GUI_ITEM_TYPE.INSCRIPTION:
             disableTooltip = VEHICLE_CUSTOMIZATION.CUSTOMIZATION_PROPERTYSHEET_DISABLED_SEASONINSCRIPTION
-        elif self._slotID == GUI_ITEM_TYPE.PROJECTION_DECAL:
+        elif self._attachedAnchor.slotType == GUI_ITEM_TYPE.PROJECTION_DECAL:
             disableTooltip = VEHICLE_CUSTOMIZATION.CUSTOMIZATION_PROPERTYSHEET_DISABLED_SEASONDECAL
-            lockedSeasons = self.__ctx.getLockedProjectionDecalSeasons(self._regionID)
+            lockedSeasons = self.__ctx.getLockedProjectionDecalSeasons(self._attachedAnchor.regionIdx)
             if lockedSeasons:
                 needNotify = True
                 notifyString = self.__makeProjectionDecalInstallToOtherSeasonsNotifyString(lockedSeasons)

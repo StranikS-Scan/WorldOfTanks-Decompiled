@@ -209,3 +209,12 @@ def getDateFromSeasonID(seasonID):
     year = int(cycleIDStr[:4])
     month = int(cycleIDStr[4:6])
     return (year, month)
+
+
+def getSeasonNumber(config, seasonID):
+    seasons = config.get('seasons', {})
+    if not seasons:
+        return
+    else:
+        seasonData = seasons.get(seasonID, None)
+        return seasonData.get('number', None)

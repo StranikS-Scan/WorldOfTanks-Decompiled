@@ -7,7 +7,7 @@ from gui.Scaleform import getButtonsAssetPath
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.common.filter_contexts import getFilterSetupContexts, FilterSetupContext
 from gui.Scaleform.daapi.view.lobby.hangar.carousels.basic.carousel_data_provider import HangarCarouselDataProvider
-from gui.Scaleform.daapi.view.lobby.store.browser.ingameshop_helpers import isIngameShopEnabled
+from gui.Scaleform.daapi.view.lobby.store.browser.ingameshop_helpers import isIngameShopEnabled, shouldOpenNewStorage
 from gui.Scaleform.daapi.view.meta.TankCarouselMeta import TankCarouselMeta
 from gui.Scaleform.genConsts.STORAGE_CONSTANTS import STORAGE_CONSTANTS
 from gui.Scaleform.genConsts.STORE_CONSTANTS import STORE_CONSTANTS
@@ -45,10 +45,7 @@ class TankCarousel(TankCarouselMeta):
             self.fireEvent(events.LoadViewEvent(VIEW_ALIAS.LOBBY_STORE_OLD, ctx=ctx), EVENT_BUS_SCOPE.LOBBY)
 
     def restoreTank(self):
-        serverSettings = self.lobbyContext.getServerSettings()
-        storageEnabled = serverSettings.isIngameStorageEnabled()
-        shopEnabled = isIngameShopEnabled()
-        if storageEnabled and shopEnabled:
+        if shouldOpenNewStorage():
             showStorage(STORAGE_CONSTANTS.IN_HANGAR, STORAGE_CONSTANTS.VEHICLES_TAB_RESTORE)
         else:
             ctx = {'tabId': STORE_TYPES.SHOP,

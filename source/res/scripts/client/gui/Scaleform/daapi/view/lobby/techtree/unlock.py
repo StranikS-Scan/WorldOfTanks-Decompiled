@@ -3,9 +3,11 @@
 from collections import namedtuple
 import BigWorld
 from debug_utils import LOG_ERROR, LOG_DEBUG
+from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform.daapi.view import dialogs
 from gui.Scaleform.daapi.view.lobby.techtree.settings import RequestState, UnlockStats
 from gui.Scaleform.daapi.view.lobby.techtree.techtree_dp import g_techTreeDP
+from gui.shared import event_dispatcher
 from gui.shared.formatters import text_styles
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.gui_items.processors import Processor, plugins as proc_plugs
@@ -16,7 +18,7 @@ def makeCostCtx(vehXP, xpCost, xpDiscount):
     if freeXP < 0:
         freeXP = 0
     if xpCost < vehXP:
-        vehXP = 0
+        vehXP = xpCost
     return {'xpCost': xpCost,
      'vehXP': vehXP,
      'freeXP': freeXP,
@@ -29,12 +31,14 @@ class UnlockItemConfirmator(proc_plugs.DialogAbstractConfirmator):
         super(UnlockItemConfirmator, self).__init__(activeHandler, isEnabled)
         self.__unlockCtx = unlockCtx
         self.__costCtx = costCtx
+        self.__itemType = None
+        g_clientUpdateManager.addCallbacks({'serverSettings.blueprints_config.isEnabled': self.__onBlueprintsModeChanged,
+         'serverSettings.blueprints_config.useBlueprintsForUnlock': self.__onBlueprintsModeChanged})
+        return
 
     def __del__(self):
+        self.__destroy()
         super(UnlockItemConfirmator, self).__del__()
-        self.__unlockCtx = None
-        self.__costCtx = None
-        return
 
     def _makeMeta(self):
         item = self.itemsCache.items.getItemByCD(self.__unlockCtx.itemCD)
@@ -44,11 +48,24 @@ class UnlockItemConfirmator(proc_plugs.DialogAbstractConfirmator):
          'freeXP': text_styles.expText(freeXp),
          'typeString': item.userType,
          'userString': item.userName}
-        if item.itemTypeID == GUI_ITEM_TYPE.VEHICLE:
+        self.__itemType = item.itemTypeID
+        if self.__itemType == GUI_ITEM_TYPE.VEHICLE:
             key = 'confirmUnlockVehicle'
         else:
             key = 'confirmUnlockItem'
         return dialogs.I18nConfirmDialogMeta('confirmUnlock', meta=dialogs.HtmlMessageLocalDialogMeta('html_templates:lobby/dialogs', key, ctx=ctx))
+
+    def __destroy(self):
+        self.__unlockCtx = None
+        self.__costCtx = None
+        self.__itemType = None
+        g_clientUpdateManager.removeObjectCallbacks(self)
+        return
+
+    def __onBlueprintsModeChanged(self, _):
+        if self.__itemType == GUI_ITEM_TYPE.VEHICLE:
+            self.__destroy()
+            event_dispatcher.showHangar()
 
 
 class UnlockItemValidator(proc_plugs.SyncValidator):

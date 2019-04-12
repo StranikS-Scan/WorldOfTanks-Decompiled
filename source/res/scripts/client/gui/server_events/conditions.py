@@ -3,7 +3,6 @@
 import operator
 import weakref
 from abc import ABCMeta, abstractmethod
-import account_helpers
 import constants
 from constants import ATTACK_REASON, ATTACK_REASONS
 from debug_utils import LOG_WARNING
@@ -55,7 +54,7 @@ class GROUP_TYPE(CONST_CONTAINER):
     AND = 'and'
 
 
-_SORT_ORDER = ('igrType', 'premiumAccount', 'inClan', 'GR', 'accountDossier', 'vehiclesUnlocked', 'vehiclesOwned', 'token', 'hasReceivedMultipliedXP', 'vehicleDossier', 'vehicleDescr', 'bonusTypes', 'isSquad', 'mapCamouflageKind', 'geometryNames', 'win', 'isAlive', 'achievements', 'results', 'unitResults', 'vehicleKills', 'vehicleDamage', 'vehicleStun', 'clanKills', 'multiStunEventcumulative', 'vehicleKillsCumulative', 'vehicleDamageCumulative', 'vehicleStunCumulative')
+_SORT_ORDER = ('igrType', 'premiumPlusAccount', 'premiumAccount', 'inClan', 'GR', 'accountDossier', 'vehiclesUnlocked', 'vehiclesOwned', 'token', 'hasReceivedMultipliedXP', 'vehicleDossier', 'vehicleDescr', 'bonusTypes', 'isSquad', 'mapCamouflageKind', 'geometryNames', 'win', 'isAlive', 'achievements', 'results', 'unitResults', 'vehicleKills', 'vehicleDamage', 'vehicleStun', 'clanKills', 'multiStunEventcumulative', 'vehicleKillsCumulative', 'vehicleDamageCumulative', 'vehicleStunCumulative')
 _SORT_ORDER_INDICES = dict(((name, idx) for idx, name in enumerate(_SORT_ORDER)))
 
 def _handleRelation(relation, source, toCompare):
@@ -485,11 +484,23 @@ class PremiumAccount(_Requirement):
         self._needValue = not self._needValue
 
     def _isAvailable(self):
-        if self._needValue is not None:
-            isPremium = account_helpers.isPremiumAccount(self.itemsCache.items.stats.attributes)
-            return isPremium == self._needValue
-        else:
-            return True
+        return self.itemsCache.items.stats.isPremium == self._needValue if self._needValue is not None else True
+
+
+class PremiumPlusAccount(_Requirement):
+
+    def __init__(self, path, data):
+        super(PremiumPlusAccount, self).__init__('premiumPlusAccount', dict(data), path)
+        self._needValue = self._data.get('value')
+
+    def isPremiumNeeded(self):
+        return self._needValue
+
+    def negate(self):
+        self._needValue = not self._needValue
+
+    def _isAvailable(self):
+        return self.itemsCache.items.stats.isActivePremium(constants.PREMIUM_TYPE.PLUS) == self._needValue if self._needValue is not None else True
 
 
 class InClan(_Requirement):

@@ -443,7 +443,7 @@ class VehicleMarkerPlugin(MarkerPlugin, IArenaVehiclesController):
             elif eventID == _EVENT_ID.VEHICLE_HEALTH:
                 self.__updateVehicleHealth(handle, *value)
             elif eventID == _EVENT_ID.VEHICLE_STUN:
-                self.__updateStunMarker(vehicleID, handle, value)
+                self.__updateStunMarker(vehicleID, handle, value.duration)
             elif eventID == _EVENT_ID.VEHICLE_INSPIRE:
                 self.__updateInspireMarker(vehicleID, handle, **value)
             elif eventID == _EVENT_ID.VEHICLE_PASSIVE_ENGINEERING:

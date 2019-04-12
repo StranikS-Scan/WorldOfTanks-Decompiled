@@ -76,7 +76,7 @@
     <hangarShadowTexture>	vehicles/german/G11_Bison_I/Bison_I_HangarShadowMap.dds	</hangarShadowTexture>
     <customization>
       <customizableVehicleAreas>
-        <paint></paint>
+        <paint>	HULL	</paint>
         <camouflage>	HULL	</camouflage>
       </customizableVehicleAreas>
     </customization>
@@ -104,9 +104,9 @@
       <slot>
         <slotType>	inscription	</slotType>
         <slotId>	36	</slotId>
-        <rayStart>	1.30458 1.18051 0.614519	</rayStart>
-        <rayEnd>	0.904588 1.18051 0.614519	</rayEnd>
-        <rayUp>	0.000000 0.961262 -0.275637	</rayUp>
+        <rayStart>	1.21035 1.17123 0.571722	</rayStart>
+        <rayEnd>	0.810358 1.17114 0.57191	</rayEnd>
+        <rayUp>	0.000000 1 0.000000	</rayUp>
         <size>	0.78	</size>
         <hideIfDamaged>	true	</hideIfDamaged>
         <isUVProportional>	true	</isUVProportional>
@@ -114,8 +114,14 @@
       <slot>
         <slotType>	camouflage	</slotType>
         <slotId>	3	</slotId>
-        <anchorPosition>	-0.00830105 0.789589 -1.30068	</anchorPosition>
-        <anchorDirection>	0.000000 0.768535 -0.639808	</anchorDirection>
+        <anchorPosition>	0.000000 0.898245 0.71927	</anchorPosition>
+        <anchorDirection>	0.000000 0.780583 0.625052	</anchorDirection>
+      </slot>
+      <slot>
+        <slotType>	paint	</slotType>
+        <slotId>	2	</slotId>
+        <anchorPosition>	0.000000 0.898245 0.71927	</anchorPosition>
+        <anchorDirection>	0.000000 0.780583 0.625052	</anchorDirection>
       </slot>
     </customizationSlots>
   </hull>
@@ -960,7 +966,7 @@
       </physicalTracks>
       <customization>
         <customizableVehicleAreas>
-          <paint></paint>
+          <paint>	CHASSIS	</paint>
           <camouflage></camouflage>
         </customizableVehicleAreas>
       </customization>
@@ -968,8 +974,14 @@
         <slot>
           <slotType>	style	</slotType>
           <slotId>	257	</slotId>
-          <anchorPosition>	-0.000000 2.70622 0.277056	</anchorPosition>
-          <anchorDirection>	0.000000 1 0.000000	</anchorDirection>
+          <anchorPosition>	0.000037 2.70622 0.276982	</anchorPosition>
+          <anchorDirection>	-0.000000 1 -0.000000	</anchorDirection>
+        </slot>
+        <slot>
+          <slotType>	paint	</slotType>
+          <slotId>	256	</slotId>
+          <anchorPosition>	-1.02276 0.409156 -0.034385	</anchorPosition>
+          <anchorDirection>	-0.928008 0.371251 -0.0311994	</anchorDirection>
         </slot>
       </customizationSlots>
     </Sturmpanzerketten_I>
@@ -1809,7 +1821,7 @@
       </physicalTracks>
       <customization>
         <customizableVehicleAreas>
-          <paint></paint>
+          <paint>	CHASSIS	</paint>
           <camouflage></camouflage>
         </customizableVehicleAreas>
       </customization>
@@ -1817,8 +1829,14 @@
         <slot>
           <slotType>	style	</slotType>
           <slotId>	257	</slotId>
-          <anchorPosition>	0.000147477 2.70582 0.226785	</anchorPosition>
-          <anchorDirection>	-0.000000 1 0.000000	</anchorDirection>
+          <anchorPosition>	-0.000000 2.20406 -0.80966	</anchorPosition>
+          <anchorDirection>	0.000000 1 0.000000	</anchorDirection>
+        </slot>
+        <slot>
+          <slotType>	paint	</slotType>
+          <slotId>	256	</slotId>
+          <anchorPosition>	-1.02276 0.409156 -0.034385	</anchorPosition>
+          <anchorDirection>	-0.928008 0.371251 -0.0311994	</anchorDirection>
         </slot>
       </customizationSlots>
     </Sturmpanzerketten_II>
@@ -1886,7 +1904,7 @@
           </hitTester>
           <customization>
             <customizableVehicleAreas>
-              <paint></paint>
+              <paint>	GUN GUN_2	</paint>
               <camouflage>	GUN	</camouflage>
             </customizableVehicleAreas>
           </customization>
@@ -1894,9 +1912,23 @@
             <slot>
               <slotType>	camouflage	</slotType>
               <slotId>	770	</slotId>
-              <anchorPosition>	-0.000000 -0.0048213 1.01343	</anchorPosition>
+              <anchorPosition>	-0.000000 -0.00482153 0.910094	</anchorPosition>
               <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
               <applyTo>	4096	</applyTo>
+            </slot>
+            <slot>
+              <slotType>	paint	</slotType>
+              <slotId>	768	</slotId>
+              <anchorPosition>	-0.000000 -0.00482153 0.910094	</anchorPosition>
+              <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+            <slot>
+              <slotType>	paint	</slotType>
+              <slotId>	769	</slotId>
+              <anchorPosition>	0.000074 -0.224755 1.59231	</anchorPosition>
+              <anchorDirection>	-0.000000 0.70719 0.707023	</anchorDirection>
+              <applyTo>	16384	</applyTo>
             </slot>
           </customizationSlots>
           <camouflage>

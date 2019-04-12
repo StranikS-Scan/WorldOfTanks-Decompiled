@@ -3,9 +3,9 @@
 import BigWorld
 import SoundGroups
 from vehicle_systems.tankStructure import ColliderTypes
-from svarog_script.py_component_system import ComponentSystem, ComponentDescriptor
+from svarog_script.script_game_object import ScriptGameObject, ComponentDescriptor
 
-class ClientSelectableObject(BigWorld.Entity, ComponentSystem):
+class ClientSelectableObject(BigWorld.Entity, ScriptGameObject):
     collisions = ComponentDescriptor()
 
     @property
@@ -14,7 +14,7 @@ class ClientSelectableObject(BigWorld.Entity, ComponentSystem):
 
     def __init__(self):
         BigWorld.Entity.__init__(self)
-        ComponentSystem.__init__(self)
+        ScriptGameObject.__init__(self, self.spaceID)
         self.__enabled = True
         self.__edged = False
         self.__clickSound = None
@@ -39,11 +39,11 @@ class ClientSelectableObject(BigWorld.Entity, ComponentSystem):
             self.collisions = prereqs['collisionAssembler']
             collisionData = ((0, self.model.matrix),)
             self.collisions.connect(self.id, ColliderTypes.DYNAMIC_COLLIDER, collisionData)
-        ComponentSystem.activate(self)
+        ScriptGameObject.activate(self)
 
     def onLeaveWorld(self):
-        ComponentSystem.deactivate(self)
-        ComponentSystem.destroy(self)
+        ScriptGameObject.deactivate(self)
+        ScriptGameObject.destroy(self)
         if self.__clickSound is not None:
             if self.__clickSound.isPlaying:
                 self.__clickSound.stop()

@@ -12,7 +12,11 @@ class GuiDirReader(object):
         ds = ResMgr.openSection(GuiDirReader.SCALEFORM_STARTUP_VIDEO_PATH)
         movieFiles = []
         for filename in ds.keys():
-            basename, extension = filename.split('.')
+            try:
+                basename, extension = filename.split('.')
+            except ValueError:
+                continue
+
             if extension == GuiDirReader.VIDEO_EXTENSION and basename[0:1] != '_':
                 movieFiles.append(GuiDirReader.SCALEFORM_STARTUP_VIDEO_MASK % filename)
 

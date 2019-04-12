@@ -301,6 +301,10 @@ class ArenaDataProvider(IArenaDataProvider):
     def getEnemiesVehiclesNumber(self):
         return vos_collections.EnemyItemsCollection().count(self)
 
+    def isAlly(self, vehicleID):
+        vehInfo = self.getVehicleInfo(vehicleID)
+        return self.isAllyTeam(vehInfo.team)
+
     def __findSquads(self, exclude=None):
         result = []
         prebattleID = self.getVehicleInfo().prebattleID

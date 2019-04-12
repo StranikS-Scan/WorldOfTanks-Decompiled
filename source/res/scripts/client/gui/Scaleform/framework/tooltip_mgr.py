@@ -4,13 +4,18 @@ import logging
 import Keys
 from gui.Scaleform.framework.entities.abstract.ToolTipMgrMeta import ToolTipMgrMeta
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
+from gui.impl.pub.tooltip_window import ToolTipWindow
 from gui.shared import events
 from gui.shared.tooltips import builders
-from gui.app_loader import g_appLoader
 from gui import InputHandler
+from helpers import dependency
+from skeletons.gui.app_loader import IAppLoader
+from skeletons.gui.impl import IGuiLoader
 _logger = logging.getLogger(__name__)
 
 class ToolTip(ToolTipMgrMeta):
+    appLoader = dependency.descriptor(IAppLoader)
+    gui = dependency.descriptor(IGuiLoader)
 
     def __init__(self, settings, advComplexSettings, *noTooltipSpaceIDs):
         super(ToolTip, self).__init__()
@@ -27,6 +32,7 @@ class ToolTip(ToolTipMgrMeta):
         self.__tooltipID = None
         self.__args = None
         self.__stateType = None
+        self.__tooltipWindowId = 0
         return
 
     def show(self, data, linkage):
@@ -72,6 +78,22 @@ class ToolTip(ToolTipMgrMeta):
                     self._dynamic[tooltipType] = data
             return
 
+    def onCreateWulfTooltip(self, tooltipType, args, x, y):
+        if not self._isAllowedTypedTooltip:
+            return
+        else:
+            builder = self._builders.getBuilder(tooltipType)
+            if builder is not None:
+                data = builder.build(self, None, self.__isAdvancedKeyPressed, *args)
+            else:
+                _logger.warning('Tooltip can not be displayed: type "%s" is not found', tooltipType)
+                return
+            window = ToolTipWindow(data.getDisplayableData(), None)
+            window.load()
+            window.move(x, y)
+            self.__tooltipWindowId = window.uniqueID
+            return
+
     def onCreateComplexTooltip(self, tooltipID, stateType):
         if self._areTooltipsDisabled:
             return
@@ -83,18 +105,19 @@ class ToolTip(ToolTipMgrMeta):
             self._dynamic[tooltipId].changeVisibility(False)
         self.__tooltipID = None
         self.__fastRedraw = False
+        self.__destroyTooltipWindow()
         return
 
     def _populate(self):
         super(ToolTip, self)._populate()
-        g_appLoader.onGUISpaceEntered += self.__onGUISpaceEntered
+        self.appLoader.onGUISpaceEntered += self.__onGUISpaceEntered
         self.addListener(events.AppLifeCycleEvent.CREATING, self.__onAppCreating)
         InputHandler.g_instance.onKeyDown += self.handleKeyEvent
         InputHandler.g_instance.onKeyUp += self.handleKeyEvent
 
     def _dispose(self):
         self._builders.clear()
-        g_appLoader.onGUISpaceEntered -= self.__onGUISpaceEntered
+        self.appLoader.onGUISpaceEntered -= self.__onGUISpaceEntered
         self.removeListener(events.AppLifeCycleEvent.CREATING, self.__onAppCreating)
         while self._dynamic:
             _, data = self._dynamic.popitem()
@@ -102,6 +125,7 @@ class ToolTip(ToolTipMgrMeta):
 
         InputHandler.g_instance.onKeyDown -= self.handleKeyEvent
         InputHandler.g_instance.onKeyUp -= self.handleKeyEvent
+        self.__destroyTooltipWindow()
         super(ToolTip, self)._dispose()
 
     def __onGUISpaceEntered(self, spaceID):
@@ -120,3 +144,11 @@ class ToolTip(ToolTipMgrMeta):
         self.__tooltipID = tooltipID
         self.__args = args
         self.__stateType = stateType
+
+    def __destroyTooltipWindow(self):
+        if self.__tooltipWindowId:
+            window = self.gui.windowsManager.getWindow(self.__tooltipWindowId)
+            if window is not None:
+                window.destroy()
+            self.__tooltipWindowId = 0
+        return

@@ -2,7 +2,7 @@
 # Embedded file name: scripts/client/gui/marathon/marathon_constants.py
 from collections import namedtuple
 from shared_utils import CONST_CONTAINER
-MarathonData = namedtuple('MarathonData', 'prefix tokenPrefix url label tabTooltip tabTooltipDisabled\n                          vehiclePrefix vehicleID suspend completedTokenPostfix awardTokens questsInChain\n                          minVehicleLevel showInPostBattle tooltipHeaderType showFlagTooltipBottom showFlagIcons\n                          tooltips icons quests')
+MarathonData = namedtuple('MarathonData', 'prefix tokenPrefix url label tabTooltip tabTooltipDisabled\n                          vehiclePrefix vehicleID showRewardVideo suspend completedTokenPostfix awardTokens\n                          questsInChain minVehicleLevel showInPostBattle tooltipHeaderType showFlagTooltipBottom\n                          showFlagIcons tooltips icons quests')
 TooltipsData = namedtuple('TooltipsData', 'header body bodyExtra errorBattleType errorVehType extraStateSteps extraStateDiscount\n                          extraStateCompleted stateStart stateEnd stateProgress daysShort hoursShort')
 IconsData = namedtuple('IconsData', 'tooltipHeader libraryOkIcon mainHangarFlag okIcon timeIcon alertIcon iconFlag saleIcon\n                       mapFlagHeaderIcon')
 QuestsData = namedtuple('QuestsData', 'titleSetProgress autoSetAnnounce autoSetProgress autoSetFinished announceTime timeFinish')

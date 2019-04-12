@@ -307,9 +307,15 @@ class ClientHangarSpace(object):
     def spaceLoading(self):
         return self.__waitCallback is not None
 
-    def getSlotPositions(self):
+    def updateAnchorsParams(self, *args):
         vEntity = self.getVehicleEntity()
-        return vEntity.appearance.getSlotPositions() if vEntity is not None and vEntity.isVehicleLoaded else None
+        if vEntity is not None and vEntity.isVehicleLoaded:
+            vEntity.appearance.updateAnchorsParams(*args)
+        return
+
+    def getAnchorParams(self, slotId, areaId, regionId):
+        vEntity = self.getVehicleEntity()
+        return vEntity.appearance.getAnchorParams(slotId, areaId, regionId) if vEntity is not None and vEntity.isVehicleLoaded else None
 
     def getVehicleEntity(self):
         return BigWorld.entity(self.__vEntityId) if self.__vEntityId else None

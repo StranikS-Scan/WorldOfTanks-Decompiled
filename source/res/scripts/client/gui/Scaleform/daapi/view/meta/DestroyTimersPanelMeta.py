@@ -22,14 +22,14 @@ class DestroyTimersPanelMeta(BaseDAAPIComponent):
     def as_turnOnStackViewS(self, value):
         return self.flashObject.as_turnOnStackView(value) if self._isDAAPIInited() else None
 
-    def as_showSecondaryTimerS(self, secTimerID, totalSeconds, currentTime):
-        return self.flashObject.as_showSecondaryTimer(secTimerID, totalSeconds, currentTime) if self._isDAAPIInited() else None
+    def as_showSecondaryTimerS(self, secTimerID, totalSeconds, currentTime, secondInRow):
+        return self.flashObject.as_showSecondaryTimer(secTimerID, totalSeconds, currentTime, secondInRow) if self._isDAAPIInited() else None
 
     def as_hideSecondaryTimerS(self, secTimerID):
         return self.flashObject.as_hideSecondaryTimer(secTimerID) if self._isDAAPIInited() else None
 
-    def as_setSecondaryTimeSnapshotS(self, secTimerID, totalSeconds, timeLeft):
-        return self.flashObject.as_setSecondaryTimeSnapshot(secTimerID, totalSeconds, timeLeft) if self._isDAAPIInited() else None
+    def as_setSecondaryTimeSnapshotS(self, secTimerID, totalSeconds, currentTime):
+        return self.flashObject.as_setSecondaryTimeSnapshot(secTimerID, totalSeconds, currentTime) if self._isDAAPIInited() else None
 
     def as_setSecondaryTimerTextS(self, secTimerID, text):
         return self.flashObject.as_setSecondaryTimerText(secTimerID, text) if self._isDAAPIInited() else None

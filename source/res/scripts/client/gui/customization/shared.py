@@ -6,13 +6,15 @@ from itertools import product
 import logging
 import Math
 from gui.shared.gui_items import GUI_ITEM_TYPE, GUI_ITEM_TYPE_NAMES
-from items.components.c11n_constants import CustomizationType, C11N_MASK_REGION, MAX_PROJECTION_DECALS_PER_AREA, MAX_USERS_PROJECTION_DECALS, ProjectionDecalPositionTags, SeasonType, ApplyArea, C11N_GUN_APPLY_REGIONS
+from items.components.c11n_constants import CustomizationType, C11N_MASK_REGION, MAX_PROJECTION_DECALS_PER_AREA, MAX_USERS_PROJECTION_DECALS, ProjectionDecalPositionTags, ProjectionDecalFormTags, SeasonType, ApplyArea, C11N_GUN_APPLY_REGIONS
 from shared_utils import CONST_CONTAINER, isEmpty
 from vehicle_systems.tankStructure import TankPartIndexes, TankPartNames
 from CurrentVehicle import g_currentVehicle
 from gui.shared.utils.requesters import REQ_CRITERIA
 from gui.shared.gui_items.customization.outfit import Area, scaffold
 from gui.shared.gui_items.customization.slots import SLOT_TYPE_TO_ANCHOR_TYPE_MAP
+from gui.impl import backport
+from gui.impl.gen import R
 _logger = logging.getLogger(__name__)
 C11nId = namedtuple('C11nId', ('areaId', 'slotType', 'regionIdx'))
 C11nId.__new__.__defaults__ = (-1, -1, -1)
@@ -45,6 +47,11 @@ REGIONS_BY_AREA_ID = {Area.CHASSIS: ApplyArea.CHASSIS_REGIONS,
  Area.GUN: ApplyArea.GUN_REGIONS}
 AREA_ID_BY_REGION = {region:areaId for areaId, regions in REGIONS_BY_AREA_ID.iteritems() for region in regions}
 QUANTITY_LIMITED_CUSTOMIZATION_TYPES = {GUI_ITEM_TYPE.PROJECTION_DECAL: MAX_USERS_PROJECTION_DECALS}
+PROJECTION_DECAL_IMAGE_FORM_TAG = {ProjectionDecalFormTags.SQUARE: backport.image(R.images.gui.maps.icons.customization.icon_form_1()),
+ ProjectionDecalFormTags.RECT1X2: backport.image(R.images.gui.maps.icons.customization.icon_form_2()),
+ ProjectionDecalFormTags.RECT1X3: backport.image(R.images.gui.maps.icons.customization.icon_form_3()),
+ ProjectionDecalFormTags.RECT1X4: backport.image(R.images.gui.maps.icons.customization.icon_form_4()),
+ ProjectionDecalFormTags.RECT1X6: backport.image(R.images.gui.maps.icons.customization.icon_form_6())}
 
 class CustomizationTankPartNames(TankPartNames):
     MASK = 'mask'
@@ -83,9 +90,9 @@ def getAppliedRegionsForCurrentHangarVehicle(areaId, slotId):
                     return ()
                 if slotId in (GUI_ITEM_TYPE.PROJECTION_DECAL,):
                     availableSlots = []
-                    for regionIdx, anchor in g_currentVehicle.item.getAnchors(slotId, Area.MISC).iteritems():
+                    for anchor in g_currentVehicle.item.getAnchors(slotId, Area.MISC):
                         if anchor.isParent:
-                            availableSlots.append(regionIdx)
+                            availableSlots.append(anchor.regionIdx)
 
                     return tuple(availableSlots)
                 if slotId in (GUI_ITEM_TYPE.PAINT, GUI_ITEM_TYPE.CAMOUFLAGE):

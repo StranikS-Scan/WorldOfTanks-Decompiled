@@ -11,10 +11,13 @@ from dossiers2.ui.achievements import ACHIEVEMENT_BLOCK
 from gui.Scaleform.locale.PERSONAL_MISSIONS import PERSONAL_MISSIONS
 from gui.Scaleform.locale.QUESTS import QUESTS
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
+from gui.impl import backport
+from gui.impl.gen import R
 from gui.ranked_battles import ranked_helpers
 from gui.server_events import finders
 from gui.server_events.bonuses import getBonuses, compareBonuses, BoxBonus
-from gui.server_events.events_helpers import isMarathon, isLinkedSet, isRegularQuest
+from gui.server_events import events_helpers
+from gui.server_events.events_helpers import isPremium
 from gui.server_events.formatters import getLinkedActionID
 from gui.server_events.modifiers import getModifierObj, compareModifiers
 from gui.server_events.parsers import AccountRequirements, VehicleRequirements, TokenQuestAccountRequirements, PreBattleConditions, PostBattleConditions, BonusConditions
@@ -40,8 +43,21 @@ class DEFAULTS_GROUPS(object):
     FOR_CURRENT_VEHICLE = 'currentlyAvailable'
     UNGROUPED_ACTIONS = 'ungroupedActions'
     UNGROUPED_QUESTS = 'ungroupedQuests'
+    REGULAR_GROUPED_QUESTS = 'regularGroupedQuests'
     MOTIVE_QUESTS = 'motiveQuests'
+    MARATHON_QUESTS = 'marathonQuests'
     LINKEDSET_QUESTS = 'AdvancedTrainingQuests'
+    PREMIUM_QUESTS = 'premiumQuests'
+
+
+def getGroupTypeByID(groupID):
+    if groupID in (DEFAULTS_GROUPS.UNGROUPED_QUESTS, DEFAULTS_GROUPS.MOTIVE_QUESTS):
+        return groupID
+    if events_helpers.isMarathon(groupID):
+        return DEFAULTS_GROUPS.MARATHON_QUESTS
+    if events_helpers.isPremium(groupID):
+        return DEFAULTS_GROUPS.PREMIUM_QUESTS
+    return DEFAULTS_GROUPS.LINKEDSET_QUESTS if events_helpers.isLinkedSet(groupID) else DEFAULTS_GROUPS.REGULAR_GROUPED_QUESTS
 
 
 class CONTITIONS_SCOPE(object):
@@ -227,13 +243,16 @@ class Group(ServerEventAbstract):
         return groupQuests
 
     def isMarathon(self):
-        return isMarathon(self.getID())
+        return events_helpers.isMarathon(self.getID())
 
     def isLinkedSet(self):
-        return isLinkedSet(self.getID())
+        return events_helpers.isLinkedSet(self.getID())
+
+    def isPremium(self):
+        return events_helpers.isPremium(self.getID())
 
     def isRegularQuest(self):
-        return isRegularQuest(self.getID())
+        return events_helpers.isRegularQuest(self.getID())
 
     def getLinkedAction(self, actions):
         return getLinkedActionID(self.getID(), actions)
@@ -244,7 +263,7 @@ class Group(ServerEventAbstract):
             return None
         else:
             for quest in events:
-                if isMarathon(quest.getID()):
+                if events_helpers.isMarathon(quest.getID()):
                     return quest
 
             LOG_ERROR('There is no main token quest in the marathon', self.getID())
@@ -284,7 +303,10 @@ class Quest(ServerEventAbstract):
         self.__linkedActions = []
 
     def isCompensationPossible(self):
-        return isMarathon(self.getGroupID()) and bool(self.getBonuses('tokens'))
+        return events_helpers.isMarathon(self.getGroupID()) and bool(self.getBonuses('tokens'))
+
+    def getGroupType(self):
+        return getGroupTypeByID(self.getGroupID())
 
     def isAvailable(self):
         return ValidationResult(False, 'dailyComplete') if self.bonusCond.getBonusLimit() is not None and self.bonusCond.isDaily() and self.isCompleted() else super(Quest, self).isAvailable()
@@ -416,8 +438,8 @@ class Quest(ServerEventAbstract):
     def _bonusDecorator(self, bonus):
         if self.getType() == constants.EVENT_TYPE.TOKEN_QUEST and bonus.getName() == 'oneof':
             if ranked_helpers.isRankedQuestID(self.getID()):
-                _, cohort, _ = ranked_helpers.getRankedDataFromTokenQuestID(self.getID())
-                bonus.setupIconHandler(BoxBonus.HANDLER_NAMES.RANKED, ('metal', cohort))
+                _, league = ranked_helpers.getRankedDataFromTokenQuestID(self.getID())
+                bonus.setupIconHandler(BoxBonus.HANDLER_NAMES.RANKED, ('metal', league))
                 bonus.setTooltipType('rankedSeason')
         return bonus
 
@@ -471,6 +493,12 @@ class LinkedSetQuest(Quest):
         return res
 
 
+class PremiumQuest(Quest):
+
+    def getUserName(self):
+        return backport.text(R.strings.quests.premiumQuest.quests.dyn(self.getID()).title())
+
+
 class PersonalQuest(Quest):
     __slots__ = Quest.__slots__ + ('expiryTime',)
 
@@ -505,9 +533,6 @@ class RankedQuest(Quest):
 
     def isProcessedAtCycleEnd(self):
         return self.__rankedData['subtype'] == 'cycle'
-
-    def isForVehicleMastering(self):
-        return self.__rankedData['subtype'] == 'vehicle'
 
     def isForRank(self):
         return self.__rankedData['subtype'] == 'rank'
@@ -1241,7 +1266,11 @@ def createQuest(questType, qID, data, progress=None, expiryTime=None):
     if questType == constants.EVENT_TYPE.TOKEN_QUEST:
         tokenClass = LinkedSetTokenQuest if qID.startswith('linkedset_') else TokenQuest
         return tokenClass(qID, data, progress)
-    questClass = LinkedSetQuest if qID.startswith('linkedset_') else Quest
+    questClass = Quest
+    if qID.startswith('linkedset_'):
+        questClass = LinkedSetQuest
+    elif isPremium(qID):
+        questClass = PremiumQuest
     return questClass(qID, data, progress)
 
 

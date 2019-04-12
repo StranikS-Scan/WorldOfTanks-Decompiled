@@ -17,19 +17,22 @@ class PlayerDataComponent(ClientArenaComponent):
         ClientArenaComponent.__init__(self, componentSystem)
         self.__playerGroupsEnabled = componentSystem.arenaType.numPlayerGroups > 0
         LOG_DEBUG_DEV('PlayerDataComponent.__playerGroupsEnabled ', self.__playerGroupsEnabled, componentSystem.arenaType.numPlayerGroups > 0)
-        if self.__playerGroupsEnabled:
-            self.addSyncDataCallback(ARENA_SYNC_OBJECTS.PLAYER_GROUP, 'playerGroups', self._vehiclePlayerGroupsUpdated)
         self.onPlayerGroupsUpdated = Event.Event(self._eventManager)
         self.__playerIngameRanksEnabled = BONUS_CAPS.checkAny(componentSystem.bonusType, BONUS_CAPS.PLAYER_RANK_MECHANICS)
-        if self.__playerIngameRanksEnabled:
-            self.addSyncDataCallback(ARENA_SYNC_OBJECTS.PLAYER_RANK, 'ranksByTeam', self.__onTeamRanksUpdated)
         self.__playerRank = None
         self.onVehicleRanksUpdated = Event.Event(self._eventManager)
         self.onPlayerRankUpdated = Event.Event(self._eventManager)
         return
 
-    def destroy(self):
-        super(PlayerDataComponent, self).destroy()
+    def activate(self):
+        super(PlayerDataComponent, self).activate()
+        if self.__playerGroupsEnabled:
+            self.addSyncDataCallback(ARENA_SYNC_OBJECTS.PLAYER_GROUP, 'playerGroups', self._vehiclePlayerGroupsUpdated)
+        if self.__playerIngameRanksEnabled:
+            self.addSyncDataCallback(ARENA_SYNC_OBJECTS.PLAYER_RANK, 'ranksByTeam', self.__onTeamRanksUpdated)
+
+    def deactivate(self):
+        super(PlayerDataComponent, self).deactivate()
         if self.__playerGroupsEnabled:
             self.removeSyncDataCallback(ARENA_SYNC_OBJECTS.PLAYER_GROUP, 'playerGroups', self._vehiclePlayerGroupsUpdated)
         if self.__playerIngameRanksEnabled:

@@ -12,7 +12,9 @@ class StartBootcampTransition(ExternalFlashComponent, StartBootcampTransitionMet
 
     def __init__(self, name):
         super(StartBootcampTransition, self).__init__(ExternalFlashSettings('transitionFlash', name, 'root.main', ROOT_SWF_CONSTANTS.BOOTCAMP_TRANISITION_CALLBACK))
+        self.createExternalComponent()
         self.movie.scaleMode = 'NoScale'
+        self.movie.backgroundAlpha = 0.6
 
     def _populate(self):
         super(StartBootcampTransition, self)._populate()

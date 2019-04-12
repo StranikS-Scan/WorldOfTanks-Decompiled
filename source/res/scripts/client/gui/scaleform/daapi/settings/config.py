@@ -57,7 +57,8 @@ ADVANCED_COMPLEX_TOOLTIPS = {'#tooltips:hangar/ammo_panel/device/empty': 'equipm
  '#tooltips:battleTypes/spec': 'gamemodeSpecial',
  '#tooltips:battleTypes/training': 'gamemodeTraining',
  '#tooltips:header/premium_buy': 'economyPremium',
- '#tooltips:header/premium_extend': 'economyPremium'}
+ '#tooltips:header/premium_extend': 'economyPremium',
+ '#tooltips:header/premium_upgrade': 'economyPremium'}
 BATTLE_TOOLTIPS_BUILDERS_PATHS = (('gui.Scaleform.daapi.view.tooltips.settings_builders', _TOOLTIPS.SETTINGS_SET),)
 if HAS_DEV_RESOURCES:
     LOBBY_PACKAGES += _LOBBY_DEBUG_PACKAGES

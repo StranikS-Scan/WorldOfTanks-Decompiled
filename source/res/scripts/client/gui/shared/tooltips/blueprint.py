@@ -280,16 +280,20 @@ class BlueprintFragmentTooltipData(BlueprintTooltipData):
 
     def __packVehicleFragmentBlocks(self):
         vehicle, blueprintData, _ = self.context.getVehicleBlueprintData(self._fragmentCD)
-        items = self._items
-        self._setNationFlagCornerBg(vehicle.nationName)
-        items.append(formatters.packImageTextBlockData(title=text_styles.highTitle(TOOLTIPS.BLUEPRINT_BLUEPRINTFRAGMENTTOOLTIP_FRAGMENTHEADER), desc=self._getVehicleDescrStr(vehicle), img=RES_ICONS.getBlueprintFragment('medium', 'vehicle'), imgPadding=formatters.packPadding(top=3), txtPadding=formatters.packPadding(left=21)))
-        self._items = [formatters.packBuildUpBlockData(blocks=items)]
-        items = self._items
-        percentDiscount, xpDiscount = self.context.getFragmentDiscounts(vehicle)
-        items.append(formatters.packBuildUpBlockData(blocks=[self._getUnlockDiscountBlock(percentDiscount, xpDiscount, TOOLTIPS.BLUEPRINT_VEHICLEBLUEPRINTTOOLTIP_RESEARCHDISCOUNT, True)], linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_BUILDUP_BLOCK_WHITE_BG_LINKAGE, padding=formatters.packPadding(left=67)))
-        gatheredInfoStr = text_styles.concatStylesWithSpace(text_styles.stats(int(blueprintData.filledCount)), text_styles.main(' '.join(('/', str(blueprintData.totalCount)))), text_styles.main(TOOLTIPS.BLUEPRINT_BLUEPRINTFRAGMENTTOOLTIP_FRAGMENTGATHERED))
-        items.append(formatters.packTextBlockData(text=gatheredInfoStr, padding=formatters.packPadding(left=67)))
-        items.append(formatters.packTextBlockData(text=text_styles.main(TOOLTIPS.BLUEPRINT_BLUEPRINTFRAGMENTTOOLTIP_FRAGMENTDESCRIPTION)))
+        if blueprintData is None:
+            return
+        else:
+            items = self._items
+            self._setNationFlagCornerBg(vehicle.nationName)
+            items.append(formatters.packImageTextBlockData(title=text_styles.highTitle(TOOLTIPS.BLUEPRINT_BLUEPRINTFRAGMENTTOOLTIP_FRAGMENTHEADER), desc=self._getVehicleDescrStr(vehicle), img=RES_ICONS.getBlueprintFragment('medium', 'vehicle'), imgPadding=formatters.packPadding(top=3), txtPadding=formatters.packPadding(left=21)))
+            self._items = [formatters.packBuildUpBlockData(blocks=items)]
+            items = self._items
+            percentDiscount, xpDiscount = self.context.getFragmentDiscounts(vehicle)
+            items.append(formatters.packBuildUpBlockData(blocks=[self._getUnlockDiscountBlock(percentDiscount, xpDiscount, TOOLTIPS.BLUEPRINT_VEHICLEBLUEPRINTTOOLTIP_RESEARCHDISCOUNT, True)], linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_BUILDUP_BLOCK_WHITE_BG_LINKAGE, padding=formatters.packPadding(left=67)))
+            gatheredInfoStr = text_styles.concatStylesWithSpace(text_styles.stats(int(blueprintData.filledCount)), text_styles.main(' '.join(('/', str(blueprintData.totalCount)))), text_styles.main(TOOLTIPS.BLUEPRINT_BLUEPRINTFRAGMENTTOOLTIP_FRAGMENTGATHERED))
+            items.append(formatters.packTextBlockData(text=gatheredInfoStr, padding=formatters.packPadding(left=67)))
+            items.append(formatters.packTextBlockData(text=text_styles.main(TOOLTIPS.BLUEPRINT_BLUEPRINTFRAGMENTTOOLTIP_FRAGMENTDESCRIPTION)))
+            return
 
 
 class BlueprintEmptySlotTooltipData(BlueprintTooltipData):

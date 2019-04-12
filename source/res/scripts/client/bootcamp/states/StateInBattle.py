@@ -11,7 +11,7 @@ from bootcamp.scenery.Scenery import Scenery
 from bootcamp.states import STATE
 from bootcamp.BootcampConstants import UI_STATE, BOOTCAMP_BATTLE_RESULT_MESSAGE
 from gui.Scaleform.daapi.view.bootcamp.BCBattleSpaceEnv import BCBattleSpaceEnv
-from gui.app_loader import settings as app_settings
+from skeletons.gui.app_loader import GuiGlobalSpaceID
 from skeletons.gui.sounds import ISoundsController
 from helpers import dependency, aop
 from PlayerEvents import g_playerEvents
@@ -70,7 +70,7 @@ class StateInBattle(AbstractState):
         self.__assistant.start()
         self.__scenery.start()
         self.__assistant.getMarkers().afterScenery()
-        self.__oldSpaceEnv = self.soundController.setEnvForSpace(app_settings.GUI_GLOBAL_SPACE_ID.BATTLE, BCBattleSpaceEnv)
+        self.__oldSpaceEnv = self.soundController.setEnvForSpace(GuiGlobalSpaceID.BATTLE, BCBattleSpaceEnv)
         self.__battleResultsData = {}
         self.__finishAnimationCompleted = True
         player = BigWorld.player()
@@ -84,7 +84,7 @@ class StateInBattle(AbstractState):
 
     def _doDeactivate(self):
         if self.__oldSpaceEnv is not None:
-            self.soundController.setEnvForSpace(app_settings.GUI_GLOBAL_SPACE_ID.BATTLE, self.__oldSpaceEnv)
+            self.soundController.setEnvForSpace(GuiGlobalSpaceID.BATTLE, self.__oldSpaceEnv)
         g_bootcampEvents.onUIStateChanged -= self._onUIStateChanged
         g_bootcampEvents.onBattleFinishAnimationComplete -= self._onBattleFinishAnimationComplete
         g_playerEvents.onKickedFromArena -= self.onKickedFromArena

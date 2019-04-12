@@ -33,8 +33,7 @@ def getVehicleCriteriaForComparing():
 
 
 def isValidVehicleForComparing(vehicle):
-    validCriteria = getVehicleCriteriaForComparing()
-    return validCriteria(vehicle)
+    return vehicle is not None and getVehicleCriteriaForComparing()(vehicle)
 
 
 @dependency.replace_none_kwargs(itemsCache=IItemsCache)

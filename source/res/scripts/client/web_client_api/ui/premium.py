@@ -8,3 +8,10 @@ class PremiumWindowWebApiMixin(object):
     @w2c(W2CSchema, 'premium')
     def openPremiumWindow(self, cmd):
         shared_events.showPremiumWindow()
+
+
+class PremiumDashboardWebApiMixin(object):
+
+    @w2c(W2CSchema, 'premium_dashboard')
+    def openPremiumDashboardWindow(self, cmd):
+        shared_events.showDashboardView()

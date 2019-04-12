@@ -30,10 +30,13 @@ class ArenaLoadController(IArenaVehiclesController, ViewComponentsController):
 
     def startControl(self, battleCtx, arenaVisitor):
         self.__arenaVisitor = arenaVisitor
+        BigWorld.wg_updateColorGrading()
+        BigWorld.wg_enableGUIBackground(True, False)
+        BigWorld.wg_setGUIBackground(battleCtx.getArenaScreenIcon())
 
     def stopControl(self):
-        self.__arenaVisitor = None
-        return
+        BigWorld.wg_enableGUIBackground(False, True)
+        self._clear()
 
     def setViewComponents(self, *components):
         super(ArenaLoadController, self).setViewComponents(*components)
@@ -61,8 +64,24 @@ class ArenaLoadController(IArenaVehiclesController, ViewComponentsController):
         MessengerEntry.g_instance.onAvatarShowGUI()
         BigWorld.enableLoadingTimer(False)
         uniprof.exitFromRegion('avatar.arena.loading')
+        BigWorld.wg_enableGUIBackground(False, False)
         uniprof.enterToRegion('avatar.arena.battle')
         BigWorld.wg_clearTextureReuseList()
         if self._viewComponents:
             for component in self._viewComponents:
                 component.arenaLoadCompleted()
+
+    def _clear(self):
+        self.__arenaVisitor = None
+        self.__isCompleted = False
+        return
+
+
+class ArenaLoadPlayer(ArenaLoadController):
+
+    def stopControl(self):
+        self._clear()
+
+
+def createArenaLoadController(setup):
+    return ArenaLoadPlayer() if setup.isReplayPlaying else ArenaLoadController()

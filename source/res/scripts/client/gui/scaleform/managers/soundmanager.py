@@ -1,10 +1,12 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/managers/SoundManager.py
+import logging
 from Vibroeffects import VibroManager
 from debug_utils import LOG_ERROR, LOG_CURRENT_EXCEPTION
 from gui.Scaleform.framework.entities.abstract.SoundManagerMeta import SoundManagerMeta
 from gui.doc_loaders.GuiSoundsLoader import GuiSoundsLoader
 import SoundGroups
+_logger = logging.getLogger(__name__)
 
 class SoundManager(SoundManagerMeta):
 
@@ -35,4 +37,6 @@ class SoundManager(SoundManagerMeta):
         sound = self.sounds.getEffectSound(effectName)
         if sound is not None:
             SoundGroups.g_instance.playSound2D(sound)
+        else:
+            _logger.warning('Sound effect "%s" not found', effectName)
         return

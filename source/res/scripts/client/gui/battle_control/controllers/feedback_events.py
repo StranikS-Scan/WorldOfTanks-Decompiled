@@ -1,8 +1,10 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/battle_control/controllers/feedback_events.py
+import logging
 from BattleFeedbackCommon import BATTLE_EVENT_TYPE as _BET, NONE_SHELL_TYPE
 from gui.battle_control.battle_constants import FEEDBACK_EVENT_ID as _FET
 from constants import ATTACK_REASON, ATTACK_REASONS, SHELL_TYPES_LIST
+_logger = logging.getLogger(__name__)
 
 def _unpackDamage(packedData):
     return _DamageExtra(*_BET.unpackDamage(packedData))
@@ -55,16 +57,17 @@ _PLAYER_FEEDBACK_EXTRA_DATA_CONVERTERS = {_FET.PLAYER_DAMAGED_HP_ENEMY: _unpackD
  _FET.DESTRUCTIBLE_DAMAGED: _unpackInteger,
  _FET.DESTRUCTIBLES_DEFENDED: _unpackInteger,
  _FET.SMOKE_ASSIST: _unpackDamage,
- _FET.INSPIRE_ASSIST: _unpackDamage}
+ _FET.INSPIRE_ASSIST: _unpackDamage,
+ _FET.PLAYER_SPOTTED_ENEMY: _unpackVisibility}
 
 def _getShellType(shellTypeID):
     return None if shellTypeID == NONE_SHELL_TYPE else SHELL_TYPES_LIST[shellTypeID]
 
 
 class _DamageExtra(object):
-    __slots__ = ('__damage', '__attackReasonID', '__isBurst', '__shellType', '__isShellGold', '__secondaryAttackReasonID')
+    __slots__ = ('__damage', '__attackReasonID', '__isBurst', '__shellType', '__isShellGold', '__secondaryAttackReasonID', '__isRoleAction')
 
-    def __init__(self, damage=0, attackReasonID=0, isBurst=False, shellTypeID=NONE_SHELL_TYPE, shellIsGold=False, secondaryAttackReasonID=0):
+    def __init__(self, damage=0, attackReasonID=0, isBurst=False, shellTypeID=NONE_SHELL_TYPE, shellIsGold=False, secondaryAttackReasonID=0, isRoleAction=False):
         super(_DamageExtra, self).__init__()
         self.__damage = damage
         self.__attackReasonID = attackReasonID
@@ -72,6 +75,8 @@ class _DamageExtra(object):
         self.__shellType = _getShellType(shellTypeID)
         self.__isShellGold = bool(shellIsGold)
         self.__secondaryAttackReasonID = secondaryAttackReasonID
+        self.__isRoleAction = bool(isRoleAction)
+        _logger.debug('_DamageExtra isRoleAction = %s', isRoleAction)
 
     def getDamage(self):
         return self.__damage
@@ -118,20 +123,28 @@ class _DamageExtra(object):
     def isSecondaryAttackReason(self, attackReason):
         return ATTACK_REASONS[self.__secondaryAttackReasonID] == attackReason
 
+    def isRoleAction(self):
+        return self.__isRoleAction
+
 
 class _VisibilityExtra(object):
-    __slots__ = ('__isVisible', '__isDirect')
+    __slots__ = ('__isVisible', '__isDirect', '__isRoleAction')
 
-    def __init__(self, isVisible, isDirect):
+    def __init__(self, isVisible, isDirect, isRoleAction):
         super(_VisibilityExtra, self).__init__()
         self.__isVisible = isVisible
         self.__isDirect = isDirect
+        self.__isRoleAction = bool(isRoleAction)
+        _logger.debug('_VisibilityExtra isRoleAction = %s', isRoleAction)
 
     def isVisible(self):
         return self.__isVisible
 
     def isDirect(self):
         return self.__isDirect
+
+    def isRoleAction(self):
+        return self.__isRoleAction
 
 
 class _CritsExtra(object):

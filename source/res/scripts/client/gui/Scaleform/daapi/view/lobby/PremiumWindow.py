@@ -71,7 +71,7 @@ class PremiumWindow(PremiumWindowMeta):
 
     def __canUpdatePremium(self):
         if self.__isPremiumAccount():
-            deltaInSeconds = float(time_utils.getTimeDeltaFromNow(time_utils.makeLocalServerTime(self.itemsCache.items.stats.premiumExpiryTime)))
+            deltaInSeconds = float(time_utils.getTimeDeltaFromNow(time_utils.makeLocalServerTime(self.itemsCache.items.stats.activePremiumExpiryTime)))
             return deltaInSeconds < time_utils.ONE_YEAR
         return True
 
@@ -154,7 +154,7 @@ class PremiumWindow(PremiumWindowMeta):
 
     def __canBuyPremium(self):
         if self.__isPremiumAccount():
-            premiumExpiryTime = self.itemsCache.items.stats.premiumExpiryTime
+            premiumExpiryTime = self.itemsCache.items.stats.activePremiumExpiryTime
         else:
             premiumExpiryTime = 0
         deltaInSeconds = float(time_utils.getTimeDeltaFromNow(time_utils.makeLocalServerTime(premiumExpiryTime)))

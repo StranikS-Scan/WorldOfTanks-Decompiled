@@ -8,18 +8,27 @@ from gui.Scaleform.daapi import LobbySubView
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.prime_time_servers_data_provider import PrimeTimesServersDataProvider
 from gui.Scaleform.daapi.view.meta.PrimeTimeMeta import PrimeTimeMeta
+from gui.impl import backport
+from gui.impl.gen import R
 from gui.prb_control.entities.base.ctx import PrbAction
 from gui.prb_control.entities.base.pre_queue.listener import IPreQueueListener
 from gui.ranked_battles.constants import PRIME_TIME_STATUS
 from gui.shared import actions, event_dispatcher
-from gui.shared.event_bus import EVENT_BUS_SCOPE
 from gui.shared import events
+from gui.shared.event_bus import EVENT_BUS_SCOPE
+from gui.shared.formatters import text_styles
+from gui.shared.formatters.servers import makePingStatusIcon
+from gui.shared.utils.scheduled_notifications import Notifiable, PeriodicNotifier
 from helpers import dependency, time_utils
 from predefined_hosts import g_preDefinedHosts, REQUEST_RATE, HOST_AVAILABILITY
 from skeletons.connection_mgr import IConnectionManager
 from skeletons.gui.game_control import IReloginController
-from gui.shared.utils.scheduled_notifications import Notifiable, PeriodicNotifier
 _PING_MAX_VALUE = 999
+
+def _makeServerString(serverInfo):
+    server = text_styles.neutral(text_styles.concatStylesToSingleLine(serverInfo.getName(), ' (', text_styles.neutral(serverInfo.getPingValue()), makePingStatusIcon(serverInfo.getPingStatus()), ')'))
+    return backport.text(R.strings.menu.primeTime.server(), server=server)
+
 
 class ServerListItemPresenter(object):
     _periodsController = None
@@ -135,9 +144,6 @@ class PrimeTimeViewBase(LobbySubView, PrimeTimeMeta, Notifiable, IPreQueueListen
         else:
             self.relogin.doRelogin(selectedID, extraChainSteps=self.__getExtraSteps())
 
-    def as_setDataS(self, data):
-        raise NotImplementedError
-
     def _populate(self):
         super(PrimeTimeViewBase, self)._populate()
         self.__serversDP = self.__buildDataProvider()
@@ -168,6 +174,17 @@ class PrimeTimeViewBase(LobbySubView, PrimeTimeMeta, Notifiable, IPreQueueListen
         self.__allServers = {}
         super(PrimeTimeViewBase, self)._dispose()
         return
+
+    def _getWarningIcon(self):
+        if self._getController().hasAvailablePrimeTimeServers():
+            icon = R.images.gui.maps.icons.library.icon_clock_100x100()
+        else:
+            icon = R.images.gui.maps.icons.library.icon_alert_90x84()
+        return backport.image(icon)
+
+    @classmethod
+    def _getServerText(cls, serverList, serverInfo):
+        return _makeServerString(serverInfo) if len(serverList) == 1 else backport.text(R.strings.menu.primeTime.servers())
 
     def _getController(self):
         raise NotImplementedError

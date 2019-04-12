@@ -31,7 +31,7 @@ CamoParams.__new__.__defaults__ = ('',
  0,
  0,
  0)
-ProjectionDecalGenericParams = namedtuple('ProjectionDecalGenericParams', ('tintColor', 'position', 'rotation', 'scale', 'decalMap', 'applyAreas', 'clipAngle', 'mirrored', 'doubleSided'))
+ProjectionDecalGenericParams = namedtuple('ProjectionDecalGenericParams', ('tintColor', 'position', 'rotation', 'scale', 'decalMap', 'applyAreas', 'clipAngle', 'mirrored', 'doubleSided', 'scaleBySlotSize'))
 ProjectionDecalGenericParams.__new__.__defaults__ = (Math.Vector4(0.0),
  Math.Vector3(0.0),
  Math.Vector3(0.0, 1.0, 0.0),
@@ -40,7 +40,8 @@ ProjectionDecalGenericParams.__new__.__defaults__ = (Math.Vector4(0.0),
  0.0,
  0.0,
  False,
- False)
+ False,
+ True)
 _DEFAULT_GLOSS = 0.509
 _DEFAULT_METALLIC = 0.23
 _DEAD_VEH_WEIGHT_COEFF = 0.1
@@ -72,7 +73,7 @@ def updateFashions(appearance):
         vDesc = appearance.typeDescriptor
         outfit = appearance.outfit
         outfitData = getOutfitData(outfit, vDesc, isDamaged)
-        appearance.c11nComponent = Vehicular.C11nComponent(fashions, appearance.compoundModel, outfitData)
+        appearance.c11nComponent = appearance.createComponent(Vehicular.C11nComponent, fashions, appearance.compoundModel, outfitData)
         return
 
 
@@ -274,7 +275,7 @@ def getGenericProjectionDecals(outfit, vehicleDescr):
                 if decal.component.scaleFactorId != 0:
                     factor = factors[decal.component.scaleFactorId - 1]
                     scale = Math.Vector3(scale[0] * factor, scale[1], scale[2] * factor)
-                params = ProjectionDecalGenericParams(tintColor=Math.Vector4(decal.component.tintColor) / 255, position=Math.Vector3(position), rotation=Math.Vector3(rotation), scale=Math.Vector3(scale), decalMap=decal.item.texture, applyAreas=showOn, clipAngle=clipAngle, mirrored=mirrored, doubleSided=doubleSided)
+                params = ProjectionDecalGenericParams(tintColor=Math.Vector4(decal.component.tintColor) / 255, position=Math.Vector3(position), rotation=Math.Vector3(rotation), scale=Math.Vector3(scale), decalMap=decal.item.texture, applyAreas=showOn, clipAngle=clipAngle, mirrored=mirrored, doubleSided=doubleSided, scaleBySlotSize=True)
                 decalsParams.append(params)
 
         return decalsParams

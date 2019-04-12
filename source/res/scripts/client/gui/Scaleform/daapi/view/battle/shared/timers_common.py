@@ -4,14 +4,15 @@ import BigWorld
 from gui.shared.utils.TimeInterval import TimeInterval
 
 class TimerComponent(object):
-    __slots__ = ('_viewObject', '_typeID', '_viewID', '_totalTime', '_startTime', '_finishTime')
+    __slots__ = ('_viewObject', '_typeID', '_viewID', '_totalTime', '_startTime', '_finishTime', '_secondInRow')
 
-    def __init__(self, viewObject, typeID, viewID, totalTime, finishTime, startTime=None, **kwargs):
+    def __init__(self, viewObject, typeID, viewID, totalTime, finishTime, startTime=None, secondInRow=False, **kwargs):
         super(TimerComponent, self).__init__(**kwargs)
         self._viewObject = viewObject
         self._typeID = typeID
         self._viewID = viewID
         self._totalTime = totalTime
+        self._secondInRow = secondInRow
         if finishTime:
             self._startTime = finishTime - totalTime
             self._finishTime = finishTime
@@ -66,8 +67,8 @@ class TimerComponent(object):
 class PythonTimer(TimerComponent):
     __slots__ = ('_timeInterval', '__weakref__')
 
-    def __init__(self, viewObject, typeID, viewID, totalTime, finishTime, startTime=None, interval=1.0, **kwargs):
-        super(PythonTimer, self).__init__(viewObject, typeID, viewID, totalTime, finishTime, startTime, **kwargs)
+    def __init__(self, viewObject, typeID, viewID, totalTime, finishTime, startTime=None, interval=1.0, secondInRow=False, **kwargs):
+        super(PythonTimer, self).__init__(viewObject, typeID, viewID, totalTime, finishTime, startTime, secondInRow=secondInRow, **kwargs)
         self._timeInterval = TimeInterval(interval, self, '_tick')
 
     def clear(self):
@@ -79,7 +80,7 @@ class PythonTimer(TimerComponent):
             timeLeft = max(0, self._finishTime - BigWorld.serverTime())
             if timeLeft:
                 self._setViewSnapshot(timeLeft)
-                self._timeInterval.start()
+                self._timeInterval.restart()
 
     def _stopTick(self):
         self._timeInterval.stop()

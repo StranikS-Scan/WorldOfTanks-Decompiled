@@ -1,15 +1,16 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/customization/vehicle_anchors_updater.py
+from copy import copy
 import GUI
-import Math
 from gui.customization.shared import C11nId
+from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.gui_items.customization.outfit import Area
+from gui.shared.gui_items.customization.slots import SLOT_ASPECT_RATIO
 from gui.Scaleform.daapi.view.lobby.customization.shared import C11nTabs
-_ASPECT_RATIO = {C11nTabs.EMBLEM: 1.0,
- C11nTabs.INSCRIPTION: 2.0}
-_ANCHOR_SHIFT_FROM_CENTRE = {C11nTabs.EMBLEM: 0.5,
- C11nTabs.INSCRIPTION: 0.3}
-_LINES_SHIFT_FROM_CENTRE = 0.4
+_ANCHOR_SHIFT = {GUI_ITEM_TYPE.EMBLEM: 0.5,
+ GUI_ITEM_TYPE.INSCRIPTION: 0.3}
+_LINES_SHIFT = 0.4
+_REGION_ANCHOR_SHIFT = 0.2
 
 class VehicleAnchorsUpdater(object):
 
@@ -30,42 +31,40 @@ class VehicleAnchorsUpdater(object):
 
     def stopUpdater(self):
         if self.__vehicleCustomizationAnchors is not None:
-            self._delAllAnchors()
+            self.__delAllAnchors()
             self.__vehicleCustomizationAnchors = None
         return
 
-    def setAnchors(self, displayObjects, menuSlotId):
+    def setAnchors(self, displayObjects, propSheetSlotId):
         if self.__vehicleCustomizationAnchors is not None:
             processedObjectIds = {}
-            self._delAllAnchors()
+            self.__delAllAnchors()
             for displayObject in displayObjects:
-                if hasattr(displayObject, 'slotData'):
-                    slotId = displayObject.slotData.slotId
-                    customSlotId = C11nId(areaId=slotId.areaId, slotType=slotId.slotId, regionIdx=slotId.regionId)
-                    anchorParams = self.__getAnchorParams(customSlotId)
-                    if anchorParams is not None:
-                        anchorWorldPos = Math.Vector3(anchorParams.pos)
-                        bottom = Math.Vector3(anchorParams.pos)
-                        size = 0.0
-                        normal = Math.Vector3(anchorParams.normal)
-                        if self.__ctx.currentTab in C11nTabs.REGIONS:
-                            if customSlotId.areaId != Area.GUN:
-                                normal.normalise()
-                                anchorWorldPos -= normal * 0.2
-                        elif self.__ctx.currentTab in (C11nTabs.EMBLEM, C11nTabs.INSCRIPTION):
-                            size = anchorParams.slotDescriptor.size
-                            decalUp = normal * (anchorParams.slotDescriptor.rayUp * normal)
-                            slotHeight = size / _ASPECT_RATIO[self.__ctx.currentTab]
-                            if customSlotId == menuSlotId:
-                                shift = slotHeight * _LINES_SHIFT_FROM_CENTRE
-                                bottom = anchorWorldPos - decalUp * shift * self.__vScale
-                            else:
-                                item = self.__ctx.currentOutfit.getContainer(customSlotId.areaId).slotFor(customSlotId.slotType).getItem(customSlotId.regionIdx)
-                                if item is not None or self.__ctx.currentTab == C11nTabs.EMBLEM:
-                                    shift = slotHeight * _ANCHOR_SHIFT_FROM_CENTRE[self.__ctx.currentTab]
-                                    anchorWorldPos += decalUp * shift * self.__vScale
-                        scaleformUid = self.__vehicleCustomizationAnchors.addAnchor(anchorWorldPos, normal, bottom, size, displayObject, True, True, True)
-                        processedObjectIds[customSlotId] = scaleformUid
+                if not hasattr(displayObject, 'slotData'):
+                    continue
+                slotData = displayObject.slotData
+                slotId = C11nId(areaId=slotData.slotId.areaId, slotType=slotData.slotId.slotId, regionIdx=slotData.slotId.regionId)
+                anchorParams = self.__getAnchorParams(slotId)
+                if anchorParams is None:
+                    continue
+                location = anchorParams.location
+                position = copy(location.position)
+                linesPosition = copy(location.position)
+                slotWidth = 0.0
+                if self.__ctx.currentTab in C11nTabs.REGIONS and slotId.areaId != Area.GUN:
+                    position -= location.normal * _REGION_ANCHOR_SHIFT * self.__vScale
+                elif self.__ctx.currentTab in (C11nTabs.EMBLEM, C11nTabs.INSCRIPTION):
+                    slotWidth = anchorParams.descriptor.size
+                    slotHeight = slotWidth * SLOT_ASPECT_RATIO[slotId.slotType]
+                    linesShift = slotHeight * _LINES_SHIFT * self.__vScale
+                    linesPosition -= location.up * linesShift
+                    if slotId != propSheetSlotId:
+                        item = self.__ctx.getItemFromRegion(slotId)
+                        if item is not None or slotId.slotType == GUI_ITEM_TYPE.EMBLEM:
+                            anchorShift = slotHeight * _ANCHOR_SHIFT[slotId.slotType] * self.__vScale
+                            position += location.up * anchorShift
+                scaleformUid = self.__vehicleCustomizationAnchors.addAnchor(position, location.normal, linesPosition, slotWidth, displayObject, True, True, True)
+                processedObjectIds[slotId] = scaleformUid
 
             self.__processedAnchors = processedObjectIds
         return
@@ -103,18 +102,6 @@ class VehicleAnchorsUpdater(object):
     def setMainView(self, displayObject):
         return self.__vehicleCustomizationAnchors.setMainView(displayObject)
 
-    def __getAnchorParams(self, slotId):
-        anchorParams = self.__service.getAnchorParams(slotId.areaId, slotId.slotType, slotId.regionIdx)
-        return anchorParams
-
-    def _delAllAnchors(self):
-        if self.__vehicleCustomizationAnchors is not None:
-            for scaleformUid in self.__processedAnchors.itervalues():
-                self.__vehicleCustomizationAnchors.delAnchor(scaleformUid)
-
-            self.__processedAnchors.clear()
-        return
-
     def hideAllAnchors(self):
         if self.__vehicleCustomizationAnchors is not None:
             for scaleformUid in self.__processedAnchors.itervalues():
@@ -124,3 +111,15 @@ class VehicleAnchorsUpdater(object):
 
     def registerInscriptionController(self, inscriptionController, inputLines):
         self.__vehicleCustomizationAnchors.registerInscriptionController(inscriptionController, inputLines)
+
+    def __getAnchorParams(self, slotId):
+        anchorParams = self.__service.getAnchorParams(slotId.areaId, slotId.slotType, slotId.regionIdx)
+        return anchorParams
+
+    def __delAllAnchors(self):
+        if self.__vehicleCustomizationAnchors is not None:
+            for scaleformUid in self.__processedAnchors.itervalues():
+                self.__vehicleCustomizationAnchors.delAnchor(scaleformUid)
+
+            self.__processedAnchors.clear()
+        return

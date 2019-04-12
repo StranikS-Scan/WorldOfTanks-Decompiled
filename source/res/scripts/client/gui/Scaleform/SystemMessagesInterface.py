@@ -89,7 +89,7 @@ class SystemMessagesInterface(ISystemMessages):
         self.pushI18nMessage('#system_messages:connected', self.connectionMgr.serverUserName, type=SM_TYPE.GameGreeting)
 
     def __checkPremiumAccountExpiry(self, ctx=None):
-        expiryUTCTime = self.itemsCache.items.stats.premiumExpiryTime
+        expiryUTCTime = self.itemsCache.items.stats.activePremiumExpiryTime
         delta = account_helpers.getPremiumExpiryDelta(expiryUTCTime)
         if delta.days == 0 and expiryUTCTime and not self.__expirationShown:
             self.proto.serviceChannel.pushClientMessage(expiryUTCTime, SCH_CLIENT_MSG_TYPE.PREMIUM_ACCOUNT_EXPIRY_MSG)

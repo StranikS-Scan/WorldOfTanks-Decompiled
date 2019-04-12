@@ -3,9 +3,6 @@
   <itemGroup>
     <priceGroup>	effect gold	</priceGroup>
     <vehicleFilter>
-      <include>
-        <levels>	6 7 8 9 10	</levels>
-      </include>
       <exclude>
         <vehicles>	china:Ch01_Type59_Gold germany:G119_Panzer58_BF germany:G114_Rheinmetall_Skorpian usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
       </exclude>
@@ -50,9 +47,6 @@
   <itemGroup>
     <priceGroup>	effect gold notInShop	</priceGroup>
     <vehicleFilter>
-      <include>
-        <levels>	6 7 8 9 10	</levels>
-      </include>
       <exclude>
         <vehicles>	china:Ch01_Type59_Gold germany:G119_Panzer58_BF germany:G114_Rheinmetall_Skorpian usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
       </exclude>
@@ -76,6 +70,29 @@
       </effects>
     </modification>
     <modification>
+      <id>	4	</id>
+      <texture>	gui/maps/vehicles/modifications/effect.png	</texture>
+      <userString>	#vehicle_customization:modifications/age_effect_04	</userString>
+      <season>	ALL	</season>
+      <historical>	true	</historical>
+      <tags>	hiddenInUI	</tags>
+      <vehicleFilter>
+        <exclude>
+          <vehicles>	china:Ch01_Type59_Gold germany:G119_Panzer58_BF germany:G114_Rheinmetall_Skorpian usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+        </exclude>
+      </vehicleFilter>
+      <effects>
+        <effect>
+          <type>	paint_age	</type>
+          <value>	-1.5	</value>
+        </effect>
+        <effect>
+          <type>	paint_fading	</type>
+          <value>	0.1	</value>
+        </effect>
+      </effects>
+    </modification>
+    <modification>
       <id>	5	</id>
       <texture>	gui/maps/vehicles/modifications/effect.png	</texture>
       <effects>
@@ -89,6 +106,23 @@
         </effect>
       </effects>
       <userString>	#vehicle_customization:modifications/age_effect_05	</userString>
+      <historical>	true	</historical>
+      <tags>	hiddenInUI	</tags>
+    </modification>
+    <modification>
+      <id>	6	</id>
+      <texture>	gui/maps/vehicles/modifications/effect.png	</texture>
+      <effects>
+        <effect>
+          <type>	paint_age	</type>
+          <value>	-1.5	</value>
+        </effect>
+        <effect>
+          <type>	paint_fading	</type>
+          <value>	0.1	</value>
+        </effect>
+      </effects>
+      <userString>	#vehicle_customization:modifications/age_effect_06	</userString>
       <historical>	true	</historical>
       <tags>	hiddenInUI	</tags>
     </modification>

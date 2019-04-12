@@ -9,6 +9,7 @@ from AvatarInputHandler import AvatarInputHandler
 from constants import IS_DEVELOPMENT
 from gui.Scaleform.daapi.view.battle.shared.minimap import settings, plugins
 from gui.Scaleform.daapi.view.meta.MinimapMeta import MinimapMeta
+from gui.Scaleform.flash_wrapper import InputKeyMode
 from gui.battle_control import minimap_utils, avatar_getter
 from gui.shared.utils.plugins import PluginsCollection
 from helpers import dependency
@@ -166,7 +167,7 @@ class MinimapComponent(MinimapMeta, IMinimapComponent):
         if self.__component is None:
             return False
         else:
-            self.__component.wg_inputKeyMode = 2
+            self.__component.wg_inputKeyMode = InputKeyMode.NO_HANDLE
             self.app.component.addChild(self.__component, self._getFlashName())
             bl, tr = arenaVisitor.type.getBoundingBox()
             if arenaVisitor.gui.isBootcampBattle():

@@ -14,6 +14,10 @@ class TimeInterval(object):
         self.__name = name
         return
 
+    def restart(self):
+        self.stop()
+        self.start()
+
     def start(self):
         if self.__callbackID is not None:
             LOG_ERROR('To start a new time interval You should before stop already the running time interval.')

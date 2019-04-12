@@ -409,6 +409,10 @@ def _migrateTo43(core, data, initialized):
     data['delete'].extend((91,))
 
 
+def _migrateTo44(core, data, initialized):
+    data['guiStartBehavior']['isRankedWelcomeViewShowed'] = True
+
+
 _versions = ((1,
   _initializeDefaultSettings,
   True,
@@ -575,6 +579,10 @@ _versions = ((1,
   False),
  (43,
   _migrateTo43,
+  False,
+  False),
+ (44,
+  _migrateTo44,
   False,
   False))
 

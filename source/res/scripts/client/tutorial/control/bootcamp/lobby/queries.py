@@ -1,13 +1,16 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/tutorial/control/bootcamp/lobby/queries.py
 from math import ceil
+import BigWorld
+from constants import PREMIUM_ENTITLEMENTS
+from gui.impl.gen import R
+from gui.impl import backport
+from gui.Scaleform.genConsts.BOOTCAMP_MESSAGE_ALIASES import BOOTCAMP_MESSAGE_ALIASES
 from helpers import i18n, dependency, time_utils
+from nations import NAMES as NATION_NAMES
 from tutorial.control import ContentQuery
 from tutorial.logger import LOG_ERROR
-from gui.Scaleform.genConsts.BOOTCAMP_MESSAGE_ALIASES import BOOTCAMP_MESSAGE_ALIASES
 from skeletons.gui.game_control import IBootcampController
-from nations import NAMES as NATION_NAMES
-import BigWorld
 _PRESET_RENDERERS = {'FINISH': BOOTCAMP_MESSAGE_ALIASES.RENDERER_FIN_UI,
  'ORANGE': BOOTCAMP_MESSAGE_ALIASES.RENDERER_ORANGE_UI,
  'BLUE': BOOTCAMP_MESSAGE_ALIASES.RENDERER_BLUE,
@@ -87,14 +90,15 @@ class MessageDialogContentQuery(ContentQuery):
             elif labelFormat == 'getGold':
                 data['label'] = data['label'].format(lessonBonuses['gold'])
             elif labelFormat == 'getPremiumHours':
-                hours = lessonBonuses['premium']
-                timeInSeconds = hours * time_utils.ONE_HOUR
+                premiumType = PREMIUM_ENTITLEMENTS.PLUS if PREMIUM_ENTITLEMENTS.PLUS in lessonBonuses else PREMIUM_ENTITLEMENTS.BASIC
+                days = lessonBonuses[premiumType]
+                timeInSeconds = days * time_utils.ONE_DAY
                 if timeInSeconds > time_utils.ONE_DAY:
                     time = ceil(timeInSeconds / time_utils.ONE_DAY)
-                    timeMetric = i18n.makeString('#menu:header/account/premium/days')
+                    timeMetric = backport.text(R.strings.menu.header.account.premium.days())
                 else:
                     time = ceil(timeInSeconds / time_utils.ONE_HOUR)
-                    timeMetric = i18n.makeString('#menu:header/account/premium/hours')
+                    timeMetric = backport.text(R.strings.menu.header.account.premium.hours())
                 data['label'] = data['label'].format(str(int(time)) + ' ' + timeMetric)
             elif labelFormat == 'getRepairKits':
                 data['label'] = data['label'].format(lessonBonuses['equipment']['largeRepairkit']['count'])

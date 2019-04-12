@@ -177,6 +177,15 @@ class SelectorDescFactory(object):
         return selector
 
 
+def makeDescVariable(templateVar, args):
+    templateVarSplit = templateVar.split(':')
+    if len(templateVarSplit) == 2:
+        templVarName = templateVarSplit[0]
+        varName = args.get(templVarName, templVarName)
+        return varName + ':' + templateVarSplit[1]
+    return args.get(templateVar, templateVar)
+
+
 class SelectorDesc(object):
     __slots__ = ('_variable', '_isPC')
 
@@ -222,7 +231,7 @@ class DiscreteSelectorDesc(SelectorDesc):
                 self._selectors[value] = SelectorDescFactory.create(selectorDesc[1], effects)
 
     def fillTemplate(self, args, effects):
-        self._variable = args.get(self._variable, self._variable)
+        self._variable = makeDescVariable(self._variable, args)
         newSelectors = dict()
         for key, selector in self._selectors.iteritems():
             selector.fillTemplate(args, effects)
@@ -286,7 +295,7 @@ class RangeSelectorDesc(SelectorDesc):
         self._selectors = tuple(values)
 
     def fillTemplate(self, args, effects):
-        self._variable = args.get(self._variable, self._variable)
+        self._variable = makeDescVariable(self._variable, args)
         newKeys = []
         for i in xrange(len(self.__keys)):
             newKeys.append(args.get(self.__keys[i], self.__keys[i]))
@@ -373,7 +382,7 @@ class EffectSelectorDesc(SelectorDesc):
         return
 
     def fillTemplate(self, args, effects):
-        self._variable = args.get(self._variable, self._variable)
+        self._variable = makeDescVariable(self._variable, args)
         self.__ttl = args.get(self.__ttl, self.__ttl)
         pathArgs = []
         for key, val in args.iteritems():

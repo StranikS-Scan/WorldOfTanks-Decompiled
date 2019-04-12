@@ -10,6 +10,7 @@ from gui.Scaleform.daapi.view.battle.shared.markers2d import settings
 from gui.Scaleform.daapi.view.external_components import ExternalFlashComponent
 from gui.Scaleform.daapi.view.external_components import ExternalFlashSettings
 from gui.Scaleform.daapi.view.meta.VehicleMarkersManagerMeta import VehicleMarkersManagerMeta
+from gui.Scaleform.flash_wrapper import InputKeyMode
 from gui.Scaleform.genConsts.BATTLE_VIEW_ALIASES import BATTLE_VIEW_ALIASES
 from gui.Scaleform.genConsts.ROOT_SWF_CONSTANTS import ROOT_SWF_CONSTANTS
 from gui.shared.utils.plugins import PluginsCollection
@@ -22,10 +23,6 @@ class MarkersManager(ExternalFlashComponent, VehicleMarkersManagerMeta, plugins.
 
     def __init__(self):
         super(MarkersManager, self).__init__(ExternalFlashSettings(BATTLE_VIEW_ALIASES.MARKERS_2D, settings.MARKERS_MANAGER_SWF, 'root.vehicleMarkersCanvas', ROOT_SWF_CONSTANTS.BATTLE_VEHICLE_MARKERS_REGISTER_CALLBACK))
-        self.component.wg_inputKeyMode = 2
-        self.component.position.z = DEPTH_OF_VehicleMarker
-        self.component.drawWithRestrictedViewPort = False
-        self.movie.backgroundAlpha = 0
         self.__plugins = None
         self.__canvas = None
         self.__ids = set()
@@ -116,6 +113,13 @@ class MarkersManager(ExternalFlashComponent, VehicleMarkersManagerMeta, plugins.
         self.__destroyPlugins()
         self.__removeCanvas()
 
+    def createExternalComponent(self):
+        super(MarkersManager, self).createExternalComponent()
+        self.component.wg_inputKeyMode = InputKeyMode.NO_HANDLE
+        self.component.position.z = DEPTH_OF_VehicleMarker
+        self.component.drawWithRestrictedViewPort = False
+        self.movie.backgroundAlpha = 0
+
     def _populate(self):
         super(MarkersManager, self)._populate()
         self.startPlugins()
@@ -145,7 +149,7 @@ class MarkersManager(ExternalFlashComponent, VehicleMarkersManagerMeta, plugins.
 
     def __addCanvas(self, arenaVisitor):
         self.__canvas = self._createCanvas(arenaVisitor)
-        self.__canvas.wg_inputKeyMode = 2
+        self.__canvas.wg_inputKeyMode = InputKeyMode.NO_HANDLE
         self.__canvas.scaleProperties = GUI_SETTINGS.markerScaleSettings
         self.__canvas.alphaProperties = GUI_SETTINGS.markerBgSettings
         self.__canvasProxy = weakref.ref(self.__canvas)

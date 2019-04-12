@@ -3,6 +3,7 @@
 import logging
 from collections import namedtuple
 from math import ceil
+from constants import LOOTBOX_TOKEN_PREFIX, PREMIUM_ENTITLEMENTS
 from gui.Scaleform.genConsts.SLOT_HIGHLIGHT_TYPES import SLOT_HIGHLIGHT_TYPES
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.Scaleform.locale.QUESTS import QUESTS
@@ -11,6 +12,7 @@ from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.Scaleform.settings import ICONS_SIZES
 from gui.impl import backport
 from gui.impl.gen import R
+from gui.ranked_battles.constants import YEAR_POINTS_TOKEN
 from gui.server_events.formatters import parseComplexToken, TOKEN_SIZES
 from gui.server_events.recruit_helper import getRecruitInfo
 from gui.shared.formatters import text_styles
@@ -28,7 +30,6 @@ from shared_utils import CONST_CONTAINER, findFirst
 from skeletons.gui.customization import ICustomizationService
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
-from constants import LOOTBOX_TOKEN_PREFIX
 _logger = logging.getLogger(__name__)
 
 class AWARDS_SIZES(CONST_CONTAINER):
@@ -119,7 +120,8 @@ def getDefaultFormattersMap():
      'freeXPFactor': simpleBonusFormatter,
      'tankmenXPFactor': simpleBonusFormatter,
      'dailyXPFactor': simpleBonusFormatter,
-     'premium': PremiumDaysBonusFormatter(),
+     PREMIUM_ENTITLEMENTS.BASIC: PremiumDaysBonusFormatter(),
+     PREMIUM_ENTITLEMENTS.PLUS: PremiumDaysBonusFormatter(),
      'vehicles': VehiclesBonusFormatter(),
      'meta': simpleBonusFormatter,
      'tokens': tokenBonusFormatter,
@@ -149,7 +151,8 @@ def getLinkedSetFormattersMap():
     mapping.update({'battleToken': tokenBonusFormatter,
      'tokens': tokenBonusFormatter,
      'items': LinkedSetItemsBonusFormatter(),
-     'premium': LinkedSetPremiumDaysBonusFormatter(),
+     PREMIUM_ENTITLEMENTS.BASIC: LinkedSetPremiumDaysBonusFormatter(),
+     PREMIUM_ENTITLEMENTS.PLUS: LinkedSetPremiumDaysBonusFormatter(),
      'vehicles': LinkedSetVehiclesBonusFormatter(),
      'customizations': LinkedSetCustomizationsBonusFormatter()})
     return mapping
@@ -175,6 +178,14 @@ def getLootboxesFormatterMap():
     return mapping
 
 
+def getRankedFormatterMap():
+    tokenBonusFormatter = RankedPointFormatter()
+    mapping = getDefaultFormattersMap()
+    mapping.update({'tokens': tokenBonusFormatter,
+     'battleToken': tokenBonusFormatter})
+    return mapping
+
+
 def getDefaultAwardFormatter():
     return AwardsPacker(getDefaultFormattersMap())
 
@@ -197,6 +208,10 @@ def getPackRentVehiclesAwardPacker():
 
 def getLootboxesAwardsPacker():
     return AwardsPacker(getLootboxesFormatterMap())
+
+
+def getRankedAwardsPacker():
+    return AwardsPacker(getRankedFormatterMap())
 
 
 def getPersonalMissionAwardPacker():
@@ -494,7 +509,7 @@ class PremiumDaysBonusFormatter(SimpleBonusFormatter):
     def _getImages(cls, bonus):
         result = {}
         for size in AWARDS_SIZES.ALL():
-            result[size] = RES_ICONS.getPremiumDaysAwardIcon(size, bonus.getValue())
+            result[size] = RES_ICONS.getPremiumDaysAwardIcon(size, bonus.getName(), bonus.getValue())
 
         return result
 
@@ -554,6 +569,30 @@ class TokenBonusFormatter(SimpleBonusFormatter):
                 images[size] = RES_ICONS.getLootBoxBonusIcon(size, lootBox.getType())
 
             return PreformattedBonus(label=self._formatBonusLabel(token.count), userName=lootBox.getUserName(), labelFormatter=self._getLabelFormatter(bonus), images=images, tooltip=makeTooltip(header=lootBox.getUserName(), body=TOOLTIPS.QUESTS_BONUSES_LOOTBOXTOKEN_BODY), align=self._getLabelAlign(bonus), isCompensation=self._isCompensation(bonus))
+
+
+class RankedPointFormatter(TokenBonusFormatter):
+
+    def _format(self, bonus):
+        result = []
+        for tokenID, token in bonus.getTokens().iteritems():
+            if tokenID.startswith(YEAR_POINTS_TOKEN):
+                formatted = self.__formatRankedPointToken(tokenID, token, bonus)
+                if formatted is not None:
+                    result.append(formatted)
+
+        return result
+
+    @classmethod
+    def _getUserName(cls, bonus):
+        return backport.text(R.strings.tooltips.rankedBattleView.scorePoint.short.header())
+
+    def __formatRankedPointToken(self, tokenID, token, bonus):
+        images = {}
+        for size in AWARDS_SIZES.ALL():
+            images[size] = backport.image(R.images.gui.maps.icons.quests.bonuses.dyn(size).rankedPoint())
+
+        return PreformattedBonus(label=self._formatBonusLabel(token.count), userName=self._getUserName(bonus), labelFormatter=self._getLabelFormatter(bonus), images=images, tooltip=makeTooltip(header=backport.text(R.strings.tooltips.rankedBattleView.scorePoint.header()), body=backport.text(R.strings.tooltips.rankedBattleView.scorePoint.body())), align=self._getLabelAlign(bonus), isCompensation=self._isCompensation(bonus))
 
 
 class TmanTemplateBonusFormatter(SimpleBonusFormatter):

@@ -1,15 +1,17 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/shared/ribbons_aggregator.py
 from collections import defaultdict
+import logging
 import Event
 import BattleReplay
 from ids_generators import SequenceIDGenerator
-from debug_utils import LOG_UNEXPECTED
 from gui.Scaleform.genConsts.BATTLE_EFFICIENCY_TYPES import BATTLE_EFFICIENCY_TYPES
 from BattleFeedbackCommon import BATTLE_EVENT_TYPE as _BET
 from gui.battle_control.battle_constants import FEEDBACK_EVENT_ID
+from gui.battle_control import avatar_getter
 from helpers import dependency
 from skeletons.gui.battle_session import IBattleSessionProvider
+_logger = logging.getLogger(__name__)
 
 class DAMAGE_SOURCE():
     PLAYER = 'player'
@@ -142,14 +144,28 @@ class _SingleVehicleRibbon(_Ribbon):
 
 
 class _SingleVehicleDamageRibbon(_SingleVehicleRibbon):
-    __slots__ = ()
+    __slots__ = ('_isRoleBonus',)
+
+    def __init__(self, ribbonID, vehID, extraValue, isRoleBonus):
+        super(_SingleVehicleDamageRibbon, self).__init__(ribbonID, vehID, extraValue)
+        self._isRoleBonus = isRoleBonus
+
+    @classmethod
+    def createFromFeedbackEvent(cls, ribbonID, event):
+        return cls(ribbonID, event.getTargetID(), cls._extractExtraValue(event), _isRoleBonus(event))
 
     def getType(self):
         raise NotImplementedError
 
+    def isRoleBonus(self):
+        return self._isRoleBonus
+
     @classmethod
     def _extractExtraValue(cls, event):
         return event.getExtra().getDamage()
+
+    def _canAggregate(self, ribbon):
+        return super(_SingleVehicleDamageRibbon, self)._canAggregate(ribbon) and self.isRoleBonus() == ribbon.isRoleBonus()
 
 
 class _CriticalHitRibbon(_SingleVehicleRibbon):
@@ -180,12 +196,19 @@ class _RadioAssistRibbon(_SingleVehicleDamageRibbon):
 class _EnemyKillRibbon(_SingleVehicleDamageRibbon):
     __slots__ = ()
 
+    @classmethod
+    def createFromFeedbackEvent(cls, ribbonID, event):
+        return cls(ribbonID, event.getTargetID(), cls._extractExtraValue(event), False)
+
     def getType(self):
         return BATTLE_EFFICIENCY_TYPES.DESTRUCTION
 
     @classmethod
     def _extractExtraValue(cls, event):
         pass
+
+    def _canAggregate(self, ribbon):
+        return self.getVehicleID() == ribbon.getVehicleID() and self.isRoleBonus() == ribbon.isRoleBonus()
 
 
 class _BlockedDamageRibbon(_SingleVehicleDamageRibbon):
@@ -273,14 +296,28 @@ class _BombersReceivedCriticalHitRibbon(_ReceivedCriticalHitRibbon):
 
 
 class _SingleVehicleReceivedHitRibbon(_SingleVehicleRibbon):
-    __slots__ = ()
+    __slots__ = ('_isRoleBonus',)
+
+    def __init__(self, ribbonID, vehID, extraValue, isRoleBonus):
+        super(_SingleVehicleReceivedHitRibbon, self).__init__(ribbonID, vehID, extraValue)
+        self._isRoleBonus = isRoleBonus
+
+    @classmethod
+    def createFromFeedbackEvent(cls, ribbonID, event):
+        return cls(ribbonID, event.getTargetID(), cls._extractExtraValue(event), _isRoleBonus(event))
 
     def getType(self):
         raise NotImplementedError
 
+    def isRoleBonus(self):
+        return self._isRoleBonus
+
     @classmethod
     def _extractExtraValue(cls, event):
         return event.getExtra().getDamage()
+
+    def _canAggregate(self, ribbon):
+        return super(_SingleVehicleReceivedHitRibbon, self)._canAggregate(ribbon) and self.isRoleBonus() == ribbon.isRoleBonus()
 
 
 class _ReceivedDamageHitRibbon(_SingleVehicleReceivedHitRibbon):
@@ -347,16 +384,17 @@ class _StunAssistRibbon(_SingleVehicleDamageRibbon):
 
 
 class _MultiVehicleRibbon(_Ribbon):
-    __slots__ = ('_hits',)
+    __slots__ = ('_hits', '_isRoleBonus')
 
-    def __init__(self, ribbonID, vehID, extraValue):
+    def __init__(self, ribbonID, vehID, extraValue, isRoleBonus):
         super(_MultiVehicleRibbon, self).__init__(ribbonID)
         self._hits = defaultdict(int)
         self._hits[vehID] = extraValue
+        self._isRoleBonus = isRoleBonus
 
     @classmethod
     def createFromFeedbackEvent(cls, ribbonID, event):
-        return cls(ribbonID, event.getTargetID(), cls._extractExtraValue(event))
+        return cls(ribbonID, event.getTargetID(), cls._extractExtraValue(event), _isRoleBonus(event))
 
     @classmethod
     def _extractExtraValue(cls, event):
@@ -370,6 +408,12 @@ class _MultiVehicleRibbon(_Ribbon):
 
     def getExtraValue(self):
         return sum(self._hits.itervalues())
+
+    def isRoleBonus(self):
+        return self._isRoleBonus
+
+    def _canAggregate(self, ribbon):
+        return super(_MultiVehicleRibbon, self)._canAggregate(ribbon) and self.isRoleBonus() == ribbon.isRoleBonus()
 
     def _aggregate(self, ribbon):
         for targetID, extra in ribbon._hits.iteritems():
@@ -562,6 +606,10 @@ class _EpicDefenderBonus(_EpicBaseRibbon):
 class _EpicAbilityAssist(_SingleVehicleReceivedHitRibbon):
     __slots__ = ()
 
+    @classmethod
+    def createFromFeedbackEvent(cls, ribbonID, event):
+        return cls(ribbonID, event.getTargetID(), cls._extractExtraValue(event), False)
+
     def getType(self):
         return BATTLE_EFFICIENCY_TYPES.ASSIST_BY_ABILITY
 
@@ -618,6 +666,10 @@ _FEEDBACK_EVENT_TO_RIBBON_CLS_FACTORY = {FEEDBACK_EVENT_ID.PLAYER_CAPTURED_BASE:
  FEEDBACK_EVENT_ID.SMOKE_ASSIST: _RibbonSingleClassFactory(_EpicAbilityAssist),
  FEEDBACK_EVENT_ID.INSPIRE_ASSIST: _RibbonSingleClassFactory(_EpicAbilityAssist)}
 
+def _isRoleBonus(event):
+    return event.getExtra().isRoleAction()
+
+
 def _createRibbonFromPlayerFeedbackEvent(ribbonID, event):
     etype = event.getType()
     if etype in _FEEDBACK_EVENT_TO_RIBBON_CLS_FACTORY:
@@ -625,7 +677,7 @@ def _createRibbonFromPlayerFeedbackEvent(ribbonID, event):
         ribbonCls = factory.getRibbonClass(event)
         if ribbonCls is not None:
             return ribbonCls.createFromFeedbackEvent(ribbonID, event)
-    LOG_UNEXPECTED('Could not find a proper ribbon class associated with the given feedback event', event)
+    _logger.error('Could not find a proper ribbon class associated with the given feedback event %s', event)
     return
 
 
@@ -818,7 +870,7 @@ class RibbonsAggregator(object):
                     self.onRibbonAdded(ribbon)
 
     def __filterRibbons(self, ribbons):
-        if self.__isInPostmortemMode:
+        if self.__isInPostmortemMode and not avatar_getter.isObserver():
             for rType in _RIBBON_TYPES_EXCLUDED_IN_POSTMORTEM:
                 if rType in ribbons:
                     del ribbons[rType]
@@ -831,7 +883,8 @@ class RibbonsAggregator(object):
                 for tmpRibbon in tmpRibbons:
                     if tmpRibbon.getVehicleID() in killRibbons:
                         killRibbon = killRibbons[tmpRibbon.getVehicleID()]
-                        killRibbon.setExtraValue(killRibbon.getExtraValue() + tmpRibbon.getExtraValue())
+                        if not killRibbon.aggregate(tmpRibbon):
+                            filteredRibbons.append(tmpRibbon)
                     filteredRibbons.append(tmpRibbon)
 
                 ribbons[rType] = filteredRibbons

@@ -1,7 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/shared/battle_loading.py
 import BattleReplay
-import BigWorld
 from account_helpers.settings_core import settings_constants
 from account_helpers.settings_core.options import BattleLoadingTipSetting
 from helpers import dependency
@@ -56,24 +55,17 @@ class BattleLoading(BaseBattleLoadingMeta, IArenaVehiclesController):
     def invalidateArenaInfo(self):
         self._setTipsInfo()
 
-    def arenaLoadCompleted(self):
-        BigWorld.wg_enableGUIBackground(False, False)
-
     def _populate(self):
         super(BattleLoading, self)._populate()
         self.sessionProvider.addArenaCtrl(self)
         if self._arenaVisitor is None:
             return
         else:
-            BigWorld.wg_updateColorGrading()
-            BigWorld.wg_enableGUIBackground(True, False)
             self._addArenaTypeData()
             return
 
     def _dispose(self):
         self.sessionProvider.removeArenaCtrl(self)
-        if not BattleReplay.isPlaying():
-            BigWorld.wg_enableGUIBackground(False, True)
         super(BattleLoading, self)._disposeWithReloading()
 
     def _getBattlesCount(self):
@@ -101,7 +93,6 @@ class BattleLoading(BaseBattleLoadingMeta, IArenaVehiclesController):
 
     def _addArenaTypeData(self):
         self.as_setMapIconS(SMALL_MAP_IMAGE_SF_PATH % self._arenaVisitor.type.getGeometryName())
-        BigWorld.wg_setGUIBackground(self._battleCtx.getArenaScreenIcon())
 
     def __makeVisualTipVO(self, arenaDP, tip=None):
         loadingInfo = settings_constants.GAME.BATTLE_LOADING_RANKED_INFO if self._arenaVisitor.gui.isRankedBattle() else settings_constants.GAME.BATTLE_LOADING_INFO

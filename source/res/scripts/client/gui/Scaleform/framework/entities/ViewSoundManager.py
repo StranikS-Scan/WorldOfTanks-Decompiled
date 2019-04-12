@@ -3,8 +3,8 @@
 import WWISE
 import SoundGroups
 from debug_utils import LOG_WARNING
-from gui.app_loader import g_appLoader
-from gui.app_loader.settings import GUI_GLOBAL_SPACE_ID as _SPACE_ID
+from helpers import dependency
+from skeletons.gui.app_loader import IAppLoader, GuiGlobalSpaceID
 
 class _ViewSoundsManager(object):
 
@@ -107,7 +107,8 @@ class _ViewSoundsManager(object):
             del self.__sounds[eventName]
 
         if self.__soundSpaceSettings is not None:
-            if g_appLoader.getSpaceID() != _SPACE_ID.LOGIN and self.__soundSpaceSettings.exitEvent:
+            appLoader = dependency.instance(IAppLoader)
+            if appLoader.getSpaceID() != GuiGlobalSpaceID.LOGIN and self.__soundSpaceSettings.exitEvent:
                 self.playInstantSound(self.__soundSpaceSettings.exitEvent)
         return
 

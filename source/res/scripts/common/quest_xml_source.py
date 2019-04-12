@@ -323,6 +323,9 @@ class Source(object):
          'GR': self.__readBattleResultsConditionList,
          'igrType': self.__readCondition_IGRType,
          'premium': self.__readCondition_bool,
+         'premiumPlus': self.__readCondition_bool,
+         'premiumVip': self.__readCondition_bool,
+         'isPremiumQuestsEnabled': self.__readCondition_bool,
          'daily': self.__readCondition_true,
          'bonusLimit': self.__readCondition_int,
          'isTutorialCompleted': self.__readCondition_bool,
@@ -426,7 +429,7 @@ class Source(object):
         if eventType in (EVENT_TYPE.RANKED_QUEST,):
             condition_readers.update({'season': self.__readCondition_int,
              'cycle': self.__readCondition_int,
-             'rank': self.__readCondition_int,
+             'rank': self.__readBattleResultsConditionList,
              'step': self.__readCondition_int,
              'maxRank': self.__readBattleResultsConditionList,
              'ladderPts': self.__readBattleResultsConditionList})
@@ -445,6 +448,8 @@ class Source(object):
          'slots',
          'berths',
          'premium',
+         'premium_plus',
+         'premium_vip',
          'token',
          'goodie',
          'vehicle',

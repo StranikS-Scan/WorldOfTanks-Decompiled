@@ -15,7 +15,7 @@ IS_BOT = BigWorld.component == 'bot'
 IS_CELLAPP = BigWorld.component == 'cell'
 IS_BASEAPP = BigWorld.component in ('base', 'service')
 IS_WEB = BigWorld.component == 'web'
-CURRENT_REALM = 'RU'
+CURRENT_REALM = 'CT'
 DEFAULT_LANGUAGE = 'ru'
 AUTH_REALM = 'RU'
 IS_DEVELOPMENT = CURRENT_REALM == 'DEV'
@@ -650,6 +650,57 @@ class ACCOUNT_ATTR:
     SUSPENDED = 137438953472L
 
 
+class PREMIUM_TYPE:
+    NONE = 0
+    BASIC = 1
+    PLUS = 2
+    VIP = 4
+    TYPES_SORTED = (BASIC, PLUS, VIP)
+    ANY = BASIC | PLUS | VIP
+    AFFECTING_TYPES = PLUS | VIP
+
+    @classmethod
+    def activePremium(cls, premMask):
+        for premType in reversed(cls.TYPES_SORTED):
+            if premMask & premType:
+                return premType
+
+        return cls.NONE
+
+    @classmethod
+    def initialData(cls):
+        return {cls.BASIC: 0,
+         cls.PLUS: 0,
+         cls.VIP: 0,
+         'premMask': 0}
+
+
+class PREMIUM_ENTITLEMENTS:
+    BASIC = 'premium'
+    PLUS = 'premium_plus'
+    VIP = 'premium_vip'
+    ALL_TYPES = (BASIC, PLUS, VIP)
+
+
+ENTITLEMENT_TO_PREM_TYPE = {PREMIUM_ENTITLEMENTS.BASIC: PREMIUM_TYPE.BASIC,
+ PREMIUM_ENTITLEMENTS.PLUS: PREMIUM_TYPE.PLUS,
+ PREMIUM_ENTITLEMENTS.VIP: PREMIUM_TYPE.VIP}
+PREM_TYPE_TO_ENTITLEMENT = {v:k for k, v in ENTITLEMENT_TO_PREM_TYPE.iteritems()}
+
+class PREM_BONUS_TYPES:
+    CREDITS = 0
+    XP = 1
+
+
+class PremiumConfigs(object):
+    DAILY_BONUS = 'additionalBonus_config'
+    PREM_QUESTS = 'premQuests_config'
+    PIGGYBANK = 'piggyBank_config'
+    IS_PREFERRED_MAPS_ENABLED = 'isPreferredMapsEnabled'
+    PREFERRED_MAPS = 'preferredMaps_config'
+    PREM_SQUAD = 'premSquad_config'
+
+
 class RESTRICTION_TYPE:
     NONE = 0
     BAN = 1
@@ -985,6 +1036,7 @@ PERSONAL_MISSION_2_FINAL_PAWN_COST = 3
 PERSONAL_MISSION_FREE_TOKENS_LIMIT = 21
 ENDLESS_TOKEN_TIME = 4104777660L
 LOOTBOX_TOKEN_PREFIX = 'lootBox:'
+PREMIUM_TOKEN_PREFIX = 'prem_acc'
 
 def personalMissionFreeTokenName(branch):
     return PERSONAL_MISSION_FREE_TOKEN_NAME if branch <= 1 else '_'.join([PERSONAL_MISSION_FREE_TOKEN_NAME, str(branch)])
@@ -1230,6 +1282,7 @@ class REQUEST_COOLDOWN:
     CREW_SKINS = 0.3
     BPF_COMMAND = 1.0
     FL_REWARD = 5.0
+    PREFERRED_MAPS = 1.0
 
 
 IS_SHOW_INGAME_HELP_FIRST_TIME = False
@@ -2052,6 +2105,8 @@ class CLIENT_COMMAND_SOURCES:
     RANGE = (UNDEFINED, RENTED_STYLE_RADIAL_MENU)
 
 
+EMPTY_GEOMETRY_ID = 0
+
 class ROLE_TYPE:
     TANK_ONE = 1
     TANK_TWO = 2
@@ -2126,3 +2181,10 @@ ACTION_LABEL_TO_TYPE = {'blockAndTakeDamage': ACTION_TYPE.BLOCK_AND_TAKE_DAMAGE,
  'doStun': ACTION_TYPE.DO_STUN,
  'doSpgDamage': ACTION_TYPE.DO_SPG_DAMAGE}
 ACTION_TYPE_TO_LABEL = dict(((index, label) for label, index in ACTION_LABEL_TO_TYPE.items()))
+
+class ASSIST_TYPES(object):
+    TRACK = 0
+    RADIO = 1
+    STUN = 2
+    SMOKE = 3
+    INSPIRE = 4

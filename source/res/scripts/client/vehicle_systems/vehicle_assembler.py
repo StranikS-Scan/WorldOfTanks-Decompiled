@@ -3,6 +3,9 @@
 import BigWorld
 import Vehicular
 import DataLinks
+import Math
+import GenericComponents
+import Triggers
 import NetworkFilters
 from helpers import gEffectsDisabled
 from CustomEffectManager import CustomEffectManager
@@ -59,7 +62,7 @@ class _CompoundAssembler(VehicleAssemblerAbstract):
         prereqs += [compoundAssembler, collisionAssembler]
         physicalTracksBuilders = typeDescriptor.chassis.physicalTracks
         for name, builder in physicalTracksBuilders.iteritems():
-            prereqs.append(builder.createLoader('{0}PhysicalTrack'.format(name), modelsSetParams.skin))
+            prereqs.append(builder.createLoader(BigWorld.player().spaceID, '{0}PhysicalTrack'.format(name), modelsSetParams.skin))
 
         return (compoundAssembler, prereqs)
 
@@ -97,23 +100,21 @@ class PanzerAssemblerWWISE(_CompoundAssembler):
             scrollableWheelsCount = appearance.typeDescriptor.chassis.generalWheelsAnimatorConfig.getWheelsCount()
             wheelsScroll = []
             for _ in xrange(scrollableWheelsCount):
-                retriever = NetworkFilters.FloatFilterRetriever()
-                appearance.addComponent(retriever)
+                retriever = appearance.createComponent(NetworkFilters.FloatFilterRetriever)
                 wheelsScroll.append(DataLinks.createFloatLink(retriever, 'value'))
                 appearance.filterRetrievers.append(retriever)
 
             steerableWheelsCount = appearance.typeDescriptor.chassis.generalWheelsAnimatorConfig.getSteerableWheelsCount()
             wheelsSteering = []
             for _ in xrange(steerableWheelsCount):
-                retriever = NetworkFilters.FloatFilterRetriever()
-                appearance.addComponent(retriever)
+                retriever = appearance.createComponent(NetworkFilters.FloatFilterRetriever)
                 wheelsSteering.append(DataLinks.createFloatLink(retriever, 'value'))
                 appearance.filterRetrievers.append(retriever)
 
-        appearance.wheelsAnimator = model_assembler.createWheelsAnimator(appearance.compoundModel, appearance.collisions, ColliderTypes.VEHICLE_COLLIDER, appearance.typeDescriptor, appearance.splineTracks, lambda : appearance.wheelsState, wheelsScroll, wheelsSteering, appearance.id, appearance.fashion, appearance.filter, lodStateLink)
+        appearance.wheelsAnimator = model_assembler.createWheelsAnimator(appearance, ColliderTypes.VEHICLE_COLLIDER, appearance.typeDescriptor, lambda : appearance.wheelsState, wheelsScroll, wheelsSteering, appearance.splineTracks, lodStateLink)
         suspensionLodLink = lodStateLink
         if 'wheeledVehicle' in appearance.typeDescriptor.type.tags:
-            wheeledLodCalculator = Vehicular.LodCalculator(DataLinks.linkMatrixTranslation(appearance.compoundModel.matrix), True, WHEELED_CHASSIS_PRIORITY_GROUP, isPlayer)
+            wheeledLodCalculator = Vehicular.LodCalculator(appearance.worldID, DataLinks.linkMatrixTranslation(appearance.compoundModel.matrix), True, WHEELED_CHASSIS_PRIORITY_GROUP, isPlayer)
             appearance.addComponent(wheeledLodCalculator, 'wheeledLodCalculator')
             appearance.allLodCalculators.append(wheeledLodCalculator)
             suspensionLodLink = wheeledLodCalculator.lodStateLink
@@ -123,12 +124,14 @@ class PanzerAssemblerWWISE(_CompoundAssembler):
         model_assembler.assembleBurnoutProcessor(appearance)
         model_assembler.assembleSuspensionSound(appearance, lodLink, isPlayer)
         model_assembler.assembleHullAimingController(appearance)
-        appearance.trackNodesAnimator = model_assembler.createTrackNodesAnimator(appearance.compoundModel, appearance.typeDescriptor, appearance.wheelsAnimator, lodStateLink)
+        appearance.trackNodesAnimator = model_assembler.createTrackNodesAnimator(appearance, appearance.typeDescriptor, lodStateLink)
         model_assembler.assembleVehicleTraces(appearance, appearance.filter, lodStateLink)
         model_assembler.assembleTracks(resourceRefs, appearance.typeDescriptor, appearance, appearance.splineTracks, False, lodStateLink)
         return
 
     def _assembleParts(self, isPlayer, appearance, resourceRefs):
+        appearance.transform = appearance.createComponent(GenericComponents.TransformComponent, Math.Vector3(0, 0, 0))
+        appearance.areaTriggerTarget = appearance.createComponent(Triggers.AreaTriggerTarget)
         appearance.filter = model_assembler.createVehicleFilter(appearance.typeDescriptor)
         compoundModel = appearance.compoundModel
         if appearance.isAlive:
@@ -141,16 +144,16 @@ class PanzerAssemblerWWISE(_CompoundAssembler):
                 model_assembler.subscribeEngineAuditionToEngineState(appearance.engineAudition, appearance.detailedEngineState)
             if isPlayer:
                 turret = appearance.typeDescriptor.turret
-                gunRotatorAudition = Vehicular.GunRotatorAudition(turret.turretRotatorSoundManual, turret.weight / 1000.0, compoundModel.node(TankPartNames.TURRET))
+                gunRotatorAudition = appearance.createComponent(Vehicular.GunRotatorAudition, turret.turretRotatorSoundManual, turret.weight / 1000.0, compoundModel.node(TankPartNames.TURRET))
                 gunRotatorAudition.vehicleMatrixLink = appearance.compoundModel.root
                 gunRotatorAudition.damaged = lambda : appearance.turretDamaged()
                 gunRotatorAudition.maxTurretRotationSpeed = lambda : appearance.maxTurretRotationSpeed()
                 appearance.gunRotatorAudition = gunRotatorAudition
-                appearance.frictionAudition = Vehicular.FrictionAudition(TANK_FRICTION_EVENT)
+                appearance.frictionAudition = appearance.createComponent(Vehicular.FrictionAudition, TANK_FRICTION_EVENT)
                 appearance.peripheralsController = PeripheralsController()
         appearance.highlighter = Highlighter()
         isLodTopPriority = isPlayer
-        lodCalcInst = Vehicular.LodCalculator(DataLinks.linkMatrixTranslation(appearance.compoundModel.matrix), True, VEHICLE_PRIORITY_GROUP, isLodTopPriority)
+        lodCalcInst = appearance.createComponent(Vehicular.LodCalculator, DataLinks.linkMatrixTranslation(appearance.compoundModel.matrix), True, VEHICLE_PRIORITY_GROUP, isLodTopPriority)
         appearance.lodCalculator = lodCalcInst
         appearance.allLodCalculators.append(lodCalcInst)
         lodLink = DataLinks.createFloatLink(lodCalcInst, 'lodDistance')
@@ -169,7 +172,7 @@ class PanzerAssemblerWWISE(_CompoundAssembler):
                  BigWorld.PyDirtHandler(False, compoundModel.node(TankPartNames.TURRET).position.y),
                  BigWorld.PyDirtHandler(False, compoundModel.node(TankPartNames.GUN).position.y)]
                 modelHeight, _ = appearance.computeVehicleHeight()
-                appearance.dirtComponent = Vehicular.DirtComponent(dirtHandlers, modelHeight)
+                appearance.dirtComponent = appearance.createComponent(Vehicular.DirtComponent, dirtHandlers, modelHeight)
                 for fashionIdx, _ in enumerate(TankPartNames.ALL):
                     fashions[fashionIdx].addMaterialHandler(dirtHandlers[fashionIdx])
 
@@ -189,7 +192,7 @@ class PanzerAssemblerWWISE(_CompoundAssembler):
 
 def _assembleSwinging(appearance, lodLink):
     compoundModel = appearance.compoundModel
-    appearance.swingingAnimator = swingingAnimator = createSwingingAnimator(appearance.typeDescriptor, compoundModel.node(TankPartNames.HULL).localMatrix, appearance.compoundModel.matrix, lodLink)
-    compoundModel.node(TankPartNames.HULL, swingingAnimator)
+    appearance.swingingAnimator = swingingAnimator = createSwingingAnimator(appearance, appearance.typeDescriptor, compoundModel.node(TankPartNames.HULL).localMatrix, appearance.compoundModel.matrix, lodLink)
+    compoundModel.node(TankPartNames.HULL, swingingAnimator.animatedMProv)
     if hasattr(appearance.filter, 'placingCompensationMatrix'):
         swingingAnimator.placingCompensationMatrix = appearance.filter.placingCompensationMatrix

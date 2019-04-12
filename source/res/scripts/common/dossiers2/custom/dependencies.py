@@ -83,7 +83,9 @@ def _set_ACHIEVEMENT15X15_DEPENDENCIES():
      'deathTrackWinSeries': [_updateMaxDeathTrackWinSeries],
      'tankwomenProgress': [_updateTankwomen],
      'EFC2016WinSeries': [_updateMaxEFC2016WinSeries],
-     'rankedBattlesHeroProgress': [_updateRankedBattlesHeroProgress]})
+     'rankedBattlesHeroProgress': [_updateRankedBattlesHeroProgress],
+     'rankedStayingPower': [_updateRankedAchievementsProgress],
+     'rankedDivisionFighter': [_updateRankedAchievementsProgress]})
 
 
 ACHIEVEMENT7X7_DEPENDENCIES = {}
@@ -537,6 +539,24 @@ def _updateRankedBattlesHeroProgress(dossierDescr, dossierBlockDescr, key, value
         dossierDescr.addPopUp('singleAchievements', 'rankedBattlesHero', 1)
     elif value == 0:
         dossierDescr['singleAchievements']['rankedBattlesHero'] = 0
+
+
+def _getMedalClass(key, value):
+    medalCfg = RECORD_CONFIGS[key]
+    maxMedalClass = len(medalCfg)
+    curClass = 0
+    for medalClass in xrange(1, maxMedalClass):
+        if value >= medalCfg[medalClass]:
+            curClass = medalClass
+
+    return curClass
+
+
+def _updateRankedAchievementsProgress(dossierDescr, dossierBlockDescr, key, value, prevValue):
+    prevClass = _getMedalClass(key, prevValue)
+    curClass = _getMedalClass(key, value)
+    if prevClass != curClass:
+        dossierDescr.addPopUp('achievements', key, curClass)
 
 
 def _updateReliableComrade(dossierDescr, dossierBlockDescr, key, value, prevValue):

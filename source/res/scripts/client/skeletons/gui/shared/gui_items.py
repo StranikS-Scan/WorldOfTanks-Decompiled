@@ -49,10 +49,10 @@ class IGuiItemsFactory(object):
     def createTankmanDossier(self, tmanDescr, tankmanDossierDescr, extDossier, playerDBID=None, currentVehicleItem=None):
         raise NotImplementedError
 
-    def createAccountDossier(self, dossier, playerDBID=None, rated7x7Seasons=None, rankedCurrentSeason=None):
+    def createAccountDossier(self, dossier, playerDBID=None, rated7x7Seasons=None):
         raise NotImplementedError
 
-    def createVehicleDossier(self, dossier, vehTypeCompDescr, playerDBID=None, rankedCurrentSeason=None):
+    def createVehicleDossier(self, dossier, vehTypeCompDescr, playerDBID=None):
         raise NotImplementedError
 
     def createBadge(self, descriptor, proxy=None):

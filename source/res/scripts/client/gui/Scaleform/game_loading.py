@@ -17,6 +17,7 @@ class GameLoading(ExternalFlashComponent, GameLoadingMeta):
 
     def __init__(self, _):
         super(GameLoading, self).__init__(ExternalFlashSettings('gameLoading', 'gameLoadingApp.swf', 'root.main', ROOT_SWF_CONSTANTS.GAME_LOADING_REGISTER_CALLBACK))
+        self.createExternalComponent()
 
     @uniprof.regionDecorator(label='offline.game_loading', scope='enter')
     def afterCreate(self):

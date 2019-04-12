@@ -36,6 +36,15 @@
       <makeTankDetails>	true	</makeTankDetails>
     </common>
   </physics_preset>
+  <tank_physics_preset>
+    <name>	collision	</name>
+    <common>
+      <dynamicDecompositionMethod>	2	</dynamicDecompositionMethod>
+      <exportMethod>	1	</exportMethod>
+      <maxDecompositionTimeout>	60	</maxDecompositionTimeout>
+      <makeTankDetails>	true	</makeTankDetails>
+    </common>
+  </tank_physics_preset>
   <collision_preset>
     <name>	collision	</name>
     <common>

@@ -7,8 +7,7 @@ from account_helpers.settings_core.settings_constants import SOUND, DAMAGE_INDIC
 from constants import VEHICLE_SIEGE_STATE as _SIEGE_STATE
 from debug_utils import LOG_DEBUG, LOG_DEBUG_DEV
 from gui import DEPTH_OF_Aim, GUI_SETTINGS
-from gui.Scaleform import SCALEFORM_SWF_PATH_V3
-from gui.Scaleform.Flash import Flash
+from gui.Scaleform.flash_wrapper import Flash, InputKeyMode
 from gui.Scaleform.daapi.view.battle.shared import siege_component
 from gui.Scaleform.daapi.view.meta.SiegeModeIndicatorMeta import SiegeModeIndicatorMeta
 from gui.Scaleform.daapi.view.meta.SixthSenseMeta import SixthSenseMeta
@@ -267,8 +266,8 @@ _DEFAULT_DAMAGE_INDICATOR_TYPE = DAMAGE_INDICATOR_TYPE.EXTENDED
 
 class DamageIndicatorMeta(Flash):
 
-    def __init__(self, swf, className, args, path):
-        super(DamageIndicatorMeta, self).__init__(swf, className, args, path)
+    def __init__(self, swf, className, args):
+        super(DamageIndicatorMeta, self).__init__(swf, className, args)
         root = self.movie.root.dmgIndicator
         self._as_updateSettings = root.as_updateSettings
         self._as_showStandard = root.as_showStandard
@@ -317,10 +316,10 @@ class _DamageIndicator(DamageIndicatorMeta, IHitIndicator):
 
     def __init__(self, hitsCount):
         names = tuple((_DAMAGE_INDICATOR_MC_NAME.format(x) for x in xrange(hitsCount)))
-        super(_DamageIndicator, self).__init__(_DAMAGE_INDICATOR_SWF, _DAMAGE_INDICATOR_COMPONENT, (names,), SCALEFORM_SWF_PATH_V3)
+        super(_DamageIndicator, self).__init__(_DAMAGE_INDICATOR_SWF, _DAMAGE_INDICATOR_COMPONENT, (names,))
         self.__voBuilderFactory = None
         self.__updateMethod = None
-        self.component.wg_inputKeyMode = 2
+        self.component.wg_inputKeyMode = InputKeyMode.NO_HANDLE
         self.component.position.z = DEPTH_OF_Aim
         self.movie.backgroundAlpha = 0.0
         self.component.focus = False
@@ -358,9 +357,6 @@ class _DamageIndicator(DamageIndicatorMeta, IHitIndicator):
 
     def getBeginAnimationDuration(self):
         return _BEGIN_ANIMATION_DURATION
-
-    def setVisible(self, flag):
-        self.component.visible = flag
 
     def invalidateSettings(self):
         getter = self.settingsCore.getSetting
@@ -561,7 +557,8 @@ class SiegeModeIndicator(SiegeModeIndicatorMeta):
             deviceName, deviceState = 'chassis', chassis
         else:
             deviceName, deviceState = 'engine', engine
-        self.as_updateDeviceStateS(deviceName, deviceState)
+        if not self._siegeComponent.staticMode:
+            self.as_updateDeviceStateS(deviceName, deviceState)
 
     def __onVehicleControlling(self, vehicle):
         vStateCtrl = self.sessionProvider.shared.vehicleState
@@ -569,6 +566,7 @@ class SiegeModeIndicator(SiegeModeIndicatorMeta):
         vType = vTypeDesc.type
         if vehicle.isAlive() and vTypeDesc.hasSiegeMode and not vTypeDesc.isWheeledVehicle:
             siegeModeParams = vType.siegeModeParams
+            self._siegeComponent.staticMode = vTypeDesc.hasAutoSiegeMode
             self._switchTimeTable.update({_SIEGE_STATE.DISABLED: siegeModeParams[_SIEGE_STATE.SWITCHING_ON],
              _SIEGE_STATE.SWITCHING_ON: siegeModeParams[_SIEGE_STATE.SWITCHING_ON],
              _SIEGE_STATE.ENABLED: siegeModeParams[_SIEGE_STATE.SWITCHING_OFF],
@@ -664,8 +662,8 @@ class IDirectionIndicator(object):
 class _DirectionIndicator(Flash, IDirectionIndicator):
 
     def __init__(self, swf):
-        super(_DirectionIndicator, self).__init__(swf, _DIRECT_INDICATOR_COMPONENT, (_DIRECT_INDICATOR_MC_NAME,), SCALEFORM_SWF_PATH_V3)
-        self.component.wg_inputKeyMode = 2
+        super(_DirectionIndicator, self).__init__(swf, _DIRECT_INDICATOR_COMPONENT, (_DIRECT_INDICATOR_MC_NAME,))
+        self.component.wg_inputKeyMode = InputKeyMode.NO_HANDLE
         self.component.position.z = DEPTH_OF_Aim
         self.movie.backgroundAlpha = 0.0
         self.movie.scaleMode = 'NoScale'
@@ -728,8 +726,8 @@ def createDamageIndicator():
 class _ArtyDirectionIndicator(Flash, IDirectionIndicator):
 
     def __init__(self, swf):
-        super(_ArtyDirectionIndicator, self).__init__(swf, _DIRECT_INDICATOR_COMPONENT, (_DIRECT_ARTY_INDICATOR_MC_NAME,), SCALEFORM_SWF_PATH_V3)
-        self.component.wg_inputKeyMode = 2
+        super(_ArtyDirectionIndicator, self).__init__(swf, _DIRECT_INDICATOR_COMPONENT, (_DIRECT_ARTY_INDICATOR_MC_NAME,))
+        self.component.wg_inputKeyMode = InputKeyMode.NO_HANDLE
         self.component.position.z = DEPTH_OF_Aim
         self.movie.backgroundAlpha = 0.0
         self.movie.scaleMode = 'NoScale'

@@ -315,6 +315,10 @@ class _VehicleInfo(object):
         raise NotImplementedError
 
     @property
+    def xpPenalty(self):
+        raise NotImplementedError
+
+    @property
     def isTeamKiller(self):
         raise NotImplementedError
 
@@ -367,7 +371,7 @@ class _VehicleInfo(object):
 
 
 class VehicleDetailedInfo(_VehicleInfo):
-    __slots__ = ('_vehicle', '_killerID', '_achievementsIDs', '_critsInfo', '_spotted', '_piercings', '_piercingsReceived', '_damageDealt', '_tdamageDealt', '_sniperDamageDealt', '_damageBlockedByArmor', '_damageAssistedTrack', '_damageAssistedRadio', '_damageAssistedStun', '_stunNum', '_stunDuration', '_rickochetsReceived', '_noDamageDirectHitsReceived', '_targetKills', '_directHits', '_directHitsReceived', '_explosionHits', '_explosionHitsReceived', '_shots', '_kills', '_tkills', '_damaged', '_mileage', '_capturePoints', '_droppedCapturePoints', '_xp', '_fire', '_isTeamKiller', '_isKilledByTeamKiller', '_rollouts', '_respawns', '_extPublic', '_deathCount', '_equipmentDamageDealt', '_equipmentDamageAssisted', '_xpForAttack', '_xpForAssist', '_xpOther')
+    __slots__ = ('_vehicle', '_killerID', '_achievementsIDs', '_critsInfo', '_spotted', '_piercings', '_piercingsReceived', '_damageDealt', '_tdamageDealt', '_sniperDamageDealt', '_damageBlockedByArmor', '_damageAssistedTrack', '_damageAssistedRadio', '_damageAssistedStun', '_stunNum', '_stunDuration', '_rickochetsReceived', '_noDamageDirectHitsReceived', '_targetKills', '_directHits', '_directHitsReceived', '_explosionHits', '_explosionHitsReceived', '_shots', '_kills', '_tkills', '_damaged', '_mileage', '_capturePoints', '_droppedCapturePoints', '_xp', '_fire', '_isTeamKiller', '_isKilledByTeamKiller', '_rollouts', '_respawns', '_extPublic', '_deathCount', '_equipmentDamageDealt', '_equipmentDamageAssisted', '_xpForAttack', '_xpForAssist', '_xpOther', '_xpPenalty')
 
     def __init__(self, vehicleID, vehicle, player, deathReason=DEATH_REASON_ALIVE):
         super(VehicleDetailedInfo, self).__init__(vehicleID, player, deathReason)
@@ -413,6 +417,7 @@ class VehicleDetailedInfo(_VehicleInfo):
         self._xpForAssist = 0
         self._xpForAttack = 0
         self._xpOther = 0
+        self._xpPenalty = 0
         self._isKilledByTeamKiller = False
 
     @property
@@ -607,6 +612,10 @@ class VehicleDetailedInfo(_VehicleInfo):
     def xpOther(self):
         return self._xpOther
 
+    @property
+    def xpPenalty(self):
+        return self._xpPenalty
+
     def haveInteractionDetails(self):
         return self._spotted != 0 or self._deathReason > DEATH_REASON_ALIVE or self._directHits != 0 or self._explosionHits != 0 or self._piercings != 0 or self._damageDealt != 0 or self.damageAssisted != 0 or self.damageAssistedStun != 0 or self.stunNum != 0 or self.critsCount != 0 or self._fire != 0 or self._targetKills != 0 or self.stunDuration != 0 or self._damageBlockedByArmor != 0
 
@@ -655,6 +664,7 @@ class VehicleDetailedInfo(_VehicleInfo):
         info._xpOther = vehicleRecords['xp/other']
         info._xpForAssist = vehicleRecords['xp/assist']
         info._xpForAttack = vehicleRecords['xp/attack']
+        info._xpPenalty = vehicleRecords['xpPenalty']
         info._isTeamKiller = vehicleRecords['isTeamKiller']
         info._isKilledByTeamKiller = vehicleRecords.get('isKilledByTeamKiller', False)
         info._rollouts = vehicleRecords['rolloutsCount']
@@ -865,6 +875,10 @@ class VehicleSummarizeInfo(_VehicleInfo):
     @property
     def xpOther(self):
         return self.__accumulate('xpOther')
+
+    @property
+    def xpPenalty(self):
+        return self.__accumulate('xpPenalty')
 
     @property
     def deathCount(self):

@@ -1,19 +1,23 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle_results_window.py
 from adisp import process
+from constants import PremiumConfigs
 from gui import SystemMessages
 from gui import makeHtmlString
+from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.battle_results.settings import PROGRESS_ACTION
 from gui.battle_results import RequestEmblemContext, EMBLEM_TYPE
 from gui.prb_control.dispatcher import g_prbLoader
 from gui.server_events import events_dispatcher as quests_events
 from gui.Scaleform.daapi.view.meta.BattleResultsMeta import BattleResultsMeta
-from gui.shared import event_bus_handlers, events, EVENT_BUS_SCOPE
+from gui.shared import event_bus_handlers, events, EVENT_BUS_SCOPE, g_eventBus
 from gui.shared import event_dispatcher
-from gui.shared.event_dispatcher import showProgressiveRewardWindow
+from gui.shared.event_dispatcher import showProgressiveRewardWindow, showTankPremiumAboutPage
 from gui.sounds.ambients import BattleResultsEnv
 from helpers import dependency
 from skeletons.gui.battle_results import IBattleResultsService
+from skeletons.gui.game_control import IGameSessionController
+from skeletons.gui.lobby_context import ILobbyContext
 from soft_exception import SoftException
 
 def _wrapEmblemUrl(emblemUrl):
@@ -21,7 +25,9 @@ def _wrapEmblemUrl(emblemUrl):
 
 
 class BattleResultsWindow(BattleResultsMeta):
-    battleResults = dependency.descriptor(IBattleResultsService)
+    __battleResults = dependency.descriptor(IBattleResultsService)
+    __lobbyContext = dependency.descriptor(ILobbyContext)
+    __gameSession = dependency.descriptor(IGameSessionController)
     __sound_env__ = BattleResultsEnv
     __metaclass__ = event_bus_handlers.EventBusListener
 
@@ -43,16 +49,13 @@ class BattleResultsWindow(BattleResultsMeta):
             self.destroy()
 
     def saveSorting(self, iconType, sortDirection, bonusType):
-        self.battleResults.saveStatsSorting(bonusType, iconType, sortDirection)
+        self.__battleResults.saveStatsSorting(bonusType, iconType, sortDirection)
 
     def getClanEmblem(self, textureID, clanDBID):
         self.__requestClanEmblem(textureID, clanDBID)
 
     def startCSAnimationSound(self, soundEffectID='cs_animation_league_up'):
         self.app.soundManager.playEffectSound(soundEffectID)
-
-    def showPremiumView(self, data):
-        self.as_openPremiumPopoverS(data)
 
     def onResultsSharingBtnPress(self):
         raise NotImplementedError('This feature is not longer supported')
@@ -66,23 +69,40 @@ class BattleResultsWindow(BattleResultsMeta):
         elif unlockType == PROGRESS_ACTION.NEW_SKILL_UNLOCK_TYPE:
             event_dispatcher.showPersonalCase(itemID, 2, EVENT_BUS_SCOPE.LOBBY)
 
-    def showProgressiveRewardView(self, data):
+    def showProgressiveRewardView(self):
         showProgressiveRewardWindow()
+
+    def onAppliedPremiumBonus(self):
+        self.__battleResults.applyAdditionalBonus(self.__arenaUniqueID)
+
+    def onShowDetailsPremium(self):
+        showTankPremiumAboutPage()
 
     def _populate(self):
         super(BattleResultsWindow, self)._populate()
-        if self.battleResults.areResultsPosted(self.__arenaUniqueID):
+        g_eventBus.addListener(events.LobbySimpleEvent.PREMIUM_XP_BONUS_CHANGED, self.__onUpdatePremiumBonus)
+        g_clientUpdateManager.addCallbacks({'applyAdditionalXPCount': self.__onUpdatePremiumBonus,
+         '_additionalXPCache': self.__onUpdatePremiumBonus})
+        self.__gameSession.onPremiumNotify += self.__onPremiumStateChanged
+        self.__lobbyContext.getServerSettings().onServerSettingsChange += self.__onServerSettingsChange
+        if self.__battleResults.areResultsPosted(self.__arenaUniqueID):
             self.__setBattleResults()
+
+    def _dispose(self):
+        g_eventBus.removeListener(events.LobbySimpleEvent.PREMIUM_XP_BONUS_CHANGED, self.__onUpdatePremiumBonus)
+        g_clientUpdateManager.removeObjectCallbacks(self)
+        self.__gameSession.onPremiumNotify -= self.__onPremiumStateChanged
+        self.__lobbyContext.getServerSettings().onServerSettingsChange -= self.__onServerSettingsChange
 
     @process
     def __requestClanEmblem(self, textureID, clanDBID):
-        emblemID = yield self.battleResults.requestEmblem(RequestEmblemContext(EMBLEM_TYPE.CLAN, clanDBID, textureID))
+        emblemID = yield self.__battleResults.requestEmblem(RequestEmblemContext(EMBLEM_TYPE.CLAN, clanDBID, textureID))
         if not self.isDisposed():
             self.as_setClanEmblemS(textureID, _wrapEmblemUrl(emblemID))
 
     def __setBattleResults(self):
         if not self.__dataSet:
-            battleResultsVO = self.battleResults.getResultsVO(self.__arenaUniqueID)
+            battleResultsVO = self.__battleResults.getResultsVO(self.__arenaUniqueID)
             self.as_setDataS(battleResultsVO)
             self.__dataSet = True
 
@@ -108,3 +128,14 @@ class BattleResultsWindow(BattleResultsMeta):
             return False
         else:
             return True
+
+    def __onPremiumStateChanged(self, *_):
+        self.__onUpdatePremiumBonus()
+
+    def __onUpdatePremiumBonus(self, _=None):
+        battleResultsVO = self.__battleResults.getResultsVO(self.__arenaUniqueID)
+        self.as_setDataS(battleResultsVO)
+
+    def __onServerSettingsChange(self, diff):
+        if PremiumConfigs.DAILY_BONUS in diff:
+            self.__onUpdatePremiumBonus()

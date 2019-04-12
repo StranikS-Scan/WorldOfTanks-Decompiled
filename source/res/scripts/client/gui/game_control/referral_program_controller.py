@@ -11,17 +11,18 @@ from gui.Scaleform.daapi.view.lobby.referral_program.referral_program_helpers im
 from gui.Scaleform.framework import ViewTypes
 from gui.Scaleform.framework.managers.containers import POP_UP_CRITERIA
 from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
-from gui.app_loader import g_appLoader
 from gui.shared import g_eventBus, events, EVENT_BUS_SCOPE
 from gui.wgnc.custom_actions_keeper import CustomActionsKeeper
 from helpers import dependency
 from skeletons.account_helpers.settings_core import ISettingsCore
+from skeletons.gui.app_loader import IAppLoader
 from skeletons.gui.game_control import IReferralProgramController
 from skeletons.gui.game_window_controller import GameWindowController
 _logger = logging.getLogger(__name__)
 
 class ReferralProgramController(GameWindowController, IReferralProgramController):
     __settingsCore = dependency.descriptor(ISettingsCore)
+    __appLoader = dependency.descriptor(IAppLoader)
 
     def __init__(self):
         super(ReferralProgramController, self).__init__()
@@ -52,12 +53,6 @@ class ReferralProgramController(GameWindowController, IReferralProgramController
         AccountSettings.setCounters(REFERRAL_COUNTER, self.getBubbleCount() + 1)
         self.__updateBubbleEvent()
 
-    def onLobbyInited(self, event):
-        self._addListeners()
-
-    def onDisconnected(self):
-        self._removeListeners()
-
     def _openWindow(self, url, _=None):
         browserView = self.__getBrowserView()
         if browserView:
@@ -86,7 +81,7 @@ class ReferralProgramController(GameWindowController, IReferralProgramController
         g_eventBus.removeListener(events.ReferralProgramEvent.SHOW_REFERRAL_PROGRAM_WINDOW, self.__onReferralProgramButtonClicked, scope=EVENT_BUS_SCOPE.LOBBY)
 
     def __getBrowserView(self):
-        app = g_appLoader.getApp()
+        app = self.__appLoader.getApp()
         if app is not None and app.containerManager is not None:
             browserView = app.containerManager.getView(ViewTypes.LOBBY_SUB, criteria={POP_UP_CRITERIA.VIEW_ALIAS: VIEW_ALIAS.REFERRAL_PROGRAM_WINDOW})
             return browserView

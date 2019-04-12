@@ -13,17 +13,17 @@ class RibbonsPanelMeta(BaseDAAPIComponent):
     def onHide(self, ribbonId):
         self._printOverrideError('onHide')
 
-    def as_setupS(self, items, isExtendedAnim, isVisible, isWithRibbonName, isWithVehName):
-        return self.flashObject.as_setup(items, isExtendedAnim, isVisible, isWithRibbonName, isWithVehName) if self._isDAAPIInited() else None
+    def as_setupS(self, items, isExtendedAnim, isVisible, isWithRibbonName, isWithVehName, bonusLabels):
+        return self.flashObject.as_setup(items, isExtendedAnim, isVisible, isWithRibbonName, isWithVehName, bonusLabels) if self._isDAAPIInited() else None
 
     def as_resetS(self):
         return self.flashObject.as_reset() if self._isDAAPIInited() else None
 
-    def as_addBattleEfficiencyEventS(self, ribbonType, ribbonId, leftFieldStr, vehName, vehType, rightFieldStr):
-        return self.flashObject.as_addBattleEfficiencyEvent(ribbonType, ribbonId, leftFieldStr, vehName, vehType, rightFieldStr) if self._isDAAPIInited() else None
+    def as_addBattleEfficiencyEventS(self, ribbonType, ribbonId, leftFieldStr, vehName, vehType, rightFieldStr, bonusLabelIndex):
+        return self.flashObject.as_addBattleEfficiencyEvent(ribbonType, ribbonId, leftFieldStr, vehName, vehType, rightFieldStr, bonusLabelIndex) if self._isDAAPIInited() else None
 
-    def as_updateBattleEfficiencyEventS(self, ribbonType, ribbonId, leftFieldStr, vehName, vehType, rightFieldStr):
-        return self.flashObject.as_updateBattleEfficiencyEvent(ribbonType, ribbonId, leftFieldStr, vehName, vehType, rightFieldStr) if self._isDAAPIInited() else None
+    def as_updateBattleEfficiencyEventS(self, ribbonType, ribbonId, leftFieldStr, vehName, vehType, rightFieldStr, bonusLabelIndex):
+        return self.flashObject.as_updateBattleEfficiencyEvent(ribbonType, ribbonId, leftFieldStr, vehName, vehType, rightFieldStr, bonusLabelIndex) if self._isDAAPIInited() else None
 
     def as_setSettingsS(self, isVisible, isExtendedAnim, isWithRibbonName, isWithVehName):
         return self.flashObject.as_setSettings(isVisible, isExtendedAnim, isWithRibbonName, isWithVehName) if self._isDAAPIInited() else None

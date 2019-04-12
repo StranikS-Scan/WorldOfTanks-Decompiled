@@ -17,6 +17,9 @@ class DynAccessor(object):
     def dyn(self, attr, default=None):
         return getattr(self, attr, default or _g_invalid)
 
+    def num(self, attr, default=None):
+        return getattr(self, 'c_{}'.format(attr), default or _g_invalid)
+
     def keys(self):
         return (attr for attr in dir(self) if attr not in dir(DynAccessor) and not attr.startswith('_'))
 

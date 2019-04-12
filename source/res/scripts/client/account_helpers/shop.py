@@ -426,6 +426,19 @@ class Shop(object):
             self.__account._doCmdIntArr(AccountCommands.CMD_RESET_C11N_ITEMS_NOVELTY, intArr, proxy)
             return
 
+    def applyPremiumXPBonus(self, arenaUniqueID, vehTypeCompDescr, callback=None):
+        if self.__ignore:
+            if callback is not None:
+                callback(AccountCommands.RES_NON_PLAYER, 0)
+            return
+        else:
+            if callback is not None:
+                proxy = lambda requestID, resultID, errorStr, ext={}: callback(requestID, resultID, errorStr)
+            else:
+                proxy = None
+            self.__account._doCmdInt3(AccountCommands.CMD_APPLY_ADDITIONAL_XP, self.__getCacheRevision(), arenaUniqueID, vehTypeCompDescr, proxy)
+            return
+
     def __onSyncResponse(self, syncID, resultID, ext=None):
         ext = ext or {}
         if resultID == AccountCommands.RES_NON_PLAYER:

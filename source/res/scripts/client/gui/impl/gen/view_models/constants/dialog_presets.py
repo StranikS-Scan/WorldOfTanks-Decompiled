@@ -9,6 +9,7 @@ class DialogPresets(ViewModel):
     WARNING = 'warning'
     INFO = 'info'
     BLUEPRINTS_CONVERSION = 'blueprintsConversion'
+    MAPS_BLACKLIST = 'mapsBlacklist'
     DEFAULT = 'default'
 
     def _initialize(self):

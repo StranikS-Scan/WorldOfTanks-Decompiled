@@ -6,18 +6,17 @@ from CurrentVehicle import HeroTankPreviewAppearance
 from adisp import process
 from constants import RentType, GameSeasonType
 from debug_utils import LOG_WARNING
-from gui import SystemMessages, DialogsInterface
+from gui import SystemMessages, DialogsInterface, GUI_SETTINGS
 from gui.Scaleform import MENU
-from gui.Scaleform.framework import ScopeTemplates
 from gui.Scaleform.genConsts.STORAGE_CONSTANTS import STORAGE_CONSTANTS
 from gui.Scaleform.locale.MESSENGER import MESSENGER
-from gui.app_loader import g_appLoader
+from gui.Scaleform.framework import ScopeTemplates
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.dialogs import I18nInfoDialogMeta, I18nConfirmDialogMeta, DIALOG_BUTTON_ID
 from gui.Scaleform.daapi.view.dialogs.ExchangeDialogMeta import ExchangeCreditsWebProductMeta
-from gui.Scaleform.daapi.view.lobby.referral_program.referral_program_helpers import getReferralProgramURL
 from gui.Scaleform.daapi.view.dialogs.rent_confirm_dialog import RentConfirmDialogMeta
-from gui.Scaleform.daapi.view.lobby.store.browser.ingameshop_helpers import getWebShopURL, isIngameShopEnabled
+from gui.Scaleform.daapi.view.lobby.referral_program.referral_program_helpers import getReferralProgramURL
+from gui.Scaleform.daapi.view.lobby.store.browser.ingameshop_helpers import getWebShopURL, isIngameShopEnabled, getBuyPremiumUrl
 from gui.Scaleform.framework.entities.View import ViewKey
 from gui.Scaleform.genConsts.BOOSTER_CONSTANTS import BOOSTER_CONSTANTS
 from gui.Scaleform.genConsts.CLANS_ALIASES import CLANS_ALIASES
@@ -25,12 +24,12 @@ from gui.Scaleform.genConsts.EPICBATTLES_ALIASES import EPICBATTLES_ALIASES
 from gui.Scaleform.genConsts.PERSONAL_MISSIONS_ALIASES import PERSONAL_MISSIONS_ALIASES
 from gui.Scaleform.genConsts.RANKEDBATTLES_ALIASES import RANKEDBATTLES_ALIASES
 from gui.impl import backport
-from gui.impl.gen import R
 from gui.game_control.links import URLMacros
 from gui.ingame_shop import generateShopRentRenewProductID, showBuyGoldForRentWebOverlay
 from gui.ingame_shop import getShopProductInfo
 from gui.ingame_shop import makeBuyParamsByProductInfo
 from gui.ingame_shop import showBuyVehicleOverlay
+from gui.impl.gen import R
 from gui.prb_control.settings import CTRL_ENTITY_TYPE
 from gui.shared import events, g_eventBus, money
 from gui.shared.event_bus import EVENT_BUS_SCOPE
@@ -44,6 +43,7 @@ from gui.shared.utils.requesters import REQ_CRITERIA
 from helpers import dependency
 from helpers.aop import pointcutable
 from helpers.i18n import makeString as _ms
+from skeletons.gui.app_loader import IAppLoader
 from skeletons.gui.game_control import IHeroTankController, IReferralProgramController
 from skeletons.gui.impl import IGuiLoader
 from skeletons.gui.shared import IItemsCache
@@ -70,17 +70,14 @@ def notifyBattleResultsPosted(arenaUniqueID):
     g_eventBus.handleEvent(events.LobbySimpleEvent(events.LobbySimpleEvent.BATTLE_RESULTS_POSTED, {'arenaUniqueID': arenaUniqueID}), EVENT_BUS_SCOPE.LOBBY)
 
 
-def showRankedBattleResultsWindow(rankedResultsVO, vehicle, rankInfo, questsProgress):
+def showRankedBattleResultsWindow(rankedResultsVO, rankInfo, questsProgress):
     g_eventBus.handleEvent(events.LoadViewEvent(alias=RANKEDBATTLES_ALIASES.RANKED_BATTLES_BATTLE_RESULTS, ctx={'rankedResultsVO': rankedResultsVO,
-     'vehicle': vehicle,
      'rankInfo': rankInfo,
      'questsProgress': questsProgress}), EVENT_BUS_SCOPE.LOBBY)
 
 
-def showRankedAwardWindow(rankID, vehicle=None, awards=None):
-    g_eventBus.handleEvent(events.LoadViewEvent(alias=RANKEDBATTLES_ALIASES.RANKED_BATTLES_AWARD, ctx={'rankID': rankID,
-     'vehicle': vehicle,
-     'awards': awards}), EVENT_BUS_SCOPE.LOBBY)
+def showRankedAwardWindow(awardsSequence):
+    g_eventBus.handleEvent(events.LoadViewEvent(alias=RANKEDBATTLES_ALIASES.RANKED_BATTLES_AWARD, ctx={'awardsSequence': awardsSequence}), EVENT_BUS_SCOPE.LOBBY)
 
 
 def showRankedPrimeTimeWindow():
@@ -207,6 +204,27 @@ def showBlueprintView(vehicleCD, exitEvent=None, itemsCache=None):
      'exitEvent': exitEvent}), scope=EVENT_BUS_SCOPE.LOBBY)
 
 
+def showPiggyBankView():
+    from gui.impl.lobby.premacc.piggybank import PiggyBankView
+    g_eventBus.handleEvent(events.LoadUnboundViewEvent(R.views.piggybank(), PiggyBankView, ScopeTemplates.LOBBY_SUB_SCOPE), scope=EVENT_BUS_SCOPE.LOBBY)
+
+
+def showMapsBlacklistView():
+    from gui.impl.lobby.premacc.maps_blacklist_view import MapsBlacklistView
+    g_eventBus.handleEvent(events.LoadUnboundViewEvent(layoutID=R.views.mapsBlacklistView(), viewClass=MapsBlacklistView, scope=ScopeTemplates.LOBBY_SUB_SCOPE), scope=EVENT_BUS_SCOPE.LOBBY)
+
+
+def showDailyExpPageView(exitEvent=None):
+    from gui.impl.lobby.premacc.daily_experience_view import DailyExperienceView
+    exitEvent = exitEvent or events.LoadViewEvent(VIEW_ALIAS.LOBBY_HANGAR)
+    g_eventBus.handleEvent(events.LoadUnboundViewEvent(layoutID=R.views.dailyExperiencePage(), viewClass=DailyExperienceView, scope=ScopeTemplates.LOBBY_SUB_SCOPE, ctx={'exitEvent': exitEvent}), scope=EVENT_BUS_SCOPE.LOBBY)
+
+
+def showDashboardView():
+    from gui.impl.lobby.premacc.prem_dashboard_view import PremDashboardView
+    g_eventBus.handleEvent(events.LoadUnboundViewEvent(R.views.premDashboardView(), PremDashboardView, ScopeTemplates.LOBBY_SUB_SCOPE), scope=EVENT_BUS_SCOPE.LOBBY)
+
+
 def showBattleBoosterBuyDialog(battleBoosterIntCD, install=False):
     g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.BOOSTER_BUY_WINDOW, ctx={'typeCompDescr': battleBoosterIntCD,
      'install': install}), EVENT_BUS_SCOPE.LOBBY)
@@ -266,7 +284,8 @@ def showWebShop(url='', path='', params=None):
         else:
             url = getWebShopURL()
     url = '/'.join((node.strip('/') for node in (url, path)))
-    app = g_appLoader.getApp()
+    appLoader = dependency.instance(IAppLoader)
+    app = appLoader.getApp()
     if app is not None and app.containerManager is not None:
         viewKey = ViewKey(VIEW_ALIAS.LOBBY_STORE)
         browserWindow = app.containerManager.getViewByKey(viewKey)
@@ -364,6 +383,10 @@ def hideWebBrowser(browserID=None):
     g_eventBus.handleEvent(events.HideWindowEvent(events.HideWindowEvent.HIDE_BROWSER_WINDOW, ctx={'browserID': browserID}), scope=EVENT_BUS_SCOPE.LOBBY)
 
 
+def hideWebBrowserOverlay():
+    g_eventBus.handleEvent(events.HideWindowEvent(events.HideWindowEvent.HIDE_OVERLAY_BROWSER_VIEW), scope=EVENT_BUS_SCOPE.LOBBY)
+
+
 def showAwardWindow(award, isUniqueName=True):
     if isPopupsWindowsOpenDisabled():
         LOG_WARNING('Award popup disabled', award, isUniqueName)
@@ -412,6 +435,10 @@ def showClanInvitesWindow():
     g_eventBus.handleEvent(events.LoadViewEvent(CLANS_ALIASES.CLAN_PROFILE_INVITES_WINDOW_PY), EVENT_BUS_SCOPE.LOBBY)
 
 
+def showClanPersonalInvitesWindow():
+    g_eventBus.handleEvent(events.LoadViewEvent(CLANS_ALIASES.CLAN_PERSONAL_INVITES_WINDOW_PY), EVENT_BUS_SCOPE.LOBBY)
+
+
 def showClanSendInviteWindow(clanDbID):
     alias = CLANS_ALIASES.CLAN_PROFILE_SEND_INVITES_WINDOW_PY
     g_eventBus.handleEvent(events.LoadViewEvent(alias, getViewName(alias, clanDbID), ctx={'clanDbID': clanDbID,
@@ -436,6 +463,14 @@ def showPersonalCase(tankmanInvID, tabIndex, scope=EVENT_BUS_SCOPE.DEFAULT):
 def showPremiumWindow(arenaUniqueID=0, premiumBonusesDiff=None):
     g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.PREMIUM_WINDOW, getViewName(VIEW_ALIAS.PREMIUM_WINDOW), ctx={'arenaUniqueID': arenaUniqueID,
      'premiumBonusesDiff': premiumBonusesDiff}), EVENT_BUS_SCOPE.LOBBY)
+
+
+def showPremiumDialog():
+    if isIngameShopEnabled():
+        url = getBuyPremiumUrl()
+        showWebShop(url)
+    else:
+        g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.PREMIUM_WINDOW), EVENT_BUS_SCOPE.LOBBY)
 
 
 def showBoostersWindow(tabID=None):
@@ -543,11 +578,20 @@ def showReferralProgramWindow(url=None):
     return
 
 
+def showTankPremiumAboutPage():
+    url = GUI_SETTINGS.premiumInfo.get('baseURL')
+    if url is None:
+        _logger.error('premiumInfo.baseURL is missed')
+    showBrowserOverlayView(url)
+    return
+
+
 @process
 def showBrowserOverlayView(url, params=None):
     if url:
         url = yield URLMacros().parse(url, params=params)
-        g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.OVERLAY_BROWSER_VIEW, ctx={'url': url}), EVENT_BUS_SCOPE.LOBBY)
+        g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.OVERLAY_BROWSER_VIEW, ctx={'url': url,
+         'allowRightClick': False}), EVENT_BUS_SCOPE.LOBBY)
 
 
 def showProgressiveRewardWindow():
@@ -569,3 +613,10 @@ def showProgressiveRewardAwardWindow(rewards, currentStep):
     from gui.impl.lobby.progressive_reward.progressive_reward_award_view import ProgressiveRewardAwardWindow
     window = ProgressiveRewardAwardWindow(rewards, currentStep)
     window.load()
+
+
+def showStylePreview(vehCD, style, styleDescr, backCallback):
+    g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.STYLE_PREVIEW, ctx={'itemCD': vehCD,
+     'style': style,
+     'styleDescr': styleDescr,
+     'backCallback': backCallback}), scope=EVENT_BUS_SCOPE.LOBBY)

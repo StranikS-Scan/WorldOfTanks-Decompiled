@@ -319,7 +319,7 @@ class SharedControllersRepository(_ControllersRepository):
         repository.addArenaController(quest_progress_ctrl.createQuestProgressController(), setup)
         repository.addArenaController(view_points_ctrl.ViewPointsController(setup), setup)
         repository.addArenaController(arena_border_ctrl.ArenaBorderController(), setup)
-        repository.addArenaViewController(arena_load_ctrl.ArenaLoadController(), setup)
+        repository.addArenaViewController(arena_load_ctrl.createArenaLoadController(setup), setup)
         repository.addArenaViewController(period_ctrl.createPeriodCtrl(setup), setup)
         repository.addViewController(hit_direction_ctrl.createHitDirectionController(setup), setup)
         repository.addViewController(game_messages_ctrl.createGameMessagesController(setup), setup)

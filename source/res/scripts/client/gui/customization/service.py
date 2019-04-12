@@ -108,6 +108,10 @@ class CustomizationService(_ServiceItemShopMixin, _ServiceHelpersMixin, ICustomi
     hangarSpace = dependency.descriptor(IHangarSpace)
     __FADE_OUT_DELAY = 0.15
 
+    @property
+    def isHighlighterActive(self):
+        return self._helper is not None and self._isHighlighterActive
+
     def __init__(self):
         super(CustomizationService, self).__init__()
         self._helper = None
@@ -188,10 +192,9 @@ class CustomizationService(_ServiceItemShopMixin, _ServiceHelpersMixin, ICustomi
         isLoaded = False
         entity = self.hangarSpace.getVehicleEntity()
         if entity and entity.appearance:
-            entity.appearance.loadState.subscribe(self.resumeHighlighter, self.suspendHighlighter)
+            entity.appearance.loadState.subscribe(self.__onVehicleLoadFinished, self.__onVehicleLoadStarted)
             isLoaded = entity.appearance.isLoaded()
         if not isLoaded:
-            self._needHelperRestart = True
             return False
         if self._helper:
             self._helper.setSelectionMode(self._mode)
@@ -208,31 +211,24 @@ class CustomizationService(_ServiceItemShopMixin, _ServiceHelpersMixin, ICustomi
     def stopHighlighter(self):
         entity = self.hangarSpace.getVehicleEntity()
         if entity and entity.appearance:
-            entity.appearance.loadState.unsubscribe(self.resumeHighlighter, self.suspendHighlighter)
+            entity.appearance.loadState.unsubscribe(self.__onVehicleLoadFinished, self.__onVehicleLoadStarted)
         self._selectedRegion = ApplyArea.NONE
         self._helper = None
-        self._needHelperRestart = False
         self._isHighlighterActive = False
         return
 
     def suspendHighlighter(self):
-        if self._helper is None and self._needHelperRestart:
-            return
-        else:
-            self._needHelperRestart = self._helper is not None
-            self._helper = None
-            self._isHighlighterActive = False
-            return
+        self._isHighlighterActive = False
+        if self._helper is not None:
+            self._helper.setSuspended(True)
+        return
 
     def resumeHighlighter(self):
-        if self._needHelperRestart:
-            if not self.startHighlighter(self._mode):
-                return
-        self._needHelperRestart = False
         if self._helper is not None:
             self._helper.setSelectionMode(self._mode)
             self.selectRegions(self._selectedRegion)
-        self._isHighlighterActive = True
+            self._isHighlighterActive = True
+            self._helper.setSuspended(False)
         return
 
     def getSelectionMode(self):
@@ -242,27 +238,7 @@ class CustomizationService(_ServiceItemShopMixin, _ServiceHelpersMixin, ICustomi
         return self.hangarSpace.getCentralPointForArea(areaId)
 
     def getAnchorParams(self, areaId, slotId, regionId):
-
-        def getAnchor(area, slotId, regionId):
-            slot = area.get(slotId, {})
-            return slot.get(regionId, None)
-
-        anchorPositions = g_currentVehicle.hangarSpace.getSlotPositions()
-        if areaId == Area.MISC:
-            anchors = []
-            for area in anchorPositions.itervalues():
-                slot = area.get(slotId, {})
-                anchors.extend(slot.itervalues())
-                if regionId < len(anchors):
-                    anchor = anchors[regionId]
-                    return anchor
-
-        else:
-            area = anchorPositions.get(areaId, {})
-            anchor = getAnchor(area, slotId, regionId)
-            if anchor is not None:
-                return anchor
-        return self.getAnchorParams(areaId, GUI_ITEM_TYPE.STYLE, regionId) if slotId == GUI_ITEM_TYPE.MODIFICATION else None
+        return self.hangarSpace.getAnchorParams(slotId, areaId, regionId)
 
     def setSelectHighlighting(self, value):
         if self._helper:
@@ -302,6 +278,14 @@ class CustomizationService(_ServiceItemShopMixin, _ServiceHelpersMixin, ICustomi
     def setSelectingRegionEnabled(self, enable):
         if self._helper:
             self._helper.setSelectingRegionEnabled(enable)
+
+    def setDOFenabled(self, enable):
+        if self._helper:
+            self._helper.setDOFenabled(enable)
+
+    def setDOFparams(self, params):
+        if self._helper:
+            self._helper.setDOFparams(*params)
 
     def __onRegionHighlighted(self, args):
         if self._notHandleHighlighterEvent:
@@ -376,4 +360,17 @@ class CustomizationService(_ServiceItemShopMixin, _ServiceHelpersMixin, ICustomi
 
     def __onWindowAccessibilityChanged(self, isAccessible):
         if self._helper:
-            self._helper.setSelectingEnabled(isAccessible)
+            self._helper.setSelectingEnabled(self._isOver3dScene)
+
+    def __onVehicleLoadFinished(self):
+        entity = self.hangarSpace.getVehicleEntity()
+        if entity and entity.appearance and entity.appearance.isLoaded():
+            self._helper = BigWorld.PyCustomizationHelper(entity.model, self._mode, self._isOver3dScene, self.__onRegionHighlighted)
+            self.selectRegions(self._selectedRegion)
+            self._isHighlighterActive = True
+
+    def __onVehicleLoadStarted(self):
+        self._selectedRegion = ApplyArea.NONE
+        self._isHighlighterActive = False
+        self._helper = None
+        return

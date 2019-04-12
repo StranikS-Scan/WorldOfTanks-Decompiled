@@ -233,7 +233,6 @@ class ClanAccountProfile(object):
                         cached.add(item.getClanDbID())
 
                     self._cache[_CACHE_KEYS.APPS] = cached
-                    count = ctx.getTotalCount(response.data)
                     if count is not None and count != self._vitalWebInfo[SYNC_KEYS.APPS]:
                         self.__changeWebInfo(SYNC_KEYS.APPS, count, 'onAccountAppsReceived')
         elif requestType == WebRequestDataType.CREATE_APPLICATIONS:

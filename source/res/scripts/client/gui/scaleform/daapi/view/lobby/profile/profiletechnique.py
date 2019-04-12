@@ -3,7 +3,7 @@
 import BigWorld
 from account_helpers import AccountSettings
 from account_helpers.AccountSettings import PROFILE_TECHNIQUE_MEMBER
-from dossiers2.ui.achievements import ACHIEVEMENT_BLOCK, MARK_ON_GUN_RECORD, HONORED_RANK_RECORD
+from dossiers2.ui.achievements import ACHIEVEMENT_BLOCK, MARK_ON_GUN_RECORD
 from gui import GUI_NATIONS_ORDER_INDEX
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.AchievementsUtils import AchievementsUtils
@@ -155,9 +155,9 @@ class ProfileTechnique(ProfileTechniqueMeta):
     def _getTechniqueListVehicles(self, targetData, addVehiclesThatInHangarOnly=False):
         result = []
         if self.lobbyContext.getServerSettings().isEpicRandomMarkOfMasteryEnabled():
-            __markOfMasteryBattles = (PROFILE_DROPDOWN_KEYS.ALL, PROFILE_DROPDOWN_KEYS.EPIC_RANDOM, PROFILE_DROPDOWN_KEYS.RANKED)
+            __markOfMasteryBattles = (PROFILE_DROPDOWN_KEYS.ALL, PROFILE_DROPDOWN_KEYS.EPIC_RANDOM)
         else:
-            __markOfMasteryBattles = (PROFILE_DROPDOWN_KEYS.ALL, PROFILE_DROPDOWN_KEYS.RANKED)
+            __markOfMasteryBattles = (PROFILE_DROPDOWN_KEYS.ALL,)
         showMarkOfMastery = self._battlesType in __markOfMasteryBattles and targetData.getMarksOfMastery() != UNAVAILABLE_MARKS_OF_MASTERY
         for intCD, (battlesCount, wins, xp) in targetData.getVehicles().iteritems():
             avgXP = xp / battlesCount if battlesCount else 0
@@ -239,7 +239,6 @@ class ProfileTechnique(ProfileTechniqueMeta):
         elif self._battlesType == PROFILE_DROPDOWN_KEYS.RANKED:
             stats = vehDossier.getRankedStats()
             achievementsList = self.__getAchievementsList(stats, vehDossier)
-            specialRankedStats.append(self.__packAchievement(stats, vehDossier, HONORED_RANK_RECORD))
         else:
             raise SoftException('Profile Technique: Unknown battle type: ' + self._battlesType)
         if achievementsList is not None:

@@ -11,6 +11,7 @@ import BattleReplay
 import material_kinds
 import DataLinks
 import Vehicular
+import NetworkComponents
 from Event import Event
 from debug_utils import LOG_ERROR
 from CustomEffectManager import EffectSettings
@@ -29,7 +30,7 @@ from helpers.CallbackDelayer import CallbackDelayer
 from helpers import bound_effects
 from helpers.EffectsList import EffectsListPlayer, SpecialKeyPointNames
 from vehicle_systems import camouflages
-from svarog_script.py_component_system import ComponentDescriptor, ComponentSystem
+from svarog_script.script_game_object import ComponentDescriptor, ScriptGameObject
 from vehicle_systems import model_assembler
 from gui.shared.gui_items.customization.outfit import Outfit
 from constants import VEHICLE_SIEGE_STATE
@@ -52,7 +53,7 @@ MAX_DISTANCE = 500
 _MATKIND_COUNT = 3
 _DEFAULT_STICKERS_ALPHA = 1.0
 
-class CompoundAppearance(ComponentSystem, CallbackDelayer):
+class CompoundAppearance(ScriptGameObject, CallbackDelayer):
     compoundModel = property(lambda self: self.__compoundModel)
     boundEffects = property(lambda self: self.__boundEffects)
     fashion = property(lambda self: self.__fashions.chassis)
@@ -94,6 +95,8 @@ class CompoundAppearance(ComponentSystem, CallbackDelayer):
     transmissionSlip = property(lambda self: self.__commonSlip)
     transmissionScroll = property(lambda self: self.__commonScroll)
     filter = AutoProperty()
+    transform = ComponentDescriptor()
+    areaTriggerTarget = ComponentDescriptor()
     detailedEngineState = ComponentDescriptor()
     gearbox = ComponentDescriptor()
     engineAudition = ComponentDescriptor()
@@ -129,7 +132,7 @@ class CompoundAppearance(ComponentSystem, CallbackDelayer):
 
     def __init__(self):
         CallbackDelayer.__init__(self)
-        ComponentSystem.__init__(self)
+        ScriptGameObject.__init__(self, BigWorld.player().spaceID)
         self.turretMatrix = Math.WGAdaptiveMatrixProvider()
         self.gunMatrix = Math.WGAdaptiveMatrixProvider()
         self.__vehicle = None
@@ -155,7 +158,7 @@ class CompoundAppearance(ComponentSystem, CallbackDelayer):
         self.__compoundModel = None
         self.__boundEffects = None
         self.__splineTracks = None
-        self.flyingInfoProvider = Vehicular.FlyingInfoProvider()
+        self.flyingInfoProvider = self.createComponent(Vehicular.FlyingInfoProvider)
         self.__trackScrollCtl = BigWorld.PyTrackScroll()
         self.__trackScrollCtl.setFlyingInfo(DataLinks.createBoolLink(self.flyingInfoProvider, 'isLeftSideFlying'), DataLinks.createBoolLink(self.flyingInfoProvider, 'isRightSideFlying'))
         self.__weaponEnergy = 0.0
@@ -213,6 +216,9 @@ class CompoundAppearance(ComponentSystem, CallbackDelayer):
         for retriever, floatFilter in zip(self.__filterRetrievers, fstList + scndList):
             retriever.setupFilter(floatFilter)
 
+        self.transform.translation = Math.Matrix(vehicle.matrix).translation
+        self.createComponent(NetworkComponents.NetworkEntity, vehicle)
+        self.createComponent(NetworkComponents.EntityTransformSyncer)
         return
 
     def __arenaPeriodChanged(self, period, *otherArgs):
@@ -273,8 +279,6 @@ class CompoundAppearance(ComponentSystem, CallbackDelayer):
                     BigWorld.cancelCallback(self.__periodicTimerID)
                 self.__periodicTimerID = BigWorld.callback(_PERIODIC_TIME, self.__onPeriodicTimer)
                 self.__dirtUpdateTime = BigWorld.time()
-            if self.fashion is not None:
-                self.fashion.activate()
             if self.__isObserver:
                 self.__compoundModel.visible = False
             BigWorld.player().arena.onPeriodChange += self.__arenaPeriodChanged
@@ -297,8 +301,6 @@ class CompoundAppearance(ComponentSystem, CallbackDelayer):
             self.shadowManager.unregisterCompoundModel(self.__compoundModel)
             self.__activated = False
             self.__wasDeactivated = True
-            if self.fashion is not None:
-                self.fashion.deactivate()
             self.__stopSystems()
             super(CompoundAppearance, self).deactivate()
             self.__chassisDecal.detach()
@@ -453,7 +455,7 @@ class CompoundAppearance(ComponentSystem, CallbackDelayer):
         self.__destroySystems()
         fashions = VehiclePartsTuple(None, None, None, None)
         self.__setFashions(fashions, self.__isTurretDetached)
-        ComponentSystem.destroy(self)
+        ScriptGameObject.destroy(self)
         self.__typeDesc = None
         if self.__boundEffects is not None:
             self.__boundEffects.destroy()
@@ -633,7 +635,7 @@ class CompoundAppearance(ComponentSystem, CallbackDelayer):
 
     def turretDamaged(self):
         player = BigWorld.player()
-        if not self.__activated or player is None or not self.__vehicle.isPlayerVehicle:
+        if player is None or self.__vehicle is None or not self.__vehicle.isPlayerVehicle:
             return 0
         else:
             deviceStates = getattr(player, 'deviceStates', None)
@@ -645,7 +647,7 @@ class CompoundAppearance(ComponentSystem, CallbackDelayer):
 
     def maxTurretRotationSpeed(self):
         player = BigWorld.player()
-        if not self.__activated or player is None or not self.__vehicle.isPlayerVehicle:
+        if player is None or self.__vehicle is None or not self.__vehicle.isPlayerVehicle:
             return 0
         else:
             gunRotator = getattr(player, 'gunRotator', None)

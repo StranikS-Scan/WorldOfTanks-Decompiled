@@ -5,16 +5,17 @@ from datetime import datetime
 import CommandMapping
 from account_helpers import AccountSettings
 from account_helpers.AccountSettings import TRAJECTORY_VIEW_HINT_SECTION, PRE_BATTLE_HINT_SECTION, QUEST_PROGRESS_HINT_SECTION, HELP_SCREEN_HINT_SECTION, SIEGE_HINT_SECTION, WHEELED_MODE_HINT_SECTION, HINTS_LEFT, NUM_BATTLES, LAST_DISPLAY_DAY
-from constants import VEHICLE_SIEGE_STATE as _SIEGE_STATE, ARENA_PERIOD
+from gui.impl import backport
+from gui.impl.gen import R
+from constants import VEHICLE_SIEGE_STATE as _SIEGE_STATE, ARENA_PERIOD, ARENA_GUI_TYPE
 from debug_utils import LOG_DEBUG
 from gui import GUI_SETTINGS
-from gui.Scaleform.locale.INGAME_GUI import INGAME_GUI
 from gui.battle_control.battle_constants import VEHICLE_VIEW_STATE, CROSSHAIR_VIEW_ID
 from gui.shared import g_eventBus, EVENT_BUS_SCOPE
 from gui.shared.events import GameEvent
 from gui.shared.utils.key_mapping import getReadableKey
 from gui.shared.utils.plugins import IPlugin
-from helpers import i18n, dependency, time_utils
+from helpers import dependency, time_utils
 from helpers.CallbackDelayer import CallbackDelayer
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.battle_session import IBattleSessionProvider
@@ -39,12 +40,21 @@ _TRAJECTORY_VIEW_HINT_CHECK_STATES = (VEHICLE_VIEW_STATE.DESTROY_TIMER,
  VEHICLE_VIEW_STATE.STUN)
 
 def createPlugins():
-    return {'trajectoryViewHint': TrajectoryViewHintPlugin,
-     'siegeIndicatorHint': SiegeIndicatorHintPlugin,
-     'prebattleHints': PreBattleHintPlugin}
+    result = {}
+    if TrajectoryViewHintPlugin.isSuitable():
+        result['trajectoryViewHint'] = TrajectoryViewHintPlugin
+    if SiegeIndicatorHintPlugin.isSuitable():
+        result['siegeIndicatorHint'] = SiegeIndicatorHintPlugin
+    if PreBattleHintPlugin.isSuitable():
+        result['prebattleHints'] = PreBattleHintPlugin
+    return result
 
 
 class HintPanelPlugin(IPlugin):
+
+    @classmethod
+    def isSuitable(cls):
+        raise NotImplementedError
 
     def setPeriod(self, period):
         pass
@@ -111,6 +121,10 @@ class TrajectoryViewHintPlugin(HintPanelPlugin):
         self.__settings = {}
         self.__wasDisplayed = False
         self.__callbackDelayer = CallbackDelayer()
+
+    @classmethod
+    def isSuitable(cls):
+        return True
 
     def start(self):
         arenaDP = self.sessionProvider.getArenaDP()
@@ -194,7 +208,9 @@ class TrajectoryViewHintPlugin(HintPanelPlugin):
             result = True
         else:
             ctrl = self.sessionProvider.shared.vehicleState
-            result = ctrl is not None and ctrl.getStateValue(VEHICLE_VIEW_STATE.STUN) or ctrl.getStateValue(VEHICLE_VIEW_STATE.FIRE)
+            stunInfo = ctrl.getStateValue(VEHICLE_VIEW_STATE.STUN)
+            isVehicleStunned = stunInfo.endTime > 0.0 if stunInfo is not None else False
+            result = ctrl is not None and isVehicleStunned or ctrl.getStateValue(VEHICLE_VIEW_STATE.FIRE)
         return result
 
     def __addHint(self):
@@ -221,10 +237,10 @@ class TrajectoryViewHintPlugin(HintPanelPlugin):
         hintTextLeft = ''
         keyName = getReadableKey(CommandMapping.CMD_CM_TRAJECTORY_VIEW)
         if keyName:
-            hintTextLeft = i18n.makeString(INGAME_GUI.TRAJECTORYVIEW_HINT_ALTERNATEMODELEFT)
-            hintTextRight = i18n.makeString(INGAME_GUI.TRAJECTORYVIEW_HINT_ALTERNATEMODERIGHT)
+            hintTextLeft = backport.text(R.strings.ingame_gui.trajectoryView.hint.alternateModeLeft())
+            hintTextRight = backport.text(R.strings.ingame_gui.trajectoryView.hint.alternateModeRight())
         else:
-            hintTextRight = i18n.makeString(INGAME_GUI.TRAJECTORYVIEW_HINT_NOBINDINGKEY)
+            hintTextRight = backport.text(R.strings.ingame_gui.trajectoryView.hint.noBindingKey())
         return HintData(keyName, hintTextLeft, hintTextRight, _TRAJECTORY_VIEW_HINT_POSITION[0], _TRAJECTORY_VIEW_HINT_POSITION[1], HintPriority.TRAJECTORY)
 
 
@@ -250,6 +266,10 @@ class SiegeIndicatorHintPlugin(HintPanelPlugin):
         self.__isInDisplayPeriod = False
         self.__callbackDelayer = CallbackDelayer()
         return
+
+    @classmethod
+    def isSuitable(cls):
+        return True
 
     def start(self):
         vStateCtrl = self.sessionProvider.shared.vehicleState
@@ -381,13 +401,14 @@ class SiegeIndicatorHintPlugin(HintPanelPlugin):
         keyName = getReadableKey(CommandMapping.CMD_CM_VEHICLE_SWITCH_AUTOROTATION)
         pressText = ''
         if keyName:
-            pressText = INGAME_GUI.SIEGEMODE_HINT_PRESS
+            pressText = backport.text(R.strings.ingame_gui.siegeMode.hint.press())
             if self.__isWheeledTech:
-                hintText = INGAME_GUI.SIEGEMODE_HINT_WHEELED
+                hintText = backport.text(R.strings.ingame_gui.siegeMode.hint.wheeled())
             else:
-                hintText = INGAME_GUI.siegeModeHint(self.__siegeState)
+                hintTextID = R.strings.ingame_gui.siegeMode.hint.forMode.dyn(attr='c_{}'.format(self.__siegeState))
+                hintText = backport.text(hintTextID()) if hintTextID.exists() else None
         else:
-            hintText = INGAME_GUI.SIEGEMODE_HINT_NOBINDING
+            hintText = backport.text(R.strings.ingame_gui.siegeMode.hint.noBinding())
         return HintData(keyName, pressText, hintText, 0, 0, HintPriority.SIEGE)
 
     def __areOtherIndicatorsShown(self):
@@ -408,6 +429,10 @@ class PreBattleHintPlugin(HintPanelPlugin):
         self.__haveReqLevel = False
         self.__vehicleId = None
         return
+
+    @classmethod
+    def isSuitable(cls):
+        return cls.sessionProvider.arenaVisitor.getArenaGuiType() != ARENA_GUI_TYPE.RANKED
 
     def start(self):
         prbSettings = dict(AccountSettings.getSettings(PRE_BATTLE_HINT_SECTION))
@@ -457,16 +482,16 @@ class PreBattleHintPlugin(HintPanelPlugin):
     def _getHint(self):
         if self.__hintInQueue is CommandMapping.CMD_SHOW_HELP:
             keyName = getReadableKey(CommandMapping.CMD_SHOW_HELP)
-            pressText = INGAME_GUI.HELPSCREEN_HINT_PRESS
-            hintText = INGAME_GUI.HELPSCREEN_HINT_DESCRIPTION
+            pressText = backport.text(R.strings.ingame_gui.helpScreen.hint.press())
+            hintText = backport.text(R.strings.ingame_gui.helpScreen.hint.description())
             return HintData(keyName, pressText, hintText, 0, 0, HintPriority.HELP)
         if self.__hintInQueue is CommandMapping.CMD_QUEST_PROGRESS_SHOW:
             keyName = getReadableKey(CommandMapping.CMD_QUEST_PROGRESS_SHOW)
             pressText = ''
-            hintText = INGAME_GUI.BATTLEPROGRESS_HINT_NOBINDINGKEY
+            hintText = backport.text(R.strings.ingame_gui.battleProgress.hint.noBindingKey())
             if keyName:
-                pressText = INGAME_GUI.BATTLEPROGRESS_HINT_PRESS
-                hintText = INGAME_GUI.BATTLEPROGRESS_HINT_DESCRIPTION
+                pressText = backport.text(R.strings.ingame_gui.battleProgress.hint.press())
+                hintText = backport.text(R.strings.ingame_gui.battleProgress.hint.description())
             return HintData(keyName, pressText, hintText, 0, 0, HintPriority.QUESTS)
 
     def __onVehicleControlling(self, vehicle):

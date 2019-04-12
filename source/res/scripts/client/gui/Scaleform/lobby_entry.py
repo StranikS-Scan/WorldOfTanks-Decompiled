@@ -20,6 +20,7 @@ from gui.Scaleform.framework.managers.optimization_manager import GraphicsOptimi
 from gui.Scaleform.genConsts.GRAPHICS_OPTIMIZATION_ALIASES import GRAPHICS_OPTIMIZATION_ALIASES
 from gui.Scaleform.genConsts.HANGAR_ALIASES import HANGAR_ALIASES
 from gui.Scaleform.managers.ColorSchemeManager import ColorSchemeManager
+from gui.Scaleform.managers.cursor_mgr import CursorManager
 from gui.Scaleform.managers.GameInputMgr import GameInputMgr
 from gui.Scaleform.managers.GlobalVarsManager import GlobalVarsManager
 from gui.Scaleform.managers.PopoverManager import PopoverManager
@@ -29,24 +30,21 @@ from gui.Scaleform.managers.UtilsManager import UtilsManager
 from gui.Scaleform.managers.voice_chat import LobbyVoiceChatManager
 from gui.impl.gen import R
 from gui.shared import EVENT_BUS_SCOPE
-from gui.app_loader import settings as app_settings
 from helpers import dependency, uniprof
+from skeletons.gui.app_loader import GuiGlobalSpaceID
 from skeletons.gui.game_control import IBootcampController
 LOBBY_OPTIMIZATION_CONFIG = {VIEW_ALIAS.LOBBY_HEADER: OptimizationSetting(),
  VIEW_ALIAS.LOBBY_TECHTREE: OptimizationSetting(),
  VIEW_ALIAS.LOBBY_RESEARCH: OptimizationSetting(),
  HANGAR_ALIASES.TANK_CAROUSEL: OptimizationSetting(),
+ HANGAR_ALIASES.RANKED_TANK_CAROUSEL: OptimizationSetting(),
  GRAPHICS_OPTIMIZATION_ALIASES.CUSTOMISATION_BOTTOM_PANEL: OptimizationSetting()}
 
 class LobbyEntry(AppEntry):
     bootcampCtrl = dependency.descriptor(IBootcampController)
 
-    def __init__(self, appNS):
-        super(LobbyEntry, self).__init__(R.entries.lobby(), appNS)
-
-    @property
-    def cursorMgr(self):
-        return self.__getCursorFromContainer()
+    def __init__(self, appNS, ctrlModeFlags):
+        super(LobbyEntry, self).__init__(R.entries.lobby(), appNS, ctrlModeFlags)
 
     @property
     def waitingManager(self):
@@ -55,16 +53,12 @@ class LobbyEntry(AppEntry):
     @uniprof.regionDecorator(label='gui.lobby', scope='enter')
     def afterCreate(self):
         super(LobbyEntry, self).afterCreate()
-        from gui.Scaleform.Waiting import Waiting
-        Waiting.setWaitingViewGetter(self.__getWaitingFromContainer)
 
     @uniprof.regionDecorator(label='gui.lobby', scope='exit')
     def beforeDelete(self):
         from gui.Scaleform.Waiting import Waiting
-        Waiting.setWaitingViewGetter(None)
         Waiting.close()
         super(LobbyEntry, self).beforeDelete()
-        return
 
     def _createLoaderManager(self):
         return LoaderManager(self.proxy)
@@ -73,7 +67,7 @@ class LobbyEntry(AppEntry):
         return ContainerManager(self._loaderMgr, DefaultContainer(ViewTypes.MARKER), DefaultContainer(ViewTypes.DEFAULT), DefaultContainer(ViewTypes.CURSOR), DefaultContainer(ViewTypes.WAITING), PopUpContainer(ViewTypes.WINDOW), PopUpContainer(ViewTypes.BROWSER), PopUpContainer(ViewTypes.TOP_WINDOW), PopUpContainer(ViewTypes.OVERLAY), DefaultContainer(ViewTypes.SERVICE_LAYOUT))
 
     def _createToolTipManager(self):
-        tooltip = ToolTip(LOBBY_TOOLTIPS_BUILDERS_PATHS, ADVANCED_COMPLEX_TOOLTIPS, app_settings.GUI_GLOBAL_SPACE_ID.BATTLE_LOADING)
+        tooltip = ToolTip(LOBBY_TOOLTIPS_BUILDERS_PATHS, ADVANCED_COMPLEX_TOOLTIPS, GuiGlobalSpaceID.BATTLE_LOADING)
         tooltip.setEnvironment(self)
         return tooltip
 
@@ -82,6 +76,11 @@ class LobbyEntry(AppEntry):
 
     def _createSoundManager(self):
         return SoundManager()
+
+    def _createCursorManager(self):
+        cursor = CursorManager()
+        cursor.setEnvironment(self)
+        return cursor
 
     def _createColorSchemeManager(self):
         return ColorSchemeManager()
@@ -129,9 +128,6 @@ class LobbyEntry(AppEntry):
 
     def _getRequiredLibraries(self):
         pass
-
-    def __getCursorFromContainer(self):
-        return self._containerMgr.getView(ViewTypes.CURSOR) if self._containerMgr is not None else None
 
     def __getWaitingFromContainer(self):
         return self._containerMgr.getView(ViewTypes.WAITING) if self._containerMgr is not None else None

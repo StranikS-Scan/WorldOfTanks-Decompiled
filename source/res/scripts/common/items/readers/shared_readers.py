@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/items/readers/shared_readers.py
+from collections import defaultdict
 import ResMgr
 from constants import IS_CLIENT, IS_BOT
 from debug_utils import LOG_ERROR
@@ -27,7 +28,7 @@ def _readCustomizationSlot(ctx, subsection, slotType):
         availableShowOnRegions = c11n_constants.ApplyArea.HULL | c11n_constants.ApplyArea.TURRET | c11n_constants.ApplyArea.GUN
         if showOn | availableShowOnRegions != availableShowOnRegions:
             _xml.raiseWrongSection(ctx, 'showOn')
-    availableTags = c11n_constants.ProjectionDecalDirectionTags.ALL + c11n_constants.ProjectionDecalFormTags.ALL + c11n_constants.ProjectionDecalPositionTags.ALL
+    availableTags = c11n_constants.ProjectionDecalDirectionTags.ALL + c11n_constants.ProjectionDecalFormTags.ALL + c11n_constants.ProjectionDecalPositionTags.ALL + c11n_constants.ProjectionDecalPreferredTags.ALL + c11n_constants.ProjectionDecalDenyTags.ALL
     tags = readOrderedTagsOrEmpty(ctx, subsection, availableTags)
     slotId = _xml.readInt(ctx, subsection, 'slotId')
     parentSlotId = _xml.readIntOrNone(ctx, subsection, 'parentSlotId')
@@ -37,7 +38,17 @@ def _readCustomizationSlot(ctx, subsection, slotType):
             _xml.raiseWrongXml(ctx, 'tags', 'wrong formfactor for slot ID%i' % slotId)
     slotId = _xml.readInt(ctx, subsection, 'slotId')
     _verifySlotId(ctx, slotType, slotId)
-    descr = shared_components.CustomizationSlotDescription(type=slotType, anchorPosition=_xml.readVector3(ctx, subsection, 'anchorPosition'), anchorDirection=_xml.readVector3(ctx, subsection, 'anchorDirection'), applyTo=applyTo, slotId=slotId, position=_xml.readVector3OrNone(ctx, subsection, 'position'), rotation=_xml.readVector3OrNone(ctx, subsection, 'rotation'), scale=_xml.readVector3OrNone(ctx, subsection, 'scale'), scaleFactors=_xml.readVector3OrNone(ctx, subsection, 'scaleFactors'), doubleSided=_xml.readBool(ctx, subsection, 'doubleSided', False), showOn=showOn, tags=tags, parentSlotId=parentSlotId, clipAngle=_xml.readFloat(ctx, subsection, 'clipAngle', 0.0))
+    attachedPartsData = _xml.readStringOrNone(ctx, subsection, 'attachedPart')
+    if attachedPartsData is not None:
+        attachedParts = defaultdict(set)
+        for partData in attachedPartsData.split():
+            pType, pName = partData.split(':')
+            if pType != 'hull':
+                attachedParts[pType].add(pName)
+
+    else:
+        attachedParts = None
+    descr = shared_components.CustomizationSlotDescription(type=slotType, anchorPosition=_xml.readVector3(ctx, subsection, 'anchorPosition'), anchorDirection=_xml.readVector3(ctx, subsection, 'anchorDirection'), applyTo=applyTo, slotId=slotId, position=_xml.readVector3OrNone(ctx, subsection, 'position'), rotation=_xml.readVector3OrNone(ctx, subsection, 'rotation'), scale=_xml.readVector3OrNone(ctx, subsection, 'scale'), scaleFactors=_xml.readVector3OrNone(ctx, subsection, 'scaleFactors'), doubleSided=_xml.readBool(ctx, subsection, 'doubleSided', False), showOn=showOn, tags=tags, parentSlotId=parentSlotId, clipAngle=_xml.readFloat(ctx, subsection, 'clipAngle', 0.0), attachedParts=attachedParts)
     return descr
 
 

@@ -143,7 +143,8 @@ VEHICLE_ATTRIBUTE_FACTORS = {'engine/power': 1.0,
  'crewChanceToHitFactor': 1.0,
  'crewRolesFactor': 1.0,
  'stunResistanceEffect': 0.0,
- 'stunResistanceDuration': 0.0}
+ 'stunResistanceDuration': 0.0,
+ 'repeatedStunDurationFactor': 1.0}
 _g_prices = None
 
 class CamouflageBonus():
@@ -212,6 +213,7 @@ class VehicleDescriptor(object):
 
     activeGunShotIndex = property(lambda self: self.__activeGunShotIdx, __set_activeGunShotIndex)
     hasSiegeMode = property(lambda self: self.type.hasSiegeMode)
+    hasAutoSiegeMode = property(lambda self: self.type.hasAutoSiegeMode)
     isWheeledVehicle = property(lambda self: self.type.isWheeledVehicle)
     hasBurnout = property(lambda self: self.type.hasBurnout)
     isPitchHullAimingAvailable = property(lambda self: self.type.hullAimingParams['pitch']['isAvailable'])
@@ -999,7 +1001,8 @@ class VehicleDescriptor(object):
              'crewLevelIncrease': 0.0,
              'crewChanceToHitFactor': 1.0,
              'stunResistanceEffect': 0.0,
-             'stunResistanceDuration': 0.0}
+             'stunResistanceDuration': 0.0,
+             'repeatedStunDurationFactor': 1.0}
             for device in self.optionalDevices:
                 if device is not None:
                     device.updateVehicleDescrAttrs(self)
@@ -1119,6 +1122,7 @@ class VehicleType(object):
      'tags',
      'level',
      'hasSiegeMode',
+     'hasAutoSiegeMode',
      'isWheeledVehicle',
      'hasCustomDefaultCamouflage',
      'customizationNationID',
@@ -1189,6 +1193,7 @@ class VehicleType(object):
         self.tags = basicInfo.tags
         self.level = basicInfo.level
         self.hasSiegeMode = 'siegeMode' in self.tags
+        self.hasAutoSiegeMode = 'autoSiege' in self.tags
         self.isWheeledVehicle = 'wheeledVehicle' in self.tags
         self.hasBurnout = 'burnout' in self.tags
         self.role = self.__getRoleFromTags()
@@ -1313,11 +1318,6 @@ class VehicleType(object):
             self.xphysics = _readXPhysicsClient(xmlCtx, section, 'physics', self.isWheeledVehicle)
         else:
             self.xphysics = None
-        if IS_CLIENT:
-            for turrets in self.turrets:
-                for turret in turrets:
-                    _calculateGunCombinedPitchLimits(xmlCtx, self.hullAimingParams, turret.guns)
-
         if IS_CLIENT and section.has_key('repaintParameters'):
             self.repaintParameters = _readRepaintParams(xmlCtx, _xml.getSubsection(xmlCtx, section, 'repaintParameters'))
         if (IS_CLIENT or IS_CELLAPP or IS_BOT) and section.has_key('extras'):
@@ -2682,6 +2682,16 @@ def _xphysicsParseEngine(ctx, sec):
     return res
 
 
+def _xphysicsReadSwingCompensator(ctx, sec):
+    floatParams = ('collisionExtend', 'stiffnesFactor0', 'stiffnesFactor1', 'dampingFactor', 'maxPitchDeviation', 'maxRollDeviation', 'restitution')
+    res = _tryParseFloatList(ctx, sec, floatParams)
+    if sec.has_key('enable'):
+        res['enable'] = sec.readBool('enable', 'true')
+    if sec.has_key('stabilisationCenter'):
+        res['stabilisationCenter'] = _xml.readTupleOfFloats(ctx, sec, 'stabilisationCenter')
+    return res
+
+
 def _xphysicsParseGround(ctx, sec):
     if 'medium' in sec.keys():
         return _parseSectionList(ctx, sec, _xphysicsParseGround)
@@ -2770,6 +2780,8 @@ def _readXPhysicsMode(xmlCtx, sec, subsectionName):
         res['vehiclePhysicsType'] = subsec.readInt('vehiclePhysicsType', VEHICLE_PHYSICS_TYPE.TANK)
         res['fakegearbox'] = _readFakeGearBox(ctx, subsec)
         res['engines'] = _parseSectionList(ctx, subsec, _xphysicsParseEngine, 'engines')
+        if subsec.has_key('swingCompensator'):
+            res['swingCompensator'] = _xphysicsReadSwingCompensator(ctx, subsec['swingCompensator'])
         isTank = res['vehiclePhysicsType'] == VEHICLE_PHYSICS_TYPE.TANK
         readChassisFunc = _xphysicsParseChassis if isTank else _xphysicsParseWheeledChassis
         res['chassis'] = _parseSectionList(ctx, subsec, readChassisFunc, 'chassis')
@@ -3006,6 +3018,8 @@ def _readGun(xmlCtx, section, item, unlocksDescrs=None, _=None):
             item.staticPitch = radians(angle)
     else:
         item.staticPitch = None
+    if section.has_key('hullPitchAimingFirst'):
+        item.hullPitchAimingFirst = _xml.readBool(xmlCtx, section, 'hullPitchAimingFirst')
     item.healthParams = shared_readers.readDeviceHealthParams(xmlCtx, section)
     item.shotDispersionAngle = atan(_xml.readNonNegativeFloat(xmlCtx, section, 'shotDispersionRadius') / 100.0)
     item.shotDispersionFactors = _readGunShotDispersionFactors(xmlCtx, section, 'shotDispersionFactors')
@@ -3074,6 +3088,11 @@ def _readGunLocals(xmlCtx, section, sharedItem, unlocksDescrs, turretCompactDesc
     else:
         hasOverride = True
         staticPitch = radians(_xml.readFloat(xmlCtx, section, 'staticPitch'))
+    if not section.has_key('hullPitchAimingFirst'):
+        hullPitchAimingFirst = sharedItem.hullPitchAimingFirst
+    else:
+        hasOverride = True
+        hullPitchAimingFirst = _xml.readBool(xmlCtx, section, 'hullPitchAimingFirst')
     if not section.has_key('rotationSpeed'):
         rotationSpeed = sharedItem.rotationSpeed
     else:
@@ -3224,6 +3243,7 @@ def _readGunLocals(xmlCtx, section, sharedItem, unlocksDescrs, turretCompactDesc
         item.materials = materials
         item.staticTurretYaw = staticTurretYaw
         item.staticPitch = staticPitch
+        item.hullPitchAimingFirst = hullPitchAimingFirst
         item.pitchLimits = copy.deepcopy(sharedItem.pitchLimits)
         item.pitchLimits.update(pitchLimits)
         _validatePitchLimits(xmlCtx, 'pitchLimits', item.pitchLimits)
@@ -4628,6 +4648,9 @@ def _readSiegeModeParams(xmlCtx, section, vehType):
          'switchOffTime': _xml.readNonNegativeFloat(xmlCtx, subSection, 'switchOffTime', 2.0),
          'switchCancelEnabled': subSection.readBool('switchCancelEnabled', False),
          'engineDamageCoeff': _xml.readNonNegativeFloat(xmlCtx, subSection, 'engineDamageCoeff', 2.0)}
+        if 'autoSiege' in vehType.tags:
+            res.update({'autoSwitchOffRequiredVehicleSpeed': component_constants.KMH_TO_MS * _xml.readNonNegativeFloat(xmlCtx, subSection, 'autoSwitchOffRequiredVehicleSpeed', 1.0),
+             'autoSwitchOnRequiredVehicleSpeed': component_constants.KMH_TO_MS * _xml.readNonNegativeFloat(xmlCtx, subSection, 'autoSwitchOnRequiredVehicleSpeed', 0.1)})
         if IS_CLIENT:
             res['soundStateChange'] = sound_readers.readSoundSiegeModeStateChange(xmlCtx, subSection)
             res[VEHICLE_SIEGE_STATE.SWITCHING_ON] = {'normal': res['switchOnTime'],
@@ -4646,7 +4669,7 @@ def _readHullAimingParams(xmlCtx, section):
                'wheelsCorrectionSpeed': radians(_xml.readPositiveFloat(xmlCtx, section, 'hull_aiming/pitch/wheelsCorrectionSpeed', 0.0)),
                'wheelsCorrectionAngles': {'pitchMin': radians(_xml.readFloat(xmlCtx, section, 'hull_aiming/pitch/wheelsCorrectionAngles/pitchMin', 0)),
                                           'pitchMax': radians(_xml.readFloat(xmlCtx, section, 'hull_aiming/pitch/wheelsCorrectionAngles/pitchMax', 0))}},
-     'yaw': {'isAvailable': section.has_key('hull_aiming') != 0}}
+     'yaw': {'isAvailable': section.has_key('hull_aiming') != 0 and not section.has_key('hull_aiming/yawDisabled')}}
     return res
 
 
@@ -4835,29 +4858,6 @@ def _unpackIDAndDuration(cd):
 def _isWeightAllowedToChange(newWeights, prevWeights):
     newReserve = newWeights[1] - newWeights[0]
     return newReserve >= 0.0 or newReserve >= prevWeights[1] - prevWeights[0]
-
-
-def _calculateGunCombinedPitchLimits(xmlCtx, hullAimingParams, inOutGuns):
-    if inOutGuns is None:
-        return
-    else:
-        hullAimingPitchMin = 0.0
-        hullAimingPitchMax = 0.0
-        if hullAimingParams is not None and hullAimingParams['pitch']['isEnabled']:
-            wheelsCorrectionAngles = hullAimingParams['pitch']['wheelsCorrectionAngles']
-            hullAimingPitchMin = wheelsCorrectionAngles['pitchMin']
-            hullAimingPitchMax = wheelsCorrectionAngles['pitchMax']
-        parameterName = 'combinedPitchLimits'
-        for gun in inOutGuns:
-            pitchLimits = gun.pitchLimits
-            minPitch = tuple(((border, pitch + hullAimingPitchMin) for border, pitch in pitchLimits['minPitch']))
-            maxPitch = tuple(((border, pitch + hullAimingPitchMax) for border, pitch in pitchLimits['maxPitch']))
-            combinedPitchLimits = {'minPitch': cachedFloatTuple(minPitch),
-             'maxPitch': cachedFloatTuple(maxPitch)}
-            _validatePitchLimits(xmlCtx, parameterName, combinedPitchLimits)
-            gun.combinedPitchLimits = combinedPitchLimits
-
-        return
 
 
 @_xml.cacheFloatTuples

@@ -1,22 +1,35 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/hangar/carousels/ranked/carousel_data_provider.py
+from gui import GUI_NATIONS_ORDER_INDEX
 from gui.Scaleform.daapi.view.lobby.hangar.carousels.basic.carousel_data_provider import HangarCarouselDataProvider
 from gui.Scaleform.locale.RANKED_BATTLES import RANKED_BATTLES
-from gui.shared.gui_items.Vehicle import Vehicle
+from gui.shared.gui_items.Vehicle import Vehicle, VEHICLE_TYPES_ORDER_INDICES
 from gui.shared.utils.functions import makeTooltip
+from helpers import dependency
+from skeletons.gui.game_control import IRankedBattlesController
 
 class RankedCarouselDataProvider(HangarCarouselDataProvider):
+    rankedController = dependency.descriptor(IRankedBattlesController)
 
     @classmethod
     def _vehicleComparisonKey(cls, vehicle):
-        result = [vehicle.getCustomState() == Vehicle.VEHICLE_STATE.UNSUITABLE_TO_QUEUE]
-        result.extend(super(RankedCarouselDataProvider, cls)._vehicleComparisonKey(vehicle))
-        return result
+        return (vehicle.getCustomState() == Vehicle.VEHICLE_STATE.UNSUITABLE_TO_QUEUE,
+         not vehicle.isInInventory,
+         not vehicle.isEvent,
+         not vehicle.isFavorite,
+         not cls.rankedController.hasVehicleRankedBonus(vehicle.intCD),
+         GUI_NATIONS_ORDER_INDEX[vehicle.nationName],
+         VEHICLE_TYPES_ORDER_INDICES[vehicle.type],
+         vehicle.level,
+         tuple(vehicle.buyPrices.itemPrice.price.iterallitems(byWeight=True)),
+         vehicle.userName)
 
     def _buildVehicle(self, vehicle):
         result = super(RankedCarouselDataProvider, self)._buildVehicle(vehicle)
         state, _ = vehicle.getState()
+        result['hasRankedBonus'] = self.rankedController.hasVehicleRankedBonus(vehicle.intCD)
         if state == Vehicle.VEHICLE_STATE.UNSUITABLE_TO_QUEUE:
             result['lockedTooltip'] = makeTooltip(RANKED_BATTLES.RANKEDBATTLESCAROUSEL_LOCKEDTOOLTIP_HEADER, RANKED_BATTLES.RANKEDBATTLESCAROUSEL_LOCKEDTOOLTIP_BODY)
             result['clickEnabled'] = True
+            result['hasRankedBonus'] = False
         return result

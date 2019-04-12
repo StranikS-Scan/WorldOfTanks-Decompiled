@@ -35,3 +35,15 @@ class IBattleResultsService(object):
 
     def saveStatsSorting(self, bonusType, iconType, sortDirection):
         raise NotImplementedError
+
+    def applyAdditionalBonus(self, arenaUniqueID):
+        raise NotImplementedError
+
+    def isAddXPBonusApplied(self, arenaUniqueID):
+        raise NotImplementedError
+
+    def isAddXPBonusEnabled(self, arenaUniqueID):
+        raise NotImplementedError
+
+    def getAdditionalXPValue(self, arenaUniqueID):
+        raise NotImplementedError

@@ -85,7 +85,7 @@
     <hangarShadowTexture>	vehicles/german/G104_Stug_IV/Stug_IV_HangarShadowMap.dds	</hangarShadowTexture>
     <customization>
       <customizableVehicleAreas>
-        <paint></paint>
+        <paint>	HULL	</paint>
         <camouflage>	HULL	</camouflage>
       </customizableVehicleAreas>
     </customization>
@@ -144,6 +144,12 @@
       <slot>
         <slotType>	camouflage	</slotType>
         <slotId>	3	</slotId>
+        <anchorPosition>	0.000000 0.686943 -1.34115	</anchorPosition>
+        <anchorDirection>	0.000000 0.455881 -0.890041	</anchorDirection>
+      </slot>
+      <slot>
+        <slotType>	paint	</slotType>
+        <slotId>	2	</slotId>
         <anchorPosition>	0.000000 0.686943 -1.34115	</anchorPosition>
         <anchorDirection>	0.000000 0.455881 -0.890041	</anchorDirection>
       </slot>
@@ -1209,7 +1215,7 @@
       </physicalTracks>
       <customization>
         <customizableVehicleAreas>
-          <paint></paint>
+          <paint>	CHASSIS	</paint>
           <camouflage></camouflage>
         </customizableVehicleAreas>
       </customization>
@@ -1217,8 +1223,14 @@
         <slot>
           <slotType>	style	</slotType>
           <slotId>	257	</slotId>
-          <anchorPosition>	0.000000 2.03478 0.000000	</anchorPosition>
-          <anchorDirection>	0.000000 1 -0.000000	</anchorDirection>
+          <anchorPosition>	0.109074 2.14261 -0.573768	</anchorPosition>
+          <anchorDirection>	0.000000 1 0.000000	</anchorDirection>
+        </slot>
+        <slot>
+          <slotType>	paint	</slotType>
+          <slotId>	256	</slotId>
+          <anchorPosition>	-1.38686 0.58059 -0.02027	</anchorPosition>
+          <anchorDirection>	-0.922347 0.386128 -0.0134808	</anchorDirection>
         </slot>
       </customizationSlots>
     </Chassis_G104_Stug_IV>
@@ -1292,7 +1304,7 @@
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <customization>
             <customizableVehicleAreas>
-              <paint></paint>
+              <paint>	GUN GUN_2	</paint>
               <camouflage>	GUN	</camouflage>
             </customizableVehicleAreas>
           </customization>
@@ -1300,8 +1312,8 @@
             <slot>
               <slotType>	insigniaOnGun	</slotType>
               <slotId>	771	</slotId>
-              <rayStart>	-0.00244623 -0.0458547 2.60427	</rayStart>
-              <rayEnd>	0.0107446 -0.0470315 2.60319	</rayEnd>
+              <rayStart>	0.0111723 -0.0340494 2.35158	</rayStart>
+              <rayEnd>	-0.0335874 -0.000788025 2.35143	</rayEnd>
               <rayUp>	0.065 0.061 4	</rayUp>
               <size>	0.35	</size>
               <hideIfDamaged>	false	</hideIfDamaged>
@@ -1310,9 +1322,23 @@
             <slot>
               <slotType>	camouflage	</slotType>
               <slotId>	770	</slotId>
-              <anchorPosition>	-0.0012231 -0.0454702 1.93325	</anchorPosition>
-              <anchorDirection>	-0.000000 0.000000 1	</anchorDirection>
+              <anchorPosition>	0.00558616 -0.0170247 1.53494	</anchorPosition>
+              <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
               <applyTo>	4096	</applyTo>
+            </slot>
+            <slot>
+              <slotType>	paint	</slotType>
+              <slotId>	768	</slotId>
+              <anchorPosition>	0.00558616 -0.0170247 1.53494	</anchorPosition>
+              <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+            <slot>
+              <slotType>	paint	</slotType>
+              <slotId>	769	</slotId>
+              <anchorPosition>	0.000000 0.345818 0.345818	</anchorPosition>
+              <anchorDirection>	0.000000 0.707107 0.707107	</anchorDirection>
+              <applyTo>	16384	</applyTo>
             </slot>
           </customizationSlots>
           <camouflage>

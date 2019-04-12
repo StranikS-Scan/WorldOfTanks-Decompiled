@@ -58,6 +58,13 @@
       <undamaged>	vehicles/french/F112_M10_RBFM/normal/lod0/Hull.model	</undamaged>
       <destroyed>	vehicles/french/F112_M10_RBFM/crash/lod0/Hull.model	</destroyed>
       <exploded>	vehicles/french/F112_M10_RBFM/crash/lod0/Hull.model	</exploded>
+      <sets>
+        <Siroco>
+          <undamaged>	vehicles/french/F112_M10_RBFM/_skins/Siroco/normal/lod0/Hull.model	</undamaged>
+          <destroyed>	vehicles/french/F112_M10_RBFM/_skins/Siroco/crash/lod0/Hull.model	</destroyed>
+          <exploded>	vehicles/french/F112_M10_RBFM/_skins/Siroco/crash/lod0/Hull.model	</exploded>
+        </Siroco>
+      </sets>
     </models>
     <swinging>
       <lodDist>	FAR	</lodDist>
@@ -87,7 +94,7 @@
       <slot>
         <slotType>	camouflage	</slotType>
         <slotId>	3	</slotId>
-        <anchorPosition>	0.000001 0.838358 -2.01365	</anchorPosition>
+        <anchorPosition>	0.000000 0.2574 2.20489	</anchorPosition>
         <anchorDirection>	0.000000 0.115953 0.993255	</anchorDirection>
       </slot>
       <slot>
@@ -141,6 +148,12 @@
         <hideIfDamaged>	false	</hideIfDamaged>
         <isUVProportional>	true	</isUVProportional>
       </slot>
+      <slot>
+        <slotType>	paint	</slotType>
+        <slotId>	2	</slotId>
+        <anchorPosition>	0.000000 0.2574 2.20489	</anchorPosition>
+        <anchorDirection>	0.000000 0.115953 0.993255	</anchorDirection>
+      </slot>
     </customizationSlots>
     <camouflage>
       <tiling>	1.8 1.8 0.000000 0.000000	</tiling>
@@ -164,8 +177,8 @@
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
       <rotationSpeed>	30	</rotationSpeed>
       <shotDispersionFactors>
-        <vehicleMovement>	0.18	</vehicleMovement>
-        <vehicleRotation>	0.18	</vehicleRotation>
+        <vehicleMovement>	0.21	</vehicleMovement>
+        <vehicleRotation>	0.21	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
       <maxHealth>	100	</maxHealth>
@@ -175,6 +188,13 @@
         <undamaged>	vehicles/french/F112_M10_RBFM/normal/lod0/Chassis.model	</undamaged>
         <destroyed>	vehicles/french/F112_M10_RBFM/crash/lod0/Chassis.model	</destroyed>
         <exploded>	vehicles/french/F112_M10_RBFM/crash/lod0/Chassis.model	</exploded>
+        <sets>
+          <Siroco>
+            <undamaged>	vehicles/french/F112_M10_RBFM/_skins/Siroco/normal/lod0/Chassis.model	</undamaged>
+            <destroyed>	vehicles/french/F112_M10_RBFM/_skins/Siroco/crash/lod0/Chassis.model	</destroyed>
+            <exploded>	vehicles/french/F112_M10_RBFM/_skins/Siroco/crash/lod0/Chassis.model	</exploded>
+          </Siroco>
+        </sets>
       </models>
       <traces>
         <lodDist>	MEDIUM	</lodDist>
@@ -908,14 +928,20 @@
         <slot>
           <slotType>	style	</slotType>
           <slotId>	257	</slotId>
-          <anchorPosition>	0.000000 2.28553 0.000000	</anchorPosition>
-          <anchorDirection>	-0.000000 1 -0.000000	</anchorDirection>
+          <anchorPosition>	-0.0027355 2.57854 -0.281123	</anchorPosition>
+          <anchorDirection>	0.000000 1 0.000000	</anchorDirection>
+        </slot>
+        <slot>
+          <slotType>	paint	</slotType>
+          <slotId>	256	</slotId>
+          <anchorPosition>	-1.27333 0.561219 -0.11134	</anchorPosition>
+          <anchorDirection>	-0.912147 0.402028 -0.0797582	</anchorDirection>
         </slot>
       </customizationSlots>
       <customization>
         <customizableVehicleAreas>
           <paint>	CHASSIS	</paint>
-          <camouflage>	CHASSIS	</camouflage>
+          <camouflage></camouflage>
         </customizableVehicleAreas>
       </customization>
     </Chassis_F112_M10_RBFM>
@@ -982,13 +1008,20 @@
             <minPitch>	0 -30 1 -30	</minPitch>
             <maxPitch>	0 10 0.430556 10 0.436111 8.9 0.483333 8.9 0.488889 4.3 0.511111 4.3 0.516667 8.9 0.563889 8.9 0.569444 10 1 10	</maxPitch>
           </pitchLimits>
-          <shotDispersionRadius>	0.36	</shotDispersionRadius>
-          <aimingTime>	1.7	</aimingTime>
+          <shotDispersionRadius>	0.37	</shotDispersionRadius>
+          <aimingTime>	1.8	</aimingTime>
           <invisibilityFactorAtShot>	0.26	</invisibilityFactorAtShot>
           <models>
             <undamaged>	vehicles/french/F112_M10_RBFM/normal/lod0/Gun_01.model	</undamaged>
             <destroyed>	vehicles/french/F112_M10_RBFM/crash/lod0/Gun_01.model	</destroyed>
             <exploded>	vehicles/french/F112_M10_RBFM/crash/lod0/Gun_01.model	</exploded>
+            <sets>
+              <Siroco>
+                <undamaged>	vehicles/french/F112_M10_RBFM/_skins/Siroco/normal/lod0/Gun_01.model	</undamaged>
+                <destroyed>	vehicles/french/F112_M10_RBFM/_skins/Siroco/crash/lod0/Gun_01.model	</destroyed>
+                <exploded>	vehicles/french/F112_M10_RBFM/_skins/Siroco/crash/lod0/Gun_01.model	</exploded>
+              </Siroco>
+            </sets>
           </models>
           <hitTester>
             <collisionModelServer>	vehicles/french/F112_M10_RBFM/collision/Gun_01.model	</collisionModelServer>
@@ -1019,6 +1052,20 @@
               <hideIfDamaged>	false	</hideIfDamaged>
               <isUVProportional>	true	</isUVProportional>
             </slot>
+            <slot>
+              <slotType>	paint	</slotType>
+              <slotId>	768	</slotId>
+              <anchorPosition>	-0.000012 -0.00846077 1.34288	</anchorPosition>
+              <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+            <slot>
+              <slotType>	paint	</slotType>
+              <slotId>	769	</slotId>
+              <anchorPosition>	0.000000 0.235044 0.235043	</anchorPosition>
+              <anchorDirection>	0.000000 0.707107 0.707107	</anchorDirection>
+              <applyTo>	16384	</applyTo>
+            </slot>
           </customizationSlots>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <camouflage>
@@ -1030,6 +1077,13 @@
         <undamaged>	vehicles/french/F112_M10_RBFM/normal/lod0/Turret_01.model	</undamaged>
         <destroyed>	vehicles/french/F112_M10_RBFM/crash/lod0/Turret_01.model	</destroyed>
         <exploded>	vehicles/french/F112_M10_RBFM/crash/lod0/Turret_01.model	</exploded>
+        <sets>
+          <Siroco>
+            <undamaged>	vehicles/french/F112_M10_RBFM/_skins/Siroco/normal/lod0/Turret_01.model	</undamaged>
+            <destroyed>	vehicles/french/F112_M10_RBFM/_skins/Siroco/crash/lod0/Turret_01.model	</destroyed>
+            <exploded>	vehicles/french/F112_M10_RBFM/_skins/Siroco/crash/lod0/Turret_01.model	</exploded>
+          </Siroco>
+        </sets>
       </models>
       <hitTester>
         <collisionModelServer>	vehicles/french/F112_M10_RBFM/collision/Turret_01.model	</collisionModelServer>
@@ -1049,8 +1103,14 @@
         <slot>
           <slotType>	camouflage	</slotType>
           <slotId>	513	</slotId>
-          <anchorPosition>	0.000000 0.706142 0.678104	</anchorPosition>
+          <anchorPosition>	0.066659 0.67947 -1.20556	</anchorPosition>
           <anchorDirection>	0.000000 1 0.000000	</anchorDirection>
+        </slot>
+        <slot>
+          <slotType>	paint	</slotType>
+          <slotId>	512	</slotId>
+          <anchorPosition>	0.0666595 0.679474 -1.20556	</anchorPosition>
+          <anchorDirection>	-0.000000 1 0.000000	</anchorDirection>
         </slot>
       </customizationSlots>
       <camouflage>

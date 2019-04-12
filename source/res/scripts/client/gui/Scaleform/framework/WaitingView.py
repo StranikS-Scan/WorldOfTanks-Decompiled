@@ -4,8 +4,10 @@ import Keys
 from debug_utils import LOG_ERROR, LOG_CURRENT_EXCEPTION
 from gui import InputHandler
 from gui.Scaleform.daapi.view.meta.WaitingViewMeta import WaitingViewMeta
+from gui.impl import backport
+from skeletons.gui.app_loader import IWaitingWidget
 
-class WaitingView(WaitingViewMeta):
+class WaitingView(WaitingViewMeta, IWaitingWidget):
 
     def __init__(self):
         super(WaitingView, self).__init__()
@@ -31,10 +33,10 @@ class WaitingView(WaitingViewMeta):
         self.__callback = None
         return
 
-    def waitingShow(self, msg):
-        self.as_showWaitingS(msg)
+    def showWaiting(self, messageID):
+        self.as_showWaitingS(backport.text(messageID))
 
-    def waitingHide(self):
+    def hideWaiting(self):
         self.__callback = None
         try:
             self.as_hideWaitingS()

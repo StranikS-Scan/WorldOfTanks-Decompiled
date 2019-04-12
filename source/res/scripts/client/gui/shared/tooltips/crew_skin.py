@@ -45,9 +45,9 @@ class CrewSkinTooltipDataBlock(BlocksTooltipData):
         topBlock.append(formatters.packTextBlockData(text=text_styles.main(item.getDescription()), padding=formatters.packPadding(14)))
         items.append(formatters.packBuildUpBlockData(topBlock))
         block = []
-        block.append(formatters.packTextParameterBlockData(name=text_styles.stats(i18n.makeString('#tooltips:crewSkins/noSound')), value=text_styles.main(i18n.makeString('#tooltips:crewSkins/sound')), valueWidth=105))
-        block.append(formatters.packTextParameterBlockData(name=text_styles.stats(str(len(item.getTankmenIDs()))), value=text_styles.main(i18n.makeString('#crew_skins:feature/inUse')), valueWidth=105))
-        block.append(formatters.packTextParameterBlockData(name=text_styles.stats('{free}({max})'.format(free=item.getFreeCount(), max=item.getMaxCount())), value=text_styles.main(i18n.makeString('#crew_skins:feature/inStorage')), valueWidth=105))
+        block.append(formatters.packTextParameterBlockData(name=text_styles.stats(i18n.makeString('#tooltips:crewSkins/noSound')), value=text_styles.main(i18n.makeString('#tooltips:crewSkins/sound')), valueWidth=115))
+        block.append(formatters.packTextParameterBlockData(name=text_styles.stats(str(len(item.getTankmenIDs()))), value=text_styles.main(i18n.makeString('#crew_skins:feature/inUse')), valueWidth=115))
+        block.append(formatters.packTextParameterBlockData(name=text_styles.stats('{free}({max})'.format(free=item.getFreeCount(), max=item.getMaxCount())), value=text_styles.main(i18n.makeString('#crew_skins:feature/inStorage')), valueWidth=115))
         restrictions = []
         if item.getRoleID() is not None:
             restrictions.append(i18n.makeString(ITEM_TYPES.tankman_roles(item.getRoleID())))
@@ -59,7 +59,7 @@ class CrewSkinTooltipDataBlock(BlocksTooltipData):
             restrictionText = ', '.join(restrictions)
         else:
             restrictionText = i18n.makeString('#tooltips:crewSkins/noRestrictions')
-        block.append(formatters.packTextParameterBlockData(name=text_styles.stats(restrictionText), value=text_styles.main(i18n.makeString('#tooltips:crewSkins/restrictions')), valueWidth=105))
+        block.append(formatters.packTextParameterBlockData(name=text_styles.stats(restrictionText), value=text_styles.main(i18n.makeString('#tooltips:crewSkins/restrictions')), valueWidth=115))
         items.append(formatters.packBuildUpBlockData(block))
         skinUsersRoleAndVehicle = _skinUsersRoleAndVehicleText('{role} ({vehicle})', item)
         if skinUsersRoleAndVehicle:

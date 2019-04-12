@@ -191,10 +191,10 @@
       <terrainResistance>	1.3 1.4 2.3	</terrainResistance>
       <brakeForce>	29000	</brakeForce>
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
-      <rotationSpeed>	27	</rotationSpeed>
+      <rotationSpeed>	24	</rotationSpeed>
       <shotDispersionFactors>
-        <vehicleMovement>	0.25	</vehicleMovement>
-        <vehicleRotation>	0.25	</vehicleRotation>
+        <vehicleMovement>	0.28	</vehicleMovement>
+        <vehicleRotation>	0.28	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
       <maxHealth>	220	</maxHealth>
@@ -898,10 +898,10 @@
       <terrainResistance>	1.2 1.3 2.1	</terrainResistance>
       <brakeForce>	29000	</brakeForce>
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
-      <rotationSpeed>	30	</rotationSpeed>
+      <rotationSpeed>	26	</rotationSpeed>
       <shotDispersionFactors>
-        <vehicleMovement>	0.25	</vehicleMovement>
-        <vehicleRotation>	0.25	</vehicleRotation>
+        <vehicleMovement>	0.26	</vehicleMovement>
+        <vehicleRotation>	0.26	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
       <maxHealth>	240	</maxHealth>
@@ -1631,7 +1631,7 @@
         <repairCost>	2.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_105mm_lvkan_m_42>	shared	  <maxAmmo>	52	</maxAmmo>
+        <_105mm_lvkan_m_42>	shared	  <maxAmmo>	57	</maxAmmo>
           <unlocks>
             <gun>	_105mm_TK_105_9	  <cost>	42000	</cost>
             </gun>
@@ -1654,12 +1654,12 @@
           </pitchLimits>
           <invisibilityFactorAtShot>	0.209	</invisibilityFactorAtShot>
           <clip>
-            <count>	4	</count>
+            <count>	3	</count>
             <rate>	20	</rate>
           </clip>
-          <shotDispersionRadius>	0.38	</shotDispersionRadius>
-          <reloadTime>	37	</reloadTime>
-          <aimingTime>	3	</aimingTime>
+          <shotDispersionRadius>	0.39	</shotDispersionRadius>
+          <reloadTime>	22.7	</reloadTime>
+          <aimingTime>	3.2	</aimingTime>
           <models>
             <undamaged>	vehicles/sweden/S18_EMIL_1951_E1/normal/lod0/Gun_01.model	</undamaged>
             <destroyed>	vehicles/sweden/S18_EMIL_1951_E1/crash/lod0/Gun_01.model	</destroyed>
@@ -1742,7 +1742,7 @@
             <tiling>	1.2 1.2 0.000000 0.000000	</tiling>
           </camouflage>
         </_105mm_lvkan_m_42>
-        <_105mm_TK_105_9>	shared	  <maxAmmo>	52	</maxAmmo>
+        <_105mm_TK_105_9>	shared	  <maxAmmo>	57	</maxAmmo>
           <unlocks>
             <vehicle>	S17_EMIL_1952_E2	  <cost>	167500	</cost>
             </vehicle>
@@ -1765,11 +1765,11 @@
           </pitchLimits>
           <invisibilityFactorAtShot>	0.198	</invisibilityFactorAtShot>
           <clip>
-            <count>	4	</count>
+            <count>	3	</count>
             <rate>	20	</rate>
           </clip>
           <shotDispersionRadius>	0.38	</shotDispersionRadius>
-          <reloadTime>	34	</reloadTime>
+          <reloadTime>	27	</reloadTime>
           <aimingTime>	3.2	</aimingTime>
           <shotDispersionFactors>
             <turretRotation>	0.16	</turretRotation>

@@ -8,14 +8,15 @@ from adisp import async, process
 from gui import GUI_SETTINGS
 from gui.Scaleform.Waiting import Waiting
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
-from gui.app_loader import g_appLoader
 from gui.game_control.browser_filters import getFilters as _getGlobalFilters
 from gui.game_control.gc_constants import BROWSER
 from gui.game_control.links import URLMacros
 from gui.shared import EVENT_BUS_SCOPE, g_eventBus
 from gui.shared.events import LoadViewEvent, BrowserEvent
 from gui.shared.utils.functions import getViewName
+from helpers import dependency
 from ids_generators import SequenceIDGenerator
+from skeletons.gui.app_loader import IAppLoader
 from skeletons.gui.game_control import IBrowserController
 from soft_exception import SoftException
 _logger = logging.getLogger(__name__)
@@ -105,7 +106,8 @@ class BrowserController(IBrowserController):
          'isSolidBorder': isSolidBorder}
         if browserID not in self.__browsers and browserID not in self.__pendingBrowsers:
             texture = self._BROWSER_TEXTURE
-            app = g_appLoader.getApp()
+            appLoader = dependency.instance(IAppLoader)
+            app = appLoader.getApp()
             if app is None:
                 raise SoftException('Application can not be None')
             browser = WebBrowser(webBrowserID, app, texture, size, url, handlers=self.__filters)

@@ -101,7 +101,6 @@ class EPIC_BATTLE(object):
     RECOVERY_PANEL_RECOVERY_REQUESTED = '#epic_battle:recovery_panel/recovery_requested'
     RECOVERY_PANEL_RECOVERY_CANCEL = '#epic_battle:recovery_panel/recovery_cancel'
     RECOVERY_PANEL_RECOVERY_CANCELLED = '#epic_battle:recovery_panel/recovery_cancelled'
-    AFTER_BATTLE_STATS_WITH_PREMIUM = '#epic_battle:after_battle_stats/with_premium'
     ADVANCE_MESSAGE_TXT = '#epic_battle:advance_message_txt'
     RETREAT_MESSAGE_TXT = '#epic_battle:retreat_message_txt'
     ADVANCE_MISSION_TXT = '#epic_battle:advance_mission_txt'

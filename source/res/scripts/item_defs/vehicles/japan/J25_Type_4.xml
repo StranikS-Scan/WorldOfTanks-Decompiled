@@ -1674,7 +1674,7 @@
       <guns>
         <_127mm_50_3rd_Year_Type>	shared	  <maxAmmo>	80	</maxAmmo>
           <unlocks>
-            <gun>	_140mm_50_3rd_Year_Type	  <cost>	64500	</cost>
+            <gun>	_150mm_45_41st_Year_Type	  <cost>	64500	</cost>
             </gun>
           </unlocks>
           <armor>
@@ -1740,77 +1740,13 @@
             <tiling>	0.7 0.25 0.000000 0.000000	</tiling>
           </camouflage>
         </_127mm_50_3rd_Year_Type>
-        <_140mm_50_3rd_Year_Type>	shared	  <maxAmmo>	60	</maxAmmo>
+        <_150mm_45_41st_Year_Type>	shared	  <maxAmmo>	40	</maxAmmo>
           <unlocks>
-            <gun>	_150mm_45_41st_Year_Type	  <cost>	64600	</cost>
+            <gun>	_140mm_50_3rd_Year_Type	  <cost>	64600	</cost>
             </gun>
             <vehicle>	J20_Type_2605	  <cost>	257560	</cost>
             </vehicle>
           </unlocks>
-          <armor>
-            <gun>	60	</gun>
-          </armor>
-          <pitchLimits>
-            <minPitch>	0 -20 1 -20	</minPitch>
-            <maxPitch>	0 10 0.377778 10 0.383333 9.5 0.386111 9.1 0.388889 8.8 0.391667 8.4 0.394444 8.1 0.397222 7.8 0.4 7.5 0.402778 7.2 0.405556 6.9 0.408333 6.5 0.411111 6.3 0.413889 6 0.416667 5.7 0.419444 5.5 0.422222 5.2 0.425 5 0.427778 4.8 0.430556 4.5 0.433333 4.1 0.436111 3.8 0.438889 3.6 0.444444 3.2 0.447222 3 0.475 2.3 0.477778 2 0.497222 2 0.502778 2 0.522222 2 0.525 2.3 0.552778 3 0.555556 3.2 0.561111 3.6 0.563889 3.8 0.566667 4.1 0.569444 4.5 0.572222 4.8 0.575 5 0.577778 5.2 0.580556 5.5 0.583333 5.7 0.586111 6 0.588889 6.3 0.591667 6.5 0.594444 6.9 0.597222 7.2 0.6 7.5 0.602778 7.8 0.605556 8.1 0.608333 8.4 0.611111 8.8 0.613889 9.1 0.616667 9.5 0.622222 10 0.925 10 0.927778 9.8 0.930556 9.7 0.933333 9.9 0.936111 10 1 10	</maxPitch>
-          </pitchLimits>
-          <invisibilityFactorAtShot>	0.152	</invisibilityFactorAtShot>
-          <shotDispersionRadius>	0.42	</shotDispersionRadius>
-          <reloadTime>	19.8	</reloadTime>
-          <shotDispersionFactors>
-            <turretRotation>	0.16	</turretRotation>
-            <afterShot>	4.0	</afterShot>
-            <whileGunDamaged>	2.0	</whileGunDamaged>
-          </shotDispersionFactors>
-          <aimingTime>	2.9	</aimingTime>
-          <models>
-            <undamaged>	vehicles/japan/J25_Type_4/normal/lod0/Gun_02.model	</undamaged>
-            <destroyed>	vehicles/japan/J25_Type_4/crash/lod0/Gun_02.model	</destroyed>
-            <exploded>	vehicles/japan/J25_Type_4/crash/lod0/Gun_02.model	</exploded>
-          </models>
-          <hitTester>
-            <collisionModelServer>	vehicles/japan/J25_Type_4/collision/Gun_02.model	</collisionModelServer>
-            <collisionModelClient>	vehicles/japan/J25_Type_4/collision_client/Gun_02.model	</collisionModelClient>
-          </hitTester>
-          <effects>	shot_superhuge	</effects>
-          <animateEmblemSlots>	true	</animateEmblemSlots>
-          <customization>
-            <customizableVehicleAreas>
-              <paint>	GUN	</paint>
-              <camouflage>	GUN	</camouflage>
-            </customizableVehicleAreas>
-          </customization>
-          <customizationSlots>
-            <slot>
-              <slotType>	insigniaOnGun	</slotType>
-              <slotId>	771	</slotId>
-              <rayStart>	0.000000 -0.00547059 1.19888	</rayStart>
-              <rayEnd>	0.0761803 -0.106758 1.19671	</rayEnd>
-              <rayUp>	0.195 0.189 5	</rayUp>
-              <size>	0.689	</size>
-              <hideIfDamaged>	false	</hideIfDamaged>
-              <isUVProportional>	true	</isUVProportional>
-            </slot>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	768	</slotId>
-              <anchorPosition>	0.000000 -0.000463486 2.30379	</anchorPosition>
-              <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	camouflage	</slotType>
-              <slotId>	770	</slotId>
-              <anchorPosition>	0.000000 -0.000463486 2.30379	</anchorPosition>
-              <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-          </customizationSlots>
-          <camouflage>
-            <tiling>	0.61 0.25 0.000000 0.000000	</tiling>
-          </camouflage>
-        </_140mm_50_3rd_Year_Type>
-        <_150mm_45_41st_Year_Type>	shared	  <maxAmmo>	40	</maxAmmo>
           <armor>
             <gun>	60	</gun>
           </armor>
@@ -1874,6 +1810,70 @@
             <tiling>	0.61 0.25 0.000000 0.000000	</tiling>
           </camouflage>
         </_150mm_45_41st_Year_Type>
+        <_140mm_50_3rd_Year_Type>	shared	  <maxAmmo>	60	</maxAmmo>
+          <armor>
+            <gun>	60	</gun>
+          </armor>
+          <pitchLimits>
+            <minPitch>	0 -20 1 -20	</minPitch>
+            <maxPitch>	0 10 0.377778 10 0.383333 9.5 0.386111 9.1 0.388889 8.8 0.391667 8.4 0.394444 8.1 0.397222 7.8 0.4 7.5 0.402778 7.2 0.405556 6.9 0.408333 6.5 0.411111 6.3 0.413889 6 0.416667 5.7 0.419444 5.5 0.422222 5.2 0.425 5 0.427778 4.8 0.430556 4.5 0.433333 4.1 0.436111 3.8 0.438889 3.6 0.444444 3.2 0.447222 3 0.475 2.3 0.477778 2 0.497222 2 0.502778 2 0.522222 2 0.525 2.3 0.552778 3 0.555556 3.2 0.561111 3.6 0.563889 3.8 0.566667 4.1 0.569444 4.5 0.572222 4.8 0.575 5 0.577778 5.2 0.580556 5.5 0.583333 5.7 0.586111 6 0.588889 6.3 0.591667 6.5 0.594444 6.9 0.597222 7.2 0.6 7.5 0.602778 7.8 0.605556 8.1 0.608333 8.4 0.611111 8.8 0.613889 9.1 0.616667 9.5 0.622222 10 0.925 10 0.927778 9.8 0.930556 9.7 0.933333 9.9 0.936111 10 1 10	</maxPitch>
+          </pitchLimits>
+          <invisibilityFactorAtShot>	0.152	</invisibilityFactorAtShot>
+          <shotDispersionRadius>	0.42	</shotDispersionRadius>
+          <reloadTime>	19.8	</reloadTime>
+          <shotDispersionFactors>
+            <turretRotation>	0.16	</turretRotation>
+            <afterShot>	4.0	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <aimingTime>	2.9	</aimingTime>
+          <models>
+            <undamaged>	vehicles/japan/J25_Type_4/normal/lod0/Gun_02.model	</undamaged>
+            <destroyed>	vehicles/japan/J25_Type_4/crash/lod0/Gun_02.model	</destroyed>
+            <exploded>	vehicles/japan/J25_Type_4/crash/lod0/Gun_02.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModelServer>	vehicles/japan/J25_Type_4/collision/Gun_02.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/japan/J25_Type_4/collision_client/Gun_02.model	</collisionModelClient>
+          </hitTester>
+          <effects>	shot_superhuge	</effects>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <customization>
+            <customizableVehicleAreas>
+              <paint>	GUN	</paint>
+              <camouflage>	GUN	</camouflage>
+            </customizableVehicleAreas>
+          </customization>
+          <customizationSlots>
+            <slot>
+              <slotType>	insigniaOnGun	</slotType>
+              <slotId>	771	</slotId>
+              <rayStart>	0.000000 -0.00547059 1.19888	</rayStart>
+              <rayEnd>	0.0761803 -0.106758 1.19671	</rayEnd>
+              <rayUp>	0.195 0.189 5	</rayUp>
+              <size>	0.689	</size>
+              <hideIfDamaged>	false	</hideIfDamaged>
+              <isUVProportional>	true	</isUVProportional>
+            </slot>
+            <slot>
+              <slotType>	paint	</slotType>
+              <slotId>	768	</slotId>
+              <anchorPosition>	0.000000 -0.000463486 2.30379	</anchorPosition>
+              <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+            <slot>
+              <slotType>	camouflage	</slotType>
+              <slotId>	770	</slotId>
+              <anchorPosition>	0.000000 -0.000463486 2.30379	</anchorPosition>
+              <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+          </customizationSlots>
+          <camouflage>
+            <tiling>	0.61 0.25 0.000000 0.000000	</tiling>
+          </camouflage>
+        </_140mm_50_3rd_Year_Type>
       </guns>
       <models>
         <undamaged>	vehicles/japan/J25_Type_4/normal/lod0/Turret_01.model	</undamaged>

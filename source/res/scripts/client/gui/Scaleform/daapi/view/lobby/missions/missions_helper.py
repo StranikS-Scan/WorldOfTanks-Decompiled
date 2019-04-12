@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/missions/missions_helper.py
 import operator
+import time
 from collections import namedtuple
 import BigWorld
 import constants
@@ -16,11 +17,13 @@ from gui.Scaleform.locale.PERSONAL_MISSIONS import PERSONAL_MISSIONS
 from gui.Scaleform.locale.QUESTS import QUESTS
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
+from gui.impl import backport
+from gui.impl.gen import R
 from gui.server_events.awards_formatters import AWARDS_SIZES
 from gui.server_events.cond_formatters.prebattle import MissionsPreBattleConditionsFormatter
 from gui.server_events.cond_formatters.requirements import AccountRequirementsFormatter, TQAccountRequirementsFormatter
 from gui.server_events.conditions import GROUP_TYPE
-from gui.server_events.events_helpers import MISSIONS_STATES, QuestInfoModel, AWARDS_PER_SINGLE_PAGE, isMarathon, AwardSheetPresenter
+from gui.server_events.events_helpers import MISSIONS_STATES, QuestInfoModel, AWARDS_PER_SINGLE_PAGE, isMarathon, AwardSheetPresenter, isPremium
 from gui.server_events.formatters import DECORATION_SIZES
 from gui.server_events.personal_progress import formatters
 from gui.shared.formatters import text_styles, icons
@@ -33,6 +36,7 @@ from potapov_quests import PM_BRANCH_TO_FREE_TOKEN_NAME
 from quest_xml_source import MAX_BONUS_LIMIT
 from shared_utils import first
 from skeletons.gui.server_events import IEventsCache
+from skeletons.gui.shared import IItemsCache
 CARD_AWARDS_COUNT = 6
 CARD_AWARDS_BIG_COUNT = 5
 LINKED_SET_CARD_AWARDS_COUNT = 8
@@ -59,6 +63,7 @@ def getHtmlAwardSheetIcon(branch=None):
 
 class BG_STATES(object):
     COMPLETED = 'completed'
+    NOT_AVAILABLE = 'notAvailable'
     MARATHON = 'marathon'
     DISABLED = 'disabled'
     DEFAULT = 'default'
@@ -199,6 +204,11 @@ def getPostponedOperationState(operationID):
     return PostponedOperationState(state, postponeTime)
 
 
+@dependency.replace_none_kwargs(itemsCache=IItemsCache)
+def _isPremiumEnabled(itemsCache=None):
+    return itemsCache.items.stats.isActivePremium(constants.PREMIUM_TYPE.PLUS)
+
+
 def _getDailyLimitedStatusKey(isDaily):
     return QUESTS.MISSIONDETAILS_MISSIONSCOMPLETE_DAILY if isDaily else QUESTS.MISSIONDETAILS_MISSIONSCOMPLETE
 
@@ -223,7 +233,7 @@ class _MissionInfo(QuestInfoModel):
     def _getInfo(self, statusData, isAvailable, errorMsg, mainQuest=None):
         status = statusData['status']
         data = {'eventID': self._getEventID(),
-         'title': self._getTitle(self.event.getUserName()),
+         'title': self._getTitle(self._getEventTitle()),
          'isAvailable': isAvailable,
          'statusLabel': statusData.get('statusLabel'),
          'statusTooltipData': statusData.get('statusTooltipData', ''),
@@ -236,6 +246,9 @@ class _MissionInfo(QuestInfoModel):
 
     def _getEventID(self):
         return self.event.getID()
+
+    def _getEventTitle(self):
+        return self.event.getUserName()
 
     def _getUIDecoration(self):
         return self.eventsCache.prefetcher.getMissionDecoration(self.event.getIconID(), DECORATION_SIZES.CARDS)
@@ -429,6 +442,44 @@ class _PrivateMissionInfo(_MissionInfo):
         return '%s\n%s' % (statusLabel, dailyLeftLabel)
 
 
+class _PremiumMissionInfo(_MissionInfo):
+
+    def _getUIDecoration(self):
+        return backport.image(R.images.gui.maps.icons.missions.decorations.premium_482x222())
+
+    def _getCompleteStatusFields(self, isLimited, bonusCount, bonusLimit):
+        status = MISSIONS_STATES.COMPLETED
+        if isLimited and bonusLimit > 1:
+            statusLabel = text_styles.bonusAppliedText(_ms(QUESTS.MISSIONDETAILS_MISSIONSCOMPLETE, count=text_styles.bonusAppliedText(bonusCount), total=text_styles.standard(bonusLimit)))
+        else:
+            progressDesc = text_styles.bonusAppliedText(_ms(QUESTS.QUESTS_STATUS_DONE))
+            icon = icons.makeImageTag(RES_ICONS.MAPS_ICONS_LIBRARY_OKICON, 16, 16, -2, 8)
+            statusLabel = text_styles.concatStylesToSingleLine(icon, progressDesc)
+        return {'statusLabel': statusLabel,
+         'status': status}
+
+    def _getUnavailableStatusFields(self, errorMsg):
+        if errorMsg == 'requirements':
+            vehicleReqs = self.event.vehicleReqs
+            isVehAvailable = vehicleReqs.isAnyVehicleAcceptable() or vehicleReqs.getSuitableVehicles()
+            if not isVehAvailable:
+                statusText = _ms(QUESTS.MISSIONDETAILS_STATUS_WRONGVEHICLE)
+            else:
+                statusText = _ms(QUESTS.MISSIONDETAILS_STATUS_NOTAVAILABLE)
+            notAvailableIcon = icons.makeImageTag(RES_ICONS.MAPS_ICONS_LIBRARY_MARKER_BLOCKED, 14, 14, -2, 10)
+            statusMsg = text_styles.concatStylesWithSpace(notAvailableIcon, text_styles.error(statusText))
+        else:
+            clockIcon = icons.makeImageTag(RES_ICONS.MAPS_ICONS_LIBRARY_TIMERICON, 16, 16, -2, 8)
+            statusMsg = text_styles.concatStylesWithSpace(clockIcon, text_styles.error(QUESTS.MISSIONDETAILS_STATUS_NOTAVAILABLE))
+        return {'statusLabel': statusMsg,
+         'status': MISSIONS_STATES.NOT_AVAILABLE}
+
+    def _getRegularStatusFields(self, isLimited, bonusCount, bonusLimit):
+        statusLabel = text_styles.concatStylesWithSpace(icons.inProgress(), text_styles.neutral(backport.text(R.strings.quests.personalMission.status.inProgress())))
+        return {'statusLabel': statusLabel,
+         'status': MISSIONS_STATES.NONE}
+
+
 class _DetailedMissionInfo(_MissionInfo):
     __AWARDS_COUNT = 6
 
@@ -562,6 +613,88 @@ class _DetailedMissionInfo(_MissionInfo):
     def __getDescription(self):
         description = self.event.getDescription()
         return None if not description else makeTooltip(QUESTS.MISSIONDETAILS_DESCRIPTION, description)
+
+
+class _PremiumDetailedMissionInfo(_DetailedMissionInfo):
+
+    def _getUIDecoration(self):
+        return backport.image(R.images.gui.maps.icons.quests.decorations.premium_750x264())
+
+    def _getConditions(self):
+        conditions = {'prebattleConditions': self._getPrebattleConditions(),
+         'battleConditions': self._getMainConditions()}
+        return conditions
+
+    def _getStatusFields(self, isAvailable, errorMsg):
+        bonusLimit = self.event.bonusCond.getBonusLimit()
+        bonusCount = min(self.event.getBonusCount(), bonusLimit)
+        isLimited = self._isLimited()
+        if self.event.isCompleted():
+            return self._getCompleteStatusFields(isLimited, bonusCount, bonusLimit)
+        return self._getUnavailableStatusFields(errorMsg) if not isAvailable else self._getRegularStatusFields(isLimited, bonusCount, bonusLimit)
+
+    def _getUnavailableStatusFields(self, errorMsg):
+        dateLabel = self.getDateLabel()
+        addStatusMsg = ''
+        if errorMsg == 'requirements':
+            vehicleReqs = self.event.vehicleReqs
+            isVehAvailable = vehicleReqs.isAnyVehicleAcceptable() or vehicleReqs.getSuitableVehicles()
+            if not isVehAvailable:
+                statusText = _ms(QUESTS.MISSIONDETAILS_STATUS_WRONGVEHICLE)
+            else:
+                statusText = _ms(QUESTS.MISSIONDETAILS_STATUS_NOTAVAILABLE)
+                isPremEnabled = _isPremiumEnabled()
+                if not isPremEnabled:
+                    addStatusMsg = backport.text(R.strings.quests.premiumQuest.detailedQuests.requirements.premiumAccount())
+                else:
+                    addStatusMsg = backport.text(R.strings.quests.premiumQuest.detailedQuests.requirements.token())
+            notAvailableIcon = icons.makeImageTag(RES_ICONS.MAPS_ICONS_LIBRARY_MARKER_BLOCKED, 14, 14, -2, 10)
+            statusMsg = text_styles.concatStylesWithSpace(notAvailableIcon, text_styles.error(statusText))
+        else:
+            clockIcon = icons.makeImageTag(RES_ICONS.MAPS_ICONS_LIBRARY_TIMERICON, 16, 16, -2, 8)
+            statusMsg = text_styles.concatStylesWithSpace(clockIcon, text_styles.error(QUESTS.MISSIONDETAILS_STATUS_NOTAVAILABLE))
+        return {'statusLabel': statusMsg,
+         'status': MISSIONS_STATES.NOT_AVAILABLE,
+         'dateLabel': dateLabel,
+         'scheduleOrResetLabel': text_styles.neutral(addStatusMsg)}
+
+    def _getCompleteStatusFields(self, isLimited, bonusCount, bonusLimit):
+        statusTooltipData = None
+        status = MISSIONS_STATES.COMPLETED
+        if isLimited and bonusLimit > 1:
+            statusLabel = text_styles.bonusAppliedText(_ms(QUESTS.MISSIONDETAILS_MISSIONSCOMPLETE, count=text_styles.bonusAppliedText(bonusCount), total=text_styles.standard(bonusLimit)))
+            statusTooltipData = getCompletetBonusLimitTooltip()
+        else:
+            progressDesc = text_styles.bonusAppliedText(_ms(QUESTS.QUESTS_STATUS_DONE))
+            icon = icons.makeImageTag(RES_ICONS.MAPS_ICONS_LIBRARY_OKICON, 16, 16, -2, 8)
+            statusLabel = text_styles.concatStylesToSingleLine(icon, progressDesc)
+        return {'statusLabel': statusLabel,
+         'status': status,
+         'bottomStatusText': text_styles.concatStylesWithSpace(icons.makeImageTag(RES_ICONS.MAPS_ICONS_LIBRARY_DONE, 32, 32, -8), text_styles.missionStatusAvailable(QUESTS.MISSIONDETAILS_BOTTOMSTATUSCOMPLETE)),
+         'statusTooltipData': statusTooltipData}
+
+    def _getRegularStatusFields(self, isLimited, bonusCount, bonusLimit):
+        dateLabel = self.getDateLabel()
+        statusLabel = text_styles.concatStylesWithSpace(icons.inProgress(), text_styles.neutral(backport.text(R.strings.quests.personalMission.status.inProgress())))
+        return {'statusLabel': statusLabel,
+         'status': MISSIONS_STATES.NONE,
+         'dateLabel': dateLabel}
+
+    def getDateLabel(self):
+        deltaTime = max(time_utils.ONE_DAY - time_utils.getServerRegionalTimeCurrentDay(), 0)
+        gmtime = time.gmtime(deltaTime)
+        if deltaTime > time_utils.ONE_HOUR:
+            fmt = R.strings.quests.item.timer.tillFinish.longFullFormat()
+        else:
+            fmt = R.strings.quests.item.timer.tillFinish.shortFullFormat()
+        return backport.text(fmt, hours=time.strftime('%H', gmtime))
+
+    def _getBackGround(self, status):
+        if status == MISSIONS_STATES.COMPLETED:
+            return BG_STATES.COMPLETED
+        if status == MISSIONS_STATES.NOT_AVAILABLE:
+            return BG_STATES.NOT_AVAILABLE
+        return BG_STATES.MARATHON if isMarathon(self.event.getGroupID()) else BG_STATES.DEFAULT
 
 
 class _DetailedPrivateMissionInfo(_DetailedMissionInfo, _PrivateMissionInfo):
@@ -912,6 +1045,8 @@ def getMissionInfoData(event):
         return _TokenMissionInfo(event)
     elif event.getType() == constants.EVENT_TYPE.PERSONAL_QUEST:
         return _PrivateMissionInfo(event)
+    elif isPremium(event.getID()):
+        return _PremiumMissionInfo(event)
     else:
         return _MissionInfo(event) if event.getType() in constants.EVENT_TYPE.LIKE_BATTLE_QUESTS else None
 
@@ -923,6 +1058,8 @@ def getDetailedMissionData(event):
         return _DetailedPrivateMissionInfo(event)
     elif event.getType() == constants.EVENT_TYPE.PERSONAL_MISSION:
         return _DetailedPersonalMissionInfo(event)
+    elif isPremium(event.getID()):
+        return _PremiumDetailedMissionInfo(event)
     else:
         return _DetailedMissionInfo(event) if event.getType() in constants.EVENT_TYPE.LIKE_BATTLE_QUESTS else None
 

@@ -1,14 +1,15 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/prb_control/entities/ranked/pre_queue/entity.py
+import logging
+import typing
 import BigWorld
 import constants
-import SoundGroups
 from CurrentVehicle import g_currentVehicle
 from PlayerEvents import g_playerEvents
 from constants import QUEUE_TYPE
-from debug_utils import LOG_DEBUG
 from gui import SystemMessages
-from gui.Scaleform.locale.SYSTEM_MESSAGES import SYSTEM_MESSAGES
+from gui.impl.gen import R
+from gui.impl import backport
 from gui.prb_control import prb_getters
 from gui.prb_control.ctrl_events import g_prbCtrlEvents
 from gui.prb_control.entities.ranked.pre_queue.actions_validator import RankedActionsValidator
@@ -25,11 +26,14 @@ from account_helpers.AccountSettings import AccountSettings, GUI_START_BEHAVIOR
 from gui.prb_control.storages import prequeue_storage_getter
 from gui.ranked_battles.constants import PRIME_TIME_STATUS
 from gui.shared.event_dispatcher import showRankedPrimeTimeWindow
-from helpers import dependency, i18n
+from helpers import dependency
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.game_control import IRankedBattlesController
 from skeletons.connection_mgr import IConnectionManager
 from soft_exception import SoftException
+if typing.TYPE_CHECKING:
+    from gui.prb_control.storages.local_storage import LocalStorage
+_logger = logging.getLogger(__name__)
 
 class RankedSubscriber(PreQueueSubscriber):
 
@@ -51,21 +55,22 @@ class RankedSubscriber(PreQueueSubscriber):
 
 
 class RankedEntryPoint(PreQueueEntryPoint):
-    connectionMgr = dependency.descriptor(IConnectionManager)
-    rankedController = dependency.descriptor(IRankedBattlesController)
+    __connectionMgr = dependency.descriptor(IConnectionManager)
+    __rankedController = dependency.descriptor(IRankedBattlesController)
+    __settingsCore = dependency.descriptor(ISettingsCore)
 
     def __init__(self):
         super(RankedEntryPoint, self).__init__(FUNCTIONAL_FLAG.RANKED, QUEUE_TYPE.RANKED)
 
     def select(self, ctx, callback=None):
-        status, _, _ = self.rankedController.getPrimeTimeStatus()
+        status, _, _ = self.__rankedController.getPrimeTimeStatus()
         if status in (PRIME_TIME_STATUS.DISABLED, PRIME_TIME_STATUS.FROZEN, PRIME_TIME_STATUS.NO_SEASON):
-            SystemMessages.pushMessage(i18n.makeString(SYSTEM_MESSAGES.RANKED_NOTIFICATION_NOTAVAILABLE), type=SystemMessages.SM_TYPE.Error)
+            SystemMessages.pushMessage(backport.text(R.strings.system_messages.ranked.notification.notAvailable()), type=SystemMessages.SM_TYPE.Error)
             if callback is not None:
                 callback(False)
             g_prbCtrlEvents.onPreQueueJoinFailure(PRE_QUEUE_JOIN_ERRORS.DISABLED)
             return
-        elif status in self._getFilterStates() and not constants.IS_CHINA:
+        elif not self.__isFirstEnter() and status in self._getFilterStates() and not constants.IS_CHINA:
             showRankedPrimeTimeWindow()
             if callback is not None:
                 callback(False)
@@ -78,6 +83,11 @@ class RankedEntryPoint(PreQueueEntryPoint):
     def _getFilterStates(self):
         return (PRIME_TIME_STATUS.NOT_SET, PRIME_TIME_STATUS.NOT_AVAILABLE)
 
+    def __isFirstEnter(self):
+        defaults = AccountSettings.getFilterDefault(GUI_START_BEHAVIOR)
+        filters = self.__settingsCore.serverSettings.getSection(GUI_START_BEHAVIOR, defaults)
+        return not filters['isRankedWelcomeViewShowed']
+
 
 class RankedForcedEntryPoint(RankedEntryPoint):
 
@@ -86,13 +96,12 @@ class RankedForcedEntryPoint(RankedEntryPoint):
 
 
 class RankedEntity(PreQueueEntity):
-    settingsCore = dependency.descriptor(ISettingsCore)
-    rankedController = dependency.descriptor(IRankedBattlesController)
+    __settingsCore = dependency.descriptor(ISettingsCore)
+    __rankedController = dependency.descriptor(IRankedBattlesController)
 
     def __init__(self):
         super(RankedEntity, self).__init__(FUNCTIONAL_FLAG.RANKED, QUEUE_TYPE.RANKED, RankedSubscriber())
         self.__watcher = None
-        self.__isPrimeTime = False
         return
 
     @prequeue_storage_getter(QUEUE_TYPE.RANKED)
@@ -106,7 +115,6 @@ class RankedEntity(PreQueueEntity):
         result = super(RankedEntity, self).init(ctx)
         if not result & FUNCTIONAL_FLAG.LOAD_PAGE:
             result |= self.__processWelcome()
-        SoundGroups.g_instance.playSound2D('gui_rb_rank_Entrance')
         return result
 
     def fini(self, ctx=None, woEvents=False):
@@ -124,7 +132,6 @@ class RankedEntity(PreQueueEntity):
 
     def leave(self, ctx, callback=None):
         self.storage.suspend()
-        SoundGroups.g_instance.playSound2D('gui_rb_rank_Exit')
         super(RankedEntity, self).leave(ctx, callback)
 
     def isInQueue(self):
@@ -149,11 +156,11 @@ class RankedEntity(PreQueueEntity):
 
     def _doQueue(self, ctx):
         BigWorld.player().enqueueRanked(ctx.getVehicleInventoryID())
-        LOG_DEBUG('Sends request on queuing to the ranked battle', ctx)
+        _logger.debug('Sends request on queuing to the ranked battle %s', ctx)
 
     def _doDequeue(self, ctx):
         BigWorld.player().dequeueRanked()
-        LOG_DEBUG('Sends request on dequeuing from the ranked battle')
+        _logger.debug('Sends request on dequeuing from the ranked battle')
 
     def _makeQueueCtxByAction(self, action=None):
         invID = g_currentVehicle.invID
@@ -170,8 +177,14 @@ class RankedEntity(PreQueueEntity):
 
     def __processWelcome(self):
         defaults = AccountSettings.getFilterDefault(GUI_START_BEHAVIOR)
-        filters = self.settingsCore.serverSettings.getSection(GUI_START_BEHAVIOR, defaults)
-        if not filters['isRankedWelcomeViewShowed']:
-            g_eventDispatcher.loadRanked()
+        filters = self.__settingsCore.serverSettings.getSection(GUI_START_BEHAVIOR, defaults)
+        rankedWelcomeCallback = self.__rankedController.getRankedWelcomeCallback()
+        if rankedWelcomeCallback is None:
+            if not filters['isRankedWelcomeViewShowed']:
+                g_eventDispatcher.loadRanked()
+                return FUNCTIONAL_FLAG.LOAD_PAGE
+            return FUNCTIONAL_FLAG.UNDEFINED
+        else:
+            rankedWelcomeCallback()
+            self.__rankedController.clearRankedWelcomeCallback()
             return FUNCTIONAL_FLAG.LOAD_PAGE
-        return FUNCTIONAL_FLAG.UNDEFINED

@@ -439,7 +439,7 @@ class _RankedItem(_SelectorItem):
             if self.rankedController.isAvailable():
                 super(_RankedItem, self).select()
             elif self.__hasPastSeason:
-                self.rankedController.openWebLeaguePage()
+                self.rankedController.showWebLeaguePage()
             selectorUtils.setBattleTypeAsKnown(self._selectorType)
 
     def _update(self, state):

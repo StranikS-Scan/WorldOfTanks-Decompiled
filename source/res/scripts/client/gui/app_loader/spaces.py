@@ -6,11 +6,11 @@ from PlayerEvents import g_playerEvents
 from adisp import process
 from constants import ARENA_GUI_TYPE
 from gui import DialogsInterface
+from gui.impl.gen import R
 from gui.shared.utils.decorators import ReprInjector
-from gui.Scaleform.Waiting import Waiting
-from gui.app_loader.settings import GUI_GLOBAL_SPACE_ID as _SPACE_ID, APP_NAME_SPACE
-from gui.app_loader.settings import APP_STATE_ID as _STATE_ID
+from gui.app_loader.settings import APP_NAME_SPACE
 from helpers import dependency, isPlayerAvatar
+from skeletons.gui.app_loader import IGlobalSpace, GuiGlobalSpaceID as _SPACE_ID, ApplicationStateID
 from skeletons.connection_mgr import DisconnectReason
 from skeletons.gui.shared.utils import IHangarSpace
 _REASON = DisconnectReason
@@ -31,40 +31,15 @@ def _stopBattleReplay():
     BattleReplay.g_replayCtrl.stop()
 
 
-class GlobalSpace(object):
-    __slots__ = ()
-
-    def getSpaceID(self):
-        return _SPACE_ID.UNDEFINED
-
-    def init(self):
-        pass
-
-    def update(self):
-        pass
-
-    def fini(self):
-        pass
-
-    def showGUI(self, appFactory, appNS, appState):
-        pass
-
-    def updateGUI(self, appFactory, appNS):
-        pass
-
-    def hideGUI(self, appFactory, newState):
-        pass
-
-
 @ReprInjector.simple()
-class IntroVideoSpace(GlobalSpace):
+class IntroVideoSpace(IGlobalSpace):
     __slots__ = ()
 
     def getSpaceID(self):
         return _SPACE_ID.INTRO_VIDEO
 
     def showGUI(self, appFactory, appNS, appState):
-        if appState == _STATE_ID.INITIALIZING:
+        if appState == ApplicationStateID.INITIALIZING:
             appFactory.goToIntroVideo(appNS)
 
 
@@ -116,7 +91,7 @@ class ReplayFinishDialogAction(ShowDialogAction):
 
 
 @ReprInjector.simple()
-class LoginSpace(GlobalSpace):
+class LoginSpace(IGlobalSpace):
     __slots__ = ('_action',)
     hangarSpace = dependency.descriptor(IHangarSpace)
 
@@ -133,20 +108,21 @@ class LoginSpace(GlobalSpace):
     def update(self):
         self._clearEntitiesAndSpaces()
 
-    def fini(self):
-        if Waiting.isOpened('login'):
-            Waiting.hide('login')
-        self._action = None
-        return
-
     def showGUI(self, appFactory, appNS, appState):
-        if appState == _STATE_ID.INITIALIZED:
+        if appState == ApplicationStateID.INITIALIZED:
             appFactory.attachCursor(appNS)
             appFactory.goToLogin(appNS)
             self._doActionIfNeed(appNS)
 
     def updateGUI(self, appFactory, appNS):
         self._doActionIfNeed(appNS)
+
+    def hideGUI(self, appFactory, newState):
+        worker = appFactory.getWaitingWorker()
+        if worker.isWaitingShown(messageID=R.strings.waiting.login()):
+            worker.hide(R.strings.waiting.login())
+        self._action = None
+        return
 
     def _doActionIfNeed(self, appNS):
         if self._action is not None and self._action.getAppNS() == appNS:
@@ -163,7 +139,7 @@ class LoginSpace(GlobalSpace):
 
 
 @ReprInjector.simple()
-class WaitingSpace(GlobalSpace):
+class WaitingSpace(IGlobalSpace):
     __slots__ = ()
 
     def getSpaceID(self):
@@ -171,14 +147,14 @@ class WaitingSpace(GlobalSpace):
 
 
 @ReprInjector.simple()
-class LobbySpace(GlobalSpace):
+class LobbySpace(IGlobalSpace):
     __slots__ = ()
 
     def getSpaceID(self):
         return _SPACE_ID.LOBBY
 
     def showGUI(self, appFactory, appNS, appState):
-        if appState == _STATE_ID.INITIALIZED:
+        if appState == ApplicationStateID.INITIALIZED:
             appFactory.attachCursor(appNS)
             appFactory.goToLobby(appNS)
 
@@ -186,7 +162,7 @@ class LobbySpace(GlobalSpace):
         appFactory.detachCursor(APP_NAME_SPACE.SF_LOBBY)
 
 
-class _ArenaSpace(GlobalSpace):
+class _ArenaSpace(IGlobalSpace):
     __slots__ = ('_arenaGuiType',)
 
     def __init__(self, arenaGuiType=ARENA_GUI_TYPE.UNKNOWN):
@@ -215,9 +191,8 @@ class BattleLoadingSpace(_ArenaSpace):
             appFactory.showLobby()
 
     def showGUI(self, appFactory, appNS, appState):
-        appFactory.destroyLobby()
         isValidAvatar = isPlayerAvatar() and not g_playerEvents.isPlayerEntityChanging
-        if appState == _STATE_ID.INITIALIZED and isValidAvatar:
+        if appState == ApplicationStateID.INITIALIZED and isValidAvatar:
             appFactory.loadBattlePage(appNS, arenaGuiType=self._arenaGuiType)
 
     def updateGUI(self, appFactory, appNS):
@@ -232,7 +207,7 @@ class ReplayLoadingSpace(BattleLoadingSpace):
     __slots__ = ()
 
     def showGUI(self, appFactory, appNS, appState):
-        if appState == _STATE_ID.INITIALIZED:
+        if appState == ApplicationStateID.INITIALIZED:
             appFactory.destroyLobby()
             appFactory.showBattle()
             appFactory.loadBattlePage(appNS, self._arenaGuiType)
@@ -250,12 +225,8 @@ class BattleSpace(_ArenaSpace):
         return _SPACE_ID.BATTLE
 
     def showGUI(self, appFactory, appNS, appState):
-        if appState == _STATE_ID.INITIALIZED:
+        if appState == ApplicationStateID.INITIALIZED:
             appFactory.goToBattlePage(appNS)
-
-    def hideGUI(self, appFactory, newState):
-        appFactory.createLobby()
-        appFactory.destroyBattle()
 
 
 @ReprInjector.simple()

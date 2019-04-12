@@ -7,6 +7,7 @@ from gui.impl.gen.view_models.constants.dialog_presets import DialogPresets
 from gui.impl.lobby.blueprints.blueprints_conversion_view import BlueprintsConversionView
 from gui.impl.lobby.dialogs.quit_game_dialog import QuitGameDialogWindow
 from gui.impl.lobby.dialogs.contents.common_balance_content import CommonBalanceContent
+from gui.impl.lobby.premacc.maps_blacklist_confirm_view import MapsBlacklistConfirmView
 from gui.impl.pub.dialog_window import DialogButtons, DialogLayer
 from gui.impl.pub.simple_dialog_window import SimpleDialogWindow
 
@@ -70,4 +71,15 @@ def blueprintsConversion(vehicleCD, fragmentCount=1, parent=None):
     result = yield await(dialog.wait())
     dialog.destroy()
     raise AsyncReturn(result == DialogButtons.RESEARCH)
+    return
+
+
+@async
+def mapsBlacklistConfirm(mapId, cooldownTime, disabledMaps=(), parent=None):
+    dialog = MapsBlacklistConfirmView(mapId=mapId, disabledMaps=disabledMaps, cooldownTime=cooldownTime, parent=parent.getParentWindow() if parent is not None else None)
+    dialog.load()
+    result = yield await(dialog.wait())
+    choice = dialog.getSelectedMap()
+    dialog.destroy()
+    raise AsyncReturn((result == DialogButtons.SUBMIT, choice))
     return

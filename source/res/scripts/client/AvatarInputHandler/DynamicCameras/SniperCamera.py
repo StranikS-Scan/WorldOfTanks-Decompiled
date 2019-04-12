@@ -192,6 +192,7 @@ class SniperCamera(ICamera, CallbackDelayer):
     def setMaxZoom(self):
         zooms = self.__getZooms()
         self.__zoom = zooms[-1]
+        self.__cfg['zoom'] = self.__zoom
         self.__applyZoom(self.__zoom)
 
     def __applyNoiseImpulse(self, noiseMagnitude):

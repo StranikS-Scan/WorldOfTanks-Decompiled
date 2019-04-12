@@ -2,16 +2,21 @@
 # Embedded file name: scripts/client/web_client_api/shop/formatters.py
 import re
 from collections import namedtuple
+from constants import RentType
 from gui.Scaleform.genConsts.STORE_CONSTANTS import STORE_CONSTANTS
 from gui.Scaleform.locale.ITEM_TYPES import ITEM_TYPES
+from gui.ingame_shop import SHOP_RENT_SEASON_TYPE_MAP, SHOP_RENT_TYPE_MAP
 from gui.shared.gui_items import KPI, CREW_SKILL_TO_KPI_NAME_MAP
 from helpers import dependency, i18n, time_utils
 from items.components.skills_constants import PERKS
+from rent_common import SeasonRentDuration
 from skeletons.gui.shared import IItemsCache
 import nations
 _WHITESPACE_RE = re.compile('\\s+')
 _COLOR_TAG_OPEN = '{colorTagOpen}'
 _COLOR_TAG_CLOSE = '{colorTagClose}'
+_RENT_DURATION_MAP = {SeasonRentDuration.ENTIRE_SEASON: SHOP_RENT_TYPE_MAP[RentType.SEASON_RENT],
+ SeasonRentDuration.SEASON_CYCLE: SHOP_RENT_TYPE_MAP[RentType.SEASON_CYCLE_RENT]}
 
 def _formatPrice(itemPrice):
     if itemPrice.isActionPrice():
@@ -68,6 +73,29 @@ def _formatVehicleRestore(item):
             restoreEndDate = None
         return {'price': {currency: restorePrice.getSignValue(currency)},
          'endDate': restoreEndDate}
+    else:
+        return
+
+
+def _formatVehicleOwnership(item):
+    if item.isInInventory:
+        result = {}
+        if not item.isRented:
+            result['type'] = 'permanent'
+        elif item.rentalIsOver:
+            result['type'] = 'rentalsOver'
+        else:
+            result['type'] = 'rented'
+            info = item.rentInfo
+            event = info.getActiveSeasonRent()
+            result['info'] = {'event': {'type': SHOP_RENT_SEASON_TYPE_MAP[event.seasonType],
+                       'id': event.seasonID,
+                       'duration': _RENT_DURATION_MAP.get(event.duration, 'undefined'),
+                       'expire': event.expiryTime} if event else None,
+             'time': info.getTimeLeft(),
+             'battles': info.battlesLeft,
+             'wins': info.winsLeft}
+        return result
     else:
         return
 
@@ -131,6 +159,7 @@ def makeVehicleFormatter(includeInventoryFields=False):
     restore = Field('restore', _formatVehicleRestore)
     isTradeInAvailableField = Field('isTradeInAvailable', lambda i: i.canTradeIn)
     inHangarField = Field('inHangar', lambda i: i.isInInventory)
+    ownershipField = Field('ownership', _formatVehicleOwnership)
     fields = [idField,
      nameField,
      shortName,
@@ -150,7 +179,8 @@ def makeVehicleFormatter(includeInventoryFields=False):
      imagesField,
      isTradeInAvailableField,
      restore,
-     inHangarField]
+     inHangarField,
+     ownershipField]
     if includeInventoryFields:
         shellFormatter = makeShellFormatter(includeCount=True)
         shellsField = Field('shells', lambda i: [ shellFormatter.format(s) for s in i.shells ])

@@ -113,3 +113,9 @@ class ICustomizationService(object):
 
     def setSelectingRegionEnabled(self, enable):
         raise NotImplementedError
+
+    def setDOFenabled(self, enable):
+        raise NotImplementedError
+
+    def setDOFparams(self, params):
+        raise NotImplementedError

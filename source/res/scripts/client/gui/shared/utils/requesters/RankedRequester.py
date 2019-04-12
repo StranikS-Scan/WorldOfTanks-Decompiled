@@ -12,36 +12,12 @@ class RankedRequester(AbstractSyncDataRequester, IRankedRequester):
         return self.getCacheValue('accRank', (0, 0))
 
     @property
-    def vehRanks(self):
-        return self.getCacheValue('vehRanks', {})
-
-    @property
-    def clientRank(self):
-        return self.getCacheValue('clientRank', (0, 0))
-
-    @property
-    def clientVehRanks(self):
-        return self.getCacheValue('clientVehRanks', {})
-
-    @property
     def season(self):
         return self.getCacheValue('season', (-1, -1))
 
     @property
     def maxRank(self):
         return self.getCacheValue('maxRank', (0, 0))
-
-    @property
-    def maxVehRanks(self):
-        return self.getCacheValue('maxVehRanks', {})
-
-    @property
-    def ladderPoints(self):
-        return self.getCacheValue('ladderPts', 0)
-
-    @property
-    def seasonLadderPts(self):
-        return self.getCacheValue('seasonLadderPts', 0)
 
     @property
     def stepsCount(self):
@@ -52,16 +28,20 @@ class RankedRequester(AbstractSyncDataRequester, IRankedRequester):
         return self.getCacheValue('seasonStepsCount', 0)
 
     @property
-    def maxRankWithAwardReceived(self):
-        return self.getCacheValue('clientMaxRank', (0, 0))
+    def seasonEfficiencyStamp(self):
+        return self.getCacheValue('currentEfficiency', {})
 
     @property
     def shields(self):
         return self.getCacheValue('shields', {})
 
     @property
-    def clientShields(self):
-        return self.getCacheValue('clientShields', {})
+    def bonusBattlesCount(self):
+        return self.getCacheValue('bonusBattlesCount', 0)
+
+    @property
+    def divisionsStats(self):
+        return self.getCacheValue('divisions', {})
 
     @async
     def _requestCache(self, callback):

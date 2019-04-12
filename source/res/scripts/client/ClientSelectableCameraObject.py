@@ -226,7 +226,8 @@ class ClientSelectableCameraObject(ClientSelectableObject, CallbackDelayer, Time
     def __teleportHangarSpaceCamera(self):
         yaw = self.cameraYaw
         pitch = -1 * self.cameraPitch
-        self.hangarSpace.space.setCameraLocation(self.__goalTarget, self.cameraPivot, yaw, pitch, self.__goalDistance, None, False, IMMEDIATE_CAMERA_MOVEMENT_MODE)
+        camLimits = (self.__pitchLimits, self.__yawLimits, None)
+        self.hangarSpace.space.setCameraLocation(self.__goalTarget, self.cameraPivot, yaw, pitch, self.__goalDistance, camLimits, False, IMMEDIATE_CAMERA_MOVEMENT_MODE)
         return
 
     def __update(self):

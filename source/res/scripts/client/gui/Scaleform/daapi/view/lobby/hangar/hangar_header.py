@@ -371,7 +371,7 @@ class HangarHeader(HangarHeaderMeta, IGlobalListener, IEventBoardsListener):
         return self._wrapQuestGroup(HANGAR_HEADER_QUESTS.QUEST_GROUP_PERSONAL, RES_ICONS.MAPS_ICONS_QUESTS_HEADERFLAGICONS_PERSONAL, result)
 
     def __onServerSettingChanged(self, diff):
-        if 'elenSettings' in diff:
+        if 'elenSettings' in diff or constants.PremiumConfigs.PREM_QUESTS in diff:
             self.update()
 
     def __getBattleQuestsVO(self, vehicle):

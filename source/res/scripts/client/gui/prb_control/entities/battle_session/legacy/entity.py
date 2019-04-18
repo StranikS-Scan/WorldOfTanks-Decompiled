@@ -96,7 +96,7 @@ class BattleSessionEntity(LegacyEntity):
         prbType = self.getEntityType()
         result = super(BattleSessionEntity, self).fini(clientPrb=clientPrb, ctx=ctx, woEvents=woEvents)
         if not woEvents:
-            if not self.canSwitch(ctx):
+            if not self.canSwitch(ctx) or ctx.hasFlags(FUNCTIONAL_FLAG.LEGACY | FUNCTIONAL_FLAG.BATTLE_SESSION):
                 g_eventDispatcher.removeSpecBattleFromCarousel(prbType)
         else:
             g_eventDispatcher.removeSpecBattleFromCarousel(prbType, closeWindow=False)

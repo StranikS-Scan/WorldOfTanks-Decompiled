@@ -56,6 +56,7 @@ class ItemPackType(CONST_CONTAINER):
     CREW_100 = 'crew/100'
     CREW_CUSTOM = 'crew/custom'
     CUSTOM_PREMIUM = 'custom/premium'
+    CUSTOM_PREMIUM_PLUS = 'custom/premium_plus'
     CUSTOM_CRYSTAL = 'custom/crystal'
     CUSTOM_GOLD = 'custom/gold'
     CUSTOM_CREDITS = 'custom/credits'
@@ -83,6 +84,7 @@ class ItemPackType(CONST_CONTAINER):
     REFERRAL_BADGE = 'referralBadge'
     PLAYER_BADGE = 'playerBadges'
     SINGLE_ACHIEVEMENTS = 'singleAchievements'
+    FRONTLINE_TOKEN = 'frontline_token'
 
 
 class ItemPackTypeGroup(CONST_CONTAINER):
@@ -111,6 +113,7 @@ class ItemPackTypeGroup(CONST_CONTAINER):
     PROJECTION_DECAL = (ItemPackType.PROJECTION_DECAL,)
     PERSONAL_NUMBER = (ItemPackType.PERSONAL_NUMBER,)
     CUSTOM = (ItemPackType.CUSTOM_PREMIUM,
+     ItemPackType.CUSTOM_PREMIUM_PLUS,
      ItemPackType.CUSTOM_CRYSTAL,
      ItemPackType.CUSTOM_GOLD,
      ItemPackType.CUSTOM_CREDITS,
@@ -123,6 +126,7 @@ class ItemPackTypeGroup(CONST_CONTAINER):
      ItemPackType.CREW_100,
      ItemPackType.CREW_CUSTOM)
     TOKEN = (ItemPackType.TOKEN,)
+    DISCOUNT = (ItemPackType.FRONTLINE_TOKEN,)
 
 
 CompensationSpec = namedtuple('CompensationSpec', ('type', 'value', 'count'))

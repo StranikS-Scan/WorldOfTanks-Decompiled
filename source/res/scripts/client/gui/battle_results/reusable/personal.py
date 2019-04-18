@@ -145,6 +145,7 @@ class _CreditsReplayRecords(records.ReplayRecords):
         self._addRecord(ValueReplay.SUB, 'originalCreditsToDraw', results['originalCreditsToDraw'], 0)
         self._addRecord(ValueReplay.SET, 'achievementCredits', results['achievementCredits'], 0)
         self._addRecord(ValueReplay.FACTOR, 'premSquadCreditsFactor100', squadCreditsFactor, 0)
+        self._addRecord(ValueReplay.SUBCOEFF, 'originalCreditsToDrawSquad', results['originalCreditsToDrawSquad'], results['originalCreditsToDrawSquad'] * self.getFactor('premSquadCreditsFactor100') * -1)
 
     def _getRecord(self, name):
         value = super(_CreditsReplayRecords, self)._getRecord(name)
@@ -185,7 +186,7 @@ class _FreeXPReplayRecords(records.ReplayRecords):
 
 
 class _EconomicsRecordsChains(object):
-    __slots__ = ('_baseCredits', '_premiumCredits', '_premiumPlusCredits', '_goldRecords', '_additionalRecords', '_baseXP', '_premiumXP', '_premiumPlusXP', '_premiumXPAdd', '_baseFreeXP', '_premiumFreeXP', '_premiumPlusFreeXP', '_premiumFreeXPAdd', '_crystal', '_crystalDetails')
+    __slots__ = ('_baseCredits', '_premiumCredits', '_premiumPlusCredits', '_goldRecords', '_additionalRecords', '_baseXP', '_premiumXP', '_premiumPlusXP', '_baseXPAdd', '_premiumXPAdd', '_premiumPlusXPAdd', '_baseFreeXP', '_premiumFreeXP', '_premiumPlusFreeXP', '_baseFreeXPAdd', '_premiumFreeXPAdd', '_premiumPlusFreeXPAdd', '_crystal', '_crystalDetails')
 
     def __init__(self):
         super(_EconomicsRecordsChains, self).__init__()
@@ -197,11 +198,15 @@ class _EconomicsRecordsChains(object):
         self._baseXP = records.RecordsIterator()
         self._premiumXP = records.RecordsIterator()
         self._premiumPlusXP = records.RecordsIterator()
+        self._baseXPAdd = records.RecordsIterator()
         self._premiumXPAdd = records.RecordsIterator()
+        self._premiumPlusXPAdd = records.RecordsIterator()
         self._baseFreeXP = records.RecordsIterator()
         self._premiumFreeXP = records.RecordsIterator()
         self._premiumPlusFreeXP = records.RecordsIterator()
+        self._baseFreeXPAdd = records.RecordsIterator()
         self._premiumFreeXPAdd = records.RecordsIterator()
+        self._premiumPlusFreeXPAdd = records.RecordsIterator()
         self._crystal = records.RecordsIterator()
         self._crystalDetails = []
 
@@ -239,15 +244,24 @@ class _EconomicsRecordsChains(object):
     def getXPRecords(self, premiumType=PREMIUM_TYPE.NONE, addBonusApplied=False):
         if premiumType == PREMIUM_TYPE.NONE or premiumType & (PREMIUM_TYPE.VIP | PREMIUM_TYPE.PLUS):
             if addBonusApplied:
-                resultXPData = self._premiumXPAdd
-                resultFreeXPData = self._premiumFreeXPAdd
+                secondXPData = self._premiumPlusXPAdd
+                secondFreeXPData = self._premiumPlusFreeXPAdd
             else:
-                resultXPData = self._premiumPlusXP
-                resultFreeXPData = self._premiumPlusFreeXP
+                secondXPData = self._premiumPlusXP
+                secondFreeXPData = self._premiumPlusFreeXP
+        elif addBonusApplied:
+            secondXPData = self._premiumXPAdd
+            secondFreeXPData = self._premiumFreeXPAdd
         else:
-            resultXPData = self._premiumXP
-            resultFreeXPData = self._premiumFreeXP
-        return itertools.izip(self._baseXP, resultXPData, self._baseFreeXP, resultFreeXPData)
+            secondXPData = self._premiumXP
+            secondFreeXPData = self._premiumFreeXP
+        if addBonusApplied:
+            firstXPData = self._baseXPAdd
+            firstFreeXPData = self._baseFreeXPAdd
+        else:
+            firstXPData = self._baseXP
+            firstFreeXPData = self._baseFreeXP
+        return itertools.izip(firstXPData, secondXPData, firstFreeXPData, secondFreeXPData)
 
     def getXPDiff(self):
         return self._premiumXP.getRecord('xp') - self._baseXP.getRecord('xp')
@@ -299,7 +313,12 @@ class _EconomicsRecordsChains(object):
             self.__updatePremiumXPFactor(replay, results, premType=PREMIUM_TYPE.PLUS)
             self._premiumPlusXP.addRecords(_XPReplayRecords(replay, isHighScope, results['achievementXP']))
             self.__updateAdditionalFactorFromReplay(replay, results, setDefault=False)
+            self.__updatePremiumXPFactor(replay, results, premType=PREMIUM_TYPE.NONE)
+            self._baseXPAdd.addRecords(_XPReplayRecords(replay, isHighScope, results['achievementXP']))
+            self.__updatePremiumXPFactor(replay, results, premType=PREMIUM_TYPE.BASIC)
             self._premiumXPAdd.addRecords(_XPReplayRecords(replay, isHighScope, results['achievementXP']))
+            self.__updatePremiumXPFactor(replay, results, premType=PREMIUM_TYPE.PLUS)
+            self._premiumPlusXPAdd.addRecords(_XPReplayRecords(replay, isHighScope, results['achievementXP']))
         else:
             LOG_ERROR('XP replay is not found', results)
         if 'freeXPReplay' in results and results['freeXPReplay'] is not None:
@@ -312,7 +331,12 @@ class _EconomicsRecordsChains(object):
             self.__updatePremiumXPFactor(replay, results, premType=PREMIUM_TYPE.PLUS)
             self._premiumPlusFreeXP.addRecords(_FreeXPReplayRecords(replay, results['achievementFreeXP']))
             self.__updateAdditionalFactorFromReplay(replay, results, setDefault=False)
+            self.__updatePremiumXPFactor(replay, results, premType=PREMIUM_TYPE.NONE)
+            self._baseFreeXPAdd.addRecords(_FreeXPReplayRecords(replay, results['achievementFreeXP']))
+            self.__updatePremiumXPFactor(replay, results, premType=PREMIUM_TYPE.BASIC)
             self._premiumFreeXPAdd.addRecords(_FreeXPReplayRecords(replay, results['achievementFreeXP']))
+            self.__updatePremiumXPFactor(replay, results, premType=PREMIUM_TYPE.PLUS)
+            self._premiumPlusFreeXPAdd.addRecords(_FreeXPReplayRecords(replay, results['achievementFreeXP']))
         else:
             LOG_ERROR('Free XP replay is not found', results)
         return

@@ -47,6 +47,7 @@ class GameSessionController(IGameSessionController, Notifiable):
     onTimeTillBan = Event.Event()
     onNewDayNotify = Event.Event()
     onPremiumNotify = Event.Event()
+    onPremiumTypeChanged = Event.Event()
     itemsCache = dependency.descriptor(IItemsCache)
     lobbyContext = dependency.descriptor(ILobbyContext)
 
@@ -262,6 +263,8 @@ class GameSessionController(IGameSessionController, Notifiable):
         self.startNotification()
         stats = self._stats
         self.onPremiumNotify(stats.isPremium, stats.attributes, stats.activePremiumExpiryTime)
+        if 'premMask' in diff:
+            self.onPremiumTypeChanged(stats.activePremiumType)
 
     def __onRestrictionsChanged(self, _):
         self.__curfewBlockTime, self.__curfewUnblockTime = self.__getCurfewBlockTime(self._stats.restrictions)

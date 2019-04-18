@@ -721,7 +721,6 @@
             <gun>	15	</gun>
           </armor>
           <turretYawLimits>	-180 180	</turretYawLimits>
-          <hullPitchAimingFirst>	True	</hullPitchAimingFirst>
           <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 6 1 6	</maxPitch>
@@ -800,7 +799,6 @@
             <gun>	15	</gun>
           </armor>
           <turretYawLimits>	-180 180	</turretYawLimits>
-          <hullPitchAimingFirst>	True	</hullPitchAimingFirst>
           <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 6 1 6	</maxPitch>
@@ -875,7 +873,6 @@
             <gun>	20	</gun>
           </armor>
           <turretYawLimits>	-180 180	</turretYawLimits>
-          <hullPitchAimingFirst>	True	</hullPitchAimingFirst>
           <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 6 1 6	</maxPitch>
@@ -1240,6 +1237,7 @@
   </siege_mode>
   <hull_aiming>
     <pitch>
+      <isFlexible>	True	</isFlexible>
       <wheelCorrectionCenterZ>	1.165	</wheelCorrectionCenterZ>
       <wheelsCorrectionSpeed>	10	</wheelsCorrectionSpeed>
       <wheelsCorrectionAngles>
@@ -1249,7 +1247,7 @@
     </pitch>
     <yawDisabled></yawDisabled>
   </hull_aiming>
-  <useHullZ>	True	</useHullZ>
+  <useHullZSize>	True	</useHullZSize>
   <effects>
     <collision></collision>
     <damagedStateGroup>	large	</damagedStateGroup>

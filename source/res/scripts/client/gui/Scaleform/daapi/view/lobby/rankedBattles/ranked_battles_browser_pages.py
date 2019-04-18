@@ -16,8 +16,16 @@ class LeaderBoardBrowserPage(BrowserPageComponent, IResetablePage):
     def _getWebHandlers(self):
         return createRankedBattlesWebHandlers({})
 
+    @classmethod
+    def _isRightClickAllowed(cls):
+        return True
+
 
 class RankedBattlesInfoPage(LeaderBoardBrowserPage):
 
     def _getUrl(self):
         return getRankedBattlesInfoPageUrl()
+
+    @classmethod
+    def _isRightClickAllowed(cls):
+        return False

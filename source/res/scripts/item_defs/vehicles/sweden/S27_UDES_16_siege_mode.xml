@@ -138,7 +138,7 @@
         <rightTrack>	20	</rightTrack>
       </armor>
       <weight>	6500	</weight>
-      <maxLoad>	30000	</maxLoad>
+      <maxLoad>	30500	</maxLoad>
       <terrainResistance>	1.1 1.2 2.4	</terrainResistance>
       <brakeForce>	30000	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
@@ -718,7 +718,6 @@
             <gun>	40	</gun>
           </armor>
           <turretYawLimits>	-180 180	</turretYawLimits>
-          <hullPitchAimingFirst>	True	</hullPitchAimingFirst>
           <pitchLimits>
             <minPitch>	0 -15 1 -15	</minPitch>
             <maxPitch>	0 5 1 5	</maxPitch>
@@ -801,7 +800,6 @@
             <gun>	40	</gun>
           </armor>
           <turretYawLimits>	-180 180	</turretYawLimits>
-          <hullPitchAimingFirst>	True	</hullPitchAimingFirst>
           <pitchLimits>
             <minPitch>	0 -15 1 -15	</minPitch>
             <maxPitch>	0 5 1 5	</maxPitch>
@@ -989,7 +987,6 @@
             <maxPitch>	0 5 1 5	</maxPitch>
           </pitchLimits>
           <invisibilityFactorAtShot>	0.198	</invisibilityFactorAtShot>
-          <hullPitchAimingFirst>	True	</hullPitchAimingFirst>
           <reloadTime>	11.1	</reloadTime>
           <aimingTime>	2.3	</aimingTime>
           <shotDispersionRadius>	0.37	</shotDispersionRadius>
@@ -1068,7 +1065,6 @@
             <maxPitch>	0 5 1 5	</maxPitch>
           </pitchLimits>
           <invisibilityFactorAtShot>	0.209	</invisibilityFactorAtShot>
-          <hullPitchAimingFirst>	True	</hullPitchAimingFirst>
           <reloadTime>	10.2	</reloadTime>
           <aimingTime>	2.2	</aimingTime>
           <shotDispersionRadius>	0.36	</shotDispersionRadius>
@@ -1315,6 +1311,7 @@
   </siege_mode>
   <hull_aiming>
     <pitch>
+      <isFlexible>	True	</isFlexible>
       <wheelCorrectionCenterZ>	1.165	</wheelCorrectionCenterZ>
       <wheelsCorrectionSpeed>	10	</wheelsCorrectionSpeed>
       <wheelsCorrectionAngles>
@@ -1325,7 +1322,7 @@
     </pitch>
     <yawDisabled></yawDisabled>
   </hull_aiming>
-  <useHullZ>	True	</useHullZ>
+  <useHullZSize>	True	</useHullZSize>
   <effects>
     <collision></collision>
     <damagedStateGroup>	large	</damagedStateGroup>

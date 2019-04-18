@@ -12,6 +12,7 @@ from gui.shared.utils.requesters.abstract import Response, ClientRequestsByIDPro
 from gui.wgcg.base.handlers import BaseRequestHandlers
 from gui.wgcg.clan.handlers import ClanRequestHandlers
 from gui.wgcg.elen.handlers import ElenRequestHandlers
+from gui.wgcg.frontline.handlers import FrontlineRequestHandlers
 from gui.wgcg.hof.handlers import HofRequestHandlers
 from gui.wgcg.promo_screens.handlers import PromoScreensRequestHandlers
 from gui.wgcg.rank.handlers import RankRequestHandlers
@@ -94,6 +95,7 @@ class WgcgRequestsController(RequestsController):
         self.__handlers.update(HofRequestHandlers(requester).get())
         self.__handlers.update(RankRequestHandlers(requester).get())
         self.__handlers.update(PromoScreensRequestHandlers(requester).get())
+        self.__handlers.update(FrontlineRequestHandlers(requester).get())
 
     def fini(self):
         super(WgcgRequestsController, self).fini()

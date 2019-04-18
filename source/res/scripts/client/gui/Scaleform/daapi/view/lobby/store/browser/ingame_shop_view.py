@@ -73,3 +73,10 @@ class IngameShopOverlay(_IngameShopOverlayBase):
     def onEscapePress(self):
         if not self._browserParams.get('isTransparent'):
             self.destroy()
+
+
+class PremContentPageOverlay(WebOverlayBase):
+
+    def webHandlers(self):
+        from gui.Scaleform.daapi.view.lobby.shared.web_handlers import createPremAccWebHandlers
+        return createPremAccWebHandlers()

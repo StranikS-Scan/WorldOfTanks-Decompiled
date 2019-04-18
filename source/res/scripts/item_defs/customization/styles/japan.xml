@@ -313,4 +313,77 @@
       </outfits>
     </style>
   </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/main_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	true	</historical>
+    <vehicleFilter>
+      <include>
+        <nations>	japan	</nations>
+      </include>
+    </vehicleFilter>
+    <style>
+      <id>	43	</id>
+      <texture>	gui/maps/vehicles/styles/generic_custom_look_2_japan.png	</texture>
+      <description>	#vehicle_customization:main_style/generic_custom_look_2_japan_desc	</description>
+      <userString>	#vehicle_customization:main_style/generic_custom_look_2_japan	</userString>
+      <priceGroup>	generic custom look styles	</priceGroup>
+      <outfits>
+        <outfit>
+          <season>	winter	</season>
+          <camouflages>
+            <item>
+              <id>	676	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <decals>
+            <item>
+              <id>	712	</id>
+              <appliedTo>	52416	</appliedTo>
+            </item>
+          </decals>
+        </outfit>
+        <outfit>
+          <season>	summer	</season>
+          <camouflages>
+            <item>
+              <id>	678	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <decals>
+            <item>
+              <id>	712	</id>
+              <appliedTo>	52416	</appliedTo>
+            </item>
+          </decals>
+        </outfit>
+        <outfit>
+          <season>	desert	</season>
+          <camouflages>
+            <item>
+              <id>	677	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <decals>
+            <item>
+              <id>	712	</id>
+              <appliedTo>	52416	</appliedTo>
+            </item>
+          </decals>
+        </outfit>
+        <outfit>
+          <season>	event	</season>
+        </outfit>
+      </outfits>
+    </style>
+  </itemGroup>
 </japan.xml>

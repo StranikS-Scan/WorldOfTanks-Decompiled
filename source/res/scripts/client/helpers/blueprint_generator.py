@@ -21,6 +21,7 @@ class BlueprintGenerator(object):
 
     def __init__(self):
         self.__cachedCompound = {}
+        self.__pendingCompound = set()
         self.__layouts = None
         self.__inProgress = None
         return
@@ -31,6 +32,7 @@ class BlueprintGenerator(object):
 
     def fini(self):
         self.__cachedCompound.clear()
+        self.__pendingCompound.clear()
         self.__layouts = None
         self.__inProgress = None
         BigWorld.enableBlueprintBuilding(False)
@@ -70,8 +72,12 @@ class BlueprintGenerator(object):
             BigWorld.buildBlueprint(self.__cachedCompound[vehicleName], _BLUEPRINT_BG_TEXTURE, layout)
             self.__inProgress = None
             return
+        elif vehicleName in self.__pendingCompound:
+            _logger.debug('Vehicle compound of "%s" is loading at the moment.', vehicleName)
+            return
         else:
             _logger.debug('Loading vehicle compound of "%s".', vehicleName)
+            self.__pendingCompound.add(vehicleName)
             resources = (ma.prepareCompoundAssembler(vehicleDescr, ModelsSetParams('', 'undamaged'), BigWorld.camera().spaceID, lodIdx=_BLUEPRINT_TANK_LOD, skipMaterials=True),)
             BigWorld.loadResourceListBG(resources, makeCallbackWeak(self.__onResourcesLoaded, vehicleName))
             return
@@ -85,6 +91,7 @@ class BlueprintGenerator(object):
             _logger.debug('Loaded compound model for "%s"', vehicleName)
             compound = resourceRefs[vehicleName]
             self.__cachedCompound[vehicleName] = compound
+            self.__pendingCompound.remove(vehicleName)
             if vehicleName != self.__inProgress:
                 return
             layout = self.__layouts.get(vehicleName, self.__layouts['default'])

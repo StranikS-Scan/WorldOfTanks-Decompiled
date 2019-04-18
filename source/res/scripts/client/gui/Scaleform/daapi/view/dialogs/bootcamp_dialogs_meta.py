@@ -1,9 +1,13 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/dialogs/bootcamp_dialogs_meta.py
+from constants import PREMIUM_ENTITLEMENTS
+from gui.impl import backport
+from gui.impl.gen import R
 from gui.Scaleform.daapi.view.dialogs import I18nConfirmDialogMeta
 from gui.Scaleform.locale.BATTLE_TUTORIAL import BATTLE_TUTORIAL
 from gui.shared.events import ShowDialogEvent
 from helpers import i18n
+_MSG_POSTFIX = '/message'
 
 class ExecutionChooserDialogMeta(I18nConfirmDialogMeta):
     SKIP = 'skip'
@@ -11,10 +15,11 @@ class ExecutionChooserDialogMeta(I18nConfirmDialogMeta):
     RETRY = 'retry'
     START = 'start'
 
-    def __init__(self, dialogType, key, focusedID, showAwardIcon):
+    def __init__(self, dialogType, key, focusedID, showAwardIcon, premiumType):
         super(ExecutionChooserDialogMeta, self).__init__(key, focusedID=focusedID)
-        self.__imagePath = '../maps/icons/bootcamp/dialog/%s.png' % dialogType
         self.__showAwardIcon = showAwardIcon
+        self.__premiumType = premiumType
+        self.__imagePath = self.__createImagePathWithTankPremium(dialogType)
 
     def getEventType(self):
         return ShowDialogEvent.SHOW_EXECUTION_CHOOSER_DIALOG
@@ -31,3 +36,15 @@ class ExecutionChooserDialogMeta(I18nConfirmDialogMeta):
     def getLabel(self):
         I18N_LABEL_KEY = '{0:>s}/label'
         return self._makeString(I18N_LABEL_KEY.format(self._key), self._messageCtx)
+
+    def getMessage(self):
+        premiumStr = ''
+        if self.__premiumType == PREMIUM_ENTITLEMENTS.BASIC:
+            premiumStr = backport.text(R.strings.dialogs.bootcamp.premiumType.basic())
+        elif self.__premiumType == PREMIUM_ENTITLEMENTS.PLUS:
+            premiumStr = backport.text(R.strings.dialogs.bootcamp.premiumType.plus())
+        premiumCtx = {'premiumType': premiumStr} if premiumStr else {}
+        return self._makeString(''.join((self._key, _MSG_POSTFIX)), premiumCtx)
+
+    def __createImagePathWithTankPremium(self, dialogType):
+        return backport.image(R.images.gui.maps.icons.bootcamp.dialog.skip_with_tank_premium()) if dialogType == self.SKIP and self.__premiumType == PREMIUM_ENTITLEMENTS.PLUS else backport.image(R.images.gui.maps.icons.bootcamp.dialog.dyn(dialogType)())

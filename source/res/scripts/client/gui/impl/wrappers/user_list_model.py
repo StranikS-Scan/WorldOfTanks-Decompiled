@@ -56,6 +56,9 @@ class UserListModel(ListModel):
     def findItems(self, predicate):
         return [ item for item in self.getItems() if predicate(item) ]
 
+    def clearItems(self):
+        self.getItems().clear()
+
     def getItemsLength(self):
         return len(self.getItems())
 

@@ -4,19 +4,18 @@ from gui.Scaleform.genConsts.RANKEDBATTLES_ALIASES import RANKEDBATTLES_ALIASES
 from gui.impl import backport
 from gui.impl.gen import R
 from gui.ranked_battles import ranked_formatters
-from gui.ranked_battles.ranked_builders.shared_vos import getStatVO
+from gui.ranked_battles.ranked_builders import shared_vos
 from gui.shared.formatters import text_styles
 
 def getDivisionVO(division):
-    return {'id': division.getUserID(),
-     'name': text_styles.middleTitle(division.getUserName()),
-     'isCompleted': division.isCompleted(),
-     'isLocked': not division.isUnlocked()}
+    divisionVO = shared_vos.getDivisionVO(division)
+    divisionVO.update({'name': text_styles.middleTitle(divisionVO['name'])})
+    return divisionVO
 
 
 def getDivisionStatsVO(divisionEfficiencyPercent, seasonEfficiencyPercent):
-    return {'divisionEfficiency': getStatVO(ranked_formatters.getFloatPercentStrStat(divisionEfficiencyPercent), 'divisionEfficiency', 'divisionEfficiency', 'divisionEfficiency'),
-     'seasonEfficiency': getStatVO(ranked_formatters.getFloatPercentStrStat(seasonEfficiencyPercent), 'seasonEfficiency', 'efficiency', 'seasonEfficiency')}
+    return {'divisionEfficiency': shared_vos.getStatVO(ranked_formatters.getFloatPercentStrStat(divisionEfficiencyPercent), 'divisionEfficiency', 'divisionEfficiency', 'divisionEfficiency'),
+     'seasonEfficiency': shared_vos.getStatVO(ranked_formatters.getFloatPercentStrStat(seasonEfficiencyPercent), 'seasonEfficiency', 'efficiency', 'seasonEfficiency')}
 
 
 def getRankVO(rank):

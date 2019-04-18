@@ -24,6 +24,7 @@ class VIEW_ALIAS(COMMON_VIEW_ALIAS):
     LOBBY_STORAGE_OLD = 'storageOld'
     OVERLAY_WEB_STORE = 'overlayWebStore'
     OVERLAY_BROWSER_VIEW = 'overlayBrowserView'
+    OVERLAY_PREM_CONTENT_VIEW = 'overlayPremContentView'
     LOBBY_INVENTORY = 'inventory'
     LOBBY_PROFILE = 'profile'
     LOBBY_MISSIONS = 'missions'

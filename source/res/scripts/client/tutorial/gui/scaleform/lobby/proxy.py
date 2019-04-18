@@ -7,6 +7,7 @@ from gui.Scaleform.Waiting import Waiting
 from gui.Scaleform.framework import g_entitiesFactories, ViewTypes
 from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
 from gui.Scaleform.genConsts.TUTORIAL_TRIGGER_TYPES import TUTORIAL_TRIGGER_TYPES
+from gui.app_loader.settings import APP_NAME_SPACE
 from gui.shared import g_eventBus, events, EVENT_BUS_SCOPE
 from helpers import dependency
 from helpers.statistics import HANGAR_LOADING_STATE
@@ -24,6 +25,7 @@ from tutorial.logger import LOG_DEBUG, LOG_ERROR, LOG_WARNING
 from gui.app_loader import sf_lobby
 from soft_exception import SoftException
 _TEvent = events.TutorialEvent
+_AppEvent = events.AppLifeCycleEvent
 _EventClassByTriggerType = {TUTORIAL_TRIGGER_TYPES.CLICK_TYPE: (ClickEvent, 'Player has clicked'),
  TUTORIAL_TRIGGER_TYPES.CLICK_OUTSIDE_TYPE: (ClickOutsideEvent, 'Player has clicked outside'),
  TUTORIAL_TRIGGER_TYPES.ESCAPE: (EscEvent, 'Player has pressed ESC'),
@@ -63,48 +65,25 @@ class SfLobbyProxy(GUIProxy):
         return
 
     def init(self):
-        result = False
         addListener = g_eventBus.addListener
+        addListener(_AppEvent.INITIALIZED, self.__onAppInitialized, scope=EVENT_BUS_SCOPE.GLOBAL)
         addListener(_TEvent.ON_COMPONENT_FOUND, self.__onComponentFound, scope=EVENT_BUS_SCOPE.GLOBAL)
         addListener(_TEvent.ON_COMPONENT_LOST, self.__onComponentLost, scope=EVENT_BUS_SCOPE.GLOBAL)
         addListener(_TEvent.ON_TRIGGER_ACTIVATED, self.__onTriggerActivated, scope=EVENT_BUS_SCOPE.GLOBAL)
         addListener(_TEvent.ON_ANIMATION_COMPLETE, self.__onAnimationComplete, scope=EVENT_BUS_SCOPE.GLOBAL)
-        if self.app is not None:
-            proxy = weakref.proxy(self.app)
-            for _, effect in self.effects.iterEffects():
-                effect.setApplication(proxy)
-
-            loader = self.app.loaderManager
-            loader.onViewLoadInit += self.__onViewLoadInit
-            loader.onViewLoaded += self.__onViewLoaded
-            loader.onViewLoadError += self.__onViewLoadError
-            addSettings = g_entitiesFactories.addSettings
-            try:
-                for settings in self.getViewSettings():
-                    addSettings(settings)
-
-                result = True
-            except Exception:
-                LOG_CURRENT_EXCEPTION()
-
-        self.onGUILoaded()
-        return result
+        if self.app is not None and self.app.initialized:
+            self.__load()
+        return True
 
     def fini(self):
         self._commands = None
         self.eManager.clear()
         self.effects.stopAll()
         self.effects.clear()
-        if self.app is not None:
-            loader = self.app.loaderManager
-            loader.onViewLoadInit -= self.__onViewLoadInit
-            loader.onViewLoaded -= self.__onViewLoaded
-            loader.onViewLoadError -= self.__onViewLoadError
-            removeSettings = g_entitiesFactories.removeSettings
-            for settings in self.getViewSettings():
-                removeSettings(settings.alias)
-
+        if self.app is not None and self.app.initialized:
+            self.__unload()
         removeListener = g_eventBus.removeListener
+        removeListener(_AppEvent.INITIALIZED, self.__onAppInitialized, scope=EVENT_BUS_SCOPE.GLOBAL)
         removeListener(_TEvent.ON_COMPONENT_FOUND, self.__onComponentFound, scope=EVENT_BUS_SCOPE.GLOBAL)
         removeListener(_TEvent.ON_COMPONENT_LOST, self.__onComponentLost, scope=EVENT_BUS_SCOPE.GLOBAL)
         removeListener(_TEvent.ON_TRIGGER_ACTIVATED, self.__onTriggerActivated, scope=EVENT_BUS_SCOPE.GLOBAL)
@@ -238,6 +217,38 @@ class SfLobbyProxy(GUIProxy):
 
     def isTutorialWindowDisplayed(self, windowID):
         return self.effects.isStillRunning(GUI_EFFECT_NAME.SHOW_WINDOW, effectID=windowID)
+
+    def __load(self):
+        proxy = weakref.proxy(self.app)
+        for _, effect in self.effects.iterEffects():
+            effect.setApplication(proxy)
+
+        loader = self.app.loaderManager
+        loader.onViewLoadInit += self.__onViewLoadInit
+        loader.onViewLoaded += self.__onViewLoaded
+        loader.onViewLoadError += self.__onViewLoadError
+        addSettings = g_entitiesFactories.addSettings
+        try:
+            for settings in self.getViewSettings():
+                addSettings(settings)
+
+        except Exception:
+            LOG_CURRENT_EXCEPTION()
+
+        self.onGUILoaded()
+
+    def __unload(self):
+        loader = self.app.loaderManager
+        loader.onViewLoadInit -= self.__onViewLoadInit
+        loader.onViewLoaded -= self.__onViewLoaded
+        loader.onViewLoadError -= self.__onViewLoadError
+        removeSettings = g_entitiesFactories.removeSettings
+        for settings in self.getViewSettings():
+            removeSettings(settings.alias)
+
+    def __onAppInitialized(self, event):
+        if event.ns == APP_NAME_SPACE.SF_LOBBY:
+            self.__load()
 
     def __onViewLoadInit(self, pyEntity):
         if pyEntity.viewType is ViewTypes.LOBBY_SUB:

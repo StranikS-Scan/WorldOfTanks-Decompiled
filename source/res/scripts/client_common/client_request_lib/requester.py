@@ -94,6 +94,15 @@ class SpaAccessor(BaseAccessor):
     def get_accounts_names(self, callback, account_ids, fields=None):
         return self._data_source.get_accounts_names(callback, account_ids, fields=fields)
 
+    def get_account_attribute_by_prefix(self, callback, attr_prefix, fields=None):
+        return self._data_source.get_account_attribute_by_prefix(callback, attr_prefix, fields=fields)
+
+
+class FreyaAccessor(BaseAccessor):
+
+    def freya_v1_fetch_product_list(self, callback, params, fields=None):
+        return self._data_source.freya_v1_fetch_product_list(callback, params, fields=fields)
+
 
 class ClansAccessor(BaseAccessor):
 
@@ -329,6 +338,7 @@ class Requester(object):
     wgelen = RequestDescriptor(WGElenAccessor)
     wgrms = RequestDescriptor(WgrmsAccessor)
     promo_screens = RequestDescriptor(PromoScreensAccessor)
+    freya = RequestDescriptor(FreyaAccessor)
 
     @classmethod
     def create_requester(cls, url_fetcher, config, client_lang=None, user_agent=None):

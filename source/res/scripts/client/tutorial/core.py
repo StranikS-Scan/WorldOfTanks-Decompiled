@@ -260,7 +260,8 @@ class Tutorial(object):
         return self._ctrlFactory
 
     def invalidateFlags(self):
-        self._funcChapterCtx.invalidate()
+        if self._funcChapterCtx is not None:
+            self._funcChapterCtx.invalidate()
         if self._funcScene is not None:
             self._funcScene.invalidate()
         return

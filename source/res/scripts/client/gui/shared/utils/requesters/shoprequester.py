@@ -390,6 +390,15 @@ class ShopRequester(AbstractSyncDataRequester, ShopCommonStats, IShopRequester):
 
         return premiumCostWithDiscount
 
+    def isActionOnPremium(self):
+        premiumCost = self.premiumCost
+        defaultPremiumCost = self.defaults.premiumCost
+        for days, price in premiumCost.iteritems():
+            if defaultPremiumCost[days] != price:
+                return True
+
+        return False
+
     def getTankmanCostWithDefaults(self):
         from gui.shared.tooltips import ACTION_TOOLTIPS_TYPE
         from gui.shared.tooltips.formatters import packActionTooltipData

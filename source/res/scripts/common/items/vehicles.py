@@ -1169,7 +1169,8 @@ class VehicleType(object):
      'autounlockedItems',
      'collisionEffectVelocities',
      'isRotationStill',
-     'useHullZ',
+     'useHullZSize',
+     'useHullZOffset',
      'siegeModeParams',
      'hullAimingParams',
      'overmatchMechanicsVer',
@@ -1300,7 +1301,8 @@ class VehicleType(object):
         self.unlocksDescrs = self.__convertAndValidateUnlocksDescrs(unlocksDescrs)
         self.autounlockedItems = self.__collectDefaultUnlocks()
         self.isRotationStill = section.readBool('isRotationStill', False)
-        self.useHullZ = section.readBool('useHullZ', False)
+        self.useHullZSize = section.readBool('useHullZSize', False)
+        self.useHullZOffset = section.readBool('useHullZOffset', False)
         self.siegeModeParams = _readSiegeModeParams(xmlCtx, section, self)
         self.hullAimingParams = _readHullAimingParams(xmlCtx, section)
         if IS_CELLAPP:
@@ -3018,8 +3020,6 @@ def _readGun(xmlCtx, section, item, unlocksDescrs=None, _=None):
             item.staticPitch = radians(angle)
     else:
         item.staticPitch = None
-    if section.has_key('hullPitchAimingFirst'):
-        item.hullPitchAimingFirst = _xml.readBool(xmlCtx, section, 'hullPitchAimingFirst')
     item.healthParams = shared_readers.readDeviceHealthParams(xmlCtx, section)
     item.shotDispersionAngle = atan(_xml.readNonNegativeFloat(xmlCtx, section, 'shotDispersionRadius') / 100.0)
     item.shotDispersionFactors = _readGunShotDispersionFactors(xmlCtx, section, 'shotDispersionFactors')
@@ -3088,11 +3088,6 @@ def _readGunLocals(xmlCtx, section, sharedItem, unlocksDescrs, turretCompactDesc
     else:
         hasOverride = True
         staticPitch = radians(_xml.readFloat(xmlCtx, section, 'staticPitch'))
-    if not section.has_key('hullPitchAimingFirst'):
-        hullPitchAimingFirst = sharedItem.hullPitchAimingFirst
-    else:
-        hasOverride = True
-        hullPitchAimingFirst = _xml.readBool(xmlCtx, section, 'hullPitchAimingFirst')
     if not section.has_key('rotationSpeed'):
         rotationSpeed = sharedItem.rotationSpeed
     else:
@@ -3243,7 +3238,6 @@ def _readGunLocals(xmlCtx, section, sharedItem, unlocksDescrs, turretCompactDesc
         item.materials = materials
         item.staticTurretYaw = staticTurretYaw
         item.staticPitch = staticPitch
-        item.hullPitchAimingFirst = hullPitchAimingFirst
         item.pitchLimits = copy.deepcopy(sharedItem.pitchLimits)
         item.pitchLimits.update(pitchLimits)
         _validatePitchLimits(xmlCtx, 'pitchLimits', item.pitchLimits)
@@ -4665,6 +4659,7 @@ def _readSiegeModeParams(xmlCtx, section, vehType):
 def _readHullAimingParams(xmlCtx, section):
     res = {'pitch': {'isAvailable': section.has_key('hull_aiming/pitch') != 0,
                'isEnabled': section.readBool('hull_aiming/pitch/isEnabled'),
+               'isFlexible': section.readBool('hull_aiming/pitch/isFlexible'),
                'wheelCorrectionCenterZ': _xml.readFloat(xmlCtx, section, 'hull_aiming/pitch/wheelCorrectionCenterZ', 0.0),
                'wheelsCorrectionSpeed': radians(_xml.readPositiveFloat(xmlCtx, section, 'hull_aiming/pitch/wheelsCorrectionSpeed', 0.0)),
                'wheelsCorrectionAngles': {'pitchMin': radians(_xml.readFloat(xmlCtx, section, 'hull_aiming/pitch/wheelsCorrectionAngles/pitchMin', 0)),

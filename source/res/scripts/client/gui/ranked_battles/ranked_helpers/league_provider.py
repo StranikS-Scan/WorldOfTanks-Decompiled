@@ -10,14 +10,16 @@ from adisp import process
 from helpers import dependency
 from helpers.time_utils import ONE_MINUTE
 from skeletons.gui.web import IWebController
+from gui.wgcg.rank.contexts import RankedPositionCtx
 _logger = logging.getLogger(__name__)
+_WEB_AVAILABLE_SYNC_TIME = 2
 _LEAGUE_SYNC_TIME = 2 * ONE_MINUTE
 WebLeague = namedtuple('WebLeague', 'league, position')
 UNDEFINED_LEAGUE_ID = 0
 UNDEFINED_WEB_LEAGUE = WebLeague(UNDEFINED_LEAGUE_ID, None)
 
 class RankedBattlesLeagueProvider(object):
-    clansController = dependency.descriptor(IWebController)
+    __webController = dependency.descriptor(IWebController)
     __slots__ = ('onLeagueUpdated', '__em', '__callbackID', '__fakeWebLeague', '__mutexOpen', '__lastUpdateTime', '__webLeague', '__isStarted')
 
     def __init__(self):
@@ -53,14 +55,27 @@ class RankedBattlesLeagueProvider(object):
         self.__webLeague = UNDEFINED_WEB_LEAGUE
         return
 
+    @process
     def forceUpdateLeague(self):
         if self.__mutexOpen:
             self.__mutexOpen = False
             _logger.debug('LeagueProvider update starts')
-            self.__updateLeague()
+            if not self.__fakeWebLeague or not constants.IS_DEVELOPMENT:
+                if self.__webController.isAvailable():
+                    result = yield self.__webController.sendRequest(RankedPositionCtx())
+                    if result.isSuccess():
+                        results = RankedPositionCtx.getDataObj(result.data).get('results')
+                        if results is not None and isinstance(results, dict):
+                            self.__webLeague = WebLeague(results.get('league'), results.get('position'))
+                            self.__lastUpdateTime = time.time()
+                            self.onLeagueUpdated()
+            else:
+                self.__webLeague = self.__fakeWebLeague
+                self.__lastUpdateTime = time.time()
+                self.onLeagueUpdated()
             self.__mutexOpen = True
-            self.onLeagueUpdated()
             _logger.debug('LeagueProvider update finishes')
+        return
 
     def setWebLeague(self, league=0, position=0):
         if constants.IS_DEVELOPMENT:
@@ -71,7 +86,7 @@ class RankedBattlesLeagueProvider(object):
         if self.isStarted:
             return
         self.__isStarted = True
-        self.__callbackID = BigWorld.callback(_LEAGUE_SYNC_TIME, self.__invoke)
+        self.__callbackID = BigWorld.callback(self.__getInvokeDelay(), self.__invoke)
 
     def stop(self):
         if self.__isStarted:
@@ -85,20 +100,8 @@ class RankedBattlesLeagueProvider(object):
         self.__callbackID = None
         self.forceUpdateLeague()
         if self.isStarted:
-            self.__callbackID = BigWorld.callback(_LEAGUE_SYNC_TIME, self.__invoke)
+            self.__callbackID = BigWorld.callback(self.__getInvokeDelay(), self.__invoke)
         return
 
-    @process
-    def __updateLeague(self):
-        if not self.__fakeWebLeague or not constants.IS_DEVELOPMENT:
-            if self.clansController.getAccountProfile():
-                result = yield self.clansController.getClanDossier().requestRankedPosition()
-                if result is not None and isinstance(result, dict):
-                    results = result.get('results')
-                    if results is not None and isinstance(results, dict):
-                        self.__webLeague = WebLeague(results.get('league'), results.get('position'))
-                        self.__lastUpdateTime = time.time()
-        else:
-            self.__webLeague = self.__fakeWebLeague
-            self.__lastUpdateTime = time.time()
-        return
+    def __getInvokeDelay(self):
+        return _LEAGUE_SYNC_TIME if self.__webController.isAvailable() else _WEB_AVAILABLE_SYNC_TIME

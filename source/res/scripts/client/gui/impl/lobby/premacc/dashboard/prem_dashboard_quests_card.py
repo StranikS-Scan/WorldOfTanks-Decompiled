@@ -5,13 +5,12 @@ from constants import PREMIUM_TYPE, PremiumConfigs
 from frameworks.wulf import ViewFlags
 from gui.Scaleform.genConsts.MISSIONS_STATES import MISSIONS_STATES
 from gui.Scaleform.genConsts.QUESTS_ALIASES import QUESTS_ALIASES
-from gui.Scaleform.daapi.view.lobby.missions.regular.group_packers import getPremiumGroup
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.premacc.dashboard.card_quests_tasks_model import CardQuestsTasksModel
 from gui.impl.gen.view_models.views.lobby.premacc.dashboard.prem_dashboard_quests_card_model import PremDashboardQuestsCardModel
 from gui.impl.pub import ViewImpl
 from gui.server_events.events_dispatcher import showMissions
-from gui.server_events.events_helpers import premMissionsSortFunc
+from gui.server_events.events_helpers import premMissionsSortFunc, isPremiumQuestsEnable, getPremiumGroup
 from helpers import dependency
 from skeletons.gui.game_control import IGameSessionController
 from skeletons.gui.lobby_context import ILobbyContext
@@ -20,6 +19,7 @@ from skeletons.gui.shared import IItemsCache
 
 class PremQuestsController(object):
     eventsCache = dependency.descriptor(IEventsCache)
+    gameSession = dependency.descriptor(IGameSessionController)
 
     def __init__(self):
         self.onPremiumQuestsStatesChange = Event()
@@ -34,11 +34,13 @@ class PremQuestsController(object):
     def initialise(self):
         self.eventsCache.onProgressUpdated += self._update
         self.eventsCache.onSyncCompleted += self._update
+        self.gameSession.onPremiumNotify += self._update
         self._update()
 
     def finalize(self):
         self.eventsCache.onProgressUpdated -= self._update
         self.eventsCache.onSyncCompleted -= self._update
+        self.gameSession.onPremiumNotify -= self._update
 
     def _getPersonalQuestsStates(self):
         quests = self.eventsCache.getPremiumQuests().values()
@@ -76,11 +78,11 @@ class PremDashboardQuestsCard(ViewImpl):
 
     def _initialize(self, *args, **kwargs):
         super(PremDashboardQuestsCard, self)._initialize(*args, **kwargs)
+        self._questController.initialise()
+        self._questController.onPremiumQuestsStatesChange += self.__onPremiumQuestsStatesChange
         self._gameSession.onPremiumNotify += self.__updateIsTankPremiumActive
         self._lobbyContext.getServerSettings().onServerSettingsChange += self.__onServerSettingsChange
         self.viewModel.onGoToQuestsView += self.__onGoToQuestsView
-        self._questController.initialise()
-        self._questController.onPremiumQuestsStatesChange += self.__updateQuestsStates
         self.__addPremQuestModel()
         self.__updateQuestsStates()
         self.__updateIsAvailable()
@@ -90,7 +92,7 @@ class PremDashboardQuestsCard(ViewImpl):
         self._gameSession.onPremiumNotify -= self.__updateIsTankPremiumActive
         self._lobbyContext.getServerSettings().onServerSettingsChange -= self.__onServerSettingsChange
         self.viewModel.onGoToQuestsView -= self.__onGoToQuestsView
-        self._questController.onPremiumQuestsStatesChange -= self.__updateQuestsStates
+        self._questController.onPremiumQuestsStatesChange -= self.__onPremiumQuestsStatesChange
         self._questController.finalize()
         self._questController = None
         super(PremDashboardQuestsCard, self)._finalize()
@@ -111,12 +113,16 @@ class PremDashboardQuestsCard(ViewImpl):
         if 'enabled' in diffConfig:
             self.__updateIsAvailable()
 
+    def __onPremiumQuestsStatesChange(self):
+        self.__updateQuestsStates()
+        self.__updateIsAvailable()
+
     def __updateIsTankPremiumActive(self, *args):
         isPremium = self.__isTankPremiumActive()
         self.viewModel.setIsTankPremiumActive(isPremium)
 
-    def __updateIsAvailable(self):
-        isAvailable = self._lobbyContext.getServerSettings().getPremQuestsConfig().get('enabled', False)
+    def __updateIsAvailable(self, *args):
+        isAvailable = isPremiumQuestsEnable()
         self.viewModel.setIsAvailable(isAvailable)
 
     def __addPremQuestModel(self):
@@ -133,6 +139,6 @@ class PremDashboardQuestsCard(ViewImpl):
         return self._itemsCache.items.stats.isActivePremium(PREMIUM_TYPE.PLUS)
 
     def __onGoToQuestsView(self):
-        if self._lobbyContext.getServerSettings().getPremQuestsConfig().get('enabled', False):
+        if isPremiumQuestsEnable():
             group = getPremiumGroup()
             showMissions(tab=QUESTS_ALIASES.MISSIONS_CATEGORIES_VIEW_PY_ALIAS, groupID=group.getID())

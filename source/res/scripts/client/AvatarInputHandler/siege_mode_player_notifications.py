@@ -95,6 +95,8 @@ class SiegeModeCameraShaker(object):
             vehicle = BigWorld.player().getVehicleAttached()
             if vehicle is None:
                 return
+            if vehicle.typeDescriptor.hasAutoSiegeMode:
+                return
             inputHandler = BigWorld.player().inputHandler
             matrix = Math.Matrix(vehicle.model.matrix)
             impulseDir = -matrix.applyToAxis(2)

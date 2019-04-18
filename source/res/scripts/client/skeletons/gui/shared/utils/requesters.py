@@ -514,6 +514,9 @@ class IShopRequester(IShopCommonStats, IRequester):
     def getPremiumCostWithDiscount(self, premiumPacketDiscounts=None):
         raise NotImplementedError
 
+    def isActionOnPremium(self):
+        raise NotImplementedError
+
     def getTankmanCostWithDefaults(self):
         raise NotImplementedError
 
@@ -577,6 +580,9 @@ class IGoodiesRequester(IRequester):
 
     @property
     def goodies(self):
+        raise NotImplementedError
+
+    def getActiveClanReserves(self):
         raise NotImplementedError
 
 

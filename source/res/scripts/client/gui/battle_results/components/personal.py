@@ -42,7 +42,7 @@ class PremiumPlusFlag(base.StatsItem):
 
 
 class DynamicPremiumState(base.StatsItem):
-    __slots__ = ('__arenaBonusType', '__arenaUniqueID', '__postBattlePremium', '__postBattlePremiumPlus')
+    __slots__ = ('__arenaBonusType', '__arenaUniqueID', '__postBattlePremium', '__postBattlePremiumPlus', '__xpDiff', '__creditsDiff')
     __itemsCache = dependency.descriptor(IItemsCache)
     __battleResults = dependency.descriptor(IBattleResultsService)
     __lobbyContext = dependency.descriptor(ILobbyContext)
@@ -53,6 +53,8 @@ class DynamicPremiumState(base.StatsItem):
         self.__arenaUniqueID = 0
         self.__postBattlePremium = False
         self.__postBattlePremiumPlus = False
+        self.__xpDiff = 0
+        self.__creditsDiff = 0
         return
 
     def setRecord(self, record, reusable):
@@ -60,11 +62,14 @@ class DynamicPremiumState(base.StatsItem):
         self.__arenaUniqueID = reusable.arenaUniqueID
         self.__postBattlePremium = reusable.isPostBattlePremium
         self.__postBattlePremiumPlus = reusable.isPostBattlePremiumPlus
+        self.__xpDiff = reusable.personal.getXPDiff()
+        self.__creditsDiff = reusable.personal.getCreditsDiff()
 
     def getVO(self):
         hasPremiumPlus = self.__itemsCache.items.stats.isActivePremium(PREMIUM_TYPE.PLUS)
         hasBasicPremium = self.__itemsCache.items.stats.isActivePremium(PREMIUM_TYPE.BASIC)
-        if hasBasicPremium and not (hasPremiumPlus or self.__postBattlePremiumPlus):
+        negativeImpact = self.__xpDiff < 0 or self.__creditsDiff < 0
+        if negativeImpact or hasBasicPremium and not (hasPremiumPlus or self.__postBattlePremiumPlus):
             self._value = BATTLE_RESULTS_PREMIUM_STATES.PREMIUM_ADVERTISING
         elif hasPremiumPlus:
             if self.__isDailyBonusVisible():
@@ -121,14 +126,13 @@ class PremiumInfoBlock(base.StatsBlock):
         self.isGetPremium = self.__canUpgradeToBasic and self.__xpDiff > 0 and self.__creditsDiff > 0 and not stats.isPremium
         self.isUpgradeToPremiumPlus = self.__canUpgradeToPlus and stats.isActivePremium(PREMIUM_TYPE.BASIC) and not stats.isActivePremium(PREMIUM_TYPE.PLUS)
         self.__setPremiumBonusData()
-        if self.isGetPremium:
-            self.creditsPremiumBonusStr = style.makeCreditsLabel(self.__creditsDiff, isDiff=True, useBigIcon=True)
-            self.xpPremiumBonusStr = style.makeXpLabel(self.__xpDiff, isDiff=True, useBigIcon=True)
-        else:
+        if self.__xpDiff < 0 or self.__creditsDiff < 0:
             self.creditsPremiumBonusStr = ''
             self.xpPremiumBonusStr = ''
-        result = super(PremiumInfoBlock, self).getVO()
-        return result
+        else:
+            self.creditsPremiumBonusStr = style.makeCreditsLabel(self.__creditsDiff, isDiff=True, useBigIcon=True)
+            self.xpPremiumBonusStr = style.makeXpLabel(self.__xpDiff, isDiff=True, useBigIcon=True)
+        return super(PremiumInfoBlock, self).getVO()
 
     def __setPremiumBonusData(self):
         value = ''
@@ -147,6 +151,8 @@ class PremiumInfoBlock(base.StatsBlock):
                 if randCase == 'bonus':
                     randCase = 'bonus_x{}'.format(multiplier)
                 icon = backport.image(R.images.gui.maps.icons.premacc.battleResult.dyn(randCase)())
+            elif self.__creditsDiff < 0 or self.__xpDiff < 0:
+                value = backport.text(R.strings.battle_results.common.details.premiumPlus.premium())
             else:
                 value = backport.text(R.strings.battle_results.common.premiumBonus())
         self.premiumBonusStr = value

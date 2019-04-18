@@ -107,11 +107,11 @@ SELECTED_INTRO_VEHICLES_FIELD = 'selectedIntroVehicles'
 CREW_SKINS_VIEWED = 'crew_skins_viewed'
 CREW_SKINS_HISTORICAL_VISIBLE = 'crew_skins_historical_visible'
 VEHICLES_WITH_BLUEPRINT_CONFIRM = 'showedBlueprintConfirm'
-IS_FIRST_DIVISION_ENTRY = 'isFirstDivisionEntry'
+IS_FIRST_ENTRY_BY_DIVISION_ID = 'isFirstEntryByDivisionId'
 RANKED_STYLED_VEHICLES_POOL = 'rankedStyledVehiclesPool'
 RANKED_WEB_LEAGUE = 'rankedWebLeague'
 RANKED_WEB_LEAGUE_UPDATE = 'rankedWebLeagueUpdate'
-RANKED_AWARDS_BUBBLE_WAS_SHOWN = 'rankedAwardsBubbleWasShown'
+RANKED_AWARDS_BUBBLE_YEAR_REACHED = 'rankedAwardsBubbleYearReached'
 KNOWN_SELECTOR_BATTLES = 'knownSelectorBattles'
 DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                'shop_current': (-1, STORE_CONSTANTS.VEHICLE, False),
@@ -538,17 +538,17 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                 CREW_SKINS_VIEWED: set(),
                 CREW_SKINS_HISTORICAL_VISIBLE: (True, True),
                 VEHICLES_WITH_BLUEPRINT_CONFIRM: {},
-                IS_FIRST_DIVISION_ENTRY: True,
+                IS_FIRST_ENTRY_BY_DIVISION_ID: {},
                 RANKED_STYLED_VEHICLES_POOL: [],
                 RANKED_WEB_LEAGUE: None,
                 RANKED_WEB_LEAGUE_UPDATE: None,
-                RANKED_AWARDS_BUBBLE_WAS_SHOWN: False},
+                RANKED_AWARDS_BUBBLE_YEAR_REACHED: False},
  KEY_COUNTERS: {NEW_HOF_COUNTER: {PROFILE_CONSTANTS.HOF_ACHIEVEMENTS_BUTTON: True,
                                   PROFILE_CONSTANTS.HOF_VEHICLES_BUTTON: True,
                                   PROFILE_CONSTANTS.HOF_VIEW_RATING_BUTTON: True},
                 NEW_LOBBY_TAB_COUNTER: {},
                 REFERRAL_COUNTER: 1,
-                RANKED_AWARDS_COUNTER: 0,
+                RANKED_AWARDS_COUNTER: 1,
                 RANKED_INFO_COUNTER: 1},
  KEY_NOTIFICATIONS: {ELEN_NOTIFICATIONS: {MISSIONS_CONSTANTS.ELEN_EVENT_STARTED_NOTIFICATION: set(),
                                           MISSIONS_CONSTANTS.ELEN_EVENT_FINISHED_NOTIFICATION: set(),
@@ -1017,7 +1017,6 @@ class AccountSettings(object):
                 cmSection = AccountSettings.__readSection(Settings.g_instance.userPrefs, Settings.KEY_COMMAND_MAPPING)
                 for command, section in cmSection.items()[:]:
                     newSection = None
-                    satelliteKeys = ''
                     fireKey = AccountSettings.__readSection(section, 'fireKey').asString
                     if fireKey == 'KEY_N':
                         if command == 'CMD_QUEST_PROGRESS_SHOW':

@@ -36,6 +36,7 @@ class TEXT_MANAGER_STYLES(object):
     TUTORIAL_TEXT = 'tutorialText'
     VEHICLE_STATUS_INFO_TEXT = 'vehicleStatusInfoText'
     VEHICLE_STATUS_CRITICAL_TEXT = 'vehicleStatusCriticalText'
+    VEHICLE_STATUS_CRITICAL_TEXT_SMALL = 'vehicleStatusCriticalTextSmall'
     VEHICLE_NAME = 'vehicleName'
     PREMIUM_VEHICLE_NAME = 'premiumVehicleName'
     MISSION_STATUS_UNAVAILABLE = 'missionStatusUnavailable'

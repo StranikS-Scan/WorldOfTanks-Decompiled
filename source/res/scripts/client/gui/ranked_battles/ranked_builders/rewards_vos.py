@@ -4,13 +4,42 @@ from gui.Scaleform.genConsts.RANKEDBATTLES_CONSTS import RANKEDBATTLES_CONSTS
 from gui.impl import backport
 from gui.impl.gen import R
 from gui.shared.formatters import text_styles
+from gui.Scaleform.genConsts.RANKEDBATTLES_ALIASES import RANKEDBATTLES_ALIASES
+from gui.ranked_battles.ranked_builders import shared_vos
+
+def getSeasonOnTabs(selectedLinkage):
+    return [{'id': RANKEDBATTLES_CONSTS.RANKED_BATTLES_REWARDS_RANKEDS_ID,
+      'label': backport.text(R.strings.ranked_battles.rewardsView.tabs.ranks()),
+      'linkage': RANKEDBATTLES_ALIASES.RANKED_BATTLES_REWARDS_RANKS_UI,
+      'selected': selectedLinkage == RANKEDBATTLES_ALIASES.RANKED_BATTLES_REWARDS_RANKS_UI}, {'id': RANKEDBATTLES_CONSTS.RANKED_BATTLES_REWARDS_LEAGUES_ID,
+      'label': backport.text(R.strings.ranked_battles.rewardsView.tabs.leagues()),
+      'linkage': RANKEDBATTLES_ALIASES.RANKED_BATTLES_REWARDS_LEAGUES_UI,
+      'selected': selectedLinkage == RANKEDBATTLES_ALIASES.RANKED_BATTLES_REWARDS_LEAGUES_UI}, {'id': RANKEDBATTLES_CONSTS.RANKED_BATTLES_REWARDS_YEAR_ID,
+      'label': backport.text(R.strings.ranked_battles.rewardsView.tabs.year()),
+      'linkage': RANKEDBATTLES_ALIASES.RANKED_BATTLES_REWARDS_YEAR_UI,
+      'selected': selectedLinkage == RANKEDBATTLES_ALIASES.RANKED_BATTLES_REWARDS_YEAR_UI}]
+
+
+def getSeasonOffTabs():
+    return [{'id': RANKEDBATTLES_CONSTS.RANKED_BATTLES_REWARDS_RANKEDS_ID,
+      'label': backport.text(R.strings.ranked_battles.rewardsView.tabs.ranks()),
+      'linkage': RANKEDBATTLES_ALIASES.RANKED_BATTLES_REWARDS_RANKS_UI,
+      'selected': False,
+      'disabled': True}, {'id': RANKEDBATTLES_CONSTS.RANKED_BATTLES_REWARDS_LEAGUES_ID,
+      'label': backport.text(R.strings.ranked_battles.rewardsView.tabs.leagues()),
+      'linkage': RANKEDBATTLES_ALIASES.RANKED_BATTLES_REWARDS_LEAGUES_UI,
+      'selected': False,
+      'disabled': True}, {'id': RANKEDBATTLES_CONSTS.RANKED_BATTLES_REWARDS_YEAR_ID,
+      'label': backport.text(R.strings.ranked_battles.rewardsView.tabs.year()),
+      'linkage': RANKEDBATTLES_ALIASES.RANKED_BATTLES_REWARDS_YEAR_UI,
+      'selected': True,
+      'disabled': False}]
+
 
 def getDivisionVO(division):
-    return {'id': division.getUserID(),
-     'name': text_styles.promoTitle(division.getUserName()),
-     'isCompleted': division.isCompleted(),
-     'isLocked': not division.isUnlocked(),
-     'isCurrent': division.isCurrent()}
+    divisionVO = shared_vos.getDivisionVO(division)
+    divisionVO.update({'name': text_styles.promoTitle(divisionVO['name'])})
+    return divisionVO
 
 
 def getRankRewardsVO(rank, bonuses, currentRankID):

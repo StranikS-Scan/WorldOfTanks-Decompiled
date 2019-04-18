@@ -49,6 +49,7 @@ class VEHICLE_PREVIEW(object):
     BUYINGPANEL_BUYBTN_LABEL_OBTAIN = '#vehicle_preview:buyingPanel/buyBtn/label/obtain'
     BUYINGPANEL_NOTRESEARCHEDVEHICLEWARNING = '#vehicle_preview:buyingPanel/notResearchedVehicleWarning'
     BUYINGPANEL_COMPENSATION_BODY = '#vehicle_preview:buyingPanel/compensation/body'
+    BUYINGPANEL_PRESENT = '#vehicle_preview:buyingPanel/present'
     INFOPANEL_TAB_CREWINFO_NAME = '#vehicle_preview:infoPanel/tab/crewInfo/name'
     INFOPANEL_TAB_CREWINFO_LOCKTITLE = '#vehicle_preview:infoPanel/tab/crewInfo/lockTitle'
     INFOPANEL_TAB_FACTSHEET_NAME = '#vehicle_preview:infoPanel/tab/factSheet/name'
@@ -67,6 +68,10 @@ class VEHICLE_PREVIEW(object):
     INFOPANEL_PREMIUM_CREDITSTEXT = '#vehicle_preview:infoPanel/premium/creditsText'
     INFOPANEL_PREMIUM_CREWTRANSFERTITLE = '#vehicle_preview:infoPanel/premium/crewTransferTitle'
     INFOPANEL_PREMIUM_CREWTRANSFERTEXT = '#vehicle_preview:infoPanel/premium/crewTransferText'
+    BUYINGPANEL_FRONTLINEPACK_TITLELABEL_ACTIVE = '#vehicle_preview:buyingPanel/frontlinePack/titleLabel/active'
+    BUYINGPANEL_FRONTLINEPACK_TITLELABEL_INACTIVE_ADD_DISCOUNT = '#vehicle_preview:buyingPanel/frontlinePack/titleLabel/inactive_add_discount'
+    BUYINGPANEL_FRONTLINEPACK_TITLELABEL_INACTIVE = '#vehicle_preview:buyingPanel/frontlinePack/titleLabel/inactive'
+    BUYINGPANEL_FRONTLINEPACK_COUPONLABEL = '#vehicle_preview:buyingPanel/frontlinePack/couponLabel'
     HEADER_BACKBTN_DESCRLABEL_ENUM = (HEADER_BACKBTN_DESCRLABEL_RESEARCHTREE,
      HEADER_BACKBTN_DESCRLABEL_PERSONALAWARDS,
      HEADER_BACKBTN_DESCRLABEL_SHOP,

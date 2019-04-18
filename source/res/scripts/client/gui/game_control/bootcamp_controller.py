@@ -14,8 +14,8 @@ from gui.Scaleform.daapi.view.bootcamp.disabled_settings import BCDisabledSettin
 from gui.Scaleform.daapi.view.dialogs.bootcamp_dialogs_meta import ExecutionChooserDialogMeta
 from gui.Scaleform.daapi.view.dialogs import DIALOG_BUTTON_ID
 from bootcamp.BootCampEvents import g_bootcampEvents
+from bootcamp.Bootcamp import g_bootcamp, LESSON_COUNT
 from PlayerEvents import g_playerEvents
-from bootcamp.Bootcamp import g_bootcamp
 from gui.shared import g_eventBus, events, EVENT_BUS_SCOPE
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.prb_control import prbDispatcherProperty
@@ -23,7 +23,7 @@ from gui.prb_control.entities.base.ctx import PrbAction
 from gui.prb_control.settings import PREBATTLE_ACTION_NAME
 from gui import DialogsInterface
 from debug_utils import LOG_ERROR
-BootcampDialogConstants = namedtuple('BootcampDialogConstants', 'dialogType dialogKey focusedID needAwarding')
+BootcampDialogConstants = namedtuple('BootcampDialogConstants', 'dialogType dialogKey focusedID needAwarding premiumType')
 
 class BootcampController(IBootcampController):
     sessionProvider = dependency.descriptor(IBattleSessionProvider)
@@ -198,18 +198,21 @@ class BootcampController(IBootcampController):
         bootcampLiteral = 'bootcamp/'
         needAwarding = self.needAwarding()
         isReferralEnabled = self.isReferralEnabled()
-        dialogType, focusedID = (ExecutionChooserDialogMeta.SKIP, DIALOG_BUTTON_ID.CLOSE) if isSkip else (ExecutionChooserDialogMeta.RETRY, DIALOG_BUTTON_ID.SUBMIT)
+        if isSkip:
+            dialogType, focusedID = ExecutionChooserDialogMeta.SKIP, DIALOG_BUTTON_ID.CLOSE
+        else:
+            dialogType, focusedID = ExecutionChooserDialogMeta.RETRY, DIALOG_BUTTON_ID.SUBMIT
         dialogKey = bootcampLiteral + dialogType
         if isReferralEnabled and dialogType == ExecutionChooserDialogMeta.SKIP:
             dialogKey = bootcampLiteral + ExecutionChooserDialogMeta.SKIP_REFERRAL
         if not isSkip and needAwarding:
             dialogKey = bootcampLiteral + ExecutionChooserDialogMeta.START
-        return BootcampDialogConstants(dialogType=dialogType, dialogKey=dialogKey, focusedID=focusedID, needAwarding=needAwarding)
+        return BootcampDialogConstants(dialogType=dialogType, dialogKey=dialogKey, focusedID=focusedID, needAwarding=needAwarding, premiumType=g_bootcamp.getPremiumType(LESSON_COUNT))
 
     @process
     def __doBootcamp(self, isSkip):
         dialogConstants = self.getSkipDialogConstants(isSkip)
-        result = yield DialogsInterface.showDialog(ExecutionChooserDialogMeta(dialogConstants.dialogType, dialogConstants.dialogKey, dialogConstants.focusedID, not dialogConstants.needAwarding and not isSkip))
+        result = yield DialogsInterface.showDialog(ExecutionChooserDialogMeta(dialogConstants.dialogType, dialogConstants.dialogKey, dialogConstants.focusedID, not dialogConstants.needAwarding and not isSkip, dialogConstants.premiumType))
         if result:
             if isSkip:
                 self.stopBootcamp(inBattle=not self.isInBootcampAccount())

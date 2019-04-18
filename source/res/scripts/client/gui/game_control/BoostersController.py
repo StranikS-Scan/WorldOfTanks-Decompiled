@@ -4,6 +4,7 @@ from operator import itemgetter
 import BigWorld
 import Event
 from gui.shared.utils.requesters.ItemsRequester import REQ_CRITERIA
+from gui.shared.utils.scheduled_notifications import Notifiable, PeriodicNotifier
 from helpers import dependency
 from helpers import time_utils
 from skeletons.gui.game_control import IBoostersController
@@ -16,9 +17,13 @@ class BoostersController(IBoostersController):
 
     def __init__(self):
         super(BoostersController, self).__init__()
-        self.onBoosterChangeNotify = Event.Event()
+        self.__eventManager = Event.EventManager()
+        self.onBoosterChangeNotify = Event.Event(self.__eventManager)
+        self.onReserveTimerTick = Event.Event(self.__eventManager)
         self.__boosterNotifyTimeCallback = None
         self.__boostersForUpdate = []
+        self.__notificatorManager = Notifiable()
+        self.__notificatorManager.addNotificator(PeriodicNotifier(self.__timeTillNextReserveTick, self.onReserveTimerTick, (time_utils.ONE_MINUTE,)))
         return
 
     def fini(self):
@@ -27,6 +32,7 @@ class BoostersController(IBoostersController):
 
     def onLobbyInited(self, event):
         self.itemsCache.onSyncCompleted += self._update
+        self.__notificatorManager.startNotification()
         if self.__boosterNotifyTimeCallback is None:
             self.__startBoosterTimeNotifyCallback()
         return
@@ -39,13 +45,15 @@ class BoostersController(IBoostersController):
 
     def _stop(self):
         self.__clearBoosterTimeNotifyCallback()
+        self.__notificatorManager.stopNotification()
         self.__boostersForUpdate = None
-        self.onBoosterChangeNotify.clear()
+        self.__eventManager.clear()
         self.itemsCache.onSyncCompleted -= self._update
         return
 
     def _update(self, *args):
         self.__clearBoosterTimeNotifyCallback()
+        self.__notificatorManager.startNotification()
         self.__startBoosterTimeNotifyCallback()
 
     def __startBoosterTimeNotifyCallback(self):
@@ -77,3 +85,7 @@ class BoostersController(IBoostersController):
             BigWorld.cancelCallback(self.__boosterNotifyTimeCallback)
             self.__boosterNotifyTimeCallback = None
         return
+
+    def __timeTillNextReserveTick(self):
+        clanReserves = self.goodiesCache.getClanReserves().values()
+        return min((reserve.getUsageLeftTime() for reserve in clanReserves)) if clanReserves else 0

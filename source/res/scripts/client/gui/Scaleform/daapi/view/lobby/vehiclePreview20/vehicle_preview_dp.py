@@ -6,10 +6,11 @@ import nations
 from gui.Scaleform import MENU
 from gui import GUI_NATIONS_ORDER_INDEX_REVERSED
 from gui.Scaleform.genConsts.STORE_CONSTANTS import STORE_CONSTANTS
+from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.impl import backport
 from gui.impl.gen import R
-from gui.shared.formatters import text_styles
+from gui.shared.formatters import text_styles, moneyWithIcon
 from gui.shared.formatters.currency import getStyle, getBWFormatter
 from gui.shared.gui_items import Vehicle
 from gui.shared.gui_items.items_actions import factory
@@ -18,7 +19,7 @@ from gui.shared.utils.functions import makeTooltip
 from helpers import dependency, func_utils
 from helpers.i18n import makeString as _ms
 from helpers.time_utils import getTillTimeString
-from items_kit_helper import getCompensateItemsCount, getDataOneVehicle, getDataMultiVehicles, collapseItemsPack
+from items_kit_helper import getCompensateItemsCount, getDataOneVehicle, getDataMultiVehicles, collapseItemsPack, getCouponDiscountForItemPack, getCouponBonusesForItemPack
 from skeletons.gui.shared import IItemsCache
 from web_client_api.common import CompensationType, ItemPackTypeGroup
 _logger = logging.getLogger(__name__)
@@ -115,6 +116,7 @@ class DefaultVehPreviewDataProvider(IVehPreviewDataProvider):
          'buyButtonTooltip': data.tooltip,
          'itemPrice': data.itemPrice,
          'isUnlock': data.isUnlock,
+         'couponDiscount': 0,
          'showAction': data.isAction,
          'hasCompensation': compensationData is not None,
          'compensation': compensationData if compensationData is not None else {},
@@ -124,12 +126,13 @@ class DefaultVehPreviewDataProvider(IVehPreviewDataProvider):
             resultVO.update({'customOffer': customOfferData})
         return resultVO
 
-    def getItemPackBuyingPanelData(self, item, data=None, itemsPack=None):
+    def getItemPackBuyingPanelData(self, item, data=None, itemsPack=None, couponSelected=False):
         compensationData = self.__getCompensationData(itemsPack)
         return {'setTitle': data.title,
          'uniqueVehicleTitle': '',
          'buyingLabel': '',
          'vehicleId': 0,
+         'couponDiscount': getCouponDiscountForItemPack(itemsPack).gold if couponSelected else 0,
          'isCanTrade': False,
          'isBuyingAvailable': True,
          'isMoneyEnough': data.enabled,
@@ -148,6 +151,7 @@ class DefaultVehPreviewDataProvider(IVehPreviewDataProvider):
          'uniqueVehicleTitle': '',
          'buyingLabel': '',
          'vehicleId': 0,
+         'couponDiscount': 0,
          'isCanTrade': False,
          'isBuyingAvailable': True,
          'isMoneyEnough': data.enabled,
@@ -191,6 +195,15 @@ class DefaultVehPreviewDataProvider(IVehPreviewDataProvider):
             vehiclesVOs = [ _createVehicleVO(packedVeh, self.__itemsCache) for packedVeh in vehicleItems ]
             itemsVOs = collapsedItemsVOs
         return (vehiclesVOs, itemsVOs, collapsedItemsVOs)
+
+    def packCouponData(self, itemsPack):
+        statsMoney = self.__itemsCache.items.stats.money
+        labelWithDiscount = _ms(text_styles.mainBig(backport.text(R.strings.vehicle_preview.buyingPanel.frontlinePack.couponLabel())), value=moneyWithIcon(getCouponDiscountForItemPack(itemsPack), statsMoney=statsMoney))
+        return {'isSelected': True,
+         'label': labelWithDiscount,
+         'icon': backport.image(R.images.gui.maps.shop.rewards.c_48x48.frontline_coupon()),
+         'tooltip': TOOLTIPS_CONSTANTS.FRONTLINE_COUPON,
+         'tooltipBonusesData': getCouponBonusesForItemPack(itemsPack)}
 
     def __getCompensationData(self, itemsPack):
         compensationMoney = MONEY_UNDEFINED

@@ -3,8 +3,20 @@
 from web_client_api import webApiCollection
 from web_client_api.request import RequestWebApi
 from web_client_api.shop import ShopWebApi
-from web_client_api.sound import SoundWebApi
+from web_client_api.sound import SoundWebApi, HangarSoundWebApi
 from web_client_api.ui import CloseWindowWebApi, UtilWebApi, OpenWindowWebApi, OpenTabWebApi, NotificationWebApi
+_DEFAULT_WEB_API_COLLECTION = (CloseWindowWebApi,
+ OpenWindowWebApi,
+ NotificationWebApi,
+ OpenTabWebApi,
+ RequestWebApi,
+ ShopWebApi,
+ SoundWebApi,
+ UtilWebApi)
 
 def createBrowserOverlayWebHandlers():
-    return webApiCollection(CloseWindowWebApi, OpenWindowWebApi, NotificationWebApi, OpenTabWebApi, RequestWebApi, ShopWebApi, SoundWebApi, UtilWebApi)
+    return webApiCollection(*_DEFAULT_WEB_API_COLLECTION)
+
+
+def createPremAccWebHandlers():
+    return webApiCollection(HangarSoundWebApi, *_DEFAULT_WEB_API_COLLECTION)

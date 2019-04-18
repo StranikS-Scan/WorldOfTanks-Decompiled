@@ -60,7 +60,7 @@ class ServerListItemPresenter(object):
          'shortname': self._shortName,
          'pingValue': self.__pingValue,
          'pingStatus': self.__pingStatus,
-         'tooltip': self._buildTooltip()}
+         'tooltip': self._buildTooltip(self.__peripheryID)}
 
     def isActive(self):
         return self.__getPrimeTimeStatus() in (PRIME_TIME_STATUS.AVAILABLE, PRIME_TIME_STATUS.NOT_AVAILABLE)
@@ -91,7 +91,7 @@ class ServerListItemPresenter(object):
         pingValue, self.__pingStatus = g_preDefinedHosts.getHostPingData(self.__hostName)
         self.__pingValue = min(pingValue, _PING_MAX_VALUE)
 
-    def _buildTooltip(self):
+    def _buildTooltip(self, peripheryID):
         raise NotImplementedError
 
     def _getIsAvailable(self):
@@ -115,7 +115,7 @@ class ServerListItemPresenter(object):
 
 class StubPresenterClass(ServerListItemPresenter):
 
-    def _buildTooltip(self):
+    def _buildTooltip(self, peripheryID):
         pass
 
 

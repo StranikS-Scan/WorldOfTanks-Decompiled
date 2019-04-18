@@ -106,6 +106,7 @@ class IGameSessionController(IGameController):
     onTimeTillBan = None
     onNewDayNotify = None
     onPremiumNotify = None
+    onPremiumTypeChanged = None
 
     def isSessionStartedThisDay(self):
         raise NotImplementedError
@@ -369,6 +370,7 @@ class IAwardController(IGameController):
 
 class IBoostersController(IGameController):
     onBoosterChangeNotify = None
+    onReserveTimerTick = None
 
 
 class IScreenCastController(IGameController):
@@ -650,9 +652,6 @@ class IRankedBattlesController(IGameController, ISeasonProvider):
         raise NotImplementedError
 
     def hasAvailablePrimeTimeServers(self):
-        raise NotImplementedError
-
-    def showWebLeaguePage(self, ctx=None):
         raise NotImplementedError
 
     def getRanksTops(self, isLoser=False, stepDiff=None):

@@ -83,3 +83,11 @@ def getRatingVO(rating):
     return {'icon': 'position',
      'label': '',
      'value': ranked_formatters.getIntegerStrStat(rating)}
+
+
+def getDivisionVO(division):
+    return {'id': division.getUserID(),
+     'name': division.getUserName(),
+     'isCompleted': division.isCompleted(),
+     'isLocked': not division.isUnlocked(),
+     'isCurrent': division.isCurrent()}

@@ -10,11 +10,12 @@ from skeletons.gui.game_control import IRankedBattlesController
 
 class PostbattleRankedAwardsView(RankedBattlesAwardsViewMeta):
     rankedController = dependency.descriptor(IRankedBattlesController)
-    __slots__ = ('__awardsSequence',)
+    __slots__ = ('__awardsSequence', '__rankedInfo')
 
     def __init__(self, ctx=None):
         super(PostbattleRankedAwardsView, self).__init__()
         self.__awardsSequence = ctx['awardsSequence']
+        self.__rankedInfo = ctx['rankedInfo']
 
     def closeView(self):
         self.__close()
@@ -24,7 +25,7 @@ class PostbattleRankedAwardsView(RankedBattlesAwardsViewMeta):
 
     def _populate(self):
         super(PostbattleRankedAwardsView, self)._populate()
-        vosSequence = getVOsSequence(self.__awardsSequence, self.rankedController.getRanksChain(min(self.__awardsSequence, key=lambda x: x.rankID).rankID if self.__awardsSequence else 0, max(self.__awardsSequence, key=lambda x: x.rankID).rankID + 1 if self.__awardsSequence else 0))
+        vosSequence = getVOsSequence(self.__awardsSequence, self.rankedController.getRanksChain(min(self.__awardsSequence, key=lambda x: x.rankID).rankID if self.__awardsSequence else 0, max(self.__awardsSequence, key=lambda x: x.rankID).rankID + 1 if self.__awardsSequence else 0), self.__rankedInfo)
         self.as_setDataS({'vosSequence': vosSequence,
          'title': backport.text(R.strings.ranked_battles.awards.congratulation()),
          'nextButtonLabel': backport.text(R.strings.ranked_battles.awards.yes())})

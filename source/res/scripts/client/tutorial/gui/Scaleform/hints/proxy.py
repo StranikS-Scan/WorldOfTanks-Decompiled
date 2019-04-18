@@ -3,6 +3,7 @@
 import weakref
 import Event
 from gui.Scaleform.genConsts.TUTORIAL_TRIGGER_TYPES import TUTORIAL_TRIGGER_TYPES
+from gui.app_loader.settings import APP_NAME_SPACE
 from gui.shared import g_eventBus, events
 from gui.shared.event_bus import EVENT_BUS_SCOPE
 from tutorial.data.events import ClickEvent, EnabledChangeEvent, VisibleChangeEvent
@@ -26,15 +27,13 @@ class HintsProxy(SfLobbyProxy):
 
     def init(self):
         addListener = g_eventBus.addListener
+        addListener(events.AppLifeCycleEvent.INITIALIZED, self.__onAppInitialized, scope=EVENT_BUS_SCOPE.GLOBAL)
         addListener(events.TutorialEvent.ON_COMPONENT_FOUND, self.__onItemFound, scope=EVENT_BUS_SCOPE.GLOBAL)
         addListener(events.TutorialEvent.ON_COMPONENT_LOST, self.__onItemLost, scope=EVENT_BUS_SCOPE.GLOBAL)
         addListener(events.TutorialEvent.ON_TRIGGER_ACTIVATED, self.__onTriggerActivated, scope=EVENT_BUS_SCOPE.GLOBAL)
-        if self.app is not None:
-            proxy = weakref.proxy(self.app)
-            for _, effect in self.effects.iterEffects():
-                effect.setApplication(proxy)
-
-        return
+        if self.app is not None and self.app.initialized:
+            self.__load()
+        return True
 
     def fini(self):
         self.__eManager.clear()
@@ -42,6 +41,7 @@ class HintsProxy(SfLobbyProxy):
         self.effects.stopAll()
         self.effects.clear()
         removeListener = g_eventBus.removeListener
+        removeListener(events.AppLifeCycleEvent.INITIALIZED, self.__onAppInitialized, scope=EVENT_BUS_SCOPE.GLOBAL)
         removeListener(events.TutorialEvent.ON_COMPONENT_FOUND, self.__onItemFound, scope=EVENT_BUS_SCOPE.GLOBAL)
         removeListener(events.TutorialEvent.ON_COMPONENT_LOST, self.__onItemLost, scope=EVENT_BUS_SCOPE.GLOBAL)
         removeListener(events.TutorialEvent.ON_TRIGGER_ACTIVATED, self.__onTriggerActivated, scope=EVENT_BUS_SCOPE.GLOBAL)
@@ -52,6 +52,17 @@ class HintsProxy(SfLobbyProxy):
 
     def hideHint(self, hintID):
         self.stopEffect(GUI_EFFECT_NAME.SHOW_HINT, hintID)
+
+    def __load(self):
+        proxy = weakref.proxy(self.app)
+        for _, effect in self.effects.iterEffects():
+            effect.setApplication(proxy)
+
+        self.onGUILoaded()
+
+    def __onAppInitialized(self, event):
+        if event.ns == APP_NAME_SPACE.SF_LOBBY:
+            self.__load()
 
     def __onItemFound(self, event):
         if event.targetID:

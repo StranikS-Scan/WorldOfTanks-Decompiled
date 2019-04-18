@@ -12,8 +12,9 @@ from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.server_events import formatters
 from gui.server_events.personal_missions_navigation import PersonalMissionsNavigation
 from helpers import time_utils, i18n, dependency
-from shared_utils import CONST_CONTAINER
+from shared_utils import CONST_CONTAINER, findFirst
 from skeletons.gui.game_control import IMarathonEventsController
+from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
 from gui.server_events.events_constants import LINKEDSET_GROUP_PREFIX, MARATHON_GROUP_PREFIX, PREMIUM_GROUP_PREFIX
@@ -175,8 +176,14 @@ def questsSortFunc(a, b):
     res = cmp(a.isCompleted(), b.isCompleted())
     if res:
         return res
-    res = cmp(a.getPriority(), b.getPriority())
-    return res if res else cmp(a.getUserName(), b.getUserName())
+
+    def getPriority(event):
+        return -1 if isPremium(event.getGroupID()) else event.getPriority()
+
+    res = cmp(getPriority(a), getPriority(b))
+    if getPriority(a) == -1 or getPriority(b) == -1:
+        res = -res
+    return res if res else cmp(a.getID(), b.getID())
 
 
 def getBoosterQuests():
@@ -345,3 +352,14 @@ def _getlocalizeLinkedSetQuestString(localizedKey, quest):
 
 def _formatNumberInLinkedSetQuest(number):
     return number if number is None else '{0:,}'.format(number).replace(',', ' ')
+
+
+@dependency.replace_none_kwargs(eventsCache=IEventsCache)
+def getPremiumGroup(eventsCache=None):
+    groups = eventsCache.getGroups()
+    return findFirst(lambda g: isPremium(g.getID()), groups.values())
+
+
+@dependency.replace_none_kwargs(eventsCache=IEventsCache, lobbyContext=ILobbyContext)
+def isPremiumQuestsEnable(lobbyContext=None, eventsCache=None):
+    return lobbyContext.getServerSettings().getPremQuestsConfig().get('enabled', False) and len(eventsCache.getPremiumQuests()) > 0

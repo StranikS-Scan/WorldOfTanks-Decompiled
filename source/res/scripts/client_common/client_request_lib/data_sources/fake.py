@@ -175,6 +175,10 @@ class FakeDataAccessor(base.BaseDataAccessor):
     def get_accounts_names(self, account_ids, fields=None):
         return [ self._request_data('accounts_names', account_id, fields=fields) for account_id in account_ids ]
 
+    @fake_method(example=lambda attr_prefix: {'user_stated_country': 'RU'})
+    def get_account_attribute_by_prefix(self, attr_prefix, fields=None):
+        return self._request_data('account_attributes', attr_prefix, fields=fields)
+
     @fake_method(example=lambda clan_id: [ {'account_id': 2324 + i,
      'role_name': 'officer',
      'role_bw_flag': 1 << i,

@@ -36,6 +36,10 @@ class BrowserPageComponent(BrowserViewStackExPaddingMeta):
         if alias == VIEW_ALIAS.BROWSER:
             viewPy.init(self.__browserId, self._getWebHandlers())
 
+    @classmethod
+    def _isRightClickAllowed(cls):
+        return False
+
     def _getWebHandlers(self):
         return None
 
@@ -55,7 +59,7 @@ class BrowserPageComponent(BrowserViewStackExPaddingMeta):
         browser = self.browserCtrl.getBrowser(self.__browserId)
         if browser:
             browser.useSpecialKeys = False
-            browser.allowRightClick = False
+            browser.allowRightClick = self._isRightClickAllowed()
         else:
             _logger.error('Failed to create browser!')
 

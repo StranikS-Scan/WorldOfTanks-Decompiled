@@ -9,6 +9,7 @@ from gui.shared.tooltips import TOOLTIP_TYPE, formatters
 from gui.shared.tooltips.common import BlocksTooltipData
 from helpers import dependency
 from skeletons.gui.game_control import IRankedBattlesController
+from gui.Scaleform.genConsts.RANKEDBATTLES_ALIASES import RANKEDBATTLES_ALIASES
 _TOOLTIP_MIN_WIDTH = 364
 _AWARD_STEP = 63
 _AWARDS_RIGHT_PADDING = 25
@@ -55,14 +56,19 @@ class RankedTooltipData(BlocksTooltipData):
         item = self.item
         division = item.getDivision()
         comment = None
-        if not division.isCompleted() and item.isLastInDivision() and not item.isFinal():
-            nextDivisionIdx = division.getID() + 1
-            divisions = self.rankedController.getDivisions()
-            if nextDivisionIdx < len(divisions):
-                nextDivision = self.rankedController.getDivisions()[nextDivisionIdx]
-                comment = text_styles.standard(backport.text(R.strings.tooltips.battleTypes.ranked.rank.isLastInDivision(), division=text_styles.stats(nextDivision.getUserName())))
+        if not division.isCompleted() and item.isLastInDivision():
+            if not item.isFinal():
+                nextDivisionIdx = division.getID() + 1
+                divisions = self.rankedController.getDivisions()
+                if nextDivisionIdx < len(divisions):
+                    nextDivision = self.rankedController.getDivisions()[nextDivisionIdx]
+                    comment = text_styles.standard(backport.text(R.strings.tooltips.battleTypes.ranked.rank.isLastInDivision(), division=text_styles.stats(nextDivision.getUserName())))
+            else:
+                comment = text_styles.standard(backport.text(R.strings.tooltips.battleTypes.ranked.rank.isLastInDivision.league()))
         elif shieldMaxHp > 0:
             comment = text_styles.standard(backport.text(R.strings.tooltips.battleTypes.ranked.haveShield(), hp=text_styles.stats(shieldMaxHp)))
+        elif item.isFirstInDivision() and division.getUserID() != RANKEDBATTLES_ALIASES.DIVISIONS_CLASSIFICATION:
+            comment = text_styles.standard(backport.text(R.strings.tooltips.battleTypes.ranked.rank.isFirstInDivision()))
         return formatters.packTextBlockData(comment) if comment is not None else None
 
     def __packStepsBlock(self):

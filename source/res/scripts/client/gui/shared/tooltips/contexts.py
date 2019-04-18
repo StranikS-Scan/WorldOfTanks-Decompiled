@@ -883,7 +883,7 @@ class Shop20CustomizationContext(TechCustomizationContext):
 
 
 class BoosterContext(ToolTipContext):
-    goodiesCache = dependency.descriptor(IGoodiesCache)
+    _goodiesCache = dependency.descriptor(IGoodiesCache)
 
     def __init__(self, fieldsToExclude=None):
         super(BoosterContext, self).__init__(TOOLTIP_COMPONENT.BOOSTER, fieldsToExclude)
@@ -892,7 +892,7 @@ class BoosterContext(ToolTipContext):
         return BoosterStatsConfiguration()
 
     def buildItem(self, boosterID):
-        return self.goodiesCache.getBooster(boosterID)
+        return self._goodiesCache.getBooster(boosterID)
 
 
 class ShopBoosterContext(BoosterContext):
@@ -919,6 +919,17 @@ class Shop20BoosterContext(BoosterContext):
         value.activeState = False
         value.inventoryCount = True
         return value
+
+
+class ClanReserveContext(BoosterContext):
+
+    def buildItem(self, boosterID):
+        return self._goodiesCache.getClanReserves().get(boosterID)
+
+    def getStatsConfiguration(self, booster):
+        boosterStatsConfig = super(ClanReserveContext, self).getStatsConfiguration(booster)
+        boosterStatsConfig.activeState = False
+        return boosterStatsConfig
 
 
 class BoosterStatsConfiguration(object):

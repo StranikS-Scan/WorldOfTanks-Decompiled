@@ -19,11 +19,17 @@ class VehiclePreviewBuyingPanelMeta(BaseDAAPIComponent):
     def updateData(self, useCompactData):
         self._printOverrideError('updateData')
 
+    def onCouponSelected(self, isActive):
+        self._printOverrideError('onCouponSelected')
+
     def as_setBuyDataS(self, data):
         return self.flashObject.as_setBuyData(data) if self._isDAAPIInited() else None
 
     def as_setSetItemsDataS(self, data):
         return self.flashObject.as_setSetItemsData(data) if self._isDAAPIInited() else None
+
+    def as_setCouponS(self, data):
+        return self.flashObject.as_setCoupon(data) if self._isDAAPIInited() else None
 
     def as_setSetVehiclesDataS(self, data):
         return self.flashObject.as_setSetVehiclesData(data) if self._isDAAPIInited() else None

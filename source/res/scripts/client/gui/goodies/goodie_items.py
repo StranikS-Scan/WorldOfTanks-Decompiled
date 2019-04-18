@@ -1,7 +1,10 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/goodies/goodie_items.py
 import time
+import weakref
+import typing
 import BigWorld
+from constants import FORT_ORDER_TYPE
 from goodies.goodie_constants import GOODIE_RESOURCE_TYPE, GOODIE_STATE, GOODIE_VARIETY, GOODIE_TARGET_TYPE
 from goodies.goodie_helpers import GOODIE_TEXT_TO_RESOURCE
 from gui import GUI_SETTINGS
@@ -15,9 +18,11 @@ from gui.shared.economics import getActionPrc
 from gui.shared.formatters import text_styles
 from gui.shared.money import Currency, MONEY_UNDEFINED
 from gui.shared.gui_items.gui_item_economics import ItemPrices, ItemPrice, ITEM_PRICE_EMPTY, ITEM_PRICES_EMPTY
-from shared_utils import CONST_CONTAINER
+from shared_utils import CONST_CONTAINER, first
 from helpers import time_utils
 from helpers.i18n import makeString as _ms
+if typing.TYPE_CHECKING:
+    from skeletons.gui.goodies import IGoodiesCache
 MAX_ACTIVE_BOOSTERS_COUNT = 3
 
 class BOOSTER_QUALITY_NAMES(CONST_CONTAINER):
@@ -46,47 +51,42 @@ GOODIE_TYPE_TO_KPI_NAME_MAP = {GOODIE_RESOURCE_TYPE.XP: KPI.Name.GAME_XP,
 
 class _Goodie(object):
 
-    def __init__(self, goodieID, goodieDescription, proxy):
+    def __init__(self, goodieID, goodieDescription, stateProvider=None):
         self._goodieID = goodieID
         self._goodieDescription = goodieDescription
-        self._goodieValues = proxy.personalGoodies.get(goodieID, None)
         self.__state = GOODIE_STATE.INACTIVE
         self.__count = 0
         self.__finishTime = None
-        goodieValues = proxy.personalGoodies.get(goodieID, None)
-        if goodieValues is not None:
-            self.__state = goodieValues.state
-            self.__count = goodieValues.count
-            self.__finishTime = goodieValues.finishTime
+        self._stateProvider = weakref.proxy(stateProvider) if stateProvider else None
         return
 
     @property
     def count(self):
-        return self.__count
+        return self.__getStateAttribute('count', 0)
 
     @property
     def finishTime(self):
-        return self.__finishTime
+        return self.__getStateAttribute('finishTime', 0)
 
     @property
     def state(self):
-        return self.__state
+        return self.__getStateAttribute('state', GOODIE_STATE.INACTIVE)
 
     @property
     def enabled(self):
-        return self._goodieDescription.enabled
+        return self.__getDescrAttribute('enabled', False)
 
     @property
     def maxCount(self):
-        return self._goodieDescription.counter
+        return self.__getDescrAttribute('counter', 0)
 
     @property
     def expiryTime(self):
-        return self._goodieDescription.useby
+        return self.__getDescrAttribute('useby', 0)
 
     @property
     def effectTime(self):
-        return self._goodieDescription.lifetime
+        return self.__getDescrAttribute('lifetime', 0)
 
     @property
     def isInAccount(self):
@@ -94,7 +94,7 @@ class _Goodie(object):
 
     @property
     def effectValue(self):
-        return self._goodieDescription.resource.value
+        return self._goodieDescription.resource.value if self._goodieDescription else 0
 
     def getFormattedValue(self, formatter=None):
         raise NotImplementedError
@@ -114,6 +114,16 @@ class _Goodie(object):
     @property
     def description(self):
         raise NotImplementedError
+
+    def __getStateAttribute(self, attributeName, default=None):
+        if self._stateProvider:
+            goodie = self._stateProvider.personalGoodies.get(self._goodieID)
+            if goodie:
+                return getattr(goodie, attributeName, default)
+        return default
+
+    def __getDescrAttribute(self, attributeName, default=None):
+        return getattr(self._goodieDescription, attributeName, default) if self._goodieDescription else default
 
 
 class _PersonalDiscount(_Goodie):
@@ -188,28 +198,7 @@ class PersonalVehicleDiscount(_PersonalDiscount):
         return getActionPrc(discountCreditPrice, defaultCreditPrice)
 
 
-class Booster(_Goodie):
-
-    def __init__(self, boosterID, boosterDescription, proxy):
-        super(Booster, self).__init__(boosterID, boosterDescription, proxy)
-        buyPrice, defaultPrice, altPrice, defaultAltPrice, self.isHidden = proxy.getBoosterPriceData(boosterID)
-        buyPrice = ItemPrice(price=buyPrice, defPrice=defaultPrice)
-        if altPrice is not None:
-            altPrice = ItemPrice(price=altPrice, defPrice=defaultAltPrice)
-        else:
-            altPrice = ITEM_PRICE_EMPTY
-        self.__buyPrices = ItemPrices(itemPrice=buyPrice, itemAltPrice=altPrice)
-        self.__sellPrices = ITEM_PRICES_EMPTY
-        self.__activeBoostersValues = proxy.getActiveBoostersTypes()
-        return
-
-    @property
-    def buyPrices(self):
-        return self.__buyPrices
-
-    @property
-    def sellPrices(self):
-        return self.__sellPrices
+class BoosterUICommon(_Goodie):
 
     @property
     def boosterID(self):
@@ -220,6 +209,10 @@ class Booster(_Goodie):
         return self._goodieDescription.resource.resourceType
 
     @property
+    def boosterGuiType(self):
+        return _BOOSTER_TYPE_NAMES[self.boosterType]
+
+    @property
     def icon(self):
         return RES_ICONS.boosterIconPath(self.boosterGuiType)
 
@@ -228,12 +221,59 @@ class Booster(_Goodie):
         return RES_ICONS.boosterBigIconPath(self.boosterGuiType)
 
     @property
+    def userName(self):
+        return _ms(MENU.boosterTypeLocale(self.boosterGuiType))
+
+    @property
+    def description(self):
+        return self.getDescription(valueFormatter=text_styles.neutral)
+
+    @property
     def bigTooltipIcon(self):
         return RES_ICONS.boosterTTBigIconPath(self.boosterGuiType)
 
+    def getCooldownAsPercent(self):
+        percent = 0
+        if self.finishTime is not None and self.effectTime is not None:
+            leftTime = self.getUsageLeftTime()
+            percent = float(max(self.effectTime - leftTime, 0)) / self.effectTime * 100
+        return percent
+
+    def getUsageLeftTime(self):
+        return time_utils.getTimeDeltaFromNow(time_utils.makeLocalServerTime(self.finishTime)) if self.finishTime is not None else 0
+
+    def getUsageLeftTimeStr(self):
+        return time_utils.getTillTimeString(self.getUsageLeftTime(), MENU.BOOSTERS_TIMELEFT, removeLeadingZeros=True)
+
+    def getEffectTimeStr(self, hoursOnly=False):
+        return _ms(MENU.VEHICLEPREVIEW_TIMELEFTSHORT_HOURS, hour=str(time.gmtime(self.effectTime).tm_hour)) if hoursOnly else time_utils.getTillTimeString(self.effectTime, MENU.TIME_TIMEVALUE)
+
+    def getFormattedValue(self, formatter=None):
+        if self.effectValue > 0:
+            value = '+{}%'.format(self.effectValue)
+        else:
+            value = '{}%'.format(self.effectValue)
+        return formatter(value) if formatter is not None else value
+
+
+class Booster(BoosterUICommon):
+
+    def __init__(self, boosterID, boosterDescription, stateProvider):
+        super(Booster, self).__init__(boosterID, boosterDescription, stateProvider)
+        self.__buyPrices = ITEM_PRICES_EMPTY
+        self.__sellPrices = ITEM_PRICES_EMPTY
+
     @property
-    def boosterGuiType(self):
-        return _BOOSTER_TYPE_NAMES[self.boosterType]
+    def buyPrices(self):
+        if not self.__buyPrices:
+            self.__buildPrice()
+        return self.__buyPrices
+
+    @property
+    def sellPrices(self):
+        if not self.__sellPrices:
+            self.__buildPrice()
+        return self.__sellPrices
 
     @property
     def quality(self):
@@ -256,29 +296,21 @@ class Booster(_Goodie):
 
     @property
     def isReadyToUse(self):
-        activeBoosterTypes = [ boosterType for boosterType, _, _ in self.__activeBoostersValues ]
-        return self.count > 0 and self.state == GOODIE_STATE.INACTIVE and len(self.__activeBoostersValues) < MAX_ACTIVE_BOOSTERS_COUNT and self.boosterType not in activeBoosterTypes if self.enabled else False
+        activeBoosterTypes = [ boosterType for boosterType, _, _ in self.__getActiveBoosters() ]
+        return self.count > 0 and self.state == GOODIE_STATE.INACTIVE and len(self.__getActiveBoosters()) < MAX_ACTIVE_BOOSTERS_COUNT and self.boosterType not in activeBoosterTypes if self.enabled else False
 
     @property
     def isReadyToUpdate(self):
         if self.enabled:
-            for aBoosterType, aEffectValue, _ in self.__activeBoostersValues:
+            for aBoosterType, aEffectValue, _ in self.__getActiveBoosters():
                 if self.boosterType == aBoosterType and self.count > 0:
                     return self.effectValue > aEffectValue
 
         return False
 
     @property
-    def userName(self):
-        return _ms(MENU.boosterTypeLocale(self.boosterGuiType))
-
-    @property
     def fullUserName(self):
         return _ms(MENU.BOOSTERSWINDOW_BOOSTERSTABLERENDERER_HEADER, boosterName=self.userName, quality=self.qualityStr)
-
-    @property
-    def description(self):
-        return self.getDescription(valueFormatter=text_styles.neutral)
 
     @property
     def shortDescriptionSpecial(self):
@@ -287,6 +319,10 @@ class Booster(_Goodie):
     @property
     def longDescriptionSpecial(self):
         return _ms(TOOLTIPS.BOOSTERSWINDOW_BOOSTER_LONGDESCRIPTIONSPECIAL)
+
+    @property
+    def isHidden(self):
+        return self._stateProvider.isBoosterHidden(self.boosterID) if self._stateProvider else False
 
     @property
     def kpi(self):
@@ -305,24 +341,8 @@ class Booster(_Goodie):
     def getBonusDescription(self, valueFormatter=None):
         return _ms(MENU.boosterBonusLocale(self.boosterGuiType), effectValue=self.getFormattedValue(valueFormatter), effectHours=self.getEffectTimeStr(hoursOnly=True))
 
-    def getCooldownAsPercent(self):
-        percent = 0
-        if self.finishTime is not None and self.effectTime is not None:
-            leftTime = self.getUsageLeftTime()
-            percent = float(max(self.effectTime - leftTime, 0)) / self.effectTime * 100
-        return percent
-
-    def getUsageLeftTime(self):
-        return time_utils.getTimeDeltaFromNow(time_utils.makeLocalServerTime(self.finishTime)) if self.finishTime is not None else 0
-
-    def getUsageLeftTimeStr(self):
-        return time_utils.getTillTimeString(self.getUsageLeftTime(), MENU.TIME_TIMEVALUE)
-
     def getShortLeftTimeStr(self):
         return time_utils.getTillTimeString(self.getUsageLeftTime(), MENU.TIME_TIMEVALUESHORT)
-
-    def getEffectTimeStr(self, hoursOnly=False):
-        return _ms(MENU.VEHICLEPREVIEW_TIMELEFTSHORT_HOURS, hour=str(time.gmtime(self.effectTime).tm_hour)) if hoursOnly else time_utils.getTillTimeString(self.effectTime, MENU.TIME_TIMEVALUE)
 
     def getQualityIcon(self):
         return RES_ICONS.boosterQualitySourcePath(self.quality)
@@ -351,13 +371,6 @@ class Booster(_Goodie):
             return (False, GUI_ITEM_ECONOMY_CODE.CENTER_UNAVAILABLE)
         return (False, GUI_ITEM_ECONOMY_CODE.ITEM_IS_HIDDEN) if self.isHidden else self._isEnoughMoney(self.buyPrices, money)
 
-    def getFormattedValue(self, formatter=None):
-        if self.effectValue > 0:
-            value = '+{}%'.format(self.effectValue)
-        else:
-            value = '{}%'.format(self.effectValue)
-        return formatter(value) if formatter is not None else value
-
     @classmethod
     def _isEnoughMoney(cls, prices, money):
         shortage = MONEY_UNDEFINED
@@ -371,3 +384,62 @@ class Booster(_Goodie):
             currency = shortage.getCurrency(byWeight=True)
             return (False, GUI_ITEM_ECONOMY_CODE.getMoneyError(currency))
         return (False, GUI_ITEM_ECONOMY_CODE.ITEM_NO_PRICE)
+
+    def __getActiveBoosters(self):
+        return [] if not self._stateProvider else self._stateProvider.getActiveBoostersTypes()
+
+    def __buildPrice(self):
+        if not self._stateProvider:
+            return
+        else:
+            priceData = self._stateProvider.getBoosterPriceData(self.boosterID)
+            buyPrice, defaultPrice, altPrice, defaultAltPrice = priceData
+            buyPrice = ItemPrice(price=buyPrice, defPrice=defaultPrice)
+            if altPrice is not None:
+                altPrice = ItemPrice(price=altPrice, defPrice=defaultAltPrice)
+            else:
+                altPrice = ITEM_PRICE_EMPTY
+            self.__buyPrices = ItemPrices(itemPrice=buyPrice, itemAltPrice=altPrice)
+            return
+
+
+class ClanReservePresenter(BoosterUICommon):
+    _CLAN_RESERVE_TO_GUI_TYPE = {FORT_ORDER_TYPE.COMBAT_PAYMENTS: GOODIE_RESOURCE_TYPE.CREDITS,
+     FORT_ORDER_TYPE.COMBAT_PAYMENTS_2_0: GOODIE_RESOURCE_TYPE.CREDITS,
+     FORT_ORDER_TYPE.TACTICAL_TRAINING: GOODIE_RESOURCE_TYPE.XP,
+     FORT_ORDER_TYPE.TACTICAL_TRAINING_2_0: GOODIE_RESOURCE_TYPE.XP,
+     FORT_ORDER_TYPE.MILITARY_EXERCISES: GOODIE_RESOURCE_TYPE.FREE_XP,
+     FORT_ORDER_TYPE.MILITARY_EXERCISES_2_0: GOODIE_RESOURCE_TYPE.FREE_XP,
+     FORT_ORDER_TYPE.ADDITIONAL_BRIEFING: GOODIE_RESOURCE_TYPE.CREW_XP,
+     FORT_ORDER_TYPE.ADDITIONAL_BRIEFING_2_0: GOODIE_RESOURCE_TYPE.CREW_XP}
+
+    def __init__(self, reserveID, expirationTime, factors, duration):
+        super(ClanReservePresenter, self).__init__(reserveID, None)
+        self.__finishTime = expirationTime
+        self.__factors = factors
+        self.__duration = duration
+        return
+
+    @property
+    def boosterType(self):
+        return self._CLAN_RESERVE_TO_GUI_TYPE[self.boosterID]
+
+    @property
+    def finishTime(self):
+        return self.__finishTime
+
+    @property
+    def effectTime(self):
+        return self.__duration
+
+    @property
+    def effectValue(self):
+        return self.__factors.values()
+
+    def getFormattedValue(self, formatter=None):
+        valuesSet = set(self.effectValue)
+        if len(valuesSet) == 1:
+            strValue = '{}%'.format(first(valuesSet))
+        else:
+            strValue = '{}%-{}%'.format(min(valuesSet), max(valuesSet))
+        return formatter(strValue) if formatter is not None else strValue

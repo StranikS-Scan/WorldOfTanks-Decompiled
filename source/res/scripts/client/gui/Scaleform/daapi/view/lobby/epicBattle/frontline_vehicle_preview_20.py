@@ -23,7 +23,7 @@ class FrontLineVehiclePreview20(VehiclePreview20):
     def __init__(self, ctx=None):
         super(FrontLineVehiclePreview20, self).__init__(ctx)
         self._heroInteractive = False
-        self.__itemsPack = (ItemPackEntry(type=ItemPackType.CREW_100, count=1, groupID=1), ItemPackEntry(type=ItemPackType.CUSTOM_SLOT, count=1, groupID=1))
+        self.__itemsPack = [ItemPackEntry(type=ItemPackType.CREW_100, count=1, groupID=1), ItemPackEntry(type=ItemPackType.CUSTOM_SLOT, count=1, groupID=1)]
 
     def _onRegisterFlashComponent(self, viewPy, alias):
         super(FrontLineVehiclePreview20, self)._onRegisterFlashComponent(viewPy, alias)
@@ -78,12 +78,15 @@ class FrontLineVehiclePreview20(VehiclePreview20):
 
     @classmethod
     def __getDefaultCrewItemPackEntry(cls):
-        return [{'count': '100%',
-          'hasCompensation': False,
-          'icon': backport.image(R.images.gui.maps.shop.rewards.c_48x48.prizeCrew()),
-          'iconAlt': backport.image(R.images.gui.maps.icons.artefact.notFound()),
-          'id': 'None',
-          'overlayType': '',
-          'rawData': None,
-          'slotIndex': 0,
-          'type': ItemPackType.CREW_100}]
+        return {'isEnabled': True,
+         'topTitle': '',
+         'topTitleSmall': '',
+         'items': [{'count': '100%',
+                    'hasCompensation': False,
+                    'icon': backport.image(R.images.gui.maps.shop.rewards.c_48x48.prizeCrew()),
+                    'iconAlt': backport.image(R.images.gui.maps.icons.artefact.notFound()),
+                    'id': 'None',
+                    'overlayType': '',
+                    'rawData': None,
+                    'slotIndex': 0,
+                    'type': ItemPackType.CREW_100}]}

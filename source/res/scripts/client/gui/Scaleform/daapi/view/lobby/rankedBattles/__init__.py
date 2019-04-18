@@ -13,9 +13,9 @@ def getContextMenuHandlers():
 
 
 def getViewSettings():
-    from gui.Scaleform.daapi.view.lobby.rankedBattles.ranked_battles_page import RankedBattlesPage
+    from gui.Scaleform.daapi.view.lobby.rankedBattles.ranked_battles_page import RankedMainSeasonOnPage
     from gui.Scaleform.daapi.view.lobby.rankedBattles.ranked_battles_intro import RankedBattlesIntro
-    from gui.Scaleform.daapi.view.lobby.rankedBattles.ranked_battles_rewards_view import RankedBattlesRewardsView
+    from gui.Scaleform.daapi.view.lobby.rankedBattles.ranked_battles_rewards_view import RankedRewardsSeasonOnView
     from gui.Scaleform.daapi.view.lobby.rankedBattles.ranked_battles_rewards_view import RankedBattlesRewardsRanksView
     from gui.Scaleform.daapi.view.lobby.rankedBattles.ranked_battles_rewards_view import RankedBattlesRewardsLeaguesView
     from gui.Scaleform.daapi.view.lobby.rankedBattles.ranked_battles_rewards_view import RankedBattlesRewardsYearView
@@ -29,9 +29,9 @@ def getViewSettings():
     from gui.Scaleform.daapi.view.lobby.rankedBattles.ranked_battles_prime_time_view import RankedBattlesPrimeTimeView
     from gui.Scaleform.daapi.view.lobby.rankedBattles.ranked_battles_browser_pages import LeaderBoardBrowserPage
     from gui.Scaleform.daapi.view.lobby.rankedBattles.ranked_battles_browser_pages import RankedBattlesInfoPage
-    return (ViewSettings(RANKEDBATTLES_ALIASES.RANKED_BATTLES_PAGE_ALIAS, RankedBattlesPage, 'rankedBattlesPage.swf', ViewTypes.LOBBY_SUB, RANKEDBATTLES_ALIASES.RANKED_BATTLES_PAGE_ALIAS, ScopeTemplates.LOBBY_SUB_SCOPE),
+    return (ViewSettings(RANKEDBATTLES_ALIASES.RANKED_BATTLES_PAGE_ALIAS, RankedMainSeasonOnPage, 'rankedBattlesPage.swf', ViewTypes.LOBBY_SUB, RANKEDBATTLES_ALIASES.RANKED_BATTLES_PAGE_ALIAS, ScopeTemplates.LOBBY_SUB_SCOPE),
      ViewSettings(RANKEDBATTLES_ALIASES.RANKED_BATTLES_INTRO_ALIAS, RankedBattlesIntro, 'rankedBattlesIntro.swf', ViewTypes.LOBBY_SUB, RANKEDBATTLES_ALIASES.RANKED_BATTLES_INTRO_ALIAS, ScopeTemplates.LOBBY_SUB_SCOPE),
-     ViewSettings(RANKEDBATTLES_ALIASES.RANKED_BATTLES_REWARDS_UI, RankedBattlesRewardsView, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
+     ViewSettings(RANKEDBATTLES_ALIASES.RANKED_BATTLES_REWARDS_UI, RankedRewardsSeasonOnView, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
      ViewSettings(RANKEDBATTLES_ALIASES.RANKED_BATTLES_REWARDS_RANKS_UI, RankedBattlesRewardsRanksView, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
      ViewSettings(RANKEDBATTLES_ALIASES.RANKED_BATTLES_REWARDS_LEAGUES_UI, RankedBattlesRewardsLeaguesView, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
      ViewSettings(RANKEDBATTLES_ALIASES.RANKED_BATTLES_RAITING_ALIAS, LeaderBoardBrowserPage, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),

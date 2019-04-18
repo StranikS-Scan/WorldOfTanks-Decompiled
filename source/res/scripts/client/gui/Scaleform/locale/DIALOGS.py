@@ -918,6 +918,8 @@ class DIALOGS(object):
     CONFIRMBATTLEBOOSTERBUYANDINSTALL_TITLE = '#dialogs:confirmBattleBoosterBuyAndInstall/title'
     CONFIRMBATTLEBOOSTERBUYANDINSTALL_SUBMIT = '#dialogs:confirmBattleBoosterBuyAndInstall/submit'
     CONFIRMBATTLEBOOSTERBUYANDINSTALL_CANCEL = '#dialogs:confirmBattleBoosterBuyAndInstall/cancel'
+    BOOTCAMP_PREMIUMTYPE_BASIC = '#dialogs:bootcamp/premiumType/basic'
+    BOOTCAMP_PREMIUMTYPE_PLUS = '#dialogs:bootcamp/premiumType/plus'
     BOOTCAMP_SKIP_TITLE = '#dialogs:bootcamp/skip/title'
     BOOTCAMP_SKIP_LABEL = '#dialogs:bootcamp/skip/label'
     BOOTCAMP_SKIP_MESSAGE = '#dialogs:bootcamp/skip/message'
@@ -1892,6 +1894,8 @@ class DIALOGS(object):
      CONFIRMBATTLEBOOSTERBUYANDINSTALL_TITLE,
      CONFIRMBATTLEBOOSTERBUYANDINSTALL_SUBMIT,
      CONFIRMBATTLEBOOSTERBUYANDINSTALL_CANCEL,
+     BOOTCAMP_PREMIUMTYPE_BASIC,
+     BOOTCAMP_PREMIUMTYPE_PLUS,
      BOOTCAMP_SKIP_TITLE,
      BOOTCAMP_SKIP_LABEL,
      BOOTCAMP_SKIP_MESSAGE,

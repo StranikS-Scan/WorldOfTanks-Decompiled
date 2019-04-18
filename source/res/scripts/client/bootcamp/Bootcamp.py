@@ -49,6 +49,7 @@ from .states.StateResultScreen import StateResultScreen
 from .aop.common import weave
 from . import GAME_SETTINGS_NEWBIE, GAME_SETTINGS_COMMON
 DISABLED_TANK_LEVELS = (1,)
+LESSON_COUNT = 5
 
 class _BCNameFormatter(player_format.PlayerFullNameFormatter):
 

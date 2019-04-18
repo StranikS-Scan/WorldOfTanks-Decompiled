@@ -100,6 +100,8 @@ class TOOLTIPS_CONSTANTS(object):
     ACTION_PRICE = 'actionPrice'
     ACTION_SLOT_PRICE = 'actionSlotPrice'
     PRICE_DISCOUNT = 'priceDiscount'
+    FRONTLINE_PRICE_DISCOUNT = 'frontlinePriceDiscount'
+    FRONTLINE_COUPON = 'frontlineCoupon'
     ACTION_XP = 'actionXP'
     SPECIAL = 'special'
     SIMPLE = 'simple'
@@ -129,6 +131,7 @@ class TOOLTIPS_CONSTANTS(object):
     PRIVATE_QUESTS_FEMALE_TANKMAN_AWARD = 'femaleTankmanPersonalQuestAward'
     PRIVATE_QUESTS_TOKENS_AWARD = 'tokensPersonalQuestAward'
     BOOSTERS_BOOSTER_INFO = 'boostersBoosterInfo'
+    CLAN_RESERVE_INFO = 'clanReserveInfo'
     BOOSTERS_QUESTS = 'boostersQuests'
     BOOSTERS_SHOP = 'boostersShop'
     VEHICLE_SIMPLE_PARAMETERS = 'vehicleSimpleParameters'
@@ -179,6 +182,7 @@ class TOOLTIPS_CONSTANTS(object):
     RANKED_CALENDAR_STEPS_INFO = 'rankedCalendarStepsInfo'
     RANKED_DIVISION_INFO = 'rankedDivisionInfo'
     RANKED_BATTLES_YEAR_REWARD = 'rankedBattlesYearReward'
+    RANKED_SERVER_PRIMETIME = 'rankedServerPrimeTime'
     EPIC_SKILL_INFO = 'epicSkillInfo'
     EPIC_SKILL_SLOT_INFO = 'epicSkillSlotInfo'
     EPIC_META_LEVEL_PROGRESS_INFO = 'epicMetaLevelProgressInfo'
@@ -285,6 +289,7 @@ class TOOLTIPS_CONSTANTS(object):
      SHOP_20_BATTLE_BOOSTER,
      BATTLE_BOOSTER_COMPARE,
      BOOSTERS_BOOSTER_INFO,
+     CLAN_RESERVE_INFO,
      BOOSTERS_SHOP,
      SHOP_20_BOOSTER,
      BOOSTERS_QUESTS]
@@ -298,6 +303,7 @@ class TOOLTIPS_CONSTANTS(object):
      ACTION_PRICE,
      ACTION_SLOT_PRICE,
      PRICE_DISCOUNT,
+     FRONTLINE_PRICE_DISCOUNT,
      ACTION_XP,
      QUESTS_VEHICLE_BONUSES,
      ENVIRONMENT,
@@ -374,7 +380,8 @@ class TOOLTIPS_CONSTANTS(object):
      RANKED_SELECTOR_INFO,
      RANKED_UNAVAILABLE_INFO,
      RANKED_DIVISION_INFO,
-     RANKED_BATTLES_YEAR_REWARD]
+     RANKED_BATTLES_YEAR_REWARD,
+     RANKED_SERVER_PRIMETIME]
     SETTINGS_SET = [SETTINGS_CONTROL,
      SETTINGS_BUTTON,
      SETTINGS_MINIMAP_CIRCLES,
@@ -436,3 +443,4 @@ class TOOLTIPS_CONSTANTS(object):
      CREW_SKIN_RESTRICTED,
      CREW_SKIN_NO_AVAILABLE_SKINS,
      CREW_SKIN_SOUND]
+    FRONTLINE_SET = [FRONTLINE_COUPON]

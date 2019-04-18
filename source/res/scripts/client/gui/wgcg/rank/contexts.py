@@ -14,6 +14,9 @@ class RankedPositionCtx(CommonWebRequestCtx):
     def isClanSyncRequired(self):
         return False
 
+    def isCaching(self):
+        return False
+
     @staticmethod
     def getDataObj(incomeData):
         return incomeData

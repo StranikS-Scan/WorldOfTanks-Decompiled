@@ -32,6 +32,7 @@ from gui.shared.event_dispatcher import showWebShop, showOldShop
 from gui.shared.formatters import text_styles
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.gui_items.Vehicle import getTypeSmallIconPath
+from gui.shared.money import MONEY_UNDEFINED
 from helpers import dependency
 from helpers.i18n import makeString as _ms
 from skeletons.gui.game_control import IHeroTankController
@@ -90,7 +91,7 @@ class VehiclePreview20(LobbySelectableView, VehiclePreview20Meta):
         self.__customizationCD = vehParams.get('styleCD')
         self.__offers = ctx.get('offers')
         self.__price = ctx.get('price')
-        self.__oldPrice = ctx.get('oldPrice')
+        self.__oldPrice = ctx.get('oldPrice', MONEY_UNDEFINED)
         self.__title = ctx.get('title')
         self.__description = ctx.get('description')
         self.__endTime = ctx.get('endTime')
@@ -193,8 +194,8 @@ class VehiclePreview20(LobbySelectableView, VehiclePreview20Meta):
         super(VehiclePreview20, self)._onRegisterFlashComponent(viewPy, alias)
         if alias == VEHPREVIEW_CONSTANTS.BUYING_PANEL_PY_ALIAS:
             if self.__itemsPack:
-                viewPy.setPackItems(self.__itemsPack, self.__price, self.__title)
-                viewPy.setTimerData(self.__endTime, self.__oldPrice)
+                viewPy.setPackItems(self.__itemsPack, self.__price, self.__oldPrice, self.__title)
+                viewPy.setTimerData(self.__endTime)
                 viewPy.setBuyParams(self.__buyParams)
                 viewPy.setBackAlias(self._backAlias)
             elif self.__offers:

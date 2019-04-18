@@ -5,6 +5,7 @@ from debug_utils import LOG_ERROR
 from gui.Scaleform.daapi.view.lobby.profile.profile_statistics_vos import getStatisticsVO
 from gui.Scaleform.daapi.view.meta.ProfileStatisticsMeta import ProfileStatisticsMeta
 from gui.Scaleform.genConsts.PROFILE_DROPDOWN_KEYS import PROFILE_DROPDOWN_KEYS
+from gui.Scaleform.genConsts.RANKEDBATTLES_CONSTS import RANKEDBATTLES_CONSTS
 from gui.Scaleform.locale.CYBERSPORT import CYBERSPORT
 from gui.Scaleform.locale.PROFILE import PROFILE
 from gui.Scaleform.locale.RANKED_BATTLES import RANKED_BATTLES
@@ -93,7 +94,7 @@ class ProfileStatistics(ProfileStatisticsMeta):
         elif self._battlesType == PROFILE_DROPDOWN_KEYS.RANKED:
             vo['seasonDropdownAttachToTitle'] = True
             vo['playersStatsLbl'] = i18n.makeString(RANKED_BATTLES.STATISTIC_PLAYERSRAITING)
-            vo['playersStats'] = True
+            vo['playersStats'] = self.rankedController.isEnabled()
             self.__updateRankedDropdownData(vo, self.__rankedSeasonKey)
         self.as_responseDossierS(self._battlesType, vo, _FRAME_LABELS[self._battlesType], '')
         return
@@ -148,4 +149,4 @@ class ProfileStatistics(ProfileStatisticsMeta):
         return passedSeasons >= 1 or self.rankedController.getCurrentSeason() is not None
 
     def showPlayersStats(self):
-        self.rankedController.showWebLeaguePage()
+        self.rankedController.showRankedBattlePage(ctx={'selectedItemID': RANKEDBATTLES_CONSTS.RANKED_BATTLES_RATING_ID})

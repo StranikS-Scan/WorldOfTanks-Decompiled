@@ -198,10 +198,11 @@ class MainView(LobbySubView, CustomizationMainViewMeta):
         self.as_hideS(value)
 
     def onReleaseItem(self):
-        self.__ctx.caruselItemUnselected()
-        self.__releaseItemSound()
-        if not self.__propertiesSheet.isVisible:
-            self.__clearSelectedAnchor()
+        if self.itemIsPicked:
+            self.__ctx.caruselItemUnselected()
+            self.__releaseItemSound()
+            if not self.__propertiesSheet.isVisible:
+                self.__clearSelectedAnchor()
 
     def _onRegisterFlashComponent(self, viewPy, alias):
         if alias == VIEW_ALIAS.CUSTOMIZATION_PROPERTIES_SHEET:

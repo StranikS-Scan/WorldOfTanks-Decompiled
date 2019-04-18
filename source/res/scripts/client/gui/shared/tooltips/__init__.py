@@ -57,6 +57,7 @@ class TOOLTIP_TYPE(CONST_CONTAINER):
     EPIC_META_LEVEL_PROGRESS_INFO = 'epicMetaLevelProgressInfo'
     EPIC_PRESTIGE_PROGRESS_BLOCK_INFO = 'epicPrestigeProgressBlockInfo'
     BLUEPRINTS = 'blueprintsInfo'
+    FRONTLINE = 'frontlineInfo'
     SQUAD_BONUS = 'squadBonus'
 
 

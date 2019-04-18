@@ -143,7 +143,7 @@ def makeStatRow(label='', labelArgs=None, column1=None, column2=None, column3=No
 
 
 def makeCreditsLabel(value, canBeFaded=False, isDiff=False, useBigIcon=False):
-    formatted = BigWorld.wg_getGoldFormat(int(value))
+    formatted = BigWorld.wg_getGoldFormat(int(round(value)))
     if value < 0:
         formatted = markValueAsError(formatted)
     if isDiff:

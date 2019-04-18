@@ -167,6 +167,7 @@ class _EconomicsDetailsBlock(base.StatsBlock):
 class MoneyDetailsBlock(_EconomicsDetailsBlock):
     __slots__ = ()
     __lobbyContext = dependency.descriptor(ILobbyContext)
+    __intermediateTotalRecords = ('credits', 'originalCreditsToDraw', 'originalCreditsToDrawSquad')
 
     def setRecord(self, result, reusable):
         baseCredits, premiumCredits, goldRecords, additionalRecords = result
@@ -195,7 +196,8 @@ class MoneyDetailsBlock(_EconomicsDetailsBlock):
         self._addEmptyRow()
         self.__addTotalResults(baseCredits, premiumCredits, goldRecords, additionalRecords)
         self._addEmptyRow()
-        self.__addPiggyBankInfo(premiumCredits, additionalRecords)
+        if self.__isProperBonusType(reusable):
+            self.__addPiggyBankInfo(premiumCredits, additionalRecords)
         return
 
     def __addStatsItem(self, label, baseRecords, premiumRecords, *names):
@@ -227,12 +229,12 @@ class MoneyDetailsBlock(_EconomicsDetailsBlock):
         self._addStatsRow('base', column1=style.makeCreditsLabel(baseCredits, canBeFaded=not self.hasAnyPremium), column3=style.makeCreditsLabel(premiumCredits, canBeFaded=self.hasAnyPremium))
 
     def __addSquadBonus(self, baseRecords, premiumRecords):
-        baseCredits = baseRecords.getRecord('originalCredits')
-        premiumCredits = premiumRecords.getRecord('originalCredits')
         baseFactor = baseRecords.getFactor('premSquadCreditsFactor100')
         premiumFactor = premiumRecords.getFactor('premSquadCreditsFactor100')
         if not self.hasAnyPremium and baseFactor or self.hasAnyPremium and premiumFactor:
-            self._addStatsRow('squadBonus', column1=style.makeCreditsLabel(baseCredits * baseFactor, canBeFaded=not self.hasAnyPremium), column3=style.makeCreditsLabel(premiumCredits * premiumFactor, canBeFaded=self.hasAnyPremium))
+            baseCredits = baseRecords.getRecord('originalCredits')
+            premiumCredits = premiumRecords.getRecord('originalCredits')
+            self._addStatsRow('squadBonus', column1=style.makeCreditsLabel(baseCredits * baseFactor + baseRecords.getRecord('originalCreditsToDrawSquad'), canBeFaded=not self.hasAnyPremium), column3=style.makeCreditsLabel(premiumCredits * premiumFactor + premiumRecords.getRecord('originalCreditsToDrawSquad'), canBeFaded=self.hasAnyPremium))
 
     def __addPiggyBankInfo(self, premiumRecords, additionalRecords):
         piggyBankCredits = additionalRecords.getRecord('piggyBank')
@@ -284,8 +286,8 @@ class MoneyDetailsBlock(_EconomicsDetailsBlock):
         return result
 
     def __addBattleResults(self, baseRecords, premiumRecords, goldRecords):
-        baseCredits = baseRecords.getRecord('credits', 'originalCreditsToDraw')
-        premiumCredits = premiumRecords.getRecord('credits', 'originalCreditsToDraw')
+        baseCredits = baseRecords.getRecord(*self.__intermediateTotalRecords)
+        premiumCredits = premiumRecords.getRecord(*self.__intermediateTotalRecords)
         baseCreditsLabel = style.makeCreditsLabel(baseCredits, canBeFaded=not self.hasAnyPremium)
         premiumCreditsLabel = style.makeCreditsLabel(premiumCredits, canBeFaded=self.hasAnyPremium)
         gold = goldRecords.getRecord('gold')
@@ -313,11 +315,15 @@ class MoneyDetailsBlock(_EconomicsDetailsBlock):
         premiumCanBeFaded = self.hasAnyPremium and self.canResourceBeFaded
         autoCredits = additionalRecords.getRecord('autoRepairCost', 'autoLoadCredits', 'autoEquipCredits')
         autoGold = additionalRecords.getRecord('autoLoadGold', 'autoEquipGold')
-        columns = {'column1': style.makeCreditsLabel(baseCredits.getRecord('credits', 'originalCreditsToDraw') + autoCredits, canBeFaded=baseCanBeFaded),
-         'column3': style.makeCreditsLabel(premiumCredits.getRecord('credits', 'originalCreditsToDraw') + autoCredits, canBeFaded=premiumCanBeFaded),
+        columns = {'column1': style.makeCreditsLabel(baseCredits.getRecord(*self.__intermediateTotalRecords) + autoCredits, canBeFaded=baseCanBeFaded),
+         'column3': style.makeCreditsLabel(premiumCredits.getRecord(*self.__intermediateTotalRecords) + autoCredits, canBeFaded=premiumCanBeFaded),
          'column2': style.makeGoldLabel(goldRecords.getRecord('gold') + autoGold, canBeFaded=not self.hasAnyPremium),
          'column4': style.makeGoldLabel(goldRecords.getRecord('gold') + autoGold, canBeFaded=self.hasAnyPremium)}
         self._addStatsRow('total', htmlKey='lightText', **columns)
+
+    def __isProperBonusType(self, reusable):
+        arenaTypes = self.__lobbyContext.getServerSettings().getPiggyBankConfig().get('arena', tuple())
+        return reusable.common.arenaBonusType in arenaTypes
 
 
 class XPDetailsBlock(_EconomicsDetailsBlock):

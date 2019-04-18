@@ -10,11 +10,11 @@ class RankedBattlesSeasonCompleteViewMeta(WrapperViewMeta):
     def closeView(self):
         self._printOverrideError('closeView')
 
-    def onSoundTrigger(self, trigerName):
+    def onSoundTrigger(self, soundName):
         self._printOverrideError('onSoundTrigger')
 
     def as_setDataS(self, data):
         return self.flashObject.as_setData(data) if self._isDAAPIInited() else None
 
-    def as_setRewardsDataS(self, awardData):
-        return self.flashObject.as_setRewardsData(awardData) if self._isDAAPIInited() else None
+    def as_setAwardsDataS(self, awardsData):
+        return self.flashObject.as_setAwardsData(awardsData) if self._isDAAPIInited() else None

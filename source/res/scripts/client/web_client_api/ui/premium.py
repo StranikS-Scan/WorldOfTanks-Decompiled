@@ -10,8 +10,12 @@ class PremiumWindowWebApiMixin(object):
         shared_events.showPremiumWindow()
 
 
-class PremiumDashboardWebApiMixin(object):
+class PremiumViewsWebApiMixin(object):
 
     @w2c(W2CSchema, 'premium_dashboard')
     def openPremiumDashboardWindow(self, cmd):
         shared_events.showDashboardView()
+
+    @w2c(W2CSchema, 'maps_blacklist')
+    def openMapsBlacklistView(self, cmd):
+        shared_events.showMapsBlacklistView()

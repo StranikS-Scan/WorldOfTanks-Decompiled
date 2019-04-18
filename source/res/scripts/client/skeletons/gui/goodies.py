@@ -40,3 +40,6 @@ class IGoodiesCache(object):
 
     def getDiscounts(self, criteria=None):
         raise NotImplementedError
+
+    def getClanReserves(self):
+        raise NotImplementedError

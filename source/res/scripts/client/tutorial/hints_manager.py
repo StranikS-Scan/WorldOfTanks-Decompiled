@@ -30,16 +30,16 @@ class HintsManager(object):
         if self._data.getHintsCount() == 0:
             return False
         else:
-            self._gui = HintsProxy()
-            self._gui.init()
-            self._gui.loadConfig(self._data.getGuiFilePath())
             self.__hintsWithClientTriggers = None
-            self.__setTriggeredComponents()
+            self._gui = HintsProxy()
+            self._gui.onGUILoaded += self.__onGUILoaded
             self._gui.onHintClicked += self.__onGUIInput
             self._gui.onHintItemFound += self.__onItemFound
             self._gui.onHintItemLost += self.__onItemLost
             self._gui.onVisibleChanged += self.__onItemVisibleChanged
             self._gui.onEnabledChanged += self.__onItemEnabledChanged
+            self._gui.loadConfig(self._data.getGuiFilePath())
+            self._gui.init()
             return True
 
     def stop(self):
@@ -64,7 +64,7 @@ class HintsManager(object):
     def __setTriggeredComponents(self):
         self.__hintsWithClientTriggers = ClientTriggers()
         self.__hintsWithClientTriggers.setStates(self._data.getHints())
-        if self._gui.app is not None:
+        if self._gui.app is not None and self._gui.app.tutorialManager is not None:
             self._gui.app.tutorialManager.setHintsWithClientTriggers(self.__hintsWithClientTriggers)
         return
 
@@ -81,7 +81,11 @@ class HintsManager(object):
         if itemID in self.__activeHints:
             hintID = self.__getActiveHintIdByItemId(itemID)
             self._gui.hideHint(hintID)
-            del self.__activeHints[itemID]
+            if itemID in self.__activeHints:
+                del self.__activeHints[itemID]
+
+    def __onGUILoaded(self):
+        self.__setTriggeredComponents()
 
     def __onGUIInput(self, event):
         itemID = event.getTargetID()

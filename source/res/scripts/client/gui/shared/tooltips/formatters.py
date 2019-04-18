@@ -8,7 +8,7 @@ from gui.Scaleform.genConsts.CURRENCIES_CONSTANTS import CURRENCIES_CONSTANTS
 from gui.Scaleform.genConsts.RANKEDBATTLES_ALIASES import RANKEDBATTLES_ALIASES
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
-from gui.ranked_battles.ranked_builders.shared_vos import buildRankVO
+from gui.ranked_battles.ranked_builders.shared_vos import buildRankTooltipVO
 from gui.shared.formatters import text_styles
 from gui.shared.money import MONEY_UNDEFINED
 from gui.shared.tooltips import ACTION_TOOLTIPS_TYPE, ACTION_TOOLTIPS_STATE
@@ -45,6 +45,13 @@ def packBlockDataItem(linkage, data, padding=None, blockWidth=0):
 def packTextBlockData(text, useHtml=True, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_TEXT_BLOCK_LINKAGE, padding=None):
     return packBlockDataItem(linkage, {'text': text,
      'useHtml': useHtml}, padding)
+
+
+def packTextWithBgBlockData(text, useHtml=True, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_TEXT_WITH_BG_BLOCK_LINKAGE, padding=None, bgColor=-1, align=BLOCKS_TOOLTIP_TYPES.ALIGN_LEFT):
+    return packBlockDataItem(linkage, {'text': text,
+     'useHtml': useHtml,
+     'bgColor': bgColor,
+     'align': align}, padding)
 
 
 def packAlignedTextBlockData(text, align, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_TEXT_BLOCK_LINKAGE, padding=None):
@@ -299,7 +306,7 @@ def packGroupBlockData(listData, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_GROUP_BLOC
 
 
 def packRankBlockData(rank, isEnabled=True, shieldStatus=None, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_RANK_BLOCK_LINKAGE, padding=None):
-    data = buildRankVO(rank=rank, isEnabled=isEnabled, imageSize=RANKEDBATTLES_ALIASES.WIDGET_BIG, hasTooltip=True, shieldStatus=shieldStatus)
+    data = buildRankTooltipVO(rank=rank, isEnabled=isEnabled, imageSize=RANKEDBATTLES_ALIASES.WIDGET_BIG, shieldStatus=shieldStatus)
     return packBlockDataItem(linkage, data, padding)
 
 

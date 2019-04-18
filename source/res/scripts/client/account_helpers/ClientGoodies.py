@@ -25,14 +25,15 @@ class ClientGoodies(object):
     def synchronize(self, isFullSync, diff):
         if isFullSync:
             self.__cache.clear()
-        goodiesFull = diff.get(('goodies', '_r'), {})
+        goodiesFull = diff.get(('goodies', '_r'))
         if goodiesFull:
             self.__cache = dict(goodiesFull)
-        for item in ('goodies',):
-            itemDiff = diff.get(item, None)
-            if itemDiff is not None:
-                synchronizeDicts(itemDiff, self.__cache.setdefault(item, {}))
-
+        goodiesDiff = diff.get('goodies', None)
+        if goodiesDiff is not None:
+            synchronizeDicts(goodiesDiff, self.__cache.setdefault('goodies', {}))
+        if 'cache' in diff:
+            clanReservesDiff = diff['cache'].get('activeOrders', {})
+            synchronizeDicts(clanReservesDiff, self.__cache.setdefault('clanReserves', {}))
         return
 
     def getCache(self, callback=None):

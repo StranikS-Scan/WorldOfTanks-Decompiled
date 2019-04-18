@@ -83,7 +83,7 @@ class BattleResultsWindow(BattleResultsMeta):
         g_eventBus.addListener(events.LobbySimpleEvent.PREMIUM_XP_BONUS_CHANGED, self.__onUpdatePremiumBonus)
         g_clientUpdateManager.addCallbacks({'applyAdditionalXPCount': self.__onUpdatePremiumBonus,
          '_additionalXPCache': self.__onUpdatePremiumBonus})
-        self.__gameSession.onPremiumNotify += self.__onPremiumStateChanged
+        self.__gameSession.onPremiumTypeChanged += self.__onPremiumStateChanged
         self.__lobbyContext.getServerSettings().onServerSettingsChange += self.__onServerSettingsChange
         if self.__battleResults.areResultsPosted(self.__arenaUniqueID):
             self.__setBattleResults()
@@ -91,7 +91,7 @@ class BattleResultsWindow(BattleResultsMeta):
     def _dispose(self):
         g_eventBus.removeListener(events.LobbySimpleEvent.PREMIUM_XP_BONUS_CHANGED, self.__onUpdatePremiumBonus)
         g_clientUpdateManager.removeObjectCallbacks(self)
-        self.__gameSession.onPremiumNotify -= self.__onPremiumStateChanged
+        self.__gameSession.onPremiumTypeChanged -= self.__onPremiumStateChanged
         self.__lobbyContext.getServerSettings().onServerSettingsChange -= self.__onServerSettingsChange
 
     @process

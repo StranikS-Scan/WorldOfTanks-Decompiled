@@ -201,9 +201,10 @@
         <lodDist>	MEDIUM	</lodDist>
         <wheel>
           <isLeft>	false	</isLeft>
-          <isLeading>	false	</isLeading>
+          <isLeading>	true	</isLeading>
           <name>	WD_R0	</name>
           <radius>	0.347403	</radius>
+          <syncAngle>	22.5	</syncAngle>
         </wheel>
         <wheel>
           <isLeft>	false	</isLeft>
@@ -213,9 +214,10 @@
         </wheel>
         <wheel>
           <isLeft>	false	</isLeft>
-          <isLeading>	false	</isLeading>
+          <isLeading>	true	</isLeading>
           <name>	WD_R2	</name>
           <radius>	0.407578	</radius>
+          <syncAngle>	20	</syncAngle>
         </wheel>
         <group>
           <isLeft>	false	</isLeft>
@@ -226,9 +228,10 @@
         </group>
         <wheel>
           <isLeft>	true	</isLeft>
-          <isLeading>	false	</isLeading>
+          <isLeading>	true	</isLeading>
           <name>	WD_L0	</name>
           <radius>	0.347403	</radius>
+          <syncAngle>	22.5	</syncAngle>
         </wheel>
         <wheel>
           <isLeft>	true	</isLeft>
@@ -238,9 +241,10 @@
         </wheel>
         <wheel>
           <isLeft>	true	</isLeft>
-          <isLeading>	false	</isLeading>
+          <isLeading>	true	</isLeading>
           <name>	WD_L2	</name>
           <radius>	0.407578	</radius>
+          <syncAngle>	20	</syncAngle>
         </wheel>
         <group>
           <isLeft>	true	</isLeft>
@@ -250,7 +254,7 @@
           <count>	9	</count>
         </group>
       </wheels>
-      <drivingWheels>	WD_L0 WD_L1	</drivingWheels>
+      <drivingWheels>	WD_L0 WD_L2	</drivingWheels>
       <effects>
         <lodDist>	MEDIUM	</lodDist>
         <mud>	largeTankMud	</mud>
@@ -963,7 +967,7 @@
           <isLeading>	true	</isLeading>
           <name>	WD_R2	</name>
           <radius>	0.407578	</radius>
-          <syncAngle>	22.5	</syncAngle>
+          <syncAngle>	20	</syncAngle>
         </wheel>
         <group>
           <isLeft>	false	</isLeft>
@@ -990,7 +994,7 @@
           <isLeading>	true	</isLeading>
           <name>	WD_L2	</name>
           <radius>	0.407578	</radius>
-          <syncAngle>	22.5	</syncAngle>
+          <syncAngle>	20	</syncAngle>
         </wheel>
         <group>
           <isLeft>	true	</isLeft>
@@ -1000,7 +1004,7 @@
           <count>	9	</count>
         </group>
       </wheels>
-      <drivingWheels>	WD_L0 WD_L1	</drivingWheels>
+      <drivingWheels>	WD_L0 WD_L2	</drivingWheels>
       <effects>
         <lodDist>	MEDIUM	</lodDist>
         <mud>	largeTankMud	</mud>

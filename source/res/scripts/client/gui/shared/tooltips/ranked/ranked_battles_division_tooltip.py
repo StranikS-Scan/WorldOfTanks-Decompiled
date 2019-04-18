@@ -27,14 +27,17 @@ class RankedDivisionTooltip(BlocksTooltipData):
         divisionIcon = backport.image(R.images.gui.maps.icons.rankedBattles.divisions.c_56x56.dyn(divisionId)())
         items.append(formatters.packImageTextBlockData(title=text_styles.highTitle(backport.text(R.strings.ranked_battles.division.dyn(divisionId)())), desc=text_styles.main(backport.text(R.strings.ranked_battles.division.tooltip.rankDescription(), ranksCount=len(division.getRanksIDs()))), img=divisionIcon, imgPadding=formatters.packPadding(top=5), txtPadding=formatters.packPadding(left=10)))
         descTitle = text_styles.middleTitle(backport.text(R.strings.ranked_battles.division.tooltip.desc.title()))
-        descText = text_styles.standard(backport.text(R.strings.ranked_battles.division.tooltip.desc.current.text()))
+        currentKey = 'current' if not division.isFinal() else 'current_final'
+        descText = text_styles.standard(backport.text(R.strings.ranked_battles.division.tooltip.desc.dyn(currentKey).text()))
         statusTitle = text_styles.warning(backport.text(R.strings.ranked_battles.division.tooltip.status.current()))
         statusText = text_styles.standard(backport.text(R.strings.ranked_battles.division.tooltip.status.locked.desc()))
         if isLocked:
-            descText = text_styles.standard(backport.text(R.strings.ranked_battles.division.tooltip.desc.locked.text()))
+            lockedKey = 'locked' if not division.isFinal() else 'locked_final'
+            descText = text_styles.standard(backport.text(R.strings.ranked_battles.division.tooltip.desc.dyn(lockedKey).text()))
             statusTitle = text_styles.critical(backport.text(R.strings.ranked_battles.division.tooltip.status.locked()))
         elif isCompleted:
-            descText = text_styles.standard(backport.text(R.strings.ranked_battles.division.tooltip.desc.completed.text()))
+            completedKey = 'completed' if not division.isFinal() else 'completed_final'
+            descText = text_styles.standard(backport.text(R.strings.ranked_battles.division.tooltip.desc.dyn(completedKey).text()))
             statusTitle = text_styles.statInfo(backport.text(R.strings.ranked_battles.division.tooltip.status.completed()))
         items.append(formatters.packImageTextBlockData(title=descTitle, desc=descText, txtPadding=formatters.packPadding(left=10)))
         items.append(formatters.packImageTextBlockData(title=statusTitle, desc=statusText if isLocked else None, txtPadding=formatters.packPadding(left=10)))

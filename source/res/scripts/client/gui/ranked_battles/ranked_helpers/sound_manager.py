@@ -35,7 +35,7 @@ _DIVISION_TO_PROGRESSION_SOUND = {RANKEDBATTLES_ALIASES.DIVISIONS_CLASSIFICATION
  RANKEDBATTLES_ALIASES.DIVISIONS_GOLD: Sounds.PROGRESSION_STATE_1_DIVISION}
 
 class RankedSoundManager(object):
-    __isFirstEntrance = True
+    __slots__ = ('__isFirstEntrance',)
 
     def __init__(self):
         self.__isFirstEntrance = True

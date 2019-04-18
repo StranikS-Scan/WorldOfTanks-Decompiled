@@ -1,12 +1,15 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/web_client_api/frontline/__init__.py
+import typing
 from gui.Scaleform.daapi.view.lobby.epicBattle.epic_helpers import triggerPrestige, checkIfVehicleIsHidden
 from gui.Scaleform.daapi.view.lobby.epicBattle.epic_helpers import checkEpicRewardVehAlreadyBought
 from gui.Scaleform.daapi.view.lobby.epicBattle.epic_helpers import getAwardsForLevel, getAwardsForPrestige
 from gui.Scaleform.daapi.view.lobby.epicBattle.epic_helpers import getFrontLineSkills, getEpicGamePlayerPrestigePoints
+from gui.wgcg.frontline.contexts import FrontlineAccountAttributeCtx, FrontlineFetchProductListCtx
 from helpers import dependency
 from skeletons.gui.game_control import IEpicBattleMetaGameController
 from skeletons.gui.server_events import IEventsCache
+from skeletons.gui.web import IWebController
 from web_client_api import w2c, w2capi, W2CSchema, Field
 from gui.shared.utils.requesters import REQ_CRITERIA
 from skeletons.gui.shared import IItemsCache
@@ -19,11 +22,25 @@ class _SkillSchema(W2CSchema):
     skill_id = Field(required=False, type=int)
 
 
+class _AccountAttribute(W2CSchema):
+    attr_prefix = Field(required=True, type=basestring)
+
+
+class _PlatformProductListSchema(W2CSchema):
+    storefront = Field(required=True, type=basestring)
+    wgid = Field(required=True, type=int)
+    language = Field(required=True, type=basestring)
+    additional_data = Field(required=True, type=dict)
+    country = Field(required=True, type=basestring)
+    response_fields = Field(required=True, type=dict)
+
+
 @w2capi(name='frontline', key='action')
 class FrontLineWebApi(W2CSchema):
     _frontLineCtrl = dependency.descriptor(IEpicBattleMetaGameController)
     _eventsCache = dependency.descriptor(IEventsCache)
     _itemsCache = dependency.descriptor(IItemsCache)
+    _webCtrl = dependency.descriptor(IWebController)
 
     @w2c(W2CSchema, name='get_metascreen_data')
     def handleGetMetaScreenData(self, _):
@@ -110,3 +127,25 @@ class FrontLineWebApi(W2CSchema):
     @w2c(W2CSchema, name='get_player_discount')
     def handleGetPlayerDiscount(self, _):
         return self._frontLineCtrl.getStoredEpicDiscount()
+
+    @w2c(_AccountAttribute, name='get_account_attribute_by_prefix')
+    def handleGetAccountAttributeByPrefix(self, cmd):
+        ctx = FrontlineAccountAttributeCtx(cmd)
+        response = yield self._webCtrl.sendRequest(ctx=ctx)
+        if response.isSuccess():
+            yield {'result': response.getData()}
+        else:
+            yield {'error': self.__getErrorResponse(response.data, 'Unable to obtain account attrs.')}
+
+    @w2c(_PlatformProductListSchema, name='fetch_product_list')
+    def handleFetchProductList(self, cmd):
+        ctx = FrontlineFetchProductListCtx(cmd)
+        response = yield self._webCtrl.sendRequest(ctx=ctx)
+        if response.isSuccess():
+            yield {'result': response.getData()}
+        else:
+            yield {'error': self.__getErrorResponse(response.data, 'Unable to fetch product list.')}
+
+    @staticmethod
+    def __getErrorResponse(data, defaultError=''):
+        return data if data else {'description': defaultError}

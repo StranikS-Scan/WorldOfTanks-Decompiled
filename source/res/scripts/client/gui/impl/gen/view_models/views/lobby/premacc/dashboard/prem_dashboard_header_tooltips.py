@@ -5,6 +5,7 @@ from frameworks.wulf import ViewModel
 class PremDashboardHeaderTooltips(ViewModel):
     __slots__ = ()
     TOOLTIP_PERSONAL_RESERVE = 'ttPersonalReserve'
+    TOOLTIP_CLAN_RESERVE = 'ttClanReserve'
 
     def _initialize(self):
         super(PremDashboardHeaderTooltips, self)._initialize()

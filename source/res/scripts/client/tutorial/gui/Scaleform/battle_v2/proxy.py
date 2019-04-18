@@ -80,27 +80,10 @@ class SfBattleProxy(GUIProxy):
         return indicator
 
     def init(self):
-        result = False
         addListener = g_eventBus.addListener
         addListener(_Event.COMPONENT_REGISTERED, self.__onComponentRegistered, scope=EVENT_BUS_SCOPE.GLOBAL)
         addListener(_Event.COMPONENT_UNREGISTERED, self.__onComponentUnregistered, scope=EVENT_BUS_SCOPE.GLOBAL)
-        if self.app is not None:
-            proxy = weakref.proxy(self.app)
-            for effect in self.__effects.filterByName(GUI_EFFECT_NAME.SHOW_DIALOG):
-                effect.setApplication(proxy)
-
-            addSettings = g_entitiesFactories.addSettings
-            try:
-                for item in self.getViewSettings():
-                    addSettings(item)
-
-                result = True
-            except Exception:
-                LOG_CURRENT_EXCEPTION()
-
-        if result:
-            self.sessionProvider.getCtx().setPlayerFullNameFormatter(TutorialFullNameFormatter())
-        return result
+        return True
 
     def fini(self):
         self.eManager.clear()
@@ -198,6 +181,19 @@ class SfBattleProxy(GUIProxy):
             self.__tutorial.as_setChapterProgressBarS(total, mask)
         return
 
+    def __load(self):
+        proxy = weakref.proxy(self.app)
+        for effect in self.__effects.filterByName(GUI_EFFECT_NAME.SHOW_DIALOG):
+            effect.setApplication(proxy)
+
+        addSettings = g_entitiesFactories.addSettings
+        try:
+            for item in self.getViewSettings():
+                addSettings(item)
+
+        except Exception:
+            LOG_CURRENT_EXCEPTION()
+
     def __onComponentRegistered(self, event):
         alias = event.alias
         self.__registered.add(alias)
@@ -217,6 +213,7 @@ class SfBattleProxy(GUIProxy):
                 self.__markers2D = plugin
         if not self.__isGuiLoaded and self.__registered.issuperset(_REQUIRED_BATTLE_ALIASES):
             self.__isGuiLoaded = True
+            self.__load()
             self.onGUILoaded()
         return
 

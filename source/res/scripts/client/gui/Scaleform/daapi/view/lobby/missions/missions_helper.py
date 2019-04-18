@@ -683,11 +683,11 @@ class _PremiumDetailedMissionInfo(_DetailedMissionInfo):
     def getDateLabel(self):
         deltaTime = max(time_utils.ONE_DAY - time_utils.getServerRegionalTimeCurrentDay(), 0)
         gmtime = time.gmtime(deltaTime)
-        if deltaTime > time_utils.ONE_HOUR:
+        if deltaTime >= time_utils.ONE_HOUR:
             fmt = R.strings.quests.item.timer.tillFinish.longFullFormat()
-        else:
-            fmt = R.strings.quests.item.timer.tillFinish.shortFullFormat()
-        return backport.text(fmt, hours=time.strftime('%H', gmtime))
+            return backport.text(fmt, hours=time.strftime('%H', gmtime))
+        fmt = R.strings.quests.item.timer.tillFinish.longFullFormatMin()
+        return backport.text(fmt, minutes=time.strftime('%M', gmtime))
 
     def _getBackGround(self, status):
         if status == MISSIONS_STATES.COMPLETED:

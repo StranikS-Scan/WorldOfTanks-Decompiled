@@ -26,6 +26,8 @@ from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.clans import formatters as clans_fmts
 from gui.clans.items import formatField
+from gui.impl import backport
+from gui.impl.gen import R
 from gui.shared.formatters import formatActionPrices
 from gui.prb_control.items.stronghold_items import SUPPORT_TYPE, REQUISITION_TYPE, HEAVYTRUCKS_TYPE
 from gui.prb_control.settings import BATTLES_TO_SELECT_RANDOM_MIN_LIMIT
@@ -741,12 +743,12 @@ class BaseDiscountTooltipData(ToolTipBaseData):
     @classmethod
     def _packDisplayableData(cls, cost, fullCost, currencyType=DISCOUNT_TYPE.GOLD):
         headerText = i18n.makeString(TOOLTIPS.ACTIONPRICE_HEADER)
-        bodyText = i18n.makeString(TOOLTIPS.ACTIONPRICE_BODY, oldPrice=cls.__formatPrice(fullCost, currencyType), newPrice=cls.__formatPrice(cost, currencyType))
+        bodyText = i18n.makeString(TOOLTIPS.ACTIONPRICE_BODY, oldPrice=cls._formatPrice(fullCost, currencyType), newPrice=cls._formatPrice(cost, currencyType))
         return {'header': headerText,
          'body': bodyText}
 
     @staticmethod
-    def __formatPrice(cost, currencyType):
+    def _formatPrice(cost, currencyType):
         template = 'html_templates:lobby/quests/actions'
         format_ = BigWorld.wg_getGoldFormat
         return makeHtmlString(template, currencyType, {'value': format_(cost)}) if cost is not None else ''
@@ -756,6 +758,20 @@ class PriceDiscountTooltipData(BaseDiscountTooltipData):
 
     def getDisplayableData(self, cost, fullCost, currencyType):
         return self._packDisplayableData(cost, fullCost, currencyType)
+
+
+class FrontlineDiscountTooltipData(BaseDiscountTooltipData):
+
+    def getDisplayableData(self, cost, fullCost, currencyType=DISCOUNT_TYPE.GOLD, frontlineDiscount=0):
+        onlyFrontlineActive = fullCost - frontlineDiscount == cost
+        headerText = i18n.makeString(backport.text(R.strings.tooltips.actionPrice.header()))
+        if onlyFrontlineActive:
+            bodyTemplate = backport.text(R.strings.tooltips.actionPrice.body.frontline())
+        else:
+            bodyTemplate = backport.text(R.strings.tooltips.actionPrice.body.frontline_with_sse())
+        bodyText = i18n.makeString(bodyTemplate, discount=self._formatPrice(frontlineDiscount, currencyType), oldPrice=self._formatPrice(fullCost, currencyType), newPrice=self._formatPrice(cost, currencyType))
+        return {'header': headerText,
+         'body': bodyText}
 
 
 class ActionXPTooltipData(BaseDiscountTooltipData):

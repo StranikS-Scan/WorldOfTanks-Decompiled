@@ -327,7 +327,8 @@ class VehicleGunRotator(object):
         if shotPoint == self.__prevSentShotPoint:
             return
         else:
-            if self.__avatar.vehicleTypeDescriptor.isHullAimingAvailable:
+            typeDescriptor = self.__avatar.vehicleTypeDescriptor
+            if typeDescriptor.isHullAimingAvailable and typeDescriptor.isYawHullAimingAvailable:
                 if shotPoint is None:
                     self.__stopTrackingWithPerfection()
                 else:

@@ -425,8 +425,11 @@ class PersonalEntriesPlugin(common.SimplePlugin):
                 self._invoke(self.__animationID, 'setAnimation', value)
 
     def __onVehicleFeedbackReceived(self, eventID, _, value):
-        if not self.__isObserver and self.__isAlive and eventID == FEEDBACK_EVENT_ID.VEHICLE_ATTRS_CHANGED and self.__circlesVisibilityState & settings.CIRCLE_TYPE.VIEW_RANGE:
+        if eventID == FEEDBACK_EVENT_ID.VEHICLE_ATTRS_CHANGED and self.__circlesVisibilityState & settings.CIRCLE_TYPE.VIEW_RANGE:
             self._invoke(self.__circlesID, settings.VIEW_RANGE_CIRCLES_AS3_DESCR.AS_UPDATE_DYN_CIRCLE, min(value.get('circularVisionRadius', VISIBILITY.MIN_RADIUS), VISIBILITY.MAX_RADIUS))
+        if eventID == FEEDBACK_EVENT_ID.VEHICLE_DEAD and self.__isObserver:
+            self.__removeAllCircles()
+            self.__hideDirectionLine()
 
     def __addDrawRangeCircle(self):
         if self.__circlesVisibilityState & settings.CIRCLE_TYPE.DRAW_RANGE:

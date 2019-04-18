@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/premacc/dashboard/prem_dashboard_header.py
+import typing
 import BigWorld
 from frameworks.wulf import ViewFlags
 from gui.ClientUpdateManager import g_clientUpdateManager
@@ -18,12 +19,15 @@ from gui.impl.lobby.tooltips.clans import ClanShortInfoTooltipContent
 from gui.impl.pub import ViewImpl
 from gui.impl.wrappers.function_helpers import replaceNoneKwargsModel
 from gui.shared import event_dispatcher, g_eventBus, events, EVENT_BUS_SCOPE
+from gui.shared.event_dispatcher import showStrongholds
 from gui.shared.utils.requesters import REQ_CRITERIA
 from helpers import dependency
 from skeletons.gui.web import IWebController
 from skeletons.gui.game_control import IBadgesController
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.goodies import IGoodiesCache
+if typing.TYPE_CHECKING:
+    from gui.clans.clan_account_profile import ClanAccountProfile
 
 class PremDashboardHeader(ViewImpl):
     __slots__ = ()
@@ -31,6 +35,9 @@ class PremDashboardHeader(ViewImpl):
     __badgesController = dependency.descriptor(IBadgesController)
     __itemsCache = dependency.descriptor(IItemsCache)
     __goodiesCache = dependency.descriptor(IGoodiesCache)
+    __MAX_VIEWABLE_CLAN_RESERVES_COUNT = 2
+    __TOOLTIPS_MAPPING = {PremDashboardHeaderTooltips.TOOLTIP_PERSONAL_RESERVE: TOOLTIPS_CONSTANTS.BOOSTERS_BOOSTER_INFO,
+     PremDashboardHeaderTooltips.TOOLTIP_CLAN_RESERVE: TOOLTIPS_CONSTANTS.CLAN_RESERVE_INFO}
 
     def __init__(self, *args, **kwargs):
         super(PremDashboardHeader, self).__init__(R.views.premDashboardHeader(), ViewFlags.VIEW, PremDashboardHeaderModel, *args, **kwargs)
@@ -65,7 +72,6 @@ class PremDashboardHeader(ViewImpl):
             userNameModel.setIsTeamKiller(self.__itemsCache.items.stats.isTeamKiller)
             self.__updateClanInfo(model)
             self.__buildPersonalReservesList(model.personalReserves)
-            model.setHasClanReserves(False)
             self.__updateBadges(model=model)
 
     def _finalize(self):
@@ -77,7 +83,8 @@ class PremDashboardHeader(ViewImpl):
 
     def __initListeners(self):
         g_clientUpdateManager.addCallbacks({'stats.clanInfo': self.__onClanInfoChanged,
-         'goodies': self.__onGoodiesUpdated})
+         'goodies': self.__onGoodiesUpdated,
+         'cache.activeOrders': self.__onClanInfoChanged})
         self.__badgesController.onUpdated += self.__updateBadges
 
     def __clearListeners(self):
@@ -91,7 +98,7 @@ class PremDashboardHeader(ViewImpl):
         self.__buildPersonalReservesList(self.viewModel.personalReserves)
 
     def __updateClanInfo(self, model):
-        clanProfile = self.__webCtrl.getAccountProfile()
+        clanProfile = self.__getAccountProfile()
         isInClan = clanProfile.isInClan()
         model.setIsInClan(isInClan)
         if isInClan:
@@ -100,31 +107,48 @@ class PremDashboardHeader(ViewImpl):
             model.userName.setClanAbbrev(clanAbbrev)
             clanInfoModel.setClanAbbrev(clanAbbrev)
             clanInfoModel.setRoleInClan(getClanRoleName(clanProfile.getRole()) or '')
+            self.__buildClanReservesList(model)
 
     def __buildPersonalReservesList(self, listModel):
-        listItems = listModel.getItems()
-        if listItems:
-            listItems.clear()
+        listModel.clearItems()
         activeBoosters = self.__goodiesCache.getBoosters(criteria=REQ_CRITERIA.BOOSTER.ACTIVE)
         activeBoostersList = sorted(activeBoosters.values(), key=lambda b: b.getUsageLeftTime(), reverse=True)
-        activeBoostersCount = len(activeBoostersList)
         for idx in range(MAX_ACTIVE_BOOSTERS_COUNT):
-            itemModel = PremDashboardHeaderReserveModel()
-            if idx < activeBoostersCount:
-                booster = activeBoostersList[idx]
-                itemModel.setId(booster.boosterID)
-                itemModel.setProgress(booster.getCooldownAsPercent())
-                itemModel.setTimeleft(booster.getUsageLeftTime())
-                itemModel.setIconId(booster.boosterGuiType)
+            itemModel = self.__makeReserveModel(activeBoostersList, idx)
             listModel.addViewModel(itemModel)
 
         listModel.invalidate()
 
+    def __buildClanReservesList(self, model):
+        clanProfile = self.__getAccountProfile()
+        mayActivate = clanProfile.getMyClanPermissions().canActivateReserves()
+        activeReserves = sorted(self.__goodiesCache.getClanReserves().values(), key=lambda r: r.finishTime)
+        showSection = mayActivate or activeReserves
+        model.setHasClanReserves(bool(showSection))
+        if showSection:
+            listModel = model.clanReserves
+            listItems = listModel.getItems()
+            if listItems:
+                listItems.clear()
+            if mayActivate:
+                slotsCount = self.__MAX_VIEWABLE_CLAN_RESERVES_COUNT
+            else:
+                slotsCount = min(len(activeReserves), self.__MAX_VIEWABLE_CLAN_RESERVES_COUNT)
+            for idx in range(slotsCount):
+                itemModel = self.__makeReserveModel(activeReserves, idx)
+                listModel.addViewModel(itemModel)
+
+            listModel.invalidate()
+
+    def __getAccountProfile(self):
+        return self.__webCtrl.getAccountProfile()
+
     def __getTooltipData(self, event):
         tooltipType = event.getArgument('tooltipType')
-        if tooltipType == PremDashboardHeaderTooltips.TOOLTIP_PERSONAL_RESERVE:
+        tooltipAlias = self.__TOOLTIPS_MAPPING.get(tooltipType)
+        if tooltipAlias:
             reserveId = event.getArgument('id')
-            return createTooltipData(isSpecial=True, specialAlias=TOOLTIPS_CONSTANTS.BOOSTERS_BOOSTER_INFO, specialArgs=(reserveId,))
+            return createTooltipData(isSpecial=True, specialAlias=tooltipAlias, specialArgs=(reserveId,))
 
     @replaceNoneKwargsModel
     def __updateBadges(self, model=None):
@@ -150,4 +174,15 @@ class PremDashboardHeader(ViewImpl):
 
     @staticmethod
     def __onClanReserveClick(item):
-        pass
+        showStrongholds()
+
+    @staticmethod
+    def __makeReserveModel(reserves, idx):
+        itemModel = PremDashboardHeaderReserveModel()
+        if idx < len(reserves):
+            booster = reserves[idx]
+            itemModel.setId(booster.boosterID)
+            itemModel.setProgress(booster.getCooldownAsPercent())
+            itemModel.setTimeleft(booster.getUsageLeftTime())
+            itemModel.setIconId(booster.boosterGuiType)
+        return itemModel

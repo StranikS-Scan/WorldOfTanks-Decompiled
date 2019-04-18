@@ -34,7 +34,7 @@ from gui.shared.formatters import getItemPricesVO, getItemUnlockPricesVO, choose
 from gui.shared.tooltips.formatters import getActionPriceData
 from gui.shared.gui_items.items_actions import factory
 from gui.shared.gui_items.gui_item_economics import ItemPrice
-from gui.shared.money import Currency, MONEY_UNDEFINED
+from gui.shared.money import Currency, MONEY_UNDEFINED, Money
 from gui.shared.utils.functions import makeTooltip
 from shared_utils import findFirst, first
 from helpers import dependency
@@ -53,6 +53,35 @@ _ButtonState = namedtuple('_ButtonState', ('enabled', 'itemPrice', 'label', 'isA
 
 def _buildBuyButtonTooltip(key):
     return makeTooltip(TOOLTIPS.vehiclepreview_buybutton_all(key, 'header'), TOOLTIPS.vehiclepreview_buybutton_all(key, 'body'))
+
+
+class _CouponData(object):
+    __slots__ = ('__item', '__selected', '__discount')
+
+    def __init__(self, item=None, selected=False):
+        self.__item = item
+        self.__selected = selected
+        self.__discount = Money(gold=self.__item.count)
+
+    @property
+    def item(self):
+        return self.__item
+
+    @item.setter
+    def item(self, value):
+        self.__item = value
+
+    @property
+    def selected(self):
+        return self.__selected
+
+    @selected.setter
+    def selected(self, value):
+        self.__selected = value
+
+    @property
+    def discount(self):
+        return self.__discount
 
 
 class VehiclePreviewBuyingPanel(VehiclePreviewBuyingPanelMeta):
@@ -92,12 +121,16 @@ class VehiclePreviewBuyingPanel(VehiclePreviewBuyingPanelMeta):
         self.__cachedVehiclesVOs = None
         self.__cachedItemsVOs = None
         self.__cachedCollapsedItemsVOs = None
+        self.__couponInfo = None
+        self.__hasSSEDiscount = False
         g_techTreeDP.load()
         return
 
     def onBuyOrResearchClick(self):
         vehicle = g_currentPreviewVehicle.item
-        if self.__items is not None:
+        shopPackage = self.__items is not None and self.__couponInfo is None
+        frontlineCouponPackage = self.__couponInfo is not None and self.__couponInfo.selected
+        if shopPackage or frontlineCouponPackage:
             self.__purchasePackage()
         elif self.__offers is not None:
             self.__purchaseOffer()
@@ -109,13 +142,26 @@ class VehiclePreviewBuyingPanel(VehiclePreviewBuyingPanelMeta):
             self.__research()
         return
 
-    def setTimerData(self, endTime, oldPrice):
-        self.__oldPrice = oldPrice
-        if endTime is not None:
-            self.__endTime = endTime
-            self.__onLeftTimeUpdated()
-        self.__updateBtnState()
-        return
+    def onCouponSelected(self, isActive):
+        if self.__couponInfo:
+            self.__couponInfo.selected = isActive
+            if isActive:
+                self.__title = backport.text(R.strings.vehicle_preview.buyingPanel.frontlinePack.titleLabel.active())
+            elif self.__hasSSEDiscount:
+                self.__title = backport.text(R.strings.vehicle_preview.buyingPanel.frontlinePack.titleLabel.inactive_add_discount())
+            else:
+                self.__title = backport.text(R.strings.vehicle_preview.buyingPanel.frontlinePack.titleLabel.inactive())
+            self.__update()
+
+    def setTimerData(self, endTime):
+        if self.__couponInfo is not None:
+            return
+        else:
+            if endTime is not None:
+                self.__endTime = endTime
+                self.__onLeftTimeUpdated()
+            self.__updateBtnState()
+            return
 
     def setBuyParams(self, buyParams):
         self.__buyParams = buyParams
@@ -123,9 +169,11 @@ class VehiclePreviewBuyingPanel(VehiclePreviewBuyingPanelMeta):
     def setBackAlias(self, backAlias):
         self.__backAlias = backAlias
 
-    def setPackItems(self, packItems, price, title):
+    def setPackItems(self, packItems, price, oldPrice, title):
         self.__title = title if title is not None else ''
         self.__price = price
+        self.__hasSSEDiscount = oldPrice != MONEY_UNDEFINED
+        self.__oldPrice = oldPrice
         self.__items = packItems
         self.__styleByGroup.clear()
         self.__vehicleByGroup.clear()
@@ -133,6 +181,12 @@ class VehiclePreviewBuyingPanel(VehiclePreviewBuyingPanelMeta):
         for item in items:
             if item.type in ItemPackTypeGroup.STYLE and item.groupID not in self.__styleByGroup:
                 self.__styleByGroup[item.groupID] = item.id
+            if item.type in ItemPackTypeGroup.DISCOUNT:
+                self.__title = backport.text(R.strings.vehicle_preview.buyingPanel.frontlinePack.titleLabel.active())
+                self.__couponInfo = _CouponData(item=item, selected=True)
+                self.as_setCouponS(self.__previewDP.packCouponData(self.__items))
+                if not self.__oldPrice:
+                    self.__oldPrice = self.__price
 
         for vehicleItem in vehiclesItems:
             self.__vehicleByGroup[vehicleItem.id] = vehicleItem.groupID
@@ -218,11 +272,23 @@ class VehiclePreviewBuyingPanel(VehiclePreviewBuyingPanelMeta):
         if self.__cachedVehiclesVOs:
             g_currentPreviewVehicle.selectVehicle(self.__cachedVehiclesVOs[0]['intCD'])
             self.as_setSetVehiclesDataS({'vehicles': self.__cachedVehiclesVOs})
+        if self.__couponInfo:
+            self.__updateEnabledState(self.__cachedCollapsedItemsVOs, self.__couponInfo.selected)
+            self.__updateEnabledState(self.__cachedItemsVOs, self.__couponInfo.selected)
         if collapseItems and self.__cachedCollapsedItemsVOs:
             self.as_setSetItemsDataS({'items': self.__cachedCollapsedItemsVOs})
         elif self.__cachedItemsVOs:
             self.as_setSetItemsDataS({'items': self.__cachedItemsVOs})
         self.__updateBtnState()
+
+    @staticmethod
+    def __updateEnabledState(collection, enabled):
+        if collection is not None:
+            for item in collection:
+                if 'isEnabled' in item:
+                    item['isEnabled'] = enabled
+
+        return
 
     def __getOfferByID(self, offerID):
         return findFirst(lambda o: o.buy_params['transactionID'] == offerID, self.__offers)
@@ -237,8 +303,9 @@ class VehiclePreviewBuyingPanel(VehiclePreviewBuyingPanelMeta):
         return key
 
     def __buyRequestConfirmation(self, key='buyConfirmation'):
-        return DialogsInterface.showDialog(meta=I18nConfirmDialogMeta(key=key, messageCtx={'product': self.__title or '"This Pack"',
-         'price': formatPrice(self.__price, reverse=True, useIcon=True)}, focusedID=DIALOG_BUTTON_ID.SUBMIT))
+        product = self.__title if self.__couponInfo is None else g_currentPreviewVehicle.item.shortUserName
+        return DialogsInterface.showDialog(meta=I18nConfirmDialogMeta(key=key, messageCtx={'product': product,
+         'price': formatPrice(self.__getPackPrice(), reverse=True, useIcon=True)}, focusedID=DIALOG_BUTTON_ID.SUBMIT))
 
     def __onVehicleLoading(self, ctxEvent):
         vehicle = g_currentPreviewVehicle.item
@@ -261,7 +328,7 @@ class VehiclePreviewBuyingPanel(VehiclePreviewBuyingPanelMeta):
             btnData = self.__getBtnData()
             self._actionType = self.__previewDP.getBuyType(item)
             if self.__items:
-                buyingPanelData = self.__previewDP.getItemPackBuyingPanelData(item, btnData, self.__items)
+                buyingPanelData = self.__previewDP.getItemPackBuyingPanelData(item, btnData, self.__items, self.__couponInfo.selected if self.__couponInfo else False)
             elif self.__offers:
                 buyingPanelData = self.__previewDP.getOffersBuyingPanelData(btnData)
             else:
@@ -298,26 +365,37 @@ class VehiclePreviewBuyingPanel(VehiclePreviewBuyingPanelMeta):
     def __getBtnDataPack(self):
         tooltip = ''
         actionTooltip = None
-        currency = self.__price.getCurrency()
+        price = self.__getPackPrice()
+        currency = price.getCurrency()
         if self._disableBuyButton:
             tooltip = _buildBuyButtonTooltip('endTime')
             enabled = False
         elif self.__price.isSet(currency):
-            enabled = self.__walletAvailableForCurrency(currency) and (isIngameShopEnabled() if currency == Currency.GOLD else mayObtainForMoney(self.__price) or mayObtainWithMoneyExchange(self.__price))
+            enabled = self.__walletAvailableForCurrency(currency) and (isIngameShopEnabled() if currency == Currency.GOLD else mayObtainForMoney(price) or mayObtainWithMoneyExchange(price))
         else:
             enabled = True
         if self.__currentOffer and self.__currentOffer.bestOffer and self.__currentOffer.eventType:
             actionTooltip = self.__getBestOfferTooltipData(self.__currentOffer.eventType)
         if self.__isReferralWindow():
             buttonLabel = backport.text(R.strings.vehicle_preview.buyingPanel.buyBtn.label.obtain())
-        elif self.__items:
+        elif self.__items and self.__couponInfo is None:
             buttonLabel = backport.text(R.strings.vehicle_preview.buyingPanel.buyBtn.label.buyItemPack())
         elif self.__offers and self.__currentOffer:
             buttonLabel = backport.text(R.strings.vehicle_preview.buyingPanel.buyBtn.label.rent())
             self.__title = self.__getCurrentOfferTitle()
         else:
             buttonLabel = backport.text(R.strings.vehicle_preview.buyingPanel.buyBtn.label.buy())
-        return _ButtonState(enabled=enabled, itemPrice=getItemPricesVO(ItemPrice(price=self.__price, defPrice=self.__oldPrice)), label=buttonLabel, isAction=self.__oldPrice.isDefined() or actionTooltip is not None, actionTooltip=actionTooltip, tooltip=tooltip, title=self.__title, isMoneyEnough=True, isUnlock=False, isPrevItemsUnlock=True)
+        isAction = self.__oldPrice.isDefined() and self.__oldPrice != self.__price or actionTooltip is not None or self.__couponInfo and self.__couponInfo.selected
+        return _ButtonState(enabled=enabled, itemPrice=getItemPricesVO(ItemPrice(price=price, defPrice=self.__oldPrice)), label=buttonLabel, isAction=isAction, actionTooltip=actionTooltip, tooltip=tooltip, title=self.__title, isMoneyEnough=True, isUnlock=False, isPrevItemsUnlock=True)
+
+    def __getPackPrice(self):
+        if self.__couponInfo and self.__couponInfo.selected:
+            discount = self.__couponInfo.discount
+            currency = self.__price.getCurrency()
+            if currency == Currency.GOLD:
+                discountPrice = self.__price - discount
+                return discountPrice.toNonNegative()
+        return self.__price
 
     def __getBtnDataUnlockedVehicle(self, vehicle):
         money = self._itemsCache.items.stats.money
@@ -445,7 +523,7 @@ class VehiclePreviewBuyingPanel(VehiclePreviewBuyingPanelMeta):
                     inventoryVehicle = self._itemsCache.items.getItemByCD(g_currentPreviewVehicle.item.intCD)
                     showGetVehiclePage(inventoryVehicle, self.__buyParams)
                     return
-                goldPrice = self.__price.get(Currency.GOLD, 0)
+                goldPrice = self.__getPackPrice().get(Currency.GOLD, 0)
                 if goldPrice > self._itemsCache.items.stats.gold:
                     showBuyGoldForBundle(goldPrice, self.__buyParams)
                 else:

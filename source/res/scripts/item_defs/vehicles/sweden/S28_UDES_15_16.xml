@@ -318,9 +318,9 @@
       <AODecals>
         <decal>
           <transform>
-            <row0>	3.657740 0.000000 0.000000	</row0>
+            <row0>	4.925780 0.000000 0.000000	</row0>
             <row1>	0.000000 1.342020 0.000000	</row1>
-            <row2>	0.000000 0.000000 5.683710	</row2>
+            <row2>	0.000000 0.000000 8.172300	</row2>
             <row3>	0.000000 0.000000 0.000021	</row3>
           </transform>
         </decal>
@@ -595,7 +595,6 @@
             <gun>	60	</gun>
           </armor>
           <turretYawLimits>	-180 180	</turretYawLimits>
-          <hullPitchAimingFirst>	True	</hullPitchAimingFirst>
           <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 6 1 6	</maxPitch>
@@ -1526,6 +1525,7 @@
   </siege_mode>
   <hull_aiming>
     <pitch>
+      <isFlexible>	True	</isFlexible>
       <wheelCorrectionCenterZ>	1.165	</wheelCorrectionCenterZ>
       <wheelsCorrectionSpeed>	10	</wheelsCorrectionSpeed>
       <wheelsCorrectionAngles>
@@ -1535,7 +1535,8 @@
     </pitch>
     <yawDisabled></yawDisabled>
   </hull_aiming>
-  <useHullZ>	True	</useHullZ>
+  <useHullZSize>	True	</useHullZSize>
+  <useHullZOffset>	True	</useHullZOffset>
   <effects>
     <collision></collision>
     <damagedStateGroup>	large	</damagedStateGroup>

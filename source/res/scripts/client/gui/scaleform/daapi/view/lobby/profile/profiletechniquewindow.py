@@ -20,7 +20,9 @@ class ProfileTechniqueWindow(ProfileTechnique):
 
     def invokeUpdate(self):
         super(ProfileTechniqueWindow, self).invokeUpdate()
-        self._receiveVehicleDossier(self._selectedVehicleIntCD, self._databaseID)
+        if self._selectedVehicleIntCD is not None:
+            self._receiveVehicleDossier(self._selectedVehicleIntCD, self._databaseID)
+        return
 
     def _dispose(self):
         self.__dataReceiver.onDataReceived -= self.__requestedDataReceived

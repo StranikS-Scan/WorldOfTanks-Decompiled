@@ -170,6 +170,6 @@ class IngameMenu(IngameMenuMeta, BattleGUIKeyHandler):
     @process
     def __doLeaveBootcamp(self):
         dialogConstants = self.bootcampController.getSkipDialogConstants()
-        result = yield DialogsInterface.showDialog(ExecutionChooserDialogMeta(dialogConstants.dialogType, dialogConstants.dialogKey, dialogConstants.focusedID, not dialogConstants.needAwarding))
+        result = yield DialogsInterface.showDialog(ExecutionChooserDialogMeta(dialogConstants.dialogType, dialogConstants.dialogKey, dialogConstants.focusedID, not dialogConstants.needAwarding, dialogConstants.premiumType))
         if result:
             self.__doLeaveArena(True)

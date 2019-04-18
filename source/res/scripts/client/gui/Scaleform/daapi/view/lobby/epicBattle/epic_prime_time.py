@@ -15,11 +15,19 @@ from skeletons.gui.game_control import IEpicBattleMetaGameController
 class FrontLineServerPresenter(ServerListItemPresenter):
     _periodsController = dependency.descriptor(IEpicBattleMetaGameController)
 
-    def _buildTooltip(self):
+    def _buildTooltip(self, peripheryID):
         if not self.getTimeLeft():
-            return text_styles.expText(_ms(EPIC_BATTLE.PRIMETIME_ENDOFCYCLE, server=self.getName()))
-        timeStr = text_styles.neutral(time_utils.getTillTimeString(self.getTimeLeft(), MENU.TIME_TIMEVALUEWITHSECS))
-        return text_styles.expText(_ms(EPIC_BATTLE.PRIMETIME_SERVERTOOLTIP, server=self.getName(), time=timeStr)) if self._getIsAvailable() else text_styles.expText(_ms(EPIC_BATTLE.PRIMETIME_SERVERUNAVAILABLETOOLTIP, time=timeStr))
+            tooltipStr = text_styles.expText(_ms(EPIC_BATTLE.PRIMETIME_ENDOFCYCLE, server=self.getName()))
+        else:
+            timeStr = text_styles.neutral(time_utils.getTillTimeString(self.getTimeLeft(), MENU.TIME_TIMEVALUEWITHSECS))
+            if self._getIsAvailable():
+                tooltipStr = text_styles.expText(_ms(EPIC_BATTLE.PRIMETIME_SERVERTOOLTIP, server=self.getName(), time=timeStr))
+            else:
+                tooltipStr = text_styles.expText(_ms(EPIC_BATTLE.PRIMETIME_SERVERUNAVAILABLETOOLTIP, time=timeStr))
+        return {'tooltip': tooltipStr,
+         'specialArgs': [],
+         'specialAlias': None,
+         'isSpecial': None}
 
     def isEnabled(self):
         return self.isActive()

@@ -173,13 +173,13 @@ class View(AbstractViewMeta, ViewInterface):
         if not self.soundManager.isUsed:
             if self._COMMON_SOUND_SPACE and not self._COMMON_SOUND_SPACE.persistentSounds:
                 self.__commonSoundManagers.pop(self._COMMON_SOUND_SPACE.name)
-        if self._COMMON_SOUND_SPACE and self._COMMON_SOUND_SPACE.parentSpace:
-            parentManager = self.__commonSoundManagers.get(self._COMMON_SOUND_SPACE.parentSpace)
-            if parentManager is not None:
-                parentManager.unregister(id(self))
-                parentManager.clear(requester=id(self))
-                if not parentManager.isUsed:
-                    self.__commonSoundManagers.pop(self._COMMON_SOUND_SPACE.parentSpace)
+        self.__soundsManager = None
+        if self.__parentManager is not None:
+            self.__parentManager.unregister(id(self))
+            self.__parentManager.clear(requester=id(self))
+            if not self.__parentManager.isUsed:
+                self.__commonSoundManagers.pop(self._COMMON_SOUND_SPACE.parentSpace)
+            self.__parentManager = None
         super(View, self)._destroy()
         return
 
@@ -193,7 +193,9 @@ class View(AbstractViewMeta, ViewInterface):
             self.__soundsManager = _ViewSoundsManager()
         self.soundManager.register(id(self), self._COMMON_SOUND_SPACE)
         if self._COMMON_SOUND_SPACE and self._COMMON_SOUND_SPACE.parentSpace:
-            parentManager = self.__commonSoundManagers.get(self._COMMON_SOUND_SPACE.parentSpace)
-            if parentManager is not None:
-                parentManager.register(id(self), CommonSoundSpaceSettings(autoStart=True))
+            self.__parentManager = self.__commonSoundManagers.get(self._COMMON_SOUND_SPACE.parentSpace)
+            if self.__parentManager is not None:
+                self.__parentManager.register(id(self), CommonSoundSpaceSettings(autoStart=True))
+        else:
+            self.__parentManager = None
         return

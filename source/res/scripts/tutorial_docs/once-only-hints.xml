@@ -121,6 +121,12 @@
           <value>	True	</value>
         </simple-state>
       </checked-ui-state>
+      <condition>
+        <condition-hint-showed>
+          <hint-id>	AccountButtonHint	</hint-id>
+          <value>	True	</value>
+        </condition-hint-showed>
+      </condition>
       <update-runtime>	True	</update-runtime>
       <ignore-outside-click>	True	</ignore-outside-click>
     </hint>
@@ -197,6 +203,21 @@
       <update-runtime>	True	</update-runtime>
       <ignore-outside-click>	False	</ignore-outside-click>
       <equal-actions>	True	</equal-actions>
+    </hint>
+    <hint>	AccountButtonHint	  <item-id>	AccountButton	</item-id>
+      <text></text>
+      <arrow>
+        <direction>	B	</direction>
+        <loop>	True	</loop>
+      </arrow>
+      <checked-ui-state>
+        <simple-state>
+          <state>	enabled	</state>
+          <value>	True	</value>
+        </simple-state>
+      </checked-ui-state>
+      <update-runtime>	True	</update-runtime>
+      <ignore-outside-click>	True	</ignore-outside-click>
     </hint>
   </hints>
 </once-only-hints.xml>

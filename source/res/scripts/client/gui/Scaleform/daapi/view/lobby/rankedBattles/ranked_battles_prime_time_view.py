@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/rankedBattles/ranked_battles_prime_time_view.py
 from gui.Scaleform.daapi.view.lobby.prime_time_view_base import ServerListItemPresenter
 from gui.Scaleform.daapi.view.meta.RankedPrimeTimeMeta import RankedPrimeTimeMeta
+from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.impl import backport
 from gui.impl.gen import R
 from gui.prb_control.settings import PREBATTLE_ACTION_NAME
@@ -15,8 +16,11 @@ from skeletons.gui.game_control import IRankedBattlesController
 class RankedServerPresenter(ServerListItemPresenter):
     _periodsController = dependency.descriptor(IRankedBattlesController)
 
-    def _buildTooltip(self):
-        return backport.text(R.strings.tooltips.ranked.serverName(), name=self._shortName)
+    def _buildTooltip(self, peripheryID):
+        return {'tooltip': '',
+         'specialArgs': [peripheryID],
+         'specialAlias': TOOLTIPS_CONSTANTS.RANKED_SERVER_PRIMETIME,
+         'isSpecial': True}
 
     def isEnabled(self):
         return self.isActive()
@@ -43,7 +47,7 @@ class RankedBattlesPrimeTimeView(RankedPrimeTimeMeta):
         if serverInfo is None and serverList:
             serverInfo = serverList[0]
         return {'warningIconSrc': self._getWarningIcon(),
-         'status': self.__getStatusTitle(serverInfo),
+         'status': self.__getStatusTitle(),
          'serversText': text_styles.expText(self._getServerText(serverList, serverInfo)),
          'serversDDEnabled': not isSingleServer,
          'serverDDVisible': not isSingleServer,
@@ -59,18 +63,27 @@ class RankedBattlesPrimeTimeView(RankedPrimeTimeMeta):
     def _getPrbForcedActionName(self):
         return PREBATTLE_ACTION_NAME.RANKED_FORCED
 
-    def __getStatusTitle(self, serverInfo):
+    def _getWarningIcon(self):
+        if self._hasAvailableServers():
+            icon = R.images.gui.maps.icons.library.icon_clock_100x100()
+        else:
+            icon = R.images.gui.maps.icons.library.icon_alert_90x84()
+        return backport.image(icon)
+
+    def __getStatusTitle(self):
         if not self._hasAvailableServers():
             status = backport.text(R.strings.ranked_battles.primeTime.status.allServersDisabled())
-        elif serverInfo.isActive():
-            primeTime = self.__rankedController.getPrimeTimes().get(serverInfo.getPeripheryID())
-            currTime = time_utils.getCurrentLocalServerTimestamp()
-            currentCycleEnd = self.__rankedController.getCurrentSeason().getCycleEndDate()
-            period = primeTime.getNextPeriodStart(currTime, currentCycleEnd)
-            startTime = formatDate('%H:%M', period)
-            status = backport.text(R.strings.ranked_battles.primeTime.status.untill(), startTime=startTime, server=serverInfo.getName())
         else:
-            status = backport.text(R.strings.ranked_battles.primeTime.status.disableFirst(), server=serverInfo.getName())
+            currServerName = self._connectionMgr.serverUserName
+            primeTime = self.__rankedController.getPrimeTimes().get(self._connectionMgr.peripheryID)
+            if primeTime:
+                currTime = time_utils.getCurrentLocalServerTimestamp()
+                currentCycleEnd = self.__rankedController.getCurrentSeason().getCycleEndDate()
+                period = primeTime.getNextPeriodStart(currTime, currentCycleEnd)
+                startTime = formatDate('%H:%M', period)
+                status = backport.text(R.strings.ranked_battles.primeTime.status.untill(), startTime=startTime, server=currServerName)
+            else:
+                status = backport.text(R.strings.ranked_battles.primeTime.status.disableFirst(), server=currServerName)
         return text_styles.grandTitle(status)
 
     def __getTimeText(self, serverInfo):

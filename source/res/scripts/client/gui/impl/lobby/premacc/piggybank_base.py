@@ -11,7 +11,7 @@ from gui.impl.wrappers.function_helpers import replaceNoneKwargsModel
 from gui.impl.lobby.premacc.premacc_helpers import PiggyBankConstants, getDeltaTimeHelper
 from gui.impl.lobby.premacc.premacc_helpers import SoundViewMixin
 from gui.shared.utils.scheduled_notifications import PeriodicNotifier
-from helpers import dependency
+from helpers import dependency, time_utils
 from skeletons.gui.game_control import IGameSessionController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
@@ -39,7 +39,7 @@ class PiggyBankBaseView(ViewImpl, SoundViewMixin):
         return self._notifier
 
     def _createNotifier(self):
-        return PeriodicNotifier(self._getDeltaTime, self._updateTimer)
+        return PeriodicNotifier(self._getDeltaTime, self._updateTimer, (time_utils.ONE_MINUTE,))
 
     def _getIsTimerEnabled(self):
         isPremium = self._isTankPremiumActive()

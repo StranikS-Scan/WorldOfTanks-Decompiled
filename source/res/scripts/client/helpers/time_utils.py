@@ -133,9 +133,10 @@ def getTillTimeString(timeValue, keyNamespace='', isRoundUp=False, sourceStrGene
         fmtKey = 'min'
     else:
         fmtKey = 'lessMin'
-    fmtValues = {'day': str(time.struct_time(gmtime).tm_yday),
-     'hour': time.strftime('%H', gmtime) if not removeLeadingZeros else time.strftime('%H', gmtime).lstrip('0'),
-     'min': time.strftime('%M', gmtime) if not removeLeadingZeros else time.strftime('%M', gmtime).lstrip('0'),
+    tm = time.struct_time(gmtime)
+    fmtValues = {'day': str(tm.tm_yday),
+     'hour': time.strftime('%H', gmtime) if not removeLeadingZeros else str(tm.tm_hour),
+     'min': time.strftime('%M', gmtime) if not removeLeadingZeros else str(tm.tm_min),
      'sec': time.strftime('%S', gmtime)}
     return sourceStrGenerator(fmtKey, **fmtValues) if sourceStrGenerator else _ms('{}/{}'.format(keyNamespace, fmtKey), **fmtValues)
 
@@ -230,6 +231,11 @@ def isTimeThisDay(timestamp):
 
 def isTimeNextDay(timestamp):
     return isTimeThisDay(timestamp - ONE_DAY)
+
+
+def getDailyTimeForUTC(hour=0, minute=0, second=0, microsecond=0):
+    timeToday = getTimeTodayForUTC()
+    return timeToday if isFuture(timeToday) else timeToday + ONE_DAY
 
 
 def getTimeTodayForUTC(hour=0, minute=0, second=0, microsecond=0):

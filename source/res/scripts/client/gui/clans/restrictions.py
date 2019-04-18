@@ -21,6 +21,9 @@ class ClanMemberPermissions(object):
     def canChangeRole(self):
         return self.__checkFlags(CLAN_MEMBER_FLAGS.MAY_CHANGE_ROLE)
 
+    def canActivateReserves(self):
+        return self.__checkFlags(CLAN_MEMBER_FLAGS.MAY_ACTIVATE_ORDER)
+
     def canEditRecruiterProfile(self):
         return self.__checkFlags(CLAN_MEMBER_FLAGS.MAY_EDIT_RECRUIT_PROFILE)
 

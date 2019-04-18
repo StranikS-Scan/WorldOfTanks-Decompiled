@@ -1,21 +1,23 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/game_control/quests_controller.py
 import weakref
-from constants import EVENT_TYPE
+from constants import EVENT_TYPE, PremiumConfigs
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.utils.requesters import REQ_CRITERIA
 from helpers import dependency
 from items import getTypeOfCompactDescr
 from skeletons.gui.game_control import IQuestsController
+from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
-from gui.server_events.events_helpers import isLinkedSet
+from gui.server_events.events_helpers import isLinkedSet, isPremium
 _MAX_LVL_FOR_TUTORIAL = 3
 
 class _QuestCache(object):
     __slots__ = ('__invVehicles', '__cache', '__eventsCache')
     itemsCache = dependency.descriptor(IItemsCache)
+    lobbyContext = dependency.descriptor(ILobbyContext)
 
     def __init__(self, eventsCache):
         self.__eventsCache = weakref.proxy(eventsCache)
@@ -105,12 +107,15 @@ class _QuestCache(object):
             return False
         if event.getType() == EVENT_TYPE.MOTIVE_QUEST:
             return not event.isCompleted() and event.isAvailable()[0]
+        if isPremium(event.getGroupID()) and not cls.lobbyContext.getServerSettings().getPremQuestsConfig().get('enabled', False):
+            return False
         return False if isLinkedSet(event.getGroupID()) else True
 
 
 class QuestsController(IQuestsController):
     __slots__ = ('__quests', 'eventsCache')
     eventsCache = dependency.descriptor(IEventsCache)
+    lobbyContext = dependency.descriptor(ILobbyContext)
 
     def __init__(self):
         super(QuestsController, self).__init__()
@@ -130,6 +135,7 @@ class QuestsController(IQuestsController):
          'stats.unlocks': self.__onStatsUnlocked})
         self.eventsCache.onSyncCompleted += self.__invalidateEventsData
         self.eventsCache.onProgressUpdated += self.__invalidateEventsData
+        self.lobbyContext.getServerSettings().onServerSettingsChange += self.__onServerSettingsChange
 
     def onAvatarBecomePlayer(self):
         self.__stop()
@@ -162,6 +168,10 @@ class QuestsController(IQuestsController):
     def __invalidateEventsData(self, *args):
         self.__quests.invalidate()
 
+    def __onServerSettingsChange(self, diff):
+        if PremiumConfigs.PREM_QUESTS in diff:
+            self.__quests.invalidate()
+
     def __onStatsUnlocked(self, ids):
         for intCD in ids:
             if getTypeOfCompactDescr(intCD) == GUI_ITEM_TYPE.VEHICLE:
@@ -170,6 +180,7 @@ class QuestsController(IQuestsController):
     def __stop(self):
         self.eventsCache.onSyncCompleted -= self.__invalidateEventsData
         self.eventsCache.onProgressUpdated -= self.__invalidateEventsData
+        self.lobbyContext.getServerSettings().onServerSettingsChange -= self.__onServerSettingsChange
         g_clientUpdateManager.removeObjectCallbacks(self)
 
     def __clearCache(self):

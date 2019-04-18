@@ -3,7 +3,7 @@
 from collections import defaultdict
 from debug_utils import LOG_WARNING
 from goodies.goodie_constants import GOODIE_VARIETY, GOODIE_STATE, GOODIE_TARGET_TYPE
-from gui.goodies.goodie_items import Booster, PersonalVehicleDiscount
+from gui.goodies.goodie_items import Booster, PersonalVehicleDiscount, ClanReservePresenter
 from gui.shared.utils.requesters.ItemsRequester import REQ_CRITERIA
 from gui.shared.money import Money
 from helpers import dependency
@@ -71,8 +71,10 @@ class GoodiesCache(IGoodiesCache):
         return (buyPrice,
          defPrice,
          altPrice,
-         defAltPrice,
-         boosterID in shop.getHiddenBoosters())
+         defAltPrice)
+
+    def isBoosterHidden(self, boosterID):
+        return boosterID in self._items.shop.getHiddenBoosters()
 
     def getItemByTargetValue(self, targetValue):
         return self._items.getItemByCD(targetValue)
@@ -107,6 +109,15 @@ class GoodiesCache(IGoodiesCache):
 
     def getDiscounts(self, criteria=REQ_CRITERIA.EMPTY):
         return self.__getGoodies(self._items.shop.discounts, criteria)
+
+    def getClanReserves(self):
+        result = {}
+        for reserveID, reserveInfo in self._items.goodies.getActiveClanReserves().iteritems():
+            guiReserveWrapper = ClanReservePresenter(reserveID, *reserveInfo)
+            if guiReserveWrapper.getUsageLeftTime() > 0:
+                result[reserveID] = guiReserveWrapper
+
+        return result
 
     @property
     def _items(self):

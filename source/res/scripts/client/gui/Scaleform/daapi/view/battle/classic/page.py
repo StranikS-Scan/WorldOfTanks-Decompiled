@@ -80,8 +80,10 @@ class ClassicPage(SharedPage):
                 return
             elif self.as_isComponentVisibleS(BATTLE_VIEW_ALIASES.RADIAL_MENU):
                 return
+            hasTabs = fullStats.hasTabs
+            if not hasTabs and tabIndex > 0:
+                return
             if self.as_isComponentVisibleS(self._fullStatsAlias) != isShown:
-                hasTabs = fullStats.hasTabs
                 if isShown:
                     if not self._fsToggling:
                         self._fsToggling.update(self.as_getComponentsVisibilityS())

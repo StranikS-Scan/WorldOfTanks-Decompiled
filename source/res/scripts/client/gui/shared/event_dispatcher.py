@@ -76,8 +76,9 @@ def showRankedBattleResultsWindow(rankedResultsVO, rankInfo, questsProgress):
      'questsProgress': questsProgress}), EVENT_BUS_SCOPE.LOBBY)
 
 
-def showRankedAwardWindow(awardsSequence):
-    g_eventBus.handleEvent(events.LoadViewEvent(alias=RANKEDBATTLES_ALIASES.RANKED_BATTLES_AWARD, ctx={'awardsSequence': awardsSequence}), EVENT_BUS_SCOPE.LOBBY)
+def showRankedAwardWindow(awardsSequence, rankedInfo):
+    g_eventBus.handleEvent(events.LoadViewEvent(alias=RANKEDBATTLES_ALIASES.RANKED_BATTLES_AWARD, ctx={'awardsSequence': awardsSequence,
+     'rankedInfo': rankedInfo}), EVENT_BUS_SCOPE.LOBBY)
 
 
 def showRankedPrimeTimeWindow():
@@ -590,7 +591,7 @@ def showTankPremiumAboutPage():
 def showBrowserOverlayView(url, params=None):
     if url:
         url = yield URLMacros().parse(url, params=params)
-        g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.OVERLAY_BROWSER_VIEW, ctx={'url': url,
+        g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.OVERLAY_PREM_CONTENT_VIEW, ctx={'url': url,
          'allowRightClick': False}), EVENT_BUS_SCOPE.LOBBY)
 
 

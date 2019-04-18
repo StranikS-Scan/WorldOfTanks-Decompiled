@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/rankedBattles/ranked_battles_divisions.py
 from account_helpers import AccountSettings
-from account_helpers.AccountSettings import IS_FIRST_DIVISION_ENTRY
+from account_helpers.AccountSettings import IS_FIRST_ENTRY_BY_DIVISION_ID
 from gui.impl import backport
 from gui.impl.gen import R
 from gui.ClientUpdateManager import g_clientUpdateManager
@@ -35,9 +35,12 @@ class RankedBattlesDivisionsView(RankedBattlesDivisionsViewMeta, IResetablePage)
         g_clientUpdateManager.addCallbacks({'stats.dossier': self.__dossierUpdateCallBack})
         self.__rankedController.onUpdated += self.__onRankedUpdate
         self.__rankedController.onUpdated += self.__setDivisionHeader
-        isFirstEntry = AccountSettings.getSettings(IS_FIRST_DIVISION_ENTRY)
+        isFirstEntryMap = AccountSettings.getSettings(IS_FIRST_ENTRY_BY_DIVISION_ID)
+        divisionID = self.__rankedController.getCurrentDivision().getID()
+        isFirstEntry = isFirstEntryMap.get(divisionID, True)
         if isFirstEntry:
-            AccountSettings.setSettings(IS_FIRST_DIVISION_ENTRY, False)
+            isFirstEntryMap[divisionID] = False
+            AccountSettings.setSettings(IS_FIRST_ENTRY_BY_DIVISION_ID, isFirstEntryMap)
         self.__setDivisionHeader(isFirstEntry)
         self.__onRankedUpdate()
 
@@ -111,8 +114,7 @@ class RankedBattlesDivisionsView(RankedBattlesDivisionsViewMeta, IResetablePage)
         if self.__selectedDivisionIdx != newSelectedDivisionIdx:
             self.__selectedDivisionIdx = newSelectedDivisionIdx
             self.as_setDataS({'isFirstEnter': isFirstEntry,
-             'divisions': divisions,
-             'divisionSelectedIdx': self.__selectedDivisionIdx})
+             'divisions': divisions})
 
     def __updateSounds(self):
         selectedDivision = self.__getSelectedDivision()

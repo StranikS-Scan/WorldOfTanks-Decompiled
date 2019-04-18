@@ -470,14 +470,16 @@ def configurePhysicsMode(cfg, typeDesc, gravityFactor):
     cfg['useComplexForm'] = typeDesc.type.name == 'sweden:S11_Strv_103B'
     bmin, bmax, _ = typeDesc.chassis.hitTester.bbox
     sizeX = bmax[0] - bmin[0]
-    offsZ = (bmin[2] + bmax[2]) * 0.5
     bminHull, bmaxHull, _ = typeDesc.hull.hitTester.bbox
-    if typeDesc.type.useHullZ:
+    if typeDesc.type.useHullZSize:
         sizeZ = bmaxHull[2] - bminHull[2]
     else:
         sizeZ = bmax[2] - bmin[2]
+    if typeDesc.type.useHullZOffset:
+        offsZ = (bmaxHull[2] + bminHull[2]) * 0.5
+    else:
+        offsZ = (bmin[2] + bmax[2]) * 0.5
     if typeDesc.isWheeledVehicle:
-        offsZ = (bminHull[2] + bmaxHull[2]) * 0.5
         wheelBbMin, wheelBbMax, _ = typeDesc.chassis.wheels.wheels[0].hitTester.bbox
         cfg['shape']['wheelXOffset'] = max((abs(wheel.position.x) for wheel in typeDesc.chassis.wheels.wheels))
         wheelSize = wheelBbMax - wheelBbMin
@@ -854,8 +856,10 @@ def initVehiclePhysicsFromParams(physics, params, xmlPath):
     typeDesc.hasSiegeMode = False
     typeDesc.isWheeledVehicle = False
     typeDesc.type.isRotationStill = False
-    typeDesc.type.useHullZ = False
+    typeDesc.type.useHullZSize = False
+    typeDesc.type.useHullZOffset = False
     typeDesc.type.hullAimingParams = {'pitch': {'isAvailable': False,
+               'isFlexible': False,
                'wheelCorrectionCenterZ': 0.0,
                'wheelsCorrectionSpeed': 0.2,
                'wheelsCorrectionAngles': {'pitchMax': 1.0,

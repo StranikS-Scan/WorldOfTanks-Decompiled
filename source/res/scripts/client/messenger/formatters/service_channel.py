@@ -34,7 +34,7 @@ from gui.server_events.bonuses import VehiclesBonus, DEFAULT_CREW_LVL
 from gui.server_events.recruit_helper import getSourceIdFromQuest
 from gui.server_events.finders import PERSONAL_MISSION_TOKEN
 from gui.shared import formatters as shared_fmts
-from gui.shared.formatters import text_styles
+from gui.shared.formatters import text_styles, time_formatters
 from gui.shared.formatters.currency import getBWFormatter, getStyle, applyAll
 from gui.shared.gui_items import GUI_ITEM_TYPE, GUI_ITEM_TYPE_NAMES
 from gui.shared.gui_items.Tankman import Tankman
@@ -2319,7 +2319,7 @@ class StrongholdMessageFormatter(ServiceChannelFormatter):
         expirationTime = data['timeExpiration']
         order = text_styles.neutral(self.getOrderUserString(orderTypeID))
         return self._buildMessage(event, {'order': order,
-         'timeLeft': time_utils.getTillTimeString(time_utils.getTimeDeltaFromNow(expirationTime), backport.text(R.strings.menu.Time.timeValueWithSecs()))})
+         'timeLeft': time_formatters.getTillTimeByResource(time_utils.getTimeDeltaFromNow(expirationTime), R.strings.menu.Time.timeValueWithSecs)})
 
     def _reserveExpiredMessage(self, data):
         return self._buildMessage(data['event'], {'order': self.getOrderUserString(data['orderTypeID'])})
@@ -2790,7 +2790,6 @@ class RankedQuestFormatter(TokenQuestsFormatter):
         return [formattedMessage]
 
     def _formatSeasonProgress(self, season, league, data):
-        self.__rankedController.getLeagueProvider().forceUpdateLeague()
         webLeague = self.__rankedController.getLeagueProvider().webLeague
         resultStrings = []
         rankedQuests = self.__eventsCache.getRankedQuests(lambda q: q.isHidden() and q.isForRank() and q.getSeasonID() == season.getSeasonID() and q.isCompleted())

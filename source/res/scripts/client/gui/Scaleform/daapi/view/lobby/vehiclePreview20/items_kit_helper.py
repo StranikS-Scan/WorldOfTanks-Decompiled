@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/vehiclePreview20/items_kit_helper.py
 import itertools
+import typing
 from collections import Container
 from CurrentVehicle import g_currentPreviewVehicle
 from gui.Scaleform.daapi.view.lobby.storage.storage_helpers import getBoosterType
@@ -10,14 +11,17 @@ from gui.Scaleform.locale.EPIC_BATTLE import EPIC_BATTLE
 from gui.Scaleform.locale.QUESTS import QUESTS
 from gui.Scaleform.locale.RES_SHOP import RES_SHOP
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
+from gui.Scaleform.locale.VEHICLE_PREVIEW import VEHICLE_PREVIEW
 from gui.shared.gui_items.Tankman import CrewTypes
-from gui.shared.money import Currency
+from gui.shared.money import Currency, Money, MONEY_ZERO_GOLD
 from gui.shared.utils.functions import makeTooltip
+from gui.impl import backport
+from gui.impl.gen import R
 from items import EQUIPMENT_TYPES
 from items import makeIntCompactDescrByID as makeCD
 from items.components.c11n_constants import CustomizationType
 from items.vehicles import NUM_OPTIONAL_DEVICE_SLOTS, NUM_EQUIPMENT_SLOTS_BY_TYPE, NUM_SHELLS_SLOTS
-from shared_utils import findFirst, first
+from shared_utils import findFirst, first, CONST_CONTAINER
 from skeletons.gui.goodies import IGoodiesCache
 from web_client_api.common import ItemPackType, ItemPackTypeGroup, ItemPackEntry
 from gui.shared.gui_items import vehicle_adjusters
@@ -27,10 +31,19 @@ from helpers import dependency
 from helpers.i18n import makeString as _ms
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
+from gui.shared.formatters import text_styles, icons
+
+class ITEM_SORT_RULE(CONST_CONTAINER):
+    REGULAR = 'regular'
+    FRONTLINE = 'frontline'
+
+
 OFFER_CHANGED_EVENT = 'offerChanged'
 _NUM_REGULAR_EQUIPMENT_SLOTS = NUM_EQUIPMENT_SLOTS_BY_TYPE[EQUIPMENT_TYPES.regular]
 _UNLIMITED_ITEMS_COUNT = -1
-_ANY_ITEM_TYPE = {v for _, v in ItemPackType.getIterator()} - set(ItemPackTypeGroup.CREW)
+_EXCLUDE_ITEMS = {v for v in ItemPackTypeGroup.CREW} | {ItemPackType.FRONTLINE_TOKEN}
+_ANY_ITEM_TYPE = {v for _, v in ItemPackType.getIterator()} - _EXCLUDE_ITEMS
+_FRONTLINE_GIFTS = {v for _, v in ItemPackType.getIterator()} - {ItemPackType.FRONTLINE_TOKEN}
 _NATIVE_ITEM_TYPE = set(itertools.chain(ItemPackTypeGroup.VEHICLE, ItemPackTypeGroup.ITEM))
 _CUSTOMIZATION_ITEM_TYPE = set(itertools.chain(ItemPackTypeGroup.STYLE, ItemPackTypeGroup.CAMOUFLAGE, ItemPackTypeGroup.PAINT, ItemPackTypeGroup.DECAL, ItemPackTypeGroup.PROJECTION_DECAL, ItemPackTypeGroup.PERSONAL_NUMBER, ItemPackTypeGroup.MODIFICATION))
 _CUSTOMIZATION_TYPES_MAP = {ItemPackType.STYLE: CustomizationType.STYLE,
@@ -49,10 +62,11 @@ _CUSTOMIZATION_TYPES_MAP = {ItemPackType.STYLE: CustomizationType.STYLE,
  ItemPackType.MODIFICATION: CustomizationType.MODIFICATION}
 _BOOSTER_ITEM_TYPE = set(ItemPackTypeGroup.GOODIE)
 _UNCOUNTABLE_ITEM_TYPE = {ItemPackType.CUSTOM_PREMIUM,
+ ItemPackType.CUSTOM_PREMIUM_PLUS,
  ItemPackType.CUSTOM_CREDITS,
  ItemPackType.CUSTOM_CRYSTAL,
  ItemPackType.CUSTOM_GOLD}
-_PACK_ITEMS_SORT_ORDER = list(itertools.chain(ItemPackTypeGroup.CUSTOM, ItemPackTypeGroup.TOKEN, ItemPackTypeGroup.GOODIE, ItemPackTypeGroup.CREW, ItemPackTypeGroup.STYLE, ItemPackTypeGroup.CAMOUFLAGE, ItemPackTypeGroup.DECAL, ItemPackTypeGroup.MODIFICATION, ItemPackTypeGroup.PAINT, ItemPackTypeGroup.ITEM))
+_PACK_ITEMS_SORT_ORDER = list(itertools.chain(ItemPackTypeGroup.DISCOUNT, ItemPackTypeGroup.CUSTOM, ItemPackTypeGroup.TOKEN, ItemPackTypeGroup.GOODIE, ItemPackTypeGroup.CREW, ItemPackTypeGroup.STYLE, ItemPackTypeGroup.CAMOUFLAGE, ItemPackTypeGroup.DECAL, ItemPackTypeGroup.MODIFICATION, ItemPackTypeGroup.PAINT, ItemPackTypeGroup.ITEM))
 _TOOLTIP_TYPE = {ItemPackType.ITEM_DEVICE: TOOLTIPS_CONSTANTS.SHOP_20_MODULE,
  ItemPackType.ITEM_EQUIPMENT: TOOLTIPS_CONSTANTS.SHOP_20_MODULE,
  ItemPackType.ITEM_SHELL: TOOLTIPS_CONSTANTS.SHOP_20_SHELL,
@@ -100,7 +114,8 @@ _ICONS = {ItemPackType.CAMOUFLAGE_ALL: RES_SHOP.MAPS_SHOP_REWARDS_48X48_PRIZE_CA
  ItemPackType.CUSTOM_CREDITS: RES_SHOP.MAPS_SHOP_REWARDS_48X48_MONEY_SILVER,
  ItemPackType.CUSTOM_CRYSTAL: RES_SHOP.MAPS_SHOP_REWARDS_48X48_MONEY_BONDS,
  ItemPackType.CUSTOM_SLOT: RES_SHOP.MAPS_SHOP_REWARDS_48X48_PRIZE_HANGARSLOT,
- ItemPackType.CUSTOM_REFERRAL_CREW: RES_SHOP.MAPS_SHOP_REWARDS_48X48_PRIZECREW}
+ ItemPackType.CUSTOM_REFERRAL_CREW: RES_SHOP.MAPS_SHOP_REWARDS_48X48_PRIZECREW,
+ ItemPackType.CREW_100: RES_SHOP.MAPS_SHOP_REWARDS_48X48_PRIZECREW}
 _NOT_FOUND_ICONS = {ItemPackType.TOKEN: RES_ICONS.MAPS_ICONS_QUESTS_ICON_BATTLE_MISSIONS_PRIZE_TOKEN}
 _PREM_ICONS = {1: RES_SHOP.MAPS_SHOP_REWARDS_48X48_ICON_BATTLE_MISSIONS_PRIZE_1DAYPREM,
  2: RES_SHOP.MAPS_SHOP_REWARDS_48X48_ICON_BATTLE_MISSIONS_PRIZE_2DAYPREM,
@@ -111,6 +126,12 @@ _PREM_ICONS = {1: RES_SHOP.MAPS_SHOP_REWARDS_48X48_ICON_BATTLE_MISSIONS_PRIZE_1D
  90: RES_SHOP.MAPS_SHOP_REWARDS_48X48_ICON_BATTLE_MISSIONS_PRIZE_90DAYPREM,
  180: RES_SHOP.MAPS_SHOP_REWARDS_48X48_ICON_BATTLE_MISSIONS_PRIZE_180DAYPREM,
  360: RES_SHOP.MAPS_SHOP_REWARDS_48X48_ICON_BATTLE_MISSIONS_PRIZE_360DAYPREM}
+
+def __getPremiumPlusIcon(days):
+    r = R.images.gui.maps.icons.quests.bonuses.small.dyn('premium_plus_{}'.format(days))
+    return backport.image(r()) if r.exists() else ''
+
+
 _BOX_ITEM = None
 BOX_TYPE = 'box'
 _OPEN_QUOTES = _ms(COMMON.COMMON_OPEN_QUOTES)
@@ -190,6 +211,8 @@ def getItemIcon(rawItem, item):
             icon = _ICONS.get(rawItem.type, item.icon)
         elif rawItem.type == ItemPackType.CUSTOM_PREMIUM:
             icon = _PREM_ICONS.get(rawItem.count, '')
+        elif rawItem.type == ItemPackType.CUSTOM_PREMIUM_PLUS:
+            icon = __getPremiumPlusIcon(rawItem.count)
         else:
             icon = _ICONS.get(rawItem.type, '')
         icon = icon or _NOT_FOUND_ICONS.get(rawItem.type, RES_ICONS.MAPS_ICONS_ARTEFACT_NOTFOUND)
@@ -217,7 +240,9 @@ def getItemTitle(rawItem, item, forBox=False):
     elif rawItem.type == ItemPackType.CUSTOM_REWARD_POINT:
         title = _ms(EPIC_BATTLE.EPICBATTLEITEM_REWARDPOINTS_HEADER)
     elif rawItem.type == ItemPackType.CUSTOM_PREMIUM:
-        title = _ms(TOOLTIPS.PREMIUM_DAYS_HEADER, rawItem.count)
+        title = backport.text(R.strings.tooltips.premium.days.header(), rawItem.count)
+    elif rawItem.type == ItemPackType.CUSTOM_PREMIUM_PLUS:
+        title = backport.text(R.strings.tooltips.premiumPlus.days.header(), rawItem.count)
     elif rawItem.type == ItemPackType.CUSTOM_REFERRAL_CREW:
         vehicle = g_currentPreviewVehicle.item
         title = _ms(TOOLTIPS.CUSTOMCREW_REFERRAL_HEADER, vehicle=vehicle.userName)
@@ -240,7 +265,9 @@ def getItemDescription(rawItem, item):
     elif rawItem.type == ItemPackType.CUSTOM_CRYSTAL:
         description = _ms(TOOLTIPS.AWARDITEM_CRYSTAL_BODY)
     elif rawItem.type == ItemPackType.CUSTOM_PREMIUM:
-        description = _ms(TOOLTIPS.AWARDITEM_PREMIUM_BODY)
+        description = backport.text(R.strings.tooltips.awardItem.premium.body())
+    elif rawItem.type == ItemPackType.CUSTOM_PREMIUM_PLUS:
+        description = backport.text(R.strings.tooltips.awardItem.premium_plus.body())
     elif rawItem.type == ItemPackType.CUSTOM_REFERRAL_CREW:
         description = _ms(TOOLTIPS.CUSTOMCREW_REFERRAL_BODY, value=CrewTypes.SKILL_100)
     elif rawItem.type == ItemPackType.CUSTOM_SUPPLY_POINT:
@@ -294,28 +321,39 @@ def _getItemKey(item):
 
 
 def _createItemVO(rawItem, itemsCache, goodiesCache, slotIndex, rawTooltipData=None):
+    countFormat = ''
     if rawItem == _BOX_ITEM:
         cd = 0
         icon = RES_ICONS.MAPS_ICONS_RANKEDBATTLES_BOXES_48X48_METAL_1
         overlay = SLOT_HIGHLIGHT_TYPES.NO_HIGHLIGHT
-        count = 0
     else:
         fittingItem = lookupItem(rawItem, itemsCache, goodiesCache)
         cd = fittingItem.intCD if fittingItem is not None else rawItem.id
         icon = getItemIcon(rawItem, fittingItem)
         overlay = getBoosterType(fittingItem)
-        if rawItem.type in _UNCOUNTABLE_ITEM_TYPE:
-            count = 1
+        if rawItem.type in ItemPackTypeGroup.CREW:
+            countFormat = _formatCrew(rawItem)
+        elif rawItem.type in _UNCOUNTABLE_ITEM_TYPE:
+            countFormat = ''
         else:
             count = rawItem.count
+            countFormat = 'x{}'.format(count) if count > 1 else ''
     return {'id': str(cd),
      'icon': icon,
      'overlayType': overlay,
      'type': rawItem.type if rawItem is not None else BOX_TYPE,
      'iconAlt': RES_ICONS.MAPS_ICONS_ARTEFACT_NOTFOUND,
      'slotIndex': slotIndex,
-     'count': 'x{}'.format(count) if count > 1 else '',
+     'count': countFormat,
      'rawData': rawTooltipData}
+
+
+def _formatCrew(item):
+    if item.type == ItemPackType.CREW_100:
+        return '100%'
+    if item.type == ItemPackType.CREW_75:
+        return '75%'
+    return '50%' if item.type == ItemPackType.CREW_50 else ''
 
 
 def _getBoxTooltipVO(rawItems, itemsCache, goodiesCache):
@@ -357,12 +395,12 @@ class _NodeContainer(object):
         self._itemTypeOrGroup = itemTypeOrGroup
 
     def getVO(self):
-        result = []
+        items = []
         self._sortChildren()
         for i, child in enumerate(self._children):
-            result.append(_createItemVO(child, self.itemsCache, self.goodiesCache, i))
+            items.append(_createItemVO(child, self.itemsCache, self.goodiesCache, i))
 
-        return result
+        return self.wrapVO(items)
 
     def getNextNode(self):
         return self._nextNode
@@ -385,6 +423,16 @@ class _NodeContainer(object):
                     itemsLeft = itemsCount - counterLimit
                     item = item.replace({'count': itemsLeft})
         self._addItemToNextNode(item, vehicle, vehicleGroupId)
+
+    @staticmethod
+    def wrapVO(items):
+        result = {}
+        if items:
+            result = {'items': items,
+             'isEnabled': True,
+             'topTitle': '',
+             'topTitleSmall': ''}
+        return result
 
     def _install(self, item, vehicle, slotIdx):
         for child in self._children:
@@ -470,8 +518,7 @@ class _PriorityNodeContainer(_NodeContainer):
         itemAllowed = _checkItemType(item.type, self._itemTypeOrGroup)
         if itemAllowed:
             self._children.append(item)
-            maxIndex = len(_PACK_ITEMS_SORT_ORDER)
-            self._children.sort(key=lambda i: _PACK_ITEMS_SORT_ORDER.index(i.type) if i.type in _PACK_ITEMS_SORT_ORDER else maxIndex)
+            self._children = _sortItemsByOrder(self._children)
             if self._maxChildCount != _UNLIMITED_ITEMS_COUNT and len(self._children) > self._maxChildCount:
                 excluded = self._children.pop()
                 self._addItemToNextNode(excluded, vehicle, vehicleGroupId)
@@ -482,7 +529,50 @@ class _PriorityNodeContainer(_NodeContainer):
         if len(self._children) <= 1:
             return super(_PriorityNodeContainer, self).getVO()
         rawTooltipData = _getBoxTooltipVO(self._children, self.itemsCache, self.goodiesCache)
-        return [_createItemVO(_BOX_ITEM, self.itemsCache, self.goodiesCache, 0, rawTooltipData)]
+        items = [_createItemVO(_BOX_ITEM, self.itemsCache, self.goodiesCache, 0, rawTooltipData)]
+        return self.wrapVO(items)
+
+
+class _FrontlineNodeContainer(_NodeContainer):
+
+    def __init__(self, nextNode=None):
+        super(_FrontlineNodeContainer, self).__init__(_UNLIMITED_ITEMS_COUNT, ItemPackType.FRONTLINE_TOKEN, nextNode)
+
+    def addItem(self, item, vehicle, vehicleGroupId):
+        if item.type == self._itemTypeOrGroup:
+            self._children.append(item)
+        else:
+            self._addItemToNextNode(item, vehicle, vehicleGroupId)
+
+    @staticmethod
+    def wrapVO(items):
+        return {}
+
+
+class _GiftNodeContainer(_NodeContainer):
+
+    def __init__(self, nextNode=None):
+        super(_GiftNodeContainer, self).__init__(_UNLIMITED_ITEMS_COUNT, _FRONTLINE_GIFTS, nextNode)
+
+    def addItem(self, item, vehicle, vehicleGroupId):
+        itemAllowed = _checkItemType(item.type, self._itemTypeOrGroup)
+        if itemAllowed:
+            self._children.append(item)
+        else:
+            self._addItemToNextNode(item, vehicle, vehicleGroupId)
+
+    @staticmethod
+    def wrapVO(items):
+        result = {}
+        if items:
+            result = {'items': items,
+             'isEnabled': True,
+             'topTitle': text_styles.concatStylesToSingleLine(icons.makeImageTag(source=backport.image(R.images.gui.maps.icons.library.icon_gift()), width=17, height=15, vSpace=0), text_styles.vehicleStatusCriticalTextSmall(VEHICLE_PREVIEW.BUYINGPANEL_PRESENT)),
+             'topTitleSmall': icons.makeImageTag(source=backport.image(R.images.gui.maps.icons.library.icon_gift()), width=17, height=15, vSpace=0)}
+        return result
+
+    def _sortChildren(self):
+        self._children = _sortItemsByOrder(self._children)
 
 
 class _CustomCrewSkillsNodeContainer(_NodeContainer):
@@ -507,29 +597,41 @@ class _CustomCrewSkillsNodeContainer(_NodeContainer):
 
 
 def getDataOneVehicle(itemsPack, vehicle, vehicleGroupId):
-    root = _CustomCrewSkillsNodeContainer(nextNode=_OptDeviceNodeContainer(nextNode=_ShellNodeContainer(nextNode=_EquipmentNodeContainer(nextNode=_PriorityNodeContainer(1, nextNode=_PriorityNodeContainer(_UNLIMITED_ITEMS_COUNT))))))
-    for item in itemsPack:
-        root.addItem(item, vehicle, vehicleGroupId)
+    rule = __getItemsSortRule(itemsPack)
+    if rule == ITEM_SORT_RULE.FRONTLINE:
+        root = __getFrontlinePackRule()
+    else:
+        root = __getDefaultPackRule()
+    return _packDataOneVehicle(root, itemsPack, vehicle, vehicleGroupId)
 
-    itemsVOs = []
-    while root:
-        vo = root.getVO()
-        if vo:
-            itemsVOs.append(vo)
-        prevNode = root
-        root = prevNode.getNextNode()
-        prevNode.destroy()
 
-    return addCompensationInfo(itemsVOs, itemsPack)
+def getCouponDiscountForItemPack(itemsPack):
+    discount = 0
+    if itemsPack is None:
+        return Money(gold=discount)
+    else:
+        for item in itemsPack:
+            if item.type in ItemPackTypeGroup.DISCOUNT:
+                discount += item.count
+
+        return Money(gold=discount)
+
+
+def getCouponBonusesForItemPack(itemsPack):
+    result = []
+    if itemsPack:
+        itemsPack = _sortItemsByOrder(itemsPack)
+        for item in itemsPack:
+            if item.type not in ItemPackTypeGroup.DISCOUNT + ItemPackTypeGroup.VEHICLE:
+                result.append({'img': _ICONS[item.type],
+                 'text': getItemTitle(item, None)})
+
+    return result
 
 
 def getDataMultiVehicles(itemsPack, vehicle):
-    container = _PriorityNodeContainer(_UNLIMITED_ITEMS_COUNT)
-    for item in itemsPack:
-        container.addItem(item, vehicle, None)
-
-    inContainerVOs = container.getVO()
-    return addCompensationInfo([inContainerVOs], itemsPack) if inContainerVOs else []
+    rule = __getItemsSortRule(itemsPack)
+    return [] if rule == ITEM_SORT_RULE.FRONTLINE else _packDataMultiVehicles(itemsPack, vehicle)
 
 
 @dependency.replace_none_kwargs(itemsCache=IItemsCache)
@@ -546,7 +648,7 @@ def addCompensationInfo(itemsVOs, itemsPack, itemsCache=None):
         return False
 
     for itemsVO in itemsVOs:
-        for vo in itemsVO:
+        for vo in itemsVO['items']:
             vo['hasCompensation'] = hasCompensation(vo)
             for insideBoxVO in vo['rawData']['items'] if vo['rawData'] else []:
                 insideBoxVO['hasCompensation'] = hasCompensation(insideBoxVO)
@@ -566,3 +668,49 @@ def mayObtainWithMoneyExchange(itemPrice, itemsCache=None):
 @dependency.replace_none_kwargs(itemsCache=IItemsCache)
 def mayObtainForMoney(itemPrice, itemsCache=None):
     return itemPrice <= itemsCache.items.stats.money
+
+
+def _sortItemsByOrder(items, rule=None):
+    if rule is None:
+        rule = _PACK_ITEMS_SORT_ORDER
+    maxIndex = len(rule)
+    items.sort(key=lambda i: rule.index(i.type) if i.type in rule else maxIndex)
+    return items
+
+
+def _packDataOneVehicle(root, itemsPack, vehicle, vehicleGroupId):
+    for item in itemsPack:
+        root.addItem(item, vehicle, vehicleGroupId)
+
+    itemsVOs = []
+    while root:
+        vo = root.getVO()
+        if vo:
+            itemsVOs.append(vo)
+        prevNode = root
+        root = prevNode.getNextNode()
+        prevNode.destroy()
+
+    return addCompensationInfo(itemsVOs, itemsPack)
+
+
+def _packDataMultiVehicles(itemsPack, vehicle):
+    container = _PriorityNodeContainer(_UNLIMITED_ITEMS_COUNT)
+    for item in itemsPack:
+        container.addItem(item, vehicle, None)
+
+    inContainerVOs = container.getVO()
+    return addCompensationInfo([inContainerVOs], itemsPack) if inContainerVOs else []
+
+
+def __getItemsSortRule(itemsPack):
+    frontlineOffer = getCouponDiscountForItemPack(itemsPack) != MONEY_ZERO_GOLD
+    return ITEM_SORT_RULE.FRONTLINE if frontlineOffer else ITEM_SORT_RULE.REGULAR
+
+
+def __getDefaultPackRule():
+    return _CustomCrewSkillsNodeContainer(nextNode=_OptDeviceNodeContainer(nextNode=_ShellNodeContainer(nextNode=_EquipmentNodeContainer(nextNode=_PriorityNodeContainer(1, nextNode=_PriorityNodeContainer(_UNLIMITED_ITEMS_COUNT))))))
+
+
+def __getFrontlinePackRule():
+    return _FrontlineNodeContainer(nextNode=_GiftNodeContainer())

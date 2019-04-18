@@ -26,14 +26,13 @@ from gui.server_events import settings
 from gui.server_events.awards_formatters import AWARDS_SIZES
 from gui.server_events.cond_formatters.tokens import TokensMarathonFormatter
 from gui.server_events.event_items import DEFAULTS_GROUPS
-from gui.server_events.events_helpers import hasAtLeastOneAvailableQuest, isAllQuestsCompleted, isLinkedSet, getLocalizedQuestNameForLinkedSetQuest, getLocalizedQuestDescForLinkedSetQuest, getLinkedSetMissionIDFromQuest, isPremium, premMissionsSortFunc
+from gui.server_events.events_helpers import hasAtLeastOneAvailableQuest, isAllQuestsCompleted, isLinkedSet, getLocalizedQuestNameForLinkedSetQuest, getLocalizedQuestDescForLinkedSetQuest, getLinkedSetMissionIDFromQuest, isPremium, premMissionsSortFunc, isPremiumQuestsEnable, getPremiumGroup
 from gui.server_events.events_helpers import missionsSortFunc
 from gui.server_events.formatters import DECORATION_SIZES
 from gui.shared.formatters import text_styles
 from gui.shared.formatters.icons import makeImageTag
 from helpers import dependency, time_utils
 from helpers.i18n import makeString as _ms
-from shared_utils import findFirst
 from skeletons.gui.linkedset import ILinkedSetController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
@@ -93,12 +92,6 @@ def _getMissionsCountLabel(completed, total):
     completed = text_styles.stats(completed)
     total = text_styles.standard(total)
     return text_styles.concatStylesToSingleLine(text_styles.standard(QUESTS.MISSIONS_TAB_CATEGORY_HEADER_PERFORMEDTASKS), text_styles.disabled('  %s / %s' % (completed, total)))
-
-
-@dependency.replace_none_kwargs(eventsCache=IEventsCache)
-def getPremiumGroup(eventsCache=None):
-    groups = eventsCache.getGroups()
-    return findFirst(lambda g: isPremium(g.getID()), groups.values())
 
 
 class _EventsBlockBuilder(object):
@@ -262,9 +255,8 @@ class QuestsGroupsBuilder(GroupedEventsBlocksBuilder):
         if self.linkedSet.isLinkedSetEnabled() and (self.__wasLinkedSetShowed or not self.linkedSet.isLinkedSetFinished()):
             self._cache['groupedEvents']['linkedset'] = _LinkedSetQuestsBlockInfo()
             self.__wasLinkedSetShowed = True
-        isPremaccQuestsEnabled = self.lobbyContext.getServerSettings().getPremQuestsConfig().get('enabled', False)
         group = getPremiumGroup()
-        if isPremaccQuestsEnabled and 'premium' not in self._cache['groupedEvents'].iterkeys() and group:
+        if isPremiumQuestsEnable() and 'premium' not in self._cache['groupedEvents'].iterkeys() and group:
             self._cache['groupedEvents']['premium'] = _PremiumGroupedQuestsBlockInfo()
 
     def _getDefaultBlocks(self):
@@ -863,8 +855,9 @@ class _PremiumGroupedQuestsBlockInfo(_GroupedQuestsBlockInfo):
 
     def _getDailyResetStatus(self):
         resetHourUTC = self.lobbyContext.getServerSettings().regionals.getDayStartingTime() / time_utils.ONE_HOUR
-        timeFmt = backport.text(R.strings.quests.details.conditions.postBattle.dailyReset.timeFmt())
-        return time.strftime(timeFmt, time_utils.getTimeStructInLocal(time_utils.getTimeTodayForUTC(hour=resetHourUTC))) if resetHourUTC >= 0 else ''
+        deltaTimeUTC = time_utils.getTimeDeltaFromNow(time_utils.getDailyTimeForUTC(hour=resetHourUTC))
+        timeFmt = backport.text(R.strings.quests.details.conditions.postBattle.deltaDailyReset.timeFmt())
+        return time.strftime(timeFmt, time_utils.getTimeStructInUTC(deltaTimeUTC)) if resetHourUTC >= 0 else ''
 
     def _getHeaderData(self):
         info = _getMissionsCountLabel(self._completedQuestsCount, self._totalQuestsCount)

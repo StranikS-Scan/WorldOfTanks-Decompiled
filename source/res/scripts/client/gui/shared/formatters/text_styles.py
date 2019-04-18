@@ -292,6 +292,10 @@ def vehicleStatusCriticalText(text):
     return _formatText('vehicleStatusCriticalText', text)
 
 
+def vehicleStatusCriticalTextSmall(text):
+    return _formatText('vehicleStatusCriticalTextSmall', text)
+
+
 def vehicleName(text):
     return _formatText('vehicleName', text)
 

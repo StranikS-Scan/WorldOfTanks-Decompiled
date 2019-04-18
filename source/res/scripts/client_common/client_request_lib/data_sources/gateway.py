@@ -157,6 +157,18 @@ class GatewayDataAccessor(base.BaseDataAccessor):
         url = '/accounts/names/'
         return self._request_data(callback, url, get_data=get_params, converters={'id': int})
 
+    def get_account_attribute_by_prefix(self, callback, attr_prefix, fields=None):
+        get_params = {'attr_prefix': attr_prefix,
+         'fields': fields}
+        url = '/accounts/attributes/get_by_prefix/'
+        return self._request_data(callback, url, get_data=get_params)
+
+    def freya_v1_fetch_product_list(self, callback, request_data, fields=None):
+        params = request_data
+        params.update({'fields': fields})
+        url = '/freya/server/api/v1/fetchProductListState/'
+        return self._request_data(callback, url, method='POST', post_data=params)
+
     def get_clan_members(self, callback, clan_id, fields=None):
         get_params = {'fields': fields}
         url = '/clans/%s/members/' % clan_id

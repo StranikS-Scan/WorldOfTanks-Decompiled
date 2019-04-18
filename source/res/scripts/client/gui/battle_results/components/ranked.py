@@ -13,6 +13,7 @@ from gui.shared.formatters import text_styles
 from helpers import dependency
 from skeletons.gui.game_control import IRankedBattlesController
 from skeletons.account_helpers.settings_core import ISettingsCore
+from shared_utils import CONST_CONTAINER
 TitleAndDescription = namedtuple('TitleAndDescription', 'title, description, descriptionIcon')
 Shield = namedtuple('Shield', 'shieldCount, shieldIcon, plateIcon')
 IconAndShield = namedtuple('IconAndShield', 'icon, shield')
@@ -29,18 +30,22 @@ def _getTopsNotEffectiveIcon(topNumber):
     return backport.image(R.images.gui.maps.icons.rankedBattles.tops.notEffective.c_106x98.dyn('top{}'.format(topNumber))())
 
 
-_STEPS_EARNED = 2
-_STEP_EARNED = 1
-_STEP_NOT_CHANGED = 0
-_STEP_LOST = -1
+class MiniSteps(CONST_CONTAINER):
+    STEPS_EARNED_BONUS = 4
+    STEP_EARNED_BONUS = 3
+    STEPS_EARNED = 2
+    STEP_EARNED = 1
+    STEP_NOT_CHANGED = 0
+    STEP_LOST = -1
+
 
 class RankedInfoHelper(object):
     rankedController = dependency.descriptor(IRankedBattlesController)
     __slots__ = ('_reusable',)
-    _RESOURCE_MAP = {_STEPS_EARNED: (RANKEDBATTLES_ALIASES.BACKGROUND_STATE_TOP2, RANKEDBATTLES_ALIASES.BACKGROUND_STATE_TOP, _getTopsTopIcon),
-     _STEP_EARNED: (RANKEDBATTLES_ALIASES.BACKGROUND_STATE_TOP, RANKEDBATTLES_ALIASES.BACKGROUND_STATE_TOP, _getTopsTopIcon),
-     _STEP_NOT_CHANGED: (RANKEDBATTLES_ALIASES.BACKGROUND_STATE_NOTEFFECTIVE, RANKEDBATTLES_ALIASES.BACKGROUND_STATE_NOTEFFECTIVE, _getTopsNotEffectiveIcon),
-     _STEP_LOST: (RANKEDBATTLES_ALIASES.BACKGROUND_STATE_LOSE, RANKEDBATTLES_ALIASES.BACKGROUND_STATE_LOSE, _getTopsLoseIcon)}
+    _RESOURCE_MAP = {MiniSteps.STEPS_EARNED: (RANKEDBATTLES_ALIASES.BACKGROUND_STATE_TOP2, RANKEDBATTLES_ALIASES.BACKGROUND_STATE_TOP, _getTopsTopIcon),
+     MiniSteps.STEP_EARNED: (RANKEDBATTLES_ALIASES.BACKGROUND_STATE_TOP, RANKEDBATTLES_ALIASES.BACKGROUND_STATE_TOP, _getTopsTopIcon),
+     MiniSteps.STEP_NOT_CHANGED: (RANKEDBATTLES_ALIASES.BACKGROUND_STATE_NOTEFFECTIVE, RANKEDBATTLES_ALIASES.BACKGROUND_STATE_NOTEFFECTIVE, _getTopsNotEffectiveIcon),
+     MiniSteps.STEP_LOST: (RANKEDBATTLES_ALIASES.BACKGROUND_STATE_LOSE, RANKEDBATTLES_ALIASES.BACKGROUND_STATE_LOSE, _getTopsLoseIcon)}
 
     def __init__(self, reusable):
         self._reusable = reusable
@@ -146,10 +151,10 @@ class RankedResultsInfoHelper(RankedInfoHelper):
     @classmethod
     def __getStepTypeByDiff(cls, stepDiff):
         if stepDiff == 0:
-            return _STEP_NOT_CHANGED
+            return MiniSteps.STEP_NOT_CHANGED
         if stepDiff == 1:
-            return _STEP_EARNED
-        return _STEPS_EARNED if stepDiff > 0 else _STEP_LOST
+            return MiniSteps.STEP_EARNED
+        return MiniSteps.STEPS_EARNED if stepDiff > 0 else MiniSteps.STEP_LOST
 
     @classmethod
     def __getStepInfo(cls, stepElement, rankChanges):
@@ -177,10 +182,12 @@ class RankedChangesInfoHelper(RankedInfoHelper):
      RankChangeStates.STEP_LOST: R.images.gui.maps.icons.rankedBattles.ranks.stage.c_140x120.stage_red(),
      RankChangeStates.NOTHING_CHANGED: R.images.gui.maps.icons.rankedBattles.ranks.stage.c_140x120.stage_grey(),
      RankChangeStates.RANK_UNBURN_PROTECTED: R.images.gui.maps.icons.rankedBattles.ranks.stage.c_140x120.stage_grey()}
-    _MINI_STEPS_ICONS = {_STEPS_EARNED: R.images.gui.maps.icons.rankedBattles.ranks.miniStage.plus2(),
-     _STEP_EARNED: R.images.gui.maps.icons.rankedBattles.ranks.miniStage.plus1(),
-     _STEP_NOT_CHANGED: R.images.gui.maps.icons.rankedBattles.ranks.miniStage.nothing(),
-     _STEP_LOST: R.images.gui.maps.icons.rankedBattles.ranks.miniStage.minus1()}
+    _MINI_STEPS_ICONS = {MiniSteps.STEPS_EARNED_BONUS: R.images.gui.maps.icons.rankedBattles.ranks.miniStage.plus2Bonus(),
+     MiniSteps.STEP_EARNED_BONUS: R.images.gui.maps.icons.rankedBattles.ranks.miniStage.plus1Bonus(),
+     MiniSteps.STEPS_EARNED: R.images.gui.maps.icons.rankedBattles.ranks.miniStage.plus2(),
+     MiniSteps.STEP_EARNED: R.images.gui.maps.icons.rankedBattles.ranks.miniStage.plus1(),
+     MiniSteps.STEP_NOT_CHANGED: R.images.gui.maps.icons.rankedBattles.ranks.miniStage.nothing(),
+     MiniSteps.STEP_LOST: R.images.gui.maps.icons.rankedBattles.ranks.miniStage.minus1()}
     _STATE_TO_SUBTASK = {RankChangeStates.LEAGUE_EARNED: RANKEDBATTLES_ALIASES.SUBTASK_STATE_LEAGUE,
      RankChangeStates.DIVISION_EARNED: RANKEDBATTLES_ALIASES.SUBTASK_STATE_DIVISION,
      RankChangeStates.RANK_EARNED: RANKEDBATTLES_ALIASES.SUBTASK_STATE_RANK,
@@ -217,16 +224,18 @@ class RankedChangesInfoHelper(RankedInfoHelper):
         if shieldState == RANKEDBATTLES_ALIASES.SHIELD_LOSE:
             title = backport.text(R.strings.ranked_battles.battleresult.shieldLose())
         position = self._getPlayerPosition(allyVehicles)
-        descriptionIcon = self._getDescriptionIcon(position)
+        descriptionIcon = self._getDescriptionIcon(rankState, rankInfo.stepChanges, rankInfo.updatedStepChanges)
         topNumber = self._getWinnerBounds(position) if isWin else self._getLoserBounds(position)
         position = position + 1 if position is not None else topNumber
         winKey = 'win' if isWin else 'lose'
         topKey = 'inTop' if topNumber >= position else 'notInTop'
         description = backport.text(R.strings.ranked_battles.battleresult.dyn(topKey).dyn(winKey)(), topNumber=topNumber)
+        if rankInfo.isBonusBattle:
+            description = text_styles.concatStylesToSingleLine(description, backport.text(R.strings.ranked_battles.battleresult.bonusBattlesUsed()))
         if rankState in (RankChangeStates.DIVISION_EARNED, RankChangeStates.LEAGUE_EARNED):
-            description = backport.text(R.strings.ranked_battles.battleresult.bonusBattlesEarned(), count=text_styles.neutral(rankInfo.additionalBonusBattles))
             if rankState == RankChangeStates.LEAGUE_EARNED:
-                description = text_styles.concatStylesToMultiLine(backport.text(R.strings.ranked_battles.battleresult.leagueUnavailable()), description)
+                description = backport.text(R.strings.ranked_battles.battleresult.leagueUnavailable())
+            description = text_styles.concatStylesToMultiLine(description, backport.text(R.strings.ranked_battles.battleresult.bonusBattlesEarned(), count=text_styles.neutral(rankInfo.additionalBonusBattles)))
             return TitleAndDescription(title, description, descriptionIcon)
         elif rankState == RankChangeStates.RANK_UNBURN_PROTECTED:
             title = backport.text(R.strings.ranked_battles.battleresult.rankUnburnable())
@@ -263,22 +272,22 @@ class RankedChangesInfoHelper(RankedInfoHelper):
     def makeSubTaskState(self):
         return self._STATE_TO_SUBTASK[self.getRankChangeStatus()]
 
-    def _getDescriptionIcon(self, position):
-        if position is None:
+    def _getDescriptionIcon(self, state, stepChanges, updatedStepChanges):
+        if stepChanges is None:
             return
         else:
             subTaskState = self.makeSubTaskState()
-            if subTaskState in (RANKEDBATTLES_ALIASES.SUBTASK_STATE_RANK, RANKEDBATTLES_ALIASES.SUBTASK_STATE_RANK_LOST):
-                state = self.getRankChangeStatus()
-                isLoser = self._reusable.getPersonalTeam() != self._reusable.common.winnerTeam
-                stepsChanges = self.rankedController.getRanksChanges(isLoser=isLoser)
-                stepsChange = stepsChanges[position] if position is not None else _STEP_NOT_CHANGED
-                if stepsChange == _STEP_LOST:
+            if subTaskState not in (RANKEDBATTLES_ALIASES.SUBTASK_STATE_STAGE, RANKEDBATTLES_ALIASES.SUBTASK_STATE_LEAGUE):
+                if stepChanges == MiniSteps.STEP_LOST:
                     if state in (RankChangeStates.RANK_UNBURN_PROTECTED, RankChangeStates.RANK_SHIELD_PROTECTED):
                         return backport.image(R.images.gui.maps.icons.rankedBattles.ranks.miniStage.protected())
                     if self.settingsCore.getSetting('isColorBlind'):
                         return backport.image(R.images.gui.maps.icons.rankedBattles.ranks.miniStage.blindMinus1())
-                return backport.image(self._MINI_STEPS_ICONS[stepsChange])
+                elif stepChanges == MiniSteps.STEP_EARNED and updatedStepChanges > stepChanges:
+                    stepChanges = MiniSteps.STEP_EARNED_BONUS
+                elif stepChanges == MiniSteps.STEPS_EARNED and updatedStepChanges > stepChanges:
+                    stepChanges = MiniSteps.STEPS_EARNED_BONUS
+                return backport.image(self._MINI_STEPS_ICONS[stepChanges])
             return
 
     def _getLoserBounds(self, position):

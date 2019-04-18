@@ -24,6 +24,7 @@ from skeletons.gui.server_events import IEventsCache
 from gui.clans.clan_helpers import isStrongholdsEnabled
 from gui.ranked_battles.ranked_helpers import getRankedBattlesUrl
 from gui.Scaleform.locale.EPIC_BATTLE import EPIC_BATTLE
+from gui.Scaleform.genConsts.RANKEDBATTLES_CONSTS import RANKEDBATTLES_CONSTS
 from gui.game_control.epic_meta_game_ctrl import EPIC_PERF_GROUP
 _SMALL_ICON_PATH = '../maps/icons/battleTypes/40x40/{0}.png'
 _LARGER_ICON_PATH = '../maps/icons/battleTypes/64x64/{0}.png'
@@ -439,7 +440,7 @@ class _RankedItem(_SelectorItem):
             if self.rankedController.isAvailable():
                 super(_RankedItem, self).select()
             elif self.__hasPastSeason:
-                self.rankedController.showWebLeaguePage()
+                self.rankedController.showRankedBattlePage(ctx={'selectedItemID': RANKEDBATTLES_CONSTS.RANKED_BATTLES_RANKS_ID})
             selectorUtils.setBattleTypeAsKnown(self._selectorType)
 
     def _update(self, state):

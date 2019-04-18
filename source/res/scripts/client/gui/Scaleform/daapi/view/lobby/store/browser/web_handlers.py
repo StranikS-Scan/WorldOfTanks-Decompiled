@@ -7,6 +7,7 @@ from web_client_api.request import RequestWebApi
 from web_client_api.sound import SoundWebApi
 from web_client_api.shop import ShopWebApi
 from web_client_api.ui import NotificationWebApi, OpenWindowWebApi, OpenTabWebApi, CloseWindowWebApi, UtilWebApi
+from web_client_api.frontline import FrontLineWebApi
 
 class _OpenTabWebApi(OpenTabWebApi):
 
@@ -21,4 +22,4 @@ class _OpenTabWebApi(OpenTabWebApi):
 
 
 def createShopWebHandlers():
-    return webApiCollection(CloseWindowWebApi, OpenWindowWebApi, NotificationWebApi, _OpenTabWebApi, RequestWebApi, ShopWebApi, SoundWebApi, UtilWebApi)
+    return webApiCollection(CloseWindowWebApi, OpenWindowWebApi, NotificationWebApi, _OpenTabWebApi, RequestWebApi, ShopWebApi, SoundWebApi, UtilWebApi, FrontLineWebApi)

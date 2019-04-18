@@ -11,7 +11,6 @@ from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.Scaleform.locale.VEHICLE_CUSTOMIZATION import VEHICLE_CUSTOMIZATION
-from gui.customization.shared import PROJECTION_DECAL_IMAGE_FORM_TAG
 from gui.shared.formatters import text_styles, icons
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.gui_items.customization.packers import pickPacker
@@ -27,8 +26,6 @@ from helpers.i18n import makeString as _ms
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.customization import ICustomizationService
-from gui.impl import backport
-from gui.impl.gen import R
 
 class SimplifiedStatsBlockConstructor(object):
 

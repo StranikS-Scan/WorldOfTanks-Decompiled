@@ -728,6 +728,7 @@ class IBootcampController(IGameController):
 
 class IMarathonEventsController(IGameController):
     onFlagUpdateNotify = None
+    onVehicleReceived = None
 
     def addMarathon(self, data):
         raise NotImplementedError

@@ -53,6 +53,7 @@ AWARDS = 'awards'
 CONTACTS = 'CONTACTS'
 BOOSTERS = 'BOOSTERS'
 FALLOUT_VEHICLES = 'FALLOUT_VEHICLES'
+MARATHON_REWARD_WAS_SHOWN = 'marathonRewardWasShown'
 GOLD_FISH_LAST_SHOW_TIME = 'goldFishWindowShowCooldown'
 BOOSTERS_FILTER = 'boostersFilter'
 LAST_PROMO_PATCH_VERSION = 'lastPromoPatchVersion'
@@ -288,6 +289,7 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                                     'lastShownEpicWelcomeScreen': 0},
                EULA_VERSION: {'version': 0},
                LINKEDSET_QUESTS: {'shown': 0},
+               MARATHON_REWARD_WAS_SHOWN: False,
                FORT_MEMBER_TUTORIAL: {'wasShown': False},
                IGR_PROMO: {'wasShown': False},
                BOOSTERS: {'wasShown': False},

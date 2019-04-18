@@ -1,0 +1,39 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
+# Embedded file name: scripts/client/gui/impl/lobby/marathon/marathon_reward_helper.py
+from collections import namedtuple
+from gui.impl.gen import R
+from gui.shared.gui_items import Vehicle
+from helpers import dependency, int2roman
+from skeletons.gui.impl import IGuiLoader
+from skeletons.gui.shared import IItemsCache
+SpecialRewardData = namedtuple('SpecialRewardData', ('sourceName', 'congratsSourceId', 'vehicleName', 'vehicleLvl', 'vehicleIsElite', 'vehicleType', 'goToVehicleBtn'))
+
+def getVehicleStrID(vehicleName):
+    return vehicleName.split(':')[1]
+
+
+def formatEliteVehicle(isElite, typeName):
+    ubFormattedTypeName = Vehicle.getIconResourceName(typeName)
+    return '{}_elite'.format(ubFormattedTypeName) if isElite else ubFormattedTypeName
+
+
+def loadedViewPredicate(layoutID):
+    return lambda view: view.layoutID == layoutID
+
+
+def showMarathonReward(vehicleCD):
+    from gui.impl.lobby.marathon.marathon_reward_view import MarathonRewardViewWindow
+    uiLoader = dependency.instance(IGuiLoader)
+    itemsCache = dependency.instance(IItemsCache)
+    vehicle = itemsCache.items.getItemByCD(vehicleCD)
+    if vehicle is not None:
+        vehicleType = formatEliteVehicle(vehicle.isElite, vehicle.type)
+        congratsSourceId = str(vehicle.intCD)
+        sourceName = Vehicle.getIconResourceName(getVehicleStrID(vehicle.name))
+        if sourceName and congratsSourceId is not None:
+            specialRewardData = SpecialRewardData(sourceName=sourceName, congratsSourceId=congratsSourceId, vehicleName=vehicle.userName, vehicleIsElite=vehicle.isElite, vehicleLvl=int2roman(vehicle.level), vehicleType=vehicleType, goToVehicleBtn=vehicle.isInInventory)
+            if uiLoader.windowsManager.findViews(loadedViewPredicate(R.views.marathonRewardView())):
+                return
+            window = MarathonRewardViewWindow(specialRewardData)
+            window.load()
+    return

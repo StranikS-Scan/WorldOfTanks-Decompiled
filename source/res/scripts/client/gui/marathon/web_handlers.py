@@ -5,8 +5,9 @@ from web_client_api.marathon import MarathonWebApi
 from web_client_api.request.access_token import AccessTokenWebApiMixin
 from web_client_api.request.spa_id import SpaIdWebApiMixin
 from web_client_api.request.wgni_token import WgniTokenWebApiMixin
+from web_client_api.shop import ShopWebApi
 from web_client_api.sound import SoundWebApi
-from web_client_api.ui import ContextMenuWebApi, OpenWindowWebApi, VehiclePreviewWebApiMixin
+from web_client_api.ui import ContextMenuWebApi, OpenWindowWebApi, VehiclePreviewWebApiMixin, UtilWebApi
 from web_client_api.ui.hangar import HangarTabWebApiMixin
 from web_client_api.ui.profile import ProfileTabWebApiMixin
 
@@ -21,4 +22,4 @@ class _OpenTabWebApi(HangarTabWebApiMixin, ProfileTabWebApiMixin, VehiclePreview
 
 
 def createMarathonWebHandlers():
-    return webApiCollection(SoundWebApi, MarathonWebApi, _OpenTabWebApi, _RequestWebApi, ContextMenuWebApi, OpenWindowWebApi)
+    return webApiCollection(SoundWebApi, MarathonWebApi, _OpenTabWebApi, _RequestWebApi, ContextMenuWebApi, OpenWindowWebApi, UtilWebApi, ShopWebApi)

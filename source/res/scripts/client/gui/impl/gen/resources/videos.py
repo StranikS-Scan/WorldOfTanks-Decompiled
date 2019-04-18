@@ -4,7 +4,13 @@ from gui.impl.gen_utils import DynAccessor
 
 class Videos(DynAccessor):
     __slots__ = ()
-    Logo_All = DynAccessor(19866)
-    _bootcampFinish = DynAccessor(19867)
-    _login = DynAccessor(19868)
-    _tutorialInitial = DynAccessor(19869)
+    Logo_All = DynAccessor(19880)
+    _bootcampFinish = DynAccessor(19881)
+    _login = DynAccessor(19882)
+    _tutorialInitial = DynAccessor(19883)
+
+    class _vehicle(DynAccessor):
+        __slots__ = ()
+        A122_TS_5 = DynAccessor(19884)
+
+    vehicle = _vehicle()

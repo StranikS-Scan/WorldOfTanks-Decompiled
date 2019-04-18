@@ -5,6 +5,7 @@ from debug_utils import LOG_WARNING
 class QUESTS(object):
     BONUSES_COMPENSATION = '#quests:bonuses/compensation'
     MISSIONS_TAB_KURSK = '#quests:missions/tab/kursk'
+    MISSIONS_TAB_SPRINGMARATHON = '#quests:missions/tab/springMarathon'
     MISSIONS_TAB_MARATHONS = '#quests:missions/tab/marathons'
     MISSIONS_TAB_EVENTBOARDS = '#quests:missions/tab/eventBoards'
     MISSIONS_TAB_CATEGORIES = '#quests:missions/tab/categories'
@@ -993,6 +994,9 @@ class QUESTS(object):
     MISSIONS_TAB_KURSK_BODY = '#quests:missions/tab/kursk/body'
     MISSIONS_TAB_MARATHONS_HEADER = '#quests:missions/tab/marathons/header'
     MISSIONS_TAB_MARATHONS_BODY = '#quests:missions/tab/marathons/body'
+    MISSIONS_TAB_LABEL_SPRINGMARATHON = '#quests:missions/tab/label/springMarathon'
+    MISSIONS_TAB_SPRINGMARATHON_HEADER = '#quests:missions/tab/springMarathon/header'
+    MISSIONS_TAB_SPRINGMARATHON_BODY = '#quests:missions/tab/springMarathon/body'
     MISSIONS_TAB_MISSIONS_HEADER = '#quests:missions/tab/missions/header'
     MISSIONS_TAB_MISSIONS_BODY = '#quests:missions/tab/missions/body'
     MISSIONS_TAB_LABEL_MISSIONS = '#quests:missions/tab/label/missions'

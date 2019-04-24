@@ -69,7 +69,7 @@ class DynamicPremiumState(base.StatsItem):
         hasPremiumPlus = self.__itemsCache.items.stats.isActivePremium(PREMIUM_TYPE.PLUS)
         hasBasicPremium = self.__itemsCache.items.stats.isActivePremium(PREMIUM_TYPE.BASIC)
         negativeImpact = self.__xpDiff < 0 or self.__creditsDiff < 0
-        if negativeImpact or hasBasicPremium and not (hasPremiumPlus or self.__postBattlePremiumPlus):
+        if (negativeImpact or hasBasicPremium) and not (hasPremiumPlus or self.__postBattlePremiumPlus):
             self._value = BATTLE_RESULTS_PREMIUM_STATES.PREMIUM_ADVERTISING
         elif hasPremiumPlus:
             if self.__isDailyBonusVisible():

@@ -249,6 +249,7 @@ class KPI(object):
         CREW_LEVEL = 'crewLevel'
         CREW_HIT_CHANCE = 'crewHitChance'
         CREW_STUN_DURATION = 'crewStunDuration'
+        CREW_REPEATED_STUN_DURATION = 'crewRepeatedStunDuration'
         CREW_SKILL_REPAIR = 'crewSkillRepair'
         CREW_SKILL_FIRE_FIGHTING = 'crewSkillFireFighting'
         CREW_SKILL_CAMOUFLAGE = 'crewSkillCamouflage'

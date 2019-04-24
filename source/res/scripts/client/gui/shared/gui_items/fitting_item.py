@@ -67,7 +67,6 @@ class RentalInfoProvider(_RentalInfoProvider):
         return None
 
     def getActiveSeasonRent(self):
-        currTime = time_utils.getCurrentLocalServerTimestamp()
         for seasonType, rentTypes in self.seasonRent.iteritems():
             seasonRents = [ item for item in rentTypes if item[1] == SeasonRentDuration.ENTIRE_SEASON ]
             if seasonRents:
@@ -83,13 +82,8 @@ class RentalInfoProvider(_RentalInfoProvider):
                 for rentType in cycleRents:
                     rentID, duration = rentType
                     currentSeason = self.seasonsController.getCurrentSeason(seasonType)
-                    if currentSeason is not None:
-                        currentCycle = currentSeason.getCycleInfo()
-                        if currentCycle and currentCycle.ID == rentID:
-                            return SeasonRentInfo(seasonType, rentID, duration, currentCycle.endDate)
-                        nextCycle = currentSeason.getNextByTimeCycle(currTime)
-                        if nextCycle and nextCycle.ID == rentID:
-                            return SeasonRentInfo(seasonType, rentID, duration, nextCycle.endDate)
+                    if currentSeason is not None and currentSeason.getCycleID() == rentID:
+                        return SeasonRentInfo(seasonType, rentID, duration, currentSeason.getCycleEndDate())
 
         return
 
@@ -109,7 +103,6 @@ class RentalInfoProvider(_RentalInfoProvider):
         else:
             seasonType, rentID, duration, _ = activeSeasonRentInfo
             currentSeason = self.seasonsController.getCurrentSeason(seasonType)
-            currTime = time_utils.getCurrentLocalServerTimestamp()
             if currentSeason:
                 if duration == SeasonRentDuration.ENTIRE_SEASON:
                     if self.seasonsController.isWithinSeasonTime(rentID, seasonType):
@@ -121,16 +114,12 @@ class RentalInfoProvider(_RentalInfoProvider):
                             return (curCycle,)
                         return (curCycle, lastCycle)
                 elif duration == SeasonRentDuration.SEASON_CYCLE:
+                    lastFutureCycleInfo = self._getLastFutureCycleRentInfo()
                     curCycle = currentSeason.getCycleInfo()
-                    if curCycle:
-                        lastFutureCycleInfo = self._getLastFutureCycleRentInfo()
-                        if lastFutureCycleInfo:
-                            lastCycle = currentSeason.getCycleInfo(lastFutureCycleInfo.seasonID)
-                            return (curCycle, lastCycle)
-                        return (curCycle,)
-                    nextCycle = currentSeason.getNextByTimeCycle(currTime)
-                    if nextCycle and nextCycle.ID == rentID:
-                        return (nextCycle,)
+                    if lastFutureCycleInfo:
+                        lastCycle = currentSeason.getCycleInfo(lastFutureCycleInfo.seasonID)
+                        return (curCycle, lastCycle)
+                    return (curCycle,)
             return
 
     def _getLastFutureCycleRentInfo(self):

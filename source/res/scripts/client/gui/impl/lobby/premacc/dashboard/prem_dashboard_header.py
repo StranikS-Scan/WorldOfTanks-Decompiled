@@ -166,11 +166,10 @@ class PremDashboardHeader(ViewImpl):
 
     @staticmethod
     def __onPersonalReserveClick(item):
-        if item.getId() < 0:
-            if shouldOpenNewStorage():
-                event_dispatcher.showStorage(defaultSection=STORAGE_CONSTANTS.PERSONAL_RESERVES)
-            else:
-                g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.BOOSTERS_WINDOW), EVENT_BUS_SCOPE.LOBBY)
+        if shouldOpenNewStorage():
+            event_dispatcher.showStorage(defaultSection=STORAGE_CONSTANTS.PERSONAL_RESERVES)
+        else:
+            g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.BOOSTERS_WINDOW), EVENT_BUS_SCOPE.LOBBY)
 
     @staticmethod
     def __onClanReserveClick(item):

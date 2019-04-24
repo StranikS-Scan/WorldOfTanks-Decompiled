@@ -8,6 +8,7 @@ from gui.Scaleform.locale.BATTLE_TUTORIAL import BATTLE_TUTORIAL
 from gui.shared.events import ShowDialogEvent
 from helpers import i18n
 _MSG_POSTFIX = '/message'
+_DEFAULT_PREMIUM_STR = R.strings.dialogs.bootcamp.premiumType.plus()
 
 class ExecutionChooserDialogMeta(I18nConfirmDialogMeta):
     SKIP = 'skip'
@@ -38,12 +39,13 @@ class ExecutionChooserDialogMeta(I18nConfirmDialogMeta):
         return self._makeString(I18N_LABEL_KEY.format(self._key), self._messageCtx)
 
     def getMessage(self):
-        premiumStr = ''
         if self.__premiumType == PREMIUM_ENTITLEMENTS.BASIC:
             premiumStr = backport.text(R.strings.dialogs.bootcamp.premiumType.basic())
         elif self.__premiumType == PREMIUM_ENTITLEMENTS.PLUS:
             premiumStr = backport.text(R.strings.dialogs.bootcamp.premiumType.plus())
-        premiumCtx = {'premiumType': premiumStr} if premiumStr else {}
+        else:
+            premiumStr = backport.text(_DEFAULT_PREMIUM_STR)
+        premiumCtx = {'premiumType': premiumStr}
         return self._makeString(''.join((self._key, _MSG_POSTFIX)), premiumCtx)
 
     def __createImagePathWithTankPremium(self, dialogType):

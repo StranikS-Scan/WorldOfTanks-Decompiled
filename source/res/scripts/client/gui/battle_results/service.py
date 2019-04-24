@@ -132,13 +132,17 @@ class BattleResultsService(IBattleResultsService):
     @decorators.process('updating')
     def applyAdditionalBonus(self, arenaUniqueID):
         vehicleID = self.__getVehicleIfHasBonus(arenaUniqueID)
-        result = yield PremiumBonusApplier(arenaUniqueID, vehicleID).request()
-        if result and result.userMsg:
-            SystemMessages.pushMessage(result.userMsg, type=result.sysMsgType)
-        if result.success:
-            self.__appliedAddXPBonus.add(arenaUniqueID)
-            self.__updateComposer(arenaUniqueID)
-            self.__onAddXPBonusChanged()
+        if vehicleID is None:
+            return
+        else:
+            result = yield PremiumBonusApplier(arenaUniqueID, vehicleID).request()
+            if result and result.userMsg:
+                SystemMessages.pushMessage(result.userMsg, type=result.sysMsgType)
+            if result.success:
+                self.__appliedAddXPBonus.add(arenaUniqueID)
+                self.__updateComposer(arenaUniqueID)
+                self.__onAddXPBonusChanged()
+            return
 
     def isAddXPBonusApplied(self, arenaUniqueID):
         return arenaUniqueID in self.__appliedAddXPBonus

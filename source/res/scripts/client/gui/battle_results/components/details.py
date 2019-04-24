@@ -237,14 +237,12 @@ class MoneyDetailsBlock(_EconomicsDetailsBlock):
             self._addStatsRow('squadBonus', column1=style.makeCreditsLabel(baseCredits * baseFactor + baseRecords.getRecord('originalCreditsToDrawSquad'), canBeFaded=not self.hasAnyPremium), column3=style.makeCreditsLabel(premiumCredits * premiumFactor + premiumRecords.getRecord('originalCreditsToDrawSquad'), canBeFaded=self.hasAnyPremium))
 
     def __addPiggyBankInfo(self, premiumRecords, additionalRecords):
-        piggyBankCredits = additionalRecords.getRecord('piggyBank')
+        baseCredits = 0
         if self.hasAnyPremium:
-            baseCredits = 0
-            premiumCredits = piggyBankCredits
+            premiumCredits = additionalRecords.getRecord('piggyBank')
         else:
             piggyBankMultiplier = self.__lobbyContext.getServerSettings().getPiggyBankConfig().get('multiplier')
-            baseCredits = piggyBankCredits
-            premiumCredits = premiumRecords.getRecord('credits', 'originalCreditsToDraw') * piggyBankMultiplier
+            premiumCredits = premiumRecords.getRecord('credits') * piggyBankMultiplier
         if baseCredits or premiumCredits:
             self._addStatsRow('piggyBankInfo', column1=style.makeCreditsLabel(baseCredits, canBeFaded=not self.hasAnyPremium, isDiff=baseCredits > 0), column3=style.makeCreditsLabel(premiumCredits, canBeFaded=self.hasAnyPremium, isDiff=premiumCredits > 0))
 

@@ -132,10 +132,10 @@
       <terrainResistance>	1 1.2 2.3	</terrainResistance>
       <brakeForce>	68000	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
-      <rotationSpeed>	28	</rotationSpeed>
+      <rotationSpeed>	26	</rotationSpeed>
       <shotDispersionFactors>
-        <vehicleMovement>	0.18	</vehicleMovement>
-        <vehicleRotation>	0.18	</vehicleRotation>
+        <vehicleMovement>	0.2	</vehicleMovement>
+        <vehicleRotation>	0.2	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
       <maxHealth>	200	</maxHealth>
@@ -916,7 +916,7 @@
           </pitchLimits>
           <reloadTime>	8.2	</reloadTime>
           <shotDispersionFactors>
-            <turretRotation>	0.1	</turretRotation>
+            <turretRotation>	0.12	</turretRotation>
             <afterShot>	3	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
@@ -932,7 +932,7 @@
             <gun>	35	</gun>
           </armor>
           <shotDispersionRadius>	0.36	</shotDispersionRadius>
-          <aimingTime>	1.9	</aimingTime>
+          <aimingTime>	2	</aimingTime>
           <invisibilityFactorAtShot>	0.225	</invisibilityFactorAtShot>
           <models>
             <undamaged>	vehicles/german/G16_PzVIB_Tiger_II/normal/lod0/Gun_04.model	</undamaged>
@@ -1070,7 +1070,7 @@
     <detailed>
       <engines>
         <Maybach_HL_210P30_Ausf_A>
-          <smplEnginePower>	800	</smplEnginePower>
+          <smplEnginePower>	700	</smplEnginePower>
           <smplFwMaxSpeed>	38	</smplFwMaxSpeed>
         </Maybach_HL_210P30_Ausf_A>
       </engines>

@@ -139,7 +139,8 @@ class VehicleInfoTooltipData(BlocksTooltipData):
         return block
 
     def __createStatusBlock(self, vehicle, items, statsConfig, paramsConfig, valueWidth):
-        frontlineBlock = FrontlineRentBlockConstructor(vehicle, statsConfig, self.context.getParams(), valueWidth, leftPadding=20, rightPadding=20).construct()
+        ctxParams = self.context.getParams()
+        frontlineBlock = FrontlineRentBlockConstructor(vehicle, statsConfig, ctxParams, valueWidth, leftPadding=20, rightPadding=20).construct()
         if frontlineBlock:
             items.append(formatters.packBuildUpBlockData(frontlineBlock, gap=-4, padding=formatters.packPadding(left=25, right=20, top=0, bottom=-11)))
         if vehicle.canTradeIn:
@@ -149,7 +150,7 @@ class VehicleInfoTooltipData(BlocksTooltipData):
         if statsConfig.rentals and not vehicle.isPremiumIGR and not frontlineBlock:
             if statsConfig.futureRentals:
                 rentLeftKey = '#tooltips:vehicle/rentLeftFuture/%s'
-                rentInfo = RentalInfoProvider(time=paramsConfig.params.get('rentExpiryTime'), battles=paramsConfig.params.get('rentBattlesLeft'), wins=paramsConfig.params.get('rentWinsLeft'), seasonRent=paramsConfig.params.get('rentSeason'), isRented=True)
+                rentInfo = RentalInfoProvider(time=ctxParams.get('rentExpiryTime'), battles=ctxParams.get('rentBattlesLeft'), wins=ctxParams.get('rentWinsLeft'), seasonRent=ctxParams.get('rentSeason'), isRented=True)
             else:
                 rentLeftKey = '#tooltips:vehicle/rentLeft/%s'
                 rentInfo = vehicle.rentInfo

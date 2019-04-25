@@ -1142,6 +1142,8 @@ class VEHICLE_CUSTOMIZATION(object):
     INSCRIPTION_SPECIAL_SPECIAL_100 = '#vehicle_customization:inscription/special/special_100'
     INSCRIPTION_SPECIAL_SPECIAL_101 = '#vehicle_customization:inscription/special/special_101'
     INSCRIPTION_SPECIAL_SPECIAL_102 = '#vehicle_customization:inscription/special/special_102'
+    INSCRIPTION_SPECIAL_INSCRIPTION_259 = '#vehicle_customization:inscription/special/inscription_259'
+    INSCRIPTION_SPECIAL_INSCRIPTION_259_DESCRIPTION = '#vehicle_customization:inscription/special/inscription_259/description'
     INSCRIPTION_SPECIAL_SPECIAL_130 = '#vehicle_customization:inscription/special/special_130'
     INSCRIPTION_SPECIAL_SPECIAL_131 = '#vehicle_customization:inscription/special/special_131'
     INSCRIPTION_SPECIAL_SPECIAL_150 = '#vehicle_customization:inscription/special/special_150'

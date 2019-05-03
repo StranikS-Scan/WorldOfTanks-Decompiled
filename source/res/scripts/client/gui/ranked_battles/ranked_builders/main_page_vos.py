@@ -7,6 +7,7 @@ from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.Scaleform.genConsts.RANKEDBATTLES_CONSTS import RANKEDBATTLES_CONSTS
 from gui.Scaleform.genConsts.RANKEDBATTLES_ALIASES import RANKEDBATTLES_ALIASES
 from gui.shared.utils.functions import makeTooltip
+from gui.shared.formatters import text_styles
 from helpers import time_utils
 
 def getBubbleLabel(counter):
@@ -53,7 +54,7 @@ def getRankedMainSeasonOffItems():
       'background': backport.image(R.images.gui.maps.icons.rankedBattles.bg.main()),
       'tooltip': makeTooltip(header=backport.text(R.strings.tooltips.rankedBattlesView.ranks.header()), body=backport.text(R.strings.tooltips.rankedBattlesView.ranks.body()))},
      {'id': RANKEDBATTLES_CONSTS.RANKED_BATTLES_REWARDS_ID,
-      'viewId': RANKEDBATTLES_ALIASES.RANKED_BATTLES_REWARDS_UI,
+      'viewId': RANKEDBATTLES_ALIASES.RANKED_BATTLES_REWARDS_SEASON_OFF_ALIAS,
       'linkage': RANKEDBATTLES_ALIASES.RANKED_BATTLES_REWARDS_UI,
       'background': backport.image(R.images.gui.maps.icons.rankedBattles.bg.main()),
       'tooltip': makeTooltip(header=backport.text(R.strings.tooltips.rankedBattlesView.rewards.header()), body=backport.text(R.strings.tooltips.rankedBattlesView.rewards.body()))},
@@ -91,8 +92,14 @@ def getRankedMainSeasonOnHeader(season, itemID):
      'tooltip': tooltip}
 
 
-def getRankedMainSeasonOffHeader():
+def getRankedMainSeasonOffHeader(prevSeason, nextSeason, itemID):
+    if itemID == RANKEDBATTLES_CONSTS.RANKED_BATTLES_INFO_ID:
+        rightSideText = backport.text(R.strings.ranked_battles.rankedBattleMainView.infoPage.header())
+    else:
+        rightSideText = backport.text(R.strings.ranked_battles.rankedBattleMainView.seasonComplete(), season=prevSeason.getUserName())
+        if nextSeason is not None:
+            rightSideText = text_styles.concatStylesToSingleLine(rightSideText, backport.text(R.strings.ranked_battles.rankedBattleMainView.seasonGap(), newSeason=nextSeason.getUserName(), date=BigWorld.wg_getLongDateFormat(nextSeason.getStartDate())))
     return {'title': backport.text(R.strings.ranked_battles.rankedBattle.title()),
      'leftSideText': '',
-     'rightSideText': '',
+     'rightSideText': rightSideText,
      'tooltip': ''}

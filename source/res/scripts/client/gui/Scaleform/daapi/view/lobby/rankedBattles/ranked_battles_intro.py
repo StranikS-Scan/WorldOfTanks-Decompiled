@@ -24,12 +24,15 @@ class RankedBattlesIntro(LobbySubView, RankedBattlesIntroMeta):
     _COMMON_SOUND_SPACE = RANKED_MAIN_PAGE_SOUND_SPACE
 
     def onAcceptClick(self):
+        self.__setShowStateFlags()
         self.onClose()
 
     def onClose(self):
+        self.__setShowStateFlags()
         event_dispatcher.showHangar()
 
     def onDetailedClick(self):
+        self.__setShowStateFlags()
         self.__rankedController.showRankedBattlePage(ctx={'selectedItemID': RANKEDBATTLES_CONSTS.RANKED_BATTLES_INFO_ID})
 
     def onPlayVideoClick(self):
@@ -37,9 +40,6 @@ class RankedBattlesIntro(LobbySubView, RankedBattlesIntroMeta):
 
     def _populate(self):
         super(RankedBattlesIntro, self)._populate()
-        stateFlags = self.__getShowStateFlags()
-        stateFlags[GuiSettingsBehavior.RANKED_WELCOME_VIEW_SHOWED] = True
-        self.__setShowStateFlags(stateFlags)
         headerData = {'title': backport.text(R.strings.ranked_battles.rankedBattle.title()),
          'leftSideText': backport.text(R.strings.ranked_battles.intoPage.description()),
          'rightSideText': None,
@@ -65,5 +65,7 @@ class RankedBattlesIntro(LobbySubView, RankedBattlesIntroMeta):
         defaults = AccountSettings.getFilterDefault(GUI_START_BEHAVIOR)
         return self.__settingsCore.serverSettings.getSection(GUI_START_BEHAVIOR, defaults)
 
-    def __setShowStateFlags(self, filters):
-        self.__settingsCore.serverSettings.setSectionSettings(GUI_START_BEHAVIOR, filters)
+    def __setShowStateFlags(self):
+        stateFlags = self.__getShowStateFlags()
+        stateFlags[GuiSettingsBehavior.RANKED_WELCOME_VIEW_SHOWED] = True
+        self.__settingsCore.serverSettings.setSectionSettings(GUI_START_BEHAVIOR, stateFlags)

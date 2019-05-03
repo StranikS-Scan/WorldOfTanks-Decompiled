@@ -4,7 +4,7 @@ import logging
 from gui.impl import backport
 from gui.impl.gen import R
 from gui.periodic_battles.models import CalendarStatusVO
-from gui.ranked_battles.constants import RANKED_QUEST_ID_PREFIX, PRIME_TIME_STATUS
+from gui.ranked_battles.constants import RANKED_QUEST_ID_PREFIX, PrimeTimeStatus
 from gui.Scaleform.genConsts.RANKEDBATTLES_ALIASES import RANKEDBATTLES_ALIASES
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.shared.utils.functions import makeTooltip
@@ -54,7 +54,7 @@ def getPrimeTimeStatusText():
 
 
 def getPrimeTimeStatusVO(status, hasAvailableServers):
-    showPrimeTimeAlert = status != PRIME_TIME_STATUS.AVAILABLE
+    showPrimeTimeAlert = status != PrimeTimeStatus.AVAILABLE
     return CalendarStatusVO(alertIcon=backport.image(R.images.gui.maps.icons.library.alertBigIcon()) if showPrimeTimeAlert else None, buttonIcon='', buttonLabel=backport.text(R.strings.ranked_battles.alertMessage.button()), buttonVisible=showPrimeTimeAlert and hasAvailableServers, buttonTooltip=None, statusText=text_styles.vehicleStatusCriticalText(getPrimeTimeStatusText()), popoverAlias=None, bgVisible=True, shadowFilterVisible=showPrimeTimeAlert, tooltip=TOOLTIPS_CONSTANTS.RANKED_CALENDAR_DAY_INFO)
 
 

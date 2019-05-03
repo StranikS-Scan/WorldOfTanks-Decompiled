@@ -65,6 +65,8 @@ class RankedBattlesSeasonCompleteView(RankedBattlesSeasonCompleteViewMeta):
         season = self.__rankedController.getSeason(int(seasonID))
         if season is not None:
             leagueData = self.__rankedController.getLeagueProvider().webLeague
+            if leagueData.league == UNDEFINED_LEAGUE_ID:
+                leagueData = self.__rankedController.getClientLeague()
             if leagueData != UNDEFINED_WEB_LEAGUE:
                 position = BigWorld.wg_getNiceNumberFormat(leagueData.position)
             else:

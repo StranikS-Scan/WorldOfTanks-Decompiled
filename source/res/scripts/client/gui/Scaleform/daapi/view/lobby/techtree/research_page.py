@@ -303,8 +303,8 @@ class Research(ResearchMeta):
         label = ''
         if bpfProps is not None:
             if bpfProps.filledCount != bpfProps.totalCount:
-                label = text_styles.concatStylesWithSpace(text_styles.credits(str(bpfProps.filledCount)), text_styles.main(''.join(('/ ', str(bpfProps.totalCount)))))
-                label = '    '.join((text_styles.credits(backport.text(R.strings.menu.research.labels.blueprint())), label))
+                values = text_styles.main(backport.text(R.strings.blueprints.blueprintProgressBar.inProgress.values()).format(current=text_styles.credits(str(bpfProps.filledCount)), total=str(bpfProps.totalCount)))
+                label = text_styles.credits(backport.text(R.strings.blueprints.blueprintProgressBar.inProgress()).format(values=values))
             else:
-                label = text_styles.concatStylesWithSpace(icons.makeImageTag(backport.image(R.images.gui.maps.icons.blueprints.blueCheck()), width=16, height=16, vSpace=-1), text_styles.credits(backport.text(R.strings.menu.research.labels.blueprintComplete())))
+                label = text_styles.concatStylesWithSpace(icons.makeImageTag(backport.image(R.images.gui.maps.icons.blueprints.blueCheck()), width=16, height=16, vSpace=-1), text_styles.credits(backport.text(R.strings.blueprints.blueprintProgressBar.complete())))
         return label

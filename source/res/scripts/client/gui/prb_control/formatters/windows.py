@@ -2,7 +2,7 @@
 # Embedded file name: scripts/client/gui/prb_control/formatters/windows.py
 from gui.Scaleform.locale.PREBATTLE import PREBATTLE
 from gui.prb_control.entities.base.ctx import PrbAction
-from gui.ranked_battles.constants import PRIME_TIME_STATUS
+from gui.ranked_battles.constants import PrimeTimeStatus
 from gui.shared import actions
 from gui.prb_control.settings import PREBATTLE_ACTION_NAME
 from helpers import dependency
@@ -93,7 +93,7 @@ class SwitchPeripheryRankedCtx(SwitchPeripheryCtx):
 
     def isPeripheryAvailable(self, peripheryID):
         status, _, _ = self.rankedController.getPrimeTimeStatus(peripheryID)
-        return status == PRIME_TIME_STATUS.AVAILABLE
+        return status == PrimeTimeStatus.AVAILABLE
 
     def getUpdateTime(self):
         timeLeftList = []

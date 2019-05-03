@@ -271,7 +271,7 @@ class CustomizationBottomPanel(CustomizationBottomPanelMeta):
         self._carouselDP.clearFilter()
 
     def __refreshCarousel(self, rebuild=False, force=False):
-        if force or self._carouselDP.getAppliedFilter() or self._carouselDP.getOwnedFilter():
+        if rebuild or force or self._carouselDP.getAppliedFilter() or self._carouselDP.getOwnedFilter():
             if rebuild:
                 self._carouselDP.buildList(self.__ctx.currentTab, self.__ctx.currentSeason, refresh=False)
             else:
@@ -334,7 +334,7 @@ class CustomizationBottomPanel(CustomizationBottomPanelMeta):
             return
         self.__updateTabs()
         self.__setBottomPanelBillData()
-        self.__refreshCarousel(rebuild=True, force=False)
+        self.__refreshCarousel(rebuild=True, force=True)
         self.__setNotificationCounters()
 
     def __onVehicleChanged(self):

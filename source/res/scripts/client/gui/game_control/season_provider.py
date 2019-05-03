@@ -17,7 +17,7 @@ class SeasonProvider(ISeasonProvider):
         return bool(self.__getSeasonSettings().seasons)
 
     def getCurrentCycleID(self):
-        now = time_utils.getServerRegionalTime()
+        now = self.__getNow()
         isCurrent, seasonInfo = season_common.getSeason(self.__getSeasonSettings().asDict(), now)
         if isCurrent:
             _, _, _, cycleID = seasonInfo
@@ -26,15 +26,15 @@ class SeasonProvider(ISeasonProvider):
             return None
 
     def getCurrentSeason(self):
-        currTime = time_utils.getServerRegionalTime()
+        now = self.__getNow()
         for seasonID, seasonData in self.__getSeasonSettings().seasons.iteritems():
-            if seasonData['startSeason'] <= currTime <= seasonData['endSeason']:
+            if seasonData['startSeason'] <= now < seasonData['endSeason']:
                 currCycleInfo = (None,
                  None,
                  seasonID,
                  None)
                 for cycleID, cycleTimes in seasonData['cycles'].iteritems():
-                    if cycleTimes['start'] <= currTime <= cycleTimes['end']:
+                    if cycleTimes['start'] <= now < cycleTimes['end']:
                         currCycleInfo = (cycleTimes['start'],
                          cycleTimes['end'],
                          seasonID,
@@ -45,7 +45,7 @@ class SeasonProvider(ISeasonProvider):
         return
 
     def getNextSeason(self):
-        now = time_utils.getServerRegionalTime()
+        now = self.__getNow()
         settings = self.__getSeasonSettings()
         seasonsComing = []
         for seasonID, season in settings.seasons.iteritems():
@@ -82,10 +82,10 @@ class SeasonProvider(ISeasonProvider):
 
     def isWithinSeasonTime(self, seasonID):
         settings = self.__getSeasonSettings()
-        return season_common.isWithinSeasonTime(settings.asDict(), seasonID, time_utils.getCurrentLocalServerTimestamp())
+        return season_common.isWithinSeasonTime(settings.asDict(), seasonID, self.__getNow())
 
     def getSeasonPassed(self):
-        now = time_utils.getServerRegionalTime()
+        now = self.__getNow()
         settings = self.__getSeasonSettings()
         seasonsPassed = []
         for seasonID, season in settings.seasons.iteritems():
@@ -97,7 +97,7 @@ class SeasonProvider(ISeasonProvider):
 
     def getClosestStateChangeTime(self):
         season = self.getCurrentSeason()
-        now = time_utils.getServerRegionalTime()
+        now = self.__getNow()
         if season is not None:
             if season.hasActiveCycle(now):
                 return season.getCycleEndDate()
@@ -114,3 +114,7 @@ class SeasonProvider(ISeasonProvider):
 
     def __getSeasonSettings(self):
         return self.__settingsProvider()
+
+    @staticmethod
+    def __getNow():
+        return time_utils.getCurrentLocalServerTimestamp()

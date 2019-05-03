@@ -642,7 +642,7 @@ class IRankedBattlesController(IGameController, ISeasonProvider):
     def showRankedAwardWindow(self, rankInfo, questsProgress):
         raise NotImplementedError
 
-    def showRankedBattlePage(self, ctx=None):
+    def showRankedBattlePage(self, ctx):
         raise NotImplementedError
 
     def updateClientValues(self):

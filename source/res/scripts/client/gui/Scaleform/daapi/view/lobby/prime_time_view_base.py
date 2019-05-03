@@ -12,7 +12,7 @@ from gui.impl import backport
 from gui.impl.gen import R
 from gui.prb_control.entities.base.ctx import PrbAction
 from gui.prb_control.entities.base.pre_queue.listener import IPreQueueListener
-from gui.ranked_battles.constants import PRIME_TIME_STATUS
+from gui.ranked_battles.constants import PrimeTimeStatus
 from gui.shared import actions, event_dispatcher
 from gui.shared import events
 from gui.shared.event_bus import EVENT_BUS_SCOPE
@@ -63,10 +63,10 @@ class ServerListItemPresenter(object):
          'tooltip': self._buildTooltip(self.__peripheryID)}
 
     def isActive(self):
-        return self.__getPrimeTimeStatus() in (PRIME_TIME_STATUS.AVAILABLE, PRIME_TIME_STATUS.NOT_AVAILABLE)
+        return self.__getPrimeTimeStatus() in (PrimeTimeStatus.AVAILABLE, PrimeTimeStatus.NOT_AVAILABLE)
 
     def isAvailable(self):
-        return self.__getPrimeTimeStatus() == PRIME_TIME_STATUS.AVAILABLE
+        return self.__getPrimeTimeStatus() == PrimeTimeStatus.AVAILABLE
 
     def isEnabled(self):
         return self.isAvailable()

@@ -61,16 +61,15 @@ class RankedSoundManager(object):
     def clear(self):
         self.__isFirstEntrance = True
 
-    def onPrbEntityChange(self, isRankedPrbSelected, isMastered):
-        if isRankedPrbSelected:
+    def onSoundModeChanged(self, isRankedSoundMode, initialProgressionState=None):
+        if isRankedSoundMode:
             if self.__isFirstEntrance:
                 self.__isFirstEntrance = False
                 WWISE.WW_eventGlobal(Sounds.FIRST_SELECT_EVENT)
             else:
                 WWISE.WW_eventGlobal(Sounds.SELECT_EVENT)
-            if isMastered:
-                WWISE.WW_setState(Sounds.PROGRESSION_STATE, Sounds.PROGRESSION_STATE_LEAGUES)
-            else:
-                WWISE.WW_setState(Sounds.PROGRESSION_STATE, Sounds.PROGRESSION_STATE_DEFAULT)
+            if initialProgressionState is not None:
+                WWISE.WW_setState(Sounds.PROGRESSION_STATE, initialProgressionState)
         else:
             WWISE.WW_eventGlobal(Sounds.DESELECT_EVENT)
+        return

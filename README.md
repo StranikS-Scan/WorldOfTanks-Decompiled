@@ -14,12 +14,12 @@ Using **[PjOrion](https://koreanrandom.com/forum/topic/15280-)**:
 
 ### Using ###
 1. Download commit to PC
-2. Run **"Zip-Unpacker.cmd"** to restore the original files from the **zip-archive** with the correct letters case in the file names
+2. Run **"Zip-Unpacker.exe"** to restore the original files from the **zip-archive** with the correct letters case in the file names
 
 ### Auto decompilation algorithm (recommendations)
 1. Replace old files with new files in the folder **"source"**: paths.xml, version.xml
 2. Delete old files and copy new files in the folder **"res"**
-3. Run **"WOT-UnDec.cmd"** to unpack and decompile the files
+3. Run **"WOT-UnDec.exe"** to unpack and decompile the files
 
 ### Manual decompilation algorithm
 1. Create a folder **"source"** and a subfolder **"res"** in it
@@ -35,10 +35,10 @@ Using **[PjOrion](https://koreanrandom.com/forum/topic/15280-)**:
 2. If you adding a new client, then create a new branch with the name as client main version **"X.X.X"** (do not use **"CT"** or **"ST"** unless it's a not separate special branch)
 3. Clean the existing **"source"** directory and put new files there using the algorithm above
 4. Change the name of the archive to the current one in the file **"Zip-Packer.arg"**
-5. Create an **zip**-archive by running the console program **Zip-Packer.cmd** (required **7z.exe** on your PC)
+5. Create an **zip**-archive by running the console program **Zip-Packer.exe** (required **7z.exe** on your PC)
 6. Clean the existing **"zip"** directory and move to it the new archive
 7. Create a commit, named as **"X.X.X: Added/Updated/Release/... #YYY"** or **"X.X.X_CT:..."**
 8. Offer a **"Pull request"** in the right branch
 
 ### Files with different case of letters
-Due to the fact that during the update of the game, the developers changed the case of the letters in the files, there may be duplicate files in the repository. To solve this problem, the **"Zip-Unpacker.cmd"** file has been added to the repository. After downloading the repository or after synchronizing your copy of the repository with the GitHub, run this file. It will extract the py-files from the archive as they should be.
+Due to the fact that during the update of the game, the developers changed the case of the letters in the files, there may be duplicate files in the repository. To solve this problem, the **"Zip-Unpacker.exe"** file has been added to the repository. After downloading the repository or after synchronizing your copy of the repository with the GitHub, run this file. It will extract the py-files from the archive as they should be.

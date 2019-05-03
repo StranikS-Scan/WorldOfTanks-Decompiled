@@ -5,7 +5,7 @@ from collections import namedtuple
 from gui.Scaleform.genConsts.RANKEDBATTLES_ALIASES import RANKEDBATTLES_ALIASES
 from gui.impl import backport
 from gui.impl.gen import R
-from gui.ranked_battles.constants import RANK_TYPES, ZERO_RANK_ID
+from gui.ranked_battles.constants import RankTypes, ZERO_RANK_ID
 from gui.shared.money import Currency
 from season_common import GameSeason
 from shared_utils import CONST_CONTAINER
@@ -184,7 +184,7 @@ class Rank(object):
         self._shieldStatus = shieldStatus
         self._progress = progress
         self._quest = quest
-        self._type = RANK_TYPES.ACCOUNT
+        self._type = RankTypes.ACCOUNT
         self.__division = division
 
     def __eq__(self, other):

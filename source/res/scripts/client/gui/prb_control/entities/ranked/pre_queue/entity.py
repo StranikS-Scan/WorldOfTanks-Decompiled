@@ -24,7 +24,7 @@ from gui.prb_control.items import SelectResult
 from gui.prb_control.settings import PREBATTLE_ACTION_NAME, FUNCTIONAL_FLAG, PRE_QUEUE_JOIN_ERRORS
 from account_helpers.AccountSettings import AccountSettings, GUI_START_BEHAVIOR
 from gui.prb_control.storages import prequeue_storage_getter
-from gui.ranked_battles.constants import PRIME_TIME_STATUS
+from gui.ranked_battles.constants import PrimeTimeStatus
 from gui.shared.event_dispatcher import showRankedPrimeTimeWindow
 from helpers import dependency
 from skeletons.account_helpers.settings_core import ISettingsCore
@@ -64,7 +64,7 @@ class RankedEntryPoint(PreQueueEntryPoint):
 
     def select(self, ctx, callback=None):
         status, _, _ = self.__rankedController.getPrimeTimeStatus()
-        if status in (PRIME_TIME_STATUS.DISABLED, PRIME_TIME_STATUS.FROZEN, PRIME_TIME_STATUS.NO_SEASON):
+        if status in (PrimeTimeStatus.DISABLED, PrimeTimeStatus.FROZEN, PrimeTimeStatus.NO_SEASON):
             SystemMessages.pushMessage(backport.text(R.strings.system_messages.ranked.notification.notAvailable()), type=SystemMessages.SM_TYPE.Error)
             if callback is not None:
                 callback(False)
@@ -81,7 +81,7 @@ class RankedEntryPoint(PreQueueEntryPoint):
             return
 
     def _getFilterStates(self):
-        return (PRIME_TIME_STATUS.NOT_SET, PRIME_TIME_STATUS.NOT_AVAILABLE)
+        return (PrimeTimeStatus.NOT_SET, PrimeTimeStatus.NOT_AVAILABLE)
 
     def __isFirstEnter(self):
         defaults = AccountSettings.getFilterDefault(GUI_START_BEHAVIOR)
@@ -92,7 +92,7 @@ class RankedEntryPoint(PreQueueEntryPoint):
 class RankedForcedEntryPoint(RankedEntryPoint):
 
     def _getFilterStates(self):
-        return (PRIME_TIME_STATUS.NOT_SET,)
+        return (PrimeTimeStatus.NOT_SET,)
 
 
 class RankedEntity(PreQueueEntity):

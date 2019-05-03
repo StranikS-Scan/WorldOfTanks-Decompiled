@@ -410,7 +410,7 @@ def _migrateTo43(core, data, initialized):
 
 
 def _migrateTo44(core, data, initialized):
-    data['guiStartBehavior']['isRankedWelcomeViewShowed'] = True
+    data['guiStartBehavior']['isRankedWelcomeViewShowed'] = False
 
 
 _versions = ((1,

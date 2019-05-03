@@ -1064,8 +1064,6 @@ class MENU(object):
     RESEARCH_LABELS_BUTTON_RESTORE = '#menu:research/labels/button/restore'
     RESEARCH_LABELS_BUTTON_TRADE_IN = '#menu:research/labels/button/trade-in'
     RESEARCH_LABELS_BUTTON_RENT = '#menu:research/labels/button/rent'
-    RESEARCH_LABELS_BLUEPRINT = '#menu:research/labels/blueprint'
-    RESEARCH_LABELS_BLUEPRINTCOMPLETE = '#menu:research/labels/blueprintComplete'
     TRADE_IN = '#menu:trade/in'
     BARRACKS_MENU_ROLEFILTER_TEXTFIELD = '#menu:barracks/menu/roleFilter/textfield'
     BARRACKS_BTNBUYTANKMAN = '#menu:barracks/btnBuyTankman'

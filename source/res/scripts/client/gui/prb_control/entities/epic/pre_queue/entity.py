@@ -21,7 +21,7 @@ from gui.prb_control.events_dispatcher import g_eventDispatcher
 from gui.prb_control.items import SelectResult
 from gui.prb_control.settings import PREBATTLE_ACTION_NAME, FUNCTIONAL_FLAG, PRE_QUEUE_JOIN_ERRORS
 from gui.prb_control.storages import prequeue_storage_getter
-from gui.ranked_battles.constants import PRIME_TIME_STATUS
+from gui.ranked_battles.constants import PrimeTimeStatus
 from gui.shared import event_dispatcher
 from helpers import dependency, i18n
 from skeletons.account_helpers.settings_core import ISettingsCore
@@ -57,7 +57,7 @@ class EpicEntryPoint(PreQueueEntryPoint):
 
     def select(self, ctx, callback=None):
         status, _, _ = self.__epicController.getPrimeTimeStatus()
-        if status in (PRIME_TIME_STATUS.DISABLED, PRIME_TIME_STATUS.FROZEN, PRIME_TIME_STATUS.NO_SEASON):
+        if status in (PrimeTimeStatus.DISABLED, PrimeTimeStatus.FROZEN, PrimeTimeStatus.NO_SEASON):
             SystemMessages.pushMessage(i18n.makeString(SYSTEM_MESSAGES.EPICBATTLES_NOTIFICATION_NOTAVAILABLE), type=SystemMessages.SM_TYPE.Error)
             if callback is not None:
                 callback(False)
@@ -74,7 +74,7 @@ class EpicEntryPoint(PreQueueEntryPoint):
             return
 
     def _getFilterStates(self):
-        return (PRIME_TIME_STATUS.NOT_SET, PRIME_TIME_STATUS.NOT_AVAILABLE)
+        return (PrimeTimeStatus.NOT_SET, PrimeTimeStatus.NOT_AVAILABLE)
 
     def __isFrontlineAvailableOnDifferentPeriphery(self):
         hostsList = g_preDefinedHosts.getSimpleHostsList(g_preDefinedHosts.hostsWithRoaming())
@@ -82,7 +82,7 @@ class EpicEntryPoint(PreQueueEntryPoint):
             if peripheryID == self.__connectionMgr.peripheryID:
                 continue
             primeTimeStatus, _, primeTimeNow = self.__epicController.getPrimeTimeStatus(peripheryID)
-            if primeTimeStatus != PRIME_TIME_STATUS.NOT_SET and primeTimeNow:
+            if primeTimeStatus != PrimeTimeStatus.NOT_SET and primeTimeNow:
                 return True
 
         return False
@@ -91,7 +91,7 @@ class EpicEntryPoint(PreQueueEntryPoint):
 class EpicForcedEntryPoint(EpicEntryPoint):
 
     def _getFilterStates(self):
-        return (PRIME_TIME_STATUS.NOT_SET,)
+        return (PrimeTimeStatus.NOT_SET,)
 
 
 class EpicEntity(PreQueueEntity):
@@ -178,7 +178,7 @@ class EpicEntity(PreQueueEntity):
             return
         status, _, _ = self.__epicController.getPrimeTimeStatus()
         isPlayable = self.__epicController.isEnabled() and not self.__epicController.isFrozen()
-        if not isPlayable or not self.__epicController.hasAnySeason() or status is not PRIME_TIME_STATUS.AVAILABLE:
+        if not isPlayable or not self.__epicController.hasAnySeason() or status is not PrimeTimeStatus.AVAILABLE:
             ctx = LeavePreQueueCtx(waitingID='prebattle/leave', flags=FUNCTIONAL_FLAG.EXIT, entityType=self.getEntityType())
 
             def showPrimeTime(_):

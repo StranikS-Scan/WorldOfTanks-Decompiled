@@ -50,12 +50,15 @@ class RankedTooltipData(BlocksTooltipData):
         return formatters.packTextBlockData(text_styles.concatStylesToMultiLine(name, divisionName))
 
     def __packComment(self):
-        shieldMaxHp = 0
-        if self.__shieldStatus is not None:
-            _, _, shieldMaxHp, _, _ = self.__shieldStatus
+        comment = self.__getDivisionComment()
+        if comment is None:
+            comment = self.__getShieldComment()
+        return formatters.packTextBlockData(comment) if comment is not None else None
+
+    def __getDivisionComment(self):
+        comment = None
         item = self.item
         division = item.getDivision()
-        comment = None
         if not division.isCompleted() and item.isLastInDivision():
             if not item.isFinal():
                 nextDivisionIdx = division.getID() + 1
@@ -65,11 +68,26 @@ class RankedTooltipData(BlocksTooltipData):
                     comment = text_styles.standard(backport.text(R.strings.tooltips.battleTypes.ranked.rank.isLastInDivision(), division=text_styles.stats(nextDivision.getUserName())))
             else:
                 comment = text_styles.standard(backport.text(R.strings.tooltips.battleTypes.ranked.rank.isLastInDivision.league()))
-        elif shieldMaxHp > 0:
-            comment = text_styles.standard(backport.text(R.strings.tooltips.battleTypes.ranked.haveShield(), hp=text_styles.stats(shieldMaxHp)))
         elif item.isFirstInDivision() and division.getUserID() != RANKEDBATTLES_ALIASES.DIVISIONS_CLASSIFICATION:
             comment = text_styles.standard(backport.text(R.strings.tooltips.battleTypes.ranked.rank.isFirstInDivision()))
-        return formatters.packTextBlockData(comment) if comment is not None else None
+        return comment
+
+    def __getShieldComment(self):
+        comment = None
+        shieldMaxHp = 0
+        hp = 0
+        if self.__shieldStatus is not None:
+            _, hp, shieldMaxHp, _, _ = self.__shieldStatus
+        if shieldMaxHp > 0:
+            if hp > 0:
+                comment = text_styles.standard(backport.text(R.strings.tooltips.battleTypes.ranked.haveShield(), hp=text_styles.stats(shieldMaxHp)))
+            elif self.item.isCurrent():
+                comment = text_styles.standard(backport.text(R.strings.tooltips.battleTypes.ranked.shieldBreaked()))
+            else:
+                comment = text_styles.standard(backport.text(R.strings.tooltips.battleTypes.ranked.shieldBreakedRankLost()))
+        elif shieldMaxHp == 0 and hp > 0:
+            comment = text_styles.standard(backport.text(R.strings.tooltips.battleTypes.ranked.haveDisposableShield(), hp=text_styles.stats(hp)))
+        return comment
 
     def __packStepsBlock(self):
         stepsNumber = self.item.getStepsCountToAchieve()

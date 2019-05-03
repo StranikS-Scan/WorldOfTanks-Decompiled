@@ -20,7 +20,7 @@ from gui.prb_control.ctrl_events import g_prbCtrlEvents
 from gui.prb_control.entities.listener import IGlobalListener
 from gui.promo.hangar_teaser_widget import TeaserViewer
 from gui.ranked_battles.ranked_helpers import getPrimeTimeStatusVO
-from gui.ranked_battles.constants import PRIME_TIME_STATUS
+from gui.ranked_battles.constants import PrimeTimeStatus
 from gui.shared import event_dispatcher as shared_events
 from gui.shared import events, EVENT_BUS_SCOPE
 from gui.shared.event_dispatcher import showRankedPrimeTimeWindow
@@ -236,8 +236,8 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
         if self.prbDispatcher is not None and self.prbDispatcher.getFunctionalState().isInPreQueue(QUEUE_TYPE.RANKED):
             if status is None:
                 status, _, _ = self.rankedController.getPrimeTimeStatus()
-            self.as_setAlertMessageBlockVisibleS(status == PRIME_TIME_STATUS.NOT_AVAILABLE)
-            visible = status == PRIME_TIME_STATUS.NOT_AVAILABLE and self.alertMessage is not None
+            self.as_setAlertMessageBlockVisibleS(status == PrimeTimeStatus.NOT_AVAILABLE)
+            visible = status == PrimeTimeStatus.NOT_AVAILABLE and self.alertMessage is not None
             if visible:
                 self.alertMessage.update(getPrimeTimeStatusVO(status, self.rankedController.hasAvailablePrimeTimeServers())._asdict(), onBtnClickCallback=showRankedPrimeTimeWindow)
         else:

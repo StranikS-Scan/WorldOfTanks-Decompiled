@@ -35,11 +35,11 @@ class ClientRanked(object):
 
     def getSeason(self):
         rankedConfig = self.__account.serverSettings['ranked_config']
-        return season_common.getSeason(rankedConfig, time_utils.getServerRegionalTime())
+        return season_common.getSeason(rankedConfig, time_utils.getCurrentLocalServerTimestamp())
 
     def getConfigs(self):
         rankedConfig = self.__account.serverSettings['ranked_config']
-        cycleConfig = season_common.getActiveCycleConfig(rankedConfig, time_utils.getServerRegionalTime())
+        cycleConfig = season_common.getActiveCycleConfig(rankedConfig, time_utils.getCurrentLocalServerTimestamp())
         return (rankedConfig, cycleConfig)
 
     def onAccountBecomePlayer(self):

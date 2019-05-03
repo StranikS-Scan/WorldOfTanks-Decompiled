@@ -95,9 +95,7 @@ class PositionTooltipData(BlocksTooltipData):
         items = super(PositionTooltipData, self)._packBlocks()
         title = text_styles.highTitle(backport.text(R.strings.tooltips.ranked.widget.position.title()))
         updateTime = self.rankedController.getClientLeagueUpdateTime()
-        if updateTime is not None:
-            items.append(formatters.packTitleDescBlock(title=title, desc=text_styles.main(backport.text(R.strings.tooltips.ranked.widget.position.description()).format(date=text_styles.neutral(BigWorld.wg_getLongTimeFormat(updateTime))))))
-            items.append(formatters.packTextBlockData(text_styles.standard(backport.text(R.strings.tooltips.ranked.widget.position.updateLabel()))))
-        else:
-            items.append(formatters.packTitleDescBlock(title=title, desc=text_styles.main(backport.text(R.strings.ranked_battles.rankedBattleMainView.stats.rating.unavailableTooltip()))))
+        items.append(formatters.packTitleDescBlock(title=title, desc=text_styles.main(backport.text(R.strings.tooltips.ranked.widget.position.description()).format(date=text_styles.neutral(ranked_formatters.getTimeLongStr(updateTime))))))
+        posComment = R.strings.tooltips.ranked.widget.position
+        items.append(formatters.packTextBlockData(text_styles.standard(backport.text(posComment.updateLabel() if updateTime is not None else posComment.unavailableLabel()))))
         return items

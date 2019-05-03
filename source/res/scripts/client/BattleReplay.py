@@ -627,7 +627,7 @@ class BattleReplay(object):
                     arenaInfo['bootcampCtx'] = g_bootcamp.serializeContext()
                 self.__replayCtrl.recMapName = arenaName
                 self.__replayCtrl.recPlayerVehicleName = vehicleName
-                self.__replayCtrl.setArenaInfoStr(json.dumps(arenaInfo))
+                self.__replayCtrl.setArenaInfoStr(json.dumps(_JSON_Encode(arenaInfo)))
             else:
                 self.__showInfoMessages()
                 if self.replayTimeout > 0:
@@ -659,7 +659,7 @@ class BattleReplay(object):
         if self.isPlaying:
             self.__serverSettings = dict()
             try:
-                self.__serverSettings = json.loads(self.__replayCtrl.getArenaInfoStr()).get('serverSettings')
+                self.__serverSettings = self.arenaInfo.get('serverSettings')
             except Exception:
                 LOG_WARNING('There is problem while unpacking server settings from replay')
                 if constants.IS_DEVELOPMENT:
@@ -854,6 +854,7 @@ class BattleReplay(object):
             self.__serverSettings['isPotapovQuestEnabled'] = serverSettings.get('isPotapovQuestEnabled', False)
             if 'spgRedesignFeatures' in serverSettings:
                 self.__serverSettings['spgRedesignFeatures'] = serverSettings['spgRedesignFeatures']
+            self.__serverSettings['ranked_config'] = serverSettings['ranked_config']
             if player.databaseID is None:
                 BigWorld.callback(0.1, self.__onAccountBecomePlayer)
             else:
@@ -994,7 +995,10 @@ def _JSON_Encode(obj):
             newDict[key] = _JSON_Encode(value)
 
         return newDict
-    if isinstance(obj, (list, tuple, set)):
+    if isinstance(obj, (list,
+     tuple,
+     set,
+     frozenset)):
         newList = []
         for value in obj:
             newList.append(_JSON_Encode(value))

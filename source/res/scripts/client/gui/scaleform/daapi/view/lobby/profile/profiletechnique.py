@@ -108,7 +108,7 @@ class ProfileTechnique(ProfileTechniqueMeta):
         return AccountSettings.getFilter(self._getStorageId())
 
     def _getTableHeader(self, isFallout=False):
-        markOfMasteryEnabled = self._battlesType == PROFILE_DROPDOWN_KEYS.ALL or self._battlesType == PROFILE_DROPDOWN_KEYS.EPIC_RANDOM or self._battlesType == PROFILE_DROPDOWN_KEYS.RANKED
+        markOfMasteryEnabled = self._battlesType == PROFILE_DROPDOWN_KEYS.ALL or self._battlesType == PROFILE_DROPDOWN_KEYS.EPIC_RANDOM
         return (self._createTableBtnInfo('nationIndex', 36, 0, PROFILE.SECTION_TECHNIQUE_SORT_TOOLTIP_NATION, 'ascending', iconSource=RES_ICONS.MAPS_ICONS_FILTERS_NATIONS_ALL, inverted=True),
          self._createTableBtnInfo('typeIndex', 34, 1, PROFILE.SECTION_TECHNIQUE_SORT_TOOLTIP_TECHNIQUE, 'descending', iconSource=RES_ICONS.MAPS_ICONS_FILTERS_TANKS_ALL),
          self._createTableBtnInfo('level', 32, 2, PROFILE.SECTION_TECHNIQUE_SORT_TOOLTIP_LVL, 'descending', iconSource=RES_ICONS.MAPS_ICONS_BUTTONS_TAB_SORT_BUTTON_LEVEL),

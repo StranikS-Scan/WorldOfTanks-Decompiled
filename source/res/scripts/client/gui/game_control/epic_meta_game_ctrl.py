@@ -21,7 +21,7 @@ from skeletons.gui.game_control import IBootcampController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
 from skeletons.connection_mgr import IConnectionManager
-from gui.ranked_battles.constants import PRIME_TIME_STATUS
+from gui.ranked_battles.constants import PrimeTimeStatus
 from gui.shared.utils.requesters import REQ_CRITERIA
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from CurrentVehicle import g_currentVehicle
@@ -298,9 +298,9 @@ class EpicBattleMetaGameController(IEpicBattleMetaGameController, Notifiable, Se
             peripheryID = self.connectionMgr.peripheryID
         primeTime = self.getPrimeTimes().get(peripheryID)
         if primeTime is None:
-            return (PRIME_TIME_STATUS.NOT_SET, 0, False)
+            return (PrimeTimeStatus.NOT_SET, 0, False)
         elif not primeTime.hasAnyPeriods():
-            return (PRIME_TIME_STATUS.FROZEN, 0, False)
+            return (PrimeTimeStatus.FROZEN, 0, False)
         else:
             season = self.getCurrentSeason() or self.getNextSeason()
             currTime = time_utils.getCurrentLocalServerTimestamp()
@@ -315,7 +315,7 @@ class EpicBattleMetaGameController(IEpicBattleMetaGameController, Notifiable, Se
                         if primeTimeStart:
                             timeTillUpdate = max(primeTimeStart, nextCycle.startDate) - currTime
                 self.__isNow = False
-            return (PRIME_TIME_STATUS.AVAILABLE, timeTillUpdate, self.__isNow) if self.__isNow else (PRIME_TIME_STATUS.NOT_AVAILABLE, timeTillUpdate, False)
+            return (PrimeTimeStatus.AVAILABLE, timeTillUpdate, self.__isNow) if self.__isNow else (PrimeTimeStatus.NOT_AVAILABLE, timeTillUpdate, False)
 
     def getPrimeTimesForDay(self, selectedTime, groupIdentical=False):
         hostsList = g_preDefinedHosts.getSimpleHostsList(g_preDefinedHosts.hostsWithRoaming(), withShortName=True)
@@ -352,7 +352,7 @@ class EpicBattleMetaGameController(IEpicBattleMetaGameController, Notifiable, Se
             allPeripheryIDs = set([ host.peripheryID for host in g_preDefinedHosts.hostsWithRoaming() ])
         for peripheryID in allPeripheryIDs:
             primeTimeStatus, _, _ = self.getPrimeTimeStatus(peripheryID)
-            if primeTimeStatus == PRIME_TIME_STATUS.AVAILABLE:
+            if primeTimeStatus == PrimeTimeStatus.AVAILABLE:
                 return True
 
         return False
@@ -477,11 +477,11 @@ class EpicBattleMetaGameController(IEpicBattleMetaGameController, Notifiable, Se
 
     def __getTimer(self):
         primeTimeStatus, timeLeft, _ = self.getPrimeTimeStatus()
-        if primeTimeStatus != PRIME_TIME_STATUS.AVAILABLE and not self.connectionMgr.isStandalone():
+        if primeTimeStatus != PrimeTimeStatus.AVAILABLE and not self.connectionMgr.isStandalone():
             allPeripheryIDs = set([ host.peripheryID for host in g_preDefinedHosts.hostsWithRoaming() ])
             for peripheryID in allPeripheryIDs:
                 peripheryStatus, peripheryTime, _ = self.getPrimeTimeStatus(peripheryID)
-                if peripheryStatus == PRIME_TIME_STATUS.NOT_AVAILABLE and peripheryTime < timeLeft:
+                if peripheryStatus == PrimeTimeStatus.NOT_AVAILABLE and peripheryTime < timeLeft:
                     timeLeft = peripheryTime
 
         seasonsChangeTime = self.getClosestStateChangeTime()

@@ -8,6 +8,7 @@ from account_helpers.AccountSettings import ENABLE_RANKED_ANIMATIONS
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform.daapi.view.meta.RankedBattlesHangarWidgetMeta import RankedBattlesHangarWidgetMeta
 from gui.Scaleform.genConsts.RANKEDBATTLES_ALIASES import RANKEDBATTLES_ALIASES
+from gui.Scaleform.genConsts.RANKEDBATTLES_CONSTS import RANKEDBATTLES_CONSTS
 from gui.ranked_battles.ranked_builders.widget_vos import StateBlock, WidgetPreferences, getVOsSequence, getAdditionalVOs
 from gui.ranked_battles.ranked_helpers.league_provider import UNDEFINED_LEAGUE_ID
 from helpers import dependency
@@ -200,7 +201,7 @@ class RankedBattlesHangarWidget(RankedBattleResultsWidget):
         super(RankedBattlesHangarWidget, self).update(lastRank, currentRank, ranksChain)
 
     def onWidgetClick(self):
-        self.rankedController.showRankedBattlePage()
+        self.rankedController.showRankedBattlePage(ctx={'selectedItemID': RANKEDBATTLES_CONSTS.RANKED_BATTLES_RANKS_ID})
 
     def onAnimationFinished(self):
         if self.rankedController.getClientBonusBattlesCount() > 0:

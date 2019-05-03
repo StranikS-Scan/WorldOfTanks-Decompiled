@@ -304,6 +304,7 @@ class RES_ICONS(object):
     MAPS_ICONS_BLUEPRINTS_BORDERSLOT = '../maps/icons/blueprints/borderSlot.png'
     MAPS_ICONS_BLUEPRINTS_GRID_SLOT = '../maps/icons/blueprints/grid_slot.png'
     MAPS_ICONS_BLUEPRINTS_PLUS = '../maps/icons/blueprints/plus.png'
+    MAPS_ICONS_BLUEPRINTS_PROGRESSBARGRDNT = '../maps/icons/blueprints/progressBarGrdnt.png'
     MAPS_ICONS_BLUEPRINTS_SLOT_GLOW = '../maps/icons/blueprints/slot_glow.png'
     MAPS_ICONS_BLUEPRINTS_VEHICLESKETCH = '../maps/icons/blueprints/vehicleSketch.png'
     MAPS_ICONS_BLUEPRINTS_BLUEPRINTSCREEN_ADDICON = '../maps/icons/blueprints/blueprintScreen/addIcon.png'

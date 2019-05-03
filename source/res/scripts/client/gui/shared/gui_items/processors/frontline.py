@@ -34,7 +34,7 @@ class FrontlineBuyRewardVehicle(Processor):
 
     @staticmethod
     def __formatTime():
-        operationTime = time_utils.getServerRegionalTime()
+        operationTime = time_utils.getCurrentLocalServerTimestamp()
         return TimeFormatter.getLongDatetimeFormat(operationTime) if operationTime else 'N/A'
 
 

@@ -431,6 +431,7 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
         self.itemsCache.onSyncCompleted -= self.__onItemsCacheResync
         self.linkedSetController.onStateChanged -= self.__onLinkedSetStateChanged
         self.rankedController.onUpdated -= self.__updateRanked
+        self.rankedController.onPrimeTimeStatusUpdated -= self.__updateRanked
         self.epicController.onUpdated -= self.__updateEpic
         self.epicController.onPrimeTimeStatusUpdated -= self.__updateEpic
         self.badgesController.onUpdated -= self.__updateBadge

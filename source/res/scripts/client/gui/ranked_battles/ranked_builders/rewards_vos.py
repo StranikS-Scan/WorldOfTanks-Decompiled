@@ -11,13 +11,16 @@ def getSeasonOnTabs(selectedLinkage):
     return [{'id': RANKEDBATTLES_CONSTS.RANKED_BATTLES_REWARDS_RANKEDS_ID,
       'label': backport.text(R.strings.ranked_battles.rewardsView.tabs.ranks()),
       'linkage': RANKEDBATTLES_ALIASES.RANKED_BATTLES_REWARDS_RANKS_UI,
-      'selected': selectedLinkage == RANKEDBATTLES_ALIASES.RANKED_BATTLES_REWARDS_RANKS_UI}, {'id': RANKEDBATTLES_CONSTS.RANKED_BATTLES_REWARDS_LEAGUES_ID,
+      'selected': selectedLinkage == RANKEDBATTLES_ALIASES.RANKED_BATTLES_REWARDS_RANKS_UI,
+      'enabled': True}, {'id': RANKEDBATTLES_CONSTS.RANKED_BATTLES_REWARDS_LEAGUES_ID,
       'label': backport.text(R.strings.ranked_battles.rewardsView.tabs.leagues()),
       'linkage': RANKEDBATTLES_ALIASES.RANKED_BATTLES_REWARDS_LEAGUES_UI,
-      'selected': selectedLinkage == RANKEDBATTLES_ALIASES.RANKED_BATTLES_REWARDS_LEAGUES_UI}, {'id': RANKEDBATTLES_CONSTS.RANKED_BATTLES_REWARDS_YEAR_ID,
+      'selected': selectedLinkage == RANKEDBATTLES_ALIASES.RANKED_BATTLES_REWARDS_LEAGUES_UI,
+      'enabled': True}, {'id': RANKEDBATTLES_CONSTS.RANKED_BATTLES_REWARDS_YEAR_ID,
       'label': backport.text(R.strings.ranked_battles.rewardsView.tabs.year()),
       'linkage': RANKEDBATTLES_ALIASES.RANKED_BATTLES_REWARDS_YEAR_UI,
-      'selected': selectedLinkage == RANKEDBATTLES_ALIASES.RANKED_BATTLES_REWARDS_YEAR_UI}]
+      'selected': selectedLinkage == RANKEDBATTLES_ALIASES.RANKED_BATTLES_REWARDS_YEAR_UI,
+      'enabled': True}]
 
 
 def getSeasonOffTabs():
@@ -25,15 +28,15 @@ def getSeasonOffTabs():
       'label': backport.text(R.strings.ranked_battles.rewardsView.tabs.ranks()),
       'linkage': RANKEDBATTLES_ALIASES.RANKED_BATTLES_REWARDS_RANKS_UI,
       'selected': False,
-      'disabled': True}, {'id': RANKEDBATTLES_CONSTS.RANKED_BATTLES_REWARDS_LEAGUES_ID,
+      'enabled': False}, {'id': RANKEDBATTLES_CONSTS.RANKED_BATTLES_REWARDS_LEAGUES_ID,
       'label': backport.text(R.strings.ranked_battles.rewardsView.tabs.leagues()),
       'linkage': RANKEDBATTLES_ALIASES.RANKED_BATTLES_REWARDS_LEAGUES_UI,
       'selected': False,
-      'disabled': True}, {'id': RANKEDBATTLES_CONSTS.RANKED_BATTLES_REWARDS_YEAR_ID,
+      'enabled': False}, {'id': RANKEDBATTLES_CONSTS.RANKED_BATTLES_REWARDS_YEAR_ID,
       'label': backport.text(R.strings.ranked_battles.rewardsView.tabs.year()),
       'linkage': RANKEDBATTLES_ALIASES.RANKED_BATTLES_REWARDS_YEAR_UI,
       'selected': True,
-      'disabled': False}]
+      'enabled': True}]
 
 
 def getDivisionVO(division):

@@ -5,7 +5,7 @@ from gui.Scaleform.genConsts.RANKEDBATTLES_CONSTS import RANKEDBATTLES_CONSTS
 from gui.shared.money import Currency
 from shared_utils import CONST_CONTAINER
 
-class RANK_TYPES(object):
+class RankTypes(CONST_CONTAINER):
     ACCOUNT = 'account'
     VEHICLE = 'vehicle'
 
@@ -29,7 +29,7 @@ YEAR_AWARDS_ORDER = (YearAwardsNames.SMALL,
  YearAwardsNames.BIG,
  YearAwardsNames.LARGE)
 
-class PRIME_TIME_STATUS(object):
+class PrimeTimeStatus(CONST_CONTAINER):
     DISABLED = 0
     NOT_SET = 1
     FROZEN = 2
@@ -39,6 +39,7 @@ class PRIME_TIME_STATUS(object):
 
 
 ZERO_RANK_ID = 0
+ZERO_DIVISION_ID = 0
 AWARDS_ORDER = ['battleToken',
  'items',
  Currency.CREDITS,
@@ -48,9 +49,28 @@ AWARDS_ORDER = ['battleToken',
  'oneof']
 DEFAULT_REWARDS_COUNT = 7
 
-class RankedDossierKeys(object):
+class RankedDossierKeys(CONST_CONTAINER):
     ARCHIVE = 'Archive'
     SEASON = 'Season%s'
 
 
 ARCHIVE_SEASON_ID = 0
+NOT_IN_LEAGUES_QUEST = 'ranked_{}_0'
+
+class SeasonResultTokenPatterns(CONST_CONTAINER):
+    RANKED_OFF_BANNED = 'ranked_{}_banned'
+    RANKED_OFF_GOLD_LEAGUE_TOKEN = 'ranked_{}_top_1'
+    RANKED_OFF_SILVER_LEAGUE_TOKEN = 'ranked_{}_top_2'
+    RANKED_OFF_BRONZE_LEAGUE_TOKEN = 'ranked_{}_top_3'
+
+
+class SeasonGapStates(CONST_CONTAINER):
+    WAITING_IN_LEAGUES = 0
+    IN_LEAGUES = 1
+    BANNED_IN_LEAGUES = 2
+    WAITING_IN_DIVISIONS = 3
+    IN_DIVISIONS = 4
+    BANNED_IN_DIVISIONS = 5
+    WAITING_NOT_IN_SEASON = 6
+    NOT_IN_SEASON = 7
+    BANNED_NOT_IN_SEASON = 8

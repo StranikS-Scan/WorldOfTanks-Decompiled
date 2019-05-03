@@ -13,7 +13,6 @@ def getFinishSeasonData(efficiencyValue, seasonNumber):
      'seasonTitle': backport.text(R.strings.ranked_battles.seasonComplete.bigTitle(), season=str(seasonNumber)),
      'effectValue': BigWorld.wg_getIntegralFormat(efficiencyValue),
      'effectLabel': backport.text(R.strings.ranked_battles.seasonComplete.effectLabel()),
-     'placeLabel': backport.text(R.strings.ranked_battles.seasonComplete.placeInRating()),
      'btnLabel': backport.text(R.strings.ranked_battles.seasonComplete.leadersButton()),
      'bgSource': backport.image(R.images.gui.maps.icons.rankedBattles.bg.main())}
 
@@ -23,6 +22,7 @@ def getFinishInLeagueData(league, position, seasonNumber):
     body = backport.text(R.strings.ranked_battles.seasonComplete.tooltip.body(), season=str(seasonNumber))
     return {'mainImage': backport.image(R.images.gui.maps.icons.rankedBattles.league.c_300x300.num(league)()),
      'state': RANKEDBATTLES_ALIASES.SEASON_COMPLETE_VIEW_LEAGUE_STATE,
+     'placeLabel': backport.text(R.strings.ranked_battles.seasonComplete.placeInRating()),
      'placeValue': position,
      'descr': '',
      'tooltip': makeTooltip(header=header, body=body)}
@@ -36,6 +36,7 @@ def getFinishInDivisionsData(division, rankID, seasonNumber):
     body = backport.text(R.strings.ranked_battles.seasonComplete.tooltip.body(), season=str(seasonNumber))
     return {'mainImage': backport.image(R.images.gui.maps.icons.rankedBattles.ranks.c_190x260.dyn('rank%s_%s' % (divisionID, rankUserID))()),
      'state': RANKEDBATTLES_ALIASES.SEASON_COMPLETE_VIEW_DIVISION_STATE,
+     'placeLabel': backport.text(R.strings.ranked_battles.seasonComplete.outOfRating()),
      'placeValue': '',
      'descr': backport.text(R.strings.ranked_battles.seasonComplete.bestRank()),
      'tooltip': makeTooltip(header=header, body=body)}

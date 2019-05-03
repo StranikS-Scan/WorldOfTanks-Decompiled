@@ -34,7 +34,6 @@ class MethodsRules(object):
             def wrapper(*args, **kwargs):
                 instance = args[0]
                 if instance.delay(self.__delayerName, listener, *args, **kwargs):
-                    _logger.debug('Notification delayed: %r, %r, %r', listener, *args, **kwargs)
                     return
                 result = listener(*args, **kwargs)
                 instance.processDelayer(listener.__name__)

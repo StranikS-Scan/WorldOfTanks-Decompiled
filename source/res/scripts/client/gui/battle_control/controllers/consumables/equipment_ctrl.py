@@ -698,6 +698,7 @@ class EquipmentsReplayPlayer(EquipmentsController):
         super(EquipmentsReplayPlayer, self).clear(leave)
         return
 
+    @MethodsRules.delayable('notifyPlayerVehicleSet')
     def setEquipment(self, intCD, quantity, stage, timeRemaining, totalTime):
         super(EquipmentsReplayPlayer, self).setEquipment(intCD, quantity, stage, timeRemaining, totalTime)
         self.__percents.pop(intCD, None)

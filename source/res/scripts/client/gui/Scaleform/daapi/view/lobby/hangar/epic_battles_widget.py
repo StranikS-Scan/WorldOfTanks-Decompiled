@@ -10,7 +10,7 @@ from gui.Scaleform.genConsts.BLOCKS_TOOLTIP_TYPES import BLOCKS_TOOLTIP_TYPES
 from gui.Scaleform.locale.EPIC_BATTLE import EPIC_BATTLE
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
-from gui.ranked_battles.constants import PRIME_TIME_STATUS
+from gui.ranked_battles.constants import PrimeTimeStatus
 from gui.shared import event_dispatcher
 from gui.shared.formatters import text_styles, icons
 from gui.shared.tooltips import TOOLTIP_TYPE
@@ -49,7 +49,7 @@ class EpicBattlesWidget(EpicBattlesWidgetMeta):
 
     def __getStatusBlock(self):
         status, timeLeft, _ = self.epicMetaGameCtrl.getPrimeTimeStatus()
-        showPrimeTimeAlert = status != PRIME_TIME_STATUS.AVAILABLE
+        showPrimeTimeAlert = status != PrimeTimeStatus.AVAILABLE
         hasAvailableServers = self.epicMetaGameCtrl.hasAvailablePrimeTimeServers()
         return CalendarStatusVO(alertIcon=RES_ICONS.MAPS_ICONS_LIBRARY_ALERTBIGICON if showPrimeTimeAlert else None, buttonIcon='', buttonLabel=i18n.makeString(EPIC_BATTLE.WIDGETALERTMESSAGEBLOCK_BUTTON), buttonVisible=showPrimeTimeAlert and hasAvailableServers, buttonTooltip=None, statusText=self.__getAlertStatusText(timeLeft, hasAvailableServers), popoverAlias=None, bgVisible=True, shadowFilterVisible=showPrimeTimeAlert, tooltip=None)
 

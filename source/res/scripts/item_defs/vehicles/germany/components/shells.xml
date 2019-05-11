@@ -2681,7 +2681,7 @@
     <notInShop>	true	</notInShop>
     <kind>	HIGH_EXPLOSIVE	</kind>
     <caliber>	100	</caliber>
-    <explosionRadius>	3.0	</explosionRadius>
+    <explosionRadius>	1.5	</explosionRadius>
     <hasStun>	true	</hasStun>
     <stunDuration>	18	</stunDuration>
     <guaranteedStunDuration>	0.5	</guaranteedStunDuration>
@@ -2689,9 +2689,11 @@
     <isTracer>	true	</isTracer>
     <effects>	epicAirbombStrike	</effects>
     <damage>
-      <armor>	360	</armor>
+      <armor>	130	</armor>
       <devices>	150	</devices>
     </damage>
+    <explosionDamageFactor>	1.0	</explosionDamageFactor>
+    <explosionEdgeDamageFactor>	1.0	</explosionEdgeDamageFactor>
   </bomber_shell_epic_level1>
   <bomber_shell_epic_level2>
     <id>	262	</id>
@@ -2701,7 +2703,7 @@
     <notInShop>	true	</notInShop>
     <kind>	HIGH_EXPLOSIVE	</kind>
     <caliber>	100	</caliber>
-    <explosionRadius>	3.0	</explosionRadius>
+    <explosionRadius>	1.5	</explosionRadius>
     <hasStun>	true	</hasStun>
     <stunDuration>	20	</stunDuration>
     <guaranteedStunDuration>	0.5	</guaranteedStunDuration>
@@ -2709,9 +2711,11 @@
     <isTracer>	true	</isTracer>
     <effects>	epicAirbombStrike	</effects>
     <damage>
-      <armor>	360	</armor>
+      <armor>	130	</armor>
       <devices>	150	</devices>
     </damage>
+    <explosionDamageFactor>	1.0	</explosionDamageFactor>
+    <explosionEdgeDamageFactor>	1.0	</explosionEdgeDamageFactor>
   </bomber_shell_epic_level2>
   <bomber_shell_epic_level3>
     <id>	263	</id>
@@ -2721,7 +2725,7 @@
     <notInShop>	true	</notInShop>
     <kind>	HIGH_EXPLOSIVE	</kind>
     <caliber>	100	</caliber>
-    <explosionRadius>	3.0	</explosionRadius>
+    <explosionRadius>	1.5	</explosionRadius>
     <hasStun>	true	</hasStun>
     <stunDuration>	22	</stunDuration>
     <guaranteedStunDuration>	0.5	</guaranteedStunDuration>
@@ -2729,9 +2733,11 @@
     <isTracer>	true	</isTracer>
     <effects>	epicAirbombStrike	</effects>
     <damage>
-      <armor>	360	</armor>
+      <armor>	140	</armor>
       <devices>	150	</devices>
     </damage>
+    <explosionDamageFactor>	1.0	</explosionDamageFactor>
+    <explosionEdgeDamageFactor>	1.0	</explosionEdgeDamageFactor>
   </bomber_shell_epic_level3>
   <bomber_shell_epic_level4>
     <id>	264	</id>
@@ -2741,7 +2747,7 @@
     <notInShop>	true	</notInShop>
     <kind>	HIGH_EXPLOSIVE	</kind>
     <caliber>	100	</caliber>
-    <explosionRadius>	3.0	</explosionRadius>
+    <explosionRadius>	1.5	</explosionRadius>
     <hasStun>	true	</hasStun>
     <stunDuration>	24	</stunDuration>
     <guaranteedStunDuration>	0.5	</guaranteedStunDuration>
@@ -2749,9 +2755,11 @@
     <isTracer>	true	</isTracer>
     <effects>	epicAirbombStrike	</effects>
     <damage>
-      <armor>	360	</armor>
+      <armor>	150	</armor>
       <devices>	150	</devices>
     </damage>
+    <explosionDamageFactor>	1.0	</explosionDamageFactor>
+    <explosionEdgeDamageFactor>	1.0	</explosionEdgeDamageFactor>
   </bomber_shell_epic_level4>
   <bomber_shell_epic_level5>
     <id>	265	</id>
@@ -2761,7 +2769,7 @@
     <notInShop>	true	</notInShop>
     <kind>	HIGH_EXPLOSIVE	</kind>
     <caliber>	100	</caliber>
-    <explosionRadius>	3.0	</explosionRadius>
+    <explosionRadius>	2.0	</explosionRadius>
     <hasStun>	true	</hasStun>
     <stunDuration>	26	</stunDuration>
     <guaranteedStunDuration>	0.5	</guaranteedStunDuration>
@@ -2769,8 +2777,10 @@
     <isTracer>	true	</isTracer>
     <effects>	epicAirbombStrike	</effects>
     <damage>
-      <armor>	360	</armor>
+      <armor>	160	</armor>
       <devices>	150	</devices>
     </damage>
+    <explosionDamageFactor>	1.0	</explosionDamageFactor>
+    <explosionEdgeDamageFactor>	1.0	</explosionEdgeDamageFactor>
   </bomber_shell_epic_level5>
 </shells.xml>

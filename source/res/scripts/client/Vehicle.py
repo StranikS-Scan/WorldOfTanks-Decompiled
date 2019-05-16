@@ -187,6 +187,8 @@ class Vehicle(BigWorld.Entity, BattleAbilitiesComponent):
     @staticmethod
     def respawnVehicle(vID, compactDescr=None, outfitCompactDescr=None):
         vehicleRef = _g_waitingVehicle.get(vID, None)
+        if vehicleRef is None and BigWorld.entities.get(vID) is not None:
+            _g_waitingVehicle[vID] = vehicleRef = weakref.ref(BigWorld.entities[vID])
         if vehicleRef is not None:
             vehicle = vehicleRef()
             if vehicle is not None:

@@ -493,11 +493,8 @@ class ItemsRequester(IItemsRequester):
                     invalidate[GUI_ITEM_TYPE.VEHICLE].update(data)
                 if statName in ('vehTypeXP', 'vehTypeLocks'):
                     invalidate[GUI_ITEM_TYPE.VEHICLE].update(data.keys())
-                if statName in (('multipliedXPVehs', '_r'),):
+                if statName in (('multipliedXPVehs', '_r'), ('multipliedRankedBattlesVehs', '_r')):
                     getter = vehicles.getVehicleTypeCompactDescr
-                    inventoryVehiclesCDs = [ getter(v['compDescr']) for v in self.__inventory.getItems(GUI_ITEM_TYPE.VEHICLE).itervalues() ]
-                    invalidate[GUI_ITEM_TYPE.VEHICLE].update(inventoryVehiclesCDs)
-                if statName in (('multipliedRankedBattlesVehs', '_r'),):
                     inventoryVehiclesCDs = [ getter(v['compDescr']) for v in self.__inventory.getItems(GUI_ITEM_TYPE.VEHICLE).itervalues() ]
                     invalidate[GUI_ITEM_TYPE.VEHICLE].update(inventoryVehiclesCDs)
                 if statName in ('oldVehInvIDs',):

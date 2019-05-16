@@ -95,6 +95,7 @@ class CustomizationCarouselRendererVO(object):
          'isEquipped': self.isEquipped,
          'rentalInfoText': self.rentalInfoText,
          'imageCached': self.imageCached,
+         'noveltyCounter': self.noveltyCounter,
          'isAllSeasons': self.isAllSeasons,
          'formIconSource': self.formIconSource,
          'defaultIconAlpha': self.defaultIconAlpha,

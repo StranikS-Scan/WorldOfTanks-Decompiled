@@ -87,6 +87,16 @@ def packTextParameterWithIconBlockData(name, value, icon, linkage=BLOCKS_TOOLTIP
     return packBlockDataItem(linkage, data, padding)
 
 
+def packTextParameterWithManualIconBlockData(value, icon, text, valueBlockWidth=77, iconBlockWidth=35, textBlockWidth=196, gap=5, padding=None):
+    valueBlock = packAlignedTextBlockData(text=value, align=BLOCKS_TOOLTIP_TYPES.ALIGN_RIGHT)
+    valueBlock['blockWidth'] = valueBlockWidth
+    iconBlock = packImageBlockData(img=icon, align=BLOCKS_TOOLTIP_TYPES.ALIGN_CENTER)
+    iconBlock['blockWidth'] = iconBlockWidth
+    textBlock = packTextBlockData(text=text)
+    textBlock['blockWidth'] = textBlockWidth
+    return packBuildUpBlockData(blocks=[valueBlock, iconBlock, textBlock], layout=BLOCKS_TOOLTIP_TYPES.LAYOUT_HORIZONTAL, gap=gap, padding=padding)
+
+
 def packTitleDescParameterWithIconBlockData(title, value='', icon=None, desc=None, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_TITLE_DESC_PARAMETER_WITH_ICON_BLOCK_LINKAGE, valueAtRight=False, valueWidth=-1, gap=5, titlePadding=None, valuePadding=None, iconPadding=None, padding=None, iconAlpha=1):
     data = {'name': title,
      'value': value,

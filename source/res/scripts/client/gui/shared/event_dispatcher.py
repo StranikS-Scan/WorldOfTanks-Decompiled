@@ -314,36 +314,41 @@ def showOldVehiclePreview(vehTypeCompDescr, previewAlias=VIEW_ALIAS.LOBBY_HANGAR
      'previewBackCb': previewBackCb}), scope=EVENT_BUS_SCOPE.LOBBY)
 
 
-def showVehiclePreview(vehTypeCompDescr, previewAlias=VIEW_ALIAS.LOBBY_HANGAR, vehStrCD=None, previewBackCb=None, itemsPack=None, offers=None, price=money.MONEY_UNDEFINED, oldPrice=None, title='', description=None, endTime=None, buyParams=None, vehParams=None, isFrontline=False):
+def showVehiclePreview(vehTypeCompDescr, previewAlias=VIEW_ALIAS.LOBBY_HANGAR, vehStrCD=None, previewBackCb=None, itemsPack=None, offers=None, price=money.MONEY_UNDEFINED, oldPrice=None, title='', description=None, endTime=None, buyParams=None, vehParams=None, isFrontline=False, marathonPrefix=None):
     lobbyContext = dependency.instance(ILobbyContext)
     newPreviewEnabled = lobbyContext.getServerSettings().isIngamePreviewEnabled()
     heroTankController = dependency.instance(IHeroTankController)
     heroTankCD = heroTankController.getCurrentTankCD()
     isHeroTank = heroTankCD and heroTankCD == vehTypeCompDescr
+    ctx = {'itemCD': vehTypeCompDescr,
+     'previewAlias': previewAlias,
+     'vehicleStrCD': vehStrCD,
+     'previewBackCb': previewBackCb,
+     'itemsPack': itemsPack,
+     'offers': offers,
+     'price': price,
+     'oldPrice': oldPrice,
+     'title': title,
+     'description': description,
+     'endTime': endTime,
+     'buyParams': buyParams,
+     'vehParams': vehParams}
     if isHeroTank and not (itemsPack or offers):
         goToHeroTankOnScene(vehTypeCompDescr, previewAlias)
     elif isFrontline:
         g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.FRONTLINE_VEHICLE_PREVIEW_20, ctx={'itemCD': vehTypeCompDescr,
          'previewAlias': previewAlias,
          'previewBackCb': previewBackCb}), scope=EVENT_BUS_SCOPE.LOBBY)
+    elif marathonPrefix is not None:
+        ctx.update({'marathonPrefix': marathonPrefix})
+        g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.MARATHON_VEHICLE_PREVIEW_20, ctx=ctx), scope=EVENT_BUS_SCOPE.LOBBY)
     elif newPreviewEnabled:
-        g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.VEHICLE_PREVIEW_20, ctx={'itemCD': vehTypeCompDescr,
-         'previewAlias': previewAlias,
-         'vehicleStrCD': vehStrCD,
-         'previewBackCb': previewBackCb,
-         'itemsPack': itemsPack,
-         'offers': offers,
-         'price': price,
-         'oldPrice': oldPrice,
-         'title': title,
-         'description': description,
-         'endTime': endTime,
-         'buyParams': buyParams,
-         'vehParams': vehParams}), scope=EVENT_BUS_SCOPE.LOBBY)
+        g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.VEHICLE_PREVIEW_20, ctx=ctx), scope=EVENT_BUS_SCOPE.LOBBY)
     elif itemsPack or offers:
         SystemMessages.pushMessage(text=_ms(MESSENGER.CLIENT_ERROR_SHARED_TRY_LATER), type=SystemMessages.SM_TYPE.Error, priority=NotificationPriorityLevel.MEDIUM)
     else:
         showOldVehiclePreview(vehTypeCompDescr, previewAlias, vehStrCD, previewBackCb)
+    return
 
 
 def goToHeroTankOnScene(vehTypeCompDescr, previewAlias=VIEW_ALIAS.LOBBY_HANGAR):
@@ -583,16 +588,17 @@ def showTankPremiumAboutPage():
     url = GUI_SETTINGS.premiumInfo.get('baseURL')
     if url is None:
         _logger.error('premiumInfo.baseURL is missed')
-    showBrowserOverlayView(url)
+    showBrowserOverlayView(url, alias=VIEW_ALIAS.OVERLAY_PREM_CONTENT_VIEW)
     return
 
 
 @process
-def showBrowserOverlayView(url, params=None):
+def showBrowserOverlayView(url, alias=VIEW_ALIAS.BROWSER_LOBBY_TOP_SUB, params=None, callbackOnLoad=None):
     if url:
         url = yield URLMacros().parse(url, params=params)
-        g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.OVERLAY_PREM_CONTENT_VIEW, ctx={'url': url,
-         'allowRightClick': False}), EVENT_BUS_SCOPE.LOBBY)
+        g_eventBus.handleEvent(events.LoadViewEvent(alias, ctx={'url': url,
+         'allowRightClick': False,
+         'callbackOnLoad': callbackOnLoad}), EVENT_BUS_SCOPE.LOBBY)
 
 
 def showProgressiveRewardWindow():

@@ -4,7 +4,7 @@ from debug_utils import LOG_WARNING
 
 class QUESTS(object):
     BONUSES_COMPENSATION = '#quests:bonuses/compensation'
-    MISSIONS_TAB_KURSK = '#quests:missions/tab/kursk'
+    MISSIONS_TAB_DDAY = '#quests:missions/tab/dday'
     MISSIONS_TAB_MARATHONS = '#quests:missions/tab/marathons'
     MISSIONS_TAB_EVENTBOARDS = '#quests:missions/tab/eventBoards'
     MISSIONS_TAB_CATEGORIES = '#quests:missions/tab/categories'
@@ -991,10 +991,10 @@ class QUESTS(object):
     MISSIONS_GROUP_OTHERS_LABEL = '#quests:missions/group/others/label'
     MISSIONS_GROUP_MOTIVE_LABEL = '#quests:missions/group/motive/label'
     MISSIONS_AWARDS_MERGED = '#quests:missions/awards/merged'
-    MISSIONS_TAB_LABEL_KURSK = '#quests:missions/tab/label/kursk'
+    MISSIONS_TAB_LABEL_DDAY = '#quests:missions/tab/label/dday'
     MISSIONS_TAB_LABEL_MARATHONS = '#quests:missions/tab/label/marathons'
-    MISSIONS_TAB_KURSK_HEADER = '#quests:missions/tab/kursk/header'
-    MISSIONS_TAB_KURSK_BODY = '#quests:missions/tab/kursk/body'
+    MISSIONS_TAB_DDAY_HEADER = '#quests:missions/tab/dday/header'
+    MISSIONS_TAB_DDAY_BODY = '#quests:missions/tab/dday/body'
     MISSIONS_TAB_MARATHONS_HEADER = '#quests:missions/tab/marathons/header'
     MISSIONS_TAB_MARATHONS_BODY = '#quests:missions/tab/marathons/body'
     MISSIONS_TAB_MISSIONS_HEADER = '#quests:missions/tab/missions/header'

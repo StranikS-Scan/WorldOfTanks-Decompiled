@@ -705,15 +705,15 @@ class MainView(LobbySubView, CustomizationMainViewMeta):
 
     def __setNotificationCounters(self):
         currentSeason = self.__ctx.currentSeason
-        newItems = g_currentVehicle.item.getNewC11nItems(g_currentVehicle.itemsCache.items)
         seasonCounters = {season:0 for season in SEASONS_ORDER}
         if self.__ctx.mode == C11nMode.STYLE:
             itemTypes = (GUI_ITEM_TYPE.STYLE,)
         else:
             itemTypes = GUI_ITEM_TYPE.CUSTOMIZATIONS_WITHOUT_STYLE
-        for item in newItems:
-            if item.season != SeasonType.ALL and item.itemTypeID in itemTypes and not item.season & currentSeason:
-                seasonCounters[item.season] += 1
+        for season in SEASONS_ORDER:
+            if currentSeason != season:
+                seasonCounters[season] = g_currentVehicle.item.getC11nItemsNoveltyCounter(g_currentVehicle.itemsCache.items, itemTypes, season)
+            seasonCounters[season] = 0
 
         self.as_setNotificationCountersS([ seasonCounters[season] for season in SEASONS_ORDER ])
 

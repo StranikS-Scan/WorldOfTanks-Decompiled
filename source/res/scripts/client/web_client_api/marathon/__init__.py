@@ -8,6 +8,10 @@ class _MarathonSchema(W2CSchema):
     ids = Field(type=list)
 
 
+class _MarathonProgressSchema(W2CSchema):
+    prefix = Field(required=True, type=basestring)
+
+
 @w2capi(name='user_data', key='action')
 class MarathonWebApi(W2CSchema):
     marathonsCtrl = dependency.descriptor(IMarathonEventsController)
@@ -27,3 +31,10 @@ class MarathonWebApi(W2CSchema):
             quests = {k:v for k, v in quests.iteritems() if k in command.ids}
         return {'quest_list': quests,
          'action': 'get_quests'}
+
+    @w2c(_MarathonProgressSchema, 'get_step')
+    def handleGetStep(self, command):
+        marathon = self.marathonsCtrl.getMarathon(command.prefix)
+        currentStep, allSteps = marathon.getMarathonProgress()
+        return {'current_step': currentStep,
+         'all_steps': allSteps}

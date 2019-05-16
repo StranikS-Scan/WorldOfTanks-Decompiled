@@ -92,7 +92,8 @@ class AwardController(IAwardController, IGlobalListener):
          EliteWindowHandler(self),
          LootBoxByInvoiceHandler(self),
          ProgressiveRewardHandler(self),
-         PiggyBankOpenHandler(self)]
+         PiggyBankOpenHandler(self),
+         DdayHandler(self)]
         super(AwardController, self).__init__()
         self.__delayedHandlers = []
         self.__isLobbyLoaded = False
@@ -1070,3 +1071,32 @@ def _getBlueprintActualBonus(data, quest):
         actualQuest.getData()['bonus'].update({'blueprints': blueprintActualBonus})
         return actualQuest
     return quest
+
+
+class DdayHandler(ServiceChannelHandler):
+
+    def __init__(self, awardCtrl):
+        super(DdayHandler, self).__init__(SYS_MESSAGE_TYPE.battleResults.index(), awardCtrl)
+
+    def _needToShowAward(self, ctx):
+        if not super(DdayHandler, self)._needToShowAward(ctx):
+            return False
+        else:
+            _, message = ctx
+            dossier = message.data.get('dossier', None)
+            if dossier is None:
+                return False
+            record = None
+            neededKey = ('singleAchievements', 'DdaymarathonMedal')
+            for _, value in dossier.iteritems():
+                if neededKey in value:
+                    record = value.get(neededKey, None)
+                    break
+
+            if record is None:
+                return False
+            value = record.get('value', None)
+            return bool(value) and value == 1
+
+    def _showAward(self, ctx):
+        shared_events.showDdayAward()

@@ -918,3 +918,6 @@ class ACHIEVEMENTS(object):
     NEWMERITPM2_DESCR = '#achievements:newMeritPM2_descr'
     NEWMERITPM2_CONDITION = '#achievements:newMeritPM2_condition'
     NEWMERITPM2_NOTIFICATION = '#achievements:newMeritPM2_notification'
+    DDAYMARATHONMEDAL = '#achievements:DdaymarathonMedal'
+    DDAYMARATHONMEDAL_DESCR = '#achievements:DdaymarathonMedal_descr'
+    DDAYMARATHONMEDAL_CONDITION = '#achievements:DdaymarathonMedal_condition'

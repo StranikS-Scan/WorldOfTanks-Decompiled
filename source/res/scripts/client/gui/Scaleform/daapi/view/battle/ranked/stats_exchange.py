@@ -5,6 +5,7 @@ from gui.Scaleform.daapi.view.battle.shared.stats_exchage import broker
 from gui.Scaleform.daapi.view.battle.shared.stats_exchage import createExchangeBroker
 from gui.Scaleform.daapi.view.battle.shared.stats_exchage import vehicle
 from gui.battle_control.arena_info import vos_collections
+from gui.ranked_battles.constants import ZERO_RANK_ID
 from helpers import dependency
 from skeletons.gui.game_control import IRankedBattlesController
 
@@ -15,9 +16,14 @@ class RankedVehicleInfoComponent(vehicle.VehicleInfoComponent):
         super(RankedVehicleInfoComponent, self).addVehicleInfo(vInfoVO, overrides)
         rankID = vInfoVO.ranked.rank
         division = self.__rankedController.getDivision(rankID)
-        division.getRankIdInDivision(rankID)
-        return self._data.update({'rankLevel': division.getRankIdInDivision(rankID),
-         'division': division.getID()})
+        divisionID = division.getID()
+        if rankID == division.lastRank:
+            rankLevel = ZERO_RANK_ID
+            divisionID += 1
+        else:
+            rankLevel = division.getRankIdInDivision(rankID)
+        return self._data.update({'rankLevel': rankLevel,
+         'division': divisionID})
 
 
 class RankedStatisticsDataController(ClassicStatisticsDataController):

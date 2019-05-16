@@ -11,39 +11,46 @@ class MarathonRewardViewModel(ViewModel):
     def setIsGoToVehicleBtnEnabled(self, value):
         self._setBool(0, value)
 
+    def getViewRewardsBtnVisible(self):
+        return self._getBool(1)
+
+    def setViewRewardsBtnVisible(self, value):
+        self._setBool(1, value)
+
     def getVideoSource(self):
-        return self._getString(1)
+        return self._getString(2)
 
     def setVideoSource(self, value):
-        self._setString(1, value)
+        self._setString(2, value)
 
     def getVehicleIsElite(self):
-        return self._getBool(2)
+        return self._getBool(3)
 
     def setVehicleIsElite(self, value):
-        self._setBool(2, value)
+        self._setBool(3, value)
 
     def getVehicleType(self):
-        return self._getString(3)
-
-    def setVehicleType(self, value):
-        self._setString(3, value)
-
-    def getVehicleLvl(self):
         return self._getString(4)
 
-    def setVehicleLvl(self, value):
+    def setVehicleType(self, value):
         self._setString(4, value)
 
-    def getVehicleName(self):
+    def getVehicleLvl(self):
         return self._getString(5)
 
-    def setVehicleName(self, value):
+    def setVehicleLvl(self, value):
         self._setString(5, value)
+
+    def getVehicleName(self):
+        return self._getString(6)
+
+    def setVehicleName(self, value):
+        self._setString(6, value)
 
     def _initialize(self):
         super(MarathonRewardViewModel, self)._initialize()
         self._addBoolProperty('isGoToVehicleBtnEnabled', True)
+        self._addBoolProperty('viewRewardsBtnVisible', True)
         self._addStringProperty('videoSource', '')
         self._addBoolProperty('vehicleIsElite', False)
         self._addStringProperty('vehicleType', '')

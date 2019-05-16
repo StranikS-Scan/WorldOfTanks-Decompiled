@@ -127,7 +127,7 @@ class EventTipsCriteria(_TipsCriteria):
 def _getRankedTipIterator():
     tipSize = R.strings.tips.ranked.length()
     if tipSize > 0:
-        items = range(tipSize)
+        items = [ key.strip('c_') for key in R.strings.tips.ranked.keys() ]
         return rnd_choice_loop(*items)
     else:
         return None

@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/missions/regular/missions_views.py
 from functools import partial
 import BigWorld
+import WWISE
 from adisp import process
 from async import async, await
 from constants import PremiumConfigs
@@ -34,6 +35,7 @@ from gui.shared import actions
 from gui.shared import events, g_eventBus
 from gui.shared.event_bus import EVENT_BUS_SCOPE
 from gui.shared.event_dispatcher import showTankPremiumAboutPage
+from gui.shared.events import MissionsEvent
 from gui.shared.formatters import text_styles, icons
 from helpers import dependency
 from helpers.i18n import makeString as _ms
@@ -156,15 +158,31 @@ class MissionsMarathonView(MissionsMarathonViewMeta):
 
     def _populate(self):
         super(MissionsMarathonView, self)._populate()
+        self.addListener(MissionsEvent.ON_TAB_CHANGED, self.__onTabChanged, EVENT_BUS_SCOPE.LOBBY)
         self._marathonEvent.showRewardVideo()
         Waiting.hide('loadPage')
         self.__loadBrowserCallbackID = BigWorld.callback(0.01, self.__loadBrowser)
+        self.__setMusicPlaying(True)
 
     def _dispose(self):
+        self.__setMusicPlaying(False)
         self.__cancelLoadBrowserCallback()
         self.__browserView = None
+        self.removeListener(MissionsEvent.ON_TAB_CHANGED, self.__onTabChanged, EVENT_BUS_SCOPE.LOBBY)
         super(MissionsMarathonView, self)._dispose()
         return
+
+    def __onTabChanged(self, event):
+        if event.ctx == self.getAlias():
+            self.__setMusicPlaying(True)
+        else:
+            self.__setMusicPlaying(False)
+
+    def __setMusicPlaying(self, play):
+        if play and self._marathonEvent.isAvailable():
+            WWISE.WW_eventGlobal(self._marathonEvent.data.sounds.tabEnter)
+            return
+        WWISE.WW_eventGlobal(self._marathonEvent.data.sounds.tabExit)
 
     def __cancelLoadBrowserCallback(self):
         if self.__loadBrowserCallbackID is not None:

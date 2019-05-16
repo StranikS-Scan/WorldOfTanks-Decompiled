@@ -13,10 +13,10 @@ class _QuestsProgressRequester(AbstractSyncDataRequester):
     itemsCache = dependency.descriptor(IItemsCache)
 
     def getTokenCount(self, tokenID):
-        return self.__getToken(tokenID).count
+        return self.getToken(tokenID).count
 
     def getTokenExpiryTime(self, tokenID):
-        return self.__getToken(tokenID).expireTime
+        return self.getToken(tokenID).expireTime
 
     def getTokenNames(self):
         tokens = self.getTokensData()
@@ -29,7 +29,7 @@ class _QuestsProgressRequester(AbstractSyncDataRequester):
     def _requestCache(self, callback=None):
         BigWorld.player().questProgress.getCache(lambda resID, value: self._response(resID, value, callback))
 
-    def __getToken(self, tokenID):
+    def getToken(self, tokenID):
         return _Token(*self.getTokensData().get(tokenID, (0, 0)))
 
 

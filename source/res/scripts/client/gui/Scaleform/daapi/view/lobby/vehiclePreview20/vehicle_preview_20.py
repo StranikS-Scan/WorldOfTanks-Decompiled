@@ -105,6 +105,7 @@ class VehiclePreview20(LobbySelectableView, VehiclePreview20Meta):
             self.__vehAppearanceChanged = False
         self.__keepVehicleSelectionEnabled = False
         self._needToResetAppearance = True
+        self._showBottomPanel = True
         if not self.__isHeroTank:
             self.hangarSpace.removeVehicle()
         g_currentPreviewVehicle.selectHeroTank(self.__isHeroTank)
@@ -115,7 +116,8 @@ class VehiclePreview20(LobbySelectableView, VehiclePreview20Meta):
 
     def _populate(self):
         self.addListener(CameraRelatedEvents.VEHICLE_LOADING, self.__onVehicleLoading, EVENT_BUS_SCOPE.DEFAULT)
-        self.setBottomPanel()
+        if self._showBottomPanel:
+            self.setBottomPanel()
         g_currentPreviewVehicle.selectVehicle(self._vehicleCD, self.__vehicleStrCD)
         super(VehiclePreview20, self)._populate()
         g_currentPreviewVehicle.onChanged += self.__onVehicleChanged

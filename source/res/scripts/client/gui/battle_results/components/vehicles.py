@@ -12,6 +12,7 @@ from gui.battle_results.components.personal import fillKillerInfoBlock
 from gui.battle_results.reusable import sort_keys
 from gui.impl import backport
 from gui.impl.gen import R
+from gui.ranked_battles.constants import ZERO_RANK_ID
 from gui.shared.formatters import text_styles
 from gui.shared.gui_items.Vehicle import getSmallIconPath, getIconPath
 from helpers import dependency, i18n
@@ -163,7 +164,13 @@ class RankedBattlesVehicleStatsBlock(RegularVehicleStatsBlock):
         if not rankID:
             return ''
         division = self.__rankedController.getDivision(rankID)
-        return backport.image(R.images.gui.maps.icons.rankedBattles.ranks.c_24x24.dyn('rank%s_%s' % (division.getID(), division.getRankUserName(rankID)))())
+        divisionID = division.getID()
+        if rankID == division.lastRank:
+            rankName = str(ZERO_RANK_ID)
+            divisionID += 1
+        else:
+            rankName = division.getRankUserName(rankID)
+        return backport.image(R.images.gui.maps.icons.rankedBattles.ranks.c_24x24.dyn('rank%s_%s' % (divisionID, rankName))())
 
 
 class EpicVehicleStatsBlock(RegularVehicleStatsBlock):

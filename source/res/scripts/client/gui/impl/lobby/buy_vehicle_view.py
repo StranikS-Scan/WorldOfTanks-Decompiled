@@ -76,7 +76,7 @@ class BuyVehicleView(ViewImpl, EventSystemEntity):
     __TRADE_OFF_NOT_SELECTED = -1
 
     def __init__(self, *args, **kwargs):
-        super(BuyVehicleView, self).__init__(R.views.buyVehicleView(), ViewFlags.COMPONENT, BuyVehicleViewModel, *args, **kwargs)
+        super(BuyVehicleView, self).__init__(R.views.lobby.shop.buy_vehicle_view.BuyVehicleView(), ViewFlags.COMPONENT, BuyVehicleViewModel, *args, **kwargs)
         self.__shop = self.__itemsCache.items.shop
         self.__stats = self.__itemsCache.items.stats
         ctx = kwargs.get('ctx')
@@ -118,7 +118,7 @@ class BuyVehicleView(ViewImpl, EventSystemEntity):
         return super(BuyVehicleView, self).getViewModel()
 
     def createToolTip(self, event):
-        if event.contentID == R.views.backportTooltipContent():
+        if event.contentID == R.views.common.tooltip_window.backport_tooltip_content.BackportTooltipContent():
             tooltipData = self.__getBackportTooltipData(event)
             if tooltipData is None:
                 return

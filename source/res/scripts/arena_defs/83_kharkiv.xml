@@ -1,0 +1,43 @@
+<83_kharkiv.xml>
+  <name>	#arenas:83_kharkiv/name	</name>
+  <description>	#arenas:83_kharkiv/description	</description>
+  <geometry>	spaces/83_kharkiv	</geometry>
+  <roundLength>	900	</roundLength>
+  <boundingBox>
+    <bottomLeft>	-550.000000 -500.000000	</bottomLeft>
+    <upperRight>	450.000000 500.000000	</upperRight>
+  </boundingBox>
+  <minimap>	spaces/83_kharkiv/mmap.dds	</minimap>
+  <vehicleCamouflageKind>	winter	</vehicleCamouflageKind>
+  <umbraEnabled>	1	</umbraEnabled>
+  <batchingEnabled>	0	</batchingEnabled>
+  <gameplayTypes>
+    <ctf>
+      <artilleryPreparationChance>	1	</artilleryPreparationChance>
+      <teamBasePositions>
+        <team1>
+          <position1>	-3.015762 -436.144409	</position1>
+        </team1>
+        <team2>
+          <position1>	-8.668373 419.294739	</position1>
+        </team2>
+      </teamBasePositions>
+    </ctf>
+  </gameplayTypes>
+  <wwmusicSetup>
+    <wwmusicLoading>	music_kharkiv_loading_screen	</wwmusicLoading>
+    <wwmusicIntensive>	music_kharkiv_dron_intensive	</wwmusicIntensive>
+    <wwmusicRelaxed>	music_kharkiv_dron_relaxed	</wwmusicRelaxed>
+    <wwmusicStop>	music_dron_stop	</wwmusicStop>
+    <wwmusicEndbattleStop>	music_dron_endbattle_stop	</wwmusicEndbattleStop>
+    <wwmusicResultWin>	music_kharkiv_result_win	</wwmusicResultWin>
+    <wwmusicResultDrawn>	music_kharkiv_result_drawn	</wwmusicResultDrawn>
+    <wwmusicResultDefeat>	music_kharkiv_result_defeat	</wwmusicResultDefeat>
+  </wwmusicSetup>
+  <wwambientSound>	ambient_wind_winter_01	</wwambientSound>
+  <water>
+    <texScale>	0	</texScale>
+    <freqX>	0	</freqX>
+    <freqZ>	0	</freqZ>
+  </water>
+</83_kharkiv.xml>

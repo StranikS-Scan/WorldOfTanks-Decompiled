@@ -608,16 +608,18 @@ class Vehicle(BigWorld.Entity, BattleAbilitiesComponent):
             return (0.0, 0.0)
 
     def onSiegeStateUpdated(self, newState, timeToNextMode):
-        if self.typeDescriptor is not None and self.typeDescriptor.hasSiegeMode:
-            self.typeDescriptor.onSiegeStateChanged(newState)
-            if self.isStarted:
-                self.appearance.onSiegeStateChanged(newState)
-            if self.isPlayerVehicle:
-                inputHandler = BigWorld.player().inputHandler
-                inputHandler.siegeModeControl.notifySiegeModeChanged(self, newState, timeToNextMode)
+        if not self.isStarted:
+            return
         else:
-            _logger.error('Wrong usage! Should be called only on vehicle with valid typeDescriptor and siege mode')
-        return
+            if self.typeDescriptor is not None and self.typeDescriptor.hasSiegeMode:
+                self.typeDescriptor.onSiegeStateChanged(newState)
+                self.appearance.onSiegeStateChanged(newState)
+                if self.isPlayerVehicle:
+                    inputHandler = BigWorld.player().inputHandler
+                    inputHandler.siegeModeControl.notifySiegeModeChanged(self, newState, timeToNextMode)
+            else:
+                _logger.error('Wrong usage! Should be called only on vehicle with valid typeDescriptor and siege mode')
+            return
 
     def collideSegmentExt(self, startPoint, endPoint):
         if self.appearance.collisions is not None:

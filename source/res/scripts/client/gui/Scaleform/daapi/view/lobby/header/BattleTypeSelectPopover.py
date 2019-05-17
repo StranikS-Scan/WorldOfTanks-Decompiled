@@ -51,7 +51,7 @@ class BattleTypeSelectPopover(BattleTypeSelectPopoverMeta):
                 if not itemIsDisabled:
                     tooltip = TOOLTIPS.BATTLETYPES_STRONGHOLDS
                 else:
-                    tooltip = TOOLTIPS.HEADER_BUTTONS_FORTS_TURNEDOFF
+                    tooltip = TOOLTIPS.BATTLETYPES_STRONGHOLDS_DISABLED
             elif itemData == PREBATTLE_ACTION_NAME.TRAININGS_LIST:
                 tooltip = TOOLTIPS.BATTLETYPES_TRAINING
             elif itemData == PREBATTLE_ACTION_NAME.SPEC_BATTLES_LIST:

@@ -502,10 +502,12 @@ class CustomizationContext(object):
             item = self.service.getItemByCD(intCD)
             currentItem = self.getItemFromSelectedRegion()
             currentComponent = self.getComponentFromSelectedRegion()
+            changeAnchor = False
             if self.__isNeedChangeSlot(currentItem, item):
                 prefAnchor = self.__getPrefferedAnchor(self.selectedAnchor, item)
                 if prefAnchor is not None and prefAnchor != self._selectedAnchor:
                     self._selectedAnchor = prefAnchor
+                    changeAnchor = True
             component = self.__getComponent(item, currentItem, currentComponent, self.selectedAnchor)
             if self.currentTab == C11nTabs.INSCRIPTION:
                 slot = self.currentOutfit.getContainer(slotId.areaId).slotFor(slotId.slotType)
@@ -518,9 +520,11 @@ class CustomizationContext(object):
                     component.number = self.storedPersonalNumber
             self.installItem(intCD, slotId, SEASON_TYPE_TO_IDX[self.currentSeason], component)
             self._selectedCarouselItem = CaruselItemData()
+            if changeAnchor:
+                self.itemDataChanged(self.selectedAnchor.areaId, self.selectedAnchor.slotType, self.selectedAnchor.regionIdx, changeAnchor=True, updatePropertiesSheet=True)
         else:
             self.service.highlightRegions(self.getEmptyRegions())
-        self.onCaruselItemSelected(index, intCD)
+        self.onCaruselItemSelected(self._selectedCarouselItem.index, self._selectedCarouselItem.intCD)
         return
 
     def caruselItemUnselected(self):
@@ -940,8 +944,9 @@ class CustomizationContext(object):
 
     def isUnsupportedForm(self, formFactor):
         if self.currentTab == C11nTabs.PROJECTION_DECAL:
-            slot = g_currentVehicle.item.getAnchorBySlotId(self.selectedSlot.slotType, self.selectedSlot.areaId, self.selectedSlot.regionIdx)
-            return formFactor.formfactor in slot.getUnsupportedForms(g_currentVehicle.item)
+            anchor = g_currentVehicle.item.getAnchorBySlotId(self.selectedAnchor.slotType, self.selectedAnchor.areaId, self.selectedAnchor.regionIdx)
+            parent = anchor if anchor.isParent else g_currentVehicle.item.getAnchorById(anchor.parentSlotId)
+            return formFactor.formfactor in parent.getUnsupportedForms(g_currentVehicle.item)
         return False
 
     def isBuyLimitReached(self, item):

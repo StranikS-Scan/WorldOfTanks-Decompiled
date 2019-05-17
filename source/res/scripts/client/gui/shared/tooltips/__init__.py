@@ -59,6 +59,7 @@ class TOOLTIP_TYPE(CONST_CONTAINER):
     BLUEPRINTS = 'blueprintsInfo'
     FRONTLINE = 'frontlineInfo'
     SQUAD_BONUS = 'squadBonus'
+    SESSION_STATS = 'sessionStats'
 
 
 class TOOLTIP_COMPONENT(CONST_CONTAINER):
@@ -85,6 +86,7 @@ class TOOLTIP_COMPONENT(CONST_CONTAINER):
     RANK = 'ranked'
     RESERVE = 'reserve'
     BLUEPRINT = 'blueprints'
+    SESSION_STATS = 'sessionStats'
 
 
 class ACTION_TOOLTIPS_TYPE(CONST_CONTAINER):

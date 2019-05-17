@@ -7,8 +7,8 @@ from gui.shared.formatters import icons
 from gui.shared.formatters.servers import formatPingStatus
 from helpers import dependency
 from helpers.i18n import makeString as _ms
-from predefined_hosts import HOST_AVAILABILITY, PING_STATUSES, g_preDefinedHosts
 from predefined_hosts import AUTO_LOGIN_QUERY_URL
+from predefined_hosts import HOST_AVAILABILITY, PING_STATUSES, g_preDefinedHosts
 from skeletons.account_helpers.settings_core import ISettingsCore
 _logger = logging.getLogger(__name__)
 

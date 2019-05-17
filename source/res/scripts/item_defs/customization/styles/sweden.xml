@@ -423,4 +423,42 @@
       </outfits>
     </style>
   </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/main_styles	</userString>
+    <maxNumber>	1	</maxNumber>
+    <season>	ALL	</season>
+    <historical>	false	</historical>
+    <vehicleFilter>
+      <include>
+        <vehicles>	sweden:S29_UDES_14_5	</vehicles>
+      </include>
+    </vehicleFilter>
+    <style>
+      <id>	51	</id>
+      <texture>	gui/maps/vehicles/styles/ski_patrol.png	</texture>
+      <description>	#vehicle_customization:main_style/ski_patrol_desc	</description>
+      <modelsSet>	UDES_14_5_3Dst	</modelsSet>
+      <userString>	#vehicle_customization:main_style/ski_patrol	</userString>
+      <priceGroup>	ski_patrol notInShop	</priceGroup>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	1	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <decals>
+            <item>
+              <id>	0	</id>
+              <appliedTo>	65520	</appliedTo>
+            </item>
+          </decals>
+        </outfit>
+      </outfits>
+    </style>
+  </itemGroup>
 </sweden.xml>

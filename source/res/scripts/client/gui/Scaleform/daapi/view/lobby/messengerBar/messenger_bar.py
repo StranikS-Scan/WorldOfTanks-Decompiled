@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/messengerBar/messenger_bar.py
+from constants import PREBATTLE_TYPE
 from gui import makeHtmlString
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.referral_program.referral_program_helpers import isReferralProgramEnabled
@@ -9,14 +10,20 @@ from gui.Scaleform.framework.managers.containers import POP_UP_CRITERIA
 from gui.Scaleform.genConsts.VEHICLE_COMPARE_CONSTANTS import VEHICLE_COMPARE_CONSTANTS
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
+from gui.impl import backport
+from gui.impl.gen import R
 from gui.prb_control import prbDispatcherProperty
+from gui.prb_control.entities.listener import IGlobalListener
 from gui.shared import events
 from gui.shared.event_bus import EVENT_BUS_SCOPE
+from gui.shared.utils.functions import makeTooltip
+from gui.shared.utils.requesters.session_stats_requester import SessionStatsRequester
 from helpers import int2roman, dependency
 from messenger.gui.Scaleform.view.lobby import MESSENGER_VIEW_ALIAS
 from skeletons.gui.game_control import IVehicleComparisonBasket, IReferralProgramController
 from skeletons.gui.shared import IItemsCache
 from soft_exception import SoftException
+from skeletons.gui.lobby_context import ILobbyContext
 
 def _formatIcon(iconName, width=32, height=32, path='html_templates:lobby/messengerBar'):
     return makeHtmlString(path, 'iconTemplate', {'iconName': iconName,
@@ -90,8 +97,9 @@ class _CompareBasketListener(object):
         return
 
 
-class MessengerBar(MessengerBarMeta):
+class MessengerBar(MessengerBarMeta, IGlobalListener):
     _referralCtrl = dependency.descriptor(IReferralProgramController)
+    _lobbyContext = dependency.descriptor(ILobbyContext)
 
     @prbDispatcherProperty
     def prbDispatcher(self):
@@ -111,13 +119,18 @@ class MessengerBar(MessengerBarMeta):
         super(MessengerBar, self).destroy()
         return
 
+    def onPrbEntitySwitched(self):
+        self.__updateSessionStatsBtn()
+
     def _populate(self):
         super(MessengerBar, self)._populate()
         self.__compareBasketCtrl = _CompareBasketListener(self)
         self._referralCtrl.onReferralProgramEnabled += self.__onReferralProgramEnabled
         self._referralCtrl.onReferralProgramDisabled += self.__onReferralProgramDisabled
         self._referralCtrl.onReferralProgramUpdated += self.__onReferralProgramUpdated
+        self._lobbyContext.getServerSettings().onServerSettingsChange += self.__onServerSettingChanged
         self.addListener(events.FightButtonEvent.FIGHT_BUTTON_UPDATE, self.__handleFightButtonUpdated, scope=EVENT_BUS_SCOPE.LOBBY)
+        self.startGlobalListening()
         self.as_setInitDataS({'channelsHtmlIcon': _formatIcon('iconChannels'),
          'isReferralEnabled': isReferralProgramEnabled(),
          'referralCounter': self._referralCtrl.getBubbleCount(),
@@ -127,13 +140,17 @@ class MessengerBar(MessengerBarMeta):
          'contactsHtmlIcon': _formatIcon('iconContacts', width=16),
          'vehicleCompareHtmlIcon': _formatIcon('iconComparison'),
          'contactsTooltip': TOOLTIPS.LOBY_MESSENGER_CONTACTS_BUTTON,
-         'vehicleCompareTooltip': TOOLTIPS.LOBY_MESSENGER_VEHICLE_COMPARE_BUTTON})
+         'vehicleCompareTooltip': TOOLTIPS.LOBY_MESSENGER_VEHICLE_COMPARE_BUTTON,
+         'sessionStatsHtmlIcon': _formatIcon('iconSessionStats'),
+         'sessionStatsTooltip': makeTooltip(backport.text(R.strings.session_stats.tooltip.mainBtn.header()), backport.text(R.strings.session_stats.tooltip.mainBtn.body()))})
 
     def _dispose(self):
         self.removeListener(events.FightButtonEvent.FIGHT_BUTTON_UPDATE, self.__handleFightButtonUpdated, scope=EVENT_BUS_SCOPE.LOBBY)
+        self._lobbyContext.getServerSettings().onServerSettingsChange -= self.__onServerSettingChanged
         self._referralCtrl.onReferralProgramUpdated -= self.__onReferralProgramUpdated
         self._referralCtrl.onReferralProgramDisabled -= self.__onReferralProgramDisabled
         self._referralCtrl.onReferralProgramEnabled -= self.__onReferralProgramEnabled
+        self.stopGlobalListening()
         super(MessengerBar, self)._dispose()
 
     def __onReferralProgramEnabled(self):
@@ -161,3 +178,14 @@ class MessengerBar(MessengerBarMeta):
             else:
                 window.onWindowClose()
         return result
+
+    def __onServerSettingChanged(self, diff):
+        if 'sessionStats' in diff or ('sessionStats', '_r') in diff:
+            self.__updateSessionStatsBtn()
+
+    def __updateSessionStatsBtn(self):
+        isInSupportedMode = self.prbDispatcher.getFunctionalState().entityTypeID in (PREBATTLE_TYPE.SQUAD,)
+        isSessionStatsEnabled = self._lobbyContext.getServerSettings().isSessionStatsEnabled()
+        if not isSessionStatsEnabled:
+            SessionStatsRequester.resetStats()
+        self.as_setSessionStatsButtonVisibleS(isInSupportedMode and isSessionStatsEnabled)

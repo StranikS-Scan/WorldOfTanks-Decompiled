@@ -158,7 +158,7 @@ class BattleEntry(AppEntry):
         self.component.wg_inputKeyMode = InputKeyMode.IGNORE_RESULT
         self.component.position.z = DEPTH_OF_Battle
         self.movie.backgroundAlpha = 0.0
-        self.movie.setFocussed(SCALEFORM_SWF_PATH_V3)
+        self.movie.setFocused(SCALEFORM_SWF_PATH_V3)
         BigWorld.wg_setRedefineKeysMode(False)
 
     def _loadWaiting(self):

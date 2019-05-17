@@ -135,6 +135,7 @@ class CustomizationCarouselDataProvider(SortableDAAPIDataProvider):
         del self._customizationItems[:]
         del self._itemSizeData[:]
         del self._customizationBookmarks[:]
+        self._selectedIdx = -1
 
     def fini(self):
         self.clear()
@@ -190,7 +191,8 @@ class CustomizationCarouselDataProvider(SortableDAAPIDataProvider):
 
     def selectItemIdx(self, itemIndex):
         self._selectedIdx = itemIndex
-        self.refresh()
+        if self.service.getCtx().isAnyAnchorSelected() or self.service.getCtx().isCaruselItemSelected():
+            self.refresh()
 
     def refresh(self):
         self._currentlyApplied = self._proxy.getAppliedItems(isOriginal=False)

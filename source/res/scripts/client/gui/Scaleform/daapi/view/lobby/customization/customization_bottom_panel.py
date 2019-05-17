@@ -115,8 +115,8 @@ class CustomizationBottomPanel(CustomizationBottomPanelMeta):
         self.__ctx.tabChanged(tabIndex)
 
     def onSelectItem(self, index, intCD):
-        self._carouselDP.selectItemIdx(index)
         self.__ctx.caruselItemSelected(index, intCD)
+        self._carouselDP.selectItemIdx(index)
 
     def blinkCounter(self):
         self.as_playFilterBlinkS()

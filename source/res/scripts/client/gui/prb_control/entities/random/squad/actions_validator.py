@@ -12,7 +12,8 @@ class BalancedSquadVehiclesValidator(BaseActionsValidator):
 
     def _validate(self):
         levelsRange = self._entity.getRosterSettings().getLevelsRange()
-        return ValidationResult(False, UNIT_RESTRICTION.VEHICLE_INVALID_LEVEL) if g_currentVehicle.isPresent() and g_currentVehicle.item.level not in levelsRange else super(BalancedSquadVehiclesValidator, self)._validate()
+        pInfo = self._entity.getPlayerInfo()
+        return ValidationResult(False, UNIT_RESTRICTION.VEHICLE_INVALID_LEVEL) if not pInfo.isReady and g_currentVehicle.isPresent() and g_currentVehicle.item.level not in levelsRange else super(BalancedSquadVehiclesValidator, self)._validate()
 
 
 class BalancedSquadSlotsValidator(CommanderValidator):

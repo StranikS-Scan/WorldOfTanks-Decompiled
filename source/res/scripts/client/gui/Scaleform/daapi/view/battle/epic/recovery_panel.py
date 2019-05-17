@@ -43,6 +43,7 @@ class RecoveryPanel(RecoveryPanelMeta):
         if ctrl is not None:
             ctrl.onVehicleFeedbackReceived += self.__onVehicleFeedbackReceived
         g_playerEvents.onRoundFinished += self.__onRoundFinished
+        CommandMapping.g_instance.onMappingChanged += self.__onMappingChanged
         self.as_setupTextsS(i18n.makeString(INGAME_GUI.RECOVERY_HINT1), i18n.makeString(INGAME_GUI.RECOVERY_HINT2), getReadableKey(CommandMapping.CMD_REQUEST_RECOVERY))
         if avatar_getter.getLastRecoveryArgs() is not None:
             activated, state, timerDuration, endOfTimer = avatar_getter.getLastRecoveryArgs()
@@ -109,6 +110,9 @@ class RecoveryPanel(RecoveryPanelMeta):
             BigWorld.cancelCallback(self.__cooldownTimerCallback)
             self.__cooldownTimerCallback = None
         return
+
+    def __onMappingChanged(self, *args):
+        self.as_updateTextsS(getReadableKey(CommandMapping.CMD_REQUEST_RECOVERY))
 
     def __tick(self):
         if self.__nextActionTime > 0 and self.__recoveryActivated:

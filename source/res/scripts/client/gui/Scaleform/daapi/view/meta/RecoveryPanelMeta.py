@@ -15,3 +15,6 @@ class RecoveryPanelMeta(BaseDAAPIComponent):
 
     def as_setupTextsS(self, hint1, hint2, button):
         return self.flashObject.as_setupTexts(hint1, hint2, button) if self._isDAAPIInited() else None
+
+    def as_updateTextsS(self, button):
+        return self.flashObject.as_updateTexts(button) if self._isDAAPIInited() else None

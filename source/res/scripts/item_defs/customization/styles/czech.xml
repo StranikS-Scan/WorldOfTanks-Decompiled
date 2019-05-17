@@ -490,4 +490,100 @@
       </outfits>
     </style>
   </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/main_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	true	</historical>
+    <vehicleFilter>
+      <include>
+        <vehicles>	czech:Cz13_T_27	</vehicles>
+      </include>
+    </vehicleFilter>
+    <style>
+      <id>	48	</id>
+      <texture>	gui/maps/vehicles/styles/czech_veteran.png	</texture>
+      <description>	#vehicle_customization:main_style/czech_veteran_desc	</description>
+      <modelsSet>	T_27_3Dst	</modelsSet>
+      <userString>	#vehicle_customization:main_style/czech_veteran	</userString>
+      <priceGroup>	czech_veteran styles notInShop	</priceGroup>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	1	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <decals>
+            <item>
+              <id>	0	</id>
+              <appliedTo>	65520	</appliedTo>
+            </item>
+          </decals>
+          <projection_decals>
+            <item>
+              <id>	108	</id>
+              <showOn>	HULL	</showOn>
+              <position>
+                <p0>	-1.808273	</p0>
+                <p1>	1.454916	</p1>
+                <p2>	1.286529	</p2>
+              </position>
+              <rotation>
+                <r0>	1.25068	</r0>
+                <r1>	-1.57079	</r1>
+                <r2>	3.14159	</r2>
+              </rotation>
+              <scale>
+                <s0>	1.5	</s0>
+                <s1>	1.0	</s1>
+                <s2>	1.5	</s2>
+              </scale>
+            </item>
+            <item>
+              <id>	109	</id>
+              <showOn>	TURRET	</showOn>
+              <position>
+                <p0>	-0.794566	</p0>
+                <p1>	1.87532	</p1>
+                <p2>	1.13687	</p2>
+              </position>
+              <rotation>
+                <r0>	1.20254	</r0>
+                <r1>	-0.97355	</r1>
+                <r2>	3.13294	</r2>
+              </rotation>
+              <scale>
+                <s0>	0.6	</s0>
+                <s1>	1.0	</s1>
+                <s2>	0.6	</s2>
+              </scale>
+            </item>
+            <item>
+              <id>	110	</id>
+              <showOn>	TURRET	</showOn>
+              <position>
+                <p0>	0.679154	</p0>
+                <p1>	1.78283	</p1>
+                <p2>	1.40573	</p2>
+              </position>
+              <rotation>
+                <r0>	1.19272	</r0>
+                <r1>	0.689563	</r1>
+                <r2>	3.03856	</r2>
+              </rotation>
+              <scale>
+                <s0>	0.3	</s0>
+                <s1>	1.0	</s1>
+                <s2>	0.3	</s2>
+              </scale>
+            </item>
+          </projection_decals>
+        </outfit>
+      </outfits>
+    </style>
+  </itemGroup>
 </czech.xml>

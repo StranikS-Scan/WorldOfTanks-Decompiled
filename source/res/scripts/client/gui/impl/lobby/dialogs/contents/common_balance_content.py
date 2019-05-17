@@ -31,7 +31,7 @@ class CommonBalanceContent(ViewImpl):
      'freeXP': BigWorld.wg_getIntegralFormat}
 
     def __init__(self, *args, **kwargs):
-        super(CommonBalanceContent, self).__init__(R.views.commonBalanceContent(), ViewFlags.COMPONENT, CommonBalanceContentModel, *args, **kwargs)
+        super(CommonBalanceContent, self).__init__(R.views.common.dialog_view.components.balance_contents.CommonBalanceContent(), ViewFlags.COMPONENT, CommonBalanceContentModel, *args, **kwargs)
         self.__currencyIndexes = []
 
     @property

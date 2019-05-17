@@ -11,7 +11,7 @@ class ClanShortInfoTooltipContent(View, ClanEmblemsHelper):
     __webCtrl = dependency.descriptor(IWebController)
 
     def __init__(self):
-        super(ClanShortInfoTooltipContent, self).__init__(R.views.clanShortInfoTooltipContent(), ViewFlags.COMPONENT, ClanShortInfoContentModel)
+        super(ClanShortInfoTooltipContent, self).__init__(R.views.lobby.tooltips.clans.ClanShortInfoTooltipContent(), ViewFlags.COMPONENT, ClanShortInfoContentModel)
         clanProfile = self.__webCtrl.getAccountProfile()
         self.requestClanEmblem32x32(clanProfile.getClanDbID())
         self.viewModel.setFullName(clanProfile.getClanFullName())
@@ -21,5 +21,5 @@ class ClanShortInfoTooltipContent(View, ClanEmblemsHelper):
         return super(ClanShortInfoTooltipContent, self).getViewModel()
 
     def onClanEmblem32x32Received(self, clanDbID, emblem):
-        if emblem:
+        if emblem and self.viewModel and self.viewModel.isBound():
             self.viewModel.setEmblem(self.getMemoryTexturePath(emblem))

@@ -37,7 +37,7 @@ class PiggyBankView(PiggyBankBaseView):
     __slots__ = ()
 
     def __init__(self, *args, **kwargs):
-        super(PiggyBankView, self).__init__(R.views.piggybank(), ViewFlags.LOBBY_TOP_SUB_VIEW, PiggybankModel)
+        super(PiggyBankView, self).__init__(R.views.lobby.premacc.piggybank.Piggybank(), ViewFlags.LOBBY_TOP_SUB_VIEW, PiggybankModel)
 
     def onPremAccProlong(self, _=None):
         event_dispatcher.showPremiumDialog()

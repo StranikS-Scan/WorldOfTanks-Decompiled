@@ -1373,6 +1373,7 @@ SYS_MESSAGE_TYPE = Enumeration('systemMessageType', ['serverReboot',
  'customizationChanged',
  'lootBoxesAutoOpenReward',
  'progressiveReward',
+ 'personalMissionRebalance',
  'piggyBankSmashed',
  'blackMapRemoved'])
 SYS_MESSAGE_IMPORTANCE = Enumeration('systemMessageImportance', ['normal', 'high'])

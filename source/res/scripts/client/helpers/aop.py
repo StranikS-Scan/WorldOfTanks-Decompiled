@@ -1,11 +1,12 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/helpers/aop.py
+import logging
 import re
 import sys
 import types
 import weakref
 from functools import partial
-from debug_utils import LOG_CURRENT_EXCEPTION, LOG_ERROR, LOG_DEBUG
+_logger = logging.getLogger(__name__)
 
 def copy(wrapper, wrapped):
     if hasattr(wrapped, '__module__'):
@@ -132,7 +133,7 @@ def _pointcutableCriteria(func, pointcutTag):
 def _isearch(ns, criteria):
     for attrName in dir(ns):
         attr = getattr(ns, attrName)
-        if isinstance(attr, (types.FunctionType, types.MethodType)) and criteria(attr):
+        if isinstance(attr, (types.FunctionType, types.BuiltinFunctionType, types.MethodType)) and criteria(attr):
             yield attrName
 
 
@@ -236,14 +237,14 @@ class CallData(object):
 class Aspect(object):
 
     def __del__(self):
-        LOG_DEBUG('Aspect deleted: {0:>s}'.format(self))
+        _logger.debug('Aspect deleted: %s', self)
 
     def __call__(self, func):
         wrapped = wrap(func)
         if hasattr(wrapped, '__aspects__'):
             wrapped.__aspects__.insert(0, self)
         else:
-            LOG_ERROR('Function is not wrapper', self)
+            _logger.error('Function is not wrapper %s', self)
         return wrapped
 
     def atCall(self, cd):
@@ -270,9 +271,9 @@ AspectType = type(Aspect)
 class Pointcut(list):
 
     def __del__(self):
-        LOG_DEBUG('Pointcut deleted: {0:>s}'.format(self))
+        _logger.debug('Pointcut deleted: %s', self)
 
-    def __init__(self, path, name, filterString=None, pointcutTag=None, match=True, aspects=()):
+    def __init__(self, path, name=None, filterString=None, pointcutTag=None, match=True, aspects=()):
         super(Pointcut, self).__init__()
         self.__nsPath = path
         self.__nsName = name
@@ -296,7 +297,7 @@ class Pointcut(list):
 
     def getNs(self, path, name):
         imported = __import__(path, globals(), locals(), [name])
-        return getattr(imported, name, None)
+        return getattr(imported, name, None) if name is not None else imported
 
     def addAspect(self, aspect, *args, **kwargs):
         if isinstance(aspect, AspectType):
@@ -334,7 +335,7 @@ class Weaver(object):
             try:
                 pointcut = pointcut(*args, **kwargs)
             except ImportError:
-                LOG_CURRENT_EXCEPTION()
+                _logger.exception()
                 return -1
 
         result = len(self.__pointcuts)
@@ -344,7 +345,7 @@ class Weaver(object):
             try:
                 pointcut.addAspect(aspect)
             except TypeError:
-                LOG_CURRENT_EXCEPTION()
+                _logger.exception()
 
         self.__pointcuts.append(pointcut)
         return result
@@ -355,7 +356,7 @@ class Weaver(object):
             try:
                 pointcut.addAspect(aspect, *args, **kwargs)
             except TypeError:
-                LOG_CURRENT_EXCEPTION()
+                _logger.exception()
 
     def findPointcut(self, pointcut):
         if isinstance(pointcut, PointcutType):

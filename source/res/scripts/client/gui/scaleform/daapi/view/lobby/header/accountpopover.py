@@ -3,7 +3,6 @@
 import BigWorld
 from adisp import process
 from PlayerEvents import g_playerEvents
-from account_helpers.AccountSettings import AccountSettings, BOOSTERS
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.store.browser.ingameshop_helpers import isIngameShopEnabled
 from gui.Scaleform.daapi.view.meta.AccountPopoverMeta import AccountPopoverMeta
@@ -136,7 +135,6 @@ class AccountPopover(AccountPopoverMeta, IGlobalListener, ClanListener, ClanEmbl
         self.__populateUserInfo()
         self.startGlobalListening()
         self.startClanListening()
-        AccountSettings.setFilter(BOOSTERS, {'wasShown': True})
         g_playerEvents.onCenterIsLongDisconnected += self.__onCenterIsLongDisconnected
 
     def _getMyInvitesBtnParams(self):

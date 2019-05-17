@@ -158,6 +158,12 @@ class BlueprintScreenModel(ViewModel):
     def setReceivedCount(self, value):
         self._setNumber(24, value)
 
+    def getShowBlueprintInfotypeIcon(self):
+        return self._getBool(25)
+
+    def setShowBlueprintInfotypeIcon(self, value):
+        self._setBool(25, value)
+
     def _initialize(self):
         super(BlueprintScreenModel, self)._initialize()
         self._addViewModelProperty('conversionMaxCost', DialogPricesContentModel())
@@ -185,6 +191,7 @@ class BlueprintScreenModel(ViewModel):
         self._addBoolProperty('blueprintAnimPaused', False)
         self._addNumberProperty('currentStateView', -1)
         self._addNumberProperty('receivedCount', 0)
+        self._addBoolProperty('showBlueprintInfotypeIcon', False)
         self.onGoToConversionScreen = self._addCommand('onGoToConversionScreen')
         self.onClose = self._addCommand('onClose')
         self.onResearchVehicle = self._addCommand('onResearchVehicle')

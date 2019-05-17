@@ -312,7 +312,7 @@ class RESEARCH_CRITERIA(object):
 class ItemsRequester(IItemsRequester):
     itemsFactory = dependency.descriptor(IGuiItemsFactory)
 
-    def __init__(self, inventory, stats, dossiers, goodies, shop, recycleBin, vehicleRotation, ranked, badges, epicMetaGame, tokens, festivityRequester, blueprints=None):
+    def __init__(self, inventory, stats, dossiers, goodies, shop, recycleBin, vehicleRotation, ranked, badges, epicMetaGame, tokens, festivityRequester, blueprints=None, sessionStatsRequester=None):
         self.__inventory = inventory
         self.__stats = stats
         self.__dossiers = dossiers
@@ -326,6 +326,7 @@ class ItemsRequester(IItemsRequester):
         self.__blueprints = blueprints
         self.__festivity = festivityRequester
         self.__tokens = tokens
+        self.__sessionStats = sessionStatsRequester
         self.__itemsCache = defaultdict(dict)
         self.__brokenSyncAlreadyLoggedTypes = set()
         self.__vehCustomStateCache = defaultdict(dict)
@@ -382,6 +383,10 @@ class ItemsRequester(IItemsRequester):
     def tokens(self):
         return self.__tokens
 
+    @property
+    def sessionStats(self):
+        return self.__sessionStats
+
     @async
     @process
     def request(self, callback=None):
@@ -396,6 +401,7 @@ class ItemsRequester(IItemsRequester):
         Waiting.hide('download/shop')
         Waiting.show('download/dossier')
         yield self.__dossiers.request()
+        yield self.__sessionStats.request()
         Waiting.hide('download/dossier')
         Waiting.show('download/discounts')
         yield self.__goodies.request()

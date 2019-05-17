@@ -1010,6 +1010,7 @@ class SYSTEM_MESSAGES(object):
     RANKED_NOTIFICATIONS_BONUSVALUE_PREMIUMDAYS = '#system_messages:ranked/notifications/bonusValue/premiumDays'
     RANKED_NOTIFICATIONS_BONUSVALUE_PREMIUMPLUSDAY = '#system_messages:ranked/notifications/bonusValue/premiumPlusDay'
     RANKED_NOTIFICATIONS_BONUSVALUE_PREMIUMPLUSDAYS = '#system_messages:ranked/notifications/bonusValue/premiumPlusDays'
+    RANKED_NOTIFICATIONS_CYCLERESULTS = '#system_messages:ranked/notifications/cycleResults'
     RANKED_NOTIFICATIONS_SEASONRESULTS = '#system_messages:ranked/notifications/seasonResults'
     RANKED_NOTIFICATIONS_LEAGUE = '#system_messages:ranked/notifications/league'
     RANKED_NOTIFICATIONS_LEAGUE1 = '#system_messages:ranked/notifications/league1'
@@ -2190,6 +2191,7 @@ class SYSTEM_MESSAGES(object):
      RANKED_NOTIFICATIONS_BONUSVALUE_PREMIUMDAYS,
      RANKED_NOTIFICATIONS_BONUSVALUE_PREMIUMPLUSDAY,
      RANKED_NOTIFICATIONS_BONUSVALUE_PREMIUMPLUSDAYS,
+     RANKED_NOTIFICATIONS_CYCLERESULTS,
      RANKED_NOTIFICATIONS_SEASONRESULTS,
      RANKED_NOTIFICATIONS_LEAGUE,
      RANKED_NOTIFICATIONS_LEAGUE1,

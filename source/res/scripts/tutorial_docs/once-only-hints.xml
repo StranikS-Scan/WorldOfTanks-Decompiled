@@ -219,5 +219,20 @@
       <update-runtime>	True	</update-runtime>
       <ignore-outside-click>	True	</ignore-outside-click>
     </hint>
+    <hint>	SessionStatsOpenBtnHint	  <item-id>	SessionStatsOpenBtn	</item-id>
+      <text>	_(#tutorial:sessionStat/openBtn)	</text>
+      <arrow>
+        <direction>	L	</direction>
+        <loop>	True	</loop>
+      </arrow>
+      <checked-ui-state>
+        <simple-state>
+          <state>	visible	</state>
+          <value>	True	</value>
+        </simple-state>
+      </checked-ui-state>
+      <update-runtime>	True	</update-runtime>
+      <ignore-outside-click>	True	</ignore-outside-click>
+    </hint>
   </hints>
 </once-only-hints.xml>

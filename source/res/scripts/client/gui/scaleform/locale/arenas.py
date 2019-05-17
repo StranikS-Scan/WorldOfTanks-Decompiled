@@ -132,6 +132,8 @@ class ARENAS(object):
     C_222_ER_CLIME_DESCRIPTION = '#arenas:222_er_clime/description'
     C_95_LOST_CITY_CTF_NAME = '#arenas:95_lost_city_ctf/name'
     C_95_LOST_CITY_CTF_DESCRIPTION = '#arenas:95_lost_city_ctf/description'
+    C_83_KHARKIV_NAME = '#arenas:83_kharkiv/name'
+    C_83_KHARKIV_DESCRIPTION = '#arenas:83_kharkiv/description'
     ALL_ENUM = (TYPE_CTF_NAME,
      TYPE_CTF_DESCRIPTION,
      TYPE_DOMINATION_NAME,
@@ -260,7 +262,9 @@ class ARENAS(object):
      C_222_ER_CLIME_NAME,
      C_222_ER_CLIME_DESCRIPTION,
      C_95_LOST_CITY_CTF_NAME,
-     C_95_LOST_CITY_CTF_DESCRIPTION)
+     C_95_LOST_CITY_CTF_DESCRIPTION,
+     C_83_KHARKIV_NAME,
+     C_83_KHARKIV_DESCRIPTION)
 
     @classmethod
     def all(cls, key0):

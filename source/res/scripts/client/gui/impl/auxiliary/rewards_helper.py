@@ -66,7 +66,7 @@ _BONUSES_ORDER = (Currency.CREDITS,
  'crewSkins',
  'blueprints')
 BLUEPRINTS_CONGRAT_TYPES = (LootCongratsTypes.CONGRAT_TYPE_BLUEPRINT, LootCongratsTypes.CONGRAT_TYPE_BLUEPRINT_PART)
-_COMPENSATION_TOOLTIP_CONTENT_RES_IDS = (R.views.lootBoxCompensationTooltipContent(), R.views.crewSkinsCompensationTooltipContent(), R.views.lootBoxVehicleCompensationTooltipContent())
+_COMPENSATION_TOOLTIP_CONTENT_RES_IDS = (R.views.common.tooltip_window.loot_box_compensation_tooltip.LootBoxCompensationTooltipContent(), R.views.common.tooltip_window.loot_box_compensation_tooltip.CrewSkinsCompensationTooltipContent(), R.views.common.tooltip_window.loot_box_compensation_tooltip.LootBoxVehicleCompensationTooltipContent())
 _COMPENSATION_TOOLTIP_CONTENT_CLASSES = {LootBoxCompensationTooltipTypes.CREW_SKINS: CrewSkinsCompensationTooltipContent,
  LootBoxCompensationTooltipTypes.BASE: CompensationTooltipContent,
  LootBoxCompensationTooltipTypes.VEHICLE: VehicleCompensationTooltipContent}
@@ -347,7 +347,7 @@ def getRewardTooltipContent(event, storedTooltipData=None, itemsCache=None):
          'countBefore': event.getArgument('countBefore', 1),
          'wsFlags': ViewFlags.VIEW,
          'viewModelClazz': LootBoxCompensationTooltipModel}
-        if event.contentID == R.views.crewSkinsCompensationTooltipContent():
+        if event.contentID == R.views.common.tooltip_window.loot_box_compensation_tooltip.CrewSkinsCompensationTooltipContent():
             if storedTooltipData is None:
                 return
             specialArgs = storedTooltipData.specialArgs
@@ -358,9 +358,9 @@ def getRewardTooltipContent(event, storedTooltipData=None, itemsCache=None):
             tooltipData.update({'iconBefore': getCrewSkinIconBig(crewSkin.getIconID()),
              'labelBefore': localizedFullName(crewSkin),
              'countBefore': crewSkinCount,
-             'layoutID': R.views.crewSkinsCompensationTooltipContent()})
+             'layoutID': R.views.common.tooltip_window.loot_box_compensation_tooltip.CrewSkinsCompensationTooltipContent()})
             tooltipType = LootBoxCompensationTooltipTypes.CREW_SKINS
-        elif event.contentID == R.views.lootBoxVehicleCompensationTooltipContent():
+        elif event.contentID == R.views.common.tooltip_window.loot_box_compensation_tooltip.LootBoxVehicleCompensationTooltipContent():
             tooltipType = LootBoxCompensationTooltipTypes.VEHICLE
             tooltipData.update({'iconBefore': event.getArgument('iconBefore', ''),
              'labelBefore': event.getArgument('labelBefore', ''),
@@ -371,10 +371,11 @@ def getRewardTooltipContent(event, storedTooltipData=None, itemsCache=None):
              'isElite': event.getArgument('isElite', True),
              'vehicleLvl': event.getArgument('vehicleLvl', ''),
              'viewModelClazz': LootBoxVehicleCompensationTooltipModel,
-             'layoutID': R.views.lootBoxVehicleCompensationTooltipContent()})
+             'layoutID': R.views.common.tooltip_window.loot_box_compensation_tooltip.LootBoxVehicleCompensationTooltipContent()})
         else:
             tooltipType = LootBoxCompensationTooltipTypes.BASE
-            tooltipData.update({'layoutID': R.views.lootBoxCompensationTooltipContent()})
+            layoutID = R.views.common.tooltip_window.loot_box_compensation_tooltip.LootBoxCompensationTooltipContent()
+            tooltipData.update({'layoutID': layoutID})
         tooltipData['tooltipType'] = tooltipType
         return _COMPENSATION_TOOLTIP_CONTENT_CLASSES[tooltipType](**tooltipData)
 

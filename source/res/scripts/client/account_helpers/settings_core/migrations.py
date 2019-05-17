@@ -413,11 +413,6 @@ def _migrateTo44(core, data, initialized):
     data['guiStartBehavior']['isRankedWelcomeViewShowed'] = False
 
 
-def _migrateTo45(core, data, initialized):
-    data['marathonRewardVideoWasShown'] = False
-    data['marathonRewardScreenWasShown'] = False
-
-
 _versions = ((1,
   _initializeDefaultSettings,
   True,
@@ -588,10 +583,6 @@ _versions = ((1,
   False),
  (44,
   _migrateTo44,
-  False,
-  False),
- (45,
-  _migrateTo45,
   False,
   False))
 

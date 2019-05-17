@@ -20,17 +20,23 @@ from gui.impl.gen.resources import R
 from helpers import i18n
 _REGULAR_TABS_VO_META = base.ListMeta([{'label': i18n.makeString(MENU.FINALSTATISTIC_TABS_COMMONSTATS),
   'linkage': 'CommonStats',
+  'viewId': 'CommonStats',
   'showWndBg': False}, {'label': i18n.makeString(MENU.FINALSTATISTIC_TABS_TEAMSTATS),
   'linkage': 'TeamStatsUI',
+  'viewId': 'TeamStatsUI',
   'showWndBg': False}, {'label': i18n.makeString(MENU.FINALSTATISTIC_TABS_DETAILSSTATS),
   'linkage': 'DetailsStatsViewUI',
+  'viewId': 'DetailsStatsViewUI',
   'showWndBg': True}])
 _MULTI_TEAM_TABS_VO_META = base.ListMeta([{'label': MENU.FINALSTATISTIC_TABS_COMMONSTATS,
   'linkage': 'CommonStats',
+  'viewId': 'CommonStats',
   'showWndBg': False}, {'label': MENU.FINALSTATISTIC_TABS_TEAMSTATS,
   'linkage': 'MultiteamStatsUI',
+  'viewId': 'MultiteamStatsUI',
   'showWndBg': False}, {'label': MENU.FINALSTATISTIC_TABS_DETAILSSTATS,
   'linkage': 'DetailsStatsViewUI',
+  'viewId': 'DetailsStatsViewUI',
   'showWndBg': True}])
 REGULAR_TABS_BLOCK = base.StatsBlock(_REGULAR_TABS_VO_META, 'tabInfo')
 MULTI_TEAM_TABS_BLOCK = base.StatsBlock(_MULTI_TEAM_TABS_VO_META, 'tabInfo')

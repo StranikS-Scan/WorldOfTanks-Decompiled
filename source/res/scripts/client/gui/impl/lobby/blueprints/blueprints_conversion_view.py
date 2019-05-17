@@ -23,7 +23,7 @@ class BlueprintsConversionView(DialogWindow):
     __slots__ = ('__vehicle', '__countFragments')
 
     def __init__(self, vehicleCD, countFragments, parent):
-        content = DialogContent(R.views.simpleDialogContent(), SimpleDialogWindowModel) if countFragments > _MIN_COUNT_FRAGMENTS else None
+        content = DialogContent(R.views.common.dialog_view.simple_dialog_content.SimpleDialogContent(), SimpleDialogWindowModel) if countFragments > _MIN_COUNT_FRAGMENTS else None
         super(BlueprintsConversionView, self).__init__(content=content, bottomContent=DialogPricesContent(), parent=parent, balanceContent=FragmentsBalanceContent(vehicleCD), enableBlur=True)
         self.__vehicle = self.__itemsCache.items.getItemByCD(vehicleCD)
         self.__countFragments = countFragments

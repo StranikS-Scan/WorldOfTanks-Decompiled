@@ -6,7 +6,7 @@ from messenger.storage import storage_getter
 from web_client_api import W2CSchema, Field, w2c
 
 class _OpenChatSchema(W2CSchema):
-    user_id = Field(required=True, type=int)
+    user_id = Field(required=True, type=(int, long, basestring))
     user_name = Field(required=True, type=basestring)
 
 

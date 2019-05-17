@@ -112,6 +112,8 @@ class PanzerAssemblerWWISE(_CompoundAssembler):
                 appearance.filterRetrievers.append(retriever)
 
         appearance.wheelsAnimator = model_assembler.createWheelsAnimator(appearance, ColliderTypes.VEHICLE_COLLIDER, appearance.typeDescriptor, lambda : appearance.wheelsState, wheelsScroll, wheelsSteering, appearance.splineTracks, lodStateLink)
+        if appearance.customEffectManager is not None:
+            appearance.customEffectManager.setWheelsData(appearance)
         suspensionLodLink = lodStateLink
         if 'wheeledVehicle' in appearance.typeDescriptor.type.tags:
             wheeledLodCalculator = Vehicular.LodCalculator(appearance.worldID, DataLinks.linkMatrixTranslation(appearance.compoundModel.matrix), True, WHEELED_CHASSIS_PRIORITY_GROUP, isPlayer)
@@ -175,6 +177,7 @@ class PanzerAssemblerWWISE(_CompoundAssembler):
                 appearance.dirtComponent = appearance.createComponent(Vehicular.DirtComponent, dirtHandlers, modelHeight)
                 for fashionIdx, _ in enumerate(TankPartNames.ALL):
                     fashions[fashionIdx].addMaterialHandler(dirtHandlers[fashionIdx])
+                    fashions[fashionIdx].addTrackMaterialHandler(dirtHandlers[fashionIdx])
 
         model_assembler.setupTurretRotations(appearance)
         appearance.waterSensor = model_assembler.assembleWaterSensor(appearance.typeDescriptor, appearance, lodStateLink)

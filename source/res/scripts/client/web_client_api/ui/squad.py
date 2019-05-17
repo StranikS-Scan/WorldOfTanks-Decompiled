@@ -6,7 +6,7 @@ from gui.prb_control.settings import PREBATTLE_ACTION_NAME
 from web_client_api import w2c, W2CSchema, Field
 
 class _CreateSquadSchema(W2CSchema):
-    spa_id = Field(required=True, type=int)
+    spa_id = Field(required=True, type=(int, long, basestring))
 
 
 class SquadWebApiMixin(object):

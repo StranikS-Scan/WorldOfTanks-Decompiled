@@ -14,23 +14,25 @@ from skeletons.gui.impl import IGuiLoader
 class ToolTipWindow(WindowImpl):
     __slots__ = ()
 
-    def __init__(self, content, parent):
-        super(ToolTipWindow, self).__init__(wndFlags=WindowFlags.TOOLTIP, decorator=WindowView(layoutID=R.views.tooltipWindow()), content=content, parent=parent, areaID=R.areas.specific())
+    def __init__(self, event, content, parent):
+        if event.decoratorID:
+            decorator = WindowView(layoutID=event.decoratorID)
+        else:
+            decorator = None
+        super(ToolTipWindow, self).__init__(wndFlags=WindowFlags.TOOLTIP, decorator=decorator, content=content, parent=parent, areaID=R.areas.specific())
+        return
 
 
 class SimpleToolTipWindow(ToolTipWindow):
     __slots__ = ()
     __gui = dependency.descriptor(IGuiLoader)
 
-    def __init__(self, event, parent, useHtmlText=False):
+    def __init__(self, event, parent):
         header = self.makeString(event.getArgument('header', ''))
         body = self.makeString(event.getArgument('body', ''))
         note = self.makeString(event.getArgument('note', ''))
         alert = self.makeString(event.getArgument('alert', ''))
-        if useHtmlText:
-            super(SimpleToolTipWindow, self).__init__(SimpleTooltipHtmlContent(header, body, note, alert), parent)
-        else:
-            super(SimpleToolTipWindow, self).__init__(SimpleTooltipContent(header, body, note, alert), parent)
+        super(SimpleToolTipWindow, self).__init__(event, SimpleTooltipContent(event.contentID, header, body, note, alert), parent)
 
     @classmethod
     def makeString(cls, value):
@@ -42,8 +44,8 @@ class SimpleToolTipWindow(ToolTipWindow):
 class SimpleTooltipContent(View):
     __slots__ = ()
 
-    def __init__(self, header='', body='', note='', alert='', layoutID=R.views.simpleTooltipContent()):
-        super(SimpleTooltipContent, self).__init__(layoutID, ViewFlags.COMPONENT, SimpleTooltipContentModel, header, body, note, alert)
+    def __init__(self, contentID, header='', body='', note='', alert=''):
+        super(SimpleTooltipContent, self).__init__(contentID, ViewFlags.COMPONENT, SimpleTooltipContentModel, header, body, note, alert)
 
     @property
     def viewModel(self):
@@ -59,18 +61,11 @@ class SimpleTooltipContent(View):
         self.viewModel.commit()
 
 
-class SimpleTooltipHtmlContent(SimpleTooltipContent):
-    __slots__ = ()
-
-    def __init__(self, header='', body='', note='', alert=''):
-        super(SimpleTooltipHtmlContent, self).__init__(header, body, note, alert, R.views.simpleTooltipHtmlContent())
-
-
 class AdvancedToolTipWindow(ToolTipWindow):
     __slots__ = ()
 
-    def __init__(self, parent, normalContent, advancedContent):
-        super(AdvancedToolTipWindow, self).__init__(AdvancedTooltipContent(normalContent, advancedContent), parent)
+    def __init__(self, event, parent, normalContent, advancedContent):
+        super(AdvancedToolTipWindow, self).__init__(event, AdvancedTooltipContent(normalContent, advancedContent), parent)
 
 
 class AdvancedTooltipContent(View):
@@ -78,7 +73,7 @@ class AdvancedTooltipContent(View):
     __slots__ = ()
 
     def __init__(self, normalContent, advancedContent):
-        super(AdvancedTooltipContent, self).__init__(R.views.advandcedTooltipContent(), ViewFlags.COMPONENT, AdvancedTooltipContentModel, normalContent, advancedContent)
+        super(AdvancedTooltipContent, self).__init__(R.views.common.tooltip_window.advanced_tooltip_content.AdvandcedTooltipContent(), ViewFlags.COMPONENT, AdvancedTooltipContentModel, normalContent, advancedContent)
 
     @property
     def viewModel(self):
@@ -106,7 +101,7 @@ class AdvancedAnimatedTooltipContent(View):
     __slots__ = ()
 
     def __init__(self, header='', body='', animation=''):
-        super(AdvancedAnimatedTooltipContent, self).__init__(R.views.advandcedAnimatedTooltipContent(), ViewFlags.COMPONENT, AdvancedAnimatedTooltipContentModel, header, body, animation)
+        super(AdvancedAnimatedTooltipContent, self).__init__(R.views.common.tooltip_window.advanced_tooltip_content.AdvandcedAnimatedTooltipContent(), ViewFlags.COMPONENT, AdvancedAnimatedTooltipContentModel, header, body, animation)
 
     @property
     def viewModel(self):

@@ -153,7 +153,7 @@ class TrainingEntity(LegacyEntity):
         for event in self.__loadEvents:
             add(event, self.__handleViewLoad, scope=EVENT_BUS_SCOPE.LOBBY)
 
-        self.__enterTrainingRoom(True)
+        self.__enterTrainingRoom(ctx.getInitCtx() is None)
         g_eventDispatcher.addTrainingToCarousel(False)
         result = FUNCTIONAL_FLAG.addIfNot(result, FUNCTIONAL_FLAG.LOAD_WINDOW)
         result = FUNCTIONAL_FLAG.addIfNot(result, FUNCTIONAL_FLAG.LOAD_PAGE)

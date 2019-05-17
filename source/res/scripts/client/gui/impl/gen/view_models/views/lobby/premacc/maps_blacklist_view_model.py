@@ -36,6 +36,12 @@ class MapsBlacklistViewModel(ViewModel):
     def setMapsTotal(self, value):
         self._setNumber(5, value)
 
+    def getIsFilterApplied(self):
+        return self._getBool(6)
+
+    def setIsFilterApplied(self, value):
+        self._setBool(6, value)
+
     def _initialize(self):
         super(MapsBlacklistViewModel, self)._initialize()
         self._addViewModelProperty('disabledMaps', ListModel())
@@ -44,6 +50,7 @@ class MapsBlacklistViewModel(ViewModel):
         self._addNumberProperty('cooldownTime', 0)
         self._addNumberProperty('mapsSelected', 0)
         self._addNumberProperty('mapsTotal', 0)
+        self._addBoolProperty('isFilterApplied', False)
         self.onBackAction = self._addCommand('onBackAction')
         self.onCloseEvent = self._addCommand('onCloseEvent')
         self.onMapAddToBlacklistEvent = self._addCommand('onMapAddToBlacklistEvent')

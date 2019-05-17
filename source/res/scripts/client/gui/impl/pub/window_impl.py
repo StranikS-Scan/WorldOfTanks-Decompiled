@@ -15,6 +15,10 @@ class WindowImpl(Window):
     def __init__(self, wndFlags, *args, **kwargs):
         self.__areaID = kwargs.pop('areaID', R.areas.default())
         super(WindowImpl, self).__init__(wndFlags, *args, **kwargs)
+        area = self.area
+        if area is not None:
+            area.addWindow(self)
+        return
 
     @property
     def windowModel(self):
@@ -50,9 +54,6 @@ class WindowImpl(Window):
 
     def _initialize(self):
         super(WindowImpl, self)._initialize()
-        area = self.area
-        if area is not None:
-            area.addWindow(self)
         if self.windowModel is not None:
             self.windowModel.onClosed += self._onClosed
             self.windowModel.onMinimized += self._onMinimize

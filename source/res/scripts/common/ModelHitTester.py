@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/ModelHitTester.py
 from collections import namedtuple
+import math
 import BigWorld
 from Math import Vector2, Matrix
 from constants import IS_DEVELOPMENT, IS_CLIENT, IS_BOT
@@ -132,6 +133,26 @@ def segmentMayHitVolume(boundingRadius, center, segmentStart, segmentEnd):
     if e <= 0.0:
         return ao.lengthSquared <= radiusSquared
     return bo.lengthSquared <= radiusSquared if e >= ab.lengthSquared else ao.lengthSquared - e * e / ab.lengthSquared <= radiusSquared
+
+
+def coneMayHitVolume(boundingRadius, center, segmentStart, segmentEnd, startDeviation, endDeviation, do2DTest=True):
+    segmentStart = segmentStart - center
+    segmentEnd = segmentEnd - center
+    if do2DTest:
+        ao = Vector2(-segmentStart.x, -segmentStart.z)
+        bo = Vector2(-segmentEnd.x, -segmentEnd.z)
+    else:
+        ao = segmentStart.scale(-1.0)
+        bo = segmentEnd.scale(-1.0)
+    ab = ao - bo
+    e = ao.dot(ab)
+    if e <= 0.0:
+        return ao.lengthSquared <= (boundingRadius + startDeviation) ** 2
+    if e >= ab.lengthSquared:
+        return bo.lengthSquared <= (boundingRadius + endDeviation) ** 2
+    d = math.sqrt(e / ab.lengthSquared)
+    radiusSquared = (boundingRadius + (1.0 - d) * startDeviation + d * endDeviation) ** 2
+    return ao.lengthSquared - e * e / ab.lengthSquared <= radiusSquared
 
 
 def segmentMayHitVehicle(vehicleDescr, segmentStart, segmentEnd, vehicleCenter):

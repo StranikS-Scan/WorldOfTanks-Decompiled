@@ -79,7 +79,7 @@ class PremiumCreditsBlock(base.StatsBlock):
     __slots__ = ()
 
     def setRecord(self, result, reusable):
-        canBeFaded = reusable.isPostBattlePremium and reusable.canResourceBeFaded
+        canBeFaded = reusable.hasAnyPremiumInPostBattle and reusable.canResourceBeFaded
         isDiffShow = reusable.canUpgradeToPremiumPlus
         for records in reusable.personal.getMoneyRecords():
             baseCredits, premiumCredits = records[:2]
@@ -229,12 +229,10 @@ class MoneyDetailsBlock(_EconomicsDetailsBlock):
         self._addStatsRow('base', column1=style.makeCreditsLabel(baseCredits, canBeFaded=not self.hasAnyPremium), column3=style.makeCreditsLabel(premiumCredits, canBeFaded=self.hasAnyPremium))
 
     def __addSquadBonus(self, baseRecords, premiumRecords):
-        baseFactor = baseRecords.getFactor('premSquadCreditsFactor100')
-        premiumFactor = premiumRecords.getFactor('premSquadCreditsFactor100')
-        if not self.hasAnyPremium and baseFactor or self.hasAnyPremium and premiumFactor:
-            baseCredits = baseRecords.getRecord('originalCredits')
-            premiumCredits = premiumRecords.getRecord('originalCredits')
-            self._addStatsRow('squadBonus', column1=style.makeCreditsLabel(baseCredits * baseFactor + baseRecords.getRecord('originalCreditsToDrawSquad'), canBeFaded=not self.hasAnyPremium), column3=style.makeCreditsLabel(premiumCredits * premiumFactor + premiumRecords.getRecord('originalCreditsToDrawSquad'), canBeFaded=self.hasAnyPremium))
+        baseCredits = baseRecords.getRecord('originalPremSquadCredits', 'originalCreditsToDrawSquad')
+        premiumCredits = premiumRecords.getRecord('originalPremSquadCredits', 'originalCreditsToDrawSquad')
+        if not self.hasAnyPremium and baseCredits or self.hasAnyPremium and premiumCredits:
+            self._addStatsRow('squadBonus', column1=style.makeCreditsLabel(baseCredits, canBeFaded=not self.hasAnyPremium), column3=style.makeCreditsLabel(premiumCredits, canBeFaded=self.hasAnyPremium))
 
     def __addPiggyBankInfo(self, premiumRecords, additionalRecords):
         baseCredits = 0
@@ -350,8 +348,7 @@ class XPDetailsBlock(_EconomicsDetailsBlock):
         if showSquadLabels:
             self.__addSquadXPDetails(baseXP, premiumXP)
         self._addAOGASFactor(baseXP)
-        rows = self.getNextComponentIndex()
-        if rows < 3 or rows < 7:
+        if self.getNextComponentIndex() < 7:
             self._addEmptyRow()
         self.__addXPsViolationPenalty()
         self.__addTotalResults(baseXP, premiumXP, baseFreeXP, premiumFreeXP)

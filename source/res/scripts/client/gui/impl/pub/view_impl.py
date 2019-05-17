@@ -25,18 +25,16 @@ class ViewImpl(View):
 
     def createToolTip(self, event):
         window = None
-        if event.contentID == R.views.simpleTooltipContent():
+        if event.contentID == R.views.common.tooltip_window.simple_tooltip_content.SimpleTooltipContent() or event.contentID == R.views.common.tooltip_window.simple_tooltip_content.SimpleTooltipHtmlContent():
             window = SimpleToolTipWindow(event, self.getParentWindow())
-        elif event.contentID == R.views.simpleTooltipHtmlContent():
-            window = SimpleToolTipWindow(event, self.getParentWindow(), useHtmlText=True)
-        elif event.contentID == R.views.advandcedTooltipContent():
+        elif event.contentID == R.views.common.tooltip_window.advanced_tooltip_content.AdvandcedTooltipContent():
             normalContent = event.getArgument('normalContent')
             advancedContent = event.getArgument('advancedContent')
-            window = AdvancedToolTipWindow(self.getParentWindow(), self.createToolTipContent(event, normalContent), self.createToolTipContent(event, advancedContent))
+            window = AdvancedToolTipWindow(event, self.getParentWindow(), self.createToolTipContent(event, normalContent), self.createToolTipContent(event, advancedContent))
         else:
             content = self.createToolTipContent(event, event.contentID)
             if content is not None:
-                window = ToolTipWindow(content, self.getParentWindow())
+                window = ToolTipWindow(event, content, self.getParentWindow())
         if window is not None:
             window.load()
             window.move(event.mouse.positionX, event.mouse.positionY)
@@ -58,7 +56,7 @@ class ViewImpl(View):
         if content is not None:
             if not isinstance(content, ContextMenuContent):
                 raise SoftException('Context menu content should be derived from ContextMenuContent.')
-            window = ContextMenuWindow(content, self.getParentWindow())
+            window = ContextMenuWindow(event, content, self.getParentWindow())
             window.load()
             window.move(event.mouse.positionX, event.mouse.positionY)
         return window

@@ -57,18 +57,16 @@ class CustomEffectManager(Component):
                     self.__selectors.append(selector)
 
         self.__createChassisCenterNodes()
-        wheelsConfig = typeDesc.chassis.generalWheelsAnimatorConfig
-        if wheelsConfig is not None:
-            self.__wheelsData = [None] * wheelsConfig.getWheelsCount()
-            nodeNames = wheelsConfig.getWheelNodeNames()
-            for wheelIndex in xrange(0, wheelsConfig.getWheelsCount()):
-                if wheelIndex >= len(nodeNames):
-                    break
-                self.__wheelsData[wheelIndex] = nodeNames[wheelIndex]
-
-        else:
-            self.__wheelsData = [None]
+        self.__wheelsData = None
         PixieCache.incref()
+        return
+
+    def setWheelsData(self, appearance):
+        wheelsConfig = appearance.typeDescriptor.chassis.generalWheelsAnimatorConfig
+        if wheelsConfig is not None:
+            names = appearance.wheelsAnimator.getWheelNodeNames()
+            if names:
+                self.__wheelsData = names
         return
 
     def getParameter(self, name):
@@ -160,9 +158,9 @@ class CustomEffectManager(Component):
         self.__variableArgs['engineState'] = self.__engineState.engineState
         self.__variableArgs['engineStart'] = self.__engineState.starting
         self.__variableArgs['physicLoad'] = self.__engineState.physicLoad
-        for wheelIndex in xrange(0, len(self.__wheelsData)):
-            nodeName = self.__wheelsData[wheelIndex]
-            if nodeName is not None:
+        if self.__wheelsData is not None:
+            for wheelIndex in xrange(0, len(self.__wheelsData)):
+                nodeName = self.__wheelsData[wheelIndex]
                 self.__variableArgs[nodeName + ':contact'] = 0 if appearance.wheelsAnimator.wheelIsFlying(wheelIndex) else 1
 
         for effectSelector in self.__selectors:

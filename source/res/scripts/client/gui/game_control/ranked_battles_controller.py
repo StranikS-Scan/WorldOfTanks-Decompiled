@@ -752,7 +752,7 @@ class RankedBattlesController(IRankedBattlesController, Notifiable, SeasonProvid
         for rankID in range(lastID, currentID):
             totalSteps += stepsToProgress[rankID]
 
-        bonusSteps = totalSteps // bonusBattlesMultiplier
+        bonusSteps = totalSteps - totalSteps // bonusBattlesMultiplier
         if currentSteps <= bonusSteps:
             result[currentID] = currentSteps
         else:

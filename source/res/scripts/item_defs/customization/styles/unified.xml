@@ -1539,7 +1539,6 @@
       <texture>	gui/maps/vehicles/styles/veteran_style.png	</texture>
       <description>	#vehicle_customization:special_style/veteran_style_desc	</description>
       <userString>	#vehicle_customization:special_style/veteran_style	</userString>
-      <tags>	vehicleBound	</tags>
       <outfits>
         <outfit>
           <season>	ALL	</season>
@@ -1579,7 +1578,6 @@
       <texture>	gui/maps/vehicles/styles/digital_style.png	</texture>
       <description>	#vehicle_customization:special_style/digital_style_desc	</description>
       <userString>	#vehicle_customization:special_style/digital_style	</userString>
-      <tags>	vehicleBound	</tags>
       <outfits>
         <outfit>
           <season>	summer	</season>
@@ -1656,7 +1654,6 @@
       <texture>	gui/maps/vehicles/styles/cracked_stone.png	</texture>
       <description>	#vehicle_customization:special_style/cracked_stone_style_desc	</description>
       <userString>	#vehicle_customization:special_style/cracked_stone_style	</userString>
-      <tags>	vehicleBound	</tags>
       <outfits>
         <outfit>
           <season>	summer	</season>
@@ -3464,6 +3461,239 @@
         </outfit>
         <outfit>
           <season>	event	</season>
+        </outfit>
+      </outfits>
+    </style>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	false	</historical>
+    <vehicleFilter>
+      <include>
+        <levels>	8 9 10	</levels>
+      </include>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G119_Panzer58_BF germany:G114_Rheinmetall_Skorpian usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <style>
+      <id>	725	</id>
+      <texture>	gui/maps/vehicles/styles/vanquisher.png	</texture>
+      <userString>	#vehicle_customization:special_style/vanquisher	</userString>
+      <priceGroup>	special style notInShop	</priceGroup>
+      <outfits>
+        <outfit>
+          <season>	summer	</season>
+          <camouflages>
+            <item>
+              <id>	697	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <paints>
+            <item>
+              <id>	3	</id>
+              <appliedTo>	30583	</appliedTo>
+            </item>
+          </paints>
+          <decals>
+            <item>
+              <id>	709	</id>
+              <appliedTo>	13104	</appliedTo>
+            </item>
+          </decals>
+        </outfit>
+        <outfit>
+          <season>	winter	</season>
+          <camouflages>
+            <item>
+              <id>	697	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	2	</palette>
+            </item>
+          </camouflages>
+          <paints>
+            <item>
+              <id>	3	</id>
+              <appliedTo>	30583	</appliedTo>
+            </item>
+          </paints>
+          <decals>
+            <item>
+              <id>	709	</id>
+              <appliedTo>	13104	</appliedTo>
+            </item>
+          </decals>
+        </outfit>
+        <outfit>
+          <season>	desert	</season>
+          <camouflages>
+            <item>
+              <id>	697	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	1	</palette>
+            </item>
+          </camouflages>
+          <paints>
+            <item>
+              <id>	3	</id>
+              <appliedTo>	30583	</appliedTo>
+            </item>
+          </paints>
+          <decals>
+            <item>
+              <id>	709	</id>
+              <appliedTo>	13104	</appliedTo>
+            </item>
+          </decals>
+        </outfit>
+        <outfit>
+          <season>	event	</season>
+        </outfit>
+      </outfits>
+    </style>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	false	</historical>
+    <vehicleFilter>
+      <include>
+        <levels>	8 9 10	</levels>
+      </include>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G119_Panzer58_BF germany:G114_Rheinmetall_Skorpian usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <style>
+      <id>	726	</id>
+      <texture>	gui/maps/vehicles/styles/conqueror.png	</texture>
+      <userString>	#vehicle_customization:special_style/conqueror	</userString>
+      <priceGroup>	special style notInShop	</priceGroup>
+      <outfits>
+        <outfit>
+          <season>	summer	</season>
+          <camouflages>
+            <item>
+              <id>	698	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <paints>
+            <item>
+              <id>	4	</id>
+              <appliedTo>	30583	</appliedTo>
+            </item>
+          </paints>
+          <decals>
+            <item>
+              <id>	725	</id>
+              <appliedTo>	13104	</appliedTo>
+            </item>
+          </decals>
+        </outfit>
+        <outfit>
+          <season>	winter	</season>
+          <camouflages>
+            <item>
+              <id>	698	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	1	</palette>
+            </item>
+          </camouflages>
+          <paints>
+            <item>
+              <id>	4	</id>
+              <appliedTo>	30583	</appliedTo>
+            </item>
+          </paints>
+          <decals>
+            <item>
+              <id>	725	</id>
+              <appliedTo>	13104	</appliedTo>
+            </item>
+          </decals>
+        </outfit>
+        <outfit>
+          <season>	desert	</season>
+          <camouflages>
+            <item>
+              <id>	698	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	2	</palette>
+            </item>
+          </camouflages>
+          <paints>
+            <item>
+              <id>	4	</id>
+              <appliedTo>	30583	</appliedTo>
+            </item>
+          </paints>
+          <decals>
+            <item>
+              <id>	725	</id>
+              <appliedTo>	13104	</appliedTo>
+            </item>
+          </decals>
+        </outfit>
+        <outfit>
+          <season>	event	</season>
+        </outfit>
+      </outfits>
+    </style>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	false	</historical>
+    <vehicleFilter>
+      <include>
+        <levels>	8 9 10	</levels>
+      </include>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G119_Panzer58_BF germany:G114_Rheinmetall_Skorpian usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <style>
+      <id>	45	</id>
+      <texture>	gui/maps/vehicles/styles/bulat.png	</texture>
+      <userString>	#vehicle_customization:special_style/bulat	</userString>
+      <priceGroup>	special style notInShop	</priceGroup>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	5	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <decals>
+            <item>
+              <id>	3	</id>
+              <appliedTo>	13104	</appliedTo>
+            </item>
+          </decals>
+          <modifications>
+            <item>	6	</item>
+          </modifications>
+          <paints>
+            <item>
+              <id>	2	</id>
+              <appliedTo>	30583	</appliedTo>
+            </item>
+          </paints>
         </outfit>
       </outfits>
     </style>

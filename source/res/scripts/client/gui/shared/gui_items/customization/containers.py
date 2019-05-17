@@ -3,7 +3,7 @@
 from debug_utils import LOG_WARNING
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.gui_items.customization import packers
-from items.customizations import EmptyComponent, PaintComponent, CamouflageComponent, DecalComponent, ProjectionDecalComponent, PersonalNumberComponent
+from items.customizations import EmptyComponent, PaintComponent, CamouflageComponent, DecalComponent, ProjectionDecalComponent, PersonalNumberComponent, SequenceComponent, AttachmentComponent
 
 class SlotData(object):
     __slots__ = ('item', 'component')
@@ -11,6 +11,11 @@ class SlotData(object):
     def __init__(self, item=None, component=None):
         self.item = item
         self.component = component
+
+    def isEqual(self, other):
+        selfId = self.item.id if self.item else None
+        otherId = other.item.id if other.item else None
+        return selfId == otherId and self.component == other.component
 
     def diff(self, other):
         aitem, acomp = self.item, self.component
@@ -49,7 +54,11 @@ def emptyComponent(itemTypeID):
         return DecalComponent()
     if itemTypeID == GUI_ITEM_TYPE.PERSONAL_NUMBER:
         return PersonalNumberComponent()
-    return ProjectionDecalComponent() if itemTypeID == GUI_ITEM_TYPE.PROJECTION_DECAL else EmptyComponent()
+    if itemTypeID == GUI_ITEM_TYPE.PROJECTION_DECAL:
+        return ProjectionDecalComponent()
+    if itemTypeID == GUI_ITEM_TYPE.SEQUENCE:
+        return SequenceComponent()
+    return AttachmentComponent() if itemTypeID == GUI_ITEM_TYPE.ATTACHMENT else EmptyComponent()
 
 
 class OutfitContainer(object):
@@ -191,3 +200,24 @@ class MultiSlot(object):
                 result.set(df.item, idx=idx, component=df.component)
 
         return result
+
+    def isEqual(self, other):
+        if self.capacity() != other.capacity():
+            return False
+        for idx in range(self.capacity()):
+            if not self.getSlotData(idx).isEqual(other.getSlotData(idx)):
+                return False
+
+        return True
+
+
+class SizableMultiSlot(MultiSlot):
+
+    def append(self, item, component=None):
+        newRegion = self.capacity()
+        self._regions.append(newRegion)
+        super(SizableMultiSlot, self).set(item, newRegion, component)
+
+    def clear(self):
+        super(SizableMultiSlot, self).clear()
+        self._regions = []

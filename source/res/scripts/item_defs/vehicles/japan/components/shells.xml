@@ -1038,15 +1038,15 @@
   </_105mm_HE_Type91>
   <_105mm_APDS_L28A1>
     <id>	42	</id>
-    <userString>	#japan_vehicles:_105mm_APDS_L28A1	</userString>
-    <icon>	ap_cr	</icon>
+    <userString>	#japan_vehicles:_105mm_AP_M735	</userString>
+    <icon>	ap	</icon>
     <price>	1200	</price>
-    <kind>	ARMOR_PIERCING_CR	</kind>
+    <kind>	ARMOR_PIERCING	</kind>
     <caliber>	105	</caliber>
     <isTracer>	true	</isTracer>
-    <effects>	mainAPCR	</effects>
+    <effects>	mainArmorPiercing	</effects>
     <damage>
-      <armor>	390	</armor>
+      <armor>	360	</armor>
       <devices>	150	</devices>
     </damage>
   </_105mm_APDS_L28A1>
@@ -1061,7 +1061,7 @@
     <isTracer>	true	</isTracer>
     <effects>	mainHollowCharge	</effects>
     <damage>
-      <armor>	390	</armor>
+      <armor>	360	</armor>
       <devices>	150	</devices>
     </damage>
     <piercingPowerLossFactorByDistance>	0.05	</piercingPowerLossFactorByDistance>
@@ -1077,7 +1077,7 @@
     <isTracer>	true	</isTracer>
     <effects>	mainHighExplosive	</effects>
     <damage>
-      <armor>	480	</armor>
+      <armor>	440	</armor>
       <devices>	150	</devices>
     </damage>
   </_105mm_HEPT_Type75>

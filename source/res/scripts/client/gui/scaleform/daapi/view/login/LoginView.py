@@ -18,7 +18,7 @@ from gui.Scaleform.framework.entities.View import View
 from gui.Scaleform.locale.BAN_REASON import BAN_REASON
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.WAITING import WAITING
-from gui.impl import dialogs
+from gui.impl.dialogs import dialogs
 from gui.shared import events, g_eventBus
 from gui.shared.event_bus import EVENT_BUS_SCOPE
 from gui.shared.events import OpenLinkEvent, LoginEventEx, ArgsEvent, LoginEvent, BootcampEvent

@@ -24,9 +24,15 @@ class SquadActionsHandler(AbstractActionsHandler):
     def setUnitChanged(self, loadHangar=False):
         flags = self._entity.getFlags()
         if self._entity.getPlayerInfo().isReady and flags.isInQueue():
+            _, unit = self._entity.getUnit()
+            pInfo = self._entity.getPlayerInfo()
+            vInfos = unit.getMemberVehicles(pInfo.dbID)
+            if vInfos is not None:
+                g_currentVehicle.selectVehicle(vInfos[0].vehInvID)
             g_eventDispatcher.loadBattleQueue()
         elif loadHangar:
             g_eventDispatcher.loadHangar()
+        return
 
     def setPlayerInfoChanged(self):
         g_eventDispatcher.updateUI()

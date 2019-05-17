@@ -8,7 +8,7 @@ import WWISE
 import constants
 from CurrentVehicle import g_currentVehicle, g_currentPreviewVehicle
 from account_helpers.AccountSettings import AccountSettings
-from account_helpers.AccountSettings import BOOSTERS, KNOWN_SELECTOR_BATTLES
+from account_helpers.AccountSettings import KNOWN_SELECTOR_BATTLES
 from account_helpers.AccountSettings import NEW_LOBBY_TAB_COUNTER, RECRUIT_NOTIFICATIONS
 from adisp import process
 from debug_utils import LOG_ERROR
@@ -90,7 +90,7 @@ HEADER_BUTTONS_COUNTERS_CHANGED_EVENT = 'lobbyHeaderButtonsCountersChanged'
 _DASHBOARD_SUPPRESSED_VIEWS = [VIEW_ALIAS.BADGES_PAGE]
 
 def _predicateLobbyTopSubViews(view):
-    return view.layoutID != R.views.premDashboardView() and view.viewFlags & ViewFlags.LOBBY_TOP_SUB_VIEW
+    return view.layoutID != R.views.lobby.premacc.prem_dashboard_view.PremDashboardView() and view.viewFlags & ViewFlags.LOBBY_TOP_SUB_VIEW
 
 
 class TOOLTIP_TYPES(object):
@@ -277,7 +277,7 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
         for view in views:
             view.destroyWindow()
 
-        dashbordView = self.gui.windowsManager.getViewByLayoutID(R.views.premDashboardView())
+        dashbordView = self.gui.windowsManager.getViewByLayoutID(R.views.lobby.premacc.prem_dashboard_view.PremDashboardView())
         if dashbordView is None:
             shared_events.showDashboardView()
         else:
@@ -505,8 +505,7 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
 
     def __updateBoostersStatus(self, *_):
         boosterPresenter = _BoosterInfoPresenter(self.goodiesCache)
-        self.as_setBoosterDataS({'hasNew': boosterPresenter.hasNew(),
-         'hasActiveBooster': boosterPresenter.hasActiveBoosters(),
+        self.as_setBoosterDataS({'hasActiveBooster': boosterPresenter.hasActiveBoosters(),
          'hasAvailableBoosters': boosterPresenter.hasAvailableBoosters(),
          'boosterIcon': boosterPresenter.getIcon(),
          'boosterText': boosterPresenter.getText(),
@@ -965,13 +964,13 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
         clansTabReplaceStrongholds = isClansTabReplaceStrongholds()
         clanDBID = self.itemsCache.items.stats.clanDBID
         if not clanDBID:
-            strongholdsTabConfig = {(True, False): (MENU.HEADERBUTTONS_STRONGHOLD, TOOLTIPS.HEADER_BUTTONS_FORTS),
-             (False, False): (MENU.HEADERBUTTONS_STRONGHOLD, TOOLTIPS.HEADER_BUTTONS_FORTS_TURNEDOFF),
+            strongholdsTabConfig = {(True, False): (MENU.HEADERBUTTONS_CLAN, TOOLTIPS.HEADER_BUTTONS_FORTS),
+             (False, False): (MENU.HEADERBUTTONS_CLAN, TOOLTIPS.HEADER_BUTTONS_FORTS_TURNEDOFF),
              (True, True): (MENU.HEADERBUTTONS_CLANS, TOOLTIPS.HEADER_BUTTONS_CLANS),
              (False, True): (MENU.HEADERBUTTONS_CLANS, TOOLTIPS.HEADER_BUTTONS_CLANS_TURNEDOFF)}
             label, tooltip = strongholdsTabConfig[strongholdEnabled, clansTabReplaceStrongholds]
         else:
-            label = MENU.HEADERBUTTONS_STRONGHOLD
+            label = MENU.HEADERBUTTONS_CLAN
             tooltip = TOOLTIPS.HEADER_BUTTONS_FORTS if strongholdEnabled else TOOLTIPS.HEADER_BUTTONS_FORTS_TURNEDOFF
         return {'label': label,
          'value': VIEW_ALIAS.LOBBY_STRONGHOLD,
@@ -1238,10 +1237,6 @@ class _BoosterInfoPresenter(object):
         self.__activeBoosters = goodiesCache.getBoosters(criteria=REQ_CRITERIA.BOOSTER.ACTIVE).values()
         self.__activeClanReserves = None
         return
-
-    @staticmethod
-    def hasNew():
-        return not AccountSettings.getFilter(BOOSTERS)['wasShown']
 
     def hasActiveBoosters(self):
         return self.__hasActiveAccountBooster() or self.__hasActiveClanReserves()

@@ -499,6 +499,16 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
             ctrl = self.guiSessionProvider.shared.vehicleState
             if self.vehicle.stunInfo > 0.0 and (self.isObserver() or ctrl.isInPostmortem):
                 self.vehicle.updateStunInfo()
+            if self.vehicle.typeDescriptor.hasSiegeMode:
+                siegeState = self.vehicle.siegeState
+                siegeModeParams = self.vehicle.typeDescriptor.type.siegeModeParams
+                if siegeState == VEHICLE_SIEGE_STATE.ENABLED:
+                    switchingTime = siegeModeParams.get('switchOffTime', 0.0)
+                elif siegeState == VEHICLE_SIEGE_STATE.DISABLED:
+                    switchingTime = siegeModeParams.get('switchOnTime', 0.0)
+                else:
+                    switchingTime = 0.0
+                self.updateVehicleMiscStatus(self.vehicle.id, VEHICLE_MISC_STATUS.SIEGE_MODE_STATE_CHANGED, siegeState, [switchingTime])
             self.guiSessionProvider.shared.viewPoints.updateAttachedVehicle(self.vehicle.id)
         return
 
@@ -1931,7 +1941,7 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
     def __onSiegeStateUpdated(self, vehicleID, newState, timeToNextState):
         vehicle = BigWorld.entity(vehicleID)
         if vehicle is not None:
-            if vehicle.typeDescriptor is not None and vehicle.typeDescriptor.hasSiegeMode:
+            if vehicle.typeDescriptor is not None and vehicle.typeDescriptor.hasSiegeMode and vehicle.isStarted:
                 vehicle.onSiegeStateUpdated(newState, timeToNextState)
             elif vehicle.isPlayerVehicle and self.__disableRespawnMode:
                 self.__pendingSiegeSettings = (vehicleID, newState, timeToNextState)

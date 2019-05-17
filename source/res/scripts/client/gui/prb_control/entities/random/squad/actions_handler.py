@@ -37,7 +37,7 @@ class BalancedSquadActionsHandler(RandomSquadActionsHandler):
                     return True
                 DialogsInterface.showDialog(I18nConfirmDialogMeta('squadHaveNotReadyPlayers'), self._confirmCallback)
                 return True
-            if not g_currentVehicle.isLocked():
+            if not g_currentVehicle.isLocked() and not fullData.playerInfo.isReady:
                 _, unit = self._entity.getUnit()
                 playerVehicles = unit.getVehicles()
                 if playerVehicles:

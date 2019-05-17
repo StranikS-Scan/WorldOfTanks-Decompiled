@@ -59,7 +59,7 @@ class BaseRewardWindowContent(ViewImpl):
         pass
 
     def createToolTip(self, event):
-        if event.contentID == R.views.backportTooltipContent():
+        if event.contentID == R.views.common.tooltip_window.backport_tooltip_content.BackportTooltipContent():
             tooltipId = event.getArgument('tooltipId')
             window = BackportTooltipWindow(self.__items[tooltipId], self.getParentWindow()) if tooltipId is not None else None
             if window is not None:
@@ -200,7 +200,7 @@ class RewardWindowBase(WindowImpl):
             view = app.containerManager.getViewByKey(ViewKey(VIEW_ALIAS.LOBBY))
             if view is not None:
                 parent = view.getParentWindow()
-        super(RewardWindowBase, self).__init__(WindowFlags.DIALOG | WindowFlags.RESIZABLE | WindowFlags.CLOSE_BY_ESCAPE, decorator=WindowView(), parent=parent, content=content, areaID=R.areas.default())
+        super(RewardWindowBase, self).__init__(WindowFlags.DIALOG, decorator=WindowView(), parent=parent, content=content, areaID=R.areas.default())
         return
 
     def _initialize(self):
@@ -223,14 +223,14 @@ class RewardWindow(RewardWindowBase):
     __slots__ = ()
 
     def __init__(self, ctx=None, parent=None):
-        super(RewardWindow, self).__init__(parent=parent, content=QuestRewardWindowContent(layoutID=R.views.rewardWindowContent(), viewModelClazz=RewardWindowContentModel, ctx=ctx))
+        super(RewardWindow, self).__init__(parent=parent, content=QuestRewardWindowContent(layoutID=R.views.lobby.reward_window.reward_window_content.RewardWindowContent(), viewModelClazz=RewardWindowContentModel, ctx=ctx))
 
 
 class TwitchRewardWindow(RewardWindowBase):
     __slots__ = ()
 
     def __init__(self, ctx=None, parent=None):
-        super(TwitchRewardWindow, self).__init__(parent=parent, content=TwitchRewardWindowContent(layoutID=R.views.twitchRewardWindowContent(), viewModelClazz=RewardWindowContentModel, ctx=ctx))
+        super(TwitchRewardWindow, self).__init__(parent=parent, content=TwitchRewardWindowContent(layoutID=R.views.lobby.reward_window.twitch_reward_window_content.TwitchRewardWindowContent(), viewModelClazz=RewardWindowContentModel, ctx=ctx))
 
 
 class GiveAwayRewardWindowContent(QuestRewardWindowContent):
@@ -254,7 +254,7 @@ class GiveAwayRewardWindow(RewardWindowBase):
     __slots__ = ()
 
     def __init__(self, ctx=None, parent=None):
-        super(GiveAwayRewardWindow, self).__init__(parent=parent, content=GiveAwayRewardWindowContent(layoutID=R.views.twitchRewardWindowContent(), viewModelClazz=RewardWindowContentModel, ctx=ctx))
+        super(GiveAwayRewardWindow, self).__init__(parent=parent, content=GiveAwayRewardWindowContent(layoutID=R.views.lobby.reward_window.twitch_reward_window_content.TwitchRewardWindowContent(), viewModelClazz=RewardWindowContentModel, ctx=ctx))
 
     def _initialize(self):
         super(GiveAwayRewardWindow, self)._initialize()
@@ -265,7 +265,7 @@ class PiggyBankRewardWindow(RewardWindowBase):
     __slots__ = ()
 
     def __init__(self, ctx=None, parent=None):
-        super(PiggyBankRewardWindow, self).__init__(parent=parent, content=PiggyBankRewardWindowContent(layoutID=R.views.piggyBankRewardWindowContent(), viewModelClazz=PiggyBankRewardWindowContentModel, ctx=ctx))
+        super(PiggyBankRewardWindow, self).__init__(parent=parent, content=PiggyBankRewardWindowContent(layoutID=R.views.lobby.reward_window.piggy_bank_reward_window_content.PiggyBankRewardWindowContent(), viewModelClazz=PiggyBankRewardWindowContentModel, ctx=ctx))
 
     def _initialize(self):
         super(PiggyBankRewardWindow, self)._initialize()

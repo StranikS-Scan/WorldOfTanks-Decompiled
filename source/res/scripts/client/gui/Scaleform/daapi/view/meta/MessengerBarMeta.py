@@ -33,3 +33,6 @@ class MessengerBarMeta(BaseDAAPIComponent):
 
     def as_showAddVehicleCompareAnimS(self, data):
         return self.flashObject.as_showAddVehicleCompareAnim(data) if self._isDAAPIInited() else None
+
+    def as_setSessionStatsButtonVisibleS(self, value):
+        return self.flashObject.as_setSessionStatsButtonVisible(value) if self._isDAAPIInited() else None

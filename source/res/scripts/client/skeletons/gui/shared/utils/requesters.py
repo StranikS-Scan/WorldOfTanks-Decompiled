@@ -766,3 +766,98 @@ class ITokensRequester(IRequester):
 
     def getLootBoxesCountByType(self):
         raise NotImplementedError
+
+
+class IBaseSessionStats(object):
+
+    @property
+    def battleCnt(self):
+        raise NotImplementedError
+
+    @property
+    def incomeCredits(self):
+        raise NotImplementedError
+
+    @property
+    def xp(self):
+        raise NotImplementedError
+
+    @property
+    def incomeCrystal(self):
+        raise NotImplementedError
+
+    @property
+    def freeXP(self):
+        raise NotImplementedError
+
+    @property
+    def averageXp(self):
+        raise NotImplementedError
+
+    @property
+    def ratioDamage(self):
+        raise NotImplementedError
+
+    @property
+    def helpDamage(self):
+        raise NotImplementedError
+
+    @property
+    def ratioKill(self):
+        raise NotImplementedError
+
+    @property
+    def averageDamage(self):
+        raise NotImplementedError
+
+    @property
+    def blockedDamage(self):
+        raise NotImplementedError
+
+    @property
+    def winRatio(self):
+        raise NotImplementedError
+
+
+class IBaseAccountStats(IBaseSessionStats):
+
+    @property
+    def netCredits(self):
+        raise NotImplementedError
+
+    @property
+    def netCrystal(self):
+        raise NotImplementedError
+
+
+class IBaseVehStats(IBaseSessionStats):
+    pass
+
+
+class IRandomAccountStats(IBaseAccountStats):
+
+    @property
+    def wtr(self):
+        raise NotImplementedError
+
+
+class IRandomVehStats(IBaseVehStats):
+
+    @property
+    def wtr(self):
+        raise NotImplementedError
+
+
+class ISessionStatsRequester(IRequester):
+
+    def getAccountStats(self, arenaType):
+        raise NotImplementedError
+
+    def getVehiclesStats(self, arenaType, vehId):
+        raise NotImplementedError
+
+    def getStatsVehList(self, arenaType):
+        raise NotImplementedError
+
+    def getAccountWtr(self):
+        raise NotImplementedError

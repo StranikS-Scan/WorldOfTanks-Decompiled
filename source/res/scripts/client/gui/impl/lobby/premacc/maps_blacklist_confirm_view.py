@@ -26,7 +26,7 @@ class MapsBlacklistConfirmView(DialogWindow):
             self.__selectedMap = None
         return
 
-    def getSelectedMap(self):
+    def _getResultData(self):
         return self.__selectedMap
 
     def _initialize(self):
@@ -66,7 +66,7 @@ class MapsBlacklistConfirmDialogContent(DialogContent):
     __slots__ = ('__mapId', '__disabledMaps', '__cooldownTime')
 
     def __init__(self, mapId, disabledMaps, cooldownTime):
-        super(MapsBlacklistConfirmDialogContent, self).__init__(R.views.mapsBlacklistConfirmDialogContent(), MapsBlacklistConfirmDialogModel)
+        super(MapsBlacklistConfirmDialogContent, self).__init__(R.views.lobby.premacc.maps_blacklist.maps_blacklist_confirm_dialog.MapsBlacklistConfirmDialogContent(), MapsBlacklistConfirmDialogModel)
         self.__mapId = mapId
         self.__disabledMaps = disabledMaps
         self.__cooldownTime = cooldownTime

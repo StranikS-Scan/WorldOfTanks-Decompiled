@@ -4,7 +4,7 @@ import logging
 import Keys
 from gui.Scaleform.framework.entities.abstract.ToolTipMgrMeta import ToolTipMgrMeta
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
-from gui.impl.pub.tooltip_window import ToolTipWindow
+from gui.impl.backport.backport_tooltip import DecoratedTooltipWindow
 from gui.shared import events
 from gui.shared.tooltips import builders
 from gui import InputHandler
@@ -88,7 +88,7 @@ class ToolTip(ToolTipMgrMeta):
             else:
                 _logger.warning('Tooltip can not be displayed: type "%s" is not found', tooltipType)
                 return
-            window = ToolTipWindow(data.getDisplayableData(), None)
+            window = DecoratedTooltipWindow(data.getDisplayableData(), None)
             window.load()
             window.move(x, y)
             self.__tooltipWindowId = window.uniqueID

@@ -3,7 +3,7 @@
 from collections import Counter
 from soft_exception import SoftException
 from gui.shared.gui_items import GUI_ITEM_TYPE
-from gui.shared.gui_items.customization.containers import OutfitContainer, MultiSlot
+from gui.shared.gui_items.customization.containers import OutfitContainer, MultiSlot, SizableMultiSlot
 from gui.shared.gui_items.gui_item import HasStrCD
 from vehicle_systems.tankStructure import TankPartIndexes
 from items.components.c11n_constants import ApplyArea, CustomizationType, MAX_PROJECTION_DECALS
@@ -37,7 +37,10 @@ def scaffold():
       MultiSlot(slotTypes=(GUI_ITEM_TYPE.EMBLEM,), regions=ApplyArea.GUN_EMBLEM_REGIONS),
       MultiSlot(slotTypes=(GUI_ITEM_TYPE.INSCRIPTION, GUI_ITEM_TYPE.PERSONAL_NUMBER), regions=ApplyArea.GUN_INSCRIPTION_REGIONS),
       MultiSlot(slotTypes=(GUI_ITEM_TYPE.INSIGNIA,), regions=ApplyArea.GUN_INSIGNIA_REGIONS))),
-     OutfitContainer(areaID=Area.MISC, slots=(MultiSlot(slotTypes=(GUI_ITEM_TYPE.MODIFICATION,), regions=(ApplyArea.NONE,)), MultiSlot(slotTypes=(GUI_ITEM_TYPE.PROJECTION_DECAL,), regions=tuple(range(MAX_PROJECTION_DECALS))))))
+     OutfitContainer(areaID=Area.MISC, slots=(MultiSlot(slotTypes=(GUI_ITEM_TYPE.MODIFICATION,), regions=(ApplyArea.NONE,)),
+      MultiSlot(slotTypes=(GUI_ITEM_TYPE.PROJECTION_DECAL,), regions=tuple(range(MAX_PROJECTION_DECALS))),
+      SizableMultiSlot(slotTypes=(GUI_ITEM_TYPE.SEQUENCE,), regions=[]),
+      SizableMultiSlot(slotTypes=(GUI_ITEM_TYPE.ATTACHMENT,), regions=[]))))
 
 
 REGIONS_BY_SLOT_TYPE = {container.getAreaID():{slotType:slot.getRegions() for slot in container.slots() for slotType in slot.getTypes()} for container in scaffold()}
@@ -130,6 +133,10 @@ class Outfit(HasStrCD):
     @property
     def modelsSet(self):
         return self._styleDescr.modelsSet if self._styleDescr else ''
+
+    @property
+    def attachments(self):
+        return self.misc.slotFor(GUI_ITEM_TYPE.ATTACHMENT)
 
     @property
     def itemsCounter(self):

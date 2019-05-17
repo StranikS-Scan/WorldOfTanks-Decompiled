@@ -27,7 +27,7 @@ class RankedBattlesLeaguesView(RankedBattlesLeaguesViewMeta, IResetablePage):
         self.__setStatsData()
         self.__setBonusBattlesCount()
         self.__setEmptyLeagueAndPositionData()
-        self.rankedController.getLeagueProvider().forceUpdateLeague()
+        self.__setLeagueAndPositionData()
 
     def _dispose(self):
         g_clientUpdateManager.removeObjectCallbacks(self)

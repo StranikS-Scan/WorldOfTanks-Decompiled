@@ -433,6 +433,28 @@ class PersonalNumber(Customization):
         return super(PersonalNumber, self).icon if number == '' else personalNumIconTemplate(number, _PN_SWATCH_WIDTH, _PN_SWATCH_HEIGHT, self.fontInfo.texture, self.fontInfo.alphabet, self.fontInfo.mask)
 
 
+class Sequence(Customization):
+
+    def __init__(self, *args, **kwargs):
+        super(Sequence, self).__init__(*args, **kwargs)
+        self.itemTypeID = GUI_ITEM_TYPE.SEQUENCE
+
+    @property
+    def sequenceName(self):
+        return self.descriptor.sequenceName
+
+
+class Attachment(Customization):
+
+    def __init__(self, *args, **kwargs):
+        super(Attachment, self).__init__(*args, **kwargs)
+        self.itemTypeID = GUI_ITEM_TYPE.ATTACHMENT
+
+    @property
+    def modelName(self):
+        return self.descriptor.modelName
+
+
 class Style(Customization):
     __slots__ = ('_outfits',)
 

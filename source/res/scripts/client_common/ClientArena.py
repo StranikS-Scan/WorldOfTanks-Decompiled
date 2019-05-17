@@ -156,9 +156,7 @@ class ClientArena(object):
         vehs.clear()
         for infoAsTuple in vehiclesList:
             vehID, info = self.__vehicleInfoAsDict(infoAsTuple)
-            vehs[vehID] = info
-            if IS_CLIENT and info['accountDBID'] <= 0:
-                info['name'] = preprocessBotName(info['name'])
+            vehs[vehID] = self.__preprocessVehicleInfo(info)
 
         self.__rebuildIndexToId()
         self.onNewVehicleListReceived()
@@ -166,14 +164,14 @@ class ClientArena(object):
     def __onVehicleAddedUpdate(self, argStr):
         infoAsTuple = cPickle.loads(zlib.decompress(argStr))
         vehID, info = self.__vehicleInfoAsDict(infoAsTuple)
-        self.__vehicles[vehID] = info
+        self.__vehicles[vehID] = self.__preprocessVehicleInfo(info)
         self.__rebuildIndexToId()
         self.onVehicleAdded(vehID)
 
     def __onVehicleUpdatedUpdate(self, argStr):
         infoAsTuple = cPickle.loads(zlib.decompress(argStr))
         vehID, info = self.__vehicleInfoAsDict(infoAsTuple)
-        self.__vehicles[vehID] = info
+        self.__vehicles[vehID] = self.__preprocessVehicleInfo(info)
         self.onVehicleUpdated(vehID)
 
     def __onPeriodInfoUpdate(self, argStr):
@@ -299,6 +297,12 @@ class ClientArena(object):
 
     def __vehicleStatisticsAsDict(self, stats):
         return (stats[0], {'frags': stats[1]})
+
+    @staticmethod
+    def __preprocessVehicleInfo(info):
+        if IS_CLIENT and info['accountDBID'] <= 0:
+            info['name'] = preprocessBotName(info['name'])
+        return info
 
 
 def _convertToList(vec4):

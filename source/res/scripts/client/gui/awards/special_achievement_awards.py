@@ -6,16 +6,12 @@ from gui.Scaleform.locale.CREW_SKINS import CREW_SKINS
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.daapi.view.lobby.PersonalCaseConstants import TABS
-from gui.impl import backport
-from gui.impl.gen import R
 from gui.referral_program import REFERRAL_PROGRAM_SOUNDS
 from gui.server_events.awards import AwardAbstract, ExplosionBackAward
-from gui.server_events.events_dispatcher import showMissionsMarathon
 from gui.shared import event_dispatcher as shared_events, EVENT_BUS_SCOPE
 from gui.shared.event_dispatcher import showReferralProgramWindow
 from gui.shared.formatters import text_styles
 from gui.shared.gui_items.Vehicle import sortCrew
-from gui.shared.gui_items.dossier.achievements.abstract import RegularAchievement
 from helpers import dependency
 from helpers import i18n
 from skeletons.gui.lobby_context import ILobbyContext
@@ -304,24 +300,3 @@ class RecruiterAward(ExplosionBackAward):
 
     def getSound(self):
         return REFERRAL_PROGRAM_SOUNDS.RECRUITER_AWARD
-
-
-class DdayAward(ExplosionBackAward):
-
-    def getWindowTitle(self):
-        return backport.text(R.strings.menu.awardWindow.ddayMedal.title())
-
-    def getAwardImage(self):
-        return '%s/%s.png' % (RegularAchievement.ICON_PATH_180X180, 'DdaymarathonMedal')
-
-    def getHeader(self):
-        return text_styles.highTitle(text_styles.alignText(backport.text(R.strings.menu.awardWindow.ddayMedal.header()), 'left'))
-
-    def getOkButtonText(self):
-        return backport.text(R.strings.menu.awardWindow.ddayMedal.okButton())
-
-    def getDescription(self):
-        return text_styles.main(text_styles.alignText(backport.text(R.strings.menu.awardWindow.ddayMedal.description(), bonuses=text_styles.stats(backport.text(R.strings.menu.awardWindow.ddayMedal.bonuses()))), 'left'))
-
-    def handleOkButton(self):
-        showMissionsMarathon()

@@ -10,7 +10,7 @@ class MakeStrongholdsUnavailable(aop.Aspect):
     def atCall(self, cd):
         cd.avoid()
         tooltip = TOOLTIPS.HEADER_BUTTONS_FORTS_SANDBOX_TURNEDOFF
-        return {'label': MENU.HEADERBUTTONS_STRONGHOLD,
+        return {'label': MENU.HEADERBUTTONS_CLAN,
          'value': VIEW_ALIAS.LOBBY_STRONGHOLD,
          'tooltip': tooltip,
          'enabled': False}

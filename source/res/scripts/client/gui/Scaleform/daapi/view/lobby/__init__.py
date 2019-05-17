@@ -74,7 +74,6 @@ def getViewSettings():
     from gui.Scaleform.daapi.view.lobby.vehiclePreview.VehiclePreview import VehiclePreview
     from gui.Scaleform.daapi.view.lobby.vehiclePreview20.vehicle_preview_20 import VehiclePreview20
     from gui.Scaleform.daapi.view.lobby.epicBattle.frontline_vehicle_preview_20 import FrontLineVehiclePreview20
-    from gui.Scaleform.daapi.view.lobby.vehiclePreview20.marathon_vehicle_preview_20 import MarathonVehiclePreview20
     from gui.Scaleform.daapi.view.lobby.vehicle_compare.cmp_view import VehicleCompareView
     from gui.Scaleform.daapi.view.lobby.vehicle_compare.cmp_configurator_view import VehicleCompareConfiguratorMain
     from gui.Scaleform.daapi.view.meta.MiniClientComponentMeta import MiniClientComponentMeta
@@ -95,13 +94,11 @@ def getViewSettings():
      ViewSettings(VIEW_ALIAS.VEHICLE_PREVIEW_20, VehiclePreview20, 'vehiclePreview20.swf', ViewTypes.LOBBY_SUB, VIEW_ALIAS.VEHICLE_PREVIEW_20, ScopeTemplates.LOBBY_SUB_SCOPE),
      ViewSettings(VIEW_ALIAS.HERO_VEHICLE_PREVIEW_20, VehiclePreview20, 'vehiclePreview20.swf', ViewTypes.LOBBY_SUB, VIEW_ALIAS.HERO_VEHICLE_PREVIEW_20, ScopeTemplates.LOBBY_SUB_SCOPE),
      ViewSettings(VIEW_ALIAS.FRONTLINE_VEHICLE_PREVIEW_20, FrontLineVehiclePreview20, 'vehiclePreview20.swf', ViewTypes.LOBBY_SUB, VIEW_ALIAS.FRONTLINE_VEHICLE_PREVIEW_20, ScopeTemplates.LOBBY_SUB_SCOPE),
-     ViewSettings(VIEW_ALIAS.MARATHON_VEHICLE_PREVIEW_20, MarathonVehiclePreview20, 'vehiclePreview20.swf', ViewTypes.LOBBY_SUB, VIEW_ALIAS.MARATHON_VEHICLE_PREVIEW_20, ScopeTemplates.LOBBY_SUB_SCOPE),
      ViewSettings(VIEW_ALIAS.STYLE_PREVIEW, VehicleStylePreview, 'vehicleBasePreview.swf', ViewTypes.LOBBY_SUB, VIEW_ALIAS.STYLE_PREVIEW, ScopeTemplates.LOBBY_SUB_SCOPE),
      ViewSettings(VIEW_ALIAS.IMAGE_VIEW, ImageView, 'imageView.swf', ViewTypes.OVERLAY, VIEW_ALIAS.IMAGE_VIEW, ScopeTemplates.LOBBY_TOP_SUB_SCOPE, True),
      ViewSettings(VIEW_ALIAS.VEHICLE_COMPARE, VehicleCompareView, 'vehicleCompareView.swf', ViewTypes.LOBBY_SUB, VIEW_ALIAS.VEHICLE_COMPARE, ScopeTemplates.LOBBY_SUB_SCOPE),
      ViewSettings(VIEW_ALIAS.VEHICLE_COMPARE_MAIN_CONFIGURATOR, VehicleCompareConfiguratorMain, 'vehicleCompareConfiguratorMain.swf', ViewTypes.LOBBY_SUB, VIEW_ALIAS.VEHICLE_COMPARE_MAIN_CONFIGURATOR, ScopeTemplates.LOBBY_SUB_SCOPE),
-     ViewSettings(VIEW_ALIAS.BROWSER_LOBBY_TOP_SUB, WebOverlayBase, 'ingameShopView.swf', ViewTypes.LOBBY_TOP_SUB, VIEW_ALIAS.BROWSER_LOBBY_TOP_SUB, ScopeTemplates.LOBBY_SUB_SCOPE),
-     ViewSettings(VIEW_ALIAS.BROWSER_OVERLAY, WebOverlayBase, 'ingameShopView.swf', ViewTypes.OVERLAY, VIEW_ALIAS.BROWSER_OVERLAY, ScopeTemplates.LOBBY_SUB_SCOPE),
+     ViewSettings(VIEW_ALIAS.OVERLAY_BROWSER_VIEW, WebOverlayBase, 'ingameShopView.swf', ViewTypes.LOBBY_TOP_SUB, VIEW_ALIAS.OVERLAY_BROWSER_VIEW, ScopeTemplates.LOBBY_SUB_SCOPE),
      GroupedViewSettings(VIEW_ALIAS.CHECK_BOX_DIALOG, CheckBoxDialog, 'confirmDialog.swf', ViewTypes.TOP_WINDOW, 'confirmDialog', None, ScopeTemplates.DYNAMIC_SCOPE, isModal=True, canDrag=False),
      GroupedViewSettings(VIEW_ALIAS.CONFIRM_MODULE_DIALOG, ConfirmModuleDialog, 'confirmModuleWindow.swf', ViewTypes.TOP_WINDOW, 'confirmModuleDialog', None, ScopeTemplates.DEFAULT_SCOPE, isModal=True, canDrag=False),
      GroupedViewSettings(VIEW_ALIAS.USE_FREEW_AWARD_SHEET_DIALOG, UseAwardSheetWindow, 'useAwardSheetWindow.swf', ViewTypes.TOP_WINDOW, 'useAwardSheetWindow', None, ScopeTemplates.DEFAULT_SCOPE, isModal=True, canDrag=False),
@@ -171,8 +168,6 @@ class LobbyPackageBusinessHandler(PackageBusinessHandler):
          (VIEW_ALIAS.BATTLE_RESULTS, self.loadViewByCtxEvent),
          (VIEW_ALIAS.BROWSER_WINDOW, self.loadViewByCtxEvent),
          (VIEW_ALIAS.BROWSER_WINDOW_MODAL, self.loadViewByCtxEvent),
-         (VIEW_ALIAS.BROWSER_LOBBY_TOP_SUB, self.loadViewByCtxEvent),
-         (VIEW_ALIAS.BROWSER_OVERLAY, self.loadViewByCtxEvent),
          (VIEW_ALIAS.DEMONSTRATOR_WINDOW, self.loadViewByCtxEvent),
          (VIEW_ALIAS.ELITE_WINDOW, self.loadViewByCtxEvent),
          (VIEW_ALIAS.GOLD_FISH_WINDOW, self.loadViewByCtxEvent),
@@ -187,7 +182,6 @@ class LobbyPackageBusinessHandler(PackageBusinessHandler):
          (VIEW_ALIAS.HERO_VEHICLE_PREVIEW, self.loadViewByCtxEvent),
          (VIEW_ALIAS.HERO_VEHICLE_PREVIEW_20, self.loadViewByCtxEvent),
          (VIEW_ALIAS.FRONTLINE_VEHICLE_PREVIEW_20, self.loadViewByCtxEvent),
-         (VIEW_ALIAS.MARATHON_VEHICLE_PREVIEW_20, self.loadViewByCtxEvent),
          (VIEW_ALIAS.VEHICLE_COMPARE, self.loadViewByCtxEvent),
          (VIEW_ALIAS.VEHICLE_COMPARE_MAIN_CONFIGURATOR, self.loadViewByCtxEvent),
          (VIEW_ALIAS.LOBBY_MENU, self.loadViewByCtxEvent),

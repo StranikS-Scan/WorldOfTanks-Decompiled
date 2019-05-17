@@ -7,8 +7,8 @@
     <loader></loader>
   </crew>
   <speedLimits>
-    <forward>	47.6	</forward>
-    <backward>	20	</backward>
+    <forward>	45	</forward>
+    <backward>	23	</backward>
   </speedLimits>
   <invisibility>
     <moving>	0.102	</moving>
@@ -28,11 +28,11 @@
     <armor>
       <armor_1>	55	</armor_1>
       <armor_2>	50	</armor_2>
-      <armor_3>	30	</armor_3>
+      <armor_3>	45	</armor_3>
       <armor_4>	25	</armor_4>
       <armor_5>	20	</armor_5>
-      <armor_6>	35	</armor_6>
-      <armor_7>	35	</armor_7>
+      <armor_6>	45	</armor_6>
+      <armor_7>	45	</armor_7>
       <armor_8>	12	</armor_8>
       <armor_9>	12	</armor_9>
       <armor_10>	10	</armor_10>
@@ -44,7 +44,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_7 armor_4	</primaryArmor>
     <weight>	11100	</weight>
-    <maxHealth>	1280	</maxHealth>
+    <maxHealth>	1400	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	240	</maxHealth>
       <maxRegenHealth>	160	</maxRegenHealth>
@@ -126,10 +126,10 @@
       <terrainResistance>	1.1 1.2 2.4	</terrainResistance>
       <brakeForce>	35000	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
-      <rotationSpeed>	44	</rotationSpeed>
+      <rotationSpeed>	46	</rotationSpeed>
       <shotDispersionFactors>
-        <vehicleMovement>	0.16	</vehicleMovement>
-        <vehicleRotation>	0.16	</vehicleRotation>
+        <vehicleMovement>	0.13	</vehicleMovement>
+        <vehicleRotation>	0.13	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
       <maxHealth>	230	</maxHealth>
@@ -803,10 +803,10 @@
       <terrainResistance>	1 1.1 2.2	</terrainResistance>
       <brakeForce>	38500	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
-      <rotationSpeed>	48	</rotationSpeed>
+      <rotationSpeed>	50	</rotationSpeed>
       <shotDispersionFactors>
-        <vehicleMovement>	0.14	</vehicleMovement>
-        <vehicleRotation>	0.14	</vehicleRotation>
+        <vehicleMovement>	0.1	</vehicleMovement>
+        <vehicleRotation>	0.1	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
       <maxHealth>	240	</maxHealth>
@@ -1513,11 +1513,11 @@
       <guns>
         <_90mm_Gun_Type61>	shared	  <maxAmmo>	50	</maxAmmo>
           <armor>
-            <armor_1>	124	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_1>	230	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_1>
-            <armor_2>	90	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_2>	160	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_2>
-            <armor_3>	40	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_3>	75	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_3>
             <armor_4>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_4>
@@ -1671,27 +1671,27 @@
         </gun>
       </unlocks>
       <armor>
-        <armor_1>	70	</armor_1>
-        <armor_2>	60	</armor_2>
-        <armor_3>	60	</armor_3>
+        <armor_1>	85	</armor_1>
+        <armor_2>	100	</armor_2>
+        <armor_3>	80	</armor_3>
         <armor_4>	35	</armor_4>
-        <armor_5>	40	</armor_5>
+        <armor_5>	80	</armor_5>
         <armor_6>	0	</armor_6>
         <armor_7>	60	</armor_7>
         <armor_8>	40	</armor_8>
         <armor_9>	18	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
         </armor_9>
-        <armor_10>	40	</armor_10>
+        <armor_10>	55	</armor_10>
         <armor_11>	18	</armor_11>
-        <armor_12>	45	</armor_12>
-        <armor_13>	18	</armor_13>
+        <armor_12>	65	</armor_12>
+        <armor_13>	30	</armor_13>
         <armor_14>	18	</armor_14>
         <armor_15>	45	</armor_15>
         <armor_16>	18	</armor_16>
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	8300	</weight>
-      <maxHealth>	420	</maxHealth>
+      <maxHealth>	350	</maxHealth>
       <rotationSpeed>	42	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	150	</maxHealth>
@@ -1708,11 +1708,11 @@
       <guns>
         <_90mm_Gun_Type61>	shared	  <maxAmmo>	50	</maxAmmo>
           <armor>
-            <armor_1>	124	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_1>	230	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_1>
-            <armor_2>	90	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_2>	160	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_2>
-            <armor_3>	40	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_3>	75	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_3>
             <armor_4>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_4>
@@ -1783,11 +1783,11 @@
             </vehicle>
           </unlocks>
           <armor>
-            <armor_1>	124	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_1>	230	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_1>
-            <armor_2>	90	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_2>	160	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_2>
-            <armor_3>	40	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_3>	75	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_3>
             <armor_4>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_4>
@@ -1797,14 +1797,14 @@
             <minPitch>	0 -13 1 -13	</minPitch>
             <maxPitch>	0 10 0.430556 10 0.444444 3 0.555556 3 0.569445 10 1 10	</maxPitch>
           </pitchLimits>
-          <shotDispersionRadius>	0.36	</shotDispersionRadius>
-          <reloadTime>	10	</reloadTime>
+          <shotDispersionRadius>	0.38	</shotDispersionRadius>
+          <reloadTime>	8.2	</reloadTime>
           <shotDispersionFactors>
-            <turretRotation>	0.14	</turretRotation>
+            <turretRotation>	0.11	</turretRotation>
             <afterShot>	4.0	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
-          <aimingTime>	2.3	</aimingTime>
+          <aimingTime>	2.1	</aimingTime>
           <invisibilityFactorAtShot>	0.209	</invisibilityFactorAtShot>
           <models>
             <undamaged>	vehicles/japan/J14_Type_61/normal/lod0/Gun_03.model	</undamaged>
@@ -1955,12 +1955,12 @@
     <detailed>
       <engines>
         <_Mitsubishi_12HM20WT>
-          <smplEnginePower>	602.6503	</smplEnginePower>
-          <smplFwMaxSpeed>	47.6	</smplFwMaxSpeed>
+          <smplEnginePower>	650	</smplEnginePower>
+          <smplFwMaxSpeed>	45	</smplFwMaxSpeed>
         </_Mitsubishi_12HM20WT>
         <_Mitsubishi_12HM21WT>
-          <smplEnginePower>	638.5978	</smplEnginePower>
-          <smplFwMaxSpeed>	47.6	</smplFwMaxSpeed>
+          <smplEnginePower>	750	</smplEnginePower>
+          <smplFwMaxSpeed>	45	</smplFwMaxSpeed>
         </_Mitsubishi_12HM21WT>
       </engines>
       <chassis>

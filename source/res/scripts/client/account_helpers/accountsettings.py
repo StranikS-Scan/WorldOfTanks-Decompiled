@@ -51,10 +51,8 @@ IGR_PROMO = 'IGR_PROMO'
 PROMO = 'PROMO'
 AWARDS = 'awards'
 CONTACTS = 'CONTACTS'
-BOOSTERS = 'BOOSTERS'
 FALLOUT_VEHICLES = 'FALLOUT_VEHICLES'
-MARATHON_REWARD_VIDEO_WAS_SHOWN = 'marathonRewardVideoWasShown'
-MARATHON_REWARD_SCREEN_WAS_SHOWN = 'marathonRewardScreenWasShown'
+MARATHON_REWARD_WAS_SHOWN = 'marathonRewardWasShown'
 GOLD_FISH_LAST_SHOW_TIME = 'goldFishWindowShowCooldown'
 BOOSTERS_FILTER = 'boostersFilter'
 LAST_PROMO_PATCH_VERSION = 'lastPromoPatchVersion'
@@ -75,6 +73,7 @@ SHOW_CRYSTAL_HEADER_BAND = 'showCrystalHeaderBand'
 ELEN_NOTIFICATIONS = 'elenNotifications'
 RECRUIT_NOTIFICATIONS = 'recruitNotifications'
 SPEAKERS_DEVICE = 'speakersDevice'
+SESSION_STATS_PREV_BATTLE_COUNT = 'sessionStatsPrevBattleCnt'
 DEFAULT_QUEUE = 'defaultQueue'
 STORE_TAB = 'store_tab'
 STATS_REGULAR_SORTING = 'statsSorting'
@@ -95,6 +94,8 @@ CUSTOMIZATION_SECTION = 'customization'
 PROJECTION_DECAL_TAB_SHOWN_FIELD = CUSTOMIZATION_ALIASES.PROJECTION_DECAL_TAB_SHOWN_FIELD
 USER_NUMBER_TAB_SHOWN_FIELD = CUSTOMIZATION_ALIASES.USER_NUMBER_TAB_SHOWN_FIELD
 CAROUSEL_ARROWS_HINT_SHOWN_FIELD = 'isCarouselsArrowsHintShown'
+SESSION_STATS_SECTION = 'sessionStats'
+BATTLE_EFFICIENCY_SECTION_EXPANDED_FIELD = 'battleEfficiencySectionExpanded'
 SIEGE_HINT_SECTION = 'siegeModeHint'
 WHEELED_MODE_HINT_SECTION = 'wheeledModeScreenHint'
 TRAJECTORY_VIEW_HINT_SECTION = 'trajectoryViewHint'
@@ -297,11 +298,9 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                                     'lastShownEpicWelcomeScreen': 0},
                EULA_VERSION: {'version': 0},
                LINKEDSET_QUESTS: {'shown': 0},
-               MARATHON_REWARD_VIDEO_WAS_SHOWN: False,
-               MARATHON_REWARD_SCREEN_WAS_SHOWN: False,
+               MARATHON_REWARD_WAS_SHOWN: False,
                FORT_MEMBER_TUTORIAL: {'wasShown': False},
                IGR_PROMO: {'wasShown': False},
-               BOOSTERS: {'wasShown': False},
                CONTACTS: {'showOfflineUsers': True,
                           'showOthersCategory': True},
                GOLD_FISH_LAST_SHOW_TIME: 0,
@@ -471,6 +470,7 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                 'checkBoxConfirmator': {'questsConfirmDialogShow': True,
                                         'questsConfirmDialogShowPM2': True},
                 CUSTOMIZATION_SECTION: {},
+                SESSION_STATS_SECTION: {BATTLE_EFFICIENCY_SECTION_EXPANDED_FIELD: False},
                 'showVehModelsOnMap': 0,
                 'battleLoadingInfo': 1,
                 'battleLoadingRankedInfo': 1,
@@ -597,7 +597,8 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                         'storage_modules': {'filterMask': 0,
                                             'vehicleCD': None},
                         'storage_reserves': {'filterMask': 0},
-                        LAST_STORAGE_VISITED_TIMESTAMP: -1}}
+                        LAST_STORAGE_VISITED_TIMESTAMP: -1,
+                        SESSION_STATS_PREV_BATTLE_COUNT: 0}}
 
 def _filterAccountSection(dataSec):
     for key, section in dataSec.items()[:]:

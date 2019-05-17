@@ -9,7 +9,7 @@ class ModelStates(object):
     EXPLODED = 'exploded'
 
 
-ModelsSetParams = namedtuple('ModelsSetParams', ('skin', 'state'))
+ModelsSetParams = namedtuple('ModelsSetParams', ('skin', 'state', 'attachments'))
 
 class TankPartNames(object):
     CHASSIS = 'chassis'

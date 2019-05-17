@@ -11,7 +11,7 @@ class PremDashboardDoubleExperienceCard(DailyExperienceBaseView):
     __slots__ = ()
 
     def __init__(self, *args, **kwargs):
-        super(PremDashboardDoubleExperienceCard, self).__init__(R.views.premDashboardDoubleExperienceCard(), ViewFlags.VIEW, PremDashboardDoubleExperienceCardModel)
+        super(PremDashboardDoubleExperienceCard, self).__init__(R.views.lobby.premacc.dashboard.prem_dashboard_double_experience_card.PremDashboardDoubleExperienceCard(), ViewFlags.VIEW, PremDashboardDoubleExperienceCardModel)
 
     def onGoToDoubleExpView(self, args=None):
         showDailyExpPageView()

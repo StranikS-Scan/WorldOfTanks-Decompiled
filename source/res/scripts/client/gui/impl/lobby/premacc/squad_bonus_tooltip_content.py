@@ -17,7 +17,7 @@ class SquadBonusTooltipContent(View):
     __eventsCache = dependency.descriptor(IEventsCache)
 
     def __init__(self, *args, **kwargs):
-        super(SquadBonusTooltipContent, self).__init__(R.views.squadBonusTooltipContent(), ViewFlags.COMPONENT, SquadBonusTooltipContentModel, *args, **kwargs)
+        super(SquadBonusTooltipContent, self).__init__(R.views.lobby.premacc.squad_bonus_tooltip_content.SquadBonusTooltipContent(), ViewFlags.COMPONENT, SquadBonusTooltipContentModel, *args, **kwargs)
 
     @property
     def viewModel(self):

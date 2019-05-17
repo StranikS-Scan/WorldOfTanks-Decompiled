@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client/gui/game_control/AwardController.py
 import types
 import weakref
+import logging
 from itertools import ifilter
 from abc import ABCMeta, abstractmethod
 from copy import deepcopy
@@ -14,7 +15,6 @@ from account_helpers.settings_core.settings_constants import SOUND
 from account_shared import getFairPlayViolationName
 from chat_shared import SYS_MESSAGE_TYPE
 from constants import EVENT_TYPE, INVOICE_ASSET, PREMIUM_TYPE
-from debug_utils import LOG_ERROR, LOG_DEBUG
 from dossiers2.custom.records import DB_ID_TO_RECORD
 from dossiers2.ui.layouts import PERSONAL_MISSIONS_GROUP
 from gui import DialogsInterface
@@ -59,6 +59,8 @@ from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.sounds import ISoundsController
 from gui.awards.event_dispatcher import showCrewSkinAward
+from gui.impl.auxiliary.rewards_helper import getProgressiveRewardBonuses
+_logger = logging.getLogger(__name__)
 
 class AwardController(IAwardController, IGlobalListener):
     bootcampController = dependency.descriptor(IBootcampController)
@@ -92,8 +94,7 @@ class AwardController(IAwardController, IGlobalListener):
          EliteWindowHandler(self),
          LootBoxByInvoiceHandler(self),
          ProgressiveRewardHandler(self),
-         PiggyBankOpenHandler(self),
-         DdayHandler(self)]
+         PiggyBankOpenHandler(self)]
         super(AwardController, self).__init__()
         self.__delayedHandlers = []
         self.__isLobbyLoaded = False
@@ -110,13 +111,13 @@ class AwardController(IAwardController, IGlobalListener):
         if self.canShow():
             handler(ctx)
         else:
-            LOG_DEBUG('Postponed award call:', handler, ctx)
+            _logger.debug('Postponed award call: %s, %s', handler, ctx)
             self.__delayedHandlers.append((handler, ctx))
 
     def handlePostponed(self, *args):
         if self.canShow():
             for handler, ctx in self.__delayedHandlers:
-                LOG_DEBUG('Calling postponed award handler:', handler, ctx)
+                _logger.debug('Calling postponed award handler: %s, %s', handler, ctx)
                 handler(ctx)
 
             self.__delayedHandlers = []
@@ -203,7 +204,7 @@ class ServiceChannelHandler(AwardHandler):
 
     def _needToShowAward(self, ctx):
         _, message = ctx
-        return message is not None and message.type == self.__type and message.data is not None
+        return message is not None and message.type == self.__type and message.data is not None and message.data
 
 
 class MultiTypeServiceChannelHandler(ServiceChannelHandler):
@@ -231,7 +232,7 @@ class EliteWindowHandler(AwardHandler):
         g_playerEvents.onVehicleBecomeElite -= self.handle
 
     def _needToShowAward(self, ctx):
-        return self.__gui.windowsManager.getViewByLayoutID(R.views.blueprintScreen()) is None
+        return self.__gui.windowsManager.getViewByLayoutID(R.views.lobby.blueprints.blueprint_screen.blueprint_screen.BlueprintScreen()) is None
 
     def _showAward(self, ctx):
         vehTypeCompDescrs = ctx
@@ -275,7 +276,7 @@ class PersonalMissionBonusHandler(ServiceChannelHandler):
         super(PersonalMissionBonusHandler, self).__init__(SYS_MESSAGE_TYPE.potapovQuestBonus.index(), awardCtrl)
 
     def _showAward(self, ctx):
-        LOG_DEBUG('Show personal mission bonus award!', ctx)
+        _logger.debug('Show personal mission bonus award! %s', ctx)
         data = ctx[1].data
         achievements = []
         for recordIdx, value in data.get('popUpRecords', []):
@@ -556,10 +557,10 @@ class BoosterAfterBattleAwardHandler(ServiceChannelHandler):
         return
 
 
-class BattleQuestsAutoWindowHandler(ServiceChannelHandler):
+class BattleQuestsAutoWindowHandler(MultiTypeServiceChannelHandler):
 
     def __init__(self, awardCtrl):
-        super(BattleQuestsAutoWindowHandler, self).__init__(SYS_MESSAGE_TYPE.battleResults.index(), awardCtrl)
+        super(BattleQuestsAutoWindowHandler, self).__init__((SYS_MESSAGE_TYPE.battleResults.index(), SYS_MESSAGE_TYPE.personalMissionRebalance.index()), awardCtrl)
 
     def _showAward(self, ctx):
         _, message = ctx
@@ -967,7 +968,7 @@ class TelecomHandler(ServiceChannelHandler):
         if vehicleDesrs:
             shared_events.showTelecomAward(vehicleDesrs, hasCrew, hasBrotherhood)
         else:
-            LOG_ERROR("Can't show telecom award window!")
+            _logger.error("Can't show telecom award window!")
 
 
 class RankedQuestsHandler(MultiTypeServiceChannelHandler):
@@ -1056,12 +1057,11 @@ class ProgressiveRewardHandler(ServiceChannelHandler):
 
     def _showAward(self, ctx):
         _, message = ctx
-        if message.data:
-            self._showWindow(message.data['rewards'], message.data['level'])
-
-    @staticmethod
-    def _showWindow(rewards, currentStep):
-        showProgressiveRewardAwardWindow(rewards, currentStep)
+        bonuses, specialRewardType = getProgressiveRewardBonuses(message.data['rewards'])
+        if bonuses:
+            showProgressiveRewardAwardWindow(bonuses, specialRewardType, message.data['level'])
+        else:
+            _logger.error("Can't show empty or invalid reward!")
 
 
 def _getBlueprintActualBonus(data, quest):
@@ -1071,32 +1071,3 @@ def _getBlueprintActualBonus(data, quest):
         actualQuest.getData()['bonus'].update({'blueprints': blueprintActualBonus})
         return actualQuest
     return quest
-
-
-class DdayHandler(ServiceChannelHandler):
-
-    def __init__(self, awardCtrl):
-        super(DdayHandler, self).__init__(SYS_MESSAGE_TYPE.battleResults.index(), awardCtrl)
-
-    def _needToShowAward(self, ctx):
-        if not super(DdayHandler, self)._needToShowAward(ctx):
-            return False
-        else:
-            _, message = ctx
-            dossier = message.data.get('dossier', None)
-            if dossier is None:
-                return False
-            record = None
-            neededKey = ('singleAchievements', 'DdaymarathonMedal')
-            for _, value in dossier.iteritems():
-                if neededKey in value:
-                    record = value.get(neededKey, None)
-                    break
-
-            if record is None:
-                return False
-            value = record.get('value', None)
-            return bool(value) and value == 1
-
-    def _showAward(self, ctx):
-        shared_events.showDdayAward()

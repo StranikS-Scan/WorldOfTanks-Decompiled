@@ -13,7 +13,7 @@ _logger = logging.getLogger(__name__)
 class PremDashboardPiggyBankCard(PiggyBankBaseView):
 
     def __init__(self, *args, **kwargs):
-        super(PremDashboardPiggyBankCard, self).__init__(R.views.premDashboardPiggyBankCard(), ViewFlags.VIEW, PremDashboardPiggyBankCardModel)
+        super(PremDashboardPiggyBankCard, self).__init__(R.views.lobby.premacc.dashboard.prem_dashboard_piggy_bank_card.PremDashboardPiggyBankCard(), ViewFlags.VIEW, PremDashboardPiggyBankCardModel)
 
     def onGoToPiggyView(self, args=None):
         if self._config.get('enabled', False):

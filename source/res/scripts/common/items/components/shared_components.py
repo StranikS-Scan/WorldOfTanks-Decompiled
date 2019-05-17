@@ -23,6 +23,7 @@ MaterialInfo = namedtuple('MaterialInfo', ('kind', 'armor', 'extra', 'multipleEx
 DEFAULT_MATERIAL_INFO = MaterialInfo(0, 0, None, False, 0.0, False, False, False, False, False, False, False, 0, 0.0, 0.0, False)
 EmblemSlot = namedtuple('EmblemSlot', ('rayStart', 'rayEnd', 'rayUp', 'size', 'hideIfDamaged', 'type', 'isMirrored', 'isUVProportional', 'emblemId', 'slotId', 'applyToFabric'))
 CustomizationSlotDescription = namedtuple('CustomizationSlotDescription', ('type', 'slotId', 'anchorPosition', 'anchorDirection', 'applyTo', 'position', 'rotation', 'scale', 'scaleFactors', 'doubleSided', 'showOn', 'tags', 'parentSlotId', 'clipAngle', 'attachedParts'))
+MiscSlot = namedtuple('MiscSlot', ('type', 'slotId', 'position', 'rotation', 'attachNode'))
 LodSettings = namedtuple('LodSettings', ('maxLodDistance', 'maxPriority'))
 NodesAndGroups = namedtuple('NodesAndGroups', ('nodes', 'groups', 'activePostmortem', 'lodSettings'))
 Camouflage = namedtuple('Camouflage', ('tiling', 'exclusionMask'))

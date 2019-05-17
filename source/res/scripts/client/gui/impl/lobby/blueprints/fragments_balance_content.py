@@ -23,7 +23,7 @@ class FragmentsBalanceContent(ViewImpl):
     __slots__ = ('__vehicle',)
 
     def __init__(self, vehicleCD, *args, **kwargs):
-        super(FragmentsBalanceContent, self).__init__(R.views.fragmentsBalanceContent(), ViewFlags.VIEW, CommonBalanceContentModel, *args, **kwargs)
+        super(FragmentsBalanceContent, self).__init__(R.views.lobby.blueprints.fragments_balance_content.FragmentsBalanceContent(), ViewFlags.VIEW, CommonBalanceContentModel, *args, **kwargs)
         self.__vehicle = self.__itemsCache.items.getItemByCD(vehicleCD)
 
     @property
@@ -31,7 +31,7 @@ class FragmentsBalanceContent(ViewImpl):
         return super(FragmentsBalanceContent, self).getViewModel()
 
     def createToolTip(self, event):
-        if event.contentID == R.views.backportTooltipContent():
+        if event.contentID == R.views.common.tooltip_window.backport_tooltip_content.BackportTooltipContent():
             tooltipId = event.getArgument('tooltipId')
             fragmentCD = int(event.getArgument('fragmentCD'))
             tooltipData = self.__getTooltipData(tooltipId, fragmentCD)

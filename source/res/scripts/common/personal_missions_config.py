@@ -1,8 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/personal_missions_config.py
-from personal_missions_constants import PROGRESS_TEMPLATE, CONDITION_ICON, VISIBLE_SCOPE, MULTIPLIER_TYPE
-from personal_missions_constants import TARGET_NATIONS, DESCRIPTIONS, DISPLAY_TYPE, CRIT_TYPES
 from constants import ASSIST_TYPES
+from personal_missions_constants import TARGET_NATIONS, DESCRIPTIONS, DISPLAY_TYPE, CRIT_TYPES
+from personal_missions_constants import PROGRESS_TEMPLATE, CONDITION_ICON, VISIBLE_SCOPE, MULTIPLIER_TYPE
 _config = {'regular_1_1_1': {'win': {'type': PROGRESS_TEMPLATE.BINARY,
                            'config': {'isMain': True,
                                       'isAward': True,
@@ -9065,6 +9065,7 @@ _config = {'regular_1_1_1': {'win': {'type': PROGRESS_TEMPLATE.BINARY,
                                                 'visibleScope': [VISIBLE_SCOPE.BATTLE, VISIBLE_SCOPE.HANGAR],
                                                 'isCumulative': True},
                                      'description': DESCRIPTIONS.HEADER(displayType=DISPLAY_TYPE.BIATHLON)}}}
+PM2_VERSION = hash(str(_config))
 
 def getQuestConfig(questID):
     return _config.get(questID, {})

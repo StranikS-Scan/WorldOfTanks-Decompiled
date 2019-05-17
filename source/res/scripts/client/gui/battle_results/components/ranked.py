@@ -230,6 +230,8 @@ class RankedChangesInfoHelper(RankedInfoHelper):
         winKey = 'win' if isWin else 'lose'
         topKey = 'inTop' if topNumber >= position else 'notInTop'
         description = backport.text(R.strings.ranked_battles.battleresult.dyn(topKey).dyn(winKey)(), topNumber=topNumber)
+        if topNumber == 1:
+            description = backport.text(R.strings.ranked_battles.battleresult.first.dyn(topKey).dyn(winKey)())
         if rankInfo.isBonusBattle:
             description = text_styles.concatStylesToSingleLine(description, backport.text(R.strings.ranked_battles.battleresult.bonusBattlesUsed()))
         if rankState in (RankChangeStates.DIVISION_EARNED, RankChangeStates.LEAGUE_EARNED):

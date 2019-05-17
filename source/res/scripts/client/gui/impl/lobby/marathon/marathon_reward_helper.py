@@ -6,7 +6,7 @@ from gui.shared.gui_items import Vehicle
 from helpers import dependency, int2roman
 from skeletons.gui.impl import IGuiLoader
 from skeletons.gui.shared import IItemsCache
-SpecialRewardData = namedtuple('SpecialRewardData', ('sourceName', 'congratsSourceId', 'vehicleName', 'vehicleLvl', 'vehicleIsElite', 'vehicleType', 'goToVehicleBtn', 'rewardsBtnVisible'))
+SpecialRewardData = namedtuple('SpecialRewardData', ('sourceName', 'congratsSourceId', 'vehicleName', 'vehicleLvl', 'vehicleIsElite', 'vehicleType', 'goToVehicleBtn'))
 
 def getVehicleStrID(vehicleName):
     return vehicleName.split(':')[1]
@@ -31,8 +31,9 @@ def showMarathonReward(vehicleCD):
         congratsSourceId = str(vehicle.intCD)
         sourceName = Vehicle.getIconResourceName(getVehicleStrID(vehicle.name))
         if sourceName and congratsSourceId is not None:
-            specialRewardData = SpecialRewardData(sourceName=sourceName, congratsSourceId=congratsSourceId, vehicleName=vehicle.userName, vehicleIsElite=vehicle.isElite, vehicleLvl=int2roman(vehicle.level), vehicleType=vehicleType, goToVehicleBtn=vehicle.isInInventory, rewardsBtnVisible=False)
-            if uiLoader.windowsManager.findViews(loadedViewPredicate(R.views.marathonRewardView())):
+            specialRewardData = SpecialRewardData(sourceName=sourceName, congratsSourceId=congratsSourceId, vehicleName=vehicle.userName, vehicleIsElite=vehicle.isElite, vehicleLvl=int2roman(vehicle.level), vehicleType=vehicleType, goToVehicleBtn=vehicle.isInInventory)
+            viewID = R.views.lobby.marathon.marathon_reward_view.MarathonRewardView()
+            if uiLoader.windowsManager.findViews(loadedViewPredicate(viewID)):
                 return
             window = MarathonRewardViewWindow(specialRewardData)
             window.load()

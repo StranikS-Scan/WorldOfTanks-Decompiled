@@ -37,10 +37,6 @@ def showRecruiterAward():
     showAwardWindow(specialAwards.RecruiterAward())
 
 
-def showDdayAward():
-    showAwardWindow(specialAwards.DdayAward())
-
-
 @dependency.replace_none_kwargs(lobbyContext=ILobbyContext)
 def showCrewSkinAward(lobbyContext=None):
     if lobbyContext.getServerSettings().isCrewSkinsEnabled():

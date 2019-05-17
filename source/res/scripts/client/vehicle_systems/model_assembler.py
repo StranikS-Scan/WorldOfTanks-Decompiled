@@ -43,6 +43,10 @@ def prepareCompoundAssembler(vehicleDesc, modelsSetParams, spaceID, isTurretDeta
     if not isTurretDetached:
         assembler.addPart(turret, turretJointName, TankPartNames.TURRET)
         assembler.addPart(gun, TankNodeNames.GUN_JOINT, TankPartNames.GUN)
+        if modelsSetParams.state == 'undamaged':
+            for idx, attachment in enumerate(modelsSetParams.attachments):
+                assembler.addPart(attachment.modelName, attachment.attachNode, 'attachment' + str(idx), attachment.transform)
+
     cornerPoint = vehicleDesc.chassis.topRightCarryingPoint
     assembler.addNode(TankNodeNames.TRACK_LEFT_MID, TankPartNames.CHASSIS, mathUtils.createTranslationMatrix((-cornerPoint[0], 0, 0)))
     assembler.addNode(TankNodeNames.TRACK_RIGHT_MID, TankPartNames.CHASSIS, mathUtils.createTranslationMatrix((cornerPoint[0], 0, 0)))
@@ -511,7 +515,6 @@ def subscribeEngineAuditionToEngineState(engineAudition, engineState):
 def setupTracksFashion(vehicleDesc, fashion):
     tracksCfg = vehicleDesc.chassis.tracks
     if tracksCfg is not None:
-        fashion.setTracksLod(tracksCfg.lodDist)
         fashion.setTracksMaterials(tracksCfg.leftMaterial, tracksCfg.rightMaterial)
     return
 
@@ -539,7 +542,6 @@ def __assemblePhysicalTracks(resourceRefs, appearance, tracks, instantWarmup):
     if leftTrack is not None:
         leftTrack.init(appearance.compoundModel, appearance.wheelsAnimator, appearance.collisionObstaclesCollector, appearance.tessellationCollisionSensor, instantWarmup)
         if leftTrack.inited:
-            appearance.fashion.setPhysicalTrack(leftTrack)
             tracks.addTrackComponent(True, leftTrack, _PHYSICAL_TRACKS_LOD_SETTINGS)
         else:
             inited = False
@@ -548,12 +550,13 @@ def __assemblePhysicalTracks(resourceRefs, appearance, tracks, instantWarmup):
     if rightTrack is not None:
         rightTrack.init(appearance.compoundModel, appearance.wheelsAnimator, appearance.collisionObstaclesCollector, appearance.tessellationCollisionSensor, instantWarmup)
         if rightTrack.inited:
-            appearance.fashion.setPhysicalTrack(rightTrack)
             tracks.addTrackComponent(False, rightTrack, _PHYSICAL_TRACKS_LOD_SETTINGS)
         else:
             inited = False
     else:
         inited = False
+    if inited:
+        appearance.fashion.setPhysicalTrack(leftTrack, rightTrack)
     return inited
 
 

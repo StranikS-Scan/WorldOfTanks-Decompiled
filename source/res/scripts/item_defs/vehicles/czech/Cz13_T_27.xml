@@ -50,6 +50,13 @@
       <undamaged>	vehicles/czech/Cz13_T_27/normal/lod0/Hull.model	</undamaged>
       <destroyed>	vehicles/czech/Cz13_T_27/crash/lod0/Hull.model	</destroyed>
       <exploded>	vehicles/czech/Cz13_T_27/crash/lod0/Hull.model	</exploded>
+      <sets>
+        <T_27_3Dst>
+          <undamaged>	vehicles/czech/Cz13_T_27/_skins/T_27_3Dst/normal/lod0/Hull.model	</undamaged>
+          <destroyed>	vehicles/czech/Cz13_T_27/_skins/T_27_3Dst/crash/lod0/Hull.model	</destroyed>
+          <exploded>	vehicles/czech/Cz13_T_27/_skins/T_27_3Dst/crash/lod0/Hull.model	</exploded>
+        </T_27_3Dst>
+      </sets>
     </models>
     <swinging>
       <lodDist>	FAR	</lodDist>
@@ -153,10 +160,10 @@
       <slot>
         <slotType>	clan	</slotType>
         <slotId>	1	</slotId>
-        <rayStart>	0.642428 0.608623 2.366	</rayStart>
-        <rayEnd>	0.626949 0.434854 2.2682	</rayEnd>
-        <rayUp>	-0.145702 0.00695916 -0.989304	</rayUp>
-        <size>	0.35	</size>
+        <rayStart>	0.460937 0.551145 2.49685	</rayStart>
+        <rayEnd>	0.445458 0.377375 2.39905	</rayEnd>
+        <rayUp>	-0.194285 0.00657005 -0.980923	</rayUp>
+        <size>	0.3	</size>
         <hideIfDamaged>	false	</hideIfDamaged>
         <isUVProportional>	true	</isUVProportional>
       </slot>
@@ -354,6 +361,13 @@
         <undamaged>	vehicles/czech/Cz13_T_27/normal/lod0/Chassis.model	</undamaged>
         <destroyed>	vehicles/czech/Cz13_T_27/crash/lod0/Chassis.model	</destroyed>
         <exploded>	vehicles/czech/Cz13_T_27/crash/lod0/Chassis.model	</exploded>
+        <sets>
+          <T_27_3Dst>
+            <undamaged>	vehicles/czech/Cz13_T_27/_skins/T_27_3Dst/normal/lod0/Chassis.model	</undamaged>
+            <destroyed>	vehicles/czech/Cz13_T_27/_skins/T_27_3Dst/crash/lod0/Chassis.model	</destroyed>
+            <exploded>	vehicles/czech/Cz13_T_27/_skins/T_27_3Dst/crash/lod0/Chassis.model	</exploded>
+          </T_27_3Dst>
+        </sets>
       </models>
       <traces>
         <lodDist>	MEDIUM	</lodDist>
@@ -1177,6 +1191,13 @@
             <undamaged>	vehicles/czech/Cz13_T_27/normal/lod0/Gun_01.model	</undamaged>
             <destroyed>	vehicles/czech/Cz13_T_27/crash/lod0/Gun_01.model	</destroyed>
             <exploded>	vehicles/czech/Cz13_T_27/crash/lod0/Gun_01.model	</exploded>
+            <sets>
+              <T_27_3Dst>
+                <undamaged>	vehicles/czech/Cz13_T_27/_skins/T_27_3Dst/normal/lod0/Gun_01.model	</undamaged>
+                <destroyed>	vehicles/czech/Cz13_T_27/_skins/T_27_3Dst/crash/lod0/Gun_01.model	</destroyed>
+                <exploded>	vehicles/czech/Cz13_T_27/_skins/T_27_3Dst/crash/lod0/Gun_01.model	</exploded>
+              </T_27_3Dst>
+            </sets>
           </models>
           <hitTester>
             <collisionModelServer>	vehicles/czech/Cz13_T_27/collision/Gun_01.model	</collisionModelServer>
@@ -1232,6 +1253,13 @@
         <undamaged>	vehicles/czech/Cz13_T_27/normal/lod0/Turret_01.model	</undamaged>
         <destroyed>	vehicles/czech/Cz13_T_27/crash/lod0/Turret_01.model	</destroyed>
         <exploded>	vehicles/czech/Cz13_T_27/crash/lod0/Turret_01.model	</exploded>
+        <sets>
+          <T_27_3Dst>
+            <undamaged>	vehicles/czech/Cz13_T_27/_skins/T_27_3Dst/normal/lod0/Turret_01.model	</undamaged>
+            <destroyed>	vehicles/czech/Cz13_T_27/_skins/T_27_3Dst/crash/lod0/Turret_01.model	</destroyed>
+            <exploded>	vehicles/czech/Cz13_T_27/_skins/T_27_3Dst/crash/lod0/Turret_01.model	</exploded>
+          </T_27_3Dst>
+        </sets>
       </models>
       <hitTester>
         <collisionModelServer>	vehicles/czech/Cz13_T_27/collision/Turret_01.model	</collisionModelServer>

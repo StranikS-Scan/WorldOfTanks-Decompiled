@@ -48,6 +48,10 @@ class IItemsRequester(requesters.IRequester):
     def tokens(self):
         raise NotImplementedError
 
+    @property
+    def sessionStats(self):
+        raise NotImplementedError
+
     def requestUserDossier(self, databaseID, callback):
         raise NotImplementedError
 

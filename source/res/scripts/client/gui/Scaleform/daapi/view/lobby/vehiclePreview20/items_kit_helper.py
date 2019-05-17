@@ -296,7 +296,7 @@ def showItemTooltip(toolTipMgr, rawItem, item):
     if tooltipType is not None:
         toolTipMgr.onCreateTypedTooltip(tooltipType, [rawItem.id], 'INFO')
     else:
-        header = getItemTitle(rawItem, item).decode('utf-8').capitalize().encode('utf-8')
+        header = getItemTitle(rawItem, item)
         body = getItemDescription(rawItem, item)
         tooltip = makeTooltip(header, body)
         toolTipMgr.onCreateComplexTooltip(tooltip, 'INFO')

@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/pub/dialog_window.py
 import logging
+from collections import namedtuple
 from gui.Scaleform.genConsts.APP_CONTAINERS_NAMES import APP_CONTAINERS_NAMES
 from shared_utils import CONST_CONTAINER
 from async import async, await, AsyncEvent, AsyncReturn, AsyncScope, BrokenPromiseError
@@ -12,6 +13,7 @@ from gui.impl.gen.view_models.windows.dialog_window_model import DialogWindowMod
 from gui.impl.pub.view_impl import ViewImpl
 from gui.impl.wrappers.background_blur import WGUIBackgroundBlurSupportImpl
 _logger = logging.getLogger(__name__)
+DialogResult = namedtuple('DialogResult', ('result', 'data'))
 
 class DialogButtons(CONST_CONTAINER):
     SUBMIT = DialogButtonModel.BTN_SUBMIT
@@ -43,7 +45,7 @@ class DialogWindow(Window):
     def __init__(self, content=None, bottomContent=None, parent=None, balanceContent=None, enableBlur=True, layer=DialogLayer.TOP_WINDOW):
         if content is not None:
             pass
-        super(DialogWindow, self).__init__(wndFlags=layer | WindowFlags.RESIZABLE | WindowFlags.CLOSE_BY_ESCAPE, decorator=ViewImpl(R.views.dialogWindow(), ViewFlags.WINDOW_DECORATOR, DialogWindowModel), content=content, parent=parent)
+        super(DialogWindow, self).__init__(wndFlags=layer, decorator=ViewImpl(R.views.common.dialog_view.dialog_window.DialogWindow(), ViewFlags.WINDOW_DECORATOR, DialogWindowModel), content=content, parent=parent)
         if bottomContent is not None:
             self._setBottomContent(bottomContent)
         self.__blur = WGUIBackgroundBlurSupportImpl()
@@ -66,7 +68,7 @@ class DialogWindow(Window):
         except BrokenPromiseError:
             _logger.debug('%s has been destroyed without user decision', self)
 
-        raise AsyncReturn(self.__result)
+        raise AsyncReturn(DialogResult(self.__result, self._getResultData()))
 
     @property
     def viewModel(self):
@@ -98,15 +100,18 @@ class DialogWindow(Window):
     def _removeAllButtons(self):
         self.viewModel.buttons.setItems([])
 
-    def _addButton(self, name, label, isFocused=False, invalidateAll=False, isEnabled=True):
+    def _addButton(self, name, label, isFocused=False, invalidateAll=False, isEnabled=True, soundDown=None):
         button = DialogButtonModel()
         button.setName(name)
         button.setLabel(label)
         button.setDoSetFocus(isFocused)
         button.setIsEnabled(isEnabled)
+        if soundDown is not None:
+            button.setSoundDown(soundDown)
         self.viewModel.buttons.addViewModel(button, isSelected=isFocused)
         if invalidateAll:
             self.viewModel.buttons.invalidate()
+        return
 
     def _getButton(self, name):
         for item in self.viewModel.buttons.getItems():
@@ -146,3 +151,6 @@ class DialogWindow(Window):
         if button is not None:
             button.setIsEnabled(value)
         return
+
+    def _getResultData(self):
+        return None

@@ -5,6 +5,7 @@ import logging
 import BigWorld
 import Math
 import Vehicular
+import AnimationSequence
 import items.vehicles
 from items.vehicles import makeIntCompactDescrByID, getItemByCompactDescr
 from items.customizations import parseOutfitDescr, CustomizationOutfit
@@ -12,6 +13,8 @@ from vehicle_systems.tankStructure import VehiclePartsTuple
 from vehicle_systems.tankStructure import TankPartNames, TankPartIndexes
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from items.components.c11n_constants import ModificationType, C11N_MASK_REGION, DEFAULT_DECAL_SCALE_FACTORS, SeasonType, CustomizationType, DEFAULT_DECAL_CLIP_ANGLE
+from AvatarInputHandler import mathUtils
+from helpers import newFakeModel
 _logger = logging.getLogger(__name__)
 RepaintParams = namedtuple('PaintParams', ('enabled', 'baseColor', 'color', 'metallic', 'gloss', 'fading', 'strength'))
 RepaintParams.__new__.__defaults__ = (False,
@@ -42,6 +45,13 @@ ProjectionDecalGenericParams.__new__.__defaults__ = (Math.Vector4(0.0),
  False,
  False,
  True)
+SequenceParams = namedtuple('SequenceParams', ('transform', 'attachNode', 'sequenceName'))
+SequenceParams.__new__.__defaults__ = (mathUtils.createIdentityMatrix(), '', '')
+AttachmentParams = namedtuple('AttachmentParams', ('transform', 'attachNode', 'modelName'))
+AttachmentParams.__new__.__defaults__ = (mathUtils.createIdentityMatrix(),
+ Math.Vector3(0.0),
+ '',
+ '')
 _DEFAULT_GLOSS = 0.509
 _DEFAULT_METALLIC = 0.23
 _DEAD_VEH_WEIGHT_COEFF = 0.1
@@ -53,7 +63,7 @@ def prepareFashions(isDamaged):
          None,
          None]
     else:
-        fashions = [BigWorld.WGVehicleFashion(False),
+        fashions = [BigWorld.WGVehicleFashion(),
          BigWorld.WGBaseFashion(),
          BigWorld.WGBaseFashion(),
          BigWorld.WGBaseFashion()]
@@ -90,6 +100,19 @@ def getOutfitComponent(outfitCD):
     else:
         outfitComponent = CustomizationOutfit()
     return outfitComponent
+
+
+def createSlotMap(vehDescr, slotTypeName):
+    slotsByIdMap = {}
+    for vehiclePartSlots in (vehDescr.hull.slotsAnchors,
+     vehDescr.chassis.slotsAnchors,
+     vehDescr.turret.slotsAnchors,
+     vehDescr.gun.slotsAnchors):
+        for vehicleSlot in vehiclePartSlots:
+            if vehicleSlot.type == slotTypeName:
+                slotsByIdMap[vehicleSlot.slotId] = vehicleSlot
+
+    return slotsByIdMap
 
 
 def getCamoPrereqs(outfit, vDesc):
@@ -208,6 +231,75 @@ def getRepaint(outfit, containerId, vDesc):
     metallics = tuple(metallics)
     glosses = tuple(glosses)
     return RepaintParams(enabled, defaultColor, colors, metallics, glosses, fading, quality) if enabled else RepaintParams(enabled, defaultColor)
+
+
+def getSequencesPrereqs(outfit, spaceId):
+    multiSlot = outfit.misc.slotFor(GUI_ITEM_TYPE.SEQUENCE)
+    prereqs = []
+    for _, item, _ in multiSlot.items():
+        prereqs.append(AnimationSequence.Loader(item.sequenceName, spaceId))
+
+    return prereqs
+
+
+def getSequenceAnimators(outfit, vehicleDescr, spaceId, loadedAnimators, compoundModel):
+    failedIds = loadedAnimators.failedIDs
+    sequences = __getSequences(outfit, vehicleDescr)
+    animators = []
+    for sequence in sequences:
+        if sequence.sequenceName in failedIds:
+            continue
+        animator = loadedAnimators[sequence.sequenceName]
+        fakeModel = newFakeModel()
+        node = compoundModel.node(sequence.attachNode)
+        node.attach(fakeModel, sequence.transform)
+        wrapper = AnimationSequence.ModelWrapperContainer(fakeModel, spaceId)
+        animator.bindTo(wrapper)
+        animators.append(animator)
+
+    return animators
+
+
+def __getParams(outfit, vehicleDescr, slotTypeName, slotType, paramsConverter):
+    result = []
+    slotsByIdMap = createSlotMap(vehicleDescr, slotTypeName)
+    multiSlot = outfit.misc.slotFor(slotType)
+    capacity = multiSlot.capacity()
+    for idx in range(capacity):
+        slotData = multiSlot.getSlotData(idx)
+        if not slotData.isEmpty():
+            if slotData.component.slotId in slotsByIdMap:
+                slotParams = slotsByIdMap[slotData.component.slotId]
+                result.append(paramsConverter(slotParams, slotData))
+            else:
+                _logger.warning('SlotId mismatch (slotId=%(slotId)d component=%(component)s)', {'slotId': slotData.component.slotId,
+                 'component': slotData.component})
+                continue
+
+    return result
+
+
+def __createTransform(slotParams, slotData):
+    worldTransform = mathUtils.createRTMatrix(slotParams.rotation, slotParams.position)
+    objectTransform = mathUtils.createRTMatrix(Math.Vector3(slotData.component.rotation), Math.Vector3(slotData.component.position))
+    worldTransform.postMultiply(objectTransform)
+    return worldTransform
+
+
+def __getSequences(outfit, vehicleDescr):
+
+    def getSequenceParams(slotParams, slotData):
+        return SequenceParams(transform=__createTransform(slotParams, slotData), attachNode=slotParams.attachNode, sequenceName=slotData.item.sequenceName)
+
+    return __getParams(outfit, vehicleDescr, 'sequence', GUI_ITEM_TYPE.SEQUENCE, getSequenceParams)
+
+
+def getAttachments(outfit, vehicleDescr):
+
+    def getAttachmentParams(slotParams, slotData):
+        return AttachmentParams(transform=__createTransform(slotParams, slotData), attachNode=slotParams.attachNode, modelName=slotData.item.modelName)
+
+    return __getParams(outfit, vehicleDescr, 'attachment', GUI_ITEM_TYPE.ATTACHMENT, getAttachmentParams)
 
 
 def getGenericProjectionDecals(outfit, vehicleDescr):

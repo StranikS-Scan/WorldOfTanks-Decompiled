@@ -13,8 +13,12 @@ _logger = logging.getLogger(__name__)
 
 class ContextMenuContent(View):
 
-    def __init__(self):
-        super(ContextMenuContent, self).__init__(R.views.contextMenuContent(), ViewFlags.COMPONENT, ContextMenuContentModel)
+    def __init__(self, layoutID=R.views.common.context_menu_window.context_menu_content.ContextMenuContent()):
+        super(ContextMenuContent, self).__init__(layoutID, ViewFlags.COMPONENT, ContextMenuContentModel)
+
+    @property
+    def isGameface(self):
+        return False
 
     @property
     def viewModel(self):
@@ -110,5 +114,10 @@ class ContextMenuContent(View):
 class ContextMenuWindow(WindowImpl):
     __slots__ = ()
 
-    def __init__(self, content, parent):
-        super(ContextMenuWindow, self).__init__(wndFlags=WindowFlags.CONTEXT_MENU, decorator=WindowView(layoutID=R.views.contextMenuWindow()), content=content, parent=parent, areaID=R.areas.specific())
+    def __init__(self, event, content, parent):
+        if event.decoratorID:
+            decorator = WindowView(layoutID=event.decoratorID)
+        else:
+            decorator = None
+        super(ContextMenuWindow, self).__init__(wndFlags=WindowFlags.CONTEXT_MENU, decorator=decorator, content=content, parent=parent, areaID=R.areas.specific())
+        return

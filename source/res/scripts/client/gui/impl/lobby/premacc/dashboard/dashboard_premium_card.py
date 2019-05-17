@@ -21,7 +21,7 @@ class DashboardPremiumCard(ViewImpl):
     __gameSession = dependency.descriptor(IGameSessionController)
 
     def __init__(self, *args, **kwargs):
-        super(DashboardPremiumCard, self).__init__(R.views.dashboardPremiumCard(), ViewFlags.COMPONENT, DashboardPremiumCardModel, *args, **kwargs)
+        super(DashboardPremiumCard, self).__init__(R.views.lobby.premacc.dashboard.dashboard_premium_card.DashboardPremiumCard(), ViewFlags.COMPONENT, DashboardPremiumCardModel, *args, **kwargs)
 
     @property
     def viewModel(self):

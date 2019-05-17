@@ -20,13 +20,14 @@ class BadgeLayouts(CONST_CONTAINER):
 
 
 class Badge(GUIItem):
-    __slots__ = ('badgeID', 'data', 'isSelected', 'isAchieved', 'achievedAt', 'group')
+    __slots__ = ('badgeID', 'data', 'isSelected', 'isAchieved', 'achievedAt', 'group', 'isAchievable')
 
     def __init__(self, data, proxy=None):
         super(Badge, self).__init__(proxy)
         self.badgeID = data['id']
         self.data = data
         self.group = data.get('group')
+        self.isAchievable = data.get('achievable', True)
         self.isSelected = False
         self.isAchieved = False
         self.achievedAt = None

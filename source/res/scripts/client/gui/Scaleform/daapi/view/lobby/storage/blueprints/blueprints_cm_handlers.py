@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/storage/blueprints/blueprints_cm_handlers.py
 from async import await, async
-from gui.impl import dialogs
+from gui.impl.dialogs import dialogs
 from gui.Scaleform.daapi.view.lobby.storage.blueprints import blueprintExitEvent
 from gui.Scaleform.daapi.view.lobby.storage.cm_handlers import ContextMenu, option, CMLabel
 from gui.shared import event_dispatcher as shared_events

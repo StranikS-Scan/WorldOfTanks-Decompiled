@@ -9,6 +9,8 @@ MAX_ITEMS_FOR_BUY_OPERATION = 100
 HIDDEN_CAMOUFLAGE_ID = 1
 TOTAL_COUNTER_TYPE_DESCR = -1
 MAX_PROJECTION_DECALS = 6
+MAX_SEQUENCES = 5
+MAX_ATTACHMENTS = 5
 MAX_USERS_PROJECTION_DECALS = 2
 MAX_PROJECTION_DECALS_PER_AREA = 2
 PROJECTION_DECALS_SCALE_ID_VALUES = (0, 1, 2, 3)
@@ -30,6 +32,8 @@ class CustomizationType(object):
     INSIGNIA = 8
     PERSONAL_NUMBER = 9
     FONT = 10
+    SEQUENCE = 11
+    ATTACHMENT = 12
     RANGE = {PAINT,
      CAMOUFLAGE,
      DECAL,
@@ -43,7 +47,11 @@ class CustomizationType(object):
      CAMOUFLAGE,
      DECAL,
      PERSONAL_NUMBER)
-    _SIMPLE_TYPES = (STYLE, MODIFICATION, PROJECTION_DECAL)
+    _SIMPLE_TYPES = (STYLE,
+     MODIFICATION,
+     PROJECTION_DECAL,
+     SEQUENCE,
+     ATTACHMENT)
 
 
 CustomizationTypeNames = {getattr(CustomizationType, k):k for k in dir(CustomizationType) if not k.startswith('_') and k != 'RANGE'}
@@ -304,12 +312,16 @@ customizationSlotIds = {'hull': {'clan': (1, 1),
           'projectionDecal': (68, 195),
           'insignia': (196, 203),
           'fixedEmblem': (204, 255),
-          'fixedInscription': (204, 255)},
+          'fixedInscription': (204, 255),
+          'attachment': (1024, 1073),
+          'sequence': (1024, 1073)},
  'chassis': {'paint': (256, 256),
              'style': (257, 257),
              'insignia': (258, 265),
              'fixedEmblem': (266, 319),
-             'fixedInscription': (266, 319)},
+             'fixedInscription': (266, 319),
+             'attachment': (1074, 1123),
+             'sequence': (1074, 1123)},
  'turret': {'clan': (1, 1),
             'paint': (512, 512),
             'camouflage': (513, 513),
@@ -318,7 +330,9 @@ customizationSlotIds = {'hull': {'clan': (1, 1),
             'projectionDecal': (578, 705),
             'insignia': (706, 713),
             'fixedEmblem': (714, 767),
-            'fixedInscription': (714, 767)},
+            'fixedInscription': (714, 767),
+            'attachment': (1124, 1173),
+            'sequence': (1124, 1173)},
  'gun': {'paint': (768, 769),
          'camouflage': (770, 770),
          'insigniaOnGun': (771, 771),
@@ -327,7 +341,9 @@ customizationSlotIds = {'hull': {'clan': (1, 1),
          'projectionDecal': (836, 963),
          'insignia': (964, 971),
          'fixedEmblem': (972, 1023),
-         'fixedInscription': (972, 1023)}}
+         'fixedInscription': (972, 1023),
+         'attachment': (1174, 1224),
+         'sequence': (1174, 1224)}}
 CUSTOMIZATION_SLOTS_VEHICLE_PARTS = ('hull', 'chassis', 'turret', 'gun')
 UNBOUND_VEH_KEY = 0
 NUM_ALL_ITEMS_KEY = -1

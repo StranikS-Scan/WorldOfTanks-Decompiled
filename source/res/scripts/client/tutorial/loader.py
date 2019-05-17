@@ -1,11 +1,11 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/tutorial/loader.py
+import logging
 import weakref
 import BigWorld
 import account_helpers
 from constants import IS_TUTORIAL_ENABLED
 from helpers import dependency
-from skeletons.gui.lobby_context import ILobbyContext
 from tutorial import core
 from tutorial import settings as _settings
 from tutorial import cache as _cache
@@ -13,12 +13,12 @@ from tutorial.control.context import GLOBAL_FLAG, GlobalStorage
 from tutorial.control.listener import AppLoaderListener
 from tutorial.doc_loader import loadDescriptorData
 from tutorial.hints_manager import HintsManager
-from debug_utils import LOG_ERROR, LOG_DEBUG
 from skeletons.gui.game_control import IBootcampController
 from soft_exception import SoftException
 _SETTINGS = _settings.TUTORIAL_SETTINGS
 _LOBBY_DISPATCHER = _settings.TUTORIAL_LOBBY_DISPATCHER
 _BATTLE_DISPATCHER = _settings.TUTORIAL_BATTLE_DISPATCHER
+_logger = logging.getLogger(__name__)
 
 class RunCtx(object):
     __slots__ = ('cache', 'isFirstStart', 'databaseID', 'isAfterBattle', 'restart', 'bonusCompleted', 'battlesCount', 'newbieBattlesCount', 'initialChapter', 'globalFlags', 'canResolveChapterOnStart', 'byRequest')
@@ -45,7 +45,6 @@ class RunCtx(object):
 
 
 class TutorialLoader(object):
-    lobbyContext = dependency.descriptor(ILobbyContext)
 
     def __init__(self):
         super(TutorialLoader, self).__init__()
@@ -104,7 +103,7 @@ class TutorialLoader(object):
     def run(self, settingsID, state=None):
         settings = self.__settings.getSettings(settingsID)
         if settings is None:
-            LOG_ERROR('Can not find settings', settingsID)
+            _logger.error('Can not find settings: %r', settingsID)
             return False
         else:
             if state is None:
@@ -119,14 +118,14 @@ class TutorialLoader(object):
                         self.__doStop()
                     else:
                         GlobalStorage.setFlags(state.get('globalFlags', {}))
-                        LOG_DEBUG('invalidateFlags from TutorialLoader.run')
+                        _logger.debug('invalidateFlags from TutorialLoader.run')
                         self.__tutorial.invalidateFlags()
                         return True
                 elif restoreIfRun and not isCurrent:
                     self.__restoreID = self.__tutorial.getID()
                     self.__doStop()
                 else:
-                    LOG_ERROR('Tutorial already is running', self.__tutorial.getID())
+                    _logger.error('Tutorial already is running: %r', self.__tutorial.getID())
                     return False
             state.setdefault('isAfterBattle', self.__afterBattle)
             state.setdefault('restart', True)
@@ -207,7 +206,7 @@ class TutorialLoader(object):
                 return False
             descriptor = loadDescriptorData(settings, settings.exParsers)
             if descriptor is None:
-                LOG_ERROR('Descriptor is not valid. Tutorial is not available', settings)
+                _logger.error('Descriptor is not valid. Tutorial is not available: %r', settings)
                 return False
             cache = _cache.TutorialCache(BigWorld.player().name)
             cache.read()
@@ -254,7 +253,7 @@ class TutorialLoader(object):
     def __doRestore(self):
         if self.__restoreID is not None:
             settingsID, self.__restoreID = self.__restoreID, None
-            LOG_DEBUG('Restore tutorial', settingsID)
+            _logger.debug('Restore tutorial: %r', settingsID)
             self.run(settingsID)
         return
 
@@ -276,7 +275,7 @@ def init():
     global g_loader
     if IS_TUTORIAL_ENABLED:
         g_loader = TutorialLoader()
-        LOG_DEBUG('g_loader init')
+        _logger.debug('g_loader init')
         g_loader.init()
 
 
@@ -286,7 +285,7 @@ def fini():
         if g_loader is not None:
             g_loader.fini()
             g_loader = None
-            LOG_DEBUG('g_loader deinit')
+            _logger.debug('g_loader deinit')
     return
 
 

@@ -67,7 +67,7 @@ class PremDashboardQuestsCard(ViewImpl):
     _gameSession = dependency.descriptor(IGameSessionController)
 
     def __init__(self, *args, **kwargs):
-        super(PremDashboardQuestsCard, self).__init__(R.views.premDashboardQuestsCard(), ViewFlags.VIEW, PremDashboardQuestsCardModel, *args, **kwargs)
+        super(PremDashboardQuestsCard, self).__init__(R.views.lobby.premacc.dashboard.prem_dashboard_quests_card.PremDashboardQuestsCard(), ViewFlags.VIEW, PremDashboardQuestsCardModel, *args, **kwargs)
         self._questController = PremQuestsController()
         self._modelConstantsMap = {MISSIONS_STATES.COMPLETED: self.viewModel.COMPLETED,
          MISSIONS_STATES.IN_PROGRESS: self.viewModel.IN_PROGRESS}

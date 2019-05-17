@@ -2,7 +2,7 @@
 # Embedded file name: scripts/client/gui/impl/lobby/marathon/marathon_reward_view.py
 import logging
 from account_helpers import AccountSettings
-from account_helpers.AccountSettings import MARATHON_REWARD_VIDEO_WAS_SHOWN
+from account_helpers.AccountSettings import MARATHON_REWARD_WAS_SHOWN
 from frameworks.wulf import ViewFlags
 from frameworks.wulf import WindowFlags
 from gui.impl.gen import R
@@ -19,7 +19,7 @@ class MarathonRewardView(ViewImpl):
 
     def __init__(self, *args, **kwargs):
         self.__congratsSourceId = 0
-        super(MarathonRewardView, self).__init__(R.views.marathonRewardView(), ViewFlags.VIEW, MarathonRewardViewModel, *args, **kwargs)
+        super(MarathonRewardView, self).__init__(R.views.lobby.marathon.marathon_reward_view.MarathonRewardView(), ViewFlags.VIEW, MarathonRewardViewModel, *args, **kwargs)
 
     @property
     def viewModel(self):
@@ -32,7 +32,6 @@ class MarathonRewardView(ViewImpl):
             self.__congratsSourceId = specialRewardData.congratsSourceId
             with self.viewModel.transaction() as model:
                 model.setIsGoToVehicleBtnEnabled(specialRewardData.goToVehicleBtn)
-                model.setViewRewardsBtnVisible(specialRewardData.rewardsBtnVisible)
                 model.setVideoSource(specialRewardData.sourceName)
                 model.setVehicleLvl(specialRewardData.vehicleLvl)
                 model.setVehicleName(specialRewardData.vehicleName)
@@ -53,8 +52,7 @@ class MarathonRewardView(ViewImpl):
         self.viewModel.onCloseBtnClick -= self.__onCloseWindow
         self.viewModel.onVideoStarted -= self.__onVideoStarted
         self.viewModel.onVideoStopped -= self.__onVideoStopped
-        onVideoDone()
-        AccountSettings.setFilter(MARATHON_REWARD_VIDEO_WAS_SHOWN, True)
+        AccountSettings.setFilter(MARATHON_REWARD_WAS_SHOWN, True)
 
     def __onGoToVehicle(self, _=None):
         self.destroyWindow()

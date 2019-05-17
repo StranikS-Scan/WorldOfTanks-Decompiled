@@ -115,6 +115,14 @@ def _getPersonalNumber(_):
     return vehicles.g_cache.customization20().personal_numbers.itervalues()
 
 
+def _getAttachment(_):
+    return vehicles.g_cache.customization20().attachments.itervalues()
+
+
+def _getSequence(_):
+    return vehicles.g_cache.customization20().sequences.itervalues()
+
+
 _MODULES_GETTERS = {GUI_ITEM_TYPE.VEHICLE: _getVehicles,
  GUI_ITEM_TYPE.CHASSIS: _getChassis,
  GUI_ITEM_TYPE.ENGINE: _getEngines,
@@ -135,7 +143,9 @@ _MODULES_GETTERS = {GUI_ITEM_TYPE.VEHICLE: _getVehicles,
  GUI_ITEM_TYPE.STYLE: _getStyles,
  GUI_ITEM_TYPE.PROJECTION_DECAL: _getProjectionDecal,
  GUI_ITEM_TYPE.PERSONAL_NUMBER: _getPersonalNumber,
- GUI_ITEM_TYPE.CREW_SKINS: _getCrewSkins}
+ GUI_ITEM_TYPE.CREW_SKINS: _getCrewSkins,
+ GUI_ITEM_TYPE.SEQUENCE: _getSequence,
+ GUI_ITEM_TYPE.ATTACHMENT: _getAttachment}
 
 def getItemsIterator(data, nationID=None, itemTypeID=None, onlyWithPrices=False):
     if 'itemPrices' in data and onlyWithPrices:

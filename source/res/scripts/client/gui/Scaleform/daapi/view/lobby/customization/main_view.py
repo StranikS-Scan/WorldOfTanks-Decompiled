@@ -159,6 +159,7 @@ class MainView(LobbySubView, CustomizationMainViewMeta):
     def __onVehicleChanged(self):
         if self.__ctx.numberEditModeActive:
             self.__ctx.sendNumberEditModeCommand(PersonalNumEditCommands.CANCEL_EDIT_MODE)
+        self.__clearSelectionAndHidePropertySheet()
         self.__setHeaderInitData()
         self.__setSeasonData()
         BigWorld.callback(0.0, self.__initAnchorsPositions)
@@ -352,7 +353,7 @@ class MainView(LobbySubView, CustomizationMainViewMeta):
         return
 
     def onLockedAnchor(self):
-        self.__hidePropertiesSheet()
+        self.__clearSelectionAndHidePropertySheet()
 
     def resetC11nItemsNovelty(self, itemsList):
         self.__ctx.resetC11nItemsNovelty(itemsList)
@@ -897,8 +898,9 @@ class MainView(LobbySubView, CustomizationMainViewMeta):
         self.as_releaseItemS()
 
     def __clearSelectedAnchor(self):
-        _, slotType, _ = self.__ctx.selectedAnchor
-        self.__ctx.anchorSelected(slotType, -1, -1)
+        if self.__ctx.isAnyAnchorSelected():
+            _, slotType, _ = self.__ctx.selectedAnchor
+            self.__ctx.anchorSelected(slotType, -1, -1)
 
     def clearSelectionAndHidePropertySheet(self):
         self.__clearSelectionAndHidePropertySheet()
@@ -979,13 +981,18 @@ class MainView(LobbySubView, CustomizationMainViewMeta):
     def __createAnchorsLockVO(self, intCD, unlock=False):
         if self.__ctx.currentTab == C11nTabs.PROJECTION_DECAL:
             anchorLockVOs = []
-            item = self.service.getItemByCD(intCD)
+            item = self.service.getItemByCD(intCD) if intCD != -1 else None
             for anchor in getAllParentProjectionSlots(g_currentVehicle):
                 anchorId = CustomizationSlotIdVO(Area.MISC, GUI_ITEM_TYPE.PROJECTION_DECAL, anchor.regionIdx)
                 uid = self.__customizationSlotIdToUid(anchorId)
-                value = item.formfactor in anchor.getUnsupportedForms(g_currentVehicle.item) if not unlock else False
-                anchorLockVOs.append(CustomizationAnchorsLockVO(uid, value)._asdict())
-                self.as_setAnchorsLockStateS({'anchorsData': anchorLockVOs})
+                if unlock or item is None:
+                    lock = False
+                else:
+                    lock = item.formfactor in anchor.getUnsupportedForms(g_currentVehicle.item)
+                anchorLockVOs.append(CustomizationAnchorsLockVO(uid, lock)._asdict())
+
+            self.as_setAnchorsLockStateS({'anchorsData': anchorLockVOs})
+        return
 
     def __onTurretRotated(self):
         self.__setAnchorsInitData()

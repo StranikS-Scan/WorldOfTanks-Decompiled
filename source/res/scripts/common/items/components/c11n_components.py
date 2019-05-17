@@ -10,7 +10,7 @@ from string import lower, upper
 Item = TypeVar('TypeVar')
 
 class BaseCustomizationItem(object):
-    __slots__ = ('id', 'tags', 'filter', 'parentGroup', 'season', 'historical', 'i18n', 'priceGroup', 'requiredToken', 'priceGroupTags', 'maxNumber')
+    __slots__ = ('id', 'tags', 'filter', 'parentGroup', 'season', 'historical', 'i18n', 'priceGroup', 'requiredToken', 'priceGroupTags', 'maxNumber', 'texture')
     allSlots = __slots__
     itemType = 0
 
@@ -25,6 +25,7 @@ class BaseCustomizationItem(object):
         self.priceGroupTags = frozenset()
         self.requiredToken = ''
         self.maxNumber = 0
+        self.texture = ''
         if parentGroup and parentGroup.itemPrototype:
             for field in self.allSlots:
                 setattr(self, field, getattr(parentGroup.itemPrototype, field))
@@ -82,7 +83,7 @@ class BaseCustomizationItem(object):
 
 class PaintItem(BaseCustomizationItem):
     itemType = CustomizationType.PAINT
-    __slots__ = ('color', 'usageCosts', 'gloss', 'metallic', 'texture')
+    __slots__ = ('color', 'usageCosts', 'gloss', 'metallic')
     allSlots = BaseCustomizationItem.__slots__ + __slots__
 
     def __init__(self, parentGroup=None):
@@ -90,7 +91,6 @@ class PaintItem(BaseCustomizationItem):
         self.usageCosts = {area:1 for area in ApplyArea.RANGE}
         self.gloss = 0.0
         self.metallic = 0.0
-        self.texture = ''
         super(PaintItem, self).__init__(parentGroup)
 
     def getAmount(self, parts):
@@ -106,30 +106,28 @@ class PaintItem(BaseCustomizationItem):
 
 class DecalItem(BaseCustomizationItem):
     itemType = CustomizationType.DECAL
-    __slots__ = ('type', 'canBeMirrored', 'texture')
+    __slots__ = ('type', 'canBeMirrored')
     allSlots = BaseCustomizationItem.__slots__ + __slots__
 
     def __init__(self, parentGroup=None):
         self.type = 0
         self.canBeMirrored = False
-        self.texture = ''
         super(DecalItem, self).__init__(parentGroup)
 
 
 class ProjectionDecalItem(BaseCustomizationItem):
     itemType = CustomizationType.PROJECTION_DECAL
-    __slots__ = ('canBeMirrored', 'texture')
+    __slots__ = ('canBeMirrored',)
     allSlots = BaseCustomizationItem.__slots__ + __slots__
 
     def __init__(self, parentGroup=None):
         self.canBeMirrored = False
-        self.texture = ''
         super(ProjectionDecalItem, self).__init__(parentGroup)
 
 
 class CamouflageItem(BaseCustomizationItem):
     itemType = CustomizationType.CAMOUFLAGE
-    __slots__ = ('palettes', 'compatibleParts', 'componentsCovering', 'invisibilityFactor', 'texture', 'tiling', 'scales', 'rotation')
+    __slots__ = ('palettes', 'compatibleParts', 'componentsCovering', 'invisibilityFactor', 'tiling', 'scales', 'rotation')
     allSlots = BaseCustomizationItem.__slots__ + __slots__
 
     def __init__(self, parentGroup=None):
@@ -137,7 +135,6 @@ class CamouflageItem(BaseCustomizationItem):
         self.componentsCovering = 0
         self.palettes = []
         self.invisibilityFactor = 1.0
-        self.texture = ''
         self.rotation = {'hull': 0.0,
          'turret': 0.0,
          'gun': 0.0}
@@ -149,12 +146,11 @@ class CamouflageItem(BaseCustomizationItem):
 class PersonalNumberItem(BaseCustomizationItem):
     itemType = CustomizationType.PERSONAL_NUMBER
     __prohibitedNumbers = ()
-    __slots__ = ('compatibleParts', 'texture', 'previewTexture', 'fontInfo', 'isMirrored')
+    __slots__ = ('compatibleParts', 'previewTexture', 'fontInfo', 'isMirrored')
     allSlots = BaseCustomizationItem.__slots__ + __slots__
 
     def __init__(self, parentGroup=None):
         self.compatibleParts = ApplyArea.INSCRIPTION_REGIONS
-        self.texture = ''
         self.previewTexture = ''
         self.fontInfo = None
         self.isMirrored = False
@@ -170,14 +166,35 @@ class PersonalNumberItem(BaseCustomizationItem):
         return cls.__prohibitedNumbers
 
 
+class SequenceItem(BaseCustomizationItem):
+    itemType = CustomizationType.SEQUENCE
+    __slots__ = ('sequenceName',)
+    allSlots = BaseCustomizationItem.__slots__ + __slots__
+
+    def __init__(self, parentGroup=None):
+        self.sequenceName = None
+        super(SequenceItem, self).__init__(parentGroup)
+        return
+
+
+class AttachmentItem(BaseCustomizationItem):
+    itemType = CustomizationType.ATTACHMENT
+    __slots__ = ('modelName',)
+    allSlots = BaseCustomizationItem.__slots__ + __slots__
+
+    def __init__(self, parentGroup=None):
+        self.modelName = None
+        super(AttachmentItem, self).__init__(parentGroup)
+        return
+
+
 class ModificationItem(BaseCustomizationItem):
     itemType = CustomizationType.MODIFICATION
-    __slots__ = ('effects', 'texture')
+    __slots__ = ('effects',)
     allSlots = BaseCustomizationItem.__slots__ + __slots__
 
     def __init__(self, parentGroup=None):
         self.effects = {}
-        self.texture = ''
         super(ModificationItem, self).__init__(parentGroup)
 
     def getEffectValue(self, type, default=0.0):
@@ -186,14 +203,13 @@ class ModificationItem(BaseCustomizationItem):
 
 class StyleItem(BaseCustomizationItem):
     itemType = CustomizationType.STYLE
-    __slots__ = ('outfits', 'isRent', 'rentCount', 'texture', 'modelsSet', 'textInfo')
+    __slots__ = ('outfits', 'isRent', 'rentCount', 'modelsSet', 'textInfo')
     allSlots = BaseCustomizationItem.__slots__ + __slots__
 
     def __init__(self, parentGroup=None):
         self.outfits = {}
         self.isRent = False
         self.rentCount = 1
-        self.texture = ''
         self.modelsSet = ''
         self.textInfo = ''
         super(StyleItem, self).__init__(parentGroup)
@@ -204,13 +220,12 @@ class StyleItem(BaseCustomizationItem):
 
 class InsigniaItem(BaseCustomizationItem):
     itemType = CustomizationType.INSIGNIA
-    __slots__ = ('atlas', 'alphabet', 'texture', 'canBeMirrored')
+    __slots__ = ('atlas', 'alphabet', 'canBeMirrored')
     allSlots = BaseCustomizationItem.__slots__ + __slots__
 
     def __init__(self, parentGroup=None):
         self.atlas = ''
         self.alphabet = ''
-        self.texture = ''
         self.canBeMirrored = False
         super(InsigniaItem, self).__init__(parentGroup)
 
@@ -332,7 +347,7 @@ class VehicleFilter(object):
 
 
 class CustomizationCache(object):
-    __slots__ = ('paints', 'camouflages', 'decals', 'projection_decals', 'modifications', 'levels', 'itemToPriceGroup', 'priceGroups', 'priceGroupNames', 'insignias', 'styles', 'defaultColors', 'itemTypes', 'priceGroupTags', '__victimStyles', 'personal_numbers', 'fonts')
+    __slots__ = ('paints', 'camouflages', 'decals', 'projection_decals', 'modifications', 'levels', 'itemToPriceGroup', 'priceGroups', 'priceGroupNames', 'insignias', 'styles', 'defaultColors', 'itemTypes', 'priceGroupTags', '__victimStyles', 'personal_numbers', 'fonts', 'sequences', 'attachments')
 
     def __init__(self):
         self.priceGroupTags = {}
@@ -349,6 +364,8 @@ class CustomizationCache(object):
         self.insignias = {}
         self.defaultColors = {}
         self.fonts = {}
+        self.sequences = {}
+        self.attachments = {}
         self.__victimStyles = {}
         self.itemTypes = {CustomizationType.MODIFICATION: self.modifications,
          CustomizationType.STYLE: self.styles,
@@ -357,7 +374,9 @@ class CustomizationCache(object):
          CustomizationType.PERSONAL_NUMBER: self.personal_numbers,
          CustomizationType.PAINT: self.paints,
          CustomizationType.PROJECTION_DECAL: self.projection_decals,
-         CustomizationType.INSIGNIA: self.insignias}
+         CustomizationType.INSIGNIA: self.insignias,
+         CustomizationType.SEQUENCE: self.sequences,
+         CustomizationType.ATTACHMENT: self.attachments}
         super(CustomizationCache, self).__init__()
 
     def isVehicleBound(self, itemId):

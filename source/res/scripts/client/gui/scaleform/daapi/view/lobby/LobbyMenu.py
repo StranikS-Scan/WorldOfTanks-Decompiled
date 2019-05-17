@@ -6,7 +6,7 @@ from adisp import process
 from async import async, await
 from gui import DialogsInterface
 from gui.Scaleform.daapi.view.dialogs import DIALOG_BUTTON_ID
-from gui.impl import dialogs
+from gui.impl.dialogs import dialogs
 from account_helpers.counter_settings import getCountNewSettings
 from gui.Scaleform.daapi.view.meta.LobbyMenuMeta import LobbyMenuMeta
 from gui.Scaleform.genConsts.MENU_CONSTANTS import MENU_CONSTANTS

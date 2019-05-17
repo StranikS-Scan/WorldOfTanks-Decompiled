@@ -532,6 +532,38 @@ class PersonalNumberComponent(SerializableComponent):
         return bool(self.number)
 
 
+class SequenceComponent(SerializableComponent):
+    customType = 9
+    fields = OrderedDict((('id', intField()),
+     ('slotId', xmlOnlyIntField(0)),
+     ('position', xmlOnlyFloatArrayField()),
+     ('rotation', xmlOnlyFloatArrayField())))
+    __slots__ = ('id', 'slotId', 'position', 'rotation')
+
+    def __init__(self, id=0, slotId=0, position=None, rotation=None):
+        self.id = id
+        self.slotId = slotId
+        self.position = position or [0, 0, 0]
+        self.rotation = rotation or [0, 0, 0]
+        super(SequenceComponent, self).__init__()
+
+
+class AttachmentComponent(SerializableComponent):
+    customType = 10
+    fields = OrderedDict((('id', intField()),
+     ('slotId', xmlOnlyIntField(0)),
+     ('position', xmlOnlyFloatArrayField()),
+     ('rotation', xmlOnlyFloatArrayField())))
+    __slots__ = ('id', 'slotId', 'position', 'rotation')
+
+    def __init__(self, id=0, slotId=0, position=None, rotation=None):
+        self.id = id
+        self.slotId = slotId
+        self.position = position or [0, 0, 0]
+        self.rotation = rotation or [0, 0, 0]
+        super(AttachmentComponent, self).__init__()
+
+
 class CustomizationOutfit(SerializableComponent):
     customType = 4
     fields = OrderedDict((('modifications', intArrayField()),
@@ -541,10 +573,12 @@ class CustomizationOutfit(SerializableComponent):
      ('styleId', intField()),
      ('projection_decals', customArrayField(ProjectionDecalComponent.customType)),
      ('insignias', customArrayField(InsigniaComponent.customType)),
-     ('personal_numbers', customArrayField(PersonalNumberComponent.customType))))
-    __slots__ = ('modifications', 'paints', 'camouflages', 'decals', 'styleId', 'projection_decals', 'insignias', 'personal_numbers')
+     ('personal_numbers', customArrayField(PersonalNumberComponent.customType)),
+     ('sequences', customArrayField(SequenceComponent.customType)),
+     ('attachments', customArrayField(AttachmentComponent.customType))))
+    __slots__ = ('modifications', 'paints', 'camouflages', 'decals', 'styleId', 'projection_decals', 'insignias', 'personal_numbers', 'sequences', 'attachments')
 
-    def __init__(self, modifications=None, paints=None, camouflages=None, decals=None, projection_decals=None, personal_numbers=None, styleId=0, insignias=None):
+    def __init__(self, modifications=None, paints=None, camouflages=None, decals=None, projection_decals=None, personal_numbers=None, styleId=0, insignias=None, sequences=None, attachments=None):
         self.modifications = modifications or []
         self.paints = paints or []
         self.camouflages = camouflages or []
@@ -553,6 +587,8 @@ class CustomizationOutfit(SerializableComponent):
         self.insignias = insignias or []
         self.projection_decals = projection_decals or []
         self.personal_numbers = personal_numbers or []
+        self.sequences = sequences or []
+        self.attachments = attachments or []
         super(CustomizationOutfit, self).__init__()
 
     def __nonzero__(self):

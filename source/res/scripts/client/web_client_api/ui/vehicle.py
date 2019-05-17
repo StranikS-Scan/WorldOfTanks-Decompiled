@@ -274,7 +274,6 @@ class _VehiclePackPreviewSchema(W2CSchema):
     items = Field(required=True, type=(list, NoneType), validator=lambda value, _: _validateItemsPack(value))
     back_url = Field(required=False, type=basestring)
     buy_params = Field(required=False, type=dict)
-    marathon_prefix = Field(required=False, type=basestring)
 
 
 class VehicleSellWebApiMixin(object):
@@ -351,7 +350,7 @@ class VehiclePreviewWebApiMixin(object):
                 datetimeInUTC = getDateTimeInUTC(timestamp)
                 localDatetime = utcToLocalDatetime(datetimeInUTC)
                 localEndTime = (localDatetime - getDateTimeInLocal(0)).total_seconds()
-            event_dispatcher.showVehiclePreview(vehTypeCompDescr=vehiclesID[0], itemsPack=items, price=price, oldPrice=oldPrice, title=cmd.title, endTime=localEndTime, previewAlias=self._getVehiclePreviewReturnAlias(cmd), previewBackCb=self._getVehiclePreviewReturnCallback(cmd), buyParams=cmd.buy_params, marathonPrefix=cmd.marathon_prefix)
+            event_dispatcher.showVehiclePreview(vehTypeCompDescr=vehiclesID[0], itemsPack=items, price=price, oldPrice=oldPrice, title=cmd.title, endTime=localEndTime, previewAlias=self._getVehiclePreviewReturnAlias(cmd), previewBackCb=self._getVehiclePreviewReturnCallback(cmd), buyParams=cmd.buy_params)
         else:
             _pushInvalidPreviewMessage()
         return

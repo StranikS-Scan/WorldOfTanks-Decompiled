@@ -88,4 +88,4 @@ class BoostersController(IBoostersController):
 
     def __timeTillNextReserveTick(self):
         clanReserves = self.goodiesCache.getClanReserves().values()
-        return min((reserve.getUsageLeftTime() for reserve in clanReserves)) if clanReserves else 0
+        return min((reserve.getUsageLeftTime() for reserve in clanReserves)) + 1 if clanReserves else 0

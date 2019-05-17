@@ -36,13 +36,12 @@ class StorageCategoryInHangarView(StorageCategoryInHangarViewMeta):
 
     def setActiveTab(self, tabId):
         tabsData = self.__getTabsData()
-        activeIdx = 0
-        for i, tab in enumerate(tabsData):
-            if tab['id'] == tabId:
-                activeIdx = i
-                break
+        if tabId:
+            for i, tab in enumerate(tabsData):
+                tabsData[i]['selected'] = False
+                if tab.get('id') == tabId:
+                    tabsData[i]['selected'] = True
 
-        tabsData[activeIdx]['selected'] = True
         self.as_setTabsDataS(tabsData)
 
     def _populate(self):

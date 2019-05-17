@@ -24,6 +24,7 @@ class EpicBattleTankCarousel(TankCarousel):
 
     def _getInitialFilterVO(self, contexts):
         filtersVO = super(EpicBattleTankCarousel, self)._getInitialFilterVO(contexts)
+        filtersVO['isFrontline'] = True
         length = len(filtersVO['hotFilters'])
         for id_ in range(0, length):
             entry = filtersVO['hotFilters'][id_]

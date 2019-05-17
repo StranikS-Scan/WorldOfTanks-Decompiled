@@ -17,6 +17,7 @@ from gui.Scaleform.genConsts.BOOSTER_CONSTANTS import BOOSTER_CONSTANTS
 from gui.Scaleform.genConsts.TEXT_ALIGN import TEXT_ALIGN
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.Scaleform.locale.BADGE import BADGE
+from gui.Scaleform.locale.NATIONS import NATIONS
 from gui.Scaleform.locale.QUESTS import QUESTS
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
@@ -41,6 +42,7 @@ from items import vehicles, tankmen
 from items.components import c11n_components as cc
 from items.components.crewSkins_constants import NO_CREW_SKIN_ID
 from items.tankmen import RECRUIT_TMAN_TOKEN_PREFIX
+from nations import NAMES
 from personal_missions import PM_BRANCH, PM_BRANCH_TO_FREE_TOKEN_NAME
 from shared_utils import makeTupleByDict, CONST_CONTAINER
 from skeletons.gui.customization import ICustomizationService
@@ -1063,7 +1065,7 @@ class CustomizationsBonus(SimpleBonus):
             if key is not None:
                 bonusDesc = _ms(key, value=item.userName)
                 if value > 0:
-                    bonusDesc = bonusDesc + _ms(VEHICLE_CUSTOMIZATION.ELEMENTBONUS_FACTOR, count=value)
+                    bonusDesc = bonusDesc + ' ' + _ms(VEHICLE_CUSTOMIZATION.ELEMENTBONUS_FACTOR, count=value)
                 if count < customizationsCountMax:
                     bonusDesc = bonusDesc + separator
             result.append({'intCD': item.intCD,
@@ -1252,6 +1254,7 @@ class BlueprintsBonusSubtypes(CONST_CONTAINER):
 
 
 class VehicleBlueprintBonus(SimpleBonus):
+    _HTML_TEMPLATE = 'vehicleBlueprints'
 
     def getBlueprintName(self):
         return BlueprintsBonusSubtypes.FINAL_FRAGMENT if self.__isFinalFragment() else BlueprintsBonusSubtypes.VEHICLE_FRAGMENT
@@ -1271,11 +1274,23 @@ class VehicleBlueprintBonus(SimpleBonus):
     def getCount(self):
         return self._value[1]
 
+    def getTooltip(self):
+        pass
+
     def _getFragmentCD(self):
         return self._value[0]
 
-    def getTooltip(self):
-        pass
+    def _getFormattedMessage(self, styleSubset, formattedValue):
+        vehicleName = self.itemsCache.items.getItemByCD(self._getFragmentCD()).shortUserName
+        return makeHtmlString('html_templates:lobby/quests/{}'.format(styleSubset), self._HTML_TEMPLATE, {'vehicleName': vehicleName,
+         'value': formattedValue})
+
+    def _format(self, styleSubset):
+        formattedValue = str(self.getValue()[1])
+        text = ''
+        if formattedValue is not None:
+            text = self._getFormattedMessage(styleSubset, formattedValue)
+        return text
 
     def __isFinalFragment(self):
         level = self.itemsCache.items.getItemByCD(self._getFragmentCD()).level
@@ -1284,6 +1299,7 @@ class VehicleBlueprintBonus(SimpleBonus):
 
 
 class IntelligenceBlueprintBonus(VehicleBlueprintBonus):
+    _HTML_TEMPLATE = 'universalBlueprints'
 
     def getBlueprintName(self):
         return BlueprintsBonusSubtypes.UNIVERSAL_FRAGMENT
@@ -1300,8 +1316,12 @@ class IntelligenceBlueprintBonus(VehicleBlueprintBonus):
     def formatBlueprintValue(self):
         pass
 
+    def _getFormattedMessage(self, styleSubset, formattedValue):
+        return makeHtmlString('html_templates:lobby/quests/{}'.format(styleSubset), self._HTML_TEMPLATE, {'value': formattedValue})
+
 
 class NationalBlueprintBonus(VehicleBlueprintBonus):
+    _HTML_TEMPLATE = 'nationBlueprints'
 
     def getBlueprintName(self):
         return BlueprintsBonusSubtypes.NATION_FRAGMENT
@@ -1310,15 +1330,24 @@ class NationalBlueprintBonus(VehicleBlueprintBonus):
         return int(makeNationalCD(self._getFragmentCD()))
 
     def getImage(self, size='big'):
-        nationID = getFragmentNationID(self._getFragmentCD())
         import nations
-        return RES_ICONS.getBlueprintFragment(size, nations.NAMES[nationID])
+        nationName = nations.NAMES[self.__getNationID()]
+        return RES_ICONS.getBlueprintFragment(size, nationName)
 
     def getBlueprintSpecialAlias(self):
         return TOOLTIPS_CONSTANTS.BLUEPRINT_FRAGMENT_INFO
 
     def formatBlueprintValue(self):
         pass
+
+    def _getFormattedMessage(self, styleSubset, formattedValue):
+        nationID = self.__getNationID()
+        localizedNationName = i18n.makeString(NATIONS.genetiveCase(NAMES[nationID]))
+        return makeHtmlString('html_templates:lobby/quests/{}'.format(styleSubset), self._HTML_TEMPLATE, {'nationName': localizedNationName,
+         'value': formattedValue})
+
+    def __getNationID(self):
+        return getFragmentNationID(self._getFragmentCD())
 
 
 class CrewSkinsBonus(SimpleBonus):

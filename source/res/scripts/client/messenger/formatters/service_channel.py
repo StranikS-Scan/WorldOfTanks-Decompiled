@@ -106,6 +106,10 @@ def _getCustomizationItemData(itemId, custType):
         customizationType = CustomizationType.PROJECTION_DECAL
     elif custType == 'personal_number':
         customizationType = CustomizationType.PERSONAL_NUMBER
+    elif custType == 'sequence':
+        customizationType = CustomizationType.SEQUENCE
+    elif custType == 'attachment':
+        customizationType = CustomizationType.ATTACHMENT
     compactDescr = makeIntCompactDescrByID('customizationItem', customizationType, itemId)
     item = itemsCache.items.getItemByCD(compactDescr)
     if custType == 'decal':
@@ -846,9 +850,8 @@ class InvoiceReceivedFormatter(WaitItemsSyncFormatter):
         result = ''
         currencies = compensationMoney.getSetCurrencies(byWeight=True)
         for currency in currencies:
-            formatter = getBWFormatter(currency)
             key = '{}Compensation'.format(currency)
-            values.append(htmlTemplates.format(key + htmlTplPostfix, ctx={'amount': formatter(compensationMoney.get(currency))}))
+            values.append(htmlTemplates.format(key + htmlTplPostfix, ctx={'amount': applyAll(currency, compensationMoney.get(currency))}))
 
         if values:
             result = htmlTemplates.format('customizationCompensation' + htmlTplPostfix, ctx={'type': strItemType,
@@ -1072,9 +1075,8 @@ class InvoiceReceivedFormatter(WaitItemsSyncFormatter):
         result = ''
         currencies = compensationMoney.getSetCurrencies(byWeight=True)
         for currency in currencies:
-            formatter = getBWFormatter(currency)
             key = '{}Compensation'.format(currency)
-            values.append(htmlTemplates.format(key + htmlTplPostfix, ctx={'amount': formatter(compensationMoney.get(currency))}))
+            values.append(htmlTemplates.format(key + htmlTplPostfix, ctx={'amount': applyAll(currency, compensationMoney.get(currency))}))
 
         if values:
             result = htmlTemplates.format('compensationFor' + htmlTplPostfix, ctx={'items': ', '.join(strItemNames),
@@ -2918,10 +2920,13 @@ class ProgressiveRewardFormatter(WaitItemsSyncFormatter):
             data = message.data
             if 'rewards' in data and 'level' in data:
                 fmt = TokenQuestsFormatter.formatQuestAchieves(data['rewards'], False)
-                formatted = g_settings.msgTemplates.format(self._template, ctx={'text': fmt})
-                settings = self._getGuiSettings(message, self._template)
-                settings.showAt = BigWorld.time()
-                callback([_MessageData(formatted, settings)])
+                if fmt:
+                    formatted = g_settings.msgTemplates.format(self._template, ctx={'text': fmt})
+                    settings = self._getGuiSettings(message, self._template)
+                    settings.showAt = BigWorld.time()
+                    callback([_MessageData(formatted, settings)])
+                else:
+                    callback([_MessageData(None, None)])
             else:
                 callback([_MessageData(None, None)])
         else:

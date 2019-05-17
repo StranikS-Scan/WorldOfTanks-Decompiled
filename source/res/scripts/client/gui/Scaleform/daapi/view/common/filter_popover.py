@@ -31,6 +31,9 @@ class VehiclesFilterPopover(TankCarouselFilterPopoverMeta):
     def __init__(self, ctx):
         super(VehiclesFilterPopover, self).__init__()
         self._carousel = None
+        if ctx:
+            data = ctx['data']
+            self._isFrontline = data.isFrontline
         self.__mapping = {}
         self.__usedFilters = ()
         return
@@ -112,7 +115,8 @@ class VehiclesFilterPopover(TankCarouselFilterPopoverMeta):
             filterCtx = contexts.get(entry, FilterSetupContext())
             dataVO['specials'].append({'value': getButtonsAssetPath(filterCtx.asset or entry),
              'tooltip': makeTooltip('#tank_carousel_filter:tooltip/{}/header'.format(entry), _ms('#tank_carousel_filter:tooltip/{}/body'.format(entry), **filterCtx.ctx)),
-             'selected': isSelected(entry)})
+             'selected': isSelected(entry),
+             'enabled': not (entry == 'bonus' and self._isFrontline)})
 
         if not dataVO['hidden']:
             dataVO['hiddenSectionVisible'] = False

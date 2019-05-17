@@ -66,7 +66,7 @@ class CrashedTrackController(Component):
         self.__setupTracksHiding()
 
     def __setupTrackAssembler(self, entity):
-        modelNames = getPartModelsFromDesc(self.__vehicleDesc, ModelsSetParams(self.__modelsSet, 'destroyed'))
+        modelNames = getPartModelsFromDesc(self.__vehicleDesc, ModelsSetParams(self.__modelsSet, 'destroyed', []))
         compoundAssembler = BigWorld.CompoundAssembler()
         compoundAssembler.addRootPart(modelNames.chassis, TankPartNames.CHASSIS, entity.filter.groundPlacingMatrix)
         compoundAssembler.name = TankPartNames.CHASSIS
@@ -156,10 +156,14 @@ class CrashedTrackController(Component):
             model = resources[TankPartNames.CHASSIS]
             self.__model = model
             self.__model.matrix = self.__entity.filter.groundPlacingMatrix
-            self.__fashion = BigWorld.WGVehicleFashion(True)
+            self.__fashion = BigWorld.WGVehicleFashion()
             matHandlers = self.__baseTrackFashion.getMaterialHandlers()
             for handler in matHandlers:
                 self.__fashion.addMaterialHandler(handler)
+
+            matHandlers = self.__baseTrackFashion.getTrackMaterialHandlers()
+            for handler in matHandlers:
+                self.__fashion.addTrackMaterialHandler(handler)
 
             model_assembler.setupTracksFashion(self.__vehicleDesc, self.__fashion)
             self.__model.setupFashions([self.__fashion])

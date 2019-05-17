@@ -7,7 +7,7 @@ from gui.Scaleform.daapi.view.lobby.hof.hof_helpers import getHofTabCounter, isH
 from gui.Scaleform.daapi.view.meta.ProfileMeta import ProfileMeta
 from gui.Scaleform.genConsts.PROFILE_CONSTANTS import PROFILE_CONSTANTS
 from gui.Scaleform.locale.PROFILE import PROFILE
-from gui.shared import events
+from gui.shared import events, g_eventBus
 from gui.shared.event_bus import EVENT_BUS_SCOPE
 from gui.sounds.ambients import LobbySubViewEnv
 from gui.ClientUpdateManager import g_clientUpdateManager
@@ -15,6 +15,8 @@ from helpers import dependency
 from helpers.i18n import makeString
 from skeletons.gui.lobby_context import ILobbyContext
 from gui.Scaleform.daapi.view.lobby.profile.sound_constants import ACHIEVEMENTS_SOUND_SPACE
+from gui.Scaleform.daapi.view.lobby.hof.web_handlers import createHofWebHandlers
+from gui.Scaleform.daapi.view.lobby.hof.hof_helpers import getHofDisabledKeys, onServerSettingsChange
 
 class ProfilePage(LobbySubView, ProfileMeta):
     __sound_env__ = LobbySubViewEnv
@@ -48,6 +50,13 @@ class ProfilePage(LobbySubView, ProfileMeta):
     def _populate(self):
         super(ProfilePage, self)._populate()
         self.lobbyContext.getServerSettings().onServerSettingsChange += self.__onServerSettingChanged
+        if self.__ctx and self.__ctx.get('hofPageUrl'):
+            self.__loadHofUrl(self.__ctx.get('hofPageUrl'))
+
+    def _invalidate(self, *args, **kwargs):
+        super(ProfilePage, self)._invalidate(*args, **kwargs)
+        if args[0] and args[0].get('hofPageUrl'):
+            self.__loadHofUrl(args[0].get('hofPageUrl'))
 
     def _dispose(self):
         g_clientUpdateManager.removeObjectCallbacks(self)
@@ -122,3 +131,12 @@ class ProfilePage(LobbySubView, ProfileMeta):
             self.__tabNavigator.as_setBtnTabCountersS(counters)
         else:
             self.__tabNavigator.as_setBtnTabCountersS([])
+
+    def __loadHofUrl(self, url):
+        g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.BROWSER_VIEW, ctx={'url': url,
+         'returnAlias': VIEW_ALIAS.LOBBY_PROFILE,
+         'allowRightClick': True,
+         'webHandlers': createHofWebHandlers(),
+         'selectedAlias': VIEW_ALIAS.PROFILE_HOF,
+         'disabledKeys': getHofDisabledKeys(),
+         'onServerSettingsChange': onServerSettingsChange}), EVENT_BUS_SCOPE.LOBBY)

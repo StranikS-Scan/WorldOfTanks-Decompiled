@@ -10,7 +10,7 @@ class DialogPricesTooltip(ViewImpl):
     __slots__ = ()
 
     def __init__(self, *args, **kwargs):
-        super(DialogPricesTooltip, self).__init__(R.views.dialogPricesTooltip(), ViewFlags.VIEW, DialogPricesTooltipModel, *args, **kwargs)
+        super(DialogPricesTooltip, self).__init__(R.views.common.dialog_view.components.dialog_prices_tooltip.DialogPricesTooltip(), ViewFlags.VIEW, DialogPricesTooltipModel, *args, **kwargs)
 
     @property
     def viewModel(self):

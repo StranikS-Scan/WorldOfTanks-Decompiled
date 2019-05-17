@@ -1,7 +1,7 @@
 <root>
   <Paths>
-    <Path cacheSubdirs="true">./res_mods/1.5.0.2</Path>
-    <Path mode="recursive" mask="*.wotmod" root="res">./mods/1.5.0.2</Path>
+    <Path cacheSubdirs="true">./res_mods/1.5.1.0 Common Test</Path>
+    <Path mode="recursive" mask="*.wotmod" root="res">./mods/1.5.1.0 Common Test</Path>
     <Packages>
       <Package type="sd,hd">./res/packages/shared_content-part2.pkg</Package>
       <Package type="sd,hd">./res/packages/shared_content-part1.pkg</Package>
@@ -88,6 +88,8 @@
       <Package type="hd">./res/packages/59_asia_great_wall_hd.pkg</Package>
       <Package type="sd,hd">./res/packages/63_tundra.pkg</Package>
       <Package type="hd">./res/packages/63_tundra_hd.pkg</Package>
+      <Package type="sd,hd">./res/packages/83_kharkiv.pkg</Package>
+      <Package type="hd">./res/packages/83_kharkiv_hd.pkg</Package>
       <Package type="sd,hd">./res/packages/90_minsk.pkg</Package>
       <Package type="hd">./res/packages/90_minsk_hd.pkg</Package>
       <Package type="sd,hd">./res/packages/95_lost_city_ctf.pkg</Package>
@@ -96,8 +98,6 @@
       <Package type="hd">./res/packages/99_poland_hd.pkg</Package>
       <Package type="sandbox,sd,hd">./res/packages/hangar_v3.pkg</Package>
       <Package type="hd">./res/packages/hangar_v3_hd.pkg</Package>
-      <Package type="sd,hd">./res/packages/hangar_victory_day.pkg</Package>
-      <Package type="hd">./res/packages/hangar_victory_day_hd.pkg</Package>
       <Package type="sandbox,sd,hd">./res/packages/audioww-part1.pkg</Package>
       <Package type="sandbox,sd,hd">./res/packages/audioww-part2.pkg</Package>
       <Package type="sandbox,sd,hd">./res/packages/gui.pkg</Package>

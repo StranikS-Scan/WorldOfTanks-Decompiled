@@ -28,7 +28,7 @@ def onVideoDone():
 
 
 class _MarathonVideoEvents(CONST_CONTAINER):
-    VIDEO_START = {MarathonVideos.VEHICLE: 'reward_tank_marathon_{}'}
+    VIDEO_START = {MarathonVideos.VEHICLE: 'gui_marathon_video_tank_{}'}
     VIDEO_DONE = 'gui_marathon_video_stop'
 
 

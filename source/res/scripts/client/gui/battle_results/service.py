@@ -154,7 +154,7 @@ class BattleResultsService(IBattleResultsService):
         for bonusInfo in self.__getAdditionalXPBattles().itervalues():
             if not bonusInfo:
                 continue
-            curArenaUniqueID, bonusValue, _ = bonusInfo
+            curArenaUniqueID, _, bonusValue, _ = bonusInfo
             if arenaUniqueID == curArenaUniqueID:
                 return bonusValue
 
@@ -165,7 +165,7 @@ class BattleResultsService(IBattleResultsService):
         for vehicleID, bonusInfo in self.__getAdditionalXPBattles().iteritems():
             if not bonusInfo:
                 continue
-            curArenaUniqueID, _, _ = bonusInfo
+            curArenaUniqueID, _, _, _ = bonusInfo
             if arenaUniqueID == curArenaUniqueID:
                 return vehicleID
 

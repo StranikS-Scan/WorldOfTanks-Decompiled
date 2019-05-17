@@ -11,7 +11,7 @@ from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.go_back_helper import getBackBtnLabel
 from gui.Scaleform.daapi.view.lobby.techtree.techtree_dp import g_techTreeDP
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
-from gui.impl import dialogs
+from gui.impl.dialogs import dialogs
 from gui.impl.backport.backport_tooltip import createTooltipData, BackportTooltipWindow
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.blueprints.blueprint_screen_model import BlueprintScreenModel
@@ -52,7 +52,7 @@ class BlueprintScreen(ViewImpl):
         return super(BlueprintScreen, self).getViewModel()
 
     def createToolTip(self, event):
-        if event.contentID == R.views.backportTooltipContent():
+        if event.contentID == R.views.common.tooltip_window.backport_tooltip_content.BackportTooltipContent():
             tooltipId = event.getArgument('tooltipId')
             tooltipData = self.__getTooltipData(tooltipId)
             if tooltipData is None:
@@ -70,6 +70,7 @@ class BlueprintScreen(ViewImpl):
         vehicle = self.__vehicle
         bpRequester = self.__itemsCache.items.blueprints
         vehType = getVehTypeIconName(vehicle.type, vehicle.isElite)
+        showBlueprintInfotypeIcon = self.__vehicle.level not in SPECIAL_BLUEPRINT_LEVEL
         rows, columns, layout = bpRequester.getLayout(vehicle.intCD, vehicle.level)
         filledCount, totalCount = bpRequester.getBlueprintCount(vehicle.intCD, vehicle.level)
         isSchemeFullCompleted = filledCount == totalCount
@@ -81,6 +82,7 @@ class BlueprintScreen(ViewImpl):
             model.setVehicleLevel(int2roman(vehicle.level))
             model.setVehicleType(vehType)
             model.setIsElite(vehicle.isElite)
+            model.setShowBlueprintInfotypeIcon(showBlueprintInfotypeIcon)
             model.setConversionAvailable(self.__isConversionAvailable())
             model.setCost(BigWorld.wg_getIntegralFormat(self.__xpCost))
             model.setDiscount(self.__discount)

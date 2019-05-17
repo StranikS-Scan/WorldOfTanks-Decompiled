@@ -1,13 +1,14 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/hof/hof_helpers.py
+import logging
 import Keys
-from debug_utils import LOG_CURRENT_EXCEPTION, LOG_DEBUG
 from helpers import dependency
 from gui import GUI_SETTINGS, DialogsInterface
 from gui.Scaleform.genConsts.PROFILE_CONSTANTS import PROFILE_CONSTANTS
 from skeletons.gui.lobby_context import ILobbyContext
 from account_helpers import AccountSettings
 from account_helpers.AccountSettings import NEW_HOF_COUNTER
+_logger = logging.getLogger(__name__)
 NEW_HOF_BUTTONS_IDS = (PROFILE_CONSTANTS.HOF_ACHIEVEMENTS_BUTTON, PROFILE_CONSTANTS.HOF_VEHICLES_BUTTON)
 NEW_ACHIEVEMENTS_BUTTONS_IDS = (PROFILE_CONSTANTS.HOF_ACHIEVEMENTS_BUTTON, PROFILE_CONSTANTS.HOF_VEHICLES_BUTTON, PROFILE_CONSTANTS.HOF_VIEW_RATING_BUTTON)
 
@@ -19,7 +20,21 @@ def _getHofUrl(urlName, lobbyContext=None):
         try:
             return lobbyContext.getServerSettings().bwHallOfFame.hofHostUrl + GUI_SETTINGS.hallOfFame.get(urlName)
         except (AttributeError, TypeError):
-            LOG_CURRENT_EXCEPTION()
+            _logger.exception('_getHofUrl() error')
+            return
+
+        return
+
+
+@dependency.replace_none_kwargs(lobbyContext=ILobbyContext)
+def isHofEnabled(lobbyContext=None):
+    if lobbyContext is None:
+        return
+    else:
+        try:
+            return lobbyContext.getServerSettings().isHofEnabled()
+        except (AttributeError, TypeError):
+            _logger.exception('isHofEnabled() error')
             return
 
         return
@@ -29,19 +44,27 @@ def getHofAchievementsRatingUrl():
     return _getHofUrl('achievementsRatingUrl')
 
 
+def getHofAchievementsStatisticUrl():
+    return _getHofUrl('achievementsStatisticUrl')
+
+
 def getHofVehiclesRatingUrl():
     return _getHofUrl('vehiclesRatingUrl')
 
 
+def getHofVehiclesStatisticUrl():
+    return _getHofUrl('vehiclesStatisticUrl')
+
+
 def getHofRatingUrlForVehicle(vehicleCD):
     if vehicleCD is None:
-        LOG_DEBUG('vehicleCD should be not None')
+        _logger.debug('vehicleCD should be not None')
         return
     else:
         try:
             return _getHofUrl('vehiclesRatingUrl') + '/' + str(vehicleCD)
         except TypeError:
-            LOG_CURRENT_EXCEPTION()
+            _logger.exception('getHofRatingUrlForVehicle() error')
             return
 
         return
@@ -342,8 +365,7 @@ def showDisabledDialog():
 
 def onServerSettingsChange(browserView, diff):
     if 'hallOfFame' in diff:
-        isHofEnabled = diff['hallOfFame'].get('isHofEnabled', False)
-        if not isHofEnabled:
+        if not diff['hallOfFame'].get('isHofEnabled', False):
             browserView.updateCtx({'selectedAlias': None})
             browserView.onCloseView()
             showDisabledDialog()

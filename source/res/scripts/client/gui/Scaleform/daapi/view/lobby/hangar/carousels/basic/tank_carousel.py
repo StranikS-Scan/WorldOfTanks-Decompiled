@@ -129,7 +129,8 @@ class TankCarousel(TankCarouselMeta):
         filtersVO = {'mainBtn': {'value': getButtonsAssetPath('params'),
                      'tooltip': TANK_CAROUSEL_FILTER.TOOLTIP_PARAMS},
          'hotFilters': [],
-         'isVisible': self._getFiltersVisible()}
+         'isVisible': self._getFiltersVisible(),
+         'isFrontline': False}
         for entry in self._usedFilters:
             filterCtx = contexts.get(entry, FilterSetupContext())
             filtersVO['hotFilters'].append({'id': entry,

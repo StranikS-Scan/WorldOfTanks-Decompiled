@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/classic/team_bases_panel.py
+from constants import ARENA_GUI_TYPE
 from gui.Scaleform.daapi.view.meta.TeamBasesPanelMeta import TeamBasesPanelMeta
 from gui.Scaleform.locale.INGAME_GUI import INGAME_GUI as I18N_INGAME_GUI
 from gui.battle_control.controllers import team_bases_ctrl
@@ -118,7 +119,7 @@ class TeamBasesPanel(TeamBasesPanelMeta, team_bases_ctrl.ITeamBasesListener):
             return
         else:
             capturingString = item.getCapturingString(points)
-            self.as_updateCaptureDataS(clientID, points, rate, time_utils.getTimeLeftFormat(timeLeft), self.__getInvadersCountStr(invadersCnt), capturingString)
+            self.as_updateCaptureDataS(clientID, points, rate, time_utils.getTimeLeftFormat(timeLeft), self.__getInvadersCountStr(invadersCnt), capturingString, item.getColor())
             return
 
     def blockTeamBaseCapturing(self, clientID, points):
@@ -126,7 +127,8 @@ class TeamBasesPanel(TeamBasesPanelMeta, team_bases_ctrl.ITeamBasesListener):
         if not item:
             return
         else:
-            self.as_updateCaptureDataS(clientID, points, 0, '-:-', '-', item.getBlockedString())
+            color = 'grey' if self.sessionProvider.arenaVisitor.getArenaGuiType() in ARENA_GUI_TYPE.EPIC_RANGE else item.getColor()
+            self.as_updateCaptureDataS(clientID, points, 0, '-:-', '-', item.getBlockedString(), color)
             return
 
     def stopTeamBaseCapturing(self, clientID, points):

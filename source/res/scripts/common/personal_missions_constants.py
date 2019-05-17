@@ -105,6 +105,9 @@ class IClientDescription(object):
     def getContainerType(cls):
         raise NotImplementedError
 
+    def __repr__(self):
+        return self.__class__.__name__
+
 
 class RegularDescription(IClientDescription):
     __slots__ = ('iconID', 'limiterID', 'isInOrGroup')
@@ -118,6 +121,9 @@ class RegularDescription(IClientDescription):
     def getContainerType(cls):
         return CONTAINER.BODY
 
+    def __repr__(self):
+        return self.__class__.__name__ + ': ' + str(self.iconID) + ' ' + str(self.limiterID) + ' ' + str(self.isInOrGroup)
+
 
 class AverageDescription(RegularDescription):
     __slots__ = RegularDescription.__slots__ + ('counterID',)
@@ -125,6 +131,9 @@ class AverageDescription(RegularDescription):
     def __init__(self, iconID, counterID, limiterID=None, isInOrGroup=False):
         super(AverageDescription, self).__init__(iconID, limiterID, isInOrGroup)
         self.counterID = counterID
+
+    def __repr__(self):
+        return self.__class__.__name__ + ': ' + str(self.iconID) + ' ' + str(self.counterID) + ' ' + str(self.limiterID) + ' ' + str(self.isInOrGroup)
 
 
 class HeaderDescription(IClientDescription):
@@ -137,6 +146,9 @@ class HeaderDescription(IClientDescription):
     @classmethod
     def getContainerType(cls):
         return CONTAINER.HEADER
+
+    def __repr__(self):
+        return self.__class__.__name__ + ': ' + str(self.displayType) + ' ' + str(self.isInOrGroup)
 
 
 class DESCRIPTIONS(object):

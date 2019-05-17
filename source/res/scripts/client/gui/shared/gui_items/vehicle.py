@@ -294,7 +294,11 @@ class Vehicle(FittingItem, HasStrCD):
             for slotsAnchor in slotHelper.tankAreaSlot:
                 slotType = ANCHOR_TYPE_TO_SLOT_TYPE_MAP.get(slotsAnchor.type, None)
                 if slotType is not None:
-                    if slotType in (GUI_ITEM_TYPE.PROJECTION_DECAL, GUI_ITEM_TYPE.MODIFICATION, GUI_ITEM_TYPE.STYLE):
+                    if slotType in (GUI_ITEM_TYPE.PROJECTION_DECAL,
+                     GUI_ITEM_TYPE.MODIFICATION,
+                     GUI_ITEM_TYPE.STYLE,
+                     GUI_ITEM_TYPE.SEQUENCE,
+                     GUI_ITEM_TYPE.ATTACHMENT):
                         areaId = Area.MISC
                     else:
                         areaId = slotHelper.tankAreaId

@@ -51,7 +51,7 @@ class _CachedVehicle(object):
         self._clearChangeCallback()
         self._removeListeners()
 
-    def selectVehicle(self, vehID):
+    def selectVehicle(self, vehInvID=0, callback=None, waitingOverlapsUI=False):
         raise NotImplementedError
 
     def selectNoVehicle(self):
@@ -267,7 +267,7 @@ class _CurrentVehicle(_CachedVehicle):
     def isCustomizationEnabled(self):
         return not self.isPresent() or self.item.isCustomizationEnabled()
 
-    def selectVehicle(self, vehInvID=0, callback=None):
+    def selectVehicle(self, vehInvID=0, callback=None, waitingOverlapsUI=False):
         vehicle = self.itemsCache.items.getVehicle(vehInvID)
         if vehicle is None:
             invVehs = self.itemsCache.items.getVehicles(criteria=REQ_CRITERIA.INVENTORY)
@@ -281,7 +281,7 @@ class _CurrentVehicle(_CachedVehicle):
                 vehInvID = sorted(invVehs.itervalues(), cmp=notEvent)[0].invID
             else:
                 vehInvID = 0
-        self._selectVehicle(vehInvID, callback)
+        self._selectVehicle(vehInvID, callback, waitingOverlapsUI)
         return
 
     def selectNoVehicle(self):
@@ -320,10 +320,10 @@ class _CurrentVehicle(_CachedVehicle):
         self.igrCtrl.onIgrTypeChanged -= self.onIgrTypeChanged
         self.rentals.onRentChangeNotify -= self.onRentChange
 
-    def _selectVehicle(self, vehInvID, callback=None):
+    def _selectVehicle(self, vehInvID, callback=None, waitingOverlapsUI=False):
         if vehInvID == self.__vehInvID:
             return
-        Waiting.show('updateCurrentVehicle', isSingle=True, overlapsUI=False)
+        Waiting.show('updateCurrentVehicle', isSingle=True, overlapsUI=waitingOverlapsUI)
         self.onChangeStarted()
         self.__vehInvID = vehInvID
         AccountSettings.setFavorites(CURRENT_VEHICLE, vehInvID)

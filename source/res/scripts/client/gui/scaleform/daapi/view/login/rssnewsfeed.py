@@ -1,11 +1,11 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/login/RssNewsFeed.py
+import logging
 import uuid
 import BigWorld
 import ResMgr
 import constants
 from adisp import process, async
-from debug_utils import LOG_DEBUG, LOG_ERROR, LOG_CURRENT_EXCEPTION
 from external_strings_utils import unicode_from_utf8
 from gui import GUI_SETTINGS
 from gui.Scaleform.daapi.view.meta.RssNewsFeedMeta import RssNewsFeedMeta
@@ -14,6 +14,7 @@ from helpers import dependency
 from helpers.i18n import encodeUtf8
 from shared_utils import findFirst
 from skeletons.gui.game_control import IExternalLinksController, IBrowserController
+_logger = logging.getLogger(__name__)
 
 class RssNewsFeed(RssNewsFeedMeta):
     UPDATE_INTERVAL = 60
@@ -42,8 +43,8 @@ class RssNewsFeed(RssNewsFeedMeta):
                 if browser is not None:
                     openBrowser = browser.load
                 else:
-                    LOG_ERROR('Attempting to open internal browser, but browseris not exist. External browser will be opened', str(linkToOpen))
-            LOG_DEBUG('Open browser', linkToOpen)
+                    _logger.error('Attempting to open internal browser, but browseris not exist. External browser will be opened: %r', linkToOpen)
+            _logger.debug('Open browser: %r', linkToOpen)
             openBrowser(linkToOpen)
         return
 
@@ -67,7 +68,7 @@ class RssNewsFeed(RssNewsFeedMeta):
             from helpers.RSSDownloader import g_downloader as g_rss
             if g_rss is not None:
                 g_rss.download(self.__onRssFeedReceived, url=requestUrl)
-            LOG_DEBUG('Requesting login RSS news', requestUrl)
+            _logger.debug('Requesting login RSS news: %s', requestUrl)
         return
 
     def __onRssFeedReceived(self, data):
@@ -80,7 +81,7 @@ class RssNewsFeed(RssNewsFeedMeta):
                 if data is not None:
                     self.__feed.append(data)
 
-            LOG_DEBUG('RSS feed received, entries count', len(self.__feed))
+            _logger.debug('RSS feed received, entries count %d', len(self.__feed))
             self.as_updateFeedS(self.__feed[:self.SHOW_NEWS_COUNT])
             return
 
@@ -114,8 +115,7 @@ class RssNewsFeed(RssNewsFeedMeta):
                 if len(description) > self.DESCRIPTION_MAX_LENGTH:
                     description = description[:self.DESCRIPTION_CUT_LENGTH] + self.DESCRIPTION_TAIL
             except Exception:
-                LOG_ERROR('Invalid RSS entry description', entryData, description)
-                LOG_CURRENT_EXCEPTION()
+                _logger.exception('Invalid RSS entry description: %r, %r', entryData, description)
                 return
 
         return {'id': entryData.get('id', str(uuid.uuid4())),

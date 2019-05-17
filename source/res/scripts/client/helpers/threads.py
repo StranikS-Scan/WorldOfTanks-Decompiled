@@ -1,10 +1,11 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/helpers/threads.py
+import logging
 import time
 import weakref
 import threading
 from Queue import Queue, Empty as QueueEmptyError
-from debug_utils import LOG_ERROR, LOG_DEBUG, LOG_CURRENT_EXCEPTION
+_logger = logging.getLogger(__name__)
 INFINITE_QUEUE_SIZE = 0
 
 class Job(object):
@@ -27,7 +28,7 @@ class Worker(threading.Thread):
         self._terminated = False
 
     def __del__(self):
-        LOG_DEBUG('Worker has been deleted', self)
+        _logger.debug('Worker has been deleted: %s', self)
 
     def terminate(self):
         self._terminated = True
@@ -45,7 +46,7 @@ class Worker(threading.Thread):
                     break
                 time.sleep(0.001)
             except Exception:
-                LOG_CURRENT_EXCEPTION()
+                _logger.exception('Exception raises in Worker: %r', self)
 
         return
 
@@ -55,7 +56,7 @@ class Worker(threading.Thread):
 
 class ThreadPool(object):
 
-    def __init__(self, workersLimit, queueLimit=INFINITE_QUEUE_SIZE):
+    def __init__(self, workersLimit, queueLimit=-1):
         self._jobs = Queue(queueLimit)
         self._running = False
         self._workers = []
@@ -67,7 +68,7 @@ class ThreadPool(object):
             try:
                 worker.start()
             except Exception:
-                LOG_ERROR('Worker has not been started properly', worker)
+                _logger.error('Worker has not been started properly: %r', worker)
             else:
                 self._workers.append(worker)
 
@@ -92,7 +93,7 @@ class ThreadPool(object):
 
     def putJob(self, job):
         if not self._running:
-            LOG_ERROR('Thread pool is not running. Trying to put new job', job)
+            _logger.error('Thread pool is not running. Trying to put new job: %r', job)
             return
         self._jobs.put_nowait(job)
 

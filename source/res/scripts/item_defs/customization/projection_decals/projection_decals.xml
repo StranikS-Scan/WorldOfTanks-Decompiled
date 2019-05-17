@@ -767,4 +767,128 @@
     </projection_decal>
     <name>	Apex Predator	</name>
   </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:projection_decals/special	</userString>
+    <season>	ALL	</season>
+    <historical>	true	</historical>
+    <priceGroup>	projection_decals notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	czech:Cz13_T_27	</vehicles>
+      </include>
+    </vehicleFilter>
+    <projection_decal>
+      <id>	108	</id>
+      <tags>	hiddenInUI	</tags>
+      <texture>	gui/maps/vehicles/decals/projection_decals/special/projection_decal_17.dds	</texture>
+      <userString>	#vehicle_customization:projection_decals/special/projection_decal_17	</userString>
+      <tags>	formfactor_rect1x6	</tags>
+      <mirror>	false	</mirror>
+    </projection_decal>
+    <projection_decal>
+      <id>	109	</id>
+      <tags>	hiddenInUI	</tags>
+      <texture>	gui/maps/vehicles/decals/projection_decals/special/projection_decal_18.dds	</texture>
+      <userString>	#vehicle_customization:projection_decals/special/projection_decal_18	</userString>
+      <tags>	formfactor_square	</tags>
+      <mirror>	false	</mirror>
+    </projection_decal>
+    <projection_decal>
+      <id>	110	</id>
+      <tags>	hiddenInUI	</tags>
+      <texture>	gui/maps/vehicles/decals/projection_decals/special/projection_decal_19.dds	</texture>
+      <userString>	#vehicle_customization:projection_decals/special/projection_decal_19	</userString>
+      <tags>	formfactor_square	</tags>
+      <mirror>	false	</mirror>
+    </projection_decal>
+    <name>	Cz Veteran Decals	</name>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:projection_decals/special	</userString>
+    <season>	ALL	</season>
+    <historical>	false	</historical>
+    <priceGroup>	projection_decals notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <levels>	8 10	</levels>
+      </include>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G119_Panzer58_BF germany:G114_Rheinmetall_Skorpian usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <projection_decal>
+      <id>	63	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/special/projection_decal_20.dds	</texture>
+      <userString>	#vehicle_customization:projection_decals/special/projection_decal_20	</userString>
+      <tags>	formfactor_square	</tags>
+      <mirror>	false	</mirror>
+    </projection_decal>
+    <name>	Legend of Global Map	</name>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:projection_decals/special	</userString>
+    <season>	ALL	</season>
+    <historical>	false	</historical>
+    <priceGroup>	projection_decals notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <levels>	8 10	</levels>
+      </include>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G119_Panzer58_BF germany:G114_Rheinmetall_Skorpian usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <projection_decal>
+      <id>	64	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/special/projection_decal_21.dds	</texture>
+      <userString>	#vehicle_customization:projection_decals/special/projection_decal_21	</userString>
+      <tags>	formfactor_square	</tags>
+      <mirror>	false	</mirror>
+    </projection_decal>
+    <name>	Tournament Champion	</name>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:projection_decals/special	</userString>
+    <season>	ALL	</season>
+    <historical>	false	</historical>
+    <priceGroup>	projection_decals notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <levels>	8 10	</levels>
+      </include>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G119_Panzer58_BF germany:G114_Rheinmetall_Skorpian usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <projection_decal>
+      <id>	65	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/special/projection_decal_22.dds	</texture>
+      <userString>	#vehicle_customization:projection_decals/special/projection_decal_22	</userString>
+      <tags>	formfactor_square	</tags>
+      <mirror>	false	</mirror>
+    </projection_decal>
+    <name>	Tournament Master	</name>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:projection_decals/special	</userString>
+    <season>	ALL	</season>
+    <historical>	false	</historical>
+    <priceGroup>	projection_decals notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <levels>	8 10	</levels>
+      </include>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G119_Panzer58_BF germany:G114_Rheinmetall_Skorpian usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <projection_decal>
+      <id>	66	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/special/projection_decal_23.dds	</texture>
+      <userString>	#vehicle_customization:projection_decals/special/projection_decal_23	</userString>
+      <tags>	formfactor_square	</tags>
+      <mirror>	false	</mirror>
+    </projection_decal>
+    <name>	Tournament Fighter	</name>
+  </itemGroup>
 </projection_decals.xml>

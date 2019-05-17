@@ -6,7 +6,7 @@ from gui.shared.gui_items import GUI_ITEM_TYPE
 from helpers import dependency
 from items import makeIntCompactDescrByID
 from items.components.c11n_constants import CustomizationType
-from items.customizations import PaintComponent, CamouflageComponent, DecalComponent, ProjectionDecalComponent, InsigniaComponent, PersonalNumberComponent
+from items.customizations import PaintComponent, CamouflageComponent, DecalComponent, ProjectionDecalComponent, InsigniaComponent, PersonalNumberComponent, SequenceComponent, AttachmentComponent
 from skeletons.gui.shared.gui_items import IGuiItemsFactory
 
 def pickPacker(itemTypeID):
@@ -26,6 +26,10 @@ def pickPacker(itemTypeID):
         return InsigniaPacker
     if itemTypeID == GUI_ITEM_TYPE.PERSONAL_NUMBER:
         return PersonalNumberPacker
+    if itemTypeID == GUI_ITEM_TYPE.SEQUENCE:
+        return SequencePacker
+    if itemTypeID == GUI_ITEM_TYPE.ATTACHMENT:
+        return AttachmentPacker
     LOG_WARNING('Unsupported packer for the given type', itemTypeID)
     return CustomizationPacker
 
@@ -48,6 +52,10 @@ def pickPackers(itemTypes):
         packers.append(InsigniaPacker)
     if GUI_ITEM_TYPE.PERSONAL_NUMBER in itemTypes:
         packers.append(PersonalNumberPacker)
+    if GUI_ITEM_TYPE.SEQUENCE in itemTypes:
+        packers.append(SequencePacker)
+    if GUI_ITEM_TYPE.ATTACHMENT in itemTypes:
+        packers.append(AttachmentPacker)
     if not packers:
         LOG_ERROR('Unsupported packer for the given type', itemTypes)
     return packers
@@ -278,3 +286,49 @@ class PersonalNumberPacker(CustomizationPacker):
     @staticmethod
     def getRawComponent():
         return PersonalNumberComponent
+
+
+class SequencePacker(CustomizationPacker):
+
+    @staticmethod
+    def pack(slot, component):
+        for _, sequence, subcomp in slot.items():
+            component.sequences.append(SequenceComponent(id=sequence.id, slotId=subcomp.slotId, position=subcomp.position, rotation=subcomp.rotation))
+
+    @classmethod
+    def unpack(cls, slot, component, proxy=None):
+        for _, subcomp in enumerate(component.sequences):
+            item = cls.create(subcomp, CustomizationType.SEQUENCE, proxy)
+            slot.append(item, component=subcomp)
+
+    @classmethod
+    def invalidate(cls, slot):
+        for _, sequence, comp in slot.items():
+            comp.id = sequence.id
+
+    @staticmethod
+    def getRawComponent():
+        return SequenceComponent
+
+
+class AttachmentPacker(CustomizationPacker):
+
+    @staticmethod
+    def pack(slot, component):
+        for _, attachment, subcomp in slot.items():
+            component.attachments.append(AttachmentComponent(id=attachment.id, slotId=subcomp.slotId, position=subcomp.position, rotation=subcomp.rotation))
+
+    @classmethod
+    def unpack(cls, slot, component, proxy=None):
+        for _, subcomp in enumerate(component.attachments):
+            item = cls.create(subcomp, CustomizationType.ATTACHMENT, proxy)
+            slot.append(item, component=subcomp)
+
+    @classmethod
+    def invalidate(cls, slot):
+        for _, attachment, comp in slot.items():
+            comp.id = attachment.id
+
+    @staticmethod
+    def getRawComponent():
+        return AttachmentComponent

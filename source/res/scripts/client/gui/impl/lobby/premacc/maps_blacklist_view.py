@@ -10,7 +10,7 @@ from gui import SystemMessages
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform import MENU
 from gui.Scaleform.Waiting import Waiting
-from gui.impl import dialogs
+from gui.impl.dialogs import dialogs
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.premacc.maps_blacklist_info_tooltip_model import MapsBlacklistInfoTooltipModel
 from gui.impl.gen.view_models.views.lobby.premacc.maps_blacklist_map_filter_model import MapsBlacklistMapFilterModel
@@ -90,7 +90,7 @@ class MapsBlacklistView(ViewImpl, SoundViewMixin):
         return super(MapsBlacklistView, self).getViewModel()
 
     def createToolTipContent(self, event, contentID):
-        return MapsBlacklistInfoTooltipContent() if event.contentID == R.views.mapsBlacklistInfoTooltipContent() else super(MapsBlacklistView, self).createToolTipContent(event=event, contentID=contentID)
+        return MapsBlacklistInfoTooltipContent() if event.contentID == R.views.lobby.premacc.maps_blacklist.maps_blacklist_tooltips.MapsBlacklistInfoTooltipContent() else super(MapsBlacklistView, self).createToolTipContent(event=event, contentID=contentID)
 
     def _initialize(self, exitEvent):
         super(MapsBlacklistView, self)._initialize(exitEvent)
@@ -156,6 +156,7 @@ class MapsBlacklistView(ViewImpl, SoundViewMixin):
 
         self.viewModel.setMapsSelected(countSelectedMaps)
         self.viewModel.setMapsTotal(len(self.__availableMaps))
+        self.viewModel.setIsFilterApplied(bool(selectedFilterIDs))
 
     def __onMapAddToBlacklist(self, eventData):
         self.__showMapConfirmDialog(eventData.get('mapId', ''))
@@ -321,7 +322,7 @@ class MapsBlacklistInfoTooltipContent(View):
     __lobbyContext = dependency.descriptor(ILobbyContext)
 
     def __init__(self):
-        super(MapsBlacklistInfoTooltipContent, self).__init__(R.views.mapsBlacklistInfoTooltipContent(), ViewFlags.COMPONENT, MapsBlacklistInfoTooltipModel)
+        super(MapsBlacklistInfoTooltipContent, self).__init__(R.views.lobby.premacc.maps_blacklist.maps_blacklist_tooltips.MapsBlacklistInfoTooltipContent(), ViewFlags.COMPONENT, MapsBlacklistInfoTooltipModel)
         mapsConfig = self.__lobbyContext.getServerSettings().getPreferredMapsConfig()
         self.viewModel.setMaxCooldownTime(mapsConfig['slotCooldown'])
 

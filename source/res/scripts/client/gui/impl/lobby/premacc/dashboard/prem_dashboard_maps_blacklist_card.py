@@ -22,7 +22,7 @@ class PremDashboardMapsBlacklistCard(ViewImpl):
     __slots__ = ('__notifier',)
 
     def __init__(self, *args, **kwargs):
-        super(PremDashboardMapsBlacklistCard, self).__init__(R.views.premDashboardMapsBlacklistCard(), ViewFlags.VIEW, PremDashboardMapsBlacklistCardModel, *args, **kwargs)
+        super(PremDashboardMapsBlacklistCard, self).__init__(R.views.lobby.premacc.dashboard.prem_dashboard_maps_blacklist_card.PremDashboardMapsBlacklistCard(), ViewFlags.VIEW, PremDashboardMapsBlacklistCardModel, *args, **kwargs)
         self.__notifier = None
         return
 

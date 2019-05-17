@@ -23,10 +23,12 @@ __all__ = ('standard',
  'promoSubTitle',
  'alert',
  'success',
+ 'statsIncrease',
  'error',
  'warning',
  'critical',
  'expText',
+ 'statsDecrease',
  'expTextBig',
  Currency.GOLD,
  Currency.CREDITS,
@@ -198,8 +200,16 @@ def success(text):
     return _formatText('successText', text)
 
 
+def statsIncrease(text):
+    return _formatText('statsIncrease', text)
+
+
 def error(text):
     return _formatText('errorText', text)
+
+
+def statsDecrease(text):
+    return _formatText('statsDecrease', text)
 
 
 def warning(text):

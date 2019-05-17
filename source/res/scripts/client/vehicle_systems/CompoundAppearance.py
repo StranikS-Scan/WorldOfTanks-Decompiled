@@ -78,7 +78,7 @@ class CompoundAppearance(ScriptGameObject, CallbackDelayer):
     isUnderwater = property(lambda self: self.waterSensor.isUnderWater)
     waterHeight = property(lambda self: self.waterSensor.waterHeight)
     damageState = property(lambda self: self.__currentDamageState)
-    modelsSetParams = property(lambda self: ModelsSetParams(self.__outfit.modelsSet, self.__currentDamageState.modelState))
+    modelsSetParams = property(lambda self: ModelsSetParams(self.__outfit.modelsSet, self.__currentDamageState.modelState, self.__attachments))
     frameTimeStamp = 0
     splineTracks = property(lambda self: self.__splineTracks)
     activated = property(lambda self: self.__activated)
@@ -178,6 +178,8 @@ class CompoundAppearance(ScriptGameObject, CallbackDelayer):
         self.__allLodCalculators = []
         self.__commonSlip = 0.0
         self.__commonScroll = 0.0
+        self.__attachments = []
+        self.__sequenceAnimators = []
         return
 
     def prerequisites(self, typeDescriptor, vID, health, isCrewActive, isTurretDetached, outfitCD):
@@ -186,7 +188,9 @@ class CompoundAppearance(ScriptGameObject, CallbackDelayer):
         self.__typeDesc = typeDescriptor
         self.__isTurretDetached = isTurretDetached
         self.__prepareOutfit(outfitCD)
+        self.__prepareAttachments()
         out = camouflages.getCamoPrereqs(self.__outfit, self.__typeDesc)
+        out.extend(camouflages.getSequencesPrereqs(self.__outfit, BigWorld.player().spaceID))
         splineDesc = typeDescriptor.chassis.splineDesc
         if splineDesc is not None:
             modelsSet = self.__outfit.modelsSet
@@ -271,6 +275,9 @@ class CompoundAppearance(ScriptGameObject, CallbackDelayer):
             for lodCalculator in self.__allLodCalculators:
                 lodCalculator.setupPosition(DataLinks.linkMatrixTranslation(self.__compoundModel.matrix))
 
+            for animator in self.__sequenceAnimators:
+                animator.start()
+
             if hasattr(self.filter, 'placingCompensationMatrix') and self.swingingAnimator is not None:
                 self.swingingAnimator.placingCompensationMatrix = self.filter.placingCompensationMatrix
                 self.swingingAnimator.worldMatrix = self.__compoundModel.matrix
@@ -298,6 +305,10 @@ class CompoundAppearance(ScriptGameObject, CallbackDelayer):
         if not self.__activated:
             return
         else:
+            for animator in self.__sequenceAnimators:
+                animator.stop()
+
+            self.__sequenceAnimators = []
             self.shadowManager.unregisterCompoundModel(self.__compoundModel)
             self.__activated = False
             self.__wasDeactivated = True
@@ -426,7 +437,7 @@ class CompoundAppearance(ScriptGameObject, CallbackDelayer):
         if self.wheelsAnimator is not None and not self.wheelsAnimator.activePostmortem:
             self.wheelsAnimator = None
         self.gunRotatorAudition = None
-        fashions = VehiclePartsTuple(BigWorld.WGVehicleFashion(True), None, None, None)
+        fashions = VehiclePartsTuple(BigWorld.WGVehicleFashion(), None, None, None)
         self.__setFashions(fashions, isTurretDetached)
         model_assembler.setupTracksFashion(self.__typeDesc, self.__fashion)
         self.showStickers(False)
@@ -453,6 +464,8 @@ class CompoundAppearance(ScriptGameObject, CallbackDelayer):
         if self.__vehicle is not None:
             self.deactivate()
         self.__destroySystems()
+        if self.fashion is not None:
+            self.fashion.setPhysicalTrack(None, None)
         fashions = VehiclePartsTuple(None, None, None, None)
         self.__setFashions(fashions, self.__isTurretDetached)
         ScriptGameObject.destroy(self)
@@ -493,6 +506,7 @@ class CompoundAppearance(ScriptGameObject, CallbackDelayer):
         if self.__currentDamageState.effect is not None:
             self.__playEffect(self.__currentDamageState.effect, SpecialKeyPointNames.STATIC)
         self.__chassisDecal.create()
+        self.__sequenceAnimators = camouflages.getSequenceAnimators(self.__outfit, self.__typeDesc, BigWorld.player().spaceID, prereqs, self.__compoundModel)
         return
 
     def showStickers(self, show):
@@ -661,6 +675,9 @@ class CompoundAppearance(ScriptGameObject, CallbackDelayer):
         player = BigWorld.player()
         forceHistorical = player.isHistoricallyAccurate and player.playerVehicleID != self.__vID and not outfit.isHistorical()
         self.__outfit = Outfit() if forceHistorical else outfit
+
+    def __prepareAttachments(self):
+        self.__attachments = camouflages.getAttachments(self.__outfit, self.__typeDesc)
 
     def __applyVehicleOutfit(self):
         camouflages.updateFashions(self)

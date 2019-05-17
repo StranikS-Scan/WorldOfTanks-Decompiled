@@ -201,29 +201,29 @@ def showBlueprintView(vehicleCD, exitEvent=None, itemsCache=None):
     from gui.impl.lobby.blueprints.blueprint_screen import BlueprintScreen
     exitEvent = exitEvent or events.LoadViewEvent(VIEW_ALIAS.LOBBY_TECHTREE, ctx={'nation': itemsCache.items.getItemByCD(vehicleCD).nationName,
      'blueprintMode': True})
-    g_eventBus.handleEvent(events.LoadUnboundViewEvent(R.views.blueprintScreen(), BlueprintScreen, ScopeTemplates.LOBBY_SUB_SCOPE, ctx={'vehicleCD': vehicleCD,
+    g_eventBus.handleEvent(events.LoadUnboundViewEvent(R.views.lobby.blueprints.blueprint_screen.blueprint_screen.BlueprintScreen(), BlueprintScreen, ScopeTemplates.LOBBY_SUB_SCOPE, ctx={'vehicleCD': vehicleCD,
      'exitEvent': exitEvent}), scope=EVENT_BUS_SCOPE.LOBBY)
 
 
 def showPiggyBankView():
     from gui.impl.lobby.premacc.piggybank import PiggyBankView
-    g_eventBus.handleEvent(events.LoadUnboundViewEvent(R.views.piggybank(), PiggyBankView, ScopeTemplates.LOBBY_SUB_SCOPE), scope=EVENT_BUS_SCOPE.LOBBY)
+    g_eventBus.handleEvent(events.LoadUnboundViewEvent(R.views.lobby.premacc.piggybank.Piggybank(), PiggyBankView, ScopeTemplates.LOBBY_SUB_SCOPE), scope=EVENT_BUS_SCOPE.LOBBY)
 
 
 def showMapsBlacklistView():
     from gui.impl.lobby.premacc.maps_blacklist_view import MapsBlacklistView
-    g_eventBus.handleEvent(events.LoadUnboundViewEvent(layoutID=R.views.mapsBlacklistView(), viewClass=MapsBlacklistView, scope=ScopeTemplates.LOBBY_SUB_SCOPE), scope=EVENT_BUS_SCOPE.LOBBY)
+    g_eventBus.handleEvent(events.LoadUnboundViewEvent(layoutID=R.views.lobby.premacc.maps_blacklist_view.MapsBlacklistView(), viewClass=MapsBlacklistView, scope=ScopeTemplates.LOBBY_SUB_SCOPE), scope=EVENT_BUS_SCOPE.LOBBY)
 
 
 def showDailyExpPageView(exitEvent=None):
     from gui.impl.lobby.premacc.daily_experience_view import DailyExperienceView
     exitEvent = exitEvent or events.LoadViewEvent(VIEW_ALIAS.LOBBY_HANGAR)
-    g_eventBus.handleEvent(events.LoadUnboundViewEvent(layoutID=R.views.dailyExperiencePage(), viewClass=DailyExperienceView, scope=ScopeTemplates.LOBBY_SUB_SCOPE, ctx={'exitEvent': exitEvent}), scope=EVENT_BUS_SCOPE.LOBBY)
+    g_eventBus.handleEvent(events.LoadUnboundViewEvent(layoutID=R.views.lobby.premacc.daily_experience_view.DailyExperiencePage(), viewClass=DailyExperienceView, scope=ScopeTemplates.LOBBY_SUB_SCOPE, ctx={'exitEvent': exitEvent}), scope=EVENT_BUS_SCOPE.LOBBY)
 
 
 def showDashboardView():
     from gui.impl.lobby.premacc.prem_dashboard_view import PremDashboardView
-    g_eventBus.handleEvent(events.LoadUnboundViewEvent(R.views.premDashboardView(), PremDashboardView, ScopeTemplates.LOBBY_SUB_SCOPE), scope=EVENT_BUS_SCOPE.LOBBY)
+    g_eventBus.handleEvent(events.LoadUnboundViewEvent(R.views.lobby.premacc.prem_dashboard_view.PremDashboardView(), PremDashboardView, ScopeTemplates.LOBBY_SUB_SCOPE), scope=EVENT_BUS_SCOPE.LOBBY)
 
 
 def showBattleBoosterBuyDialog(battleBoosterIntCD, install=False):
@@ -257,8 +257,9 @@ def showBarracks():
     g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.LOBBY_BARRACKS), scope=EVENT_BUS_SCOPE.LOBBY)
 
 
-def showBadges():
-    g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.BADGES_PAGE), scope=EVENT_BUS_SCOPE.LOBBY)
+def showBadges(backViewName=''):
+    g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.BADGES_PAGE, ctx={'backViewName': backViewName} if backViewName else None), scope=EVENT_BUS_SCOPE.LOBBY)
+    return
 
 
 def showStrongholds():
@@ -314,41 +315,36 @@ def showOldVehiclePreview(vehTypeCompDescr, previewAlias=VIEW_ALIAS.LOBBY_HANGAR
      'previewBackCb': previewBackCb}), scope=EVENT_BUS_SCOPE.LOBBY)
 
 
-def showVehiclePreview(vehTypeCompDescr, previewAlias=VIEW_ALIAS.LOBBY_HANGAR, vehStrCD=None, previewBackCb=None, itemsPack=None, offers=None, price=money.MONEY_UNDEFINED, oldPrice=None, title='', description=None, endTime=None, buyParams=None, vehParams=None, isFrontline=False, marathonPrefix=None):
+def showVehiclePreview(vehTypeCompDescr, previewAlias=VIEW_ALIAS.LOBBY_HANGAR, vehStrCD=None, previewBackCb=None, itemsPack=None, offers=None, price=money.MONEY_UNDEFINED, oldPrice=None, title='', description=None, endTime=None, buyParams=None, vehParams=None, isFrontline=False):
     lobbyContext = dependency.instance(ILobbyContext)
     newPreviewEnabled = lobbyContext.getServerSettings().isIngamePreviewEnabled()
     heroTankController = dependency.instance(IHeroTankController)
     heroTankCD = heroTankController.getCurrentTankCD()
     isHeroTank = heroTankCD and heroTankCD == vehTypeCompDescr
-    ctx = {'itemCD': vehTypeCompDescr,
-     'previewAlias': previewAlias,
-     'vehicleStrCD': vehStrCD,
-     'previewBackCb': previewBackCb,
-     'itemsPack': itemsPack,
-     'offers': offers,
-     'price': price,
-     'oldPrice': oldPrice,
-     'title': title,
-     'description': description,
-     'endTime': endTime,
-     'buyParams': buyParams,
-     'vehParams': vehParams}
     if isHeroTank and not (itemsPack or offers):
         goToHeroTankOnScene(vehTypeCompDescr, previewAlias)
     elif isFrontline:
         g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.FRONTLINE_VEHICLE_PREVIEW_20, ctx={'itemCD': vehTypeCompDescr,
          'previewAlias': previewAlias,
          'previewBackCb': previewBackCb}), scope=EVENT_BUS_SCOPE.LOBBY)
-    elif marathonPrefix is not None:
-        ctx.update({'marathonPrefix': marathonPrefix})
-        g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.MARATHON_VEHICLE_PREVIEW_20, ctx=ctx), scope=EVENT_BUS_SCOPE.LOBBY)
     elif newPreviewEnabled:
-        g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.VEHICLE_PREVIEW_20, ctx=ctx), scope=EVENT_BUS_SCOPE.LOBBY)
+        g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.VEHICLE_PREVIEW_20, ctx={'itemCD': vehTypeCompDescr,
+         'previewAlias': previewAlias,
+         'vehicleStrCD': vehStrCD,
+         'previewBackCb': previewBackCb,
+         'itemsPack': itemsPack,
+         'offers': offers,
+         'price': price,
+         'oldPrice': oldPrice,
+         'title': title,
+         'description': description,
+         'endTime': endTime,
+         'buyParams': buyParams,
+         'vehParams': vehParams}), scope=EVENT_BUS_SCOPE.LOBBY)
     elif itemsPack or offers:
         SystemMessages.pushMessage(text=_ms(MESSENGER.CLIENT_ERROR_SHARED_TRY_LATER), type=SystemMessages.SM_TYPE.Error, priority=NotificationPriorityLevel.MEDIUM)
     else:
         showOldVehiclePreview(vehTypeCompDescr, previewAlias, vehStrCD, previewBackCb)
-    return
 
 
 def goToHeroTankOnScene(vehTypeCompDescr, previewAlias=VIEW_ALIAS.LOBBY_HANGAR):
@@ -588,17 +584,16 @@ def showTankPremiumAboutPage():
     url = GUI_SETTINGS.premiumInfo.get('baseURL')
     if url is None:
         _logger.error('premiumInfo.baseURL is missed')
-    showBrowserOverlayView(url, alias=VIEW_ALIAS.OVERLAY_PREM_CONTENT_VIEW)
+    showBrowserOverlayView(url)
     return
 
 
 @process
-def showBrowserOverlayView(url, alias=VIEW_ALIAS.BROWSER_LOBBY_TOP_SUB, params=None, callbackOnLoad=None):
+def showBrowserOverlayView(url, params=None):
     if url:
         url = yield URLMacros().parse(url, params=params)
-        g_eventBus.handleEvent(events.LoadViewEvent(alias, ctx={'url': url,
-         'allowRightClick': False,
-         'callbackOnLoad': callbackOnLoad}), EVENT_BUS_SCOPE.LOBBY)
+        g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.OVERLAY_PREM_CONTENT_VIEW, ctx={'url': url,
+         'allowRightClick': False}), EVENT_BUS_SCOPE.LOBBY)
 
 
 def showProgressiveRewardWindow():
@@ -609,16 +604,16 @@ def showProgressiveRewardWindow():
     else:
         from gui.impl.lobby.progressive_reward.progressive_reward_view import ProgressiveRewardWindow
         uiLoader = dependency.instance(IGuiLoader)
-        contentResId = R.views.progressiveRewardView()
+        contentResId = R.views.lobby.progressive_reward.progressive_reward_view.ProgressiveRewardView()
         if uiLoader.windowsManager.getViewByLayoutID(contentResId) is None:
             window = ProgressiveRewardWindow(contentResId)
             window.load()
         return
 
 
-def showProgressiveRewardAwardWindow(rewards, currentStep):
+def showProgressiveRewardAwardWindow(bonuses, specialRewardType, currentStep):
     from gui.impl.lobby.progressive_reward.progressive_reward_award_view import ProgressiveRewardAwardWindow
-    window = ProgressiveRewardAwardWindow(rewards, currentStep)
+    window = ProgressiveRewardAwardWindow(bonuses, specialRewardType, currentStep)
     window.load()
 
 

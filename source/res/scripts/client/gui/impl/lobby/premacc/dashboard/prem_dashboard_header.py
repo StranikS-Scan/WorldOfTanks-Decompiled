@@ -10,6 +10,7 @@ from gui.Scaleform.genConsts.STORAGE_CONSTANTS import STORAGE_CONSTANTS
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.clans.settings import getClanRoleName
 from gui.goodies.goodie_items import MAX_ACTIVE_BOOSTERS_COUNT
+from gui.impl import backport
 from gui.impl.backport.backport_tooltip import createTooltipData, BackportTooltipWindow
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.premacc.dashboard.prem_dashboard_header_model import PremDashboardHeaderModel
@@ -23,7 +24,7 @@ from gui.shared.event_dispatcher import showStrongholds
 from gui.shared.utils.requesters import REQ_CRITERIA
 from helpers import dependency
 from skeletons.gui.web import IWebController
-from skeletons.gui.game_control import IBadgesController
+from skeletons.gui.game_control import IBadgesController, IBoostersController
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.goodies import IGoodiesCache
 if typing.TYPE_CHECKING:
@@ -35,19 +36,20 @@ class PremDashboardHeader(ViewImpl):
     __badgesController = dependency.descriptor(IBadgesController)
     __itemsCache = dependency.descriptor(IItemsCache)
     __goodiesCache = dependency.descriptor(IGoodiesCache)
+    __boosters = dependency.descriptor(IBoostersController)
     __MAX_VIEWABLE_CLAN_RESERVES_COUNT = 2
     __TOOLTIPS_MAPPING = {PremDashboardHeaderTooltips.TOOLTIP_PERSONAL_RESERVE: TOOLTIPS_CONSTANTS.BOOSTERS_BOOSTER_INFO,
      PremDashboardHeaderTooltips.TOOLTIP_CLAN_RESERVE: TOOLTIPS_CONSTANTS.CLAN_RESERVE_INFO}
 
     def __init__(self, *args, **kwargs):
-        super(PremDashboardHeader, self).__init__(R.views.premDashboardHeader(), ViewFlags.VIEW, PremDashboardHeaderModel, *args, **kwargs)
+        super(PremDashboardHeader, self).__init__(R.views.lobby.premacc.dashboard.prem_dashboard_header.PremDashboardHeader(), ViewFlags.VIEW, PremDashboardHeaderModel, *args, **kwargs)
 
     @property
     def viewModel(self):
         return super(PremDashboardHeader, self).getViewModel()
 
     def createToolTip(self, event):
-        if event.contentID == R.views.backportTooltipContent():
+        if event.contentID == R.views.common.tooltip_window.backport_tooltip_content.BackportTooltipContent():
             tooltipData = self.__getTooltipData(event)
             if tooltipData is None:
                 return
@@ -58,7 +60,7 @@ class PremDashboardHeader(ViewImpl):
             return super(PremDashboardHeader, self).createToolTip(event)
 
     def createToolTipContent(self, event, contentID):
-        return ClanShortInfoTooltipContent() if contentID == R.views.clanShortInfoTooltipContent() else super(PremDashboardHeader, self).createToolTipContent(event=event, contentID=contentID)
+        return ClanShortInfoTooltipContent() if contentID == R.views.lobby.tooltips.clans.ClanShortInfoTooltipContent() else super(PremDashboardHeader, self).createToolTipContent(event=event, contentID=contentID)
 
     def _initialize(self, *args, **kwargs):
         super(PremDashboardHeader, self)._initialize(*args, **kwargs)
@@ -71,7 +73,7 @@ class PremDashboardHeader(ViewImpl):
             userNameModel.setUserName(BigWorld.player().name)
             userNameModel.setIsTeamKiller(self.__itemsCache.items.stats.isTeamKiller)
             self.__updateClanInfo(model)
-            self.__buildPersonalReservesList(model.personalReserves)
+            self.__buildPersonalReservesList(model=model)
             self.__updateBadges(model=model)
 
     def _finalize(self):
@@ -86,16 +88,24 @@ class PremDashboardHeader(ViewImpl):
          'goodies': self.__onGoodiesUpdated,
          'cache.activeOrders': self.__onClanInfoChanged})
         self.__badgesController.onUpdated += self.__updateBadges
+        self.__boosters.onBoosterChangeNotify += self.__onBoosterChangeNotify
+        self.__boosters.onReserveTimerTick += self.__buildClanReservesList
 
     def __clearListeners(self):
         g_clientUpdateManager.removeObjectCallbacks(self)
         self.__badgesController.onUpdated -= self.__updateBadges
+        self.__boosters.onBoosterChangeNotify -= self.__onBoosterChangeNotify
+        self.__boosters.onReserveTimerTick -= self.__buildClanReservesList
 
     def __onClanInfoChanged(self, _):
         self.__updateClanInfo(self.viewModel)
 
     def __onGoodiesUpdated(self, *_):
-        self.__buildPersonalReservesList(self.viewModel.personalReserves)
+        self.__buildPersonalReservesList()
+        self.__buildClanReservesList()
+
+    def __onBoosterChangeNotify(self, *_):
+        self.__buildPersonalReservesList()
 
     def __updateClanInfo(self, model):
         clanProfile = self.__getAccountProfile()
@@ -107,9 +117,11 @@ class PremDashboardHeader(ViewImpl):
             model.userName.setClanAbbrev(clanAbbrev)
             clanInfoModel.setClanAbbrev(clanAbbrev)
             clanInfoModel.setRoleInClan(getClanRoleName(clanProfile.getRole()) or '')
-            self.__buildClanReservesList(model)
+            self.__buildClanReservesList(model=model)
 
-    def __buildPersonalReservesList(self, listModel):
+    @replaceNoneKwargsModel
+    def __buildPersonalReservesList(self, _=None, model=None):
+        listModel = model.personalReserves
         listModel.clearItems()
         activeBoosters = self.__goodiesCache.getBoosters(criteria=REQ_CRITERIA.BOOSTER.ACTIVE)
         activeBoostersList = sorted(activeBoosters.values(), key=lambda b: b.getUsageLeftTime(), reverse=True)
@@ -119,7 +131,8 @@ class PremDashboardHeader(ViewImpl):
 
         listModel.invalidate()
 
-    def __buildClanReservesList(self, model):
+    @replaceNoneKwargsModel
+    def __buildClanReservesList(self, _=None, model=None):
         clanProfile = self.__getAccountProfile()
         mayActivate = clanProfile.getMyClanPermissions().canActivateReserves()
         activeReserves = sorted(self.__goodiesCache.getClanReserves().values(), key=lambda r: r.finishTime)
@@ -162,7 +175,7 @@ class PremDashboardHeader(ViewImpl):
 
     @staticmethod
     def __onShowBadges():
-        event_dispatcher.showBadges()
+        event_dispatcher.showBadges(backViewName=backport.text(R.strings.badge.badgesPage.header.backBtn.descrLabel()))
 
     @staticmethod
     def __onPersonalReserveClick(item):

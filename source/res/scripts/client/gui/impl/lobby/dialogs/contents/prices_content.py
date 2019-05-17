@@ -9,7 +9,7 @@ class DialogPricesContent(DialogContent):
     __slots__ = ('__valueMainCost', '__iconMainCost', '__labelMainCost', '__valueAdditionalCost', '__iconAdditionalCost', '__labelAdditionalCost', '__totalCost', '__labelTotalCost')
 
     def __init__(self):
-        super(DialogPricesContent, self).__init__(layoutID=R.views.dialogPricesContent(), viewModelClazz=DialogPricesContentModel)
+        super(DialogPricesContent, self).__init__(layoutID=R.views.common.dialog_view.components.dialog_prices_content.DialogPricesContent(), viewModelClazz=DialogPricesContentModel)
 
     @property
     def viewModel(self):

@@ -640,6 +640,12 @@ class ServerSettings(object):
     def isLootBoxesEnabled(self):
         return self.__getGlobalSetting('isLootBoxesEnabled')
 
+    def isSessionStatsEnabled(self):
+        return self.__getGlobalSetting('sessionStats', {}).get('isSessionStatsEnabled', False)
+
+    def isLinkWithHoFEnabled(self):
+        return self.__getGlobalSetting('sessionStats', {}).get('isLinkWithHoFEnabled', False)
+
     @property
     def ingameShop(self):
         return self.__bwIngameShop

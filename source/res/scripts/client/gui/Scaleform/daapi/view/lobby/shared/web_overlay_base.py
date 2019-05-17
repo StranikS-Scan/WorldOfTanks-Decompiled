@@ -24,7 +24,6 @@ class WebOverlayBase(IngameShopViewMeta):
         self.__loadBrowserCbID = None
         self.__ctx = ctx
         self._url = ctx.get('url') if ctx else None
-        self.__callbackOnLoad = ctx.get('callbackOnLoad', None) if ctx else None
         self._browserParams = (ctx or {}).get('browserParams', makeBrowserParams())
         return
 
@@ -108,8 +107,6 @@ class WebOverlayBase(IngameShopViewMeta):
 
     def __loadBrowserAS(self):
         self.__loadBrowserCbID = None
-        if self.__callbackOnLoad is not None:
-            self.__callbackOnLoad()
         self.as_loadBrowserS()
         return
 

@@ -131,6 +131,7 @@
     <Maybach_HL_234_TRM_P45_Leicht>	145	</Maybach_HL_234_TRM_P45_Leicht>
     <Maybach_HL_98>	146	</Maybach_HL_98>
     <MB_837_Ea_600M>	147	</MB_837_Ea_600M>
+    <Maybach_HL_234K>	148	</Maybach_HL_234K>
     <Development_Engine>	65535	</Development_Engine>
     <Maybach_HL57TR_bot>	247	</Maybach_HL57TR_bot>
     <Krupp_M301_bot>	248	</Krupp_M301_bot>
@@ -1607,7 +1608,7 @@
       <price>	95000	</price>
       <wwsoundPC>	eng_v55_pc	</wwsoundPC>
       <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
-      <power>	830	</power>
+      <power>	770	</power>
       <weight>	1700	</weight>
       <maxHealth>	360	</maxHealth>
       <maxRegenHealth>	170	</maxRegenHealth>
@@ -2538,6 +2539,23 @@
       <rpm_min>	500	</rpm_min>
       <rpm_max>	2200	</rpm_max>
     </Maybach_HL_98>
+    <Maybach_HL_234K>
+      <userString>	#germany_vehicles:Maybach_HL_234K	</userString>
+      <tags>	gasoline	</tags>
+      <level>	8	</level>
+      <price>	55000	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_Ford_GAA_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Ford_GAA_npc	</wwsoundNPC>
+      <power>	900	</power>
+      <weight>	1300	</weight>
+      <maxHealth>	260	</maxHealth>
+      <maxRegenHealth>	129	</maxRegenHealth>
+      <repairCost>	8	</repairCost>
+      <fireStartingChance>	0.15	</fireStartingChance>
+      <rpm_min>	564	</rpm_min>
+      <rpm_max>	2508	</rpm_max>
+    </Maybach_HL_234K>
     <Maybach_HL_210P30_Ausf_A_IGR>
       <userString>	#igr_vehicles:Maybach_HL_210P30_Ausf_A_IGR	</userString>
       <tags>	gasoline	</tags>

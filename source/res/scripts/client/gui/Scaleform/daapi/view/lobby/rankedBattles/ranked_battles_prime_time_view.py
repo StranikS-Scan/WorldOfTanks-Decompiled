@@ -11,10 +11,12 @@ from gui.shared.formatters import text_styles
 from gui.shared.formatters.time_formatters import formatDate
 from helpers import dependency
 from helpers import time_utils
+from skeletons.connection_mgr import IConnectionManager
 from skeletons.gui.game_control import IRankedBattlesController
 
 class RankedServerPresenter(ServerListItemPresenter):
     _periodsController = dependency.descriptor(IRankedBattlesController)
+    _connectionMgr = dependency.descriptor(IConnectionManager)
 
     def _buildTooltip(self, peripheryID):
         return {'tooltip': '',
@@ -24,6 +26,11 @@ class RankedServerPresenter(ServerListItemPresenter):
 
     def isEnabled(self):
         return self.isActive()
+
+    def __cmp__(self, other):
+        peripheryID = self._connectionMgr.peripheryID
+        result = cmp(self.getPeripheryID() == peripheryID, other.getPeripheryID() == peripheryID)
+        return result if result else self.orderID - other.orderID
 
 
 class RankedBattlesPrimeTimeView(RankedPrimeTimeMeta):

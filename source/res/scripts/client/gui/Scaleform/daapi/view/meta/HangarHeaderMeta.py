@@ -9,6 +9,3 @@ class HangarHeaderMeta(BaseDAAPIComponent):
 
     def as_setDataS(self, data):
         return self.flashObject.as_setData(data) if self._isDAAPIInited() else None
-
-    def as_setBonusDataS(self, visible, data):
-        return self.flashObject.as_setBonusData(visible, data) if self._isDAAPIInited() else None

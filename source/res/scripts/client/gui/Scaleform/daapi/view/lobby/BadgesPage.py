@@ -37,11 +37,12 @@ class BadgesPage(BadgesPageMeta):
     settingsCore = dependency.descriptor(ISettingsCore)
     badgesController = dependency.descriptor(IBadgesController)
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, ctx=None, *args, **kwargs):
         super(BadgesPage, self).__init__(*args, **kwargs)
         self.__prefixBadgeID = None
         self.__receivedSuffixBadgeID = None
         self.__suffixBadgeSelected = False
+        self.__backViewName = ctx.get('backViewName', '') if ctx is not None else ''
         self.__tutorStorage = getTutorialGlobalStorage()
         if self.__tutorStorage is not None:
             hasNewBadges = self.__checkNewSuffixBadges()
@@ -76,7 +77,7 @@ class BadgesPage(BadgesPageMeta):
         super(BadgesPage, self)._populate()
         userName = BigWorld.player().name
         self.as_setStaticDataS({'header': {'backBtnLabel': backport.text(R.strings.badge.badgesPage.header.backBtn.label()),
-                    'backBtnDescrLabel': backport.text(R.strings.badge.badgesPage.header.backBtn.descrLabel()),
+                    'backBtnDescrLabel': self.__backViewName,
                     'descrTf': text_styles.main(BADGE.BADGESPAGE_HEADER_DESCR),
                     'playerText': text_styles.grandTitle(self.lobbyContext.getPlayerFullName(userName))}})
         self.__updateBadges()
@@ -132,6 +133,8 @@ class BadgesPage(BadgesPageMeta):
         prefixBadges = []
         cache = defaultdict(list)
         for badge in self.itemsCache.items.getBadges().itervalues():
+            if not badge.isAchievable and not badge.isAchieved:
+                continue
             if not badge.isPrefixLayout():
                 continue
             badge.isSelected = False

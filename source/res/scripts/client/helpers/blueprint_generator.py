@@ -78,7 +78,7 @@ class BlueprintGenerator(object):
         else:
             _logger.debug('Loading vehicle compound of "%s".', vehicleName)
             self.__pendingCompound.add(vehicleName)
-            resources = (ma.prepareCompoundAssembler(vehicleDescr, ModelsSetParams('', 'undamaged'), BigWorld.camera().spaceID, lodIdx=_BLUEPRINT_TANK_LOD, skipMaterials=True),)
+            resources = (ma.prepareCompoundAssembler(vehicleDescr, ModelsSetParams('', 'undamaged', []), BigWorld.camera().spaceID, lodIdx=_BLUEPRINT_TANK_LOD, skipMaterials=True),)
             BigWorld.loadResourceListBG(resources, makeCallbackWeak(self.__onResourcesLoaded, vehicleName))
             return
 

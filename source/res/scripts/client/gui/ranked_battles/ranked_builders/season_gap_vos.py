@@ -4,7 +4,7 @@ import logging
 import typing
 from gui.impl import backport
 from gui.impl.gen import R
-from gui.shared.formatters import text_styles
+from gui.shared.formatters import text_styles, icons
 from gui.ranked_battles.ranked_builders import shared_vos
 from gui.ranked_battles import ranked_formatters
 from gui.ranked_battles.constants import SeasonGapStates, ZERO_RANK_ID, ZERO_DIVISION_ID
@@ -31,8 +31,10 @@ def _buildDivisionVO(state, rankID, division, leagueID):
         buttonVisible = True
     if state == SeasonGapStates.BANNED_IN_LEAGUES:
         description = backport.text(R.strings.ranked_battles.rankedBattleMainView.seasonGap.bannedLeague.descr())
+        description = _addAlertIcon(description)
     elif state == SeasonGapStates.BANNED_IN_DIVISIONS:
         description = backport.text(R.strings.ranked_battles.rankedBattleMainView.seasonGap.bannedDivision.descr())
+        description = _addAlertIcon(description)
     return _getDataVO(RANKEDBATTLES_ALIASES.SEASON_GAP_VIEW_DIVISION_STATE, divisionID=division.getID(), rankID=division.getRankIdInDivision(rankID), title=backport.text(R.strings.ranked_battles.rankedBattleMainView.seasonGap.division.title(), rank=division.getRankUserName(rankID), division=division.getUserName()), descr=description, btnLabel=buttonLabel, btnVisible=buttonVisible)
 
 
@@ -45,6 +47,7 @@ def _buildNotInSeasonVO(state, rankID, division, leagueID):
         buttonVisible = True
     if state == SeasonGapStates.BANNED_NOT_IN_SEASON:
         description = backport.text(R.strings.ranked_battles.rankedBattleMainView.seasonGap.bannedNotInSeason.descr())
+        description = _addAlertIcon(description)
     return _getDataVO(RANKEDBATTLES_ALIASES.SEASON_GAP_VIEW_DIVISION_STATE, divisionID=division.getID(), disabled=True, title=backport.text(R.strings.ranked_battles.rankedBattleMainView.seasonGap.notInSeason.title()), descr=description, btnLabel=buttonLabel, btnVisible=buttonVisible)
 
 
@@ -97,3 +100,7 @@ def _getDataVO(state, leagueID=UNDEFINED_LEAGUE_ID, divisionID=ZERO_DIVISION_ID,
      'descr': descr,
      'btnLabel': btnLabel,
      'btnVisible': btnVisible}
+
+
+def _addAlertIcon(description):
+    return text_styles.concatStylesToSingleLine(icons.makeImageTag(backport.image(R.images.gui.maps.icons.library.alertIcon1()), 23, 23, -6), description)

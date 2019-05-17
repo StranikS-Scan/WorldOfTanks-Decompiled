@@ -51,6 +51,10 @@ class ViewEvent(object):
         return self.__core.eventType
 
     @property
+    def decoratorID(self):
+        return self.__core.decoratorID
+
+    @property
     def contentID(self):
         return self.__core.contentID
 

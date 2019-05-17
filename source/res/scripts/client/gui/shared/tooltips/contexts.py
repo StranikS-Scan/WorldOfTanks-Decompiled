@@ -603,7 +603,9 @@ class VehCmpModulesContext(TechTreeContext):
 
     def getStatsConfiguration(self, item):
         value = super(VehCmpModulesContext, self).getStatsConfiguration(item)
-        value.sellPrice = True
+        value.buyPrice = False
+        value.sellPrice = False
+        value.unlockPrice = False
         return value
 
 
@@ -869,6 +871,16 @@ class TechCustomizationContext(ToolTipContext):
 
     def getParams(self):
         return {'showBonus': True}
+
+
+class SessionStatsContext(ToolTipContext):
+    itemsCache = dependency.descriptor(IItemsCache)
+
+    def __init__(self):
+        super(SessionStatsContext, self).__init__(TOOLTIP_COMPONENT.SESSION_STATS)
+
+    def buildItem(self, intCD):
+        return self.itemsCache.items.getItemByCD(int(intCD))
 
 
 class Shop20CustomizationContext(TechCustomizationContext):

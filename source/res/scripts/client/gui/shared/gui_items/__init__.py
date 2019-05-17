@@ -5,7 +5,7 @@ from items import ITEM_TYPE_NAMES, vehicles, ITEM_TYPE_INDICES, EQUIPMENT_TYPES
 from gui.shared.money import Currency
 CLAN_LOCK = 1
 GUI_ITEM_TYPE_NAMES = tuple(ITEM_TYPE_NAMES) + tuple(['reserved'] * (16 - len(ITEM_TYPE_NAMES)))
-GUI_ITEM_TYPE_NAMES += ('dossierAccount', 'dossierVehicle', 'dossierTankman', 'achievement', 'tankmanSkill', 'battleBooster', 'badge', 'battleAbility', 'lootBox', 'paint', 'camouflage', 'modification', 'outfit', 'style', 'decal', 'emblem', 'inscription', 'projectionDecal', 'insignia', 'personalNumber')
+GUI_ITEM_TYPE_NAMES += ('dossierAccount', 'dossierVehicle', 'dossierTankman', 'achievement', 'tankmanSkill', 'battleBooster', 'badge', 'battleAbility', 'lootBox', 'paint', 'camouflage', 'modification', 'outfit', 'style', 'decal', 'emblem', 'inscription', 'projectionDecal', 'insignia', 'personalNumber', 'sequence', 'attachment')
 GUI_ITEM_TYPE_INDICES = dict(((n, idx) for idx, n in enumerate(GUI_ITEM_TYPE_NAMES)))
 
 class GUI_ITEM_TYPE(CONST_CONTAINER):
@@ -34,6 +34,8 @@ class GUI_ITEM_TYPE(CONST_CONTAINER):
     PROJECTION_DECAL = GUI_ITEM_TYPE_INDICES['projectionDecal']
     INSIGNIA = GUI_ITEM_TYPE_INDICES['insignia']
     PERSONAL_NUMBER = GUI_ITEM_TYPE_INDICES['personalNumber']
+    SEQUENCE = GUI_ITEM_TYPE_INDICES['sequence']
+    ATTACHMENT = GUI_ITEM_TYPE_INDICES['attachment']
     COMMON = tuple(ITEM_TYPE_INDICES.keys())
     BATTLE_BOOSTER = GUI_ITEM_TYPE_INDICES['battleBooster']
     ARTEFACTS = (EQUIPMENT, OPTIONALDEVICE, BATTLE_BOOSTER)
@@ -63,7 +65,9 @@ class GUI_ITEM_TYPE(CONST_CONTAINER):
      INSCRIPTION,
      STYLE,
      PROJECTION_DECAL,
-     PERSONAL_NUMBER)
+     PERSONAL_NUMBER,
+     SEQUENCE,
+     ATTACHMENT)
     CUSTOMIZATIONS_WITHOUT_STYLE = (PAINT,
      CAMOUFLAGE,
      MODIFICATION,

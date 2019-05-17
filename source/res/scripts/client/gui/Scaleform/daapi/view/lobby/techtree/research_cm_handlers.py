@@ -168,7 +168,7 @@ class ResearchVehicleContextMenuHandler(SimpleVehicleCMHandler):
             isAvailable2SellOrRemove = NODE_STATE.isAvailable2Sell(self._nodeState)
             if isAvailable2SellOrRemove:
                 options.append(self._makeItem(VEHICLE.SELL, MENU.CONTEXTMENU_VEHICLEREMOVE if vehicle.isRented else MENU.CONTEXTMENU_SELL, {'enabled': isAvailable2SellOrRemove}))
-        options.extend([self._makeSeparator(), self._makeItem(VEHICLE.SELECT, MENU.CONTEXTMENU_SELECTVEHICLEINHANGAR, {'enabled': (NODE_STATE.inInventory(self._nodeState) or NODE_STATE.isRentalOver(self._nodeState)) and NODE_STATE.isVehicleCanBeChanged(self._nodeState)})])
+        options.extend([self._makeSeparator(), self._makeItem(VEHICLE.SELECT, MENU.CONTEXTMENU_SELECTVEHICLEINHANGAR, {'enabled': NODE_STATE.inInventory(self._nodeState) or NODE_STATE.isRentalOver(self._nodeState)})])
         return options
 
     def _manageVehCompareItem(self, optionsRef, vehicle):

@@ -159,6 +159,30 @@ class PersonalNumberXmlReader(BaseCustomizationItemXmlReader):
             target.fontInfo = cache.fonts[section.readInt('fontId')]
 
 
+class SequenceXmlReader(BaseCustomizationItemXmlReader):
+    __slots__ = ()
+
+    def _readFromXml(self, target, xmlCtx, section, cache=None):
+        super(SequenceXmlReader, self)._readFromXml(target, xmlCtx, section)
+        target.sequenceName = ix.readStringOrNone(xmlCtx, section, 'sequenceName')
+
+    def _readClientOnlyFromXml(self, target, xmlCtx, section, cache=None):
+        super(SequenceXmlReader, self)._readClientOnlyFromXml(target, xmlCtx, section)
+        target.sequenceName = ix.readStringOrNone(xmlCtx, section, 'sequenceName')
+
+
+class AttachmentXmlReader(BaseCustomizationItemXmlReader):
+    __slots__ = ()
+
+    def _readFromXml(self, target, xmlCtx, section, cache=None):
+        super(AttachmentXmlReader, self)._readFromXml(target, xmlCtx, section)
+        target.modelName = ix.readStringOrNone(xmlCtx, section, 'modelName')
+
+    def _readClientOnlyFromXml(self, target, xmlCtx, section, cache=None):
+        super(AttachmentXmlReader, self)._readClientOnlyFromXml(target, xmlCtx, section)
+        target.modelName = ix.readStringOrNone(xmlCtx, section, 'modelName')
+
+
 class ModificationXmlReader(BaseCustomizationItemXmlReader):
     __slots__ = ()
 
@@ -310,6 +334,8 @@ def readCustomizationCacheFromXml(cache, folder):
     __readItemFolder(cc.StyleItem, folder, 'style', cache.styles)
     __readItemFolder(cc.InsigniaItem, folder, 'insignia', cache.insignias)
     __readItemFolder(cc.PersonalNumberItem, folder, 'personal_number', cache.personal_numbers)
+    __readItemFolder(cc.SequenceItem, folder, 'sequence', cache.sequences)
+    __readItemFolder(cc.AttachmentItem, folder, 'attachment', cache.attachments)
     return None
 
 
@@ -445,4 +471,6 @@ __xmlReaders = {cc.PaintItem: PaintXmlReader(),
  cc.ModificationItem: ModificationXmlReader(),
  cc.StyleItem: StyleXmlReader(),
  cc.InsigniaItem: InsigniaXmlReader(),
- cc.PersonalNumberItem: PersonalNumberXmlReader()}
+ cc.PersonalNumberItem: PersonalNumberXmlReader(),
+ cc.SequenceItem: SequenceXmlReader(),
+ cc.AttachmentItem: AttachmentXmlReader()}

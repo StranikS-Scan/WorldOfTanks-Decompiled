@@ -10,11 +10,19 @@ from items.components import shared_components
 from items.components import c11n_constants
 _ALLOWED_EMBLEM_SLOTS = component_constants.ALLOWED_EMBLEM_SLOTS
 _ALLOWED_SLOTS_ANCHORS = component_constants.ALLOWED_SLOTS_ANCHORS
+_ALLOWED_MISC_SLOTS = component_constants.ALLOWED_MISC_SLOTS
 
 def _readEmblemSlot(ctx, subsection, slotType):
     slotId = _xml.readInt(ctx, subsection, 'slotId')
     _verifySlotId(ctx, slotType, slotId)
     descr = shared_components.EmblemSlot(_xml.readVector3(ctx, subsection, 'rayStart'), _xml.readVector3(ctx, subsection, 'rayEnd'), _xml.readVector3(ctx, subsection, 'rayUp'), _xml.readPositiveFloat(ctx, subsection, 'size'), subsection.readBool('hideIfDamaged', False), slotType, subsection.readBool('isMirrored', False), subsection.readBool('isUVProportional', True), _xml.readIntOrNone(ctx, subsection, 'emblemId'), slotId, subsection.readBool('applyToFabric', True))
+    return descr
+
+
+def _readMiscSlot(ctx, subsection, slotType):
+    slotId = _xml.readInt(ctx, subsection, 'slotId')
+    _verifySlotId(ctx, slotType, slotId)
+    descr = shared_components.MiscSlot(type=slotType, slotId=slotId, position=_xml.readVector3OrNone(ctx, subsection, 'position'), rotation=_xml.readVector3OrNone(ctx, subsection, 'rotation'), attachNode=_xml.readStringOrNone(ctx, subsection, 'attachNode'))
     return descr
 
 
@@ -128,8 +136,11 @@ def readCustomizationSlots(xmlCtx, section, subsectionName):
         elif slotType in component_constants.ALLOWED_SLOTS_ANCHORS:
             descr = _readCustomizationSlot(ctx, subsection, slotType)
             anchors.append(descr)
+        elif slotType in component_constants.ALLOWED_MISC_SLOTS:
+            descr = _readMiscSlot(ctx, subsection, slotType)
+            anchors.append(descr)
         else:
-            _xml.raiseWrongXml(xmlCtx, 'customizationSlots/{}/{}'.format(sname, slotType), 'expected value is {}'.format(_ALLOWED_EMBLEM_SLOTS + _ALLOWED_SLOTS_ANCHORS))
+            _xml.raiseWrongXml(xmlCtx, 'customizationSlots/{}/{}'.format(sname, slotType), 'expected value is {}'.format(_ALLOWED_EMBLEM_SLOTS + _ALLOWED_SLOTS_ANCHORS + _ALLOWED_MISC_SLOTS))
         if descr is not None and descr.slotId not in slotIDs:
             slotIDs.add(descr.slotId)
         xmlContext, fileName = xmlCtx

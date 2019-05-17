@@ -52,6 +52,12 @@ class DialogButtonModel(ViewModel):
     def setIconAfterText(self, value):
         self._setBool(6, value)
 
+    def getSoundDown(self):
+        return self._getResource(7)
+
+    def setSoundDown(self, value):
+        self._setResource(7, value)
+
     def _initialize(self):
         super(DialogButtonModel, self)._initialize()
         self._addStringProperty('name', '')
@@ -61,4 +67,5 @@ class DialogButtonModel(ViewModel):
         self._addBoolProperty('doSetFocus', False)
         self._addResourceProperty('icon', R.invalid())
         self._addBoolProperty('iconAfterText', True)
+        self._addResourceProperty('soundDown', R.invalid())
         self.onClicked = self._addCommand('onClicked')

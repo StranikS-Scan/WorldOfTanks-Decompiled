@@ -165,14 +165,6 @@ class CustomizationService(_ServiceItemShopMixin, _ServiceHelpersMixin, ICustomi
                 self.__showCustomizationCallbackId = BigWorld.callback(0.0, lambda : self.__showCustomization(loadCallback))
             return
 
-    def __loadCustomization(self, vehInvID=None, callback=None):
-        if vehInvID is not None and vehInvID != g_currentVehicle.item.invID:
-            return g_currentVehicle.selectVehicle(vehInvID, lambda : self.__loadCustomization(vehInvID, callback))
-        else:
-            if callback is not None:
-                BigWorld.callback(0.0, callback)
-            return
-
     def getCtx(self):
         if not self.__customizationCtx:
             self.__customizationCtx = CustomizationContext()
@@ -357,6 +349,14 @@ class CustomizationService(_ServiceItemShopMixin, _ServiceHelpersMixin, ICustomi
             self.__customizationShownCallback = None
         g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.LOBBY_CUSTOMIZATION, ctx=ctx), scope=EVENT_BUS_SCOPE.LOBBY)
         return
+
+    def __loadCustomization(self, vehInvID=None, callback=None):
+        if vehInvID is not None and vehInvID != g_currentVehicle.item.invID:
+            return g_currentVehicle.selectVehicle(vehInvID, lambda : self.__loadCustomization(vehInvID, callback), True)
+        else:
+            if callback is not None:
+                BigWorld.callback(0.0, callback)
+            return
 
     def __onWindowAccessibilityChanged(self, isAccessible):
         if self._helper:

@@ -2412,6 +2412,8 @@ class VEHICLE_CUSTOMIZATION(object):
     SPECIAL_STYLE_AUSTRALIA_DAY_DESC = '#vehicle_customization:special_style/australia_day_desc'
     SPECIAL_STYLE_COSMONAUTICS_DAY = '#vehicle_customization:special_style/cosmonautics_day'
     SPECIAL_STYLE_COSMONAUTICS_DAY_DESC = '#vehicle_customization:special_style/cosmonautics_day_desc'
+    SPECIAL_STYLE_KINGTIGER = '#vehicle_customization:special_style/kingtiger'
+    SPECIAL_STYLE_KINGTIGER_DESC = '#vehicle_customization:special_style/kingtiger_desc'
     MAIN_STYLE_GENERIC_CUSTOM_LOOK_USSR = '#vehicle_customization:main_style/generic_custom_look_ussr'
     MAIN_STYLE_GENERIC_CUSTOM_LOOK_USSR_DESC = '#vehicle_customization:main_style/generic_custom_look_ussr_desc'
     MAIN_STYLE_GENERIC_CUSTOM_LOOK_UK = '#vehicle_customization:main_style/generic_custom_look_uk'

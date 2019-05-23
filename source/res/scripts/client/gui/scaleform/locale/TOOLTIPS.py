@@ -1081,7 +1081,8 @@ class TOOLTIPS(object):
     VEHICLEIGR_SPECIALABILITY = '#tooltips:vehicleIgr/specialAbility'
     VEHICLEIGR_DAYS = '#tooltips:vehicleIgr/days'
     VEHICLEIGR_HOURS = '#tooltips:vehicleIgr/hours'
-    VEHICLE_DEAL_TELECOM_MAIN = '#tooltips:vehicle/deal/telecom/main'
+    VEHICLE_DEAL_TELECOM_MAIN_DEFAULT = '#tooltips:vehicle/deal/telecom/main/default'
+    VEHICLE_DEAL_TELECOM_MAIN_TWITCHPRIME = '#tooltips:vehicle/deal/telecom/main/Twitchprime'
     VEHICLE_TRADE = '#tooltips:vehicle/trade'
     VEHICLE_DEAL_EPIC_MAIN = '#tooltips:vehicle/deal/epic/main'
     BUYSKILL_FULLY = '#tooltips:buySkill/fully'
@@ -1135,6 +1136,16 @@ class TOOLTIPS(object):
     VEHICLESTATUS_SERVERRESTRICTION_HEADER = '#tooltips:vehicleStatus/serverRestriction/header'
     VEHICLESTATUS_DEALISOVER_HEADER = '#tooltips:vehicleStatus/dealIsOver/header'
     VEHICLESTATUS_DEALISOVER_TEXT = '#tooltips:vehicleStatus/dealIsOver/text'
+    VEHICLESTATUS_DEALISOVER_ROSTELECOM_HEADER = '#tooltips:vehicleStatus/dealIsOver/Rostelecom/header'
+    VEHICLESTATUS_DEALISOVER_ROSTELECOM_TEXT = '#tooltips:vehicleStatus/dealIsOver/Rostelecom/text'
+    VEHICLESTATUS_DEALISOVER_BELTELECOM_HEADER = '#tooltips:vehicleStatus/dealIsOver/Beltelecom/header'
+    VEHICLESTATUS_DEALISOVER_BELTELECOM_TEXT = '#tooltips:vehicleStatus/dealIsOver/Beltelecom/text'
+    VEHICLESTATUS_DEALISOVER_KYIVSTAR_HEADER = '#tooltips:vehicleStatus/dealIsOver/Kyivstar/header'
+    VEHICLESTATUS_DEALISOVER_KYIVSTAR_TEXT = '#tooltips:vehicleStatus/dealIsOver/Kyivstar/text'
+    VEHICLESTATUS_DEALISOVER_KAZAKHTELECOM_HEADER = '#tooltips:vehicleStatus/dealIsOver/Kazakhtelecom/header'
+    VEHICLESTATUS_DEALISOVER_KAZAKHTELECOM_TEXT = '#tooltips:vehicleStatus/dealIsOver/Kazakhtelecom/text'
+    VEHICLESTATUS_DEALISOVER_TWITCHPRIME_HEADER = '#tooltips:vehicleStatus/dealIsOver/Twitchprime/header'
+    VEHICLESTATUS_DEALISOVER_TWITCHPRIME_TEXT = '#tooltips:vehicleStatus/dealIsOver/Twitchprime/text'
     VEHICLESTATUS_NOTENOUGHCREDITS_HEADER = '#tooltips:vehicleStatus/notEnoughCredits/header'
     VEHICLESTATUS_NOTENOUGHCREDITS_TEXT = '#tooltips:vehicleStatus/notEnoughCredits/text'
     VEHICLESTATUS_NOTENOUGHGOLD_HEADER = '#tooltips:vehicleStatus/notEnoughGold/header'
@@ -2661,6 +2672,8 @@ class TOOLTIPS(object):
     NOTRECRUITEDTANKMAN_TANKMAN_DESC = '#tooltips:notrecruitedtankman/tankman/desc'
     NOTRECRUITEDTANKMAN_TWITCH1_LABEL = '#tooltips:notrecruitedtankman/twitch1/label'
     NOTRECRUITEDTANKMAN_TWITCH1_DESC = '#tooltips:notrecruitedtankman/twitch1/desc'
+    NOTRECRUITEDTANKMAN_TWITCH3_LABEL = '#tooltips:notrecruitedtankman/twitch3/label'
+    NOTRECRUITEDTANKMAN_TWITCH3_DESC = '#tooltips:notrecruitedtankman/twitch3/desc'
     NOTRECRUITEDTANKMAN_NY19MEN_LABEL = '#tooltips:notrecruitedtankman/ny19men/label'
     NOTRECRUITEDTANKMAN_NY19MEN_DESC = '#tooltips:notrecruitedtankman/ny19men/desc'
     NOTRECRUITEDTANKMAN_NY19WOMAN_LABEL = '#tooltips:notrecruitedtankman/ny19woman/label'
@@ -3218,6 +3231,7 @@ class TOOLTIPS(object):
      NOTRECRUITEDTANKMAN_TANKWOMAN_LABEL,
      NOTRECRUITEDTANKMAN_TANKMAN_LABEL,
      NOTRECRUITEDTANKMAN_TWITCH1_LABEL,
+     NOTRECRUITEDTANKMAN_TWITCH3_LABEL,
      NOTRECRUITEDTANKMAN_NY19MEN_LABEL,
      NOTRECRUITEDTANKMAN_NY19WOMAN_LABEL)
     NOTRECRUITEDTANKMAN_ALL_DESC_ENUM = (NOTRECRUITEDTANKMAN_BASE_DESC,
@@ -3225,6 +3239,7 @@ class TOOLTIPS(object):
      NOTRECRUITEDTANKMAN_TANKWOMAN_DESC,
      NOTRECRUITEDTANKMAN_TANKMAN_DESC,
      NOTRECRUITEDTANKMAN_TWITCH1_DESC,
+     NOTRECRUITEDTANKMAN_TWITCH3_DESC,
      NOTRECRUITEDTANKMAN_NY19MEN_DESC,
      NOTRECRUITEDTANKMAN_NY19WOMAN_DESC)
     QUESTS_AWARDS_VEHICLERENT_RENTLEFT_ENUM = (QUESTS_AWARDS_VEHICLERENT_RENTLEFT_RENTDAYS, QUESTS_AWARDS_VEHICLERENT_RENTLEFT_RENTBATTLES, QUESTS_AWARDS_VEHICLERENT_RENTLEFT_RENTWINS)

@@ -4,7 +4,7 @@ from gui.shared.event_dispatcher import showWebShop
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from web_client_api import webApiCollection
 from web_client_api.request import RequestWebApi
-from web_client_api.sound import SoundWebApi
+from web_client_api.sound import SoundWebApi, HangarSoundWebApi
 from web_client_api.shop import ShopWebApi
 from web_client_api.ui import NotificationWebApi, OpenWindowWebApi, OpenTabWebApi, CloseWindowWebApi, UtilWebApi
 from web_client_api.frontline import FrontLineWebApi
@@ -22,4 +22,4 @@ class _OpenTabWebApi(OpenTabWebApi):
 
 
 def createShopWebHandlers():
-    return webApiCollection(CloseWindowWebApi, OpenWindowWebApi, NotificationWebApi, _OpenTabWebApi, RequestWebApi, ShopWebApi, SoundWebApi, UtilWebApi, FrontLineWebApi)
+    return webApiCollection(CloseWindowWebApi, OpenWindowWebApi, NotificationWebApi, _OpenTabWebApi, RequestWebApi, ShopWebApi, SoundWebApi, HangarSoundWebApi, UtilWebApi, FrontLineWebApi)

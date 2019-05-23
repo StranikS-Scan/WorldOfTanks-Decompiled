@@ -10,6 +10,7 @@ from gui import DialogsInterface
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.dialogs import I18nConfirmDialogMeta, DIALOG_BUTTON_ID
+from gui.Scaleform.daapi.view.dialogs.ExchangeDialogMeta import ExchangeCreditsWebProductMeta
 from gui.Scaleform.daapi.view.lobby.store.browser.ingameshop_helpers import isIngameShopEnabled
 from gui.Scaleform.daapi.view.lobby.techtree.techtree_dp import g_techTreeDP
 from gui.Scaleform.daapi.view.lobby.vehiclePreview20.vehicle_preview_dp import DefaultVehPreviewDataProvider
@@ -517,17 +518,24 @@ class VehiclePreviewBuyingPanel(VehiclePreviewBuyingPanelMeta):
     @process
     def __purchasePackage(self):
         if self.__items is not None:
+            product = self.__title if self.__couponInfo is None else g_currentPreviewVehicle.item.shortUserName
+            price = self.__getPackPrice()
+            if not mayObtainForMoney(price) and mayObtainWithMoneyExchange(price):
+                isOk, _ = yield DialogsInterface.showDialog(ExchangeCreditsWebProductMeta(name=product, count=1, price=price.get(Currency.CREDITS)))
+                if isOk:
+                    self.__purchasePackage()
+                    return
+                return
             requestConfirmed = yield self.__buyRequestConfirmation(self.__getConfirmationDialogKey())
             if requestConfirmed:
                 if self.__isReferralWindow():
                     inventoryVehicle = self._itemsCache.items.getItemByCD(g_currentPreviewVehicle.item.intCD)
                     showGetVehiclePage(inventoryVehicle, self.__buyParams)
                     return
-                goldPrice = self.__getPackPrice().get(Currency.GOLD, 0)
-                if goldPrice > self._itemsCache.items.stats.gold:
-                    showBuyGoldForBundle(goldPrice, self.__buyParams)
-                else:
+                if mayObtainForMoney(price):
                     showBuyVehicleOverlay(self.__buyParams)
+                elif price.get(Currency.GOLD, 0) > self._itemsCache.items.stats.gold:
+                    showBuyGoldForBundle(price.get(Currency.GOLD, 0), self.__buyParams)
         return
 
     def __purchaseOffer(self):

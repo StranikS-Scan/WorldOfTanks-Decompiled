@@ -842,6 +842,50 @@
     </damage>
     <piercingPowerLossFactorByDistance>	0.05	</piercingPowerLossFactorByDistance>
   </_76mm_HEAT_M496A1>
+  <_88mm_Pzgr_39_43>
+    <id>	153	</id>
+    <userString>	#usa_vehicles:_88mm_Pzgr_39_43	</userString>
+    <icon>	ap	</icon>
+    <price>	350	</price>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	88	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainArmorPiercing	</effects>
+    <damage>
+      <armor>	240	</armor>
+      <devices>	119	</devices>
+    </damage>
+  </_88mm_Pzgr_39_43>
+  <_88mm_Pzgr_40_43>
+    <id>	154	</id>
+    <userString>	#usa_vehicles:_88mm_Pzgr_40_43	</userString>
+    <icon>	ap_cr	</icon>
+    <price>	4400	</price>
+    <improved>	true	</improved>
+    <kind>	ARMOR_PIERCING_CR	</kind>
+    <caliber>	88	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainAPCR	</effects>
+    <damage>
+      <armor>	240	</armor>
+      <devices>	119	</devices>
+    </damage>
+  </_88mm_Pzgr_40_43>
+  <_88mm_Sprgr_43>
+    <id>	155	</id>
+    <userString>	#usa_vehicles:_88mm_Sprgr_43	</userString>
+    <icon>	he	</icon>
+    <price>	230	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <caliber>	88	</caliber>
+    <explosionRadius>	1.4	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	mainHighExplosive	</effects>
+    <damage>
+      <armor>	295	</armor>
+      <devices>	119	</devices>
+    </damage>
+  </_88mm_Sprgr_43>
   <_90mm_AP_M77>
     <id>	23	</id>
     <userString>	#usa_vehicles:_90mm_AP_M77	</userString>

@@ -2467,31 +2467,34 @@ class TelecomStatusFormatter(ServiceChannelFormatter):
 
         return [_MessageData(formatted, settings)]
 
+    @staticmethod
+    def __addProviderToRes(res, provider):
+        return res.dyn(provider, res.default)
+
     def __getMessageContext(self, data):
         key = 'vehicleUnblocked' if data['orderStatus'] else 'vehicleBlocked'
         vehTypeDescrs = data['vehTypeCompDescrs']
+        provider = ''
         if vehTypeDescrs:
             serverSettings = self.__lobbyContext.getServerSettings()
             vehInvID = self.__itemsCache.items.getItemByCD(list(vehTypeDescrs)[0]).invID
             provider = BigWorld.player().inventory.getProviderForVehInvId(vehInvID, serverSettings)
-        else:
-            provider = ''
+        providerLocName = ''
         if provider:
-            i18nProvider = backport.text(R.strings.menu.internet_provider.dyn(provider).name())
-            if i18nProvider is None:
-                i18nProvider = ''
-        else:
-            i18nProvider = ''
+            providerLocRes = R.strings.menu.internet_provider.dyn(provider)
+            providerLocName = backport.text(providerLocRes.name()) if providerLocRes else ''
         msgctx = {'vehicles': self.__getVehicleNames(vehTypeDescrs),
-         'provider': i18nProvider}
+         'provider': providerLocName}
         ctx = {}
+        resShortcut = R.strings.system_messages.telecom
         for txtBlock in ('title', 'comment', 'subcomment'):
-            ctx[txtBlock] = backport.text(R.strings.system_messages.telecom.notifications.dyn(key).dyn(txtBlock)(), **msgctx)
+            ctx[txtBlock] = backport.text(self.__addProviderToRes(resShortcut.notifications.dyn(key).dyn(txtBlock), provider)(), **msgctx)
 
         return ctx
 
 
 class TelecomReceivedInvoiceFormatter(InvoiceReceivedFormatter):
+    _lobbyContext = dependency.descriptor(ILobbyContext)
 
     @staticmethod
     def invoiceHasCrew(data):
@@ -2523,6 +2526,27 @@ class TelecomReceivedInvoiceFormatter(InvoiceReceivedFormatter):
 
         return hasBrotherhood
 
+    @staticmethod
+    def _addProviderToRes(res, provider):
+        return res.dyn(provider, res.default)
+
+    @classmethod
+    def _getProvider(cls, data):
+        provider = ''
+        if 'data' in data and 'vehicles' in data['data']:
+            vehicles = data['data']['vehicles']
+            for vehCompDescr in vehicles.iterkeys():
+                if cls._isValidCD(vehCompDescr):
+                    serverSettings = cls._lobbyContext.getServerSettings()
+                    vehInvID = cls._itemsCache.items.getItemByCD(abs(vehCompDescr)).invID
+                    return BigWorld.player().inventory.getProviderForVehInvId(vehInvID, serverSettings)
+
+        return provider
+
+    @classmethod
+    def _isValidCD(cls, vehCompDescr):
+        return vehCompDescr > 0
+
     def _getVehicles(self, data):
         dataEx = data.get('data', {})
         if not dataEx:
@@ -2538,27 +2562,35 @@ class TelecomReceivedInvoiceFormatter(InvoiceReceivedFormatter):
         pass
 
     def _getMessageContext(self, data, vehicleNames):
-        ctx = {}
+        msgctx = {}
         hasCrew = self.invoiceHasCrew(data)
         if hasCrew:
             if self.invoiceHasBrotherhood(data):
                 skills = ' (%s)' % backport.text(R.strings.item_types.tankman.skills.brotherhood())
             else:
                 skills = ''
-            ctx['crew'] = backport.text(R.strings.system_messages.telecom.notifications.vehicleReceived.crew(), skills=skills)
+            msgctx['crew'] = backport.text(self._addProviderToRes(R.strings.system_messages.telecom.notifications.vehicleReceived.crew, self._getProvider(data)), skills=skills)
         else:
-            ctx['crew'] = ''
-        ctx['vehicles'] = ', '.join(vehicleNames)
-        ctx['datetime'] = self._getOperationTimeString(data)
+            msgctx['crew'] = ''
+        msgctx['vehicles'] = ', '.join(vehicleNames)
+        msgctx['datetime'] = self._getOperationTimeString(data)
+        ctx = {}
+        resShortcut = R.strings.system_messages.telecom.notifications.vehicleReceived
+        for txtBlock in ('title', 'comment', 'subcomment'):
+            ctx[txtBlock] = backport.text(self._addProviderToRes(resShortcut.dyn(txtBlock), self._getProvider(data))(), **msgctx)
+
         return ctx
 
     def _formatData(self, assetType, data):
         vehicleNames = self._getVehicles(data)
-        return None if not vehicleNames else g_settings.msgTemplates.format(self._getMessageTemplateKey(None), ctx=self._getMessageContext(data, vehicleNames), data={'timestamp': time.time()})
+        return None if not vehicleNames else g_settings.msgTemplates.format(self._getMessageTemplateKey(data), ctx=self._getMessageContext(data, vehicleNames), data={'timestamp': time.time()})
 
 
 class TelecomRemovedInvoiceFormatter(TelecomReceivedInvoiceFormatter):
-    __lobbyContext = dependency.descriptor(ILobbyContext)
+
+    @classmethod
+    def _isValidCD(cls, vehCompDescr):
+        return vehCompDescr < 0
 
     def _getMessageTemplateKey(self, data):
         pass
@@ -2575,20 +2607,20 @@ class TelecomRemovedInvoiceFormatter(TelecomReceivedInvoiceFormatter):
             return removedVehNames
 
     def _getMessageContext(self, data, vehicleNames):
-        provider = ''
-        if 'data' in data and 'vehicles' in data['data']:
-            vehicles = data['data']['vehicles']
-            for vehCompDescr in vehicles.iterkeys():
-                if vehCompDescr < 0:
-                    serverSettings = self.__lobbyContext.getServerSettings()
-                    vehInvID = self._itemsCache.items.getItemByCD(abs(vehCompDescr)).invID
-                    provider = BigWorld.player().inventory.getProviderForVehInvId(vehInvID, serverSettings)
-                    break
-
-        tariff = backport.text(R.strings.menu.internet_provider.dyn(provider).tariff()) if provider else ''
-        return {'vehicles': ', '.join(vehicleNames),
+        provider = self._getProvider(data)
+        providerLocTariff = ''
+        if provider != '':
+            providerLocRes = R.strings.menu.internet_provider.dyn(provider)
+            providerLocTariff = backport.text(providerLocRes.tariff()) if providerLocRes else ''
+        msgctx = {'vehicles': ', '.join(vehicleNames),
          'datetime': self._getOperationTimeString(data),
-         'tariff': tariff}
+         'tariff': providerLocTariff}
+        ctx = {}
+        resShortcut = R.strings.system_messages.telecom.notifications.vehicleRemoved
+        for txtBlock in ('title', 'comment', 'subcomment'):
+            ctx[txtBlock] = backport.text(self._addProviderToRes(resShortcut.dyn(txtBlock), provider)(), **msgctx)
+
+        return ctx
 
 
 class PrbVehicleKickFormatter(ServiceChannelFormatter):

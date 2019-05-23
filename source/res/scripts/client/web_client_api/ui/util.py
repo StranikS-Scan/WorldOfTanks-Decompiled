@@ -72,7 +72,7 @@ class _ShowItemTooltipSchema(W2CSchema):
 
 
 class _ChatAvailabilitySchema(W2CSchema):
-    receiver_id = Field(required=True, type=long)
+    receiver_id = Field(required=True, type=(int, long))
 
 
 class UtilWebApiMixin(object):

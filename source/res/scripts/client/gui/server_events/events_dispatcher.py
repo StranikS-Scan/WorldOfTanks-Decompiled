@@ -20,6 +20,7 @@ OPERATIONS = {PERSONAL_MISSIONS_ALIASES.PERONAL_MISSIONS_OPERATIONS_SEASON_1_ID:
 _EVENTS_REWARD_WINDOW = {recruit_helper.RecruitSourceID.TWITCH_0: TwitchRewardWindow,
  recruit_helper.RecruitSourceID.TWITCH_1: TwitchRewardWindow,
  recruit_helper.RecruitSourceID.TWITCH_2: TwitchRewardWindow,
+ recruit_helper.RecruitSourceID.TWITCH_3: TwitchRewardWindow,
  anniversary_helper.ANNIVERSARY_EVENT_PREFIX: GiveAwayRewardWindow}
 _PIGGY_BANK_EVENT_NAME = 'piggyBank'
 

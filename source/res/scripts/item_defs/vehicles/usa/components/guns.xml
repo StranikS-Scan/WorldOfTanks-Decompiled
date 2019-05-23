@@ -105,6 +105,7 @@
     <_75mm_Gun_M3_L37L>	128	</_75mm_Gun_M3_L37L>
     <_90mm_Gun_M3E>	129	</_90mm_Gun_M3E>
     <_120mm_AT_Gun_M58>	130	</_120mm_AT_Gun_M58>
+    <_88mm_Kw_K_43>	131	</_88mm_Kw_K_43>
     <_12.7mm_T23>	255	</_12.7mm_T23>
     <_90mm_Gun_M3_ID>	256	</_90mm_Gun_M3_ID>
     <_76mm_Gun_T185E_IGR>	60001	</_76mm_Gun_T185E_IGR>
@@ -3493,6 +3494,64 @@
         </_76mm_AP_M79training>
       </shots>
     </Gun_1_M4A3E8_Sherman_training>
+    <_88mm_Kw_K_43>
+      <userString>	#usa_vehicles:_88mm_Kw_K_43	</userString>
+      <tags></tags>
+      <level>	8	</level>
+      <price>	112180	</price>
+      <notInShop>	true	</notInShop>
+      <impulse>	0.38	</impulse>
+      <recoil>
+        <lodDist>	MEDIUM	</lodDist>
+        <amplitude>	0.48	</amplitude>
+        <recoilEffect>	main	</recoilEffect>
+      </recoil>
+      <effects>	shot_main_mb	</effects>
+      <reloadEffect>	reload85_107	</reloadEffect>
+      <pitchLimits>
+        <minPitch>	0.0 -15.0 1.0 -15.0	</minPitch>
+        <maxPitch>	0.0 8.0 1.0 8.0	</maxPitch>
+      </pitchLimits>
+      <turretYawLimits>	-180 180	</turretYawLimits>
+      <rotationSpeed>	30.625	</rotationSpeed>
+      <reloadTime>	6.9	</reloadTime>
+      <maxAmmo>	60	</maxAmmo>
+      <aimingTime>	2.7	</aimingTime>
+      <weight>	2562	</weight>
+      <maxHealth>	200	</maxHealth>
+      <maxRegenHealth>	100	</maxRegenHealth>
+      <repairCost>	7	</repairCost>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
+      <shotDispersionRadius>	0.32	</shotDispersionRadius>
+      <shotDispersionFactors>
+        <turretRotation>	0.16	</turretRotation>
+        <afterShot>	4.0	</afterShot>
+        <whileGunDamaged>	2.0	</whileGunDamaged>
+      </shotDispersionFactors>
+      <shots>
+        <_88mm_Pzgr_39_43>
+          <defaultPortion>	0.95	</defaultPortion>
+          <speed>	1000	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	203 185	</piercingPower>
+        </_88mm_Pzgr_39_43>
+        <_88mm_Pzgr_40_43>
+          <defaultPortion>	0.0	</defaultPortion>
+          <speed>	1250	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	237 217	</piercingPower>
+        </_88mm_Pzgr_40_43>
+        <_88mm_Sprgr_43>
+          <defaultPortion>	0.05	</defaultPortion>
+          <speed>	1000	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	44 44	</piercingPower>
+        </_88mm_Sprgr_43>
+      </shots>
+    </_88mm_Kw_K_43>
     <_90mm_Gun_M3E>
       <userString>	#usa_vehicles:_90mm_Gun_M3E	</userString>
       <tags></tags>

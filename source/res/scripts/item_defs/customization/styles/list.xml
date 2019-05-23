@@ -4721,6 +4721,7 @@
       <modelsSet>	NYst	</modelsSet>
       <userString>	#vehicle_customization:special_style/Bat_Chatillon25t_NYst	</userString>
       <tags>	NY2019_style	</tags>
+      <maxNumber>	1	</maxNumber>
       <outfits>
         <outfit>
           <season>	ALL	</season>
@@ -5237,6 +5238,7 @@
       <modelsSet>	NYst	</modelsSet>
       <userString>	#vehicle_customization:special_style/Grille_15_L63_NYst	</userString>
       <tags>	NY2019_style	</tags>
+      <maxNumber>	1	</maxNumber>
       <outfits>
         <outfit>
           <season>	ALL	</season>
@@ -6969,6 +6971,7 @@
       <modelsSet>	NYst	</modelsSet>
       <userString>	#vehicle_customization:special_style/T57_NYst	</userString>
       <tags>	NY2019_style	</tags>
+      <maxNumber>	1	</maxNumber>
       <outfits>
         <outfit>
           <season>	ALL	</season>
@@ -7142,6 +7145,44 @@
         </outfit>
         <outfit>
           <season>	event	</season>
+        </outfit>
+      </outfits>
+    </style>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/main_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	true	</historical>
+    <priceGroup>	2d common styles notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	usa:A126_PzVI_Tiger_II_capt	</vehicles>
+      </include>
+    </vehicleFilter>
+    <style>
+      <id>	52	</id>
+      <texture>	gui/maps/vehicles/styles/kingtiger.png	</texture>
+      <description>	#vehicle_customization:special_style/kingtiger_desc	</description>
+      <modelsSet>	KingTiger	</modelsSet>
+      <maxNumber>	1	</maxNumber>
+      <userString>	#vehicle_customization:special_style/kingtiger	</userString>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	1	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <decals>
+            <item>
+              <id>	0	</id>
+              <appliedTo>	65520	</appliedTo>
+            </item>
+          </decals>
         </outfit>
       </outfits>
     </style>
@@ -7618,6 +7659,7 @@
       <modelsSet>	NYst	</modelsSet>
       <userString>	#vehicle_customization:special_style/IS7_NYst	</userString>
       <tags>	NY2019_style	</tags>
+      <maxNumber>	1	</maxNumber>
       <outfits>
         <outfit>
           <season>	ALL	</season>

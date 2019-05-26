@@ -989,6 +989,50 @@
       <devices>	118	</devices>
     </damage>
   </_20pdr_HE_Mk3>
+  <_QF_20pdr_AP_Mk1>
+    <id>	141	</id>
+    <userString>	#gb_vehicles:_QF_20pdr_AP_Mk1	</userString>
+    <icon>	ap	</icon>
+    <price>	310	</price>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	83.4	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainArmorPiercing	</effects>
+    <damage>
+      <armor>	180	</armor>
+      <devices>	118	</devices>
+    </damage>
+  </_QF_20pdr_AP_Mk1>
+  <_QF_20pdr_APC_Mk2>
+    <id>	142	</id>
+    <userString>	#gb_vehicles:_QF_20pdr_APC_Mk2	</userString>
+    <icon>	ap_cr	</icon>
+    <price>	3600	</price>
+    <improved>	true	</improved>
+    <kind>	ARMOR_PIERCING_CR	</kind>
+    <caliber>	83.4	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainAPCR	</effects>
+    <damage>
+      <armor>	180	</armor>
+      <devices>	118	</devices>
+    </damage>
+  </_QF_20pdr_APC_Mk2>
+  <_QF_20pdr_HE_Mk3>
+    <id>	143	</id>
+    <userString>	#gb_vehicles:_QF_20pdr_HE_Mk3	</userString>
+    <icon>	he	</icon>
+    <price>	445	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <caliber>	83.4	</caliber>
+    <explosionRadius>	1.28	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	mainHighExplosive	</effects>
+    <damage>
+      <armor>	280	</armor>
+      <devices>	118	</devices>
+    </damage>
+  </_QF_20pdr_HE_Mk3>
   <_18pdr_HE_Mk_1C>
     <id>	92	</id>
     <userString>	#gb_vehicles:_18pdr_HE_Mk_1C	</userString>

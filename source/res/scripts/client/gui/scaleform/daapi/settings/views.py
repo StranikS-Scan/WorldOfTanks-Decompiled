@@ -156,6 +156,7 @@ class VIEW_ALIAS(COMMON_VIEW_ALIAS):
     SERVERS_STATS = 'serverStats'
     PROMO_PREMIUM_IGR_WINDOW = 'PromoPremiumIgrWindow'
     CONFIRM_EXCHANGE_DIALOG = 'ConfirmExchangeDialog'
+    CONFIRM_EXCHANGE_DIALOG_MODAL = 'ConfirmExchangeDialogModal'
     QUESTS_SEASON_AWARDS_WINDOW = 'QuestsSeasonAwardsWindow'
     CHECK_BOX_DIALOG = 'CheckBoxDialog'
     ROLE_CHANGE = 'roleChange'

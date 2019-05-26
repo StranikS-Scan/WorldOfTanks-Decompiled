@@ -15,7 +15,7 @@ _ZERO_TUPLE = (0, 0, 0)
 _LABLE_TEXTS = {SESSION_STATS_CONSTANTS.SESSION_STATS_PROPS_INCOME_CREDITS: backport.text(R.strings.tooltips.credits.header()),
  SESSION_STATS_CONSTANTS.SESSION_STATS_PROPS_XP: backport.text(R.strings.session_stats.label.gamingXp()),
  SESSION_STATS_CONSTANTS.SESSION_STATS_PROPS_INCOME_CRYSTAL: backport.text(R.strings.menu.crystals.promoWindow.title()),
- SESSION_STATS_CONSTANTS.SESSION_STATS_PROPS_FREE_XP: backport.text(R.strings.menu.research.labels.freeXP()),
+ SESSION_STATS_CONSTANTS.SESSION_STATS_PROPS_FREE_XP: backport.text(R.strings.session_stats.label.freeXp()),
  SESSION_STATS_CONSTANTS.SESSION_STATS_PROPS_WTR: backport.text(R.strings.session_stats.label.wtr()),
  SESSION_STATS_CONSTANTS.SESSION_STATS_PROPS_RATIO_DAMAGE: backport.text(R.strings.session_stats.label.damaged()),
  SESSION_STATS_CONSTANTS.SESSION_STATS_PROPS_RATIO_KILL: backport.text(R.strings.session_stats.label.destroyed()),

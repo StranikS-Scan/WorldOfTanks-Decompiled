@@ -20,6 +20,11 @@ ICONS_MASK = '../maps/icons/%(type)s/%(subtype)s%(unicName)s.png'
 _RentalInfoProvider = namedtuple('RentalInfoProvider', ('rentExpiryTime', 'compensations', 'battlesLeft', 'winsLeft', 'seasonRent', 'isRented'))
 SeasonRentInfo = namedtuple('SeasonRentInfo', ('seasonType', 'seasonID', 'duration', 'expiryTime'))
 
+def canBuyWithGoldExchange(price, money, exchangeRate):
+    money = money.exchange(Currency.GOLD, Currency.CREDITS, exchangeRate, default=0)
+    return FittingItem._isEnoughMoney(price, money)[0]
+
+
 class RentalInfoProvider(_RentalInfoProvider):
     seasonsController = dependency.descriptor(ISeasonsController)
 
@@ -452,7 +457,8 @@ class FittingItem(GUIItem, HasIntCD):
         if self.itemTypeID not in (GUI_ITEM_TYPE.EQUIPMENT,
          GUI_ITEM_TYPE.OPTIONALDEVICE,
          GUI_ITEM_TYPE.SHELL,
-         GUI_ITEM_TYPE.BATTLE_BOOSTER) and not self.isUnlocked:
+         GUI_ITEM_TYPE.BATTLE_BOOSTER,
+         GUI_ITEM_TYPE.CREW_BOOKS) and not self.isUnlocked:
             return (False, GUI_ITEM_ECONOMY_CODE.UNLOCK_ERROR)
         return (False, GUI_ITEM_ECONOMY_CODE.ITEM_IS_HIDDEN) if self.isHidden else self._isEnoughMoney(price, money)
 

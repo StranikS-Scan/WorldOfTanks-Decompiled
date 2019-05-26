@@ -1,11 +1,11 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/storage/inventory/modules_tab.py
-from gui.Scaleform.daapi.view.lobby.storage.inventory.inventory_view import FiltrableInventoryCategoryTabView
+from gui.Scaleform.daapi.view.lobby.storage.inventory.filters.filter_by_vehicle import FiltrableInventoryCategoryByVehicleTabView
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
-from gui.shared.utils.requesters.ItemsRequester import REQ_CRITERIA
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.utils.functions import makeTooltip
+from gui.shared.utils.requesters.ItemsRequester import REQ_CRITERIA
 from shared_utils import CONST_CONTAINER
 
 class _ModuleFilterBit(CONST_CONTAINER):
@@ -42,7 +42,7 @@ _TYPE_ID_BIT_TO_TYPE_ID_MAP = {_ModuleFilterBit.GUN: GUI_ITEM_TYPE.GUN,
  _ModuleFilterBit.CHASSIS: GUI_ITEM_TYPE.CHASSIS,
  _ModuleFilterBit.RADIO: GUI_ITEM_TYPE.RADIO}
 
-class ModulesTabView(FiltrableInventoryCategoryTabView):
+class ModulesTabView(FiltrableInventoryCategoryByVehicleTabView):
     filterItems = _TYPE_FILTER_ITEMS
 
     def _getClientSectionKey(self):
@@ -52,7 +52,7 @@ class ModulesTabView(FiltrableInventoryCategoryTabView):
         return GUI_ITEM_TYPE.VEHICLE_MODULES
 
     def _getFilteredCriteria(self):
-        criteria = REQ_CRITERIA.EMPTY
+        criteria = super(ModulesTabView, self)._getFilteredCriteria()
         typeIds = [ _TYPE_ID_BIT_TO_TYPE_ID_MAP[bit] for bit in _TYPE_ID_BIT_TO_TYPE_ID_MAP.iterkeys() if self._filterMask & bit ]
         if typeIds:
             criteria |= REQ_CRITERIA.ITEM_TYPES(*typeIds)

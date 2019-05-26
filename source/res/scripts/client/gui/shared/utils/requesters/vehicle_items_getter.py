@@ -85,6 +85,10 @@ def _getCrewSkins(_):
     return tankmen.g_cache.crewSkins().skins.itervalues()
 
 
+def _getCrewBooks(_):
+    return tankmen.g_cache.crewBooks().books.itervalues()
+
+
 def _getModifications(_):
     return vehicles.g_cache.customization20().modifications.itervalues()
 
@@ -144,6 +148,7 @@ _MODULES_GETTERS = {GUI_ITEM_TYPE.VEHICLE: _getVehicles,
  GUI_ITEM_TYPE.PROJECTION_DECAL: _getProjectionDecal,
  GUI_ITEM_TYPE.PERSONAL_NUMBER: _getPersonalNumber,
  GUI_ITEM_TYPE.CREW_SKINS: _getCrewSkins,
+ GUI_ITEM_TYPE.CREW_BOOKS: _getCrewBooks,
  GUI_ITEM_TYPE.SEQUENCE: _getSequence,
  GUI_ITEM_TYPE.ATTACHMENT: _getAttachment}
 

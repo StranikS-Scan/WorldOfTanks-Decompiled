@@ -18,7 +18,7 @@ from gui.shared.gui_items.gui_item_economics import ITEM_PRICE_EMPTY
 from helpers import dependency
 from items import vehicles, tankmen, getTypeOfCompactDescr, makeIntCompactDescrByID
 from items.components.c11n_constants import SeasonType, CustomizationType, StyleFlags
-from items.components.crewSkins_constants import CrewSkinType
+from items.components.crew_skins_constants import CrewSkinType
 from skeletons.gui.shared import IItemsRequester
 from skeletons.gui.shared.gui_items import IGuiItemsFactory
 
@@ -253,8 +253,10 @@ class REQ_CRITERIA(object):
         DISMISSED = RequestCriteria(PredicateCondition(lambda item: item.isDismissed))
         ACTIVE = ~DISMISSED
 
-    class CREW_SKIN(object):
+    class CREW_ITEM(object):
         IN_ACCOUNT = RequestCriteria(PredicateCondition(lambda item: item.inAccount()))
+        BOOK_RARITIES = staticmethod(lambda rarityTypes: RequestCriteria(PredicateCondition(lambda item: item.getBookType() in rarityTypes)))
+        NATIONS = staticmethod(lambda nationIDs=nations.INDICES.keys(): RequestCriteria(PredicateCondition(lambda item: item.nationID in nationIDs or item.getNationID() == nations.NONE_INDEX)))
 
     class BOOSTER(object):
         ENABLED = RequestCriteria(PredicateCondition(lambda item: item.enabled))
@@ -559,6 +561,8 @@ class ItemsRequester(IItemsRequester):
                             invalidate[GUI_ITEM_TYPE.VEHICLE].update(self.__getVehicleCDForTankman(tmanData))
                             invalidate[GUI_ITEM_TYPE.TANKMAN].update(self.__getTankmenIDsForTankman(tmanData))
 
+            if itemTypeID == GUI_ITEM_TYPE.CREW_BOOKS:
+                invalidate[itemTypeID].update(itemsDiff.keys())
             if itemTypeID == GUI_ITEM_TYPE.SHELL:
                 invalidate[itemTypeID].update(itemsDiff.keys())
                 vehicleItems = self.__inventory.getItems(GUI_ITEM_TYPE.VEHICLE)

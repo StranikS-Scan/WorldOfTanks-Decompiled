@@ -36,7 +36,8 @@ class ModuleProcessor(ItemProcessor):
     ITEMS_MSG_PREFIXES = {GUI_ITEM_TYPE.SHELL: 'shell',
      GUI_ITEM_TYPE.EQUIPMENT: 'artefact',
      GUI_ITEM_TYPE.OPTIONALDEVICE: 'artefact',
-     GUI_ITEM_TYPE.BATTLE_BOOSTER: 'battleBooster'}
+     GUI_ITEM_TYPE.BATTLE_BOOSTER: 'battleBooster',
+     GUI_ITEM_TYPE.CREW_BOOKS: 'crewBooks'}
     DEFAULT_PREFIX = 'module'
 
     def __init__(self, item, opType, plugs=tuple()):

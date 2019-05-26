@@ -88,3 +88,8 @@ class STORAGE(object):
     VEHICLESELECTPOPOVER_TOOLTIPS_TITLE_HEADER = '#storage:vehicleSelectPopover/tooltips/title/header'
     VEHICLESELECTPOPOVER_TOOLTIPS_TITLE_BODY = '#storage:vehicleSelectPopover/tooltips/title/body'
     CUSTOMIZATIONSUITABLE_LABEL = '#storage:customizationSuitable/label'
+    STORAGE_TABS_CREWBOOKS = '#storage:storage/tabs/crewBooks'
+    CREWBOOKS_NOITEMS_INFO = '#storage:crewBooks/noItems/info'
+    CREWBOOKS_FILTERS_TITLE = '#storage:crewBooks/filters/title'
+    CREWBOOKS_FILTERS_NATION = '#storage:crewBooks/filters/nation'
+    CREWBOOKS_FILTERS_NATION_ALL = '#storage:crewBooks/filters/nation/all'

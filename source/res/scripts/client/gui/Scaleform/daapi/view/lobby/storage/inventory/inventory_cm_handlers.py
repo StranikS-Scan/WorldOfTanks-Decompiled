@@ -29,6 +29,18 @@ class ModulesShellsCMHandler(ContextMenu):
         return {'textColor': CM_BUY_COLOR} if label == CMLabel.BUY_MORE else None
 
 
+class ModulesShellsNoSaleCMHandler(ContextMenu):
+    _sqGen = SequenceIDGenerator()
+    _itemsCache = dependency.descriptor(IItemsCache)
+
+    @option(_sqGen.next(), CMLabel.INFORMATION)
+    def showInfo(self):
+        shared_events.showStorageModuleInfo(self._id)
+
+    def _getOptionCustomData(self, label):
+        return {'textColor': CM_BUY_COLOR} if label == CMLabel.BUY_MORE else None
+
+
 class EquipmentCMHandler(ContextMenu):
     _sqGen = SequenceIDGenerator()
     _itemsCache = dependency.descriptor(IItemsCache)

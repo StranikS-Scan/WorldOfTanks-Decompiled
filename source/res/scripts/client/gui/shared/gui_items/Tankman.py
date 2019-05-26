@@ -7,10 +7,12 @@ from gui import nationCompareByIndex, TANKMEN_ROLES_ORDER_DICT
 from gui.shared.utils.functions import getShortDescr
 from gui.shared.gui_items import ItemsCollection, GUI_ITEM_TYPE
 from gui.shared.gui_items.gui_item import HasStrCD, GUIItem
+from gui.impl.gen import R
+from gui.impl import backport
 from items.components import skills_constants
 from constants import SkinInvData
 from items.vehicles import VEHICLE_CLASS_TAGS
-from items.components.crewSkins_constants import NO_CREW_SKIN_ID
+from items.components.crew_skins_constants import NO_CREW_SKIN_ID
 
 class CrewTypes(object):
     SKILL_100 = 100
@@ -236,12 +238,20 @@ class Tankman(GUIItem, HasStrCD):
         return getIconName(self.nationID, self.descriptor.iconID)
 
     @property
+    def extensionLessIcon(self):
+        return getExtensionLessIconName(self.nationID, self.descriptor.iconID)
+
+    @property
     def iconRank(self):
         return getRankIconName(self.nationID, self.descriptor.rankID)
 
     @property
     def iconRole(self):
         return getRoleIconName(self.descriptor.role)
+
+    @property
+    def extensionLessIconRole(self):
+        return getExtensionLessRoleIconName(self.descriptor.role)
 
     @property
     def firstUserName(self):
@@ -512,6 +522,10 @@ class TankmanSkill(GUIItem):
         return getSkillIconName(self.name)
 
     @property
+    def extensionLessIconName(self):
+        return getExtensionLessSkillIconName(self.name)
+
+    @property
     def bigIconPath(self):
         return '../maps/icons/tankmen/skills/big/%s' % self.icon
 
@@ -572,6 +586,10 @@ def getRoleIconName(role):
     return tankmen.getSkillsConfig().getSkill(role).icon
 
 
+def getExtensionLessRoleIconName(role):
+    return tankmen.getSkillsConfig().getSkill(role).extensionLessIcon
+
+
 def getRoleBigIconPath(role):
     return '../maps/icons/tankmen/roles/big/%s' % getRoleIconName(role)
 
@@ -590,6 +608,10 @@ def getRoleWhiteIconPath(role):
 
 def getRankUserName(nationID, rankID):
     return i18n.convert(tankmen.getNationConfig(nationID).getRank(rankID).userString)
+
+
+def getExtensionLessIconName(nationID, iconID):
+    return tankmen.getNationConfig(nationID).getExtensionLessIcon(iconID)
 
 
 def getIconName(nationID, iconID):
@@ -624,6 +646,10 @@ def getSkillIconName(skillName):
     return i18n.convert(tankmen.getSkillsConfig().getSkill(skillName).icon)
 
 
+def getExtensionLessSkillIconName(skillName):
+    return tankmen.getSkillsConfig().getSkill(skillName).extensionLessIcon
+
+
 def getSkillBigIconPath(skillName):
     return '../maps/icons/tankmen/skills/big/%s' % getSkillIconName(skillName)
 
@@ -637,23 +663,24 @@ def getSkillIconPath(skillName, size='big'):
 
 
 def getCrewSkinIconBig(iconID):
-    return '../maps/icons/tankmen/icons/big/crewSkins/%s' % iconID
+    return backport.image(R.images.gui.maps.icons.tankmen.icons.big.crewSkins.dyn(iconID)())
 
 
 def getCrewSkinNationPath(nationID):
-    return '../maps/icons/tankmen/crewSkins/nations/{}.png'.format(nationID) if nationID is not None else ''
+    return backport.image(R.images.gui.maps.icons.tankmen.crewSkins.nations.dyn(nationID)()) if nationID else ''
 
 
 def getCrewSkinRolePath(roleID):
-    return '../maps/icons/tankmen/roles/big/crewSkins/{}.png'.format(roleID) if roleID is not None else ''
+    return backport.image(R.images.gui.maps.icons.tankmen.roles.big.crewSkins.dyn(roleID)()) if roleID else ''
 
 
 def getCrewSkinIconSmall(iconID):
-    return '../maps/icons/tankmen/icons/small/crewSkins/%s' % iconID
+    return backport.image(R.images.gui.maps.icons.tankmen.icons.small.crewSkins.dyn(iconID)())
 
 
 def getCrewSkinIconSmallWithoutPath(iconID):
-    return 'crewSkins/%s' % iconID
+    fullPath = backport.image(R.images.gui.maps.icons.tankmen.icons.small.crewSkins.dyn(iconID)())
+    return '/'.join(fullPath.rsplit('/')[-2:])
 
 
 def getSkillUserName(skillName):

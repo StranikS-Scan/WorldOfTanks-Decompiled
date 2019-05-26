@@ -85,6 +85,7 @@
     <_5inch_QF_Gun>	91	</_5inch_QF_Gun>
     <_76mm_Excalibur_Gun>	92	</_76mm_Excalibur_Gun>
     <_120mm_Gun_L11>	93	</_120mm_Gun_L11>
+    <QF_20_pounder_S>	94	</QF_20_pounder_S>
     <_20pdr_Gun_Type_A_IGR>	60001	</_20pdr_Gun_Type_A_IGR>
     <_20pdr_Gun_Type_B_IGR>	60002	</_20pdr_Gun_Type_B_IGR>
     <_75mm_Gun_Vickers_HV_IGR>	60003	</_75mm_Gun_Vickers_HV_IGR>
@@ -3088,6 +3089,64 @@
         </_20pdr_HE_Mk3>
       </shots>
     </_20pdr_Gun_Type_A>
+    <QF_20_pounder_S>
+      <userString>	#gb_vehicles:QF_20_pounder_S	</userString>
+      <tags></tags>
+      <level>	8	</level>
+      <price>	120000	</price>
+      <notInShop>	true	</notInShop>
+      <impulse>	0.48	</impulse>
+      <recoil>
+        <lodDist>	MEDIUM	</lodDist>
+        <amplitude>	0.2	</amplitude>
+        <recoilEffect>	main	</recoilEffect>
+      </recoil>
+      <effects>	shot_main	</effects>
+      <reloadEffect>	reload85_107	</reloadEffect>
+      <pitchLimits>
+        <minPitch>	0.0 -20.0 1.0 -20.0	</minPitch>
+        <maxPitch>	0.0 12.5 1.0 12.5	</maxPitch>
+      </pitchLimits>
+      <turretYawLimits>	-180 180	</turretYawLimits>
+      <rotationSpeed>	40.25	</rotationSpeed>
+      <reloadTime>	3.25714285714286	</reloadTime>
+      <maxAmmo>	60	</maxAmmo>
+      <aimingTime>	2.28571428571429	</aimingTime>
+      <weight>	1240	</weight>
+      <maxHealth>	170	</maxHealth>
+      <maxRegenHealth>	85	</maxRegenHealth>
+      <repairCost>	6	</repairCost>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
+      <shotDispersionRadius>	0.4	</shotDispersionRadius>
+      <shotDispersionFactors>
+        <turretRotation>	0.12	</turretRotation>
+        <afterShot>	3.5	</afterShot>
+        <whileGunDamaged>	2.0	</whileGunDamaged>
+      </shotDispersionFactors>
+      <shots>
+        <_QF_20pdr_AP_Mk1>
+          <defaultPortion>	0.8	</defaultPortion>
+          <speed>	1020	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	189 167	</piercingPower>
+        </_QF_20pdr_AP_Mk1>
+        <_QF_20pdr_APC_Mk2>
+          <defaultPortion>	0.0	</defaultPortion>
+          <speed>	1275	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	223 198	</piercingPower>
+        </_QF_20pdr_APC_Mk2>
+        <_QF_20pdr_HE_Mk3>
+          <defaultPortion>	0.2	</defaultPortion>
+          <speed>	1020	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	90 90	</piercingPower>
+        </_QF_20pdr_HE_Mk3>
+      </shots>
+    </QF_20_pounder_S>
     <_20pdr_AT_Gun_Type_A>
       <userString>	#gb_vehicles:_20pdr_AT_Gun_Type_A	</userString>
       <tags></tags>

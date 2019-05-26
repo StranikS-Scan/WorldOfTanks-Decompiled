@@ -3,7 +3,7 @@
 import logging
 import BigWorld
 from constants import EQUIP_TMAN_CODE
-from items.components.crewSkins_constants import NO_CREW_SKIN_ID
+from items.components.crew_skins_constants import NO_CREW_SKIN_ID
 from gui.SystemMessages import SM_TYPE, CURRENCY_TO_SM_TYPE
 from gui.game_control.restore_contoller import getTankmenRestoreInfo
 from gui.shared.formatters import formatPrice, formatPriceForCurrency

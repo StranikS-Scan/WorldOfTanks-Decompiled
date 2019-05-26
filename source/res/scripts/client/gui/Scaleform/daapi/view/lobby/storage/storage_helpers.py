@@ -6,6 +6,7 @@ import BigWorld
 import nations
 from account_helpers import AccountSettings
 from account_helpers.AccountSettings import LAST_STORAGE_VISITED_TIMESTAMP
+from items import vehicles as vehicles_core, ITEM_TYPES
 from gui import g_htmlTemplates
 from gui.Scaleform import MENU
 from gui.Scaleform.daapi.settings import BUTTON_LINKAGES
@@ -30,6 +31,7 @@ from gui.shared.utils.requesters.ItemsRequester import REQ_CRITERIA
 from helpers import i18n, dependency, int2roman, time_utils, func_utils
 from helpers.time_utils import getCurrentTimestamp
 from skeletons.gui.shared import IItemsCache
+from skeletons.gui.lobby_context import ILobbyContext
 _MAX_COMPATIBLE_VEHS_COUNT = 5
 _MAX_COMPATIBLE_GUNS_COUNT = 2
 _HANDLERS_MAP = {GUI_ITEM_TYPE.OPTIONALDEVICE: CONTEXT_MENU_HANDLER_TYPE.STORAGE_EQUIPMENT_ITEM,
@@ -40,7 +42,8 @@ _HANDLERS_MAP = {GUI_ITEM_TYPE.OPTIONALDEVICE: CONTEXT_MENU_HANDLER_TYPE.STORAGE
  GUI_ITEM_TYPE.GUN: CONTEXT_MENU_HANDLER_TYPE.STORAGE_MODULES_SHELLS_ITEM,
  GUI_ITEM_TYPE.RADIO: CONTEXT_MENU_HANDLER_TYPE.STORAGE_MODULES_SHELLS_ITEM,
  GUI_ITEM_TYPE.CHASSIS: CONTEXT_MENU_HANDLER_TYPE.STORAGE_MODULES_SHELLS_ITEM,
- GUI_ITEM_TYPE.SHELL: CONTEXT_MENU_HANDLER_TYPE.STORAGE_MODULES_SHELLS_ITEM}
+ GUI_ITEM_TYPE.SHELL: CONTEXT_MENU_HANDLER_TYPE.STORAGE_MODULES_SHELLS_ITEM,
+ GUI_ITEM_TYPE.CREW_BOOKS: CONTEXT_MENU_HANDLER_TYPE.STORAGE_MODULES_SHELLS_ITEM}
 _CUSTOMIZATION_VEHICLE_CRITERIA = ~REQ_CRITERIA.VEHICLE.IS_PREMIUM_IGR | ~REQ_CRITERIA.VEHICLE.EVENT_BATTLE | ~REQ_CRITERIA.VEHICLE.IS_BOT
 
 def getStorageItemDescr(item):
@@ -60,7 +63,12 @@ def getStorageItemDescr(item):
         return text_styles.main(desc)
 
 
-def createStorageDefVO(itemID, title, description, count, price, image, imageAlt, itemType='', nationFlagIcon='', enabled=True, contextMenuId=''):
+@dependency.replace_none_kwargs(lobbyContext=ILobbyContext)
+def createStorageDefVO(itemID, title, description, count, price, image, imageAlt, itemType='', nationFlagIcon='', enabled=True, contextMenuId='', lobbyContext=None):
+    if not lobbyContext.getServerSettings().isCrewBooksSaleEnabled():
+        itemTypeID, _, _ = vehicles_core.parseIntCompactDescr(itemID)
+        if itemTypeID == ITEM_TYPES.crewBook:
+            enabled = False
     return {'id': itemID,
      'title': title,
      'description': description,
@@ -176,6 +184,8 @@ def getBoosterType(item):
 def getStorageItemIcon(item, size=STORE_CONSTANTS.ICON_SIZE_MEDIUM):
     if item.itemTypeID in GUI_ITEM_TYPE.VEHICLE_COMPONENTS:
         icon = func_utils.makeFlashPath(item.getShopIcon(size))
+    elif item.itemTypeID == GUI_ITEM_TYPE.CREW_BOOKS:
+        icon = item.getOldStyleIcon()
     else:
         icon = item.icon
     return icon
@@ -229,7 +239,8 @@ def getVehicleRestoreInfo(vehicle):
      icon)
 
 
-def getItemVo(item):
+@dependency.replace_none_kwargs(lobbyContext=ILobbyContext)
+def getItemVo(item, lobbyContext=None):
 
     def getItemNationID(item):
         compatibleNations = []
@@ -240,7 +251,14 @@ def getItemVo(item):
     priceVO = getItemPricesVO(item.getSellPrice())[0]
     itemNationID = getItemNationID(item)
     nationFlagIcon = RES_SHOP.getNationFlagIcon(nations.NAMES[itemNationID]) if itemNationID != nations.NONE_INDEX else ''
-    vo = createStorageDefVO(item.intCD, getStorageModuleName(item), getStorageItemDescr(item), item.inventoryCount, priceVO, getStorageItemIcon(item, STORE_CONSTANTS.ICON_SIZE_SMALL), 'altimage', itemType=getBoosterType(item), nationFlagIcon=nationFlagIcon, enabled=item.itemTypeID != GUI_ITEM_TYPE.BATTLE_BOOSTER, contextMenuId=_HANDLERS_MAP[item.itemTypeID])
+    if not lobbyContext.getServerSettings().isCrewBooksSaleEnabled():
+        if item.itemTypeID == ITEM_TYPES.crewBook:
+            handler = CONTEXT_MENU_HANDLER_TYPE.STORAGE_CREW_BOOKS_NO_SALE_ITEM
+        else:
+            handler = _HANDLERS_MAP[item.itemTypeID]
+    else:
+        handler = _HANDLERS_MAP[item.itemTypeID]
+    vo = createStorageDefVO(item.intCD, getStorageModuleName(item), getStorageItemDescr(item), item.inventoryCount, priceVO, getStorageItemIcon(item, STORE_CONSTANTS.ICON_SIZE_SMALL), 'altimage', itemType=getBoosterType(item), nationFlagIcon=nationFlagIcon, enabled=item.itemTypeID != GUI_ITEM_TYPE.BATTLE_BOOSTER, contextMenuId=handler)
     return vo
 
 

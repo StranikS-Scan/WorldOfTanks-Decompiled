@@ -1948,6 +1948,7 @@ _itemGetters = {ITEM_TYPES.shell: lambda nationID, compTypeID: g_cache.shells(na
  ITEM_TYPES.vehicleChassis: lambda nationID, compTypeID: g_cache.chassis(nationID)[compTypeID],
  ITEM_TYPES.vehicleFuelTank: lambda nationID, compTypeID: g_cache.fuelTanks(nationID)[compTypeID],
  ITEM_TYPES.customizationItem: lambda cType, compTypeID: g_cache.customization20().itemTypes[cType][compTypeID]}
+VEHICLE_ITEM_TYPES = _itemGetters.keys()
 
 def getVehicleType(compactDescr):
     cdType = type(compactDescr)

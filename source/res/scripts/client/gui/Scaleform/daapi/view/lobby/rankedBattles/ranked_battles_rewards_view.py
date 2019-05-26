@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/rankedBattles/ranked_battles_rewards_view.py
+from CurrentVehicle import g_currentVehicle
 from account_helpers import AccountSettings
 from account_helpers.AccountSettings import RANKED_STYLED_VEHICLES_POOL
 from gui.Scaleform.daapi.view.lobby.rankedBattles.ranked_battles_page import IResetablePage
@@ -206,21 +207,25 @@ class RankedBattlesRewardsLeaguesView(RankedBattlesRewardsLeaguesMeta, IResetabl
 
     def __showStylePreview(self, styleCD):
         styledVehicleCD = None
-        accDossier = self.__itemsCache.items.getAccountDossier()
-        vehicles = accDossier.getRankedStats().getVehicles()
-        if not vehicles:
-            vehicles = accDossier.getRandomStats().getVehicles()
-        if vehicles:
-            sortedVehicles = sorted(vehicles.items(), key=lambda vStat: vStat[1].battlesCount, reverse=True)
-            styledVehicleCD = sortedVehicles[0][0]
-        if not styledVehicleCD:
-            vehiclesPool = AccountSettings.getSettings(RANKED_STYLED_VEHICLES_POOL)
-            if not vehiclesPool:
-                vehiclesPool = list(_DEFAULT_STYLED_VEHICLES)
-            vehicleName = vehiclesPool.pop(0)
-            styledVehicleCD = VehicleDescriptor(typeName=vehicleName).type.compactDescr
-            vehiclesPool.append(vehicleName)
-            AccountSettings.setSettings(RANKED_STYLED_VEHICLES_POOL, vehiclesPool)
+        minLvl, _ = self.__rankedController.getSuitableVehicleLevels()
+        if g_currentVehicle.isPresent() and g_currentVehicle.item.level >= minLvl:
+            styledVehicleCD = g_currentVehicle.item.intCD
+        else:
+            accDossier = self.__itemsCache.items.getAccountDossier()
+            vehicles = accDossier.getRankedStats().getVehicles()
+            if not vehicles:
+                vehicles = accDossier.getRandomStats().getVehicles()
+            if vehicles:
+                sortedVehicles = sorted(vehicles.items(), key=lambda vStat: vStat[1].battlesCount, reverse=True)
+                styledVehicleCD = sortedVehicles[0][0]
+            if not styledVehicleCD:
+                vehiclesPool = AccountSettings.getSettings(RANKED_STYLED_VEHICLES_POOL)
+                if not vehiclesPool:
+                    vehiclesPool = list(_DEFAULT_STYLED_VEHICLES)
+                vehicleName = vehiclesPool.pop(0)
+                styledVehicleCD = VehicleDescriptor(typeName=vehicleName).type.compactDescr
+                vehiclesPool.append(vehicleName)
+                AccountSettings.setSettings(RANKED_STYLED_VEHICLES_POOL, vehiclesPool)
         styleDescr = self.__styleDescriptions.get(styleCD, '')
         showStylePreview(styledVehicleCD, self.__itemsCache.items.getItemByCD(styleCD), styleDescr, self._backToLeaguesCallback)
         return

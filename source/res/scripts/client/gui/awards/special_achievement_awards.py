@@ -2,7 +2,6 @@
 # Embedded file name: scripts/client/gui/awards/special_achievement_awards.py
 import BigWorld
 from gui.Scaleform.locale.CLANS import CLANS
-from gui.Scaleform.locale.CREW_SKINS import CREW_SKINS
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.daapi.view.lobby.PersonalCaseConstants import TABS
@@ -12,6 +11,8 @@ from gui.shared import event_dispatcher as shared_events, EVENT_BUS_SCOPE
 from gui.shared.event_dispatcher import showReferralProgramWindow
 from gui.shared.formatters import text_styles
 from gui.shared.gui_items.Vehicle import sortCrew
+from gui.impl.gen import R
+from gui.impl import backport
 from helpers import dependency
 from helpers import i18n
 from skeletons.gui.lobby_context import ILobbyContext
@@ -84,19 +85,19 @@ class CrewSkinAward(ExplosionBackAward):
         super(CrewSkinAward, self).__init__(False)
 
     def getWindowTitle(self):
-        return i18n.makeString(CREW_SKINS.FEATURE_POSTER_POSTERHEADER)
+        return backport.text(R.strings.crew_skins.feature.poster.posterHeader())
 
     def getBackgroundImage(self):
-        return RES_ICONS.MAPS_ICONS_WINDOWS_REWARDWINDOW_CREWSKINS_PRESENTATION
+        return backport.image(R.images.gui.maps.icons.windows.rewardWindow.crewSkins_presentation())
 
     def getHeader(self):
-        return text_styles.highTitle(i18n.makeString(CREW_SKINS.FEATURE_POSTER_GIFTNAME))
+        return text_styles.highTitle(backport.text(R.strings.crew_skins.feature.poster.giftName()))
 
     def getOkButtonText(self):
-        return i18n.makeString(CREW_SKINS.FEATURE_POSTER_CONFIRM) if self._getFirstEnableTankman() is not None else i18n.makeString(MENU.AWARDWINDOW_OKBUTTON)
+        return backport.text(R.strings.crew_skins.feature.poster.confirm()) if self._getFirstEnableTankman() is not None else backport.text(R.strings.menu.awardWindow.okButton())
 
     def getDescription(self):
-        return text_styles.main(i18n.makeString(CREW_SKINS.FEATURE_POSTER_FEATUREDESCR))
+        return text_styles.main(backport.text(R.strings.crew_skins.feature.poster.featureDescr()))
 
     @staticmethod
     def _getFirstEnableTankman():

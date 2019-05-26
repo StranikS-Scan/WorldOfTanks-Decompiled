@@ -7,7 +7,7 @@ from gui.Scaleform.daapi.view.lobby.store.browser.ingameshop_helpers import isIn
 from gui.shared.money import Money, Currency
 from helpers import dependency, i18n
 from items.components import skills_constants
-from items.components.crewSkins_constants import NO_CREW_SKIN_ID
+from items.components.crew_skins_constants import NO_CREW_SKIN_ID
 from gui.shared.gui_items.crew_skin import localizedFullName
 from gui.shared.gui_items.fitting_item import ICONS_MASK
 from gui.shared.gui_items import Tankman, Vehicle

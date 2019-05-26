@@ -12,10 +12,10 @@ class _ClientUpdateManager(object):
 
     def update(self, diff):
         self.__clearRemoved()
-        for handler, diffpaths in self.__handlers.iteritems():
+        for handler, diffpaths in self.__handlers.items():
             if handler in self.__removedHandlers:
                 continue
-            for diffpath in diffpaths:
+            for diffpath in list(diffpaths):
                 isFire, args = self.__processPath(diffpath, diff)
                 if isFire:
                     handler(args)
@@ -47,6 +47,7 @@ class _ClientUpdateManager(object):
             for item in removed:
                 del self.__handlers[item]
 
+            self.__removedHandlers -= removed
         else:
             self.__removedHandlers |= removed
 

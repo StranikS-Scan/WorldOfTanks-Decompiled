@@ -27,9 +27,11 @@ from gui.shared.event_dispatcher import showRankedPrimeTimeWindow
 from gui.shared.events import LobbySimpleEvent
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.items_cache import CACHE_SYNC_REASON
+from gui.shared.tutorial_helper import getTutorialGlobalStorage
 from gui.shared.utils.functions import makeTooltip
 from gui.sounds.filters import STATE_HANGAR_FILTERED
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
+from gui.impl.auxiliary.crew_books_helper import crewBooksViewedCache
 from helpers import dependency
 from helpers.i18n import makeString as _ms
 from helpers.statistics import HANGAR_LOADING_STATE
@@ -42,6 +44,7 @@ from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.shared.utils import IHangarSpace
 from skeletons.helpers.statistics import IStatisticsCollector
+from tutorial.control.context import GLOBAL_FLAG
 
 def predicateNotEmptyWindow(window):
     return window.content is not None
@@ -134,6 +137,10 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
         self.addListener(CameraRelatedEvents.CAMERA_ENTITY_UPDATED, self.__handleSelectedEntityUpdated)
         self._onPopulateEnd()
         self.statsCollector.noteHangarLoadingState(HANGAR_LOADING_STATE.HANGAR_UI_READY, showSummaryNow=True)
+        lobbyContext = dependency.instance(ILobbyContext)
+        isCrewBooksEnabled = lobbyContext.getServerSettings().isCrewBooksEnabled()
+        getTutorialGlobalStorage().setValue(GLOBAL_FLAG.CREW_BOOKS_ENABLED, isCrewBooksEnabled)
+        self.as_setNotificationEnabledS(crewBooksViewedCache().haveNewCrewBooks())
 
     def _dispose(self):
         self.removeListener(LobbySimpleEvent.WAITING_SHOWN, self.__onWaitingShown, EVENT_BUS_SCOPE.LOBBY)
@@ -311,6 +318,8 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
         return self.getComponent(HANGAR_ALIASES.EPIC_WIDGET)
 
     def onCacheResync(self, reason, diff):
+        if diff is not None and GUI_ITEM_TYPE.CREW_BOOKS in diff:
+            self.as_setNotificationEnabledS(crewBooksViewedCache().haveNewCrewBooks())
         if reason == CACHE_SYNC_REASON.SHOP_RESYNC:
             self.__updateAll()
             return
@@ -383,6 +392,7 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
         self.__updateHeaderComponent()
         self.__updateHeaderEpicWidget()
         self.__updateCrew()
+        self.as_setNotificationEnabledS(crewBooksViewedCache().haveNewCrewBooks())
         Waiting.hide('updateVehicle')
 
     def __onSpaceRefresh(self):

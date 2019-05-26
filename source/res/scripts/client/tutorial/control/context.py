@@ -146,6 +146,7 @@ class GLOBAL_FLAG(object):
     HAVE_NEW_BADGE = '_HaveNewBadge'
     HAVE_NEW_SUFFIX_BADGE = '_HaveNewSuffixBadge'
     BADGE_PAGE_HAS_NEW_SUFFIX_BADGE = '_BadgePageHasNewSuffixBadge'
+    CREW_BOOKS_ENABLED = '_CrewBooksEnabled'
     ALL = (IS_FLAGS_RESET,
      SHOW_HISTORY,
      HISTORY_NOT_AVAILABLE,
@@ -154,7 +155,8 @@ class GLOBAL_FLAG(object):
      MAY_PAWN_PERSONAL_MISSION,
      HAVE_NEW_BADGE,
      HAVE_NEW_SUFFIX_BADGE,
-     BADGE_PAGE_HAS_NEW_SUFFIX_BADGE)
+     BADGE_PAGE_HAS_NEW_SUFFIX_BADGE,
+     CREW_BOOKS_ENABLED)
 
 
 class GlobalStorage(object):

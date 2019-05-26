@@ -3,6 +3,7 @@
 import BigWorld
 import BattleReplay
 import SoundGroups
+import Settings
 from AvatarInputHandler.aih_constants import CTRL_MODE_NAME
 from PlayerEvents import g_playerEvents
 from bootcamp.BootCampEvents import g_bootcampEvents
@@ -22,8 +23,14 @@ from bootcamp.BootcampLobbyHintsConfig import g_bootcampHintsConfig
 from gui import GUI_CTRL_MODE_FLAG as _CTRL_FLAG
 from gui.app_loader import settings as app_settings
 from gui.Scaleform.daapi.view.bootcamp.BCBattleLoadingSpaceEnv import BCBattleLoadingSpaceEnv
-from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from soft_exception import SoftException
+_INTRO_VIDEO_PATH = 'videos/_tutorialInitial.usm'
+_INTRO_VIDEO_LOOP_PATH = 'videos/_tutorialInitialLoop.usm'
+_INTRO_VIDEO_MUSIC_START_EVENT = 'bc_music_video_intro_start'
+_INTRO_VIDEO_MUSIC_STOP_EVENT = 'bc_music_video_intro_stop'
+_INTRO_VIDEO_MUSIC_PAUSE_EVENT = 'bc_music_video_intro_pause'
+_INTRO_VIDEO_MUSIC_RESUME_EVENT = 'bc_music_video_intro_resume'
+_DEFAULT_VIDEO_BUFFERING_TIME = 0.5
 
 class StateBattlePreparing(AbstractState):
     soundController = dependency.instance(ISoundsController)
@@ -109,14 +116,15 @@ class StateBattlePreparing(AbstractState):
         return
 
     def getIntroVideoData(self):
-        video = ''
-        background = ''
+        introVideoData = {'showSkipOption': False}
         if self.isVideoPlayingLesson:
-            video = 'videos/_tutorialInitial.usm'
-            background = RES_ICONS.MAPS_ICONS_BOOTCAMP_LOADING_INTROLOADING
-        introVideoData = {'backgroundImage': background,
-         'video': video,
-         'showSkipOption': False}
+            introVideoData.update({'video': _INTRO_VIDEO_PATH,
+             'backgroundVideo': _INTRO_VIDEO_LOOP_PATH,
+             'backgroundMusicStartEvent': _INTRO_VIDEO_MUSIC_START_EVENT,
+             'backgroundMusicStopEvent': _INTRO_VIDEO_MUSIC_STOP_EVENT,
+             'backgroundMusicPauseEvent': _INTRO_VIDEO_MUSIC_PAUSE_EVENT,
+             'backgroundMusicResumeEvent': _INTRO_VIDEO_MUSIC_RESUME_EVENT,
+             'bufferTime': Settings.g_instance.userPrefs.readFloat(Settings.VIDEO_BUFFERING_TIME, _DEFAULT_VIDEO_BUFFERING_TIME)})
         return introVideoData
 
     def onSpaceLoaded(self):

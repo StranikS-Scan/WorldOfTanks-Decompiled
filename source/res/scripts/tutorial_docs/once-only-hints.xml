@@ -227,7 +227,40 @@
       </arrow>
       <checked-ui-state>
         <simple-state>
-          <state>	visible	</state>
+          <state>	enabled	</state>
+          <value>	True	</value>
+        </simple-state>
+      </checked-ui-state>
+      <update-runtime>	True	</update-runtime>
+      <ignore-outside-click>	True	</ignore-outside-click>
+    </hint>
+    <hint>	CrewOperationBtnHint	  <item-id>	CrewOperationBtn	</item-id>
+      <text>	_(#crew_operations:crewBooks/tutorial/crewOperations)	</text>
+      <arrow>
+        <direction>	R	</direction>
+        <loop>	True	</loop>
+      </arrow>
+      <checked-ui-state>
+        <simple-state>
+          <state>	enabled	</state>
+          <value>	True	</value>
+        </simple-state>
+      </checked-ui-state>
+      <update-runtime>	True	</update-runtime>
+      <ignore-outside-click>	True	</ignore-outside-click>
+      <condition>
+        <global-active>	_CrewBooksEnabled	</global-active>
+      </condition>
+    </hint>
+    <hint>	SoundButtonExHint	  <item-id>	SoundButtonEx	</item-id>
+      <text>	_(#crew_operations:crewBooks/tutorial/readBook)	</text>
+      <arrow>
+        <direction>	R	</direction>
+        <loop>	True	</loop>
+      </arrow>
+      <checked-ui-state>
+        <simple-state>
+          <state>	enabled	</state>
           <value>	True	</value>
         </simple-state>
       </checked-ui-state>

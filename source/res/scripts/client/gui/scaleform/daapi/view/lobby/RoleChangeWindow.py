@@ -24,7 +24,7 @@ from gui.shared.utils import decorators, isVehicleObserver
 from gui.shared.utils.requesters.ItemsRequester import REQ_CRITERIA
 from gui.shared.formatters import icons, text_styles
 from items import tankmen
-from items.components.crewSkins_constants import NO_CREW_SKIN_ID
+from items.components.crew_skins_constants import NO_CREW_SKIN_ID
 from nations import NAMES
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.lobby_context import ILobbyContext

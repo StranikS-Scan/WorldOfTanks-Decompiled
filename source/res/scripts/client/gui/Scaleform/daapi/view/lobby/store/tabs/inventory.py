@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/store/tabs/inventory.py
 from constants import IS_RENTALS_ENABLED
-from gui.Scaleform.daapi.view.lobby.store.tabs import StoreItemsTab, StoreModuleTab, StoreVehicleTab, StoreShellTab, StoreArtefactTab, StoreOptionalDeviceTab, StoreEquipmentTab, StoreBattleBoosterTab
+from gui.Scaleform.daapi.view.lobby.store.tabs import StoreItemsTab, StoreModuleTab, StoreVehicleTab, StoreShellTab, StoreArtefactTab, StoreOptionalDeviceTab, StoreEquipmentTab, StoreBattleBoosterTab, StoreCrewBookTab
 from gui.Scaleform.genConsts.STORE_CONSTANTS import STORE_CONSTANTS
 from gui.Scaleform.locale.MENU import MENU
 from gui.shared.gui_items import GUI_ITEM_TYPE
@@ -9,6 +9,8 @@ from gui.shared.gui_items.Vehicle import Vehicle, getVehicleStateIcon
 from gui.shared.tooltips.formatters import packItemActionTooltipData
 from gui.shared.utils.requesters.ItemsRequester import REQ_CRITERIA
 from helpers.i18n import makeString
+from items.components.crew_books_constants import CREW_BOOK_RARITY
+import nations
 
 class InventoryItemsTab(StoreItemsTab):
 
@@ -186,3 +188,20 @@ class InventoryBattleBoosterTab(StoreBattleBoosterTab, InventoryArtefactTab):
         else:
             result = REQ_CRITERIA.BATTLE_BOOSTER.ALL
         return result | REQ_CRITERIA.INVENTORY
+
+
+_TARGET_TYPE_BIT_TO_TYPE_ID_MAP = {STORE_CONSTANTS.FOR_BROCHURE_FIT: CREW_BOOK_RARITY.CREW_COMMON,
+ STORE_CONSTANTS.FOR_GUIDE_FIT: CREW_BOOK_RARITY.CREW_RARE,
+ STORE_CONSTANTS.FOR_CREW_BOOK_FIT: CREW_BOOK_RARITY.CREW_EPIC,
+ STORE_CONSTANTS.FOR_PERSONAL_BOOK_FIT: CREW_BOOK_RARITY.PERSONAL}
+
+class InventoryCrewBookTab(StoreCrewBookTab, InventoryArtefactTab):
+
+    def _getRequestCriteria(self, invVehicles):
+        result = REQ_CRITERIA.INVENTORY
+        targetType = self._filterData['targetType']
+        if targetType != STORE_CONSTANTS.ALL_KIND_FIT:
+            result |= REQ_CRITERIA.CREW_ITEM.BOOK_RARITIES([_TARGET_TYPE_BIT_TO_TYPE_ID_MAP[targetType]])
+        if self._nation is not None and self._nation != nations.NONE_INDEX:
+            result |= REQ_CRITERIA.NATIONS([self._nation])
+        return result

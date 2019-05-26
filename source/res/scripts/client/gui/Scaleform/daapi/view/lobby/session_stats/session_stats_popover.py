@@ -14,6 +14,7 @@ from gui.Scaleform.framework import ViewTypes
 from gui.Scaleform.framework.managers.containers import POP_UP_CRITERIA
 from gui.Scaleform.genConsts.SESSION_STATS_CONSTANTS import SESSION_STATS_CONSTANTS
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
+from gui.shared.items_cache import CACHE_SYNC_REASON
 from gui.impl import backport
 from gui.impl.dialogs import dialogs
 from gui.impl.dialogs.builders import ResSimpleDialogBuilder
@@ -90,8 +91,9 @@ class SessionStatsPopover(SessionStatsPopoverMeta):
             AccountSettings.setSessionSettings(SESSION_STATS_PREV_BATTLE_COUNT, 0)
             SessionStatsRequester.resetStats()
 
-    def __updateViewHandler(self, *_):
-        self.as_setDataS(self.__makeInitVO())
+    def __updateViewHandler(self, reason, _):
+        if reason in (CACHE_SYNC_REASON.DOSSIER_RESYNC,):
+            self.as_setDataS(self.__makeInitVO())
 
     def __makeInitVO(self):
         battleCnt = self._itemsCache.items.sessionStats.getAccountStats(ARENA_BONUS_TYPE.REGULAR).battleCnt

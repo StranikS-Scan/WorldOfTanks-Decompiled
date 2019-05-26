@@ -6,9 +6,9 @@ import os
 from constants import REGIONAL_REALMS
 from items import _xml
 from items import vehicles
-from items.components import skills_constants, crewSkins_constants
+from items.components import skills_constants, crew_skins_constants
 from items.components import tankmen_components
-import items.components.crewSkins_components as cc
+import items.components.crew_skins_components as cc
 
 def _readPriceForItem(pricesDest, xmlCtx, section, compactDescr):
     if pricesDest is not None:
@@ -78,7 +78,7 @@ def _readSkinItem(pricesCache, cache, xmlCtx, section, storage):
     iconID = _xml.readNonEmptyString(xmlCtx, section, 'icon')
     rarity = _xml.readInt(xmlCtx, section, 'rarity', 1)
     maxCount = _xml.readInt(xmlCtx, section, 'maxCount')
-    soundSetID = section.readString('soundSet', crewSkins_constants.NO_CREW_SKIN_SOUND_SET)
+    soundSetID = section.readString('soundSet', crew_skins_constants.NO_CREW_SKIN_SOUND_SET)
     historical = _xml.readBool(xmlCtx, section, 'historical', False)
     realmsStr = section.readString('realms', '')
     realms = realmsStr.split()
@@ -100,7 +100,7 @@ def _readSkinItem(pricesCache, cache, xmlCtx, section, storage):
             crewSkinItem.nation = nation if nation else None
         if filterSection.has_key('sex'):
             sex = filterSection.readString('sex', '')
-            if sex not in crewSkins_constants.TANKMAN_SEX.AVAILABLE:
+            if sex not in crew_skins_constants.TANKMAN_SEX.AVAILABLE:
                 _xml.raiseWrongXml(xmlCtx, 'sex', "unknown tankman sex '%s'" % sex)
             crewSkinItem.sex = sex
     storage[skinID] = crewSkinItem
@@ -127,10 +127,10 @@ def _readCrewSkinsCacheFromXMLSection(pricesCache, cache, xmlCtx, section, secti
 
 
 def readCrewSkinsCacheFromXML(pricesCache, cache, folder):
-    pgFile = os.path.join(folder, crewSkins_constants.CREW_SKINS_PRICE_GROUPS_XML_FILE)
-    _readPriceGroups(pricesCache, cache, (None, crewSkins_constants.CREW_SKINS_PRICE_GROUPS_XML_FILE), ResMgr.openSection(pgFile), 'priceGroup')
+    pgFile = os.path.join(folder, crew_skins_constants.CREW_SKINS_PRICE_GROUPS_XML_FILE)
+    _readPriceGroups(pricesCache, cache, (None, crew_skins_constants.CREW_SKINS_PRICE_GROUPS_XML_FILE), ResMgr.openSection(pgFile), 'priceGroup')
     ResMgr.purge(pgFile)
-    pgFile = os.path.join(folder, crewSkins_constants.CREW_SKINS_XML_FILE)
-    _readCrewSkinsCacheFromXMLSection(pricesCache, cache, (None, crewSkins_constants.CREW_SKINS_XML_FILE), ResMgr.openSection(pgFile), 'crewSkin', cache.skins)
+    pgFile = os.path.join(folder, crew_skins_constants.CREW_SKINS_XML_FILE)
+    _readCrewSkinsCacheFromXMLSection(pricesCache, cache, (None, crew_skins_constants.CREW_SKINS_XML_FILE), ResMgr.openSection(pgFile), 'crewSkin', cache.skins)
     ResMgr.purge(pgFile)
     return

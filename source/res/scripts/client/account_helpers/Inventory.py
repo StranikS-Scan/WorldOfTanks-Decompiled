@@ -141,6 +141,18 @@ class Inventory(object):
             self.__account._doCmdInt3(AccountCommands.CMD_TMAN_UNEQUIP_CREW_SKIN, tmanInvID, 0, 0, proxy)
             return
 
+    def useCrewBook(self, crewBookCD, vehInvID, tmanInvID, callback):
+        if self.__ignore:
+            if callback is not None:
+                callback(AccountCommands.RES_NON_PLAYER)
+            return
+        else:
+            proxy = None
+            if callback is not None:
+                proxy = lambda requestID, resultID, errorStr, ext={}: callback(resultID)
+            self.__account._doCmdInt3(AccountCommands.CMD_LEARN_CREW_BOOK, crewBookCD, vehInvID, tmanInvID, proxy)
+            return
+
     def equip(self, vehInvID, itemCompDescr, callback):
         if self.__ignore:
             if callback is not None:

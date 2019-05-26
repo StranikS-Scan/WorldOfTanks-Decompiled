@@ -7,7 +7,7 @@ from constants import RentType, SEASON_NAME_BY_TYPE, CLIENT_COMMAND_SOURCES
 from AccountCommands import VEHICLE_SETTINGS_FLAG
 from bootcamp.Bootcamp import g_bootcamp
 from items import EQUIPMENT_TYPES
-from items.components.crewSkins_constants import NO_CREW_SKIN_ID
+from items.components.crew_skins_constants import NO_CREW_SKIN_ID
 from items.components.c11n_constants import SeasonType
 from account_shared import LayoutIterator
 from adisp import process, async

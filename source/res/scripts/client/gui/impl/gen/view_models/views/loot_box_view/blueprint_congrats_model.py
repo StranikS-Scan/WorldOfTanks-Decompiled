@@ -6,22 +6,22 @@ class BlueprintCongratsModel(CongratsViewModel):
     __slots__ = ()
 
     def getFragments(self):
-        return self._getNumber(9)
-
-    def setFragments(self, value):
-        self._setNumber(9, value)
-
-    def getFragmentsTotal(self):
         return self._getNumber(10)
 
-    def setFragmentsTotal(self, value):
+    def setFragments(self, value):
         self._setNumber(10, value)
 
+    def getFragmentsTotal(self):
+        return self._getNumber(11)
+
+    def setFragmentsTotal(self, value):
+        self._setNumber(11, value)
+
     def getCanConvert(self):
-        return self._getBool(11)
+        return self._getBool(12)
 
     def setCanConvert(self, value):
-        self._setBool(11, value)
+        self._setBool(12, value)
 
     def _initialize(self):
         super(BlueprintCongratsModel, self)._initialize()

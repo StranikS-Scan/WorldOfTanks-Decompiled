@@ -6,14 +6,16 @@ from functools import partial
 from itertools import izip
 import nations
 from items import vehicles, ITEM_TYPES, parseIntCompactDescr
-from items.components import skills_components, crewSkins_constants
+from items.components import skills_components, crew_skins_constants, crew_books_constants
 from items.components import skills_constants
 from items.components import tankmen_components
 from items.components import component_constants
-from items.components.crewSkins_components import CrewSkinsCache
+from items.components.crew_skins_components import CrewSkinsCache
+from items.components.crew_books_components import CrewBooksCache
 from items.readers import skills_readers
 from items.readers import tankmen_readers
 from items.readers.crewSkins_readers import readCrewSkinsCacheFromXML
+from items.readers.crewBooks_readers import readCrewBooksCacheFromXML
 from items.passports import PassportCache, passport_generator, maxAttempts, distinctFrom, acceptOn
 from vehicles import VEHICLE_CLASS_TAGS
 from debug_utils import LOG_ERROR, LOG_WARNING, LOG_CURRENT_EXCEPTION
@@ -38,6 +40,7 @@ _LEVELUP_K2 = 100.0
 RECRUIT_TMAN_TOKEN_PREFIX = 'tman_template'
 MAX_SKILLS_IN_RECRUIT_TOKEN = 10
 _CREW_SKINS_XML_PATH = ITEM_DEFS_PATH + 'crewSkins/'
+_CREW_BOOKS_XML_PATH = ITEM_DEFS_PATH + 'crewBooks/'
 g_cache = None
 
 def init(preloadEverything, pricesToCollect):
@@ -49,6 +52,7 @@ def init(preloadEverything, pricesToCollect):
             getNationConfig(nationID)
 
         g_cache.initCrewSkins(pricesToCollect)
+        g_cache.initCrewBooks(pricesToCollect)
 
 
 def getSkillsConfig():
@@ -756,7 +760,7 @@ def getTankmanGroup(tankmanDescr):
 
 def getCommanderSkinID(crewDescs, crewIDs, crewSkins):
     commanderDescr, commanderInvID = getCommanderInfo(crewDescs, crewIDs)
-    return crewSkins.get(commanderInvID, crewSkins_constants.NO_CREW_SKIN_ID)
+    return crewSkins.get(commanderInvID, crew_skins_constants.NO_CREW_SKIN_ID)
 
 
 def tankmenGroupHasRole(nationID, groupID, isPremium, role):
@@ -979,21 +983,61 @@ def generateRecruitToken(group, sourceID, nationList=(), isPremium=True, freeXP=
         return ':'.join(tokenParts)
 
 
+def validateCrewToLearnCrewBook(crew, vehTypeCompDescr):
+    resultMask = crew_books_constants.CREW_BOOK_PROPERTIES_MASKS.EMPTY_MASK
+    resultMsg = ''
+    crewLists = {mask:[] for mask in crew_books_constants.CREW_BOOK_PROPERTIES_MASKS.ALL}
+    if None in crew:
+        resultMsg += 'Vehicle has not full crew; '
+        resultMask = resultMask | crew_books_constants.CREW_BOOK_PROPERTIES_MASKS.FULL_CREW
+    _, _, vehicleID = vehicles.parseIntCompactDescr(vehTypeCompDescr)
+    for slotID, tmanCompDescr in enumerate(crew):
+        if tmanCompDescr is None:
+            if not resultMask & crew_books_constants.CREW_BOOK_PROPERTIES_MASKS.FULL_CREW:
+                resultMsg += 'Vehicle has not full crew; '
+            resultMask = resultMask | crew_books_constants.CREW_BOOK_PROPERTIES_MASKS.FULL_CREW
+            continue
+        tmanDescr = TankmanDescr(tmanCompDescr)
+        if tmanDescr.roleLevel < MAX_SKILL_LEVEL:
+            if not resultMask & crew_books_constants.CREW_BOOK_PROPERTIES_MASKS.ROLE_LEVEL:
+                resultMsg += 'One of crew members has not enough level of specialization; '
+            resultMask = resultMask | crew_books_constants.CREW_BOOK_PROPERTIES_MASKS.ROLE_LEVEL
+            crewLists[crew_books_constants.CREW_BOOK_PROPERTIES_MASKS.ROLE_LEVEL].append(slotID)
+        if vehicleID != tmanDescr.vehicleTypeID:
+            if not resultMask & crew_books_constants.CREW_BOOK_PROPERTIES_MASKS.SPECIALIZATION:
+                resultMsg += 'One of crew members has specialization not compatible with current vehicle;'
+            resultMask = resultMask | crew_books_constants.CREW_BOOK_PROPERTIES_MASKS.SPECIALIZATION
+            crewLists[crew_books_constants.CREW_BOOK_PROPERTIES_MASKS.SPECIALIZATION].append(slotID)
+
+    return (resultMask == 0,
+     resultMask,
+     resultMsg,
+     crewLists)
+
+
 def getItemByCompactDescr(compactDescr):
     try:
         itemTypeID, nationID, compTypeID = parseIntCompactDescr(compactDescr)
-        return g_cache.crewSkins().skins[compTypeID]
+        items = None
+        if itemTypeID == ITEM_TYPES.crewSkin:
+            items = g_cache.crewSkins().skins
+        elif itemTypeID == ITEM_TYPES.crewBook:
+            items = g_cache.crewBooks().books
+        return items[compTypeID]
     except Exception:
         LOG_CURRENT_EXCEPTION()
         LOG_ERROR('(compact description to XML mismatch?)', compactDescr)
         raise
 
+    return
+
 
 class Cache(object):
-    __slots__ = '__crewSkins'
+    __slots__ = ('__crewSkins', '__crewBooks')
 
     def __init__(self):
         self.__crewSkins = None
+        self.__crewBooks = None
         return
 
     def initCrewSkins(self, pricesCache):
@@ -1002,5 +1046,14 @@ class Cache(object):
             readCrewSkinsCacheFromXML(pricesCache, self.__crewSkins, _CREW_SKINS_XML_PATH)
         return
 
+    def initCrewBooks(self, pricesCache):
+        if self.__crewBooks is None:
+            self.__crewBooks = CrewBooksCache()
+            readCrewBooksCacheFromXML(pricesCache, self.__crewBooks, _CREW_BOOKS_XML_PATH)
+        return
+
     def crewSkins(self):
         return self.__crewSkins
+
+    def crewBooks(self):
+        return self.__crewBooks

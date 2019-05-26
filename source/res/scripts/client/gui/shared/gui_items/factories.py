@@ -15,6 +15,7 @@ from gui.shared.gui_items.Vehicle import Vehicle
 from gui.shared.gui_items.badge import Badge
 from gui.shared.gui_items.loot_box import LootBox
 from gui.shared.gui_items.crew_skin import CrewSkin
+from gui.shared.gui_items.crew_book import CrewBook
 from skeletons.gui.shared.gui_items import IGuiItemsFactory
 _logger = logging.getLogger(__name__)
 _NONE_GUI_ITEM_TYPE = 0
@@ -133,6 +134,9 @@ class GuiItemFactory(IGuiItemsFactory):
     def createCrewSkin(self, intCompactDescr, proxy=None):
         return CrewSkin(intCompactDescr, proxy)
 
+    def createCrewBook(self, intCompactDescr, proxy=None):
+        return CrewBook(intCompactDescr, proxy)
+
 
 _ITEM_TYPES_MAPPING = {_NONE_GUI_ITEM_TYPE: lambda *args, **kwargs: None,
  GUI_ITEM_TYPE.SHELL: GuiItemFactory.createShell,
@@ -163,4 +167,5 @@ _ITEM_TYPES_MAPPING = {_NONE_GUI_ITEM_TYPE: lambda *args, **kwargs: None,
  GUI_ITEM_TYPE.SEQUENCE: GuiItemFactory.createCustomization,
  GUI_ITEM_TYPE.ATTACHMENT: GuiItemFactory.createCustomization,
  GUI_ITEM_TYPE.OUTFIT: GuiItemFactory.createOutfit,
- GUI_ITEM_TYPE.CREW_SKINS: GuiItemFactory.createCrewSkin}
+ GUI_ITEM_TYPE.CREW_SKINS: GuiItemFactory.createCrewSkin,
+ GUI_ITEM_TYPE.CREW_BOOKS: GuiItemFactory.createCrewBook}

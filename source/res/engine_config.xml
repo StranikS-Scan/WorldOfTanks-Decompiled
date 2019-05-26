@@ -570,9 +570,12 @@
     <logFile>	cef.log	</logFile>
     <logVerbosity>	warning	</logVerbosity>
     <enableFlash>	true	</enableFlash>
+    <ignoreCertErrors>	false	</ignoreCertErrors>
     <debugPort>	-1	</debugPort>
     <maxFrameRate>	0	</maxFrameRate>
     <acceptLangList></acceptLangList>
     <locale></locale>
+    <autoPlayVideo>	true	</autoPlayVideo>
+    <useOldSdk>	false	</useOldSdk>
   </webBrowser>
 </engine_config.xml>

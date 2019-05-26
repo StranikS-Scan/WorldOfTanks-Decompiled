@@ -4,7 +4,7 @@ import logging
 from frameworks.wulf import ViewFlags
 from frameworks.wulf import WindowFlags
 from gui.ClientUpdateManager import g_clientUpdateManager
-from gui.impl.auxiliary.rewards_helper import getRewardTooltipContent, getRewardRendererModelPresenter, BLUEPRINTS_CONGRAT_TYPES, fillStepsModel
+from gui.impl.auxiliary.rewards_helper import getRewardTooltipContent, getRewardRendererModelPresenter, BLUEPRINTS_CONGRAT_TYPES, fillStepsModel, getCongratsIndex
 from gui.impl.backport.backport_tooltip import TooltipData
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.progressive_reward.progressive_reward_award_model import ProgressiveRewardAwardModel
@@ -75,7 +75,8 @@ class ProgressiveRewardAwardView(ViewImpl):
         super(ProgressiveRewardAwardView, self)._finalize()
 
     def __update(self, _=None):
-        self.__setSteps(self.__currentStep)
+        if self.__specialRewardType != LootCongratsTypes.INIT_CONGRAT_TYPE_CREW_BOOKS:
+            self.__setSteps(self.__currentStep)
         self.__setBonuses(self.__bonuses)
 
     def __onWindowClose(self, _=None):
@@ -107,9 +108,11 @@ class ProgressiveRewardAwardView(ViewImpl):
         with self.getViewModel().transaction() as tx:
             rewardsList = tx.getRewards()
             rewardsList.clear()
+            lastCongratsIndex = getCongratsIndex(bonuses)
             for index, reward in enumerate(bonuses):
                 formatter = getRewardRendererModelPresenter(reward)
-                rewardRender = formatter.getModel(reward, index)
+                showCongrats = index is lastCongratsIndex
+                rewardRender = formatter.getModel(reward, index, showCongrats=showCongrats)
                 rewardsList.addViewModel(rewardRender)
                 compensationReason = reward.get('compensationReason', None)
                 ttTarget = compensationReason if compensationReason is not None else reward

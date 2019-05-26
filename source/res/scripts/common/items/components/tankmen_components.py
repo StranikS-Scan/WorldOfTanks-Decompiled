@@ -307,6 +307,12 @@ class NationConfig(legacy_stuff.LegacyStuff):
         else:
             return component_constants.EMPTY_STRING
 
+    def getExtensionLessIcon(self, iconID):
+        if iconID in self.__icons:
+            return self.__icons[iconID].split('.png')[0]
+        else:
+            return component_constants.EMPTY_STRING
+
     def getRank(self, rankID):
         if self.__ranks is not None:
             return self.__ranks.getRankByID(rankID)

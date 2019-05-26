@@ -6,7 +6,6 @@ import BigWorld
 from gui import makeHtmlString
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.Scaleform.genConsts.CURRENCIES_CONSTANTS import CURRENCIES_CONSTANTS
-from gui.impl.gen.view_models.ui_kit.action_price_model import ActionPriceModel
 from gui.shared.economics import ActualPrice
 from gui.shared.formatters import icons
 from gui.shared.formatters import text_styles
@@ -145,38 +144,6 @@ def getItemPricesVO(*itemPrices):
         resultVO.append({'price': getMoneyVO(itemPrice.price)})
 
     return resultVO
-
-
-def getItemPricesViewModel(statsMoney, *itemPrices):
-    result = []
-    for itemPrice in itemPrices:
-        priceModels = []
-        if itemPrice.isDefined():
-            for currency in Currency.ALL:
-                currencyValue = itemPrice.price.get(currency)
-                if currencyValue is not None:
-                    actionPriceModel = ActionPriceModel()
-                    isEnough = statsMoney.get(currency) >= currencyValue
-                    actionPriceModel.setIsEnough(isEnough)
-                    currencyAction = itemPrice.getActionPrcAsMoney().get(currency)
-                    hasAction = currencyAction is not None
-                    if hasAction:
-                        updateActionInViewModel(currency, actionPriceModel, itemPrice)
-                    actionPriceModel.setType(currency)
-                    actionPriceModel.setIsWithAction(hasAction)
-                    actionPriceModel.setPrice(BigWorld.wg_getIntegralFormat(currencyValue))
-                    defPrice = BigWorld.wg_getIntegralFormat(itemPrice.defPrice.get(currency, 0))
-                    actionPriceModel.setDefPrice(defPrice)
-                    priceModels.append(actionPriceModel)
-
-        else:
-            actionPriceModel = ActionPriceModel()
-            actionPriceModel.setIsFree(True)
-            priceModels.append(actionPriceModel)
-        if priceModels:
-            result.append(priceModels)
-
-    return result
 
 
 def updateActionInViewModel(currency, actionPriceModel, itemPrice):

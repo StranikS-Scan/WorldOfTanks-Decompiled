@@ -3,6 +3,8 @@
 import logging
 import BigWorld
 from constants import EMPTY_GEOMETRY_ID
+from helpers import dependency
+from skeletons.gui.shared import IItemsCache
 from gui import SystemMessages
 from gui.Scaleform.locale.MESSENGER import MESSENGER
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
@@ -367,3 +369,19 @@ class PremiumBonusApplier(Processor):
     def _request(self, callback):
         _logger.debug('Make server request to apply premium XP bonus %d', self.__arenaUniqueID)
         BigWorld.player().shop.applyPremiumXPBonus(self.__arenaUniqueID, self.__vehTypeCompDescr, lambda resID, code, errStr: self._response(code, callback, errStr))
+
+
+class UseCrewBookProcessor(Processor):
+
+    def __init__(self, crewBookCD, vehInvID, tmanInvID):
+        super(UseCrewBookProcessor, self).__init__()
+        self.__crewBookCD = crewBookCD
+        self.__vehInvID = vehInvID
+        self.__tmanInvID = tmanInvID
+
+    def _successHandler(self, code, ctx=None):
+        itemsCache = dependency.instance(IItemsCache)
+        return makeI18nSuccess(sysMsgKey='crewBooksNotification/bookUsed', name=itemsCache.items.getItemByCD(self.__crewBookCD).userName)
+
+    def _request(self, callback):
+        BigWorld.player().inventory.useCrewBook(self.__crewBookCD, self.__vehInvID, self.__tmanInvID, lambda code: self._response(code, callback))

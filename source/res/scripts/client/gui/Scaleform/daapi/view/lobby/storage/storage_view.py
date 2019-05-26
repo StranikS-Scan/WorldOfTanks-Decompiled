@@ -26,6 +26,7 @@ class StorageView(LobbySubView, StorageViewMeta):
     __lobbyContext = dependency.descriptor(ILobbyContext)
     __itemsCache = dependency.descriptor(IItemsCache)
     _COMMON_SOUND_SPACE = STORAGE_SOUND_SPACE
+    _AUTO_TAB_SELECT_ENABLE = [STORAGE_CONSTANTS.IN_HANGAR_VIEW, STORAGE_CONSTANTS.STORAGE_VIEW]
 
     def __init__(self, ctx=None):
         super(StorageView, self).__init__(ctx)
@@ -60,7 +61,7 @@ class StorageView(LobbySubView, StorageViewMeta):
 
     def _onRegisterFlashComponent(self, viewPy, alias):
         super(StorageView, self)._onRegisterFlashComponent(viewPy, alias)
-        if alias == STORAGE_CONSTANTS.IN_HANGAR_VIEW:
+        if alias in self._AUTO_TAB_SELECT_ENABLE:
             viewPy.setActiveTab(self.__activeTab)
 
     def __initialize(self):

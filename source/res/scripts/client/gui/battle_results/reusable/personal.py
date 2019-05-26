@@ -279,6 +279,8 @@ class _EconomicsRecordsChains(object):
             if appliedPremiumCreditsFactor100Exists:
                 replay['appliedPremiumCreditsFactor100'] = FACTOR_VALUE.BASE_CREDITS_FACTOR
             self._baseCredits.addRecords(self.__buildCreditsReplayForPremType(PREMIUM_TYPE.NONE, results, replay))
+            if appliedPremiumCreditsFactor100Exists:
+                replay['appliedPremiumCreditsFactor100'] = results['premiumCreditsFactor100']
             self._premiumCredits.addRecords(self.__buildCreditsReplayForPremType(PREMIUM_TYPE.BASIC, results, replay))
             if appliedPremiumCreditsFactor100Exists:
                 replay['appliedPremiumCreditsFactor100'] = results['premiumPlusCreditsFactor100']

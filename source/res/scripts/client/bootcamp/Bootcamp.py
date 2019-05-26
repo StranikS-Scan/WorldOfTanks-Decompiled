@@ -24,7 +24,6 @@ from gui.prb_control.dispatcher import g_prbLoader
 from gui.Scaleform.Waiting import Waiting
 from gui.Scaleform.daapi.view.login.EULADispatcher import EULADispatcher
 from gui.Scaleform.framework.entities.EventSystemEntity import EventSystemEntity
-from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.prb_control import prbEntityProperty
 from gui.shared.items_cache import CACHE_SYNC_REASON
 from gui.battle_control.arena_info import player_format
@@ -75,7 +74,7 @@ class Bootcamp(EventSystemEntity):
     sessionProvider = dependency.descriptor(IBattleSessionProvider)
     itemsCache = dependency.descriptor(IItemsCache)
     appLoader = dependency.descriptor(IAppLoader)
-    BOOTCAMP_SOUND_BANKS = ('bootcamp.pck', 'bootcamp_gui.bnk', 'bootcamp_hangar.bnk', 'bootcamp_hangar_voiceover.bnk', 'bootcamp_voiceover.bnk', 'bootcamp_result_screen.bnk')
+    BOOTCAMP_SOUND_BANKS = ('bootcamp.pck', 'bootcamp_gui.bnk', 'bootcamp_hangar.bnk', 'bootcamp_hangar_voiceover.bnk', 'bootcamp_voiceover.bnk', 'bootcamp_result_screen.bnk', 'bootcamp_video.pck', 'bootcamp_video.bnk')
 
     def __init__(self):
         super(Bootcamp, self).__init__()
@@ -485,9 +484,7 @@ class Bootcamp(EventSystemEntity):
         autoStart = parameters.get('introAutoStart', False)
         if BattleReplay.isPlaying():
             autoStart = True
-        introPageData = {'backgroundImage': RES_ICONS.MAPS_ICONS_BOOTCAMP_LOADING_INTROLOADING,
-         'video': '',
-         'autoStart': autoStart,
+        introPageData = {'autoStart': autoStart,
          'lessonNumber': self.__lessonId,
          'tutorialPages': self.getBattleLoadingPages(),
          'showSkipOption': True,

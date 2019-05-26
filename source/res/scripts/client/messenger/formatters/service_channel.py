@@ -49,10 +49,11 @@ from gui.Scaleform.genConsts.RANKEDBATTLES_ALIASES import RANKEDBATTLES_ALIASES
 from helpers import dependency
 from helpers import i18n, html, getLocalizedData
 from helpers import time_utils
-from items import getTypeInfoByIndex, getTypeInfoByName, vehicles as vehicles_core, tankmen
+from items import getTypeInfoByIndex, getTypeInfoByName, vehicles as vehicles_core, tankmen, ITEM_TYPES as I_T
 from items import makeIntCompactDescrByID
 from items.components.c11n_constants import CustomizationType, DecalType
-from items.components.crewSkins_constants import NO_CREW_SKIN_ID
+from items.components.crew_skins_constants import NO_CREW_SKIN_ID
+from items.components.crew_books_constants import CREW_BOOK_RARITY
 from messenger import g_settings
 from messenger.ext import passCensor
 from messenger.formatters import TimeFormatter, NCContextItemFormatter
@@ -224,6 +225,13 @@ def _getRaresAchievementsStirngs(battleResults):
 def _getDefaultMessage(normal='', bold=''):
     return g_settings.msgTemplates.format(_DEFAULT_MESSAGE, {'normal': normal,
      'bold': bold})
+
+
+def _getCrewBookUserString(itemDescr):
+    params = {}
+    if itemDescr.type != CREW_BOOK_RARITY.PERSONAL:
+        params['nation'] = i18n.makeString('#nations:{}'.format(itemDescr.nation))
+    return i18n.makeString(itemDescr.name, **params)
 
 
 _MessageData = namedtuple('MessageData', 'data, settings')
@@ -957,6 +965,7 @@ class InvoiceReceivedFormatter(WaitItemsSyncFormatter):
             if tankPremium is not None:
                 operations.append(self.__getTankPremiumString(tankPremium))
             items = dataEx.get('items', {})
+            items = self.__composeItems(items)
             if items:
                 operations.append(self.__getItemsString(items))
             tmen = dataEx.get('tankmen', [])
@@ -1172,14 +1181,33 @@ class InvoiceReceivedFormatter(WaitItemsSyncFormatter):
             ctx['amount'] = BigWorld.wg_getIntegralFormat(abs(amount))
         return g_settings.htmlTemplates.format(self.__operationTemplateKeys[templateKey], ctx=ctx)
 
+    def __composeItems(self, items):
+
+        def validateItem(item):
+            itemCompactDescr, _ = item
+            itemTypeID, _, _ = vehicles_core.parseIntCompactDescr(itemCompactDescr)
+            if itemTypeID == I_T.crewBook:
+                lobbyContext = dependency.instance(ILobbyContext)
+                if not lobbyContext.getServerSettings().isCrewBooksEnabled():
+                    return False
+            return True
+
+        return dict(filter(validateItem, items.iteritems()))
+
     def __getItemsString(self, items, installed=False):
         accrued = []
         debited = []
         for itemCompactDescr, count in items.iteritems():
             if count:
                 try:
-                    item = vehicles_core.getItemByCompactDescr(itemCompactDescr)
-                    itemString = '{0:s} "{1:s}" - {2:d} {3:s}'.format(getTypeInfoByName(item.itemTypeName)['userString'], item.i18n.userString, abs(count), backport.text(R.strings.messenger.serviceChannelMessages.invoiceReceived.pieces()))
+                    itemTypeID, _, _ = vehicles_core.parseIntCompactDescr(itemCompactDescr)
+                    if itemTypeID == I_T.crewBook:
+                        item = tankmen.getItemByCompactDescr(itemCompactDescr)
+                        userString = _getCrewBookUserString(item)
+                    else:
+                        item = vehicles_core.getItemByCompactDescr(itemCompactDescr)
+                        userString = item.i18n.userString
+                    itemString = '{0:s} "{1:s}" - {2:d} {3:s}'.format(getTypeInfoByName(item.itemTypeName)['userString'], userString, abs(count), backport.text(R.strings.messenger.serviceChannelMessages.invoiceReceived.pieces()))
                     if count > 0:
                         accrued.append(itemString)
                     else:
@@ -1922,6 +1950,7 @@ class BootcampResultsFormatter(WaitItemsSyncFormatter):
 
 class TokenQuestsFormatter(WaitItemsSyncFormatter):
     _eventsCache = dependency.descriptor(IEventsCache)
+    __lobbyContext = dependency.descriptor(ILobbyContext)
     __PERSONAL_MISSIONS_CUSTOM_TEMPLATE = 'personalMissionsCustom'
     __FRONTLINE_REWARD_QUEST_TEMPLATE = 'bought_frontline_reward_veh_'
 
@@ -1998,8 +2027,16 @@ class TokenQuestsFormatter(WaitItemsSyncFormatter):
         items = data.get('items', {})
         itemsNames = []
         for intCD, count in items.iteritems():
-            itemDescr = vehicles_core.getItemByCompactDescr(intCD)
-            itemsNames.append(backport.text(R.strings.messenger.serviceChannelMessages.battleResults.quests.items.name(), name=itemDescr.i18n.userString, count=BigWorld.wg_getIntegralFormat(count)))
+            itemTypeID, _, _ = vehicles_core.parseIntCompactDescr(intCD)
+            if itemTypeID == I_T.crewBook:
+                if not cls.__lobbyContext.getServerSettings().isCrewBooksEnabled():
+                    continue
+                itemDescr = tankmen.getItemByCompactDescr(intCD)
+                name = _getCrewBookUserString(itemDescr)
+            else:
+                itemDescr = vehicles_core.getItemByCompactDescr(intCD)
+                name = itemDescr.i18n.userString
+            itemsNames.append(backport.text(R.strings.messenger.serviceChannelMessages.battleResults.quests.items.name(), name=name, count=BigWorld.wg_getIntegralFormat(count)))
 
         if itemsNames:
             result.append(cls.__makeQuestsAchieve('battleQuestsItems', names=', '.join(itemsNames)))

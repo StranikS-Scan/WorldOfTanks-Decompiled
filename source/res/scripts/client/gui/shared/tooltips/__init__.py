@@ -20,6 +20,7 @@ class TOOLTIP_TYPE(CONST_CONTAINER):
     NOT_RECRUITED_TANKMAN = 'notRecruitedTankman'
     SKILL = 'skill'
     CREW_SKIN = 'crew_skin'
+    CREW_BOOK = 'crew_book'
     ACHIEVEMENT = 'achievement'
     ACHIEVEMENT_ATTR = 'achievementAttr'
     MODULE = 'module'
@@ -87,6 +88,7 @@ class TOOLTIP_COMPONENT(CONST_CONTAINER):
     RESERVE = 'reserve'
     BLUEPRINT = 'blueprints'
     SESSION_STATS = 'sessionStats'
+    CREW_BOOK = 'crewBook'
 
 
 class ACTION_TOOLTIPS_TYPE(CONST_CONTAINER):

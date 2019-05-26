@@ -848,6 +848,8 @@ class MESSENGER(object):
     SERVICECHANNELMESSAGES_BLACKMAPREMOVED_MAPDISABLED = '#messenger:serviceChannelMessages/blackMapRemoved/mapDisabled'
     SERVICECHANNELMESSAGES_BLACKMAPREMOVED_SLOTDISABLED = '#messenger:serviceChannelMessages/blackMapRemoved/slotDisabled'
     SERVICECHANNELMESSAGES_BLACKMAPDISABLED = '#messenger:serviceChannelMessages/blackMapDisabled'
+    SERVICECHANNELMESSAGES_INVOICERECEIVED_CREWBOOKSACCRUED = '#messenger:serviceChannelMessages/invoiceReceived/crewBooksAccrued'
+    SERVICECHANNELMESSAGES_CREWBOOKSCOUNT = '#messenger:serviceChannelMessages/crewBooksCount'
     CLIENT_ERROR_SHARED_ENUM = (CLIENT_ERROR_SHARED_TRY_LATER,
      CLIENT_ERROR_SHARED_GENERIC,
      CLIENT_ERROR_SHARED_LOCKED,

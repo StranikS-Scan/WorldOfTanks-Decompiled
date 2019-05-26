@@ -12,7 +12,7 @@ from helpers import i18n
 from helpers import time_utils
 from helpers.i18n import makeString
 from items.components.component_constants import EMPTY_STRING
-from items.components.crewSkins_constants import NO_CREW_SKIN_ID
+from items.components.crew_skins_constants import NO_CREW_SKIN_ID
 from items.tankmen import SKILLS_BY_ROLES, getSkillsConfig
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.shared.formatters import text_styles, moneyWithIcon

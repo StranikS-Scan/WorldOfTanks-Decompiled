@@ -29,6 +29,7 @@ from gui.shared.formatters import text_styles
 from gui.shared.gui_items import GUI_ITEM_TYPE, GUI_ITEM_TYPE_INDICES
 from gui.shared.gui_items.Tankman import getRoleUserName, calculateRoleLevel, Tankman
 from gui.shared.gui_items.dossier.factories import getAchievementFactory
+from gui.shared.gui_items.crew_book import orderCmp
 from gui.shared.money import Currency, Money
 from gui.shared.utils.functions import makeTooltip, stripColorTagDescrTags
 from gui.shared.utils.requesters.blueprints_requester import getFragmentNationID, getVehicleCDForNational
@@ -40,7 +41,7 @@ from helpers import time_utils
 from helpers.i18n import makeString as _ms
 from items import vehicles, tankmen
 from items.components import c11n_components as cc
-from items.components.crewSkins_constants import NO_CREW_SKIN_ID
+from items.components.crew_skins_constants import NO_CREW_SKIN_ID
 from items.tankmen import RECRUIT_TMAN_TOKEN_PREFIX
 from nations import NAMES
 from personal_missions import PM_BRANCH, PM_BRANCH_TO_FREE_TOKEN_NAME
@@ -1221,6 +1222,22 @@ class BoxBonus(SimpleBonus):
         return RES_ICONS.getRankedBoxIcon(size, boxType, '', number)
 
 
+def itemsBonusFactory(name, value, isCompensation=False, ctx=None):
+    itemBonusesDict = {}
+    crewBooksBonusesDict = {}
+    itemBonuses = []
+    for intCD, count in value.iteritems():
+        itemTypeID, _, _ = vehicles.parseIntCompactDescr(intCD)
+        bonusesDict = crewBooksBonusesDict if itemTypeID == GUI_ITEM_TYPE.CREW_BOOKS else itemBonusesDict
+        bonusesDict[intCD] = count
+
+    if crewBooksBonusesDict:
+        itemBonuses.append(CrewBooksBonus('crewBooks', crewBooksBonusesDict, isCompensation, ctx))
+    if itemBonusesDict:
+        itemBonuses.append(ItemsBonus(name, itemBonusesDict, isCompensation, ctx))
+    return itemBonuses
+
+
 def blueprintBonusFactory(name, value, isCompensation=False, ctx=None):
     blueprintBonuses = []
     for fragmentCD, fragmentCount in value.iteritems():
@@ -1255,6 +1272,11 @@ class BlueprintsBonusSubtypes(CONST_CONTAINER):
 
 class VehicleBlueprintBonus(SimpleBonus):
     _HTML_TEMPLATE = 'vehicleBlueprints'
+
+    def __init__(self, name, value, isCompensation=False, ctx=None):
+        super(VehicleBlueprintBonus, self).__init__(name, value, isCompensation, ctx)
+        if self.__isFinalFragment():
+            self._name = 'finalBlueprints'
 
     def getBlueprintName(self):
         return BlueprintsBonusSubtypes.FINAL_FRAGMENT if self.__isFinalFragment() else BlueprintsBonusSubtypes.VEHICLE_FRAGMENT
@@ -1432,6 +1454,55 @@ class CrewSkinsBonus(SimpleBonus):
         return itemInfo
 
 
+class CrewBooksBonus(SimpleBonus):
+
+    def getItems(self):
+        if self._value is None:
+            return []
+        else:
+            getItem = self.itemsCache.items.getItemByCD
+            result = []
+            for crewBookCD, count in self._value.iteritems():
+                crewBookItem = getItem(crewBookCD)
+                if crewBookItem is not None:
+                    result.append((crewBookItem, count))
+
+            return sorted(result, lambda x, y: orderCmp(x[0], y[0], True))
+
+    def format(self):
+        return ', '.join(self.formattedList())
+
+    def formattedList(self):
+        result = []
+        for _, count in self.getItems():
+            result.append(makeHtmlString('html_templates:lobby/quests/bonuses', 'crewBook', {'value': count}))
+
+        return result
+
+    def getWrappedEpicBonusList(self):
+        result = []
+        for item, count in self.getItems():
+            if item is not None:
+                result.append({'id': item.intCD,
+                 'type': 'item/{}'.format(item.itemTypeName),
+                 'value': count,
+                 'icon': {AWARDS_SIZES.SMALL: item.getBonusIcon(AWARDS_SIZES.SMALL),
+                          AWARDS_SIZES.BIG: item.getBonusIcon(AWARDS_SIZES.BIG)}})
+
+        return result
+
+    def __getCommonAwardsVOs(self, item, count, iconSize='small', align=TEXT_ALIGN.RIGHT, withCounts=False):
+        itemInfo = {'imgSource': item.getBonusIcon(iconSize),
+         'label': text_styles.stats('x{}'.format(count)),
+         'align': align,
+         'isSpecial': True,
+         'specialArgs': [item.id],
+         'specialAlias': None}
+        if withCounts:
+            itemInfo['count'] = count
+        return itemInfo
+
+
 _BONUSES = {Currency.CREDITS: CreditsBonus,
  Currency.GOLD: GoldBonus,
  Currency.CRYSTAL: CrystalBonus,
@@ -1462,7 +1533,7 @@ _BONUSES = {Currency.CREDITS: CreditsBonus,
              _ET.PERSONAL_MISSION: TankwomanBonus},
  'customizations': CustomizationsBonus,
  'goodies': GoodiesBonus,
- 'items': ItemsBonus,
+ 'items': itemsBonusFactory,
  'oneof': BoxBonus,
  'badgesGroup': BadgesGroupBonus,
  'blueprints': blueprintBonusFactory,

@@ -188,6 +188,7 @@ class ShowDialogEvent(SharedEvent):
     SHOW_CONFIRM_ORDER_DIALOG = 'showConfirmOrderDialog'
     SHOW_PUNISHMENT_DIALOG = 'showPunishmentDialog'
     SHOW_EXCHANGE_DIALOG = 'showExchangeDialog'
+    SHOW_EXCHANGE_DIALOG_MODAL = 'showExchangeDialogModal'
     SHOW_CHECK_BOX_DIALOG = 'showCheckBoxDialog'
     SHOW_DESERTER_DLG = 'showDeserterDialog'
     SHOW_EXECUTION_CHOOSER_DIALOG = 'showExecutionChooserDialog'

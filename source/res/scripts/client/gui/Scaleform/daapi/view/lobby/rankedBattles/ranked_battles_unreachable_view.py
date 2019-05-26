@@ -49,7 +49,7 @@ class RankedBattlesUnreachableView(LobbySubView, RankedBattlesUnreachableViewMet
         result = list()
         result.append({'tooltip': '',
          'image': backport.image(R.images.gui.maps.icons.rankedBattles.XlessView.icon_prem()),
-         'description': text_styles.main(backport.text(R.strings.ranked_battles.rankedBattlesUnreachableView.bottom.premium()))})
+         'description': text_styles.main(backport.text(R.strings.ranked_battles.rankedBattlesUnreachableView.bottom.premium(), premiumType=backport.text(R.strings.ranked_battles.rankedBattlesUnreachableView.bottom.premium.plus())))})
         result.append({'tooltip': '',
          'image': backport.image(R.images.gui.maps.icons.rankedBattles.XlessView.icon_ranks_task_200x100()),
          'description': text_styles.main(backport.text(R.strings.ranked_battles.rankedBattlesUnreachableView.bottom.missions()))})

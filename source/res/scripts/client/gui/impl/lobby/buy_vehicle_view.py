@@ -38,7 +38,8 @@ from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.money import ZERO_MONEY
 from gui.shared.gui_items.Vehicle import getTypeUserName, getSmallIconPath, getLevelSmallIconPath, getTypeSmallIconPath
 from gui.shared.gui_items.gui_item_economics import ITEM_PRICE_EMPTY
-from gui.shared.formatters import getItemPricesViewModel, updateActionInViewModel
+from gui.shared.formatters import updateActionInViewModel
+from gui.shared.formatters.tankmen import getItemPricesViewModel
 from gui.shared.formatters.text_styles import neutral
 from gui.shared.money import Currency, Money
 from gui.shared.gui_items.gui_item_economics import ItemPrice

@@ -1,23 +1,23 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/store/StoreView.py
 from account_helpers import AccountSettings
+from gui.Scaleform.daapi import LobbySubView
+from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.store.actions_formatters import getActiveActions, getNewActiveActions
 from gui.Scaleform.daapi.view.lobby.store.browser.ingameshop_helpers import isIngameShopEnabled
 from gui.Scaleform.daapi.view.lobby.store.browser.sound_constants import INGAMESHOP_SOUND_SPACE
 from gui.Scaleform.daapi.view.meta.StoreViewMeta import StoreViewMeta
+from gui.Scaleform.genConsts.STORE_CONSTANTS import STORE_CONSTANTS
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.shared import events, EVENT_BUS_SCOPE
 from gui.shared.event_dispatcher import showHangar
 from gui.sounds.ambients import ShopEnv
-from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
-from gui.Scaleform.genConsts.STORE_CONSTANTS import STORE_CONSTANTS
 from helpers import dependency
 from helpers.i18n import makeString
 from shared_utils import findFirst
-from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.lobby_context import ILobbyContext
-from gui.Scaleform.daapi import LobbySubView
+from skeletons.gui.server_events import IEventsCache
 _TABS = ({'id': STORE_CONSTANTS.STORE_ACTIONS,
   'label': makeString(MENU.STORETAB_ACTIONS),
   'linkage': STORE_CONSTANTS.STORE_ACTIONS_LINKAGE}, {'id': STORE_CONSTANTS.SHOP,
@@ -105,20 +105,22 @@ class StoreView(LobbySubView, StoreViewMeta):
         self.__showBackButton = ctx.get('showBackButton', False)
         if tabId is not None:
             self.__currentTabIdx = _getTabIndex(tabId)
+            filterKey = tabId + '_current'
         elif self.__currentTabIdx is None:
             if getActiveActions(self.eventsCache):
                 self.__currentTabIdx = _getTabIndex(STORE_CONSTANTS.STORE_ACTIONS)
             else:
                 self.__currentTabIdx = _getTabIndex(STORE_CONSTANTS.SHOP)
+            filterKey = STORE_CONSTANTS.SHOP + '_current'
         if component is not None:
-            nation, _, actionsSelected = AccountSettings.getFilter('shop_current')
-            AccountSettings.setFilter('shop_current', (nation, component, actionsSelected))
+            nation, _, actionsSelected = AccountSettings.getFilter(filterKey)
+            AccountSettings.setFilter(filterKey, (nation, component, actionsSelected))
         if all((itemCD, component, tabId)):
             AccountSettings.setFilter('scroll_to_item', itemCD)
             section = '{}_{}'.format(tabId, component)
-            _, component, _ = AccountSettings.getFilter('shop_current')
+            _, component, _ = AccountSettings.getFilter(filterKey)
             defaults = AccountSettings.getFilterDefault(section)
-            AccountSettings.setFilter('shop_current', (-1, component, False))
+            AccountSettings.setFilter(filterKey, (-1, component, False))
             AccountSettings.setFilter(section, defaults)
         return
 

@@ -33,7 +33,8 @@ class VehiclesFilterPopover(TankCarouselFilterPopoverMeta):
         self._carousel = None
         if ctx:
             data = ctx['data']
-            self._isFrontline = data.isFrontline
+            if hasattr(data, 'isFrontline'):
+                self._isFrontline = data.isFrontline
         self.__mapping = {}
         self.__usedFilters = ()
         return

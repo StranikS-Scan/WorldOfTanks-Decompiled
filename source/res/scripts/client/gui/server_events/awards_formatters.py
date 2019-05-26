@@ -19,7 +19,7 @@ from gui.shared.formatters import text_styles
 from gui.shared.gui_items import GUI_ITEM_TYPE, getItemIconName
 from gui.shared.gui_items.Tankman import getRoleUserName
 from gui.shared.gui_items.badge import Badge
-from gui.shared.gui_items.crew_skin import localizedFullName, RarityLocals
+from gui.shared.gui_items.crew_skin import localizedFullName, Rarity
 from gui.shared.money import Currency
 from gui.shared.utils.functions import makeTooltip
 from gui.shared.utils.requesters import REQ_CRITERIA
@@ -133,7 +133,9 @@ def getDefaultFormattersMap():
      'items': ItemsBonusFormatter(),
      'dossier': DossierBonusFormatter(),
      'blueprints': BlueprintBonusFormatter(),
+     'finalBlueprints': BlueprintBonusFormatter(),
      'crewSkins': CrewSkinsBonusFormatter(),
+     'crewBooks': CrewBooksBonusFormatter(),
      'slots': countableIntegralBonusFormatter,
      'berths': countableIntegralBonusFormatter}
 
@@ -1181,7 +1183,7 @@ class CrewSkinsBonusFormatter(SimpleBonusFormatter):
         return result
 
     def _formatBonusLabel(self, item, count, _):
-        defaultStr = text_styles.stats(i18n.makeString(RarityLocals.LOCALES[item.getRarity()]))
+        defaultStr = text_styles.stats(backport.text(R.strings.item_types.crewSkins.itemType.dyn(Rarity.STRINGS[item.getRarity()])()))
         formattedStr = formatCountLabel(count=count, defaultStr=defaultStr)
         return formattedStr
 
@@ -1207,6 +1209,37 @@ class CrewSkinsBonusFormatter(SimpleBonusFormatter):
         return result
 
 
+class CrewBooksBonusFormatter(SimpleBonusFormatter):
+
+    def _format(self, bonus):
+        result = []
+        for item, count in bonus.getItems():
+            if item is not None and count:
+                result.append(PreformattedBonus(bonusName=bonus.getName(), images=self._getImages(item), isSpecial=True, label=formatCountLabel(count), labelFormatter=self._getLabelFormatter(bonus), userName=self._getUserName(item), align=self._getLabelAlign(count), isCompensation=self._isCompensation(bonus), specialAlias=TOOLTIPS_CONSTANTS.CREW_BOOK, specialArgs=[item.intCD, count]))
+
+        return result
+
+    @classmethod
+    def _getLabelAlign(cls, count):
+        return LABEL_ALIGN.RIGHT if count > 1 else LABEL_ALIGN.CENTER
+
+    @classmethod
+    def _getUserName(cls, item):
+        return item.userName
+
+    @classmethod
+    def _getImages(cls, item):
+        result = {}
+        for size in AWARDS_SIZES.ALL():
+            sizePath = R.images.gui.maps.icons.crewBooks.books.dyn(size, None)
+            if sizePath is not None:
+                img = sizePath.dyn(item.getBonusIconName())
+                if img is not None:
+                    result[size] = backport.image(img())
+
+        return result
+
+
 class CrewSkinsCompensationFormatter(CrewSkinsBonusFormatter):
 
     def _format(self, bonus):
@@ -1218,6 +1251,6 @@ class CrewSkinsCompensationFormatter(CrewSkinsBonusFormatter):
         return result
 
     def _formatBonusLabel(self, item, _, compensatedNumber):
-        defaultStr = text_styles.stats(i18n.makeString(RarityLocals.LOCALES[item.getRarity()]))
+        defaultStr = text_styles.stats(backport.text(R.strings.item_types.crewSkins.itemType.dyn(Rarity.STRINGS[item.getRarity()])()))
         formattedStr = formatCountLabel(count=compensatedNumber, defaultStr=defaultStr)
         return formattedStr

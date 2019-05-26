@@ -8,6 +8,7 @@ class LootCongratsTypes(ViewModel):
     CONGRAT_TYPE_BLUEPRINT_PART = 'BlueprintVehicleFragmentCongrats'
     INIT_CONGRAT_TYPE_USUAL = 'UsualCongrats'
     INIT_CONGRAT_TYPE_PROGRESSIVE_REWARDS = 'ProgressiveRewardCongrats'
+    INIT_CONGRAT_TYPE_CREW_BOOKS = 'CrewBookCongrats'
 
     def _initialize(self):
         super(LootCongratsTypes, self)._initialize()

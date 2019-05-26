@@ -141,8 +141,8 @@ class MessengerBar(MessengerBarMeta, IGlobalListener):
          'vehicleCompareHtmlIcon': _formatIcon('iconComparison'),
          'contactsTooltip': TOOLTIPS.LOBY_MESSENGER_CONTACTS_BUTTON,
          'vehicleCompareTooltip': TOOLTIPS.LOBY_MESSENGER_VEHICLE_COMPARE_BUTTON,
-         'sessionStatsHtmlIcon': _formatIcon('iconSessionStats'),
-         'sessionStatsTooltip': makeTooltip(backport.text(R.strings.session_stats.tooltip.mainBtn.header()), backport.text(R.strings.session_stats.tooltip.mainBtn.body()))})
+         'sessionStatsHtmlIcon': _formatIcon('iconSessionStats')})
+        self.__updateSessionStatsBtn()
 
     def _dispose(self):
         self.removeListener(events.FightButtonEvent.FIGHT_BUTTON_UPDATE, self.__handleFightButtonUpdated, scope=EVENT_BUS_SCOPE.LOBBY)
@@ -186,6 +186,12 @@ class MessengerBar(MessengerBarMeta, IGlobalListener):
     def __updateSessionStatsBtn(self):
         isInSupportedMode = self.prbDispatcher.getFunctionalState().entityTypeID in (PREBATTLE_TYPE.SQUAD,)
         isSessionStatsEnabled = self._lobbyContext.getServerSettings().isSessionStatsEnabled()
+        tooltip = self.__getSessionStatsBtnTooltip(isInSupportedMode and isSessionStatsEnabled)
         if not isSessionStatsEnabled:
             SessionStatsRequester.resetStats()
-        self.as_setSessionStatsButtonVisibleS(isInSupportedMode and isSessionStatsEnabled)
+        self.as_setSessionStatsButtonVisibleS(isSessionStatsEnabled)
+        self.as_setSessionStatsButtonEnableS(isSessionStatsEnabled and isInSupportedMode, tooltip)
+
+    @staticmethod
+    def __getSessionStatsBtnTooltip(btnEnabled):
+        return makeTooltip(backport.text(R.strings.session_stats.tooltip.mainBtn.header()), backport.text(R.strings.session_stats.tooltip.mainBtn.body.enabled())) if btnEnabled else makeTooltip(backport.text(R.strings.session_stats.tooltip.mainBtn.header()), backport.text(R.strings.session_stats.tooltip.mainBtn.body.disabled()))

@@ -30,6 +30,7 @@ from gui.Scaleform.locale.MESSENGER import MESSENGER
 from gui.Scaleform.locale.SYSTEM_MESSAGES import SYSTEM_MESSAGES
 from gui.gold_fish import isGoldFishActionActive, isTimeToShowGoldFishPromo
 from gui.impl.gen import R
+from gui.impl.gen.view_models.views.loot_box_view.loot_congrats_types import LootCongratsTypes
 from gui.prb_control.entities.listener import IGlobalListener
 from gui.prb_control.settings import BATTLES_TO_SELECT_RANDOM_MIN_LIMIT
 from gui.ranked_battles import ranked_helpers
@@ -47,6 +48,7 @@ from gui.sounds.sound_constants import SPEAKERS_CONFIG
 from helpers import dependency
 from helpers import i18n
 from items import ITEM_TYPE_INDICES, getTypeOfCompactDescr, vehicles as vehicles_core
+from items.components.crew_books_constants import CREW_BOOK_DISPLAYED_AWARDS_COUNT
 from messenger.formatters import TimeFormatter
 from messenger.formatters.service_channel import TelecomReceivedInvoiceFormatter
 from messenger.proto.events import g_messengerEvents
@@ -61,6 +63,11 @@ from skeletons.gui.sounds import ISoundsController
 from gui.awards.event_dispatcher import showCrewSkinAward
 from gui.impl.auxiliary.rewards_helper import getProgressiveRewardBonuses
 _logger = logging.getLogger(__name__)
+
+class QUEST_AWARD_POSTFIX(object):
+    CREW_SKINS = 'awardcrewskin'
+    CREW_BOOKS = 'awardcrewbook'
+
 
 class AwardController(IAwardController, IGlobalListener):
     bootcampController = dependency.descriptor(IBootcampController)
@@ -89,6 +96,7 @@ class AwardController(IAwardController, IGlobalListener):
          MarkByInvoiceHandler(self),
          MarkByQuestHandler(self),
          CrewSkinsQuestHandler(self),
+         CrewBooksQuestHandler(self),
          RecruitHandler(self),
          SoundDeviceHandler(self),
          EliteWindowHandler(self),
@@ -459,25 +467,48 @@ class MarkByQuestHandler(MultiTypeServiceChannelHandler):
 
 
 class CrewSkinsQuestHandler(MultiTypeServiceChannelHandler):
-    QUEST_AWARD_POSTFIX = 'awardcrewskin'
 
     def __init__(self, awardCtrl):
         super(CrewSkinsQuestHandler, self).__init__((SYS_MESSAGE_TYPE.battleResults.index(), SYS_MESSAGE_TYPE.tokenQuests.index()), awardCtrl)
-        self.__singleShowGuard = True
 
     def _needToShowAward(self, ctx):
         _, message = ctx
         res = super(CrewSkinsQuestHandler, self)._needToShowAward(ctx)
         questIDs = message.data.get('completedQuestIDs', set())
-        res = res and self.__singleShowGuard
         res = res and 'crewSkins' in message.data
-        res = res and next(ifilter(lambda x: x.endswith(self.QUEST_AWARD_POSTFIX), questIDs), None) is not None
-        if res:
-            self.__singleShowGuard = False
+        res = res and next(ifilter(lambda x: x.endswith(QUEST_AWARD_POSTFIX.CREW_SKINS), questIDs), None) is not None
         return res
 
     def _showAward(self, ctx):
         showCrewSkinAward()
+
+
+class CrewBooksQuestHandler(MultiTypeServiceChannelHandler):
+
+    def __init__(self, awardCtrl):
+        super(CrewBooksQuestHandler, self).__init__((SYS_MESSAGE_TYPE.battleResults.index(), SYS_MESSAGE_TYPE.tokenQuests.index()), awardCtrl)
+
+    def _needToShowAward(self, ctx):
+
+        def isCrewBook(intCD):
+            itemTypeID, _, _ = vehicles_core.parseIntCompactDescr(intCD)
+            return itemTypeID == ITEM_TYPE_INDICES['crewBook']
+
+        _, message = ctx
+        res = super(CrewBooksQuestHandler, self)._needToShowAward(ctx)
+        questIDs = message.data.get('completedQuestIDs', set())
+        res = res and 'items' in message.data
+        res = res and any((isCrewBook(intCD) for intCD in message.data['items'].iterkeys()))
+        res = res and next(ifilter(lambda x: x.endswith(QUEST_AWARD_POSTFIX.CREW_BOOKS), questIDs), None) is not None
+        return res
+
+    def _showAward(self, ctx):
+        _, message = ctx
+        bonuses, _ = getProgressiveRewardBonuses(message.data, maxAwardCount=CREW_BOOK_DISPLAYED_AWARDS_COUNT)
+        if bonuses:
+            showProgressiveRewardAwardWindow(bonuses, LootCongratsTypes.INIT_CONGRAT_TYPE_CREW_BOOKS, 0)
+        else:
+            _logger.error("Can't show empty or invalid reward!")
 
 
 class RecruitHandler(ServiceChannelHandler):

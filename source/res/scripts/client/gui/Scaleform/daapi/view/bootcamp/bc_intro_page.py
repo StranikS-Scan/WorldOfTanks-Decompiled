@@ -1,7 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/bootcamp/bc_intro_page.py
+import WWISE
 import BigWorld
 import BattleReplay
+import Windowing
 from PlayerEvents import g_playerEvents
 from constants import WOT_GAMEPLAY
 from gui.Scaleform.daapi.view.meta.BCIntroVideoPageMeta import BCIntroVideoPageMeta
@@ -32,10 +34,14 @@ class BCIntroPage(BCIntroVideoPageMeta):
 
     def __init__(self, settings):
         super(BCIntroPage, self).__init__()
-        self._backgroundImage = settings.get('backgroundImage', '')
         self._videoPlayerVisible = False
         self._movieFile = None
-        self._soundValue = 0
+        self._backgroundVideo = None
+        self._backgroundVideoBufferTime = None
+        self._backgroundMusicStartEvent = None
+        self._backgroundMusicStopEvent = None
+        self._backgroundMusicPauseEvent = None
+        self._backgroundMusicResumeEvent = None
         self._lessonNumber = settings.get('lessonNumber', 0)
         self._tutorialPages = settings.get('tutorialPages', [])
         self._autoStart = settings.get('autoStart', False)
@@ -44,11 +50,17 @@ class BCIntroPage(BCIntroVideoPageMeta):
         self._isChoice = settings.get('isChoice', False)
         self._highlightingMask = 0
         self._goToBattleEvent = lambda : g_bootcampEvents.onGameplayChoice(WOT_GAMEPLAY.BOOTCAMP, WOT_GAMEPLAY.ON)
+        self._isWindowAccessible = True
+        self._delayedVideoStart = False
         return
 
     def videoFinished(self):
         self._onFinish()
         self.as_showIntroPageS(len(self._tutorialPages) == 0)
+
+    def videoStarted(self):
+        if self._movieFile and self._backgroundMusicStartEvent:
+            WWISE.WW_eventGlobal(self._backgroundMusicStartEvent)
 
     def goToBattle(self):
         BigWorld.callback(0.1, self._goToBattleEvent)
@@ -84,21 +96,33 @@ class BCIntroPage(BCIntroVideoPageMeta):
         super(BCIntroPage, self)._populate()
         Waiting.hide('login')
         self.as_showIntroPageS(False)
-        self.__start()
+        self._isWindowAccessible = Windowing.isWindowAccessible()
+        if self._movieFile:
+            if self._isWindowAccessible:
+                self._start()
+            else:
+                self._delayedVideoStart = True
+            Windowing.addWindowAccessibilitynHandler(self._onWindowAccessibilityChanged)
+        else:
+            self._start()
         if self._shouldHighlight(INTRO_HIGHLIGHT_TYPE.ARROWS):
             self._setHighlighting(INTRO_HIGHLIGHT_TYPE.ARROWS, True)
-        g_playerEvents.onDisconnected += self.__onDisconnected
+        g_playerEvents.onDisconnected += self._onDisconnected
 
     def _dispose(self):
-        g_playerEvents.onDisconnected -= self.__onDisconnected
+        g_playerEvents.onDisconnected -= self._onDisconnected
         for highlightType in (INTRO_HIGHLIGHT_TYPE.ARROWS, INTRO_HIGHLIGHT_TYPE.START_BUTTON):
             if self._isCurrentlyHighlighting(highlightType):
                 self._setHighlighting(highlightType, False)
 
         self.appLoader.detachCursor(APP_NAME_SPACE.SF_BATTLE)
+        if self._movieFile:
+            Windowing.removeWindowAccessibilityHandler(self._onWindowAccessibilityChanged)
+        if self._movieFile and self._backgroundMusicStopEvent:
+            WWISE.WW_eventGlobal(self._backgroundMusicStopEvent)
         super(BCIntroPage, self)._dispose()
 
-    def __start(self):
+    def _start(self):
         listSmall = []
         listBig = []
         for pageId in self._tutorialPages:
@@ -111,18 +135,18 @@ class BCIntroPage(BCIntroVideoPageMeta):
          'isBootcampCloseEnabled': self._isReferralEnabled,
          'referralDescription': BOOTCAMP.WELLCOME_BOOTCAMP_REFERRAL,
          'showTutorialPages': pageCount > 0,
-         'backgroundImage': self._backgroundImage,
+         'backgroundVideo': self._backgroundVideo,
          'source': self._movieFile,
-         'volume': self._soundValue,
          'lessonPagesSmallData': listSmall,
          'lessonPagesBigData': listBig,
          'autoStart': self._autoStart,
          'navigationButtonsVisible': pageCount > 1,
          'videoPlayerVisible': self._videoPlayerVisible,
          'allowSkipButton': self._showSkipOption,
-         'selectButtonLabel': label})
+         'selectButtonLabel': label,
+         'bufferTime': self._backgroundVideoBufferTime})
 
-    def __onDisconnected(self):
+    def _onDisconnected(self):
         self.destroy()
 
     def _onFinish(self):
@@ -156,3 +180,29 @@ class BCIntroPage(BCIntroVideoPageMeta):
             return len(self._tutorialPages) > 1
         LOG_ERROR_BOOTCAMP('Unknown highlight type - {0}'.format(highlightType))
         return False
+
+    def _onWindowAccessibilityChanged(self, isAccessible):
+        if self._isWindowAccessible == isAccessible:
+            return
+        self._isWindowAccessible = isAccessible
+        if isAccessible and self._delayedVideoStart:
+            self._start()
+            self._delayedVideoStart = False
+        else:
+            self._applyWindowAccessibility()
+
+    def _applyWindowAccessibility(self):
+        if self._isWindowAccessible:
+            self._resumePlayback()
+        else:
+            self._pausePlayback()
+
+    def _pausePlayback(self):
+        self.as_pausePlaybackS()
+        if self._backgroundMusicPauseEvent:
+            WWISE.WW_eventGlobal(self._backgroundMusicPauseEvent)
+
+    def _resumePlayback(self):
+        self.as_resumePlaybackS()
+        if self._backgroundMusicResumeEvent:
+            WWISE.WW_eventGlobal(self._backgroundMusicResumeEvent)

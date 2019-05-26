@@ -1,5 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/missions/regular/group_packers.py
+import locale
+import logging
 import time
 import weakref
 from collections import namedtuple, defaultdict, OrderedDict
@@ -31,7 +33,7 @@ from gui.server_events.events_helpers import missionsSortFunc
 from gui.server_events.formatters import DECORATION_SIZES
 from gui.shared.formatters import text_styles
 from gui.shared.formatters.icons import makeImageTag
-from helpers import dependency, time_utils
+from helpers import dependency, time_utils, getLanguageCode
 from helpers.i18n import makeString as _ms
 from skeletons.gui.linkedset import ILinkedSetController
 from skeletons.gui.lobby_context import ILobbyContext
@@ -43,6 +45,7 @@ _MAIN_QUEST_AWARDS_COUNT = 6
 _BIG_TOKENS_TRESHOLD = 2
 awardsFormatters = MarathonAwardComposer(_MAIN_QUEST_AWARDS_COUNT)
 tokenMarathonsCondFormatter = TokensMarathonFormatter()
+_logger = logging.getLogger(__name__)
 
 class GuiGroupBlockID(object):
     BASE = 'base'
@@ -856,8 +859,15 @@ class _PremiumGroupedQuestsBlockInfo(_GroupedQuestsBlockInfo):
     def _getDailyResetStatus(self):
         resetHourUTC = self.lobbyContext.getServerSettings().regionals.getDayStartingTime() / time_utils.ONE_HOUR
         deltaTimeUTC = time_utils.getTimeDeltaFromNow(time_utils.getDailyTimeForUTC(hour=resetHourUTC))
-        timeFmt = backport.text(R.strings.quests.details.conditions.postBattle.deltaDailyReset.timeFmt())
-        return time.strftime(timeFmt, time_utils.getTimeStructInUTC(deltaTimeUTC)) if resetHourUTC >= 0 else ''
+        if resetHourUTC >= 0:
+            timeFmt = backport.text(R.strings.quests.details.conditions.postBattle.deltaDailyReset.timeFmt())
+            parts = time_utils.getTimeStructInUTC(deltaTimeUTC)
+            try:
+                return time.strftime(timeFmt, parts)
+            except ValueError:
+                _logger.error('Current time locale: %r', locale.getlocale(locale.LC_TIME))
+                _logger.error('Selected language: %r', getLanguageCode())
+                _logger.exception('Invalid formatting string %r to delta of time %r', timeFmt, parts)
 
     def _getHeaderData(self):
         info = _getMissionsCountLabel(self._completedQuestsCount, self._totalQuestsCount)

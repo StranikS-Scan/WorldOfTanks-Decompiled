@@ -541,20 +541,9 @@ def _updateRankedBattlesHeroProgress(dossierDescr, dossierBlockDescr, key, value
         dossierDescr['singleAchievements']['rankedBattlesHero'] = 0
 
 
-def _getMedalClass(key, value):
-    medalCfg = RECORD_CONFIGS[key]
-    maxMedalClass = len(medalCfg)
-    curClass = 0
-    for medalClass in xrange(1, maxMedalClass):
-        if value >= medalCfg[medalClass]:
-            curClass = medalClass
-
-    return curClass
-
-
 def _updateRankedAchievementsProgress(dossierDescr, dossierBlockDescr, key, value, prevValue):
-    prevClass = _getMedalClass(key, prevValue)
-    curClass = _getMedalClass(key, value)
+    prevClass = __getNewMedalClass(key, prevValue, 0)
+    curClass = __getNewMedalClass(key, value, 0)
     if prevClass != curClass:
         dossierDescr.addPopUp('achievements', key, curClass)
 

@@ -17,7 +17,7 @@ from gui.Scaleform.daapi.view.meta.CrewMeta import CrewMeta
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.Waiting import Waiting
 from helpers import dependency
-from items.components.crewSkins_constants import NO_CREW_SKIN_ID
+from items.components.crew_skins_constants import NO_CREW_SKIN_ID
 from items.tankmen import getSkillsConfig, compareMastery
 from helpers.i18n import convert, makeString
 from gui.ClientUpdateManager import g_clientUpdateManager

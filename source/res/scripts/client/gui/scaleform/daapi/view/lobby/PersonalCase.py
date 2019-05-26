@@ -30,7 +30,7 @@ from gui.shared.events import LoadViewEvent
 from gui.shared.formatters import text_styles
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.gui_items.dossier import dumpDossier
-from gui.shared.gui_items.crew_skin import GenderRestrictionsLocals, localizedFullName
+from gui.shared.gui_items.crew_skin import localizedFullName, GenderRestrictionsLocales
 from gui.shared.gui_items.processors.tankman import TankmanDismiss, TankmanUnload, TankmanRetraining, TankmanAddSkill, TankmanChangePassport, CrewSkinEquip, CrewSkinUnequip
 from gui.shared.gui_items.serializers import packTankman, packVehicle, packTraining, repackTankmanWithSkinData
 from gui.shared.money import Money
@@ -39,10 +39,12 @@ from gui.shared.tooltips.formatters import packActionTooltipData
 from gui.shared.utils import decorators, roundByModulo
 from gui.shared.utils.functions import getViewName, makeTooltip
 from gui.shared.utils.requesters import REQ_CRITERIA
+from gui.impl.gen import R
+from gui.impl import backport
 from helpers import dependency
 from helpers import i18n, strcmp
 from items import tankmen
-from items.components.crewSkins_constants import CREW_SKIN_PROPERTIES_MASKS, NO_CREW_SKIN_ID, NO_CREW_SKIN_SOUND_SET, TANKMAN_SEX
+from items.components.crew_skins_constants import CREW_SKIN_PROPERTIES_MASKS, NO_CREW_SKIN_ID, NO_CREW_SKIN_SOUND_SET, TANKMAN_SEX
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
@@ -279,7 +281,7 @@ class PersonalCase(PersonalCaseMeta, IGlobalListener):
         self.as_setDocumentsIsChangeEnableS(changeDocumentsEnable, warning)
 
     def _updateNewCrewSkinsCount(self):
-        items = self.itemsCache.items.getItems(GUI_ITEM_TYPE.CREW_SKINS, REQ_CRITERIA.CREW_SKIN.IN_ACCOUNT)
+        items = self.itemsCache.items.getItems(GUI_ITEM_TYPE.CREW_SKINS, REQ_CRITERIA.CREW_ITEM.IN_ACCOUNT)
         count = 0
         for item in items.itervalues():
             if item.isNew() and not self.crewSkinsHAConfig.checkForViewed(item.getID()) and countSkinAsNew(item):
@@ -491,7 +493,7 @@ class PersonalCaseDataProvider(object):
     @async
     def getCrewSkinsData(self, callback):
         tankman = self.itemsCache.items.getTankman(self.tmanInvID)
-        items = self.itemsCache.items.getItems(GUI_ITEM_TYPE.CREW_SKINS, REQ_CRITERIA.CREW_SKIN.IN_ACCOUNT)
+        items = self.itemsCache.items.getItems(GUI_ITEM_TYPE.CREW_SKINS, REQ_CRITERIA.CREW_ITEM.IN_ACCOUNT)
         crewSkins = []
         newSkinsCount = 0
         if self.lobbyContext.getServerSettings().isCrewSkinsEnabled():
@@ -511,12 +513,12 @@ class PersonalCaseDataProvider(object):
         if crewSkin.getRoleID() is not None:
             LOC_MAP[CREW_SKIN_PROPERTIES_MASKS.ROLE] = i18n.makeString(ITEM_TYPES.tankman_roles(crewSkin.getRoleID()))
         if crewSkin.getSex() in TANKMAN_SEX.ALL:
-            LOC_MAP[CREW_SKIN_PROPERTIES_MASKS.SEX] = i18n.makeString(GenderRestrictionsLocals.LOCALES[crewSkin.getSex()])
+            LOC_MAP[CREW_SKIN_PROPERTIES_MASKS.SEX] = backport.text(R.strings.item_types.tankman.gender.dyn(GenderRestrictionsLocales.KEYS[crewSkin.getSex()])())
         if crewSkin.getNation() is not None:
             LOC_MAP[CREW_SKIN_PROPERTIES_MASKS.NATION] = i18n.makeString(NATIONS.all(crewSkin.getNation()))
         validation, validationMask, _ = cache.validateCrewSkin(tankman.descriptor, crewSkin.getID())
         soundValidation = crewSkin.getRoleID() == tankman.role if crewSkin.getRoleID() is not None else True
-        restrictionsMessage = i18n.makeString('#tooltips:crewSkins/restrictions')
+        restrictionsMessage = backport.text(R.strings.tooltips.crewSkins.restrictions())
         if not validation:
             restrictions = [ loc for key, loc in LOC_MAP.iteritems() if key & validationMask ]
             restrictionsMessage += ' ' + ', '.join(restrictions)
@@ -537,7 +539,7 @@ class PersonalCaseDataProvider(object):
          'isNew': crewSkin.isNew() and not PersonalCase.crewSkinsHAConfig.checkForViewed(crewSkin.getID()),
          'isAvailable': validation,
          'notAvailableMessage': restrictionsMessage,
-         'soundSetName': soundSetID if soundSetID != NO_CREW_SKIN_SOUND_SET else i18n.makeString('#crew_skins:feature/sound/noSound'),
+         'soundSetName': soundSetID if soundSetID != NO_CREW_SKIN_SOUND_SET else backport.text(R.strings.crew_skins.feature.sound.noSound()),
          'soundSetIsAvailable': soundValidation if crewSkin.getSoundSetID() != NO_CREW_SKIN_SOUND_SET else True}
 
     @async
@@ -555,7 +557,7 @@ class PersonalCaseDataProvider(object):
         if self.lobbyContext.getServerSettings().isCrewSkinsEnabled():
             tankman = self.itemsCache.items.getTankman(self.tmanInvID)
             isEnable = tankman.skinID == NO_CREW_SKIN_ID
-            warning = '' if isEnable else i18n.makeString('#crew_skins:feature/skinUsedWarning')
+            warning = '' if isEnable else backport.text(R.strings.crew_skins.feature.skinUsedWarning())
             return (isEnable, warning)
         return (True, '')
 
@@ -579,16 +581,16 @@ class PersonalCaseDataProvider(object):
         if vehicle is None:
             return (False, '')
         elif vehicle.isInBattle:
-            return (False, i18n.makeString('#menu:tankmen/lockReason/inbattle'))
+            return (False, backport.text(R.strings.menu.tankmen.lockReason.inbattle()))
         elif vehicle.isBroken:
-            return (False, i18n.makeString('#menu:tankmen/lockReason/broken'))
+            return (False, backport.text(R.strings.menu.tankmen.lockReason.broken()))
         else:
             if g_currentVehicle.item == vehicle:
                 dispatcher = g_prbLoader.getDispatcher()
                 if dispatcher is not None:
                     permission = dispatcher.getGUIPermissions()
                     if not permission.canChangeVehicle():
-                        return (True, i18n.makeString('#menu:tankmen/lockReason/prebattle'))
+                        return (True, backport.text(R.strings.menu.tankmen.lockReason.prebattle()))
             return (False, '')
 
     @staticmethod

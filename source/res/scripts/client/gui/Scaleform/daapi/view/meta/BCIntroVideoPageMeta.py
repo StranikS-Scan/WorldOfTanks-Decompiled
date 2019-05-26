@@ -4,6 +4,9 @@ from gui.Scaleform.framework.entities.View import View
 
 class BCIntroVideoPageMeta(View):
 
+    def videoStarted(self):
+        self._printOverrideError('videoStarted')
+
     def videoFinished(self):
         self._printOverrideError('videoFinished')
 
@@ -27,3 +30,9 @@ class BCIntroVideoPageMeta(View):
 
     def as_showIntroPageS(self, value):
         return self.flashObject.as_showIntroPage(value) if self._isDAAPIInited() else None
+
+    def as_pausePlaybackS(self):
+        return self.flashObject.as_pausePlayback() if self._isDAAPIInited() else None
+
+    def as_resumePlaybackS(self):
+        return self.flashObject.as_resumePlayback() if self._isDAAPIInited() else None

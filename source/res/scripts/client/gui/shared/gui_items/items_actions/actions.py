@@ -21,7 +21,9 @@ from gui.Scaleform.locale.SYSTEM_MESSAGES import SYSTEM_MESSAGES
 from gui.shared import event_dispatcher as shared_events
 from gui.shared.economics import getGUIPrice
 from gui.shared.gui_items import GUI_ITEM_TYPE
-from gui.shared.gui_items.processors.common import TankmanBerthsBuyer, ConvertBlueprintFragmentProcessor
+from gui.shared.gui_items.processors.common import TankmanBerthsBuyer
+from gui.shared.gui_items.processors.common import ConvertBlueprintFragmentProcessor
+from gui.shared.gui_items.processors.common import UseCrewBookProcessor
 from gui.shared.gui_items.processors.goodies import BoosterBuyer
 from gui.shared.gui_items.processors.module import BuyAndInstallItemProcessor
 from gui.shared.gui_items.processors.module import ModuleSeller
@@ -569,3 +571,20 @@ class ConvertBlueprintFragmentAction(object):
         result = yield ConvertBlueprintFragmentProcessor(self.__vehicleCD, fragmentPosition=self.__fragmentPosition, count=self.__fragmentCount).request()
         if not result or not result.success:
             SystemMessages.pushI18nMessage(SYSTEM_MESSAGES.BLUEPRINTS_CONVERSION_ERROR, type=result.sysMsgType)
+
+
+class UseCrewBookAction(object):
+
+    def __init__(self, bookCD, vehicleCD, tankmanId=None):
+        super(UseCrewBookAction, self).__init__()
+        self.__bookCD = bookCD
+        self.__vehicleCD = vehicleCD
+        self.__tankmanId = tankmanId
+
+    @decorators.process('crewBooks/useCrewBook')
+    def doAction(self):
+        result = yield UseCrewBookProcessor(self.__bookCD, self.__vehicleCD, self.__tankmanId).request()
+        if result.success:
+            SystemMessages.pushI18nMessage(result.userMsg, type=result.sysMsgType)
+        else:
+            SystemMessages.pushI18nMessage(SYSTEM_MESSAGES.CREWBOOKS_FAILED, type=result.sysMsgType)

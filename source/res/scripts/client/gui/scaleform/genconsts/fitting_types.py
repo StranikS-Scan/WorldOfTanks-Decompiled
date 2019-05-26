@@ -10,6 +10,7 @@ class FITTING_TYPES(object):
     MODULE = 'module'
     ORDER = 'order'
     BOOSTER = 'battleBooster'
+    CREW_BOOKS = 'crewBooks'
     CUSTOMIZATION = 'customization'
     BATTLE_ABILITY = 'battleAbility'
     STORE_SLOTS = [VEHICLE,
@@ -17,7 +18,8 @@ class FITTING_TYPES(object):
      SHELL,
      OPTIONAL_DEVICE,
      EQUIPMENT,
-     BOOSTER]
+     BOOSTER,
+     CREW_BOOKS]
     ARTEFACT_SLOTS = [OPTIONAL_DEVICE, EQUIPMENT]
     VEHICLE_GUN = 'vehicleGun'
     VEHICLE_TURRET = 'vehicleTurret'

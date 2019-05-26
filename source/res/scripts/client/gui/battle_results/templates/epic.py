@@ -13,10 +13,13 @@ from gui.battle_results.settings import BATTLE_RESULTS_RECORD as _RECORD
 regular.FINISH_RESULT_VO_META.bind(common.EpicBattleBattleFinishResultBlock)
 _EPIC_TABS_VO_META = base.ListMeta([{'label': i18n.makeString(MENU.FINALSTATISTIC_TABS_EPICSTATS),
   'linkage': 'EpicStatsUI',
+  'viewId': 'EpicStatsUI',
   'showWndBg': False}, {'label': i18n.makeString(MENU.FINALSTATISTIC_TABS_TEAMSTATS),
   'linkage': 'TeamStatsUI',
+  'viewId': 'TeamStatsUI',
   'showWndBg': False}, {'label': i18n.makeString(MENU.FINALSTATISTIC_TABS_DETAILSSTATS),
   'linkage': 'DetailsStatsViewUI',
+  'viewId': 'DetailsStatsViewUI',
   'showWndBg': True}])
 EPIC_TABS_BLOCK = base.StatsBlock(_EPIC_TABS_VO_META, 'tabInfo')
 EPIC_TIME_STATS_BLOCK = base.StatsBlock(base.ListMeta(runtime=False), 'timeStats', _RECORD.COMMON)

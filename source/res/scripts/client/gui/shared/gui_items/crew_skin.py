@@ -3,7 +3,7 @@
 from account_helpers import AccountSettings
 from account_helpers.AccountSettings import CREW_SKINS_VIEWED
 from helpers import i18n
-from items.components.crewSkins_constants import NO_CREW_SKIN_ID, TANKMAN_SEX, CREW_SKIN_RARITY
+from items.components.crew_skins_constants import NO_CREW_SKIN_ID, TANKMAN_SEX, CREW_SKIN_RARITY
 from items import tankmen, parseIntCompactDescr
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.gui_items.fitting_item import FittingItem
@@ -16,15 +16,15 @@ def localizedFullName(crewSkin):
     return fullName
 
 
-class GenderRestrictionsLocals(object):
-    LOCALES = {TANKMAN_SEX.MALE: '#item_types:tankman/gender/man',
-     TANKMAN_SEX.FEMALE: '#item_types:tankman/gender/woman'}
+class GenderRestrictionsLocales(object):
+    KEYS = {TANKMAN_SEX.MALE: 'man',
+     TANKMAN_SEX.FEMALE: 'woman'}
 
 
-class RarityLocals(object):
-    LOCALES = {CREW_SKIN_RARITY.COMMON: '#item_types:crewSkins/itemType/common',
-     CREW_SKIN_RARITY.RARE: '#item_types:crewSkins/itemType/rare',
-     CREW_SKIN_RARITY.EPIC: '#item_types:crewSkins/itemType/epic'}
+class Rarity(object):
+    STRINGS = {CREW_SKIN_RARITY.COMMON: 'common',
+     CREW_SKIN_RARITY.RARE: 'rare',
+     CREW_SKIN_RARITY.EPIC: 'epic'}
 
 
 class CrewSkin(FittingItem):

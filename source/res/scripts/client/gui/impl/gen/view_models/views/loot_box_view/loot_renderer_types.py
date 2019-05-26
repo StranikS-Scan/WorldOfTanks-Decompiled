@@ -13,6 +13,7 @@ class LootRendererTypes(ViewModel):
     VEHICLE_COMPENSATION = 'VehicleCompensationRenderer'
     VEHICLE_COMPENSATION_WITHOUT_ANIMATION = 'VehicleCompensationWithoutAnimationRenderer'
     BLUEPRINT_FINAL_FRAGMENT = 'BlueprintFinalFragmentRenderer'
+    CREW_BOOK = 'CrewBookRenderer'
 
     def _initialize(self):
         super(LootRendererTypes, self)._initialize()

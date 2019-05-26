@@ -6,6 +6,7 @@ from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.shared import EVENT_BUS_SCOPE
 from gui.shared import events
 from gui.shared import g_eventBus
+_OUTRO_VIDEO_PATH = 'videos/_bootcampFinish.usm'
 
 class StateOutroVideo(AbstractState):
 
@@ -16,8 +17,11 @@ class StateOutroVideo(AbstractState):
         pass
 
     def _doActivate(self):
-        g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.BOOTCAMP_OUTRO_VIDEO, None, {'video': 'videos/_bootcampFinish.usm'}), EVENT_BUS_SCOPE.LOBBY)
+        g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.BOOTCAMP_OUTRO_VIDEO, None, self._getOutroVideoData()), EVENT_BUS_SCOPE.LOBBY)
         return
+
+    def _getOutroVideoData(self):
+        return {'video': _OUTRO_VIDEO_PATH}
 
     def _doDeactivate(self):
         pass

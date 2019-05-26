@@ -498,6 +498,12 @@ class ExchangeCreditsSingleItemMeta(_ExchangeDialogMeta, _ExchangeCreditsSubscri
         return
 
 
+class ExchangeCreditsSingleItemModalMeta(ExchangeCreditsSingleItemMeta):
+
+    def getEventType(self):
+        return events.ShowDialogEvent.SHOW_EXCHANGE_DIALOG_MODAL
+
+
 class ExchangeCreditsMultiItemsMeta(_ExchangeDialogMeta, _ExchangeCreditsSubscriber):
 
     def __init__(self, itemsCDs, infoItem, key='confirmExchangeDialog/exchangeCredits'):

@@ -1074,6 +1074,12 @@ class SYSTEM_MESSAGES(object):
     SQUAD_BONUS_SWITCH_ON_BODY = '#system_messages:squad_bonus/switch_on/body'
     PREMIUMXPBONUS_APPLY_SERVER_ERROR_COOLDOWN = '#system_messages:premiumXPBonus/apply/server_error/COOLDOWN'
     PREMIUMXPBONUS_APPLY_SERVER_ERROR = '#system_messages:premiumXPBonus/apply/server_error'
+    CREWBOOKS_SELL_SUCCESS = '#system_messages:crewBooks_sell/success'
+    CREWBOOKSNOTIFICATION_BOOKUSED = '#system_messages:crewBooksNotification/bookUsed'
+    CREWBOOKS_FAILED = '#system_messages:crewBooks/failed'
+    CREWBOOKS_BUY_SUCCESS = '#system_messages:crewBooks_buy/success'
+    CREWBOOKS_BUY_SERVER_ERROR = '#system_messages:crewBooks_buy/server_error'
+    CREWBOOKS_SELL_SERVER_ERROR = '#system_messages:crewBooks_sell/server_error'
     UNIT_NOTIFICATION_DIVISIONTYPE_ENUM = (UNIT_NOTIFICATION_DIVISIONTYPE_MIDDLE, UNIT_NOTIFICATION_DIVISIONTYPE_CHAMPION, UNIT_NOTIFICATION_DIVISIONTYPE_ABSOLUTE)
     UNIT_ERRORS_ENUM = (UNIT_ERRORS_ALREADY_JOINED_UNIT,
      UNIT_ERRORS_CANT_CHANGE_DIVISION,
@@ -2254,7 +2260,13 @@ class SYSTEM_MESSAGES(object):
      SQUAD_BONUS_SWITCH_ON_TITLE,
      SQUAD_BONUS_SWITCH_ON_BODY,
      PREMIUMXPBONUS_APPLY_SERVER_ERROR_COOLDOWN,
-     PREMIUMXPBONUS_APPLY_SERVER_ERROR)
+     PREMIUMXPBONUS_APPLY_SERVER_ERROR,
+     CREWBOOKS_SELL_SUCCESS,
+     CREWBOOKSNOTIFICATION_BOOKUSED,
+     CREWBOOKS_FAILED,
+     CREWBOOKS_BUY_SUCCESS,
+     CREWBOOKS_BUY_SERVER_ERROR,
+     CREWBOOKS_SELL_SERVER_ERROR)
 
     @classmethod
     def unit_notification_divisiontype(cls, key0):

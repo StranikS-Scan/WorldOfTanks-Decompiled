@@ -5,8 +5,12 @@ from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.hangar.Crew import Crew
 from gui.Scaleform.daapi.view.meta.CrewOperationsPopOverMeta import CrewOperationsPopOverMeta
+from gui.Scaleform.framework import ScopeTemplates
 from gui.Scaleform.locale.CREW_OPERATIONS import CREW_OPERATIONS
-from gui.shared import EVENT_BUS_SCOPE
+from gui.impl.gen import R
+from gui.impl.lobby.crew_books.crew_books_view import CrewBooksView, CrewBooksLackView
+from gui.impl.auxiliary.crew_books_helper import crewBooksViewedCache
+from gui.shared import EVENT_BUS_SCOPE, g_eventBus, events
 from gui.shared.events import LoadViewEvent
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.gui_items.Tankman import TankmenComparator
@@ -18,9 +22,11 @@ from gui.shared.utils import decorators
 from gui import SystemMessages
 from items import tankmen
 from skeletons.gui.shared import IItemsCache
+from skeletons.gui.lobby_context import ILobbyContext
 OPERATION_RETRAIN = 'retrain'
 OPERATION_RETURN = 'return'
 OPERATION_DROP_IN_BARRACK = 'dropInBarrack'
+OPERATION_CREW_BOOKS = 'crewBooks'
 
 class CrewOperationsPopOver(CrewOperationsPopOverMeta):
     itemsCache = dependency.descriptor(IItemsCache)
@@ -38,9 +44,16 @@ class CrewOperationsPopOver(CrewOperationsPopOverMeta):
             self.__update()
 
     def __update(self):
+        lobbyContext = dependency.instance(ILobbyContext)
         vehicle = g_currentVehicle.item
-        dataForUpdate = {'operationsArray': (self.__getRetrainOperationData(vehicle), self.__getReturnOperationData(vehicle), self.__getDropInBarrackOperationData(vehicle))}
+        dataForUpdate = {'operationsArray': [self.__getRetrainOperationData(vehicle), self.__getReturnOperationData(vehicle), self.__getDropInBarrackOperationData(vehicle)]}
+        if lobbyContext.getServerSettings().isCrewBooksEnabled():
+            dataForUpdate['operationsArray'].append(self.__getCrewBooksOperationData(vehicle))
         self.as_updateS(dataForUpdate)
+
+    def __getCrewBooksOperationData(self, vehicle):
+        lastCrewIDs = vehicle.lastCrew
+        return self.__getInitCrewOperationObject(OPERATION_CREW_BOOKS, None, CREW_OPERATIONS.CREWBOOKS_WARNING_MEMBERSINBATTLE_TOOLTIP) if self.__isCrewLocked(lastCrewIDs) else self.__getInitCrewOperationObject(OPERATION_CREW_BOOKS)
 
     def __getRetrainOperationData(self, vehicle):
         crew = vehicle.crew
@@ -101,6 +114,19 @@ class CrewOperationsPopOver(CrewOperationsPopOverMeta):
         else:
             return self.__getInitCrewOperationObject(OPERATION_DROP_IN_BARRACK, None, CREW_OPERATIONS.DROPINBARRACK_WARNING_NOSPACE_TOOLTIP) if self.__isNotEnoughSpaceInBarrack(crew) else self.__getInitCrewOperationObject(OPERATION_DROP_IN_BARRACK)
 
+    def __isCrewLocked(self, lastCrewIDs):
+        if lastCrewIDs is not None:
+            for lastTankmenInvID in lastCrewIDs:
+                actualLastTankman = self.itemsCache.items.getTankman(lastTankmenInvID)
+                if actualLastTankman is not None:
+                    if actualLastTankman.isInTank:
+                        lastTankmanVehicle = self.itemsCache.items.getVehicle(actualLastTankman.vehicleInvID)
+                        if lastTankmanVehicle:
+                            if lastTankmanVehicle.isLocked:
+                                return True
+
+        return False
+
     def __isTopCrewForCurrentVehicle(self, crew, vehicle):
         for _, tman in crew:
             if tman is not None:
@@ -127,6 +153,12 @@ class CrewOperationsPopOver(CrewOperationsPopOverMeta):
             self.fireEvent(LoadViewEvent(VIEW_ALIAS.RETRAIN_CREW), EVENT_BUS_SCOPE.LOBBY)
         elif operationName == OPERATION_RETURN:
             self.__processReturnCrew()
+        elif operationName == OPERATION_CREW_BOOKS:
+            availableBooksCount = self.__getAvailableBooksCount()
+            if availableBooksCount > 0:
+                self.__openCrewBooksView()
+            else:
+                self.__openCrewBooksLackView()
         else:
             Crew.unloadCrew()
 
@@ -135,6 +167,12 @@ class CrewOperationsPopOver(CrewOperationsPopOverMeta):
         result = yield TankmanReturn(g_currentVehicle.item).request()
         if result.userMsg:
             SystemMessages.pushI18nMessage(result.userMsg, type=result.sysMsgType)
+
+    def __openCrewBooksView(self):
+        g_eventBus.handleEvent(events.LoadUnboundViewEvent(R.views.lobby.crew_books.crew_books_view.CrewBooksView(), CrewBooksView, ScopeTemplates.LOBBY_SUB_SCOPE), scope=EVENT_BUS_SCOPE.LOBBY)
+
+    def __openCrewBooksLackView(self):
+        g_eventBus.handleEvent(events.LoadUnboundViewEvent(R.views.lobby.crew_books.crew_books_lack_view.CrewBooksLackView(), CrewBooksLackView, ScopeTemplates.LOBBY_SUB_SCOPE), scope=EVENT_BUS_SCOPE.LOBBY)
 
     def __getInitCrewOperationObject(self, operationId, errorId=None, warningId='', operationAvailable=False):
         context = '#crew_operations:%s'
@@ -152,11 +190,35 @@ class CrewOperationsPopOver(CrewOperationsPopOverMeta):
              'tooltipId': warningId}
         return {'id': operationId,
          'iconPath': iconPathContext % (operationId, '.png'),
-         'title': i18n.makeString(cOpId + '/title'),
+         'title': self.__getItemTitle(operationId, cOpId),
          'description': i18n.makeString(cOpId + '/description'),
          'error': errorText,
          'warning': warningInfo,
-         'btnLabel': btnLabelText}
+         'btnLabel': btnLabelText,
+         'btnNotificationEnabled': self.__getNotificationEnabledFlag(operationId)}
+
+    def __getItemTitle(self, operationId, cOpId):
+        if operationId == OPERATION_CREW_BOOKS:
+            count = self.__getAvailableBooksCount()
+            return i18n.makeString(cOpId + '/title').format(count=count)
+        return i18n.makeString(cOpId + '/title')
+
+    def __getNotificationEnabledFlag(self, operationId):
+        return crewBooksViewedCache().haveNewCrewBooks() if operationId == OPERATION_CREW_BOOKS else False
+
+    def __getAvailableBooksCount(self):
+        nation = g_currentVehicle.item.nationName
+
+        def filterBooks(book):
+            return True if book.getNation() == nation or book.isPersonal() else None
+
+        allCrewBooks = self.itemsCache.items.getItems(GUI_ITEM_TYPE.CREW_BOOKS, REQ_CRITERIA.CREW_ITEM.IN_ACCOUNT)
+        availableCrewBooksTypes = allCrewBooks.filter(filterBooks)
+        count = 0
+        for crewBook in availableCrewBooksTypes.values():
+            count = count + crewBook.getFreeCount()
+
+        return count
 
     def onWindowClose(self):
         self.destroy()

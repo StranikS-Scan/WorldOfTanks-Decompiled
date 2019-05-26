@@ -21,6 +21,7 @@ from gui.shared.items_cache import CACHE_SYNC_REASON
 from gui.shared.items_parameters.params_cache import g_paramsCache
 from gui.shared.utils import requesters
 from gui.shared.view_helpers.UsersInfoHelper import UsersInfoHelper
+from gui.impl.auxiliary.crew_books_helper import crewBooksViewedCache
 from gui.wgnc import g_wgncProvider
 from helpers import isPlayerAccount, time_utils, dependency
 from helpers.blueprint_generator import g_blueprintGenerator
@@ -172,6 +173,7 @@ def onClientUpdate(diff, updateOnlyLobbyCtx):
         ServicesLocator.lobbyContext.update(diff)
     else:
         if isPlayerAccount():
+            yield crewBooksViewedCache().onCrewBooksUpdated(diff)
             yield ServicesLocator.itemsCache.update(CACHE_SYNC_REASON.CLIENT_UPDATE, diff)
             yield ServicesLocator.eventsCache.update(diff)
             yield g_clanCache.update(diff)

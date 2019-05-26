@@ -157,6 +157,7 @@ class WAITING(object):
     CLANS_INVITES_SEND = '#waiting:clans/invites/send'
     HOF_LOADING = '#waiting:hof/loading'
     BLUEPRINTS_CONVERTFRAGMENTS = '#waiting:blueprints/convertFragments'
+    CREWBOOKS_USECREWBOOK = '#waiting:crewBooks/useCrewBook'
     TITLES_ENUM = (TITLES_QUEUE,
      TITLES_REGISTERING,
      TITLES_ANOTHER_PERIPHERY,

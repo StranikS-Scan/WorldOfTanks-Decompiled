@@ -113,15 +113,15 @@ class BrowserController(IBrowserController):
             browser = WebBrowser(webBrowserID, app, texture, size, url, handlers=self.__filters)
             self.__browsers[browserID] = browser
             if self.__isCreatingBrowser():
-                _logger.debug('CTRL: Queueing a browser creation: %r - %s', browserID, url)
+                _logger.info('CTRL: Queueing a browser creation: %r - %s', browserID, url)
                 self.__pendingBrowsers[browserID] = ctx
             else:
                 self.__createBrowser(ctx)
         elif browserID in self.__pendingBrowsers:
-            _logger.debug('CTRL: Re-queuing a browser creation, overriding: %r - %s', browserID, url)
+            _logger.info('CTRL: Re-queuing a browser creation, overriding: %r - %s', browserID, url)
             self.__pendingBrowsers[browserID] = ctx
         elif browserID in self.__browsers:
-            _logger.debug('CTRL: Re-navigating an existing browser: %r - %s', browserID, url)
+            _logger.info('CTRL: Re-navigating an existing browser: %r - %s', browserID, url)
             browser = self.__browsers[browserID]
             browser.navigate(url)
             browser.changeTitle(title)
@@ -136,7 +136,7 @@ class BrowserController(IBrowserController):
 
     def delBrowser(self, browserID):
         if browserID in self.__browsers:
-            _logger.debug('CTRL: Deleting a browser: %s', browserID)
+            _logger.info('CTRL: Deleting a browser: %s', browserID)
             browser = self.__browsers.pop(browserID)
             self.__clearCallbacks(browserID, browser, True)
             browser.destroy()
@@ -152,7 +152,7 @@ class BrowserController(IBrowserController):
         return self.__creatingBrowserID is not None
 
     def __createDone(self, ctx):
-        _logger.debug('CTRL: Finished creating a browser: %s', self.__creatingBrowserID)
+        _logger.info('CTRL: Finished creating a browser: %s', self.__creatingBrowserID)
         if ctx['showCreateWaiting']:
             Waiting.hide('browser/init')
 
@@ -165,26 +165,19 @@ class BrowserController(IBrowserController):
 
     def __createBrowser(self, ctx):
         browserID = ctx['browserID']
-        _logger.debug('CTRL: Creating a browser: %r - %s', browserID, ctx['url'])
+        _logger.info('CTRL: Creating a browser: %r - %s', browserID, ctx['url'])
         self.__creatingBrowserID = browserID
         browser = self.__browsers[browserID]
         if not browser.create():
-            _logger.debug('CTRL: Failed the create step: %r', browserID)
+            _logger.info('CTRL: Failed the create step: %r', browserID)
             self.delBrowser(browserID)
             self.__tryCreateNextPendingBrowser()
             return
         else:
             self.onBrowserAdded(browserID)
 
-            def createBrowserTimeout():
-                _logger.debug('CTRL: Browser create timed out')
-                createNextBrowser()
-
-            timeoutid = BigWorld.callback(30.0, createBrowserTimeout)
-
             def createNextBrowser():
-                _logger.debug('CTRL: Triggering create of next browser from: %s', browserID)
-                BigWorld.cancelCallback(timeoutid)
+                _logger.info('CTRL: Triggering create of next browser from: %s', browserID)
                 creation = self.__browserCreationCallbacks.pop(browserID, None)
                 if creation is not None:
                     self.__browsers[browserID].onCanCreateNewBrowser -= creation
@@ -192,12 +185,12 @@ class BrowserController(IBrowserController):
                 return
 
             def failedCreationCallback(url):
-                _logger.debug('CTRL: Failed a creation: %r - %s', browserID, url)
+                _logger.info('CTRL: Failed a creation: %r - %s', browserID, url)
                 self.__clearCallbacks(browserID, self.__browsers[browserID], False)
                 self.delBrowser(browserID)
 
             def successfulCreationCallback(url, isLoaded, httpStatusCode=None):
-                _logger.debug('CTRL: Ready to show: %r - %r - %s', browserID, isLoaded, url)
+                _logger.info('CTRL: Ready to show: %r - %r - %s', browserID, isLoaded, url)
                 self.__clearCallbacks(browserID, self.__browsers[browserID], False)
                 if isLoaded:
                     self.__showBrowser(browserID, ctx)
@@ -251,7 +244,7 @@ class BrowserController(IBrowserController):
         return
 
     def __showBrowser(self, browserID, ctx):
-        _logger.debug('CTRL: Showing a browser: %r - %s', browserID, ctx['url'])
+        _logger.info('CTRL: Showing a browser: %r - %s', browserID, ctx['url'])
         if ctx.get('showWindow'):
             alias = ctx['alias']
             g_eventBus.handleEvent(LoadViewEvent(alias, getViewName(alias, browserID), ctx=ctx), EVENT_BUS_SCOPE.LOBBY)

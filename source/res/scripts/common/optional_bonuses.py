@@ -6,7 +6,7 @@ import time
 from account_shared import getCustomizationItem
 from soft_exception import SoftException
 from items import tankmen
-from items.components.crewSkins_constants import NO_CREW_SKIN_ID
+from items.components.crew_skins_constants import NO_CREW_SKIN_ID
 
 def _packTrack(track):
     result = []

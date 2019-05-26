@@ -2691,6 +2691,17 @@ class TOOLTIPS(object):
     PREM_DASHBOARD_HEADER_CLANRESERVES_EMPTYSLOT_BODY = '#tooltips:prem/dashboard/header/clanReserves/emptySlot/body'
     PREM_DASHBOARD_HEADER_BADGESLOT = '#tooltips:prem/dashboard/header/badgeSlot'
     PREM_PIGGYBANK_GHOSTBTN_BODY = '#tooltips:prem/piggyBank/ghostBtn/body'
+    CREWBOOKS_SCREEN_INVALIDCREW_TITLE = '#tooltips:crewBooks/screen/invalidCrew/title'
+    CREWBOOKS_SCREEN_INVALIDCREW_INVALIDSKILL = '#tooltips:crewBooks/screen/invalidCrew/invalidSkill'
+    CREWBOOKS_SCREEN_INVALIDCREW_INVALIDSPECIALITY = '#tooltips:crewBooks/screen/invalidCrew/invalidSpeciality'
+    CREWBOOKS_SCREEN_INVALIDCREW_INCOMPLETECREW = '#tooltips:crewBooks/screen/invalidCrew/incompleteCrew'
+    CREWBOOKS_STORAGE_FILTERS_BROCHURE_TITLE = '#tooltips:crewBooks/storage/filters/brochure/title'
+    CREWBOOKS_STORAGE_FILTERS_GUIDE_TITLE = '#tooltips:crewBooks/storage/filters/guide/title'
+    CREWBOOKS_STORAGE_FILTERS_CREWBOOK_TITLE = '#tooltips:crewBooks/storage/filters/crewBook/title'
+    CREWBOOKS_STORAGE_FILTERS_PERSONALBOOK_TITLE = '#tooltips:crewBooks/storage/filters/personalBook/title'
+    CREWBOOKS_STORAGE_FILTERS_BODY = '#tooltips:crewBooks/storage/filters/body'
+    CREWBOOKS_SCREEN_INVALIDITEM_TITLE = '#tooltips:crewBooks/screen/invalidItem/title'
+    CREWBOOKS_SCREEN_INVALIDPRICE_TITLE = '#tooltips:crewBooks/screen/invalidPrice/title'
     ELEN_SUMMARY_RANK_ENUM = (ELEN_SUMMARY_RANK_1,
      ELEN_SUMMARY_RANK_2,
      ELEN_SUMMARY_RANK_3,

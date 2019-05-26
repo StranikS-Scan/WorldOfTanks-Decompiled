@@ -90,7 +90,10 @@ class ConfirmModuleDialog(ConfirmItemWindowMeta):
 
     @staticmethod
     def __getIcon(item):
-        return str(item.level) if item.itemTypeID not in (GUI_ITEM_TYPE.OPTIONALDEVICE, GUI_ITEM_TYPE.SHELL, GUI_ITEM_TYPE.EQUIPMENT) else item.icon
+        return str(item.level) if item.itemTypeID not in (GUI_ITEM_TYPE.OPTIONALDEVICE,
+         GUI_ITEM_TYPE.SHELL,
+         GUI_ITEM_TYPE.EQUIPMENT,
+         GUI_ITEM_TYPE.CREW_BOOKS) else item.icon
 
     @staticmethod
     def __getHighlightType(item):

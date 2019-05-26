@@ -17,7 +17,9 @@ from gui.impl.auxiliary.rewards_helper import getProgressiveRewardVO
 from gui.impl.gen import R
 from gui.shared.formatters import text_styles, getItemUnlockPricesVO, getItemPricesVO
 from gui.shared.gui_items import GUI_ITEM_TYPE, Tankman, getVehicleComponentsByType
+from gui.shared.gui_items.crew_skin import localizedFullName
 from gui.shared.gui_items.Vehicle import getLevelIconPath
+from gui.shared.gui_items.Tankman import getCrewSkinIconSmall
 from gui.shared.gui_items.gui_item_economics import ItemPrice
 from gui.shared.money import Currency
 from helpers import dependency
@@ -25,11 +27,13 @@ from helpers.i18n import makeString as _ms
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
+from items.components.crew_skins_constants import NO_CREW_SKIN_ID
 MIN_BATTLES_TO_SHOW_PROGRESS = 5
 _logger = logging.getLogger(__name__)
 
 class VehicleProgressHelper(object):
     itemsCache = dependency.descriptor(IItemsCache)
+    lobbyContext = dependency.descriptor(ILobbyContext)
 
     def __init__(self, vehTypeCompDescr):
         items = self.itemsCache.items
@@ -135,9 +139,9 @@ class VehicleProgressHelper(object):
     def __getAvgBattles2NewSkill(self, avgTmanXp, tman):
         return max(1, math.ceil(tman.getNextSkillXpCost() / avgTmanXp)) if avgTmanXp > 0 else 0
 
-    def __makeTankmanDescription(self, tankman):
-        role = text_styles.main(tankman.roleUserName)
-        name = text_styles.standard(tankman.fullUserName)
+    def __makeTankmanDescription(self, roleName, fullName):
+        role = text_styles.main(roleName)
+        name = text_styles.standard(fullName)
         return _ms(BATTLE_RESULTS.COMMON_CREWMEMBER_DESCRIPTION, name=name, role=role)
 
     def __makeVehicleDescription(self, vehicle):
@@ -149,12 +153,19 @@ class VehicleProgressHelper(object):
         prediction = ''
         if avgBattles2NewSkill > 0:
             prediction = _ms(BATTLE_RESULTS.COMMON_NEWSKILLPREDICTION, battles=BigWorld.wg_getIntegralFormat(avgBattles2NewSkill))
-        return {'title': _ms(BATTLE_RESULTS.COMMON_CREWMEMBER_NEWSKILL),
-         'description': self.__makeTankmanDescription(tman),
-         'tankmenIcon': Tankman.getSmallIconPath(tman.nationID, tman.descriptor.iconID),
+        data = {'title': _ms(BATTLE_RESULTS.COMMON_CREWMEMBER_NEWSKILL),
          'prediction': prediction,
          'linkEvent': PROGRESS_ACTION.NEW_SKILL_UNLOCK_TYPE,
          'linkId': tman.invID}
+        if tman.skinID != NO_CREW_SKIN_ID and self.lobbyContext.getServerSettings().isCrewSkinsEnabled():
+            skinItem = self.itemsCache.items.getCrewSkin(tman.skinID)
+            data['tankmenIcon'] = getCrewSkinIconSmall(skinItem.getIconID())
+            fullTankmanName = localizedFullName(skinItem)
+        else:
+            data['tankmenIcon'] = Tankman.getSmallIconPath(tman.nationID, tman.descriptor.iconID)
+            fullTankmanName = tman.fullUserName
+        data['description'] = self.__makeTankmanDescription(tman.roleUserName, fullTankmanName)
+        return data
 
     def __makeUnlockModuleVO(self, item, unlockProps):
         return {'title': _ms(BATTLE_RESULTS.COMMON_FITTING_RESEARCH),

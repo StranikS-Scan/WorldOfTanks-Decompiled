@@ -55,6 +55,10 @@ def stripColorTagDescrTags(descr):
     return re.sub('{colorTagOpen}|{colorTagClose}', '', descr)
 
 
+def stripExpAmountTags(descr):
+    return re.sub('{expTagOpen}|{expTagClose}', '', descr)
+
+
 def stripShortDescr(descr):
     return re.sub('<shortDesc>(.*?)</shortDesc>', '', descr)
 

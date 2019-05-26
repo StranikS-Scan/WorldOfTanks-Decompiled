@@ -7,7 +7,7 @@ from helpers import dependency
 from SoundGroups import CREW_GENDER_SWITCHES
 from items import tankmen
 from items.components.tankmen_components import SPECIAL_VOICE_TAG
-from items.components.crewSkins_constants import NO_CREW_SKIN_ID, NO_CREW_SKIN_SOUND_SET
+from items.components.crew_skins_constants import NO_CREW_SKIN_ID, NO_CREW_SKIN_SOUND_SET
 from skeletons.gui.lobby_context import ILobbyContext
 _VALKYRIE_SOUND_MODES = {'japan:J29_Nameless': 'valkyrie1',
  'japan:J30_Edelweiss': 'valkyrie2'}

@@ -22,8 +22,11 @@ class RankedStayingPowerAchievement(ClassProgressAchievement):
 
     @classmethod
     def checkIsInDossier(cls, block, name, dossier):
-        currentValue = dossier.getRecordValue(_AB.TOTAL, cls.__ACHIEVEMENT_NAME)
-        return cls.__getRankValue(currentValue) > cls.__DEFAULT_LEVEL
+        if dossier is not None:
+            currentValue = dossier.getRecordValue(_AB.TOTAL, cls.__ACHIEVEMENT_NAME)
+            return cls.__getRankValue(currentValue) > cls.__DEFAULT_LEVEL
+        else:
+            return False
 
     def _readProgressValue(self, dossier):
         return self.__getRankValue(self._readCurrentProgressValue(dossier))

@@ -38,7 +38,7 @@ from gui.sounds.ambients import LobbySubViewEnv
 from gui.server_events import recruit_helper
 from helpers import i18n, time_utils, dependency
 from helpers.i18n import makeString as _ms
-from items.components.crewSkins_constants import NO_CREW_SKIN_ID
+from items.components.crew_skins_constants import NO_CREW_SKIN_ID
 from skeletons.gui.game_control import IRestoreController
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.lobby_context import ILobbyContext

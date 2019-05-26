@@ -677,6 +677,27 @@ class CrewSkinTankmanContext(ToolTipContext):
         return self.TankmanContext(self.itemsCache.items.getTankman(tankmanID), self.itemsCache.items.getCrewSkin(skinID))
 
 
+class CrewBookContext(ToolTipContext):
+    itemsCache = dependency.descriptor(IItemsCache)
+
+    def __init__(self, fieldsToExclude=None):
+        super(CrewBookContext, self).__init__(TOOLTIP_COMPONENT.PERSONAL_CASE, fieldsToExclude)
+
+    def buildItem(self, bookCD):
+        return self.itemsCache.items.getItemByCD(bookCD)
+
+
+class CrewBookVehicleContext(ToolTipContext):
+    VehicleContext = namedtuple('BookVehicleContext', 'vehicle')
+    itemsCache = dependency.descriptor(IItemsCache)
+
+    def __init__(self, fieldsToExclude=None):
+        super(CrewBookVehicleContext, self).__init__(TOOLTIP_COMPONENT.CREW_BOOK, fieldsToExclude)
+
+    def buildItem(self, vehicleID):
+        return self.VehicleContext(self.itemsCache.items.getVehicle(vehicleID))
+
+
 class NewSkillContext(PersonalCaseContext):
     SKILL_MOCK = namedtuple('SkillMock', ('header', 'userName', 'shortDescription', 'description', 'count', 'level'))
 

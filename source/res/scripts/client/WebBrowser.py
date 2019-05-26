@@ -515,7 +515,9 @@ class WebBrowser(object):
             secondtest = self.__browser.url[:-1]
             if secondtest.endswith(title):
                 return False
-        return False if self.__baseUrl == title or self.__baseUrl.endswith(title) else True
+        if self.__baseUrl == title or self.__baseUrl.endswith(title):
+            return False
+        return False if title.startswith('http://') or title.startswith('https://') else True
 
     def __setUICursor(self, ui, cursorType):
         if ui and cursorType:

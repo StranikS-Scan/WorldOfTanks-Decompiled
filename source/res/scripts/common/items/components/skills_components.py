@@ -45,6 +45,10 @@ class BasicSkill(legacy_stuff.LegacyStuff):
     def icon(self):
         return self.__icon
 
+    @property
+    def extensionLessIcon(self):
+        return self.__icon.split('.png')[0]
+
     def recreate(self, *args):
         raise NotImplementedError
 

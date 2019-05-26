@@ -20,7 +20,7 @@ from gui.shared.money import Currency
 from gui.shared.utils.functions import makeTooltip
 from helpers import time_utils, dependency
 from helpers.i18n import makeString as _ms
-from items.components.crewSkins_constants import NO_CREW_SKIN_ID
+from items.components.crew_skins_constants import NO_CREW_SKIN_ID
 from items.tankmen import MAX_SKILL_LEVEL
 from skeletons.gui.game_control import IRestoreController
 from skeletons.gui.shared import IItemsCache

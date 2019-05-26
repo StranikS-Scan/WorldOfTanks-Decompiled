@@ -11,6 +11,7 @@ import Settings
 import Event
 import WWISE
 from constants import VEHICLE_CLASSES, MAX_VEHICLE_LEVEL
+from items.components.crew_books_constants import CREW_BOOK_RARITY
 from account_helpers import gameplay_ctx
 from debug_utils import LOG_CURRENT_EXCEPTION
 from gui.Scaleform.genConsts.CUSTOMIZATION_ALIASES import CUSTOMIZATION_ALIASES
@@ -21,6 +22,7 @@ from gui.prb_control.settings import SELECTOR_BATTLE_TYPES
 from soft_exception import SoftException
 from skeletons.account_helpers.settings_core import ISettingsCore
 from helpers import dependency
+import nations
 KEY_FILTERS = 'filters'
 KEY_SESSION_SETTINGS = 'session_settings'
 KEY_SETTINGS = 'settings'
@@ -107,6 +109,7 @@ HINTS_LEFT = 'hintsLeft'
 NUM_BATTLES = 'numBattles'
 SELECTED_INTRO_VEHICLES_FIELD = 'selectedIntroVehicles'
 CREW_SKINS_VIEWED = 'crew_skins_viewed'
+CREW_BOOKS_VIEWED = 'crew_books_viewed'
 CREW_SKINS_HISTORICAL_VISIBLE = 'crew_skins_historical_visible'
 VEHICLES_WITH_BLUEPRINT_CONFIRM = 'showedBlueprintConfirm'
 IS_FIRST_ENTRY_BY_DIVISION_ID = 'isFirstEntryByDivisionId'
@@ -174,6 +177,7 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                                        'vehicleCD': -1,
                                        'extra': [STORE_CONSTANTS.ON_VEHICLE_EXTRA_NAME]},
                'inventory_battleBooster': {'targetType': STORE_CONSTANTS.ALL_KIND_FIT},
+               'inventory_crewBooks': {'targetType': STORE_CONSTANTS.ALL_KIND_FIT},
                MISSIONS_PAGE: {'hideDone': False,
                                'hideUnavailable': False},
                CAROUSEL_FILTER_1: {'ussr': False,
@@ -538,6 +542,10 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                                             LAST_DISPLAY_DAY: 0,
                                             NUM_BATTLES: 0},
                 CREW_SKINS_VIEWED: set(),
+                CREW_BOOKS_VIEWED: {CREW_BOOK_RARITY.CREW_COMMON: {},
+                                    CREW_BOOK_RARITY.CREW_EPIC: {},
+                                    CREW_BOOK_RARITY.CREW_RARE: {},
+                                    CREW_BOOK_RARITY.PERSONAL: 0},
                 CREW_SKINS_HISTORICAL_VISIBLE: (True, True),
                 VEHICLES_WITH_BLUEPRINT_CONFIRM: {},
                 IS_FIRST_ENTRY_BY_DIVISION_ID: {},
@@ -594,6 +602,8 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                                                              'searchNameVehicle': ''},
                         'storage_shells': {'filterMask': 0,
                                            'vehicleCD': None},
+                        'storage_crew_books': {'filterMask': 0,
+                                               'nationID': nations.NONE_INDEX},
                         'storage_modules': {'filterMask': 0,
                                             'vehicleCD': None},
                         'storage_reserves': {'filterMask': 0},

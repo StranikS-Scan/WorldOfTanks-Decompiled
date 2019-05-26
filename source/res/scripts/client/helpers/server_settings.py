@@ -768,6 +768,15 @@ class ServerSettings(object):
     def isPreferredMapsEnabled(self):
         return self.__getGlobalSetting('isPreferredMapsEnabled', False)
 
+    def isCrewBooksEnabled(self):
+        return self.__getGlobalSetting('isCrewBooksEnabled', False)
+
+    def isCrewBooksPurchaseEnabled(self):
+        return self.__getGlobalSetting('isCrewBooksPurchaseEnabled', False)
+
+    def isCrewBooksSaleEnabled(self):
+        return self.__getGlobalSetting('isCrewBooksSaleEnabled', False)
+
     def getProgressiveRewardConfig(self):
         return self.__progressiveReward
 

@@ -35,3 +35,5 @@ class CONTEXT_MENU_HANDLER_TYPE(object):
     STORAGE_PERSONAL_RESERVE_ITEM = 'storagePersonalReserveItem'
     STORAGE_CUSTOMZIZATION_ITEM = 'storageCustomizationItem'
     STORAGE_BLUEPRINTS_ITEM = 'storageBlueprintsItem'
+    STORAGE_CREW_BOOKS_ITEM = 'storageCrewBooksItem'
+    STORAGE_CREW_BOOKS_NO_SALE_ITEM = 'storageCrewBooksNoSaleItem'

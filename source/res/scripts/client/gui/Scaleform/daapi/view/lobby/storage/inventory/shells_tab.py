@@ -2,10 +2,10 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/storage/inventory/shells_tab.py
 from constants import SHELL_TYPES
 from gui.Scaleform.daapi.view.lobby.storage import storage_helpers
-from gui.Scaleform.daapi.view.lobby.storage.inventory.inventory_view import FiltrableInventoryCategoryTabView
-from gui.shared.gui_items import GUI_ITEM_TYPE
+from gui.Scaleform.daapi.view.lobby.storage.inventory.filters.filter_by_vehicle import FiltrableInventoryCategoryByVehicleTabView
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
+from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.utils.functions import makeTooltip
 from gui.shared.utils.requesters.ItemsRequester import REQ_CRITERIA
 from shared_utils import CONST_CONTAINER
@@ -38,7 +38,7 @@ _TYPE_ID_BIT_TO_TYPE_ID_MAP = {_ShellsFilterBit.ARMOR_PIERCING: SHELL_TYPES.ARMO
  _ShellsFilterBit.HOLLOW_CHARGE: SHELL_TYPES.HOLLOW_CHARGE,
  _ShellsFilterBit.HIGH_EXPLOSIVE: SHELL_TYPES.HIGH_EXPLOSIVE}
 
-class ShellsTabView(FiltrableInventoryCategoryTabView):
+class ShellsTabView(FiltrableInventoryCategoryByVehicleTabView):
     filterItems = _TYPE_FILTER_ITEMS
 
     def _getClientSectionKey(self):
@@ -48,7 +48,7 @@ class ShellsTabView(FiltrableInventoryCategoryTabView):
         return GUI_ITEM_TYPE.SHELL
 
     def _getFilteredCriteria(self):
-        criteria = REQ_CRITERIA.EMPTY
+        criteria = super(ShellsTabView, self)._getFilteredCriteria()
         kindsList = [ _TYPE_ID_BIT_TO_TYPE_ID_MAP[bit] for bit in _TYPE_ID_BIT_TO_TYPE_ID_MAP.iterkeys() if self._filterMask & bit ]
         if kindsList:
             criteria |= REQ_CRITERIA.SHELL.TYPE(kindsList)

@@ -7,7 +7,7 @@ from account_shared import validateCustomizationItem
 from invoices_helpers import checkAccountDossierOperation
 from items import vehicles, tankmen
 from items.components.c11n_constants import SeasonType
-from items.components.crewSkins_constants import NO_CREW_SKIN_ID
+from items.components.crew_skins_constants import NO_CREW_SKIN_ID
 from constants import DOSSIER_TYPE, IS_DEVELOPMENT, SEASON_TYPE_BY_NAME, EVENT_TYPE
 from soft_exception import SoftException
 __all__ = ['readBonusSection', 'readUTC', 'SUPPORTED_BONUSES']
@@ -92,7 +92,9 @@ def __readBonus_optionalDevice(bonus, _name, section, eventType):
 def __readBonus_item(bonus, _name, section, eventType):
     compDescr = section.asInt
     try:
-        descr = vehicles.getItemByCompactDescr(compDescr)
+        itemTypeID, _, _ = vehicles.parseIntCompactDescr(compDescr)
+        itemsCache = vehicles if itemTypeID in vehicles.VEHICLE_ITEM_TYPES else tankmen
+        descr = itemsCache.getItemByCompactDescr(compDescr)
         if descr.itemTypeName not in items.SIMPLE_ITEM_TYPE_NAMES:
             raise SoftException('Wrong compact descriptor (%d). Not simple item.' % compDescr)
     except:

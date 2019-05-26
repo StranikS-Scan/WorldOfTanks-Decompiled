@@ -133,7 +133,7 @@ class SessionStatsTankInfo(BlocksTooltipData):
         if marksOnGun.getValue() > 0:
             tankItems.append(self._getTankParamVO(text_styles.main(backport.text(R.strings.session_stats.tankInfo.markOnGun(), progress=text_styles.stats('{}{}'.format(marksOnGun.getDamageRating(), '%')))), _MARK_ON_GUN_ICONS[marksOnGun.getValue() - 1]))
         else:
-            tankItems.append(self._getTankParamVO(text_styles.main(backport.text(R.strings.session_stats.tankInfo.markOnGun.warning())), backport.image(R.images.gui.maps.icons.library.mark_on_gun_icon())))
+            tankItems.append(self._getTankParamVO(text_styles.main(backport.text(R.strings.session_stats.tankInfo.markOnGun.warning(), progress=text_styles.stats('{}{}'.format(marksOnGun.getDamageRating(), '%')))), backport.image(R.images.gui.maps.icons.library.mark_on_gun_icon())))
         tankItems.append(self._getTankParamVO(text_styles.main(backport.text(R.strings.session_stats.tankInfo.status.total(), total=text_styles.stats(self.vehicleStats.battleCnt))), backport.image(R.images.gui.maps.icons.statistic.battles24())))
         if smallLayout:
             self._headerPadding = -itemOffset * 2

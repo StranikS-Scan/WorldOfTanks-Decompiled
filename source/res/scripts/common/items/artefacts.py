@@ -101,7 +101,7 @@ class Artefact(BasicItem):
         else:
             self.tags = _readTags(xmlCtx, section, 'tags', self.itemTypeName)
         if IS_CLIENT or IS_WEB:
-            self.i18n = shared_components.I18nComponent(userStringKey=section.readString('userString'), descriptionKey=section.readString('description'), shortDescriptionSpecialKey=section.readString('shortDescriptionSpecial'), longDescriptionSpecialKey=section.readString('longDescriptionSpecial'))
+            self.i18n = shared_components.I18nComponent(userStringKey=section.readString('userString'), descriptionKey=section.readString('description'), shortDescriptionSpecialKey=section.readString('shortDescriptionSpecial'), longDescriptionSpecialKey=section.readString('longDescriptionSpecial'), shortFilterAlertKey=section.readString('shortFilterAlert'), longFilterAlertKey=section.readString('longFilterAlert'))
             self.icon = _xml.readIcon(xmlCtx, section, 'icon')
             self.iconName = os.path.splitext(os.path.basename(self.icon[0]))[0]
         if IS_CLIENT and section.has_key('kpi'):
@@ -489,17 +489,21 @@ class SharedCooldownConsumableConfigReader(object):
 
 
 class TooltipConfigReader(object):
-    _SHARED_TOOLTIPS_CONSUMABLE_SLOTS = ('shortDescription', 'longDescription', 'tooltipIdentifiers')
+    _SHARED_TOOLTIPS_CONSUMABLE_SLOTS = ('shortDescription', 'longDescription', 'longFilterAlert', 'tooltipIdentifiers')
 
     def initTooltipInformation(self):
         self.shortDescription = component_constants.EMPTY_STRING
         self.longDescription = component_constants.EMPTY_STRING
+        self.shortFilterAlert = component_constants.EMPTY_STRING
+        self.longFilterAlert = component_constants.EMPTY_STRING
         self.tooltipIdentifiers = []
 
     def readTooltipInformation(self, xmlCtx, section):
         if IS_CLIENT:
             self.shortDescription = _xml.readString(xmlCtx, section, 'shortDescription')
             self.longDescription = _xml.readString(xmlCtx, section, 'longDescription')
+            self.shortFilterAlert = _xml.readString(xmlCtx, section, 'shortFilterAlert')
+            self.longFilterAlert = _xml.readString(xmlCtx, section, 'longFilterAlert')
             tooltipsString = _xml.readStringOrNone(xmlCtx, section, 'tooltips')
             if tooltipsString is not None:
                 self.tooltipIdentifiers = tooltipsString.split()

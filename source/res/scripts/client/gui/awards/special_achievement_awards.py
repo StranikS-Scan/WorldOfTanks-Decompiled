@@ -215,68 +215,71 @@ class TelecomAward(AwardAbstract):
     def __init__(self, vehicleDesrs, hasCrew, hasBrotherhood):
         super(TelecomAward, self).__init__()
         self.__vehicleDesrs = vehicleDesrs
+        self.__provider = ''
         self.__hasCrew = hasCrew
         self.__hasBrotherhood = hasBrotherhood
+
+    def __getProvider(self):
+        if not self.__provider and self.__vehicleDesrs:
+            self.__provider = BigWorld.player().inventory.getProviderForVehInvId(self.itemsCache.items.getItemByCD(self.__vehicleDesrs[0]).invID, self.lobbyContext.getServerSettings())
+        return self.__provider
 
     def __getVehicleDetails(self, vehicleCD):
         details = {}
         item = self.itemsCache.items.getItemByCD(vehicleCD)
         details['type'] = item.typeUserName
-        details['nation'] = i18n.makeString(MENU.nations(item.nationName))
+        details['nation'] = backport.text(R.strings.menu.nations.dyn(item.nationName)())
         details['vehicle'] = item.userName
         return details
 
     def getWindowTitle(self):
-        return i18n.makeString(MENU.AWARDWINDOW_TITLE_INFO)
+        return backport.text(self.__addProviderToRes(R.strings.menu.awardWindow.telecomAward.title)())
 
     def getBackgroundImage(self):
-        return RES_ICONS.MAPS_ICONS_REFERRAL_AWARDBACK
+        return backport.image(self.__addProviderToRes(R.images.gui.maps.icons.awards.telecom.bg)())
 
     def getAwardImage(self):
-        return RES_ICONS.MAPS_ICONS_AWARDS_USSR_R127_T44_100_P
+        return backport.image(self.__addProviderToRes(R.images.gui.maps.icons.awards.telecom.vehicle)())
 
     def getHeader(self):
-        return text_styles.highTitle(MENU.AWARDWINDOW_TELECOMAWARD_HEADER)
+        return text_styles.highTitle(backport.text(self.__addProviderToRes(R.strings.menu.awardWindow.telecomAward.header)()))
 
     def getDescription(self):
         vehicleNames = []
         for vehCD in self.__vehicleDesrs:
             details = self.__getVehicleDetails(vehCD)
-            vehicleNames.append(i18n.makeString(MENU.AWARDWINDOW_TELECOMAWARD_VEHICLES, **details))
+            vehicleNames.append(backport.text(self.__addProviderToRes(R.strings.menu.awardWindow.telecomAward.vehicles)(), **details))
 
         vehicles = '\n'.join(vehicleNames)
         if self.__hasCrew:
             if self.__hasBrotherhood:
-                descriptionKey = MENU.AWARDWINDOW_TELECOMAWARD_DESCRIPTION_WITHBROTHERHOOD
+                descriptionRes = R.strings.menu.awardWindow.telecomAward.description.withBrotherhood
             else:
-                descriptionKey = MENU.AWARDWINDOW_TELECOMAWARD_DESCRIPTION
+                descriptionRes = R.strings.menu.awardWindow.telecomAward.description.full
         else:
-            descriptionKey = MENU.AWARDWINDOW_TELECOMAWARD_DESCRIPTION_WITHOUTCREW
-        if self.__vehicleDesrs:
-            serverSettings = self.lobbyContext.getServerSettings()
-            vehInvId = self.itemsCache.items.getItemByCD(self.__vehicleDesrs[0]).invID
-            provider = BigWorld.player().inventory.getProviderForVehInvId(vehInvId, serverSettings)
-            tariff = i18n.makeString(MENU.internetProviderTariff(provider))
-        else:
-            tariff = ''
-        premText = text_styles.neutral(MENU.AWARDWINDOW_TELECOMAWARD_DESCRIPTION_PREM)
-        description = i18n.makeString(descriptionKey, tariff=tariff, vehicles=vehicles, prem=premText)
+            descriptionRes = R.strings.menu.awardWindow.telecomAward.description.withoutCrew
+        providerLocRes = R.strings.menu.internet_provider.dyn(self.__getProvider())
+        premText = text_styles.neutral(backport.text(self.__addProviderToRes(R.strings.menu.awardWindow.telecomAward.description.prem)()))
+        description = backport.text(self.__addProviderToRes(descriptionRes)(), tariff=backport.text(providerLocRes.tariff()) if providerLocRes else '', vehicles=vehicles, prem=premText)
         return text_styles.main(description)
 
     def getAdditionalText(self):
-        return text_styles.standard(MENU.AWARDWINDOW_TELECOMAWARD_SUBDESCRIPTION)
+        return text_styles.standard(backport.text(self.__addProviderToRes(R.strings.menu.awardWindow.telecomAward.subdescription)()))
 
     def getButtonStates(self):
         return (False, True, True)
 
     def getBodyButtonText(self):
-        return i18n.makeString(MENU.AWARDWINDOW_TELECOMAWARD_BUTTON_LABEL)
+        return backport.text(self.__addProviderToRes(R.strings.menu.awardWindow.telecomAward.button.label)())
 
     def handleBodyButton(self):
         item = self.itemsCache.items.getItemByCD(self.__vehicleDesrs[0])
         if hasattr(item, 'invID'):
             g_currentVehicle.selectVehicle(item.invID)
         shared_events.showHangar()
+
+    def __addProviderToRes(self, res):
+        return res.dyn(self.__getProvider(), res.default)
 
 
 class RecruiterAward(ExplosionBackAward):

@@ -214,6 +214,7 @@ SETTING_DEFAULTS = {'ver': 1,
  'playerGroupLimit': 0}
 LIMIT_DEFAULTS = {'maxCountTotal': 256,
  'minCount': 1,
+ 'maxCount': (0, 65535),
  'totalLevel': (0, 65535),
  'level': (0, 65535),
  'classLevel': {},

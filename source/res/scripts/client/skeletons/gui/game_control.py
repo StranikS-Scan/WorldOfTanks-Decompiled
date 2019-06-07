@@ -826,6 +826,9 @@ class IEpicBattleMetaGameController(IGameController, ISeasonProvider):
     def getPlayerLevelInfo(self):
         raise NotImplementedError
 
+    def getPlayerRanksInfo(self):
+        raise NotImplementedError
+
     def getSeasonData(self):
         raise NotImplementedError
 

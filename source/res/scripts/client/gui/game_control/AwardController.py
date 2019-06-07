@@ -1037,7 +1037,7 @@ class RankedQuestsHandler(MultiTypeServiceChannelHandler):
             self.__processOrHold(*self.__pending.pop(0))
 
     def __showSeasonAward(self, quest, data):
-        seasonID, _ = ranked_helpers.getRankedDataFromTokenQuestID(quest.getID())
+        seasonID, _, _ = ranked_helpers.getRankedDataFromTokenQuestID(quest.getID())
         season = self.rankedController.getSeason(seasonID)
         if season is not None:
             g_eventBus.handleEvent(events.LoadViewEvent(RANKEDBATTLES_ALIASES.RANKED_BATTLES_SEASON_COMPLETE, ctx={'quest': quest,

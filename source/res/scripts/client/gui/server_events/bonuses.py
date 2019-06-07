@@ -1467,15 +1467,17 @@ class CrewBooksBonus(SimpleBonus):
                 if crewBookItem is not None:
                     result.append((crewBookItem, count))
 
-            return sorted(result, lambda x, y: orderCmp(x[0], y[0], True))
+            return sorted(result, lambda x, y: orderCmp(x[0], y[0]))
 
     def format(self):
         return ', '.join(self.formattedList())
 
     def formattedList(self):
         result = []
-        for _, count in self.getItems():
-            result.append(makeHtmlString('html_templates:lobby/quests/bonuses', 'crewBook', {'value': count}))
+        for item, count in self.getItems():
+            result.append(makeHtmlString('html_templates:lobby/quests/bonuses', 'crewBook', {'type': item.getBookType(),
+             'nation': item.getNation(),
+             'value': count}))
 
         return result
 

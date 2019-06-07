@@ -10,9 +10,6 @@ class RankTypes(CONST_CONTAINER):
     VEHICLE = 'vehicle'
 
 
-RANKED_QUEST_ID_PREFIX = 'ranked'
-YEAR_POINTS_TOKEN = 'rb2019'
-
 class YearAwardsNames(CONST_CONTAINER):
     SMALL = RANKEDBATTLES_CONSTS.RANKED_REWARDS_YEAR_SMALL
     MEDIUM = RANKEDBATTLES_CONSTS.RANKED_REWARDS_YEAR_MEDIUM
@@ -55,10 +52,15 @@ class RankedDossierKeys(CONST_CONTAINER):
 
 
 ARCHIVE_SEASON_ID = 0
-NOT_IN_LEAGUES_QUEST = 'ranked_{}_0'
+NOT_IN_LEAGUES_QUEST = 'ranked_{}_0_common'
+COMMON_POSTFIX = 'common'
+SPRINTER_POSTFIX = 'sprinter'
+RANKED_QUEST_ID_PREFIX = 'ranked'
+YEAR_POINTS_TOKEN = 'rb2019'
 
 class SeasonResultTokenPatterns(CONST_CONTAINER):
     RANKED_OFF_BANNED = 'ranked_{}_banned'
+    RANKED_OFF_SPRINTER = 'ranked_{}_sprinter'
     RANKED_OFF_GOLD_LEAGUE_TOKEN = 'ranked_{}_top_1'
     RANKED_OFF_SILVER_LEAGUE_TOKEN = 'ranked_{}_top_2'
     RANKED_OFF_BRONZE_LEAGUE_TOKEN = 'ranked_{}_top_3'

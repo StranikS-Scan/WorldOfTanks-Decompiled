@@ -21,7 +21,7 @@ class RankedVehicleInfoComponent(vehicle.VehicleInfoComponent):
             rankLevel = ZERO_RANK_ID
             divisionID += 1
         else:
-            rankLevel = division.getRankIdInDivision(rankID)
+            rankLevel = division.getRankUserId(rankID)
         return self._data.update({'rankLevel': rankLevel,
          'division': divisionID})
 

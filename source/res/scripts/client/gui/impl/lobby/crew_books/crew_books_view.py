@@ -93,7 +93,7 @@ class CrewBooksView(ViewImpl):
         for _, tankman in self.__vehicle.crew:
             if tankman is None:
                 emptyTankmen += 1
-            if tankman.realRoleLevel[0] < self.MIN_ROLE_LEVEL:
+            if tankman.roleLevel < self.MIN_ROLE_LEVEL:
                 invalidSkill += 1
             if tankman.vehicleDescr.type.compactDescr != tankman.vehicleNativeDescr.type.compactDescr:
                 invalidSpeciality += 1
@@ -209,8 +209,8 @@ class CrewBooksView(ViewImpl):
         crewDiff = [ (_, tankman) for _, tankman in crew if tankman is not None and tankman.invID in diff['compDescr'] ]
         for slotIdx, tankman in crewDiff:
             tankmanVM = crewListVM[slotIdx]
-            tankmanVM.setRoleLevel(str(int(tankman.realRoleLevel[0])))
-            tankmanVM.setIsLowRoleLevel(tankman.realRoleLevel[0] < self.MIN_ROLE_LEVEL)
+            tankmanVM.setRoleLevel(str(tankman.roleLevel))
+            tankmanVM.setIsLowRoleLevel(tankman.roleLevel < self.MIN_ROLE_LEVEL)
             self.__setSkillListViewModelData(tankmanVM, tankman.invID)
 
         crewListVM.invalidate()
@@ -383,8 +383,10 @@ class CrewBooksView(ViewImpl):
             if CREW_BOOK_INVALID_TYPE.EMPTY_CREW in self.__invalidTypes:
                 vm.setFooterIcon(R.images.gui.maps.icons.library.alertBigIcon())
                 vm.setFooterTitle(R.strings.crew_books.screen.info.empty_tank.title())
+                vm.setTooltipBody(R.strings.crew_books.screen.info.empty_tank.title())
                 vm.setIsFooterAlert(True)
-                vm.setIsInvalidTooltipEnable(False)
+                vm.setIsInvalidTooltipEnable(True)
+                vm.setIsSimpleInvalidTooltip(True)
             else:
                 vm.setFooterIcon(R.images.gui.maps.icons.library.InformationIcon())
                 vm.setFooterTitle(R.strings.crew_books.screen.info.selectBook.title())
@@ -402,8 +404,9 @@ class CrewBooksView(ViewImpl):
                 vm.setTooltipBody(R.strings.tooltips.crewBooks.screen.invalidItem.title())
             elif CREW_BOOK_INVALID_TYPE.EMPTY_CREW in self.__invalidTypes:
                 vm.setFooterIcon(R.images.gui.maps.icons.library.alertBigIcon())
-                vm.setFooterTitle(R.strings.crew_books.screen.info.empty_tank.title())
                 vm.setIsFooterAlert(True)
+                vm.setIsInvalidTooltipEnable(True)
+                vm.setIsSimpleInvalidTooltip(True)
             elif self.__selectedTankmanVM is None:
                 vm.setIsInvalidTooltipEnable(True)
                 vm.setIsSimpleInvalidTooltip(True)
@@ -433,8 +436,6 @@ class CrewBooksView(ViewImpl):
                 vm.setIsInvalidTooltipEnable(True)
                 if CREW_BOOK_INVALID_TYPE.EMPTY_CREW in self.__invalidTypes:
                     vm.setIsSimpleInvalidTooltip(True)
-                    vm.setFooterTitle(R.strings.crew_books.screen.info.empty_tank.title())
-                    vm.setTooltipBody(R.strings.crew_books.screen.info.empty_tank.title())
                 elif CREW_BOOK_INVALID_TYPE.INCOMPLETE_CREW in self.__invalidTypes:
                     vm.setFooterTitle(R.strings.crew_books.screen.info.incompleteCrew.title())
                 else:

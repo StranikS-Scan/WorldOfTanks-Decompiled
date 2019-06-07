@@ -106,13 +106,15 @@ def _extendByBattleBoosterData(targetData, module, vehicle):
     targetData['buyButtonVisible'] = targetData['isSelected']
 
 
-def _extendByBattleAbilityData(targetData, ability, slotIndex):
+def _extendByBattleAbilityData(targetData, ability, slotIndex, mayInstall=False):
+    filterText = ability.shortFilterAlert if targetData['disabled'] and not mayInstall else ''
     targetData['slotIndex'] = slotIndex
     targetData['desc'] = text_styles.main(ability.shortDescription)
     targetData['name'] = text_styles.stats(ability.userName)
     targetData['level'] = ability.level if ability.isUnlocked else 0
     targetData['removeButtonLabel'] = EPIC_BATTLE.FITTINGSELECTPOPOVER_REMOVEBUTTON
     targetData['changeOrderButtonLabel'] = EPIC_BATTLE.FITTINGSELECTPOPOVER_CHANGEORDER
+    targetData['filterText'] = filterText
 
 
 def _extendHighlightData(targetData, highlight, bgHighlight):
@@ -549,7 +551,8 @@ class PopoverLogicProvider(object):
         elif self._slotType == FITTING_TYPES.BOOSTER:
             _extendByBattleBoosterData(moduleData, vehicleModule, self._vehicle)
         elif self._slotType == FITTING_TYPES.BATTLE_ABILITY:
-            _extendByBattleAbilityData(moduleData, vehicleModule, self._slotIndex)
+            mayInstall, _ = vehicleModule.mayInstall(self._vehicle)
+            _extendByBattleAbilityData(moduleData, vehicleModule, self._slotIndex, mayInstall)
 
 
 class _HangarLogicProvider(PopoverLogicProvider):
@@ -632,7 +635,9 @@ class _BattleAbilityLogicProvider(_HangarLogicProvider):
 
     def _buildModuleData(self, vehicleModule, isInstalledInSlot, stats):
         baseData = super(_BattleAbilityLogicProvider, self)._buildModuleData(vehicleModule, isInstalledInSlot, stats)
-        baseData['disabled'] = vehicleModule.isInstalled(self._vehicle) and not isInstalledInSlot or not vehicleModule.isUnlocked
+        isInstalled = vehicleModule.isInstalled(self._vehicle)
+        mayInstall, _ = vehicleModule.mayInstall(self._vehicle)
+        baseData['disabled'] = isInstalled and not isInstalledInSlot or not mayInstall or not vehicleModule.isUnlocked
         baseData['showPrice'] = False
         return baseData
 

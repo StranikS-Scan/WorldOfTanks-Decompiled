@@ -60,11 +60,11 @@ class VEHICLE_PHYSICS_TYPE():
     WHEELED_TECH = 1
 
 
-ABILITY_SLOTS_BY_VEHICLE_CLASS = {'lightTank': 3,
- 'SPG': 3,
+ABILITY_SLOTS_BY_VEHICLE_CLASS = {'lightTank': 1,
+ 'SPG': 1,
  'AT-SPG': 2,
- 'mediumTank': 1,
- 'heavyTank': 1}
+ 'mediumTank': 2,
+ 'heavyTank': 3}
 
 def getNumAbilitySlots(vehicleType):
     vehClass = getVehicleClassFromVehicleType(vehicleType)

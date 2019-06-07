@@ -96,6 +96,18 @@
     <start></start>
     <stop></stop>
     <reset></reset>
+    <onEnemyVehicleShot>
+      <Arg>	OBJECT_ID	</Arg>
+      <Arg>	ARRAY	  <of>	SHOT_ID	</of>
+      </Arg>
+      <Arg>	UINT8	</Arg>
+      <Arg>	FLOAT32	</Arg>
+      <Arg>	FLOAT32	</Arg>
+    </onEnemyVehicleShot>
+    <scheduleExtraCheck>
+      <Arg>	OBJECT_ID	</Arg>
+      <Arg>	FLOAT32	</Arg>
+    </scheduleExtraCheck>
   </CellMethods>
   <BaseMethods>
     <smartDestroy></smartDestroy>

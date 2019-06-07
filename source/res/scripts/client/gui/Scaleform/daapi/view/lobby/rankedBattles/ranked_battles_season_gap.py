@@ -39,6 +39,7 @@ class RankedBattlesSeasonGapView(RankedBattlesSeasonGapViewMeta, IResetablePage)
         self.__dossier = None
         self.__resultState = None
         self.__resultLeague = UNDEFINED_LEAGUE_ID
+        self.__isSprinter = False
         return
 
     def reset(self):
@@ -83,6 +84,16 @@ class RankedBattlesSeasonGapView(RankedBattlesSeasonGapViewMeta, IResetablePage)
         notLeagueQuest = self.__getNotLeagueQuest()
         return notLeagueQuest.getStartTimeLeft() if notLeagueQuest is not None else time_utils.ONE_MINUTE
 
+    def __hasSprinterToken(self):
+        prevSeasonID = self.__prevSeason.getSeasonID()
+        sprinterToken = SeasonResultTokenPatterns.RANKED_OFF_SPRINTER.format(prevSeasonID)
+        token = self.__itemsCache.items.tokens.getTokens().get(sprinterToken)
+        if token:
+            _, count = token
+            if count > 0:
+                return True
+        return False
+
     def __onTokensUpdate(self, _):
         self.__update()
 
@@ -96,7 +107,7 @@ class RankedBattlesSeasonGapView(RankedBattlesSeasonGapViewMeta, IResetablePage)
     def __updateData(self):
         achievedRankID = self.__dossier.getAchievedRank()
         achievedDivision = self.__rankedController.getDivision(achievedRankID)
-        self.as_setDataS(season_gap_vos.getDataVO(self.__resultState, achievedRankID, achievedDivision, self.__resultLeague))
+        self.as_setDataS(season_gap_vos.getDataVO(season_gap_vos.StateBlock(self.__resultState, achievedRankID, achievedDivision, self.__resultLeague, self.__isSprinter)))
 
     def __updateEfficiency(self):
         self.as_setEfficiencyDataS(season_gap_vos.getEfficiencyVO(self.__dossier.getStepsEfficiency()))
@@ -120,6 +131,7 @@ class RankedBattlesSeasonGapView(RankedBattlesSeasonGapViewMeta, IResetablePage)
 
     def __updateStateByTokens(self):
         self.__resultLeague = UNDEFINED_LEAGUE_ID
+        self.__isSprinter = self.__hasSprinterToken()
         resultTokenPattern = self.__getResultTokenPattern()
         if resultTokenPattern == SeasonResultTokenPatterns.RANKED_OFF_BANNED:
             self.__resultState = _STATE_TO_BANNED_GAP_STATE.get(self.__resultState, self.__resultState)

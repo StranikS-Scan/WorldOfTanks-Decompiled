@@ -409,9 +409,9 @@ class BuyVehicleView(ViewImpl, EventSystemEntity):
         self.__tradeOffVehicle = self.__itemsCache.items.getItemByCD(selectedVehCD)
         if self.__tradeOffVehicle is not None:
             self.__updateTradeInInfo()
-            self.__updateTotalPrice()
-            self.__updateTankPrice()
             self.__updateSlotPrice()
+            self.__updateTankPrice()
+            self.__updateTotalPrice()
         else:
             _logger.error('No vehicle with given id = %d', selectedVehCD)
         self.__updateBuyBtnLabel()

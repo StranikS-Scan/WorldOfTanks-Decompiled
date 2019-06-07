@@ -4,8 +4,10 @@ import typing
 import BigWorld
 from gui.impl import backport
 from gui.impl.gen import R
+from gui.ranked_battles.ranked_helpers.league_provider import TOP_LEAGUE_ID
 from gui.shared.utils.functions import makeTooltip
 from gui.Scaleform.genConsts.RANKEDBATTLES_ALIASES import RANKEDBATTLES_ALIASES
+from gui.shared.formatters import text_styles, icons
 
 def getFinishSeasonData(efficiencyValue, seasonNumber):
     return {'typeTitle': backport.text(R.strings.ranked_battles.seasonComplete.smallTitle()),
@@ -17,14 +19,22 @@ def getFinishSeasonData(efficiencyValue, seasonNumber):
      'bgSource': backport.image(R.images.gui.maps.icons.rankedBattles.bg.main())}
 
 
-def getFinishInLeagueData(league, position, seasonNumber):
+def getFinishInLeagueData(league, position, seasonNumber, isSprinter):
     header = backport.text(R.strings.ranked_battles.rankedBattleMainView.leaguesView.dyn('league{}'.format(league))())
     body = backport.text(R.strings.ranked_battles.seasonComplete.tooltip.body(), season=str(seasonNumber))
+    sprinterLabel = ''
+    if isSprinter:
+        if league == TOP_LEAGUE_ID:
+            sprinterLabel = backport.text(R.strings.ranked_battles.seasonComplete.sprinterTop())
+        else:
+            sprinterLabel = backport.text(R.strings.ranked_battles.seasonComplete.sprinterImproved())
+        sprinterLabel = text_styles.concatStylesToSingleLine(icons.makeImageTag(backport.image(R.images.gui.maps.icons.rankedBattles.sprinter_icon()), 32, 17, -3), text_styles.highlightText(sprinterLabel))
     return {'mainImage': backport.image(R.images.gui.maps.icons.rankedBattles.league.c_300x300.num(league)()),
      'state': RANKEDBATTLES_ALIASES.SEASON_COMPLETE_VIEW_LEAGUE_STATE,
      'placeLabel': backport.text(R.strings.ranked_battles.seasonComplete.placeInRating()),
      'placeValue': position,
      'descr': '',
+     'sprinterLabel': sprinterLabel,
      'tooltip': makeTooltip(header=header, body=body)}
 
 

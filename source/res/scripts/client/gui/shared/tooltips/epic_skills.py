@@ -3,6 +3,7 @@
 from AvatarInputHandler.mathUtils import clamp
 from debug_utils import LOG_ERROR
 from gui.Scaleform.locale.EPIC_BATTLE import EPIC_BATTLE
+from gui.Scaleform.genConsts.BLOCKS_TOOLTIP_TYPES import BLOCKS_TOOLTIP_TYPES
 from gui.Scaleform.locale.COMMON import COMMON
 from gui.shared.formatters import text_styles
 from gui.shared.tooltips import TOOLTIP_TYPE
@@ -46,7 +47,11 @@ class EpicSkillBaseTooltipData(BlocksTooltipData):
         overlayPadding = formatters.packPadding(top=SLOT_HIGHLIGHT_TYPES.TOOLTIP_OVERLAY_PADDING_TOP, left=SLOT_HIGHLIGHT_TYPES.TOOLTIP_OVERLAY_PADDING_LEFT)
         highlightPadding = formatters.packPadding(top=SLOT_HIGHLIGHT_TYPES.TOOLTIP_HIGHLIGHT_PADDING_TOP, left=SLOT_HIGHLIGHT_TYPES.TOOLTIP_HIGHLIGHT_PADDING_LEFT)
         block.append(formatters.packItemTitleDescBlockData(title=text_styles.highTitle(title), desc=text_styles.standard(desc), img=RES_ICONS.getEpicBattlesSkillIcon('43x43', icon), imgPadding=formatters.packPadding(left=imgPaddingLeft, top=imgPaddingTop), txtGap=-3, txtOffset=txtOffset, padding=formatters.packPadding(top=0, bottom=0), overlayPath=overlayPath, overlayPadding=overlayPadding, highlightPath=highlightPath, highlightPadding=highlightPadding))
-        block.append(formatters.packTextBlockData(text_styles.standard(skillLevel.shortDescr), padding=formatters.packPadding(left=txtOffset, top=0)))
+        if skillLevel.longFilterAlert:
+            blocks = [formatters.packTextBlockData(text_styles.standard(skillLevel.shortDescr)), formatters.packTextBlockData(text_styles.alert(skillLevel.longFilterAlert))]
+            block.append(formatters.packBuildUpBlockData(blocks=blocks, layout=BLOCKS_TOOLTIP_TYPES.LAYOUT_VERTICAL, padding=formatters.packPadding(left=txtOffset, top=0)))
+        else:
+            block.append(formatters.packTextBlockData(text_styles.standard(skillLevel.shortDescr), padding=formatters.packPadding(left=txtOffset, top=0)))
         return
 
 

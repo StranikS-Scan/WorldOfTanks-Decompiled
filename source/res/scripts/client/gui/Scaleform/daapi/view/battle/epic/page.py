@@ -10,6 +10,7 @@ from gui.Scaleform.daapi.view.battle.shared import crosshair
 from gui.Scaleform.daapi.view.battle.shared import period_music_listener
 from gui.Scaleform.daapi.view.battle.epic import finish_sound_player, drone_music_player
 from PlayerEvents import g_playerEvents
+from gui.Scaleform.managers.battle_input import BattleGUIKeyHandler
 import CommandMapping
 from constants import ARENA_PERIOD
 import BigWorld
@@ -132,7 +133,7 @@ _STATE_TO_UI = {PageStates.GAME: _GAME_UI,
                         BATTLE_VIEW_ALIASES.SIEGE_MODE_INDICATOR})}
 _EPIC_EXTERNAL_COMPONENTS = (crosshair.CrosshairPanelContainer, markers2d.EpicMarkersManager)
 
-class EpicBattlePage(EpicBattlePageMeta):
+class EpicBattlePage(EpicBattlePageMeta, BattleGUIKeyHandler):
 
     def __init__(self, components=None, external=_EPIC_EXTERNAL_COMPONENTS, fullStatsAlias=BATTLE_VIEW_ALIASES.FULL_STATS):
         if components is None:
@@ -192,6 +193,7 @@ class EpicBattlePage(EpicBattlePageMeta):
         if specCtrl is not None:
             specCtrl.onSpectatorViewModeChanged += self.__onSpectatorModeChanged
         g_playerEvents.onRoundFinished += self.__onRoundFinished
+        self.app.registerGuiKeyHandler(self)
         arena = self.sessionProvider.arenaVisitor.getArenaSubscription()
         if arena is not None:
             arena.onPeriodChange += self.__arena_onPeriodChange
@@ -225,6 +227,13 @@ class EpicBattlePage(EpicBattlePageMeta):
                 self.__pageState = PageStates.GAME
                 self._invalidateState()
             self.__battleStarted = True
+
+    def handleEscKey(self, isDown):
+        isMapVisible = self.as_isComponentVisibleS(BATTLE_VIEW_ALIASES.EPIC_OVERVIEW_MAP_SCREEN)
+        if isMapVisible:
+            self._setComponentsVisibility(hidden=[BATTLE_VIEW_ALIASES.EPIC_OVERVIEW_MAP_SCREEN, BATTLE_VIEW_ALIASES.EPIC_DEPLOYMENT_MAP])
+            self._toggleOverviewMap()
+        return isMapVisible
 
     def _handleToggleOverviewMap(self, event):
         if not self._isVisible:

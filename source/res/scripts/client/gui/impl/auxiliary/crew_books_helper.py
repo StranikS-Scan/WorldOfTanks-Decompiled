@@ -146,7 +146,7 @@ class TankmanModelPresenterBase(object):
                 m.setTankmanIcon(tankmenIcons.icons.big.dyn(getIconResourceName(tankman.extensionLessIcon))())
             m.setRoleIcon(tankmenIcons.roles.big.dyn(getIconResourceName(tankman.extensionLessIconRole))())
             m.setInvID(tankman.invID)
-            m.setRoleLevel(str(int(tankman.realRoleLevel[0])))
+            m.setRoleLevel(str(tankman.roleLevel))
 
     def _formatEmptyModel(self, model, index):
         model.setIdx(index)
@@ -162,7 +162,7 @@ class TankmanModelPresenter(TankmanModelPresenterBase):
         super(TankmanModelPresenter, self)._formatModel(model, index, tankmanInvId)
         tankman = self.__itemsCache.items.getTankman(int(tankmanInvId))
         with model.transaction() as m:
-            m.setIsLowRoleLevel(tankman.realRoleLevel[0] < MIN_ROLE_LEVEL)
+            m.setIsLowRoleLevel(tankman.roleLevel < MIN_ROLE_LEVEL)
             if tankman.vehicleDescr.type.compactDescr != tankman.vehicleNativeDescr.type.compactDescr:
                 nativeVehicle = self.__itemsCache.items.getItemByCD(tankman.vehicleNativeDescr.type.compactDescr)
                 m.setIsWrongVehicle(True)

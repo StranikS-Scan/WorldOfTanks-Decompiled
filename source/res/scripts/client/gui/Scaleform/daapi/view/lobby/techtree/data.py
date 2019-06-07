@@ -536,9 +536,10 @@ class ResearchItemsData(_ItemsData):
                 state |= NODE_STATE_FLAGS.ELITE
             if guiItem.isPremium:
                 state |= NODE_STATE_FLAGS.PREMIUM
-            if guiItem.isRented and not guiItem.isPremiumIGR and not guiItem.isTelecom:
+            if guiItem.isRented and not guiItem.isPremiumIGR:
                 state = self._checkExpiredRent(state, guiItem)
-                state = self._checkMoney(state, nodeCD)
+                if not guiItem.isTelecom:
+                    state = self._checkMoney(state, nodeCD)
             if guiItem.isRentable and not guiItem.isInInventory and not guiItem.isTelecom:
                 state = self._checkMoney(state, nodeCD)
             if self._isVehicleCanBeChanged():

@@ -17,6 +17,7 @@ _LEAGUE_SYNC_TIME = 2 * ONE_MINUTE
 WebLeague = namedtuple('WebLeague', 'league, position')
 UNDEFINED_LEAGUE_ID = 0
 UNDEFINED_WEB_LEAGUE = WebLeague(UNDEFINED_LEAGUE_ID, None)
+TOP_LEAGUE_ID = 1
 
 class RankedBattlesLeagueProvider(object):
     __webController = dependency.descriptor(IWebController)

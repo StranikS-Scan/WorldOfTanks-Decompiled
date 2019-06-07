@@ -301,6 +301,10 @@ class BattleAbility(Equipment):
     def shortDescription(self):
         return self.descriptor.shortDescription
 
+    @property
+    def shortFilterAlert(self):
+        return self.descriptor.shortFilterAlert
+
     def getSubTypeName(self):
         return self.descriptor.__class__.__name__
 
@@ -322,8 +326,8 @@ class BattleAbility(Equipment):
         return (False, GUI_ITEM_ECONOMY_CODE.ITEM_NO_PRICE)
 
     def mayInstall(self, vehicle, slotIdx=None):
-        myInstall = slotIdx < ABILITY_SLOTS_BY_VEHICLE_CLASS[getVehicleClassFromVehicleType(vehicle.descriptor.type)]
-        return (True, None) if myInstall else (False, 'slot index exceeds limit of vehicle class')
+        slotCheck = slotIdx < ABILITY_SLOTS_BY_VEHICLE_CLASS[getVehicleClassFromVehicleType(vehicle.descriptor.type)]
+        return (False, 'slot index exceeds limit of vehicle class') if not slotCheck else self.descriptor.checkCompatibilityWithVehicle(vehicle.descriptor)
 
     def _getAltPrice(self, buyPrice, proxy):
         return MONEY_UNDEFINED

@@ -222,11 +222,15 @@ def _getAwardsForTokenBase(tokenBase, level=None, eventsCache=None):
 
 def _packBonuses(bonuses, packSP=False):
     if packSP:
+
+        def trimIcon(path):
+            return path.replace('img://gui', '..')
+
         result = [{'id': 0,
           'type': ItemPackType.CUSTOM_SUPPLY_POINT,
           'value': 1,
-          'icon': {AWARDS_SIZES.SMALL: backport.image(R.images.gui.maps.icons.epicBattles.awards.c_48x48.abilityToken()),
-                   AWARDS_SIZES.BIG: backport.image(R.images.gui.maps.icons.epicBattles.awards.c_80x80.abilityToken())}}]
+          'icon': {AWARDS_SIZES.SMALL: trimIcon(backport.image(R.images.gui.maps.icons.epicBattles.awards.c_48x48.abilityToken())),
+                   AWARDS_SIZES.BIG: trimIcon(backport.image(R.images.gui.maps.icons.epicBattles.awards.c_80x80.abilityToken()))}}]
     else:
         result = []
     for bonus in bonuses:
@@ -251,6 +255,7 @@ def getFrontLineSkills():
         skillInfo['name'] = firstSkill.name
         skillInfo['shortDescr'] = firstSkill.shortDescr
         skillInfo['skillID'] = skillID
+        skillInfo['longFilterAlert'] = firstSkill.longFilterAlert
         skillInfo['params'] = dict()
         for _, skillLevelData in skillData.levels.iteritems():
             skillInfo.setdefault('levels', []).append(skillLevelData.eqID)

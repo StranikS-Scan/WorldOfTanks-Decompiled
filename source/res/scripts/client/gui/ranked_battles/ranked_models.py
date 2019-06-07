@@ -113,7 +113,7 @@ class RankProgress(object):
 
 
 class Division(object):
-    __slots__ = ('firstRank', 'lastRank', '__divisionID', '__currentRank', '__isFinal')
+    __slots__ = ('firstRank', 'lastRank', '__divisionID', '__currentRank', '__isFinal', '__rankIDs')
 
     def __eq__(self, other):
         if self.getID() != other.getID() or self.getRanksIDs() != other.getRanksIDs():
@@ -129,17 +129,18 @@ class Division(object):
         self.__divisionID = divisionID
         self.__currentRank = currentRank
         self.__isFinal = isFinal
+        self.__rankIDs = tuple(range(self.firstRank, self.lastRank + 1))
 
     def getID(self):
         return self.__divisionID
 
     def getRanksIDs(self):
-        return range(self.firstRank, self.lastRank + 1)
+        return self.__rankIDs
 
     def getRankUserName(self, rankID):
-        return str(self.getRankIdInDivision(rankID))
+        return str(self.getRankUserId(rankID))
 
-    def getRankIdInDivision(self, rankID):
+    def getRankUserId(self, rankID):
         return rankID - self.firstRank + 1 if rankID in self.getRanksIDs() else None
 
     def getUserID(self):

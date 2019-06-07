@@ -40,6 +40,7 @@ from skeletons.account_helpers.settings_core import ISettingsCore
 from account_helpers.settings_core.settings_constants import GRAPHICS
 from season_provider import SeasonProvider
 from gui.Scaleform.daapi.view.lobby.epicBattle.epic_cycle_helpers import getCurrentWelcomeScreenVersion
+from player_ranks import getSettings as getRankSettings
 _logger = logging.getLogger(__name__)
 _VALID_PREBATTLE_TYPES = [PREBATTLE_TYPE.EPIC, PREBATTLE_TYPE.EPIC_TRAINING]
 
@@ -73,14 +74,16 @@ PERFORMANCE_GROUP_LIMITS = {EPIC_PERF_GROUP.HIGH_RISK: [{EPIC_META_GAME_LIMIT_TY
  EPIC_PERF_GROUP.MEDIUM_RISK: [{EPIC_META_GAME_LIMIT_TYPE.HARDWARE_PARAMS: {HARDWARE_SCORE_PARAMS.PARAM_GPU_SCORE: 150}}, {EPIC_META_GAME_LIMIT_TYPE.HARDWARE_PARAMS: {HARDWARE_SCORE_PARAMS.PARAM_CPU_SCORE: 50000}}]}
 
 class EpicMetaGameSkillLevel(object):
-    __slots__ = ('level', 'name', 'descr', 'shortDescr', 'longDescr', 'icon', 'eqID')
+    __slots__ = ('level', 'name', 'descr', 'shortDescr', 'longDescr', 'shortFilterAlert', 'longFilterAlert', 'icon', 'eqID')
 
-    def __init__(self, lvl, eqID, name, descr, shortDescr, longDescr, icon):
+    def __init__(self, lvl, eqID, name, descr, shortDescr, longDescr, shortFilterAlert, longFilterAlert, icon):
         self.level = lvl
         self.name = name
         self.descr = descr
         self.shortDescr = shortDescr
         self.longDescr = longDescr
+        self.shortFilterAlert = shortFilterAlert
+        self.longFilterAlert = longFilterAlert
         self.icon = icon
         self.eqID = eqID
 
@@ -145,6 +148,7 @@ class EpicBattleMetaGameController(IEpicBattleMetaGameController, Notifiable, Se
         self.__urlMacros = URLMacros()
         self.__baseUrl = GUI_SETTINGS.lookup('frontline')
         self.__isFrSoundMode = False
+        self.__rankSettings = {}
         return
 
     def init(self):
@@ -244,6 +248,13 @@ class EpicBattleMetaGameController(IEpicBattleMetaGameController, Notifiable, Se
 
     def getPlayerLevelInfo(self):
         return self.itemsCache.items.epicMetaGame.playerLevelInfo
+
+    def getPlayerRanksInfo(self):
+        if not self.__rankSettings:
+            famePtsByRank = self.__getSettings().metaLevel.get('famePtsByRank', {})
+            rankSettings = getRankSettings()
+            self.__rankSettings = {rankLvl:(extraFamePts, rankSettings.bonus.factor100ByRank[rankLvl]) for rankLvl, extraFamePts in famePtsByRank.iteritems()}
+        return self.__rankSettings
 
     def getSeasonData(self):
         return self.itemsCache.items.epicMetaGame.seasonData
@@ -441,7 +452,7 @@ class EpicBattleMetaGameController(IEpicBattleMetaGameController, Notifiable, Se
                 for eq in eqs.values():
                     if eq.name in lvls:
                         lvl = lvls.index(eq.name) + 1
-                        self.__skillData[key].levels[lvl] = EpicMetaGameSkillLevel(lvl, eq.id[1], i18n.makeString(eq.userString), i18n.makeString(eq.description), i18n.makeString(eq.shortDescription), i18n.makeString(eq.longDescription), eq.icon[0])
+                        self.__skillData[key].levels[lvl] = EpicMetaGameSkillLevel(lvl, eq.id[1], i18n.makeString(eq.userString), i18n.makeString(eq.description), i18n.makeString(eq.shortDescription), i18n.makeString(eq.longDescription), i18n.makeString(eq.shortFilterAlert), i18n.makeString(eq.longFilterAlert), eq.icon[0])
                         found += 1
                         if found == lvlAmount:
                             break

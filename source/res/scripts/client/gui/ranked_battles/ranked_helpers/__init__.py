@@ -4,7 +4,7 @@ import logging
 from gui.impl import backport
 from gui.impl.gen import R
 from gui.periodic_battles.models import CalendarStatusVO
-from gui.ranked_battles.constants import RANKED_QUEST_ID_PREFIX, PrimeTimeStatus
+from gui.ranked_battles.constants import RANKED_QUEST_ID_PREFIX, PrimeTimeStatus, SPRINTER_POSTFIX
 from gui.Scaleform.genConsts.RANKEDBATTLES_ALIASES import RANKEDBATTLES_ALIASES
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.shared.utils.functions import makeTooltip
@@ -74,8 +74,8 @@ def getRankedBattlesIntroPageUrl(lobbyContext=None):
 
 
 def getRankedDataFromTokenQuestID(questID):
-    seasonID, league = questID.split('_')[-2:]
-    return (int(seasonID), int(league))
+    seasonID, league, sprinterPostfix = questID.split('_')[-3:]
+    return (int(seasonID), int(league), sprinterPostfix == SPRINTER_POSTFIX)
 
 
 def getShieldSizeByRankSize(rankSize):

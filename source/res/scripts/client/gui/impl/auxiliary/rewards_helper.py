@@ -65,10 +65,10 @@ _BONUSES_ORDER = (Currency.CREDITS,
  'customizations',
  'goodies',
  'tokens',
- 'finalBlueprints',
- CREW_BOOK_BONUSES,
  'blueprints',
- 'crewSkins')
+ 'crewSkins',
+ CREW_BOOK_BONUSES,
+ 'finalBlueprints')
 BLUEPRINTS_CONGRAT_TYPES = (LootCongratsTypes.CONGRAT_TYPE_BLUEPRINT, LootCongratsTypes.CONGRAT_TYPE_BLUEPRINT_PART)
 _COMPENSATION_TOOLTIP_CONTENT_RES_IDS = (R.views.common.tooltip_window.loot_box_compensation_tooltip.LootBoxCompensationTooltipContent(), R.views.common.tooltip_window.loot_box_compensation_tooltip.CrewSkinsCompensationTooltipContent(), R.views.common.tooltip_window.loot_box_compensation_tooltip.LootBoxVehicleCompensationTooltipContent())
 _COMPENSATION_TOOLTIP_CONTENT_CLASSES = {LootBoxCompensationTooltipTypes.CREW_SKINS: CrewSkinsCompensationTooltipContent,
@@ -264,7 +264,7 @@ class BlueprintFinalFragmentModelPresenter(LootRewardAnimatedModelPresenter):
         _fillVehicleBlueprintCongratsModel(vehicle, model, self.__itemsCache, LootCongratsTypes.CONGRAT_TYPE_BLUEPRINT, showCongrats)
 
     @classmethod
-    def validate(cls, reward):
+    def validate(cls, reward, rewardType):
         vehicle = _getVehicleFromReward(reward)
         return False if not vehicle else vehicle is not None and vehicle.level >= _MIN_VEHICLE_LVL_BLUEPRINT_AWARD
 
@@ -284,11 +284,13 @@ class CrewBookModelPresenter(LootRewardDefModelPresenter):
         _fillCrewBookCongratsModel(model, LootCongratsTypes.INIT_CONGRAT_TYPE_CREW_BOOKS, showCongrats)
 
     @classmethod
-    def validate(cls, reward):
-        specialArgs = reward.get('specialArgs', None)
-        if not specialArgs or not isinstance(specialArgs, (types.ListType, types.TupleType)):
-            return False
+    def validate(cls, reward, rewardType):
+        if rewardType == LootCongratsTypes.INIT_CONGRAT_TYPE_CREW_BOOKS:
+            return True
         else:
+            specialArgs = reward.get('specialArgs', None)
+            if not specialArgs or not isinstance(specialArgs, (types.ListType, types.TupleType)):
+                return False
             compactDescr = specialArgs[0]
             item = cls.__itemsCache.items.getItemByCD(compactDescr)
             return not item.isCommon()
@@ -330,7 +332,7 @@ class BlueprintFragmentRewardPresenter(LootRewardDefModelPresenter):
         _fillVehicleBlueprintCongratsModel(vehicle, model, self.__itemsCache, LootCongratsTypes.CONGRAT_TYPE_BLUEPRINT_PART, showCongrats)
 
     @classmethod
-    def validate(cls, reward):
+    def validate(cls, reward, rewardType):
         vehicle = _getVehicleFromReward(reward)
         return False if not vehicle else vehicle is not None and vehicle.level >= _MIN_VEHICLE_LVL_BLUEPRINT_AWARD
 
@@ -482,15 +484,16 @@ def getProgressiveRewardVO(currentStep, probability, maxSteps, descText='', isEn
     return result
 
 
-def getCongratsIndex(bonuses):
+def getLastCongratsIndex(bonuses, rewardType):
+    lastIndex = -1
     for index, reward in enumerate(bonuses):
         bonusName = reward.get('bonusName', '')
         if bonusName in _DEF_CONGRATS_VALIDATORS:
-            congratsVlidator = _DEF_CONGRATS_VALIDATORS.get(bonusName, None)
-            if congratsVlidator is None or congratsVlidator(reward):
-                return index
+            congratsValidator = _DEF_CONGRATS_VALIDATORS.get(bonusName, None)
+            if congratsValidator is None or congratsValidator(reward, rewardType):
+                lastIndex = index
 
-    return -1
+    return lastIndex
 
 
 def _getProgressiveSteps(currentStep, probability, maxSteps, hasCompleted=False):

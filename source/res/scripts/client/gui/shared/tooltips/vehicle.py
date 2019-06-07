@@ -549,8 +549,9 @@ class TelecomBlockConstructor(VehicleTooltipBlockConstructor):
         if self.vehicle.isTelecom:
             serverSettings = self.lobbyContext.getServerSettings()
             provider = BigWorld.player().inventory.getProviderForVehInvId(self.vehicle.invID, serverSettings)
-            telecomText = _ms(TOOLTIPS.VEHICLE_DEAL_TELECOM_MAIN, tariff=_ms(MENU.internetProviderTariff(provider)), provider=_ms(MENU.internetProviderName(provider)))
-            return [formatters.packTextBlockData(text=text_styles.main(telecomText))]
+            providerLocRes = R.strings.menu.internet_provider.dyn(provider)
+            telecomTextRes = R.strings.tooltips.vehicle.deal.telecom.main.dyn(provider, R.strings.tooltips.vehicle.deal.telecom.main.default)
+            return [formatters.packTextBlockData(text=text_styles.main(backport.text(telecomTextRes(), tariff=backport.text(providerLocRes.tariff()) if providerLocRes else '', provider=backport.text(providerLocRes.name()) if providerLocRes else '')))]
         return []
 
 
@@ -920,7 +921,11 @@ class StatusBlockConstructor(VehicleTooltipBlockConstructor):
             elif state == Vehicle.VEHICLE_STATE.DEAL_IS_OVER:
                 serverSettings = self.lobbyContext.getServerSettings()
                 provider = BigWorld.player().inventory.getProviderForVehInvId(vehicle.invID, serverSettings)
-                header, text = getComplexStatus('#tooltips:vehicleStatus/%s' % state, provider=_ms(MENU.internetProviderName(provider)))
+                providerLocRes = R.strings.menu.internet_provider.dyn(provider)
+                keyString = '#tooltips:vehicleStatus/{}'.format(state)
+                if provider != '':
+                    keyString = keyString + '/{}'.format(provider)
+                header, text = getComplexStatus(keyString, provider=backport.text(providerLocRes.name()) if providerLocRes else '')
             else:
                 header, text = getComplexStatus('#tooltips:vehicleStatus/%s' % state)
                 if header is None and text is None:

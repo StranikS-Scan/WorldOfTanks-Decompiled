@@ -38,13 +38,17 @@ class DestructibleEntitiesCache(object):
 class DestructibleEntityType(object):
     maxNumStateComponents = property(lambda self: max((len(state.components) for state in self.states.values())))
 
-    def __init__(self, id, displayName, health, destroyedNotificationRadius, materials):
+    def __init__(self, id, displayName, health, destroyedNotificationRadius, materials, observationPoints=(), observedPoints=(), directVisionRadius=None, normalRadioDistance=None):
         self.id = id
         self.displayName = displayName
         self.health = health
         self.destroyedNotificationRadius = destroyedNotificationRadius
         self.materials = materials
         self.states = OrderedDict()
+        self.observationPoints = observationPoints
+        self.observedPoints = observedPoints
+        self.directVisionRadius = directVisionRadius
+        self.normalRadioDistance = normalRadioDistance
 
     def addState(self, name, state):
         self.states[name] = state
@@ -109,11 +113,23 @@ def _readType(xmlCtx, section):
     health = section.readFloat('health', 100)
     destroyedNotificationRadius = section.readFloat('destroyedNotificationRadius', 0)
     materials = _readMaterials(*_xml.getSubSectionWithContext(xmlCtx, section, 'materials'))
-    destructibleEntityType = DestructibleEntityType(id, displayName, health, destroyedNotificationRadius, materials)
+    observationPoints = _readPointList(*_xml.getSubSectionWithContext(xmlCtx, section, 'observationPoints'))
+    observedPoints = _readPointList(*_xml.getSubSectionWithContext(xmlCtx, section, 'observedPoints'))
+    directVisionRadius = section.readFloat('directVisionRadius', 0)
+    normalRadioDistance = section.readFloat('normalRadioDistance', 0)
+    destructibleEntityType = DestructibleEntityType(id, displayName, health, destroyedNotificationRadius, materials, observationPoints=observationPoints, observedPoints=observedPoints, directVisionRadius=directVisionRadius, normalRadioDistance=normalRadioDistance)
     for _, (stateXmlCtx, stateSection) in _xml.getChildrenWithContext(xmlCtx, section, 'states'):
         destructibleEntityType.addState(*_readState(stateXmlCtx, stateSection))
 
     return destructibleEntityType
+
+
+def _readPointList(xmlCtx, section):
+    result = []
+    for _, ((stateCompXmlCtx, _), point) in _xml.getItemsWithContext(xmlCtx, section, 'point'):
+        result.append(point.asVector3)
+
+    return result
 
 
 def _readState(xmlCtx, section):

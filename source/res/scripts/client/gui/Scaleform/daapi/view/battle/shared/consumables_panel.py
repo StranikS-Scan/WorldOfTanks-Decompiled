@@ -542,7 +542,7 @@ class ConsumablesPanel(ConsumablesPanelMeta, BattleGUIKeyHandler):
                         bwKey, _ = self.__genKey(idx)
                         self.__keys[bwKey] = partial(self.__handleEquipmentPressed, self.__cds[idx], deviceName)
             elif state == VEHICLE_VIEW_STATE.STUN:
-                if value > 0:
+                if value.duration > 0:
                     for intCD, _ in ctrl.iterEquipmentsByTag('medkit', _isEquipmentAvailableToUse):
                         self._showEquipmentGlow(self.__cds.index(intCD))
 

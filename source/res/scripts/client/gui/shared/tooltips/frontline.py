@@ -3,6 +3,7 @@
 import BigWorld
 from gui import makeHtmlString
 from gui.Scaleform.genConsts.BLOCKS_TOOLTIP_TYPES import BLOCKS_TOOLTIP_TYPES
+from gui.Scaleform.locale.EPIC_BATTLE import EPIC_BATTLE
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.impl import backport
 from gui.impl.gen import R
@@ -12,8 +13,8 @@ from gui.shared.tooltips import TOOLTIP_TYPE, formatters
 from gui.shared.tooltips.common import BlocksTooltipData
 from helpers import dependency
 from helpers.i18n import makeString as _ms
-from skeletons.gui.game_control import ITradeInController
-_TOOLTIP_WIDTH = 350
+from skeletons.gui.game_control import ITradeInController, IEpicBattleMetaGameController
+_PREVIEW_TOOLTIP_WIDTH = 350
 _GIFTS_WIDTH = 265
 
 class FrontlinePackPreviewTooltipData(BlocksTooltipData):
@@ -21,7 +22,7 @@ class FrontlinePackPreviewTooltipData(BlocksTooltipData):
 
     def __init__(self, context):
         super(FrontlinePackPreviewTooltipData, self).__init__(context, TOOLTIP_TYPE.FRONTLINE)
-        self._setWidth(_TOOLTIP_WIDTH)
+        self._setWidth(_PREVIEW_TOOLTIP_WIDTH)
         self._setContentMargin(top=40, left=0, bottom=0, right=30)
 
     def _packBlocks(self, discount, bonuses):
@@ -39,7 +40,7 @@ class FrontlinePackPreviewTooltipData(BlocksTooltipData):
     def _getGiftBlock(self):
         lineBlock = formatters.packImageBlockData(align=BLOCKS_TOOLTIP_TYPES.ALIGN_CENTER, img=backport.image(R.images.gui.maps.icons.tooltip.line()))
         textBlock = formatters.packTextWithBgBlockData(text=text_styles.concatStylesToSingleLine(icons.makeImageTag(source=backport.image(R.images.gui.maps.icons.library.icon_gift()), width=17, height=15, vSpace=0), text_styles.vehicleStatusCriticalTextSmall(TOOLTIPS.FRONTLINEPACKPREVIEW_GIFT)), bgColor=0, align=BLOCKS_TOOLTIP_TYPES.ALIGN_CENTER)
-        return formatters.packBuildUpBlockData(blocks=[lineBlock, textBlock], gap=-13, blockWidth=_TOOLTIP_WIDTH, layout=BLOCKS_TOOLTIP_TYPES.LAYOUT_VERTICAL, align=BLOCKS_TOOLTIP_TYPES.ALIGN_CENTER)
+        return formatters.packBuildUpBlockData(blocks=[lineBlock, textBlock], gap=-13, blockWidth=_PREVIEW_TOOLTIP_WIDTH, layout=BLOCKS_TOOLTIP_TYPES.LAYOUT_VERTICAL, align=BLOCKS_TOOLTIP_TYPES.ALIGN_CENTER)
 
     def _getDiscountSection(self, discount, bonuses):
         discount = discount or 0
@@ -57,4 +58,44 @@ class FrontlinePackPreviewTooltipData(BlocksTooltipData):
             hBlocks.append(formatters.packImageTextBlockData(desc=text_styles.main(item.text), img=item.img, blockWidth=130))
 
         vBlocks.append(formatters.packBuildUpBlockData(blocks=hBlocks, blockWidth=_GIFTS_WIDTH, gap=5, layout=BLOCKS_TOOLTIP_TYPES.LAYOUT_HORIZONTAL, align=BLOCKS_TOOLTIP_TYPES.ALIGN_LEFT))
-        return formatters.packBuildUpBlockData(blocks=vBlocks, blockWidth=_TOOLTIP_WIDTH, padding=formatters.packPadding(top=-25, left=42), layout=BLOCKS_TOOLTIP_TYPES.LAYOUT_VERTICAL, align=BLOCKS_TOOLTIP_TYPES.ALIGN_CENTER)
+        return formatters.packBuildUpBlockData(blocks=vBlocks, blockWidth=_PREVIEW_TOOLTIP_WIDTH, padding=formatters.packPadding(top=-25, left=42), layout=BLOCKS_TOOLTIP_TYPES.LAYOUT_VERTICAL, align=BLOCKS_TOOLTIP_TYPES.ALIGN_CENTER)
+
+
+_RANK_TOOLTIP_WIDTH = 330
+_RANK_ICONS = [R.images.gui.maps.icons.library.epicRank.big_rank_recruit(),
+ R.images.gui.maps.icons.library.epicRank.big_rank_private(),
+ R.images.gui.maps.icons.library.epicRank.big_rank_sergeant(),
+ R.images.gui.maps.icons.library.epicRank.big_rank_captain(),
+ R.images.gui.maps.icons.library.epicRank.big_rank_major(),
+ R.images.gui.maps.icons.library.epicRank.big_rank_general()]
+
+class FrontlineRankTooltipData(BlocksTooltipData):
+    __rank = 0
+    __frontLine = dependency.descriptor(IEpicBattleMetaGameController)
+
+    def __init__(self, context):
+        super(FrontlineRankTooltipData, self).__init__(context, TOOLTIP_TYPE.FRONTLINE)
+        self._setWidth(_RANK_TOOLTIP_WIDTH)
+        self._setContentMargin(top=20, left=18, bottom=20, right=12)
+
+    def _packBlocks(self, rank):
+        items = super(FrontlineRankTooltipData, self)._packBlocks()
+        self.__rank = rank
+        items.append(formatters.packBuildUpBlockData(blocks=[self._getHeader(), self._getIcon(), self._getBottom()], layout=BLOCKS_TOOLTIP_TYPES.LAYOUT_VERTICAL))
+        return items
+
+    def _getIcon(self):
+        return formatters.packImageBlockData(img=backport.image(_RANK_ICONS[self.__rank]), align=BLOCKS_TOOLTIP_TYPES.ALIGN_CENTER)
+
+    def _getHeader(self):
+        return formatters.packTextBlockData(text=_ms(text_styles.middleTitle(TOOLTIPS.FRONTLINERANK_HEADER), rank=_ms(EPIC_BATTLE.getRankLabel(self.__rank))))
+
+    def _getBottom(self):
+        if self.__rank > 0:
+            rankSettings = self.__frontLine.getPlayerRanksInfo()
+            exp, bonus = rankSettings.get(self.__rank, (0, 0))
+            blocks = [formatters.packTextBlockData(text=_ms(text_styles.main(TOOLTIPS.FRONTLINERANK_EXP), exp=text_styles.gold(exp))), formatters.packTextBlockData(text=_ms(text_styles.main(TOOLTIPS.FRONTLINERANK_EXPBONUS), bonus=text_styles.gold('+%d%%' % bonus)))]
+            bottomBlocks = formatters.packBuildUpBlockData(blocks=blocks, layout=BLOCKS_TOOLTIP_TYPES.LAYOUT_VERTICAL)
+        else:
+            bottomBlocks = formatters.packTextBlockData(text=_ms(text_styles.main(TOOLTIPS.FRONTLINERANK_FIRSTRANKDESCR)))
+        return bottomBlocks

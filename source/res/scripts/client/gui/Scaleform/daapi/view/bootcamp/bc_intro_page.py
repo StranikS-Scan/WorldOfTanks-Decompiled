@@ -96,18 +96,22 @@ class BCIntroPage(BCIntroVideoPageMeta):
         super(BCIntroPage, self)._populate()
         Waiting.hide('login')
         self.as_showIntroPageS(False)
-        self._isWindowAccessible = Windowing.isWindowAccessible()
+        self._isWindowAccessible = Windowing.isWindowAccessible() if self._canWindowBePaused() else True
         if self._movieFile:
             if self._isWindowAccessible:
                 self._start()
             else:
                 self._delayedVideoStart = True
-            Windowing.addWindowAccessibilitynHandler(self._onWindowAccessibilityChanged)
+            if self._canWindowBePaused():
+                Windowing.addWindowAccessibilitynHandler(self._onWindowAccessibilityChanged)
         else:
             self._start()
         if self._shouldHighlight(INTRO_HIGHLIGHT_TYPE.ARROWS):
             self._setHighlighting(INTRO_HIGHLIGHT_TYPE.ARROWS, True)
         g_playerEvents.onDisconnected += self._onDisconnected
+
+    def _canWindowBePaused(self):
+        return not BigWorld.checkUnattended()
 
     def _dispose(self):
         g_playerEvents.onDisconnected -= self._onDisconnected
@@ -116,7 +120,7 @@ class BCIntroPage(BCIntroVideoPageMeta):
                 self._setHighlighting(highlightType, False)
 
         self.appLoader.detachCursor(APP_NAME_SPACE.SF_BATTLE)
-        if self._movieFile:
+        if self._movieFile and self._canWindowBePaused():
             Windowing.removeWindowAccessibilityHandler(self._onWindowAccessibilityChanged)
         if self._movieFile and self._backgroundMusicStopEvent:
             WWISE.WW_eventGlobal(self._backgroundMusicStopEvent)

@@ -53,12 +53,14 @@ class _I18nConvertedFlags(object):
     DESCRIPTION = 4
     SHORT_DESCRIPTION_SPECIAL = 8
     LONG_DESCRIPTION_SPECIAL = 16
+    SHORT_FILTER_ALERT_SPECIAL = 18
+    LONG_FILTER_ALERT_SPECIAL = 20
 
 
 class I18nComponent(object):
-    __slots__ = ('__userString', '__shortString', '__description', '__converted', '__shortDescriptionSpecial', '__longDescriptionSpecial')
+    __slots__ = ('__userString', '__shortString', '__description', '__converted', '__shortDescriptionSpecial', '__longDescriptionSpecial', '__shortFilterAlertSpecial', '__longFilterAlertSpecial')
 
-    def __init__(self, userStringKey, descriptionKey, shortStringKey='', shortDescriptionSpecialKey='', longDescriptionSpecialKey=''):
+    def __init__(self, userStringKey, descriptionKey, shortStringKey='', shortDescriptionSpecialKey='', longDescriptionSpecialKey='', shortFilterAlertKey='', longFilterAlertKey=''):
         super(I18nComponent, self).__init__()
         self.__userString = userStringKey
         if shortStringKey:
@@ -75,6 +77,14 @@ class I18nComponent(object):
             self.__longDescriptionSpecial = longDescriptionSpecialKey
         else:
             self.__longDescriptionSpecial = component_constants.EMPTY_STRING
+        if shortFilterAlertKey:
+            self.__longFilterAlertSpecial = shortFilterAlertKey
+        else:
+            self.__shortFilterAlertSpecial = component_constants.EMPTY_STRING
+        if longFilterAlertKey:
+            self.__longFilterAlertSpecial = longFilterAlertKey
+        else:
+            self.__longFilterAlertSpecial = component_constants.EMPTY_STRING
 
     @property
     def userString(self):
@@ -110,6 +120,20 @@ class I18nComponent(object):
             self.__longDescriptionSpecial = i18n.makeString(self.__longDescriptionSpecial)
             self.__converted |= _I18nConvertedFlags.LONG_DESCRIPTION_SPECIAL
         return self.__longDescriptionSpecial
+
+    @property
+    def longFilterAlertSpecial(self):
+        if self.__converted & _I18nConvertedFlags.LONG_FILTER_ALERT_SPECIAL == 0:
+            self.__longFilterAlertSpecial = i18n.makeString(self.__longFilterAlertSpecial)
+            self.__converted |= _I18nConvertedFlags.LONG_FILTER_ALERT_SPECIAL
+        return self.__longFilterAlertSpecial
+
+    @property
+    def shortFilterAlertSpecial(self):
+        if self.__converted & _I18nConvertedFlags.SHORT_FILTER_ALERT_SPECIAL == 0:
+            self.__shortFilterAlertSpecial = i18n.makeString(self.__shortFilterAlertSpecial)
+            self.__converted |= _I18nConvertedFlags.SHORT_FILTER_ALERT_SPECIAL
+        return self.__shortFilterAlertSpecial
 
 
 class I18nExposedComponent(I18nComponent):

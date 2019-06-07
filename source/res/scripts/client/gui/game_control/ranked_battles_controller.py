@@ -277,8 +277,8 @@ class RankedBattlesController(IRankedBattlesController, Notifiable, SeasonProvid
             _, _, seasonID, _ = seasonInfo
             seasonQuests = self.__eventsCache.getHiddenQuests(lambda q: q.getType() == EVENT_TYPE.TOKEN_QUEST and ranked_helpers.isRankedQuestID(q.getID()))
             for qID in sorted(seasonQuests):
-                season, league = ranked_helpers.getRankedDataFromTokenQuestID(qID)
-                if season == seasonID:
+                season, league, isSprinter = ranked_helpers.getRankedDataFromTokenQuestID(qID)
+                if season == seasonID and not isSprinter:
                     quest = seasonQuests[qID]
                     result.append({'league': league,
                      'awards': quest.getBonuses(bonusName=bonusName)})

@@ -31,3 +31,13 @@ class APP_CONTAINERS_NAMES(object):
      CURSOR,
      WAITING,
      MARKER]
+    FOCUS_ORDER = [WAITING,
+     SERVICE_LAYOUT,
+     OVERLAY,
+     DIALOGS,
+     BROWSER,
+     WINDOWS,
+     TOP_SUB_VIEW,
+     SUBVIEW,
+     VIEWS,
+     MARKER]

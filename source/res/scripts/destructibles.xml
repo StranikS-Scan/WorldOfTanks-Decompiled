@@ -1185,7 +1185,7 @@
     <entry>
       <filename>	vegetation/Broadleaves/Poplar_Dry/Poplar_Dry_13m.srt	</filename>
       <health>	60	</health>
-      <density>	0.5	</density>
+      <density>	0.25	</density>
       <physicParams>	800 10 0.26 20000 4000 20 0.15	</physicParams>
       <lifetimeEffect>	none	</lifetimeEffect>
       <lifetimeEffectChance>	0.0	</lifetimeEffectChance>
@@ -1195,7 +1195,7 @@
     <entry>
       <filename>	vegetation/Broadleaves/Poplar_Dry/Poplar_Dry_21m.srt	</filename>
       <health>	60	</health>
-      <density>	0.5	</density>
+      <density>	0.25	</density>
       <physicParams>	800 10 0.26 20000 4000 20 0.15	</physicParams>
       <lifetimeEffect>	none	</lifetimeEffect>
       <lifetimeEffectChance>	0.0	</lifetimeEffectChance>
@@ -4099,6 +4099,26 @@
       <touchdownEffect>	hd_env_101_RoadPoles_01_touchdown	</touchdownEffect>
       <touchdownBreakEffect>	none	</touchdownBreakEffect>
       <effectScale>	1.000000	</effectScale>
+    </entry>
+    <entry>
+      <filename>	content/Environment/hd_env_UNI_073_BurntTree/normal/lod0/hd_env_UNI_073_BurntTree_02.model	</filename>
+      <health>	20	</health>
+      <physicParams>	200 3.2 0.03 150000 10000 0 0.05	</physicParams>
+      <lifetimeEffect>	none	</lifetimeEffect>
+      <fractureEffect>	hd_env_UNI_073_BurntTree	</fractureEffect>
+      <touchdownEffect>	hd_env_UNI_073_BurntTree_01_touchdown	</touchdownEffect>
+      <touchdownBreakEffect>	hd_env_101_RoadPoles_01_fall	</touchdownBreakEffect>
+      <effectScale>	1	</effectScale>
+    </entry>
+    <entry>
+      <filename>	content/Environment/hd_env_UNI_073_BurntTree/normal/lod0/hd_env_UNI_073_BurntTreeStump_02.model	</filename>
+      <health>	20	</health>
+      <physicParams>	200 3.2 0.03 150000 10000 0 0.05	</physicParams>
+      <lifetimeEffect>	none	</lifetimeEffect>
+      <fractureEffect>	hd_env_UNI_073_BurntTree	</fractureEffect>
+      <touchdownEffect>	hd_env_UNI_073_BurntTreeStump_01_touchdown	</touchdownEffect>
+      <touchdownBreakEffect>	hd_env_101_RoadPoles_01_fall	</touchdownBreakEffect>
+      <effectScale>	1	</effectScale>
     </entry>
   </fallingAtoms>
   <fragiles>

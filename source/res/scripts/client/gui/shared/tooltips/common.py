@@ -723,7 +723,8 @@ class ActionSlotTooltipData(ToolTipBaseData):
         formatedOldPrice, formatedNewPrice = formatActionPrices(oldPrice, newPrice)
         template = 'html_templates:lobby/tooltips/'
         headerText = i18n.makeString(TOOLTIPS.TANKS_CAROUSEL_BUY_SLOT_HEADER)
-        bodyText = i18n.makeString(''.join((TOOLTIPS.TANKS_CAROUSEL_BUY_SLOT_BODY, '\n\n')))
+        bodyText = i18n.makeString(TOOLTIPS.TANKS_CAROUSEL_BUY_SLOT_BODY)
+        bodyText = '{}\n\n'.format(bodyText)
         sep = icons.makeImageTag(RES_ICONS.MAPS_ICONS_TOOLTIP_TOOL_TIP_SEPARATOR, 283, 1, 15, 0)
         if actionUserName is not None:
             fa = i18n.makeString(TOOLTIPS.ACTIONPRICE_FORACTION, actionName=text_styles.stats(actionUserName))
@@ -767,9 +768,11 @@ class FrontlineDiscountTooltipData(BaseDiscountTooltipData):
         headerText = i18n.makeString(backport.text(R.strings.tooltips.actionPrice.header()))
         if onlyFrontlineActive:
             bodyTemplate = backport.text(R.strings.tooltips.actionPrice.body.frontline())
+            discount = frontlineDiscount
         else:
             bodyTemplate = backport.text(R.strings.tooltips.actionPrice.body.frontline_with_sse())
-        bodyText = i18n.makeString(bodyTemplate, discount=self._formatPrice(frontlineDiscount, currencyType), oldPrice=self._formatPrice(fullCost, currencyType), newPrice=self._formatPrice(cost, currencyType))
+            discount = fullCost - cost
+        bodyText = i18n.makeString(bodyTemplate, discount=self._formatPrice(discount, currencyType), oldPrice=self._formatPrice(fullCost, currencyType), newPrice=self._formatPrice(cost, currencyType))
         return {'header': headerText,
          'body': bodyText}
 

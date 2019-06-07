@@ -4,7 +4,7 @@ import logging
 from frameworks.wulf import ViewFlags
 from frameworks.wulf import WindowFlags
 from gui.ClientUpdateManager import g_clientUpdateManager
-from gui.impl.auxiliary.rewards_helper import getRewardTooltipContent, getRewardRendererModelPresenter, BLUEPRINTS_CONGRAT_TYPES, fillStepsModel, getCongratsIndex
+from gui.impl.auxiliary.rewards_helper import getRewardTooltipContent, getRewardRendererModelPresenter, BLUEPRINTS_CONGRAT_TYPES, fillStepsModel, getLastCongratsIndex
 from gui.impl.backport.backport_tooltip import TooltipData
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.progressive_reward.progressive_reward_award_model import ProgressiveRewardAwardModel
@@ -108,7 +108,7 @@ class ProgressiveRewardAwardView(ViewImpl):
         with self.getViewModel().transaction() as tx:
             rewardsList = tx.getRewards()
             rewardsList.clear()
-            lastCongratsIndex = getCongratsIndex(bonuses)
+            lastCongratsIndex = getLastCongratsIndex(bonuses, self.__specialRewardType)
             for index, reward in enumerate(bonuses):
                 formatter = getRewardRendererModelPresenter(reward)
                 showCongrats = index is lastCongratsIndex

@@ -438,7 +438,7 @@ class Quest(ServerEventAbstract):
     def _bonusDecorator(self, bonus):
         if self.getType() == constants.EVENT_TYPE.TOKEN_QUEST and bonus.getName() == 'oneof':
             if ranked_helpers.isRankedQuestID(self.getID()):
-                _, league = ranked_helpers.getRankedDataFromTokenQuestID(self.getID())
+                _, league, _ = ranked_helpers.getRankedDataFromTokenQuestID(self.getID())
                 bonus.setupIconHandler(BoxBonus.HANDLER_NAMES.RANKED, ('metal', league))
                 bonus.setTooltipType('rankedSeason')
         return bonus

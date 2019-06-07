@@ -399,6 +399,8 @@ class ARTEFACTS(object):
     PASSIVE_ENGINEERING_DESCR = '#artefacts:passive_engineering/descr'
     PASSIVE_ENGINEERING_SHORTDESCR = '#artefacts:passive_engineering/shortDescr'
     PASSIVE_ENGINEERING_LONGDESCR = '#artefacts:passive_engineering/longDescr'
+    PASSIVE_ENGINEERING_SHORTFILTERALERT = '#artefacts:passive_engineering/shortFilterAlert'
+    PASSIVE_ENGINEERING_LONGFILTERALERT = '#artefacts:passive_engineering/longFilterAlert'
     ALL_GAIN_ENUM = (TOOLBOXBATTLEBOOSTER_GAIN_SIMPLE,
      TOOLBOXBATTLEBOOSTER_GAIN_DELUXE,
      IMPROVEDVENTILATIONBATTLEBOOSTER_GAIN_SIMPLE,

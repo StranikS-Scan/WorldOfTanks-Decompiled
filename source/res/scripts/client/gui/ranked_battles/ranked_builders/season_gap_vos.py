@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/ranked_battles/ranked_builders/season_gap_vos.py
+from collections import namedtuple
 import logging
 import typing
 from gui.impl import backport
@@ -10,45 +11,47 @@ from gui.ranked_battles import ranked_formatters
 from gui.ranked_battles.constants import SeasonGapStates, ZERO_RANK_ID, ZERO_DIVISION_ID
 from gui.ranked_battles.ranked_helpers.league_provider import UNDEFINED_LEAGUE_ID
 from gui.Scaleform.genConsts.RANKEDBATTLES_ALIASES import RANKEDBATTLES_ALIASES
-if typing.TYPE_CHECKING:
-    from gui.ranked_battles.ranked_models import Division
 _logger = logging.getLogger(__name__)
+StateBlock = namedtuple('StateBlock', 'state, rankID, division, leagueID, isSprinter')
 
-def _buildWaitingVO(state, rankID, division, leagueID):
+def _buildWaitingVO(_):
     return _getDataVO(RANKEDBATTLES_ALIASES.SEASON_GAP_VIEW_LEAGUE_STATE, disabled=True, title=backport.text(R.strings.ranked_battles.rankedBattleMainView.seasonGap.waitingLeague.title()), descr=backport.text(R.strings.ranked_battles.rankedBattleMainView.seasonGap.waitingLeague.descr()))
 
 
-def _buildLeaguesVO(state, rankID, division, leagueID):
-    return _getDataVO(RANKEDBATTLES_ALIASES.SEASON_GAP_VIEW_LEAGUE_STATE, leagueID=leagueID, title=backport.text(R.strings.ranked_battles.rankedBattleMainView.seasonGap.dyn('league{}'.format(leagueID))()), descr=backport.text(R.strings.ranked_battles.rankedBattleMainView.seasonGap.league.descr()), btnLabel=backport.text(R.strings.ranked_battles.rankedBattleMainView.seasonGap.league.ratingBtn()), btnVisible=True)
+def _buildLeaguesVO(stateBlock):
+    sprinterLabel = ''
+    if stateBlock.isSprinter:
+        sprinterLabel = text_styles.concatStylesToSingleLine(icons.makeImageTag(backport.image(R.images.gui.maps.icons.rankedBattles.sprinter_icon()), 32, 17, -3), text_styles.highlightText(backport.text(R.strings.ranked_battles.rankedBattleMainView.seasonGap.sprinter())))
+    return _getDataVO(RANKEDBATTLES_ALIASES.SEASON_GAP_VIEW_LEAGUE_STATE, leagueID=stateBlock.leagueID, title=backport.text(R.strings.ranked_battles.rankedBattleMainView.seasonGap.dyn('league{}'.format(stateBlock.leagueID))()), descr=backport.text(R.strings.ranked_battles.rankedBattleMainView.seasonGap.league.descr()), btnLabel=backport.text(R.strings.ranked_battles.rankedBattleMainView.seasonGap.league.ratingBtn()), btnVisible=True, sprinterLabel=sprinterLabel)
 
 
-def _buildDivisionVO(state, rankID, division, leagueID):
+def _buildDivisionVO(stateBlock):
     description = backport.text(R.strings.ranked_battles.rankedBattleMainView.seasonGap.division.descr())
     buttonLabel = ''
     buttonVisible = False
-    if state != SeasonGapStates.WAITING_IN_DIVISIONS:
+    if stateBlock.state != SeasonGapStates.WAITING_IN_DIVISIONS:
         buttonLabel = backport.text(R.strings.ranked_battles.rankedBattleMainView.seasonGap.division.ratingBtn())
         buttonVisible = True
-    if state == SeasonGapStates.BANNED_IN_LEAGUES:
+    if stateBlock.state == SeasonGapStates.BANNED_IN_LEAGUES:
         description = backport.text(R.strings.ranked_battles.rankedBattleMainView.seasonGap.bannedLeague.descr())
         description = _addAlertIcon(description)
-    elif state == SeasonGapStates.BANNED_IN_DIVISIONS:
+    elif stateBlock.state == SeasonGapStates.BANNED_IN_DIVISIONS:
         description = backport.text(R.strings.ranked_battles.rankedBattleMainView.seasonGap.bannedDivision.descr())
         description = _addAlertIcon(description)
-    return _getDataVO(RANKEDBATTLES_ALIASES.SEASON_GAP_VIEW_DIVISION_STATE, divisionID=division.getID(), rankID=division.getRankIdInDivision(rankID), title=backport.text(R.strings.ranked_battles.rankedBattleMainView.seasonGap.division.title(), rank=division.getRankUserName(rankID), division=division.getUserName()), descr=description, btnLabel=buttonLabel, btnVisible=buttonVisible)
+    return _getDataVO(RANKEDBATTLES_ALIASES.SEASON_GAP_VIEW_DIVISION_STATE, divisionID=stateBlock.division.getID(), rankID=stateBlock.division.getRankUserId(stateBlock.rankID), title=backport.text(R.strings.ranked_battles.rankedBattleMainView.seasonGap.division.title(), rank=stateBlock.division.getRankUserName(stateBlock.rankID), division=stateBlock.division.getUserName()), descr=description, btnLabel=buttonLabel, btnVisible=buttonVisible)
 
 
-def _buildNotInSeasonVO(state, rankID, division, leagueID):
+def _buildNotInSeasonVO(stateBlock):
     description = backport.text(R.strings.ranked_battles.rankedBattleMainView.seasonGap.notInSeason.descr())
     buttonLabel = ''
     buttonVisible = False
-    if state != SeasonGapStates.WAITING_NOT_IN_SEASON:
+    if stateBlock.state != SeasonGapStates.WAITING_NOT_IN_SEASON:
         buttonLabel = backport.text(R.strings.ranked_battles.rankedBattleMainView.seasonGap.division.ratingBtn())
         buttonVisible = True
-    if state == SeasonGapStates.BANNED_NOT_IN_SEASON:
+    if stateBlock.state == SeasonGapStates.BANNED_NOT_IN_SEASON:
         description = backport.text(R.strings.ranked_battles.rankedBattleMainView.seasonGap.bannedNotInSeason.descr())
         description = _addAlertIcon(description)
-    return _getDataVO(RANKEDBATTLES_ALIASES.SEASON_GAP_VIEW_DIVISION_STATE, divisionID=division.getID(), disabled=True, title=backport.text(R.strings.ranked_battles.rankedBattleMainView.seasonGap.notInSeason.title()), descr=description, btnLabel=buttonLabel, btnVisible=buttonVisible)
+    return _getDataVO(RANKEDBATTLES_ALIASES.SEASON_GAP_VIEW_DIVISION_STATE, divisionID=stateBlock.division.getID(), disabled=True, title=backport.text(R.strings.ranked_battles.rankedBattleMainView.seasonGap.notInSeason.title()), descr=description, btnLabel=buttonLabel, btnVisible=buttonVisible)
 
 
 _DATA_VOS_BUILDERS = {SeasonGapStates.WAITING_IN_LEAGUES: _buildWaitingVO,
@@ -61,12 +64,12 @@ _DATA_VOS_BUILDERS = {SeasonGapStates.WAITING_IN_LEAGUES: _buildWaitingVO,
  SeasonGapStates.BANNED_IN_DIVISIONS: _buildDivisionVO,
  SeasonGapStates.BANNED_NOT_IN_SEASON: _buildNotInSeasonVO}
 
-def getDataVO(state, rankID, division, leagueID):
-    builder = _DATA_VOS_BUILDERS.get(state)
+def getDataVO(stateBlock):
+    builder = _DATA_VOS_BUILDERS.get(stateBlock.state)
     if builder is not None:
-        return builder(state, rankID, division, leagueID)
+        return builder(stateBlock)
     else:
-        _logger.error('Can not find builder for state = %s', state)
+        _logger.error('Can not find builder for state = %s', stateBlock.state)
         return _getDataVO(RANKEDBATTLES_ALIASES.SEASON_GAP_VIEW_DIVISION_STATE)
 
 
@@ -88,7 +91,7 @@ def getRatingVO(rating, isMastered):
     return resultVO
 
 
-def _getDataVO(state, leagueID=UNDEFINED_LEAGUE_ID, divisionID=ZERO_DIVISION_ID, rankID=ZERO_RANK_ID, disabled=False, title='', descr='', btnLabel='', btnVisible=False):
+def _getDataVO(state, leagueID=UNDEFINED_LEAGUE_ID, divisionID=ZERO_DIVISION_ID, rankID=ZERO_RANK_ID, disabled=False, title='', descr='', btnLabel='', btnVisible=False, sprinterLabel=''):
     if rankID == ZERO_RANK_ID:
         rankID += 1
     return {'state': state,
@@ -99,7 +102,8 @@ def _getDataVO(state, leagueID=UNDEFINED_LEAGUE_ID, divisionID=ZERO_DIVISION_ID,
      'title': title,
      'descr': descr,
      'btnLabel': btnLabel,
-     'btnVisible': btnVisible}
+     'btnVisible': btnVisible,
+     'sprinterLabel': sprinterLabel}
 
 
 def _addAlertIcon(description):

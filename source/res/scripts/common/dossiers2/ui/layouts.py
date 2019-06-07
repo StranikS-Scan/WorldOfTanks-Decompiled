@@ -140,7 +140,9 @@ NEAREST_ACHIEVEMENTS = TANK_EXPERT_GROUP + MECH_ENGINEER_GROUP + [_total('mouseb
  _total('readyForBattleAllianceUSSR'),
  _total('readyForBattleAllianceGermany'),
  _total('readyForBattleAllianceUSA'),
- _total('readyForBattleAllianceFrance')]
+ _total('readyForBattleAllianceFrance'),
+ _total('rankedDivisionFighter'),
+ _total('rankedStayingPower')]
 
 def init():
     global _EXCLUDED_ACHIEVES

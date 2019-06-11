@@ -2484,27 +2484,32 @@ class GoodyDisabledFormatter(GoodyFormatter):
         pass
 
 
-class TelecomStatusFormatter(ServiceChannelFormatter):
-    __itemsCache = dependency.descriptor(IItemsCache)
+class TelecomStatusFormatter(WaitItemsSyncFormatter):
     __lobbyContext = dependency.descriptor(ILobbyContext)
 
     @classmethod
     def __getVehicleNames(cls, vehTypeCompDescrs):
-        itemGetter = cls.__itemsCache.items.getItemByCD
+        itemGetter = cls._itemsCache.items.getItemByCD
         return ', '.join((itemGetter(vehicleCD).userName for vehicleCD in vehTypeCompDescrs))
 
-    def format(self, message, *args):
+    @async
+    @process
+    def format(self, message, callback):
+        isSynced = yield self._waitForSyncItems()
         formatted, settings = (None, None)
-        try:
-            template = 'telecomVehicleStatus'
-            ctx = self.__getMessageContext(message.data)
-            settings = self._getGuiSettings(message, template)
-            formatted = g_settings.msgTemplates.format(template, ctx, data={'timestamp': time.time()})
-        except Exception:
-            _logger.error("Can't format telecom status message %s", message)
-            _logger.exception('TelecomStatusFormatter catches exception')
+        if isSynced:
+            try:
+                template = 'telecomVehicleStatus'
+                ctx = self.__getMessageContext(message.data)
+                settings = self._getGuiSettings(message, template)
+                formatted = g_settings.msgTemplates.format(template, ctx, data={'timestamp': time.time()})
+            except Exception:
+                _logger.error("Can't format telecom status message %s", message)
+                _logger.exception('TelecomStatusFormatter catches exception')
 
-        return [_MessageData(formatted, settings)]
+        messageData = _MessageData(formatted, settings)
+        callback([messageData])
+        return None
 
     @staticmethod
     def __addProviderToRes(res, provider):
@@ -2515,9 +2520,8 @@ class TelecomStatusFormatter(ServiceChannelFormatter):
         vehTypeDescrs = data['vehTypeCompDescrs']
         provider = ''
         if vehTypeDescrs:
-            serverSettings = self.__lobbyContext.getServerSettings()
-            vehInvID = self.__itemsCache.items.getItemByCD(list(vehTypeDescrs)[0]).invID
-            provider = BigWorld.player().inventory.getProviderForVehInvId(vehInvID, serverSettings)
+            telecomConfig = self.__lobbyContext.getServerSettings().telecomConfig
+            provider = telecomConfig.getInternetProvider(list(vehTypeDescrs)[0])
         providerLocName = ''
         if provider:
             providerLocRes = R.strings.menu.internet_provider.dyn(provider)
@@ -2576,9 +2580,8 @@ class TelecomReceivedInvoiceFormatter(InvoiceReceivedFormatter):
             vehicles = data['data']['vehicles']
             for vehCompDescr in vehicles.iterkeys():
                 if cls._isValidCD(vehCompDescr):
-                    serverSettings = cls._lobbyContext.getServerSettings()
-                    vehInvID = cls._itemsCache.items.getItemByCD(abs(vehCompDescr)).invID
-                    return BigWorld.player().inventory.getProviderForVehInvId(vehInvID, serverSettings)
+                    telecomConfig = cls._lobbyContext.getServerSettings().telecomConfig
+                    return telecomConfig.getInternetProvider(abs(vehCompDescr))
 
         return provider
 

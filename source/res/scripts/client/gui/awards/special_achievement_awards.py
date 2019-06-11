@@ -221,7 +221,8 @@ class TelecomAward(AwardAbstract):
 
     def __getProvider(self):
         if not self.__provider and self.__vehicleDesrs:
-            self.__provider = BigWorld.player().inventory.getProviderForVehInvId(self.itemsCache.items.getItemByCD(self.__vehicleDesrs[0]).invID, self.lobbyContext.getServerSettings())
+            telecomConfig = self.lobbyContext.getServerSettings().telecomConfig
+            self.__provider = telecomConfig.getInternetProvider(self.__vehicleDesrs[0])
         return self.__provider
 
     def __getVehicleDetails(self, vehicleCD):

@@ -547,8 +547,8 @@ class TelecomBlockConstructor(VehicleTooltipBlockConstructor):
 
     def construct(self):
         if self.vehicle.isTelecom:
-            serverSettings = self.lobbyContext.getServerSettings()
-            provider = BigWorld.player().inventory.getProviderForVehInvId(self.vehicle.invID, serverSettings)
+            telecomConfig = self.lobbyContext.getServerSettings().telecomConfig
+            provider = telecomConfig.getInternetProvider(self.vehicle.intCD)
             providerLocRes = R.strings.menu.internet_provider.dyn(provider)
             telecomTextRes = R.strings.tooltips.vehicle.deal.telecom.main.dyn(provider, R.strings.tooltips.vehicle.deal.telecom.main.default)
             return [formatters.packTextBlockData(text=text_styles.main(backport.text(telecomTextRes(), tariff=backport.text(providerLocRes.tariff()) if providerLocRes else '', provider=backport.text(providerLocRes.name()) if providerLocRes else '')))]
@@ -919,8 +919,8 @@ class StatusBlockConstructor(VehicleTooltipBlockConstructor):
             if state == Vehicle.VEHICLE_STATE.ROTATION_GROUP_UNLOCKED:
                 header, text = getComplexStatus('#tooltips:vehicleStatus/%s' % state, groupNum=vehicle.rotationGroupNum, battlesLeft=getBattlesLeft(vehicle))
             elif state == Vehicle.VEHICLE_STATE.DEAL_IS_OVER:
-                serverSettings = self.lobbyContext.getServerSettings()
-                provider = BigWorld.player().inventory.getProviderForVehInvId(vehicle.invID, serverSettings)
+                telecomConfig = self.lobbyContext.getServerSettings().telecomConfig
+                provider = telecomConfig.getInternetProvider(vehicle.intCD)
                 providerLocRes = R.strings.menu.internet_provider.dyn(provider)
                 keyString = '#tooltips:vehicleStatus/{}'.format(state)
                 if provider != '':

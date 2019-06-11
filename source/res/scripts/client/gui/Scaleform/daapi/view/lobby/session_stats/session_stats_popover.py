@@ -6,6 +6,13 @@ from async import async, await
 from adisp import process
 from account_helpers.AccountSettings import AccountSettings, SESSION_STATS_SECTION, SESSION_STATS_PREV_BATTLE_COUNT, BATTLE_EFFICIENCY_SECTION_EXPANDED_FIELD
 from constants import ARENA_BONUS_TYPE
+from gui.game_control.links import URLMacros
+from gui.prb_control import prbDispatcherProperty
+from gui.impl import backport
+from gui.impl.dialogs import dialogs
+from gui.impl.dialogs.builders import ResSimpleDialogBuilder
+from gui.impl.gen import R
+from gui.impl.pub.dialog_window import DialogButtons
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.hof.hof_helpers import getHofAchievementsStatisticUrl, getHofVehiclesStatisticUrl, isHofEnabled
 from gui.Scaleform.daapi.view.lobby.session_stats.shared import toIntegral
@@ -15,11 +22,6 @@ from gui.Scaleform.framework.managers.containers import POP_UP_CRITERIA
 from gui.Scaleform.genConsts.SESSION_STATS_CONSTANTS import SESSION_STATS_CONSTANTS
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.shared.items_cache import CACHE_SYNC_REASON
-from gui.impl import backport
-from gui.impl.dialogs import dialogs
-from gui.impl.dialogs.builders import ResSimpleDialogBuilder
-from gui.impl.gen import R
-from gui.impl.pub.dialog_window import DialogButtons
 from gui.shared import g_eventBus, events, EVENT_BUS_SCOPE
 from gui.shared.formatters import text_styles
 from gui.shared.utils.functions import makeTooltip
@@ -28,7 +30,6 @@ from helpers import dependency, time_utils
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.lobby_context import ILobbyContext
-from gui.game_control.links import URLMacros
 _TabData = namedtuple('_TabData', ('alias', 'linkage', 'tooltip', 'label'))
 _TABS_DATA_ORDERED = [_TabData(SESSION_STATS_CONSTANTS.SESSION_BATTLE_STATS_VIEW_PY_ALIAS, SESSION_STATS_CONSTANTS.SESSION_BATTLE_STATS_VIEW_LINKAGE, backport.text(R.strings.session_stats.tooltip.tabBattle()), backport.text(R.strings.session_stats.label.tabBattle())), _TabData(SESSION_STATS_CONSTANTS.SESSION_VEHICLE_STATS_VIEW_PY_ALIAS, SESSION_STATS_CONSTANTS.SESSION_VEHICLE_STATS_VIEW_LINKAGE, backport.text(R.strings.session_stats.tooltip.tabVehicle()), backport.text(R.strings.session_stats.label.tabVehicle()))]
 _HOF_URL_BY_TAB_ALIAS = {SESSION_STATS_CONSTANTS.SESSION_BATTLE_STATS_VIEW_PY_ALIAS: getHofAchievementsStatisticUrl,
@@ -42,6 +43,10 @@ class SessionStatsPopover(SessionStatsPopoverMeta):
     def __init__(self, ctx=None):
         super(SessionStatsPopover, self).__init__(ctx)
         self._currentTabAlias = SESSION_STATS_CONSTANTS.SESSION_BATTLE_STATS_VIEW_PY_ALIAS
+
+    @prbDispatcherProperty
+    def prbDispatcher(self):
+        return None
 
     def onClickMoreBtn(self):
         self._showHof()
@@ -150,7 +155,8 @@ class SessionStatsPopover(SessionStatsPopoverMeta):
         stats = self._itemsCache.items.sessionStats.getAccountStats(ARENA_BONUS_TYPE.REGULAR)
         clearBtnEnabled = stats.battleCnt > 0 or stats.xp > 0 or stats.freeXP > 0
         label = backport.text(R.strings.session_stats.moreBtn.label())
-        if self._isHofAccessible:
+        isHofBtnUnlocked = not self.prbDispatcher.getFunctionalState().isNavigationDisabled() and self._isHofAccessible
+        if isHofBtnUnlocked:
             moreBtnTooltip = makeTooltip(header=backport.text(R.strings.session_stats.tooltip.moreBtn.header()), body=backport.text(R.strings.session_stats.tooltip.moreBtn.available.body()))
         else:
             moreBtnTooltip = makeTooltip(header=backport.text(R.strings.session_stats.tooltip.moreBtn.header()), body=backport.text(R.strings.session_stats.tooltip.moreBtn.unavailable.body()))
@@ -161,6 +167,6 @@ class SessionStatsPopover(SessionStatsPopoverMeta):
             dropSkillsBtnTooltip = makeTooltip(header=backport.text(R.strings.session_stats.tooltip.dropSkillsButton.header()), body=backport.text(R.strings.session_stats.tooltip.dropSkillsButton.unavailable.body()))
         return [{'btnLabel': label,
           'btnTooltip': moreBtnTooltip,
-          'btnEnabled': self._isHofAccessible}, {'btnLabel': backport.text(R.strings.menu.tankmanPersonalCase.dropSkillsButtonLabel()),
+          'btnEnabled': isHofBtnUnlocked}, {'btnLabel': backport.text(R.strings.menu.tankmanPersonalCase.dropSkillsButtonLabel()),
           'btnTooltip': dropSkillsBtnTooltip,
           'btnEnabled': clearBtnEnabled}]

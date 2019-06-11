@@ -1,6 +1,6 @@
 <engine_config.xml>
   <personality>	game	</personality>
-  <preferences>	preferences_ct.xml	</preferences>
+  <preferences>	preferences.xml	</preferences>
   <enableBalanceCPU>	true	</enableBalanceCPU>
   <enableServerTimeSync>	true	</enableServerTimeSync>
   <lod>
@@ -139,7 +139,7 @@
     <PS_PERFORMANCE_LOD_MULT>	1.2	</PS_PERFORMANCE_LOD_MULT>
   </ParticleSystem>
   <debug>
-    <fullDump>	false	</fullDump>
+    <fullDump>	true	</fullDump>
     <clientUrl></clientUrl>
     <botsUrl>	http://cat-st1.wargaming.net	</botsUrl>
     <dxdiag>	true	</dxdiag>

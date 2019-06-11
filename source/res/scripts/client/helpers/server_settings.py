@@ -350,15 +350,17 @@ class _SquadPremiumBonus(namedtuple('_SquadPremiumBonus', ('isEnabled', 'ownCred
 
 
 class _TelecomConfig(object):
-    __slots__ = ('__config',)
+    __slots__ = ('__vehCDToProvider',)
 
     def __init__(self, telecomConfig):
-        self.__config = dict(((bundleId, bundleData['operator']) for bundleId, bundleData in telecomConfig['bundles'].iteritems()))
+        self.__vehCDToProvider = {}
+        for _, bundleData in telecomConfig['bundles'].iteritems():
+            for vehCD in bundleData['vehicles']:
+                self.__vehCDToProvider[vehCD] = bundleData['operator']
 
-    def getInternetProvider(self, bundleId):
-        if bundleId in self.__config:
-            return self.__config[bundleId]
-        LOG_ERROR('Telecom config: no internet provider info for bundleId: {}.'.format(bundleId))
+    def getInternetProvider(self, vehCD):
+        provider = self.__vehCDToProvider.get(vehCD, '')
+        return provider
 
     @classmethod
     def defaults(cls):

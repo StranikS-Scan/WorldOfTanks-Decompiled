@@ -134,6 +134,9 @@ def __readBonus_vehicle(bonus, _name, section, eventType):
         __readBonus_customCompensation(extra, None, section['customCompensation'])
     if section.has_key('outfits'):
         __readBonus_outfits(extra, None, section['outfits'])
+    if section.has_key('ammo'):
+        ammo = section['ammo'].asString
+        extra['ammo'] = [ int(item) for item in ammo.split(' ') ]
     vehicleBonuses = bonus.setdefault('vehicles', {})
     vehKey = vehCompDescr if vehCompDescr else vehTypeCompDescr
     if vehKey in vehicleBonuses:

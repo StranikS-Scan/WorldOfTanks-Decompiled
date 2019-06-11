@@ -385,27 +385,6 @@ class Inventory(object):
             self.__account._doCmdIntArr(AccountCommands.CMD_TMAN_ADD_CREW_SKIN, skinList, proxy)
             return
 
-    def getProviderForVehInvId(self, vehInvId, serverSettings):
-        if not self.__cache:
-            _logger.warning('Local cache is empty, cannot get provider name.')
-            return ''
-        elif 'telecomOrders' not in self.__cache:
-            _logger.warning('telecomOrders key is missing.')
-            return ''
-        foundBundleId = None
-        telecomOrders = self.__cache['telecomOrders']
-        for bundle in telecomOrders.itervalues():
-            bundleId, vehInvIds = bundle
-            if vehInvId in vehInvIds:
-                foundBundleId = bundleId
-                break
-
-        if foundBundleId is None:
-            _logger.warning('Cannot find bundleId for vehicle with invId=%d.', vehInvId)
-            return ''
-        else:
-            return serverSettings.telecomConfig.getInternetProvider(foundBundleId)
-
     def __onGetItemsResponse(self, itemTypeIdx, callback, resultID):
         if resultID < 0:
             if callback is not None:

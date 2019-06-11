@@ -1140,6 +1140,7 @@ class QUESTS(object):
     TOKEN_DEFAULT_LEAFLET = '#quests:token/default/leaflet'
     TOKEN_DEFAULT_WHEEL = '#quests:token/default/wheel'
     TOKEN_DEFAULT_BOX = '#quests:token/default/box'
+    TOKEN_DEFAULT_TANKREWARDS = '#quests:token/default/tankrewards'
     BONUSNAME_CREDITS = '#quests:bonusName/credits'
     BONUSNAME_GOLD = '#quests:bonusName/gold'
     BONUSNAME_CRYSTAL = '#quests:bonusName/crystal'
@@ -1568,7 +1569,8 @@ class QUESTS(object):
      TOKEN_DEFAULT_FOLDER,
      TOKEN_DEFAULT_LEAFLET,
      TOKEN_DEFAULT_WHEEL,
-     TOKEN_DEFAULT_BOX)
+     TOKEN_DEFAULT_BOX,
+     TOKEN_DEFAULT_TANKREWARDS)
     BONUSNAME_ENUM = (BONUSNAME_BLUEPRINTS_VEHICLE,
      BONUSNAME_BLUEPRINTS_NATION,
      BONUSNAME_BLUEPRINTS_UNIVERSAL,

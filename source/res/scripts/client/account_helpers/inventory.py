@@ -419,17 +419,33 @@ class Inventory(object):
             return
 
     def __sellMultipleItems_onShopSynced(self, itemList, callback, resultID, shopRev):
+        chunkSize = 80
+        chunks = [ itemList[i:i + chunkSize] for i in xrange(0, len(itemList), chunkSize) ]
+        results = {}
         if resultID < 0:
             if callback is not None:
                 callback(resultID)
             return
         else:
             if callback is not None:
-                proxy = lambda requestID, resultID, errorStr, ext={}: callback(resultID)
+
+                def proxy(requestID, resultID, errorStr, ext=None):
+                    _logger.debug('sellMultipleItems callback(requestID=%d, resultID=%d, errorStr=%s', requestID, resultID, errorStr)
+                    results[requestID] = resultID
+                    if all((res is not None for res in results.itervalues())):
+                        if all((AccountCommands.isCodeValid(res) for res in results.itervalues())):
+                            callback(AccountCommands.RES_SUCCESS)
+                        else:
+                            callback(AccountCommands.RES_FAILURE)
+
             else:
                 proxy = None
-            intArr = array('i', [shopRev] + list(chain(*itemList)))
-            self.__account._doCmdIntArr(AccountCommands.CMD_SELL_MULTIPLE_ITEMS, intArr, proxy)
+            for chunk in chunks:
+                intArr = array('i', [shopRev] + list(chain(*chunk)))
+                requestID = self.__account._doCmdIntArr(AccountCommands.CMD_SELL_MULTIPLE_ITEMS, intArr, proxy)
+                results[requestID] = None
+                _logger.debug('sellMultipleItems requestID: %d', requestID)
+
             return
 
     def __sellVehicle_onShopSynced(self, vehInvID, flags, itemsFromVehicle, itemsFromInventory, customizationItems, callback, resultID, shopRev):

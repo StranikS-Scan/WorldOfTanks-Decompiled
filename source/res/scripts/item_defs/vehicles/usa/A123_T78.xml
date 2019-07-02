@@ -51,6 +51,13 @@
       <undamaged>	vehicles/american/A123_T78/normal/lod0/Hull.model	</undamaged>
       <destroyed>	vehicles/american/A123_T78/crash/lod0/Hull.model	</destroyed>
       <exploded>	vehicles/american/A123_T78/crash/lod0/Hull.model	</exploded>
+      <sets>
+        <T78_ID>
+          <undamaged>	vehicles/american/A123_T78/_skins/T78_ID/normal/lod0/Hull.model	</undamaged>
+          <destroyed>	vehicles/american/A123_T78/_skins/T78_ID/crash/lod0/Hull.model	</destroyed>
+          <exploded>	vehicles/american/A123_T78/_skins/T78_ID/crash/lod0/Hull.model	</exploded>
+        </T78_ID>
+      </sets>
     </models>
     <swinging>
       <lodDist>	FAR	</lodDist>
@@ -130,6 +137,13 @@
         <undamaged>	vehicles/american/A123_T78/normal/lod0/Chassis.model	</undamaged>
         <destroyed>	vehicles/american/A123_T78/crash/lod0/Chassis.model	</destroyed>
         <exploded>	vehicles/american/A123_T78/crash/lod0/Chassis.model	</exploded>
+        <sets>
+          <T78_ID>
+            <undamaged>	vehicles/american/A123_T78/_skins/T78_ID/normal/lod0/Chassis.model	</undamaged>
+            <destroyed>	vehicles/american/A123_T78/_skins/T78_ID/crash/lod0/Chassis.model	</destroyed>
+            <exploded>	vehicles/american/A123_T78/_skins/T78_ID/crash/lod0/Chassis.model	</exploded>
+          </T78_ID>
+        </sets>
       </models>
       <traces>
         <lodDist>	MEDIUM	</lodDist>
@@ -1039,6 +1053,13 @@
             <undamaged>	vehicles/american/A123_T78/normal/lod0/Gun_01.model	</undamaged>
             <destroyed>	vehicles/american/A123_T78/crash/lod0/Gun_01.model	</destroyed>
             <exploded>	vehicles/american/A123_T78/crash/lod0/Gun_01.model	</exploded>
+            <sets>
+              <T78_ID>
+                <undamaged>	vehicles/american/A123_T78/_skins/T78_ID/normal/lod0/Gun_01.model	</undamaged>
+                <destroyed>	vehicles/american/A123_T78/_skins/T78_ID/crash/lod0/Gun_01.model	</destroyed>
+                <exploded>	vehicles/american/A123_T78/_skins/T78_ID/crash/lod0/Gun_01.model	</exploded>
+              </T78_ID>
+            </sets>
           </models>
           <hitTester>
             <collisionModelServer>	vehicles/american/A123_T78/collision/Gun_01.model	</collisionModelServer>
@@ -1084,7 +1105,7 @@
               <applyTo>	4096	</applyTo>
             </slot>
           </customizationSlots>
-          <animateEmblemSlots>	false	</animateEmblemSlots>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
           <camouflage>
             <tiling>	0.54 0.54 0.000000 0.000000	</tiling>
           </camouflage>
@@ -1094,6 +1115,13 @@
         <undamaged>	vehicles/american/A123_T78/normal/lod0/Turret_01.model	</undamaged>
         <destroyed>	vehicles/american/A123_T78/crash/lod0/Turret_01.model	</destroyed>
         <exploded>	vehicles/american/A123_T78/crash/lod0/Turret_01.model	</exploded>
+        <sets>
+          <T78_ID>
+            <undamaged>	vehicles/american/A123_T78/_skins/T78_ID/normal/lod0/Turret_01.model	</undamaged>
+            <destroyed>	vehicles/american/A123_T78/_skins/T78_ID/crash/lod0/Turret_01.model	</destroyed>
+            <exploded>	vehicles/american/A123_T78/_skins/T78_ID/crash/lod0/Turret_01.model	</exploded>
+          </T78_ID>
+        </sets>
       </models>
       <hitTester>
         <collisionModelServer>	vehicles/american/A123_T78/collision/Turret_01.model	</collisionModelServer>

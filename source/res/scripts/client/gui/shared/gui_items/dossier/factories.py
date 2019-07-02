@@ -222,6 +222,7 @@ _ACHIEVEMENTS_BY_NAME = {(_AB.TOTAL, 'warrior'): _CustomAchieveFactory.get(_as.W
  (_AB.SINGLE, 'streamersEventLeBwA'): _AchieveFactory.get(_as.Achieved),
  (_AB.SINGLE, 'DdaymarathonMedal'): _AchieveFactory.get(_abstract_achievements.QuestAchievement),
  (_AB.SINGLE, 'twitchPrime'): _AchieveFactory.get(_abstract_achievements.DeprecatedAchievement),
+ (_AB.SINGLE, 'twitchPrime2'): _AchieveFactory.get(_abstract_achievements.DeprecatedAchievement),
  (_AB.SINGLE, 'alphaTester'): _AchieveFactory.get(LoyalServiceAchievement),
  (_AB.SINGLE, 'betaTester'): _AchieveFactory.get(LoyalServiceAchievement),
  (_AB.SINGLE, '10YearsOfService'): _AchieveFactory.get(LoyalServiceAchievement),

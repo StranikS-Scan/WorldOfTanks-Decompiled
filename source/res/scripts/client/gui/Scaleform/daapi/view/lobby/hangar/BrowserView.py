@@ -26,7 +26,7 @@ class BrowserView(LobbySubView, BrowserScreenMeta):
 
     def __init__(self, ctx=None):
         super(BrowserView, self).__init__(ctx)
-        self.__browserId = 0
+        self.__browserId = None
         self.__ctx = ctx
         self.__hasFocus = False
         self.__browser = None

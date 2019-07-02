@@ -21,6 +21,7 @@ _EVENTS_REWARD_WINDOW = {recruit_helper.RecruitSourceID.TWITCH_0: TwitchRewardWi
  recruit_helper.RecruitSourceID.TWITCH_1: TwitchRewardWindow,
  recruit_helper.RecruitSourceID.TWITCH_2: TwitchRewardWindow,
  recruit_helper.RecruitSourceID.TWITCH_3: TwitchRewardWindow,
+ recruit_helper.RecruitSourceID.TWITCH_4: TwitchRewardWindow,
  anniversary_helper.ANNIVERSARY_EVENT_PREFIX: GiveAwayRewardWindow}
 _PIGGY_BANK_EVENT_NAME = 'piggyBank'
 

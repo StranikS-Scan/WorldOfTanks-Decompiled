@@ -718,6 +718,8 @@ class ACHIEVEMENTS(object):
     FE18SOLODEFENDER4_CONDITION = '#achievements:FE18SoloDefender4_condition'
     TWITCHPRIME = '#achievements:twitchPrime'
     TWITCHPRIME_DESCR = '#achievements:twitchPrime_descr'
+    TWITCHPRIME2 = '#achievements:twitchPrime2'
+    TWITCHPRIME2_DESCR = '#achievements:twitchPrime2_descr'
     SUPERTESTERVETERAN1 = '#achievements:superTesterVeteran1'
     SUPERTESTERVETERAN1_DESCR = '#achievements:superTesterVeteran1_descr'
     SUPERTESTERVETERAN1_CONDITION = '#achievements:superTesterVeteran1_condition'

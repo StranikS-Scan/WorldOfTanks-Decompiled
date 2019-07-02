@@ -18,6 +18,7 @@ class WAITING(object):
     UPDATETANKMEN = '#waiting:updateTankmen'
     UPDATEFITTING = '#waiting:updateFitting'
     SELLVEHICLE = '#waiting:sellVehicle'
+    STORAGE_FORSELL = '#waiting:storage/forSell'
     BUYSLOT = '#waiting:buySlot'
     BUYBERTHS = '#waiting:buyBerths'
     UPDATEINVENTORY = '#waiting:updateInventory'

@@ -86,6 +86,7 @@
     <_75mm_Gun_M6B>	104	</_75mm_Gun_M6B>
     <_3_inch_AT_Gun_M7>	105	</_3_inch_AT_Gun_M7>
     <_75mm_SA50_mle_50>	106	</_75mm_SA50_mle_50>
+    <_75mm_Kw_K_42_L_70>	107	</_75mm_Kw_K_42_L_70>
     <_120mm_SA_46_AC_IGR>	60001	</_120mm_SA_46_AC_IGR>
     <_90mm_F3M_IGR>	60002	</_90mm_F3M_IGR>
     <_100mm_SA_47_IGR>	60003	</_100mm_SA_47_IGR>
@@ -2316,6 +2317,64 @@
         </_76mm_HE_M42A1>
       </shots>
     </_3_inch_AT_Gun_M7>
+    <_75mm_Kw_K_42_L_70>
+      <userString>	#france_vehicles:_75mm_Kw_K_42_L_70	</userString>
+      <tags></tags>
+      <level>	6	</level>
+      <price>	53000	</price>
+      <notInShop>	true	</notInShop>
+      <impulse>	0.38	</impulse>
+      <recoil>
+        <lodDist>	MEDIUM	</lodDist>
+        <amplitude>	0.48	</amplitude>
+        <recoilEffect>	medium	</recoilEffect>
+      </recoil>
+      <effects>	shot_medium_mb	</effects>
+      <reloadEffect>	reload50_75	</reloadEffect>
+      <turretYawLimits>	-180 180	</turretYawLimits>
+      <pitchLimits>
+        <minPitch>	0.0 -17.0 1.0 -17.0	</minPitch>
+        <maxPitch>	0.0 6.0 1.0 6.0	</maxPitch>
+      </pitchLimits>
+      <rotationSpeed>	35.0	</rotationSpeed>
+      <reloadTime>	4	</reloadTime>
+      <maxAmmo>	55	</maxAmmo>
+      <aimingTime>	4.04	</aimingTime>
+      <weight>	955	</weight>
+      <maxHealth>	130	</maxHealth>
+      <maxRegenHealth>	65	</maxRegenHealth>
+      <repairCost>	5	</repairCost>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
+      <shotDispersionRadius>	0.4	</shotDispersionRadius>
+      <shotDispersionFactors>
+        <turretRotation>	0.16	</turretRotation>
+        <afterShot>	4.0	</afterShot>
+        <whileGunDamaged>	2.0	</whileGunDamaged>
+      </shotDispersionFactors>
+      <shots>
+        <_75mm_Pzgr_39_42>
+          <defaultPortion>	0.95	</defaultPortion>
+          <speed>	925	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	150 132	</piercingPower>
+        </_75mm_Pzgr_39_42>
+        <_75mm_Pzgr_40_42>
+          <defaultPortion>	0.0	</defaultPortion>
+          <speed>	1156	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	194 174	</piercingPower>
+        </_75mm_Pzgr_40_42>
+        <_75mm_Sprgr_34>
+          <defaultPortion>	0.05	</defaultPortion>
+          <speed>	925	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	38 38	</piercingPower>
+        </_75mm_Sprgr_34>
+      </shots>
+    </_75mm_Kw_K_42_L_70>
     <_90mm_canon_DCA_30>
       <userString>	#france_vehicles:_90mm_canon_DCA_30	</userString>
       <tags></tags>
@@ -2672,7 +2731,7 @@
         <recoilEffect>	main	</recoilEffect>
       </recoil>
       <effects>	shot_main_mb	</effects>
-      <reloadEffect>	reload85_107	</reloadEffect>
+      <reloadEffect>	reload_automat_reloading_85_107	</reloadEffect>
       <pitchLimits>
         <minPitch>	0.0 -19.0 1.0 -19.0	</minPitch>
         <maxPitch>	0.0 9.0 1.0 9.0	</maxPitch>

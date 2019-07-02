@@ -30,37 +30,51 @@ class CrewBookSkillModel(ViewModel):
     def setTankmanInvId(self, value):
         self._setNumber(3, value)
 
-    def getIsUnlearned(self):
-        return self._getBool(4)
+    def getGainProgress(self):
+        return self._getString(4)
 
-    def setIsUnlearned(self, value):
-        self._setBool(4, value)
+    def setGainProgress(self, value):
+        self._setString(4, value)
 
-    def getIsCompact(self):
+    def getIsGainProgressVisible(self):
         return self._getBool(5)
 
-    def setIsCompact(self, value):
+    def setIsGainProgressVisible(self, value):
         self._setBool(5, value)
 
-    def getIsUndistributedExp(self):
+    def getIsUnlearned(self):
         return self._getBool(6)
 
-    def setIsUndistributedExp(self, value):
+    def setIsUnlearned(self, value):
         self._setBool(6, value)
 
-    def getIsTooltipEnable(self):
+    def getIsCompact(self):
         return self._getBool(7)
 
-    def setIsTooltipEnable(self, value):
+    def setIsCompact(self, value):
         self._setBool(7, value)
+
+    def getIsTooltipEnable(self):
+        return self._getBool(8)
+
+    def setIsTooltipEnable(self, value):
+        self._setBool(8, value)
+
+    def getIsLowGainedXp(self):
+        return self._getBool(9)
+
+    def setIsLowGainedXp(self, value):
+        self._setBool(9, value)
 
     def _initialize(self):
         super(CrewBookSkillModel, self)._initialize()
         self._addResourceProperty('icon', R.invalid())
-        self._addStringProperty('description', '')
+        self._addStringProperty('description', '0')
         self._addStringProperty('skillName', '')
         self._addNumberProperty('tankmanInvId', 0)
+        self._addStringProperty('gainProgress', '')
+        self._addBoolProperty('isGainProgressVisible', False)
         self._addBoolProperty('isUnlearned', False)
         self._addBoolProperty('isCompact', False)
-        self._addBoolProperty('isUndistributedExp', False)
         self._addBoolProperty('isTooltipEnable', True)
+        self._addBoolProperty('isLowGainedXp', False)

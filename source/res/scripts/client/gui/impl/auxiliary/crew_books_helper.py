@@ -15,14 +15,15 @@ from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.gui_items.Vehicle import getIconResourceName
 from gui.shared.items_cache import CACHE_SYNC_REASON
 from gui.shared.utils.requesters import REQ_CRITERIA
-from helpers.dependency import descriptor
+from helpers.dependency import descriptor, replace_none_kwargs
 from items.components.crew_books_constants import CREW_BOOK_RARITY
+from items.components import skills_constants
 from items import tankmen
 from items.components.crew_skins_constants import NO_CREW_SKIN_ID
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
 MIN_ROLE_LEVEL = 100
-MAX_SKILL_VIEW_COUNT = 5
+MAX_SKILL_VIEW_COUNT = 4
 _g_crewBooksViewedCache = None
 
 def crewBooksViewedCache():
@@ -116,6 +117,65 @@ class _CrewBooksViewedCache(object):
         return INDICES.get(nationName, NONE_INDEX)
 
 
+class XpGainResult(object):
+    NEW_SKILLS = 'new_skills'
+    SURPLUS_LEVELS = 'surplus_levels'
+
+
+@replace_none_kwargs(itemsCache=IItemsCache)
+def gainedLevels(tankmanInvId, crewBookCD, itemsCache=None):
+    result = {}
+    if crewBookCD is None:
+        return result
+    else:
+
+        def _newSkillsCount(descr):
+            if tankman.role == tankman.ROLES.COMMANDER:
+                skillsList = list(skills_constants.ACTIVE_SKILLS)
+            else:
+                skillsList = list(tankman._NON_COMMANDER_SKILLS)
+            i = 0
+            while descr.roleLevel == 100 and (descr.lastSkillLevel == 100 or not descr.skills) and skillsList:
+                skillName = skillsList.pop()
+                if skillName not in descr.skills:
+                    descr.addSkill(skillName)
+                    i += 1
+
+            return i
+
+        def _calculateSurplus(xp, surplus, descr, result):
+            if surplus == 0:
+                xpCost = descr.levelUpXpCost(descr.lastSkillLevel, descr.lastSkillNumber - descr.freeSkillsNumber)
+                result[XpGainResult.SURPLUS_LEVELS] = round(xp / (xpCost * 1.0), 2)
+            else:
+                result[XpGainResult.SURPLUS_LEVELS] = surplus
+
+        def _fillResult(newSkillsCount, descr, levelBeforeAdd, bookXP, result):
+            if newSkillsCount:
+                result[XpGainResult.NEW_SKILLS] = newSkillsCount
+                surplus = descr.lastSkillLevel
+                _calculateSurplus(descr.freeXP, surplus, descr, result)
+            else:
+                surplus = descr.lastSkillLevel - levelBeforeAdd
+                _calculateSurplus(bookXP, surplus, descr, result)
+
+        tankman = itemsCache.items.getTankman(tankmanInvId)
+        descr = tankmen.TankmanDescr(tankman.strCD)
+        xp = itemsCache.items.getItemByCD(crewBookCD).getXP()
+        roleLevel = descr.roleLevel
+        if roleLevel < tankmen.MAX_SKILL_LEVEL:
+            descr.addXP(xp)
+            newSkillsCount = _newSkillsCount(descr)
+            _fillResult(newSkillsCount, descr, 0, xp, result)
+        else:
+            _newSkillsCount(descr)
+            levelBeforeAdd = descr.lastSkillLevel
+            descr.addXP(xp)
+            newSkillsCount = _newSkillsCount(descr)
+            _fillResult(newSkillsCount, descr, levelBeforeAdd, xp, result)
+        return result
+
+
 class TankmanModelPresenterBase(object):
     __itemsCache = descriptor(IItemsCache)
     __lobbyContext = descriptor(ILobbyContext)
@@ -171,36 +231,54 @@ class TankmanModelPresenter(TankmanModelPresenterBase):
 
 class TankmanSkillListPresenter(object):
     __itemsCache = descriptor(IItemsCache)
-    __slots__ = ()
 
-    def getList(self, tankmanInvId, isTooltipEnable=True):
+    def getList(self, tankmanInvId, isTooltipEnable=True, crewBookCD=None):
         tankman = self.__itemsCache.items.getTankman(int(tankmanInvId))
+        self._gainedLevels = gainedLevels(tankmanInvId, crewBookCD)
         wulfList = Array()
-        if len(tankman.skills) <= MAX_SKILL_VIEW_COUNT:
-            self._createList(wulfList, tankman, isTooltipEnable=isTooltipEnable)
+        if len(tankman.skills) + tankman.newSkillCount[0] <= MAX_SKILL_VIEW_COUNT:
+            self._createList(wulfList, tankman, isTooltipEnable)
         else:
-            self._createShortList(wulfList, tankman, isTooltipEnable=isTooltipEnable)
-        self._newSkillCount(wulfList, tankman, isTooltipEnable=isTooltipEnable)
+            self._createShortList(wulfList, tankman, isTooltipEnable)
+        self._availableForLearn(wulfList, tankman)
         return wulfList
 
-    def _newSkillCount(self, wulfList, tankman, isTooltipEnable):
+    def _availableForLearn(self, wulfList, tankman):
         canLearnSkills, lastSkillLevel = tankman.newSkillCount
-        hasUndistributedExp = canLearnSkills > 1 or lastSkillLevel > 0
-        if hasUndistributedExp:
+        if XpGainResult.NEW_SKILLS in self._gainedLevels:
+            gainedSkills = self._gainedLevels[XpGainResult.NEW_SKILLS]
+            if XpGainResult.SURPLUS_LEVELS in self._gainedLevels:
+                gainedSkills -= 1
+        else:
+            gainedSkills = 0
+        if tankman.hasNewSkill(True) and XpGainResult.NEW_SKILLS not in self._gainedLevels:
+            canLearnSkills -= 1
+        compactSkills = canLearnSkills + gainedSkills
+        isMaxSkillsLearned = len(tankman.availableSkills(True)) <= compactSkills
+        hasUnlearnedSkill = XpGainResult.SURPLUS_LEVELS in self._gainedLevels and XpGainResult.NEW_SKILLS in self._gainedLevels or tankman.newSkillCount[0] > 0
+        if compactSkills > 0:
             tankmanSkillVM = CrewBookSkillModel()
-            tankmanSkillVM.setIsTooltipEnable(isTooltipEnable)
+            tankmanSkillVM.setIsTooltipEnable(False)
             tankmanSkillVM.setIcon(R.images.gui.maps.icons.tankmen.skills.small.new_skill())
-            tankmanSkillVM.setIsUndistributedExp(True)
             tankmanSkillVM.setTankmanInvId(tankman.invID)
-            wulfList.addViewModel(tankmanSkillVM)
-            if lastSkillLevel > 0 and canLearnSkills == 1:
-                tankmanSkillVM.setDescription(str(lastSkillLevel))
-                tankmanSkillVM.setIsUnlearned(True)
-            elif canLearnSkills > 1:
-                if lastSkillLevel > 0:
-                    canLearnSkills -= 1
-                tankmanSkillVM.setDescription(str(canLearnSkills))
+            if compactSkills > 1:
                 tankmanSkillVM.setIsCompact(True)
+                tankmanSkillVM.setDescription(str(compactSkills))
+            wulfList.addViewModel(tankmanSkillVM)
+        if hasUnlearnedSkill and isMaxSkillsLearned is False:
+            tankmanSkillVM = CrewBookSkillModel()
+            tankmanSkillVM.setIsTooltipEnable(False)
+            tankmanSkillVM.setIcon(R.images.gui.maps.icons.tankmen.skills.small.new_current_skill())
+            tankmanSkillVM.setTankmanInvId(tankman.invID)
+            tankmanSkillVM.setIsUnlearned(True)
+            if XpGainResult.NEW_SKILLS not in self._gainedLevels:
+                tankmanSkillVM.setDescription(str(lastSkillLevel))
+            if XpGainResult.SURPLUS_LEVELS in self._gainedLevels:
+                tankmanSkillVM.setGainProgress(str(self._gainedLevels[XpGainResult.SURPLUS_LEVELS]))
+                tankmanSkillVM.setIsGainProgressVisible(True)
+                if self._gainedLevels[XpGainResult.SURPLUS_LEVELS] == 0:
+                    tankmanSkillVM.setIsLowGainedXp(True)
+            wulfList.addViewModel(tankmanSkillVM)
 
     def _createList(self, wulfList, tankman, isTooltipEnable):
         skillsIconsSmall = R.images.gui.maps.icons.tankmen.skills.small
@@ -211,9 +289,14 @@ class TankmanSkillListPresenter(object):
             tankmanSkillVM.setTankmanInvId(tankman.invID)
             tankmanSkillVM.setSkillName(tankmanSkill.name)
             wulfList.addViewModel(tankmanSkillVM)
-            if tankmanSkill.level < MIN_ROLE_LEVEL:
+            if tankmanSkill.level < MIN_ROLE_LEVEL and XpGainResult.NEW_SKILLS not in self._gainedLevels:
                 tankmanSkillVM.setDescription(str(tankmanSkill.level))
                 tankmanSkillVM.setIsUnlearned(True)
+                if XpGainResult.SURPLUS_LEVELS in self._gainedLevels:
+                    tankmanSkillVM.setGainProgress(str(self._gainedLevels[XpGainResult.SURPLUS_LEVELS]))
+                    tankmanSkillVM.setIsGainProgressVisible(True)
+                    if self._gainedLevels[XpGainResult.SURPLUS_LEVELS] == 0:
+                        tankmanSkillVM.setIsLowGainedXp(True)
 
     def _createShortList(self, wulfList, tankman, isTooltipEnable):
         reversedList = []
@@ -227,10 +310,15 @@ class TankmanSkillListPresenter(object):
             tankmanSkillVM.setIcon(skillsIconsSmall.dyn(getIconResourceName(tankmanSkill.extensionLessIconName))())
             tankmanSkillVM.setTankmanInvId(tankman.invID)
             tankmanSkillVM.setSkillName(tankmanSkill.name)
-            if tankmanSkill.level < MIN_ROLE_LEVEL:
+            if tankmanSkill.level < MIN_ROLE_LEVEL and XpGainResult.NEW_SKILLS not in self._gainedLevels:
                 hasUnlearnedSkill = True
                 tankmanSkillVM.setDescription(str(tankmanSkill.level))
                 tankmanSkillVM.setIsUnlearned(True)
+                if XpGainResult.SURPLUS_LEVELS in self._gainedLevels:
+                    tankmanSkillVM.setGainProgress(str(self._gainedLevels[XpGainResult.SURPLUS_LEVELS]))
+                    tankmanSkillVM.setIsGainProgressVisible(True)
+                    if self._gainedLevels[XpGainResult.SURPLUS_LEVELS] == 0:
+                        tankmanSkillVM.setIsLowGainedXp(True)
             if hasUnlearnedSkill:
                 skillsCount -= 1
             tankmanSkillVM.setIsCompact(True)

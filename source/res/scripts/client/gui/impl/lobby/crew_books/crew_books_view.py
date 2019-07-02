@@ -149,15 +149,21 @@ class CrewBooksView(ViewImpl):
             tankmanInvID = tankman.invID if tankman is not None else None
             tankmanVM = TankmanModelPresenter().getModel(index, tankmanInvID)
             if tankmanInvID is not None:
-                self.__setSkillListViewModelData(tankmanVM, tankmanInvID)
+                self.__setSkillListViewModelData(tankmanVM)
             crewListVM.addViewModel(tankmanVM)
 
         return
 
-    def __setSkillListViewModelData(self, tankmanVM, tankmanInvId):
+    def __setSkillListViewModelData(self, tankmanVM, showGainedProgress=False):
         skillListVM = tankmanVM.tankmanSkillList.getItems()
         skillListVM.clear()
-        tankmanVM.tankmanSkillList.setItems(TankmanSkillListPresenter().getList(tankmanInvId))
+        if self.__selectedBookGuiItem is not None and showGainedProgress:
+            bookIntCD = self.__selectedBookGuiItem.intCD
+        else:
+            bookIntCD = None
+        tankmanVM.tankmanSkillList.setItems(TankmanSkillListPresenter().getList(int(tankmanVM.getInvID()), True, bookIntCD))
+        tankmanVM.tankmanSkillList.getItems().invalidate()
+        return
 
     def __onInventoryUpdate(self, invDiff):
         with self.viewModel.transaction() as vm:
@@ -211,7 +217,7 @@ class CrewBooksView(ViewImpl):
             tankmanVM = crewListVM[slotIdx]
             tankmanVM.setRoleLevel(str(tankman.roleLevel))
             tankmanVM.setIsLowRoleLevel(tankman.roleLevel < self.MIN_ROLE_LEVEL)
-            self.__setSkillListViewModelData(tankmanVM, tankman.invID)
+            self.__setSkillListViewModelData(tankmanVM)
 
         crewListVM.invalidate()
         self.__setInvalidTypes()
@@ -281,10 +287,12 @@ class CrewBooksView(ViewImpl):
 
             if self.__selectedTankmanVM is not None:
                 self.__setStates(self.__selectedTankmanVM, False)
+                self.__setSkillListViewModelData(self.__selectedTankmanVM)
             tankmanVM = crewListVM[clickedTankmanIndex]
             self.__setStates(tankmanVM, True)
             self.__selectedTankmanVM = tankmanVM
             self.__setTankmanGainExp(self.__selectedTankmanVM)
+            self.__setSkillListViewModelData(self.__selectedTankmanVM, True)
         self.__updateIsBookUseEnable()
         self.__updateFooterDescription()
         return
@@ -310,13 +318,15 @@ class CrewBooksView(ViewImpl):
                     tankmanVM.setIsClickEnable(False)
                     tankmanVM.setIsTankamanSelected(False)
                     tankmanVM.setIsArrowAnimPlay(False)
-                    continue
+                    self.__setSkillListViewModelData(tankmanVM)
                 if self.__invalidTypes or self.__selectedBookGuiItem.getFreeCount() == 0:
                     tankmanVM.setIsClickEnable(False)
                     tankmanVM.setIsTankamanSelected(False)
                     tankmanVM.setIsArrowAnimPlay(False)
+                    self.__setSkillListViewModelData(tankmanVM)
                 tankmanVM.setIsArrowAnimPlay(False)
                 self.__setStates(tankmanVM, True)
+                self.__setSkillListViewModelData(tankmanVM, True)
 
     def __setPersonalBookSelectedStates(self):
         with self.viewModel.transaction() as vm:
@@ -327,9 +337,11 @@ class CrewBooksView(ViewImpl):
                 if self.__selectedBookGuiItem.getFreeCount() == 0:
                     tankmanVM.setIsClickEnable(False)
                     tankmanVM.setIsTankamanSelected(False)
-                tankmanVM.setIsLearnDisable(False)
-                tankmanVM.setIsArrowAnimPlay(True)
-                self.__setStates(tankmanVM, False)
+                else:
+                    tankmanVM.setIsLearnDisable(False)
+                    tankmanVM.setIsArrowAnimPlay(True)
+                    self.__setStates(tankmanVM, False)
+                self.__setSkillListViewModelData(tankmanVM)
 
     def __setNoBookSelectedStates(self):
         with self.viewModel.transaction() as vm:
@@ -340,6 +352,7 @@ class CrewBooksView(ViewImpl):
                 tankmanVM.setIsClickEnable(False)
                 tankmanVM.setIsTankamanSelected(False)
                 tankmanVM.setIsArrowAnimPlay(False)
+                self.__setSkillListViewModelData(tankmanVM)
 
     def __setStates(self, tankmanVM, isSelected):
         tankmanVM.setIsClickEnable(not isSelected)

@@ -71,7 +71,8 @@ class VehicleMarker(Marker):
         rootM = rootMP.localMatrix
         guiM = guiMP.localMatrix
         offset = guiM.translation - rootM.translation
-        return GUI.WGVehicleMarkersMatrixProvider(rootMP, offset)
+        rootCalculator = vProxy.model.getWorldMatrixCalculator(TankNodeNames.HULL_SWINGING)
+        return GUI.WGVehicleMarkersMatrixProvider(rootCalculator, offset)
 
     def getMatrixProvider(self):
         return self.fetchMatrixProvider(self._vProxy) if self._vProxy is not None else None

@@ -16,7 +16,6 @@ from gui.Scaleform.daapi.view.lobby.techtree import unlock
 from gui.Scaleform.daapi.view.lobby.techtree.settings import RequestState
 from gui.Scaleform.daapi.view.lobby.techtree.settings import UnlockStats
 from gui.Scaleform.daapi.view.lobby.techtree.techtree_dp import g_techTreeDP
-from gui.Scaleform.locale.STORAGE import STORAGE
 from gui.Scaleform.locale.SYSTEM_MESSAGES import SYSTEM_MESSAGES
 from gui.shared import event_dispatcher as shared_events
 from gui.shared.economics import getGUIPrice
@@ -156,7 +155,7 @@ class SellMultipleItems(IGUIItemAction):
 
     @process
     def doAction(self):
-        Waiting.show(STORAGE.FORSELL_WAITING)
+        Waiting.show('storage/forSell')
         if allEqual(self.__items, lambda i: i.intCD):
             item = self._itemsCache.items.getItemByCD(first(self.__items).intCD)
             result = yield ModuleSeller(item, min(item.inventoryCount, MAX_ITEMS_FOR_OPERATION)).request()
@@ -164,7 +163,7 @@ class SellMultipleItems(IGUIItemAction):
             result = yield MultipleModulesSeller(self.__items).request()
         if result.userMsg:
             SystemMessages.pushI18nMessage(result.userMsg, type=result.sysMsgType)
-        Waiting.hide(STORAGE.FORSELL_WAITING)
+        Waiting.hide('storage/forSell')
 
 
 class ModuleBuyAction(BuyAction):

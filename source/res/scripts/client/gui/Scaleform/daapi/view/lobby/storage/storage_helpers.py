@@ -6,7 +6,6 @@ import BigWorld
 import nations
 from account_helpers import AccountSettings
 from account_helpers.AccountSettings import LAST_STORAGE_VISITED_TIMESTAMP
-from items import vehicles as vehicles_core, ITEM_TYPES
 from gui import g_htmlTemplates
 from gui.Scaleform import MENU
 from gui.Scaleform.daapi.settings import BUTTON_LINKAGES
@@ -31,7 +30,6 @@ from gui.shared.utils.requesters.ItemsRequester import REQ_CRITERIA
 from helpers import i18n, dependency, int2roman, time_utils, func_utils
 from helpers.time_utils import getCurrentTimestamp
 from skeletons.gui.shared import IItemsCache
-from skeletons.gui.lobby_context import ILobbyContext
 _MAX_COMPATIBLE_VEHS_COUNT = 5
 _MAX_COMPATIBLE_GUNS_COUNT = 2
 _HANDLERS_MAP = {GUI_ITEM_TYPE.OPTIONALDEVICE: CONTEXT_MENU_HANDLER_TYPE.STORAGE_EQUIPMENT_ITEM,
@@ -63,12 +61,7 @@ def getStorageItemDescr(item):
         return text_styles.main(desc)
 
 
-@dependency.replace_none_kwargs(lobbyContext=ILobbyContext)
-def createStorageDefVO(itemID, title, description, count, price, image, imageAlt, itemType='', nationFlagIcon='', enabled=True, contextMenuId='', lobbyContext=None):
-    if not lobbyContext.getServerSettings().isCrewBooksSaleEnabled():
-        itemTypeID, _, _ = vehicles_core.parseIntCompactDescr(itemID)
-        if itemTypeID == ITEM_TYPES.crewBook:
-            enabled = False
+def createStorageDefVO(itemID, title, description, count, price, image, imageAlt, itemType='', nationFlagIcon='', enabled=True, contextMenuId=''):
     return {'id': itemID,
      'title': title,
      'description': description,
@@ -239,8 +232,7 @@ def getVehicleRestoreInfo(vehicle):
      icon)
 
 
-@dependency.replace_none_kwargs(lobbyContext=ILobbyContext)
-def getItemVo(item, lobbyContext=None):
+def getItemVo(item):
 
     def getItemNationID(item):
         compatibleNations = []
@@ -251,14 +243,7 @@ def getItemVo(item, lobbyContext=None):
     priceVO = getItemPricesVO(item.getSellPrice())[0]
     itemNationID = getItemNationID(item)
     nationFlagIcon = RES_SHOP.getNationFlagIcon(nations.NAMES[itemNationID]) if itemNationID != nations.NONE_INDEX else ''
-    if not lobbyContext.getServerSettings().isCrewBooksSaleEnabled():
-        if item.itemTypeID == ITEM_TYPES.crewBook:
-            handler = CONTEXT_MENU_HANDLER_TYPE.STORAGE_CREW_BOOKS_NO_SALE_ITEM
-        else:
-            handler = _HANDLERS_MAP[item.itemTypeID]
-    else:
-        handler = _HANDLERS_MAP[item.itemTypeID]
-    vo = createStorageDefVO(item.intCD, getStorageModuleName(item), getStorageItemDescr(item), item.inventoryCount, priceVO, getStorageItemIcon(item, STORE_CONSTANTS.ICON_SIZE_SMALL), 'altimage', itemType=getBoosterType(item), nationFlagIcon=nationFlagIcon, enabled=item.itemTypeID != GUI_ITEM_TYPE.BATTLE_BOOSTER, contextMenuId=handler)
+    vo = createStorageDefVO(item.intCD, getStorageModuleName(item), getStorageItemDescr(item), item.inventoryCount, priceVO, getStorageItemIcon(item, STORE_CONSTANTS.ICON_SIZE_SMALL), 'altimage', itemType=getBoosterType(item), nationFlagIcon=nationFlagIcon, enabled=item.itemTypeID != GUI_ITEM_TYPE.BATTLE_BOOSTER, contextMenuId=_HANDLERS_MAP[item.itemTypeID])
     return vo
 
 

@@ -20,7 +20,6 @@ class STORAGE(object):
     CUSTOMIZATION_NOITEMS_TITLE = '#storage:customization/noItems/title'
     CUSTOMIZATION_NOITEMS_NAVIGATIONBUTTON = '#storage:customization/noItems/navigationButton'
     FORSELL_SECTIONTITLE = '#storage:forSell/sectionTitle'
-    FORSELL_WAITING = '#storage:forSell/waiting'
     FORSELL_NOITEMS_TITLE = '#storage:forSell/noItems/title'
     STORAGE_SECTIONTITLE = '#storage:storage/sectionTitle'
     STORAGE_NOITEMS_TITLE = '#storage:storage/noItems/title'

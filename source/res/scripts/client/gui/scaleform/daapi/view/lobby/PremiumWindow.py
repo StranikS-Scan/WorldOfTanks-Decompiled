@@ -1,6 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/PremiumWindow.py
-import BigWorld
 from gui import makeHtmlString, SystemMessages
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform.daapi.settings import BUTTON_LINKAGES
@@ -8,6 +7,7 @@ from gui.Scaleform.daapi.view.meta.PremiumWindowMeta import PremiumWindowMeta
 from gui.Scaleform.genConsts.TEXT_ALIGN import TEXT_ALIGN
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
+from gui.impl import backport
 from gui.shared.events import LobbySimpleEvent
 from gui.shared.formatters import text_styles, icons
 from gui.shared.gui_items.processors.common import PremiumAccountBuyer
@@ -164,7 +164,7 @@ class PremiumWindow(PremiumWindowMeta):
         priceStr = ''
         if not hasAction:
             key = 'gold' if isEnoughMoney else 'goldAlert'
-            priceStr = makeHtmlString('html_templates:lobby/dialogs/premium', key, ctx={'value': BigWorld.wg_getGoldFormat(cost)})
+            priceStr = makeHtmlString('html_templates:lobby/dialogs/premium', key, ctx={'value': backport.getGoldFormat(cost)})
         duration = i18n.makeString(PREMIUM_PACKET_LOCAL_KEY.format(period))
         ctx = {'duration': duration,
          'price': priceStr}

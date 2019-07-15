@@ -7,6 +7,7 @@ from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform.daapi.view import dialogs
 from gui.Scaleform.daapi.view.lobby.techtree.settings import RequestState, UnlockStats
 from gui.Scaleform.daapi.view.lobby.techtree.techtree_dp import g_techTreeDP
+from gui.impl import backport
 from gui.shared import event_dispatcher
 from gui.shared.formatters import text_styles
 from gui.shared.gui_items import GUI_ITEM_TYPE
@@ -42,8 +43,8 @@ class UnlockItemConfirmator(proc_plugs.DialogAbstractConfirmator):
 
     def _makeMeta(self):
         item = self.itemsCache.items.getItemByCD(self.__unlockCtx.itemCD)
-        xpCost = BigWorld.wg_getIntegralFormat(self.__costCtx['xpCost'])
-        freeXp = BigWorld.wg_getIntegralFormat(self.__costCtx['freeXP'])
+        xpCost = backport.getIntegralFormat(self.__costCtx['xpCost'])
+        freeXp = backport.getIntegralFormat(self.__costCtx['freeXP'])
         ctx = {'xpCost': text_styles.expText(xpCost),
          'freeXP': text_styles.expText(freeXp),
          'typeString': item.userType,

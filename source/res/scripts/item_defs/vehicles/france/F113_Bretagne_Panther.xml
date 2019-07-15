@@ -79,11 +79,45 @@
     <customizationSlots>
       <slot>
         <slotType>	clan	</slotType>
-        <slotId>	1	</slotId>
+        <slotId>	10000	</slotId>
         <rayStart>	-0.497376 0.271781 2.66241	</rayStart>
         <rayEnd>	-0.497376 0.19083 2.6037	</rayEnd>
         <rayUp>	0.000000 0.000000 -1	</rayUp>
         <size>	0.32	</size>
+        <hideIfDamaged>	false	</hideIfDamaged>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	paint	</slotType>
+        <slotId>	11000	</slotId>
+        <anchorPosition>	0.000000 0.566582 2.16868	</anchorPosition>
+        <anchorDirection>	0.000000 0.252772 0.967526	</anchorDirection>
+      </slot>
+      <slot>
+        <slotType>	camouflage	</slotType>
+        <slotId>	12000	</slotId>
+        <anchorPosition>	0.000000 0.566582 2.16868	</anchorPosition>
+        <anchorDirection>	0.000000 0.252772 0.967526	</anchorDirection>
+      </slot>
+      <slot>
+        <slotType>	fixedInscription	</slotType>
+        <slotId>	17000	</slotId>
+        <rayStart>	1.61597 0.449204 -1.76211	</rayStart>
+        <rayEnd>	1.46276 0.320646 -1.76211	</rayEnd>
+        <rayUp>	0.000000 1 0.000000	</rayUp>
+        <emblemId>	14901	</emblemId>
+        <size>	0.703226	</size>
+        <hideIfDamaged>	false	</hideIfDamaged>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	fixedInscription	</slotType>
+        <slotId>	17001	</slotId>
+        <rayStart>	-1.61597 0.449204 -1.76211	</rayStart>
+        <rayEnd>	-1.46276 0.320646 -1.76211	</rayEnd>
+        <rayUp>	0.000000 1 0.000000	</rayUp>
+        <emblemId>	14901	</emblemId>
+        <size>	0.703226	</size>
         <hideIfDamaged>	false	</hideIfDamaged>
         <isUVProportional>	true	</isUVProportional>
       </slot>
@@ -782,6 +816,20 @@
           </sourceCollisionHullPoints>
         </right>
       </physicalTracks>
+      <customizationSlots>
+        <slot>
+          <slotType>	paint	</slotType>
+          <slotId>	21000	</slotId>
+          <anchorPosition>	-1.63942 0.713297 0.13646	</anchorPosition>
+          <anchorDirection>	-0.914307 0.397807 0.0761039	</anchorDirection>
+        </slot>
+        <slot>
+          <slotType>	style	</slotType>
+          <slotId>	29000	</slotId>
+          <anchorPosition>	0.000052 2.74191 -0.182475	</anchorPosition>
+          <anchorDirection>	0.000000 1 0.000000	</anchorDirection>
+        </slot>
+      </customizationSlots>
     </Chassis_F113_Bretagne_Panther>
   </chassis>
   <turrets0>
@@ -861,8 +909,29 @@
           </customization>
           <customizationSlots>
             <slot>
+              <slotType>	paint	</slotType>
+              <slotId>	41000	</slotId>
+              <anchorPosition>	-0.00164943 0.00365121 2.21921	</anchorPosition>
+              <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+            <slot>
+              <slotType>	paint	</slotType>
+              <slotId>	41001	</slotId>
+              <anchorPosition>	0.000000 0.23799 0.23799	</anchorPosition>
+              <anchorDirection>	0.000000 0.707107 0.707107	</anchorDirection>
+              <applyTo>	16384	</applyTo>
+            </slot>
+            <slot>
+              <slotType>	camouflage	</slotType>
+              <slotId>	42000	</slotId>
+              <anchorPosition>	-0.00164943 0.00365121 2.21921	</anchorPosition>
+              <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+            <slot>
               <slotType>	insigniaOnGun	</slotType>
-              <slotId>	771	</slotId>
+              <slotId>	49000	</slotId>
               <rayStart>	-0.00329885 -0.00569758 2.88573	</rayStart>
               <rayEnd>	0.881837 -0.158029 2.86255	</rayEnd>
               <rayUp>	0.096 0.000000 0.000000	</rayUp>
@@ -894,6 +963,43 @@
           <camouflage></camouflage>
         </customizableVehicleAreas>
       </customization>
+      <customizationSlots>
+        <slot>
+          <slotType>	paint	</slotType>
+          <slotId>	31000	</slotId>
+          <anchorPosition>	0.000000 0.822428 0.000000	</anchorPosition>
+          <anchorDirection>	0.000000 1 0.000000	</anchorDirection>
+        </slot>
+        <slot>
+          <slotType>	camouflage	</slotType>
+          <slotId>	32000	</slotId>
+          <anchorPosition>	0.000000 0.822428 0.000000	</anchorPosition>
+          <anchorDirection>	0.000000 1 0.000000	</anchorDirection>
+        </slot>
+        <slot>
+          <slotType>	fixedEmblem	</slotType>
+          <slotId>	37000	</slotId>
+          <rayStart>	-0.927895 0.437737 1.16106	</rayStart>
+          <rayEnd>	-0.728084 0.437729 1.15233	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <emblemId>	15504	</emblemId>
+          <size>	0.22	</size>
+          <hideIfDamaged>	false	</hideIfDamaged>
+          <isUVProportional>	true	</isUVProportional>
+        </slot>
+        <slot>
+          <slotType>	fixedEmblem	</slotType>
+          <slotId>	37001	</slotId>
+          <rayStart>	0.928663 0.435697 1.14655	</rayStart>
+          <rayEnd>	0.728853 0.435689 1.13783	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <isMirrored>	true	</isMirrored>
+          <emblemId>	15504	</emblemId>
+          <size>	0.22	</size>
+          <hideIfDamaged>	false	</hideIfDamaged>
+          <isUVProportional>	true	</isUVProportional>
+        </slot>
+      </customizationSlots>
     </Turret_1_F113_Bretagne_Panther>
   </turrets0>
   <engines>
@@ -960,7 +1066,7 @@
     <damagedStateGroup>	large	</damagedStateGroup>
   </effects>
   <emblems>
-    <default>	french_rose	</default>
+    <default>	15504	</default>
     <lodDist>	MEDIUM	</lodDist>
     <alpha>	0.88	</alpha>
   </emblems>

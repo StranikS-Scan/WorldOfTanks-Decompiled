@@ -22,12 +22,12 @@ __all__ = ('MaterialInfo', 'DEFAULT_MATERIAL_INFO', 'EmblemSlot', 'LodSettings',
 MaterialInfo = namedtuple('MaterialInfo', ('kind', 'armor', 'extra', 'multipleExtra', 'vehicleDamageFactor', 'useArmorHomogenization', 'useHitAngle', 'useAntifragmentationLining', 'mayRicochet', 'collideOnceOnly', 'checkCaliberForRichet', 'checkCaliberForHitAngleNorm', 'damageKind', 'chanceToHitByProjectile', 'chanceToHitByExplosion', 'continueTraceIfNoHit'))
 DEFAULT_MATERIAL_INFO = MaterialInfo(0, 0, None, False, 0.0, False, False, False, False, False, False, False, 0, 0.0, 0.0, False)
 EmblemSlot = namedtuple('EmblemSlot', ('rayStart', 'rayEnd', 'rayUp', 'size', 'hideIfDamaged', 'type', 'isMirrored', 'isUVProportional', 'emblemId', 'slotId', 'applyToFabric'))
-CustomizationSlotDescription = namedtuple('CustomizationSlotDescription', ('type', 'slotId', 'anchorPosition', 'anchorDirection', 'applyTo', 'position', 'rotation', 'scale', 'scaleFactors', 'doubleSided', 'showOn', 'tags', 'parentSlotId', 'clipAngle', 'attachedParts'))
+CustomizationSlotDescription = namedtuple('CustomizationSlotDescription', ('type', 'slotId', 'anchorPosition', 'anchorDirection', 'applyTo', 'position', 'rotation', 'scale', 'scaleFactors', 'doubleSided', 'showOn', 'tags', 'clipAngle', 'attachedParts'))
 MiscSlot = namedtuple('MiscSlot', ('type', 'slotId', 'position', 'rotation', 'attachNode'))
 LodSettings = namedtuple('LodSettings', ('maxLodDistance', 'maxPriority'))
 NodesAndGroups = namedtuple('NodesAndGroups', ('nodes', 'groups', 'activePostmortem', 'lodSettings'))
-Camouflage = namedtuple('Camouflage', ('tiling', 'exclusionMask'))
-DEFAULT_CAMOUFLAGE = Camouflage(None, None)
+Camouflage = namedtuple('Camouflage', ('tiling', 'exclusionMask', 'density', 'aoTextureSize'))
+DEFAULT_CAMOUFLAGE = Camouflage(None, None, None, None)
 SwingingSettings = namedtuple('SwingingSettings', ('lodDist', 'sensitivityToImpulse', 'pitchParams', 'rollParams'))
 
 class I18nString(object):
@@ -137,13 +137,13 @@ class I18nComponent(object):
 
 
 class I18nExposedComponent(I18nComponent):
-    __slots__ = ('__userKey', '__shortKey', '__descriptionKey')
+    __slots__ = ('__userKey', '__descriptionKey', '__longDescriptionSpecialKey')
 
-    def __init__(self, userStringKey, descriptionKey, shortStringKey=''):
-        super(I18nExposedComponent, self).__init__(userStringKey, descriptionKey, shortStringKey='')
+    def __init__(self, userStringKey, descriptionKey, longDescriptionSpecialKey=''):
+        super(I18nExposedComponent, self).__init__(userStringKey, descriptionKey, longDescriptionSpecialKey=longDescriptionSpecialKey)
         self.__userKey = userStringKey
         self.__descriptionKey = descriptionKey
-        self.__shortKey = shortStringKey
+        self.__longDescriptionSpecialKey = longDescriptionSpecialKey
 
     @property
     def userKey(self):
@@ -154,8 +154,8 @@ class I18nExposedComponent(I18nComponent):
         return self.__descriptionKey
 
     @property
-    def shortKey(self):
-        return self.__shortKey
+    def longDescriptionSpecialKey(self):
+        return self.__longDescriptionSpecialKey
 
 
 class DeviceHealth(object):

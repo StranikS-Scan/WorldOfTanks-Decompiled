@@ -2,7 +2,6 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/dialogs/ExchangeDialogMeta.py
 import math
 import operator
-import BigWorld
 import Event
 from adisp import async, process
 from gui.ClientUpdateManager import g_clientUpdateManager
@@ -15,6 +14,7 @@ from gui.Scaleform.genConsts.TEXT_MANAGER_STYLES import TEXT_MANAGER_STYLES
 from gui.Scaleform.locale.DIALOGS import DIALOGS
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.managers.ColorSchemeManager import ColorSchemeManager
+from gui.impl import backport
 from gui.shared import events
 from gui.shared.formatters import icons, text_styles
 from gui.shared.gui_items import GUI_ITEM_TYPE
@@ -260,7 +260,7 @@ class _ExchangeDialogMeta(I18nConfirmDialogMeta):
             return (CONFIRM_EXCHANGE_DIALOG_TYPES.EXCHANGE_NOT_NEEED_STATE, text_styles.success(self._makeString(I18N_EXCHANGENONEEDTEXT_KEY)))
         if not self._isEnoughGold(resToExchange):
             goldToExchange = self._getGoldToExchange(resToExchange)
-            fmtGold = ''.join((text_styles.gold(BigWorld.wg_getGoldFormat(goldToExchange)), icons.gold()))
+            fmtGold = ''.join((text_styles.gold(backport.getGoldFormat(goldToExchange)), icons.gold()))
             return (CONFIRM_EXCHANGE_DIALOG_TYPES.NOT_ENOUGH_GOLD_STATE, text_styles.error(self._makeString(I18N_GOLDNOTENOUGHTEXT_KEY, {'gold': fmtGold})))
         return (CONFIRM_EXCHANGE_DIALOG_TYPES.NORMAL_STATE, '')
 
@@ -269,7 +269,7 @@ class _ExchangeDialogMeta(I18nConfirmDialogMeta):
 
     def _getResourceToExchangeTxt(self, resToExchange):
         if resToExchange > 0:
-            resource = BigWorld.wg_getIntegralFormat(resToExchange)
+            resource = backport.getIntegralFormat(resToExchange)
             submitter = self._getSubmitter()
             resStr = submitter.currencyFormat(resource) + submitter.currencyIconStr
             return text_styles.error(self._makeString(I18N_NEEDITEMSTEXT_KEY, {'value': resStr}))
@@ -277,7 +277,7 @@ class _ExchangeDialogMeta(I18nConfirmDialogMeta):
     def _getGoldToExchangeTxt(self, resToExchange):
         if resToExchange > 0:
             goldToExchange = self._getGoldToExchange(resToExchange)
-            fmtGold = ''.join((text_styles.gold(BigWorld.wg_getGoldFormat(goldToExchange)), icons.gold()))
+            fmtGold = ''.join((text_styles.gold(backport.getGoldFormat(goldToExchange)), icons.gold()))
             return text_styles.main(self._makeString(I18N_NEEDGOLDTEXT_KEY, {'gold': fmtGold}))
 
     def _getGoldToExchange(self, resToExchange):

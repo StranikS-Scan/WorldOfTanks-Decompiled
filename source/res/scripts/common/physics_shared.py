@@ -9,7 +9,7 @@ import collections
 from items import vehicles, vehicle_items
 from items.vehicles import VEHICLE_PHYSICS_TYPE
 from math import pi
-from constants import IS_CLIENT, IS_CELLAPP, VEHICLE_PHYSICS_MODE, SERVER_TICK_LENGTH
+from constants import IS_CLIENT, IS_EDITOR, IS_CELLAPP, VEHICLE_PHYSICS_MODE, SERVER_TICK_LENGTH
 from debug_utils import LOG_CURRENT_EXCEPTION, LOG_DEBUG, LOG_ERROR
 import copy
 from items.components import gun_components
@@ -80,6 +80,7 @@ CONTACT_FRICTION_STATICS_VERT = 0.25
 CONTACT_FRICTION_DESTRUCTIBLES = 1.0
 CONTACT_FRICTION_VEHICLES = 0.3
 VEHICLE_ON_BODY_DEFAULT_FRICTION = 0.5
+ROLLER_REACTION_COEFF_FOR_STATIC = 0.2
 ROLLER_FRICTION_GAIN_MIN = 0.05
 ROLLER_FRICTION_GAIN_MAX = 0.25
 ROLLER_FRICTION_ANGLE_MIN = 20.0
@@ -227,7 +228,9 @@ g_defaultVehicleXPhysicsShapeCfg = {'useComplexForm': False,
 g_defaultWheeledVehicleXPhysicsShapeCfg = copy.deepcopy(g_defaultVehicleXPhysicsShapeCfg)
 g_defaultWheeledVehicleXPhysicsShapeCfg.update({'wheelZPenetration': 0.8,
  'wheelSize': (0.0, 0.0, 0.0),
- 'wheelXOffset': 0.0})
+ 'wheelXOffset': 0.0,
+ 'terrBoardAngle': 20.0,
+ 'terrFrontChamferFraction': 0.75})
 g_defaultVehicleXPhysicsCfg = {'mode_index': 0,
  'gravity': 9.81,
  'hullCOMShiftY': 0.0,
@@ -331,6 +334,7 @@ def updateCommonConf():
     BigWorld.wg_setupPhysicsParam('CONTACT_FRICTION_DESTRUCTIBLES', CONTACT_FRICTION_DESTRUCTIBLES)
     BigWorld.wg_setupPhysicsParam('CONTACT_FRICTION_VEHICLES', CONTACT_FRICTION_VEHICLES)
     BigWorld.wg_setupPhysicsParam('VEHICLE_ON_BODY_DEFAULT_FRICTION', VEHICLE_ON_BODY_DEFAULT_FRICTION)
+    BigWorld.wg_setupPhysicsParam('ROLLER_REACTION_COEFF_FOR_STATIC', ROLLER_REACTION_COEFF_FOR_STATIC)
     BigWorld.wg_setupPhysicsParam('ROLLER_FRICTION_GAIN_MIN', ROLLER_FRICTION_GAIN_MIN)
     BigWorld.wg_setupPhysicsParam('ROLLER_FRICTION_GAIN_MAX', ROLLER_FRICTION_GAIN_MAX)
     BigWorld.wg_setupPhysicsParam('ROLLER_FRICTION_ANGLE_MIN', ROLLER_FRICTION_ANGLE_MIN)
@@ -704,7 +708,7 @@ def initVehiclePhysicsClient(physics, typeDesc):
     trackLen = _computeTrackLength(clearance, blen)
     indent = boxHeight / 2
     hardRatio = _computeHardRatio(clearance, blen)
-    if IS_CLIENT and typeDesc.isPitchHullAimingAvailable:
+    if (IS_CLIENT or IS_EDITOR) and typeDesc.isPitchHullAimingAvailable:
         springExtendMultiplier = 2.0
         hardRatio = 0
         hullAngleMin = typeDesc.type.hullAimingParams['pitch']['wheelsCorrectionAngles']['pitchMin']
@@ -712,7 +716,7 @@ def initVehiclePhysicsClient(physics, typeDesc):
         backSpringLength = blen * math.sin(abs(hullAngleMax)) * springExtendMultiplier
         frontSpringLength = blen * math.sin(abs(hullAngleMin)) * springExtendMultiplier
         hullAimingLength = max(backSpringLength, frontSpringLength)
-    if IS_CLIENT and typeDesc.hasSiegeMode and typeDesc.isPitchHullAimingAvailable:
+    if (IS_CLIENT or IS_EDITOR) and typeDesc.hasSiegeMode and typeDesc.isPitchHullAimingAvailable:
         springsLengthList = tuple((length for _ in xrange(0, carrierSpringPairs)))
         hullAimingSpringsLengthList = tuple((hullAimingLength for _ in xrange(0, carrierSpringPairs)))
         for descriptor in [typeDesc.defaultVehicleDescr, typeDesc.siegeVehicleDescr]:

@@ -1,11 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/missions/regular/group_packers.py
-import locale
 import logging
-import time
 import weakref
 from collections import namedtuple, defaultdict, OrderedDict
-import BigWorld
 from CurrentVehicle import g_currentVehicle
 from Event import EventManager, Event
 from constants import EVENT_TYPE, PREMIUM_TYPE
@@ -33,7 +30,7 @@ from gui.server_events.events_helpers import missionsSortFunc
 from gui.server_events.formatters import DECORATION_SIZES
 from gui.shared.formatters import text_styles
 from gui.shared.formatters.icons import makeImageTag
-from helpers import dependency, time_utils, getLanguageCode
+from helpers import dependency, time_utils
 from helpers.i18n import makeString as _ms
 from skeletons.gui.linkedset import ILinkedSetController
 from skeletons.gui.lobby_context import ILobbyContext
@@ -441,7 +438,7 @@ class _GroupedEventsBlockInfo(_CollapsableEventsBlockInfo):
     def _getDescrBlock(self):
         minStartTime = min([ q.getStartTime() for q in self._suitableEvents ])
         maxFinishTime = max([ q.getFinishTime() for q in self._suitableEvents ])
-        return {'period': text_styles.middleTitle(_ms(QUESTS.MISSIONS_TAB_MARATHONS_HEADER_PERIOD, startDate=BigWorld.wg_getLongDateFormat(minStartTime), endDate=BigWorld.wg_getLongDateFormat(maxFinishTime))),
+        return {'period': text_styles.middleTitle(_ms(QUESTS.MISSIONS_TAB_MARATHONS_HEADER_PERIOD, startDate=backport.getLongDateFormat(minStartTime), endDate=backport.getLongDateFormat(maxFinishTime))),
          'isMultiline': True,
          'hasCalendarIcon': True}
 
@@ -809,10 +806,9 @@ class _LinkedSetQuestsBlockInfo(_EventsBlockInfo):
 
 
 class _PremiumGroupedQuestsBlockInfo(_GroupedQuestsBlockInfo):
-    itemsCache = dependency.descriptor(IItemsCache)
-    lobbyContext = dependency.descriptor(ILobbyContext)
     blockType = GuiGroupBlockID.PREMIUM_QUESTS_BLOCK
     groupID = 'prem_acc_qroup'
+    __itemsCache = dependency.descriptor(IItemsCache)
 
     def __init__(self):
         group = getPremiumGroup()
@@ -845,7 +841,7 @@ class _PremiumGroupedQuestsBlockInfo(_GroupedQuestsBlockInfo):
 
         isPremEnabled = self.__isPremiumEnabled()
         isAllCompleted = self._completedQuestsCount == self._totalQuestsCount
-        timeStr = self._getDailyResetStatus()
+        timeStr = self.__getDailyResetStatus()
         completeTitle = text_styles.missionStatusAvailable(backport.text(R.strings.quests.premiumQuest.body.complete(), time=timeStr) if isAllCompleted else '')
         return {'missions': cardsList,
          'title': text_styles.promoTitle(QUESTS.PREMIUMQUEST_BODY_TITLE),
@@ -856,23 +852,17 @@ class _PremiumGroupedQuestsBlockInfo(_GroupedQuestsBlockInfo):
          'completeTitle': completeTitle,
          'uiDecoration': backport.image(R.images.gui.maps.icons.premacc.quests.background())}
 
-    def _getDailyResetStatus(self):
-        resetHourUTC = self.lobbyContext.getServerSettings().regionals.getDayStartingTime() / time_utils.ONE_HOUR
-        deltaTimeUTC = time_utils.getTimeDeltaFromNow(time_utils.getDailyTimeForUTC(hour=resetHourUTC))
-        if resetHourUTC >= 0:
-            timeFmt = backport.text(R.strings.quests.details.conditions.postBattle.deltaDailyReset.timeFmt())
-            parts = time_utils.getTimeStructInUTC(deltaTimeUTC)
-            try:
-                return time.strftime(timeFmt, parts)
-            except ValueError:
-                _logger.error('Current time locale: %r', locale.getlocale(locale.LC_TIME))
-                _logger.error('Selected language: %r', getLanguageCode())
-                _logger.exception('Invalid formatting string %r to delta of time %r', timeFmt, parts)
-
     def _getHeaderData(self):
         info = _getMissionsCountLabel(self._completedQuestsCount, self._totalQuestsCount)
         return {'titleBlock': self.getTitleBlock(),
          'info': info}
 
     def __isPremiumEnabled(self):
-        return self.itemsCache.items.stats.isActivePremium(PREMIUM_TYPE.PLUS)
+        return self.__itemsCache.items.stats.isActivePremium(PREMIUM_TYPE.PLUS)
+
+    @staticmethod
+    def __getDailyResetStatus():
+        timeLeft = time_utils.ONE_DAY - time_utils.getServerRegionalTimeCurrentDay()
+        if timeLeft >= 0:
+            timeFmt = backport.text(R.strings.quests.details.conditions.postBattle.deltaDailyReset.timeFmt())
+            return time_utils.timestampToFmtStr(timeLeft, timeFmt)

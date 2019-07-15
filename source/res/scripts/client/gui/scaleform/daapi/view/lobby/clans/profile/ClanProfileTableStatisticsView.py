@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/clans/profile/ClanProfileTableStatisticsView.py
-import BigWorld
 from debug_utils import LOG_ERROR
+from gui.impl import backport
 from helpers import int2roman
 from gui.Scaleform.daapi.view.lobby.clans.profile import getI18ArenaById
 from gui.clans.items import formatField, isValueAvailable
@@ -75,7 +75,7 @@ class ClanProfileTableStatisticsView(ClanProfileTableStatisticsViewMeta):
         self.__provincesDP = _ClanProfileProvinceDataProvider(showTreasury)
         self.__provincesDP.setFlashObject(self.as_getDPS())
         self.__provincesDP.buildList(provinces)
-        self.as_setAdditionalTextS(hasProvinces and showTreasury, text_styles.standard(_ms(CLANS.GLOBALMAPVIEW_TOTALINCOME, icon=icons.gold(), value=text_styles.gold(BigWorld.wg_getIntegralFormat(self.__provincesDP.getCommonRevenue())))))
+        self.as_setAdditionalTextS(hasProvinces and showTreasury, text_styles.standard(_ms(CLANS.GLOBALMAPVIEW_TOTALINCOME, icon=icons.gold(), value=text_styles.gold(backport.getIntegralFormat(self.__provincesDP.getCommonRevenue())))))
         proxy.hideWaiting()
 
     def _dispose(self):
@@ -188,13 +188,13 @@ class _ClanProfileProvinceDataProvider(SortableDAAPIDataProvider):
          'province': self.__getProvinceName(province),
          'map': self.__getMap(province),
          'primeTime': text_styles.main(province.getUserPrimeTime()),
-         'days': text_styles.main(BigWorld.wg_getIntegralFormat(self.__getDays(province))),
+         'days': text_styles.main(backport.getIntegralFormat(self.__getDays(province))),
          'isRobbed': isRobbed}
         if isRobbed:
             restoreTime = province.getPillageEndDatetime()
             result.update({'robbedTooltip': makeTooltip(None, text_styles.concatStylesToMultiLine(text_styles.main(_ms(CLANS.GLOBALMAPVIEW_TABLE_PROVINCEROBBED_TOOLTIP_NOINCOME)), text_styles.neutral(_ms(CLANS.GLOBALMAPVIEW_TABLE_PROVINCEROBBED_TOOLTIP_RESTORETIME, date=text_styles.main(formatters.formatShortDateShortTimeString(restoreTime))))))})
         if self.__showTreasuryData:
-            result.update({'income': text_styles.gold(BigWorld.wg_getIntegralFormat(self.__getIncome(province))),
+            result.update({'income': text_styles.gold(backport.getIntegralFormat(self.__getIncome(province))),
              'noIncomeIconVisible': not province.isHqConnected() or isRobbed,
              'noIncomeTooltip': CLANS.GLOBALMAPVIEW_NOINCOME_TOOLTIP})
         return result

@@ -3,7 +3,6 @@
 import logging
 from collections import OrderedDict
 from gui.Scaleform.daapi.view.meta.CustomizationFiltersPopoverMeta import CustomizationFiltersPopoverMeta
-from gui.customization.shared import PROJECTION_DECAL_IMAGE_FORM_TAG
 from gui.shared.formatters import text_styles
 from gui.shared.utils.functions import makeTooltip
 from helpers import dependency
@@ -11,6 +10,7 @@ from skeletons.gui.customization import ICustomizationService
 from items.components.c11n_constants import ProjectionDecalFormTags
 from gui.impl import backport
 from gui.impl.gen import R
+from gui.customization.shared import PROJECTION_DECAL_TEXT_FORM_TAG
 _logger = logging.getLogger(__name__)
 
 class FiltersPopoverVO(object):
@@ -37,10 +37,16 @@ class FiltersPopoverVO(object):
          'btnDefaultTooltip': self.btnDefaultTooltip,
          'groupTypeSelectedIndex': self.groupTypeSelectedIndex,
          'filterBtns': self.filterBtns,
+         'formsBtns': self.formsBtns,
          'formsBtnsLbl': self.formsBtnsLbl}
 
 
 class FilterPopover(CustomizationFiltersPopoverMeta):
+    PROJECTION_DECAL_IMAGE_FORM_TAG = {ProjectionDecalFormTags.SQUARE: backport.image(R.images.gui.maps.icons.customization.icon_form_1_c()),
+     ProjectionDecalFormTags.RECT1X2: backport.image(R.images.gui.maps.icons.customization.icon_form_2_c()),
+     ProjectionDecalFormTags.RECT1X3: backport.image(R.images.gui.maps.icons.customization.icon_form_3_c()),
+     ProjectionDecalFormTags.RECT1X4: backport.image(R.images.gui.maps.icons.customization.icon_form_4_c()),
+     ProjectionDecalFormTags.RECT1X6: backport.image(R.images.gui.maps.icons.customization.icon_form_6())}
     service = dependency.descriptor(ICustomizationService)
 
     def __init__(self, ctx=None):
@@ -55,8 +61,8 @@ class FilterPopover(CustomizationFiltersPopoverMeta):
         self._groupCount = data.groupCount
         self._formfactorTypes = OrderedDict()
         for i, val in enumerate(data.formfactorGroups):
-            if i <= len(ProjectionDecalFormTags.ALL_FACTORS):
-                self._formfactorTypes[ProjectionDecalFormTags.ALL_FACTORS[i]] = val
+            if i <= len(ProjectionDecalFormTags.ALL):
+                self._formfactorTypes[ProjectionDecalFormTags.ALL[i]] = val
 
         if hasattr(data, 'isInit'):
             self._isInit = data.isInit
@@ -71,10 +77,10 @@ class FilterPopover(CustomizationFiltersPopoverMeta):
     def onFormChange(self, index, value):
         if not self._formfactorTypes:
             return
-        if index >= len(ProjectionDecalFormTags.ALL_FACTORS):
+        if index >= len(ProjectionDecalFormTags.ALL):
             _logger.warning('"index" = %(index)s is not valid', {'index': index})
             return
-        formFactor = ProjectionDecalFormTags.ALL_FACTORS[index]
+        formFactor = ProjectionDecalFormTags.ALL[index]
         if formFactor not in self._formfactorTypes:
             _logger.warning('"index" = %(index)s is not valid  (self._formfactorTypes = %(formfactorTypes)s)', {'index': index,
              'formfactorTypes': self._formfactorTypes})
@@ -143,9 +149,9 @@ class FilterPopover(CustomizationFiltersPopoverMeta):
           'selected': self._purchasedToggleEnabled}, {'value': backport.image(R.images.gui.maps.icons.buttons.equipped_icon()),
           'tooltip': makeTooltip(backport.text(R.strings.vehicle_customization.carousel.filter.equippedBtn.header()), backport.text(R.strings.vehicle_customization.carousel.filter.equippedBtn.body())),
           'selected': self._appliedToggleEnabled}]
-        _formsBtns = [ {'value': PROJECTION_DECAL_IMAGE_FORM_TAG[formType],
+        _formsBtns = [ {'value': self.PROJECTION_DECAL_IMAGE_FORM_TAG[formType],
          'selected': value,
-         'tooltip': makeTooltip(backport.text(R.strings.vehicle_customization.popover.tooltip.form()), backport.text(R.strings.vehicle_customization.popover.tooltip.form.body(), value=backport.text(R.strings.vehicle_customization.form.dyn(formType)())))} for formType, value in self._formfactorTypes.iteritems() ]
+         'tooltip': makeTooltip('{} {}'.format(backport.text(R.strings.vehicle_customization.popover.tooltip.form()), PROJECTION_DECAL_TEXT_FORM_TAG[formType]), backport.text(R.strings.vehicle_customization.popover.tooltip.form.body(), value=backport.text(R.strings.vehicle_customization.form.dyn(formType)())))} for formType, value in self._formfactorTypes.iteritems() ]
         formsBtnsLbl = ''
         if self._formfactorTypes:
             formsBtnsLbl = text_styles.standard(backport.text(R.strings.vehicle_customization.filter.popover.formfilters.title()))

@@ -33,7 +33,7 @@ class LobbyControllersFactory(IControllerFactory):
         if chatType == CHAT_TYPE.UNIT:
             prbType = channel.getPrebattleType()
             if prbType:
-                if prbType == PREBATTLE_TYPE.TRAINING:
+                if prbType in PREBATTLE_TYPE.TRAININGS:
                     controller = lobby_controllers.TrainingChannelController(channel)
                 else:
                     controller = lobby_controllers.UnitChannelController(channel)

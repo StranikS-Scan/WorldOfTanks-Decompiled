@@ -9,7 +9,7 @@ from helpers import dependency
 from skeletons.gui.battle_session import IBattleSessionProvider
 from gui.battle_control import avatar_getter
 from AvatarInputHandler import AvatarInputHandler
-from AvatarInputHandler.aih_constants import CTRL_MODE_NAME
+from aih_constants import CTRL_MODE_NAME
 _DEVICE_NAME_TO_ID = {'gunHealth': DAMAGE_INFO_PANEL_CONSTS.GUN,
  'turretRotatorHealth': DAMAGE_INFO_PANEL_CONSTS.TURRET_ROTATOR,
  'surveyingDeviceHealth': DAMAGE_INFO_PANEL_CONSTS.SURVEYING_DEVICE,

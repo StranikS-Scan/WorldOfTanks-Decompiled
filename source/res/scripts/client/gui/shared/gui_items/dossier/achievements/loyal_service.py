@@ -1,6 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/gui_items/dossier/achievements/loyal_service.py
-import BigWorld
+from gui.impl import backport
 from gui.shared.gui_items.dossier.achievements.abstract import DeprecatedAchievement
 from helpers import i18n
 
@@ -9,7 +9,7 @@ class LoyalServiceAchievement(DeprecatedAchievement):
     def __init__(self, name, block, dossier, value=None):
         super(LoyalServiceAchievement, self).__init__(name, block, dossier, value)
         if dossier is not None:
-            self.__registrationDate = BigWorld.wg_getLongDateFormat(dossier.getDossierDescr()['total']['creationTime'])
+            self.__registrationDate = backport.getLongDateFormat(dossier.getDossierDescr()['total']['creationTime'])
         else:
             self.__registrationDate = None
         return

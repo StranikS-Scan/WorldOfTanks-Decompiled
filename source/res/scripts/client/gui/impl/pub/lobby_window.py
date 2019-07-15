@@ -1,6 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/pub/lobby_window.py
-from frameworks.wulf import Window
+from frameworks.wulf import Window, WindowSettings
 from gui.Scaleform.framework.entities.View import ViewKey
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from helpers import dependency
@@ -16,5 +16,10 @@ class LobbyWindow(Window):
             view = app.containerManager.getViewByKey(ViewKey(VIEW_ALIAS.LOBBY))
             if view is not None:
                 parent = view.getParentWindow()
-        super(LobbyWindow, self).__init__(wndFlags=wndFlags, decorator=decorator, content=content, parent=parent)
+        settings = WindowSettings()
+        settings.flags = wndFlags
+        settings.decorator = decorator
+        settings.content = content
+        settings.parent = parent
+        super(LobbyWindow, self).__init__(settings)
         return

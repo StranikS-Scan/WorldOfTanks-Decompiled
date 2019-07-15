@@ -18,6 +18,7 @@ from gui.battle_control.battle_constants import VEHICLE_DEVICE_IN_COMPLEX_ITEM
 from gui.battle_control.battle_constants import VEHICLE_VIEW_STATE, DEVICE_STATE_DESTROYED
 from gui.battle_control.controllers.consumables.equipment_ctrl import IgnoreEntitySelection
 from gui.battle_control.controllers.consumables.equipment_ctrl import NeedEntitySelection, InCooldownError
+from gui.impl import backport
 from gui.shared import g_eventBus, EVENT_BUS_SCOPE
 from gui.shared.events import GameEvent
 from gui.shared.utils.key_mapping import getScaleformKey
@@ -229,7 +230,7 @@ class ConsumablesPanel(ConsumablesPanelMeta, BattleGUIKeyHandler):
 
     def __makeShellTooltip(self, descriptor, piercingPower):
         kind = descriptor.kind
-        header = i18n.makeString('#ingame_gui:shells_kinds/{0:>s}'.format(kind), caliber=BigWorld.wg_getNiceNumberFormat(descriptor.caliber), userString=descriptor.userString)
+        header = i18n.makeString('#ingame_gui:shells_kinds/{0:>s}'.format(kind), caliber=backport.getNiceNumberFormat(descriptor.caliber), userString=descriptor.userString)
         if GUI_SETTINGS.technicalInfo:
             tooltipStr = INGAME_GUI.SHELLS_KINDS_PARAMS
             paramsDict = {'damage': str(int(descriptor.damage[0])),
@@ -237,8 +238,8 @@ class ConsumablesPanel(ConsumablesPanelMeta, BattleGUIKeyHandler):
             if descriptor.hasStun and self.lobbyContext.getServerSettings().spgRedesignFeatures.isStunEnabled():
                 stun = descriptor.stun
                 tooltipStr = INGAME_GUI.SHELLS_KINDS_STUNPARAMS
-                paramsDict['stunMinDuration'] = BigWorld.wg_getNiceNumberFormat(stun.guaranteedStunDuration * stun.stunDuration)
-                paramsDict['stunMaxDuration'] = BigWorld.wg_getNiceNumberFormat(stun.stunDuration)
+                paramsDict['stunMinDuration'] = backport.getNiceNumberFormat(stun.guaranteedStunDuration * stun.stunDuration)
+                paramsDict['stunMaxDuration'] = backport.getNiceNumberFormat(stun.stunDuration)
             body = i18n.makeString(tooltipStr, **paramsDict)
             fmt = TOOLTIP_FORMAT
         else:

@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/tooltips/module.py
 from debug_utils import LOG_ERROR
+from gui.Scaleform.daapi.view.lobby.storage.storage_helpers import getSlotOverlayIconType
 from gui.Scaleform.genConsts.BLOCKS_TOOLTIP_TYPES import BLOCKS_TOOLTIP_TYPES
 from gui.Scaleform.genConsts.NODE_STATE_FLAGS import NODE_STATE_FLAGS
 from gui.Scaleform.genConsts.SLOT_HIGHLIGHT_TYPES import SLOT_HIGHLIGHT_TYPES
@@ -43,7 +44,7 @@ class ModuleBlockTooltipData(BlocksTooltipData):
         return
 
     def _getHighLightType(self):
-        return SLOT_HIGHLIGHT_TYPES.EQUIPMENT_PLUS if self.item.itemTypeID == GUI_ITEM_TYPE.OPTIONALDEVICE and self.item.isDeluxe() else SLOT_HIGHLIGHT_TYPES.NO_HIGHLIGHT
+        return getSlotOverlayIconType(self.item)
 
     def _packBlocks(self, *args, **kwargs):
         self.item = self.context.buildItem(*args, **kwargs)
@@ -233,6 +234,8 @@ class HeaderBlockConstructor(ModuleTooltipBlockConstructor):
             paramValue = params_formatters.formatParameter(paramName, moduleParams[paramName]) if paramName in moduleParams else None
             if paramValue is not None:
                 desc = text_styles.main(TOOLTIPS.PARAMETER_WEIGHT) + text_styles.credits(paramValue) + weightUnits
+            elif module.itemTypeID is GUI_ITEM_TYPE.EQUIPMENT and module.isBuiltIn:
+                desc = text_styles.standard(TOOLTIPS.EQUIPMENT_BUILTIN)
         else:
             desc = text_styles.standard(desc)
         overlayPath, overlayPadding, blockPadding = self.__getOverlayData()
@@ -260,10 +263,15 @@ class HeaderBlockConstructor(ModuleTooltipBlockConstructor):
 
     def __getOverlayData(self):
         blockPadding = formatters.packPadding(top=-6)
+        bottomBlockPadding = -12
         if self.module.itemTypeID == GUI_ITEM_TYPE.OPTIONALDEVICE and self.module.isDeluxe():
             overlayPath = RES_ICONS.MAPS_ICONS_QUESTS_BONUSES_SMALL_EQUIPMENTPLUS_OVERLAY
             padding = formatters.packPadding(top=SLOT_HIGHLIGHT_TYPES.TOOLTIP_OVERLAY_PADDING_TOP, left=SLOT_HIGHLIGHT_TYPES.TOOLTIP_OVERLAY_PADDING_LEFT)
-            blockPadding['bottom'] = -12
+            blockPadding['bottom'] = bottomBlockPadding
+        elif self.module.itemTypeID is GUI_ITEM_TYPE.EQUIPMENT and self.module.isBuiltIn:
+            overlayPath = RES_ICONS.MAPS_ICONS_QUESTS_BONUSES_SMALL_BUILTINEQUIPMENT_OVERLAY
+            padding = formatters.packPadding(top=SLOT_HIGHLIGHT_TYPES.TOOLTIP_OVERLAY_PADDING_TOP, left=SLOT_HIGHLIGHT_TYPES.TOOLTIP_OVERLAY_PADDING_LEFT)
+            blockPadding['bottom'] = bottomBlockPadding
         else:
             overlayPath = padding = None
         return (overlayPath, padding, blockPadding)
@@ -292,6 +300,8 @@ class PriceBlockConstructor(ModuleTooltipBlockConstructor):
         if buyPrice and sellPrice:
             LOG_ERROR('You are not allowed to use buyPrice and sellPrice at the same time')
             return
+        elif self.module.itemTypeID is GUI_ITEM_TYPE.EQUIPMENT and self.module.isBuiltIn:
+            return (None, False)
         else:
 
             def checkState(state):
@@ -528,7 +538,9 @@ class StatusBlockConstructor(ModuleTooltipBlockConstructor):
     def construct(self):
         if self.configuration.isResearchPage:
             return self._getResearchPageStatus()
-        return [] if self.configuration.isAwardWindow else self._getStatus()
+        if self.configuration.isAwardWindow:
+            return []
+        return [] if self.module.itemTypeID is GUI_ITEM_TYPE.EQUIPMENT and self.module.isBuiltIn else self._getStatus()
 
     def _getStatus(self):
         block = []

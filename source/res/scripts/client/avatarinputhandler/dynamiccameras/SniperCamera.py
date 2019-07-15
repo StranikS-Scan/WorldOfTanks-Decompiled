@@ -5,7 +5,8 @@ import BigWorld
 import GUI
 import Settings
 import constants
-from AvatarInputHandler import mathUtils, cameras, aih_global_binding
+import math_utils
+from AvatarInputHandler import cameras, aih_global_binding
 from AvatarInputHandler.AimingSystems.SniperAimingSystem import SniperAimingSystem
 from AvatarInputHandler.AimingSystems.SniperAimingSystemRemote import SniperAimingSystemRemote
 from AvatarInputHandler import AimingSystems
@@ -196,7 +197,7 @@ class SniperCamera(ICamera, CallbackDelayer):
         self.__applyZoom(self.__zoom)
 
     def __applyNoiseImpulse(self, noiseMagnitude):
-        noiseImpulse = mathUtils.RandomVectors.random3(noiseMagnitude)
+        noiseImpulse = math_utils.RandomVectors.random3(noiseMagnitude)
         self.__noiseOscillator.applyImpulse(noiseImpulse)
 
     def __rotateAndZoom(self, dx, dy, dz):
@@ -289,8 +290,8 @@ class SniperCamera(ICamera, CallbackDelayer):
         zoom = self.__aimingSystem.overrideZoom(self.__zoom)
         aimMatrix = cameras.getAimMatrix(self.__defaultAimOffset.x, self.__defaultAimOffset.y)
         camMat = Matrix(aimMatrix)
-        rodMat = mathUtils.createTranslationMatrix(-self.__dynamicCfg['pivotShift'])
-        antiRodMat = mathUtils.createTranslationMatrix(self.__dynamicCfg['pivotShift'])
+        rodMat = math_utils.createTranslationMatrix(-self.__dynamicCfg['pivotShift'])
+        antiRodMat = math_utils.createTranslationMatrix(self.__dynamicCfg['pivotShift'])
         camMat.postMultiply(rodMat)
         camMat.postMultiply(localTransform)
         camMat.postMultiply(antiRodMat)
@@ -325,7 +326,7 @@ class SniperCamera(ICamera, CallbackDelayer):
             worldCrosshair.postMultiply(aimLocalTransform)
         worldCrosshair.postMultiply(aimingSystemMatrix)
         aimOffset = cameras.projectPoint(worldCrosshair.translation)
-        return Vector2(mathUtils.clamp(-0.95, 0.95, aimOffset.x), mathUtils.clamp(-0.95, 0.95, aimOffset.y))
+        return Vector2(math_utils.clamp(-0.95, 0.95, aimOffset.x), math_utils.clamp(-0.95, 0.95, aimOffset.y))
 
     def __calcCurOscillatorAcceleration(self, deltaTime):
         vehicle = BigWorld.player().vehicle
@@ -353,7 +354,7 @@ class SniperCamera(ICamera, CallbackDelayer):
             self.__impulseOscillator.reset()
             self.__movementOscillator.reset()
             self.__noiseOscillator.reset()
-            return (mathUtils.createRotationMatrix(Vector3(0, 0, 0)), mathUtils.createRotationMatrix(Vector3(0, 0, 0)))
+            return (math_utils.createRotationMatrix(Vector3(0, 0, 0)), math_utils.createRotationMatrix(Vector3(0, 0, 0)))
         oscillatorAcceleration = self.__calcCurOscillatorAcceleration(deltaTime)
         self.__movementOscillator.externalForce += oscillatorAcceleration
         self.__impulseOscillator.update(deltaTime)
@@ -381,7 +382,7 @@ class SniperCamera(ICamera, CallbackDelayer):
         self.__impulseOscillator.externalForce = Vector3(0)
         self.__movementOscillator.externalForce = Vector3(0)
         self.__noiseOscillator.externalForce = Vector3(0)
-        return (mathUtils.createRotationMatrix(Vector3(deviation.x, deviation.y, deviation.z)), mathUtils.createRotationMatrix(impulseDeviation))
+        return (math_utils.createRotationMatrix(Vector3(deviation.x, deviation.y, deviation.z)), math_utils.createRotationMatrix(impulseDeviation))
 
     def __isPositionUnderwater(self, position):
         return BigWorld.wg_collideWater(position, position + Vector3(0, 1, 0), False) > -1.0
@@ -448,7 +449,7 @@ class SniperCamera(ICamera, CallbackDelayer):
         self.__dynamicCfg['aimMarkerDistance'] = readFloat(dynamicsSection, 'aimMarkerDistance', -1000, 1000, 1.0)
         rawZoomExposure = dynamicsSection.readString('zoomExposure', '0.6 0.5 0.4 0.3 0.2')
         self.__dynamicCfg['zoomExposure'] = [ float(x) for x in rawZoomExposure.split() ]
-        accelerationFilter = mathUtils.RangeFilter(self.__dynamicCfg['accelerationThreshold'], self.__dynamicCfg['accelerationMax'], 100, mathUtils.SMAFilter(SniperCamera._FILTER_LENGTH))
+        accelerationFilter = math_utils.RangeFilter(self.__dynamicCfg['accelerationThreshold'], self.__dynamicCfg['accelerationMax'], 100, math_utils.SMAFilter(SniperCamera._FILTER_LENGTH))
         maxAccelerationDuration = readFloat(dynamicsSection, 'maxAccelerationDuration', 0.0, 10000.0, SniperCamera._DEFAULT_MAX_ACCELERATION_DURATION)
         self.__accelerationSmoother = AccelerationSmoother(accelerationFilter, maxAccelerationDuration)
         return

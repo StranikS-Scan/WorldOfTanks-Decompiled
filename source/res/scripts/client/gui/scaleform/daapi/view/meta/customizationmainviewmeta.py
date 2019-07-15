@@ -25,8 +25,11 @@ class CustomizationMainViewMeta(View):
     def onSelectAnchor(self, areaID, slotID, regionID):
         self._printOverrideError('onSelectAnchor')
 
-    def onLockedAnchor(self):
-        self._printOverrideError('onLockedAnchor')
+    def onHoverAnchor(self, areaID, slotID, regionID, hover):
+        self._printOverrideError('onHoverAnchor')
+
+    def onDragAnchor(self, areaID, slotID, regionID):
+        self._printOverrideError('onDragAnchor')
 
     def onReleaseItem(self):
         self._printOverrideError('onReleaseItem')
@@ -97,5 +100,8 @@ class CustomizationMainViewMeta(View):
     def as_setNotificationCountersS(self, counters):
         return self.flashObject.as_setNotificationCounters(counters) if self._isDAAPIInited() else None
 
-    def as_setAnchorsLockStateS(self, data):
-        return self.flashObject.as_setAnchorsLockState(data) if self._isDAAPIInited() else None
+    def as_setAnchorsStateS(self, data):
+        return self.flashObject.as_setAnchorsState(data) if self._isDAAPIInited() else None
+
+    def as_attachToCursorS(self, index):
+        return self.flashObject.as_attachToCursor(index) if self._isDAAPIInited() else None

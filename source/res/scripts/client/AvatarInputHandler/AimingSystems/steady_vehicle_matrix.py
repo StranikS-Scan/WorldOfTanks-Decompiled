@@ -1,6 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/AvatarInputHandler/AimingSystems/steady_vehicle_matrix.py
-from AvatarInputHandler import mathUtils
+import math_utils
 import BigWorld
 import Math
 from svarog_script.py_component import Component
@@ -14,7 +14,7 @@ class SteadyVehicleMatrixCalculator(Component):
         self.__stabilisedMProv = Math.WGAdaptiveMatrixProvider()
 
     def __relinkToIdentity(self):
-        self.__outputMProv.rotationSrc = mathUtils.createIdentityMatrix()
+        self.__outputMProv.rotationSrc = math_utils.createIdentityMatrix()
         self.__outputMProv.translationSrc = self.__outputMProv.rotationSrc
         self.__stabilisedMProv.target = self.__outputMProv.rotationSrc
 

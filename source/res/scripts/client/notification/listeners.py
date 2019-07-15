@@ -5,6 +5,7 @@ import weakref
 from collections import defaultdict
 from account_helpers import AccountSettings
 from account_helpers.AccountSettings import PROGRESSIVE_REWARD_VISITED
+from chat_shared import SYS_MESSAGE_TYPE
 from constants import AUTO_MAINTENANCE_RESULT, PremiumConfigs
 from adisp import process
 from debug_utils import LOG_DEBUG, LOG_ERROR
@@ -113,8 +114,6 @@ class _WGNCNotificationListener(_NotificationListener):
 
 
 class ServiceChannelListener(_NotificationListener):
-    _MESSAGE_DECORATOR_BY_TYPE = {AUTO_MAINTENANCE_RESULT.RENT_IS_OVER: C11nMessageDecorator,
-     AUTO_MAINTENANCE_RESULT.RENT_IS_ALMOST_OVER: C11nMessageDecorator}
 
     @proto_getter(PROTO_TYPE.BW)
     def proto(self):
@@ -147,9 +146,17 @@ class ServiceChannelListener(_NotificationListener):
             model.addNotification(self.__makeNotification(clientID, formatted, settings, model))
 
     def __makeNotification(self, clientID, formatted, settings, model):
-        messageDecorator = self._MESSAGE_DECORATOR_BY_TYPE.get(settings.messageType, MessageDecorator)
+        messageDecorator = self.__getMessageDecorator(settings.messageType, settings.messageSubtype)
         notification = messageDecorator(clientID, formatted, settings, model)
         return notification
+
+    def __getMessageDecorator(self, messageType, messageSubtype):
+        if messageType == SYS_MESSAGE_TYPE.autoMaintenance.index():
+            if messageSubtype in (AUTO_MAINTENANCE_RESULT.RENT_IS_OVER, AUTO_MAINTENANCE_RESULT.RENT_IS_ALMOST_OVER):
+                return C11nMessageDecorator
+        elif messageType == SYS_MESSAGE_TYPE.customizationChanged.index():
+            return C11nMessageDecorator
+        return MessageDecorator
 
 
 class PrbInvitesListener(_NotificationListener, IGlobalListener):

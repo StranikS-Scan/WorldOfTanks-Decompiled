@@ -1,6 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/clans/profile/ClanProfilePersonnelView.py
-import BigWorld
 from account_helpers import getAccountDatabaseID
 from adisp import process
 from constants import CLAN_MEMBER_FLAGS
@@ -14,6 +13,7 @@ from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.clans import formatters as clans_fmts
 from gui.clans import items
 from gui.clans.settings import CLIENT_CLAN_RESTRICTIONS as RES
+from gui.impl import backport
 from gui.shared.event_dispatcher import showClanInvitesWindow
 from gui.shared.formatters import text_styles
 from gui.shared.utils import sortByFields, weightedAvg
@@ -297,16 +297,16 @@ class _ClanMembersDataProvider(SortableDAAPIDataProvider, UsersInfoHelper):
             self.refresh()
 
     def getAvgGlobalRating(self):
-        return _getAvgStringValue(self.__accountsList, 'getGlobalRating', formatter=BigWorld.wg_getIntegralFormat)
+        return _getAvgStringValue(self.__accountsList, 'getGlobalRating', formatter=backport.getIntegralFormat)
 
     def getAvgBattlesCount(self):
-        return _getAvgStringValue(self.__accountsList, 'getBattlesCount', formatter=BigWorld.wg_getIntegralFormat)
+        return _getAvgStringValue(self.__accountsList, 'getBattlesCount', formatter=backport.getIntegralFormat)
 
     def getAvgPerformanceBattles(self):
-        return _getWeighedAvgStringValue(self.__accountsList, 'getBattlesPerformanceAvg', 'getBattlesCount', formatter=lambda v: BigWorld.wg_getNiceNumberFormat(v) + '%')
+        return _getWeighedAvgStringValue(self.__accountsList, 'getBattlesPerformanceAvg', 'getBattlesCount', formatter=lambda v: backport.getNiceNumberFormat(v) + '%')
 
     def getAvgXp(self):
-        return _getWeighedAvgStringValue(self.__accountsList, 'getBattleXpAvg', 'getBattlesCount', formatter=BigWorld.wg_getIntegralFormat)
+        return _getWeighedAvgStringValue(self.__accountsList, 'getBattleXpAvg', 'getBattlesCount', formatter=backport.getIntegralFormat)
 
     def _makeVO(self, memberData):
         memberDBID = memberData.getDbID()
@@ -320,11 +320,11 @@ class _ClanMembersDataProvider(SortableDAAPIDataProvider, UsersInfoHelper):
          'userName': self.__getMemberName(memberData),
          'post': items.formatField(getter=memberData.getRoleString),
          'postIcon': memberData.getRoleIcon(),
-         'personalRating': items.formatField(getter=memberData.getGlobalRating, formatter=BigWorld.wg_getIntegralFormat),
-         'battlesCount': items.formatField(getter=memberData.getBattlesCount, formatter=BigWorld.wg_getIntegralFormat),
-         'wins': items.formatField(getter=memberData.getBattlesPerformanceAvg, formatter=lambda x: BigWorld.wg_getNiceNumberFormat(x) + '%'),
-         'awgExp': items.formatField(getter=memberData.getBattleXpAvg, formatter=BigWorld.wg_getIntegralFormat),
-         'daysInClan': items.formatField(getter=memberData.getDaysInClan, formatter=BigWorld.wg_getIntegralFormat),
+         'personalRating': items.formatField(getter=memberData.getGlobalRating, formatter=backport.getIntegralFormat),
+         'battlesCount': items.formatField(getter=memberData.getBattlesCount, formatter=backport.getIntegralFormat),
+         'wins': items.formatField(getter=memberData.getBattlesPerformanceAvg, formatter=lambda x: backport.getNiceNumberFormat(x) + '%'),
+         'awgExp': items.formatField(getter=memberData.getBattleXpAvg, formatter=backport.getIntegralFormat),
+         'daysInClan': items.formatField(getter=memberData.getDaysInClan, formatter=backport.getIntegralFormat),
          'canShowContextMenu': memberDBID != getAccountDatabaseID(),
          'contactItem': userVO}
 

@@ -453,7 +453,7 @@ def __calcSpaceBoundingBox(arenaBoundingBox):
 
 
 def __readChatCommandFlags(name, section, defaultXml):
-    if section[name]:
+    if section[name] is not None:
         flagsAsWhitespaceSeparatedString = section.readString(name)
     else:
         flagsAsWhitespaceSeparatedString = defaultXml.readString(name)

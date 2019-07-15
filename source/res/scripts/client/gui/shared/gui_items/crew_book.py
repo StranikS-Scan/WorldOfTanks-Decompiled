@@ -8,8 +8,9 @@ from gui.shared.gui_items.Vehicle import getIconResourceName
 from gui.shared.utils.functions import stripExpAmountTags
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.gui_items.fitting_item import FittingItem
-from helpers import func_utils
+from helpers import func_utils, dependency
 from items.components.crew_books_constants import CREW_BOOK_RARITY, CREW_BOOK_SPREAD
+from skeletons.gui.lobby_context import ILobbyContext
 
 def orderCmp(item1, item2, rarityReverse=False):
     itemOrder1 = item1.getBookTypeOrder()
@@ -27,6 +28,7 @@ def sortItems(items):
 
 class CrewBook(FittingItem):
     __slots__ = ('__id', '__count')
+    __lobbyContext = dependency.descriptor(ILobbyContext)
 
     def __init__(self, intCompactDescr, proxy=None):
         super(CrewBook, self).__init__(intCompactDescr, proxy)
@@ -36,6 +38,10 @@ class CrewBook(FittingItem):
         if proxy is not None and proxy.inventory.isSynced():
             self.__count = proxy.inventory.getItems(GUI_ITEM_TYPE.CREW_BOOKS, intCompactDescr)
         return
+
+    @property
+    def isForSale(self):
+        return self.__lobbyContext.getServerSettings().isCrewBooksSaleEnabled()
 
     def getID(self):
         return self.__id

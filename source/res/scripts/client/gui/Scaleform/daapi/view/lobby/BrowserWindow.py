@@ -3,7 +3,8 @@
 from debug_utils import LOG_ERROR
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.meta.BrowserWindowMeta import BrowserWindowMeta
-from gui.Scaleform.locale.WAITING import WAITING
+from gui.impl import backport
+from gui.impl.gen import R
 from gui.shared import event_bus_handlers, events, EVENT_BUS_SCOPE
 from helpers import dependency
 from skeletons.gui.game_control import IBrowserController
@@ -44,7 +45,7 @@ class BrowserWindow(BrowserWindowMeta):
         self.as_configureS(self.__customTitle, self.__showActionBtn, self.__showCloseBtn, self.__isSolidBorder)
         self.as_setSizeS(*self.__size)
         if self.__showWaiting:
-            self.as_showWaitingS(WAITING.LOADCONTENT, {})
+            self.as_showWaitingS(backport.msgid(R.strings.waiting.loadContent()), {})
 
     @event_bus_handlers.eventBusHandler(events.HideWindowEvent.HIDE_BROWSER_WINDOW, EVENT_BUS_SCOPE.LOBBY)
     def __handleBrowserClose(self, event):

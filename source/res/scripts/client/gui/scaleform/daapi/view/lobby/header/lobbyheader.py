@@ -555,7 +555,7 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
         btnType = LobbyHeader.BUTTONS.FREE_XP
         if self.__isHeaderButtonPresent(btnType):
             isActionActive = self.itemsCache.items.shop.isXPConversionActionActive
-            btnData = self._getWalletBtnData(btnType, freeXP, BigWorld.wg_getIntegralFormat, isActionActive)
+            btnData = self._getWalletBtnData(btnType, freeXP, backport.getIntegralFormat, isActionActive)
             self.as_updateWalletBtnS(btnType, btnData)
 
     def _getWalletBtnData(self, btnType, value, formatter, isHasAction=False, isDiscountEnabled=False, isNew=False):
@@ -1066,10 +1066,15 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
     def __onServerSettingChanged(self, diff):
         strongholdSettingsChanged = 'strongholdSettings' in diff
         epicRandomStateChanged = 'isEpicRandomEnabled' in diff
+        commandBattlesStateChanged = 'isCommandBattleEnabled' in diff
         bootcampStateChanged = 'isBootcampEnabled' in diff
-        updateHangarMenuData = any((strongholdSettingsChanged, epicRandomStateChanged, 'isRegularQuestEnabled' in diff))
+        updateHangarMenuData = any((strongholdSettingsChanged,
+         epicRandomStateChanged,
+         commandBattlesStateChanged,
+         'isRegularQuestEnabled' in diff))
         updatePrebattleControls = any((strongholdSettingsChanged,
          epicRandomStateChanged,
+         commandBattlesStateChanged,
          bootcampStateChanged,
          'isSandboxEnabled' in diff,
          'ranked_config' in diff,

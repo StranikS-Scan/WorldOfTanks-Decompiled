@@ -1,8 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/clans/profile/ClanProfileSummaryView.py
-import BigWorld
 from adisp import process
 from constants import IS_CHINA
+from gui.impl import backport
 from helpers import i18n
 from gui.clans.settings import CLIENT_CLAN_RESTRICTIONS as _RES
 from gui.clans.items import formatField, isValueAvailable, StrongholdStatisticsData
@@ -150,7 +150,7 @@ class ClanProfileSummaryView(ClanProfileSummaryViewMeta, UsersInfoHelper):
             return
         self._updateClanInfo(clanInfo)
         ratingStrBuilder = text_styles.builder(delimiter='\n')
-        ratingStrBuilder.addStyledText(text_styles.promoTitle, formatField(getter=ratings.getEfficiency, formatter=BigWorld.wg_getIntegralFormat))
+        ratingStrBuilder.addStyledText(text_styles.promoTitle, formatField(getter=ratings.getEfficiency, formatter=backport.getIntegralFormat))
         ratingStrBuilder.addStyledText(text_styles.stats, CLANS.CLANPROFILE_SUMMARYVIEW_TOTALRAGE)
         motto = clanInfo.getMotto()
         if motto:
@@ -238,11 +238,11 @@ class ClanProfileSummaryView(ClanProfileSummaryViewMeta, UsersInfoHelper):
         stats = [{'local': 'commander',
           'value': formatField(getter=clanInfo.getLeaderDbID, formatter=self.getGuiUserName),
           'textStyle': _STYLE.STATS_TEXT}, {'local': 'totalPlayers',
-          'value': formatField(getter=clanInfo.getMembersCount, formatter=BigWorld.wg_getIntegralFormat)}]
+          'value': formatField(getter=clanInfo.getMembersCount, formatter=backport.getIntegralFormat)}]
         canSeeTreasury = self.webCtrl.getLimits().canSeeTreasury(self._clanDossier)
         if canSeeTreasury.success:
             stats.append({'local': 'gold',
-             'value': formatField(getter=clanInfo.getTreasuryValue, formatter=BigWorld.wg_getIntegralFormat),
+             'value': formatField(getter=clanInfo.getTreasuryValue, formatter=backport.getIntegralFormat),
              'icon': RES_ICONS.MAPS_ICONS_LIBRARY_GOLDICON_2})
         if syncUserInfo:
             self.syncUsersInfo()
@@ -256,22 +256,22 @@ class ClanProfileSummaryView(ClanProfileSummaryViewMeta, UsersInfoHelper):
         if hasGlobalMap:
             notActual = ratings.getGlobalMapBattlesFor28Days() <= 0
             stats = [{'local': 'rageLevel10',
-              'value': formatField(getter=ratings.getGlobalMapEloRating10, formatter=BigWorld.wg_getIntegralFormat),
+              'value': formatField(getter=ratings.getGlobalMapEloRating10, formatter=backport.getIntegralFormat),
               'timeExpired': notActual,
               'tooltip': CLANS.CLANPROFILE_SUMMARYVIEW_TOOLTIP_GMAP_ELO_RAGE_10_BODY},
              {'local': 'rageLevel8',
-              'value': formatField(getter=ratings.getGlobalMapEloRating8, formatter=BigWorld.wg_getIntegralFormat),
+              'value': formatField(getter=ratings.getGlobalMapEloRating8, formatter=backport.getIntegralFormat),
               'timeExpired': notActual,
               'tooltip': CLANS.CLANPROFILE_SUMMARYVIEW_TOOLTIP_GMAP_ELO_RAGE_8_BODY},
              {'local': 'rageLevel6',
-              'value': formatField(getter=ratings.getGlobalMapEloRating6, formatter=BigWorld.wg_getIntegralFormat),
+              'value': formatField(getter=ratings.getGlobalMapEloRating6, formatter=backport.getIntegralFormat),
               'timeExpired': notActual,
               'tooltip': CLANS.CLANPROFILE_SUMMARYVIEW_TOOLTIP_GMAP_ELO_RAGE_6_BODY},
              {'local': 'battlesCount',
-              'value': formatField(getter=ratings.getGlobalMapBattlesFor28Days, formatter=BigWorld.wg_getIntegralFormat),
+              'value': formatField(getter=ratings.getGlobalMapBattlesFor28Days, formatter=backport.getIntegralFormat),
               'tooltip': CLANS.CLANPROFILE_SUMMARYVIEW_TOOLTIP_GMAP_BATTLES_COUNT_BODY},
              {'local': 'provinces',
-              'value': formatField(getter=globalMapStats.getCurrentProvincesCount, formatter=BigWorld.wg_getIntegralFormat),
+              'value': formatField(getter=globalMapStats.getCurrentProvincesCount, formatter=backport.getIntegralFormat),
               'tooltip': CLANS.CLANPROFILE_SUMMARYVIEW_TOOLTIP_GMAP_PROVINCE_BODY}]
             statsBlock = self.__makeStatsBlock(stats)
             emptyLbl = ''
@@ -310,7 +310,7 @@ class ClanProfileSummaryView(ClanProfileSummaryViewMeta, UsersInfoHelper):
                 tooltipBody = None
                 tooltipHeader = None
             if not isinstance(value, str):
-                value = BigWorld.wg_getIntegralFormat(value)
+                value = backport.getIntegralFormat(value)
             icon = item.get('icon', None)
             if icon is not None:
                 icon = icons.makeImageTag(icon, 16, 16, -4, 0)
@@ -339,7 +339,7 @@ class ClanProfileSummaryView(ClanProfileSummaryViewMeta, UsersInfoHelper):
             imgSource = league.get('emblemImage') or RES_ICONS.getDefaultLeagueIcon(level)
             elo = league.get('elo')
             if elo:
-                elo = BigWorld.wg_getNiceNumberFormat(elo)
+                elo = backport.getNiceNumberFormat(elo)
                 label = text_styles.stats(elo) if league.get('position') else text_styles.standard(elo)
             else:
                 label = text_styles.standard(DUMMY_UNAVAILABLE_DATA)

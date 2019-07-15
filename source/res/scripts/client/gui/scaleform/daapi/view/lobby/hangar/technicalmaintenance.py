@@ -4,6 +4,7 @@ from CurrentVehicle import g_currentVehicle
 from adisp import process
 from gui import SystemMessages, DialogsInterface
 from gui.ClientUpdateManager import g_clientUpdateManager
+from gui.Scaleform.daapi.view.lobby.storage.storage_helpers import getSlotOverlayIconType
 from gui.Scaleform.locale.MENU import MENU
 from gui.shared.event_bus import EVENT_BUS_SCOPE
 from gui.shared.items_parameters import isAutoReloadGun
@@ -80,14 +81,14 @@ class TechnicalMaintenance(TechnicalMaintenanceMeta):
             self.populateTechnicalMaintenance()
             self.populateTechnicalMaintenanceEquipment(**self.__layout)
 
-    def getEquipment(self, eId1, currency1, eId2, currency2, eId3, currency3, slotIndex):
+    def getEquipment(self, eId1, currency1, eId2, currency2, eId3, currency3):
         eIdsCD = []
         for item in (eId1, eId2, eId3):
             if item is None:
                 eIdsCD.append(None)
             eIdsCD.append(int(item))
 
-        self.populateTechnicalMaintenanceEquipment(eIdsCD[0], currency1, eIdsCD[1], currency2, eIdsCD[2], currency3, slotIndex)
+        self.populateTechnicalMaintenanceEquipment(eIdsCD[0], currency1, eIdsCD[1], currency2, eIdsCD[2], currency3)
         return
 
     def updateEquipmentCurrency(self, equipmentIndex, currency):
@@ -177,14 +178,14 @@ class TechnicalMaintenance(TechnicalMaintenanceMeta):
         self.populateTechnicalMaintenanceEquipment(**params)
         return
 
-    def populateTechnicalMaintenanceEquipment(self, eId1=None, currency1=None, eId2=None, currency2=None, eId3=None, currency3=None, slotIndex=None):
+    def populateTechnicalMaintenanceEquipment(self, eId1=None, currency1=None, eId2=None, currency2=None, eId3=None, currency3=None):
         items = self.itemsCache.items
         vehicle = g_currentVehicle.item
         money = self.itemsCache.items.stats.money
         installedItems = vehicle.equipment.regularConsumables
         currencies = [None, None, None]
         selectedItems = [None, None, None]
-        if eId1 is not None or eId2 is not None or eId3 is not None or slotIndex is not None:
+        if eId1 is not None or eId2 is not None or eId3 is not None:
             selectedItems = []
             for _id in (eId1, eId2, eId3):
                 if _id is not None:
@@ -210,7 +211,7 @@ class TechnicalMaintenance(TechnicalMaintenanceMeta):
             else:
                 prices = module.buyPrices.itemPrice.price
             inventoryCount = module.inventoryCount
-            index = None
+            index = -1
             if module in selectedItems:
                 index = selectedItems.index(module)
                 priceCurrency = currencies[index] or Currency.CREDITS
@@ -221,6 +222,8 @@ class TechnicalMaintenance(TechnicalMaintenanceMeta):
             action = None
             if buyPrice.isActionPrice():
                 action = packItemActionTooltipData(module)
+            highlightType = getSlotOverlayIconType(module)
+            disabledOption = self.__isSlotDisabled(module, selectedItems)
             modules.append({'id': str(module.intCD),
              'name': module.userName,
              'desc': module.fullDescription,
@@ -236,7 +239,10 @@ class TechnicalMaintenance(TechnicalMaintenanceMeta):
              'fits': fits,
              'userCredits': money.toDict(),
              'actionPriceData': action,
-             'moduleLabel': module.getGUIEmblemID()})
+             'moduleLabel': module.getGUIEmblemID(),
+             'builtIn': module.isBuiltIn,
+             'highlightType': highlightType,
+             'disabledOption': disabledOption})
 
         vehicle.equipment.setRegularConsumables(installedItems)
         installed = []
@@ -306,6 +312,14 @@ class TechnicalMaintenance(TechnicalMaintenanceMeta):
                 else:
                     self.__isConfirmDialogShown = False
         return
+
+    @staticmethod
+    def __isSlotDisabled(module, slots):
+        if module.isBuiltIn:
+            installedModules = filter(None, slots)
+            if len(installedModules) == 1:
+                return True
+        return False
 
     def _setEquipment(self, installed, setup, modules):
         self.as_setEquipmentS(installed, setup, modules)

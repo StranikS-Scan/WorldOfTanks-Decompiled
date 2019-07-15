@@ -1,6 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/dialogs/dialog_prices_tooltip.py
-import BigWorld
 from frameworks.wulf import ViewFlags
 from gui.impl.gen import R
 from gui.impl.gen.view_models.windows.dialog_prices_tooltip_model import DialogPricesTooltipModel
@@ -24,5 +23,5 @@ class DialogPricesTooltip(ViewImpl):
             model.setValueAdditionalCost(valueAdditionalCost)
             model.setIconAdditionalCost(iconAdditionalCost)
             model.setLabelAdditionalCost(labelAdditionalCost)
-            model.setTotalCost(BigWorld.wg_getIntegralFormat(totalCost))
+            model.setTotalCost(self.gui.systemLocale.getNumberFormat(totalCost))
             model.setLabelTotalCost(labelTotalCost)

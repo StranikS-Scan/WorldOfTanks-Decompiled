@@ -1,9 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/rankedBattles/ranked_battles_season_complete_view.py
 import logging
-import BigWorld
 import SoundGroups
 from gui.Scaleform.daapi.view.meta.RankedBattlesSeasonCompleteViewMeta import RankedBattlesSeasonCompleteViewMeta
+from gui.impl import backport
 from gui.ranked_battles import ranked_helpers
 from gui.ranked_battles.constants import RankedDossierKeys
 from gui.ranked_battles.ranked_builders import season_comple_vos
@@ -68,7 +68,7 @@ class RankedBattlesSeasonCompleteView(RankedBattlesSeasonCompleteViewMeta):
             if leagueData.league == UNDEFINED_LEAGUE_ID:
                 leagueData = self.__rankedController.getClientLeague()
             if leagueData.league != UNDEFINED_LEAGUE_ID and leagueData.league == league:
-                position = BigWorld.wg_getNiceNumberFormat(leagueData.position)
+                position = backport.getNiceNumberFormat(leagueData.position)
             else:
                 position = '0'
             dossier = self.__itemsCache.items.getAccountDossier().getSeasonRankedStats(RankedDossierKeys.SEASON % season.getNumber(), seasonID)

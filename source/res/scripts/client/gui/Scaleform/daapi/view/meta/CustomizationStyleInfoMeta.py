@@ -13,6 +13,9 @@ class CustomizationStyleInfoMeta(BaseDAAPIComponent):
     def as_setDataS(self, data):
         return self.flashObject.as_setData(data) if self._isDAAPIInited() else None
 
+    def as_buttonUpdateS(self, data):
+        return self.flashObject.as_buttonUpdate(data) if self._isDAAPIInited() else None
+
     def as_showS(self):
         return self.flashObject.as_show() if self._isDAAPIInited() else None
 

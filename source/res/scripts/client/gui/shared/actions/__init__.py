@@ -141,7 +141,6 @@ class ConnectToPeriphery(Action):
         self.__host = g_preDefinedHosts.periphery(peripheryID)
         self.__endTime = None
         self.__credentials = self.lobbyContext.getCredentials()
-        self.__wgcLogin = False
         return
 
     def isInstantaneous(self):
@@ -154,18 +153,16 @@ class ConnectToPeriphery(Action):
         return super(ConnectToPeriphery, self).isRunning()
 
     def invoke(self):
-        self.__wgcLogin = self.loginManager.checkWgcAvailability()
-        if self.__host and (self.__credentials or self.__wgcLogin):
-            if not self.__wgcLogin:
-                if len(self.__credentials) < 2:
-                    self._completed = False
-                    LOG_ERROR('Connect action. Login info is invalid')
-                    return
-                login, token2 = self.__credentials
-                if not login or not token2:
-                    self._completed = False
-                    LOG_ERROR('Connect action. Login info is invalid')
-                    return
+        if self.__host and self.__credentials:
+            if len(self.__credentials) < 2:
+                self._completed = False
+                LOG_ERROR('Connect action. Login info is invalid')
+                return
+            login, token2 = self.__credentials
+            if not login or not token2:
+                self._completed = False
+                LOG_ERROR('Connect action. Login info is invalid')
+                return
             self._running = True
             self.__endTime = BigWorld.time() + CONNECT_TO_PERIPHERY_DELAY
             Waiting.show('login')
@@ -175,11 +172,7 @@ class ConnectToPeriphery(Action):
             self._running = False
 
     def __doConnect(self):
-        if not self.__wgcLogin:
-            login, token2 = self.__credentials
-        else:
-            login = 'wgc'
-            token2 = ''
+        login, token2 = self.__credentials
         self.__addHandlers()
         self.loginManager.initiateRelogin(login, token2, getHostURL(self.__host, token2))
 

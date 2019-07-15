@@ -104,23 +104,23 @@ def readTrackNodes(xmlCtx, section):
         return tuple(trackNodes)
 
 
-def readTrackParams(xmlCtx, section):
-    trackParams = None
+def readTrackSplineParams(xmlCtx, section):
+    trackSplineParams = None
     if section['trackNodes'] is not None:
         ctx = (xmlCtx, 'trackNodes')
-        trackParams = chassis_components.TrackParams(thickness=_xml.readFloat(ctx, section, 'trackThickness'), maxAmplitude=_xml.readFloat(ctx, section, 'trackNodes/maxAmplitude'), maxOffset=_xml.readFloat(ctx, section, 'trackNodes/maxOffset'), gravity=_xml.readFloat(ctx, section, 'trackNodes/gravity'))
+        trackSplineParams = chassis_components.TrackSplineParams(thickness=_xml.readFloat(ctx, section, 'trackThickness'), maxAmplitude=_xml.readFloat(ctx, section, 'trackNodes/maxAmplitude'), maxOffset=_xml.readFloat(ctx, section, 'trackNodes/maxOffset'), gravity=_xml.readFloat(ctx, section, 'trackNodes/gravity'))
     elif section['splineDesc'] is not None or section['physicalTracks'] is not None:
-        trackParams = chassis_components.TrackParams(thickness=_xml.readFloat(xmlCtx, section, 'trackThickness'), maxAmplitude=component_constants.ZERO_FLOAT, maxOffset=component_constants.ZERO_FLOAT, gravity=component_constants.ZERO_FLOAT)
-    return trackParams
+        trackSplineParams = chassis_components.TrackSplineParams(thickness=_xml.readFloat(xmlCtx, section, 'trackThickness'), maxAmplitude=component_constants.ZERO_FLOAT, maxOffset=component_constants.ZERO_FLOAT, gravity=component_constants.ZERO_FLOAT)
+    return trackSplineParams
 
 
 def readTraces(xmlCtx, section, centerOffset, cache):
     return chassis_components.Traces(lodDist=shared_readers.readLodDist(xmlCtx, section, 'traces/lodDist', cache), bufferPrefs=intern(_xml.readNonEmptyString(xmlCtx, section, 'traces/bufferPrefs')), textureSet=intern(_xml.readNonEmptyString(xmlCtx, section, 'traces/textureSet')), centerOffset=centerOffset, size=_xml.readPositiveVector2(xmlCtx, section, 'traces/size'), activePostmortem=_xml.readBool(xmlCtx, section, 'traces/activePostmortem', False))
 
 
-def readTrackMaterials(xmlCtx, section, cache):
+def readTrackBasicParams(xmlCtx, section, cache):
     tracksSection = section['tracks']
-    return None if tracksSection is None else chassis_components.TrackMaterials(lodDist=shared_readers.readLodDist(xmlCtx, section, 'tracks/lodDist', cache), leftMaterial=intern(_xml.readNonEmptyString(xmlCtx, section, 'tracks/leftMaterial')), rightMaterial=intern(_xml.readNonEmptyString(xmlCtx, section, 'tracks/rightMaterial')), textureScale=_xml.readFloat(xmlCtx, section, 'tracks/textureScale'))
+    return None if tracksSection is None else chassis_components.TrackBasicParams(lodDist=shared_readers.readLodDist(xmlCtx, section, 'tracks/lodDist', cache), leftMaterial=intern(_xml.readNonEmptyString(xmlCtx, section, 'tracks/leftMaterial')), rightMaterial=intern(_xml.readNonEmptyString(xmlCtx, section, 'tracks/rightMaterial')), textureScale=_xml.readFloat(xmlCtx, section, 'tracks/textureScale'), pairsCount=section.readInt('tracks/pairsCount', 1))
 
 
 def readLeveredSuspension(xmlCtx, section, cache):
@@ -152,4 +152,40 @@ def readSplineConfig(xmlCtx, section, cache):
             for sname, subSection in modelSetsSection.items():
                 splineSegmentModelSets[sname] = chassis_components.SplineSegmentModelSet(left=_xml.readNonEmptyString(xmlCtx, subSection, 'segmentModelLeft'), right=_xml.readNonEmptyString(xmlCtx, subSection, 'segmentModelRight'), secondLeft=_xml.readStringOrNone(xmlCtx, subSection, 'segment2ModelLeft'), secondRight=_xml.readStringOrNone(xmlCtx, subSection, 'segment2ModelRight'))
 
-        return chassis_components.SplineConfig(segmentModelSets=splineSegmentModelSets, segmentLength=_xml.readFloat(xmlCtx, section, 'splineDesc/segmentLength'), leftDesc=_xml.readStringOrNone(xmlCtx, section, 'splineDesc/left'), rightDesc=_xml.readStringOrNone(xmlCtx, section, 'splineDesc/right'), lodDist=shared_readers.readLodDist(xmlCtx, section, 'splineDesc/lodDist', cache), segmentOffset=_xml.readFloat(xmlCtx, section, 'splineDesc/segmentOffset', 0), segment2Offset=_xml.readFloat(xmlCtx, section, 'splineDesc/segment2Offset', 0), atlasUTiles=section.readInt('splineDesc/atlas/UTiles', 1), atlasVTiles=section.readInt('splineDesc/atlas/VTiles', 1))
+        leftDescs = []
+        rightDescs = []
+        multipleTracks = section['splineDesc/multipleTracks']
+        if multipleTracks is not None:
+            for node in multipleTracks.items():
+                desc = _xml.readNonEmptyString(xmlCtx, node[1], 'desc')
+                pairIdx = _xml.readNonNegativeInt(xmlCtx, node[1], 'trackPairIdx')
+                length = _xml.readFloat(xmlCtx, node[1], 'segmentLength')
+                offset = _xml.readFloat(xmlCtx, node[1], 'segmentOffset', 0)
+                offset2 = _xml.readFloat(xmlCtx, node[1], 'segment2Offset', 0)
+                descList = [desc,
+                 pairIdx,
+                 length,
+                 offset,
+                 offset2]
+                if node[0] == 'left':
+                    leftDescs.append(descList)
+                if node[0] == 'right':
+                    rightDescs.append(descList)
+
+        else:
+            length = _xml.readFloat(xmlCtx, section, 'splineDesc/segmentLength')
+            offset = _xml.readFloat(xmlCtx, section, 'splineDesc/segmentOffset', 0)
+            offset2 = _xml.readFloat(xmlCtx, section, 'splineDesc/segment2Offset', 0)
+            leftTuple = [_xml.readStringOrNone(xmlCtx, section, 'splineDesc/left'),
+             0,
+             length,
+             offset,
+             offset2]
+            rightTuple = [_xml.readStringOrNone(xmlCtx, section, 'splineDesc/right'),
+             0,
+             length,
+             offset,
+             offset2]
+            leftDescs.append(leftTuple)
+            rightDescs.append(rightTuple)
+        return chassis_components.SplineConfig(segmentModelSets=splineSegmentModelSets, leftDesc=leftDescs, rightDesc=rightDescs, lodDist=shared_readers.readLodDist(xmlCtx, section, 'splineDesc/lodDist', cache), atlasUTiles=section.readInt('splineDesc/atlas/UTiles', 1), atlasVTiles=section.readInt('splineDesc/atlas/VTiles', 1))

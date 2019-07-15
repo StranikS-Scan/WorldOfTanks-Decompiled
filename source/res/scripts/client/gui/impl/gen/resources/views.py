@@ -371,6 +371,12 @@ class Views(DynAccessor):
 
         tooltips = _tooltips()
 
+        class _customization(DynAccessor):
+            __slots__ = ()
+            CustomizationCart = DynAccessor(75)
+
+        customization = _customization()
+
     lobby = _lobby()
 
     class _test_check_box_view(DynAccessor):
@@ -582,15 +588,17 @@ class Views(DynAccessor):
         views = _views()
 
     wtypes_view = _wtypes_view()
-    Anchor = DynAccessor(75)
-    ComplexListView = DynAccessor(76)
-    ComponentsDemo = DynAccessor(77)
-    DataTrackerDemo = DynAccessor(78)
-    DemoContextMenu = DynAccessor(79)
-    GFDemoPopover = DynAccessor(80)
-    GFDemoWindow = DynAccessor(81)
-    GFSimpleTooltipWindow = DynAccessor(82)
-    PropsSupportDemo = DynAccessor(83)
-    StructuralDataBindDemo = DynAccessor(84)
-    TextFormat = DynAccessor(85)
-    VideoSupportView = DynAccessor(86)
+    Anchor = DynAccessor(76)
+    ComplexListView = DynAccessor(77)
+    ComponentsDemo = DynAccessor(78)
+    DataTrackerDemo = DynAccessor(79)
+    DemoContextMenu = DynAccessor(80)
+    GFDemoPopover = DynAccessor(81)
+    GFDemoRichTooltipWindow = DynAccessor(82)
+    GFDemoWindow = DynAccessor(83)
+    GFSimpleTooltipWindow = DynAccessor(84)
+    LocaleDemo = DynAccessor(85)
+    PropsSupportDemo = DynAccessor(86)
+    StructuralDataBindDemo = DynAccessor(87)
+    TextFormat = DynAccessor(88)
+    VideoSupportView = DynAccessor(89)

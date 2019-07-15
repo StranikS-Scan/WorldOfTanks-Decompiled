@@ -12,6 +12,7 @@ from gui.Scaleform.framework.managers.containers import POP_UP_CRITERIA
 from gui.app_loader import spaces
 from helpers import dependency
 from skeletons.connection_mgr import DisconnectReason
+from skeletons.gui.app_loader import GuiGlobalSpaceID
 from skeletons.gameplay import GameplayStateID, IGameplayLogic
 
 class AppLoaderObserver(SingleStateObserver):
@@ -57,6 +58,8 @@ class LoginObserver(AppLoaderObserver):
             disconnectReason = event.getArgument('disconnectReason', DisconnectReason.REQUEST)
             if disconnectReason in (DisconnectReason.EVENT, DisconnectReason.KICK, DisconnectReason.ERROR):
                 action = spaces.DisconnectDialogAction(event.getArgument('kickReason', ''), event.getArgument('isBan', False), event.getArgument('expiryTime'))
+        if self._proxy.getSpaceID() == GuiGlobalSpaceID.LOGIN:
+            self._proxy.setupSpace(action=action)
         self._proxy.changeSpace(spaces.LoginSpace(action=action))
         return
 

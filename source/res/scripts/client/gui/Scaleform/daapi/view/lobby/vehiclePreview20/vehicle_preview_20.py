@@ -8,7 +8,7 @@ from account_helpers import AccountSettings
 from account_helpers.AccountSettings import PREVIEW_INFO_PANEL_IDX
 from gui import makeHtmlString
 from gui.ClientUpdateManager import g_clientUpdateManager
-from gui.Scaleform.daapi.view.lobby.vehiclePreview20.items_kit_helper import getActiveOffer
+from gui.Scaleform.daapi.view.lobby.vehiclePreview20.items_kit_helper import getActiveOffer, addBuiltInEquipment
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.LobbySelectableView import LobbySelectableView
 from gui.Scaleform.daapi.view.lobby.store.browser.ingameshop_helpers import isIngameShopEnabled, getBuyVehiclesUrl
@@ -96,6 +96,7 @@ class VehiclePreview20(LobbySelectableView, VehiclePreview20Meta):
         self.__description = ctx.get('description')
         self.__endTime = ctx.get('endTime')
         self.__buyParams = ctx.get('buyParams')
+        addBuiltInEquipment(self.__itemsPack, self.itemsCache, self._vehicleCD)
         self._heroInteractive = not (self.__itemsPack or self.__offers or self._backAlias == VIEW_ALIAS.LOBBY_STORE)
         self.__haveCustomCrew = any((item.type == ItemPackType.CREW_CUSTOM for item in self.__itemsPack)) if self.__itemsPack else False
         if 'previewAppearance' in ctx:

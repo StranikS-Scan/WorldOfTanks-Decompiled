@@ -861,10 +861,14 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
             return
         self.base.accountPrebattle_createDevPrebattle(bonusType, arenaTypeID, roundLength, comment)
 
+    def prb_createEpicTrainingBattle(self, arenaTypeID, roundLength, isOpened, comment, bonusType=ARENA_BONUS_TYPE.EPIC_BATTLE):
+        if events.isPlayerEntityChanging:
+            return
+        self.base.accountPrebattle_createEpicTrainingPrebattle(arenaTypeID, isOpened, comment)
+
     def prb_createDevEpicBattle(self, arenaTypeID, roundLength, isOpened, comment, bonusType=ARENA_BONUS_TYPE.EPIC_BATTLE):
         if events.isPlayerEntityChanging:
             return
-        LOG_DEBUG('arenaTypeID ', arenaTypeID)
         self.base.accountPrebattle_createEpicDevPrebattle(arenaTypeID, comment)
 
     def prb_sendInvites(self, accountsToInvite, comment):

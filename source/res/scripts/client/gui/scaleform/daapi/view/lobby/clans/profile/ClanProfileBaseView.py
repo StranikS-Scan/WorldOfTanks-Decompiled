@@ -1,6 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/clans/profile/ClanProfileBaseView.py
-import BigWorld
 from adisp import process
 from gui import SystemMessages
 from gui.Scaleform.daapi.view.meta.ClanProfileBaseViewMeta import ClanProfileBaseViewMeta
@@ -10,6 +9,7 @@ from gui.clans import formatters as clans_fmts
 from gui.clans import items
 from gui.clans.clan_helpers import ClanListener
 from gui.clans.settings import CLIENT_CLAN_RESTRICTIONS as RES
+from gui.impl import backport
 from gui.shared.formatters import text_styles
 from gui.shared.view_helpers.emblems import ClanEmblemsHelper
 from gui.wgcg.base.contexts import CreateApplicationCtx
@@ -73,7 +73,7 @@ class ClanProfileBaseView(ClanProfileBaseViewMeta, ClanEmblemsHelper, ClanListen
         self._updateHeaderState()
 
     def _updateClanInfo(self, clanInfo):
-        creationDate = i18n.makeString(CLANS.CLAN_HEADER_CREATIONDATE, creationDate=items.formatField(getter=clanInfo.getCreatedAt, formatter=BigWorld.wg_getLongDateFormat))
+        creationDate = i18n.makeString(CLANS.CLAN_HEADER_CREATIONDATE, creationDate=items.formatField(getter=clanInfo.getCreatedAt, formatter=backport.getLongDateFormat))
         self.as_setClanInfoS({'name': items.formatField(getter=clanInfo.getFullName),
          'bgIcon': RES_ICONS.MAPS_ICONS_CLANS_CLAN_CARD_HEADER,
          'creationDate': creationDate})

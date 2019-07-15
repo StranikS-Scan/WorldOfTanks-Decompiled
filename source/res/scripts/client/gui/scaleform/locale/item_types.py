@@ -141,7 +141,9 @@ class ITEM_TYPES(object):
     CUSTOMIZATION_EMBLEM = '#item_types:customization/emblem'
     CUSTOMIZATION_INSCRIPTION = '#item_types:customization/inscription'
     CUSTOMIZATION_PROJECTIONDECAL = '#item_types:customization/projectionDecal'
-    CUSTOMIZATION_PERSONALNUMBER = '#item_types:customization/personalNumber'
+    CUSTOMIZATION_PERSONALNUMBER_3 = '#item_types:customization/personalNumber_3'
+    CUSTOMIZATION_PERSONALNUMBER_2 = '#item_types:customization/personalNumber_2'
+    CUSTOMIZATION_PERSONALNUMBER_1 = '#item_types:customization/personalNumber_1'
     CUSTOMIZATION_PLURAL_PAINT = '#item_types:customization/plural/paint'
     CUSTOMIZATION_PLURAL_CAMOUFLAGE = '#item_types:customization/plural/camouflage'
     CUSTOMIZATION_PLURAL_MODIFICATION = '#item_types:customization/plural/modification'
@@ -242,7 +244,9 @@ class ITEM_TYPES(object):
      CUSTOMIZATION_EMBLEM,
      CUSTOMIZATION_INSCRIPTION,
      CUSTOMIZATION_PROJECTIONDECAL,
-     CUSTOMIZATION_PERSONALNUMBER,
+     CUSTOMIZATION_PERSONALNUMBER_3,
+     CUSTOMIZATION_PERSONALNUMBER_2,
+     CUSTOMIZATION_PERSONALNUMBER_1,
      CUSTOMIZATION_PLURAL_PAINT,
      CUSTOMIZATION_PLURAL_CAMOUFLAGE,
      CUSTOMIZATION_PLURAL_MODIFICATION,

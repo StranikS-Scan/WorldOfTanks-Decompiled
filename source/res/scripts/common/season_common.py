@@ -73,6 +73,8 @@ class GameSeason(object):
             if cycle.startDate >= now:
                 return cycle
 
+        return None
+
     def getLastCycleInfo(self):
         lastCycleID = max(self.getAllCycles().iterkeys())
         return self.getAllCycles()[lastCycleID] if lastCycleID else None

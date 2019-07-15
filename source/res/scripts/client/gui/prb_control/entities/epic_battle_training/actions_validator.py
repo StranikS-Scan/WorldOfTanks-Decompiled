@@ -8,7 +8,7 @@ from gui.prb_control.items import ValidationResult
 class TrainingIsLoaded(BaseActionsValidator):
 
     def _validate(self):
-        return ValidationResult(False) if g_eventDispatcher.isTrainingLoaded() else super(TrainingIsLoaded, self)._validate()
+        return ValidationResult(False) if g_eventDispatcher.isEpicTrainingLoaded() else super(TrainingIsLoaded, self)._validate()
 
 
 class TrainingIntroActionsValidator(ActionsValidatorComposite):

@@ -8,13 +8,10 @@ from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.dialogs import DIALOG_BUTTON_ID, PMConfirmationDialogMeta
 from gui.Scaleform.daapi.view.lobby.customization.shared import SCALE_SIZE
 from gui.Scaleform.daapi.view.meta.CustomizationPropertiesSheetMeta import CustomizationPropertiesSheetMeta
-from gui.Scaleform.daapi.view.lobby.customization.customization_inscription_controller import PersonalNumEditStatuses
 from gui.Scaleform.daapi.view.lobby.customization.shared import C11nTabs
 from gui.Scaleform.genConsts.CUSTOMIZATION_ALIASES import CUSTOMIZATION_ALIASES
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.VEHICLE_CUSTOMIZATION import VEHICLE_CUSTOMIZATION
-from gui.hangar_cameras.hangar_camera_common import CameraRelatedEvents
-from gui.shared import EVENT_BUS_SCOPE
 from gui.shared.formatters import text_styles
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from helpers import dependency
@@ -35,10 +32,6 @@ _DEFAULT_COLORNUM = 1
 _PALETTE_BACKGROUND = 'gui/maps/vehicles/camouflages/camo_palettes_back.dds'
 _PALETTE_WIDTH = 42
 _PALETTE_HEIGHT = 42
-_C11nEditModes = {CUSTOMIZATION_ALIASES.CUSTOMIZATION_POJECTION_INTERACTION_DEFAULT: 0,
- CUSTOMIZATION_ALIASES.CUSTOMIZATION_POJECTION_INTERACTION_MOVE: 1,
- CUSTOMIZATION_ALIASES.CUSTOMIZATION_POJECTION_INTERACTION_SCALE: 2,
- CUSTOMIZATION_ALIASES.CUSTOMIZATION_POJECTION_INTERACTION_ROTATION: 3}
 _SEASONS_REMOVE_TEXT = {SeasonType.SUMMER: VEHICLE_CUSTOMIZATION.PROPERTYSHEET_NOTIFY_DECAL_SEASONS_SUMMER,
  SeasonType.WINTER: VEHICLE_CUSTOMIZATION.PROPERTYSHEET_NOTIFY_DECAL_SEASONS_WINTER,
  SeasonType.DESERT: VEHICLE_CUSTOMIZATION.PROPERTYSHEET_NOTIFY_DECAL_SEASONS_DESERT,
@@ -56,14 +49,12 @@ class CustomizationPropertiesSheet(CustomizationPropertiesSheetMeta):
         super(CustomizationPropertiesSheet, self).__init__()
         self.__ctx = None
         self._attachedAnchor = C11nId()
-        self._isVisible = False
-        self._editMode = False
+        self._visible = False
         self._extraMoney = None
         self._isItemAppliedToAll = False
         self._showSwitchers = False
         self._isNarrowSlot = False
         self.__inscriptionController = None
-        self.__interactionType = CUSTOMIZATION_ALIASES.CUSTOMIZATION_POJECTION_INTERACTION_DEFAULT
         self.__changes = [False] * 3
         return
 
@@ -72,29 +63,20 @@ class CustomizationPropertiesSheet(CustomizationPropertiesSheetMeta):
             self.__inscriptionController = viewPy
 
     @property
-    def isVisible(self):
-        return self._isVisible
+    def visible(self):
+        return self._visible
+
+    @property
+    def inEditMode(self):
+        return self.__inscriptionController is not None and self.__inscriptionController.visible
 
     @property
     def attachedAnchor(self):
         return self._attachedAnchor
 
-    def editMode(self, value, interactionType):
-        self._editMode = value
-        if self._editMode:
-            self.__interactionType = interactionType
-        else:
-            self.interactionStatusUpdate(False)
-            self.__interactionType = -1
-
-    def interactionStatusUpdate(self, value):
-        self.fireEvent(CameraRelatedEvents(CameraRelatedEvents.FORCE_DISABLE_CAMERA_MOVEMENT, ctx={'disable': value}), EVENT_BUS_SCOPE.DEFAULT)
-
-    def setScale(self, value):
-        pass
-
-    def setRotation(self, value):
-        pass
+    @property
+    def attached(self):
+        return self._attachedAnchor.slotType != -1 and self._attachedAnchor.regionIdx != -1 and self._attachedAnchor.areaId != -1
 
     def registerInscriptionController(self, inscriptionController, inputLines):
         self.__ctx.vehicleAnchorsUpdater.registerInscriptionController(inscriptionController, inputLines)
@@ -106,7 +88,6 @@ class CustomizationPropertiesSheet(CustomizationPropertiesSheetMeta):
         self._extraMoney = None
         self._isItemAppliedToAll = False
         self.__ctx.onCacheResync += self.__onCacheResync
-        self.__ctx.onCustomizationSeasonChanged += self.__onSeasonChanged
         self.__ctx.onCustomizationItemInstalled += self.__onItemsInstalled
         self.__ctx.onCustomizationItemsRemoved += self.__onItemsRemoved
         self.__ctx.onCamouflageColorChanged += self.__onCamouflageColorChanged
@@ -115,7 +96,12 @@ class CustomizationPropertiesSheet(CustomizationPropertiesSheetMeta):
         self.__ctx.onProjectionDecalMirrored += self.__onProjectionDecalMirrored
         self.__ctx.onCustomizationItemsBought += self.__onItemsBought
         self.__ctx.onCustomizationItemSold += self.__onItemSold
-        self.__ctx.onChangeAutoRent += self.onChangeAutoRent
+        self.__ctx.onCustomizationTabChanged += self.__onTabChanged
+        self.__ctx.onChangeAutoRent += self.__onChangeAutoRent
+        self.__ctx.onSelectAnchor += self.__onSelectAnchor
+        self.__ctx.onEditModeFinished += self.onEditModeFinished
+        self.__ctx.onCarouselRebuild += self.__onCarouselRebuild
+        g_currentVehicle.onChanged += self.__onVehicleChanged
         return
 
     def _dispose(self):
@@ -127,9 +113,13 @@ class CustomizationPropertiesSheet(CustomizationPropertiesSheetMeta):
         self.__ctx.onProjectionDecalMirrored -= self.__onProjectionDecalMirrored
         self.__ctx.onCustomizationItemsRemoved -= self.__onItemsRemoved
         self.__ctx.onCustomizationItemInstalled -= self.__onItemsInstalled
-        self.__ctx.onCustomizationSeasonChanged -= self.__onSeasonChanged
         self.__ctx.onCacheResync -= self.__onCacheResync
-        self.__ctx.onChangeAutoRent -= self.onChangeAutoRent
+        self.__ctx.onCustomizationTabChanged -= self.__onTabChanged
+        self.__ctx.onChangeAutoRent -= self.__onChangeAutoRent
+        self.__ctx.onSelectAnchor -= self.__onSelectAnchor
+        self.__ctx.onEditModeFinished -= self.onEditModeFinished
+        self.__ctx.onCarouselRebuild -= self.__onCarouselRebuild
+        g_currentVehicle.onChanged -= self.__onVehicleChanged
         self._extraMoney = None
         self._isItemAppliedToAll = False
         self._attachedAnchor = C11nId()
@@ -138,37 +128,76 @@ class CustomizationPropertiesSheet(CustomizationPropertiesSheetMeta):
         super(CustomizationPropertiesSheet, self)._dispose()
         return
 
-    def show(self, areaID, slotID, regionID, showSwitchers, isNarrowSlot, forceUpdate=False):
-        prevAnchor = self._attachedAnchor
-        self._attachedAnchor = C11nId(areaID, slotID, regionID)
-        self.__ctx.vehicleAnchorsUpdater.changeAnchorParams(prevAnchor, isDisplayed=True, isAutoScalable=True)
-        self.__ctx.vehicleAnchorsUpdater.changeAnchorParams(self._attachedAnchor, isDisplayed=not showSwitchers, isAutoScalable=False)
-        if prevAnchor == self._attachedAnchor and self.isVisible and not forceUpdate:
-            return
-        self._isVisible = True
-        self._showSwitchers = showSwitchers
-        self._isNarrowSlot = isNarrowSlot
-        if self.__update():
-            if self._currentItem and self._currentItem.itemTypeID == GUI_ITEM_TYPE.PERSONAL_NUMBER and self.__inscriptionController and (self._currentComponent.number == '' or self.__ctx.numberEditModeActive):
-                self.__inscriptionController.show()
-            elif self.__inscriptionController:
-                self.__inscriptionController.hide()
-            self.__ctx.onPropertySheetShown()
-        self.__ctx.vehicleAnchorsUpdater.displayMenu(True)
+    def onEditModeFinished(self):
+        self.__update()
 
-    def hide(self, storePersonalNumber=False):
-        if not self.isVisible:
+    def locateOnAnchor(self, areaID, slotID, regionID):
+        anchor = C11nId(areaID, slotID, regionID)
+        if anchor != self._attachedAnchor:
+            self.__attachToAnchor(anchor)
+
+    def locateToCustomizationPreview(self):
+        anchor = C11nId()
+        self.__attachToAnchor(anchor)
+
+    def handleEscBtn(self):
+        return self.__inscriptionController.handleEscBtn() if self.__inscriptionController is not None else False
+
+    def handleDelBtn(self):
+        if self.__inscriptionController is not None:
+            if self.__inscriptionController.handleDelBtn():
+                return True
+        if self.visible:
+            if self.__ctx.currentTab == C11nTabs.STYLE:
+                self.__ctx.removeStyle(self.__ctx.modifiedStyle.intCD)
+            else:
+                self.__ctx.removeItemFromSlot(self.__ctx.currentSeason, self.__ctx.selectedSlot)
+            return True
+        else:
+            return False
+
+    def handleLobbyClick(self):
+        return self.__inscriptionController.handleLobbyClick() if self.__inscriptionController is not None else False
+
+    def handleBuyWindow(self):
+        if self.__inscriptionController is not None:
+            purchaseItems = self.__ctx.getPurchaseItems()
+            showProhibitedHint = False
+            if len(purchaseItems) == 1:
+                item = purchaseItems[0].item
+                showProhibitedHint = item is not None and item.itemTypeID == GUI_ITEM_TYPE.PERSONAL_NUMBER
+            self.__inscriptionController.finish(cancelIfEmpty=True, removeProhibited=not showProhibitedHint)
+            return self.__inscriptionController.visible
+        else:
+            return False
+
+    def confirmHeaderNavigation(self):
+        if self.__inscriptionController is not None:
+            self.__inscriptionController.cancel()
+        return
+
+    def show(self):
+        if self.__ctx.vehicleAnchorsUpdater is None:
             return
-        if self._attachedAnchor != self.__ctx.selectedAnchor:
-            self.__changeAttachedAnchor()
-        self._isVisible = False
-        self.as_hideS()
-        if self.__inscriptionController:
-            self.__inscriptionController.hide()
-        self.__ctx.onPropertySheetHidden()
-        self.__ctx.vehicleAnchorsUpdater.changeAnchorParams(self._attachedAnchor, True, True)
-        if not storePersonalNumber:
-            self.__ctx.clearStoredPersonalNumber()
+        else:
+            self.__ctx.vehicleAnchorsUpdater.attachMenuToAnchor(self._attachedAnchor)
+            self._visible = True
+            if self.__update():
+                self.__ctx.onPropertySheetShown(self._attachedAnchor)
+                self.__ctx.vehicleAnchorsUpdater.displayMenu(True)
+                self.__updateAnchorSwitchers()
+            return
+
+    def hide(self):
+        if not self.visible:
+            return
+        else:
+            self._visible = False
+            self.as_hideS()
+            if self.__inscriptionController is not None:
+                self.__inscriptionController.hide()
+            self.__ctx.onPropertySheetHidden()
+            return
 
     def elementControlsHide(self):
         self.__ctx.vehicleAnchorsUpdater.displayMenu(False)
@@ -202,28 +231,31 @@ class CustomizationPropertiesSheet(CustomizationPropertiesSheetMeta):
             self.__ctx.onClearItem()
         elif actionType == CUSTOMIZATION_ALIASES.CUSTOMIZATION_SHEET_ACTION_MIRROR:
             self.__ctx.mirrorProjectionDecal(self._attachedAnchor.areaId, self._attachedAnchor.regionIdx)
-        elif actionType == CUSTOMIZATION_ALIASES.CUSTOMIZATION_SHEET_ACTION_MOVE:
-            self.__ctx.moveProjectionDecal(self._attachedAnchor.areaId, self._attachedAnchor.regionIdx, actionData)
-            self.__update()
         elif actionType == CUSTOMIZATION_ALIASES.CUSTOMIZATION_SHEET_ACTION_EDIT:
-            self.hide(storePersonalNumber=True)
-            self.__ctx.onPersonalNumberEditModeChanged(PersonalNumEditStatuses.EDIT_MODE_STARTED)
+            self.__ctx.storePersonalNumber(self._currentComponent.number)
+            self.__inscriptionController.show(self._attachedAnchor)
+            self.__update()
         elif actionType == CUSTOMIZATION_ALIASES.CUSTOMIZATION_SHEET_ACTION_INFO:
             self.__ctx.onShowStyleInfo()
+        elif actionType == CUSTOMIZATION_ALIASES.CUSTOMIZATION_SHEET_ACTION_GET_BACK:
+            currentIntCD = self._currentItem.intCD
+            self.__removeElement()
+            self.__ctx.onGetItemBackToHand(currentIntCD)
 
     def onClose(self):
         self.hide()
 
     @property
     def _currentSlotData(self):
-        if self._attachedAnchor.slotType == -1 or self._attachedAnchor.areaId == -1 or self._attachedAnchor.slotType == GUI_ITEM_TYPE.STYLE:
+        if not self.attached or self._attachedAnchor.slotType == GUI_ITEM_TYPE.STYLE:
             return
         else:
-            slot = self.__ctx.currentOutfit.getContainer(self._attachedAnchor.areaId).slotFor(self._attachedAnchor.slotType)
-            if slot is None or self._attachedAnchor.regionIdx == -1:
+            container = self.__ctx.currentOutfit.getContainer(self._attachedAnchor.areaId)
+            slot = container.slotFor(self._attachedAnchor.slotType)
+            if slot is None:
                 return
             slotId = self.__ctx.getSlotIdByAnchorId(self._attachedAnchor)
-            return slot.getSlotData(slotId.regionIdx)
+            return slot.getSlotData(slotId.regionIdx) if slotId is not None else None
 
     @property
     def _currentItem(self):
@@ -240,23 +272,31 @@ class CustomizationPropertiesSheet(CustomizationPropertiesSheetMeta):
         return self.__ctx.modifiedStyle if self._attachedAnchor.slotType == GUI_ITEM_TYPE.STYLE else None
 
     def __update(self):
-        if self._attachedAnchor != self.__ctx.selectedAnchor:
-            self.__changeAttachedAnchor()
-        if self._isVisible and self._attachedAnchor.slotType != -1 and self._attachedAnchor.regionIdx != -1 and self._attachedAnchor.areaId != -1:
+        if self._currentItem is None and self._currentStyle is None:
+            self.hide()
+            return False
+        elif self.visible and self.attached:
+            self.__updateInscriptionController()
             self.__updateItemAppliedToAllFlag()
             self.__updateExtraPrice()
-            if self._currentStyle or self._currentItem:
-                self.as_setDataAndShowS(self.__makeVO())
+            self.as_setDataAndShowS(self.__makeVO())
             self.__ctx.caruselItemUnselected()
-            self.__ctx.onPropertySheetShown()
             return True
-        return False
+        else:
+            return False
 
-    def __changeAttachedAnchor(self):
-        prevAnchor = self._attachedAnchor
-        self._attachedAnchor = self.__ctx.selectedAnchor
-        self.__ctx.vehicleAnchorsUpdater.changeAnchorParams(prevAnchor, isDisplayed=True, isAutoScalable=True)
-        self.__ctx.vehicleAnchorsUpdater.changeAnchorParams(self._attachedAnchor, isDisplayed=not self._isVisible, isAutoScalable=not self._isVisible)
+    def __attachToAnchor(self, anchor):
+        if not g_currentVehicle.isPresent():
+            return
+        else:
+            if self.attached:
+                self.__inscriptionController.finish(cancelIfEmpty=True, removeProhibited=True)
+            self._attachedAnchor = anchor
+            if self._currentItem is not None or self._currentStyle is not None:
+                self.show()
+            else:
+                self.hide()
+            return
 
     def __applyToOtherAreas(self, installItem):
         if self.__ctx.currentTab not in (C11nTabs.PAINT, C11nTabs.CAMOUFLAGE):
@@ -327,6 +367,19 @@ class CustomizationPropertiesSheet(CustomizationPropertiesSheetMeta):
                 self.__ctx.removeItemFromSlot(self.__ctx.currentSeason, slotId)
         return
 
+    def __updateInscriptionController(self):
+        if self.__inscriptionController is None:
+            return
+        else:
+            self.__inscriptionController.update(self._attachedAnchor)
+            return
+
+    def __updateAnchorSwitchers(self):
+        if not self.visible:
+            return
+        installPrev, installNext = self.__ctx.getItemSwitchersState()
+        self.as_setArrowsStatesS(installPrev, installNext)
+
     def __updateItemAppliedToAllFlag(self):
         self._isItemAppliedToAll = False
         if self.__ctx.currentTab in (C11nTabs.PAINT, C11nTabs.CAMOUFLAGE):
@@ -373,12 +426,10 @@ class CustomizationPropertiesSheet(CustomizationPropertiesSheetMeta):
         return
 
     def __makeVO(self):
-        currentElement = self._currentStyle if self._attachedAnchor.slotType == GUI_ITEM_TYPE.STYLE else self._currentItem
-        isPersonalNumberEdit = self.__ctx.numberEditModeActive
-        vo = {'renderersData': self.__makeRenderersVOs() if currentElement and not isPersonalNumberEdit else [],
-         'isProjectionEnable': self._attachedAnchor.slotType == GUI_ITEM_TYPE.PROJECTION_DECAL,
+        isEditMode = self.__inscriptionController.visible
+        vo = {'renderersData': self.__makeRenderersVOs() if not isEditMode else [],
          'isBigRadius': self._attachedAnchor.slotType in (GUI_ITEM_TYPE.INSCRIPTION, GUI_ITEM_TYPE.PROJECTION_DECAL, GUI_ITEM_TYPE.EMBLEM),
-         'showSwitchers': self._showSwitchers and not isPersonalNumberEdit,
+         'showSwitchers': self._showSwitchers and not isEditMode,
          'isNarrowSlot': self._isNarrowSlot}
         return vo
 
@@ -401,13 +452,14 @@ class CustomizationPropertiesSheet(CustomizationPropertiesSheetMeta):
                 renderers.append(self.__makeEditInscriptionRendererVO())
             renderers.append(self.__makeSetOnOtherSeasonsRendererVO())
         elif self._attachedAnchor.slotType == GUI_ITEM_TYPE.STYLE:
-            isExtentionEnabled = self._currentStyle and self._currentStyle.isRentable
+            renderers.append(self.__makeStyleInfoRendererVO())
+            isExtentionEnabled = self._currentStyle is not None and self._currentStyle.isRentable
             if isExtentionEnabled:
                 renderers.append(self.__makeExtensionRendererVO())
         elif self._attachedAnchor.slotType == GUI_ITEM_TYPE.PROJECTION_DECAL:
             renderers.append(self.__makeMirorRendererVO())
             renderers.append(self.__makeScaleRendererVO())
-            renderers.append(self.__makeMoveRendererVO())
+            renderers.append(self.__makeGetBackRendererVO())
             renderers.append(self.__makeSetOnOtherSeasonsRendererVO())
         renderers.append(self.__makeRemoveRendererVO())
         renderers.append(self.__makeCloseeRendererVO())
@@ -478,51 +530,30 @@ class CustomizationPropertiesSheet(CustomizationPropertiesSheetMeta):
          'disableTooltip': VEHICLE_CUSTOMIZATION.CUSTOMIZATION_PROPERTYSHEET_DISABLED_MIRROR,
          'enabled': isMirrorOn}
 
-    def __makeMoveRendererVO(self):
-        anchor = g_currentVehicle.item.getAnchorById(self._currentComponent.slotId)
-        parent = anchor if anchor.isParent else g_currentVehicle.item.getAnchorById(anchor.parentSlotId)
-        formfactor = self._currentItem.formfactor
-        availableAnchorsIds = [ anch.slotId for anch in parent.getChilds(formfactor, g_currentVehicle.item) ]
-        currentIdx = availableAnchorsIds.index(anchor.slotId)
-        actionBtnLabel = _ms(VEHICLE_CUSTOMIZATION.PROPERTYSHEET_ACTIONBTN_MOVE, current=str(currentIdx + 1), total=str(len(availableAnchorsIds)))
-        return {'actionBtnLabel': actionBtnLabel,
-         'actionType': CUSTOMIZATION_ALIASES.CUSTOMIZATION_SHEET_ACTION_MOVE,
-         'rendererLnk': CUSTOMIZATION_ALIASES.CUSTOMIZATION_SHEET_SWITCH_RENDERER_UI,
-         'disableTooltip': VEHICLE_CUSTOMIZATION.CUSTOMIZATION_PROPERTYSHEET_DISABLED_MOVE,
-         'buttonMode': True,
-         'enabled': len(availableAnchorsIds) > 1}
+    def __makeGetBackRendererVO(self):
+        actionBtnLabel = VEHICLE_CUSTOMIZATION.PROPERTYSHEET_ACTIONBTN_GETBACK
+        return {'iconSrc': RES_ICONS.MAPS_ICONS_CUSTOMIZATION_PROPERTY_SHEET_IDLE_MOVE_NORMAL,
+         'iconHoverSrc': RES_ICONS.MAPS_ICONS_CUSTOMIZATION_PROPERTY_SHEET_IDLE_MOVE_HOVER,
+         'actionBtnLabel': actionBtnLabel,
+         'actionType': CUSTOMIZATION_ALIASES.CUSTOMIZATION_SHEET_ACTION_GET_BACK,
+         'rendererLnk': CUSTOMIZATION_ALIASES.CUSTOMIZATION_SHEET_BTN_RENDERER_UI,
+         'enabled': True}
 
     def __makeRemoveRendererVO(self):
-        iconSrc = RES_ICONS.MAPS_ICONS_CUSTOMIZATION_PROPERTY_SHEET_REMOVE_STYLE_X
-        hoverIcon = RES_ICONS.MAPS_ICONS_CUSTOMIZATION_PROPERTY_SHEET_REMOVE_STYLE_X_HOVER
         if self._attachedAnchor.slotType == GUI_ITEM_TYPE.MODIFICATION:
-            actionBtnLabel = VEHICLE_CUSTOMIZATION.PROPERTYSHEET_ACTIONBTN_REMOVE_TANK
-            iconSrc = RES_ICONS.MAPS_ICONS_CUSTOMIZATION_PROPERTY_SHEET_REMOVE_ICON_DEL_TANK
-            hoverIcon = RES_ICONS.MAPS_ICONS_CUSTOMIZATION_PROPERTY_SHEET_REMOVE_ICON_DEL_TANK_HOVER
+            actionBtnLabel = VEHICLE_CUSTOMIZATION.PROPERTYSHEET_ACTIONBTN_REMOVE_MODIFICATION
         elif self._attachedAnchor.slotType == GUI_ITEM_TYPE.EMBLEM:
             actionBtnLabel = VEHICLE_CUSTOMIZATION.PROPERTYSHEET_ACTIONBTN_REMOVE_EMBLEM
-            iconSrc = RES_ICONS.MAPS_ICONS_CUSTOMIZATION_PROPERTY_SHEET_REMOVE_EMBLEM_X
-            hoverIcon = RES_ICONS.MAPS_ICONS_CUSTOMIZATION_PROPERTY_SHEET_REMOVE_EMBLEM_X_HOVER
         elif self._attachedAnchor.slotType == GUI_ITEM_TYPE.INSCRIPTION:
             actionBtnLabel = VEHICLE_CUSTOMIZATION.PROPERTYSHEET_ACTIONBTN_REMOVE_INSCRIPTION
-            iconSrc = RES_ICONS.MAPS_ICONS_CUSTOMIZATION_PROPERTY_SHEET_REMOVE_TYPE_X
-            hoverIcon = RES_ICONS.MAPS_ICONS_CUSTOMIZATION_PROPERTY_SHEET_REMOVE_TYPE_X_HOVER
         elif self._attachedAnchor.slotType == GUI_ITEM_TYPE.PROJECTION_DECAL:
             actionBtnLabel = VEHICLE_CUSTOMIZATION.PROPERTYSHEET_ACTIONBTN_REMOVE_PROJECTIONDECAL
-            iconSrc = RES_ICONS.MAPS_ICONS_CUSTOMIZATION_PROPERTY_SHEET_REMOVE_ICON_DECAL_X_HOVER
-            hoverIcon = RES_ICONS.MAPS_ICONS_CUSTOMIZATION_PROPERTY_SHEET_REMOVE_ICON_DECAL_X_NORMAL
         elif self._attachedAnchor.slotType == GUI_ITEM_TYPE.STYLE:
             actionBtnLabel = VEHICLE_CUSTOMIZATION.PROPERTYSHEET_ACTIONBTN_REMOVESTYLE
         else:
             actionBtnLabel = VEHICLE_CUSTOMIZATION.getSheetBtnRemoveText(getCustomizationTankPartName(self._attachedAnchor.areaId, self._attachedAnchor.regionIdx))
-        if self._attachedAnchor.slotType == GUI_ITEM_TYPE.CAMOUFLAGE:
-            iconSrc = RES_ICONS.MAPS_ICONS_CUSTOMIZATION_PROPERTY_SHEET_REMOVE_CAMO_X
-            hoverIcon = RES_ICONS.MAPS_ICONS_CUSTOMIZATION_PROPERTY_SHEET_REMOVE_CAMO_X_HOVER
-        elif self._attachedAnchor.slotType == GUI_ITEM_TYPE.PAINT:
-            iconSrc = RES_ICONS.MAPS_ICONS_CUSTOMIZATION_PROPERTY_SHEET_REMOVE_COLORS_X
-            hoverIcon = RES_ICONS.MAPS_ICONS_CUSTOMIZATION_PROPERTY_SHEET_REMOVE_COLORS_X_HOVER
-        return {'iconSrc': iconSrc,
-         'iconHoverSrc': hoverIcon,
+        return {'iconSrc': RES_ICONS.MAPS_ICONS_CUSTOMIZATION_PROPERTY_SHEET_REMOVE_DEL,
+         'iconHoverSrc': RES_ICONS.MAPS_ICONS_CUSTOMIZATION_PROPERTY_SHEET_REMOVE_DEL_HOVER,
          'actionBtnLabel': actionBtnLabel,
          'rendererLnk': CUSTOMIZATION_ALIASES.CUSTOMIZATION_SHEET_BTN_RENDERER_UI,
          'actionType': CUSTOMIZATION_ALIASES.CUSTOMIZATION_SHEET_ACTION_REMOVE_ONE,
@@ -541,13 +572,14 @@ class CustomizationPropertiesSheet(CustomizationPropertiesSheetMeta):
          'enabled': True}
 
     def __makeStyleInfoRendererVO(self):
-        enabled = True
+        enabled = self._currentStyle is not None and bool(self._currentStyle.longDescriptionSpecial)
         return {'iconSrc': RES_ICONS.MAPS_ICONS_CUSTOMIZATION_PROPERTY_SHEET_IDLE_ICON_INFO,
          'iconHoverSrc': RES_ICONS.MAPS_ICONS_CUSTOMIZATION_PROPERTY_SHEET_IDLE_ICON_INFO_HOVER,
          'iconDisableSrc': RES_ICONS.MAPS_ICONS_CUSTOMIZATION_PROPERTY_SHEET_DISABLE_ICON_INFO_DISABLE,
          'actionBtnLabel': VEHICLE_CUSTOMIZATION.CUSTOMIZATION_POPOVER_STYLE_INFO,
          'rendererLnk': CUSTOMIZATION_ALIASES.CUSTOMIZATION_SHEET_BTN_RENDERER_UI,
          'actionType': CUSTOMIZATION_ALIASES.CUSTOMIZATION_SHEET_ACTION_INFO,
+         'disableTooltip': VEHICLE_CUSTOMIZATION.CUSTOMIZATION_PROPERTYSHEET_DISABLED_STYLEINFO,
          'enabled': enabled}
 
     def __makeExtensionRendererVO(self):
@@ -688,9 +720,6 @@ class CustomizationPropertiesSheet(CustomizationPropertiesSheetMeta):
             return
         self.__update()
 
-    def __onSeasonChanged(self, seasonType):
-        self.hide()
-
     def __onCamouflageColorChanged(self, areaId, regionIdx, paletteIdx):
         self.__update()
 
@@ -703,11 +732,21 @@ class CustomizationPropertiesSheet(CustomizationPropertiesSheetMeta):
     def __onProjectionDecalMirrored(self, areaId, regionIdx):
         self.__update()
 
-    def __onItemsInstalled(self, *args):
-        self.__update()
+    def __onItemsInstalled(self, item, component, slotId, limitReached):
+        if self._currentItem is not None or self._currentStyle is not None:
+            if not self.visible:
+                self.show()
+            else:
+                self.__update()
+                self.__updateAnchorSwitchers()
+        return
 
     def __onItemsRemoved(self):
-        self.hide()
+        if self._currentItem is None and self._currentStyle is None:
+            self.hide()
+        else:
+            self.__update()
+        return
 
     def __onItemsBought(self, purchaseItems, results):
         self.__update()
@@ -715,5 +754,21 @@ class CustomizationPropertiesSheet(CustomizationPropertiesSheetMeta):
     def __onItemSold(self, item, count):
         self.__update()
 
-    def onChangeAutoRent(self):
+    def __onTabChanged(self, tabIndex):
+        self._showSwitchers = tabIndex not in C11nTabs.REGIONS
+        self._isNarrowSlot = tabIndex == C11nTabs.EMBLEM
+
+    def __onChangeAutoRent(self):
         self.__update()
+
+    def __onSelectAnchor(self, areaId, slotType, regionIdx):
+        if self.attached and self._attachedAnchor != C11nId(areaId, slotType, regionIdx):
+            if self.__inscriptionController is not None:
+                self.__inscriptionController.finish(cancelIfEmpty=True, removeProhibited=True)
+        return
+
+    def __onCarouselRebuild(self):
+        self.__updateAnchorSwitchers()
+
+    def __onVehicleChanged(self):
+        self.hide()

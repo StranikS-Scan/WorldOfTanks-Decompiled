@@ -2,7 +2,8 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/customization/installed_kit_popover.py
 from collections import namedtuple
 from gui import makeHtmlString
-from gui.Scaleform.daapi.view.lobby.customization.shared import SEASONS_ORDER, SEASON_TYPE_TO_NAME, TYPES_ORDER, SEASON_TYPE_TO_INFOTYPE_MAP
+from gui.Scaleform.daapi.view.lobby.customization.shared import TYPES_ORDER, SEASON_TYPE_TO_INFOTYPE_MAP
+from gui.customization.shared import SEASON_TYPE_TO_NAME, SEASONS_ORDER
 from gui.Scaleform.daapi.view.meta.CustomizationKitPopoverMeta import CustomizationKitPopoverMeta
 from gui.Scaleform.framework.entities.DAAPIDataProvider import SortableDAAPIDataProvider
 from gui.Scaleform.locale.VEHICLE_CUSTOMIZATION import VEHICLE_CUSTOMIZATION

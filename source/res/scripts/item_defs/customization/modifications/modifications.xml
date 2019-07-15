@@ -1,6 +1,8 @@
 <modifications.xml>
   <itemGroup>
-    <priceGroup>	effect gold	</priceGroup>
+    <season>	ALL	</season>
+    <historical>	true	</historical>
+    <priceGroup>	modifications 300g	</priceGroup>
     <vehicleFilter>
       <exclude>
         <vehicles>	china:Ch01_Type59_Gold germany:G119_Panzer58_BF germany:G114_Rheinmetall_Skorpian usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
@@ -9,10 +11,7 @@
     <modification>
       <id>	1	</id>
       <texture>	gui/maps/vehicles/modifications/effect.png	</texture>
-      <userString>	#vehicle_customization:modifications/age_effect_01	</userString>
       <description>	#vehicle_customization:modifications/age_effect_01/description	</description>
-      <season>	ALL	</season>
-      <historical>	true	</historical>
       <effects>
         <effect>
           <type>	paint_age	</type>
@@ -23,14 +22,12 @@
           <value>	0.1	</value>
         </effect>
       </effects>
+      <userString>	#vehicle_customization:modifications/age_effect_01	</userString>
     </modification>
     <modification>
       <id>	2	</id>
       <texture>	gui/maps/vehicles/modifications/effect.png	</texture>
-      <userString>	#vehicle_customization:modifications/age_effect_02	</userString>
       <description>	#vehicle_customization:modifications/age_effect_02/description	</description>
-      <season>	ALL	</season>
-      <historical>	true	</historical>
       <effects>
         <effect>
           <type>	paint_age	</type>
@@ -41,10 +38,13 @@
           <value>	0.3	</value>
         </effect>
       </effects>
+      <userString>	#vehicle_customization:modifications/age_effect_02	</userString>
     </modification>
   </itemGroup>
   <itemGroup>
-    <priceGroup>	effect gold notInShop	</priceGroup>
+    <season>	ALL	</season>
+    <historical>	true	</historical>
+    <priceGroup>	modifications 300g notInShop	</priceGroup>
     <vehicleFilter>
       <exclude>
         <vehicles>	china:Ch01_Type59_Gold germany:G119_Panzer58_BF germany:G114_Rheinmetall_Skorpian usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
@@ -53,10 +53,7 @@
     <modification>
       <id>	3	</id>
       <texture>	gui/maps/vehicles/modifications/effect.png	</texture>
-      <userString>	#vehicle_customization:modifications/age_effect_03	</userString>
       <description>	#vehicle_customization:modifications/age_effect_03/description	</description>
-      <season>	ALL	</season>
-      <historical>	true	</historical>
       <effects>
         <effect>
           <type>	paint_age	</type>
@@ -67,19 +64,11 @@
           <value>	0.1	</value>
         </effect>
       </effects>
+      <userString>	#vehicle_customization:modifications/age_effect_03	</userString>
     </modification>
     <modification>
       <id>	4	</id>
       <texture>	gui/maps/vehicles/modifications/effect.png	</texture>
-      <userString>	#vehicle_customization:modifications/age_effect_04	</userString>
-      <season>	ALL	</season>
-      <historical>	true	</historical>
-      <tags>	hiddenInUI	</tags>
-      <vehicleFilter>
-        <exclude>
-          <vehicles>	china:Ch01_Type59_Gold germany:G119_Panzer58_BF germany:G114_Rheinmetall_Skorpian usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
-        </exclude>
-      </vehicleFilter>
       <effects>
         <effect>
           <type>	paint_age	</type>
@@ -90,6 +79,8 @@
           <value>	0.1	</value>
         </effect>
       </effects>
+      <userString>	#vehicle_customization:modifications/age_effect_04	</userString>
+      <tags>	hiddenInUI	</tags>
     </modification>
     <modification>
       <id>	5	</id>
@@ -105,7 +96,6 @@
         </effect>
       </effects>
       <userString>	#vehicle_customization:modifications/age_effect_05	</userString>
-      <historical>	true	</historical>
       <tags>	hiddenInUI	</tags>
     </modification>
     <modification>
@@ -122,7 +112,6 @@
         </effect>
       </effects>
       <userString>	#vehicle_customization:modifications/age_effect_06	</userString>
-      <historical>	true	</historical>
       <tags>	hiddenInUI	</tags>
     </modification>
   </itemGroup>

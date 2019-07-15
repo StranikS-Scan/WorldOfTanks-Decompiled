@@ -1,9 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/proto/bw/errors.py
-import BigWorld
 from chat_shared import CHAT_RESPONSES
 from debug_utils import LOG_ERROR, LOG_WARNING
 from gui.Scaleform.locale.MESSENGER import MESSENGER
+from gui.impl import backport
 from helpers import i18n
 from helpers.time_utils import makeLocalServerTime
 import messenger
@@ -84,7 +84,7 @@ class MemberBannedError(ChatActionError):
                 del banInfo['banEndTime']
             bannedMessage = i18n.makeString('#chat:errors/bannedpermanent', **banInfo)
         else:
-            banInfo['banEndTime'] = BigWorld.wg_getLongDateFormat(banEndTime) + ' ' + BigWorld.wg_getShortTimeFormat(banEndTime)
+            banInfo['banEndTime'] = backport.getLongDateFormat(banEndTime) + ' ' + backport.getShortTimeFormat(banEndTime)
             bannedMessage = i18n.makeString('#chat:errors/banned', **banInfo)
         return MemberBannedError(cls._makeTitle('memberBanned'), bannedMessage, isModal=True)
 
@@ -100,7 +100,7 @@ class ChatBannedError(ChatActionError):
                 del banInfo['banEndTime']
             bannedMessage = i18n.makeString('#chat:errors/chatbannedpermanent', **banInfo)
         else:
-            banInfo['banEndTime'] = BigWorld.wg_getLongDateFormat(banEndTime) + ' ' + BigWorld.wg_getShortTimeFormat(banEndTime)
+            banInfo['banEndTime'] = backport.getLongDateFormat(banEndTime) + ' ' + backport.getShortTimeFormat(banEndTime)
             bannedMessage = i18n.makeString('#chat:errors/chatbanned', **banInfo)
         return ChatBannedError(cls._makeTitle('chatBanned'), bannedMessage, isModal=True)
 

@@ -2,9 +2,9 @@
 # Embedded file name: scripts/client/AvatarInputHandler/StrategicCamerasInterpolator.py
 import BigWorld
 import Math
-from AvatarInputHandler import mathUtils
+import math_utils
 from helpers.CallbackDelayer import CallbackDelayer
-_EASING_METHOD = mathUtils.easeInOutQuad
+_EASING_METHOD = math_utils.easeInOutQuad
 _INTERPOLATION_TIME = 0.2
 
 class StrategicCamerasInterpolator(CallbackDelayer):
@@ -37,7 +37,7 @@ class StrategicCamerasInterpolator(CallbackDelayer):
     def __setupCamera(self):
         if self.__cam is None:
             self.__cam = BigWorld.CursorCamera()
-        self.__cam.target = mathUtils.MatrixProviders.product(self.__finalState.target.a, Math.Matrix())
+        self.__cam.target = math_utils.MatrixProviders.product(self.__finalState.target.a, Math.Matrix())
         self.__cam.source = Math.Matrix()
         self.__cam.pivotMaxDist = 0.0
         self.__cam.maxDistHalfLife = 0.01
@@ -64,7 +64,7 @@ class StrategicCamerasInterpolator(CallbackDelayer):
         self.__elapsedTime += currentTime - self.__prevTime
         self.__prevTime = currentTime
         interpolationCoefficient = self.__easingMethod(self.__elapsedTime, 1.0, self.__totalInterpolationTime)
-        interpolationCoefficient = mathUtils.clamp(0.0, 1.0, interpolationCoefficient)
+        interpolationCoefficient = math_utils.clamp(0.0, 1.0, interpolationCoefficient)
         iSource = self.__initialState.source
         iTarget = self.__initialState.target.b.translation
         iPivotPosition = self.__initialState.pivotPosition
@@ -72,9 +72,9 @@ class StrategicCamerasInterpolator(CallbackDelayer):
         fTarget = self.__finalState.target.b.translation
         fPivotPosition = self.__finalState.pivotPosition
         self.__cam.source = Math.slerp(iSource, fSource, interpolationCoefficient)
-        self.__cam.target.b.translation = mathUtils.lerp(iTarget, fTarget, interpolationCoefficient)
-        self.__cam.pivotPosition = mathUtils.lerp(iPivotPosition, fPivotPosition, interpolationCoefficient)
-        BigWorld.projection().fov = mathUtils.lerp(self.__initialFov, self.__finalFov, interpolationCoefficient)
+        self.__cam.target.b.translation = math_utils.lerp(iTarget, fTarget, interpolationCoefficient)
+        self.__cam.pivotPosition = math_utils.lerp(iPivotPosition, fPivotPosition, interpolationCoefficient)
+        BigWorld.projection().fov = math_utils.lerp(self.__initialFov, self.__finalFov, interpolationCoefficient)
         if self.__elapsedTime > self.__totalInterpolationTime:
             self.delayCallback(0.0, self.disable)
             return 10.0

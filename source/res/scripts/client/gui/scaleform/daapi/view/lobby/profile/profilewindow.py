@@ -6,8 +6,9 @@ from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.profile.ProfileUtils import getProfileCommonInfo
 from gui.Scaleform.daapi.view.meta.ProfileWindowMeta import ProfileWindowMeta
 from gui.Scaleform.locale.PROFILE import PROFILE
-from gui.Scaleform.locale.WAITING import WAITING
 from gui.clans.clan_helpers import ClanListener, showClanInviteSystemMsg
+from gui.impl import backport
+from gui.impl.gen import R
 from gui.wgcg.clan.contexts import CreateInviteCtx
 from helpers import dependency
 from helpers.i18n import makeString
@@ -121,7 +122,7 @@ class ProfileWindow(ProfileWindowMeta, ClanListener):
 
     @process
     def userAddToClan(self):
-        self.as_showWaitingS(WAITING.CLANS_INVITES_SEND, {})
+        self.as_showWaitingS(backport.msgid(R.strings.waiting.clans.invites.send()), {})
         profile = self.webCtrl.getAccountProfile()
         context = CreateInviteCtx(profile.getClanDbID(), [self.__databaseID])
         result = yield self.webCtrl.sendRequest(context, allowDelay=True)

@@ -3,7 +3,7 @@
 import math
 import BigWorld
 import Math
-from AvatarInputHandler import mathUtils
+import math_utils
 
 class ImpulseReason(object):
     MY_SHOT = 0
@@ -108,7 +108,7 @@ def readFloat(dataSec, name, minVal, maxVal, defaultVal):
         return defaultVal
     else:
         value = dataSec.readFloat(name, defaultVal)
-        value = mathUtils.clamp(minVal, maxVal, value)
+        value = math_utils.clamp(minVal, maxVal, value)
         return value
 
 
@@ -118,7 +118,7 @@ def readVec2(dataSec, name, minVal, maxVal, defaultVal):
     else:
         value = dataSec.readVector2(name, Math.Vector2(defaultVal))
         for i in xrange(2):
-            value[i] = mathUtils.clamp(minVal[i], maxVal[i], value[i])
+            value[i] = math_utils.clamp(minVal[i], maxVal[i], value[i])
 
         return value
 
@@ -129,7 +129,7 @@ def readVec3(dataSec, name, minVal, maxVal, defaultVal):
     else:
         value = dataSec.readVector3(name, Math.Vector3(defaultVal))
         for i in xrange(3):
-            value[i] = mathUtils.clamp(minVal[i], maxVal[i], value[i])
+            value[i] = math_utils.clamp(minVal[i], maxVal[i], value[i])
 
         return value
 
@@ -188,7 +188,7 @@ def getAimMatrix(x, y, fov=None):
     aspect = getScreenAspectRatio()
     yLength = near * math.tan(fov * 0.5)
     xLength = yLength * aspect
-    result = mathUtils.createRotationMatrix(Math.Vector3(math.atan2(xLength * x, near), math.atan2(yLength * y, near), 0))
+    result = math_utils.createRotationMatrix(Math.Vector3(math.atan2(xLength * x, near), math.atan2(yLength * y, near), 0))
     return result
 
 
@@ -225,7 +225,7 @@ class FovExtended(object):
 
     @staticmethod
     def clampFov(fov):
-        return mathUtils.clamp(0.017, 3.12, fov)
+        return math_utils.clamp(0.017, 3.12, fov)
 
     @staticmethod
     def calcVerticalFov(horizontalFovValue):

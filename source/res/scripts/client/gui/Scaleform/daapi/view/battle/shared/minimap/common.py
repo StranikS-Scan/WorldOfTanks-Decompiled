@@ -3,7 +3,7 @@
 from functools import partial
 import BigWorld
 import Math
-from AvatarInputHandler.aih_constants import CTRL_MODE_NAME
+from aih_constants import CTRL_MODE_NAME
 from gui.Scaleform.daapi.view.battle.shared.minimap import entries, settings
 from gui.battle_control.battle_constants import FEEDBACK_EVENT_ID
 from gui.shared.utils.plugins import IPlugin

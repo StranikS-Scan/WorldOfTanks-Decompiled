@@ -4,6 +4,7 @@ import re
 import calendar
 import datetime
 import time
+import locale
 import BigWorld
 from debug_utils import LOG_CURRENT_EXCEPTION
 from helpers.i18n import makeString as _ms
@@ -233,11 +234,6 @@ def isTimeNextDay(timestamp):
     return isTimeThisDay(timestamp - ONE_DAY)
 
 
-def getDailyTimeForUTC(hour=0, minute=0, second=0, microsecond=0):
-    timeToday = getTimeTodayForUTC()
-    return timeToday if isFuture(timeToday) else timeToday + ONE_DAY
-
-
 def getTimeTodayForUTC(hour=0, minute=0, second=0, microsecond=0):
     return getTimeForUTC(getCurrentTimestamp(), hour, minute, second, microsecond)
 
@@ -256,10 +252,6 @@ def getTimeForLocal(timestamp, hour=0, minute=0, second=0, microsecond=0):
     return _getTimestampForLocal(date.year, date.month, date.day, hour, minute, second, microsecond)
 
 
-def getDateTimeFormat(timeValue):
-    return '{0:>s} {1:>s}'.format(BigWorld.wg_getLongDateFormat(timeValue), BigWorld.wg_getShortTimeFormat(timeValue))
-
-
 def getLocalDelta():
     return abs(getCurrentLocalServerTimestamp() - getCurrentTimestamp())
 
@@ -272,6 +264,17 @@ def getTimeLeftFormat(timeLeft, useMinutes=True, useHours=False):
         templateParts.insert(0, '%H')
     template = ':'.join(templateParts)
     return time.strftime(template, time.gmtime(timeLeft))
+
+
+def timestampToFmtStr(tstamp, fmtstr):
+    fmtstr = fmtstr.decode('utf8')
+    encoding = locale.getlocale(locale.LC_TIME)[1]
+    if encoding is None:
+        encoding = locale.getdefaultlocale(locale.LC_TIME)[1]
+    nativeFmtStr = fmtstr.encode(encoding)
+    struct = getTimeStructInUTC(tstamp)
+    nativeOutput = time.strftime(nativeFmtStr, struct)
+    return nativeOutput.decode(encoding).encode('utf8')
 
 
 def timestampToISO(timestamp):

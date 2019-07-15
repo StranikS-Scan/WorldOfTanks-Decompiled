@@ -5,19 +5,21 @@ import BigWorld
 import account_helpers
 from constants import PREBATTLE_TYPE
 from debug_utils import LOG_ERROR
+from CurrentVehicle import g_currentVehicle
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
+from gui.Scaleform.genConsts.PREBATTLE_ALIASES import PREBATTLE_ALIASES
 from gui.prb_control import prb_getters
 from gui.prb_control.entities.base import cooldown
 from gui.prb_control.entities.base.legacy.ctx import SetPlayerStateCtx
 from gui.prb_control.entities.base.legacy.entity import LegacyEntryPoint, LegacyIntroEntryPoint, LegacyIntroEntity, LegacyEntity
 from gui.prb_control.entities.epic_battle_training.limits import EpicBattleTrainingLimits
-from gui.prb_control.entities.training.legacy.actions_validator import TrainingActionsValidator, TrainingIntroActionsValidator
+from gui.prb_control.entities.epic_battle_training.actions_validator import TrainingActionsValidator, TrainingIntroActionsValidator
 from gui.prb_control.entities.epic_battle_training.ctx import EpicTrainingSettingsCtx, SetPlayerObserverStateCtx
 from gui.prb_control.entities.epic_battle_training.permissions import EpicBattleTrainingPermissions
 from gui.prb_control.entities.epic_battle_training.requester import EpicBattleTrainingListRequester
 from gui.prb_control.events_dispatcher import g_eventDispatcher
-from gui.prb_control.items import prb_items, SelectResult
-from gui.prb_control.settings import FUNCTIONAL_FLAG, PREBATTLE_ACTION_NAME
+from gui.prb_control.items import prb_items, SelectResult, ValidationResult
+from gui.prb_control.settings import FUNCTIONAL_FLAG, PREBATTLE_ACTION_NAME, PREBATTLE_RESTRICTION
 from gui.prb_control.settings import PREBATTLE_ROSTER, REQUEST_TYPE
 from gui.prb_control.settings import PREBATTLE_SETTING_NAME
 from gui.prb_control.storages import legacy_storage_getter
@@ -39,7 +41,7 @@ class EpicBattleTrainingEntryPoint(LegacyEntryPoint):
                 callback(False)
         elif prb_getters.getClientPrebattle() is None or ctx.isForced():
             ctx.startProcessing(callback=callback)
-            BigWorld.player().prb_createDevEpicBattle(ctx.getArenaTypeID(), ctx.getRoundLen(), ctx.isOpened(), ctx.getComment())
+            BigWorld.player().prb_createEpicTrainingBattle(ctx.getArenaTypeID(), ctx.getRoundLen(), ctx.isOpened(), ctx.getComment())
             cooldown.setPrbCreationCooldown()
         else:
             LOG_ERROR('First, player has to confirm exit from the current prebattle', prb_getters.getPrebattleType())
@@ -54,7 +56,7 @@ class EpicBattleTrainingEntryPoint(LegacyEntryPoint):
 class EpicBattleTrainingIntroEntryPoint(LegacyIntroEntryPoint):
 
     def __init__(self):
-        super(EpicBattleTrainingIntroEntryPoint, self).__init__(FUNCTIONAL_FLAG.EPIC_TRAINING, PREBATTLE_TYPE.EPIC_TRAINING)
+        super(EpicBattleTrainingIntroEntryPoint, self).__init__(FUNCTIONAL_FLAG.EPIC_TRAINING | FUNCTIONAL_FLAG.LOAD_PAGE, PREBATTLE_TYPE.EPIC_TRAINING)
 
 
 class EpicBattleTrainingIntroEntity(LegacyIntroEntity):
@@ -71,7 +73,8 @@ class EpicBattleTrainingIntroEntity(LegacyIntroEntity):
     def fini(self, clientPrb=None, ctx=None, woEvents=False):
         result = super(EpicBattleTrainingIntroEntity, self).fini()
         if not woEvents:
-            if not self.canSwitch(ctx):
+            aliasToLoad = [PREBATTLE_ALIASES.EPICBATTLE_LIST_VIEW_PY, PREBATTLE_ALIASES.EPIC_TRAINING_ROOM_VIEW_PY]
+            if not self.canSwitch(ctx) and g_eventDispatcher.needToLoadHangar(ctx, self.getModeFlags(), aliasToLoad):
                 g_eventDispatcher.loadHangar()
             g_eventDispatcher.removeEpicTrainingFromCarousel()
         else:
@@ -83,7 +86,7 @@ class EpicBattleTrainingIntroEntity(LegacyIntroEntity):
         return True
 
     def doSelectAction(self, action):
-        if action.actionName == PREBATTLE_ACTION_NAME.EPIC_DEV:
+        if action.actionName == PREBATTLE_ACTION_NAME.EPIC_TRAINING_LIST:
             g_eventDispatcher.loadEpicTrainingList()
             return SelectResult(True)
         return super(EpicBattleTrainingIntroEntity, self).doSelectAction(action)
@@ -96,16 +99,17 @@ class EpicBattleTrainingEntity(LegacyEntity):
     __loadEvents = (VIEW_ALIAS.LOBBY_HANGAR,
      VIEW_ALIAS.LOBBY_INVENTORY,
      VIEW_ALIAS.LOBBY_STORE,
+     VIEW_ALIAS.LOBBY_STORAGE,
      VIEW_ALIAS.LOBBY_TECHTREE,
      VIEW_ALIAS.LOBBY_BARRACKS,
-     VIEW_ALIAS.LOBBY_PROFILE)
+     VIEW_ALIAS.LOBBY_PROFILE,
+     VIEW_ALIAS.VEHICLE_COMPARE)
 
     def __init__(self, settings):
         requests = {REQUEST_TYPE.ASSIGN: self.assign,
          REQUEST_TYPE.SET_TEAM_STATE: self.setTeamState,
          REQUEST_TYPE.SET_PLAYER_STATE: self.setPlayerState,
          REQUEST_TYPE.CHANGE_SETTINGS: self.changeSettings,
-         REQUEST_TYPE.SWAP_TEAMS: self.swapTeams,
          REQUEST_TYPE.CHANGE_ARENA_VOIP: self.changeArenaVoip,
          REQUEST_TYPE.CHANGE_USER_STATUS: self.changeUserObserverStatus,
          REQUEST_TYPE.KICK: self.kickPlayer,
@@ -130,6 +134,7 @@ class EpicBattleTrainingEntity(LegacyEntity):
         if clientPrb is not None:
             clientPrb.onPlayerGroupChanged += self.__prb_onPlayerGroupChanged
         self.__enterTrainingRoom(True)
+        g_eventDispatcher.addEpicTrainingToCarousel(False)
         result = FUNCTIONAL_FLAG.addIfNot(result, FUNCTIONAL_FLAG.LOAD_WINDOW)
         result = FUNCTIONAL_FLAG.addIfNot(result, FUNCTIONAL_FLAG.LOAD_PAGE)
         return result
@@ -144,12 +149,13 @@ class EpicBattleTrainingEntity(LegacyEntity):
             remove(event, self.__handleViewLoad, scope=EVENT_BUS_SCOPE.LOBBY)
 
         if not woEvents:
-            if not self.canSwitch(ctx):
+            aliasToLoad = [PREBATTLE_ALIASES.EPICBATTLE_LIST_VIEW_PY, PREBATTLE_ALIASES.EPIC_TRAINING_ROOM_VIEW_PY]
+            if not self.canSwitch(ctx) and g_eventDispatcher.needToLoadHangar(ctx, self.getModeFlags(), aliasToLoad):
                 g_eventDispatcher.loadHangar()
-            g_eventDispatcher.removeTrainingFromCarousel(False)
+            g_eventDispatcher.removeEpicTrainingFromCarousel(False)
             self.storage.suspend()
         else:
-            g_eventDispatcher.removeTrainingFromCarousel(False, closeWindow=False)
+            g_eventDispatcher.removeEpicTrainingFromCarousel(False, closeWindow=False)
         return FUNCTIONAL_FLAG.UNDEFINED
 
     def resetPlayerState(self):
@@ -185,12 +191,15 @@ class EpicBattleTrainingEntity(LegacyEntity):
 
         return result
 
+    def getTeamLimits(self):
+        return prb_getters.getPrebattleSettings().getTeamLimits(self.getPlayerTeam())
+
     def doAction(self, action=None):
         self.__enterTrainingRoom()
         return True
 
     def doSelectAction(self, action):
-        if action.actionName == PREBATTLE_ACTION_NAME.TRAININGS_LIST:
+        if action.actionName == PREBATTLE_ACTION_NAME.EPIC_TRAINING_LIST:
             self.__enterTrainingRoom()
             return SelectResult(True)
         return super(EpicBattleTrainingEntity, self).doSelectAction(action)
@@ -311,15 +320,37 @@ class EpicBattleTrainingEntity(LegacyEntity):
             return
 
     def swapInTeam(self, ctx, callback=None):
-        roster = ctx.getRoster()
-        flane, tlane = ctx.getGroups()
-        ctx.startProcessing(callback)
-        BigWorld.player().prb_swapGroupsWithinTeam(roster, flane, tlane, ctx.onResponseReceived)
+        if self._cooldown.validate(REQUEST_TYPE.EPIC_SWAP_IN_TEAM):
+            if callback:
+                callback(False)
+            return
+        pPermissions = self.getPermissions()
+        if pPermissions.canChangePlayerTeam():
+            roster = ctx.getRoster()
+            flane, tlane = ctx.getGroups()
+            ctx.startProcessing(callback)
+            BigWorld.player().prb_swapGroupsWithinTeam(roster, flane, tlane, ctx.onResponseReceived)
+            self._cooldown.process(REQUEST_TYPE.EPIC_SWAP_IN_TEAM)
+        else:
+            LOG_ERROR('Player can not swap teams', pPermissions)
+            if callback:
+                callback(False)
 
     def swapBetweenTeam(self, ctx, callback=None):
-        lane = ctx.getGroup()
-        ctx.startProcessing(callback)
-        BigWorld.player().prb_swapTeamsWithinGroup(lane, ctx.onResponseReceived)
+        if self._cooldown.validate(REQUEST_TYPE.EPIC_SWAP_BETWEEN_TEAM):
+            if callback:
+                callback(False)
+            return
+        pPermissions = self.getPermissions()
+        if pPermissions.canChangePlayerTeam():
+            lane = ctx.getGroup()
+            ctx.startProcessing(callback)
+            BigWorld.player().prb_swapTeamsWithinGroup(lane, ctx.onResponseReceived)
+            self._cooldown.process(REQUEST_TYPE.EPIC_SWAP_BETWEEN_TEAM)
+        else:
+            LOG_ERROR('Player can not swap teams', pPermissions)
+            if callback:
+                callback(False)
 
     def assign(self, ctx, callback=None):
         prevTeam, _ = decodeRoster(self.getRosterKey(pID=ctx.getPlayerID()))
@@ -350,6 +381,14 @@ class EpicBattleTrainingEntity(LegacyEntity):
     def _createActionsValidator(self):
         return TrainingActionsValidator(self)
 
+    def _setPlayerReady(self, ctx, callback=None):
+        if g_currentVehicle.isObserver():
+            if not self._processValidationResult(ctx, ValidationResult(False, PREBATTLE_RESTRICTION.VEHICLE_NOT_SUPPORTED)):
+                if callback:
+                    callback(False)
+                return
+        super(EpicBattleTrainingEntity, self)._setPlayerReady(ctx, callback)
+
     def __enterTrainingRoom(self, isInitial=False):
         if self.storage.isObserver:
             self.changeUserObserverStatus(SetPlayerObserverStateCtx(True, True, isInitial=isInitial, waitingID='prebattle/change_user_status'), self.__onPlayerReady)
@@ -360,7 +399,6 @@ class EpicBattleTrainingEntity(LegacyEntity):
         if result:
             g_eventDispatcher.loadEpicTrainingRoom()
         else:
-            g_eventDispatcher.addEpicTrainingToCarousel(False)
             g_eventDispatcher.loadHangar()
 
     def __onSettingChanged(self, code, record='', callback=None):

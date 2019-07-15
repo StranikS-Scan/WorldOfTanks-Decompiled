@@ -3,7 +3,7 @@
 import functools
 import math
 import SoundGroups
-from AvatarInputHandler import mathUtils
+import math_utils
 import BigWorld
 from Math import Vector2, Vector3
 from helpers import dependency
@@ -33,10 +33,10 @@ class _DebugFrontLine(CallbackDelayer):
         self.model.position = beginExplosionPos
         linearHomer = BigWorld.LinearHomer()
         self.model.addMotor(linearHomer)
-        linearHomer.align = mathUtils.createSRTMatrix((areaWidth, 5, 1), (0.0, 0, 0), Vector3(0, 0, 0))
+        linearHomer.align = math_utils.createSRTMatrix((areaWidth, 5, 1), (0.0, 0, 0), Vector3(0, 0, 0))
         linearHomer.acceleration = 0
         linearHomer.velocity = velocity
-        linearHomer.target = mathUtils.createTranslationMatrix(endExplosionPos)
+        linearHomer.target = math_utils.createTranslationMatrix(endExplosionPos)
         linearHomer.proximityCallback = self.__onDeath
 
     def __onDeath(self):

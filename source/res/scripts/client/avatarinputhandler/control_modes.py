@@ -16,8 +16,9 @@ import TriggersManager
 import VideoCamera
 import cameras
 import constants
-from AvatarInputHandler import mathUtils, AimingSystems, aih_global_binding, gun_marker_ctrl
-from AvatarInputHandler.aih_constants import CTRL_MODE_NAME, GUN_MARKER_FLAG, STRATEGIC_CAMERA, CTRL_MODES
+import math_utils
+from aih_constants import CTRL_MODE_NAME, GUN_MARKER_FLAG, STRATEGIC_CAMERA, CTRL_MODES
+from AvatarInputHandler import AimingSystems, aih_global_binding, gun_marker_ctrl
 from AvatarInputHandler.StrategicCamerasInterpolator import StrategicCamerasInterpolator
 from DynamicCameras import SniperCamera, StrategicCamera, ArcadeCamera, ArtyCamera
 from PostmortemDelay import PostmortemDelay
@@ -521,9 +522,8 @@ class ArcadeControlMode(_GunControlMode):
         if isFiredFreeCamera:
             self.setAimingMode(isDown, AIMING_MODE.USER_DISABLED)
         if isFiredLockTarget and isDown:
-            if isWheeledTech:
-                gui_event_dispatcher.hideAutoAimMarker()
-                autoAimProcessor(target=BigWorld.target())
+            gui_event_dispatcher.hideAutoAimMarker()
+            autoAimProcessor(target=BigWorld.target())
             BigWorld.player().autoAim(BigWorld.target())
             self.__simpleAimTarget = BigWorld.target()
         if isWheeledTech and isFiredLockTarget and not isDown:
@@ -573,7 +573,7 @@ class ArcadeControlMode(_GunControlMode):
     def handleMouseEvent(self, dx, dy, dz):
         GUI.mcursor().position = self._aimOffset
         if not self._aih.isObserverFPV:
-            self._cam.update(dx, dy, mathUtils.clamp(-1, 1, dz))
+            self._cam.update(dx, dy, math_utils.clamp(-1, 1, dz))
             self.__mouseVehicleRotator.handleMouse(dx)
         return True
 
@@ -918,13 +918,11 @@ class SniperControlMode(_GunControlMode):
         cmdMap = CommandMapping.g_instance
         isFiredFreeCamera = cmdMap.isFired(CommandMapping.CMD_CM_FREE_CAMERA, key)
         isFiredLockTarget = cmdMap.isFired(CommandMapping.CMD_CM_LOCK_TARGET, key) and isDown
-        isWheeledTech = self._aih.isWheeledTech
         if isFiredFreeCamera or isFiredLockTarget:
             if isFiredFreeCamera:
                 self.setAimingMode(isDown, AIMING_MODE.USER_DISABLED)
             if isFiredLockTarget:
-                if isWheeledTech:
-                    autoAimProcessor(target=BigWorld.target())
+                autoAimProcessor(target=BigWorld.target())
                 BigWorld.player().autoAim(BigWorld.target())
         if cmdMap.isFired(CommandMapping.CMD_CM_SHOOT, key) and isDown:
             BigWorld.player().shoot()
@@ -1187,7 +1185,7 @@ class PostMortemControlMode(IControlMode):
             self.__postmortemDelay.handleMouseEvent(dx, dy, dz)
             return True
         else:
-            self.__cam.update(dx, dy, mathUtils.clamp(-1, 1, dz))
+            self.__cam.update(dx, dy, math_utils.clamp(-1, 1, dz))
             return True
 
     def onRecreateDevice(self):
@@ -1576,7 +1574,7 @@ class _MouseVehicleRotator(object):
                 return
             if dx * self.__rotationState > 0:
                 return
-            self.__rotationState = mathUtils.clamp(-1, 1, dx)
+            self.__rotationState = math_utils.clamp(-1, 1, dx)
             bStartRotation = dx != 0
             if self.__cbIDActivity is not None:
                 BigWorld.cancelCallback(self.__cbIDActivity)

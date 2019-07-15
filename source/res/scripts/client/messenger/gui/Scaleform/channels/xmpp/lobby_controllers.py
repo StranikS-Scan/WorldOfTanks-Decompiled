@@ -132,7 +132,7 @@ class ChatSessionController(_ChannelController):
                 return True
             if user.isCurrentPlayer():
                 continue
-            if not USER_TAG.filterTrustedTags(user.getTags()):
+            if not USER_TAG.filterClosedContactsTags(user.getTags()):
                 return True
 
         return False

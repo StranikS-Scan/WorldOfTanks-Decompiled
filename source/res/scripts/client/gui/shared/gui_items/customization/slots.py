@@ -2,8 +2,7 @@
 # Embedded file name: scripts/client/gui/shared/gui_items/customization/slots.py
 from shared_utils import first
 from gui.shared.gui_items import GUI_ITEM_TYPE
-from items.components.c11n_components import isSlotFitsVehicle
-from items.components.c11n_constants import ProjectionDecalDirectionTags, ProjectionDecalFormTags, ProjectionDecalPositionTags, ProjectionDecalPreferredTags, ProjectionDecalDenyTags
+from items.components.c11n_constants import ProjectionDecalDirectionTags, ProjectionDecalFormTags, ProjectionDecalPositionTags
 ANCHOR_TYPE_TO_SLOT_TYPE_MAP = {'inscription': GUI_ITEM_TYPE.INSCRIPTION,
  'player': GUI_ITEM_TYPE.EMBLEM,
  'paint': GUI_ITEM_TYPE.PAINT,
@@ -116,12 +115,6 @@ class BaseCustomizationSlot(BaseSlot):
 
 
 class ProjectionDecalSlot(BaseCustomizationSlot):
-    __slots__ = ('_childs',)
-
-    def __init__(self, customizationSlotDescriptior, areaId, regionIdx):
-        super(ProjectionDecalSlot, self).__init__(customizationSlotDescriptior, areaId, regionIdx)
-        self._childs = {formfactor:[self.slotId] for formfactor in ProjectionDecalFormTags.ALL}
-        self._unsupportedForms = {}
 
     @property
     def applyTo(self):
@@ -162,54 +155,12 @@ class ProjectionDecalSlot(BaseCustomizationSlot):
 
     @property
     def formfactors(self):
-        return tuple((tag for tag in self.tags if tag.startswith(ProjectionDecalFormTags.PREFIX))) or (ProjectionDecalFormTags.ANY,)
+        return tuple((tag for tag in self.tags if tag.startswith(ProjectionDecalFormTags.PREFIX)))
 
     @property
     def positionTag(self):
         positionTags = (tag for tag in self.tags if tag.startswith(ProjectionDecalPositionTags.PREFIX))
         return first(positionTags, None)
 
-    @property
-    def parentSlotId(self):
-        return self.descriptor.parentSlotId
-
-    @property
-    def isChild(self):
-        return self.parentSlotId is not None
-
-    @property
-    def isParent(self):
-        return self.parentSlotId is None
-
-    def isPreferredForFormfactor(self, formfactor):
-        preferredTag = '{}{}'.format(ProjectionDecalPreferredTags.PREFIX, formfactor)
-        return preferredTag in self.tags
-
-    def isDenyForFormfactor(self, formfactor):
-        preferredTag = '{}{}'.format(ProjectionDecalDenyTags.PREFIX, formfactor)
-        return preferredTag in self.tags
-
     def isFitForFormfactor(self, formfactor):
-        return formfactor in self.formfactors or ProjectionDecalFormTags.ANY in self.formfactors
-
-    def getChilds(self, formfactor, vehicle):
-        allSlots = (vehicle.getAnchorById(slotId) for slotId in self._childs[formfactor])
-        allSlots = (item for item in allSlots if not item.isDenyForFormfactor(formfactor))
-        availableSlots = tuple((slot for slot in allSlots if isSlotFitsVehicle(slot.descriptor, vehicle.descriptor)))
-        return availableSlots
-
-    def addChild(self, anchor):
-        if ProjectionDecalFormTags.ANY in anchor.formfactors:
-            for formfactor in ProjectionDecalFormTags.ALL:
-                self._childs[formfactor].append(anchor.slotId)
-
-        else:
-            for formfactor in anchor.formfactors:
-                self._childs[formfactor].append(anchor.slotId)
-                self._childs[ProjectionDecalFormTags.ANY].append(anchor.slotId)
-
-    def getUnsupportedForms(self, vehicle):
-        vehicleName = vehicle.name
-        if vehicleName not in self._unsupportedForms:
-            self._unsupportedForms[vehicleName] = [ formFactor for formFactor in ProjectionDecalFormTags.ALL_FACTORS if not [ child.slotId for child in self.getChilds(formFactor, vehicle) ] ]
-        return self._unsupportedForms[vehicleName]
+        return formfactor in self.formfactors

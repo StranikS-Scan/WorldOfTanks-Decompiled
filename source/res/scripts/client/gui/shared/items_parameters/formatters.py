@@ -1,12 +1,12 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/items_parameters/formatters.py
 from itertools import chain
-import BigWorld
 from debug_utils import LOG_ERROR
 from gui.Scaleform.genConsts.HANGAR_ALIASES import HANGAR_ALIASES
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
+from gui.impl import backport
 from gui.shared.formatters import text_styles
 from gui.shared.items_parameters import RELATIVE_PARAMS
 from gui.shared.items_parameters.comparator import PARAM_STATE
@@ -156,14 +156,14 @@ def getRelativeDiffParams(comparator):
     return sorted(relativeParams, cmp=lambda a, b: cmp(RELATIVE_PARAMS.index(a.name), RELATIVE_PARAMS.index(b.name)))
 
 
-_niceFormat = {'rounder': BigWorld.wg_getNiceNumberFormat}
-_niceRangeFormat = {'rounder': BigWorld.wg_getNiceNumberFormat,
+_niceFormat = {'rounder': backport.getNiceNumberFormat}
+_niceRangeFormat = {'rounder': backport.getNiceNumberFormat,
  'separator': '-'}
-_listFormat = {'rounder': lambda v: BigWorld.wg_getIntegralFormat(int(v)),
+_listFormat = {'rounder': lambda v: backport.getIntegralFormat(int(v)),
  'separator': '/'}
-_niceListFormat = {'rounder': BigWorld.wg_getNiceNumberFormat,
+_niceListFormat = {'rounder': backport.getNiceNumberFormat,
  'separator': '/'}
-_integralFormat = {'rounder': BigWorld.wg_getIntegralFormat}
+_integralFormat = {'rounder': backport.getIntegralFormat}
 _percentFormat = {'rounder': lambda v: '%d%%' % v}
 
 def _autoReloadPreprocessor(reloadTimes, rowStates):
@@ -199,6 +199,10 @@ def _autoReloadPreprocessor(reloadTimes, rowStates):
         return ((min(times), max(times)), '-', None)
     else:
         return (times, '/', states if states else None)
+
+
+def _getRoundReload(value):
+    return backport.getNiceNumberFormat(round(value, 1))
 
 
 FORMAT_SETTINGS = {'relativePower': _integralFormat,
@@ -260,7 +264,7 @@ FORMAT_SETTINGS = {'relativePower': _integralFormat,
  'stunMinDurationList': _niceListFormat,
  'cooldownSeconds': _niceFormat,
  AUTO_RELOAD_PROP_NAME: {'preprocessor': _autoReloadPreprocessor,
-                         'rounder': lambda v: BigWorld.wg_getNiceNumberFormat(round(v, 1))},
+                         'rounder': _getRoundReload},
  MAX_STEERING_LOCK_ANGLE: _niceFormat,
  WHEELED_SWITCH_ON_TIME: _niceFormat,
  WHEELED_SWITCH_OFF_TIME: _niceFormat,

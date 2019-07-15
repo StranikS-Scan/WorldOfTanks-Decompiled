@@ -5,6 +5,7 @@ import BigWorld
 from debug_utils import LOG_WARNING
 from gui import SystemMessages
 from gui.Scaleform.locale.SYSTEM_MESSAGES import SYSTEM_MESSAGES as I18N_SYSTEM_MESSAGES
+from gui.impl import backport
 from gui.shared import g_eventBus, events, EVENT_BUS_SCOPE
 from helpers import i18n
 DEFAULT_COOLDOWN_TO_REQUEST = 5.0
@@ -91,7 +92,7 @@ class RequestCooldownManager(object):
         requestName = self.lookupName(rqTypeID)
         if coolDown is None:
             coolDown = self.getDefaultCoolDown()
-        return i18n.makeString(I18N_SYSTEM_MESSAGES.REQUEST_ISINCOOLDOWN, request=requestName, coolDown=BigWorld.wg_getNiceNumberFormat(coolDown))
+        return i18n.makeString(I18N_SYSTEM_MESSAGES.REQUEST_ISINCOOLDOWN, request=requestName, coolDown=backport.getNiceNumberFormat(coolDown))
 
     def process(self, rqTypeID, coolDown=None):
         if coolDown is None:

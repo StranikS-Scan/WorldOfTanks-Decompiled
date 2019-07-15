@@ -73,7 +73,7 @@
     <customizationSlots>
       <slot>
         <slotType>	clan	</slotType>
-        <slotId>	1	</slotId>
+        <slotId>	10000	</slotId>
         <rayStart>	0.731018 0.121257 2.73623	</rayStart>
         <rayEnd>	0.731018 -0.0360348 2.6127	</rayEnd>
         <rayUp>	0.000000 0.000000 -1	</rayUp>
@@ -83,22 +83,22 @@
       </slot>
       <slot>
         <slotType>	fixedEmblem	</slotType>
-        <slotId>	204	</slotId>
+        <slotId>	17000	</slotId>
         <rayStart>	-1.72505 0.210214 0.965741	</rayStart>
         <rayEnd>	-1.6593 0.209237 0.959979	</rayEnd>
         <rayUp>	-0.00458983 0.99863 -0.0521286	</rayUp>
-        <emblemId>	3501	</emblemId>
+        <emblemId>	15938	</emblemId>
         <size>	0.249	</size>
         <hideIfDamaged>	true	</hideIfDamaged>
         <isUVProportional>	true	</isUVProportional>
       </slot>
       <slot>
         <slotType>	fixedEmblem	</slotType>
-        <slotId>	205	</slotId>
+        <slotId>	17001	</slotId>
         <rayStart>	1.7863 0.190632 0.957354	</rayStart>
         <rayEnd>	1.60103 0.187879 0.941114	</rayEnd>
         <rayUp>	0.00612655 0.997565 -0.0694792	</rayUp>
-        <emblemId>	3501	</emblemId>
+        <emblemId>	15938	</emblemId>
         <size>	0.255	</size>
         <hideIfDamaged>	true	</hideIfDamaged>
         <isUVProportional>	true	</isUVProportional>
@@ -790,7 +790,7 @@
           <customizationSlots>
             <slot>
               <slotType>	insigniaOnGun	</slotType>
-              <slotId>	771	</slotId>
+              <slotId>	49000	</slotId>
               <rayStart>	0.000000 0.000002 1.60107	</rayStart>
               <rayEnd>	0.343085 -0.152283 1.57939	</rayEnd>
               <rayUp>	0.131 0.000000 0.000000	</rayUp>
@@ -824,11 +824,11 @@
       <customizationSlots>
         <slot>
           <slotType>	fixedEmblem	</slotType>
-          <slotId>	714	</slotId>
+          <slotId>	37000	</slotId>
           <rayStart>	-0.652515 0.389731 0.914683	</rayStart>
           <rayEnd>	-0.476146 0.311055 0.862676	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
-          <emblemId>	3502	</emblemId>
+          <emblemId>	15939	</emblemId>
           <size>	0.454	</size>
           <hideIfDamaged>	false	</hideIfDamaged>
           <isUVProportional>	true	</isUVProportional>
@@ -904,7 +904,7 @@
     <damagedStateGroup>	large	</damagedStateGroup>
   </effects>
   <emblems>
-    <default>	japanese_sun	</default>
+    <default>	15508	</default>
     <lodDist>	MEDIUM	</lodDist>
     <alpha>	0.88	</alpha>
   </emblems>

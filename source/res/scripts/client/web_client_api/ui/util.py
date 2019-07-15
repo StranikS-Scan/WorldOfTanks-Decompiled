@@ -21,8 +21,10 @@ from messenger.storage import storage_getter
 from skeletons.gui.app_loader import IAppLoader
 from skeletons.gui.goodies import IGoodiesCache
 from skeletons.gui.shared import IItemsCache
+from skeletons.gui.web import IWebController
 from web_client_api import w2c, W2CSchema, Field, WebCommandException
-from web_client_api.common import ItemPackType, ItemPackEntry
+from web_client_api.common import ItemPackType, ItemPackEntry, SPA_ID_TYPES
+from gui.wgcg.utils.contexts import SPAAccountAttributeCtx, PlatformFetchProductListCtx
 _COUNTER_IDS_MAP = {'shop': VIEW_ALIAS.LOBBY_STORE}
 
 def _itemTypeValidator(itemType, _=None):
@@ -72,12 +74,29 @@ class _ShowItemTooltipSchema(W2CSchema):
 
 
 class _ChatAvailabilitySchema(W2CSchema):
-    receiver_id = Field(required=True, type=long)
+    receiver_id = Field(required=True, type=SPA_ID_TYPES)
+
+
+class _AccountAttribute(W2CSchema):
+    attr_prefix = Field(required=True, type=basestring)
+
+
+class _PlatformProductListSchema(W2CSchema):
+    storefront = Field(required=True, type=basestring)
+    wgid = Field(required=True, type=int)
+    language = Field(required=True, type=basestring)
+    additional_data = Field(required=True, type=dict)
+    country = Field(required=True, type=basestring)
+    response_fields = Field(required=True, type=dict)
+    response_fields_profile = Field(required=False, type=basestring)
+    category = Field(required=False, type=basestring)
+    product_codes = Field(required=False, type=list)
 
 
 class UtilWebApiMixin(object):
     itemsCache = dependency.descriptor(IItemsCache)
     goodiesCache = dependency.descriptor(IGoodiesCache)
+    _webCtrl = dependency.descriptor(IWebController)
 
     def __init__(self):
         super(UtilWebApiMixin, self).__init__()
@@ -156,6 +175,24 @@ class UtilWebApiMixin(object):
     def getCurrentLocalServerTimestamp(self, _):
         return time_utils.getCurrentLocalServerTimestamp()
 
+    @w2c(_PlatformProductListSchema, name='fetch_product_list')
+    def handleFetchProductList(self, cmd):
+        ctx = PlatformFetchProductListCtx(cmd)
+        response = yield self._webCtrl.sendRequest(ctx=ctx)
+        if response.isSuccess():
+            yield {'result': response.getData()}
+        else:
+            yield {'error': self.__getErrorResponse(response.data, 'Unable to fetch product list.')}
+
+    @w2c(_AccountAttribute, name='get_account_attribute_by_prefix')
+    def handleGetAccountAttributeByPrefix(self, cmd):
+        ctx = SPAAccountAttributeCtx(cmd)
+        response = yield self._webCtrl.sendRequest(ctx=ctx)
+        if response.isSuccess():
+            yield {'result': response.getData()}
+        else:
+            yield {'error': self.__getErrorResponse(response.data, 'Unable to obtain account attrs.')}
+
     @storage_getter('users')
     def usersStorage(self):
         return None
@@ -181,3 +218,7 @@ class UtilWebApiMixin(object):
     def __getTooltipMgr(self):
         appLoader = dependency.instance(IAppLoader)
         return appLoader.getApp().getToolTipMgr()
+
+    @staticmethod
+    def __getErrorResponse(data, defaultError=''):
+        return data if data else {'description': defaultError}

@@ -4,7 +4,7 @@ import BigWorld
 import BattleReplay
 import SoundGroups
 import Settings
-from AvatarInputHandler.aih_constants import CTRL_MODE_NAME
+from aih_constants import CTRL_MODE_NAME
 from PlayerEvents import g_playerEvents
 from bootcamp.BootCampEvents import g_bootcampEvents
 from bootcamp.BootcampConstants import CAMERA_START_DISTANCE

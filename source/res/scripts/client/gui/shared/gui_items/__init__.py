@@ -273,6 +273,7 @@ class KPI(object):
         GAME_FREE_XP = 'gameFreeXp'
         GAME_CREW_XP = 'gameCrewXp'
         GAME_CREDITS = 'gameCredits'
+        GAME_FL_XP = 'gameFlXp'
 
     class Type(CONST_CONTAINER):
         MUL = 'mul'

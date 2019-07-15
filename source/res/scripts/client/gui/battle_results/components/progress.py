@@ -4,7 +4,6 @@ import logging
 import math
 import operator
 from collections import namedtuple
-import BigWorld
 import personal_missions
 from gui.Scaleform.daapi.view.lobby.server_events.events_helpers import getEventPostBattleInfo
 from gui.Scaleform.daapi.view.lobby.techtree.techtree_dp import g_techTreeDP
@@ -152,7 +151,7 @@ class VehicleProgressHelper(object):
     def __makeTankmanVO(self, tman, avgBattles2NewSkill):
         prediction = ''
         if avgBattles2NewSkill > 0:
-            prediction = _ms(BATTLE_RESULTS.COMMON_NEWSKILLPREDICTION, battles=BigWorld.wg_getIntegralFormat(avgBattles2NewSkill))
+            prediction = _ms(BATTLE_RESULTS.COMMON_NEWSKILLPREDICTION, battles=backport.getIntegralFormat(avgBattles2NewSkill))
         data = {'title': _ms(BATTLE_RESULTS.COMMON_CREWMEMBER_NEWSKILL),
          'prediction': prediction,
          'linkEvent': PROGRESS_ACTION.NEW_SKILL_UNLOCK_TYPE,

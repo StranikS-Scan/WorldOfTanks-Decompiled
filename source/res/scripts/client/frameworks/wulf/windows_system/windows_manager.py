@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/frameworks/wulf/windows_system/windows_manager.py
 import logging
+import typing
 import Event
 from ..py_object_binder import PyObjectEntity
 from .windows_area import WindowsArea

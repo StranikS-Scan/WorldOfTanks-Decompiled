@@ -8,8 +8,9 @@ import BigWorld
 import GUI
 import Math
 import constants
+import aih_constants
 from AvatarInputHandler import AimingSystems
-from AvatarInputHandler import aih_constants, aih_global_binding
+from AvatarInputHandler import aih_global_binding
 from helpers import dependency
 from helpers.CallbackDelayer import CallbackDelayer
 from skeletons.account_helpers.settings_core import ISettingsCore

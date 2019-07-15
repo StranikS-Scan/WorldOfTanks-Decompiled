@@ -84,7 +84,8 @@
     <V-12-5A>	113	</V-12-5A>
     <V-11-IS-3>	114	</V-11-IS-3>
     <M-17L_R>	115	</M-17L_R>
-    <V-7>	116	</V-7>
+    <V-7C>	116	</V-7C>
+    <V-7>	217	</V-7>
     <M_40_1200>	117	</M_40_1200>
     <ZiS-16_A>	119	</ZiS-16_A>
     <V-12-6V>	120	</V-12-6V>
@@ -2305,8 +2306,8 @@
       <rpm_min>	293	</rpm_min>
       <rpm_max>	2320	</rpm_max>
     </_2xV_16_1000_A>
-    <V-7>
-      <userString>	#ussr_vehicles:V-7	</userString>
+    <V-7C>
+      <userString>	#ussr_vehicles:V-7C	</userString>
       <tags>	diesel	</tags>
       <level>	10	</level>
       <notInShop>	true	</notInShop>
@@ -2321,6 +2322,23 @@
       <fireStartingChance>	0.15	</fireStartingChance>
       <rpm_min>	293	</rpm_min>
       <rpm_max>	2320	</rpm_max>
+    </V-7C>
+    <V-7>
+      <userString>	#ussr_vehicles:V-7	</userString>
+      <tags>	diesel	</tags>
+      <level>	9	</level>
+      <notInShop>	true	</notInShop>
+      <price>	110000	</price>
+      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
+      <power>	670	</power>
+      <weight>	1050	</weight>
+      <maxHealth>	320	</maxHealth>
+      <maxRegenHealth>	160	</maxRegenHealth>
+      <repairCost>	10	</repairCost>
+      <fireStartingChance>	0.15	</fireStartingChance>
+      <rpm_min>	341	</rpm_min>
+      <rpm_max>	2176	</rpm_max>
     </V-7>
     <GMC_6046>
       <userString>	#ussr_vehicles:GMC_6046	</userString>

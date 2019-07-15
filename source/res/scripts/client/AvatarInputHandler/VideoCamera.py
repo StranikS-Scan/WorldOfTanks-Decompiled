@@ -6,8 +6,9 @@ import BigWorld
 import GUI
 import Keys
 import Math
-from AvatarInputHandler import mathUtils, AimingSystems
-from AvatarInputHandler.aih_constants import CTRL_MODE_NAME
+import math_utils
+from aih_constants import CTRL_MODE_NAME
+from AvatarInputHandler import AimingSystems
 from AvatarInputHandler.cameras import ICamera
 from DetachedTurret import DetachedTurret
 from Math import Vector3, Matrix
@@ -158,7 +159,7 @@ class _VehicleBounder(object):
     lookAtPosition = property(__getLookAtPosition)
 
     def __init__(self):
-        self.matrix = mathUtils.createIdentityMatrix()
+        self.matrix = math_utils.createIdentityMatrix()
         self.__boundLocalPos = None
         self.__vehicle = None
         self.__lookAtProvider = None
@@ -168,7 +169,7 @@ class _VehicleBounder(object):
     def bind(self, vehicle, bindWorldPos=None):
         self.__vehicle = vehicle
         if vehicle is None:
-            self.matrix = mathUtils.createIdentityMatrix()
+            self.matrix = math_utils.createIdentityMatrix()
             self.__lookAtProvider = None
             return
         else:
@@ -192,8 +193,8 @@ class _VehicleBounder(object):
                 turretMatrixProv = AimingSystems.getTurretMatrixProvider(self.__vehicle.typeDescriptor, self.__vehicle.matrix, self.__vehicle.appearance.turretMatrix)
                 self.matrix = AimingSystems.getGunMatrixProvider(self.__vehicle.typeDescriptor, turretMatrixProv, self.__vehicle.appearance.gunMatrix)
             elif placement == _VehicleBounder.SELECT_LOOK_AT:
-                self.matrix = mathUtils.createIdentityMatrix()
-                self.__lookAtProvider = mathUtils.MatrixProviders.product(mathUtils.createTranslationMatrix(self.__boundLocalPos), self.__vehicle.matrix)
+                self.matrix = math_utils.createIdentityMatrix()
+                self.__lookAtProvider = math_utils.MatrixProviders.product(math_utils.createTranslationMatrix(self.__boundLocalPos), self.__vehicle.matrix)
             return
 
     def selectNextPlacement(self):
@@ -297,7 +298,7 @@ class VideoCamera(ICamera, CallbackDelayer, TimeDeltaMeter):
         camMatrix = args.get('camMatrix', BigWorld.camera().matrix)
         self._cam.set(camMatrix)
         self._cam.invViewProvider.a = camMatrix
-        self._cam.invViewProvider.b = mathUtils.createIdentityMatrix()
+        self._cam.invViewProvider.b = math_utils.createIdentityMatrix()
         cameraTransitionDuration = args.get('transitionDuration', -1)
         if cameraTransitionDuration > 0:
             self.__cameraTransition.start(BigWorld.camera().matrix, self._cam, cameraTransitionDuration)
@@ -396,7 +397,7 @@ class VideoCamera(ICamera, CallbackDelayer, TimeDeltaMeter):
         return delta
 
     def __getMovementDirections(self):
-        m = mathUtils.createRotationMatrix(self.__ypr)
+        m = math_utils.createRotationMatrix(self.__ypr)
         result = (m.applyVector(Vector3(1, 0, 0)), Vector3(0, 1, 0), m.applyVector(Vector3(0, 0, 1)))
         if self._alignerToLand.enabled:
             result[0].y = 0.0
@@ -425,7 +426,7 @@ class VideoCamera(ICamera, CallbackDelayer, TimeDeltaMeter):
         self.__ypr += self.__yprVelocity * delta
         self.__position += self.__velocity * delta
         if self.__rotateAroundPointEnabled:
-            self.__position = self.__getAlignedToPointPosition(mathUtils.createRotationMatrix(self.__ypr))
+            self.__position = self.__getAlignedToPointPosition(math_utils.createRotationMatrix(self.__ypr))
         if self._alignerToLand.enabled and not self.__basisMProv.isBound:
             if abs(self.__velocity.y) > 0.1:
                 self._alignerToLand.enable(self.__position, self._alignerToLand.ignoreTerrain)
@@ -438,7 +439,7 @@ class VideoCamera(ICamera, CallbackDelayer, TimeDeltaMeter):
         else:
             self.__ypr = self.__clampYPR(self.__ypr)
         self.__position = self._checkSpaceBounds(prevPos, self.__position)
-        self._cam.invViewProvider.a = mathUtils.createRTMatrix(self.__ypr, self.__position)
+        self._cam.invViewProvider.a = math_utils.createRTMatrix(self.__ypr, self.__position)
         self._cam.invViewProvider.b = self.__basisMProv.matrix
         BigWorld.projection().fov = self.__calcFov()
         self.__resetSenses()
@@ -570,7 +571,7 @@ class VideoCamera(ICamera, CallbackDelayer, TimeDeltaMeter):
 
     def __calcFov(self):
         fov = BigWorld.projection().fov + self._zoomSensor.currentVelocity
-        return mathUtils.clamp(0.1, math.pi - 0.1, fov)
+        return math_utils.clamp(0.1, math.pi - 0.1, fov)
 
     def __updateSenses(self, delta):
         self._movementSensor.update(delta)

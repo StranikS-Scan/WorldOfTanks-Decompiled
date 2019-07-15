@@ -1,52 +1,52 @@
 <environment_effects.xml>
   <lightSounds>
     <model>
-      <modelName>	particles/Environment/env_firehouse_01.xml	</modelName>
+      <modelName>	particles/Environment/env_firehouse_01.eff	</modelName>
       <offset>	0 0.2 0	</offset>
       <wwsound>	ambient_burn_static_small	</wwsound>
     </model>
     <model>
-      <modelName>	particles/Environment/env_firehouse_02.xml	</modelName>
+      <modelName>	particles/Environment/env_firehouse_02.eff	</modelName>
       <offset>	0 0.2 0	</offset>
       <wwsound>	ambient_burn_static_small	</wwsound>
     </model>
     <model>
-      <modelName>	particles/Environment/fire_01.xml	</modelName>
+      <modelName>	particles/Environment/fire_01.eff	</modelName>
       <offset>	0 0.5 0	</offset>
       <wwsound>	ambient_burn_static_mid	</wwsound>
     </model>
     <model>
-      <modelName>	particles/Environment/interior/101_dday_fire_big.xml	</modelName>
+      <modelName>	particles/Environment/interior/101_dday_fire_big.eff	</modelName>
       <offset>	0 0.3 0	</offset>
       <wwsound>	ambient_burn_static_mid	</wwsound>
     </model>
     <model>
-      <modelName>	particles/Environment/interior/101_dday_fire_small.xml	</modelName>
+      <modelName>	particles/Environment/interior/101_dday_fire_small.eff	</modelName>
       <offset>	0 0.2 0	</offset>
       <wwsound>	ambient_burn_static_small	</wwsound>
     </model>
     <model>
-      <modelName>	particles/Environment/interior/101_dday_tree_fire_small.xml	</modelName>
+      <modelName>	particles/Environment/interior/101_dday_tree_fire_small.eff	</modelName>
       <offset>	0 0.2 0	</offset>
       <wwsound>	ambient_burn_static_small	</wwsound>
     </model>
     <model>
-      <modelName>	particles/Environment/exterior/101_dday_fire_dot.xml	</modelName>
+      <modelName>	particles/Environment/exterior/101_dday_fire_dot.eff	</modelName>
       <offset>	0 0.3 0	</offset>
       <wwsound>	ambient_burn_static_big	</wwsound>
     </model>
     <model>
-      <modelName>	particles/Environment/interior/04_himmelsdorf_Fire_Big.xml	</modelName>
+      <modelName>	particles/Environment/interior/04_himmelsdorf_Fire_Big.eff	</modelName>
       <offset>	0 0.5 0	</offset>
       <wwsound>	ambient_burn_static_big	</wwsound>
     </model>
     <model>
-      <modelName>	particles/Environment/interior/04_himmelsdorf_FireSmoke.xml	</modelName>
+      <modelName>	particles/Environment/interior/04_himmelsdorf_FireSmoke.eff	</modelName>
       <offset>	0 0.5 0	</offset>
       <wwsound>	ambient_burn_static_big	</wwsound>
     </model>
     <model>
-      <modelName>	particles/Environment/interior/04_himmelsdorf_firesmoke_2.xml	</modelName>
+      <modelName>	particles/Environment/interior/04_himmelsdorf_firesmoke_2.eff	</modelName>
       <offset>	0 0.5 0	</offset>
       <wwsound>	amb_map_burn_static_big	</wwsound>
     </model>
@@ -56,12 +56,12 @@
       <wwsound>	amb_map_burn_static_big	</wwsound>
     </model>
     <model>
-      <modelName>	particles/Environment/interior/10_hills_fire_smoke_2.xml	</modelName>
+      <modelName>	particles/Environment/interior/10_hills_fire_smoke_2.eff	</modelName>
       <offset>	0 0.5 0	</offset>
       <wwsound>	amb_map_10_hils_burn_static_big_open	</wwsound>
     </model>
     <model>
-      <modelName>	particles/Environment/interior/10_hills_fire_smoke.xml	</modelName>
+      <modelName>	particles/Environment/interior/10_hills_fire_smoke.eff	</modelName>
       <offset>	0 0.2 0	</offset>
       <wwsound>	amb_map_10_hils_burn_static_small_close	</wwsound>
     </model>
@@ -81,7 +81,7 @@
       <wwsound>	amb_map_burn_static_small	</wwsound>
     </model>
     <model>
-      <modelName>	particles/Environment/interior/11_murovanka_fire_smoke_2.xml	</modelName>
+      <modelName>	particles/Environment/interior/11_murovanka_fire_smoke_2.eff	</modelName>
       <offset>	0 0 0	</offset>
       <wwsound>	amb_map_burn_static_small	</wwsound>
     </model>
@@ -91,7 +91,7 @@
       <wwsound>	amb_map_burn_static_medium	</wwsound>
     </model>
     <model>
-      <modelName>	particles/Environment/interior/11_murovanka_fire_smoke.xml	</modelName>
+      <modelName>	particles/Environment/interior/11_murovanka_fire_smoke.eff	</modelName>
       <offset>	0 0.5 0	</offset>
       <wwsound>	amb_map_burn_static_medium	</wwsound>
     </model>
@@ -283,7 +283,7 @@
     <model>
       <modelName>	vegetation/Conifers/Cypress_regular/Cypress_regular_half-small.srt	</modelName>
       <offset>	0 0.2 0	</offset>
-      <wwsound>	ambient_trees_yellow_dry_comb_small_01	</wwsound>
+      <wwsound>	ambient_trees_green_comb_small_01	</wwsound>
     </model>
     <model>
       <modelName>	vegetation/Conifers/Cypress_regular/Cypress_regular_small.srt	</modelName>
@@ -293,7 +293,7 @@
     <model>
       <modelName>	vegetation/Conifers/Cypress_regular/Cypress_regular_tiny.srt	</modelName>
       <offset>	0 0.6 0	</offset>
-      <wwsound>	ambient_trees_yellow_dry_comb_small_01	</wwsound>
+      <wwsound>	ambient_trees_green_comb_small_01	</wwsound>
     </model>
     <model>
       <modelName>	vegetation/Broadleaves/Apple/Apple_6m_Classic.srt	</modelName>
@@ -716,17 +716,17 @@
       <wwsound>	amb_map_06_ensk_flag	</wwsound>
     </model>
     <model>
-      <modelName>	particles/Environment/interior/14_siegfried_line_fires_small_02.xml	</modelName>
+      <modelName>	particles/Environment/interior/14_siegfried_line_fires_small_02.eff	</modelName>
       <offset>	0 1 0	</offset>
       <wwsound>	amb_map_burn_static_small	</wwsound>
     </model>
     <model>
-      <modelName>	particles/Environment/interior/14_siegfried_line_firesmoke_long.xml	</modelName>
+      <modelName>	particles/Environment/interior/14_siegfried_line_firesmoke_long.eff	</modelName>
       <offset>	0 1 0	</offset>
       <wwsound>	amb_map_burn_static_big	</wwsound>
     </model>
     <model>
-      <modelName>	particles/Environment/interior/14_siegfried_line_firesmoke_thick.xml	</modelName>
+      <modelName>	particles/Environment/interior/14_siegfried_line_firesmoke_thick.eff	</modelName>
       <offset>	0 1 0	</offset>
       <wwsound>	amb_map_burn_static_big	</wwsound>
     </model>
@@ -746,7 +746,7 @@
       <wwsound>	ambient_palm_green_mid	</wwsound>
     </model>
     <model>
-      <modelName>	particles/Environment/interior/13_erlenberg_fire.xml	</modelName>
+      <modelName>	particles/Environment/interior/13_erlenberg_fire.eff	</modelName>
       <offset>	0 1 0	</offset>
       <wwsound>	amb_map_burn_static_big	</wwsound>
     </model>
@@ -911,12 +911,12 @@
       <wwsound>	ambient_trees_coniferous_01	</wwsound>
     </model>
     <model>
-      <modelName>	particles/Environment/interior/47_canada_a_firesmoke_long.xml	</modelName>
+      <modelName>	particles/Environment/interior/47_canada_a_firesmoke_long.eff	</modelName>
       <offset>	0.000000 0.000000 0.000000	</offset>
       <wwsound>	amb_map_07_lakeville_burn_static_big_open	</wwsound>
     </model>
     <model>
-      <modelName>	particles/Environment/interior/47_canada_a_firesmoke_thick.xml	</modelName>
+      <modelName>	particles/Environment/interior/47_canada_a_firesmoke_thick.eff	</modelName>
       <offset>	0.000000 0.000000 0.000000	</offset>
       <wwsound>	amb_map_07_lakeville_burn_static_big_open	</wwsound>
     </model>
@@ -1063,7 +1063,7 @@
     <model>
       <modelName>	vegetation/Misc/Reed/Reed_cluster.srt	</modelName>
       <offset>	0.000000 0.600000 0.000000	</offset>
-      <wwsound>	ambient_bush_yellow_dry_small_01	</wwsound>
+      <wwsound>	ambient_trees_green_comb_small_01	</wwsound>
     </model>
     <model>
       <modelName>	content/Buildings/hd_bld_EU_259_WindMill/normal/lod0/hd_bld_EU_259_WindMill_01.model	</modelName>
@@ -1081,12 +1081,17 @@
       <wwsound>	ambient_trees_yellow_dry_comb_big_02	</wwsound>
     </model>
     <model>
-      <modelName>	particles/Environment/interior/08_ruinberg_firesmoke.xml	</modelName>
+      <modelName>	vegetation/Broadleaves/Shrubs/Hedge/Hedge_Half_Rare_Light.srt	</modelName>
+      <offset>	0.000000 0.000000 0.000000	</offset>
+      <wwsound>	ambient_bush_yellow_dry_small_01	</wwsound>
+    </model>
+    <model>
+      <modelName>	particles/Environment/interior/08_ruinberg_firesmoke.eff	</modelName>
       <offset>	0.000000 0.000000 0.000000	</offset>
       <wwsound>	ambient_burn_static_mid	</wwsound>
     </model>
     <model>
-      <modelName>	particles/Environment/interior/08_ruinberg_fires_small.xml	</modelName>
+      <modelName>	particles/Environment/interior/08_ruinberg_fires_small.eff	</modelName>
       <offset>	0.000000 0.000000 0.000000	</offset>
       <wwsound>	ambient_burn_static_small	</wwsound>
     </model>
@@ -1248,20 +1253,15 @@
     <model>
       <modelName>	vegetation/Conifers/BaldCypress/BaldCypress_02.srt	</modelName>
       <offset>	0.000000 15.000000 0.000000	</offset>
-      <wwsound>	ambient_bush_yellow_dry_big_01	</wwsound>
+      <wwsound>	ambient_trees_green_comb_small_01	</wwsound>
     </model>
     <model>
       <modelName>	vegetation/Broadleaves/Shrubs/Swamp_Reed/Swamp_Reed_Bush.srt	</modelName>
       <offset>	0.000000 1.000000 0.000000	</offset>
-      <wwsound>	ambient_bush_yellow_dry_small_01	</wwsound>
+      <wwsound>	ambient_trees_green_comb_small_01	</wwsound>
     </model>
     <model>
       <modelName>	vegetation/Misc/Sugar_Cane/Sugar_Cane_01.srt	</modelName>
-      <offset>	0.000000 2.000000 0.000000	</offset>
-      <wwsound>	ambient_bush_yellow_dry_small_01	</wwsound>
-    </model>
-    <model>
-      <modelName>	vegetation/Misc/Sugar_Cane/Sugar_Cane_02.srt	</modelName>
       <offset>	0.000000 2.000000 0.000000	</offset>
       <wwsound>	ambient_bush_yellow_dry_small_01	</wwsound>
     </model>
@@ -1278,15 +1278,15 @@
     <model>
       <modelName>	vegetation/Misc/Cotton/Cotton_01.srt	</modelName>
       <offset>	0.000000 0.000000 0.000000	</offset>
-      <wwsound>	ambient_bush_yellow_dry_small_01	</wwsound>
+      <wwsound>	ambient_trees_green_comb_small_01	</wwsound>
     </model>
     <model>
-      <modelName>	particles/Environment/interior/63_tundra_firesmoke_thick.xml	</modelName>
+      <modelName>	particles/Environment/interior/63_tundra_firesmoke_thick.eff	</modelName>
       <offset>	0.000000 0.000000 0.000000	</offset>
       <wwsound>	ambient_burn_static_big	</wwsound>
     </model>
     <model>
-      <modelName>	particles/Environment/interior/14_siegfried_line_fire_thick.xml	</modelName>
+      <modelName>	particles/Environment/interior/14_siegfried_line_fire_thick.eff	</modelName>
       <offset>	0.000000 2.000000 0.000000	</offset>
       <wwsound>	amb_map_burn_static_big	</wwsound>
     </model>
@@ -1321,7 +1321,7 @@
       <wwsound>	amb_map_burn_static_big	</wwsound>
     </model>
     <model>
-      <modelName>	particles/Environment/interior/07_lakeville_fire.xml	</modelName>
+      <modelName>	particles/Environment/interior/07_lakeville_fire.eff	</modelName>
       <offset>	0.000000 0.000000 0.000000	</offset>
       <wwsound>	ambient_burn_static_mid	</wwsound>
     </model>
@@ -1336,7 +1336,7 @@
       <wwsound>	ambient_bush_yellow_dry_small_01	</wwsound>
     </model>
     <model>
-      <modelName>	particles/Environment/interior/37_caucasus_firesmoke_thick.xml	</modelName>
+      <modelName>	particles/Environment/interior/37_caucasus_firesmoke_thick.eff	</modelName>
       <offset>	0.000000 0.500000 0.000000	</offset>
       <wwsound>	amb_map_burn_static_big	</wwsound>
     </model>
@@ -1481,27 +1481,32 @@
       <wwsound>	ambient_trees_coniferous_01	</wwsound>
     </model>
     <model>
-      <modelName>	particles/Environment/interior/208_fire_small_1.xml	</modelName>
+      <modelName>	particles/Environment/interior/208_fire_small_1.eff	</modelName>
       <offset>	0 0 0	</offset>
       <wwsound>	ambient_burn_static_small	</wwsound>
     </model>
     <model>
-      <modelName>	particles/Environment/interior/208_fire_length_1.xml	</modelName>
+      <modelName>	particles/Environment/interior/208_fire_length_1.eff	</modelName>
       <offset>	0 0 0	</offset>
       <wwsound>	ambient_burn_static_big	</wwsound>
     </model>
     <model>
-      <modelName>	particles/Environment/interior/208_fire_dot_1.xml	</modelName>
+      <modelName>	particles/Environment/interior/208_fire_dot_1.eff	</modelName>
       <offset>	0 0 0	</offset>
       <wwsound>	ambient_burn_static_small	</wwsound>
     </model>
     <model>
-      <modelName>	particles/Environment/interior/208_fire_big_01.xml	</modelName>
+      <modelName>	particles/Environment/interior/208_fire_big_2.eff	</modelName>
       <offset>	0 0 0	</offset>
       <wwsound>	ambient_burn_static_big	</wwsound>
     </model>
     <model>
-      <modelName>	particles/Environment/interior/208_fire_area_1.xml	</modelName>
+      <modelName>	particles/Environment/interior/208_fire_big_01.eff	</modelName>
+      <offset>	0 0 0	</offset>
+      <wwsound>	ambient_burn_static_big	</wwsound>
+    </model>
+    <model>
+      <modelName>	particles/Environment/interior/208_fire_area_1.eff	</modelName>
       <offset>	0 0 0	</offset>
       <wwsound>	ambient_burn_static_big	</wwsound>
     </model>
@@ -1516,17 +1521,22 @@
       <wwsound>	ambient_trees_coniferous_comb_big_01	</wwsound>
     </model>
     <model>
-      <modelName>	particles/Environment/interior/114_czech_firesmoke.xml	</modelName>
+      <modelName>	particles/Environment/interior/114_czech_firesmoke.eff	</modelName>
       <offset>	0 1 0	</offset>
       <wwsound>	ambient_burn_static_mid	</wwsound>
     </model>
     <model>
-      <modelName>	particles/Environment/interior/05_prohorovka_fire_big_all_2.xml	</modelName>
+      <modelName>	particles/Environment/interior/05_prohorovka_fire_big_all_2.eff	</modelName>
       <offset>	0.000000 0.000000 0.000000	</offset>
       <wwsound>	ambient_burn_static_small	</wwsound>
     </model>
     <model>
-      <modelName>	particles/Environment/interior/05_prohorovka_fire_small_2.xml	</modelName>
+      <modelName>	particles/Environment/interior/05_prohorovka_fire_small_2.eff	</modelName>
+      <offset>	0.000000 0.000000 0.000000	</offset>
+      <wwsound>	ambient_burn_static_small	</wwsound>
+    </model>
+    <model>
+      <modelName>	particles/Experimental/fire_big_all_2.eff	</modelName>
       <offset>	0.000000 0.000000 0.000000	</offset>
       <wwsound>	ambient_burn_static_small	</wwsound>
     </model>
@@ -1536,12 +1546,12 @@
       <wwsound>	amb_map_burn_static_big	</wwsound>
     </model>
     <model>
-      <modelName>	particles/Environment/interior/114_czech_Gasolin_fire_small.xml	</modelName>
+      <modelName>	particles/Environment/interior/114_czech_Gasolin_fire_small.eff	</modelName>
       <offset>	0.000000 0.000000 0.000000	</offset>
       <wwsound>	ambient_burn_static_big	</wwsound>
     </model>
     <model>
-      <modelName>	particles/Environment/interior/114_czech_Gasolin_fire_big.xml	</modelName>
+      <modelName>	particles/Environment/interior/114_czech_Gasolin_fire_big.eff	</modelName>
       <offset>	0.000000 0.000000 0.000000	</offset>
       <wwsound>	ambient_burn_static_big	</wwsound>
     </model>
@@ -1741,7 +1751,7 @@
       <wwsound>	amb_map_95_streetlamp	</wwsound>
     </model>
     <model>
-      <modelName>	particles/Environment/interior/83_kharkiv_firesmoke.xml	</modelName>
+      <modelName>	particles/Environment/interior/83_kharkiv_firesmoke.eff	</modelName>
       <offset>	0 0.5 0	</offset>
       <wwsound>	ambient_burn_static_big	</wwsound>
     </model>
@@ -1785,6 +1795,21 @@
       <offset>	0.000000 2.000000 0.000000	</offset>
       <wwsound>	ambient_bush_yellow_dry_big_01	</wwsound>
     </model>
+    <model>
+      <modelName>	vegetation/Conifers/Spruce_Snow/Spruce_Snow_8m_Wide.srt	</modelName>
+      <offset>	0.000000 3.000000 0.000000	</offset>
+      <wwsound>	ambient_trees_coniferous_01	</wwsound>
+    </model>
+    <model>
+      <modelName>	vegetation/Conifers/Pine_Young_Snow/Pine_Young_Snow_4m.srt	</modelName>
+      <offset>	0.000000 2.500000 0.000000	</offset>
+      <wwsound>	ambient_trees_coniferous_01	</wwsound>
+    </model>
+    <model>
+      <modelName>	vegetation/Conifers/Pine_Young_Snow/Pine_Young_Snow_1m.srt	</modelName>
+      <offset>	0.000000 0.800000 0.000000	</offset>
+      <wwsound>	ambient_trees_coniferous_01	</wwsound>
+    </model>
   </lightSounds>
   <birds>
     <seagull>
@@ -1816,7 +1841,7 @@
         <alphaFadeDistances>	1000.000000 1000.000000	</alphaFadeDistances>
         <wwsoundName>	plane_not_gun_bomber_01	</wwsoundName>
         <effectHardpoint>	HP_module_0	</effectHardpoint>
-        <effectName>	particles/Environment/scenarios/plane_engine_sc_all.xml	</effectName>
+        <effectName>	particles/Environment/scenarios/plane_engine_sc_all.eff	</effectName>
       </channel0>
       <point>
         <position>	1194.215698 129.043335 -1442.338501	</position>
@@ -1855,7 +1880,7 @@
         <alphaFadeDistances>	1000.000000 1000.000000	</alphaFadeDistances>
         <wwsoundName>	plane_not_gun_bomber_01	</wwsoundName>
         <effectHardpoint>	HP_module_0	</effectHardpoint>
-        <effectName>	particles/Environment/scenarios/plane_engine_sc_all.xml	</effectName>
+        <effectName>	particles/Environment/scenarios/plane_engine_sc_all.eff	</effectName>
       </channel0>
       <point>
         <position>	1260.551147 108.478935 -1402.305176	</position>
@@ -1894,7 +1919,7 @@
         <alphaFadeDistances>	1000.000000 1000.000000	</alphaFadeDistances>
         <wwsoundName>	plane_not_gun_bomber_01	</wwsoundName>
         <effectHardpoint>	HP_module_0	</effectHardpoint>
-        <effectName>	particles/Environment/scenarios/plane_engine_sc_all.xml	</effectName>
+        <effectName>	particles/Environment/scenarios/plane_engine_sc_all.eff	</effectName>
       </channel0>
       <point>
         <position>	1281.174683 141.449524 -1355.557495	</position>
@@ -1933,7 +1958,7 @@
         <alphaFadeDistances>	1000.000000 1000.000000	</alphaFadeDistances>
         <wwsoundName>	plane_not_gun_bomber_01	</wwsoundName>
         <effectHardpoint>	HP_module_0	</effectHardpoint>
-        <effectName>	particles/Environment/scenarios/plane_engine_sc_all.xml	</effectName>
+        <effectName>	particles/Environment/scenarios/plane_engine_sc_all.eff	</effectName>
       </channel0>
       <point>
         <position>	1285.582886 135.884735 -1359.429932	</position>
@@ -1972,7 +1997,7 @@
         <alphaFadeDistances>	1000.000000 1000.000000	</alphaFadeDistances>
         <wwsoundName>	plane_not_gun_bomber_01	</wwsoundName>
         <effectHardpoint>	HP_module_0	</effectHardpoint>
-        <effectName>	particles/Environment/scenarios/13_plane_flight.xml	</effectName>
+        <effectName>	particles/Environment/scenarios/13_plane_flight.eff	</effectName>
       </channel0>
       <point>
         <position>	-578.765625 68.316032 992.447754	</position>
@@ -2026,7 +2051,7 @@
         <alphaFadeDistances>	1000.000000 1000.000000	</alphaFadeDistances>
         <wwsoundName></wwsoundName>
         <effectHardpoint>	HP_module_0	</effectHardpoint>
-        <effectName>	particles/Environment/scenarios/13_plane_explosion.xml	</effectName>
+        <effectName>	particles/Environment/scenarios/13_plane_explosion.eff	</effectName>
       </channel0>
       <point>
         <position>	-208.988617 262.162506 -140.036392	</position>
@@ -2050,7 +2075,7 @@
         <alphaFadeDistances>	1000.000000 1000.000000	</alphaFadeDistances>
         <wwsoundName>	plane_not_gun_bomber_01	</wwsoundName>
         <effectHardpoint>	HP_module_0	</effectHardpoint>
-        <effectName>	particles/Environment/scenarios/13_plane_flight.xml	</effectName>
+        <effectName>	particles/Environment/scenarios/13_plane_flight.eff	</effectName>
       </channel0>
       <point>
         <position>	-542.815491 66.518181 1001.769043	</position>
@@ -2099,7 +2124,7 @@
         <alphaFadeDistances>	1000.000000 1000.000000	</alphaFadeDistances>
         <wwsoundName></wwsoundName>
         <effectHardpoint>	HP_module_0	</effectHardpoint>
-        <effectName>	particles/Environment/scenarios/03_compania_gun_attack.xml	</effectName>
+        <effectName>	particles/Environment/scenarios/03_compania_gun_attack.eff	</effectName>
       </channel0>
       <point>
         <position>	-144.244675 243.746872 -737.809937	</position>
@@ -2125,7 +2150,7 @@
         <alphaFadeDistances>	1000.000000 1000.000000	</alphaFadeDistances>
         <wwsoundName></wwsoundName>
         <effectHardpoint>	HP_module_0	</effectHardpoint>
-        <effectName>	particles/Environment/scenarios/03_compania_gun_attack.xml	</effectName>
+        <effectName>	particles/Environment/scenarios/03_compania_gun_attack.eff	</effectName>
       </channel0>
       <point>
         <position>	-500.528137 242.437592 -487.786774	</position>
@@ -2151,7 +2176,7 @@
         <alphaFadeDistances>	1000.000000 1000.000000	</alphaFadeDistances>
         <wwsoundName></wwsoundName>
         <effectHardpoint>	HP_module_0	</effectHardpoint>
-        <effectName>	particles/Environment/scenarios/03_compania_gun_attack.xml	</effectName>
+        <effectName>	particles/Environment/scenarios/03_compania_gun_attack.eff	</effectName>
       </channel0>
       <point>
         <position>	-216.123001 242.776001 -712.463013	</position>
@@ -2177,7 +2202,7 @@
         <alphaFadeDistances>	1000.000000 1000.000000	</alphaFadeDistances>
         <wwsoundName>	plane_not_gun_mustang_01	</wwsoundName>
         <effectHardpoint>	HP_module_0	</effectHardpoint>
-        <effectName>	particles/Environment/scenarios/13_plane_flight.xml	</effectName>
+        <effectName>	particles/Environment/scenarios/13_plane_flight.eff	</effectName>
       </channel0>
       <point>
         <position>	-592.182190 74.670036 937.449280	</position>
@@ -2216,7 +2241,7 @@
         <alphaFadeDistances>	0.000000 0.000000	</alphaFadeDistances>
         <wwsoundName>	amb_map_38_mannerheim_line_rocket_expl	</wwsoundName>
         <effectHardpoint>	HP_module_0	</effectHardpoint>
-        <effectName>	particles/Environment/interior/114_czech_explosion_low.xml	</effectName>
+        <effectName>	particles/Environment/interior/114_czech_explosion_low.eff	</effectName>
       </channel0>
       <point>
         <position>	-22.961592 33.933815 954.507690	</position>
@@ -2240,7 +2265,7 @@
         <alphaFadeDistances>	0.000000 0.000000	</alphaFadeDistances>
         <wwsoundName>	amb_map_38_mannerheim_line_rocket_expl	</wwsoundName>
         <effectHardpoint>	HP_module_0	</effectHardpoint>
-        <effectName>	particles/Environment/interior/114_czech_fire.xml	</effectName>
+        <effectName>	particles/Environment/interior/114_czech_fire.eff	</effectName>
       </channel0>
       <point>
         <position>	-232.614014 70.201782 584.069031	</position>
@@ -2580,7 +2605,7 @@
         <alphaFadeDistances>	1000.000000 1000.000000	</alphaFadeDistances>
         <wwsoundName>	plane_not_gun_bomber_01	</wwsoundName>
         <effectHardpoint>	HP_module_0	</effectHardpoint>
-        <effectName>	particles/Environment/scenarios/plane_engine_sc_all.xml	</effectName>
+        <effectName>	particles/Environment/scenarios/plane_engine_sc_all.eff	</effectName>
       </channel0>
       <point>
         <position>	-1055.646729 213.809128 -235.292892	</position>
@@ -2618,7 +2643,7 @@
         <alphaFadeDistances>	1000.000000 1000.000000	</alphaFadeDistances>
         <wwsoundName>	plane_not_gun_bomber_01	</wwsoundName>
         <effectHardpoint>	HP_module_0	</effectHardpoint>
-        <effectName>	particles/Environment/scenarios/plane_engine_sc_all.xml	</effectName>
+        <effectName>	particles/Environment/scenarios/plane_engine_sc_all.eff	</effectName>
       </channel0>
       <point>
         <position>	-1067.056030 218.758377 -293.437408	</position>
@@ -2656,7 +2681,7 @@
         <alphaFadeDistances>	1000.000000 1000.000000	</alphaFadeDistances>
         <wwsoundName>	plane_not_gun_bomber_01	</wwsoundName>
         <effectHardpoint>	HP_module_0	</effectHardpoint>
-        <effectName>	particles/Environment/scenarios/plane_engine_sc_all.xml	</effectName>
+        <effectName>	particles/Environment/scenarios/plane_engine_sc_all.eff	</effectName>
       </channel0>
       <point>
         <position>	-1078.555298 215.351669 -353.833038	</position>
@@ -2694,7 +2719,7 @@
         <alphaFadeDistances>	1000.000000 1000.000000	</alphaFadeDistances>
         <wwsoundName>	plane_not_gun_bomber_01	</wwsoundName>
         <effectHardpoint>	HP_module_0	</effectHardpoint>
-        <effectName>	particles/Environment/scenarios/plane_engine_sc_all.xml	</effectName>
+        <effectName>	particles/Environment/scenarios/plane_engine_sc_all.eff	</effectName>
       </channel0>
       <point>
         <position>	-1095.855957 204.952240 -425.047577	</position>
@@ -2728,7 +2753,7 @@
         <alphaFadeDistances>	1000.000000 1000.000000	</alphaFadeDistances>
         <wwsoundName>	plane_not_gun_bomber_01	</wwsoundName>
         <effectHardpoint>	HP_module_0	</effectHardpoint>
-        <effectName>	particles/Environment/scenarios/plane_engine_sc_all.xml	</effectName>
+        <effectName>	particles/Environment/scenarios/plane_engine_sc_all.eff	</effectName>
       </channel0>
       <point>
         <position>	-1112.252441 210.571121 -487.766754	</position>
@@ -2762,7 +2787,7 @@
         <alphaFadeDistances>	1000.000000 1000.000000	</alphaFadeDistances>
         <wwsoundName>	plane_not_gun_bomber_01	</wwsoundName>
         <effectHardpoint>	HP_module_0	</effectHardpoint>
-        <effectName>	particles/Environment/scenarios/plane_engine_sc_all.xml	</effectName>
+        <effectName>	particles/Environment/scenarios/plane_engine_sc_all.eff	</effectName>
       </channel0>
       <point>
         <position>	280.415710 81.214096 -950.707703	</position>
@@ -2796,7 +2821,7 @@
         <alphaFadeDistances>	1000.000000 1000.000000	</alphaFadeDistances>
         <wwsoundName>	plane_not_gun_bomber_01	</wwsoundName>
         <effectHardpoint>	HP_module_0	</effectHardpoint>
-        <effectName>	particles/Environment/scenarios/plane_engine_sc_all.xml	</effectName>
+        <effectName>	particles/Environment/scenarios/plane_engine_sc_all.eff	</effectName>
       </channel0>
       <point>
         <position>	287.221924 81.214119 -857.301575	</position>
@@ -2830,7 +2855,7 @@
         <alphaFadeDistances>	1000.000000 1000.000000	</alphaFadeDistances>
         <wwsoundName>	plane_not_gun_bomber_01	</wwsoundName>
         <effectHardpoint>	HP_module_0	</effectHardpoint>
-        <effectName>	particles/Environment/scenarios/plane_engine_sc_all.xml	</effectName>
+        <effectName>	particles/Environment/scenarios/plane_engine_sc_all.eff	</effectName>
       </channel0>
       <point>
         <position>	303.572449 76.026306 -776.301270	</position>
@@ -2864,7 +2889,7 @@
         <alphaFadeDistances>	1000.000000 1000.000000	</alphaFadeDistances>
         <wwsoundName>	plane_not_gun_bomber_01	</wwsoundName>
         <effectHardpoint>	HP_module_0	</effectHardpoint>
-        <effectName>	particles/Environment/scenarios/plane_engine_sc_all.xml	</effectName>
+        <effectName>	particles/Environment/scenarios/plane_engine_sc_all.eff	</effectName>
       </channel0>
       <point>
         <position>	369.965881 81.214104 -795.284241	</position>
@@ -2898,7 +2923,7 @@
         <alphaFadeDistances>	1000.000000 1000.000000	</alphaFadeDistances>
         <wwsoundName>	plane_not_gun_bomber_01	</wwsoundName>
         <effectHardpoint>	HP_module_0	</effectHardpoint>
-        <effectName>	particles/Environment/scenarios/plane_engine_sc_all.xml	</effectName>
+        <effectName>	particles/Environment/scenarios/plane_engine_sc_all.eff	</effectName>
       </channel0>
       <point>
         <position>	456.470917 81.214058 -858.676514	</position>
@@ -2932,7 +2957,7 @@
         <alphaFadeDistances>	1000.000000 1000.000000	</alphaFadeDistances>
         <wwsoundName>	amb_map_90_minsk_helicopter	</wwsoundName>
         <effectHardpoint>	HP_module_0	</effectHardpoint>
-        <effectName>	particles/Environment/scenarios/90_minsk_helicopter_fly.xml	</effectName>
+        <effectName>	particles/Environment/scenarios/90_minsk_helicopter_fly.eff	</effectName>
       </channel0>
       <point>
         <position>	-2141.129883 58.696899 -2206.830078	</position>
@@ -2970,7 +2995,7 @@
         <alphaFadeDistances>	1000.000000 1000.000000	</alphaFadeDistances>
         <wwsoundName>	amb_map_90_minsk_helicopter	</wwsoundName>
         <effectHardpoint>	HP_module_0	</effectHardpoint>
-        <effectName>	particles/Environment/scenarios/90_minsk_helicopter_fly.xml	</effectName>
+        <effectName>	particles/Environment/scenarios/90_minsk_helicopter_fly.eff	</effectName>
       </channel0>
       <point>
         <position>	-2142.411621 67.702728 -2254.549316	</position>
@@ -3008,7 +3033,7 @@
         <alphaFadeDistances>	1000.000000 1000.000000	</alphaFadeDistances>
         <wwsoundName>	amb_map_90_minsk_helicopter	</wwsoundName>
         <effectHardpoint>	HP_module_0	</effectHardpoint>
-        <effectName>	particles/Environment/scenarios/90_minsk_helicopter_fly.xml	</effectName>
+        <effectName>	particles/Environment/scenarios/90_minsk_helicopter_fly.eff	</effectName>
       </channel0>
       <point>
         <position>	1191.682739 81.293282 -2335.610352	</position>
@@ -3052,7 +3077,7 @@
         <alphaFadeDistances>	1000.000000 1000.000000	</alphaFadeDistances>
         <wwsoundName>	amb_map_90_minsk_helicopter	</wwsoundName>
         <effectHardpoint>	HP_module_0	</effectHardpoint>
-        <effectName>	particles/Environment/scenarios/90_minsk_helicopter_fly.xml	</effectName>
+        <effectName>	particles/Environment/scenarios/90_minsk_helicopter_fly.eff	</effectName>
       </channel0>
       <point>
         <position>	1214.666748 90.960815 -2409.489258	</position>
@@ -3096,7 +3121,7 @@
         <alphaFadeDistances>	1000.000000 1000.000000	</alphaFadeDistances>
         <wwsoundName>	amb_map_90_minsk_helicopter	</wwsoundName>
         <effectHardpoint>	HP_module_0	</effectHardpoint>
-        <effectName>	particles/Environment/scenarios/90_minsk_helicopter_fly.xml	</effectName>
+        <effectName>	particles/Environment/scenarios/90_minsk_helicopter_fly.eff	</effectName>
       </channel0>
       <point>
         <position>	3137.806885 107.385643 42.440277	</position>
@@ -3134,7 +3159,7 @@
         <alphaFadeDistances>	1000.000000 1000.000000	</alphaFadeDistances>
         <wwsoundName>	amb_map_90_minsk_helicopter	</wwsoundName>
         <effectHardpoint>	HP_module_0	</effectHardpoint>
-        <effectName>	particles/Environment/scenarios/90_minsk_helicopter_fly.xml	</effectName>
+        <effectName>	particles/Environment/scenarios/90_minsk_helicopter_fly.eff	</effectName>
       </channel0>
       <point>
         <position>	3225.398682 80.428421 17.182159	</position>
@@ -3172,7 +3197,7 @@
         <alphaFadeDistances>	1000.000000 1000.000000	</alphaFadeDistances>
         <wwsoundName>	amb_map_90_minsk_aircraft_fast	</wwsoundName>
         <effectHardpoint>	HP_module0	</effectHardpoint>
-        <effectName>	particles/Environment/scenarios/90_minsk_aircraft_smoke.xml	</effectName>
+        <effectName>	particles/Environment/scenarios/90_minsk_aircraft_smoke.eff	</effectName>
       </channel0>
       <point>
         <position>	-478.351746 34.708214 -1757.071167	</position>
@@ -3222,7 +3247,7 @@
         <alphaFadeDistances>	1000.000000 1000.000000	</alphaFadeDistances>
         <wwsoundName>	amb_map_90_minsk_aircraft_fast	</wwsoundName>
         <effectHardpoint>	HP_module0	</effectHardpoint>
-        <effectName>	particles/Environment/scenarios/90_minsk_aircraft_smoke.xml	</effectName>
+        <effectName>	particles/Environment/scenarios/90_minsk_aircraft_smoke.eff	</effectName>
       </channel0>
       <point>
         <position>	537.468262 68.312111 -1764.076904	</position>
@@ -3272,7 +3297,7 @@
         <alphaFadeDistances>	1000.000000 1000.000000	</alphaFadeDistances>
         <wwsoundName>	amb_map_90_minsk_aircraft_fast	</wwsoundName>
         <effectHardpoint>	HP_module0	</effectHardpoint>
-        <effectName>	particles/Environment/scenarios/90_minsk_aircraft_smoke.xml	</effectName>
+        <effectName>	particles/Environment/scenarios/90_minsk_aircraft_smoke.eff	</effectName>
       </channel0>
       <point>
         <position>	556.956604 73.017227 -1928.031860	</position>
@@ -3322,7 +3347,7 @@
         <alphaFadeDistances>	1000.000000 1000.000000	</alphaFadeDistances>
         <wwsoundName>	amb_map_90_minsk_aircraft_med	</wwsoundName>
         <effectHardpoint>	HP_module0	</effectHardpoint>
-        <effectName>	particles/Environment/scenarios/90_minsk_aircraft_smoke.xml	</effectName>
+        <effectName>	particles/Environment/scenarios/90_minsk_aircraft_smoke.eff	</effectName>
       </channel0>
       <point>
         <position>	-2877.725586 85.350212 566.972595	</position>
@@ -3366,7 +3391,7 @@
         <alphaFadeDistances>	1000.000000 1000.000000	</alphaFadeDistances>
         <wwsoundName>	amb_map_90_minsk_aircraft_med	</wwsoundName>
         <effectHardpoint>	HP_module0	</effectHardpoint>
-        <effectName>	particles/Environment/scenarios/90_minsk_aircraft_smoke.xml	</effectName>
+        <effectName>	particles/Environment/scenarios/90_minsk_aircraft_smoke.eff	</effectName>
       </channel0>
       <point>
         <position>	2091.699951 63.516106 -458.988831	</position>
@@ -3416,7 +3441,7 @@
         <alphaFadeDistances>	1000.000000 1000.000000	</alphaFadeDistances>
         <wwsoundName>	plane_not_gun_yak_3_01	</wwsoundName>
         <effectHardpoint>	HP_module_0	</effectHardpoint>
-        <effectName>	particles/Environment/scenarios/plane_engine_sc_all.xml	</effectName>
+        <effectName>	particles/Environment/scenarios/plane_engine_sc_all.eff	</effectName>
       </channel0>
       <point>
         <position>	-47.643879 39.186577 531.281494	</position>
@@ -3460,7 +3485,7 @@
         <alphaFadeDistances>	0.000000 0.000000	</alphaFadeDistances>
         <wwsoundName>	amb_map_13_erlenberg_aircraft	</wwsoundName>
         <effectHardpoint>	HP_module_0	</effectHardpoint>
-        <effectName>	particles/Environment/scenarios/13_plane_flight.xml	</effectName>
+        <effectName>	particles/Environment/scenarios/13_plane_flight.eff	</effectName>
       </channel0>
       <point>
         <position>	983.362000 -30.046000 727.869995	</position>
@@ -3504,7 +3529,7 @@
         <alphaFadeDistances>	0.000000 0.000000	</alphaFadeDistances>
         <wwsoundName>	amb_map_13_erlenberg_anti_aircraft	</wwsoundName>
         <effectHardpoint>	HP_module_0	</effectHardpoint>
-        <effectName>	particles/Environment/scenarios/13_attack_airplane.xml	</effectName>
+        <effectName>	particles/Environment/scenarios/13_attack_airplane.eff	</effectName>
       </channel0>
       <point>
         <position>	-610.754028 22.960899 -69.445503	</position>
@@ -3530,7 +3555,7 @@
         <alphaFadeDistances>	0.000000 0.000000	</alphaFadeDistances>
         <wwsoundName>	amb_map_13_erlenberg_anti_aircraft	</wwsoundName>
         <effectHardpoint>	HP_module_0	</effectHardpoint>
-        <effectName>	particles/Environment/scenarios/13_attack_airplane.xml	</effectName>
+        <effectName>	particles/Environment/scenarios/13_attack_airplane.eff	</effectName>
       </channel0>
       <point>
         <position>	-512.633972 40.078564 45.701641	</position>
@@ -3556,7 +3581,7 @@
         <alphaFadeDistances>	0.000000 0.000000	</alphaFadeDistances>
         <wwsoundName>	amb_map_13_erlenberg_anti_aircraft	</wwsoundName>
         <effectHardpoint>	HP_module_0	</effectHardpoint>
-        <effectName>	particles/Environment/scenarios/13_attack_airplane.xml	</effectName>
+        <effectName>	particles/Environment/scenarios/13_attack_airplane.eff	</effectName>
       </channel0>
       <point>
         <position>	-578.676758 22.960897 -38.600506	</position>
@@ -3582,7 +3607,7 @@
         <alphaFadeDistances>	0.000000 0.000000	</alphaFadeDistances>
         <wwsoundName>	amb_map_38_mannerheim_line_rocket_expl	</wwsoundName>
         <effectHardpoint>	HP_module_0	</effectHardpoint>
-        <effectName>	particles/Environment/scenarios/13_plane_explosion.xml	</effectName>
+        <effectName>	particles/Environment/scenarios/13_plane_explosion.eff	</effectName>
       </channel0>
       <point>
         <position>	-59.235100 22.456100 -568.711975	</position>
@@ -3606,7 +3631,7 @@
         <alphaFadeDistances>	1000.000000 1000.000000	</alphaFadeDistances>
         <wwsoundName>	plane_not_gun_yak_3_01	</wwsoundName>
         <effectHardpoint>	HP_module_0	</effectHardpoint>
-        <effectName>	particles/Environment/scenarios/38_plane_flight.xml	</effectName>
+        <effectName>	particles/Environment/scenarios/38_plane_flight.eff	</effectName>
       </channel0>
       <point>
         <position>	-484.976440 62.676281 543.854675	</position>
@@ -3660,7 +3685,7 @@
         <alphaFadeDistances>	0.000000 0.000000	</alphaFadeDistances>
         <wwsoundName>	amb_map_38_mannerheim_line_rocket_expl	</wwsoundName>
         <effectHardpoint>	HP_module_0	</effectHardpoint>
-        <effectName>	particles/Environment/scenarios/38_shell_explosion.xml	</effectName>
+        <effectName>	particles/Environment/scenarios/38_shell_explosion.eff	</effectName>
       </channel0>
       <point>
         <position>	63.128380 22.219810 604.777222	</position>
@@ -3684,7 +3709,7 @@
         <alphaFadeDistances>	0.000000 0.000000	</alphaFadeDistances>
         <wwsoundName>	amb_map_38_mannerheim_line_flight_missiles	</wwsoundName>
         <effectHardpoint>	HP_module_0	</effectHardpoint>
-        <effectName>	particles/Environment/scenarios/38_shell_flight.xml	</effectName>
+        <effectName>	particles/Environment/scenarios/38_shell_flight.eff	</effectName>
       </channel0>
       <point>
         <position>	-648.561951 19.576902 -636.379578	</position>
@@ -3716,7 +3741,7 @@
         <alphaFadeDistances>	0.000000 0.000000	</alphaFadeDistances>
         <wwsoundName>	amb_map_38_mannerheim_line_rocket_expl	</wwsoundName>
         <effectHardpoint>	HP_module_0	</effectHardpoint>
-        <effectName>	particles/Environment/scenarios/38_shell_explosion.xml	</effectName>
+        <effectName>	particles/Environment/scenarios/38_shell_explosion.eff	</effectName>
       </channel0>
       <point>
         <position>	272.235382 17.478725 589.370728	</position>
@@ -3740,7 +3765,7 @@
         <alphaFadeDistances>	0.000000 0.000000	</alphaFadeDistances>
         <wwsoundName>	amb_map_38_mannerheim_line_flight_missiles	</wwsoundName>
         <effectHardpoint>	HP_module_0	</effectHardpoint>
-        <effectName>	particles/Environment/scenarios/38_shell_flight.xml	</effectName>
+        <effectName>	particles/Environment/scenarios/38_shell_flight.eff	</effectName>
       </channel0>
       <point>
         <position>	-619.296753 17.006670 -612.447632	</position>
@@ -3769,7 +3794,7 @@
         <alphaFadeDistances>	0.000000 0.000000	</alphaFadeDistances>
         <wwsoundName>	amb_map_38_mannerheim_line_rocket_expl	</wwsoundName>
         <effectHardpoint>	HP_module_0	</effectHardpoint>
-        <effectName>	particles/Environment/scenarios/38_shell_explosion.xml	</effectName>
+        <effectName>	particles/Environment/scenarios/38_shell_explosion.eff	</effectName>
       </channel0>
       <point>
         <position>	410.878479 24.592781 602.640137	</position>
@@ -3793,7 +3818,7 @@
         <alphaFadeDistances>	0.000000 0.000000	</alphaFadeDistances>
         <wwsoundName>	amb_map_38_mannerheim_line_flight_missiles	</wwsoundName>
         <effectHardpoint>	HP_module_0	</effectHardpoint>
-        <effectName>	particles/Environment/scenarios/38_shell_flight.xml	</effectName>
+        <effectName>	particles/Environment/scenarios/38_shell_flight.eff	</effectName>
       </channel0>
       <point>
         <position>	-587.975403 22.273794 -621.974182	</position>
@@ -3822,7 +3847,7 @@
         <alphaFadeDistances>	0.000000 0.000000	</alphaFadeDistances>
         <wwsoundName>	amb_map_38_mannerheim_line_rocket_expl	</wwsoundName>
         <effectHardpoint>	HP_module_0	</effectHardpoint>
-        <effectName>	particles/Environment/scenarios/38_shell_explosion.xml	</effectName>
+        <effectName>	particles/Environment/scenarios/38_shell_explosion.eff	</effectName>
       </channel0>
       <point>
         <position>	583.445068 12.759515 463.943237	</position>
@@ -3846,7 +3871,7 @@
         <alphaFadeDistances>	0.000000 0.000000	</alphaFadeDistances>
         <wwsoundName>	amb_map_38_mannerheim_line_flight_missiles	</wwsoundName>
         <effectHardpoint>	HP_module_0	</effectHardpoint>
-        <effectName>	particles/Environment/scenarios/38_shell_flight.xml	</effectName>
+        <effectName>	particles/Environment/scenarios/38_shell_flight.eff	</effectName>
       </channel0>
       <point>
         <position>	-561.517212 20.071447 -601.687439	</position>
@@ -3875,7 +3900,7 @@
         <alphaFadeDistances>	0.000000 0.000000	</alphaFadeDistances>
         <wwsoundName>	amb_map_38_mannerheim_line_rocket_expl	</wwsoundName>
         <effectHardpoint>	HP_module_0	</effectHardpoint>
-        <effectName>	particles/Environment/scenarios/38_shell_explosion.xml	</effectName>
+        <effectName>	particles/Environment/scenarios/38_shell_explosion.eff	</effectName>
       </channel0>
       <point>
         <position>	633.214600 0.490940 342.216095	</position>
@@ -3899,7 +3924,7 @@
         <alphaFadeDistances>	0.000000 0.000000	</alphaFadeDistances>
         <wwsoundName>	amb_map_38_mannerheim_line_flight_missiles	</wwsoundName>
         <effectHardpoint>	HP_module_0	</effectHardpoint>
-        <effectName>	particles/Environment/scenarios/38_shell_flight.xml	</effectName>
+        <effectName>	particles/Environment/scenarios/38_shell_flight.eff	</effectName>
       </channel0>
       <point>
         <position>	-564.045349 18.136909 -645.613831	</position>
@@ -4027,7 +4052,7 @@
         <oscillationFreqVert>	1.000000	</oscillationFreqVert>
         <tesselationFactor>	50	</tesselationFactor>
         <alphaFadeDistances>	200.000000 200.000000	</alphaFadeDistances>
-        <effectName>	particles/Environment/plane_engine_1.xml	</effectName>
+        <effectName>	particles/Environment/plane_engine_1.eff	</effectName>
         <effectHardpoint>	HP_0	</effectHardpoint>
         <wwsoundName>	aircraft_loop_01	</wwsoundName>
       </channel0>
@@ -4102,7 +4127,7 @@
         <tesselationFactor>	50	</tesselationFactor>
         <alphaFadeDistances>	200.000000 200.000000	</alphaFadeDistances>
         <effectHardpoint>	HP_0	</effectHardpoint>
-        <effectName>	particles/Environment/plane_engine_1.xml	</effectName>
+        <effectName>	particles/Environment/plane_engine_1.eff	</effectName>
         <wwsoundName>	aircraft_loop_01	</wwsoundName>
       </channel0>
       <point>
@@ -4145,7 +4170,7 @@
         <oscillationFreqVert>	1.000000	</oscillationFreqVert>
         <tesselationFactor>	50	</tesselationFactor>
         <alphaFadeDistances>	20.000000 20.000000	</alphaFadeDistances>
-        <effectName>	particles/Environment/plane_engine.xml	</effectName>
+        <effectName>	particles/Environment/plane_engine.eff	</effectName>
         <effectHardpoint>	HP_0	</effectHardpoint>
         <wwsoundName>	aircraft_loop_01	</wwsoundName>
       </channel0>
@@ -4202,7 +4227,7 @@
         <tesselationFactor>	50	</tesselationFactor>
         <alphaFadeDistances>	20.000000 20.000000	</alphaFadeDistances>
         <effectHardpoint>	HP_0	</effectHardpoint>
-        <effectName>	particles/Environment/plane_engine.xml	</effectName>
+        <effectName>	particles/Environment/plane_engine.eff	</effectName>
         <wwsoundName>	aircraft_loop_01	</wwsoundName>
       </channel0>
       <point>
@@ -4247,7 +4272,7 @@
         <alphaFadeDistances>	1000.000000 1000.000000	</alphaFadeDistances>
         <wwsoundName>	plane_not_gun_yak_3_01	</wwsoundName>
         <effectHardpoint>	HP_module_0	</effectHardpoint>
-        <effectName>	particles/Environment/scenarios/plane_engine_sc_all.xml	</effectName>
+        <effectName>	particles/Environment/scenarios/plane_engine_sc_all.eff	</effectName>
       </channel0>
       <point>
         <position>	1524.124634 82.011101 -957.278320	</position>
@@ -4281,7 +4306,7 @@
         <alphaFadeDistances>	1000.000000 1000.000000	</alphaFadeDistances>
         <wwsoundName>	plane_not_gun_yak_3_01	</wwsoundName>
         <effectHardpoint>	HP_module_0	</effectHardpoint>
-        <effectName>	particles/Environment/scenarios/plane_engine_sc_all.xml	</effectName>
+        <effectName>	particles/Environment/scenarios/plane_engine_sc_all.eff	</effectName>
       </channel0>
       <point>
         <position>	1545.524536 79.848206 -1010.411682	</position>
@@ -4315,7 +4340,7 @@
         <alphaFadeDistances>	1000.000000 1000.000000	</alphaFadeDistances>
         <wwsoundName>	plane_not_gun_yak_3_01	</wwsoundName>
         <effectHardpoint>	HP_module_0	</effectHardpoint>
-        <effectName>	particles/Environment/scenarios/plane_engine_sc_all.xml	</effectName>
+        <effectName>	particles/Environment/scenarios/plane_engine_sc_all.eff	</effectName>
       </channel0>
       <point>
         <position>	1936.720825 67.029671 -1548.106689	</position>
@@ -4349,7 +4374,7 @@
         <alphaFadeDistances>	1000.000000 1000.000000	</alphaFadeDistances>
         <wwsoundName>	plane_not_gun_bomber_02	</wwsoundName>
         <effectHardpoint>	HP_module_0	</effectHardpoint>
-        <effectName>	particles/Environment/scenarios/plane_engine_sc_all.xml	</effectName>
+        <effectName>	particles/Environment/scenarios/plane_engine_sc_all.eff	</effectName>
       </channel0>
       <point>
         <position>	1979.967773 61.191776 -1640.142212	</position>
@@ -4383,7 +4408,7 @@
         <alphaFadeDistances>	1000.000000 1000.000000	</alphaFadeDistances>
         <wwsoundName>	plane_not_gun_mustang_02	</wwsoundName>
         <effectHardpoint>	HP_module_0	</effectHardpoint>
-        <effectName>	particles/Environment/scenarios/plane_engine_sc_all.xml	</effectName>
+        <effectName>	particles/Environment/scenarios/plane_engine_sc_all.eff	</effectName>
       </channel0>
       <point>
         <position>	1472.658325 102.362427 -867.930298	</position>
@@ -4422,7 +4447,7 @@
         <alphaFadeDistances>	1000.000000 1000.000000	</alphaFadeDistances>
         <wwsoundName>	plane_not_gun_yak_3_02	</wwsoundName>
         <effectHardpoint>	HP_module_0	</effectHardpoint>
-        <effectName>	particles/Environment/scenarios/plane_engine_sc_all.xml	</effectName>
+        <effectName>	particles/Environment/scenarios/plane_engine_sc_all.eff	</effectName>
       </channel0>
       <point>
         <position>	1420.449463 99.390305 -815.813599	</position>
@@ -4461,7 +4486,7 @@
         <alphaFadeDistances>	1000.000000 1000.000000	</alphaFadeDistances>
         <wwsoundName>	plane_not_gun_yak_3_02	</wwsoundName>
         <effectHardpoint>	HP_module_0	</effectHardpoint>
-        <effectName>	particles/Environment/scenarios/plane_engine_sc_all.xml	</effectName>
+        <effectName>	particles/Environment/scenarios/plane_engine_sc_all.eff	</effectName>
       </channel0>
       <point>
         <position>	-3293.452637 265.759735 3386.862549	</position>
@@ -4500,7 +4525,7 @@
         <alphaFadeDistances>	1000.000000 1000.000000	</alphaFadeDistances>
         <wwsoundName>	plane_not_gun_bomber_01	</wwsoundName>
         <effectHardpoint>	HP_module_0	</effectHardpoint>
-        <effectName>	particles/Environment/scenarios/plane_engine_sc_all.xml	</effectName>
+        <effectName>	particles/Environment/scenarios/plane_engine_sc_all.eff	</effectName>
       </channel0>
       <point>
         <position>	-2503.070313 253.427521 2355.581787	</position>
@@ -4539,7 +4564,7 @@
         <alphaFadeDistances>	1000.000000 1000.000000	</alphaFadeDistances>
         <wwsoundName>	plane_not_gun_mustang_01	</wwsoundName>
         <effectHardpoint>	HP_module_0	</effectHardpoint>
-        <effectName>	particles/Environment/scenarios/plane_engine_sc_all.xml	</effectName>
+        <effectName>	particles/Environment/scenarios/plane_engine_sc_all.eff	</effectName>
       </channel0>
       <point>
         <position>	-2431.335693 213.275879 2674.211670	</position>
@@ -4578,7 +4603,7 @@
         <alphaFadeDistances>	1000.000000 1000.000000	</alphaFadeDistances>
         <wwsoundName>	plane_not_gun_yak_3_01	</wwsoundName>
         <effectHardpoint>	HP_module_0	</effectHardpoint>
-        <effectName>	particles/Environment/scenarios/plane_engine_sc_all.xml	</effectName>
+        <effectName>	particles/Environment/scenarios/plane_engine_sc_all.eff	</effectName>
       </channel0>
       <point>
         <position>	-3021.322998 244.690948 2776.500732	</position>
@@ -4617,7 +4642,7 @@
         <alphaFadeDistances>	400.000000 400.000000	</alphaFadeDistances>
         <wwsoundName>	plane_not_gun_bomber_02	</wwsoundName>
         <effectHardpoint>	HP_module_0	</effectHardpoint>
-        <effectName>	particles/Environment/scenarios/plane_engine_sc_all.xml	</effectName>
+        <effectName>	particles/Environment/scenarios/plane_engine_sc_all.eff	</effectName>
       </channel0>
       <point>
         <position>	1795.753052 70.924843 -1566.853516	</position>
@@ -4661,7 +4686,7 @@
         <alphaFadeDistances>	400.000000 400.000000	</alphaFadeDistances>
         <wwsoundName>	plane_not_gun_mustang_02	</wwsoundName>
         <effectHardpoint>	HP_module_0	</effectHardpoint>
-        <effectName>	particles/Environment/scenarios/plane_engine_sc_all.xml	</effectName>
+        <effectName>	particles/Environment/scenarios/plane_engine_sc_all.eff	</effectName>
       </channel0>
       <point>
         <position>	1726.264893 70.603546 -1590.269043	</position>
@@ -4705,7 +4730,7 @@
         <alphaFadeDistances>	400.000000 400.000000	</alphaFadeDistances>
         <wwsoundName>	plane_with_gun_yak_3_02	</wwsoundName>
         <effectHardpoint>	HP_module_0	</effectHardpoint>
-        <effectName>	particles/Environment/scenarios/plane_engine_sc3_a3_a4.xml	</effectName>
+        <effectName>	particles/Environment/scenarios/plane_engine_sc3_a3_a4.eff	</effectName>
       </channel0>
       <point>
         <position>	-2150.674561 234.909836 -1831.553345	</position>
@@ -4749,7 +4774,7 @@
         <alphaFadeDistances>	400.000000 400.000000	</alphaFadeDistances>
         <wwsoundName>	plane_with_gun_mustang_02	</wwsoundName>
         <effectHardpoint>	HP_module_0	</effectHardpoint>
-        <effectName>	particles/Environment/scenarios/plane_engine_sc3_a3_a4.xml	</effectName>
+        <effectName>	particles/Environment/scenarios/plane_engine_sc3_a3_a4.eff	</effectName>
       </channel0>
       <point>
         <position>	-1723.353149 202.105392 -1532.654419	</position>
@@ -4793,7 +4818,7 @@
         <alphaFadeDistances>	1100.000000 1500.000000	</alphaFadeDistances>
         <wwsoundName>	plane_crash	</wwsoundName>
         <effectHardpoint>	HP_module_0	</effectHardpoint>
-        <effectName>	particles/Environment/scenarios/plane_engine_sc4_a1.xml	</effectName>
+        <effectName>	particles/Environment/scenarios/plane_engine_sc4_a1.eff	</effectName>
       </channel0>
       <point>
         <position>	2037.080322 33.703270 1686.771851	</position>
@@ -4827,7 +4852,7 @@
         <alphaFadeDistances>	400.000000 400.000000	</alphaFadeDistances>
         <wwsoundName>	plane_with_gun_bomber_02	</wwsoundName>
         <effectHardpoint>	HP_module_0	</effectHardpoint>
-        <effectName>	particles/Environment/scenarios/plane_engine_sc4_a2_a3.xml	</effectName>
+        <effectName>	particles/Environment/scenarios/plane_engine_sc4_a2_a3.eff	</effectName>
       </channel0>
       <point>
         <position>	386.553101 386.145569 2985.168945	</position>
@@ -4876,7 +4901,7 @@
         <alphaFadeDistances>	400.000000 400.000000	</alphaFadeDistances>
         <wwsoundName>	plane_with_gun_mustang_02	</wwsoundName>
         <effectHardpoint>	HP_module_0	</effectHardpoint>
-        <effectName>	particles/Environment/scenarios/plane_engine_sc4_a2_a3.xml	</effectName>
+        <effectName>	particles/Environment/scenarios/plane_engine_sc4_a2_a3.eff	</effectName>
       </channel0>
       <point>
         <position>	412.582703 397.284729 2727.180420	</position>
@@ -4925,7 +4950,7 @@
         <alphaFadeDistances>	100.000000 100.000000	</alphaFadeDistances>
         <wwsoundName>	plane_DDay_bomber_01	</wwsoundName>
         <effectHardpoint>	HP_module_0	</effectHardpoint>
-        <effectName>	particles/Environment/scenarios/101_dday_paratroopers.xml	</effectName>
+        <effectName>	particles/Environment/scenarios/101_dday_paratroopers.eff	</effectName>
       </channel0>
       <point>
         <position>	832.796875 151.301941 -717.554199	</position>
@@ -4969,7 +4994,7 @@
         <alphaFadeDistances>	0.000000 0.000000	</alphaFadeDistances>
         <wwsoundName>	plane_DDAY_anti_aicraft_gun	</wwsoundName>
         <effectHardpoint>	HP_module_0	</effectHardpoint>
-        <effectName>	particles/Environment/scenarios/101_dday_airdefence.xml	</effectName>
+        <effectName>	particles/Environment/scenarios/101_dday_airdefence.eff	</effectName>
       </channel0>
       <point>
         <position>	773.125916 135.232315 -79.136894	</position>
@@ -5049,7 +5074,7 @@
         <alphaFadeDistances>	100.000000 100.000000	</alphaFadeDistances>
         <wwsoundName>	plane_stalingrad_mustang_02	</wwsoundName>
         <effectHardpoint>	HP_module_0	</effectHardpoint>
-        <effectName>	particles/Environment/scenarios/plane_engine_sc_all.xml	</effectName>
+        <effectName>	particles/Environment/scenarios/plane_engine_sc_all.eff	</effectName>
       </channel0>
       <point>
         <position>	197.168701 74.607338 -471.572144	</position>
@@ -5117,7 +5142,7 @@
         <alphaFadeDistances>	10.000000 100.000000	</alphaFadeDistances>
         <wwsoundName>	plane_stalingrad_yak_3_01	</wwsoundName>
         <effectHardpoint>	HP_module_0	</effectHardpoint>
-        <effectName>	particles/Environment/scenarios/plane_engine_sc_all.xml	</effectName>
+        <effectName>	particles/Environment/scenarios/plane_engine_sc_all.eff	</effectName>
       </channel0>
       <point>
         <position>	290.975769 110.405258 -563.094482	</position>
@@ -5169,7 +5194,7 @@
         <oscillationFreqVert>	1.000000	</oscillationFreqVert>
         <tesselationFactor>	50	</tesselationFactor>
         <alphaFadeDistances>	0.000000 0.000000	</alphaFadeDistances>
-        <effectName>	particles/Environment/inf_lightning_01.xml	</effectName>
+        <effectName>	particles/Environment/inf_lightning_01.eff	</effectName>
         <effectHardpoint>	HP_module_0	</effectHardpoint>
         <wwsoundName>	ambient_static_objects_inf_lightning	</wwsoundName>
       </channel0>
@@ -5195,7 +5220,7 @@
         <oscillationFreqVert>	1.000000	</oscillationFreqVert>
         <tesselationFactor>	50	</tesselationFactor>
         <alphaFadeDistances>	0.000000 0.000000	</alphaFadeDistances>
-        <effectName>	particles/Environment/inf_lightning_01.xml	</effectName>
+        <effectName>	particles/Environment/inf_lightning_01.eff	</effectName>
         <effectHardpoint>	HP_module_0	</effectHardpoint>
         <wwsoundName>	ambient_static_objects_inf_lightning	</wwsoundName>
       </channel0>
@@ -5221,7 +5246,7 @@
         <oscillationFreqVert>	1.000000	</oscillationFreqVert>
         <tesselationFactor>	50	</tesselationFactor>
         <alphaFadeDistances>	0.000000 0.000000	</alphaFadeDistances>
-        <effectName>	particles/Environment/inf_lightning_01.xml	</effectName>
+        <effectName>	particles/Environment/inf_lightning_01.eff	</effectName>
         <effectHardpoint>	HP_module_0	</effectHardpoint>
         <wwsoundName>	ambient_static_objects_inf_lightning	</wwsoundName>
       </channel0>
@@ -5247,7 +5272,7 @@
         <oscillationFreqVert>	1.000000	</oscillationFreqVert>
         <tesselationFactor>	50	</tesselationFactor>
         <alphaFadeDistances>	0.000000 0.000000	</alphaFadeDistances>
-        <effectName>	particles/Environment/inf_lightning_01.xml	</effectName>
+        <effectName>	particles/Environment/inf_lightning_01.eff	</effectName>
         <effectHardpoint>	HP_module_0	</effectHardpoint>
         <wwsoundName>	ambient_static_objects_inf_lightning	</wwsoundName>
       </channel0>
@@ -5273,7 +5298,7 @@
         <oscillationFreqVert>	1.000000	</oscillationFreqVert>
         <tesselationFactor>	50	</tesselationFactor>
         <alphaFadeDistances>	0.000000 0.000000	</alphaFadeDistances>
-        <effectName>	particles/Environment/inf_lightning_01.xml	</effectName>
+        <effectName>	particles/Environment/inf_lightning_01.eff	</effectName>
         <effectHardpoint>	HP_module_0	</effectHardpoint>
         <wwsoundName>	ambient_static_objects_inf_lightning	</wwsoundName>
       </channel0>
@@ -5803,7 +5828,7 @@
         <oscillationFreqVert>	1.000000	</oscillationFreqVert>
         <tesselationFactor>	5	</tesselationFactor>
         <alphaFadeDistances>	15.000000 15.000000	</alphaFadeDistances>
-        <wwsoundName>	plane_bomber_04	</wwsoundName>
+        <wwsoundName></wwsoundName>
       </channel0>
       <point>
         <position>	387.819000 275.562012 -623.901978	</position>
@@ -5834,7 +5859,7 @@
         <tesselationFactor>	50	</tesselationFactor>
         <alphaFadeDistances>	15.000000 15.000000	</alphaFadeDistances>
         <effectHardpoint>	HP_module_0	</effectHardpoint>
-        <effectName>	particles/Environment/exterior/07_lakeville_train.xml	</effectName>
+        <effectName>	particles/Environment/exterior/07_lakeville_train.eff	</effectName>
         <wwsoundName>	amb_map_07_lakeville_train	</wwsoundName>
       </channel0>
       <point>
@@ -6672,7 +6697,7 @@
         <oscillationFreqVert>	1.000000	</oscillationFreqVert>
         <tesselationFactor>	5	</tesselationFactor>
         <alphaFadeDistances>	0.000000 0.000000	</alphaFadeDistances>
-        <effectName>	particles/Environment/interior/31_airfield_sea_tornado.xml	</effectName>
+        <effectName>	particles/Environment/interior/31_airfield_sea_tornado.eff	</effectName>
         <effectHardpoint>	HP_Effect	</effectHardpoint>
       </channel0>
       <point>
@@ -6704,11 +6729,11 @@
         <tesselationFactor>	50	</tesselationFactor>
         <alphaFadeDistances>	25.000000 5.000000	</alphaFadeDistances>
         <effectHardpoint>	HP_module_0	</effectHardpoint>
-        <effectName>	particles/Environment/scenarios/plane_engine_sc_all.xml	</effectName>
-        <wwsoundName>	eb_bomber_engine	</wwsoundName>
+        <effectName>	particles/Environment/scenarios/plane_engine_sc_all.eff	</effectName>
+        <wwsoundName>	plane_bomber_01	</wwsoundName>
       </channel0>
       <point>
-        <position>	195.558899 117.328690 -1768.579956	</position>
+        <position>	195.558868 28.643385 -2437.372070	</position>
         <speed0>	120.000000	</speed0>
         <oscillation0>	0.200000 0.250000	</oscillation0>
         <animAction></animAction>
@@ -6774,7 +6799,7 @@
         <animAction></animAction>
       </point>
       <point>
-        <position>	996.488525 116.359314 -1584.769043	</position>
+        <position>	1285.419922 58.834400 -2441.826904	</position>
         <speed0>	150.000000	</speed0>
         <oscillation0>	0.200000 0.200000	</oscillation0>
         <animAction></animAction>
@@ -6790,11 +6815,11 @@
         <tesselationFactor>	50	</tesselationFactor>
         <alphaFadeDistances>	25.000000 5.000000	</alphaFadeDistances>
         <effectHardpoint>	HP_module_0	</effectHardpoint>
-        <effectName>	particles/Environment/scenarios/plane_engine_sc_all.xml	</effectName>
-        <wwsoundName>	eb_bomber_engine	</wwsoundName>
+        <effectName>	particles/Environment/scenarios/plane_engine_sc_all.eff	</effectName>
+        <wwsoundName>	plane_bomber_02	</wwsoundName>
       </channel0>
       <point>
-        <position>	39.512787 129.842560 -1722.068726	</position>
+        <position>	39.512779 20.854177 -2431.343750	</position>
         <speed0>	120.000000	</speed0>
         <oscillation0>	0.200000 0.250000	</oscillation0>
         <animAction></animAction>
@@ -6860,7 +6885,7 @@
         <animAction></animAction>
       </point>
       <point>
-        <position>	833.995422 125.399872 -1584.768677	</position>
+        <position>	1155.100830 54.187222 -2439.946045	</position>
         <speed0>	150.000000	</speed0>
         <oscillation0>	0.200000 0.200000	</oscillation0>
         <animAction></animAction>
@@ -6876,11 +6901,11 @@
         <tesselationFactor>	50	</tesselationFactor>
         <alphaFadeDistances>	25.000000 5.000000	</alphaFadeDistances>
         <effectHardpoint>	HP_module_0	</effectHardpoint>
-        <effectName>	particles/Environment/scenarios/plane_engine_sc_all.xml	</effectName>
-        <wwsoundName>	eb_bomber_engine	</wwsoundName>
+        <effectName>	particles/Environment/scenarios/plane_engine_sc_all.eff	</effectName>
+        <wwsoundName>	plane_bomber_03	</wwsoundName>
       </channel0>
       <point>
-        <position>	-74.947693 149.762985 -1729.927979	</position>
+        <position>	-74.947678 38.148197 -2425.378418	</position>
         <speed0>	120.000000	</speed0>
         <oscillation0>	0.200000 0.250000	</oscillation0>
         <animAction></animAction>
@@ -6946,7 +6971,7 @@
         <animAction></animAction>
       </point>
       <point>
-        <position>	701.581055 123.283531 -1584.769043	</position>
+        <position>	1025.427002 48.623402 -2448.760986	</position>
         <speed0>	150.000000	</speed0>
         <oscillation0>	0.200000 0.200000	</oscillation0>
         <animAction></animAction>
@@ -6962,11 +6987,11 @@
         <tesselationFactor>	50	</tesselationFactor>
         <alphaFadeDistances>	25.000000 5.000000	</alphaFadeDistances>
         <effectHardpoint>	HP_module_0	</effectHardpoint>
-        <effectName>	particles/Environment/scenarios/plane_engine_sc_all.xml	</effectName>
-        <wwsoundName>	eb_bomber_engine	</wwsoundName>
+        <effectName>	particles/Environment/scenarios/plane_engine_sc_all.eff	</effectName>
+        <wwsoundName>	plane_bomber_04	</wwsoundName>
       </channel0>
       <point>
-        <position>	-183.810471 163.009186 -1695.802246	</position>
+        <position>	-225.644638 27.377056 -2420.860107	</position>
         <speed0>	120.000000	</speed0>
         <oscillation0>	0.200000 0.250000	</oscillation0>
         <animAction></animAction>
@@ -7032,7 +7057,7 @@
         <animAction></animAction>
       </point>
       <point>
-        <position>	565.193726 131.978928 -1584.769409	</position>
+        <position>	886.108215 22.622259 -2445.256592	</position>
         <speed0>	150.000000	</speed0>
         <oscillation0>	0.200000 0.200000	</oscillation0>
         <animAction></animAction>
@@ -7048,11 +7073,11 @@
         <tesselationFactor>	50	</tesselationFactor>
         <alphaFadeDistances>	25.000000 5.000000	</alphaFadeDistances>
         <effectHardpoint>	HP_module_0	</effectHardpoint>
-        <effectName>	particles/Environment/scenarios/plane_engine_sc_all.xml	</effectName>
-        <wwsoundName>	eb_bomber_engine	</wwsoundName>
+        <effectName>	particles/Environment/scenarios/plane_engine_sc_all.eff	</effectName>
+        <wwsoundName>	plane_bomber_01	</wwsoundName>
       </channel0>
       <point>
-        <position>	-305.546722 172.244766 -1696.869263	</position>
+        <position>	-359.696960 31.874065 -2417.068115	</position>
         <speed0>	120.000000	</speed0>
         <oscillation0>	0.200000 0.250000	</oscillation0>
         <animAction></animAction>
@@ -7118,7 +7143,7 @@
         <animAction></animAction>
       </point>
       <point>
-        <position>	454.924408 120.502373 -1584.769409	</position>
+        <position>	727.887329 31.747663 -2442.794678	</position>
         <speed0>	150.000000	</speed0>
         <oscillation0>	0.200000 0.200000	</oscillation0>
         <animAction></animAction>
@@ -7134,11 +7159,11 @@
         <tesselationFactor>	50	</tesselationFactor>
         <alphaFadeDistances>	25.000000 5.000000	</alphaFadeDistances>
         <effectHardpoint>	HP_module_0	</effectHardpoint>
-        <effectName>	particles/Environment/scenarios/plane_engine_sc_all.xml	</effectName>
-        <wwsoundName>	eb_bomber_engine	</wwsoundName>
+        <effectName>	particles/Environment/scenarios/plane_engine_sc_all.eff	</effectName>
+        <wwsoundName>	plane_bomber_02	</wwsoundName>
       </channel0>
       <point>
-        <position>	-405.901093 173.422501 -1685.366943	</position>
+        <position>	-481.326752 41.127159 -2409.142334	</position>
         <speed0>	120.000000	</speed0>
         <oscillation0>	0.200000 0.250000	</oscillation0>
         <animAction></animAction>
@@ -7204,7 +7229,7 @@
         <animAction></animAction>
       </point>
       <point>
-        <position>	333.806580 131.978897 -1584.769165	</position>
+        <position>	576.272461 31.149878 -2442.901123	</position>
         <speed0>	150.000000	</speed0>
         <oscillation0>	0.200000 0.200000	</oscillation0>
         <animAction></animAction>
@@ -7220,7 +7245,7 @@
         <tesselationFactor>	50	</tesselationFactor>
         <alphaFadeDistances>	25.000000 50.000000	</alphaFadeDistances>
         <effectHardpoint>	HP_module_0	</effectHardpoint>
-        <effectName>	particles/Environment/scenarios/plane_engine_sc_all.xml	</effectName>
+        <effectName>	particles/Environment/scenarios/plane_engine_sc_all.eff	</effectName>
         <wwsoundName>	eb_bomber_engine	</wwsoundName>
       </channel0>
       <point>
@@ -7306,7 +7331,7 @@
         <tesselationFactor>	50	</tesselationFactor>
         <alphaFadeDistances>	25.000000 50.000000	</alphaFadeDistances>
         <effectHardpoint>	HP_module_0	</effectHardpoint>
-        <effectName>	particles/Environment/scenarios/plane_engine_sc_all.xml	</effectName>
+        <effectName>	particles/Environment/scenarios/plane_engine_sc_all.eff	</effectName>
         <wwsoundName>	eb_bomber_engine	</wwsoundName>
       </channel0>
       <point>
@@ -7392,7 +7417,7 @@
         <tesselationFactor>	50	</tesselationFactor>
         <alphaFadeDistances>	25.000000 50.000000	</alphaFadeDistances>
         <effectHardpoint>	HP_module_0	</effectHardpoint>
-        <effectName>	particles/Environment/scenarios/plane_engine_sc_all.xml	</effectName>
+        <effectName>	particles/Environment/scenarios/plane_engine_sc_all.eff	</effectName>
         <wwsoundName>	eb_bomber_engine	</wwsoundName>
       </channel0>
       <point>
@@ -7478,7 +7503,7 @@
         <tesselationFactor>	50	</tesselationFactor>
         <alphaFadeDistances>	25.000000 50.000000	</alphaFadeDistances>
         <effectHardpoint>	HP_module_0	</effectHardpoint>
-        <effectName>	particles/Environment/scenarios/plane_engine_sc_all.xml	</effectName>
+        <effectName>	particles/Environment/scenarios/plane_engine_sc_all.eff	</effectName>
         <wwsoundName>	eb_bomber_engine	</wwsoundName>
       </channel0>
       <point>
@@ -7564,7 +7589,7 @@
         <tesselationFactor>	50	</tesselationFactor>
         <alphaFadeDistances>	25.000000 50.000000	</alphaFadeDistances>
         <effectHardpoint>	HP_module_0	</effectHardpoint>
-        <effectName>	particles/Environment/scenarios/plane_engine_sc_all.xml	</effectName>
+        <effectName>	particles/Environment/scenarios/plane_engine_sc_all.eff	</effectName>
         <wwsoundName>	eb_bomber_engine	</wwsoundName>
       </channel0>
       <point>
@@ -7650,7 +7675,7 @@
         <tesselationFactor>	50	</tesselationFactor>
         <alphaFadeDistances>	25.000000 5.000000	</alphaFadeDistances>
         <effectHardpoint>	HP_module_0	</effectHardpoint>
-        <effectName>	particles/Environment/scenarios/plane_engine_sc_all.xml	</effectName>
+        <effectName>	particles/Environment/scenarios/plane_engine_sc_all.eff	</effectName>
         <wwsoundName>	eb_bomber_engine	</wwsoundName>
       </channel0>
       <point>
@@ -7736,7 +7761,7 @@
         <tesselationFactor>	50	</tesselationFactor>
         <alphaFadeDistances>	25.000000 5.000000	</alphaFadeDistances>
         <effectHardpoint>	HP_module_0	</effectHardpoint>
-        <effectName>	particles/Environment/scenarios/plane_engine_sc_all.xml	</effectName>
+        <effectName>	particles/Environment/scenarios/plane_engine_sc_all.eff	</effectName>
         <wwsoundName>	eb_bomber_engine	</wwsoundName>
       </channel0>
       <point>
@@ -7822,7 +7847,7 @@
         <tesselationFactor>	50	</tesselationFactor>
         <alphaFadeDistances>	25.000000 5.000000	</alphaFadeDistances>
         <effectHardpoint>	HP_module_0	</effectHardpoint>
-        <effectName>	particles/Environment/scenarios/plane_engine_sc_all.xml	</effectName>
+        <effectName>	particles/Environment/scenarios/plane_engine_sc_all.eff	</effectName>
         <wwsoundName>	eb_bomber_engine	</wwsoundName>
       </channel0>
       <point>
@@ -7908,7 +7933,7 @@
         <tesselationFactor>	50	</tesselationFactor>
         <alphaFadeDistances>	25.000000 5.000000	</alphaFadeDistances>
         <effectHardpoint>	HP_module_0	</effectHardpoint>
-        <effectName>	particles/Environment/scenarios/plane_engine_sc_all.xml	</effectName>
+        <effectName>	particles/Environment/scenarios/plane_engine_sc_all.eff	</effectName>
         <wwsoundName>	eb_bomber_engine	</wwsoundName>
       </channel0>
       <point>
@@ -7994,7 +8019,7 @@
         <tesselationFactor>	50	</tesselationFactor>
         <alphaFadeDistances>	25.000000 5.000000	</alphaFadeDistances>
         <effectHardpoint>	HP_module_0	</effectHardpoint>
-        <effectName>	particles/Environment/scenarios/plane_engine_sc_all.xml	</effectName>
+        <effectName>	particles/Environment/scenarios/plane_engine_sc_all.eff	</effectName>
         <wwsoundName>	eb_bomber_engine	</wwsoundName>
       </channel0>
       <point>
@@ -8080,7 +8105,7 @@
         <tesselationFactor>	50	</tesselationFactor>
         <alphaFadeDistances>	25.000000 5.000000	</alphaFadeDistances>
         <effectHardpoint>	HP_module_0	</effectHardpoint>
-        <effectName>	particles/Environment/scenarios/plane_engine_sc_all.xml	</effectName>
+        <effectName>	particles/Environment/scenarios/plane_engine_sc_all.eff	</effectName>
         <wwsoundName>	eb_bomber_engine	</wwsoundName>
       </channel0>
       <point>
@@ -8166,7 +8191,7 @@
         <tesselationFactor>	50	</tesselationFactor>
         <alphaFadeDistances>	25.000000 5.000000	</alphaFadeDistances>
         <effectHardpoint>	HP_module_0	</effectHardpoint>
-        <effectName>	particles/Environment/scenarios/plane_engine_sc_all.xml	</effectName>
+        <effectName>	particles/Environment/scenarios/plane_engine_sc_all.eff	</effectName>
         <wwsoundName>	eb_bomber_engine	</wwsoundName>
       </channel0>
       <point>
@@ -8252,7 +8277,7 @@
         <tesselationFactor>	50	</tesselationFactor>
         <alphaFadeDistances>	25.000000 50.000000	</alphaFadeDistances>
         <effectHardpoint>	HP_module_0	</effectHardpoint>
-        <effectName>	particles/Environment/scenarios/plane_engine_sc_all.xml	</effectName>
+        <effectName>	particles/Environment/scenarios/plane_engine_sc_all.eff	</effectName>
         <wwsoundName>	eb_bomber_engine	</wwsoundName>
       </channel0>
       <point>
@@ -8338,7 +8363,7 @@
         <tesselationFactor>	50	</tesselationFactor>
         <alphaFadeDistances>	25.000000 50.000000	</alphaFadeDistances>
         <effectHardpoint>	HP_module_0	</effectHardpoint>
-        <effectName>	particles/Environment/scenarios/plane_engine_sc_all.xml	</effectName>
+        <effectName>	particles/Environment/scenarios/plane_engine_sc_all.eff	</effectName>
         <wwsoundName>	eb_bomber_engine	</wwsoundName>
       </channel0>
       <point>
@@ -8424,7 +8449,7 @@
         <tesselationFactor>	50	</tesselationFactor>
         <alphaFadeDistances>	25.000000 50.000000	</alphaFadeDistances>
         <effectHardpoint>	HP_module_0	</effectHardpoint>
-        <effectName>	particles/Environment/scenarios/plane_engine_sc_all.xml	</effectName>
+        <effectName>	particles/Environment/scenarios/plane_engine_sc_all.eff	</effectName>
         <wwsoundName>	eb_bomber_engine	</wwsoundName>
       </channel0>
       <point>
@@ -8510,7 +8535,7 @@
         <tesselationFactor>	50	</tesselationFactor>
         <alphaFadeDistances>	25.000000 50.000000	</alphaFadeDistances>
         <effectHardpoint>	HP_module_0	</effectHardpoint>
-        <effectName>	particles/Environment/scenarios/plane_engine_sc_all.xml	</effectName>
+        <effectName>	particles/Environment/scenarios/plane_engine_sc_all.eff	</effectName>
         <wwsoundName>	eb_bomber_engine	</wwsoundName>
       </channel0>
       <point>
@@ -8596,7 +8621,7 @@
         <tesselationFactor>	50	</tesselationFactor>
         <alphaFadeDistances>	25.000000 50.000000	</alphaFadeDistances>
         <effectHardpoint>	HP_module_0	</effectHardpoint>
-        <effectName>	particles/Environment/scenarios/plane_engine_sc_all.xml	</effectName>
+        <effectName>	particles/Environment/scenarios/plane_engine_sc_all.eff	</effectName>
         <wwsoundName>	eb_bomber_engine	</wwsoundName>
       </channel0>
       <point>
@@ -8682,7 +8707,7 @@
         <tesselationFactor>	50	</tesselationFactor>
         <alphaFadeDistances>	25.000000 5.000000	</alphaFadeDistances>
         <effectHardpoint>	HP_module_0	</effectHardpoint>
-        <effectName>	particles/Environment/scenarios/plane_engine_sc_all.xml	</effectName>
+        <effectName>	particles/Environment/scenarios/plane_engine_sc_all.eff	</effectName>
         <wwsoundName>	eb_bomber_engine	</wwsoundName>
       </channel0>
       <point>
@@ -8768,7 +8793,7 @@
         <tesselationFactor>	50	</tesselationFactor>
         <alphaFadeDistances>	25.000000 5.000000	</alphaFadeDistances>
         <effectHardpoint>	HP_module_0	</effectHardpoint>
-        <effectName>	particles/Environment/scenarios/plane_engine_sc_all.xml	</effectName>
+        <effectName>	particles/Environment/scenarios/plane_engine_sc_all.eff	</effectName>
         <wwsoundName>	eb_bomber_engine	</wwsoundName>
       </channel0>
       <point>
@@ -8854,7 +8879,7 @@
         <tesselationFactor>	50	</tesselationFactor>
         <alphaFadeDistances>	25.000000 5.000000	</alphaFadeDistances>
         <effectHardpoint>	HP_module_0	</effectHardpoint>
-        <effectName>	particles/Environment/scenarios/plane_engine_sc_all.xml	</effectName>
+        <effectName>	particles/Environment/scenarios/plane_engine_sc_all.eff	</effectName>
         <wwsoundName>	eb_bomber_engine	</wwsoundName>
       </channel0>
       <point>
@@ -8940,7 +8965,7 @@
         <tesselationFactor>	50	</tesselationFactor>
         <alphaFadeDistances>	25.000000 5.000000	</alphaFadeDistances>
         <effectHardpoint>	HP_module_0	</effectHardpoint>
-        <effectName>	particles/Environment/scenarios/plane_engine_sc_all.xml	</effectName>
+        <effectName>	particles/Environment/scenarios/plane_engine_sc_all.eff	</effectName>
         <wwsoundName>	eb_bomber_engine	</wwsoundName>
       </channel0>
       <point>
@@ -9026,7 +9051,7 @@
         <tesselationFactor>	50	</tesselationFactor>
         <alphaFadeDistances>	25.000000 5.000000	</alphaFadeDistances>
         <effectHardpoint>	HP_module_0	</effectHardpoint>
-        <effectName>	particles/Environment/scenarios/plane_engine_sc_all.xml	</effectName>
+        <effectName>	particles/Environment/scenarios/plane_engine_sc_all.eff	</effectName>
         <wwsoundName>	eb_bomber_engine	</wwsoundName>
       </channel0>
       <point>
@@ -9112,7 +9137,7 @@
         <tesselationFactor>	50	</tesselationFactor>
         <alphaFadeDistances>	25.000000 5.000000	</alphaFadeDistances>
         <effectHardpoint>	HP_module_0	</effectHardpoint>
-        <effectName>	particles/Environment/scenarios/plane_engine_sc_all.xml	</effectName>
+        <effectName>	particles/Environment/scenarios/plane_engine_sc_all.eff	</effectName>
         <wwsoundName>	eb_bomber_engine	</wwsoundName>
       </channel0>
       <point>
@@ -9198,7 +9223,7 @@
         <tesselationFactor>	50	</tesselationFactor>
         <alphaFadeDistances>	25.000000 5.000000	</alphaFadeDistances>
         <effectHardpoint>	HP_module_0	</effectHardpoint>
-        <effectName>	particles/Environment/scenarios/plane_engine_sc_all.xml	</effectName>
+        <effectName>	particles/Environment/scenarios/plane_engine_sc_all.eff	</effectName>
         <wwsoundName>	eb_bomber_engine	</wwsoundName>
       </channel0>
       <point>
@@ -9284,7 +9309,7 @@
         <tesselationFactor>	50	</tesselationFactor>
         <alphaFadeDistances>	25.000000 50.000000	</alphaFadeDistances>
         <effectHardpoint>	HP_module_0	</effectHardpoint>
-        <effectName>	particles/Environment/scenarios/plane_engine_sc_all.xml	</effectName>
+        <effectName>	particles/Environment/scenarios/plane_engine_sc_all.eff	</effectName>
         <wwsoundName>	eb_bomber_engine	</wwsoundName>
       </channel0>
       <point>
@@ -9370,7 +9395,7 @@
         <tesselationFactor>	50	</tesselationFactor>
         <alphaFadeDistances>	25.000000 50.000000	</alphaFadeDistances>
         <effectHardpoint>	HP_module_0	</effectHardpoint>
-        <effectName>	particles/Environment/scenarios/plane_engine_sc_all.xml	</effectName>
+        <effectName>	particles/Environment/scenarios/plane_engine_sc_all.eff	</effectName>
         <wwsoundName>	eb_bomber_engine	</wwsoundName>
       </channel0>
       <point>
@@ -9456,7 +9481,7 @@
         <tesselationFactor>	50	</tesselationFactor>
         <alphaFadeDistances>	25.000000 50.000000	</alphaFadeDistances>
         <effectHardpoint>	HP_module_0	</effectHardpoint>
-        <effectName>	particles/Environment/scenarios/plane_engine_sc_all.xml	</effectName>
+        <effectName>	particles/Environment/scenarios/plane_engine_sc_all.eff	</effectName>
         <wwsoundName>	eb_bomber_engine	</wwsoundName>
       </channel0>
       <point>
@@ -9542,7 +9567,7 @@
         <tesselationFactor>	50	</tesselationFactor>
         <alphaFadeDistances>	25.000000 50.000000	</alphaFadeDistances>
         <effectHardpoint>	HP_module_0	</effectHardpoint>
-        <effectName>	particles/Environment/scenarios/plane_engine_sc_all.xml	</effectName>
+        <effectName>	particles/Environment/scenarios/plane_engine_sc_all.eff	</effectName>
         <wwsoundName>	eb_bomber_engine	</wwsoundName>
       </channel0>
       <point>
@@ -9628,7 +9653,7 @@
         <tesselationFactor>	50	</tesselationFactor>
         <alphaFadeDistances>	25.000000 50.000000	</alphaFadeDistances>
         <effectHardpoint>	HP_module_0	</effectHardpoint>
-        <effectName>	particles/Environment/scenarios/plane_engine_sc_all.xml	</effectName>
+        <effectName>	particles/Environment/scenarios/plane_engine_sc_all.eff	</effectName>
         <wwsoundName>	eb_bomber_engine	</wwsoundName>
       </channel0>
       <point>
@@ -9714,7 +9739,7 @@
         <tesselationFactor>	50	</tesselationFactor>
         <alphaFadeDistances>	25.000000 5.000000	</alphaFadeDistances>
         <effectHardpoint>	HP_module_0	</effectHardpoint>
-        <effectName>	particles/Environment/scenarios/plane_engine_sc_all.xml	</effectName>
+        <effectName>	particles/Environment/scenarios/plane_engine_sc_all.eff	</effectName>
         <wwsoundName>	eb_bomber_engine	</wwsoundName>
       </channel0>
       <point>
@@ -9800,7 +9825,7 @@
         <tesselationFactor>	50	</tesselationFactor>
         <alphaFadeDistances>	0.100000 0.100000	</alphaFadeDistances>
         <effectHardpoint>	HP_module_0	</effectHardpoint>
-        <effectName>	particles/Environment/scenarios/208_smoke_east_01.xml	</effectName>
+        <effectName>	particles/Environment/scenarios/208_smoke_east_01.eff	</effectName>
       </channel0>
       <point>
         <position>	-542.775452 51.902103 -203.842148	</position>
@@ -9825,7 +9850,7 @@
         <tesselationFactor>	50	</tesselationFactor>
         <alphaFadeDistances>	0.100000 0.100000	</alphaFadeDistances>
         <effectHardpoint>	HP_module_0	</effectHardpoint>
-        <effectName>	particles/Environment/scenarios/208_smoke_east_01.xml	</effectName>
+        <effectName>	particles/Environment/scenarios/208_smoke_east_01.eff	</effectName>
       </channel0>
       <point>
         <position>	-236.838028 2.700085 -1590.418335	</position>
@@ -9850,7 +9875,7 @@
         <tesselationFactor>	50	</tesselationFactor>
         <alphaFadeDistances>	5.000000 25.000000	</alphaFadeDistances>
         <effectHardpoint>	HP_module_0	</effectHardpoint>
-        <effectName>	particles/Environment/scenarios/208_aircraft_damaged_center_02.xml	</effectName>
+        <effectName>	particles/Environment/scenarios/208_aircraft_damaged_center_02.eff	</effectName>
       </channel0>
       <point>
         <position>	-351.283966 120.121994 -2464.754150	</position>
@@ -9923,7 +9948,7 @@
         <tesselationFactor>	50	</tesselationFactor>
         <alphaFadeDistances>	5.000000 25.000000	</alphaFadeDistances>
         <effectHardpoint>	HP_module_0	</effectHardpoint>
-        <effectName>	particles/Environment/scenarios/208_aircraft_damaged_center_01.xml	</effectName>
+        <effectName>	particles/Environment/scenarios/208_aircraft_damaged_center_01.eff	</effectName>
       </channel0>
       <point>
         <position>	148.975983 100.661995 -2556.960693	</position>
@@ -9996,7 +10021,7 @@
         <tesselationFactor>	50	</tesselationFactor>
         <alphaFadeDistances>	5.000000 25.000000	</alphaFadeDistances>
         <effectHardpoint>	HP_module_0	</effectHardpoint>
-        <effectName>	particles/Environment/scenarios/208_aircraft_damaged_center_03.xml	</effectName>
+        <effectName>	particles/Environment/scenarios/208_aircraft_damaged_center_03.eff	</effectName>
       </channel0>
       <point>
         <position>	-278.829956 122.033989 -2468.619141	</position>
@@ -10051,7 +10076,7 @@
         <tesselationFactor>	50	</tesselationFactor>
         <alphaFadeDistances>	5.000000 25.000000	</alphaFadeDistances>
         <effectHardpoint>	HP_module_0	</effectHardpoint>
-        <effectName>	particles/Environment/scenarios/plane_engine_sc_all.xml	</effectName>
+        <effectName>	particles/Environment/scenarios/plane_engine_sc_all.eff	</effectName>
         <wwsoundName>	plane_stalingrad_yak_3_01	</wwsoundName>
       </channel0>
       <point>
@@ -10107,7 +10132,7 @@
         <tesselationFactor>	50	</tesselationFactor>
         <alphaFadeDistances>	5.000000 25.000000	</alphaFadeDistances>
         <effectHardpoint>	HP_module_0	</effectHardpoint>
-        <effectName>	particles/Environment/scenarios/plane_engine_sc_all.xml	</effectName>
+        <effectName>	particles/Environment/scenarios/plane_engine_sc_all.eff	</effectName>
         <wwsoundName>	plane_stalingrad_yak_3_01	</wwsoundName>
       </channel0>
       <point>
@@ -10163,7 +10188,7 @@
         <tesselationFactor>	50	</tesselationFactor>
         <alphaFadeDistances>	5.000000 25.000000	</alphaFadeDistances>
         <effectHardpoint>	HP_module_0	</effectHardpoint>
-        <effectName>	particles/Environment/scenarios/plane_engine_sc_all.xml	</effectName>
+        <effectName>	particles/Environment/scenarios/plane_engine_sc_all.eff	</effectName>
         <wwsoundName>	plane_stalingrad_yak_3_01	</wwsoundName>
       </channel0>
       <point>
@@ -10220,7 +10245,7 @@
         <alphaFadeDistances>	0.000000 0.000000	</alphaFadeDistances>
         <wwsoundName>	plane_DDAY_anti_aicraft_gun	</wwsoundName>
         <effectHardpoint>	HP_module_0	</effectHardpoint>
-        <effectName>	particles/Environment/scenarios/208_air_defence.xml	</effectName>
+        <effectName>	particles/Environment/scenarios/208_air_defence.eff	</effectName>
       </channel0>
       <point>
         <position>	-318.798218 113.302467 -1335.034912	</position>
@@ -10258,7 +10283,7 @@
         <alphaFadeDistances>	0.000000 0.000000	</alphaFadeDistances>
         <wwsoundName>	plane_DDAY_anti_aicraft_gun	</wwsoundName>
         <effectHardpoint>	HP_module_0	</effectHardpoint>
-        <effectName>	particles/Environment/scenarios/208_air_defence.xml	</effectName>
+        <effectName>	particles/Environment/scenarios/208_air_defence.eff	</effectName>
       </channel0>
       <point>
         <position>	129.695175 85.360222 -1359.966187	</position>
@@ -10295,7 +10320,7 @@
         <tesselationFactor>	50	</tesselationFactor>
         <alphaFadeDistances>	0.100000 0.100000	</alphaFadeDistances>
         <effectHardpoint>	HP_module_0	</effectHardpoint>
-        <effectName>	particles/Environment/scenarios/208_aircraft_crash_east_01.xml	</effectName>
+        <effectName>	particles/Environment/scenarios/208_aircraft_crash_east_01.eff	</effectName>
       </channel0>
       <point>
         <position>	-534.396729 47.065056 -204.216309	</position>
@@ -10320,7 +10345,7 @@
         <tesselationFactor>	50	</tesselationFactor>
         <alphaFadeDistances>	0.000000 0.000000	</alphaFadeDistances>
         <effectHardpoint>	HP_module_0	</effectHardpoint>
-        <effectName>	particles/Environment/scenarios/208_aircraft_crash_east_01.xml	</effectName>
+        <effectName>	particles/Environment/scenarios/208_aircraft_crash_east_01.eff	</effectName>
         <wwsoundName>	BF_eb_plane_hits_water	</wwsoundName>
       </channel0>
       <point>
@@ -10346,7 +10371,7 @@
         <tesselationFactor>	50	</tesselationFactor>
         <alphaFadeDistances>	0.100000 0.100000	</alphaFadeDistances>
         <effectHardpoint>	HP_module_0	</effectHardpoint>
-        <effectName>	particles/Environment/scenarios/208_smoke_east_01.xml	</effectName>
+        <effectName>	particles/Environment/scenarios/208_smoke_east_01.eff	</effectName>
       </channel0>
       <point>
         <position>	1112.549927 45.665470 -1262.502930	</position>
@@ -10371,7 +10396,7 @@
         <tesselationFactor>	50	</tesselationFactor>
         <alphaFadeDistances>	5.000000 5.000000	</alphaFadeDistances>
         <effectHardpoint>	HP_module_0	</effectHardpoint>
-        <effectName>	particles/Environment/scenarios/208_aircraft_damaged_east_01.xml	</effectName>
+        <effectName>	particles/Environment/scenarios/208_aircraft_damaged_east_01.eff	</effectName>
       </channel0>
       <point>
         <position>	1121.099976 91.544296 -2440.219971	</position>
@@ -10456,7 +10481,7 @@
         <tesselationFactor>	50	</tesselationFactor>
         <alphaFadeDistances>	5.000000 5.000000	</alphaFadeDistances>
         <effectHardpoint>	HP_module_0	</effectHardpoint>
-        <effectName>	particles/Environment/scenarios/208_aircraft_damaged_east_02.xml	</effectName>
+        <effectName>	particles/Environment/scenarios/208_aircraft_damaged_east_02.eff	</effectName>
       </channel0>
       <point>
         <position>	721.593018 100.760002 -2390.040039	</position>
@@ -10541,7 +10566,7 @@
         <tesselationFactor>	50	</tesselationFactor>
         <alphaFadeDistances>	5.000000 25.000000	</alphaFadeDistances>
         <effectHardpoint>	HP_module_0	</effectHardpoint>
-        <effectName>	particles/Environment/scenarios/plane_engine_sc_all.xml	</effectName>
+        <effectName>	particles/Environment/scenarios/plane_engine_sc_all.eff	</effectName>
         <wwsoundName>	plane_stalingrad_yak_3_01	</wwsoundName>
       </channel0>
       <point>
@@ -10597,7 +10622,7 @@
         <tesselationFactor>	50	</tesselationFactor>
         <alphaFadeDistances>	5.000000 5.000000	</alphaFadeDistances>
         <effectHardpoint>	HP_module_0	</effectHardpoint>
-        <effectName>	particles/Environment/scenarios/plane_engine_sc_all.xml	</effectName>
+        <effectName>	particles/Environment/scenarios/plane_engine_sc_all.eff	</effectName>
         <wwsoundName>	plane_stalingrad_yak_3_01	</wwsoundName>
       </channel0>
       <point>
@@ -10653,7 +10678,7 @@
         <tesselationFactor>	50	</tesselationFactor>
         <alphaFadeDistances>	5.000000 5.000000	</alphaFadeDistances>
         <effectHardpoint>	HP_module_0	</effectHardpoint>
-        <effectName>	particles/Environment/scenarios/plane_engine_sc_all.xml	</effectName>
+        <effectName>	particles/Environment/scenarios/plane_engine_sc_all.eff	</effectName>
         <wwsoundName>	plane_stalingrad_yak_3_01	</wwsoundName>
       </channel0>
       <point>
@@ -10709,7 +10734,7 @@
         <tesselationFactor>	50	</tesselationFactor>
         <alphaFadeDistances>	5.000000 5.000000	</alphaFadeDistances>
         <effectHardpoint>	HP_module_0	</effectHardpoint>
-        <effectName>	particles/Environment/scenarios/plane_engine_sc_all.xml	</effectName>
+        <effectName>	particles/Environment/scenarios/plane_engine_sc_all.eff	</effectName>
         <wwsoundName>	plane_stalingrad_yak_3_01	</wwsoundName>
       </channel0>
       <point>
@@ -10766,7 +10791,7 @@
         <alphaFadeDistances>	0.000000 0.000000	</alphaFadeDistances>
         <wwsoundName>	plane_DDAY_anti_aicraft_gun	</wwsoundName>
         <effectHardpoint>	HP_module_0	</effectHardpoint>
-        <effectName>	particles/Environment/scenarios/208_air_defence.xml	</effectName>
+        <effectName>	particles/Environment/scenarios/208_air_defence.eff	</effectName>
       </channel0>
       <point>
         <position>	720.675964 99.441437 -1309.183716	</position>
@@ -10804,7 +10829,7 @@
         <alphaFadeDistances>	0.000000 0.000000	</alphaFadeDistances>
         <wwsoundName>	plane_DDAY_anti_aicraft_gun	</wwsoundName>
         <effectHardpoint>	HP_module_0	</effectHardpoint>
-        <effectName>	particles/Environment/scenarios/208_air_defence.xml	</effectName>
+        <effectName>	particles/Environment/scenarios/208_air_defence.eff	</effectName>
       </channel0>
       <point>
         <position>	1127.060547 97.785400 -1392.060669	</position>
@@ -10841,7 +10866,7 @@
         <tesselationFactor>	50	</tesselationFactor>
         <alphaFadeDistances>	0.100000 0.100000	</alphaFadeDistances>
         <effectHardpoint>	HP_module_0	</effectHardpoint>
-        <effectName>	particles/Environment/scenarios/208_aircraft_crash_east_01.xml	</effectName>
+        <effectName>	particles/Environment/scenarios/208_aircraft_crash_east_01.eff	</effectName>
       </channel0>
       <point>
         <position>	1553.971680 84.500961 -376.890137	</position>
@@ -10866,7 +10891,7 @@
         <tesselationFactor>	50	</tesselationFactor>
         <alphaFadeDistances>	0.100000 0.100000	</alphaFadeDistances>
         <effectHardpoint>	HP_module_0	</effectHardpoint>
-        <effectName>	particles/Environment/scenarios/208_aircraft_crash_east_01.xml	</effectName>
+        <effectName>	particles/Environment/scenarios/208_aircraft_crash_east_01.eff	</effectName>
       </channel0>
       <point>
         <position>	1111.329956 45.684799 -1259.859985	</position>
@@ -10891,7 +10916,7 @@
         <tesselationFactor>	50	</tesselationFactor>
         <alphaFadeDistances>	0.100000 0.100000	</alphaFadeDistances>
         <effectHardpoint>	HP_module_0	</effectHardpoint>
-        <effectName>	particles/Environment/scenarios/208_smoke_east_01.xml	</effectName>
+        <effectName>	particles/Environment/scenarios/208_smoke_east_01.eff	</effectName>
       </channel0>
       <point>
         <position>	-1570.699219 73.168633 -380.229248	</position>
@@ -10916,7 +10941,7 @@
         <tesselationFactor>	50	</tesselationFactor>
         <alphaFadeDistances>	5.000000 5.000000	</alphaFadeDistances>
         <effectHardpoint>	HP_module_0	</effectHardpoint>
-        <effectName>	particles/Environment/scenarios/208_aircraft_damaged_west_01.xml	</effectName>
+        <effectName>	particles/Environment/scenarios/208_aircraft_damaged_west_01.eff	</effectName>
       </channel0>
       <point>
         <position>	-799.910950 91.227791 -2811.929199	</position>
@@ -10989,7 +11014,7 @@
         <tesselationFactor>	50	</tesselationFactor>
         <alphaFadeDistances>	5.000000 5.000000	</alphaFadeDistances>
         <effectHardpoint>	HP_module_0	</effectHardpoint>
-        <effectName>	particles/Environment/scenarios/208_aircraft_damaged_west_02.xml	</effectName>
+        <effectName>	particles/Environment/scenarios/208_aircraft_damaged_west_02.eff	</effectName>
       </channel0>
       <point>
         <position>	-1452.377808 102.864990 -2736.009766	</position>
@@ -11044,7 +11069,7 @@
         <tesselationFactor>	50	</tesselationFactor>
         <alphaFadeDistances>	5.000000 25.000000	</alphaFadeDistances>
         <effectHardpoint>	HP_module_0	</effectHardpoint>
-        <effectName>	particles/Environment/scenarios/plane_engine_sc_all.xml	</effectName>
+        <effectName>	particles/Environment/scenarios/plane_engine_sc_all.eff	</effectName>
         <wwsoundName>	plane_stalingrad_yak_3_01	</wwsoundName>
       </channel0>
       <point>
@@ -11100,7 +11125,7 @@
         <tesselationFactor>	50	</tesselationFactor>
         <alphaFadeDistances>	5.000000 5.000000	</alphaFadeDistances>
         <effectHardpoint>	HP_module_0	</effectHardpoint>
-        <effectName>	particles/Environment/scenarios/plane_engine_sc_all.xml	</effectName>
+        <effectName>	particles/Environment/scenarios/plane_engine_sc_all.eff	</effectName>
         <wwsoundName>	plane_stalingrad_yak_3_01	</wwsoundName>
       </channel0>
       <point>
@@ -11156,7 +11181,7 @@
         <tesselationFactor>	49	</tesselationFactor>
         <alphaFadeDistances>	5.000000 5.000000	</alphaFadeDistances>
         <effectHardpoint>	HP_module_0	</effectHardpoint>
-        <effectName>	particles/Environment/scenarios/plane_engine_sc_all.xml	</effectName>
+        <effectName>	particles/Environment/scenarios/plane_engine_sc_all.eff	</effectName>
         <wwsoundName>	plane_stalingrad_yak_3_01	</wwsoundName>
       </channel0>
       <point>
@@ -11212,7 +11237,7 @@
         <tesselationFactor>	50	</tesselationFactor>
         <alphaFadeDistances>	5.000000 5.000000	</alphaFadeDistances>
         <effectHardpoint>	HP_module_0	</effectHardpoint>
-        <effectName>	particles/Environment/scenarios/plane_engine_sc_all.xml	</effectName>
+        <effectName>	particles/Environment/scenarios/plane_engine_sc_all.eff	</effectName>
         <wwsoundName>	plane_stalingrad_yak_3_01	</wwsoundName>
       </channel0>
       <point>
@@ -11269,7 +11294,7 @@
         <alphaFadeDistances>	0.000000 0.000000	</alphaFadeDistances>
         <wwsoundName>	plane_DDAY_anti_aicraft_gun	</wwsoundName>
         <effectHardpoint>	HP_module_0	</effectHardpoint>
-        <effectName>	particles/Environment/scenarios/208_air_defence.xml	</effectName>
+        <effectName>	particles/Environment/scenarios/208_air_defence.eff	</effectName>
       </channel0>
       <point>
         <position>	-1265.326294 121.118889 -1383.046753	</position>
@@ -11307,7 +11332,7 @@
         <alphaFadeDistances>	0.000000 0.000000	</alphaFadeDistances>
         <wwsoundName>	plane_DDAY_anti_aicraft_gun	</wwsoundName>
         <effectHardpoint>	HP_module_0	</effectHardpoint>
-        <effectName>	particles/Environment/scenarios/208_air_defence.xml	</effectName>
+        <effectName>	particles/Environment/scenarios/208_air_defence.eff	</effectName>
       </channel0>
       <point>
         <position>	-793.980591 86.506241 -1534.233398	</position>
@@ -11344,7 +11369,7 @@
         <tesselationFactor>	50	</tesselationFactor>
         <alphaFadeDistances>	0.100000 0.100000	</alphaFadeDistances>
         <effectHardpoint>	HP_module_0	</effectHardpoint>
-        <effectName>	particles/Environment/scenarios/208_aircraft_crash_east_01.xml	</effectName>
+        <effectName>	particles/Environment/scenarios/208_aircraft_crash_east_01.eff	</effectName>
       </channel0>
       <point>
         <position>	-1559.698120 72.764214 -382.453003	</position>
@@ -11369,7 +11394,7 @@
         <tesselationFactor>	50	</tesselationFactor>
         <alphaFadeDistances>	0.100000 0.100000	</alphaFadeDistances>
         <effectHardpoint>	HP_module_0	</effectHardpoint>
-        <effectName>	particles/Environment/scenarios/208_aircraft_crash_east_01.xml	</effectName>
+        <effectName>	particles/Environment/scenarios/208_aircraft_crash_east_01.eff	</effectName>
       </channel0>
       <point>
         <position>	-737.163391 33.720150 -1466.056519	</position>

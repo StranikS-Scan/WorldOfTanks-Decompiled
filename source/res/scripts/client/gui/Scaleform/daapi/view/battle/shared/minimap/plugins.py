@@ -6,7 +6,8 @@ from functools import partial
 import BigWorld
 import Math
 import BattleReplay
-from AvatarInputHandler import aih_constants, AvatarInputHandler
+import aih_constants
+from AvatarInputHandler import AvatarInputHandler
 from PlayerEvents import g_playerEvents
 from account_helpers.settings_core import settings_constants
 from battleground.StunAreaManager import STUN_AREA_STATIC_MARKER

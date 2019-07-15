@@ -27,9 +27,10 @@ class WGUIBackgroundBlurSupportImpl(BackgroundBlurSupport):
     def battle(self):
         return None
 
-    def enable(self, ownLayer, layers, blurAnimRepeatCount=10):
+    def enable(self, ownLayer, layers, blurAnimRepeatCount=10, fadeTime=0):
         if self.__blur is None:
             self.__blur = GUI.WGUIBackgroundBlur()
+            self.__blur.fadeTime = fadeTime
         self.__blur.enable = True
         if self.lobby is not None:
             self.lobby.blurBackgroundViews(ownLayer, layers, blurAnimRepeatCount)

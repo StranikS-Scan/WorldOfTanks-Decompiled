@@ -8,7 +8,7 @@ class MainWindow(WindowImpl):
     __slots__ = ()
 
     def __init__(self, entryID, content=None):
-        super(MainWindow, self).__init__(WindowFlags.MAIN_WINDOW, entryID, content=content)
+        super(MainWindow, self).__init__(WindowFlags.MAIN_WINDOW, entryID=entryID, content=content)
 
     def _initialize(self):
         super(MainWindow, self)._initialize()

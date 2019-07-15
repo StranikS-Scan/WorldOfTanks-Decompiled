@@ -1,6 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/storage/blueprints/__init__.py
-import BigWorld
 from account_helpers.AccountSettings import AccountSettings
 from account_helpers.AccountSettings import BLUEPRINTS_STORAGE_FILTER
 from gui import GUI_NATIONS_ORDER_INDEX_REVERSED
@@ -17,6 +16,7 @@ from gui.Scaleform.genConsts.CONTEXT_MENU_HANDLER_TYPE import CONTEXT_MENU_HANDL
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.RES_SHOP import RES_SHOP
 from gui.Scaleform.locale.STORAGE import STORAGE
+from gui.impl import backport
 from gui.shared.formatters import text_styles, icons
 from gui.shared.utils.requesters.ItemsRequester import RequestCriteria, PredicateCondition
 from helpers import dependency, func_utils
@@ -153,7 +153,7 @@ class BlueprintsStorageCarouselDataProvider(StorageCarouselDataProvider):
 
     @classmethod
     def __formatFragmentProgress(cls, current, total, discount):
-        return text_styles.alignText(''.join((text_styles.credits(BigWorld.wg_getIntegralFormat(current)), text_styles.main(''.join((' / ', BigWorld.wg_getIntegralFormat(total)))), text_styles.credits(''.join(('   ', BigWorld.wg_getIntegralFormat(discount), '%'))) if discount > 0 else '')), 'right')
+        return text_styles.alignText(''.join((text_styles.credits(backport.getIntegralFormat(current)), text_styles.main(''.join((' / ', backport.getIntegralFormat(total)))), text_styles.credits(''.join(('   ', backport.getIntegralFormat(discount), '%'))) if discount > 0 else '')), 'right')
 
     @classmethod
     def __formatFragment(cls, count, icon):
@@ -165,7 +165,7 @@ class BlueprintsStorageCarouselDataProvider(StorageCarouselDataProvider):
 
     @classmethod
     def __getConvertAvailableDescription(cls, availableFragments):
-        return makeString(STORAGE.BLUEPRINTS_CARD_CONVERTAVAILABLE, count=text_styles.stats(BigWorld.wg_getIntegralFormat(availableFragments)))
+        return makeString(STORAGE.BLUEPRINTS_CARD_CONVERTAVAILABLE, count=text_styles.stats(backport.getIntegralFormat(availableFragments)))
 
     @classmethod
     def __getConvertRequiredDescription(cls, intelligenceRequired, intelligenceIcon, nationalRequired, nationalIcon):

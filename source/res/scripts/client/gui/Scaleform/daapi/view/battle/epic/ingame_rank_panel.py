@@ -17,7 +17,7 @@ class InGameRankPanel(EpicInGameRankMeta):
         self.__waitingForLevelUp = False
         componentSystem = self.sessionProvider.arenaVisitor.getComponentSystem()
         playerDataComp = getattr(componentSystem, 'playerDataComponent', None)
-        if playerDataComp is not None:
+        if playerDataComp is not None and playerDataComp.playerIngameRanksEnabled():
             playerDataComp.onPlayerXPUpdated += self.__onPlayerXPUpdated
             self.__rankThresholds = playerDataComp.getTresholdForRanks()
             self.__currentExp = playerDataComp.playerXP
@@ -27,7 +27,7 @@ class InGameRankPanel(EpicInGameRankMeta):
     def _dispose(self):
         super(InGameRankPanel, self)._dispose()
         playerDataComp = getattr(self.sessionProvider.arenaVisitor.getComponentSystem(), 'playerDataComponent', None)
-        if playerDataComp is not None:
+        if playerDataComp is not None and playerDataComp.playerIngameRanksEnabled():
             playerDataComp.onPlayerXPUpdated -= self.__onPlayerXPUpdated
         return
 

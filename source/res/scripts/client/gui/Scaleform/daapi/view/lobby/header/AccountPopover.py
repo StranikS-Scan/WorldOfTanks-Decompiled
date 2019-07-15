@@ -16,6 +16,7 @@ from gui.clans import formatters as clans_fmts
 from gui.clans.clan_helpers import ClanListener
 from gui.clans.restrictions import ClanMemberPermissions
 from gui.clans.settings import getNoClanEmblem32x32
+from gui.impl import backport
 from gui.prb_control.dispatcher import g_prbLoader
 from gui.prb_control.entities.listener import IGlobalListener
 from gui.shared import event_dispatcher as shared_events
@@ -34,8 +35,7 @@ from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
 from tutorial.control.context import GLOBAL_FLAG
 from tutorial.hints_manager import HINT_SHOWN_STATUS
-_PREFIX_BADGE_HINT_ID = 'HaveNewBadgeHint'
-_SUFFIX_BADGE_HINT_ID = 'HaveNewSuffixBadgeHint'
+from account_helpers.settings_core.settings_constants import OnceOnlyHints
 
 class AccountPopover(AccountPopoverMeta, IGlobalListener, ClanListener, ClanEmblemsHelper):
     itemsCache = dependency.descriptor(IItemsCache)
@@ -226,14 +226,14 @@ class AccountPopover(AccountPopoverMeta, IGlobalListener, ClanListener, ClanEmbl
         if winsEfficiency is None:
             winsEffLabel = '--'
         else:
-            winsEffLabel = '%s %%' % BigWorld.wg_getNiceNumberFormat(winsEfficiency * 100)
+            winsEffLabel = '%s %%' % backport.getNiceNumberFormat(winsEfficiency * 100)
 
         def _packStats(label, value, iconPath):
             return {'name': makeString('#menu:header/account/popover/achieves/%s' % label),
              'value': value,
              'icon': iconPath}
 
-        self.__achieves = [_packStats('rating', BigWorld.wg_getIntegralFormat(items.stats.globalRating), RES_ICONS.MAPS_ICONS_STATISTIC_RATING), _packStats('battles', BigWorld.wg_getIntegralFormat(randomStats.getBattlesCount()), RES_ICONS.MAPS_ICONS_STATISTIC_RATIO), _packStats('wins', winsEffLabel, RES_ICONS.MAPS_ICONS_STATISTIC_FIGHTS)]
+        self.__achieves = [_packStats('rating', backport.getIntegralFormat(items.stats.globalRating), RES_ICONS.MAPS_ICONS_STATISTIC_RATING), _packStats('battles', backport.getIntegralFormat(randomStats.getBattlesCount()), RES_ICONS.MAPS_ICONS_STATISTIC_RATIO), _packStats('wins', winsEffLabel, RES_ICONS.MAPS_ICONS_STATISTIC_FIGHTS)]
         return
 
     def __setClanData(self):
@@ -338,13 +338,13 @@ class AccountPopover(AccountPopoverMeta, IGlobalListener, ClanListener, ClanEmbl
         else:
             hasNewPrefixBadges, hasNewSuffixBadges = self.__checkNewBadges()
             serverSettings = self.settingsCore.serverSettings
-            hintShown = serverSettings.getOnceOnlyHintsSetting(_SUFFIX_BADGE_HINT_ID)
+            hintShown = serverSettings.getOnceOnlyHintsSetting(OnceOnlyHints.HAVE_NEW_SUFFIX_BADGE_HINT)
             if not hintShown and hasNewSuffixBadges:
                 self.__tutorStorage.setValue(GLOBAL_FLAG.HAVE_NEW_SUFFIX_BADGE, True)
                 if hasNewPrefixBadges:
-                    serverSettings.setOnceOnlyHintsSettings({_PREFIX_BADGE_HINT_ID: HINT_SHOWN_STATUS})
+                    serverSettings.setOnceOnlyHintsSettings({OnceOnlyHints.HAVE_NEW_BADGE_HINT: HINT_SHOWN_STATUS})
                 return
-            hintShown = serverSettings.getOnceOnlyHintsSetting(_PREFIX_BADGE_HINT_ID)
+            hintShown = serverSettings.getOnceOnlyHintsSetting(OnceOnlyHints.HAVE_NEW_BADGE_HINT)
             if not hintShown and hasNewPrefixBadges:
                 self.__tutorStorage.setValue(GLOBAL_FLAG.HAVE_NEW_BADGE, True)
             return

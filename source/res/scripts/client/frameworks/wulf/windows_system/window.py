@@ -2,30 +2,100 @@
 # Embedded file name: scripts/client/frameworks/wulf/windows_system/window.py
 import typing
 import Event
+from soft_exception import SoftException
 from ..py_object_binder import PyObjectEntity
+from ..py_object_wrappers import PyObjectWindowSettings
 from ..py_object_wrappers import PyObjectWindow
 from ..view.view import View
 from ..view.view_model import ViewModel
-from ..gui_constants import WindowStatus, WindowFlags
+from ..gui_constants import WindowStatus, WindowFlags, ViewStatus
+
+def _getProxy(object_):
+    return object_.proxy if object_ is not None else None
+
+
+def _getObject(proxy):
+    return proxy.object if proxy is not None else None
+
+
+class WindowSettings(object):
+    __slots__ = ('__proxy',)
+
+    def __init__(self):
+        super(WindowSettings, self).__init__()
+        self.__proxy = PyObjectWindowSettings()
+
+    def clear(self):
+        self.__proxy = None
+        return
+
+    @property
+    def proxy(self):
+        return self.__proxy
+
+    @property
+    def flags(self):
+        return self.__proxy.flags
+
+    @flags.setter
+    def flags(self, flags):
+        self.__proxy.flags = flags
+
+    @property
+    def entryID(self):
+        return self.__proxy.entryID
+
+    @entryID.setter
+    def entryID(self, entryID):
+        self.__proxy.entryID = entryID
+
+    @property
+    def areaID(self):
+        return self.__proxy.areaID
+
+    @areaID.setter
+    def areaID(self, areaID):
+        self.__proxy.areaID = areaID
+
+    @property
+    def decorator(self):
+        return _getObject(self.__proxy.decorator)
+
+    @decorator.setter
+    def decorator(self, decorator):
+        if decorator is not None and not isinstance(decorator, View):
+            raise SoftException('Decorator should be View class or extends it')
+        self.__proxy.decorator = _getProxy(decorator)
+        return
+
+    @property
+    def content(self):
+        return _getObject(self.__proxy.content)
+
+    @content.setter
+    def content(self, content):
+        if content is not None and not isinstance(content, View):
+            raise SoftException('Content should be View class or extends it')
+        self.__proxy.content = _getProxy(content)
+        return
+
+    @property
+    def parent(self):
+        return _getObject(self.__proxy.parent)
+
+    @parent.setter
+    def parent(self, parent):
+        if parent is not None and not isinstance(parent, Window):
+            raise SoftException('Content should be Window class or extends it')
+        self.__proxy.parent = _getProxy(parent)
+        return
+
 
 class Window(PyObjectEntity):
-    __slots__ = ('onStatusChanged', '__windowStatus', '__hasDecorator', '__weakref__')
+    __slots__ = ('onStatusChanged', '__windowStatus', '__weakref__')
 
-    def __init__(self, wndFlags, *args, **kwargs):
-        decorator = kwargs.pop('decorator', None)
-        content = kwargs.pop('content', None)
-        parent = kwargs.pop('parent', None)
-        self.__hasDecorator = False
-        if decorator is not None:
-            decorator.getViewModel().setContent(content)
-            contentProxy = decorator.proxy
-            self.__hasDecorator = True
-        elif content is not None:
-            contentProxy = content.proxy
-        else:
-            contentProxy = None
-        parentWndProxy = None if parent is None else parent.proxy
-        super(Window, self).__init__(PyObjectWindow(wndFlags, contentProxy, parentWndProxy, args))
+    def __init__(self, settings):
+        super(Window, self).__init__(PyObjectWindow(settings.proxy))
         self.onStatusChanged = Event.Event()
         self.__windowStatus = WindowStatus.UNDEFINED if self.proxy is None else self.proxy.windowStatus
         return
@@ -35,17 +105,13 @@ class Window(PyObjectEntity):
 
     @property
     def decorator(self):
-        return self._getProxyContent() if self.__hasDecorator else None
+        proxy = self.proxy
+        return proxy.decorator if proxy is not None else None
 
     @property
     def content(self):
-        if self.__hasDecorator:
-            model = self._getDecoratorViewModel()
-            if model is not None:
-                return model.getContent()
-        else:
-            return self._getProxyContent()
-        return
+        proxy = self.proxy
+        return proxy.content if proxy is not None else None
 
     @property
     def parent(self):
@@ -84,10 +150,14 @@ class Window(PyObjectEntity):
         return self.proxy.isModal()
 
     def setDecorator(self, decorator):
-        self.__hasDecorator = True
-        contentProxy = None if decorator is None else decorator.proxy
-        self.proxy.setContent(contentProxy)
-        return
+        self.__detachFromDecorator()
+        self.proxy.setDecorator(_getProxy(decorator))
+        self.__attachToDecorator()
+
+    def setContent(self, content):
+        self.__detachFromContent()
+        self.proxy.setContent(_getProxy(content))
+        self.__attachToContent()
 
     def load(self):
         self.proxy.load()
@@ -122,18 +192,28 @@ class Window(PyObjectEntity):
     def isHidden(self):
         return self.proxy.isHidden()
 
-    def _initialize(self):
-        pass
-
     def _getDecoratorViewModel(self):
         decorator = self.decorator
         return decorator.getViewModel() if decorator is not None else None
 
-    def _getProxyContent(self):
-        proxy = self.proxy
-        return proxy.content if proxy is not None else None
+    def _initialize(self):
+        self.__attachToDecorator()
+        self.__attachToContent()
 
     def _finalize(self):
+        self.__detachFromDecorator()
+        self.__detachFromContent()
+
+    def _onDecoratorReady(self):
+        pass
+
+    def _onDecoratorReleased(self):
+        pass
+
+    def _onContentReady(self):
+        pass
+
+    def _onContentReleased(self):
         pass
 
     def _cInit(self):
@@ -147,3 +227,45 @@ class Window(PyObjectEntity):
     def _cWindowStatusChanged(self, _, newStatus):
         self.__windowStatus = newStatus
         self.onStatusChanged(newStatus)
+
+    def __attachToDecorator(self):
+        decorator = self.decorator
+        if decorator is not None:
+            if decorator.viewStatus == ViewStatus.LOADED:
+                self._onDecoratorReady()
+            decorator.onStatusChanged += self.__onDecoratorStatusChanged
+        return
+
+    def __detachFromDecorator(self):
+        decorator = self.decorator
+        if decorator is not None:
+            self._onDecoratorReleased()
+            decorator.onStatusChanged -= self.__onDecoratorStatusChanged
+        return
+
+    def __attachToContent(self):
+        content = self.content
+        if content is not None:
+            if content.viewStatus == ViewStatus.LOADED:
+                self._onContentReady()
+            content.onStatusChanged += self.__onContentStatusChanged
+        return
+
+    def __detachFromContent(self):
+        content = self.content
+        if content is not None:
+            self._onContentReleased()
+            content.onStatusChanged -= self.__onContentStatusChanged
+        return
+
+    def __onDecoratorStatusChanged(self, newStatus):
+        if newStatus == ViewStatus.LOADED:
+            self._onDecoratorReady()
+        elif newStatus == ViewStatus.DESTROYED:
+            self._onDecoratorReleased()
+
+    def __onContentStatusChanged(self, newStatus):
+        if newStatus == ViewStatus.LOADED:
+            self._onContentReady()
+        elif newStatus == ViewStatus.DESTROYED:
+            self._onContentReleased()

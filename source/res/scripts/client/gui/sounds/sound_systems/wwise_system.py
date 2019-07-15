@@ -164,6 +164,7 @@ class WWISESoundSystem(SoundSystemAbstract):
             LOG_DEBUG('WWISE: New sounds preset is set. New value is {}'.format(presetID))
             WWISE.WW_reinit()
             LOG_DEBUG('WWISE: Sound system is reinitialized')
+            BigWorld.reinitVideoSound()
 
     def setSoundSystem(self, soundSystemID):
         if soundSystemID == _LAPTOP_SOUND_PRESET:

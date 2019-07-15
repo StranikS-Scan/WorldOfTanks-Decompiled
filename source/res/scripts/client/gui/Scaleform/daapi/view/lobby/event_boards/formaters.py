@@ -1,8 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/event_boards/formaters.py
-import BigWorld
 import nations
 from gui import makeHtmlString
+from gui.impl import backport
 from helpers import int2roman
 from gui.event_boards.event_boards_items import CALCULATION_METHODS
 from gui.event_boards import event_boards_timer
@@ -119,11 +119,11 @@ def timeEndStyle(text):
 
 
 def formatDate(ts, default='--'):
-    return str(BigWorld.wg_getShortDateFormat(ts)) if ts is not None else default
+    return str(backport.getShortDateFormat(ts)) if ts is not None else default
 
 
 def formatTime(ts):
-    return str(BigWorld.wg_getShortTimeFormat(ts))
+    return str(backport.getShortTimeFormat(ts))
 
 
 def formatTimeAndDate(ts):
@@ -131,7 +131,7 @@ def formatTimeAndDate(ts):
 
 
 def niceNumberFormatter(param):
-    return BigWorld.wg_getNiceNumberFormat(param)
+    return backport.getNiceNumberFormat(param)
 
 
 _defaultFormatter = niceNumberFormatter
@@ -159,7 +159,7 @@ def formatAdditionalParameters(method, params):
 
 def formatUpdateTime(recalculationTS):
     statusDay = event_boards_timer.getUpdateStatus_ts(recalculationTS)
-    statusTime = BigWorld.wg_getShortTimeFormat(recalculationTS)
-    day = _ms(EVENT_BOARDS.time_day(statusDay)) if statusDay else BigWorld.wg_getLongDateFormat(recalculationTS)
+    statusTime = backport.getShortTimeFormat(recalculationTS)
+    day = _ms(EVENT_BOARDS.time_day(statusDay)) if statusDay else backport.getLongDateFormat(recalculationTS)
     status = _ms(EVENT_BOARDS.SUMMARY_STATUS, day=day, time=statusTime)
     return status

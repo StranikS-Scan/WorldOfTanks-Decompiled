@@ -12,7 +12,8 @@ from skeletons.gui.shared import IItemsCache
 from skeletons.gui.customization import ICustomizationService
 from gui.shared.tooltips.formatters import packActionTooltipData
 from gui.shared.tooltips import ACTION_TOOLTIPS_TYPE
-from gui.Scaleform.daapi.view.lobby.customization.shared import SEASON_TYPE_TO_NAME, C11nMode
+from gui.Scaleform.daapi.view.lobby.customization.shared import C11nMode
+from gui.customization.shared import SEASON_TYPE_TO_NAME
 
 class CustomizationOptions(object):
     BUY = 'buy'
@@ -21,6 +22,7 @@ class CustomizationOptions(object):
     REMOVE_FROM_TANK = 'removeFromTank'
     PROLONGATION_ON = 'autoprolongationOn'
     PROLONGATION_OFF = 'autoprolongationOff'
+    STYLE_INFO = 'styleInfo'
 
 
 class CustomizationItemCMHandler(AbstractContextMenuHandler):
@@ -33,7 +35,8 @@ class CustomizationItemCMHandler(AbstractContextMenuHandler):
          CustomizationOptions.SELL: 'sellItem',
          CustomizationOptions.REMOVE_FROM_TANK: 'removeItemFromTank',
          CustomizationOptions.PROLONGATION_ON: 'changeAutoRent',
-         CustomizationOptions.PROLONGATION_OFF: 'changeAutoRent'})
+         CustomizationOptions.PROLONGATION_OFF: 'changeAutoRent',
+         CustomizationOptions.STYLE_INFO: 'showStyleInfo'})
         self.onSelected = Event(self._eManager)
         self._item = self.itemsCache.items.getItemByCD(self._intCD)
         self.__ctx = self.service.getCtx()
@@ -56,6 +59,9 @@ class CustomizationItemCMHandler(AbstractContextMenuHandler):
 
     def removeItemFromTank(self):
         self.onSelected(CustomizationOptions.REMOVE_FROM_TANK, self._intCD)
+
+    def showStyleInfo(self):
+        self.onSelected(CustomizationOptions.STYLE_INFO, self._intCD)
 
     def _generateOptions(self, ctx=None):
         item = self.itemsCache.items.getItemByCD(self._intCD)
@@ -84,6 +90,9 @@ class CustomizationItemCMHandler(AbstractContextMenuHandler):
         buyText = CustomizationOptions.BUY
         if self.__ctx.getItemInventoryCount(item) > 0 and item.isRentable:
             buyText = CustomizationOptions.BUY_MORE
+        if self.__ctx.mode == C11nMode.STYLE:
+            menuItems.append(self._makeItem(CustomizationOptions.STYLE_INFO, MENU.cst_item_ctx_menu(CustomizationOptions.STYLE_INFO), {'enabled': bool(item.longDescriptionSpecial)}))
+            menuItems.append(self._makeSeparator())
         menuItems.append(self._makeItem(CustomizationOptions.BUY, MENU.cst_item_ctx_menu(buyText), {'data': {'price': first(buyPriceVO)} if availableForPurchase else None,
          'enabled': availableForPurchase}, None, 'CurrencyContextMenuItem'))
         menuItems.append(self._makeSeparator())

@@ -3,7 +3,7 @@
     <userString>	#vehicle_customization:styles/rented_styles	</userString>
     <season>	ALL	</season>
     <historical>	true	</historical>
-    <priceGroup>	rented style	</priceGroup>
+    <priceGroup>	styles 75000s	</priceGroup>
     <vehicleFilter>
       <include>
         <nations>	poland	</nations>
@@ -60,7 +60,7 @@
     <userString>	#vehicle_customization:styles/main_styles	</userString>
     <season>	ALL	</season>
     <historical>	true	</historical>
-    <priceGroup>	style gold	</priceGroup>
+    <priceGroup>	styles 750g	</priceGroup>
     <vehicleFilter>
       <include>
         <nations>	poland	</nations>
@@ -70,6 +70,7 @@
       <id>	185	</id>
       <texture>	gui/maps/vehicles/styles/style_01.png	</texture>
       <userString>	#vehicle_customization:gold_style/gold_style_01	</userString>
+      <longDescriptionSpecial>	#vehicle_customization:gold_style/gold_style_01_desc/long	</longDescriptionSpecial>
       <outfits>
         <outfit>
           <season>	winter	</season>
@@ -195,7 +196,7 @@
     <userString>	#vehicle_customization:styles/special_styles	</userString>
     <season>	ALL	</season>
     <historical>	false	</historical>
-    <priceGroup>	legacy notInShop	</priceGroup>
+    <priceGroup>	styles 750g notInShop	</priceGroup>
     <vehicleFilter>
       <include>
         <nations>	poland	</nations>
@@ -244,7 +245,7 @@
     <userString>	#vehicle_customization:styles/special_styles	</userString>
     <season>	ALL	</season>
     <historical>	false	</historical>
-    <priceGroup>	WingedHussar styles notInShop	</priceGroup>
+    <priceGroup>	styles 1500g notInShop	</priceGroup>
     <vehicleFilter>
       <include>
         <vehicles>	poland:Pl08_50TP_prototyp	</vehicles>
@@ -256,6 +257,7 @@
       <modelsSet>	WingedHussar	</modelsSet>
       <maxNumber>	1	</maxNumber>
       <userString>	#vehicle_customization:special_style/50TP_prototyp_WingedHussar	</userString>
+      <longDescriptionSpecial>	#vehicle_customization:special_style/50TP_prototyp_WingedHussar_desc/long	</longDescriptionSpecial>
       <outfits>
         <outfit>
           <season>	ALL	</season>
@@ -285,7 +287,7 @@
     <userString>	#vehicle_customization:styles/main_styles	</userString>
     <season>	ALL	</season>
     <historical>	true	</historical>
-    <priceGroup>	generic custom look styles	</priceGroup>
+    <priceGroup>	styles 700g	</priceGroup>
     <vehicleFilter>
       <include>
         <nations>	poland	</nations>
@@ -295,6 +297,7 @@
       <id>	242	</id>
       <texture>	gui/maps/vehicles/styles/generic_custom_look_poland.png	</texture>
       <description>	#vehicle_customization:main_style/generic_custom_look_poland_desc	</description>
+      <longDescriptionSpecial>	#vehicle_customization:main_style/generic_custom_look_poland_desc/long	</longDescriptionSpecial>
       <userString>	#vehicle_customization:main_style/generic_custom_look_poland	</userString>
       <outfits>
         <outfit>
@@ -368,7 +371,7 @@
       <texture>	gui/maps/vehicles/styles/generic_custom_look_2_poland.png	</texture>
       <description>	#vehicle_customization:main_style/generic_custom_look_2_poland_desc	</description>
       <userString>	#vehicle_customization:main_style/generic_custom_look_2_poland	</userString>
-      <priceGroup>	generic custom look styles	</priceGroup>
+      <priceGroup>	styles 700g	</priceGroup>
       <outfits>
         <outfit>
           <season>	winter	</season>

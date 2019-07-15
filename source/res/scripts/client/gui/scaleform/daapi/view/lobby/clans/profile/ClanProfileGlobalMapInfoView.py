@@ -1,8 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/clans/profile/ClanProfileGlobalMapInfoView.py
 import weakref
-import BigWorld
 from adisp import process
+from gui.impl import backport
 from helpers import time_utils
 from helpers.i18n import makeString as _ms
 from gui.clans import items
@@ -30,7 +30,7 @@ class ClanProfileGlobalMapInfoView(ClanProfileGlobalMapInfoViewMeta):
         favouriteAttrs = yield clanDossier.requestFavouriteAttributes()
         if self.isDisposed():
             return
-        primeTime = items.formatField(getter=favouriteAttrs.getFavoritePrimetime, formatter=lambda x: BigWorld.wg_getShortTimeFormat(x.hour * time_utils.ONE_HOUR + x.minute * time_utils.ONE_MINUTE))
+        primeTime = items.formatField(getter=favouriteAttrs.getFavoritePrimetime, formatter=lambda x: backport.getShortTimeFormat(x.hour * time_utils.ONE_HOUR + x.minute * time_utils.ONE_MINUTE))
         primeTime = text_styles.standard(_ms(CLANS.GLOBALMAPVIEW_POPULARPRIMETIME, time=text_styles.main(primeTime)))
         data = FortGlobalMapStatistics({'stats': globalMapStats,
          'ratings': ratings,

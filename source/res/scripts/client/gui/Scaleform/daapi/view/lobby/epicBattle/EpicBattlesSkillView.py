@@ -2,7 +2,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/epicBattle/EpicBattlesSkillView.py
 from collections import namedtuple
 import SoundGroups
-from AvatarInputHandler.mathUtils import clamp
+from math_utils import clamp
 from gui.Scaleform.daapi import LobbySubView
 from gui.Scaleform.daapi.view.meta.EpicBattlesSkillViewMeta import EpicBattlesSkillViewMeta
 from gui.Scaleform.locale.COMMON import COMMON

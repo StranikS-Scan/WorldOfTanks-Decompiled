@@ -19,8 +19,9 @@ import epic_battle_death_mode
 import cameras
 import constants
 import control_modes
+import aih_constants
 from AvatarInputHandler import AimingSystems
-from AvatarInputHandler import aih_global_binding, aih_constants, gun_marker_ctrl
+from AvatarInputHandler import aih_global_binding, gun_marker_ctrl
 from AvatarInputHandler.AimingSystems.SniperAimingSystem import SniperAimingSystem
 from AvatarInputHandler.AimingSystems.steady_vehicle_matrix import SteadyVehicleMatrixCalculator
 from AvatarInputHandler.commands.bootcamp_mode_control import BootcampModeControl

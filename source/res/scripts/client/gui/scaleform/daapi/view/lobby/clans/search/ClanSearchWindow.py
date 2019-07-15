@@ -1,19 +1,19 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/clans/search/ClanSearchWindow.py
-import BigWorld
 from debug_utils import LOG_ERROR, LOG_DEBUG
 from gui.Scaleform.daapi.settings import BUTTON_LINKAGES
 from gui.clans.clan_helpers import ClanListener, ClanFinder
 from gui.clans.items import ClanCommonData, formatField
 from gui.clans import formatters as clans_fmts
 from gui.clans.settings import CLIENT_CLAN_RESTRICTIONS as _CCR
+from gui.impl import backport
+from gui.impl.gen import R
 from gui.wgcg.settings import WebRequestDataType
 from gui.Scaleform.daapi.view.meta.ClanSearchWindowMeta import ClanSearchWindowMeta
 from gui.Scaleform.framework.entities.DAAPIDataProvider import ListDAAPIDataProvider
 from gui.Scaleform.genConsts.CLANS_ALIASES import CLANS_ALIASES
 from gui.Scaleform.locale.CLANS import CLANS
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
-from gui.Scaleform.locale.WAITING import WAITING
 from gui.shared.events import CoolDownEvent
 from gui.shared.formatters import text_styles
 from gui.shared.view_helpers import CooldownHelper
@@ -65,11 +65,11 @@ class ClanSearchWindow(ClanSearchWindowMeta, ClanListener):
         return
 
     def previousPage(self):
-        self.as_showWaitingS(WAITING.PREBATTLE_AUTO_SEARCH, {})
+        self.as_showWaitingS(backport.msgid(R.strings.waiting.prebattle.auto_search()), {})
         self.__clanFinder.left()
 
     def nextPage(self):
-        self.as_showWaitingS(WAITING.PREBATTLE_AUTO_SEARCH, {})
+        self.as_showWaitingS(backport.msgid(R.strings.waiting.prebattle.auto_search()), {})
         self.__clanFinder.right()
 
     def isInvitesLimitReached(self):
@@ -112,7 +112,7 @@ class ClanSearchWindow(ClanSearchWindowMeta, ClanListener):
             viewPy.bindDataProvider(self)
 
     def dummyButtonPress(self):
-        self.as_showWaitingS(WAITING.PREBATTLE_AUTO_SEARCH, {})
+        self.as_showWaitingS(backport.msgid(R.strings.waiting.prebattle.auto_search()), {})
         self._searchDP.rebuildList(None)
         self.__clanFinder.requestLastSuccess()
         return
@@ -194,7 +194,7 @@ class ClanSearchWindow(ClanSearchWindowMeta, ClanListener):
         self.__lastSuccessfullyFoundClans = data
 
     def __doSearch(self, text):
-        self.as_showWaitingS(WAITING.PREBATTLE_AUTO_SEARCH, {})
+        self.as_showWaitingS(backport.msgid(R.strings.waiting.prebattle.auto_search()), {})
         self._searchDP.rebuildList(None)
         isValid, reason = self.webCtrl.getLimits().canSearchClans(text)
         if self.__clanFinder.isRecommended() or isValid:
@@ -290,8 +290,8 @@ class _ClanSearchDataProvider(ListDAAPIDataProvider, ClanEmblemsHelper):
 
     def _makeVO(self, item):
         vo = {'players': text_styles.main(str(item.getMembersCount())),
-         'creationDate': text_styles.main(formatField(getter=item.getCreationDate, formatter=BigWorld.wg_getShortDateFormat)),
-         'rating': text_styles.stats(formatField(getter=item.getPersonalRating, formatter=BigWorld.wg_getIntegralFormat)),
+         'creationDate': text_styles.main(formatField(getter=item.getCreationDate, formatter=backport.getShortDateFormat)),
+         'rating': text_styles.stats(formatField(getter=item.getPersonalRating, formatter=backport.getIntegralFormat)),
          'arrowIcon': RES_ICONS.MAPS_ICONS_LIBRARY_ARROWORANGERIGHTICON8X8,
          'clanInfo': {'dbID': item.getClanDbID(),
                       'clanAbbrev': formatField(getter=item.getClanAbbrev),

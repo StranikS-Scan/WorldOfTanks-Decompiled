@@ -1,8 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/server_events/recruit_helper.py
-import BigWorld
 from constants import ENDLESS_TOKEN_TIME
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
+from gui.impl import backport
 from items.tankmen import TankmanDescr
 from nations import NONE_INDEX, NAMES as NationNames
 from items import tankmen
@@ -87,7 +87,7 @@ class _BaseRecruitInfo(object):
         return self._lastSkillLevel
 
     def getExpiryTime(self):
-        return BigWorld.wg_getShortDateFormat(self._expiryTime) if self._expiryTime and self._expiryTime < ENDLESS_TOKEN_TIME else ''
+        return backport.getShortDateFormat(self._expiryTime) if self._expiryTime and self._expiryTime < ENDLESS_TOKEN_TIME else ''
 
     def getExpiryTimeStamp(self):
         return self._expiryTime

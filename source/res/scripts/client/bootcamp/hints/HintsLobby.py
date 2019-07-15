@@ -5,7 +5,7 @@ import math
 from copy import copy
 from bootcamp.BootcampConstants import HINT_TYPE
 from HintsBase import HintBase, HINT_COMMAND
-from AvatarInputHandler import mathUtils
+import math_utils
 from helpers import dependency
 from skeletons.gui.shared.utils import IHangarSpace
 
@@ -36,7 +36,7 @@ class HintLobbyRotate(HintBase):
             curDirection = copy(camera.direction)
             curDirection.normalise()
             cosAngle = self.__prevCameraDirection.dot(curDirection)
-            cosAngle = mathUtils.clamp(-1.0, 1.0, cosAngle)
+            cosAngle = math_utils.clamp(-1.0, 1.0, cosAngle)
             self.__curAngle += abs(math.acos(cosAngle))
             self.__prevCameraDirection = curDirection
             resultCommand = None

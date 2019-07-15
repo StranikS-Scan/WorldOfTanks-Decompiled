@@ -4,7 +4,7 @@ import logging
 import typing
 from collections import namedtuple
 from frameworks.wulf import Window
-from gui.Scaleform.framework.entities.ub_windows_tracker import UnboundWindowsTracker
+from gui.Scaleform.framework.entities.window_impl_tracker import WindowImplTracker
 from gui.Scaleform.framework.settings import UIFrameworkImpl
 from gui.Scaleform.framework.entities.DisposableEntity import EntityState
 from gui.Scaleform.framework.entities.abstract.AbstractViewMeta import AbstractViewMeta
@@ -51,7 +51,7 @@ class View(AbstractViewMeta, ViewInterface):
         self.__initSoundManager()
         from gui.Scaleform.framework import ScopeTemplates
         self.__scope = ScopeTemplates.DEFAULT_SCOPE
-        self.__ubWindowsTracker = None
+        self.__windowImplTracker = None
         return
 
     def __repr__(self):
@@ -152,10 +152,10 @@ class View(AbstractViewMeta, ViewInterface):
         self.fireEvent(FocusEvent(FocusEvent.COMPONENT_FOCUSED))
 
     def getParentWindow(self, parent=None):
-        if self.__ubWindowsTracker is None:
-            self.__ubWindowsTracker = UnboundWindowsTracker(self)
-            self.__ubWindowsTracker.create(parent=parent)
-        return self.__ubWindowsTracker.getParentWindow()
+        if self.__windowImplTracker is None:
+            self.__windowImplTracker = WindowImplTracker(self)
+            self.__windowImplTracker.create(parent=parent)
+        return self.__windowImplTracker.getParentWindow()
 
     def isVisible(self):
         return self.getState() == EntityState.CREATED
@@ -165,9 +165,9 @@ class View(AbstractViewMeta, ViewInterface):
         self.soundManager.startSpace(self._COMMON_SOUND_SPACE)
 
     def _destroy(self):
-        if self.__ubWindowsTracker is not None:
-            self.__ubWindowsTracker.destroy()
-            self.__ubWindowsTracker = None
+        if self.__windowImplTracker is not None:
+            self.__windowImplTracker.destroy()
+            self.__windowImplTracker = None
         self.soundManager.unregister(id(self))
         self.soundManager.clear(requester=id(self))
         if not self.soundManager.isUsed:

@@ -2,14 +2,17 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/vehiclePreview20/info/vehicle_preview_browse_tab.py
 from CurrentVehicle import g_currentPreviewVehicle
 from gui.Scaleform.daapi.view.meta.VehiclePreviewBrowseTabMeta import VehiclePreviewBrowseTabMeta
-from gui.Scaleform.locale.RES_SHOP import RES_SHOP
-from gui.Scaleform.locale.VEHICLE_PREVIEW import VEHICLE_PREVIEW
 from gui.shared.formatters import text_styles
 from gui.shared.money import Currency
+from gui.impl import backport
+from gui.impl.gen import R
+from helpers import dependency
+from skeletons.gui.shared import IItemsCache
 _MAX_LENGTH_FULL_DESCRIPTION_NO_KPI = 400
 _MAX_LENGTH_FULL_DESCRIPTION_WITH_KPI = 280
 
 class VehiclePreviewBrowseTab(VehiclePreviewBrowseTabMeta):
+    itemsCache = dependency.descriptor(IItemsCache)
 
     def __init__(self):
         super(VehiclePreviewBrowseTab, self).__init__()
@@ -41,14 +44,24 @@ class VehiclePreviewBrowseTab(VehiclePreviewBrowseTabMeta):
             item = g_currentPreviewVehicle.item
             if item.buyPrices.itemPrice.defPrice.get(Currency.GOLD):
                 maxDescriptionLength = _MAX_LENGTH_FULL_DESCRIPTION_WITH_KPI
-                bonuses = [{'icon': RES_SHOP.MAPS_SHOP_KPI_STAR_ICON_BENEFITS,
-                  'title': text_styles.concatStylesToMultiLine(text_styles.highTitle(VEHICLE_PREVIEW.INFOPANEL_PREMIUM_FREEEXPMULTIPLIER), text_styles.main(VEHICLE_PREVIEW.INFOPANEL_PREMIUM_FREEEXPTEXT))}]
+                bonuses = [{'icon': backport.image(R.images.gui.maps.shop.kpi.star_icon_benefits()),
+                  'title': text_styles.concatStylesToMultiLine(text_styles.highTitle(backport.text(R.strings.vehicle_preview.infoPanel.premium.freeExpMultiplier())), text_styles.main(backport.text(R.strings.vehicle_preview.infoPanel.premium.freeExpText())))}]
                 if not item.isSpecial:
-                    bonuses.append({'icon': RES_SHOP.MAPS_SHOP_KPI_MONEY_BENEFITS,
-                     'title': text_styles.concatStylesToMultiLine(text_styles.highTitle(VEHICLE_PREVIEW.INFOPANEL_PREMIUM_CREDITSMULTIPLIER), text_styles.main(VEHICLE_PREVIEW.INFOPANEL_PREMIUM_CREDITSTEXT))})
+                    bonuses.append({'icon': backport.image(R.images.gui.maps.shop.kpi.money_benefits()),
+                     'title': text_styles.concatStylesToMultiLine(text_styles.highTitle(backport.text(R.strings.vehicle_preview.infoPanel.premium.creditsMultiplier())), text_styles.main(backport.text(R.strings.vehicle_preview.infoPanel.premium.creditsText())))})
                 if not item.isCrewLocked:
-                    bonuses.append({'icon': RES_SHOP.MAPS_SHOP_KPI_CROW_BENEFITS,
-                     'title': text_styles.concatStylesToMultiLine(text_styles.highTitle(VEHICLE_PREVIEW.INFOPANEL_PREMIUM_CREWTRANSFERTITLE), text_styles.main(VEHICLE_PREVIEW.INFOPANEL_PREMIUM_CREWTRANSFERTEXT))})
+                    bonuses.append({'icon': backport.image(R.images.gui.maps.shop.kpi.crow_benefits()),
+                     'title': text_styles.concatStylesToMultiLine(text_styles.highTitle(backport.text(R.strings.vehicle_preview.infoPanel.premium.crewTransferTitle())), text_styles.main(backport.text(R.strings.vehicle_preview.infoPanel.premium.crewTransferText())))})
+                builtInEquipmentIDs = item.getBuiltInEquipmentIDs()
+                builtInCount = len(builtInEquipmentIDs) if builtInEquipmentIDs else 0
+                if builtInCount > 0:
+                    if builtInCount == 1:
+                        equipment = self.itemsCache.items.getItemByCD(builtInEquipmentIDs[0])
+                        mainText = equipment.userName
+                    else:
+                        mainText = backport.text(R.strings.vehicle_preview.infoPanel.premium.builtInEqupmentText(), value=builtInCount)
+                    bonuses.append({'icon': backport.image(R.images.gui.maps.shop.kpi.infinity_benefits()),
+                     'title': text_styles.concatStylesToMultiLine(text_styles.highTitle(backport.text(R.strings.vehicle_preview.infoPanel.premium.builtInEqupmentTitle())), text_styles.main(mainText))})
             else:
                 maxDescriptionLength = _MAX_LENGTH_FULL_DESCRIPTION_NO_KPI
                 bonuses = None

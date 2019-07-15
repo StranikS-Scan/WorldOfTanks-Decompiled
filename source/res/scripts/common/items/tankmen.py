@@ -334,20 +334,21 @@ class TankmanDescr(object):
         addition = vehicleDescr.miscAttrs['crewLevelIncrease']
         return (factor, addition)
 
-    def battleXpGain(self, xp, vehicleType, tankmanHasSurvived, commanderTutorXpBonusFactor):
+    def getBattleXpGainFactor(self, vehicleType, tankmanHasSurvived, commanderTutorXpBonusFactor):
+        factor = 1.0
         nationID, vehicleTypeID = vehicleType.id
         if vehicleTypeID != self.vehicleTypeID:
             isPremium, isSameClass = self.__paramsOnVehicle(vehicleType)
             if isPremium:
-                xp *= 1.0 if isSameClass else 0.5
+                factor *= 1.0 if isSameClass else 0.5
             else:
-                xp *= 0.5 if isSameClass else 0.25
-        xp *= vehicleType.crewXpFactor
+                factor *= 0.5 if isSameClass else 0.25
+        factor *= vehicleType.crewXpFactor
         if not tankmanHasSurvived:
-            xp *= 0.9
+            factor *= 0.9
         if self.role != 'commander':
-            xp *= 1.0 + commanderTutorXpBonusFactor
-        return int(xp)
+            factor *= 1.0 + commanderTutorXpBonusFactor
+        return factor
 
     @staticmethod
     def levelUpXpCost(fromSkillLevel, skillSeqNum):

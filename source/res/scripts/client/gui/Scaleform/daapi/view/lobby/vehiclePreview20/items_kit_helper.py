@@ -4,7 +4,7 @@ import itertools
 import typing
 from collections import Container
 from CurrentVehicle import g_currentPreviewVehicle
-from gui.Scaleform.daapi.view.lobby.storage.storage_helpers import getBoosterType
+from gui.Scaleform.daapi.view.lobby.storage.storage_helpers import getSlotOverlayIconType
 from gui.Scaleform.genConsts.SLOT_HIGHLIGHT_TYPES import SLOT_HIGHLIGHT_TYPES
 from gui.Scaleform.locale.COMMON import COMMON
 from gui.Scaleform.locale.EPIC_BATTLE import EPIC_BATTLE
@@ -74,6 +74,7 @@ _TOOLTIP_TYPE = {ItemPackType.ITEM_DEVICE: TOOLTIPS_CONSTANTS.SHOP_20_MODULE,
  ItemPackType.GOODIE_EXPERIENCE: TOOLTIPS_CONSTANTS.SHOP_20_BOOSTER,
  ItemPackType.GOODIE_CREW_EXPERIENCE: TOOLTIPS_CONSTANTS.SHOP_20_BOOSTER,
  ItemPackType.GOODIE_FREE_EXPERIENCE: TOOLTIPS_CONSTANTS.SHOP_20_BOOSTER,
+ ItemPackType.GOODIE_FRONTLINE_EXPERIENCE: TOOLTIPS_CONSTANTS.SHOP_20_BOOSTER,
  ItemPackType.VEHICLE_MEDIUM: TOOLTIPS_CONSTANTS.AWARD_VEHICLE,
  ItemPackType.VEHICLE_HEAVY: TOOLTIPS_CONSTANTS.AWARD_VEHICLE,
  ItemPackType.VEHICLE_LIGHT: TOOLTIPS_CONSTANTS.AWARD_VEHICLE,
@@ -330,7 +331,7 @@ def _createItemVO(rawItem, itemsCache, goodiesCache, slotIndex, rawTooltipData=N
         fittingItem = lookupItem(rawItem, itemsCache, goodiesCache)
         cd = fittingItem.intCD if fittingItem is not None else rawItem.id
         icon = getItemIcon(rawItem, fittingItem)
-        overlay = getBoosterType(fittingItem)
+        overlay = getSlotOverlayIconType(fittingItem)
         if rawItem.type in ItemPackTypeGroup.CREW:
             countFormat = _formatCrew(rawItem)
         elif rawItem.type in _UNCOUNTABLE_ITEM_TYPE:
@@ -365,7 +366,7 @@ def _getBoxTooltipVO(rawItems, itemsCache, goodiesCache):
             icon = RES_ICONS.getBonusIcon('small', fittingItem.itemTypeName)
         else:
             icon = getItemIcon(rawItem, fittingItem)
-        overlay = getBoosterType(fittingItem)
+        overlay = getSlotOverlayIconType(fittingItem)
         items.append({'id': rawItem.id,
          'type': rawItem.type,
          'count': str(rawItem.count) if rawItem.type not in _UNCOUNTABLE_ITEM_TYPE else '',
@@ -509,6 +510,24 @@ class _EquipmentNodeContainer(_NodeContainer):
             return (result, 1)
 
 
+class _BuiltinEquipmentNodeContainer(_NodeContainer):
+
+    def __init__(self, nextNode=None):
+        super(_BuiltinEquipmentNodeContainer, self).__init__(_NUM_REGULAR_EQUIPMENT_SLOTS, ItemPackType.ITEM_EQUIPMENT, nextNode)
+
+    def _install(self, item, vehicle, slotIdx):
+        equipment = self.itemsCache.items.getItemByCD(item.id)
+        if equipment is None:
+            return (False, 0)
+        elif not equipment.isBuiltIn:
+            return (False, 0)
+        else:
+            result = equipment.mayInstall(vehicle, slotIdx)[0]
+            if result:
+                vehicle_adjusters.installEquipment(vehicle, equipment.intCD, slotIdx)
+            return (result, 1)
+
+
 class _PriorityNodeContainer(_NodeContainer):
 
     def __init__(self, childCount, nextNode=None):
@@ -623,7 +642,7 @@ def getCouponBonusesForItemPack(itemsPack):
         itemsPack = _sortItemsByOrder(itemsPack)
         for item in itemsPack:
             if item.type not in ItemPackTypeGroup.DISCOUNT + ItemPackTypeGroup.VEHICLE:
-                result.append({'img': _ICONS[item.type],
+                result.append({'img': getItemIcon(item, None),
                  'text': getItemTitle(item, None)})
 
     return result
@@ -658,6 +677,19 @@ def addCompensationInfo(itemsVOs, itemsPack, itemsCache=None):
 
 def getActiveOffer(offers):
     return findFirst(lambda o: o.preferred, offers) or findFirst(lambda o: o.bestOffer, offers) or first(offers)
+
+
+def addBuiltInEquipment(packItems, itemsCache, vehicleCD):
+    if packItems and itemsCache and vehicleCD:
+        vehicle = itemsCache.items.getItemByCD(vehicleCD)
+        groupID = 1
+        for item in packItems:
+            if item.id == vehicleCD:
+                groupID = item.groupID
+
+        for eqId in vehicle.getBuiltInEquipmentIDs():
+            eqItem = ItemPackEntry(type=ItemPackType.ITEM_EQUIPMENT, id=eqId, count=1, groupID=groupID)
+            packItems.append(eqItem)
 
 
 @dependency.replace_none_kwargs(itemsCache=IItemsCache)
@@ -709,7 +741,7 @@ def __getItemsSortRule(itemsPack):
 
 
 def __getDefaultPackRule():
-    return _CustomCrewSkillsNodeContainer(nextNode=_OptDeviceNodeContainer(nextNode=_ShellNodeContainer(nextNode=_EquipmentNodeContainer(nextNode=_PriorityNodeContainer(1, nextNode=_PriorityNodeContainer(_UNLIMITED_ITEMS_COUNT))))))
+    return _BuiltinEquipmentNodeContainer(nextNode=_CustomCrewSkillsNodeContainer(nextNode=_OptDeviceNodeContainer(nextNode=_ShellNodeContainer(nextNode=_EquipmentNodeContainer(nextNode=_PriorityNodeContainer(1, nextNode=_PriorityNodeContainer(_UNLIMITED_ITEMS_COUNT)))))))
 
 
 def __getFrontlinePackRule():

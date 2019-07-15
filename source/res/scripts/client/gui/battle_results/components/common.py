@@ -1,6 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/battle_results/components/common.py
-import BigWorld
 from constants import ARENA_GUI_TYPE, FINISH_REASON
 from gui.impl import backport
 from gui.impl.gen import R
@@ -39,14 +38,14 @@ class ArenaShortTimeVO(base.StatsItem):
     __slots__ = ()
 
     def _convert(self, record, reusable):
-        return style.makeTimeStatsVO(self._field, BigWorld.wg_getShortTimeFormat(record))
+        return style.makeTimeStatsVO(self._field, backport.getShortTimeFormat(record))
 
 
 class ArenaDateTimeItem(base.StatsItem):
     __slots__ = ()
 
     def _convert(self, record, reusable):
-        return ' '.join((BigWorld.wg_getShortDateFormat(record), BigWorld.wg_getShortTimeFormat(record)))
+        return ' '.join((backport.getShortDateFormat(record), backport.getShortTimeFormat(record)))
 
 
 class RegularArenaFullNameItem(base.StatsItem):
@@ -130,7 +129,7 @@ class PlayerKillingTimeVO(base.StatsItem):
         if info.isKilled:
             minutes = int(info.lifeTime / ONE_MINUTE)
             seconds = int(info.lifeTime % ONE_MINUTE)
-            converted = backport.text(R.strings.battle_results.details.time.value(), minutes, seconds)
+            converted = backport.text(R.strings.battle_results.details.time.value(), min=minutes, sec=seconds)
         else:
             converted = '-'
         return style.makeTimeStatsVO(self._field, converted)

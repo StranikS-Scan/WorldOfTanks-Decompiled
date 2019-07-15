@@ -16,6 +16,7 @@ class CHAT(object):
     CHANNELS_BATTLE_COMMON = '#chat:channels/battle/common'
     CHANNELS_BATTLE_TEAM = '#chat:channels/battle/team'
     CHANNELS_TRAINING = '#chat:channels/training'
+    CHANNELS_EPIC_TRAINING = '#chat:channels/epic_training'
     CHANNELS_SQUAD = '#chat:channels/squad'
     CHANNELS_SQUADREADY_TOOLTIP_HEADER = '#chat:channels/squadReady/tooltip/header'
     CHANNELS_SQUADREADY_TOOLTIP_BODY = '#chat:channels/squadReady/tooltip/body'

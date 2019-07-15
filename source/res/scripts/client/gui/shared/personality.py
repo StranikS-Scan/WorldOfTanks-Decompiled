@@ -4,7 +4,7 @@ import BigWorld
 import SoundGroups
 from CurrentVehicle import g_currentVehicle, g_currentPreviewVehicle
 from PlayerEvents import g_playerEvents
-from account_helpers.AccountValidator import AccountValidator
+from account_helpers.account_validator import AccountValidator, ValidationCodes
 from adisp import process
 from constants import HAS_DEV_RESOURCES
 from debug_utils import LOG_CURRENT_EXCEPTION, LOG_ERROR, LOG_DEBUG
@@ -14,6 +14,7 @@ from gui.Scaleform.Waiting import Waiting
 from gui.Scaleform.daapi.view.login.EULADispatcher import EULADispatcher
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.SYSTEM_MESSAGES import SYSTEM_MESSAGES
+from gui.impl import backport
 from gui.prb_control.dispatcher import g_prbLoader
 from gui.shared import g_eventBus, events, EVENT_BUS_SCOPE
 from gui.shared.ClanCache import g_clanCache
@@ -98,10 +99,12 @@ def onAccountShowGUI(ctx):
     yield eula.processLicense()
     eula.fini()
     g_playerEvents.onGuiCacheSyncCompleted(ctx)
-    code = yield AccountValidator().validate()
-    if code > 0:
-        ServicesLocator.gameplay.goToLoginByError('#menu:disconnect/codes/%d' % code)
+    code = AccountValidator().validate()
+    if code != ValidationCodes.OK:
+        ServicesLocator.gameplay.goToLoginByError('#menu:disconnect/codes/{}'.format(code))
         return
+    ServicesLocator.itemsCache.items.inventory.initC11nItemsAppliedCounts()
+    ServicesLocator.itemsCache.items.inventory.initC11nItemsNoveltyData()
     ServicesLocator.itemsCache.onSyncCompleted(CACHE_SYNC_REASON.SHOW_GUI, {})
     ServicesLocator.settingsCore.serverSettings.applySettings()
     ServicesLocator.gameState.onAccountShowGUI(ServicesLocator.lobbyContext.getGuiCtx())
@@ -194,7 +197,7 @@ def onShopResync():
     yield ServicesLocator.eventsCache.update()
     Waiting.hide('sinhronize')
     now = time_utils.getCurrentTimestamp()
-    SystemMessages.pushI18nMessage(SYSTEM_MESSAGES.SHOP_RESYNC, date=BigWorld.wg_getLongDateFormat(now), time=BigWorld.wg_getShortTimeFormat(now), type=SystemMessages.SM_TYPE.Information)
+    SystemMessages.pushI18nMessage(SYSTEM_MESSAGES.SHOP_RESYNC, date=backport.getLongDateFormat(now), time=backport.getShortTimeFormat(now), type=SystemMessages.SM_TYPE.Information)
 
 
 def onCenterIsLongDisconnected(isLongDisconnected):

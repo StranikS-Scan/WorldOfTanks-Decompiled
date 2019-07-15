@@ -8,6 +8,7 @@ from gui.prb_control.entities.listener import IGlobalListener
 from gui.shared import event_dispatcher as shared_events
 from gui.shared.utils.functions import makeTooltip
 from helpers.i18n import makeString as _ms
+from gui.shared.formatters import text_styles
 _SEARCH_INPUT_MAX_CHARS = 50
 
 class StorageCarouselEnvironment(ICarouselEnvironment, IGlobalListener, StorageCarouselEnvironmentMeta):
@@ -62,7 +63,7 @@ class StorageCarouselEnvironment(ICarouselEnvironment, IGlobalListener, StorageC
             drawAttention = filteredVehicles == 0
             self.as_updateCounterS(shouldShow, formatCountString(filteredVehicles, totalVehicles), drawAttention)
         else:
-            self.as_updateCounterS(False, '', False)
+            self.as_updateCounterS(False, text_styles.stats(totalVehicles), False)
 
     def updateSearchInput(self, text=''):
         searchInputTooltip = makeTooltip(TANK_CAROUSEL_FILTER.TOOLTIP_SEARCHINPUT_HEADER, _ms(TANK_CAROUSEL_FILTER.TOOLTIP_SEARCHINPUT_BODY, count=_SEARCH_INPUT_MAX_CHARS))

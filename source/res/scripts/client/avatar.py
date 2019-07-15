@@ -105,6 +105,8 @@ class _CRUISE_CONTROL_MODE(object):
 
 _SHOT_WAITING_MAX_TIMEOUT = 0.2
 _SHOT_WAITING_MIN_TIMEOUT = 0.12
+_MAX_SPEED_MULTIPLIER = 1.5
+_SPEEDOMETER_CORRECTION_DELTA = 0.25
 
 class _MOVEMENT_FLAGS(object):
     FORWARD = 1
@@ -1628,8 +1630,7 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
                 self.__aimingInfo[1] = self.gunRotator.dispersionAngle / minShotDisp
                 self.onLockTarget(AimSound.TARGET_UNLOCKED, True)
                 TriggersManager.g_manager.deactivateTrigger(TRIGGER_TYPE.AUTO_AIM_AT_VEHICLE)
-                if BigWorld.player().vehicle.isWheeledTech:
-                    gui_event_dispatcher.hideAutoAimMarker()
+                gui_event_dispatcher.hideAutoAimMarker()
         return
 
     def __gunDamagedSound(self):
@@ -1809,26 +1810,25 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
             else:
                 speed = speedInfo[0]
                 rspeed = speedInfo[1]
-            MAX_SPEED_MULTIPLIER = 1.5
             physics = vehicle.typeDescriptor.physics
             if self.__fwdSpeedometerLimit is None or self.__bckwdSpeedometerLimit is None:
                 self.__fwdSpeedometerLimit, self.__bckwdSpeedometerLimit = physics['speedLimits']
-                self.__fwdSpeedometerLimit *= MAX_SPEED_MULTIPLIER
-                self.__bckwdSpeedometerLimit *= MAX_SPEED_MULTIPLIER
+                self.__fwdSpeedometerLimit *= _MAX_SPEED_MULTIPLIER
+                self.__bckwdSpeedometerLimit *= _MAX_SPEED_MULTIPLIER
             if speed > self.__fwdSpeedometerLimit:
                 speed = self.__fwdSpeedometerLimit
-                self.__fwdSpeedometerLimit += 1
+                self.__fwdSpeedometerLimit += _SPEEDOMETER_CORRECTION_DELTA
             elif speed < self.__fwdSpeedometerLimit:
-                lim = MAX_SPEED_MULTIPLIER * physics['speedLimits'][0]
+                lim = _MAX_SPEED_MULTIPLIER * physics['speedLimits'][0]
                 if self.__fwdSpeedometerLimit > lim:
-                    self.__fwdSpeedometerLimit -= 1
+                    self.__fwdSpeedometerLimit -= _SPEEDOMETER_CORRECTION_DELTA
             if speed < -self.__bckwdSpeedometerLimit:
                 speed = -self.__bckwdSpeedometerLimit
-                self.__bckwdSpeedometerLimit += 1
+                self.__bckwdSpeedometerLimit += _SPEEDOMETER_CORRECTION_DELTA
             elif speed > -self.__bckwdSpeedometerLimit:
-                lim = MAX_SPEED_MULTIPLIER * physics['speedLimits'][1]
+                lim = _MAX_SPEED_MULTIPLIER * physics['speedLimits'][1]
                 if self.__bckwdSpeedometerLimit > lim:
-                    self.__bckwdSpeedometerLimit -= 1
+                    self.__bckwdSpeedometerLimit -= _SPEEDOMETER_CORRECTION_DELTA
             rspeedLimit = physics['rotationSpeedLimit']
             if rspeed > rspeedLimit:
                 rspeed = rspeedLimit

@@ -2,11 +2,11 @@
 # Embedded file name: scripts/client/gui/server_events/personal_progress/progress.py
 import logging
 import typing
-import BigWorld
 import quest_progress
 from constants import QUEST_PROGRESS_STATE
 from gui.Scaleform.genConsts.QUEST_PROGRESS_BASE import QUEST_PROGRESS_BASE
 from gui.Scaleform.locale.PERSONAL_MISSIONS import PERSONAL_MISSIONS
+from gui.impl import backport
 from gui.shared.formatters import text_styles
 from helpers import i18n
 from helpers.time_utils import ONE_MINUTE
@@ -14,9 +14,9 @@ from personal_missions_constants import CONTAINER, DISPLAY_TYPE, MULTIPLIER_TYPE
 from shared_utils import first
 from gui.server_events.personal_progress import ORDERED_ICON_IDS
 _logger = logging.getLogger(__name__)
-PARAMS_KEYS = {'vehicleHealthFactor': BigWorld.wg_getNiceNumberFormat,
- 'stunSeveralTargets': BigWorld.wg_getIntegralFormat,
- 'distanceGreatOrEqual': BigWorld.wg_getIntegralFormat}
+PARAMS_KEYS = {'vehicleHealthFactor': backport.getNiceNumberFormat,
+ 'stunSeveralTargets': backport.getIntegralFormat,
+ 'distanceGreatOrEqual': backport.getIntegralFormat}
 UI_HEADER_TYPES = {DISPLAY_TYPE.BIATHLON: QUEST_PROGRESS_BASE.HEADER_PROGRESS_TYPE_BIATHLON,
  DISPLAY_TYPE.LIMITED: QUEST_PROGRESS_BASE.HEADER_PROGRESS_TYPE_LIMITED,
  DISPLAY_TYPE.SERIES: QUEST_PROGRESS_BASE.HEADER_PROGRESS_TYPE_SERIES,
@@ -272,9 +272,9 @@ class BodyProgress(ClientProgress):
         return self._commonProgress.getCountDown()
 
     def getLocalizationValues(self):
-        data = {'goal': BigWorld.wg_getNiceNumberFormat(self.getGoal())}
+        data = {'goal': backport.getNiceNumberFormat(self.getGoal())}
         if self.getCountDown():
-            data['timeLimit'] = BigWorld.wg_getNiceNumberFormat(float(self.getCountDown()) / ONE_MINUTE)
+            data['timeLimit'] = backport.getNiceNumberFormat(float(self.getCountDown()) / ONE_MINUTE)
         for param, formatter in PARAMS_KEYS.iteritems():
             value = self._commonProgress.getParam(param)
             if value:
@@ -362,7 +362,7 @@ class VehicleTypesProgress(BodyProgress):
 
     def getLocalizationValues(self):
         data = super(VehicleTypesProgress, self).getLocalizationValues()
-        data.update(uniqueGoal=BigWorld.wg_getIntegralFormat(self._commonProgress.getUniqueGoal()))
+        data.update(uniqueGoal=backport.getIntegralFormat(self._commonProgress.getUniqueGoal()))
         return data
 
 

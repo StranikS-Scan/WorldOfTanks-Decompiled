@@ -16,5 +16,8 @@ class TrainingFormMeta(View):
     def onLeave(self):
         self._printOverrideError('onLeave')
 
+    def as_setInfoS(self, data):
+        return self.flashObject.as_setInfo(data) if self._isDAAPIInited() else None
+
     def as_setListS(self, data):
         return self.flashObject.as_setList(data) if self._isDAAPIInited() else None

@@ -1,26 +1,40 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/gui_items/customization/c11n_items.py
 import os
+import urllib
 from collections import defaultdict
 import Math
 import ResMgr
+from gui.impl import backport
+from gui.impl.gen import R
 from gui.Scaleform.locale.ITEM_TYPES import ITEM_TYPES
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.VEHICLE_CUSTOMIZATION import VEHICLE_CUSTOMIZATION
 from gui.shared.gui_items import GUI_ITEM_TYPE_NAMES, GUI_ITEM_TYPE
 from gui.shared.gui_items.fitting_item import FittingItem, RentalInfoProvider
+from gui.shared.view_helpers.image_helper import getTextureLinkByID
 from helpers import i18n, dependency
 from items.components.c11n_constants import SeasonType, ItemTags, ProjectionDecalDirectionTags, ProjectionDecalFormTags, UNBOUND_VEH_KEY, NUM_ALL_ITEMS_KEY
 from shared_utils import first
 from skeletons.gui.server_events import IEventsCache
 _CAMO_ICON_TEMPLATE = 'img://camouflage,{width},{height},"{texture}","{background}",{colors},{weights}'
+_CAMO_ICON_URL = 'camo://{texture}?{params}'
 _CAMO_SWATCH_WIDTH = 128
 _CAMO_SWATCH_HEIGHT = 128
+_CAMO_SWATCH_BACKGROUND = 'gui/maps/vehicles/camouflages/camo_back.dds'
+_PERSONAL_NUM_ICON_TEMPLATE = 'img://personal_num,{width},{height},"{texture}","{fontPath}","{number}","{textureMask}","{background}"'
+_PERSONAL_NUM_ICON_URL = 'pnum://{texture}?{params}'
 _PN_SWATCH_WIDTH = 228
 _PN_SWATCH_HEIGHT = 104
-_CAMO_SWATCH_BACKGROUND = 'gui/maps/vehicles/camouflages/camo_back.dds'
-_PERSONAL_NUM_ICON_TEMPLATE = 'img://personal_num,{width},{height},"{texture}","{alphabet}","{number}","{textureMask}","{background}"'
-_PERSONAL_NUM_ICON_TEMPLATE = 'img://personal_num,{width},{height},"{texture}","{fontPath}","{number}","{textureMask}","{background}"'
+_PREVIEW_ICON_TEMPLATE = 'img://preview_icon,{width},{height},{innerWidth},{innerHeight},"{texture}"'
+_PREVIEW_ICON_OUTSIDE_SIZE_WIDTH = 226
+_PREVIEW_ICON_OUTSIDE_SIZE_HEIGHT = 102
+_PREVIEW_ICON_INNER_SIZE_BY_DEFAULT = (74, 74)
+_PREVIEW_ICON_INNER_SIZE_BY_FORMFACTOR = {'formfactor_square': (74, 74),
+ 'formfactor_rect1x2': (174, 87),
+ 'formfactor_rect1x3': (186, 62),
+ 'formfactor_rect1x4': (220, 55),
+ 'formfactor_rect1x6': (220, 37)}
 STYLE_GROUP_ID_TO_GROUP_NAME_MAP = {VEHICLE_CUSTOMIZATION.STYLES_SPECIAL_STYLES: VEHICLE_CUSTOMIZATION.CUSTOMIZATION_INFOTYPE_TYPE_STYLE_SPECIAL,
  VEHICLE_CUSTOMIZATION.STYLES_MAIN_STYLES: VEHICLE_CUSTOMIZATION.CUSTOMIZATION_INFOTYPE_TYPE_STYLE_MAIN,
  VEHICLE_CUSTOMIZATION.STYLES_RENTED_STYLES: VEHICLE_CUSTOMIZATION.CUSTOMIZATION_INFOTYPE_TYPE_STYLE_RENTAL,
@@ -30,13 +44,66 @@ STYLE_GROUP_ID_TO_FULL_GROUP_NAME_MAP = {VEHICLE_CUSTOMIZATION.STYLES_SPECIAL_ST
  VEHICLE_CUSTOMIZATION.STYLES_RENTED_STYLES: VEHICLE_CUSTOMIZATION.CAROUSEL_SWATCH_STYLE_RENTED,
  VEHICLE_CUSTOMIZATION.STYLES_UNIQUE_STYLES: VEHICLE_CUSTOMIZATION.CAROUSEL_SWATCH_STYLE_UNIQUE}
 
+class SpecialEvents(object):
+    NY18 = 'NY2018_style'
+    NY19 = 'NY2019_style'
+    FOOTBALL18 = 'football2018'
+    WINTER_HUNT = 'winter_hunt'
+    KURSK_BATTLE = 'Kursk_battle'
+    ALL = (NY18,
+     NY19,
+     FOOTBALL18,
+     WINTER_HUNT,
+     KURSK_BATTLE)
+    ICONS = {NY18: backport.image(R.images.gui.maps.icons.customization.style_info.newYear()),
+     NY19: backport.image(R.images.gui.maps.icons.customization.style_info.newYear()),
+     FOOTBALL18: backport.image(R.images.gui.maps.icons.customization.style_info.football()),
+     WINTER_HUNT: backport.image(R.images.gui.maps.icons.customization.style_info.marathon()),
+     KURSK_BATTLE: backport.image(R.images.gui.maps.icons.customization.style_info.marathon())}
+    NAMES = {NY18: backport.text(R.strings.vehicle_customization.styleInfo.event.ny18()),
+     NY19: backport.text(R.strings.vehicle_customization.styleInfo.event.ny19()),
+     FOOTBALL18: backport.text(R.strings.vehicle_customization.styleInfo.event.football18()),
+     WINTER_HUNT: backport.text(R.strings.vehicle_customization.styleInfo.event.winter_hunt()),
+     KURSK_BATTLE: backport.text(R.strings.vehicle_customization.styleInfo.event.kursk_battle())}
+
+
 def camoIconTemplate(texture, width, height, colors, background=_CAMO_SWATCH_BACKGROUND):
     weights = Math.Vector4(*[ (color >> 24) / 255.0 for color in colors ])
     return _CAMO_ICON_TEMPLATE.format(width=width, height=height, texture=texture, background=background, colors=','.join((str(color) for color in colors)), weights=','.join((str(weight) for weight in weights)))
 
 
+def camoIconUrl(texture, width, height, colors, background=_CAMO_SWATCH_BACKGROUND):
+    weights = Math.Vector4(*[ (color >> 24) / 255.0 for color in colors ])
+    params = {'back': background,
+     'w': width,
+     'h': height,
+     'r': colors[0],
+     'g': colors[1],
+     'b': colors[2],
+     'a': colors[3],
+     'rw': weights[0],
+     'gw': weights[1],
+     'bw': weights[2],
+     'aw': weights[3]}
+    return _CAMO_ICON_URL.format(texture=texture, params=urllib.urlencode(params))
+
+
 def personalNumIconTemplate(number, width, height, texture, fontPath, textureMask='', background=''):
     return _PERSONAL_NUM_ICON_TEMPLATE.format(width=width, height=height, number=number, texture=texture, textureMask=textureMask, fontPath=fontPath, background=background)
+
+
+def previewTemplate(texture, width, height, innerWidth, innerHeight):
+    return _PREVIEW_ICON_TEMPLATE.format(width=width, height=height, texture=texture, innerWidth=innerWidth, innerHeight=innerHeight)
+
+
+def personalNumIconUrl(number, width, height, texture, fontPath, textureMask='', background=''):
+    params = {'num': number,
+     'w': width,
+     'h': height,
+     'font': fontPath,
+     'mask': textureMask,
+     'back': background}
+    return _PERSONAL_NUM_ICON_URL.format(texture=texture, params=urllib.urlencode(params))
 
 
 class ConcealmentBonus(object):
@@ -114,6 +181,10 @@ class Customization(FittingItem):
         return GUI_ITEM_TYPE_NAMES[self.itemTypeID]
 
     @property
+    def itemFullTypeName(self):
+        return self.itemTypeName
+
+    @property
     def groupID(self):
         return self.descriptor.parentGroup.itemPrototype.userKey
 
@@ -123,7 +194,7 @@ class Customization(FittingItem):
 
     @property
     def userType(self):
-        return i18n.makeString(ITEM_TYPES.customization(self.itemTypeName))
+        return i18n.makeString(ITEM_TYPES.customization(self.itemFullTypeName))
 
     @property
     def boundInventoryCount(self):
@@ -158,8 +229,16 @@ class Customization(FittingItem):
         return self._bonus
 
     @property
+    def texture(self):
+        return self.descriptor.texture
+
+    @property
     def icon(self):
         return self.descriptor.texture.replace('gui/', '../', 1)
+
+    @property
+    def iconUrl(self):
+        return getTextureLinkByID(self.texture)
 
     @property
     def isVehicleBound(self):
@@ -179,6 +258,19 @@ class Customization(FittingItem):
     def mayApply(self):
         return self.inventoryCount > 0 or self.buyCount > 0
 
+    @property
+    def specialEventTag(self):
+        eventTags = (tag for tag in self.tags if tag in SpecialEvents.ALL)
+        return first(eventTags)
+
+    @property
+    def specialEventIcon(self):
+        return SpecialEvents.ICONS.get(self.specialEventTag, '')
+
+    @property
+    def specialEventName(self):
+        return SpecialEvents.NAMES.get(self.specialEventTag, '')
+
     def getIconApplied(self, component):
         return self.icon
 
@@ -190,6 +282,9 @@ class Customization(FittingItem):
 
     def isHistorical(self):
         return self.descriptor.historical
+
+    def isDim(self):
+        return ItemTags.DIM in self.tags
 
     def isSummer(self):
         return self.season & SeasonType.SUMMER
@@ -268,12 +363,12 @@ class Camouflage(Customization):
         self._bonus = ConcealmentBonus(camouflageId=self.id, season=self.season)
 
     @property
-    def texture(self):
-        return self.descriptor.texture
-
-    @property
     def icon(self):
         return camoIconTemplate(self.texture, _CAMO_SWATCH_WIDTH, _CAMO_SWATCH_HEIGHT, first(self.palettes))
+
+    @property
+    def iconUrl(self):
+        return camoIconUrl(self.texture, _CAMO_SWATCH_WIDTH, _CAMO_SWATCH_HEIGHT, first(self.palettes))
 
     def getIconApplied(self, component):
         if component:
@@ -285,6 +380,10 @@ class Camouflage(Customization):
     @property
     def tiling(self):
         return self.descriptor.tiling
+
+    @property
+    def tilingSettings(self):
+        return self.descriptor.tilingSettings
 
     @property
     def rotation(self):
@@ -326,10 +425,6 @@ class Modification(Customization):
 class Decal(Customization):
 
     @property
-    def texture(self):
-        return self.descriptor.texture
-
-    @property
     def canBeMirrored(self):
         return self.descriptor.canBeMirrored
 
@@ -366,10 +461,6 @@ class Insignia(Customization):
         return self.descriptor.alphabet
 
     @property
-    def texture(self):
-        return self.descriptor.texture
-
-    @property
     def canBeMirrored(self):
         return self.descriptor.canBeMirrored
 
@@ -388,17 +479,27 @@ class ProjectionDecal(Decal):
     @property
     def formfactor(self):
         formTags = (tag for tag in self.tags if tag.startswith(ProjectionDecalFormTags.PREFIX))
-        return first(formTags, ProjectionDecalFormTags.ANY)
+        return first(formTags)
 
     @property
     def icon(self):
+        innerSize = _PREVIEW_ICON_INNER_SIZE_BY_FORMFACTOR.get(self.formfactor, _PREVIEW_ICON_INNER_SIZE_BY_DEFAULT)
+        return previewTemplate(self.texture, _PREVIEW_ICON_OUTSIDE_SIZE_WIDTH, _PREVIEW_ICON_OUTSIDE_SIZE_HEIGHT, innerSize[0], innerSize[1])
+
+    @property
+    def iconUrl(self):
         path = self.descriptor.texture
-        f, _ = os.path.splitext(path)
-        iconPath = '{}_preview.{}'.format(f, 'png')
-        return iconPath.replace('gui/', '../', 1) if ResMgr.isFile(iconPath) else path.replace('gui/', '../', 1)
+        path = self._getPreviewIcon(path)
+        return getTextureLinkByID(path)
 
     def isWide(self):
         return True
+
+    @staticmethod
+    def _getPreviewIcon(icon):
+        f, _ = os.path.splitext(icon)
+        iconPath = '{}_preview.png'.format(f)
+        return iconPath if ResMgr.isFile(iconPath) else icon
 
 
 class PersonalNumber(Customization):
@@ -408,12 +509,12 @@ class PersonalNumber(Customization):
         self.itemTypeID = GUI_ITEM_TYPE.PERSONAL_NUMBER
 
     @property
-    def texture(self):
-        return self.descriptor.texture
-
-    @property
     def previewTexture(self):
         return self.descriptor.previewTexture
+
+    @property
+    def digitsCount(self):
+        return self.descriptor.digitsCount
 
     @property
     def fontInfo(self):
@@ -430,7 +531,14 @@ class PersonalNumber(Customization):
         return True
 
     def numberIcon(self, number=''):
-        return super(PersonalNumber, self).icon if number == '' else personalNumIconTemplate(number, _PN_SWATCH_WIDTH, _PN_SWATCH_HEIGHT, self.fontInfo.texture, self.fontInfo.alphabet, self.fontInfo.mask)
+        return super(PersonalNumber, self).icon if not number else personalNumIconTemplate(number, _PN_SWATCH_WIDTH, _PN_SWATCH_HEIGHT, self.fontInfo.texture, self.fontInfo.alphabet, self.fontInfo.mask)
+
+    @property
+    def itemFullTypeName(self):
+        return self.itemTypeName + '_' + str(self.digitsCount)
+
+    def numberIconUrl(self, number=''):
+        return self.iconUrl if not number else personalNumIconUrl(number, _PN_SWATCH_WIDTH, _PN_SWATCH_HEIGHT, self.fontInfo.texture, self.fontInfo.alphabet, self.fontInfo.mask)
 
 
 class Sequence(Customization):
@@ -482,10 +590,6 @@ class Style(Customization):
     @property
     def userType(self):
         return i18n.makeString(STYLE_GROUP_ID_TO_GROUP_NAME_MAP[self.groupID])
-
-    @property
-    def textInfo(self):
-        return self.descriptor.textInfo
 
     def getRentInfo(self, vehicle):
         if not self.isRentable:

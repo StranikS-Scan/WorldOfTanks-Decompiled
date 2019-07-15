@@ -7,7 +7,7 @@ import ResMgr
 from epic_constants import SECTOR_EDGE_STATE
 from items import _xml
 from Math import Matrix, Vector3
-from AvatarInputHandler import mathUtils
+import math_utils
 CONFIG_FILE = 'scripts/dynamic_objects.xml'
 BORDER_VISUAL_TAG = 'SectorBorderVisual'
 VisualSetting = namedtuple('VisualSetting', ('modelPath', 'overTerrainHeight', 'modelSettings'))
@@ -63,7 +63,7 @@ class BorderVisual(object):
             maxNumModels = max(self.__numModelsPerEdgeState.values())
             rotation = (self.__direction.yaw + math.pi * 0.5, self.__direction.pitch, 0.0)
             translation = fromPos + self.__direction * self.__length * 0.5
-            self.__rootMatrix = rootMatrix = mathUtils.createRTMatrix(rotation=rotation, translation=translation)
+            self.__rootMatrix = rootMatrix = math_utils.createRTMatrix(rotation=rotation, translation=translation)
             self.__rootModel = rootModel = BigWorld.Model('')
             rootModel.addMotor(BigWorld.Servo(rootMatrix))
             BigWorld.addModel(rootModel)

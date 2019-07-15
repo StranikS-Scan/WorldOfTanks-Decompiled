@@ -14,6 +14,7 @@ class PREBATTLE_ALIASES(object):
     BATTLE_SESSION_LIST_WINDOW_PY = 'prb_windows/battleSessionList'
     BATTLE_SESSION_ROOM_WINDOW_PY = 'prb_windows/battleSessionWindow'
     TRAINING_SETTINGS_WINDOW_PY = 'trainingSettingsWindow'
+    EPIC_TRAINING_SETTINGS_WINDOW_PY = 'epicTrainingSettingsWindow'
     SEND_INVITES_WINDOW_PY = 'prb_windows/sendInvitesWindow'
     AUTO_INVITE_WINDOW_PY = 'prb_windows/autoInviteWindow'
     TRAINING_LIST_VIEW_PY = 'trainings'

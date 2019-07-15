@@ -83,7 +83,7 @@
     <customizationSlots>
       <slot>
         <slotType>	clan	</slotType>
-        <slotId>	1	</slotId>
+        <slotId>	10000	</slotId>
         <rayStart>	0.812499 1.64408 1.41221	</rayStart>
         <rayEnd>	0.812499 1.4772 1.04869	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
@@ -93,7 +93,7 @@
       </slot>
       <slot>
         <slotType>	player	</slotType>
-        <slotId>	4	</slotId>
+        <slotId>	13000	</slotId>
         <rayStart>	-1.30459 1.24831 0.282793	</rayStart>
         <rayEnd>	-0.904587 1.24831 0.282793	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
@@ -103,7 +103,7 @@
       </slot>
       <slot>
         <slotType>	inscription	</slotType>
-        <slotId>	36	</slotId>
+        <slotId>	14000	</slotId>
         <rayStart>	1.21035 1.17123 0.571722	</rayStart>
         <rayEnd>	0.810358 1.17114 0.57191	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
@@ -113,13 +113,13 @@
       </slot>
       <slot>
         <slotType>	camouflage	</slotType>
-        <slotId>	3	</slotId>
+        <slotId>	12000	</slotId>
         <anchorPosition>	0.000000 0.898245 0.71927	</anchorPosition>
         <anchorDirection>	0.000000 0.780583 0.625052	</anchorDirection>
       </slot>
       <slot>
         <slotType>	paint	</slotType>
-        <slotId>	2	</slotId>
+        <slotId>	11000	</slotId>
         <anchorPosition>	0.000000 0.898245 0.71927	</anchorPosition>
         <anchorDirection>	0.000000 0.780583 0.625052	</anchorDirection>
       </slot>
@@ -973,13 +973,13 @@
       <customizationSlots>
         <slot>
           <slotType>	style	</slotType>
-          <slotId>	257	</slotId>
+          <slotId>	29000	</slotId>
           <anchorPosition>	0.000037 2.70622 0.276982	</anchorPosition>
           <anchorDirection>	-0.000000 1 -0.000000	</anchorDirection>
         </slot>
         <slot>
           <slotType>	paint	</slotType>
-          <slotId>	256	</slotId>
+          <slotId>	21000	</slotId>
           <anchorPosition>	-1.02276 0.409156 -0.034385	</anchorPosition>
           <anchorDirection>	-0.928008 0.371251 -0.0311994	</anchorDirection>
         </slot>
@@ -1828,13 +1828,13 @@
       <customizationSlots>
         <slot>
           <slotType>	style	</slotType>
-          <slotId>	257	</slotId>
+          <slotId>	29000	</slotId>
           <anchorPosition>	-0.000000 2.20406 -0.80966	</anchorPosition>
           <anchorDirection>	0.000000 1 0.000000	</anchorDirection>
         </slot>
         <slot>
           <slotType>	paint	</slotType>
-          <slotId>	256	</slotId>
+          <slotId>	21000	</slotId>
           <anchorPosition>	-1.02276 0.409156 -0.034385	</anchorPosition>
           <anchorDirection>	-0.928008 0.371251 -0.0311994	</anchorDirection>
         </slot>
@@ -1911,21 +1911,21 @@
           <customizationSlots>
             <slot>
               <slotType>	camouflage	</slotType>
-              <slotId>	770	</slotId>
+              <slotId>	42000	</slotId>
               <anchorPosition>	-0.000000 -0.00482153 0.910094	</anchorPosition>
               <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
               <applyTo>	4096	</applyTo>
             </slot>
             <slot>
               <slotType>	paint	</slotType>
-              <slotId>	768	</slotId>
+              <slotId>	41000	</slotId>
               <anchorPosition>	-0.000000 -0.00482153 0.910094	</anchorPosition>
               <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
               <applyTo>	4096	</applyTo>
             </slot>
             <slot>
               <slotType>	paint	</slotType>
-              <slotId>	769	</slotId>
+              <slotId>	41001	</slotId>
               <anchorPosition>	0.000074 -0.224755 1.59231	</anchorPosition>
               <anchorDirection>	-0.000000 0.70719 0.707023	</anchorDirection>
               <applyTo>	16384	</applyTo>
@@ -2075,7 +2075,7 @@
     <damagedStateGroup>	small	</damagedStateGroup>
   </effects>
   <emblems>
-    <default>	germany_cross	</default>
+    <default>	15502	</default>
     <lodDist>	MEDIUM	</lodDist>
     <alpha>	0.8	</alpha>
   </emblems>

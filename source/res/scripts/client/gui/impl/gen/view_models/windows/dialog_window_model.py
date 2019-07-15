@@ -13,88 +13,81 @@ class DialogWindowModel(ViewModel):
     def buttons(self):
         return self._getViewModel(0)
 
-    def getContent(self):
+    def getBottomContent(self):
         return self._getView(1)
 
-    def setContent(self, value):
+    def setBottomContent(self, value):
         self._setView(1, value)
 
-    def getBottomContent(self):
+    def getBalanceContent(self):
         return self._getView(2)
 
-    def setBottomContent(self, value):
+    def setBalanceContent(self, value):
         self._setView(2, value)
 
-    def getBalanceContent(self):
-        return self._getView(3)
-
-    def setBalanceContent(self, value):
-        self._setView(3, value)
-
     def getIcon(self):
-        return self._getResource(4)
+        return self._getResource(3)
 
     def setIcon(self, value):
-        self._setResource(4, value)
+        self._setResource(3, value)
 
     def getIconHighlight(self):
-        return self._getResource(5)
+        return self._getResource(4)
 
     def setIconHighlight(self, value):
-        self._setResource(5, value)
+        self._setResource(4, value)
 
     def getAnimationHighlight(self):
-        return self._getResource(6)
+        return self._getResource(5)
 
     def setAnimationHighlight(self, value):
-        self._setResource(6, value)
+        self._setResource(5, value)
 
     def getTitle(self):
-        return self._getResource(7)
+        return self._getResource(6)
 
     def setTitle(self, value):
-        self._setResource(7, value)
+        self._setResource(6, value)
 
     def getTitleArgs(self):
-        return self._getArray(8)
+        return self._getArray(7)
 
     def setTitleArgs(self, value):
-        self._setArray(8, value)
+        self._setArray(7, value)
 
     def getTitleFmtArgs(self):
-        return self._getArray(9)
+        return self._getArray(8)
 
     def setTitleFmtArgs(self, value):
-        self._setArray(9, value)
+        self._setArray(8, value)
 
     def getIsTitleFmtArgsNamed(self):
-        return self._getBool(10)
+        return self._getBool(9)
 
     def setIsTitleFmtArgsNamed(self, value):
-        self._setBool(10, value)
+        self._setBool(9, value)
 
     def getBackgroundImage(self):
-        return self._getResource(11)
+        return self._getResource(10)
 
     def setBackgroundImage(self, value):
-        self._setResource(11, value)
+        self._setResource(10, value)
 
     def getShowSoundId(self):
-        return self._getResource(12)
+        return self._getResource(11)
 
     def setShowSoundId(self, value):
-        self._setResource(12, value)
+        self._setResource(11, value)
 
     def getPreset(self):
-        return self._getString(13)
+        return self._getString(12)
 
     def setPreset(self, value):
-        self._setString(13, value)
+        self._setString(12, value)
 
     def _initialize(self):
         super(DialogWindowModel, self)._initialize()
         self._addViewModelProperty('buttons', UserListModel())
-        self._addViewProperty('content')
         self._addViewProperty('bottomContent')
         self._addViewProperty('balanceContent')
         self._addResourceProperty('icon', R.invalid())

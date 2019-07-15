@@ -11,7 +11,7 @@ from gui.Scaleform.daapi.view.battle.shared.minimap.common import SimplePlugin, 
 from gui.Scaleform.daapi.view.battle.shared.minimap import settings
 from gui.Scaleform.daapi.view.battle.shared.minimap.component import _IMAGE_PATH_FORMATTER
 from gui.battle_control import minimap_utils, avatar_getter
-from AvatarInputHandler.aih_constants import CTRL_MODE_NAME
+from aih_constants import CTRL_MODE_NAME
 from epic_constants import EPIC_BATTLE_TEAM_ID
 from gui.battle_control.battle_constants import PROGRESS_CIRCLE_TYPE, SECTOR_STATE_ID
 from constants import IS_DEVELOPMENT

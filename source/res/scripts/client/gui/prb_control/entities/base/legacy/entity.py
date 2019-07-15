@@ -86,7 +86,7 @@ class LegacyIntroEntryPoint(BasePrbEntryPoint):
         self._prbType = prbType
 
     def makeDefCtx(self):
-        return JoinLegacyModeCtx(self._prbType)
+        return JoinLegacyModeCtx(self._prbType, flags=self.getFunctionalFlags())
 
     def create(self, ctx, callback=None):
         raise SoftException('PrbIntro is not create entity')
@@ -511,7 +511,7 @@ class LegacyEntity(_LegacyEntity):
                 callback(False)
             return
         pPermissions = self.getPermissions()
-        if self.getPermissions().canChangePlayerTeam():
+        if pPermissions.canChangePlayerTeam():
             ctx.startProcessing(callback)
             BigWorld.player().prb_swapTeams(ctx.onResponseReceived)
             self._cooldown.process(REQUEST_TYPE.SWAP_TEAMS)
@@ -526,7 +526,7 @@ class LegacyEntity(_LegacyEntity):
                 callback(False)
             return
         pPermissions = self.getPermissions()
-        if self.getPermissions().canSendInvite():
+        if pPermissions.canSendInvite():
             BigWorld.player().prb_sendInvites(ctx.getDatabaseIDs(), ctx.getComment())
             self._cooldown.process(REQUEST_TYPE.SEND_INVITE, coolDown=REQUEST_COOLDOWN.PREBATTLE_INVITES)
             if callback:

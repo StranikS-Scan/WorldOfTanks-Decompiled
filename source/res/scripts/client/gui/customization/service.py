@@ -121,6 +121,7 @@ class CustomizationService(_ServiceItemShopMixin, _ServiceHelpersMixin, ICustomi
         self._isOver3dScene = False
         self.onRegionHighlighted = Event.Event(self._eventsManager)
         self.onOutfitChanged = Event.Event(self._eventsManager)
+        self.onCustomizationHelperRecreated = Event.Event(self._eventsManager)
         self.__customizationCtx = None
         self._suspendHighlighterCallbackID = None
         self._isDraggingInProcess = False
@@ -192,6 +193,7 @@ class CustomizationService(_ServiceItemShopMixin, _ServiceHelpersMixin, ICustomi
             self._helper.setSelectionMode(self._mode)
         else:
             self._helper = BigWorld.PyCustomizationHelper(entity.model, self._mode, self._isOver3dScene, self.__onRegionHighlighted)
+            self.onCustomizationHelperRecreated()
         self.selectRegions(self._selectedRegion)
         self._isHighlighterActive = True
         return True
@@ -366,8 +368,12 @@ class CustomizationService(_ServiceItemShopMixin, _ServiceHelpersMixin, ICustomi
         entity = self.hangarSpace.getVehicleEntity()
         if entity and entity.appearance and entity.appearance.isLoaded():
             self._helper = BigWorld.PyCustomizationHelper(entity.model, self._mode, self._isOver3dScene, self.__onRegionHighlighted)
+            self.onCustomizationHelperRecreated()
             self.selectRegions(self._selectedRegion)
             self._isHighlighterActive = True
+            if self.__customizationCtx is not None and self.__customizationCtx.c11CameraManager.isStyleInfo():
+                self.suspendHighlighter()
+        return
 
     def __onVehicleLoadStarted(self):
         self._selectedRegion = ApplyArea.NONE

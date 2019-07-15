@@ -1,6 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/tooltips/ranked/ranked_selector_tooltip.py
-import BigWorld
 from gui.Scaleform.genConsts.BLOCKS_TOOLTIP_TYPES import BLOCKS_TOOLTIP_TYPES
 from gui.impl import backport
 from gui.impl.gen import R
@@ -91,7 +90,7 @@ class RankedUnavailableTooltip(BlocksTooltipData):
             if self.rankedController.isFrozen():
                 additionalInfo = backport.text(tooltipData.body.frozen())
             elif nextSeason is not None:
-                additionalInfo = backport.text(tooltipData.body.coming(), date=BigWorld.wg_getShortDateFormat(time_utils.makeLocalServerTime(nextSeason.getStartDate())))
+                additionalInfo = backport.text(tooltipData.body.coming(), date=backport.getShortDateFormat(time_utils.makeLocalServerTime(nextSeason.getStartDate())))
             else:
                 additionalInfo = backport.text(tooltipData.body.disabled())
             body = '%s\n\n%s' % (body, additionalInfo)

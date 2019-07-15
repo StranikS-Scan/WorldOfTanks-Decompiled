@@ -1,0 +1,44 @@
+<inscriptions_china.xml>
+  <xmlns:czech0>	ussr	</xmlns:czech0>
+  <xmlns:germany>	germany	</xmlns:germany>
+  <xmlns:usa>	usa	</xmlns:usa>
+  <xmlns:china>	china	</xmlns:china>
+  <xmlns:france>	france	</xmlns:france>
+  <xmlns:uk>	uk	</xmlns:uk>
+  <xmlns:japan>	japan	</xmlns:japan>
+  <xmlns:czech>	czech	</xmlns:czech>
+  <xmlns:sweden>	sweden	</xmlns:sweden>
+  <xmlns:poland>	poland	</xmlns:poland>
+  <xmlns:italy>	italy	</xmlns:italy>
+  <itemGroup>
+    <userString>	#vehicle_customization:inscription/clan_content	</userString>
+    <season>	ALL	</season>
+    <historical>	false	</historical>
+    <priceGroup>	inscriptions 50g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <nations>	china	</nations>
+      </include>
+    </vehicleFilter>
+    <decal>
+      <id>	14856	</id>
+      <texture>	gui/maps/vehicles/decals/inscriptions/clan_content/inscription_01.dds	</texture>
+      <userString>	#vehicle_customization:inscription/clan_content/inscription_01	</userString>
+      <mirror>	false	</mirror>
+    </decal>
+    <decal>
+      <id>	14857	</id>
+      <texture>	gui/maps/vehicles/decals/inscriptions/clan_content/inscription_11.dds	</texture>
+      <userString>	#vehicle_customization:inscription/clan_content/inscription_11	</userString>
+      <mirror>	false	</mirror>
+    </decal>
+    <decal>
+      <id>	14858	</id>
+      <texture>	gui/maps/vehicles/decals/inscriptions/clan_content/inscription_21.dds	</texture>
+      <userString>	#vehicle_customization:inscription/clan_content/inscription_21	</userString>
+      <mirror>	false	</mirror>
+    </decal>
+    <name>	Clan Content China	</name>
+    <type>	INSCRIPTION	</type>
+  </itemGroup>
+</inscriptions_china.xml>

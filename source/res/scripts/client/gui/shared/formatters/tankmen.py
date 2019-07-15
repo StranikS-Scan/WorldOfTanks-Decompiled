@@ -1,9 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/formatters/tankmen.py
-import BigWorld
 from helpers import dependency
 from skeletons.gui.shared import IItemsCache
 from gui.shared.money import Currency
+from gui.impl import backport
 from gui.impl.gen.view_models.ui_kit.action_price_model import ActionPriceModel
 from gui.shared.formatters import updateActionInViewModel
 from gui.shared.gui_items.fitting_item import canBuyWithGoldExchange
@@ -33,8 +33,8 @@ def getItemPricesViewModel(statsMoney, *itemPrices, **kwargs):
                         updateActionInViewModel(currency, actionPriceModel, itemPrice)
                     actionPriceModel.setType(currency)
                     actionPriceModel.setIsWithAction(hasAction)
-                    actionPriceModel.setPrice(BigWorld.wg_getIntegralFormat(currencyValue))
-                    defPrice = BigWorld.wg_getIntegralFormat(itemPrice.defPrice.get(currency, 0))
+                    actionPriceModel.setPrice(backport.getIntegralFormat(currencyValue))
+                    defPrice = backport.getIntegralFormat(itemPrice.defPrice.get(currency, 0))
                     actionPriceModel.setDefPrice(defPrice)
                     priceModels.append(actionPriceModel)
 

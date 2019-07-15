@@ -4,9 +4,7 @@ from constants import PREMIUM_ENTITLEMENTS
 from gui.impl import backport
 from gui.impl.gen import R
 from gui.Scaleform.daapi.view.dialogs import I18nConfirmDialogMeta
-from gui.Scaleform.locale.BATTLE_TUTORIAL import BATTLE_TUTORIAL
 from gui.shared.events import ShowDialogEvent
-from helpers import i18n
 _MSG_POSTFIX = '/message'
 _DEFAULT_PREMIUM_STR = R.strings.dialogs.bootcamp.premiumType.plus()
 
@@ -32,7 +30,7 @@ class ExecutionChooserDialogMeta(I18nConfirmDialogMeta):
         return self.__showAwardIcon
 
     def getAwardingText(self):
-        return i18n.makeString(BATTLE_TUTORIAL.LABELS_BONUSES_ALREADY_RECEIVED, **self._messageCtx)
+        return backport.text(R.strings.battle_tutorial.labels.bonuses_already_received(), **self._messageCtx)
 
     def getLabel(self):
         I18N_LABEL_KEY = '{0:>s}/label'

@@ -7,7 +7,7 @@ from helpers.PixieNode import PixieCache
 from CustomEffect import EffectSettings
 from svarog_script.py_component import Component
 from vehicle_systems.tankStructure import TankNodeNames
-from AvatarInputHandler import mathUtils
+import math_utils
 _ENABLE_VALUE_TRACKER = False
 _ENABLE_VALUE_TRACKER_ENGINE = False
 _ENABLE_PIXIE_TRACKER = False
@@ -146,7 +146,7 @@ class CustomEffectManager(Component):
             vehicleDir = Math.Vector3(0.0, 0.0, 1.0)
             velocityLocal = Math.Vector2(velocityLocal.z, velocityLocal.x)
             cosA = velocityLocal.dot(Math.Vector2(vehicleDir.z, vehicleDir.x)) / velLen
-            self.__variableArgs['hullAngle'] = math.acos(mathUtils.clamp(0.0, 1.0, math.fabs(cosA)))
+            self.__variableArgs['hullAngle'] = math.acos(math_utils.clamp(0.0, 1.0, math.fabs(cosA)))
         else:
             self.__variableArgs['hullAngle'] = 0.0
         self.__variableArgs['isUnderWater'] = 1 if appearance.isUnderwater else 0

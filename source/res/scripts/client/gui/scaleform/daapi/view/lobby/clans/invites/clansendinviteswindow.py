@@ -5,9 +5,10 @@ from client_request_lib.exceptions import ResponseCodes
 from gui import SystemMessages
 from gui.Scaleform.daapi.view.lobby.SendInvitesWindow import SendInvitesWindow
 from gui.Scaleform.locale.CLANS import CLANS
-from gui.Scaleform.locale.WAITING import WAITING
 from gui.clans import formatters as clans_fmts
 from gui.clans.clan_helpers import ClanListener, showClanInviteSystemMsg
+from gui.impl import backport
+from gui.impl.gen import R
 from gui.shared.view_helpers import UsersInfoHelper
 from gui.wgcg.clan import contexts as clan_ctx
 from helpers import i18n
@@ -21,7 +22,7 @@ class ClanSendInvitesWindow(SendInvitesWindow, UsersInfoHelper, ClanListener):
 
     @process
     def sendInvites(self, accountsToInvite, comment):
-        self.as_showWaitingS(WAITING.CLANS_INVITES_SEND, {})
+        self.as_showWaitingS(backport.msgid(R.strings.waiting.clans.invites.send()), {})
         accountsToInvite = [ int(userDbID) for userDbID in accountsToInvite ]
         ctx = clan_ctx.CreateInviteCtx(self.__clanDbID, accountsToInvite, comment)
         self.as_onReceiveSendInvitesCooldownS(ctx.getCooldown())

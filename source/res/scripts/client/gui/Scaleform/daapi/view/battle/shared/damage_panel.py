@@ -322,7 +322,7 @@ class DamagePanel(DamagePanelMeta):
         healthProgress = normalizeHealthPercent(health, self.__maxHealth)
         self.as_setupS(healthStr, healthProgress, vehicle_getter.getVehicleIndicatorType(vTypeDesc), vehicle_getter.getCrewMainRolesWithIndexes(vType.crewRoles), inDegrees, vehicle_getter.hasTurretRotator(vTypeDesc), self.__isWheeledTech, self.__isAutoRotationOn)
         if self.__isWheeledTech:
-            self.as_setupWheeledS(vTypeDesc.chassis.generalWheelsAnimatorConfig.getWheelsCount())
+            self.as_setupWheeledS(vTypeDesc.chassis.generalWheelsAnimatorConfig.getNonTrackWheelsCount())
         self._updatePlayerInfo(vehicle.id)
         if self.__tankIndicator is not None:
             self.__tankIndicator.setup(vehicle, yawLimits)

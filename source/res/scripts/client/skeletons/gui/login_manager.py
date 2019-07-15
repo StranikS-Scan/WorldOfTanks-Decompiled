@@ -12,7 +12,7 @@ class ILoginManager(object):
     def wgcAvailable(self):
         raise NotImplementedError
 
-    def checkWgcAvailability(self):
+    def tryPrepareWGCLogin(self):
         raise NotImplementedError
 
     def checkWgcCouldRetry(self, loginStatus):

@@ -2,11 +2,10 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/dialogs/SystemMessageMeta.py
 from collections import namedtuple
 from gui.Scaleform.daapi.view.dialogs import IDialogMeta
-from gui.Scaleform.locale.AOGAS import AOGAS
-from gui.Scaleform.locale.MESSENGER import MESSENGER
+from gui.impl import backport
+from gui.impl.gen import R
 from gui.shared import events
 from soft_exception import SoftException
-from web_stubs import i18n
 
 class SESSION_CONTROL_TYPE(object):
     AOGAS = 'AOGAS'
@@ -29,11 +28,11 @@ class SystemMessageMeta(IDialogMeta):
         else:
             sessionControlType = None
         if sessionControlType == SESSION_CONTROL_TYPE.AOGAS:
-            self.__title = i18n.makeString(AOGAS.NOTIFICATION_TITLE)
-            self.__cancelLabel = i18n.makeString(AOGAS.NOTIFICATION_CLOSE)
+            self.__title = backport.text(R.strings.aogas.NOTIFICATION.TITLE())
+            self.__cancelLabel = backport.text(R.strings.aogas.NOTIFICATION.CLOSE())
         else:
-            self.__title = i18n.makeString(MESSENGER.SERVICECHANNELMESSAGES_PRIORITYMESSAGETITLE)
-            self.__cancelLabel = i18n.makeString(MESSENGER.SERVICECHANNELMESSAGES_BUTTONS_CLOSE)
+            self.__title = backport.text(R.strings.messenger.serviceChannelMessages.priorityMessageTitle())
+            self.__cancelLabel = backport.text(R.strings.messenger.serviceChannelMessages.buttons.close())
         return
 
     def getSettings(self):

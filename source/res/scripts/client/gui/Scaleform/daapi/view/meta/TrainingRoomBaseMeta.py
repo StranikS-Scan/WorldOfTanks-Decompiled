@@ -58,8 +58,8 @@ class TrainingRoomBaseMeta(View):
     def as_updateCommentS(self, commentStr):
         return self.flashObject.as_updateComment(commentStr) if self._isDAAPIInited() else None
 
-    def as_updateMapS(self, arenaTypeID, maxPlayersCount, arenaName, title, arenaSubType, descriptionStr):
-        return self.flashObject.as_updateMap(arenaTypeID, maxPlayersCount, arenaName, title, arenaSubType, descriptionStr) if self._isDAAPIInited() else None
+    def as_updateMapS(self, arenaTypeID, maxPlayersCount, arenaName, title, arenaSubType, descriptionStr, battleTypeIco):
+        return self.flashObject.as_updateMap(arenaTypeID, maxPlayersCount, arenaName, title, arenaSubType, descriptionStr, battleTypeIco) if self._isDAAPIInited() else None
 
     def as_updateTimeoutS(self, roundLenString):
         return self.flashObject.as_updateTimeout(roundLenString) if self._isDAAPIInited() else None
@@ -97,14 +97,14 @@ class TrainingRoomBaseMeta(View):
     def as_startCoolDownSwapButtonS(self, time):
         return self.flashObject.as_startCoolDownSwapButton(time) if self._isDAAPIInited() else None
 
-    def as_setPlayerStateInTeam1S(self, uid, stateString, vContourIcon, vShortName, vLevel, igrType):
-        return self.flashObject.as_setPlayerStateInTeam1(uid, stateString, vContourIcon, vShortName, vLevel, igrType) if self._isDAAPIInited() else None
+    def as_setPlayerStateInTeam1S(self, uid, stateString, vContourIcon, vShortName, vLevel, igrType, badge, badgeImgStr):
+        return self.flashObject.as_setPlayerStateInTeam1(uid, stateString, vContourIcon, vShortName, vLevel, igrType, badge, badgeImgStr) if self._isDAAPIInited() else None
 
-    def as_setPlayerStateInTeam2S(self, uid, stateString, vContourIcon, vShortName, vLevel, igrType):
-        return self.flashObject.as_setPlayerStateInTeam2(uid, stateString, vContourIcon, vShortName, vLevel, igrType) if self._isDAAPIInited() else None
+    def as_setPlayerStateInTeam2S(self, uid, stateString, vContourIcon, vShortName, vLevel, igrType, badge, badgeImgStr):
+        return self.flashObject.as_setPlayerStateInTeam2(uid, stateString, vContourIcon, vShortName, vLevel, igrType, badge, badgeImgStr) if self._isDAAPIInited() else None
 
-    def as_setPlayerStateInOtherS(self, uid, stateString, vContourIcon, vShortName, vLevel, igrType):
-        return self.flashObject.as_setPlayerStateInOther(uid, stateString, vContourIcon, vShortName, vLevel, igrType) if self._isDAAPIInited() else None
+    def as_setPlayerStateInOtherS(self, uid, stateString, vContourIcon, vShortName, vLevel, igrType, badge, badgeImgStr):
+        return self.flashObject.as_setPlayerStateInOther(uid, stateString, vContourIcon, vShortName, vLevel, igrType, badge, badgeImgStr) if self._isDAAPIInited() else None
 
     def as_setPlayerTagsInTeam1S(self, uid, tags):
         return self.flashObject.as_setPlayerTagsInTeam1(uid, tags) if self._isDAAPIInited() else None

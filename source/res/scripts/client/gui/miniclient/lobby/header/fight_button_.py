@@ -26,7 +26,7 @@ class DisableFightButtonPointcut(aop.Pointcut):
 class DisableTrainingFightButtonPointcut(aop.Pointcut):
 
     def __init__(self, config):
-        aop.Pointcut.__init__(self, 'gui.Scaleform.daapi.view.lobby.trainings.TrainingRoom', 'TrainingRoom', 'as_disableStartButtonS', aspects=(_DisableFightButtonAspect(config),))
+        aop.Pointcut.__init__(self, 'gui.Scaleform.daapi.view.lobby.trainings.TrainingRoomBase', 'TrainingRoomBase', 'as_disableStartButtonS', aspects=(_DisableFightButtonAspect(config),))
 
 
 class _DisableBattlesForHiddenVehiclesAspect(aop.Aspect):

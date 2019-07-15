@@ -2,6 +2,8 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/components/browser_view_page.py
 import logging
 import BigWorld
+from gui.impl import backport
+from gui.impl.gen import R
 from adisp import process
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.meta.BrowserViewStackExPaddingMeta import BrowserViewStackExPaddingMeta
@@ -29,7 +31,8 @@ class BrowserPageComponent(BrowserViewStackExPaddingMeta):
 
     def _populate(self):
         super(BrowserPageComponent, self)._populate()
-        self.as_setAllowWaitingS(True)
+        self.as_setWaitingMessageS(backport.text(R.strings.waiting.browser.init()))
+        self.as_setAllowWaitingS(True, True)
 
     def _onRegisterFlashComponent(self, viewPy, alias):
         super(BrowserPageComponent, self)._onRegisterFlashComponent(viewPy, alias)

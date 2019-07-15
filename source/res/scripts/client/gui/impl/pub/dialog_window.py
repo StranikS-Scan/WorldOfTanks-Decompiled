@@ -3,15 +3,17 @@
 import logging
 from collections import namedtuple
 from gui.Scaleform.genConsts.APP_CONTAINERS_NAMES import APP_CONTAINERS_NAMES
+from helpers import dependency
 from shared_utils import CONST_CONTAINER
 from async import async, await, AsyncEvent, AsyncReturn, AsyncScope, BrokenPromiseError
-from frameworks.wulf import ViewFlags
+from frameworks.wulf import ViewFlags, WindowSettings
 from frameworks.wulf import WindowFlags, Window
 from gui.impl.gen import R
 from gui.impl.gen.view_models.ui_kit.dialog_button_model import DialogButtonModel
 from gui.impl.gen.view_models.windows.dialog_window_model import DialogWindowModel
 from gui.impl.pub.view_impl import ViewImpl
 from gui.impl.wrappers.background_blur import WGUIBackgroundBlurSupportImpl
+from skeletons.gui.impl import IGuiLoader
 _logger = logging.getLogger(__name__)
 DialogResult = namedtuple('DialogResult', ('result', 'data'))
 
@@ -40,12 +42,18 @@ class DialogContent(ViewImpl):
 
 
 class DialogWindow(Window):
+    gui = dependency.descriptor(IGuiLoader)
     __slots__ = ('__blur', '__scope', '__event', '__result')
 
     def __init__(self, content=None, bottomContent=None, parent=None, balanceContent=None, enableBlur=True, layer=DialogLayer.TOP_WINDOW):
         if content is not None:
             pass
-        super(DialogWindow, self).__init__(wndFlags=layer, decorator=ViewImpl(R.views.common.dialog_view.dialog_window.DialogWindow(), ViewFlags.WINDOW_DECORATOR, DialogWindowModel), content=content, parent=parent)
+        settings = WindowSettings()
+        settings.flags = layer
+        settings.decorator = ViewImpl(R.views.common.dialog_view.dialog_window.DialogWindow(), ViewFlags.WINDOW_DECORATOR, DialogWindowModel)
+        settings.content = content
+        settings.parent = parent
+        super(DialogWindow, self).__init__(settings)
         if bottomContent is not None:
             self._setBottomContent(bottomContent)
         self.__blur = WGUIBackgroundBlurSupportImpl()
@@ -76,7 +84,8 @@ class DialogWindow(Window):
 
     @property
     def contentViewModel(self):
-        return self.viewModel.getContent().getViewModel()
+        content = self.content
+        return content.getViewModel() if content is not None else None
 
     @property
     def bottomContentViewModel(self):
@@ -98,7 +107,7 @@ class DialogWindow(Window):
         self.destroy()
 
     def _removeAllButtons(self):
-        self.viewModel.buttons.setItems([])
+        self.viewModel.buttons.getItems().clear()
 
     def _addButton(self, name, label, isFocused=False, invalidateAll=False, isEnabled=True, soundDown=None):
         button = DialogButtonModel()
@@ -130,9 +139,6 @@ class DialogWindow(Window):
 
     def _setBottomContent(self, value):
         self.viewModel.setBottomContent(value)
-
-    def _setContent(self, value):
-        self.viewModel.setContent(value)
 
     def _setIconHighlight(self, value):
         self.viewModel.setIconHighlight(value)

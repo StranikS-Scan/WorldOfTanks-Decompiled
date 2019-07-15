@@ -220,6 +220,7 @@ class PrebattleWindow(PrebattleWindowMeta, ILegacyListener):
              'state': account.state,
              'icon': vContourIcon,
              'vShortName': vShortName,
+             'isCurrentPayer': account.isCurrentPlayer(),
              'vLevel': vLevel,
              'vType': vType,
              'tags': list(user.getTags()) if user else [],

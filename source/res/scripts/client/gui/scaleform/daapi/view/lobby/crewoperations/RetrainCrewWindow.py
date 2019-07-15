@@ -4,6 +4,8 @@ from CurrentVehicle import g_currentVehicle
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform.daapi.view.lobby.store.browser.ingameshop_helpers import isIngameShopEnabled
 from gui.Scaleform.daapi.view.meta.RetrainCrewWindowMeta import RetrainCrewWindowMeta
+from gui.impl import backport
+from gui.impl.gen import R
 from gui.ingame_shop import showBuyGoldForCrew
 from gui.shared.gui_items.processors.tankman import TankmanCrewRetraining
 from gui.shared.gui_items.serializers import packTraining
@@ -13,8 +15,6 @@ from gui import SystemMessages
 from helpers import dependency
 from items import tankmen
 from gui.shared.formatters import text_styles
-from helpers.i18n import makeString as _ms
-from gui.Scaleform.locale.RETRAIN_CREW import RETRAIN_CREW
 from skeletons.gui.shared import IItemsCache
 
 class RetrainCrewWindow(RetrainCrewWindowMeta):
@@ -118,7 +118,7 @@ class RetrainCrewWindow(RetrainCrewWindowMeta):
         enableSubmitButton = crew and (cost <= currentMoney or cost.get(Currency.GOLD) and isIngameShopEnabled())
         self.as_setCrewDataS({'price': cost.toMoneyTuple(),
          'crew': crew,
-         'crewMembersText': text_styles.concatStylesWithSpace(_ms(RETRAIN_CREW.LABEL_CREWMEMBERS), text_styles.middleTitle(len(crew))),
+         'crewMembersText': text_styles.concatStylesWithSpace(backport.text(R.strings.retrain_crew.label.crewMembers()), text_styles.middleTitle(len(crew))),
          'enableSubmitButton': enableSubmitButton})
 
     def getOperationCost(self, priceInfo, crewSize):

@@ -81,7 +81,9 @@ class BattleResultsWindow(BattleResultsMeta):
     def _populate(self):
         super(BattleResultsWindow, self)._populate()
         g_eventBus.addListener(events.LobbySimpleEvent.PREMIUM_XP_BONUS_CHANGED, self.__onUpdatePremiumBonus)
-        g_clientUpdateManager.addCallbacks({'account._additionalXPCache': self.__onUpdatePremiumBonus})
+        g_clientUpdateManager.addCallbacks({'account._additionalXPCache': self.__onUpdatePremiumBonus,
+         'inventory.1': self.__onUpdatePremiumBonus,
+         'inventory.8': self.__onUpdatePremiumBonus})
         self.__gameSession.onPremiumTypeChanged += self.__onPremiumStateChanged
         self.__lobbyContext.getServerSettings().onServerSettingsChange += self.__onServerSettingsChange
         if self.__battleResults.areResultsPosted(self.__arenaUniqueID):

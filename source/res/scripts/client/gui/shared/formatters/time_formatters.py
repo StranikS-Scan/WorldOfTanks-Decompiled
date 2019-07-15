@@ -2,7 +2,6 @@
 # Embedded file name: scripts/client/gui/shared/formatters/time_formatters.py
 import math
 import time
-import BigWorld
 from gui.Scaleform.locale.MENU import MENU
 from gui.impl import backport
 from helpers import i18n, time_utils
@@ -66,9 +65,9 @@ def getDueDateOrTimeStr(finishTime, localization=''):
     if not finishTime or time_utils.isPast(finishTime):
         return ''
     if time_utils.isToday(finishTime):
-        strTime = BigWorld.wg_getShortTimeFormat(finishTime)
+        strTime = backport.getShortTimeFormat(finishTime)
     else:
-        strTime = BigWorld.wg_getLongDateFormat(finishTime)
+        strTime = backport.getLongDateFormat(finishTime)
     return ' '.join([localization, strTime]) if localization else strTime
 
 

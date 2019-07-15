@@ -1,6 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/session_stats/shared.py
-import BigWorld
 import nations
 from gui import makeHtmlString
 from gui.Scaleform.genConsts.SESSION_STATS_CONSTANTS import SESSION_STATS_CONSTANTS
@@ -189,20 +188,20 @@ def makeTooltipData(header, resId, total):
 
 
 def toIntegral(value):
-    return '-' if value is None else BigWorld.wg_getIntegralFormat(value)
+    return '-' if value is None else backport.getIntegralFormat(value)
 
 
 def toNiceNumber(value):
-    return '-' if value is None else BigWorld.wg_getNiceNumberFormat(float(value))
+    return '-' if value is None else backport.getNiceNumberFormat(float(value))
 
 
 def precisionFormat(value, showIntegerOnly=False):
     if showIntegerOnly:
         if abs(value) >= 1:
-            return BigWorld.wg_getIntegralFormat(value)
+            return backport.getIntegralFormat(value)
         return ''
     if abs(value) >= 10:
-        return BigWorld.wg_getFractionalFormat(value)
+        return backport.getFractionalFormat(value)
     return '%.*f' % (_INFOTIP_PRECISION, value) if abs(value) >= 10 ** (-_INFOTIP_PRECISION) else ''
 
 
@@ -226,10 +225,10 @@ def getSessionStatsPropImage(propId, width=54, height=54):
 
 def processRatioValue(value):
     if value.ratio:
-        return BigWorld.wg_getNiceNumberFormat(float(value.ratio))
+        return backport.getNiceNumberFormat(float(value.ratio))
     elif value.dealt is not None and value.received is not None:
-        ctx = {'numerator': BigWorld.wg_getIntegralFormat(value.dealt),
-         'denominator': BigWorld.wg_getIntegralFormat(value.received)}
+        ctx = {'numerator': backport.getIntegralFormat(value.dealt),
+         'denominator': backport.getIntegralFormat(value.received)}
         sourceKey = 'inverse' if value.dealt == 0 else 'normal'
         return makeHtmlString('html_templates:lobby/session_stats/', 'ratio', ctx, sourceKey=sourceKey)
     else:

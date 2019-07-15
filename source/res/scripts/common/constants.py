@@ -11,11 +11,12 @@ except ImportError:
 
 
 IS_CLIENT = BigWorld.component == 'client'
+IS_EDITOR = BigWorld.component == 'editor'
 IS_BOT = BigWorld.component == 'bot'
 IS_CELLAPP = BigWorld.component == 'cell'
 IS_BASEAPP = BigWorld.component in ('base', 'service')
 IS_WEB = BigWorld.component == 'web'
-CURRENT_REALM = 'RU'
+CURRENT_REALM = 'CT'
 DEFAULT_LANGUAGE = 'ru'
 AUTH_REALM = 'RU'
 IS_DEVELOPMENT = CURRENT_REALM == 'DEV'
@@ -232,6 +233,7 @@ class ARENA_BONUS_TYPE:
     EPIC_RANDOM_TRAINING = 25
     EVENT_BATTLES_2 = 26
     EPIC_BATTLE = 27
+    EPIC_BATTLE_TRAINING = 28
     RANGE = (UNKNOWN,
      REGULAR,
      TRAINING,
@@ -254,7 +256,8 @@ class ARENA_BONUS_TYPE:
      RANKED,
      EPIC_RANDOM,
      EPIC_RANDOM_TRAINING,
-     EPIC_BATTLE)
+     EPIC_BATTLE,
+     EPIC_BATTLE_TRAINING)
     RANDOM_RANGE = (REGULAR, EPIC_RANDOM)
     SANDBOX_RANGE = (RATED_SANDBOX, SANDBOX)
     FALLOUT_RANGE = (FALLOUT_CLASSIC, FALLOUT_MULTITEAM)
@@ -265,6 +268,8 @@ class ARENA_BONUS_TYPE:
      TOURNAMENT_CLAN,
      TOURNAMENT_REGULAR)
 
+
+ARENA_BONUS_TYPE_NAMES = dict([ (k, v) for k, v in ARENA_BONUS_TYPE.__dict__.iteritems() if isinstance(v, int) ])
 
 class ARENA_BONUS_MASK:
     TYPE_BITS = dict(((name, 2 ** id) for id, name in enumerate(ARENA_BONUS_TYPE.RANGE[1:])))
@@ -438,6 +443,7 @@ class PREBATTLE_TYPE:
      FALLOUT,
      EVENT)
     CREATE_FROM_WEB = (UNIT, SQUAD, EXTERNAL)
+    TRAININGS = (TRAINING, EPIC_TRAINING)
     CREATE_EX_FROM_SERVER = (SQUAD, CLAN, EPIC)
     CREATE_EX_FROM_WEB = (SQUAD, CLAN)
     EPIC_PREBATTLES = (EPIC, EPIC_TRAINING)
@@ -2089,6 +2095,7 @@ class QUEST_TYPE_OPERATION_FOR_KAFKA:
     START_PAUSE = 5
     STOP_PAUSE = 6
     RESET = 7
+    COMPLETED_AFTER_REBALANCE = 8
 
 
 class LOCALIZABLE_BOT_NAME:

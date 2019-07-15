@@ -1,7 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/blueprints/fragments_balance_content.py
 import logging
-import BigWorld
 import nations
 from blueprints.BlueprintTypes import BlueprintTypes
 from frameworks.wulf import ViewFlags
@@ -12,7 +11,7 @@ from gui.impl.gen.view_models.views.common_balance_content_model import CommonBa
 from gui.impl.gen.view_models.views.lobby.blueprints.fragment_item_model import FragmentItemModel
 from gui.impl.gen.view_models.views.lobby.blueprints.blueprint_screen_tooltips import BlueprintScreenTooltips
 from gui.impl.pub import ViewImpl
-from gui.impl.backport.backport_tooltip import createTooltipData, BackportTooltipWindow
+from gui.impl.backport import createTooltipData, BackportTooltipWindow
 from gui.shared.utils.requesters.blueprints_requester import getNationalFragmentCD
 from helpers import dependency
 from skeletons.gui.shared import IItemsCache
@@ -53,12 +52,12 @@ class FragmentsBalanceContent(ViewImpl):
         g_clientUpdateManager.addCallbacks({'blueprints': self.__onUpdateBlueprints})
         with self.viewModel.transaction() as model:
             item = FragmentItemModel()
-            item.setValue(BigWorld.wg_getIntegralFormat(intelligenceFragments))
+            item.setValue(self.gui.systemLocale.getNumberFormat(intelligenceFragments))
             item.setIcon(R.images.gui.maps.icons.blueprints.fragment.small.intelligence())
             item.setFragmentCD(BlueprintTypes.INTELLIGENCE_DATA)
             model.currency.addViewModel(item)
             item = FragmentItemModel()
-            item.setValue(BigWorld.wg_getIntegralFormat(nationalFragments))
+            item.setValue(self.gui.systemLocale.getNumberFormat(nationalFragments))
             item.setIcon(R.images.gui.maps.icons.blueprints.fragment.small.dyn(nationName)())
             nationId = nations.INDICES.get(nationName, nations.NONE_INDEX)
             nationTooltipData = getNationalFragmentCD(nationId)
@@ -80,9 +79,9 @@ class FragmentsBalanceContent(ViewImpl):
         intelligenceFragments, nationalFragments = self.__getFragmentCount()
         with self.viewModel.transaction() as model:
             intelItem = model.currency.getItem(0)
-            intelItem.setValue(BigWorld.wg_getIntegralFormat(intelligenceFragments))
+            intelItem.setValue(self.gui.systemLocale.getNumberFormat(intelligenceFragments))
             nationalItem = model.currency.getItem(1)
-            nationalItem.setValue(BigWorld.wg_getIntegralFormat(nationalFragments))
+            nationalItem.setValue(self.gui.systemLocale.getNumberFormat(nationalFragments))
             model.currency.invalidate()
 
     def __getFragmentCount(self):

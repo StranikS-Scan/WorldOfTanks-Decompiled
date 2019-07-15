@@ -2,10 +2,10 @@
 # Embedded file name: scripts/client/gui/shared/formatters/__init__.py
 import logging
 from itertools import combinations
-import BigWorld
 from gui import makeHtmlString
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.Scaleform.genConsts.CURRENCIES_CONSTANTS import CURRENCIES_CONSTANTS
+from gui.impl import backport
 from gui.shared.economics import ActualPrice
 from gui.shared.formatters import icons
 from gui.shared.formatters import text_styles
@@ -31,7 +31,7 @@ def _checkPriceIsAllowed(price, itemsCache=None):
 
 
 def _getFormattedPrice(price):
-    format_ = BigWorld.wg_getGoldFormat
+    format_ = backport.getGoldFormat
     postfix = ''
     template = 'html_templates:lobby/quests/actions'
     fmtCurrency = {currencyName:'' for currencyName in Currency.ALL}
@@ -73,7 +73,7 @@ def formatPrice(price, reverse=False, currency=Currency.CREDITS, useIcon=False, 
         if value == 0 and ignoreZeros and not (c == Currency.CREDITS and not price.getSetCurrencies()):
             continue
         formatter = getBWFormatter(c)
-        cFormatted = formatter(value) if formatter else value
+        cFormatted = formatter(value)
         if useStyle:
             styler = getStyle(c)
             cFormatted = styler(cFormatted) if styler else cFormatted
@@ -97,7 +97,7 @@ def formatGoldPrice(gold, reverse=False):
 
 
 def getGlobalRatingFmt(globalRating):
-    return BigWorld.wg_getIntegralFormat(globalRating) if globalRating >= 0 else '--'
+    return backport.getIntegralFormat(globalRating) if globalRating >= 0 else '--'
 
 
 def moneyWithIcon(money, currType=None, statsMoney=None):

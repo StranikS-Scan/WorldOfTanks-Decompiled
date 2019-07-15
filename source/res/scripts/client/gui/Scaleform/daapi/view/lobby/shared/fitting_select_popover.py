@@ -82,6 +82,13 @@ def _extendByOptionalDeviceData(targetData, module):
     _extendOverlayData(targetData, highlight)
 
 
+def _extendByEquipmentData(targetData, module):
+    if module.isBuiltIn:
+        highlight = SLOT_HIGHLIGHT_TYPES.BUILT_IN_EQUIPMENT_BIG
+        _extendHighlightData(targetData, highlight, highlight)
+        _extendOverlayData(targetData, highlight)
+
+
 def _extendByBattleBoosterData(targetData, module, vehicle):
     if module.isCrewBooster():
         skillLearnt = module.isAffectedSkillLearnt(vehicle)
@@ -553,6 +560,8 @@ class PopoverLogicProvider(object):
         elif self._slotType == FITTING_TYPES.BATTLE_ABILITY:
             mayInstall, _ = vehicleModule.mayInstall(self._vehicle)
             _extendByBattleAbilityData(moduleData, vehicleModule, self._slotIndex, mayInstall)
+        elif self._slotType == FITTING_TYPES.EQUIPMENT:
+            _extendByEquipmentData(moduleData, vehicleModule)
 
 
 class _HangarLogicProvider(PopoverLogicProvider):

@@ -1,12 +1,12 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/server_events/personal_progress/formatters.py
 from collections import namedtuple
-import BigWorld
 from constants import QUEST_PROGRESS_STATE
 from gui.Scaleform.genConsts.QUEST_PROGRESS_BASE import QUEST_PROGRESS_BASE
 from gui.Scaleform.locale.PERSONAL_MISSIONS import PERSONAL_MISSIONS
 from gui.Scaleform.locale.BATTLE_RESULTS import BATTLE_RESULTS
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
+from gui.impl import backport
 from gui.server_events.personal_progress.storage import PostBattleProgressStorage, LobbyProgressStorage
 from gui.shared.formatters import text_styles
 from gui.shared.utils.functions import makeTooltip
@@ -148,8 +148,8 @@ class PostBattleConditionsFormatter(object):
         statusConditionValues = self.__getStatusConditionValues(isMain)
         if statusConditionValues:
             current, goal, state = statusConditionValues
-            currentStr = BigWorld.wg_getNiceNumberFormat(current)
-            goalStr = BigWorld.wg_getIntegralFormat(goal)
+            currentStr = backport.getNiceNumberFormat(current)
+            goalStr = backport.getIntegralFormat(goal)
             if state == QUEST_PROGRESS_STATE.COMPLETED:
                 return ''.join([text_styles.bonusAppliedText(currentStr), text_styles.success(' / %s' % goalStr)])
             if state == QUEST_PROGRESS_STATE.FAILED:

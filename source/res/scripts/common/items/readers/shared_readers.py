@@ -2,7 +2,7 @@
 # Embedded file name: scripts/common/items/readers/shared_readers.py
 from collections import defaultdict
 import ResMgr
-from constants import IS_CLIENT, IS_BOT
+from constants import IS_CLIENT, IS_BOT, ITEM_DEFS_PATH
 from debug_utils import LOG_ERROR
 from items import _xml
 from items.components import component_constants
@@ -11,6 +11,7 @@ from items.components import c11n_constants
 _ALLOWED_EMBLEM_SLOTS = component_constants.ALLOWED_EMBLEM_SLOTS
 _ALLOWED_SLOTS_ANCHORS = component_constants.ALLOWED_SLOTS_ANCHORS
 _ALLOWED_MISC_SLOTS = component_constants.ALLOWED_MISC_SLOTS
+_CUSTOMIZATION_CONSTANTS_PATH = ITEM_DEFS_PATH + '/customization/constants.xml'
 
 def _readEmblemSlot(ctx, subsection, slotType):
     slotId = _xml.readInt(ctx, subsection, 'slotId')
@@ -36,14 +37,8 @@ def _readCustomizationSlot(ctx, subsection, slotType):
         availableShowOnRegions = c11n_constants.ApplyArea.HULL | c11n_constants.ApplyArea.TURRET | c11n_constants.ApplyArea.GUN
         if showOn | availableShowOnRegions != availableShowOnRegions:
             _xml.raiseWrongSection(ctx, 'showOn')
-    availableTags = c11n_constants.ProjectionDecalDirectionTags.ALL + c11n_constants.ProjectionDecalFormTags.ALL + c11n_constants.ProjectionDecalPositionTags.ALL + c11n_constants.ProjectionDecalPreferredTags.ALL + c11n_constants.ProjectionDecalDenyTags.ALL
+    availableTags = c11n_constants.ProjectionDecalDirectionTags.ALL + c11n_constants.ProjectionDecalFormTags.ALL + c11n_constants.ProjectionDecalPositionTags.ALL + c11n_constants.ProjectionDecalPreferredTags.ALL
     tags = readOrderedTagsOrEmpty(ctx, subsection, availableTags)
-    slotId = _xml.readInt(ctx, subsection, 'slotId')
-    parentSlotId = _xml.readIntOrNone(ctx, subsection, 'parentSlotId')
-    if slotType == 'projectionDecal' and parentSlotId is None:
-        formTags = [ tag for tag in tags if tag in c11n_constants.ProjectionDecalFormTags.ALL ]
-        if formTags and formTags != [c11n_constants.ProjectionDecalFormTags.ANY]:
-            _xml.raiseWrongXml(ctx, 'tags', 'wrong formfactor for slot ID%i' % slotId)
     slotId = _xml.readInt(ctx, subsection, 'slotId')
     _verifySlotId(ctx, slotType, slotId)
     attachedPartsData = _xml.readStringOrNone(ctx, subsection, 'attachedPart')
@@ -56,11 +51,32 @@ def _readCustomizationSlot(ctx, subsection, slotType):
 
     else:
         attachedParts = None
-    descr = shared_components.CustomizationSlotDescription(type=slotType, anchorPosition=_xml.readVector3(ctx, subsection, 'anchorPosition'), anchorDirection=_xml.readVector3(ctx, subsection, 'anchorDirection'), applyTo=applyTo, slotId=slotId, position=_xml.readVector3OrNone(ctx, subsection, 'position'), rotation=_xml.readVector3OrNone(ctx, subsection, 'rotation'), scale=_xml.readVector3OrNone(ctx, subsection, 'scale'), scaleFactors=_xml.readVector3OrNone(ctx, subsection, 'scaleFactors'), doubleSided=_xml.readBool(ctx, subsection, 'doubleSided', False), showOn=showOn, tags=tags, parentSlotId=parentSlotId, clipAngle=_xml.readFloat(ctx, subsection, 'clipAngle', 0.0), attachedParts=attachedParts)
+    descr = shared_components.CustomizationSlotDescription(type=slotType, anchorPosition=_xml.readVector3(ctx, subsection, 'anchorPosition'), anchorDirection=_xml.readVector3(ctx, subsection, 'anchorDirection'), applyTo=applyTo, slotId=slotId, position=_xml.readVector3OrNone(ctx, subsection, 'position'), rotation=_xml.readVector3OrNone(ctx, subsection, 'rotation'), scale=_xml.readVector3OrNone(ctx, subsection, 'scale'), scaleFactors=_xml.readVector3OrNone(ctx, subsection, 'scaleFactors'), doubleSided=_xml.readBool(ctx, subsection, 'doubleSided', False), showOn=showOn, tags=tags, clipAngle=_xml.readFloat(ctx, subsection, 'clipAngle', 0.0), attachedParts=attachedParts)
     return descr
 
 
+__customizationSlotIdRanges = None
+
+def _readCustomizationSlotIdRanges():
+    global __customizationSlotIdRanges
+    filePath = _CUSTOMIZATION_CONSTANTS_PATH
+    section = ResMgr.openSection(filePath)
+    if section is None:
+        _xml.raiseWrongXml(None, filePath, 'can not open or read')
+    xmlCtx = (None, filePath)
+    slots = _xml.getSubsection(xmlCtx, section, 'slot_id_ranges')
+    for partName, part in _xml.getChildren(xmlCtx, section, 'slot_id_ranges'):
+        partIds = __customizationSlotIdRanges[partName]
+        for itemName, item in _xml.getChildren(xmlCtx, slots, partName):
+            range_min = _xml.readInt(xmlCtx, item, 'range_min')
+            range_max = _xml.readInt(xmlCtx, item, 'range_max')
+            partIds[itemName] = (range_min, range_max)
+
+    return
+
+
 def _verifySlotId(ctx, slotType, slotId):
+    global __customizationSlotIdRanges
     tankPart = ctx[0][1]
     if tankPart == 'hull':
         tankArea = tankPart
@@ -72,7 +88,10 @@ def _verifySlotId(ctx, slotType, slotId):
         tankArea = 'chassis'
     else:
         return
-    minSlotId, maxSlotId = c11n_constants.customizationSlotIds[tankArea][slotType]
+    if __customizationSlotIdRanges is None:
+        __customizationSlotIdRanges = defaultdict(dict)
+        _readCustomizationSlotIdRanges()
+    minSlotId, maxSlotId = __customizationSlotIdRanges[tankArea][slotType]
     if not minSlotId <= slotId <= maxSlotId:
         xmlContext, fileName = ctx
         while xmlContext is not None:
@@ -221,21 +240,32 @@ def readDeviceHealthParams(xmlCtx, section, subsectionName='', withHysteresis=Tr
 
 
 def readCamouflage(xmlCtx, section, sectionName, default=None):
+    tiling, mask, density, aoTextureSize = (None, None, None, None)
     tilingKey = sectionName + '/tiling'
-    if default is None or section.has_key(tilingKey):
-        tiling = _xml.readTupleOfFloats(xmlCtx, section, tilingKey, 4)
-        if tiling[0] <= 0 or tiling[1] <= 0:
-            if default is None:
-                _xml.raiseWrongSection(xmlCtx, tilingKey)
-            else:
-                tiling = default[0]
-    else:
-        tiling = default[0]
+    if section.has_key(tilingKey):
+        readTiling = _xml.readTupleOfFloats(xmlCtx, section, tilingKey, 4)
+        if readTiling[0] > 0 and readTiling[1] > 0:
+            tiling = readTiling
+    if tiling is None:
+        if default is not None:
+            tiling = default[0]
+        else:
+            _xml.raiseWrongSection(xmlCtx, tilingKey)
     maskKey = sectionName + '/exclusionMask'
     mask = section.readString(maskKey)
     if not mask and default is not None:
         mask = default[1]
-    return shared_components.Camouflage(tiling, mask)
+    densityKey = sectionName + '/density'
+    if section.has_key(densityKey):
+        density = _xml.readTupleOfFloats(xmlCtx, section, densityKey, 2)
+    if density is None and default is not None:
+        density = default[2]
+    aoTextureSizeKey = sectionName + '/aoTextureSize'
+    if section.has_key(aoTextureSizeKey):
+        aoTextureSize = _xml.readTupleOfFloats(xmlCtx, section, aoTextureSizeKey, 2)
+    if aoTextureSize is None and default is not None:
+        aoTextureSize = default[3]
+    return shared_components.Camouflage(tiling, mask, density, aoTextureSize)
 
 
 def readBuilder(xmlCtx, section, subsectionName, builderType):
@@ -248,3 +278,18 @@ def readBuilder(xmlCtx, section, subsectionName, builderType):
     else:
         _xml.raiseWrongSection(xmlCtx, subsectionName)
     return
+
+
+def readBuilders(xmlCtx, section, subsectionName, builderType):
+    products = []
+    for node in section.items():
+        if node[0] == subsectionName:
+            product = builderType(node[1])
+            if product is not None:
+                products.append(product)
+            else:
+                _xml.raiseWrongXml(xmlCtx, subsectionName, 'Failed builder {0} loading from {1}'.format(builderType, subsectionName))
+
+    if not products:
+        _xml.raiseWrongSection(xmlCtx, subsectionName)
+    return products

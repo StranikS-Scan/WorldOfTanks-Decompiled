@@ -1,7 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/vehiclePreview20/vehicle_preview_dp.py
 import logging
-import BigWorld
 import nations
 from gui.Scaleform import MENU
 from gui import GUI_NATIONS_ORDER_INDEX_REVERSED
@@ -242,6 +241,6 @@ class DefaultVehPreviewDataProvider(IVehPreviewDataProvider):
                 actionType, actionValue = action
                 if actionValue == _CUSTOM_OFFER_ACTION_PERCENT:
                     return {'name': backport.text(R.strings.vehicle_preview.buyingPanel.customOffer.buy()) if actionType in Currency.ALL else backport.text(R.strings.vehicle_preview.buyingPanel.customOffer.research()),
-                     'value': '{}%'.format(BigWorld.wg_getIntegralFormat(actionValue))}
+                     'value': '{}%'.format(backport.getIntegralFormat(actionValue))}
 
         return None

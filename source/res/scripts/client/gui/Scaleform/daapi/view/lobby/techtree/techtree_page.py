@@ -1,7 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/techtree/techtree_page.py
 import Keys
-import BigWorld
 import GUI
 import nations
 from constants import IS_DEVELOPMENT
@@ -216,10 +215,10 @@ class TechTree(TechTreeMeta):
         nationalAmount = self.__nationalFragmentsData.get(selectedNation, 0)
         balanceStr = text_styles.main(backport.text(R.strings.blueprints.blueprintScreen.resourcesOnStorage()))
         intFragmentVO = {'iconPath': backport.image(R.images.gui.maps.icons.blueprints.fragment.small.intelligence()),
-         'title': BigWorld.wg_getIntegralFormat(self.__intelligenceAmount),
+         'title': backport.getIntegralFormat(self.__intelligenceAmount),
          'fragmentCD': BlueprintTypes.INTELLIGENCE_DATA}
         natFragmentVO = {'iconPath': backport.image(R.images.gui.maps.icons.blueprints.fragment.small.dyn(SelectedNation.getName())()),
-         'title': BigWorld.wg_getIntegralFormat(nationalAmount),
+         'title': backport.getIntegralFormat(nationalAmount),
          'fragmentCD': getNationalFragmentCD(selectedNation)}
         balanceVO = {'balanceStr': balanceStr,
          'internationalItemVO': intFragmentVO,

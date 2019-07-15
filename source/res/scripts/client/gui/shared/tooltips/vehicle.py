@@ -2,7 +2,6 @@
 # Embedded file name: scripts/client/gui/shared/tooltips/vehicle.py
 import collections
 import logging
-import BigWorld
 import constants
 from gui.impl.gen import R
 from gui.impl import backport
@@ -166,7 +165,7 @@ class VehicleInfoTooltipData(BlocksTooltipData):
         if statsConfig.dailyXP:
             attrs = self.__itemsCache.items.stats.attributes
             if attrs & constants.ACCOUNT_ATTR.DAILY_MULTIPLIED_XP and vehicle.dailyXPFactor > 0:
-                dailyXPText = text_styles.main(text_styles.expText(''.join(('x', BigWorld.wg_getIntegralFormat(vehicle.dailyXPFactor)))))
+                dailyXPText = text_styles.main(text_styles.expText(''.join(('x', backport.getIntegralFormat(vehicle.dailyXPFactor)))))
                 items.append(formatters.packTextParameterWithIconBlockData(name=text_styles.main(TOOLTIPS.VEHICLE_DAILYXPFACTOR), value=dailyXPText, icon=ICON_TEXT_FRAMES.DOUBLE_XP_FACTOR, iconYOffset=2, valueWidth=valueWidth, gap=0, padding=formatters.packPadding(left=0, top=-2, bottom=5)))
         if statsConfig.restorePrice:
             if vehicle.isRestorePossible() and vehicle.hasLimitedRestore():
@@ -586,7 +585,7 @@ class PriceBlockConstructor(VehicleTooltipBlockConstructor):
         if xp:
             xpValue = vehicle.xp
             if isUnlocked and not vehicle.getRentPackage() or vehicle.isRestorePossible() or vehicle.isInInventory:
-                xPText = text_styles.expTextBig(BigWorld.wg_getIntegralFormat(xpValue))
+                xPText = text_styles.expTextBig(backport.getIntegralFormat(xpValue))
                 icon = RES_ICONS.MAPS_ICONS_LIBRARY_ELITEXPICONBIG if vehicle.isElite or vehicle.isPremium else RES_ICONS.MAPS_ICONS_LIBRARY_XPICONBIG_2
                 xpBlock = [formatters.packTextBlockData(text_styles.main(TOOLTIPS.VEHICLE_XP)), formatters.packImageTextBlockData(title=xPText, img=icon, imgPadding=formatters.packPadding(left=0, top=4), imgAtLeft=False, snapImage=True, txtGap=-2, txtOffset=0, padding=formatters.packPadding(top=-4, bottom=0))]
                 block.append(formatters.packBuildUpBlockData(xpBlock, blockWidth=150, padding=formatters.packPadding(bottom=-8)))
@@ -808,7 +807,7 @@ class ClanLockAdditionalStatsBlockConstructor(LockAdditionalStatsBlockConstructo
 
     def _makeLockText(self):
         clanLockTime = self.vehicle.clanLock
-        time = time_utils.getDateTimeFormat(clanLockTime)
+        time = backport.getDateTimeFormat(clanLockTime)
         timeStr = text_styles.main(text_styles.concatStylesWithSpace(_ms(TOOLTIPS.TANKCARUSEL_LOCK_TO), time))
         return text_styles.concatStylesToMultiLine(timeStr, text_styles.main(_ms(TOOLTIPS.TANKCARUSEL_LOCK_CLAN)))
 

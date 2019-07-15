@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/prb_control/formatters/windows.py
-from gui.Scaleform.locale.PREBATTLE import PREBATTLE
+from gui.impl import backport
+from gui.impl.gen import R
 from gui.prb_control.entities.base.ctx import PrbAction
 from gui.ranked_battles.constants import PrimeTimeStatus
 from gui.shared import actions
@@ -48,16 +49,16 @@ class SwitchPeripheryFortCtx(SwitchPeripheryCtx):
     lobbyContext = dependency.descriptor(ILobbyContext)
 
     def getHeader(self):
-        return PREBATTLE.SWITCHPERIPHERYWINDOW_FORT_HEADER
+        return backport.msgid(R.strings.prebattle.switchPeripheryWindow.fort.header())
 
     def getDescription(self):
-        return PREBATTLE.SWITCHPERIPHERYWINDOW_FORT_DESCRIPTION
+        return backport.msgid(R.strings.prebattle.switchPeripheryWindow.fort.description())
 
     def getSelectServerLabel(self):
-        return PREBATTLE.SWITCHPERIPHERYWINDOW_FORT_SELECTSERVERLABEL
+        return backport.msgid(R.strings.prebattle.switchPeripheryWindow.fort.selectServerLabel())
 
     def getApplySwitchLabel(self):
-        return PREBATTLE.SWITCHPERIPHERYWINDOW_FORT_APPLYSWITCHLABEL
+        return backport.msgid(R.strings.prebattle.switchPeripheryWindow.fort.applySwitchLabel())
 
     def getExtraChainSteps(self):
         return None
@@ -73,16 +74,16 @@ class SwitchPeripheryRankedCtx(SwitchPeripheryCtx):
         super(SwitchPeripheryRankedCtx, self).__init__(False)
 
     def getHeader(self):
-        return PREBATTLE.SWITCHPERIPHERYWINDOW_RANKED_HEADER
+        return backport.msgid(R.strings.prebattle.switchPeripheryWindow.ranked.header())
 
     def getDescription(self):
-        return PREBATTLE.SWITCHPERIPHERYWINDOW_RANKED_DESCRIPTION
+        return backport.msgid(R.strings.prebattle.switchPeripheryWindow.ranked.description())
 
     def getSelectServerLabel(self):
-        return PREBATTLE.SWITCHPERIPHERYWINDOW_RANKED_SELECTSERVERLABEL
+        return backport.msgid(R.strings.prebattle.switchPeripheryWindow.ranked.selectServerLabel())
 
     def getApplySwitchLabel(self):
-        return PREBATTLE.SWITCHPERIPHERYWINDOW_RANKED_APPLYSWITCHLABEL
+        return backport.msgid(R.strings.prebattle.switchPeripheryWindow.ranked.applySwitchLabel())
 
     def getExtraChainSteps(self):
 

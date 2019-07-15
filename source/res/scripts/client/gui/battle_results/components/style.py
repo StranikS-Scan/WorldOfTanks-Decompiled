@@ -1,12 +1,13 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/battle_results/components/style.py
 from collections import namedtuple
-import BigWorld
 from constants import IGR_TYPE
 from gui import makeHtmlString
 from gui.Scaleform import settings
 from gui.Scaleform.locale.BATTLE_RESULTS import BATTLE_RESULTS
 from gui.battle_results.components import base
+from gui.impl import backport
+from gui.impl.gen import R
 from gui.shared.formatters import text_styles
 from gui.shared.utils.functions import makeTooltip
 from helpers import i18n
@@ -45,11 +46,11 @@ def makeMarksOfMasteryText(marksOfMastery, totalVehicles):
 
 
 def getIntegralFormatIfNoEmpty(value):
-    return BigWorld.wg_getIntegralFormat(value) if value else markValueAsEmpty(value)
+    return backport.getIntegralFormat(value) if value else markValueAsEmpty(value)
 
 
 def getFractionalFormatIfNoEmpty(value):
-    return BigWorld.wg_getFractionalFormat(value) if value else markValueAsEmpty(value)
+    return backport.getFractionalFormat(value) if value else markValueAsEmpty(value)
 
 
 _SPLASH_CHAR_NO_EMPTY_STAT = '/'
@@ -63,7 +64,7 @@ def getTooltipParamsStyle(paramKey=None):
 
 def _makeModuleTooltipLabel(module, suffix):
     return makeHtmlString('html_templates:lobby/battle_results', 'tooltip_crit_label', {'image': '{0}{1}'.format(module, suffix),
-     'value': i18n.makeString('#item_types:{0}/name'.format(module))})
+     'value': backport.text(R.strings.item_types.dyn(module).name())})
 
 
 def makeCriticalModuleTooltipLabel(module):
@@ -76,7 +77,7 @@ def makeDestroyedModuleTooltipLabel(module):
 
 def makeTankmenTooltipLabel(role):
     return makeHtmlString('html_templates:lobby/battle_results', 'tooltip_crit_label', {'image': '{0}Destroyed'.format(role),
-     'value': i18n.makeString('#item_types:tankman/roles/{0}'.format(role))})
+     'value': backport.text(R.strings.item_types.tankman.roles.dyn(role)())})
 
 
 class StatRow(base.StatsItem):
@@ -143,7 +144,7 @@ def makeStatRow(label='', labelArgs=None, column1=None, column2=None, column3=No
 
 
 def makeCreditsLabel(value, canBeFaded=False, isDiff=False, useBigIcon=False):
-    formatted = BigWorld.wg_getGoldFormat(int(round(value)))
+    formatted = backport.getGoldFormat(int(round(value)))
     if value < 0:
         formatted = markValueAsError(formatted)
     if isDiff:
@@ -158,7 +159,7 @@ def makeCreditsLabel(value, canBeFaded=False, isDiff=False, useBigIcon=False):
 
 
 def makeGoldLabel(value, canBeFaded=False):
-    formatted = BigWorld.wg_getGoldFormat(value)
+    formatted = backport.getGoldFormat(value)
     if canBeFaded and not value:
         template = 'gold_small_inactive_label'
     else:
@@ -167,7 +168,7 @@ def makeGoldLabel(value, canBeFaded=False):
 
 
 def makeXpLabel(value, canBeFaded=False, isDiff=False, useBigIcon=False):
-    formatted = BigWorld.wg_getIntegralFormat(int(value))
+    formatted = backport.getIntegralFormat(int(value))
     if value < 0:
         formatted = markValueAsError(formatted)
     if isDiff:
@@ -186,15 +187,15 @@ def makeFreeXpLabel(value, canBeFaded=False):
         template = 'free_xp_small_inactive_label'
     else:
         template = 'free_xp_small_label'
-    return makeHtmlString('html_templates:lobby/battle_results', template, {'value': BigWorld.wg_getIntegralFormat(int(value))})
+    return makeHtmlString('html_templates:lobby/battle_results', template, {'value': backport.getIntegralFormat(int(value))})
 
 
 def makeCrystalLabel(value):
-    return makeHtmlString('html_templates:lobby/battle_results', 'crystal_small_label', {'value': BigWorld.wg_getIntegralFormat(int(value))})
+    return makeHtmlString('html_templates:lobby/battle_results', 'crystal_small_label', {'value': backport.getIntegralFormat(int(value))})
 
 
 def makePercentLabel(value):
-    formatted = BigWorld.wg_getGoldFormat(int(value))
+    formatted = backport.getGoldFormat(int(value))
     template = 'percent'
     if value < 0:
         formatted = markValueAsError(formatted)
@@ -215,7 +216,7 @@ def makeIGRBonusLabel(igrIcon):
 
 
 def makeIGRBonusValue(factor):
-    return makeHtmlString('html_templates:lobby/battle_results', 'igr_bonus', {'value': BigWorld.wg_getNiceNumberFormat(factor)})
+    return makeHtmlString('html_templates:lobby/battle_results', 'igr_bonus', {'value': backport.getNiceNumberFormat(factor)})
 
 
 def makeMultiXPFactorValue(value, useFreeXPStyle=False):
@@ -232,7 +233,7 @@ def makeMultiXPFactorValue(value, useFreeXPStyle=False):
 
 
 def makeAOGASFactorValue(value):
-    formatted = ''.join((i18n.makeString(BATTLE_RESULTS.COMMON_XPMULTIPLIERSIGN), BigWorld.wg_getFractionalFormat(value)))
+    formatted = ''.join((i18n.makeString(BATTLE_RESULTS.COMMON_XPMULTIPLIERSIGN), backport.getFractionalFormat(value)))
     formatted = markValueAsError(formatted)
     return formatted
 
@@ -391,7 +392,7 @@ class RedSlashedValuesBlock(TwoItemsWithSlashBlock):
 class MetersToKillometersItem(base.StatsItem):
 
     def _convert(self, value, reusable):
-        converted = BigWorld.wg_getFractionalFormat(value / 1000.0)
+        converted = backport.getFractionalFormat(value / 1000.0)
         if not value:
             converted = markValueAsEmpty(converted)
         return converted

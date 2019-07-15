@@ -2,10 +2,10 @@
 # Embedded file name: scripts/client/gui/shared/gui_items/dossier/__init__.py
 import math
 import cPickle
-import BigWorld
 import dossiers2
 from constants import DOSSIER_TYPE
 from gui.Scaleform.locale.MENU import MENU
+from gui.impl import backport
 from helpers import dependency
 from items import tankmen
 from helpers import i18n
@@ -191,7 +191,7 @@ class TankmanDossier(_Dossier, stats.TankmanDossierStats):
         return result
 
     def __formatValueForUI(self, value):
-        return i18n.makeString('#menu:profile/stats/items/empty') if value is None else BigWorld.wg_getIntegralFormat(value)
+        return i18n.makeString('#menu:profile/stats/items/empty') if value is None else backport.getIntegralFormat(value)
 
     def __getBattlesLeftOnPremiumVehicle(self, value):
         xpFactorToUse = self.PREMIUM_TANK_DEFAULT_CREW_XP_FACTOR

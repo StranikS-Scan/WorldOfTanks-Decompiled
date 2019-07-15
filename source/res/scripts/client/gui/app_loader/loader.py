@@ -125,6 +125,9 @@ class AppLoader(IAppLoader):
     def changeSpace(self, space):
         return self.__updateSpace(space)
 
+    def setupSpace(self, *args, **kwargs):
+        self.__space.setup(*args, **kwargs)
+
     def createLobby(self):
         self.__appFactory.createLobby()
 

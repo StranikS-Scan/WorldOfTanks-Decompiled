@@ -1,7 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/barracks/Barracks.py
 import logging
-import BigWorld
 from CurrentVehicle import g_currentVehicle
 from account_helpers.AccountSettings import AccountSettings, BARRACKS_FILTER, RECRUIT_NOTIFICATIONS
 from gui import SystemMessages
@@ -16,6 +15,7 @@ from gui.Scaleform.genConsts.BARRACKS_CONSTANTS import BARRACKS_CONSTANTS
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.game_control.restore_contoller import getTankmenRestoreInfo
+from gui.impl import backport
 from gui.ingame_shop import showBuyGoldForBerth
 from gui.prb_control.entities.listener import IGlobalListener
 from gui.server_events.events_dispatcher import showRecruitWindow
@@ -168,7 +168,7 @@ def _packBuyBerthsSlot(itemsCache=None):
         action = packActionTooltipData(ACTION_TOOLTIPS_TYPE.ECONOMICS, 'berthsPrices', True, berthPrice, defaultBerthPrice)
     enoughGold = berthPrice.gold <= gold
     return {'buy': True,
-     'price': BigWorld.wg_getGoldFormat(berthPrice.getSignValue(Currency.GOLD)),
+     'price': backport.getGoldFormat(berthPrice.getSignValue(Currency.GOLD)),
      'enoughGold': enoughGold or isIngameShopEnabled(),
      'actionPriceData': action,
      'count': berthCount}

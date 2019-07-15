@@ -1,6 +1,6 @@
 <engine_config.xml>
   <personality>	game	</personality>
-  <preferences>	preferences.xml	</preferences>
+  <preferences>	preferences_ct.xml	</preferences>
   <enableBalanceCPU>	true	</enableBalanceCPU>
   <enableServerTimeSync>	true	</enableServerTimeSync>
   <lod>
@@ -139,10 +139,10 @@
     <PS_PERFORMANCE_LOD_MULT>	1.2	</PS_PERFORMANCE_LOD_MULT>
   </ParticleSystem>
   <debug>
-    <fullDump>	true	</fullDump>
-    <clientUrl></clientUrl>
+    <fullDump>	false	</fullDump>
+    <clientUrl>	http://cat-st1.wargaming.net	</clientUrl>
     <botsUrl>	http://cat-st1.wargaming.net	</botsUrl>
-    <dxdiag>	true	</dxdiag>
+    <dxdiag>	false	</dxdiag>
     <framesCount>	0	</framesCount>
     <enableServers>	false	</enableServers>
     <profilerBufferSize>	12582912	</profilerBufferSize>
@@ -182,6 +182,13 @@
         <IOPoolSize>	4	</IOPoolSize>
         <IOGranularity>	16	</IOGranularity>
       </memoryManager>
+      <memoryManager_64bit>
+        <defaultPool>	24	</defaultPool>
+        <lowEnginePool>	10	</lowEnginePool>
+        <streamingPool>	2	</streamingPool>
+        <IOPoolSize>	4	</IOPoolSize>
+        <IOGranularity>	16	</IOGranularity>
+      </memoryManager_64bit>
       <soundRender>
         <use_config>	false	</use_config>
         <HDR_lower_threshold>	-40	</HDR_lower_threshold>
@@ -388,6 +395,13 @@
         <IOPoolSize>	4	</IOPoolSize>
         <IOGranularity>	16	</IOGranularity>
       </memoryManager>
+      <memoryManager_64bit>
+        <defaultPool>	24	</defaultPool>
+        <lowEnginePool>	10	</lowEnginePool>
+        <streamingPool>	2	</streamingPool>
+        <IOPoolSize>	4	</IOPoolSize>
+        <IOGranularity>	16	</IOGranularity>
+      </memoryManager_64bit>
       <soundRender>
         <use_config>	true	</use_config>
         <HDR_lower_threshold>	-40	</HDR_lower_threshold>
@@ -545,8 +559,8 @@
       <source>	SCRIPT	</source>
       <source>	UI	</source>
       <openMode>	a	</openMode>
-      <maxSizeKB>	2048	</maxSizeKB>
-      <trimToKB>	512	</trimToKB>
+      <maxSizeKB>	512	</maxSizeKB>
+      <trimToKB>	0	</trimToKB>
       <showTime>	true	</showTime>
       <disableBuffering>	false	</disableBuffering>
       <messageLength>	8192	</messageLength>
@@ -554,8 +568,8 @@
     <file>	ui.log	  <enabled>	true	</enabled>
       <source>	UI	</source>
       <openMode>	a	</openMode>
-      <maxSizeKB>	2048	</maxSizeKB>
-      <trimToKB>	512	</trimToKB>
+      <maxSizeKB>	512	</maxSizeKB>
+      <trimToKB>	0	</trimToKB>
       <showTime>	true	</showTime>
       <disableBuffering>	false	</disableBuffering>
       <messageLength>	8192	</messageLength>

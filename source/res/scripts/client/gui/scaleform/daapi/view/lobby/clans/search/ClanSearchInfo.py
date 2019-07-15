@@ -1,7 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/clans/search/ClanSearchInfo.py
 import weakref
-import BigWorld
 from adisp import process
 from gui import SystemMessages
 from gui.Scaleform.daapi.view.lobby.profile.ProfileUtils import HeaderItemsTypes, ProfileUtils
@@ -11,6 +10,7 @@ from gui.clans import formatters as clans_fmts
 from gui.clans.clan_helpers import ClanListener
 from gui.clans.items import formatField
 from gui.clans.settings import CLIENT_CLAN_RESTRICTIONS, MAX_CLAN_MEMBERS_COUNT
+from gui.impl import backport
 from gui.shared import event_dispatcher as shared_events
 from gui.shared.formatters import text_styles
 from gui.shared.utils.functions import makeTooltip
@@ -74,10 +74,10 @@ class ClanSearchInfo(ClanSearchInfoMeta, ClanListener, ClanEmblemsHelper):
     def _updateDetailedInfo(self):
         clanID = self.__selectedClan.getClanDbID()
         clanName = formatField(self.__selectedClan.getClanFullName)
-        rating = formatField(getter=self.__selectedClan.getPersonalRating, formatter=BigWorld.wg_getIntegralFormat)
-        battlesCount = formatField(getter=self.__selectedClan.getBattlesCount, formatter=BigWorld.wg_getIntegralFormat)
-        wins = formatField(getter=self.__selectedClan.getBattleXpAvg, formatter=lambda value: BigWorld.wg_getNiceNumberFormat(value) + '%')
-        avgExp = formatField(getter=self.__selectedClan.getBattlesPerformanceAvg, formatter=BigWorld.wg_getIntegralFormat)
+        rating = formatField(getter=self.__selectedClan.getPersonalRating, formatter=backport.getIntegralFormat)
+        battlesCount = formatField(getter=self.__selectedClan.getBattlesCount, formatter=backport.getIntegralFormat)
+        wins = formatField(getter=self.__selectedClan.getBattleXpAvg, formatter=lambda value: backport.getNiceNumberFormat(value) + '%')
+        avgExp = formatField(getter=self.__selectedClan.getBattlesPerformanceAvg, formatter=backport.getIntegralFormat)
         stats = [_packItemData(battlesCount, CLANS.SEARCH_INFO_STATS_BATTLES, CLANS.SEARCH_INFO_STATS_BATTLES_TOOLTIP, 'avgBattlesCount40x32.png'), _packItemData(wins, CLANS.SEARCH_INFO_STATS_WINS, CLANS.SEARCH_INFO_STATS_WINS_TOOLTIP, 'avgWins40x32.png'), _packItemData(avgExp, CLANS.SEARCH_INFO_STATS_AVGEXP, CLANS.SEARCH_INFO_STATS_AVGEXP_TOOLTIP, 'avgExp40x32.png')]
         self.as_setDataS({'clanId': clanID,
          'clanName': clanName,

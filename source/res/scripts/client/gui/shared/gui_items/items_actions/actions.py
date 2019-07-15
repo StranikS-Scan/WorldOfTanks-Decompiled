@@ -1,7 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/gui_items/items_actions/actions.py
 from collections import namedtuple
-import BigWorld
 from adisp import process, async
 from debug_utils import LOG_ERROR, LOG_DEBUG
 from gui import SystemMessages, DialogsInterface
@@ -17,6 +16,7 @@ from gui.Scaleform.daapi.view.lobby.techtree.settings import RequestState
 from gui.Scaleform.daapi.view.lobby.techtree.settings import UnlockStats
 from gui.Scaleform.daapi.view.lobby.techtree.techtree_dp import g_techTreeDP
 from gui.Scaleform.locale.SYSTEM_MESSAGES import SYSTEM_MESSAGES
+from gui.impl import backport
 from gui.shared import event_dispatcher as shared_events
 from gui.shared.economics import getGUIPrice
 from gui.shared.gui_items import GUI_ITEM_TYPE
@@ -263,8 +263,8 @@ class _UnlockItem(CachedItemAction):
 
     def _showResult(self, result):
         if result.success:
-            self.__costCtx['vehXP'] = BigWorld.wg_getIntegralFormat(self.__costCtx['vehXP'])
-            self.__costCtx['freeXP'] = BigWorld.wg_getIntegralFormat(self.__costCtx['freeXP'])
+            self.__costCtx['vehXP'] = backport.getIntegralFormat(self.__costCtx['vehXP'])
+            self.__costCtx['freeXP'] = backport.getIntegralFormat(self.__costCtx['freeXP'])
             showUnlockMsg('unlock_success', self._item, msgType=SystemMessages.SM_TYPE.PowerLevel, **self.__costCtx)
         elif result.userMsg:
             showUnlockMsg(result.userMsg, self._item)

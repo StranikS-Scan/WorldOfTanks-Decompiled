@@ -1,6 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/storage/blueprints/blueprints_storage_view.py
-import BigWorld
 import nations
 from CurrentVehicle import g_currentVehicle
 from blueprints.BlueprintTypes import BlueprintTypes
@@ -11,6 +10,7 @@ from gui.Scaleform.daapi.view.lobby.storage.blueprints import BlueprintsStorageC
 from gui.Scaleform.daapi.view.lobby.storage.storage_carousel_environment import StorageCarouselEnvironment
 from gui.Scaleform.daapi.view.meta.StorageCategoryBlueprintsViewMeta import StorageCategoryBlueprintsViewMeta
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
+from gui.impl import backport
 from gui.shared import event_dispatcher as shared_events
 from gui.shared.formatters import text_styles
 from gui.shared.gui_items import GUI_ITEM_TYPE
@@ -62,7 +62,7 @@ class StorageCategoryBlueprintsView(StorageCategoryBlueprintsViewMeta, StorageCa
     @staticmethod
     def __makeFragmentVO(count, iconName, tooltipData=None):
         style = text_styles.stats if count > 0 else text_styles.main
-        label = style(BigWorld.wg_getIntegralFormat(count))
+        label = style(backport.getIntegralFormat(count))
         return {'hasFragments': count > 0,
          'label': label,
          'iconSmall': RES_ICONS.getBlueprintFragment('medium', iconName),

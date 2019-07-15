@@ -1,12 +1,13 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/formatters/__init__.py
+import logging
 from time import gmtime, time as getTime
 from collections import namedtuple
-import BigWorld
 from constants import NC_CONTEXT_ITEM_TYPE
-from debug_utils import LOG_WARNING, LOG_CURRENT_EXCEPTION, LOG_ERROR
+from gui.impl import backport
 from helpers import time_utils, i18n
 from messenger import g_settings
+_logger = logging.getLogger(__name__)
 
 class TimeFormatter(object):
     _messageDateTimeFormat = {0: 'getMessageEmptyFormatU',
@@ -21,27 +22,27 @@ class TimeFormatter(object):
 
     @classmethod
     def getShortDateFormat(cls, time):
-        return '{0:>s}'.format(BigWorld.wg_getShortDateFormat(time))
+        return '{0:>s}'.format(backport.getShortDateFormat(time))
 
     @classmethod
     def getLongTimeFormat(cls, time):
-        return '{0:>s}'.format(BigWorld.wg_getLongTimeFormat(time))
+        return '{0:>s}'.format(backport.getLongTimeFormat(time))
 
     @classmethod
     def getShortTimeFormat(cls, time):
-        return '{0:>s}'.format(BigWorld.wg_getShortTimeFormat(time))
+        return '{0:>s}'.format(backport.getShortTimeFormat(time))
 
     @classmethod
     def getLongDatetimeFormat(cls, time):
-        return '{0:>s} {1:>s}'.format(BigWorld.wg_getShortDateFormat(time), BigWorld.wg_getLongTimeFormat(time))
+        return '{0:>s} {1:>s}'.format(backport.getShortDateFormat(time), backport.getLongTimeFormat(time))
 
     @classmethod
     def getShortTimeDateFormat(cls, time):
-        return '{0:>s} {1:>s}'.format(BigWorld.wg_getShortTimeFormat(time), BigWorld.wg_getShortDateFormat(time))
+        return '{0:>s} {1:>s}'.format(backport.getShortTimeFormat(time), backport.getShortDateFormat(time))
 
     @classmethod
     def getShortDatetimeFormat(cls, time):
-        return '{0:>s} {1:>s}'.format(BigWorld.wg_getShortDateFormat(time), BigWorld.wg_getShortTimeFormat(time))
+        return '{0:>s} {1:>s}'.format(backport.getShortDateFormat(time), backport.getShortTimeFormat(time))
 
     @classmethod
     def getActualMsgTimeStr(cls, timestamp):
@@ -52,8 +53,7 @@ class TimeFormatter(object):
                 return TimeFormatter.getShortTimeDateFormat(timestamp)
             return TimeFormatter.getShortTimeFormat(timestamp)
         except Exception:
-            LOG_ERROR('There is error while formatting message time', timestamp)
-            LOG_CURRENT_EXCEPTION()
+            _logger.exception('There is error while formatting message time: %r', timestamp)
 
     @classmethod
     def getMessageEmptyFormatU(cls, _):
@@ -61,15 +61,15 @@ class TimeFormatter(object):
 
     @classmethod
     def getMessageShortDateFormat(cls, time):
-        return '({0:>s}) '.format(BigWorld.wg_getShortDateFormat(time)).decode('utf-8', 'ignore')
+        return '({0:>s}) '.format(backport.getShortDateFormat(time)).decode('utf-8', 'ignore')
 
     @classmethod
     def getMessageLongTimeFormat(cls, time):
-        return '({0:>s}) '.format(BigWorld.wg_getLongTimeFormat(time)).decode('utf-8', 'ignore')
+        return '({0:>s}) '.format(backport.getLongTimeFormat(time)).decode('utf-8', 'ignore')
 
     @classmethod
     def getMessageLongDatetimeFormat(cls, time):
-        return '({0:>s} {1:>s}) '.format(BigWorld.wg_getShortDateFormat(time), BigWorld.wg_getLongTimeFormat(time)).decode('utf-8', 'ignore')
+        return '({0:>s} {1:>s}) '.format(backport.getShortDateFormat(time), backport.getLongTimeFormat(time)).decode('utf-8', 'ignore')
 
 
 class NCContextItemFormatter(object):
@@ -87,46 +87,46 @@ class NCContextItemFormatter(object):
     @classmethod
     def getItemFormat(cls, itemType, itemValue):
         if itemType not in cls._formats:
-            LOG_WARNING('Type of item is not found', itemType, itemValue)
+            _logger.warning('Type of item is not found: %r, %r', itemType, itemValue)
             return str(itemValue)
         method = cls._formats[itemType]
         return getattr(cls, method)(itemValue)
 
     @classmethod
     def getGoldFormat(cls, value):
-        return BigWorld.wg_getGoldFormat(value)
+        return backport.getGoldFormat(value)
 
     @classmethod
     def getIntegralFormat(cls, value):
-        return BigWorld.wg_getIntegralFormat(value)
+        return backport.getIntegralFormat(value)
 
     @classmethod
     def getFractionalFormat(cls, value):
-        return BigWorld.wg_getFractionalFormat(value)
+        return backport.getFractionalFormat(value)
 
     @classmethod
     def getNiceNumberFormat(cls, value):
-        return BigWorld.wg_getNiceNumberFormat(value)
+        return backport.getNiceNumberFormat(value)
 
     @classmethod
     def getShortTimeFormat(cls, value):
-        return cls._makeLocalTimeString(value, BigWorld.wg_getShortTimeFormat)
+        return cls._makeLocalTimeString(value, backport.getShortTimeFormat)
 
     @classmethod
     def getLongTimeFormat(cls, value):
-        return cls._makeLocalTimeString(value, BigWorld.wg_getLongTimeFormat)
+        return cls._makeLocalTimeString(value, backport.getLongTimeFormat)
 
     @classmethod
     def getShortDateFormat(cls, value):
-        return cls._makeLocalTimeString(value, BigWorld.wg_getShortDateFormat)
+        return cls._makeLocalTimeString(value, backport.getShortDateFormat)
 
     @classmethod
     def getLongDateFormat(cls, value):
-        return cls._makeLocalTimeString(value, BigWorld.wg_getLongDateFormat)
+        return cls._makeLocalTimeString(value, backport.getLongDateFormat)
 
     @classmethod
     def getDateTimeFormat(cls, value):
-        return cls._makeLocalTimeString(value, lambda localTime: '{0:>s} {1:>s}'.format(BigWorld.wg_getShortDateFormat(value), BigWorld.wg_getLongTimeFormat(value)))
+        return cls._makeLocalTimeString(value, lambda localTime: '{0:>s} {1:>s}'.format(backport.getShortDateFormat(value), backport.getLongTimeFormat(value)))
 
     @classmethod
     def getStringFormat(cls, value):
@@ -138,7 +138,7 @@ class NCContextItemFormatter(object):
         if result:
             result = formatter(value)
         else:
-            LOG_WARNING('Timestamp is not defined', value)
+            _logger.warning('Timestamp is not defined: %r', value)
             result = ''
         return result
 

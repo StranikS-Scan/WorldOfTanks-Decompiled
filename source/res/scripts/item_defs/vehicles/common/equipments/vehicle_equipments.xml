@@ -1,0 +1,537 @@
+<vehicle_equipments.xml>
+  <handExtinguishers>
+    <id>	0	</id>
+    <userString>	#artefacts:handExtinguishers/name	</userString>
+    <description>	#artefacts:handExtinguishers/descr	</description>
+    <shortDescriptionSpecial>	#artefacts:handExtinguishers/short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#artefacts:handExtinguishers/long_special	</longDescriptionSpecial>
+    <icon>	handExtinguishers 0 0	</icon>
+    <price>	3000	</price>
+    <tags>	extinguisher	</tags>
+    <script>	Extinguisher	  <cooldownSeconds>	90	</cooldownSeconds>
+      <reuseCount>	-1	</reuseCount>
+    </script>
+  </handExtinguishers>
+  <autoExtinguishers>
+    <id>	1	</id>
+    <userString>	#artefacts:autoExtinguishers/name	</userString>
+    <description>	#artefacts:autoExtinguishers/descr	</description>
+    <shortDescriptionSpecial>	#artefacts:autoExtinguishers/short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#artefacts:autoExtinguishers/long_special	</longDescriptionSpecial>
+    <icon>	autoExtinguishers 0 0	</icon>
+    <price>	20000	</price>
+    <improved>	true	</improved>
+    <tags>	extinguisher premium_equipment	</tags>
+    <script>	Extinguisher	  <fireStartingChanceFactor>	0.9	</fireStartingChanceFactor>
+      <autoactivate>	true	</autoactivate>
+      <cooldownSeconds>	90	</cooldownSeconds>
+      <reuseCount>	-1	</reuseCount>
+    </script>
+    <kpi>
+      <mul>
+        <name>	vehicleFireChance	</name>
+        <value>	1.1	</value>
+      </mul>
+    </kpi>
+  </autoExtinguishers>
+  <smallMedkit>
+    <id>	2	</id>
+    <userString>	#artefacts:smallMedkit/name	</userString>
+    <description>	#artefacts:smallMedkit/descr	</description>
+    <shortDescriptionSpecial>	#artefacts:smallMedkit/short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#artefacts:smallMedkit/long_special	</longDescriptionSpecial>
+    <icon>	smallMedkit 0 0	</icon>
+    <price>	3000	</price>
+    <tags>	medkit	</tags>
+    <script>	Repairkit	  <repairAll>	false	</repairAll>
+      <bonusValue>	0	</bonusValue>
+      <stunResistanceEffect>	0.0	</stunResistanceEffect>
+      <stunResistanceDuration>	0.0	</stunResistanceDuration>
+      <cooldownSeconds>	90	</cooldownSeconds>
+      <reuseCount>	-1	</reuseCount>
+    </script>
+  </smallMedkit>
+  <largeMedkit>
+    <id>	3	</id>
+    <userString>	#artefacts:largeMedkit/name	</userString>
+    <description>	#artefacts:largeMedkit/descr	</description>
+    <shortDescriptionSpecial>	#artefacts:largeMedkit/short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#artefacts:largeMedkit/long_special	</longDescriptionSpecial>
+    <icon>	largeMedkit 0 0	</icon>
+    <price>	20000	</price>
+    <improved>	true	</improved>
+    <tags>	medkit premium_equipment	</tags>
+    <script>	Repairkit	  <repairAll>	true	</repairAll>
+      <bonusValue>	0.30	</bonusValue>
+      <stunResistanceEffect>	0.0	</stunResistanceEffect>
+      <stunResistanceDuration>	0.05	</stunResistanceDuration>
+      <cooldownSeconds>	90	</cooldownSeconds>
+      <reuseCount>	-1	</reuseCount>
+    </script>
+    <kpi>
+      <mul>
+        <name>	crewHitChance	</name>
+        <value>	1.15	</value>
+      </mul>
+      <mul>
+        <name>	crewStunDuration	</name>
+        <value>	0.95	</value>
+      </mul>
+    </kpi>
+  </largeMedkit>
+  <smallRepairkit>
+    <id>	4	</id>
+    <userString>	#artefacts:smallRepairkit/name	</userString>
+    <description>	#artefacts:smallRepairkit/descr	</description>
+    <shortDescriptionSpecial>	#artefacts:smallRepairkit/short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#artefacts:smallRepairkit/long_special	</longDescriptionSpecial>
+    <icon>	smallRepairkit 0 0	</icon>
+    <price>	3000	</price>
+    <tags>	repairkit	</tags>
+    <script>	Repairkit	  <repairAll>	false	</repairAll>
+      <bonusValue>	0	</bonusValue>
+      <cooldownSeconds>	90	</cooldownSeconds>
+      <reuseCount>	-1	</reuseCount>
+    </script>
+  </smallRepairkit>
+  <largeRepairkit>
+    <id>	5	</id>
+    <userString>	#artefacts:largeRepairkit/name	</userString>
+    <description>	#artefacts:largeRepairkit/descr	</description>
+    <shortDescriptionSpecial>	#artefacts:largeRepairkit/short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#artefacts:largeRepairkit/long_special	</longDescriptionSpecial>
+    <icon>	largeRepairkit 0 0	</icon>
+    <price>	20000	</price>
+    <improved>	true	</improved>
+    <tags>	repairkit premium_equipment	</tags>
+    <vehicleFilter>
+      <exclude>
+        <vehicle>
+          <tags>	builtinRepairkit_user	</tags>
+        </vehicle>
+      </exclude>
+    </vehicleFilter>
+    <script>	Repairkit	  <repairAll>	true	</repairAll>
+      <bonusValue>	0.1	</bonusValue>
+      <cooldownSeconds>	90	</cooldownSeconds>
+      <reuseCount>	-1	</reuseCount>
+    </script>
+    <kpi>
+      <mul>
+        <name>	vehicleRepairSpeed	</name>
+        <value>	1.1	</value>
+      </mul>
+    </kpi>
+  </largeRepairkit>
+  <lendLeaseOil>
+    <id>	6	</id>
+    <userString>	#artefacts:lendLeaseOil/name	</userString>
+    <description>	#artefacts:lendLeaseOil/descr	</description>
+    <shortDescriptionSpecial>	#artefacts:lendLeaseOil/short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#artefacts:lendLeaseOil/long_special	</longDescriptionSpecial>
+    <icon>	lendLeaseOil 0 0	</icon>
+    <price>	5000	</price>
+    <tags>	fuel	</tags>
+    <incompatibleTags>
+      <installed>	fuel	</installed>
+    </incompatibleTags>
+    <vehicleFilter>
+      <include>
+        <nations>	ussr	</nations>
+      </include>
+    </vehicleFilter>
+    <script>	Fuel	  <enginePowerFactor>	1.05	</enginePowerFactor>
+      <turretRotationSpeedFactor>	1.0	</turretRotationSpeedFactor>
+    </script>
+    <kpi>
+      <mul>
+        <name>	vehicleEnginePower	</name>
+        <value>	1.05	</value>
+      </mul>
+    </kpi>
+  </lendLeaseOil>
+  <gasoline100>
+    <id>	7	</id>
+    <userString>	#artefacts:gasoline100/name	</userString>
+    <description>	#artefacts:gasoline100/descr	</description>
+    <shortDescriptionSpecial>	#artefacts:gasoline100/short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#artefacts:gasoline100/long_special	</longDescriptionSpecial>
+    <icon>	gasoline100 0 0	</icon>
+    <price>	5000	</price>
+    <tags>	fuel	</tags>
+    <incompatibleTags>
+      <installed>	fuel	</installed>
+    </incompatibleTags>
+    <vehicleFilter>
+      <include>
+        <nations>	usa germany france uk czech sweden poland italy	</nations>
+        <engine>
+          <tags>	gasoline	</tags>
+        </engine>
+      </include>
+    </vehicleFilter>
+    <script>	Fuel	  <enginePowerFactor>	1.05	</enginePowerFactor>
+      <turretRotationSpeedFactor>	1.05	</turretRotationSpeedFactor>
+    </script>
+    <kpi>
+      <mul>
+        <name>	vehicleEnginePower	</name>
+        <value>	1.05	</value>
+      </mul>
+      <mul>
+        <name>	vehicleTurretRotationSpeed	</name>
+        <value>	1.05	</value>
+      </mul>
+    </kpi>
+  </gasoline100>
+  <gasoline105>
+    <id>	8	</id>
+    <userString>	#artefacts:gasoline105/name	</userString>
+    <description>	#artefacts:gasoline105/descr	</description>
+    <shortDescriptionSpecial>	#artefacts:gasoline105/short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#artefacts:gasoline105/long_special	</longDescriptionSpecial>
+    <icon>	gasoline105 0 0	</icon>
+    <price>	20000	</price>
+    <improved>	true	</improved>
+    <tags>	fuel premium_equipment	</tags>
+    <incompatibleTags>
+      <installed>	fuel	</installed>
+    </incompatibleTags>
+    <vehicleFilter>
+      <include>
+        <nations>	usa germany france uk czech sweden poland italy	</nations>
+        <engine>
+          <tags>	gasoline	</tags>
+        </engine>
+      </include>
+    </vehicleFilter>
+    <script>	Fuel	  <enginePowerFactor>	1.1	</enginePowerFactor>
+      <turretRotationSpeedFactor>	1.1	</turretRotationSpeedFactor>
+    </script>
+    <kpi>
+      <mul>
+        <name>	vehicleEnginePower	</name>
+        <value>	1.1	</value>
+      </mul>
+      <mul>
+        <name>	vehicleTurretRotationSpeed	</name>
+        <value>	1.1	</value>
+      </mul>
+    </kpi>
+  </gasoline105>
+  <chocolate>
+    <id>	9	</id>
+    <userString>	#artefacts:chocolate/name	</userString>
+    <description>	#artefacts:chocolate/descr	</description>
+    <shortDescriptionSpecial>	#artefacts:chocolate/short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#artefacts:chocolate/long_special	</longDescriptionSpecial>
+    <icon>	chocolate 0 0	</icon>
+    <price>	20000	</price>
+    <improved>	true	</improved>
+    <tags>	stimulator premium_equipment	</tags>
+    <vehicleFilter>
+      <include>
+        <nations>	germany	</nations>
+      </include>
+    </vehicleFilter>
+    <script>	Stimulator	  <crewLevelIncrease>	10	</crewLevelIncrease>
+    </script>
+    <kpi>
+      <mul>
+        <name>	crewLevel	</name>
+        <value>	1.1	</value>
+      </mul>
+    </kpi>
+  </chocolate>
+  <cocacola>
+    <id>	100	</id>
+    <userString>	#artefacts:cocacola/name	</userString>
+    <description>	#artefacts:cocacola/descr	</description>
+    <shortDescriptionSpecial>	#artefacts:cocacola/short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#artefacts:cocacola/long_special	</longDescriptionSpecial>
+    <icon>	cocacola 0 0	</icon>
+    <price>	20000	</price>
+    <improved>	true	</improved>
+    <tags>	stimulator premium_equipment	</tags>
+    <vehicleFilter>
+      <include>
+        <nations>	usa	</nations>
+      </include>
+    </vehicleFilter>
+    <script>	Stimulator	  <crewLevelIncrease>	10	</crewLevelIncrease>
+    </script>
+    <kpi>
+      <mul>
+        <name>	crewLevel	</name>
+        <value>	1.1	</value>
+      </mul>
+    </kpi>
+  </cocacola>
+  <ration>
+    <id>	11	</id>
+    <userString>	#artefacts:ration/name	</userString>
+    <description>	#artefacts:ration/descr	</description>
+    <shortDescriptionSpecial>	#artefacts:ration/short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#artefacts:ration/long_special	</longDescriptionSpecial>
+    <icon>	ration 0 0	</icon>
+    <price>	20000	</price>
+    <improved>	true	</improved>
+    <tags>	stimulator premium_equipment	</tags>
+    <vehicleFilter>
+      <include>
+        <nations>	ussr	</nations>
+      </include>
+    </vehicleFilter>
+    <script>	Stimulator	  <crewLevelIncrease>	10	</crewLevelIncrease>
+    </script>
+    <kpi>
+      <mul>
+        <name>	crewLevel	</name>
+        <value>	1.1	</value>
+      </mul>
+    </kpi>
+  </ration>
+  <removedRpmLimiter>
+    <id>	12	</id>
+    <userString>	#artefacts:removedRpmLimiter/name	</userString>
+    <description>	#artefacts:removedRpmLimiter/descr	</description>
+    <shortDescriptionSpecial>	#artefacts:removedRpmLimiter/short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#artefacts:removedRpmLimiter/long_special	</longDescriptionSpecial>
+    <icon>	removedRpmLimiter 0 0	</icon>
+    <price>	3000	</price>
+    <tags>	trigger	</tags>
+    <vehicleFilter>
+      <include>
+        <nations>	ussr china	</nations>
+      </include>
+    </vehicleFilter>
+    <script>	RemovedRpmLimiter	  <enginePowerFactor>	1.1	</enginePowerFactor>
+      <engineHpLossPerSecond>	1.5	</engineHpLossPerSecond>
+    </script>
+    <kpi>
+      <mul>
+        <name>	vehicleEnginePower	</name>
+        <value>	1.1	</value>
+      </mul>
+    </kpi>
+  </removedRpmLimiter>
+  <hotCoffee>
+    <id>	13	</id>
+    <userString>	#artefacts:hotCoffee/name	</userString>
+    <description>	#artefacts:hotCoffee/descr	</description>
+    <shortDescriptionSpecial>	#artefacts:hotCoffee/short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#artefacts:hotCoffee/long_special	</longDescriptionSpecial>
+    <icon>	hotCoffee 0 0	</icon>
+    <price>	20000	</price>
+    <improved>	true	</improved>
+    <tags>	stimulator premium_equipment	</tags>
+    <vehicleFilter>
+      <include>
+        <nations>	france	</nations>
+      </include>
+    </vehicleFilter>
+    <script>	Stimulator	  <crewLevelIncrease>	10	</crewLevelIncrease>
+    </script>
+    <kpi>
+      <mul>
+        <name>	crewLevel	</name>
+        <value>	1.1	</value>
+      </mul>
+    </kpi>
+  </hotCoffee>
+  <ration_china>
+    <id>	15	</id>
+    <userString>	#artefacts:ration_china/name	</userString>
+    <description>	#artefacts:ration_china/descr	</description>
+    <shortDescriptionSpecial>	#artefacts:ration_china/short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#artefacts:ration_china/long_special	</longDescriptionSpecial>
+    <icon>	ration_china 0 0	</icon>
+    <price>	20000	</price>
+    <improved>	true	</improved>
+    <tags>	stimulator premium_equipment	</tags>
+    <vehicleFilter>
+      <include>
+        <nations>	china	</nations>
+      </include>
+    </vehicleFilter>
+    <script>	Stimulator	  <crewLevelIncrease>	10	</crewLevelIncrease>
+    </script>
+    <kpi>
+      <mul>
+        <name>	crewLevel	</name>
+        <value>	1.1	</value>
+      </mul>
+    </kpi>
+  </ration_china>
+  <qualityOil>
+    <id>	16	</id>
+    <userString>	#artefacts:qualityOil/name	</userString>
+    <description>	#artefacts:qualityOil/descr	</description>
+    <shortDescriptionSpecial>	#artefacts:qualityOil/short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#artefacts:qualityOil/long_special	</longDescriptionSpecial>
+    <icon>	qualityOil 0 0	</icon>
+    <price>	5000	</price>
+    <tags>	fuel	</tags>
+    <incompatibleTags>
+      <installed>	fuel	</installed>
+    </incompatibleTags>
+    <vehicleFilter>
+      <include>
+        <nations>	china japan	</nations>
+      </include>
+    </vehicleFilter>
+    <script>	Fuel	  <enginePowerFactor>	1.05	</enginePowerFactor>
+      <turretRotationSpeedFactor>	1.0	</turretRotationSpeedFactor>
+    </script>
+    <kpi>
+      <mul>
+        <name>	vehicleEnginePower	</name>
+        <value>	1.05	</value>
+      </mul>
+    </kpi>
+  </qualityOil>
+  <ration_uk>
+    <id>	17	</id>
+    <userString>	#artefacts:ration_uk/name	</userString>
+    <description>	#artefacts:ration_uk/descr	</description>
+    <shortDescriptionSpecial>	#artefacts:ration_uk/short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#artefacts:ration_uk/long_special	</longDescriptionSpecial>
+    <icon>	ration_uk 0 0	</icon>
+    <price>	20000	</price>
+    <improved>	true	</improved>
+    <tags>	stimulator premium_equipment	</tags>
+    <vehicleFilter>
+      <include>
+        <nations>	uk	</nations>
+      </include>
+    </vehicleFilter>
+    <script>	Stimulator	  <crewLevelIncrease>	10	</crewLevelIncrease>
+    </script>
+    <kpi>
+      <mul>
+        <name>	crewLevel	</name>
+        <value>	1.1	</value>
+      </mul>
+    </kpi>
+  </ration_uk>
+  <ration_japan>
+    <id>	18	</id>
+    <userString>	#artefacts:ration_japan/name	</userString>
+    <description>	#artefacts:ration_japan/descr	</description>
+    <shortDescriptionSpecial>	#artefacts:ration_japan/short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#artefacts:ration_japan/long_special	</longDescriptionSpecial>
+    <icon>	ration_japan 0 0	</icon>
+    <price>	20000	</price>
+    <improved>	true	</improved>
+    <tags>	stimulator premium_equipment	</tags>
+    <vehicleFilter>
+      <include>
+        <nations>	japan	</nations>
+      </include>
+    </vehicleFilter>
+    <script>	Stimulator	  <crewLevelIncrease>	10	</crewLevelIncrease>
+    </script>
+    <kpi>
+      <mul>
+        <name>	crewLevel	</name>
+        <value>	1.1	</value>
+      </mul>
+    </kpi>
+  </ration_japan>
+  <ration_czech>
+    <id>	61	</id>
+    <userString>	#artefacts:ration_czech/name	</userString>
+    <description>	#artefacts:ration_czech/descr	</description>
+    <shortDescriptionSpecial>	#artefacts:ration_czech/short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#artefacts:ration_czech/long_special	</longDescriptionSpecial>
+    <icon>	ration_czech 0 0	</icon>
+    <price>	20000	</price>
+    <improved>	true	</improved>
+    <tags>	stimulator premium_equipment	</tags>
+    <vehicleFilter>
+      <include>
+        <nations>	czech	</nations>
+      </include>
+    </vehicleFilter>
+    <script>	Stimulator	  <crewLevelIncrease>	10	</crewLevelIncrease>
+    </script>
+    <kpi>
+      <mul>
+        <name>	crewLevel	</name>
+        <value>	1.1	</value>
+      </mul>
+    </kpi>
+  </ration_czech>
+  <ration_sweden>
+    <id>	62	</id>
+    <userString>	#artefacts:ration_sweden/name	</userString>
+    <description>	#artefacts:ration_sweden/descr	</description>
+    <shortDescriptionSpecial>	#artefacts:ration_sweden/short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#artefacts:ration_sweden/long_special	</longDescriptionSpecial>
+    <icon>	ration_sweden 0 0	</icon>
+    <price>	20000	</price>
+    <improved>	true	</improved>
+    <tags>	stimulator premium_equipment	</tags>
+    <vehicleFilter>
+      <include>
+        <nations>	sweden	</nations>
+      </include>
+    </vehicleFilter>
+    <script>	Stimulator	  <crewLevelIncrease>	10	</crewLevelIncrease>
+    </script>
+    <kpi>
+      <mul>
+        <name>	crewLevel	</name>
+        <value>	1.1	</value>
+      </mul>
+    </kpi>
+  </ration_sweden>
+  <ration_poland>
+    <id>	63	</id>
+    <userString>	#artefacts:ration_poland/name	</userString>
+    <description>	#artefacts:ration_poland/descr	</description>
+    <shortDescriptionSpecial>	#artefacts:ration_poland/short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#artefacts:ration_poland/long_special	</longDescriptionSpecial>
+    <icon>	ration_poland 0 0	</icon>
+    <price>	20000	</price>
+    <improved>	true	</improved>
+    <tags>	stimulator premium_equipment	</tags>
+    <vehicleFilter>
+      <include>
+        <nations>	poland	</nations>
+      </include>
+    </vehicleFilter>
+    <script>	Stimulator	  <crewLevelIncrease>	10	</crewLevelIncrease>
+    </script>
+    <kpi>
+      <mul>
+        <name>	crewLevel	</name>
+        <value>	1.1	</value>
+      </mul>
+    </kpi>
+  </ration_poland>
+  <ration_italy>
+    <id>	64	</id>
+    <userString>	#artefacts:ration_italy/name	</userString>
+    <description>	#artefacts:ration_italy/descr	</description>
+    <shortDescriptionSpecial>	#artefacts:ration_italy/short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#artefacts:ration_italy/long_special	</longDescriptionSpecial>
+    <icon>	ration_italy 0 0	</icon>
+    <price>	20000	</price>
+    <improved>	true	</improved>
+    <tags>	stimulator premium_equipment	</tags>
+    <vehicleFilter>
+      <include>
+        <nations>	italy	</nations>
+      </include>
+    </vehicleFilter>
+    <script>	Stimulator	  <crewLevelIncrease>	10	</crewLevelIncrease>
+    </script>
+    <kpi>
+      <mul>
+        <name>	crewLevel	</name>
+        <value>	1.1	</value>
+      </mul>
+    </kpi>
+  </ration_italy>
+</vehicle_equipments.xml>

@@ -461,7 +461,7 @@ def packItemPriceBlockData(price, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_COMPOUND_
     return packBlockDataItem(linkage, price, padding)
 
 
-def packCustomizationImageBlockData(img=None, align=BLOCKS_TOOLTIP_TYPES.ALIGN_LEFT, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_IMAGE_BLOCK_LINKAGE, width=-1, height=-1, padding=None, isHistorical=False, formfactor=None):
+def packCustomizationImageBlockData(img=None, align=BLOCKS_TOOLTIP_TYPES.ALIGN_LEFT, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_IMAGE_BLOCK_LINKAGE, width=-1, height=-1, padding=None, isHistorical=False, formfactor=None, isDim=False):
     data = {'align': align}
     if img is not None:
         data['imagePath'] = img
@@ -470,6 +470,7 @@ def packCustomizationImageBlockData(img=None, align=BLOCKS_TOOLTIP_TYPES.ALIGN_L
     if height != -1:
         data['height'] = height
     data['isHistorical'] = isHistorical
+    data['isDim'] = isDim
     if formfactor is not None:
         data['formfactor'] = formfactor
     return packBlockDataItem(linkage, data, padding)

@@ -5,6 +5,7 @@ import Event
 import constants
 from PlayerEvents import g_playerEvents
 from gui.Scaleform.locale.MENU import MENU
+from gui.impl import backport
 from gui.shared.formatters import text_styles
 from skeletons.gui.game_control import IServerStatsController
 _STATS_REQUEST_TIMEOUT = 5.0
@@ -48,8 +49,8 @@ class ServerStats(IServerStatsController):
         clusterCCU = self.__stats.get('clusterCCU', 0)
         regionCCU = self.__stats.get('regionCCU', 0)
         if regionCCU:
-            clusterUsers = BigWorld.wg_getIntegralFormat(clusterCCU)
-            regionUsers = BigWorld.wg_getIntegralFormat(regionCCU)
+            clusterUsers = backport.getIntegralFormat(clusterCCU)
+            regionUsers = backport.getIntegralFormat(regionCCU)
             if clusterCCU == regionCCU:
                 tooltipType = STATS_TYPE.CLUSTER
             else:

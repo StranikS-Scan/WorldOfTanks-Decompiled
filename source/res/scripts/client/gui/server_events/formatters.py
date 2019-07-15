@@ -3,12 +3,12 @@
 import re
 import types
 from collections import namedtuple
-import BigWorld
 import ArenaType
 from constants import ARENA_BONUS_TYPE, GAMEPLAY_NAMES_WITH_DISABLED_QUESTS
 from gui import makeHtmlString
 from gui.Scaleform.locale.QUESTS import QUESTS
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
+from gui.impl import backport
 from gui.shared.formatters import text_styles, icons as gui_icons
 from gui.shared.money import Currency
 from helpers import i18n
@@ -142,7 +142,7 @@ def _packIconTextElement(label='', icon='', dataType=None, dataValue=None, count
 def formatRelation(value, relation, relationI18nType=RELATIONS_SCHEME.DEFAULT):
     relation = relation or 'equal'
     if not isinstance(value, types.StringTypes):
-        value = BigWorld.wg_getNiceNumberFormat(value)
+        value = backport.getNiceNumberFormat(value)
     return makeHtmlString('html_templates:lobby/quests', 'relation', {'relation': i18n.makeString('#quests:details/relations%d/%s' % (relationI18nType, relation)),
      'value': value})
 
@@ -183,37 +183,37 @@ def formatVehicleLevel(value):
 
 
 def formatCreditPriceNormalCard(value):
-    value = BigWorld.wg_getIntegralFormat(value)
+    value = backport.getIntegralFormat(value)
     icon = gui_icons.makeImageTag(RES_ICONS.MAPS_ICONS_LIBRARY_CREDITSICON_1, vSpace=-1)
     return '{} {}'.format(text_styles.creditsTextNormalCard(value), icon)
 
 
 def formatGoldPriceNormalCard(value):
-    value = BigWorld.wg_getIntegralFormat(value)
+    value = backport.getIntegralFormat(value)
     icon = gui_icons.makeImageTag(RES_ICONS.MAPS_ICONS_LIBRARY_GOLDICON_1, vSpace=-1)
     return '{} {}'.format(text_styles.goldTextNormalCard(value), icon)
 
 
 def formatGoldPrice(value):
-    value = BigWorld.wg_getIntegralFormat(value)
+    value = backport.getIntegralFormat(value)
     icon = gui_icons.makeImageTag(RES_ICONS.MAPS_ICONS_LIBRARY_GOLDICON_2, vSpace=-4)
     return '{} {}'.format(text_styles.gold(value), icon)
 
 
 def formatCreditPrice(value):
-    value = BigWorld.wg_getIntegralFormat(value)
+    value = backport.getIntegralFormat(value)
     icon = gui_icons.makeImageTag(RES_ICONS.MAPS_ICONS_LIBRARY_CREDITSICON_2, vSpace=-4)
     return '{} {}'.format(text_styles.credits(value), icon)
 
 
 def formatGoldPriceBig(value):
-    value = BigWorld.wg_getIntegralFormat(value)
+    value = backport.getIntegralFormat(value)
     icon = gui_icons.makeImageTag(RES_ICONS.MAPS_ICONS_LIBRARY_GOLDICON_1, vSpace=-1)
     return '{} {}'.format(text_styles.goldTextBig(value), icon)
 
 
 def formatCreditPriceBig(value):
-    value = BigWorld.wg_getIntegralFormat(value)
+    value = backport.getIntegralFormat(value)
     icon = gui_icons.makeImageTag(RES_ICONS.MAPS_ICONS_LIBRARY_CREDITSICON_1, vSpace=-1)
     return '{} {}'.format(text_styles.creditsTextBig(value), icon)
 
@@ -317,7 +317,7 @@ def getUniqueBonusTypes(bonusTypes):
             bonusType = ARENA_BONUS_TYPE.RATED_SANDBOX
         if bonusType in (ARENA_BONUS_TYPE.TOURNAMENT_REGULAR, ARENA_BONUS_TYPE.TOURNAMENT_CLAN):
             bonusType = ARENA_BONUS_TYPE.TOURNAMENT
-        if bonusType in (ARENA_BONUS_TYPE.EPIC_RANDOM_TRAINING,):
+        if bonusType in (ARENA_BONUS_TYPE.EPIC_RANDOM_TRAINING, ARENA_BONUS_TYPE.EPIC_BATTLE_TRAINING):
             bonusType = ARENA_BONUS_TYPE.EPIC_RANDOM
         if bonusType in (ARENA_BONUS_TYPE.BOOTCAMP,):
             bonusType = ARENA_BONUS_TYPE.REGULAR
@@ -382,7 +382,7 @@ def _titleRelationFormat(value, relation, relationI18nType=RELATIONS_SCHEME.DEFA
     if value is not None:
         relation = relation or 'equal'
         if not isinstance(value, types.StringTypes):
-            value = BigWorld.wg_getNiceNumberFormat(value)
+            value = backport.getNiceNumberFormat(value)
         relation = i18n.makeString('#quests:details/relations%s/%s' % (relationI18nType, relation))
         return '%s %s' % (relation, value)
     elif titleKey:
@@ -417,18 +417,18 @@ def minimizedTitleComplexRelationFormat(value, relation, titleKey=None):
 
 
 def titleCumulativeFormat(current, total):
-    return text_styles.promoSubTitle('%s / %s' % (BigWorld.wg_getNiceNumberFormat(int(current)), BigWorld.wg_getNiceNumberFormat(int(total))))
+    return text_styles.promoSubTitle('%s / %s' % (backport.getNiceNumberFormat(int(current)), backport.getNiceNumberFormat(int(total))))
 
 
 def personalTitleCumulativeFormat(current, total):
-    return i18n.makeString('%s / %s' % (BigWorld.wg_getNiceNumberFormat(int(current)), BigWorld.wg_getNiceNumberFormat(int(total))))
+    return i18n.makeString('%s / %s' % (backport.getNiceNumberFormat(int(current)), backport.getNiceNumberFormat(int(total))))
 
 
 def minimizedTitleCumulativeFormat(current, total):
     if current == total:
-        current = text_styles.bonusAppliedText(BigWorld.wg_getNiceNumberFormat(int(current)))
+        current = text_styles.bonusAppliedText(backport.getNiceNumberFormat(int(current)))
     else:
-        current = text_styles.stats(BigWorld.wg_getNiceNumberFormat(int(current)))
+        current = text_styles.stats(backport.getNiceNumberFormat(int(current)))
     total = text_styles.standard(int(total))
     return text_styles.disabled('%s / %s' % (current, total))
 

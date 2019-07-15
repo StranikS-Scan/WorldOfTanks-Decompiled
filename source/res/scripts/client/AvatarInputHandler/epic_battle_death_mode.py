@@ -5,7 +5,7 @@ import BigWorld
 from ClientArena import CollisionResult
 import constants
 import CommandMapping
-from AvatarInputHandler.aih_constants import CTRL_MODE_NAME
+from aih_constants import CTRL_MODE_NAME
 from control_modes import VideoCameraControlMode, PostMortemControlMode
 from VideoCamera import VideoCamera, _Inertia, KeySensor
 import Math

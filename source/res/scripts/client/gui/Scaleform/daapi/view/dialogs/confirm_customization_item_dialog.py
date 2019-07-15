@@ -49,7 +49,7 @@ class ConfirmCustomizationItemDialog(ConfirmItemWindowMeta):
 
     def submit(self, count, currency):
         item = self.meta.getItem()
-        if self.meta.type == Types.BUY and item.isVehicleBound and not item.isRentable:
+        if self.meta.type == Types.BUY and item.isRentable:
 
             def callback(isOk):
                 if isOk:
@@ -84,7 +84,7 @@ class ConfirmCustomizationItemDialog(ConfirmItemWindowMeta):
             if actualPrices != defaultPrices:
                 action = self.meta.getActionVO(item)
             iconWidth = iconHeight = CustomizationItemIconWidth.SMALL
-            if item.isWide() and item.itemTypeID != GUI_ITEM_TYPE.PROJECTION_DECAL:
+            if item.isWide():
                 iconWidth = CustomizationItemIconWidth.MEDIUM if item.itemTypeID == GUI_ITEM_TYPE.INSCRIPTION or item.itemTypeID == GUI_ITEM_TYPE.PERSONAL_NUMBER else CustomizationItemIconWidth.BIG
             countLabel = ''
             if item.isRentable and item.rentCount:

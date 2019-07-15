@@ -3,7 +3,7 @@
 import weakref
 import BigWorld
 from debug_utils import LOG_DEBUG_DEV
-from AvatarInputHandler.aih_constants import CTRL_MODES
+from aih_constants import CTRL_MODES
 from AvatarInputHandler.commands.input_handler_command import InputHandlerCommand
 from AvatarInputHandler.control_modes import ArcadeControlMode, SniperControlMode
 from AvatarInputHandler.control_modes import StrategicControlMode, ArtyControlMode

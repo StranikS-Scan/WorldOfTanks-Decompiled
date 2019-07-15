@@ -12,6 +12,14 @@ class IGuiLoader(object):
     def windowsManager(self):
         raise NotImplementedError
 
+    @property
+    def systemLocale(self):
+        raise NotImplementedError
+
+    @property
+    def implTypeMask(self):
+        raise NotImplementedError
+
     def init(self):
         raise NotImplementedError
 

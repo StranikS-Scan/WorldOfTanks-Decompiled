@@ -5,7 +5,7 @@ import BigWorld
 import Vehicle
 import Math
 from constants import VEHICLE_SETTING
-from AvatarInputHandler.aih_constants import CTRL_MODE_NAME, CTRL_MODES
+from aih_constants import CTRL_MODE_NAME, CTRL_MODES
 from AvatarInputHandler.subfilters_constants import AVATAR_SUBFILTERS, FILTER_INTERPOLATION_TYPE
 from debug_utils import LOG_DEBUG_DEV
 from helpers.CallbackDelayer import CallbackDelayer

@@ -3,7 +3,7 @@
 import logging
 import Event
 import constants
-from gui.Scaleform.framework.entities.ub_view_adaptor import UnboundViewAdaptor
+from gui.Scaleform.framework.entities.view_impl_adaptor import ViewImplAdaptor
 from gui.Scaleform.framework.settings import UIFrameworkImpl
 from helpers import dependency
 from shared_utils import CONST_CONTAINER
@@ -273,7 +273,7 @@ class LoaderManager(LoaderManagerMeta):
         if manager.getViewByLayoutID(layoutID) is not None:
             raise SoftException('There is unexpected behavior,we have unbound view, but adaptor is not created: %r'.format(loadParams))
         ubView = viewClass(layoutID, *args, **kwargs)
-        adaptor = UnboundViewAdaptor()
+        adaptor = ViewImplAdaptor()
         adaptor.setView(ubView)
         adaptor.setCurrentScope(scope)
         if adaptor.isLoaded():
@@ -281,5 +281,6 @@ class LoaderManager(LoaderManagerMeta):
         adaptor.onDispose += self.__handleViewDispose
         adaptor.onCreated += self.__handleViewLoaded
         self.__loadingItems[adaptor.key] = _LoadingItem(loadParams, adaptor, -1, args, kwargs)
+        self.onViewLoadInit(adaptor)
         adaptor.loadView()
         return adaptor

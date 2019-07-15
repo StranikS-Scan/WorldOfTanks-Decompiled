@@ -9,6 +9,7 @@ from gui.Scaleform.genConsts.MISSIONS_STATES import MISSIONS_STATES
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.QUESTS import QUESTS
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
+from gui.impl import backport
 from gui.server_events import formatters
 from gui.server_events.personal_missions_navigation import PersonalMissionsNavigation
 from helpers import time_utils, i18n, dependency
@@ -99,7 +100,7 @@ class EventInfoModel(object):
                 if intervals:
                     times = []
                     for low, high in intervals:
-                        times.append('%s - %s' % (BigWorld.wg_getShortTimeFormat(low), BigWorld.wg_getShortTimeFormat(high)))
+                        times.append('%s - %s' % (backport.getShortTimeFormat(low), backport.getShortTimeFormat(high)))
 
                     i18nKey += 'Times'
                     times = ', '.join(times)
@@ -108,7 +109,7 @@ class EventInfoModel(object):
 
     @classmethod
     def _getDateTimeString(cls, timeValue):
-        return '{0:>s} {1:>s}'.format(BigWorld.wg_getLongDateFormat(timeValue), BigWorld.wg_getShortTimeFormat(timeValue))
+        return '{0:>s} {1:>s}'.format(backport.getLongDateFormat(timeValue), backport.getShortTimeFormat(timeValue))
 
 
 class QuestInfoModel(EventInfoModel):

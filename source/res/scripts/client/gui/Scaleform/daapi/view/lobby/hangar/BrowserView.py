@@ -8,14 +8,17 @@ from gui.InputHandler import g_instance as g_inputHandler
 from gui.Scaleform.daapi import LobbySubView
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.meta.BrowserScreenMeta import BrowserScreenMeta
-from gui.Scaleform.locale.WAITING import WAITING
+from gui.impl import backport
+from gui.impl.gen import R
 from gui.shared import events, EVENT_BUS_SCOPE
 from helpers import dependency
 from skeletons.gui.game_control import IBrowserController
 from skeletons.gui.lobby_context import ILobbyContext
 
-def makeBrowserParams(waitingMessage=WAITING.LOADCONTENT, isTransparent=False):
-    return {'waitingMessage': waitingMessage,
+def makeBrowserParams(waitingMessage=R.invalid(), isTransparent=False):
+    if not waitingMessage:
+        waitingMessage = R.strings.waiting.loadContent()
+    return {'waitingMessage': backport.msgid(waitingMessage),
      'isTransparent': isTransparent}
 
 

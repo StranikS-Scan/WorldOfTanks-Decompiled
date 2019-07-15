@@ -1,6 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/shared/crosshair/settings.py
-from AvatarInputHandler import aih_constants
+import aih_constants
 from gui.Scaleform.genConsts.ROOT_SWF_CONSTANTS import ROOT_SWF_CONSTANTS
 CROSSHAIR_CONTAINER_SWF = 'battleCrosshairsApp.swf'
 CROSSHAIR_ROOT_PATH = 'root.main'

@@ -20,6 +20,7 @@ from gui.Scaleform.daapi.view.meta.BattleStrongholdsQueueMeta import BattleStron
 from gui.Scaleform.framework import ViewTypes
 from gui.Scaleform.framework.managers.containers import POP_UP_CRITERIA
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
+from gui.impl import backport
 from gui.prb_control import prb_getters, prbEntityProperty
 from gui.prb_control.entities.listener import IGlobalListener
 from gui.prb_control.events_dispatcher import g_eventDispatcher
@@ -423,7 +424,7 @@ class BattleStrongholdsQueue(BattleStrongholdsQueueMeta, LobbySubView, ClanEmble
             myClanRating = clanData.get('position')
             if isinstance(myClanRating, int):
                 textStyle = text_styles.highTitle
-                updateData['myClanRating'] = textStyle(BigWorld.wg_getNiceNumberFormat(myClanRating))
+                updateData['myClanRating'] = textStyle(backport.getNiceNumberFormat(myClanRating))
             else:
                 textStyle = text_styles.highTitleDisabled
                 updateData['myClanRating'] = textStyle('--')
@@ -431,7 +432,7 @@ class BattleStrongholdsQueue(BattleStrongholdsQueueMeta, LobbySubView, ClanEmble
             textStyle = text_styles.highTitle
         myClanElo = clanData.get('elo')
         if isinstance(myClanElo, int):
-            updateData['myClanElo'] = textStyle(BigWorld.wg_getNiceNumberFormat(myClanElo))
+            updateData['myClanElo'] = textStyle(backport.getNiceNumberFormat(myClanElo))
         callback(updateData)
 
     @async
@@ -457,10 +458,10 @@ class BattleStrongholdsQueue(BattleStrongholdsQueueMeta, LobbySubView, ClanEmble
                     return
                 elo = clan.get('elo')
                 if isinstance(elo, int):
-                    clanVO['clanElo'] = BigWorld.wg_getNiceNumberFormat(elo)
+                    clanVO['clanElo'] = backport.getNiceNumberFormat(elo)
                 position = clan.get('position')
                 if isinstance(position, int):
-                    position = BigWorld.wg_getNiceNumberFormat(position)
+                    position = backport.getNiceNumberFormat(position)
                     clanVO['title'] = makeString(FORTIFICATIONS.BATTLEQUEUE_CLANPOSITION, position=position)
                 clans.append(clanVO)
 

@@ -1,11 +1,11 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/missions/regular/missions_token_popover.py
-import BigWorld
 from gui import GUI_SETTINGS
 from gui.Scaleform.daapi.view.meta.MissionsTokenPopoverMeta import MissionsTokenPopoverMeta
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.QUESTS import QUESTS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
+from gui.impl import backport
 from gui.server_events.events_dispatcher import showMissionDetails
 from gui.server_events.events_helpers import missionsSortFunc
 from gui.server_events.formatters import TOKEN_SIZES
@@ -61,7 +61,7 @@ class MissionsTokenPopover(MissionsTokenPopoverMeta):
                 descr = text_styles.error(QUESTS.MISSIONS_TOKENPOPOVER_QUEST_DESCR_NOTAVAILABLE)
             else:
                 icon = ''
-                descr = text_styles.standard(ms(QUESTS.MISSIONS_TOKENPOPOVER_QUEST_DESCR_DATE, date=BigWorld.wg_getLongDateFormat(quest.getFinishTime())))
+                descr = text_styles.standard(ms(QUESTS.MISSIONS_TOKENPOPOVER_QUEST_DESCR_DATE, date=backport.getLongDateFormat(quest.getFinishTime())))
             tooltip = makeTooltip(ms(TOOLTIPS.MISSIONS_TOKENPOPOVER_QUEST_HEADER, name=quest.getUserName()), ms(TOOLTIPS.MISSIONS_TOKENPOPOVER_QUEST_BODY))
             result.append({'headerText': header,
              'descrText': descr,

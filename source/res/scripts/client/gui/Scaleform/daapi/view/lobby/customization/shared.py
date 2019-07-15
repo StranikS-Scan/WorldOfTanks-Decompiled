@@ -5,25 +5,20 @@ import Math
 import nations
 from CurrentVehicle import g_currentVehicle
 from gui.Scaleform import getNationsFilterAssetPath
-from gui.customization.shared import HighlightingMode
+from gui.Scaleform.locale.RES_ICONS import RES_ICONS
+from gui.Scaleform.locale.VEHICLE_CUSTOMIZATION import VEHICLE_CUSTOMIZATION
+from gui.customization.shared import HighlightingMode, SEASONS_ORDER, AdditionalPurchaseGroups, PurchaseItem
 from gui.hangar_cameras.hangar_camera_common import CameraMovementStates
 from gui.shared.formatters import icons, text_styles
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.gui_items.Vehicle import VEHICLE_TYPES_ORDER, VEHICLE_TAGS
-from gui.shared.gui_items.customization.outfit import Area
-from gui.shared.gui_items.gui_item_economics import ITEM_PRICE_EMPTY
-from gui.Scaleform.daapi.view.lobby.store.browser.ingameshop_helpers import isIngameShopEnabled
-from gui.Scaleform.genConsts.SEASONS_CONSTANTS import SEASONS_CONSTANTS
-from gui.Scaleform.locale.VEHICLE_CUSTOMIZATION import VEHICLE_CUSTOMIZATION
-from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from helpers import dependency, int2roman
 from helpers.i18n import makeString as _ms
-from items.components.c11n_constants import SeasonType, PERSONAL_NUMBER_DIGITS_COUNT
+from items.components.c11n_constants import SeasonType, ProjectionDecalFormTags
 from items.vehicles import VEHICLE_CLASS_TAGS
-from shared_utils import CONST_CONTAINER
+from shared_utils import CONST_CONTAINER, first
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
-from gui.shared.money import Currency, Money
 from skeletons.gui.shared.utils import IHangarSpace
 
 class C11nMode(CONST_CONTAINER):
@@ -63,6 +58,7 @@ TABS_SLOT_TYPE_MAPPING = {C11nTabs.STYLE: GUI_ITEM_TYPE.STYLE,
  C11nTabs.INSCRIPTION: GUI_ITEM_TYPE.INSCRIPTION,
  C11nTabs.PROJECTION_DECAL: GUI_ITEM_TYPE.PROJECTION_DECAL,
  C11nTabs.EFFECT: GUI_ITEM_TYPE.MODIFICATION}
+REGIONS_SLOTS = tuple((TABS_SLOT_TYPE_MAPPING[regionTab] for regionTab in C11nTabs.REGIONS))
 TABS_ITEM_TYPE_MAPPING = {C11nTabs.STYLE: (GUI_ITEM_TYPE.STYLE,),
  C11nTabs.PAINT: (GUI_ITEM_TYPE.PAINT,),
  C11nTabs.CAMOUFLAGE: (GUI_ITEM_TYPE.CAMOUFLAGE,),
@@ -78,17 +74,7 @@ TYPE_TO_TAB_IDX = {GUI_ITEM_TYPE.STYLE: C11nTabs.STYLE,
  GUI_ITEM_TYPE.PERSONAL_NUMBER: C11nTabs.INSCRIPTION,
  GUI_ITEM_TYPE.PROJECTION_DECAL: C11nTabs.PROJECTION_DECAL,
  GUI_ITEM_TYPE.MODIFICATION: C11nTabs.EFFECT}
-SEASON_IDX_TO_TYPE = {SEASONS_CONSTANTS.SUMMER_INDEX: SeasonType.SUMMER,
- SEASONS_CONSTANTS.WINTER_INDEX: SeasonType.WINTER,
- SEASONS_CONSTANTS.DESERT_INDEX: SeasonType.DESERT}
-SEASON_TYPE_TO_NAME = {SeasonType.SUMMER: SEASONS_CONSTANTS.SUMMER,
- SeasonType.WINTER: SEASONS_CONSTANTS.WINTER,
- SeasonType.DESERT: SEASONS_CONSTANTS.DESERT}
-SEASON_TYPE_TO_IDX = {SeasonType.SUMMER: SEASONS_CONSTANTS.SUMMER_INDEX,
- SeasonType.WINTER: SEASONS_CONSTANTS.WINTER_INDEX,
- SeasonType.DESERT: SEASONS_CONSTANTS.DESERT_INDEX}
 SCALE_SIZE = (VEHICLE_CUSTOMIZATION.CUSTOMIZATION_POPOVER_SCALE_SMALL, VEHICLE_CUSTOMIZATION.CUSTOMIZATION_POPOVER_SCALE_NORMAL, VEHICLE_CUSTOMIZATION.CUSTOMIZATION_POPOVER_SCALE_LARGE)
-SEASONS_ORDER = (SeasonType.SUMMER, SeasonType.WINTER, SeasonType.DESERT)
 TYPES_ORDER = (GUI_ITEM_TYPE.PAINT,
  GUI_ITEM_TYPE.CAMOUFLAGE,
  GUI_ITEM_TYPE.PROJECTION_DECAL,
@@ -101,36 +87,6 @@ DRAG_AND_DROP_INACTIVE_TABS = (C11nTabs.STYLE, C11nTabs.EFFECT)
 SEASON_TYPE_TO_INFOTYPE_MAP = {SeasonType.SUMMER: VEHICLE_CUSTOMIZATION.CUSTOMIZATION_INFOTYPE_MAPTYPE_SUMMER,
  SeasonType.DESERT: VEHICLE_CUSTOMIZATION.CUSTOMIZATION_INFOTYPE_MAPTYPE_DESERT,
  SeasonType.WINTER: VEHICLE_CUSTOMIZATION.CUSTOMIZATION_INFOTYPE_MAPTYPE_WINTER}
-
-class PurchaseItem(object):
-    __slots__ = ('item', 'price', 'areaID', 'slot', 'regionID', 'selected', 'group', 'isFromInventory', 'isDismantling', 'component')
-
-    def __init__(self, item, price, areaID, slot, regionID, selected, group, isFromInventory=False, isDismantling=False, component=None):
-        self.item = item
-        self.price = price
-        self.areaID = areaID
-        self.slot = slot
-        self.regionID = regionID
-        self.selected = selected
-        self.group = group
-        self.isFromInventory = isFromInventory
-        self.isDismantling = isDismantling
-        self.component = component
-
-
-CartInfo = namedtuple('CartInfo', 'totalPrice numSelected numApplying numTotal minPriceItem isAtLeastOneItemFromInventory isAtLeastOneItemDismantled')
-
-class AdditionalPurchaseGroups(object):
-    STYLES_GROUP_ID = -1
-    UNASSIGNED_GROUP_ID = -2
-
-
-class MoneyForPurchase(object):
-    NOT_ENOUGH = 0
-    ENOUGH_WITH_EXCHANGE = 1
-    ENOUGH = 2
-
-
 OutfitInfo = namedtuple('OutfitInfo', ('original', 'modified'))
 
 def getCustomPurchaseItems(outfitsInfo, seasonOrder=None):
@@ -253,30 +209,6 @@ def getStyleInventoryCount(item, styleInfo=None):
         return max(0, inventoryCount)
 
 
-def getTotalPurchaseInfo(purchaseItems):
-    totalPrice = ITEM_PRICE_EMPTY
-    numSelectedItems = 0
-    numApplyingItems = 0
-    isAtLeastOneItemFromInventory = False
-    isAtLeastOneItemDismantled = False
-    minPriceItem = Money()
-    for purchaseItem in purchaseItems:
-        if not purchaseItem.isDismantling:
-            numApplyingItems += 1
-        else:
-            isAtLeastOneItemDismantled = True
-        if purchaseItem.selected and not purchaseItem.isDismantling:
-            numSelectedItems += 1
-            if not purchaseItem.isFromInventory:
-                totalPrice += purchaseItem.price
-                if not minPriceItem.isDefined() or purchaseItem.price.price < minPriceItem:
-                    minPriceItem = purchaseItem.price.price
-            else:
-                isAtLeastOneItemFromInventory = True
-
-    return CartInfo(totalPrice, numSelectedItems, numApplyingItems, len(purchaseItems), minPriceItem, isAtLeastOneItemFromInventory, isAtLeastOneItemDismantled)
-
-
 def fromWorldCoordsToHangarVehicle(worldCoords):
     compoundModel = g_currentVehicle.hangarSpace.space.getVehicleEntity().appearance.compoundModel
     modelMat = Math.Matrix(compoundModel.matrix)
@@ -288,18 +220,6 @@ def fromHangarVehicleToWorldCoords(hangarVehicleCoords):
     compoundModel = g_currentVehicle.hangarSpace.space.getVehicleEntity().appearance.compoundModel
     modelMatrix = Math.Matrix(compoundModel.matrix)
     return modelMatrix.applyPoint(hangarVehicleCoords)
-
-
-def containsVehicleBound(purchaseItems):
-    fromInventoryCounter = Counter()
-    vehCD = g_currentVehicle.item.intCD
-    for purchaseItem in purchaseItems:
-        if purchaseItem.item and purchaseItem.item.isVehicleBound and not purchaseItem.isDismantling and not purchaseItem.item.isRentable:
-            if not purchaseItem.isFromInventory:
-                return True
-            fromInventoryCounter[purchaseItem.item] += 1
-
-    return any((count > item.boundInventoryCount.get(vehCD, 0) for item, count in fromInventoryCounter.items()))
 
 
 def getSuitableText(item, currentVehicle=None):
@@ -334,7 +254,7 @@ def getSuitableText(item, currentVehicle=None):
             conditions = conditions[:-1]
             conditions.append(separator)
         if node.vehicles:
-            conditions.append(text_styles.standard(makeVehiclesShortNamesString(set(node.vehicles), currentVehicle, flat=True)))
+            conditions.append(text_styles.main(makeVehiclesShortNamesString(set(node.vehicles), currentVehicle, flat=True)))
             conditions.append(separator)
 
     return text_styles.concatStylesToSingleLine(*conditions[:-1])
@@ -365,37 +285,17 @@ def isC11nEnabled(lobbyContext=None, hangarSpace=None):
     return lobbyContext.getServerSettings().isCustomizationEnabled() and state.isCustomizationEnabled() and not state.isOnlyForEventBattles() and hangarSpace.spaceInited and hangarSpace.isModelLoaded and isVehicleCameraReadyForC11n
 
 
-def getPurchaseMoneyState(price):
-    itemsCache = dependency.instance(IItemsCache)
-    money = itemsCache.items.stats.money
-    exchangeRate = itemsCache.items.shop.exchangeRate
-    shortage = money.getShortage(price)
-    if not shortage:
-        moneyState = MoneyForPurchase.ENOUGH
+def formatPersonalNumber(number, digitsCount):
+    return number.rjust(digitsCount, '0')
+
+
+def fitPersonalNumber(number, digitsCount):
+    return number[max(0, len(number) - digitsCount):]
+
+
+def getProjectionSlotFormfactor(anchorId):
+    if anchorId.slotType != GUI_ITEM_TYPE.PROJECTION_DECAL:
+        return None
     else:
-        money = money - price + shortage
-        price = shortage
-        money = money.exchange(Currency.GOLD, Currency.CREDITS, exchangeRate, default=0)
-        shortage = money.getShortage(price)
-        if not shortage:
-            moneyState = MoneyForPurchase.ENOUGH_WITH_EXCHANGE
-        else:
-            moneyState = MoneyForPurchase.NOT_ENOUGH
-    return moneyState
-
-
-def isTransactionValid(moneyState, price):
-    itemsCache = dependency.instance(IItemsCache)
-    money = itemsCache.items.stats.money
-    shortage = money.getShortage(price)
-    inGameShopOn = Currency.GOLD in shortage.getCurrency() and isIngameShopEnabled()
-    validTransaction = moneyState != MoneyForPurchase.NOT_ENOUGH or inGameShopOn
-    return validTransaction
-
-
-def formatPersonalNumber(number):
-    return number.rjust(PERSONAL_NUMBER_DIGITS_COUNT, '0')
-
-
-def getAllParentProjectionSlots(vehicle):
-    return [ anchor for anchor in vehicle.item.getAnchors(GUI_ITEM_TYPE.PROJECTION_DECAL, Area.MISC) if anchor.isParent ]
+        anchorSlot = g_currentVehicle.item.getAnchorBySlotId(anchorId.slotType, anchorId.areaId, anchorId.regionIdx)
+        return ProjectionDecalFormTags.ALL.index(first(anchorSlot.formfactors))

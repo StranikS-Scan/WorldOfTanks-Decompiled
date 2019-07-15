@@ -1,8 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/components/CalendarComponent.py
-import BigWorld
 from Event import Event, EventManager
 from gui.Scaleform.daapi.view.meta.CalendarMeta import CalendarMeta
+from gui.impl import backport
 
 class CalendarComponent(CalendarMeta):
 
@@ -19,7 +19,7 @@ class CalendarComponent(CalendarMeta):
         self.onDateSelectedEvent(timestamp)
 
     def formatYMHeader(self, rawDate):
-        return BigWorld.wg_getYMDateFormat(rawDate)
+        return backport.getYearMonthFormat(rawDate)
 
     def _dispose(self):
         self.__em.clear()

@@ -84,7 +84,8 @@ class BasePrbEntity(IActionsValidator, PrbFunctionalFlags):
         pass
 
     def canSwitch(self, ctx):
-        return ctx is not None and self.getModeFlags() & FUNCTIONAL_FLAG.MODES_BITMASK > 0 and ctx.hasFlags(self.getModeFlags())
+        flags = self.getModeFlags()
+        return ctx is not None and flags & FUNCTIONAL_FLAG.MODES_BITMASK > 0 and ctx.hasFlags(flags)
 
     def isActive(self):
         return self._isActive

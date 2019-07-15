@@ -1,6 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/techtree/research_page.py
-import BigWorld
 from CurrentVehicle import g_currentVehicle
 from debug_utils import LOG_DEBUG
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
@@ -14,7 +13,6 @@ from gui.Scaleform.genConsts.RESEARCH_ALIASES import RESEARCH_ALIASES
 from gui.Scaleform.genConsts.STORE_CONSTANTS import STORE_CONSTANTS
 from gui.Scaleform.locale.RES_SHOP import RES_SHOP
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
-from gui.Scaleform.locale.VEHICLE_PREVIEW import VEHICLE_PREVIEW
 from gui.impl import backport
 from gui.impl.gen.resources import R
 from gui.impl.lobby.buy_vehicle_view import VehicleBuyActionTypes
@@ -30,6 +28,7 @@ from gui.shared.gui_items.items_actions import factory as ItemsActionsFactory
 from gui.shared.money import Currency
 from helpers import int2roman
 from items import getTypeOfCompactDescr
+_BENEFIT_ITEMS_LIMIT = 3
 
 class Research(ResearchMeta):
 
@@ -257,11 +256,22 @@ class Research(ResearchMeta):
         if root.isPremium:
             benefitIconPattern = 'benefit%dIconSrc'
             benefitLabelPattern = 'benefit%dLabelStr'
-            benefitData = [(RES_SHOP.MAPS_SHOP_KPI_STAR_ICON_BENEFITS, VEHICLE_PREVIEW.INFOPANEL_PREMIUM_FREEEXPMULTIPLIER, VEHICLE_PREVIEW.INFOPANEL_PREMIUM_FREEEXPTEXT)]
+            benefitData = [(backport.image(R.images.gui.maps.shop.kpi.star_icon_benefits()), backport.text(R.strings.vehicle_preview.infoPanel.premium.freeExpMultiplier()), backport.text(R.strings.vehicle_preview.infoPanel.premium.freeExpText()))]
             if not root.isSpecial:
-                benefitData.append((RES_SHOP.MAPS_SHOP_KPI_MONEY_BENEFITS, VEHICLE_PREVIEW.INFOPANEL_PREMIUM_CREDITSMULTIPLIER, VEHICLE_PREVIEW.INFOPANEL_PREMIUM_CREDITSTEXT))
-            benefitData.append((RES_SHOP.MAPS_SHOP_KPI_CROW_BENEFITS, VEHICLE_PREVIEW.INFOPANEL_PREMIUM_CREWTRANSFERTITLE, VEHICLE_PREVIEW.INFOPANEL_PREMIUM_CREWTRANSFERTEXT))
+                benefitData.append((backport.image(R.images.gui.maps.shop.kpi.money_benefits()), backport.text(R.strings.vehicle_preview.infoPanel.premium.creditsMultiplier()), backport.text(R.strings.vehicle_preview.infoPanel.premium.creditsText())))
+            benefitData.append((backport.image(R.images.gui.maps.shop.kpi.crow_benefits()), backport.text(R.strings.vehicle_preview.infoPanel.premium.crewTransferTitle()), backport.text(R.strings.vehicle_preview.infoPanel.premium.crewTransferText())))
+            builtInEquipmentIDs = root.getBuiltInEquipmentIDs()
+            builtInCount = len(builtInEquipmentIDs) if builtInEquipmentIDs else 0
+            if builtInCount > 0:
+                if builtInCount == 1:
+                    equipment = self._itemsCache.items.getItemByCD(builtInEquipmentIDs[0])
+                    mainText = equipment.userName
+                else:
+                    mainText = backport.text(R.strings.vehicle_preview.infoPanel.premium.builtInEqupmentText(), value=builtInCount)
+                benefitData.append((backport.image(R.images.gui.maps.shop.kpi.infinity_benefits()), text_styles.concatStylesToMultiLine(text_styles.highTitle(backport.text(R.strings.vehicle_preview.infoPanel.premium.builtInEqupmentTitle()))), text_styles.main(mainText)))
             for i, (icon, title, body) in enumerate(benefitData, 1):
+                if i > _BENEFIT_ITEMS_LIMIT:
+                    break
                 result[benefitIconPattern % i] = icon
                 result[benefitLabelPattern % i] = text_styles.concatStylesToMultiLine(text_styles.highTitle(title), text_styles.main(body))
 
@@ -292,9 +302,9 @@ class Research(ResearchMeta):
         if NODE_STATE.isRentAvailable(rootNode.getState()):
             minRentPrice, currency = rootNode.getRentInfo()
             if currency == Currency.CREDITS:
-                btnLabel = text_styles.concatStylesWithSpace(backport.text(R.strings.menu.research.labels.button.rent()), text_styles.credits(BigWorld.wg_getIntegralFormat(minRentPrice.credits)), icons.credits())
+                btnLabel = text_styles.concatStylesWithSpace(backport.text(R.strings.menu.research.labels.button.rent()), text_styles.credits(backport.getIntegralFormat(minRentPrice.credits)), icons.credits())
             elif currency == Currency.GOLD:
-                btnLabel = text_styles.concatStylesWithSpace(backport.text(R.strings.menu.research.labels.button.rent()), text_styles.gold(BigWorld.wg_getGoldFormat(minRentPrice.gold)), icons.gold())
+                btnLabel = text_styles.concatStylesWithSpace(backport.text(R.strings.menu.research.labels.button.rent()), text_styles.gold(backport.getGoldFormat(minRentPrice.gold)), icons.gold())
         return btnLabel
 
     @staticmethod

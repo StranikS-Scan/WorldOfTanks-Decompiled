@@ -47,3 +47,12 @@ class IBattleResultsService(object):
 
     def getAdditionalXPValue(self, arenaUniqueID):
         raise NotImplementedError
+
+    def isCrewSameForArena(self, arenaUniqueID):
+        raise NotImplementedError
+
+    def isXPToTManSameForArena(self, arenaUniqueID):
+        raise NotImplementedError
+
+    def getVehicleForArena(self, arenaUniqueID):
+        raise NotImplementedError

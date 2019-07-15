@@ -1,8 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/RoleChangeWindow.py
-import BigWorld
 import constants
 from gui.Scaleform.daapi.view.lobby.store.browser.ingameshop_helpers import isIngameShopEnabled
+from gui.impl import backport
 from gui.ingame_shop import showBuyGoldForCrew
 from gui.shared.gui_items.Tankman import getCrewSkinIconBig
 from gui.shared.money import Money
@@ -179,7 +179,7 @@ class RoleChangeWindow(RoleChangeMeta):
             discount = packActionTooltipData(ACTION_TOOLTIPS_TYPE.ECONOMICS, 'changeRoleCost', True, Money(gold=changeRoleCost), Money(gold=defaultChangeRoleCost))
         else:
             discount = None
-        formattedPrice = BigWorld.wg_getIntegralFormat(changeRoleCost)
+        formattedPrice = backport.getIntegralFormat(changeRoleCost)
         actualGold = self.itemsCache.items.stats.gold
         enoughGold = actualGold - changeRoleCost >= 0
         if enoughGold:

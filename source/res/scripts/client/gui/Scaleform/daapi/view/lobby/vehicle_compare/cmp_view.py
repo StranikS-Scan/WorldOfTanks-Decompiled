@@ -19,6 +19,7 @@ from helpers import dependency
 from helpers.i18n import makeString as _ms
 from skeletons.gui.game_control import IVehicleComparisonBasket
 from skeletons.gui.shared import IItemsCache
+from account_helpers.settings_core.settings_constants import OnceOnlyHints
 _BACK_BTN_LABELS = {VIEW_ALIAS.LOBBY_HANGAR: 'hangar',
  VIEW_ALIAS.LOBBY_STORE: 'shop',
  VIEW_ALIAS.LOBBY_RESEARCH: 'researchTree',
@@ -42,7 +43,7 @@ class VehicleCompareView(LobbySubView, VehicleCompareViewMeta):
     def onSelectModulesClick(self, vehicleID, index):
         tutorStorage = getTutorialGlobalStorage()
         if tutorStorage:
-            tutorStorage.setValue('VehCompareConfigHint', False)
+            tutorStorage.setValue(OnceOnlyHints.VEH_COMPARE_CONFIG_HINT, False)
         event = g_entitiesFactories.makeLoadEvent(VIEW_ALIAS.VEHICLE_COMPARE_MAIN_CONFIGURATOR, ctx={'index': int(index)})
         self.fireEvent(event, scope=EVENT_BUS_SCOPE.LOBBY)
 

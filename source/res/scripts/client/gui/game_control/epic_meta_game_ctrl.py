@@ -25,7 +25,7 @@ from gui.ranked_battles.constants import PrimeTimeStatus
 from gui.shared.utils.requesters import REQ_CRITERIA
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from CurrentVehicle import g_currentVehicle
-from items.vehicles import getNumAbilitySlots
+from items.vehicles import getVehicleClassFromVehicleType
 from gui.shared.gui_items.vehicle_equipment import BattleAbilityConsumables
 from gui.prb_control.dispatcher import g_prbLoader
 from gui.shared.utils.scheduled_notifications import Notifiable, SimpleNotifier
@@ -153,7 +153,7 @@ class EpicBattleMetaGameController(IEpicBattleMetaGameController, Notifiable, Se
 
     def init(self):
         super(EpicBattleMetaGameController, self).init()
-        self.addNotificator(SimpleNotifier(self.__getTimer, self.__timerUpdate))
+        self.addNotificator(SimpleNotifier(self.getTimer, self.__timerUpdate))
 
     def fini(self):
         self.__urlMacros.clear()
@@ -434,6 +434,21 @@ class EpicBattleMetaGameController(IEpicBattleMetaGameController, Notifiable, Se
         currentVersion = getCurrentWelcomeScreenVersion()
         return lastSeen >= currentVersion
 
+    def getTimer(self):
+        primeTimeStatus, timeLeft, _ = self.getPrimeTimeStatus()
+        if primeTimeStatus != PrimeTimeStatus.AVAILABLE and not self.connectionMgr.isStandalone():
+            allPeripheryIDs = set([ host.peripheryID for host in g_preDefinedHosts.hostsWithRoaming() ])
+            for peripheryID in allPeripheryIDs:
+                peripheryStatus, peripheryTime, _ = self.getPrimeTimeStatus(peripheryID)
+                if peripheryStatus == PrimeTimeStatus.NOT_AVAILABLE and peripheryTime < timeLeft:
+                    timeLeft = peripheryTime
+
+        seasonsChangeTime = self.getClosestStateChangeTime()
+        currTime = time_utils.getCurrentLocalServerTimestamp()
+        if seasonsChangeTime and (currTime + timeLeft > seasonsChangeTime or timeLeft == 0):
+            timeLeft = seasonsChangeTime - currTime
+        return timeLeft + 1 if timeLeft > 0 else time_utils.ONE_MINUTE
+
     def __invalidateBattleAbilities(self):
         self.__invalidateBattleAbilityItems()
         self.__invalidateBattleAbilitiesForVehicle()
@@ -486,21 +501,6 @@ class EpicBattleMetaGameController(IEpicBattleMetaGameController, Notifiable, Se
             self.onUpdated(diff)
             self.__resetTimer()
 
-    def __getTimer(self):
-        primeTimeStatus, timeLeft, _ = self.getPrimeTimeStatus()
-        if primeTimeStatus != PrimeTimeStatus.AVAILABLE and not self.connectionMgr.isStandalone():
-            allPeripheryIDs = set([ host.peripheryID for host in g_preDefinedHosts.hostsWithRoaming() ])
-            for peripheryID in allPeripheryIDs:
-                peripheryStatus, peripheryTime, _ = self.getPrimeTimeStatus(peripheryID)
-                if peripheryStatus == PrimeTimeStatus.NOT_AVAILABLE and peripheryTime < timeLeft:
-                    timeLeft = peripheryTime
-
-        seasonsChangeTime = self.getClosestStateChangeTime()
-        currTime = time_utils.getCurrentLocalServerTimestamp()
-        if seasonsChangeTime and (currTime + timeLeft > seasonsChangeTime or timeLeft == 0):
-            timeLeft = seasonsChangeTime - currTime
-        return timeLeft + 1 if timeLeft > 0 else time_utils.ONE_MINUTE
-
     def __resetTimer(self):
         self.startNotification()
         self.__timerUpdate()
@@ -530,6 +530,11 @@ class EpicBattleMetaGameController(IEpicBattleMetaGameController, Notifiable, Se
             item.setLevel(0)
             item.isUnlocked = False
 
+    def getNumAbilitySlots(self, vehicleType):
+        config = self.lobbyContext.getServerSettings().epicMetaGame
+        vehClass = getVehicleClassFromVehicleType(vehicleType)
+        return config.defaultSlots[vehClass]
+
     def __invalidateBattleAbilitiesForVehicle(self):
         vehicle = g_currentVehicle.item
         if vehicle is None or vehicle.descriptor.type.level not in self.lobbyContext.getServerSettings().epicBattles.validVehicleLevels or not self.__isInValidPrebattle():
@@ -537,7 +542,7 @@ class EpicBattleMetaGameController(IEpicBattleMetaGameController, Notifiable, Se
                 vehicle.equipment.setBattleAbilityConsumables(BattleAbilityConsumables(*[]))
             return
         else:
-            amountOfSlots = getNumAbilitySlots(vehicle.descriptor.type)
+            amountOfSlots = self.getNumAbilitySlots(vehicle.descriptor.type)
             selectedItems = [None] * amountOfSlots
             skillInfo = self.getAllSkillsInformation()
             slectedSkills = self.getSelectedSkills(vehicle.intCD)

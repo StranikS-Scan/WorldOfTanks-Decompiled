@@ -19,7 +19,6 @@ DEFAULT_SCALE_FACTOR_ID = 3
 DEFAULT_PALETTE = 0
 DEFAULT_DECAL_CLIP_ANGLE = 0.0
 RENT_IS_ALMOST_OVER_VALUE = 3
-PERSONAL_NUMBER_DIGITS_COUNT = 3
 
 class CustomizationType(object):
     PAINT = 1
@@ -55,6 +54,7 @@ class CustomizationType(object):
 
 
 CustomizationTypeNames = {getattr(CustomizationType, k):k for k in dir(CustomizationType) if not k.startswith('_') and k != 'RANGE'}
+CustomizationNamesToTypes = {v:k for k, v in CustomizationTypeNames.iteritems()}
 
 class ItemTags(object):
     VEHICLE_BOUND = 'vehicleBound'
@@ -62,6 +62,7 @@ class ItemTags(object):
     IGR = 'IGR'
     RARE = 'rare'
     HIDDEN_IN_UI = 'hiddenInUI'
+    DIM = 'dim'
 
 
 class ProjectionDecalDirectionTags(object):
@@ -74,35 +75,11 @@ class ProjectionDecalDirectionTags(object):
 
 class ProjectionDecalFormTags(object):
     PREFIX = 'formfactor_'
-    DENY = 'deny_'
-    DENY_PREFIX = DENY + PREFIX
-    ANY = PREFIX + 'any'
     SQUARE = PREFIX + 'square'
     RECT1X2 = PREFIX + 'rect1x2'
     RECT1X3 = PREFIX + 'rect1x3'
     RECT1X4 = PREFIX + 'rect1x4'
     RECT1X6 = PREFIX + 'rect1x6'
-    ALL = (ANY,
-     SQUARE,
-     RECT1X2,
-     RECT1X3,
-     RECT1X4,
-     RECT1X6)
-    ALL_FACTORS = (SQUARE,
-     RECT1X2,
-     RECT1X3,
-     RECT1X4,
-     RECT1X6)
-    DENY_ALL = [ DENY + tag for tag in ALL ]
-
-
-class ProjectionDecalPreferredTags(object):
-    PREFIX = 'preferred_'
-    SQUARE = PREFIX + ProjectionDecalFormTags.SQUARE
-    RECT1X2 = PREFIX + ProjectionDecalFormTags.RECT1X2
-    RECT1X3 = PREFIX + ProjectionDecalFormTags.RECT1X3
-    RECT1X4 = PREFIX + ProjectionDecalFormTags.RECT1X4
-    RECT1X6 = PREFIX + ProjectionDecalFormTags.RECT1X6
     ALL = (SQUARE,
      RECT1X2,
      RECT1X3,
@@ -110,8 +87,8 @@ class ProjectionDecalPreferredTags(object):
      RECT1X6)
 
 
-class ProjectionDecalDenyTags(object):
-    PREFIX = 'deny_'
+class ProjectionDecalPreferredTags(object):
+    PREFIX = 'preferred_'
     SQUARE = PREFIX + ProjectionDecalFormTags.SQUARE
     RECT1X2 = PREFIX + ProjectionDecalFormTags.RECT1X2
     RECT1X3 = PREFIX + ProjectionDecalFormTags.RECT1X3
@@ -304,46 +281,19 @@ C11N_GUN_REGION = 0
 C11N_MASK_REGION = 2
 C11N_GUN_APPLY_REGIONS = {'GUN': C11N_GUN_REGION,
  'GUN_2': C11N_MASK_REGION}
-customizationSlotIds = {'hull': {'clan': (1, 1),
-          'paint': (2, 2),
-          'camouflage': (3, 3),
-          'player': (4, 35),
-          'inscription': (36, 67),
-          'projectionDecal': (68, 195),
-          'insignia': (196, 203),
-          'fixedEmblem': (204, 255),
-          'fixedInscription': (204, 255),
-          'attachment': (1024, 1073),
-          'sequence': (1024, 1073)},
- 'chassis': {'paint': (256, 256),
-             'style': (257, 257),
-             'insignia': (258, 265),
-             'fixedEmblem': (266, 319),
-             'fixedInscription': (266, 319),
-             'attachment': (1074, 1123),
-             'sequence': (1074, 1123)},
- 'turret': {'clan': (1, 1),
-            'paint': (512, 512),
-            'camouflage': (513, 513),
-            'player': (514, 545),
-            'inscription': (546, 577),
-            'projectionDecal': (578, 705),
-            'insignia': (706, 713),
-            'fixedEmblem': (714, 767),
-            'fixedInscription': (714, 767),
-            'attachment': (1124, 1173),
-            'sequence': (1124, 1173)},
- 'gun': {'paint': (768, 769),
-         'camouflage': (770, 770),
-         'insigniaOnGun': (771, 771),
-         'player': (772, 803),
-         'inscription': (804, 835),
-         'projectionDecal': (836, 963),
-         'insignia': (964, 971),
-         'fixedEmblem': (972, 1023),
-         'fixedInscription': (972, 1023),
-         'attachment': (1174, 1224),
-         'sequence': (1174, 1224)}}
 CUSTOMIZATION_SLOTS_VEHICLE_PARTS = ('hull', 'chassis', 'turret', 'gun')
 UNBOUND_VEH_KEY = 0
 NUM_ALL_ITEMS_KEY = -1
+
+class CamouflageTilingType(object):
+    NONE = 0
+    LEGACY = 1
+    RELATIVE = 2
+    RELATIVEWITHFACTOR = 3
+    ABSOLUTE = 4
+    RANGE = None
+
+
+CamouflageTilingType.RANGE = tuple([ getattr(CamouflageTilingType, k) for k in dir(CamouflageTilingType) if not k.startswith('_') and k not in ('RANGE', 'NONE') ])
+CamouflageTilingTypeNames = {getattr(CamouflageTilingType, k):k for k in dir(CamouflageTilingType) if not k.startswith('_') and k not in ('RANGE', 'NONE')}
+CamouflageTilingTypeNameToType = {v:k for k, v in CamouflageTilingTypeNames.iteritems()}

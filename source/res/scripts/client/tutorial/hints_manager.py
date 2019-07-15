@@ -3,6 +3,7 @@
 import logging
 from helpers import dependency
 from skeletons.account_helpers.settings_core import ISettingsCore
+from account_helpers.settings_core.settings_constants import OnceOnlyHints
 from tutorial import settings
 from tutorial.control.functional import FunctionalConditions
 from tutorial.data.hints import HintProps
@@ -38,6 +39,7 @@ class HintsManager(object):
             self._gui.onHintItemLost += self.__onItemLost
             self._gui.onVisibleChanged += self.__onItemVisibleChanged
             self._gui.onEnabledChanged += self.__onItemEnabledChanged
+            self.__startSettingsListening()
             self._gui.loadConfig(self._data.getGuiFilePath())
             self._gui.init()
             return True
@@ -53,6 +55,7 @@ class HintsManager(object):
             self._gui.fini()
         self._gui = None
         self.__hintsWithClientTriggers = None
+        self.__stopSettingsListening()
         return
 
     def __loadHintsData(self):
@@ -77,9 +80,9 @@ class HintsManager(object):
         self.__activeHints[hint['itemID']] = hint
         return
 
-    def __hideHint(self, itemID):
+    def __hideHint(self, itemID, hintID=''):
         if itemID in self.__activeHints:
-            hintID = self.__getActiveHintIdByItemId(itemID)
+            hintID = hintID or self.__getActiveHintIdByItemId(itemID)
             self._gui.hideHint(hintID)
             if itemID in self.__activeHints:
                 del self.__activeHints[itemID]
@@ -151,7 +154,9 @@ class HintsManager(object):
             hints = self._data.hintsForItem(itemID)
             for hint in hints:
                 if hint['hintID'] == hintID:
+                    self.__stopSettingsListening()
                     self.__settingsCore.serverSettings.setOnceOnlyHintsSettings({hintID: HINT_SHOWN_STATUS})
+                    self.__startSettingsListening()
                     self._data.markAsShown(itemID, hintID)
 
             return
@@ -160,3 +165,22 @@ class HintsManager(object):
     def __checkConditions(hint):
         conditions = hint['conditions']
         return True if conditions is None else FunctionalConditions(conditions).allConditionsOk()
+
+    def __startSettingsListening(self):
+        self.__settingsCore.onSettingsChanged += self.__onSettingsChanged
+
+    def __stopSettingsListening(self):
+        self.__settingsCore.onSettingsChanged -= self.__onSettingsChanged
+
+    def __onSettingsChanged(self, diff):
+        diffKeys = diff.viewkeys()
+        if diffKeys & set(OnceOnlyHints.ALL()):
+            self._data.markHintsAsShown(diffKeys)
+            for itemID, hint in self.__activeHints.items():
+                hintID = hint['hintID']
+                if hintID in diffKeys:
+                    self.__hideHint(itemID, hintID)
+
+            if self._data.getHintsCount() == 0:
+                self.stop()
+                return

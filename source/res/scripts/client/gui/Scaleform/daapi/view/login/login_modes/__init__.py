@@ -13,7 +13,6 @@ def createLoginMode(view, loginManager=None):
     mode = CredentialsMode(view)
     if GUI_SETTINGS.socialNetworkLogin['enabled']:
         mode = SocialMode(view, mode)
-    isWgcUser = loginManager.checkWgcAvailability()
     if loginManager.wgcAvailable:
-        mode = WgcMode(isWgcUser, view, mode)
+        mode = WgcMode(view, mode)
     return mode

@@ -102,6 +102,13 @@ class _ConfigFittingSlotVO(FittingSlotVO):
                 self['tooltipType'] = TOOLTIPS_CONSTANTS.COMPARE_MODULE
             elif slotType == FITTING_TYPES.BOOSTER:
                 self['tooltipType'] = TOOLTIPS_CONSTANTS.BATTLE_BOOSTER_COMPARE
+            elif slotType == FITTING_TYPES.EQUIPMENT:
+                self['tooltipType'] = TOOLTIPS_CONSTANTS.COMPARE_MODULE
+                equipment = findFirst(lambda item: item.isInstalled(vehicle, slotId), modulesData)
+                if equipment is not None and equipment.isBuiltIn:
+                    self['bgHighlightType'] = SLOT_HIGHLIGHT_TYPES.BUILT_IN_EQUIPMENT
+                    self['showRemoveBtn'] = False
+                    self['slotLocked'] = True
             else:
                 self['tooltipType'] = TOOLTIPS_CONSTANTS.COMPARE_MODULE
         return
@@ -449,9 +456,8 @@ class VehicleCompareConfiguratorView(LobbySubView, VehicleCompareConfiguratorVie
                 if slotDataID > 0:
                     moduleItem = self.itemsCache.items.getItemByCD(slotDataID)
                     itemTypeID = moduleItem.itemTypeID
-                    itemName = moduleItem.name
                     if itemTypeID == GUI_ITEM_TYPE.EQUIPMENT:
-                        if itemName in cmp_helpers.NOT_AFFECTED_EQUIPMENTS:
+                        if moduleItem.tags.intersection(cmp_helpers.NOT_AFFECTED_EQUIPMENTS):
                             newSlotData['affectsAtTTC'] = False
                             newSlotData['tooltipType'] = 'complex'
                             newSlotData['tooltip'] = makeTooltip(moduleItem.userName, attention=VEH_COMPARE.VEHCONF_TOOLTIPS_DEVICENOTAFFECTEDTTC)

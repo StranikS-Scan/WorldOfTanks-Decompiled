@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/customization/customization_item_vo.py
+from gui.customization.shared import PROJECTION_DECAL_FORM_TO_UI_ID, PROJECTION_DECAL_IMAGE_FORM_TAG
 from gui.shared.formatters import getItemPricesVO, text_styles
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.gui_items.gui_item_economics import ITEM_PRICE_EMPTY
@@ -17,7 +18,7 @@ _ICON_ALPHA_BY_GUI_ITEM_TYPE = {GUI_ITEM_TYPE.PAINT: 1,
  GUI_ITEM_TYPE.INSIGNIA: 1,
  GUI_ITEM_TYPE.PERSONAL_NUMBER: 0.8}
 
-def buildCustomizationItemDataVO(item, count, plainView=False, showDetailItems=True, forceLocked=False, showUnsupportedAlert=False, isCurrentlyApplied=False, addExtraName=True, isAlreadyUsed=False, isDarked=False, noPrice=False, autoRentEnabled=False, customIcon=None, vehicle=None, isUnsupportedForm=False):
+def buildCustomizationItemDataVO(item, count, plainView=False, showDetailItems=True, forceLocked=False, showUnsupportedAlert=False, isCurrentlyApplied=False, addExtraName=True, isAlreadyUsed=False, isDarked=False, noPrice=False, autoRentEnabled=False, customIcon=None, vehicle=None):
     isSpecial = item.isVehicleBound and (item.buyCount > 0 or item.inventoryCount > 0) or item.isLimited and item.buyCount > 0
     hasBonus = item.bonus is not None and not plainView
     locked = (not item.isUnlocked or forceLocked) and not plainView
@@ -26,6 +27,7 @@ def buildCustomizationItemDataVO(item, count, plainView=False, showDetailItems=T
     else:
         buyPrice = item.getBuyPrice()
     isNonHistoric = not item.isHistorical()
+    isDim = item.isDim()
     if addExtraName and item.itemTypeID in (GUI_ITEM_TYPE.MODIFICATION, GUI_ITEM_TYPE.STYLE):
         extraNames = (text_styles.bonusLocalText(item.userName), text_styles.highTitle(item.userName))
     else:
@@ -36,16 +38,20 @@ def buildCustomizationItemDataVO(item, count, plainView=False, showDetailItems=T
         rentalInfoText = text_styles.main(_ms(VEHICLE_CUSTOMIZATION.CAROUSEL_RENTALBATTLES, battlesNum=item.rentCount))
     icon = customIcon if customIcon else item.icon
     noveltyCounter = 0 if not vehicle else item.getNoveltyCounter(vehicle)
+    formFactor = -1
     formIconSource = ''
+    if item.itemTypeID == GUI_ITEM_TYPE.PROJECTION_DECAL:
+        formFactor = PROJECTION_DECAL_FORM_TO_UI_ID[item.formfactor]
+        formIconSource = PROJECTION_DECAL_IMAGE_FORM_TAG[item.formfactor]
     iconAlpha = _ICON_ALPHA_BY_GUI_ITEM_TYPE.get(item.itemTypeID, 1)
     lockText = VEHICLE_CUSTOMIZATION.CUSTOMIZATION_LIMITED_ONOTHER if isAlreadyUsed else VEHICLE_CUSTOMIZATION.CUSTOMIZATION_UNSUPPORTEDFORM
-    return CustomizationCarouselRendererVO(item.intCD, item.itemTypeID, item.isWide(), icon, hasBonus, locked, buyPrice, count, item.isRentable, showDetailItems, isNonHistoric, isSpecial, isDarked, isAlreadyUsed, showUnsupportedAlert, extraNames=extraNames, showRareIcon=item.isRare(), isEquipped=isCurrentlyApplied, rentalInfoText=rentalInfoText, imageCached=imageCached, autoRentEnabled=autoRentEnabled, isAllSeasons=item.isAllSeason(), noveltyCounter=noveltyCounter, formIconSource=formIconSource, defaultIconAlpha=iconAlpha, lockText=lockText, isUnsupportedForm=isUnsupportedForm).asDict()
+    return CustomizationCarouselRendererVO(item.intCD, item.itemTypeID, item.isWide(), icon, hasBonus, locked, buyPrice, count, item.isRentable, showDetailItems, isNonHistoric, isSpecial, isDarked, isAlreadyUsed, showUnsupportedAlert, extraNames=extraNames, showRareIcon=item.isRare(), isEquipped=isCurrentlyApplied, rentalInfoText=rentalInfoText, imageCached=imageCached, autoRentEnabled=autoRentEnabled, isAllSeasons=item.isAllSeason(), noveltyCounter=noveltyCounter, formIconSource=formIconSource, defaultIconAlpha=iconAlpha, lockText=lockText, isDim=isDim, formFactor=formFactor).asDict()
 
 
 class CustomizationCarouselRendererVO(object):
-    __slots__ = ('intCD', 'typeId', 'isWide', 'icon', 'hasBonus', 'locked', 'buyPrice', 'quantity', 'isRental', 'autoRentEnabled', 'showDetailItems', 'isNonHistoric', 'isSpecial', 'isDarked', 'isAlreadyUsed', 'showAlert', 'buyOperationAllowed', 'extraNames', 'showRareIcon', 'isEquipped', 'rentalInfoText', 'imageCached', 'isAllSeasons', 'noveltyCounter', 'formIconSource', 'defaultIconAlpha', 'lockText', 'isUnsupportedForm')
+    __slots__ = ('intCD', 'typeId', 'isWide', 'icon', 'hasBonus', 'locked', 'buyPrice', 'quantity', 'isRental', 'autoRentEnabled', 'showDetailItems', 'isNonHistoric', 'isSpecial', 'isDarked', 'isAlreadyUsed', 'showAlert', 'buyOperationAllowed', 'extraNames', 'showRareIcon', 'isEquipped', 'rentalInfoText', 'imageCached', 'isAllSeasons', 'noveltyCounter', 'formIconSource', 'defaultIconAlpha', 'lockText', 'isDim', 'formFactor')
 
-    def __init__(self, intCD, typeId, isWide, icon, hasBonus, locked, buyPrice, quantity=None, isRental=False, showDetailItems=True, isNonHistoric=False, isSpecial=False, isDarked=False, isAlreadyUsed=False, showAlert=False, buyOperationAllowed=True, extraNames=None, showRareIcon=False, isEquipped=False, rentalInfoText='', imageCached=True, noveltyCounter=0, autoRentEnabled=False, isAllSeasons=False, formIconSource='', defaultIconAlpha=1, lockText='', isUnsupportedForm=False):
+    def __init__(self, intCD, typeId, isWide, icon, hasBonus, locked, buyPrice, quantity=None, isRental=False, showDetailItems=True, isNonHistoric=False, isSpecial=False, isDarked=False, isAlreadyUsed=False, showAlert=False, buyOperationAllowed=True, extraNames=None, showRareIcon=False, isEquipped=False, rentalInfoText='', imageCached=True, noveltyCounter=0, autoRentEnabled=False, isAllSeasons=False, formIconSource='', defaultIconAlpha=1, lockText='', isDim=False, formFactor=-1):
         self.intCD = intCD
         self.typeId = typeId
         self.isWide = isWide
@@ -73,7 +79,8 @@ class CustomizationCarouselRendererVO(object):
         self.formIconSource = formIconSource
         self.defaultIconAlpha = defaultIconAlpha
         self.lockText = lockText
-        self.isUnsupportedForm = isUnsupportedForm
+        self.isDim = isDim
+        self.formFactor = formFactor
 
     def asDict(self):
         ret = {'intCD': self.intCD,
@@ -100,7 +107,8 @@ class CustomizationCarouselRendererVO(object):
          'formIconSource': self.formIconSource,
          'defaultIconAlpha': self.defaultIconAlpha,
          'lockText': self.lockText,
-         'isUnsupportedForm': self.isUnsupportedForm}
+         'isDim': self.isDim,
+         'formFactor': self.formFactor}
         if self.extraNames is not None:
             ret.update(styleName=self.extraNames[0], styleNameSmall=self.extraNames[1])
         if self.quantity:

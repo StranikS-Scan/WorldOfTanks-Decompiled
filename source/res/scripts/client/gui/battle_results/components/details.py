@@ -1,9 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/battle_results/components/details.py
 import operator
-import BigWorld
 from constants import IGR_TYPE, PREMIUM_TYPE
 from gui import makeHtmlString
+from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.battle_results.components import base
 from gui.battle_results.components import style
 from gui.battle_results.reusable.records import convertFactorToPercent
@@ -13,6 +13,7 @@ from gui.impl.lobby.premacc import premacc_helpers
 from gui.shared.formatters import icons, text_styles
 from gui.shared.formatters.icons import makeImageTag
 from gui.shared.money import Currency
+from gui.shared.utils.functions import makeTooltip
 from helpers import i18n, dependency
 from shared_utils import first
 from skeletons.gui.battle_results import IBattleResultsService
@@ -41,7 +42,7 @@ class _GainResourceInBattleItem(base.StatsItem):
                     resource += records.getRecord(name)
                 resource -= records.getRecord(name)
 
-        return BigWorld.wg_getIntegralFormat(resource)
+        return backport.getIntegralFormat(resource)
 
 
 class GainCreditsInBattleItem(_GainResourceInBattleItem):
@@ -586,7 +587,7 @@ class TotalCrystalDetailsBlock(base.StatsBlock):
 
 
 class PremiumBonusDetailsBlock(base.StatsBlock):
-    __slots__ = ('description', 'bonusLeft', 'xpValue', 'statusBonusLabel', 'bonusIcon', '__isPersonalTeamWin', '__arenaUniqueID', '__arenaBonusType', '__xpFactor')
+    __slots__ = ('description', 'bonusLeft', 'xpValue', 'statusBonusLabel', 'statusBonusTooltip', 'bonusIcon', '__isPersonalTeamWin', '__arenaUniqueID', '__arenaBonusType', '__xpFactor', '__vehicleCD')
     __itemsCache = dependency.descriptor(IItemsCache)
     __battleResults = dependency.descriptor(IBattleResultsService)
 
@@ -596,11 +597,13 @@ class PremiumBonusDetailsBlock(base.StatsBlock):
         self.__isPersonalTeamWin = False
         self.__arenaBonusType = None
         self.__xpFactor = 0
+        self.__vehicleCD = None
         self.bonusIcon = ''
         self.description = ''
         self.bonusLeft = ''
         self.xpValue = ''
         self.statusBonusLabel = ''
+        self.statusBonusTooltip = ''
         return
 
     def getVO(self):
@@ -612,6 +615,8 @@ class PremiumBonusDetailsBlock(base.StatsBlock):
         self.__isPersonalTeamWin = reusable.isPersonalTeamWin()
         self.__arenaBonusType = reusable.common.arenaBonusType
         self.__xpFactor = reusable.personal.getPremiumXPAddRecords().getFactor('additionalXPFactor10')
+        _, vehicle = first(reusable.personal.getVehicleItemsIterator())
+        self.__vehicleCD = vehicle.intCompactDescr
 
     def __getIsApplied(self):
         return self.__battleResults.isAddXPBonusApplied(self.__arenaUniqueID)
@@ -627,8 +632,39 @@ class PremiumBonusDetailsBlock(base.StatsBlock):
             self.__setLostBattleState()
         elif not self.__battleResults.isAddXPBonusEnabled(self.__arenaUniqueID):
             self.__setExcludedState()
+        elif not self.__itemsCache.items.getItemByCD(self.__vehicleCD).isInInventory:
+            self.__setBlockedByVehicle()
+        elif self.__isBlockedByXPToTman():
+            self.__setBlockedByXPToTman()
+        elif self.__isBlockedByCrew():
+            self.__setBlockedByCrew()
         else:
             self.__setShowButtonState()
+
+    def __setBlockedByVehicle(self):
+        self.xpValue = ''
+        self.statusBonusLabel = text_styles.neutral(backport.text(R.strings.battle_results.common.premiumBonus.tankStateChanged()))
+        self.statusBonusTooltip = TOOLTIPS.BATTLERESULTS_PREMIUMBONUS_TANKSTATECHANGED
+
+    def __isBlockedByXPToTman(self):
+        return not self.__battleResults.isXPToTManSameForArena(self.__arenaUniqueID)
+
+    def __setBlockedByXPToTman(self):
+        self.xpValue = ''
+        if self.__battleResults.getVehicleForArena(self.__arenaUniqueID).isXPToTman:
+            textKey = R.strings.battle_results.common.premiumBonus.isXPToTmenEnabled()
+        else:
+            textKey = R.strings.battle_results.common.premiumBonus.isXPToTmenDisabled()
+        self.statusBonusLabel = text_styles.neutral(backport.text(textKey))
+        self.statusBonusTooltip = makeTooltip(body=TOOLTIPS.BATTLERESULTS_PREMIUMBONUS_XPTOTMENCHANGED_BODY)
+
+    def __isBlockedByCrew(self):
+        return not self.__battleResults.isCrewSameForArena(self.__arenaUniqueID)
+
+    def __setBlockedByCrew(self):
+        self.xpValue = ''
+        self.statusBonusLabel = text_styles.neutral(backport.text(R.strings.battle_results.common.premiumBonus.tankmenStateChanged()))
+        self.statusBonusTooltip = TOOLTIPS.BATTLERESULTS_PREMIUMBONUS_TANKMENSTATECHANGED
 
     def __setBaseState(self):
         self.bonusIcon = self.__getAddXPBonusIcon(self.__xpFactor)
@@ -656,6 +692,7 @@ class PremiumBonusDetailsBlock(base.StatsBlock):
 
     def __setShowButtonState(self):
         self.statusBonusLabel = ''
+        self.statusBonusTooltip = ''
         bonusValue = self.__battleResults.getAdditionalXPValue(self.__arenaUniqueID)
         self.xpValue = style.makeXpLabel(bonusValue, isDiff=True, useBigIcon=True)
 

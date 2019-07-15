@@ -1,6 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/premacc/dashboard/dashboard_premium_card.py
-import BigWorld
 from constants import PREMIUM_TYPE
 from frameworks.wulf import ViewFlags
 from gui.ClientUpdateManager import g_clientUpdateManager
@@ -11,6 +10,7 @@ from gui.impl.pub import ViewImpl
 from gui.shared.event_dispatcher import showPremiumDialog
 from helpers import dependency, time_utils
 from skeletons.gui.game_control import IGameSessionController
+from skeletons.gui.impl import IGuiLoader
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
 
@@ -90,6 +90,7 @@ class DashboardPremiumCard(ViewImpl):
 
 
 class _StatsGroupBuilder(object):
+    __gui = dependency.descriptor(IGuiLoader)
 
     def __init__(self, stats):
         self.__stats = stats
@@ -105,10 +106,10 @@ class _StatsGroupBuilder(object):
         items.addViewModel(self.__buildPremStatsModel(sessionData.get('xp', 0), 'XpIcon_1'))
         items.invalidate()
 
-    @staticmethod
-    def __buildPremStatsModel(value, icon, isCredits=False):
+    @classmethod
+    def __buildPremStatsModel(cls, value, icon, isCredits=False):
         result = CardPremInfoModel()
-        result.setValue(BigWorld.wg_getIntegralFormat(value))
+        result.setValue(cls.__gui.systemLocale.getNumberFormat(value))
         result.setIcon(R.images.gui.maps.icons.library.dyn(icon)())
         result.setIsCredits(isCredits)
         return result

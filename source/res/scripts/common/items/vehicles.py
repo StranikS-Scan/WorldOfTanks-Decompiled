@@ -15,7 +15,7 @@ import items
 from items import _xml, makeIntCompactDescrByID, parseIntCompactDescr, ITEM_TYPES
 from items.components import component_constants, shell_components, chassis_components, skills_constants
 from items.components import shared_components
-from items.components.c11n_constants import ProjectionDecalPositionTags
+from items.components.c11n_constants import ApplyArea, ProjectionDecalPositionTags, CamouflageTilingType, CamouflageTilingTypeNameToType
 from items.readers import chassis_readers
 from items.readers import gun_readers
 from items.readers import shared_readers
@@ -24,22 +24,22 @@ from items.readers import json_vehicle_reader
 from items import vehicle_items
 from items._xml import cachedFloat
 from constants import IS_BOT, IS_WEB, ITEM_DEFS_PATH, SHELL_TYPES, VEHICLE_SIEGE_STATE, VEHICLE_MODE
-from constants import IGR_TYPE, IS_RENTALS_ENABLED, IS_CELLAPP, IS_BASEAPP, IS_CLIENT
+from constants import IGR_TYPE, IS_RENTALS_ENABLED, IS_CELLAPP, IS_BASEAPP, IS_CLIENT, IS_EDITOR
 from constants import ACTION_LABEL_TO_TYPE, ACTIONS_GROUP_LABEL_TO_TYPE, ROLE_LABEL_TO_TYPE, ACTIONS_GROUP_TYPE_TO_LABEL, ROLE_TYPE_TO_LABEL
 from debug_utils import LOG_WARNING, LOG_ERROR, LOG_CURRENT_EXCEPTION, LOG_DEBUG_DEV
 from items.stun import g_cfg as stunConfig
 from items import common_extras, decodeEnum
-from items.components.c11n_constants import ApplyArea
-if IS_CLIENT:
+from string import upper
+if IS_CLIENT or IS_EDITOR:
     import ResMgr
 else:
     from realm_utils import ResMgr
-if IS_CELLAPP or IS_CLIENT or IS_BOT:
+if IS_CELLAPP or IS_CLIENT or IS_BOT or IS_EDITOR:
     from ModelHitTester import ModelHitTester
-if IS_CELLAPP or IS_CLIENT or IS_WEB:
+if IS_CELLAPP or IS_CLIENT or IS_EDITOR or IS_WEB:
     import material_kinds
     from material_kinds import EFFECT_MATERIALS
-if IS_CLIENT:
+if IS_CLIENT or IS_EDITOR:
     from helpers import i18n
     from helpers import EffectsList
     from CustomEffect import SelectorDescFactory, CustomEffectsDescriptor, ExhaustEffectDescriptor
@@ -65,12 +65,6 @@ ABILITY_SLOTS_BY_VEHICLE_CLASS = {'lightTank': 1,
  'AT-SPG': 2,
  'mediumTank': 2,
  'heavyTank': 3}
-
-def getNumAbilitySlots(vehicleType):
-    vehClass = getVehicleClassFromVehicleType(vehicleType)
-    return ABILITY_SLOTS_BY_VEHICLE_CLASS[vehClass]
-
-
 VEHICLE_DEVICE_TYPE_NAMES = ('engine',
  'ammoBay',
  'fuelTank',
@@ -187,17 +181,38 @@ def reload(full=True):
 
 class VehicleDescriptor(object):
 
-    def __init__(self, compactDescr=None, typeID=None, typeName=None, vehMode=VEHICLE_MODE.DEFAULT):
+    def __init__(self, compactDescr=None, typeID=None, typeName=None, vehMode=VEHICLE_MODE.DEFAULT, xmlPath=None):
+        vehType = None
         if compactDescr is None:
+            vehicleItem = None
             if typeID is not None:
                 nationID, vehicleTypeID = typeID
-            else:
+            elif typeName is not None:
                 nationID, vehicleTypeID = g_list.getIDsByName(typeName)
-            type = g_cache.vehicle(nationID, vehicleTypeID)
+            elif xmlPath is not None:
+                nation, vehicleType = _deduceNamesFromTankXmlPath(xmlPath)
+                typeName = nation + ':' + vehicleType
+                try:
+                    nationID, vehicleTypeID = g_list.getIDsByName(typeName)
+                    vehicleItem = g_list.getList(nationID)[vehicleTypeID]
+                except Exception as e:
+                    nationID = nations.INDICES[nation]
+                    vehicleTypeID = 255
+
+            if xmlPath is None:
+                type = g_cache.vehicle(nationID, vehicleTypeID)
+            else:
+                if vehicleItem is None:
+                    vehicleItem = vehicle_items.VehicleItem(ITEM_TYPES['vehicle'], vehicleTypeID, typeName, makeIntCompactDescrByID('vehicle', nationID, vehicleTypeID))
+                if vehMode != VEHICLE_MODE.DEFAULT:
+                    xmlName, xmlExt = os.path.splitext(xmlPath)
+                    xmlPath = xmlName + VEHICLE_MODE_FILE_SUFFIX[vehMode] + xmlExt
+                type = VehicleType(nationID, vehicleItem, xmlPath, vehMode)
+                vehType = type
             turretDescr = type.turrets[0][0]
             header = items.ITEM_TYPES.vehicle + (nationID << 4)
             compactDescr = struct.pack('<2B6HB', header, vehicleTypeID, type.chassis[0].id[1], type.engines[0].id[1], type.fuelTanks[0].id[1], type.radios[0].id[1], turretDescr.id[1], turretDescr.guns[0].id[1], 0)
-        self.__initFromCompactDescr(compactDescr, vehMode)
+        self.__initFromCompactDescr(compactDescr, vehMode, vehType)
         return
 
     def __set_activeTurretPos(self, turretPosition):
@@ -843,16 +858,16 @@ class VehicleDescriptor(object):
         self.hull = hullDescr
         callable()
 
-    def __initFromCompactDescr(self, compactDescr, vehMode):
+    def __initFromCompactDescr(self, compactDescr, vehMode, vehType=None):
         unpack = struct.unpack
         try:
-            type, components, optionalDeviceSlots, optionalDevices, emblemPositions, emblems, inscriptions, camouflages = _splitVehicleCompactDescr(compactDescr, vehMode)
+            type, components, optionalDeviceSlots, optionalDevices, emblemPositions, emblems, inscriptions, camouflages = _splitVehicleCompactDescr(compactDescr, vehMode, vehType)
             custNationID = type.customizationNationID
             customization = g_cache.customization(custNationID)
             self.type = type
             self.name = type.name
             self.level = type.level
-            if IS_CLIENT or IS_CELLAPP or IS_BOT:
+            if IS_CLIENT or IS_EDITOR or IS_CELLAPP or IS_BOT:
                 self.extras = type.extras
                 self.extrasDict = type.extrasDict
             chassisID, engineID, fuelTankID, radioID = unpack('<4H', components[:8])
@@ -882,7 +897,7 @@ class VehicleDescriptor(object):
                 idx -= 1
 
             if IS_CLIENT:
-                self.playerEmblems = type._defEmblems
+                self.playerEmblems = _EMPTY_EMBLEMS
                 self.playerInscriptions = _EMPTY_INSCRIPTIONS
                 self.camouflages = _EMPTY_CAMOUFLAGES
             else:
@@ -971,7 +986,7 @@ class VehicleDescriptor(object):
         for turretDescr, gunDescr in self.turrets:
             self.maxHealth += turretDescr.maxHealth
 
-        if IS_CLIENT or IS_CELLAPP or IS_WEB or IS_BOT:
+        if IS_CLIENT or IS_EDITOR or IS_CELLAPP or IS_WEB or IS_BOT:
             weight, maxWeight = self.__computeWeight()
             trackCenterOffset = chassis.topRightCarryingPoint[0]
             self.physics = {'weight': weight,
@@ -1024,7 +1039,7 @@ class VehicleDescriptor(object):
             physics['rotationSpeedLimit'] = rotationSpeedLimit
             physics['rotationEnergy'] = rotationEnergy
             physics['massRotationFactor'] = defWeight / weight
-            if IS_CELLAPP or IS_CLIENT or IS_BOT:
+            if IS_CELLAPP or IS_CLIENT or IS_EDITOR or IS_BOT:
                 invisibilityFactor = 1.0
                 for turretDescr, _ in self.turrets:
                     invisibilityFactor *= turretDescr.invisibilityFactor
@@ -1101,11 +1116,11 @@ class CompositeVehicleDescriptor(object):
         return self.__vehicleDescr.__installGun(gunID, turretPositionIdx)
 
 
-def VehicleDescr(compactDescr=None, typeID=None, typeName=None):
-    defaultDescriptor = VehicleDescriptor(compactDescr, typeID, typeName)
+def VehicleDescr(compactDescr=None, typeID=None, typeName=None, xmlPath=None):
+    defaultDescriptor = VehicleDescriptor(compactDescr, typeID, typeName, xmlPath=xmlPath)
     if not defaultDescriptor.hasSiegeMode:
         return defaultDescriptor
-    siegeDescriptor = VehicleDescriptor(compactDescr, typeID, typeName, VEHICLE_MODE.SIEGE)
+    siegeDescriptor = VehicleDescriptor(compactDescr, typeID, typeName, VEHICLE_MODE.SIEGE, xmlPath=xmlPath)
     return CompositeVehicleDescriptor(defaultDescriptor, siegeDescriptor)
 
 
@@ -1180,7 +1195,8 @@ class VehicleType(object):
      'hasBurnout',
      'role',
      'actionsGroup',
-     'actions')
+     'actions',
+     'builtins')
 
     def __init__(self, nationID, basicInfo, xmlPath, vehMode=VEHICLE_MODE.DEFAULT):
         self.name = basicInfo.name
@@ -1196,6 +1212,7 @@ class VehicleType(object):
         self.hasSiegeMode = 'siegeMode' in self.tags
         self.hasAutoSiegeMode = 'autoSiege' in self.tags
         self.isWheeledVehicle = 'wheeledVehicle' in self.tags
+        self.builtins = {t.split('_user')[0] for t in self.tags if t.startswith('builtin')}
         self.hasBurnout = 'burnout' in self.tags
         self.role = self.__getRoleFromTags()
         self.actionsGroup = self.__getActionsGroupFromRole(self.role)
@@ -1232,7 +1249,7 @@ class VehicleType(object):
          'firePenalty': _xml.readFraction(xmlCtx, section, 'invisibility/firePenalty')}
         self.crewRoles = _readCrew(xmlCtx, section, 'crew')
         commonConfig = g_cache.commonConfig
-        if IS_CLIENT or IS_CELLAPP or IS_BOT:
+        if IS_CLIENT or IS_EDITOR or IS_CELLAPP or IS_BOT:
             _id = lambda args: args
             copyMethod = copy.copy if section.has_key('extras') else _id
             self.extras = copyMethod(commonConfig['extras'])
@@ -1241,7 +1258,7 @@ class VehicleType(object):
             self.tankmen = _selectCrewExtras(self.crewRoles, self.extrasDict)
         if IS_CLIENT or IS_WEB:
             self.i18nInfo = basicInfo.i18n
-        if IS_CLIENT:
+        if IS_CLIENT or IS_EDITOR:
             self.damageStickersLodDist = commonConfig['miscParams']['damageStickersLodDist']
             collisionVelCfg = commonConfig['miscParams']['collisionEffectVelocities']
             self.heavyCollisionEffectVelocities = {'hull': collisionVelCfg['hull'][1],
@@ -1253,16 +1270,14 @@ class VehicleType(object):
             self.emblemsAlpha = _xml.readFraction(xmlCtx, section, 'emblems/alpha')
             self._prereqs = None
             self.clientAdjustmentFactors = _readClientAdjustmentFactors(xmlCtx, section)
-        if IS_CELLAPP or IS_CLIENT:
+        if IS_CELLAPP or IS_CLIENT or IS_EDITOR:
             collisionVelCfg = commonConfig['miscParams']['collisionEffectVelocities']
             self.collisionEffectVelocities = {'hull': collisionVelCfg['hull'][0],
              'track': collisionVelCfg['track'][0],
              'waterContact': collisionVelCfg['waterContact'][0],
              'ramming': collisionVelCfg['ramming']}
-        defEmblemName = _xml.readNonEmptyString(xmlCtx, section, 'emblems/default')
-        self.defaultPlayerEmblemID = g_cache.playerEmblems()[2].get(defEmblemName)
-        if self.defaultPlayerEmblemID is None:
-            _xml.raiseWrongXml(xmlCtx, 'emblems/default', "unknown emblem '%s'" % defEmblemName)
+        g_cache.playerEmblems()
+        self.defaultPlayerEmblemID = _xml.readNonNegativeInt(xmlCtx, section, 'emblems/default')
         self._defEmblem = (self.defaultPlayerEmblemID, _CUSTOMIZATION_EPOCH, 0)
         self._defEmblems = (self._defEmblem,
          self._defEmblem,
@@ -1316,13 +1331,13 @@ class VehicleType(object):
                 LOG_CURRENT_EXCEPTION()
                 self.xphysics = None
 
-        elif IS_CLIENT:
+        elif IS_CLIENT or IS_EDITOR:
             self.xphysics = _readXPhysicsClient(xmlCtx, section, 'physics', self.isWheeledVehicle)
         else:
             self.xphysics = None
-        if IS_CLIENT and section.has_key('repaintParameters'):
+        if (IS_CLIENT or IS_EDITOR) and section.has_key('repaintParameters'):
             self.repaintParameters = _readRepaintParams(xmlCtx, _xml.getSubsection(xmlCtx, section, 'repaintParameters'))
-        if (IS_CLIENT or IS_CELLAPP or IS_BOT) and section.has_key('extras'):
+        if (IS_CLIENT or IS_EDITOR or IS_CELLAPP or IS_BOT) and section.has_key('extras'):
             _readExtraLocals(self, (xmlCtx, 'extras'), section)
         if IS_CELLAPP:
             self.rollerExtras = [ extra for extra in self.devices if extra.isTrack and getattr(extra, 'isWheel', False) == self.isWheeledVehicle ]
@@ -1334,7 +1349,7 @@ class VehicleType(object):
                             if matInfo.multipleExtra:
                                 wheel.materials[matKind] = matInfo._replace(extra=self.extrasDict[matInfo.extra])
 
-        if IS_CLIENT:
+        if IS_CLIENT or IS_EDITOR:
             self.__checkPositionTags()
         VehicleType.currentReadingVeh = None
         section = None
@@ -1526,7 +1541,7 @@ class Cache(object):
         self.__rolesActionGroups = None
         self.__actionsByGroups = None
         self.__actionsByRoles = None
-        if IS_CLIENT:
+        if IS_CLIENT or IS_EDITOR:
             self.__vehicleEffects = None
             self.__gunEffects = None
             self.__gunReloadEffects = None
@@ -1622,10 +1637,14 @@ class Cache(object):
         return descr
 
     def playerEmblems(self):
-        descr = self.__playerEmblems
-        if descr is None:
-            descr = self.__playerEmblems = _readPlayerEmblems(_VEHICLE_TYPE_XML_PATH + 'common/player_emblems.xml')
-        return descr
+        if IS_CLIENT:
+            descr = ({}, {}, {})
+            return descr
+        else:
+            descr = self.__playerEmblems
+            if descr is None:
+                descr = self.__playerEmblems = _readPlayerEmblems(_VEHICLE_TYPE_XML_PATH + 'common/player_emblems.xml')
+            return descr
 
     def optionalDevices(self):
         descr = self.__optionalDevices
@@ -2099,6 +2118,12 @@ def _getAmmoForGun(gunDescr, defaultPortion=None):
     return ammo
 
 
+def getBuiltinEqsForVehicle(vehType):
+    numSlots = NUM_EQUIPMENT_SLOTS_BY_TYPE[items.EQUIPMENT_TYPES.regular]
+    builtins = getattr(vehType, 'builtins', [])
+    return [ e.compactDescr for e in g_cache.equipments().itervalues() if e.name in builtins ][:numSlots]
+
+
 def getUnlocksSources():
     res = {}
     for nationID in xrange(len(nations.NAMES)):
@@ -2179,7 +2204,7 @@ def _readInstallableComponents(xmlCtx, section, subsectionName, nationID, reader
                     _xml.raiseWrongXml(ctx, sname, 'the component is not shared')
                 res.append(localReader(ctx, subsection, descr, unlocksDescrs, parentItem, **kwargs))
             else:
-                if descr.status != _ITEM_STATUS.EMPTY:
+                if not IS_EDITOR and descr.status != _ITEM_STATUS.EMPTY:
                     _xml.raiseWrongXml(ctx, '', 'the component is already defined somewhere')
                 descr.status = _ITEM_STATUS.LOCAL
                 reader(ctx, subsection, descr, unlocksDescrs, parentItem, **kwargs)
@@ -2282,7 +2307,7 @@ def _readHull(xmlCtx, section):
         _xml.raiseWrongSection(xmlCtx, 'turretPositions')
     item.turretPositions = tuple(v)
     numTurrets = len(item.turretPositions)
-    if IS_CLIENT:
+    if IS_CLIENT or IS_EDITOR:
         item.turretHardPoints = __readTurretHardPoints(section, numTurrets)
     if numTurrets == 1:
         item.variantMatch = component_constants.DEFAULT_HULL_VARIANT_MATCH
@@ -2293,13 +2318,13 @@ def _readHull(xmlCtx, section):
     else:
         item.fakeTurrets = {'lobby': _readFakeTurretIndices(xmlCtx, section, 'fakeTurrets/lobby', numTurrets),
          'battle': _readFakeTurretIndices(xmlCtx, section, 'fakeTurrets/battle', numTurrets)}
-    if IS_CLIENT or IS_BOT or IS_BASEAPP:
+    if IS_CLIENT or IS_EDITOR or IS_BOT or IS_BASEAPP:
         if section.has_key('emblemSlots'):
             if not IS_BASEAPP:
                 item.emblemSlots, item.slotsAnchors = shared_readers.readEmblemSlots(xmlCtx, section, 'emblemSlots')
         elif section.has_key('customizationSlots'):
             item.emblemSlots, item.slotsAnchors = shared_readers.readCustomizationSlots(xmlCtx, section, 'customizationSlots')
-    if IS_CLIENT:
+    if IS_CLIENT or IS_EDITOR:
         item.modelsSets = shared_readers.readModelsSets(xmlCtx, section, 'models')
         item.models = item.modelsSets['default']
         item.swinging = shared_readers.readSwingingSettings(xmlCtx, section, g_cache)
@@ -2312,7 +2337,7 @@ def _readHull(xmlCtx, section):
         else:
             item.hangarShadowTexture = None
         item.burnoutAnimation = __readBurnoutAnimation(xmlCtx, section)
-    if IS_CLIENT or IS_WEB or IS_CELLAPP:
+    if IS_CLIENT or IS_EDITOR or IS_WEB or IS_CELLAPP:
         item.primaryArmor = _readPrimaryArmor(xmlCtx, section, 'primaryArmor', item.materials)
     return item
 
@@ -2404,19 +2429,19 @@ def _readHullVariants(xmlCtx, section, defHull, chassis, turrets):
                 variant.turretPositions = tuple(v)
                 continue
             if name == 'turretHardPoints':
-                if IS_CLIENT:
+                if IS_CLIENT or IS_EDITOR:
                     variant.turretHardPoints = __readTurretHardPoints(section, numTurrets)
                 continue
             if name == 'emblemSlots':
-                if IS_CLIENT:
+                if IS_CLIENT or IS_EDITOR:
                     variant.emblemSlots, variant.slotsAnchors = shared_readers.readEmblemSlots(xmlCtx, section, 'emblemSlots')
                 continue
             if name == 'customizationSlots':
-                if IS_CLIENT or IS_BOT or IS_BASEAPP:
+                if IS_CLIENT or IS_EDITOR or IS_BOT or IS_BASEAPP:
                     variant.emblemSlots, variant.slotsAnchors = shared_readers.readCustomizationSlots(xmlCtx, section, 'customizationSlots')
                 continue
             if name == 'camouflage':
-                if IS_CLIENT:
+                if IS_CLIENT or IS_EDITOR:
                     variant.camouflage = shared_readers.readCamouflage(xmlCtx, section, 'camouflage', default=shared_components.DEFAULT_CAMOUFLAGE)
                 continue
             if name == 'chassis':
@@ -2487,7 +2512,7 @@ def _readChassis(xmlCtx, section, item, unlocksDescrs=None, _=None):
         item.armorHomogenization = component_constants.DEFAULT_ARMOR_HOMOGENIZATION
         item.bulkHealthFactor = _xml.readPositiveFloat(xmlCtx, section, 'bulkHealthFactor')
     item.healthParams = shared_readers.readDeviceHealthParams(xmlCtx, section)
-    if IS_CLIENT or IS_BOT or IS_BASEAPP:
+    if IS_CLIENT or IS_EDITOR or IS_BOT or IS_BASEAPP:
         if section.has_key('emblemSlots'):
             if not IS_BASEAPP:
                 item.emblemSlots, item.slotsAnchors = shared_readers.readEmblemSlots(xmlCtx, section, 'emblemSlots')
@@ -2499,20 +2524,20 @@ def _readChassis(xmlCtx, section, item, unlocksDescrs=None, _=None):
             wheelNumber = int(name[-2:]) if name[-2:].isdigit() else int(name[-1])
             item.wheelHealthParams[wheelNumber] = shared_readers.readDeviceHealthParams(subctx, subsection)
 
-    if IS_CLIENT or IS_CELLAPP or IS_WEB or IS_BOT:
+    if IS_CLIENT or IS_EDITOR or IS_CELLAPP or IS_WEB or IS_BOT:
         v = item.topRightCarryingPoint
         topLeft = Vector2(-v.x, v.y)
         bottomLeft = Vector2(-v.x, -v.y)
         topRight = Vector2(v.x, v.y)
         bottomRight = Vector2(v.x, -v.y)
         item.carryingTriangles = (((topLeft + bottomLeft) / 2.0, topRight, bottomRight), ((topRight + bottomRight) / 2.0, bottomLeft, topLeft))
-    if IS_CLIENT or IS_CELLAPP:
+    if IS_CLIENT or IS_EDITOR or IS_CELLAPP:
         drivingWheelNames = section.readString('drivingWheels').split()
         if len(drivingWheelNames) != 2:
             _xml.raiseWrongSection(xmlCtx, 'drivingWheels')
         frontWheelSize = None
         rearWheelSize = None
-        if IS_CLIENT and _xml.readBool(xmlCtx, section, 'wheels/generalWheels', False):
+        if (IS_CLIENT or IS_EDITOR) and _xml.readBool(xmlCtx, section, 'wheels/generalWheels', False):
             item.generalWheelsAnimatorConfig = Vehicular.GeneralWheelsAnimatorConfig(section)
             radius = item.generalWheelsAnimatorConfig.getRadius(drivingWheelNames[0])
             frontWheelSize = radius * 2.2
@@ -2535,7 +2560,7 @@ def _readChassis(xmlCtx, section, item, unlocksDescrs=None, _=None):
     _readPriceForItem(xmlCtx, section, item.compactDescr)
     if IS_CLIENT or IS_WEB:
         item.i18n = shared_readers.readUserText(section)
-    if IS_CLIENT:
+    if IS_CLIENT or IS_EDITOR:
         groundGroups, groundNodes, groundNodesActivePostmortem, lodSettings = chassis_readers.readGroundNodesAndGroups(xmlCtx, section, g_cache)
         trackNodes = chassis_readers.readTrackNodes(xmlCtx, section)
         if section.has_key('camouflage'):
@@ -2543,10 +2568,10 @@ def _readChassis(xmlCtx, section, item, unlocksDescrs=None, _=None):
         item.modelsSets = shared_readers.readModelsSets(xmlCtx, section, 'models')
         item.models = item.modelsSets['default']
         item.traces = chassis_readers.readTraces(xmlCtx, section, item.topRightCarryingPoint[0], g_cache)
-        item.tracks = chassis_readers.readTrackMaterials(xmlCtx, section, g_cache)
+        item.tracks = chassis_readers.readTrackBasicParams(xmlCtx, section, g_cache)
         item.groundNodes = shared_components.NodesAndGroups(nodes=groundNodes, groups=groundGroups, activePostmortem=groundNodesActivePostmortem, lodSettings=lodSettings)
         item.trackNodes = shared_components.NodesAndGroups(nodes=trackNodes, groups=component_constants.EMPTY_TUPLE, activePostmortem=False, lodSettings=None)
-        item.trackParams = chassis_readers.readTrackParams(xmlCtx, section)
+        item.trackSplineParams = chassis_readers.readTrackSplineParams(xmlCtx, section)
         item.splineDesc = chassis_readers.readSplineConfig(xmlCtx, section, g_cache)
         item.leveredSuspension = chassis_readers.readLeveredSuspension(xmlCtx, section, g_cache)
         item.hullAimingSound = sound_readers.readHullAimingSound(xmlCtx, section, g_cache)
@@ -2558,8 +2583,8 @@ def _readChassis(xmlCtx, section, item, unlocksDescrs=None, _=None):
         item.physicalTracks = physicalTracksDict = {}
         physicalTracksSection = section['physicalTracks']
         if physicalTracksSection is not None:
-            physicalTracksDict['left'] = shared_readers.readBuilder(xmlCtx, physicalTracksSection, 'left', Vehicular.PhysicalTrackBuilder)
-            physicalTracksDict['right'] = shared_readers.readBuilder(xmlCtx, physicalTracksSection, 'right', Vehicular.PhysicalTrackBuilder)
+            physicalTracksDict['left'] = shared_readers.readBuilders(xmlCtx, physicalTracksSection, 'left', Vehicular.PhysicalTrackBuilder)
+            physicalTracksDict['right'] = shared_readers.readBuilders(xmlCtx, physicalTracksSection, 'right', Vehicular.PhysicalTrackBuilder)
         item.chassisLodDistance = shared_readers.readLodDist(xmlCtx, section, 'wheels/lodDist', g_cache)
         item.customEffects = (CustomEffectsDescriptor.getDescriptor(section, g_cache._customEffects['slip'], xmlCtx, 'effects/mud'),)
         item.AODecals = _readAODecals(xmlCtx, section, 'AODecals')
@@ -2570,7 +2595,7 @@ def _readChassis(xmlCtx, section, item, unlocksDescrs=None, _=None):
 def _readChassisLocals(xmlCtx, section, sharedItem, unlocksDescrs, _=None):
     hasOverride = False
     cam = None
-    if IS_CLIENT:
+    if IS_CLIENT or IS_EDITOR:
         sharedCam = sharedItem.camouflage
         cam = shared_readers.readCamouflage(xmlCtx, section, 'camouflage', default=sharedCam)
         if cam != sharedCam:
@@ -2585,7 +2610,7 @@ def _readChassisLocals(xmlCtx, section, sharedItem, unlocksDescrs, _=None):
     else:
         descr = sharedItem.copy()
         descr.unlocks = unlocks
-        if IS_CLIENT:
+        if IS_CLIENT or IS_EDITOR:
             descr.camouflage = cam
         return descr
 
@@ -2600,7 +2625,7 @@ def _readEngine(xmlCtx, section, item, unlocksDescrs=None, _=None):
     _readPriceForItem(xmlCtx, section, item.compactDescr)
     if IS_CLIENT or IS_WEB:
         item.i18n = shared_readers.readUserText(section)
-    if IS_CLIENT:
+    if IS_CLIENT or IS_EDITOR:
         item.rpm_min = section.readInt('rpm_min', 1000)
         item.rpm_max = section.readInt('rpm_max', 2600)
         sounds = sound_readers.readWWTripleSoundConfig(section)
@@ -2825,6 +2850,8 @@ def _xphysicsParseWheeledChassisClient(ctx, sec):
     axleCount = sec.readInt('axleCount', 5)
     floatArrParams = (('axleSteeringLockAngles', axleCount),)
     res.update(_parseFloatArrList(ctx, sec, floatArrParams))
+    floatParams = ('wheelRiseSpeed',)
+    res.update(_parseFloatList(ctx, sec, floatParams))
     return res
 
 
@@ -2876,15 +2903,15 @@ def _readTurret(xmlCtx, section, item, unlocksDescrs=None, _=None):
     item.showEmblemsOnGun = section.readBool('showEmblemsOnGun', False)
     if IS_CLIENT or IS_WEB:
         item.i18n = shared_readers.readUserText(section)
-    if IS_CLIENT or IS_WEB or IS_CELLAPP:
+    if IS_CLIENT or IS_EDITOR or IS_WEB or IS_CELLAPP:
         item.primaryArmor = _readPrimaryArmor(xmlCtx, section, 'primaryArmor', item.materials)
-    if IS_CLIENT or IS_BOT or IS_BASEAPP:
+    if IS_CLIENT or IS_EDITOR or IS_BOT or IS_BASEAPP:
         if section.has_key('emblemSlots'):
             if not IS_BASEAPP:
                 item.emblemSlots, item.slotsAnchors = shared_readers.readEmblemSlots(xmlCtx, section, 'emblemSlots')
         elif section.has_key('customizationSlots'):
             item.emblemSlots, item.slotsAnchors = shared_readers.readCustomizationSlots(xmlCtx, section, 'customizationSlots')
-    if IS_CLIENT:
+    if IS_CLIENT or IS_EDITOR:
         item.ceilless = section.readBool('ceilless', False)
         item.modelsSets = shared_readers.readModelsSets(xmlCtx, section, 'models')
         item.models = item.modelsSets['default']
@@ -2914,7 +2941,7 @@ def _readTurretLocals(xmlCtx, section, sharedItem, unlocksDescrs, _=None):
     else:
         hasOverride = True
         guns = _readInstallableComponents(xmlCtx, section, 'guns', nationID, _readGun, _readGunLocals, g_cache.guns(nationID), g_cache.gunIDs(nationID), unlocksDescrs, sharedItem.compactDescr)
-    if IS_CLIENT:
+    if IS_CLIENT or IS_EDITOR:
         sharedCam = sharedItem.camouflage
         cam = shared_readers.readCamouflage(xmlCtx, section, 'camouflage', default=sharedCam)
         if cam != sharedCam:
@@ -2930,7 +2957,7 @@ def _readTurretLocals(xmlCtx, section, sharedItem, unlocksDescrs, _=None):
         descr = sharedItem.copy()
         descr.guns = guns
         descr.unlocks = unlocks
-        if IS_CLIENT:
+        if IS_CLIENT or IS_EDITOR:
             descr.camouflage = cam
         return descr
 
@@ -2971,7 +2998,7 @@ def _readGun(xmlCtx, section, item, unlocksDescrs=None, _=None):
     _readPriceForItem(xmlCtx, section, item.compactDescr)
     if IS_CLIENT or IS_WEB:
         item.i18n = shared_readers.readUserText(section)
-    if IS_CLIENT:
+    if IS_CLIENT or IS_EDITOR:
         if section.has_key('models'):
             item.modelsSets = shared_readers.readModelsSets(xmlCtx, section, 'models')
             item.models = item.modelsSets['default']
@@ -2993,7 +3020,7 @@ def _readGun(xmlCtx, section, item, unlocksDescrs=None, _=None):
         item.animateEmblemSlots = section.readBool('animateEmblemSlots', True)
         if section.has_key('emblemSlots'):
             item.emblemSlots, item.slotsAnchors = shared_readers.readEmblemSlots(xmlCtx, section, 'emblemSlots')
-    if IS_CLIENT or IS_BOT or IS_BASEAPP:
+    if IS_CLIENT or IS_EDITOR or IS_BOT or IS_BASEAPP:
         if section.has_key('customizationSlots'):
             item.emblemSlots, item.slotsAnchors = shared_readers.readCustomizationSlots(xmlCtx, section, 'customizationSlots')
     if section.has_key('hitTester'):
@@ -3143,7 +3170,7 @@ def _readGunLocals(xmlCtx, section, sharedItem, unlocksDescrs, turretCompactDesc
     else:
         hasOverride = True
         invisibilityFactorAtShot = _xml.readFraction(xmlCtx, section, 'invisibilityFactorAtShot')
-    if IS_CLIENT:
+    if IS_CLIENT or IS_EDITOR:
         if not section.has_key('models'):
             modelsSets = sharedItem.modelsSets
             models = sharedItem.models
@@ -3187,7 +3214,7 @@ def _readGunLocals(xmlCtx, section, sharedItem, unlocksDescrs, turretCompactDesc
             drivenJoints = _readDrivenJoints(xmlCtx, section, 'drivenJoints')
         else:
             drivenJoints = None
-    if IS_CLIENT or IS_BOT or IS_BASEAPP:
+    if IS_CLIENT or IS_EDITOR or IS_BOT or IS_BASEAPP:
         if not section.has_key('emblemSlots') and not section.has_key('customizationSlots'):
             if not IS_BOT and not IS_BASEAPP:
                 emblemSlots = sharedItem.emblemSlots
@@ -3258,7 +3285,7 @@ def _readGunLocals(xmlCtx, section, sharedItem, unlocksDescrs, turretCompactDesc
             else:
                 tags = tags.union(('autoreload',))
             item.tags = tags
-        if IS_CLIENT:
+        if IS_CLIENT or IS_EDITOR:
             item.modelsSets = modelsSets
             item.models = models
             item.effects = effects
@@ -3268,7 +3295,7 @@ def _readGunLocals(xmlCtx, section, sharedItem, unlocksDescrs, turretCompactDesc
             item.emblemSlots = emblemSlots
             item.reloadEffect = reloadEffect
             item.drivenJoints = drivenJoints
-        if IS_CLIENT or IS_BOT or IS_BASEAPP:
+        if IS_CLIENT or IS_EDITOR or IS_BOT or IS_BASEAPP:
             item.slotsAnchors = slotsAnchors
         item.invisibilityFactorAtShot = invisibilityFactorAtShot
         return item
@@ -3360,7 +3387,7 @@ def _readShells(xmlPath, nationID):
     if section is None:
         _xml.raiseWrongXml(None, xmlPath, 'can not open or read')
     icons = {}
-    if IS_CLIENT or IS_WEB:
+    if IS_CLIENT or IS_EDITOR or IS_WEB:
         for name, subsection in _xml.getChildren((None, xmlPath), section, 'icons'):
             name = intern(name)
             if icons.has_key(name):
@@ -3918,7 +3945,7 @@ def _readShotEffectGroups(xmlPath):
         index = len(res[1])
         descr = {'index': index}
         descr.update(_readShotEffects(ctx, subsection))
-        if IS_CLIENT:
+        if IS_CLIENT or IS_EDITOR:
             descr['prereqs'] = set()
         res[0][sname] = index
         res[1].append(descr)
@@ -3948,12 +3975,12 @@ def _readShotEffects(xmlCtx, section):
         if v is None:
             _xml.raiseWrongXml(xmlCtx, 'targetStickers/armorPierced', 'unknown name of sticker')
     res['targetStickers']['armorPierced'] = v
-    if IS_CLIENT:
+    if IS_CLIENT or IS_EDITOR:
         artillery = section.has_key('artillery')
-        if artillery:
+        if artillery and IS_CLIENT:
             res['artilleryID'] = BigWorld.PyGroundEffectManager().loadArtillery(section['artillery'])
         airstrike = section.has_key('airstrike')
-        if airstrike:
+        if airstrike and IS_CLIENT:
             res['airstrikeID'] = BigWorld.PyGroundEffectManager().loadAirstrike(section['airstrike'])
         res['caliber'] = _xml.readNonNegativeFloat(xmlCtx, section, 'caliber')
         res['targetImpulse'] = _xml.readNonNegativeFloat(xmlCtx, section, 'targetImpulse')
@@ -4026,7 +4053,6 @@ def _readDamageStickers(xmlPath):
         stickerID = len(descrs)
         damageSticker['priority'] = _xml.readInt(ctx, subsection, 'priority', 1)
         if IS_CLIENT:
-            texParamVariants = []
             stickerID = _readAndRegisterDamageStickerTextureParams(ctx, subsection, sname, False)
             for i in xrange(1, 100):
                 name = 'variant%d' % i
@@ -4073,7 +4099,7 @@ def _readCommonConfig(xmlCtx, section):
      'explosionDamageAbsorptionFactor': _xml.readNonNegativeFloat(xmlCtx, section, 'miscParams/explosionDamageAbsorptionFactor'),
      'explosionEdgeDamageFactor': _xml.readNonNegativeFloat(xmlCtx, section, 'miscParams/explosionEdgeDamageFactor'),
      'allowMortarShooting': _xml.readBool(xmlCtx, section, 'miscParams/allowMortarShooting')}
-    if IS_CLIENT:
+    if IS_CLIENT or IS_EDITOR:
         v = {}
         for lodName in _xml.getSubsection(xmlCtx, section, 'lodLevels').keys():
             v[lodName] = _xml.readPositiveFloat(xmlCtx, section, 'lodLevels/' + lodName)
@@ -4088,7 +4114,7 @@ def _readCommonConfig(xmlCtx, section):
         res['defaultVehicleEffects'] = _readVehicleEffects(xmlCtx, section, 'defaultVehicleEffects')
         res['defaultTurretDetachmentEffects'] = _readTurretDetachmentEffects(xmlCtx, section, 'defaultTurretDetachmentEffects')
         res['miscParams']['explosionCandleVolumes'] = [ float(f) for f in _xml.readString(xmlCtx, section, 'miscParams/explosionCandleVolumes').split() ]
-    if IS_CLIENT or IS_CELLAPP:
+    if IS_CLIENT or IS_EDITOR or IS_CELLAPP:
         res['extras'], res['extrasDict'] = common_extras.readExtras(xmlCtx, section, 'extras', 'vehicle_extras')
         res['materials'], res['_autoDamageKindMaterials'] = _readMaterials(xmlCtx, section, 'materials', res['extrasDict'])
         res['deviceExtraIndexToTypeIndex'], res['tankmanExtraIndexToTypeIndex'] = _readDeviceTypes(xmlCtx, section, 'deviceExtras', res['extrasDict'])
@@ -4232,7 +4258,7 @@ def _readCustomization(xmlPath, nationID, idsRange):
             if groupName in camouflageGroups:
                 _xml.raiseWrongXml(xmlCtx, 'camouflages/' + groupName, 'camouflage group name is not unique')
             groupDescr = {'ids': []}
-            if IS_CLIENT or IS_WEB:
+            if IS_WEB:
                 groupDescr['userString'] = i18n.makeString(subsection.readString('userString'))
                 groupDescr['hasNew'] = False
             groupDescr['igrType'] = _readIGRType(_xml, subsection)
@@ -4298,14 +4324,15 @@ def _readCamouflage(xmlCtx, section, ids, groups, nationID, priceFactors, notInS
      'deny': _readNationVehiclesByNames(xmlCtx, section, 'deny', nationID),
      'requiredToken': section.readString('requiredToken', '')}
     isNew = False
-    if IS_CLIENT or IS_WEB:
+    if IS_CLIENT or IS_EDITOR or IS_WEB:
         camouflage['description'] = section.readString('description')
         camouflage['texture'] = _xml.readNonEmptyString(xmlCtx, section, 'texture')
         camouflage['colors'] = _readColors(xmlCtx, section, 'colors', 4)
-    if IS_CLIENT:
+    if IS_CLIENT or IS_EDITOR:
         isNew = section.readBool('isNew', False)
         camouflage['isNew'] = isNew
         camouflage['tiling'] = _readCamouflageTilings(xmlCtx, section, 'tiling', nationID)
+        camouflage['tilingSettings'] = _readCamouflageTilingSettings(xmlCtx, section)
     groupDescr['ids'].append(id)
     if isNew:
         groupDescr['hasNew'] = True
@@ -4397,6 +4424,23 @@ def _readCamouflageTilings(xmlCtx, section, sectionName, defNationID):
         res[v.compact_descriptor] = tiling
 
     return res
+
+
+def _readCamouflageTilingSettings(xmlCtx, section):
+    sectionName = 'tilingSettings'
+    if not section.has_key(sectionName):
+        return (CamouflageTilingType.LEGACY, None, None)
+    else:
+        subSection = _xml.getSubsection(xmlCtx, section, sectionName)
+        return (_readCamouflageTilingType(xmlCtx, subSection), _xml.readTupleOfFloats(xmlCtx, subSection, 'factor', 2), _xml.readTupleOfFloats(xmlCtx, subSection, 'offset', 2))
+
+
+def _readCamouflageTilingType(xmlCtx, section):
+    readType = _xml.readNonEmptyString(xmlCtx, section, 'type')
+    tilingType = CamouflageTilingTypeNameToType.get(upper(readType), None)
+    if tilingType is None:
+        _xml.raiseWrongXml(xmlCtx, '', "invalid tiling type '{}'".format(readType))
+    return tilingType
 
 
 def _readPlayerEmblems(xmlPath):
@@ -4608,7 +4652,7 @@ def _readTurretDetachmentEffects(xmlCtx, section, subsectionName, defaultEffects
     return res
 
 
-if IS_CLIENT:
+if IS_CLIENT or IS_EDITOR:
     _vehicleEffectKindNames = tuple(['collisionVehicleLight',
      'collisionVehicleHeavy',
      'collisionVehicleHeavy1',
@@ -4646,7 +4690,7 @@ def _readSiegeModeParams(xmlCtx, section, vehType):
         if 'autoSiege' in vehType.tags:
             res.update({'autoSwitchOffRequiredVehicleSpeed': component_constants.KMH_TO_MS * _xml.readNonNegativeFloat(xmlCtx, subSection, 'autoSwitchOffRequiredVehicleSpeed', 1.0),
              'autoSwitchOnRequiredVehicleSpeed': component_constants.KMH_TO_MS * _xml.readNonNegativeFloat(xmlCtx, subSection, 'autoSwitchOnRequiredVehicleSpeed', 0.1)})
-        if IS_CLIENT:
+        if IS_CLIENT or IS_EDITOR:
             res['soundStateChange'] = sound_readers.readSoundSiegeModeStateChange(xmlCtx, subSection)
             res[VEHICLE_SIEGE_STATE.SWITCHING_ON] = {'normal': res['switchOnTime'],
              'critical': res['switchOnTime'] * res['engineDamageCoeff'],
@@ -4771,11 +4815,14 @@ def _summPriceDiff(price, priceAdd, priceSub):
     return (price[0] + priceAdd[0] - priceSub[0], price[1] + priceAdd[1] - priceSub[1])
 
 
-def _splitVehicleCompactDescr(compactDescr, vehMode=VEHICLE_MODE.DEFAULT):
+def _splitVehicleCompactDescr(compactDescr, vehMode=VEHICLE_MODE.DEFAULT, vehType=None):
     header = ord(compactDescr[0])
     vehicleTypeID = ord(compactDescr[1])
     nationID = header >> 4 & 15
-    type = g_cache.vehicle(nationID, vehicleTypeID, vehMode)
+    if vehType is None:
+        type = g_cache.vehicle(nationID, vehicleTypeID, vehMode)
+    else:
+        type = vehType
     idx = 10 + len(type.turrets) * 4
     components = compactDescr[2:idx]
     flags = ord(compactDescr[idx])
@@ -4861,6 +4908,16 @@ def cachedFloatTuple(args):
     return tuple(args)
 
 
+def _deduceNamesFromTankXmlPath(xmlPath):
+    parts = xmlPath.split('/')
+    return (parts[-2], os.path.splitext(parts[-1])[0])
+
+
+_EMPTY_EMBLEM = (None, _CUSTOMIZATION_EPOCH, 0)
+_EMPTY_EMBLEMS = (_EMPTY_EMBLEM,
+ _EMPTY_EMBLEM,
+ _EMPTY_EMBLEM,
+ _EMPTY_EMBLEM)
 _EMPTY_INSCRIPTION = (None,
  _CUSTOMIZATION_EPOCH,
  0,

@@ -18,6 +18,14 @@ class GuiLoader(IGuiLoader):
     def windowsManager(self):
         return self.__gui.windowsManager
 
+    @property
+    def systemLocale(self):
+        return self.__gui.systemLocale
+
+    @property
+    def implTypeMask(self):
+        return self.__gui.implTypeMask
+
     def init(self):
         self.__gui.init()
 

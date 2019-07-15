@@ -1,6 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/VehicleSellDialog.py
-import BigWorld
 from account_helpers.AccountSettings import AccountSettings
 from debug_utils import LOG_ERROR, LOG_CURRENT_EXCEPTION
 from gui import SystemMessages, makeHtmlString
@@ -12,6 +11,7 @@ from gui.Scaleform.genConsts.CURRENCIES_CONSTANTS import CURRENCIES_CONSTANTS
 from gui.Scaleform.locale.DIALOGS import DIALOGS
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
+from gui.impl import backport
 from gui.ingame_shop import showBuyGoldForEquipment
 from gui.shared.formatters import text_styles
 from gui.shared.formatters.tankmen import formatDeletedTankmanStr
@@ -63,7 +63,7 @@ class VehicleSellDialog(VehicleSellDialogMeta):
         sellCurrency = sellPrice.getCurrency(byWeight=True)
         sellForGold = sellCurrency == Currency.GOLD
         priceTextColor = CURRENCIES_CONSTANTS.GOLD_COLOR if sellForGold else CURRENCIES_CONSTANTS.CREDITS_COLOR
-        priceTextValue = _ms(DIALOGS.VEHICLESELLDIALOG_PRICE_SIGN_ADD) + _ms(BigWorld.wg_getIntegralFormat(sellPrice.getSignValue(sellCurrency)))
+        priceTextValue = _ms(DIALOGS.VEHICLESELLDIALOG_PRICE_SIGN_ADD) + _ms(backport.getIntegralFormat(sellPrice.getSignValue(sellCurrency)))
         currencyIcon = CURRENCIES_CONSTANTS.GOLD if sellForGold else CURRENCIES_CONSTANTS.CREDITS
         invVehs = items.getVehicles(REQ_CRITERIA.INVENTORY)
         self.checkControlQuestion(self.__checkUsefulTankman)
@@ -168,13 +168,15 @@ class VehicleSellDialog(VehicleSellDialogMeta):
                 onVehicleoShells.append(data)
 
         onVehicleEquipments = []
-        for equipmnent in vehicle.equipment.regularConsumables.getInstalledItems():
+        for equipment in vehicle.equipment.regularConsumables.getInstalledItems():
             action = None
-            if equipmnent.sellPrices.itemPrice.isActionPrice():
-                action = packItemActionTooltipData(equipmnent, False)
-            data = {'intCD': equipmnent.intCD,
-             'userName': equipmnent.userName,
-             'sellPrice': equipmnent.sellPrices.itemPrice.price.toMoneyTuple(),
+            if equipment.isBuiltIn:
+                continue
+            if equipment.sellPrices.itemPrice.isActionPrice():
+                action = packItemActionTooltipData(equipment, False)
+            data = {'intCD': equipment.intCD,
+             'userName': equipment.userName,
+             'sellPrice': equipment.sellPrices.itemPrice.price.toMoneyTuple(),
              'toInventory': True,
              'action': action}
             onVehicleEquipments.append(data)
@@ -293,7 +295,7 @@ class VehicleSellDialog(VehicleSellDialogMeta):
         try:
             vehicle = self.itemsCache.items.getItemByCD(int(vehicleCD))
             shells = [ getShellItem(flashObject2Dict(shell)) for shell in shells ]
-            eqs = [ getItem(flashObject2Dict(eq)) for eq in eqs ]
+            eqs = [ item for item in (getItem(flashObject2Dict(eq)) for eq in eqs) if not item.isBuiltIn ]
             optDevicesToSell = [ getItem(flashObject2Dict(dev)) for dev in optDevicesToSell ]
             inventory = [ getItem(flashObject2Dict(module)) for module in inventory ]
             customizationItems = [ getItem(flashObject2Dict(cust_item)) for cust_item in customizationItems ]
@@ -315,9 +317,9 @@ class VehicleSellDialog(VehicleSellDialogMeta):
 
     def __getControlQuestion(self, usingGold=False):
         if usingGold:
-            currencyFormatter = BigWorld.wg_getGoldFormat(long(self.__controlNumber))
+            currencyFormatter = backport.getGoldFormat(long(self.__controlNumber))
         else:
-            currencyFormatter = BigWorld.wg_getIntegralFormat(long(self.__controlNumber))
+            currencyFormatter = backport.getIntegralFormat(long(self.__controlNumber))
         question = makeHtmlString('html_templates:lobby/dialogs', 'vehicleSellQuestion', {'controlNumber': currencyFormatter})
         return question
 

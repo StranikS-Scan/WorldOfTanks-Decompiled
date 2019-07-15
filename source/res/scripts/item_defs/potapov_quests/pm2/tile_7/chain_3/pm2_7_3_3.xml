@@ -68,10 +68,8 @@ filter = globals().get('BattleResults')
 """:type: battle_result_filters"""
 
 PROGRESS_ID_MAIN = 'assistedKills'
-PROGRESS_ID_MAIN_LIMITATION = 'assistedKillsInBattle'
 PROGRESS_ID_MAIN_SERIES = 'battlesSeries'
 PROGRESS_ID_ADD = 'assistedKillsAdv'
-PROGRESS_ID_ADD_LIMITATION = 'assistedKillsInBattleAdv'
 PROGRESS_ID_ADD_SERIES = 'battlesSeriesAdv'
 
 def onInit(eventType, eventData, quest, processor):
@@ -84,10 +82,8 @@ def onFinishBattle(eventType, eventData, quest, processor):
 
     brfilter = filter.BattleResultsFilter(eventData)
     killed = sum(len(items) for items in brfilter.filterAssist(result=['killed']).itervalues())
-    killedMain = killed if questProgress.increaseUntilComplete(PROGRESS_ID_MAIN_LIMITATION, killed) else 0
-    killedAdv = killed if questProgress.increaseUntilComplete(PROGRESS_ID_ADD_LIMITATION, killed) else 0
-    questProgress.increaseSumProgress(PROGRESS_ID_MAIN, PROGRESS_ID_MAIN_SERIES, killedMain)
-    questProgress.increaseSumProgress(PROGRESS_ID_ADD, PROGRESS_ID_ADD_SERIES, killedAdv, PROGRESS_ID_MAIN)
+    questProgress.increaseSumProgress(PROGRESS_ID_MAIN, PROGRESS_ID_MAIN_SERIES, killed)
+    questProgress.increaseSumProgress(PROGRESS_ID_ADD, PROGRESS_ID_ADD_SERIES, killed, PROGRESS_ID_MAIN)
 
     eventData['results'].update(processor.checkComplete(questProgress, quest.progressID, additionalProgressID=PROGRESS_ID_ADD))
 

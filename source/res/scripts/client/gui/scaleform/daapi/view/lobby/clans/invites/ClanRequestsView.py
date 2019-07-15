@@ -1,6 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/clans/invites/ClanRequestsView.py
-import BigWorld
 from adisp import process
 from debug_utils import LOG_DEBUG
 from gui.Scaleform.daapi.view.lobby.clans.invites.ClanInvitesViewWithTable import ClanInvitesAbstractDataProvider
@@ -12,6 +11,7 @@ from gui.clans import formatters
 from gui.clans.clan_helpers import isInClanEnterCooldown
 from gui.clans.items import formatField, isValueAvailable
 from gui.clans.settings import CLAN_INVITE_STATES
+from gui.impl import backport
 from gui.shared.events import CoolDownEvent
 from gui.shared.formatters import text_styles
 from gui.shared.view_helpers import CooldownHelper
@@ -164,10 +164,10 @@ class RequestDataProvider(ClanInvitesAbstractDataProvider):
         return {'dbID': item.getDbID(),
          'userInfo': {'userName': item.getAccountName(),
                       'dbID': accountDbId},
-         'personalRating': formatField(getter=item.getPersonalRating, formatter=BigWorld.wg_getIntegralFormat),
-         'battlesCount': formatField(getter=item.getBattlesCount, formatter=BigWorld.wg_getIntegralFormat),
-         'wins': formatField(getter=item.getBattlesPerformanceAvg, formatter=lambda value: BigWorld.wg_getNiceNumberFormat(value) + '%'),
-         'awgExp': formatField(getter=item.getBattleXpAvg, formatter=BigWorld.wg_getIntegralFormat),
+         'personalRating': formatField(getter=item.getPersonalRating, formatter=backport.getIntegralFormat),
+         'battlesCount': formatField(getter=item.getBattlesCount, formatter=backport.getIntegralFormat),
+         'wins': formatField(getter=item.getBattlesPerformanceAvg, formatter=lambda value: backport.getNiceNumberFormat(value) + '%'),
+         'awgExp': formatField(getter=item.getBattleXpAvg, formatter=backport.getIntegralFormat),
          'status': {'text': self._makeInviteStateString(item),
                     'tooltip': self._makeTooltip(body=self._makeRequestTooltip(status=item.getStatus(), user=formatField(getter=item.getChangerName), date=formatField(getter=item.getUpdatedAt, formatter=formatters.formatShortDateShortTimeString)))},
          'canShowContextMenu': True,

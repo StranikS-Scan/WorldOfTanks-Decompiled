@@ -2,7 +2,6 @@
 # Embedded file name: scripts/client/gui/impl/lobby/buy_vehicle_view.py
 import logging
 from collections import namedtuple
-import BigWorld
 import nations
 import GUI
 import constants
@@ -24,7 +23,7 @@ from gui.Scaleform.framework.entities.EventSystemEntity import EventSystemEntity
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.Scaleform.genConsts.STORE_CONSTANTS import STORE_CONSTANTS
 from gui.impl.pub import ViewImpl
-from gui.impl.backport.backport_tooltip import BackportTooltipWindow, TooltipData
+from gui.impl.backport import BackportTooltipWindow, TooltipData
 from gui.impl.gen.resources import R
 from gui.impl.gen.view_models.views.buy_vehicle_view_model import BuyVehicleViewModel
 from gui.impl.gen.view_models.views.buy_vehicle_view.commander_slot_model import CommanderSlotModel
@@ -50,7 +49,7 @@ from helpers import i18n, dependency, int2roman, func_utils
 from shared_utils import CONST_CONTAINER
 from skeletons.gui.game_control import IRentalsController, ITradeInController, IRestoreController, IBootcampController, IWalletController, IEpicBattleMetaGameController
 from skeletons.gui.shared import IItemsCache
-from frameworks.wulf import ViewFlags, WindowFlags, ViewStatus, Window
+from frameworks.wulf import ViewFlags, WindowFlags, ViewStatus, Window, WindowSettings
 
 class VehicleBuyActionTypes(CONST_CONTAINER):
     DEFAULT = 0
@@ -302,21 +301,21 @@ class BuyVehicleView(ViewImpl, EventSystemEntity):
             self.__updatePriceModel(priceModel, itemPrice)
 
     def __updatePriceModel(self, priceModel, itemPrice):
-        wgGetIntegralFormat = BigWorld.wg_getIntegralFormat
+        numberFormat = self.gui.systemLocale.getNumberFormat
         statsMoney = self.__stats.money
         price = itemPrice.price
         defPrice = itemPrice.defPrice
         currencyType = priceModel.getType()
         currencyValue = price.get(currencyType)
         if currencyValue is not None:
-            priceModel.setPrice(wgGetIntegralFormat(currencyValue))
-            priceModel.setDefPrice(wgGetIntegralFormat(defPrice.get(currencyType, 0)))
+            priceModel.setPrice(numberFormat(currencyValue))
+            priceModel.setDefPrice(numberFormat(defPrice.get(currencyType, 0)))
         else:
             for currencyType in Currency.ALL:
                 currencyValue = price.get(currencyType)
                 if currencyValue:
                     priceModel.setType(currencyType)
-                    priceModel.setPrice(BigWorld.wg_getIntegralFormat(currencyValue))
+                    priceModel.setPrice(numberFormat(currencyValue))
                     break
 
         priceModel.setAction(itemPrice.getActionPrc())
@@ -433,14 +432,9 @@ class BuyVehicleView(ViewImpl, EventSystemEntity):
         return currencyType == Currency.GOLD and self.__isGoldAutoPurhaseEnabled
 
     def __updateTradeInInfo(self):
+        self.__updateTradeOffVehicleIntCD()
         with self.viewModel.transaction() as vm:
             vm.equipmentBlock.setBuyVehicleIntCD(self.__vehicle.intCD)
-            if self.__tradeOffVehicle is not None:
-                vm.setTradeOffVehicleIntCD(self.__tradeOffVehicle.intCD)
-                vm.equipmentBlock.setTradeOffVehicleIntCD(self.__tradeOffVehicle.intCD)
-            else:
-                vm.setTradeOffVehicleIntCD(self.__TRADE_OFF_NOT_SELECTED)
-                vm.equipmentBlock.setTradeOffVehicleIntCD(self.__TRADE_OFF_NOT_SELECTED)
             with vm.equipmentBlock.vehicleTradeInBtn.transaction() as vehicleTradeInBtnVm:
                 if self.__isTradeIn():
                     vehicleTradeInBtnVm.setIcon(R.images.gui.maps.icons.library.trade_in())
@@ -448,6 +442,16 @@ class BuyVehicleView(ViewImpl, EventSystemEntity):
                 isTradeIn = not self.__isRentVisible and self.__isTradeIn()
                 vehicleTradeInBtnVm.setIsVisible(isTradeIn and self.__tradeOffVehicle is None)
             self.__updateTradeOffVehicleBtnData()
+        return
+
+    def __updateTradeOffVehicleIntCD(self):
+        with self.viewModel.transaction() as vm:
+            if self.__tradeOffVehicle is not None and not self.__isRentVisible:
+                vm.setTradeOffVehicleIntCD(self.__tradeOffVehicle.intCD)
+                vm.equipmentBlock.setTradeOffVehicleIntCD(self.__tradeOffVehicle.intCD)
+            else:
+                vm.setTradeOffVehicleIntCD(self.__TRADE_OFF_NOT_SELECTED)
+                vm.equipmentBlock.setTradeOffVehicleIntCD(self.__TRADE_OFF_NOT_SELECTED)
         return
 
     def __updateRentInfo(self):
@@ -588,7 +592,7 @@ class BuyVehicleView(ViewImpl, EventSystemEntity):
                 statsMoney = self.__stats.money
                 currencyType = model.getType()
                 currencyValue = totalPirce.price.get(currencyType)
-                model.setPrice(BigWorld.wg_getIntegralFormat(currencyValue))
+                model.setPrice(self.gui.systemLocale.getNumberFormat(currencyValue))
                 if not self.__isPurchaseCurrencyAvailable(currencyType):
                     model.setIsEnough(currencyValue <= statsMoney.get(currencyType))
 
@@ -669,6 +673,7 @@ class BuyVehicleView(ViewImpl, EventSystemEntity):
     def __onToggleRentAndTradeIn(self):
         self.__isRentVisible = not self.__isRentVisible
         self.__updateToggleTradeInBtn()
+        self.__updateTradeOffVehicleIntCD()
         with self.viewModel.equipmentBlock.transaction() as equipmentBlockVm:
             equipmentBlockVm.vehicleTradeInBtn.setIsVisible(not self.__isRentVisible and self.__tradeOffVehicle is None)
             equipmentBlockVm.vehicleBtn.setVisible(not self.__isRentVisible and self.__tradeOffVehicle is not None)
@@ -861,7 +866,11 @@ class BuyVehicleWindow(Window):
             parent = view.getParentWindow()
         else:
             parent = None
-        super(BuyVehicleWindow, self).__init__(content=BuyVehicleView(*args, **kwargs), wndFlags=WindowFlags.DIALOG, decorator=None, parent=parent)
+        settings = WindowSettings()
+        settings.flags = WindowFlags.DIALOG
+        settings.content = BuyVehicleView(*args, **kwargs)
+        settings.parent = parent
+        super(BuyVehicleWindow, self).__init__(settings)
         return
 
     def showCongratulations(self):

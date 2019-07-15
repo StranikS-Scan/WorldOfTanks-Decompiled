@@ -4,12 +4,11 @@ import logging
 from constants import RentType
 from gui.Scaleform.daapi.view.dialogs import I18nConfirmDialogMeta, DIALOG_BUTTON_ID
 from gui.Scaleform.framework import ScopeTemplates
-from gui.Scaleform.locale.ARENAS import ARENAS
-from gui.Scaleform.locale.VEHICLE_PREVIEW import VEHICLE_PREVIEW
+from gui.impl import backport
+from gui.impl.gen import R
 from gui.shared.formatters import formatPrice, text_styles
 from gui.shared.money import MONEY_UNDEFINED
 from helpers import dependency
-from helpers.i18n import makeString as _ms
 from helpers.time_utils import getTimeStructInLocal
 from skeletons.gui.game_control import IEpicBattleMetaGameController
 from skeletons.gui.shared import IItemsCache
@@ -39,8 +38,8 @@ class RentConfirmDialogMeta(I18nConfirmDialogMeta):
             key = ''
             indexes = str(None)
             _logger.debug('GameSeasonType %s with RentType %s is not supported', seasonType, rentType)
-        stage = _ms(VEHICLE_PREVIEW.getOfferName(key), value=indexes)
-        event = _ms(ARENAS.TYPE_EPIC_NAME_INQUOTES)
+        stage = backport.text(R.strings.vehicle_preview.buyingPanel.offer.rent.name.dyn(key)(), value=indexes)
+        event = backport.text(R.strings.arenas.type.epic.name.inQuotes())
         self._messageCtx = {'name': vehicle.shortUserName or 'Vehicle',
          'stage': text_styles.stats(stage or 'Stage'),
          'event': text_styles.stats(event or 'Event'),

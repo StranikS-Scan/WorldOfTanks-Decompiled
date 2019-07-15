@@ -35,6 +35,9 @@ class IGlobalSpace(object):
     def fini(self):
         pass
 
+    def setup(self, *args, **kwargs):
+        pass
+
     def showGUI(self, appFactory, appNS, appState):
         pass
 

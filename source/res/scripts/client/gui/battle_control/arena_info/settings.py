@@ -9,6 +9,7 @@ CONTOUR_ICON_RES_PATH = 'gui/maps/icons/vehicle/contour/{0}.png'
 SMALL_MAP_IMAGE_SF_PATH = '../maps/icons/map/battleLoading/%s.png'
 SCREEN_MAP_IMAGE_RES_PATH = 'gui/maps/icons/map/screen/%s.dds'
 RESPAWN_MAP_IMAGE_RES_PATH = 'gui/maps/icons/map/respawn/%s.dds'
+DEFAULT_SCREEN_MAP_IMAGE_RES_PATH = 'gui/maps/icons/map/screen/default_screen.dds'
 UNKNOWN_CONTOUR_ICON_NAME = 'unknown'
 UNKNOWN_CONTOUR_ICON_SF_PATH = CONTOUR_ICON_SF_PATH.format(UNKNOWN_CONTOUR_ICON_NAME)
 UNKNOWN_CONTOUR_ICON_RES_PATH = CONTOUR_ICON_RES_PATH.format(UNKNOWN_CONTOUR_ICON_NAME)

@@ -1,8 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/event_boards/event_boards_vos.py
-import BigWorld
 import nations
 from gui import GUI_NATIONS_ORDER_INDEX_REVERSED
+from gui.impl import backport
 from gui.shared.gui_items.Vehicle import getSmallIconPath, Vehicle, VEHICLE_TABLE_TYPES_ORDER_INDICES_REVERSED, getTypeSmallIconPath, getTypeBigIconPath
 from helpers import int2roman, dependency
 from helpers.i18n import makeString as _ms
@@ -202,7 +202,7 @@ def _makeCantJoinReasonTooltip(stateReasons, playerData, limits):
 
     header = TOOLTIPS.ELEN_STATUS_REQUIREMENTS_HEADER
     body = ''
-    date = BigWorld.wg_getShortDateFormat(limits.getRegistrationDateMaxTs())
+    date = backport.getShortDateFormat(limits.getRegistrationDateMaxTs())
     winRateMin = limits.getWinRateMin()
     winRateMax = limits.getWinRateMax()
     battlesCount = limits.getBattlesCountMin()
@@ -248,7 +248,7 @@ def makeCantJoinReasonTextVO(event, playerData):
             else:
                 reasonText = _ms(EVENT_BOARDS.STATUS_CANTJOIN_REASON_BYWINRATEHIGH, number=str(winRateMax))
         elif stateReason is _psr.BYAGE:
-            date = BigWorld.wg_getShortDateFormat(limits.getRegistrationDateMaxTs())
+            date = backport.getShortDateFormat(limits.getRegistrationDateMaxTs())
             reasonText = _ms(EVENT_BOARDS.STATUS_CANTJOIN_REASON_BYAGE, date=date)
         elif stateReason is _psr.BYBATTLESCOUNT:
             battlesCount = playerData.getBattlesCount()

@@ -131,6 +131,10 @@ class ValueReplay:
             self.__setInitial(startRecordName)
             return
 
+    @property
+    def recordName(self):
+        return self.__recordName
+
     @staticmethod
     def makeStepCompDescr(op, idx):
         return (idx << 4) + (op & 15)

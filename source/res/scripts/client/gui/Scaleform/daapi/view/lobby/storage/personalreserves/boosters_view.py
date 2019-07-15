@@ -23,7 +23,7 @@ from helpers.i18n import makeString as _ms
 from shared_utils import CONST_CONTAINER
 from skeletons.gui.goodies import IGoodiesCache
 from skeletons.gui.server_events import IEventsCache
-from skeletons.gui.game_control import IBoostersController
+from skeletons.gui.game_control import IBoostersController, IEpicBattleMetaGameController
 from gui.shared.utils.functions import makeTooltip
 from gui.shared import event_dispatcher as shared_events
 from gui.Scaleform.daapi.view.meta.StorageCategoryPersonalReservesViewMeta import StorageCategoryPersonalReservesViewMeta
@@ -100,6 +100,7 @@ class StorageCategoryPersonalReservesView(StorageCategoryPersonalReservesViewMet
     _boostersCtrl = dependency.descriptor(IBoostersController)
     _eventsCache = dependency.descriptor(IEventsCache)
     _goodiesCache = dependency.descriptor(IGoodiesCache)
+    _epicCtrl = dependency.descriptor(IEpicBattleMetaGameController)
 
     def __init__(self):
         super(StorageCategoryPersonalReservesView, self).__init__()
@@ -152,6 +153,7 @@ class StorageCategoryPersonalReservesView(StorageCategoryPersonalReservesViewMet
          'shop': self.__onUpdateBoosters})
         self._boostersCtrl.onBoosterChangeNotify += self.__onUpdateBoosters
         self._eventsCache.onSyncCompleted += self.__onQuestsUpdate
+        self._epicCtrl.onUpdated += self.__onUpdateBoosters
         self.__onUpdateBoosters()
         self.__initFilter()
 
@@ -159,6 +161,7 @@ class StorageCategoryPersonalReservesView(StorageCategoryPersonalReservesViewMet
         g_clientUpdateManager.removeObjectCallbacks(self)
         self._boostersCtrl.onBoosterChangeNotify -= self.__onUpdateBoosters
         self._eventsCache.onSyncCompleted -= self.__onQuestsUpdate
+        self._epicCtrl.onUpdated -= self.__onUpdateBoosters
         self._saveFilters()
         super(StorageCategoryPersonalReservesView, self)._dispose()
 
@@ -177,7 +180,8 @@ class StorageCategoryPersonalReservesView(StorageCategoryPersonalReservesViewMet
         filterWarningVO = None
         if boosters:
             for booster in sorted(boosters, cmp=self.__sort):
-                vo = createStorageDefVO(booster.boosterID, text_styles.hightlight(_ms(MENU.BOOSTER_DESCRIPTION_EFFECTVALUETIME, effectValue=booster.getFormattedValue(), effectTime=booster.getEffectTimeStr(hoursOnly=True))), text_styles.main(_ms(MENU.boosterInfluenceLocale(booster.boosterGuiType))), booster.count, getItemPricesVO(booster.getSellPrice())[0], func_utils.makeFlashPath(booster.getShopIcon(STORE_CONSTANTS.ICON_SIZE_SMALL)), func_utils.makeFlashPath(booster.getShopIcon()), 'altimage', enabled=booster.isReadyToActivate, contextMenuId=CONTEXT_MENU_HANDLER_TYPE.STORAGE_PERSONAL_RESERVE_ITEM)
+                boosterLimitLocale = MENU.boosterLimitLocale(booster.boosterGuiType)
+                vo = createStorageDefVO(booster.boosterID, text_styles.hightlight(_ms(MENU.BOOSTER_DESCRIPTION_EFFECTVALUETIME, effectValue=booster.getFormattedValue(), effectTime=booster.getEffectTimeStr(hoursOnly=True))), text_styles.main(_ms(MENU.boosterInfluenceLocale(booster.boosterGuiType))), booster.count, getItemPricesVO(booster.getSellPrice())[0], func_utils.makeFlashPath(booster.getShopIcon(STORE_CONSTANTS.ICON_SIZE_SMALL)), func_utils.makeFlashPath(booster.getShopIcon()), 'altimage', enabled=booster.isReadyToActivate, active=booster.state, contextMenuId=CONTEXT_MENU_HANDLER_TYPE.STORAGE_PERSONAL_RESERVE_ITEM, additionalInfo=text_styles.alert(_ms(boosterLimitLocale)) if boosterLimitLocale else '')
                 dataProviderValues.append(vo)
                 filteredBoostersCount += booster.count
 

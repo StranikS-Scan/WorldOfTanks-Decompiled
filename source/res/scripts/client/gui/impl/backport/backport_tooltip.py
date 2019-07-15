@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/backport/backport_tooltip.py
 from collections import namedtuple
-from frameworks.wulf import ViewFlags, ViewModel, Window, WindowFlags
+from frameworks.wulf import ViewFlags, ViewModel, Window, WindowFlags, WindowSettings
 from gui.impl.pub import ViewImpl, WindowImpl
 from gui.impl.pub.window_view import WindowView
 from gui.impl.gen import R
@@ -42,8 +42,11 @@ class BackportTooltipWindow(Window):
     __slots__ = ()
 
     def __init__(self, tooltipData, parent):
-        super(BackportTooltipWindow, self).__init__(wndFlags=WindowFlags.TOOLTIP, decorator=None, content=_BackportTooltipContent(tooltipData), parent=parent)
-        return
+        settings = WindowSettings()
+        settings.flags = WindowFlags.TOOLTIP
+        settings.content = _BackportTooltipContent(tooltipData)
+        settings.parent = parent
+        super(BackportTooltipWindow, self).__init__(settings)
 
 
 class DecoratedTooltipWindow(WindowImpl):

@@ -2,7 +2,7 @@
 # Embedded file name: scripts/client/gui/event_boards/event_boards_timer.py
 import time
 import datetime
-import BigWorld
+from gui.impl import backport
 from helpers import time_utils
 FORMAT_EMPTY_STR = ''
 FORMAT_DAY_STR = 'day'
@@ -30,7 +30,7 @@ def getPeripheryTime(primeTime):
     prStartTimeUTC, prEndTimeUTC = _calculatePeripheryTimeHelper(currentTimeUTC, primeTime)
     dateStartTimestamp = int(time_utils.getTimestampFromUTC(prStartTimeUTC.utctimetuple()))
     dateEndTimestamp = int(time_utils.getTimestampFromUTC(prEndTimeUTC.utctimetuple()))
-    return (BigWorld.wg_getShortTimeFormat(dateStartTimestamp), BigWorld.wg_getShortTimeFormat(dateEndTimestamp))
+    return (backport.getShortTimeFormat(dateStartTimestamp), backport.getShortTimeFormat(dateEndTimestamp))
 
 
 def isCurrentTimeInPeriod(strStartDate, strEndDate):
@@ -108,12 +108,12 @@ def getDayMonthYear(strDate):
 def getShortTimeString(strDate):
     if strDate:
         dateTimestamp = getTimeStampFromDate(strDate)
-        return BigWorld.wg_getShortTimeFormat(dateTimestamp)
+        return backport.getShortTimeFormat(dateTimestamp)
     return FORMAT_EMPTY_STR
 
 
 def getShortTimeString_ts(tsDate):
-    return BigWorld.wg_getShortTimeFormat(tsDate)
+    return backport.getShortTimeFormat(tsDate)
 
 
 def _remainingTimeToEndHelper(dtime, isRoundUp):

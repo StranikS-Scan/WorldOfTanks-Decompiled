@@ -1,6 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/tooltips/blueprint.py
-import BigWorld
 from blueprints.BlueprintTypes import BlueprintTypes
 from gui.Scaleform.genConsts.BLOCKS_TOOLTIP_TYPES import BLOCKS_TOOLTIP_TYPES
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
@@ -48,10 +47,10 @@ class BlueprintTooltipData(BlocksTooltipData):
         else:
             discountPadding = 19 if showPlus else 30
         percentStr = ''.join(('+' if showPlus else '', str(percentValue), '%'))
-        discountValueStr = text_styles.concatStylesToSingleLine(text_styles.bonusLocalText(percentStr), text_styles.main(i18n.makeString(TOOLTIPS.VEHICLE_TEXTDELIMITER_OR).join(('  ', ' '))), icons.xpCost(), text_styles.expText(BigWorld.wg_getIntegralFormat(xpValue)))
+        discountValueStr = text_styles.concatStylesToSingleLine(text_styles.bonusLocalText(percentStr), text_styles.main(i18n.makeString(TOOLTIPS.VEHICLE_TEXTDELIMITER_OR).join(('  ', ' '))), icons.xpCost(), text_styles.expText(backport.getIntegralFormat(xpValue)))
         blockPadding = -discountPadding - (0 if showPlus else -10)
-        imgPadding = -84 - (3 if percentValue < 10 else 0)
-        return formatters.packImageTextBlockData(title=text_styles.main(title), desc=discountValueStr, img=backport.image(R.images.gui.maps.icons.blueprints.blueprintScreen.discountShine()), txtGap=-6, imgPadding=formatters.packPadding(top=0, right=imgPadding), txtPadding=formatters.packPadding(left=discountPadding), padding=formatters.packPadding(top=4, left=blockPadding, bottom=-6))
+        imgPadding = -79 - (3 if percentValue < 10 else 0)
+        return formatters.packImageTextBlockData(title=text_styles.main(title), desc=discountValueStr, img=backport.image(R.images.gui.maps.icons.blueprints.blueprintScreen.discountShine()), txtGap=-6, imgPadding=formatters.packPadding(top=0, right=imgPadding), txtPadding=formatters.packPadding(left=discountPadding), padding=formatters.packPadding(top=4, left=blockPadding, bottom=-6), blockWidth=300)
 
     @staticmethod
     def _getImageWithBottomTitleBlock(imagePath, imageTitle, blockPadding=None):

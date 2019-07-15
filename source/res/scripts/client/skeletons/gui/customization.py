@@ -5,6 +5,7 @@ from Event import Event
 class ICustomizationService(object):
     onRegionHighlighted = None
     onOutfitChanged = None
+    onCustomizationHelperRecreated = None
 
     def init(self):
         raise NotImplementedError

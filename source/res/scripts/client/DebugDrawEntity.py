@@ -4,7 +4,7 @@ from collections import defaultdict
 import BigWorld
 import GUI
 from Math import Vector3, Matrix
-from AvatarInputHandler import mathUtils
+import math_utils
 from helpers.CallbackDelayer import CallbackDelayer
 from constants import SERVER_TICK_LENGTH
 
@@ -110,23 +110,23 @@ class DebugDrawEntity(BigWorld.Entity):
         scale = (width, width, direction.length)
         rotation = (direction.yaw, direction.pitch, 0)
         translation = pointA + direction * 0.5
-        m = mathUtils.createSRTMatrix(scale, rotation, translation)
-        m.preMultiply(mathUtils.createTranslationMatrix(Vector3(0.0, -0.5, 0.0)))
+        m = math_utils.createSRTMatrix(scale, rotation, translation)
+        m.preMultiply(math_utils.createTranslationMatrix(Vector3(0.0, -0.5, 0.0)))
         motor.signal = m
         return (modelName, model, motor)
 
     def __createCube(self, position, size):
         modelName = self.CUBE_MODEL
         model, motor = self.__getModel(modelName)
-        m = mathUtils.createSRTMatrix(size, (0, 0, 0), position)
-        m.preMultiply(mathUtils.createTranslationMatrix(Vector3(0.0, -0.5, 0.0)))
+        m = math_utils.createSRTMatrix(size, (0, 0, 0), position)
+        m.preMultiply(math_utils.createTranslationMatrix(Vector3(0.0, -0.5, 0.0)))
         motor.signal = m
         return (modelName, model, motor)
 
     def __createSphere(self, position, radius):
         modelName = self.SPHERE_MODEL
         model, motor = self.__getModel(modelName)
-        motor.signal = mathUtils.createSRTMatrix(radius, (0, 0, 0), position)
+        motor.signal = math_utils.createSRTMatrix(radius, (0, 0, 0), position)
         return (modelName, model, motor)
 
     def __getModel(self, modelName):
@@ -147,7 +147,7 @@ class DebugDrawEntity(BigWorld.Entity):
             component = GUI.Text(text)
             attachment.component = component
             attachment.faceCamera = True
-            motor = BigWorld.Servo(mathUtils.createTranslationMatrix(position))
+            motor = BigWorld.Servo(math_utils.createTranslationMatrix(position))
             model = BigWorld.Model('')
             model.addMotor(motor)
             BigWorld.addModel(model, self.spaceID)
@@ -160,7 +160,7 @@ class DebugDrawEntity(BigWorld.Entity):
         component.text = text
         component.size = (0, textSize)
         component.colour = color
-        motor.signal = mathUtils.createTranslationMatrix(position)
+        motor.signal = math_utils.createTranslationMatrix(position)
         return (model, motor, component)
 
     def __onPeriodicCheckTimer(self, timeSlice):

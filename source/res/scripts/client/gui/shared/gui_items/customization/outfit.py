@@ -111,6 +111,10 @@ class Outfit(HasStrCD):
         return self._id
 
     @property
+    def style(self):
+        return self._styleDescr
+
+    @property
     def hull(self):
         return self.getContainer(Area.HULL)
 

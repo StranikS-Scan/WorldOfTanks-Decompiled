@@ -21,6 +21,7 @@ from soft_exception import SoftException
 from items.vehicles import ABILITY_SLOTS_BY_VEHICLE_CLASS, getVehicleClassFromVehicleType
 _TAG_NOT_FOR_SALE = 'notForSale'
 _TAG_CREW_BATTLE_BOOSTER = 'crewSkillBattleBooster'
+_TAG_EQUEPMENT_BUILTIN = 'builtin'
 _TAG_OPT_DEVICE_DELUXE = 'deluxe'
 _TOKEN_OPT_DEVICE_SIMPLE = 'simple'
 _TOKEN_OPT_DEVICE_DELUXE = 'deluxe'
@@ -104,6 +105,10 @@ class Equipment(VehicleArtefact):
         descr = self.descriptor
         return bool(descr.stunResistanceEffect or descr.stunResistanceDuration)
 
+    @property
+    def isBuiltIn(self):
+        return _TAG_EQUEPMENT_BUILTIN in self.tags
+
     def isInstalled(self, vehicle, slotIdx=None):
         return vehicle.equipment.regularConsumables.containsIntCD(self.intCD, slotIdx)
 
@@ -175,6 +180,10 @@ class BattleBooster(Equipment):
     def __init__(self, *args, **kwargs):
         super(BattleBooster, self).__init__(*args, **kwargs)
         self.itemTypeID = GUI_ITEM_TYPE.BATTLE_BOOSTER
+
+    @property
+    def isForSale(self):
+        return False
 
     @property
     def userType(self):

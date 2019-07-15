@@ -22,12 +22,17 @@ from helpers.i18n import makeString as _ms
 from skeletons.connection_mgr import IConnectionManager
 from skeletons.gui.game_control import IEpicBattleMetaGameController
 from skeletons.gui.lobby_context import ILobbyContext
+from gui.shared.utils.scheduled_notifications import PeriodicNotifier
 EpicBattlesWidgetVO = namedtuple('EpicBattlesWidgetVO', ('skillPoints', 'calendarStatus', 'canPrestige', 'showAlert', 'epicMetaLevelIconData'))
 EpicBattlesWidgetTooltipVO = namedtuple('EpicBattlesWidgetTooltipVO', 'progressBarData')
 
 class EpicBattlesWidget(EpicBattlesWidgetMeta):
     epicMetaGameCtrl = dependency.descriptor(IEpicBattleMetaGameController)
     __connectionMgr = dependency.descriptor(IConnectionManager)
+
+    def __init__(self):
+        super(EpicBattlesWidget, self).__init__()
+        self.__periodicNotifier = PeriodicNotifier(self.epicMetaGameCtrl.getTimer, self.update)
 
     def onWidgetClick(self):
         self.epicMetaGameCtrl.openURL()
@@ -39,7 +44,16 @@ class EpicBattlesWidget(EpicBattlesWidgetMeta):
         event_dispatcher.showEpicBattlesPrimeTimeWindow()
 
     def update(self):
+        self.__periodicNotifier.startNotification()
         self.as_setDataS(self._buildVO()._asdict())
+
+    def _populate(self):
+        super(EpicBattlesWidget, self)._populate()
+        self.__periodicNotifier.startNotification()
+
+    def _dispose(self):
+        self.__periodicNotifier.stopNotification()
+        super(EpicBattlesWidget, self)._dispose()
 
     def _buildVO(self):
         pPrestigeLevel, pLevel, _ = self.epicMetaGameCtrl.getPlayerLevelInfo()
@@ -74,7 +88,7 @@ class EpicBattlesWidget(EpicBattlesWidgetMeta):
                     nextCycle = nextSeason.getNextByTimeCycle(currTime)
                     if nextCycle is not None:
                         cycleId = nextCycle.getEpicCycleNumber()
-                        timeLeftStr = time_utils.getTillTimeString(timeLeft, EPIC_BATTLE.STATUS_TIMELEFT)
+                        timeLeftStr = time_utils.getTillTimeString(nextCycle.startDate - currTime, EPIC_BATTLE.STATUS_TIMELEFT)
                         alertStr = _ms(EPIC_BATTLE.WIDGETALERTMESSAGEBLOCK_STARTIN, cycle=cycleId, time=timeLeftStr)
                 if not alertStr:
                     prevSeason = currSeason or self.epicMetaGameCtrl.getPreviousSeason()

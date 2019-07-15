@@ -10,6 +10,7 @@ from goodies.goodie_helpers import GOODIE_TEXT_TO_RESOURCE
 from gui import GUI_SETTINGS
 from gui.Scaleform.genConsts.STORE_CONSTANTS import STORE_CONSTANTS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
+from gui.impl import backport
 from gui.shared.gui_items import GUI_ITEM_ECONOMY_CODE, KPI
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
@@ -19,8 +20,9 @@ from gui.shared.formatters import text_styles
 from gui.shared.money import Currency, MONEY_UNDEFINED
 from gui.shared.gui_items.gui_item_economics import ItemPrices, ItemPrice, ITEM_PRICE_EMPTY, ITEM_PRICES_EMPTY
 from shared_utils import CONST_CONTAINER, first
-from helpers import time_utils
+from helpers import time_utils, dependency
 from helpers.i18n import makeString as _ms
+from skeletons.gui.game_control import IEpicBattleMetaGameController
 if typing.TYPE_CHECKING:
     from skeletons.gui.goodies import IGoodiesCache
 MAX_ACTIVE_BOOSTERS_COUNT = 3
@@ -37,17 +39,20 @@ _BOOSTER_TYPE_NAMES = {GOODIE_RESOURCE_TYPE.GOLD: 'booster_gold',
  GOODIE_RESOURCE_TYPE.CREDITS: 'booster_credits',
  GOODIE_RESOURCE_TYPE.XP: 'booster_xp',
  GOODIE_RESOURCE_TYPE.CREW_XP: 'booster_crew_xp',
- GOODIE_RESOURCE_TYPE.FREE_XP: 'booster_free_xp'}
+ GOODIE_RESOURCE_TYPE.FREE_XP: 'booster_free_xp',
+ GOODIE_RESOURCE_TYPE.FL_XP: 'booster_fl_xp'}
 _BOOSTER_TYPE_TEXT = {v:k for k, v in GOODIE_TEXT_TO_RESOURCE.iteritems()}
-BOOSTERS_ORDERS = {GOODIE_RESOURCE_TYPE.XP: 0,
- GOODIE_RESOURCE_TYPE.CREW_XP: 1,
- GOODIE_RESOURCE_TYPE.FREE_XP: 2,
- GOODIE_RESOURCE_TYPE.CREDITS: 3,
- GOODIE_RESOURCE_TYPE.GOLD: 4}
+BOOSTERS_ORDERS = {GOODIE_RESOURCE_TYPE.FL_XP: 0,
+ GOODIE_RESOURCE_TYPE.XP: 1,
+ GOODIE_RESOURCE_TYPE.CREW_XP: 2,
+ GOODIE_RESOURCE_TYPE.FREE_XP: 3,
+ GOODIE_RESOURCE_TYPE.CREDITS: 4,
+ GOODIE_RESOURCE_TYPE.GOLD: 5}
 GOODIE_TYPE_TO_KPI_NAME_MAP = {GOODIE_RESOURCE_TYPE.XP: KPI.Name.GAME_XP,
  GOODIE_RESOURCE_TYPE.FREE_XP: KPI.Name.GAME_FREE_XP,
  GOODIE_RESOURCE_TYPE.CREW_XP: KPI.Name.GAME_CREW_XP,
- GOODIE_RESOURCE_TYPE.CREDITS: KPI.Name.GAME_CREDITS}
+ GOODIE_RESOURCE_TYPE.CREDITS: KPI.Name.GAME_CREDITS,
+ GOODIE_RESOURCE_TYPE.FL_XP: KPI.Name.GAME_FL_XP}
 
 class _Goodie(object):
 
@@ -257,6 +262,7 @@ class BoosterUICommon(_Goodie):
 
 
 class Booster(BoosterUICommon):
+    _epicCtrl = dependency.descriptor(IEpicBattleMetaGameController)
 
     def __init__(self, boosterID, boosterDescription, stateProvider):
         super(Booster, self).__init__(boosterID, boosterDescription, stateProvider)
@@ -297,7 +303,7 @@ class Booster(BoosterUICommon):
     @property
     def isReadyToUse(self):
         activeBoosterTypes = [ boosterType for boosterType, _, _ in self.__getActiveBoosters() ]
-        return self.count > 0 and self.state == GOODIE_STATE.INACTIVE and len(self.__getActiveBoosters()) < MAX_ACTIVE_BOOSTERS_COUNT and self.boosterType not in activeBoosterTypes if self.enabled else False
+        return self.count > 0 and self.state == GOODIE_STATE.INACTIVE and len(self.__getActiveBoosters()) < MAX_ACTIVE_BOOSTERS_COUNT and self.boosterType not in activeBoosterTypes and self.__readyForEvent() if self.enabled else False
 
     @property
     def isReadyToUpdate(self):
@@ -351,7 +357,7 @@ class Booster(BoosterUICommon):
         return RES_SHOP_EXT.getBoosterIcon(size, self.boosterGuiType)
 
     def getExpiryDate(self):
-        return BigWorld.wg_getLongDateFormat(self.expiryTime) if self.expiryTime is not None else ''
+        return backport.getLongDateFormat(self.expiryTime) if self.expiryTime is not None else ''
 
     def getExpiryDateStr(self):
         if self.expiryTime:
@@ -401,6 +407,9 @@ class Booster(BoosterUICommon):
                 altPrice = ITEM_PRICE_EMPTY
             self.__buyPrices = ItemPrices(itemPrice=buyPrice, itemAltPrice=altPrice)
             return
+
+    def __readyForEvent(self):
+        return self._epicCtrl.isAvailable() if self.boosterType == GOODIE_RESOURCE_TYPE.FL_XP else True
 
 
 class ClanReservePresenter(BoosterUICommon):

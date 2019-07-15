@@ -68,7 +68,7 @@ class LobbyMenu(LobbyMenuMeta):
     def logoffClick(self):
         isOk = yield DialogsInterface.showI18nConfirmDialog('disconnect', focusedID=DIALOG_BUTTON_ID.CLOSE)
         if isOk:
-            self.gameplay.goToLoginByRQ()
+            self.gameplay.goToLoginByDisconnectRQ()
 
     @async
     def quitClick(self):

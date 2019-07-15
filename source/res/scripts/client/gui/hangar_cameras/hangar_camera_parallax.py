@@ -5,7 +5,7 @@ import GUI
 import BigWorld
 import Windowing
 from helpers.CallbackDelayer import CallbackDelayer, TimeDeltaMeter
-from AvatarInputHandler import mathUtils
+import math_utils
 from account_helpers.settings_core.settings_constants import GAME
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.shared.utils import IHangarSpace
@@ -121,8 +121,8 @@ class HangarCameraParallax(CallbackDelayer, TimeDeltaMeter):
 
     def __getClampedCursor(self):
         cursorPosition = GUI.mcursor().position
-        cursorPosition.x = mathUtils.clamp(-self.CURSOR_POSITION_CLAMP_VALUE, self.CURSOR_POSITION_CLAMP_VALUE, cursorPosition.x)
-        cursorPosition.y = mathUtils.clamp(-self.CURSOR_POSITION_CLAMP_VALUE, self.CURSOR_POSITION_CLAMP_VALUE, cursorPosition.y)
+        cursorPosition.x = math_utils.clamp(-self.CURSOR_POSITION_CLAMP_VALUE, self.CURSOR_POSITION_CLAMP_VALUE, cursorPosition.x)
+        cursorPosition.y = math_utils.clamp(-self.CURSOR_POSITION_CLAMP_VALUE, self.CURSOR_POSITION_CLAMP_VALUE, cursorPosition.y)
         return cursorPosition
 
     def __update(self):

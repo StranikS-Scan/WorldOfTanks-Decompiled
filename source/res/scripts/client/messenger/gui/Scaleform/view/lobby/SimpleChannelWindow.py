@@ -1,8 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/gui/Scaleform/view/lobby/SimpleChannelWindow.py
-from gui.Scaleform.locale.WAITING import WAITING
+from gui.impl import backport
+from gui.impl.gen import R
 from gui.shared.events import FocusEvent
-from helpers.i18n import makeString
 from messenger.gui.Scaleform.meta.ChannelWindowMeta import ChannelWindowMeta
 from gui.shared import events, EVENT_BUS_SCOPE
 from messenger.gui.Scaleform.view.lobby import MESSENGER_VIEW_ALIAS
@@ -95,4 +95,4 @@ class SimpleChannelWindow(ChannelWindowMeta):
         if self._controller.getChannel().isJoined():
             self.as_hideWaitingS()
         else:
-            self.as_showWaitingS(makeString(WAITING.MESSENGER_SUBSCRIBE), {})
+            self.as_showWaitingS(backport.text(R.strings.waiting.messenger.subscribe()), {})

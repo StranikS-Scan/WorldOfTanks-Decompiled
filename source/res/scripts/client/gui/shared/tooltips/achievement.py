@@ -2,12 +2,12 @@
 # Embedded file name: scripts/client/gui/shared/tooltips/achievement.py
 import logging
 import constants
-import BigWorld
 from CurrentVehicle import g_currentVehicle
 from debug_utils import LOG_ERROR
 from gui.Scaleform.genConsts.BLOCKS_TOOLTIP_TYPES import BLOCKS_TOOLTIP_TYPES
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
+from gui.impl import backport
 from gui.shared.formatters import text_styles
 from gui.shared.formatters.icons import makeImageTag
 from gui.shared.money import Money
@@ -185,7 +185,7 @@ class AchievementCrystalRewardField(ToolTipDataField):
                     imgId = RES_ICONS.MAPS_ICONS_LIBRARY_CRYSTALICONINACTIVE_2
             else:
                 imgId = RES_ICONS.MAPS_ICONS_LIBRARY_CRYSTAL_16X16
-            rewardStr = BigWorld.wg_getIntegralFormat(rewardValue.crystal)
+            rewardStr = backport.getIntegralFormat(rewardValue.crystal)
             self._rewardsValues.append(rewardStr + ' ' + makeImageTag(imgId, 16, 16, -3, 0))
 
 

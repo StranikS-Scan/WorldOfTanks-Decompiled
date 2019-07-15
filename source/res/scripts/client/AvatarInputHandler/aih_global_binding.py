@@ -2,7 +2,7 @@
 # Embedded file name: scripts/client/AvatarInputHandler/aih_global_binding.py
 import logging
 import Math
-from AvatarInputHandler.aih_constants import CTRL_MODE_NAME, GUN_MARKER_FLAG, STRATEGIC_CAMERA
+from aih_constants import CTRL_MODE_NAME, GUN_MARKER_FLAG, STRATEGIC_CAMERA
 from soft_exception import SoftException
 _logger = logging.getLogger(__name__)
 _FLOAT_EPSILON = 0.003

@@ -135,7 +135,7 @@ class OptionalDevice(Artefact):
 
 
 class Equipment(Artefact):
-    __slots__ = ('equipmentType', 'reuseCount', 'cooldownSeconds', 'soundNotification')
+    __slots__ = ('equipmentType', 'reuseCount', 'cooldownSeconds', 'soundNotification', 'offload')
 
     def __init__(self):
         super(Equipment, self).__init__(items.ITEM_TYPES.equipment, 0, '', 0)
@@ -162,6 +162,12 @@ class Equipment(Artefact):
 
     def checkCompatibilityWithActiveEquipment(self, other):
         return self.checkCompatibilityWithActiveOther(other)
+
+    def offload(self, inventoryCallback):
+        if not callable(inventoryCallback):
+            return
+        if 'builtin' not in self.tags:
+            inventoryCallback(self.compactDescr)
 
 
 class StaticFactorDevice(OptionalDevice):
@@ -502,8 +508,8 @@ class TooltipConfigReader(object):
         if IS_CLIENT:
             self.shortDescription = _xml.readString(xmlCtx, section, 'shortDescription')
             self.longDescription = _xml.readString(xmlCtx, section, 'longDescription')
-            self.shortFilterAlert = _xml.readString(xmlCtx, section, 'shortFilterAlert')
-            self.longFilterAlert = _xml.readString(xmlCtx, section, 'longFilterAlert')
+            self.shortFilterAlert = _xml.readStringOrEmpty(xmlCtx, section, 'shortFilterAlert')
+            self.longFilterAlert = _xml.readStringOrEmpty(xmlCtx, section, 'longFilterAlert')
             tooltipsString = _xml.readStringOrNone(xmlCtx, section, 'tooltips')
             if tooltipsString is not None:
                 self.tooltipIdentifiers = tooltipsString.split()

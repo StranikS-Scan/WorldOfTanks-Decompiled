@@ -3,7 +3,7 @@
     <userString>	#vehicle_customization:styles/rented_styles	</userString>
     <season>	ALL	</season>
     <historical>	true	</historical>
-    <priceGroup>	rented style	</priceGroup>
+    <priceGroup>	styles 75000s	</priceGroup>
     <vehicleFilter>
       <include>
         <nations>	sweden	</nations>
@@ -60,7 +60,7 @@
     <userString>	#vehicle_customization:styles/main_styles	</userString>
     <season>	ALL	</season>
     <historical>	true	</historical>
-    <priceGroup>	style gold	</priceGroup>
+    <priceGroup>	styles 750g	</priceGroup>
     <vehicleFilter>
       <include>
         <nations>	sweden	</nations>
@@ -70,6 +70,7 @@
       <id>	39	</id>
       <texture>	gui/maps/vehicles/styles/style_01.png	</texture>
       <userString>	#vehicle_customization:gold_style/gold_style_01	</userString>
+      <longDescriptionSpecial>	#vehicle_customization:gold_style/gold_style_01_desc/long	</longDescriptionSpecial>
       <outfits>
         <outfit>
           <season>	winter	</season>
@@ -195,7 +196,7 @@
     <userString>	#vehicle_customization:styles/special_styles	</userString>
     <season>	ALL	</season>
     <historical>	false	</historical>
-    <priceGroup>	legacy notInShop	</priceGroup>
+    <priceGroup>	styles 750g notInShop	</priceGroup>
     <vehicleFilter>
       <include>
         <nations>	sweden	</nations>
@@ -244,7 +245,7 @@
     <userString>	#vehicle_customization:styles/main_styles	</userString>
     <season>	ALL	</season>
     <historical>	true	</historical>
-    <priceGroup>	generic custom look styles	</priceGroup>
+    <priceGroup>	styles 700g	</priceGroup>
     <vehicleFilter>
       <include>
         <nations>	sweden	</nations>
@@ -254,6 +255,7 @@
       <id>	246	</id>
       <texture>	gui/maps/vehicles/styles/generic_custom_look_sweden.png	</texture>
       <description>	#vehicle_customization:main_style/generic_custom_look_sweden_desc	</description>
+      <longDescriptionSpecial>	#vehicle_customization:main_style/generic_custom_look_sweden_desc/long	</longDescriptionSpecial>
       <userString>	#vehicle_customization:main_style/generic_custom_look_sweden	</userString>
       <outfits>
         <outfit>
@@ -317,7 +319,7 @@
     <userString>	#vehicle_customization:styles/main_styles	</userString>
     <season>	ALL	</season>
     <historical>	false	</historical>
-    <priceGroup>	WolvesOfOdin styles	</priceGroup>
+    <priceGroup>	styles 3500g notInShop	</priceGroup>
     <vehicleFilter>
       <include>
         <vehicles>	sweden:S26_Lansen_C	</vehicles>
@@ -327,6 +329,7 @@
       <id>	12	</id>
       <texture>	gui/maps/vehicles/styles/WolvesOfOdin.png	</texture>
       <description>	#vehicle_customization:special_style/wolves_of_odin_desc	</description>
+      <longDescriptionSpecial>	#vehicle_customization:special_style/wolves_of_odin_desc/long	</longDescriptionSpecial>
       <modelsSet>	WolvesOfOdin	</modelsSet>
       <userString>	#vehicle_customization:special_style/wolves_of_odin	</userString>
       <outfits>
@@ -364,7 +367,7 @@
       <texture>	gui/maps/vehicles/styles/generic_custom_look_2_sweden.png	</texture>
       <description>	#vehicle_customization:main_style/generic_custom_look_2_sweden_desc	</description>
       <userString>	#vehicle_customization:main_style/generic_custom_look_2_sweden	</userString>
-      <priceGroup>	generic custom look styles	</priceGroup>
+      <priceGroup>	styles 700g	</priceGroup>
       <outfits>
         <outfit>
           <season>	winter	</season>
@@ -425,7 +428,6 @@
   </itemGroup>
   <itemGroup>
     <userString>	#vehicle_customization:styles/main_styles	</userString>
-    <maxNumber>	1	</maxNumber>
     <season>	ALL	</season>
     <historical>	false	</historical>
     <vehicleFilter>
@@ -438,8 +440,9 @@
       <texture>	gui/maps/vehicles/styles/ski_patrol.png	</texture>
       <description>	#vehicle_customization:main_style/ski_patrol_desc	</description>
       <modelsSet>	UDES_14_5_3Dst	</modelsSet>
+      <maxNumber>	1	</maxNumber>
       <userString>	#vehicle_customization:main_style/ski_patrol	</userString>
-      <priceGroup>	ski_patrol notInShop	</priceGroup>
+      <priceGroup>	styles 2500g notInShop	</priceGroup>
       <outfits>
         <outfit>
           <season>	ALL	</season>

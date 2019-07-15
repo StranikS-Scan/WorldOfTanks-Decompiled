@@ -21,14 +21,11 @@ from gui.prb_control.items import prb_items, SelectResult, ValidationResult
 from gui.prb_control.settings import FUNCTIONAL_FLAG, PREBATTLE_ACTION_NAME
 from gui.prb_control.settings import PREBATTLE_ROSTER, REQUEST_TYPE
 from gui.prb_control.settings import PREBATTLE_SETTING_NAME, PREBATTLE_RESTRICTION
+from gui.Scaleform.genConsts.PREBATTLE_ALIASES import PREBATTLE_ALIASES
 from gui.prb_control.storages import legacy_storage_getter
 from gui.shared import g_eventBus, EVENT_BUS_SCOPE
-from helpers import dependency
 from prebattle_shared import decodeRoster
-from gui.Scaleform.genConsts.PREBATTLE_ALIASES import PREBATTLE_ALIASES
-from gui.Scaleform.framework import ViewTypes
 from gui.prb_control.entities.training.pre_queue.vehicles_watcher import TrainingVehiclesWatcher
-from skeletons.gui.app_loader import IAppLoader
 
 class TrainingEntryPoint(LegacyEntryPoint):
 
@@ -64,7 +61,6 @@ class TrainingIntroEntryPoint(LegacyIntroEntryPoint):
 
 
 class TrainingIntroEntity(LegacyIntroEntity):
-    appLoader = dependency.descriptor(IAppLoader)
 
     def __init__(self):
         super(TrainingIntroEntity, self).__init__(FUNCTIONAL_FLAG.TRAINING, PREBATTLE_TYPE.TRAINING, TrainingListRequester())
@@ -79,21 +75,11 @@ class TrainingIntroEntity(LegacyIntroEntity):
         self.__watcher.start()
         return result
 
-    def needToLoadHangar(self):
-        res = False
-        aliasToLoad = [PREBATTLE_ALIASES.TRAINING_LIST_VIEW_PY, PREBATTLE_ALIASES.TRAINING_ROOM_VIEW_PY]
-        inView = None
-        if self.appLoader is not None and self.appLoader.getApp() is not None and self.appLoader.getApp().containerManager is not None:
-            inView = self.appLoader.getApp().containerManager.getView(ViewTypes.LOBBY_SUB)
-        if inView is not None:
-            if inView.alias in aliasToLoad:
-                res = True
-        return res
-
     def fini(self, clientPrb=None, ctx=None, woEvents=False):
         result = super(TrainingIntroEntity, self).fini(clientPrb=clientPrb, ctx=ctx, woEvents=woEvents)
         if not woEvents:
-            if not self.canSwitch(ctx) and self.needToLoadHangar():
+            aliasToLoad = [PREBATTLE_ALIASES.TRAINING_LIST_VIEW_PY, PREBATTLE_ALIASES.TRAINING_ROOM_VIEW_PY]
+            if not self.canSwitch(ctx) and g_eventDispatcher.needToLoadHangar(ctx, self.getModeFlags(), aliasToLoad):
                 g_eventDispatcher.loadHangar()
             g_eventDispatcher.removeTrainingFromCarousel()
         else:
@@ -118,15 +104,18 @@ class TrainingIntroEntity(LegacyIntroEntity):
 
 
 class TrainingEntity(LegacyEntity):
-    appLoader = dependency.descriptor(IAppLoader)
     __loadEvents = (VIEW_ALIAS.LOBBY_HANGAR,
      VIEW_ALIAS.LOBBY_INVENTORY,
+     VIEW_ALIAS.LOBBY_STORE_OLD,
      VIEW_ALIAS.LOBBY_STORE,
      VIEW_ALIAS.LOBBY_STORAGE,
      VIEW_ALIAS.LOBBY_TECHTREE,
      VIEW_ALIAS.LOBBY_BARRACKS,
      VIEW_ALIAS.LOBBY_PROFILE,
-     VIEW_ALIAS.VEHICLE_COMPARE)
+     VIEW_ALIAS.VEHICLE_COMPARE,
+     VIEW_ALIAS.LOBBY_PERSONAL_MISSIONS,
+     VIEW_ALIAS.LOBBY_MISSIONS,
+     VIEW_ALIAS.LOBBY_STRONGHOLD)
 
     def __init__(self, settings):
         requests = {REQUEST_TYPE.ASSIGN: self.assign,
@@ -153,24 +142,13 @@ class TrainingEntity(LegacyEntity):
         for event in self.__loadEvents:
             add(event, self.__handleViewLoad, scope=EVENT_BUS_SCOPE.LOBBY)
 
-        self.__enterTrainingRoom(ctx.getInitCtx() is None)
+        self.__enterTrainingRoom(isInitial=ctx.getInitCtx() is None)
         g_eventDispatcher.addTrainingToCarousel(False)
         result = FUNCTIONAL_FLAG.addIfNot(result, FUNCTIONAL_FLAG.LOAD_WINDOW)
         result = FUNCTIONAL_FLAG.addIfNot(result, FUNCTIONAL_FLAG.LOAD_PAGE)
         self.__watcher = TrainingVehiclesWatcher()
         self.__watcher.start()
         return result
-
-    def needToLoadHangar(self):
-        res = False
-        aliasToLoad = [PREBATTLE_ALIASES.TRAINING_LIST_VIEW_PY, PREBATTLE_ALIASES.TRAINING_ROOM_VIEW_PY]
-        inView = None
-        if self.appLoader is not None and self.appLoader.getApp() is not None and self.appLoader.getApp().containerManager is not None:
-            inView = self.appLoader.getApp().containerManager.getView(ViewTypes.LOBBY_SUB)
-        if inView is not None:
-            if inView.alias in aliasToLoad:
-                res = True
-        return res
 
     def fini(self, clientPrb=None, ctx=None, woEvents=False):
         result = super(TrainingEntity, self).fini(clientPrb=clientPrb, ctx=ctx, woEvents=woEvents)
@@ -179,7 +157,8 @@ class TrainingEntity(LegacyEntity):
             remove(event, self.__handleViewLoad, scope=EVENT_BUS_SCOPE.LOBBY)
 
         if not woEvents:
-            if not self.canSwitch(ctx) and self.needToLoadHangar():
+            aliasToLoad = [PREBATTLE_ALIASES.TRAINING_LIST_VIEW_PY, PREBATTLE_ALIASES.TRAINING_ROOM_VIEW_PY]
+            if not self.canSwitch(ctx) and g_eventDispatcher.needToLoadHangar(ctx, self.getModeFlags(), aliasToLoad):
                 g_eventDispatcher.loadHangar()
             g_eventDispatcher.removeTrainingFromCarousel(False)
             self.storage.suspend()

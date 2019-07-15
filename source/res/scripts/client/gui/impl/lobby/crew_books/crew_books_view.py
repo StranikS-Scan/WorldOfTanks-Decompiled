@@ -1,7 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/crew_books/crew_books_view.py
 import WWISE
-import BigWorld
 from CurrentVehicle import g_currentVehicle
 from async import async, await
 from frameworks.wulf import ViewFlags, ViewStatus
@@ -30,12 +29,14 @@ from gui.sounds.filters import STATE_HANGAR_FILTERED
 from helpers.dependency import descriptor
 from items.components.component_constants import EMPTY_STRING
 from items.components.crew_books_constants import CREW_BOOK_INVALID_TYPE, CREW_BOOK_SPREAD, CREW_BOOK_RARITY
+from skeletons.gui.impl import IGuiLoader
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
 
 class CrewBooksView(ViewImpl):
     __itemsCache = descriptor(IItemsCache)
     __lobbyContext = descriptor(ILobbyContext)
+    __gui = descriptor(IGuiLoader)
     MIN_ROLE_LEVEL = 100
     __slots__ = ('__vehicle', '__bookGuiItemList', '__selectedBookGuiItem', '__selectedTankmanVM', '__selectedBookIndex', '__selectedBookIndex', '__invalidTypes')
 
@@ -127,7 +128,7 @@ class CrewBooksView(ViewImpl):
             purchaseEnable = True if book.intCD not in notInShopItems and isCrewBooksPurchaseEnabled else False
             bookVM.setIsInShop(purchaseEnable)
             descriptionFmtArgsVM = bookVM.getDescriptionFmtArgs()
-            descriptionFmtArgsVM.addViewModel(UserFormatStringArgModel(BigWorld.wg_getIntegralFormat(book.getXP()), 'exp', R.styles.ExpTextStyle()))
+            descriptionFmtArgsVM.addViewModel(UserFormatStringArgModel(self.__gui.systemLocale.getNumberFormat(book.getXP()), 'exp', R.styles.ExpTextStyle()))
             bookVM.setDescription(R.strings.crew_books.screen.bookType.dyn(bookSpread).info.title())
             bookNation = book.getNation()
             if bookNation is not None:
@@ -162,6 +163,8 @@ class CrewBooksView(ViewImpl):
         else:
             bookIntCD = None
         tankmanVM.tankmanSkillList.setItems(TankmanSkillListPresenter().getList(int(tankmanVM.getInvID()), True, bookIntCD))
+        isEmptySkills = len(tankmanVM.tankmanSkillList.getItems()) == 0
+        tankmanVM.setIsSkillsEmpty(isEmptySkills)
         tankmanVM.tankmanSkillList.getItems().invalidate()
         return
 
@@ -212,7 +215,7 @@ class CrewBooksView(ViewImpl):
         self.__vehicle = g_currentVehicle.item
         roles = self.__vehicle.descriptor.type.crewRoles
         crew = sortCrew(self.__vehicle.crew, roles)
-        crewDiff = [ (_, tankman) for _, tankman in crew if tankman is not None and tankman.invID in diff['compDescr'] ]
+        crewDiff = [ (i, tankman) for i, (_, tankman) in enumerate(crew) if tankman is not None and tankman.invID in diff['compDescr'] ]
         for slotIdx, tankman in crewDiff:
             tankmanVM = crewListVM[slotIdx]
             tankmanVM.setRoleLevel(str(tankman.roleLevel))
@@ -361,7 +364,7 @@ class CrewBooksView(ViewImpl):
             self.__setTankmanGainExp(tankmanVM)
 
     def __setTankmanGainExp(self, tankmanVM):
-        tankmanVM.setTankmanGainExp(BigWorld.wg_getIntegralFormat(self.__selectedBookGuiItem.getXP()))
+        tankmanVM.setTankmanGainExp(self.__gui.systemLocale.getNumberFormat(self.__selectedBookGuiItem.getXP()))
 
     def __updateIsBookUseEnable(self):
         with self.viewModel.transaction() as vm:
@@ -429,7 +432,7 @@ class CrewBooksView(ViewImpl):
                 vm.setFooterTitle(R.strings.crew_books.screen.info.personalBook.title())
                 footerTitleFmtArgs = vm.getFooterTitleFmtArgs()
                 footerTitleFmtArgs.addViewModel(UserFormatStringArgModel(self.__selectedBookGuiItem.userName, 'book_type'))
-                footerTitleFmtArgs.addViewModel(UserFormatStringArgModel(BigWorld.wg_getIntegralFormat(self.__selectedBookGuiItem.getXP()), 'exp'))
+                footerTitleFmtArgs.addViewModel(UserFormatStringArgModel(self.__gui.systemLocale.getNumberFormat(self.__selectedBookGuiItem.getXP()), 'exp'))
         return
 
     def __setCrewBookFooterDescription(self):
@@ -457,7 +460,7 @@ class CrewBooksView(ViewImpl):
                 vm.setFooterTitle(R.strings.crew_books.screen.info.crewBook.title())
                 footerTitleFmtArgs = vm.getFooterTitleFmtArgs()
                 footerTitleFmtArgs.addViewModel(UserFormatStringArgModel(self.__selectedBookGuiItem.userName, 'book_type'))
-                footerTitleFmtArgs.addViewModel(UserFormatStringArgModel(BigWorld.wg_getIntegralFormat(self.__selectedBookGuiItem.getXP()), 'exp'))
+                footerTitleFmtArgs.addViewModel(UserFormatStringArgModel(self.__gui.systemLocale.getNumberFormat(self.__selectedBookGuiItem.getXP()), 'exp'))
 
     def __getBackportTooltipData(self, event):
         tooltipId = event.getArgument('tooltipId')

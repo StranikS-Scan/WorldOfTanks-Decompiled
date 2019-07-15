@@ -3,12 +3,12 @@
 from collections import namedtuple
 import math
 import BigWorld
-from AvatarInputHandler import mathUtils
+import math_utils
 import items
 from debug_utils import LOG_ERROR, LOG_WARNING
+from constants import IS_EDITOR
 from helpers import dependency
 import Math
-import BattleReplay
 from skeletons.gui.lobby_context import ILobbyContext
 from vehicle_systems import stricted_loading
 from vehicle_systems.tankStructure import TankPartIndexes, TankPartNames, TankNodeNames
@@ -16,6 +16,8 @@ from vehicle_systems.tankStructure import DetachedTurretPartIndexes, DetachedTur
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.gui_items.customization.outfit import Outfit
 from VehicleEffects import DamageFromShotDecoder
+if not IS_EDITOR:
+    import BattleReplay
 
 def _getAccountRepository():
     import Account
@@ -25,7 +27,7 @@ def _getAccountRepository():
 _TextureParams = namedtuple('TextureParams', ('textureName', 'bumpTextureName', 'mirror'))
 _CounterParams = namedtuple('CounterParams', ('atlas', 'alphabet', 'mirror'))
 _StickerSlotPair = namedtuple('_StickerSlotPair', ('componentSlot', 'stickerParams'))
-_PersonalNumberTexParams = namedtuple('PersonalNumberTexParams', ('textureName', 'textureMap', 'text', 'fontMask'))
+_PersonalNumberTexParams = namedtuple('PersonalNumberTexParams', ('textureName', 'textureMap', 'text', 'fontMask', 'digitsCount'))
 _GUN_INSIGNIA_IDX = -1
 _INSIGNIA_LETTER = '*'
 
@@ -66,7 +68,7 @@ class ModelStickers(object):
                     stickerPack.bind(componentIdx, slot)
 
         self.__model = None
-        self.__toPartRootMatrix = mathUtils.createIdentityMatrix()
+        self.__toPartRootMatrix = math_utils.createIdentityMatrix()
         self.__parentNode = None
         self.__isDamaged = False
         self.__stickerModel = BigWorld.WGStickerModel()
@@ -150,8 +152,6 @@ class StickerPack(object):
 
     def __init__(self, vDesc, outfit):
         self._outfit = outfit
-        self._defStickers = self._getDefaultStickerCache(vDesc)
-        self._defStickerID = self._getDefaultStickerID(vDesc)
         self._data = {idx:[] for idx in self._ALLOWED_PART_IDX}
         self._handles = {idx:{} for idx in self._ALLOWED_PART_IDX}
 
@@ -185,20 +185,6 @@ class StickerPack(object):
     def _isValidComponentIdx(self, componentIdx):
         return componentIdx in self._ALLOWED_PART_IDX
 
-    def _getDefaultStickerCache(self, vDesc):
-        return None
-
-    def _getDefaultStickerID(self, vDesc):
-        return None
-
-    def _getDefaultParams(self, stickerID=None):
-        stickerID = stickerID or self._defStickerID
-        if self._defStickers is None or stickerID is None:
-            return
-        else:
-            texName, bumpTexName, _, canBeMirrored = self._defStickers[stickerID][2:6]
-            return _TextureParams(texName, bumpTexName, canBeMirrored)
-
     def _useTexture(self):
         return False
 
@@ -224,13 +210,18 @@ class FixedEmblemStickerPack(StickerPack):
         stickerParam = self._getDefaultParams(componentSlot.emblemId)
         params.append(_StickerSlotPair(componentSlot, stickerParam))
 
-    def _getDefaultStickerCache(self, vDesc):
-        g_cache = items.vehicles.g_cache
-        return g_cache.playerEmblems()[1]
+    def _getDefaultParams(self, stickerID):
+        stickerID = stickerID
+        item = items.vehicles.g_cache.customization20().decals.get(stickerID)
+        return None if item is None else _TextureParams(item.texture, '', item.canBeMirrored)
 
 
-class EmblemStickerPack(FixedEmblemStickerPack):
+class EmblemStickerPack(StickerPack):
     _ALLOWED_PART_IDX = (TankPartIndexes.HULL, TankPartIndexes.TURRET, TankPartIndexes.GUN)
+
+    def __init__(self, vDesc, outfit):
+        super(EmblemStickerPack, self).__init__(vDesc, outfit)
+        self._defStickerID = vDesc.type.defaultPlayerEmblemID
 
     def bind(self, componentIdx, componentSlot):
         if not self._isValidComponentIdx(componentIdx):
@@ -250,27 +241,17 @@ class EmblemStickerPack(FixedEmblemStickerPack):
             params.append(_StickerSlotPair(componentSlot, stickerParam))
             return
 
-    def _getDefaultStickerID(self, vDesc):
-        return vDesc.type.defaultPlayerEmblemID
+    def _getDefaultParams(self):
+        stickerID = self._defStickerID
+        item = items.vehicles.g_cache.customization20().decals.get(stickerID)
+        return None if item is None else _TextureParams(item.texture, '', item.canBeMirrored)
 
     def __convertToParams(self, item):
         return _TextureParams(item.texture, '', item.canBeMirrored)
 
 
-class FixedInscriptionStickerPack(StickerPack):
+class FixedInscriptionStickerPack(FixedEmblemStickerPack):
     _ALLOWED_PART_IDX = (TankPartIndexes.HULL, TankPartIndexes.TURRET, TankPartIndexes.GUN)
-
-    def bind(self, componentIdx, componentSlot):
-        if not self._isValidComponentIdx(componentIdx):
-            return
-        params = self._data[componentIdx]
-        stickerParam = self._getDefaultParams(componentSlot.emblemId)
-        params.append(_StickerSlotPair(componentSlot, stickerParam))
-
-    def _getDefaultStickerCache(self, vDesc):
-        g_cache = items.vehicles.g_cache
-        customizationCache = g_cache.customization(vDesc.type.customizationNationID)
-        return customizationCache['inscriptions']
 
     def _getStickerSize(self, slot):
         return (slot.size, slot.size * 0.5)
@@ -328,7 +309,7 @@ class PersonalNumStickerPack(StickerPack):
             return
 
     def _convertToParams(self, slotData):
-        return _PersonalNumberTexParams(textureName=slotData.item.fontInfo.texture, textureMap=slotData.item.fontInfo.alphabet, text=slotData.component.number, fontMask=slotData.item.fontInfo.mask)
+        return _PersonalNumberTexParams(textureName=slotData.item.fontInfo.texture, textureMap=slotData.item.fontInfo.alphabet, text=slotData.component.number, fontMask=slotData.item.fontInfo.mask, digitsCount=slotData.item.digitsCount)
 
     def _getStickerSize(self, slot):
         return (slot.size, slot.size * 0.5)
@@ -341,20 +322,19 @@ class PersonalNumStickerPack(StickerPack):
             slot, sticker = param
             if not sticker or slot.hideIfDamaged and isDamaged:
                 continue
-            texName, texMap, text, fontMask = sticker
-            if texName == '' and not self._useTexture():
+            if sticker.textureName == '' and not self._useTexture():
                 continue
             sizes = self._getStickerSize(slot)
-            handle = stickerModel.addCounterSticker((texName,
-             texMap,
-             text,
+            handle = stickerModel.addCounterSticker((sticker.textureName,
+             sticker.textureMap,
+             sticker.text,
              slot.rayStart,
              slot.rayEnd,
              sizes,
              slot.rayUp,
-             fontMask,
+             sticker.fontMask,
              1,
-             3,
+             sticker.digitsCount,
              True))
             self._handles[componentIdx][idx] = handle
 
@@ -384,9 +364,10 @@ class ClanStickerPack(StickerPack):
         elif not self._data[componentIdx]:
             return
         else:
-            replayCtrl = BattleReplay.g_replayCtrl
-            if replayCtrl.isPlaying and replayCtrl.isOffline:
-                return
+            if not IS_EDITOR:
+                replayCtrl = BattleReplay.g_replayCtrl
+                if replayCtrl.isPlaying and replayCtrl.isOffline:
+                    return
             serverSettings = self.lobbyContext.getServerSettings()
             if serverSettings is not None and serverSettings.roaming.isInRoaming():
                 return
@@ -430,6 +411,7 @@ class InsigniaStickerPack(StickerPack):
     def __init__(self, vDesc, outfit, insigniaRank):
         super(InsigniaStickerPack, self).__init__(vDesc, outfit)
         self._insigniaRank = insigniaRank
+        self._customizationNationID = vDesc.type.customizationNationID
         self._useCustomInsignia = False
         self._useOldInsignia = True
 
@@ -444,7 +426,7 @@ class InsigniaStickerPack(StickerPack):
                 slot = container.slotFor(GUI_ITEM_TYPE.INSIGNIA)
                 item = slot.getItem(slotIdx)
                 if item is not None:
-                    stickerParam = self.__convertToInsignia(item)
+                    stickerParam = self._convertToInsignia(item)
                     self._useCustomInsignia = True
                 else:
                     stickerParam = self._getDefaultParams()
@@ -453,7 +435,7 @@ class InsigniaStickerPack(StickerPack):
                 slot = container.slotFor(GUI_ITEM_TYPE.INSIGNIA)
                 item = slot.getItem(slotIdx)
                 if item is not None:
-                    stickerParam = self.__convertToCounter(item)
+                    stickerParam = self._convertToCounter(item)
                     self._useOldInsignia = False
                 else:
                     stickerParam = None
@@ -490,14 +472,14 @@ class InsigniaStickerPack(StickerPack):
     def _isValidComponentIdx(self, componentIdx):
         return self._insigniaRank != 0 and super(InsigniaStickerPack, self)._isValidComponentIdx(componentIdx)
 
-    def _getDefaultStickerCache(self, vDesc):
-        g_cache = items.vehicles.g_cache
-        customizationCache = g_cache.customization(vDesc.type.customizationNationID)
-        return customizationCache['insigniaOnGun']
-
-    def _getDefaultParams(self, stickerID=None):
-        stickerID = stickerID or self._insigniaRank
-        return _TextureParams(*self._defStickers.get(stickerID, ('', '', False)))
+    def _getDefaultParams(self):
+        defaultParams = _TextureParams('', '', False)
+        defaultInsignia = items.vehicles.g_cache.customization20().defaultInsignias.get(self._customizationNationID)
+        if defaultInsignia is None:
+            return defaultParams
+        else:
+            item = items.vehicles.g_cache.customization20().insignias.get(defaultInsignia)
+            return defaultParams if item is None else self._convertToInsignia(item)
 
     def _getStickerAttributes(self, slot, sticker):
         stickerAttributes = StickerAttributes.DOUBLESIDED
@@ -505,13 +487,13 @@ class InsigniaStickerPack(StickerPack):
             stickerAttributes |= StickerAttributes.APPLY_TO_FABRIC
         return stickerAttributes | super(InsigniaStickerPack, self)._getStickerAttributes(slot, sticker)
 
-    def __convertToInsignia(self, item):
+    def _convertToInsignia(self, item):
         constantPart, delimeterPart, changeablePart = item.texture.rpartition('_')
         _, dotPart, extenstionPart = changeablePart.partition('.')
         textureName = constantPart + delimeterPart + str(self._insigniaRank) + dotPart + extenstionPart
         return _TextureParams(textureName, '', item.canBeMirrored)
 
-    def __convertToCounter(self, item):
+    def _convertToCounter(self, item):
         return _CounterParams(item.atlas, item.alphabet, item.canBeMirrored)
 
 
@@ -607,7 +589,7 @@ class VehicleStickers(object):
         else:
             gunGeometry = compoundModel.getPartGeometryLink(DetachedTurretPartIndexes.GUN) if isDetachedTurret else compoundModel.getPartGeometryLink(TankPartIndexes.GUN)
             if isDamaged:
-                toPartRoot = mathUtils.createIdentityMatrix()
+                toPartRoot = math_utils.createIdentityMatrix()
             else:
                 toPartRoot = Math.Matrix(gunNode)
                 toPartRoot.invert()

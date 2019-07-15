@@ -4,7 +4,8 @@ import BigWorld
 from constants import PREBATTLE_TYPE
 from debug_utils import LOG_ERROR
 from gui.Scaleform.daapi.view.meta.BaseRallyMainWindowMeta import BaseRallyMainWindowMeta
-from gui.Scaleform.locale.WAITING import WAITING
+from gui.impl import backport
+from gui.impl.gen import R
 from gui.prb_control.entities.listener import IGlobalListener
 from gui.prb_control.settings import FUNCTIONAL_FLAG
 from gui.shared.events import FocusEvent
@@ -110,7 +111,7 @@ class BaseRallyMainWindow(BaseRallyMainWindowMeta, IGlobalListener):
 
     def _showLeadershipNotification(self):
         if self.prbEntity is not None and self.prbEntity.getShowLeadershipNotification():
-            self.as_showWaitingS(WAITING.PREBATTLE_GIVELEADERSHIP, {})
+            self.as_showWaitingS(backport.msgid(R.strings.waiting.prebattle.giveLeadership()), {})
             self._leadershipNotificationCallback = BigWorld.callback(self.LEADERSHIP_NOTIFICATION_TIME, self._cancelLeadershipNotification)
         return
 

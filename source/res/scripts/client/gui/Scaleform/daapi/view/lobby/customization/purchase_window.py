@@ -1,16 +1,18 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/customization/purchase_window.py
 from collections import namedtuple
+import logging
 import GUI
 from adisp import process
 from CurrentVehicle import g_currentVehicle
 from gui.impl import backport
 from gui.impl.gen import R
 from gui import DialogsInterface
+from gui.customization.processors.cart import SeparateItemsProcessor, StyleItemsProcessor
+from gui.customization.processors.cart import ProcessorSelector, ItemsType
 from gui.ClientUpdateManager import g_clientUpdateManager
-from gui.Scaleform.daapi.view.dialogs.ExchangeDialogMeta import ExchangeCreditsSingleItemMeta, ExchangeCreditsMultiItemsMeta, InfoItemBase
+from gui.Scaleform.daapi.view.dialogs.ExchangeDialogMeta import ExchangeCreditsSingleItemMeta, ExchangeCreditsMultiItemsMeta
 from gui.Scaleform.daapi.view.lobby.customization.customization_item_vo import buildCustomizationItemDataVO
-from gui.Scaleform.daapi.view.lobby.customization.shared import containsVehicleBound
 from gui.Scaleform.daapi.view.lobby.header.LobbyHeader import HeaderMenuVisibilityState
 from gui.Scaleform.daapi.view.lobby.store.browser.ingameshop_helpers import isIngameShopEnabled
 from gui.Scaleform.daapi.view.meta.CustomizationBuyWindowMeta import CustomizationBuyWindowMeta
@@ -34,33 +36,14 @@ from items.components.c11n_constants import SeasonType
 from skeletons.gui.customization import ICustomizationService
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
-from shared import getTotalPurchaseInfo, AdditionalPurchaseGroups, getPurchaseMoneyState, MoneyForPurchase, isTransactionValid
+from gui.customization.shared import MoneyForPurchase, getTotalPurchaseInfo, containsVehicleBound
+from gui.customization.shared import getPurchaseMoneyState, isTransactionValid, CartExchangeCreditsInfoItem
+_logger = logging.getLogger(__name__)
 _CUSTOMIZATION_SEASON_TITLES = {SeasonType.WINTER: backport.text(R.strings.vehicle_customization.buyWindow.title.winter()),
  SeasonType.SUMMER: backport.text(R.strings.vehicle_customization.buyWindow.title.summer()),
  SeasonType.DESERT: backport.text(R.strings.vehicle_customization.buyWindow.title.desert())}
 _CUSTOMIZATION_TUTORIAL_CHAPTER = 'c11nProlong'
 _SelectItemData = namedtuple('_SelectItemData', ('season', 'quantity', 'purchaseIndices'))
-
-class CartInfoItem(InfoItemBase):
-
-    @property
-    def itemTypeName(self):
-        pass
-
-    @property
-    def userName(self):
-        pass
-
-    @property
-    def itemTypeID(self):
-        return GUI_ITEM_TYPE.CUSTOMIZATION
-
-    def getExtraIconInfo(self):
-        return None
-
-    def getGUIEmblemID(self):
-        pass
-
 
 class PurchaseWindow(CustomizationBuyWindowMeta):
     lobbyContext = dependency.descriptor(ILobbyContext)
@@ -100,7 +83,7 @@ class PurchaseWindow(CustomizationBuyWindowMeta):
                 meta = ExchangeCreditsSingleItemMeta(item.intCD)
             else:
                 itemsCDs = [ purchaseItem.item.intCD for purchaseItem in self.__purchaseItems ]
-                meta = ExchangeCreditsMultiItemsMeta(itemsCDs, CartInfoItem())
+                meta = ExchangeCreditsMultiItemsMeta(itemsCDs, CartExchangeCreditsInfoItem())
             yield DialogsInterface.showDialog(meta)
             return
         if containsVehicleBound(self.__purchaseItems):
@@ -130,22 +113,29 @@ class PurchaseWindow(CustomizationBuyWindowMeta):
         self.__ctx = self.service.getCtx()
         purchaseItems = self.__ctx.getPurchaseItems()
         g_clientUpdateManager.addMoneyCallback(self.__setTotalData)
-        self.__isStyle, self.__purchaseItems, processor = _ProcessorSelector.selectFor(purchaseItems)
-        processor.process(self.__purchaseItems)
-        itemDescriptors = processor.itemsDescriptors
-        if not self.__isStyle:
-            for season in SeasonType.COMMON_SEASONS:
-                for item in itemDescriptors[season]:
-                    self.__items[item.identificator] = _SelectItemData(season, item.quantity, item.purchaseIndices)
-                    self.__counters[season][int(item.isFromInventory)] += item.quantity
+        processorSelector = ProcessorSelector(_getProcessorsMap())
+        result = processorSelector.process(purchaseItems)
+        if result is None:
+            _logger.error("Can't process purchase items")
+            return
+        else:
+            self.__purchaseItems = result.items
+            self.__isStyle = result.itemsType == ItemsType.STYLE
+            itemDescriptors = result.descriptors
+            if not self.__isStyle:
+                for season in SeasonType.COMMON_SEASONS:
+                    for item in itemDescriptors[season]:
+                        self.__items[item.identificator] = _SelectItemData(season, item.quantity, item.purchaseIndices)
+                        self.__counters[season][int(item.isFromInventory)] += item.quantity
 
-        self.as_setDataS({'summerData': [ item.getVO() for item in itemDescriptors[SeasonType.SUMMER] ],
-         'winterData': [ item.getVO() for item in itemDescriptors[SeasonType.WINTER] ],
-         'desertData': [ item.getVO() for item in itemDescriptors[SeasonType.DESERT] ]})
-        self.__setTitlesData()
-        self.__setTotalData()
-        self.__blur.enable = True
-        self.fireEvent(LobbyHeaderMenuEvent(LobbyHeaderMenuEvent.TOGGLE_VISIBILITY, ctx={'state': HeaderMenuVisibilityState.NOTHING}), EVENT_BUS_SCOPE.LOBBY)
+            self.as_setDataS({'summerData': [ item.getUIData() for item in itemDescriptors[SeasonType.SUMMER] ],
+             'winterData': [ item.getUIData() for item in itemDescriptors[SeasonType.WINTER] ],
+             'desertData': [ item.getUIData() for item in itemDescriptors[SeasonType.DESERT] ]})
+            self.__setTitlesData()
+            self.__setTotalData()
+            self.__blur.enable = True
+            self.fireEvent(LobbyHeaderMenuEvent(LobbyHeaderMenuEvent.TOGGLE_VISIBILITY, ctx={'state': HeaderMenuVisibilityState.NOTHING}), EVENT_BUS_SCOPE.LOBBY)
+            return
 
     def _dispose(self):
         self.fireEvent(LobbyHeaderMenuEvent(LobbyHeaderMenuEvent.TOGGLE_VISIBILITY, ctx={'state': HeaderMenuVisibilityState.ONLINE_COUNTER}), EVENT_BUS_SCOPE.LOBBY)
@@ -172,7 +162,7 @@ class PurchaseWindow(CustomizationBuyWindowMeta):
         bonusSeparator = '&nbsp;&nbsp;'
         if item and item.bonus:
             bonus = item.bonus.getFormattedValue(vehicle)
-            return bonusSeparator + text_styles.bonusAppliedText(_ms(VEHICLE_CUSTOMIZATION.BUYWINDOW_TITLE_BONUSCAMO, bonus=bonus))
+            return bonusSeparator + text_styles.bonusAppliedText(_ms(VEHICLE_CUSTOMIZATION.BUYWINDOW_TITLE_BONUS_CAMOUFLAGE, bonus=bonus))
 
     def __setTitlesData(self):
         haveAutoprolongation = False
@@ -284,43 +274,13 @@ class PurchaseWindow(CustomizationBuyWindowMeta):
             event_dispatcher.runSalesChain(_CUSTOMIZATION_TUTORIAL_CHAPTER)
 
 
-class _ProcessorSelector(object):
+class _BaseUIDataPacker(object):
 
-    @staticmethod
-    def selectFor(items):
-        itemsToProcess = _ProcessorSelector.__preprocess(items)
-        isStyle = _ProcessorSelector.__isStyle(itemsToProcess)
-        processor = _StyleItemsProcessor() if isStyle else _SeparateItemsProcessor()
-        return (isStyle, itemsToProcess, processor)
-
-    @staticmethod
-    def __isStyle(items):
-        return len(items) == 1 and items[0].group == AdditionalPurchaseGroups.STYLES_GROUP_ID
-
-    @staticmethod
-    def __preprocess(items):
-        return [ item for item in items if not item.isDismantling ]
-
-
-class _BasePurchaseDescription(object):
-    __slots__ = ('intCD', 'identificator', 'itemData', 'quantity', 'purchaseIndices')
-
-    def __init__(self, item, purchaseIdx=0, quantity=1, component=None):
-        self.intCD = item.intCD
-        self.identificator = self.intCD
-        self.itemData = self._buildCustomizationItemData(item, component)
-        self.quantity = quantity
-        self.purchaseIndices = [purchaseIdx]
-
-    def getVO(self):
-        itemVO = {'id': self.identificator,
-         'itemImg': self.itemData,
-         'quantity': self.quantity}
-        return itemVO
-
-    def addPurchaseIndices(self, indices):
-        self.quantity += 1
-        self.purchaseIndices.extend(indices)
+    def __call__(self, desc):
+        itemData = self._buildCustomizationItemData(desc.item, desc.component)
+        return {'id': desc.identificator,
+         'itemImg': itemData,
+         'quantity': desc.quantity}
 
     @staticmethod
     def _buildCustomizationItemData(item, component=None):
@@ -334,166 +294,41 @@ class _BasePurchaseDescription(object):
         return buildCustomizationItemDataVO(item, None, True, False, True, showUnsupportedAlert=showUnsupportedAlert, addExtraName=False, customIcon=customIcon)
 
 
-class _StubItemPurchaseDescription(_BasePurchaseDescription):
-    __slots__ = ('isFromInventory',)
-    _StubItem = namedtuple('_StubItem', ('intCD',))
+class _StubUIDataPacker(_BaseUIDataPacker):
 
-    def __init__(self):
-        super(_StubItemPurchaseDescription, self).__init__(self._StubItem(-1), quantity=0)
-        self.isFromInventory = False
-
-    def getVO(self):
-        itemVO = super(_StubItemPurchaseDescription, self).getVO()
-        itemVO.update({'itemImg': self.itemData,
-         'isLock': True,
+    def __call__(self, desc):
+        itemVO = super(_StubUIDataPacker, self).__call__(desc)
+        itemVO.update({'isLock': True,
          'tooltip': TOOLTIPS_CONSTANTS.TECH_CUSTOMIZATION_ITEM})
         return itemVO
 
     @staticmethod
     def _buildCustomizationItemData(item, component=None):
-        itemData = {'intCD': 0,
+        return {'intCD': 0,
          'isPlaceHolder': True}
-        return itemData
 
 
-class _SeparateItemPurchaseDescription(_BasePurchaseDescription):
-    __slots__ = ('intCD', 'identificator', 'selected', 'itemData', 'compoundPrice', 'quantity', 'isFromInventory', 'purchaseIndices')
+class _SeparateUIDataPacker(_BaseUIDataPacker):
 
-    def __init__(self, purchaseItem, purchaseIdx):
-        super(_SeparateItemPurchaseDescription, self).__init__(purchaseItem.item, purchaseIdx, component=purchaseItem.component)
-        self.identificator = self.__generateID(purchaseItem)
-        self.selected = purchaseItem.selected
-        self.compoundPrice = purchaseItem.price
-        self.isFromInventory = purchaseItem.isFromInventory
-
-    def getVO(self):
-        itemVO = super(_SeparateItemPurchaseDescription, self).getVO()
-        itemVO.update({'compoundPrice': getItemPricesVO(self.compoundPrice)[0],
-         'isFromStorage': self.isFromInventory,
-         'selected': self.selected,
+    def __call__(self, desc):
+        itemVO = super(_SeparateUIDataPacker, self).__call__(desc)
+        itemVO.update({'compoundPrice': getItemPricesVO(desc.compoundPrice)[0],
+         'isFromStorage': desc.isFromInventory,
+         'selected': desc.selected,
          'tooltip': TOOLTIPS_CONSTANTS.TECH_CUSTOMIZATION_ITEM_PURCHASE})
         return itemVO
 
-    def __generateID(self, item):
-        return hash((self.intCD, item.group, item.isFromInventory))
 
+class _StyleUIDataPacker(_BaseUIDataPacker):
 
-class _StyleItemPurchaseDescription(_BasePurchaseDescription):
-
-    def getVO(self):
-        itemVO = super(_StyleItemPurchaseDescription, self).getVO()
+    def __call__(self, desc):
+        itemVO = super(_StyleUIDataPacker, self).__call__(desc)
         itemVO.update({'isFromStorage': False,
          'isLock': True,
          'tooltip': TOOLTIPS_CONSTANTS.TECH_CUSTOMIZATION_ITEM_ICON})
         return itemVO
 
 
-class _SeasonPurchaseInfo(object):
-    _ORDERED_KEYS = (GUI_ITEM_TYPE.ATTACHMENT,
-     GUI_ITEM_TYPE.SEQUENCE,
-     GUI_ITEM_TYPE.PROJECTION_DECAL,
-     GUI_ITEM_TYPE.INSCRIPTION,
-     GUI_ITEM_TYPE.PERSONAL_NUMBER,
-     GUI_ITEM_TYPE.MODIFICATION,
-     GUI_ITEM_TYPE.PAINT,
-     GUI_ITEM_TYPE.CAMOUFLAGE,
-     GUI_ITEM_TYPE.EMBLEM,
-     GUI_ITEM_TYPE.STYLE)
-
-    def __init__(self, keyFunc=None):
-        self.__buckets = {key:{} for key in self._ORDERED_KEYS}
-        self.__keyFunc = keyFunc or self.__defaultKeyFunc
-
-    def add(self, purchaseItemInfo, typeID):
-        if typeID in self._ORDERED_KEYS:
-            bucket = self.__buckets[typeID]
-            key = self.__keyFunc(purchaseItemInfo)
-            if key in bucket:
-                bucket[key].addPurchaseIndices(purchaseItemInfo.purchaseIndices)
-            else:
-                bucket[key] = purchaseItemInfo
-
-    def flatten(self):
-        items = []
-        for key in self._ORDERED_KEYS:
-            bucket = self.__buckets[key].values()
-            bucket.sort(key=self.__keyFunc)
-            items.extend(bucket)
-
-        return items
-
-    @staticmethod
-    def __defaultKeyFunc(item):
-        return item.intCD
-
-
-class _ItemsProcessor(object):
-
-    @property
-    def itemsDescriptors(self):
-        return self.__itemsDescriptors
-
-    def __init__(self):
-        self.__itemsDescriptors = {season:[] for season in SeasonType.COMMON_SEASONS}
-
-    def getItemsDescriptors(self):
-        return self.__itemsDescriptors
-
-    def process(self, items):
-        items = self._preProcess(items)
-        itemsInfo = self._process(items)
-        self._postProcess(itemsInfo)
-
-    def _preProcess(self, items):
-        return items
-
-    def _process(self, items):
-        raise NotImplementedError
-
-    def _postProcess(self, itemsInfo):
-        for season in SeasonType.COMMON_SEASONS:
-            if season in itemsInfo:
-                items = itemsInfo[season].flatten()
-            else:
-                items = [_StubItemPurchaseDescription()]
-            self.__itemsDescriptors[season] = items
-
-
-class _SeparateItemsProcessor(_ItemsProcessor):
-
-    def _process(self, items):
-        itemsInfo = {}
-        for idx, item in enumerate(items):
-            itemDescription = _SeparateItemPurchaseDescription(item, idx)
-            seasonInfo = itemsInfo.setdefault(item.group, _SeasonPurchaseInfo(self._getKey))
-            seasonInfo.add(itemDescription, item.item.itemTypeID)
-
-        return itemsInfo
-
-    @staticmethod
-    def _getKey(item):
-        return (not item.isFromInventory, item.intCD)
-
-
-class _StyleItemsProcessor(_ItemsProcessor):
-
-    def _preProcess(self, items):
-        return items[0]
-
-    def _process(self, style):
-        itemsInfo = {}
-        for season in SeasonType.COMMON_SEASONS:
-            showStyleInsteadItems = True
-            outfit = style.item.getOutfit(season)
-            seasonInfo = itemsInfo.setdefault(season, _SeasonPurchaseInfo())
-            for item in outfit.items():
-                if not item.isHiddenInUI():
-                    showStyleInsteadItems = False
-                    itemDescription = _StyleItemPurchaseDescription(item)
-                    seasonInfo.add(itemDescription, item.itemTypeID)
-
-            if showStyleInsteadItems:
-                styleDescription = _StyleItemPurchaseDescription(style.item)
-                seasonInfo.add(styleDescription, GUI_ITEM_TYPE.STYLE)
-
-        return itemsInfo
+def _getProcessorsMap():
+    return {ItemsType.DEFAULT: SeparateItemsProcessor(_SeparateUIDataPacker(), _StubUIDataPacker()),
+     ItemsType.STYLE: StyleItemsProcessor(_StyleUIDataPacker(), _StubUIDataPacker())}

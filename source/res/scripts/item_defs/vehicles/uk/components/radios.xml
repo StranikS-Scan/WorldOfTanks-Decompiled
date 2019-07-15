@@ -18,6 +18,10 @@
     <N14_bot>	28	</N14_bot>
     <C42_B47>	29	</C42_B47>
     <N19_S>	30	</N19_S>
+    <C42_VHF>	31	</C42_VHF>
+    <C13_B42>	32	</C13_B42>
+    <C13_B47>	33	</C13_B47>
+    <N22_LT>	34	</N22_LT>
     <C42_IGR>	60001	</C42_IGR>
     <N19Mk3_IGR>	60002	</N19Mk3_IGR>
     <N22_IGR>	60003	</N22_IGR>
@@ -81,6 +85,28 @@
       <maxRegenHealth>	72	</maxRegenHealth>
       <repairCost>	3.5	</repairCost>
     </N19Mk2>
+    <C13_B42>
+      <userString>	#gb_vehicles:C13_B42	</userString>
+      <tags></tags>
+      <level>	6	</level>
+      <price>	16000	</price>
+      <weight>	40	</weight>
+      <distance>	400	</distance>
+      <maxHealth>	100	</maxHealth>
+      <maxRegenHealth>	60	</maxRegenHealth>
+      <repairCost>	0.5	</repairCost>
+    </C13_B42>
+    <C13_B47>
+      <userString>	#gb_vehicles:C13_B47	</userString>
+      <tags></tags>
+      <level>	7	</level>
+      <price>	24000	</price>
+      <weight>	40	</weight>
+      <distance>	600	</distance>
+      <maxHealth>	120	</maxHealth>
+      <maxRegenHealth>	72	</maxRegenHealth>
+      <repairCost>	3.5	</repairCost>
+    </C13_B47>
     <N19Mk2_Aust>
       <userString>	#gb_vehicles:N19Mk2_Aust	</userString>
       <tags></tags>
@@ -116,6 +142,17 @@
       <maxRegenHealth>	84	</maxRegenHealth>
       <repairCost>	3	</repairCost>
     </N22>
+    <N22_LT>
+      <userString>	#gb_vehicles:N22_LT	</userString>
+      <tags></tags>
+      <level>	8	</level>
+      <price>	25000	</price>
+      <weight>	40	</weight>
+      <distance>	700	</distance>
+      <maxHealth>	140	</maxHealth>
+      <maxRegenHealth>	84	</maxRegenHealth>
+      <repairCost>	3	</repairCost>
+    </N22_LT>
     <N19_S>
       <userString>	#gb_vehicles:N19_S	</userString>
       <tags></tags>
@@ -184,6 +221,17 @@
       <maxRegenHealth>	108	</maxRegenHealth>
       <repairCost>	3.5	</repairCost>
     </C42>
+    <C42_VHF>
+      <userString>	#gb_vehicles:C42_VHF	</userString>
+      <tags></tags>
+      <level>	10	</level>
+      <price>	54000	</price>
+      <weight>	40	</weight>
+      <distance>	750	</distance>
+      <maxHealth>	180	</maxHealth>
+      <maxRegenHealth>	108	</maxRegenHealth>
+      <repairCost>	3.5	</repairCost>
+    </C42_VHF>
     <C42_B47>
       <userString>	#gb_vehicles:C42_B47	</userString>
       <tags></tags>

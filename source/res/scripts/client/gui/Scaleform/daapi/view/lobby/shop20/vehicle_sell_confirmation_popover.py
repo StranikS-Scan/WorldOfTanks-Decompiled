@@ -1,9 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/shop20/vehicle_sell_confirmation_popover.py
 import logging
-import BigWorld
 from gui.Scaleform.daapi.view.meta.VehicleSellConfirmationPopoverMeta import VehicleSellConfirmationPopoverMeta
 from gui.Scaleform.locale.STORE import STORE
+from gui.impl import backport
 from gui.shared.event_bus import EVENT_BUS_SCOPE
 from gui.shared.events import ShopEvent
 from gui.shared.formatters import text_styles
@@ -33,7 +33,7 @@ class VehicleSellConfirmationPopover(VehicleSellConfirmationPopoverMeta):
         tradeOffVehicle = self.itemsCache.items.getItemByCD(self.__tradeOffVehicleIntCD)
         if tradeOffVehicle:
             dataVO = {'titleLabel': text_styles.main(_ms(STORE.SELLCONFIRMATIONPOPOVER_TITLELABEL, vehName=tradeOffVehicle.shortUserName)),
-             'priceLabel': text_styles.main(_ms(STORE.SELLCONFIRMATIONPOPOVER_PRICELABEL, price=text_styles.highlightText(BigWorld.wg_getIntegralFormat(self.__confirmGoldPrice)))),
+             'priceLabel': text_styles.main(_ms(STORE.SELLCONFIRMATIONPOPOVER_PRICELABEL, price=text_styles.highlightText(backport.getIntegralFormat(self.__confirmGoldPrice)))),
              'priceValue': self.__confirmGoldPrice}
             return dataVO
         else:

@@ -40,7 +40,7 @@ class UsersStorage(RevCachedStorage):
         dbIDs = self.__contacts.keys()
         for dbID in dbIDs:
             user = self.__contacts[dbID]
-            if USER_TAG.TEMP in user.getTags():
+            if USER_TAG.filterToRemoveTags(user.getTags()):
                 self.__contacts.pop(dbID)
 
     def all(self):

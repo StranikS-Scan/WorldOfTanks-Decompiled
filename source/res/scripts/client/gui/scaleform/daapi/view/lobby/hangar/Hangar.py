@@ -354,7 +354,6 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
     def onRankedUpdate(self):
         self.__updateHeader()
         self.__updateHeaderComponent()
-        self.__updateHeaderEpicWidget()
         self.__updateHeaderRankedWidget()
 
     def _onPopulateEnd(self):

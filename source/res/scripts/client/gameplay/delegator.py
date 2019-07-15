@@ -7,11 +7,13 @@ from frameworks.state_machine import BaseStateObserver
 from gameplay import listeners
 from helpers import dependency
 from skeletons.connection_mgr import IConnectionManager, DisconnectReason
+from skeletons.gui.login_manager import ILoginManager
 from skeletons.gameplay import IGameplayLogic, PlayerEventID
 
 class GameplayLogic(IGameplayLogic):
     __slots__ = ('__machine', '__adaptor')
     connectionMgr = dependency.descriptor(IConnectionManager)
+    loginMgr = dependency.descriptor(ILoginManager)
 
     def __init__(self, machine):
         super(GameplayLogic, self).__init__()
@@ -42,6 +44,10 @@ class GameplayLogic(IGameplayLogic):
     def goToLoginByRQ(self):
         self.connectionMgr.disconnect()
         self.postStateEvent(PlayerEventID.NON_PLAYER_BECOME_PLAYER, disconnectReason=DisconnectReason.REQUEST)
+
+    def goToLoginByDisconnectRQ(self):
+        self.loginMgr.tryPrepareWGCLogin()
+        self.goToLoginByRQ()
 
     def goToLoginByEvent(self):
         self.postStateEvent(PlayerEventID.NON_PLAYER_BECOME_PLAYER, disconnectReason=DisconnectReason.EVENT)

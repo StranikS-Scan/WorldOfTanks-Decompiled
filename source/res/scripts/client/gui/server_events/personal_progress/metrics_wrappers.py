@@ -1,11 +1,11 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/server_events/personal_progress/metrics_wrappers.py
 import typing
-import BigWorld
 from constants import QUEST_PROGRESS_STATE
 from gui.Scaleform.genConsts.QUESTSPROGRESS import QUESTSPROGRESS
 from gui.Scaleform.genConsts.QUEST_PROGRESS_BASE import QUEST_PROGRESS_BASE
 from gui.Scaleform.locale.QUESTS import QUESTS
+from gui.impl import backport
 from helpers.time_utils import ONE_MINUTE
 
 class METRICS_TYPES(object):
@@ -50,7 +50,7 @@ def wrapTimerValue(progress):
 
 
 def _formatValue(value):
-    return BigWorld.wg_getNiceNumberFormat(value)
+    return backport.getNiceNumberFormat(value)
 
 
 def _wrapSimpleValue(title, value):

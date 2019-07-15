@@ -3,7 +3,6 @@
 from __future__ import absolute_import
 import logging
 from shared_utils import first
-import BigWorld
 from bootcamp.Bootcamp import g_bootcamp
 from bootcamp.BootcampConstants import BATTLE_STATS_RESULT_FIELDS, BATTLE_STATS_ICONS
 from constants import PREMIUM_ENTITLEMENTS
@@ -96,7 +95,7 @@ class StatsBlock(base.StatsBlock):
         for statType in battleStats:
             statFieldName = BATTLE_STATS_RESULT_FIELDS[statType]
             statVal = info.__getattribute__(statFieldName)
-            statVal = BigWorld.wg_getIntegralFormat(statVal)
+            statVal = backport.getIntegralFormat(statVal)
             self.addNextComponent(base.DirectStatsItem('', {'id': statType,
              'label': makeString(BOOTCAMP.battle_result(statType)),
              'description': makeString(BOOTCAMP.battle_result_description(statType)),
@@ -146,7 +145,7 @@ class CreditsBlock(base.StatsBlock):
 
     def setRecord(self, result, reusable):
         intVal = reusable.personal.getBaseCreditsRecords().getRecord('credits')
-        strVal = BigWorld.wg_getGoldFormat(intVal)
+        strVal = backport.getGoldFormat(intVal)
         self.addNextComponent(base.DirectStatsItem('value', intVal))
         self.addNextComponent(base.DirectStatsItem('str', strVal))
 
@@ -156,6 +155,6 @@ class XPBlock(base.StatsBlock):
 
     def setRecord(self, result, reusable):
         intVal = reusable.personal.getBaseXPRecords().getRecord('xp')
-        strVal = BigWorld.wg_getIntegralFormat(intVal)
+        strVal = backport.getIntegralFormat(intVal)
         self.addNextComponent(base.DirectStatsItem('value', intVal))
         self.addNextComponent(base.DirectStatsItem('str', strVal))

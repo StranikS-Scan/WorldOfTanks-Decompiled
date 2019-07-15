@@ -4,15 +4,19 @@ from adisp import process
 from gui import SystemMessages
 from gui.Scaleform.daapi.view.lobby.trainings import formatters
 from gui.prb_control.items.prb_items import getPlayersComparator
-from gui.prb_control.settings import PREBATTLE_ROSTER
+from gui.prb_control.settings import PREBATTLE_ROSTER, REQUEST_TYPE
 from gui.shared import events, EVENT_BUS_SCOPE
 from gui.shared.formatters import text_styles
 from gui.Scaleform.daapi.view.meta.EpicBattleTrainingRoomMeta import EpicBattleTrainingRoomMeta
 from gui.prb_control.entities.base.legacy.ctx import GroupAssignLegacyCtx, GroupSwapInTeamLegacyCtx, GroupSwapBetweenTeamLegacyCtx
-from helpers import int2roman, i18n
 from debug_utils import LOG_DEBUG
-from gui.Scaleform.locale.EPIC_BATTLE import EPIC_BATTLE
-from gui.Scaleform.locale.SYSTEM_MESSAGES import SYSTEM_MESSAGES
+from constants import PREBATTLE_TYPE
+from gui.prb_control.events_dispatcher import g_eventDispatcher
+from gui.prb_control.entities.epic_battle_training.ctx import EpicTrainingSettingsCtx
+from gui.Scaleform.genConsts.PREBATTLE_ALIASES import PREBATTLE_ALIASES
+from gui.impl import backport
+from gui.impl.gen import R
+from helpers import int2roman
 
 class EpicBattleTrainingRoom(EpicBattleTrainingRoomMeta):
 
@@ -20,28 +24,39 @@ class EpicBattleTrainingRoom(EpicBattleTrainingRoomMeta):
         super(EpicBattleTrainingRoom, self).__init__()
         self._firstTime = True
 
-    def canChangeSetting(self):
-        return False
+    def showTrainingSettings(self):
+        settings = EpicTrainingSettingsCtx()
+        self.fireEvent(events.LoadViewEvent(PREBATTLE_ALIASES.EPIC_TRAINING_SETTINGS_WINDOW_PY, ctx={'isCreateRequest': False,
+         'settings': settings}), scope=EVENT_BUS_SCOPE.LOBBY)
 
-    def _addListeners(self):
-        self.addListener(events.CoolDownEvent.PREBATTLE, self._handleSetPrebattleCoolDown, scope=EVENT_BUS_SCOPE.LOBBY)
-        self.addListener(events.TrainingSettingsEvent.UPDATE_EPIC_TRAINING_SETTINGS, self._updateTrainingRoom, scope=EVENT_BUS_SCOPE.LOBBY)
-
-    def _removeListeners(self):
-        self.removeListener(events.CoolDownEvent.PREBATTLE, self._handleSetPrebattleCoolDown, scope=EVENT_BUS_SCOPE.LOBBY)
-        self.removeListener(events.TrainingSettingsEvent.UPDATE_EPIC_TRAINING_SETTINGS, self._updateTrainingRoom, scope=EVENT_BUS_SCOPE.LOBBY)
+    def onRostersChanged(self, entity, rosters, full):
+        if PREBATTLE_ROSTER.ASSIGNED_IN_TEAM1 in rosters:
+            self.as_setTeam1S(self.__makeAccountsDataForLane(rosters[PREBATTLE_ROSTER.ASSIGNED_IN_TEAM1], 1, R.strings.epic_battle.epictraining.info.team1LaneLabel()))
+        if PREBATTLE_ROSTER.ASSIGNED_IN_TEAM1 in rosters:
+            self.as_setTeam1S(self.__makeAccountsDataForLane(rosters[PREBATTLE_ROSTER.ASSIGNED_IN_TEAM1], 2, R.strings.epic_battle.epictraining.info.team1LaneLabel()))
+        if PREBATTLE_ROSTER.ASSIGNED_IN_TEAM1 in rosters:
+            self.as_setTeam1S(self.__makeAccountsDataForLane(rosters[PREBATTLE_ROSTER.ASSIGNED_IN_TEAM1], 3, R.strings.epic_battle.epictraining.info.team1LaneLabel()))
+        if PREBATTLE_ROSTER.ASSIGNED_IN_TEAM2 in rosters:
+            self.as_setTeam2S(self.__makeAccountsDataForLane(rosters[PREBATTLE_ROSTER.ASSIGNED_IN_TEAM2], 1, R.strings.epic_battle.epictraining.info.team2LaneLabel()))
+        if PREBATTLE_ROSTER.ASSIGNED_IN_TEAM2 in rosters:
+            self.as_setTeam2S(self.__makeAccountsDataForLane(rosters[PREBATTLE_ROSTER.ASSIGNED_IN_TEAM2], 2, R.strings.epic_battle.epictraining.info.team2LaneLabel()))
+        if PREBATTLE_ROSTER.ASSIGNED_IN_TEAM2 in rosters:
+            self.as_setTeam2S(self.__makeAccountsDataForLane(rosters[PREBATTLE_ROSTER.ASSIGNED_IN_TEAM2], 3, R.strings.epic_battle.epictraining.info.team2LaneLabel()))
+        if PREBATTLE_ROSTER.UNASSIGNED in rosters:
+            self.as_setOtherS(self._makeAccountsData(rosters[PREBATTLE_ROSTER.UNASSIGNED], R.strings.epic_battle.epictraining.info.otherLabel()))
+        super(EpicBattleTrainingRoom, self).onRostersChanged(entity, rosters, full)
 
     @process
-    def py_swapTeamLane(self, fromTeam, fromLane, toTeam, toLane):
+    def onSwapTeamLane(self, fromTeam, fromLane, toTeam, toLane):
         if fromTeam == toTeam:
             result = yield self.prbDispatcher.sendPrbRequest(GroupSwapInTeamLegacyCtx(fromTeam, fromLane, toLane, waitingID='prebattle/swap'))
         else:
             result = yield self.prbDispatcher.sendPrbRequest(GroupSwapBetweenTeamLegacyCtx(fromLane, waitingID='prebattle/swap'))
         if not result:
-            SystemMessages.pushMessage(i18n.makeString(SYSTEM_MESSAGES.TRAINING_ERROR_SWAPTEAMS), type=SystemMessages.SM_TYPE.Error)
+            SystemMessages.pushMessage(backport.text(R.strings.system_messages.training.error.swapTeams()), type=SystemMessages.SM_TYPE.Error)
 
     @process
-    def py_changeTeamLane(self, accID, team, lane):
+    def onChangeTeamLane(self, accID, team, lane):
         selectedLane = int(lane)
         roster = int(team)
         if not roster:
@@ -53,55 +68,66 @@ class EpicBattleTrainingRoom(EpicBattleTrainingRoomMeta):
         if not result:
             self._showActionErrorMessage()
 
-    def onRostersChanged(self, functional, rosters, full):
-        parent = super(EpicBattleTrainingRoom, self)
-        parent.onRostersChanged(functional, rosters, full)
-        if PREBATTLE_ROSTER.ASSIGNED_IN_TEAM1 in rosters:
-            self.as_setTeam1S(self.__makeAccountsDataForLane(rosters[PREBATTLE_ROSTER.ASSIGNED_IN_TEAM1], 1, EPIC_BATTLE.EPICTRAINING_INFO_TEAM1LANELABEL))
-        if PREBATTLE_ROSTER.ASSIGNED_IN_TEAM1 in rosters:
-            self.as_setTeam1S(self.__makeAccountsDataForLane(rosters[PREBATTLE_ROSTER.ASSIGNED_IN_TEAM1], 2, EPIC_BATTLE.EPICTRAINING_INFO_TEAM1LANELABEL))
-        if PREBATTLE_ROSTER.ASSIGNED_IN_TEAM1 in rosters:
-            self.as_setTeam1S(self.__makeAccountsDataForLane(rosters[PREBATTLE_ROSTER.ASSIGNED_IN_TEAM1], 3, EPIC_BATTLE.EPICTRAINING_INFO_TEAM1LANELABEL))
-        if PREBATTLE_ROSTER.ASSIGNED_IN_TEAM2 in rosters:
-            self.as_setTeam2S(self.__makeAccountsDataForLane(rosters[PREBATTLE_ROSTER.ASSIGNED_IN_TEAM2], 1, EPIC_BATTLE.EPICTRAINING_INFO_TEAM2LANELABEL))
-        if PREBATTLE_ROSTER.ASSIGNED_IN_TEAM2 in rosters:
-            self.as_setTeam2S(self.__makeAccountsDataForLane(rosters[PREBATTLE_ROSTER.ASSIGNED_IN_TEAM2], 2, EPIC_BATTLE.EPICTRAINING_INFO_TEAM2LANELABEL))
-        if PREBATTLE_ROSTER.ASSIGNED_IN_TEAM2 in rosters:
-            self.as_setTeam2S(self.__makeAccountsDataForLane(rosters[PREBATTLE_ROSTER.ASSIGNED_IN_TEAM2], 3, EPIC_BATTLE.EPICTRAINING_INFO_TEAM2LANELABEL))
-        if PREBATTLE_ROSTER.UNASSIGNED in rosters:
-            self.as_setOtherS(self._makeAccountsData(rosters[PREBATTLE_ROSTER.UNASSIGNED], EPIC_BATTLE.EPICTRAINING_INFO_OTHERLABEL))
-        self._updateStartButton(functional)
+    def _populate(self):
+        funcState = self.prbDispatcher.getFunctionalState()
+        if not funcState.isInLegacy(PREBATTLE_TYPE.EPIC_TRAINING):
+            g_eventDispatcher.removeEpicTrainingFromCarousel(False)
+            return
+        super(EpicBattleTrainingRoom, self)._populate()
 
-    def _showRosters(self, functional, rosters):
-        parent = super(EpicBattleTrainingRoom, self)
-        parent._showRosters(functional, rosters)
+    def _addListeners(self):
+        super(EpicBattleTrainingRoom, self)._addListeners()
+        self.addListener(events.TrainingSettingsEvent.UPDATE_EPIC_TRAINING_SETTINGS, self._updateTrainingRoom, scope=EVENT_BUS_SCOPE.LOBBY)
+
+    def _removeListeners(self):
+        super(EpicBattleTrainingRoom, self)._removeListeners()
+        self.removeListener(events.TrainingSettingsEvent.UPDATE_EPIC_TRAINING_SETTINGS, self._updateTrainingRoom, scope=EVENT_BUS_SCOPE.LOBBY)
+
+    def _handleSetPrebattleCoolDown(self, event):
+        super(EpicBattleTrainingRoom, self)._handleSetPrebattleCoolDown(event)
+        if event.requestID in [REQUEST_TYPE.EPIC_SWAP_IN_TEAM, REQUEST_TYPE.EPIC_SWAP_BETWEEN_TEAM]:
+            self.as_startCoolDownSwapButtonS(event.coolDown)
+
+    def _closeWindows(self):
+        self._closeWindow(PREBATTLE_ALIASES.EPIC_TRAINING_SETTINGS_WINDOW_PY)
+        self._closeWindow(PREBATTLE_ALIASES.SEND_INVITES_WINDOW_PY)
+
+    def _showRosters(self, entity, rosters):
         if self._firstTime:
-            self.as_setTeam1S(self.__makeAccountsDataForLane([], 1, EPIC_BATTLE.EPICTRAINING_INFO_TEAM1LANELABEL))
-            self.as_setTeam2S(self.__makeAccountsDataForLane([], 1, EPIC_BATTLE.EPICTRAINING_INFO_TEAM2LANELABEL))
-            self.as_setOtherS(self._makeAccountsData([], EPIC_BATTLE.EPICTRAINING_INFO_OTHERLABEL))
+            self.as_setTeam1S(self.__makeAccountsDataForLane([], 1, R.strings.epic_battle.epictraining.info.team1LaneLabel()))
+            self.as_setTeam2S(self.__makeAccountsDataForLane([], 1, R.strings.epic_battle.epictraining.info.team2LaneLabel()))
+            self.as_setOtherS(self._makeAccountsData([], R.strings.epic_battle.epictraining.info.otherLabel()))
             self._firstTime = False
         accounts = rosters[PREBATTLE_ROSTER.ASSIGNED_IN_TEAM1]
         if accounts:
             if PREBATTLE_ROSTER.ASSIGNED_IN_TEAM1 in rosters:
-                self.as_setTeam1S(self.__makeAccountsDataForLane(accounts, 1, EPIC_BATTLE.EPICTRAINING_INFO_TEAM1LANELABEL))
+                self.as_setTeam1S(self.__makeAccountsDataForLane(accounts, 1, R.strings.epic_battle.epictraining.info.team1LaneLabel()))
             if PREBATTLE_ROSTER.ASSIGNED_IN_TEAM1 in rosters:
-                self.as_setTeam1S(self.__makeAccountsDataForLane(accounts, 2, EPIC_BATTLE.EPICTRAINING_INFO_TEAM1LANELABEL))
+                self.as_setTeam1S(self.__makeAccountsDataForLane(accounts, 2, R.strings.epic_battle.epictraining.info.team1LaneLabel()))
             if PREBATTLE_ROSTER.ASSIGNED_IN_TEAM1 in rosters:
-                self.as_setTeam1S(self.__makeAccountsDataForLane(accounts, 3, EPIC_BATTLE.EPICTRAINING_INFO_TEAM1LANELABEL))
+                self.as_setTeam1S(self.__makeAccountsDataForLane(accounts, 3, R.strings.epic_battle.epictraining.info.team1LaneLabel()))
         accounts = rosters[PREBATTLE_ROSTER.ASSIGNED_IN_TEAM2]
         if accounts:
             if PREBATTLE_ROSTER.ASSIGNED_IN_TEAM2 in rosters:
-                self.as_setTeam2S(self.__makeAccountsDataForLane(accounts, 1, EPIC_BATTLE.EPICTRAINING_INFO_TEAM2LANELABEL))
+                self.as_setTeam2S(self.__makeAccountsDataForLane(accounts, 1, R.strings.epic_battle.epictraining.info.team2LaneLabel()))
             if PREBATTLE_ROSTER.ASSIGNED_IN_TEAM2 in rosters:
-                self.as_setTeam2S(self.__makeAccountsDataForLane(accounts, 2, EPIC_BATTLE.EPICTRAINING_INFO_TEAM2LANELABEL))
+                self.as_setTeam2S(self.__makeAccountsDataForLane(accounts, 2, R.strings.epic_battle.epictraining.info.team2LaneLabel()))
             if PREBATTLE_ROSTER.ASSIGNED_IN_TEAM2 in rosters:
-                self.as_setTeam2S(self.__makeAccountsDataForLane(accounts, 3, EPIC_BATTLE.EPICTRAINING_INFO_TEAM2LANELABEL))
+                self.as_setTeam2S(self.__makeAccountsDataForLane(accounts, 3, R.strings.epic_battle.epictraining.info.team2LaneLabel()))
         accounts = rosters[PREBATTLE_ROSTER.UNASSIGNED]
         if accounts:
             self.as_setOtherS(self._makeAccountsData(accounts))
-        self._updateStartButton(functional)
+        super(EpicBattleTrainingRoom, self)._showRosters(entity, rosters)
 
-    def __makeAccountsDataForLane(self, accounts, lane, label=None):
+    def _isObserverModeEnabled(self):
+        return False
+
+    @process
+    def _updateTrainingRoom(self, event):
+        self._closeWindow(PREBATTLE_ALIASES.EPIC_TRAINING_SETTINGS_WINDOW_PY)
+        super(EpicBattleTrainingRoom, self)._updateTrainingRoom(event)
+
+    def __makeAccountsDataForLane(self, accounts, lane, rLabel=None):
         listData = []
         isPlayerSpeaking = self.app.voiceChatManager.isPlayerSpeaking
         accounts = sorted(accounts, cmp=getPlayersComparator())
@@ -132,10 +158,13 @@ class EpicBattleTrainingRoom(EpicBattleTrainingRoomMeta):
                  'isPlayerSpeaking': bool(isPlayerSpeaking(account.dbID)),
                  'clanAbbrev': account.clanAbbrev,
                  'region': self.lobbyContext.getRegionCode(account.dbID),
-                 'igrType': account.igrType})
+                 'igrType': account.igrType,
+                 'badge': account.getBadgeID(),
+                 'badgeImgStr': account.getBadgeImgStr()})
 
-        if label is not None:
-            label = text_styles.main(i18n.makeString(label, lane1=str(lanecounter[0]), lane2=str(lanecounter[1]), lane3=str(lanecounter[2])))
+        label = ''
+        if rLabel is not None:
+            label = text_styles.neutral(backport.text(rLabel, lane1=str(lanecounter[0]), lane2=str(lanecounter[1]), lane3=str(lanecounter[2])))
         result = {'listData': listData,
          'teamLabel': label,
          'lane': lane}

@@ -2,10 +2,10 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/event_boards/event_helpers.py
 from io import BufferedIOBase, TextIOWrapper
 from functools import wraps
-import BigWorld
 from ResMgr import DataSection
 from constants import ARENA_GUI_TYPE, MAX_VEHICLE_LEVEL, MIN_VEHICLE_LEVEL
 from debug_utils import LOG_ERROR, LOG_DEBUG
+from gui.impl import backport
 from helpers.i18n import makeString as _ms
 from helpers import xmltodict, int2roman, dependency
 from nations import NAMES as NationNames
@@ -613,7 +613,7 @@ class EventHeader(object):
                 else:
                     result += formatToEnd(RES_ICONS.MAPS_ICONS_EVENTBOARDS_FLAGICONS_ICON_FLAG, EVENT_BOARDS.TIME_TIMETO_END, EVENT_DATE_TYPE.END, endSoon)
         else:
-            date = BigWorld.wg_getLongDateFormat(event.getEndDateTs())
+            date = backport.getLongDateFormat(event.getEndDateTs())
             result = text_styles.main(_ms(EVENT_BOARDS.TIME_EVENTFINISHED, date=date))
         return {'timer': result}
 

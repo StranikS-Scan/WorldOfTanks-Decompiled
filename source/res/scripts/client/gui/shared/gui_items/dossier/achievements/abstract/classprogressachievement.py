@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/gui_items/dossier/achievements/abstract/ClassProgressAchievement.py
-import BigWorld
 from SimpleProgressAchievement import SimpleProgressAchievement
+from gui.impl import backport
 from helpers import i18n
 from dossiers2.custom.config import RECORD_CONFIGS
 
@@ -24,7 +24,7 @@ class ClassProgressAchievement(SimpleProgressAchievement):
         return self._value or self.NO_LVL
 
     def getI18nValue(self):
-        return BigWorld.wg_getIntegralFormat(self._value)
+        return backport.getIntegralFormat(self._value)
 
     def getProgressValue(self):
         if self._progressValue == 1:

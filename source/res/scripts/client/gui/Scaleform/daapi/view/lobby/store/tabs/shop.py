@@ -240,7 +240,7 @@ class ShopOptionalDeviceTab(ShopArtefactTab, StoreOptionalDeviceTab):
         return canBuy or canBuyWithExchange
 
 
-class ShopEquipmentTab(ShopArtefactTab, StoreEquipmentTab):
+class ShopEquipmentTab(StoreEquipmentTab, ShopArtefactTab):
     pass
 
 

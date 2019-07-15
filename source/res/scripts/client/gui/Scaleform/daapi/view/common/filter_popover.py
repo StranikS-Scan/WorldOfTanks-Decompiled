@@ -31,7 +31,8 @@ class VehiclesFilterPopover(TankCarouselFilterPopoverMeta):
     def __init__(self, ctx):
         super(VehiclesFilterPopover, self).__init__()
         self._carousel = None
-        if ctx:
+        self._isFrontline = False
+        if ctx and 'data' in ctx:
             data = ctx['data']
             if hasattr(data, 'isFrontline'):
                 self._isFrontline = data.isFrontline

@@ -1,12 +1,12 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/common/vehicle_carousel/carousel_data_provider.py
-import BigWorld
 from constants import SEASON_NAME_BY_TYPE
 from dossiers2.ui.achievements import MARK_ON_GUN_RECORD
 from gui import GUI_NATIONS_ORDER_INDEX, makeHtmlString
 from gui.Scaleform import getButtonsAssetPath
 from gui.Scaleform.framework.entities.DAAPIDataProvider import SortableDAAPIDataProvider
 from gui.Scaleform.locale.MENU import MENU
+from gui.impl import backport
 from gui.shared.formatters import icons, text_styles
 from gui.shared.formatters.time_formatters import RentLeftFormatter
 from gui.shared.gui_items.Vehicle import Vehicle, VEHICLE_TYPES_ORDER_INDICES, getVehicleStateIcon, getVehicleStateAddIcon, getBattlesLeft, getSmallIconPath, getIconPath
@@ -285,7 +285,7 @@ class CarouselDataProvider(SortableDAAPIDataProvider):
             else:
                 markOfMasteryText = ''
             winsEfficiency = 100.0 * wins / battlesCount if battlesCount else 0
-            winsEfficiencyStr = BigWorld.wg_getIntegralFormat(round(winsEfficiency)) + '%'
+            winsEfficiencyStr = backport.getIntegralFormat(round(winsEfficiency)) + '%'
             winsText = makeHtmlString('html_templates:lobby/tank_carousel/statistic', 'wins', ctx={'wins': winsEfficiencyStr})
             vehDossier = self._itemsCache.items.getVehicleDossier(intCD)
             vehStats = vehDossier.getTotalStats()

@@ -9,7 +9,7 @@ import items.vehicles as iv
 import items._xml as ix
 import items.components.c11n_components as cc
 import items.customizations as c11n
-from constants import IS_CLIENT, IS_WEB
+from constants import IS_CLIENT, IS_EDITOR, IS_WEB
 from items.components.c11n_constants import SeasonType, ApplyArea, DecalType, ModificationType, RENT_DEFAULT_BATTLES, ItemTags
 from typing import Dict, Type, Tuple, Any, TypeVar
 _itemType = TypeVar('_itemType', bound=cc.BaseCustomizationItem)
@@ -27,7 +27,7 @@ class BaseCustomizationItemXmlReader(object):
             target.tags = iv._readTags(xmlCtx, section, 'tags', 'customizationItem')
             if target.itemType == CustomizationType.PROJECTION_DECAL:
                 formTags = [ tag for tag in target.tags if tag in ProjectionDecalFormTags.ALL ]
-                if len(formTags) > 1 or ProjectionDecalFormTags.ANY in formTags:
+                if len(formTags) > 1:
                     ix.raiseWrongXml(xmlCtx, 'tags', 'wrong formfactor for prjection decal ID%i' % target.id)
         if section.has_key('vehicleFilter'):
             target.filter = self.readVehicleFilterFromXml((xmlCtx, 'vehicleFilter'), section['vehicleFilter'])
@@ -41,11 +41,11 @@ class BaseCustomizationItemXmlReader(object):
             target.maxNumber = ix.readPositiveInt(xmlCtx, section, 'maxNumber')
             if target.maxNumber <= 0:
                 ix.raiseWrongXml(xmlCtx, 'maxNumber', 'should not be less then 1')
-        if IS_CLIENT or IS_WEB:
+        if IS_CLIENT or IS_EDITOR or IS_WEB:
             self._readClientOnlyFromXml(target, xmlCtx, section, cache)
 
     def _readClientOnlyFromXml(self, target, xmlCtx, section, cache=None):
-        target.i18n = shared_components.I18nExposedComponent(section.readString('userString'), section.readString('description'))
+        target.i18n = shared_components.I18nExposedComponent(section.readString('userString'), section.readString('description'), section.readString('longDescriptionSpecial'))
 
     @staticmethod
     def readVehicleFilterFromXml(xmlCtx, section):
@@ -147,6 +147,8 @@ class PersonalNumberXmlReader(BaseCustomizationItemXmlReader):
     __slots__ = ()
 
     def _readFromXml(self, target, xmlCtx, section, cache):
+        if section.has_key('digitsCount'):
+            target.digitsCount = section.readInt('digitsCount')
         super(PersonalNumberXmlReader, self)._readFromXml(target, xmlCtx, section, cache)
 
     def _readClientOnlyFromXml(self, target, xmlCtx, section, cache):
@@ -232,6 +234,8 @@ class CamouflageXmlReader(BaseCustomizationItemXmlReader):
             target.texture = section.readString('texture')
         if section.has_key('tiling'):
             target.tiling = iv._readCamouflageTilings(xmlCtx, section, 'tiling', self.getDefaultNationId(target))
+        if section.has_key('tilingSettings'):
+            target.tilingSettings = iv._readCamouflageTilingSettings(xmlCtx, section)
         if section.has_key('scales'):
             target.scales = ix.readTupleOfFloats(xmlCtx, section, 'scales')
         if section.has_key('rotation'):
@@ -281,8 +285,6 @@ class StyleXmlReader(BaseCustomizationItemXmlReader):
             target.texture = section.readString('texture')
         if section.has_key('modelsSet'):
             target.modelsSet = section.readString('modelsSet')
-        if section.has_key('textInfo'):
-            target.textInfo = section.readString('textInfo')
 
 
 class InsigniaXmlReader(BaseCustomizationItemXmlReader):
@@ -317,8 +319,8 @@ def readCustomizationCacheFromXml(cache, folder):
     pgFile = os.path.join(folder, 'priceGroups', 'list.xml')
     _readPriceGroups(cache, (None, 'priceGroups/list.xml'), ResMgr.openSection(pgFile), 'priceGroup')
     ResMgr.purge(pgFile)
-    pgFile = os.path.join(folder, 'default_colors.xml')
-    _readDefaultColors(cache, (None, 'default_colors.xml'), ResMgr.openSection(pgFile), 'default_color')
+    pgFile = os.path.join(folder, 'default.xml')
+    _readDefault(cache, (None, 'default.xml'), ResMgr.openSection(pgFile), 'default')
     ResMgr.purge(pgFile)
     pgFile = os.path.join(folder, 'fonts', 'list.xml')
     _readFonts(cache, (None, 'fonts/list.xml'), ResMgr.openSection(pgFile), 'font')
@@ -426,7 +428,7 @@ def _readFonts(cache, xmlCtx, section, sectionName):
         cache.fonts[font.id] = font
 
 
-def _readDefaultColors(cache, xmlCtx, section, sectionName):
+def _readDefault(cache, xmlCtx, section, sectionName):
     for tag, iSection in section.items():
         if tag != sectionName:
             continue
@@ -437,6 +439,8 @@ def _readDefaultColors(cache, xmlCtx, section, sectionName):
             colors.append(iv._readColor((xmlCtx, 'color {}'.format(idx)), scolors, ctag))
 
         cache.defaultColors[nations.INDICES[nation]] = tuple(colors)
+        itemId = ix.readInt(xmlCtx, iSection, 'insignia_id')
+        cache.defaultInsignias[nations.INDICES[nation]] = itemId
 
 
 def readFlagEnum(xmlCtx, section, subsectionName, enumClass, defaultValue=None):

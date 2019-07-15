@@ -4,9 +4,10 @@ from functools import partial
 import BigWorld
 from adisp import process
 from debug_utils import LOG_WARNING, LOG_ERROR
+from gui.impl import backport
+from gui.impl.gen import R
 from helpers import dependency, i18n
 from gui.Scaleform import MENU
-from gui.Scaleform.locale.WAITING import WAITING
 from gui.shared.formatters import icons
 from skeletons.gui.web import IWebController
 from skeletons.gui.server_events import IEventsCache
@@ -111,7 +112,7 @@ class ProfileHof(ProfileHofMeta):
     def __makeRequest(self, requestFunc, successStatus, errorCallback):
         if self.__retriesCount == 0:
             if not self.__isMaintenance:
-                self.as_showWaitingS(WAITING.HOF_LOADING)
+                self.as_showWaitingS(backport.msgid(R.strings.waiting.hof.loading()))
             self.__requestProcessing = True
         else:
             self.__retryCallback = None

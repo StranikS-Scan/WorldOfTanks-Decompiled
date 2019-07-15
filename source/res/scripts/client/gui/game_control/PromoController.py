@@ -36,8 +36,8 @@ _PromoData = namedtuple('_PromoData', ['url', 'closeCallback', 'source'])
 _logger = logging.getLogger(__name__)
 
 class PromoController(IPromoController):
-    browserCtrl = dependency.descriptor(IBrowserController)
-    eventsNotification = dependency.descriptor(IEventsNotificationsController)
+    __browserCtrl = dependency.descriptor(IBrowserController)
+    __notificationsCtrl = dependency.descriptor(IEventsNotificationsController)
     __webController = dependency.descriptor(IWebController)
     __settingsCore = dependency.descriptor(ISettingsCore)
     __lobbyContext = dependency.descriptor(ILobbyContext)
@@ -53,7 +53,7 @@ class PromoController(IPromoController):
         self.__promoCount = 0
         self.__lastUpdateTimeMark = 0
         self.__promoData = None
-        self.__webBrgDataRequested = False
+        self.__waitingForWebBridgeData = False
         self.__battlesFromLastTeaser = 0
         self.__wasInBattle = False
         self.__hasPendingTeaser = False
@@ -90,13 +90,13 @@ class PromoController(IPromoController):
             return
         g_eventBus.addListener(BrowserEvent.BROWSER_CREATED, self.__handleBrowserCreated)
         self.__isLobbyInited = True
-        if self.__hasPendingTeaser:
-            self.__tryToShowTeaser()
-        elif self.__checkIntervalInBattles > 0 and self.__battlesFromLastTeaser % self.__checkIntervalInBattles == 0:
+        if self.__needToGetTeasersInfo():
             self.__updateWebBrgData()
-        self.eventsNotification.onEventNotificationsChanged += self.__onEventNotification
+        elif self.__hasPendingTeaser:
+            self.__tryToShowTeaser()
+        self.__notificationsCtrl.onEventNotificationsChanged += self.__onEventNotification
         if not isPopupsWindowsOpenDisabled():
-            self.__processPromo(self.eventsNotification.getEventsNotifications())
+            self.__processPromo(self.__notificationsCtrl.getEventsNotifications())
         self.app.loaderManager.onViewLoaded += self.__onViewLoaded
 
     @property
@@ -139,10 +139,13 @@ class PromoController(IPromoController):
 
     def showPromo(self, url, closeCallback=None, source=None):
         if self.__isLobbyInited:
-            if not self.__isPromoOpen and not self.__webBrgDataRequested:
+            if not self.__isPromoOpen and not self.__waitingForWebBridgeData:
                 self.__registerAndShowPromoBrowser(url, closeCallback, self.__logger.getLoggingFuture(action=PromoLogActions.OPEN_IN_OLD, type=PromoLogSubjectType.PROMO_SCREEN, source=source, url=url))
         else:
             self.__pendingPromo = _PromoData(url, closeCallback, source)
+
+    def __needToGetTeasersInfo(self):
+        return True if self.__battlesFromLastTeaser == 0 else self.__checkIntervalInBattles > 0 and self.__battlesFromLastTeaser % self.__checkIntervalInBattles == 0
 
     def __onTeaserClosed(self, byUser=False):
         self.__isTeaserOpen = False
@@ -163,11 +166,13 @@ class PromoController(IPromoController):
         else:
             sourceType = PromoLogSourceType.AFTER_BATTLE
         answerCallback = self.__logger.getLoggingFuture(action=PromoLogActions.GET_MOST_IMPORTANT, source=sourceType)
-        self.__webBrgDataRequested = True
+        self.__waitingForWebBridgeData = True
         response = yield self.__webController.sendRequest(ctx=ctx)
+        self.__waitingForWebBridgeData = False
         if response.isSuccess():
             self.__updateTeaserData(ctx.getDataObj(response.getData()))
-        self.__webBrgDataRequested = False
+        elif self.__hasPendingTeaser:
+            self.__tryToShowTeaser()
         if answerCallback:
             answerCallback(success=response.extraCode)
 
@@ -217,7 +222,7 @@ class PromoController(IPromoController):
         yield self.__webController.sendRequest(PromoSendTeaserShownRequestCtx(promoID))
 
     def __tryToShowTeaser(self):
-        if self.__isLobbyInited and self.__isInHangar:
+        if self.__isLobbyInited and self.__isInHangar and not self.__waitingForWebBridgeData:
             self.__showTeaser()
         else:
             self.__hasPendingTeaser = True
@@ -226,11 +231,12 @@ class PromoController(IPromoController):
         if self.app and self.app.loaderManager:
             self.app.loaderManager.onViewLoaded -= self.__onViewLoaded
         self.__isLobbyInited = False
+        self.__isInHangar = False
         self.__isPromoOpen = False
         self.__currentVersionBrowserID = None
         self.__externalCloseCallback = None
         self.__isTeaserOpen = False
-        self.eventsNotification.onEventNotificationsChanged -= self.__onEventNotification
+        self.__notificationsCtrl.onEventNotificationsChanged -= self.__onEventNotification
         g_eventBus.removeListener(BrowserEvent.BROWSER_CREATED, self.__handleBrowserCreated)
         self.__browserCreationCallbacks = {}
         watcherKeys = self.__browserWatchers.keys()
@@ -240,7 +246,7 @@ class PromoController(IPromoController):
         return
 
     def __processPromo(self, promos):
-        if not self.__isPromoOpen and not self.__webBrgDataRequested:
+        if not self.__isPromoOpen and not self.__waitingForWebBridgeData:
             logData = {'action': PromoLogActions.OPEN_IN_OLD,
              'type': PromoLogSubjectType.PROMO_SCREEN}
             if self.__pendingPromo is not None:
@@ -282,7 +288,7 @@ class PromoController(IPromoController):
         if url in self.__browserCreationCallbacks:
             callback = self.__browserCreationCallbacks.pop(url)
             browserID = event.ctx.get('browserID')
-            browser = self.browserCtrl.getBrowser(browserID)
+            browser = self.__browserCtrl.getBrowser(browserID)
             if browser is None:
                 return
 
@@ -298,7 +304,7 @@ class PromoController(IPromoController):
     def __clearWatcher(self, browserID):
         if browserID in self.__browserWatchers:
             watcher = self.__browserWatchers.pop(browserID)
-            browser = self.browserCtrl.getBrowser(browserID)
+            browser = self.__browserCtrl.getBrowser(browserID)
             if browser is not None:
                 browser.onLoadEnd -= watcher
         return

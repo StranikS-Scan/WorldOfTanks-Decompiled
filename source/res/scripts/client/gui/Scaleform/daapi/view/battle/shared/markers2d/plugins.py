@@ -9,6 +9,7 @@ import constants
 from Math import Matrix
 from PlayerEvents import g_playerEvents
 from account_helpers.settings_core.settings_constants import MARKERS, GRAPHICS, GAME
+from account_helpers.settings_core.options import VehicleMarkerSetting
 from battleground.StunAreaManager import STUN_AREA_STATIC_MARKER
 from gui.Scaleform.daapi.view.battle.shared.markers2d import markers
 from gui.Scaleform.daapi.view.battle.shared.markers2d import settings
@@ -552,14 +553,18 @@ class RespawnableVehicleMarkerPlugin(VehicleMarkerPlugin):
 
 
 class VehicleMarkerTargetPlugin(MarkerPlugin, IArenaVehiclesController):
-    __slots__ = ('_markers', '_markersStates', '_clazz', '__markerType', '__arenaDP')
+    __slots__ = ('_markers', '_vehicleID', '_showExtendedInfo', '_markersStates', '_clazz', '__markerType', '__markerBaseAimMarker2D', '__markerAltAimMarker2D', '__arenaDP')
 
     def __init__(self, parentObj, clazz=markers.VehicleTargetMarker):
         super(VehicleMarkerTargetPlugin, self).__init__(parentObj)
         self._markers = {}
+        self._vehicleID = None
+        self._showExtendedInfo = False
         self._markersStates = defaultdict(list)
         self._clazz = clazz
         self.__markerType = settings.MARKER_SYMBOL_NAME.TARGET_MARKER
+        self.__markerBaseAimMarker2D = VehicleMarkerSetting.OPTIONS.getOptionName(VehicleMarkerSetting.OPTIONS.TYPES.BASE, VehicleMarkerSetting.OPTIONS.PARAMS.AIM_MARKER_2D)
+        self.__markerAltAimMarker2D = VehicleMarkerSetting.OPTIONS.getOptionName(VehicleMarkerSetting.OPTIONS.TYPES.ALT, VehicleMarkerSetting.OPTIONS.PARAMS.AIM_MARKER_2D)
         self.__arenaDP = None
         return
 
@@ -576,6 +581,8 @@ class VehicleMarkerTargetPlugin(MarkerPlugin, IArenaVehiclesController):
         add = g_eventBus.addListener
         add(GameEvent.ADD_AUTO_AIM_MARKER, self.__addAutoAimMarker, scope=settings.SCOPE)
         add(GameEvent.HIDE_AUTO_AIM_MARKER, self._hideAllMarkers, scope=settings.SCOPE)
+        add(GameEvent.SHOW_EXTENDED_INFO, self.__ShowExtendedInfo, scope=settings.SCOPE)
+        self.settingsCore.onSettingsChanged += self.__onSettingsChanged
         return
 
     def fini(self):
@@ -589,6 +596,8 @@ class VehicleMarkerTargetPlugin(MarkerPlugin, IArenaVehiclesController):
         remove = g_eventBus.removeListener
         remove(GameEvent.ADD_AUTO_AIM_MARKER, self.__addAutoAimMarker, scope=settings.SCOPE)
         remove(GameEvent.HIDE_AUTO_AIM_MARKER, self._hideAllMarkers, scope=settings.SCOPE)
+        remove(GameEvent.SHOW_EXTENDED_INFO, self.__ShowExtendedInfo, scope=settings.SCOPE)
+        self.settingsCore.onSettingsChanged -= self.__onSettingsChanged
         super(VehicleMarkerTargetPlugin, self).fini()
         return
 
@@ -648,9 +657,13 @@ class VehicleMarkerTargetPlugin(MarkerPlugin, IArenaVehiclesController):
         return
 
     def __addAutoAimMarker(self, event):
-        vehicle = event.ctx['vehicle']
-        vehicleId = vehicle.id if vehicle is not None else None
-        self._addMarker(vehicleId)
+        vehicle = event.ctx.get('vehicle')
+        self._vehicleID = vehicle.id if vehicle is not None else None
+        if self._showExtendedInfo:
+            if self.settingsCore.getSetting(MARKERS.ENEMY).get(self.__markerAltAimMarker2D):
+                self._addMarker(self._vehicleID)
+        elif self.settingsCore.getSetting(MARKERS.ENEMY).get(self.__markerBaseAimMarker2D):
+            self._addMarker(self._vehicleID)
         return
 
     def _addMarker(self, vehicleID):
@@ -660,8 +673,12 @@ class VehicleMarkerTargetPlugin(MarkerPlugin, IArenaVehiclesController):
         return
 
     def _hideAllMarkers(self, event=None):
+        if event and not event.ctx.get('vehicle'):
+            self._vehicleID = None
         for vehicleID in self._markers:
             self._hideVehicleMarker(vehicleID)
+
+        return
 
     def _hideVehicleMarker(self, vehicleID):
         if vehicleID in self._markers:
@@ -676,6 +693,24 @@ class VehicleMarkerTargetPlugin(MarkerPlugin, IArenaVehiclesController):
     def __onVehicleStateUpdated(self, state, value):
         if state in (VEHICLE_VIEW_STATE.DESTROYED, VEHICLE_VIEW_STATE.CREW_DEACTIVATED):
             self._hideAllMarkers()
+
+    def __onSettingsChanged(self, diff):
+        if MARKERS.ENEMY in diff:
+            if diff[MARKERS.ENEMY].get(self.__markerBaseAimMarker2D):
+                self._addMarker(self._vehicleID)
+            else:
+                self._hideAllMarkers()
+
+    def __ShowExtendedInfo(self, event):
+        isDown = event.ctx['isDown']
+        self._showExtendedInfo = isDown if isDown is not None else False
+        self._hideAllMarkers()
+        if self._showExtendedInfo:
+            if self.settingsCore.getSetting(MARKERS.ENEMY).get(self.__markerAltAimMarker2D):
+                self._addMarker(self._vehicleID)
+        elif self.settingsCore.getSetting(MARKERS.ENEMY).get(self.__markerBaseAimMarker2D):
+            self._addMarker(self._vehicleID)
+        return
 
 
 class VehicleMarkerTargetPluginReplayPlaying(VehicleMarkerTargetPlugin):

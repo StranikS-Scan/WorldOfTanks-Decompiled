@@ -3,7 +3,6 @@
 import cPickle
 import zlib
 import sys
-import asyncore
 import functools
 import locale
 import services_config
@@ -89,7 +88,6 @@ def init(scriptConfig, engineConfig, userPreferences, loadingScreenGUI=None):
         except Exception:
             LOG_CURRENT_EXCEPTION()
 
-        BigWorld.callback(0.1, asyncore_call)
         import items
         items.init(True, None if not constants.IS_DEVELOPMENT else {})
         import win_points
@@ -305,7 +303,7 @@ def fini():
         from predefined_hosts import g_preDefinedHosts
         if g_preDefinedHosts is not None:
             g_preDefinedHosts.fini()
-        SoundGroups.g_instance.startListeningGUISpaceChanges()
+        SoundGroups.g_instance.stopListeningGUISpaceChanges()
         dependency.clear()
         if g_replayCtrl is not None:
             g_replayCtrl.destroy()
@@ -556,15 +554,6 @@ def convertMouseEvent(event):
 
 def onMemoryCritical():
     g_critMemHandler()
-
-
-def asyncore_call():
-    try:
-        asyncore.loop(count=1)
-    except Exception:
-        LOG_CURRENT_EXCEPTION()
-
-    BigWorld.callback(0.1, asyncore_call)
 
 
 g_scenario = None

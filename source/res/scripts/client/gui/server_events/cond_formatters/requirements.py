@@ -1,7 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/server_events/cond_formatters/requirements.py
 import types
-import BigWorld
 import nations
 from constants import EVENT_TYPE, IGR_TYPE, IS_CHINA
 from gui import makeHtmlString
@@ -27,7 +26,7 @@ def packTokens(tokens):
 
 def relate(relation, value, label):
     if not isinstance(value, types.StringTypes):
-        value = BigWorld.wg_getNiceNumberFormat(value)
+        value = backport.getNiceNumberFormat(value)
     else:
         value = value
     relation = backport.text(R.strings.quests.details.requirementsRelation.dyn(relation)())

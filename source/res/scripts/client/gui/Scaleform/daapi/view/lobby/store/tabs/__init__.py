@@ -373,6 +373,11 @@ class StoreEquipmentTab(StoreArtefactTab):
     def _getItemTypeID(self):
         return GUI_ITEM_TYPE.EQUIPMENT
 
+    def _getRequestCriteria(self, invVehicles):
+        requestCriteria = super(StoreEquipmentTab, self)._getRequestCriteria(invVehicles)
+        requestCriteria |= REQ_CRITERIA.EQUIPMENT.BUILTIN
+        return requestCriteria
+
 
 class StoreBattleBoosterTab(StoreArtefactTab):
 

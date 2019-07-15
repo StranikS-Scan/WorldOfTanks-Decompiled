@@ -489,7 +489,7 @@ class BattleReplay(object):
         self.__replayCtrl.turretYaw = value
 
     def getTurretYaw(self):
-        return self.__replayCtrl.turretYaw
+        return self.__replayCtrl.getTurretYawByTime(self.currentTime)
 
     def setGunPitch(self, value):
         self.__replayCtrl.gunPitch = value
@@ -832,6 +832,11 @@ class BattleReplay(object):
                 for personal in personals.itervalues():
                     for field in ('damageEventList', 'xpReplay', 'creditsReplay', 'tmenXPReplay', 'goldReplay', 'crystalReplay', 'freeXPReplay', 'avatarDamageEventList'):
                         personal[field] = None
+
+                    extMeta = personal.get('ext', {}).get('epicMetaGame')
+                    if extMeta is not None:
+                        for field in ('flXPReplay',):
+                            extMeta[field] = None
 
             common = modifiedResults.get('common', None)
             if common is not None:

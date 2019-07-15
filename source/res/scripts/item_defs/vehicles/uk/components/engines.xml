@@ -63,6 +63,13 @@
     <L50>	83	</L50>
     <Continental_AOI_1195_5A>	84	</Continental_AOI_1195_5A>
     <Rover_Meteorite>	85	</Rover_Meteorite>
+    <Rolls_Royse_FB_60>	86	</Rolls_Royse_FB_60>
+    <Daimler_D2458_V_8>	87	</Daimler_D2458_V_8>
+    <Rolls_Royse_B81>	89	</Rolls_Royse_B81>
+    <Bedford_Type_120>	90	</Bedford_Type_120>
+    <Jaguar_J_60>	91	</Jaguar_J_60>
+    <Cummins_BTA_5_9>	92	</Cummins_BTA_5_9>
+    <Jaguar_4_2_XK6>	93	</Jaguar_4_2_XK6>
     <Rolls_Royse_Meteor_MkIVC_IGR>	60001	</Rolls_Royse_Meteor_MkIVC_IGR>
     <Rolls_Royse_Meteor_M120_IGR>	60002	</Rolls_Royse_Meteor_M120_IGR>
     <Rolls_Royse_Meteor_MkIV_IGR>	60003	</Rolls_Royse_Meteor_MkIV_IGR>
@@ -137,6 +144,38 @@
       <rpm_min>	632	</rpm_min>
       <rpm_max>	2354	</rpm_max>
     </Rolls_Royse_Meteor_MkV>
+    <Rolls_Royse_FB_60>
+      <userString>	#gb_vehicles:Rolls_Royse_FB_60	</userString>
+      <tags>	gasoline	</tags>
+      <level>	8	</level>
+      <price>	43000	</price>
+      <wwsoundPC>	eng_Ford_GAA_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Ford_GAA_npc	</wwsoundNPC>
+      <power>	150	</power>
+      <weight>	744	</weight>
+      <maxHealth>	247	</maxHealth>
+      <maxRegenHealth>	123	</maxRegenHealth>
+      <repairCost>	5	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	632	</rpm_min>
+      <rpm_max>	2354	</rpm_max>
+    </Rolls_Royse_FB_60>
+    <Daimler_D2458_V_8>
+      <userString>	#gb_vehicles:Daimler_D2458_V_8	</userString>
+      <tags>	gasoline	</tags>
+      <level>	9	</level>
+      <price>	74000	</price>
+      <wwsoundPC>	eng_ContinentalR_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_ContinentalR_npc	</wwsoundNPC>
+      <power>	250	</power>
+      <weight>	850	</weight>
+      <maxHealth>	320	</maxHealth>
+      <maxRegenHealth>	160	</maxRegenHealth>
+      <repairCost>	9	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	488	</rpm_min>
+      <rpm_max>	2035	</rpm_max>
+    </Daimler_D2458_V_8>
     <Rover_Meteorite>
       <userString>	#gb_vehicles:Rover_Meteorite	</userString>
       <tags>	gasoline	</tags>
@@ -145,7 +184,7 @@
       <notInShop>	true	</notInShop>
       <wwsoundPC>	eng_Ford_GAA_pc	</wwsoundPC>
       <wwsoundNPC>	eng_Ford_GAA_npc	</wwsoundNPC>
-      <power>	650	</power>
+      <power>	710	</power>
       <weight>	740	</weight>
       <maxHealth>	247	</maxHealth>
       <maxRegenHealth>	123	</maxRegenHealth>
@@ -902,6 +941,23 @@
       <rpm_min>	429	</rpm_min>
       <rpm_max>	2817	</rpm_max>
     </Rolls_Royse_Meteor_Mk12>
+    <Rolls_Royse_B81>
+      <userString>	#gb_vehicles:Rolls_Royse_B81	</userString>
+      <tags>	gasoline	</tags>
+      <level>	10	</level>
+      <price>	100000	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_Ford_GAA_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Ford_GAA_npc	</wwsoundNPC>
+      <power>	500	</power>
+      <weight>	744	</weight>
+      <maxHealth>	320	</maxHealth>
+      <maxRegenHealth>	160	</maxRegenHealth>
+      <repairCost>	9	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	429	</rpm_min>
+      <rpm_max>	2817	</rpm_max>
+    </Rolls_Royse_B81>
     <Wright_Continental_R-975EC2_A>
       <userString>	#gb_vehicles:Wright_Continental_R-975EC2_A	</userString>
       <shortUserString>	#gb_vehicles:Wright_Continental_R-975EC2_A_short	</shortUserString>
@@ -986,6 +1042,22 @@
       <rpm_min>	632	</rpm_min>
       <rpm_max>	2354	</rpm_max>
     </Rolls_Royce_Meteorite_202B>
+    <Jaguar_J_60>
+      <userString>	#gb_vehicles:Jaguar_J_60	</userString>
+      <tags>	gasoline	</tags>
+      <level>	7	</level>
+      <price>	30000	</price>
+      <wwsoundPC>	eng_Ford_GAA_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Ford_GAA_npc	</wwsoundNPC>
+      <power>	135	</power>
+      <weight>	496	</weight>
+      <maxHealth>	247	</maxHealth>
+      <maxRegenHealth>	123	</maxRegenHealth>
+      <repairCost>	5	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	632	</rpm_min>
+      <rpm_max>	2354	</rpm_max>
+    </Jaguar_J_60>
     <Rolls_Royce_Meteor_M300>
       <userString>	#gb_vehicles:Rolls_Royce_Meteor_M300	</userString>
       <tags>	gasoline	</tags>
@@ -1089,6 +1161,55 @@
       <rpm_min>	386	</rpm_min>
       <rpm_max>	2040	</rpm_max>
     </L50>
+    <Bedford_Type_120>
+      <userString>	#gb_vehicles:Bedford_Type_120	</userString>
+      <tags>	gasoline	</tags>
+      <level>	6	</level>
+      <price>	30000	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_Continental_R975_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Continental_R975_npc	</wwsoundNPC>
+      <power>	600	</power>
+      <weight>	1531	</weight>
+      <maxHealth>	200	</maxHealth>
+      <maxRegenHealth>	111	</maxRegenHealth>
+      <repairCost>	4	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	406	</rpm_min>
+      <rpm_max>	2500	</rpm_max>
+    </Bedford_Type_120>
+    <Cummins_BTA_5_9>
+      <userString>	#gb_vehicles:Cummins_BTA_5_9	</userString>
+      <tags>	gasoline	</tags>
+      <level>	6	</level>
+      <price>	24000	</price>
+      <wwsoundPC>	eng_Continental_R975_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Continental_R975_npc	</wwsoundNPC>
+      <power>	200	</power>
+      <weight>	431	</weight>
+      <maxHealth>	200	</maxHealth>
+      <maxRegenHealth>	111	</maxRegenHealth>
+      <repairCost>	4	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	406	</rpm_min>
+      <rpm_max>	2500	</rpm_max>
+    </Cummins_BTA_5_9>
+    <Jaguar_4_2_XK6>
+      <userString>	#gb_vehicles:Jaguar_4_2_XK6	</userString>
+      <tags>	gasoline	</tags>
+      <level>	7	</level>
+      <price>	33500	</price>
+      <wwsoundPC>	eng_Ford_GAA_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Ford_GAA_npc	</wwsoundNPC>
+      <power>	220	</power>
+      <weight>	496	</weight>
+      <maxHealth>	247	</maxHealth>
+      <maxRegenHealth>	123	</maxRegenHealth>
+      <repairCost>	5	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	632	</rpm_min>
+      <rpm_max>	2354	</rpm_max>
+    </Jaguar_4_2_XK6>
     <Rolls_Royse_Meteor_MkIVC_IGR>
       <userString>	#igr_vehicles:Rolls_Royse_Meteor_MkIVC_IGR	</userString>
       <tags>	gasoline	</tags>

@@ -1,8 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/storage/inventory/crew_books_tab.py
-from gui.Scaleform.daapi.view.lobby.storage import storage_helpers
 from gui.Scaleform.daapi.view.lobby.storage.inventory.filters.filter_by_nation import FiltrableInventoryCategoryByNationTabView
-from gui.Scaleform.genConsts.CONTEXT_MENU_HANDLER_TYPE import CONTEXT_MENU_HANDLER_TYPE
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.shared.gui_items import GUI_ITEM_TYPE
@@ -60,10 +58,3 @@ class CrewBooksTabView(FiltrableInventoryCategoryByNationTabView):
 
     def _getRequestCriteria(self, invVehicles):
         return REQ_CRITERIA.CREW_ITEM.IN_ACCOUNT
-
-    def _getVO(self, item):
-        vo = storage_helpers.getItemVo(item)
-        if not self.__lobbyContext.getServerSettings().isCrewBooksSaleEnabled():
-            vo.update({'contextMenuId': CONTEXT_MENU_HANDLER_TYPE.STORAGE_CREW_BOOKS_NO_SALE_ITEM,
-             'enabled': False})
-        return vo

@@ -3,7 +3,6 @@
 import copy
 from collections import namedtuple
 from functools import partial
-import BigWorld
 from blueprints.BlueprintTypes import BlueprintTypes
 from blueprints.FragmentTypes import getFragmentType
 from constants import EVENT_TYPE as _ET, DOSSIER_TYPE, LOOTBOX_TOKEN_PREFIX, PREMIUM_ENTITLEMENTS
@@ -194,13 +193,13 @@ class IntegralBonus(SimpleBonus):
         return int(self._value)
 
     def formatValue(self):
-        return BigWorld.wg_getIntegralFormat(self._value) if self._value else None
+        return backport.getIntegralFormat(self._value) if self._value else None
 
 
 class FloatBonus(SimpleBonus):
 
     def formatValue(self):
-        return BigWorld.wg_getNiceNumberFormat(self._value) if self._value else None
+        return backport.getNiceNumberFormat(self._value) if self._value else None
 
 
 class CountableIntegralBonus(IntegralBonus):
@@ -230,7 +229,7 @@ class CreditsBonus(IntegralBonus):
 class GoldBonus(SimpleBonus):
 
     def formatValue(self):
-        return BigWorld.wg_getGoldFormat(self._value) if self._value else None
+        return backport.getGoldFormat(self._value) if self._value else None
 
     def getIcon(self):
         return backport.image(R.images.gui.maps.icons.library.GoldIcon_1())
@@ -502,7 +501,7 @@ class ItemsBonus(SimpleBonus):
                 if item.itemTypeID in (GUI_ITEM_TYPE.OPTIONALDEVICE, GUI_ITEM_TYPE.EQUIPMENT):
                     description = stripColorTagDescrTags(description)
                 tooltip = makeTooltip(header=item.userName, body=description)
-                result.append({'value': BigWorld.wg_getIntegralFormat(count),
+                result.append({'value': backport.getIntegralFormat(count),
                  'itemSource': item.icon,
                  'tooltip': tooltip})
 
@@ -590,7 +589,7 @@ class GoodiesBonus(SimpleBonus):
         result = []
         for booster, count in sorted(self.getBoosters().iteritems(), key=lambda (booster, count): booster.boosterType):
             if booster is not None:
-                result.append({'value': BigWorld.wg_getIntegralFormat(count),
+                result.append({'value': backport.getIntegralFormat(count),
                  'tooltip': TOOLTIPS_CONSTANTS.BOOSTERS_BOOSTER_INFO,
                  'boosterVO': self.__makeBoosterVO(booster)})
 
@@ -1061,7 +1060,7 @@ class CustomizationsBonus(SimpleBonus):
             valueStr = None
             if value > 1:
                 valueStr = text_styles.main(i18n.makeString(QUESTS.BONUSES_CUSTOMIZATION_VALUE, count=value))
-            key = VEHICLE_CUSTOMIZATION.getElementBonusDesc(item.itemTypeName)
+            key = VEHICLE_CUSTOMIZATION.getElementBonusDesc(item.itemFullTypeName)
             bonusDesc = ''
             if key is not None:
                 bonusDesc = _ms(key, value=item.userName)

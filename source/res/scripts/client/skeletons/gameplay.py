@@ -74,6 +74,9 @@ class IGameplayLogic(object):
     def goToLoginByRQ(self):
         raise NotImplementedError
 
+    def goToLoginByDisconnectRQ(self):
+        raise NotImplementedError
+
     def goToLoginByEvent(self):
         raise NotImplementedError
 

@@ -4,8 +4,8 @@ from gui.Scaleform.daapi.view.lobby.trainings.TrainingRoomBase import TrainingRo
 
 class EpicBattleTrainingRoomMeta(TrainingRoomBase):
 
-    def py_changeTeamLane(self, accID, team, lane):
-        self._printOverrideError('py_changeTeamLane')
+    def onChangeTeamLane(self, accID, team, lane):
+        self._printOverrideError('onChangeTeamLane')
 
-    def py_swapTeamLane(self, fromTeam, fromLane, toTeam, toLane):
-        self._printOverrideError('py_swapTeamLane')
+    def onSwapTeamLane(self, fromTeam, fromLane, toTeam, toLane):
+        self._printOverrideError('onSwapTeamLane')

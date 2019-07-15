@@ -1,13 +1,13 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/tutorial/gui/Scaleform/pop_ups.py
 from gui.Scaleform.framework.entities.abstract.AbstractWindowView import AbstractWindowView
+from gui.impl import backport
+from gui.impl.gen import R
 from tutorial.control import TutorialProxyHolder
 from tutorial.data.events import ClickEvent
 from tutorial.gui import GUI_EFFECT_NAME
 from tutorial.gui.Scaleform.meta.TutorialDialogMeta import TutorialDialogMeta
 from tutorial.logger import LOG_ERROR
-from gui.Scaleform.locale.BATTLE_TUTORIAL import BATTLE_TUTORIAL
-from helpers import i18n
 
 class TutorialPopUp(AbstractWindowView, TutorialProxyHolder):
 
@@ -64,10 +64,10 @@ class TutorialQueueDialog(TutorialDialog):
          'avgTimeText': data['avgTimeText'],
          'updatePeriod': 60,
          'timePointcuts': {'firstPointcut': {'value': firstPntCut,
-                                             'text': i18n.makeString(BATTLE_TUTORIAL.LABELS_LESS_N_MINUTES, minutes=firstPntCut)},
+                                             'text': backport.text(R.strings.battle_tutorial.labels.less_n_minutes(), minutes=firstPntCut)},
                            'lastPointcut': {'value': lastPntCut,
-                                            'text': i18n.makeString(BATTLE_TUTORIAL.LABELS_MORE_N_MINUTES, minutes=lastPntCut)},
-                           'betweenPointcutsTextAlias': BATTLE_TUTORIAL.LABELS_MINUTES}})
+                                            'text': backport.text(R.strings.battle_tutorial.labels.more_n_minutes(), minutes=lastPntCut)},
+                           'betweenPointcutsTextAlias': backport.text(R.strings.battle_tutorial.labels.minutes())}})
 
     def as_updateContentS(self, data):
         return super(TutorialQueueDialog, self).as_updateContentS({'avgTimeText': data['avgTimeText']})

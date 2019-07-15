@@ -4,7 +4,7 @@ import weakref
 from collections import namedtuple
 import BigWorld
 from debug_utils import LOG_DEBUG, LOG_WARNING
-from vehicle_systems import vehicle_assembler
+from vehicle_systems.CompoundAppearance import CompoundAppearance
 from vehicle_systems.stricted_loading import loadingPriority, makeCallbackWeak
 _ENABLE_CACHE_TRACKER = False
 _ENABLE_PRECACHE = True
@@ -15,10 +15,7 @@ _VehicleInfo = namedtuple('_VehicleInfo', ['typeDescr',
  'isCrewActive',
  'isTurretDetached',
  'outfitCD'])
-_AssemblerData = namedtuple('_AssemblerData', ['compoundAssembler',
- 'assembler',
- 'info',
- 'prereqsNames'])
+_AssemblerData = namedtuple('_AssemblerData', ['appearance', 'info', 'prereqsNames'])
 
 class _AppearanceCache(object):
     __slots__ = ('__arena', '__appearanceCache', '__assemblersCache', '__spaceLoaded')
@@ -89,18 +86,16 @@ class _AppearanceCache(object):
     def createAppearance(self, vId, vInfo, forceReloadingFromCache):
         appearanceInfo = self.__appearanceCache.get(vId, None)
         appearance = None
-        compoundAssembler = None
         prereqsNames = []
         if appearanceInfo is None or not self.__validate(appearanceInfo[1], vInfo) or not self.__validateAppearanceWithInfo(appearanceInfo[0], vInfo) or forceReloadingFromCache:
             assemblerData = self.__assemblersCache.get(vId, None)
             if assemblerData is None or not self.__validate(assemblerData.info, vInfo) or forceReloadingFromCache:
-                compoundAssembler, prereqsNames = self.__cacheApperance(vId, vInfo)
+                prereqsNames = self.__cacheApperance(vId, vInfo)
             else:
-                compoundAssembler = assemblerData.compoundAssembler
                 prereqsNames = assemblerData.prereqsNames
         else:
             appearance, _ = appearanceInfo
-        return (appearance, compoundAssembler, prereqsNames)
+        return (appearance, prereqsNames)
 
     def getAppearance(self, vId, resourceRefs):
         if _ENABLE_CACHE_TRACKER:
@@ -113,20 +108,14 @@ class _AppearanceCache(object):
         if assemblerData is None:
             return
         else:
-            assembler = assemblerData.assembler
-            if assemblerData.compoundAssembler is None:
-                if _ENABLE_CACHE_TRACKER:
-                    LOG_DEBUG("Appearance cache. Can't find assembler vID = {0}".format(vId))
-                return
+            appearance = assemblerData.appearance
             if _ENABLE_CACHE_TRACKER:
                 LOG_DEBUG('Appearance cache. Constructed vID = {0}'.format(vId))
             if not resourceRefs.has_key(assemblerData.info.typeDescr.name):
                 LOG_WARNING('Loaded appearance is not latest requested appearance, construction of the appearance is skipped ', assemblerData.info.typeDescr.name, resourceRefs)
                 return
             assemblerData.info.typeDescr.keepPrereqs(resourceRefs)
-            assembler.appearance.start(resourceRefs)
-            assembler.constructAppearance(BigWorld.player().playerVehicleID == vId, resourceRefs)
-            appearance = assembler.appearance
+            appearance.construct(BigWorld.player().playerVehicleID == vId, resourceRefs)
             oldAppearance = self.__appearanceCache.get(vId, None)
             if oldAppearance is not None:
                 oldAppearance[0].destroy()
@@ -135,27 +124,24 @@ class _AppearanceCache(object):
                     LOG_DEBUG('Appearance cache. Deleting old appearance vID = {0}'.format(vId))
             self.__appearanceCache[vId] = (appearance, assemblerData.info)
             del self.__assemblersCache[vId]
-            del assembler
             if _ENABLE_CACHE_TRACKER:
                 d_cacheInfo[vId] = BigWorld.time()
             return appearance
 
     def __cacheApperance(self, vId, info):
-        assembler = vehicle_assembler.createAssembler()
-        prereqs = info.typeDescr.prerequisites(True)
-        compoundAssembler, assemblerPrereqs = assembler.prerequisites(info.typeDescr, vId, info.health, info.isCrewActive, info.isTurretDetached, info.outfitCD)
-        prereqs += assemblerPrereqs
+        appearance = CompoundAppearance()
+        prereqs = appearance.prerequisites(info.typeDescr, vId, info.health, info.isCrewActive, info.isTurretDetached, info.outfitCD)
         if vId in self.__assemblersCache:
             assemblerData = self.__assemblersCache.get(vId, None)
             if assemblerData is not None:
-                oldAssembler = assemblerData.assembler
-                LOG_WARNING('The latest resources for the vehicle are not loaded yet, deleting old assember and creating new one %s %s' % (info.typeDescr.name, assemblerData.info.typeDescr))
-                del oldAssembler
+                oldAppearance = assemblerData.appearance
+                LOG_WARNING('The latest resources for the vehicle are not loaded yet, deleting old appearance and creating new one %s %s' % (info.typeDescr.name, assemblerData.info.typeDescr))
+                del oldAppearance
             del self.__assemblersCache[vId]
-        self.__assemblersCache[vId] = _AssemblerData(compoundAssembler, assembler, info, prereqs)
+        self.__assemblersCache[vId] = _AssemblerData(appearance, info, prereqs)
         if self.__spaceLoaded:
             BigWorld.loadResourceListBG(prereqs, makeCallbackWeak(_resourceLoaded, prereqs, vId), loadingPriority(vId))
-        return (compoundAssembler, prereqs)
+        return prereqs
 
     def __validateAppearanceWithInfo(self, appearance, info):
         isAlive = 1 if info.health > 0 else 0

@@ -54,3 +54,9 @@ class ResourceDescription(object):
     def __init__(self, resource, value):
         self.resource = resource
         self.value = value
+
+
+class FrontlineExperience(GoodieResource):
+
+    def __init__(self, value):
+        super(FrontlineExperience, self).__init__(value)

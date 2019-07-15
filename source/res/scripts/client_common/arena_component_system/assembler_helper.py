@@ -11,7 +11,8 @@ from arena_component_system.epic_battle_component_assembler import EpicBattleCom
 from arena_component_system.protection_zone_component import ProtectionZoneComponent
 COMPONENT_ASSEMBLER = {ARENA_BONUS_TYPE.EPIC_RANDOM: EpicRandomBattleComponentAssembler,
  ARENA_BONUS_TYPE.EPIC_RANDOM_TRAINING: EpicRandomBattleComponentAssembler,
- ARENA_BONUS_TYPE.EPIC_BATTLE: EpicBattleComponentAssembler}
+ ARENA_BONUS_TYPE.EPIC_BATTLE: EpicBattleComponentAssembler,
+ ARENA_BONUS_TYPE.EPIC_BATTLE_TRAINING: EpicBattleComponentAssembler}
 ARENA_BONUS_TYPE_CAP_COMPONENTS = {'sectorBaseComponent': (ARENA_BONUS_TYPE_CAPS.SECTOR_MECHANICS, SectorBaseArenaComponent),
  'sectorComponent': (ARENA_BONUS_TYPE_CAPS.SECTOR_MECHANICS, SectorsArenaComponent),
  'destructibleEntityComponent': (ARENA_BONUS_TYPE_CAPS.DESTRUCTIBLE_ENTITIES, DestructibleEntitiesComponent),

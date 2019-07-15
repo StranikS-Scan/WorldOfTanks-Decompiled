@@ -1,6 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/exchange/ExchangeXPWindow.py
-import BigWorld
 from gui import SystemMessages
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform import getVehicleTypeAssetPath, getNationsAssetPath, NATION_ICON_PREFIX_131x31
@@ -10,6 +9,7 @@ from gui.Scaleform.genConsts.ICON_TEXT_FRAMES import ICON_TEXT_FRAMES
 from gui.Scaleform.locale.DIALOGS import DIALOGS
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
+from gui.impl import backport
 from gui.ingame_shop import showBuyGoldForXpWebOverlay
 from gui.shared.formatters import icons
 from gui.shared.formatters.text_styles import builder
@@ -75,7 +75,7 @@ class ExchangeXPWindow(ExchangeXpWindowMeta):
                  'vehicleType': getVehicleTypeAssetPath(vehicle.type),
                  'vehicleName': vehicle.shortUserName,
                  'xp': vehicle.xp,
-                 'xpStrValue': BigWorld.wg_getIntegralFormat(vehicle.xp),
+                 'xpStrValue': backport.getIntegralFormat(vehicle.xp),
                  'isSelectCandidate': vehicle.isFullyElite,
                  'vehicleIco': vehicle.iconSmall,
                  'nationIco': getNationsAssetPath(vehicle.nationID, namePrefix=NATION_ICON_PREFIX_131x31)})
@@ -85,7 +85,7 @@ class ExchangeXPWindow(ExchangeXpWindowMeta):
         labelBuilder = builder().addStyledText('middleTitle', i18n.makeString(MENU.EXCHANGE_RATE))
         if self.__xpForFree is not None:
             labelBuilder.addStyledText(self.__getActionStyle(), i18n.makeString(MENU.EXCHANGEXP_AVAILABLE_FORFREE_LABEL))
-            labelBuilder.addStyledText('expText', i18n.makeString(MENU.EXCHANGEXP_AVAILABLE_FORFREE_VALUE, icon=icons.makeImageTag(RES_ICONS.MAPS_ICONS_LIBRARY_ELITEXPICON_2), forFree=BigWorld.wg_getNiceNumberFormat(self.__xpForFree)))
+            labelBuilder.addStyledText('expText', i18n.makeString(MENU.EXCHANGEXP_AVAILABLE_FORFREE_VALUE, icon=icons.makeImageTag(RES_ICONS.MAPS_ICONS_LIBRARY_ELITEXPICON_2), forFree=backport.getNiceNumberFormat(self.__xpForFree)))
         exchangeHeaderData = {'labelText': labelBuilder.render(),
          'rateFromIcon': ICON_TEXT_FRAMES.GOLD,
          'rateToIcon': ICON_TEXT_FRAMES.ELITE_XP,

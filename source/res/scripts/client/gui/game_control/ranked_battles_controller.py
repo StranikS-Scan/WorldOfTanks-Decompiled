@@ -157,13 +157,15 @@ class RankedBattlesController(IRankedBattlesController, Notifiable, SeasonProvid
 
     def onPrbEntitySwitched(self):
         self.__updateSounds()
+        if self.isRankedPrbActive():
+            self.updateClientValues()
 
     def isAvailable(self):
         return self.isEnabled() and not self.isFrozen() and self.getCurrentSeason() is not None
 
     def isAccountMastered(self):
         currentRank, _ = self.__itemsCache.items.ranked.accRank
-        return currentRank == self.getMaxPossibleRank()
+        return currentRank == self.getMaxPossibleRank() != ZERO_RANK_ID
 
     def isEnabled(self):
         return self.__rankedSettings.isEnabled

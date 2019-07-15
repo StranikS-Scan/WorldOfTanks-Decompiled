@@ -1,6 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/ranked_battles/ranked_builders/main_page_vos.py
-import BigWorld
 from gui.impl import backport
 from gui.impl.gen import R
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
@@ -43,7 +42,7 @@ def getRankedMainSeasonOnItems(isMastered):
      {'id': RANKEDBATTLES_CONSTS.RANKED_BATTLES_INFO_ID,
       'viewId': RANKEDBATTLES_ALIASES.RANKED_BATTLES_INFO_ALIAS,
       'linkage': 'BrowserViewStackExPaddingUI',
-      'background': backport.image(R.images.gui.maps.icons.rankedBattles.bg.rewards()),
+      'background': backport.image(R.images.gui.maps.icons.rankedBattles.bg.main()),
       'tooltip': makeTooltip(header=backport.text(R.strings.tooltips.rankedBattlesView.info.header()), body=backport.text(R.strings.tooltips.rankedBattlesView.info.body()))}]
 
 
@@ -66,7 +65,7 @@ def getRankedMainSeasonOffItems():
      {'id': RANKEDBATTLES_CONSTS.RANKED_BATTLES_INFO_ID,
       'viewId': RANKEDBATTLES_ALIASES.RANKED_BATTLES_INFO_ALIAS,
       'linkage': 'BrowserViewStackExPaddingUI',
-      'background': backport.image(R.images.gui.maps.icons.rankedBattles.bg.rewards()),
+      'background': backport.image(R.images.gui.maps.icons.rankedBattles.bg.main()),
       'tooltip': makeTooltip(header=backport.text(R.strings.tooltips.rankedBattlesView.info.header()), body=backport.text(R.strings.tooltips.rankedBattlesView.info.body()))}]
 
 
@@ -82,7 +81,7 @@ def getRankedMainSeasonOnHeader(season, itemID):
         endDate = season.getEndDate()
         timeDelta = time_utils.getTimeDeltaFromNowInLocal(time_utils.makeLocalServerTime(endDate))
         if timeDelta > time_utils.ONE_WEEK:
-            leftSideText = backport.text(R.strings.ranked_battles.rankedBattleMainView.date.period(), start=BigWorld.wg_getLongDateFormat(startDate), finish=BigWorld.wg_getLongDateFormat(endDate))
+            leftSideText = backport.text(R.strings.ranked_battles.rankedBattleMainView.date.period(), start=backport.getLongDateFormat(startDate), finish=backport.getLongDateFormat(endDate))
         else:
             leftSideText = backport.getTillTimeStringByRClass(timeDelta, R.strings.ranked_battles.rankedBattleMainView.date)
         rightSideText = backport.text(R.strings.ranked_battles.rankedBattleMainView.season(), season=season.getUserName())
@@ -98,7 +97,7 @@ def getRankedMainSeasonOffHeader(prevSeason, nextSeason, itemID):
     else:
         rightSideText = backport.text(R.strings.ranked_battles.rankedBattleMainView.seasonComplete(), season=prevSeason.getUserName())
         if nextSeason is not None:
-            rightSideText = text_styles.concatStylesToSingleLine(rightSideText, backport.text(R.strings.ranked_battles.rankedBattleMainView.seasonGap(), newSeason=nextSeason.getUserName(), date=BigWorld.wg_getLongDateFormat(nextSeason.getStartDate())))
+            rightSideText = text_styles.concatStylesToSingleLine(rightSideText, backport.text(R.strings.ranked_battles.rankedBattleMainView.seasonGap(), newSeason=nextSeason.getUserName(), date=backport.getLongDateFormat(nextSeason.getStartDate())))
     return {'title': backport.text(R.strings.ranked_battles.rankedBattle.title()),
      'leftSideText': '',
      'rightSideText': rightSideText,

@@ -36,7 +36,7 @@ from gui.prb_control.settings import BATTLES_TO_SELECT_RANDOM_MIN_LIMIT
 from gui.ranked_battles import ranked_helpers
 from gui.server_events import events_dispatcher as quests_events, recruit_helper
 from gui.server_events.events_dispatcher import showLootboxesAward, showPiggyBankRewardWindow
-from gui.server_events.finders import PM_FINAL_TOKEN_QUEST_IDS_BY_OPERATION_ID, getBranchByOperationId, BRANCH_TO_OPERATION_IDS, CHAMPION_BADGES_BY_BRANCH
+from gui.server_events.finders import PM_FINAL_TOKEN_QUEST_IDS_BY_OPERATION_ID, getBranchByOperationId, CHAMPION_BADGES_BY_BRANCH, CHAMPION_BADGE_AT_OPERATION_ID
 from gui.shared import EVENT_BUS_SCOPE, g_eventBus, events
 from gui.shared.event_dispatcher import showProgressiveRewardAwardWindow
 from gui.shared.events import PersonalMissionsEvent
@@ -680,7 +680,6 @@ class PersonalMissionByAwardListHandler(PersonalMissionAutoWindowHandler):
 
 
 class PersonalMissionOperationAwardHandler(BattleQuestsAutoWindowHandler):
-    __FINAL_BRANCHES_OPERATION_IDS = tuple([ ids[-1] for ids in BRANCH_TO_OPERATION_IDS.values() ])
     __CHAMPION_BADGES_IDS = CHAMPION_BADGES_BY_BRANCH.values()
 
     def __init__(self, awardCtrl):
@@ -709,11 +708,11 @@ class PersonalMissionOperationAwardHandler(BattleQuestsAutoWindowHandler):
                     pqType = personal_missions.g_cache.questByUniqueQuestID(uniqueQuestID)
                     if pqType.isFinal:
                         self.__openedOperationsAwards.add((pqType.id, pqType.tileID))
-                for operationID, prefixes in PM_FINAL_TOKEN_QUEST_IDS_BY_OPERATION_ID.iteritems():
-                    if uniqueQuestID.startswith(prefixes):
-                        if uniqueQuestID in self.__CHAMPION_BADGES_IDS:
-                            return True
-                        if operationID in self.__FINAL_BRANCHES_OPERATION_IDS:
+                for operationID, prefix in PM_FINAL_TOKEN_QUEST_IDS_BY_OPERATION_ID.iteritems():
+                    if uniqueQuestID in self.__CHAMPION_BADGES_IDS:
+                        return True
+                    if uniqueQuestID.startswith(prefix):
+                        if operationID in CHAMPION_BADGE_AT_OPERATION_ID:
                             pmCache = self.eventsCache.getPersonalMissions()
                             operation = pmCache.getAllOperations()[operationID]
                             operations = pmCache.getOperationsForBranch(operation.getBranch())
@@ -730,10 +729,10 @@ class PersonalMissionOperationAwardHandler(BattleQuestsAutoWindowHandler):
         _, message = ctx
         completedQuestIDs = message.data.get('completedQuestIDs', set())
         allQuests = self.eventsCache.getHiddenQuests()
-        for operationId, prefixes in PM_FINAL_TOKEN_QUEST_IDS_BY_OPERATION_ID.iteritems():
+        for operationId, prefix in PM_FINAL_TOKEN_QUEST_IDS_BY_OPERATION_ID.iteritems():
             quests = []
             for uniqueQuestID in completedQuestIDs:
-                if uniqueQuestID.startswith(prefixes) and uniqueQuestID in allQuests:
+                if (uniqueQuestID.startswith(prefix) or self.__isChampionBadgeQuest(uniqueQuestID, operationId)) and uniqueQuestID in allQuests:
                     quests.append(uniqueQuestID)
 
             if quests:
@@ -752,6 +751,10 @@ class PersonalMissionOperationAwardHandler(BattleQuestsAutoWindowHandler):
             quests_events.showPersonalMissionsOperationAwardsScreen(context)
         else:
             self.__delayedWindows[opId] = context
+
+    @staticmethod
+    def __isChampionBadgeQuest(qID, operationID):
+        return False if operationID not in CHAMPION_BADGE_AT_OPERATION_ID else qID == CHAMPION_BADGE_AT_OPERATION_ID[operationID]
 
     def __onAwardScreenClose(self, event):
         opID = event.ctx['operationID']

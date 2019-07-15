@@ -3,6 +3,7 @@
 import logging
 import BigWorld
 from constants import EQUIP_TMAN_CODE
+from gui.impl import backport
 from items.components.crew_skins_constants import NO_CREW_SKIN_ID
 from gui.SystemMessages import SM_TYPE, CURRENCY_TO_SM_TYPE
 from gui.game_control.restore_contoller import getTankmenRestoreInfo
@@ -394,7 +395,7 @@ class TankmanFreeToOwnXpConvertor(Processor):
         return makeI18nError(sysMsgKey='free_xp_to_tman_skill/error/{}'.format(errStr), defaultSysMsgKey='free_xp_to_tman_skill/server_error')
 
     def _successHandler(self, code, ctx=None):
-        return makeI18nSuccess(sysMsgKey='free_xp_to_tman_skill/success', freeXP=BigWorld.wg_getIntegralFormat(self.__selectedXpForConvert), type=SM_TYPE.Information)
+        return makeI18nSuccess(sysMsgKey='free_xp_to_tman_skill/success', freeXP=backport.getIntegralFormat(self.__selectedXpForConvert), type=SM_TYPE.Information)
 
     def _request(self, callback):
         _logger.debug('Attempt to request server to exchange Free user XP to tankman XP: %s, %s', self.__tankman, self.__selectedXpForConvert)

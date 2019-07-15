@@ -5,7 +5,7 @@ from adisp import process
 from debug_utils import LOG_ERROR
 from helpers import dependency
 from gui.shared import events, EVENT_BUS_SCOPE
-from gui.clans.clan_helpers import getStrongholdUrl
+from gui.clans.clan_helpers import getStrongholdClanCardUrl
 from gui.sounds.ambients import StrongholdEnv
 from gui.Scaleform.daapi import LobbySubView
 from gui.Scaleform.daapi.view.meta.StrongholdViewMeta import StrongholdViewMeta
@@ -50,7 +50,7 @@ class StrongholdView(LobbySubView, StrongholdViewMeta):
 
     @process
     def __loadBrowser(self, width, height):
-        strongholdsTabUrl = getStrongholdUrl('tabUrl')
+        strongholdsTabUrl = getStrongholdClanCardUrl()
         if strongholdsTabUrl is not None:
             self.__browserId = yield self.browserCtrl.load(url=strongholdsTabUrl, useBrowserWindow=False, browserSize=(width, height), showBrowserCallback=self.__showBrowser)
             self.__browser = self.browserCtrl.getBrowser(self.__browserId)

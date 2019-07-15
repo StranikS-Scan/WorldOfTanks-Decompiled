@@ -10,7 +10,7 @@ import math
 import weakref
 from collections import namedtuple
 from operator import itemgetter
-from AvatarInputHandler.aih_constants import CTRL_MODE_NAME
+from aih_constants import CTRL_MODE_NAME
 import GUI
 from AvatarInputHandler.cameras import FovExtended
 import BigWorld
@@ -1209,6 +1209,7 @@ class VehicleMarkerSetting(StorageAccountSetting):
             HP = 'Hp'
             VEHICLE_NAME = 'VehicleName'
             PLAYER_NAME = 'PlayerName'
+            AIM_MARKER_2D = 'AimMarker2D'
 
         @classmethod
         def getOptionName(cls, mType, mOption):

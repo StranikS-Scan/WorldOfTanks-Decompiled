@@ -23,7 +23,6 @@ class BoostersController(IBoostersController):
         self.__boosterNotifyTimeCallback = None
         self.__boostersForUpdate = []
         self.__notificatorManager = Notifiable()
-        self.__notificatorManager.addNotificator(PeriodicNotifier(self.__timeTillNextReserveTick, self.onReserveTimerTick, (time_utils.ONE_MINUTE,)))
         return
 
     def fini(self):
@@ -32,6 +31,7 @@ class BoostersController(IBoostersController):
 
     def onLobbyInited(self, event):
         self.itemsCache.onSyncCompleted += self._update
+        self.__notificatorManager.addNotificator(PeriodicNotifier(self.__timeTillNextReserveTick, self.onReserveTimerTick, (time_utils.ONE_MINUTE,)))
         self.__notificatorManager.startNotification()
         if self.__boosterNotifyTimeCallback is None:
             self.__startBoosterTimeNotifyCallback()
@@ -46,6 +46,7 @@ class BoostersController(IBoostersController):
     def _stop(self):
         self.__clearBoosterTimeNotifyCallback()
         self.__notificatorManager.stopNotification()
+        self.__notificatorManager.clearNotification()
         self.__boostersForUpdate = None
         self.__eventManager.clear()
         self.itemsCache.onSyncCompleted -= self._update

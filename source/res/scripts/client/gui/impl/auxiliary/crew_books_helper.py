@@ -147,6 +147,8 @@ def gainedLevels(tankmanInvId, crewBookCD, itemsCache=None):
             if surplus == 0:
                 xpCost = descr.levelUpXpCost(descr.lastSkillLevel, descr.lastSkillNumber - descr.freeSkillsNumber)
                 result[XpGainResult.SURPLUS_LEVELS] = round(xp / (xpCost * 1.0), 2)
+                if result[XpGainResult.SURPLUS_LEVELS] == 0:
+                    result[XpGainResult.SURPLUS_LEVELS] = format(result[XpGainResult.SURPLUS_LEVELS], '.2f')
             else:
                 result[XpGainResult.SURPLUS_LEVELS] = surplus
 
@@ -276,7 +278,7 @@ class TankmanSkillListPresenter(object):
             if XpGainResult.SURPLUS_LEVELS in self._gainedLevels:
                 tankmanSkillVM.setGainProgress(str(self._gainedLevels[XpGainResult.SURPLUS_LEVELS]))
                 tankmanSkillVM.setIsGainProgressVisible(True)
-                if self._gainedLevels[XpGainResult.SURPLUS_LEVELS] == 0:
+                if float(self._gainedLevels[XpGainResult.SURPLUS_LEVELS]) == 0:
                     tankmanSkillVM.setIsLowGainedXp(True)
             wulfList.addViewModel(tankmanSkillVM)
 
@@ -295,7 +297,7 @@ class TankmanSkillListPresenter(object):
                 if XpGainResult.SURPLUS_LEVELS in self._gainedLevels:
                     tankmanSkillVM.setGainProgress(str(self._gainedLevels[XpGainResult.SURPLUS_LEVELS]))
                     tankmanSkillVM.setIsGainProgressVisible(True)
-                    if self._gainedLevels[XpGainResult.SURPLUS_LEVELS] == 0:
+                    if float(self._gainedLevels[XpGainResult.SURPLUS_LEVELS]) == 0:
                         tankmanSkillVM.setIsLowGainedXp(True)
 
     def _createShortList(self, wulfList, tankman, isTooltipEnable):
@@ -317,7 +319,7 @@ class TankmanSkillListPresenter(object):
                 if XpGainResult.SURPLUS_LEVELS in self._gainedLevels:
                     tankmanSkillVM.setGainProgress(str(self._gainedLevels[XpGainResult.SURPLUS_LEVELS]))
                     tankmanSkillVM.setIsGainProgressVisible(True)
-                    if self._gainedLevels[XpGainResult.SURPLUS_LEVELS] == 0:
+                    if float(self._gainedLevels[XpGainResult.SURPLUS_LEVELS]) == 0:
                         tankmanSkillVM.setIsLowGainedXp(True)
             if hasUnlearnedSkill:
                 skillsCount -= 1

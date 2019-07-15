@@ -96,6 +96,11 @@ class HangarFittingSlotVO(FittingSlotVO):
                     self['bgHighlightType'] = SLOT_HIGHLIGHT_TYPES.EQUIPMENT_PLUS
                 else:
                     self['bgHighlightType'] = SLOT_HIGHLIGHT_TYPES.NO_HIGHLIGHT
+            elif slotType == FITTING_TYPES.EQUIPMENT:
+                if module is not None and module.isBuiltIn:
+                    self['bgHighlightType'] = SLOT_HIGHLIGHT_TYPES.BUILT_IN_EQUIPMENT
+                else:
+                    self['bgHighlightType'] = SLOT_HIGHLIGHT_TYPES.NO_HIGHLIGHT
             elif slotType == FITTING_TYPES.BOOSTER and module is not None:
                 affectsAtTTC = module.isAffectsOnVehicle(vehicle)
                 self['affectsAtTTC'] = affectsAtTTC

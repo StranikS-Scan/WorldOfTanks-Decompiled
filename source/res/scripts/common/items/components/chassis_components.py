@@ -1,16 +1,17 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/items/components/chassis_components.py
 from collections import namedtuple
+from copy import deepcopy
 from items.components import component_constants
 from items.components import path_builder
 from items.components import shared_components
-__all__ = ('Wheel', 'WheelGroup', 'TrackNode', 'TrackMaterials', 'GroundNode', 'GroundNodeGroup', 'Traces', 'LeveredSuspensionConfig', 'SuspensionLever', 'SplineSegmentModelSet')
+__all__ = ('Wheel', 'WheelGroup', 'TrackNode', 'TrackBasicParams', 'GroundNode', 'GroundNodeGroup', 'Traces', 'LeveredSuspensionConfig', 'SuspensionLever', 'SplineSegmentModelSet')
 Wheel = namedtuple('Wheel', ('index', 'isLeft', 'radius', 'nodeName', 'isLeading', 'leadingSyncAngle', 'hitTester', 'materials', 'position'))
 WheelGroup = namedtuple('WheelGroup', ('isLeft', 'template', 'count', 'startIndex', 'radius'))
 WheelsConfig = namedtuple('WheelsConfig', ('groups', 'wheels'))
 TrackNode = namedtuple('TrackNode', ('name', 'isLeft', 'initialOffset', 'leftNodeName', 'rightNodeName', 'damping', 'elasticity', 'forwardElasticityCoeff', 'backwardElasticityCoeff'))
-TrackMaterials = namedtuple('TrackNode', ('lodDist', 'leftMaterial', 'rightMaterial', 'textureScale'))
-TrackParams = namedtuple('TrackNode', ('thickness', 'maxAmplitude', 'maxOffset', 'gravity'))
+TrackBasicParams = namedtuple('TrackNode', ('lodDist', 'leftMaterial', 'rightMaterial', 'textureScale', 'pairsCount'))
+TrackSplineParams = namedtuple('TrackNode', ('thickness', 'maxAmplitude', 'maxOffset', 'gravity'))
 GroundNode = namedtuple('GroundNode', ('nodeName', 'affectedWheelName', 'isLeft', 'minOffset', 'maxOffset', 'collisionSamplesCount', 'hasLiftMode'))
 GroundNodeGroup = namedtuple('GroundNodeGroup', ('isLeft', 'minOffset', 'maxOffset', 'nodesTemplate', 'affectedWheelsTemplate', 'nodesCount', 'startIndex', 'collisionSamplesCount', 'hasLiftMode'))
 Traces = namedtuple('Traces', ('lodDist', 'bufferPrefs', 'textureSet', 'centerOffset', 'size', 'activePostmortem'))
@@ -19,9 +20,9 @@ SuspensionLever = namedtuple('SuspensionLever', ('startNodeName', 'jointNodeName
 SplineSegmentModelSet = namedtuple('SplineSegmentModelSet', ('left', 'right', 'secondLeft', 'secondRight'))
 
 class SplineConfig(object):
-    __slots__ = ('__segmentModelSets', '__segmentLength', '__leftDesc', '__rightDesc', '__lodDist', '__segmentOffset', '__segment2Offset', '__atlasUTiles', '__atlasVTiles')
+    __slots__ = ('__segmentModelSets', '__leftDesc', '__rightDesc', '__lodDist', '__atlasUTiles', '__atlasVTiles')
 
-    def __init__(self, segmentModelSets=None, segmentLength=component_constants.ZERO_FLOAT, leftDesc=None, rightDesc=None, lodDist=None, segmentOffset=component_constants.ZERO_FLOAT, segment2Offset=component_constants.ZERO_FLOAT, atlasUTiles=component_constants.ZERO_INT, atlasVTiles=component_constants.ZERO_INT):
+    def __init__(self, segmentModelSets=None, leftDesc=None, rightDesc=None, lodDist=None, atlasUTiles=component_constants.ZERO_INT, atlasVTiles=component_constants.ZERO_INT):
         super(SplineConfig, self).__init__()
         self.__segmentModelSets = {}
         segmentModelSets = segmentModelSets or {}
@@ -38,45 +39,52 @@ class SplineConfig(object):
                 secondRight = None
             self.__segmentModelSets[setName] = SplineSegmentModelSet(left, right, secondLeft, secondRight)
 
-        self.__segmentLength = segmentLength
-        if leftDesc is not None:
-            self.__leftDesc = tuple(path_builder.makeIndexes(leftDesc))
+        self.__leftDesc = []
+        if len(leftDesc) > 0:
+            for desc in leftDesc:
+                desc[0] = tuple(path_builder.makeIndexes(desc[0]))
+                self.__leftDesc.append(desc)
+
         else:
             self.__leftDesc = component_constants.EMPTY_TUPLE
-        if rightDesc is not None:
-            self.__rightDesc = tuple(path_builder.makeIndexes(rightDesc))
+        self.__rightDesc = []
+        if len(rightDesc) > 0:
+            for desc in rightDesc:
+                desc[0] = tuple(path_builder.makeIndexes(desc[0]))
+                self.__rightDesc.append(desc)
+
         else:
             self.__rightDesc = component_constants.EMPTY_TUPLE
         self.__lodDist = lodDist
-        self.__segmentOffset = segmentOffset
-        self.__segment2Offset = segment2Offset
         self.__atlasUTiles = atlasUTiles
         self.__atlasVTiles = atlasVTiles
         return
 
     @property
-    def segmentLength(self):
-        return self.__segmentLength
-
-    @property
     def leftDesc(self):
-        return path_builder.makePath(*self.__leftDesc) if self.__leftDesc else None
+        ret = []
+        if self.__leftDesc:
+            for desc in self.__leftDesc:
+                unpackedTuple = deepcopy(desc)
+                unpackedTuple[0] = path_builder.makePath(*unpackedTuple[0])
+                ret.append(unpackedTuple)
+
+        return ret
 
     @property
     def rightDesc(self):
-        return path_builder.makePath(*self.__rightDesc) if self.__rightDesc else None
+        ret = []
+        if self.__rightDesc:
+            for desc in self.__rightDesc:
+                unpackedTuple = deepcopy(desc)
+                unpackedTuple[0] = path_builder.makePath(*unpackedTuple[0])
+                ret.append(unpackedTuple)
+
+        return ret
 
     @property
     def lodDist(self):
         return self.__lodDist
-
-    @property
-    def segmentOffset(self):
-        return self.__segmentOffset
-
-    @property
-    def segment2Offset(self):
-        return self.__segment2Offset
 
     @property
     def atlasUTiles(self):

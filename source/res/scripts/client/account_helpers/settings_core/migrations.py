@@ -417,6 +417,10 @@ def _migrateTo45(core, data, initialized):
     data['onceOnlyHints']['AccountButtonHint'] = True
 
 
+def _migrateTo46(core, data, initialized):
+    data['gameExtData'][GAME.ENABLE_SPEEDOMETER] = True
+
+
 _versions = ((1,
   _initializeDefaultSettings,
   True,
@@ -591,6 +595,10 @@ _versions = ((1,
   False),
  (45,
   _migrateTo45,
+  False,
+  False),
+ (46,
+  _migrateTo46,
   False,
   False))
 

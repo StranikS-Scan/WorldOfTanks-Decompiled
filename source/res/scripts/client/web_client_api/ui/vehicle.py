@@ -10,7 +10,8 @@ from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.vehiclePreview20.items_kit_helper import getCDFromId
 from gui.Scaleform.daapi.view.lobby.epicBattle.epic_helpers import checkIfVehicleIsHidden
 from gui.Scaleform.locale.VEHICLE_PREVIEW import VEHICLE_PREVIEW
-from gui.Scaleform.locale.W2C import W2C
+from gui.impl import backport
+from gui.impl.gen import R
 from gui.shared import event_dispatcher
 from gui.shared.money import Money, MONEY_UNDEFINED, Currency
 from helpers import dependency
@@ -307,7 +308,7 @@ class VehicleComparisonBasketWebApiMixin(object):
 
 
 def _pushInvalidPreviewMessage():
-    SystemMessages.pushMessage(_ms(W2C.ERROR_INVALIDPREVIEWVEHICLE), SystemMessages.SM_TYPE.Error, NC_MESSAGE_PRIORITY.MEDIUM)
+    SystemMessages.pushMessage(backport.text(R.strings.w2c.error.invalidPreviewVehicle()), SystemMessages.SM_TYPE.Error, NC_MESSAGE_PRIORITY.MEDIUM)
 
 
 class VehiclePreviewWebApiMixin(object):

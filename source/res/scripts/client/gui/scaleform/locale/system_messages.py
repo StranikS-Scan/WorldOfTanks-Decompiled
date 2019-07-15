@@ -211,37 +211,45 @@ class SYSTEM_MESSAGES(object):
     CUSTOMIZATION_ADDED_MODIFICATION = '#system_messages:customization/added/modification'
     CUSTOMIZATION_ADDED_STYLE = '#system_messages:customization/added/style'
     CUSTOMIZATION_ADDED_DECAL = '#system_messages:customization/added/decal'
-    CUSTOMIZATION_ADDED_PROJECTION_DECAL = '#system_messages:customization/added/projection_decal'
+    CUSTOMIZATION_ADDED_PROJECTIONDECAL = '#system_messages:customization/added/projectionDecal'
     CUSTOMIZATION_ADDED_EMBLEM = '#system_messages:customization/added/emblem'
     CUSTOMIZATION_ADDED_INSCRIPTION = '#system_messages:customization/added/inscription'
-    CUSTOMIZATION_ADDED_PERSONAL_NUMBER = '#system_messages:customization/added/personal_number'
+    CUSTOMIZATION_ADDED_PERSONALNUMBER_3 = '#system_messages:customization/added/personalNumber_3'
+    CUSTOMIZATION_ADDED_PERSONALNUMBER_2 = '#system_messages:customization/added/personalNumber_2'
+    CUSTOMIZATION_ADDED_PERSONALNUMBER_1 = '#system_messages:customization/added/personalNumber_1'
     CUSTOMIZATION_ADDED_PAINTVALUE = '#system_messages:customization/added/paintValue'
     CUSTOMIZATION_ADDED_CAMOUFLAGEVALUE = '#system_messages:customization/added/camouflageValue'
     CUSTOMIZATION_ADDED_MODIFICATIONVALUE = '#system_messages:customization/added/modificationValue'
     CUSTOMIZATION_ADDED_STYLEVALUE = '#system_messages:customization/added/styleValue'
     CUSTOMIZATION_ADDED_DECALVALUE = '#system_messages:customization/added/decalValue'
-    CUSTOMIZATION_ADDED_PROJECTION_DECALVALUE = '#system_messages:customization/added/projection_decalValue'
+    CUSTOMIZATION_ADDED_PROJECTIONDECALVALUE = '#system_messages:customization/added/projectionDecalValue'
     CUSTOMIZATION_ADDED_EMBLEMVALUE = '#system_messages:customization/added/emblemValue'
     CUSTOMIZATION_ADDED_INSCRIPTIONVALUE = '#system_messages:customization/added/inscriptionValue'
-    CUSTOMIZATION_ADDED_PERSONAL_NUMBERVALUE = '#system_messages:customization/added/personal_numberValue'
+    CUSTOMIZATION_ADDED_PERSONALNUMBER_3VALUE = '#system_messages:customization/added/personalNumber_3Value'
+    CUSTOMIZATION_ADDED_PERSONALNUMBER_2VALUE = '#system_messages:customization/added/personalNumber_2Value'
+    CUSTOMIZATION_ADDED_PERSONALNUMBER_1VALUE = '#system_messages:customization/added/personalNumber_1Value'
     CUSTOMIZATION_REMOVED_PAINT = '#system_messages:customization/removed/paint'
     CUSTOMIZATION_REMOVED_CAMOUFLAGE = '#system_messages:customization/removed/camouflage'
     CUSTOMIZATION_REMOVED_MODIFICATION = '#system_messages:customization/removed/modification'
     CUSTOMIZATION_REMOVED_STYLE = '#system_messages:customization/removed/style'
     CUSTOMIZATION_REMOVED_DECAL = '#system_messages:customization/removed/decal'
-    CUSTOMIZATION_REMOVED_PROJECTION_DECAL = '#system_messages:customization/removed/projection_decal'
+    CUSTOMIZATION_REMOVED_PROJECTIONDECAL = '#system_messages:customization/removed/projectionDecal'
     CUSTOMIZATION_REMOVED_EMBLEM = '#system_messages:customization/removed/emblem'
     CUSTOMIZATION_REMOVED_INSCRIPTION = '#system_messages:customization/removed/inscription'
-    CUSTOMIZATION_REMOVED_PERSONAL_NUMBER = '#system_messages:customization/removed/personal_number'
+    CUSTOMIZATION_REMOVED_PERSONALNUMBER_3 = '#system_messages:customization/removed/personalNumber_3'
+    CUSTOMIZATION_REMOVED_PERSONALNUMBER_2 = '#system_messages:customization/removed/personalNumber_2'
+    CUSTOMIZATION_REMOVED_PERSONALNUMBER_1 = '#system_messages:customization/removed/personalNumber_1'
     CUSTOMIZATION_REMOVED_PAINTVALUE = '#system_messages:customization/removed/paintValue'
     CUSTOMIZATION_REMOVED_CAMOUFLAGEVALUE = '#system_messages:customization/removed/camouflageValue'
     CUSTOMIZATION_REMOVED_MODIFICATIONVALUE = '#system_messages:customization/removed/modificationValue'
     CUSTOMIZATION_REMOVED_STYLEVALUE = '#system_messages:customization/removed/styleValue'
     CUSTOMIZATION_REMOVED_DECALVALUE = '#system_messages:customization/removed/decalValue'
-    CUSTOMIZATION_REMOVED_PROJECTION_DECALVALUE = '#system_messages:customization/removed/projection_decalValue'
+    CUSTOMIZATION_REMOVED_PROJECTIONDECALVALUE = '#system_messages:customization/removed/projectionDecalValue'
     CUSTOMIZATION_REMOVED_EMBLEMVALUE = '#system_messages:customization/removed/emblemValue'
     CUSTOMIZATION_REMOVED_INSCRIPTIONVALUE = '#system_messages:customization/removed/inscriptionValue'
-    CUSTOMIZATION_REMOVED_PERSONAL_NUMBERVALUE = '#system_messages:customization/removed/personal_numberValue'
+    CUSTOMIZATION_REMOVED_PERSONALNUMBER_3VALUE = '#system_messages:customization/removed/personalNumber_3Value'
+    CUSTOMIZATION_REMOVED_PERSONALNUMBER_2VALUE = '#system_messages:customization/removed/personalNumber_2Value'
+    CUSTOMIZATION_REMOVED_PERSONALNUMBER_1VALUE = '#system_messages:customization/removed/personalNumber_1Value'
     BONUSES_BOOSTER_VALUE = '#system_messages:bonuses/booster/value'
     CHECKOUT_ERROR = '#system_messages:checkout_error'
     ANOTHER_PERIPHERY = '#system_messages:another_periphery'
@@ -1404,37 +1412,45 @@ class SYSTEM_MESSAGES(object):
      CUSTOMIZATION_ADDED_MODIFICATION,
      CUSTOMIZATION_ADDED_STYLE,
      CUSTOMIZATION_ADDED_DECAL,
-     CUSTOMIZATION_ADDED_PROJECTION_DECAL,
+     CUSTOMIZATION_ADDED_PROJECTIONDECAL,
      CUSTOMIZATION_ADDED_EMBLEM,
      CUSTOMIZATION_ADDED_INSCRIPTION,
-     CUSTOMIZATION_ADDED_PERSONAL_NUMBER,
+     CUSTOMIZATION_ADDED_PERSONALNUMBER_3,
+     CUSTOMIZATION_ADDED_PERSONALNUMBER_2,
+     CUSTOMIZATION_ADDED_PERSONALNUMBER_1,
      CUSTOMIZATION_ADDED_PAINTVALUE,
      CUSTOMIZATION_ADDED_CAMOUFLAGEVALUE,
      CUSTOMIZATION_ADDED_MODIFICATIONVALUE,
      CUSTOMIZATION_ADDED_STYLEVALUE,
      CUSTOMIZATION_ADDED_DECALVALUE,
-     CUSTOMIZATION_ADDED_PROJECTION_DECALVALUE,
+     CUSTOMIZATION_ADDED_PROJECTIONDECALVALUE,
      CUSTOMIZATION_ADDED_EMBLEMVALUE,
      CUSTOMIZATION_ADDED_INSCRIPTIONVALUE,
-     CUSTOMIZATION_ADDED_PERSONAL_NUMBERVALUE,
+     CUSTOMIZATION_ADDED_PERSONALNUMBER_3VALUE,
+     CUSTOMIZATION_ADDED_PERSONALNUMBER_2VALUE,
+     CUSTOMIZATION_ADDED_PERSONALNUMBER_1VALUE,
      CUSTOMIZATION_REMOVED_PAINT,
      CUSTOMIZATION_REMOVED_CAMOUFLAGE,
      CUSTOMIZATION_REMOVED_MODIFICATION,
      CUSTOMIZATION_REMOVED_STYLE,
      CUSTOMIZATION_REMOVED_DECAL,
-     CUSTOMIZATION_REMOVED_PROJECTION_DECAL,
+     CUSTOMIZATION_REMOVED_PROJECTIONDECAL,
      CUSTOMIZATION_REMOVED_EMBLEM,
      CUSTOMIZATION_REMOVED_INSCRIPTION,
-     CUSTOMIZATION_REMOVED_PERSONAL_NUMBER,
+     CUSTOMIZATION_REMOVED_PERSONALNUMBER_3,
+     CUSTOMIZATION_REMOVED_PERSONALNUMBER_2,
+     CUSTOMIZATION_REMOVED_PERSONALNUMBER_1,
      CUSTOMIZATION_REMOVED_PAINTVALUE,
      CUSTOMIZATION_REMOVED_CAMOUFLAGEVALUE,
      CUSTOMIZATION_REMOVED_MODIFICATIONVALUE,
      CUSTOMIZATION_REMOVED_STYLEVALUE,
      CUSTOMIZATION_REMOVED_DECALVALUE,
-     CUSTOMIZATION_REMOVED_PROJECTION_DECALVALUE,
+     CUSTOMIZATION_REMOVED_PROJECTIONDECALVALUE,
      CUSTOMIZATION_REMOVED_EMBLEMVALUE,
      CUSTOMIZATION_REMOVED_INSCRIPTIONVALUE,
-     CUSTOMIZATION_REMOVED_PERSONAL_NUMBERVALUE,
+     CUSTOMIZATION_REMOVED_PERSONALNUMBER_3VALUE,
+     CUSTOMIZATION_REMOVED_PERSONALNUMBER_2VALUE,
+     CUSTOMIZATION_REMOVED_PERSONALNUMBER_1VALUE,
      BONUSES_BOOSTER_VALUE,
      CHECKOUT_ERROR,
      ANOTHER_PERIPHERY,

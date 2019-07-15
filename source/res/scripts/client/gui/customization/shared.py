@@ -1,13 +1,17 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/customization/shared.py
-from collections import namedtuple, defaultdict
-from copy import deepcopy
-from itertools import product
+from collections import namedtuple, Counter
 import logging
 import Math
+from gui.Scaleform.daapi.view.lobby.store.browser.ingameshop_helpers import isIngameShopEnabled
+from gui.Scaleform.daapi.view.dialogs.ExchangeDialogMeta import InfoItemBase
+from gui.Scaleform.genConsts.SEASONS_CONSTANTS import SEASONS_CONSTANTS
 from gui.shared.gui_items import GUI_ITEM_TYPE, GUI_ITEM_TYPE_NAMES
-from items.components.c11n_constants import CustomizationType, C11N_MASK_REGION, MAX_PROJECTION_DECALS_PER_AREA, MAX_USERS_PROJECTION_DECALS, ProjectionDecalPositionTags, ProjectionDecalFormTags, SeasonType, ApplyArea, C11N_GUN_APPLY_REGIONS
+from gui.shared.gui_items.gui_item_economics import ITEM_PRICE_EMPTY
+from gui.shared.money import Money, Currency
+from items.components.c11n_constants import CustomizationType, C11N_MASK_REGION, MAX_USERS_PROJECTION_DECALS, ProjectionDecalFormTags, SeasonType, ApplyArea, C11N_GUN_APPLY_REGIONS
 from shared_utils import CONST_CONTAINER, isEmpty
+from skeletons.gui.shared import IItemsCache
 from vehicle_systems.tankStructure import TankPartIndexes, TankPartNames
 from CurrentVehicle import g_currentVehicle
 from gui.shared.utils.requesters import REQ_CRITERIA
@@ -15,6 +19,7 @@ from gui.shared.gui_items.customization.outfit import Area, scaffold
 from gui.shared.gui_items.customization.slots import SLOT_TYPE_TO_ANCHOR_TYPE_MAP
 from gui.impl import backport
 from gui.impl.gen import R
+from helpers import dependency
 _logger = logging.getLogger(__name__)
 C11nId = namedtuple('C11nId', ('areaId', 'slotType', 'regionIdx'))
 C11nId.__new__.__defaults__ = (-1, -1, -1)
@@ -27,6 +32,22 @@ C11N_ITEM_TYPE_MAP = {GUI_ITEM_TYPE.PAINT: CustomizationType.PAINT,
  GUI_ITEM_TYPE.PERSONAL_NUMBER: CustomizationType.PERSONAL_NUMBER,
  GUI_ITEM_TYPE.STYLE: CustomizationType.STYLE,
  GUI_ITEM_TYPE.PROJECTION_DECAL: CustomizationType.PROJECTION_DECAL}
+
+class PurchaseItem(object):
+    __slots__ = ('item', 'price', 'areaID', 'slot', 'regionID', 'selected', 'group', 'isFromInventory', 'isDismantling', 'component')
+
+    def __init__(self, item, price, areaID, slot, regionID, selected, group, isFromInventory=False, isDismantling=False, component=None):
+        self.item = item
+        self.price = price
+        self.areaID = areaID
+        self.slot = slot
+        self.regionID = regionID
+        self.selected = selected
+        self.group = group
+        self.isFromInventory = isFromInventory
+        self.isDismantling = isDismantling
+        self.component = component
+
 
 class HighlightingMode(CONST_CONTAINER):
     PAINT_REGIONS = 0
@@ -52,6 +73,59 @@ PROJECTION_DECAL_IMAGE_FORM_TAG = {ProjectionDecalFormTags.SQUARE: backport.imag
  ProjectionDecalFormTags.RECT1X3: backport.image(R.images.gui.maps.icons.customization.icon_form_3()),
  ProjectionDecalFormTags.RECT1X4: backport.image(R.images.gui.maps.icons.customization.icon_form_4()),
  ProjectionDecalFormTags.RECT1X6: backport.image(R.images.gui.maps.icons.customization.icon_form_6())}
+PROJECTION_DECAL_TEXT_FORM_TAG = {ProjectionDecalFormTags.SQUARE: backport.text(R.strings.vehicle_customization.form.formfactor_square()),
+ ProjectionDecalFormTags.RECT1X2: backport.text(R.strings.vehicle_customization.form.formfactor_rect1x2()),
+ ProjectionDecalFormTags.RECT1X3: backport.text(R.strings.vehicle_customization.form.formfactor_rect1x3()),
+ ProjectionDecalFormTags.RECT1X4: backport.text(R.strings.vehicle_customization.form.formfactor_rect1x4()),
+ ProjectionDecalFormTags.RECT1X6: backport.text(R.strings.vehicle_customization.form.formfactor_rect1x6())}
+PROJECTION_DECAL_FORM_TO_UI_ID = {ProjectionDecalFormTags.SQUARE: 1,
+ ProjectionDecalFormTags.RECT1X2: 2,
+ ProjectionDecalFormTags.RECT1X3: 3,
+ ProjectionDecalFormTags.RECT1X4: 4,
+ ProjectionDecalFormTags.RECT1X6: 6}
+SEASON_IDX_TO_TYPE = {SEASONS_CONSTANTS.SUMMER_INDEX: SeasonType.SUMMER,
+ SEASONS_CONSTANTS.WINTER_INDEX: SeasonType.WINTER,
+ SEASONS_CONSTANTS.DESERT_INDEX: SeasonType.DESERT}
+SEASON_TYPE_TO_NAME = {SeasonType.SUMMER: SEASONS_CONSTANTS.SUMMER,
+ SeasonType.WINTER: SEASONS_CONSTANTS.WINTER,
+ SeasonType.DESERT: SEASONS_CONSTANTS.DESERT}
+SEASON_TYPE_TO_IDX = {SeasonType.SUMMER: SEASONS_CONSTANTS.SUMMER_INDEX,
+ SeasonType.WINTER: SEASONS_CONSTANTS.WINTER_INDEX,
+ SeasonType.DESERT: SEASONS_CONSTANTS.DESERT_INDEX}
+SEASONS_ORDER = (SeasonType.SUMMER, SeasonType.WINTER, SeasonType.DESERT)
+CartInfo = namedtuple('CartInfo', 'totalPrice numSelected numApplying numTotal minPriceItem isAtLeastOneItemFromInventory isAtLeastOneItemDismantled')
+
+class MoneyForPurchase(object):
+    NOT_ENOUGH = 0
+    ENOUGH_WITH_EXCHANGE = 1
+    ENOUGH = 2
+
+
+class AdditionalPurchaseGroups(object):
+    STYLES_GROUP_ID = -1
+    UNASSIGNED_GROUP_ID = -2
+
+
+class CartExchangeCreditsInfoItem(InfoItemBase):
+
+    @property
+    def itemTypeName(self):
+        pass
+
+    @property
+    def userName(self):
+        pass
+
+    @property
+    def itemTypeID(self):
+        return GUI_ITEM_TYPE.CUSTOMIZATION
+
+    def getExtraIconInfo(self):
+        return None
+
+    def getGUIEmblemID(self):
+        pass
+
 
 class CustomizationTankPartNames(TankPartNames):
     MASK = 'mask'
@@ -89,12 +163,7 @@ def getAppliedRegionsForCurrentHangarVehicle(areaId, slotId):
                     _logger.warning('slotId=%d does not have matched value', slotId)
                     return ()
                 if slotId in (GUI_ITEM_TYPE.PROJECTION_DECAL,):
-                    availableSlots = []
-                    for anchor in g_currentVehicle.item.getAnchors(slotId, Area.MISC):
-                        if anchor.isParent:
-                            availableSlots.append(anchor.regionIdx)
-
-                    return tuple(availableSlots)
+                    return tuple(g_currentVehicle.item.getAnchors(slotId, Area.MISC))
                 if slotId in (GUI_ITEM_TYPE.PAINT, GUI_ITEM_TYPE.CAMOUFLAGE):
                     customizableAreas = []
                     vehiclePart = getVehiclePartByIdx(g_currentVehicle.item, areaId)
@@ -181,82 +250,65 @@ def getVehiclePartByIdx(vehicle, partIdx):
     return vehiclePart
 
 
-def getAppliedAreas(mask):
-    areas = []
-    for area in ApplyArea.RANGE:
-        if mask & area:
-            areas.append(area)
-
-    return areas
-
-
-def getPositionTag(slot):
-    for tag in slot.tags:
-        if tag.startswith(ProjectionDecalPositionTags.PREFIX):
-            return tag
-
-    return None
-
-
-def matchProjectionDecalsToSlots(projectionDecalsSlot, slotsByTagMap):
-    taggedDecals = []
-    appliedDecals = []
-    for idx, _, component in projectionDecalsSlot.items():
-        slotData = projectionDecalsSlot.getSlotData(idx)
-        if component.slotId == 0 and component.tags:
-            taggedDecals.append(slotData)
-        appliedDecals.append(slotData)
-
-    if taggedDecals:
-        slots = __findProjectionDecalsSlotsByTags(taggedDecals, appliedDecals, slotsByTagMap)
-        if slots:
-            for decal, slotParams in zip(taggedDecals, slots):
-                decal.component.slotId = slotParams.slotId
-
+def getTotalPurchaseInfo(purchaseItems):
+    totalPrice = ITEM_PRICE_EMPTY
+    numSelectedItems = 0
+    numApplyingItems = 0
+    isAtLeastOneItemFromInventory = False
+    isAtLeastOneItemDismantled = False
+    minPriceItem = Money()
+    for purchaseItem in purchaseItems:
+        if not purchaseItem.isDismantling:
+            numApplyingItems += 1
         else:
-            return False
-    return True
+            isAtLeastOneItemDismantled = True
+        if purchaseItem.selected and not purchaseItem.isDismantling:
+            numSelectedItems += 1
+            if not purchaseItem.isFromInventory:
+                totalPrice += purchaseItem.price
+                if not minPriceItem.isDefined() or purchaseItem.price.price < minPriceItem:
+                    minPriceItem = purchaseItem.price.price
+            else:
+                isAtLeastOneItemFromInventory = True
+
+    return CartInfo(totalPrice, numSelectedItems, numApplyingItems, len(purchaseItems), minPriceItem, isAtLeastOneItemFromInventory, isAtLeastOneItemDismantled)
 
 
-def __findProjectionDecalsSlotsByTags(decals, appliedDecals, slotsByTagMap):
-    resultSlots = []
-    for tagsOrder in product(*[ decal.component.tags for decal in decals ]):
-        slotsByTags = deepcopy(slotsByTagMap)
-        slots = []
-        for tag in tagsOrder:
-            slot = slotsByTags.pop(tag, None)
-            if slot is not None and slot not in slots:
-                slots.append(slot)
-            break
+def containsVehicleBound(purchaseItems):
+    fromInventoryCounter = Counter()
+    vehCD = g_currentVehicle.item.intCD
+    for purchaseItem in purchaseItems:
+        if purchaseItem.item and purchaseItem.item.isVehicleBound and not purchaseItem.isDismantling and not purchaseItem.item.isRentable:
+            if not purchaseItem.isFromInventory:
+                return True
+            fromInventoryCounter[purchaseItem.item] += 1
+
+    return any((count > item.boundInventoryCount.get(vehCD, 0) for item, count in fromInventoryCounter.items()))
+
+
+def getPurchaseMoneyState(price):
+    itemsCache = dependency.instance(IItemsCache)
+    money = itemsCache.items.stats.money
+    exchangeRate = itemsCache.items.shop.exchangeRate
+    shortage = money.getShortage(price)
+    if not shortage:
+        moneyState = MoneyForPurchase.ENOUGH
+    else:
+        money = money - price + shortage
+        price = shortage
+        money = money.exchange(Currency.GOLD, Currency.CREDITS, exchangeRate, default=0)
+        shortage = money.getShortage(price)
+        if not shortage:
+            moneyState = MoneyForPurchase.ENOUGH_WITH_EXCHANGE
         else:
-            if __checkSlotsOrder(slots, appliedDecals):
-                resultSlots = __compareSlotsOrders(resultSlots, slots, decals)
-
-    return resultSlots
+            moneyState = MoneyForPurchase.NOT_ENOUGH
+    return moneyState
 
 
-def __checkSlotsOrder(slots, appliedDecals):
-    areas = defaultdict(int)
-    for decal in appliedDecals:
-        for area in getAppliedAreas(decal.component.showOn):
-            areas[area] += 1
-
-    for slot in slots:
-        appliedAreas = getAppliedAreas(slot.showOn)
-        if all((areas[area] < MAX_PROJECTION_DECALS_PER_AREA for area in appliedAreas)):
-            for area in appliedAreas:
-                areas[area] += 1
-
-        return False
-
-    return True
-
-
-def __compareSlotsOrders(slotsA, slotsB, decals):
-    if not slotsA or not slotsB:
-        return slotsA or slotsB
-    slotsAIds = [ decal.component.tags.index(getPositionTag(slot)) for slot, decal in zip(slotsA, decals) ]
-    slotsAIds.sort()
-    slotsBIds = [ decal.component.tags.index(getPositionTag(slot)) for slot, decal in zip(slotsB, decals) ]
-    slotsBIds.sort()
-    return slotsA if slotsBIds >= slotsAIds else slotsB
+def isTransactionValid(moneyState, price):
+    itemsCache = dependency.instance(IItemsCache)
+    money = itemsCache.items.stats.money
+    shortage = money.getShortage(price)
+    inGameShopOn = Currency.GOLD in shortage.getCurrency() and isIngameShopEnabled()
+    validTransaction = moneyState != MoneyForPurchase.NOT_ENOUGH or inGameShopOn
+    return validTransaction

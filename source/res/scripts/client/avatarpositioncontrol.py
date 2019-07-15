@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/AvatarPositionControl.py
 import weakref
-from AvatarInputHandler import mathUtils
+import math_utils
 import BigWorld
 import Math
 from Event import Event
@@ -27,9 +27,9 @@ class ConsistentMatrices(object):
 
     def __init__(self):
         self.__attachedVehicleMatrix = Math.WGAdaptiveMatrixProvider()
-        self.__attachedVehicleMatrix.target = mathUtils.createIdentityMatrix()
+        self.__attachedVehicleMatrix.target = math_utils.createIdentityMatrix()
         self.__ownVehicleMProv = Math.WGAdaptiveMatrixProvider()
-        self.__ownVehicleMProv.target = mathUtils.createIdentityMatrix()
+        self.__ownVehicleMProv.target = math_utils.createIdentityMatrix()
         self.onVehicleMatrixBindingChanged = Event()
 
     def notifyEnterWorld(self, avatar):
@@ -68,7 +68,7 @@ class ConsistentMatrices(object):
 
     def notifyViewPointChanged(self, avatar, staticPosition=None):
         if staticPosition is not None:
-            self.__setTarget(mathUtils.createTranslationMatrix(staticPosition))
+            self.__setTarget(math_utils.createTranslationMatrix(staticPosition))
         return
 
     def __setTarget(self, matrix, asStatic=True):

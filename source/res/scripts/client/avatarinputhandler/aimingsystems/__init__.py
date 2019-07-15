@@ -6,8 +6,8 @@ import logging.handlers
 import BigWorld
 import Math
 from Math import Vector3
-from AvatarInputHandler import mathUtils
-from AvatarInputHandler.mathUtils import MatrixProviders
+import math_utils
+from math_utils import MatrixProviders
 from ProjectileMover import collideDynamicAndStatic, collideVehiclesAndStaticScene, EntityCollisionData
 from vehicle_systems.tankStructure import TankPartNames
 _logger = logging.getLogger(__name__)
@@ -31,7 +31,7 @@ class IAimingSystem(object):
     matrix = property(lambda self: self._matrix)
 
     def __init__(self):
-        self._matrix = mathUtils.createIdentityMatrix()
+        self._matrix = math_utils.createIdentityMatrix()
 
     @property
     def aimMatrix(self):
@@ -66,7 +66,7 @@ def getTurretJointMat(vehicleTypeDescriptor, vehicleMatrix, turretYaw=0.0, overr
     turretOffset = getTurretJointOffset(vehicleTypeDescriptor)
     if overrideTurretLocalZ is not None:
         turretOffset.z = overrideTurretLocalZ
-    turretJointMat = mathUtils.createRTMatrix(Vector3(turretYaw, 0, 0), turretOffset)
+    turretJointMat = math_utils.createRTMatrix(Vector3(turretYaw, 0, 0), turretOffset)
     turretJointMat.postMultiply(vehicleMatrix)
     return turretJointMat
 
@@ -81,14 +81,14 @@ def getGunJointMat(vehicleTypeDescriptor, turretMatrix, gunPitch, overrideTurret
         offset = getTurretJointOffset(vehicleTypeDescriptor)
         yOffset = math.tan(gunPitch) * offset.z
         gunOffset.y += yOffset
-    gunMat = mathUtils.createRTMatrix(Vector3(0, gunPitch, 0), gunOffset)
+    gunMat = math_utils.createRTMatrix(Vector3(0, gunPitch, 0), gunOffset)
     gunMat.postMultiply(turretMatrix)
     return gunMat
 
 
 def getGunCameraJointMat(vehicleTypeDescriptor, turretMatrix, gunPitch):
     gunOffset = Vector3(vehicleTypeDescriptor.turret.gunCamPosition)
-    gunMat = mathUtils.createRTMatrix(Vector3(0, gunPitch, 0), gunOffset)
+    gunMat = math_utils.createRTMatrix(Vector3(0, gunPitch, 0), gunOffset)
     gunMat.postMultiply(turretMatrix)
     return gunMat
 
@@ -139,12 +139,12 @@ def getSniperCameraPlayerGunMat(turretYaw=0.0, gunPitch=0.0):
 
 def getTurretMatrixProvider(vehicleTypeDescriptor, vehicleMatrixProvider, turretYawMatrixProvider):
     turretOffset = vehicleTypeDescriptor.chassis.hullPosition + vehicleTypeDescriptor.hull.turretPositions[0]
-    return MatrixProviders.product(turretYawMatrixProvider, MatrixProviders.product(mathUtils.createTranslationMatrix(turretOffset), vehicleMatrixProvider))
+    return MatrixProviders.product(turretYawMatrixProvider, MatrixProviders.product(math_utils.createTranslationMatrix(turretOffset), vehicleMatrixProvider))
 
 
 def getGunMatrixProvider(vehicleTypeDescriptor, turretMatrixProvider, gunPitchMatrixProvider):
     gunOffset = vehicleTypeDescriptor.turret.gunPosition
-    return MatrixProviders.product(gunPitchMatrixProvider, MatrixProviders.product(mathUtils.createTranslationMatrix(gunOffset), turretMatrixProvider))
+    return MatrixProviders.product(gunPitchMatrixProvider, MatrixProviders.product(math_utils.createTranslationMatrix(gunOffset), turretMatrixProvider))
 
 
 def getTurretYawGunPitch(vehTypeDescr, vehicleMatrix, targetPos, compensateGravity=False):

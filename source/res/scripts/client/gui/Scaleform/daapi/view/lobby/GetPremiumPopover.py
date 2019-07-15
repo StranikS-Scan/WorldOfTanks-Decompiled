@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/GetPremiumPopover.py
-import BigWorld
 from gui.Scaleform.daapi.view.meta.GetPremiumPopoverMeta import GetPremiumPopoverMeta
+from gui.impl import backport
 from gui.prb_control.dispatcher import g_prbLoader
 from gui.shared import event_dispatcher
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
@@ -33,8 +33,8 @@ class GetPremiumPopover(GetPremiumPopoverMeta):
         self.destroy()
 
     def __makeVO(self, data):
-        creditsDiff = '+ %s' % BigWorld.wg_getNiceNumberFormat(data.creditsDiff)
-        xpDiff = '+ %s' % BigWorld.wg_getNiceNumberFormat(data.xpDiff)
+        creditsDiff = '+ %s' % backport.getNiceNumberFormat(data.creditsDiff)
+        xpDiff = '+ %s' % backport.getNiceNumberFormat(data.xpDiff)
         premStr = text_styles.neutral(BATTLE_RESULTS.GETPREMIUMPOPOVER_PREM)
         awardStr = text_styles.neutral(BATTLE_RESULTS.GETPREMIUMPOPOVER_AWARD)
         descriptionText = _ms(BATTLE_RESULTS.GETPREMIUMPOPOVER_DESCRIPTIONTEXT, prem=premStr, award=awardStr)

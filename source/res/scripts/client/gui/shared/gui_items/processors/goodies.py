@@ -4,6 +4,7 @@ import logging
 import BigWorld
 import AccountCommands
 from gui.SystemMessages import SM_TYPE, CURRENCY_TO_SM_TYPE
+from gui.impl import backport
 from gui.shared.formatters import formatPrice
 from gui.shared.gui_items.processors import Processor, makeI18nError, makeI18nSuccess, plugins as proc_plugs
 from gui.shared.gui_items.gui_item_economics import ItemPrice
@@ -62,7 +63,7 @@ class BoosterTradeProcessor(BoosterProcessor):
 
     def _getMsgCtx(self):
         return {'boosterName': self.booster.userName,
-         'count': BigWorld.wg_getIntegralFormat(int(self.count)),
+         'count': backport.getIntegralFormat(int(self.count)),
          'money': formatPrice(self._getOpPrice().price)}
 
     def _getOpPrice(self):

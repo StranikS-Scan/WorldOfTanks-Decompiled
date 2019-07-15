@@ -4,9 +4,10 @@ import math
 from functools import partial
 import BigWorld
 import Math
+import math_utils
 from ClientSelectableObject import ClientSelectableObject
 from helpers.CallbackDelayer import CallbackDelayer, TimeDeltaMeter
-from AvatarInputHandler import cameras, mathUtils
+from AvatarInputHandler import cameras
 from gui.Scaleform.Waiting import Waiting
 from gui.hangar_cameras.hangar_camera_common import CameraMovementStates, CameraRelatedEvents
 from gui.shared import g_eventBus, EVENT_BUS_SCOPE
@@ -73,7 +74,7 @@ class ClientSelectableCameraObject(ClientSelectableObject, CallbackDelayer, Time
         TimeDeltaMeter.__init__(self)
         self.__state = CameraMovementStates.FROM_OBJECT
         self.__camera = cameras.FreeCamera()
-        self.cameraPitch = mathUtils.clamp(-math.pi / 2 * 0.99, math.pi / 2 * 0.99, self.cameraPitch)
+        self.cameraPitch = math_utils.clamp(-math.pi / 2 * 0.99, math.pi / 2 * 0.99, self.cameraPitch)
         self.cameraYaw = normalizeAngle(self.cameraYaw)
         self.__goalPosition = Math.Vector3(0.0, 0.0, 0.0)
         self.__goalDistance = None
@@ -170,7 +171,7 @@ class ClientSelectableCameraObject(ClientSelectableObject, CallbackDelayer, Time
         self.__goalTarget = Math.Matrix(self.model.matrix).translation + self.cameraShift
         if not self.__goalDistance:
             distConstr = self.hangarSpace.space.getCameraLocation()['camConstraints'][2]
-            self.__goalDistance = mathUtils.clamp(distConstr[0], distConstr[1], size / math.tan(BigWorld.projection().fov / 2.0))
+            self.__goalDistance = math_utils.clamp(distConstr[0], distConstr[1], size / math.tan(BigWorld.projection().fov / 2.0))
 
     def __normalizeStartValues(self):
         yaw1 = calculateYaw(self.__startPosition, self.__goalPosition)
@@ -184,7 +185,7 @@ class ClientSelectableCameraObject(ClientSelectableObject, CallbackDelayer, Time
         self.__startPitch = updateStartAngleAccordingToGoal(self.__startPitch, self.__easedInPitch)
 
     def __updateCalculateParams(self, time):
-        easedTime = mathUtils.easeOutCubic(time, 1.0, 1.0)
+        easedTime = math_utils.easeOutCubic(time, 1.0, 1.0)
         position = calculatePosition(self.__startPosition, self.__p1, self.__goalPosition, easedTime)
         yaw = self.__interpolateAngle(self.__startYaw, self.__easedInYaw, position, self.__p2, time, calculateYaw)
         pitch = self.__interpolateAngle(self.__startPitch, self.__easedInPitch, position, self.__p2, time, calculatePitch)
@@ -221,7 +222,7 @@ class ClientSelectableCameraObject(ClientSelectableObject, CallbackDelayer, Time
         else:
             relativeDist = 1.0
         self.__startFov = BigWorld.projection().fov
-        self.__goalFov = mathUtils.lerp(math.radians(minFov), math.radians(maxFov), relativeDist)
+        self.__goalFov = math_utils.lerp(math.radians(minFov), math.radians(maxFov), relativeDist)
 
     def __teleportHangarSpaceCamera(self):
         yaw = self.cameraYaw
@@ -247,7 +248,7 @@ class ClientSelectableCameraObject(ClientSelectableObject, CallbackDelayer, Time
 
     def __updateCameraLocation(self):
         position, yaw, pitch = self.__updateCalculateParams(self.__curTime)
-        mat = mathUtils.createRTMatrix(Math.Vector3(yaw, pitch, 0.0), position)
+        mat = math_utils.createRTMatrix(Math.Vector3(yaw, pitch, 0.0), position)
         self.__camera.setWorldMatrix(mat)
         self.__updateDynamicFOV(self.__curTime)
 
@@ -257,11 +258,11 @@ class ClientSelectableCameraObject(ClientSelectableObject, CallbackDelayer, Time
         if time > self.__easeInDuration:
             return
         time /= self.__easeInDuration
-        fov = mathUtils.lerp(self.__startFov, self.__goalFov, time)
+        fov = math_utils.lerp(self.__startFov, self.__goalFov, time)
         BigWorld.callback(0.0, partial(FovExtended.instance().setFovByAbsoluteValue, fov, 0.1))
 
     def __interpolateAngle(self, startValue, easedInValue, currentPosition, goalPosition, time, angleCalculation):
-        return mathUtils.easeOutQuad(time, easedInValue - startValue, self.__easeInDuration) + startValue if time < self.__easeInDuration else angleCalculation(currentPosition, goalPosition)
+        return math_utils.easeOutQuad(time, easedInValue - startValue, self.__easeInDuration) + startValue if time < self.__easeInDuration else angleCalculation(currentPosition, goalPosition)
 
     def _finishCameraMovement(self):
         self.setState(CameraMovementStates.ON_OBJECT)

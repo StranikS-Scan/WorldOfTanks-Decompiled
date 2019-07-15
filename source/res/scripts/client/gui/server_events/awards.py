@@ -1,7 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/server_events/awards.py
 from collections import namedtuple
-import BigWorld
 import constants
 from gui import makeHtmlString
 from gui.Scaleform.daapi.view.lobby.missions.missions_helper import getMissionInfoData, getAwardsWindowBonuses
@@ -12,6 +11,7 @@ from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.PERSONAL_MISSIONS import PERSONAL_MISSIONS
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
+from gui.impl import backport
 from gui.shared.formatters import text_styles
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.money import Currency
@@ -239,7 +239,7 @@ class FormattedAward(AwardAbstract):
             self._tooltip = tooltip
 
         def __call__(self, bonus):
-            return [self._BonusFmt(self._icon, BigWorld.wg_getIntegralFormat(bonus.getValue()), self._tooltip, None)]
+            return [self._BonusFmt(self._icon, backport.getIntegralFormat(bonus.getValue()), self._tooltip, None)]
 
     class _SimpleNoValueFormatter(_SimpleFormatter):
 
@@ -256,7 +256,7 @@ class FormattedAward(AwardAbstract):
                     if item.itemTypeID in (GUI_ITEM_TYPE.OPTIONALDEVICE, GUI_ITEM_TYPE.EQUIPMENT):
                         description = stripColorTagDescrTags(description)
                     tooltip = makeTooltip(header=item.userName, body=description)
-                    result.append(self._BonusFmt(item.icon, BigWorld.wg_getIntegralFormat(count), tooltip, None))
+                    result.append(self._BonusFmt(item.icon, backport.getIntegralFormat(count), tooltip, None))
 
             return result
 
@@ -267,7 +267,7 @@ class FormattedAward(AwardAbstract):
             for booster, count in bonus.getBoosters().iteritems():
                 if booster is not None and count:
                     tooltip = TOOLTIPS_CONSTANTS.BOOSTERS_BOOSTER_INFO
-                    result.append(self._BonusFmt('', BigWorld.wg_getIntegralFormat(count), tooltip, self.__makeBoosterVO(booster)))
+                    result.append(self._BonusFmt('', backport.getIntegralFormat(count), tooltip, self.__makeBoosterVO(booster)))
 
             return result
 

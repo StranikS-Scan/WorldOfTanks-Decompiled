@@ -243,7 +243,7 @@ class VehiclePreviewBuyingPanel(VehiclePreviewBuyingPanelMeta):
             return
 
     def updateData(self, useCompactData):
-        self.__update(collapseItems=useCompactData)
+        self.__update(collapseItems=False)
 
     def _populate(self):
         super(VehiclePreviewBuyingPanel, self)._populate()

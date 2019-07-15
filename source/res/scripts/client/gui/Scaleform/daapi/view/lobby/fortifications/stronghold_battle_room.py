@@ -1,7 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/fortifications/stronghold_battle_room.py
 import weakref
-import BigWorld
 from UnitBase import UNIT_OP
 from adisp import process
 from constants import PREBATTLE_TYPE_NAMES, PREBATTLE_TYPE
@@ -22,6 +21,7 @@ from gui.Scaleform.genConsts.FORTIFICATION_ALIASES import FORTIFICATION_ALIASES
 from gui.Scaleform.locale.FORTIFICATIONS import FORTIFICATIONS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.clans.clan_helpers import getStrongholdUrl
+from gui.impl import backport
 from gui.prb_control import settings
 from gui.prb_control.entities.base.unit.listener import IStrongholdListener
 from gui.prb_control.entities.base.unit.listener import IUnitListener
@@ -418,9 +418,9 @@ class StrongholdBattleRoom(FortClanBattleRoomMeta, IUnitListener, IStrongholdLis
             elif textid == FORTIFICATIONS.SORTIE_INTROVIEW_FORTBATTLES_NEXTTIMEOFBATTLESOON:
                 timetext = time_utils.getTimeLeftFormat(data['dtime'])
             elif textid == FORTIFICATIONS.SORTIE_INTROVIEW_FORTBATTLES_NEXTTIMEOFBATTLETOMORROW:
-                timetext = BigWorld.wg_getShortTimeFormat(data['peripheryStartTimestamp'])
+                timetext = backport.getShortTimeFormat(data['peripheryStartTimestamp'])
             elif textid == FORTIFICATIONS.SORTIE_INTROVIEW_FORTBATTLES_NEXTTIMEOFBATTLETODAY:
-                timetext = BigWorld.wg_getShortTimeFormat(data['peripheryStartTimestamp'])
+                timetext = backport.getShortTimeFormat(data['peripheryStartTimestamp'])
             wfbDescr = i18n.makeString(textid, nextDate=timetext)
         else:
             direction = vo_converters.getDirection(data['direction'])
@@ -428,9 +428,9 @@ class StrongholdBattleRoom(FortClanBattleRoomMeta, IUnitListener, IStrongholdLis
             if textid != FORTIFICATIONS.ROSTERINTROWINDOW_INTROVIEW_FORTBATTLES_NEXTTIMEOFBATTLESOON:
                 timetext = None
                 if textid == FORTIFICATIONS.SORTIE_INTROVIEW_FORTBATTLES_NEXTTIMEOFBATTLETOMORROW:
-                    timetext = BigWorld.wg_getShortTimeFormat(data['matchmakerNextTick'])
+                    timetext = backport.getShortTimeFormat(data['matchmakerNextTick'])
                 elif textid == FORTIFICATIONS.SORTIE_INTROVIEW_FORTBATTLES_NEXTTIMEOFBATTLETODAY:
-                    timetext = BigWorld.wg_getShortTimeFormat(data['matchmakerNextTick'])
+                    timetext = backport.getShortTimeFormat(data['matchmakerNextTick'])
                 wfbDescr = i18n.makeString(textid, nextDate=timetext)
             else:
                 isBattleTimerVisible = True

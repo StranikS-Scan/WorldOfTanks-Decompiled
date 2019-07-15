@@ -1,6 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/gen/view_models/views/lobby/crew_books/crew_book_tankman_model.py
-from frameworks.wulf import Array
 from gui.impl.gen import R
 from frameworks.wulf import ViewModel
 from gui.impl.gen.view_models.ui_kit.list_model import ListModel
@@ -72,11 +71,11 @@ class CrewBookTankmanModel(ViewModel):
     def setIsArrowAnimPlay(self, value):
         self._setBool(10, value)
 
-    def getSkillList(self):
-        return self._getArray(11)
+    def getIsSkillsEmpty(self):
+        return self._getBool(11)
 
-    def setSkillList(self, value):
-        self._setArray(11, value)
+    def setIsSkillsEmpty(self, value):
+        self._setBool(11, value)
 
     def getTankmanGainExp(self):
         return self._getString(12)
@@ -121,7 +120,7 @@ class CrewBookTankmanModel(ViewModel):
         self._addBoolProperty('isClickEnable', False)
         self._addBoolProperty('isTankamanSelected', False)
         self._addBoolProperty('isArrowAnimPlay', False)
-        self._addArrayProperty('skillList', Array())
+        self._addBoolProperty('isSkillsEmpty', False)
         self._addStringProperty('tankmanGainExp', '')
         self._addStringProperty('roleLevel', '')
         self._addStringProperty('nativeVehicle', '')

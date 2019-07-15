@@ -273,7 +273,7 @@
       <effects>
         <pixie>
           <startKey>	start	</startKey>
-          <file>	particles/Tank/strv_change_hull_ground.xml	</file>
+          <file>	particles/Tank/strv_change_hull_ground.eff	</file>
           <force>	1	</force>
         </pixie>
       </effects>
@@ -285,7 +285,7 @@
       <effects>
         <pixie>
           <startKey>	start	</startKey>
-          <file>	particles/Tank/strv_change_hull_sand.xml	</file>
+          <file>	particles/Tank/strv_change_hull_sand.eff	</file>
           <force>	1	</force>
         </pixie>
       </effects>
@@ -297,7 +297,7 @@
       <effects>
         <pixie>
           <startKey>	start	</startKey>
-          <file>	particles/Tank/strv_change_hull_snow.xml	</file>
+          <file>	particles/Tank/strv_change_hull_snow.eff	</file>
           <force>	1	</force>
         </pixie>
       </effects>
@@ -309,7 +309,7 @@
       <effects>
         <pixie>
           <startKey>	start	</startKey>
-          <file>	particles/Tank/strv_change_hull_stone.xml	</file>
+          <file>	particles/Tank/strv_change_hull_stone.eff	</file>
           <force>	1	</force>
         </pixie>
       </effects>
@@ -321,7 +321,7 @@
       <effects>
         <pixie>
           <startKey>	start	</startKey>
-          <file>	particles/Tank/strv_change_hull_water.xml	</file>
+          <file>	particles/Tank/strv_change_hull_water.eff	</file>
           <force>	1	</force>
         </pixie>
       </effects>
@@ -741,22 +741,22 @@
               <type>	union	</type>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/sand/turn_{0}_CCW_spd3.xml	</name>
+                <name>	particles/Tank/movement/sand/turn_{0}_CCW_spd3.eff	</name>
                 <effectHP>	_TrackFront	</effectHP>
               </selector>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/sand/turn_{0}_CCW_spd3.xml	</name>
+                <name>	particles/Tank/movement/sand/turn_{0}_CCW_spd3.eff	</name>
                 <effectHP>	_TrackRear	</effectHP>
               </selector>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/sand/turn_{0}_CW_spd3.xml	</name>
+                <name>	particles/Tank/movement/sand/turn_{0}_CW_spd3.eff	</name>
                 <effectHP>	_TrackFront	</effectHP>
               </selector>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/sand/turn_{0}_CW_spd3.xml	</name>
+                <name>	particles/Tank/movement/sand/turn_{0}_CW_spd3.eff	</name>
                 <effectHP>	_TrackRear	</effectHP>
               </selector>
             </selector>
@@ -774,22 +774,22 @@
               <type>	union	</type>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/ground/turn_{0}_CCW_spd3.xml	</name>
+                <name>	particles/Tank/movement/ground/turn_{0}_CCW_spd3.eff	</name>
                 <effectHP>	_TrackFront	</effectHP>
               </selector>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/ground/turn_{0}_CCW_spd3.xml	</name>
+                <name>	particles/Tank/movement/ground/turn_{0}_CCW_spd3.eff	</name>
                 <effectHP>	_TrackRear	</effectHP>
               </selector>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/ground/turn_{0}_CW_spd3.xml	</name>
+                <name>	particles/Tank/movement/ground/turn_{0}_CW_spd3.eff	</name>
                 <effectHP>	_TrackFront	</effectHP>
               </selector>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/ground/turn_{0}_CW_spd3.xml	</name>
+                <name>	particles/Tank/movement/ground/turn_{0}_CW_spd3.eff	</name>
                 <effectHP>	_TrackRear	</effectHP>
               </selector>
             </selector>
@@ -807,22 +807,22 @@
               <type>	union	</type>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/stone/turn_{0}_CCW_spd3.xml	</name>
+                <name>	particles/Tank/movement/stone/turn_{0}_CCW_spd3.eff	</name>
                 <effectHP>	_TrackFront	</effectHP>
               </selector>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/stone/turn_{0}_CCW_spd3.xml	</name>
+                <name>	particles/Tank/movement/stone/turn_{0}_CCW_spd3.eff	</name>
                 <effectHP>	_TrackRear	</effectHP>
               </selector>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/stone/turn_{0}_CW_spd3.xml	</name>
+                <name>	particles/Tank/movement/stone/turn_{0}_CW_spd3.eff	</name>
                 <effectHP>	_TrackFront	</effectHP>
               </selector>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/stone/turn_{0}_CW_spd3.xml	</name>
+                <name>	particles/Tank/movement/stone/turn_{0}_CW_spd3.eff	</name>
                 <effectHP>	_TrackRear	</effectHP>
               </selector>
             </selector>
@@ -840,22 +840,22 @@
               <type>	union	</type>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/snow/turn_{0}_CCW_spd3.xml	</name>
+                <name>	particles/Tank/movement/snow/turn_{0}_CCW_spd3.eff	</name>
                 <effectHP>	_TrackFront	</effectHP>
               </selector>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/snow/turn_{0}_CCW_spd3.xml	</name>
+                <name>	particles/Tank/movement/snow/turn_{0}_CCW_spd3.eff	</name>
                 <effectHP>	_TrackRear	</effectHP>
               </selector>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/snow/turn_{0}_CW_spd3.xml	</name>
+                <name>	particles/Tank/movement/snow/turn_{0}_CW_spd3.eff	</name>
                 <effectHP>	_TrackFront	</effectHP>
               </selector>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/snow/turn_{0}_CW_spd3.xml	</name>
+                <name>	particles/Tank/movement/snow/turn_{0}_CW_spd3.eff	</name>
                 <effectHP>	_TrackRear	</effectHP>
               </selector>
             </selector>
@@ -889,12 +889,12 @@
                 <type>	union	</type>
                 <selector>
                   <type>	effect	</type>
-                  <name>	particles/Tank/movement/sand/turn_{0}_CCW_spd3.xml	</name>
+                  <name>	particles/Tank/movement/sand/turn_{0}_CCW_spd3.eff	</name>
                   <effectHP>	_TrackFront	</effectHP>
                 </selector>
                 <selector>
                   <type>	effect	</type>
-                  <name>	particles/Tank/movement/sand/turn_{0}_CCW_spd3.xml	</name>
+                  <name>	particles/Tank/movement/sand/turn_{0}_CCW_spd3.eff	</name>
                   <effectHP>	_TrackRear	</effectHP>
                 </selector>
               </selector>
@@ -903,12 +903,12 @@
                 <type>	union	</type>
                 <selector>
                   <type>	effect	</type>
-                  <name>	particles/Tank/movement/sand/turn_{0}_CCW_spd2.xml	</name>
+                  <name>	particles/Tank/movement/sand/turn_{0}_CCW_spd2.eff	</name>
                   <effectHP>	_TrackFront	</effectHP>
                 </selector>
                 <selector>
                   <type>	effect	</type>
-                  <name>	particles/Tank/movement/sand/turn_{0}_CCW_spd2.xml	</name>
+                  <name>	particles/Tank/movement/sand/turn_{0}_CCW_spd2.eff	</name>
                   <effectHP>	_TrackRear	</effectHP>
                 </selector>
               </selector>
@@ -921,12 +921,12 @@
                 <type>	union	</type>
                 <selector>
                   <type>	effect	</type>
-                  <name>	particles/Tank/movement/sand/turn_{0}_CW_spd2.xml	</name>
+                  <name>	particles/Tank/movement/sand/turn_{0}_CW_spd2.eff	</name>
                   <effectHP>	_TrackFront	</effectHP>
                 </selector>
                 <selector>
                   <type>	effect	</type>
-                  <name>	particles/Tank/movement/sand/turn_{0}_CW_spd2.xml	</name>
+                  <name>	particles/Tank/movement/sand/turn_{0}_CW_spd2.eff	</name>
                   <effectHP>	_TrackRear	</effectHP>
                 </selector>
               </selector>
@@ -935,12 +935,12 @@
                 <type>	union	</type>
                 <selector>
                   <type>	effect	</type>
-                  <name>	particles/Tank/movement/sand/turn_{0}_CW_spd3.xml	</name>
+                  <name>	particles/Tank/movement/sand/turn_{0}_CW_spd3.eff	</name>
                   <effectHP>	_TrackFront	</effectHP>
                 </selector>
                 <selector>
                   <type>	effect	</type>
-                  <name>	particles/Tank/movement/sand/turn_{0}_CW_spd3.xml	</name>
+                  <name>	particles/Tank/movement/sand/turn_{0}_CW_spd3.eff	</name>
                   <effectHP>	_TrackRear	</effectHP>
                 </selector>
               </selector>
@@ -954,12 +954,12 @@
                 <type>	union	</type>
                 <selector>
                   <type>	effect	</type>
-                  <name>	particles/Tank/movement/sand/turn_{0}_CCW_spd1.xml	</name>
+                  <name>	particles/Tank/movement/sand/turn_{0}_CCW_spd1.eff	</name>
                   <effectHP>	_TrackFront	</effectHP>
                 </selector>
                 <selector>
                   <type>	effect	</type>
-                  <name>	particles/Tank/movement/sand/turn_{0}_CCW_spd1.xml	</name>
+                  <name>	particles/Tank/movement/sand/turn_{0}_CCW_spd1.eff	</name>
                   <effectHP>	_TrackRear	</effectHP>
                 </selector>
               </selector>
@@ -972,12 +972,12 @@
                 <type>	union	</type>
                 <selector>
                   <type>	effect	</type>
-                  <name>	particles/Tank/movement/sand/turn_{0}_CW_spd1.xml	</name>
+                  <name>	particles/Tank/movement/sand/turn_{0}_CW_spd1.eff	</name>
                   <effectHP>	_TrackFront	</effectHP>
                 </selector>
                 <selector>
                   <type>	effect	</type>
-                  <name>	particles/Tank/movement/sand/turn_{0}_CW_spd1.xml	</name>
+                  <name>	particles/Tank/movement/sand/turn_{0}_CW_spd1.eff	</name>
                   <effectHP>	_TrackRear	</effectHP>
                 </selector>
               </selector>
@@ -991,12 +991,12 @@
                 <type>	union	</type>
                 <selector>
                   <type>	effect	</type>
-                  <name>	particles/Tank/movement/sand/turn_{0}_CCW_spd3.xml	</name>
+                  <name>	particles/Tank/movement/sand/turn_{0}_CCW_spd3.eff	</name>
                   <effectHP>	_TrackFront	</effectHP>
                 </selector>
                 <selector>
                   <type>	effect	</type>
-                  <name>	particles/Tank/movement/sand/turn_{0}_CCW_spd3.xml	</name>
+                  <name>	particles/Tank/movement/sand/turn_{0}_CCW_spd3.eff	</name>
                   <effectHP>	_TrackRear	</effectHP>
                 </selector>
               </selector>
@@ -1005,12 +1005,12 @@
                 <type>	union	</type>
                 <selector>
                   <type>	effect	</type>
-                  <name>	particles/Tank/movement/sand/turn_{0}_CCW_spd2.xml	</name>
+                  <name>	particles/Tank/movement/sand/turn_{0}_CCW_spd2.eff	</name>
                   <effectHP>	_TrackFront	</effectHP>
                 </selector>
                 <selector>
                   <type>	effect	</type>
-                  <name>	particles/Tank/movement/sand/turn_{0}_CCW_spd2.xml	</name>
+                  <name>	particles/Tank/movement/sand/turn_{0}_CCW_spd2.eff	</name>
                   <effectHP>	_TrackRear	</effectHP>
                 </selector>
               </selector>
@@ -1023,12 +1023,12 @@
                 <type>	union	</type>
                 <selector>
                   <type>	effect	</type>
-                  <name>	particles/Tank/movement/sand/turn_{0}_CW_spd2.xml	</name>
+                  <name>	particles/Tank/movement/sand/turn_{0}_CW_spd2.eff	</name>
                   <effectHP>	_TrackFront	</effectHP>
                 </selector>
                 <selector>
                   <type>	effect	</type>
-                  <name>	particles/Tank/movement/sand/turn_{0}_CW_spd2.xml	</name>
+                  <name>	particles/Tank/movement/sand/turn_{0}_CW_spd2.eff	</name>
                   <effectHP>	_TrackRear	</effectHP>
                 </selector>
               </selector>
@@ -1037,12 +1037,12 @@
                 <type>	union	</type>
                 <selector>
                   <type>	effect	</type>
-                  <name>	particles/Tank/movement/sand/turn_{0}_CW_spd3.xml	</name>
+                  <name>	particles/Tank/movement/sand/turn_{0}_CW_spd3.eff	</name>
                   <effectHP>	_TrackFront	</effectHP>
                 </selector>
                 <selector>
                   <type>	effect	</type>
-                  <name>	particles/Tank/movement/sand/turn_{0}_CW_spd3.xml	</name>
+                  <name>	particles/Tank/movement/sand/turn_{0}_CW_spd3.eff	</name>
                   <effectHP>	_TrackRear	</effectHP>
                 </selector>
               </selector>
@@ -1066,12 +1066,12 @@
                 <type>	union	</type>
                 <selector>
                   <type>	effect	</type>
-                  <name>	particles/Tank/movement/ground/turn_{0}_CCW_spd3.xml	</name>
+                  <name>	particles/Tank/movement/ground/turn_{0}_CCW_spd3.eff	</name>
                   <effectHP>	_TrackFront	</effectHP>
                 </selector>
                 <selector>
                   <type>	effect	</type>
-                  <name>	particles/Tank/movement/ground/turn_{0}_CCW_spd3.xml	</name>
+                  <name>	particles/Tank/movement/ground/turn_{0}_CCW_spd3.eff	</name>
                   <effectHP>	_TrackRear	</effectHP>
                 </selector>
               </selector>
@@ -1080,12 +1080,12 @@
                 <type>	union	</type>
                 <selector>
                   <type>	effect	</type>
-                  <name>	particles/Tank/movement/ground/turn_{0}_CCW_spd2.xml	</name>
+                  <name>	particles/Tank/movement/ground/turn_{0}_CCW_spd2.eff	</name>
                   <effectHP>	_TrackFront	</effectHP>
                 </selector>
                 <selector>
                   <type>	effect	</type>
-                  <name>	particles/Tank/movement/ground/turn_{0}_CCW_spd2.xml	</name>
+                  <name>	particles/Tank/movement/ground/turn_{0}_CCW_spd2.eff	</name>
                   <effectHP>	_TrackRear	</effectHP>
                 </selector>
               </selector>
@@ -1098,12 +1098,12 @@
                 <type>	union	</type>
                 <selector>
                   <type>	effect	</type>
-                  <name>	particles/Tank/movement/ground/turn_{0}_CW_spd2.xml	</name>
+                  <name>	particles/Tank/movement/ground/turn_{0}_CW_spd2.eff	</name>
                   <effectHP>	_TrackFront	</effectHP>
                 </selector>
                 <selector>
                   <type>	effect	</type>
-                  <name>	particles/Tank/movement/ground/turn_{0}_CW_spd2.xml	</name>
+                  <name>	particles/Tank/movement/ground/turn_{0}_CW_spd2.eff	</name>
                   <effectHP>	_TrackRear	</effectHP>
                 </selector>
               </selector>
@@ -1112,12 +1112,12 @@
                 <type>	union	</type>
                 <selector>
                   <type>	effect	</type>
-                  <name>	particles/Tank/movement/ground/turn_{0}_CW_spd3.xml	</name>
+                  <name>	particles/Tank/movement/ground/turn_{0}_CW_spd3.eff	</name>
                   <effectHP>	_TrackFront	</effectHP>
                 </selector>
                 <selector>
                   <type>	effect	</type>
-                  <name>	particles/Tank/movement/ground/turn_{0}_CW_spd3.xml	</name>
+                  <name>	particles/Tank/movement/ground/turn_{0}_CW_spd3.eff	</name>
                   <effectHP>	_TrackRear	</effectHP>
                 </selector>
               </selector>
@@ -1131,12 +1131,12 @@
                 <type>	union	</type>
                 <selector>
                   <type>	effect	</type>
-                  <name>	particles/Tank/movement/ground/turn_{0}_CCW_spd1.xml	</name>
+                  <name>	particles/Tank/movement/ground/turn_{0}_CCW_spd1.eff	</name>
                   <effectHP>	_TrackFront	</effectHP>
                 </selector>
                 <selector>
                   <type>	effect	</type>
-                  <name>	particles/Tank/movement/ground/turn_{0}_CCW_spd1.xml	</name>
+                  <name>	particles/Tank/movement/ground/turn_{0}_CCW_spd1.eff	</name>
                   <effectHP>	_TrackRear	</effectHP>
                 </selector>
               </selector>
@@ -1149,12 +1149,12 @@
                 <type>	union	</type>
                 <selector>
                   <type>	effect	</type>
-                  <name>	particles/Tank/movement/ground/turn_{0}_CW_spd1.xml	</name>
+                  <name>	particles/Tank/movement/ground/turn_{0}_CW_spd1.eff	</name>
                   <effectHP>	_TrackFront	</effectHP>
                 </selector>
                 <selector>
                   <type>	effect	</type>
-                  <name>	particles/Tank/movement/ground/turn_{0}_CW_spd1.xml	</name>
+                  <name>	particles/Tank/movement/ground/turn_{0}_CW_spd1.eff	</name>
                   <effectHP>	_TrackRear	</effectHP>
                 </selector>
               </selector>
@@ -1168,12 +1168,12 @@
                 <type>	union	</type>
                 <selector>
                   <type>	effect	</type>
-                  <name>	particles/Tank/movement/ground/turn_{0}_CCW_spd3.xml	</name>
+                  <name>	particles/Tank/movement/ground/turn_{0}_CCW_spd3.eff	</name>
                   <effectHP>	_TrackFront	</effectHP>
                 </selector>
                 <selector>
                   <type>	effect	</type>
-                  <name>	particles/Tank/movement/ground/turn_{0}_CCW_spd3.xml	</name>
+                  <name>	particles/Tank/movement/ground/turn_{0}_CCW_spd3.eff	</name>
                   <effectHP>	_TrackRear	</effectHP>
                 </selector>
               </selector>
@@ -1182,12 +1182,12 @@
                 <type>	union	</type>
                 <selector>
                   <type>	effect	</type>
-                  <name>	particles/Tank/movement/ground/turn_{0}_CCW_spd2.xml	</name>
+                  <name>	particles/Tank/movement/ground/turn_{0}_CCW_spd2.eff	</name>
                   <effectHP>	_TrackFront	</effectHP>
                 </selector>
                 <selector>
                   <type>	effect	</type>
-                  <name>	particles/Tank/movement/ground/turn_{0}_CCW_spd2.xml	</name>
+                  <name>	particles/Tank/movement/ground/turn_{0}_CCW_spd2.eff	</name>
                   <effectHP>	_TrackRear	</effectHP>
                 </selector>
               </selector>
@@ -1200,12 +1200,12 @@
                 <type>	union	</type>
                 <selector>
                   <type>	effect	</type>
-                  <name>	particles/Tank/movement/ground/turn_{0}_CW_spd2.xml	</name>
+                  <name>	particles/Tank/movement/ground/turn_{0}_CW_spd2.eff	</name>
                   <effectHP>	_TrackFront	</effectHP>
                 </selector>
                 <selector>
                   <type>	effect	</type>
-                  <name>	particles/Tank/movement/ground/turn_{0}_CW_spd2.xml	</name>
+                  <name>	particles/Tank/movement/ground/turn_{0}_CW_spd2.eff	</name>
                   <effectHP>	_TrackRear	</effectHP>
                 </selector>
               </selector>
@@ -1214,12 +1214,12 @@
                 <type>	union	</type>
                 <selector>
                   <type>	effect	</type>
-                  <name>	particles/Tank/movement/ground/turn_{0}_CW_spd3.xml	</name>
+                  <name>	particles/Tank/movement/ground/turn_{0}_CW_spd3.eff	</name>
                   <effectHP>	_TrackFront	</effectHP>
                 </selector>
                 <selector>
                   <type>	effect	</type>
-                  <name>	particles/Tank/movement/ground/turn_{0}_CW_spd3.xml	</name>
+                  <name>	particles/Tank/movement/ground/turn_{0}_CW_spd3.eff	</name>
                   <effectHP>	_TrackRear	</effectHP>
                 </selector>
               </selector>
@@ -1243,12 +1243,12 @@
                 <type>	union	</type>
                 <selector>
                   <type>	effect	</type>
-                  <name>	particles/Tank/movement/stone/turn_{0}_CCW_spd3.xml	</name>
+                  <name>	particles/Tank/movement/stone/turn_{0}_CCW_spd3.eff	</name>
                   <effectHP>	_TrackFront	</effectHP>
                 </selector>
                 <selector>
                   <type>	effect	</type>
-                  <name>	particles/Tank/movement/stone/turn_{0}_CCW_spd3.xml	</name>
+                  <name>	particles/Tank/movement/stone/turn_{0}_CCW_spd3.eff	</name>
                   <effectHP>	_TrackRear	</effectHP>
                 </selector>
               </selector>
@@ -1257,12 +1257,12 @@
                 <type>	union	</type>
                 <selector>
                   <type>	effect	</type>
-                  <name>	particles/Tank/movement/stone/turn_{0}_CCW_spd2.xml	</name>
+                  <name>	particles/Tank/movement/stone/turn_{0}_CCW_spd2.eff	</name>
                   <effectHP>	_TrackFront	</effectHP>
                 </selector>
                 <selector>
                   <type>	effect	</type>
-                  <name>	particles/Tank/movement/stone/turn_{0}_CCW_spd2.xml	</name>
+                  <name>	particles/Tank/movement/stone/turn_{0}_CCW_spd2.eff	</name>
                   <effectHP>	_TrackRear	</effectHP>
                 </selector>
               </selector>
@@ -1275,12 +1275,12 @@
                 <type>	union	</type>
                 <selector>
                   <type>	effect	</type>
-                  <name>	particles/Tank/movement/stone/turn_{0}_CW_spd2.xml	</name>
+                  <name>	particles/Tank/movement/stone/turn_{0}_CW_spd2.eff	</name>
                   <effectHP>	_TrackFront	</effectHP>
                 </selector>
                 <selector>
                   <type>	effect	</type>
-                  <name>	particles/Tank/movement/stone/turn_{0}_CW_spd2.xml	</name>
+                  <name>	particles/Tank/movement/stone/turn_{0}_CW_spd2.eff	</name>
                   <effectHP>	_TrackRear	</effectHP>
                 </selector>
               </selector>
@@ -1289,12 +1289,12 @@
                 <type>	union	</type>
                 <selector>
                   <type>	effect	</type>
-                  <name>	particles/Tank/movement/stone/turn_{0}_CW_spd3.xml	</name>
+                  <name>	particles/Tank/movement/stone/turn_{0}_CW_spd3.eff	</name>
                   <effectHP>	_TrackFront	</effectHP>
                 </selector>
                 <selector>
                   <type>	effect	</type>
-                  <name>	particles/Tank/movement/stone/turn_{0}_CW_spd3.xml	</name>
+                  <name>	particles/Tank/movement/stone/turn_{0}_CW_spd3.eff	</name>
                   <effectHP>	_TrackRear	</effectHP>
                 </selector>
               </selector>
@@ -1308,12 +1308,12 @@
                 <type>	union	</type>
                 <selector>
                   <type>	effect	</type>
-                  <name>	particles/Tank/movement/stone/turn_{0}_CCW_spd1.xml	</name>
+                  <name>	particles/Tank/movement/stone/turn_{0}_CCW_spd1.eff	</name>
                   <effectHP>	_TrackFront	</effectHP>
                 </selector>
                 <selector>
                   <type>	effect	</type>
-                  <name>	particles/Tank/movement/stone/turn_{0}_CCW_spd1.xml	</name>
+                  <name>	particles/Tank/movement/stone/turn_{0}_CCW_spd1.eff	</name>
                   <effectHP>	_TrackRear	</effectHP>
                 </selector>
               </selector>
@@ -1326,12 +1326,12 @@
                 <type>	union	</type>
                 <selector>
                   <type>	effect	</type>
-                  <name>	particles/Tank/movement/stone/turn_{0}_CW_spd1.xml	</name>
+                  <name>	particles/Tank/movement/stone/turn_{0}_CW_spd1.eff	</name>
                   <effectHP>	_TrackFront	</effectHP>
                 </selector>
                 <selector>
                   <type>	effect	</type>
-                  <name>	particles/Tank/movement/stone/turn_{0}_CW_spd1.xml	</name>
+                  <name>	particles/Tank/movement/stone/turn_{0}_CW_spd1.eff	</name>
                   <effectHP>	_TrackRear	</effectHP>
                 </selector>
               </selector>
@@ -1345,12 +1345,12 @@
                 <type>	union	</type>
                 <selector>
                   <type>	effect	</type>
-                  <name>	particles/Tank/movement/stone/turn_{0}_CCW_spd3.xml	</name>
+                  <name>	particles/Tank/movement/stone/turn_{0}_CCW_spd3.eff	</name>
                   <effectHP>	_TrackFront	</effectHP>
                 </selector>
                 <selector>
                   <type>	effect	</type>
-                  <name>	particles/Tank/movement/stone/turn_{0}_CCW_spd3.xml	</name>
+                  <name>	particles/Tank/movement/stone/turn_{0}_CCW_spd3.eff	</name>
                   <effectHP>	_TrackRear	</effectHP>
                 </selector>
               </selector>
@@ -1359,12 +1359,12 @@
                 <type>	union	</type>
                 <selector>
                   <type>	effect	</type>
-                  <name>	particles/Tank/movement/stone/turn_{0}_CCW_spd2.xml	</name>
+                  <name>	particles/Tank/movement/stone/turn_{0}_CCW_spd2.eff	</name>
                   <effectHP>	_TrackFront	</effectHP>
                 </selector>
                 <selector>
                   <type>	effect	</type>
-                  <name>	particles/Tank/movement/stone/turn_{0}_CCW_spd2.xml	</name>
+                  <name>	particles/Tank/movement/stone/turn_{0}_CCW_spd2.eff	</name>
                   <effectHP>	_TrackRear	</effectHP>
                 </selector>
               </selector>
@@ -1377,12 +1377,12 @@
                 <type>	union	</type>
                 <selector>
                   <type>	effect	</type>
-                  <name>	particles/Tank/movement/stone/turn_{0}_CW_spd2.xml	</name>
+                  <name>	particles/Tank/movement/stone/turn_{0}_CW_spd2.eff	</name>
                   <effectHP>	_TrackFront	</effectHP>
                 </selector>
                 <selector>
                   <type>	effect	</type>
-                  <name>	particles/Tank/movement/stone/turn_{0}_CW_spd2.xml	</name>
+                  <name>	particles/Tank/movement/stone/turn_{0}_CW_spd2.eff	</name>
                   <effectHP>	_TrackRear	</effectHP>
                 </selector>
               </selector>
@@ -1391,12 +1391,12 @@
                 <type>	union	</type>
                 <selector>
                   <type>	effect	</type>
-                  <name>	particles/Tank/movement/stone/turn_{0}_CW_spd3.xml	</name>
+                  <name>	particles/Tank/movement/stone/turn_{0}_CW_spd3.eff	</name>
                   <effectHP>	_TrackFront	</effectHP>
                 </selector>
                 <selector>
                   <type>	effect	</type>
-                  <name>	particles/Tank/movement/stone/turn_{0}_CW_spd3.xml	</name>
+                  <name>	particles/Tank/movement/stone/turn_{0}_CW_spd3.eff	</name>
                   <effectHP>	_TrackRear	</effectHP>
                 </selector>
               </selector>
@@ -1420,12 +1420,12 @@
                 <type>	union	</type>
                 <selector>
                   <type>	effect	</type>
-                  <name>	particles/Tank/movement/snow/turn_{0}_CCW_spd3.xml	</name>
+                  <name>	particles/Tank/movement/snow/turn_{0}_CCW_spd3.eff	</name>
                   <effectHP>	_TrackFront	</effectHP>
                 </selector>
                 <selector>
                   <type>	effect	</type>
-                  <name>	particles/Tank/movement/snow/turn_{0}_CCW_spd3.xml	</name>
+                  <name>	particles/Tank/movement/snow/turn_{0}_CCW_spd3.eff	</name>
                   <effectHP>	_TrackRear	</effectHP>
                 </selector>
               </selector>
@@ -1434,12 +1434,12 @@
                 <type>	union	</type>
                 <selector>
                   <type>	effect	</type>
-                  <name>	particles/Tank/movement/snow/turn_{0}_CCW_spd2.xml	</name>
+                  <name>	particles/Tank/movement/snow/turn_{0}_CCW_spd2.eff	</name>
                   <effectHP>	_TrackFront	</effectHP>
                 </selector>
                 <selector>
                   <type>	effect	</type>
-                  <name>	particles/Tank/movement/snow/turn_{0}_CCW_spd2.xml	</name>
+                  <name>	particles/Tank/movement/snow/turn_{0}_CCW_spd2.eff	</name>
                   <effectHP>	_TrackRear	</effectHP>
                 </selector>
               </selector>
@@ -1452,12 +1452,12 @@
                 <type>	union	</type>
                 <selector>
                   <type>	effect	</type>
-                  <name>	particles/Tank/movement/snow/turn_{0}_CW_spd2.xml	</name>
+                  <name>	particles/Tank/movement/snow/turn_{0}_CW_spd2.eff	</name>
                   <effectHP>	_TrackFront	</effectHP>
                 </selector>
                 <selector>
                   <type>	effect	</type>
-                  <name>	particles/Tank/movement/snow/turn_{0}_CW_spd2.xml	</name>
+                  <name>	particles/Tank/movement/snow/turn_{0}_CW_spd2.eff	</name>
                   <effectHP>	_TrackRear	</effectHP>
                 </selector>
               </selector>
@@ -1466,12 +1466,12 @@
                 <type>	union	</type>
                 <selector>
                   <type>	effect	</type>
-                  <name>	particles/Tank/movement/snow/turn_{0}_CW_spd3.xml	</name>
+                  <name>	particles/Tank/movement/snow/turn_{0}_CW_spd3.eff	</name>
                   <effectHP>	_TrackFront	</effectHP>
                 </selector>
                 <selector>
                   <type>	effect	</type>
-                  <name>	particles/Tank/movement/snow/turn_{0}_CW_spd3.xml	</name>
+                  <name>	particles/Tank/movement/snow/turn_{0}_CW_spd3.eff	</name>
                   <effectHP>	_TrackRear	</effectHP>
                 </selector>
               </selector>
@@ -1485,12 +1485,12 @@
                 <type>	union	</type>
                 <selector>
                   <type>	effect	</type>
-                  <name>	particles/Tank/movement/snow/turn_{0}_CCW_spd1.xml	</name>
+                  <name>	particles/Tank/movement/snow/turn_{0}_CCW_spd1.eff	</name>
                   <effectHP>	_TrackFront	</effectHP>
                 </selector>
                 <selector>
                   <type>	effect	</type>
-                  <name>	particles/Tank/movement/snow/turn_{0}_CCW_spd1.xml	</name>
+                  <name>	particles/Tank/movement/snow/turn_{0}_CCW_spd1.eff	</name>
                   <effectHP>	_TrackRear	</effectHP>
                 </selector>
               </selector>
@@ -1503,12 +1503,12 @@
                 <type>	union	</type>
                 <selector>
                   <type>	effect	</type>
-                  <name>	particles/Tank/movement/snow/turn_{0}_CW_spd1.xml	</name>
+                  <name>	particles/Tank/movement/snow/turn_{0}_CW_spd1.eff	</name>
                   <effectHP>	_TrackFront	</effectHP>
                 </selector>
                 <selector>
                   <type>	effect	</type>
-                  <name>	particles/Tank/movement/snow/turn_{0}_CW_spd1.xml	</name>
+                  <name>	particles/Tank/movement/snow/turn_{0}_CW_spd1.eff	</name>
                   <effectHP>	_TrackRear	</effectHP>
                 </selector>
               </selector>
@@ -1522,12 +1522,12 @@
                 <type>	union	</type>
                 <selector>
                   <type>	effect	</type>
-                  <name>	particles/Tank/movement/snow/turn_{0}_CCW_spd3.xml	</name>
+                  <name>	particles/Tank/movement/snow/turn_{0}_CCW_spd3.eff	</name>
                   <effectHP>	_TrackFront	</effectHP>
                 </selector>
                 <selector>
                   <type>	effect	</type>
-                  <name>	particles/Tank/movement/snow/turn_{0}_CCW_spd3.xml	</name>
+                  <name>	particles/Tank/movement/snow/turn_{0}_CCW_spd3.eff	</name>
                   <effectHP>	_TrackRear	</effectHP>
                 </selector>
               </selector>
@@ -1536,12 +1536,12 @@
                 <type>	union	</type>
                 <selector>
                   <type>	effect	</type>
-                  <name>	particles/Tank/movement/snow/turn_{0}_CCW_spd2.xml	</name>
+                  <name>	particles/Tank/movement/snow/turn_{0}_CCW_spd2.eff	</name>
                   <effectHP>	_TrackFront	</effectHP>
                 </selector>
                 <selector>
                   <type>	effect	</type>
-                  <name>	particles/Tank/movement/snow/turn_{0}_CCW_spd2.xml	</name>
+                  <name>	particles/Tank/movement/snow/turn_{0}_CCW_spd2.eff	</name>
                   <effectHP>	_TrackRear	</effectHP>
                 </selector>
               </selector>
@@ -1554,12 +1554,12 @@
                 <type>	union	</type>
                 <selector>
                   <type>	effect	</type>
-                  <name>	particles/Tank/movement/snow/turn_{0}_CW_spd2.xml	</name>
+                  <name>	particles/Tank/movement/snow/turn_{0}_CW_spd2.eff	</name>
                   <effectHP>	_TrackFront	</effectHP>
                 </selector>
                 <selector>
                   <type>	effect	</type>
-                  <name>	particles/Tank/movement/snow/turn_{0}_CW_spd2.xml	</name>
+                  <name>	particles/Tank/movement/snow/turn_{0}_CW_spd2.eff	</name>
                   <effectHP>	_TrackRear	</effectHP>
                 </selector>
               </selector>
@@ -1568,12 +1568,12 @@
                 <type>	union	</type>
                 <selector>
                   <type>	effect	</type>
-                  <name>	particles/Tank/movement/snow/turn_{0}_CW_spd3.xml	</name>
+                  <name>	particles/Tank/movement/snow/turn_{0}_CW_spd3.eff	</name>
                   <effectHP>	_TrackFront	</effectHP>
                 </selector>
                 <selector>
                   <type>	effect	</type>
-                  <name>	particles/Tank/movement/snow/turn_{0}_CW_spd3.xml	</name>
+                  <name>	particles/Tank/movement/snow/turn_{0}_CW_spd3.eff	</name>
                   <effectHP>	_TrackRear	</effectHP>
                 </selector>
               </selector>
@@ -1600,7 +1600,7 @@
               <type>	union	</type>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/sand/slip_{0}_trackrear_spd1.xml	</name>
+                <name>	particles/Tank/movement/sand/slip_{0}_trackrear_spd1.eff	</name>
                 <effectHP>	_TrackRear	</effectHP>
               </selector>
             </selector>
@@ -1609,7 +1609,7 @@
               <type>	union	</type>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/sand/slip_{0}_trackrear_spd2.xml	</name>
+                <name>	particles/Tank/movement/sand/slip_{0}_trackrear_spd2.eff	</name>
                 <effectHP>	_TrackRear	</effectHP>
               </selector>
             </selector>
@@ -1618,7 +1618,7 @@
               <type>	union	</type>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/sand/slip_{0}_trackrear_spd3.xml	</name>
+                <name>	particles/Tank/movement/sand/slip_{0}_trackrear_spd3.eff	</name>
                 <effectHP>	_TrackRear	</effectHP>
               </selector>
             </selector>
@@ -1637,7 +1637,7 @@
               <type>	union	</type>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/ground/slip_{0}_trackrear_spd1.xml	</name>
+                <name>	particles/Tank/movement/ground/slip_{0}_trackrear_spd1.eff	</name>
                 <effectHP>	_TrackRear	</effectHP>
               </selector>
             </selector>
@@ -1646,7 +1646,7 @@
               <type>	union	</type>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/ground/slip_{0}_trackrear_spd2.xml	</name>
+                <name>	particles/Tank/movement/ground/slip_{0}_trackrear_spd2.eff	</name>
                 <effectHP>	_TrackRear	</effectHP>
               </selector>
             </selector>
@@ -1655,7 +1655,7 @@
               <type>	union	</type>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/ground/slip_{0}_trackrear_spd3.xml	</name>
+                <name>	particles/Tank/movement/ground/slip_{0}_trackrear_spd3.eff	</name>
                 <effectHP>	_TrackRear	</effectHP>
               </selector>
             </selector>
@@ -1674,12 +1674,12 @@
               <type>	union	</type>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/stone/slip_{0}_trackrear_spd1.xml	</name>
+                <name>	particles/Tank/movement/stone/slip_{0}_trackrear_spd1.eff	</name>
                 <effectHP>	_TrackRear	</effectHP>
               </selector>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/stone/slip_{0}_trackfront_spd1.xml	</name>
+                <name>	particles/Tank/movement/stone/slip_{0}_trackfront_spd1.eff	</name>
                 <effectHP>	_TrackFront	</effectHP>
               </selector>
             </selector>
@@ -1688,12 +1688,12 @@
               <type>	union	</type>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/stone/slip_{0}_trackrear_spd2.xml	</name>
+                <name>	particles/Tank/movement/stone/slip_{0}_trackrear_spd2.eff	</name>
                 <effectHP>	_TrackRear	</effectHP>
               </selector>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/stone/slip_{0}_trackfront_spd2.xml	</name>
+                <name>	particles/Tank/movement/stone/slip_{0}_trackfront_spd2.eff	</name>
                 <effectHP>	_TrackFront	</effectHP>
               </selector>
             </selector>
@@ -1702,12 +1702,12 @@
               <type>	union	</type>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/stone/slip_{0}_trackrear_spd3.xml	</name>
+                <name>	particles/Tank/movement/stone/slip_{0}_trackrear_spd3.eff	</name>
                 <effectHP>	_TrackRear	</effectHP>
               </selector>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/stone/slip_{0}_trackfront_spd3.xml	</name>
+                <name>	particles/Tank/movement/stone/slip_{0}_trackfront_spd3.eff	</name>
                 <effectHP>	_TrackFront	</effectHP>
               </selector>
             </selector>
@@ -1726,7 +1726,7 @@
               <type>	union	</type>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/snow/slip_{0}_trackrear_spd1.xml	</name>
+                <name>	particles/Tank/movement/snow/slip_{0}_trackrear_spd1.eff	</name>
                 <effectHP>	_TrackRear	</effectHP>
               </selector>
             </selector>
@@ -1735,7 +1735,7 @@
               <type>	union	</type>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/snow/slip_{0}_trackrear_spd2.xml	</name>
+                <name>	particles/Tank/movement/snow/slip_{0}_trackrear_spd2.eff	</name>
                 <effectHP>	_TrackRear	</effectHP>
               </selector>
             </selector>
@@ -1744,7 +1744,7 @@
               <type>	union	</type>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/snow/slip_{0}_trackrear_spd3.xml	</name>
+                <name>	particles/Tank/movement/snow/slip_{0}_trackrear_spd3.eff	</name>
                 <effectHP>	_TrackRear	</effectHP>
               </selector>
             </selector>
@@ -1770,7 +1770,7 @@
               <type>	union	</type>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/sand/slip_{0}_trackrear_spd1.xml	</name>
+                <name>	particles/Tank/movement/sand/slip_{0}_trackrear_spd1.eff	</name>
                 <effectHP>	_TrackRear	</effectHP>
               </selector>
             </selector>
@@ -1779,7 +1779,7 @@
               <type>	union	</type>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/sand/slip_{0}_trackrear_spd2.xml	</name>
+                <name>	particles/Tank/movement/sand/slip_{0}_trackrear_spd2.eff	</name>
                 <effectHP>	_TrackRear	</effectHP>
               </selector>
             </selector>
@@ -1788,7 +1788,7 @@
               <type>	union	</type>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/sand/slip_{0}_trackrear_spd3.xml	</name>
+                <name>	particles/Tank/movement/sand/slip_{0}_trackrear_spd3.eff	</name>
                 <effectHP>	_TrackRear	</effectHP>
               </selector>
             </selector>
@@ -1807,7 +1807,7 @@
               <type>	union	</type>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/ground/slip_{0}_trackrear_spd1.xml	</name>
+                <name>	particles/Tank/movement/ground/slip_{0}_trackrear_spd1.eff	</name>
                 <effectHP>	_TrackRear	</effectHP>
               </selector>
             </selector>
@@ -1816,7 +1816,7 @@
               <type>	union	</type>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/ground/slip_{0}_trackrear_spd2.xml	</name>
+                <name>	particles/Tank/movement/ground/slip_{0}_trackrear_spd2.eff	</name>
                 <effectHP>	_TrackRear	</effectHP>
               </selector>
             </selector>
@@ -1825,7 +1825,7 @@
               <type>	union	</type>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/ground/slip_{0}_trackrear_spd3.xml	</name>
+                <name>	particles/Tank/movement/ground/slip_{0}_trackrear_spd3.eff	</name>
                 <effectHP>	_TrackRear	</effectHP>
               </selector>
             </selector>
@@ -1844,12 +1844,12 @@
               <type>	union	</type>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/stone/slip_{0}_trackrear_spd1.xml	</name>
+                <name>	particles/Tank/movement/stone/slip_{0}_trackrear_spd1.eff	</name>
                 <effectHP>	_TrackRear	</effectHP>
               </selector>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/stone/slip_{0}_trackfront_spd1.xml	</name>
+                <name>	particles/Tank/movement/stone/slip_{0}_trackfront_spd1.eff	</name>
                 <effectHP>	_TrackFront	</effectHP>
               </selector>
             </selector>
@@ -1858,12 +1858,12 @@
               <type>	union	</type>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/stone/slip_{0}_trackrear_spd2.xml	</name>
+                <name>	particles/Tank/movement/stone/slip_{0}_trackrear_spd2.eff	</name>
                 <effectHP>	_TrackRear	</effectHP>
               </selector>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/stone/slip_{0}_trackfront_spd2.xml	</name>
+                <name>	particles/Tank/movement/stone/slip_{0}_trackfront_spd2.eff	</name>
                 <effectHP>	_TrackFront	</effectHP>
               </selector>
             </selector>
@@ -1872,12 +1872,12 @@
               <type>	union	</type>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/stone/slip_{0}_trackrear_spd3.xml	</name>
+                <name>	particles/Tank/movement/stone/slip_{0}_trackrear_spd3.eff	</name>
                 <effectHP>	_TrackRear	</effectHP>
               </selector>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/stone/slip_{0}_trackfront_spd3.xml	</name>
+                <name>	particles/Tank/movement/stone/slip_{0}_trackfront_spd3.eff	</name>
                 <effectHP>	_TrackFront	</effectHP>
               </selector>
             </selector>
@@ -1896,7 +1896,7 @@
               <type>	union	</type>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/snow/slip_{0}_trackrear_spd1.xml	</name>
+                <name>	particles/Tank/movement/snow/slip_{0}_trackrear_spd1.eff	</name>
                 <effectHP>	_TrackRear	</effectHP>
               </selector>
             </selector>
@@ -1905,7 +1905,7 @@
               <type>	union	</type>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/snow/slip_{0}_trackrear_spd2.xml	</name>
+                <name>	particles/Tank/movement/snow/slip_{0}_trackrear_spd2.eff	</name>
                 <effectHP>	_TrackRear	</effectHP>
               </selector>
             </selector>
@@ -1914,7 +1914,7 @@
               <type>	union	</type>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/snow/slip_{0}_trackrear_spd3.xml	</name>
+                <name>	particles/Tank/movement/snow/slip_{0}_trackrear_spd3.eff	</name>
                 <effectHP>	_TrackRear	</effectHP>
               </selector>
             </selector>
@@ -1940,17 +1940,17 @@
               <type>	union	</type>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/sand/trail_{0}_spd3.xml	</name>
+                <name>	particles/Tank/movement/sand/trail_{0}_spd3.eff	</name>
                 <effectHP>	_TrackRear	</effectHP>
               </selector>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/sand/trail_{0}_front_spd3.xml	</name>
+                <name>	particles/Tank/movement/sand/trail_{0}_front_spd3.eff	</name>
                 <effectHP>	_TrackFront	</effectHP>
               </selector>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/sand/trail_{0}_front_up_spd3.xml	</name>
+                <name>	particles/Tank/movement/sand/trail_{0}_front_up_spd3.eff	</name>
                 <effectHP>	_TrackUpFront	</effectHP>
               </selector>
             </selector>
@@ -1959,17 +1959,17 @@
               <type>	union	</type>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/sand/trail_{0}_spd2.xml	</name>
+                <name>	particles/Tank/movement/sand/trail_{0}_spd2.eff	</name>
                 <effectHP>	_TrackRear	</effectHP>
               </selector>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/sand/trail_{0}_front_spd2.xml	</name>
+                <name>	particles/Tank/movement/sand/trail_{0}_front_spd2.eff	</name>
                 <effectHP>	_TrackFront	</effectHP>
               </selector>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/sand/trail_{0}_front_up_spd2.xml	</name>
+                <name>	particles/Tank/movement/sand/trail_{0}_front_up_spd2.eff	</name>
                 <effectHP>	_TrackUpFront	</effectHP>
               </selector>
             </selector>
@@ -1978,17 +1978,17 @@
               <type>	union	</type>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/sand/trail_{0}_spd1.xml	</name>
+                <name>	particles/Tank/movement/sand/trail_{0}_spd1.eff	</name>
                 <effectHP>	_TrackRear	</effectHP>
               </selector>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/sand/trail_{0}_front_spd1.xml	</name>
+                <name>	particles/Tank/movement/sand/trail_{0}_front_spd1.eff	</name>
                 <effectHP>	_TrackFront	</effectHP>
               </selector>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/sand/trail_{0}_front_up_spd1.xml	</name>
+                <name>	particles/Tank/movement/sand/trail_{0}_front_up_spd1.eff	</name>
                 <effectHP>	_TrackUpFront	</effectHP>
               </selector>
             </selector>
@@ -2001,17 +2001,17 @@
               <type>	union	</type>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/sand/trail_{0}_spd1.xml	</name>
+                <name>	particles/Tank/movement/sand/trail_{0}_spd1.eff	</name>
                 <effectHP>	_TrackRear	</effectHP>
               </selector>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/sand/trail_{0}_front_spd1.xml	</name>
+                <name>	particles/Tank/movement/sand/trail_{0}_front_spd1.eff	</name>
                 <effectHP>	_TrackFront	</effectHP>
               </selector>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/sand/trail_{0}_front_up_spd1.xml	</name>
+                <name>	particles/Tank/movement/sand/trail_{0}_front_up_spd1.eff	</name>
                 <effectHP>	_TrackUpFront	</effectHP>
               </selector>
             </selector>
@@ -2020,17 +2020,17 @@
               <type>	union	</type>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/sand/trail_{0}_spd2.xml	</name>
+                <name>	particles/Tank/movement/sand/trail_{0}_spd2.eff	</name>
                 <effectHP>	_TrackRear	</effectHP>
               </selector>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/sand/trail_{0}_front_spd2.xml	</name>
+                <name>	particles/Tank/movement/sand/trail_{0}_front_spd2.eff	</name>
                 <effectHP>	_TrackFront	</effectHP>
               </selector>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/sand/trail_{0}_front_up_spd2.xml	</name>
+                <name>	particles/Tank/movement/sand/trail_{0}_front_up_spd2.eff	</name>
                 <effectHP>	_TrackUpFront	</effectHP>
               </selector>
             </selector>
@@ -2039,17 +2039,17 @@
               <type>	union	</type>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/sand/trail_{0}_spd3.xml	</name>
+                <name>	particles/Tank/movement/sand/trail_{0}_spd3.eff	</name>
                 <effectHP>	_TrackRear	</effectHP>
               </selector>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/sand/trail_{0}_front_spd3.xml	</name>
+                <name>	particles/Tank/movement/sand/trail_{0}_front_spd3.eff	</name>
                 <effectHP>	_TrackFront	</effectHP>
               </selector>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/sand/trail_{0}_front_up_spd3.xml	</name>
+                <name>	particles/Tank/movement/sand/trail_{0}_front_up_spd3.eff	</name>
                 <effectHP>	_TrackUpFront	</effectHP>
               </selector>
             </selector>
@@ -2067,17 +2067,17 @@
               <type>	union	</type>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/ground/trail_{0}_spd3.xml	</name>
+                <name>	particles/Tank/movement/ground/trail_{0}_spd3.eff	</name>
                 <effectHP>	_TrackRear	</effectHP>
               </selector>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/ground/trail_{0}_front_spd3.xml	</name>
+                <name>	particles/Tank/movement/ground/trail_{0}_front_spd3.eff	</name>
                 <effectHP>	_TrackFront	</effectHP>
               </selector>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/ground/trail_{0}_front_up_spd3.xml	</name>
+                <name>	particles/Tank/movement/ground/trail_{0}_front_up_spd3.eff	</name>
                 <effectHP>	_TrackUpFront	</effectHP>
               </selector>
             </selector>
@@ -2086,17 +2086,17 @@
               <type>	union	</type>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/ground/trail_{0}_spd2.xml	</name>
+                <name>	particles/Tank/movement/ground/trail_{0}_spd2.eff	</name>
                 <effectHP>	_TrackRear	</effectHP>
               </selector>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/ground/trail_{0}_front_spd2.xml	</name>
+                <name>	particles/Tank/movement/ground/trail_{0}_front_spd2.eff	</name>
                 <effectHP>	_TrackFront	</effectHP>
               </selector>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/ground/trail_{0}_front_up_spd2.xml	</name>
+                <name>	particles/Tank/movement/ground/trail_{0}_front_up_spd2.eff	</name>
                 <effectHP>	_TrackUpFront	</effectHP>
               </selector>
             </selector>
@@ -2105,17 +2105,17 @@
               <type>	union	</type>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/ground/trail_{0}_spd1.xml	</name>
+                <name>	particles/Tank/movement/ground/trail_{0}_spd1.eff	</name>
                 <effectHP>	_TrackRear	</effectHP>
               </selector>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/ground/trail_{0}_front_spd1.xml	</name>
+                <name>	particles/Tank/movement/ground/trail_{0}_front_spd1.eff	</name>
                 <effectHP>	_TrackFront	</effectHP>
               </selector>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/ground/trail_{0}_front_up_spd1.xml	</name>
+                <name>	particles/Tank/movement/ground/trail_{0}_front_up_spd1.eff	</name>
                 <effectHP>	_TrackUpFront	</effectHP>
               </selector>
             </selector>
@@ -2128,17 +2128,17 @@
               <type>	union	</type>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/ground/trail_{0}_spd1.xml	</name>
+                <name>	particles/Tank/movement/ground/trail_{0}_spd1.eff	</name>
                 <effectHP>	_TrackRear	</effectHP>
               </selector>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/ground/trail_{0}_front_spd1.xml	</name>
+                <name>	particles/Tank/movement/ground/trail_{0}_front_spd1.eff	</name>
                 <effectHP>	_TrackFront	</effectHP>
               </selector>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/ground/trail_{0}_front_up_spd1.xml	</name>
+                <name>	particles/Tank/movement/ground/trail_{0}_front_up_spd1.eff	</name>
                 <effectHP>	_TrackUpFront	</effectHP>
               </selector>
             </selector>
@@ -2147,17 +2147,17 @@
               <type>	union	</type>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/ground/trail_{0}_spd2.xml	</name>
+                <name>	particles/Tank/movement/ground/trail_{0}_spd2.eff	</name>
                 <effectHP>	_TrackRear	</effectHP>
               </selector>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/ground/trail_{0}_front_spd2.xml	</name>
+                <name>	particles/Tank/movement/ground/trail_{0}_front_spd2.eff	</name>
                 <effectHP>	_TrackFront	</effectHP>
               </selector>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/ground/trail_{0}_front_up_spd2.xml	</name>
+                <name>	particles/Tank/movement/ground/trail_{0}_front_up_spd2.eff	</name>
                 <effectHP>	_TrackUpFront	</effectHP>
               </selector>
             </selector>
@@ -2166,17 +2166,17 @@
               <type>	union	</type>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/ground/trail_{0}_spd3.xml	</name>
+                <name>	particles/Tank/movement/ground/trail_{0}_spd3.eff	</name>
                 <effectHP>	_TrackRear	</effectHP>
               </selector>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/ground/trail_{0}_front_spd3.xml	</name>
+                <name>	particles/Tank/movement/ground/trail_{0}_front_spd3.eff	</name>
                 <effectHP>	_TrackFront	</effectHP>
               </selector>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/ground/trail_{0}_front_up_spd3.xml	</name>
+                <name>	particles/Tank/movement/ground/trail_{0}_front_up_spd3.eff	</name>
                 <effectHP>	_TrackUpFront	</effectHP>
               </selector>
             </selector>
@@ -2195,17 +2195,17 @@
               <type>	union	</type>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/stone/trail_{0}_spd3.xml	</name>
+                <name>	particles/Tank/movement/stone/trail_{0}_spd3.eff	</name>
                 <effectHP>	_TrackRear	</effectHP>
               </selector>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/stone/trail_{0}_front_spd3.xml	</name>
+                <name>	particles/Tank/movement/stone/trail_{0}_front_spd3.eff	</name>
                 <effectHP>	_TrackFront	</effectHP>
               </selector>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/stone/trail_{0}_front_up_spd3.xml	</name>
+                <name>	particles/Tank/movement/stone/trail_{0}_front_up_spd3.eff	</name>
                 <effectHP>	_TrackUpFront	</effectHP>
               </selector>
             </selector>
@@ -2214,17 +2214,17 @@
               <type>	union	</type>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/stone/trail_{0}_spd2.xml	</name>
+                <name>	particles/Tank/movement/stone/trail_{0}_spd2.eff	</name>
                 <effectHP>	_TrackRear	</effectHP>
               </selector>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/stone/trail_{0}_front_spd2.xml	</name>
+                <name>	particles/Tank/movement/stone/trail_{0}_front_spd2.eff	</name>
                 <effectHP>	_TrackFront	</effectHP>
               </selector>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/stone/trail_{0}_front_up_spd2.xml	</name>
+                <name>	particles/Tank/movement/stone/trail_{0}_front_up_spd2.eff	</name>
                 <effectHP>	_TrackUpFront	</effectHP>
               </selector>
             </selector>
@@ -2233,12 +2233,12 @@
               <type>	union	</type>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/stone/trail_{0}_spd1.xml	</name>
+                <name>	particles/Tank/movement/stone/trail_{0}_spd1.eff	</name>
                 <effectHP>	_TrackRear	</effectHP>
               </selector>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/stone/trail_{0}_front_up_spd1.xml	</name>
+                <name>	particles/Tank/movement/stone/trail_{0}_front_up_spd1.eff	</name>
                 <effectHP>	_TrackUpFront	</effectHP>
               </selector>
             </selector>
@@ -2251,12 +2251,12 @@
               <type>	union	</type>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/stone/trail_{0}_spd1.xml	</name>
+                <name>	particles/Tank/movement/stone/trail_{0}_spd1.eff	</name>
                 <effectHP>	_TrackRear	</effectHP>
               </selector>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/stone/trail_{0}_front_up_spd1.xml	</name>
+                <name>	particles/Tank/movement/stone/trail_{0}_front_up_spd1.eff	</name>
                 <effectHP>	_TrackUpFront	</effectHP>
               </selector>
             </selector>
@@ -2265,17 +2265,17 @@
               <type>	union	</type>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/stone/trail_{0}_spd2.xml	</name>
+                <name>	particles/Tank/movement/stone/trail_{0}_spd2.eff	</name>
                 <effectHP>	_TrackRear	</effectHP>
               </selector>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/stone/trail_{0}_front_spd2.xml	</name>
+                <name>	particles/Tank/movement/stone/trail_{0}_front_spd2.eff	</name>
                 <effectHP>	_TrackFront	</effectHP>
               </selector>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/stone/trail_{0}_front_up_spd2.xml	</name>
+                <name>	particles/Tank/movement/stone/trail_{0}_front_up_spd2.eff	</name>
                 <effectHP>	_TrackUpFront	</effectHP>
               </selector>
             </selector>
@@ -2284,17 +2284,17 @@
               <type>	union	</type>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/stone/trail_{0}_spd3.xml	</name>
+                <name>	particles/Tank/movement/stone/trail_{0}_spd3.eff	</name>
                 <effectHP>	_TrackRear	</effectHP>
               </selector>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/stone/trail_{0}_front_spd3.xml	</name>
+                <name>	particles/Tank/movement/stone/trail_{0}_front_spd3.eff	</name>
                 <effectHP>	_TrackFront	</effectHP>
               </selector>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/stone/trail_{0}_front_up_spd3.xml	</name>
+                <name>	particles/Tank/movement/stone/trail_{0}_front_up_spd3.eff	</name>
                 <effectHP>	_TrackUpFront	</effectHP>
               </selector>
             </selector>
@@ -2313,17 +2313,17 @@
               <type>	union	</type>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/snow/trail_{0}_spd3.xml	</name>
+                <name>	particles/Tank/movement/snow/trail_{0}_spd3.eff	</name>
                 <effectHP>	_TrackRear	</effectHP>
               </selector>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/snow/trail_{0}_front_spd3.xml	</name>
+                <name>	particles/Tank/movement/snow/trail_{0}_front_spd3.eff	</name>
                 <effectHP>	_TrackFront	</effectHP>
               </selector>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/snow/trail_{0}_front_up_spd3.xml	</name>
+                <name>	particles/Tank/movement/snow/trail_{0}_front_up_spd3.eff	</name>
                 <effectHP>	_TrackUpFront	</effectHP>
               </selector>
             </selector>
@@ -2332,17 +2332,17 @@
               <type>	union	</type>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/snow/trail_{0}_spd2.xml	</name>
+                <name>	particles/Tank/movement/snow/trail_{0}_spd2.eff	</name>
                 <effectHP>	_TrackRear	</effectHP>
               </selector>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/snow/trail_{0}_front_spd2.xml	</name>
+                <name>	particles/Tank/movement/snow/trail_{0}_front_spd2.eff	</name>
                 <effectHP>	_TrackFront	</effectHP>
               </selector>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/snow/trail_{0}_front_up_spd2.xml	</name>
+                <name>	particles/Tank/movement/snow/trail_{0}_front_up_spd2.eff	</name>
                 <effectHP>	_TrackUpFront	</effectHP>
               </selector>
             </selector>
@@ -2351,17 +2351,17 @@
               <type>	union	</type>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/snow/trail_{0}_spd1.xml	</name>
+                <name>	particles/Tank/movement/snow/trail_{0}_spd1.eff	</name>
                 <effectHP>	_TrackRear	</effectHP>
               </selector>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/snow/trail_{0}_front_spd1.xml	</name>
+                <name>	particles/Tank/movement/snow/trail_{0}_front_spd1.eff	</name>
                 <effectHP>	_TrackFront	</effectHP>
               </selector>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/snow/trail_{0}_front_up_spd1.xml	</name>
+                <name>	particles/Tank/movement/snow/trail_{0}_front_up_spd1.eff	</name>
                 <effectHP>	_TrackUpFront	</effectHP>
               </selector>
             </selector>
@@ -2374,17 +2374,17 @@
               <type>	union	</type>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/snow/trail_{0}_spd1.xml	</name>
+                <name>	particles/Tank/movement/snow/trail_{0}_spd1.eff	</name>
                 <effectHP>	_TrackRear	</effectHP>
               </selector>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/snow/trail_{0}_front_spd1.xml	</name>
+                <name>	particles/Tank/movement/snow/trail_{0}_front_spd1.eff	</name>
                 <effectHP>	_TrackFront	</effectHP>
               </selector>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/snow/trail_{0}_front_up_spd1.xml	</name>
+                <name>	particles/Tank/movement/snow/trail_{0}_front_up_spd1.eff	</name>
                 <effectHP>	_TrackUpFront	</effectHP>
               </selector>
             </selector>
@@ -2393,17 +2393,17 @@
               <type>	union	</type>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/snow/trail_{0}_spd2.xml	</name>
+                <name>	particles/Tank/movement/snow/trail_{0}_spd2.eff	</name>
                 <effectHP>	_TrackRear	</effectHP>
               </selector>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/snow/trail_{0}_front_spd2.xml	</name>
+                <name>	particles/Tank/movement/snow/trail_{0}_front_spd2.eff	</name>
                 <effectHP>	_TrackFront	</effectHP>
               </selector>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/snow/trail_{0}_front_up_spd2.xml	</name>
+                <name>	particles/Tank/movement/snow/trail_{0}_front_up_spd2.eff	</name>
                 <effectHP>	_TrackUpFront	</effectHP>
               </selector>
             </selector>
@@ -2412,17 +2412,17 @@
               <type>	union	</type>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/snow/trail_{0}_spd3.xml	</name>
+                <name>	particles/Tank/movement/snow/trail_{0}_spd3.eff	</name>
                 <effectHP>	_TrackRear	</effectHP>
               </selector>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/snow/trail_{0}_front_spd3.xml	</name>
+                <name>	particles/Tank/movement/snow/trail_{0}_front_spd3.eff	</name>
                 <effectHP>	_TrackFront	</effectHP>
               </selector>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/snow/trail_{0}_front_up_spd3.xml	</name>
+                <name>	particles/Tank/movement/snow/trail_{0}_front_up_spd3.eff	</name>
                 <effectHP>	_TrackUpFront	</effectHP>
               </selector>
             </selector>
@@ -2445,12 +2445,12 @@
                 <type>	union	</type>
                 <selector>
                   <type>	effect	</type>
-                  <name>	particles/Tank/movement/water/trail_{0}_r_front_spd3.xml	</name>
+                  <name>	particles/Tank/movement/water/trail_{0}_r_front_spd3.eff	</name>
                   <effectHP>	_TrackFront	</effectHP>
                 </selector>
                 <selector>
                   <type>	effect	</type>
-                  <name>	particles/Tank/movement/water/trail_{0}_r_spd3.xml	</name>
+                  <name>	particles/Tank/movement/water/trail_{0}_r_spd3.eff	</name>
                   <effectHP>	_TrackRear	</effectHP>
                 </selector>
               </selector>
@@ -2459,12 +2459,12 @@
                 <type>	union	</type>
                 <selector>
                   <type>	effect	</type>
-                  <name>	particles/Tank/movement/water/trail_{0}_r_front_spd2.xml	</name>
+                  <name>	particles/Tank/movement/water/trail_{0}_r_front_spd2.eff	</name>
                   <effectHP>	_TrackFront	</effectHP>
                 </selector>
                 <selector>
                   <type>	effect	</type>
-                  <name>	particles/Tank/movement/water/trail_{0}_r_spd2.xml	</name>
+                  <name>	particles/Tank/movement/water/trail_{0}_r_spd2.eff	</name>
                   <effectHP>	_TrackRear	</effectHP>
                 </selector>
               </selector>
@@ -2473,12 +2473,12 @@
                 <type>	union	</type>
                 <selector>
                   <type>	effect	</type>
-                  <name>	particles/Tank/movement/water/trail_{0}_r_front_spd1.xml	</name>
+                  <name>	particles/Tank/movement/water/trail_{0}_r_front_spd1.eff	</name>
                   <effectHP>	_TrackFront	</effectHP>
                 </selector>
                 <selector>
                   <type>	effect	</type>
-                  <name>	particles/Tank/movement/water/trail_{0}_r_spd1.xml	</name>
+                  <name>	particles/Tank/movement/water/trail_{0}_r_spd1.eff	</name>
                   <effectHP>	_TrackRear	</effectHP>
                 </selector>
               </selector>
@@ -2487,12 +2487,12 @@
                 <type>	union	</type>
                 <selector>
                   <type>	effect	</type>
-                  <name>	particles/Tank/movement/water/trail_{0}_r_front_spd0.xml	</name>
+                  <name>	particles/Tank/movement/water/trail_{0}_r_front_spd0.eff	</name>
                   <effectHP>	_TrackFront	</effectHP>
                 </selector>
                 <selector>
                   <type>	effect	</type>
-                  <name>	particles/Tank/movement/water/trail_{0}_r_spd0.xml	</name>
+                  <name>	particles/Tank/movement/water/trail_{0}_r_spd0.eff	</name>
                   <effectHP>	_TrackRear	</effectHP>
                 </selector>
               </selector>
@@ -2505,12 +2505,12 @@
                 <type>	union	</type>
                 <selector>
                   <type>	effect	</type>
-                  <name>	particles/Tank/movement/water/trail_{0}_r_spd0.xml	</name>
+                  <name>	particles/Tank/movement/water/trail_{0}_r_spd0.eff	</name>
                   <effectHP>	_TrackRear	</effectHP>
                 </selector>
                 <selector>
                   <type>	effect	</type>
-                  <name>	particles/Tank/movement/water/trail_{0}_r_front_spd0.xml	</name>
+                  <name>	particles/Tank/movement/water/trail_{0}_r_front_spd0.eff	</name>
                   <effectHP>	_TrackFront	</effectHP>
                 </selector>
               </selector>
@@ -2519,12 +2519,12 @@
                 <type>	union	</type>
                 <selector>
                   <type>	effect	</type>
-                  <name>	particles/Tank/movement/water/trail_{0}_r_spd1.xml	</name>
+                  <name>	particles/Tank/movement/water/trail_{0}_r_spd1.eff	</name>
                   <effectHP>	_TrackRear	</effectHP>
                 </selector>
                 <selector>
                   <type>	effect	</type>
-                  <name>	particles/Tank/movement/water/trail_{0}_r_front_spd1.xml	</name>
+                  <name>	particles/Tank/movement/water/trail_{0}_r_front_spd1.eff	</name>
                   <effectHP>	_TrackFront	</effectHP>
                 </selector>
               </selector>
@@ -2533,12 +2533,12 @@
                 <type>	union	</type>
                 <selector>
                   <type>	effect	</type>
-                  <name>	particles/Tank/movement/water/trail_{0}_r_spd2.xml	</name>
+                  <name>	particles/Tank/movement/water/trail_{0}_r_spd2.eff	</name>
                   <effectHP>	_TrackRear	</effectHP>
                 </selector>
                 <selector>
                   <type>	effect	</type>
-                  <name>	particles/Tank/movement/water/trail_{0}_r_front_spd2.xml	</name>
+                  <name>	particles/Tank/movement/water/trail_{0}_r_front_spd2.eff	</name>
                   <effectHP>	_TrackFront	</effectHP>
                 </selector>
               </selector>
@@ -2547,12 +2547,12 @@
                 <type>	union	</type>
                 <selector>
                   <type>	effect	</type>
-                  <name>	particles/Tank/movement/water/trail_{0}_r_spd3.xml	</name>
+                  <name>	particles/Tank/movement/water/trail_{0}_r_spd3.eff	</name>
                   <effectHP>	_TrackRear	</effectHP>
                 </selector>
                 <selector>
                   <type>	effect	</type>
-                  <name>	particles/Tank/movement/water/trail_{0}_r_front_spd3.xml	</name>
+                  <name>	particles/Tank/movement/water/trail_{0}_r_front_spd3.eff	</name>
                   <effectHP>	_TrackFront	</effectHP>
                 </selector>
               </selector>
@@ -2566,7 +2566,7 @@
                 <type>	union	</type>
                 <selector>
                   <type>	effect	</type>
-                  <name>	particles/Tank/movement/water/trail_{0}_underwater_spdBack.xml	</name>
+                  <name>	particles/Tank/movement/water/trail_{0}_underwater_spdBack.eff	</name>
                   <effectHP>	_TankDust	</effectHP>
                 </selector>
               </selector>
@@ -2575,7 +2575,7 @@
                 <type>	union	</type>
                 <selector>
                   <type>	effect	</type>
-                  <name>	particles/Tank/movement/water/trail_{0}_underwater_spd0.xml	</name>
+                  <name>	particles/Tank/movement/water/trail_{0}_underwater_spd0.eff	</name>
                   <effectHP>	_TankDust	</effectHP>
                 </selector>
               </selector>
@@ -2584,7 +2584,7 @@
                 <type>	union	</type>
                 <selector>
                   <type>	effect	</type>
-                  <name>	particles/Tank/movement/water/trail_{0}_underwater_spd1.xml	</name>
+                  <name>	particles/Tank/movement/water/trail_{0}_underwater_spd1.eff	</name>
                   <effectHP>	_TankDust	</effectHP>
                 </selector>
               </selector>
@@ -2611,17 +2611,17 @@
               <type>	union	</type>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/sand/trail_{0}_front_spd3.xml	</name>
+                <name>	particles/Tank/movement/sand/trail_{0}_front_spd3.eff	</name>
                 <effectHP>	_TrackFront	</effectHP>
               </selector>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/sand/trail_{0}_spd3.xml	</name>
+                <name>	particles/Tank/movement/sand/trail_{0}_spd3.eff	</name>
                 <effectHP>	_TrackRear	</effectHP>
               </selector>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/sand/trail_{0}_front_up_spd3.xml	</name>
+                <name>	particles/Tank/movement/sand/trail_{0}_front_up_spd3.eff	</name>
                 <effectHP>	_TrackUpFront	</effectHP>
               </selector>
             </selector>
@@ -2630,17 +2630,17 @@
               <type>	union	</type>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/sand/trail_{0}_front_spd2.xml	</name>
+                <name>	particles/Tank/movement/sand/trail_{0}_front_spd2.eff	</name>
                 <effectHP>	_TrackFront	</effectHP>
               </selector>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/sand/trail_{0}_spd2.xml	</name>
+                <name>	particles/Tank/movement/sand/trail_{0}_spd2.eff	</name>
                 <effectHP>	_TrackRear	</effectHP>
               </selector>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/sand/trail_{0}_front_up_spd2.xml	</name>
+                <name>	particles/Tank/movement/sand/trail_{0}_front_up_spd2.eff	</name>
                 <effectHP>	_TrackUpFront	</effectHP>
               </selector>
             </selector>
@@ -2649,17 +2649,17 @@
               <type>	union	</type>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/sand/trail_{0}_front_spd1.xml	</name>
+                <name>	particles/Tank/movement/sand/trail_{0}_front_spd1.eff	</name>
                 <effectHP>	_TrackFront	</effectHP>
               </selector>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/sand/trail_{0}_spd1.xml	</name>
+                <name>	particles/Tank/movement/sand/trail_{0}_spd1.eff	</name>
                 <effectHP>	_TrackRear	</effectHP>
               </selector>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/sand/trail_{0}_front_up_spd1.xml	</name>
+                <name>	particles/Tank/movement/sand/trail_{0}_front_up_spd1.eff	</name>
                 <effectHP>	_TrackUpFront	</effectHP>
               </selector>
             </selector>
@@ -2672,17 +2672,17 @@
               <type>	union	</type>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/sand/trail_{0}_front_spd1.xml	</name>
+                <name>	particles/Tank/movement/sand/trail_{0}_front_spd1.eff	</name>
                 <effectHP>	_TrackFront	</effectHP>
               </selector>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/sand/trail_{0}_spd1.xml	</name>
+                <name>	particles/Tank/movement/sand/trail_{0}_spd1.eff	</name>
                 <effectHP>	_TrackRear	</effectHP>
               </selector>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/sand/trail_{0}_front_up_spd1.xml	</name>
+                <name>	particles/Tank/movement/sand/trail_{0}_front_up_spd1.eff	</name>
                 <effectHP>	_TrackUpFront	</effectHP>
               </selector>
             </selector>
@@ -2691,17 +2691,17 @@
               <type>	union	</type>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/sand/trail_{0}_front_spd2.xml	</name>
+                <name>	particles/Tank/movement/sand/trail_{0}_front_spd2.eff	</name>
                 <effectHP>	_TrackFront	</effectHP>
               </selector>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/sand/trail_{0}_spd2.xml	</name>
+                <name>	particles/Tank/movement/sand/trail_{0}_spd2.eff	</name>
                 <effectHP>	_TrackRear	</effectHP>
               </selector>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/sand/trail_{0}_front_up_spd2.xml	</name>
+                <name>	particles/Tank/movement/sand/trail_{0}_front_up_spd2.eff	</name>
                 <effectHP>	_TrackUpFront	</effectHP>
               </selector>
             </selector>
@@ -2710,22 +2710,22 @@
               <type>	union	</type>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/sand/trail_{0}_front_spd3.xml	</name>
+                <name>	particles/Tank/movement/sand/trail_{0}_front_spd3.eff	</name>
                 <effectHP>	_TrackFront	</effectHP>
               </selector>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/sand/trail_{0}_spd3.xml	</name>
+                <name>	particles/Tank/movement/sand/trail_{0}_spd3.eff	</name>
                 <effectHP>	_TrackRear	</effectHP>
               </selector>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/sand/trail_{0}_front_up_spd3.xml	</name>
+                <name>	particles/Tank/movement/sand/trail_{0}_front_up_spd3.eff	</name>
                 <effectHP>	_TrackUpFront	</effectHP>
               </selector>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/sand/dust_{0}.xml	</name>
+                <name>	particles/Tank/movement/sand/dust_{0}.eff	</name>
                 <effectHP>	_TankDust	</effectHP>
               </selector>
             </selector>
@@ -2744,17 +2744,17 @@
               <type>	union	</type>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/ground/trail_{0}_spd3.xml	</name>
+                <name>	particles/Tank/movement/ground/trail_{0}_spd3.eff	</name>
                 <effectHP>	_TrackRear	</effectHP>
               </selector>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/ground/trail_{0}_front_spd3.xml	</name>
+                <name>	particles/Tank/movement/ground/trail_{0}_front_spd3.eff	</name>
                 <effectHP>	_TrackFront	</effectHP>
               </selector>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/ground/trail_{0}_front_up_spd3.xml	</name>
+                <name>	particles/Tank/movement/ground/trail_{0}_front_up_spd3.eff	</name>
                 <effectHP>	_TrackUpFront	</effectHP>
               </selector>
             </selector>
@@ -2763,17 +2763,17 @@
               <type>	union	</type>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/ground/trail_{0}_spd2.xml	</name>
+                <name>	particles/Tank/movement/ground/trail_{0}_spd2.eff	</name>
                 <effectHP>	_TrackRear	</effectHP>
               </selector>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/ground/trail_{0}_front_spd2.xml	</name>
+                <name>	particles/Tank/movement/ground/trail_{0}_front_spd2.eff	</name>
                 <effectHP>	_TrackFront	</effectHP>
               </selector>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/ground/trail_{0}_front_up_spd2.xml	</name>
+                <name>	particles/Tank/movement/ground/trail_{0}_front_up_spd2.eff	</name>
                 <effectHP>	_TrackUpFront	</effectHP>
               </selector>
             </selector>
@@ -2782,17 +2782,17 @@
               <type>	union	</type>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/ground/trail_{0}_spd1.xml	</name>
+                <name>	particles/Tank/movement/ground/trail_{0}_spd1.eff	</name>
                 <effectHP>	_TrackRear	</effectHP>
               </selector>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/ground/trail_{0}_front_spd1.xml	</name>
+                <name>	particles/Tank/movement/ground/trail_{0}_front_spd1.eff	</name>
                 <effectHP>	_TrackFront	</effectHP>
               </selector>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/ground/trail_{0}_front_up_spd1.xml	</name>
+                <name>	particles/Tank/movement/ground/trail_{0}_front_up_spd1.eff	</name>
                 <effectHP>	_TrackUpFront	</effectHP>
               </selector>
             </selector>
@@ -2805,17 +2805,17 @@
               <type>	union	</type>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/ground/trail_{0}_spd1.xml	</name>
+                <name>	particles/Tank/movement/ground/trail_{0}_spd1.eff	</name>
                 <effectHP>	_TrackRear	</effectHP>
               </selector>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/ground/trail_{0}_front_spd1.xml	</name>
+                <name>	particles/Tank/movement/ground/trail_{0}_front_spd1.eff	</name>
                 <effectHP>	_TrackFront	</effectHP>
               </selector>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/ground/trail_{0}_front_up_spd1.xml	</name>
+                <name>	particles/Tank/movement/ground/trail_{0}_front_up_spd1.eff	</name>
                 <effectHP>	_TrackUpFront	</effectHP>
               </selector>
             </selector>
@@ -2824,17 +2824,17 @@
               <type>	union	</type>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/ground/trail_{0}_spd2.xml	</name>
+                <name>	particles/Tank/movement/ground/trail_{0}_spd2.eff	</name>
                 <effectHP>	_TrackRear	</effectHP>
               </selector>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/ground/trail_{0}_front_spd2.xml	</name>
+                <name>	particles/Tank/movement/ground/trail_{0}_front_spd2.eff	</name>
                 <effectHP>	_TrackFront	</effectHP>
               </selector>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/ground/trail_{0}_front_up_spd2.xml	</name>
+                <name>	particles/Tank/movement/ground/trail_{0}_front_up_spd2.eff	</name>
                 <effectHP>	_TrackUpFront	</effectHP>
               </selector>
             </selector>
@@ -2843,17 +2843,17 @@
               <type>	union	</type>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/ground/trail_{0}_spd3.xml	</name>
+                <name>	particles/Tank/movement/ground/trail_{0}_spd3.eff	</name>
                 <effectHP>	_TrackRear	</effectHP>
               </selector>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/ground/trail_{0}_front_spd3.xml	</name>
+                <name>	particles/Tank/movement/ground/trail_{0}_front_spd3.eff	</name>
                 <effectHP>	_TrackFront	</effectHP>
               </selector>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/ground/trail_{0}_front_up_spd3.xml	</name>
+                <name>	particles/Tank/movement/ground/trail_{0}_front_up_spd3.eff	</name>
                 <effectHP>	_TrackUpFront	</effectHP>
               </selector>
             </selector>
@@ -2872,17 +2872,17 @@
               <type>	union	</type>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/stone/trail_{0}_spd3.xml	</name>
+                <name>	particles/Tank/movement/stone/trail_{0}_spd3.eff	</name>
                 <effectHP>	_TrackRear	</effectHP>
               </selector>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/stone/trail_{0}_front_spd3.xml	</name>
+                <name>	particles/Tank/movement/stone/trail_{0}_front_spd3.eff	</name>
                 <effectHP>	_TrackFront	</effectHP>
               </selector>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/stone/trail_{0}_front_up_spd3.xml	</name>
+                <name>	particles/Tank/movement/stone/trail_{0}_front_up_spd3.eff	</name>
                 <effectHP>	_TrackUpFront	</effectHP>
               </selector>
             </selector>
@@ -2891,17 +2891,17 @@
               <type>	union	</type>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/stone/trail_{0}_spd2.xml	</name>
+                <name>	particles/Tank/movement/stone/trail_{0}_spd2.eff	</name>
                 <effectHP>	_TrackRear	</effectHP>
               </selector>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/stone/trail_{0}_front_spd2.xml	</name>
+                <name>	particles/Tank/movement/stone/trail_{0}_front_spd2.eff	</name>
                 <effectHP>	_TrackFront	</effectHP>
               </selector>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/stone/trail_{0}_front_up_spd2.xml	</name>
+                <name>	particles/Tank/movement/stone/trail_{0}_front_up_spd2.eff	</name>
                 <effectHP>	_TrackUpFront	</effectHP>
               </selector>
             </selector>
@@ -2910,12 +2910,12 @@
               <type>	union	</type>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/stone/trail_{0}_spd1.xml	</name>
+                <name>	particles/Tank/movement/stone/trail_{0}_spd1.eff	</name>
                 <effectHP>	_TrackRear	</effectHP>
               </selector>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/stone/trail_{0}_front_up_spd1.xml	</name>
+                <name>	particles/Tank/movement/stone/trail_{0}_front_up_spd1.eff	</name>
                 <effectHP>	_TrackUpFront	</effectHP>
               </selector>
             </selector>
@@ -2928,12 +2928,12 @@
               <type>	union	</type>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/stone/trail_{0}_spd1.xml	</name>
+                <name>	particles/Tank/movement/stone/trail_{0}_spd1.eff	</name>
                 <effectHP>	_TrackRear	</effectHP>
               </selector>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/stone/trail_{0}_front_up_spd1.xml	</name>
+                <name>	particles/Tank/movement/stone/trail_{0}_front_up_spd1.eff	</name>
                 <effectHP>	_TrackUpFront	</effectHP>
               </selector>
             </selector>
@@ -2942,17 +2942,17 @@
               <type>	union	</type>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/stone/trail_{0}_spd2.xml	</name>
+                <name>	particles/Tank/movement/stone/trail_{0}_spd2.eff	</name>
                 <effectHP>	_TrackRear	</effectHP>
               </selector>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/stone/trail_{0}_front_spd2.xml	</name>
+                <name>	particles/Tank/movement/stone/trail_{0}_front_spd2.eff	</name>
                 <effectHP>	_TrackFront	</effectHP>
               </selector>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/stone/trail_{0}_front_up_spd2.xml	</name>
+                <name>	particles/Tank/movement/stone/trail_{0}_front_up_spd2.eff	</name>
                 <effectHP>	_TrackUpFront	</effectHP>
               </selector>
             </selector>
@@ -2961,17 +2961,17 @@
               <type>	union	</type>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/stone/trail_{0}_spd3.xml	</name>
+                <name>	particles/Tank/movement/stone/trail_{0}_spd3.eff	</name>
                 <effectHP>	_TrackRear	</effectHP>
               </selector>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/stone/trail_{0}_front_spd3.xml	</name>
+                <name>	particles/Tank/movement/stone/trail_{0}_front_spd3.eff	</name>
                 <effectHP>	_TrackFront	</effectHP>
               </selector>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/stone/trail_{0}_front_up_spd3.xml	</name>
+                <name>	particles/Tank/movement/stone/trail_{0}_front_up_spd3.eff	</name>
                 <effectHP>	_TrackUpFront	</effectHP>
               </selector>
             </selector>
@@ -2990,17 +2990,17 @@
               <type>	union	</type>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/snow/trail_{0}_front_spd3.xml	</name>
+                <name>	particles/Tank/movement/snow/trail_{0}_front_spd3.eff	</name>
                 <effectHP>	_TrackFront	</effectHP>
               </selector>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/snow/trail_{0}_spd3.xml	</name>
+                <name>	particles/Tank/movement/snow/trail_{0}_spd3.eff	</name>
                 <effectHP>	_TrackRear	</effectHP>
               </selector>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/snow/trail_{0}_front_up_spd3.xml	</name>
+                <name>	particles/Tank/movement/snow/trail_{0}_front_up_spd3.eff	</name>
                 <effectHP>	_TrackUpFront	</effectHP>
               </selector>
             </selector>
@@ -3009,17 +3009,17 @@
               <type>	union	</type>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/snow/trail_{0}_front_spd2.xml	</name>
+                <name>	particles/Tank/movement/snow/trail_{0}_front_spd2.eff	</name>
                 <effectHP>	_TrackFront	</effectHP>
               </selector>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/snow/trail_{0}_spd2.xml	</name>
+                <name>	particles/Tank/movement/snow/trail_{0}_spd2.eff	</name>
                 <effectHP>	_TrackRear	</effectHP>
               </selector>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/snow/trail_{0}_front_up_spd2.xml	</name>
+                <name>	particles/Tank/movement/snow/trail_{0}_front_up_spd2.eff	</name>
                 <effectHP>	_TrackUpFront	</effectHP>
               </selector>
             </selector>
@@ -3028,17 +3028,17 @@
               <type>	union	</type>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/snow/trail_{0}_front_spd1.xml	</name>
+                <name>	particles/Tank/movement/snow/trail_{0}_front_spd1.eff	</name>
                 <effectHP>	_TrackFront	</effectHP>
               </selector>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/snow/trail_{0}_spd1.xml	</name>
+                <name>	particles/Tank/movement/snow/trail_{0}_spd1.eff	</name>
                 <effectHP>	_TrackRear	</effectHP>
               </selector>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/snow/trail_{0}_front_up_spd1.xml	</name>
+                <name>	particles/Tank/movement/snow/trail_{0}_front_up_spd1.eff	</name>
                 <effectHP>	_TrackUpFront	</effectHP>
               </selector>
             </selector>
@@ -3051,17 +3051,17 @@
               <type>	union	</type>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/snow/trail_{0}_front_spd1.xml	</name>
+                <name>	particles/Tank/movement/snow/trail_{0}_front_spd1.eff	</name>
                 <effectHP>	_TrackFront	</effectHP>
               </selector>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/snow/trail_{0}_spd1.xml	</name>
+                <name>	particles/Tank/movement/snow/trail_{0}_spd1.eff	</name>
                 <effectHP>	_TrackRear	</effectHP>
               </selector>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/snow/trail_{0}_front_up_spd1.xml	</name>
+                <name>	particles/Tank/movement/snow/trail_{0}_front_up_spd1.eff	</name>
                 <effectHP>	_TrackUpFront	</effectHP>
               </selector>
             </selector>
@@ -3070,22 +3070,22 @@
               <type>	union	</type>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/snow/trail_{0}_front_spd2.xml	</name>
+                <name>	particles/Tank/movement/snow/trail_{0}_front_spd2.eff	</name>
                 <effectHP>	_TrackFront	</effectHP>
               </selector>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/snow/trail_{0}_spd2.xml	</name>
+                <name>	particles/Tank/movement/snow/trail_{0}_spd2.eff	</name>
                 <effectHP>	_TrackRear	</effectHP>
               </selector>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/snow/trail_{0}_front_up_spd2.xml	</name>
+                <name>	particles/Tank/movement/snow/trail_{0}_front_up_spd2.eff	</name>
                 <effectHP>	_TrackUpFront	</effectHP>
               </selector>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/snow/dust_{0}_spd2.xml	</name>
+                <name>	particles/Tank/movement/snow/dust_{0}_spd2.eff	</name>
                 <effectHP>	_TankDust	</effectHP>
               </selector>
             </selector>
@@ -3094,22 +3094,22 @@
               <type>	union	</type>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/snow/trail_{0}_front_spd3.xml	</name>
+                <name>	particles/Tank/movement/snow/trail_{0}_front_spd3.eff	</name>
                 <effectHP>	_TrackFront	</effectHP>
               </selector>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/snow/trail_{0}_spd3.xml	</name>
+                <name>	particles/Tank/movement/snow/trail_{0}_spd3.eff	</name>
                 <effectHP>	_TrackRear	</effectHP>
               </selector>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/snow/trail_{0}_front_up_spd3.xml	</name>
+                <name>	particles/Tank/movement/snow/trail_{0}_front_up_spd3.eff	</name>
                 <effectHP>	_TrackUpFront	</effectHP>
               </selector>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/snow/dust_{0}_spd3.xml	</name>
+                <name>	particles/Tank/movement/snow/dust_{0}_spd3.eff	</name>
                 <effectHP>	_TankDust	</effectHP>
               </selector>
             </selector>
@@ -3132,12 +3132,12 @@
                 <type>	union	</type>
                 <selector>
                   <type>	effect	</type>
-                  <name>	particles/Tank/movement/water/trail_{0}_l_front_spd3.xml	</name>
+                  <name>	particles/Tank/movement/water/trail_{0}_l_front_spd3.eff	</name>
                   <effectHP>	_TrackFront	</effectHP>
                 </selector>
                 <selector>
                   <type>	effect	</type>
-                  <name>	particles/Tank/movement/water/trail_{0}_l_spd3.xml	</name>
+                  <name>	particles/Tank/movement/water/trail_{0}_l_spd3.eff	</name>
                   <effectHP>	_TrackRear	</effectHP>
                 </selector>
               </selector>
@@ -3146,12 +3146,12 @@
                 <type>	union	</type>
                 <selector>
                   <type>	effect	</type>
-                  <name>	particles/Tank/movement/water/trail_{0}_l_front_spd2.xml	</name>
+                  <name>	particles/Tank/movement/water/trail_{0}_l_front_spd2.eff	</name>
                   <effectHP>	_TrackFront	</effectHP>
                 </selector>
                 <selector>
                   <type>	effect	</type>
-                  <name>	particles/Tank/movement/water/trail_{0}_l_spd2.xml	</name>
+                  <name>	particles/Tank/movement/water/trail_{0}_l_spd2.eff	</name>
                   <effectHP>	_TrackRear	</effectHP>
                 </selector>
               </selector>
@@ -3160,12 +3160,12 @@
                 <type>	union	</type>
                 <selector>
                   <type>	effect	</type>
-                  <name>	particles/Tank/movement/water/trail_{0}_l_front_spd1.xml	</name>
+                  <name>	particles/Tank/movement/water/trail_{0}_l_front_spd1.eff	</name>
                   <effectHP>	_TrackFront	</effectHP>
                 </selector>
                 <selector>
                   <type>	effect	</type>
-                  <name>	particles/Tank/movement/water/trail_{0}_l_spd1.xml	</name>
+                  <name>	particles/Tank/movement/water/trail_{0}_l_spd1.eff	</name>
                   <effectHP>	_TrackRear	</effectHP>
                 </selector>
               </selector>
@@ -3174,12 +3174,12 @@
                 <type>	union	</type>
                 <selector>
                   <type>	effect	</type>
-                  <name>	particles/Tank/movement/water/trail_{0}_l_front_spd0.xml	</name>
+                  <name>	particles/Tank/movement/water/trail_{0}_l_front_spd0.eff	</name>
                   <effectHP>	_TrackFront	</effectHP>
                 </selector>
                 <selector>
                   <type>	effect	</type>
-                  <name>	particles/Tank/movement/water/trail_{0}_l_spd0.xml	</name>
+                  <name>	particles/Tank/movement/water/trail_{0}_l_spd0.eff	</name>
                   <effectHP>	_TrackRear	</effectHP>
                 </selector>
               </selector>
@@ -3192,12 +3192,12 @@
                 <type>	union	</type>
                 <selector>
                   <type>	effect	</type>
-                  <name>	particles/Tank/movement/water/trail_{0}_l_spd0.xml	</name>
+                  <name>	particles/Tank/movement/water/trail_{0}_l_spd0.eff	</name>
                   <effectHP>	_TrackRear	</effectHP>
                 </selector>
                 <selector>
                   <type>	effect	</type>
-                  <name>	particles/Tank/movement/water/trail_{0}_l_front_spd0.xml	</name>
+                  <name>	particles/Tank/movement/water/trail_{0}_l_front_spd0.eff	</name>
                   <effectHP>	_TrackFront	</effectHP>
                 </selector>
               </selector>
@@ -3206,12 +3206,12 @@
                 <type>	union	</type>
                 <selector>
                   <type>	effect	</type>
-                  <name>	particles/Tank/movement/water/trail_{0}_l_spd1.xml	</name>
+                  <name>	particles/Tank/movement/water/trail_{0}_l_spd1.eff	</name>
                   <effectHP>	_TrackRear	</effectHP>
                 </selector>
                 <selector>
                   <type>	effect	</type>
-                  <name>	particles/Tank/movement/water/trail_{0}_l_front_spd1.xml	</name>
+                  <name>	particles/Tank/movement/water/trail_{0}_l_front_spd1.eff	</name>
                   <effectHP>	_TrackFront	</effectHP>
                 </selector>
               </selector>
@@ -3220,12 +3220,12 @@
                 <type>	union	</type>
                 <selector>
                   <type>	effect	</type>
-                  <name>	particles/Tank/movement/water/trail_{0}_l_spd2.xml	</name>
+                  <name>	particles/Tank/movement/water/trail_{0}_l_spd2.eff	</name>
                   <effectHP>	_TrackRear	</effectHP>
                 </selector>
                 <selector>
                   <type>	effect	</type>
-                  <name>	particles/Tank/movement/water/trail_{0}_l_front_spd2.xml	</name>
+                  <name>	particles/Tank/movement/water/trail_{0}_l_front_spd2.eff	</name>
                   <effectHP>	_TrackFront	</effectHP>
                 </selector>
               </selector>
@@ -3234,12 +3234,12 @@
                 <type>	union	</type>
                 <selector>
                   <type>	effect	</type>
-                  <name>	particles/Tank/movement/water/trail_{0}_l_spd3.xml	</name>
+                  <name>	particles/Tank/movement/water/trail_{0}_l_spd3.eff	</name>
                   <effectHP>	_TrackRear	</effectHP>
                 </selector>
                 <selector>
                   <type>	effect	</type>
-                  <name>	particles/Tank/movement/water/trail_{0}_l_front_spd3.xml	</name>
+                  <name>	particles/Tank/movement/water/trail_{0}_l_front_spd3.eff	</name>
                   <effectHP>	_TrackFront	</effectHP>
                 </selector>
               </selector>
@@ -3262,17 +3262,17 @@
             <type>	union	</type>
             <selector>
               <type>	effect	</type>
-              <name>	particles/Tank/movement/forcefields/Forcefield_{0}_collision_reverse.xml	</name>
+              <name>	particles/Tank/movement/forcefields/Forcefield_{0}_collision_reverse.eff	</name>
               <effectHP>	_TankDust	</effectHP>
             </selector>
             <selector>
               <type>	effect	</type>
-              <name>	particles/Tank/movement/forcefields/Forcefield_{0}_dust_spd3.xml	</name>
+              <name>	particles/Tank/movement/forcefields/Forcefield_{0}_dust_spd3.eff	</name>
               <effectHP>	_TankDust	</effectHP>
             </selector>
             <selector>
               <type>	effect	</type>
-              <name>	particles/Tank/movement/forcefields/Forcefield_{0}_track_spd3.xml	</name>
+              <name>	particles/Tank/movement/forcefields/Forcefield_{0}_track_spd3.eff	</name>
               <effectHP>	_TrackRear	</effectHP>
             </selector>
           </selector>
@@ -3281,17 +3281,17 @@
             <type>	union	</type>
             <selector>
               <type>	effect	</type>
-              <name>	particles/Tank/movement/forcefields/Forcefield_{0}_collision_reverse.xml	</name>
+              <name>	particles/Tank/movement/forcefields/Forcefield_{0}_collision_reverse.eff	</name>
               <effectHP>	_TankDust	</effectHP>
             </selector>
             <selector>
               <type>	effect	</type>
-              <name>	particles/Tank/movement/forcefields/Forcefield_{0}_dust_spd2.xml	</name>
+              <name>	particles/Tank/movement/forcefields/Forcefield_{0}_dust_spd2.eff	</name>
               <effectHP>	_TankDust	</effectHP>
             </selector>
             <selector>
               <type>	effect	</type>
-              <name>	particles/Tank/movement/forcefields/Forcefield_{0}_track_spd2.xml	</name>
+              <name>	particles/Tank/movement/forcefields/Forcefield_{0}_track_spd2.eff	</name>
               <effectHP>	_TrackRear	</effectHP>
             </selector>
           </selector>
@@ -3300,17 +3300,17 @@
             <type>	union	</type>
             <selector>
               <type>	effect	</type>
-              <name>	particles/Tank/movement/forcefields/Forcefield_{0}_track_spd1.xml	</name>
+              <name>	particles/Tank/movement/forcefields/Forcefield_{0}_track_spd1.eff	</name>
               <effectHP>	_TrackRear	</effectHP>
             </selector>
             <selector>
               <type>	effect	</type>
-              <name>	particles/Tank/movement/forcefields/Forcefield_{0}_dust_spd1.xml	</name>
+              <name>	particles/Tank/movement/forcefields/Forcefield_{0}_dust_spd1.eff	</name>
               <effectHP>	_TankDust	</effectHP>
             </selector>
             <selector>
               <type>	effect	</type>
-              <name>	particles/Tank/movement/forcefields/Forcefield_{0}_collision_reverse.xml	</name>
+              <name>	particles/Tank/movement/forcefields/Forcefield_{0}_collision_reverse.eff	</name>
               <effectHP>	_TankDust	</effectHP>
             </selector>
           </selector>
@@ -3319,7 +3319,7 @@
             <type>	union	</type>
             <selector>
               <type>	effect	</type>
-              <name>	particles/Tank/movement/forcefields/Forcefield_{0}_collision.xml	</name>
+              <name>	particles/Tank/movement/forcefields/Forcefield_{0}_collision.eff	</name>
               <effectHP>	_TankDust	</effectHP>
             </selector>
           </selector>
@@ -3328,12 +3328,12 @@
             <type>	union	</type>
             <selector>
               <type>	effect	</type>
-              <name>	particles/Tank/movement/forcefields/Forcefield_{0}_collision.xml	</name>
+              <name>	particles/Tank/movement/forcefields/Forcefield_{0}_collision.eff	</name>
               <effectHP>	_TankDust	</effectHP>
             </selector>
             <selector>
               <type>	effect	</type>
-              <name>	particles/Tank/movement/forcefields/Forcefield_{0}_dust_spd1.xml	</name>
+              <name>	particles/Tank/movement/forcefields/Forcefield_{0}_dust_spd1.eff	</name>
               <effectHP>	_TankDust	</effectHP>
             </selector>
           </selector>
@@ -3342,17 +3342,17 @@
             <type>	union	</type>
             <selector>
               <type>	effect	</type>
-              <name>	particles/Tank/movement/forcefields/Forcefield_{0}_collision.xml	</name>
+              <name>	particles/Tank/movement/forcefields/Forcefield_{0}_collision.eff	</name>
               <effectHP>	_TankDust	</effectHP>
             </selector>
             <selector>
               <type>	effect	</type>
-              <name>	particles/Tank/movement/forcefields/Forcefield_{0}_dust_spd2.xml	</name>
+              <name>	particles/Tank/movement/forcefields/Forcefield_{0}_dust_spd2.eff	</name>
               <effectHP>	_TankDust	</effectHP>
             </selector>
             <selector>
               <type>	effect	</type>
-              <name>	particles/Tank/movement/forcefields/Forcefield_{0}_track_spd2.xml	</name>
+              <name>	particles/Tank/movement/forcefields/Forcefield_{0}_track_spd2.eff	</name>
               <effectHP>	_TrackRear	</effectHP>
             </selector>
           </selector>
@@ -3361,17 +3361,17 @@
             <type>	union	</type>
             <selector>
               <type>	effect	</type>
-              <name>	particles/Tank/movement/forcefields/Forcefield_{0}_collision.xml	</name>
+              <name>	particles/Tank/movement/forcefields/Forcefield_{0}_collision.eff	</name>
               <effectHP>	_TankDust	</effectHP>
             </selector>
             <selector>
               <type>	effect	</type>
-              <name>	particles/Tank/movement/forcefields/Forcefield_{0}_dust_spd3.xml	</name>
+              <name>	particles/Tank/movement/forcefields/Forcefield_{0}_dust_spd3.eff	</name>
               <effectHP>	_TankDust	</effectHP>
             </selector>
             <selector>
               <type>	effect	</type>
-              <name>	particles/Tank/movement/forcefields/Forcefield_{0}_track_spd3.xml	</name>
+              <name>	particles/Tank/movement/forcefields/Forcefield_{0}_track_spd3.eff	</name>
               <effectHP>	_TrackRear	</effectHP>
             </selector>
           </selector>
@@ -3392,7 +3392,7 @@
             <type>	union	</type>
             <selector>
               <type>	effect	</type>
-              <name>	particles/Tank/movement/forcefields/Forcefield_{0}_track_spd3.xml	</name>
+              <name>	particles/Tank/movement/forcefields/Forcefield_{0}_track_spd3.eff	</name>
               <effectHP>	_TrackRear	</effectHP>
             </selector>
           </selector>
@@ -3401,7 +3401,7 @@
             <type>	union	</type>
             <selector>
               <type>	effect	</type>
-              <name>	particles/Tank/movement/forcefields/Forcefield_{0}_track_spd2.xml	</name>
+              <name>	particles/Tank/movement/forcefields/Forcefield_{0}_track_spd2.eff	</name>
               <effectHP>	_TrackRear	</effectHP>
             </selector>
           </selector>
@@ -3410,7 +3410,7 @@
             <type>	union	</type>
             <selector>
               <type>	effect	</type>
-              <name>	particles/Tank/movement/forcefields/Forcefield_{0}_track_spd1.xml	</name>
+              <name>	particles/Tank/movement/forcefields/Forcefield_{0}_track_spd1.eff	</name>
               <effectHP>	_TrackRear	</effectHP>
             </selector>
           </selector>
@@ -3423,7 +3423,7 @@
             <type>	union	</type>
             <selector>
               <type>	effect	</type>
-              <name>	particles/Tank/movement/forcefields/Forcefield_{0}_track_spd1.xml	</name>
+              <name>	particles/Tank/movement/forcefields/Forcefield_{0}_track_spd1.eff	</name>
               <effectHP>	_TrackRear	</effectHP>
             </selector>
           </selector>
@@ -3432,7 +3432,7 @@
             <type>	union	</type>
             <selector>
               <type>	effect	</type>
-              <name>	particles/Tank/movement/forcefields/Forcefield_{0}_track_spd2.xml	</name>
+              <name>	particles/Tank/movement/forcefields/Forcefield_{0}_track_spd2.eff	</name>
               <effectHP>	_TrackRear	</effectHP>
             </selector>
           </selector>
@@ -3441,7 +3441,7 @@
             <type>	union	</type>
             <selector>
               <type>	effect	</type>
-              <name>	particles/Tank/movement/forcefields/Forcefield_{0}_track_spd3.xml	</name>
+              <name>	particles/Tank/movement/forcefields/Forcefield_{0}_track_spd3.eff	</name>
               <effectHP>	_TrackRear	</effectHP>
             </selector>
           </selector>
@@ -3466,17 +3466,17 @@
               <type>	union	</type>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/sand/trail_{0}_spd3.xml	</name>
+                <name>	particles/Tank/movement/sand/trail_{0}_spd3.eff	</name>
                 <effectHP>	_TrackRear	</effectHP>
               </selector>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/sand/trail_{0}_front_spd3.xml	</name>
+                <name>	particles/Tank/movement/sand/trail_{0}_front_spd3.eff	</name>
                 <effectHP>	_TrackFront	</effectHP>
               </selector>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/sand/trail_{0}_front_up_spd3.xml	</name>
+                <name>	particles/Tank/movement/sand/trail_{0}_front_up_spd3.eff	</name>
                 <effectHP>	_TrackUpFront	</effectHP>
               </selector>
             </selector>
@@ -3485,17 +3485,17 @@
               <type>	union	</type>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/sand/trail_{0}_spd2.xml	</name>
+                <name>	particles/Tank/movement/sand/trail_{0}_spd2.eff	</name>
                 <effectHP>	_TrackRear	</effectHP>
               </selector>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/sand/trail_{0}_front_spd2.xml	</name>
+                <name>	particles/Tank/movement/sand/trail_{0}_front_spd2.eff	</name>
                 <effectHP>	_TrackFront	</effectHP>
               </selector>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/sand/trail_{0}_front_up_spd2.xml	</name>
+                <name>	particles/Tank/movement/sand/trail_{0}_front_up_spd2.eff	</name>
                 <effectHP>	_TrackUpFront	</effectHP>
               </selector>
             </selector>
@@ -3504,17 +3504,17 @@
               <type>	union	</type>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/sand/trail_{0}_spd1.xml	</name>
+                <name>	particles/Tank/movement/sand/trail_{0}_spd1.eff	</name>
                 <effectHP>	_TrackRear	</effectHP>
               </selector>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/sand/trail_{0}_front_spd1.xml	</name>
+                <name>	particles/Tank/movement/sand/trail_{0}_front_spd1.eff	</name>
                 <effectHP>	_TrackFront	</effectHP>
               </selector>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/sand/trail_{0}_front_up_spd1.xml	</name>
+                <name>	particles/Tank/movement/sand/trail_{0}_front_up_spd1.eff	</name>
                 <effectHP>	_TrackUpFront	</effectHP>
               </selector>
             </selector>
@@ -3527,17 +3527,17 @@
               <type>	union	</type>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/sand/trail_{0}_spd1.xml	</name>
+                <name>	particles/Tank/movement/sand/trail_{0}_spd1.eff	</name>
                 <effectHP>	_TrackRear	</effectHP>
               </selector>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/sand/trail_{0}_front_spd1.xml	</name>
+                <name>	particles/Tank/movement/sand/trail_{0}_front_spd1.eff	</name>
                 <effectHP>	_TrackFront	</effectHP>
               </selector>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/sand/trail_{0}_front_up_spd1.xml	</name>
+                <name>	particles/Tank/movement/sand/trail_{0}_front_up_spd1.eff	</name>
                 <effectHP>	_TrackUpFront	</effectHP>
               </selector>
             </selector>
@@ -3546,17 +3546,17 @@
               <type>	union	</type>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/sand/trail_{0}_spd2.xml	</name>
+                <name>	particles/Tank/movement/sand/trail_{0}_spd2.eff	</name>
                 <effectHP>	_TrackRear	</effectHP>
               </selector>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/sand/trail_{0}_front_spd2.xml	</name>
+                <name>	particles/Tank/movement/sand/trail_{0}_front_spd2.eff	</name>
                 <effectHP>	_TrackFront	</effectHP>
               </selector>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/sand/trail_{0}_front_up_spd2.xml	</name>
+                <name>	particles/Tank/movement/sand/trail_{0}_front_up_spd2.eff	</name>
                 <effectHP>	_TrackUpFront	</effectHP>
               </selector>
             </selector>
@@ -3565,17 +3565,17 @@
               <type>	union	</type>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/sand/trail_{0}_spd3.xml	</name>
+                <name>	particles/Tank/movement/sand/trail_{0}_spd3.eff	</name>
                 <effectHP>	_TrackRear	</effectHP>
               </selector>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/sand/trail_{0}_front_spd3.xml	</name>
+                <name>	particles/Tank/movement/sand/trail_{0}_front_spd3.eff	</name>
                 <effectHP>	_TrackFront	</effectHP>
               </selector>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/sand/trail_{0}_front_up_spd3.xml	</name>
+                <name>	particles/Tank/movement/sand/trail_{0}_front_up_spd3.eff	</name>
                 <effectHP>	_TrackUpFront	</effectHP>
               </selector>
             </selector>
@@ -3594,17 +3594,17 @@
               <type>	union	</type>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/ground/trail_{0}_spd3.xml	</name>
+                <name>	particles/Tank/movement/ground/trail_{0}_spd3.eff	</name>
                 <effectHP>	_TrackRear	</effectHP>
               </selector>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/ground/trail_{0}_front_spd3.xml	</name>
+                <name>	particles/Tank/movement/ground/trail_{0}_front_spd3.eff	</name>
                 <effectHP>	_TrackFront	</effectHP>
               </selector>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/ground/trail_{0}_front_up_spd3.xml	</name>
+                <name>	particles/Tank/movement/ground/trail_{0}_front_up_spd3.eff	</name>
                 <effectHP>	_TrackUpFront	</effectHP>
               </selector>
             </selector>
@@ -3613,17 +3613,17 @@
               <type>	union	</type>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/ground/trail_{0}_spd2.xml	</name>
+                <name>	particles/Tank/movement/ground/trail_{0}_spd2.eff	</name>
                 <effectHP>	_TrackRear	</effectHP>
               </selector>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/ground/trail_{0}_front_spd2.xml	</name>
+                <name>	particles/Tank/movement/ground/trail_{0}_front_spd2.eff	</name>
                 <effectHP>	_TrackFront	</effectHP>
               </selector>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/ground/trail_{0}_front_up_spd2.xml	</name>
+                <name>	particles/Tank/movement/ground/trail_{0}_front_up_spd2.eff	</name>
                 <effectHP>	_TrackUpFront	</effectHP>
               </selector>
             </selector>
@@ -3632,17 +3632,17 @@
               <type>	union	</type>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/ground/trail_{0}_spd1.xml	</name>
+                <name>	particles/Tank/movement/ground/trail_{0}_spd1.eff	</name>
                 <effectHP>	_TrackRear	</effectHP>
               </selector>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/ground/trail_{0}_front_spd1.xml	</name>
+                <name>	particles/Tank/movement/ground/trail_{0}_front_spd1.eff	</name>
                 <effectHP>	_TrackFront	</effectHP>
               </selector>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/ground/trail_{0}_front_up_spd1.xml	</name>
+                <name>	particles/Tank/movement/ground/trail_{0}_front_up_spd1.eff	</name>
                 <effectHP>	_TrackUpFront	</effectHP>
               </selector>
             </selector>
@@ -3655,17 +3655,17 @@
               <type>	union	</type>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/ground/trail_{0}_spd1.xml	</name>
+                <name>	particles/Tank/movement/ground/trail_{0}_spd1.eff	</name>
                 <effectHP>	_TrackRear	</effectHP>
               </selector>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/ground/trail_{0}_front_spd1.xml	</name>
+                <name>	particles/Tank/movement/ground/trail_{0}_front_spd1.eff	</name>
                 <effectHP>	_TrackFront	</effectHP>
               </selector>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/ground/trail_{0}_front_up_spd1.xml	</name>
+                <name>	particles/Tank/movement/ground/trail_{0}_front_up_spd1.eff	</name>
                 <effectHP>	_TrackUpFront	</effectHP>
               </selector>
             </selector>
@@ -3674,17 +3674,17 @@
               <type>	union	</type>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/ground/trail_{0}_spd2.xml	</name>
+                <name>	particles/Tank/movement/ground/trail_{0}_spd2.eff	</name>
                 <effectHP>	_TrackRear	</effectHP>
               </selector>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/ground/trail_{0}_front_spd2.xml	</name>
+                <name>	particles/Tank/movement/ground/trail_{0}_front_spd2.eff	</name>
                 <effectHP>	_TrackFront	</effectHP>
               </selector>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/ground/trail_{0}_front_up_spd2.xml	</name>
+                <name>	particles/Tank/movement/ground/trail_{0}_front_up_spd2.eff	</name>
                 <effectHP>	_TrackUpFront	</effectHP>
               </selector>
             </selector>
@@ -3693,17 +3693,17 @@
               <type>	union	</type>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/ground/trail_{0}_spd3.xml	</name>
+                <name>	particles/Tank/movement/ground/trail_{0}_spd3.eff	</name>
                 <effectHP>	_TrackRear	</effectHP>
               </selector>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/ground/trail_{0}_front_spd3.xml	</name>
+                <name>	particles/Tank/movement/ground/trail_{0}_front_spd3.eff	</name>
                 <effectHP>	_TrackFront	</effectHP>
               </selector>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/ground/trail_{0}_front_up_spd3.xml	</name>
+                <name>	particles/Tank/movement/ground/trail_{0}_front_up_spd3.eff	</name>
                 <effectHP>	_TrackUpFront	</effectHP>
               </selector>
             </selector>
@@ -3722,17 +3722,17 @@
               <type>	union	</type>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/snow/trail_{0}_spd3.xml	</name>
+                <name>	particles/Tank/movement/snow/trail_{0}_spd3.eff	</name>
                 <effectHP>	_TrackRear	</effectHP>
               </selector>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/snow/trail_{0}_front_spd3.xml	</name>
+                <name>	particles/Tank/movement/snow/trail_{0}_front_spd3.eff	</name>
                 <effectHP>	_TrackFront	</effectHP>
               </selector>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/snow/trail_{0}_front_up_spd3.xml	</name>
+                <name>	particles/Tank/movement/snow/trail_{0}_front_up_spd3.eff	</name>
                 <effectHP>	_TrackUpFront	</effectHP>
               </selector>
             </selector>
@@ -3741,17 +3741,17 @@
               <type>	union	</type>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/snow/trail_{0}_spd2.xml	</name>
+                <name>	particles/Tank/movement/snow/trail_{0}_spd2.eff	</name>
                 <effectHP>	_TrackRear	</effectHP>
               </selector>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/snow/trail_{0}_front_spd2.xml	</name>
+                <name>	particles/Tank/movement/snow/trail_{0}_front_spd2.eff	</name>
                 <effectHP>	_TrackFront	</effectHP>
               </selector>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/snow/trail_{0}_front_up_spd2.xml	</name>
+                <name>	particles/Tank/movement/snow/trail_{0}_front_up_spd2.eff	</name>
                 <effectHP>	_TrackUpFront	</effectHP>
               </selector>
             </selector>
@@ -3760,17 +3760,17 @@
               <type>	union	</type>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/snow/trail_{0}_spd1.xml	</name>
+                <name>	particles/Tank/movement/snow/trail_{0}_spd1.eff	</name>
                 <effectHP>	_TrackRear	</effectHP>
               </selector>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/snow/trail_{0}_front_spd1.xml	</name>
+                <name>	particles/Tank/movement/snow/trail_{0}_front_spd1.eff	</name>
                 <effectHP>	_TrackFront	</effectHP>
               </selector>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/snow/trail_{0}_front_up_spd1.xml	</name>
+                <name>	particles/Tank/movement/snow/trail_{0}_front_up_spd1.eff	</name>
                 <effectHP>	_TrackUpFront	</effectHP>
               </selector>
             </selector>
@@ -3783,17 +3783,17 @@
               <type>	union	</type>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/snow/trail_{0}_spd1.xml	</name>
+                <name>	particles/Tank/movement/snow/trail_{0}_spd1.eff	</name>
                 <effectHP>	_TrackRear	</effectHP>
               </selector>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/snow/trail_{0}_front_spd1.xml	</name>
+                <name>	particles/Tank/movement/snow/trail_{0}_front_spd1.eff	</name>
                 <effectHP>	_TrackFront	</effectHP>
               </selector>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/snow/trail_{0}_front_up_spd1.xml	</name>
+                <name>	particles/Tank/movement/snow/trail_{0}_front_up_spd1.eff	</name>
                 <effectHP>	_TrackUpFront	</effectHP>
               </selector>
             </selector>
@@ -3802,17 +3802,17 @@
               <type>	union	</type>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/snow/trail_{0}_spd2.xml	</name>
+                <name>	particles/Tank/movement/snow/trail_{0}_spd2.eff	</name>
                 <effectHP>	_TrackRear	</effectHP>
               </selector>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/snow/trail_{0}_front_spd2.xml	</name>
+                <name>	particles/Tank/movement/snow/trail_{0}_front_spd2.eff	</name>
                 <effectHP>	_TrackFront	</effectHP>
               </selector>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/snow/trail_{0}_front_up_spd2.xml	</name>
+                <name>	particles/Tank/movement/snow/trail_{0}_front_up_spd2.eff	</name>
                 <effectHP>	_TrackUpFront	</effectHP>
               </selector>
             </selector>
@@ -3821,17 +3821,17 @@
               <type>	union	</type>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/snow/trail_{0}_spd3.xml	</name>
+                <name>	particles/Tank/movement/snow/trail_{0}_spd3.eff	</name>
                 <effectHP>	_TrackRear	</effectHP>
               </selector>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/snow/trail_{0}_front_spd3.xml	</name>
+                <name>	particles/Tank/movement/snow/trail_{0}_front_spd3.eff	</name>
                 <effectHP>	_TrackFront	</effectHP>
               </selector>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/snow/trail_{0}_front_up_spd3.xml	</name>
+                <name>	particles/Tank/movement/snow/trail_{0}_front_up_spd3.eff	</name>
                 <effectHP>	_TrackUpFront	</effectHP>
               </selector>
             </selector>
@@ -3850,17 +3850,17 @@
               <type>	union	</type>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/stone/trail_{0}_spd3.xml	</name>
+                <name>	particles/Tank/movement/stone/trail_{0}_spd3.eff	</name>
                 <effectHP>	_TrackRear	</effectHP>
               </selector>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/stone/trail_{0}_front_spd3.xml	</name>
+                <name>	particles/Tank/movement/stone/trail_{0}_front_spd3.eff	</name>
                 <effectHP>	_TrackFront	</effectHP>
               </selector>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/stone/trail_{0}_front_up_spd3.xml	</name>
+                <name>	particles/Tank/movement/stone/trail_{0}_front_up_spd3.eff	</name>
                 <effectHP>	_TrackUpFront	</effectHP>
               </selector>
             </selector>
@@ -3869,17 +3869,17 @@
               <type>	union	</type>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/stone/trail_{0}_spd2.xml	</name>
+                <name>	particles/Tank/movement/stone/trail_{0}_spd2.eff	</name>
                 <effectHP>	_TrackRear	</effectHP>
               </selector>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/stone/trail_{0}_front_spd2.xml	</name>
+                <name>	particles/Tank/movement/stone/trail_{0}_front_spd2.eff	</name>
                 <effectHP>	_TrackFront	</effectHP>
               </selector>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/stone/trail_{0}_front_up_spd2.xml	</name>
+                <name>	particles/Tank/movement/stone/trail_{0}_front_up_spd2.eff	</name>
                 <effectHP>	_TrackUpFront	</effectHP>
               </selector>
             </selector>
@@ -3888,12 +3888,12 @@
               <type>	union	</type>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/stone/trail_{0}_spd1.xml	</name>
+                <name>	particles/Tank/movement/stone/trail_{0}_spd1.eff	</name>
                 <effectHP>	_TrackRear	</effectHP>
               </selector>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/stone/trail_{0}_front_up_spd1.xml	</name>
+                <name>	particles/Tank/movement/stone/trail_{0}_front_up_spd1.eff	</name>
                 <effectHP>	_TrackUpFront	</effectHP>
               </selector>
             </selector>
@@ -3906,12 +3906,12 @@
               <type>	union	</type>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/stone/trail_{0}_spd1.xml	</name>
+                <name>	particles/Tank/movement/stone/trail_{0}_spd1.eff	</name>
                 <effectHP>	_TrackRear	</effectHP>
               </selector>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/stone/trail_{0}_front_up_spd1.xml	</name>
+                <name>	particles/Tank/movement/stone/trail_{0}_front_up_spd1.eff	</name>
                 <effectHP>	_TrackUpFront	</effectHP>
               </selector>
             </selector>
@@ -3920,17 +3920,17 @@
               <type>	union	</type>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/stone/trail_{0}_spd2.xml	</name>
+                <name>	particles/Tank/movement/stone/trail_{0}_spd2.eff	</name>
                 <effectHP>	_TrackRear	</effectHP>
               </selector>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/stone/trail_{0}_front_spd2.xml	</name>
+                <name>	particles/Tank/movement/stone/trail_{0}_front_spd2.eff	</name>
                 <effectHP>	_TrackFront	</effectHP>
               </selector>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/stone/trail_{0}_front_up_spd2.xml	</name>
+                <name>	particles/Tank/movement/stone/trail_{0}_front_up_spd2.eff	</name>
                 <effectHP>	_TrackUpFront	</effectHP>
               </selector>
             </selector>
@@ -3939,17 +3939,17 @@
               <type>	union	</type>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/stone/trail_{0}_spd3.xml	</name>
+                <name>	particles/Tank/movement/stone/trail_{0}_spd3.eff	</name>
                 <effectHP>	_TrackRear	</effectHP>
               </selector>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/stone/trail_{0}_front_spd3.xml	</name>
+                <name>	particles/Tank/movement/stone/trail_{0}_front_spd3.eff	</name>
                 <effectHP>	_TrackFront	</effectHP>
               </selector>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/stone/trail_{0}_front_up_spd3.xml	</name>
+                <name>	particles/Tank/movement/stone/trail_{0}_front_up_spd3.eff	</name>
                 <effectHP>	_TrackUpFront	</effectHP>
               </selector>
             </selector>
@@ -3976,12 +3976,12 @@
                   <type>	union	</type>
                   <selector>
                     <type>	effect	</type>
-                    <name>	particles/Tank/movement/water/trail_{0}_r_front_spd3.xml	</name>
+                    <name>	particles/Tank/movement/water/trail_{0}_r_front_spd3.eff	</name>
                     <effectHP>	_TrackFront	</effectHP>
                   </selector>
                   <selector>
                     <type>	effect	</type>
-                    <name>	particles/Tank/movement/water/trail_{0}_r_spd3.xml	</name>
+                    <name>	particles/Tank/movement/water/trail_{0}_r_spd3.eff	</name>
                     <effectHP>	_TrackRear	</effectHP>
                   </selector>
                 </selector>
@@ -3990,12 +3990,12 @@
                   <type>	union	</type>
                   <selector>
                     <type>	effect	</type>
-                    <name>	particles/Tank/movement/water/trail_{0}_r_front_spd2.xml	</name>
+                    <name>	particles/Tank/movement/water/trail_{0}_r_front_spd2.eff	</name>
                     <effectHP>	_TrackFront	</effectHP>
                   </selector>
                   <selector>
                     <type>	effect	</type>
-                    <name>	particles/Tank/movement/water/trail_{0}_r_spd2.xml	</name>
+                    <name>	particles/Tank/movement/water/trail_{0}_r_spd2.eff	</name>
                     <effectHP>	_TrackRear	</effectHP>
                   </selector>
                 </selector>
@@ -4004,12 +4004,12 @@
                   <type>	union	</type>
                   <selector>
                     <type>	effect	</type>
-                    <name>	particles/Tank/movement/water/trail_{0}_r_front_spd1.xml	</name>
+                    <name>	particles/Tank/movement/water/trail_{0}_r_front_spd1.eff	</name>
                     <effectHP>	_TrackFront	</effectHP>
                   </selector>
                   <selector>
                     <type>	effect	</type>
-                    <name>	particles/Tank/movement/water/trail_{0}_r_spd1.xml	</name>
+                    <name>	particles/Tank/movement/water/trail_{0}_r_spd1.eff	</name>
                     <effectHP>	_TrackRear	</effectHP>
                   </selector>
                 </selector>
@@ -4018,12 +4018,12 @@
                   <type>	union	</type>
                   <selector>
                     <type>	effect	</type>
-                    <name>	particles/Tank/movement/water/trail_{0}_r_front_spd0.xml	</name>
+                    <name>	particles/Tank/movement/water/trail_{0}_r_front_spd0.eff	</name>
                     <effectHP>	_TrackFront	</effectHP>
                   </selector>
                   <selector>
                     <type>	effect	</type>
-                    <name>	particles/Tank/movement/water/trail_{0}_r_spd0.xml	</name>
+                    <name>	particles/Tank/movement/water/trail_{0}_r_spd0.eff	</name>
                     <effectHP>	_TrackRear	</effectHP>
                   </selector>
                 </selector>
@@ -4036,12 +4036,12 @@
                   <type>	union	</type>
                   <selector>
                     <type>	effect	</type>
-                    <name>	particles/Tank/movement/water/trail_{0}_r_spd0.xml	</name>
+                    <name>	particles/Tank/movement/water/trail_{0}_r_spd0.eff	</name>
                     <effectHP>	_TrackRear	</effectHP>
                   </selector>
                   <selector>
                     <type>	effect	</type>
-                    <name>	particles/Tank/movement/water/trail_{0}_r_front_spd0.xml	</name>
+                    <name>	particles/Tank/movement/water/trail_{0}_r_front_spd0.eff	</name>
                     <effectHP>	_TrackFront	</effectHP>
                   </selector>
                 </selector>
@@ -4050,12 +4050,12 @@
                   <type>	union	</type>
                   <selector>
                     <type>	effect	</type>
-                    <name>	particles/Tank/movement/water/trail_{0}_r_spd1.xml	</name>
+                    <name>	particles/Tank/movement/water/trail_{0}_r_spd1.eff	</name>
                     <effectHP>	_TrackRear	</effectHP>
                   </selector>
                   <selector>
                     <type>	effect	</type>
-                    <name>	particles/Tank/movement/water/trail_{0}_r_front_spd1.xml	</name>
+                    <name>	particles/Tank/movement/water/trail_{0}_r_front_spd1.eff	</name>
                     <effectHP>	_TrackFront	</effectHP>
                   </selector>
                 </selector>
@@ -4064,12 +4064,12 @@
                   <type>	union	</type>
                   <selector>
                     <type>	effect	</type>
-                    <name>	particles/Tank/movement/water/trail_{0}_r_spd2.xml	</name>
+                    <name>	particles/Tank/movement/water/trail_{0}_r_spd2.eff	</name>
                     <effectHP>	_TrackRear	</effectHP>
                   </selector>
                   <selector>
                     <type>	effect	</type>
-                    <name>	particles/Tank/movement/water/trail_{0}_r_front_spd2.xml	</name>
+                    <name>	particles/Tank/movement/water/trail_{0}_r_front_spd2.eff	</name>
                     <effectHP>	_TrackFront	</effectHP>
                   </selector>
                 </selector>
@@ -4078,12 +4078,12 @@
                   <type>	union	</type>
                   <selector>
                     <type>	effect	</type>
-                    <name>	particles/Tank/movement/water/trail_{0}_r_spd3.xml	</name>
+                    <name>	particles/Tank/movement/water/trail_{0}_r_spd3.eff	</name>
                     <effectHP>	_TrackRear	</effectHP>
                   </selector>
                   <selector>
                     <type>	effect	</type>
-                    <name>	particles/Tank/movement/water/trail_{0}_r_front_spd3.xml	</name>
+                    <name>	particles/Tank/movement/water/trail_{0}_r_front_spd3.eff	</name>
                     <effectHP>	_TrackFront	</effectHP>
                   </selector>
                 </selector>
@@ -4111,17 +4111,17 @@
               <type>	union	</type>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/sand/trail_{0}_front_spd3.xml	</name>
+                <name>	particles/Tank/movement/sand/trail_{0}_front_spd3.eff	</name>
                 <effectHP>	_TrackFront	</effectHP>
               </selector>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/sand/trail_{0}_spd3.xml	</name>
+                <name>	particles/Tank/movement/sand/trail_{0}_spd3.eff	</name>
                 <effectHP>	_TrackRear	</effectHP>
               </selector>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/sand/trail_{0}_front_up_spd3.xml	</name>
+                <name>	particles/Tank/movement/sand/trail_{0}_front_up_spd3.eff	</name>
                 <effectHP>	_TrackUpFront	</effectHP>
               </selector>
             </selector>
@@ -4130,17 +4130,17 @@
               <type>	union	</type>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/sand/trail_{0}_front_spd2.xml	</name>
+                <name>	particles/Tank/movement/sand/trail_{0}_front_spd2.eff	</name>
                 <effectHP>	_TrackFront	</effectHP>
               </selector>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/sand/trail_{0}_spd2.xml	</name>
+                <name>	particles/Tank/movement/sand/trail_{0}_spd2.eff	</name>
                 <effectHP>	_TrackRear	</effectHP>
               </selector>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/sand/trail_{0}_front_up_spd2.xml	</name>
+                <name>	particles/Tank/movement/sand/trail_{0}_front_up_spd2.eff	</name>
                 <effectHP>	_TrackUpFront	</effectHP>
               </selector>
             </selector>
@@ -4149,17 +4149,17 @@
               <type>	union	</type>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/sand/trail_{0}_front_spd1.xml	</name>
+                <name>	particles/Tank/movement/sand/trail_{0}_front_spd1.eff	</name>
                 <effectHP>	_TrackFront	</effectHP>
               </selector>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/sand/trail_{0}_spd1.xml	</name>
+                <name>	particles/Tank/movement/sand/trail_{0}_spd1.eff	</name>
                 <effectHP>	_TrackRear	</effectHP>
               </selector>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/sand/trail_{0}_front_up_spd1.xml	</name>
+                <name>	particles/Tank/movement/sand/trail_{0}_front_up_spd1.eff	</name>
                 <effectHP>	_TrackUpFront	</effectHP>
               </selector>
             </selector>
@@ -4172,17 +4172,17 @@
               <type>	union	</type>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/sand/trail_{0}_front_spd1.xml	</name>
+                <name>	particles/Tank/movement/sand/trail_{0}_front_spd1.eff	</name>
                 <effectHP>	_TrackFront	</effectHP>
               </selector>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/sand/trail_{0}_spd1.xml	</name>
+                <name>	particles/Tank/movement/sand/trail_{0}_spd1.eff	</name>
                 <effectHP>	_TrackRear	</effectHP>
               </selector>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/sand/trail_{0}_front_up_spd1.xml	</name>
+                <name>	particles/Tank/movement/sand/trail_{0}_front_up_spd1.eff	</name>
                 <effectHP>	_TrackUpFront	</effectHP>
               </selector>
             </selector>
@@ -4191,17 +4191,17 @@
               <type>	union	</type>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/sand/trail_{0}_front_spd2.xml	</name>
+                <name>	particles/Tank/movement/sand/trail_{0}_front_spd2.eff	</name>
                 <effectHP>	_TrackFront	</effectHP>
               </selector>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/sand/trail_{0}_spd2.xml	</name>
+                <name>	particles/Tank/movement/sand/trail_{0}_spd2.eff	</name>
                 <effectHP>	_TrackRear	</effectHP>
               </selector>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/sand/trail_{0}_front_up_spd2.xml	</name>
+                <name>	particles/Tank/movement/sand/trail_{0}_front_up_spd2.eff	</name>
                 <effectHP>	_TrackUpFront	</effectHP>
               </selector>
             </selector>
@@ -4210,22 +4210,22 @@
               <type>	union	</type>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/sand/trail_{0}_front_spd3.xml	</name>
+                <name>	particles/Tank/movement/sand/trail_{0}_front_spd3.eff	</name>
                 <effectHP>	_TrackFront	</effectHP>
               </selector>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/sand/trail_{0}_spd3.xml	</name>
+                <name>	particles/Tank/movement/sand/trail_{0}_spd3.eff	</name>
                 <effectHP>	_TrackRear	</effectHP>
               </selector>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/sand/trail_{0}_front_up_spd3.xml	</name>
+                <name>	particles/Tank/movement/sand/trail_{0}_front_up_spd3.eff	</name>
                 <effectHP>	_TrackUpFront	</effectHP>
               </selector>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/sand/dust_{0}.xml	</name>
+                <name>	particles/Tank/movement/sand/dust_{0}.eff	</name>
                 <effectHP>	_TankDust	</effectHP>
               </selector>
             </selector>
@@ -4244,17 +4244,17 @@
               <type>	union	</type>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/ground/trail_{0}_spd3.xml	</name>
+                <name>	particles/Tank/movement/ground/trail_{0}_spd3.eff	</name>
                 <effectHP>	_TrackRear	</effectHP>
               </selector>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/ground/trail_{0}_front_spd3.xml	</name>
+                <name>	particles/Tank/movement/ground/trail_{0}_front_spd3.eff	</name>
                 <effectHP>	_TrackFront	</effectHP>
               </selector>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/ground/trail_{0}_front_up_spd3.xml	</name>
+                <name>	particles/Tank/movement/ground/trail_{0}_front_up_spd3.eff	</name>
                 <effectHP>	_TrackUpFront	</effectHP>
               </selector>
             </selector>
@@ -4263,17 +4263,17 @@
               <type>	union	</type>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/ground/trail_{0}_spd2.xml	</name>
+                <name>	particles/Tank/movement/ground/trail_{0}_spd2.eff	</name>
                 <effectHP>	_TrackRear	</effectHP>
               </selector>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/ground/trail_{0}_front_spd2.xml	</name>
+                <name>	particles/Tank/movement/ground/trail_{0}_front_spd2.eff	</name>
                 <effectHP>	_TrackFront	</effectHP>
               </selector>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/ground/trail_{0}_front_up_spd2.xml	</name>
+                <name>	particles/Tank/movement/ground/trail_{0}_front_up_spd2.eff	</name>
                 <effectHP>	_TrackUpFront	</effectHP>
               </selector>
             </selector>
@@ -4282,17 +4282,17 @@
               <type>	union	</type>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/ground/trail_{0}_spd1.xml	</name>
+                <name>	particles/Tank/movement/ground/trail_{0}_spd1.eff	</name>
                 <effectHP>	_TrackRear	</effectHP>
               </selector>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/ground/trail_{0}_front_spd1.xml	</name>
+                <name>	particles/Tank/movement/ground/trail_{0}_front_spd1.eff	</name>
                 <effectHP>	_TrackFront	</effectHP>
               </selector>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/ground/trail_{0}_front_up_spd1.xml	</name>
+                <name>	particles/Tank/movement/ground/trail_{0}_front_up_spd1.eff	</name>
                 <effectHP>	_TrackUpFront	</effectHP>
               </selector>
             </selector>
@@ -4305,17 +4305,17 @@
               <type>	union	</type>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/ground/trail_{0}_spd1.xml	</name>
+                <name>	particles/Tank/movement/ground/trail_{0}_spd1.eff	</name>
                 <effectHP>	_TrackRear	</effectHP>
               </selector>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/ground/trail_{0}_front_spd1.xml	</name>
+                <name>	particles/Tank/movement/ground/trail_{0}_front_spd1.eff	</name>
                 <effectHP>	_TrackFront	</effectHP>
               </selector>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/ground/trail_{0}_front_up_spd1.xml	</name>
+                <name>	particles/Tank/movement/ground/trail_{0}_front_up_spd1.eff	</name>
                 <effectHP>	_TrackUpFront	</effectHP>
               </selector>
             </selector>
@@ -4324,17 +4324,17 @@
               <type>	union	</type>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/ground/trail_{0}_spd2.xml	</name>
+                <name>	particles/Tank/movement/ground/trail_{0}_spd2.eff	</name>
                 <effectHP>	_TrackRear	</effectHP>
               </selector>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/ground/trail_{0}_front_spd2.xml	</name>
+                <name>	particles/Tank/movement/ground/trail_{0}_front_spd2.eff	</name>
                 <effectHP>	_TrackFront	</effectHP>
               </selector>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/ground/trail_{0}_front_up_spd2.xml	</name>
+                <name>	particles/Tank/movement/ground/trail_{0}_front_up_spd2.eff	</name>
                 <effectHP>	_TrackUpFront	</effectHP>
               </selector>
             </selector>
@@ -4343,17 +4343,17 @@
               <type>	union	</type>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/ground/trail_{0}_spd3.xml	</name>
+                <name>	particles/Tank/movement/ground/trail_{0}_spd3.eff	</name>
                 <effectHP>	_TrackRear	</effectHP>
               </selector>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/ground/trail_{0}_front_spd3.xml	</name>
+                <name>	particles/Tank/movement/ground/trail_{0}_front_spd3.eff	</name>
                 <effectHP>	_TrackFront	</effectHP>
               </selector>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/ground/trail_{0}_front_up_spd3.xml	</name>
+                <name>	particles/Tank/movement/ground/trail_{0}_front_up_spd3.eff	</name>
                 <effectHP>	_TrackUpFront	</effectHP>
               </selector>
             </selector>
@@ -4372,17 +4372,17 @@
               <type>	union	</type>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/snow/trail_{0}_front_spd3.xml	</name>
+                <name>	particles/Tank/movement/snow/trail_{0}_front_spd3.eff	</name>
                 <effectHP>	_TrackFront	</effectHP>
               </selector>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/snow/trail_{0}_spd3.xml	</name>
+                <name>	particles/Tank/movement/snow/trail_{0}_spd3.eff	</name>
                 <effectHP>	_TrackRear	</effectHP>
               </selector>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/snow/trail_{0}_front_up_spd3.xml	</name>
+                <name>	particles/Tank/movement/snow/trail_{0}_front_up_spd3.eff	</name>
                 <effectHP>	_TrackUpFront	</effectHP>
               </selector>
             </selector>
@@ -4391,17 +4391,17 @@
               <type>	union	</type>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/snow/trail_{0}_front_spd2.xml	</name>
+                <name>	particles/Tank/movement/snow/trail_{0}_front_spd2.eff	</name>
                 <effectHP>	_TrackFront	</effectHP>
               </selector>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/snow/trail_{0}_spd2.xml	</name>
+                <name>	particles/Tank/movement/snow/trail_{0}_spd2.eff	</name>
                 <effectHP>	_TrackRear	</effectHP>
               </selector>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/snow/trail_{0}_front_up_spd2.xml	</name>
+                <name>	particles/Tank/movement/snow/trail_{0}_front_up_spd2.eff	</name>
                 <effectHP>	_TrackUpFront	</effectHP>
               </selector>
             </selector>
@@ -4410,17 +4410,17 @@
               <type>	union	</type>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/snow/trail_{0}_front_spd1.xml	</name>
+                <name>	particles/Tank/movement/snow/trail_{0}_front_spd1.eff	</name>
                 <effectHP>	_TrackFront	</effectHP>
               </selector>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/snow/trail_{0}_spd1.xml	</name>
+                <name>	particles/Tank/movement/snow/trail_{0}_spd1.eff	</name>
                 <effectHP>	_TrackRear	</effectHP>
               </selector>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/snow/trail_{0}_front_up_spd1.xml	</name>
+                <name>	particles/Tank/movement/snow/trail_{0}_front_up_spd1.eff	</name>
                 <effectHP>	_TrackUpFront	</effectHP>
               </selector>
             </selector>
@@ -4433,17 +4433,17 @@
               <type>	union	</type>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/snow/trail_{0}_front_spd1.xml	</name>
+                <name>	particles/Tank/movement/snow/trail_{0}_front_spd1.eff	</name>
                 <effectHP>	_TrackFront	</effectHP>
               </selector>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/snow/trail_{0}_spd1.xml	</name>
+                <name>	particles/Tank/movement/snow/trail_{0}_spd1.eff	</name>
                 <effectHP>	_TrackRear	</effectHP>
               </selector>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/snow/trail_{0}_front_up_spd1.xml	</name>
+                <name>	particles/Tank/movement/snow/trail_{0}_front_up_spd1.eff	</name>
                 <effectHP>	_TrackUpFront	</effectHP>
               </selector>
             </selector>
@@ -4452,22 +4452,22 @@
               <type>	union	</type>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/snow/trail_{0}_front_spd2.xml	</name>
+                <name>	particles/Tank/movement/snow/trail_{0}_front_spd2.eff	</name>
                 <effectHP>	_TrackFront	</effectHP>
               </selector>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/snow/trail_{0}_spd2.xml	</name>
+                <name>	particles/Tank/movement/snow/trail_{0}_spd2.eff	</name>
                 <effectHP>	_TrackRear	</effectHP>
               </selector>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/snow/trail_{0}_front_up_spd2.xml	</name>
+                <name>	particles/Tank/movement/snow/trail_{0}_front_up_spd2.eff	</name>
                 <effectHP>	_TrackUpFront	</effectHP>
               </selector>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/snow/dust_{0}_spd2.xml	</name>
+                <name>	particles/Tank/movement/snow/dust_{0}_spd2.eff	</name>
                 <effectHP>	_TankDust	</effectHP>
               </selector>
             </selector>
@@ -4476,22 +4476,22 @@
               <type>	union	</type>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/snow/trail_{0}_front_spd3.xml	</name>
+                <name>	particles/Tank/movement/snow/trail_{0}_front_spd3.eff	</name>
                 <effectHP>	_TrackFront	</effectHP>
               </selector>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/snow/trail_{0}_spd3.xml	</name>
+                <name>	particles/Tank/movement/snow/trail_{0}_spd3.eff	</name>
                 <effectHP>	_TrackRear	</effectHP>
               </selector>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/snow/trail_{0}_front_up_spd3.xml	</name>
+                <name>	particles/Tank/movement/snow/trail_{0}_front_up_spd3.eff	</name>
                 <effectHP>	_TrackUpFront	</effectHP>
               </selector>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/snow/dust_{0}_spd3.xml	</name>
+                <name>	particles/Tank/movement/snow/dust_{0}_spd3.eff	</name>
                 <effectHP>	_TankDust	</effectHP>
               </selector>
             </selector>
@@ -4510,17 +4510,17 @@
               <type>	union	</type>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/stone/trail_{0}_spd3.xml	</name>
+                <name>	particles/Tank/movement/stone/trail_{0}_spd3.eff	</name>
                 <effectHP>	_TrackRear	</effectHP>
               </selector>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/stone/trail_{0}_front_spd3.xml	</name>
+                <name>	particles/Tank/movement/stone/trail_{0}_front_spd3.eff	</name>
                 <effectHP>	_TrackFront	</effectHP>
               </selector>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/stone/trail_{0}_front_up_spd3.xml	</name>
+                <name>	particles/Tank/movement/stone/trail_{0}_front_up_spd3.eff	</name>
                 <effectHP>	_TrackUpFront	</effectHP>
               </selector>
             </selector>
@@ -4529,17 +4529,17 @@
               <type>	union	</type>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/stone/trail_{0}_spd2.xml	</name>
+                <name>	particles/Tank/movement/stone/trail_{0}_spd2.eff	</name>
                 <effectHP>	_TrackRear	</effectHP>
               </selector>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/stone/trail_{0}_front_spd2.xml	</name>
+                <name>	particles/Tank/movement/stone/trail_{0}_front_spd2.eff	</name>
                 <effectHP>	_TrackFront	</effectHP>
               </selector>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/stone/trail_{0}_front_up_spd2.xml	</name>
+                <name>	particles/Tank/movement/stone/trail_{0}_front_up_spd2.eff	</name>
                 <effectHP>	_TrackUpFront	</effectHP>
               </selector>
             </selector>
@@ -4548,12 +4548,12 @@
               <type>	union	</type>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/stone/trail_{0}_spd1.xml	</name>
+                <name>	particles/Tank/movement/stone/trail_{0}_spd1.eff	</name>
                 <effectHP>	_TrackRear	</effectHP>
               </selector>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/stone/trail_{0}_front_up_spd1.xml	</name>
+                <name>	particles/Tank/movement/stone/trail_{0}_front_up_spd1.eff	</name>
                 <effectHP>	_TrackUpFront	</effectHP>
               </selector>
             </selector>
@@ -4566,12 +4566,12 @@
               <type>	union	</type>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/stone/trail_{0}_spd1.xml	</name>
+                <name>	particles/Tank/movement/stone/trail_{0}_spd1.eff	</name>
                 <effectHP>	_TrackRear	</effectHP>
               </selector>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/stone/trail_{0}_front_up_spd1.xml	</name>
+                <name>	particles/Tank/movement/stone/trail_{0}_front_up_spd1.eff	</name>
                 <effectHP>	_TrackUpFront	</effectHP>
               </selector>
             </selector>
@@ -4580,17 +4580,17 @@
               <type>	union	</type>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/stone/trail_{0}_spd2.xml	</name>
+                <name>	particles/Tank/movement/stone/trail_{0}_spd2.eff	</name>
                 <effectHP>	_TrackRear	</effectHP>
               </selector>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/stone/trail_{0}_front_spd2.xml	</name>
+                <name>	particles/Tank/movement/stone/trail_{0}_front_spd2.eff	</name>
                 <effectHP>	_TrackFront	</effectHP>
               </selector>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/stone/trail_{0}_front_up_spd2.xml	</name>
+                <name>	particles/Tank/movement/stone/trail_{0}_front_up_spd2.eff	</name>
                 <effectHP>	_TrackUpFront	</effectHP>
               </selector>
             </selector>
@@ -4599,17 +4599,17 @@
               <type>	union	</type>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/stone/trail_{0}_spd3.xml	</name>
+                <name>	particles/Tank/movement/stone/trail_{0}_spd3.eff	</name>
                 <effectHP>	_TrackRear	</effectHP>
               </selector>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/stone/trail_{0}_front_spd3.xml	</name>
+                <name>	particles/Tank/movement/stone/trail_{0}_front_spd3.eff	</name>
                 <effectHP>	_TrackFront	</effectHP>
               </selector>
               <selector>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/stone/trail_{0}_front_up_spd3.xml	</name>
+                <name>	particles/Tank/movement/stone/trail_{0}_front_up_spd3.eff	</name>
                 <effectHP>	_TrackUpFront	</effectHP>
               </selector>
             </selector>
@@ -4636,12 +4636,12 @@
                   <type>	union	</type>
                   <selector>
                     <type>	effect	</type>
-                    <name>	particles/Tank/movement/water/trail_{0}_l_front_spd3.xml	</name>
+                    <name>	particles/Tank/movement/water/trail_{0}_l_front_spd3.eff	</name>
                     <effectHP>	_TrackFront	</effectHP>
                   </selector>
                   <selector>
                     <type>	effect	</type>
-                    <name>	particles/Tank/movement/water/trail_{0}_l_spd3.xml	</name>
+                    <name>	particles/Tank/movement/water/trail_{0}_l_spd3.eff	</name>
                     <effectHP>	_TrackRear	</effectHP>
                   </selector>
                 </selector>
@@ -4650,12 +4650,12 @@
                   <type>	union	</type>
                   <selector>
                     <type>	effect	</type>
-                    <name>	particles/Tank/movement/water/trail_{0}_l_front_spd2.xml	</name>
+                    <name>	particles/Tank/movement/water/trail_{0}_l_front_spd2.eff	</name>
                     <effectHP>	_TrackFront	</effectHP>
                   </selector>
                   <selector>
                     <type>	effect	</type>
-                    <name>	particles/Tank/movement/water/trail_{0}_l_spd2.xml	</name>
+                    <name>	particles/Tank/movement/water/trail_{0}_l_spd2.eff	</name>
                     <effectHP>	_TrackRear	</effectHP>
                   </selector>
                 </selector>
@@ -4664,12 +4664,12 @@
                   <type>	union	</type>
                   <selector>
                     <type>	effect	</type>
-                    <name>	particles/Tank/movement/water/trail_{0}_l_front_spd1.xml	</name>
+                    <name>	particles/Tank/movement/water/trail_{0}_l_front_spd1.eff	</name>
                     <effectHP>	_TrackFront	</effectHP>
                   </selector>
                   <selector>
                     <type>	effect	</type>
-                    <name>	particles/Tank/movement/water/trail_{0}_l_spd1.xml	</name>
+                    <name>	particles/Tank/movement/water/trail_{0}_l_spd1.eff	</name>
                     <effectHP>	_TrackRear	</effectHP>
                   </selector>
                 </selector>
@@ -4678,12 +4678,12 @@
                   <type>	union	</type>
                   <selector>
                     <type>	effect	</type>
-                    <name>	particles/Tank/movement/water/trail_{0}_l_front_spd0.xml	</name>
+                    <name>	particles/Tank/movement/water/trail_{0}_l_front_spd0.eff	</name>
                     <effectHP>	_TrackFront	</effectHP>
                   </selector>
                   <selector>
                     <type>	effect	</type>
-                    <name>	particles/Tank/movement/water/trail_{0}_l_spd0.xml	</name>
+                    <name>	particles/Tank/movement/water/trail_{0}_l_spd0.eff	</name>
                     <effectHP>	_TrackRear	</effectHP>
                   </selector>
                 </selector>
@@ -4696,12 +4696,12 @@
                   <type>	union	</type>
                   <selector>
                     <type>	effect	</type>
-                    <name>	particles/Tank/movement/water/trail_{0}_l_spd0.xml	</name>
+                    <name>	particles/Tank/movement/water/trail_{0}_l_spd0.eff	</name>
                     <effectHP>	_TrackRear	</effectHP>
                   </selector>
                   <selector>
                     <type>	effect	</type>
-                    <name>	particles/Tank/movement/water/trail_{0}_l_front_spd0.xml	</name>
+                    <name>	particles/Tank/movement/water/trail_{0}_l_front_spd0.eff	</name>
                     <effectHP>	_TrackFront	</effectHP>
                   </selector>
                 </selector>
@@ -4710,12 +4710,12 @@
                   <type>	union	</type>
                   <selector>
                     <type>	effect	</type>
-                    <name>	particles/Tank/movement/water/trail_{0}_l_spd1.xml	</name>
+                    <name>	particles/Tank/movement/water/trail_{0}_l_spd1.eff	</name>
                     <effectHP>	_TrackRear	</effectHP>
                   </selector>
                   <selector>
                     <type>	effect	</type>
-                    <name>	particles/Tank/movement/water/trail_{0}_l_front_spd1.xml	</name>
+                    <name>	particles/Tank/movement/water/trail_{0}_l_front_spd1.eff	</name>
                     <effectHP>	_TrackFront	</effectHP>
                   </selector>
                 </selector>
@@ -4724,12 +4724,12 @@
                   <type>	union	</type>
                   <selector>
                     <type>	effect	</type>
-                    <name>	particles/Tank/movement/water/trail_{0}_l_spd2.xml	</name>
+                    <name>	particles/Tank/movement/water/trail_{0}_l_spd2.eff	</name>
                     <effectHP>	_TrackRear	</effectHP>
                   </selector>
                   <selector>
                     <type>	effect	</type>
-                    <name>	particles/Tank/movement/water/trail_{0}_l_front_spd2.xml	</name>
+                    <name>	particles/Tank/movement/water/trail_{0}_l_front_spd2.eff	</name>
                     <effectHP>	_TrackFront	</effectHP>
                   </selector>
                 </selector>
@@ -4738,12 +4738,12 @@
                   <type>	union	</type>
                   <selector>
                     <type>	effect	</type>
-                    <name>	particles/Tank/movement/water/trail_{0}_l_spd3.xml	</name>
+                    <name>	particles/Tank/movement/water/trail_{0}_l_spd3.eff	</name>
                     <effectHP>	_TrackRear	</effectHP>
                   </selector>
                   <selector>
                     <type>	effect	</type>
-                    <name>	particles/Tank/movement/water/trail_{0}_l_front_spd3.xml	</name>
+                    <name>	particles/Tank/movement/water/trail_{0}_l_front_spd3.eff	</name>
                     <effectHP>	_TrackFront	</effectHP>
                   </selector>
                 </selector>
@@ -4758,7 +4758,7 @@
                 <type>	union	</type>
                 <selector>
                   <type>	effect	</type>
-                  <name>	particles/Tank/movement/water/trail_{0}_underwater_spdBack.xml	</name>
+                  <name>	particles/Tank/movement/water/trail_{0}_underwater_spdBack.eff	</name>
                   <effectHP>	_TankDust	</effectHP>
                 </selector>
               </selector>
@@ -4767,7 +4767,7 @@
                 <type>	union	</type>
                 <selector>
                   <type>	effect	</type>
-                  <name>	particles/Tank/movement/water/trail_{0}_underwater_spd0.xml	</name>
+                  <name>	particles/Tank/movement/water/trail_{0}_underwater_spd0.eff	</name>
                   <effectHP>	_TankDust	</effectHP>
                 </selector>
               </selector>
@@ -4776,7 +4776,7 @@
                 <type>	union	</type>
                 <selector>
                   <type>	effect	</type>
-                  <name>	particles/Tank/movement/water/trail_{0}_underwater_spd1.xml	</name>
+                  <name>	particles/Tank/movement/water/trail_{0}_underwater_spd1.eff	</name>
                   <effectHP>	_TankDust	</effectHP>
                 </selector>
               </selector>
@@ -4929,25 +4929,25 @@
             <selector>
               <key>	sand	</key>
               <type>	effect	</type>
-              <name>	particles/Tank/movement/sand/wheeltrail_dust_{0}_spd1.xml	</name>
+              <name>	particles/Tank/movement/sand/wheeltrail_dust_{0}_spd1.eff	</name>
               <effectHP>	_Node	</effectHP>
             </selector>
             <selector>
               <key>	ground	</key>
               <type>	effect	</type>
-              <name>	particles/Tank/movement/ground/wheeltrail_dust_{0}_spd1.xml	</name>
+              <name>	particles/Tank/movement/ground/wheeltrail_dust_{0}_spd1.eff	</name>
               <effectHP>	_Node	</effectHP>
             </selector>
             <selector>
               <key>	snow	</key>
               <type>	effect	</type>
-              <name>	particles/Tank/movement/snow/wheeltrail_dust_{0}_spd1.xml	</name>
+              <name>	particles/Tank/movement/snow/wheeltrail_dust_{0}_spd1.eff	</name>
               <effectHP>	_Node	</effectHP>
             </selector>
             <selector>
               <key>	stone	</key>
               <type>	effect	</type>
-              <name>	particles/Tank/movement/stone/wheeltrail_dust_{0}_spd1.xml	</name>
+              <name>	particles/Tank/movement/stone/wheeltrail_dust_{0}_spd1.eff	</name>
               <effectHP>	_Node	</effectHP>
             </selector>
             <selector>
@@ -4957,13 +4957,13 @@
               <selector>
                 <key>	0	</key>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/water/wheeltrail_water_{0}_spd1.xml	</name>
+                <name>	particles/Tank/movement/water/wheeltrail_water_{0}_spd1.eff	</name>
                 <effectHP>	_Node	</effectHP>
               </selector>
               <selector>
                 <key>	1	</key>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/water/wheeltrail_underwater_{0}_spd1.xml	</name>
+                <name>	particles/Tank/movement/water/wheeltrail_underwater_{0}_spd1.eff	</name>
                 <effectHP>	_Node	</effectHP>
               </selector>
             </selector>
@@ -4975,25 +4975,25 @@
             <selector>
               <key>	sand	</key>
               <type>	effect	</type>
-              <name>	particles/Tank/movement/sand/wheeltrail_dust_{0}_spd2.xml	</name>
+              <name>	particles/Tank/movement/sand/wheeltrail_dust_{0}_spd2.eff	</name>
               <effectHP>	_Node	</effectHP>
             </selector>
             <selector>
               <key>	ground	</key>
               <type>	effect	</type>
-              <name>	particles/Tank/movement/ground/wheeltrail_dust_{0}_spd2.xml	</name>
+              <name>	particles/Tank/movement/ground/wheeltrail_dust_{0}_spd2.eff	</name>
               <effectHP>	_Node	</effectHP>
             </selector>
             <selector>
               <key>	snow	</key>
               <type>	effect	</type>
-              <name>	particles/Tank/movement/snow/wheeltrail_dust_{0}_spd2.xml	</name>
+              <name>	particles/Tank/movement/snow/wheeltrail_dust_{0}_spd2.eff	</name>
               <effectHP>	_Node	</effectHP>
             </selector>
             <selector>
               <key>	stone	</key>
               <type>	effect	</type>
-              <name>	particles/Tank/movement/stone/wheeltrail_dust_{0}_spd2.xml	</name>
+              <name>	particles/Tank/movement/stone/wheeltrail_dust_{0}_spd2.eff	</name>
               <effectHP>	_Node	</effectHP>
             </selector>
             <selector>
@@ -5003,13 +5003,13 @@
               <selector>
                 <key>	0	</key>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/water/wheeltrail_water_{0}_spd1.xml	</name>
+                <name>	particles/Tank/movement/water/wheeltrail_water_{0}_spd1.eff	</name>
                 <effectHP>	_Node	</effectHP>
               </selector>
               <selector>
                 <key>	1	</key>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/water/wheeltrail_underwater_{0}_spd1.xml	</name>
+                <name>	particles/Tank/movement/water/wheeltrail_underwater_{0}_spd1.eff	</name>
                 <effectHP>	_Node	</effectHP>
               </selector>
             </selector>
@@ -5033,25 +5033,25 @@
             <selector>
               <key>	sand	</key>
               <type>	effect	</type>
-              <name>	particles/Tank/movement/sand/wheeltrail_solid_{0}_spd1.xml	</name>
+              <name>	particles/Tank/movement/sand/wheeltrail_solid_{0}_spd1.eff	</name>
               <effectHP>	_Node	</effectHP>
             </selector>
             <selector>
               <key>	ground	</key>
               <type>	effect	</type>
-              <name>	particles/Tank/movement/ground/wheeltrail_solid_{0}_spd1.xml	</name>
+              <name>	particles/Tank/movement/ground/wheeltrail_solid_{0}_spd1.eff	</name>
               <effectHP>	_Node	</effectHP>
             </selector>
             <selector>
               <key>	snow	</key>
               <type>	effect	</type>
-              <name>	particles/Tank/movement/snow/wheeltrail_solid_{0}_spd1.xml	</name>
+              <name>	particles/Tank/movement/snow/wheeltrail_solid_{0}_spd1.eff	</name>
               <effectHP>	_Node	</effectHP>
             </selector>
             <selector>
               <key>	stone	</key>
               <type>	effect	</type>
-              <name>	particles/Tank/movement/stone/wheeltrail_solid_{0}_spd1.xml	</name>
+              <name>	particles/Tank/movement/stone/wheeltrail_solid_{0}_spd1.eff	</name>
               <effectHP>	_Node	</effectHP>
             </selector>
             <selector>
@@ -5061,13 +5061,13 @@
               <selector>
                 <key>	0	</key>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/water/wheeltrail_water_{0}_spd1.xml	</name>
+                <name>	particles/Tank/movement/water/wheeltrail_water_{0}_spd1.eff	</name>
                 <effectHP>	_Node	</effectHP>
               </selector>
               <selector>
                 <key>	1	</key>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/water/wheeltrail_underwater_{0}_spd1.xml	</name>
+                <name>	particles/Tank/movement/water/wheeltrail_underwater_{0}_spd1.eff	</name>
                 <effectHP>	_Node	</effectHP>
               </selector>
             </selector>
@@ -5079,25 +5079,25 @@
             <selector>
               <key>	sand	</key>
               <type>	effect	</type>
-              <name>	particles/Tank/movement/sand/wheeltrail_solid_{0}_spd2.xml	</name>
+              <name>	particles/Tank/movement/sand/wheeltrail_solid_{0}_spd2.eff	</name>
               <effectHP>	_Node	</effectHP>
             </selector>
             <selector>
               <key>	ground	</key>
               <type>	effect	</type>
-              <name>	particles/Tank/movement/ground/wheeltrail_solid_{0}_spd2.xml	</name>
+              <name>	particles/Tank/movement/ground/wheeltrail_solid_{0}_spd2.eff	</name>
               <effectHP>	_Node	</effectHP>
             </selector>
             <selector>
               <key>	snow	</key>
               <type>	effect	</type>
-              <name>	particles/Tank/movement/snow/wheeltrail_solid_{0}_spd2.xml	</name>
+              <name>	particles/Tank/movement/snow/wheeltrail_solid_{0}_spd2.eff	</name>
               <effectHP>	_Node	</effectHP>
             </selector>
             <selector>
               <key>	stone	</key>
               <type>	effect	</type>
-              <name>	particles/Tank/movement/stone/wheeltrail_solid_{0}_spd2.xml	</name>
+              <name>	particles/Tank/movement/stone/wheeltrail_solid_{0}_spd2.eff	</name>
               <effectHP>	_Node	</effectHP>
             </selector>
             <selector>
@@ -5107,13 +5107,13 @@
               <selector>
                 <key>	0	</key>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/water/wheeltrail_water_{0}_spd1.xml	</name>
+                <name>	particles/Tank/movement/water/wheeltrail_water_{0}_spd1.eff	</name>
                 <effectHP>	_Node	</effectHP>
               </selector>
               <selector>
                 <key>	1	</key>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/water/wheeltrail_underwater_{0}_spd1.xml	</name>
+                <name>	particles/Tank/movement/water/wheeltrail_underwater_{0}_spd1.eff	</name>
                 <effectHP>	_Node	</effectHP>
               </selector>
             </selector>
@@ -5137,25 +5137,25 @@
             <selector>
               <key>	sand	</key>
               <type>	effect	</type>
-              <name>	particles/Tank/movement/sand/wheeltrail_finish_{0}_spd1.xml	</name>
+              <name>	particles/Tank/movement/sand/wheeltrail_finish_{0}_spd1.eff	</name>
               <effectHP>	_Node	</effectHP>
             </selector>
             <selector>
               <key>	ground	</key>
               <type>	effect	</type>
-              <name>	particles/Tank/movement/ground/wheeltrail_finish_{0}_spd1.xml	</name>
+              <name>	particles/Tank/movement/ground/wheeltrail_finish_{0}_spd1.eff	</name>
               <effectHP>	_Node	</effectHP>
             </selector>
             <selector>
               <key>	snow	</key>
               <type>	effect	</type>
-              <name>	particles/Tank/movement/snow/wheeltrail_finish_{0}_spd1.xml	</name>
+              <name>	particles/Tank/movement/snow/wheeltrail_finish_{0}_spd1.eff	</name>
               <effectHP>	_Node	</effectHP>
             </selector>
             <selector>
               <key>	stone	</key>
               <type>	effect	</type>
-              <name>	particles/Tank/movement/stone/wheeltrail_finish_{0}_spd1.xml	</name>
+              <name>	particles/Tank/movement/stone/wheeltrail_finish_{0}_spd1.eff	</name>
               <effectHP>	_Node	</effectHP>
             </selector>
             <selector>
@@ -5165,13 +5165,13 @@
               <selector>
                 <key>	0	</key>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/water/wheeltrail_water_{0}_spd1.xml	</name>
+                <name>	particles/Tank/movement/water/wheeltrail_water_{0}_spd1.eff	</name>
                 <effectHP>	_Node	</effectHP>
               </selector>
               <selector>
                 <key>	1	</key>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/water/wheeltrail_underwater_{0}_spd1.xml	</name>
+                <name>	particles/Tank/movement/water/wheeltrail_underwater_{0}_spd1.eff	</name>
                 <effectHP>	_Node	</effectHP>
               </selector>
             </selector>
@@ -5183,25 +5183,25 @@
             <selector>
               <key>	sand	</key>
               <type>	effect	</type>
-              <name>	particles/Tank/movement/sand/wheeltrail_finish_{0}_spd2.xml	</name>
+              <name>	particles/Tank/movement/sand/wheeltrail_finish_{0}_spd2.eff	</name>
               <effectHP>	_Node	</effectHP>
             </selector>
             <selector>
               <key>	ground	</key>
               <type>	effect	</type>
-              <name>	particles/Tank/movement/ground/wheeltrail_finish_{0}_spd2.xml	</name>
+              <name>	particles/Tank/movement/ground/wheeltrail_finish_{0}_spd2.eff	</name>
               <effectHP>	_Node	</effectHP>
             </selector>
             <selector>
               <key>	snow	</key>
               <type>	effect	</type>
-              <name>	particles/Tank/movement/snow/wheeltrail_finish_{0}_spd2.xml	</name>
+              <name>	particles/Tank/movement/snow/wheeltrail_finish_{0}_spd2.eff	</name>
               <effectHP>	_Node	</effectHP>
             </selector>
             <selector>
               <key>	stone	</key>
               <type>	effect	</type>
-              <name>	particles/Tank/movement/stone/wheeltrail_finish_{0}_spd2.xml	</name>
+              <name>	particles/Tank/movement/stone/wheeltrail_finish_{0}_spd2.eff	</name>
               <effectHP>	_Node	</effectHP>
             </selector>
             <selector>
@@ -5211,13 +5211,13 @@
               <selector>
                 <key>	0	</key>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/water/wheeltrail_water_{0}_spd1.xml	</name>
+                <name>	particles/Tank/movement/water/wheeltrail_water_{0}_spd1.eff	</name>
                 <effectHP>	_Node	</effectHP>
               </selector>
               <selector>
                 <key>	1	</key>
                 <type>	effect	</type>
-                <name>	particles/Tank/movement/water/wheeltrail_underwater_{0}_spd1.xml	</name>
+                <name>	particles/Tank/movement/water/wheeltrail_underwater_{0}_spd1.eff	</name>
                 <effectHP>	_Node	</effectHP>
               </selector>
             </selector>
@@ -5237,25 +5237,25 @@
           <selector>
             <key>	sand	</key>
             <type>	effect	</type>
-            <name>	particles/Tank/movement/sand/wheelslip_{0}_spd1.xml	</name>
+            <name>	particles/Tank/movement/sand/wheelslip_{0}_spd1.eff	</name>
             <effectHP>	_Node	</effectHP>
           </selector>
           <selector>
             <key>	ground	</key>
             <type>	effect	</type>
-            <name>	particles/Tank/movement/ground/wheelslip_{0}_spd1.xml	</name>
+            <name>	particles/Tank/movement/ground/wheelslip_{0}_spd1.eff	</name>
             <effectHP>	_Node	</effectHP>
           </selector>
           <selector>
             <key>	snow	</key>
             <type>	effect	</type>
-            <name>	particles/Tank/movement/snow/wheelslip_{0}_spd1.xml	</name>
+            <name>	particles/Tank/movement/snow/wheelslip_{0}_spd1.eff	</name>
             <effectHP>	_Node	</effectHP>
           </selector>
           <selector>
             <key>	stone	</key>
             <type>	effect	</type>
-            <name>	particles/Tank/movement/stone/wheelslip_{0}_spd1.xml	</name>
+            <name>	particles/Tank/movement/stone/wheelslip_{0}_spd1.eff	</name>
             <effectHP>	_Node	</effectHP>
           </selector>
         </selector>
@@ -5277,7 +5277,7 @@
         </selector>
         <selector>
           <type>	effect	</type>
-          <name>	particles/Tank/movement/forcefields/Forcefield_{0}_track_spd1.xml	</name>
+          <name>	particles/Tank/movement/forcefields/Forcefield_{0}_track_spd1.eff	</name>
           <effectHP>	_Node1	</effectHP>
         </selector>
       </selector>
@@ -5303,7 +5303,7 @@
         </selector>
         <selector>
           <type>	effect	</type>
-          <name>	particles/Tank/movement/forcefields/Forcefield_{0}_track_spd1.xml	</name>
+          <name>	particles/Tank/movement/forcefields/Forcefield_{0}_track_spd1.eff	</name>
           <effectHP>	_Node1	</effectHP>
         </selector>
       </selector>
@@ -5334,7 +5334,7 @@
         </selector>
         <selector>
           <type>	effect	</type>
-          <name>	particles/Tank/movement/forcefields/Forcefield_{0}_track_spd1.xml	</name>
+          <name>	particles/Tank/movement/forcefields/Forcefield_{0}_track_spd1.eff	</name>
           <effectHP>	_Node1	</effectHP>
         </selector>
       </selector>

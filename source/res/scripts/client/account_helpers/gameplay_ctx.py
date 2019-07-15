@@ -10,6 +10,7 @@ _EPIC_RANDOM_NAMES = (constants.ARENA_GAMEPLAY_NAMES[11], constants.ARENA_GAMEPL
 ENABLED_ARENA_GAMEPLAY_NAMES = constants.ARENA_GAMEPLAY_NAMES[:3] + (_ASSAULT2_GP_NAME,) + _EPIC_RANDOM_NAMES
 if constants.IS_DEVELOPMENT:
     ENABLED_ARENA_GAMEPLAY_NAMES += (constants.ARENA_GAMEPLAY_NAMES[13],)
+ENABLED_ARENA_EPIC_NAMES = (constants.ARENA_GAMEPLAY_NAMES[15],)
 
 def getDefaultMask():
 
@@ -51,8 +52,8 @@ def setMaskByNames(names):
     _setMask(gameplayMask)
 
 
-def isCreationEnabled(gameplayName):
-    return gameplayName in ENABLED_ARENA_GAMEPLAY_NAMES
+def isCreationEnabled(gameplayName, isEpic):
+    return gameplayName in ENABLED_ARENA_EPIC_NAMES if isEpic else gameplayName in ENABLED_ARENA_GAMEPLAY_NAMES
 
 
 def _setMask(gameplayMask):

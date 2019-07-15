@@ -1,7 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/shared/page.py
 import BattleReplay
-from AvatarInputHandler import aih_constants, aih_global_binding
+import aih_constants
+from AvatarInputHandler import aih_global_binding
 from debug_utils import LOG_DEBUG
 from gui.Scaleform.daapi.view.battle.shared import crosshair
 from gui.Scaleform.daapi.view.battle.shared import indicators

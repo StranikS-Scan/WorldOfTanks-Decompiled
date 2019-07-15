@@ -1,10 +1,18 @@
 <attachments.xml>
   <priceGroup>
-    <id>	300	</id>
-    <name>	custom attachment notInShop	</name>
+    <id>	17	</id>
+    <name>	attachments 50g	</name>
+    <tags>	attachments	</tags>
+    <price>	50	  <gold></gold>
+    </price>
+    <notInShop>	False	</notInShop>
+  </priceGroup>
+  <priceGroup>
+    <id>	18	</id>
+    <name>	attachments 50g notInShop	</name>
+    <tags>	attachments notInShop	</tags>
     <price>	50	  <gold></gold>
     </price>
     <notInShop>	True	</notInShop>
-    <tags>	attachments	</tags>
   </priceGroup>
 </attachments.xml>

@@ -70,8 +70,17 @@ class CustomizationBottomPanelMeta(BaseDAAPIComponent):
     def as_setNotificationCountersS(self, data):
         return self.flashObject.as_setNotificationCounters(data) if self._isDAAPIInited() else None
 
-    def as_scrollToSlotS(self, intCD):
-        return self.flashObject.as_scrollToSlot(intCD) if self._isDAAPIInited() else None
+    def as_scrollToSlotS(self, intCD, immediately=False):
+        return self.flashObject.as_scrollToSlot(intCD, immediately) if self._isDAAPIInited() else None
 
     def as_playFilterBlinkS(self):
         return self.flashObject.as_playFilterBlink() if self._isDAAPIInited() else None
+
+    def as_onProjectionDecalOnlyOnceHintShownS(self):
+        return self.flashObject.as_onProjectionDecalOnlyOnceHintShown() if self._isDAAPIInited() else None
+
+    def as_onProjectionDecalOnlyOnceHintHiddenS(self):
+        return self.flashObject.as_onProjectionDecalOnlyOnceHintHidden() if self._isDAAPIInited() else None
+
+    def as_carouselFilterMessageS(self, value):
+        return self.flashObject.as_carouselFilterMessage(value) if self._isDAAPIInited() else None

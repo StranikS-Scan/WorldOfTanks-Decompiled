@@ -1,7 +1,10 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/pub/window_impl.py
 import logging
-from frameworks.wulf import PositionAnchor, Window
+import typing
+from frameworks.wulf import PositionAnchor
+from frameworks.wulf import Window, WindowSettings
+from frameworks.wulf import WindowsArea
 from gui.impl.gen import R
 from gui.impl.gen.view_models.windows.window_model import WindowModel
 from helpers import dependency
@@ -9,15 +12,18 @@ from skeletons.gui.impl import IGuiLoader
 _logger = logging.getLogger(__name__)
 
 class WindowImpl(Window):
-    __slots__ = ('__areaID',)
+    __slots__ = ()
     gui = dependency.descriptor(IGuiLoader)
 
     def __init__(self, wndFlags, *args, **kwargs):
-        self.__areaID = kwargs.pop('areaID', R.areas.default())
-        super(WindowImpl, self).__init__(wndFlags, *args, **kwargs)
-        area = self.area
-        if area is not None:
-            area.addWindow(self)
+        settings = WindowSettings()
+        settings.flags = wndFlags
+        settings.areaID = kwargs.pop('areaID', R.areas.default())
+        settings.entryID = kwargs.pop('entryID', R.invalid())
+        settings.decorator = kwargs.pop('decorator', None)
+        settings.content = kwargs.pop('content', None)
+        settings.parent = kwargs.pop('parent', None)
+        super(WindowImpl, self).__init__(settings)
         return
 
     @property
@@ -26,7 +32,8 @@ class WindowImpl(Window):
 
     @property
     def area(self):
-        return self.gui.windowsManager.getWindowsArea(self.__areaID) if self.__areaID else None
+        proxy = self.proxy
+        return self.gui.windowsManager.getWindowsArea(proxy.areaID) if proxy is not None and proxy.areaID else None
 
     def move(self, x, y, xAnchor=PositionAnchor.LEFT, yAnchor=PositionAnchor.TOP):
         area = self.area
@@ -52,21 +59,16 @@ class WindowImpl(Window):
             _logger.error('Window %r can not be cascaded due to it is not added to area.', self)
             return False
 
-    def _initialize(self):
-        super(WindowImpl, self)._initialize()
+    def _onDecoratorReady(self):
         if self.windowModel is not None:
             self.windowModel.onClosed += self._onClosed
             self.windowModel.onMinimized += self._onMinimize
         return
 
-    def _finalize(self):
-        area = self.area
-        if area is not None:
-            self.area.removeWindow(self)
+    def _onDecoratorReleased(self):
         if self.windowModel is not None:
             self.windowModel.onClosed -= self._onClosed
             self.windowModel.onMinimized -= self._onMinimize
-        super(WindowImpl, self)._finalize()
         return
 
     def _onClosed(self, _=None):

@@ -7,12 +7,6 @@ class CustomizationPropertiesSheetMeta(BaseDAAPIComponent):
     def onActionBtnClick(self, actionType, actionData):
         self._printOverrideError('onActionBtnClick')
 
-    def editMode(self, value, interactionType):
-        self._printOverrideError('editMode')
-
-    def interactionStatusUpdate(self, value):
-        self._printOverrideError('interactionStatusUpdate')
-
     def elementControlsHide(self):
         self._printOverrideError('elementControlsHide')
 
@@ -24,6 +18,9 @@ class CustomizationPropertiesSheetMeta(BaseDAAPIComponent):
 
     def as_setDataAndShowS(self, data):
         return self.flashObject.as_setDataAndShow(data) if self._isDAAPIInited() else None
+
+    def as_setArrowsStatesS(self, left, right):
+        return self.flashObject.as_setArrowsStates(left, right) if self._isDAAPIInited() else None
 
     def as_hideS(self):
         return self.flashObject.as_hide() if self._isDAAPIInited() else None

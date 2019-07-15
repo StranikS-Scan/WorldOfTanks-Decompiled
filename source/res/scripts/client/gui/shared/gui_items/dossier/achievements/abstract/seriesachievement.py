@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/gui_items/dossier/achievements/abstract/SeriesAchievement.py
-import BigWorld
 from RegularAchievement import RegularAchievement
+from gui.impl import backport
 
 class SeriesAchievement(RegularAchievement):
 
@@ -9,7 +9,7 @@ class SeriesAchievement(RegularAchievement):
         return (self._getCounterRecordNames()[1], self.getValue())
 
     def getI18nValue(self):
-        return BigWorld.wg_getIntegralFormat(self._value)
+        return backport.getIntegralFormat(self._value)
 
     def _getCounterRecordNames(self):
         return (None, None)

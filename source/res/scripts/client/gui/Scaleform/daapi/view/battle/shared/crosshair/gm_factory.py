@@ -1,6 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/shared/crosshair/gm_factory.py
-from AvatarInputHandler.aih_constants import GUN_MARKER_TYPE
+from aih_constants import GUN_MARKER_TYPE
 from AvatarInputHandler.gun_marker_ctrl import useDefaultGunMarkers
 from gui.battle_control.battle_constants import CROSSHAIR_VIEW_ID as _VIEW_ID
 from gui.Scaleform.daapi.view.battle.shared.crosshair import gm_components as _components

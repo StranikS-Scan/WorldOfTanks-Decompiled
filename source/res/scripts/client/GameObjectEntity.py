@@ -18,7 +18,6 @@ class GameObjectEntity(BigWorld.Entity):
     def loadFromScript(self, script, doReload=False):
         doReload = doReload or GameObjectEntity.ENFORCE_RELOAD
         self.gameObject = Svarog.GameObject(self.spaceID)
-        self.gameObject.activate()
         self.gameObject.createComponent(GenericComponents.TransformComponent, self.matrix)
         self.gameObject.createComponent(NetworkComponents.NetworkEntity, self)
         if not script:
@@ -30,8 +29,11 @@ class GameObjectEntity(BigWorld.Entity):
         module.spaceID = self.spaceID
         module.buildCommon(self.gameObject)
         module.buildClient(self.gameObject)
+        self.gameObject.activate()
 
     def onLeaveWorld(self):
+        if self.gameObject is not None:
+            self.gameObject.destroy()
         self.gameObject = None
         return
 

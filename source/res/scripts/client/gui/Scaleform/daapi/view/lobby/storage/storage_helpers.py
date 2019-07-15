@@ -2,10 +2,10 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/storage/storage_helpers.py
 import random
 from functools import partial
-import BigWorld
 import nations
 from account_helpers import AccountSettings
 from account_helpers.AccountSettings import LAST_STORAGE_VISITED_TIMESTAMP
+from goodies.goodie_constants import GOODIE_STATE
 from gui import g_htmlTemplates
 from gui.Scaleform import MENU
 from gui.Scaleform.daapi.settings import BUTTON_LINKAGES
@@ -18,6 +18,7 @@ from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.MENU import MENU as _MENU
 from gui.Scaleform.locale.RES_SHOP import RES_SHOP
 from gui.Scaleform.locale.STORAGE import STORAGE
+from gui.impl import backport
 from gui.shared.event_dispatcher import showVehiclePreview, showStorage
 from gui.shared.formatters import text_styles, getItemPricesVO, icons
 from gui.shared.gui_items.gui_item_economics import ITEM_PRICE_EMPTY
@@ -32,17 +33,31 @@ from helpers.time_utils import getCurrentTimestamp
 from skeletons.gui.shared import IItemsCache
 _MAX_COMPATIBLE_VEHS_COUNT = 5
 _MAX_COMPATIBLE_GUNS_COUNT = 2
-_HANDLERS_MAP = {GUI_ITEM_TYPE.OPTIONALDEVICE: CONTEXT_MENU_HANDLER_TYPE.STORAGE_EQUIPMENT_ITEM,
- GUI_ITEM_TYPE.EQUIPMENT: CONTEXT_MENU_HANDLER_TYPE.STORAGE_EQUIPMENT_ITEM,
- GUI_ITEM_TYPE.BATTLE_BOOSTER: CONTEXT_MENU_HANDLER_TYPE.STORAGE_BONS_ITEM,
- GUI_ITEM_TYPE.TURRET: CONTEXT_MENU_HANDLER_TYPE.STORAGE_MODULES_SHELLS_ITEM,
- GUI_ITEM_TYPE.ENGINE: CONTEXT_MENU_HANDLER_TYPE.STORAGE_MODULES_SHELLS_ITEM,
- GUI_ITEM_TYPE.GUN: CONTEXT_MENU_HANDLER_TYPE.STORAGE_MODULES_SHELLS_ITEM,
- GUI_ITEM_TYPE.RADIO: CONTEXT_MENU_HANDLER_TYPE.STORAGE_MODULES_SHELLS_ITEM,
- GUI_ITEM_TYPE.CHASSIS: CONTEXT_MENU_HANDLER_TYPE.STORAGE_MODULES_SHELLS_ITEM,
- GUI_ITEM_TYPE.SHELL: CONTEXT_MENU_HANDLER_TYPE.STORAGE_MODULES_SHELLS_ITEM,
- GUI_ITEM_TYPE.CREW_BOOKS: CONTEXT_MENU_HANDLER_TYPE.STORAGE_MODULES_SHELLS_ITEM}
+_HANDLERS_MAP = {GUI_ITEM_TYPE.OPTIONALDEVICE: (CONTEXT_MENU_HANDLER_TYPE.STORAGE_EQUIPMENT_ITEM,),
+ GUI_ITEM_TYPE.EQUIPMENT: (CONTEXT_MENU_HANDLER_TYPE.STORAGE_EQUIPMENT_ITEM,),
+ GUI_ITEM_TYPE.BATTLE_BOOSTER: (CONTEXT_MENU_HANDLER_TYPE.STORAGE_BONS_ITEM,),
+ GUI_ITEM_TYPE.TURRET: (CONTEXT_MENU_HANDLER_TYPE.STORAGE_MODULES_SHELLS_ITEM,),
+ GUI_ITEM_TYPE.ENGINE: (CONTEXT_MENU_HANDLER_TYPE.STORAGE_MODULES_SHELLS_ITEM,),
+ GUI_ITEM_TYPE.GUN: (CONTEXT_MENU_HANDLER_TYPE.STORAGE_MODULES_SHELLS_ITEM,),
+ GUI_ITEM_TYPE.RADIO: (CONTEXT_MENU_HANDLER_TYPE.STORAGE_MODULES_SHELLS_ITEM,),
+ GUI_ITEM_TYPE.CHASSIS: (CONTEXT_MENU_HANDLER_TYPE.STORAGE_MODULES_SHELLS_ITEM,),
+ GUI_ITEM_TYPE.SHELL: (CONTEXT_MENU_HANDLER_TYPE.STORAGE_MODULES_SHELLS_ITEM,),
+ GUI_ITEM_TYPE.CREW_BOOKS: (CONTEXT_MENU_HANDLER_TYPE.STORAGE_CREW_BOOKS_NO_SALE_ITEM, CONTEXT_MENU_HANDLER_TYPE.STORAGE_MODULES_SHELLS_ITEM)}
+
+def _getContextMenuHandlerID(item):
+    itemTypeID = item.itemTypeID
+    if itemTypeID not in _HANDLERS_MAP:
+        return ''
+    handlers = _HANDLERS_MAP[item.itemTypeID]
+    return handlers[item.isForSale] if len(handlers) > 1 else handlers[0]
+
+
 _CUSTOMIZATION_VEHICLE_CRITERIA = ~REQ_CRITERIA.VEHICLE.IS_PREMIUM_IGR | ~REQ_CRITERIA.VEHICLE.EVENT_BATTLE | ~REQ_CRITERIA.VEHICLE.IS_BOT
+_BIG_HIGHLIGHT_TYPES_MAP = {SLOT_HIGHLIGHT_TYPES.BATTLE_BOOSTER_CREW_REPLACE: SLOT_HIGHLIGHT_TYPES.BATTLE_BOOSTER_CREW_REPLACE_BIG,
+ SLOT_HIGHLIGHT_TYPES.BATTLE_BOOSTER: SLOT_HIGHLIGHT_TYPES.BATTLE_BOOSTER_BIG,
+ SLOT_HIGHLIGHT_TYPES.EQUIPMENT_PLUS: SLOT_HIGHLIGHT_TYPES.EQUIPMENT_PLUS_BIG,
+ SLOT_HIGHLIGHT_TYPES.BUILT_IN_EQUIPMENT: SLOT_HIGHLIGHT_TYPES.BUILT_IN_EQUIPMENT_BIG,
+ SLOT_HIGHLIGHT_TYPES.NO_HIGHLIGHT: SLOT_HIGHLIGHT_TYPES.NO_HIGHLIGHT}
 
 def getStorageItemDescr(item):
     itemType = item.itemTypeID
@@ -61,7 +76,7 @@ def getStorageItemDescr(item):
         return text_styles.main(desc)
 
 
-def createStorageDefVO(itemID, title, description, count, price, image, imageAlt, itemType='', nationFlagIcon='', enabled=True, contextMenuId=''):
+def createStorageDefVO(itemID, title, description, count, price, image, imageAlt, itemType='', nationFlagIcon='', enabled=True, contextMenuId='', additionalInfo='', active=GOODIE_STATE.INACTIVE):
     return {'id': itemID,
      'title': title,
      'description': description,
@@ -72,6 +87,8 @@ def createStorageDefVO(itemID, title, description, count, price, image, imageAlt
      'type': itemType,
      'nationFlagIcon': nationFlagIcon,
      'enabled': enabled,
+     'additionalInfo': additionalInfo,
+     'active': active == GOODIE_STATE.ACTIVE,
      'contextMenuId': contextMenuId}
 
 
@@ -82,7 +99,7 @@ def getStorageVehicleVo(vehicle):
     stateIcon, stateText = _getVehicleInfo(vehicle)
     if not imageSmall and not stateText:
         stateText = text_styles.vehicleStatusInfoText(_ms(STORAGE.INHANGAR_NOIMAGE))
-    vo = createStorageDefVO(vehicle.intCD, name, description, vehicle.inventoryCount, getItemPricesVO(vehicle.getSellPrice())[0], imageSmall, RES_SHOP.getVehicleIcon(STORE_CONSTANTS.ICON_SIZE_SMALL, 'empty_tank'), itemType=getBoosterType(vehicle), nationFlagIcon=RES_SHOP.getNationFlagIcon(nations.NAMES[vehicle.nationID]), contextMenuId=CONTEXT_MENU_HANDLER_TYPE.STORAGE_VEHICLES_REGULAR_ITEM)
+    vo = createStorageDefVO(vehicle.intCD, name, description, vehicle.inventoryCount, getItemPricesVO(vehicle.getSellPrice())[0], imageSmall, RES_SHOP.getVehicleIcon(STORE_CONSTANTS.ICON_SIZE_SMALL, 'empty_tank'), itemType=getSlotOverlayIconType(vehicle), nationFlagIcon=RES_SHOP.getNationFlagIcon(nations.NAMES[vehicle.nationID]), contextMenuId=CONTEXT_MENU_HANDLER_TYPE.STORAGE_VEHICLES_REGULAR_ITEM)
     vo.update({'infoImgSrc': stateIcon,
      'infoText': stateText})
     return vo
@@ -93,7 +110,7 @@ def getVehicleName(vehicle):
 
 
 def _getVehicleDescription(vehicle):
-    return ' '.join((_ms(STORAGE.CARD_VEHICLE_HOVER_MAXADDITIONALPRICELABEL), BigWorld.wg_getIntegralFormat(_calculateVehicleMaxAdditionalPrice(vehicle)), icons.credits()))
+    return ' '.join((_ms(STORAGE.CARD_VEHICLE_HOVER_MAXADDITIONALPRICELABEL), backport.getIntegralFormat(_calculateVehicleMaxAdditionalPrice(vehicle)), icons.credits()))
 
 
 def _getVehicleInfo(vehicle):
@@ -163,15 +180,22 @@ def _generateDescr(item, label, moreLabel, paramsNames, maxItemsCount):
     return ' '.join(descrItems)
 
 
-def getBoosterType(item):
-    if item is not None:
-        if item.itemTypeID == GUI_ITEM_TYPE.BATTLE_BOOSTER:
+def getSlotOverlayIconType(item, isBig=False, vehicle=None):
+    if item is None:
+        return SLOT_HIGHLIGHT_TYPES.NO_HIGHLIGHT
+    else:
+        highlightType = SLOT_HIGHLIGHT_TYPES.NO_HIGHLIGHT
+        itemTypeID = item.itemTypeID
+        if itemTypeID == GUI_ITEM_TYPE.BATTLE_BOOSTER:
+            highlightType = SLOT_HIGHLIGHT_TYPES.BATTLE_BOOSTER
             if item.isCrewBooster():
-                return SLOT_HIGHLIGHT_TYPES.BATTLE_BOOSTER_CREW_REPLACE
-            return SLOT_HIGHLIGHT_TYPES.BATTLE_BOOSTER
-        if item.itemTypeID == GUI_ITEM_TYPE.OPTIONALDEVICE and item.isDeluxe():
-            return SLOT_HIGHLIGHT_TYPES.EQUIPMENT_PLUS
-    return SLOT_HIGHLIGHT_TYPES.NO_HIGHLIGHT
+                skillLearnt = item.isAffectedSkillLearnt(vehicle)
+                highlightType = SLOT_HIGHLIGHT_TYPES.BATTLE_BOOSTER if skillLearnt else SLOT_HIGHLIGHT_TYPES.BATTLE_BOOSTER_CREW_REPLACE
+        elif itemTypeID == GUI_ITEM_TYPE.OPTIONALDEVICE and item.isDeluxe():
+            highlightType = SLOT_HIGHLIGHT_TYPES.EQUIPMENT_PLUS
+        elif itemTypeID == GUI_ITEM_TYPE.EQUIPMENT and item.isBuiltIn:
+            highlightType = SLOT_HIGHLIGHT_TYPES.BUILT_IN_EQUIPMENT
+        return _BIG_HIGHLIGHT_TYPES_MAP[highlightType] if isBig else highlightType
 
 
 def getStorageItemIcon(item, size=STORE_CONSTANTS.ICON_SIZE_MEDIUM):
@@ -243,7 +267,7 @@ def getItemVo(item):
     priceVO = getItemPricesVO(item.getSellPrice())[0]
     itemNationID = getItemNationID(item)
     nationFlagIcon = RES_SHOP.getNationFlagIcon(nations.NAMES[itemNationID]) if itemNationID != nations.NONE_INDEX else ''
-    vo = createStorageDefVO(item.intCD, getStorageModuleName(item), getStorageItemDescr(item), item.inventoryCount, priceVO, getStorageItemIcon(item, STORE_CONSTANTS.ICON_SIZE_SMALL), 'altimage', itemType=getBoosterType(item), nationFlagIcon=nationFlagIcon, enabled=item.itemTypeID != GUI_ITEM_TYPE.BATTLE_BOOSTER, contextMenuId=_HANDLERS_MAP[item.itemTypeID])
+    vo = createStorageDefVO(item.intCD, getStorageModuleName(item), getStorageItemDescr(item), item.inventoryCount, priceVO, getStorageItemIcon(item, STORE_CONSTANTS.ICON_SIZE_SMALL), 'altimage', itemType=getSlotOverlayIconType(item), nationFlagIcon=nationFlagIcon, enabled=item.isForSale, contextMenuId=_getContextMenuHandlerID(item))
     return vo
 
 

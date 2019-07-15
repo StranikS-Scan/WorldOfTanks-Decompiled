@@ -1,6 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/rally/rally_dps.py
-import BigWorld
+from gui.impl import backport
 from gui.prb_control import prbEntityProperty
 from helpers import dependency
 from debug_utils import LOG_ERROR
@@ -181,7 +181,7 @@ class ManualSearchDataProvider(BaseRallyListDataProvider):
         userGetter = storage_getter('users')().getUser
         colorGetter = g_settings.getColorScheme('rosters').getColors
         pNameGetter = self.lobbyContext.getPeripheryName
-        ratingFormatter = BigWorld.wg_getIntegralFormat
+        ratingFormatter = backport.getIntegralFormat
         self._selectedIdx = -1
         for unitItem in result:
             creator = unitItem.creator
@@ -232,7 +232,7 @@ class ManualSearchDataProvider(BaseRallyListDataProvider):
         self._selectedIdx = None
         userGetter = storage_getter('users')().getUser
         colorGetter = g_settings.getColorScheme('rosters').getColors
-        ratingFormatter = BigWorld.wg_getIntegralFormat
+        ratingFormatter = backport.getIntegralFormat
         result = set(result)
         removed = set((item for item in result if item[1] is None))
         isFullUpdate = len(removed)

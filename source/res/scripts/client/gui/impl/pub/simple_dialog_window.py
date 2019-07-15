@@ -1,5 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/pub/simple_dialog_window.py
+import typing
+from frameworks.wulf import ViewModel, Array
 from gui.impl.gen.resources import R
 from gui.impl.gen.view_models.constants.dialog_presets import DialogPresets
 from gui.impl.gen.view_models.windows.simple_dialog_window_model import SimpleDialogWindowModel
@@ -13,7 +15,8 @@ class SimpleDialogWindow(DialogWindow):
 
     @property
     def contentViewModel(self):
-        return self._getDecoratorViewModel().getContent().getViewModel()
+        content = self.content
+        return content.getViewModel() if content is not None else None
 
     def setTitle(self, title=R.invalid(), args=None, fmtArgs=None, namedFmtArgs=True):
         model = self.viewModel

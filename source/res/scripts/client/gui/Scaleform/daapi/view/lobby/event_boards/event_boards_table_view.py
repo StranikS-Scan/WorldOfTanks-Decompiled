@@ -4,6 +4,7 @@ from functools import partial
 from collections import namedtuple
 import BigWorld
 from adisp import process
+from gui.impl import backport
 from helpers import dependency
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from helpers.i18n import makeString as _ms
@@ -365,7 +366,7 @@ class EventBoardsTableView(LobbySubView, EventBoardsTableViewMeta):
         leaderboard = self.__leaderboard
         leaderboardValue = event.getLeaderboard(self.__leaderboardID)
         if event.isFinished():
-            date = BigWorld.wg_getLongDateFormat(event.getEndDateTs())
+            date = backport.getLongDateFormat(event.getEndDateTs())
             status = text_styles.main(_ms(EVENT_BOARDS.TIME_EVENTFINISHED, date=date))
             statusTooltip = None
         elif leaderboard:

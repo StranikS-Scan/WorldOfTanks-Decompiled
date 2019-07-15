@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/gui_items/dossier/achievements/MarkOnGunAchievement.py
+from gui.impl import backport
 from helpers import i18n
-import BigWorld
 from dossiers2.ui.achievements import ACHIEVEMENT_BLOCK as _AB
 from gui import makeHtmlString
 from abstract import RegularAchievement
@@ -38,7 +38,7 @@ class MarkOnGunAchievement(RegularAchievement):
          self.IT_95X85: self.__getIconPath(self.IT_95X85)}
 
     def getI18nValue(self):
-        return makeHtmlString('html_templates:lobby/tooltips/achievements', 'marksOnGun', {'count': BigWorld.wg_getNiceNumberFormat(self.__damageRating)}) if self.__damageRating > 0 else ''
+        return makeHtmlString('html_templates:lobby/tooltips/achievements', 'marksOnGun', {'count': backport.getNiceNumberFormat(self.__damageRating)}) if self.__damageRating > 0 else ''
 
     def _getActualName(self):
         return '%s%d' % (self._name, self._value)

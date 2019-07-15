@@ -148,7 +148,7 @@ class PREBATTLE_ACTION_NAME(object):
     STRONGHOLDS_BATTLES_LIST = 'strongholdsBattlesList'
     RANKED = 'ranked'
     RANKED_FORCED = 'rankedForced'
-    EPIC_DEV = 'epicBattle'
+    EPIC_TRAINING_LIST = 'epicTrainingsList'
     EPIC = 'epicQueue'
     EPIC_FORCED = 'epicForced'
 
@@ -196,6 +196,7 @@ class PREBATTLE_SETTING_NAME(object):
     EXTRA_DATA = 'extraData'
     LIMITS = 'limits'
     DESTROY_IF_CREATOR_OUT = 'destroyIfCreatorOut'
+    BATTLE_TYPE = 'type'
 
 
 class PREBATTLE_RESTRICTION(object):

@@ -3,7 +3,6 @@
 import operator
 import time
 from collections import namedtuple
-import BigWorld
 import constants
 from debug_utils import LOG_WARNING
 from gui.Scaleform.daapi.view.lobby.missions import cards_formatters
@@ -255,7 +254,7 @@ class _MissionInfo(QuestInfoModel):
 
     def _getMissionDurationTooltipData(self):
         header = _ms(TOOLTIPS.QUESTS_UNAVAILABLE_TIME_STATUSTOOLTIP)
-        body = _ms(QUESTS.MISSIONS_TAB_MARATHONS_HEADER_PERIOD, startDate=BigWorld.wg_getLongDateFormat(self.event.getStartTime()), endDate=BigWorld.wg_getLongDateFormat(self.event.getFinishTime()))
+        body = _ms(QUESTS.MISSIONS_TAB_MARATHONS_HEADER_PERIOD, startDate=backport.getLongDateFormat(self.event.getStartTime()), endDate=backport.getLongDateFormat(self.event.getFinishTime()))
         note = None
         timeLeft = self.event.getNearestActivityTimeLeft()
         if timeLeft is not None:

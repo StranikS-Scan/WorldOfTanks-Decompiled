@@ -287,6 +287,10 @@ class VehicleParams(_ParameterBase):
         return _getMaxSteeringLockAngle(self.__getChassisPhysics().get('axleSteeringLockAngles')) if self._itemDescr.isWheeledVehicle else None
 
     @property
+    def wheelRiseSpeed(self):
+        return self.__getChassisPhysics().get('wheelRiseSpeed') if self._itemDescr.isWheeledVehicle else None
+
+    @property
     def hullArmor(self):
         return self._itemDescr.hull.primaryArmor
 
@@ -502,7 +506,8 @@ class VehicleParams(_ParameterBase):
          WHEELED_SWITCH_ON_TIME,
          WHEELED_SWITCH_OFF_TIME,
          WHEELED_SWITCH_TIME,
-         WHEELED_SPEED_MODE_SPEED)
+         WHEELED_SPEED_MODE_SPEED,
+         'wheelRiseSpeed')
         stunConditionParams = ('stunMaxDuration', 'stunMinDuration')
         result = _ParamsDictProxy(self, preload, conditions=((conditionalParams, lambda v: v is not None), (stunConditionParams, lambda s: _isStunParamVisible(self._itemDescr.shot.shell))))
         return result

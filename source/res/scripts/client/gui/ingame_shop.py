@@ -11,8 +11,8 @@ from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.hangar.BrowserView import makeBrowserParams
 from gui.Scaleform.daapi.view.lobby.store.browser import ingameshop_helpers as helpers
 from gui.Scaleform.daapi.view.lobby.store.browser.ingameshop_helpers import getLoginUrl, getProductsUrl
-from gui.Scaleform.locale.WAITING import WAITING
 from gui.game_control.links import URLMacros
+from gui.impl.gen import R
 from gui.shared import events, g_eventBus
 from gui.shared.economics import getGUIPrice
 from gui.shared.event_bus import EVENT_BUS_SCOPE
@@ -177,7 +177,7 @@ def showBuyVehicleOverlay(params=None):
     if url:
         url = yield URLMacros().parse(url, params=params)
         g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.OVERLAY_WEB_STORE, ctx={'url': url,
-         'browserParams': makeBrowserParams(WAITING.BUYITEM, True)}), EVENT_BUS_SCOPE.LOBBY)
+         'browserParams': makeBrowserParams(R.strings.waiting.buyItem(), True)}), EVENT_BUS_SCOPE.LOBBY)
 
 
 @async

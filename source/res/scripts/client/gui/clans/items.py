@@ -2,7 +2,7 @@
 # Embedded file name: scripts/client/gui/clans/items.py
 from collections import namedtuple
 from datetime import datetime
-import BigWorld
+from gui.impl import backport
 from helpers import time_utils, int2roman
 from messenger.ext import passCensor
 from shared_utils import makeTupleByDict
@@ -626,23 +626,23 @@ _StrongholdStatisticsData.__new__.__defaults__ = (None,
 
 class StrongholdStatisticsData(_StrongholdStatisticsData, FieldsCheckerMixin):
 
-    @simpleFormatter(BigWorld.wg_getIntegralFormat)
+    @simpleFormatter(backport.getIntegralFormat)
     def getElo10(self):
         return self.elo_10
 
-    @simpleFormatter(BigWorld.wg_getIntegralFormat)
+    @simpleFormatter(backport.getIntegralFormat)
     def getElo8(self):
         return self.elo_8
 
-    @simpleFormatter(BigWorld.wg_getIntegralFormat)
+    @simpleFormatter(backport.getIntegralFormat)
     def getElo6(self):
         return self.elo_6
 
-    @simpleFormatter(BigWorld.wg_getIntegralFormat)
+    @simpleFormatter(backport.getIntegralFormat)
     def getSortiesIn28Days(self):
         return self.sorties_in_28_days
 
-    @simpleFormatter(BigWorld.wg_getIntegralFormat)
+    @simpleFormatter(backport.getIntegralFormat)
     def getFortBattlesIn28Days(self):
         return self.fort_battles_in_28_days
 
@@ -830,7 +830,7 @@ class ClanProvinceData(_ClanProvinceData, FieldsCheckerMixin):
 
     @fmtUnavailableValue(fields=('prime_time',))
     def getUserPrimeTime(self):
-        return BigWorld.wg_getShortTimeFormat(self.prime_time.hour * time_utils.ONE_HOUR + self.prime_time.minute * time_utils.ONE_MINUTE)
+        return backport.getShortTimeFormat(self.prime_time.hour * time_utils.ONE_HOUR + self.prime_time.minute * time_utils.ONE_MINUTE)
 
     def getPeripheryID(self):
         return self.periphery

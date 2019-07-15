@@ -81,6 +81,7 @@ class CrewContextMenuHandler(AbstractContextMenuHandler, EventSystemEntity):
 
 
 class TechnicalMaintenanceCMHandler(AbstractContextMenuHandler, EventSystemEntity):
+    itemsCache = dependency.descriptor(IItemsCache)
 
     def __init__(self, cmProxy, ctx=None):
         super(TechnicalMaintenanceCMHandler, self).__init__(cmProxy, ctx, {MODULE.INFO: 'showModuleInfo',
@@ -106,11 +107,15 @@ class TechnicalMaintenanceCMHandler(AbstractContextMenuHandler, EventSystemEntit
 
     def _generateOptions(self, ctx=None):
         options = [self._makeItem(MODULE.INFO, MENU.contextmenu(MODULE.INFO))]
-        if self._isCanceled:
-            options.append(self._makeItem(MODULE.CANCEL_BUY, MENU.contextmenu(MODULE.CANCEL_BUY)))
+        equipment = self.itemsCache.items.getItemByCD(int(self._equipmentCD))
+        if equipment is not None and equipment.isBuiltIn:
+            return options
         else:
-            options.append(self._makeItem(MODULE.UNLOAD, MENU.contextmenu(MODULE.UNLOAD)))
-        return options
+            if self._isCanceled:
+                options.append(self._makeItem(MODULE.CANCEL_BUY, MENU.contextmenu(MODULE.CANCEL_BUY)))
+            else:
+                options.append(self._makeItem(MODULE.UNLOAD, MENU.contextmenu(MODULE.UNLOAD)))
+            return options
 
 
 class SimpleVehicleCMHandler(AbstractContextMenuHandler, EventSystemEntity):

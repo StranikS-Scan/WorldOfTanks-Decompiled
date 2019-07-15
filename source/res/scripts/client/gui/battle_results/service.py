@@ -131,11 +131,11 @@ class BattleResultsService(IBattleResultsService):
 
     @decorators.process('updating')
     def applyAdditionalBonus(self, arenaUniqueID):
-        vehicleID = self.__getVehicleIfHasBonus(arenaUniqueID)
-        if vehicleID is None:
+        arenaInfo = self.__getAdditionalXPBattles().get(arenaUniqueID)
+        if arenaInfo is None:
             return
         else:
-            result = yield PremiumBonusApplier(arenaUniqueID, vehicleID).request()
+            result = yield PremiumBonusApplier(arenaUniqueID, arenaInfo.vehicleID).request()
             if result and result.userMsg:
                 SystemMessages.pushMessage(result.userMsg, type=result.sysMsgType)
             if result.success:
@@ -148,28 +148,33 @@ class BattleResultsService(IBattleResultsService):
         return arenaUniqueID in self.__appliedAddXPBonus
 
     def isAddXPBonusEnabled(self, arenaUniqueID):
-        return self.__getVehicleIfHasBonus(arenaUniqueID) is not None and self.itemsCache.items.stats.isPremium
+        return arenaUniqueID in self.__getAdditionalXPBattles() and self.itemsCache.items.stats.isPremium
 
     def getAdditionalXPValue(self, arenaUniqueID):
-        for bonusInfo in self.__getAdditionalXPBattles().itervalues():
-            if not bonusInfo:
-                continue
-            curArenaUniqueID, _, bonusValue, _ = bonusInfo
-            if arenaUniqueID == curArenaUniqueID:
-                return bonusValue
+        arenaInfo = self.__getAdditionalXPBattles().get(arenaUniqueID)
+        return 0 if arenaInfo is None else arenaInfo.extraXP
+
+    def isCrewSameForArena(self, arenaUniqueID):
+        arenaInfo = self.__getAdditionalXPBattles().get(arenaUniqueID)
+        vehicle = self.getVehicleForArena(arenaUniqueID)
+        if arenaInfo is not None and vehicle is not None:
+            currentCrew = set((tankman.invID for _, tankman in vehicle.crew if tankman is not None))
+            lastCrew = set((tankmanID for tankmanID, _ in arenaInfo.extraTmenXP))
+            return currentCrew == lastCrew
+        else:
+            return False
+
+    def isXPToTManSameForArena(self, arenaUniqueID):
+        arenaInfo = self.__getAdditionalXPBattles().get(arenaUniqueID)
+        vehicle = self.getVehicleForArena(arenaUniqueID)
+        return vehicle.isXPToTman == arenaInfo.isXPToTMan if arenaInfo is not None and vehicle is not None else False
+
+    def getVehicleForArena(self, arenaUniqueID):
+        arenaInfo = self.__getAdditionalXPBattles().get(arenaUniqueID)
+        return self.itemsCache.items.getItemByCD(arenaInfo.vehicleID) if arenaInfo is not None else None
 
     def __getAdditionalXPBattles(self):
         return self.itemsCache.items.stats.additionalXPCache
-
-    def __getVehicleIfHasBonus(self, arenaUniqueID):
-        for vehicleID, bonusInfo in self.__getAdditionalXPBattles().iteritems():
-            if not bonusInfo:
-                continue
-            curArenaUniqueID, _, _, _ = bonusInfo
-            if arenaUniqueID == curArenaUniqueID:
-                return vehicleID
-
-        return None
 
     @process
     def __showResults(self, ctx):

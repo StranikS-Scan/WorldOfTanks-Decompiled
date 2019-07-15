@@ -2,7 +2,7 @@
 # Embedded file name: scripts/client/SoundZoneTrigger.py
 import BigWorld
 import Math
-from AvatarInputHandler import mathUtils
+import math_utils
 VISUALISE_ZONE = False
 
 class SoundZoneTrigger(BigWorld.UserDataObject):
@@ -15,7 +15,7 @@ class SoundZoneTrigger(BigWorld.UserDataObject):
             BigWorld.player().addModel(self.model)
             motor = BigWorld.Servo(Math.Matrix())
             self.model.addMotor(motor)
-            motor.signal = mathUtils.createSRTMatrix(Math.Vector3(self.Size.x, self.Size.y, self.Size.z), Math.Vector3(self.direction.z, self.direction.y, self.direction.x), self.position)
+            motor.signal = math_utils.createSRTMatrix(Math.Vector3(self.Size.x, self.Size.y, self.Size.z), Math.Vector3(self.direction.z, self.direction.y, self.direction.x), self.position)
 
     def destroy(self):
         pass

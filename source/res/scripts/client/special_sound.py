@@ -38,15 +38,15 @@ def _setSpecialVoiceByCommanderSkinID(isFemale, commanderSkinID, lobbyContext=No
 def setSpecialVoice(crewGroup, commanderSkinID, vehicleType, isPlayerVehicle):
     groupID, isFemaleCrewCommander, isPremium = tankmen.unpackCrewParams(crewGroup)
     nationID, _ = vehicleType.id
-    if _setSpecialVoiceByCommanderSkinID(isFemaleCrewCommander, commanderSkinID):
-        return
-    if _setSpecialVoiceByTankmen(nationID, groupID, isPremium):
-        return
+    genderSwitch = CREW_GENDER_SWITCHES.DEFAULT
     if vehicleType.name in _VALKYRIE_SOUND_MODES and isPlayerVehicle:
         SoundGroups.g_instance.soundModes.setMode(_VALKYRIE_SOUND_MODES[vehicleType.name])
         return
-    genderSwitch = CREW_GENDER_SWITCHES.DEFAULT
+    if _setSpecialVoiceByTankmen(nationID, groupID, isPremium):
+        return
     if SoundGroups.g_instance.soundModes.currentNationalPreset[1]:
+        if _setSpecialVoiceByCommanderSkinID(isFemaleCrewCommander, commanderSkinID):
+            return
         if isFemaleCrewCommander:
             genderSwitch = CREW_GENDER_SWITCHES.FEMALE
     nation = nations.NAMES[nationID]

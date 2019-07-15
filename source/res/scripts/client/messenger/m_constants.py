@@ -88,10 +88,14 @@ class USER_TAG(object):
     PRESENCE_DND = 'presence/dnd'
     BAN_CHAT = 'ban/chat'
     _SHARED_TAGS = {CLAN_MEMBER, SEARCH, TEMP}
-    _CLOSED_CONTACTS = _SHARED_TAGS | {FRIEND}
-    _ALL_CONTACTS = _SHARED_TAGS | {IGNORED, IGNORED_TMP, SUB_PENDING_IN}
+    _CLOSED_CONTACTS = {FRIEND, CLAN_MEMBER}
+    _ALL_CONTACTS = {CLAN_MEMBER,
+     FRIEND,
+     IGNORED,
+     IGNORED_TMP,
+     SUB_PENDING_IN,
+     MUTED}
     _STORED_TO_CACHE = {MUTED}
-    _TRUSTED_TAGS = {FRIEND, CLAN_MEMBER}
 
     @classmethod
     def filterAllContactsTags(cls, tags):
@@ -110,8 +114,8 @@ class USER_TAG(object):
         return tags & cls._SHARED_TAGS
 
     @classmethod
-    def filterTrustedTags(cls, tags):
-        return tags & cls._TRUSTED_TAGS
+    def filterToRemoveTags(cls, tags):
+        return USER_TAG.TEMP in tags and not USER_TAG.filterAllContactsTags(tags)
 
 
 class USER_ACTION_ID(object):

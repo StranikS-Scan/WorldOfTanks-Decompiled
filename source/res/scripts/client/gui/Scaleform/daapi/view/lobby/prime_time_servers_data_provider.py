@@ -1,9 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/prime_time_servers_data_provider.py
-import BigWorld
 from gui.Scaleform.daapi.view.servers_data_provider import ServersDataProvider
 from gui.Scaleform.locale.COMMON import COMMON
 from gui.Scaleform.locale.RANKED_BATTLES import RANKED_BATTLES
+from gui.impl import backport
 from helpers import i18n
 
 class PrimeTimesServersDataProvider(ServersDataProvider):
@@ -51,7 +51,7 @@ class PrimeTimesServersDataProvider(ServersDataProvider):
                 serverPeriods = self.primeTimes[scheduleServerNames]
 
         periodsStr = []
-        frmt = BigWorld.wg_getShortTimeFormat
+        frmt = backport.getShortTimeFormat
         if serverPeriods:
             for periodStart, periodEnd in serverPeriods:
                 periodsStr.append(i18n.makeString(RANKED_BATTLES.CALENDARDAY_TIME, start=frmt(periodStart), end=frmt(periodEnd)))

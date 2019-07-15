@@ -1,10 +1,10 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/epicBattle/epic_prime_time.py
-import BigWorld
 from gui.Scaleform import MENU
 from gui.Scaleform.daapi.view.lobby.prime_time_view_base import ServerListItemPresenter
 from gui.Scaleform.daapi.view.lobby.prime_time_view_base import PrimeTimeViewBase
 from gui.Scaleform.locale.EPIC_BATTLE import EPIC_BATTLE
+from gui.impl import backport
 from gui.prb_control.settings import PREBATTLE_ACTION_NAME
 from gui.shared.formatters import text_styles
 from helpers import dependency
@@ -75,9 +75,9 @@ class EpicBattlesPrimeTimeView(PrimeTimeViewBase):
                 startTime = primeTime.getNextPeriodStart(currTime, timestamp)
                 if startTime:
                     if startTime - currTime > time_utils.ONE_DAY:
-                        startTimeStr = BigWorld.wg_getShortDateFormat(startTime)
+                        startTimeStr = backport.getShortDateFormat(startTime)
                     else:
-                        startTimeStr = BigWorld.wg_getShortTimeFormat(startTime)
+                        startTimeStr = backport.getShortTimeFormat(startTime)
                     return _ms(EPIC_BATTLE.PRIMETIME_STATUS_NOPRIMETIMEONTHISSERVER, startTime=startTimeStr, server=currServerName)
             season = self.__epicController.getCurrentSeason()
             if season is not None and primeTime is not None:

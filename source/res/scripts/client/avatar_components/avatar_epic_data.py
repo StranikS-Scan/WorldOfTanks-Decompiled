@@ -9,7 +9,7 @@ from gui.battle_control import avatar_getter
 import CommandMapping
 from gui.battle_control import event_dispatcher as gui_event_dispatcher
 from gui.battle_control.battle_constants import VEHICLE_VIEW_STATE
-from AvatarInputHandler.aih_constants import CTRL_MODE_NAME
+from aih_constants import CTRL_MODE_NAME
 from gui.sounds.epic_sound_constants import EPIC_SOUND
 
 class AvatarEpicData(object):

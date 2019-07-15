@@ -4,7 +4,6 @@ import cPickle
 import logging
 import math
 from collections import namedtuple
-import BigWorld
 import ResMgr
 import ArenaType
 import constants
@@ -121,7 +120,7 @@ class IgrTooltipData(ToolTipBaseData):
         igrType = self.igrCtrl.getRoomType()
         icon = makeHtmlString('html_templates:igr/iconBig', 'premium' if igrType == constants.IGR_TYPE.PREMIUM else 'basic')
         return {'title': i18n.makeString(TOOLTIPS.IGR_TITLE, igrIcon=icon),
-         'description': makeHtmlString('html_templates:lobby/tooltips', descriptionTemplate, {'igrValue': '{0}%'.format(BigWorld.wg_getIntegralFormat(igrPercent))}),
+         'description': makeHtmlString('html_templates:lobby/tooltips', descriptionTemplate, {'igrValue': '{0}%'.format(backport.getIntegralFormat(igrPercent))}),
          'quests': [ i.format(**template.ctx) for i in qLabels ],
          'progressHeader': makeHtmlString('html_templates:lobby/tooltips', 'igr_progress_header', {}),
          'progress': qProgress,
@@ -413,7 +412,7 @@ class SortieDivisionTooltipData(StrongholdTooltipData):
         return text_styles.main(str(minCount) + ' - ' + str(maxCount))
 
     def __getBonusStr(self, bonus):
-        return ''.join((text_styles.defRes(BigWorld.wg_getIntegralFormat(bonus) + ' '), icons.nut()))
+        return ''.join((text_styles.defRes(backport.getIntegralFormat(bonus) + ' '), icons.nut()))
 
 
 class ReserveTooltipData(StrongholdTooltipData):
@@ -577,10 +576,10 @@ class ClanCommonInfoTooltipData(ToolTipBaseData):
         if data is None:
             return {}
         else:
-            rating = formatField(getter=data.getRating, formatter=BigWorld.wg_getIntegralFormat)
-            count = formatField(getter=data.getBattlesCount, formatter=BigWorld.wg_getIntegralFormat)
-            wins = formatField(getter=data.getWinsRatio, formatter=lambda value: BigWorld.wg_getNiceNumberFormat(value) + '%')
-            exp = formatField(getter=data.getAvgExp, formatter=BigWorld.wg_getIntegralFormat)
+            rating = formatField(getter=data.getRating, formatter=backport.getIntegralFormat)
+            count = formatField(getter=data.getBattlesCount, formatter=backport.getIntegralFormat)
+            wins = formatField(getter=data.getWinsRatio, formatter=lambda value: backport.getNiceNumberFormat(value) + '%')
+            exp = formatField(getter=data.getAvgExp, formatter=backport.getIntegralFormat)
             statValues = text_styles.stats('\n'.join((rating,
              count,
              wins,
@@ -614,7 +613,7 @@ class _BattleStatus(object):
         return makeString(self.msg)
 
     def getResText(self, count):
-        return ''.join((self.style('%s %s' % (self.prefix, BigWorld.wg_getIntegralFormat(count))), icons.nut()))
+        return ''.join((self.style('%s %s' % (self.prefix, backport.getIntegralFormat(count))), icons.nut()))
 
 
 class ActionTooltipData(ToolTipBaseData):
@@ -692,7 +691,7 @@ class ActionTooltipData(ToolTipBaseData):
                 elif actionUserName:
                     descr = i18n.makeString(TOOLTIPS.ACTIONPRICE_FORACTION, actionName=actionUserName)
         if hasRentCompensation:
-            formattedRentCompensation = makeHtmlString(template, Currency.GOLD, {'value': BigWorld.wg_getGoldFormat(rentCompensation)})
+            formattedRentCompensation = makeHtmlString(template, Currency.GOLD, {'value': backport.getGoldFormat(rentCompensation)})
             descr += '\n' + i18n.makeString(TOOLTIPS.ACTIONPRICE_RENTCOMPENSATION, rentCompensation=formattedRentCompensation)
         if not isBuying and deviceName is not None:
             headerText = i18n.makeString(TOOLTIPS.ACTIONPRICE_SELL_HEADER)
@@ -751,7 +750,7 @@ class BaseDiscountTooltipData(ToolTipBaseData):
     @staticmethod
     def _formatPrice(cost, currencyType):
         template = 'html_templates:lobby/quests/actions'
-        format_ = BigWorld.wg_getGoldFormat
+        format_ = backport.getGoldFormat
         return makeHtmlString(template, currencyType, {'value': format_(cost)}) if cost is not None else ''
 
 
@@ -808,7 +807,7 @@ class ToolTipFortWrongTime(ToolTipBaseData):
 
         if wrongState == 'wrongTime':
             return {'header': i18n.makeString(TOOLTIPS.FORTWRONGTIME_HEADER),
-             'body': i18n.makeString(TOOLTIPS.FORTWRONGTIME_BODY, local=BigWorld.wg_getShortTimeFormat(time_utils.getCurrentTimestamp()), server=BigWorld.wg_getShortTimeFormat(time_utils.getCurrentLocalServerTimestamp()))}
+             'body': i18n.makeString(TOOLTIPS.FORTWRONGTIME_BODY, local=backport.getShortTimeFormat(time_utils.getCurrentTimestamp()), server=backport.getShortTimeFormat(time_utils.getCurrentLocalServerTimestamp()))}
         elif (wrongState == 'lockTime' or wrongState == 'ownDefenceTime') and timePeriods is not None and len(timePeriods) >= 1:
             timeStart, timeFinish = timePeriods[0]
             return {'header': i18n.makeString(TOOLTIPS.FORTWRONGTIME_LOCKTIME_HEADER),
@@ -996,7 +995,7 @@ def _getCurrencySetting(key):
 
 
 def makePriceBlock(price, currencySetting, neededValue=None, oldPrice=None, percent=0, valueWidth=-1, leftPadding=61, forcedText=''):
-    _int = BigWorld.wg_getIntegralFormat
+    _int = backport.getIntegralFormat
     needFormatted = ''
     oldPriceText = ''
     hasAction = percent != 0
@@ -1153,13 +1152,13 @@ class HeaderMoneyAndXpTooltipData(BlocksTooltipData):
     def _getValue(self):
         valueStr = '0'
         if self._btnType == CURRENCIES_CONSTANTS.GOLD:
-            valueStr = text_styles.gold(BigWorld.wg_getIntegralFormat(self.itemsCache.items.stats.money.gold))
+            valueStr = text_styles.gold(backport.getIntegralFormat(self.itemsCache.items.stats.money.gold))
         elif self._btnType == CURRENCIES_CONSTANTS.CREDITS:
-            valueStr = text_styles.credits(BigWorld.wg_getIntegralFormat(self.itemsCache.items.stats.money.credits))
+            valueStr = text_styles.credits(backport.getIntegralFormat(self.itemsCache.items.stats.money.credits))
         elif self._btnType == CURRENCIES_CONSTANTS.CRYSTAL:
-            valueStr = text_styles.crystal(BigWorld.wg_getIntegralFormat(self.itemsCache.items.stats.money.crystal))
+            valueStr = text_styles.crystal(backport.getIntegralFormat(self.itemsCache.items.stats.money.crystal))
         elif self._btnType == CURRENCIES_CONSTANTS.FREE_XP:
-            valueStr = text_styles.expText(BigWorld.wg_getIntegralFormat(self.itemsCache.items.stats.actualFreeXP))
+            valueStr = text_styles.expText(backport.getIntegralFormat(self.itemsCache.items.stats.actualFreeXP))
         return valueStr
 
     def _getIconYOffset(self):

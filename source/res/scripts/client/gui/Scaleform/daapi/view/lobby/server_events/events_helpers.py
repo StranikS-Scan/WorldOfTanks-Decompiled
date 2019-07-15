@@ -2,7 +2,6 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/server_events/events_helpers.py
 import operator
 from collections import defaultdict
-import BigWorld
 import constants
 from constants import EVENT_TYPE
 from gui import makeHtmlString, GUI_NATIONS
@@ -15,6 +14,7 @@ from gui.Scaleform.locale.LINKEDSET import LINKEDSET
 from gui.Scaleform.locale.PERSONAL_MISSIONS import PERSONAL_MISSIONS
 from gui.Scaleform.locale.QUESTS import QUESTS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
+from gui.impl import backport
 from gui.server_events import formatters, conditions, settings as quest_settings
 from gui.server_events.events_helpers import EventInfoModel, MISSIONS_STATES, QuestInfoModel, isLinkedSet
 from gui.server_events.events_helpers import getLocalizedMissionNameForLinkedSetQuest, getLocalizedQuestNameForLinkedSetQuest, getLocalizedQuestDescForLinkedSetQuest
@@ -80,7 +80,7 @@ class _EventInfo(EventInfoModel):
                          'maxProgrVal': totalProg,
                          'currentProgrVal': curProg,
                          'description': '%d. %s' % (index, label),
-                         'progressDiff': '+ %s' % BigWorld.wg_getIntegralFormat(diff)})
+                         'progressDiff': '+ %s' % backport.getIntegralFormat(diff)})
 
             if not progresses:
                 return

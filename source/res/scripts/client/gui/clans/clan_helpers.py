@@ -767,7 +767,7 @@ def getStrongholdUrl(urlName):
     return None
 
 
-def getStrongholdClanCardUrl(clanDBID):
+def getStrongholdClanCardUrl(clanDBID=''):
     return getStrongholdUrl('clanCardUrl') + str(clanDBID)
 
 

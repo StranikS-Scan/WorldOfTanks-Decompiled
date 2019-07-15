@@ -569,9 +569,11 @@ class OpenCustomizationHandler(_ActionHandler):
         notification = model.getNotification(self.getNotType(), entityID)
         savedData = notification.getSavedData()
         vehicleIntCD = savedData.get('vehicleIntCD')
+        callback = self.service.getCtx().switchToStyle if savedData.get('toStyle') else None
         vehicle = self.service.getItemByCD(vehicleIntCD)
         if vehicle.invID != -1:
-            self.service.showCustomization(vehicle.invID, callback=self.service.getCtx().switchToStyle)
+            self.service.showCustomization(vehicle.invID, callback=callback)
+        return
 
 
 class ProlongStyleRent(_ActionHandler):

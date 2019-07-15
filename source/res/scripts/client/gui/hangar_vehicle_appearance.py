@@ -8,7 +8,7 @@ import Event
 import Math
 import VehicleStickers
 import Vehicular
-from AvatarInputHandler import mathUtils
+import math_utils
 from debug_utils import LOG_ERROR
 from dossiers2.ui.achievements import MARK_ON_GUN_RECORD
 from gui import g_tankActiveCamouflage
@@ -33,14 +33,16 @@ from gui.shared import g_eventBus, EVENT_BUS_SCOPE
 from gui.ClientHangarSpace import hangarCFG
 from gui.battle_control.vehicle_getter import hasTurretRotator
 _SHOULD_CHECK_DECAL_UNDER_GUN = True
+_PROJECTION_DECAL_OVERLAPPING_FACTOR = 0.7
 _HANGAR_TURRET_SHIFT = math.pi / 8
 AnchorLocation = namedtuple('AnchorLocation', ['position', 'normal', 'up'])
+AnchorId = namedtuple('AnchorId', ('slotType', 'areaId', 'regionIdx'))
 AnchorHelper = namedtuple('AnchorHelper', ['location',
  'descriptor',
  'turretYaw',
  'partIdx',
  'attachedPartIdx'])
-AnchorParams = namedtuple('AnchorParams', ['location', 'descriptor', 'turretYaw'])
+AnchorParams = namedtuple('AnchorParams', ['location', 'descriptor', 'id'])
 
 class _LoadStateNotifier(object):
     __em = Event.EventManager()
@@ -163,7 +165,7 @@ class HangarVehicleAppearance(ScriptGameObject):
 
     def destroy(self):
         if self.fashion is not None:
-            self.fashion.setPhysicalTrack(None, None)
+            self.fashion.removePhysicalTracks()
         ScriptGameObject.deactivate(self)
         ScriptGameObject.destroy(self)
         self.__clearSequences()
@@ -220,10 +222,14 @@ class HangarVehicleAppearance(ScriptGameObject):
             vehicleLength = abs(hullBB[1][2] - hullBB[0][2])
         return vehicleLength
 
+    def computeFullVehicleLength(self):
+        hullBB = Math.Matrix(self.__vEntity.model.getBoundsForPart(TankPartIndexes.HULL))
+        return hullBB.applyVector(Math.Vector3(0.0, 0.0, 1.0)).length
+
     def __reload(self, vDesc, vState, outfit):
         self.__loadState.unload()
         if self.fashion is not None:
-            self.fashion.setPhysicalTrack(None, None)
+            self.fashion.removePhysicalTracks()
         ScriptGameObject.deactivate(self)
         self.tracks = None
         self.collisionObstaclesCollector = None
@@ -287,8 +293,9 @@ class HangarVehicleAppearance(ScriptGameObject):
         collisionAssembler = BigWorld.CollisionAssembler(bspModels, self.__spaceId)
         resources.append(collisionAssembler)
         physicalTracksBuilders = vDesc.chassis.physicalTracks
-        for name, builder in physicalTracksBuilders.iteritems():
-            resources.append(builder.createLoader(self.__spaceId, '{0}PhysicalTrack'.format(name), modelsSet))
+        for name, builders in physicalTracksBuilders.iteritems():
+            for index, builder in enumerate(builders):
+                resources.append(builder.createLoader(self.__spaceId, '{0}{1}PhysicalTrack'.format(name, index), modelsSet))
 
         BigWorld.loadResourceListBG(tuple(resources), makeCallbackWeak(self.__onResourcesLoaded, self.__curBuildInd))
         return
@@ -353,7 +360,7 @@ class HangarVehicleAppearance(ScriptGameObject):
             self.__fashions = VehiclePartsTuple(BigWorld.WGVehicleFashion(), BigWorld.WGBaseFashion(), BigWorld.WGBaseFashion(), BigWorld.WGBaseFashion())
             model_assembler.setupTracksFashion(self.__vDesc, self.__fashions.chassis)
             self.__vEntity.model.setupFashions(self.__fashions)
-            model_assembler.assembleCollisionObstaclesCollector(self, None, self.__vDesc)
+            model_assembler.assembleCollisionObstaclesCollector(self, None, self.__vDesc, BigWorld.player().spaceID)
             model_assembler.assembleTessellationCollisionSensor(self, None)
             wheelsScroll = None
             wheelsSteering = None
@@ -363,9 +370,9 @@ class HangarVehicleAppearance(ScriptGameObject):
                 steerableWheelsCount = self.__vDesc.chassis.generalWheelsAnimatorConfig.getSteerableWheelsCount()
                 wheelsSteering = [ (lambda : 0.0) for _ in xrange(steerableWheelsCount) ]
             chassisFashion = self.__fashions.chassis
-            self.wheelsAnimator = model_assembler.createWheelsAnimator(self, ColliderTypes.VEHICLE_COLLIDER, self.__vDesc, lambda : 0, wheelsScroll, wheelsSteering, None)
-            self.trackNodesAnimator = model_assembler.createTrackNodesAnimator(self, self.__vDesc)
             splineTracksImpl = model_assembler.setupSplineTracks(chassisFashion, self.__vDesc, self.__vEntity.model, self.__resources, self.__outfit.modelsSet)
+            self.wheelsAnimator = model_assembler.createWheelsAnimator(self, ColliderTypes.VEHICLE_COLLIDER, self.__vDesc, lambda : 0, wheelsScroll, wheelsSteering, splineTracksImpl)
+            self.trackNodesAnimator = model_assembler.createTrackNodesAnimator(self, self.__vDesc)
             model_assembler.assembleTracks(self.__resources, self.__vDesc, self, splineTracksImpl, True)
             dirtEnabled = BigWorld.WG_dirtEnabled() and 'HD' in self.__vDesc.type.tags
             if dirtEnabled:
@@ -379,7 +386,7 @@ class HangarVehicleAppearance(ScriptGameObject):
                     self.__fashions[fashionIdx].addMaterialHandler(dirtHandlers[fashionIdx])
 
                 self.dirtComponent.setBase()
-            outfitData = camouflages.getOutfitData(self.__outfit, self.__vDesc, self.__vState != 'undamaged')
+            outfitData = camouflages.getOutfitData(self, self.__outfit, self.__vDesc, self.__vState != 'undamaged')
             self.c11nComponent = self.createComponent(Vehicular.C11nEditComponent, self.__fashions, self.compoundModel, outfitData)
             self.__updateDecals(self.__outfit)
             self.__updateSequences(self.__outfit)
@@ -397,19 +404,19 @@ class HangarVehicleAppearance(ScriptGameObject):
                 self.__staticTurretYaw = cfg['vehicle_turret_yaw']
                 turretYawLimits = self.__vDesc.gun.turretYawLimits
                 if turretYawLimits is not None:
-                    self.__staticTurretYaw = mathUtils.clamp(turretYawLimits[0], turretYawLimits[1], self.__staticTurretYaw)
+                    self.__staticTurretYaw = math_utils.clamp(turretYawLimits[0], turretYawLimits[1], self.__staticTurretYaw)
             if self.__staticGunPitch is None:
                 self.__staticGunPitch = cfg['vehicle_gun_pitch']
                 gunPitchLimits = self.__vDesc.gun.pitchLimits['absolute']
-                self.__staticGunPitch = mathUtils.clamp(gunPitchLimits[0], gunPitchLimits[1], self.__staticGunPitch)
+                self.__staticGunPitch = math_utils.clamp(gunPitchLimits[0], gunPitchLimits[1], self.__staticGunPitch)
         else:
             if self.__staticTurretYaw is None:
                 self.__staticTurretYaw = 0.0
             if self.__staticGunPitch is None:
                 self.__staticGunPitch = 0.0
-        turretYawMatrix = mathUtils.createRotationMatrix((self.__staticTurretYaw, 0.0, 0.0))
+        turretYawMatrix = math_utils.createRotationMatrix((self.__staticTurretYaw, 0.0, 0.0))
         self.__vEntity.model.node(TankPartNames.TURRET, turretYawMatrix)
-        gunPitchMatrix = mathUtils.createRotationMatrix((0.0, self.__staticGunPitch, 0.0))
+        gunPitchMatrix = math_utils.createRotationMatrix((0.0, self.__staticGunPitch, 0.0))
         self.__vEntity.model.node(TankPartNames.GUN, gunPitchMatrix)
         return
 
@@ -441,7 +448,7 @@ class HangarVehicleAppearance(ScriptGameObject):
     def __setupModel(self, buildIdx):
         self.__assembleModel()
         cfg = hangarCFG()
-        matrix = mathUtils.createSRTMatrix(Math.Vector3(cfg['v_scale'], cfg['v_scale'], cfg['v_scale']), Math.Vector3(self.__vEntity.yaw, self.__vEntity.pitch, self.__vEntity.roll), self.__vEntity.position)
+        matrix = math_utils.createSRTMatrix(Math.Vector3(cfg['v_scale'], cfg['v_scale'], cfg['v_scale']), Math.Vector3(self.__vEntity.yaw, self.__vEntity.pitch, self.__vEntity.roll), self.__vEntity.position)
         self.__vEntity.model.matrix = matrix
         self.__doFinalSetup(buildIdx)
         self.__vEntity.typeDescriptor = self.__vDesc
@@ -449,7 +456,7 @@ class HangarVehicleAppearance(ScriptGameObject):
         center = 0.5 * (gunColBox[1] - gunColBox[0])
         gunoffset = Math.Matrix()
         gunoffset.setTranslate((0.0, 0.0, center.z + gunColBox[0].z))
-        gunLink = mathUtils.MatrixProviders.product(gunoffset, self.__vEntity.model.node(TankPartNames.GUN))
+        gunLink = math_utils.MatrixProviders.product(gunoffset, self.__vEntity.model.node(TankPartNames.GUN))
         collisionData = ((TankPartNames.getIdx(TankPartNames.CHASSIS), self.__vEntity.model.matrix),
          (TankPartNames.getIdx(TankPartNames.HULL), self.__vEntity.model.node(TankPartNames.HULL)),
          (TankPartNames.getIdx(TankPartNames.TURRET), self.__vEntity.model.node(TankPartNames.TURRET)),
@@ -554,22 +561,49 @@ class HangarVehicleAppearance(ScriptGameObject):
         self.__updateProjectionDecals(outfit)
         self.__updateSequences(outfit)
 
-    def rotateTurret(self, turretYaw=None):
+    def rotateTurret(self, anchorId):
         if self.compoundModel is None:
             return False
-        if turretYaw is None or not hasTurretRotator(self.__vDesc):
-            turretYaw = self.__staticTurretYaw
-        else:
-            turretYawLimits = self.__vDesc.gun.turretYawLimits
-            if turretYawLimits is not None:
-                turretYaw = mathUtils.clamp(turretYawLimits[0], turretYawLimits[1], turretYaw)
+        turretYaw = self.__getTurretYawForAnchor(anchorId, self.__staticTurretYaw)
         currentTurretYaw = Math.Matrix(self.compoundModel.node(TankPartNames.TURRET)).yaw
         if abs(currentTurretYaw - turretYaw) > 0.0001:
-            turretYawMatrix = mathUtils.createRotationMatrix((turretYaw, 0.0, 0.0))
+            turretYawMatrix = math_utils.createRotationMatrix((turretYaw, 0.0, 0.0))
             self.compoundModel.node(TankPartNames.TURRET, turretYawMatrix)
             return True
         else:
             return False
+
+    def __getAnchorHelperById(self, anchorId):
+        if anchorId.slotType not in self.__anchorsHelpers:
+            return None
+        else:
+            slotTypeAnchorHelpers = self.__anchorsHelpers[anchorId.slotType]
+            if anchorId.areaId not in slotTypeAnchorHelpers:
+                return None
+            areaAnchorHelpers = slotTypeAnchorHelpers[anchorId.areaId]
+            return None if anchorId.regionIdx not in areaAnchorHelpers else areaAnchorHelpers[anchorId.regionIdx]
+
+    def __updateAnchorHelperWithId(self, anchorId, newAnchorHelper):
+        self.__anchorsHelpers[anchorId.slotType][anchorId.areaId][anchorId.regionIdx] = newAnchorHelper
+
+    def __getTurretYawForAnchor(self, anchorId, defaultYaw):
+        turretYaw = defaultYaw
+        if anchorId is not None and hasTurretRotator(self.__vDesc):
+            anchorHelper = self.__getAnchorHelperById(anchorId)
+            if anchorHelper is not None:
+                if anchorHelper.turretYaw is not None:
+                    turretYaw = anchorHelper.turretYaw
+                else:
+                    if anchorHelper.attachedPartIdx == TankPartIndexes.HULL:
+                        needsCorrection = anchorId.slotType in (GUI_ITEM_TYPE.PROJECTION_DECAL, GUI_ITEM_TYPE.EMBLEM, GUI_ITEM_TYPE.INSCRIPTION)
+                        if needsCorrection:
+                            turretYaw = self.__correctTurretYaw(anchorHelper, defaultYaw)
+                    anchorHelper = AnchorHelper(anchorHelper.location, anchorHelper.descriptor, turretYaw, anchorHelper.partIdx, anchorHelper.attachedPartIdx)
+                    self.__updateAnchorHelperWithId(anchorId, anchorHelper)
+        turretYawLimits = self.__vDesc.gun.turretYawLimits
+        if turretYawLimits is not None:
+            turretYaw = math_utils.clamp(turretYawLimits[0], turretYawLimits[1], turretYaw)
+        return turretYaw
 
     def __updatePaint(self, outfit):
         for fashionIdx, _ in enumerate(TankPartNames.ALL):
@@ -578,7 +612,7 @@ class HangarVehicleAppearance(ScriptGameObject):
 
     def __updateCamouflage(self, outfit):
         for fashionIdx, descId in enumerate(TankPartNames.ALL):
-            camo = camouflages.getCamo(outfit, fashionIdx, self.__vDesc, descId, self.__vState != 'undamaged')
+            camo = camouflages.getCamo(self, outfit, fashionIdx, self.__vDesc, descId, self.__vState != 'undamaged')
             self.c11nComponent.setPartCamo(fashionIdx, camo)
 
     def __updateDecals(self, outfit):
@@ -597,8 +631,7 @@ class HangarVehicleAppearance(ScriptGameObject):
 
     def __clearSequences(self):
         for animator in self.__sequenceAnimators:
-            animator.stop()
-            animator.setEnabled(False)
+            animator.halt()
 
         self.__sequenceAnimators = []
 
@@ -628,7 +661,7 @@ class HangarVehicleAppearance(ScriptGameObject):
                     if attachedPartIdx not in tankPartsToUpdate:
                         continue
                     anchorLocationWS = self.__getAnchorLocationWS(anchorHelper.location, anchorHelper.partIdx)
-                    self.__anchorsParams[slotType][areaId][regionIdx] = AnchorParams(anchorLocationWS, anchorHelper.descriptor, anchorHelper.turretYaw)
+                    self.__anchorsParams[slotType][areaId][regionIdx] = AnchorParams(anchorLocationWS, anchorHelper.descriptor, AnchorId(slotType, areaId, regionIdx))
 
     def __initAnchorsHelpers(self):
         anchorsHelpers = {cType:{area:{} for area in Area.ALL} for cType in SLOT_TYPES}
@@ -666,11 +699,7 @@ class HangarVehicleAppearance(ScriptGameObject):
         anchorLocation = AnchorLocation(position, normal, up)
         partIdx = anchor.areaId
         attachedPartIdx = self.__getAttachedPartIdx(position, normal, partIdx)
-        if attachedPartIdx == TankPartIndexes.HULL:
-            turretYaw = self.__correctTurretYaw(anchorLocation, partIdx, anchor.descriptor)
-        else:
-            turretYaw = None
-        return AnchorHelper(anchorLocation, anchor.descriptor, turretYaw, partIdx, attachedPartIdx)
+        return AnchorHelper(anchorLocation, anchor.descriptor, None, partIdx, attachedPartIdx)
 
     def __getAnchorHelper(self, anchor):
         slotType = ANCHOR_TYPE_TO_SLOT_TYPE_MAP[anchor.descriptor.type]
@@ -683,14 +712,16 @@ class HangarVehicleAppearance(ScriptGameObject):
             partIdx = anchor.areaId
         normal = anchor.anchorDirection
         normal.normalise()
-        up = normal * (Math.Vector3(0, 1, 0) * normal)
+        if slotType == GUI_ITEM_TYPE.PROJECTION_DECAL:
+            ypr = anchor.descriptor.rotation
+            rotationMatrix = Math.Matrix()
+            rotationMatrix.setRotateYPR((ypr.y, ypr.x, ypr.z))
+            up = rotationMatrix.applyVector((0, 0, -1))
+        else:
+            up = normal * (Math.Vector3(0, 1, 0) * normal)
         anchorLocation = AnchorLocation(position, normal, up)
         attachedPartIdx = self.__getAttachedPartIdx(position, normal, partIdx)
-        if slotType == GUI_ITEM_TYPE.PROJECTION_DECAL and attachedPartIdx == TankPartIndexes.HULL:
-            turretYaw = self.__correctTurretYaw(anchorLocation, partIdx, anchor.descriptor)
-        else:
-            turretYaw = None
-        return AnchorHelper(anchorLocation, anchor.descriptor, turretYaw, partIdx, attachedPartIdx)
+        return AnchorHelper(anchorLocation, anchor.descriptor, None, partIdx, attachedPartIdx)
 
     def __getAttachedPartIdx(self, position, normal, tankPartIdx):
         partMatrix = Math.Matrix(self.__vEntity.model.node(TankPartIndexes.getName(tankPartIdx)))
@@ -707,25 +738,40 @@ class HangarVehicleAppearance(ScriptGameObject):
 
         return tankPartIdx
 
-    def __correctTurretYaw(self, anchorLocation, partIdx, slotDescriptor):
+    def __correctTurretYaw(self, anchorHelper, defaultYaw):
         if not _SHOULD_CHECK_DECAL_UNDER_GUN:
-            return
+            return defaultYaw
         else:
-            anchorLocationWS = self.__getAnchorLocationWS(anchorLocation, partIdx)
-            position = anchorLocationWS.position
-            direction = -anchorLocationWS.normal
+            partMatrix = Math.Matrix(self.__vEntity.model.node(TankPartIndexes.getName(anchorHelper.partIdx)))
+            turretMat = Math.Matrix(self.compoundModel.node(TankPartNames.TURRET))
+            transformMatrix = math_utils.createRTMatrix((turretMat.yaw, partMatrix.pitch, partMatrix.roll), partMatrix.translation)
+            anchorLocationWS = self.__applyToAnchorLocation(anchorHelper.location, transformMatrix)
+            pivotXZ = turretMat.translation - partMatrix.translation
+            pivotXZ[1] = 0.0
+            position = anchorLocationWS.position + pivotXZ
+            direction = anchorLocationWS.normal
             up = anchorLocationWS.up
-            turretMat = Math.Matrix(self.__vEntity.model.node(TankPartNames.TURRET))
             fromTurretToHit = position - turretMat.translation
-            if fromTurretToHit.z < 0:
-                return
-            checkDirWorld = direction * -10.0
-            cornersWorldSpace = self.__getDecalCorners(position, direction, up, slotDescriptor)
+            if fromTurretToHit.dot(turretMat.applyVector((0, 0, 1))) < 0:
+                return defaultYaw
+            checkDirWorld = direction * 10.0
+            cornersWorldSpace = self.__getDecalCorners(position, direction, up, anchorHelper.descriptor)
             if cornersWorldSpace is None:
-                return
+                return defaultYaw
+            slotType = ANCHOR_TYPE_TO_SLOT_TYPE_MAP[anchorHelper.descriptor.type]
+            if slotType == GUI_ITEM_TYPE.PROJECTION_DECAL:
+                turretLefttDir = turretMat.applyVector((1, 0, 0))
+                turretLefttDir.normalise()
+                gunJoin = self.__vEntity.model.node('HP_gunJoint')
+                fromGunJointToAnchor = gunJoin.position - position
+                decalDiags = (cornersWorldSpace[0] - cornersWorldSpace[2], cornersWorldSpace[1] - cornersWorldSpace[3])
+                fromGunToHit = abs(fromGunJointToAnchor.dot(turretLefttDir))
+                halfDecalWidth = max((abs(decalDiag.dot(turretLefttDir)) for decalDiag in decalDiags)) * 0.5
+                if fromGunToHit > halfDecalWidth * _PROJECTION_DECAL_OVERLAPPING_FACTOR:
+                    return 0.0
             result = self.collisions.collideShape(TankPartIndexes.GUN, cornersWorldSpace, checkDirWorld)
             if result < 0.0:
-                return
+                return defaultYaw
             turretYaw = _HANGAR_TURRET_SHIFT
             gunDir = turretMat.applyVector(Math.Vector3(0, 0, 1))
             if Math.Vector3(0, 1, 0).dot(gunDir * fromTurretToHit) > 0.0:
@@ -755,12 +801,15 @@ class HangarVehicleAppearance(ScriptGameObject):
          Math.Vector3(-width * 0.5, height * 0.5, 0))
         return tuple((transformMatrix.applyPoint(vec) for vec in result))
 
-    def __getAnchorLocationWS(self, anchorLocation, partIdx):
-        partMatrix = Math.Matrix(self.__vEntity.model.node(TankPartIndexes.getName(partIdx)))
-        position = partMatrix.applyPoint(anchorLocation.position)
-        normal = partMatrix.applyVector(anchorLocation.normal)
-        up = partMatrix.applyVector(anchorLocation.up)
+    def __applyToAnchorLocation(self, anchorLocation, transform):
+        position = transform.applyPoint(anchorLocation.position)
+        normal = transform.applyVector(anchorLocation.normal)
+        up = transform.applyVector(anchorLocation.up)
         if abs(normal.pitch - math.pi / 2) < 0.1:
             normal = Math.Vector3(0, -1, 0) + up * 0.01
             normal.normalise()
         return AnchorLocation(position, normal, up)
+
+    def __getAnchorLocationWS(self, anchorLocation, partIdx):
+        partMatrix = Math.Matrix(self.__vEntity.model.node(TankPartIndexes.getName(partIdx)))
+        return self.__applyToAnchorLocation(anchorLocation, partMatrix)

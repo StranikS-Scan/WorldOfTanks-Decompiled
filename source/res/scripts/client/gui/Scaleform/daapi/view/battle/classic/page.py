@@ -1,6 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/classic/page.py
-from AvatarInputHandler.aih_constants import CTRL_MODE_NAME
+from aih_constants import CTRL_MODE_NAME
 from constants import ARENA_PERIOD
 from debug_utils import LOG_DEBUG
 from gui.Scaleform.daapi.view.battle.shared import SharedPage, finish_sound_player, drone_music_player, period_music_listener

@@ -5,7 +5,7 @@
     <userString>	#vehicle_customization:insignias/special	</userString>
     <season>	ALL	</season>
     <historical>	false	</historical>
-    <priceGroup>	legacy notInShop	</priceGroup>
+    <priceGroup>	insignias 50g notInShop	</priceGroup>
     <tags>	hiddenInUI	</tags>
     <vehicleFilter>
       <include>
@@ -13,10 +13,63 @@
       </include>
     </vehicleFilter>
     <insignia>
-      <id>	1	</id>
+      <id>	12	</id>
       <atlas>	gui/maps/vehicles/decals/insignia/custom/gun_wh.dds	</atlas>
       <alphabet>	gui/maps/vehicles/decals/insignia/custom/gun_wh.xml	</alphabet>
       <texture>	gui/maps/vehicles/decals/insignia/custom/gun_wh_3.dds	</texture>
+    </insignia>
+  </itemGroup>
+  <itemGroup>
+    <name>	national	</name>
+    <userString>	#vehicle_customization:insignias/national	</userString>
+    <season>	ALL	</season>
+    <historical>	true	</historical>
+    <priceGroup>	insignias 50g notInShop	</priceGroup>
+    <tags>	hiddenInUI	</tags>
+    <vehicleFilter></vehicleFilter>
+    <insignia>
+      <id>	1	</id>
+      <texture>	gui/maps/vehicles/decals/insignia/gun_ussr_3.dds	</texture>
+    </insignia>
+    <insignia>
+      <id>	2	</id>
+      <texture>	gui/maps/vehicles/decals/insignia/gun_germany_3.dds	</texture>
+    </insignia>
+    <insignia>
+      <id>	3	</id>
+      <texture>	gui/maps/vehicles/decals/insignia/gun_usa_3.dds	</texture>
+    </insignia>
+    <insignia>
+      <id>	4	</id>
+      <texture>	gui/maps/vehicles/decals/insignia/gun_china_3.dds	</texture>
+    </insignia>
+    <insignia>
+      <id>	5	</id>
+      <texture>	gui/maps/vehicles/decals/insignia/gun_france_uk_3.dds	</texture>
+    </insignia>
+    <insignia>
+      <id>	6	</id>
+      <texture>	gui/maps/vehicles/decals/insignia/gun_france_uk_3.dds	</texture>
+    </insignia>
+    <insignia>
+      <id>	7	</id>
+      <texture>	gui/maps/vehicles/decals/insignia/gun_japan_3.dds	</texture>
+    </insignia>
+    <insignia>
+      <id>	8	</id>
+      <texture>	gui/maps/vehicles/decals/insignia/gun_czech_3.dds	</texture>
+    </insignia>
+    <insignia>
+      <id>	9	</id>
+      <texture>	gui/maps/vehicles/decals/insignia/gun_sweden_3.dds	</texture>
+    </insignia>
+    <insignia>
+      <id>	10	</id>
+      <texture>	gui/maps/vehicles/decals/insignia/gun_poland_3.dds	</texture>
+    </insignia>
+    <insignia>
+      <id>	11	</id>
+      <texture>	gui/maps/vehicles/decals/insignia/gun_italian_3.dds	</texture>
     </insignia>
   </itemGroup>
 </list.xml>

@@ -15,7 +15,7 @@ class ViewFlags(CONST_CONTAINER):
     VIEW = 1
     WINDOW_DECORATOR = 2
     POP_OVER_DECORATOR = 4 | WINDOW_DECORATOR
-    COMPONENT = 16 | VIEW
+    COMPONENT = 16
     OLD_STYLE_VIEW = 32
     MARKER_VIEW = 256 | OLD_STYLE_VIEW
     WINDOW_VIEW = 512 | OLD_STYLE_VIEW
@@ -137,3 +137,24 @@ class PositionAnchor(CONST_CONTAINER):
     RIGHT = 1
     TOP = 2
     BOTTOM = 3
+
+
+class NumberFormatType(CONST_CONTAINER):
+    INTEGRAL = 0
+    GOLD = 1
+
+
+class RealFormatType(CONST_CONTAINER):
+    FRACTIONAL = 0
+    WO_ZERO_DIGITS = 1
+
+
+class TimeFormatType(CONST_CONTAINER):
+    SHORT_FORMAT = 0
+    LONG_FORMAT = 1
+
+
+class DateFormatType(CONST_CONTAINER):
+    SHORT_FORMAT = 0
+    LONG_FORMAT = 1
+    YEAR_MONTH = 2

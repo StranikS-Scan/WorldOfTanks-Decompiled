@@ -596,6 +596,10 @@ class RankedPointFormatter(TokenBonusFormatter):
 
         return PreformattedBonus(label=self._formatBonusLabel(token.count), userName=self._getUserName(bonus), labelFormatter=self._getLabelFormatter(bonus), images=images, tooltip=makeTooltip(header=backport.text(R.strings.tooltips.rankedBattleView.scorePoint.header()), body=backport.text(R.strings.tooltips.rankedBattleView.scorePoint.body())), align=self._getLabelAlign(bonus), isCompensation=self._isCompensation(bonus))
 
+    @classmethod
+    def _getLabelAlign(cls, bonus):
+        return LABEL_ALIGN.RIGHT
+
 
 class TmanTemplateBonusFormatter(SimpleBonusFormatter):
 
@@ -1046,28 +1050,13 @@ class ItemsBonusFormatter(SimpleBonusFormatter):
 
     @classmethod
     def _getHighlightType(cls, item):
-        result = {}
-        for size in AWARDS_SIZES.ALL():
-            result[size] = SLOT_HIGHLIGHT_TYPES.NO_HIGHLIGHT
-
-        if item.itemTypeName == SLOT_HIGHLIGHT_TYPES.BATTLE_BOOSTER_NAME:
-            result[AWARDS_SIZES.BIG] = SLOT_HIGHLIGHT_TYPES.BATTLE_BOOSTER_BIG
-            result[AWARDS_SIZES.SMALL] = SLOT_HIGHLIGHT_TYPES.BATTLE_BOOSTER
-        return result
+        from gui.Scaleform.daapi.view.lobby.storage.storage_helpers import getSlotOverlayIconType
+        return {AWARDS_SIZES.BIG: getSlotOverlayIconType(item, isBig=True),
+         AWARDS_SIZES.SMALL: getSlotOverlayIconType(item, isBig=False)}
 
     @classmethod
     def _getOverlayType(cls, item):
-        result = {}
-        for size in AWARDS_SIZES.ALL():
-            result[size] = SLOT_HIGHLIGHT_TYPES.NO_HIGHLIGHT
-
-        if item.itemTypeName == SLOT_HIGHLIGHT_TYPES.OPTIONAL_DEVICE_NAME and item.isDeluxe():
-            result[AWARDS_SIZES.BIG] = SLOT_HIGHLIGHT_TYPES.EQUIPMENT_PLUS_BIG
-            result[AWARDS_SIZES.SMALL] = SLOT_HIGHLIGHT_TYPES.EQUIPMENT_PLUS
-        elif item.itemTypeName == SLOT_HIGHLIGHT_TYPES.BATTLE_BOOSTER_NAME:
-            result[AWARDS_SIZES.BIG] = SLOT_HIGHLIGHT_TYPES.BATTLE_BOOSTER_BIG
-            result[AWARDS_SIZES.SMALL] = SLOT_HIGHLIGHT_TYPES.BATTLE_BOOSTER
-        return result
+        return cls._getHighlightType(item)
 
     @classmethod
     def _getHighlightIcon(cls, item):

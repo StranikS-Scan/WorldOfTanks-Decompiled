@@ -4,7 +4,8 @@ from math import pi, copysign, atan2, sqrt
 import BattleReplay
 import BigWorld
 import Settings
-from AvatarInputHandler import mathUtils, aih_global_binding, cameras
+import math_utils
+from AvatarInputHandler import aih_global_binding, cameras
 from AvatarInputHandler.AimingSystems.ArtyAimingSystem import ArtyAimingSystem
 from AvatarInputHandler.AimingSystems.ArtyAimingSystemRemote import ArtyAimingSystemRemote
 from AvatarInputHandler.DynamicCameras import createOscillatorFromSection, CameraDynamicConfig
@@ -206,7 +207,7 @@ class ArtyCamera(ICamera, CallbackDelayer):
         ds.writeFloat('artyMode/camera/camDist', self.__cfg['camDist'])
 
     def __applyNoiseImpulse(self, noiseMagnitude):
-        noiseImpulse = mathUtils.RandomVectors.random3Flat(noiseMagnitude)
+        noiseImpulse = math_utils.RandomVectors.random3Flat(noiseMagnitude)
         self.__positionNoiseOscillator.applyImpulse(noiseImpulse)
 
     def __calculateAimOffset(self, aimWorldPos):
@@ -215,7 +216,7 @@ class ArtyCamera(ICamera, CallbackDelayer):
             aimOffset = replayCtrl.getAimClipPosition()
         else:
             aimOffset = cameras.projectPoint(aimWorldPos)
-            aimOffset = Vector2(mathUtils.clamp(-0.95, 0.95, aimOffset.x), mathUtils.clamp(-0.95, 0.95, aimOffset.y))
+            aimOffset = Vector2(math_utils.clamp(-0.95, 0.95, aimOffset.x), math_utils.clamp(-0.95, 0.95, aimOffset.y))
             if replayCtrl.isRecording:
                 replayCtrl.setAimClipPosition(aimOffset)
         return aimOffset
@@ -252,7 +253,7 @@ class ArtyCamera(ICamera, CallbackDelayer):
     def __getDesiredCameraDistance(self):
         distRange = self.__cfg['distRange']
         self.__desiredCamDist -= self.__dxdydz.z * self.__curSense
-        self.__desiredCamDist = mathUtils.clamp(distRange[0], distRange[1], self.__desiredCamDist)
+        self.__desiredCamDist = math_utils.clamp(distRange[0], distRange[1], self.__desiredCamDist)
         self.__desiredCamDist = self.__aimingSystem.overrideCamDist(self.__desiredCamDist)
         self.__cfg['camDist'] = self.__camDist
         return self.__desiredCamDist
@@ -280,9 +281,9 @@ class ArtyCamera(ICamera, CallbackDelayer):
         distRange = self.__cfg['distRange']
         vehiclePosition = BigWorld.player().getVehicleAttached().position
         collisionTestOrigin = Vector3(vehiclePosition)
-        if direction.x * direction.x > direction.z * direction.z and not mathUtils.almostZero(direction.x):
+        if direction.x * direction.x > direction.z * direction.z and not math_utils.almostZero(direction.x):
             collisionTestOrigin.y = direction.y / direction.x * (vehiclePosition.x - aimPoint.x) + aimPoint.y
-        elif not mathUtils.almostZero(direction.z):
+        elif not math_utils.almostZero(direction.z):
             collisionTestOrigin.y = direction.y / direction.z * (vehiclePosition.z - aimPoint.z) + aimPoint.y
         else:
             collisionTestOrigin = aimPoint - direction.scale((distRange[1] - distRange[0]) / 2.0)
@@ -300,7 +301,7 @@ class ArtyCamera(ICamera, CallbackDelayer):
             collisionDistance = (aimPoint - collision[0]).length
             if sign * (collisionDistance - distance) < distRange[0]:
                 distance = collisionDistance - sign * distRange[0]
-        if mathUtils.almostZero(self.__rotation):
+        if math_utils.almostZero(self.__rotation):
             srcPoint = aimPoint - direction.scale(distance)
             endPoint = aimPoint
             collision = collideDynamicAndStatic(srcPoint, endPoint, (BigWorld.player().playerVehicleID,))
@@ -326,19 +327,19 @@ class ArtyCamera(ICamera, CallbackDelayer):
         angularShift = angularShift if self.__choosePitchLevel(aimPoint) else -angularShift
         minPitch = max(forcedPitch, impactPitch)
         maxPitch = max(forcedPitch, self.__cfg['maximalPitch'])
-        self.__rotation = mathUtils.clamp(minPitch, maxPitch, self.__rotation + angularShift)
+        self.__rotation = math_utils.clamp(minPitch, maxPitch, self.__rotation + angularShift)
         desiredDistance = self.__getDesiredCameraDistance()
         cameraDirection = self.__getCameraDirection()
         desiredDistance = self.__resolveCollisions(aimPoint, desiredDistance, cameraDirection)
-        desiredDistance = mathUtils.clamp(distRange[0], distRange[1], desiredDistance)
+        desiredDistance = math_utils.clamp(distRange[0], distRange[1], desiredDistance)
         translation = aimPoint - cameraDirection.scale(desiredDistance)
         rotation = Vector3(cameraDirection.yaw, -cameraDirection.pitch, 0.0)
         return (translation, rotation)
 
     def __interpolateStates(self, deltaTime, translation, rotation):
-        lerpParam = mathUtils.clamp(0.0, 1.0, deltaTime * self.__cfg['interpolationSpeed'])
+        lerpParam = math_utils.clamp(0.0, 1.0, deltaTime * self.__cfg['interpolationSpeed'])
         self.__sourceMatrix = slerp(self.__sourceMatrix, rotation, lerpParam)
-        self.__targetMatrix.translation = mathUtils.lerp(self.__targetMatrix.translation, translation, lerpParam)
+        self.__targetMatrix.translation = math_utils.lerp(self.__targetMatrix.translation, translation, lerpParam)
         return (self.__sourceMatrix, self.__targetMatrix)
 
     def __cameraUpdate(self):
@@ -348,7 +349,7 @@ class ArtyCamera(ICamera, CallbackDelayer):
         self.__aimOffset = self.__calculateAimOffset(aimPoint)
         self.__updateTrajectoryDrawer()
         translation, rotation = self.__calculateIdealState(deltaTime)
-        self.__interpolateStates(deltaTime, translation, mathUtils.createRotationMatrix(rotation))
+        self.__interpolateStates(deltaTime, translation, math_utils.createRotationMatrix(rotation))
         self.__camDist = aimPoint - self.__targetMatrix.translation
         self.__camDist = self.__camDist.length
         self.__cam.source = self.__sourceMatrix
@@ -367,7 +368,7 @@ class ArtyCamera(ICamera, CallbackDelayer):
         else:
             self.__positionOscillator.reset()
             self.__positionNoiseOscillator.reset()
-        self.__cam.target.a = mathUtils.createTranslationMatrix(self.__positionOscillator.deviation + self.__positionNoiseOscillator.deviation)
+        self.__cam.target.a = math_utils.createTranslationMatrix(self.__positionOscillator.deviation + self.__positionNoiseOscillator.deviation)
 
     def __readCfg(self, dataSec):
         if not dataSec:

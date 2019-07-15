@@ -188,12 +188,12 @@ class _StrongholdSettings(namedtuple('_StrongholdSettings', ('wgshHostUrl',))):
         return cls('')
 
 
-class _FrontlineSettings(namedtuple('_FrontlineSettings', ('flHostUrl',))):
+class _FrontlineSettings(namedtuple('_FrontlineSettings', ('flHostUrl', 'isEpicTrainingEnabled'))):
     __slots__ = ()
 
     @classmethod
     def defaults(cls):
-        return cls('')
+        return cls('', False)
 
 
 class _SpgRedesignFeatures(namedtuple('_SpgRedesignFeatures', ('stunEnabled', 'markTargetAreaEnabled'))):
@@ -247,7 +247,7 @@ class _RankedBattlesConfig(namedtuple('_RankedBattlesConfig', ('isEnabled', 'per
     __slots__ = ()
 
     def __new__(cls, **kwargs):
-        defaults = dict(isEnabled=False, peripheryIDs={}, winnerRankChanges=(), loserRankChanges=(), minXP=0, unburnableRanks={}, unburnableStepRanks={}, unburnableVehRanks={}, unburnableVehStepRanks={}, minLevel=0, maxLevel=0, accRanks=(), accSteps=(), vehRanks=(), vehSteps=(), cycleFinishSeconds=0, primeTimes={}, seasons={}, cycleTimes=(), accLadderPts=(), vehLadderPts=(), shields={}, divisions={}, bonusBattlesMultiplier=0)
+        defaults = dict(isEnabled=False, peripheryIDs={}, winnerRankChanges=(), loserRankChanges=(), minXP=0, unburnableRanks={}, unburnableStepRanks={}, unburnableVehRanks={}, unburnableVehStepRanks={}, minLevel=0, maxLevel=0, accRanks=0, accSteps=(), vehRanks=(), vehSteps=(), cycleFinishSeconds=0, primeTimes={}, seasons={}, cycleTimes=(), accLadderPts=(), vehLadderPts=(), shields={}, divisions={}, bonusBattlesMultiplier=0)
         defaults.update(kwargs)
         return super(_RankedBattlesConfig, cls).__new__(cls, **defaults)
 
@@ -280,7 +280,8 @@ _ProgressiveReward.__new__.__defaults__ = (True,
 class _EpicMetaGameConfig(namedtuple('_EpicMetaGameConfig', ['maxCombatReserveLevel',
  'seasonData',
  'metaLevel',
- 'rewards'])):
+ 'rewards',
+ 'defaultSlots'])):
 
     def asDict(self):
         return self._asdict()
@@ -294,6 +295,7 @@ class _EpicMetaGameConfig(namedtuple('_EpicMetaGameConfig', ['maxCombatReserveLe
 _EpicMetaGameConfig.__new__.__defaults__ = (0,
  (0, False),
  (0, 0, 0),
+ {},
  {})
 
 class _EpicGameConfig(namedtuple('_EpicGameConfig', ('isEnabled', 'validVehicleLevels', 'seasons', 'cycleTimes', 'peripheryIDs', 'primeTimes'))):
@@ -459,7 +461,7 @@ class ServerSettings(object):
             self.__strongholdSettings = _StrongholdSettings(settings.get('wgshHostUrl', ''))
         if 'frontlineSettings' in self.__serverSettings:
             settings = self.__serverSettings['frontlineSettings']
-            self.__frontlineSettings = _FrontlineSettings(settings.get('flHostUrl', ''))
+            self.__frontlineSettings = _FrontlineSettings(settings.get('flHostUrl', ''), settings.get('isEpicTrainingEnabled', False))
         if 'rankedBattles' in self.__serverSettings:
             self.__bwRankedBattles = makeTupleByDict(_BwRankedBattles, self.__serverSettings['rankedBattles'])
         if 'hallOfFame' in self.__serverSettings:
@@ -706,6 +708,9 @@ class ServerSettings(object):
     def isEpicRandomMarksOnGunEnabled(self):
         return self.__getGlobalSetting('isEpicRandomMarksOnGunEnabled', False)
 
+    def isCommandBattleEnabled(self):
+        return self.__getGlobalSetting('isCommandBattleEnabled', False)
+
     def isHofEnabled(self):
         return self.__getGlobalSetting('hallOfFame', {}).get('isHofEnabled', False)
 
@@ -769,6 +774,9 @@ class ServerSettings(object):
 
     def isPreferredMapsEnabled(self):
         return self.__getGlobalSetting('isPreferredMapsEnabled', False)
+
+    def isGamefaceEnabled(self):
+        return self.__getGlobalSetting('isGamefaceEnabled', False)
 
     def isCrewBooksEnabled(self):
         return self.__getGlobalSetting('isCrewBooksEnabled', False)

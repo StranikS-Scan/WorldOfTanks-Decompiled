@@ -1,6 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/clans/formatters.py
-import BigWorld
 from client_request_lib.exceptions import ResponseCodes
 from gui import makeHtmlString
 from gui.impl import backport
@@ -40,7 +39,7 @@ def formatDataToString(data):
 
 
 def formatShortDateShortTimeString(timestamp):
-    return str(' ').join((BigWorld.wg_getShortDateFormat(timestamp), '  ', BigWorld.wg_getShortTimeFormat(timestamp)))
+    return str(' ').join((backport.getShortDateFormat(timestamp), '  ', backport.getShortTimeFormat(timestamp)))
 
 
 _CUSTOM_ERR_MESSAGES_BY_REQUEST = {REQUEST_TYPE.CREATE_INVITES: lambda result, ctx: ''}

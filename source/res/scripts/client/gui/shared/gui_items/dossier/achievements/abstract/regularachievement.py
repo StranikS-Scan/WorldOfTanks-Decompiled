@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/gui_items/dossier/achievements/abstract/RegularAchievement.py
-import BigWorld
 from helpers import i18n
+from gui.impl import backport
 from gui.shared.gui_items.gui_item import GUIItem
 from dossiers2.custom.records import RECORD_MAX_VALUES
 from dossiers2.ui import achievements
@@ -54,7 +54,7 @@ class RegularAchievement(GUIItem):
 
     def getI18nValue(self):
         maxValue = RECORD_MAX_VALUES.get(self.getRecordName())
-        return i18n.makeString('#achievements:achievement/maxMedalValue') % BigWorld.wg_getIntegralFormat(maxValue - 1) if maxValue is not None and self._value >= maxValue else BigWorld.wg_getIntegralFormat(self._value)
+        return i18n.makeString('#achievements:achievement/maxMedalValue') % backport.getIntegralFormat(maxValue - 1) if maxValue is not None and self._value >= maxValue else backport.getIntegralFormat(self._value)
 
     def getLevelUpValue(self):
         return self._lvlUpValue

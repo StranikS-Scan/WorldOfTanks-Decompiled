@@ -9,6 +9,7 @@ from gui import SystemMessages
 from gui.Scaleform.locale.MESSENGER import MESSENGER
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.SystemMessages import SM_TYPE, CURRENCY_TO_SM_TYPE
+from gui.impl import backport
 from gui.shared.formatters import formatPrice, formatGoldPrice, text_styles, icons
 from gui.shared.gui_items.processors import Processor, makeError, makeSuccess, makeI18nError, makeI18nSuccess, plugins
 from gui.shared.money import Money, Currency
@@ -58,10 +59,10 @@ class PremiumAccountBuyer(Processor):
     def __getConfirmator(self, withoutBenefits, period, price):
         if withoutBenefits:
             return plugins.HtmlMessageConfirmator('buyPremWithoutBenefitsConfirmation', 'html_templates:lobby/dialogs', 'confirmBuyPremWithoutBenefeits', {'days': text_styles.stats(period),
-             Currency.GOLD: text_styles.concatStylesWithSpace(text_styles.gold(BigWorld.wg_getGoldFormat(price)), icons.makeImageTag(RES_ICONS.MAPS_ICONS_LIBRARY_GOLDICON_2))})
+             Currency.GOLD: text_styles.concatStylesWithSpace(text_styles.gold(backport.getGoldFormat(price)), icons.makeImageTag(RES_ICONS.MAPS_ICONS_LIBRARY_GOLDICON_2))})
         localKey = 'premiumContinueConfirmation' if self.wasPremium else 'premiumBuyConfirmation'
         return plugins.MessageConfirmator(localKey, ctx={'days': text_styles.stats(period),
-         Currency.GOLD: text_styles.concatStylesWithSpace(text_styles.gold(BigWorld.wg_getGoldFormat(price)), icons.makeImageTag(RES_ICONS.MAPS_ICONS_LIBRARY_GOLDICON_2))})
+         Currency.GOLD: text_styles.concatStylesWithSpace(text_styles.gold(backport.getGoldFormat(price)), icons.makeImageTag(RES_ICONS.MAPS_ICONS_LIBRARY_GOLDICON_2))})
 
 
 class GoldToCreditsExchanger(Processor):
@@ -69,14 +70,14 @@ class GoldToCreditsExchanger(Processor):
     def __init__(self, gold):
         self.gold = gold
         self.credits = int(gold) * self.itemsCache.items.shop.exchangeRate
-        super(GoldToCreditsExchanger, self).__init__(plugins=(plugins.HtmlMessageConfirmator('exchangeGoldConfirmation', 'html_templates:lobby/dialogs', 'confirmExchange', {'primaryCurrencyAmount': BigWorld.wg_getGoldFormat(self.gold),
-          'resultCurrencyAmount': BigWorld.wg_getIntegralFormat(self.credits)}), plugins.MoneyValidator(Money(gold=self.gold))))
+        super(GoldToCreditsExchanger, self).__init__(plugins=(plugins.HtmlMessageConfirmator('exchangeGoldConfirmation', 'html_templates:lobby/dialogs', 'confirmExchange', {'primaryCurrencyAmount': backport.getGoldFormat(self.gold),
+          'resultCurrencyAmount': backport.getIntegralFormat(self.credits)}), plugins.MoneyValidator(Money(gold=self.gold))))
 
     def _errorHandler(self, code, errStr='', ctx=None):
         return makeI18nError(sysMsgKey='exchange/{}'.format(errStr), defaultSysMsgKey='exchange/server_error', gold=self.gold)
 
     def _successHandler(self, code, ctx=None):
-        return makeI18nSuccess(sysMsgKey='exchange/success', gold=BigWorld.wg_getGoldFormat(self.gold), credits=formatPrice(Money(credits=self.credits)), type=SM_TYPE.FinancialTransactionWithGold)
+        return makeI18nSuccess(sysMsgKey='exchange/success', gold=backport.getGoldFormat(self.gold), credits=formatPrice(Money(credits=self.credits)), type=SM_TYPE.FinancialTransactionWithGold)
 
     def _request(self, callback):
         _logger.debug('Make server request to exchange gold to credits')
@@ -94,10 +95,10 @@ class FreeXPExchanger(Processor):
         super(FreeXPExchanger, self).__init__(plugins=(self.__makeConfirmator(), plugins.MoneyValidator(Money(gold=self.gold)), plugins.EliteVehiclesValidator(self.vehiclesCD)))
 
     def _errorHandler(self, code, errStr='', ctx=None):
-        return makeI18nError(sysMsgKey='exchangeXP/{}'.format(errStr), defaultSysMsgKey='exchangeXP/server_error', xp=BigWorld.wg_getIntegralFormat(self.xp))
+        return makeI18nError(sysMsgKey='exchangeXP/{}'.format(errStr), defaultSysMsgKey='exchangeXP/server_error', xp=backport.getIntegralFormat(self.xp))
 
     def _successHandler(self, code, ctx=None):
-        return makeI18nSuccess(sysMsgKey='exchangeXP/success', gold=BigWorld.wg_getGoldFormat(self.gold), xp=BigWorld.wg_getIntegralFormat(self.xp), type=SM_TYPE.FinancialTransactionWithGold)
+        return makeI18nSuccess(sysMsgKey='exchangeXP/success', gold=backport.getGoldFormat(self.gold), xp=backport.getIntegralFormat(self.xp), type=SM_TYPE.FinancialTransactionWithGold)
 
     def _request(self, callback):
         _logger.debug('Make server request to exchange xp for credits')
@@ -105,11 +106,11 @@ class FreeXPExchanger(Processor):
 
     def __makeConfirmator(self):
         xpLimit = self.itemsCache.items.shop.freeXPConversionLimit
-        extra = {'resultCurrencyAmount': BigWorld.wg_getIntegralFormat(self.xp),
-         'primaryCurrencyAmount': BigWorld.wg_getGoldFormat(self.gold)}
+        extra = {'resultCurrencyAmount': backport.getIntegralFormat(self.xp),
+         'primaryCurrencyAmount': backport.getGoldFormat(self.gold)}
         if self.__freeConversion:
             sourceKey = 'XP_EXCHANGE_FOR_FREE'
-            extra['freeXPLimit'] = BigWorld.wg_getIntegralFormat(xpLimit)
+            extra['freeXPLimit'] = backport.getIntegralFormat(xpLimit)
         else:
             sourceKey = 'XP_EXCHANGE_FOR_GOLD'
         return plugins.HtmlMessageConfirmator('exchangeXPConfirmation', 'html_templates:lobby/dialogs', 'confirmExchangeXP', extra, sourceKey=sourceKey)
@@ -189,7 +190,7 @@ class CustomizationsBuyer(Processor):
     def _getMsgCtx(self):
         return {'itemType': self.item.userType,
          'itemName': self.item.userName,
-         'count': BigWorld.wg_getIntegralFormat(int(self.count)),
+         'count': backport.getIntegralFormat(int(self.count)),
          'money': formatPrice(self._getTotalPrice())}
 
     def _successHandler(self, code, ctx=None):
@@ -220,7 +221,7 @@ class CustomizationsSeller(Processor):
     def _getMsgCtx(self):
         return {'itemType': self.item.userType,
          'itemName': self.item.userName,
-         'count': BigWorld.wg_getIntegralFormat(int(self.count)),
+         'count': backport.getIntegralFormat(int(self.count)),
          'money': formatPrice(self._getTotalPrice())}
 
     def _successHandler(self, code, ctx=None):

@@ -3,9 +3,9 @@
 from account_helpers.AccountSettings import AccountSettings, CONTACTS
 from debug_utils import LOG_DEBUG, LOG_WARNING
 from gui.Scaleform.genConsts.CONTACTS_ALIASES import CONTACTS_ALIASES
-from gui.Scaleform.locale.WAITING import WAITING
+from gui.impl import backport
+from gui.impl.gen import R
 from helpers import dependency
-from helpers.i18n import makeString
 from messenger.gui.Scaleform.meta.ContactsListPopoverMeta import ContactsListPopoverMeta
 from messenger.gui.Scaleform.view.lobby.ContactsCMListener import ContactsCMListener
 from messenger.m_constants import PROTO_TYPE
@@ -99,7 +99,7 @@ class ContactsListPopover(ContactsListPopoverMeta, ContactsCMListener):
         self.proto.contacts.addIgnored(uid, name)
 
     def as_showWaitingS(self, msg, props):
-        return super(ContactsListPopover, self).as_showWaitingS(makeString(WAITING.MESSENGER_SUBSCRIBE), props)
+        return super(ContactsListPopover, self).as_showWaitingS(backport.text(R.strings.waiting.messenger.subscribe()), props)
 
     def _populate(self):
         super(ContactsListPopover, self)._populate()

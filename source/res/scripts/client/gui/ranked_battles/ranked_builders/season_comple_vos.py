@@ -1,7 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/ranked_battles/ranked_builders/season_comple_vos.py
 import typing
-import BigWorld
 from gui.impl import backport
 from gui.impl.gen import R
 from gui.ranked_battles.ranked_helpers.league_provider import TOP_LEAGUE_ID
@@ -13,7 +12,7 @@ def getFinishSeasonData(efficiencyValue, seasonNumber):
     return {'typeTitle': backport.text(R.strings.ranked_battles.seasonComplete.smallTitle()),
      'typeIcon': backport.image(R.images.gui.maps.icons.battleTypes.c_40x40.ranked()),
      'seasonTitle': backport.text(R.strings.ranked_battles.seasonComplete.bigTitle(), season=str(seasonNumber)),
-     'effectValue': BigWorld.wg_getIntegralFormat(efficiencyValue),
+     'effectValue': backport.getIntegralFormat(efficiencyValue),
      'effectLabel': backport.text(R.strings.ranked_battles.seasonComplete.effectLabel()),
      'btnLabel': backport.text(R.strings.ranked_battles.seasonComplete.leadersButton()),
      'bgSource': backport.image(R.images.gui.maps.icons.rankedBattles.bg.main())}

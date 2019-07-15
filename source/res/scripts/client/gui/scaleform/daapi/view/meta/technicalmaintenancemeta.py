@@ -4,7 +4,7 @@ from gui.Scaleform.framework.entities.abstract.AbstractWindowView import Abstrac
 
 class TechnicalMaintenanceMeta(AbstractWindowView):
 
-    def getEquipment(self, id1, currency1, id2, currency2, id3, currency3, installSlotIndex):
+    def getEquipment(self, id1, currency1, id2, currency2, id3, currency3):
         self._printOverrideError('getEquipment')
 
     def repair(self):

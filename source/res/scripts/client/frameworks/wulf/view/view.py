@@ -93,6 +93,12 @@ class View(PyObjectEntity):
     def createContextMenu(self, event):
         return None
 
+    def _onLoading(self, *args, **kwargs):
+        pass
+
+    def _onLoaded(self, *args, **kwargs):
+        pass
+
     def _initialize(self, *args, **kwargs):
         pass
 
@@ -100,7 +106,10 @@ class View(PyObjectEntity):
         pass
 
     def _swapStates(self, oldStatus, newStatus):
-        pass
+        if newStatus == ViewStatus.LOADING:
+            self._onLoading(*self.__args, **self.__kwargs)
+        elif newStatus == ViewStatus.LOADED:
+            self._onLoaded(*self.__args, **self.__kwargs)
 
     def _cInit(self):
         self._initialize(*self.__args, **self.__kwargs)

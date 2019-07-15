@@ -169,7 +169,7 @@ def makePlayerVO(pInfo, user, colorGetter, isPlayerSpeaking=False):
     else:
         colors = colorGetter(USER_GUI_TYPE.OTHER)
         tags = []
-    rating = BigWorld.wg_getIntegralFormat(pInfo.rating)
+    rating = backport.getIntegralFormat(pInfo.rating)
     return {'isInvite': pInfo.isInvite(),
      'dbID': pInfo.dbID,
      'accID': pInfo.accID,
@@ -297,7 +297,7 @@ def _getSlotsData(unitMgrID, fullData, levelsRange=None, checkForVehicles=True, 
         role = 0
         if player is not None:
             isLegionaries = player.isLegionary()
-            rating = BigWorld.wg_getIntegralFormat(player.rating)
+            rating = backport.getIntegralFormat(player.rating)
             role = player.role
         if maxPlayerCount == MAX_PLAYER_COUNT_ALL or playerCount < maxPlayerCount:
             isLocked = False
@@ -416,8 +416,8 @@ def makeMsg(value):
 
 
 def makeSimpleClanListRenderVO(member, intTotalMining, intWeekMining, role, roleID):
-    week = text_styles.defRes(BigWorld.wg_getIntegralFormat(intWeekMining))
-    allTime = text_styles.defRes(BigWorld.wg_getIntegralFormat(intTotalMining))
+    week = text_styles.defRes(backport.getIntegralFormat(intWeekMining))
+    allTime = text_styles.defRes(backport.getIntegralFormat(intTotalMining))
     databaseID = member.getID()
     return {'dbID': databaseID,
      'uid': databaseID,
@@ -536,16 +536,16 @@ def makeBuildingIndicatorsVO(buildingLevel, progress, hpVal, hpTotalVal, defResV
         hpValueFormatter = text_styles.alert(FORMAT_PATTERN)
     else:
         hpValueFormatter = text_styles.defRes(FORMAT_PATTERN)
-    hpTotalFormatted = str(BigWorld.wg_getIntegralFormat(hpTotalVal)) + ' '
+    hpTotalFormatted = str(backport.getIntegralFormat(hpTotalVal)) + ' '
     formattedHpTotal = ''.join((text_styles.standard(hpTotalFormatted), icons.nut()))
     defResValueFormatter = text_styles.alert(FORMAT_PATTERN) if defResVal > maxDefResVal else text_styles.defRes(FORMAT_PATTERN)
-    maxDefDerFormatted = str(BigWorld.wg_getIntegralFormat(maxDefResVal)) + ' '
+    maxDefDerFormatted = str(backport.getIntegralFormat(maxDefResVal)) + ' '
     formattedDefResTotal = ''.join((text_styles.standard(maxDefDerFormatted), icons.nut()))
-    hpProgressLabels = {'currentValue': str(BigWorld.wg_getIntegralFormat(hpVal)),
+    hpProgressLabels = {'currentValue': str(backport.getIntegralFormat(hpVal)),
      'currentValueFormatter': hpValueFormatter,
      'totalValue': formattedHpTotal,
      'separator': '/'}
-    storeProgressLabels = {'currentValue': str(BigWorld.wg_getIntegralFormat(defResVal)),
+    storeProgressLabels = {'currentValue': str(backport.getIntegralFormat(defResVal)),
      'currentValueFormatter': defResValueFormatter,
      'totalValue': formattedDefResTotal,
      'separator': '/'}

@@ -2,19 +2,19 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/clans/invites/ClanInvitesWindow.py
 import weakref
 from functools import partial
-import BigWorld
 import gui
 from debug_utils import LOG_DEBUG
 from gui.Scaleform.daapi.view.meta.ClanInvitesWindowMeta import ClanInvitesWindowMeta
 from gui.Scaleform.genConsts.CLANS_ALIASES import CLANS_ALIASES
 from gui.Scaleform.locale.CLANS import CLANS
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
-from gui.Scaleform.locale.WAITING import WAITING
 from gui.clans import formatters
 from gui.clans.clan_helpers import ClanInvitesPaginator
 from gui.clans.clan_helpers import ClanListener
 from gui.clans.items import formatField
 from gui.clans.settings import CLAN_INVITE_STATES
+from gui.impl import backport
+from gui.impl.gen import R
 from gui.shared.event_dispatcher import showClanSendInviteWindow
 from gui.shared.events import CoolDownEvent
 from gui.shared.formatters import text_styles
@@ -79,7 +79,7 @@ class ClanInvitesWindow(ClanInvitesWindowMeta, ClanListener, ClanEmblemsHelper):
 
     def showWaiting(self, show):
         if show:
-            self.as_showWaitingS(WAITING.LOADINGDATA, {})
+            self.as_showWaitingS(backport.msgid(R.strings.waiting.loadingData()), {})
         elif not self.paginatorsController.isInProgress():
             self.as_hideWaitingS()
 
@@ -151,7 +151,7 @@ class ClanInvitesWindow(ClanInvitesWindowMeta, ClanListener, ClanEmblemsHelper):
     def _updateClanInfo(self):
         self.as_setClanInfoS({'name': self.clanProfile.getClanFullName(),
          'bgIcon': RES_ICONS.MAPS_ICONS_CLANS_INVITESWINDOW_CC_HEADER_BACK,
-         'creationDate': i18n.makeString(CLANS.CLAN_HEADER_CREATIONDATE, creationDate=BigWorld.wg_getLongDateFormat(self.clanInfo.getCreatedAt()))})
+         'creationDate': i18n.makeString(CLANS.CLAN_HEADER_CREATIONDATE, creationDate=backport.getLongDateFormat(self.clanInfo.getCreatedAt()))})
 
     def _updateHeaderState(self):
         freePlaces = self.clanInfo.getFreePlaces()

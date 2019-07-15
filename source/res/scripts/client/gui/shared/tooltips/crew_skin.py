@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/tooltips/crew_skin.py
+import SoundGroups
 from skeletons.gui.shared import IItemsCache
 from gui.shared.formatters import text_styles
 from gui.shared.tooltips import TOOLTIP_TYPE, formatters
@@ -7,10 +8,10 @@ from gui.impl.gen import R
 from gui.impl import backport
 from helpers import dependency
 from gui.shared.tooltips.common import BlocksTooltipData
-from gui.shared.gui_items.Tankman import getCrewSkinIconBig
+from gui.shared.gui_items.Tankman import getCrewSkinIconBig, Tankman
 from gui.shared.gui_items.crew_skin import GenderRestrictionsLocales, localizedFullName, Rarity
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
-from items.components.crew_skins_constants import TANKMAN_SEX
+from items.components.crew_skins_constants import TANKMAN_SEX, NO_CREW_SKIN_SOUND_SET
 from skeletons.gui.lobby_context import ILobbyContext
 from nations import NAMES
 _MAX_USERS_DISPLAYED = 10
@@ -44,7 +45,9 @@ class CrewSkinTooltipDataBlock(BlocksTooltipData):
         topBlock.append(formatters.packTextBlockData(text=text_styles.main(item.getDescription()), padding=formatters.packPadding(14)))
         items.append(formatters.packBuildUpBlockData(topBlock))
         block = []
-        block.append(formatters.packTextParameterBlockData(name=text_styles.stats(backport.text(R.strings.tooltips.crewSkins.noSound())), value=text_styles.main(backport.text(R.strings.tooltips.crewSkins.sound())), valueWidth=115))
+        soundSetID = item.getSoundSetID()
+        soundSetName = soundSetID if soundSetID != NO_CREW_SKIN_SOUND_SET else backport.text(R.strings.crew_skins.feature.sound.noSound())
+        block.append(formatters.packTextParameterBlockData(name=text_styles.stats(soundSetName), value=text_styles.main(backport.text(R.strings.tooltips.crewSkins.sound())), valueWidth=115))
         block.append(formatters.packTextParameterBlockData(name=text_styles.stats(str(len(item.getTankmenIDs()))), value=text_styles.main(backport.text(R.strings.crew_skins.feature.inUse())), valueWidth=115))
         block.append(formatters.packTextParameterBlockData(name=text_styles.stats('{free}({max})'.format(free=item.getFreeCount(), max=item.getMaxCount())), value=text_styles.main(backport.text(R.strings.crew_skins.feature.inStorage())), valueWidth=115))
         restrictions = []
@@ -141,15 +144,20 @@ class CrewSkinSoundTooltipDataBlock(BlocksTooltipData):
 
     def _packBlocks(self, *args, **kwargs):
         items = super(CrewSkinSoundTooltipDataBlock, self)._packBlocks()
+        tankman = self.context.buildItem(*args, **kwargs).tankman
         topBlock = []
-        topBlock.append(formatters.packTextBlockData(text=text_styles.middleTitle('#tooltips:crewSkins/sound')))
-        topBlock.append(formatters.packTextBlockData(text=text_styles.main('#tooltips:crewSkins/soundHeader')))
-        topBlock.append(formatters.packImageTextBlockData(img=RES_ICONS.MAPS_ICONS_LIBRARY_ALERTBIGICON, imgPadding={'left': -3,
-         'top': -2}, txtOffset=20, padding=formatters.packPadding(bottom=0, top=8, left=0), desc=text_styles.alert('#tooltips:crewSkins/soundWarningDescr1')))
+        topBlock.append(formatters.packTextBlockData(text=text_styles.middleTitle(backport.text(R.strings.tooltips.crewSkins.sound()))))
+        topBlock.append(formatters.packTextBlockData(text=text_styles.main(backport.text(R.strings.tooltips.crewSkins.soundHeader()))))
+        if tankman.role != Tankman.ROLES.COMMANDER:
+            topBlock.append(formatters.packImageTextBlockData(img=RES_ICONS.MAPS_ICONS_LIBRARY_ALERTBIGICON, imgPadding={'left': -3,
+             'top': -2}, txtOffset=20, padding=formatters.packPadding(bottom=0, top=8, left=0), desc=text_styles.alert(backport.text(R.strings.tooltips.crewSkins.soundWarningDescr2()))))
+        elif not SoundGroups.g_instance.soundModes.currentNationalPreset[1]:
+            topBlock.append(formatters.packImageTextBlockData(img=RES_ICONS.MAPS_ICONS_LIBRARY_ALERTBIGICON, imgPadding={'left': -3,
+             'top': -2}, txtOffset=20, padding=formatters.packPadding(bottom=0, top=8, left=0), desc=text_styles.alert(backport.text(R.strings.tooltips.crewSkins.soundWarningDescr1()))))
         items.append(formatters.packBuildUpBlockData(topBlock))
         infoBlock = []
         infoBlock.append(formatters.packImageTextBlockData(img=RES_ICONS.MAPS_ICONS_LIBRARY_INFO, imgPadding={'left': -3,
-         'top': -2}, txtOffset=20, desc=text_styles.stats('!Available only for commander')))
-        infoBlock.append(formatters.packTextBlockData(text=text_styles.main('!Push to heard this sound.'), padding=formatters.packPadding(left=20)))
+         'top': -2}, txtOffset=20, desc=text_styles.stats(backport.text(R.strings.tooltips.crewSkins.soundInfo()))))
+        infoBlock.append(formatters.packTextBlockData(text=text_styles.main(backport.text(R.strings.tooltips.crewSkins.soundInfoDescr())), padding=formatters.packPadding(left=20)))
         items.append(formatters.packBuildUpBlockData(infoBlock))
         return items

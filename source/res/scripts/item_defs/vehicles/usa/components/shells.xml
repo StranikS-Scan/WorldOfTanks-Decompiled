@@ -1361,6 +1361,50 @@
       <devices>	150	</devices>
     </damage>
   </_105mm_Exp_HE>
+  <_105mm_AP_T32M2E>
+    <id>	97	</id>
+    <userString>	#usa_vehicles:_105mm_AP_T32M2E	</userString>
+    <icon>	ap	</icon>
+    <price>	1005	</price>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	105	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainArmorPiercing	</effects>
+    <damage>
+      <armor>	390	</armor>
+      <devices>	150	</devices>
+    </damage>
+  </_105mm_AP_T32M2E>
+  <_105mm_APCR_T29E3M2E>
+    <id>	98	</id>
+    <userString>	#usa_vehicles:_105mm_APCR_T29E3M2E	</userString>
+    <icon>	ap_cr	</icon>
+    <price>	4400	</price>
+    <improved>	true	</improved>
+    <kind>	ARMOR_PIERCING_CR	</kind>
+    <caliber>	105	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainAPCR	</effects>
+    <damage>
+      <armor>	390	</armor>
+      <devices>	150	</devices>
+    </damage>
+  </_105mm_APCR_T29E3M2E>
+  <_105mm_HE_M11A2E>
+    <id>	99	</id>
+    <userString>	#usa_vehicles:_105mm_HE_M11A2E	</userString>
+    <icon>	he	</icon>
+    <price>	765	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <caliber>	105	</caliber>
+    <explosionRadius>	1.91	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	mainHighExplosive	</effects>
+    <damage>
+      <armor>	480	</armor>
+      <devices>	150	</devices>
+    </damage>
+  </_105mm_HE_M11A2E>
   <_120mm_AP_T42>
     <id>	30	</id>
     <userString>	#usa_vehicles:_120mm_AP_T42	</userString>

@@ -125,7 +125,7 @@ class InstallableItem(VehicleItem):
 
 @add_shallow_copy()
 class Chassis(InstallableItem):
-    __slots__ = ('hullPosition', 'topRightCarryingPoint', 'navmeshGirth', 'minPlaneNormalY', 'maxLoad', 'specificFriction', 'rotationSpeed', 'rotationSpeedLimit', 'rotationIsAroundCenter', 'shotDispersionFactors', 'terrainResistance', 'bulkHealthFactor', 'carryingTriangles', 'drivingWheelsSizes', 'chassisLodDistance', 'traces', 'tracks', 'wheels', 'groundNodes', 'trackNodes', 'trackParams', 'splineDesc', 'leveredSuspension', 'suspensionSpringsLength', 'hullAimingSound', 'effects', 'customEffects', 'AODecals', 'brakeForce', 'physicalTracks', 'customizableVehicleAreas', 'generalWheelsAnimatorConfig', 'wheelHealthParams')
+    __slots__ = ('hullPosition', 'topRightCarryingPoint', 'navmeshGirth', 'minPlaneNormalY', 'maxLoad', 'specificFriction', 'rotationSpeed', 'rotationSpeedLimit', 'rotationIsAroundCenter', 'shotDispersionFactors', 'terrainResistance', 'bulkHealthFactor', 'carryingTriangles', 'drivingWheelsSizes', 'chassisLodDistance', 'traces', 'tracks', 'wheels', 'groundNodes', 'trackNodes', 'trackSplineParams', 'splineDesc', 'leveredSuspension', 'suspensionSpringsLength', 'hullAimingSound', 'effects', 'customEffects', 'AODecals', 'brakeForce', 'physicalTracks', 'customizableVehicleAreas', 'generalWheelsAnimatorConfig', 'wheelHealthParams')
 
     def __init__(self, typeID, componentID, componentName, compactDescr, level=1):
         super(Chassis, self).__init__(typeID, componentID, componentName, compactDescr, level=level)
@@ -151,7 +151,7 @@ class Chassis(InstallableItem):
         self.generalWheelsAnimatorConfig = None
         self.groundNodes = None
         self.trackNodes = None
-        self.trackParams = None
+        self.trackSplineParams = None
         self.splineDesc = None
         self.leveredSuspension = None
         self.hullAimingSound = None

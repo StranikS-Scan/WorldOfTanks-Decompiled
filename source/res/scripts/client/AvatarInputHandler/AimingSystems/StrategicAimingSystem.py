@@ -4,7 +4,8 @@ import math
 import BigWorld
 import Math
 from Math import Vector3
-from AvatarInputHandler import mathUtils, AimingSystems
+import math_utils
+from AvatarInputHandler import AimingSystems
 from AvatarInputHandler.AimingSystems import IAimingSystem
 from AvatarInputHandler.cameras import _clampPoint2DInBox2D
 
@@ -15,7 +16,7 @@ class StrategicAimingSystem(IAimingSystem):
 
     def __init__(self, height, yaw):
         super(StrategicAimingSystem, self).__init__()
-        self._matrix = mathUtils.createRotationMatrix((yaw, 0, 0))
+        self._matrix = math_utils.createRotationMatrix((yaw, 0, 0))
         self._planePosition = Vector3(0, 0, 0)
         self.__camDist = 0.0
         self.__height = height
@@ -44,7 +45,7 @@ class StrategicAimingSystem(IAimingSystem):
         self._updateMatrix()
 
     def setYaw(self, yaw):
-        self._matrix = mathUtils.createRotationMatrix((yaw, 0, 0))
+        self._matrix = math_utils.createRotationMatrix((yaw, 0, 0))
         self._updateMatrix()
 
     def getCamDist(self):

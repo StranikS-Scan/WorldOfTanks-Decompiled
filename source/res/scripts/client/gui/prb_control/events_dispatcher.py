@@ -3,7 +3,6 @@
 import weakref
 from collections import namedtuple
 from constants import PREBATTLE_TYPE
-from constants import IS_DEVELOPMENT
 from debug_utils import LOG_ERROR, LOG_DEBUG
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.framework import ViewTypes
@@ -16,14 +15,17 @@ from gui.Scaleform.locale.CHAT import CHAT
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.app_loader import sf_lobby
-from gui.prb_control.settings import CTRL_ENTITY_TYPE
+from gui.prb_control.settings import CTRL_ENTITY_TYPE, FUNCTIONAL_FLAG
 from gui.shared import g_eventBus, events, EVENT_BUS_SCOPE
 from gui.shared.events import ChannelManagementEvent, PreBattleChannelEvent
 from helpers import dependency
+from gui.impl import backport
+from gui.impl.gen import R
 from messenger.ext import channel_num_gen
 from messenger.ext.channel_num_gen import SPECIAL_CLIENT_WINDOWS
 from messenger.m_constants import LAZY_CHANNEL
 from skeletons.gui.game_control import IGameSessionController
+from skeletons.gui.app_loader import IAppLoader
 TOOLTIP_PRB_DATA = namedtuple('TOOLTIP_PRB_DATA', ('tooltipId', 'label'))
 _SQUAD_TYPE_TO_ALIAS = {PREBATTLE_TYPE.EVENT: PREBATTLE_ALIASES.EVENT_SQUAD_WINDOW_PY,
  PREBATTLE_TYPE.SQUAD: PREBATTLE_ALIASES.SQUAD_WINDOW_PY,
@@ -44,6 +46,7 @@ _EPIC_SCREENS = (PREBATTLE_ALIASES.EPIC_TRAINING_ROOM_VIEW_PY, PREBATTLE_ALIASES
 
 class EventDispatcher(object):
     gameSession = dependency.descriptor(IGameSessionController)
+    __appLoader = dependency.descriptor(IAppLoader)
 
     def __init__(self):
         super(EventDispatcher, self).__init__()
@@ -72,7 +75,7 @@ class EventDispatcher(object):
         return self.__getLoadedEvent() in _LOCKED_SCREENS or self.__loadingEvent in _LOCKED_SCREENS
 
     def isEpicTrainingLoaded(self):
-        return None if not IS_DEVELOPMENT else self.__getLoadedEvent() in _EPIC_SCREENS or self.__loadingEvent in _EPIC_SCREENS
+        return self.__getLoadedEvent() in _EPIC_SCREENS or self.__loadingEvent in _EPIC_SCREENS
 
     def updateUI(self, loadedAlias=None):
         self.__fireEvent(events.FightButtonEvent(events.FightButtonEvent.FIGHT_BUTTON_UPDATE))
@@ -93,17 +96,11 @@ class EventDispatcher(object):
         self.__showTrainingRoom()
 
     def loadEpicTrainingList(self):
-        if not IS_DEVELOPMENT:
-            return
-        self.removeEpicTrainingFromCarousel()
         self.addEpicTrainingToCarousel()
         self._showEpicTrainingList()
 
     def loadEpicTrainingRoom(self):
-        if not IS_DEVELOPMENT:
-            return
-        self.removeTrainingFromCarousel()
-        self.addTrainingToCarousel(False)
+        self.addEpicTrainingToCarousel(False)
         self.__showEpicTrainingRoom()
 
     def loadBattleSessionWindow(self, prbType):
@@ -158,8 +155,6 @@ class EventDispatcher(object):
         self.__handleRemoveRequest(clientID, closeWindow=closeWindow)
 
     def removeEpicTrainingFromCarousel(self, isList=True, closeWindow=True):
-        if not IS_DEVELOPMENT:
-            return
         clientType = SPECIAL_CLIENT_WINDOWS.EPIC_TRAINING_LIST if isList else SPECIAL_CLIENT_WINDOWS.EPIC_TRAINING_ROOM
         clientID = channel_num_gen.getClientID4SpecialWindow(clientType)
         if not clientID:
@@ -185,8 +180,7 @@ class EventDispatcher(object):
         self.__handleAddPreBattleRequest(clientID, currCarouselItemCtx._asdict())
 
     def addEpicTrainingToCarousel(self, isList=True):
-        if not IS_DEVELOPMENT:
-            return
+        self.removeEpicTrainingFromCarousel(not isList, closeWindow=False)
         if isList:
             clientType = SPECIAL_CLIENT_WINDOWS.EPIC_TRAINING_LIST
             alias = PREBATTLE_ALIASES.EPICBATTLE_LIST_VIEW_PY
@@ -199,7 +193,8 @@ class EventDispatcher(object):
         if not clientID:
             LOG_ERROR('Client ID not found', 'addEpicTrainingToCarousel')
             return
-        currCarouselItemCtx = _defCarouselItemCtx._replace(label=MENU.HEADERBUTTONS_BATTLE_TYPES_EPICBATTLE, criteria={POP_UP_CRITERIA.VIEW_ALIAS: alias}, viewType=ViewTypes.LOBBY_SUB, openHandler=handler)
+        label = '{} - {}'.format(backport.text(R.strings.menu.headerButtons.battle.types.epicTraining()), backport.text(R.strings.menu.headerButtons.battle.types.epicTraining.descr()))
+        currCarouselItemCtx = _defCarouselItemCtx._replace(label=label, criteria={POP_UP_CRITERIA.VIEW_ALIAS: alias}, viewType=ViewTypes.LOBBY_SUB, openHandler=handler)
         self.__handleAddPreBattleRequest(clientID, currCarouselItemCtx._asdict())
 
     def addSpecBattleToCarousel(self, prbType):
@@ -314,6 +309,21 @@ class EventDispatcher(object):
          'isShowByReq': False,
          'showIfClosed': True}), scope=EVENT_BUS_SCOPE.LOBBY)
 
+    def needToLoadHangar(self, ctx, modeFlags, aliasToLoad):
+        if ctx is not None:
+            switchMask = FUNCTIONAL_FLAG.TRAINING | FUNCTIONAL_FLAG.EPIC_TRAINING
+            canSwitch = (ctx.getFlags() | modeFlags) & switchMask == switchMask
+            if canSwitch:
+                return False
+        res = False
+        inView = None
+        if self.__appLoader is not None and self.__appLoader.getApp() is not None and self.__appLoader.getApp().containerManager is not None:
+            inView = self.__appLoader.getApp().containerManager.getView(ViewTypes.LOBBY_SUB)
+        if inView is not None:
+            if inView.alias in aliasToLoad:
+                res = True
+        return res
+
     def _showUnitProgress(self, prbType, show):
         clientID = channel_num_gen.getClientID4Prebattle(prbType)
         if not clientID:
@@ -336,8 +346,6 @@ class EventDispatcher(object):
         return
 
     def __showEpicTrainingRoom(self):
-        if not IS_DEVELOPMENT:
-            return
         self.__fireLoadEvent(PREBATTLE_ALIASES.EPIC_TRAINING_ROOM_VIEW_PY)
 
     def __fireEvent(self, event, scope=EVENT_BUS_SCOPE.LOBBY):
@@ -391,8 +399,6 @@ class EventDispatcher(object):
         self.__fireLoadEvent(PREBATTLE_ALIASES.TRAINING_LIST_VIEW_PY)
 
     def _showEpicTrainingList(self):
-        if not IS_DEVELOPMENT:
-            return
         self.__fireLoadEvent(PREBATTLE_ALIASES.EPICBATTLE_LIST_VIEW_PY)
 
     def __getReadyPrbData(self, isReady):

@@ -1,7 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/shared/damage_log_panel.py
 from collections import defaultdict
-import BigWorld
 from BattleFeedbackCommon import BATTLE_EVENT_TYPE as _BET
 from account_helpers.settings_core.options import DamageLogDetailsSetting as _VIEW_MODE, DamageLogEventPositionsSetting as _EVENT_POSITIONS, DamageLogEventTypesSetting as _DISPLAYED_EVENT_TYPES
 from account_helpers.settings_core.settings_constants import DAMAGE_LOG, GRAPHICS
@@ -11,6 +10,7 @@ from gui.Scaleform.genConsts.BATTLEDAMAGELOG_IMAGES import BATTLEDAMAGELOG_IMAGE
 from gui.Scaleform.genConsts.DAMAGE_LOG_SHELL_BG_TYPES import DAMAGE_LOG_SHELL_BG_TYPES
 from gui.Scaleform.locale.INGAME_GUI import INGAME_GUI
 from gui.battle_control.battle_constants import PERSONAL_EFFICIENCY_TYPE as _ETYPE
+from gui.impl import backport
 from gui.shared import events as gui_events, EVENT_BUS_SCOPE
 from helpers import dependency
 from helpers import i18n
@@ -55,7 +55,7 @@ _SHELL_TYPES_TO_STR = {SHELL_TYPES.ARMOR_PIERCING: INGAME_GUI.DAMAGELOG_SHELLTYP
  SHELL_TYPES.HOLLOW_CHARGE: INGAME_GUI.DAMAGELOG_SHELLTYPE_HOLLOW_CHARGE}
 
 def _formatTotalValue(value):
-    return BigWorld.wg_getIntegralFormat(value)
+    return backport.getIntegralFormat(value)
 
 
 class _VOModel(dict):
@@ -215,7 +215,7 @@ class _CriticalHitValueVOBuilder(_ValueVOBuilder):
 class _DamageValueVOBuilder(_ValueVOBuilder):
 
     def _getValue(self, info):
-        return BigWorld.wg_getIntegralFormat(info.getDamage())
+        return backport.getIntegralFormat(info.getDamage())
 
 
 class _ActionImgVOModel(_VOModel):

@@ -26,6 +26,8 @@ from gui.ranked_battles.ranked_helpers import getRankedBattlesUrl
 from gui.Scaleform.locale.EPIC_BATTLE import EPIC_BATTLE
 from gui.Scaleform.genConsts.RANKEDBATTLES_CONSTS import RANKEDBATTLES_CONSTS
 from gui.game_control.epic_meta_game_ctrl import EPIC_PERF_GROUP
+from gui.impl import backport
+from gui.impl.gen import R
 _SMALL_ICON_PATH = '../maps/icons/battleTypes/40x40/{0}.png'
 _LARGER_ICON_PATH = '../maps/icons/battleTypes/64x64/{0}.png'
 
@@ -178,8 +180,10 @@ class _CommandItem(_SelectorItem):
         return False
 
     def _update(self, state):
+        isCommandBattleEnabled = self.lobbyContext.getServerSettings().isCommandBattleEnabled()
         self._isSelected = state.isInUnit(PREBATTLE_TYPE.UNIT) or state.isInUnit(PREBATTLE_TYPE.E_SPORT_COMMON)
-        self._isDisabled = state.hasLockedState
+        self._isDisabled = state.hasLockedState or not isCommandBattleEnabled
+        self._isVisible = isCommandBattleEnabled
 
 
 class _StrongholdsItem(_SelectorItem):
@@ -217,6 +221,28 @@ class _TrainingItem(_SelectorItem):
     def _update(self, state):
         self._isSelected = state.isInLegacy(PREBATTLE_TYPE.TRAINING)
         self._isDisabled = state.hasLockedState
+
+
+class _EpicTrainingItem(_SelectorItem):
+
+    def getFightButtonLabel(self, state, playerInfo):
+        return MENU.HEADERBUTTONS_BATTLE
+
+    def _update(self, state):
+        settings = self.lobbyContext.getServerSettings()
+        self._isSelected = state.isInLegacy(PREBATTLE_TYPE.EPIC_TRAINING)
+        self._isDisabled = state.hasLockedState
+        self._isVisible = settings is not None and settings.frontline.isEpicTrainingEnabled
+        return
+
+    def getFormattedLabel(self):
+        title = super(_EpicTrainingItem, self).getFormattedLabel()
+        descr = text_styles.main(backport.text(R.strings.menu.headerButtons.battle.types.epicTraining.descr()))
+        return '{}\n{}'.format(title, descr)
+
+    def select(self):
+        super(_EpicTrainingItem, self).select()
+        selectorUtils.setBattleTypeAsKnown(self._selectorType)
 
 
 class _BattleTutorialItem(_SelectorItem):
@@ -297,7 +323,7 @@ class _EpicQueueItem(_SelectorItem):
             else:
                 nextSeason = self.epicQueueController.getNextSeason()
                 if nextSeason:
-                    startTime = time_utils.getDateTimeFormat(nextSeason.getStartDate())
+                    startTime = backport.getDateTimeFormat(nextSeason.getStartDate())
                     scheduleStr = i18n.makeString(MENU.HEADERBUTTONS_BATTLE_TYPES_EPIC_EXTRA_STARTSAT, time=startTime)
                 else:
                     scheduleStr = None
@@ -461,7 +487,7 @@ class _RankedItem(_SelectorItem):
             nextSeason = self.rankedController.getNextSeason()
             if nextSeason is not None:
                 message = MENU.HEADERBUTTONS_BATTLE_TYPES_RANKED_AVAILABILITY_UNTIL
-                time = time_utils.getDateTimeFormat(nextSeason.getStartDate())
+                time = backport.getDateTimeFormat(nextSeason.getStartDate())
                 return text_styles.main(i18n.makeString(message, time=time))
             return text_styles.main(i18n.makeString(MENU.HEADERBUTTONS_BATTLE_TYPES_RANKED_AVAILABILITY_ENDED))
         else:
@@ -484,9 +510,10 @@ def _createItems(eventsCache=None, lobbyContext=None):
     _addRandomBattleType(items)
     _addEpicQueueBattleType(items)
     _addRankedBattleType(items, settings)
-    _addCommandBattleType(items)
+    _addCommandBattleType(items, settings)
     _addStrongholdsBattleType(items, isInRoaming)
     _addTrainingBattleType(items)
+    _addEpicTrainingBattleType(items, settings)
     if GUI_SETTINGS.specPrebatlesVisible:
         _addSpecialBattleType(items)
     if settings is not None and settings.isSandboxEnabled() and not isInRoaming:
@@ -511,8 +538,10 @@ def _addRankedBattleType(items, settings):
     return
 
 
-def _addCommandBattleType(items):
-    items.append(_CommandItem(MENU.HEADERBUTTONS_BATTLE_TYPES_UNIT, PREBATTLE_ACTION_NAME.E_SPORT, 3, SELECTOR_BATTLE_TYPES.UNIT))
+def _addCommandBattleType(items, settings):
+    visible = settings is not None and settings.isCommandBattleEnabled()
+    items.append(_CommandItem(MENU.HEADERBUTTONS_BATTLE_TYPES_UNIT, PREBATTLE_ACTION_NAME.E_SPORT, 3, SELECTOR_BATTLE_TYPES.UNIT, isVisible=visible))
+    return
 
 
 def _addStrongholdsBattleType(items, isInRoaming):
@@ -521,6 +550,12 @@ def _addStrongholdsBattleType(items, isInRoaming):
 
 def _addTrainingBattleType(items):
     items.append(_TrainingItem(MENU.HEADERBUTTONS_BATTLE_TYPES_TRAINING, PREBATTLE_ACTION_NAME.TRAININGS_LIST, 7))
+
+
+def _addEpicTrainingBattleType(items, settings=None):
+    visible = settings is not None and settings.frontline.isEpicTrainingEnabled
+    items.append(_EpicTrainingItem(MENU.HEADERBUTTONS_BATTLE_TYPES_EPICTRAINING, PREBATTLE_ACTION_NAME.EPIC_TRAINING_LIST, 10, SELECTOR_BATTLE_TYPES.EPIC, isVisible=visible))
+    return
 
 
 def _addSpecialBattleType(items):

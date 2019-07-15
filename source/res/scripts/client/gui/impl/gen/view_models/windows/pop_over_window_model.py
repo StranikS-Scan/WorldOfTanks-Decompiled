@@ -6,40 +6,40 @@ class PopOverWindowModel(WindowModel):
     __slots__ = ()
 
     def getBoundX(self):
-        return self._getNumber(4)
+        return self._getNumber(3)
 
     def setBoundX(self, value):
-        self._setNumber(4, value)
+        self._setNumber(3, value)
 
     def getBoundY(self):
-        return self._getNumber(5)
+        return self._getNumber(4)
 
     def setBoundY(self, value):
-        self._setNumber(5, value)
+        self._setNumber(4, value)
 
     def getBoundWidth(self):
-        return self._getNumber(6)
+        return self._getNumber(5)
 
     def setBoundWidth(self, value):
-        self._setNumber(6, value)
+        self._setNumber(5, value)
 
     def getBoundHeight(self):
-        return self._getNumber(7)
+        return self._getNumber(6)
 
     def setBoundHeight(self, value):
-        self._setNumber(7, value)
+        self._setNumber(6, value)
 
     def getDirectionType(self):
-        return self._getNumber(8)
+        return self._getNumber(7)
 
     def setDirectionType(self, value):
-        self._setNumber(8, value)
+        self._setNumber(7, value)
 
     def getIsCloseBtnVisible(self):
-        return self._getBool(9)
+        return self._getBool(8)
 
     def setIsCloseBtnVisible(self, value):
-        self._setBool(9, value)
+        self._setBool(8, value)
 
     def _initialize(self):
         super(PopOverWindowModel, self)._initialize()

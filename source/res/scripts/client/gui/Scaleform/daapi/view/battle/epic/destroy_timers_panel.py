@@ -2,7 +2,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/epic/destroy_timers_panel.py
 from functools import partial
 import BigWorld
-from AvatarInputHandler.aih_constants import CTRL_MODE_NAME
+from aih_constants import CTRL_MODE_NAME
 from constants import DEATH_ZONES
 from gui.Scaleform.daapi.view.battle.shared import destroy_times_mapping as _mapping
 from gui.Scaleform.daapi.view.meta.EpicDestroyTimersPanelMeta import EpicDestroyTimersPanelMeta

@@ -5,6 +5,7 @@ import BigWorld
 import AccountCommands
 from gui import makeHtmlString
 from gui.SystemMessages import SM_TYPE, CURRENCY_TO_SM_TYPE, CURRENCY_TO_SM_TYPE_DISMANTLING
+from gui.impl import backport
 from gui.shared.formatters import formatPrice, icons, getBWFormatter
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.gui_items.gui_item_economics import getItemBuyPrice
@@ -66,7 +67,7 @@ class ModuleTradeProcessor(ModuleProcessor):
     def _getMsgCtx(self):
         return {'name': self.item.userName,
          'kind': self.item.userType,
-         'count': BigWorld.wg_getIntegralFormat(int(self.count)),
+         'count': backport.getIntegralFormat(int(self.count)),
          'money': formatPrice(self._getOpPrice().price)}
 
     def _getOpPrice(self):
@@ -425,7 +426,7 @@ class BattleAbilityInstaller(ModuleInstallProcessor):
     def _request(self, callback):
         epicMetaGameCtrl = dependency.instance(IEpicBattleMetaGameController)
         selectedSkill = next((skillID for skillID, levels in epicMetaGameCtrl.getAllUnlockedSkillLevelsBySkillId().iteritems() if self.item.innationID in (level.eqID for level in levels)), -1)
-        currentSkills = epicMetaGameCtrl.getSelectedSkills(self.vehicle.intCD)
+        currentSkills = epicMetaGameCtrl.getSelectedSkills(self.vehicle.intCD)[:]
         previousSkill = currentSkills[self.slotIdx] if len(currentSkills) >= self.slotIdx else -1
         for idx, skillID in enumerate(currentSkills):
             if idx == self.slotIdx:

@@ -68,6 +68,8 @@ class VEHICLE_PREVIEW(object):
     INFOPANEL_PREMIUM_CREDITSTEXT = '#vehicle_preview:infoPanel/premium/creditsText'
     INFOPANEL_PREMIUM_CREWTRANSFERTITLE = '#vehicle_preview:infoPanel/premium/crewTransferTitle'
     INFOPANEL_PREMIUM_CREWTRANSFERTEXT = '#vehicle_preview:infoPanel/premium/crewTransferText'
+    INFOPANEL_PREMIUM_BUILTINEQUPMENTTITLE = '#vehicle_preview:infoPanel/premium/builtInEqupmentTitle'
+    INFOPANEL_PREMIUM_BUILTINEQUPMENTTEXT = '#vehicle_preview:infoPanel/premium/builtInEqupmentText'
     BUYINGPANEL_FRONTLINEPACK_TITLELABEL_ACTIVE = '#vehicle_preview:buyingPanel/frontlinePack/titleLabel/active'
     BUYINGPANEL_FRONTLINEPACK_TITLELABEL_INACTIVE_ADD_DISCOUNT = '#vehicle_preview:buyingPanel/frontlinePack/titleLabel/inactive_add_discount'
     BUYINGPANEL_FRONTLINEPACK_TITLELABEL_INACTIVE = '#vehicle_preview:buyingPanel/frontlinePack/titleLabel/inactive'

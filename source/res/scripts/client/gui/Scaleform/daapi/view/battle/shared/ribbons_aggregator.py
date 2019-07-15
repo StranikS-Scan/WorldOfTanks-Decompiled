@@ -919,10 +919,14 @@ class RibbonsAggregator(object):
 
 class RibbonsAggregatorPlayer(RibbonsAggregator):
 
-    def _onPlayerFeedbackReceived(self, events):
-        if BattleReplay.g_replayCtrl.isTimeWarpInProgress:
-            return
-        super(RibbonsAggregatorPlayer, self)._onPlayerFeedbackReceived(events)
+    def _aggregateRibbons(self, ribbons):
+        replayRibbons = []
+        for ribbon in ribbons:
+            if BattleReplay.g_replayCtrl.isTimeWarpInProgress and ribbon.getType() not in _ACCUMULATED_RIBBON_TYPES:
+                continue
+            replayRibbons.append(ribbon)
+
+        super(RibbonsAggregatorPlayer, self)._aggregateRibbons(replayRibbons)
 
 
 def createRibbonsAggregator():

@@ -18,7 +18,6 @@ from gui.Scaleform.daapi.view.meta.BadgesPageMeta import BadgesPageMeta
 from gui.shared.formatters import text_styles
 from gui.Scaleform.locale.BADGE import BADGE
 from tutorial.control.context import GLOBAL_FLAG
-_SUFFIX_BADGE_HINT_ID = 'BadgePageNewSuffixBadgeHint'
 
 def _makeBadgeVO(badge):
     return {'id': badge.badgeID,

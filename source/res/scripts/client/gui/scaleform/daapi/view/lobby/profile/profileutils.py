@@ -1,9 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/profile/ProfileUtils.py
-import BigWorld
 from debug_utils import LOG_ERROR
 from gui.Scaleform.locale.PROFILE import PROFILE
 from gui.battle_results.components import style
+from gui.impl import backport
 from gui.shared.formatters import text_styles
 from gui.shared.gui_items.dossier.stats import _MaxVehicleStatsBlock, _FalloutStatsBlock
 from gui.shared.gui_items.dossier.stats import _VehiclesStatsBlock
@@ -52,14 +52,14 @@ class _OnlyTechniqueField(_AbstractField):
 class _BattlesCountField(_AbstractField):
 
     def _buildData(self, targetData, isCurrentUser):
-        return BigWorld.wg_getIntegralFormat(targetData.getBattlesCount())
+        return backport.getIntegralFormat(targetData.getBattlesCount())
 
     def _buildTooltipData(self, targetData, isCurrentUser):
         lossesCount = targetData.getLossesCount()
         winsCount = targetData.getWinsCount()
         drawsCount = targetData.getDrawsCount()
-        drawsStr = BigWorld.wg_getIntegralFormat(drawsCount) if drawsCount >= 0 else ProfileUtils.UNAVAILABLE_SYMBOL
-        return ProfileUtils.createToolTipData((BigWorld.wg_getIntegralFormat(winsCount), BigWorld.wg_getIntegralFormat(lossesCount), drawsStr))
+        drawsStr = backport.getIntegralFormat(drawsCount) if drawsCount >= 0 else ProfileUtils.UNAVAILABLE_SYMBOL
+        return ProfileUtils.createToolTipData((backport.getIntegralFormat(winsCount), backport.getIntegralFormat(lossesCount), drawsStr))
 
 
 class _WinsEfficiencyField(_AbstractField):
@@ -71,7 +71,7 @@ class _WinsEfficiencyField(_AbstractField):
 class _WinsField(_AbstractField):
 
     def _buildData(self, targetData, isCurrentUser):
-        return BigWorld.wg_getIntegralFormat(targetData.getWinsCount())
+        return backport.getIntegralFormat(targetData.getWinsCount())
 
 
 class _SurvivalField(_AbstractField):
@@ -99,10 +99,10 @@ class _DamageCoefficientField(_AbstractField):
         return ProfileUtils.formatEfficiency(targetData.getDamageReceived(), targetData.getDamageEfficiency)
 
     def _buildTooltipData(self, targetData, isCurrentUser):
-        damageToolTipData = [BigWorld.wg_getIntegralFormat(targetData.getDamageDealt()), BigWorld.wg_getIntegralFormat(targetData.getDamageReceived())]
+        damageToolTipData = [backport.getIntegralFormat(targetData.getDamageDealt()), backport.getIntegralFormat(targetData.getDamageReceived())]
         if isinstance(targetData, _FalloutStatsBlock):
             if isinstance(targetData, _VehiclesStatsBlock):
-                damageToolTipData.append(BigWorld.wg_getIntegralFormat(targetData.getConsumablesDamageDealt()))
+                damageToolTipData.append(backport.getIntegralFormat(targetData.getConsumablesDamageDealt()))
         return ProfileUtils.createToolTipData(damageToolTipData)
 
 
@@ -119,10 +119,10 @@ class _DestructionCoefficientField(_AbstractField):
         return ProfileUtils.formatEfficiency(targetData.getDeathsCount(), targetData.getFragsEfficiency)
 
     def _buildTooltipData(self, targetData, isCurrentUser):
-        destructionToolTipData = [BigWorld.wg_getIntegralFormat(targetData.getFragsCount()), BigWorld.wg_getIntegralFormat(targetData.getDeathsCount())]
+        destructionToolTipData = [backport.getIntegralFormat(targetData.getFragsCount()), backport.getIntegralFormat(targetData.getDeathsCount())]
         if isinstance(targetData, _FalloutStatsBlock):
             if isinstance(targetData, _VehiclesStatsBlock):
-                destructionToolTipData.append(BigWorld.wg_getIntegralFormat(targetData.getConsumablesFragsCount()))
+                destructionToolTipData.append(backport.getIntegralFormat(targetData.getConsumablesFragsCount()))
         return ProfileUtils.createToolTipData(destructionToolTipData)
 
 
@@ -139,7 +139,7 @@ class _ArmorusingField(_AbstractField):
 
 
 def _avgExpField(targetData, isCurrentUser):
-    formatedExp = BigWorld.wg_getIntegralFormat(ProfileUtils.getValueOrUnavailable(targetData.getAvgXP()))
+    formatedExp = backport.getIntegralFormat(ProfileUtils.getValueOrUnavailable(targetData.getAvgXP()))
     return DetailedStatisticsUtils.getDetailedDataObject(PROFILE.SECTION_STATISTICS_SCORES_AVGEXPERIENCE_SHORT, formatedExp, PROFILE.PROFILE_PARAMS_TOOLTIP_AVGEX_SHORT)
 
 
@@ -153,13 +153,13 @@ class _AvgDmgField(_AbstractField):
         return DetailedStatisticsUtils.getDetailedDataObject(self._label, self._buildData(targetData, isCurrentUser), tooltip, None)
 
     def _buildData(self, targetData, isCurrentUser):
-        return BigWorld.wg_getIntegralFormat(ProfileUtils.getValueOrUnavailable(targetData.getAvgDamage()))
+        return backport.getIntegralFormat(ProfileUtils.getValueOrUnavailable(targetData.getAvgDamage()))
 
 
 class _AvgReceivedDmgField(_AbstractField):
 
     def _buildData(self, targetData, isCurrentUser):
-        return BigWorld.wg_getIntegralFormat(ProfileUtils.getValueOrUnavailable(targetData.getAvgDamageReceived()))
+        return backport.getIntegralFormat(ProfileUtils.getValueOrUnavailable(targetData.getAvgDamageReceived()))
 
 
 def _avgAssignedDmgField(targetData, isCurrentUser):
@@ -177,29 +177,29 @@ class _StunFieldMixin(object):
 class _StunNumberField(_StunFieldMixin, _OnlyTechniqueField):
 
     def _buildData(self, targetData, isCurrentUser):
-        return BigWorld.wg_getIntegralFormat(ProfileUtils.getValueOrUnavailable(targetData.getStunNumber()))
+        return backport.getIntegralFormat(ProfileUtils.getValueOrUnavailable(targetData.getStunNumber()))
 
 
 class _AvgStunNumberField(_StunFieldMixin, _AbstractField):
 
     def _buildData(self, targetData, isCurrentUser):
-        return BigWorld.wg_getIntegralFormat(ProfileUtils.getValueOrUnavailable(targetData.getAvgStunNumber()))
+        return backport.getIntegralFormat(ProfileUtils.getValueOrUnavailable(targetData.getAvgStunNumber()))
 
 
 class _AssistedStunDmgField(_StunFieldMixin, _OnlyTechniqueField):
 
     def _buildData(self, targetData, isCurrentUser):
-        return BigWorld.wg_getIntegralFormat(ProfileUtils.getValueOrUnavailable(targetData.getDamageAssistedStun()))
+        return backport.getIntegralFormat(ProfileUtils.getValueOrUnavailable(targetData.getDamageAssistedStun()))
 
 
 class _AvgAssistedStunDmgField(_StunFieldMixin, _AbstractField):
 
     def _buildData(self, targetData, isCurrentUser):
-        return BigWorld.wg_getIntegralFormat(ProfileUtils.getValueOrUnavailable(targetData.getAvgDamageAssistedStun()))
+        return backport.getIntegralFormat(ProfileUtils.getValueOrUnavailable(targetData.getAvgDamageAssistedStun()))
 
 
 def _avgDetectedField(targetData, isCurrentUser):
-    formatedDetected = BigWorld.wg_getNiceNumberFormat(ProfileUtils.getValueOrUnavailable(targetData.getAvgEnemiesSpotted()))
+    formatedDetected = backport.getNiceNumberFormat(ProfileUtils.getValueOrUnavailable(targetData.getAvgEnemiesSpotted()))
     return DetailedStatisticsUtils.getDetailedDataObject(PROFILE.SECTION_STATISTICS_DETAILED_AVGDETECTEDENEMIES, formatedDetected, PROFILE.PROFILE_PARAMS_TOOLTIP_AVGDETECTEDENEMIES)
 
 
@@ -213,7 +213,7 @@ class _AvgDestroyedField(_AbstractField):
         return DetailedStatisticsUtils.getDetailedDataObject(self._label, self._buildData(targetData, isCurrentUser), tooltip, None)
 
     def _buildData(self, targetData, isCurrentUser):
-        return BigWorld.wg_getNiceNumberFormat(ProfileUtils.getValueOrUnavailable(targetData.getAvgFrags()))
+        return backport.getNiceNumberFormat(ProfileUtils.getValueOrUnavailable(targetData.getAvgFrags()))
 
 
 class _MaxXPField(_AbstractField):
@@ -228,7 +228,7 @@ class _MaxXPField(_AbstractField):
         return DetailedStatisticsUtils.getDetailedDataObject(self._label, self._buildData(targetData, isCurrentUser), tooltip, tooltipData)
 
     def _buildData(self, targetData, isCurrentUser):
-        return BigWorld.wg_getIntegralFormat(targetData.getMaxXp())
+        return backport.getIntegralFormat(targetData.getMaxXp())
 
     def _buildTooltipData(self, targetData, isCurrentUser):
         maxXpVehicle = self.itemsCache.items.getItemByCD(targetData.getMaxXpVehicle())
@@ -253,7 +253,7 @@ class _MaxDamageField(_AbstractField):
         return DetailedStatisticsUtils.getDetailedDataObject(self._label, self._buildData(targetData, isCurrentUser), tooltip, tooltipData)
 
     def _buildData(self, targetData, isCurrentUser):
-        return BigWorld.wg_getIntegralFormat(targetData.getMaxDamage()) if targetData.getBattlesCountVer3() > 0 else ProfileUtils.UNAVAILABLE_VALUE
+        return backport.getIntegralFormat(targetData.getMaxDamage()) if targetData.getBattlesCountVer3() > 0 else ProfileUtils.UNAVAILABLE_VALUE
 
     def _buildTooltipData(self, targetData, isCurrentUser):
         maxDamageVehicle = self.itemsCache.items.getItemByCD(targetData.getMaxDamageVehicle())
@@ -272,7 +272,7 @@ class _MaxDestroyedField(_AbstractField):
         return DetailedStatisticsUtils.getDetailedDataObject(self._label, self._buildData(targetData, isCurrentUser), tooltip, tooltipData)
 
     def _buildData(self, targetData, isCurrentUser):
-        return BigWorld.wg_getIntegralFormat(targetData.getMaxFrags())
+        return backport.getIntegralFormat(targetData.getMaxFrags())
 
     def _buildTooltipData(self, targetData, isCurrentUser):
         maxFragsVehicle = self.itemsCache.items.getItemByCD(targetData.getMaxFragsVehicle())
@@ -282,38 +282,38 @@ class _MaxDestroyedField(_AbstractField):
 class _CapturePointsField(_OnlyAccountField):
 
     def _buildData(self, targetData, isCurrentUser):
-        return BigWorld.wg_getIntegralFormat(targetData.getCapturePoints())
+        return backport.getIntegralFormat(targetData.getCapturePoints())
 
 
 class _DroppedPointsField(_OnlyAccountField):
 
     def _buildData(self, targetData, isCurrentUser):
-        return BigWorld.wg_getIntegralFormat(targetData.getDroppedCapturePoints())
+        return backport.getIntegralFormat(targetData.getDroppedCapturePoints())
 
 
 class _TotalVehiclesField(_OnlyAccountField):
 
     def _buildData(self, targetData, isCurrentUser):
-        return BigWorld.wg_getIntegralFormat(targetData.getTotalVehicles())
+        return backport.getIntegralFormat(targetData.getTotalVehicles())
 
 
 def _totalVehiclesField(targetData, isCurrentUser):
-    formattedVehicles = BigWorld.wg_getIntegralFormat(targetData.getTotalVehicles())
+    formattedVehicles = backport.getIntegralFormat(targetData.getTotalVehicles())
     return DetailedStatisticsUtils.getDetailedDataObject(PROFILE.SECTION_STATISTICS_SCORES_TOTALVEHS, formattedVehicles, PROFILE.PROFILE_PARAMS_TOOLTIP_TOTALVEHS)
 
 
 def _flagsDeliveredField(targetData, isCurrentUser):
-    formattedDelivered = BigWorld.wg_getIntegralFormat(targetData.getFlagsDelivered())
+    formattedDelivered = backport.getIntegralFormat(targetData.getFlagsDelivered())
     return DetailedStatisticsUtils.getDetailedDataObject(PROFILE.SECTION_STATISTICS_SCORES_FLAGSDELIVERED, formattedDelivered, PROFILE.PROFILE_PARAMS_TOOLTIP_FLAGSDELIVERED)
 
 
 def _flagsAbsorbedField(targetData, isCurrentUser):
-    formattedAbsorbed = BigWorld.wg_getIntegralFormat(targetData.getFlagsAbsorbed())
+    formattedAbsorbed = backport.getIntegralFormat(targetData.getFlagsAbsorbed())
     return DetailedStatisticsUtils.getDetailedDataObject(PROFILE.SECTION_STATISTICS_SCORES_FLAGSABSORBED, formattedAbsorbed, PROFILE.PROFILE_PARAMS_TOOLTIP_FLAGSABSORBED)
 
 
 def _maxWinPointsField(targetData, isCurrentUser):
-    formatedMaxWP = BigWorld.wg_getIntegralFormat(targetData.getMaxVictoryPoints())
+    formatedMaxWP = backport.getIntegralFormat(targetData.getMaxVictoryPoints())
     return DetailedStatisticsUtils.getDetailedDataObject(PROFILE.SECTION_STATISTICS_SCORES_MAXVICTORYPOINTS, formatedMaxWP, PROFILE.PROFILE_PARAMS_TOOLTIP_MAXVICTORYPOINTS)
 
 
@@ -386,7 +386,7 @@ class ProfileUtils(object):
         totalVehiclesCount = len(epicRandomVehicles.union(set(accountDossier.getRandomStats().getVehicles().keys())))
         vehicle = cls.itemsCache.items.getItemByCD(targetData.getMaxXpVehicle())
         outcome['maxXPByVehicle'] = vehicle.shortUserName if vehicle is not None else ''
-        outcome['marksOfMasteryText'] = style.makeMarksOfMasteryText(BigWorld.wg_getIntegralFormat(targetData.getMarksOfMastery()[3]), totalVehiclesCount)
+        outcome['marksOfMasteryText'] = style.makeMarksOfMasteryText(backport.getIntegralFormat(targetData.getMarksOfMastery()[3]), totalVehiclesCount)
         return outcome
 
     @staticmethod
@@ -408,7 +408,7 @@ class ProfileUtils(object):
     def formatFloatPercent(value):
         if value != ProfileUtils.UNAVAILABLE_VALUE:
             value = value * 100
-            value = text_styles.concatStylesWithSpace(BigWorld.wg_getNiceNumberFormat(value), ProfileUtils.PERCENT_SYMBOL)
+            value = text_styles.concatStylesWithSpace(backport.getNiceNumberFormat(value), ProfileUtils.PERCENT_SYMBOL)
         return str(value)
 
     @staticmethod
@@ -419,11 +419,11 @@ class ProfileUtils(object):
 
     @staticmethod
     def formatEfficiency(coeff2, valueReceiveFunction):
-        return BigWorld.wg_getNiceNumberFormat(valueReceiveFunction()) if coeff2 > 0 else ProfileUtils.UNAVAILABLE_VALUE
+        return backport.getNiceNumberFormat(valueReceiveFunction()) if coeff2 > 0 else ProfileUtils.UNAVAILABLE_VALUE
 
     @staticmethod
     def getEfficiencyPercent(dividend, delimiter, unavailableValue=UNAVAILABLE_VALUE):
-        return BigWorld.wg_getNiceNumberFormat(float(dividend) / delimiter * 100) + ProfileUtils.PERCENT_SYMBOL if delimiter != 0 else unavailableValue
+        return backport.getNiceNumberFormat(float(dividend) / delimiter * 100) + ProfileUtils.PERCENT_SYMBOL if delimiter != 0 else unavailableValue
 
     @staticmethod
     def packLditItemData(text, description, tooltip, icon, tooltipData=None):
@@ -484,9 +484,9 @@ class ProfileUtils(object):
         lossesCount = targetData.getLossesCount()
         winsCount = targetData.getWinsCount()
         drawsCount = targetData.getDrawsCount()
-        drawsStr = BigWorld.wg_getIntegralFormat(drawsCount) if drawsCount >= 0 else ProfileUtils.UNAVAILABLE_SYMBOL
-        battlesToolTipData = (BigWorld.wg_getIntegralFormat(winsCount), BigWorld.wg_getIntegralFormat(lossesCount), drawsStr)
-        return ProfileUtils.packLditItemData(BigWorld.wg_getIntegralFormat(battlesCount), description, tooltip, 'battles40x32.png', ProfileUtils.createToolTipData(battlesToolTipData))
+        drawsStr = backport.getIntegralFormat(drawsCount) if drawsCount >= 0 else ProfileUtils.UNAVAILABLE_SYMBOL
+        battlesToolTipData = (backport.getIntegralFormat(winsCount), backport.getIntegralFormat(lossesCount), drawsStr)
+        return ProfileUtils.packLditItemData(backport.getIntegralFormat(battlesCount), description, tooltip, 'battles40x32.png', ProfileUtils.createToolTipData(battlesToolTipData))
 
     @classmethod
     def getVehicleRecordTooltipData(cls, getValueMethod):
@@ -533,7 +533,7 @@ def getProfileCommonInfo(userName, dossier):
     lastBattleTimeUserString = None
     if dossier['total']['lastBattleTime']:
         lbt = dossier['total']['lastBattleTime']
-        lastBattleTimeUserString = '%s %s' % (BigWorld.wg_getLongDateFormat(lbt), BigWorld.wg_getShortTimeFormat(lbt))
+        lastBattleTimeUserString = '%s %s' % (backport.getLongDateFormat(lbt), backport.getShortTimeFormat(lbt))
     return {'name': userName,
-     'registrationDate': '%s' % BigWorld.wg_getLongDateFormat(dossier['total']['creationTime']),
+     'registrationDate': '%s' % backport.getLongDateFormat(dossier['total']['creationTime']),
      'lastBattleDate': lastBattleTimeUserString}

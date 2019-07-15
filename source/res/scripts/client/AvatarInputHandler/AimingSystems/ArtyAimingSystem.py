@@ -2,7 +2,7 @@
 # Embedded file name: scripts/client/AvatarInputHandler/AimingSystems/ArtyAimingSystem.py
 import BigWorld
 from Math import Vector3, Matrix
-from AvatarInputHandler import mathUtils
+import math_utils
 from AvatarInputHandler.AimingSystems.StrategicAimingSystem import StrategicAimingSystem
 from constants import SERVER_TICK_LENGTH, SHELL_TRAJECTORY_EPSILON_CLIENT
 _MINIMAL_AIMING_RADIUS = 2.0
@@ -56,6 +56,6 @@ class ArtyAimingSystem(StrategicAimingSystem):
             time = (aimPoint.x - r0.x) / v0.x
             self.__direction = v0 + g0 * time
             self.__direction.normalise()
-            self._matrix = mathUtils.createRTMatrix((self.__direction.yaw, -self.__direction.pitch, 0.0), hitPoint[1])
+            self._matrix = math_utils.createRTMatrix((self.__direction.yaw, -self.__direction.pitch, 0.0), hitPoint[1])
         self.__aimMatrix.setTranslate(aimPoint)
         return

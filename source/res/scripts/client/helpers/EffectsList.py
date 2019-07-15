@@ -14,11 +14,13 @@ import helpers
 import material_kinds
 from PixieBG import PixieBG
 from ReplayEvents import g_replayEvents
-from gui.Scaleform.genConsts.EPIC_CONSTS import EPIC_CONSTS
 from helpers import dependency
 from skeletons.gui.battle_session import IBattleSessionProvider
 from soft_exception import SoftException
 from vehicle_systems.tankStructure import TankSoundObjectsIndexes
+from constants import IS_EDITOR
+if not IS_EDITOR:
+    from gui.Scaleform.genConsts.EPIC_CONSTS import EPIC_CONSTS
 _logger = logging.getLogger(__name__)
 COLOR_WHITE = 4294967295L
 _ALLOW_DYNAMIC_LIGHTS = True

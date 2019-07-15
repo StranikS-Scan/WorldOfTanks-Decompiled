@@ -7,7 +7,8 @@ import BigWorld
 import Math
 import Settings
 import constants
-from AvatarInputHandler import mathUtils, cameras, aih_global_binding
+import math_utils
+from AvatarInputHandler import cameras, aih_global_binding
 from AvatarInputHandler.AimingSystems.StrategicAimingSystem import StrategicAimingSystem
 from AvatarInputHandler.AimingSystems.StrategicAimingSystemRemote import StrategicAimingSystemRemote
 from AvatarInputHandler.DynamicCameras import createOscillatorFromSection, CameraDynamicConfig
@@ -89,7 +90,7 @@ class StrategicCamera(ICamera, CallbackDelayer):
         self.__activeDistRangeSettings = self.__getActiveDistRangeForArena()
         if self.__activeDistRangeSettings is not None:
             self.__aimingSystem.height = self.__getDistRange()[0]
-        srcMat = mathUtils.createRotationMatrix((self.__cameraYaw, -math.pi * 0.499, 0.0))
+        srcMat = math_utils.createRotationMatrix((self.__cameraYaw, -math.pi * 0.499, 0.0))
         self.__cam.source = srcMat
         if not saveDist:
             self.__updateCamDistCfg()
@@ -192,7 +193,7 @@ class StrategicCamera(ICamera, CallbackDelayer):
         adjustedImpulse, noiseMagnitude = self.__dynamicCfg.adjustImpulse(impulse, reason)
         impulseFlatDir = Vector3(adjustedImpulse.x, 0, adjustedImpulse.z)
         impulseFlatDir.normalise()
-        cameraYawMat = mathUtils.createRotationMatrix(Vector3(-self.__cameraYaw, 0.0, 0.0))
+        cameraYawMat = math_utils.createRotationMatrix(Vector3(-self.__cameraYaw, 0.0, 0.0))
         impulseLocal = cameraYawMat.applyVector(impulseFlatDir * (-1 * adjustedImpulse.length))
         self.__positionOscillator.applyImpulse(impulseLocal)
         self.__applyNoiseImpulse(noiseMagnitude)
@@ -213,7 +214,7 @@ class StrategicCamera(ICamera, CallbackDelayer):
         self.applyImpulse(position, impulse, reason)
 
     def __applyNoiseImpulse(self, noiseMagnitude):
-        noiseImpulse = mathUtils.RandomVectors.random3Flat(noiseMagnitude)
+        noiseImpulse = math_utils.RandomVectors.random3Flat(noiseMagnitude)
         self.__positionNoiseOscillator.applyImpulse(noiseImpulse)
 
     def writeUserPreferences(self):
@@ -267,11 +268,11 @@ class StrategicCamera(ICamera, CallbackDelayer):
         self.__camDist = self.__aimingSystem.overrideCamDist(self.__camDist)
         distRange = self.__getDistRange()
         maxPivotHeight = distRange[1] - distRange[0]
-        self.__camDist = mathUtils.clamp(0, maxPivotHeight, self.__camDist)
+        self.__camDist = math_utils.clamp(0, maxPivotHeight, self.__camDist)
         self.__cfg['camDist'] = self.__camDist
         camDistWithSmoothing = self.__camDist + self.__smoothingPivotDelta - self.__aimingSystem.heightFromPlane
         self.__cam.pivotPosition = Math.Vector3(0.0, camDistWithSmoothing, 0.0)
-        if self.__dxdydz.z != 0 and self.__onChangeControlMode is not None and mathUtils.almostZero(self.__camDist - maxPivotHeight):
+        if self.__dxdydz.z != 0 and self.__onChangeControlMode is not None and math_utils.almostZero(self.__camDist - maxPivotHeight):
             self.__onChangeControlMode()
         self.__updateOscillator(deltaTime)
         if not self.__autoUpdatePosition:
@@ -280,13 +281,14 @@ class StrategicCamera(ICamera, CallbackDelayer):
 
     def __calcSmoothingPivotDelta(self, deltaTime):
         heightsDy = self.__aimingSystem.heightFromPlane - self.__smoothingPivotDelta
-        smoothingPivotDeltaDy = StrategicCamera._SMOOTHING_PIVOT_DELTA_FACTOR * heightsDy * deltaTime
+        smoothFactor = math_utils.clamp(0, 1, StrategicCamera._SMOOTHING_PIVOT_DELTA_FACTOR * deltaTime)
+        smoothingPivotDeltaDy = smoothFactor * heightsDy
         self.__smoothingPivotDelta += smoothingPivotDeltaDy
 
     def __calcAimOffset(self):
         aimWorldPos = self.__aimingSystem.matrix.applyPoint(Vector3(0, -self.__aimingSystem.height, 0))
         aimOffset = cameras.projectPoint(aimWorldPos)
-        return Vector2(mathUtils.clamp(-0.95, 0.95, aimOffset.x), mathUtils.clamp(-0.95, 0.95, aimOffset.y))
+        return Vector2(math_utils.clamp(-0.95, 0.95, aimOffset.x), math_utils.clamp(-0.95, 0.95, aimOffset.y))
 
     def __updateOscillator(self, deltaTime):
         if StrategicCamera.isCameraDynamic():
@@ -295,7 +297,7 @@ class StrategicCamera(ICamera, CallbackDelayer):
         else:
             self.__positionOscillator.reset()
             self.__positionNoiseOscillator.reset()
-        self.__cam.target.a = mathUtils.createTranslationMatrix(self.__positionOscillator.deviation + self.__positionNoiseOscillator.deviation)
+        self.__cam.target.a = math_utils.createTranslationMatrix(self.__positionOscillator.deviation + self.__positionNoiseOscillator.deviation)
 
     def reload(self):
         if not constants.IS_DEVELOPMENT:

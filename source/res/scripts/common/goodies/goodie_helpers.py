@@ -4,8 +4,8 @@ from collections import namedtuple
 from copy import deepcopy
 from GoodieConditions import MaxVehicleLevel
 from GoodieDefinition import GoodieDefinition
-from GoodieResources import Gold, Credits, Experience, CrewExperience, FreeExperience
-from GoodieTargets import BuyPremiumAccount, BuySlot, PostBattle, BuyGoldTankmen, FreeExperienceConversion, BuyVehicle
+from GoodieResources import Gold, Credits, Experience, CrewExperience, FreeExperience, FrontlineExperience
+from GoodieTargets import BuyPremiumAccount, BuySlot, PostBattle, BuyGoldTankmen, FreeExperienceConversion, BuyVehicle, EpicMeta
 from GoodieValue import GoodieValue
 from Goodies import GoodieException
 from debug_utils import LOG_ERROR
@@ -17,36 +17,42 @@ _TARGETS = {GOODIE_TARGET_TYPE.ON_BUY_PREMIUM: BuyPremiumAccount,
  GOODIE_TARGET_TYPE.ON_POST_BATTLE: PostBattle,
  GOODIE_TARGET_TYPE.ON_BUY_GOLD_TANKMEN: BuyGoldTankmen,
  GOODIE_TARGET_TYPE.ON_FREE_XP_CONVERSION: FreeExperienceConversion,
- GOODIE_TARGET_TYPE.ON_BUY_VEHICLE: BuyVehicle}
+ GOODIE_TARGET_TYPE.ON_BUY_VEHICLE: BuyVehicle,
+ GOODIE_TARGET_TYPE.ON_EPIC_META: EpicMeta}
 _RESOURCES = {GOODIE_RESOURCE_TYPE.GOLD: Gold,
  GOODIE_RESOURCE_TYPE.CREDITS: Credits,
  GOODIE_RESOURCE_TYPE.XP: Experience,
  GOODIE_RESOURCE_TYPE.CREW_XP: CrewExperience,
- GOODIE_RESOURCE_TYPE.FREE_XP: FreeExperience}
+ GOODIE_RESOURCE_TYPE.FREE_XP: FreeExperience,
+ GOODIE_RESOURCE_TYPE.FL_XP: FrontlineExperience}
 GOODIE_CONDITION_TO_TEXT = {MaxVehicleLevel: 'max_vehicle_level'}
 GOODIE_RESOURCE_TO_TEXT = {Gold: 'gold',
  Credits: 'credits',
  Experience: 'experience',
  CrewExperience: 'crew_experience',
- FreeExperience: 'free_experience'}
+ FreeExperience: 'free_experience',
+ FrontlineExperience: 'fl_experience'}
 GOODIE_TARGET_TO_TEXT = {BuyPremiumAccount: 'premium',
  BuySlot: 'slot',
  PostBattle: 'post_battle',
  BuyGoldTankmen: 'gold_tankmen',
  FreeExperienceConversion: 'free_xp_conversion',
- BuyVehicle: 'vehicle'}
+ BuyVehicle: 'vehicle',
+ EpicMeta: 'epic_meta'}
 GOODIE_TEXT_TO_CONDITION = {'max_vehicle_level': GOODIE_CONDITION_TYPE.MAX_VEHICLE_LEVEL}
 GOODIE_TEXT_TO_RESOURCE = {'credits': GOODIE_RESOURCE_TYPE.CREDITS,
  'experience': GOODIE_RESOURCE_TYPE.XP,
  'crew_experience': GOODIE_RESOURCE_TYPE.CREW_XP,
  'free_experience': GOODIE_RESOURCE_TYPE.FREE_XP,
- 'gold': GOODIE_RESOURCE_TYPE.GOLD}
+ 'gold': GOODIE_RESOURCE_TYPE.GOLD,
+ 'fl_experience': GOODIE_RESOURCE_TYPE.FL_XP}
 GOODIE_TEXT_TO_TARGET = {'premium': GOODIE_TARGET_TYPE.ON_BUY_PREMIUM,
  'slot': GOODIE_TARGET_TYPE.ON_BUY_SLOT,
  'post_battle': GOODIE_TARGET_TYPE.ON_POST_BATTLE,
  'gold_tankmen': GOODIE_TARGET_TYPE.ON_BUY_GOLD_TANKMEN,
  'free_xp_conversion': GOODIE_TARGET_TYPE.ON_FREE_XP_CONVERSION,
- 'vehicle': GOODIE_TARGET_TYPE.ON_BUY_VEHICLE}
+ 'vehicle': GOODIE_TARGET_TYPE.ON_BUY_VEHICLE,
+ 'epic_meta': GOODIE_TARGET_TYPE.ON_EPIC_META}
 
 def loadDefinitions(d):
     goodies = {'goodies': {},

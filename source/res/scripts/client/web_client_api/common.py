@@ -3,6 +3,7 @@
 from collections import namedtuple
 from gui.shared.money import MONEY_UNDEFINED
 from shared_utils import CONST_CONTAINER
+SPA_ID_TYPES = (int, long)
 VehicleOfferEntry = namedtuple('VehicleOfferEntry', ('id', 'eventType', 'rent', 'crew', 'name', 'label', 'left', 'buyPrice', 'bestOffer', 'buyParams', 'preferred'))
 VehicleOfferEntry.__new__.__defaults__ = ('',
  None,
@@ -51,6 +52,7 @@ class ItemPackType(CONST_CONTAINER):
     GOODIE_EXPERIENCE = 'goodie/experience'
     GOODIE_FREE_EXPERIENCE = 'goodie/free_experience'
     GOODIE_CREW_EXPERIENCE = 'goodie/crew_experience'
+    GOODIE_FRONTLINE_EXPERIENCE = 'goodie/fl_experience'
     CREW_50 = 'crew/50'
     CREW_75 = 'crew/75'
     CREW_100 = 'crew/100'
@@ -98,7 +100,8 @@ class ItemPackTypeGroup(CONST_CONTAINER):
      ItemPackType.GOODIE_CREDITS,
      ItemPackType.GOODIE_EXPERIENCE,
      ItemPackType.GOODIE_CREW_EXPERIENCE,
-     ItemPackType.GOODIE_FREE_EXPERIENCE)
+     ItemPackType.GOODIE_FREE_EXPERIENCE,
+     ItemPackType.GOODIE_FRONTLINE_EXPERIENCE)
     CAMOUFLAGE = (ItemPackType.CAMOUFLAGE_ALL,
      ItemPackType.CAMOUFLAGE_DESERT,
      ItemPackType.CAMOUFLAGE_SUMMER,

@@ -2,7 +2,7 @@
 # Embedded file name: scripts/client/CombatSelectedArea.py
 import BigWorld
 import Math
-from AvatarInputHandler import mathUtils
+import math_utils
 from constants import SERVER_TICK_LENGTH
 OVER_TERRAIN_HEIGHT = 0.5
 MARKER_HEIGHT = 5.0
@@ -56,7 +56,7 @@ class CombatSelectedArea(object):
     def setSelectingDirection(self, value=False):
         if value and self.__terrainRotatedArea is None:
             objectSize = Math.Vector2(10.0, 10.0)
-            self.__rotateModelNode = self.__fakeModel.node('', mathUtils.createRTMatrix(Math.Vector3(-self.__matrix.yaw, 0.0, 0.0), Math.Vector3((-self.__size.x - objectSize.x) * 0.5, 0.0, (self.__size.y + objectSize.y) * 0.5)))
+            self.__rotateModelNode = self.__fakeModel.node('', math_utils.createRTMatrix(Math.Vector3(-self.__matrix.yaw, 0.0, 0.0), Math.Vector3((-self.__size.x - objectSize.x) * 0.5, 0.0, (self.__size.y + objectSize.y) * 0.5)))
             self.__terrainRotatedArea = area = BigWorld.PyTerrainSelectedArea()
             area.setup(DEFAULT_ROTATE_MODEL, objectSize, self.__overTerrainHeight, self.__color)
             area.enableAccurateCollision(True)

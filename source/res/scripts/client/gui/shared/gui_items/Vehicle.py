@@ -10,6 +10,7 @@ import constants
 from AccountCommands import LOCK_REASON, VEHICLE_SETTINGS_FLAG
 from account_shared import LayoutIterator
 from constants import WIN_XP_FACTOR_MODE, RentType
+from gui.impl import backport
 from gui.impl.gen import R
 from rent_common import parseRentID
 from gui import makeHtmlString
@@ -320,18 +321,13 @@ class Vehicle(FittingItem, HasStrCD):
 
         if not slotsAnchors[GUI_ITEM_TYPE.MODIFICATION][Area.MISC]:
             slotsAnchors[GUI_ITEM_TYPE.MODIFICATION][Area.MISC] = slotsAnchors[GUI_ITEM_TYPE.STYLE][Area.MISC]
-        for slot in slotsAnchors[GUI_ITEM_TYPE.PROJECTION_DECAL][Area.MISC].itervalues():
-            if slot.isChild:
-                parent = slotsAnchorsById[slot.parentSlotId]
-                parent.addChild(slot)
-
         return (slotsAnchorsById, slotsAnchors)
 
     def getAnchors(self, slotType, areaId):
-        return self._slotsAnchors[slotType][areaId].itervalues()
+        return self._slotsAnchors.get(slotType, {}).get(areaId, {}).itervalues()
 
     def getAnchorBySlotId(self, slotType, areaId, regionIdx):
-        return self._slotsAnchors[slotType][areaId].get(regionIdx, None)
+        return self._slotsAnchors.get(slotType, {}).get(areaId, {}).get(regionIdx)
 
     def getAnchorById(self, anchorId):
         return self._slotsAnchorsById.get(anchorId, None)
@@ -1342,6 +1338,9 @@ class Vehicle(FittingItem, HasStrCD):
         outfit = self.getOutfit(season)
         return outfit is not None and not outfit.isEmpty()
 
+    def getBuiltInEquipmentIDs(self):
+        return vehicles.getBuiltinEqsForVehicle(self._descriptor.type)
+
     def getBonusCamo(self):
         for season in SeasonType.SEASONS:
             outfit = self.getOutfit(season)
@@ -1399,9 +1398,9 @@ class Vehicle(FittingItem, HasStrCD):
         description = i18n.makeString('#menu:descriptions/' + self.itemTypeName)
         caliber = self.descriptor.gun.shots[0].shell.caliber
         armor = findVehicleArmorMinMax(self.descriptor)
-        return description % {'weight': BigWorld.wg_getNiceNumberFormat(float(self.descriptor.physics['weight']) / 1000),
-         'hullArmor': BigWorld.wg_getIntegralFormat(armor[1]),
-         'caliber': BigWorld.wg_getIntegralFormat(caliber)}
+        return description % {'weight': backport.getNiceNumberFormat(float(self.descriptor.physics['weight']) / 1000),
+         'hullArmor': backport.getIntegralFormat(armor[1]),
+         'caliber': backport.getIntegralFormat(caliber)}
 
     def _sortByType(self, other):
         return compareByVehTypeName(self.type, other.type)

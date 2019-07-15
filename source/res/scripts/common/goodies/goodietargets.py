@@ -57,3 +57,9 @@ class BuyVehicle(GoodieTarget):
 
     def __init__(self, targetID, limit=None):
         super(BuyVehicle, self).__init__(targetID, limit)
+
+
+class EpicMeta(GoodieTarget):
+
+    def __init__(self, targetID=None, limit=None):
+        super(EpicMeta, self).__init__(targetID, limit)

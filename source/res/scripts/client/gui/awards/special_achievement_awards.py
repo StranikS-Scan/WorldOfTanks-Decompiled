@@ -1,6 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/awards/special_achievement_awards.py
-import BigWorld
 from gui.Scaleform.locale.CLANS import CLANS
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
@@ -56,7 +55,7 @@ class VictoryAward(ExplosionBackAward):
         return text_styles.highTitle(i18n.makeString(MENU.AWARDWINDOW_SPECIALACHIEVEMENT_HEADER))
 
     def getDescription(self):
-        return text_styles.main(i18n.makeString('#menu:awardWindow/specialAchievement/victory/description%d' % self.messageNumber, victoriesCount=BigWorld.wg_getIntegralFormat(self.victoriesCount)))
+        return text_styles.main(i18n.makeString('#menu:awardWindow/specialAchievement/victory/description%d' % self.messageNumber, victoriesCount=backport.getIntegralFormat(self.victoriesCount)))
 
 
 class BattleAward(ExplosionBackAward):
@@ -76,7 +75,7 @@ class BattleAward(ExplosionBackAward):
         return text_styles.highTitle(i18n.makeString(MENU.AWARDWINDOW_SPECIALACHIEVEMENT_HEADER))
 
     def getDescription(self):
-        return text_styles.main(i18n.makeString('#menu:awardWindow/specialAchievement/battle/description%d' % self.messageNumber, battlesCount=BigWorld.wg_getIntegralFormat(self.battlesCount)))
+        return text_styles.main(i18n.makeString('#menu:awardWindow/specialAchievement/battle/description%d' % self.messageNumber, battlesCount=backport.getIntegralFormat(self.battlesCount)))
 
 
 class CrewSkinAward(ExplosionBackAward):

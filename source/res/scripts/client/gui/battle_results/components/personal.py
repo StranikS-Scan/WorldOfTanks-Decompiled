@@ -2,7 +2,6 @@
 # Embedded file name: scripts/client/gui/battle_results/components/personal.py
 import random
 from math import ceil
-import BigWorld
 from arena_bonus_type_caps import ARENA_BONUS_TYPE_CAPS
 from constants import DEATH_REASON_ALIVE, PREMIUM_TYPE
 from gui.Scaleform.genConsts.BATTLE_RESULTS_PREMIUM_STATES import BATTLE_RESULTS_PREMIUM_STATES
@@ -76,10 +75,10 @@ class DynamicPremiumState(base.StatsItem):
                 self._value = BATTLE_RESULTS_PREMIUM_STATES.PREMIUM_BONUS
             else:
                 self._value = BATTLE_RESULTS_PREMIUM_STATES.PREMIUM_EARNINGS
-        elif self.__postBattlePremiumPlus:
-            self._value = BATTLE_RESULTS_PREMIUM_STATES.PREMIUM_EARNINGS
         elif self.__getIsApplied():
             self._value = BATTLE_RESULTS_PREMIUM_STATES.PREMIUM_BONUS
+        elif self.__postBattlePremiumPlus:
+            self._value = BATTLE_RESULTS_PREMIUM_STATES.PREMIUM_EARNINGS
         else:
             self._value = BATTLE_RESULTS_PREMIUM_STATES.PREMIUM_INFO
         return super(DynamicPremiumState, self).getVO()
@@ -147,7 +146,7 @@ class PremiumInfoBlock(base.StatsBlock):
             if self.__itemsCache.items.stats.isActivePremium(PREMIUM_TYPE.BASIC):
                 cases = ('credits', 'premium', 'squad', 'bonus', 'quests')
                 randCase = random.choice(cases)
-                value = backport.text(R.strings.battle_results.common.details.premiumPlus.dyn(randCase)(), bonusCredits=text_styles.concatStylesToSingleLine(text_styles.credits(BigWorld.wg_getGoldFormat(piggyBankMaxAmount)), icons.makeImageTag(backport.image(R.images.gui.maps.icons.library.CreditsIcon_2()), vSpace=-5)), durationInDays=periodInDays, multiplier=multiplier)
+                value = backport.text(R.strings.battle_results.common.details.premiumPlus.dyn(randCase)(), bonusCredits=text_styles.concatStylesToSingleLine(text_styles.credits(backport.getGoldFormat(piggyBankMaxAmount)), icons.makeImageTag(backport.image(R.images.gui.maps.icons.library.CreditsIcon_2()), vSpace=-5)), durationInDays=periodInDays, multiplier=multiplier)
                 if randCase == 'bonus':
                     randCase = 'bonus_x{}'.format(multiplier)
                 icon = backport.image(R.images.gui.maps.icons.premacc.battleResult.dyn(randCase)())
@@ -319,7 +318,7 @@ class DamageDetailsBlock(_DetailsBlock):
         self._isEmpty = piercings <= 0
         if damageDealt > 0:
             self._isEmpty = False
-            self.damageDealtValues = [BigWorld.wg_getIntegralFormat(damageDealt), BigWorld.wg_getIntegralFormat(piercings)]
+            self.damageDealtValues = [backport.getIntegralFormat(damageDealt), backport.getIntegralFormat(piercings)]
             self.damageDealtNames = [i18n.makeString(BATTLE_RESULTS.COMMON_TOOLTIP_DAMAGE_PART1, vals=style.getTooltipParamsStyle()), i18n.makeString(BATTLE_RESULTS.COMMON_TOOLTIP_DAMAGE_PART2)]
 
 
@@ -340,7 +339,7 @@ class ArmorUsingDetailsBlock(_DetailsBlock):
         if noDamage > 0 or damageBlocked > 0:
             self._isEmpty = False
             rickochets = result.rickochetsReceived
-            self.armorValues = [BigWorld.wg_getIntegralFormat(rickochets), BigWorld.wg_getIntegralFormat(noDamage), BigWorld.wg_getIntegralFormat(damageBlocked)]
+            self.armorValues = [backport.getIntegralFormat(rickochets), backport.getIntegralFormat(noDamage), backport.getIntegralFormat(damageBlocked)]
             self.armorNames = [i18n.makeString(BATTLE_RESULTS.COMMON_TOOLTIP_ARMOR_PART1), i18n.makeString(BATTLE_RESULTS.COMMON_TOOLTIP_ARMOR_PART2), i18n.makeString(BATTLE_RESULTS.COMMON_TOOLTIP_ARMOR_PART3, vals=style.getTooltipParamsStyle())]
 
 
@@ -361,7 +360,7 @@ class AssistDetailsBlock(_DetailsBlock):
         self.damageAssisted = damageAssisted
         if damageAssisted > 0:
             self._isEmpty = False
-            self.damageAssistedValues = [BigWorld.wg_getIntegralFormat(damageAssistedRadio), BigWorld.wg_getIntegralFormat(damageAssistedTrack), BigWorld.wg_getIntegralFormat(damageAssisted)]
+            self.damageAssistedValues = [backport.getIntegralFormat(damageAssistedRadio), backport.getIntegralFormat(damageAssistedTrack), backport.getIntegralFormat(damageAssisted)]
             tooltipStyle = style.getTooltipParamsStyle()
             self.damageAssistedNames = [i18n.makeString(BATTLE_RESULTS.COMMON_TOOLTIP_ASSIST_PART1, vals=tooltipStyle), i18n.makeString(BATTLE_RESULTS.COMMON_TOOLTIP_ASSIST_PART2, vals=tooltipStyle), i18n.makeString(BATTLE_RESULTS.COMMON_TOOLTIP_ASSIST_TOTAL, vals=tooltipStyle)]
 
@@ -385,7 +384,7 @@ class StunDetailsBlock(_DetailsBlock):
         self.stunDuration = duration
         if count > 0 or assisted > 0 or duration > 0:
             self._isEmpty = False
-            self.stunValues = [BigWorld.wg_getIntegralFormat(assisted), BigWorld.wg_getIntegralFormat(count), BigWorld.wg_getFractionalFormat(duration)]
+            self.stunValues = [backport.getIntegralFormat(assisted), backport.getIntegralFormat(count), backport.getFractionalFormat(duration)]
             self.stunNames = [i18n.makeString(BATTLE_RESULTS.COMMON_TOOLTIP_STUN_PART1, vals=style.getTooltipParamsStyle()), i18n.makeString(BATTLE_RESULTS.COMMON_TOOLTIP_STUN_PART2), i18n.makeString(BATTLE_RESULTS.COMMON_TOOLTIP_STUN_PART3, vals=style.getTooltipParamsStyle(BATTLE_RESULTS.COMMON_TOOLTIP_PARAMS_VAL_SECONDS))]
 
 
@@ -417,7 +416,7 @@ class CritsDetailsBlock(_DetailsBlock):
             self._isEmpty = False
             destroyedTankmen.append(style.makeTankmenTooltipLabel(tankman))
 
-        self.critsCount = BigWorld.wg_getIntegralFormat(crits['critsCount'])
+        self.critsCount = backport.getIntegralFormat(crits['critsCount'])
         self.criticalDevices = style.makeMultiLineHtmlString(criticalDevices)
         self.destroyedDevices = style.makeMultiLineHtmlString(destroyedDevices)
         self.destroyedTankmen = style.makeMultiLineHtmlString(destroyedTankmen)
@@ -446,10 +445,10 @@ class TeamBaseDetailsBlock(base.StatsBlock):
         self.captureTotalItems = capturePoints
         self.defenceTotalItems = defencePoints
         if self._showCapturePoints and capturePoints > 0:
-            self.captureValues = (BigWorld.wg_getIntegralFormat(capturePoints),)
+            self.captureValues = (backport.getIntegralFormat(capturePoints),)
             self.captureNames = (i18n.makeString(BATTLE_RESULTS.COMMON_TOOLTIP_CAPTURE_TOTALPOINTS),)
         if self._showDefencePoints and defencePoints > 0:
-            self.defenceValues = (BigWorld.wg_getIntegralFormat(defencePoints),)
+            self.defenceValues = (backport.getIntegralFormat(defencePoints),)
             self.defenceNames = (i18n.makeString(BATTLE_RESULTS.COMMON_TOOLTIP_DEFENCE_TOTALPOINTS),)
 
 
@@ -570,7 +569,7 @@ class TotalEfficiencyDetailsHeader(base.StatsBlock):
     def __makeEfficiencyHeaderTooltip(cls, key, value):
         if value > 0:
             header = TOOLTIPS.battleresults_efficiencyheader(key)
-            body = BigWorld.wg_getIntegralFormat(value)
+            body = backport.getIntegralFormat(value)
             return makeTooltip(header, body)
         else:
             return None

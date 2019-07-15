@@ -16,7 +16,7 @@ import DestructiblesCache
 import TriggersManager
 import constants
 import physics_shared
-from AvatarInputHandler.aih_constants import ShakeReason
+from aih_constants import ShakeReason
 from TriggersManager import TRIGGER_TYPE
 from VehicleEffects import DamageFromShotDecoder
 from constants import SPT_MATKIND
@@ -173,7 +173,7 @@ class Vehicle(BigWorld.Entity, BattleAbilitiesComponent):
         else:
             self.typeDescriptor = self.getDescr(respawnCompactDescr)
             forceReloading = respawnCompactDescr is not None
-            self.appearance, _, prereqs = appearance_cache.createAppearance(self.id, self.typeDescriptor, self.health, self.isCrewActive, self.isTurretDetached, outfitDescr, forceReloading)
+            self.appearance, prereqs = appearance_cache.createAppearance(self.id, self.typeDescriptor, self.health, self.isCrewActive, self.isTurretDetached, outfitDescr, forceReloading)
             return (loadingPriority(self.id), prereqs)
 
     def getDescr(self, respawnCompactDescr):
@@ -208,7 +208,7 @@ class Vehicle(BigWorld.Entity, BattleAbilitiesComponent):
         self.__wheelsScrollFilter = None
         self.__wheelsSteeringFilter = None
         if self.typeDescriptor.chassis.generalWheelsAnimatorConfig is not None:
-            scrollableWheelsCount = self.typeDescriptor.chassis.generalWheelsAnimatorConfig.getWheelsCount()
+            scrollableWheelsCount = self.typeDescriptor.chassis.generalWheelsAnimatorConfig.getNonTrackWheelsCount()
             self.__wheelsScrollFilter = []
             for _ in range(scrollableWheelsCount):
                 self.__wheelsScrollFilter.append(NetworkFilters.FloatLatencyDelayingFilter())
@@ -269,7 +269,7 @@ class Vehicle(BigWorld.Entity, BattleAbilitiesComponent):
             maxComponentIdx = TankPartIndexes.ALL[-1]
             wheelsConfig = self.appearance.typeDescriptor.chassis.generalWheelsAnimatorConfig
             if wheelsConfig:
-                maxComponentIdx = maxComponentIdx + wheelsConfig.getWheelsCount()
+                maxComponentIdx = maxComponentIdx + wheelsConfig.getNonTrackWheelsCount()
             maxHitEffectCode, decodedPoints, maxDamagedComponent = DamageFromShotDecoder.decodeHitPoints(points, self.appearance.collisions, maxComponentIdx)
             hasPiercedHit = DamageFromShotDecoder.hasDamaged(maxHitEffectCode)
             firstHitDir = Math.Vector3(0)
@@ -429,7 +429,7 @@ class Vehicle(BigWorld.Entity, BattleAbilitiesComponent):
             maxComponentIdx = TankPartIndexes.ALL[-1]
             wheelsConfig = self.appearance.typeDescriptor.chassis.generalWheelsAnimatorConfig
             if wheelsConfig:
-                maxComponentIdx = maxComponentIdx + wheelsConfig.getWheelsCount()
+                maxComponentIdx = maxComponentIdx + wheelsConfig.getNonTrackWheelsCount()
             for sticker in curr.difference(prev):
                 self.appearance.addDamageSticker(sticker, *DamageFromShotDecoder.decodeSegment(sticker, self.appearance.collisions, maxComponentIdx))
 

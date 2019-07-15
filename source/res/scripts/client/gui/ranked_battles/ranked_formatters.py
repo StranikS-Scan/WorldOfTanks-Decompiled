@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/ranked_battles/ranked_formatters.py
-import BigWorld
 from gui.Scaleform.daapi.view.lobby.missions.awards_formatters import CurtailingAwardsComposer
+from gui.impl import backport
 from gui.ranked_battles.constants import AWARDS_ORDER, DEFAULT_REWARDS_COUNT
 from gui.server_events.awards_formatters import AWARDS_SIZES, getRankedAwardsPacker
 from gui.shared.formatters import text_styles
@@ -28,15 +28,15 @@ def getFloatPercentStrStat(value):
     if _getValueOrUnavailable(value) == _UNAVAILABLE_VALUE:
         return _UNAVAILABLE_SYMBOL
     value = value * 100
-    return text_styles.concatStylesToSingleLine(BigWorld.wg_getNiceNumberFormat(value), _PERCENT_SYMBOL)
+    return text_styles.concatStylesToSingleLine(backport.getNiceNumberFormat(value), _PERCENT_SYMBOL)
 
 
 def getIntegerStrStat(value):
-    return _UNAVAILABLE_SYMBOL if _getValueOrUnavailable(value) == _UNAVAILABLE_VALUE else BigWorld.wg_getNiceNumberFormat(value)
+    return _UNAVAILABLE_SYMBOL if _getValueOrUnavailable(value) == _UNAVAILABLE_VALUE else backport.getNiceNumberFormat(value)
 
 
 def getTimeLongStr(value):
-    return _UNAVAILABLE_SYMBOL if _getValueOrUnavailable(value) == _UNAVAILABLE_VALUE else BigWorld.wg_getLongTimeFormat(value)
+    return _UNAVAILABLE_SYMBOL if _getValueOrUnavailable(value) == _UNAVAILABLE_VALUE else backport.getLongTimeFormat(value)
 
 
 def getRanksColumnRewardsFormatter(maxRewardsCount=DEFAULT_REWARDS_COUNT):

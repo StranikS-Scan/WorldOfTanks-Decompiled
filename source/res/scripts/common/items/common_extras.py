@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/items/common_extras.py
 from items import _xml
-from constants import IS_CLIENT, IS_BOT
+from constants import IS_CLIENT, IS_EDITOR, IS_BOT
 import importlib
 from debug_utils import LOG_DEBUG
 import collections
@@ -21,7 +21,7 @@ def readExtras(xmlCtx, section, subsectionName, moduleName, **kwargs):
         if extrasDict.has_key(extraName):
             _xml.raiseWrongXml(ctx, '', 'name is not unique')
         clientName, sep, serverName = extraSection.asString.partition(':')
-        className = (clientName if IS_CLIENT or IS_BOT else serverName).strip()
+        className = (clientName if IS_CLIENT or IS_EDITOR or IS_BOT else serverName).strip()
         classObj = getattr(mod, className, None)
         if classObj is None:
             _xml.raiseWrongXml(ctx, '', "class '%s' is not found in '%s'" % (className, mod.__name__))

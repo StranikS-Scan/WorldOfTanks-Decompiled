@@ -4,7 +4,7 @@ from web_client_api import w2capi
 from web_client_api.ui.chat import ChatWebApiMixin
 from web_client_api.ui.shop import ShopWebApiMixin
 from web_client_api.ui.badges import BadgesWebApiMixin
-from web_client_api.ui.boosters import BoostersWindowWebApiMixin
+from web_client_api.ui.boosters import BoostersWindowWebApiMixin, BoostersInfoWebApiMixin
 from web_client_api.ui.browser import OpenBrowserWindowWebApiMixin, CloseBrowserWindowWebApiMixin, CloseBrowserViewWebApiMixin, OpenExternalBrowserWebApiMixin, OpenBrowserOverlayWebApiMixin
 from web_client_api.ui.barracks import BarracksWebApiMixin
 from web_client_api.ui.clan import ClanWindowWebApiMixin
@@ -53,5 +53,5 @@ class ContextMenuWebApi(UserMenuWebApiMixin):
 
 
 @w2capi(name='util', key='action')
-class UtilWebApi(UtilWebApiMixin, VehicleCompareWebApiMixin, WaitingWebApiMixin):
+class UtilWebApi(UtilWebApiMixin, VehicleCompareWebApiMixin, WaitingWebApiMixin, BoostersInfoWebApiMixin):
     pass

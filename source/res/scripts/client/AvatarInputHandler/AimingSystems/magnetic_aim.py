@@ -6,7 +6,7 @@ import math
 import BigWorld
 import Vehicle
 from Math import Vector3, Matrix
-from AvatarInputHandler import mathUtils
+import math_utils
 from gui.battle_control import event_dispatcher as gui_event_dispatcher
 
 class MagneticAimSettings(object):
@@ -65,7 +65,7 @@ def magneticAimFindTarget():
             veh = _TargetVeh(vehicleRef=vehicle, dotResult=dotResult, distance=targetDistance.length)
             if minAngleVehicle is None or dotResult >= minAngleVehicle.dotResult:
                 minAngleVehicle = veh
-            if minAngleVehicle is not None and mathUtils.almostZero(dotResult - minAngleVehicle.dotResult):
+            if minAngleVehicle is not None and math_utils.almostZero(dotResult - minAngleVehicle.dotResult):
                 if targetDistance < minAngleVehicle.distance:
                     minAngleVehicle = veh
 

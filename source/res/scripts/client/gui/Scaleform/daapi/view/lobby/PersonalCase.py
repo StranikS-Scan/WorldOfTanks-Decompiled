@@ -89,6 +89,7 @@ class PersonalCase(PersonalCaseMeta, IGlobalListener):
     itemsCache = dependency.descriptor(IItemsCache)
     lobbyContext = dependency.descriptor(ILobbyContext)
     crewSkinsHAConfig = CrewSkinsCache()
+    _SOUND_PREVIEW = 'wwsound_mode_preview01'
 
     def __init__(self, ctx=None):
         super(PersonalCase, self).__init__()
@@ -98,6 +99,8 @@ class PersonalCase(PersonalCaseMeta, IGlobalListener):
         self.dataProvider = PersonalCaseDataProvider(self.tmanInvID)
         tankman = self.itemsCache.items.getTankman(self.tmanInvID)
         self.vehicle = self.itemsCache.items.getItemByCD(tankman.vehicleNativeDescr.type.compactDescr)
+        self.__previewSound = None
+        return
 
     def onPrbEntitySwitched(self):
         self.__setCommonData()
@@ -146,7 +149,12 @@ class PersonalCase(PersonalCaseMeta, IGlobalListener):
     def playCrewSkinSound(self, crewSkinID):
         crewSkin = self.itemsCache.items.getCrewSkin(crewSkinID)
         if crewSkin.getSoundSetID() != NO_CREW_SKIN_SOUND_SET:
-            SoundGroups.g_instance.playSound2D(crewSkin.getSoundSetID())
+            SoundGroups.g_instance.soundModes.setMode(crewSkin.getSoundSetID())
+            sndPath = self.app.soundManager.sounds.getEffectSound(self._SOUND_PREVIEW)
+            self.__previewSound = SoundGroups.g_instance.getSound2D(sndPath)
+            if self.__previewSound is not None:
+                self.__previewSound.play()
+        return
 
     def changeHistoricallyAccurate(self, historicallyAccurate):
         self.crewSkinsHAConfig.changeHistoricalAccurate(historicallyAccurate)
@@ -241,7 +249,13 @@ class PersonalCase(PersonalCaseMeta, IGlobalListener):
         self.itemsCache.onSyncCompleted -= self.__refreshData
         g_clientUpdateManager.removeObjectCallbacks(self)
         self.removeListener(events.FightButtonEvent.FIGHT_BUTTON_UPDATE, self.__updatePrbState, scope=EVENT_BUS_SCOPE.LOBBY)
+        self.__stopSoundPreview()
         super(PersonalCase, self)._dispose()
+
+    def __stopSoundPreview(self):
+        if self.__previewSound is not None:
+            self.__previewSound.stop()
+        return
 
     @decorators.process('updating')
     def __setCommonData(self):
@@ -518,11 +532,14 @@ class PersonalCaseDataProvider(object):
             LOC_MAP[CREW_SKIN_PROPERTIES_MASKS.NATION] = i18n.makeString(NATIONS.all(crewSkin.getNation()))
         validation, validationMask, _ = cache.validateCrewSkin(tankman.descriptor, crewSkin.getID())
         soundValidation = crewSkin.getRoleID() == tankman.role if crewSkin.getRoleID() is not None else True
+        if not SoundGroups.g_instance.soundModes.currentNationalPreset[1]:
+            soundValidation = False
         restrictionsMessage = backport.text(R.strings.tooltips.crewSkins.restrictions())
         if not validation:
             restrictions = [ loc for key, loc in LOC_MAP.iteritems() if key & validationMask ]
             restrictionsMessage += ' ' + ', '.join(restrictions)
         soundSetID = crewSkin.getSoundSetID()
+        soundSetLoc = backport.text(R.strings.crew_skins.feature.sound.dyn(soundSetID)())
         return {'id': crewSkin.getID(),
          'fullName': localizedFullName(crewSkin),
          'description': crewSkin.getDescription(),
@@ -539,7 +556,7 @@ class PersonalCaseDataProvider(object):
          'isNew': crewSkin.isNew() and not PersonalCase.crewSkinsHAConfig.checkForViewed(crewSkin.getID()),
          'isAvailable': validation,
          'notAvailableMessage': restrictionsMessage,
-         'soundSetName': soundSetID if soundSetID != NO_CREW_SKIN_SOUND_SET else backport.text(R.strings.crew_skins.feature.sound.noSound()),
+         'soundSetName': soundSetLoc if soundSetID != NO_CREW_SKIN_SOUND_SET else backport.text(R.strings.crew_skins.feature.sound.noSound()),
          'soundSetIsAvailable': soundValidation if crewSkin.getSoundSetID() != NO_CREW_SKIN_SOUND_SET else True}
 
     @async

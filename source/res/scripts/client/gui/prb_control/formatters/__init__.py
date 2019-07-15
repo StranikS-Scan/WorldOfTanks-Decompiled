@@ -2,8 +2,8 @@
 # Embedded file name: scripts/client/gui/prb_control/formatters/__init__.py
 import time
 from datetime import datetime
-import BigWorld
-from gui.Scaleform.locale.PREBATTLE import PREBATTLE
+from gui.impl import backport
+from gui.impl.gen import R
 from gui.prb_control import prb_getters
 from helpers import html, i18n
 from helpers.time_utils import makeLocalServerTime
@@ -68,15 +68,15 @@ def getPrebattleOpponentsString(extraData, escapeHtml=False):
 
 
 def getPrebattleStartTimeString(startTime):
-    startTimeString = BigWorld.wg_getLongTimeFormat(startTime)
+    startTimeString = backport.getLongTimeFormat(startTime)
     if startTime - time.time() > 8640:
-        startTimeString = '{0:>s} {1:>s}'.format(BigWorld.wg_getLongDateFormat(startTime), startTimeString)
+        startTimeString = '{0:>s} {1:>s}'.format(backport.getLongDateFormat(startTime), startTimeString)
     return startTimeString
 
 
 def getBattleSessionStartTimeString(startTime):
     startTimeString = getPrebattleStartTimeString(startTime)
-    return '%s %s' % (i18n.makeString(PREBATTLE.TITLE_BATTLESESSION_STARTTIME), startTimeString)
+    return '%s %s' % (backport.text(R.strings.prebattle.title.battleSession.startTime()), startTimeString)
 
 
 def getStartTimeLeft(startTime):

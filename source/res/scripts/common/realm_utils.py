@@ -3,7 +3,7 @@
 import BigWorld
 import string
 import ResMgr as rmgr
-from constants import CURRENT_REALM, IS_CLIENT
+from constants import CURRENT_REALM, IS_CLIENT, IS_EDITOR
 
 class ResMgr(object):
 
@@ -16,7 +16,7 @@ class ResMgr(object):
     def openSection(filepath, createIfMissing=False):
         realm = CURRENT_REALM
         parts = filepath.split('.')
-        section = rmgr.openSection(string.join(parts[:-1] + [realm] + parts[-1:], '.')) if BigWorld.component != 'editor' else None
+        section = rmgr.openSection(string.join(parts[:-1] + [realm] + parts[-1:], '.')) if not IS_EDITOR else None
         return section if section is not None else rmgr.openSection(filepath, createIfMissing)
 
     @staticmethod

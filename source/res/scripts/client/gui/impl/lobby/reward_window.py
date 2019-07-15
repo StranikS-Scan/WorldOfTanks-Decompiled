@@ -8,14 +8,12 @@ from gui.Scaleform.daapi.view.lobby.missions.awards_formatters import PackRentVe
 from gui.Scaleform.daapi.view.lobby.missions.missions_helper import getMissionInfoData
 from gui.Scaleform.framework.entities.View import ViewKey
 from gui.Scaleform.genConsts.BARRACKS_CONSTANTS import BARRACKS_CONSTANTS
-from gui.impl.backport.backport_tooltip import TooltipData, BackportTooltipWindow
+from gui.impl.backport import TooltipData, BackportTooltipWindow
+from gui.impl.pub import ViewImpl, WindowImpl, WindowView
 from gui.impl.gen import R
 from gui.impl.gen.view_models.ui_kit.reward_renderer_model import RewardRendererModel
 from gui.impl.gen.view_models.windows.piggy_bank_reward_window_content_model import PiggyBankRewardWindowContentModel
 from gui.impl.gen.view_models.windows.reward_window_content_model import RewardWindowContentModel
-from gui.impl.pub import ViewImpl
-from gui.impl.pub.window_impl import WindowImpl
-from gui.impl.pub.window_view import WindowView
 from gui.server_events.awards_formatters import getPackRentVehiclesAwardPacker, getAnniversaryPacker, getDefaultAwardFormatter
 from gui.server_events.bonuses import getTutorialBonuses, CreditsBonus
 from gui.server_events.recruit_helper import getRecruitInfo
@@ -157,11 +155,14 @@ class QuestRewardWindowContent(BaseRewardWindowContent):
         return
 
     def _getBonuses(self):
-        allBonuses = getMissionInfoData(self._quest).getSubstituteBonuses()
-        bonuses = [ bonus for bonus in allBonuses if bonus.getName() != 'vehicles' ]
-        vehBonus = getTutorialBonuses('vehicles', self._vehicles)
-        bonuses.extend(vehBonus)
-        return bonuses
+        if self._quest is not None:
+            allBonuses = getMissionInfoData(self._quest).getSubstituteBonuses()
+            bonuses = [ bonus for bonus in allBonuses if bonus.getName() != 'vehicles' ]
+            vehBonus = getTutorialBonuses('vehicles', self._vehicles)
+            bonuses.extend(vehBonus)
+            return bonuses
+        else:
+            return []
 
     def _getAwardComposer(self):
         return PackRentVehiclesAwardComposer(_ADDITIONAL_AWARDS_COUNT, getPackRentVehiclesAwardPacker())

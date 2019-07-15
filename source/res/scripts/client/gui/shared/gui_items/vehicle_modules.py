@@ -1,11 +1,11 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/gui_items/vehicle_modules.py
-import BigWorld
 from constants import SHELL_TYPES
 from gui.Scaleform.genConsts.FITTING_TYPES import FITTING_TYPES
 from gui.Scaleform.genConsts.STORE_CONSTANTS import STORE_CONSTANTS
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.RES_SHOP_EXT import RES_SHOP_EXT
+from gui.impl import backport
 from gui.shared.items_parameters.params_cache import g_paramsCache
 import nations
 from helpers import i18n
@@ -282,7 +282,7 @@ class Shell(FittingItem):
             dimension = i18n.makeString('#item_types:shell/dimension/mm')
         return i18n.makeString('#item_types:shell/name') % {'kind': i18n.makeString('#item_types:shell/%s/%s' % (kind, self.descriptor.kind)),
          'name': self.userName,
-         'caliber': BigWorld.wg_getNiceNumberFormat(caliber),
+         'caliber': backport.getNiceNumberFormat(caliber),
          'dimension': dimension}
 
     @property

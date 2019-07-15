@@ -15,7 +15,7 @@ from CurrentVehicle import g_currentVehicle
 from gui.customization.shared import isOutfitVisuallyEmpty
 _PopoverHeadersVO = namedtuple('_PopoverHeadersVO', ('title', 'checkBoxText', 'counterText', 'currentSeasonImage'))
 _RegionId = namedtuple('_RegionId', ('areaId', 'slotType', 'regionIdx'))
-_DisplayedItemsVO = namedtuple('_DisplayedItemsVO', ('id', 'icon', 'userName', 'numItems', 'isHistoric', 'price', 'isApplied', 'isWide', 'itemsList'))
+_DisplayedItemsVO = namedtuple('_DisplayedItemsVO', ('id', 'icon', 'userName', 'numItems', 'isHistoric', 'price', 'isApplied', 'isWide', 'itemsList', 'isDim'))
 
 class InstalledItemsPopover(CustomizationItemsPopoverMeta):
     service = dependency.descriptor(ICustomizationService)
@@ -194,4 +194,4 @@ class InstalledItemsPopoverDataProvider(SortableDAAPIDataProvider):
             else:
                 numItemsStr = text_styles.main('{} '.format(itemGroupDescription.numItems))
             regionIdListVO = [ regionId._asdict() for regionId in itemGroupDescription.regionIdList ]
-        return _DisplayedItemsVO(item.intCD, imageIcon, userName, numItemsStr, item.isHistorical(), price, isAlreadyPurchased, item.isWide(), regionIdListVO)._asdict()
+        return _DisplayedItemsVO(item.intCD, imageIcon, userName, numItemsStr, item.isHistorical(), price, isAlreadyPurchased, item.isWide(), regionIdListVO, item.isDim())._asdict()

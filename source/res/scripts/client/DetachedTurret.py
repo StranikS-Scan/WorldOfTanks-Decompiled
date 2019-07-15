@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/DetachedTurret.py
 from soft_exception import SoftException
-from AvatarInputHandler import mathUtils
+import math_utils
 import BigWorld
 import Math
 from debug_utils import LOG_ERROR
@@ -243,9 +243,9 @@ class _TurretDetachmentEffects(Component):
 
     def __normalizeEnergy(self, energy):
         minBound, maxBound = _TurretDetachmentEffects._MIN_COLLISION_ENERGY, _TurretDetachmentEffects._MAX_COLLISION_ENERGY
-        clampedEnergy = mathUtils.clamp(minBound, maxBound, energy)
+        clampedEnergy = math_utils.clamp(minBound, maxBound, energy)
         t = (clampedEnergy - minBound) / (maxBound - minBound)
-        return mathUtils.lerp(_TurretDetachmentEffects._MIN_NORMALIZED_ENERGY, 1.0, t)
+        return math_utils.lerp(_TurretDetachmentEffects._MIN_NORMALIZED_ENERGY, 1.0, t)
 
 
 class _HitEffects(ModelBoundEffects, Component):

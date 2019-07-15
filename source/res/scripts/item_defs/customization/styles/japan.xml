@@ -3,7 +3,7 @@
     <userString>	#vehicle_customization:styles/rented_styles	</userString>
     <season>	ALL	</season>
     <historical>	true	</historical>
-    <priceGroup>	rented style	</priceGroup>
+    <priceGroup>	styles 75000s	</priceGroup>
     <vehicleFilter>
       <include>
         <nations>	japan	</nations>
@@ -60,7 +60,7 @@
     <userString>	#vehicle_customization:styles/main_styles	</userString>
     <season>	ALL	</season>
     <historical>	true	</historical>
-    <priceGroup>	style gold	</priceGroup>
+    <priceGroup>	styles 750g	</priceGroup>
     <vehicleFilter>
       <include>
         <nations>	japan	</nations>
@@ -70,6 +70,7 @@
       <id>	38	</id>
       <texture>	gui/maps/vehicles/styles/style_01.png	</texture>
       <userString>	#vehicle_customization:gold_style/gold_style_01	</userString>
+      <longDescriptionSpecial>	#vehicle_customization:gold_style/gold_style_01_desc/long	</longDescriptionSpecial>
       <outfits>
         <outfit>
           <season>	winter	</season>
@@ -195,7 +196,7 @@
     <userString>	#vehicle_customization:styles/special_styles	</userString>
     <season>	ALL	</season>
     <historical>	false	</historical>
-    <priceGroup>	legacy notInShop	</priceGroup>
+    <priceGroup>	styles 750g notInShop	</priceGroup>
     <vehicleFilter>
       <include>
         <nations>	japan	</nations>
@@ -244,7 +245,7 @@
     <userString>	#vehicle_customization:styles/main_styles	</userString>
     <season>	ALL	</season>
     <historical>	true	</historical>
-    <priceGroup>	generic custom look styles	</priceGroup>
+    <priceGroup>	styles 700g	</priceGroup>
     <vehicleFilter>
       <include>
         <nations>	japan	</nations>
@@ -254,6 +255,7 @@
       <id>	247	</id>
       <texture>	gui/maps/vehicles/styles/generic_custom_look_japan.png	</texture>
       <description>	#vehicle_customization:main_style/generic_custom_look_japan_desc	</description>
+      <longDescriptionSpecial>	#vehicle_customization:main_style/generic_custom_look_japan_desc/long	</longDescriptionSpecial>
       <userString>	#vehicle_customization:main_style/generic_custom_look_japan	</userString>
       <outfits>
         <outfit>
@@ -327,7 +329,7 @@
       <texture>	gui/maps/vehicles/styles/generic_custom_look_2_japan.png	</texture>
       <description>	#vehicle_customization:main_style/generic_custom_look_2_japan_desc	</description>
       <userString>	#vehicle_customization:main_style/generic_custom_look_2_japan	</userString>
-      <priceGroup>	generic custom look styles	</priceGroup>
+      <priceGroup>	styles 700g	</priceGroup>
       <outfits>
         <outfit>
           <season>	winter	</season>

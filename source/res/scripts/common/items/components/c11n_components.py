@@ -4,7 +4,7 @@ import items
 import items.vehicles as iv
 from items.components import shared_components
 from soft_exception import SoftException
-from items.components.c11n_constants import ApplyArea, SeasonType, Options, ItemTags, CustomizationType, MAX_CAMOUFLAGE_PATTERN_SIZE, DecalType, PROJECTION_DECALS_SCALE_ID_VALUES, MAX_USERS_PROJECTION_DECALS, CustomizationTypeNames, DecalTypeNames, ProjectionDecalFormTags, CUSTOMIZATION_SLOTS_VEHICLE_PARTS, PERSONAL_NUMBER_DIGITS_COUNT
+from items.components.c11n_constants import ApplyArea, SeasonType, Options, ItemTags, CustomizationType, MAX_CAMOUFLAGE_PATTERN_SIZE, DecalType, PROJECTION_DECALS_SCALE_ID_VALUES, MAX_USERS_PROJECTION_DECALS, CustomizationTypeNames, DecalTypeNames, ProjectionDecalFormTags, CUSTOMIZATION_SLOTS_VEHICLE_PARTS, CamouflageTilingType
 from typing import List, Dict, Type, Tuple, Optional, Union, TypeVar, FrozenSet
 from string import lower, upper
 Item = TypeVar('TypeVar')
@@ -127,7 +127,7 @@ class ProjectionDecalItem(BaseCustomizationItem):
 
 class CamouflageItem(BaseCustomizationItem):
     itemType = CustomizationType.CAMOUFLAGE
-    __slots__ = ('palettes', 'compatibleParts', 'componentsCovering', 'invisibilityFactor', 'tiling', 'scales', 'rotation')
+    __slots__ = ('palettes', 'compatibleParts', 'componentsCovering', 'invisibilityFactor', 'tiling', 'tilingSettings', 'scales', 'rotation')
     allSlots = BaseCustomizationItem.__slots__ + __slots__
 
     def __init__(self, parentGroup=None):
@@ -139,18 +139,21 @@ class CamouflageItem(BaseCustomizationItem):
          'turret': 0.0,
          'gun': 0.0}
         self.tiling = ()
+        self.tilingSettings = (CamouflageTilingType.LEGACY, None, None)
         self.scales = (1.2, 1, 0.7)
         super(CamouflageItem, self).__init__(parentGroup)
+        return
 
 
 class PersonalNumberItem(BaseCustomizationItem):
     itemType = CustomizationType.PERSONAL_NUMBER
     __prohibitedNumbers = ()
-    __slots__ = ('compatibleParts', 'previewTexture', 'fontInfo', 'isMirrored')
+    __slots__ = ('compatibleParts', 'digitsCount', 'previewTexture', 'fontInfo', 'isMirrored')
     allSlots = BaseCustomizationItem.__slots__ + __slots__
 
     def __init__(self, parentGroup=None):
         self.compatibleParts = ApplyArea.INSCRIPTION_REGIONS
+        self.digitsCount = 3
         self.previewTexture = ''
         self.fontInfo = None
         self.isMirrored = False
@@ -203,7 +206,7 @@ class ModificationItem(BaseCustomizationItem):
 
 class StyleItem(BaseCustomizationItem):
     itemType = CustomizationType.STYLE
-    __slots__ = ('outfits', 'isRent', 'rentCount', 'modelsSet', 'textInfo')
+    __slots__ = ('outfits', 'isRent', 'rentCount', 'modelsSet')
     allSlots = BaseCustomizationItem.__slots__ + __slots__
 
     def __init__(self, parentGroup=None):
@@ -211,7 +214,6 @@ class StyleItem(BaseCustomizationItem):
         self.isRent = False
         self.rentCount = 1
         self.modelsSet = ''
-        self.textInfo = ''
         super(StyleItem, self).__init__(parentGroup)
 
     def isVictim(self, color):
@@ -347,7 +349,7 @@ class VehicleFilter(object):
 
 
 class CustomizationCache(object):
-    __slots__ = ('paints', 'camouflages', 'decals', 'projection_decals', 'modifications', 'levels', 'itemToPriceGroup', 'priceGroups', 'priceGroupNames', 'insignias', 'styles', 'defaultColors', 'itemTypes', 'priceGroupTags', '__victimStyles', 'personal_numbers', 'fonts', 'sequences', 'attachments')
+    __slots__ = ('paints', 'camouflages', 'decals', 'projection_decals', 'modifications', 'levels', 'itemToPriceGroup', 'priceGroups', 'priceGroupNames', 'insignias', 'styles', 'defaultColors', 'defaultInsignias', 'itemTypes', 'priceGroupTags', '__victimStyles', 'personal_numbers', 'fonts', 'sequences', 'attachments')
 
     def __init__(self):
         self.priceGroupTags = {}
@@ -362,6 +364,7 @@ class CustomizationCache(object):
         self.priceGroupNames = {}
         self.styles = {}
         self.insignias = {}
+        self.defaultInsignias = {}
         self.defaultColors = {}
         self.fonts = {}
         self.sequences = {}
@@ -411,7 +414,6 @@ class CustomizationCache(object):
             if projectionDecalsCount > MAX_USERS_PROJECTION_DECALS:
                 raise SoftException('projection decals quantity {} greater than acceptable'.format(projectionDecalsCount))
             vehType = vehDescr.type
-            usedParents = set()
             for itemType in CustomizationType.RANGE:
                 typeName = lower(CustomizationTypeNames[itemType])
                 componentsAttrName = '{}s'.format(typeName)
@@ -430,9 +432,9 @@ class CustomizationCache(object):
                         if itemType == CustomizationType.CAMOUFLAGE:
                             _validateCamouflage(component, item)
                         elif itemType == CustomizationType.PERSONAL_NUMBER:
-                            _validatePersonalNumber(component)
+                            _validatePersonalNumber(component, item)
                     if itemType == CustomizationType.PROJECTION_DECAL:
-                        _validateProjectionDecal(component, item, vehDescr, usedParents)
+                        _validateProjectionDecal(component, item, vehDescr)
 
         except SoftException as ex:
             return (False, ex.message)
@@ -479,7 +481,7 @@ def _validateCamouflage(component, item):
         raise SoftException('camouflage {} has wrong palette number {}'.format(component.id, component.palette))
 
 
-def _validateProjectionDecal(component, item, vehDescr, usedParents):
+def _validateProjectionDecal(component, item, vehDescr):
     options = component.options
     if options & Options.PROJECTION_DECALS_ALLOWED_OPTIONS_VALUE != options:
         raise SoftException('projection decal {} wrong options {}'.format(component.id, options))
@@ -489,30 +491,21 @@ def _validateProjectionDecal(component, item, vehDescr, usedParents):
     slotParams = getVehicleProjectionDecalSlotParams(vehDescr, slotId)
     if slotParams is None:
         raise SoftException('projection decal {} wrong slotId = {}. VehType = {}'.format(component.id, slotId, vehDescr.type))
-    parentSlotId = slotParams.parentSlotId if slotParams.parentSlotId is not None else slotId
-    if parentSlotId in usedParents:
-        raise SoftException('projection decal {} slot {} already used. VehType = {}'.format(component.id, parentSlotId, vehDescr.type))
-    usedParents.add(parentSlotId)
     if options & Options.MIRRORED and not item.canBeMirrored:
         raise SoftException('projection decal {} wrong mirrored option'.format(component.id))
     slotFormFactors = set([ tag for tag in slotParams.tags if tag.startswith(ProjectionDecalFormTags.PREFIX) ])
-    denyLen = len(ProjectionDecalFormTags.DENY)
-    denySlotFormFactors = set([ tag[denyLen:] for tag in slotParams.tags if tag.startswith(ProjectionDecalFormTags.DENY_PREFIX) ])
     if slotFormFactors:
         formfactor = next((tag for tag in item.tags if tag.startswith(ProjectionDecalFormTags.PREFIX)), '')
-        if ProjectionDecalFormTags.ANY not in slotFormFactors:
-            if not formfactor:
-                raise SoftException('projection decal {} wrong XML. formfactor is missing'.format(component.id, formfactor))
-            if formfactor not in slotFormFactors:
-                raise SoftException('projection decal {} wrong formfactor {}'.format(component.id, formfactor))
-        if formfactor in denySlotFormFactors:
-            raise SoftException('projection decal {} formfactor {} restricted'.format(component.id, formfactor))
+        if not formfactor:
+            raise SoftException('projection decal {} wrong XML. formfactor is missing'.format(component.id, formfactor))
+        if formfactor not in slotFormFactors:
+            raise SoftException('projection decal {} wrong formfactor {}'.format(component.id, formfactor))
     return
 
 
-def _validatePersonalNumber(component):
+def _validatePersonalNumber(component, item):
     number = component.number
-    if not number or len(number) != PERSONAL_NUMBER_DIGITS_COUNT:
+    if not number or len(number) != item.digitsCount:
         raise SoftException('personal number {} has wrong number {}'.format(component.id, number))
     if not isPersonalNumberAllowed(number):
         raise SoftException('number {} of personal number {} is prohibited'.format(number, component.id))

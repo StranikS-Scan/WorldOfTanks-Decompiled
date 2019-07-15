@@ -1,9 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/gui_items/loot_box.py
-import typing
-from gui.Scaleform.locale.LOOTBOXES import LOOTBOXES
+from gui.impl import backport
+from gui.impl.gen import R
 from gui.shared.gui_items.gui_item import GUIItem
-from helpers import i18n
 from shared_utils import CONST_CONTAINER
 
 class NewYearLootBoxes(CONST_CONTAINER):
@@ -57,7 +56,7 @@ class LootBox(GUIItem):
         return self.__id
 
     def getUserName(self):
-        return i18n.makeString(LOOTBOXES.getLootboxName(self.__type))
+        return backport.text(R.strings.lootboxes.type.dyn(self.__type)())
 
     def getType(self):
         return self.__type

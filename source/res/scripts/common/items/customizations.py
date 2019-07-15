@@ -490,10 +490,11 @@ class ProjectionDecalComponent(SerializableComponent):
      ('position', xmlOnlyFloatArrayField()),
      ('tintColor', intArrayField(xmlOnly=True)),
      ('doubleSided', xmlOnlyIntField(0)),
-     ('tags', xmlOnlyTagsField(()))))
-    __slots__ = ('id', 'options', 'slotId', 'scaleFactorId', 'showOn', 'scale', 'rotation', 'position', 'tintColor', 'doubleSided', 'tags')
+     ('tags', xmlOnlyTagsField(())),
+     ('preview', xmlOnlyIntField(0))))
+    __slots__ = ('id', 'options', 'slotId', 'scaleFactorId', 'showOn', 'scale', 'rotation', 'position', 'tintColor', 'doubleSided', 'tags', 'preview')
 
-    def __init__(self, id=0, options=Options.NONE, slotId=0, scaleFactorId=0, showOn=ApplyArea.NONE, scale=(1, 10, 1), rotation=(0, 0, 0), position=(0, 0, 0), tintColor=(255, 255, 255, 255), doubleSided=0, tags=()):
+    def __init__(self, id=0, options=Options.NONE, slotId=0, scaleFactorId=0, showOn=ApplyArea.NONE, scale=(1, 10, 1), rotation=(0, 0, 0), position=(0, 0, 0), tintColor=(255, 255, 255, 255), doubleSided=0, tags=(), preview=False):
         self.id = id
         self.options = options
         self.slotId = slotId
@@ -505,16 +506,17 @@ class ProjectionDecalComponent(SerializableComponent):
         self.tintColor = tintColor
         self.doubleSided = doubleSided
         self.tags = tags
+        self.preview = preview
         super(ProjectionDecalComponent, self).__init__()
 
     def __str__(self):
-        return 'ProjectionDecalComponent(id={0}, options={1}, slotId={2}, scaleFactorId={3}, showOn={4}, scale={5}, rotation={6}, position={7}, tintColor={8})'.format(self.id, self.options, self.slotId, self.scaleFactorId, self.showOn, self.scale, self.rotation, self.position, self.tintColor, self.doubleSided)
+        return 'ProjectionDecalComponent(id={0}, options={1}, slotId={2}, scaleFactorId={3}, showOn={4}, scale={5}, rotation={6}, position={7}, tintColor={8}, doubleSided={9}, preview={10})'.format(self.id, self.options, self.slotId, self.scaleFactorId, self.showOn, self.scale, self.rotation, self.position, self.tintColor, self.doubleSided, self.preview)
 
     def isMirrored(self):
         return self.options & Options.MIRRORED
 
     def isFilled(self):
-        return any(self.position) or bool(self.slotId)
+        return (any(self.position) or bool(self.slotId)) and not self.preview
 
 
 class PersonalNumberComponent(SerializableComponent):

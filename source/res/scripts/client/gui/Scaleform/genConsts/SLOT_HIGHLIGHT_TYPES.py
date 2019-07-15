@@ -11,6 +11,8 @@ class SLOT_HIGHLIGHT_TYPES(object):
     BATTLE_BOOSTER_CREW_REPLACE_BIG = 'battleBoosterReplaceBig'
     EQUIPMENT_PLUS = 'equipmentPlus'
     EQUIPMENT_PLUS_BIG = 'equipmentPlusBig'
+    BUILT_IN_EQUIPMENT = 'builtIn'
+    BUILT_IN_EQUIPMENT_BIG = 'builtInBig'
     NO_HIGHLIGHT = ''
     TOOLTIP_OVERLAY_PADDING_LEFT = -25
     TOOLTIP_OVERLAY_PADDING_TOP = -23

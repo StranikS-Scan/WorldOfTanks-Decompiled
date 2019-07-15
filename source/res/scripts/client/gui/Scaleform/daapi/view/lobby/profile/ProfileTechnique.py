@@ -1,6 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/profile/ProfileTechnique.py
-import BigWorld
 from account_helpers import AccountSettings
 from account_helpers.AccountSettings import PROFILE_TECHNIQUE_MEMBER
 from dossiers2.ui.achievements import ACHIEVEMENT_BLOCK, MARK_ON_GUN_RECORD
@@ -16,6 +15,7 @@ from gui.Scaleform.genConsts.PROFILE_CONSTANTS import PROFILE_CONSTANTS
 from gui.Scaleform.genConsts.PROFILE_DROPDOWN_KEYS import PROFILE_DROPDOWN_KEYS
 from gui.Scaleform.locale.PROFILE import PROFILE
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
+from gui.impl import backport
 from gui.shared import g_eventBus, events, EVENT_BUS_SCOPE
 from gui.shared.gui_items.Vehicle import VEHICLE_TABLE_TYPES_ORDER_INDICES_REVERSED
 from gui.shared.gui_items.dossier import dumpDossier
@@ -168,10 +168,10 @@ class ProfileTechnique(ProfileTechniqueMeta):
                     continue
                 if self._battlesType == PROFILE_DROPDOWN_KEYS.FALLOUT:
                     winsEfficiency = wins
-                    winsEfficiencyStr = BigWorld.wg_getIntegralFormat(winsEfficiency)
+                    winsEfficiencyStr = backport.getIntegralFormat(winsEfficiency)
                 else:
                     winsEfficiency = 100.0 * wins / battlesCount if battlesCount else 0
-                    winsEfficiencyStr = BigWorld.wg_getIntegralFormat(round(winsEfficiency)) + '%'
+                    winsEfficiencyStr = backport.getIntegralFormat(round(winsEfficiency)) + '%'
                 if showMarkOfMastery:
                     markOfMastery = targetData.getMarkOfMasteryForVehicle(intCD)
                     if not isMarkOfMasteryAchieved(markOfMastery):

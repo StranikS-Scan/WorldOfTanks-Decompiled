@@ -1,6 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/blueprints/blueprint_screen.py
-import BigWorld
 from account_helpers import AccountSettings
 from account_helpers.AccountSettings import VEHICLES_WITH_BLUEPRINT_CONFIRM
 from adisp import process
@@ -12,7 +11,7 @@ from gui.Scaleform.daapi.view.lobby.go_back_helper import getBackBtnLabel
 from gui.Scaleform.daapi.view.lobby.techtree.techtree_dp import g_techTreeDP
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.impl.dialogs import dialogs
-from gui.impl.backport.backport_tooltip import createTooltipData, BackportTooltipWindow
+from gui.impl.backport import createTooltipData, BackportTooltipWindow
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.blueprints.blueprint_screen_model import BlueprintScreenModel
 from gui.impl.gen.view_models.views.lobby.blueprints.blueprint_screen_scheme_item_model import BlueprintScreenSchemeItemModel
@@ -84,9 +83,9 @@ class BlueprintScreen(ViewImpl):
             model.setIsElite(vehicle.isElite)
             model.setShowBlueprintInfotypeIcon(showBlueprintInfotypeIcon)
             model.setConversionAvailable(self.__isConversionAvailable())
-            model.setCost(BigWorld.wg_getIntegralFormat(self.__xpCost))
+            model.setCost(self.gui.systemLocale.getNumberFormat(self.__xpCost))
             model.setDiscount(self.__discount)
-            model.setDiscountAbs(BigWorld.wg_getIntegralFormat(int(self.__fullXpCost - self.__xpCost)))
+            model.setDiscountAbs(self.gui.systemLocale.getNumberFormat(int(self.__fullXpCost - self.__xpCost)))
             model.setIsUnlocked(self.__vehicle.isUnlocked)
             model.setIsAvailableForUnlock(isAvailableForUnlock)
             model.setIsPurchased(self.__vehicle.isPurchased)
@@ -189,9 +188,9 @@ class BlueprintScreen(ViewImpl):
         isSchemeFullCompleted = filledCount == totalCount
         maxFragCount = bpRequester.getConvertibleFragmentCount(self.__vehicle.intCD, self.__vehicle.level)
         with self.getViewModel().transaction() as model:
-            model.setCost(BigWorld.wg_getIntegralFormat(self.__xpCost))
+            model.setCost(self.gui.systemLocale.getNumberFormat(self.__xpCost))
             model.setDiscount(self.__discount)
-            model.setDiscountAbs(BigWorld.wg_getIntegralFormat(int(self.__fullXpCost - self.__xpCost)))
+            model.setDiscountAbs(self.gui.systemLocale.getNumberFormat(int(self.__fullXpCost - self.__xpCost)))
             model.setConversionAvailable(self.__isConversionAvailable())
             model.setFilledCount(filledCount)
             model.setIsSchemeFullCompleted(isSchemeFullCompleted)
@@ -232,8 +231,8 @@ class BlueprintScreen(ViewImpl):
         intelligenceFragCount = bpRequester.getIntelligenceData()
         nationFragCount = bpRequester.getNationalFragments(self.__vehicle.intCD)
         nationFragCost, intelligenceFragCost = bpRequester.getRequiredIntelligenceAndNational(self.__vehicle.level)
-        model.setValueMainCost(BigWorld.wg_getIntegralFormat(intelligenceFragCost))
-        model.setValueAdditionalCost(BigWorld.wg_getIntegralFormat(nationFragCost))
+        model.setValueMainCost(self.gui.systemLocale.getNumberFormat(intelligenceFragCost))
+        model.setValueAdditionalCost(self.gui.systemLocale.getNumberFormat(nationFragCost))
         model.setNotEnoughMain(intelligenceFragCount < intelligenceFragCost)
         model.setNotEnoughAdditional(nationFragCount < nationFragCost)
 

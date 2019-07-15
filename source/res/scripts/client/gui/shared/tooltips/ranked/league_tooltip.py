@@ -1,6 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/tooltips/ranked/league_tooltip.py
-import BigWorld
 from gui.shared.formatters import text_styles
 from gui.shared.tooltips import TOOLTIP_TYPE, formatters
 from gui.shared.tooltips.common import BlocksTooltipData
@@ -78,7 +77,7 @@ class EfficiencyTooltipData(BlocksTooltipData):
         return items
 
     def __getEfficiencyBlock(self, efficiency, updateTime, resID):
-        text = text_styles.main(backport.text(resID)).format(value=text_styles.stats(ranked_formatters.getFloatPercentStrStat(efficiency)), date=text_styles.standard(BigWorld.wg_getShortDateFormat(updateTime)), time=text_styles.standard(BigWorld.wg_getShortTimeFormat(updateTime)))
+        text = text_styles.main(backport.text(resID)).format(value=text_styles.stats(ranked_formatters.getFloatPercentStrStat(efficiency)), date=text_styles.standard(backport.getShortDateFormat(updateTime)), time=text_styles.standard(backport.getShortTimeFormat(updateTime)))
         return formatters.packTextBlockData(text)
 
 

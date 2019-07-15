@@ -147,12 +147,12 @@ class _CmpVehArtefactLogicProvider(PopoverLogicProvider):
     def _sortNotAffected(self, artefacts):
 
         def sortByAffectedVal(item):
-            return item.name in self._notAffectedArtefacts
+            return len(item.tags.intersection(self._notAffectedArtefacts)) > 0
 
         return sorted(artefacts, key=sortByAffectedVal)
 
     def _isNotAffected(self, module):
-        return module.name in self._notAffectedArtefacts
+        return len(module.tags.intersection(self._notAffectedArtefacts)) > 0
 
     def _buildModuleData(self, module, isInstalledInSlot, stats):
         isFit, reason = module.mayInstall(self._vehicle, self._slotIndex)

@@ -1,10 +1,18 @@
 <sequences.xml>
   <priceGroup>
-    <id>	200	</id>
-    <name>	custom sequence notInShop	</name>
+    <id>	58	</id>
+    <name>	sequences 50g	</name>
+    <tags>	sequences	</tags>
+    <price>	50	  <gold></gold>
+    </price>
+    <notInShop>	False	</notInShop>
+  </priceGroup>
+  <priceGroup>
+    <id>	59	</id>
+    <name>	sequences 50g notInShop	</name>
+    <tags>	sequences notInShop	</tags>
     <price>	50	  <gold></gold>
     </price>
     <notInShop>	True	</notInShop>
-    <tags>	sequences	</tags>
   </priceGroup>
 </sequences.xml>

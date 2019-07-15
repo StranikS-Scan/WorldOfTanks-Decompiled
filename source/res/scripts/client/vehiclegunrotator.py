@@ -5,7 +5,8 @@ import math
 from math import pi, fmod
 import BigWorld
 import Math
-from AvatarInputHandler import AimingSystems, mathUtils
+import math_utils
+from AvatarInputHandler import AimingSystems
 from helpers import dependency
 from constants import SERVER_TICK_LENGTH, AIMING_MODE, VEHICLE_SIEGE_STATE
 from projectile_trajectory import getShotAngles
@@ -352,17 +353,20 @@ class VehicleGunRotator(object):
             turretYawLimits = self.__getTurretYawLimits()
             maxTurretRotationSpeed = self.__maxTurretRotationSpeed
             prevTurretYaw = self.__turretYaw
+            replayCtrl = BattleReplay.g_replayCtrl
             vehicleMatrix = self.getAvatarOwnVehicleStabilisedMatrix()
             shotTurretYaw, shotGunPitch = getShotAngles(descr, vehicleMatrix, (prevTurretYaw, self.__gunPitch), targetPoint)
             estimatedTurretYaw = self.getNextTurretYaw(prevTurretYaw, shotTurretYaw, maxTurretRotationSpeed * timeDiff, turretYawLimits)
-            self.__turretYaw = turretYaw = self.__syncWithServerTurretYaw(estimatedTurretYaw)
+            if replayCtrl.isRecording:
+                self.__turretYaw = turretYaw = self.__syncWithServerTurretYaw(estimatedTurretYaw)
+            else:
+                self.__turretYaw = turretYaw = estimatedTurretYaw
             if maxTurretRotationSpeed != 0:
                 self.estimatedTurretRotationTime = abs(turretYaw - shotTurretYaw) / maxTurretRotationSpeed
             else:
                 self.estimatedTurretRotationTime = 0
             gunPitchLimits = calcPitchLimitsFromDesc(turretYaw, self.__getGunPitchLimits())
             self.__gunPitch = self.getNextGunPitch(self.__gunPitch, shotGunPitch, timeDiff, gunPitchLimits)
-            replayCtrl = BattleReplay.g_replayCtrl
             if replayCtrl.isPlaying and replayCtrl.isUpdateGunOnTimeWarp:
                 self.__updateTurretMatrix(turretYaw, 0.001)
                 self.__updateGunMatrix(self.__gunPitch, 0.001)
@@ -487,7 +491,7 @@ class VehicleGunRotator(object):
         else:
             if math.fabs(curAngle - shotAngle) < VehicleGunRotator.__ANGLE_EPS:
                 if angleLimits is not None:
-                    return mathUtils.clamp(angleLimits[0], angleLimits[1], shotAngle)
+                    return math_utils.clamp(angleLimits[0], angleLimits[1], shotAngle)
                 return shotAngle
             shotDiff = shotAngle - curAngle
             speedLimit = self.__maxGunRotationSpeed * timeDiff

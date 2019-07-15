@@ -38,6 +38,9 @@ class PlayerDataComponent(ClientArenaComponent):
         if self.__playerIngameRanksEnabled:
             self.removeSyncDataCallback(ARENA_SYNC_OBJECTS.PLAYER_RANK, 'ranksByTeam', self.__onTeamRanksUpdated)
 
+    def playerIngameRanksEnabled(self):
+        return self.__playerIngameRanksEnabled
+
     def getTresholdForRanks(self):
         xpTresholdForRanks = []
         if not self.__playerIngameRanksEnabled:

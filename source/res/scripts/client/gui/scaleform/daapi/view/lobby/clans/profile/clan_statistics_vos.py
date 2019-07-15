@@ -1,8 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/clans/profile/clan_statistics_vos.py
-import BigWorld
 from gui.Scaleform.daapi.view.lobby.clans.profile import getI18ArenaById
 from gui.clans.items import formatField
+from gui.impl import backport
 from helpers.i18n import makeString as _ms
 from gui.Scaleform.daapi.view.lobby.profile.profile_statistics_vos import BaseDictStatisticsVO
 from gui.Scaleform.daapi.view.lobby.profile.ProfileUtils import ProfileUtils as PUtils
@@ -39,10 +39,10 @@ def _getDataObjectTruncatedValue(key, i18nFunc, value):
 
 
 def _getLevelParams(i18nFunc, battlesCountGetter, winsEfficiencyGetter, eloRatingGetter, placeGetter, favArenaNameGetter, ratingOutdated):
-    battlesCount = formatField(getter=battlesCountGetter, formatter=BigWorld.wg_getIntegralFormat)
+    battlesCount = formatField(getter=battlesCountGetter, formatter=backport.getIntegralFormat)
     winsEfficiency = formatField(getter=winsEfficiencyGetter, formatter=PUtils.formatFloatPercent)
-    eloRating = formatField(getter=eloRatingGetter, formatter=BigWorld.wg_getIntegralFormat)
-    place = formatField(getter=placeGetter, formatter=BigWorld.wg_getIntegralFormat)
+    eloRating = formatField(getter=eloRatingGetter, formatter=backport.getIntegralFormat)
+    place = formatField(getter=placeGetter, formatter=backport.getIntegralFormat)
     favArenaName = formatField(getter=favArenaNameGetter, formatter=getI18ArenaById)
     return [_getDataObject('battles', i18nFunc, battlesCount),
      _getDataObject('wins', i18nFunc, winsEfficiency),
@@ -55,7 +55,7 @@ class FortGlobalMapStatistics(BaseDictStatisticsVO):
 
     def _getHeaderData(self, data):
         stats = data['stats']
-        return (PUtils.packLditItemData(formatField(getter=stats.getBattlesCount, formatter=BigWorld.wg_getIntegralFormat), CL.GLOBALMAPVIEW_STATS_BATTLES, CL.GLOBALMAPVIEW_STATS_BATTLES_TOOLTIP, 'battles40x32.png'), PUtils.packLditItemData(formatField(getter=stats.getWinsEfficiency, formatter=PUtils.formatFloatPercent), CL.GLOBALMAPVIEW_STATS_WINS, CL.GLOBALMAPVIEW_STATS_WINS_TOOLTIP, 'wins40x32.png'), PUtils.packLditItemData(formatField(getter=stats.getCapturedProvincesCount, formatter=BigWorld.wg_getIntegralFormat), CL.GLOBALMAPVIEW_STATS_SEIZED, CL.GLOBALMAPVIEW_STATS_SEIZED_TOOLTIP, 'seizedProvinces40x32.png'))
+        return (PUtils.packLditItemData(formatField(getter=stats.getBattlesCount, formatter=backport.getIntegralFormat), CL.GLOBALMAPVIEW_STATS_BATTLES, CL.GLOBALMAPVIEW_STATS_BATTLES_TOOLTIP, 'battles40x32.png'), PUtils.packLditItemData(formatField(getter=stats.getWinsEfficiency, formatter=PUtils.formatFloatPercent), CL.GLOBALMAPVIEW_STATS_WINS, CL.GLOBALMAPVIEW_STATS_WINS_TOOLTIP, 'wins40x32.png'), PUtils.packLditItemData(formatField(getter=stats.getCapturedProvincesCount, formatter=backport.getIntegralFormat), CL.GLOBALMAPVIEW_STATS_SEIZED, CL.GLOBALMAPVIEW_STATS_SEIZED_TOOLTIP, 'seizedProvinces40x32.png'))
 
     def _getDetailedData(self, data):
         stats = data['stats']

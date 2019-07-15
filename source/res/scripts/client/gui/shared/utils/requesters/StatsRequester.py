@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/utils/requesters/StatsRequester.py
+from collections import namedtuple
 import BigWorld
 from account_helpers.premium_info import PremiumInfo
 from adisp import async
@@ -9,6 +10,8 @@ from helpers import time_utils, dependency
 from skeletons.gui.game_control import IWalletController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared.utils.requesters import IStatsRequester
+_ADDITIONAL_XP_DATA_KEY = '_additionalXPCache'
+_ControllableXPData = namedtuple('_ControllableXPData', ('vehicleID', 'bonusType', 'extraXP', 'extraFreeXP', 'extraTmenXP', 'isXPToTMan'))
 
 class StatsRequester(AbstractSyncDataRequester, IStatsRequester):
     wallet = dependency.descriptor(IWalletController)
@@ -220,7 +223,7 @@ class StatsRequester(AbstractSyncDataRequester, IStatsRequester):
 
     @property
     def additionalXPCache(self):
-        return self.getCacheValue('_additionalXPCache', {})
+        return self.getCacheValue(_ADDITIONAL_XP_DATA_KEY, {})
 
     @property
     def isGoldFishBonusApplied(self):
@@ -246,3 +249,15 @@ class StatsRequester(AbstractSyncDataRequester, IStatsRequester):
     @async
     def _requestCache(self, callback):
         BigWorld.player().stats.getCache(lambda resID, value: self._response(resID, value, callback))
+
+    def _preprocessValidData(self, data):
+        result = super(StatsRequester, self)._preprocessValidData(data)
+        extraXPInfo = result.get(_ADDITIONAL_XP_DATA_KEY, {})
+        if extraXPInfo:
+            result[_ADDITIONAL_XP_DATA_KEY] = processedXP = {}
+            for vehicleID, XPData in extraXPInfo.iteritems():
+                if XPData:
+                    arenaUniqueID = XPData[0]
+                    processedXP[arenaUniqueID] = _ControllableXPData(vehicleID, *XPData[1:])
+
+        return result

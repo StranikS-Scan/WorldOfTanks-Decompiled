@@ -173,7 +173,7 @@ class InventoryOptionalDeviceTab(InventoryArtefactTab, StoreOptionalDeviceTab):
         return (statusMessage, disabled)
 
 
-class InventoryEquipmentTab(InventoryArtefactTab, StoreEquipmentTab):
+class InventoryEquipmentTab(StoreEquipmentTab, InventoryArtefactTab):
     pass
 
 

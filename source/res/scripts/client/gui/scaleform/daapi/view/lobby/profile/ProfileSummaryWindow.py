@@ -1,8 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/profile/ProfileSummaryWindow.py
-import BigWorld
 from adisp import process
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
+from gui.impl import backport
 from gui.shared import event_dispatcher as shared_events
 from helpers.i18n import makeString as _ms
 from gui.clans.clan_helpers import ClanListener
@@ -66,7 +66,7 @@ class ProfileSummaryWindow(ProfileSummaryWindowMeta, ClanEmblemsHelper, ClanList
              'topLabel': _ms(PROFILE.PROFILE_SUMMARY_CLAN_POST),
              'topValue': text_styles.main(getClanRoleString(clanInfo.getMembersFlags())),
              'bottomLabel': _ms(PROFILE.PROFILE_SUMMARY_CLAN_JOINDATE),
-             'bottomValue': text_styles.main(BigWorld.wg_getLongDateFormat(clanInfo.getJoiningTime()))}
+             'bottomValue': text_styles.main(backport.getLongDateFormat(clanInfo.getJoiningTime()))}
             btnParams = self._getClanBtnParams(isShowClanProfileBtnVisible)
             clanData.update(btnParams)
             self.as_setClanDataS(clanData)

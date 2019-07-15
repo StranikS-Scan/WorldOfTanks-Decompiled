@@ -1,13 +1,13 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/ModuleInfoWindow.py
 from account_helpers.settings_core.ServerSettingsManager import UI_STORAGE_KEYS
+from gui.Scaleform.daapi.view.lobby.storage.storage_helpers import getSlotOverlayIconType
 from gui.Scaleform.daapi.view.meta.ModuleInfoMeta import ModuleInfoMeta
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.framework.entities.View import View
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.shared.formatters import text_styles
 from gui.shared.items_parameters import params_helper, formatters
-from gui.Scaleform.genConsts.SLOT_HIGHLIGHT_TYPES import SLOT_HIGHLIGHT_TYPES
 from gui.shared import utils
 from gui.shared.utils.functions import stripColorTagDescrTags, getAbsoluteUrl
 from helpers import dependency
@@ -79,7 +79,6 @@ class ModuleInfoWindow(ModuleInfoMeta):
             isGun = module.itemTypeID == GUI_ITEM_TYPE.GUN
             isShell = module.itemTypeID == GUI_ITEM_TYPE.SHELL
             isChassis = module.itemTypeID == GUI_ITEM_TYPE.CHASSIS
-            isOptionalDevice = module.itemTypeID == GUI_ITEM_TYPE.OPTIONALDEVICE
             excludedParametersNames = extraParamsInfo.get('excludedParams', tuple())
             highlightPossible = False
             if isGun:
@@ -151,8 +150,8 @@ class ModuleInfoWindow(ModuleInfoMeta):
                      'value': text_styles.stats(cooldownSeconds) + '\n'}
             if isShell and self.__isAdditionalInfoShow is not None:
                 moduleData['additionalInfo'] = self.__isAdditionalInfoShow
-            if isOptionalDevice:
-                moduleData['highlightType'] = SLOT_HIGHLIGHT_TYPES.EQUIPMENT_PLUS if module.isDeluxe() else SLOT_HIGHLIGHT_TYPES.NO_HIGHLIGHT
+            moduleData['overlayType'] = getSlotOverlayIconType(module)
+            moduleData['highlightType'] = getSlotOverlayIconType(module, isBig=True)
             self._updateModuleInfo(moduleData)
             return
 

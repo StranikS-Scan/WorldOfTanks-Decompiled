@@ -244,6 +244,7 @@ _PREMIUM_BONUS_VO_META = base.PropertyMeta((('description', '', 'description'),
  ('bonusLeft', '', 'bonusLeft'),
  ('xpValue', '', 'xpValue'),
  ('statusBonusLabel', '', 'statusBonusLabel'),
+ ('statusBonusTooltip', '', 'statusBonusTooltip'),
  ('bonusIcon', '', 'bonusIcon')))
 _PREMIUM_BONUS_VO_META.bind(details.PremiumBonusDetailsBlock)
 _PREMIUM_EARNINGS_VO_META = base.DictMeta({'xpTitleStrings': [],

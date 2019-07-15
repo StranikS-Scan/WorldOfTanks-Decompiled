@@ -101,7 +101,10 @@ class SeasonProvider(ISeasonProvider):
         if season is not None:
             if season.hasActiveCycle(now):
                 return season.getCycleEndDate()
-            return season.getCycleStartDate() or season.getEndDate()
+            nextCycle = season.getNextByTimeCycle(now)
+            if nextCycle:
+                return nextCycle.startDate
+            return season.getEndDate()
         else:
             season = self.getNextSeason()
             return season.getStartDate() if season else 0

@@ -1,8 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/wgnc/xml/format_by_tags.py
 import re
-import BigWorld
 from debug_utils import LOG_CURRENT_EXCEPTION, LOG_WARNING
+from gui.impl import backport
 _RE_FLAGS = re.M | re.U
 
 class _TagFormatter(object):
@@ -61,7 +61,7 @@ class _GoldFormatter(_ValueFormatter):
         super(_GoldFormatter, self).__init__('gold')
 
     def _getValue(self, value):
-        return BigWorld.wg_getGoldFormat(long(value))
+        return backport.getGoldFormat(long(value))
 
 
 class _IntegerFormatter(_ValueFormatter):
@@ -70,7 +70,7 @@ class _IntegerFormatter(_ValueFormatter):
         super(_IntegerFormatter, self).__init__('integer')
 
     def _getValue(self, value):
-        return BigWorld.wg_getIntegralFormat(long(value))
+        return backport.getIntegralFormat(long(value))
 
 
 class _FloatFormatter(_ValueFormatter):
@@ -79,7 +79,7 @@ class _FloatFormatter(_ValueFormatter):
         super(_FloatFormatter, self).__init__('float')
 
     def _getValue(self, value):
-        return BigWorld.wg_getFractionalFormat(float(value))
+        return backport.getFractionalFormat(float(value))
 
 
 class _NiceNumberFormatter(_ValueFormatter):
@@ -88,7 +88,7 @@ class _NiceNumberFormatter(_ValueFormatter):
         super(_NiceNumberFormatter, self).__init__('nicenumber')
 
     def _getValue(self, value):
-        return BigWorld.wg_getNiceNumberFormat(float(value))
+        return backport.getNiceNumberFormat(float(value))
 
 
 class _TimeFormatter(_ValueFormatter):
@@ -103,7 +103,7 @@ class _ShortTimeFormatter(_TimeFormatter):
         super(_ShortTimeFormatter, self).__init__('shorttime')
 
     def _getValue(self, value):
-        return BigWorld.wg_getShortTimeFormat(self._getLocalTime(value))
+        return backport.getShortTimeFormat(self._getLocalTime(value))
 
 
 class _LongTimeFormatter(_TimeFormatter):
@@ -112,7 +112,7 @@ class _LongTimeFormatter(_TimeFormatter):
         super(_LongTimeFormatter, self).__init__('longtime')
 
     def _getValue(self, value):
-        return BigWorld.wg_getLongTimeFormat(self._getLocalTime(value))
+        return backport.getLongTimeFormat(self._getLocalTime(value))
 
 
 class _ShortDateFormatter(_TimeFormatter):
@@ -121,7 +121,7 @@ class _ShortDateFormatter(_TimeFormatter):
         super(_ShortDateFormatter, self).__init__('shortdate')
 
     def _getValue(self, value):
-        return BigWorld.wg_getShortDateFormat(self._getLocalTime(value))
+        return backport.getShortDateFormat(self._getLocalTime(value))
 
 
 class _LongDateFormatter(_TimeFormatter):
@@ -130,7 +130,7 @@ class _LongDateFormatter(_TimeFormatter):
         super(_LongDateFormatter, self).__init__('longdate')
 
     def _getValue(self, value):
-        return BigWorld.wg_getLongDateFormat(self._getLocalTime(value))
+        return backport.getLongDateFormat(self._getLocalTime(value))
 
 
 class _DateTimeFormatter(_TimeFormatter):
@@ -140,7 +140,7 @@ class _DateTimeFormatter(_TimeFormatter):
 
     def _getValue(self, value):
         value = self._getLocalTime(value)
-        return '{0:>s} {1:>s}'.format(BigWorld.wg_getShortDateFormat(value), BigWorld.wg_getLongTimeFormat(value))
+        return '{0:>s} {1:>s}'.format(backport.getShortDateFormat(value), backport.getLongTimeFormat(value))
 
 
 _LINK_HTML = '<a href="event:{0}">{1}</a>'

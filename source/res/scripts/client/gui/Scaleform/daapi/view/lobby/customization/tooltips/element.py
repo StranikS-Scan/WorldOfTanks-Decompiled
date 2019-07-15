@@ -1,9 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/customization/tooltips/element.py
-import BigWorld
 from CurrentVehicle import g_currentVehicle
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
-from gui.Scaleform.daapi.view.lobby.customization.shared import getItemInventoryCount, getItemAppliedCount, SEASON_TYPE_TO_NAME, makeVehiclesShortNamesString, getSuitableText
+from gui.Scaleform.daapi.view.lobby.customization.shared import getItemInventoryCount, getItemAppliedCount, makeVehiclesShortNamesString, getSuitableText
+from gui.customization.shared import SEASON_TYPE_TO_NAME
 from gui.Scaleform.framework import ViewTypes
 from gui.Scaleform.genConsts.BLOCKS_TOOLTIP_TYPES import BLOCKS_TOOLTIP_TYPES
 from gui.Scaleform.locale.MENU import MENU
@@ -11,6 +11,9 @@ from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.Scaleform.locale.VEHICLE_CUSTOMIZATION import VEHICLE_CUSTOMIZATION
+from gui.customization.shared import PROJECTION_DECAL_IMAGE_FORM_TAG, PROJECTION_DECAL_TEXT_FORM_TAG
+from gui.impl import backport
+from gui.impl.gen import R
 from gui.shared.formatters import text_styles, icons
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.gui_items.customization.packers import pickPacker
@@ -26,6 +29,7 @@ from helpers.i18n import makeString as _ms
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.customization import ICustomizationService
+from items.components.c11n_constants import ProjectionDecalFormTags
 
 class SimplifiedStatsBlockConstructor(object):
 
@@ -95,7 +99,7 @@ class ElementTooltip(BlocksTooltipData):
     itemsCache = dependency.descriptor(IItemsCache)
     settingsCore = dependency.descriptor(ISettingsCore)
     service = dependency.descriptor(ICustomizationService)
-    CUSTOMIZATION_TOOLTIP_WIDTH = 436
+    CUSTOMIZATION_TOOLTIP_WIDTH = 446
     CUSTOMIZATION_TOOLTIP_ICON_WIDTH = 104
     CUSTOMIZATION_TOOLTIP_ICON_HEIGHT = 104
     CUSTOMIZATION_TOOLTIP_ICON_WIDTH_WIDE = 204
@@ -127,7 +131,7 @@ class ElementTooltip(BlocksTooltipData):
 
     def _packItemBlocks(self, statsConfig):
         self.bonusDescription = VEHICLE_CUSTOMIZATION.BONUS_CONDITION_SEASON
-        topBlocks = [self._packTitleBlock(), self._packIconBlock(self._item.isHistorical())]
+        topBlocks = [self._packTitleBlock(), self._packIconBlock(self._item.isHistorical(), self._item.isDim())]
         items = [formatters.packBuildUpBlockData(blocks=topBlocks, gap=10)]
         self.currentVehicle = g_currentVehicle.item
         self.boundVehs = [ vehicleCD for vehicleCD in self._item.boundInventoryCount if vehicleCD != -1 ]
@@ -193,7 +197,7 @@ class ElementTooltip(BlocksTooltipData):
         if not self._item.descriptor.filter.include:
             return None
         elif self._item.isVehicleBound and not self._item.mayApply:
-            return formatters.packTitleDescBlock(title=text_styles.middleTitle(VEHICLE_CUSTOMIZATION.CUSTOMIZATION_TOOLTIP_SUITABLE_TITLE), desc=text_styles.standard(makeVehiclesShortNamesString(set(self.boundVehs + self.installedToVehs), self.currentVehicle)), padding=formatters.packPadding(top=-2))
+            return formatters.packTitleDescBlock(title=text_styles.middleTitle(VEHICLE_CUSTOMIZATION.CUSTOMIZATION_TOOLTIP_SUITABLE_TITLE), desc=text_styles.main(makeVehiclesShortNamesString(set(self.boundVehs + self.installedToVehs), self.currentVehicle)), padding=formatters.packPadding(top=-2))
         else:
             icn = getSuitableText(self._item, self.currentVehicle)
             blocks.append(formatters.packTextBlockData(text=icn, padding=formatters.packPadding(top=-2)))
@@ -253,6 +257,18 @@ class ElementTooltip(BlocksTooltipData):
         desc = _ms(VEHICLE_CUSTOMIZATION.CUSTOMIZATION_INFOTYPE_DESCRIPTION_MAP, mapType=text_styles.stats(mapType))
         if self._item.groupUserName:
             desc = text_styles.concatStylesToSingleLine(desc, _ms(VEHICLE_CUSTOMIZATION.CUSTOMIZATION_INFOTYPE_DESCRIPTION_TYPE, elementType=text_styles.stats(self._item.groupUserName)))
+        if self._item.itemTypeID == GUI_ITEM_TYPE.PROJECTION_DECAL:
+            formIconSource = PROJECTION_DECAL_IMAGE_FORM_TAG[self._item.formfactor]
+            iconSize = 39
+            if self._item.formfactor == ProjectionDecalFormTags.SQUARE:
+                iconSize = 9
+            elif self._item.formfactor == ProjectionDecalFormTags.RECT1X2:
+                iconSize = 15
+            elif self._item.formfactor == ProjectionDecalFormTags.RECT1X3:
+                iconSize = 21
+            elif self._item.formfactor == ProjectionDecalFormTags.RECT1X4:
+                iconSize = 27
+            desc = text_styles.concatStylesToSingleLine(desc, '{desc} {form} '.format(desc=backport.text(R.strings.vehicle_customization.element.formIconSource()), form=text_styles.stats(PROJECTION_DECAL_TEXT_FORM_TAG[self._item.formfactor])), icons.makeImageTag(formIconSource, iconSize, 9, 0))
         title = self._item.userName
         tooltipKey = TOOLTIPS.getItemBoxTooltip(self._item.itemTypeName)
         if tooltipKey:
@@ -291,7 +307,7 @@ class ElementTooltip(BlocksTooltipData):
                 defValue = itemPrice.defPrice.getSignValue(currency)
                 actionPercent = itemPrice.getActionPrc()
                 if actionPercent > 0:
-                    subBlocks.append(formatters.packTextParameterWithIconBlockData(name=text_styles.main(TOOLTIPS.ACTIONPRICE_SELL_BODY_SIMPLE), value=text_styles.concatStylesToSingleLine(text_styles.credits(BigWorld.wg_getIntegralFormat(value)), '    ', icons.credits()), icon='alertMedium', valueWidth=88, padding=formatters.packPadding(left=-5)))
+                    subBlocks.append(formatters.packTextParameterWithIconBlockData(name=text_styles.main(TOOLTIPS.ACTIONPRICE_SELL_BODY_SIMPLE), value=text_styles.concatStylesToSingleLine(text_styles.credits(backport.getIntegralFormat(value)), '    ', icons.credits()), icon='alertMedium', valueWidth=88, padding=formatters.packPadding(left=-5)))
                 subBlocks.append(makePriceBlock(value, CURRENCY_SETTINGS.SELL_PRICE, oldPrice=defValue if defValue > 0 else None, percent=actionPercent, valueWidth=88, leftPadding=49))
 
         inventoryCount = getInventoryCount(self._item)
@@ -333,7 +349,7 @@ class ElementTooltip(BlocksTooltipData):
                 iconWidth = self.CUSTOMIZATION_TOOLTIP_ICON_WIDTH_OTHER_BIG
         return iconWidth
 
-    def _packIconBlock(self, isHistorical=False):
+    def _packIconBlock(self, isHistorical=False, isDim=False):
         width = self._countImageWidth()
         if self._specialArgs:
             component = pickPacker(self._item.itemTypeID).getRawComponent()(*self._specialArgs)
@@ -342,7 +358,7 @@ class ElementTooltip(BlocksTooltipData):
         formfactor = ''
         if self._item.itemTypeID == GUI_ITEM_TYPE.PROJECTION_DECAL:
             formfactor = self._item.formfactor
-        return formatters.packCustomizationImageBlockData(img=self._item.getIconApplied(component), linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_IMAGE_BLOCK_NON_HISTORICAL_LINKAGE, align=BLOCKS_TOOLTIP_TYPES.ALIGN_CENTER, width=width, height=self.CUSTOMIZATION_TOOLTIP_ICON_HEIGHT, padding=formatters.packPadding(bottom=2), isHistorical=isHistorical, formfactor=formfactor)
+        return formatters.packCustomizationImageBlockData(img=self._item.getIconApplied(component), linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_IMAGE_BLOCK_NON_HISTORICAL_LINKAGE, align=BLOCKS_TOOLTIP_TYPES.ALIGN_CENTER, width=width, height=self.CUSTOMIZATION_TOOLTIP_ICON_HEIGHT, padding=formatters.packPadding(bottom=2), isHistorical=isHistorical, formfactor=formfactor, isDim=isDim)
 
     def _packBonusBlock(self, bonus, camo, isApplied):
         blocks = []

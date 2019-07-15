@@ -7,7 +7,8 @@ from gui.Scaleform.daapi.view.lobby.clans.profile.ClanProfileBaseView import Cla
 from gui.Scaleform.daapi.view.meta.ClanProfileMainWindowMeta import ClanProfileMainWindowMeta
 from gui.Scaleform.genConsts.CLANS_ALIASES import CLANS_ALIASES
 from gui.Scaleform.locale.CLANS import CLANS
-from gui.Scaleform.locale.WAITING import WAITING
+from gui.impl import backport
+from gui.impl.gen import R
 from gui.shared.event_bus import EVENT_BUS_SCOPE
 from helpers import i18n
 
@@ -36,7 +37,7 @@ class ClanProfileMainWindow(ClanProfileMainWindowMeta, ClanListener):
         self.startClanListening()
         self.webCtrl.getAccountProfile().resync()
         self.__clanDossier = weakref.proxy(self.webCtrl.getClanDossier(self.__clanDBID))
-        self.as_setDataS({'waitingMsg': WAITING.LOADINGDATA,
+        self.as_setDataS({'waitingMsg': backport.msgid(R.strings.waiting.loadingData()),
          'tabDataProvider': [{'label': CLANS.CLANPROFILE_MAINWINDOWTAB_SUMMARY,
                               'linkage': CLANS_ALIASES.CLAN_PROFILE_SUMMARY_VIEW_LINKAGE},
                              {'label': CLANS.CLANPROFILE_MAINWINDOWTAB_PERSONNEL,

@@ -4,25 +4,26 @@ from constants import PREBATTLE_TYPE
 from gui.prb_control import prb_getters
 from gui.prb_control.factories.ControlFactory import ControlFactory
 from gui.prb_control.entities.base.legacy.ctx import LeaveLegacyCtx
-from gui.prb_control.entities.base.legacy.entity import LegacyIntroEntryPoint, LegacyInitEntity
-from gui.prb_control.entities.base.legacy.entity import LegacyIntroEntity
-from gui.prb_control.entities.battle_session.legacy.entity import BattleSessionEntryPoint
-from gui.prb_control.entities.battle_session.legacy.entity import BattleSessionListEntryPoint, BattleSessionEntity
-from gui.prb_control.entities.training.legacy.entity import TrainingEntryPoint, TrainingIntroEntryPoint
-from gui.prb_control.entities.training.legacy.entity import TrainingEntity, TrainingIntroEntity
+from gui.prb_control.entities.base.legacy.entity import LegacyIntroEntryPoint, LegacyInitEntity, LegacyIntroEntity
+from gui.prb_control.entities.epic_battle_training.entity import EpicBattleTrainingEntryPoint, EpicBattleTrainingIntroEntryPoint, EpicBattleTrainingEntity, EpicBattleTrainingIntroEntity
+from gui.prb_control.entities.battle_session.legacy.entity import BattleSessionEntryPoint, BattleSessionListEntryPoint, BattleSessionEntity
+from gui.prb_control.entities.training.legacy.entity import TrainingEntryPoint, TrainingIntroEntryPoint, TrainingEntity, TrainingIntroEntity
 from gui.prb_control.items import PlayerDecorator, FunctionalState
-from gui.prb_control.settings import FUNCTIONAL_FLAG
-from gui.prb_control.settings import PREBATTLE_ACTION_NAME, CTRL_ENTITY_TYPE
+from gui.prb_control.settings import FUNCTIONAL_FLAG, PREBATTLE_ACTION_NAME, CTRL_ENTITY_TYPE
 __all__ = ('LegacyFactory',)
 _SUPPORTED_ENTRY_BY_TYPE = {PREBATTLE_TYPE.TRAINING: TrainingEntryPoint,
  PREBATTLE_TYPE.TOURNAMENT: BattleSessionEntryPoint,
- PREBATTLE_TYPE.CLAN: BattleSessionEntryPoint}
+ PREBATTLE_TYPE.CLAN: BattleSessionEntryPoint,
+ PREBATTLE_TYPE.EPIC_TRAINING: EpicBattleTrainingEntryPoint}
 _SUPPORTED_ENTRY_BY_ACTION = {PREBATTLE_ACTION_NAME.TRAININGS_LIST: TrainingIntroEntryPoint,
- PREBATTLE_ACTION_NAME.SPEC_BATTLES_LIST: BattleSessionListEntryPoint}
+ PREBATTLE_ACTION_NAME.SPEC_BATTLES_LIST: BattleSessionListEntryPoint,
+ PREBATTLE_ACTION_NAME.EPIC_TRAINING_LIST: EpicBattleTrainingIntroEntryPoint}
 _SUPPORTED_ENTITY = {PREBATTLE_TYPE.TRAINING: TrainingEntity,
  PREBATTLE_TYPE.TOURNAMENT: BattleSessionEntity,
- PREBATTLE_TYPE.CLAN: BattleSessionEntity}
-_SUPPORTED_INTRO_BY_TYPE = {PREBATTLE_TYPE.TRAINING: TrainingIntroEntity}
+ PREBATTLE_TYPE.CLAN: BattleSessionEntity,
+ PREBATTLE_TYPE.EPIC_TRAINING: EpicBattleTrainingEntity}
+_SUPPORTED_INTRO_BY_TYPE = {PREBATTLE_TYPE.TRAINING: TrainingIntroEntity,
+ PREBATTLE_TYPE.EPIC_TRAINING: EpicBattleTrainingIntroEntity}
 
 class LegacyFactory(ControlFactory):
 

@@ -1,20 +1,20 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/epicBattle/EpicBattlesAfterBattleView.py
 import SoundGroups
+from gui.Scaleform.daapi.view.lobby.epicBattle.epic_meta_level_icon import getEpicMetaIconVODict
 from gui.Scaleform.daapi.view.lobby.missions.awards_formatters import EpicCurtailingAwardsComposer
 from gui.Scaleform.daapi.view.meta.EpicBattlesAfterBattleViewMeta import EpicBattlesAfterBattleViewMeta
 from gui.Scaleform.locale.EPIC_BATTLE import EPIC_BATTLE
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.server_events.awards_formatters import AWARDS_SIZES, getEpicViewAwardPacker
+from gui.server_events.bonuses import CreditsBonus, CrystalBonus, ItemsBonus, GoodiesBonus, BasicPremiumDaysBonus, PlusPremiumDaysBonus
+from gui.shared.formatters import text_styles
 from gui.shared.utils import toUpper
+from gui.sounds.epic_sound_constants import EPIC_METAGAME_WWISE_SOUND_EVENTS
 from helpers import dependency, int2roman
 from helpers.i18n import makeString as _ms
 from skeletons.gui.game_control import IEpicBattleMetaGameController
 from skeletons.gui.server_events import IEventsCache
-from gui.shared.formatters import text_styles
-from gui.Scaleform.daapi.view.lobby.epicBattle.epic_meta_level_icon import getEpicMetaIconVODict
-from gui.sounds.epic_sound_constants import EPIC_METAGAME_WWISE_SOUND_EVENTS
-from gui.server_events.bonuses import CreditsBonus, CrystalBonus, ItemsBonus, GoodiesBonus, BasicPremiumDaysBonus, PlusPremiumDaysBonus
 from web_stubs import i18n
 _LEVELUP_TOKEN_TEMPLATE = 'epicmetagame:levelup:%d'
 
@@ -95,12 +95,20 @@ class EpicBattlesAfterBattleView(EpicBattlesAfterBattleViewMeta):
     def onWindowClose(self):
         self.destroy()
 
+    def onProgressBarStartAnim(self):
+        pass
+
+    def onProgressBarCompleteAnim(self):
+        pass
+
     def _populate(self):
         super(EpicBattlesAfterBattleView, self)._populate()
         extInfo = self.__ctx['reusableInfo'].personal.avatar.extensionInfo
         epicMetaGame = extInfo['epicMetaGame']
         pPrestigeLevel, pMetaLevel, pFamePts = epicMetaGame.get('metaLevel', (None, None, None))
         _, prevPMetaLevel, prevPFamePts = epicMetaGame.get('prevMetaLevel', (None, None, None))
+        boosterFLXP = epicMetaGame.get('boosterFlXP', 0)
+        originalFlXP = epicMetaGame.get('originalFlXP', 0)
         maxMetaLevel = self.__epicMetaGameCtrl.getMaxPlayerLevel()
         famePtsToProgress = self.__epicMetaGameCtrl.getLevelProgress()
         famePointsReceived = sum(famePtsToProgress[prevPMetaLevel:pMetaLevel]) + pFamePts - prevPFamePts
@@ -113,13 +121,15 @@ class EpicBattlesAfterBattleView(EpicBattlesAfterBattleViewMeta):
         if prevPMetaLevel >= maxMetaLevel or pMetaLevel >= maxMetaLevel or pPrestigeLevel >= self.__epicMetaGameCtrl.getStageLimit():
             lvlReachedText = toUpper(_ms(EPIC_BATTLE.EPIC_BATTLES_AFTER_BATTLE_LEVEL_UP_MAX_TITLE))
             maxLevelText = self.__getMaxLevelInfoStr(pPrestigeLevel, pMetaLevel)
+            boosterFLXP = famePointsReceived - originalFlXP if famePointsReceived > originalFlXP else 0
             if prevPMetaLevel >= maxMetaLevel or pPrestigeLevel >= self.__epicMetaGameCtrl.getStageLimit():
                 fameBarVisible = False
         else:
             lvlReachedText = toUpper(_ms(EPIC_BATTLE.EPIC_BATTLES_AFTER_BATTLE_LEVEL_UP_TITLE))
         data = {'awards': awardsVO,
-         'progress': self.__getProgress(pMetaLevel, pFamePts, prevPMetaLevel, prevPFamePts, maxMetaLevel),
-         'barText': '+' + str(famePointsReceived),
+         'progress': self.__getProgress(pMetaLevel, pFamePts, prevPMetaLevel, prevPFamePts, maxMetaLevel, boosterFLXP),
+         'barText': '+' + str(min(originalFlXP, famePointsReceived)),
+         'barBoostText': '+' + str(boosterFLXP),
          'epicMetaLevelIconData': getEpicMetaIconVODict(pPrestigeLevel, pMetaLevel),
          'rank': achievedRank + 1,
          'rankText': text_styles.heroTitle(rankName),
@@ -146,11 +156,18 @@ class EpicBattlesAfterBattleView(EpicBattlesAfterBattleViewMeta):
             bonuses = []
         return bonuses
 
-    def __getProgress(self, curLevel, curFamePoints, prevLevel, prevFamePoints, maxLevel):
+    def __getProgress(self, curLevel, curFamePoints, prevLevel, prevFamePoints, maxLevel, boostedXP):
         getPointsProgressForLevel = self.__epicMetaGameCtrl.getPointsProgressForLevel
+        originalXP = curFamePoints - boostedXP
         pLevel = prevLevel + float(prevFamePoints) / float(getPointsProgressForLevel(prevLevel)) if prevLevel != maxLevel else maxLevel
-        cLevel = curLevel + float(curFamePoints) / float(getPointsProgressForLevel(curLevel)) if curLevel != maxLevel else maxLevel
-        return (pLevel, cLevel)
+        cLevel = curLevel + float(originalXP) / float(getPointsProgressForLevel(curLevel)) if curLevel != maxLevel else maxLevel
+        if boostedXP:
+            if curLevel == maxLevel:
+                cLevel = maxLevel - float(boostedXP) / float(getPointsProgressForLevel(curLevel - 1))
+            cBoostedLevel = curLevel + float(curFamePoints) / float(getPointsProgressForLevel(curLevel)) if curLevel != maxLevel else maxLevel
+        else:
+            cBoostedLevel = cLevel
+        return (pLevel, cLevel, cBoostedLevel)
 
     def __getMaxLevelInfoStr(self, prestige, level):
         season = self.__epicMetaGameCtrl.getCurrentSeason() or self.__epicMetaGameCtrl.getPreviousSeason()

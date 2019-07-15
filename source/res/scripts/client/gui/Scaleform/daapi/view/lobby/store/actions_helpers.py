@@ -3,11 +3,11 @@
 import operator
 import time
 from collections import namedtuple
-import BigWorld
 import constants
 import nations
 from gui.Scaleform.locale.QUESTS import QUESTS
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
+from gui.impl import backport
 from gui.server_events.event_items import ActionData
 from gui.server_events.events_helpers import EventInfoModel
 from gui.server_events.formatters import formatStrDiscount, formatPercentValue, formatMultiplierValue, formatGoldPriceNormalCard, formatCreditPriceNormalCard, DECORATION_SIZES, formatGoldPrice, formatGoldPriceBig, formatCreditPrice, formatCreditPriceBig, formatVehicleLevel, DISCOUNT_TYPE
@@ -258,7 +258,7 @@ class ActionInfo(EventInfoModel):
         return formatPercentValue(discount.discountValue) if discount else None
 
     def _formatFinishTime(self):
-        return ' '.join((text_styles.main(i18n.makeString(QUESTS.ACTION_TIME_FINISH)), BigWorld.wg_getShortDateFormat(self.getFinishTime())))
+        return ' '.join((text_styles.main(i18n.makeString(QUESTS.ACTION_TIME_FINISH)), backport.getShortDateFormat(self.getFinishTime())))
 
     def _getActiveDateTimeString(self):
         if self.event.getFinishTimeLeft() <= time_utils.ONE_DAY:
@@ -478,7 +478,7 @@ class VehPriceActionInfo(ActionInfo):
         return [formatters.packBuildUpBlockData(block, gap=2, padding=formatters.packPadding(top=-2))]
 
     def _makePriceBlock(self, price, currencySetting, percent=0, valueWidth=-1):
-        _int = BigWorld.wg_getIntegralFormat
+        _int = backport.getIntegralFormat
         hasAction = percent != 0
         settings = _getCurrencySetting(currencySetting)
         if settings is None:
@@ -608,7 +608,7 @@ class VehRentActionInfo(VehPriceActionInfo):
         return TOOLTIPS.ACTIONPRICE_RENTPRICE_DEFAULTPRICE
 
     def __makeRentBlock(self, price, currencySetting, days, percent=0):
-        _int = BigWorld.wg_getIntegralFormat
+        _int = backport.getIntegralFormat
         settings = _getCurrencySetting(currencySetting)
         if settings is None:
             return
@@ -829,7 +829,7 @@ class ComingSoonActionInfo(ActionInfo):
         pass
 
     def _getStartTime(self):
-        startTimeStr = BigWorld.wg_getShortDateFormat(self.__startTime)
+        startTimeStr = backport.getShortDateFormat(self.__startTime)
         return text_styles.main(i18n.makeString(QUESTS.ACTION_COMINGSOON_TIME, startTime=startTimeStr)) if startTimeStr is not None else ''
 
     def _getParamName(self):
@@ -892,7 +892,7 @@ class MarathonEventActionInfo(ActionInfo):
     def _getActiveDateTimeString(self):
         name = self.discount.getParamName()
         if name == 'set_MarathonAnnounce':
-            timeStr = BigWorld.wg_getLongDateFormat(self.getFinishTime())
+            timeStr = backport.getLongDateFormat(self.getFinishTime())
             if timeStr is not None and self._marathonEvent:
                 return text_styles.main(i18n.makeString(self._marathonEvent.data.quests.announceTime, startTime=timeStr))
         elif name == 'set_MarathonInProgress':
@@ -900,7 +900,7 @@ class MarathonEventActionInfo(ActionInfo):
         return ''
 
     def _formatFinishTime(self):
-        return '' if self._marathonEvent is None else ' '.join((text_styles.main(i18n.makeString(self._marathonEvent.data.quests.timeFinish)), BigWorld.wg_getLongDateFormat(self.getFinishTime())))
+        return '' if self._marathonEvent is None else ' '.join((text_styles.main(i18n.makeString(self._marathonEvent.data.quests.timeFinish)), backport.getLongDateFormat(self.getFinishTime())))
 
     def _showTimerIco(self):
         name = self.discount.getParamName()

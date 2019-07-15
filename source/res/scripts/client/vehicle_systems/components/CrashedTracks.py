@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/vehicle_systems/components/CrashedTracks.py
 import weakref
-from AvatarInputHandler import mathUtils
+import math_utils
 import Math
 import BigWorld
 import TriggersManager
@@ -40,12 +40,12 @@ class CrashedTrackController(Component):
         self.__triggerEvents = entity.isPlayerVehicle
 
     def activate(self):
-        if self.__entity is not None and self.__model is not None and not self.__model.isAttached:
+        if self.__entity is not None and self.__model is not None:
             self.__entity.addModel(self.__model)
         return
 
     def deactivate(self):
-        if self.__entity is not None and self.__model is not None and self.__model.isAttached:
+        if self.__entity is not None and self.__model is not None:
             self.__entity.delModel(self.__model)
         self.__loading = False
         return
@@ -134,8 +134,7 @@ class CrashedTrackController(Component):
         else:
             hideLeftTrack, hideRightTrack = self.__flags & 1, self.__flags & 2
         if self.baseTracksComponent is not None:
-            self.baseTracksComponent.leftTrack.disableTrack(hideLeftTrack)
-            self.baseTracksComponent.rightTrack.disableTrack(hideRightTrack)
+            self.baseTracksComponent.disableTrack(hideLeftTrack, hideRightTrack)
         if self.__fashion is not None:
             self.__fashion.changeTrackVisibility(True, hideLeftTrack)
             self.__fashion.changeTrackVisibility(False, hideRightTrack)
@@ -167,7 +166,7 @@ class CrashedTrackController(Component):
 
             model_assembler.setupTracksFashion(self.__vehicleDesc, self.__fashion)
             self.__model.setupFashions([self.__fashion])
-            rotationMProv = mathUtils.MatrixProviders.product(self.__entity.model.node('hull'), Math.MatrixInverse(self.__model.node('Tank')))
+            rotationMProv = math_utils.MatrixProviders.product(self.__entity.model.node('hull'), Math.MatrixInverse(self.__model.node('Tank')))
             self.__model.node('V', rotationMProv)
             self.__setupTracksHiding()
             self.__entity.addModel(self.__model)

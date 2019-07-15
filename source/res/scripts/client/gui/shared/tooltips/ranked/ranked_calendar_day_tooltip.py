@@ -1,7 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/tooltips/ranked/ranked_calendar_day_tooltip.py
 from datetime import datetime
-import BigWorld
 from gui.impl import backport
 from gui.impl.gen import R
 from gui.shared.formatters import text_styles
@@ -34,7 +33,7 @@ class RankedCalendarDayTooltip(BlocksTooltipData):
         else:
             blocks = [self.__packHeaderBlock()]
             serversPeriodsMapping = self.rankedController.getPrimeTimesForDay(selectedTime)
-            frmt = BigWorld.wg_getShortTimeFormat
+            frmt = backport.getShortTimeFormat
             for serverName in sorted(serversPeriodsMapping.keys()):
                 periodsStr = []
                 dayPeriods = serversPeriodsMapping[serverName]

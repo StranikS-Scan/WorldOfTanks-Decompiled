@@ -162,6 +162,20 @@ class MultiSlot(object):
             component = emptyComponent(item.itemTypeID)
         self._items[idx] = SlotData(item=item, component=component)
 
+    def moveSlotTop(self, slotId):
+        if slotId.slotType != GUI_ITEM_TYPE.PROJECTION_DECAL:
+            return slotId.regionIdx
+        slotData = self.getSlotData(slotId.regionIdx)
+        self.remove(slotId.regionIdx)
+        pairs = list(((item, component) for _, item, component in self.items()))
+        self.clear()
+        for idx, (item, component) in enumerate(pairs):
+            self.set(item, idx, component)
+
+        regionIdx = len(pairs)
+        self.set(item=slotData.item, idx=regionIdx, component=slotData.component)
+        return regionIdx
+
     def lock(self, idx=0):
         self._locks[idx] = True
 

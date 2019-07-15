@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/tooltips/wgm_currency.py
-import BigWorld
 from debug_utils import LOG_ERROR
+from gui.impl import backport
 from gui.shared.money import Currency
 from gui.shared.tooltips.common import DynamicBlocksTooltipData
 from gui.shared.utils.requesters import wgm_balance_info_requester
@@ -33,7 +33,7 @@ class WGMCurrencyTooltip(DynamicBlocksTooltipData):
         elif self.__data is None:
             return _WAITING_FOR_DATA
         else:
-            return BigWorld.wg_getIntegralFormat(int(self.__data[key])) if key in self.__data else _UNKNOWN_VALUE
+            return backport.getIntegralFormat(int(self.__data[key])) if key in self.__data else _UNKNOWN_VALUE
 
     def updateData(self):
         if self.isVisible() and self.app is not None:
@@ -91,11 +91,11 @@ class WGMCurrencyTooltip(DynamicBlocksTooltipData):
         return text_styles.gold(result) if result != _WAITING_FOR_DATA else result
 
     def __getGoldTotal(self):
-        return BigWorld.wg_getIntegralFormat(self.itemsCache.items.stats.gold) if self.isWGMAvailable() else _UNKNOWN_VALUE
+        return backport.getIntegralFormat(self.itemsCache.items.stats.gold) if self.isWGMAvailable() else _UNKNOWN_VALUE
 
     def __getCreditsString(self, creditsType):
         result = self.getWGMCurrencyValue(creditsType)
         return text_styles.credits(result) if result != _WAITING_FOR_DATA else result
 
     def __getCreditsTotal(self):
-        return BigWorld.wg_getIntegralFormat(self.itemsCache.items.stats.credits) if self.isWGMAvailable() else _UNKNOWN_VALUE
+        return backport.getIntegralFormat(self.itemsCache.items.stats.credits) if self.isWGMAvailable() else _UNKNOWN_VALUE

@@ -2,7 +2,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/managers/battle_input.py
 import Keys
 from AvatarInputHandler import aih_global_binding
-from AvatarInputHandler.aih_constants import CTRL_MODE_NAME
+from aih_constants import CTRL_MODE_NAME
 from gui.battle_control import avatar_getter
 from gui.battle_control import event_dispatcher
 from soft_exception import SoftException

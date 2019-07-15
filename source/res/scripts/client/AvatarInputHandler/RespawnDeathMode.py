@@ -8,7 +8,7 @@ import BattleReplay
 from AvatarInputHandler import aih_global_binding
 from DynamicCameras.ArcadeCamera import ArcadeCamera
 from control_modes import IControlMode, _ARCADE_CAM_PIVOT_POS
-from mathUtils import clamp
+from math_utils import clamp
 from helpers import dependency
 from skeletons.gui.battle_session import IBattleSessionProvider
 

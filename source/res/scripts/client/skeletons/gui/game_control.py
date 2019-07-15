@@ -880,6 +880,9 @@ class IEpicBattleMetaGameController(IGameController, ISeasonProvider):
     def isWelcomeScreenUpToDate(self, serverSettings):
         raise NotImplementedError
 
+    def getTimer(self):
+        raise NotImplementedError
+
     def openURL(self, url=None):
         raise NotImplementedError
 

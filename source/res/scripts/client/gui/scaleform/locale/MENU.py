@@ -606,6 +606,8 @@ class MENU(object):
     HEADERBUTTONS_BATTLE_TYPES_SQUADBATTLE = '#menu:headerButtons/battle/types/squadBattle'
     HEADERBUTTONS_BATTLE_TYPES_TRAINING = '#menu:headerButtons/battle/types/training'
     HEADERBUTTONS_BATTLE_TYPES_TRAINING_DESCR = '#menu:headerButtons/battle/types/training/descr'
+    HEADERBUTTONS_BATTLE_TYPES_EPICTRAINING = '#menu:headerButtons/battle/types/epicTraining'
+    HEADERBUTTONS_BATTLE_TYPES_EPICTRAINING_DESCR = '#menu:headerButtons/battle/types/epicTraining/descr'
     HEADERBUTTONS_BATTLE_TYPES_LEAVETRAINING_DESCR = '#menu:headerButtons/battle/types/leaveTraining/descr'
     HEADERBUTTONS_BATTLE_TYPES_TRAININGLEAVEOWNER = '#menu:headerButtons/battle/types/trainingLeaveOwner'
     HEADERBUTTONS_BATTLE_TYPES_SIMPLESQUAD = '#menu:headerButtons/battle/types/simpleSquad'
@@ -1264,6 +1266,7 @@ class MENU(object):
     SPECPREBETLES_OWNERTITLE = '#menu:specPrebetles/ownerTitle'
     SPECPREBETLES_PLAYERSTITLE = '#menu:specPrebetles/playersTitle'
     TRAINING_TITLE = '#menu:training/title'
+    EPICTRAINING_TITLE = '#menu:epicTraining/title'
     TRAINING_DESCRIPTION = '#menu:training/description'
     TRAINING_CREATEBUTTON = '#menu:training/createButton'
     TRAINING_LEAVEBUTTON = '#menu:training/leaveButton'
@@ -1274,11 +1277,13 @@ class MENU(object):
     TRAINING_OWNERTITLE = '#menu:training/ownerTitle'
     TRAINING_PLAYERSTITLE = '#menu:training/playersTitle'
     TRAINING_CREATE_TITLE = '#menu:training/create/title'
+    EPIC_TRAINING_CREATE_TITLE = '#menu:epic_training/create/title'
     TRAINING_CREATE_CREATEBUTTON = '#menu:training/create/createButton'
     TRAINING_CREATE_CLOSEBUTTON = '#menu:training/create/closeButton'
     TRAINING_CREATE_MAPSELECT = '#menu:training/create/mapSelect'
     TRAINING_CREATE_MAXPLAYERS = '#menu:training/create/maxPlayers'
     TRAINING_CREATE_BATTLETIME = '#menu:training/create/battleTime'
+    TRAINING_CREATE_BATTLETIME_DISABLED_BODY = '#menu:training/create/battleTime/disabled/body'
     TRAINING_CREATE_PRIVACY = '#menu:training/create/privacy'
     TRAINING_CREATE_DESCRIPTION = '#menu:training/create/description'
     TRAINING_INFO_TITLE = '#menu:training/info/title'
@@ -1292,6 +1297,7 @@ class MENU(object):
     TRAINING_INFO_TEAM2LABEL = '#menu:training/info/team2Label'
     TRAINING_INFO_OTHERLABEL = '#menu:training/info/otherLabel'
     TRAINING_INFO_SETTINGS_TITLE = '#menu:training/info/settings/title'
+    EPIC_TRAINING_INFO_SETTINGS_TITLE = '#menu:epic_training/info/settings/title'
     TRAINING_INFO_SETTINGS_OKBUTTON = '#menu:training/info/settings/okButton'
     TRAINING_INFO_MAP = '#menu:training/info/map'
     TRAINING_INFO_TIMEOUT_LABEL = '#menu:training/info/timeout/label'
@@ -1855,6 +1861,7 @@ class MENU(object):
     CST_ITEM_CTX_MENU_CONVERTBLUEPRINTMAX = '#menu:cst_item_ctx_menu/convertBlueprintMax'
     CST_ITEM_CTX_MENU_CONVERTBLUEPRINTMAXCOUNT = '#menu:cst_item_ctx_menu/convertBlueprintMaxCount'
     CST_ITEM_CTX_MENU_SHOWBLUEPRINT = '#menu:cst_item_ctx_menu/showBlueprint'
+    CST_ITEM_CTX_MENU_STYLEINFO = '#menu:cst_item_ctx_menu/styleInfo'
     VIEWHEADER_BACKBTN_LABEL = '#menu:viewHeader/backBtn/label'
     VIEWHEADER_BACKBTN_DESCRLABEL_TECHTREE = '#menu:viewHeader/backBtn/descrLabel/techtree'
     VIEWHEADER_BACKBTN_DESCRLABEL_HANGAR = '#menu:viewHeader/backBtn/descrLabel/hangar'
@@ -1903,6 +1910,12 @@ class MENU(object):
     TIMELEFT_FULL_LESSMIN = '#menu:timeLeft/full/lessMin'
     PRIMETIME_SERVERS = '#menu:primeTime/servers'
     PRIMETIME_SERVER = '#menu:primeTime/server'
+    BOOSTER_USERNAME_BOOSTER_FL_XP = '#menu:booster/userName/booster_fl_xp'
+    BOOSTER_INFLUENCE_BOOSTER_FL_XP = '#menu:booster/influence/booster_fl_xp'
+    BOOSTER_DESCRIPTION_BOOSTER_FL_XP = '#menu:booster/description/booster_fl_xp'
+    BOOSTER_DESCRIPTION_BONUSVALUETIME_BOOSTER_FL_XP = '#menu:booster/description/bonusValueTime/booster_fl_xp'
+    BOOSTER_BONUS_BOOSTER_FL_XP = '#menu:booster/bonus/booster_fl_xp'
+    BOOSTER_LIMIT_BOOSTER_FL_XP = '#menu:booster/limit/booster_fl_xp'
     CONTEXTMENU_ENUM = (CONTEXTMENU_VEHICLEINFO,
      CONTEXTMENU_VEHICLEINFOEX,
      CONTEXTMENU_GOTONATIONTREE,
@@ -2422,7 +2435,8 @@ class MENU(object):
      CST_ITEM_CTX_MENU_CONVERTBLUEPRINT,
      CST_ITEM_CTX_MENU_CONVERTBLUEPRINTMAX,
      CST_ITEM_CTX_MENU_CONVERTBLUEPRINTMAXCOUNT,
-     CST_ITEM_CTX_MENU_SHOWBLUEPRINT)
+     CST_ITEM_CTX_MENU_SHOWBLUEPRINT,
+     CST_ITEM_CTX_MENU_STYLEINFO)
     INTERNET_PROVIDER_ALL_NAME_ENUM = (INTERNET_PROVIDER_ROSTELECOM_NAME,
      INTERNET_PROVIDER_BELTELECOM_NAME,
      INTERNET_PROVIDER_KYIVSTAR_NAME,
@@ -2435,11 +2449,13 @@ class MENU(object):
      BOOSTER_USERNAME_BOOSTER_FREE_XP,
      BOOSTER_USERNAME_BOOSTER_CREW_XP,
      BOOSTER_USERNAME_BOOSTER_CREDITS,
-     BOOSTER_USERNAME_BOOSTER_REPAIR)
+     BOOSTER_USERNAME_BOOSTER_REPAIR,
+     BOOSTER_USERNAME_BOOSTER_FL_XP)
     BOOSTER_INFLUENCE_ENUM = (BOOSTER_INFLUENCE_BOOSTER_XP,
      BOOSTER_INFLUENCE_BOOSTER_FREE_XP,
      BOOSTER_INFLUENCE_BOOSTER_CREW_XP,
-     BOOSTER_INFLUENCE_BOOSTER_CREDITS)
+     BOOSTER_INFLUENCE_BOOSTER_CREDITS,
+     BOOSTER_INFLUENCE_BOOSTER_FL_XP)
     BOOSTER_DESCRIPTION_ENUM = (BOOSTER_DESCRIPTION_BOOSTER_XP,
      BOOSTER_DESCRIPTION_BONUSVALUETIME_BOOSTER_XP,
      BOOSTER_DESCRIPTION_BOOSTER_FREE_XP,
@@ -2450,16 +2466,21 @@ class MENU(object):
      BOOSTER_DESCRIPTION_BONUSVALUETIME_BOOSTER_CREDITS,
      BOOSTER_DESCRIPTION_BOOSTER_REPAIR,
      BOOSTER_DESCRIPTION_EFFECTTIME,
-     BOOSTER_DESCRIPTION_EFFECTVALUETIME)
+     BOOSTER_DESCRIPTION_EFFECTVALUETIME,
+     BOOSTER_DESCRIPTION_BOOSTER_FL_XP,
+     BOOSTER_DESCRIPTION_BONUSVALUETIME_BOOSTER_FL_XP)
     BOOSTER_DESCRIPTION_BONUSVALUETIME_ENUM = (BOOSTER_DESCRIPTION_BONUSVALUETIME_BOOSTER_XP,
      BOOSTER_DESCRIPTION_BONUSVALUETIME_BOOSTER_FREE_XP,
      BOOSTER_DESCRIPTION_BONUSVALUETIME_BOOSTER_CREW_XP,
-     BOOSTER_DESCRIPTION_BONUSVALUETIME_BOOSTER_CREDITS)
+     BOOSTER_DESCRIPTION_BONUSVALUETIME_BOOSTER_CREDITS,
+     BOOSTER_DESCRIPTION_BONUSVALUETIME_BOOSTER_FL_XP)
     BOOSTER_QUALITY_ENUM = (BOOSTER_QUALITY_SMALL, BOOSTER_QUALITY_MEDIUM, BOOSTER_QUALITY_BIG)
     BOOSTER_BONUS_ENUM = (BOOSTER_BONUS_BOOSTER_XP,
      BOOSTER_BONUS_BOOSTER_FREE_XP,
      BOOSTER_BONUS_BOOSTER_CREW_XP,
-     BOOSTER_BONUS_BOOSTER_CREDITS)
+     BOOSTER_BONUS_BOOSTER_CREDITS,
+     BOOSTER_BONUS_BOOSTER_FL_XP)
+    BOOSTER_LIMIT_ENUM = (BOOSTER_LIMIT_BOOSTER_FL_XP,)
     VIEWHEADER_BACKBTN_DESCRLABEL_ENUM = (VIEWHEADER_BACKBTN_DESCRLABEL_TECHTREE,
      VIEWHEADER_BACKBTN_DESCRLABEL_HANGAR,
      VIEWHEADER_BACKBTN_DESCRLABEL_STORAGE,
@@ -2790,6 +2811,15 @@ class MENU(object):
     def boosterBonusLocale(cls, value):
         outcome = '#menu:booster/bonus/{}'.format(value)
         if outcome not in cls.BOOSTER_BONUS_ENUM:
+            LOG_WARNING('Localization key "{}" not found'.format(outcome))
+            return None
+        else:
+            return outcome
+
+    @classmethod
+    def boosterLimitLocale(cls, value):
+        outcome = '#menu:booster/limit/{}'.format(value)
+        if outcome not in cls.BOOSTER_LIMIT_ENUM:
             LOG_WARNING('Localization key "{}" not found'.format(outcome))
             return None
         else:

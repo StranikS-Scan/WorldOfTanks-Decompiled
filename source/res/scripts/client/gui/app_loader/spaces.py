@@ -105,6 +105,9 @@ class LoginSpace(IGlobalSpace):
     def init(self):
         self._clearEntitiesAndSpaces()
 
+    def setup(self, action=None):
+        self._action = action
+
     def update(self):
         self._clearEntitiesAndSpaces()
 

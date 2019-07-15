@@ -13,9 +13,9 @@ _g_firstEntry = True
 class WgcMode(BaseMode):
     _settingsCore = dependency.descriptor(ISettingsCore)
 
-    def __init__(self, wgcStoredUserSelected, *args):
+    def __init__(self, *args):
         super(WgcMode, self).__init__(*args)
-        self.__wgcStoredUserSelected = wgcStoredUserSelected
+        self.__wgcStoredUserSelected = True
         self._fallbackMode.setRememberPassword(False)
         self._fallbackMode.resetToken()
 
@@ -50,7 +50,6 @@ class WgcMode(BaseMode):
 
     def changeAccount(self):
         if self.__wgcStoredUserSelected:
-            self._loginManager.stopWgc()
             message = _ms('#menu:login/status/WGC_LOGOUT', userName=self.login)
             self.__stop()
             self._view.as_setLoginWarningS(message)
@@ -75,6 +74,7 @@ class WgcMode(BaseMode):
         g_preDefinedHosts.requestPing()
 
     def __stop(self):
+        self._loginManager.stopWgc()
         if self.__wgcStoredUserSelected:
             self.__wgcStoredUserSelected = False
             self._view.update()

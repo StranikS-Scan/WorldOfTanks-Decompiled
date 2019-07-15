@@ -54,6 +54,8 @@ class BattleTypeSelectPopover(BattleTypeSelectPopoverMeta):
                     tooltip = TOOLTIPS.BATTLETYPES_STRONGHOLDS_DISABLED
             elif itemData == PREBATTLE_ACTION_NAME.TRAININGS_LIST:
                 tooltip = TOOLTIPS.BATTLETYPES_TRAINING
+            elif itemData == PREBATTLE_ACTION_NAME.EPIC_TRAINING_LIST:
+                tooltip = TOOLTIPS.BATTLETYPES_EPIC_TRAINING
             elif itemData == PREBATTLE_ACTION_NAME.SPEC_BATTLES_LIST:
                 tooltip = TOOLTIPS.BATTLETYPES_SPEC
             elif itemData == PREBATTLE_ACTION_NAME.BATTLE_TUTORIAL:

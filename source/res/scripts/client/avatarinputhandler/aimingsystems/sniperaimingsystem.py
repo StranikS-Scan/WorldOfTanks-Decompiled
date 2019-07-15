@@ -5,7 +5,7 @@ import BigWorld
 import Math
 from constants import VEHICLE_SIEGE_STATE
 from Math import Vector3, Matrix
-from AvatarInputHandler import mathUtils
+import math_utils
 from AvatarInputHandler import AimingSystems
 from AvatarInputHandler.AimingSystems import IAimingSystem
 from gun_rotation_shared import calcPitchLimitsFromDesc
@@ -91,8 +91,8 @@ class SniperAimingSystem(IAimingSystem):
         isBackTurretSector = turretYaw < math.pi * -0.5 or turretYaw > math.pi * 0.5
         if isBackTurretSector:
             hullAngleMin, hullAngleMax = hullAngleMax, hullAngleMin
-        hullMatrixAngleMin = mathUtils.createRotationMatrix((0, hullAngleMin, 0))
-        hullMatrixAngleMax = mathUtils.createRotationMatrix((0, hullAngleMax, 0))
+        hullMatrixAngleMin = math_utils.createRotationMatrix((0, hullAngleMin, 0))
+        hullMatrixAngleMax = math_utils.createRotationMatrix((0, hullAngleMax, 0))
         maxPitch = _getCorrectGunPitch(hullMatrixAngleMax, turretYaw, gunAngleMax)
         minPitch = _getCorrectGunPitch(hullMatrixAngleMin, turretYaw, gunAngleMin)
         return {'absolute': (minPitch, maxPitch),
@@ -173,18 +173,18 @@ class SniperAimingSystem(IAimingSystem):
         self.__oscillator.velocity = Vector3(0.0, 0.0, 0.0)
         self.__returningOscillator.velocity = Vector3(0.0, 0.0, 0.0)
         _, uncompensatedPitch = self.__getTurretYawGunPitch(self.getDesiredShotPoint())
-        self.__pitchCompensating = mathUtils.clamp(math.radians(-2.0), math.radians(2.0), self.__idealGunPitch - uncompensatedPitch)
+        self.__pitchCompensating = math_utils.clamp(math.radians(-2.0), math.radians(2.0), self.__idealGunPitch - uncompensatedPitch)
         if abs(self.__pitchCompensating) < 1e-06:
             self.__pitchCompensating = 0.0
 
     def __clampToLimits(self, turretYaw, gunPitch):
         if self.__yawLimits is not None:
-            turretYaw = mathUtils.clamp(self.__yawLimits[0], self.__yawLimits[1], turretYaw)
+            turretYaw = math_utils.clamp(self.__yawLimits[0], self.__yawLimits[1], turretYaw)
         pitchLimits = calcPitchLimitsFromDesc(turretYaw, self.getPitchLimits(turretYaw))
         adjustment = max(0, self.__returningOscillator.deviation.y)
         pitchLimits[0] -= adjustment
         pitchLimits[1] += adjustment
-        gunPitch = mathUtils.clamp(pitchLimits[0], pitchLimits[1] + self.__pitchCompensating, gunPitch)
+        gunPitch = math_utils.clamp(pitchLimits[0], pitchLimits[1] + self.__pitchCompensating, gunPitch)
         return (turretYaw, gunPitch)
 
     def __adjustPitchLimitExtension(self, value, shrinkOnly=False):
@@ -199,7 +199,7 @@ class SniperAimingSystem(IAimingSystem):
 
     def __calcPitchExcess(self, turretYaw, gunPitch):
         if self.__yawLimits is not None:
-            turretYaw = mathUtils.clamp(self.__yawLimits[0], self.__yawLimits[1], turretYaw)
+            turretYaw = math_utils.clamp(self.__yawLimits[0], self.__yawLimits[1], turretYaw)
         pitchLimits = calcPitchLimitsFromDesc(turretYaw, self.getPitchLimits(turretYaw))
         if pitchLimits[0] > gunPitch:
             return pitchLimits[0] - gunPitch
@@ -209,14 +209,14 @@ class SniperAimingSystem(IAimingSystem):
     def __worldYawPitchToTurret(self, worldYaw, worldPitch):
         worldToTurret = Matrix(self.__vehicleMProv)
         worldToTurret.invert()
-        worldToTurret.preMultiply(mathUtils.createRotationMatrix((worldYaw, worldPitch, 0.0)))
+        worldToTurret.preMultiply(math_utils.createRotationMatrix((worldYaw, worldPitch, 0.0)))
         return (worldToTurret.yaw, worldToTurret.pitch)
 
     def update(self, deltaTime):
         if self.__forceFullStabilization:
             self.__oscillator.constraints = SniperAimingSystem.__STABILIZED_CONSTRAINTS
         else:
-            self.__oscillator.constraints = mathUtils.matrixScale(self.__yprDeviationConstraints, SniperAimingSystem.__CONSTRAINTS_MULTIPLIERS)
+            self.__oscillator.constraints = math_utils.matrixScale(self.__yprDeviationConstraints, SniperAimingSystem.__CONSTRAINTS_MULTIPLIERS)
         curTurretYaw, curGunPitch = self.__worldYawPitchToTurret(self.__worldYaw, self.__worldPitch)
         yprDelta = Vector3(curTurretYaw - self.__idealTurretYaw, curGunPitch - self.__idealGunPitch, 0.0)
         self.__oscillator.deviation = yprDelta
@@ -259,7 +259,7 @@ class SniperAimingSystem(IAimingSystem):
         player = BigWorld.player()
         stabilisedMatrix = Math.Matrix(player.inputHandler.steadyVehicleMatrixCalculator.stabilisedMProv)
         turretYaw, gunPitch = AimingSystems.getTurretYawGunPitch(self.__vehicleTypeDescriptor, stabilisedMatrix, targetPos, compensateGravity)
-        rotation = mathUtils.createRotationMatrix((turretYaw, gunPitch, 0.0))
+        rotation = math_utils.createRotationMatrix((turretYaw, gunPitch, 0.0))
         rotation.postMultiply(stabilisedMatrix)
         invertSteady = Math.Matrix(self.__vehicleMProv)
         invertSteady.invert()

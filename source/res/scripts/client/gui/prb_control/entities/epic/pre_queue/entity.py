@@ -11,11 +11,11 @@ from gui.Scaleform.locale.SYSTEM_MESSAGES import SYSTEM_MESSAGES
 from gui.prb_control import prb_getters
 from gui.prb_control.ctrl_events import g_prbCtrlEvents
 from gui.prb_control.entities.base import vehicleAmmoCheck
-from gui.prb_control.entities.base.pre_queue.ctx import LeavePreQueueCtx
 from gui.prb_control.entities.base.pre_queue.entity import PreQueueSubscriber, PreQueueEntryPoint, PreQueueEntity
 from gui.prb_control.entities.epic.pre_queue.actions_validator import EpicActionsValidator
 from gui.prb_control.entities.epic.pre_queue.ctx import EpicQueueCtx
 from gui.prb_control.entities.epic.pre_queue.vehicles_watcher import EpicVehiclesWatcher
+from gui.prb_control.entities.epic.pre_queue.scheduler import EpicMetaScheduler
 from gui.prb_control.entities.epic.squad.entity import EpicSquadEntryPoint
 from gui.prb_control.events_dispatcher import g_eventDispatcher
 from gui.prb_control.items import SelectResult
@@ -104,7 +104,6 @@ class EpicEntity(PreQueueEntity):
         return
 
     def init(self, ctx=None):
-        self.__epicController.onUpdated += self.__onEpicUpdated
         self.storage.release()
         self.__watcher = EpicVehiclesWatcher()
         self.__watcher.start()
@@ -116,7 +115,6 @@ class EpicEntity(PreQueueEntity):
         return None
 
     def fini(self, ctx=None, woEvents=False):
-        self.__epicController.onUpdated -= self.__onEpicUpdated
         if not woEvents:
             if not self.canSwitch(ctx):
                 g_eventDispatcher.loadHangar()
@@ -148,6 +146,9 @@ class EpicEntity(PreQueueEntity):
     def _createActionsValidator(self):
         return EpicActionsValidator(self)
 
+    def _createScheduler(self):
+        return EpicMetaScheduler(self)
+
     def _doQueue(self, ctx):
         BigWorld.player().enqueueEpic(ctx.getVehicleInventoryID())
         LOG_DEBUG('Sends request on queuing to the epic battle', ctx)
@@ -166,23 +167,3 @@ class EpicEntity(PreQueueEntity):
 
     def _exitFromQueueUI(self):
         g_eventDispatcher.loadHangar()
-
-    def __processWelcome(self):
-        if not self.__epicController.isWelcomeScreenUpToDate(self.__settingsCore.serverSettings):
-            g_eventDispatcher.loadEpicWelcome()
-            return FUNCTIONAL_FLAG.LOAD_PAGE
-        return FUNCTIONAL_FLAG.UNDEFINED
-
-    def __onEpicUpdated(self, diff):
-        if 'epic_config' not in diff:
-            return
-        status, _, _ = self.__epicController.getPrimeTimeStatus()
-        isPlayable = self.__epicController.isEnabled() and not self.__epicController.isFrozen()
-        if not isPlayable or not self.__epicController.hasAnySeason() or status is not PrimeTimeStatus.AVAILABLE:
-            ctx = LeavePreQueueCtx(waitingID='prebattle/leave', flags=FUNCTIONAL_FLAG.EXIT, entityType=self.getEntityType())
-
-            def showPrimeTime(_):
-                if isPlayable:
-                    event_dispatcher.showEpicBattlesPrimeTimeWindow()
-
-            self.leave(ctx, callback=showPrimeTime)

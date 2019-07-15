@@ -32,7 +32,14 @@ class HintsData(object):
     def markAsShown(self, itemID, hintID):
         if itemID in self.__hints:
             hintsList = self.__hints[itemID]
-            for idx, hint in reversed(list(enumerate(hintsList))):
-                if hint['hintID'] == hintID:
-                    del hintsList[idx]
-                    break
+            self._delHints(hintsList, (hintID,))
+
+    def markHintsAsShown(self, hintIDs):
+        for hintsList in self.__hints.itervalues():
+            self._delHints(hintsList, hintIDs)
+
+    @staticmethod
+    def _delHints(hintsList, ids):
+        for idx, hint in reversed(list(enumerate(hintsList))):
+            if hint['hintID'] in ids:
+                del hintsList[idx]

@@ -25,15 +25,12 @@ def getBranchByOperationId(operationId):
 def getFinalTokenQuestIdByOperationId(operationId):
     season = {PM_BRANCH.REGULAR: 1,
      PM_BRANCH.PERSONAL_MISSION_2: 2}
-    result = [FINAL_PERSONAL_MISSION_TOKEN % (season[getBranchByOperationId(operationId)], operationId)]
-    if operationId in CHAMPION_BADGE_AT_OPERATION_ID:
-        result.append(CHAMPION_BADGE_AT_OPERATION_ID[operationId])
-    return tuple(result)
+    return FINAL_PERSONAL_MISSION_TOKEN % (season[getBranchByOperationId(operationId)], operationId)
 
 
 def getAdditionalTokenQuestIdByOperationId(operationId, addCamouflage=False, addBadge=False):
     result = []
-    finalId = getFinalTokenQuestIdByOperationId(operationId)[0]
+    finalId = getFinalTokenQuestIdByOperationId(operationId)
     if addCamouflage:
         result.append(''.join((finalId, '_camouflage')))
     if addBadge:

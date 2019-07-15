@@ -1,20 +1,24 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/vehicle_systems/camouflages.py
-from collections import namedtuple
 import logging
+from collections import namedtuple, defaultdict
+from copy import deepcopy
+from itertools import product
 import BigWorld
 import Math
 import Vehicular
 import AnimationSequence
 import items.vehicles
+from constants import IS_EDITOR
 from items.vehicles import makeIntCompactDescrByID, getItemByCompactDescr
 from items.customizations import parseOutfitDescr, CustomizationOutfit
 from vehicle_systems.tankStructure import VehiclePartsTuple
 from vehicle_systems.tankStructure import TankPartNames, TankPartIndexes
 from gui.shared.gui_items import GUI_ITEM_TYPE
-from items.components.c11n_constants import ModificationType, C11N_MASK_REGION, DEFAULT_DECAL_SCALE_FACTORS, SeasonType, CustomizationType, DEFAULT_DECAL_CLIP_ANGLE
-from AvatarInputHandler import mathUtils
+from items.components.c11n_constants import ModificationType, C11N_MASK_REGION, DEFAULT_DECAL_SCALE_FACTORS, SeasonType, CustomizationType, DEFAULT_DECAL_CLIP_ANGLE, ApplyArea, ProjectionDecalPositionTags, MAX_PROJECTION_DECALS_PER_AREA, CamouflageTilingType
+import math_utils
 from helpers import newFakeModel
+from soft_exception import SoftException
 _logger = logging.getLogger(__name__)
 RepaintParams = namedtuple('PaintParams', ('enabled', 'baseColor', 'color', 'metallic', 'gloss', 'fading', 'strength'))
 RepaintParams.__new__.__defaults__ = (False,
@@ -46,15 +50,16 @@ ProjectionDecalGenericParams.__new__.__defaults__ = (Math.Vector4(0.0),
  False,
  True)
 SequenceParams = namedtuple('SequenceParams', ('transform', 'attachNode', 'sequenceName'))
-SequenceParams.__new__.__defaults__ = (mathUtils.createIdentityMatrix(), '', '')
+SequenceParams.__new__.__defaults__ = (math_utils.createIdentityMatrix(), '', '')
 AttachmentParams = namedtuple('AttachmentParams', ('transform', 'attachNode', 'modelName'))
-AttachmentParams.__new__.__defaults__ = (mathUtils.createIdentityMatrix(),
+AttachmentParams.__new__.__defaults__ = (math_utils.createIdentityMatrix(),
  Math.Vector3(0.0),
  '',
  '')
 _DEFAULT_GLOSS = 0.509
 _DEFAULT_METALLIC = 0.23
 _DEAD_VEH_WEIGHT_COEFF = 0.1
+_PROJECTION_DECAL_PREVIEW_ALPHA = 0.5
 
 def prepareFashions(isDamaged):
     if isDamaged:
@@ -82,18 +87,27 @@ def updateFashions(appearance):
             return
         vDesc = appearance.typeDescriptor
         outfit = appearance.outfit
-        outfitData = getOutfitData(outfit, vDesc, isDamaged)
+        outfitData = getOutfitData(appearance, outfit, vDesc, isDamaged)
         appearance.c11nComponent = appearance.createComponent(Vehicular.C11nComponent, fashions, appearance.compoundModel, outfitData)
+        return
+
+
+def _currentMapSeason():
+    if IS_EDITOR:
+        return SeasonType.SUMMER
+    else:
+        arena = BigWorld.player().arena
+        if arena is not None:
+            mapKind = arena.arenaType.vehicleCamouflageKind
+            return SeasonType.fromArenaKind(mapKind)
         return
 
 
 def getOutfitComponent(outfitCD):
     if outfitCD:
         outfitComponent = parseOutfitDescr(outfitCD)
-        arena = BigWorld.player().arena
-        if outfitComponent.styleId != 0 and arena is not None:
-            mapKind = arena.arenaType.vehicleCamouflageKind
-            season = SeasonType.fromArenaKind(mapKind)
+        season = _currentMapSeason()
+        if outfitComponent.styleId != 0 and season is not None:
             intCD = makeIntCompactDescrByID('customizationItem', CustomizationType.STYLE, outfitComponent.styleId)
             styleDescr = getItemByCompactDescr(intCD)
             outfitComponent = styleDescr.outfits[season]
@@ -138,56 +152,114 @@ def getCamoPrereqs(outfit, vDesc):
         return result
 
 
-def getCamo(outfit, containerId, vDesc, descId, isDamaged, default=None):
+def getCamo(appearance, outfit, containerId, vDesc, descId, isDamaged, default=None):
     result = default
     if not outfit:
         return result
-    else:
-        container = outfit.getContainer(containerId)
-        slot = container.slotFor(GUI_ITEM_TYPE.CAMOUFLAGE)
-        if not slot:
-            return result
-        camouflage = slot.getItem()
-        component = slot.getComponent()
-        if camouflage:
-            try:
-                palette = camouflage.palettes[component.palette]
-            except IndexError:
-                palette = camouflage.palettes[0]
-
-            weights = Math.Vector4(*[ (c >> 24) / 255.0 for c in palette ])
-            if isDamaged:
-                weights *= _DEAD_VEH_WEIGHT_COEFF
-            tiling = camouflage.tiling.get(vDesc.type.compactDescr)
-            if tiling is None:
-                tiling = vDesc.type.camouflage.tiling
-            if tiling:
-                try:
-                    scale = camouflage.scales[component.patternSize]
-                except IndexError:
-                    scale = 0
-
-                tiling = (tiling[0] * scale,
-                 tiling[1] * scale,
-                 tiling[2],
-                 tiling[3])
-            exclusionMap = vDesc.type.camouflage.exclusionMask
-            compDesc = getattr(vDesc, descId, None)
-            if compDesc is not None:
-                coeff = compDesc.camouflage.tiling
-                if coeff is not None:
-                    if tiling is not None:
-                        tiling = (tiling[0] * coeff[0],
-                         tiling[1] * coeff[1],
-                         tiling[2] + coeff[2],
-                         tiling[3] + coeff[3])
-                    else:
-                        tiling = coeff
-                if compDesc.camouflage.exclusionMask:
-                    exclusionMap = compDesc.camouflage.exclusionMask
-            camoAngle = camouflage.rotation[descId]
-            result = CamoParams(camouflage.texture, exclusionMap or '', tiling, camoAngle, weights, palette[0], palette[1], palette[2], palette[3])
+    container = outfit.getContainer(containerId)
+    slot = container.slotFor(GUI_ITEM_TYPE.CAMOUFLAGE)
+    if not slot:
         return result
+    camouflage = slot.getItem()
+    component = slot.getComponent()
+    if camouflage:
+        try:
+            palette = camouflage.palettes[component.palette]
+        except IndexError:
+            palette = camouflage.palettes[0]
+
+        weights = Math.Vector4(*[ (c >> 24) / 255.0 for c in palette ])
+        if isDamaged:
+            weights *= _DEAD_VEH_WEIGHT_COEFF
+        tiling, exclusionMap = processTiling(appearance, vDesc, descId, camouflage, component)
+        camoAngle = camouflage.rotation[descId]
+        result = CamoParams(camouflage.texture, exclusionMap or '', tiling, camoAngle, weights, palette[0], palette[1], palette[2], palette[3])
+    return result
+
+
+def processTiling(appearance, vDesc, descId, camouflage, component):
+    tilingSettings = camouflage.tilingSettings
+    tilingType = tilingSettings[0]
+    if camouflage.tiling.get(vDesc.type.compactDescr) is not None or tilingType == CamouflageTilingType.LEGACY:
+        return processLegacyTiling(vDesc, descId, camouflage, component)
+    else:
+        vehPartCompDesc = getattr(vDesc, descId, None)
+        if vehPartCompDesc is None:
+            raise SoftException("Get descId '{}' attr from vDesc of vehicle '{}' error".format(descId, vDesc.type.name))
+        vehLength = appearance.computeFullVehicleLength()
+        if vehLength <= 0:
+            raise SoftException("Invalid length {} of vehicle '{}'".format(vehLength, vDesc.type.name))
+        vehPartCamouflage = vehPartCompDesc.camouflage
+        textureSize = (BigWorld.PyTextureProvider(camouflage.texture).width, BigWorld.PyTextureProvider(camouflage.texture).height)
+        aoTextureSize = vehPartCamouflage.aoTextureSize
+        vehDensity = vDesc.type.camouflage.density
+        vehPartDensity = vehPartCamouflage.density
+        try:
+            scale = camouflage.scales[component.patternSize]
+        except IndexError:
+            scale = 0
+
+        return (computeTiling(tilingSettings, textureSize, aoTextureSize, vehDensity, vehPartDensity, vehLength, scale), vehPartCompDesc.camouflage.exclusionMask)
+
+
+def computeTiling(tilingSettings, textureSize, aoTextureSize, vehDensity, vehPartDensity, vehLength, scale):
+    tilingType = tilingSettings[0]
+    factor = tilingSettings[1]
+    factorX = factor[0]
+    factorY = factor[1]
+    textureWidth = textureSize[0]
+    textureHeight = textureSize[1]
+    if tilingType == CamouflageTilingType.ABSOLUTE:
+        coeficientX = factorX
+        coeficientY = factorY
+    elif tilingType == CamouflageTilingType.RELATIVE:
+        coeficientX = textureWidth * factorX / vehLength
+        coeficientY = textureHeight * factorY / vehLength
+    elif tilingType == CamouflageTilingType.RELATIVEWITHFACTOR:
+        coeficientX = textureWidth * factorX / vehLength * vehDensity[0]
+        coeficientY = textureHeight * factorY / vehLength * vehDensity[1]
+    else:
+        raise SoftException('Unexpected tilingType {}'.format(tilingType))
+    coeficientTextureX = aoTextureSize[0] / textureWidth
+    coeficientTextureY = aoTextureSize[1] / textureHeight
+    tilingX = coeficientTextureX * coeficientX / vehPartDensity[0] * scale
+    tilingY = coeficientTextureY * coeficientY / vehPartDensity[1] * scale
+    offset = tilingSettings[2]
+    return (tilingX,
+     tilingY,
+     offset[0],
+     offset[1])
+
+
+def processLegacyTiling(vDesc, descId, camouflage, component):
+    tiling = camouflage.tiling.get(vDesc.type.compactDescr)
+    if tiling is None:
+        tiling = vDesc.type.camouflage.tiling
+    try:
+        scale = camouflage.scales[component.patternSize]
+    except IndexError:
+        scale = 0
+
+    if tiling:
+        tiling = (tiling[0] * scale,
+         tiling[1] * scale,
+         tiling[2],
+         tiling[3])
+    exclusionMap = vDesc.type.camouflage.exclusionMask
+    vehPartCompDesc = getattr(vDesc, descId, None)
+    if vehPartCompDesc is not None:
+        coeff = vehPartCompDesc.camouflage.tiling
+        if coeff is not None:
+            if tiling is not None:
+                tiling = (tiling[0] * coeff[0],
+                 tiling[1] * coeff[1],
+                 tiling[2] + coeff[2],
+                 tiling[3] + coeff[3])
+            else:
+                tiling = coeff
+        if vehPartCompDesc.camouflage.exclusionMask:
+            exclusionMap = vehPartCompDesc.camouflage.exclusionMask
+    return (tiling, exclusionMap)
 
 
 def getRepaint(outfit, containerId, vDesc):
@@ -280,8 +352,8 @@ def __getParams(outfit, vehicleDescr, slotTypeName, slotType, paramsConverter):
 
 
 def __createTransform(slotParams, slotData):
-    worldTransform = mathUtils.createRTMatrix(slotParams.rotation, slotParams.position)
-    objectTransform = mathUtils.createRTMatrix(Math.Vector3(slotData.component.rotation), Math.Vector3(slotData.component.position))
+    worldTransform = math_utils.createRTMatrix(slotParams.rotation, slotParams.position)
+    objectTransform = math_utils.createRTMatrix(Math.Vector3(slotData.component.rotation), Math.Vector3(slotData.component.position))
     worldTransform.postMultiply(objectTransform)
     return worldTransform
 
@@ -302,8 +374,88 @@ def getAttachments(outfit, vehicleDescr):
     return __getParams(outfit, vehicleDescr, 'attachment', GUI_ITEM_TYPE.ATTACHMENT, getAttachmentParams)
 
 
+def _getPositionTag(slot):
+    for tag in slot.tags:
+        if tag.startswith(ProjectionDecalPositionTags.PREFIX):
+            return tag
+
+    return None
+
+
+def _matchProjectionDecalsToSlots(projectionDecalsSlot, slotsByTagMap):
+    taggedDecals = []
+    appliedDecals = []
+    for idx, _, component in projectionDecalsSlot.items():
+        slotData = projectionDecalsSlot.getSlotData(idx)
+        if component.slotId == 0 and component.tags:
+            taggedDecals.append(slotData)
+        appliedDecals.append(slotData)
+
+    if taggedDecals:
+        slots = _findProjectionDecalsSlotsByTags(taggedDecals, appliedDecals, slotsByTagMap)
+        if slots:
+            for decal, slotParams in zip(taggedDecals, slots):
+                decal.component.slotId = slotParams.slotId
+
+        else:
+            return False
+    return True
+
+
+def _findProjectionDecalsSlotsByTags(decals, appliedDecals, slotsByTagMap):
+    resultSlots = []
+    for tagsOrder in product(*[ decal.component.tags for decal in decals ]):
+        slotsByTags = deepcopy(slotsByTagMap)
+        slots = []
+        for tag in tagsOrder:
+            slot = slotsByTags.pop(tag, None)
+            if slot is not None and slot not in slots:
+                slots.append(slot)
+            break
+        else:
+            if _checkSlotsOrder(slots, appliedDecals):
+                resultSlots = _compareSlotsOrders(resultSlots, slots, decals)
+
+    return resultSlots
+
+
+def _getAppliedAreas(mask):
+    areas = []
+    for area in ApplyArea.RANGE:
+        if mask & area:
+            areas.append(area)
+
+    return areas
+
+
+def _checkSlotsOrder(slots, appliedDecals):
+    areas = defaultdict(int)
+    for decal in appliedDecals:
+        for area in _getAppliedAreas(decal.component.showOn):
+            areas[area] += 1
+
+    for slot in slots:
+        appliedAreas = _getAppliedAreas(slot.showOn)
+        if all((areas[area] < MAX_PROJECTION_DECALS_PER_AREA for area in appliedAreas)):
+            for area in appliedAreas:
+                areas[area] += 1
+
+        return False
+
+    return True
+
+
+def _compareSlotsOrders(slotsA, slotsB, decals):
+    if not slotsA or not slotsB:
+        return slotsA or slotsB
+    slotsAIds = [ decal.component.tags.index(_getPositionTag(slot)) for slot, decal in zip(slotsA, decals) ]
+    slotsAIds.sort()
+    slotsBIds = [ decal.component.tags.index(_getPositionTag(slot)) for slot, decal in zip(slotsB, decals) ]
+    slotsBIds.sort()
+    return slotsA if slotsBIds >= slotsAIds else slotsB
+
+
 def getGenericProjectionDecals(outfit, vehicleDescr):
-    from gui.customization.shared import matchProjectionDecalsToSlots, getPositionTag
 
     def createVehSlotsMaps(vehDescr):
         slotsByIdMap = {}
@@ -316,7 +468,7 @@ def getGenericProjectionDecals(outfit, vehicleDescr):
             for vehicleSlot in vehiclePartSlots:
                 if vehicleSlot.type == slotTypeName:
                     slotsByIdMap[vehicleSlot.slotId] = vehicleSlot
-                    positionTag = getPositionTag(vehicleSlot)
+                    positionTag = _getPositionTag(vehicleSlot)
                     if positionTag is not None:
                         slotsByTagMap[positionTag] = vehicleSlot
 
@@ -329,7 +481,7 @@ def getGenericProjectionDecals(outfit, vehicleDescr):
     else:
         slotsByIdMap, slotsByTagMap = createVehSlotsMaps(vehicleDescr)
         if outfit.id != 0:
-            if not matchProjectionDecalsToSlots(projectionDecalsSlot, slotsByTagMap):
+            if not _matchProjectionDecalsToSlots(projectionDecalsSlot, slotsByTagMap):
                 _logger.warning('No available slots for tagged decals. vehicle: %(vehicle)s styleId: %(id)s', {'vehicle': vehicleDescr.type.name,
                  'id': outfit.id})
         capacity = projectionDecalsSlot.capacity()
@@ -367,17 +519,20 @@ def getGenericProjectionDecals(outfit, vehicleDescr):
                 if decal.component.scaleFactorId != 0:
                     factor = factors[decal.component.scaleFactorId - 1]
                     scale = Math.Vector3(scale[0] * factor, scale[1], scale[2] * factor)
-                params = ProjectionDecalGenericParams(tintColor=Math.Vector4(decal.component.tintColor) / 255, position=Math.Vector3(position), rotation=Math.Vector3(rotation), scale=Math.Vector3(scale), decalMap=decal.item.texture, applyAreas=showOn, clipAngle=clipAngle, mirrored=mirrored, doubleSided=doubleSided, scaleBySlotSize=True)
+                tintColor = Math.Vector4(decal.component.tintColor) / 255
+                if decal.component.preview:
+                    tintColor.w = tintColor.w * _PROJECTION_DECAL_PREVIEW_ALPHA
+                params = ProjectionDecalGenericParams(tintColor=tintColor, position=Math.Vector3(position), rotation=Math.Vector3(rotation), scale=Math.Vector3(scale), decalMap=decal.item.texture, applyAreas=showOn, clipAngle=clipAngle, mirrored=mirrored, doubleSided=doubleSided, scaleBySlotSize=True)
                 decalsParams.append(params)
 
         return decalsParams
 
 
-def getOutfitData(outfit, vehicleDescr, isDamaged):
+def getOutfitData(appearance, outfit, vehicleDescr, isDamaged):
     camos = []
     paints = []
     for fashionIdx, descId in enumerate(TankPartNames.ALL):
-        camos.append(getCamo(outfit, fashionIdx, vehicleDescr, descId, isDamaged))
+        camos.append(getCamo(appearance, outfit, fashionIdx, vehicleDescr, descId, isDamaged))
         paints.append(getRepaint(outfit, fashionIdx, vehicleDescr))
 
     decals = getGenericProjectionDecals(outfit, vehicleDescr)

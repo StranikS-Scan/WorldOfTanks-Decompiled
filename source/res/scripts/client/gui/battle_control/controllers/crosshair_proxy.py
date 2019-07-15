@@ -2,7 +2,8 @@
 # Embedded file name: scripts/client/gui/battle_control/controllers/crosshair_proxy.py
 import Event
 import GUI
-from AvatarInputHandler import aih_global_binding, aih_constants
+import aih_constants
+from AvatarInputHandler import aih_global_binding
 from gui.battle_control.battle_constants import BATTLE_CTRL_ID, CROSSHAIR_VIEW_ID, STRATEGIC_CAMERA_ID
 from gui.battle_control.controllers.interfaces import IBattleController
 from helpers import dependency

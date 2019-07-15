@@ -21,7 +21,7 @@ from helpers import time_utils
 from ids_generators import SequenceIDGenerator
 from messenger import g_settings
 from messenger.ext import isNotFriendSenderIgnored
-from messenger.m_constants import USER_TAG
+from messenger.m_constants import USER_ACTION_ID, USER_TAG
 from messenger.proto.events import g_messengerEvents
 from messenger.storage import storage_getter
 from predefined_hosts import g_preDefinedHosts
@@ -157,6 +157,9 @@ class PrbInviteWrapper(_PrbInviteData):
     def isSameBattle(self, arenaUniqueID):
         return False
 
+    def merge(self, other):
+        return self._merge(other)
+
     def _isCurrentPrebattle(self, entity):
         return entity is not None and self.prebattleID == entity.getID()
 
@@ -276,6 +279,7 @@ class InvitesManager(UsersInfoHelper):
         self._IDGen = SequenceIDGenerator()
         self._IDMap = {}
         self.__invites = {}
+        self.__invitesIgnored = {}
         self.__unreadInvitesCount = 0
         self.__eventManager = Event.EventManager()
         self.__acceptChain = None
@@ -291,19 +295,21 @@ class InvitesManager(UsersInfoHelper):
 
     def init(self):
         self.__inited = PRB_INVITES_INIT_STEP.UNDEFINED
-        g_messengerEvents.users.onUsersListReceived += self.__me_onUsersListReceived
-        g_playerEvents.onPrebattleInvitesChanged += self.__pe_onPrebattleInvitesChanged
-        g_playerEvents.onPrebattleInvitationsChanged += self.__pe_onPrebattleInvitationsChanged
-        g_playerEvents.onPrebattleInvitesStatus += self.__pe_onPrebattleInvitesStatus
+        g_messengerEvents.users.onUsersListReceived += self.__onUsersListReceived
+        g_messengerEvents.users.onUserActionReceived += self.__onUserActionReceived
+        g_playerEvents.onPrebattleInvitesChanged += self.__onPrebattleInvitesChanged
+        g_playerEvents.onPrebattleInvitationsChanged += self.__onPrebattleInvitationsChanged
+        g_playerEvents.onPrebattleInvitesStatus += self.__onPrebattleInvitesStatus
 
     def fini(self):
         self.__clearAcceptChain()
         self.__inited = PRB_INVITES_INIT_STEP.UNDEFINED
         self.__loader = None
-        g_messengerEvents.users.onUsersListReceived -= self.__me_onUsersListReceived
-        g_playerEvents.onPrebattleInvitationsChanged -= self.__pe_onPrebattleInvitationsChanged
-        g_playerEvents.onPrebattleInvitesChanged -= self.__pe_onPrebattleInvitesChanged
-        g_playerEvents.onPrebattleInvitesStatus -= self.__pe_onPrebattleInvitesStatus
+        g_messengerEvents.users.onUsersListReceived -= self.__onUsersListReceived
+        g_messengerEvents.users.onUserActionReceived -= self.__onUserActionReceived
+        g_playerEvents.onPrebattleInvitationsChanged -= self.__onPrebattleInvitationsChanged
+        g_playerEvents.onPrebattleInvitesChanged -= self.__onPrebattleInvitesChanged
+        g_playerEvents.onPrebattleInvitesStatus -= self.__onPrebattleInvitesStatus
         self.clear()
         return
 
@@ -484,6 +490,7 @@ class InvitesManager(UsersInfoHelper):
 
     def _addInvite(self, invite, userGetter):
         if self.__isInviteSenderIgnored(invite, userGetter):
+            self.__invitesIgnored[invite.clientID] = invite
             return False
         self.__invites[invite.clientID] = invite
         if invite.isActive():
@@ -492,11 +499,20 @@ class InvitesManager(UsersInfoHelper):
 
     def _updateInvite(self, other, userGetter):
         inviteID = other.clientID
-        invite = self.__invites[inviteID]
-        if invite == other or not invite.isActive() and self.__isInviteSenderIgnored(invite, userGetter):
+        isIgnored = False
+        if inviteID in self.__invites:
+            invite = self.__invites[inviteID]
+        else:
+            isIgnored = True
+            invite = self.__invitesIgnored[inviteID]
+        if invite == other:
+            return False
+        if isIgnored:
+            invite = invite.merge(other)
+            self.__invitesIgnored[inviteID] = invite
             return False
         prevCount = invite.count
-        invite = invite._merge(other)
+        invite = invite.merge(other)
         self.__invites[inviteID] = invite
         if invite.isActive() and prevCount < invite.count:
             self.__unreadInvitesCount += 1
@@ -586,7 +602,7 @@ class InvitesManager(UsersInfoHelper):
             self.__acceptChain = None
         return
 
-    def __me_onUsersListReceived(self, tags):
+    def __onUsersListReceived(self, tags):
         doInit = False
         if USER_TAG.FRIEND in tags:
             doInit = True
@@ -601,7 +617,13 @@ class InvitesManager(UsersInfoHelper):
         if doInit:
             self.__initReceivedInvites()
 
-    def __pe_onPrebattleInvitesChanged(self, diff):
+    def __onUserActionReceived(self, actionID, user):
+        if actionID in (USER_ACTION_ID.IGNORED_REMOVED, USER_ACTION_ID.TMP_IGNORED_REMOVED):
+            self.__refreshIgnoredInvitesRemove(user)
+        if actionID in (USER_ACTION_ID.IGNORED_ADDED, USER_ACTION_ID.TMP_IGNORED_ADDED):
+            self.__refreshIgnoredInvitesAdd(user)
+
+    def __onPrebattleInvitesChanged(self, diff):
         step = PRB_INVITES_INIT_STEP.CONTACTS_RECEIVED
         if self.__inited & step != step:
             LOG_DEBUG('Received invites are ignored. Manager waits for client will receive contacts')
@@ -611,14 +633,14 @@ class InvitesManager(UsersInfoHelper):
         if 'prebattleInvites' in diff:
             self.__updateOldPrebattleInvites(_getOldInvites())
 
-    def __pe_onPrebattleInvitationsChanged(self, invitations):
+    def __onPrebattleInvitationsChanged(self, invitations):
         step = PRB_INVITES_INIT_STEP.CONTACTS_RECEIVED
         if self.__inited & step != step:
             LOG_DEBUG('Received invites are ignored. Manager waits for client will receive contacts')
             return
         self.__updateNewPrebattleInvites(invitations)
 
-    def __pe_onPrebattleInvitesStatus(self, dbID, name, status):
+    def __onPrebattleInvitesStatus(self, dbID, name, status):
         if status != PREBATTLE_INVITE_STATUS.OK:
             statusName = PREBATTLE_INVITE_STATUS_NAMES[status]
             SystemMessages.pushI18nMessage('#system_messages:invite/status/%s' % statusName, name=name, type=SystemMessages.SM_TYPE.Warning)
@@ -637,7 +659,7 @@ class InvitesManager(UsersInfoHelper):
                     modified = True
                     deleted.append(inviteID)
                 continue
-            inList = inviteID in self.__invites
+            inList = inviteID in self.__invites or inviteID in self.__invitesIgnored
             if not inList:
                 if self._addInvite(invite, rosterGetter):
                     modified = True
@@ -674,7 +696,7 @@ class InvitesManager(UsersInfoHelper):
 
         for inviteID, invite in newInvites.iteritems():
             isIncoming = invite.isIncoming()
-            if inviteID not in self.__invites:
+            if inviteID not in self.__invites and inviteID not in self.__invitesIgnored:
                 if self._addInvite(invite, rosterGetter):
                     modified[isIncoming] = True
                     added[isIncoming].append(inviteID)
@@ -698,6 +720,7 @@ class InvitesManager(UsersInfoHelper):
 
     def __clearInvites(self):
         self.__invites.clear()
+        self.__invitesIgnored.clear()
         self.__unreadInvitesCount = 0
 
     def __isInviteSenderIgnored(self, invite, userGetter):
@@ -706,6 +729,30 @@ class InvitesManager(UsersInfoHelper):
             if arenaDP and arenaDP.getVehicleInfo().prebattleID > 0:
                 return True
         return isInviteSenderIgnored(userGetter(invite.creatorDBID), g_settings.userPrefs.invitesFromFriendsOnly, invite.isCreatedInBattle())
+
+    def __refreshIgnoredInvitesRemove(self, user):
+        invitations = []
+        for invite in self.__invitesIgnored.itervalues():
+            if invite.creatorDBID == user.getID():
+                invitations.append(invite.clientID)
+
+        for inviteID in invitations:
+            self.__invites[inviteID] = self.__invitesIgnored.pop(inviteID)
+
+        self.onReceivedInviteListModified([], invitations, [])
+        self.syncUsersInfo()
+
+    def __refreshIgnoredInvitesAdd(self, user):
+        invitations = []
+        for invite in self.__invites.itervalues():
+            if invite.creatorDBID == user.getID():
+                invitations.append(invite.clientID)
+
+        for inviteID in invitations:
+            self.__invitesIgnored[inviteID] = self.__invites.pop(inviteID)
+
+        self.onReceivedInviteListModified([], invitations, [])
+        self.syncUsersInfo()
 
 
 class AutoInvitesNotifier(object):

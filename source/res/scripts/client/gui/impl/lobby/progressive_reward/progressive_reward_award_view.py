@@ -5,7 +5,6 @@ from frameworks.wulf import ViewFlags
 from frameworks.wulf import WindowFlags
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.impl.auxiliary.rewards_helper import getRewardTooltipContent, getRewardRendererModelPresenter, BLUEPRINTS_CONGRAT_TYPES, fillStepsModel, getLastCongratsIndex
-from gui.impl.backport.backport_tooltip import TooltipData
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.progressive_reward.progressive_reward_award_model import ProgressiveRewardAwardModel
 from gui.impl.gen.view_models.views.loot_box_view.loot_congrats_types import LootCongratsTypes
@@ -13,7 +12,7 @@ from gui.impl.gen.view_models.views.lobby.blueprints.blueprint_screen_tooltips i
 from gui.impl.lobby.progressive_reward.progressive_award_sounds import setSoundState, ProgressiveRewardSoundEvents
 from gui.impl.pub import ViewImpl
 from gui.impl.pub.lobby_window import LobbyWindow
-from gui.impl.backport.backport_tooltip import createTooltipData, BackportTooltipWindow
+from gui.impl.backport import createTooltipData, BackportTooltipWindow, TooltipData
 from gui.Scaleform.daapi.view.lobby.techtree.techtree_dp import g_techTreeDP
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.shared.event_dispatcher import showBlueprintView

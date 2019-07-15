@@ -1,10 +1,10 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/crew_books/crew_books_buy_dialog.py
 import logging
-import BigWorld
-from adisp import process
+import adisp
+from gui.shared.utils.decorators import process
 from async import async, await, AsyncEvent, AsyncReturn, AsyncScope, BrokenPromiseError
-from frameworks.wulf import Window, WindowStatus
+from frameworks.wulf import Window, WindowStatus, WindowSettings
 from gui import SystemMessages, DialogsInterface
 from gui.Scaleform.daapi.view.dialogs.ExchangeDialogMeta import ExchangeCreditsSingleItemModalMeta
 from gui.Scaleform.genConsts.APP_CONTAINERS_NAMES import APP_CONTAINERS_NAMES
@@ -18,15 +18,21 @@ from gui.shared.gui_items.Vehicle import getIconResourceName
 from gui.shared.gui_items.processors.module import ModuleBuyer
 from gui.shared.money import Currency
 from helpers.dependency import descriptor
+from skeletons.gui.impl import IGuiLoader
 from skeletons.gui.shared import IItemsCache
 _logger = logging.getLogger(__name__)
 
 class CrewBooksBuyDialog(Window):
     __itemsCache = descriptor(IItemsCache)
+    __gui = descriptor(IGuiLoader)
     __slots__ = ('__blur', '__scope', '__event', '__result', '__bookGuiItem', '__bookCount')
 
     def __init__(self, parent, crewBookCD):
-        super(CrewBooksBuyDialog, self).__init__(wndFlags=DialogLayer.WINDOW, decorator=None, content=DialogContent(R.views.lobby.crew_books.crew_books_buy_dialog.CrewBooksBuyDialog(), CrewBooksBuyDialogModel), parent=parent)
+        settings = WindowSettings()
+        settings.flags = DialogLayer.WINDOW
+        settings.content = DialogContent(R.views.lobby.crew_books.crew_books_buy_dialog.CrewBooksBuyDialog(), CrewBooksBuyDialogModel)
+        settings.parent = parent
+        super(CrewBooksBuyDialog, self).__init__(settings)
         self.__bookGuiItem = self.__itemsCache.items.getItemByCD(crewBookCD)
         self.__blur = WGUIBackgroundBlurSupportImpl()
         blurLayers = [APP_CONTAINERS_NAMES.VIEWS, APP_CONTAINERS_NAMES.SUBVIEW, APP_CONTAINERS_NAMES.BROWSER]
@@ -57,7 +63,7 @@ class CrewBooksBuyDialog(Window):
             vm.setBookIcon(R.images.gui.maps.icons.crewBooks.books.large.dyn(getIconResourceName(self.__bookGuiItem.icon))())
             vm.setBookTitle(self.__bookGuiItem.getName())
             bookDescriptionFmtArgs = vm.getBookDescriptionFmtArgs()
-            bookDescriptionFmtArgs.addViewModel(UserFormatStringArgModel(BigWorld.wg_getIntegralFormat(self.__bookGuiItem.getXP()), 'exp', R.styles.VehicleStatusCriticalSmallTextStyle()))
+            bookDescriptionFmtArgs.addViewModel(UserFormatStringArgModel(self.__gui.systemLocale.getNumberFormat(self.__bookGuiItem.getXP()), 'exp', R.styles.VehicleStatusCriticalSmallTextStyle()))
             vm.setBookDescription(R.strings.crew_books.screen.bookType.dyn(self.__bookGuiItem.getBookSpread()).info.title())
             bookDescriptionFmtArgs.invalidate()
             self.__updateVMsInActionPriceList()
@@ -102,7 +108,7 @@ class CrewBooksBuyDialog(Window):
         self.viewModel.setIsBuyEnable(priceVM.getIsEnough())
         listArray.invalidate()
 
-    @process
+    @adisp.process
     def __onBuyBtnClick(self):
         self.viewModel.setIsBuyEnable(False)
         mayPurchase = True
@@ -112,17 +118,21 @@ class CrewBooksBuyDialog(Window):
             if playerMoney.get(requiredCurrency) < self.purchasePrice.price.get(requiredCurrency):
                 mayPurchase, _ = yield DialogsInterface.showDialog(ExchangeCreditsSingleItemModalMeta(self.__bookGuiItem.intCD, count=self.__bookCount))
         if mayPurchase:
-            result = yield ModuleBuyer(self.__bookGuiItem, self.__bookCount, requiredCurrency).request()
-            if result.userMsg:
-                SystemMessages.pushI18nMessage(result.userMsg, type=result.sysMsgType)
-            if result.success:
-                if self.windowStatus != WindowStatus.LOADED:
-                    return
-                self.__result = DialogButtons.SUBMIT
-                self.viewModel.setBuyComplete(True)
+            self.__executeBuy(requiredCurrency)
         if self.windowStatus != WindowStatus.LOADED:
             return
         self.__updateVMsInActionPriceList()
+
+    @process('buyItem')
+    def __executeBuy(self, requiredCurrency):
+        result = yield ModuleBuyer(self.__bookGuiItem, self.__bookCount, requiredCurrency).request()
+        if result.userMsg:
+            SystemMessages.pushI18nMessage(result.userMsg, type=result.sysMsgType)
+        if result.success:
+            if self.windowStatus != WindowStatus.LOADED:
+                return
+            self.__result = DialogButtons.SUBMIT
+            self.viewModel.setBuyComplete(True)
 
     def __onClosed(self, _=None):
         if self.__result is None:

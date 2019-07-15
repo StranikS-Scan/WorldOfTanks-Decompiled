@@ -86,7 +86,7 @@
     <customizationSlots>
       <slot>
         <slotType>	clan	</slotType>
-        <slotId>	1	</slotId>
+        <slotId>	10000	</slotId>
         <rayStart>	0.278515 0.163175 2.34593	</rayStart>
         <rayEnd>	0.24011 -0.0285594 2.30394	</rayEnd>
         <rayUp>	0.000000 0.000000 -1	</rayUp>
@@ -95,8 +95,20 @@
         <isUVProportional>	true	</isUVProportional>
       </slot>
       <slot>
+        <slotType>	paint	</slotType>
+        <slotId>	11000	</slotId>
+        <anchorPosition>	0.00377242 0.506322 -2.83161	</anchorPosition>
+        <anchorDirection>	0.000000 0.545709 -0.837975	</anchorDirection>
+      </slot>
+      <slot>
+        <slotType>	camouflage	</slotType>
+        <slotId>	12000	</slotId>
+        <anchorPosition>	0.000114534 0.506663 -2.83142	</anchorPosition>
+        <anchorDirection>	0.000000 0.545663 -0.838004	</anchorDirection>
+      </slot>
+      <slot>
         <slotType>	inscription	</slotType>
-        <slotId>	36	</slotId>
+        <slotId>	14000	</slotId>
         <rayStart>	-1.965 -0.212265 -0.454414	</rayStart>
         <rayEnd>	-1.765 -0.212265 -0.454414	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
@@ -106,7 +118,7 @@
       </slot>
       <slot>
         <slotType>	inscription	</slotType>
-        <slotId>	37	</slotId>
+        <slotId>	14001	</slotId>
         <rayStart>	1.965 -0.212265 -0.454414	</rayStart>
         <rayEnd>	1.765 -0.212265 -0.454414	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
@@ -116,754 +128,1056 @@
       </slot>
       <slot>
         <slotType>	projectionDecal	</slotType>
-        <slotId>	68	</slotId>
-        <tags>	formfactor_any deny_formfactor_rect1x2 deny_formfactor_rect1x3 deny_formfactor_rect1x4 deny_formfactor_rect1x6	</tags>
-        <position>	-0.0026316 1.32155 2.65465	</position>
-        <rotation>	0.482465 -0.000035 3.14155	</rotation>
-        <scale>	1.08386 1.02784 1.08384	</scale>
-        <doubleSided>	false	</doubleSided>
-        <showOn>	16	</showOn>
-        <clipAngle>	0.791534	</clipAngle>
-        <anchorPosition>	-0.00263749 0.0681724 2.55095	</anchorPosition>
-        <anchorDirection>	0.000026 0.885854 0.463964	</anchorDirection>
-      </slot>
-      <slot>
-        <slotType>	projectionDecal	</slotType>
-        <slotId>	69	</slotId>
-        <tags>	formfactor_any deny_formfactor_rect1x2 deny_formfactor_rect1x3 deny_formfactor_rect1x4 deny_formfactor_rect1x6 direction_left_to_right	</tags>
-        <position>	2.40935 1.0191 -0.138187	</position>
-        <rotation>	1.47716 1.47759 3.0479	</rotation>
+        <slotId>	15000	</slotId>
+        <tags>	formfactor_square direction_left_to_right	</tags>
+        <position>	2.40934 1.01912 -0.13817	</position>
+        <rotation>	1.47715 1.4776 3.04791	</rotation>
         <scale>	1.35021 1.35021 1.3502	</scale>
         <doubleSided>	false	</doubleSided>
         <showOn>	16	</showOn>
         <clipAngle>	0.951068	</clipAngle>
-        <anchorPosition>	1.90592 -0.0833469 -0.137736	</anchorPosition>
-        <anchorDirection>	0.995657 0.0930898 -0.00089252	</anchorDirection>
+        <anchorPosition>	1.90592 -0.0833313 -0.137719	</anchorPosition>
+        <anchorDirection>	0.995656 0.0931003 -0.000892133	</anchorDirection>
       </slot>
       <slot>
         <slotType>	projectionDecal	</slotType>
-        <slotId>	70	</slotId>
-        <tags>	formfactor_any deny_formfactor_rect1x2 deny_formfactor_rect1x3 deny_formfactor_rect1x4 deny_formfactor_rect1x6 direction_right_to_left	</tags>
-        <position>	-2.30967 0.972344 -0.129872	</position>
-        <rotation>	1.59395 0.930616 -0.635805	</rotation>
-        <scale>	1.35021 1.35021 1.3502	</scale>
+        <slotId>	15001	</slotId>
+        <tags>	direction_right_to_left formfactor_rect1x2	</tags>
+        <position>	-2.01227 0.905464 1.17195	</position>
+        <rotation>	1.56878 0.926887 -0.63917	</rotation>
+        <scale>	1.72775 0.499999 1.72774	</scale>
         <doubleSided>	false	</doubleSided>
         <showOn>	16	</showOn>
         <clipAngle>	1.0472	</clipAngle>
-        <anchorPosition>	-1.8958 -0.0907443 -0.128116	</anchorPosition>
-        <anchorDirection>	-0.999817 0.018626 -0.004242	</anchorDirection>
-      </slot>
-      <slot>
-        <slotType>	paint	</slotType>
-        <slotId>	2	</slotId>
-        <anchorPosition>	0.00377242 0.506322 -2.83161	</anchorPosition>
-        <anchorDirection>	0.000000 0.545709 -0.837975	</anchorDirection>
-      </slot>
-      <slot>
-        <slotType>	camouflage	</slotType>
-        <slotId>	3	</slotId>
-        <anchorPosition>	0.000114534 0.506663 -2.83142	</anchorPosition>
-        <anchorDirection>	0.000000 0.545663 -0.838004	</anchorDirection>
+        <anchorPosition>	-1.89846 -0.14973 1.1725	</anchorPosition>
+        <anchorDirection>	-0.999987 -0.00161579 -0.00482938	</anchorDirection>
       </slot>
       <slot>
         <slotType>	projectionDecal	</slotType>
-        <slotId>	71	</slotId>
+        <slotId>	15002	</slotId>
         <tags>	formfactor_square direction_left_to_right	</tags>
-        <parentSlotId>	69	</parentSlotId>
-        <position>	0.738789 2.00779 0.0831197	</position>
-        <rotation>	0.650114 1.10588 3.13351	</rotation>
-        <scale>	1.1012 1.1012 1.10119	</scale>
-        <doubleSided>	false	</doubleSided>
-        <showOn>	256	</showOn>
-        <clipAngle>	0.951068	</clipAngle>
-        <anchorPosition>	0.767917 0.994982 0.0972463	</anchorPosition>
-        <anchorDirection>	0.544638 0.795989 0.264141	</anchorDirection>
-      </slot>
-      <slot>
-        <slotType>	projectionDecal	</slotType>
-        <slotId>	72	</slotId>
-        <tags>	formfactor_square direction_left_to_right	</tags>
-        <parentSlotId>	69	</parentSlotId>
-        <position>	1.84973 0.880375 0.850734	</position>
-        <rotation>	1.55724 0.997667 2.56827	</rotation>
-        <scale>	0.923342 0.923339 0.923329	</scale>
+        <position>	1.84973 0.88039 0.850751	</position>
+        <rotation>	1.55718 0.997961 2.56857	</rotation>
+        <scale>	0.92334 0.923338 0.923328	</scale>
         <doubleSided>	false	</doubleSided>
         <showOn>	16	</showOn>
         <clipAngle>	0.951068	</clipAngle>
-        <anchorPosition>	1.88321 -0.174623 0.850726	</anchorPosition>
-        <anchorDirection>	0.999935 0.0113603 -0.000229686	</anchorDirection>
+        <anchorPosition>	1.88321 -0.174605 0.850743	</anchorPosition>
+        <anchorDirection>	0.999934 0.01144 -0.000234008	</anchorDirection>
       </slot>
       <slot>
         <slotType>	projectionDecal	</slotType>
-        <slotId>	73	</slotId>
+        <slotId>	15003	</slotId>
         <tags>	formfactor_square direction_right_to_left	</tags>
-        <parentSlotId>	70	</parentSlotId>
-        <position>	-0.894281 2.23283 -0.0835773	</position>
-        <rotation>	0.555039 -1.2163 -3.11867	</rotation>
-        <scale>	1.03412 1.03412 1.03412	</scale>
-        <doubleSided>	false	</doubleSided>
-        <showOn>	256	</showOn>
-        <clipAngle>	0.668816	</clipAngle>
-        <anchorPosition>	-0.801318 1.02012 -0.11346	</anchorPosition>
-        <anchorDirection>	-0.502036 0.849657 0.161379	</anchorDirection>
-      </slot>
-      <slot>
-        <slotType>	projectionDecal	</slotType>
-        <slotId>	74	</slotId>
-        <tags>	formfactor_square direction_right_to_left	</tags>
-        <parentSlotId>	70	</parentSlotId>
-        <position>	-2.21627 0.924553 0.855914	</position>
-        <rotation>	1.61614 1.25856 -0.30803	</rotation>
-        <scale>	0.923339 0.923338 0.923328	</scale>
+        <position>	-2.21627 0.924533 0.855934	</position>
+        <rotation>	1.61614 1.25851 -0.308101	</rotation>
+        <scale>	0.923338 0.923337 0.923327	</scale>
         <doubleSided>	false	</doubleSided>
         <showOn>	16	</showOn>
         <clipAngle>	0.668816	</clipAngle>
-        <anchorPosition>	-1.8668 -0.145935 0.857279	</anchorPosition>
-        <anchorDirection>	-0.999059 0.0431968 -0.00390387	</anchorDirection>
+        <anchorPosition>	-1.8668 -0.145955 0.857293	</anchorPosition>
+        <anchorDirection>	-0.999059 0.0431958 -0.00388521	</anchorDirection>
       </slot>
       <slot>
         <slotType>	projectionDecal	</slotType>
-        <slotId>	75	</slotId>
+        <slotId>	15004	</slotId>
         <tags>	formfactor_square direction_left_to_right	</tags>
-        <parentSlotId>	69	</parentSlotId>
-        <position>	1.84982 0.885002 1.48475	</position>
-        <rotation>	1.55724 0.997667 2.56827	</rotation>
-        <scale>	0.923342 0.923339 0.923329	</scale>
+        <position>	1.84982 0.885017 1.48477	</position>
+        <rotation>	1.55718 0.997961 2.56857	</rotation>
+        <scale>	0.92334 0.923338 0.923328	</scale>
         <doubleSided>	false	</doubleSided>
         <showOn>	16	</showOn>
         <clipAngle>	0.951068	</clipAngle>
-        <anchorPosition>	1.8833 -0.169996 1.48474	</anchorPosition>
-        <anchorDirection>	0.999935 0.0113603 -0.000229686	</anchorDirection>
+        <anchorPosition>	1.8833 -0.169978 1.48476	</anchorPosition>
+        <anchorDirection>	0.999934 0.01144 -0.000234008	</anchorDirection>
       </slot>
       <slot>
         <slotType>	projectionDecal	</slotType>
-        <slotId>	76	</slotId>
+        <slotId>	15005	</slotId>
         <tags>	formfactor_square direction_left_to_right	</tags>
-        <parentSlotId>	69	</parentSlotId>
-        <position>	1.84991 0.889525 2.10453	</position>
-        <rotation>	1.55726 0.997684 2.56829	</rotation>
-        <scale>	0.923341 0.923339 0.92333	</scale>
-        <doubleSided>	false	</doubleSided>
-        <showOn>	16	</showOn>
-        <clipAngle>	0.951068	</clipAngle>
-        <anchorPosition>	1.88339 -0.165473 2.10452	</anchorPosition>
-        <anchorDirection>	0.999935 0.0113566 -0.000230133	</anchorDirection>
-      </slot>
-      <slot>
-        <slotType>	projectionDecal	</slotType>
-        <slotId>	77	</slotId>
-        <tags>	formfactor_square direction_left_to_right	</tags>
-        <parentSlotId>	69	</parentSlotId>
-        <position>	2.21937 0.898642 2.78138	</position>
-        <rotation>	1.55715 0.997669 2.56828	</rotation>
+        <position>	1.84991 0.88954 2.10455	</position>
+        <rotation>	1.55716 0.998021 2.56863	</rotation>
         <scale>	0.92334 0.923338 0.923329	</scale>
         <doubleSided>	false	</doubleSided>
         <showOn>	16	</showOn>
         <clipAngle>	0.951068	</clipAngle>
-        <anchorPosition>	1.87936 -0.160628 2.78145	</anchorPosition>
-        <anchorDirection>	0.999934 0.0114453 -0.000208557	</anchorDirection>
+        <anchorPosition>	1.88339 -0.165455 2.10454	</anchorPosition>
+        <anchorDirection>	0.999934 0.011455 -0.000233352	</anchorDirection>
       </slot>
       <slot>
         <slotType>	projectionDecal	</slotType>
-        <slotId>	78	</slotId>
+        <slotId>	15006	</slotId>
         <tags>	formfactor_square direction_left_to_right	</tags>
-        <parentSlotId>	69	</parentSlotId>
-        <position>	1.84945 0.866087 -1.10687	</position>
-        <rotation>	1.55726 0.997655 2.56828	</rotation>
-        <scale>	0.923341 0.923338 0.923329	</scale>
+        <position>	1.84945 0.866103 -1.10685	</position>
+        <rotation>	1.55717 0.997975 2.56861	</rotation>
+        <scale>	0.92334 0.923337 0.923328	</scale>
         <doubleSided>	false	</doubleSided>
         <showOn>	16	</showOn>
         <clipAngle>	0.951068	</clipAngle>
-        <anchorPosition>	1.88293 -0.18891 -1.10688	</anchorPosition>
-        <anchorDirection>	0.999935 0.0113751 -0.000218451	</anchorDirection>
+        <anchorPosition>	1.88293 -0.188892 -1.10686	</anchorPosition>
+        <anchorDirection>	0.999934 0.0114477 -0.000206172	</anchorDirection>
       </slot>
       <slot>
         <slotType>	projectionDecal	</slotType>
-        <slotId>	79	</slotId>
+        <slotId>	15007	</slotId>
         <tags>	formfactor_square direction_left_to_right	</tags>
-        <parentSlotId>	69	</parentSlotId>
-        <position>	1.84935 0.86128 -1.76554	</position>
-        <rotation>	1.55732 0.997664 2.56829	</rotation>
-        <scale>	0.923341 0.923339 0.92333	</scale>
+        <position>	1.84935 0.861296 -1.76552	</position>
+        <rotation>	1.55725 0.997935 2.56859	</rotation>
+        <scale>	0.923339 0.923338 0.923328	</scale>
         <doubleSided>	false	</doubleSided>
         <showOn>	16	</showOn>
         <clipAngle>	0.951068	</clipAngle>
-        <anchorPosition>	1.88283 -0.19372 -1.76555	</anchorPosition>
-        <anchorDirection>	0.999936 0.0113049 -0.000217408	</anchorDirection>
+        <anchorPosition>	1.88283 -0.193701 -1.76553	</anchorPosition>
+        <anchorDirection>	0.999935 0.0113848 -0.000185549	</anchorDirection>
       </slot>
       <slot>
         <slotType>	projectionDecal	</slotType>
-        <slotId>	80	</slotId>
+        <slotId>	15008	</slotId>
         <tags>	formfactor_square direction_left_to_right	</tags>
-        <parentSlotId>	69	</parentSlotId>
-        <position>	2.20696 0.87915 -2.3913	</position>
-        <rotation>	1.55719 0.997707 2.56832	</rotation>
-        <scale>	0.923338 0.923338 0.923328	</scale>
+        <position>	2.20695 0.879169 -2.39128	</position>
+        <rotation>	1.55712 0.998028 2.56865	</rotation>
+        <scale>	0.923337 0.923337 0.923327	</scale>
         <doubleSided>	false	</doubleSided>
         <showOn>	16	</showOn>
         <clipAngle>	0.951068	</clipAngle>
-        <anchorPosition>	1.85879 -0.180208 -2.39122	</anchorPosition>
-        <anchorDirection>	0.999934 0.0114308 -0.000225782	</anchorDirection>
+        <anchorPosition>	1.875 -0.180023 -2.39121	</anchorPosition>
+        <anchorDirection>	0.999934 0.0114882 -0.000222862	</anchorDirection>
       </slot>
       <slot>
         <slotType>	projectionDecal	</slotType>
-        <slotId>	81	</slotId>
-        <tags>	formfactor_square direction_left_to_right	</tags>
-        <parentSlotId>	69	</parentSlotId>
-        <position>	1.84895 0.870582 -3.06301	</position>
-        <rotation>	1.55722 0.997725 2.56833	</rotation>
-        <scale>	0.92334 0.923339 0.923329	</scale>
-        <doubleSided>	false	</doubleSided>
-        <showOn>	16	</showOn>
-        <clipAngle>	0.951068	</clipAngle>
-        <anchorPosition>	1.88243 -0.184414 -3.06302	</anchorPosition>
-        <anchorDirection>	0.999935 0.0113977 -0.000235468	</anchorDirection>
-      </slot>
-      <slot>
-        <slotType>	projectionDecal	</slotType>
-        <slotId>	82	</slotId>
+        <slotId>	15009	</slotId>
         <tags>	formfactor_square direction_right_to_left	</tags>
-        <parentSlotId>	70	</parentSlotId>
-        <position>	-2.24369 0.923424 1.48097	</position>
-        <rotation>	1.61613 1.25855 -0.308017	</rotation>
-        <scale>	0.923338 0.923338 0.923328	</scale>
-        <doubleSided>	false	</doubleSided>
-        <showOn>	16	</showOn>
-        <clipAngle>	0.668815	</clipAngle>
-        <anchorPosition>	-1.89238 -0.14714 1.48235	</anchorPosition>
-        <anchorDirection>	-0.999059 0.0431868 -0.00392476	</anchorDirection>
-      </slot>
-      <slot>
-        <slotType>	projectionDecal	</slotType>
-        <slotId>	83	</slotId>
-        <tags>	formfactor_square direction_right_to_left	</tags>
-        <parentSlotId>	70	</parentSlotId>
-        <position>	-1.92692 0.900375 2.15392	</position>
-        <rotation>	1.61613 1.25855 -0.30802	</rotation>
-        <scale>	0.923339 0.923339 0.923329	</scale>
-        <doubleSided>	false	</doubleSided>
-        <showOn>	16	</showOn>
-        <clipAngle>	0.668815	</clipAngle>
-        <anchorPosition>	-1.88067 -0.157002 2.1541	</anchorPosition>
-        <anchorDirection>	-0.999059 0.0431867 -0.0039269	</anchorDirection>
-      </slot>
-      <slot>
-        <slotType>	projectionDecal	</slotType>
-        <slotId>	84	</slotId>
-        <tags>	formfactor_square direction_right_to_left	</tags>
-        <parentSlotId>	70	</parentSlotId>
-        <position>	-2.25531 0.911915 2.80641	</position>
-        <rotation>	1.61617 1.25855 -0.308016	</rotation>
-        <scale>	0.923338 0.923338 0.923327	</scale>
-        <doubleSided>	false	</doubleSided>
-        <showOn>	16	</showOn>
-        <clipAngle>	0.668815	</clipAngle>
-        <anchorPosition>	-1.87221 -0.160038 2.80792	</anchorPosition>
-        <anchorDirection>	-0.999058 0.0432245 -0.00393113	</anchorDirection>
-      </slot>
-      <slot>
-        <slotType>	projectionDecal	</slotType>
-        <slotId>	85	</slotId>
-        <tags>	formfactor_square direction_right_to_left	</tags>
-        <parentSlotId>	70	</parentSlotId>
-        <position>	-1.91408 0.899103 -1.1239	</position>
-        <rotation>	1.61614 1.25856 -0.308007	</rotation>
-        <scale>	0.923339 0.923339 0.923329	</scale>
-        <doubleSided>	false	</doubleSided>
-        <showOn>	16	</showOn>
-        <clipAngle>	0.668815	</clipAngle>
-        <anchorPosition>	-1.86783 -0.158275 -1.12372	</anchorPosition>
-        <anchorDirection>	-0.999059 0.0431957 -0.0039233	</anchorDirection>
-      </slot>
-      <slot>
-        <slotType>	projectionDecal	</slotType>
-        <slotId>	86	</slotId>
-        <tags>	formfactor_square direction_right_to_left	</tags>
-        <parentSlotId>	70	</parentSlotId>
-        <position>	-1.9124 0.880145 -1.75831	</position>
-        <rotation>	1.61613 1.25855 -0.30802	</rotation>
-        <scale>	0.923339 0.923339 0.923329	</scale>
-        <doubleSided>	false	</doubleSided>
-        <showOn>	16	</showOn>
-        <clipAngle>	0.668815	</clipAngle>
-        <anchorPosition>	-1.86616 -0.177232 -1.75813	</anchorPosition>
-        <anchorDirection>	-0.999059 0.0431867 -0.0039269	</anchorDirection>
-      </slot>
-      <slot>
-        <slotType>	projectionDecal	</slotType>
-        <slotId>	87	</slotId>
-        <tags>	formfactor_square direction_right_to_left	</tags>
-        <parentSlotId>	70	</parentSlotId>
-        <position>	-1.90999 0.879521 -2.37966	</position>
-        <rotation>	1.61613 1.25855 -0.308012	</rotation>
-        <scale>	0.923339 0.923339 0.923329	</scale>
-        <doubleSided>	false	</doubleSided>
-        <showOn>	16	</showOn>
-        <clipAngle>	0.668815	</clipAngle>
-        <anchorPosition>	-1.86374 -0.177857 -2.37948	</anchorPosition>
-        <anchorDirection>	-0.999059 0.0431884 -0.0039252	</anchorDirection>
-      </slot>
-      <slot>
-        <slotType>	projectionDecal	</slotType>
-        <slotId>	88	</slotId>
-        <tags>	formfactor_square direction_right_to_left	</tags>
-        <parentSlotId>	70	</parentSlotId>
-        <position>	-2.22251 0.912043 -3.05109	</position>
-        <rotation>	1.61616 1.25858 -0.308011	</rotation>
+        <position>	-2.24369 0.923404 1.48099	</position>
+        <rotation>	1.61613 1.2585 -0.308082	</rotation>
         <scale>	0.923337 0.923337 0.923327	</scale>
         <doubleSided>	false	</doubleSided>
         <showOn>	16	</showOn>
         <clipAngle>	0.668815	</clipAngle>
-        <anchorPosition>	-1.88115 -0.158101 -3.04976	</anchorPosition>
-        <anchorDirection>	-0.999058 0.0432157 -0.00389999	</anchorDirection>
+        <anchorPosition>	-1.89238 -0.14716 1.48237	</anchorPosition>
+        <anchorDirection>	-0.999059 0.0431859 -0.0039162	</anchorDirection>
       </slot>
       <slot>
         <slotType>	projectionDecal	</slotType>
-        <slotId>	89	</slotId>
-        <tags>	formfactor_square	</tags>
-        <parentSlotId>	68	</parentSlotId>
-        <position>	-0.00266751 0.490208 2.82341	</position>
-        <rotation>	0.605744 3.14159 0.000044	</rotation>
-        <scale>	1.20401 1.14179 1.20399	</scale>
+        <slotId>	15010	</slotId>
+        <tags>	formfactor_square direction_right_to_left	</tags>
+        <position>	-1.92692 0.900358 2.15394	</position>
+        <rotation>	1.61614 1.25849 -0.308082	</rotation>
+        <scale>	0.923338 0.923339 0.923329	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.668815	</clipAngle>
+        <anchorPosition>	-1.88067 -0.15702 2.15412	</anchorPosition>
+        <anchorDirection>	-0.999059 0.0431946 -0.00392359	</anchorDirection>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15011	</slotId>
+        <tags>	formfactor_square direction_right_to_left	</tags>
+        <position>	-1.91408 0.899087 -1.12388	</position>
+        <rotation>	1.61614 1.2585 -0.308067	</rotation>
+        <scale>	0.923338 0.923338 0.923328	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.668815	</clipAngle>
+        <anchorPosition>	-1.86783 -0.158291 -1.1237	</anchorPosition>
+        <anchorDirection>	-0.999059 0.0431961 -0.00393122	</anchorDirection>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15012	</slotId>
+        <tags>	formfactor_square direction_right_to_left	</tags>
+        <position>	-1.9124 0.880128 -1.75829	</position>
+        <rotation>	1.61614 1.25849 -0.308079	</rotation>
+        <scale>	0.923339 0.923339 0.923329	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.668815	</clipAngle>
+        <anchorPosition>	-1.86616 -0.177249 -1.75811	</anchorPosition>
+        <anchorDirection>	-0.999059 0.0431948 -0.00392839	</anchorDirection>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15013	</slotId>
+        <tags>	formfactor_square direction_right_to_left	</tags>
+        <position>	-1.90999 0.879504 -2.37964	</position>
+        <rotation>	1.61614 1.25849 -0.308079	</rotation>
+        <scale>	0.923339 0.923339 0.923328	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.668815	</clipAngle>
+        <anchorPosition>	-1.87499 -0.177387 -2.3795	</anchorPosition>
+        <anchorDirection>	-0.999059 0.0431948 -0.00392839	</anchorDirection>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15014	</slotId>
+        <tags>	formfactor_rect1x4	</tags>
+        <position>	-0.00265904 0.700784 2.85499	</position>
+        <rotation>	0.605744 3.14158 0.000034	</rotation>
+        <scale>	1.59447 0.326252 1.59445	</scale>
         <doubleSided>	false	</doubleSided>
         <showOn>	16	</showOn>
         <clipAngle>	0.791534	</clipAngle>
-        <anchorPosition>	-0.00265735 -0.381415 2.69614	</anchorPosition>
-        <anchorDirection>	-0.000045 -0.822079 0.569374	</anchorDirection>
+        <anchorPosition>	-0.00265601 -0.294155 2.81313	</anchorPosition>
+        <anchorDirection>	-0.000041 -0.822079 0.569374	</anchorDirection>
       </slot>
       <slot>
         <slotType>	projectionDecal	</slotType>
-        <slotId>	90	</slotId>
-        <tags>	formfactor_rect1x2 preferred_formfactor_rect1x2	</tags>
-        <parentSlotId>	68	</parentSlotId>
-        <position>	0.000019 1.60382 2.5532	</position>
-        <rotation>	0.190558 -0.000023 3.14155	</rotation>
-        <scale>	1.75415 1.66347 1.7541	</scale>
+        <slotId>	15015	</slotId>
+        <tags>	formfactor_rect1x3	</tags>
+        <position>	0.000010 1.45004 2.4602	</position>
+        <rotation>	0.190558 -0.000021 3.14156	</rotation>
+        <scale>	3.71587 0.999992 3.71578	</scale>
         <doubleSided>	false	</doubleSided>
         <showOn>	16	</showOn>
         <clipAngle>	0.000000	</clipAngle>
-        <anchorPosition>	0.000001 0.0793419 2.46271	</anchorPosition>
-        <anchorDirection>	0.000038 0.981899 0.189407	</anchorDirection>
+        <anchorPosition>	0.000003 0.148177 2.41265	</anchorPosition>
+        <anchorDirection>	0.000029 0.981899 0.189407	</anchorDirection>
       </slot>
       <slot>
         <slotType>	projectionDecal	</slotType>
-        <slotId>	91	</slotId>
-        <tags>	formfactor_rect1x3 preferred_formfactor_rect1x3	</tags>
-        <parentSlotId>	68	</parentSlotId>
-        <position>	0.000010 1.35558 2.44818	</position>
-        <rotation>	0.190557 -0.000023 3.14155	</rotation>
+        <slotId>	15016	</slotId>
+        <tags>	formfactor_rect1x3	</tags>
+        <position>	0.000006 1.35558 2.4482	</position>
+        <rotation>	0.190557 -0.000021 3.14156	</rotation>
         <scale>	1.75429 1.66361 1.75424	</scale>
         <doubleSided>	false	</doubleSided>
         <showOn>	16	</showOn>
         <clipAngle>	0.000000	</clipAngle>
-        <anchorPosition>	0.000001 0.0807285 2.40584	</anchorPosition>
-        <anchorDirection>	0.000038 0.981899 0.189406	</anchorDirection>
+        <anchorPosition>	0.000000 0.110889 2.41168	</anchorPosition>
+        <anchorDirection>	0.000029 0.981899 0.189406	</anchorDirection>
       </slot>
       <slot>
         <slotType>	projectionDecal	</slotType>
-        <slotId>	92	</slotId>
-        <tags>	formfactor_rect1x3 direction_left_to_right preferred_formfactor_rect1x3	</tags>
-        <parentSlotId>	69	</parentSlotId>
-        <position>	2.98917 0.867901 -0.126776	</position>
-        <rotation>	1.56918 0.461683 2.03233	</rotation>
+        <slotId>	15017	</slotId>
+        <tags>	formfactor_rect1x3 direction_left_to_right	</tags>
+        <position>	2.98917 0.867926 -0.126759	</position>
+        <rotation>	1.56914 0.46629 2.03702	</rotation>
         <scale>	2.35292 2.35293 2.35291	</scale>
         <doubleSided>	false	</doubleSided>
         <showOn>	16	</showOn>
         <clipAngle>	0.951068	</clipAngle>
-        <anchorPosition>	1.87044 -0.188207 -0.126629	</anchorPosition>
-        <anchorDirection>	1 0.000652492 -0.000131547	</anchorDirection>
+        <anchorPosition>	1.87044 -0.188266 -0.126694	</anchorPosition>
+        <anchorDirection>	1 0.000727892 -0.000058	</anchorDirection>
       </slot>
       <slot>
         <slotType>	projectionDecal	</slotType>
-        <slotId>	93	</slotId>
+        <slotId>	15018	</slotId>
         <tags>	formfactor_rect1x3 direction_left_to_right	</tags>
-        <parentSlotId>	69	</parentSlotId>
-        <position>	2.97469 0.862465 1.82265	</position>
-        <rotation>	1.56988 -0.9408 0.631388	</rotation>
+        <position>	2.97469 0.86249 1.82267	</position>
+        <rotation>	1.57002 -0.934088 0.637693	</rotation>
         <scale>	2.35292 2.35293 2.3529	</scale>
         <doubleSided>	false	</doubleSided>
         <showOn>	16	</showOn>
         <clipAngle>	0.951068	</clipAngle>
-        <anchorPosition>	1.88737 -0.192235 1.82079	</anchorPosition>
-        <anchorDirection>	0.999998 -0.000623405 0.0017142	</anchorDirection>
+        <anchorPosition>	1.88737 -0.19209 1.82164	</anchorPosition>
+        <anchorDirection>	0.999999 -0.000733912 0.00094977	</anchorDirection>
       </slot>
       <slot>
         <slotType>	projectionDecal	</slotType>
-        <slotId>	94	</slotId>
+        <slotId>	15019	</slotId>
         <tags>	formfactor_rect1x3 direction_left_to_right	</tags>
-        <parentSlotId>	69	</parentSlotId>
-        <position>	2.80097 0.85389 -2.07211	</position>
-        <rotation>	1.5702 -0.518425 1.08694	</rotation>
+        <position>	2.80096 0.853914 -2.07209	</position>
+        <rotation>	1.57031 -0.50717 1.09784	</rotation>
         <scale>	2.35292 2.35293 2.3529	</scale>
         <doubleSided>	false	</doubleSided>
         <showOn>	16	</showOn>
         <clipAngle>	0.951068	</clipAngle>
-        <anchorPosition>	1.88549 -0.201194 -2.10391	</anchorPosition>
-        <anchorDirection>	0.999397 -0.000321209 0.034719	</anchorDirection>
+        <anchorPosition>	1.88545 -0.20126 -2.10321	</anchorPosition>
+        <anchorDirection>	0.999423 -0.000222445 0.0339684	</anchorDirection>
       </slot>
       <slot>
         <slotType>	projectionDecal	</slotType>
-        <slotId>	95	</slotId>
-        <tags>	formfactor_rect1x4 direction_left_to_right preferred_formfactor_rect1x4	</tags>
-        <parentSlotId>	69	</parentSlotId>
-        <position>	3.26853 0.852092 -0.121222	</position>
-        <rotation>	1.56995 0.374432 1.94913	</rotation>
-        <scale>	2.91466 2.91466 2.91463	</scale>
-        <doubleSided>	false	</doubleSided>
-        <showOn>	16	</showOn>
-        <clipAngle>	0.951068	</clipAngle>
-        <anchorPosition>	1.85264 -0.203729 -0.12685	</anchorPosition>
-        <anchorDirection>	0.999992 0.000312567 0.00397453	</anchorDirection>
-      </slot>
-      <slot>
-        <slotType>	projectionDecal	</slotType>
-        <slotId>	96	</slotId>
+        <slotId>	15020	</slotId>
         <tags>	formfactor_rect1x4 direction_left_to_right	</tags>
-        <parentSlotId>	69	</parentSlotId>
-        <position>	3.17003 0.856682 1.64178	</position>
-        <rotation>	1.57002 0.426615 1.99557	</rotation>
-        <scale>	2.91467 2.91467 2.91463	</scale>
+        <position>	3.26852 0.885933 -0.121234	</position>
+        <rotation>	1.56955 0.382422 1.95677	</rotation>
+        <scale>	3.82762 3.82762 3.82758	</scale>
         <doubleSided>	false	</doubleSided>
         <showOn>	16	</showOn>
         <clipAngle>	0.951068	</clipAngle>
-        <anchorPosition>	1.88049 -0.199063 1.64397	</anchorPosition>
-        <anchorDirection>	0.999999 0.000284642 -0.0016993	</anchorDirection>
+        <anchorPosition>	1.87499 -0.170073 -0.126044	</anchorPosition>
+        <anchorDirection>	0.999994 0.000450313 0.00345185	</anchorDirection>
       </slot>
       <slot>
         <slotType>	projectionDecal	</slotType>
-        <slotId>	97	</slotId>
-        <tags>	formfactor_rect1x6 direction_left_to_right preferred_formfactor_rect1x6	</tags>
-        <parentSlotId>	69	</parentSlotId>
-        <position>	3.98524 0.856576 -0.120726	</position>
-        <rotation>	1.56942 0.00123435 1.57612	</rotation>
-        <scale>	4.51919 4.51919 4.51915	</scale>
-        <doubleSided>	false	</doubleSided>
-        <showOn>	16	</showOn>
-        <clipAngle>	0.951068	</clipAngle>
-        <anchorPosition>	1.86416 -0.198818 -0.129241	</anchorPosition>
-        <anchorDirection>	0.999992 0.000007 0.00401443	</anchorDirection>
-      </slot>
-      <slot>
-        <slotType>	projectionDecal	</slotType>
-        <slotId>	98	</slotId>
-        <tags>	formfactor_rect1x2 direction_left_to_right preferred_formfactor_rect1x2	</tags>
-        <parentSlotId>	69	</parentSlotId>
-        <position>	0.786644 1.98038 0.0670176	</position>
-        <rotation>	0.414878 1.10794 3.13456	</rotation>
-        <scale>	1.30412 1.30412 1.30411	</scale>
-        <doubleSided>	false	</doubleSided>
-        <showOn>	256	</showOn>
-        <clipAngle>	0.951068	</clipAngle>
-        <anchorPosition>	0.8061 0.973945 0.0763063	</anchorPosition>
-        <anchorDirection>	0.363798 0.915143 0.17368	</anchorDirection>
-      </slot>
-      <slot>
-        <slotType>	projectionDecal	</slotType>
-        <slotId>	99	</slotId>
-        <tags>	formfactor_rect1x3 direction_left_to_right	</tags>
-        <parentSlotId>	69	</parentSlotId>
-        <position>	0.764273 1.98127 0.110734	</position>
-        <rotation>	0.441587 1.17393 -3.10172	</rotation>
-        <scale>	1.54568 1.54567 1.54567	</scale>
-        <doubleSided>	false	</doubleSided>
-        <showOn>	256	</showOn>
-        <clipAngle>	0.951068	</clipAngle>
-        <anchorPosition>	0.784512 0.9742 0.121527	</anchorPosition>
-        <anchorDirection>	0.378437 0.903356 0.201826	</anchorDirection>
-      </slot>
-      <slot>
-        <slotType>	projectionDecal	</slotType>
-        <slotId>	100	</slotId>
+        <slotId>	15021	</slotId>
         <tags>	formfactor_rect1x4 direction_left_to_right	</tags>
-        <parentSlotId>	69	</parentSlotId>
-        <position>	1.07315 1.80948 0.222622	</position>
-        <rotation>	1.43702 1.20231 -3.05173	</rotation>
-        <scale>	1.81783 1.81783 1.81783	</scale>
+        <position>	3.16878 0.856457 1.17899	</position>
+        <rotation>	1.57011 0.435457 2.00336	</rotation>
+        <scale>	3.82762 3.82762 3.82758	</scale>
         <doubleSided>	false	</doubleSided>
-        <showOn>	256	</showOn>
-        <clipAngle>	0.670802	</clipAngle>
-        <anchorPosition>	1.12066 0.761205 0.246111	</anchorPosition>
-        <anchorDirection>	0.888483 0.13284 0.439263	</anchorDirection>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.951068	</clipAngle>
+        <anchorPosition>	1.87924 -0.199294 1.18248	</anchorPosition>
+        <anchorDirection>	0.999996 0.00028947 -0.00270835	</anchorDirection>
       </slot>
       <slot>
         <slotType>	projectionDecal	</slotType>
-        <slotId>	101	</slotId>
-        <tags>	formfactor_rect1x3 direction_right_to_left preferred_formfactor_rect1x3	</tags>
-        <parentSlotId>	70	</parentSlotId>
-        <position>	-2.61336 0.863294 -0.137923	</position>
-        <rotation>	1.5702 1.57588 0.020112	</rotation>
+        <slotId>	15022	</slotId>
+        <tags>	formfactor_rect1x6 direction_right_to_left	</tags>
+        <position>	-2.17852 0.834668 -0.128377	</position>
+        <rotation>	1.56904 1.57975 0.0182906	</rotation>
+        <scale>	6.29943 1.39394 6.29938	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.951068	</clipAngle>
+        <anchorPosition>	-1.89209 -0.220196 -0.125709	</anchorPosition>
+        <anchorDirection>	-0.999955 -0.00179374 -0.00931543	</anchorDirection>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15023	</slotId>
+        <tags>	formfactor_rect1x3 direction_right_to_left	</tags>
+        <position>	-2.61336 0.863271 -0.137901	</position>
+        <rotation>	1.57011 1.5752 0.0202235	</rotation>
         <scale>	2.35292 2.35292 2.35291	</scale>
         <doubleSided>	false	</doubleSided>
         <showOn>	16	</showOn>
         <clipAngle>	0.951068	</clipAngle>
-        <anchorPosition>	-1.88456 -0.191648 -0.127073	</anchorPosition>
-        <anchorDirection>	-0.999889 -0.000598073 -0.0148862	</anchorDirection>
+        <anchorPosition>	-1.88456 -0.191491 -0.126454	</anchorPosition>
+        <anchorDirection>	-0.999876 -0.00084576 -0.0157047	</anchorDirection>
       </slot>
       <slot>
         <slotType>	projectionDecal	</slotType>
-        <slotId>	102	</slotId>
+        <slotId>	15024	</slotId>
         <tags>	formfactor_rect1x3 direction_right_to_left	</tags>
-        <parentSlotId>	70	</parentSlotId>
-        <position>	-2.9583 0.806149 1.81548	</position>
-        <rotation>	1.52545 1.25817 -0.308469	</rotation>
+        <position>	-2.9583 0.806123 1.8155	</position>
+        <rotation>	1.52544 1.25823 -0.308406	</rotation>
         <scale>	2.35293 2.35293 2.3529	</scale>
         <doubleSided>	false	</doubleSided>
         <showOn>	16	</showOn>
         <clipAngle>	0.951068	</clipAngle>
-        <anchorPosition>	-1.89281 -0.203165 1.81959	</anchorPosition>
-        <anchorDirection>	-0.999059 -0.0431919 -0.00385648	</anchorDirection>
+        <anchorPosition>	-1.89281 -0.203183 1.81962	</anchorPosition>
+        <anchorDirection>	-0.999059 -0.0432 -0.00386158	</anchorDirection>
       </slot>
       <slot>
         <slotType>	projectionDecal	</slotType>
-        <slotId>	103	</slotId>
+        <slotId>	15025	</slotId>
         <tags>	formfactor_rect1x3 direction_right_to_left	</tags>
-        <parentSlotId>	70	</parentSlotId>
-        <position>	-2.91076 0.854514 -2.06977	</position>
-        <rotation>	1.57177 1.56849 -0.0109844	</rotation>
+        <position>	-2.91076 0.854489 -2.06975	</position>
+        <rotation>	1.57183 1.5678 -0.0111632	</rotation>
         <scale>	2.35292 2.35292 2.3529	</scale>
         <doubleSided>	false	</doubleSided>
         <showOn>	16	</showOn>
         <clipAngle>	0.951068	</clipAngle>
-        <anchorPosition>	-1.86751 -0.202003 -2.0787	</anchorPosition>
-        <anchorDirection>	-0.999963 0.0010916 0.00856185	</anchorDirection>
+        <anchorPosition>	-1.86751 -0.20197 -2.07823	</anchorPosition>
+        <anchorDirection>	-0.999966 0.00103581 0.00812921	</anchorDirection>
       </slot>
       <slot>
         <slotType>	projectionDecal	</slotType>
-        <slotId>	104	</slotId>
-        <tags>	formfactor_rect1x4 direction_right_to_left preferred_formfactor_rect1x4	</tags>
-        <parentSlotId>	70	</parentSlotId>
-        <position>	-3.19985 0.86632 -0.124408	</position>
-        <rotation>	1.57114 0.784479 -0.789874	</rotation>
-        <scale>	2.91466 2.91466 2.91463	</scale>
-        <doubleSided>	false	</doubleSided>
-        <showOn>	16	</showOn>
-        <clipAngle>	0.951068	</clipAngle>
-        <anchorPosition>	-1.86844 -0.189516 -0.128584	</anchorPosition>
-        <anchorDirection>	-0.999995 0.000343859 0.0031369	</anchorDirection>
-      </slot>
-      <slot>
-        <slotType>	projectionDecal	</slotType>
-        <slotId>	105	</slotId>
+        <slotId>	15026	</slotId>
         <tags>	formfactor_rect1x4 direction_right_to_left	</tags>
-        <parentSlotId>	70	</parentSlotId>
-        <position>	-3.16278 0.814097 1.63428	</position>
-        <rotation>	1.52544 1.25816 -0.308444	</rotation>
-        <scale>	2.91465 2.91465 2.91463	</scale>
+        <position>	-3.19985 0.866292 -0.124386	</position>
+        <rotation>	1.57209 0.773126 -0.802495	</rotation>
+        <scale>	3.82762 3.82762 3.82758	</scale>
         <doubleSided>	false	</doubleSided>
         <showOn>	16	</showOn>
         <clipAngle>	0.951068	</clipAngle>
-        <anchorPosition>	-1.84445 -0.184275 1.63941	</anchorPosition>
-        <anchorDirection>	-0.999059 -0.0431997 -0.00388843	</anchorDirection>
+        <anchorPosition>	-1.86845 -0.190238 -0.13084	</anchorPosition>
+        <anchorDirection>	-0.999988 0.000865161 0.00484735	</anchorDirection>
       </slot>
       <slot>
         <slotType>	projectionDecal	</slotType>
-        <slotId>	106	</slotId>
-        <tags>	formfactor_rect1x6 direction_right_to_left preferred_formfactor_rect1x6	</tags>
-        <parentSlotId>	70	</parentSlotId>
-        <position>	-3.96844 0.831616 -0.143509	</position>
-        <rotation>	1.56965 1.58122 0.0185905	</rotation>
-        <scale>	4.51917 4.51918 4.51914	</scale>
-        <doubleSided>	false	</doubleSided>
-        <showOn>	16	</showOn>
-        <clipAngle>	0.951068	</clipAngle>
-        <anchorPosition>	-1.87191 -0.221474 -0.126616	</anchorPosition>
-        <anchorDirection>	-0.999967 -0.00109154 -0.00805735	</anchorDirection>
-      </slot>
-      <slot>
-        <slotType>	projectionDecal	</slotType>
-        <slotId>	107	</slotId>
-        <tags>	formfactor_rect1x2 direction_right_to_left preferred_formfactor_rect1x2	</tags>
-        <parentSlotId>	70	</parentSlotId>
-        <position>	-0.835298 1.86221 0.24696	</position>
-        <rotation>	1.00542 -1.109 3.12961	</rotation>
-        <scale>	1.30412 1.30411 1.30411	</scale>
-        <doubleSided>	false	</doubleSided>
-        <showOn>	256	</showOn>
-        <clipAngle>	0.951068	</clipAngle>
-        <anchorPosition>	-0.94142 0.882572 0.301667	</anchorPosition>
-        <anchorDirection>	-0.750549 0.535697 0.386918	</anchorDirection>
-      </slot>
-      <slot>
-        <slotType>	projectionDecal	</slotType>
-        <slotId>	108	</slotId>
-        <tags>	formfactor_rect1x3 direction_right_to_left	</tags>
-        <parentSlotId>	70	</parentSlotId>
-        <position>	-0.855741 1.86578 0.203624	</position>
-        <rotation>	1.0474 -1.11002 3.12872	</rotation>
-        <scale>	1.54567 1.54567 1.54567	</scale>
-        <doubleSided>	false	</doubleSided>
-        <showOn>	256	</showOn>
-        <clipAngle>	0.346481	</clipAngle>
-        <anchorPosition>	-0.950821 0.872115 0.252598	</anchorPosition>
-        <anchorDirection>	-0.770008 0.499783 0.396615	</anchorDirection>
-      </slot>
-      <slot>
-        <slotType>	projectionDecal	</slotType>
-        <slotId>	109	</slotId>
+        <slotId>	15027	</slotId>
         <tags>	formfactor_rect1x4 direction_right_to_left	</tags>
-        <parentSlotId>	70	</parentSlotId>
-        <position>	-1.03771 1.76939 0.239354	</position>
-        <rotation>	1.44361 -1.18854 -3.11348	</rotation>
-        <scale>	1.81783 1.81783 1.81783	</scale>
+        <position>	-3.16073 0.807776 1.17713	</position>
+        <rotation>	1.52544 1.25823 -0.30838	</rotation>
+        <scale>	3.82762 3.82762 3.82758	</scale>
         <doubleSided>	false	</doubleSided>
-        <showOn>	256	</showOn>
-        <clipAngle>	0.910415	</clipAngle>
-        <anchorPosition>	-1.12469 0.725865 0.27149	</anchorPosition>
-        <anchorDirection>	-0.930453 0.126794 0.343775	</anchorDirection>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.951068	</clipAngle>
+        <anchorPosition>	-1.87294 -0.191911 1.18214	</anchorPosition>
+        <anchorDirection>	-0.999059 -0.0432044 -0.00388429	</anchorDirection>
       </slot>
       <slot>
         <slotType>	projectionDecal	</slotType>
-        <slotId>	110	</slotId>
-        <tags>	formfactor_rect1x4 preferred_formfactor_rect1x4	</tags>
-        <parentSlotId>	68	</parentSlotId>
-        <position>	0.000012 1.37135 2.36636	</position>
-        <rotation>	0.190557 -0.000023 3.14155	</rotation>
-        <scale>	1.8272 1.73276 1.82716	</scale>
+        <slotId>	15028	</slotId>
+        <tags>	formfactor_rect1x6  direction_left_to_right	</tags>
+        <position>	2.17853 0.834629 -0.128376	</position>
+        <rotation>	1.56894 -1.57967 -0.018401	</rotation>
+        <scale>	6.29942 1.39394 6.29938	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.951068	</clipAngle>
+        <anchorPosition>	1.8921 -0.220226 -0.125657	</anchorPosition>
+        <anchorDirection>	0.999953 -0.0018267 -0.00949079	</anchorDirection>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15029	</slotId>
+        <tags>	formfactor_rect1x6	</tags>
+        <position>	0.000017 1.69172 2.42817	</position>
+        <rotation>	0.190557 -0.000021 3.14156	</rotation>
+        <scale>	3.70757 1.5 3.70749	</scale>
         <doubleSided>	false	</doubleSided>
         <showOn>	16	</showOn>
         <clipAngle>	0.000000	</clipAngle>
-        <anchorPosition>	0.000003 0.0965011 2.32402	</anchorPosition>
-        <anchorDirection>	0.000038 0.981899 0.189406	</anchorDirection>
+        <anchorPosition>	0.000003 0.145068 2.3334	</anchorPosition>
+        <anchorDirection>	0.000029 0.981899 0.189406	</anchorDirection>
       </slot>
       <slot>
         <slotType>	projectionDecal	</slotType>
-        <slotId>	111	</slotId>
+        <slotId>	15030	</slotId>
         <tags>	formfactor_rect1x4 direction_left_to_right	</tags>
-        <parentSlotId>	69	</parentSlotId>
-        <position>	3.27525 0.861705 -1.89452	</position>
-        <rotation>	1.56995 0.374275 1.94873	</rotation>
-        <scale>	2.91466 2.91466 2.91463	</scale>
+        <position>	3.27397 0.862096 -1.46481	</position>
+        <rotation>	1.56946 0.381548 1.9553	</rotation>
+        <scale>	3.82762 3.82762 3.82758	</scale>
         <doubleSided>	false	</doubleSided>
         <showOn>	16	</showOn>
         <clipAngle>	0.951068	</clipAngle>
-        <anchorPosition>	1.85936 -0.194115 -1.89994	</anchorPosition>
-        <anchorDirection>	0.999992 0.000312209 0.00382972	</anchorDirection>
+        <anchorPosition>	1.87373 -0.193961 -1.46889	</anchorPosition>
+        <anchorDirection>	0.999996 0.000484586 0.00291243	</anchorDirection>
       </slot>
       <slot>
         <slotType>	projectionDecal	</slotType>
-        <slotId>	112	</slotId>
+        <slotId>	15031	</slotId>
         <tags>	formfactor_rect1x4 direction_right_to_left	</tags>
-        <parentSlotId>	70	</parentSlotId>
-        <position>	-3.2058 0.867073 -1.89608	</position>
-        <rotation>	1.57149 0.784092 -0.789985	</rotation>
-        <scale>	2.91466 2.91466 2.91463	</scale>
+        <position>	-3.20297 0.866934 -1.44568	</position>
+        <rotation>	1.57164 0.784879 -0.793668	</rotation>
+        <scale>	3.82762 3.82762 3.82758	</scale>
         <doubleSided>	false	</doubleSided>
         <showOn>	16	</showOn>
         <clipAngle>	0.951068	</clipAngle>
-        <anchorPosition>	-1.8744 -0.188866 -1.90055	</anchorPosition>
-        <anchorDirection>	-0.999994 0.000421047 0.00336191	</anchorDirection>
+        <anchorPosition>	-1.87161 -0.189089 -1.45598	</anchorPosition>
+        <anchorDirection>	-0.99997 0.000484288 0.00773895	</anchorDirection>
       </slot>
       <slot>
         <slotType>	projectionDecal	</slotType>
-        <slotId>	113	</slotId>
-        <tags>	formfactor_rect1x2 direction_left_to_right	</tags>
-        <parentSlotId>	69	</parentSlotId>
-        <position>	1.39007 1.83999 1.48873	</position>
-        <rotation>	0.000038 1.56982 3.14109	</rotation>
-        <scale>	1.54352 1.54351 1.5435	</scale>
-        <doubleSided>	false	</doubleSided>
-        <showOn>	16	</showOn>
-        <clipAngle>	0.951068	</clipAngle>
-        <anchorPosition>	1.39005 0.278984 1.48898	</anchorPosition>
-        <anchorDirection>	0.000038 1 -0.0005027	</anchorDirection>
-      </slot>
-      <slot>
-        <slotType>	projectionDecal	</slotType>
-        <slotId>	114	</slotId>
-        <tags>	formfactor_rect1x3 direction_left_to_right	</tags>
-        <parentSlotId>	69	</parentSlotId>
-        <position>	1.41753 1.83987 1.25609	</position>
-        <rotation>	0.000038 1.56982 3.14109	</rotation>
-        <scale>	2.05368 2.05366 2.05365	</scale>
-        <doubleSided>	false	</doubleSided>
-        <showOn>	16	</showOn>
-        <clipAngle>	0.951068	</clipAngle>
-        <anchorPosition>	1.41751 0.278867 1.25634	</anchorPosition>
-        <anchorDirection>	0.000038 1 -0.000499124	</anchorDirection>
-      </slot>
-      <slot>
-        <slotType>	projectionDecal	</slotType>
-        <slotId>	115	</slotId>
-        <tags>	formfactor_rect1x4 direction_left_to_right	</tags>
-        <parentSlotId>	69	</parentSlotId>
-        <position>	1.49307 1.68216 -0.991845	</position>
-        <rotation>	0.000038 1.56982 3.14109	</rotation>
-        <scale>	1.93121 0.374752 1.93117	</scale>
-        <doubleSided>	false	</doubleSided>
-        <showOn>	16	</showOn>
-        <clipAngle>	0.951068	</clipAngle>
-        <anchorPosition>	1.49306 0.45696 -0.99176	</anchorPosition>
-        <anchorDirection>	0.000038 1 -0.000499124	</anchorDirection>
-      </slot>
-      <slot>
-        <slotType>	projectionDecal	</slotType>
-        <slotId>	116	</slotId>
+        <slotId>	15032	</slotId>
         <tags>	formfactor_rect1x2 direction_right_to_left	</tags>
-        <parentSlotId>	70	</parentSlotId>
-        <position>	-1.3701 1.39839 2.04873	</position>
-        <rotation>	3.14163 1.56657 -0.0137663	</rotation>
-        <scale>	1.54352 1.54351 1.5435	</scale>
+        <position>	-1.39619 1.41038 1.177	</position>
+        <rotation>	3.14162 1.56657 -0.0137665	</rotation>
+        <scale>	1.86122 1.86122 1.8612	</scale>
         <doubleSided>	false	</doubleSided>
         <showOn>	16	</showOn>
         <clipAngle>	0.951068	</clipAngle>
-        <anchorPosition>	-1.3701 0.286838 2.04796	</anchorPosition>
-        <anchorDirection>	-0.000020 0.999905 0.0137657	</anchorDirection>
+        <anchorPosition>	-1.39619 0.308824 1.17636	</anchorPosition>
+        <anchorDirection>	-0.000031 0.999905 0.0137661	</anchorDirection>
       </slot>
       <slot>
         <slotType>	projectionDecal	</slotType>
-        <slotId>	117	</slotId>
+        <slotId>	15033	</slotId>
+        <tags>	formfactor_rect1x3  direction_left_to_right	</tags>
+        <position>	1.37158 1.3936 2.39424	</position>
+        <rotation>	3.1416 -1.56661 -0.013788	</rotation>
+        <scale>	2.28283 2.2828 2.2828	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.951068	</clipAngle>
+        <anchorPosition>	1.37158 0.362036 2.39391	</anchorPosition>
+        <anchorDirection>	-0.000065 0.999905 -0.0137874	</anchorDirection>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15034	</slotId>
+        <tags>	formfactor_rect1x4	</tags>
+        <position>	0.00504108 1.64098 -2.29629	</position>
+        <rotation>	3.14159 -0.000001 -0.000050	</rotation>
+        <scale>	2.46853 1.23242 2.46855	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.901981	</clipAngle>
+        <anchorPosition>	0.00504467 0.513779 -2.29629	</anchorPosition>
+        <anchorDirection>	-0.000050 1 -0.000003	</anchorDirection>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15035	</slotId>
+        <tags>	formfactor_rect1x2  direction_left_to_right	</tags>
+        <position>	1.39621 1.41035 1.177	</position>
+        <rotation>	3.1416 -1.56661 -0.013788	</rotation>
+        <scale>	1.86123 1.86122 1.8612	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.951068	</clipAngle>
+        <anchorPosition>	1.39621 0.308799 1.17764	</anchorPosition>
+        <anchorDirection>	-0.000065 0.999905 -0.0137874	</anchorDirection>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15036	</slotId>
+        <tags>	formfactor_rect1x4   direction_right_to_left	</tags>
+        <position>	-0.679725 1.50247 1.91155	</position>
+        <rotation>	0.369177 -1.30708 2.90702	</rotation>
+        <scale>	2.28282 0.999996 2.28279	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.893229	</clipAngle>
+        <anchorPosition>	-0.583554 0.133572 1.80237	</anchorPosition>
+        <anchorDirection>	-0.278245 0.907084 0.315878	</anchorDirection>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15037	</slotId>
+        <tags>	formfactor_rect1x6   direction_right_to_left	</tags>
+        <position>	-1.3843 1.51655 0.556396	</position>
+        <rotation>	3.14162 1.56661 -0.175929	</rotation>
+        <scale>	5.93608 1.62379 5.93604	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.57432	</clipAngle>
+        <anchorPosition>	-1.38418 0.297554 0.52731	</anchorPosition>
+        <anchorDirection>	-0.000705808 0.984564 0.175021	</anchorDirection>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15038	</slotId>
+        <tags>	formfactor_rect1x4 direction_right_to_left	</tags>
+        <position>	-1.38911 1.44601 1.70524	</position>
+        <rotation>	3.14162 1.56657 -0.175853	</rotation>
+        <scale>	3.6557 1 3.65566	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.57432	</clipAngle>
+        <anchorPosition>	-1.38907 0.335323 1.69541	</anchorPosition>
+        <anchorDirection>	-0.000712566 0.984578 0.174947	</anchorDirection>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15039	</slotId>
+        <tags>	formfactor_rect1x4  direction_left_to_right	</tags>
+        <position>	1.4283 1.42603 -1.73769	</position>
+        <rotation>	2.95619 -1.56818 -0.173311	</rotation>
+        <scale>	3.65569 1 3.65566	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.57432	</clipAngle>
+        <anchorPosition>	1.44892 0.48085 -1.75737	</anchorPosition>
+        <anchorDirection>	0.181129 0.968138 -0.172919	</anchorDirection>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15040	</slotId>
+        <tags>	formfactor_square	</tags>
+        <position>	0.00504143 1.6501 -2.86044	</position>
+        <rotation>	2.86546 -0.000015 -0.000052	</rotation>
+        <scale>	2.53913 1.26767 2.53916	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.00568525	</clipAngle>
+        <anchorPosition>	0.00504487 0.52562 -2.84086	</anchorPosition>
+        <anchorDirection>	-0.000048 0.962117 -0.272637	</anchorDirection>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15041	</slotId>
+        <tags>	formfactor_square   direction_left_to_right	</tags>
+        <position>	-1.39665 1.27145 3.07426	</position>
+        <rotation>	0.366553 -0.000037 3.14156	</rotation>
+        <scale>	0.999995 0.499997 0.999995	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.791534	</clipAngle>
+        <anchorPosition>	-1.39665 0.313085 3.1115	</anchorPosition>
+        <anchorDirection>	0.000019 0.933568 0.3584	</anchorDirection>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15042	</slotId>
+        <tags>	formfactor_rect1x6	</tags>
+        <position>	0.00504108 1.64098 -2.30085	</position>
+        <rotation>	3.14159 -0.000001 -0.000050	</rotation>
+        <scale>	2.46853 1.23242 2.46855	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.901981	</clipAngle>
+        <anchorPosition>	0.00504467 0.513779 -2.30085	</anchorPosition>
+        <anchorDirection>	-0.000050 1 -0.000003	</anchorDirection>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15043	</slotId>
+        <tags>	formfactor_square	</tags>
+        <position>	-0.0026138 1.65146 1.87844	</position>
+        <rotation>	0.119504 -0.000019 3.14156	</rotation>
+        <scale>	3.71396 2.41989 3.71392	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.791534	</clipAngle>
+        <anchorPosition>	-0.0026187 0.435751 1.85919	</anchorPosition>
+        <anchorDirection>	0.000030 0.992868 0.11922	</anchorDirection>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15044	</slotId>
+        <tags>	formfactor_square direction_left_to_right	</tags>
+        <position>	-1.39674 1.50287 2.33172	</position>
+        <rotation>	-0.000000 -0.000025 3.14156	</rotation>
+        <scale>	0.999998 0.499999 0.999998	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.791534	</clipAngle>
+        <anchorPosition>	-1.39674 0.301409 2.33172	</anchorPosition>
+        <anchorDirection>	0.000033 1 0.000000	</anchorDirection>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15045	</slotId>
+        <tags>	formfactor_rect1x2  direction_left_to_right	</tags>
+        <position>	1.40222 1.39078 2.59841	</position>
+        <rotation>	3.1416 -1.56661 -0.013788	</rotation>
+        <scale>	1.86123 1.86122 1.8612	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.951068	</clipAngle>
+        <anchorPosition>	1.40222 0.349222 2.59822	</anchorPosition>
+        <anchorDirection>	-0.000065 0.999905 -0.0137874	</anchorDirection>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15046	</slotId>
+        <tags>	formfactor_rect1x2 direction_right_to_left	</tags>
+        <position>	-1.4022 1.39081 2.59841	</position>
+        <rotation>	3.14162 1.56657 -0.0137665	</rotation>
+        <scale>	1.86123 1.86122 1.8612	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.951068	</clipAngle>
+        <anchorPosition>	-1.4022 0.289255 2.59777	</anchorPosition>
+        <anchorDirection>	-0.000031 0.999905 0.0137661	</anchorDirection>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15047	</slotId>
+        <tags>	formfactor_square	</tags>
+        <position>	0.0050412 1.64098 -2.39687	</position>
+        <rotation>	3.14159 -0.000001 -0.000050	</rotation>
+        <scale>	1.56268 0.780168 1.56269	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.901981	</clipAngle>
+        <anchorPosition>	0.00504479 0.51378 -2.39687	</anchorPosition>
+        <anchorDirection>	-0.000050 1 -0.000003	</anchorDirection>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15048	</slotId>
+        <tags>	formfactor_square direction_right_to_left	</tags>
+        <position>	-2.30967 0.972324 -0.129851	</position>
+        <rotation>	1.59395 0.930393 -0.636012	</rotation>
+        <scale>	1.35021 1.35021 1.3502	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	1.0472	</clipAngle>
+        <anchorPosition>	-1.8958 -0.0907639 -0.128085	</anchorPosition>
+        <anchorDirection>	-0.999817 0.0186251 -0.00426722	</anchorDirection>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15049	</slotId>
+        <tags>	direction_right_to_left formfactor_rect1x2	</tags>
+        <position>	-2.0054 0.903895 -0.128908	</position>
+        <rotation>	1.56881 0.926749 -0.639391	</rotation>
+        <scale>	1.72775 0.499999 1.72774	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	1.0472	</clipAngle>
+        <anchorPosition>	-1.8916 -0.151305 -0.128369	</anchorPosition>
+        <anchorDirection>	-0.999988 -0.00156739 -0.00473356	</anchorDirection>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15050	</slotId>
+        <tags>	formfactor_rect1x2 direction_left_to_right	</tags>
+        <position>	1.99408 0.900542 -2.50392	</position>
+        <rotation>	1.56861 -0.932024 0.633952	</rotation>
+        <scale>	1.72775 0.499999 1.72774	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	1.0472	</clipAngle>
+        <anchorPosition>	1.88027 -0.154633 -2.50336	</anchorPosition>
+        <anchorDirection>	0.999987 -0.00178128 -0.00487328	</anchorDirection>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15051	</slotId>
+        <tags>	direction_right_to_left formfactor_rect1x2	</tags>
+        <position>	-1.99441 0.90113 -2.49058	</position>
+        <rotation>	1.56881 0.926652 -0.639153	</rotation>
+        <scale>	1.72775 0.499999 1.72774	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	1.0472	</clipAngle>
+        <anchorPosition>	-1.8806 -0.154067 -2.49001	</anchorPosition>
+        <anchorDirection>	-0.999986 -0.00159195 -0.0049954	</anchorDirection>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15052	</slotId>
+        <tags>	direction_right_to_left formfactor_rect1x2	</tags>
+        <position>	-1.99954 0.902394 -1.42261	</position>
+        <rotation>	1.56881 0.926751 -0.63915	</rotation>
+        <scale>	1.72775 0.499999 1.72774	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	1.0472	</clipAngle>
+        <anchorPosition>	-1.88573 -0.152803 -1.42205	</anchorPosition>
+        <anchorDirection>	-0.999987 -0.00159192 -0.00488704	</anchorDirection>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15053	</slotId>
+        <tags>	direction_right_to_left formfactor_rect1x2	</tags>
+        <position>	-2.01679 0.906667 2.24117	</position>
+        <rotation>	1.56881 0.926751 -0.63915	</rotation>
+        <scale>	1.72775 0.499999 1.72774	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	1.0472	</clipAngle>
+        <anchorPosition>	-1.90299 -0.14853 2.24173	</anchorPosition>
+        <anchorDirection>	-0.999987 -0.00159192 -0.00488704	</anchorDirection>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15054	</slotId>
+        <tags>	formfactor_rect1x2 direction_left_to_right	</tags>
+        <position>	2.0168 0.906631 2.24117	</position>
+        <rotation>	1.56867 -0.932064 0.633968	</rotation>
+        <scale>	1.72775 0.499999 1.72774	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	1.0472	</clipAngle>
+        <anchorPosition>	1.90299 -0.148547 2.24172	</anchorPosition>
+        <anchorDirection>	0.999987 -0.00175917 -0.00483245	</anchorDirection>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15055	</slotId>
+        <tags>	formfactor_rect1x2 direction_left_to_right	</tags>
+        <position>	1.99921 0.901941 -1.41364	</position>
+        <rotation>	1.56867 -0.931871 0.63384	</rotation>
+        <scale>	1.72775 0.499999 1.72774	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	1.0472	</clipAngle>
+        <anchorPosition>	1.8854 -0.153242 -1.41306	</anchorPosition>
+        <anchorDirection>	0.999986 -0.00171512 -0.00506857	</anchorDirection>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15056	</slotId>
+        <tags>	formfactor_rect1x2 direction_left_to_right	</tags>
+        <position>	2.01181 0.905298 1.17362	</position>
+        <rotation>	1.56861 -0.932024 0.633952	</rotation>
+        <scale>	1.72775 0.499999 1.72774	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	1.0472	</clipAngle>
+        <anchorPosition>	1.898 -0.149877 1.17417	</anchorPosition>
+        <anchorDirection>	0.999987 -0.00178128 -0.00487328	</anchorDirection>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15057	</slotId>
+        <tags>	formfactor_rect1x2 direction_left_to_right	</tags>
+        <position>	2.00561 0.903623 -0.113749	</position>
+        <rotation>	1.56867 -0.931871 0.63384	</rotation>
+        <scale>	1.72775 0.499999 1.72774	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	1.0472	</clipAngle>
+        <anchorPosition>	1.8918 -0.15156 -0.113172	</anchorPosition>
+        <anchorDirection>	0.999986 -0.00171512 -0.00506857	</anchorDirection>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15058	</slotId>
+        <tags>	formfactor_square	</tags>
+        <position>	-0.00266345 0.490207 2.82343	</position>
+        <rotation>	0.605744 3.14158 0.000034	</rotation>
+        <scale>	1.20401 1.14179 1.20399	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.791534	</clipAngle>
+        <anchorPosition>	-0.00265425 -0.381416 2.69616	</anchorPosition>
+        <anchorDirection>	-0.000041 -0.822079 0.569374	</anchorDirection>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15059	</slotId>
+        <tags>	formfactor_rect1x2	</tags>
+        <position>	0.0050412 1.64098 -2.39687	</position>
+        <rotation>	3.14159 -0.000001 -0.000050	</rotation>
+        <scale>	2.46853 1.23242 2.46855	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.901981	</clipAngle>
+        <anchorPosition>	0.00504479 0.513779 -2.39687	</anchorPosition>
+        <anchorDirection>	-0.000050 1 -0.000003	</anchorDirection>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15060	</slotId>
+        <tags>	formfactor_rect1x2	</tags>
+        <position>	-0.00265755 0.617737 2.73509	</position>
+        <rotation>	0.605744 3.14158 0.000034	</rotation>
+        <scale>	1.46617 0.3 1.46615	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.791534	</clipAngle>
+        <anchorPosition>	-0.00265535 -0.393646 2.70462	</anchorPosition>
+        <anchorDirection>	-0.000041 -0.822079 0.569374	</anchorDirection>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15061	</slotId>
+        <tags>	formfactor_rect1x4 direction_right_to_left	</tags>
+        <position>	-1.42828 1.42606 -1.73769	</position>
+        <rotation>	2.95621 1.56821 0.173268	</rotation>
+        <scale>	3.65569 1 3.65566	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.57432	</clipAngle>
+        <anchorPosition>	-1.44889 0.480879 -1.75737	</anchorPosition>
+        <anchorDirection>	-0.181116 0.968149 -0.172871	</anchorDirection>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15062	</slotId>
+        <tags>	formfactor_rect1x3	</tags>
+        <position>	0.00504107 1.64098 -2.29179	</position>
+        <rotation>	3.14159 -0.000001 -0.000050	</rotation>
+        <scale>	2.46853 1.23242 2.46855	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.901981	</clipAngle>
+        <anchorPosition>	0.00504467 0.513779 -2.29179	</anchorPosition>
+        <anchorDirection>	-0.000050 1 -0.000003	</anchorDirection>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15063	</slotId>
+        <tags>	formfactor_rect1x3	</tags>
+        <position>	-0.00265836 0.662868 2.80025	</position>
+        <rotation>	0.605744 3.14158 0.000034	</rotation>
+        <scale>	1.59447 0.326252 1.59445	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.791534	</clipAngle>
+        <anchorPosition>	-0.00265533 -0.332071 2.75839	</anchorPosition>
+        <anchorDirection>	-0.000041 -0.822079 0.569374	</anchorDirection>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15064	</slotId>
+        <tags>	formfactor_rect1x4	</tags>
+        <position>	0.000017 1.69172 2.42817	</position>
+        <rotation>	0.190557 -0.000021 3.14156	</rotation>
+        <scale>	3.70757 1.5 3.70749	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.000000	</clipAngle>
+        <anchorPosition>	0.000003 0.145068 2.3334	</anchorPosition>
+        <anchorDirection>	0.000029 0.981899 0.189406	</anchorDirection>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15065	</slotId>
+        <tags>	formfactor_rect1x4  direction_left_to_right	</tags>
+        <position>	1.38913 1.44599 1.70524	</position>
+        <rotation>	3.1416 -1.56661 0.17593	</rotation>
+        <scale>	3.65569 1 3.65566	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.57432	</clipAngle>
+        <anchorPosition>	1.38909 0.335301 1.69541	</anchorPosition>
+        <anchorDirection>	0.00072553 0.984564 0.175022	</anchorDirection>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15066	</slotId>
+        <tags>	formfactor_rect1x6  direction_left_to_right	</tags>
+        <position>	1.38432 1.51652 0.556397	</position>
+        <rotation>	3.1416 -1.56661 0.17593	</rotation>
+        <scale>	5.93609 1.6238 5.93605	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.57432	</clipAngle>
+        <anchorPosition>	1.3842 0.29753 0.527312	</anchorPosition>
+        <anchorDirection>	0.00072553 0.984564 0.175022	</anchorDirection>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15067	</slotId>
+        <tags>	formfactor_square  direction_right_to_left	</tags>
+        <position>	1.39667 1.27142 3.07426	</position>
+        <rotation>	0.366553 -0.000037 3.14156	</rotation>
+        <scale>	0.999995 0.499997 0.999995	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.791534	</clipAngle>
+        <anchorPosition>	1.39667 0.313063 3.11151	</anchorPosition>
+        <anchorDirection>	0.000019 0.933568 0.3584	</anchorDirection>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15068	</slotId>
+        <tags>	formfactor_rect1x2	</tags>
+        <position>	-0.00263532 1.31449 2.66814	</position>
+        <rotation>	0.482464 -0.000030 3.14156	</rotation>
+        <scale>	1.76071 1.66971 1.76068	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.791534	</clipAngle>
+        <anchorPosition>	-0.00263927 0.0717699 2.57002	</anchorPosition>
+        <anchorDirection>	0.000019 0.885854 0.463963	</anchorDirection>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15069	</slotId>
+        <tags>	formfactor_square	</tags>
+        <position>	-0.00262632 1.47175 2.36788	</position>
+        <rotation>	0.482464 -0.000030 3.14156	</rotation>
+        <scale>	1.76071 1.66971 1.76068	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.791534	</clipAngle>
+        <anchorPosition>	-0.00263027 0.229031 2.26976	</anchorPosition>
+        <anchorDirection>	0.000019 0.885854 0.463963	</anchorDirection>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15070	</slotId>
+        <tags>	formfactor_rect1x2	</tags>
+        <position>	0.000018 1.5273 2.05973	</position>
+        <rotation>	0.190558 -0.000021 3.14156	</rotation>
+        <scale>	3.71589 0.999998 3.71579	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.000000	</clipAngle>
+        <anchorPosition>	0.000012 0.274528 2.02165	</anchorPosition>
+        <anchorDirection>	0.000029 0.981899 0.189407	</anchorDirection>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15071	</slotId>
+        <tags>	formfactor_rect1x3	</tags>
+        <position>	0.000031 1.65118 1.41751	</position>
+        <rotation>	0.190558 -0.000021 3.14156	</rotation>
+        <scale>	3.71588 0.999995 3.71578	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.000000	</clipAngle>
+        <anchorPosition>	0.000030 0.545693 1.40784	</anchorPosition>
+        <anchorDirection>	0.000029 0.981899 0.189407	</anchorDirection>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15072	</slotId>
         <tags>	formfactor_rect1x3 direction_right_to_left	</tags>
-        <parentSlotId>	70	</parentSlotId>
-        <position>	-1.36853 1.40351 1.67687	</position>
-        <rotation>	3.14163 1.56657 -0.0137663	</rotation>
+        <position>	-1.36853 1.4035 1.67689	</position>
+        <rotation>	3.14162 1.56657 -0.0137665	</rotation>
         <scale>	2.28283 2.28281 2.2828	</scale>
         <doubleSided>	false	</doubleSided>
         <showOn>	16	</showOn>
         <clipAngle>	0.951068	</clipAngle>
-        <anchorPosition>	-1.36853 0.291958 1.67609	</anchorPosition>
-        <anchorDirection>	-0.000020 0.999905 0.0137657	</anchorDirection>
+        <anchorPosition>	-1.36853 0.321943 1.67653	</anchorPosition>
+        <anchorDirection>	-0.000031 0.999905 0.0137661	</anchorDirection>
       </slot>
       <slot>
         <slotType>	projectionDecal	</slotType>
-        <slotId>	118	</slotId>
-        <tags>	formfactor_rect1x4 direction_right_to_left	</tags>
-        <parentSlotId>	70	</parentSlotId>
-        <position>	-1.42068 1.40603 1.49354	</position>
-        <rotation>	3.14163 1.56657 -0.0137663	</rotation>
-        <scale>	2.63813 2.63811 2.6381	</scale>
+        <slotId>	15073	</slotId>
+        <tags>	formfactor_rect1x3 direction_right_to_left	</tags>
+        <position>	-1.37156 1.39362 2.39424	</position>
+        <rotation>	3.14162 1.56657 -0.0137665	</rotation>
+        <scale>	2.28283 2.28281 2.2828	</scale>
         <doubleSided>	false	</doubleSided>
         <showOn>	16	</showOn>
         <clipAngle>	0.951068	</clipAngle>
-        <anchorPosition>	-1.42068 0.294481 1.49277	</anchorPosition>
-        <anchorDirection>	-0.000020 0.999905 0.0137657	</anchorDirection>
+        <anchorPosition>	-1.37156 0.312067 2.39388	</anchorPosition>
+        <anchorDirection>	-0.000031 0.999905 0.0137661	</anchorDirection>
       </slot>
       <slot>
         <slotType>	projectionDecal	</slotType>
-        <slotId>	119	</slotId>
-        <tags>	formfactor_rect1x4 direction_right_to_left	</tags>
-        <parentSlotId>	70	</parentSlotId>
-        <position>	-1.50606 1.73832 -0.943588	</position>
-        <rotation>	3.14163 1.56657 -0.0137663	</rotation>
-        <scale>	1.75901 0.535575 1.75899	</scale>
+        <slotId>	15074	</slotId>
+        <tags>	formfactor_rect1x3  direction_left_to_right	</tags>
+        <position>	1.36855 1.40347 1.67689	</position>
+        <rotation>	3.1416 -1.56661 -0.0137882	</rotation>
+        <scale>	2.28283 2.2828 2.2828	</scale>
         <doubleSided>	false	</doubleSided>
         <showOn>	16	</showOn>
         <clipAngle>	0.951068	</clipAngle>
-        <anchorPosition>	-1.50605 0.45628 -0.946708	</anchorPosition>
-        <anchorDirection>	-0.000020 0.999905 0.0137657	</anchorDirection>
+        <anchorPosition>	1.36855 0.321916 1.67725	</anchorPosition>
+        <anchorDirection>	-0.000065 0.999905 -0.0137876	</anchorDirection>
       </slot>
       <slot>
         <slotType>	projectionDecal	</slotType>
-        <slotId>	120	</slotId>
-        <tags>	formfactor_rect1x4 direction_left_to_right	</tags>
-        <parentSlotId>	69	</parentSlotId>
-        <position>	1.4305 1.84014 1.80273	</position>
-        <rotation>	0.000038 1.56982 3.14109	</rotation>
-        <scale>	2.73201 2.73197 2.73197	</scale>
+        <slotId>	15075	</slotId>
+        <tags>	formfactor_rect1x6   direction_right_to_left	</tags>
+        <position>	-0.589447 1.48487 2.03129	</position>
+        <rotation>	0.369177 -1.30708 2.90702	</rotation>
+        <scale>	2.28282 0.999995 2.28279	</scale>
         <doubleSided>	false	</doubleSided>
         <showOn>	16	</showOn>
-        <clipAngle>	0.951068	</clipAngle>
-        <anchorPosition>	1.43048 0.279134 1.80298	</anchorPosition>
-        <anchorDirection>	0.000038 1 -0.000499124	</anchorDirection>
+        <clipAngle>	0.893229	</clipAngle>
+        <anchorPosition>	-0.496059 0.125046 1.92527	</anchorPosition>
+        <anchorDirection>	-0.278245 0.907084 0.315878	</anchorDirection>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15076	</slotId>
+        <tags>	formfactor_rect1x3   direction_right_to_left	</tags>
+        <position>	-0.679725 1.50247 1.91155	</position>
+        <rotation>	0.369177 -1.30708 2.90702	</rotation>
+        <scale>	2.28282 0.999996 2.28279	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.893229	</clipAngle>
+        <anchorPosition>	-0.583554 0.133572 1.80237	</anchorPosition>
+        <anchorDirection>	-0.278245 0.907084 0.315878	</anchorDirection>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15077	</slotId>
+        <tags>	formfactor_rect1x3  direction_left_to_right	</tags>
+        <position>	0.679745 1.50246 1.91155	</position>
+        <rotation>	0.369194 1.30699 -2.90702	</rotation>
+        <scale>	2.28282 0.999997 2.28279	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.893229	</clipAngle>
+        <anchorPosition>	0.583579 0.133566 1.80236	</anchorPosition>
+        <anchorDirection>	0.278232 0.907078 0.315907	</anchorDirection>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15078	</slotId>
+        <tags>	formfactor_rect1x4  direction_left_to_right	</tags>
+        <position>	0.679745 1.50246 1.91155	</position>
+        <rotation>	0.369194 1.30699 -2.90702	</rotation>
+        <scale>	2.28282 0.999997 2.28279	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.893229	</clipAngle>
+        <anchorPosition>	0.583579 0.133566 1.80236	</anchorPosition>
+        <anchorDirection>	0.278232 0.907078 0.315907	</anchorDirection>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15079	</slotId>
+        <tags>	formfactor_rect1x6  direction_left_to_right	</tags>
+        <position>	0.589467 1.48486 2.03129	</position>
+        <rotation>	0.369194 1.30699 -2.90702	</rotation>
+        <scale>	2.28282 0.999997 2.28279	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.893229	</clipAngle>
+        <anchorPosition>	0.496084 0.125038 1.92526	</anchorPosition>
+        <anchorDirection>	0.278232 0.907078 0.315907	</anchorDirection>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15080	</slotId>
+        <tags>	formfactor_square  direction_right_to_left	</tags>
+        <position>	1.39676 1.50284 2.33172	</position>
+        <rotation>	-0.000000 -0.000025 3.14156	</rotation>
+        <scale>	0.999997 0.499999 0.999997	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.791534	</clipAngle>
+        <anchorPosition>	1.39676 0.361383 2.33172	</anchorPosition>
+        <anchorDirection>	0.000033 1 0.000000	</anchorDirection>
       </slot>
     </customizationSlots>
     <customization>
@@ -1553,13 +1867,13 @@
       <customizationSlots>
         <slot>
           <slotType>	paint	</slotType>
-          <slotId>	256	</slotId>
+          <slotId>	21000	</slotId>
           <anchorPosition>	-1.74997 0.621498 -0.18332	</anchorPosition>
           <anchorDirection>	-0.937778 0.33305 -0.098238	</anchorDirection>
         </slot>
         <slot>
           <slotType>	style	</slotType>
-          <slotId>	257	</slotId>
+          <slotId>	29000	</slotId>
           <anchorPosition>	0.000325777 2.28204 -0.222425	</anchorPosition>
           <anchorDirection>	0.000000 1 -0.000000	</anchorDirection>
         </slot>
@@ -1688,8 +2002,55 @@
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <customizationSlots>
             <slot>
+              <slotType>	paint	</slotType>
+              <slotId>	41000	</slotId>
+              <anchorPosition>	-0.000001 -0.00308979 2.32052	</anchorPosition>
+              <anchorDirection>	-0.000000 0.000000 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+            <slot>
+              <slotType>	paint	</slotType>
+              <slotId>	41001	</slotId>
+              <anchorPosition>	0.000000 0.228904 0.228905	</anchorPosition>
+              <anchorDirection>	0.000000 0.707107 0.707107	</anchorDirection>
+              <applyTo>	16384	</applyTo>
+            </slot>
+            <slot>
+              <slotType>	camouflage	</slotType>
+              <slotId>	42000	</slotId>
+              <anchorPosition>	-0.000001 -0.00308979 2.32052	</anchorPosition>
+              <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+            <slot>
+              <slotType>	projectionDecal	</slotType>
+              <slotId>	45000	</slotId>
+              <tags>	formfactor_rect1x2	</tags>
+              <position>	-0.00260162 1.48932 0.699285	</position>
+              <rotation>	0.832296 -0.000047 3.14154	</rotation>
+              <scale>	2.84783 2 2.84777	</scale>
+              <doubleSided>	false	</doubleSided>
+              <showOn>	4368	</showOn>
+              <clipAngle>	0.0593059	</clipAngle>
+              <anchorPosition>	-0.00258664 0.200983 0.346568	</anchorPosition>
+              <anchorDirection>	0.000018 0.67318 0.739479	</anchorDirection>
+            </slot>
+            <slot>
+              <slotType>	projectionDecal	</slotType>
+              <slotId>	45001	</slotId>
+              <tags>	formfactor_square	</tags>
+              <position>	-0.00260303 1.45856 0.734492	</position>
+              <rotation>	0.718222 -0.000040 3.14155	</rotation>
+              <scale>	3.55357 2 3.5535	</scale>
+              <doubleSided>	false	</doubleSided>
+              <showOn>	4368	</showOn>
+              <clipAngle>	0.0593059	</clipAngle>
+              <anchorPosition>	-0.00258938 0.237176 0.313446	</anchorPosition>
+              <anchorDirection>	0.000016 0.752977 0.658047	</anchorDirection>
+            </slot>
+            <slot>
               <slotType>	insigniaOnGun	</slotType>
-              <slotId>	771	</slotId>
+              <slotId>	49000	</slotId>
               <rayStart>	0.000000 -0.0061799 1.46336	</rayStart>
               <rayEnd>	0.829676 -0.377305 1.44775	</rayEnd>
               <rayUp>	0.096 0.000000 0.000000	</rayUp>
@@ -1697,27 +2058,6 @@
               <size>	0.492	</size>
               <hideIfDamaged>	false	</hideIfDamaged>
               <isUVProportional>	true	</isUVProportional>
-            </slot>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	768	</slotId>
-              <anchorPosition>	-0.000001 -0.00308979 2.32052	</anchorPosition>
-              <anchorDirection>	-0.000000 0.000000 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	769	</slotId>
-              <anchorPosition>	0.000000 0.228904 0.228905	</anchorPosition>
-              <anchorDirection>	0.000000 0.707107 0.707107	</anchorDirection>
-              <applyTo>	16384	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	camouflage	</slotType>
-              <slotId>	770	</slotId>
-              <anchorPosition>	-0.000001 -0.00308979 2.32052	</anchorPosition>
-              <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
             </slot>
           </customizationSlots>
           <customization>
@@ -1753,21 +2093,20 @@
       <physicsShape>	1.056 0.025 1.098 -0.003 0.667 0.199 0.551 0.548 0.552 0.507 0.383 0.389 0.177 0.426 0.274	</physicsShape>
       <customizationSlots>
         <slot>
-          <slotType>	projectionDecal	</slotType>
-          <slotId>	578	</slotId>
-          <tags>	formfactor_any deny_formfactor_rect1x2 deny_formfactor_rect1x3 deny_formfactor_rect1x4 deny_formfactor_rect1x6	</tags>
-          <position>	-0.0159717 2.33786 0.284463	</position>
-          <rotation>	0.138558 -0.000021 3.14155	</rotation>
-          <scale>	2.00301 2.67726 2.00301	</scale>
-          <doubleSided>	false	</doubleSided>
-          <showOn>	4352	</showOn>
-          <clipAngle>	0.901981	</clipAngle>
-          <anchorPosition>	-0.0159749 0.731059 0.495505	</anchorPosition>
-          <anchorDirection>	0.000040 0.990416 0.138115	</anchorDirection>
+          <slotType>	paint	</slotType>
+          <slotId>	31000	</slotId>
+          <anchorPosition>	0.000000 0.756229 0.000000	</anchorPosition>
+          <anchorDirection>	0.000000 1 0.000000	</anchorDirection>
+        </slot>
+        <slot>
+          <slotType>	camouflage	</slotType>
+          <slotId>	32000	</slotId>
+          <anchorPosition>	0.000000 0.756229 0.000000	</anchorPosition>
+          <anchorDirection>	0.000000 1 0.000000	</anchorDirection>
         </slot>
         <slot>
           <slotType>	player	</slotType>
-          <slotId>	514	</slotId>
+          <slotId>	33000	</slotId>
           <rayStart>	-0.734943 0.461263 1.08737	</rayStart>
           <rayEnd>	-0.595097 0.375001 0.973345	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
@@ -1777,7 +2116,7 @@
         </slot>
         <slot>
           <slotType>	player	</slotType>
-          <slotId>	515	</slotId>
+          <slotId>	33001	</slotId>
           <rayStart>	0.734943 0.461263 1.08737	</rayStart>
           <rayEnd>	0.595097 0.375001 0.973345	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
@@ -1787,72 +2126,238 @@
           <isUVProportional>	true	</isUVProportional>
         </slot>
         <slot>
-          <slotType>	paint	</slotType>
-          <slotId>	512	</slotId>
-          <anchorPosition>	0.000000 0.756229 0.000000	</anchorPosition>
-          <anchorDirection>	0.000000 1 0.000000	</anchorDirection>
-        </slot>
-        <slot>
-          <slotType>	camouflage	</slotType>
-          <slotId>	513	</slotId>
-          <anchorPosition>	0.000000 0.756229 0.000000	</anchorPosition>
-          <anchorDirection>	0.000000 1 0.000000	</anchorDirection>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35000	</slotId>
+          <tags>	formfactor_square  direction_right_to_left	</tags>
+          <position>	-0.738748 2.00781 0.0831382	</position>
+          <rotation>	0.65009 -1.10584 3.13357	</rotation>
+          <scale>	1.1012 1.10119 1.10119	</scale>
+          <doubleSided>	false	</doubleSided>
+          <showOn>	256	</showOn>
+          <clipAngle>	0.951068	</clipAngle>
+          <anchorPosition>	-0.767487 0.524609 0.320377	</anchorPosition>
+          <anchorDirection>	-0.53739 0.796004 0.27855	</anchorDirection>
         </slot>
         <slot>
           <slotType>	projectionDecal	</slotType>
-          <slotId>	579	</slotId>
+          <slotId>	35001	</slotId>
+          <tags>	formfactor_square direction_left_to_right	</tags>
+          <position>	0.738777 2.00779 0.0831383	</position>
+          <rotation>	0.650106 1.10588 3.13352	</rotation>
+          <scale>	1.1012 1.1012 1.10119	</scale>
+          <doubleSided>	false	</doubleSided>
+          <showOn>	256	</showOn>
+          <clipAngle>	0.951068	</clipAngle>
+          <anchorPosition>	0.767906 0.524593 0.319608	</anchorPosition>
+          <anchorDirection>	0.544629 0.795994 0.264147	</anchorDirection>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35002	</slotId>
+          <tags>	formfactor_rect1x2 direction_right_to_left	</tags>
+          <position>	-0.835307 1.8622 0.246979	</position>
+          <rotation>	1.00543 -1.10899 3.12962	</rotation>
+          <scale>	1.52108 1.52107 1.52107	</scale>
+          <doubleSided>	false	</doubleSided>
+          <showOn>	256	</showOn>
+          <clipAngle>	0.951068	</clipAngle>
+          <anchorPosition>	-0.950895 0.418928 0.528909	</anchorPosition>
+          <anchorDirection>	-0.750553 0.535687 0.386924	</anchorDirection>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35003	</slotId>
+          <tags>	formfactor_rect1x3 direction_right_to_left	</tags>
+          <position>	-0.85575 1.86577 0.203644	</position>
+          <rotation>	1.04741 -1.11001 3.12873	</rotation>
+          <scale>	1.96896 1.96896 1.96896	</scale>
+          <doubleSided>	false	</doubleSided>
+          <showOn>	256	</showOn>
+          <clipAngle>	0.346481	</clipAngle>
+          <anchorPosition>	-0.969113 0.413578 0.484377	</anchorPosition>
+          <anchorDirection>	-0.770013 0.499775 0.396617	</anchorDirection>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35004	</slotId>
+          <tags>	formfactor_rect1x4  direction_right_to_left	</tags>
+          <position>	-1.04069 1.95028 0.245637	</position>
+          <rotation>	1.25738 -1.15018 3.10266	</rotation>
+          <scale>	2.25059 2.25059 2.25059	</scale>
+          <doubleSided>	false	</doubleSided>
+          <showOn>	256	</showOn>
+          <clipAngle>	0.670802	</clipAngle>
+          <anchorPosition>	-1.04304 0.42536 0.469148	</anchorPosition>
+          <anchorDirection>	-0.851818 0.308077 0.423668	</anchorDirection>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35005	</slotId>
+          <tags>	formfactor_rect1x2  direction_left_to_right	</tags>
+          <position>	0.835333 1.86219 0.246979	</position>
+          <rotation>	1.00544 1.10898 3.12956	</rotation>
+          <scale>	1.52108 1.52107 1.52107	</scale>
+          <doubleSided>	false	</doubleSided>
+          <showOn>	256	</showOn>
+          <clipAngle>	0.951068	</clipAngle>
+          <anchorPosition>	0.952566 0.418915 0.5256	</anchorPosition>
+          <anchorDirection>	0.761249 0.535678 0.365443	</anchorDirection>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35006	</slotId>
+          <tags>	formfactor_rect1x3  direction_left_to_right	</tags>
+          <position>	0.855776 1.86575 0.203644	</position>
+          <rotation>	1.04743 1.11002 3.12869	</rotation>
+          <scale>	1.96895 1.96895 1.96895	</scale>
+          <doubleSided>	false	</doubleSided>
+          <showOn>	256	</showOn>
+          <clipAngle>	0.346481	</clipAngle>
+          <anchorPosition>	0.970829 0.413556 0.480979	</anchorPosition>
+          <anchorDirection>	0.781482 0.499757 0.373535	</anchorDirection>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35007	</slotId>
+          <tags>	formfactor_rect1x6  direction_right_to_left	</tags>
+          <position>	-0.16899 1.6747 -0.18443	</position>
+          <rotation>	1.33417 -1.17113 3.0866	</rotation>
+          <scale>	2.25057 2.25059 2.25057	</scale>
+          <doubleSided>	false	</doubleSided>
+          <showOn>	256	</showOn>
+          <clipAngle>	1.10308	</clipAngle>
+          <anchorPosition>	-1.09018 0.395983 0.489999	</anchorPosition>
+          <anchorDirection>	-0.87278 0.23407 0.428329	</anchorDirection>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35008	</slotId>
           <tags>	formfactor_square	</tags>
-          <parentSlotId>	578	</parentSlotId>
-          <position>	0.0050514 1.64098 -2.3969	</position>
-          <rotation>	3.14159 -0.000002 -0.000041	</rotation>
-          <scale>	1.56268 0.78017 1.56269	</scale>
+          <position>	-0.0159831 2.35679 0.148719	</position>
+          <rotation>	0.138558 -0.000019 3.14156	</rotation>
+          <scale>	2.3029 3.07811 2.30291	</scale>
           <doubleSided>	false	</doubleSided>
-          <showOn>	16	</showOn>
+          <showOn>	4352	</showOn>
           <clipAngle>	0.901981	</clipAngle>
-          <anchorPosition>	0.00505434 0.0433903 -2.17456	</anchorPosition>
-          <anchorDirection>	-0.000041 1 -0.000003	</anchorDirection>
+          <anchorPosition>	-0.0159855 0.749988 0.359761	</anchorPosition>
+          <anchorDirection>	0.000030 0.990416 0.138115	</anchorDirection>
         </slot>
         <slot>
           <slotType>	projectionDecal	</slotType>
-          <slotId>	580	</slotId>
-          <tags>	formfactor_rect1x2 preferred_formfactor_rect1x2	</tags>
-          <parentSlotId>	578	</parentSlotId>
-          <position>	0.000032 2.37691 0.00432142	</position>
-          <rotation>	0.138558 -0.000021 3.14155	</rotation>
-          <scale>	1.876 2.5075 1.87601	</scale>
+          <slotId>	35009	</slotId>
+          <tags>	direction_right_to_left formfactor_rect1x4	</tags>
+          <position>	-0.000331425 2.07322 -0.193662	</position>
+          <rotation>	-0.000009 -1.56905 3.14157	</rotation>
+          <scale>	2.58245 1.1135 2.58246	</scale>
           <doubleSided>	false	</doubleSided>
-          <showOn>	256	</showOn>
-          <clipAngle>	0.0225777	</clipAngle>
-          <anchorPosition>	0.000029 0.770109 0.215364	</anchorPosition>
-          <anchorDirection>	0.000040 0.990416 0.138115	</anchorDirection>
+          <showOn>	4352	</showOn>
+          <clipAngle>	1.02521	</clipAngle>
+          <anchorPosition>	-0.000329324 0.779854 0.0286852	</anchorPosition>
+          <anchorDirection>	0.000009 1 0.000023	</anchorDirection>
         </slot>
         <slot>
           <slotType>	projectionDecal	</slotType>
-          <slotId>	581	</slotId>
-          <tags>	formfactor_rect1x3 preferred_formfactor_rect1x3	</tags>
-          <parentSlotId>	578	</parentSlotId>
-          <position>	0.000035 2.39394 -0.117815	</position>
-          <rotation>	0.138558 -0.000021 3.14155	</rotation>
-          <scale>	2.05411 2.74558 2.05412	</scale>
-          <doubleSided>	false	</doubleSided>
-          <showOn>	256	</showOn>
-          <clipAngle>	0.0225778	</clipAngle>
-          <anchorPosition>	0.000032 0.787135 0.0932266	</anchorPosition>
-          <anchorDirection>	0.000040 0.990416 0.138115	</anchorDirection>
-        </slot>
-        <slot>
-          <slotType>	projectionDecal	</slotType>
-          <slotId>	582	</slotId>
-          <tags>	formfactor_rect1x4 preferred_formfactor_rect1x4	</tags>
-          <parentSlotId>	578	</parentSlotId>
-          <position>	0.000035 2.39394 -0.117815	</position>
-          <rotation>	0.138558 -0.000021 3.14155	</rotation>
-          <scale>	1.95413 2.61195 1.95415	</scale>
+          <slotId>	35010	</slotId>
+          <tags>	formfactor_rect1x3	</tags>
+          <position>	0.000018 2.38174 -0.03033	</position>
+          <rotation>	0.138558 -0.000019 3.14156	</rotation>
+          <scale>	2.46948 3.30078 2.4695	</scale>
           <doubleSided>	false	</doubleSided>
           <showOn>	256	</showOn>
           <clipAngle>	0.0225778	</clipAngle>
-          <anchorPosition>	0.000032 0.787133 0.0932263	</anchorPosition>
-          <anchorDirection>	0.000040 0.990416 0.138115	</anchorDirection>
+          <anchorPosition>	0.000016 0.774934 0.180711	</anchorPosition>
+          <anchorDirection>	0.000030 0.990416 0.138115	</anchorDirection>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35011	</slotId>
+          <tags>	formfactor_rect1x6	</tags>
+          <position>	0.000017 2.37231 0.0372623	</position>
+          <rotation>	0.138558 -0.000019 3.14156	</rotation>
+          <scale>	2.36241 3.15767 2.36244	</scale>
+          <doubleSided>	false	</doubleSided>
+          <showOn>	256	</showOn>
+          <clipAngle>	0.0225778	</clipAngle>
+          <anchorPosition>	0.000015 0.765506 0.248304	</anchorPosition>
+          <anchorDirection>	0.000030 0.990416 0.138115	</anchorDirection>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35012	</slotId>
+          <tags>	formfactor_rect1x2	</tags>
+          <position>	0.000017 2.37691 0.00434077	</position>
+          <rotation>	0.138558 -0.000019 3.14156	</rotation>
+          <scale>	2.13188 2.84951 2.13189	</scale>
+          <doubleSided>	false	</doubleSided>
+          <showOn>	256	</showOn>
+          <clipAngle>	0.718346	</clipAngle>
+          <anchorPosition>	0.000015 0.770109 0.215383	</anchorPosition>
+          <anchorDirection>	0.000030 0.990416 0.138115	</anchorDirection>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35013	</slotId>
+          <tags>	formfactor_rect1x2 direction_right_to_left	</tags>
+          <position>	-0.000331425 2.07322 -0.193662	</position>
+          <rotation>	-0.000009 -1.56905 3.14157	</rotation>
+          <scale>	2.31921 0.999997 2.31922	</scale>
+          <doubleSided>	false	</doubleSided>
+          <showOn>	4352	</showOn>
+          <clipAngle>	1.02521	</clipAngle>
+          <anchorPosition>	-0.000329324 0.779856 0.0286852	</anchorPosition>
+          <anchorDirection>	0.000009 1 0.000023	</anchorDirection>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35014	</slotId>
+          <tags>	direction_right_to_left formfactor_rect1x3	</tags>
+          <position>	-0.000331425 2.07322 -0.193662	</position>
+          <rotation>	-0.000009 -1.56905 3.14157	</rotation>
+          <scale>	2.58245 1.1135 2.58246	</scale>
+          <doubleSided>	false	</doubleSided>
+          <showOn>	4352	</showOn>
+          <clipAngle>	1.02521	</clipAngle>
+          <anchorPosition>	-0.000329324 0.779854 0.0286852	</anchorPosition>
+          <anchorDirection>	0.000009 1 0.000023	</anchorDirection>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35015	</slotId>
+          <tags>	formfactor_rect1x4	</tags>
+          <position>	0.000019 2.39004 -0.089847	</position>
+          <rotation>	0.138558 -0.000019 3.14156	</rotation>
+          <scale>	2.36241 3.15767 2.36244	</scale>
+          <doubleSided>	false	</doubleSided>
+          <showOn>	256	</showOn>
+          <clipAngle>	0.0225778	</clipAngle>
+          <anchorPosition>	0.000017 0.783231 0.121194	</anchorPosition>
+          <anchorDirection>	0.000030 0.990416 0.138115	</anchorDirection>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35016	</slotId>
+          <tags>	formfactor_rect1x4 direction_left_to_right	</tags>
+          <position>	1.04072 1.95026 0.245638	</position>
+          <rotation>	1.25739 1.15021 -3.10274	</rotation>
+          <scale>	2.25059 2.2506 2.25059	</scale>
+          <doubleSided>	false	</doubleSided>
+          <showOn>	256	</showOn>
+          <clipAngle>	0.670802	</clipAngle>
+          <anchorPosition>	1.04307 0.42534 0.469149	</anchorPosition>
+          <anchorDirection>	0.851869 0.308068 0.423572	</anchorDirection>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35017	</slotId>
+          <tags>	formfactor_rect1x6 direction_left_to_right	</tags>
+          <position>	0.169014 1.67469 -0.18443	</position>
+          <rotation>	1.33419 1.17103 -3.0867	</rotation>
+          <scale>	2.25057 2.25059 2.25058	</scale>
+          <doubleSided>	false	</doubleSided>
+          <showOn>	256	</showOn>
+          <clipAngle>	1.10308	</clipAngle>
+          <anchorPosition>	1.09021 0.395954 0.49	</anchorPosition>
+          <anchorDirection>	0.872785 0.234052 0.428329	</anchorDirection>
         </slot>
       </customizationSlots>
       <customization>
@@ -1928,7 +2433,7 @@
     <damagedStateGroup>	large	</damagedStateGroup>
   </effects>
   <emblems>
-    <default>	poland_chekers	</default>
+    <default>	15516	</default>
     <lodDist>	MEDIUM	</lodDist>
     <alpha>	0.88	</alpha>
   </emblems>

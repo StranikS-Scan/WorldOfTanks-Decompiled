@@ -257,7 +257,7 @@ class BootcampBattleDescription(ArenaWithLabelDescription):
         return i18n.makeString('#arenas:type/{}/description{}'.format(functions.getArenaSubTypeName(self._visitor.type.getID()), lessonId))
 
     def getScreenIcon(self):
-        pass
+        return settings.DEFAULT_SCREEN_MAP_IMAGE_RES_PATH
 
 
 class EpicBattlesDescription(ArenaWithLabelDescription):

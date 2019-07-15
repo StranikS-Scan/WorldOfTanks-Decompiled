@@ -74,13 +74,13 @@
     <customizationSlots>
       <slot>
         <slotType>	camouflage	</slotType>
-        <slotId>	3	</slotId>
+        <slotId>	12000	</slotId>
         <anchorPosition>	-0.000005 0.143387 2.00934	</anchorPosition>
         <anchorDirection>	-0.000000 0.730586 0.68282	</anchorDirection>
       </slot>
       <slot>
         <slotType>	clan	</slotType>
-        <slotId>	1	</slotId>
+        <slotId>	10000	</slotId>
         <rayStart>	-0.907826 0.052421 2.56225	</rayStart>
         <rayEnd>	-0.907829 -0.0996119 2.43231	</rayEnd>
         <rayUp>	0.000000 0.000000 -1	</rayUp>
@@ -90,7 +90,7 @@
       </slot>
       <slot>
         <slotType>	inscription	</slotType>
-        <slotId>	36	</slotId>
+        <slotId>	14000	</slotId>
         <rayStart>	0.0223476 0.294354 1.86682	</rayStart>
         <rayEnd>	0.0223476 0.103986 1.8055	</rayEnd>
         <rayUp>	0.000000 0.000000 -1	</rayUp>
@@ -100,7 +100,7 @@
       </slot>
       <slot>
         <slotType>	paint	</slotType>
-        <slotId>	2	</slotId>
+        <slotId>	11000	</slotId>
         <anchorPosition>	0.000000 0.255983 1.58937	</anchorPosition>
         <anchorDirection>	0.000000 0.159011 0.987277	</anchorDirection>
       </slot>
@@ -171,6 +171,7 @@
           <index>	4	</index>
           <isLeft>	true	</isLeft>
           <name>	WD_L0	</name>
+          <nonTrack>	true	</nonTrack>
           <isLeading>	true	</isLeading>
           <deflatable>	true	</deflatable>
           <steeringProcessor>	true	</steeringProcessor>
@@ -202,6 +203,7 @@
           <index>	0	</index>
           <isLeft>	true	</isLeft>
           <name>	WD_L1	</name>
+          <nonTrack>	true	</nonTrack>
           <isLeading>	true	</isLeading>
           <deflatable>	true	</deflatable>
           <steeringProcessor>	true	</steeringProcessor>
@@ -233,6 +235,7 @@
           <index>	2	</index>
           <isLeft>	true	</isLeft>
           <name>	W_L0	</name>
+          <nonTrack>	true	</nonTrack>
           <scrollProcessor>
             <connectedToEngine>	true	</connectedToEngine>
           </scrollProcessor>
@@ -262,6 +265,7 @@
           <index>	5	</index>
           <isLeft>	false	</isLeft>
           <name>	WD_R0	</name>
+          <nonTrack>	true	</nonTrack>
           <isLeading>	true	</isLeading>
           <deflatable>	true	</deflatable>
           <steeringProcessor>	true	</steeringProcessor>
@@ -293,6 +297,7 @@
           <index>	1	</index>
           <isLeft>	false	</isLeft>
           <name>	WD_R1	</name>
+          <nonTrack>	true	</nonTrack>
           <isLeading>	true	</isLeading>
           <deflatable>	true	</deflatable>
           <steeringProcessor>	true	</steeringProcessor>
@@ -324,6 +329,7 @@
           <index>	3	</index>
           <isLeft>	false	</isLeft>
           <name>	W_R0	</name>
+          <nonTrack>	true	</nonTrack>
           <scrollProcessor>
             <connectedToEngine>	true	</connectedToEngine>
           </scrollProcessor>
@@ -356,6 +362,20 @@
           <sideShift>	0.2	</sideShift>
           <peakShift>	0.95	</peakShift>
         </globalDeflationShaderParams>
+        <traces>
+          <wheelTrace>
+            <name>	WD_L0	</name>
+          </wheelTrace>
+          <wheelTrace>
+            <name>	WD_L1	</name>
+          </wheelTrace>
+          <wheelTrace>
+            <name>	WD_R0	</name>
+          </wheelTrace>
+          <wheelTrace>
+            <name>	WD_R1	</name>
+          </wheelTrace>
+        </traces>
         <activePostmortem>	true	</activePostmortem>
       </wheels>
       <drivingWheels>	WD_L0 WD_L1	</drivingWheels>
@@ -437,13 +457,13 @@
       <customizationSlots>
         <slot>
           <slotType>	style	</slotType>
-          <slotId>	257	</slotId>
+          <slotId>	29000	</slotId>
           <anchorPosition>	0.000069 2.33969 -0.97536	</anchorPosition>
           <anchorDirection>	0.000000 1 0.000000	</anchorDirection>
         </slot>
         <slot>
           <slotType>	paint	</slotType>
-          <slotId>	256	</slotId>
+          <slotId>	21000	</slotId>
           <anchorPosition>	-1.28724 0.645635 0.00228655	</anchorPosition>
           <anchorDirection>	-0.893865 0.448333 0.0015878	</anchorDirection>
         </slot>
@@ -499,6 +519,7 @@
           <index>	4	</index>
           <isLeft>	true	</isLeft>
           <name>	WD_L0	</name>
+          <nonTrack>	true	</nonTrack>
           <isLeading>	true	</isLeading>
           <deflatable>	true	</deflatable>
           <steeringProcessor>	true	</steeringProcessor>
@@ -530,6 +551,7 @@
           <index>	0	</index>
           <isLeft>	true	</isLeft>
           <name>	WD_L1	</name>
+          <nonTrack>	true	</nonTrack>
           <isLeading>	true	</isLeading>
           <deflatable>	true	</deflatable>
           <steeringProcessor>	true	</steeringProcessor>
@@ -561,6 +583,7 @@
           <index>	2	</index>
           <isLeft>	true	</isLeft>
           <name>	W_L0	</name>
+          <nonTrack>	true	</nonTrack>
           <scrollProcessor>
             <connectedToEngine>	true	</connectedToEngine>
           </scrollProcessor>
@@ -590,6 +613,7 @@
           <index>	5	</index>
           <isLeft>	false	</isLeft>
           <name>	WD_R0	</name>
+          <nonTrack>	true	</nonTrack>
           <isLeading>	true	</isLeading>
           <deflatable>	true	</deflatable>
           <steeringProcessor>	true	</steeringProcessor>
@@ -621,6 +645,7 @@
           <index>	1	</index>
           <isLeft>	false	</isLeft>
           <name>	WD_R1	</name>
+          <nonTrack>	true	</nonTrack>
           <isLeading>	true	</isLeading>
           <deflatable>	true	</deflatable>
           <steeringProcessor>	true	</steeringProcessor>
@@ -652,6 +677,7 @@
           <index>	3	</index>
           <isLeft>	false	</isLeft>
           <name>	W_R0	</name>
+          <nonTrack>	true	</nonTrack>
           <scrollProcessor>
             <connectedToEngine>	true	</connectedToEngine>
           </scrollProcessor>
@@ -684,6 +710,20 @@
           <sideShift>	0.2	</sideShift>
           <peakShift>	0.95	</peakShift>
         </globalDeflationShaderParams>
+        <traces>
+          <wheelTrace>
+            <name>	WD_L0	</name>
+          </wheelTrace>
+          <wheelTrace>
+            <name>	WD_L1	</name>
+          </wheelTrace>
+          <wheelTrace>
+            <name>	WD_R0	</name>
+          </wheelTrace>
+          <wheelTrace>
+            <name>	WD_R1	</name>
+          </wheelTrace>
+        </traces>
         <activePostmortem>	true	</activePostmortem>
       </wheels>
       <drivingWheels>	WD_L0 WD_L1	</drivingWheels>
@@ -765,13 +805,13 @@
       <customizationSlots>
         <slot>
           <slotType>	style	</slotType>
-          <slotId>	257	</slotId>
+          <slotId>	29000	</slotId>
           <anchorPosition>	0.000183228 2.33968 -0.975397	</anchorPosition>
           <anchorDirection>	0.000000 1 -0.000000	</anchorDirection>
         </slot>
         <slot>
           <slotType>	paint	</slotType>
-          <slotId>	256	</slotId>
+          <slotId>	21000	</slotId>
           <anchorPosition>	-1.28724 0.645635 0.00228655	</anchorPosition>
           <anchorDirection>	-0.893865 0.448333 0.0015878	</anchorDirection>
         </slot>
@@ -849,14 +889,14 @@
           <customizationSlots>
             <slot>
               <slotType>	camouflage	</slotType>
-              <slotId>	770	</slotId>
+              <slotId>	42000	</slotId>
               <anchorPosition>	0.000299035 -0.000697255 1.15211	</anchorPosition>
               <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
               <applyTo>	4096	</applyTo>
             </slot>
             <slot>
               <slotType>	insigniaOnGun	</slotType>
-              <slotId>	771	</slotId>
+              <slotId>	49000	</slotId>
               <rayStart>	-0.002 0.000000 1.4664	</rayStart>
               <rayEnd>	0.014497 -0.0572455 1.46485	</rayEnd>
               <rayUp>	0.071138 0.000000 0.000000	</rayUp>
@@ -867,14 +907,14 @@
             </slot>
             <slot>
               <slotType>	paint	</slotType>
-              <slotId>	768	</slotId>
+              <slotId>	41000	</slotId>
               <anchorPosition>	-0.00104447 0.00107217 1.24994	</anchorPosition>
               <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
               <applyTo>	4096	</applyTo>
             </slot>
             <slot>
               <slotType>	paint	</slotType>
-              <slotId>	769	</slotId>
+              <slotId>	41001	</slotId>
               <anchorPosition>	0.000000 0.174792 0.174792	</anchorPosition>
               <anchorDirection>	0.000000 0.707107 0.707107	</anchorDirection>
               <applyTo>	16384	</applyTo>
@@ -927,14 +967,14 @@
           <customizationSlots>
             <slot>
               <slotType>	camouflage	</slotType>
-              <slotId>	770	</slotId>
+              <slotId>	42000	</slotId>
               <anchorPosition>	0.000290469 0.00981569 1.83899	</anchorPosition>
               <anchorDirection>	-0.000000 0.000000 1	</anchorDirection>
               <applyTo>	4096	</applyTo>
             </slot>
             <slot>
               <slotType>	insigniaOnGun	</slotType>
-              <slotId>	771	</slotId>
+              <slotId>	49000	</slotId>
               <rayStart>	-0.000000 0.000000 2.68583	</rayStart>
               <rayEnd>	-0.0309458 0.0318767 2.6854	</rayEnd>
               <rayUp>	0.079138 0.000000 0.000000	</rayUp>
@@ -945,14 +985,14 @@
             </slot>
             <slot>
               <slotType>	paint	</slotType>
-              <slotId>	768	</slotId>
+              <slotId>	41000	</slotId>
               <anchorPosition>	0.000055 0.0014552 2.09926	</anchorPosition>
               <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
               <applyTo>	4096	</applyTo>
             </slot>
             <slot>
               <slotType>	paint	</slotType>
-              <slotId>	769	</slotId>
+              <slotId>	41001	</slotId>
               <anchorPosition>	0.000000 0.174792 0.174792	</anchorPosition>
               <anchorDirection>	0.000000 0.707107 0.707107	</anchorDirection>
               <applyTo>	16384	</applyTo>
@@ -1001,14 +1041,14 @@
           <customizationSlots>
             <slot>
               <slotType>	camouflage	</slotType>
-              <slotId>	770	</slotId>
+              <slotId>	42000	</slotId>
               <anchorPosition>	0.000290439 0.0111398 1.98463	</anchorPosition>
               <anchorDirection>	-0.000000 0.000000 1	</anchorDirection>
               <applyTo>	4096	</applyTo>
             </slot>
             <slot>
               <slotType>	insigniaOnGun	</slotType>
-              <slotId>	771	</slotId>
+              <slotId>	49000	</slotId>
               <rayStart>	-0.000000 0.000000 2.68491	</rayStart>
               <rayEnd>	-0.0318306 0.0329563 2.68458	</rayEnd>
               <rayUp>	0.080138 0.000000 0.000000	</rayUp>
@@ -1019,14 +1059,14 @@
             </slot>
             <slot>
               <slotType>	paint	</slotType>
-              <slotId>	768	</slotId>
+              <slotId>	41000	</slotId>
               <anchorPosition>	0.000055 0.00106533 2.0981	</anchorPosition>
               <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
               <applyTo>	4096	</applyTo>
             </slot>
             <slot>
               <slotType>	paint	</slotType>
-              <slotId>	769	</slotId>
+              <slotId>	41001	</slotId>
               <anchorPosition>	0.000000 0.174792 0.174792	</anchorPosition>
               <anchorDirection>	0.000000 0.707107 0.707107	</anchorDirection>
               <applyTo>	16384	</applyTo>
@@ -1055,13 +1095,13 @@
       <customizationSlots>
         <slot>
           <slotType>	camouflage	</slotType>
-          <slotId>	513	</slotId>
+          <slotId>	32000	</slotId>
           <anchorPosition>	0.000069 0.723289 -0.314419	</anchorPosition>
           <anchorDirection>	-0.000000 1 0.000000	</anchorDirection>
         </slot>
         <slot>
           <slotType>	player	</slotType>
-          <slotId>	514	</slotId>
+          <slotId>	33000	</slotId>
           <rayStart>	-0.83448 0.385458 0.249428	</rayStart>
           <rayEnd>	-0.648971 0.326684 0.203256	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
@@ -1071,7 +1111,7 @@
         </slot>
         <slot>
           <slotType>	player	</slotType>
-          <slotId>	515	</slotId>
+          <slotId>	33001	</slotId>
           <rayStart>	0.827037 0.412634 0.185303	</rayStart>
           <rayEnd>	0.641525 0.353882 0.139111	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
@@ -1082,7 +1122,7 @@
         </slot>
         <slot>
           <slotType>	inscription	</slotType>
-          <slotId>	546	</slotId>
+          <slotId>	34000	</slotId>
           <rayStart>	0.89268 0.330583 -0.493133	</rayStart>
           <rayEnd>	0.706985 0.269143 -0.451388	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
@@ -1092,7 +1132,7 @@
         </slot>
         <slot>
           <slotType>	paint	</slotType>
-          <slotId>	512	</slotId>
+          <slotId>	31000	</slotId>
           <anchorPosition>	0.000000 0.723236 0.000000	</anchorPosition>
           <anchorDirection>	0.000000 1 0.000000	</anchorDirection>
         </slot>
@@ -1161,6 +1201,7 @@
         <Chassis_F107_Hotchkiss_EBR>
           <axleCount>	3	</axleCount>
           <axleSteeringLockAngles>	-15 0 15	</axleSteeringLockAngles>
+          <wheelRiseSpeed>	0	</wheelRiseSpeed>
           <grounds>
             <ground>
               <medium>
@@ -1197,6 +1238,7 @@
         <Chassis_F107_Hotchkiss_EBR_2>
           <axleCount>	3	</axleCount>
           <axleSteeringLockAngles>	-18 0 18	</axleSteeringLockAngles>
+          <wheelRiseSpeed>	0	</wheelRiseSpeed>
           <grounds>
             <ground>
               <medium>
@@ -1271,7 +1313,7 @@
     <waterCollisionHeavy>	waterCollisionWheeledHeavy	</waterCollisionHeavy>
   </effects>
   <emblems>
-    <default>	french_rose	</default>
+    <default>	15504	</default>
     <lodDist>	MEDIUM	</lodDist>
     <alpha>	0.8	</alpha>
   </emblems>

@@ -3,7 +3,7 @@
 import weakref
 from ArtilleryEquipment import ArtilleryEquipment
 from AvatarInputHandler import gun_marker_ctrl
-from AvatarInputHandler.aih_constants import GUN_MARKER_TYPE
+from aih_constants import GUN_MARKER_TYPE
 from helpers import dependency
 from helpers.CallbackDelayer import CallbackDelayer
 from skeletons.gui.battle_session import IBattleSessionProvider

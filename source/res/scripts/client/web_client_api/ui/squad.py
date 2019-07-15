@@ -4,9 +4,10 @@ from gui.prb_control import prbDispatcherProperty
 from gui.prb_control.entities.base.ctx import PrbAction
 from gui.prb_control.settings import PREBATTLE_ACTION_NAME
 from web_client_api import w2c, W2CSchema, Field
+from web_client_api.common import SPA_ID_TYPES
 
 class _CreateSquadSchema(W2CSchema):
-    spa_id = Field(required=True, type=(int, long, basestring))
+    spa_id = Field(required=True, type=SPA_ID_TYPES)
 
 
 class SquadWebApiMixin(object):

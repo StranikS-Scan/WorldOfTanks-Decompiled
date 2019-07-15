@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/proto/shared_errors.py
-import BigWorld
 from gui.Scaleform.locale.MESSENGER import MESSENGER as I18N_MESSENGER
+from gui.impl import backport
 from helpers import i18n
 from messenger.m_constants import CLIENT_ERROR_NAMES, CLIENT_ACTION_NAMES, CLIENT_ERROR_ID
 from messenger.proto.interfaces import IChatError
@@ -135,7 +135,7 @@ class ChatBanError(IChatError):
 
     def getMessage(self):
         if self._endTime:
-            banEndTime = BigWorld.wg_getLongDateFormat(self._endTime) + ' ' + BigWorld.wg_getShortTimeFormat(self._endTime)
+            banEndTime = backport.getLongDateFormat(self._endTime) + ' ' + backport.getShortTimeFormat(self._endTime)
             msg = i18n.makeString('#chat:errors/chatbanned', banEndTime=banEndTime, banReason=self._reason)
         else:
             msg = i18n.makeString('#chat:errors/chatbannedpermanent', banReason=self._reason)

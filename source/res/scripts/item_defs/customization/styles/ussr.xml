@@ -3,7 +3,7 @@
     <userString>	#vehicle_customization:styles/rented_styles	</userString>
     <season>	ALL	</season>
     <historical>	true	</historical>
-    <priceGroup>	rented style	</priceGroup>
+    <priceGroup>	styles 75000s	</priceGroup>
     <vehicleFilter>
       <include>
         <nations>	ussr	</nations>
@@ -63,7 +63,7 @@
     <userString>	#vehicle_customization:styles/main_styles	</userString>
     <season>	ALL	</season>
     <historical>	true	</historical>
-    <priceGroup>	style gold	</priceGroup>
+    <priceGroup>	styles 750g	</priceGroup>
     <vehicleFilter>
       <include>
         <nations>	ussr	</nations>
@@ -76,6 +76,7 @@
       <id>	33	</id>
       <texture>	gui/maps/vehicles/styles/style_01.png	</texture>
       <userString>	#vehicle_customization:gold_style/gold_style_01	</userString>
+      <longDescriptionSpecial>	#vehicle_customization:gold_style/gold_style_01_desc/long	</longDescriptionSpecial>
       <outfits>
         <outfit>
           <season>	winter	</season>
@@ -201,7 +202,7 @@
     <userString>	#vehicle_customization:styles/special_styles	</userString>
     <season>	ALL	</season>
     <historical>	false	</historical>
-    <priceGroup>	legacy notInShop	</priceGroup>
+    <priceGroup>	styles 750g notInShop	</priceGroup>
     <vehicleFilter>
       <include>
         <nations>	ussr	</nations>
@@ -253,7 +254,7 @@
     <userString>	#vehicle_customization:styles/unique_styles	</userString>
     <season>	ALL	</season>
     <historical>	false	</historical>
-    <priceGroup>	kv2_w style	</priceGroup>
+    <priceGroup>	styles 3000g notInShop	</priceGroup>
     <vehicleFilter>
       <include>
         <vehicles>	ussr:R152_KV2_W	</vehicles>
@@ -263,6 +264,7 @@
       <id>	170	</id>
       <texture>	gui/maps/vehicles/styles/kv2_w.png	</texture>
       <description>	#vehicle_customization:special_style/kv2_w_description	</description>
+      <longDescriptionSpecial>	#vehicle_customization:special_style/kv2_w_description/long	</longDescriptionSpecial>
       <modelsSet>	WH	</modelsSet>
       <userString>	#vehicle_customization:special_style/kv2_w	</userString>
       <outfits>
@@ -288,7 +290,7 @@
           </decals>
           <insignias>
             <item>
-              <id>	1	</id>
+              <id>	12	</id>
               <appliedTo>	4096	</appliedTo>
             </item>
           </insignias>
@@ -300,7 +302,7 @@
     <userString>	#vehicle_customization:styles/special_styles	</userString>
     <season>	ALL	</season>
     <historical>	true	</historical>
-    <priceGroup>	special style notInShop	</priceGroup>
+    <priceGroup>	styles 750g notInShop	</priceGroup>
     <vehicleFilter>
       <include>
         <vehicles>	ussr:R154_T_34E_1943	</vehicles>
@@ -310,6 +312,7 @@
       <id>	184	</id>
       <texture>	gui/maps/vehicles/styles/battle_of_kursk_01.png	</texture>
       <description>	#vehicle_customization:special_style/battle_of_kursk_01_desc	</description>
+      <longDescriptionSpecial>	#vehicle_customization:special_style/battle_of_kursk_01_desc/long	</longDescriptionSpecial>
       <modelsSet>	KurskBattle	</modelsSet>
       <maxNumber>	1	</maxNumber>
       <userString>	#vehicle_customization:special_style/battle_of_kursk_01	</userString>
@@ -344,7 +347,7 @@
     <userString>	#vehicle_customization:styles/special_styles	</userString>
     <season>	ALL	</season>
     <historical>	false	</historical>
-    <priceGroup>	Rostelecom style notInShop	</priceGroup>
+    <priceGroup>	styles 750g notInShop	</priceGroup>
     <vehicleFilter>
       <include>
         <vehicles>	ussr:R127_T44_100_P	</vehicles>
@@ -385,7 +388,7 @@
     <userString>	#vehicle_customization:styles/special_styles	</userString>
     <season>	ALL	</season>
     <historical>	false	</historical>
-    <priceGroup>	SnowLeopard styles	</priceGroup>
+    <priceGroup>	styles 1500g notInShop	</priceGroup>
     <vehicleFilter>
       <include>
         <vehicles>	ussr:R159_SU_130PM	</vehicles>
@@ -395,8 +398,10 @@
       <id>	225	</id>
       <texture>	gui/maps/vehicles/styles/snow_leopard.png	</texture>
       <description>	#vehicle_customization:special_style/snow_leopard_description	</description>
+      <longDescriptionSpecial>	#vehicle_customization:special_style/snow_leopard_description/long	</longDescriptionSpecial>
       <modelsSet>	SnowLeopard	</modelsSet>
       <userString>	#vehicle_customization:special_style/snow_leopard	</userString>
+      <tags>	winter_hunt	</tags>
       <outfits>
         <outfit>
           <season>	ALL	</season>
@@ -426,7 +431,7 @@
     <userString>	#vehicle_customization:styles/special_styles	</userString>
     <season>	ALL	</season>
     <historical>	true	</historical>
-    <priceGroup>	SD styles notInShop	</priceGroup>
+    <priceGroup>	styles 750g notInShop	</priceGroup>
     <vehicleFilter>
       <include>
         <vehicles>	ussr:R160_T_50_2	</vehicles>
@@ -436,6 +441,7 @@
       <id>	215	</id>
       <texture>	gui/maps/vehicles/styles/t50_2.png	</texture>
       <description>	#vehicle_customization:special_style/t50_2_desc	</description>
+      <longDescriptionSpecial>	#vehicle_customization:special_style/t50_2_desc/long	</longDescriptionSpecial>
       <modelsSet>	SD	</modelsSet>
       <maxNumber>	1	</maxNumber>
       <userString>	#vehicle_customization:special_style/t50_2	</userString>
@@ -458,7 +464,7 @@
     <userString>	#vehicle_customization:styles/unique_styles	</userString>
     <season>	ALL	</season>
     <historical>	true	</historical>
-    <priceGroup>	NYst styles	</priceGroup>
+    <priceGroup>	styles 4500g notInShop	</priceGroup>
     <vehicleFilter>
       <include>
         <vehicles>	ussr:R45_IS-7	</vehicles>
@@ -468,10 +474,11 @@
       <id>	228	</id>
       <texture>	gui/maps/vehicles/styles/IS7_NYst.png	</texture>
       <description>	#vehicle_customization:special_style/IS7_NYst_description	</description>
+      <longDescriptionSpecial>	#vehicle_customization:special_style/IS7_NYst_description/long	</longDescriptionSpecial>
       <modelsSet>	NYst	</modelsSet>
+      <maxNumber>	1	</maxNumber>
       <userString>	#vehicle_customization:special_style/IS7_NYst	</userString>
       <tags>	NY2019_style	</tags>
-      <maxNumber>	1	</maxNumber>
       <outfits>
         <outfit>
           <season>	ALL	</season>
@@ -501,7 +508,7 @@
     <userString>	#vehicle_customization:styles/main_styles	</userString>
     <season>	ALL	</season>
     <historical>	true	</historical>
-    <priceGroup>	generic custom look styles	</priceGroup>
+    <priceGroup>	styles 700g	</priceGroup>
     <vehicleFilter>
       <include>
         <nations>	ussr	</nations>
@@ -514,6 +521,7 @@
       <id>	238	</id>
       <texture>	gui/maps/vehicles/styles/generic_custom_look_ussr.png	</texture>
       <description>	#vehicle_customization:main_style/generic_custom_look_ussr_desc	</description>
+      <longDescriptionSpecial>	#vehicle_customization:main_style/generic_custom_look_ussr_desc/long	</longDescriptionSpecial>
       <userString>	#vehicle_customization:main_style/generic_custom_look_ussr	</userString>
       <outfits>
         <outfit>
@@ -590,7 +598,7 @@
       <texture>	gui/maps/vehicles/styles/generic_custom_look_2_ussr.png	</texture>
       <description>	#vehicle_customization:main_style/generic_custom_look_2_ussr_desc	</description>
       <userString>	#vehicle_customization:main_style/generic_custom_look_2_ussr	</userString>
-      <priceGroup>	generic custom look styles	</priceGroup>
+      <priceGroup>	styles 700g	</priceGroup>
       <outfits>
         <outfit>
           <season>	winter	</season>

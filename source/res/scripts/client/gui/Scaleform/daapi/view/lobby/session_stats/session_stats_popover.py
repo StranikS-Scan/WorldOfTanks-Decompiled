@@ -142,6 +142,9 @@ class SessionStatsPopover(SessionStatsPopoverMeta):
         return RES_ICONS.MAPS_ICONS_BATTLETYPES_BACKGROUNDS_RANDOM
 
     def __onServerSettingChanged(self, diff):
+        if 'hallOfFame' in diff:
+            self._isHofAccessible = isHofEnabled() and self._lobbyContext.getServerSettings().isLinkWithHoFEnabled()
+            self.as_setButtonsStateS(self.__getButtonStates())
         if 'sessionStats' in diff or ('sessionStats', '_r') in diff:
             isSessionStatsEnabled = diff['sessionStats'].get('isSessionStatsEnabled', False)
             if not isSessionStatsEnabled:

@@ -5,7 +5,8 @@ import math
 import BigWorld
 import Math
 from Math import Vector3, Matrix
-from AvatarInputHandler import mathUtils, AimingSystems
+import math_utils
+from AvatarInputHandler import AimingSystems
 from AvatarInputHandler.AimingSystems import IAimingSystem
 from ProjectileMover import collideDynamic
 from debug_utils import LOG_WARNING
@@ -41,7 +42,7 @@ class ArcadeAimingSystem(IAimingSystem):
             self.__cursor.yaw += 2.0 * math.pi
 
     def __setPitch(self, value):
-        self.__cursor.pitch = mathUtils.clamp(self.__anglesRange[0], self.__anglesRange[1], value)
+        self.__cursor.pitch = math_utils.clamp(self.__anglesRange[0], self.__anglesRange[1], value)
 
     @property
     def aimMatrix(self):

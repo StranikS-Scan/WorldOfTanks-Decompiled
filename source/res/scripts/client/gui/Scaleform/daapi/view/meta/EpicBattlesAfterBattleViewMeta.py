@@ -16,5 +16,11 @@ class EpicBattlesAfterBattleViewMeta(View):
     def onEscapePress(self):
         self._printOverrideError('onEscapePress')
 
+    def onProgressBarStartAnim(self):
+        self._printOverrideError('onProgressBarStartAnim')
+
+    def onProgressBarCompleteAnim(self):
+        self._printOverrideError('onProgressBarCompleteAnim')
+
     def as_setDataS(self, data):
         return self.flashObject.as_setData(data) if self._isDAAPIInited() else None

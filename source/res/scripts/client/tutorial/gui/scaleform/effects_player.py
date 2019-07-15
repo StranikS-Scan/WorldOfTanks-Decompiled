@@ -243,6 +243,7 @@ class ShowChainHint(ApplicationEffect):
                     content['hasArrow'] = True
                     content['arrowDir'] = arrow.direction
                     content['arrowLoop'] = arrow.loop
+                    content['positionValue'] = arrow.positionValue
                 padding = hintProps.padding
                 if padding is not None:
                     content['padding'] = padding._asdict()

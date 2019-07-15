@@ -9,7 +9,8 @@ import Keys
 import Math
 import Settings
 import constants
-from AvatarInputHandler import mathUtils, cameras, aih_global_binding
+import math_utils
+from AvatarInputHandler import cameras, aih_global_binding
 from AvatarInputHandler.AimingSystems.ArcadeAimingSystem import ArcadeAimingSystem
 from AvatarInputHandler.AimingSystems.ArcadeAimingSystemRemote import ArcadeAimingSystemRemote
 from AvatarInputHandler.DynamicCameras import createOscillatorFromSection, CameraDynamicConfig, AccelerationSmoother
@@ -39,7 +40,7 @@ VOLUME_GROUPS_NAMES = ['tiny',
  'small',
  'medium',
  'large']
-_INERTIA_EASING = mathUtils.Easing.exponentialEasing
+_INERTIA_EASING = math_utils.Easing.exponentialEasing
 ENABLE_INPUT_ROTATION_INERTIA = False
 
 class _InputInertia(object):
@@ -50,7 +51,7 @@ class _InputInertia(object):
 
     def __init__(self, minMaxZoomMultiplier, relativeFocusDist):
         self.__deltaEasing = _INERTIA_EASING(Vector3(0.0), Vector3(0.0), _InputInertia.__ZOOM_DURATION)
-        fovMultiplier = mathUtils.lerp(minMaxZoomMultiplier.min, minMaxZoomMultiplier.max, relativeFocusDist)
+        fovMultiplier = math_utils.lerp(minMaxZoomMultiplier.min, minMaxZoomMultiplier.max, relativeFocusDist)
         self.__zoomMultiplierEasing = _INERTIA_EASING(fovMultiplier, fovMultiplier, _InputInertia.__ZOOM_DURATION)
         self.__minMaxZoomMultiplier = minMaxZoomMultiplier
 
@@ -59,14 +60,14 @@ class _InputInertia(object):
 
     def glideFov(self, newRelativeFocusDist):
         minMult, maxMult = self.__minMaxZoomMultiplier
-        endMult = mathUtils.lerp(minMult, maxMult, newRelativeFocusDist)
+        endMult = math_utils.lerp(minMult, maxMult, newRelativeFocusDist)
         self.__zoomMultiplierEasing.reset(self.__zoomMultiplierEasing.value, endMult, _InputInertia.__ZOOM_DURATION)
 
     def teleport(self, relativeFocusDist, minMaxZoomMultiplier=None):
         if minMaxZoomMultiplier is not None:
             self.__minMaxZoomMultiplier = minMaxZoomMultiplier
         self.__deltaEasing.reset(Vector3(0.0), Vector3(0.0), _InputInertia.__ZOOM_DURATION)
-        fovMultiplier = mathUtils.lerp(self.__minMaxZoomMultiplier.min, self.__minMaxZoomMultiplier.max, relativeFocusDist)
+        fovMultiplier = math_utils.lerp(self.__minMaxZoomMultiplier.min, self.__minMaxZoomMultiplier.max, relativeFocusDist)
         self.__zoomMultiplierEasing.reset(fovMultiplier, fovMultiplier, _InputInertia.__ZOOM_DURATION)
         return
 
@@ -313,7 +314,7 @@ class ArcadeCamera(ICamera, CallbackDelayer, TimeDeltaMeter):
         vehicleTranslationOnly = Math.WGTranslationOnlyMP()
         vehicleTranslationOnly.source = vehicleMProv
         refinedMatrixProvider = Math.MatrixProduct()
-        refinedMatrixProvider.a = mathUtils.createIdentityMatrix()
+        refinedMatrixProvider.a = math_utils.createIdentityMatrix()
         refinedMatrixProvider.b = vehicleTranslationOnly
         return refinedMatrixProvider
 
@@ -392,7 +393,7 @@ class ArcadeCamera(ICamera, CallbackDelayer, TimeDeltaMeter):
 
     def setCameraDistance(self, distance):
         distRange = self.__cfg['distRange']
-        clampedDist = mathUtils.clamp(distRange[0], distRange[1], distance)
+        clampedDist = math_utils.clamp(distRange[0], distRange[1], distance)
         self.__aimingSystem.distanceFromFocus = clampedDist
         self.__inputInertia.teleport(self.__calcRelativeDist())
 
@@ -423,7 +424,7 @@ class ArcadeCamera(ICamera, CallbackDelayer, TimeDeltaMeter):
                 prevDist = self.__aimingSystem.distanceFromFocus
                 distDelta = dz * float(self.__curScrollSense)
                 distMinMax = self.__cfg['distRange']
-                newDist = mathUtils.clamp(distMinMax.min, distMinMax.max, prevDist - distDelta)
+                newDist = math_utils.clamp(distMinMax.min, distMinMax.max, prevDist - distDelta)
                 floatEps = 0.001
                 if abs(newDist - prevDist) > floatEps:
                     self.__aimingSystem.distanceFromFocus = newDist
@@ -432,7 +433,7 @@ class ArcadeCamera(ICamera, CallbackDelayer, TimeDeltaMeter):
                     self.__aimingSystem.aimMatrix = self.__calcAimMatrix()
                     distChanged = True
                 if not self.__updatedByKeyboard:
-                    if abs(newDist - prevDist) < floatEps and mathUtils.almostZero(newDist - distMinMax.min):
+                    if abs(newDist - prevDist) < floatEps and math_utils.almostZero(newDist - distMinMax.min):
                         if self.__onChangeControlMode is not None:
                             self.__onChangeControlMode()
                             return
@@ -472,12 +473,12 @@ class ArcadeCamera(ICamera, CallbackDelayer, TimeDeltaMeter):
         vehMatrix = Math.Matrix(self.__aimingSystem.vehicleMProv)
         vehiclePos = vehMatrix.translation
         fromVehicleToUnshakedPos = unshakenPos - vehiclePos
-        deviationBasis = mathUtils.createRotationMatrix(Vector3(self.__aimingSystem.yaw, 0, 0))
+        deviationBasis = math_utils.createRotationMatrix(Vector3(self.__aimingSystem.yaw, 0, 0))
         impulseDeviation, movementDeviation, oscillationsZoomMultiplier = self.__updateOscillators(deltaTime)
-        relCamPosMatrix = mathUtils.createTranslationMatrix(impulseDeviation + movementDeviation)
+        relCamPosMatrix = math_utils.createTranslationMatrix(impulseDeviation + movementDeviation)
         relCamPosMatrix.postMultiply(deviationBasis)
         relCamPosMatrix.translation += fromVehicleToUnshakedPos
-        upRotMat = mathUtils.createRotationMatrix(Vector3(0, 0, -impulseDeviation.x * self.__dynamicCfg['sideImpulseToRollRatio'] - self.__noiseOscillator.deviation.z))
+        upRotMat = math_utils.createRotationMatrix(Vector3(0, 0, -impulseDeviation.x * self.__dynamicCfg['sideImpulseToRollRatio'] - self.__noiseOscillator.deviation.z))
         upRotMat.postMultiply(relCamPosMatrix)
         self.__cam.up = upRotMat.applyVector(Vector3(0, 1, 0))
         relTranslation = relCamPosMatrix.translation
@@ -553,7 +554,7 @@ class ArcadeCamera(ICamera, CallbackDelayer, TimeDeltaMeter):
             else:
                 self.__accelerationSmoother.maxAllowedAcceleration = self.__dynamicCfg['accelerationMax']
             acceleration = self.__accelerationSmoother.update(vehicle, deltaTime)
-            yawMat = mathUtils.createRotationMatrix((-self.__aimingSystem.yaw, 0, 0))
+            yawMat = math_utils.createRotationMatrix((-self.__aimingSystem.yaw, 0, 0))
             acceleration = yawMat.applyVector(-acceleration)
             oscillatorAcceleration = Vector3(acceleration.x, acceleration.y, acceleration.z)
             return oscillatorAcceleration * self.__dynamicCfg['accelerationSensitivity']
@@ -573,7 +574,7 @@ class ArcadeCamera(ICamera, CallbackDelayer, TimeDeltaMeter):
         self.__movementOscillator.externalForce = Vector3(0)
         self.__noiseOscillator.externalForce = Vector3(0)
         relDist = self.__calcRelativeDist()
-        zoomMultiplier = mathUtils.lerp(1.0, self.__dynamicCfg['zoomExposure'], relDist)
+        zoomMultiplier = math_utils.lerp(1.0, self.__dynamicCfg['zoomExposure'], relDist)
         impulseDeviation = Vector3(self.__impulseOscillator.deviation)
         impulseDeviation.set(impulseDeviation.x * zoomMultiplier, impulseDeviation.y * zoomMultiplier, impulseDeviation.z * zoomMultiplier)
         movementDeviation = Vector3(self.__movementOscillator.deviation)
@@ -582,7 +583,7 @@ class ArcadeCamera(ICamera, CallbackDelayer, TimeDeltaMeter):
 
     def applyImpulse(self, position, impulse, reason=ImpulseReason.ME_HIT):
         adjustedImpulse, noiseMagnitude = self.__dynamicCfg.adjustImpulse(impulse, reason)
-        yawMat = mathUtils.createRotationMatrix((-self.__aimingSystem.yaw, 0, 0))
+        yawMat = math_utils.createRotationMatrix((-self.__aimingSystem.yaw, 0, 0))
         impulseLocal = yawMat.applyVector(adjustedImpulse)
         self.__impulseOscillator.applyImpulse(impulseLocal)
         self.__applyNoiseImpulse(noiseMagnitude)
@@ -607,7 +608,7 @@ class ArcadeCamera(ICamera, CallbackDelayer, TimeDeltaMeter):
         self.applyImpulse(position, impulse, reason)
 
     def __applyNoiseImpulse(self, noiseMagnitude):
-        noiseImpulse = mathUtils.RandomVectors.random3(noiseMagnitude)
+        noiseImpulse = math_utils.RandomVectors.random3(noiseMagnitude)
         self.__noiseOscillator.applyImpulse(noiseImpulse)
 
     def handleKeyEvent(self, isDown, key, mods, event=None):
@@ -713,7 +714,7 @@ class ArcadeCamera(ICamera, CallbackDelayer, TimeDeltaMeter):
         self.__dynamicCfg['maxShotImpulseDistance'] = readFloat(dynamicsSection, 'maxShotImpulseDistance', 0.0, 1000.0, 10.0)
         self.__dynamicCfg['maxExplosionImpulseDistance'] = readFloat(dynamicsSection, 'maxExplosionImpulseDistance', 0.0, 1000.0, 10.0)
         self.__dynamicCfg['zoomExposure'] = readFloat(dynamicsSection, 'zoomExposure', 0.0, 1000.0, 0.25)
-        accelerationFilter = mathUtils.RangeFilter(self.__dynamicCfg['accelerationThreshold'], self.__dynamicCfg['accelerationMax'], 100, mathUtils.SMAFilter(ArcadeCamera._FILTER_LENGTH))
+        accelerationFilter = math_utils.RangeFilter(self.__dynamicCfg['accelerationThreshold'], self.__dynamicCfg['accelerationMax'], 100, math_utils.SMAFilter(ArcadeCamera._FILTER_LENGTH))
         maxAccelerationDuration = readFloat(dynamicsSection, 'maxAccelerationDuration', 0.0, 10000.0, ArcadeCamera._DEFAULT_MAX_ACCELERATION_DURATION)
         self.__accelerationSmoother = AccelerationSmoother(accelerationFilter, maxAccelerationDuration)
         self.__inputInertia = _InputInertia(self.__calculateInputInertiaMinMax(), 0.0)

@@ -25,6 +25,10 @@ def text(resId, *args, **kwargs):
     return wulf.getTranslatedTextByResId(resId)
 
 
+def msgid(resId):
+    return wulf.getTranslatedKey(resId)
+
+
 def image(resId):
     return wulf.getImagePath(resId)
 

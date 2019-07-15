@@ -19,7 +19,7 @@ class IInventoryRequester(IRequester):
     def invalidateItem(self, itemTypeID, invIdx):
         raise NotImplementedError
 
-    def updateC11nItemsAppliedCounts(self):
+    def initC11nItemsAppliedCounts(self):
         raise NotImplementedError
 
     def updateC11nItemAppliedCount(self, itemCD, vehicleIntCD, count):
@@ -31,7 +31,7 @@ class IInventoryRequester(IRequester):
     def getC11nItemAppliedOnVehicleCount(self, itemCD, vehicleCD):
         raise NotImplementedError
 
-    def updateC11nItemsNoveltyData(self):
+    def initC11nItemsNoveltyData(self):
         raise NotImplementedError
 
     def updateC11nItemNoveltyData(self, itemIntCD):
@@ -65,6 +65,9 @@ class IInventoryRequester(IRequester):
         raise NotImplementedError
 
     def getFreeSlots(self, vehiclesSlots):
+        raise NotImplementedError
+
+    def getCacheValue(self, key, defaultValue):
         raise NotImplementedError
 
 

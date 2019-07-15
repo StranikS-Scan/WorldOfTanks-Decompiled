@@ -7,7 +7,7 @@ import BattleReplay
 from ReplayEvents import g_replayEvents
 from AvatarInputHandler import gun_marker_ctrl
 from PlayerEvents import g_playerEvents
-from account_helpers.settings_core.settings_constants import GRAPHICS, AIM
+from account_helpers.settings_core.settings_constants import GRAPHICS, AIM, GAME
 from constants import VEHICLE_SIEGE_STATE as _SIEGE_STATE
 from debug_utils import LOG_WARNING
 from gui import makeHtmlString
@@ -914,6 +914,7 @@ class SpeedometerWheeledTech(CrosshairPlugin):
                 self.__onVehicleControlling(vehicle)
         add = g_eventBus.addListener
         add(GameEvent.DESTROY_TIMERS_PANEL, self.__destroyTimersListener, scope=EVENT_BUS_SCOPE.BATTLE)
+        self.settingsCore.onSettingsChanged += self.__onSettingsChanged
         return
 
     def stop(self):
@@ -925,6 +926,7 @@ class SpeedometerWheeledTech(CrosshairPlugin):
             crosshairCtrl.onCrosshairViewChanged -= self.__onCrosshairViewChanged
         remove = g_eventBus.removeListener
         remove(GameEvent.DESTROY_TIMERS_PANEL, self.__destroyTimersListener, scope=EVENT_BUS_SCOPE.BATTLE)
+        self.settingsCore.onSettingsChanged -= self.__onSettingsChanged
         return
 
     def __onVehicleControlling(self, vehicle):
@@ -935,7 +937,8 @@ class SpeedometerWheeledTech(CrosshairPlugin):
                 self.__resetSpeedometer()
             self.__updateBurnoutWarning(vStateCtrl)
             self.__updateCurrentBurnoutLevel(vehicle)
-            self.__addSpedometer(vehicle)
+            if self.settingsCore.getSetting(GAME.ENABLE_SPEEDOMETER):
+                self.__addSpedometer(vehicle)
             self.__updateCurStateSpeedMode(vStateCtrl)
         else:
             self.parentObj.as_removeSpeedometerS()
@@ -1062,3 +1065,17 @@ class SpeedometerWheeledTech(CrosshairPlugin):
             self.__stopEngineDamageWarning()
             self.parentObj.as_stopEngineCrushErrorS()
         return
+
+    def __onSettingsChanged(self, diff):
+        if GAME.ENABLE_SPEEDOMETER not in diff:
+            return
+        else:
+            if diff[GAME.ENABLE_SPEEDOMETER]:
+                vStateCtrl = self.sessionProvider.shared.vehicleState
+                if vStateCtrl is not None:
+                    vehicle = vStateCtrl.getControllingVehicle()
+                    if vehicle is not None and vehicle.isWheeledTech:
+                        self.__onVehicleControlling(vehicle)
+            else:
+                self.parentObj.as_removeSpeedometerS()
+            return

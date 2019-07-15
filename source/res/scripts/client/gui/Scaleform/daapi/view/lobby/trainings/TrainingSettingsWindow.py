@@ -2,23 +2,26 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/trainings/TrainingSettingsWindow.py
 import ArenaType
 from account_helpers import gameplay_ctx
+from constants import PREBATTLE_TYPE
 from debug_utils import LOG_ERROR, LOG_CURRENT_EXCEPTION
 from gui.Scaleform.daapi.view.lobby.trainings import formatters
 from gui.Scaleform.daapi.view.meta.TrainingWindowMeta import TrainingWindowMeta
 from gui.prb_control import prbEntityProperty
-from gui.prb_control.entities.training.legacy.ctx import TrainingSettingsCtx
 from gui.prb_control.prb_getters import getTrainingBattleRoundLimits
 from gui.shared import events, EVENT_BUS_SCOPE
 from helpers import dependency
 from helpers import i18n
+from gui.impl import backport
+from gui.impl.gen import R
 from skeletons.gui.shared import IItemsCache
 
 class ArenasCache(object):
 
-    def __init__(self):
+    def __init__(self, ctx):
         self.__cache = []
+        self.__isEpic = ctx.get('isEpic', False)
         for arenaTypeID, arenaType in ArenaType.g_cache.iteritems():
-            if arenaType.explicitRequestOnly or not gameplay_ctx.isCreationEnabled(arenaType.gameplayName):
+            if arenaType.explicitRequestOnly or not gameplay_ctx.isCreationEnabled(arenaType.gameplayName, self.__isEpic):
                 continue
             try:
                 nameSuffix = ''
@@ -54,7 +57,10 @@ class TrainingSettingsWindow(TrainingWindowMeta):
     def __init__(self, ctx=None):
         super(TrainingSettingsWindow, self).__init__()
         self.__isCreateRequest = ctx.get('isCreateRequest', False)
-        self.__arenasCache = ArenasCache()
+        self.__settings = ctx.get('settings', None)
+        self.__isEpic = self.__settings.getEntityType() == PREBATTLE_TYPE.EPIC_TRAINING
+        self.__arenasCache = ArenasCache({'isEpic': self.__isEpic})
+        return
 
     @prbEntityProperty
     def prbEntity(self):
@@ -71,21 +77,26 @@ class TrainingSettingsWindow(TrainingWindowMeta):
         return self.__arenasCache.cache
 
     def getInfo(self):
-        settings = TrainingSettingsCtx()
         if not self.__isCreateRequest:
-            settings = settings.fetch(self.prbEntity.getSettings())
+            self.__settings = self.__settings.fetch(self.prbEntity.getSettings())
         if self.itemsCache.isSynced():
             accountAttrs = self.itemsCache.items.stats.attributes
         else:
             accountAttrs = 0
         _, maxBound = getTrainingBattleRoundLimits(accountAttrs)
-        info = {'description': settings.getComment(),
-         'timeout': settings.getRoundLen() / 60,
-         'arena': settings.getArenaTypeID(),
-         'privacy': not settings.isOpened(),
+        if self.__isEpic:
+            rTitle = R.strings.menu.epic_training.create.title() if self.__isCreateRequest else R.strings.menu.epic_training.info.settings.title()
+        else:
+            rTitle = R.strings.menu.training.create.title() if self.__isCreateRequest else R.strings.menu.training.info.settings.title()
+        info = {'description': self.__settings.getComment(),
+         'timeout': self.__settings.getRoundLen() / 60,
+         'arena': self.__settings.getArenaTypeID(),
+         'privacy': not self.__settings.isOpened(),
          'create': self.__isCreateRequest,
+         'wndTitle': backport.text(rTitle),
          'canMakeOpenedClosed': True,
          'canChangeComment': True,
+         'canChangeArenaTime': not self.__isEpic,
          'canChangeArena': True,
          'maxBattleTime': maxBound / 60}
         if not self.__isCreateRequest:
@@ -96,12 +107,12 @@ class TrainingSettingsWindow(TrainingWindowMeta):
         return info
 
     def updateTrainingRoom(self, arena, roundLength, isPrivate, comment):
-        if self.__isCreateRequest:
-            settings = TrainingSettingsCtx(isRequestToCreate=True)
+        self.__settings.setArenaTypeID(arena)
+        self.__settings.setRoundLen(roundLength * 60)
+        self.__settings.setOpened(not isPrivate)
+        self.__settings.setComment(comment)
+        if self.__isEpic:
+            eventType = events.TrainingSettingsEvent.UPDATE_EPIC_TRAINING_SETTINGS
         else:
-            settings = TrainingSettingsCtx(isRequestToCreate=False)
-        settings.setArenaTypeID(arena)
-        settings.setRoundLen(roundLength * 60)
-        settings.setOpened(not isPrivate)
-        settings.setComment(comment)
-        self.fireEvent(events.TrainingSettingsEvent(events.TrainingSettingsEvent.UPDATE_TRAINING_SETTINGS, ctx={'settings': settings}), scope=EVENT_BUS_SCOPE.LOBBY)
+            eventType = events.TrainingSettingsEvent.UPDATE_TRAINING_SETTINGS
+        self.fireEvent(events.TrainingSettingsEvent(eventType, ctx={'settings': self.__settings}), scope=EVENT_BUS_SCOPE.LOBBY)

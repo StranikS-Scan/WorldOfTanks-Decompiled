@@ -1,10 +1,10 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/clans/invites/ClanPersonalInvitesView.py
-import BigWorld
 from gui.clans import formatters
 from gui.clans.clan_helpers import ClanPersonalInvitesPaginator, ClanListener
 from gui.clans.items import ClanCommonData, formatField, isValueAvailable
 from gui.clans.settings import CLAN_INVITE_STATES
+from gui.impl import backport
 from gui.wgcg.settings import WebRequestDataType
 from gui.Scaleform.daapi.view.lobby.clans.invites.ClanInvitesViewWithTable import ClanInvitesAbstractDataProvider
 from gui.Scaleform.daapi.view.meta.ClanPersonalInvitesViewMeta import ClanPersonalInvitesViewMeta
@@ -238,10 +238,10 @@ class PersonalInvitesDataProvider(ClanInvitesAbstractDataProvider):
                     'clanAbbrev': formatField(getter=item.getClanAbbrev),
                     'dbID': item.getClanDbID(),
                     'isActive': item.isClanActive()},
-         'personalRating': formatField(getter=item.getPersonalRating, formatter=BigWorld.wg_getIntegralFormat),
-         'battlesCount': formatField(getter=item.getBattlesCount, formatter=BigWorld.wg_getIntegralFormat),
-         'wins': formatField(getter=item.getBattleXpAvg, formatter=lambda value: BigWorld.wg_getNiceNumberFormat(value) + '%'),
-         'awgExp': formatField(getter=item.getBattlesPerformanceAvg, formatter=BigWorld.wg_getIntegralFormat),
+         'personalRating': formatField(getter=item.getPersonalRating, formatter=backport.getIntegralFormat),
+         'battlesCount': formatField(getter=item.getBattlesCount, formatter=backport.getIntegralFormat),
+         'wins': formatField(getter=item.getBattleXpAvg, formatter=lambda value: backport.getNiceNumberFormat(value) + '%'),
+         'awgExp': formatField(getter=item.getBattlesPerformanceAvg, formatter=backport.getIntegralFormat),
          'status': {'text': self._makeInviteStateString(item),
                     'tooltip': self._makeTooltip(body=self._makeRequestTooltip(status=item.getStatus(), user=formatField(getter=item.getSenderName), date=formatField(getter=item.getUpdatedAt, formatter=formatters.formatShortDateShortTimeString)))},
          'enabled': status == CLAN_INVITE_STATES.ACTIVE or status == CLAN_INVITE_STATES.ERROR,

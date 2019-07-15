@@ -1,7 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/tutorial/control/bootcamp/lobby/queries.py
 from math import ceil
-import BigWorld
 from constants import PREMIUM_ENTITLEMENTS
 from gui.impl.gen import R
 from gui.impl import backport
@@ -79,13 +78,13 @@ class MessageDialogContentQuery(ContentQuery):
                 nationId = ctx['nation']
                 nationsData = lessonBonuses.get('nations', None)
                 if nationsData is not None:
-                    formattedValue = BigWorld.wg_getIntegralFormat(nationsData[NATION_NAMES[nationId]]['credits']['win'][0])
+                    formattedValue = backport.getIntegralFormat(nationsData[NATION_NAMES[nationId]]['credits']['win'][0])
                     data['label'] = data['label'].format(formattedValue)
             elif labelFormat == 'getExperience':
                 nationId = ctx['nation']
                 nationsData = lessonBonuses.get('nations', None)
                 if nationsData is not None:
-                    formattedValue = BigWorld.wg_getIntegralFormat(nationsData[NATION_NAMES[nationId]]['xp']['win'][0])
+                    formattedValue = backport.getIntegralFormat(nationsData[NATION_NAMES[nationId]]['xp']['win'][0])
                     data['label'] = data['label'].format(formattedValue)
             elif labelFormat == 'getGold':
                 data['label'] = data['label'].format(lessonBonuses['gold'])

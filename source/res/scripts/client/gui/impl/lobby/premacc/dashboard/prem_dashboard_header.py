@@ -11,7 +11,6 @@ from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.clans.settings import getClanRoleName
 from gui.goodies.goodie_items import MAX_ACTIVE_BOOSTERS_COUNT
 from gui.impl import backport
-from gui.impl.backport.backport_tooltip import createTooltipData, BackportTooltipWindow
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.premacc.dashboard.prem_dashboard_header_model import PremDashboardHeaderModel
 from gui.impl.gen.view_models.views.lobby.premacc.dashboard.prem_dashboard_header_tooltips import PremDashboardHeaderTooltips
@@ -53,7 +52,7 @@ class PremDashboardHeader(ViewImpl):
             tooltipData = self.__getTooltipData(event)
             if tooltipData is None:
                 return
-            window = BackportTooltipWindow(tooltipData, self.getParentWindow())
+            window = backport.BackportTooltipWindow(tooltipData, self.getParentWindow())
             window.load()
             return window
         else:
@@ -161,7 +160,7 @@ class PremDashboardHeader(ViewImpl):
         tooltipAlias = self.__TOOLTIPS_MAPPING.get(tooltipType)
         if tooltipAlias:
             reserveId = event.getArgument('id')
-            return createTooltipData(isSpecial=True, specialAlias=tooltipAlias, specialArgs=(reserveId,))
+            return backport.createTooltipData(isSpecial=True, specialAlias=tooltipAlias, specialArgs=(reserveId,))
 
     @replaceNoneKwargsModel
     def __updateBadges(self, model=None):

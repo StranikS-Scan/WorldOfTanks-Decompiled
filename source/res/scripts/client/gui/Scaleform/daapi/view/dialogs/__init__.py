@@ -6,6 +6,7 @@ from gui import makeHtmlString
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform.framework import ScopeTemplates
 from gui.Scaleform.locale.DIALOGS import DIALOGS
+from gui.impl import backport
 from gui.shared import events
 from helpers import dependency
 from helpers import i18n, time_utils
@@ -401,7 +402,7 @@ class DisconnectMeta(I18nInfoDialogMeta):
             formatArgs['reason'] = i18n.makeString(DIALOGS.DISCONNECTED_REASON, i18n.makeString(self.reason))
         if self.expiryTime:
             expiryTime = time_utils.makeLocalServerTime(int(self.expiryTime))
-            formatArgs['expiryTime'] = '%s %s' % (BigWorld.wg_getLongDateFormat(expiryTime), BigWorld.wg_getLongTimeFormat(expiryTime))
+            formatArgs['expiryTime'] = '%s %s' % (backport.getLongDateFormat(expiryTime), backport.getLongTimeFormat(expiryTime))
         key = DIALOGS.DISCONNECTED_MESSAGEKICK
         if self.isBan:
             key = DIALOGS.DISCONNECTED_MESSAGEBANPERIOD if self.expiryTime else DIALOGS.DISCONNECTED_MESSAGEBAN

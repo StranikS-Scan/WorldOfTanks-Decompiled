@@ -4,7 +4,7 @@ import math
 import BigWorld
 import Math
 from helpers.CallbackDelayer import CallbackDelayer, TimeDeltaMeter
-from AvatarInputHandler import mathUtils
+import math_utils
 from account_helpers.settings_core.settings_constants import GAME
 import gui.hangar_cam_settings as settings
 from gui.hangar_cameras.hangar_camera_common import CameraRelatedEvents
@@ -142,7 +142,7 @@ class HangarCameraIdle(HangarCameraIdleController, CallbackDelayer, TimeDeltaMet
     def __updateValue(self, params):
         if params.period <= 0:
             return params.startValue
-        return params.startValue + mathUtils.easeOutQuad(self.__currentIdleTime, self.__sinValue(params) - params.startValue, self.__easingInTime) if self.__currentIdleTime < self.__easingInTime else self.__sinValue(params)
+        return params.startValue + math_utils.easeOutQuad(self.__currentIdleTime, self.__sinValue(params) - params.startValue, self.__easingInTime) if self.__currentIdleTime < self.__easingInTime else self.__sinValue(params)
 
     def __sinValue(self, params):
         a = params.minValue
@@ -180,7 +180,7 @@ class HangarCameraIdle(HangarCameraIdleController, CallbackDelayer, TimeDeltaMet
     def __setStartParams(self, params):
         a = params.minValue
         b = params.maxValue - params.minValue
-        clampedValue = mathUtils.clamp(params.minValue, params.maxValue, params.startValue)
+        clampedValue = math_utils.clamp(params.minValue, params.maxValue, params.startValue)
         dArg = -1.0 + (clampedValue - a) * 2.0 / b if b != 0.0 else 0.0
         params.startTime = math.asin(dArg)
 

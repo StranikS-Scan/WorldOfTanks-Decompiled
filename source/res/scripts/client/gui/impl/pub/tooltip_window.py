@@ -51,8 +51,7 @@ class SimpleTooltipContent(View):
     def viewModel(self):
         return super(SimpleTooltipContent, self).getViewModel()
 
-    def _initialize(self, header, body, note, alert):
-        super(SimpleTooltipContent, self)._initialize()
+    def _onLoading(self, header, body, note, alert):
         self.viewModel.hold()
         self.viewModel.setHeader(header)
         self.viewModel.setBody(body)

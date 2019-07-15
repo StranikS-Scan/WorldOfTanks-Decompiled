@@ -5,13 +5,13 @@ from collections import namedtuple
 import BigWorld
 import Math
 from Math import Vector3, Matrix
-from AvatarInputHandler import mathUtils
+import math_utils
 from AvatarInputHandler.cameras import readVec3, readFloat, ImpulseReason
 from helpers.CallbackDelayer import TimeDeltaMeter
 
 def createCrosshairMatrix(offsetFromNearPlane):
     nearPlane = BigWorld.projection().nearPlane
-    return mathUtils.createTranslationMatrix(Vector3(0, 0, nearPlane + offsetFromNearPlane))
+    return math_utils.createTranslationMatrix(Vector3(0, 0, nearPlane + offsetFromNearPlane))
 
 
 def createOscillatorFromSection(oscillatorSection, constraintsAsAngle=True):
@@ -91,11 +91,11 @@ class CameraDynamicConfig(dict):
         resultImpulse = impulse * impulseSensitivity
         impulseMinMax = self['impulseLimits'].get(reason, None)
         if impulseMinMax is not None:
-            resultImpulse = mathUtils.clampVectorLength(impulseMinMax[0], impulseMinMax[1], resultImpulse)
+            resultImpulse = math_utils.clampVectorLength(impulseMinMax[0], impulseMinMax[1], resultImpulse)
         noiseMagnitude = impulse.length * noiseImpulseSensitivity
         noiseMinMax = self['noiseLimits'].get(reason, None)
         if noiseMinMax is not None:
-            noiseMagnitude = mathUtils.clamp(noiseMinMax[0], noiseMinMax[1], noiseMagnitude)
+            noiseMagnitude = math_utils.clamp(noiseMinMax[0], noiseMinMax[1], noiseMagnitude)
         return (resultImpulse, noiseMagnitude)
 
 

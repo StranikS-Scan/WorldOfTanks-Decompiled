@@ -1,6 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/blueprints/blueprints_conversion_view.py
-import BigWorld
 from gui import SystemMessages
 from gui.SystemMessages import SM_TYPE
 from gui.Scaleform.locale.SYSTEM_MESSAGES import SYSTEM_MESSAGES
@@ -70,13 +69,13 @@ class BlueprintsConversionView(DialogWindow):
     def __createUniversalFragmentsBlock(self, countFragments):
         nationValue, intelligenceValue = self.__itemsCache.items.blueprints.getRequiredIntelligenceAndNational(self.__vehicle.level)
         with self.bottomContentViewModel.transaction() as model:
-            model.setValueMainCost(BigWorld.wg_getIntegralFormat(countFragments * intelligenceValue))
+            model.setValueMainCost(self.gui.systemLocale.getNumberFormat(countFragments * intelligenceValue))
             model.setIconMainCost(R.images.gui.maps.icons.blueprints.fragment.small.intelligence())
-            model.setValueAdditionalCost(BigWorld.wg_getIntegralFormat(countFragments * nationValue))
+            model.setValueAdditionalCost(self.gui.systemLocale.getNumberFormat(countFragments * nationValue))
             model.setIconAdditionalCost(R.images.gui.maps.icons.blueprints.fragment.small.dyn(self.__vehicle.nationName)())
 
     def __updateUniversalFragmentsBlock(self):
         nationValue, intelligenceValue = self.__itemsCache.items.blueprints.getRequiredIntelligenceAndNational(self.__vehicle.level)
         with self.bottomContentViewModel.transaction() as model:
-            model.setValueMainCost(BigWorld.wg_getIntegralFormat(nationValue))
-            model.setValueAdditionalCost(BigWorld.wg_getIntegralFormat(intelligenceValue))
+            model.setValueMainCost(self.gui.systemLocale.getNumberFormat(nationValue))
+            model.setValueAdditionalCost(self.gui.systemLocale.getNumberFormat(intelligenceValue))

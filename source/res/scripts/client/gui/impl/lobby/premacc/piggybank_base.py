@@ -1,7 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/premacc/piggybank_base.py
 import logging
-import BigWorld
 from constants import PREMIUM_TYPE, PremiumConfigs
 from frameworks.wulf import ViewFlags
 from gui.ClientUpdateManager import g_clientUpdateManager
@@ -90,14 +89,14 @@ class PiggyBankBaseView(ViewImpl, SoundViewMixin):
     @replaceNoneKwargsModel
     def _updateMaxAmount(self, model=None):
         maxAmount = self._config.get('threshold', PiggyBankConstants.MAX_AMOUNT)
-        maxAmountStr = BigWorld.wg_getIntegralFormat(maxAmount)
+        maxAmountStr = self.gui.systemLocale.getNumberFormat(maxAmount)
         model.setMaxAmount(maxAmount)
         model.setMaxAmountStr(maxAmountStr)
 
     @replaceNoneKwargsModel
     def _updateCurrentAmount(self, credits_=None, model=None):
         creditsValue = credits_ or self._data.get('credits', 0)
-        creditsValueStr = BigWorld.wg_getIntegralFormat(creditsValue)
+        creditsValueStr = self.gui.systemLocale.getNumberFormat(creditsValue)
         model.setCurrentAmount(creditsValue)
         model.setCurrentAmountStr(creditsValueStr)
 

@@ -3,7 +3,7 @@
 import typing
 from CurrentVehicle import g_currentPreviewVehicle
 from gui.Scaleform.daapi.view.lobby.epicBattle.epic_helpers import getEpicGamePlayerPrestigePoints
-from gui.Scaleform.daapi.view.lobby.vehiclePreview20.items_kit_helper import getDataOneVehicle
+from gui.Scaleform.daapi.view.lobby.vehiclePreview20.items_kit_helper import getDataOneVehicle, addBuiltInEquipment
 from gui.Scaleform.daapi.view.lobby.vehiclePreview20.vehicle_preview_20 import VehiclePreview20
 from gui.Scaleform.genConsts.VEHPREVIEW_CONSTANTS import VEHPREVIEW_CONSTANTS
 from gui.shared.formatters import text_styles, icons
@@ -24,6 +24,7 @@ class FrontLineVehiclePreview20(VehiclePreview20):
         super(FrontLineVehiclePreview20, self).__init__(ctx)
         self._heroInteractive = False
         self.__itemsPack = [ItemPackEntry(type=ItemPackType.CREW_100, count=1, groupID=1), ItemPackEntry(type=ItemPackType.CUSTOM_SLOT, count=1, groupID=1)]
+        addBuiltInEquipment(self.__itemsPack, self.itemsCache, self._vehicleCD)
 
     def _onRegisterFlashComponent(self, viewPy, alias):
         super(FrontLineVehiclePreview20, self)._onRegisterFlashComponent(viewPy, alias)

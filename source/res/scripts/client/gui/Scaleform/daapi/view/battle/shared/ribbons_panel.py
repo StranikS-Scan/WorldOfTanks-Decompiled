@@ -1,7 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/shared/ribbons_panel.py
 import logging
-import BigWorld
 from account_helpers.settings_core.settings_constants import BATTLE_EVENTS, GRAPHICS
 from gui.battle_control.battle_constants import BonusRibbonLabel as _BRL
 from gui.impl import backport
@@ -84,7 +83,7 @@ def _singleVehRibbonFormatter(ribbon, arenaDP, updater):
     else:
         vehicleName, vehicleClassTag = '', ribbon.getDamageSource()
     bonusRibbonLabelID = _BRL.BASE_BONUS_LABEL if ribbon.isRoleBonus() else _BRL.NO_BONUS
-    updater(ribbonID=ribbon.getID(), ribbonType=ribbon.getType(), vehName=vehicleName, vehType=vehicleClassTag, leftFieldStr=BigWorld.wg_getIntegralFormat(ribbon.getExtraValue()), bonusRibbonLabelID=bonusRibbonLabelID)
+    updater(ribbonID=ribbon.getID(), ribbonType=ribbon.getType(), vehName=vehicleName, vehType=vehicleClassTag, leftFieldStr=backport.getIntegralFormat(ribbon.getExtraValue()), bonusRibbonLabelID=bonusRibbonLabelID)
 
 
 def _receivedRamRibbonFormatter(ribbon, arenaDP, updater):
@@ -93,7 +92,7 @@ def _receivedRamRibbonFormatter(ribbon, arenaDP, updater):
         vehicleName = ''
         vehicleClassTag = ''
     bonusRibbonLabelID = _BRL.BASE_BONUS_LABEL if ribbon.isRoleBonus() else _BRL.NO_BONUS
-    updater(ribbonID=ribbon.getID(), ribbonType=ribbon.getType(), vehName=vehicleName, vehType=vehicleClassTag, leftFieldStr=BigWorld.wg_getIntegralFormat(ribbon.getExtraValue()), bonusRibbonLabelID=bonusRibbonLabelID)
+    updater(ribbonID=ribbon.getID(), ribbonType=ribbon.getType(), vehName=vehicleName, vehType=vehicleClassTag, leftFieldStr=backport.getIntegralFormat(ribbon.getExtraValue()), bonusRibbonLabelID=bonusRibbonLabelID)
 
 
 def _criticalHitRibbonFormatter(ribbon, arenaDP, updater):
@@ -114,14 +113,14 @@ def _receivedCriticalHitRibbonFormatter(ribbon, arenaDP, updater):
 def _killRibbonFormatter(ribbon, arenaDP, updater):
     vehicleName, vehicleClassTag = _getVehicleData(arenaDP, ribbon.getVehicleID())
     value = ribbon.getExtraValue()
-    leftFieldStr = BigWorld.wg_getIntegralFormat(value) if value else ''
+    leftFieldStr = backport.getIntegralFormat(value) if value else ''
     bonusRibbonLabelID = _BRL.BASE_BONUS_LABEL if ribbon.isRoleBonus() else _BRL.NO_BONUS
     updater(ribbonID=ribbon.getID(), ribbonType=ribbon.getType(), vehName=vehicleName, vehType=vehicleClassTag, leftFieldStr=leftFieldStr, bonusRibbonLabelID=bonusRibbonLabelID)
 
 
 def _epicEventRibbonFormatter(ribbon, arenaDP, updater):
     value = ribbon.getExtraValue()
-    leftFieldStr = BigWorld.wg_getIntegralFormat(value) if value else ''
+    leftFieldStr = backport.getIntegralFormat(value) if value else ''
     updater(ribbonID=ribbon.getID(), ribbonType=ribbon.getType(), leftFieldStr=leftFieldStr)
 
 

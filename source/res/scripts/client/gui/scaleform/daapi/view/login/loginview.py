@@ -15,10 +15,9 @@ from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.meta.LoginPageMeta import LoginPageMeta
 from gui.Scaleform.daapi.view.servers_data_provider import ServersDataProvider
 from gui.Scaleform.framework.entities.View import View
-from gui.Scaleform.locale.BAN_REASON import BAN_REASON
-from gui.Scaleform.locale.MENU import MENU
-from gui.Scaleform.locale.WAITING import WAITING
+from gui.impl import backport
 from gui.impl.dialogs import dialogs
+from gui.impl.gen import R
 from gui.shared import events, g_eventBus
 from gui.shared.event_bus import EVENT_BUS_SCOPE
 from gui.shared.events import OpenLinkEvent, LoginEventEx, ArgsEvent, LoginEvent, BootcampEvent
@@ -140,7 +139,7 @@ class LoginView(LoginPageMeta):
         g_playerEvents.onEntityCheckOutEnqueued += self._onEntityCheckoutEnqueued
         g_playerEvents.onAccountBecomeNonPlayer += self._onAccountBecomeNonPlayer
         self.as_setVersionS(getFullClientVersion())
-        self.as_setCopyrightS(_ms(MENU.COPY), _ms(MENU.LEGAL))
+        self.as_setCopyrightS(backport.text(R.strings.menu.copy()), backport.text(R.strings.menu.legal()))
         self.sessionProvider.getCtx().lastArenaUniqueID = None
         self._loginMode.init()
         self.update()
@@ -192,9 +191,9 @@ class LoginView(LoginPageMeta):
         if peripheryID >= 0:
             self.__customLoginStatus = 'another_periphery' if peripheryID else 'checkout_error'
             if not self.__loginRetryDialogShown:
-                self.__showLoginRetryDialog({'waitingOpen': WAITING.titles(self.__customLoginStatus),
-                 'waitingClose': WAITING.BUTTONS_CEASE,
-                 'message': _ms(WAITING.message(self.__customLoginStatus), self.connectionMgr.serverUserName)})
+                self.__showLoginRetryDialog({'waitingOpen': backport.text(R.strings.waiting.titles.dyn(self.__customLoginStatus)()),
+                 'waitingClose': backport.msgid(R.strings.waiting.buttons.cease()),
+                 'message': backport.text(R.strings.waiting.message.dyn(self.__customLoginStatus)(), self.connectionMgr.serverUserName)})
         elif peripheryID == -2:
             self.__customLoginStatus = 'centerRestart'
         elif peripheryID == -3:
@@ -203,18 +202,21 @@ class LoginView(LoginPageMeta):
     def _onHandleQueue(self, queueNumber):
         serverName = self.connectionMgr.serverUserName
         showAutoSearchBtn = AUTO_LOGIN_QUERY_ENABLED and not self._autoSearchVisited
-        cancelBtnLbl = WAITING.BUTTONS_CANCEL if showAutoSearchBtn else WAITING.BUTTONS_EXITQUEUE
-        message = _ms(WAITING.MESSAGE_QUEUE, serverName, queueNumber)
         if showAutoSearchBtn:
-            message = _ms(WAITING.MESSAGE_USEAUTOSEARCH, serverName, queueNumber, serverName)
+            cancelBtnLbl = backport.msgid(R.strings.waiting.buttons.cancel())
+        else:
+            cancelBtnLbl = backport.msgid(R.strings.waiting.buttons.exitQueue())
+        message = backport.text(R.strings.waiting.message.queue(), serverName, queueNumber)
+        if showAutoSearchBtn:
+            message = backport.text(R.strings.waiting.message.useAutoSearch(), serverName, queueNumber, serverName)
         if not self.__loginQueueDialogShown:
             self._clearLoginView()
             self.__loginQueueDialogShown = True
-            self.fireEvent(LoginEventEx(LoginEventEx.SET_LOGIN_QUEUE, '', WAITING.TITLES_QUEUE, message, cancelBtnLbl, showAutoSearchBtn), EVENT_BUS_SCOPE.LOBBY)
+            self.fireEvent(LoginEventEx(LoginEventEx.SET_LOGIN_QUEUE, '', backport.msgid(R.strings.waiting.titles.queue()), message, cancelBtnLbl, showAutoSearchBtn), EVENT_BUS_SCOPE.LOBBY)
             self.addListener(LoginEventEx.ON_LOGIN_QUEUE_CLOSED, self._onLoginQueueClosed, EVENT_BUS_SCOPE.LOBBY)
             self.addListener(LoginEventEx.SWITCH_LOGIN_QUEUE_TO_AUTO, self._onLoginQueueSwitched, EVENT_BUS_SCOPE.LOBBY)
         else:
-            ctx = {'title': WAITING.TITLES_QUEUE,
+            ctx = {'title': backport.msgid(R.strings.waiting.titles.queue()),
              'message': message,
              'cancelLabel': cancelBtnLbl,
              'showAutoLoginBtn': showAutoSearchBtn}
@@ -258,7 +260,7 @@ class LoginView(LoginPageMeta):
             elif loginStatus == LOGIN_STATUS.NOT_SET and self.__customLoginStatus is not None:
                 self.__loginRejectedWithCustomState()
             else:
-                self.as_setErrorMessageS(_ms('#menu:login/status/' + loginStatus), _STATUS_TO_INVALID_FIELDS_MAPPING[loginStatus])
+                self.as_setErrorMessageS(backport.text(R.strings.menu.login.status.dyn(loginStatus)()), _STATUS_TO_INVALID_FIELDS_MAPPING[loginStatus])
             self.__clearFields(_STATUS_TO_INVALID_FIELDS_MAPPING[loginStatus])
         self._dropLoginQueue(loginStatus)
         return
@@ -275,33 +277,34 @@ class LoginView(LoginPageMeta):
     def __loginRejectedUpdateNeeded(self):
         success = yield DialogsInterface.showI18nConfirmDialog('updateNeeded')
         if success and not BigWorld.wg_quitAndStartLauncher():
-            self.as_setErrorMessageS(_ms(MENU.LOGIN_STATUS_LAUNCHERNOTFOUND), INVALID_FIELDS.ALL_VALID)
+            self.as_setErrorMessageS(backport.text(R.strings.menu.login.status.launchernotfound()), INVALID_FIELDS.ALL_VALID)
 
     def __loginRejectedBan(self, responseData):
         bansJSON = responseData.get('bans')
         bans = json.loads(bansJSON)
         expiryTime = int(bans.get('expiryTime', '0'))
         reason = bans.get('reason', '')
-        if reason == BAN_REASON.CHINA_MIGRATION:
+        if reason == backport.msgid(R.strings.ban_reason.china_migration()):
             g_eventBus.handleEvent(OpenLinkEvent(OpenLinkEvent.MIGRATION))
         if reason.startswith('#'):
             reason = _ms(reason)
         if expiryTime > 0:
             expiryTime = makeLocalServerTime(expiryTime)
-            expiryTime = BigWorld.wg_getLongDateFormat(expiryTime) + ' ' + BigWorld.wg_getLongTimeFormat(expiryTime)
-            self.as_setErrorMessageS(_ms(MENU.LOGIN_STATUS_LOGIN_REJECTED_BAN, time=expiryTime, reason=reason), INVALID_FIELDS.ALL_VALID)
+            expiryTime = backport.getLongDateFormat(expiryTime) + ' ' + backport.getLongTimeFormat(expiryTime)
+            self.as_setErrorMessageS(backport.text(R.strings.menu.login.status.LOGIN_REJECTED_BAN(), time=expiryTime, reason=reason), INVALID_FIELDS.ALL_VALID)
         else:
-            self.as_setErrorMessageS(_ms(MENU.LOGIN_STATUS_LOGIN_REJECTED_BAN_UNLIMITED, reason=reason), INVALID_FIELDS.ALL_VALID)
+            self.as_setErrorMessageS(backport.text(R.strings.menu.login.status.LOGIN_REJECTED_BAN_UNLIMITED(), reason=reason), INVALID_FIELDS.ALL_VALID)
 
     def __loginRejectedRateLimited(self):
-        self.as_setErrorMessageS(_ms(MENU.LOGIN_STATUS_LOGIN_REJECTED_RATE_LIMITED), INVALID_FIELDS.ALL_VALID)
+        backport.text(R.strings.menu.login.status.LOGIN_REJECTED_RATE_LIMITED())
+        self.as_setErrorMessageS(backport.text(R.strings.menu.login.status.LOGIN_REJECTED_RATE_LIMITED()), INVALID_FIELDS.ALL_VALID)
         if not self.__loginRetryDialogShown:
-            self.__showLoginRetryDialog({'waitingOpen': WAITING.TITLES_QUEUE,
-             'waitingClose': WAITING.BUTTONS_EXITQUEUE,
-             'message': _ms(WAITING.MESSAGE_AUTOLOGIN, self.connectionMgr.serverUserName)})
+            self.__showLoginRetryDialog({'waitingOpen': backport.msgid(R.strings.waiting.titles.queue()),
+             'waitingClose': backport.msgid(R.strings.waiting.buttons.exitQueue()),
+             'message': backport.text(R.strings.waiting.message.autoLogin(), self.connectionMgr.serverUserName)})
 
     def __loginRejectedWithCustomState(self):
-        self.as_setErrorMessageS(_ms('#menu:login/status/' + self.__customLoginStatus), INVALID_FIELDS.ALL_VALID)
+        self.as_setErrorMessageS(backport.text(R.strings.menu.login.status.dyn(self.__customLoginStatus)()), INVALID_FIELDS.ALL_VALID)
         self.__clearFields(INVALID_FIELDS.ALL_VALID)
 
     def __showLoginRetryDialog(self, data):

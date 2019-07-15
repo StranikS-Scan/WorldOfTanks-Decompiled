@@ -3,7 +3,7 @@
     <userString>	#vehicle_customization:styles/rented_styles	</userString>
     <season>	ALL	</season>
     <historical>	true	</historical>
-    <priceGroup>	rented style	</priceGroup>
+    <priceGroup>	styles 75000s	</priceGroup>
     <vehicleFilter>
       <include>
         <nations>	usa	</nations>
@@ -63,7 +63,7 @@
     <userString>	#vehicle_customization:styles/main_styles	</userString>
     <season>	ALL	</season>
     <historical>	true	</historical>
-    <priceGroup>	style gold	</priceGroup>
+    <priceGroup>	styles 750g	</priceGroup>
     <vehicleFilter>
       <include>
         <nations>	usa	</nations>
@@ -76,6 +76,7 @@
       <id>	32	</id>
       <texture>	gui/maps/vehicles/styles/style_01.png	</texture>
       <userString>	#vehicle_customization:gold_style/gold_style_01	</userString>
+      <longDescriptionSpecial>	#vehicle_customization:gold_style/gold_style_01_desc/long	</longDescriptionSpecial>
       <outfits>
         <outfit>
           <season>	winter	</season>
@@ -201,7 +202,7 @@
     <userString>	#vehicle_customization:styles/special_styles	</userString>
     <season>	ALL	</season>
     <historical>	false	</historical>
-    <priceGroup>	legacy notInShop	</priceGroup>
+    <priceGroup>	styles 750g notInShop	</priceGroup>
     <vehicleFilter>
       <include>
         <nations>	usa	</nations>
@@ -253,7 +254,7 @@
     <userString>	#vehicle_customization:styles/unique_styles	</userString>
     <season>	ALL	</season>
     <historical>	true	</historical>
-    <priceGroup>	NYst styles	</priceGroup>
+    <priceGroup>	styles 4500g notInShop	</priceGroup>
     <vehicleFilter>
       <include>
         <vehicles>	usa:A67_T57_58	</vehicles>
@@ -263,10 +264,11 @@
       <id>	226	</id>
       <texture>	gui/maps/vehicles/styles/T57_NYst.png	</texture>
       <description>	#vehicle_customization:special_style/T57_NYst_description	</description>
+      <longDescriptionSpecial>	#vehicle_customization:special_style/T57_NYst_description/long	</longDescriptionSpecial>
       <modelsSet>	NYst	</modelsSet>
+      <maxNumber>	1	</maxNumber>
       <userString>	#vehicle_customization:special_style/T57_NYst	</userString>
       <tags>	NY2019_style	</tags>
-      <maxNumber>	1	</maxNumber>
       <outfits>
         <outfit>
           <season>	ALL	</season>
@@ -296,7 +298,7 @@
     <userString>	#vehicle_customization:styles/main_styles	</userString>
     <season>	ALL	</season>
     <historical>	true	</historical>
-    <priceGroup>	generic custom look styles	</priceGroup>
+    <priceGroup>	styles 700g	</priceGroup>
     <vehicleFilter>
       <include>
         <nations>	usa	</nations>
@@ -309,6 +311,7 @@
       <id>	243	</id>
       <texture>	gui/maps/vehicles/styles/generic_custom_look_usa.png	</texture>
       <description>	#vehicle_customization:main_style/generic_custom_look_usa_desc	</description>
+      <longDescriptionSpecial>	#vehicle_customization:main_style/generic_custom_look_usa_desc/long	</longDescriptionSpecial>
       <userString>	#vehicle_customization:main_style/generic_custom_look_usa	</userString>
       <outfits>
         <outfit>
@@ -385,7 +388,7 @@
       <texture>	gui/maps/vehicles/styles/generic_custom_look_2_usa.png	</texture>
       <description>	#vehicle_customization:main_style/generic_custom_look_2_usa_desc	</description>
       <userString>	#vehicle_customization:main_style/generic_custom_look_2_usa	</userString>
-      <priceGroup>	generic custom look styles	</priceGroup>
+      <priceGroup>	styles 700g	</priceGroup>
       <outfits>
         <outfit>
           <season>	winter	</season>
@@ -458,9 +461,9 @@
       <texture>	gui/maps/vehicles/styles/usa_veteran.png	</texture>
       <description>	#vehicle_customization:main_style/usa_veteran_desc	</description>
       <modelsSet>	T78_ID	</modelsSet>
-      <userString>	#vehicle_customization:main_style/usa_veteran	</userString>
       <maxNumber>	1	</maxNumber>
-      <priceGroup>	usa_veteran styles notInShop	</priceGroup>
+      <userString>	#vehicle_customization:main_style/usa_veteran	</userString>
+      <priceGroup>	styles 2000g notInShop	</priceGroup>
       <outfits>
         <outfit>
           <season>	ALL	</season>
@@ -486,7 +489,7 @@
     <userString>	#vehicle_customization:styles/main_styles	</userString>
     <season>	ALL	</season>
     <historical>	true	</historical>
-    <priceGroup>	2d common styles notInShop	</priceGroup>
+    <priceGroup>	styles 1500g notInShop	</priceGroup>
     <vehicleFilter>
       <include>
         <vehicles>	usa:A126_PzVI_Tiger_II_capt	</vehicles>

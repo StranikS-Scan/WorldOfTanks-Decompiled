@@ -3,9 +3,9 @@
 import logging
 import BigWorld
 from gui import SystemMessages
-from gui.Scaleform.locale.LOOTBOXES import LOOTBOXES
+from gui.impl import backport
+from gui.impl.gen import R
 from gui.shared.notifications import NotificationPriorityLevel
-from helpers.i18n import makeString as _ms
 from optional_bonuses import BONUS_MERGERS
 _logger = logging.getLogger(__name__)
 
@@ -23,6 +23,6 @@ def getMergedLootBoxBonuses(bonusesList):
 def showRestrictedSysMessage():
 
     def _showRestrictedSysMessage():
-        SystemMessages.pushMessage(text=_ms(LOOTBOXES.RESTRICTEDMESSAGE_BODY), type=SystemMessages.SM_TYPE.ErrorHeader, priority=NotificationPriorityLevel.HIGH, messageData={'header': _ms(LOOTBOXES.RESTRICTEDMESSAGE_HEADER)})
+        SystemMessages.pushMessage(text=backport.text(R.strings.lootboxes.restrictedMessage.body()), type=SystemMessages.SM_TYPE.ErrorHeader, priority=NotificationPriorityLevel.HIGH, messageData={'header': backport.text(R.strings.lootboxes.restrictedMessage.header())})
 
     BigWorld.callback(0.0, _showRestrictedSysMessage)

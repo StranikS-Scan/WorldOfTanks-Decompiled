@@ -3,7 +3,8 @@
 import math
 import BigWorld
 import Math
-from AvatarInputHandler.DynamicCameras.ArcadeCamera import ArcadeCamera, mathUtils
+import math_utils
+from AvatarInputHandler.DynamicCameras.ArcadeCamera import ArcadeCamera
 from PlayerEvents import g_playerEvents
 from constants import ARENA_PERIOD
 from debug_utils import LOG_CURRENT_EXCEPTION, LOG_DEBUG
@@ -80,7 +81,7 @@ class PostmortemDelay(object):
 
     def handleMouseEvent(self, dx, dy, dz):
         if self.__bActive and self.__mouseInputEnabled:
-            self.__arcadeCamera.update(dx, dy, mathUtils.clamp(-1, 1, dz))
+            self.__arcadeCamera.update(dx, dy, math_utils.clamp(-1, 1, dz))
 
     def __fadeScreen(self, bFade=True):
         if self.__bFadeScreenActive == bFade:

@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/DestructibleStickers.py
 import BigWorld
-from AvatarInputHandler import mathUtils
+import math_utils
 import VehicleStickers
 
 class DestructibleStickers(object):
@@ -10,7 +10,7 @@ class DestructibleStickers(object):
         self.__model = model
         self.__stickerModel = BigWorld.WGStickerModel()
         self.__stickerModel.setLODDistance(1000.0)
-        self.__stickerModel.setupSuperModel(model, mathUtils.createIdentityMatrix())
+        self.__stickerModel.setupSuperModel(model, math_utils.createIdentityMatrix())
         nodeToAttach.attach(self.__stickerModel)
         self.__damageStickers = {}
 

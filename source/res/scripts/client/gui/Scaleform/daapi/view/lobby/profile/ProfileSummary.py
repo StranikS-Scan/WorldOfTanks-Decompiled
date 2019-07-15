@@ -1,10 +1,10 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/profile/ProfileSummary.py
-import BigWorld
 from gui.Scaleform.daapi.view.AchievementsUtils import AchievementsUtils
 from gui.Scaleform.daapi.view.lobby.profile.ProfileUtils import ProfileUtils, getProfileCommonInfo
 from gui.Scaleform.daapi.view.meta.ProfileSummaryMeta import ProfileSummaryMeta
 from gui.Scaleform.locale.PROFILE import PROFILE
+from gui.impl import backport
 from helpers import dependency
 from helpers import i18n
 from PlayerEvents import g_playerEvents
@@ -67,7 +67,7 @@ class ProfileSummary(ProfileSummaryMeta):
          'significantAwardsErrorText': PROFILE.SECTION_SUMMARY_ERRORTEXT_SIGNIFICANTAWARDS}
 
     def getPersonalScoreWarningText(self, data):
-        battlesCount = BigWorld.wg_getIntegralFormat(data)
+        battlesCount = backport.getIntegralFormat(data)
         return i18n.makeString(PROFILE.SECTION_SUMMARY_WARNING_PERSONALSCORE, count=battlesCount)
 
     def _dispose(self):

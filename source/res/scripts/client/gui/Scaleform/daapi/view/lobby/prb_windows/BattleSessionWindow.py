@@ -2,11 +2,14 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/prb_windows/BattleSessionWindow.py
 import functools
 import BigWorld
+from shared_utils import safeCancelCallback
 import constants
 import nations
+from account_helpers import getAccountDatabaseID
 from adisp import process
-from gui import makeHtmlString
+from constants import PREBATTLE_MAX_OBSERVERS_IN_TEAM, OBSERVERS_BONUS_TYPES, PREBATTLE_ERRORS
 from gui import SystemMessages
+from gui import makeHtmlString
 from gui.Scaleform.daapi.view.meta.BattleSessionWindowMeta import BattleSessionWindowMeta
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.SYSTEM_MESSAGES import SYSTEM_MESSAGES
@@ -17,8 +20,6 @@ from gui.shared import events, EVENT_BUS_SCOPE
 from gui.shared.formatters import text_styles
 from gui.shared.utils import functions
 from helpers import time_utils, i18n
-from shared_utils import safeCancelCallback
-from constants import PREBATTLE_MAX_OBSERVERS_IN_TEAM, OBSERVERS_BONUS_TYPES, PREBATTLE_ERRORS
 
 class BattleSessionWindow(BattleSessionWindowMeta):
     START_TIME_SYNC_PERIOD = 10
@@ -51,13 +52,21 @@ class BattleSessionWindow(BattleSessionWindowMeta):
         if team1State.isInQueue():
             self._closeSendInvitesWindow()
 
+    def isReadyBtnEnabled(self):
+        result = super(BattleSessionWindow, self).isReadyBtnEnabled()
+        if self.__isTurnamentBattle:
+            result = result and self.__isCurrentPlayerInAssigned()
+        return result
+
     def onRostersChanged(self, entity, rosters, full):
+        if self.__isTurnamentBattle:
+            self.requestToReady(self.isPlayerReady() and self.__isCurrentPlayerInAssigned())
         self._setRosterList(rosters)
         self.__updateCommonRequirements(entity.getTeamLimits(), rosters)
 
     def onPlayerStateChanged(self, entity, roster, playerInfo):
         super(BattleSessionWindow, self).onPlayerStateChanged(entity, roster, playerInfo)
-        self.as_setInfoS(self.__battlesWinsString, self.__arenaName, self.__firstTeam, self.__secondTeam, self.prbEntity.getProps().getBattlesScore(), self.__eventName, self.__sessionName)
+        self.as_setInfoS(self.__isTurnamentBattle, self.__battlesWinsString, self.__arenaName, self.__firstTeam, self.__secondTeam, self.prbEntity.getProps().getBattlesScore(), self.__eventName, self.__sessionName)
         rosters = entity.getRosters()
         self._setRosterList(rosters)
         self.__updateCommonRequirements(entity.getTeamLimits(), rosters)
@@ -113,6 +122,10 @@ class BattleSessionWindow(BattleSessionWindowMeta):
 
         return None
 
+    def __isCurrentPlayerInAssigned(self):
+        dbIDs = [ playerInfo.dbID for playerInfo in self.prbEntity.getRosters()[self._getPlayerTeam() | PREBATTLE_ROSTER.ASSIGNED] ]
+        return getAccountDatabaseID() in dbIDs
+
     def requestToAssignMember(self, pID):
         playerInfo = self.__getUnassignedPlayerByAccID(pID)
         if playerInfo is not None and playerInfo.isReady():
@@ -166,7 +179,7 @@ class BattleSessionWindow(BattleSessionWindowMeta):
         self.__syncStartTime()
         self._setRosterList(rosters)
         self.__updateCommonRequirements(teamLimits, rosters)
-        self.as_setInfoS(self.__battlesWinsString, self.__arenaName, self.__firstTeam, self.__secondTeam, self.prbEntity.getProps().getBattlesScore(), self.__eventName, self.__sessionName)
+        self.as_setInfoS(self.__isTurnamentBattle, self.__battlesWinsString, self.__arenaName, self.__firstTeam, self.__secondTeam, self.prbEntity.getProps().getBattlesScore(), self.__eventName, self.__sessionName)
         self.__updateLimits(teamLimits, rosters)
 
     def _dispose(self):
@@ -234,6 +247,8 @@ class BattleSessionWindow(BattleSessionWindowMeta):
         winsLimit = settings[PREBATTLE_SETTING_NAME.WINS_LIMIT]
         self.__battlesWinsString = '%d/%s' % (battlesLimit, str(winsLimit or '-'))
         self.__eventName = formatters.getPrebattleEventName(extraData)
+        clansToInvite = settings['clansToInvite']
+        self.__isTurnamentBattle = not clansToInvite
         self.__sessionName = formatters.getPrebattleSessionName(extraData)
         description = formatters.getPrebattleDescription(extraData)
         if description:

@@ -1,902 +1,658 @@
 <list.xml>
   <xmlns:xmlref>	http://bwt/xmlref	</xmlns:xmlref>
   <priceGroup>
-    <id>	10000	</id>
-    <name>	legacy notInShop	</name>
-    <tags>	legacy notInShop	</tags>
-    <price>	1	  <gold></gold>
+    <id>	17	</id>
+    <name>	attachments 50g	</name>
+    <tags>	attachments	</tags>
+    <price>	50	  <gold></gold>
+    </price>
+    <notInShop>	False	</notInShop>
+  </priceGroup>
+  <priceGroup>
+    <id>	18	</id>
+    <name>	attachments 50g notInShop	</name>
+    <tags>	attachments notInShop	</tags>
+    <price>	50	  <gold></gold>
     </price>
     <notInShop>	True	</notInShop>
-  </priceGroup>
-  <priceGroup>
-    <id>	10001	</id>
-    <name>	legacy IGR notInShop	</name>
-    <tags>	legacy IGR notInShop	</tags>
-    <price>	1	  <gold></gold>
-    </price>
-    <notInShop>	True	</notInShop>
-  </priceGroup>
-  <priceGroup>
-    <id>	10002	</id>
-    <name>	legacy camo ussr	</name>
-    <tags>	legacy camouflages ussr	</tags>
-    <price>	50	  <gold></gold>
-    </price>
-    <notInShop>	False	</notInShop>
-  </priceGroup>
-  <priceGroup>
-    <id>	10003	</id>
-    <name>	legacy camo germany	</name>
-    <tags>	legacy camouflages germany	</tags>
-    <price>	50	  <gold></gold>
-    </price>
-    <notInShop>	False	</notInShop>
-  </priceGroup>
-  <priceGroup>
-    <id>	10004	</id>
-    <name>	legacy camo usa	</name>
-    <tags>	legacy camouflages usa	</tags>
-    <price>	50	  <gold></gold>
-    </price>
-    <notInShop>	False	</notInShop>
-  </priceGroup>
-  <priceGroup>
-    <id>	10005	</id>
-    <name>	legacy camo china	</name>
-    <tags>	legacy camouflages china	</tags>
-    <price>	50	  <gold></gold>
-    </price>
-    <notInShop>	False	</notInShop>
-  </priceGroup>
-  <priceGroup>
-    <id>	10006	</id>
-    <name>	legacy camo france	</name>
-    <tags>	legacy camouflages france	</tags>
-    <price>	50	  <gold></gold>
-    </price>
-    <notInShop>	False	</notInShop>
-  </priceGroup>
-  <priceGroup>
-    <id>	10007	</id>
-    <name>	legacy camo uk	</name>
-    <tags>	legacy camouflages uk	</tags>
-    <price>	50	  <gold></gold>
-    </price>
-    <notInShop>	False	</notInShop>
-  </priceGroup>
-  <priceGroup>
-    <id>	10008	</id>
-    <name>	legacy camo japan	</name>
-    <tags>	legacy camouflages japan	</tags>
-    <price>	50	  <gold></gold>
-    </price>
-    <notInShop>	False	</notInShop>
-  </priceGroup>
-  <priceGroup>
-    <id>	10009	</id>
-    <name>	legacy camo czech	</name>
-    <tags>	legacy camouflages czech	</tags>
-    <price>	50	  <gold></gold>
-    </price>
-    <notInShop>	False	</notInShop>
-  </priceGroup>
-  <priceGroup>
-    <id>	10010	</id>
-    <name>	legacy camo sweden	</name>
-    <tags>	legacy camouflages sweden	</tags>
-    <price>	50	  <gold></gold>
-    </price>
-    <notInShop>	False	</notInShop>
-  </priceGroup>
-  <priceGroup>
-    <id>	10011	</id>
-    <name>	legacy camo poland	</name>
-    <tags>	legacy camouflages poland	</tags>
-    <price>	50	  <gold></gold>
-    </price>
-    <notInShop>	False	</notInShop>
-  </priceGroup>
-  <priceGroup>
-    <id>	10012	</id>
-    <name>	legacy emblems	</name>
-    <tags>	legacy emblems	</tags>
-    <price>	50	  <gold></gold>
-    </price>
-    <notInShop>	False	</notInShop>
-  </priceGroup>
-  <priceGroup>
-    <id>	10013	</id>
-    <name>	legacy inscriptions ussr	</name>
-    <tags>	legacy inscriptions ussr	</tags>
-    <price>	50	  <gold></gold>
-    </price>
-    <notInShop>	False	</notInShop>
-  </priceGroup>
-  <priceGroup>
-    <id>	10014	</id>
-    <name>	legacy inscriptions germany	</name>
-    <tags>	legacy inscriptions germany	</tags>
-    <price>	50	  <gold></gold>
-    </price>
-    <notInShop>	False	</notInShop>
-  </priceGroup>
-  <priceGroup>
-    <id>	10015	</id>
-    <name>	legacy inscriptions usa	</name>
-    <tags>	legacy inscriptions usa	</tags>
-    <price>	50	  <gold></gold>
-    </price>
-    <notInShop>	False	</notInShop>
-  </priceGroup>
-  <priceGroup>
-    <id>	10016	</id>
-    <name>	legacy inscriptions china	</name>
-    <tags>	legacy inscriptions china	</tags>
-    <price>	50	  <gold></gold>
-    </price>
-    <notInShop>	False	</notInShop>
-  </priceGroup>
-  <priceGroup>
-    <id>	10017	</id>
-    <name>	legacy inscriptions france	</name>
-    <tags>	legacy inscriptions france	</tags>
-    <price>	50	  <gold></gold>
-    </price>
-    <notInShop>	False	</notInShop>
-  </priceGroup>
-  <priceGroup>
-    <id>	10018	</id>
-    <name>	legacy inscriptions uk	</name>
-    <tags>	legacy inscriptions uk	</tags>
-    <price>	50	  <gold></gold>
-    </price>
-    <notInShop>	False	</notInShop>
-  </priceGroup>
-  <priceGroup>
-    <id>	10019	</id>
-    <name>	legacy inscriptions japan	</name>
-    <tags>	legacy inscriptions japan	</tags>
-    <price>	50	  <gold></gold>
-    </price>
-    <notInShop>	False	</notInShop>
-  </priceGroup>
-  <priceGroup>
-    <id>	10020	</id>
-    <name>	legacy inscriptions czech	</name>
-    <tags>	legacy inscriptions czech	</tags>
-    <price>	50	  <gold></gold>
-    </price>
-    <notInShop>	False	</notInShop>
-  </priceGroup>
-  <priceGroup>
-    <id>	10021	</id>
-    <name>	legacy inscriptions sweden	</name>
-    <tags>	legacy inscriptions sweden	</tags>
-    <price>	50	  <gold></gold>
-    </price>
-    <notInShop>	False	</notInShop>
-  </priceGroup>
-  <priceGroup>
-    <id>	10022	</id>
-    <name>	legacy inscriptions poland	</name>
-    <tags>	legacy inscriptions poland	</tags>
-    <price>	50	  <gold></gold>
-    </price>
-    <notInShop>	False	</notInShop>
-  </priceGroup>
-  <priceGroup>
-    <id>	10023	</id>
-    <name>	legacy inscriptions common	</name>
-    <tags>	legacy inscriptions common	</tags>
-    <price>	50	  <gold></gold>
-    </price>
-    <notInShop>	False	</notInShop>
   </priceGroup>
   <priceGroup>
     <id>	1	</id>
-    <name>	custom paint	</name>
-    <price>	20	  <gold></gold>
+    <name>	camouflages ussr 50g	</name>
+    <tags>	camouflages ussr	</tags>
+    <price>	50	  <gold></gold>
     </price>
     <notInShop>	False	</notInShop>
-    <tags>	paints	</tags>
   </priceGroup>
   <priceGroup>
     <id>	2	</id>
-    <name>	custom paint notInShop	</name>
-    <price>	20	  <gold></gold>
+    <name>	camouflages germany 50g	</name>
+    <tags>	camouflages germany	</tags>
+    <price>	50	  <gold></gold>
     </price>
-    <notInShop>	True	</notInShop>
+    <notInShop>	False	</notInShop>
   </priceGroup>
   <priceGroup>
     <id>	3	</id>
-    <name>	historical paint	</name>
-    <price>	20	  <gold></gold>
+    <name>	camouflages usa 50g	</name>
+    <tags>	camouflages usa	</tags>
+    <price>	50	  <gold></gold>
     </price>
     <notInShop>	False	</notInShop>
-    <tags>	paints	</tags>
   </priceGroup>
   <priceGroup>
     <id>	4	</id>
-    <name>	historical paint notInShop	</name>
-    <price>	1	  <gold></gold>
-    </price>
-    <notInShop>	True	</notInShop>
-  </priceGroup>
-  <priceGroup>
-    <id>	32	</id>
-    <name>	effect free	</name>
-    <price>	300	  <gold></gold>
+    <name>	camouflages china 50g	</name>
+    <tags>	camouflages china	</tags>
+    <price>	50	  <gold></gold>
     </price>
     <notInShop>	False	</notInShop>
-    <tags>	modifications	</tags>
-  </priceGroup>
-  <priceGroup>
-    <id>	33	</id>
-    <name>	effect gold	</name>
-    <price>	300	  <gold></gold>
-    </price>
-    <notInShop>	False	</notInShop>
-    <tags>	modifications	</tags>
-  </priceGroup>
-  <priceGroup>
-    <id>	34	</id>
-    <name>	effect gold notInShop	</name>
-    <price>	1	  <gold></gold>
-    </price>
-    <notInShop>	True	</notInShop>
-    <tags>	modifications	</tags>
-  </priceGroup>
-  <priceGroup>
-    <id>	64	</id>
-    <name>	rented style	</name>
-    <price>	75000	</price>
-    <notInShop>	False	</notInShop>
-    <tags>	styles	</tags>
-  </priceGroup>
-  <priceGroup>
-    <id>	65	</id>
-    <name>	style gold	</name>
-    <price>	750	  <gold></gold>
-    </price>
-    <notInShop>	False	</notInShop>
-    <tags>	styles	</tags>
-  </priceGroup>
-  <priceGroup>
-    <id>	66	</id>
-    <name>	NY style notInShop	</name>
-    <price>	750	  <gold></gold>
-    </price>
-    <notInShop>	True	</notInShop>
-    <tags>	styles	</tags>
-  </priceGroup>
-  <priceGroup>
-    <id>	67	</id>
-    <name>	WG Fest style notInShop	</name>
-    <price>	750	  <gold></gold>
-    </price>
-    <notInShop>	True	</notInShop>
-    <tags>	styles	</tags>
-  </priceGroup>
-  <priceGroup>
-    <id>	68	</id>
-    <name>	Rostelecom style notInShop	</name>
-    <price>	750	  <gold></gold>
-    </price>
-    <notInShop>	True	</notInShop>
-    <tags>	styles	</tags>
-  </priceGroup>
-  <priceGroup>
-    <id>	70	</id>
-    <name>	misc notInShop	</name>
-    <price>	750	  <gold></gold>
-    </price>
-    <notInShop>	True	</notInShop>
-  </priceGroup>
-  <priceGroup>
-    <id>	71	</id>
-    <name>	special style notInShop	</name>
-    <price>	750	  <gold></gold>
-    </price>
-    <notInShop>	True	</notInShop>
-    <tags>	styles	</tags>
-  </priceGroup>
-  <priceGroup>
-    <id>	6	</id>
-    <name>	special style notInShop 700	</name>
-    <price>	700	  <gold></gold>
-    </price>
-    <notInShop>	true	</notInShop>
-    <tags>	styles	</tags>
-  </priceGroup>
-  <priceGroup>
-    <id>	75	</id>
-    <name>	23feb style	</name>
-    <price>	1000	  <gold></gold>
-    </price>
-    <notInShop>	True	</notInShop>
-  </priceGroup>
-  <priceGroup>
-    <id>	80	</id>
-    <name>	kv2_w style	</name>
-    <price>	3000	  <gold></gold>
-    </price>
-    <notInShop>	True	</notInShop>
-    <tags>	styles	</tags>
-  </priceGroup>
-  <priceGroup>
-    <id>	78	</id>
-    <name>	bdr_g1b_w style	</name>
-    <price>	2500	  <gold></gold>
-    </price>
-    <notInShop>	True	</notInShop>
-    <tags>	styles	</tags>
-  </priceGroup>
-  <priceGroup>
-    <id>	79	</id>
-    <name>	italy marathon style notInShop	</name>
-    <price>	1000	  <gold></gold>
-    </price>
-    <notInShop>	True	</notInShop>
-    <tags>	styles	</tags>
-  </priceGroup>
-  <priceGroup>
-    <id>	84	</id>
-    <name>	football styles notInShop	</name>
-    <tags>	football styles notInShop	</tags>
-    <price>	777	  <gold></gold>
-    </price>
-    <notInShop>	True	</notInShop>
-  </priceGroup>
-  <priceGroup>
-    <id>	88	</id>
-    <name>	football styles 4sale	</name>
-    <tags>	football styles	</tags>
-    <price>	1750	  <gold></gold>
-    </price>
-    <notInShop>	True	</notInShop>
-  </priceGroup>
-  <priceGroup>
-    <id>	91	</id>
-    <name>	royalCorps styles notInShop	</name>
-    <tags>	royalCorps styles	</tags>
-    <price>	1500	  <gold></gold>
-    </price>
-    <notInShop>	True	</notInShop>
-  </priceGroup>
-  <priceGroup>
-    <id>	92	</id>
-    <name>	WingedHussar styles notInShop	</name>
-    <tags>	WingedHussar styles	</tags>
-    <price>	1500	  <gold></gold>
-    </price>
-    <notInShop>	True	</notInShop>
-  </priceGroup>
-  <priceGroup>
-    <id>	93	</id>
-    <name>	KanonenPanter_105 styles notInShop	</name>
-    <tags>	KanonenPanter_105 styles	</tags>
-    <price>	1500	  <gold></gold>
-    </price>
-    <notInShop>	True	</notInShop>
-  </priceGroup>
-  <priceGroup>
-    <id>	100	</id>
-    <name>	twitch styles notInShop	</name>
-    <tags>	twitch styles notInShop	</tags>
-    <price>	1500	  <gold></gold>
-    </price>
-    <notInShop>	True	</notInShop>
-  </priceGroup>
-  <priceGroup>
-    <id>	101	</id>
-    <name>	gamescom styles	</name>
-    <tags>	gamescom styles	</tags>
-    <price>	1750	  <gold></gold>
-    </price>
-    <notInShop>	True	</notInShop>
-  </priceGroup>
-  <priceGroup>
-    <id>	102	</id>
-    <name>	tankmansday styles	</name>
-    <tags>	tankmansday styles	</tags>
-    <price>	1750	  <gold></gold>
-    </price>
-    <notInShop>	True	</notInShop>
-  </priceGroup>
-  <priceGroup>
-    <id>	103	</id>
-    <name>	NFL styles	</name>
-    <tags>	NFL styles	</tags>
-    <price>	1750	  <gold></gold>
-    </price>
-    <notInShop>	True	</notInShop>
-  </priceGroup>
-  <priceGroup>
-    <id>	109	</id>
-    <name>	Armistice styles	</name>
-    <tags>	Armistice styles	</tags>
-    <price>	1750	  <gold></gold>
-    </price>
-    <notInShop>	True	</notInShop>
-  </priceGroup>
-  <priceGroup>
-    <id>	127	</id>
-    <name>	NYst styles	</name>
-    <tags>	NYst styles	</tags>
-    <price>	4500	  <gold></gold>
-    </price>
-    <notInShop>	True	</notInShop>
-  </priceGroup>
-  <priceGroup>
-    <id>	128	</id>
-    <name>	special styles veteran	</name>
-    <tags>	special styles veteran	</tags>
-    <price>	1500	  <gold></gold>
-    </price>
-    <notInShop>	True	</notInShop>
-  </priceGroup>
-  <priceGroup>
-    <id>	126	</id>
-    <name>	SnowLeopard styles	</name>
-    <tags>	SnowLeopard styles	</tags>
-    <price>	1500	  <gold></gold>
-    </price>
-    <notInShop>	true	</notInShop>
-  </priceGroup>
-  <priceGroup>
-    <id>	107	</id>
-    <name>	SD styles notInShop	</name>
-    <tags>	SD styles notInShop	</tags>
-    <price>	750	  <gold></gold>
-    </price>
-    <notInShop>	True	</notInShop>
-  </priceGroup>
-  <priceGroup>
-    <id>	130	</id>
-    <name>	generic custom look styles	</name>
-    <tags>	generic custom look styles	</tags>
-    <price>	700	  <gold></gold>
-    </price>
-    <notInShop>	False	</notInShop>
-  </priceGroup>
-  <priceGroup>
-    <id>	135	</id>
-    <name>	WolvesOfOdin styles	</name>
-    <tags>	WolvesOfOdin styles	</tags>
-    <price>	3500	  <gold></gold>
-    </price>
-    <notInShop>	True	</notInShop>
-  </priceGroup>
-  <priceGroup>
-    <id>	140	</id>
-    <name>	2d common styles notInShop	</name>
-    <tags>	2d common styles notInShop	</tags>
-    <price>	1500	  <gold></gold>
-    </price>
-    <notInShop>	True	</notInShop>
-  </priceGroup>
-  <priceGroup>
-    <id>	141	</id>
-    <name>	ranked styles notInShop	</name>
-    <tags>	ranked styles notInShop	</tags>
-    <price>	1500	  <gold></gold>
-    </price>
-    <notInShop>	True	</notInShop>
-  </priceGroup>
-  <priceGroup>
-    <id>	144	</id>
-    <name>	BlackFriday digital styles	</name>
-    <tags>	BlackFriday digital styles	</tags>
-    <price>	1750	  <gold></gold>
-    </price>
-    <notInShop>	True	</notInShop>
-  </priceGroup>
-  <priceGroup>
-    <id>	142	</id>
-    <name>	czech_veteran styles notInShop	</name>
-    <tags>	czech_veteran styles notInShop	</tags>
-    <price>	4000	  <gold></gold>
-    </price>
-    <notInShop>	True	</notInShop>
   </priceGroup>
   <priceGroup>
     <id>	5	</id>
-    <name>	usa_veteran styles notInShop	</name>
-    <tags>	usa_veteran styles notInShop	</tags>
-    <price>	2000	  <gold></gold>
-    </price>
-    <notInShop>	True	</notInShop>
-  </priceGroup>
-  <priceGroup>
-    <id>	7	</id>
-    <name>	ski_patrol notInShop	</name>
-    <tags>	ski_patrol notInShop	</tags>
-    <price>	2500	  <gold></gold>
-    </price>
-    <notInShop>	true	</notInShop>
-  </priceGroup>
-  <priceGroup>
-    <id>	110	</id>
-    <name>	Thanksgiving styles	</name>
-    <tags>	Thanksgiving styles	</tags>
-    <price>	1750	  <gold></gold>
-    </price>
-    <notInShop>	True	</notInShop>
-  </priceGroup>
-  <priceGroup>
-    <id>	123	</id>
-    <name>	BlackFriday styles	</name>
-    <tags>	BlackFriday styles	</tags>
-    <price>	1750	  <gold></gold>
-    </price>
-    <notInShop>	True	</notInShop>
-  </priceGroup>
-  <priceGroup>
-    <id>	133	</id>
-    <name>	generic custom look na	</name>
-    <tags>	generic custom look na	</tags>
-    <price>	700	  <gold></gold>
-    </price>
-    <notInShop>	True	</notInShop>
-  </priceGroup>
-  <priceGroup>
-    <id>	94	</id>
-    <name>	Mooncamo styles	</name>
-    <tags>	Mooncamo styles	</tags>
-    <price>	1750	  <gold></gold>
-    </price>
-    <notInShop>	True	</notInShop>
-  </priceGroup>
-  <priceGroup>
-    <id>	104	</id>
-    <name>	AutumnWind styles	</name>
-    <tags>	AutumnWind styles	</tags>
-    <price>	1750	  <gold></gold>
-    </price>
-    <notInShop>	True	</notInShop>
-  </priceGroup>
-  <priceGroup>
-    <id>	108	</id>
-    <name>	Diversity styles	</name>
-    <tags>	Diversity styles	</tags>
-    <price>	1750	  <gold></gold>
-    </price>
-    <notInShop>	True	</notInShop>
-  </priceGroup>
-  <priceGroup>
-    <id>	132	</id>
-    <name>	generic custom look asia	</name>
-    <tags>	generic custom look asia	</tags>
-    <price>	700	  <gold></gold>
-    </price>
-    <notInShop>	True	</notInShop>
-  </priceGroup>
-  <priceGroup>
-    <id>	106	</id>
-    <name>	Czech style	</name>
-    <tags>	Czech style	</tags>
-    <price>	1200	  <gold></gold>
-    </price>
-    <notInShop>	True	</notInShop>
-  </priceGroup>
-  <priceGroup>
-    <id>	134	</id>
-    <name>	generic custom look eu	</name>
-    <tags>	generic custom look eu	</tags>
-    <price>	700	  <gold></gold>
-    </price>
-    <notInShop>	True	</notInShop>
-  </priceGroup>
-  <priceGroup>
-    <id>	125	</id>
-    <name>	Counterattack styles	</name>
-    <tags>	Counterattack styles	</tags>
-    <price>	1750	  <gold></gold>
-    </price>
-    <notInShop>	True	</notInShop>
-  </priceGroup>
-  <priceGroup>
-    <id>	69	</id>
-    <name>	legacy inscriptions italy	</name>
-    <tags>	legacy inscriptions italy	</tags>
+    <name>	camouflages france 50g	</name>
+    <tags>	camouflages france	</tags>
     <price>	50	  <gold></gold>
     </price>
     <notInShop>	False	</notInShop>
   </priceGroup>
   <priceGroup>
-    <id>	73	</id>
-    <name>	23feb inscriptions notInShop	</name>
-    <tags>	23feb inscriptions notInShop	</tags>
+    <id>	6	</id>
+    <name>	camouflages uk 50g	</name>
+    <tags>	camouflages uk	</tags>
     <price>	50	  <gold></gold>
     </price>
-    <notInShop>	True	</notInShop>
+    <notInShop>	False	</notInShop>
   </priceGroup>
   <priceGroup>
-    <id>	90	</id>
-    <name>	bovington emblem notInShop	</name>
-    <tags>	bovington emblems notInShop	</tags>
+    <id>	7	</id>
+    <name>	camouflages japan 50g	</name>
+    <tags>	camouflages japan	</tags>
     <price>	50	  <gold></gold>
     </price>
-    <notInShop>	True	</notInShop>
+    <notInShop>	False	</notInShop>
   </priceGroup>
   <priceGroup>
-    <id>	96	</id>
-    <name>	sabaton inscriptions notInShop	</name>
-    <tags>	sabaton inscriptions notInShop	</tags>
-    <price>	200	  <gold></gold>
-    </price>
-    <notInShop>	True	</notInShop>
-  </priceGroup>
-  <priceGroup>
-    <id>	99	</id>
-    <name>	inscriptions notInShop	</name>
-    <tags>	inscriptions notInShop	</tags>
+    <id>	8	</id>
+    <name>	camouflages czech 50g	</name>
+    <tags>	camouflages czech	</tags>
     <price>	50	  <gold></gold>
     </price>
-    <notInShop>	True	</notInShop>
+    <notInShop>	False	</notInShop>
   </priceGroup>
   <priceGroup>
-    <id>	121	</id>
-    <name>	Remembrance day inscriptions	</name>
-    <tags>	Remembrance day inscriptions	</tags>
+    <id>	9	</id>
+    <name>	camouflages sweden 50g	</name>
+    <tags>	camouflages sweden	</tags>
     <price>	50	  <gold></gold>
     </price>
-    <notInShop>	True	</notInShop>
+    <notInShop>	False	</notInShop>
   </priceGroup>
   <priceGroup>
-    <id>	77	</id>
-    <name>	blank camouflage notInShop	</name>
-    <tags>	blank camouflages notInShop	</tags>
-    <price>	1	  <gold></gold>
+    <id>	10	</id>
+    <name>	camouflages poland 50g	</name>
+    <tags>	camouflages poland	</tags>
+    <price>	50	  <gold></gold>
     </price>
-    <notInShop>	True	</notInShop>
+    <notInShop>	False	</notInShop>
   </priceGroup>
   <priceGroup>
-    <id>	72	</id>
-    <name>	23feb camo notInShop	</name>
-    <tags>	23feb camouflages notInShop	</tags>
-    <price>	500	  <gold></gold>
-    </price>
-    <notInShop>	True	</notInShop>
-  </priceGroup>
-  <priceGroup>
-    <id>	74	</id>
-    <name>	camo italy	</name>
+    <id>	11	</id>
+    <name>	camouflages italy 50g	</name>
     <tags>	camouflages italy	</tags>
     <price>	50	  <gold></gold>
     </price>
     <notInShop>	False	</notInShop>
   </priceGroup>
   <priceGroup>
-    <id>	76	</id>
-    <name>	camo italy notInShop	</name>
-    <tags>	camouflages italy notInShop	</tags>
-    <price>	1	  <gold></gold>
-    </price>
-    <notInShop>	True	</notInShop>
-  </priceGroup>
-  <priceGroup>
-    <id>	81	</id>
-    <name>	wh camo notInShop	</name>
-    <tags>	wh camouflages notInShop	</tags>
-    <price>	500	  <gold></gold>
-    </price>
-    <notInShop>	True	</notInShop>
-  </priceGroup>
-  <priceGroup>
-    <id>	82	</id>
-    <name>	free football camouflages notInShop	</name>
-    <tags>	free football camouflages notInShop	</tags>
-    <price>	1	  <gold></gold>
-    </price>
-    <notInShop>	True	</notInShop>
-  </priceGroup>
-  <priceGroup>
-    <id>	83	</id>
-    <name>	football camouflages notInShop	</name>
-    <tags>	football camouflages notInShop	</tags>
-    <price>	500	  <gold></gold>
-    </price>
-    <notInShop>	True	</notInShop>
-  </priceGroup>
-  <priceGroup>
-    <id>	89	</id>
-    <name>	bovington camo notInShop	</name>
-    <tags>	bovington camouflages notInShop	</tags>
+    <id>	12	</id>
+    <name>	camouflages unified 50g	</name>
+    <tags>	camouflages unified	</tags>
     <price>	50	  <gold></gold>
     </price>
-    <notInShop>	True	</notInShop>
+    <notInShop>	False	</notInShop>
   </priceGroup>
   <priceGroup>
-    <id>	98	</id>
-    <name>	camouflages notInShop	</name>
+    <id>	13	</id>
+    <name>	camouflages 50g notInShop	</name>
     <tags>	camouflages notInShop	</tags>
     <price>	50	  <gold></gold>
     </price>
     <notInShop>	True	</notInShop>
   </priceGroup>
   <priceGroup>
-    <id>	129	</id>
-    <name>	camouflages WBulldog notInShop	</name>
-    <tags>	camouflages WBulldog notInShop	</tags>
-    <price>	300	  <gold></gold>
-    </price>
-    <notInShop>	True	</notInShop>
-  </priceGroup>
-  <priceGroup>
-    <id>	139	</id>
-    <name>	ranked camouflages notInShop	</name>
-    <tags>	ranked camouflages notInShop	</tags>
+    <id>	14	</id>
+    <name>	camouflages 50g IGR notInShop	</name>
+    <tags>	camouflages IGR notInShop	</tags>
     <price>	50	  <gold></gold>
     </price>
     <notInShop>	True	</notInShop>
   </priceGroup>
   <priceGroup>
-    <id>	85	</id>
-    <name>	football emblems 100	</name>
-    <tags>	football emblems	</tags>
-    <price>	100	  <gold></gold>
+    <id>	15	</id>
+    <name>	camouflages 300g notInShop	</name>
+    <tags>	camouflages notInShop	</tags>
+    <price>	300	  <gold></gold>
     </price>
     <notInShop>	True	</notInShop>
   </priceGroup>
   <priceGroup>
-    <id>	86	</id>
-    <name>	football emblems 150	</name>
-    <tags>	football emblems	</tags>
-    <price>	150	  <gold></gold>
+    <id>	16	</id>
+    <name>	camouflages 500g notInShop	</name>
+    <tags>	camouflages notInShop	</tags>
+    <price>	500	  <gold></gold>
     </price>
     <notInShop>	True	</notInShop>
   </priceGroup>
   <priceGroup>
-    <id>	87	</id>
-    <name>	football emblems 200	</name>
-    <tags>	football emblems	</tags>
-    <price>	200	  <gold></gold>
-    </price>
-    <notInShop>	True	</notInShop>
-  </priceGroup>
-  <priceGroup>
-    <id>	95	</id>
-    <name>	sabaton emblems notInShop	</name>
-    <tags>	sabaton emblems notInShop	</tags>
-    <price>	200	  <gold></gold>
-    </price>
-    <notInShop>	True	</notInShop>
-  </priceGroup>
-  <priceGroup>
-    <id>	97	</id>
-    <name>	emblems notInShop	</name>
+    <id>	19	</id>
+    <name>	emblems 50g notInShop	</name>
     <tags>	emblems notInShop	</tags>
     <price>	50	  <gold></gold>
     </price>
     <notInShop>	True	</notInShop>
   </priceGroup>
   <priceGroup>
-    <id>	120	</id>
-    <name>	Remembrance day emblems	</name>
-    <tags>	Remembrance day emblems	</tags>
+    <id>	20	</id>
+    <name>	emblems 50g	</name>
+    <tags>	emblems	</tags>
+    <price>	50	  <gold></gold>
+    </price>
+    <notInShop>	False	</notInShop>
+  </priceGroup>
+  <priceGroup>
+    <id>	21	</id>
+    <name>	emblems 100g notInShop	</name>
+    <tags>	emblems notInShop	</tags>
+    <price>	100	  <gold></gold>
+    </price>
+    <notInShop>	True	</notInShop>
+  </priceGroup>
+  <priceGroup>
+    <id>	22	</id>
+    <name>	emblems 150g notInShop	</name>
+    <tags>	emblems notInShop	</tags>
+    <price>	150	  <gold></gold>
+    </price>
+    <notInShop>	True	</notInShop>
+  </priceGroup>
+  <priceGroup>
+    <id>	23	</id>
+    <name>	emblems 200g notInShop	</name>
+    <tags>	emblems notInShop	</tags>
+    <price>	200	  <gold></gold>
+    </price>
+    <notInShop>	True	</notInShop>
+  </priceGroup>
+  <priceGroup>
+    <id>	74	</id>
+    <name>	emblems 50g IGR notInShop	</name>
+    <tags>	emblems IGR notInShop	</tags>
     <price>	50	  <gold></gold>
     </price>
     <notInShop>	True	</notInShop>
   </priceGroup>
   <priceGroup>
-    <id>	124	</id>
-    <name>	Thanksgiving emblems	</name>
-    <tags>	Thanksgiving emblems	</tags>
+    <id>	24	</id>
+    <name>	emblems 50g NA	</name>
+    <tags>	emblems NA	</tags>
     <price>	50	  <gold></gold>
     </price>
     <notInShop>	True	</notInShop>
   </priceGroup>
   <priceGroup>
-    <id>	105	</id>
-    <name>	projection_decals notInShop	</name>
+    <id>	25	</id>
+    <name>	inscriptions ussr 50g	</name>
+    <tags>	inscriptions ussr	</tags>
+    <price>	50	  <gold></gold>
+    </price>
+    <notInShop>	False	</notInShop>
+  </priceGroup>
+  <priceGroup>
+    <id>	26	</id>
+    <name>	inscriptions germany 50g	</name>
+    <tags>	inscriptions germany	</tags>
+    <price>	50	  <gold></gold>
+    </price>
+    <notInShop>	False	</notInShop>
+  </priceGroup>
+  <priceGroup>
+    <id>	27	</id>
+    <name>	inscriptions usa 50g	</name>
+    <tags>	inscriptions usa	</tags>
+    <price>	50	  <gold></gold>
+    </price>
+    <notInShop>	False	</notInShop>
+  </priceGroup>
+  <priceGroup>
+    <id>	28	</id>
+    <name>	inscriptions china 50g	</name>
+    <tags>	inscriptions china	</tags>
+    <price>	50	  <gold></gold>
+    </price>
+    <notInShop>	False	</notInShop>
+  </priceGroup>
+  <priceGroup>
+    <id>	29	</id>
+    <name>	inscriptions france 50g	</name>
+    <tags>	inscriptions france	</tags>
+    <price>	50	  <gold></gold>
+    </price>
+    <notInShop>	False	</notInShop>
+  </priceGroup>
+  <priceGroup>
+    <id>	30	</id>
+    <name>	inscriptions uk 50g	</name>
+    <tags>	inscriptions uk	</tags>
+    <price>	50	  <gold></gold>
+    </price>
+    <notInShop>	False	</notInShop>
+  </priceGroup>
+  <priceGroup>
+    <id>	31	</id>
+    <name>	inscriptions japan 50g	</name>
+    <tags>	inscriptions japan	</tags>
+    <price>	50	  <gold></gold>
+    </price>
+    <notInShop>	False	</notInShop>
+  </priceGroup>
+  <priceGroup>
+    <id>	32	</id>
+    <name>	inscriptions czech 50g	</name>
+    <tags>	inscriptions czech	</tags>
+    <price>	50	  <gold></gold>
+    </price>
+    <notInShop>	False	</notInShop>
+  </priceGroup>
+  <priceGroup>
+    <id>	33	</id>
+    <name>	inscriptions sweden 50g	</name>
+    <tags>	inscriptions sweden	</tags>
+    <price>	50	  <gold></gold>
+    </price>
+    <notInShop>	False	</notInShop>
+  </priceGroup>
+  <priceGroup>
+    <id>	34	</id>
+    <name>	inscriptions poland 50g	</name>
+    <tags>	inscriptions poland	</tags>
+    <price>	50	  <gold></gold>
+    </price>
+    <notInShop>	False	</notInShop>
+  </priceGroup>
+  <priceGroup>
+    <id>	35	</id>
+    <name>	inscriptions italy 50g	</name>
+    <tags>	inscriptions italy	</tags>
+    <price>	50	  <gold></gold>
+    </price>
+    <notInShop>	False	</notInShop>
+  </priceGroup>
+  <priceGroup>
+    <id>	36	</id>
+    <name>	inscriptions unified 50g	</name>
+    <tags>	inscriptions unified	</tags>
+    <price>	50	  <gold></gold>
+    </price>
+    <notInShop>	False	</notInShop>
+  </priceGroup>
+  <priceGroup>
+    <id>	37	</id>
+    <name>	inscriptions 50g notInShop	</name>
+    <tags>	inscriptions notInShop	</tags>
+    <price>	50	  <gold></gold>
+    </price>
+    <notInShop>	True	</notInShop>
+  </priceGroup>
+  <priceGroup>
+    <id>	38	</id>
+    <name>	inscriptions 200g notInShop	</name>
+    <tags>	inscriptions notInShop	</tags>
+    <price>	200	  <gold></gold>
+    </price>
+    <notInShop>	True	</notInShop>
+  </priceGroup>
+  <priceGroup>
+    <id>	75	</id>
+    <name>	inscriptions 50g IGR notInShop	</name>
+    <tags>	inscriptions IGR notInShop	</tags>
+    <price>	50	  <gold></gold>
+    </price>
+    <notInShop>	True	</notInShop>
+  </priceGroup>
+  <priceGroup>
+    <id>	39	</id>
+    <name>	inscriptions 50g NA	</name>
+    <tags>	inscriptions NA	</tags>
+    <price>	50	  <gold></gold>
+    </price>
+    <notInShop>	True	</notInShop>
+  </priceGroup>
+  <priceGroup>
+    <id>	76	</id>
+    <name>	insignias 50g	</name>
+    <tags>	insignias	</tags>
+    <price>	50	  <gold></gold>
+    </price>
+    <notInShop>	False	</notInShop>
+  </priceGroup>
+  <priceGroup>
+    <id>	77	</id>
+    <name>	insignias 50g notInShop	</name>
+    <tags>	insignias notInShop	</tags>
+    <price>	50	  <gold></gold>
+    </price>
+    <notInShop>	True	</notInShop>
+  </priceGroup>
+  <priceGroup>
+    <id>	40	</id>
+    <name>	modifications 300g	</name>
+    <tags>	modifications	</tags>
+    <price>	300	  <gold></gold>
+    </price>
+    <notInShop>	False	</notInShop>
+  </priceGroup>
+  <priceGroup>
+    <id>	41	</id>
+    <name>	modifications 300g notInShop	</name>
+    <tags>	modifications notInShop	</tags>
+    <price>	300	  <gold></gold>
+    </price>
+    <notInShop>	True	</notInShop>
+  </priceGroup>
+  <priceGroup>
+    <id>	42	</id>
+    <name>	paints 20g	</name>
+    <tags>	paints	</tags>
+    <price>	20	  <gold></gold>
+    </price>
+    <notInShop>	False	</notInShop>
+  </priceGroup>
+  <priceGroup>
+    <id>	43	</id>
+    <name>	paints 20g notInShop	</name>
+    <tags>	paints notInShop	</tags>
+    <price>	20	  <gold></gold>
+    </price>
+    <notInShop>	True	</notInShop>
+  </priceGroup>
+  <priceGroup>
+    <id>	44	</id>
+    <name>	personal_numbers 50g	</name>
+    <tags>	personal_numbers	</tags>
+    <price>	50	  <gold></gold>
+    </price>
+    <notInShop>	False	</notInShop>
+  </priceGroup>
+  <priceGroup>
+    <id>	45	</id>
+    <name>	personal_numbers 50g notInShop	</name>
+    <tags>	personal_numbers notInShop	</tags>
+    <price>	50	  <gold></gold>
+    </price>
+    <notInShop>	True	</notInShop>
+  </priceGroup>
+  <priceGroup>
+    <id>	46	</id>
+    <name>	projection_decals 50g notInShop	</name>
     <tags>	projection_decals notInShop	</tags>
     <price>	50	  <gold></gold>
     </price>
     <notInShop>	True	</notInShop>
   </priceGroup>
   <priceGroup>
-    <id>	111	</id>
-    <name>	projection_decals 100	</name>
-    <tags>	projection_decals 100	</tags>
+    <id>	47	</id>
+    <name>	projection_decals 150g notInShop	</name>
+    <tags>	projection_decals notInShop	</tags>
+    <price>	150	  <gold></gold>
+    </price>
+    <notInShop>	True	</notInShop>
+  </priceGroup>
+  <priceGroup>
+    <id>	48	</id>
+    <name>	projection_decals 100g	</name>
+    <tags>	projection_decals	</tags>
     <price>	100	  <gold></gold>
     </price>
     <notInShop>	False	</notInShop>
   </priceGroup>
   <priceGroup>
-    <id>	112	</id>
-    <name>	projection_decals 110	</name>
-    <tags>	projection_decals 110	</tags>
+    <id>	49	</id>
+    <name>	projection_decals 110g	</name>
+    <tags>	projection_decals	</tags>
     <price>	110	  <gold></gold>
     </price>
     <notInShop>	False	</notInShop>
   </priceGroup>
   <priceGroup>
-    <id>	136	</id>
-    <name>	projection_decals 120	</name>
-    <tags>	projection_decals 120	</tags>
+    <id>	50	</id>
+    <name>	projection_decals 120g	</name>
+    <tags>	projection_decals	</tags>
     <price>	120	  <gold></gold>
     </price>
     <notInShop>	False	</notInShop>
   </priceGroup>
   <priceGroup>
-    <id>	113	</id>
-    <name>	projection_decals 130	</name>
-    <tags>	projection_decals 130	</tags>
+    <id>	51	</id>
+    <name>	projection_decals 130g	</name>
+    <tags>	projection_decals	</tags>
     <price>	130	  <gold></gold>
     </price>
     <notInShop>	False	</notInShop>
   </priceGroup>
   <priceGroup>
-    <id>	114	</id>
-    <name>	projection_decals 140	</name>
-    <tags>	projection_decals 140	</tags>
+    <id>	52	</id>
+    <name>	projection_decals 140g	</name>
+    <tags>	projection_decals	</tags>
     <price>	140	  <gold></gold>
     </price>
     <notInShop>	False	</notInShop>
   </priceGroup>
   <priceGroup>
-    <id>	115	</id>
-    <name>	projection_decals 150	</name>
-    <tags>	projection_decals 150	</tags>
+    <id>	53	</id>
+    <name>	projection_decals 150g	</name>
+    <tags>	projection_decals	</tags>
     <price>	150	  <gold></gold>
     </price>
     <notInShop>	False	</notInShop>
   </priceGroup>
   <priceGroup>
-    <id>	116	</id>
-    <name>	projection_decals 160	</name>
-    <tags>	projection_decals 160	</tags>
+    <id>	54	</id>
+    <name>	projection_decals 160g	</name>
+    <tags>	projection_decals	</tags>
     <price>	160	  <gold></gold>
     </price>
     <notInShop>	False	</notInShop>
   </priceGroup>
   <priceGroup>
-    <id>	137	</id>
-    <name>	projection_decals 170	</name>
-    <tags>	projection_decals 170	</tags>
+    <id>	55	</id>
+    <name>	projection_decals 170g	</name>
+    <tags>	projection_decals	</tags>
     <price>	170	  <gold></gold>
     </price>
     <notInShop>	False	</notInShop>
   </priceGroup>
   <priceGroup>
-    <id>	138	</id>
-    <name>	projection_decals 220	</name>
-    <tags>	projection_decals 220	</tags>
+    <id>	80	</id>
+    <name>	projection_decals 175g	</name>
+    <tags>	projection_decals	</tags>
+    <price>	175	  <gold></gold>
+    </price>
+    <notInShop>	False	</notInShop>
+  </priceGroup>
+  <priceGroup>
+    <id>	83	</id>
+    <name>	projection_decals 220g	</name>
+    <tags>	projection_decals	</tags>
     <price>	220	  <gold></gold>
     </price>
     <notInShop>	False	</notInShop>
   </priceGroup>
   <priceGroup>
-    <id>	118	</id>
-    <name>	projection_decals notInShop 150	</name>
-    <tags>	projection_decals notInShop 150	</tags>
-    <price>	150	  <gold></gold>
-    </price>
-    <notInShop>	True	</notInShop>
-  </priceGroup>
-  <priceGroup>
-    <id>	131	</id>
-    <name>	Frontline2019 projection_decals	</name>
-    <tags>	Frontline2019 projection_decals	</tags>
-    <price>	150	  <gold></gold>
-    </price>
-    <notInShop>	True	</notInShop>
-  </priceGroup>
-  <priceGroup>
-    <id>	117	</id>
-    <name>	projection_decals 110 EU	</name>
-    <tags>	projection_decals 110 EU	</tags>
+    <id>	57	</id>
+    <name>	projection_decals 110g EU	</name>
+    <tags>	projection_decals EU	</tags>
     <price>	110	  <gold></gold>
     </price>
     <notInShop>	False	</notInShop>
   </priceGroup>
   <priceGroup>
-    <id>	41	</id>
-    <name>	custom personal number	</name>
+    <id>	58	</id>
+    <name>	sequences 50g	</name>
+    <tags>	sequences	</tags>
     <price>	50	  <gold></gold>
     </price>
     <notInShop>	False	</notInShop>
-    <tags>	personal_numbers	</tags>
+  </priceGroup>
+  <priceGroup>
+    <id>	59	</id>
+    <name>	sequences 50g notInShop	</name>
+    <tags>	sequences notInShop	</tags>
+    <price>	50	  <gold></gold>
+    </price>
+    <notInShop>	True	</notInShop>
+  </priceGroup>
+  <priceGroup>
+    <id>	60	</id>
+    <name>	styles 75000s	</name>
+    <tags>	styles	</tags>
+    <price>	75000	</price>
+    <notInShop>	False	</notInShop>
+  </priceGroup>
+  <priceGroup>
+    <id>	78	</id>
+    <name>	styles 700g	</name>
+    <tags>	styles	</tags>
+    <price>	700	  <gold></gold>
+    </price>
+    <notInShop>	False	</notInShop>
+  </priceGroup>
+  <priceGroup>
+    <id>	61	</id>
+    <name>	styles 750g	</name>
+    <tags>	styles	</tags>
+    <price>	750	  <gold></gold>
+    </price>
+    <notInShop>	False	</notInShop>
+  </priceGroup>
+  <priceGroup>
+    <id>	81	</id>
+    <name>	styles 1750g	</name>
+    <tags>	styles	</tags>
+    <price>	1750	  <gold></gold>
+    </price>
+    <notInShop>	False	</notInShop>
+  </priceGroup>
+  <priceGroup>
+    <id>	62	</id>
+    <name>	styles 700g notInShop	</name>
+    <tags>	styles notInShop	</tags>
+    <price>	700	  <gold></gold>
+    </price>
+    <notInShop>	True	</notInShop>
+  </priceGroup>
+  <priceGroup>
+    <id>	63	</id>
+    <name>	styles 750g notInShop	</name>
+    <tags>	styles notInShop	</tags>
+    <price>	750	  <gold></gold>
+    </price>
+    <notInShop>	True	</notInShop>
+  </priceGroup>
+  <priceGroup>
+    <id>	64	</id>
+    <name>	styles 777g notInShop	</name>
+    <tags>	styles notInShop	</tags>
+    <price>	777	  <gold></gold>
+    </price>
+    <notInShop>	True	</notInShop>
+  </priceGroup>
+  <priceGroup>
+    <id>	65	</id>
+    <name>	styles 1000g notInShop	</name>
+    <tags>	styles notInShop	</tags>
+    <price>	1000	  <gold></gold>
+    </price>
+    <notInShop>	True	</notInShop>
+  </priceGroup>
+  <priceGroup>
+    <id>	66	</id>
+    <name>	styles 1500g notInShop	</name>
+    <tags>	styles notInShop	</tags>
+    <price>	1500	  <gold></gold>
+    </price>
+    <notInShop>	True	</notInShop>
+  </priceGroup>
+  <priceGroup>
+    <id>	67	</id>
+    <name>	styles 1750g notInShop	</name>
+    <tags>	styles notInShop	</tags>
+    <price>	1750	  <gold></gold>
+    </price>
+    <notInShop>	True	</notInShop>
+  </priceGroup>
+  <priceGroup>
+    <id>	82	</id>
+    <name>	styles 2000g notInShop	</name>
+    <tags>	styles notInShop	</tags>
+    <price>	2000	  <gold></gold>
+    </price>
+    <notInShop>	True	</notInShop>
+  </priceGroup>
+  <priceGroup>
+    <id>	68	</id>
+    <name>	styles 2500g notInShop	</name>
+    <tags>	styles notInShop	</tags>
+    <price>	2500	  <gold></gold>
+    </price>
+    <notInShop>	True	</notInShop>
+  </priceGroup>
+  <priceGroup>
+    <id>	69	</id>
+    <name>	styles 3000g notInShop	</name>
+    <tags>	styles notInShop	</tags>
+    <price>	3000	  <gold></gold>
+    </price>
+    <notInShop>	True	</notInShop>
+  </priceGroup>
+  <priceGroup>
+    <id>	70	</id>
+    <name>	styles 3500g notInShop	</name>
+    <tags>	styles notInShop	</tags>
+    <price>	3500	  <gold></gold>
+    </price>
+    <notInShop>	True	</notInShop>
+  </priceGroup>
+  <priceGroup>
+    <id>	79	</id>
+    <name>	styles 4000g notInShop	</name>
+    <tags>	styles notInShop	</tags>
+    <price>	4000	  <gold></gold>
+    </price>
+    <notInShop>	True	</notInShop>
+  </priceGroup>
+  <priceGroup>
+    <id>	71	</id>
+    <name>	styles 4500g notInShop	</name>
+    <tags>	styles notInShop	</tags>
+    <price>	4500	  <gold></gold>
+    </price>
+    <notInShop>	True	</notInShop>
+  </priceGroup>
+  <priceGroup>
+    <id>	72	</id>
+    <name>	styles 1200g EU	</name>
+    <tags>	styles EU	</tags>
+    <price>	1200	  <gold></gold>
+    </price>
+    <notInShop>	True	</notInShop>
+  </priceGroup>
+  <priceGroup>
+    <id>	73	</id>
+    <name>	styles 1750g NA	</name>
+    <tags>	styles NA	</tags>
+    <price>	1750	  <gold></gold>
+    </price>
+    <notInShop>	True	</notInShop>
   </priceGroup>
 </list.xml>

@@ -1,6 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/tooltips/quests.py
-import BigWorld
 import constants
 from CurrentVehicle import g_currentVehicle
 from gui import makeHtmlString
@@ -11,6 +10,7 @@ from gui.Scaleform.locale.ITEM_TYPES import ITEM_TYPES
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
+from gui.impl import backport
 from gui.server_events import events_helpers
 from gui.server_events.awards_formatters import TokenBonusFormatter, PreformattedBonus, LABEL_ALIGN
 from gui.server_events.bonuses import CustomizationsBonus
@@ -168,7 +168,7 @@ class ScheduleQuestTooltipData(BlocksTooltipData):
         if intervals:
             times = []
             for low, high in intervals:
-                times.append('{} - {}'.format(BigWorld.wg_getShortTimeFormat(low), BigWorld.wg_getShortTimeFormat(high)))
+                times.append('{} - {}'.format(backport.getShortTimeFormat(low), backport.getShortTimeFormat(high)))
 
             items.append(self._getSubBlock(TOOLTIPS.QUESTS_SCHEDULE_INTERVALS, times, formatters.packPadding(top=18)))
         return formatters.packBuildUpBlockData(blocks=items, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_BUILDUP_BLOCK_WHITE_BG_LINKAGE, padding=formatters.packPadding(top=-3))

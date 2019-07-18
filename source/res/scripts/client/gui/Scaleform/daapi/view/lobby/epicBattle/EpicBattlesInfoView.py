@@ -158,7 +158,7 @@ class EpicBattlesInfoView(LobbySubView, EpicBattlesInfoViewMeta):
          'pageDescriptionHtmlText': text_styles.promoSubTitle(cycleDescText),
          'aboutButtonLabel': i18n.makeString(EPIC_BATTLE.INFOVIEW_ABOUTBUTTON_ABOUTFRONTLINE).upper(),
          'canClaimFinalReward': self.__canClaimFinalReward(),
-         'epicMetaLevelIconData': getEpicMetaIconVODict(pPrestigeLevel, pMetaLevel),
+         'epicMetaLevelIconData': getEpicMetaIconVODict(pPrestigeLevel, pMetaLevel, maxPrestigeLevel, maxMetaLevel),
          'epicRewardRibbonData': self._packRewardRibbonData(pPrestigeLevel + 1, self.eventsCache.getAllQuests(), maxPrestigeLevel),
          'epicCombatReservesData': self._packCombatReservesVO(self.epicMetaGameCtrl.getSkillPoints()),
          'epicMetaProgressData': self._packMetaProgressVO(prestigeAllowed, maxRewardClaimed),

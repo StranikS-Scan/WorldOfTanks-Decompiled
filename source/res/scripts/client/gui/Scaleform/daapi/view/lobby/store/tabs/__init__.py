@@ -375,7 +375,7 @@ class StoreEquipmentTab(StoreArtefactTab):
 
     def _getRequestCriteria(self, invVehicles):
         requestCriteria = super(StoreEquipmentTab, self)._getRequestCriteria(invVehicles)
-        requestCriteria |= REQ_CRITERIA.EQUIPMENT.BUILTIN
+        requestCriteria |= ~REQ_CRITERIA.EQUIPMENT.BUILTIN
         return requestCriteria
 
 

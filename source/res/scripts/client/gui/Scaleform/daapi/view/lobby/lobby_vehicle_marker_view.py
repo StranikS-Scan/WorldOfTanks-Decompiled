@@ -1,7 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/lobby_vehicle_marker_view.py
-from functools import partial
-import BigWorld
 import GUI
 import Math
 from gui.Scaleform.daapi.view.meta.LobbyVehicleMarkerViewMeta import LobbyVehicleMarkerViewMeta
@@ -85,14 +83,14 @@ class LobbyVehicleMarkerView(LobbyVehicleMarkerViewMeta):
         guiNode = vehicle.model.node('HP_gui')
         localPosition = Math.Vector3(guiNode.localMatrix.translation)
         localPosition.y *= vehicle.markerHeightFactor
-        rootNodeMatrix = Math.Matrix(vehicle.model.node(''))
-        worldPosition = rootNodeMatrix.applyPoint(localPosition)
+        vehicleMatrix = vehicle.model.matrix
+        worldPosition = vehicleMatrix.applyPoint(localPosition)
         mat.setTranslate(worldPosition)
         return mat
 
     def __beginCreateMarker(self, vehicle):
         self.__destroyMarker()
-        BigWorld.callback(0.0, partial(self.__createMarker, vehicle))
+        self.__createMarker(vehicle)
 
     def __createMarker(self, vehicle):
         vClass, vName, vMatrix = self.__getVehicleInfo(vehicle)

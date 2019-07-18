@@ -15,7 +15,6 @@ from helpers import dependency, int2roman
 from helpers.i18n import makeString as _ms
 from skeletons.gui.game_control import IEpicBattleMetaGameController
 from skeletons.gui.server_events import IEventsCache
-from web_stubs import i18n
 _LEVELUP_TOKEN_TEMPLATE = 'epicmetagame:levelup:%d'
 
 def _AccumulateBonuses(bonuses):
@@ -110,6 +109,7 @@ class EpicBattlesAfterBattleView(EpicBattlesAfterBattleViewMeta):
         boosterFLXP = epicMetaGame.get('boosterFlXP', 0)
         originalFlXP = epicMetaGame.get('originalFlXP', 0)
         maxMetaLevel = self.__epicMetaGameCtrl.getMaxPlayerLevel()
+        maxPrestigeLevel = self.__epicMetaGameCtrl.getMaxPlayerPrestigeLevel()
         famePtsToProgress = self.__epicMetaGameCtrl.getLevelProgress()
         famePointsReceived = sum(famePtsToProgress[prevPMetaLevel:pMetaLevel]) + pFamePts - prevPFamePts
         achievedRank = extInfo['playerRank'].get('rank', -1)
@@ -117,7 +117,7 @@ class EpicBattlesAfterBattleView(EpicBattlesAfterBattleViewMeta):
         awardsVO = self._awardsFormatter.getFormattedBonuses(self.__getBonuses(pMetaLevel), size=AWARDS_SIZES.BIG)
         maxLevelText = ''
         fameBarVisible = True
-        maxPrestigeIconVisible = pPrestigeLevel == self.__epicMetaGameCtrl.getMaxPlayerPrestigeLevel()
+        maxPrestigeIconVisible = pPrestigeLevel == maxPrestigeLevel
         if prevPMetaLevel >= maxMetaLevel or pMetaLevel >= maxMetaLevel or pPrestigeLevel >= self.__epicMetaGameCtrl.getStageLimit():
             lvlReachedText = toUpper(_ms(EPIC_BATTLE.EPIC_BATTLES_AFTER_BATTLE_LEVEL_UP_MAX_TITLE))
             maxLevelText = self.__getMaxLevelInfoStr(pPrestigeLevel, pMetaLevel)
@@ -130,7 +130,7 @@ class EpicBattlesAfterBattleView(EpicBattlesAfterBattleViewMeta):
          'progress': self.__getProgress(pMetaLevel, pFamePts, prevPMetaLevel, prevPFamePts, maxMetaLevel, boosterFLXP),
          'barText': '+' + str(min(originalFlXP, famePointsReceived)),
          'barBoostText': '+' + str(boosterFLXP),
-         'epicMetaLevelIconData': getEpicMetaIconVODict(pPrestigeLevel, pMetaLevel),
+         'epicMetaLevelIconData': getEpicMetaIconVODict(pPrestigeLevel, pMetaLevel, maxPrestigeLevel, maxMetaLevel),
          'rank': achievedRank + 1,
          'rankText': text_styles.heroTitle(rankName),
          'rankTextBig': text_styles.epicTitle(rankName),
@@ -173,7 +173,7 @@ class EpicBattlesAfterBattleView(EpicBattlesAfterBattleViewMeta):
         season = self.__epicMetaGameCtrl.getCurrentSeason() or self.__epicMetaGameCtrl.getPreviousSeason()
         levelStr = ''
         if prestige >= self.__epicMetaGameCtrl.getMaxPlayerPrestigeLevel():
-            levelStr = _ms(EPIC_BATTLE.EPIC_BATTLES_AFTER_BATTLE_MAX_PRESTIGE_IN_SEASON_INFO, season=i18n.makeString(EPIC_BATTLE.getSeasonName(season.getSeasonID())))
+            levelStr = _ms(EPIC_BATTLE.EPIC_BATTLES_AFTER_BATTLE_MAX_PRESTIGE_IN_SEASON_INFO, season=_ms(EPIC_BATTLE.getSeasonName(season.getSeasonID())))
         elif prestige >= self.__epicMetaGameCtrl.getStageLimit():
             currCycleID = season.getCycleInfo().getEpicCycleNumber()
             prestige = self.__epicMetaGameCtrl.getStageLimit()

@@ -154,7 +154,7 @@
         <lodDist>	MEDIUM	</lodDist>
         <bufferPrefs>	mediumTank	</bufferPrefs>
         <textureSet>	usa_04	</textureSet>
-        <size>	0.5 0.5	</size>
+        <size>	0.5 0.25	</size>
       </traces>
       <AODecals>
         <decal>
@@ -186,7 +186,6 @@
           <geometry>
             <radius>	0.455	</radius>
             <width>	0.265	</width>
-            <pivotXOffset>	-0.05	</pivotXOffset>
           </geometry>
           <proceduralCollisionBody>	true	</proceduralCollisionBody>
           <deflation>
@@ -219,7 +218,6 @@
           <geometry>
             <radius>	0.455	</radius>
             <width>	0.265	</width>
-            <pivotXOffset>	-0.05	</pivotXOffset>
           </geometry>
           <proceduralCollisionBody>	true	</proceduralCollisionBody>
           <deflation>
@@ -279,7 +277,6 @@
           <geometry>
             <radius>	0.455	</radius>
             <width>	0.265	</width>
-            <pivotXOffset>	0.05	</pivotXOffset>
           </geometry>
           <proceduralCollisionBody>	true	</proceduralCollisionBody>
           <deflation>
@@ -312,7 +309,6 @@
           <geometry>
             <radius>	0.455	</radius>
             <width>	0.265	</width>
-            <pivotXOffset>	0.05	</pivotXOffset>
           </geometry>
           <proceduralCollisionBody>	true	</proceduralCollisionBody>
           <deflation>
@@ -351,7 +347,7 @@
           <armor>
             <wheel>	5	</wheel>
           </armor>
-          <wheelPos>	0.779 0.603 0.125	</wheelPos>
+          <wheelPos>	0.77925 0.603125 0.12474	</wheelPos>
           <isLeading>	false	</isLeading>
         </wheel>
         <generalWheels>	true	</generalWheels>

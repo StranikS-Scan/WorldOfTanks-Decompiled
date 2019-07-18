@@ -68,7 +68,8 @@ _CTRLS_DESC_MAP = {_CTRL_MODE.ARCADE: ('ArcadeControlMode', 'arcadeMode', _CTRL_
  _CTRL_MODE.MAP_CASE: ('MapCaseControlMode', 'strategicMode', _CTRL_TYPE.USUAL),
  _CTRL_MODE.RESPAWN_DEATH: ('RespawnDeathMode', 'postMortemMode', _CTRL_TYPE.USUAL),
  _CTRL_MODE.DEATH_FREE_CAM: ('DeathFreeCamMode', 'epicVideoMode', _CTRL_TYPE.USUAL)}
-_OVERWRITE_CTRLS_DESC_MAP = {constants.ARENA_BONUS_TYPE.EPIC_BATTLE: {_CTRL_MODE.POSTMORTEM: ('DeathTankFollowMode', 'postMortemMode', _CTRL_TYPE.USUAL)}}
+_OVERWRITE_CTRLS_DESC_MAP = {constants.ARENA_BONUS_TYPE.EPIC_BATTLE: {_CTRL_MODE.POSTMORTEM: ('DeathTankFollowMode', 'postMortemMode', _CTRL_TYPE.USUAL)},
+ constants.ARENA_BONUS_TYPE.EPIC_BATTLE_TRAINING: {_CTRL_MODE.POSTMORTEM: ('DeathTankFollowMode', 'postMortemMode', _CTRL_TYPE.USUAL)}}
 _DYNAMIC_CAMERAS = (DynamicCameras.ArcadeCamera.ArcadeCamera,
  DynamicCameras.SniperCamera.SniperCamera,
  DynamicCameras.StrategicCamera.StrategicCamera,

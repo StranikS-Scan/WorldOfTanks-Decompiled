@@ -186,13 +186,14 @@ class CustomizationCarouselDataProvider(SortableDAAPIDataProvider):
         return self._onlyOwnedAndFreeItems or self._historicOnlyItems or self._onlyAppliedItems or seasonAndTabData.selectedGroupIndex != len(seasonAndTabData.allGroups) - 1 or any(self._formfactorGroupsFilterByTabIndex[self._tabIndex].itervalues())
 
     def selectItem(self, item=None):
+        selectedIntCD, selectedIdx = self._selectIntCD, self._selectedIdx
         if not item:
             self._selectIntCD = None
             self._selectedIdx = -1
         else:
             self._selectIntCD = item.intCD
             self._selectedIdx = self.collection.index(item.intCD) if item.intCD in self.collection else -1
-        if self.__ctx.isAnyAnchorSelected() or self.__ctx.isCaruselItemSelected():
+        if selectedIntCD != self._selectIntCD or selectedIdx != self._selectedIdx:
             self.refresh()
         return
 

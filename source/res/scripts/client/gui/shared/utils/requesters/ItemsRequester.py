@@ -270,7 +270,7 @@ class REQ_CRITERIA(object):
         DURATION = staticmethod(lambda durationTimes: RequestCriteria(PredicateCondition(lambda item: item.effectTime in durationTimes)))
 
     class EQUIPMENT(object):
-        BUILTIN = staticmethod(RequestCriteria(PredicateCondition(lambda item: not item.isBuiltIn)))
+        BUILTIN = staticmethod(RequestCriteria(PredicateCondition(lambda item: item.isBuiltIn)))
 
     class BATTLE_BOOSTER(object):
         ALL = RequestCriteria(PredicateCondition(lambda item: item.itemTypeID == GUI_ITEM_TYPE.BATTLE_BOOSTER))

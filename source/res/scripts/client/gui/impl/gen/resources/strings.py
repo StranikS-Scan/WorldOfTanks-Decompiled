@@ -47321,7 +47321,7 @@ class vehicle_customization(DynAccessor):
             __slots__ = ()
             description = DynAccessor(16911)
             header = DynAccessor(16910)
-            propertysheet = DynAccessor(18035)
+            propertysheet = DynAccessor(18047)
 
         message = _message()
         rentalBattles = DynAccessor(17041)
@@ -48146,7 +48146,7 @@ class vehicle_customization(DynAccessor):
 
     class _element(DynAccessor):
         __slots__ = ()
-        formIconSource = DynAccessor(18026)
+        formIconSource = DynAccessor(18038)
 
     element = _element()
 
@@ -48155,8 +48155,8 @@ class vehicle_customization(DynAccessor):
 
         class _description(DynAccessor):
             __slots__ = ()
-            camouflage = DynAccessor(17990)
-            style = DynAccessor(17989)
+            camouflage = DynAccessor(18002)
+            style = DynAccessor(18001)
 
         description = _description()
 
@@ -48167,20 +48167,20 @@ class vehicle_customization(DynAccessor):
 
         class _desc(DynAccessor):
             __slots__ = ()
-            camouflage = DynAccessor(18008)
-            emblem = DynAccessor(18010)
-            inscription = DynAccessor(18011)
-            modification = DynAccessor(18012)
-            paint = DynAccessor(18013)
-            personalNumber_1 = DynAccessor(18017)
-            personalNumber_2 = DynAccessor(18016)
-            personalNumber_3 = DynAccessor(18015)
-            projectionDecal = DynAccessor(18014)
-            shell = DynAccessor(18007)
-            style = DynAccessor(18009)
+            camouflage = DynAccessor(18020)
+            emblem = DynAccessor(18022)
+            inscription = DynAccessor(18023)
+            modification = DynAccessor(18024)
+            paint = DynAccessor(18025)
+            personalNumber_1 = DynAccessor(18029)
+            personalNumber_2 = DynAccessor(18028)
+            personalNumber_3 = DynAccessor(18027)
+            projectionDecal = DynAccessor(18026)
+            shell = DynAccessor(18019)
+            style = DynAccessor(18021)
 
         desc = _desc()
-        factor = DynAccessor(18018)
+        factor = DynAccessor(18030)
 
     elementBonus = _elementBonus()
 
@@ -48960,9 +48960,9 @@ class vehicle_customization(DynAccessor):
 
             class _sticker_478(DynAccessor):
                 __slots__ = ()
-                description = DynAccessor(18025)
+                description = DynAccessor(18037)
 
-            sticker_478 = _sticker_478(18024)
+            sticker_478 = _sticker_478(18036)
             sticker_485 = DynAccessor(16272)
             sticker_486 = DynAccessor(16273)
             sticker_487 = DynAccessor(16274)
@@ -49020,11 +49020,11 @@ class vehicle_customization(DynAccessor):
 
     class _form(DynAccessor):
         __slots__ = ()
-        formfactor_rect1x2 = DynAccessor(18032)
-        formfactor_rect1x3 = DynAccessor(18031)
-        formfactor_rect1x4 = DynAccessor(18030)
-        formfactor_rect1x6 = DynAccessor(18029)
-        formfactor_square = DynAccessor(18033)
+        formfactor_rect1x2 = DynAccessor(18044)
+        formfactor_rect1x3 = DynAccessor(18043)
+        formfactor_rect1x4 = DynAccessor(18042)
+        formfactor_rect1x6 = DynAccessor(18041)
+        formfactor_square = DynAccessor(18045)
 
     form = _form()
 
@@ -49757,8 +49757,8 @@ class vehicle_customization(DynAccessor):
 
     class _insignias(DynAccessor):
         __slots__ = ()
-        national = DynAccessor(18006)
-        special = DynAccessor(18005)
+        national = DynAccessor(18018)
+        special = DynAccessor(18017)
 
     insignias = _insignias()
 
@@ -49929,7 +49929,7 @@ class vehicle_customization(DynAccessor):
 
         class _slotIsFilled(DynAccessor):
             __slots__ = ()
-            title = DynAccessor(18034)
+            title = DynAccessor(18046)
 
         slotIsFilled = _slotIsFilled()
 
@@ -49973,22 +49973,22 @@ class vehicle_customization(DynAccessor):
 
         class _fonts(DynAccessor):
             __slots__ = ()
-            font_01 = DynAccessor(17993)
-            font_02 = DynAccessor(17994)
-            font_03 = DynAccessor(17995)
-            font_04 = DynAccessor(17996)
-            font_05 = DynAccessor(17997)
-            font_06 = DynAccessor(17998)
-            font_07 = DynAccessor(17999)
-            font_08 = DynAccessor(18000)
-            font_09 = DynAccessor(18001)
-            font_10 = DynAccessor(18002)
-            font_11 = DynAccessor(18003)
-            font_12 = DynAccessor(18004)
+            font_01 = DynAccessor(18005)
+            font_02 = DynAccessor(18006)
+            font_03 = DynAccessor(18007)
+            font_04 = DynAccessor(18008)
+            font_05 = DynAccessor(18009)
+            font_06 = DynAccessor(18010)
+            font_07 = DynAccessor(18011)
+            font_08 = DynAccessor(18012)
+            font_09 = DynAccessor(18013)
+            font_10 = DynAccessor(18014)
+            font_11 = DynAccessor(18015)
+            font_12 = DynAccessor(18016)
 
         fonts = _fonts()
-        general = DynAccessor(17992)
-        special = DynAccessor(17991)
+        general = DynAccessor(18004)
+        special = DynAccessor(18003)
 
     personal_number = _personal_number()
 
@@ -50006,9 +50006,9 @@ class vehicle_customization(DynAccessor):
 
             class _form(DynAccessor):
                 __slots__ = ()
-                body = DynAccessor(18028)
+                body = DynAccessor(18040)
 
-            form = _form(18027)
+            form = _form(18039)
 
         tooltip = _tooltip()
 
@@ -50203,6 +50203,22 @@ class vehicle_customization(DynAccessor):
 
         mythology = _mythology(17971)
 
+        class _pin_up(DynAccessor):
+            __slots__ = ()
+            projection_decal_01 = DynAccessor(17985)
+            projection_decal_02 = DynAccessor(17986)
+            projection_decal_03 = DynAccessor(17987)
+            projection_decal_04 = DynAccessor(17988)
+            projection_decal_05 = DynAccessor(17989)
+            projection_decal_06 = DynAccessor(17990)
+            projection_decal_07 = DynAccessor(17991)
+            projection_decal_08 = DynAccessor(17992)
+            projection_decal_09 = DynAccessor(17993)
+            projection_decal_10 = DynAccessor(17994)
+            projection_decal_11 = DynAccessor(17995)
+
+        pin_up = _pin_up(17984)
+
         class _signs(DynAccessor):
             __slots__ = ()
             projection_decal_01 = DynAccessor(17927)
@@ -50230,12 +50246,12 @@ class vehicle_customization(DynAccessor):
 
             class _projection_decal_16(DynAccessor):
                 __slots__ = ()
-                description = DynAccessor(18020)
+                description = DynAccessor(18032)
 
-            projection_decal_16 = _projection_decal_16(18019)
-            projection_decal_17 = DynAccessor(18021)
-            projection_decal_18 = DynAccessor(18022)
-            projection_decal_19 = DynAccessor(18023)
+            projection_decal_16 = _projection_decal_16(18031)
+            projection_decal_17 = DynAccessor(18033)
+            projection_decal_18 = DynAccessor(18034)
+            projection_decal_19 = DynAccessor(18035)
             projection_decal_20 = DynAccessor(17957)
             projection_decal_21 = DynAccessor(17958)
             projection_decal_22 = DynAccessor(17959)
@@ -50353,16 +50369,16 @@ class vehicle_customization(DynAccessor):
 
         class _inscriptionController(DynAccessor):
             __slots__ = ()
-            edit_buttons = DynAccessor(17988)
-            entry_completed = DynAccessor(17987)
-            invalid_inscription = DynAccessor(17985)
-            prompt = DynAccessor(17986)
+            edit_buttons = DynAccessor(18000)
+            entry_completed = DynAccessor(17999)
+            invalid_inscription = DynAccessor(17997)
+            prompt = DynAccessor(17998)
 
         inscriptionController = _inscriptionController()
 
         class _keyboard(DynAccessor):
             __slots__ = ()
-            hint = DynAccessor(17984)
+            hint = DynAccessor(17996)
 
         keyboard = _keyboard()
 
@@ -51062,19 +51078,19 @@ class vehicle_preview(DynAccessor):
 
     class _buyingPanel(DynAccessor):
         __slots__ = ()
-        alertLabel = DynAccessor(18049)
+        alertLabel = DynAccessor(18061)
 
         class _buyBtn(DynAccessor):
             __slots__ = ()
 
             class _label(DynAccessor):
                 __slots__ = ()
-                buy = DynAccessor(18073)
-                buyItemPack = DynAccessor(18074)
-                obtain = DynAccessor(18078)
-                rent = DynAccessor(18075)
-                research = DynAccessor(18077)
-                restore = DynAccessor(18076)
+                buy = DynAccessor(18085)
+                buyItemPack = DynAccessor(18086)
+                obtain = DynAccessor(18090)
+                rent = DynAccessor(18087)
+                research = DynAccessor(18089)
+                restore = DynAccessor(18088)
 
             label = _label()
 
@@ -51082,32 +51098,32 @@ class vehicle_preview(DynAccessor):
 
         class _compensation(DynAccessor):
             __slots__ = ()
-            body = DynAccessor(18080)
+            body = DynAccessor(18092)
 
         compensation = _compensation()
 
         class _customOffer(DynAccessor):
             __slots__ = ()
-            buy = DynAccessor(18067)
-            research = DynAccessor(18068)
+            buy = DynAccessor(18079)
+            research = DynAccessor(18080)
 
         customOffer = _customOffer()
 
         class _frontlinePack(DynAccessor):
             __slots__ = ()
-            couponLabel = DynAccessor(18105)
+            couponLabel = DynAccessor(18117)
 
             class _titleLabel(DynAccessor):
                 __slots__ = ()
-                active = DynAccessor(18102)
-                inactive = DynAccessor(18104)
-                inactive_add_discount = DynAccessor(18103)
+                active = DynAccessor(18114)
+                inactive = DynAccessor(18116)
+                inactive_add_discount = DynAccessor(18115)
 
             titleLabel = _titleLabel()
 
         frontlinePack = _frontlinePack()
-        Label = DynAccessor(18048)
-        notResearchedVehicleWarning = DynAccessor(18079)
+        Label = DynAccessor(18060)
+        notResearchedVehicleWarning = DynAccessor(18091)
 
         class _offer(DynAccessor):
             __slots__ = ()
@@ -51123,11 +51139,11 @@ class vehicle_preview(DynAccessor):
 
                         class _body(DynAccessor):
                             __slots__ = ()
-                            credits = DynAccessor(18055)
-                            gold = DynAccessor(18056)
+                            credits = DynAccessor(18067)
+                            gold = DynAccessor(18068)
 
                         body = _body()
-                        header = DynAccessor(18054)
+                        header = DynAccessor(18066)
 
                     description = _description()
 
@@ -51136,15 +51152,15 @@ class vehicle_preview(DynAccessor):
 
                         class _best_offer(DynAccessor):
                             __slots__ = ()
-                            body = DynAccessor(18066)
-                            header = DynAccessor(18065)
+                            body = DynAccessor(18078)
+                            header = DynAccessor(18077)
 
                         best_offer = _best_offer()
 
                         class _body(DynAccessor):
                             __slots__ = ()
-                            cyclesLeft = DynAccessor(18064)
-                            timeLeft = DynAccessor(18063)
+                            cyclesLeft = DynAccessor(18076)
+                            timeLeft = DynAccessor(18075)
 
                         body = _body()
 
@@ -51154,17 +51170,17 @@ class vehicle_preview(DynAccessor):
 
                 class _label(DynAccessor):
                     __slots__ = ()
-                    cycle = DynAccessor(18060)
-                    cycles = DynAccessor(18061)
-                    season = DynAccessor(18062)
+                    cycle = DynAccessor(18072)
+                    cycles = DynAccessor(18073)
+                    season = DynAccessor(18074)
 
                 label = _label()
 
                 class _name(DynAccessor):
                     __slots__ = ()
-                    cycle = DynAccessor(18057)
-                    cycles = DynAccessor(18058)
-                    season = DynAccessor(18059)
+                    cycle = DynAccessor(18069)
+                    cycles = DynAccessor(18070)
+                    season = DynAccessor(18071)
 
                 name = _name()
 
@@ -51173,8 +51189,8 @@ class vehicle_preview(DynAccessor):
 
                     class _frontline(DynAccessor):
                         __slots__ = ()
-                        ordinal = DynAccessor(18052)
-                        single_cycle = DynAccessor(18053)
+                        ordinal = DynAccessor(18064)
+                        single_cycle = DynAccessor(18065)
 
                     frontline = _frontline()
 
@@ -51183,9 +51199,9 @@ class vehicle_preview(DynAccessor):
             rent = _rent()
 
         offer = _offer()
-        present = DynAccessor(18081)
-        tradeInLabel = DynAccessor(18051)
-        uniqueVehicleLabel = DynAccessor(18050)
+        present = DynAccessor(18093)
+        tradeInLabel = DynAccessor(18063)
+        uniqueVehicleLabel = DynAccessor(18062)
 
     buyingPanel = _buyingPanel()
 
@@ -51197,26 +51213,26 @@ class vehicle_preview(DynAccessor):
 
             class _descrLabel(DynAccessor):
                 __slots__ = ()
-                frontline = DynAccessor(18044)
-                hangar = DynAccessor(18041)
-                personalAwards = DynAccessor(18038)
-                referralProgram = DynAccessor(18043)
-                researchTree = DynAccessor(18037)
-                shop = DynAccessor(18039)
-                storage = DynAccessor(18040)
-                vehicleCompare = DynAccessor(18042)
+                frontline = DynAccessor(18056)
+                hangar = DynAccessor(18053)
+                personalAwards = DynAccessor(18050)
+                referralProgram = DynAccessor(18055)
+                researchTree = DynAccessor(18049)
+                shop = DynAccessor(18051)
+                storage = DynAccessor(18052)
+                vehicleCompare = DynAccessor(18054)
 
             descrLabel = _descrLabel()
-            label = DynAccessor(18036)
+            label = DynAccessor(18048)
 
         backBtn = _backBtn()
 
         class _closeBtn(DynAccessor):
             __slots__ = ()
-            label = DynAccessor(18047)
+            label = DynAccessor(18059)
 
         closeBtn = _closeBtn()
-        title = DynAccessor(18045)
+        title = DynAccessor(18057)
 
     header = _header()
 
@@ -51225,7 +51241,7 @@ class vehicle_preview(DynAccessor):
 
         class _header(DynAccessor):
             __slots__ = ()
-            title = DynAccessor(18046)
+            title = DynAccessor(18058)
 
         header = _header()
 
@@ -51233,18 +51249,18 @@ class vehicle_preview(DynAccessor):
 
     class _infoPanel(DynAccessor):
         __slots__ = ()
-        level = DynAccessor(18093)
+        level = DynAccessor(18105)
 
         class _premium(DynAccessor):
             __slots__ = ()
-            builtInEqupmentText = DynAccessor(18101)
-            builtInEqupmentTitle = DynAccessor(18100)
-            creditsMultiplier = DynAccessor(18096)
-            creditsText = DynAccessor(18097)
-            crewTransferText = DynAccessor(18099)
-            crewTransferTitle = DynAccessor(18098)
-            freeExpMultiplier = DynAccessor(18094)
-            freeExpText = DynAccessor(18095)
+            builtInEqupmentText = DynAccessor(18113)
+            builtInEqupmentTitle = DynAccessor(18112)
+            creditsMultiplier = DynAccessor(18108)
+            creditsText = DynAccessor(18109)
+            crewTransferText = DynAccessor(18111)
+            crewTransferTitle = DynAccessor(18110)
+            freeExpMultiplier = DynAccessor(18106)
+            freeExpText = DynAccessor(18107)
 
         premium = _premium()
 
@@ -51253,42 +51269,42 @@ class vehicle_preview(DynAccessor):
 
             class _browse(DynAccessor):
                 __slots__ = ()
-                name = DynAccessor(18085)
+                name = DynAccessor(18097)
 
             browse = _browse()
 
             class _crewInfo(DynAccessor):
                 __slots__ = ()
-                lockTitle = DynAccessor(18083)
-                name = DynAccessor(18082)
+                lockTitle = DynAccessor(18095)
+                name = DynAccessor(18094)
 
             crewInfo = _crewInfo()
 
             class _eliteFactSheet(DynAccessor):
                 __slots__ = ()
-                info = DynAccessor(18092)
-                title = DynAccessor(18091)
+                info = DynAccessor(18104)
+                title = DynAccessor(18103)
 
             eliteFactSheet = _eliteFactSheet()
 
             class _factSheet(DynAccessor):
                 __slots__ = ()
-                name = DynAccessor(18084)
+                name = DynAccessor(18096)
 
             factSheet = _factSheet()
 
             class _listDesc(DynAccessor):
                 __slots__ = ()
-                crew = DynAccessor(18087)
-                crewEquips = DynAccessor(18089)
-                crewSkills = DynAccessor(18088)
-                crewSkillsEquips = DynAccessor(18090)
+                crew = DynAccessor(18099)
+                crewEquips = DynAccessor(18101)
+                crewSkills = DynAccessor(18100)
+                crewSkillsEquips = DynAccessor(18102)
 
             listDesc = _listDesc()
 
             class _modules(DynAccessor):
                 __slots__ = ()
-                name = DynAccessor(18086)
+                name = DynAccessor(18098)
 
             modules = _modules()
 
@@ -51298,15 +51314,15 @@ class vehicle_preview(DynAccessor):
 
     class _modulesPanel(DynAccessor):
         __slots__ = ()
-        Label = DynAccessor(18070)
-        noModulesOptions = DynAccessor(18071)
+        Label = DynAccessor(18082)
+        noModulesOptions = DynAccessor(18083)
 
         class _status(DynAccessor):
             __slots__ = ()
-            text = DynAccessor(18072)
+            text = DynAccessor(18084)
 
         status = _status()
-        title = DynAccessor(18069)
+        title = DynAccessor(18081)
 
     modulesPanel = _modulesPanel()
 
@@ -51316,48 +51332,48 @@ class w2c(DynAccessor):
 
     class _error(DynAccessor):
         __slots__ = ()
-        invalidPreviewVehicle = DynAccessor(18106)
+        invalidPreviewVehicle = DynAccessor(18118)
 
     error = _error()
 
 
 class waiting(DynAccessor):
     __slots__ = ()
-    applyModule = DynAccessor(18164)
+    applyModule = DynAccessor(18176)
 
     class _blueprints(DynAccessor):
         __slots__ = ()
-        convertFragments = DynAccessor(18261)
+        convertFragments = DynAccessor(18273)
 
     blueprints = _blueprints()
 
     class _browser(DynAccessor):
         __slots__ = ()
-        init = DynAccessor(18149)
+        init = DynAccessor(18161)
 
     browser = _browser()
 
     class _buttons(DynAccessor):
         __slots__ = ()
-        autoSearch = DynAccessor(18187)
-        cancel = DynAccessor(18188)
-        cease = DynAccessor(18189)
-        exit = DynAccessor(18190)
-        exitQueue = DynAccessor(18186)
+        autoSearch = DynAccessor(18199)
+        cancel = DynAccessor(18200)
+        cease = DynAccessor(18201)
+        exit = DynAccessor(18202)
+        exitQueue = DynAccessor(18198)
 
     buttons = _buttons()
-    buyAndInstall = DynAccessor(18128)
-    buyBerths = DynAccessor(18124)
-    buyItem = DynAccessor(18127)
-    buySlot = DynAccessor(18123)
-    changingRole = DynAccessor(18166)
+    buyAndInstall = DynAccessor(18140)
+    buyBerths = DynAccessor(18136)
+    buyItem = DynAccessor(18139)
+    buySlot = DynAccessor(18135)
+    changingRole = DynAccessor(18178)
 
     class _clans(DynAccessor):
         __slots__ = ()
 
         class _invites(DynAccessor):
             __slots__ = ()
-            send = DynAccessor(18259)
+            send = DynAccessor(18271)
 
         invites = _invites()
 
@@ -51365,225 +51381,225 @@ class waiting(DynAccessor):
 
     class _crewBooks(DynAccessor):
         __slots__ = ()
-        useCrewBook = DynAccessor(18262)
+        useCrewBook = DynAccessor(18274)
 
     crewBooks = _crewBooks()
-    crewRetraining = DynAccessor(18137)
-    crewReturning = DynAccessor(18136)
-    customizationApply = DynAccessor(18143)
-    customizationDrop = DynAccessor(18144)
-    deleting = DynAccessor(18141)
-    disconnect = DynAccessor(18108)
+    crewRetraining = DynAccessor(18149)
+    crewReturning = DynAccessor(18148)
+    customizationApply = DynAccessor(18155)
+    customizationDrop = DynAccessor(18156)
+    deleting = DynAccessor(18153)
+    disconnect = DynAccessor(18120)
 
     class _download(DynAccessor):
         __slots__ = ()
-        badges = DynAccessor(18209)
-        blueprints = DynAccessor(18211)
-        discounts = DynAccessor(18206)
-        dossier = DynAccessor(18205)
-        epicMetaGame = DynAccessor(18210)
-        festivity = DynAccessor(18213)
-        inventory = DynAccessor(18203)
-        ranked = DynAccessor(18208)
-        recycleBin = DynAccessor(18207)
-        shop = DynAccessor(18204)
-        tokens = DynAccessor(18212)
+        badges = DynAccessor(18221)
+        blueprints = DynAccessor(18223)
+        discounts = DynAccessor(18218)
+        dossier = DynAccessor(18217)
+        epicMetaGame = DynAccessor(18222)
+        festivity = DynAccessor(18225)
+        inventory = DynAccessor(18215)
+        ranked = DynAccessor(18220)
+        recycleBin = DynAccessor(18219)
+        shop = DynAccessor(18216)
+        tokens = DynAccessor(18224)
 
     download = _download()
-    draw_research_items = DynAccessor(18148)
-    enter = DynAccessor(18112)
-    equipping = DynAccessor(18134)
-    exchangeVehiclesXP = DynAccessor(18132)
-    exit_battle = DynAccessor(18156)
-    Flash = DynAccessor(18107)
+    draw_research_items = DynAccessor(18160)
+    enter = DynAccessor(18124)
+    equipping = DynAccessor(18146)
+    exchangeVehiclesXP = DynAccessor(18144)
+    exit_battle = DynAccessor(18168)
+    Flash = DynAccessor(18119)
 
     class _fort(DynAccessor):
         __slots__ = ()
-        activateConsumable = DynAccessor(18256)
-        attack = DynAccessor(18252)
+        activateConsumable = DynAccessor(18268)
+        attack = DynAccessor(18264)
 
         class _building(DynAccessor):
             __slots__ = ()
-            add = DynAccessor(18240)
-            attach = DynAccessor(18242)
-            delete = DynAccessor(18241)
-            upgrade = DynAccessor(18243)
+            add = DynAccessor(18252)
+            attach = DynAccessor(18254)
+            delete = DynAccessor(18253)
+            upgrade = DynAccessor(18255)
 
         building = _building()
 
         class _card(DynAccessor):
             __slots__ = ()
-            get = DynAccessor(18249)
+            get = DynAccessor(18261)
 
         card = _card()
-        create = DynAccessor(18236)
-        delete = DynAccessor(18237)
+        create = DynAccessor(18248)
+        delete = DynAccessor(18249)
 
         class _direction(DynAccessor):
             __slots__ = ()
-            close = DynAccessor(18239)
-            open = DynAccessor(18238)
+            close = DynAccessor(18251)
+            open = DynAccessor(18250)
 
         direction = _direction()
 
         class _favorite(DynAccessor):
             __slots__ = ()
-            add = DynAccessor(18253)
-            remove = DynAccessor(18254)
+            add = DynAccessor(18265)
+            remove = DynAccessor(18266)
 
         favorite = _favorite()
 
         class _fortBattle(DynAccessor):
             __slots__ = ()
-            createOrJoin = DynAccessor(18251)
+            createOrJoin = DynAccessor(18263)
 
         fortBattle = _fortBattle()
 
         class _order(DynAccessor):
             __slots__ = ()
-            activate = DynAccessor(18246)
-            add = DynAccessor(18245)
+            activate = DynAccessor(18258)
+            add = DynAccessor(18257)
 
         order = _order()
-        returnConsumable = DynAccessor(18257)
-        serverConnection = DynAccessor(18255)
-        settings = DynAccessor(18250)
+        returnConsumable = DynAccessor(18269)
+        serverConnection = DynAccessor(18267)
+        settings = DynAccessor(18262)
 
         class _sortie(DynAccessor):
             __slots__ = ()
-            create = DynAccessor(18247)
-            get = DynAccessor(18248)
+            create = DynAccessor(18259)
+            get = DynAccessor(18260)
 
         sortie = _sortie()
-        subscribe = DynAccessor(18234)
-        transport = DynAccessor(18244)
-        unsubscribe = DynAccessor(18235)
+        subscribe = DynAccessor(18246)
+        transport = DynAccessor(18256)
+        unsubscribe = DynAccessor(18247)
 
     fort = _fort()
 
     class _hof(DynAccessor):
         __slots__ = ()
-        loading = DynAccessor(18260)
+        loading = DynAccessor(18272)
 
     hof = _hof()
-    in_battle = DynAccessor(18155)
-    installEquipment = DynAccessor(18146)
-    loadContent = DynAccessor(18110)
-    loadHangarSpace = DynAccessor(18113)
-    loadHangarSpaceVehicle = DynAccessor(18114)
-    loadingData = DynAccessor(18167)
-    loadPage = DynAccessor(18109)
-    loadStats = DynAccessor(18130)
-    login = DynAccessor(18111)
+    in_battle = DynAccessor(18167)
+    installEquipment = DynAccessor(18158)
+    loadContent = DynAccessor(18122)
+    loadHangarSpace = DynAccessor(18125)
+    loadHangarSpaceVehicle = DynAccessor(18126)
+    loadingData = DynAccessor(18179)
+    loadPage = DynAccessor(18121)
+    loadStats = DynAccessor(18142)
+    login = DynAccessor(18123)
 
     class _message(DynAccessor):
         __slots__ = ()
-        another_periphery = DynAccessor(18199)
-        auto_login_activating = DynAccessor(18202)
-        auto_login_query_failed = DynAccessor(18201)
-        autoLogin = DynAccessor(18198)
-        checkout_error = DynAccessor(18200)
-        queue = DynAccessor(18196)
-        useAutoSearch = DynAccessor(18197)
+        another_periphery = DynAccessor(18211)
+        auto_login_activating = DynAccessor(18214)
+        auto_login_query_failed = DynAccessor(18213)
+        autoLogin = DynAccessor(18210)
+        checkout_error = DynAccessor(18212)
+        queue = DynAccessor(18208)
+        useAutoSearch = DynAccessor(18209)
 
     message = _message()
 
     class _messenger(DynAccessor):
         __slots__ = ()
-        subscribe = DynAccessor(18258)
+        subscribe = DynAccessor(18270)
 
     messenger = _messenger()
 
     class _prebattle(DynAccessor):
         __slots__ = ()
-        assign = DynAccessor(18220)
-        auto_search = DynAccessor(18228)
-        battle_queue = DynAccessor(18229)
-        change_arena_voip = DynAccessor(18223)
-        change_settings = DynAccessor(18225)
-        change_user_status = DynAccessor(18224)
-        changeDivision = DynAccessor(18233)
-        create = DynAccessor(18215)
-        giveEquipmentCommander = DynAccessor(18232)
-        giveLeadership = DynAccessor(18230)
-        join = DynAccessor(18221)
-        kick = DynAccessor(18227)
-        leave = DynAccessor(18226)
-        player_not_ready = DynAccessor(18219)
-        player_ready = DynAccessor(18218)
-        swap = DynAccessor(18222)
-        takeLeadership = DynAccessor(18231)
-        team_not_ready = DynAccessor(18217)
-        team_ready = DynAccessor(18216)
+        assign = DynAccessor(18232)
+        auto_search = DynAccessor(18240)
+        battle_queue = DynAccessor(18241)
+        change_arena_voip = DynAccessor(18235)
+        change_settings = DynAccessor(18237)
+        change_user_status = DynAccessor(18236)
+        changeDivision = DynAccessor(18245)
+        create = DynAccessor(18227)
+        giveEquipmentCommander = DynAccessor(18244)
+        giveLeadership = DynAccessor(18242)
+        join = DynAccessor(18233)
+        kick = DynAccessor(18239)
+        leave = DynAccessor(18238)
+        player_not_ready = DynAccessor(18231)
+        player_ready = DynAccessor(18230)
+        swap = DynAccessor(18234)
+        takeLeadership = DynAccessor(18243)
+        team_not_ready = DynAccessor(18229)
+        team_ready = DynAccessor(18228)
 
     prebattle = _prebattle()
-    recruting = DynAccessor(18133)
-    replacePassport = DynAccessor(18142)
-    requestCaptureDevices = DynAccessor(18153)
-    research = DynAccessor(18147)
-    retraining = DynAccessor(18140)
-    sellItem = DynAccessor(18126)
-    sellVehicle = DynAccessor(18121)
-    sinhronize = DynAccessor(18165)
-    start_battle = DynAccessor(18157)
-    stats = DynAccessor(18154)
+    recruting = DynAccessor(18145)
+    replacePassport = DynAccessor(18154)
+    requestCaptureDevices = DynAccessor(18165)
+    research = DynAccessor(18159)
+    retraining = DynAccessor(18152)
+    sellItem = DynAccessor(18138)
+    sellVehicle = DynAccessor(18133)
+    sinhronize = DynAccessor(18177)
+    start_battle = DynAccessor(18169)
+    stats = DynAccessor(18166)
 
     class _storage(DynAccessor):
         __slots__ = ()
-        forSell = DynAccessor(18122)
+        forSell = DynAccessor(18134)
 
     storage = _storage()
-    studying = DynAccessor(18139)
-    techMaintenance = DynAccessor(18151)
-    techMaintenanceEquipments = DynAccessor(18150)
+    studying = DynAccessor(18151)
+    techMaintenance = DynAccessor(18163)
+    techMaintenanceEquipments = DynAccessor(18162)
 
     class _titles(DynAccessor):
         __slots__ = ()
-        another_periphery = DynAccessor(18193)
-        auto_login_query_failed = DynAccessor(18195)
-        checkout_error = DynAccessor(18194)
-        queue = DynAccessor(18191)
-        registering = DynAccessor(18192)
+        another_periphery = DynAccessor(18205)
+        auto_login_query_failed = DynAccessor(18207)
+        checkout_error = DynAccessor(18206)
+        queue = DynAccessor(18203)
+        registering = DynAccessor(18204)
 
     titles = _titles()
-    trainingCreate = DynAccessor(18158)
-    trainingDestroy = DynAccessor(18162)
-    trainingJoin = DynAccessor(18160)
-    trainingLeave = DynAccessor(18163)
-    trainingStart = DynAccessor(18161)
-    trainingUpdate = DynAccessor(18159)
-    transferMoney = DynAccessor(18131)
-    tutorial_chapter_loading = DynAccessor(18179)
-    tutorial_queue = DynAccessor(18185)
-    tutorial_request_battle_count = DynAccessor(18169)
-    tutorial_request_bonus = DynAccessor(18168)
-    tutorial_request_credits = DynAccessor(18173)
-    tutorial_request_elite_vehicles = DynAccessor(18172)
-    tutorial_request_inventory_items = DynAccessor(18176)
-    tutorial_request_item_params = DynAccessor(18181)
-    tutorial_request_shop = DynAccessor(18183)
-    tutorial_request_slots = DynAccessor(18184)
-    tutorial_request_tankman = DynAccessor(18177)
-    tutorial_request_tankman_info = DynAccessor(18182)
-    tutorial_request_unlocks = DynAccessor(18170)
-    tutorial_request_vehicle_equipments = DynAccessor(18175)
-    tutorial_request_vehicle_settings = DynAccessor(18171)
-    tutorial_request_xp = DynAccessor(18174)
-    tutorial_start_training = DynAccessor(18178)
-    tutorial_update_scene = DynAccessor(18180)
-    unloading = DynAccessor(18135)
-    updateAmmo = DynAccessor(18118)
-    updateCaptureDevices = DynAccessor(18145)
-    updateCurrentVehicle = DynAccessor(18116)
-    updateFitting = DynAccessor(18120)
-    updateInventory = DynAccessor(18125)
-    updateMyVehicles = DynAccessor(18117)
-    updateShop = DynAccessor(18129)
-    updateTankmen = DynAccessor(18119)
-    updateVehicle = DynAccessor(18115)
-    updating = DynAccessor(18138)
-    updatingSkillWindow = DynAccessor(18214)
-    voiceChat = DynAccessor(18152)
+    trainingCreate = DynAccessor(18170)
+    trainingDestroy = DynAccessor(18174)
+    trainingJoin = DynAccessor(18172)
+    trainingLeave = DynAccessor(18175)
+    trainingStart = DynAccessor(18173)
+    trainingUpdate = DynAccessor(18171)
+    transferMoney = DynAccessor(18143)
+    tutorial_chapter_loading = DynAccessor(18191)
+    tutorial_queue = DynAccessor(18197)
+    tutorial_request_battle_count = DynAccessor(18181)
+    tutorial_request_bonus = DynAccessor(18180)
+    tutorial_request_credits = DynAccessor(18185)
+    tutorial_request_elite_vehicles = DynAccessor(18184)
+    tutorial_request_inventory_items = DynAccessor(18188)
+    tutorial_request_item_params = DynAccessor(18193)
+    tutorial_request_shop = DynAccessor(18195)
+    tutorial_request_slots = DynAccessor(18196)
+    tutorial_request_tankman = DynAccessor(18189)
+    tutorial_request_tankman_info = DynAccessor(18194)
+    tutorial_request_unlocks = DynAccessor(18182)
+    tutorial_request_vehicle_equipments = DynAccessor(18187)
+    tutorial_request_vehicle_settings = DynAccessor(18183)
+    tutorial_request_xp = DynAccessor(18186)
+    tutorial_start_training = DynAccessor(18190)
+    tutorial_update_scene = DynAccessor(18192)
+    unloading = DynAccessor(18147)
+    updateAmmo = DynAccessor(18130)
+    updateCaptureDevices = DynAccessor(18157)
+    updateCurrentVehicle = DynAccessor(18128)
+    updateFitting = DynAccessor(18132)
+    updateInventory = DynAccessor(18137)
+    updateMyVehicles = DynAccessor(18129)
+    updateShop = DynAccessor(18141)
+    updateTankmen = DynAccessor(18131)
+    updateVehicle = DynAccessor(18127)
+    updating = DynAccessor(18150)
+    updatingSkillWindow = DynAccessor(18226)
+    voiceChat = DynAccessor(18164)
 
 
 class Strings(DynAccessor):

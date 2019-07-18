@@ -283,9 +283,14 @@ class Vehicle(BigWorld.Entity, BattleAbilitiesComponent):
                 self.appearance.executeHitVibrations(maxHitEffectCode)
                 player = BigWorld.player()
                 player.inputHandler.onVehicleShaken(self, compMatrix.translation, firstHitDir, effectsDescr['caliber'], ShakeReason.HIT if hasPiercedHit else ShakeReason.HIT_NO_DAMAGE)
+            showFriendlyFlashBang = False
             sessionProvider = self.guiSessionProvider
             isAlly = sessionProvider.getArenaDP().isAlly(attackerID)
-            showFriendlyFlashBang = sessionProvider.arenaVisitor.hasCustomAllyDamageEffect() and isAlly
+            if isAlly:
+                friendlyFireBonusTypes = self.lobbyContext.getServerSettings().getFriendlyFireBonusTypes()
+                isFriendlyFireMode = sessionProvider.arenaVisitor.bonus.isFriendlyFireMode(friendlyFireBonusTypes)
+                hasCustomAllyDamageEffect = sessionProvider.arenaVisitor.bonus.hasCustomAllyDamageEffect()
+                showFriendlyFlashBang = isFriendlyFireMode and hasCustomAllyDamageEffect
             for shotPoint in decodedPoints:
                 showFullscreenEffs = self.isPlayerVehicle and self.isAlive()
                 keyPoints, effects, _ = effectsDescr[shotPoint.hitEffectGroup]

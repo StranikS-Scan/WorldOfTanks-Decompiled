@@ -1,8 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/epicBattle/epic_meta_level_icon.py
 from collections import namedtuple
-from helpers import int2roman
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
+from helpers import int2roman
 _FOREGROUND_TO_META_LEVEL = {None: [1],
  1: range(2, 6),
  2: range(6, 11),
@@ -14,15 +14,18 @@ _FOREGROUND_TO_META_LEVEL = {None: [1],
 _AVAILABLE_LEVELS = sum(_FOREGROUND_TO_META_LEVEL.values(), [])
 EpicMetaLevelIconVO = namedtuple('EpicMetaLevelIconVO', ('level', 'prestigeLevelHtmlText', 'metLvlBGImageSrc', 'metLvlTopImageSrc'))
 
-def getEpicMetaIconVO(prestigeLevel, metaLevel):
+def getEpicMetaIconVO(prestigeLevel, metaLevel, maxPrestigeLevel, maxMetaLevel):
+    isMaxPrestigeLevel = prestigeLevel == maxPrestigeLevel
+    metaLevel = maxMetaLevel if isMaxPrestigeLevel else metaLevel
     bg = _getEpicMetaIconBackground(prestigeLevel)
     fg = _getEpicMetaIconForeground(metaLevel)
     prestigeStr = int2roman(prestigeLevel) if prestigeLevel else ''
-    return EpicMetaLevelIconVO(str(metaLevel), prestigeStr, bg, fg)
+    level = '' if isMaxPrestigeLevel else str(metaLevel)
+    return EpicMetaLevelIconVO(level, prestigeStr, bg, fg)
 
 
-def getEpicMetaIconVODict(prestigeLevel, metaLevel):
-    return getEpicMetaIconVO(prestigeLevel, metaLevel)._asdict()
+def getEpicMetaIconVODict(prestigeLevel, metaLevel, maxPrestigeLevel, maxMetaLevel):
+    return getEpicMetaIconVO(prestigeLevel, metaLevel, maxPrestigeLevel, maxMetaLevel)._asdict()
 
 
 def _getForegroundIndexForMetaLevel(metaLevel):

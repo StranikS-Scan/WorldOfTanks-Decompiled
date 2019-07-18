@@ -29,10 +29,11 @@ class FrontLineWebApi(W2CSchema):
     def handleGetMetaScreenData(self, _):
         prestige, level, exp = self._frontLineCtrl.getPlayerLevelInfo()
         nextLevelExp = self._frontLineCtrl.getPointsProgressForLevel(level)
-        data = {'lvl': level,
+        maxPrestige = self._frontLineCtrl.getMaxPlayerPrestigeLevel()
+        data = {'lvl': level if prestige < maxPrestige else '',
          'max_lvl': self._frontLineCtrl.getMaxPlayerLevel(),
          'prestige': prestige,
-         'max_prestige': self._frontLineCtrl.getMaxPlayerPrestigeLevel(),
+         'max_prestige': maxPrestige,
          'stageLimit': self._frontLineCtrl.getStageLimit(),
          'exp': exp,
          'exp_for_lvl': nextLevelExp,

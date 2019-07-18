@@ -58,8 +58,9 @@ class EpicBattlesWidget(EpicBattlesWidgetMeta):
     def _buildVO(self):
         pPrestigeLevel, pLevel, _ = self.epicMetaGameCtrl.getPlayerLevelInfo()
         maxMetaLevel = self.epicMetaGameCtrl.getMaxPlayerLevel()
+        maxPrestigeLevel = self.epicMetaGameCtrl.getMaxPlayerPrestigeLevel()
         showAlert = not self.epicMetaGameCtrl.isInPrimeTime() and self.epicMetaGameCtrl.isEnabled()
-        return EpicBattlesWidgetVO(skillPoints=self.epicMetaGameCtrl.getSkillPoints(), calendarStatus=self.__getStatusBlock()._asdict(), canPrestige=pLevel == maxMetaLevel, showAlert=showAlert, epicMetaLevelIconData=getEpicMetaIconVODict(pPrestigeLevel, pLevel))
+        return EpicBattlesWidgetVO(skillPoints=self.epicMetaGameCtrl.getSkillPoints(), calendarStatus=self.__getStatusBlock()._asdict(), canPrestige=pLevel == maxMetaLevel, showAlert=showAlert, epicMetaLevelIconData=getEpicMetaIconVODict(pPrestigeLevel, pLevel, maxPrestigeLevel, maxMetaLevel))
 
     def __getStatusBlock(self):
         status, timeLeft, _ = self.epicMetaGameCtrl.getPrimeTimeStatus()

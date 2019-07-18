@@ -361,6 +361,9 @@ class _ArenaBonusTypeVisitor(IArenaVisitor):
     def hasPlayerRanks(self):
         return _CAPS.checkAny(self._bonusType, _CAPS.PLAYER_RANK_MECHANICS)
 
+    def isFriendlyFireMode(self, enabledBonusTypes):
+        return self._bonusType in enabledBonusTypes
+
 
 class _ArenaExtraDataVisitor(IArenaVisitor):
     __slots__ = ('_extra',)
@@ -494,9 +497,6 @@ class _ClientArenaVisitor(IClientArenaVisitor):
 
     def hasGameEndMessage(self):
         return self._bonus.hasGameEndMessage()
-
-    def hasCustomAllyDamageEffect(self):
-        return self._bonus.hasCustomAllyDamageEffect()
 
     def hasPlayerGroups(self):
         return self._arena.arenaType.numPlayerGroups > 0

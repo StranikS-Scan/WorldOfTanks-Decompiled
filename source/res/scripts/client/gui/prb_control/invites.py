@@ -739,7 +739,7 @@ class InvitesManager(UsersInfoHelper):
         for inviteID in invitations:
             self.__invites[inviteID] = self.__invitesIgnored.pop(inviteID)
 
-        self.onReceivedInviteListModified([], invitations, [])
+        self.onReceivedInviteListModified(invitations, [], [])
         self.syncUsersInfo()
 
     def __refreshIgnoredInvitesAdd(self, user):
@@ -751,7 +751,7 @@ class InvitesManager(UsersInfoHelper):
         for inviteID in invitations:
             self.__invitesIgnored[inviteID] = self.__invites.pop(inviteID)
 
-        self.onReceivedInviteListModified([], invitations, [])
+        self.onReceivedInviteListModified([], [], invitations)
         self.syncUsersInfo()
 
 

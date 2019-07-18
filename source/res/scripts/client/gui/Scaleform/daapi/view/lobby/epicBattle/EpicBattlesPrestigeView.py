@@ -47,6 +47,7 @@ class EpicBattlesPrestigeView(LobbySubView, EpicBattlesPrestigeViewMeta):
         nextPrestigeLevel = pPrestigeLevel + 1
         metaLevel = self.lobbyCtx.getServerSettings().epicMetaGame.metaLevel
         maxPrestigeLevel = metaLevel.get('maxPrestigeLevel', 0)
+        maxMetaLevel = metaLevel.get('maxMetaLevel', 0)
         if maxPrestigeLevel >= 0 and pPrestigeLevel >= maxPrestigeLevel:
             LOG_ERROR('This line of code should never be reached!')
             self.fireEvent(events.LoadViewEvent(EPICBATTLES_ALIASES.EPIC_BATTLES_INFO_ALIAS), EVENT_BUS_SCOPE.LOBBY)
@@ -59,8 +60,8 @@ class EpicBattlesPrestigeView(LobbySubView, EpicBattlesPrestigeViewMeta):
          'resetLevelContainerTitleText': i18n.makeString(EPIC_BATTLE.EPICBATTLESPRESTIGEVIEW_RESETLEVEL_TITLE),
          'rewardTitleText': i18n.makeString(EPIC_BATTLE.EPICBATTLESPRESTIGEVIEW_CONGRATULATIONS),
          'awards': awardsVO,
-         'metaLevelIconPrestige': getEpicMetaIconVODict(nextPrestigeLevel, 1),
-         'epicMetaLevelIconData': getEpicMetaIconVODict(nextPrestigeLevel, 1),
+         'metaLevelIconPrestige': getEpicMetaIconVODict(nextPrestigeLevel, 1, maxPrestigeLevel, maxMetaLevel),
+         'epicMetaLevelIconData': getEpicMetaIconVODict(nextPrestigeLevel, 1, maxPrestigeLevel, maxMetaLevel),
          'backgroundImageSrc': RES_ICONS.MAPS_ICONS_EPICBATTLES_BACKGROUNDS_META_BG}
         self.as_setDataS(data)
 

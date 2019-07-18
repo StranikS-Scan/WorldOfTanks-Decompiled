@@ -123,7 +123,7 @@ class ServersDataProvider(SortableDAAPIDataProvider):
          'pingValue': pingValueStr,
          'enabled': enabled}
         if csisStatus == HOST_AVAILABILITY.NOT_RECOMMENDED:
-            vo['tooltip'] = _ms(TOOLTIPS.SERVER_NOTRECOMENDED, icon=icons.serverAlert(), server=serverName)
+            vo['tooltip'] = {'tooltip': _ms(TOOLTIPS.SERVER_NOTRECOMENDED, icon=icons.serverAlert(), server=serverName)}
         elif 'tooltip' in item:
             vo['tooltip'] = item['tooltip']
         return vo

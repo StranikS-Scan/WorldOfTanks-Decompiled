@@ -241,9 +241,6 @@ class IClientArenaVisitor(object):
     def hasGameEndMessage(self):
         raise NotImplementedError
 
-    def hasCustomAllyDamageEffect(self):
-        raise NotImplementedError
-
 
 class IBattleClientCache(object):
 

@@ -15,6 +15,7 @@ import material_kinds
 from PixieBG import PixieBG
 from ReplayEvents import g_replayEvents
 from helpers import dependency
+from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.battle_session import IBattleSessionProvider
 from soft_exception import SoftException
 from vehicle_systems.tankStructure import TankSoundObjectsIndexes
@@ -819,6 +820,7 @@ ImpactNames = namedtuple('ImpactNames', ('impactNPC_PC', 'impactPC_NPC', 'impact
 class _SoundEffectDesc(_EffectDesc):
     __slots__ = ('_soundName', '_soundNames', '_switch_impact_surface', '_switch_shell_type', '_dynamic', '_stopSyncVisual', '_impactNames')
     TYPE = '_SoundEffectDesc'
+    __lobbyContext = dependency.descriptor(ILobbyContext)
     __sessionProvider = dependency.descriptor(IBattleSessionProvider)
 
     def __init__(self, dataSection):
@@ -905,11 +907,14 @@ class _SoundEffectDesc(_EffectDesc):
             if fromPC:
                 soundName = self._impactNames.impactPC_NPC
             elif isPlayerVehicle:
-                isCustomAllyDamageEffect = self.__sessionProvider.arenaVisitor.hasCustomAllyDamageEffect()
                 isAlly = self.__sessionProvider.getArenaDP().isAlly(attackerID)
                 soundName = self._impactNames.impactNPC_PC
-                if isCustomAllyDamageEffect and isAlly:
-                    soundName = self._impactNames.impactFNPC_PC or self._impactNames.impactNPC_PC
+                if isAlly:
+                    friendlyFireBonusTypes = self.__lobbyContext.getServerSettings().getFriendlyFireBonusTypes()
+                    isFriendlyFireMode = self.__sessionProvider.arenaVisitor.bonus.isFriendlyFireMode(friendlyFireBonusTypes)
+                    isCustomAllyDamageEffect = self.__sessionProvider.arenaVisitor.bonus.hasCustomAllyDamageEffect()
+                    if isFriendlyFireMode and isCustomAllyDamageEffect:
+                        soundName = self._impactNames.impactFNPC_PC or self._impactNames.impactNPC_PC
                 if not BigWorld.entity(playerID).isAlive():
                     if self.__sessionProvider is not None:
                         spectator = self.__sessionProvider.dynamic.spectator

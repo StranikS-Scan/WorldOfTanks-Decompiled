@@ -787,6 +787,9 @@ class ServerSettings(object):
     def isCrewBooksSaleEnabled(self):
         return self.__getGlobalSetting('isCrewBooksSaleEnabled', False)
 
+    def getFriendlyFireBonusTypes(self):
+        return self.__getGlobalSetting('isNoAllyDamage', set())
+
     def getProgressiveRewardConfig(self):
         return self.__progressiveReward
 

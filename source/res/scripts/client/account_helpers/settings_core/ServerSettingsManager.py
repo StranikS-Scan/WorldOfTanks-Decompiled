@@ -49,6 +49,8 @@ class SETTINGS_SECTIONS(CONST_CONTAINER):
     ENCYCLOPEDIA_RECOMMENDATIONS_3 = 'ENCYCLOPEDIA_RECOMMENDATIONS_3'
     UI_STORAGE = 'UI_STORAGE'
     LINKEDSET_QUESTS = 'LINKEDSET_QUESTS'
+    GAME_EVENT = 'GAME_EVENT'
+    GAME_MANUAL_EVENT = 'GAME_MANUAL_EVENT'
 
 
 class UI_STORAGE_KEYS(CONST_CONTAINER):
@@ -57,6 +59,12 @@ class UI_STORAGE_KEYS(CONST_CONTAINER):
     DISABLE_ANIMATED_TOOLTIP = 'disable_animated_tooltip'
     FIELD_POST_HINT_IS_SHOWN = 'field_post_hint'
     REFERRAL_BUTTON_CIRCLES_SHOWN = 'referral_button_circles_shown'
+
+
+class UI_GAME_EVENT_KEYS(CONST_CONTAINER):
+    FRONT_AWARD_SHOWN = 'front_award_shown'
+    GENERAL_LEVEL_AWARD_SHOWN = 'general_level_award_shown'
+    MANUAL_PAGE_SHOWED = 'manual_page_showed'
 
 
 class ServerSettingsManager(object):
@@ -334,7 +342,10 @@ class ServerSettingsManager(object):
                                     UI_STORAGE_KEYS.AUTO_RELOAD_HIGHLIGHTS_COUNTER: Offset(10, 7168)}),
      SETTINGS_SECTIONS.LINKEDSET_QUESTS: Section(masks={}, offsets={'shown': Offset(0, 4294967295L)}),
      SETTINGS_SECTIONS.QUESTS_PROGRESS: Section(masks={}, offsets={QUESTS_PROGRESS.VIEW_TYPE: Offset(0, 3),
-                                         QUESTS_PROGRESS.DISPLAY_TYPE: Offset(2, 12)})}
+                                         QUESTS_PROGRESS.DISPLAY_TYPE: Offset(2, 12)}),
+     SETTINGS_SECTIONS.GAME_EVENT: Section(masks={}, offsets={UI_GAME_EVENT_KEYS.FRONT_AWARD_SHOWN: Offset(0, 65535),
+                                    UI_GAME_EVENT_KEYS.GENERAL_LEVEL_AWARD_SHOWN: Offset(16, 4294901760L)}),
+     SETTINGS_SECTIONS.GAME_MANUAL_EVENT: Section(masks={}, offsets={UI_GAME_EVENT_KEYS.MANUAL_PAGE_SHOWED: Offset(0, 4294967295L)})}
     AIM_MAPPING = {'net': 1,
      'netType': 1,
      'centralTag': 1,
@@ -433,6 +444,21 @@ class ServerSettingsManager(object):
         mask = self._getMaskForLinkedSetQuest(questID, missionID)
         newValue = self.getSectionSettings(SETTINGS_SECTIONS.LINKEDSET_QUESTS, 'shown', 0) | mask
         return self.setSectionSettings(SETTINGS_SECTIONS.LINKEDSET_QUESTS, {'shown': newValue})
+
+    def getGameEventStorage(self, defaults=None):
+        return self.getSection(SETTINGS_SECTIONS.GAME_EVENT, defaults)
+
+    def saveInGameEventStorage(self, fields):
+        return self.setSections([SETTINGS_SECTIONS.GAME_EVENT], fields)
+
+    def isEventManualShowed(self, ind):
+        section = self.getSectionSettings(SETTINGS_SECTIONS.GAME_MANUAL_EVENT, UI_GAME_EVENT_KEYS.MANUAL_PAGE_SHOWED)
+        return bool(section & 1 << ind + 1) if section else False
+
+    def setEventManualShowed(self, ind):
+        key = UI_GAME_EVENT_KEYS.MANUAL_PAGE_SHOWED
+        newValue = self.getSectionSettings(SETTINGS_SECTIONS.GAME_MANUAL_EVENT, key, 0) | 1 << ind + 1
+        return self.setSectionSettings(SETTINGS_SECTIONS.GAME_MANUAL_EVENT, {key: newValue})
 
     def setQuestProgressSettings(self, settings):
         self.setSectionSettings(SETTINGS_SECTIONS.QUESTS_PROGRESS, settings)

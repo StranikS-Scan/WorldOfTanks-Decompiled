@@ -35,7 +35,8 @@ _STATE_HANDLERS = {VEHICLE_VIEW_STATE.HEALTH: '_updateHealth',
  VEHICLE_VIEW_STATE.SWITCHING: '_switching',
  VEHICLE_VIEW_STATE.STUN: '_updateStun',
  VEHICLE_VIEW_STATE.INSPIRE: '_updateInspire',
- VEHICLE_VIEW_STATE.SIEGE_MODE: '_changeSpeedoType'}
+ VEHICLE_VIEW_STATE.SIEGE_MODE: '_changeSpeedoType',
+ VEHICLE_VIEW_STATE.LAST_STAND: '_updateLastStand'}
 
 class STATUS_ID(CONST_CONTAINER):
     STUN = 0
@@ -348,6 +349,10 @@ class DamagePanel(DamagePanelMeta):
                 self.as_setSpeedModeS(True)
             elif siegeState == _SIEGE_STATE.DISABLED:
                 self.as_setSpeedModeS(False)
+
+    def _updateLastStand(self, value):
+        self._updateHealth(0)
+        self._updateDestroyed()
 
     def __onReplayPaused(self, _):
         self.as_setPlaybackSpeedS(BattleReplay.g_replayCtrl.playbackSpeed)

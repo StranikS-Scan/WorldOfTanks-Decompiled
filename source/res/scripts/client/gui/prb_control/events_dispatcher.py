@@ -81,8 +81,14 @@ class EventDispatcher(object):
     def loadHangar(self):
         self.__fireLoadEvent(VIEW_ALIAS.LOBBY_HANGAR)
 
+    def loadEventHangar(self):
+        self.__fireLoadEvent(VIEW_ALIAS.EVENT_HANGAR_PAGE)
+
     def loadBattleQueue(self):
         self.__fireLoadEvent(VIEW_ALIAS.BATTLE_QUEUE)
+
+    def loadEventBattleQueue(self):
+        self.__fireLoadEvent(VIEW_ALIAS.EVENT_BATTLE_QUEUE)
 
     def loadTrainingList(self):
         self.addTrainingToCarousel()
@@ -313,6 +319,12 @@ class EventDispatcher(object):
          'value': self.__getTooltipPrbData(CHAT.CHANNELS_SQUADREADY_TOOLTIP if isTeamReady else CHAT.CHANNELS_SQUADNOTREADY_TOOLTIP),
          'isShowByReq': False,
          'showIfClosed': True}), scope=EVENT_BUS_SCOPE.LOBBY)
+
+    def showEpicBattlesPrimeTimeWindow(self):
+        g_eventBus.handleEvent(events.LoadViewEvent(alias=EPICBATTLES_ALIASES.EPIC_BATTLES_PRIME_TIME_ALIAS, ctx={}), EVENT_BUS_SCOPE.LOBBY)
+
+    def showRankedPrimeTimeWindow(self):
+        g_eventBus.handleEvent(events.LoadViewEvent(alias=RANKEDBATTLES_ALIASES.RANKED_BATTLE_PRIME_TIME, ctx={}), EVENT_BUS_SCOPE.LOBBY)
 
     def _showUnitProgress(self, prbType, show):
         clientID = channel_num_gen.getClientID4Prebattle(prbType)

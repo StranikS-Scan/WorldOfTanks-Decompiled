@@ -29,6 +29,8 @@ class BATTLE_RESULTS(object):
     FINISH_REASON_9 = '#battle_results:finish/reason/9'
     FINISH_REASON_10WIN = '#battle_results:finish/reason/10win'
     FINISH_REASON_10LOSE = '#battle_results:finish/reason/10lose'
+    FINISH_REASON_11 = '#battle_results:finish/reason/11'
+    FINISH_REASON_12 = '#battle_results:finish/reason/12'
     FINISH_OVERTIME_WIN = '#battle_results:finish/overtime/win'
     FINISH_OVERTIME_LOSE = '#battle_results:finish/overtime/lose'
     COMMON_MAINFINISHREASONTITLE = '#battle_results:common/mainFinishReasonTitle'

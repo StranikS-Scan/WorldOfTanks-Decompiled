@@ -19,6 +19,7 @@ class IngameSoundNotifications(object):
         self.__isEnabled = False
         self.__enabledSoundCategories = set()
         self.__lastEnqueuedTime = {}
+        self.__remappedNotifications = {}
         self.__readConfig()
         return
 
@@ -66,6 +67,9 @@ class IngameSoundNotifications(object):
         elif not self.__isEnabled or BigWorld.isWindowVisible() is False:
             return
         else:
+            eventName = self.__remappedNotifications.get(eventName, eventName)
+            if eventName is None:
+                return
             event = self.__events.get(eventName, None)
             if event is None:
                 LOG_WARNING("Couldn't find %s event" % eventName)
@@ -136,6 +140,9 @@ class IngameSoundNotifications(object):
         else:
             self.__enabledSoundCategories.remove(category)
             self.__clearQueue(category)
+
+    def setRemapping(self, remap):
+        self.__remappedNotifications = remap
 
     def isPlaying(self, eventName):
         for category in ('fx', 'voice'):

@@ -54,7 +54,8 @@ __all__ = ('standard',
  'heroTitleTK',
  'grandTitle',
  'grandTitleYellow',
- 'grandTitleTK')
+ 'grandTitleTK',
+ 'eventGeneralProgressActive')
 
 def _getStyle(style, ctx=None):
     if ctx is None:
@@ -368,6 +369,10 @@ def grandTitleTK(text):
 
 def failedStatusText(text):
     return _formatText('failedStatusText', text)
+
+
+def eventGeneralProgressActive(text):
+    return _formatText('eventGeneralProgressActive', text)
 
 
 def getRawStyles(names):

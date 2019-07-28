@@ -68,6 +68,9 @@ class IArenaGuiDescription(object):
     def getSelectedQuestInfo(self):
         raise NotImplementedError
 
+    def getArenaBonusType(self):
+        raise NotImplementedError
+
 
 class DefaultArenaGuiDescription(IArenaGuiDescription):
     __slots__ = ('_visitor', '_team', '_questInfo', '_isPersonalDataSet', '_selectedQuestIDs', '_selectedQuestInfo')
@@ -148,6 +151,9 @@ class DefaultArenaGuiDescription(IArenaGuiDescription):
 
     def getSelectedQuestInfo(self):
         return self._selectedQuestInfo
+
+    def getArenaBonusType(self):
+        return self._visitor.getArenaBonusType()
 
 
 class ArenaWithBasesDescription(DefaultArenaGuiDescription):
@@ -247,6 +253,9 @@ class ArenaWithL10nDescription(IArenaGuiDescription):
 
     def getSelectedQuestInfo(self):
         return self._decorated.getSelectedQuestInfo()
+
+    def getArenaBonusType(self):
+        pass
 
 
 class BootcampBattleDescription(ArenaWithLabelDescription):

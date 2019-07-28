@@ -354,10 +354,13 @@ class _OrderItem(_TriggerItem):
     def update(self, quantity, stage, timeRemaining, totalTime):
         from AvatarInputHandler import MapCaseMode
         if stage == EQUIPMENT_STAGES.PREPARING and self._stage != stage:
-            MapCaseMode.activateMapCase(self.getEquipmentID(), partial(self.deactivate))
+            MapCaseMode.activateMapCase(self.getEquipmentID(), partial(self.deactivate), self.isArcadeCamera())
         elif self._stage == EQUIPMENT_STAGES.PREPARING and self._stage != stage:
-            MapCaseMode.turnOffMapCase(self.getEquipmentID())
+            MapCaseMode.turnOffMapCase(self.getEquipmentID(), self.isArcadeCamera())
         super(_OrderItem, self).update(quantity, stage, timeRemaining, totalTime)
+
+    def isArcadeCamera(self):
+        return False
 
 
 class _ArtilleryItem(_OrderItem):
@@ -366,10 +369,28 @@ class _ArtilleryItem(_OrderItem):
         pass
 
 
+class _ArcadeArtilleryItem(_ArtilleryItem):
+
+    def isArcadeCamera(self):
+        return True
+
+
 class _BomberItem(_OrderItem):
 
     def getMarker(self):
         pass
+
+
+class _ArcadeBomberItem(_BomberItem):
+
+    def isArcadeCamera(self):
+        return True
+
+
+class _ArcadeMineFieldItem(_OrderItem):
+
+    def isArcadeCamera(self):
+        return True
 
 
 class _ReconItem(_OrderItem):
@@ -384,7 +405,23 @@ class _SmokeItem(_OrderItem):
         pass
 
 
+class _EventNitroItem(_TriggerItem):
+
+    def update(self, quantity, stage, timeRemaining, totalTime):
+        super(_EventNitroItem, self).update(quantity, stage, timeRemaining, totalTime)
+        if stage == EQUIPMENT_STAGES.COOLDOWN:
+            self._totalTime = self._descriptor.cooldownSeconds
+        elif stage == EQUIPMENT_STAGES.READY:
+            self._totalTime = self._descriptor.durationSeconds
+
+
 def _triggerItemFactory(descriptor, quantity, stage, timeRemaining, totalTime, tag=None):
+    if descriptor.name.startswith('arcade_artillery'):
+        return _ArcadeArtilleryItem(descriptor, quantity, stage, timeRemaining, totalTime, tag)
+    if descriptor.name.startswith('arcade_bomber'):
+        return _ArcadeBomberItem(descriptor, quantity, stage, timeRemaining, totalTime, tag)
+    if descriptor.name.startswith('arcade_minefield'):
+        return _ArcadeMineFieldItem(descriptor, quantity, stage, timeRemaining, totalTime, tag)
     if descriptor.name.startswith('artillery'):
         return _ArtilleryItem(descriptor, quantity, stage, timeRemaining, totalTime, tag)
     if descriptor.name.startswith('bomber'):
@@ -399,7 +436,9 @@ _EQUIPMENT_TAG_TO_ITEM = {'fuel': _AutoItem,
  'trigger': _triggerItemFactory,
  'extinguisher': _ExtinguisherItem,
  'medkit': _MedKitItem,
- 'repairkit': _RepairKitItem}
+ 'repairkit': _RepairKitItem,
+ 'event_passive_ability': _AutoItem,
+ 'event_nitro': _EventNitroItem}
 
 def _getSupportedTag(descriptor):
     keys = set(_EQUIPMENT_TAG_TO_ITEM.keys()) & descriptor.tags
@@ -654,6 +693,12 @@ class _ReplaySmokeItem(_ReplayOrderItem):
 
 
 def _replayTriggerItemFactory(descriptor, quantity, stage, timeRemaining, totalTime, tag=None):
+    if descriptor.name.startswith('arcade_artillery'):
+        return _ReplayArtilleryItem(descriptor, quantity, stage, timeRemaining, totalTime, tag)
+    if descriptor.name.startswith('arcade_bomber'):
+        return _ReplayBomberItem(descriptor, quantity, stage, timeRemaining, totalTime, tag)
+    if descriptor.name.startswith('arcade_minefield'):
+        return _ReplayOrderItem(descriptor, quantity, stage, timeRemaining, totalTime, tag)
     if descriptor.name.startswith('artillery'):
         return _ReplayArtilleryItem(descriptor, quantity, stage, timeRemaining, totalTime, tag)
     if descriptor.name.startswith('bomber'):
@@ -668,7 +713,9 @@ _REPLAY_EQUIPMENT_TAG_TO_ITEM = {'fuel': _ReplayItem,
  'trigger': _replayTriggerItemFactory,
  'extinguisher': _ReplayItem,
  'medkit': _ReplayMedKitItem,
- 'repairkit': _ReplayRepairKitItem}
+ 'repairkit': _ReplayRepairKitItem,
+ 'event_passive_ability': _ReplayItem,
+ 'event_nitro': _replayTriggerItemFactory}
 
 class EquipmentsReplayPlayer(EquipmentsController):
     __slots__ = ('__callbackID', '__callbackTimeID', '__percentGetters', '__percents', '__timeGetters', '__times')

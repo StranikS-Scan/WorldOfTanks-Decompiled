@@ -349,10 +349,11 @@ class VehicleArenaInfoVO(object):
         return not self.player.accountDBID
 
     def isChatCommandsDisabled(self, isAlly):
-        if not self.player.accountDBID:
+        arena = avatar_getter.getArena()
+        isEvent = arena.guiType == ARENA_GUI_TYPE.EVENT_BATTLES if arena else False
+        if not self.player.accountDBID and not isEvent:
             if isAlly:
                 return True
-            arena = avatar_getter.getArena()
             if arena is None or arena.guiType not in (ARENA_GUI_TYPE.RANDOM, ARENA_GUI_TYPE.TRAINING):
                 return True
         return False

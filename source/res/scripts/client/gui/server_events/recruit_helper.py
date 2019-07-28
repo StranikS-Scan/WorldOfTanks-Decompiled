@@ -24,13 +24,15 @@ class RecruitSourceID(object):
     TWITCH_2 = 'twitch2'
     TWITCH_3 = 'twitch3'
     TWITCH_4 = 'twitch4'
+    TWITCH_5 = 'twitch5'
     BUFFON = 'buffon'
     LOOTBOX = 'lootbox'
     EVENTS = (TWITCH_0,
      TWITCH_1,
      TWITCH_2,
      TWITCH_3,
-     TWITCH_4)
+     TWITCH_4,
+     TWITCH_5)
 
 
 _NEW_SKILL = 'new_skill'

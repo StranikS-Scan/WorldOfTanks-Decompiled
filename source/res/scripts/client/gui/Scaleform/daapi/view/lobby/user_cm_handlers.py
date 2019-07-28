@@ -333,6 +333,7 @@ class AppealCMHandler(BaseUserCMHandler):
         shared_events.showVehicleInfo(self._vehicleCD)
 
     def showVehiclePreview(self):
+        shared_events.switchOutEventMode()
         shared_events.showVehiclePreview(self._vehicleCD)
         shared_events.hideBattleResults()
 

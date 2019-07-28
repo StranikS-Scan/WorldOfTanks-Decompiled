@@ -8,7 +8,7 @@ from ClientUnit import ClientUnit
 from CurrentVehicle import g_currentVehicle
 from PlayerEvents import g_playerEvents
 from UnitBase import UNIT_SLOT, INV_ID_CLEAR_VEHICLE, UNIT_ROLE
-from constants import REQUEST_COOLDOWN, VEHICLE_CLASS_INDICES
+from constants import REQUEST_COOLDOWN, VEHICLE_CLASS_INDICES, PREBATTLE_TYPE
 from debug_utils import LOG_ERROR, LOG_DEBUG
 from gui.Scaleform.daapi.view.dialogs import rally_dialog_meta
 from gui.prb_control import prb_getters, settings
@@ -35,6 +35,7 @@ from helpers import time_utils
 from items import vehicles as core_vehicles
 from messenger.ext import passCensor
 from shared_utils import findFirst
+from skeletons.gui.game_event_controller import IGameEventController
 from skeletons.gui.shared import IItemsCache
 from soft_exception import SoftException
 
@@ -440,6 +441,7 @@ class UnitBrowserEntity(_UnitIntroEntity):
 
 
 class UnitEntity(_UnitEntity):
+    gameEventController = dependency.descriptor(IGameEventController)
 
     def __init__(self, modeFlags, prbType):
         handlers = self._getRequestHandlers()
@@ -473,7 +475,8 @@ class UnitEntity(_UnitEntity):
             if idle:
                 listener.onUnitFlagsChanged(flags, timeLeftInIdle)
 
-        g_eventDispatcher.loadHangar()
+        if not ctx.hasFlags(FUNCTIONAL_FLAG.LOAD_PAGE):
+            g_eventDispatcher.loadHangar()
         return initResult | FUNCTIONAL_FLAG.LOAD_WINDOW
 
     def fini(self, ctx=None, woEvents=False):
@@ -1052,25 +1055,7 @@ class UnitEntity(_UnitEntity):
 
     @vehicleAmmoCheck
     def togglePlayerReadyAction(self, launchChain=False):
-        notReady = not self.getPlayerInfo().isReady
-        if notReady:
-            waitingID = 'prebattle/player_ready'
-        else:
-            waitingID = 'prebattle/player_not_ready'
-        if launchChain:
-            if notReady:
-                selVehCtx = SetVehicleUnitCtx(vTypeCD=g_currentVehicle.item.intCD, waitingID='prebattle/change_settings')
-                selVehCtx.setReady = True
-                self.setVehicle(selVehCtx)
-            else:
-                ctx = SetReadyUnitCtx(False, 'prebattle/player_not_ready')
-                ctx.resetVehicle = True
-                LOG_DEBUG('Unit request', ctx)
-                self.setPlayerReady(ctx)
-        else:
-            ctx = SetReadyUnitCtx(notReady, waitingID)
-            LOG_DEBUG('Unit request', ctx)
-            self.setPlayerReady(ctx)
+        self._togglePlayerReadyAction(launchChain)
 
     def isVehiclesReadyToBattle(self):
         result = self._actionsValidator.getVehiclesValidator().canPlayerDoAction()
@@ -1103,6 +1088,11 @@ class UnitEntity(_UnitEntity):
         if not flags.isOnlyRosterWaitChanged():
             loadHangar = flags.isInQueueChanged()
             self._actionsHandler.setUnitChanged(loadHangar)
+        if flags.isInQueueChanged():
+            if flags.isInQueue():
+                self._startQueueTimer()
+            else:
+                self._stopQueueTimer()
         members = unit.getMembers()
         diff = []
         for slotIdx in self._rosterSettings.getAllSlotsRange():
@@ -1253,6 +1243,32 @@ class UnitEntity(_UnitEntity):
 
     def unit_onUnitExtraChanged(self, extras):
         self._invokeListeners('onUnitExtraChanged', extras)
+
+    def _togglePlayerReadyAction(self, launchChain):
+        notReady = not self.getPlayerInfo().isReady
+        if notReady:
+            waitingID = 'prebattle/player_ready'
+        else:
+            waitingID = 'prebattle/player_not_ready'
+        if launchChain:
+            if notReady:
+                if self._prbType == PREBATTLE_TYPE.EVENT:
+                    general = self.gameEventController.getSelectedGeneral()
+                    BigWorld.player().changeSelectedGeneral(general.getID(), general.getCurrentProgressLevel(), general.getFrontID())
+                selVehCtx = SetVehicleUnitCtx(vTypeCD=g_currentVehicle.item.intCD, waitingID='prebattle/change_settings')
+                selVehCtx.setReady = True
+                self.setVehicle(selVehCtx)
+            else:
+                if self._prbType == PREBATTLE_TYPE.EVENT:
+                    BigWorld.player().changeSelectedGeneral(-1, -1, -1)
+                ctx = SetReadyUnitCtx(False, 'prebattle/player_not_ready')
+                ctx.resetVehicle = True
+                LOG_DEBUG('Unit request', ctx)
+                self.setPlayerReady(ctx)
+        else:
+            ctx = SetReadyUnitCtx(notReady, waitingID)
+            LOG_DEBUG('Unit request', ctx)
+            self.setPlayerReady(ctx)
 
     def _createActionsValidator(self):
         return UnitActionsValidator(self)

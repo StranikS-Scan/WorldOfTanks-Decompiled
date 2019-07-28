@@ -9,6 +9,7 @@ class HANGAR_HEADER_QUESTS(object):
     QUEST_TYPE_PERSONAL_REGULAR = 'regular'
     QUEST_TYPE_PERSONAL_PM2 = 'pm2'
     QUEST_TYPE_EVENT = 'eventQuest'
+    QUEST_TYPE_EVENT_GENERAL_MISSIONS = 'general'
     QUEST_GROUP_COMMON = 'commonQuestsGroup'
     QUEST_GROUP_MARATHON = 'marathonQuestsGroup'
     QUEST_GROUP_PERSONAL = 'personalQuestsGroup'

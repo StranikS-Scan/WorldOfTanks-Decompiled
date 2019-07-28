@@ -4,6 +4,7 @@ from debug_utils import LOG_WARNING
 
 class VEH_COMPARE(object):
     CARTPOPOVER_OPENCMPBTN_TOOLTIP = '#veh_compare:cartPopover/openCmpBtn/tooltip'
+    CARTPOPOVER_DISABLEDCMPBTN_TOOLTIP = '#veh_compare:cartPopover/disabledCmpBtn/tooltip'
     CARTPOPOVER_FULLBASKETCMPBTN_TOOLTIP = '#veh_compare:cartPopover/fullBasketCmpBtn/tooltip'
     CARTPOPOVER_REMOVEALLBTN_TOOLTIP = '#veh_compare:cartPopover/removeAllBtn/tooltip'
     CARTPOPOVER_REMOVEBTNLOCKED_TOOLTIP = '#veh_compare:cartPopover/removeBtnLocked/tooltip'
@@ -62,6 +63,8 @@ class VEH_COMPARE(object):
     CARTPOPOVER_GOTOCOMPAREBTN_LABEL = '#veh_compare:cartPopover/gotoCompareBtn/label'
     CARTPOPOVER_OPENCMPBTN_TOOLTIP_HEADER = '#veh_compare:cartPopover/openCmpBtn/tooltip/header'
     CARTPOPOVER_OPENCMPBTN_TOOLTIP_BODY = '#veh_compare:cartPopover/openCmpBtn/tooltip/body'
+    CARTPOPOVER_DISABLEDCMPBTN_TOOLTIP_HEADER = '#veh_compare:cartPopover/disabledCmpBtn/tooltip/header'
+    CARTPOPOVER_DISABLEDCMPBTN_TOOLTIP_BODY = '#veh_compare:cartPopover/disabledCmpBtn/tooltip/body'
     CARTPOPOVER_FULLBASKETCMPBTN_TOOLTIP_HEADER = '#veh_compare:cartPopover/fullBasketCmpBtn/tooltip/header'
     CARTPOPOVER_FULLBASKETCMPBTN_TOOLTIP_ATTENTION = '#veh_compare:cartPopover/fullBasketCmpBtn/tooltip/attention'
     CARTPOPOVER_REMOVEALLBTN_LABEL = '#veh_compare:cartPopover/removeAllBtn/label'

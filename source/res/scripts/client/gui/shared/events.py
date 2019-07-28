@@ -43,6 +43,7 @@ class GameEvent(HasCtxEvent):
     GUN_MARKER_VISIBILITY = 'game/gunMarkerVisibility'
     CROSSHAIR_VIEW = 'game/crosshairView'
     FULL_STATS = 'game/fullStats'
+    EVENT_STATS = 'game/eventStats'
     FULL_STATS_QUEST_PROGRESS = 'game/fullStats/questProgress'
     SHOW_CURSOR = 'game/showCursor'
     HIDE_CURSOR = 'game/hideCursor'
@@ -59,6 +60,8 @@ class GameEvent(HasCtxEvent):
     SHOW_BTN_HINT = 'game/showBtnHint'
     HIDE_BTN_HINT = 'game/hideBtnHint'
     DESTROY_TIMERS_PANEL = 'game/destroyTimersPanel'
+    LOOTSIGN_STATE_CHANGED = 'game/lootsignStateChanged'
+    LOOTSIGN_COMPONENT_LIFETIME = 'game/lootsignComponentLifetime'
 
 
 class GUICommonEvent(SharedEvent):
@@ -615,10 +618,12 @@ class HangarVehicleEvent(HasCtxEvent):
     ON_HERO_TANK_LOADED = 'hangarVehicle/onHeroTankLoaded'
     ON_HERO_TANK_DESTROY = 'hangarVehicle/onHeroTankDestroy'
     HERO_TANK_MARKER = 'hangarVehicle/heroTankMarker'
+    LOBBY_TYPE_CHANGED = 'hangarVehicle/lobbyTypeChanged'
 
 
 class LinkedSetEvent(HasCtxEvent):
     VEHICLE_SELECTED = 'LinkedSetEvent/vehicleSelected'
+    HINTS_VIEW = 'LinkedSetEvent/hintsView'
 
 
 class ManualEvent(HasCtxEvent):
@@ -636,6 +641,10 @@ class HangarCustomizationEvent(HasCtxEvent):
     RESET_VEHICLE_MODEL_TRANSFORM = 'hangarCustomization/resetVehicleModelTransform'
 
 
+class PickUpEvent(HasCtxEvent):
+    ON_PICKUP = 'PickUpEvent/onPickup'
+
+
 class ReferralProgramEvent(HasCtxEvent):
     REFERRAL_PROGRAM_ACTIVATED = 'referralProgramActivated'
     REFERRAL_PROGRAM_DEACTIVATED = 'referralProgrammDeactivated'
@@ -649,3 +658,7 @@ class AdventCalendarEvent(HasCtxEvent):
 
 class ProgressiveRewardEvent(HasCtxEvent):
     WIDGET_WAS_SHOWN = 'progressiveWidgetWasShown'
+
+
+class RadialMenuEvent(SharedEvent):
+    RADIAL_MENU_ACTION = 'radialMenuAction'

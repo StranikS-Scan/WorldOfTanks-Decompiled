@@ -9,6 +9,7 @@ from gui.prb_control.entities.base.scheduler import BaseScheduler
 from gui.prb_control.items import SelectResult, ValidationResult
 from gui.prb_control.settings import FUNCTIONAL_FLAG, CTRL_ENTITY_TYPE
 from gui.shared.utils.listeners_collection import IListenersCollection
+from helpers import time_utils
 
 class PrbFunctionalFlags(object):
     __slots__ = ('_entityFlags', '_modeFlags')
@@ -63,6 +64,8 @@ class BasePrbEntity(IActionsValidator, PrbFunctionalFlags):
         self._scheduler = self._createScheduler()
         self._isActive = False
         self._cooldown = self._createCooldownManager()
+        self.__queueStartTime = None
+        return
 
     def init(self, **kwargs):
         self._scheduler.init()
@@ -131,6 +134,9 @@ class BasePrbEntity(IActionsValidator, PrbFunctionalFlags):
     def getQueueType(self):
         return QUEUE_TYPE.UNKNOWN
 
+    def getQueueTime(self):
+        return time_utils.getCurrentTimestamp() - self.__queueStartTime if self.__queueStartTime is not None else 0
+
     def hasLockedState(self):
         return False
 
@@ -165,6 +171,13 @@ class BasePrbEntity(IActionsValidator, PrbFunctionalFlags):
 
     def _createCooldownManager(self):
         return None
+
+    def _startQueueTimer(self):
+        self.__queueStartTime = time_utils.getCurrentTimestamp()
+
+    def _stopQueueTimer(self):
+        self.__queueStartTime = None
+        return
 
 
 class NotSupportedEntryPoint(BasePrbEntryPoint):

@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/CurrentVehicle.py
 import BigWorld
-from constants import CustomizationInvData
+from constants import CustomizationInvData, QUEUE_TYPE
 from Event import Event, EventManager
 from adisp import process
 from gui.shared.formatters.time_formatters import getTimeLeftStr
@@ -13,6 +13,7 @@ from items.vehicles import VehicleDescr
 from helpers import isPlayerAccount, i18n
 from account_helpers.AccountSettings import AccountSettings, CURRENT_VEHICLE
 from gui.ClientUpdateManager import g_clientUpdateManager
+from gui.prb_control import prbEntityProperty
 from gui.shared.utils.requesters import REQ_CRITERIA
 from gui.shared.formatters import icons
 from gui.shared.gui_items import GUI_ITEM_TYPE
@@ -371,10 +372,15 @@ class _RegularPreviewAppearance(PreviewAppearance):
 
 class HeroTankPreviewAppearance(PreviewAppearance):
 
+    @prbEntityProperty
+    def prbEntity(self):
+        return None
+
     def refreshVehicle(self, item):
         if item is None:
             from ClientSelectableCameraObject import ClientSelectableCameraObject
-            ClientSelectableCameraObject.switchCamera()
+            immediate = self.prbEntity.getQueueType() == QUEUE_TYPE.EVENT_BATTLES
+            ClientSelectableCameraObject.switchCamera(None, immediate)
         return
 
 

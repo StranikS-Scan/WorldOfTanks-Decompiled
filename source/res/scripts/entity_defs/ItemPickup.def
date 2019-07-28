@@ -1,0 +1,42 @@
+<ItemPickup.def>
+  <Implements></Implements>
+  <Properties>
+    <visualAppearanceID>
+      <Type>	STRING	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </visualAppearanceID>
+    <pickupByType>
+      <Type>	PYTHON	</Type>
+      <Flags>	CELL_PRIVATE	</Flags>
+    </pickupByType>
+    <pickupRadius>
+      <Type>	UINT8	</Type>
+      <Flags>	CELL_PRIVATE	</Flags>
+    </pickupRadius>
+    <lifetime>
+      <Type>	FLOAT	</Type>
+      <Flags>	CELL_PRIVATE	</Flags>
+    </lifetime>
+    <arena>
+      <Type>	MAILBOX	</Type>
+      <Flags>	CELL_PRIVATE	</Flags>
+    </arena>
+    <isPickedUp>
+      <Type>	BOOL	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </isPickedUp>
+    <ownerVehicleID>
+      <Type>	OBJECT_ID	</Type>
+      <Flags>	CELL_PRIVATE	</Flags>
+    </ownerVehicleID>
+    <equipmentID>
+      <Type>	OBJECT_ID	</Type>
+      <Flags>	CELL_PRIVATE	</Flags>
+    </equipmentID>
+  </Properties>
+  <TempProperties>
+    <events></events>
+    <_pickupAction></_pickupAction>
+    <_timerID></_timerID>
+  </TempProperties>
+</ItemPickup.def>

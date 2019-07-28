@@ -1927,4 +1927,266 @@
       <devices>	105	</devices>
     </damage>
   </_76mm_AP_M79training>
+  <_90mm_AP_M318_L>
+    <id>	156	</id>
+    <userString>	#usa_vehicles:_90mm_AP_M318_L	</userString>
+    <icon>	ap	</icon>
+    <price>	420	</price>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	90	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainArmorPiercing	</effects>
+    <damage>
+      <armor>	280	</armor>
+      <devices>	122	</devices>
+    </damage>
+  </_90mm_AP_M318_L>
+  <_90mm_HEAT_M348_L>
+    <id>	157	</id>
+    <userString>	#usa_vehicles:_90mm_HEAT_M348_L	</userString>
+    <icon>	hc	</icon>
+    <price>	4400	</price>
+    <improved>	true	</improved>
+    <kind>	HOLLOW_CHARGE	</kind>
+    <caliber>	90	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainHollowCharge	</effects>
+    <damage>
+      <armor>	280	</armor>
+      <devices>	122	</devices>
+    </damage>
+    <piercingPowerLossFactorByDistance>	0.05	</piercingPowerLossFactorByDistance>
+  </_90mm_HEAT_M348_L>
+  <_90mm_HE_T91E3_L>
+    <id>	158	</id>
+    <userString>	#usa_vehicles:_90mm_HE_T91E3_L	</userString>
+    <icon>	he	</icon>
+    <price>	295	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <caliber>	90	</caliber>
+    <explosionRadius>	1.46	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	mainHighExplosive	</effects>
+    <damage>
+      <armor>	370	</armor>
+      <devices>	122	</devices>
+    </damage>
+  </_90mm_HE_T91E3_L>
+  <_37mm_APC_M51_G5_1>
+    <id>	58	</id>
+    <userString>	#usa_vehicles:_37mm_APC_M51	</userString>
+    <icon>	ap_cr	</icon>
+    <price>	800	</price>
+    <improved>	true	</improved>
+    <kind>	ARMOR_PIERCING_CR	</kind>
+    <caliber>	37	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	smallAPCR	</effects>
+    <damage>
+      <armor>	40	</armor>
+      <devices>	50	</devices>
+    </damage>
+    <notInShop>	True	</notInShop>
+  </_37mm_APC_M51_G5_1>
+  <_37mm_APC_M51_G5_2>
+    <id>	69	</id>
+    <userString>	#usa_vehicles:_37mm_APC_M51	</userString>
+    <icon>	ap_cr	</icon>
+    <price>	800	</price>
+    <improved>	true	</improved>
+    <kind>	ARMOR_PIERCING_CR	</kind>
+    <caliber>	37	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	smallAPCR	</effects>
+    <damage>
+      <armor>	40	</armor>
+      <devices>	50	</devices>
+    </damage>
+    <notInShop>	True	</notInShop>
+  </_37mm_APC_M51_G5_2>
+  <_75mm_M48_G5_3>
+    <id>	70	</id>
+    <userString>	#usa_vehicles:_75mm_M48	</userString>
+    <icon>	he	</icon>
+    <price>	56	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <caliber>	75	</caliber>
+    <explosionRadius>	1.06	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	mediumHighExplosive	</effects>
+    <damage>
+      <armor>	200	</armor>
+      <devices>	100	</devices>
+    </damage>
+    <notInShop>	True	</notInShop>
+  </_75mm_M48_G5_3>
+  <_75mm_M61_G5_4>
+    <id>	71	</id>
+    <userString>	#usa_vehicles:_75mm_M61	</userString>
+    <icon>	ap	</icon>
+    <price>	56	</price>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	75	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mediumArmorPiercing	</effects>
+    <damage>
+      <armor>	110	</armor>
+      <devices>	100	</devices>
+    </damage>
+    <notInShop>	True	</notInShop>
+  </_75mm_M61_G5_4>
+  <_75mm_M72_G5_4>
+    <id>	72	</id>
+    <userString>	#usa_vehicles:_75mm_M72	</userString>
+    <icon>	ap_cr	</icon>
+    <price>	2800	</price>
+    <improved>	true	</improved>
+    <kind>	ARMOR_PIERCING_CR	</kind>
+    <caliber>	75	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mediumAPCR	</effects>
+    <damage>
+      <armor>	110	</armor>
+      <devices>	100	</devices>
+    </damage>
+    <notInShop>	True	</notInShop>
+  </_75mm_M72_G5_4>
+  <_75mm_M61_G5_5>
+    <id>	73	</id>
+    <userString>	#usa_vehicles:_75mm_M61	</userString>
+    <icon>	ap	</icon>
+    <price>	56	</price>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	75	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mediumArmorPiercing	</effects>
+    <damage>
+      <armor>	110	</armor>
+      <devices>	100	</devices>
+    </damage>
+    <notInShop>	True	</notInShop>
+  </_75mm_M61_G5_5>
+  <_75mm_M72_G5_5>
+    <id>	74	</id>
+    <userString>	#usa_vehicles:_75mm_M72	</userString>
+    <icon>	ap_cr	</icon>
+    <price>	2800	</price>
+    <improved>	true	</improved>
+    <kind>	ARMOR_PIERCING_CR	</kind>
+    <caliber>	75	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mediumAPCR	</effects>
+    <damage>
+      <armor>	110	</armor>
+      <devices>	100	</devices>
+    </damage>
+    <notInShop>	True	</notInShop>
+  </_75mm_M72_G5_5>
+  <_75mm_M61_G5_7>
+    <id>	75	</id>
+    <userString>	#usa_vehicles:_75mm_M61	</userString>
+    <icon>	ap	</icon>
+    <price>	56	</price>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	75	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mediumArmorPiercing	</effects>
+    <damage>
+      <armor>	110	</armor>
+      <devices>	100	</devices>
+    </damage>
+    <notInShop>	True	</notInShop>
+  </_75mm_M61_G5_7>
+  <_75mm_M72_G5_7>
+    <id>	83	</id>
+    <userString>	#usa_vehicles:_75mm_M72	</userString>
+    <icon>	ap_cr	</icon>
+    <price>	2800	</price>
+    <improved>	true	</improved>
+    <kind>	ARMOR_PIERCING_CR	</kind>
+    <caliber>	75	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mediumAPCR	</effects>
+    <damage>
+      <armor>	110	</armor>
+      <devices>	100	</devices>
+    </damage>
+    <notInShop>	True	</notInShop>
+  </_75mm_M72_G5_7>
+  <_75mm_M61_G5_8>
+    <id>	88	</id>
+    <userString>	#usa_vehicles:_75mm_M61	</userString>
+    <icon>	ap	</icon>
+    <price>	56	</price>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	75	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mediumArmorPiercing	</effects>
+    <damage>
+      <armor>	110	</armor>
+      <devices>	100	</devices>
+    </damage>
+    <notInShop>	True	</notInShop>
+  </_75mm_M61_G5_8>
+  <_75mm_M72_G5_8>
+    <id>	89	</id>
+    <userString>	#usa_vehicles:_75mm_M72	</userString>
+    <icon>	ap_cr	</icon>
+    <price>	2800	</price>
+    <improved>	true	</improved>
+    <kind>	ARMOR_PIERCING_CR	</kind>
+    <caliber>	75	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mediumAPCR	</effects>
+    <damage>
+      <armor>	110	</armor>
+      <devices>	100	</devices>
+    </damage>
+    <notInShop>	True	</notInShop>
+  </_75mm_M72_G5_8>
+  <_76mm_AP_M79_G5_9>
+    <id>	90	</id>
+    <userString>	#usa_vehicles:_76mm_AP_M79	</userString>
+    <icon>	ap	</icon>
+    <price>	96	</price>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	76	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mediumArmorPiercing	</effects>
+    <damage>
+      <armor>	115	</armor>
+      <devices>	105	</devices>
+    </damage>
+    <notInShop>	True	</notInShop>
+  </_76mm_AP_M79_G5_9>
+  <_75mm_M61_G5_10>
+    <id>	94	</id>
+    <userString>	#usa_vehicles:_75mm_M61	</userString>
+    <icon>	ap	</icon>
+    <price>	56	</price>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	75	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mediumArmorPiercing	</effects>
+    <damage>
+      <armor>	110	</armor>
+      <devices>	100	</devices>
+    </damage>
+    <notInShop>	True	</notInShop>
+  </_75mm_M61_G5_10>
+  <_76mm_M62_G5_6>
+    <id>	95	</id>
+    <userString>	#usa_vehicles:_76mm_M62	</userString>
+    <icon>	ap	</icon>
+    <price>	56	</price>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	76	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mediumArmorPiercing	</effects>
+    <damage>
+      <armor>	110	</armor>
+      <devices>	100	</devices>
+    </damage>
+    <notInShop>	True	</notInShop>
+  </_76mm_M62_G5_6>
 </shells.xml>

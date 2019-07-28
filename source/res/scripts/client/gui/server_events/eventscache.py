@@ -287,7 +287,7 @@ class EventsCache(IEventsCache):
         return EventBattles(battles.get('vehicleTags', set()), battles.get('vehicles', []), bool(battles.get('enabled', 0)), battles.get('arenaTypeID')) if battles else EventBattles(set(), [], 0, None)
 
     def isEventEnabled(self):
-        return len(self.__getEventBattles()) > 0 and len(self.getEventVehicles()) > 0
+        return self.getEventBattles().enabled
 
     @dependency.replace_none_kwargs(itemsCache=IItemsCache)
     def getEventVehicles(self, itemsCache=None):
@@ -435,6 +435,9 @@ class EventsCache(IEventsCache):
             currentStep = self.questsProgress.getTokenCount(progressiveConfig.levelTokenID)
             probability = self.questsProgress.getTokenCount(progressiveConfig.probabilityTokenID) / 100
             return _ProgressiveReward(currentStep, probability, maxSteps)
+
+    def getGameEventData(self):
+        return self.__getIngameEventsData().get('se_april', {})
 
     def _getQuests(self, filterFunc=None, includePersonalMissions=False):
         result = {}

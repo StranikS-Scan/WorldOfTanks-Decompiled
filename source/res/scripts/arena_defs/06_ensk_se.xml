@@ -1,0 +1,239 @@
+<06_ensk_se.xml>
+  <name>	#arenas:06_ensk_se/name	</name>
+  <description>	#arenas:06_ensk_se/description	</description>
+  <geometry>	spaces/06_ensk_se	</geometry>
+  <runDelay>	15	</runDelay>
+  <estimatedLoad>	0.45	</estimatedLoad>
+  <boundingBox>
+    <bottomLeft>	-100.000000 -500.000000	</bottomLeft>
+    <upperRight>	300.000000 500.000000	</upperRight>
+  </boundingBox>
+  <playerBoundingBox>
+    <bottomLeft>	-100.000000 -100.000000	</bottomLeft>
+    <upperRight>	300.000000 300.000000	</upperRight>
+  </playerBoundingBox>
+  <roundLength>	1800	</roundLength>
+  <minimap>	spaces/06_ensk_se/mmap.dds	</minimap>
+  <minimap_arrows_overlay>	spaces/06_ensk_se/mmap_arrows.dds	</minimap_arrows_overlay>
+  <vehicleCamouflageKind>	summer	</vehicleCamouflageKind>
+  <defaultGroundEffect>	None	</defaultGroundEffect>
+  <umbraEnabled>	1	</umbraEnabled>
+  <batchingEnabled>	0	</batchingEnabled>
+  <maxPlayersInTeam>	5	</maxPlayersInTeam>
+  <wwmusicSetup>
+    <wwmusicLoading>	music_ensk_loading_screen	</wwmusicLoading>
+    <wwmusicLoadingVoiceover>	vo_se1_story_loading_east_front	</wwmusicLoadingVoiceover>
+    <wwmusicIntensive>	music_ensk_dron_intensive	</wwmusicIntensive>
+    <wwmusicRelaxed>	music_ensk_dron_relaxed	</wwmusicRelaxed>
+    <wwmusicStop>	music_dron_stop	</wwmusicStop>
+    <wwmusicEndbattleStop>	music_dron_endbattle_stop	</wwmusicEndbattleStop>
+    <wwmusicResultWin>	music_ensk_result_win	</wwmusicResultWin>
+    <wwmusicVoiceoverResultWin>	vo_se1_victory	</wwmusicVoiceoverResultWin>
+    <wwmusicResultDrawn>	music_ensk_result_drawn	</wwmusicResultDrawn>
+    <wwmusicResultDefeat>	music_ensk_result_defeat	</wwmusicResultDefeat>
+    <wwmusicVoiceoverResultDefeat>	vo_se1_defeat	</wwmusicVoiceoverResultDefeat>
+  </wwmusicSetup>
+  <wwambientSound>	ambient_wind_autumn_01	</wwambientSound>
+  <notificationsRemapping>
+    <notification>
+      <name>	vehicle_destroyed	</name>
+    </notification>
+    <notification>
+      <name>	enemy_hp_damaged_by_projectile_by_player	</name>
+    </notification>
+    <notification>
+      <name>	enemy_hp_damaged_by_projectile_and_chassis_damaged_by_player	</name>
+    </notification>
+    <notification>
+      <name>	enemy_hp_damaged_by_projectile_and_gun_damaged_by_player	</name>
+    </notification>
+    <notification>
+      <name>	enemy_hp_damaged_by_explosion_at_direct_hit_by_player	</name>
+    </notification>
+    <notification>
+      <name>	enemy_no_piercing_by_player	</name>
+    </notification>
+    <notification>
+      <name>	enemy_no_hp_damage_at_attempt_and_chassis_damaged_by_player	</name>
+    </notification>
+    <notification>
+      <name>	enemy_no_hp_damage_at_attempt_and_gun_damaged_by_player	</name>
+    </notification>
+    <notification>
+      <name>	enemy_no_hp_damage_at_no_attempt_by_player	</name>
+    </notification>
+    <notification>
+      <name>	enemy_no_hp_damage_at_attempt_by_player	</name>
+    </notification>
+    <notification>
+      <name>	enemy_no_hp_damage_at_no_attempt_and_chassis_damaged_by_player	</name>
+    </notification>
+    <notification>
+      <name>	enemy_no_hp_damage_at_no_attempt_and_gun_damaged_by_player	</name>
+    </notification>
+    <notification>
+      <name>	enemy_ricochet_by_player	</name>
+    </notification>
+    <notification>
+      <name>	enemy_no_hp_damage_by_near_explosion_by_player	</name>
+    </notification>
+    <notification>
+      <name>	enemy_hp_damaged_by_near_explosion_by_player	</name>
+    </notification>
+    <notification>
+      <name>	enemy_fire_started_by_player	</name>
+    </notification>
+    <notification>
+      <name>	damage_by_near_explosion_by_enemy	</name>
+    </notification>
+    <notification>
+      <name>	target_captured	</name>
+    </notification>
+    <notification>
+      <name>	target_lost	</name>
+    </notification>
+    <notification>
+      <name>	target_unlocked	</name>
+    </notification>
+    <notification>
+      <name>	crew_deactivated	</name>
+    </notification>
+    <notification>
+      <name>	engine_damaged	</name>
+    </notification>
+    <notification>
+      <name>	engine_destroyed	</name>
+    </notification>
+    <notification>
+      <name>	engine_functional	</name>
+    </notification>
+    <notification>
+      <name>	ammo_bay_damaged	</name>
+    </notification>
+    <notification>
+      <name>	fuel_tank_damaged	</name>
+    </notification>
+    <notification>
+      <name>	radio_damaged	</name>
+    </notification>
+    <notification>
+      <name>	track_damaged	</name>
+    </notification>
+    <notification>
+      <name>	track_destroyed	</name>
+    </notification>
+    <notification>
+      <name>	track_functional	</name>
+    </notification>
+    <notification>
+      <name>	track_functional_can_move	</name>
+    </notification>
+    <notification>
+      <name>	gun_damaged	</name>
+    </notification>
+    <notification>
+      <name>	gun_destroyed	</name>
+    </notification>
+    <notification>
+      <name>	gun_functional	</name>
+    </notification>
+    <notification>
+      <name>	turret_rotator_damaged	</name>
+    </notification>
+    <notification>
+      <name>	turret_rotator_destroyed	</name>
+    </notification>
+    <notification>
+      <name>	turret_rotator_functional	</name>
+    </notification>
+    <notification>
+      <name>	surveying_devices_damaged	</name>
+    </notification>
+    <notification>
+      <name>	surveying_devices_destroyed	</name>
+    </notification>
+    <notification>
+      <name>	surveying_devices_functional	</name>
+    </notification>
+    <notification>
+      <name>	commander_killed	</name>
+    </notification>
+    <notification>
+      <name>	driver_killed	</name>
+    </notification>
+    <notification>
+      <name>	radioman_killed	</name>
+    </notification>
+    <notification>
+      <name>	gunner_killed	</name>
+    </notification>
+    <notification>
+      <name>	loader_killed	</name>
+    </notification>
+    <notification>
+      <name>	fire_started	</name>
+    </notification>
+    <notification>
+      <name>	fire_stopped	</name>
+    </notification>
+    <notification>
+      <name>	enemy_killed_by_player	</name>
+    </notification>
+  </notificationsRemapping>
+  <soundRemapping>
+    <loadBanks>
+      <bank>	ev_2019_secret_event_gameplay.bnk	</bank>
+      <bank>	ev_2019_secret_event_gameplay.pck	</bank>
+      <bank>	ev_2019_secret_event_voiceover.bnk	</bank>
+      <bank>	ev_2019_secret_event_voiceover.pck	</bank>
+      <bank>	epic_battle.pck	</bank>
+      <bank>	epic_battle.bnk	</bank>
+      <bank>	epic_battle_voiceover.bnk	</bank>
+    </loadBanks>
+    <events>
+      <event>
+        <name>	vo_start_battle	</name>
+        <mod>	vo_se1_start_battle	</mod>
+      </event>
+      <event>
+        <name>	ambient_wind_autumn_01	</name>
+        <mod>	ambient_wind_autumn_01	</mod>
+        <modAUX>	ev_2019_secret_event_gameplay_intro_combat	</modAUX>
+      </event>
+    </events>
+  </soundRemapping>
+  <wwmusicDroneSetup>
+    <timeRemained>
+      <value>	180	</value>
+    </timeRemained>
+    <playerLivesRemained>
+      <value>	1	</value>
+    </playerLivesRemained>
+    <wavesRemained>
+      <value>	1	</value>
+    </wavesRemained>
+  </wwmusicDroneSetup>
+  <gameplayTypes>
+    <ctf>
+      <respawnType>	event_limited	</respawnType>
+      <numPlayerGroups>	3	</numPlayerGroups>
+      <playerGroupLimit>	150	</playerGroupLimit>
+      <artilleryPreparationChance>	0.6	</artilleryPreparationChance>
+      <teamBasePositions></teamBasePositions>
+      <recon>
+        <flyDirections>
+          <flyDirection>
+            <team>	1	</team>
+            <direction>	0 0 -1	</direction>
+          </flyDirection>
+          <flyDirection>
+            <team>	2	</team>
+            <direction>	0 0 1	</direction>
+          </flyDirection>
+        </flyDirections>
+      </recon>
+    </ctf>
+  </gameplayTypes>
+  <explicitRequestOnly>	true	</explicitRequestOnly>
+  <mapActivities></mapActivities>
+</06_ensk_se.xml>

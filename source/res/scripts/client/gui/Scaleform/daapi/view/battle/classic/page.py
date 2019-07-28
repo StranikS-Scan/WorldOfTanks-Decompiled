@@ -78,7 +78,7 @@ class ClassicPage(SharedPage):
             fullStats = self.getComponent(self._fullStatsAlias)
             if fullStats is None:
                 return
-            elif self.as_isComponentVisibleS(BATTLE_VIEW_ALIASES.RADIAL_MENU):
+            elif self._isRadialMenuVisible():
                 return
             hasTabs = fullStats.hasTabs
             if not hasTabs and tabIndex > 0:
@@ -108,6 +108,9 @@ class ClassicPage(SharedPage):
             else:
                 self.app.leaveGuiControlMode(BATTLE_VIEW_ALIASES.FULL_STATS)
             return
+
+    def _isRadialMenuVisible(self):
+        return self.as_isComponentVisibleS(BATTLE_VIEW_ALIASES.RADIAL_MENU)
 
     def _processHint(self, needShow):
         alias = BATTLE_VIEW_ALIASES.HINT_PANEL
@@ -153,6 +156,9 @@ class ClassicPage(SharedPage):
 
     def _switchToPostmortem(self):
         super(ClassicPage, self)._switchToPostmortem()
+        self._hideRadialMenu()
+
+    def _hideRadialMenu(self):
         if self.as_isComponentVisibleS(BATTLE_VIEW_ALIASES.RADIAL_MENU):
             self._toggleRadialMenu(False)
 

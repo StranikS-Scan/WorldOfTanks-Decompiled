@@ -83,6 +83,7 @@ class _PlayerEvents(object):
         self.onKickWhileLoginReceived = Event.Event()
         self.onGuiCacheSyncCompleted = Event.Event()
         self.onPMLocksChanged = Event.Event()
+        self.onGeneralLockChanged = Event.Event()
         self.onBootcampEnqueued = Event.Event()
         self.onBootcampDequeued = Event.Event()
         self.onBootcampStartChoice = Event.Event()

@@ -165,6 +165,7 @@ class PreQueueEntity(BasePreQueueEntity, ListenersCollection):
                 LOG_CURRENT_EXCEPTION()
                 self._requestCtx.stopProcessing(False)
 
+            self._startQueueTimer()
             return
 
     def dequeue(self, ctx, callback=None):
@@ -187,6 +188,7 @@ class PreQueueEntity(BasePreQueueEntity, ListenersCollection):
                 LOG_CURRENT_EXCEPTION()
                 self._requestCtx.stopProcessing(False)
 
+            self._stopQueueTimer()
             return
 
     def leave(self, ctx, callback=None):

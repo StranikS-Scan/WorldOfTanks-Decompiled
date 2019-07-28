@@ -35,6 +35,7 @@ _logger = logging.getLogger(__name__)
 class AWARDS_SIZES(CONST_CONTAINER):
     SMALL = 'small'
     BIG = 'big'
+    EVENT_REWARD = 'event_reward'
 
 
 class COMPLETION_TOKENS_SIZES(CONST_CONTAINER):
@@ -188,8 +189,23 @@ def getRankedFormatterMap():
     return mapping
 
 
+def getEventFormattersMap():
+    simpleEventBonusFormatter = SimpleEventBonusFormatter()
+    mapping = getDefaultFormattersMap()
+    mapping.update({'xpFactor': simpleEventBonusFormatter,
+     'creditsFactor': simpleEventBonusFormatter,
+     'freeXPFactor': simpleEventBonusFormatter,
+     PREMIUM_ENTITLEMENTS.BASIC: LinkedSetPremiumDaysBonusFormatter(),
+     PREMIUM_ENTITLEMENTS.PLUS: LinkedSetPremiumDaysBonusFormatter()})
+    return mapping
+
+
 def getDefaultAwardFormatter():
     return AwardsPacker(getDefaultFormattersMap())
+
+
+def getEventAwardFormatter():
+    return AwardsPacker(getEventFormattersMap())
 
 
 def getEpicViewAwardPacker():
@@ -430,6 +446,13 @@ class SimpleBonusFormatter(AwardFormatter):
         return
 
 
+class SimpleEventBonusFormatter(SimpleBonusFormatter):
+
+    @classmethod
+    def _getLabel(cls, bonus):
+        return '+{}%'.format(int(bonus.getValue() * 100))
+
+
 class CountableIntegralBonusFormatter(SimpleBonusFormatter):
 
     def _format(self, bonus):
@@ -558,7 +581,13 @@ class TokenBonusFormatter(SimpleBonusFormatter):
 
     def _formatComplexToken(self, complexToken, token, bonus):
         userName = self._getUserName(complexToken.styleID)
-        tooltip = makeTooltip(i18n.makeString(TOOLTIPS.QUESTS_BONUSES_TOKEN_HEADER, userName=userName), i18n.makeString(TOOLTIPS.QUESTS_BONUSES_TOKEN_BODY))
+        header = TOOLTIPS.QUESTS_BONUSES_TOKEN_HEADER
+        if TOOLTIPS.hasBonusesTokenHeader(complexToken.styleID):
+            header = TOOLTIPS.getBonusesTokenHeader(complexToken.styleID)
+        body = TOOLTIPS.QUESTS_BONUSES_TOKEN_BODY
+        if TOOLTIPS.hasBonusesTokenBody(complexToken.styleID):
+            body = TOOLTIPS.getBonusesTokenBody(complexToken.styleID)
+        tooltip = makeTooltip(i18n.makeString(header, userName=userName), i18n.makeString(body))
         return PreformattedBonus(bonusName=bonus.getName(), images=self._getTokenImages(complexToken.styleID), label=self._formatBonusLabel(token.count), userName=self._getUserName(complexToken.styleID), labelFormatter=self._getLabelFormatter(bonus), tooltip=tooltip, align=LABEL_ALIGN.RIGHT, isCompensation=self._isCompensation(bonus))
 
     def _formatLootBoxToken(self, tokenID, token, bonus):
@@ -1203,7 +1232,7 @@ class CrewSkinsBonusFormatter(SimpleBonusFormatter):
             sizePath = R.images.gui.maps.icons.quests.bonuses.dyn(size, None)
             if sizePath is not None:
                 img = sizePath.dyn(item.itemTypeName + str(rarity))
-                if img is not None:
+                if img is not None and img.exists():
                     result[size] = backport.image(img())
 
         return result
@@ -1234,7 +1263,7 @@ class CrewBooksBonusFormatter(SimpleBonusFormatter):
             sizePath = R.images.gui.maps.icons.crewBooks.books.dyn(size, None)
             if sizePath is not None:
                 img = sizePath.dyn(item.getBonusIconName())
-                if img is not None:
+                if img is not None and img.exists():
                     result[size] = backport.image(img())
 
         return result

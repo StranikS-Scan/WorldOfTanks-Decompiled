@@ -2,8 +2,9 @@
 # Embedded file name: scripts/client/gui/sounds/ambients.py
 from collections import defaultdict
 import MusicControllerWWISE as _MC
+import WWISE
 from Event import Event
-from constants import ARENA_PERIOD as _PERIOD
+from constants import ARENA_PERIOD as _PERIOD, ARENA_GUI_TYPE
 from gui.Scaleform.daapi.view.meta.WindowViewMeta import WindowViewMeta
 from gui.Scaleform.framework import ViewTypes
 from gui.Scaleform.framework.managers.containers import POP_UP_CRITERIA
@@ -161,22 +162,28 @@ class NoAmbient(EmptySound):
 
 class SoundEnv(object):
 
-    def __init__(self, soundsCtrl, envId, music=None, ambient=None, filters=None):
+    def __init__(self, soundsCtrl, envId, music=None, ambient=None, filters=None, startStates=None, stopStates=None):
         self._soundsCtrl = soundsCtrl
         self._music = music or EmptySound()
         self._ambient = ambient or EmptySound()
         self._filters = filters or []
         self.__envID = envId
+        self._startStates = startStates or {}
+        self._stopStates = stopStates or {}
         self.onChanged = Event()
 
     def start(self):
         self._soundsCtrl.system.onEnvStart(self.__envID)
+        for stateName, state in self._startStates.iteritems():
+            WWISE.WW_setState(stateName, state)
 
     def stop(self):
         self.onChanged.clear()
         self._soundsCtrl.system.onEnvStop(self.__envID)
         self._ambient.clear()
         self._music.clear()
+        for stateName, state in self._stopStates.iteritems():
+            WWISE.WW_setState(stateName, state)
 
     def getMusicEvent(self):
         return self._music
@@ -292,6 +299,26 @@ class BattleQueueEnv(SoundEnv):
         super(BattleQueueEnv, self).__init__(soundsCtrl, 'queue', filters=(SoundFilters.FILTERED_HANGAR,))
 
 
+class EventBattleLoadingSpaceEnv(BattleLoadingSpaceEnv):
+
+    def __init__(self, soundsCtrl):
+        super(EventBattleLoadingSpaceEnv, self).__init__(soundsCtrl)
+        self._startStates = {'STATE_ev_2019_secret_event_gameplay': 'STATE_ev_2019_secret_event_gameplay_on'}
+
+
+class EventBattleSpaceEnv(BattleSpaceEnv):
+
+    def __init__(self, soundsCtrl):
+        super(EventBattleSpaceEnv, self).__init__(soundsCtrl)
+        self._stopStates = {'STATE_ev_2019_secret_event_gameplay': 'STATE_ev_2019_secret_event_gameplay_off'}
+
+
+class EventBattleQueueEnv(SoundEnv):
+
+    def __init__(self, soundsCtrl):
+        super(EventBattleQueueEnv, self).__init__(soundsCtrl, 'queue', filters=(SoundFilters.FILTERED_HANGAR,))
+
+
 class ShopEnv(SoundEnv):
 
     def __init__(self, soundsCtrl):
@@ -360,6 +387,9 @@ class GuiAmbientsCtrl(object):
      GuiGlobalSpaceID.LOBBY: LobbySpaceEnv,
      GuiGlobalSpaceID.BATTLE_LOADING: BattleLoadingSpaceEnv,
      GuiGlobalSpaceID.BATTLE: BattleSpaceEnv}
+    _spacesReplacementByArenaGUIType = {ARENA_GUI_TYPE.EVENT_BATTLES: {GuiGlobalSpaceID.BATTLE_LOADING: EventBattleLoadingSpaceEnv,
+                                    GuiGlobalSpaceID.BATTLE: EventBattleSpaceEnv}}
+    sessionProvider = dependency.descriptor(IBattleSessionProvider)
     hangarSpace = dependency.descriptor(IHangarSpace)
     appLoader = dependency.descriptor(IAppLoader)
 
@@ -411,6 +441,15 @@ class GuiAmbientsCtrl(object):
         if _MC.g_musicController is not None:
             _MC.g_musicController.stop()
         return
+
+    def _getSoundEnvForSpace(self, spaceId):
+        guiType = ARENA_GUI_TYPE.UNKNOWN
+        if self.sessionProvider:
+            guiType = self.sessionProvider.arenaVisitor.getArenaGuiType()
+        spaces = self._spacesReplacementByArenaGUIType.get(guiType, self._spaces)
+        if spaceId not in spaces and spaceId not in self._spaces:
+            SOUND_DEBUG('Wrong spaceID - ', spaceId)
+        return spaces.get(spaceId, self._spaces.get(spaceId))
 
     def setEnvForSpace(self, spaceID, newEnv):
         if spaceID not in self._spaces:
@@ -471,15 +510,18 @@ class GuiAmbientsCtrl(object):
         return env
 
     def __onGUISpaceEntered(self, spaceID):
-        SOUND_DEBUG('Entering GUI space', spaceID, spaceID in self._spaces)
-        if spaceID in self._spaces:
+        spaceSoundEnv = self._getSoundEnvForSpace(spaceID)
+        SOUND_DEBUG('Entering GUI space', spaceID, spaceSoundEnv is not None)
+        if spaceSoundEnv is not None:
             self._clearSoundEnv(self._spaceEnv)
-            self._spaceEnv = self._buildSoundEnv(self._spaces[spaceID])
+            self._spaceEnv = self._buildSoundEnv(spaceSoundEnv)
             self._restartSounds()
+        return
 
     def __onGUISpaceLeft(self, spaceID):
-        SOUND_DEBUG('Leaving GUI space', spaceID, spaceID in self._spaces)
-        if self.app is not None and self.app.containerManager is not None and spaceID in self._spaces:
+        spaceSoundEnv = self._getSoundEnvForSpace(spaceID)
+        SOUND_DEBUG('Leaving GUI space', spaceID, spaceSoundEnv is not None)
+        if self.app is not None and self.app.containerManager is not None and spaceSoundEnv is not None:
             customViews = []
             for vt in (ViewTypes.TOP_WINDOW, ViewTypes.WINDOW, ViewTypes.LOBBY_SUB):
                 container = self.app.containerManager.getContainer(vt)

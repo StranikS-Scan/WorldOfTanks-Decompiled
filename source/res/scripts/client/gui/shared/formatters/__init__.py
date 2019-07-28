@@ -89,7 +89,7 @@ def formatPrice(price, reverse=False, currency=Currency.CREDITS, useIcon=False, 
 
 
 def formatPriceForCurrency(money, currencyName):
-    return formatPrice(Money(money.get(currencyName)))
+    return formatPrice(Money(money.get(currencyName)), currency=currencyName)
 
 
 def formatGoldPrice(gold, reverse=False):

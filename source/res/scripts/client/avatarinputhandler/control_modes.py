@@ -136,7 +136,7 @@ class _GunControlMode(IControlMode):
     def __init__(self, dataSection, avatarInputHandler, mode=CTRL_MODE_NAME.ARCADE, isStrategic=False):
         self._aih = weakref.proxy(avatarInputHandler)
         self._defaultOffset = dataSection.readVector2('defaultOffset')
-        self._cameraTransitionDurations = _readCameraTransitionSettings(dataSection['camera'])
+        self._cameraTransitionDurations = readCameraTransitionSettings(dataSection['camera'])
         self._gunMarker = gun_marker_ctrl.createGunMarker(isStrategic)
         self._isEnabled = False
         self._cam = None
@@ -1052,7 +1052,7 @@ class PostMortemControlMode(IControlMode):
         self.__postmortemDelay = None
         self.__isObserverMode = False
         self.__videoControlModeAvailable = dataSection.readBool('videoModeAvailable', constants.HAS_DEV_RESOURCES)
-        self._cameraTransitionDurations = _readCameraTransitionSettings(dataSection['camera'])
+        self._cameraTransitionDurations = readCameraTransitionSettings(dataSection['camera'])
         self._targetCtrlModeAfterDelay = None
         self.__altTargetMode = None
         return
@@ -1086,6 +1086,9 @@ class PostMortemControlMode(IControlMode):
         _setCameraFluency(self.__cam.camera, self.__CAM_FLUENCY)
         self.__isEnabled = True
         BigWorld.player().consistentMatrices.onVehicleMatrixBindingChanged += self._onMatrixBound
+        arenaVisitor = self.guiSessionProvider.arenaVisitor
+        isEventBattle = arenaVisitor.gui.isEventBattle()
+        bPostmortemDelay = bool(args.get('bPostmortemDelay'))
         if not BattleReplay.g_replayCtrl.isPlaying:
             if self.__isObserverMode:
                 vehicleID = args.get('vehicleID')
@@ -1094,7 +1097,7 @@ class PostMortemControlMode(IControlMode):
                 else:
                     self.__fakeSwitchToVehicle(vehicleID)
                 return
-            if (PostMortemControlMode.getIsPostmortemDelayEnabled() or bool(args.get('respawn', False))) and bool(args.get('bPostmortemDelay')):
+            if PostMortemControlMode.getIsPostmortemDelayEnabled() and bPostmortemDelay or bool(args.get('respawn', False)) and not isEventBattle:
                 self.__startPostmortemDelay(self.__selfVehicleID)
             else:
                 self.__switchToVehicle(None)
@@ -1621,7 +1624,7 @@ def getFocalPoint():
     return point[0] if point is not None else AimingSystems.shootInSkyPoint(start, direction)
 
 
-def _readCameraTransitionSettings(cameraDataSec):
+def readCameraTransitionSettings(cameraDataSec):
     targetModeToDurationMap = dict.fromkeys(CTRL_MODES, -1.0)
     if cameraDataSec is None:
         return targetModeToDurationMap

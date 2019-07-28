@@ -85,6 +85,14 @@ def _getNodeValue(node, key, default=None):
     return default
 
 
+def _getFirstNodeValue(node, key, default=None):
+    if key in node and node[key]:
+        dNode = dict([node[key][0]])
+        if 'value' in dNode:
+            return dNode['value']
+    return default
+
+
 def _prepareVehData(vehsList, predicate=None):
     predicate = predicate or (lambda *args: True)
     return [ (v, (not v.isInInventory or predicate(v), None, None)) for v in vehsList ]
@@ -1097,7 +1105,7 @@ class BattleResults(_Condition, _Negatable, _Updatable):
     def __init__(self, path, data, localeKey='single'):
         super(BattleResults, self).__init__('results', dict(data), path)
         self._keyName = _getNodeValue(self._data, 'key')
-        self._max = (self.TOP_RANGE_HIGHEST, int(_getNodeValue(self._data, 'max', self.TOP_RANGE_LOWEST)))
+        self._max = (self.TOP_RANGE_HIGHEST, int(_getFirstNodeValue(self._data, 'max', self.TOP_RANGE_LOWEST)))
         self._isTotal = 'total' in self._data
         self._isAvg = 'average' in self._data
         self._relation = _findRelation(self._data.keys())
@@ -1502,3 +1510,31 @@ def getProgressFromQuestWithSingleAccumulative(quest):
             currentProgress, totalProgress = item.getProgressPerGroup().get(None, [])[:2]
             return (currentProgress, totalProgress)
     return (None, None)
+
+
+def getTokenNeededCountInCondition(quest, tokenName, default=None):
+    return default if quest is None else _getTokenNeededCountInCondition(quest.accountReqs.getConditions().items, tokenName, default)
+
+
+def _getTokenNeededCountInCondition(items, tokenName, default=None):
+    item = _getTokenItemInCondition(items, tokenName)
+    return default if item is None else item.getNeededCount()
+
+
+def getTokenReceivedCountInCondition(quest, tokenName, default=None):
+    return default if quest is None else _getTokenReceivedCountInCondition(quest.accountReqs.getConditions().items, tokenName, default)
+
+
+def _getTokenReceivedCountInCondition(items, tokenName, default=None):
+    item = _getTokenItemInCondition(items, tokenName)
+    return default if item is None else item.getReceivedCount()
+
+
+def _getTokenItemInCondition(items, tokenName):
+    for item in items:
+        if isinstance(item, _ConditionsGroup):
+            return _getTokenItemInCondition(item.items, tokenName)
+        if item.getName() == 'token' and item.getID() == tokenName:
+            return item
+
+    return None

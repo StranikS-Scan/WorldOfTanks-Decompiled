@@ -1639,7 +1639,7 @@ def getMergeBonusFunction(lhv, rhv):
     if hasOneBaseClass(lhv, lhv, ItemsBonus):
         return mergeItemsBonuses
     else:
-        return mergeIntegralBonuses if hasOneBaseClass(lhv, rhv, IntegralBonus) or hasOneBaseClass(lhv, rhv, GoldBonus) else None
+        return mergeIntegralBonuses if hasOneBaseClass(lhv, rhv, IntegralBonus) or hasOneBaseClass(lhv, rhv, GoldBonus) or hasOneBaseClass(lhv, rhv, FloatBonus) else None
 
 
 def mergeItemsBonuses(lhv, rhv):

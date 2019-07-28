@@ -1,0 +1,42 @@
+<AnimatedScene.def>
+  <Properties>
+    <sequencePath>
+      <Type>	STRING	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </sequencePath>
+    <sequenceDuration>
+      <Type>	FLOAT32	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </sequenceDuration>
+    <offset>
+      <Type>	VECTOR3	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <Default>	0 0 0	</Default>
+    </offset>
+    <repeat>
+      <Type>	INT32	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <Default>	1	</Default>
+    </repeat>
+    <repeatDelay>
+      <Type>	FLOAT32	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <Default>	0.0	</Default>
+    </repeatDelay>
+    <yprDeviation>
+      <Type>	VECTOR3	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <Default>	0 0 0	</Default>
+    </yprDeviation>
+    <offsetDeviation>
+      <Type>	VECTOR3	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <Default>	0 0 0	</Default>
+    </offsetDeviation>
+    <delayDeviation>
+      <Type>	FLOAT32	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <Default>	0.0	</Default>
+    </delayDeviation>
+  </Properties>
+</AnimatedScene.def>

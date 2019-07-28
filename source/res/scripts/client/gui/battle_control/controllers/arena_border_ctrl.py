@@ -52,6 +52,8 @@ class ArenaBorderController(IArenaLoadController):
         if BigWorld.player().spaceID <= 0:
             return
         arenaBoundingBox = self.__arenaVisitor.type.getBoundingBox()
+        if self.__arenaVisitor.gui.isEventBattle():
+            arenaBoundingBox = self.__arenaVisitor.type.getPlayerBoundingBox()
         bounds = Math.Vector4(arenaBoundingBox[0][0], arenaBoundingBox[0][1], arenaBoundingBox[1][0], arenaBoundingBox[1][1])
         self.__spaceID = BigWorld.player().spaceID
         self.__applySetting(self.settingsCore.getSetting(settings_constants.BATTLE_BORDER_MAP.MODE_SHOW_BORDER), self.settingsCore.getSetting(settings_constants.BATTLE_BORDER_MAP.TYPE_BORDER), self.__getCurrentColor(self.settingsCore.getSetting(settings_constants.GRAPHICS.COLOR_BLIND)))

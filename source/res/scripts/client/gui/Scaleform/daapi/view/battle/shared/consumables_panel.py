@@ -53,6 +53,7 @@ EMPTY_EQUIPMENT_TOOLTIP = i18n.makeString('#ingame_gui:consumables_panel/equipme
 TOOLTIP_FORMAT = '{{HEADER}}{0:>s}{{/HEADER}}\n/{{BODY}}{1:>s}{{/BODY}}'
 TOOLTIP_NO_BODY_FORMAT = '{{HEADER}}{0:>s}{{/HEADER}}'
 _EQUIPMENT_GLOW_TIME = 7
+_LAST_STAND_DISABLE_EQUIPMENT = ('medkit', 'extinguisher', 'repairkit', 'event_nitro')
 
 def _isEquipmentAvailableToUse(eq):
     return eq.isAvailableToUse
@@ -405,7 +406,7 @@ class ConsumablesPanel(ConsumablesPanelMeta, BattleGUIKeyHandler):
             idx = self.__genNextIdx(EQUIPMENT_FULL_MASK + ORDERS_FULL_MASK, EQUIPMENT_START_IDX)
             self.__cds[idx] = intCD
             bwKey, sfKey = self.__genKey(idx)
-            self.as_addEquipmentSlotS(idx, bwKey, sfKey, None, 0, 0, 0, None, EMPTY_EQUIPMENT_TOOLTIP)
+            self.as_addEquipmentSlotS(idx, bwKey, sfKey, None, 0, 0, 0, None, EMPTY_EQUIPMENT_TOOLTIP, 0)
             snap = self.__cds[EQUIPMENT_START_IDX:EQUIPMENT_END_IDX + 1]
             if snap == EMPTY_EQUIPMENTS_SLICE:
                 self.as_showEquipmentSlotsS(False)
@@ -417,6 +418,7 @@ class ConsumablesPanel(ConsumablesPanelMeta, BattleGUIKeyHandler):
             quantity = item.getQuantity()
             currentTime = item.getTimeRemaining()
             maxTime = item.getTotalTime()
+            self.as_setEquipmentStageS(idx, item.getStage())
             self.as_setItemTimeQuantityInSlotS(idx, quantity, currentTime, maxTime)
             if item.isReusable or item.isAvatar() and item.getStage() != EQUIPMENT_STAGES.PREPARING:
                 glowType = CONSUMABLES_PANEL_SETTINGS.GLOW_ID_GREEN_SPECIAL if item.isAvatar() else CONSUMABLES_PANEL_SETTINGS.GLOW_ID_GREEN
@@ -453,8 +455,10 @@ class ConsumablesPanel(ConsumablesPanelMeta, BattleGUIKeyHandler):
         body = descriptor.description
         if item.getTotalTime() > 0:
             tooltipStr = INGAME_GUI.CONSUMABLES_PANEL_EQUIPMENT_COOLDOWNSECONDS
-            cooldownSeconds = str(int(descriptor.cooldownSeconds))
-            paramsString = i18n.makeString(tooltipStr, cooldownSeconds=cooldownSeconds)
+            cooldownSeconds = int(descriptor.cooldownSeconds)
+            if cooldownSeconds == 0:
+                cooldownSeconds = int(descriptor.cooldownTime)
+            paramsString = i18n.makeString(tooltipStr, cooldownSeconds=str(cooldownSeconds))
             body = body + '\n\n' + paramsString
         toolTip = TOOLTIP_FORMAT.format(descriptor.userString, body)
         tag = item.getTag()
@@ -468,7 +472,7 @@ class ConsumablesPanel(ConsumablesPanelMeta, BattleGUIKeyHandler):
                 self.__keys[bwKey] = handler
         else:
             bwKey, sfKey = (None, None)
-        self.as_addEquipmentSlotS(idx, bwKey, sfKey, tag, item.getQuantity(), item.getTimeRemaining(), item.getTotalTime(), iconPath, toolTip)
+        self.as_addEquipmentSlotS(idx, bwKey, sfKey, tag, item.getQuantity(), item.getTimeRemaining(), item.getTotalTime(), iconPath, toolTip, item.getStage())
         return None
 
     def __onOptionalDeviceAdded(self, intCD, descriptor, isOn):
@@ -571,7 +575,21 @@ class ConsumablesPanel(ConsumablesPanelMeta, BattleGUIKeyHandler):
                         if not equipment.getDescriptor().autoactivate:
                             self.__clearEquipmentGlow(self.__cds.index(intCD))
 
+            elif state == VEHICLE_VIEW_STATE.LAST_STAND:
+                self.__disableEquipmentForLastStand()
             return
+
+    def __disableEquipmentForLastStand(self):
+        for value in _LAST_STAND_DISABLE_EQUIPMENT:
+            self.__disableItem(value)
+
+    def __disableItem(self, itemTag):
+        ctrl = self.sessionProvider.shared.equipments
+        for intCD, item in ctrl.iterEquipmentsByTag(itemTag):
+            idx = self.__cds.index(intCD)
+            self.__clearEquipmentGlow(idx)
+            self.as_setItemTimeQuantityInSlotS(idx, 0, 0, 0)
+            item.update(0, EQUIPMENT_STAGES.UNAVAILABLE, 0, 0)
 
     def __canApplyingGlowEquipment(self, equipment):
         if equipment.getTag() == 'extinguisher':

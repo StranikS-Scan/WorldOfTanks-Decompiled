@@ -134,6 +134,12 @@ class ReceivedBattleChatCommand(_ChatCommand):
     def showMarkerForReceiver(self):
         return False
 
+    def isMsgOnMarker(self):
+        return False
+
+    def messageOnMarker(self):
+        pass
+
     def _getCommandVehMarker(self):
         pass
 

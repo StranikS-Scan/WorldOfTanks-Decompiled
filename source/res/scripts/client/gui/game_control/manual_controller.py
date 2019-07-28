@@ -12,6 +12,7 @@ from gui.Scaleform.framework import ViewTypes
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.framework.managers.containers import POP_UP_CRITERIA
 _logger = logging.getLogger(__name__)
+_DEFAULT_CHAPTER_SECTION = 'chapters'
 
 class ManualController(IManualController):
     lobbyContext = dependency.descriptor(ILobbyContext)
@@ -19,9 +20,8 @@ class ManualController(IManualController):
 
     def __init__(self):
         super(ManualController, self).__init__()
-        self.__chapters = None
+        self.__chapters = {}
         self._isChapterViewOnScreen = False
-        return
 
     def init(self):
         g_eventBus.addListener(events.ManualEvent.CHAPTER_CLOSED, self.__onChapterClosed, EVENT_BUS_SCOPE.LOBBY)
@@ -33,13 +33,13 @@ class ManualController(IManualController):
     def app(self):
         return None
 
-    def getChaptersUIData(self):
-        chaptersUIData = [ i['uiData'] for i in self.__getChapters() ]
+    def getChaptersUIData(self, sectionName=_DEFAULT_CHAPTER_SECTION):
+        chaptersUIData = [ i['uiData'] for i in self.__getChapters(sectionName) ]
         return chaptersUIData
 
-    def getChapterUIData(self, chapterIndex):
+    def getChapterUIData(self, chapterIndex, sectionName=_DEFAULT_CHAPTER_SECTION):
         chapterFilename = None
-        for chapter in self.__getChapters():
+        for chapter in self.__getChapters(sectionName):
             if chapter['uiData']['index'] == chapterIndex:
                 chapterFilename = chapter['filePath']
 
@@ -47,8 +47,7 @@ class ManualController(IManualController):
         return currentChapter
 
     def clear(self):
-        self.__chapters = None
-        return
+        self.__chapters = {}
 
     def isActivated(self):
         return self.lobbyContext.getServerSettings().isManualEnabled()
@@ -69,7 +68,7 @@ class ManualController(IManualController):
         if not lessonID:
             g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.WIKI_VIEW), EVENT_BUS_SCOPE.LOBBY)
         else:
-            for chapterIndex, chapter in enumerate(self.__getChapters()):
+            for chapterIndex, chapter in enumerate(self.__getChapters(_DEFAULT_CHAPTER_SECTION)):
                 pageIndex = next((pageIndex for pageIndex, pageID in enumerate(chapter['pageIDs']) if pageID == lessonID), None)
                 if pageIndex is not None:
                     if view:
@@ -99,10 +98,11 @@ class ManualController(IManualController):
         g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.MANUAL_CHAPTER_VIEW, ctx={'chapterIndex': chapterIndex,
          'pageIndex': pageIndex}), scope=EVENT_BUS_SCOPE.LOBBY)
 
-    def __getChapters(self):
-        if self.__chapters is None:
-            self.__chapters = manual_xml_data_reader.getChapters(self.__isBootcampEnabled())
-        return self.__chapters
+    def __getChapters(self, sectionName):
+        chapters = self.__chapters
+        if sectionName not in chapters:
+            chapters[sectionName] = manual_xml_data_reader.getChapters(self.__isBootcampEnabled(), sectionName)
+        return chapters[sectionName]
 
     def __isBootcampEnabled(self):
         return self.lobbyContext.getServerSettings().isBootcampEnabled()

@@ -151,6 +151,7 @@ class PREBATTLE_ACTION_NAME(object):
     EPIC_DEV = 'epicBattle'
     EPIC = 'epicQueue'
     EPIC_FORCED = 'epicForced'
+    EVENT_BATTLE = 'eventBattle'
 
 
 class PREBATTLE_INIT_STEP(object):
@@ -236,6 +237,8 @@ class PREBATTLE_RESTRICTION(object):
     VEHICLE_ROTATION_GROUP_LOCKED = 'vehicle/rotationGroupLocked'
     CREW_NOT_FULL = 'crew/notFull'
     TUTORIAL_NOT_FINISHED = 'tutorial/notFinished'
+    EVENT_NOT_ENOUGHT_ENERGY = 'event/notEnoughtEnergy'
+    EVENT_GENERAL_LOCKED = 'event/generalLocked'
     SERVER_LIMITS = (LIMIT_MIN_COUNT,
      LIMIT_MAX_COUNT,
      LIMIT_LEVEL,
@@ -320,6 +323,11 @@ class UNIT_RESTRICTION(object):
     UNIT_MIN_CLAN_MEMBERS = 40
     UNIT_WILL_SEARCH_PLAYERS = 41
     UNIT_IS_IN_PLAYERS_MATCHING = 42
+    EVENT_UNIT_GENERAL_NOT_VALID = 43
+    EVENT_UNIT_GENERAL_INACTIVE = 44
+    EVENT_UNIT_GENERAL_IS_LOCKED = 45
+    COMMANDER_GENERAL_NOT_SELECTED = 46
+    EVENT_UNIT_NOT_ENOUGHT_ENERGY = 47
 
 
 class PRE_QUEUE_RESTRICTION(object):

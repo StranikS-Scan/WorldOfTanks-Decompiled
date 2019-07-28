@@ -573,6 +573,7 @@ class TOOLTIPS(object):
     REDBUTTON_DISABLED_LIMITS_CLASSES_AT_SPG_BODY = '#tooltips:redButton/disabled/limits/classes/AT-SPG/body'
     HANGAR_STARTBTN_SQUADNOTREADY_HEADER = '#tooltips:hangar/startBtn/squadNotReady/header'
     HANGAR_STARTBTN_SQUADNOTREADY_BODY = '#tooltips:hangar/startBtn/squadNotReady/body'
+    HANGAR_STARTBTN_SQUADNOTREADY_BODYEVENT = '#tooltips:hangar/startBtn/squadNotReady/bodyEvent'
     HANGAR_STARTBTN_PREVIEW_BODY = '#tooltips:hangar/startBtn/preview/body'
     HANGAR_TANKCARUSEL_WRONGSQUADVEHICLE_HEADER = '#tooltips:hangar/tankCarusel/wrongSquadVehicle/header'
     HANGAR_TANKCARUSEL_WRONGSQUADVEHICLE_BODY = '#tooltips:hangar/tankCarusel/wrongSquadVehicle/body'
@@ -2119,6 +2120,12 @@ class TOOLTIPS(object):
     QUESTS_CONDITION_ACHIEVEMENTS_OTHERS = '#tooltips:quests/condition/achievements/others'
     QUESTS_BONUSES_TOKEN_HEADER = '#tooltips:quests/bonuses/token/header'
     QUESTS_BONUSES_TOKEN_BODY = '#tooltips:quests/bonuses/token/body'
+    QUESTS_BONUSES_TOKEN_HEADER_SE1_ENERGY = '#tooltips:quests/bonuses/token/header/se1_energy'
+    QUESTS_BONUSES_TOKEN_BODY_SE1_ENERGY = '#tooltips:quests/bonuses/token/body/se1_energy'
+    QUESTS_BONUSES_TOKEN_HEADER_FRONT_MARK_0 = '#tooltips:quests/bonuses/token/header/front_mark_0'
+    QUESTS_BONUSES_TOKEN_BODY_FRONT_MARK_0 = '#tooltips:quests/bonuses/token/body/front_mark_0'
+    QUESTS_BONUSES_TOKEN_HEADER_FRONT_MARK_1 = '#tooltips:quests/bonuses/token/header/front_mark_1'
+    QUESTS_BONUSES_TOKEN_BODY_FRONT_MARK_1 = '#tooltips:quests/bonuses/token/body/front_mark_1'
     HANGAR_HEADER_WGMONEYTOOLTIP_GOLDNAME = '#tooltips:hangar/header/wgmoneyTooltip/goldName'
     HANGAR_HEADER_WGMONEYTOOLTIP_CREDITSNAME = '#tooltips:hangar/header/wgmoneyTooltip/creditsName'
     HANGAR_HEADER_WGMONEYTOOLTIP_PURCHASEDVALUE = '#tooltips:hangar/header/wgmoneyTooltip/purchasedValue'
@@ -2658,6 +2665,8 @@ class TOOLTIPS(object):
     NOTRECRUITEDTANKMAN_TWITCH3_DESC = '#tooltips:notrecruitedtankman/twitch3/desc'
     NOTRECRUITEDTANKMAN_TWITCH4_LABEL = '#tooltips:notrecruitedtankman/twitch4/label'
     NOTRECRUITEDTANKMAN_TWITCH4_DESC = '#tooltips:notrecruitedtankman/twitch4/desc'
+    NOTRECRUITEDTANKMAN_TWITCH5_LABEL = '#tooltips:notrecruitedtankman/twitch5/label'
+    NOTRECRUITEDTANKMAN_TWITCH5_DESC = '#tooltips:notrecruitedtankman/twitch5/desc'
     NOTRECRUITEDTANKMAN_NY19MEN_LABEL = '#tooltips:notrecruitedtankman/ny19men/label'
     NOTRECRUITEDTANKMAN_NY19MEN_DESC = '#tooltips:notrecruitedtankman/ny19men/desc'
     NOTRECRUITEDTANKMAN_NY19WOMAN_LABEL = '#tooltips:notrecruitedtankman/ny19woman/label'
@@ -3232,6 +3241,7 @@ class TOOLTIPS(object):
      NOTRECRUITEDTANKMAN_TWITCH1_LABEL,
      NOTRECRUITEDTANKMAN_TWITCH3_LABEL,
      NOTRECRUITEDTANKMAN_TWITCH4_LABEL,
+     NOTRECRUITEDTANKMAN_TWITCH5_LABEL,
      NOTRECRUITEDTANKMAN_NY19MEN_LABEL,
      NOTRECRUITEDTANKMAN_NY19WOMAN_LABEL)
     NOTRECRUITEDTANKMAN_ALL_DESC_ENUM = (NOTRECRUITEDTANKMAN_BASE_DESC,
@@ -3241,9 +3251,14 @@ class TOOLTIPS(object):
      NOTRECRUITEDTANKMAN_TWITCH1_DESC,
      NOTRECRUITEDTANKMAN_TWITCH3_DESC,
      NOTRECRUITEDTANKMAN_TWITCH4_DESC,
+     NOTRECRUITEDTANKMAN_TWITCH5_DESC,
      NOTRECRUITEDTANKMAN_NY19MEN_DESC,
      NOTRECRUITEDTANKMAN_NY19WOMAN_DESC)
     QUESTS_AWARDS_VEHICLERENT_RENTLEFT_ENUM = (QUESTS_AWARDS_VEHICLERENT_RENTLEFT_RENTDAYS, QUESTS_AWARDS_VEHICLERENT_RENTLEFT_RENTBATTLES, QUESTS_AWARDS_VEHICLERENT_RENTLEFT_RENTWINS)
+    QUESTS_BONUSES_TOKEN_HEADER_ENUM = (QUESTS_BONUSES_TOKEN_HEADER_SE1_ENERGY, QUESTS_BONUSES_TOKEN_HEADER_FRONT_MARK_0, QUESTS_BONUSES_TOKEN_HEADER_FRONT_MARK_1)
+    QUESTS_BONUSES_TOKEN_BODY_ENUM = (QUESTS_BONUSES_TOKEN_BODY_SE1_ENERGY, QUESTS_BONUSES_TOKEN_BODY_FRONT_MARK_0, QUESTS_BONUSES_TOKEN_BODY_FRONT_MARK_1)
+    QUESTS_BONUSES_TOKEN_HEADER_ENUM = (QUESTS_BONUSES_TOKEN_HEADER_SE1_ENERGY, QUESTS_BONUSES_TOKEN_HEADER_FRONT_MARK_0, QUESTS_BONUSES_TOKEN_HEADER_FRONT_MARK_1)
+    QUESTS_BONUSES_TOKEN_BODY_ENUM = (QUESTS_BONUSES_TOKEN_BODY_SE1_ENERGY, QUESTS_BONUSES_TOKEN_BODY_FRONT_MARK_0, QUESTS_BONUSES_TOKEN_BODY_FRONT_MARK_1)
 
     @classmethod
     def elen_summary_rank(cls, key0):
@@ -3613,3 +3628,31 @@ class TOOLTIPS(object):
             return None
         else:
             return outcome
+
+    @classmethod
+    def getBonusesTokenHeader(cls, styleId):
+        outcome = '#tooltips:quests/bonuses/token/header/{}'.format(styleId)
+        if outcome not in cls.QUESTS_BONUSES_TOKEN_HEADER_ENUM:
+            LOG_WARNING('Localization key "{}" not found'.format(outcome))
+            return None
+        else:
+            return outcome
+
+    @classmethod
+    def getBonusesTokenBody(cls, styleId):
+        outcome = '#tooltips:quests/bonuses/token/body/{}'.format(styleId)
+        if outcome not in cls.QUESTS_BONUSES_TOKEN_BODY_ENUM:
+            LOG_WARNING('Localization key "{}" not found'.format(outcome))
+            return None
+        else:
+            return outcome
+
+    @classmethod
+    def hasBonusesTokenHeader(cls, styleId):
+        outcome = '#tooltips:quests/bonuses/token/header/{}'.format(styleId)
+        return outcome in cls.QUESTS_BONUSES_TOKEN_HEADER_ENUM
+
+    @classmethod
+    def hasBonusesTokenBody(cls, styleId):
+        outcome = '#tooltips:quests/bonuses/token/body/{}'.format(styleId)
+        return outcome in cls.QUESTS_BONUSES_TOKEN_BODY_ENUM

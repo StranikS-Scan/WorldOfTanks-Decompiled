@@ -6,6 +6,7 @@ import BigWorld
 from CurrentVehicle import g_currentVehicle
 from constants import QUEUE_TYPE
 from debug_utils import LOG_DEBUG
+from constants import EVENT
 from gui.prb_control.prb_getters import isInEventBattlesQueue
 from helpers import dependency
 from skeletons.gui.server_events import IEventsCache
@@ -85,7 +86,7 @@ class _EventVehicleEntityExtension(object):
 
     def _makeQueueCtxByAction(self, action=None):
         from gui.prb_control.entities.event.pre_queue.ctx import EventBattleQueueCtx
-        return EventBattleQueueCtx(vehInvIDs=[g_currentVehicle.item.invID], waitingID='prebattle/join')
+        return EventBattleQueueCtx(EVENT.INVALID_GENERAL_ID)
 
     def _onEventsCacheResync(self):
         if self.__isEventsEnabled != self.eventsCache.isEventEnabled():

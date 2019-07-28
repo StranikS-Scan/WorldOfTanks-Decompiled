@@ -31,6 +31,7 @@ from skeletons.connection_mgr import IConnectionManager
 from skeletons.gameplay import IGameplayLogic, PlayerEventID
 from skeletons.gui.app_loader import IAppLoader
 from skeletons.gui.battle_results import IBattleResultsService
+from skeletons.gui.event_hangar_sound_controller import IEventHangarSoundController
 from skeletons.gui.shared.utils import IHangarSpace, IRaresCache
 from skeletons.gui.web import IWebController
 from skeletons.gui.game_control import IGameStateTracker
@@ -41,6 +42,7 @@ from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.sounds import ISoundsController
 from skeletons.gui.event_boards_controllers import IEventBoardController
+from skeletons.gui.game_event_controller import IGameEventController
 from skeletons.helpers.statistics import IStatisticsCollector
 try:
     from gui import mods
@@ -70,11 +72,14 @@ class ServicesLocator(object):
     hangarSpace = dependency.descriptor(IHangarSpace)
     rareAchievesCache = dependency.descriptor(IRaresCache)
     appLoader = dependency.descriptor(IAppLoader)
+    gameEventController = dependency.descriptor(IGameEventController)
+    evHangarSoundController = dependency.descriptor(IEventHangarSoundController)
 
     @classmethod
     def clear(cls):
         cls.itemsCache.clear()
         cls.goodiesCache.clear()
+        cls.gameEventController.clear()
         cls.eventsCache.clear()
         cls.lobbyContext.clear()
 
@@ -89,6 +94,8 @@ def onAccountShowGUI(ctx):
     ServicesLocator.statsCollector.noteHangarLoadingState(HANGAR_LOADING_STATE.QUESTS_SYNC)
     ServicesLocator.eventsCache.start()
     yield ServicesLocator.eventsCache.update()
+    ServicesLocator.gameEventController.start()
+    ServicesLocator.evHangarSoundController.start()
     ServicesLocator.statsCollector.noteHangarLoadingState(HANGAR_LOADING_STATE.USER_SERVER_SETTINGS_SYNC)
     yield ServicesLocator.settingsCache.update()
     if not ServicesLocator.itemsCache.isSynced():
@@ -152,6 +159,8 @@ def onAvatarBecomePlayer():
     ServicesLocator.soundCtrl.stop()
     ServicesLocator.webCtrl.stop(logout=False)
     ServicesLocator.eventsCache.stop()
+    ServicesLocator.gameEventController.stop()
+    ServicesLocator.evHangarSoundController.stop()
     g_prbLoader.onAvatarBecomePlayer()
     ServicesLocator.gameState.onAvatarBecomePlayer()
     g_clanCache.onAvatarBecomePlayer()
@@ -302,6 +311,7 @@ def onDisconnected():
     ServicesLocator.gameState.onDisconnected()
     ServicesLocator.webCtrl.stop()
     ServicesLocator.eventsCache.getPersonalMissions().stop()
+    ServicesLocator.evHangarSoundController.stop()
     g_wgncProvider.clear()
     ServicesLocator.clear()
     UsersInfoHelper.clear()

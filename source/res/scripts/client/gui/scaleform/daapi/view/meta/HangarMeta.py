@@ -19,6 +19,9 @@ class HangarMeta(View):
     def onTeaserClick(self):
         self._printOverrideError('onTeaserClick')
 
+    def onEventBannerClick(self):
+        self._printOverrideError('onEventBannerClick')
+
     def as_setCrewEnabledS(self, value):
         return self.flashObject.as_setCrewEnabled(value) if self._isDAAPIInited() else None
 
@@ -72,3 +75,9 @@ class HangarMeta(View):
 
     def as_setNotificationEnabledS(self, value):
         return self.flashObject.as_setNotificationEnabled(value) if self._isDAAPIInited() else None
+
+    def as_showEventBannerS(self, isVisible):
+        return self.flashObject.as_showEventBanner(isVisible) if self._isDAAPIInited() else None
+
+    def as_setProgressBannerInfoS(self, data):
+        return self.flashObject.as_setProgressBannerInfo(data) if self._isDAAPIInited() else None

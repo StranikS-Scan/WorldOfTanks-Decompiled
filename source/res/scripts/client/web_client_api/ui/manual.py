@@ -8,7 +8,7 @@ from web_client_api import W2CSchema, w2c, Field
 
 def _chapterIndexValidator(key, _):
     settings = dependency.instance(ILobbyContext).getServerSettings()
-    return key in getPagesIndexesList(settings.isBootcampEnabled())
+    return key in getPagesIndexesList(settings.isBootcampEnabled(), 'chapters')
 
 
 class _OpenManualWindowSchema(W2CSchema):

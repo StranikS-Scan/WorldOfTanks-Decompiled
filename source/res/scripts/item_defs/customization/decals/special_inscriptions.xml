@@ -1057,6 +1057,63 @@
     <type>	INSCRIPTION	</type>
   </itemGroup>
   <itemGroup>
+    <userString>	#vehicle_customization:inscription/historical	</userString>
+    <season>	ALL	</season>
+    <historical>	true	</historical>
+    <priceGroup>	inscriptions notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <nations>	ussr	</nations>
+      </include>
+    </vehicleFilter>
+    <decal>
+      <id>	719	</id>
+      <texture>	gui/maps/vehicles/decals/inscriptions/special/inscription_255.dds	</texture>
+      <userString>	#vehicle_customization:inscription/historical/inscription_255	</userString>
+      <mirror>	false	</mirror>
+    </decal>
+    <name>	strong	</name>
+    <type>	INSCRIPTION	</type>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:inscription/historical	</userString>
+    <season>	ALL	</season>
+    <historical>	true	</historical>
+    <priceGroup>	inscriptions notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <nations>	uk	</nations>
+      </include>
+    </vehicleFilter>
+    <decal>
+      <id>	722	</id>
+      <texture>	gui/maps/vehicles/decals/inscriptions/special/inscription_256.dds	</texture>
+      <userString>	#vehicle_customization:inscription/historical/inscription_256	</userString>
+      <mirror>	false	</mirror>
+    </decal>
+    <name>	desert_rats	</name>
+    <type>	INSCRIPTION	</type>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:inscription/historical	</userString>
+    <season>	ALL	</season>
+    <historical>	true	</historical>
+    <priceGroup>	inscriptions notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <nations>	usa	</nations>
+      </include>
+    </vehicleFilter>
+    <decal>
+      <id>	724	</id>
+      <texture>	gui/maps/vehicles/decals/inscriptions/special/inscription_257.dds	</texture>
+      <userString>	#vehicle_customization:inscription/historical/inscription_257	</userString>
+      <mirror>	false	</mirror>
+    </decal>
+    <name>	tunisia_dazzle	</name>
+    <type>	INSCRIPTION	</type>
+  </itemGroup>
+  <itemGroup>
     <name>	ranked 4th	</name>
     <userString>	#vehicle_customization:inscription/special	</userString>
     <season>	ALL	</season>

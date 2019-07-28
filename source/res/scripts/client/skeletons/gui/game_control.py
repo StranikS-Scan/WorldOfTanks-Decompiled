@@ -904,6 +904,9 @@ class IManualController(IGameController):
     def runBootcamp(self):
         raise NotImplementedError
 
+    def getChapterUIData(self, chapterIndex, sectionName):
+        raise NotImplementedError
+
 
 class ICalendarController(IGameController):
     pass

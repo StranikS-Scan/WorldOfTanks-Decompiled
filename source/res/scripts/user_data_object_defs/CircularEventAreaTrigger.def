@@ -1,0 +1,33 @@
+<CircularEventAreaTrigger.def>
+  <Domain>	NONE	</Domain>
+  <Properties>
+    <Name>
+      <Type>	STRING	</Type>
+      <Editable>	True	</Editable>
+    </Name>
+    <ReactOn>
+      <Type>	STRING	</Type>
+      <Editable>	True	</Editable>
+    </ReactOn>
+    <ReactOnKilled>
+      <Type>	STRING	</Type>
+      <Editable>	True	</Editable>
+    </ReactOnKilled>
+    <ReactOnTeam>
+      <Type>	STRING	</Type>
+      <Editable>	True	</Editable>
+    </ReactOnTeam>
+    <ActivationsCount>
+      <Type>	UINT8	</Type>
+      <Editable>	True	</Editable>
+    </ActivationsCount>
+    <Cooldown>
+      <Type>	FLOAT	</Type>
+      <Editable>	True	</Editable>
+    </Cooldown>
+    <Radius>
+      <Type>	FLOAT	</Type>
+      <Editable>	True	</Editable>
+    </Radius>
+  </Properties>
+</CircularEventAreaTrigger.def>

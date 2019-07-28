@@ -132,14 +132,16 @@ class BombersWing(CallbackDelayer):
         return (flatDir, flatNorm)
 
     def __calculateOffset(self, offset, flatDirAndNorm):
-        return offset[2] * flatDirAndNorm[0] + offset[0] * flatDirAndNorm[1]
+        latero, ante = offset
+        flatDir, flatNorm = flatDirAndNorm
+        return ante * flatDir + latero * flatNorm
 
     def __calculateSpeed(self, start, finish):
         return (finish.position - start.position).length / (finish.time - start.time)
 
     def __readData(self, equipmentID):
         self.__equipment = equipment = vehicles.g_cache.equipments()[equipmentID]
-        self.__offsets = zip(equipment.antepositions, [0.0] * len(equipment.antepositions), equipment.lateropositions)
+        self.__offsets = zip(equipment.lateropositions, equipment.antepositions)
         self.__fixedSpeed = equipment.speed
         self.__areaLength = equipment.areaLength * AREA_LENGTH_SCALE_FACTOR
         return (equipment.modelName, equipment.soundEvent)

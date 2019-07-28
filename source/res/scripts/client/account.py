@@ -182,6 +182,7 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         self.clanMembers = g_accountRepository.clanMembers
         self.eventsData = g_accountRepository.eventsData
         self.personalMissionsLock = g_accountRepository.personalMissionsLock
+        self.generalsLock = g_accountRepository.generalsLock
         self.isInRandomQueue = False
         self.isInTutorialQueue = False
         self.isInBootcampQueue = False
@@ -817,10 +818,9 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         if not events.isPlayerEntityChanging:
             self.base.doCmdInt3(AccountCommands.REQUEST_ID_NO_RESPONSE, AccountCommands.CMD_DEQUEUE_UNIT_ASSEMBLER, 0, 0, 0)
 
-    def enqueueEventBattles(self, vehInvIDs):
+    def enqueueEventBattles(self, generalID):
         if not events.isPlayerEntityChanging:
-            arr = [len(vehInvIDs)] + vehInvIDs
-            self.base.doCmdIntArr(AccountCommands.REQUEST_ID_NO_RESPONSE, AccountCommands.CMD_ENQUEUE_EVENT_BATTLES, arr)
+            self.base.doCmdIntArr(AccountCommands.REQUEST_ID_NO_RESPONSE, AccountCommands.CMD_ENQUEUE_EVENT_BATTLES, [generalID])
 
     def dequeueEventBattles(self):
         if not events.isPlayerEntityChanging:
@@ -1044,6 +1044,31 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         self._doCmdIntStrArr(AccountCommands.CMD_CHOOSE_QUEST_REWARD, eventType, strArr, proxy)
         return
 
+    def buyGeneralLevel(self, generalId, generalLevel, callback=None):
+        if callback is not None:
+            proxy = lambda requestID, resultID, errorCode: callback(resultID, errorCode)
+        else:
+            proxy = None
+        self._doCmdIntArr(AccountCommands.CMD_BUY_GENERAL_LEVEL, [generalId, generalLevel], proxy)
+        return
+
+    def buyEnergy(self, energyID, callback=None):
+        if callback is not None:
+            proxy = lambda requestID, resultID, errorCode: callback(resultID, errorCode)
+        else:
+            proxy = None
+        self._doCmdStr(AccountCommands.CMD_BUY_ENERGY, energyID, proxy)
+        return
+
+    def changeSelectedGeneral(self, generalId, generalLevel, generalNation, callback=None):
+        if callback is not None:
+            proxy = lambda requestID, resultID, errorCode: callback(resultID, errorCode)
+        else:
+            proxy = None
+        parameters = [generalId, generalLevel, generalNation]
+        self._doCmdIntArr(AccountCommands.CMD_CHANGE_SELECTED_GENERAL, parameters, proxy)
+        return
+
     def logClientSystem(self, stats):
         self.base.logClientSystem(stats)
 
@@ -1157,6 +1182,7 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
             self.__synchronizeCacheDict(self.clanMembers, diff.get('cache', None), 'clanMembers', 'replace', events.onClanMembersListChanged)
             self.__synchronizeCacheDict(self.eventsData, diff, 'eventsData', 'replace', events.onEventsDataChanged)
             self.__synchronizeCacheDict(self.personalMissionsLock, diff.get('cache', None), 'potapovQuestIDs', 'replace', events.onPMLocksChanged)
+            self.__synchronizeCacheDict(self.generalsLock, diff.get('cache', None), 'generalIDsLock', 'replace', events.onGeneralLockChanged)
             self.__synchronizeCacheSimpleValue('globalRating', diff.get('account', None), 'globalRating', events.onAccountGlobalRatingChanged)
             events.onClientUpdated(diff, not triggerEvents)
             if triggerEvents and not isFullSync:
@@ -1369,6 +1395,7 @@ class _AccountRepository(object):
         self.clanMembers = {}
         self.eventsData = {}
         self.personalMissionsLock = {}
+        self.generalsLock = {}
         self.customFilesCache = CustomFilesCache.CustomFilesCache('custom_data')
         self.eventNotifications = []
         self.intUserSettings = IntUserSettings.IntUserSettings()

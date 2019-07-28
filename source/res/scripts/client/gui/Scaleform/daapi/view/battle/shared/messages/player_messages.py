@@ -62,7 +62,7 @@ class PlayerMessages(fading_messages.FadingMessages):
         if equipmentID:
             equipment = vehicles.g_cache.equipments().get(equipmentID)
             if equipment is not None:
-                postfix = '_'.join((postfix, equipment.name.split('_')[0].upper()))
+                postfix = '_'.join((postfix, self.__getEquipmentPostfix(equipment.name)))
         self.showMessage(code, {'target': getFullName(targetID, showClan=False),
          'attacker': getFullName(attackerID, showClan=False)}, extra=(('target', targetID), ('attacker', attackerID)), postfix=postfix)
         return
@@ -72,7 +72,7 @@ class PlayerMessages(fading_messages.FadingMessages):
 
     def __onCombatEquipmentUpdated(self, _, item):
         if item.getPrevStage() in (EQUIPMENT_STAGES.DEPLOYING, EQUIPMENT_STAGES.UNAVAILABLE, EQUIPMENT_STAGES.COOLDOWN) and item.getStage() == EQUIPMENT_STAGES.READY:
-            postfix = item.getDescriptor().name.split('_')[0].upper()
+            postfix = self.__getEquipmentPostfix(item.getDescriptor().name)
             self.showMessage('COMBAT_EQUIPMENT_READY', {}, postfix=postfix)
 
     def __onCombatEquipmentUsed(self, shooterID, eqID):
@@ -81,13 +81,13 @@ class PlayerMessages(fading_messages.FadingMessages):
             equipment = vehicles.g_cache.equipments().get(eqID)
             getFullName = battleCxt.getPlayerFullName
             if equipment is not None:
-                postfix = equipment.name.split('_')[0].upper()
+                postfix = self.__getEquipmentPostfix(equipment.name)
                 self.showMessage('COMBAT_EQUIPMENT_USED', {'player': getFullName(shooterID, showClan=False)}, extra=(('player', shooterID),), postfix=postfix)
         else:
             equipment = vehicles.g_cache.equipments().get(eqID)
             if equipment is None:
                 return
-            postfix = equipment.name.split('_')[0].upper()
+            postfix = self.__getEquipmentPostfix(equipment.name)
             if postfix in EPIC_SOUND.BF_EB_ABILITY_LIST:
                 soundNotifications = avatar_getter.getSoundNotifications()
                 if soundNotifications is not None:
@@ -95,3 +95,10 @@ class PlayerMessages(fading_messages.FadingMessages):
                     if notification is not None:
                         soundNotifications.play(notification)
         return
+
+    @staticmethod
+    def __getEquipmentPostfix(name):
+        if 'arcade_bomber_attack' in name:
+            return 'BOMBER_ATTACK'
+        name = name.replace('arcade_', '')
+        return name.split('_')[0].upper()

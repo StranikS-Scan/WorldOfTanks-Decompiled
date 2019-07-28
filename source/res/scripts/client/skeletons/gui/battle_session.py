@@ -117,6 +117,14 @@ class IDynamicControllersLocator(object):
     def battleField(self):
         raise NotImplementedError
 
+    @property
+    def battleHints(self):
+        raise NotImplementedError
+
+    @property
+    def lootSign(self):
+        raise NotImplementedError
+
 
 class ISquadInvitationsHandler(object):
     __slots__ = ()
@@ -242,6 +250,9 @@ class IClientArenaVisitor(object):
         raise NotImplementedError
 
     def hasCustomAllyDamageEffect(self):
+        raise NotImplementedError
+
+    def getComponentSystem(self):
         raise NotImplementedError
 
 

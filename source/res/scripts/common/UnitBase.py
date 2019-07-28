@@ -277,6 +277,7 @@ class UNIT_NOTIFY_CMD:
     REMOVED_VEHICLE = 13
     UPD_VEHICLE_DESCRS = 14
     REMOVED_VEHICLE_MAX_SPG_EXCEED = 15
+    EVENT_WRONG_FRONT = 16
 
 
 class CLIENT_UNIT_CMD:
@@ -672,9 +673,9 @@ class UnitBase(OpsUnpacker):
             unpacking = unpacking[self._SLOT_PLAYERS_SIZE:]
 
         for i in xrange(0, playerCount):
-            blockLength, accountDBID, accountID, timeJoin, role, igrType, rating, peripheryID, clanDBID, isPremium, nickName, clanAbbrev, badges = self.__unpackPlayerData(unpacking)
+            blockLength, accountDBID, accountID, timeJoin, role, igrType, rating, peripheryID, clanDBID, isPremium, nickName, clanAbbrev, badges, eventData = self.__unpackPlayerData(unpacking)
             unpacking = unpacking[blockLength:]
-            self._addPlayer(accountDBID, accountID=accountID, timeJoin=timeJoin, role=role, rating=rating, nickName=nickName, clanAbbrev=clanAbbrev, peripheryID=peripheryID, igrType=igrType, clanDBID=clanDBID, badges=badges, isPremium=isPremium)
+            self._addPlayer(accountDBID, accountID=accountID, timeJoin=timeJoin, role=role, rating=rating, nickName=nickName, clanAbbrev=clanAbbrev, peripheryID=peripheryID, igrType=igrType, clanDBID=clanDBID, badges=badges, isPremium=isPremium, eventData=eventData)
 
         self._extras = self._extrasHandler.unpack(unpacking[:extrasLen])
         unpacking = unpacking[extrasLen:]
@@ -1035,8 +1036,8 @@ class UnitBase(OpsUnpacker):
         return packedOps[opLen:]
 
     def _unpackPlayer(self, packedOps):
-        blockLength, accountDBID, accountID, timeJoin, role, igrType, rating, peripheryID, clanDBID, isPremium, nickName, clanAbbrev, badges = self.__unpackPlayerData(packedOps)
-        playerInfo = dict(accountID=accountID, role=role, timeJoin=timeJoin, rating=rating, nickName=nickName, clanAbbrev=clanAbbrev, peripheryID=peripheryID, igrType=igrType, clanDBID=clanDBID, badges=badges, isPremium=isPremium)
+        blockLength, accountDBID, accountID, timeJoin, role, igrType, rating, peripheryID, clanDBID, isPremium, nickName, clanAbbrev, badges, eventData = self.__unpackPlayerData(packedOps)
+        playerInfo = dict(accountID=accountID, role=role, timeJoin=timeJoin, rating=rating, nickName=nickName, clanAbbrev=clanAbbrev, peripheryID=peripheryID, igrType=igrType, clanDBID=clanDBID, badges=badges, isPremium=isPremium, eventData=eventData)
         self._addPlayer(accountDBID, **playerInfo)
         return packedOps[blockLength:]
 
@@ -1123,6 +1124,11 @@ class UnitBase(OpsUnpacker):
         packed += struct.pack('<B', len(badges))
         if badges:
             packed += struct.pack(('<%dI' % len(badges)), *badges)
+        extraData = kwargs.get('extraData', {})
+        eventData = extraData.get('eventEnqueueData', [])
+        packed += struct.pack('<B', len(eventData))
+        if eventData:
+            packed += struct.pack(('<%di' % len(eventData)), *eventData)
         return packed
 
     def __unpackPlayerData(self, packedData):
@@ -1131,14 +1137,8 @@ class UnitBase(OpsUnpacker):
         nickName, lenNickBytes = unpackPascalString(packedData, sz)
         clanAbbrev, lenClanBytes = unpackPascalString(packedData, sz + lenNickBytes)
         blockLength = sz + lenNickBytes + lenClanBytes
-        badgesLength = struct.unpack_from('<B', packedData, blockLength)[0]
-        blockLength += struct.calcsize('<B')
-        if badgesLength:
-            fmt = '<%dI' % badgesLength
-            badges = list(struct.unpack_from(fmt, packedData, blockLength))
-            blockLength += struct.calcsize(fmt)
-        else:
-            badges = list()
+        badges, blockLength = self.__unpackContainerData(packedData, blockLength)
+        eventData, blockLength = self.__unpackEventContainerData(packedData, blockLength)
         return (blockLength,
          accountDBID,
          accountID,
@@ -1151,4 +1151,25 @@ class UnitBase(OpsUnpacker):
          isPremium,
          nickName,
          clanAbbrev,
-         badges)
+         badges,
+         eventData)
+
+    @staticmethod
+    def __unpackContainerData(packedData, blockLength):
+        return UnitBase.__unpackContainerDataWithFormat(packedData, blockLength, '<%dI')
+
+    @staticmethod
+    def __unpackEventContainerData(packedData, blockLength):
+        return UnitBase.__unpackContainerDataWithFormat(packedData, blockLength, '<%di')
+
+    @staticmethod
+    def __unpackContainerDataWithFormat(packedData, blockLength, formatData):
+        containerLength = struct.unpack_from('<B', packedData, blockLength)[0]
+        blockLength += struct.calcsize('<B')
+        if containerLength:
+            fmt = formatData % containerLength
+            container = list(struct.unpack_from(fmt, packedData, blockLength))
+            blockLength += struct.calcsize(fmt)
+        else:
+            container = list()
+        return (container, blockLength)

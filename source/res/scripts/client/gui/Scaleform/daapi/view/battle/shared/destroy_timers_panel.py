@@ -25,6 +25,7 @@ _TIMERS_PRIORITY = {(_TIMER_STATES.STUN, _TIMER_STATES.WARNING_VIEW): 1,
  (_TIMER_STATES.OVERTURNED, _TIMER_STATES.CRITICAL_VIEW): 1,
  (_TIMER_STATES.DROWN, _TIMER_STATES.CRITICAL_VIEW): 1,
  (_TIMER_STATES.DEATH_ZONE, _TIMER_STATES.CRITICAL_VIEW): 1,
+ (_TIMER_STATES.LAST_STAND, _TIMER_STATES.CRITICAL_VIEW): 1,
  (_TIMER_STATES.FIRE, _TIMER_STATES.WARNING_VIEW): 2,
  (_TIMER_STATES.DROWN, _TIMER_STATES.WARNING_VIEW): 3,
  (_TIMER_STATES.OVERTURNED, _TIMER_STATES.WARNING_VIEW): 4,
@@ -502,6 +503,13 @@ class DestroyTimersPanel(DestroyTimersPanelMeta):
             self._hideTimer(_TIMER_STATES.INSPIRE_CD)
         return
 
+    def __updateLastStandTimer(self, destructionDelay):
+        if destructionDelay:
+            self._timers.addTimer(_TIMER_STATES.LAST_STAND, _TIMER_STATES.CRITICAL_VIEW, destructionDelay, None)
+        else:
+            self._hideTimer(_TIMER_STATES.LAST_STAND)
+        return
+
     def __onVehicleControlling(self, vehicle):
         ctrl = self.sessionProvider.shared.vehicleState
         checkStatesIDs = (VEHICLE_VIEW_STATE.FIRE,
@@ -535,6 +543,8 @@ class DestroyTimersPanel(DestroyTimersPanelMeta):
             self.__updateSmokeTimer(value)
         elif state == VEHICLE_VIEW_STATE.INSPIRE:
             self.__updateInspireTimer(**value)
+        elif state == VEHICLE_VIEW_STATE.LAST_STAND:
+            self.__updateLastStandTimer(**value)
         elif state in (VEHICLE_VIEW_STATE.DESTROYED, VEHICLE_VIEW_STATE.CREW_DEACTIVATED):
             self.__hideAll()
 

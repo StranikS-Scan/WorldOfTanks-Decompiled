@@ -371,7 +371,7 @@ class _VehicleInfo(object):
 
 
 class VehicleDetailedInfo(_VehicleInfo):
-    __slots__ = ('_vehicle', '_killerID', '_achievementsIDs', '_critsInfo', '_spotted', '_piercings', '_piercingsReceived', '_damageDealt', '_tdamageDealt', '_sniperDamageDealt', '_damageBlockedByArmor', '_damageAssistedTrack', '_damageAssistedRadio', '_damageAssistedStun', '_stunNum', '_stunDuration', '_rickochetsReceived', '_noDamageDirectHitsReceived', '_targetKills', '_directHits', '_directHitsReceived', '_explosionHits', '_explosionHitsReceived', '_shots', '_kills', '_tkills', '_damaged', '_mileage', '_capturePoints', '_droppedCapturePoints', '_xp', '_fire', '_isTeamKiller', '_isKilledByTeamKiller', '_rollouts', '_respawns', '_extPublic', '_deathCount', '_equipmentDamageDealt', '_equipmentDamageAssisted', '_xpForAttack', '_xpForAssist', '_xpOther', '_xpPenalty')
+    __slots__ = ('_vehicle', '_killerID', '_achievementsIDs', '_critsInfo', '_spotted', '_piercings', '_piercingsReceived', '_damageDealt', '_tdamageDealt', '_sniperDamageDealt', '_damageBlockedByArmor', '_damageAssistedTrack', '_damageAssistedRadio', '_damageAssistedStun', '_stunNum', '_stunDuration', '_rickochetsReceived', '_noDamageDirectHitsReceived', '_targetKills', '_directHits', '_directHitsReceived', '_explosionHits', '_explosionHitsReceived', '_shots', '_kills', '_tkills', '_damaged', '_mileage', '_capturePoints', '_droppedCapturePoints', '_xp', '_fire', '_isTeamKiller', '_isKilledByTeamKiller', '_rollouts', '_respawns', '_extPublic', '_deathCount', '_equipmentDamageDealt', '_equipmentDamageAssisted', '_xpForAttack', '_xpForAssist', '_xpOther', '_xpPenalty', '_generalID', '_eventPoints', '_generalPoints', '_generalLevel', '_frontLevel', '_checkpointProgress', '_healthProgress')
 
     def __init__(self, vehicleID, vehicle, player, deathReason=DEATH_REASON_ALIVE):
         super(VehicleDetailedInfo, self).__init__(vehicleID, player, deathReason)
@@ -419,6 +419,13 @@ class VehicleDetailedInfo(_VehicleInfo):
         self._xpOther = 0
         self._xpPenalty = 0
         self._isKilledByTeamKiller = False
+        self._generalID = -1
+        self._generalLevel = 0
+        self._eventPoints = 0
+        self._generalPoints = 0
+        self._frontLevel = 0
+        self._checkpointProgress = (0, 0)
+        self._healthProgress = (0, 0)
 
     @property
     def vehicle(self):
@@ -616,6 +623,34 @@ class VehicleDetailedInfo(_VehicleInfo):
     def xpPenalty(self):
         return self._xpPenalty
 
+    @property
+    def eventPoints(self):
+        return self._eventPoints
+
+    @property
+    def generalPoints(self):
+        return self._generalPoints
+
+    @property
+    def generalID(self):
+        return self._generalID
+
+    @property
+    def generalLevel(self):
+        return self._generalLevel
+
+    @property
+    def frontLevel(self):
+        return self._frontLevel
+
+    @property
+    def checkpointProgress(self):
+        return self._checkpointProgress
+
+    @property
+    def healthProgress(self):
+        return self._healthProgress
+
     def haveInteractionDetails(self):
         return self._spotted != 0 or self._deathReason > DEATH_REASON_ALIVE or self._directHits != 0 or self._explosionHits != 0 or self._piercings != 0 or self._damageDealt != 0 or self.damageAssisted != 0 or self.damageAssistedStun != 0 or self.stunNum != 0 or self.critsCount != 0 or self._fire != 0 or self._targetKills != 0 or self.stunDuration != 0 or self._damageBlockedByArmor != 0
 
@@ -672,6 +707,13 @@ class VehicleDetailedInfo(_VehicleInfo):
         info._deathCount = vehicleRecords['deathCount']
         info._extPublic = vehicleRecords['extPublic']
         info._equipmentDamageAssisted = vehicleRecords.get('damageAssistedInspire', 0) + vehicleRecords.get('damageAssistedSmoke', 0)
+        info._generalID = vehicleRecords['generalID']
+        info._generalLevel = vehicleRecords['generalLevel']
+        info._eventPoints = vehicleRecords['eventPoints']
+        info._generalPoints = vehicleRecords['generalPoints']
+        info._frontLevel = vehicleRecords['generalLevel']
+        info._checkpointProgress = vehicleRecords['checkpointProgress']
+        info._healthProgress = vehicleRecords['healthProgress']
         cls._setSharedRecords(info, vehicleRecords)
         return info
 
@@ -919,6 +961,34 @@ class VehicleSummarizeInfo(_VehicleInfo):
     @property
     def equipmentDamageAssisted(self):
         return self.__accumulate('equipmentDamageAssisted')
+
+    @property
+    def generalID(self):
+        return self.__findFirstNoZero('generalID')
+
+    @property
+    def generalLevel(self):
+        return self.__findFirstNoZero('generalLevel')
+
+    @property
+    def eventPoints(self):
+        return self.__findFirstNoZero('eventPoints')
+
+    @property
+    def generalPoints(self):
+        return self.__findFirstNoZero('generalPoints')
+
+    @property
+    def frontLevel(self):
+        return self.__findFirstNoZero('frontLevel')
+
+    @property
+    def checkpointProgress(self):
+        return self.__findFirstNoZero('checkpointProgress')
+
+    @property
+    def healthProgress(self):
+        return self.__findFirstNoZero('healthProgress')
 
     def addVehicleInfo(self, info):
         self.__vehicles.append(info)

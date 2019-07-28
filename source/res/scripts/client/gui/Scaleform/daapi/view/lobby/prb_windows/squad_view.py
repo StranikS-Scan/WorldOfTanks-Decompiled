@@ -18,6 +18,7 @@ from gui.shared.utils.functions import makeTooltip
 from helpers import dependency
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.lobby_context import ILobbyContext
+from skeletons.gui.game_event_controller import IGameEventController
 
 def _unitWithPremium(unitData):
     return any((slot.player.hasPremium for slot in unitData.slotsIterator if slot.player))
@@ -169,6 +170,18 @@ class SquadView(SquadViewMeta):
 
 
 class EventSquadView(SquadView):
+    gameEventController = dependency.descriptor(IGameEventController)
+
+    def _populate(self):
+        super(EventSquadView, self)._populate()
+        self.gameEventController.onSelectedGeneralChanged += self._onSelectedGeneralChanged
+
+    def _dispose(self):
+        self.gameEventController.onSelectedGeneralChanged -= self._onSelectedGeneralChanged
+        super(EventSquadView, self)._dispose()
+
+    def _onSelectedGeneralChanged(self):
+        self._setActionButtonState()
 
     def _getHeaderPresenter(self):
         return _EventHeaderPresenter(self.prbEntity)
@@ -274,12 +287,19 @@ class _EpicHeaderPresenter(_HeaderPresenter):
 
 class _EventHeaderPresenter(_HeaderPresenter):
 
+    def __init__(self, prbEntity):
+        super(_EventHeaderPresenter, self).__init__(prbEntity)
+        self._bgImage = backport.image(R.images.gui.maps.icons.squad.backgrounds.event_squad())
+        self._isArtVisible = True
+
     def _getInfoIconTooltipParams(self):
-        vehiclesNames = [ veh.userName for veh in self._eventsCache.getEventVehicles() ]
-        tooltip = backport.text(R.strings.tooltips.squadWindow.eventVehicle(), tankName=', '.join(vehiclesNames))
+        tooltip = TOOLTIPS.SQUADWINDOW_EVENTVEHICLE
         return (makeTooltip(body=tooltip), TOOLTIPS_CONSTANTS.COMPLEX)
 
     def _getMessageParams(self):
         iconSource = backport.image(R.images.gui.maps.icons.squad.event())
         messageText = text_styles.main(backport.text(R.strings.messenger.dialogs.squadChannel.headerMsg.eventFormationRestriction()))
         return (iconSource, messageText)
+
+    def _packBonuses(self):
+        return []

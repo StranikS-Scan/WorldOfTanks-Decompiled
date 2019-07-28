@@ -4,20 +4,24 @@ import BigWorld
 from CurrentVehicle import g_currentVehicle
 from HeroTank import HeroTank
 from account_helpers.settings_core.ServerSettingsManager import SETTINGS_SECTIONS
+from adisp import process
 from constants import QUEUE_TYPE, PREBATTLE_TYPE
 from gui.Scaleform.Waiting import Waiting
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.LobbySelectableView import LobbySelectableView
+from gui.Scaleform.framework.managers.containers import POP_UP_CRITERIA
+from gui.prb_control.entities.base.ctx import PrbAction
+from gui.prb_control.entities.listener import IGlobalListener
 from gui.Scaleform.daapi.view.meta.HangarMeta import HangarMeta
 from gui.Scaleform.framework import ViewTypes
 from gui.Scaleform.framework.entities.View import CommonSoundSpaceSettings
-from gui.Scaleform.framework.managers.containers import POP_UP_CRITERIA
 from gui.Scaleform.genConsts.HANGAR_ALIASES import HANGAR_ALIASES
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
+from gui.Scaleform.locale.EVENT import EVENT
 from gui.game_control.links import URLMacros
 from gui.hangar_cameras.hangar_camera_common import CameraRelatedEvents, CameraMovementStates
 from gui.prb_control.ctrl_events import g_prbCtrlEvents
-from gui.prb_control.entities.listener import IGlobalListener
+from gui.prb_control.settings import PREBATTLE_ACTION_NAME
 from gui.promo.hangar_teaser_widget import TeaserViewer
 from gui.ranked_battles.ranked_helpers import getPrimeTimeStatusVO
 from gui.ranked_battles.constants import PrimeTimeStatus
@@ -32,6 +36,7 @@ from gui.shared.utils.functions import makeTooltip
 from gui.sounds.filters import STATE_HANGAR_FILTERED
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.impl.auxiliary.crew_books_helper import crewBooksViewedCache
+from gui.server_events.awards_formatters import AWARDS_SIZES, getEventAwardFormatter
 from helpers import dependency
 from helpers.i18n import makeString as _ms
 from helpers.statistics import HANGAR_LOADING_STATE
@@ -39,8 +44,10 @@ from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.connection_mgr import IConnectionManager
 from skeletons.gui.game_control import IIGRController
 from skeletons.gui.game_control import IRankedBattlesController, IEpicBattleMetaGameController, IPromoController
+from skeletons.gui.game_event_controller import IGameEventController
 from skeletons.gui.impl import IGuiLoader
 from skeletons.gui.lobby_context import ILobbyContext
+from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.shared.utils import IHangarSpace
 from skeletons.helpers.statistics import IStatisticsCollector
@@ -58,6 +65,7 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
      STATE_HANGAR_FILTERED: '{}_off'.format(STATE_HANGAR_FILTERED)}, exitStates={}, persistentSounds=(), stoppableSounds=(), priorities=(), autoStart=True, enterEvent='', exitEvent='')
     rankedController = dependency.descriptor(IRankedBattlesController)
     epicController = dependency.descriptor(IEpicBattleMetaGameController)
+    gameEventController = dependency.descriptor(IGameEventController)
     itemsCache = dependency.descriptor(IItemsCache)
     igrCtrl = dependency.descriptor(IIGRController)
     lobbyContext = dependency.descriptor(ILobbyContext)
@@ -67,6 +75,7 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
     hangarSpace = dependency.descriptor(IHangarSpace)
     _promoController = dependency.descriptor(IPromoController)
     _connectionMgr = dependency.descriptor(IConnectionManager)
+    eventsCache = dependency.descriptor(IEventsCache)
     _COMMON_SOUND_SPACE = __SOUND_SETTINGS
 
     def __init__(self, _=None):
@@ -109,6 +118,9 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
         self.fireEvent(LobbySimpleEvent(LobbySimpleEvent.CLOSE_HELPLAYOUT), scope=EVENT_BUS_SCOPE.LOBBY)
         self.as_closeHelpLayoutS()
 
+    def onEventBannerClick(self):
+        self.__doSelectAction(PREBATTLE_ACTION_NAME.EVENT_BATTLE)
+
     def _populate(self):
         LobbySelectableView._populate(self)
         self.__isSpaceReadyForC11n = self.hangarSpace.spaceInited
@@ -121,6 +133,7 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
         self.hangarSpace.onSpaceCreate += self.__onSpaceCreate
         self.igrCtrl.onIgrTypeChanged += self.__onIgrTypeChanged
         self.itemsCache.onSyncCompleted += self.onCacheResync
+        self.eventsCache.onSyncCompleted += self.__onEventsCacheResync
         self.rankedController.onUpdated += self.onRankedUpdate
         self.rankedController.onPrimeTimeStatusUpdated += self.__updateAlertMessage
         self.epicController.onUpdated += self.__onEpicSkillsUpdate
@@ -146,6 +159,7 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
         self.removeListener(LobbySimpleEvent.WAITING_SHOWN, self.__onWaitingShown, EVENT_BUS_SCOPE.LOBBY)
         self.removeListener(events.FightButtonEvent.FIGHT_BUTTON_UPDATE, self.__handleFightButtonUpdated, scope=EVENT_BUS_SCOPE.LOBBY)
         self.removeListener(CameraRelatedEvents.CAMERA_ENTITY_UPDATED, self.__handleSelectedEntityUpdated)
+        self.eventsCache.onSyncCompleted -= self.__onEventsCacheResync
         self.itemsCache.onSyncCompleted -= self.onCacheResync
         g_currentVehicle.onChanged -= self.__onCurrentVehicleChanged
         self.hangarSpace.onVehicleChangeStarted -= self.__onVehicleLoading
@@ -358,7 +372,7 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
         self.__updateHeaderRankedWidget()
 
     def _onPopulateEnd(self):
-        pass
+        self.fireEvent(events.HangarVehicleEvent(events.HangarVehicleEvent.LOBBY_TYPE_CHANGED, ctx={'lobbyType': 'regular'}), scope=EVENT_BUS_SCOPE.LOBBY)
 
     def __onEpicSkillsUpdate(self, *_):
         self.__updateHeader()
@@ -380,6 +394,7 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
         self.__updateHeaderRankedWidget()
         self.__updateCrew()
         self.__updateAlertMessage()
+        self.__updateEventBanner()
         Waiting.hide('updateVehicle')
 
     def __onCurrentVehicleChanged(self):
@@ -465,3 +480,39 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
         else:
             self.__isVehicleCameraReadyForC11n = vehicleEntity.state == CameraMovementStates.ON_OBJECT
             return
+
+    def __onEventsCacheResync(self):
+        self.__updateEventBanner()
+
+    def __updateEventBanner(self):
+        self.as_showEventBannerS(self.eventsCache.isEventEnabled())
+        generals = self.gameEventController.getGenerals()
+        if generals:
+            bonuses = [ self.__getBonusVO(front) for front in self.gameEventController.getFronts().itervalues() ]
+            self.as_setProgressBannerInfoS({'header': _ms(EVENT.HANGARBANNER_HEADER),
+             'generals': bonuses,
+             'energy': self.gameEventController.getEnergy().getCurrentCount(),
+             'tooltip': '',
+             'specialArgs': [],
+             'specialAlias': TOOLTIPS_CONSTANTS.EVENT_BANNER_INFO,
+             'isSpecial': True})
+
+    def __getBonusVO(self, front):
+        item = front.items[-1]
+        bonuses = item.getBonuses()
+        if not bonuses:
+            return {}
+        bonus = getEventAwardFormatter().format(bonuses)[0]
+        return {'label': bonus.getFormattedLabel(),
+         'iconPrize': bonus.getImage(AWARDS_SIZES.SMALL),
+         'tooltip': bonus.tooltip,
+         'isSpecial': bonus.isSpecial,
+         'specialAlias': TOOLTIPS_CONSTANTS.EVENT_AWARD_MODULE,
+         'specialArgs': bonus.specialArgs + [front.getID()],
+         'prizeUnlocked': item.isCompleted(),
+         'frontID': front.getID(),
+         'overlayType': bonus.overlayType[AWARDS_SIZES.SMALL]}
+
+    @process
+    def __doSelectAction(self, actionName):
+        yield self.prbDispatcher.doSelectAction(PrbAction(actionName))

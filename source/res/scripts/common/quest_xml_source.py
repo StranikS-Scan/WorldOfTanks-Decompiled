@@ -398,7 +398,7 @@ class Source(object):
              'unit': self.__readBattleResultsConditionList,
              'results': self.__readBattleResultsConditionList,
              'key': self.__readCondition_keyResults,
-             'max': self.__readCondition_int,
+             'max': self.__readCondition_max,
              'total': self.__readCondition_int,
              'compareWithMaxHealth': self.__readCondition_true,
              'plus': self.__readBattleResultsConditionList,
@@ -619,6 +619,14 @@ class Source(object):
     def __readCondition_consume(self, _, section, node):
         node.addChild(section.asInt)
         node.addChild(section.has_key('force'))
+
+    def __readCondition_max(self, _, section, node):
+        maxValue = section.asString
+        if not maxValue.isdigit():
+            raise SoftException("max value can't be not digit: {}", maxValue)
+        node.addChild(section.asInt)
+        keys = section.keys()
+        node.addChild(keys[0].upper() if keys else 'LESSOREQUAL')
 
     def __readCondition_attackReason(self, _, section, node):
         attackReason = section.asInt

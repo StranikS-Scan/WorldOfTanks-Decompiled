@@ -4,8 +4,9 @@ import logging
 from operator import attrgetter
 from CurrentVehicle import HeroTankPreviewAppearance
 from adisp import process
-from constants import RentType, GameSeasonType
+from constants import RentType, GameSeasonType, PREBATTLE_TYPE, QUEUE_TYPE
 from debug_utils import LOG_WARNING
+from constants import ARENA_BONUS_TYPE
 from gui import SystemMessages, DialogsInterface, GUI_SETTINGS
 from gui.Scaleform import MENU
 from gui.Scaleform.genConsts.STORAGE_CONSTANTS import STORAGE_CONSTANTS
@@ -30,7 +31,8 @@ from gui.ingame_shop import getShopProductInfo
 from gui.ingame_shop import makeBuyParamsByProductInfo
 from gui.ingame_shop import showBuyVehicleOverlay
 from gui.impl.gen import R
-from gui.prb_control.settings import CTRL_ENTITY_TYPE
+from gui.prb_control.entities.base.ctx import PrbAction
+from gui.prb_control.settings import CTRL_ENTITY_TYPE, PREBATTLE_ACTION_NAME
 from gui.shared import events, g_eventBus, money
 from gui.shared.event_bus import EVENT_BUS_SCOPE
 from gui.shared.formatters import text_styles
@@ -50,6 +52,7 @@ from skeletons.gui.shared import IItemsCache
 from skeletons.gui.goodies import IGoodiesCache
 from skeletons.gui.lobby_context import ILobbyContext
 from soft_exception import SoftException
+from gui.prb_control.dispatcher import g_prbLoader
 _logger = logging.getLogger(__name__)
 
 class SETTINGS_TAB_INDEX(object):
@@ -62,8 +65,12 @@ class SETTINGS_TAB_INDEX(object):
     FEEDBACK = 6
 
 
-def showBattleResultsWindow(arenaUniqueID):
-    g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.BATTLE_RESULTS, getViewName(VIEW_ALIAS.BATTLE_RESULTS, str(arenaUniqueID)), {'arenaUniqueID': arenaUniqueID}), EVENT_BUS_SCOPE.LOBBY)
+def showBattleResultsWindow(arenaUniqueID, arenaBonusType):
+    if arenaBonusType == ARENA_BONUS_TYPE.EVENT_BATTLES:
+        alias = VIEW_ALIAS.EVENT_BATTLE_RESULTS
+    else:
+        alias = VIEW_ALIAS.BATTLE_RESULTS
+    g_eventBus.handleEvent(events.LoadViewEvent(alias, getViewName(alias, str(arenaUniqueID)), {'arenaUniqueID': arenaUniqueID}), EVENT_BUS_SCOPE.LOBBY)
 
 
 def notifyBattleResultsPosted(arenaUniqueID):
@@ -250,7 +257,13 @@ def showVehicleStats(vehTypeCompDescr):
 
 
 def showHangar():
-    g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.LOBBY_HANGAR), scope=EVENT_BUS_SCOPE.LOBBY)
+    alias = VIEW_ALIAS.LOBBY_HANGAR
+    dispatcher = g_prbLoader.getDispatcher()
+    if dispatcher:
+        state = dispatcher.getFunctionalState()
+        if state.isInUnit(PREBATTLE_TYPE.EVENT) or state.isInPreQueue(QUEUE_TYPE.EVENT_BATTLES):
+            alias = VIEW_ALIAS.EVENT_HANGAR_PAGE
+    g_eventBus.handleEvent(events.LoadViewEvent(alias), scope=EVENT_BUS_SCOPE.LOBBY)
 
 
 def showBarracks():
@@ -622,3 +635,16 @@ def showStylePreview(vehCD, style, styleDescr, backCallback):
      'style': style,
      'styleDescr': styleDescr,
      'backCallback': backCallback}), scope=EVENT_BUS_SCOPE.LOBBY)
+
+
+def switchOutEventMode():
+    dispatcher = g_prbLoader.getDispatcher()
+    if dispatcher:
+        state = dispatcher.getFunctionalState()
+        if state.isInUnit(PREBATTLE_TYPE.EVENT) or state.isInPreQueue(QUEUE_TYPE.EVENT_BATTLES):
+            _doSelectAction(dispatcher, PREBATTLE_ACTION_NAME.RANDOM)
+
+
+@process
+def _doSelectAction(prbDispatcher, actionName):
+    yield prbDispatcher.doSelectAction(PrbAction(actionName))

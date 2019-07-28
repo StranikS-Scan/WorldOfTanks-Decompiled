@@ -3,7 +3,7 @@
 from gui.Scaleform.daapi.view.lobby.rally.action_button_state_vo import ActionButtonStateVO
 from gui.Scaleform.locale.CYBERSPORT import CYBERSPORT
 from gui.prb_control.settings import UNIT_RESTRICTION
-_VALID_RESTRICTIONS = (UNIT_RESTRICTION.COMMANDER_VEHICLE_NOT_SELECTED,)
+_VALID_RESTRICTIONS = (UNIT_RESTRICTION.COMMANDER_VEHICLE_NOT_SELECTED, UNIT_RESTRICTION.COMMANDER_GENERAL_NOT_SELECTED)
 
 class SquadActionButtonStateVO(ActionButtonStateVO):
 

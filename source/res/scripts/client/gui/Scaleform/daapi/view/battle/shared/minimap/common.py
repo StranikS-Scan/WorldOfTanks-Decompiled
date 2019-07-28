@@ -194,6 +194,8 @@ class AttentionToCellPlugin(IntervalPlugin):
     def start(self):
         super(AttentionToCellPlugin, self).start()
         self._boundingBox = self._arenaVisitor.type.getBoundingBox()
+        if self._arenaVisitor.gui.isEventBattle():
+            self._boundingBox = self._arenaVisitor.type.getPlayerBoundingBox()
         ctrl = self.sessionProvider.shared.feedback
         if ctrl is not None:
             ctrl.onMinimapFeedbackReceived += self.__onMinimapFeedbackReceived

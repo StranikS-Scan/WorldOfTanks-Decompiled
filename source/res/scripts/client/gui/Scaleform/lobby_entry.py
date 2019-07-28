@@ -33,6 +33,7 @@ from gui.shared import EVENT_BUS_SCOPE
 from helpers import dependency, uniprof
 from skeletons.gui.app_loader import GuiGlobalSpaceID
 from skeletons.gui.game_control import IBootcampController
+from gui.Scaleform.managers.fade_manager import FadeManager
 LOBBY_OPTIMIZATION_CONFIG = {VIEW_ALIAS.LOBBY_HEADER: OptimizationSetting(),
  VIEW_ALIAS.LOBBY_TECHTREE: OptimizationSetting(),
  VIEW_ALIAS.LOBBY_RESEARCH: OptimizationSetting(),
@@ -45,6 +46,12 @@ class LobbyEntry(AppEntry):
 
     def __init__(self, appNS, ctrlModeFlags):
         super(LobbyEntry, self).__init__(R.entries.lobby(), appNS, ctrlModeFlags)
+        self.__fadeManager = None
+        return
+
+    @property
+    def fadeManager(self):
+        return self.__fadeManager
 
     @property
     def waitingManager(self):
@@ -53,12 +60,21 @@ class LobbyEntry(AppEntry):
     @uniprof.regionDecorator(label='gui.lobby', scope='enter')
     def afterCreate(self):
         super(LobbyEntry, self).afterCreate()
+        self.__fadeManager.setup()
 
     @uniprof.regionDecorator(label='gui.lobby', scope='exit')
     def beforeDelete(self):
         from gui.Scaleform.Waiting import Waiting
         Waiting.close()
+        if self.__fadeManager:
+            self.__fadeManager.destroy()
+            self.__fadeManager = None
         super(LobbyEntry, self).beforeDelete()
+        return
+
+    def _createManagers(self):
+        super(LobbyEntry, self)._createManagers()
+        self.__fadeManager = FadeManager()
 
     def _createLoaderManager(self):
         return LoaderManager(self.proxy)

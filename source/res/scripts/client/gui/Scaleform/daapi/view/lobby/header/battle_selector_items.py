@@ -169,6 +169,38 @@ class _RandomQueueItem(_SelectorItem):
         self._isSelected = state.isQueueSelected(QUEUE_TYPE.RANDOMS)
 
 
+def getPerformanceAlarmStr(performanceGroup):
+    attentionText, iconPath = (None, None)
+    if performanceGroup == EPIC_PERF_GROUP.HIGH_RISK:
+        attentionText = text_styles.error(MENU.HEADERBUTTONS_BATTLE_MENU_ATTENTION_LOWPERFORMANCE)
+        iconPath = RES_ICONS.MAPS_ICONS_LIBRARY_MARKER_BLOCKED
+    elif performanceGroup == EPIC_PERF_GROUP.MEDIUM_RISK:
+        attentionText = text_styles.alert(MENU.HEADERBUTTONS_BATTLE_MENU_ATTENTION_REDUCEDPERFORMANCE)
+        iconPath = RES_ICONS.MAPS_ICONS_LIBRARY_ALERTICON
+    return icons.makeImageTag(iconPath, vSpace=-3) + ' ' + attentionText if attentionText and iconPath else None
+
+
+class _EventBattleItem(_SelectorItem):
+    eventsCache = dependency.descriptor(IEventsCache)
+    epicQueueController = dependency.descriptor(IEpicBattleMetaGameController)
+
+    def getVO(self):
+        vo = super(_EventBattleItem, self).getVO()
+        vo['specialBgIcon'] = RES_ICONS.MAPS_ICONS_BUTTONS_SELECTORRENDERERBGEVENT
+        return vo
+
+    def _update(self, state):
+        self._isDisabled = state.hasLockedState
+        self._isSelected = state.isQueueSelected(QUEUE_TYPE.EVENT_BATTLES)
+        self._isVisible = self.eventsCache.isEventEnabled()
+
+    def getFormattedLabel(self):
+        battleTypeName = super(_EventBattleItem, self).getFormattedLabel()
+        performanceGroup = self.epicQueueController.getPerformanceGroup()
+        availabilityStr = getPerformanceAlarmStr(performanceGroup)
+        return battleTypeName if availabilityStr is None else '%s\n%s' % (battleTypeName, availabilityStr)
+
+
 class _CommandItem(_SelectorItem):
 
     def isRandomBattle(self):
@@ -260,7 +292,8 @@ class _EpicQueueItem(_SelectorItem):
 
     def getFormattedLabel(self):
         battleTypeName = super(_EpicQueueItem, self).getFormattedLabel()
-        availabilityStr = self.__getPerformanceAlarmStr() or self.__getScheduleStr()
+        performanceGroup = self.epicQueueController.getPerformanceGroup()
+        availabilityStr = getPerformanceAlarmStr(performanceGroup) or self.__getScheduleStr()
         return battleTypeName if availabilityStr is None else '%s\n%s' % (battleTypeName, availabilityStr)
 
     @process
@@ -302,17 +335,6 @@ class _EpicQueueItem(_SelectorItem):
                 else:
                     scheduleStr = None
             return text_styles.main(scheduleStr) if scheduleStr else None
-
-    def __getPerformanceAlarmStr(self):
-        currPerformanceGroup = self.epicQueueController.getPerformanceGroup()
-        attentionText, iconPath = (None, None)
-        if currPerformanceGroup == EPIC_PERF_GROUP.HIGH_RISK:
-            attentionText = text_styles.error(MENU.HEADERBUTTONS_BATTLE_MENU_ATTENTION_LOWPERFORMANCE)
-            iconPath = RES_ICONS.MAPS_ICONS_LIBRARY_MARKER_BLOCKED
-        elif currPerformanceGroup == EPIC_PERF_GROUP.MEDIUM_RISK:
-            attentionText = text_styles.alert(MENU.HEADERBUTTONS_BATTLE_MENU_ATTENTION_REDUCEDPERFORMANCE)
-            iconPath = RES_ICONS.MAPS_ICONS_LIBRARY_ALERTICON
-        return icons.makeImageTag(iconPath, vSpace=-3) + ' ' + attentionText if attentionText and iconPath else None
 
 
 class _BattleSelectorItems(object):
@@ -403,11 +425,6 @@ class _EventSquadItem(_SelectorItem):
         self._isSelected = state.isInUnit(PREBATTLE_TYPE.EVENT)
         self._isDisabled = state.hasLockedState and not state.isInUnit(PREBATTLE_TYPE.EVENT)
 
-    def getVO(self):
-        vo = super(_EventSquadItem, self).getVO()
-        vo['specialBgIcon'] = RES_ICONS.MAPS_ICONS_LOBBY_EVENTPOPOVERBTNBG
-        return vo
-
 
 class _RankedItem(_SelectorItem):
     rankedController = dependency.descriptor(IRankedBattlesController)
@@ -489,6 +506,7 @@ def _createItems(eventsCache=None, lobbyContext=None):
     _addTrainingBattleType(items)
     if GUI_SETTINGS.specPrebatlesVisible:
         _addSpecialBattleType(items)
+    _addEventBattleType(items)
     if settings is not None and settings.isSandboxEnabled() and not isInRoaming:
         _addSandboxType(items)
     return _BattleSelectorItems(items)
@@ -533,6 +551,10 @@ def _addTutorialBattleType(items, isInRoaming):
 
 def _addSandboxType(items):
     items.append(_SandboxItem(MENU.HEADERBUTTONS_BATTLE_TYPES_BATTLETEACHING, PREBATTLE_ACTION_NAME.SANDBOX, 9))
+
+
+def _addEventBattleType(items):
+    items.append(_EventBattleItem(MENU.HEADERBUTTONS_BATTLE_TYPES_EVENTBATTLE, PREBATTLE_ACTION_NAME.EVENT_BATTLE, 10))
 
 
 def _addEpicQueueBattleType(items):

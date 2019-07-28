@@ -17,6 +17,7 @@
     <Interface>	SmokeController_Vehicle	</Interface>
     <Interface>	InspireController_Vehicle	</Interface>
     <Interface>	Wheels	</Interface>
+    <Interface>	LastStandController_Vehicle	</Interface>
   </Implements>
   <LoDLevels>
     <level>	20	  <hyst>	4	</hyst>
@@ -202,6 +203,10 @@
       <Type>	BOOL	</Type>
       <Flags>	ALL_CLIENTS	</Flags>
     </isBlockingCapture>
+    <lastStandEnabled>
+      <Type>	BOOL	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </lastStandEnabled>
   </Properties>
   <TempProperties>
     <events></events>
@@ -448,6 +453,12 @@
     <requestVisibilityLists>
       <Arg>	MAILBOX	</Arg>
     </requestVisibilityLists>
+    <swapVehicle>
+      <Arg>	SWAP_INFO_VEHICLE	</Arg>
+      <Arg>	ARRAY	  <of>	MAILBOX	</of>
+      </Arg>
+    </swapVehicle>
+    <redrawVehicleOnRespawnAfterReconnect></redrawVehicleOnRespawnAfterReconnect>
   </CellMethods>
   <BaseMethods>
     <createCellNearHere>

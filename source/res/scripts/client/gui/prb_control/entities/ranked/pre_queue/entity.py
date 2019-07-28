@@ -25,7 +25,6 @@ from gui.prb_control.settings import PREBATTLE_ACTION_NAME, FUNCTIONAL_FLAG, PRE
 from account_helpers.AccountSettings import AccountSettings, GUI_START_BEHAVIOR
 from gui.prb_control.storages import prequeue_storage_getter
 from gui.ranked_battles.constants import PrimeTimeStatus
-from gui.shared.event_dispatcher import showRankedPrimeTimeWindow
 from helpers import dependency
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.game_control import IRankedBattlesController
@@ -71,7 +70,7 @@ class RankedEntryPoint(PreQueueEntryPoint):
             g_prbCtrlEvents.onPreQueueJoinFailure(PRE_QUEUE_JOIN_ERRORS.DISABLED)
             return
         elif not self.__isFirstEnter() and status in self._getFilterStates() and not constants.IS_CHINA:
-            showRankedPrimeTimeWindow()
+            g_eventDispatcher.showRankedPrimeTimeWindow()
             if callback is not None:
                 callback(False)
             g_prbCtrlEvents.onPreQueueJoinFailure(PRE_QUEUE_JOIN_ERRORS.NOT_AVAILABLE)

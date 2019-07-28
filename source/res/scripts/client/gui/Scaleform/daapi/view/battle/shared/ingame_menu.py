@@ -79,6 +79,7 @@ class IngameMenu(IngameMenuMeta, BattleGUIKeyHandler):
         self.__setMenuButtonsLabels()
         self.as_showQuitButtonS(BattleReplay.g_replayCtrl.isPlaying or not self.bootcampController.isInBootcamp())
         self.as_showBootcampButtonS(self.bootcampController.isInBootcamp())
+        self.as_showHelpButtonS(not self.sessionProvider.arenaVisitor.gui.isEventBattle())
         return
 
     def __updateNewSettingsCount(self):

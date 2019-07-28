@@ -32,7 +32,7 @@
     <requiredVersion_15100>
       <Type>	STRING	</Type>
       <Flags>	BASE_AND_CLIENT	</Flags>
-      <Default>	ru_1.5.1_4	</Default>
+      <Default>	ru_1.5.1_7	</Default>
     </requiredVersion_15100>
     <name>
       <Type>	STRING	</Type>
@@ -362,6 +362,15 @@
       <Arg>	INT32	</Arg>
       <Arg>	PYTHON	</Arg>
     </onArenaCreated>
+    <onEventArenaCreated>
+      <Arg>	MAILBOX	</Arg>
+      <Arg>	UINT64	</Arg>
+      <Arg>	UINT8	</Arg>
+      <Arg>	OBJECT_ID	</Arg>
+      <Arg>	UINT8	</Arg>
+      <Arg>	INT32	</Arg>
+      <Arg>	PYTHON	</Arg>
+    </onEventArenaCreated>
     <onTutorialCreated>
       <Arg>	MAILBOX	</Arg>
       <Arg>	UINT64	</Arg>

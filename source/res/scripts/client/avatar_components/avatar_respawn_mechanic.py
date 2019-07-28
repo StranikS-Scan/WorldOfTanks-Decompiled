@@ -29,6 +29,15 @@ class AvatarRespawnMechanic(object):
                 ctrl.updateRespawnVehicles(vehsList)
             return
 
+    def eventUpdateRespawnVehicles(self, vehsList):
+        if not self.__enabled:
+            return
+        else:
+            ctrl = self.guiSessionProvider.dynamic.respawn
+            if ctrl is not None:
+                ctrl.eventUpdateRespawnVehicles(vehsList)
+            return
+
     def updateRespawnCooldowns(self, cooldowns):
         if not self.__enabled:
             return
@@ -74,4 +83,10 @@ class AvatarRespawnMechanic(object):
         ctrl = self.guiSessionProvider.dynamic.respawn
         if ctrl is not None:
             ctrl.restoredTeamRespawnLives(teams)
+        return
+
+    def addRespawnGroup(self, groupID, position, isSelected):
+        ctrl = self.guiSessionProvider.dynamic.respawn
+        if ctrl is not None:
+            ctrl.addRespawnGroup(groupID, position, isSelected)
         return

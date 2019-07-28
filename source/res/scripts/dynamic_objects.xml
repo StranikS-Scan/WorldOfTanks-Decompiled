@@ -147,4 +147,93 @@
     <maxUpdateInterval>	0.04	</maxUpdateInterval>
     <overTerrainHeight>	0.5	</overTerrainHeight>
   </InspireAreaVisual>
+  <EquipmentCircleRestrictionVisual>
+    <visual>	content/Interface/TargetPoint/inspire.model	</visual>
+    <color>	0xffffffff	</color>
+    <enableAccurateCollision>	False	</enableAccurateCollision>
+    <maxUpdateInterval>	0.04	</maxUpdateInterval>
+    <overTerrainHeight>	0.5	</overTerrainHeight>
+  </EquipmentCircleRestrictionVisual>
+  <VehicleBotPreSpawnEffect>
+    <timeline>
+      <effectEnd>	10	</effectEnd>
+    </timeline>
+    <effects>
+      <pixie>
+        <startKey>	start	</startKey>
+        <file>	particles/Environment/secrect_event/1005_skyrocket_small.xml	</file>
+        <force>	1	</force>
+      </pixie>
+    </effects>
+  </VehicleBotPreSpawnEffect>
+  <VehicleBotDisappearEffect>
+    <timeline>
+      <effectEnd>	10	</effectEnd>
+    </timeline>
+    <effects>
+      <pixie>
+        <startKey>	start	</startKey>
+        <file>	particles/Environment/secrect_event/vehicle_bot_disappear.xml	</file>
+        <force>	1	</force>
+      </pixie>
+    </effects>
+  </VehicleBotDisappearEffect>
+  <lootTypes>
+    <item>	&gt;	  <id>	1	</id>
+      <name>	ammo_small	</name>
+    </item>
+    <item>	&gt;	  <id>	2	</id>
+      <name>	heal_big_all	</name>
+    </item>
+    <item>	&gt;	  <id>	3	</id>
+      <name>	bombVisual	</name>
+    </item>
+  </lootTypes>
+  <ammo_small>
+    <model>
+      <name>	content/Environment/env_111_05_AmmoFlag/normal/lod0/env_111_05_AmmoFlag.model	</name>
+    </model>
+    <particle>
+      <name>	particles/Environment/buildings/Bld_19_01_Vhouse_05_Smoke_Small.xml	</name>
+    </particle>
+    <pickupEffect>
+      <name>	ammoSmallPickupEffect	</name>
+    </pickupEffect>
+    <minimapPoint>
+      <name>	EventAmmoMinimapEntryUI	</name>
+    </minimapPoint>
+  </ammo_small>
+  <heal_big_all>
+    <model>
+      <name>	content/Environment/env_111_05_AmmoFlag/normal/lod0/env_111_05_AmmoFlag.model	</name>
+    </model>
+    <particle>
+      <name>	particles/Environment/buildings/Bld_19_01_Vhouse_05_Smoke_Small.xml	</name>
+    </particle>
+    <pickupEffect>
+      <name>	defaultPickup	</name>
+    </pickupEffect>
+    <minimapPoint>
+      <name>	TutorialTargetEntry	</name>
+    </minimapPoint>
+  </heal_big_all>
+  <bombVisual>
+    <startEffect>
+      <name>	bombStartEffect	</name>
+    </startEffect>
+    <idleEffect>
+      <name>	bombIdleEffect	</name>
+    </idleEffect>
+    <pickupEffect>
+      <name>	bombEffect	</name>
+    </pickupEffect>
+    <destroyEffect>
+      <name>	bombDestroyEffect	</name>
+    </destroyEffect>
+  </bombVisual>
+  <add_my>	spaces/05_prohorovka_se/mmap_arrows.dds	</add_my>
+  <add_my>	spaces/06_ensk_se/mmap_arrows.dds	</add_my>
+  <add_my>	spaces/28_desert_se/mmap_arrows.dds	</add_my>
+  <add_my>	spaces/36_fishing_bay_se/mmap_arrows.dds	</add_my>
+  <add_my>	spaces/99_poland_se/mmap_arrows.dds	</add_my>
 </dynamic_objects.xml>

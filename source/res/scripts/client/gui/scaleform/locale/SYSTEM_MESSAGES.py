@@ -174,6 +174,7 @@ class SYSTEM_MESSAGES(object):
     SQUAD_KICKEDFROMQUEUE = '#system_messages:squad/kickedFromQueue'
     SQUAD_NOTVALIDDELETED = '#system_messages:squad/notValidDeleted'
     SQUAD_NOTVALIDMAXSPGDELETED = '#system_messages:squad/notValidMaxSpgDeleted'
+    SQUAD_NOTVALIDFRONTDELETED = '#system_messages:squad/notValidFrontDeleted'
     BATTLESESSION_KICKEDFROMQUEUE = '#system_messages:battleSession/kickedFromQueue'
     MEMBERROSTERCHANGEDMAIN = '#system_messages:memberRosterChangedMain'
     MEMBERROSTERCHANGEDSECOND = '#system_messages:memberRosterChangedSecond'
@@ -1086,6 +1087,19 @@ class SYSTEM_MESSAGES(object):
     CREWBOOKS_BUY_SUCCESS = '#system_messages:crewBooks_buy/success'
     CREWBOOKS_BUY_SERVER_ERROR = '#system_messages:crewBooks_buy/server_error'
     CREWBOOKS_SELL_SERVER_ERROR = '#system_messages:crewBooks_sell/server_error'
+    SE_APRIL_2019_WALLET_NOT_AVAILABLE = '#system_messages:se_april_2019/wallet_not_available'
+    SE_APRIL_2019_MAX_LEVEL_ALREADY_BOUGHT = '#system_messages:se_april_2019/max_level_already_bought'
+    SE_APRIL_2019_DISABLED = '#system_messages:se_april_2019/disabled'
+    SE_APRIL_2019_SERVER_ERROR = '#system_messages:se_april_2019/server_error'
+    SE_APRIL_2019_GOLD_NOT_AVAILABLE = '#system_messages:se_april_2019/gold_not_available'
+    SE_APRIL_2019_BUY_LEVEL_NOT_AVAILABLE = '#system_messages:se_april_2019/buy_level_not_available'
+    SE_APRIL_2019_LEVEL_ALREADY_BOUGHT = '#system_messages:se_april_2019/level_already_bought'
+    SE_APRIL_2019_MAX_GENERAL_LEVEL_ALREADY_REACHED = '#system_messages:se_april_2019/max_general_level_already_reached'
+    SE_APRIL_2019_BUY_GENERAL_LEVEL_SUCCESS = '#system_messages:se_april_2019/buy_general_level_success'
+    SE_APRIL_2019_BUY_ENERGY_SUCCESS = '#system_messages:se_april_2019/buy_energy_success'
+    SE_APRIL_2019_ENERGY_NOT_EXIST = '#system_messages:se_april_2019/energy_not_exist'
+    SE_APRIL_2019_FULL_ENERGY_ALREADY_REACHED = '#system_messages:se_april_2019/full_energy_already_reached'
+    SE_APRIL_2019_GOLD_ERROR = '#system_messages:se_april_2019/gold_error'
     UNIT_NOTIFICATION_DIVISIONTYPE_ENUM = (UNIT_NOTIFICATION_DIVISIONTYPE_MIDDLE, UNIT_NOTIFICATION_DIVISIONTYPE_CHAMPION, UNIT_NOTIFICATION_DIVISIONTYPE_ABSOLUTE)
     UNIT_ERRORS_ENUM = (UNIT_ERRORS_ALREADY_JOINED_UNIT,
      UNIT_ERRORS_CANT_CHANGE_DIVISION,
@@ -1367,6 +1381,7 @@ class SYSTEM_MESSAGES(object):
      SQUAD_KICKEDFROMQUEUE,
      SQUAD_NOTVALIDDELETED,
      SQUAD_NOTVALIDMAXSPGDELETED,
+     SQUAD_NOTVALIDFRONTDELETED,
      BATTLESESSION_KICKEDFROMQUEUE,
      MEMBERROSTERCHANGEDMAIN,
      MEMBERROSTERCHANGEDSECOND,
@@ -2278,7 +2293,20 @@ class SYSTEM_MESSAGES(object):
      CREWBOOKS_FAILED,
      CREWBOOKS_BUY_SUCCESS,
      CREWBOOKS_BUY_SERVER_ERROR,
-     CREWBOOKS_SELL_SERVER_ERROR)
+     CREWBOOKS_SELL_SERVER_ERROR,
+     SE_APRIL_2019_WALLET_NOT_AVAILABLE,
+     SE_APRIL_2019_MAX_LEVEL_ALREADY_BOUGHT,
+     SE_APRIL_2019_DISABLED,
+     SE_APRIL_2019_SERVER_ERROR,
+     SE_APRIL_2019_GOLD_NOT_AVAILABLE,
+     SE_APRIL_2019_BUY_LEVEL_NOT_AVAILABLE,
+     SE_APRIL_2019_LEVEL_ALREADY_BOUGHT,
+     SE_APRIL_2019_MAX_GENERAL_LEVEL_ALREADY_REACHED,
+     SE_APRIL_2019_BUY_GENERAL_LEVEL_SUCCESS,
+     SE_APRIL_2019_BUY_ENERGY_SUCCESS,
+     SE_APRIL_2019_ENERGY_NOT_EXIST,
+     SE_APRIL_2019_FULL_ENERGY_ALREADY_REACHED,
+     SE_APRIL_2019_GOLD_ERROR)
 
     @classmethod
     def unit_notification_divisiontype(cls, key0):

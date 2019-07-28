@@ -90,7 +90,9 @@ class _ArenaTypeSkeleton(object):
     soloTeamNumbers = []
     squadTeamNumbers = []
     boundingBox = ((0, 0), (0, 0))
+    playerBoundingBox = ((0, 0), (0, 0))
     minimap = ''
+    minimap_arrows_overlay = ''
     overviewmap = ''
     winPointsSettings = None
     battleCountdownTimerSound = ''
@@ -219,9 +221,17 @@ class _ArenaTypeVisitor(IArenaVisitor):
     def getBoundingBox(self):
         return self._arenaType.boundingBox
 
+    @catch_attribute_exception(default=_ArenaTypeSkeleton.playerBoundingBox)
+    def getPlayerBoundingBox(self):
+        return self._arenaType.playerBoundingBox
+
     @catch_attribute_exception(default=_ArenaTypeSkeleton.minimap)
     def getMinimapTexture(self):
         return self._arenaType.minimap
+
+    @catch_attribute_exception(default=_ArenaTypeSkeleton.minimap_arrows_overlay)
+    def getMinimapArrowsTexture(self):
+        return self._arenaType.minimap_arrows_overlay
 
     @catch_attribute_exception(default=_ArenaTypeSkeleton.overviewmap)
     def getOverviewMapTexture(self):

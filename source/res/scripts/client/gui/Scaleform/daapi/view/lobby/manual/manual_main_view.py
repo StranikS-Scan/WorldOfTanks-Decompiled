@@ -4,7 +4,6 @@ import logging
 from gui.Scaleform.daapi.view.meta.ManualMainViewMeta import ManualMainViewMeta
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.shared import events, EVENT_BUS_SCOPE, event_dispatcher as shared_events
-from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.manual.manual_view_base import ManualViewBase
 _logger = logging.getLogger(__name__)
 
@@ -14,7 +13,7 @@ class ManualMainView(ManualViewBase, ManualMainViewMeta):
     def closeView(self):
         self._close()
         self.manualController.clear()
-        self.fireEvent(events.LoadViewEvent(VIEW_ALIAS.LOBBY_HANGAR), scope=EVENT_BUS_SCOPE.LOBBY)
+        shared_events.showHangar()
 
     def onChapterOpenedS(self, chapterIndex):
         _logger.debug('ManualMainView. Chapter selected: %s', chapterIndex)

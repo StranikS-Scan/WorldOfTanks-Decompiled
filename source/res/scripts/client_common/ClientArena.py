@@ -39,6 +39,7 @@ class ClientArena(object):
 
     def __init__(self, arenaUniqueID, arenaTypeID, arenaBonusType, arenaGuiType, arenaExtraData):
         self.__vehicles = {}
+        self.__precachedVehicles = {}
         self.__vehicleIndexToId = {}
         self.__positions = {}
         self.__statistics = {}
@@ -80,10 +81,12 @@ class ClientArena(object):
         self.extraData = arenaExtraData
         self.__arenaBBCollider = None
         self.__spaceBBCollider = None
+        self.__arenaPlayerBBCollider = None
         self.componentSystem = assembler.createComponentSystem(self, self.bonusType, self.arenaType)
         return
 
     vehicles = property(lambda self: self.__vehicles)
+    precachedVehicles = property(lambda self: self.__precachedVehicles)
     positions = property(lambda self: self.__positions)
     statistics = property(lambda self: self.__statistics)
     period = property(lambda self: self.__periodInfo[0])
@@ -125,11 +128,17 @@ class ClientArena(object):
     def collideWithArenaBB(self, start, end):
         return None if self.__arenaBBCollider is None and not self.__setupBBColliders() else self.__arenaBBCollider.collide(start, end)
 
+    def collideWithArenaPlayerBB(self, start, end):
+        return None if self.__arenaPlayerBBCollider is None and not self.__setupPlayerBBColliders() else self.__arenaPlayerBBCollider.collide(start, end)
+
     def getArenaBB(self):
         return (None, None) if self.__arenaBBCollider is None and not self.__setupBBColliders() else (self.__arenaBBCollider.getMinBounds(), self.__arenaBBCollider.getMaxBounds())
 
     def getClosestPointOnArenaBB(self, point):
         return None if self.__arenaBBCollider is None and not self.__setupBBColliders() else self.__arenaBBCollider.getClosestPointOnBB(point)
+
+    def getClosestPointOnArenaPlayerBB(self, point):
+        return None if self.__arenaPlayerBBCollider is None and not self.__setupPlayerBBColliders() else self.__arenaPlayerBBCollider.getClosestPointOnBB(point)
 
     def collideWithSpaceBB(self, start, end):
         return None if self.__spaceBBCollider is None and not self.__setupBBColliders() else self.__spaceBBCollider.collide(start, end)
@@ -149,14 +158,23 @@ class ClientArena(object):
         self.__spaceBBCollider = _BBCollider(spaceBB, (-500.0, 500.0))
         return True
 
+    def __setupPlayerBBColliders(self):
+        if BigWorld.wg_getSpaceBounds().length == 0.0:
+            return False
+        self.__arenaPlayerBBCollider = _BBCollider(self.arenaType.playerBoundingBox, (-500.0, 500.0))
+        return True
+
     def __onVehicleListUpdate(self, argStr):
         vehiclesList = cPickle.loads(zlib.decompress(argStr))
         LOG_DEBUG_DEV('__onVehicleListUpdate', vehiclesList)
         vehs = self.__vehicles
         vehs.clear()
+        self.__precachedVehicles.clear()
         for infoAsTuple in vehiclesList:
             vehID, info = self.__vehicleInfoAsDict(infoAsTuple)
-            vehs[vehID] = self.__preprocessVehicleInfo(info)
+            if vehID >= 0:
+                vehs[vehID] = self.__preprocessVehicleInfo(info)
+            self.__precachedVehicles[vehID] = info
 
         self.__rebuildIndexToId()
         self.onNewVehicleListReceived()
@@ -292,7 +310,8 @@ class ClientArena(object):
          'personalMissionIDs': info[15],
          'personalMissionInfo': info[16],
          'ranked': info[17],
-         'outfitCD': info[18]}
+         'outfitCD': info[18],
+         'vehiclesCount': info[19]}
         return (info[0], infoAsDict)
 
     def __vehicleStatisticsAsDict(self, stats):

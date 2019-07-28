@@ -62,7 +62,7 @@ class VehicleMarker(Marker):
         return self._vProxy.isAlive() if self._vProxy is not None else 0
 
     def getHealth(self):
-        return self._vProxy.health if self._vProxy is not None else 0
+        return self._vProxy.health if self._vProxy is not None and not self._vProxy.lastStandEnabled else 0
 
     @classmethod
     def fetchMatrixProvider(cls, vProxy):

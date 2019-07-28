@@ -25,6 +25,7 @@ _BASE_PIERCING_PERCENT = 100.0
 _ENABLED_MAX_PROJECTION_CHECK = True
 _MAX_PROJECTION_ANGLE = math.radians(60.0)
 _MAX_PROJECTION_ANGLE_COS = math.cos(_MAX_PROJECTION_ANGLE)
+_ARCADE_RELAX_TIME = 0.001
 _logger = logging.getLogger(__name__)
 
 def _computePiercingPowerAtDistImpl(dist, maxDist, p100, p500):
@@ -74,6 +75,11 @@ def createGunMarker(isStrategic):
 def createArtyHit(artyEquipmentUDO, areaRadius):
     factory = _GunMarkersDPFactory()
     return _ArtyHitMarkerController(_MARKER_TYPE.CLIENT, factory.getClientSPGProvider(), artyEquipmentUDO, areaRadius, interval=0.0 if BattleReplay.g_replayCtrl.isPlaying else 0.1)
+
+
+def createArcadeArtilleryHit(artyEquipmentUDO, areaRadius):
+    factory = _GunMarkersDPFactory()
+    return _ArcadeArtilleryHitMarkerController(_MARKER_TYPE.CLIENT, factory.getClientSPGProvider(), artyEquipmentUDO, areaRadius, interval=0.0 if BattleReplay.g_replayCtrl.isPlaying else 0.1)
 
 
 if _IS_EXTENDED_GUN_MARKER_ENABLED:
@@ -725,6 +731,33 @@ class _ArtyHitMarkerController(_SPGGunMarkerController):
     def __tick(self):
         self.__trajectoryDrawer.update(self._position, self._position + self.__artyEquipmentUDO.position, self.__artyEquipmentUDO.launchVelocity, self.__interval)
         return self.__interval
+
+
+class _ArcadeArtilleryHitMarkerController(_SPGGunMarkerController):
+
+    def __init__(self, gunMakerType, dataProvider, artyEquipmentUDO, areaRadius, interval=0.1):
+        super(_ArcadeArtilleryHitMarkerController, self).__init__(gunMakerType, dataProvider, enabledFlag=_MARKER_FLAG.ARTY_HIT_ENABLED)
+        self.__artyEquipmentUDO = artyEquipmentUDO
+        self.__areaRadius = areaRadius
+        self.__interval = interval
+        self._dataProvider.setRelaxTime(_ARCADE_RELAX_TIME)
+
+    def destroy(self):
+        self.__artyEquipmentUDO = None
+        super(_ArcadeArtilleryHitMarkerController, self).destroy()
+        return
+
+    def getPointsInside(self, positions):
+        return self._dataProvider.getPointsInside(positions)
+
+    def _getCurrentShotInfo(self):
+        launchPosition = self._position + self.__artyEquipmentUDO.position
+        launchVelocity = self.__artyEquipmentUDO.launchVelocity
+        gravity = Math.Vector3(0, -self.__artyEquipmentUDO.gravity, 0)
+        return (launchPosition, launchVelocity, gravity)
+
+    def _updateDispersionData(self):
+        self._dataProvider.setupFlatRadialDispersion(self.__areaRadius)
 
 
 def _makeWorldMatrix(positionMatrix):

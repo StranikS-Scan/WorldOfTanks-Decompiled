@@ -77,6 +77,7 @@ class VIEW_ALIAS(COMMON_VIEW_ALIAS):
     VEHICLE_BUY_WINDOW = 'vehicleBuyWindow'
     VEHICLE_RESTORE_WINDOW = 'vehicleRestoreWindow'
     BATTLE_QUEUE = 'battleQueue'
+    EVENT_BATTLE_QUEUE = 'eventBattleQueue'
     BATTLE_STRONGHOLDS_QUEUE = 'battleStrongholdsQueue'
     BATTLE_LOADING = 'battleLoading'
     LEGAL_INFO_WINDOW = 'legalInfoWindow'
@@ -89,6 +90,7 @@ class VIEW_ALIAS(COMMON_VIEW_ALIAS):
     VEHICLE_SELL_DIALOG = 'vehicleSellDialog'
     SETTINGS_WINDOW = 'settingsWindow'
     BATTLE_RESULTS = 'battleResults'
+    EVENT_BATTLE_RESULTS = 'eventBattleResults'
     EVENTS_WINDOW = 'EventsWindow'
     TANKMAN_SKILLS_DROP_WINDOW = 'tankmanSkillsDropWindow'
     BROWSER_WINDOW = 'browserWindow'
@@ -185,7 +187,7 @@ class VIEW_ALIAS(COMMON_VIEW_ALIAS):
     REFERRAL_PROGRAM_WINDOW = 'referralProgramWindow'
     EPIC_RANDOM_PAGE = 'epicRandomPage'
     EPIC_BATTLE_PAGE = 'epicBattlePage'
-    EVENT_BATTLE_PAGE = 'classicBattlePage'
+    EVENT_BATTLE_PAGE = 'eventBattlePage'
     RANKED_BATTLE_PAGE = 'rankedBattlePage'
     MISSION_AWARD_WINDOW = 'missionAwardWindow'
     CRYSTALS_PROMO_WINDOW = 'crystalsPromoWindow'
@@ -196,6 +198,7 @@ class VIEW_ALIAS(COMMON_VIEW_ALIAS):
     INGAME_DETAILS_HELP = 'ingameDetailsHelp'
     INGAME_DESERTER = 'ingameDeserter'
     BOTS_MENU = 'botsMenu'
+    EVENT_LOADING = 'eventLoading'
     BOOTCAMP_INTRO = 'bootcampIntro'
     BOOTCAMP_INTRO_VIDEO = 'bootcampIntroVideo'
     BOOTCAMP_OUTRO_VIDEO = 'bootcampOutroVideo'
@@ -225,6 +228,10 @@ class VIEW_ALIAS(COMMON_VIEW_ALIAS):
     FEEDBACK_DAMAGE_INDICATOR = 'feedbackDamageIndicator'
     FEEDBACK_BATTLE_BORDER_MAP = 'feedbackBattleBorderMap'
     FEEDBACK_QUESTS_PROGRESS = 'feedbackQuestsProgress'
+    EVENT_HANGAR_PAGE = 'eventHangarPage'
+    EVENT_MANUAL_PAGE = 'eventManualPage'
+    EVENT_GENERAL_PROGRESS_PAGE = 'eventGeneralProgressPage'
+    EVENT_GENERAL_DIALOG = 'eventGeneralDialog'
     LOADINGS = (BATTLE_LOADING, TUTORIAL_LOADING)
     BATTLE_PAGES = (CLASSIC_BATTLE_PAGE,
      TUTORIAL_BATTLE_PAGE,

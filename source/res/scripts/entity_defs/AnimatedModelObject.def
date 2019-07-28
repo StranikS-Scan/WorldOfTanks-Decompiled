@@ -1,0 +1,24 @@
+<AnimatedModelObject.def>
+  <Volatile>
+    <position></position>
+    <yaw></yaw>
+  </Volatile>
+  <Properties>
+    <modelPath>
+      <Type>	STRING	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <Editable>	true	</Editable>
+    </modelPath>
+    <stateMachinePath>
+      <Type>	STRING	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <Editable>	true	</Editable>
+    </stateMachinePath>
+    <stateMachineBoolParamName>
+      <Type>	STRING	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <Editable>	true	</Editable>
+    </stateMachineBoolParamName>
+  </Properties>
+  <ClientMethods></ClientMethods>
+</AnimatedModelObject.def>

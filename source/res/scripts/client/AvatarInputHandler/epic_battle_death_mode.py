@@ -81,11 +81,17 @@ class EpicVideoCamera(VideoCamera):
             return endPos
         moveDir = endPos - startPos
         moveDir.normalise()
-        collisionResult, _ = BigWorld.player().arena.collideWithArenaBB(startPos, endPos)
+        arena = BigWorld.player().arena
+        collideMethod = arena.collideWithArenaBB
+        getClosestPointMethod = arena.getClosestPointOnArenaBB
+        if arena.guiType == constants.ARENA_GUI_TYPE.EVENT_BATTLES:
+            collideMethod = arena.collideWithArenaPlayerBB
+            getClosestPointMethod = arena.getClosestPointOnArenaPlayerBB
+        collisionResult, _ = collideMethod(startPos, endPos)
         if collisionResult == CollisionResult.INTERSECTION:
-            return BigWorld.player().arena.getClosestPointOnArenaBB(endPos)
+            return getClosestPointMethod(endPos)
         if collisionResult == CollisionResult.OUTSIDE:
-            onBorder = BigWorld.player().arena.getClosestPointOnArenaBB(endPos)
+            onBorder = getClosestPointMethod(endPos)
             offset = onBorder - endPos
             offset.normalise()
             return onBorder + offset

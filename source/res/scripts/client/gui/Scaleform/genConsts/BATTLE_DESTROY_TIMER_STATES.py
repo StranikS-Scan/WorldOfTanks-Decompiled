@@ -9,6 +9,7 @@ class BATTLE_DESTROY_TIMER_STATES(object):
     FIRE = 3
     GAS_ATTACK = 4
     UNDER_FIRE = 4
+    LAST_STAND = 4
     SECTOR_AIRSTRIKE = 5
     RECOVERY = 6
     STUN = 10

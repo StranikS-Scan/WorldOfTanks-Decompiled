@@ -80,6 +80,9 @@ class GlobalSettingsPlugin(common.SimplePlugin):
         self.__isVisible = not self.__isVisible
         self._parentObj.as_setVisibleS(self.__isVisible)
 
+    def _isHotKeysDisabled(self):
+        return self._parentObj.isModalViewShown()
+
     def __saveSettings(self):
         AccountSettings.setSettings(self.__currentSizeSettings, self.__sizeIndex)
 
@@ -90,7 +93,7 @@ class GlobalSettingsPlugin(common.SimplePlugin):
             self._parentObj.as_setSizeS(newIndex)
 
     def __handleKey(self, key):
-        if self._parentObj.isModalViewShown():
+        if self._isHotKeysDisabled():
             return
         cmdMap = CommandMapping.g_instance
         if cmdMap.isFired(CommandMapping.CMD_MINIMAP_SIZE_DOWN, key):

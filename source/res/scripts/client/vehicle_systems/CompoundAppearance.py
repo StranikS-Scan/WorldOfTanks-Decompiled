@@ -225,6 +225,9 @@ class CompoundAppearance(ScriptGameObject, CallbackDelayer):
         self.createComponent(NetworkComponents.EntityTransformSyncer)
         return
 
+    def setID(self, vID):
+        self.__vID = vID
+
     def __arenaPeriodChanged(self, period, *otherArgs):
         if self.detailedEngineState is None:
             return

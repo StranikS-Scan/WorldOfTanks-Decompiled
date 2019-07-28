@@ -10,6 +10,7 @@ from gui.impl.gen.resources import R
 from gui.shared.utils.functions import getArenaShortName
 from gui.Scaleform.daapi.view.lobby.cyberSport import PLAYER_GUI_STATUS, SLOT_LABEL
 from gui.Scaleform.genConsts.FORTIFICATION_ALIASES import FORTIFICATION_ALIASES as FORT_ALIAS
+from gui.Scaleform.locale.EVENT import EVENT
 from gui.Scaleform.locale.FORTIFICATIONS import FORTIFICATIONS
 from gui.Scaleform.locale.MESSENGER import MESSENGER
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
@@ -22,7 +23,7 @@ from gui.shared.formatters.ranges import toRomanRangeString
 from gui.shared.gui_items.Vehicle import VEHICLE_TABLE_TYPES_ORDER_INDICES_REVERSED, Vehicle
 from gui.shared.utils.functions import makeTooltip
 from gui.prb_control.items.stronghold_items import SUPPORT_TYPE, REQUISITION_TYPE, HEAVYTRUCKS_TYPE, AIRSTRIKE, ARTILLERY_STRIKE, REQUISITION, HIGH_CAPACITY_TRANSPORT
-from helpers import i18n
+from helpers import i18n, int2roman
 from messenger import g_settings
 from messenger.m_constants import USER_GUI_TYPE, PROTO_TYPE, USER_TAG
 from messenger.proto import proto_getter
@@ -239,7 +240,7 @@ def makeUnitStateLabel(unitState):
     return makeHtmlString('html_templates:lobby/cyberSport', 'teamUnlocked' if unitState.isOpened() else 'teamLocked', {})
 
 
-def _getSlotsData(unitMgrID, fullData, levelsRange=None, checkForVehicles=True, maxPlayerCount=MAX_PLAYER_COUNT_ALL, withPrem=False):
+def _getSlotsData(unitEntity, unitMgrID, fullData, levelsRange=None, checkForVehicles=True, maxPlayerCount=MAX_PLAYER_COUNT_ALL, withPrem=False):
     pInfo = fullData.playerInfo
     isPlayerCreator = pInfo.isCommander()
     isPlayerInSlot = pInfo.isInSlot
@@ -337,14 +338,22 @@ def _getSlotsData(unitMgrID, fullData, levelsRange=None, checkForVehicles=True, 
             elif eventsCache.isSquadXpFactorsEnabled():
                 slot.update(_getXPFactorSlotInfo(unit, eventsCache, slotInfo))
         if unit.isEvent():
-            isVisibleAdtMsg = player and player.isCurrentPlayer() and not vehicle
+            front = unitEntity.getRequireFront()
+            isVisibleAdtMsg = player and player.isCurrentPlayer() and not vehicle and front is not None
             additionMsg = ''
             if isVisibleAdtMsg:
-                eventsCache = dependency.instance(IEventsCache)
-                vehiclesNames = [ veh.userName for veh in eventsCache.getEventVehicles() ]
-                additionMsg = text_styles.main(i18n.makeString(MESSENGER.DIALOGS_EVENTSQUAD_VEHICLE, vehName=', '.join(vehiclesNames)))
+                frontName = i18n.makeString(EVENT.SQUAD_FRONT_0 if front == 0 else EVENT.SQUAD_FRONT_1)
+                additionMsg = text_styles.main(i18n.makeString(MESSENGER.DIALOGS_EVENTSQUAD_VEHICLE, vehName=frontName))
+            generalVO = None
+            if player and unit.getVehicles().get(player.dbID) is not None:
+                pInfo = unitEntity.getPlayerInfo(dbID=player.dbID)
+                generalID, generalLevel, _ = pInfo.eventData
+                generalVO = {'logo': generalID + 1,
+                 'romanLevel': int2roman(generalLevel + 1),
+                 'name': i18n.makeString(EVENT.getGeneralTooltipHeader(generalID))}
             slot.update({'isVisibleAdtMsg': isVisibleAdtMsg,
-             'additionalMsg': additionMsg})
+             'additionalMsg': additionMsg,
+             'general': generalVO})
         elif unit.getPrebattleType() == PREBATTLE_TYPE.EPIC and squadPremBonusEnabled:
             slot.update(_updateEpicBattleSlotInfo(player, vehicle))
         slots.append(slot)
@@ -398,7 +407,7 @@ def _getXPFactorSlotInfo(unit, eventsCache, slotInfo):
 
 def makeSlotsVOs(unitEntity, unitMgrID=None, maxPlayerCount=MAX_PLAYER_COUNT_ALL, withPrem=False):
     fullData = unitEntity.getUnitFullData(unitMgrID=unitMgrID)
-    slots = _getSlotsData(unitMgrID, fullData, unitEntity.getRosterSettings().getLevelsRange(), maxPlayerCount=maxPlayerCount, withPrem=withPrem)
+    slots = _getSlotsData(unitEntity, unitMgrID, fullData, unitEntity.getRosterSettings().getLevelsRange(), maxPlayerCount=maxPlayerCount, withPrem=withPrem)
     isRosterSet = fullData.unit.isRosterSet(ignored=settings.CREATOR_ROSTER_SLOT_INDEXES)
     return (isRosterSet, slots)
 
@@ -407,7 +416,7 @@ def makeUnitShortVO(unitEntity, unitMgrID=None, maxPlayerCount=MAX_PLAYER_COUNT_
     fullData = unitEntity.getUnitFullData(unitMgrID=unitMgrID)
     return {'isFreezed': fullData.flags.isLocked(),
      'hasRestrictions': fullData.unit.isRosterSet(ignored=settings.CREATOR_ROSTER_SLOT_INDEXES),
-     'slots': _getSlotsData(unitMgrID, fullData, unitEntity.getRosterSettings().getLevelsRange(), maxPlayerCount=maxPlayerCount),
+     'slots': _getSlotsData(unitEntity, unitMgrID, fullData, unitEntity.getRosterSettings().getLevelsRange(), maxPlayerCount=maxPlayerCount),
      'description': unitEntity.getCensoredComment(unitMgrID=unitMgrID)}
 
 
@@ -446,7 +455,7 @@ def makeUnitVO(unitEntity, unitMgrID=None, maxPlayerCount=MAX_PLAYER_COUNT_ALL, 
      'sumLevelsInt': fullData.stats.curTotalLevel,
      'sumLevels': sumLevelsStr,
      'sumLevelsError': canDoAction,
-     'slots': _getSlotsData(unitMgrID, fullData, unitEntity.getRosterSettings().getLevelsRange(), maxPlayerCount=maxPlayerCount, withPrem=withPrem),
+     'slots': _getSlotsData(unitEntity, unitMgrID, fullData, unitEntity.getRosterSettings().getLevelsRange(), maxPlayerCount=maxPlayerCount, withPrem=withPrem),
      'description': unitEntity.getCensoredComment(unitMgrID=unitMgrID)}
 
 

@@ -344,6 +344,9 @@ class VehicleMarkerPlugin(MarkerPlugin, IArenaVehiclesController):
             self._destroyMarker(marker.getMarkerID())
             marker.destroy()
 
+    def _getMarkerName(self):
+        return settings.MARKER_SYMBOL_NAME.VEHICLE_MARKER
+
     def __addMarkerToPool(self, vehicleID, vProxy=None):
         if vProxy is not None:
             matrixProvider = self._clazz.fetchMatrixProvider(vProxy)
@@ -351,7 +354,7 @@ class VehicleMarkerPlugin(MarkerPlugin, IArenaVehiclesController):
         else:
             matrixProvider = None
             active = False
-        markerID = self._createMarkerWithMatrix(settings.MARKER_SYMBOL_NAME.VEHICLE_MARKER, matrixProvider=matrixProvider, active=active)
+        markerID = self._createMarkerWithMatrix(self._getMarkerName(), matrixProvider=matrixProvider, active=active)
         marker = self._clazz(markerID, vehicleID, vProxy=vProxy, active=active)
         marker.onVehicleModelChanged += self.__onVehicleModelChanged
         self._markers[vehicleID] = marker
@@ -441,7 +444,7 @@ class VehicleMarkerPlugin(MarkerPlugin, IArenaVehiclesController):
             elif eventID == _EVENT_ID.VEHICLE_SHOW_MARKER:
                 self.__showActionMarker(handle, value)
             elif eventID == _EVENT_ID.VEHICLE_HEALTH:
-                self.__updateVehicleHealth(handle, *value)
+                self.__updateVehicleHealth(vehicleID, handle, *value)
             elif eventID == _EVENT_ID.VEHICLE_STUN:
                 self.__updateStunMarker(vehicleID, handle, value.duration)
             elif eventID == _EVENT_ID.VEHICLE_INSPIRE:
@@ -508,14 +511,22 @@ class VehicleMarkerPlugin(MarkerPlugin, IArenaVehiclesController):
             self._updateStatusMarkerState(vehicleID, False, handle, statusID, duration, animated, isSourceVehicle)
         return
 
-    def __updateVehicleHealth(self, handle, newHealth, aInfo, attackReasonID):
-        if newHealth < 0 and not constants.SPECIAL_VEHICLE_HEALTH.IS_AMMO_BAY_DESTROYED(newHealth):
+    def __updateVehicleHealth(self, vehicleID, handle, newHealth, aInfo, attackReasonID):
+        if newHealth < 0 and not constants.SPECIAL_VEHICLE_HEALTH.IS_AMMO_BAY_DESTROYED(newHealth) or self.__isVehicleInLastStand(vehicleID):
             newHealth = 0
         replayCtrl = BattleReplay.g_replayCtrl
         if replayCtrl.isPlaying and replayCtrl.isTimeWarpInProgress:
             self._invokeMarker(handle, 'setHealth', newHealth)
         else:
             self._invokeMarker(handle, 'updateHealth', newHealth, self.__getVehicleDamageType(aInfo), constants.ATTACK_REASONS[attackReasonID])
+
+    def __isVehicleInLastStand(self, vehicleID):
+        feedback = self.sessionProvider.shared.feedback
+        vProxy = feedback.getVehicleProxy(vehicleID)
+        result = False
+        if vProxy:
+            result = vProxy.lastStandEnabled
+        return result
 
     def __onPlayerSpeaking(self, accountDBID, flag):
         vehicleID = self.sessionProvider.getCtx().getVehIDByAccDBID(accountDBID)

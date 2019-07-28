@@ -131,6 +131,7 @@ def getGuiServicesConfig(manager):
     from gui import Scaleform as _sf
     from gui import hangar_cameras
     from gui import impl
+    from gui.Scaleform.daapi.view.lobby import event_hangar
     from skeletons.gui.lobby_context import ILobbyContext
     manager.addConfig(app_loader.getAppLoaderConfig)
     manager.addConfig(shared.getSharedServices)
@@ -139,12 +140,14 @@ def getGuiServicesConfig(manager):
     manager.addConfig(impl.getGuiImplConfig)
     manager.addConfig(login.getLoginManagerConfig)
     manager.addConfig(server_events.getServerEventsConfig)
+    manager.addConfig(server_events.getGameEventController)
     manager.addConfig(battle_control.getBattleSessionConfig)
     manager.addConfig(sounds.getSoundsConfig)
     manager.addConfig(wgcg.getWebServicesConfig)
     manager.addConfig(event_boards.getEventServicesConfig)
     manager.addConfig(goodies.getGoodiesCacheConfig)
     manager.addConfig(battle_results.getBattleResultsServiceConfig)
+    manager.addConfig(event_hangar.getEventHangarSoundsConfig)
     manager.addConfig(customization.getCustomizationServiceConfig)
     manager.addConfig(hangar_cameras.getHangarCamerasConfig)
     manager.addConfig(promo.getPromoConfig)

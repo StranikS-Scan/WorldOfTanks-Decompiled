@@ -21,6 +21,7 @@ class WAITING(object):
     STORAGE_FORSELL = '#waiting:storage/forSell'
     BUYSLOT = '#waiting:buySlot'
     BUYBERTHS = '#waiting:buyBerths'
+    BUYGENERAL = '#waiting:buyGeneral'
     UPDATEINVENTORY = '#waiting:updateInventory'
     SELLITEM = '#waiting:sellItem'
     BUYITEM = '#waiting:buyItem'

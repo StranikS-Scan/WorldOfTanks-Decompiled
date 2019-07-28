@@ -1,27 +1,10 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/prb_control/storages/ranked_storage.py
 from gui.battle_control.arena_visitor import createByAvatar
-from gui.prb_control.storages.local_storage import LocalStorage
+from gui.prb_control.storages.selection_storage import SelectionStorage
 
-class RankedStorage(LocalStorage):
-    __slots__ = ('_isSelected',)
+class RankedStorage(SelectionStorage):
 
-    def __init__(self):
-        super(RankedStorage, self).__init__()
-        self._isSelected = False
-
-    def clear(self):
-        self._isSelected = False
-
-    def release(self):
-        self._isSelected = True
-
-    def suspend(self):
-        self.clear()
-
-    def isModeSelected(self):
-        return self._isSelected
-
-    def onAvatarBecomePlayer(self):
+    def _isInMode(self):
         arenaVisitor = createByAvatar()
-        self._isSelected = arenaVisitor.gui.isRankedBattle()
+        return arenaVisitor.gui.isRankedBattle()

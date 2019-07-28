@@ -321,6 +321,8 @@ class ARENA_SYNC_OBJECTS:
     SECTOR = 5
     OVERTIME = 6
     SMOKE = 7
+    GAME_EVENT = 8
+    BATTLE_HINTS = 9
 
 
 ARENA_SYNC_OBJECT_NAMES = dict([ (v, k) for k, v in ARENA_SYNC_OBJECTS.__dict__.iteritems() if not k.startswith('_') ])
@@ -342,6 +344,8 @@ class JOIN_FAILURE:
     WRONG_PERIPHERY_ID = 15
     WRONG_VEHICLE_LVL = 16
     QUEUE_FULL = 17
+    NOT_ENOUGHT_ENERGY = 18
+    GENERAL_NOT_SUPPORTED = 19
 
 
 JOIN_FAILURE_NAMES = dict([ (v, k) for k, v in JOIN_FAILURE.__dict__.iteritems() if not k.startswith('_') ])
@@ -374,6 +378,8 @@ class FINISH_REASON:
     ALLY_KILLED = 8
     OWN_VEHICLE_DESTROYED = 9
     DESTROYED_OBJECTS = 10
+    EVENT_BATTLE_TIMOUT = 11
+    EVENT_LINE_OF_FRONT_FOLD = 12
 
 
 class ARENA_EXT_MSG:
@@ -810,6 +816,14 @@ class EQUIPMENT_STAGES:
          cls.EXHAUSTED: 'exhausted'}.get(value)
 
 
+class EQUIPMENT_AIMING:
+    SELECTOR = 0
+    TARGET = 1
+    SELF = 2
+
+
+DEATH_ZONE_EQUIPMENT = 'death_zone_event_1'
+
 class DEVELOPMENT_INFO:
     ATTACK_RESULT = 1
     FIRE_RESULT = 2
@@ -876,6 +890,7 @@ class ATTACK_REASON(object):
     RECOVERY = 'recovery'
     ARTILLERY_EQ = 'artillery_eq'
     BOMBER_EQ = 'bomber_eq'
+    MINEFIELD_EQ = 'minefield_eq'
     NONE = 'none'
 
     @classmethod
@@ -898,6 +913,7 @@ ATTACK_REASONS = (ATTACK_REASON.SHOT,
  ATTACK_REASON.RECOVERY,
  ATTACK_REASON.ARTILLERY_EQ,
  ATTACK_REASON.BOMBER_EQ,
+ ATTACK_REASON.MINEFIELD_EQ,
  ATTACK_REASON.NONE)
 ATTACK_REASON_INDICES = dict(((value, index) for index, value in enumerate(ATTACK_REASONS)))
 DEATH_REASON_ALIVE = -1
@@ -1288,6 +1304,9 @@ class REQUEST_COOLDOWN:
     MAKE_DENUNCIATION = 1.0
     PREFERRED_MAPS = 1.0
     APPLY_ADDITIONAL_XP = 2.0
+    GENERAL_BUY_LEVEL = 1.0
+    BUY_ENERGY = 1.0
+    CHANGE_SELECTED_GENERAL = 1.0
 
 
 IS_SHOW_INGAME_HELP_FIRST_TIME = False
@@ -1492,6 +1511,8 @@ class USER_SERVER_SETTINGS:
     SNIPER_AIM_4 = 64
     LINKEDSET_QUESTS = 89
     QUESTS_PROGRESS = 90
+    GAME_EVENT = 92
+    GAME_MANUAL_EVENT = 93
     _ALL = (HIDE_MARKS_ON_GUN,
      EULA_VERSION,
      GAME_EXTENDED,
@@ -1591,7 +1612,9 @@ INT_USER_SETTINGS_KEYS = {USER_SERVER_SETTINGS.VERSION: 'Settings version',
  USER_SERVER_SETTINGS.HIDE_MARKS_ON_GUN: 'Hide marks on gun',
  USER_SERVER_SETTINGS.LINKEDSET_QUESTS: 'linkedset quests show reward info',
  USER_SERVER_SETTINGS.QUESTS_PROGRESS: 'feedback quests progress',
- 91: 'Loot box last viewed count'}
+ 91: 'Loot box last viewed count',
+ USER_SERVER_SETTINGS.GAME_EVENT: 'game event',
+ USER_SERVER_SETTINGS.GAME_MANUAL_EVENT: 'game manual event'}
 
 class WG_GAMES:
     TANKS = 'wot'
@@ -1899,6 +1922,7 @@ class RESPAWN_TYPES:
     SHARED = 2
     LIMITED = 3
     EPIC = 4
+    EVENT_LIMITED = 5
 
 
 class VISIBILITY:
@@ -2193,3 +2217,39 @@ class ASSIST_TYPES(object):
     STUN = 2
     SMOKE = 3
     INSPIRE = 4
+
+
+class EVENT:
+
+    class TRIGGER_TYPES(object):
+        TIME_INTERVAL = 'TimeInterval'
+        TIMER = 'Timer'
+        CIRCULAR_AREA_TRIGGER = 'CircularAreaAlly'
+        CIRCULAR_AREA_COUNTER = 'CircularAreaAllyCounter'
+        RECTANGULAR_AREA_TRIGGER = 'RectangularAreaAlly'
+        RECTANGULAR_AREA_COUNTER = 'RectangularAreaAllyCounter'
+
+    class LOG_TYPE:
+        VEHICLE_SPAWN = 'vehicleSpawn'
+        LOF_PENETRATED = 'lofPenetrated'
+        VEHICLE_KILLED = 'vehicleKilled'
+        WAVE_STARTED = 'waveStarted'
+        TEAMMATE_LIVES_LEFT = 'teammateLivesLeft'
+        DAMAGE_ENEMY = 'damageEnemy'
+        DEATHZONE_DAMAGE = 'deathzoneDamage'
+
+    PLAYERS_COUNT = 5
+    PLAYERS_TEAM = 1
+    ENEMY_TEAM = 2
+    BOT_EXPLOSION_DELAY = 6.5
+    BOT_REMOVAL_DELAY = 7.0
+    OBJECT_DEFENCE_DISTANCE = 200
+    ADDITIONAL_TARGET_SCORES = {'eventODKiller': 15,
+     'eventPlayerKiller': 5,
+     'eventAttacker': 2}
+    INVALID_GENERAL_ID = -1
+    AMOUNT_OF_SHELLS_SHOW_MARKER = 5
+    ARENA_WAITING_HINT_NAME = 'arena_waiting'
+
+
+GLOBAL_ENERGY_ID = 'img:se1_energy:webId'

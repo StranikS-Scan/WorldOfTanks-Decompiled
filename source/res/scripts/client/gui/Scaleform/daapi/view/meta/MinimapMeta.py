@@ -24,3 +24,6 @@ class MinimapMeta(BaseDAAPIComponent):
 
     def as_setBackgroundS(self, path):
         return self.flashObject.as_setBackground(path) if self._isDAAPIInited() else None
+
+    def as_setOverlayS(self, path):
+        return self.flashObject.as_setOverlay(path) if self._isDAAPIInited() else None

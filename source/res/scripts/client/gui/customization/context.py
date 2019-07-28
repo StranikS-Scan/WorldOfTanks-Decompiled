@@ -9,6 +9,7 @@ import Event
 from AccountCommands import isCodeValid
 from debug_utils import LOG_WARNING
 from gui.shared.utils import code2str
+from skeletons.hb1 import ICustomizableObjectsManager
 from soft_exception import SoftException
 from CurrentVehicle import g_currentVehicle
 from gui.shared.utils.decorators import process
@@ -46,6 +47,7 @@ class CustomizationContext(object):
     eventsCache = dependency.descriptor(IEventsCache)
     settingsCore = dependency.descriptor(ISettingsCore)
     hangarSpace = dependency.descriptor(IHangarSpace)
+    customizableObjectsMgr = dependency.descriptor(ICustomizableObjectsManager)
 
     @property
     def visibleTabs(self):
@@ -784,7 +786,7 @@ class CustomizationContext(object):
         self._autoRentEnabled = g_currentVehicle.item.isAutoRentStyle
         self._vehicleAnchorsUpdater = VehicleAnchorsUpdater(self.service, self)
         self._vehicleAnchorsUpdater.startUpdater(self.settingsCore.interfaceScale.get())
-        if self.hangarSpace.spaceInited:
+        if self.hangarSpace.spaceInited and not self.customizableObjectsMgr.isCamActive():
             self._c11CameraManager = C11nHangarCameraManager(self.hangarSpace.space.getCameraManager())
             self._c11CameraManager.init()
         self.settingsCore.interfaceScale.onScaleExactlyChanged += self.__onInterfaceScaleChanged

@@ -68,7 +68,7 @@ class PersonalEntriesPlugin(common.SimplePlugin):
         handler = avatar_getter.getInputHandler()
         if isinstance(handler, AvatarInputHandler):
             handler.onPostmortemKillerVisionEnter += self.__onKillerVisionEnter
-            handler.onPostmortemKillerVisionExit += self.__onKillerVisionExit
+            handler.onPostmortemKillerVisionExit += self._onKillerVisionExit
         super(PersonalEntriesPlugin, self).start()
         return
 
@@ -85,7 +85,7 @@ class PersonalEntriesPlugin(common.SimplePlugin):
         handler = avatar_getter.getInputHandler()
         if isinstance(handler, AvatarInputHandler):
             handler.onPostmortemKillerVisionEnter -= self.__onKillerVisionEnter
-            handler.onPostmortemKillerVisionExit -= self.__onKillerVisionExit
+            handler.onPostmortemKillerVisionExit -= self._onKillerVisionExit
         super(PersonalEntriesPlugin, self).stop()
         return
 
@@ -182,11 +182,14 @@ class PersonalEntriesPlugin(common.SimplePlugin):
     def setDefaultViewRangeCircleSize(self, size):
         self.__defaultViewRangeCircleSize = size
 
+    def setKillerVehicleID(self, killerVehicleID):
+        self.__killerVehicleID = killerVehicleID
+
     def __onKillerVisionEnter(self, killerVehicleID):
         self.__killerVehicleID = killerVehicleID
         self.updateControlMode(_CTRL_MODE.POSTMORTEM, killerVehicleID)
 
-    def __onKillerVisionExit(self):
+    def _onKillerVisionExit(self):
         self.__killerVehicleID = 0
         self.updateControlMode(_CTRL_MODE.POSTMORTEM, 0)
 
@@ -203,12 +206,21 @@ class PersonalEntriesPlugin(common.SimplePlugin):
             self.__clearYawLimit()
 
     def _updateDeadPointEntry(self, active=True):
-        isActive = not self.__isObserver and (not self.__isAlive or self._isInPostmortemMode())
+        isActive = self._isActiveDeadPoint()
         if self.__deadPointID:
             self._setActive(self.__deadPointID, active=isActive)
             return
         matrix = matrix_factory.makeOwnVehicleMatrix()
         self.__deadPointID = self._addEntry(_S_NAME.DEAD_POINT, _C_NAME.PERSONAL, matrix=matrix, active=isActive)
+
+    def _isActiveDeadPoint(self):
+        return not self.__isObserver and (not self.__isAlive or self._isInPostmortemMode())
+
+    def _isActiveViewPoint(self, vehicleID):
+        return self._isInPostmortemMode() and vehicleID and vehicleID != self.__playerVehicleID or self._isInVideoMode() and self.__isAlive or not (self._isInPostmortemMode() or self._isInVideoMode() or self.__isObserver)
+
+    def _isActiveViewRangeCircle(self):
+        return not self.__isObserver and self.__isAlive
 
     def __createCameraEntries(self, *modes):
         self.__cameraIDs.clear()
@@ -279,7 +291,7 @@ class PersonalEntriesPlugin(common.SimplePlugin):
             self._setActive(entryID, False)
 
     def __updateViewPointEntry(self, vehicleID=0):
-        isActive = self._isInPostmortemMode() and vehicleID and vehicleID != self.__playerVehicleID or self._isInVideoMode() and self.__isAlive or not (self._isInPostmortemMode() or self._isInVideoMode() or self.__isObserver)
+        isActive = self._isActiveViewPoint(vehicleID)
         if self.__killerVehicleID:
             ownMatrix = matrix_factory.getEntityMatrix(self.__killerVehicleID)
         else:
@@ -297,7 +309,7 @@ class PersonalEntriesPlugin(common.SimplePlugin):
 
     def __updateViewRangeCircle(self):
         ownMatrix = matrix_factory.makeAttachedVehicleMatrix()
-        isActive = not self.__isObserver and self.__isAlive
+        isActive = self._isActiveViewRangeCircle()
         if self.__circlesID:
             self._setActive(self.__circlesID, isActive)
             self._setMatrix(self.__circlesID, ownMatrix)

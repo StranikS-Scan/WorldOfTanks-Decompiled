@@ -32,7 +32,8 @@ _ATTACK_REASON_CODE = {_AR_INDICES['shot']: 'DEATH_FROM_SHOT',
  _AR_INDICES['bombers']: 'DEATH_FROM_SECTOR_BOMBERS',
  _AR_INDICES['recovery']: 'DEATH_FROM_RECOVERY',
  _AR_INDICES['artillery_eq']: 'DEATH_FROM_SHOT',
- _AR_INDICES['bomber_eq']: 'DEATH_FROM_SHOT'}
+ _AR_INDICES['bomber_eq']: 'DEATH_FROM_SHOT',
+ _AR_INDICES['minefield_eq']: 'DEATH_FROM_SHOT'}
 _PLAYER_KILL_ENEMY_SOUND = 'enemy_killed_by_player'
 _PLAYER_KILL_ALLY_SOUND = 'ally_killed_by_player'
 _ALLY_KILLED_SOUND = 'ally_killed_by_enemy'
@@ -259,16 +260,38 @@ class EpicBattleMessagesController(BattleMessagesController):
         return True
 
 
+class EventBattleMessagesPlayer(BattleMessagesPlayer):
+
+    def showAllyHitMessage(self, vehicleID=None):
+        pass
+
+
+class EventBattleMessagesController(BattleMessagesController):
+
+    def showAllyHitMessage(self, vehicleID=None):
+        pass
+
+    def showVehicleKilledMessage(self, avatar, targetID, attackerID, equipmentID, reason):
+        isKilledByLineOfFront = reason == _AR_INDICES['fire'] and attackerID == targetID
+        if not isKilledByLineOfFront:
+            super(EventBattleMessagesController, self).showVehicleKilledMessage(avatar, targetID, attackerID, equipmentID, reason)
+
+
 def createBattleMessagesCtrl(setup):
     sessionProvider = dependency.instance(IBattleSessionProvider)
     arenaVisitor = sessionProvider.arenaVisitor
-    if not arenaVisitor.gui.isInEpicRange():
+    if arenaVisitor.gui.isInEpicRange():
         if setup.isReplayPlaying:
-            ctrl = BattleMessagesPlayer(setup)
+            ctrl = EpicBattleMessagesPlayer(setup)
         else:
-            ctrl = BattleMessagesController(setup)
+            ctrl = EpicBattleMessagesController(setup)
+    elif arenaVisitor.gui.isEventBattle():
+        if setup.isReplayPlaying:
+            ctrl = EventBattleMessagesPlayer(setup)
+        else:
+            ctrl = EventBattleMessagesController(setup)
     elif setup.isReplayPlaying:
-        ctrl = EpicBattleMessagesPlayer(setup)
+        ctrl = BattleMessagesPlayer(setup)
     else:
-        ctrl = EpicBattleMessagesController(setup)
+        ctrl = BattleMessagesController(setup)
     return ctrl

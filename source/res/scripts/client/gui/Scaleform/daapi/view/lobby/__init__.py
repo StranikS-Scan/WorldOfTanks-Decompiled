@@ -41,7 +41,7 @@ def getViewSettings():
     from gui.Scaleform.daapi.view.lobby.eliteWindow.EliteWindow import EliteWindow
     from gui.Scaleform.daapi.view.lobby.AwardWindow import AwardWindow
     from gui.Scaleform.daapi.view.lobby.AwardWindow import MissionAwardWindow
-    from gui.Scaleform.daapi.view.lobby.battle_queue import BattleQueue, BattleStrongholdsQueue
+    from gui.Scaleform.daapi.view.lobby.battle_queue import BattleQueue, BattleStrongholdsQueue, EventBattleQueue
     from gui.Scaleform.daapi.view.lobby.BrowserWindow import BrowserWindow
     from gui.Scaleform.daapi.view.lobby.Browser import Browser
     from gui.Scaleform.daapi.view.lobby.components.CalendarComponent import CalendarComponent
@@ -84,9 +84,11 @@ def getViewSettings():
     from gui.Scaleform.daapi.view.bootcamp.BCBattleResult import BCBattleResult
     from gui.Scaleform.daapi.view.bootcamp.BCVehiclePreview import BCVehiclePreview
     from gui.Scaleform.daapi.view.lobby.vehiclePreview20.style_preview import VehicleStylePreview
+    from gui.Scaleform.daapi.view.lobby.april_event.event_battle_results import EventBattleResult
     return (ViewSettings(VIEW_ALIAS.LOBBY, LobbyView, 'lobbyPage.swf', ViewTypes.DEFAULT, None, ScopeTemplates.DEFAULT_SCOPE, False, (ContainerSettings(ViewTypes.LOBBY_SUB, containers.DefaultContainer), ContainerSettings(ViewTypes.LOBBY_TOP_SUB, containers.PopUpContainer))),
      ViewSettings(VIEW_ALIAS.LOBBY_VEHICLE_MARKER_VIEW, LobbyVehicleMarkerView, 'lobbyVehicleMarkerView.swf', ViewTypes.MARKER, VIEW_ALIAS.LOBBY_VEHICLE_MARKER_VIEW, ScopeTemplates.DEFAULT_SCOPE),
      ViewSettings(VIEW_ALIAS.BATTLE_QUEUE, BattleQueue, 'battleQueue.swf', ViewTypes.LOBBY_SUB, VIEW_ALIAS.BATTLE_QUEUE, ScopeTemplates.DEFAULT_SCOPE),
+     ViewSettings(VIEW_ALIAS.EVENT_BATTLE_QUEUE, EventBattleQueue, 'eventBattleQueue.swf', ViewTypes.LOBBY_SUB, VIEW_ALIAS.EVENT_BATTLE_QUEUE, ScopeTemplates.DEFAULT_SCOPE),
      ViewSettings(VIEW_ALIAS.BATTLE_STRONGHOLDS_QUEUE, BattleStrongholdsQueue, 'battleStrongholdsQueue.swf', ViewTypes.LOBBY_SUB, VIEW_ALIAS.BATTLE_STRONGHOLDS_QUEUE, ScopeTemplates.DEFAULT_SCOPE),
      ViewSettings(VIEW_ALIAS.LOBBY_CUSTOMIZATION, CustomizationMainView, 'customizationMainView.swf', ViewTypes.LOBBY_SUB, VIEW_ALIAS.LOBBY_CUSTOMIZATION, ScopeTemplates.LOBBY_SUB_SCOPE),
      ConditionalViewSettings(VIEW_ALIAS.VEHICLE_PREVIEW, BootcampComponentOverride(VehiclePreview, BCVehiclePreview), 'vehiclePreview.swf', ViewTypes.LOBBY_SUB, None, VIEW_ALIAS.VEHICLE_PREVIEW, ScopeTemplates.LOBBY_SUB_SCOPE),
@@ -119,6 +121,7 @@ def getViewSettings():
      GroupedViewSettings(VIEW_ALIAS.AWARD_WINDOW, AwardWindow, 'awardWindow.swf', ViewTypes.WINDOW, 'awardWindow', None, ScopeTemplates.DEFAULT_SCOPE),
      GroupedViewSettings(VIEW_ALIAS.AWARD_WINDOW_MODAL, AwardWindow, 'awardWindow.swf', ViewTypes.TOP_WINDOW, 'awardWindow', None, ScopeTemplates.DEFAULT_SCOPE, isModal=True),
      ConditionalViewSettings(VIEW_ALIAS.BATTLE_RESULTS, BootcampComponentOverride(BattleResultsWindow, BCBattleResult), BootcampComponentOverride('battleResults.swf', 'BCBattleResult.swf'), BootcampComponentOverride(ViewTypes.WINDOW, ViewTypes.TOP_WINDOW), BootcampComponentOverride('BattleResultsWindow', ''), None, BootcampComponentOverride(ScopeTemplates.DEFAULT_SCOPE, ScopeTemplates.TOP_WINDOW_SCOPE)),
+     GroupedViewSettings(VIEW_ALIAS.EVENT_BATTLE_RESULTS, EventBattleResult, 'battleResultPage.swf', ViewTypes.LOBBY_SUB, '', None, ScopeTemplates.LOBBY_SUB_SCOPE),
      GroupedViewSettings(VIEW_ALIAS.BROWSER_WINDOW, BrowserWindow, 'browserWindow.swf', ViewTypes.WINDOW, '', None, ScopeTemplates.DEFAULT_SCOPE),
      GroupedViewSettings(VIEW_ALIAS.BROWSER_WINDOW_MODAL, BrowserWindow, 'browserWindow.swf', ViewTypes.WINDOW, '', None, ScopeTemplates.DEFAULT_SCOPE, isModal=True, canDrag=False),
      GroupedViewSettings(VIEW_ALIAS.DEMONSTRATOR_WINDOW, DemonstratorWindow, 'demonstratorWindow.swf', ViewTypes.WINDOW, '', None, ScopeTemplates.DEFAULT_SCOPE),
@@ -164,8 +167,10 @@ class LobbyPackageBusinessHandler(PackageBusinessHandler):
         listeners = ((VIEW_ALIAS.AWARD_WINDOW, self.loadViewByCtxEvent),
          (VIEW_ALIAS.AWARD_WINDOW_MODAL, self.loadViewByCtxEvent),
          (VIEW_ALIAS.BATTLE_QUEUE, self.loadViewByCtxEvent),
+         (VIEW_ALIAS.EVENT_BATTLE_QUEUE, self.loadViewByCtxEvent),
          (VIEW_ALIAS.BATTLE_STRONGHOLDS_QUEUE, self.loadViewByCtxEvent),
          (VIEW_ALIAS.BATTLE_RESULTS, self.loadViewByCtxEvent),
+         (VIEW_ALIAS.EVENT_BATTLE_RESULTS, self.loadViewByCtxEvent),
          (VIEW_ALIAS.BROWSER_WINDOW, self.loadViewByCtxEvent),
          (VIEW_ALIAS.BROWSER_WINDOW_MODAL, self.loadViewByCtxEvent),
          (VIEW_ALIAS.DEMONSTRATOR_WINDOW, self.loadViewByCtxEvent),

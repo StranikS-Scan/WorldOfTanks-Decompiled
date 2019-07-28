@@ -190,11 +190,11 @@ def _getDesiredShotPointUncached(start, direction, onlyOnGround, isStrategicMode
 g_desiredShotPoint = Vector3(0)
 g_frameStamp = -1
 
-def getDesiredShotPoint(start, direction, onlyOnGround=False, isStrategicMode=False, terrainOnlyCheck=False):
+def getDesiredShotPoint(start, direction, onlyOnGround=False, isStrategicMode=False, terrainOnlyCheck=False, force=False):
     global g_desiredShotPoint
     global g_frameStamp
     currentFrameStamp = BigWorld.wg_getFrameTimestamp()
-    if g_frameStamp == currentFrameStamp:
+    if g_frameStamp == currentFrameStamp and not force:
         return g_desiredShotPoint
     g_frameStamp = currentFrameStamp
     g_desiredShotPoint = _getDesiredShotPointUncached(start, direction, onlyOnGround, isStrategicMode, terrainOnlyCheck)

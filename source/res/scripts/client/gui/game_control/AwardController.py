@@ -14,7 +14,7 @@ from account_helpers.AccountSettings import AccountSettings, AWARDS, SPEAKERS_DE
 from account_helpers.settings_core.settings_constants import SOUND
 from account_shared import getFairPlayViolationName
 from chat_shared import SYS_MESSAGE_TYPE
-from constants import EVENT_TYPE, INVOICE_ASSET, PREMIUM_TYPE
+from constants import EVENT_TYPE, INVOICE_ASSET, PREMIUM_TYPE, GLOBAL_ENERGY_ID
 from dossiers2.custom.records import DB_ID_TO_RECORD
 from dossiers2.ui.layouts import PERSONAL_MISSIONS_GROUP
 from gui import DialogsInterface
@@ -28,6 +28,7 @@ from gui.Scaleform.genConsts.RANKEDBATTLES_ALIASES import RANKEDBATTLES_ALIASES
 from gui.Scaleform.locale.DIALOGS import DIALOGS
 from gui.Scaleform.locale.MESSENGER import MESSENGER
 from gui.Scaleform.locale.SYSTEM_MESSAGES import SYSTEM_MESSAGES
+from gui.Scaleform.locale.EVENT import EVENT
 from gui.gold_fish import isGoldFishActionActive, isTimeToShowGoldFishPromo
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.loot_box_view.loot_congrats_types import LootCongratsTypes
@@ -450,10 +451,11 @@ class MarkByQuestHandler(MultiTypeServiceChannelHandler):
         return bool(self.__tokenCount)
 
     def _showAward(self, ctx):
-        self.__showMessage()
-
-    def __showMessage(self):
-        SystemMessages.pushI18nMessage(SYSTEM_MESSAGES.TOKENS_NOTIFICATION_MARK_ACQUIRED, count=self.__tokenCount, type=SystemMessages.SM_TYPE.tokenWithMarkAcquired)
+        localizationKey = SYSTEM_MESSAGES.TOKENS_NOTIFICATION_MARK_ACQUIRED
+        _, message = ctx
+        if GLOBAL_ENERGY_ID in message.data.get('tokens', {}):
+            localizationKey = EVENT.TOKENS_NOTIFICATION_ENERGY_RECEIVED
+        SystemMessages.pushI18nMessage(localizationKey, count=self.__tokenCount, type=SystemMessages.SM_TYPE.tokenWithMarkAcquired)
 
     @staticmethod
     def __extractCount(message):

@@ -774,6 +774,11 @@ class _CollisionSoundEffectDesc(_NodeSoundEffectDesc):
 class _DestructionSoundEffectDesc(_BaseSoundEvent):
     TYPE = '_DestructionSoundEffectDesc'
     __slots__ = ('_soundName', '_parameters')
+    _timeStamp = 0.0
+    _effectCount = 0
+    _DELTA_TIME_MAX = 1
+    _MAX_EFFECT_COUNT = 10
+    guiSessionProvider = dependency.descriptor(IBattleSessionProvider)
 
     def __init__(self, dataSection):
         super(_DestructionSoundEffectDesc, self).__init__(dataSection)
@@ -785,6 +790,16 @@ class _DestructionSoundEffectDesc(_BaseSoundEvent):
         if soundName == '':
             return
         else:
+            isEventBattle = self.guiSessionProvider.arenaVisitor.gui.isEventBattle()
+            if isEventBattle:
+                prevCallDelta = BigWorld.time() - _DestructionSoundEffectDesc._timeStamp
+                _DestructionSoundEffectDesc._timeStamp = BigWorld.time()
+                if prevCallDelta < _DestructionSoundEffectDesc._DELTA_TIME_MAX:
+                    if _DestructionSoundEffectDesc._effectCount > _DestructionSoundEffectDesc._MAX_EFFECT_COUNT:
+                        return
+                    _DestructionSoundEffectDesc._effectCount += 1
+                else:
+                    _DestructionSoundEffectDesc._effectCount = 0
             node = _findTargetNodeSafe(model, self._nodeName)
             objectName = soundName
             sound = SoundGroups.g_instance.WWgetSoundObject(objectName, node.actualNode)
@@ -992,26 +1007,23 @@ class _DecalEffectDesc(_EffectDesc):
 
     def __init__(self, dataSection):
         _EffectDesc.__init__(self, dataSection)
-        self._texName = intern(dataSection.readString('texName'))
-        bumpSubsection = dataSection['bumpTexName']
-        if bumpSubsection is None:
-            self._bumpTexName = ''
-        else:
-            self._bumpTexName = intern(bumpSubsection.asString)
-        smSubsection = dataSection['smTexName']
-        if smSubsection is None:
-            self._smTexName = ''
-        else:
-            self._smTexName = intern(smSubsection.asString)
+        self._texName = dataSection.readString('texName').split()
+        self._bumpTexName = dataSection.readString('bumpTexName').split()
+        self._smTexName = dataSection.readString('smTexName').split()
         self._groupName = intern(dataSection.readString('groupName'))
         self._size = dataSection.readVector2('size')
         self._randomYaw = dataSection.readBool('randomYaw')
         self._variation = dataSection.readFloat('variation', 0.0)
-        return
 
     def create(self, model, effects, args):
         if not args.get('showDecal', True) or not BigWorld.isDynamicDecalEnabled():
             return
+        if not self._texName:
+            return
+        texIndex = random.randrange(len(self._texName))
+        texName = intern(self._texName[texIndex])
+        bumpTexName = intern(self._bumpTexName[texIndex]) if texIndex < len(self._bumpTexName) else ''
+        smTexName = intern(self._smTexName[texIndex]) if texIndex < len(self._smTexName) else ''
         rayStart = args['start']
         rayEnd = args['end']
         size = self._size.scale(random.uniform(1.0 - self._variation, 1.0 + self._variation))
@@ -1019,7 +1031,7 @@ class _DecalEffectDesc(_EffectDesc):
         extent = rayEnd - rayStart
         extent.normalise()
         extent *= size.length * 0.707
-        BigWorld.wg_addDecal(self._groupName, center - extent, center + extent, size, args['yaw'] if not self._randomYaw else random.uniform(0.0, 3.14), DecalMap.g_instance.getIndex(self._texName), DecalMap.g_instance.getIndex(self._bumpTexName), DecalMap.g_instance.getIndex(self._smTexName))
+        BigWorld.wg_addDecal(self._groupName, center - extent, center + extent, size, args['yaw'] if not self._randomYaw else random.uniform(0.0, 3.14), DecalMap.g_instance.getIndex(texName), DecalMap.g_instance.getIndex(bumpTexName), DecalMap.g_instance.getIndex(smTexName))
 
     def delete(self, elem, reason):
         return True

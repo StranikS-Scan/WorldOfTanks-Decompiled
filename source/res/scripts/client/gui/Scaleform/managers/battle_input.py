@@ -5,6 +5,8 @@ from AvatarInputHandler import aih_global_binding
 from AvatarInputHandler.aih_constants import CTRL_MODE_NAME
 from gui.battle_control import avatar_getter
 from gui.battle_control import event_dispatcher
+from helpers import dependency
+from skeletons.gui.battle_session import IBattleSessionProvider
 from soft_exception import SoftException
 
 class BattleGUIKeyHandler(object):
@@ -16,6 +18,7 @@ class BattleGUIKeyHandler(object):
 class BattleGameInputMgr(object):
     __slots__ = ('__consumers', '__keyHandlers')
     __ctrlModeName = aih_global_binding.bindRO(aih_global_binding.BINDING_ID.CTRL_MODE_NAME)
+    guiSessionProvider = dependency.descriptor(IBattleSessionProvider)
 
     def __init__(self):
         super(BattleGameInputMgr, self).__init__()
@@ -67,14 +70,22 @@ class BattleGameInputMgr(object):
 
             if isDown and self.__ctrlModeName != CTRL_MODE_NAME.MAP_CASE:
                 event_dispatcher.showIngameMenu()
-                event_dispatcher.toggleFullStats(False)
+                isEventBattle = self.guiSessionProvider.arenaVisitor.gui.isEventBattle()
+                if isEventBattle:
+                    event_dispatcher.toggleEventStats(False)
+                else:
+                    event_dispatcher.toggleFullStats(False)
             return True
         if key in (Keys.KEY_LCONTROL, Keys.KEY_RCONTROL):
             if not self.__consumers:
                 avatar_getter.setForcedGuiControlMode(isDown, enableAiming=False)
             return True
         if key == Keys.KEY_TAB and (mods != Keys.MODIFIER_CTRL or not isDown):
-            event_dispatcher.toggleFullStats(isDown)
+            isEventBattle = self.guiSessionProvider.arenaVisitor.gui.isEventBattle()
+            if isEventBattle:
+                event_dispatcher.toggleEventStats(isDown)
+            else:
+                event_dispatcher.toggleFullStats(isDown)
             return True
         if key == Keys.KEY_TAB and mods == Keys.MODIFIER_CTRL and isDown:
             if not self.__consumers:

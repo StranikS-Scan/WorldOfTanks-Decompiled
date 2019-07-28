@@ -11,23 +11,25 @@ _CHAPTERS_DATA_PATH = 'gui/manual/'
 _CHAPTERS_LIST_XML = 'chapters_list.xml'
 _HINTS_PAGE = 'hints_page'
 _BOOTCAMP_PAGE = 'bootcamp_page'
+_ANNOUNCEMENT_PAGE = 'announcement_page'
 _MANUAL_LESSON_TEMPLATES = {_HINTS_PAGE: MANUAL_TEMPLATES.HINTS,
- _BOOTCAMP_PAGE: MANUAL_TEMPLATES.BOOTCAMP}
+ _BOOTCAMP_PAGE: MANUAL_TEMPLATES.BOOTCAMP,
+ _ANNOUNCEMENT_PAGE: MANUAL_TEMPLATES.ANNOUNCEMENT}
 
-def getChapters(isBootcampEnabled):
+def getChapters(isBootcampEnabled, sectionName):
     chaptersListPath = _CHAPTERS_DATA_PATH + _CHAPTERS_LIST_XML
     with resource_helper.root_generator(chaptersListPath) as ctx, root:
-        chapters = __readChapters(ctx, root, isBootcampEnabled)
+        chapters = __readChapters(ctx, root, isBootcampEnabled, sectionName)
     return chapters
 
 
-def getPagesIndexesList(isBootcampEnabled):
-    chaptersData = getChapters(isBootcampEnabled)
+def getPagesIndexesList(isBootcampEnabled, sectionName):
+    chaptersData = getChapters(isBootcampEnabled, sectionName)
     return itertools.chain.from_iterable([ chapter['pageIDs'] for chapter in chaptersData ])
 
 
-def getChaptersIndexesList(isBootcampEnabled):
-    chaptersData = getChapters(isBootcampEnabled)
+def getChaptersIndexesList(isBootcampEnabled, sectionName):
+    chaptersData = getChapters(isBootcampEnabled, sectionName)
     return [ chapter['uiData']['index'] for chapter in chaptersData ]
 
 
@@ -47,6 +49,7 @@ def __readChapter(ctx, root, isBootcampEnabled, bootcampRunCount):
     for lessonCtx, lessonSection in resource_helper.getIterator(ctx, section):
         template = __getCustomSectionValue(lessonCtx, lessonSection, 'template')
         title = translation(__getCustomSectionValue(lessonCtx, lessonSection, 'title'))
+        tooltip = title
         background = __getCustomSectionValue(lessonCtx, lessonSection, 'background')
         description = __getCustomSectionValue(lessonCtx, lessonSection, 'description', safe=True)
         if description is None:
@@ -54,11 +57,17 @@ def __readChapter(ctx, root, isBootcampEnabled, bootcampRunCount):
         else:
             description = translation(description)
         contentRendererLinkage = ''
+        detail = {}
         if template is _BOOTCAMP_PAGE:
             if not isBootcampEnabled:
                 continue
             contentRendererData = __getBootcampRendererData(bootcampRunCount)
             contentRendererLinkage = _MANUAL_LESSON_TEMPLATES.get(template)
+        elif template is _ANNOUNCEMENT_PAGE:
+            contentRendererData = __getAnnouncementRendererData(lessonCtx, lessonSection)
+            contentRendererLinkage = _MANUAL_LESSON_TEMPLATES.get(template)
+            detail.update({'animatedBackground': template == _ANNOUNCEMENT_PAGE})
+            title = None
         else:
             contentRendererData, hintsCount = __getHintsRendererData(lessonCtx, lessonSection)
             if hintsCount > 0:
@@ -67,12 +76,13 @@ def __readChapter(ctx, root, isBootcampEnabled, bootcampRunCount):
          'pageIndex': int(index),
          'selected': False,
          'label': str(int(index) + 1),
-         'tooltip': {'tooltip': makeTooltip(title)}})
-        details.append({'title': title,
+         'tooltip': {'tooltip': makeTooltip(tooltip)}})
+        detail.update({'title': title,
          'description': description,
          'background': background,
          'contentRendererLinkage': contentRendererLinkage,
          'contentRendererData': contentRendererData})
+        details.append(detail)
         index += 1
 
     chapterData = {'pages': pages,
@@ -81,8 +91,8 @@ def __readChapter(ctx, root, isBootcampEnabled, bootcampRunCount):
     return chapterData
 
 
-def __readChapters(ctx, root, isBootcampEnabled):
-    ctx, section = resource_helper.getSubSection(ctx, root, 'chapters')
+def __readChapters(ctx, root, isBootcampEnabled, sectionName):
+    ctx, section = resource_helper.getSubSection(ctx, root, sectionName)
     chapters = []
     index = 0
     for chapterCtx, chapterSection in resource_helper.getIterator(ctx, section):
@@ -153,3 +163,21 @@ def __getHintsRendererData(lessonCtx, lessonSection):
 
         contentRendererData = {'hints': hints}
     return (contentRendererData, len(hints))
+
+
+def __getAnnouncementRendererData(lessonCtx, lessonSection):
+    ctx, section = resource_helper.getSubSection(lessonCtx, lessonSection, 'anouncement', safe=True)
+    if section is None:
+        return
+    else:
+        header = translation(__getCustomSectionValue(ctx, section, 'header'))
+        text = translation(__getCustomSectionValue(ctx, section, 'text'))
+        data = {'header': header,
+         'text': text}
+        buttonText = __getCustomSectionValue(ctx, section, 'buttonText', safe=True)
+        if buttonText:
+            buttonText = translation(buttonText)
+            link = __getCustomSectionValue(ctx, section, 'link')
+            data.update({'buttonText': buttonText,
+             'link': link})
+        return data

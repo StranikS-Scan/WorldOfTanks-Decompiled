@@ -70,6 +70,28 @@
     <Rolls_Royse_Meteor_MkV_IGR>	60005	</Rolls_Royse_Meteor_MkV_IGR>
     <Vauxhall_Bedford_Twin_Six_IGR>	60006	</Vauxhall_Bedford_Twin_Six_IGR>
     <Rolls_Royce_Griffon_IGR>	60007	</Rolls_Royce_Griffon_IGR>
+    <GMC_6-71_Mk11_G3_1>	0	</GMC_6-71_Mk11_G3_1>
+    <GMC_6-71_Mk11_G3_2>	3	</GMC_6-71_Mk11_G3_2>
+    <Leyland_G3_3>	6	</Leyland_G3_3>
+    <Vauxhall_Bedford_Twin_Six_G3_4>	11	</Vauxhall_Bedford_Twin_Six_G3_4>
+    <Vauxhall_Bedford_Twin_Six_G3_5>	15	</Vauxhall_Bedford_Twin_Six_G3_5>
+    <Wright_Continental_R-975C4_G3_6>	16	</Wright_Continental_R-975C4_G3_6>
+    <Meadows_DAV_G3_7>	17	</Meadows_DAV_G3_7>
+    <Vauxhall_Bedford_Twin_Six_G3_8>	22	</Vauxhall_Bedford_Twin_Six_G3_8>
+    <Wright_Continental_R-975C4_G3_9>	27	</Wright_Continental_R-975C4_G3_9>
+    <Meadows_DAV_MkI_G4_1>	30	</Meadows_DAV_MkI_G4_1>
+    <Meadows_DAV_MkI_G4_2>	31	</Meadows_DAV_MkI_G4_2>
+    <Nuffield_liberty_MKV_G4_3>	33	</Nuffield_liberty_MKV_G4_3>
+    <Nuffield_liberty_MKV_G4_4>	36	</Nuffield_liberty_MKV_G4_4>
+    <Nuffield_liberty_MKV_G4_5>	37	</Nuffield_liberty_MKV_G4_5>
+    <Nuffield_liberty_MKV_G4_3__0>	45	</Nuffield_liberty_MKV_G4_3__0>
+    <Nuffield_liberty_MKV_G4_4__0>	50	</Nuffield_liberty_MKV_G4_4__0>
+    <Nuffield_liberty_MKV_G4_5__0>	51	</Nuffield_liberty_MKV_G4_5__0>
+    <Nuffield_liberty_MKV_G4_7>	52	</Nuffield_liberty_MKV_G4_7>
+    <Wright_Continental_R-975C4_G4_6>	44	</Wright_Continental_R-975C4_G4_6>
+    <Wright_Continental_R-975C4_G4_9>	53	</Wright_Continental_R-975C4_G4_9>
+    <Rolls_Royse_Meteor_MkIV_G4_8>	69	</Rolls_Royse_Meteor_MkIV_G4_8>
+    <Ford_GAA_G4_10>	70	</Ford_GAA_G4_10>
   </ids>
   <shared>
     <Vickers-Armstrong>
@@ -1225,5 +1247,379 @@
       <rpm_min>	416	</rpm_min>
       <rpm_max>	2848	</rpm_max>
     </Engine_FV4202>
+    <GMC_6-71_Mk11_G3_1>
+      <userString>	#gb_vehicles:GMC_6-71_Mk11	</userString>
+      <tags>	diesel	</tags>
+      <level>	5	</level>
+      <price>	11000	</price>
+      <wwsoundPC>	eng_Hetzer_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Hetzer_npc	</wwsoundNPC>
+      <power>	165	</power>
+      <weight>	991	</weight>
+      <maxHealth>	72	</maxHealth>
+      <maxRegenHealth>	36	</maxRegenHealth>
+      <repairCost>	1	</repairCost>
+      <fireStartingChance>	0.15	</fireStartingChance>
+      <rpm_min>	326	</rpm_min>
+      <rpm_max>	2046	</rpm_max>
+      <notInShop>	True	</notInShop>
+    </GMC_6-71_Mk11_G3_1>
+    <GMC_6-71_Mk11_G3_2>
+      <userString>	#gb_vehicles:GMC_6-71_Mk11	</userString>
+      <tags>	diesel	</tags>
+      <level>	5	</level>
+      <price>	11000	</price>
+      <wwsoundPC>	eng_Hetzer_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Hetzer_npc	</wwsoundNPC>
+      <power>	165	</power>
+      <weight>	991	</weight>
+      <maxHealth>	72	</maxHealth>
+      <maxRegenHealth>	36	</maxRegenHealth>
+      <repairCost>	1	</repairCost>
+      <fireStartingChance>	0.15	</fireStartingChance>
+      <rpm_min>	326	</rpm_min>
+      <rpm_max>	2046	</rpm_max>
+      <notInShop>	True	</notInShop>
+    </GMC_6-71_Mk11_G3_2>
+    <Leyland_G3_3>
+      <userString>	#gb_vehicles:Leyland	</userString>
+      <tags>	diesel	</tags>
+      <level>	3	</level>
+      <price>	4000	</price>
+      <wwsoundPC>	eng_Hetzer_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Hetzer_npc	</wwsoundNPC>
+      <power>	190	</power>
+      <weight>	331	</weight>
+      <maxHealth>	65	</maxHealth>
+      <maxRegenHealth>	32	</maxRegenHealth>
+      <repairCost>	1	</repairCost>
+      <fireStartingChance>	0.15	</fireStartingChance>
+      <rpm_min>	315	</rpm_min>
+      <rpm_max>	2069	</rpm_max>
+      <notInShop>	True	</notInShop>
+    </Leyland_G3_3>
+    <Vauxhall_Bedford_Twin_Six_G3_4>
+      <userString>	#gb_vehicles:Vauxhall_Bedford_Twin_Six	</userString>
+      <tags>	gasoline	</tags>
+      <level>	4	</level>
+      <price>	11000	</price>
+      <wwsoundPC>	eng_Continental_R975_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Continental_R975_npc	</wwsoundNPC>
+      <power>	350	</power>
+      <weight>	1531	</weight>
+      <maxHealth>	104	</maxHealth>
+      <maxRegenHealth>	52	</maxRegenHealth>
+      <repairCost>	3	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	406	</rpm_min>
+      <rpm_max>	2500	</rpm_max>
+      <notInShop>	True	</notInShop>
+    </Vauxhall_Bedford_Twin_Six_G3_4>
+    <Vauxhall_Bedford_Twin_Six_G3_5>
+      <userString>	#gb_vehicles:Vauxhall_Bedford_Twin_Six	</userString>
+      <tags>	gasoline	</tags>
+      <level>	4	</level>
+      <price>	11000	</price>
+      <wwsoundPC>	eng_Continental_R975_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Continental_R975_npc	</wwsoundNPC>
+      <power>	350	</power>
+      <weight>	1531	</weight>
+      <maxHealth>	104	</maxHealth>
+      <maxRegenHealth>	52	</maxRegenHealth>
+      <repairCost>	3	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	406	</rpm_min>
+      <rpm_max>	2500	</rpm_max>
+      <notInShop>	True	</notInShop>
+    </Vauxhall_Bedford_Twin_Six_G3_5>
+    <Wright_Continental_R-975C4_G3_6>
+      <userString>	#gb_vehicles:Wright_Continental_R-975C4	</userString>
+      <tags>	gasoline	</tags>
+      <level>	5	</level>
+      <price>	13900	</price>
+      <wwsoundPC>	eng_Continental_R975_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Continental_R975_npc	</wwsoundNPC>
+      <power>	460	</power>
+      <weight>	550	</weight>
+      <maxHealth>	136	</maxHealth>
+      <maxRegenHealth>	67	</maxRegenHealth>
+      <repairCost>	3	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	337	</rpm_min>
+      <rpm_max>	2721	</rpm_max>
+      <notInShop>	True	</notInShop>
+    </Wright_Continental_R-975C4_G3_6>
+    <Meadows_DAV_G3_7>
+      <userString>	#gb_vehicles:Meadows_DAV	</userString>
+      <tags>	gasoline	</tags>
+      <level>	4	</level>
+      <price>	9000	</price>
+      <wwsoundPC>	eng_Continental_R975_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Continental_R975_npc	</wwsoundNPC>
+      <power>	300	</power>
+      <weight>	724	</weight>
+      <maxHealth>	82	</maxHealth>
+      <maxRegenHealth>	40	</maxRegenHealth>
+      <repairCost>	4	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	437	</rpm_min>
+      <rpm_max>	2400	</rpm_max>
+      <notInShop>	True	</notInShop>
+    </Meadows_DAV_G3_7>
+    <Vauxhall_Bedford_Twin_Six_G3_8>
+      <userString>	#gb_vehicles:Vauxhall_Bedford_Twin_Six	</userString>
+      <tags>	gasoline	</tags>
+      <level>	4	</level>
+      <price>	11000	</price>
+      <wwsoundPC>	eng_Continental_R975_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Continental_R975_npc	</wwsoundNPC>
+      <power>	350	</power>
+      <weight>	1531	</weight>
+      <maxHealth>	104	</maxHealth>
+      <maxRegenHealth>	52	</maxRegenHealth>
+      <repairCost>	3	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	406	</rpm_min>
+      <rpm_max>	2500	</rpm_max>
+      <notInShop>	True	</notInShop>
+    </Vauxhall_Bedford_Twin_Six_G3_8>
+    <Wright_Continental_R-975C4_G3_9>
+      <userString>	#gb_vehicles:Wright_Continental_R-975C4	</userString>
+      <tags>	gasoline	</tags>
+      <level>	5	</level>
+      <price>	13900	</price>
+      <wwsoundPC>	eng_Continental_R975_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Continental_R975_npc	</wwsoundNPC>
+      <power>	460	</power>
+      <weight>	550	</weight>
+      <maxHealth>	136	</maxHealth>
+      <maxRegenHealth>	67	</maxRegenHealth>
+      <repairCost>	3	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	337	</rpm_min>
+      <rpm_max>	2721	</rpm_max>
+      <notInShop>	True	</notInShop>
+    </Wright_Continental_R-975C4_G3_9>
+    <Meadows_DAV_MkI_G4_1>
+      <userString>	#gb_vehicles:Meadows_DAV_MkI	</userString>
+      <tags>	gasoline	</tags>
+      <level>	4	</level>
+      <price>	11200	</price>
+      <wwsoundPC>	eng_Continental_R975_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Continental_R975_npc	</wwsoundNPC>
+      <power>	360	</power>
+      <weight>	724	</weight>
+      <maxHealth>	82	</maxHealth>
+      <maxRegenHealth>	40	</maxRegenHealth>
+      <repairCost>	4	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	399	</rpm_min>
+      <rpm_max>	2520	</rpm_max>
+      <notInShop>	True	</notInShop>
+    </Meadows_DAV_MkI_G4_1>
+    <Meadows_DAV_MkI_G4_2>
+      <userString>	#gb_vehicles:Meadows_DAV_MkI	</userString>
+      <tags>	gasoline	</tags>
+      <level>	4	</level>
+      <price>	11200	</price>
+      <wwsoundPC>	eng_Continental_R975_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Continental_R975_npc	</wwsoundNPC>
+      <power>	360	</power>
+      <weight>	724	</weight>
+      <maxHealth>	82	</maxHealth>
+      <maxRegenHealth>	40	</maxRegenHealth>
+      <repairCost>	4	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	399	</rpm_min>
+      <rpm_max>	2520	</rpm_max>
+      <notInShop>	True	</notInShop>
+    </Meadows_DAV_MkI_G4_2>
+    <Nuffield_liberty_MKV_G4_3>
+      <userString>	#gb_vehicles:Nuffield_liberty_MKV	</userString>
+      <tags>	gasoline	</tags>
+      <level>	5	</level>
+      <price>	12500	</price>
+      <wwsoundPC>	eng_Continental_R975_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Continental_R975_npc	</wwsoundNPC>
+      <power>	410	</power>
+      <weight>	383	</weight>
+      <maxHealth>	136	</maxHealth>
+      <maxRegenHealth>	67	</maxRegenHealth>
+      <repairCost>	3	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	368	</rpm_min>
+      <rpm_max>	2621	</rpm_max>
+      <notInShop>	True	</notInShop>
+    </Nuffield_liberty_MKV_G4_3>
+    <Nuffield_liberty_MKV_G4_4>
+      <userString>	#gb_vehicles:Nuffield_liberty_MKV	</userString>
+      <tags>	gasoline	</tags>
+      <level>	5	</level>
+      <price>	12500	</price>
+      <wwsoundPC>	eng_Continental_R975_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Continental_R975_npc	</wwsoundNPC>
+      <power>	410	</power>
+      <weight>	383	</weight>
+      <maxHealth>	136	</maxHealth>
+      <maxRegenHealth>	67	</maxRegenHealth>
+      <repairCost>	3	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	368	</rpm_min>
+      <rpm_max>	2621	</rpm_max>
+      <notInShop>	True	</notInShop>
+    </Nuffield_liberty_MKV_G4_4>
+    <Nuffield_liberty_MKV_G4_5>
+      <userString>	#gb_vehicles:Nuffield_liberty_MKV	</userString>
+      <tags>	gasoline	</tags>
+      <level>	5	</level>
+      <price>	12500	</price>
+      <wwsoundPC>	eng_Continental_R975_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Continental_R975_npc	</wwsoundNPC>
+      <power>	410	</power>
+      <weight>	383	</weight>
+      <maxHealth>	136	</maxHealth>
+      <maxRegenHealth>	67	</maxRegenHealth>
+      <repairCost>	3	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	368	</rpm_min>
+      <rpm_max>	2621	</rpm_max>
+      <notInShop>	True	</notInShop>
+    </Nuffield_liberty_MKV_G4_5>
+    <Nuffield_liberty_MKV_G4_3__0>
+      <userString>	#gb_vehicles:Nuffield_liberty_MKV	</userString>
+      <tags>	gasoline	</tags>
+      <level>	5	</level>
+      <price>	12500	</price>
+      <wwsoundPC>	eng_Continental_R975_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Continental_R975_npc	</wwsoundNPC>
+      <power>	410	</power>
+      <weight>	383	</weight>
+      <maxHealth>	136	</maxHealth>
+      <maxRegenHealth>	67	</maxRegenHealth>
+      <repairCost>	3	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	368	</rpm_min>
+      <rpm_max>	2621	</rpm_max>
+      <notInShop>	True	</notInShop>
+    </Nuffield_liberty_MKV_G4_3__0>
+    <Nuffield_liberty_MKV_G4_4__0>
+      <userString>	#gb_vehicles:Nuffield_liberty_MKV	</userString>
+      <tags>	gasoline	</tags>
+      <level>	5	</level>
+      <price>	12500	</price>
+      <wwsoundPC>	eng_Continental_R975_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Continental_R975_npc	</wwsoundNPC>
+      <power>	410	</power>
+      <weight>	383	</weight>
+      <maxHealth>	136	</maxHealth>
+      <maxRegenHealth>	67	</maxRegenHealth>
+      <repairCost>	3	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	368	</rpm_min>
+      <rpm_max>	2621	</rpm_max>
+      <notInShop>	True	</notInShop>
+    </Nuffield_liberty_MKV_G4_4__0>
+    <Nuffield_liberty_MKV_G4_5__0>
+      <userString>	#gb_vehicles:Nuffield_liberty_MKV	</userString>
+      <tags>	gasoline	</tags>
+      <level>	5	</level>
+      <price>	12500	</price>
+      <wwsoundPC>	eng_Continental_R975_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Continental_R975_npc	</wwsoundNPC>
+      <power>	410	</power>
+      <weight>	383	</weight>
+      <maxHealth>	136	</maxHealth>
+      <maxRegenHealth>	67	</maxRegenHealth>
+      <repairCost>	3	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	368	</rpm_min>
+      <rpm_max>	2621	</rpm_max>
+      <notInShop>	True	</notInShop>
+    </Nuffield_liberty_MKV_G4_5__0>
+    <Nuffield_liberty_MKV_G4_7>
+      <userString>	#gb_vehicles:Nuffield_liberty_MKV	</userString>
+      <tags>	gasoline	</tags>
+      <level>	5	</level>
+      <price>	12500	</price>
+      <wwsoundPC>	eng_Continental_R975_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Continental_R975_npc	</wwsoundNPC>
+      <power>	410	</power>
+      <weight>	383	</weight>
+      <maxHealth>	136	</maxHealth>
+      <maxRegenHealth>	67	</maxRegenHealth>
+      <repairCost>	3	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	368	</rpm_min>
+      <rpm_max>	2621	</rpm_max>
+      <notInShop>	True	</notInShop>
+    </Nuffield_liberty_MKV_G4_7>
+    <Wright_Continental_R-975C4_G4_6>
+      <userString>	#gb_vehicles:Wright_Continental_R-975C4	</userString>
+      <tags>	gasoline	</tags>
+      <level>	5	</level>
+      <price>	13900	</price>
+      <wwsoundPC>	eng_Continental_R975_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Continental_R975_npc	</wwsoundNPC>
+      <power>	460	</power>
+      <weight>	550	</weight>
+      <maxHealth>	136	</maxHealth>
+      <maxRegenHealth>	67	</maxRegenHealth>
+      <repairCost>	3	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	337	</rpm_min>
+      <rpm_max>	2721	</rpm_max>
+      <notInShop>	True	</notInShop>
+    </Wright_Continental_R-975C4_G4_6>
+    <Wright_Continental_R-975C4_G4_9>
+      <userString>	#gb_vehicles:Wright_Continental_R-975C4	</userString>
+      <tags>	gasoline	</tags>
+      <level>	5	</level>
+      <price>	13900	</price>
+      <wwsoundPC>	eng_Continental_R975_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Continental_R975_npc	</wwsoundNPC>
+      <power>	460	</power>
+      <weight>	550	</weight>
+      <maxHealth>	136	</maxHealth>
+      <maxRegenHealth>	67	</maxRegenHealth>
+      <repairCost>	3	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	337	</rpm_min>
+      <rpm_max>	2721	</rpm_max>
+      <notInShop>	True	</notInShop>
+    </Wright_Continental_R-975C4_G4_9>
+    <Rolls_Royse_Meteor_MkIV_G4_8>
+      <userString>	#gb_vehicles:Rolls_Royse_Meteor_MkIV	</userString>
+      <tags>	gasoline	</tags>
+      <level>	5	</level>
+      <price>	16000	</price>
+      <wwsoundPC>	eng_Ford_GAA_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Ford_GAA_npc	</wwsoundNPC>
+      <power>	650	</power>
+      <weight>	744	</weight>
+      <maxHealth>	247	</maxHealth>
+      <maxRegenHealth>	123	</maxRegenHealth>
+      <repairCost>	5	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	632	</rpm_min>
+      <rpm_max>	2354	</rpm_max>
+      <notInShop>	True	</notInShop>
+    </Rolls_Royse_Meteor_MkIV_G4_8>
+    <Ford_GAA_G4_10>
+      <userString>	#gb_vehicles:Ford_GAA	</userString>
+      <tags>	gasoline	</tags>
+      <level>	5	</level>
+      <price>	13910	</price>
+      <wwsoundPC>	eng_Continental_R975_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Continental_R975_npc	</wwsoundNPC>
+      <power>	500	</power>
+      <weight>	708	</weight>
+      <maxHealth>	234	</maxHealth>
+      <maxRegenHealth>	123	</maxRegenHealth>
+      <repairCost>	5	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	312	</rpm_min>
+      <rpm_max>	2801	</rpm_max>
+      <notInShop>	True	</notInShop>
+    </Ford_GAA_G4_10>
   </shared>
 </engines.xml>

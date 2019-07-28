@@ -15,9 +15,9 @@ from messenger_common_chat2 import MESSENGER_ACTION_IDS as _ACTIONS
 from messenger_common_chat2 import messageArgs, BATTLE_CHAT_COMMANDS
 from skeletons.gui.battle_session import IBattleSessionProvider
 import Math
-_TARGETED_CMD_NAMES = ('ATTACKENEMY', 'TURNBACK', 'FOLLOWME', 'HELPMEEX', 'SUPPORTMEWITHFIRE', 'STOP')
-_PUBLIC_CMD_NAMES = ('ATTACKENEMY', 'SUPPORTMEWITHFIRE', 'POSITIVE', 'NEGATIVE', 'RELOADING_READY', 'RELOADING_UNAVAILABLE', 'HELPME', 'RELOADINGGUN', 'RELOADING_CASSETE', 'RELOADING_READY_CASSETE')
-_PRIVATE_CMD_NAMES = ('TURNBACK', 'FOLLOWME', 'HELPMEEX', 'STOP')
+_TARGETED_CMD_NAMES = ('ATTACKENEMY', 'TURNBACK', 'FOLLOWME', 'HELPMEEX', 'SUPPORTMEWITHFIRE', 'STOP', 'EVENT_CHAT_1_EX', 'EVENT_CHAT_2_EX', 'EVENT_CHAT_3_EX', 'EVENT_CHAT_4_EX', 'EVENT_CHAT_5_EX', 'EVENT_CHAT_6_EX', 'EVENT_CHAT_7_EX')
+_PUBLIC_CMD_NAMES = ('ATTACKENEMY', 'SUPPORTMEWITHFIRE', 'POSITIVE', 'NEGATIVE', 'RELOADING_READY', 'RELOADING_UNAVAILABLE', 'HELPME', 'RELOADINGGUN', 'RELOADING_CASSETE', 'RELOADING_READY_CASSETE', 'EVENT_CHAT_1', 'EVENT_CHAT_2', 'EVENT_CHAT_3', 'EVENT_CHAT_4', 'EVENT_CHAT_5', 'EVENT_CHAT_6', 'EVENT_CHAT_7')
+_PRIVATE_CMD_NAMES = ('TURNBACK', 'FOLLOWME', 'HELPMEEX', 'STOP', 'EVENT_CHAT_1_EX', 'EVENT_CHAT_2_EX', 'EVENT_CHAT_3_EX', 'EVENT_CHAT_4_EX', 'EVENT_CHAT_5_EX', 'EVENT_CHAT_6_EX', 'EVENT_CHAT_7_EX')
 _SHOW_MARKER_CMD_NAMES = ('ATTACKENEMY', 'SUPPORTMEWITHFIRE')
 _ENEMY_TARGET_CMD_NAMES = ('ATTACKENEMY', 'SUPPORTMEWITHFIRE')
 _MINIMAP_CMD_NAMES = ('ATTENTIONTOCELL', 'SPG_AIM_AREA')
@@ -209,6 +209,19 @@ class _ReceivedCmdDecorator(ReceivedBattleChatCommand):
     def isReceiver(self):
         from gui.battle_control import avatar_getter
         return self.getFirstTargetID() == avatar_getter.getPlayerVehicleID()
+
+    def isMsgOnMarker(self):
+        command = _ACTIONS.battleChatCommandFromActionID(self._commandID)
+        return command is not None and command.msgOnMarker is not None
+
+    def messageOnMarker(self):
+        command = _ACTIONS.battleChatCommandFromActionID(self._commandID)
+        i18nKey = I18N_INGAME_GUI.chat_shortcuts(command.msgOnMarker)
+        if i18nKey is not None:
+            text = i18n.makeString(i18nKey)
+        else:
+            text = command.msgOnMarker
+        return unicode(text, 'utf-8', errors='ignore')
 
     def _getTarget(self):
         target = self.sessionProvider.getCtx().getPlayerFullName(vID=self.getFirstTargetID())

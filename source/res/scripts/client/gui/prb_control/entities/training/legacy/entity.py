@@ -93,7 +93,7 @@ class TrainingIntroEntity(LegacyIntroEntity):
     def fini(self, clientPrb=None, ctx=None, woEvents=False):
         result = super(TrainingIntroEntity, self).fini(clientPrb=clientPrb, ctx=ctx, woEvents=woEvents)
         if not woEvents:
-            if not self.canSwitch(ctx) and self.needToLoadHangar():
+            if not self.canSwitch(ctx) and self.needToLoadHangar() and not ctx.hasFlags(FUNCTIONAL_FLAG.LOAD_PAGE):
                 g_eventDispatcher.loadHangar()
             g_eventDispatcher.removeTrainingFromCarousel()
         else:
@@ -179,7 +179,7 @@ class TrainingEntity(LegacyEntity):
             remove(event, self.__handleViewLoad, scope=EVENT_BUS_SCOPE.LOBBY)
 
         if not woEvents:
-            if not self.canSwitch(ctx) and self.needToLoadHangar():
+            if not self.canSwitch(ctx) and self.needToLoadHangar() and (ctx is None or not ctx.hasFlags(FUNCTIONAL_FLAG.LOAD_PAGE)):
                 g_eventDispatcher.loadHangar()
             g_eventDispatcher.removeTrainingFromCarousel(False)
             self.storage.suspend()

@@ -10,6 +10,7 @@ from items import vehicles
 from gui.battle_control.view_components import ViewComponentsController
 from PlayerEvents import g_playerEvents
 _Vehicle = namedtuple('_Vehicle', ('intCD', 'type', 'settings'))
+_EventVehicle = namedtuple('_Vehicle', ('intCD', 'type', 'isEnable', 'settings'))
 _RespawnInfo = namedtuple('_RespawnInfo', ('vehicleID', 'respawnTime', 'respawnType', 'autoRespawnTime'))
 
 class IRespawnView(object):
@@ -39,7 +40,7 @@ class IRespawnView(object):
 _RESPAWN_SOUND_ID = 'start_battle'
 
 class RespawnsController(ViewComponentsController):
-    __slots__ = ('__weakref__', '__isUIInited', '__vehicles', '__cooldowns', '__respawnInfo', '__timerCallback', '__eManager', 'onRespawnVisibilityChanged', 'onVehicleDeployed', 'onRespawnInfoUpdated', 'onPlayerRespawnLivesUpdated', 'onTeamRespawnLivesRestored', 'onRespawnVehiclesUpdated', '__isUiShown', '__isShowUiAllowed', '__limits', '__playerRespawnLives', '__respawnSoundNotificationRequest', '__battleCtx')
+    __slots__ = ('__weakref__', '__isUIInited', '__vehicles', '__cooldowns', '__respawnInfo', '__timerCallback', '__eManager', 'onRespawnVisibilityChanged', 'onVehicleDeployed', 'onRespawnInfoUpdated', 'onPlayerRespawnLivesUpdated', 'onTeamRespawnLivesRestored', 'onRespawnVehiclesUpdated', '__isUiShown', '__isShowUiAllowed', '__limits', '__playerRespawnLives', '__respawnSoundNotificationRequest', '__battleCtx', 'onEventRespawnVehiclesUpdated')
     showUiAllowed = property(lambda self: self.__isShowUiAllowed, lambda self, value: self.__setShowUiAllowed(value))
     respawnInfo = property(lambda self: self.__respawnInfo)
     playerLives = property(lambda self: self.__playerRespawnLives)
@@ -65,6 +66,7 @@ class RespawnsController(ViewComponentsController):
         self.onPlayerRespawnLivesUpdated = Event.Event(self.__eManager)
         self.onTeamRespawnLivesRestored = Event.Event(self.__eManager)
         self.onRespawnVehiclesUpdated = Event.Event(self.__eManager)
+        self.onEventRespawnVehiclesUpdated = Event.Event(self.__eManager)
         return
 
     def getControllerID(self):
@@ -98,6 +100,9 @@ class RespawnsController(ViewComponentsController):
     def chooseVehicleForRespawn(self, vehicleID):
         BigWorld.player().base.respawnController_chooseVehicleForRespawn(vehicleID)
 
+    def setSwapVehicle(self, vehicleID):
+        BigWorld.player().base.respawnController_setSwapVehicle(vehicleID)
+
     def movingToRespawn(self):
         self.__respawnInfo = None
         self.__stopTimer()
@@ -121,6 +126,14 @@ class RespawnsController(ViewComponentsController):
             self.__vehicles.append(_Vehicle(descr.compactDescr, descr, v['settings']))
 
         self.onRespawnVehiclesUpdated(self.__vehicles)
+
+    def eventUpdateRespawnVehicles(self, vehsList):
+        self.__vehicles = []
+        for v in vehsList:
+            descr = vehicles.getVehicleType(v['compDescr'])
+            self.__vehicles.append(_EventVehicle(descr.compactDescr, descr, v['isEnable'], v['settings']))
+
+        self.onEventRespawnVehiclesUpdated(self.__vehicles)
 
     def updateRespawnCooldowns(self, cooldowns):
         self.__cooldowns = cooldowns

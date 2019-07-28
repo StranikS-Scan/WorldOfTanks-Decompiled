@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/battle_control/battle_ctx.py
 import Settings
+import constants
 from gui.battle_control.arena_info import player_format
 from unit_roster_config import SquadRoster, EpicRoster
 from helpers import dependency
@@ -15,6 +16,7 @@ class BattleContext(IBattleContext):
         self.__lastArenaWinStatus = None
         self.__playerFormatter = player_format.PlayerFullNameFormatter()
         self.lastArenaUniqueID = None
+        self.lastArenaBonusType = None
         self.isInBattle = False
         self.wasInBattle = False
         return
@@ -59,6 +61,9 @@ class BattleContext(IBattleContext):
         if vID is None:
             vID = self.__arenaDP.getVehIDByAccDBID(accID)
         vInfo = self.__arenaDP.getVehicleInfo(vID)
+        arenaBonusType = self.__arenaDP.getPersonalDescription().getArenaBonusType()
+        if arenaBonusType == constants.ARENA_BONUS_TYPE.EVENT_BATTLES and vInfo.player.accountDBID == 0:
+            vInfo.player.name = vInfo.vehicleType.guiName
         self.__playerFormatter.setVehicleShortNameShown(showVehShortName and self.__isShowVehShortName)
         self.__playerFormatter.setClanShown(showClan)
         self.__playerFormatter.setRegionShown(showRegion)

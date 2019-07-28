@@ -1,0 +1,40 @@
+<LineOfFrontController_Avatar.def>
+  <BaseMethods>
+    <lineOfFrontController_onHealthDataChanged>
+      <Arg>	STRING	</Arg>
+      <Arg>	UINT16	</Arg>
+    </lineOfFrontController_onHealthDataChanged>
+    <lineOfFrontController_vehicleEnteredLoFEffect>
+      <Arg>	VECTOR3	</Arg>
+    </lineOfFrontController_vehicleEnteredLoFEffect>
+    <lineOfFrontController_setConfigForCurrentMap>
+      <Arg>	STRING	</Arg>
+    </lineOfFrontController_setConfigForCurrentMap>
+    <lineOfFrontController_onLineOfFrontPenetrated></lineOfFrontController_onLineOfFrontPenetrated>
+    <lineOfFrontController_onVehicleDangerousZoneTriggered>
+      <Arg>	OBJECT_ID	</Arg>
+      <Arg>	STRING	</Arg>
+      <Arg>	UINT16	</Arg>
+      <Arg>	VECTOR3	</Arg>
+    </lineOfFrontController_onVehicleDangerousZoneTriggered>
+  </BaseMethods>
+  <ClientMethods>
+    <onHealthDataChanged>
+      <Arg>	STRING	</Arg>
+      <Arg>	UINT16	</Arg>
+    </onHealthDataChanged>
+    <vehicleEnteredLoFEffect>
+      <Arg>	VECTOR3	</Arg>
+    </vehicleEnteredLoFEffect>
+    <setConfigForCurrentMap>
+      <Arg>	STRING	</Arg>
+    </setConfigForCurrentMap>
+    <onLineOfFrontPenetrated></onLineOfFrontPenetrated>
+    <onVehicleDangerousZoneTriggered>
+      <Arg>	OBJECT_ID	</Arg>
+      <Arg>	STRING	</Arg>
+      <Arg>	UINT16	</Arg>
+      <Arg>	VECTOR3	</Arg>
+    </onVehicleDangerousZoneTriggered>
+  </ClientMethods>
+</LineOfFrontController_Avatar.def>

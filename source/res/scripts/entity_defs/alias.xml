@@ -713,6 +713,12 @@
       <premMask>
         <Type>	INT8	</Type>
       </premMask>
+      <generalID>
+        <Type>	INT32	</Type>
+      </generalID>
+      <generalLevel>
+        <Type>	INT32	</Type>
+      </generalLevel>
     </Properties>
   </ARENA_ADDPLAYER_INFO>
   <AVATAR_VEHICLE_ROSTER>	FIXED_DICT	  <Properties>
@@ -957,6 +963,18 @@
       </settings>
     </Properties>
   </RESPAWN_AVAILABLE_VEHICLE>
+  <EVENT_RESPAWN_AVAILABLE_VEHICLE>	FIXED_DICT	  <Properties>
+      <compDescr>
+        <Type>	STRING	</Type>
+      </compDescr>
+      <isEnable>
+        <Type>	BOOL	</Type>
+      </isEnable>
+      <settings>
+        <Type>	UINT16	</Type>
+      </settings>
+    </Properties>
+  </EVENT_RESPAWN_AVAILABLE_VEHICLE>
   <RESPAWN_COOLDOWN_ITEM>	FIXED_DICT	  <Properties>
       <vehTypeCompDescr>
         <Type>	UINT16	</Type>
@@ -1094,4 +1112,30 @@
       </aliveOnly>
     </Properties>
   </VEHICLE_DETECTOR_INFO>
+  <SWAP_INFO_VEHICLE>	FIXED_DICT	  <Properties>
+      <compDescr>
+        <Type>	STRING	</Type>
+      </compDescr>
+      <crewCompactDescrs>
+        <Type>	ARRAY	  <of>	STRING	</of>
+        </Type>
+      </crewCompactDescrs>
+      <commanderSkinID>
+        <Type>	UINT16	</Type>
+      </commanderSkinID>
+      <marksOnGun>
+        <Type>	UINT8	</Type>
+      </marksOnGun>
+      <onRespawnSettings>
+        <Type>	PYTHON	</Type>
+      </onRespawnSettings>
+      <ammo>
+        <Type>	ARRAY	  <of>	INT32	</of>
+        </Type>
+      </ammo>
+      <index>
+        <Type>	UINT16	</Type>
+      </index>
+    </Properties>
+  </SWAP_INFO_VEHICLE>
 </alias.xml>

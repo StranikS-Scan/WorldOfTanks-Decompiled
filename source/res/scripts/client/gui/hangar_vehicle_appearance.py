@@ -220,6 +220,20 @@ class HangarVehicleAppearance(ScriptGameObject):
             vehicleLength = abs(hullBB[1][2] - hullBB[0][2])
         return vehicleLength
 
+    def getTurretYaw(self):
+        cfg = hangarCFG()
+        return cfg['vehicle_turret_yaw']
+
+    def getGunPitch(self):
+        cfg = hangarCFG()
+        return cfg['vehicle_gun_pitch']
+
+    def getGunPitchLimits(self):
+        return self.__vDesc.gun.pitchLimits['absolute']
+
+    def getTurretYawLimits(self):
+        return self.__vDesc.gun.turretYawLimits
+
     def __reload(self, vDesc, vState, outfit):
         self.__loadState.unload()
         if self.fashion is not None:
@@ -389,18 +403,17 @@ class HangarVehicleAppearance(ScriptGameObject):
             self.wheelsAnimator = None
             self.trackNodesAnimator = None
             self.dirtComponent = None
-        cfg = hangarCFG()
         self.__staticTurretYaw = self.__vDesc.gun.staticTurretYaw
         self.__staticGunPitch = self.__vDesc.gun.staticPitch
         if not ('AT-SPG' in self.__vDesc.type.tags or 'SPG' in self.__vDesc.type.tags):
             if self.__staticTurretYaw is None:
-                self.__staticTurretYaw = cfg['vehicle_turret_yaw']
-                turretYawLimits = self.__vDesc.gun.turretYawLimits
+                self.__staticTurretYaw = self.getTurretYaw()
+                turretYawLimits = self.getTurretYawLimits()
                 if turretYawLimits is not None:
                     self.__staticTurretYaw = mathUtils.clamp(turretYawLimits[0], turretYawLimits[1], self.__staticTurretYaw)
             if self.__staticGunPitch is None:
-                self.__staticGunPitch = cfg['vehicle_gun_pitch']
-                gunPitchLimits = self.__vDesc.gun.pitchLimits['absolute']
+                self.__staticGunPitch = self.getGunPitch()
+                gunPitchLimits = self.getGunPitchLimits()
                 self.__staticGunPitch = mathUtils.clamp(gunPitchLimits[0], gunPitchLimits[1], self.__staticGunPitch)
         else:
             if self.__staticTurretYaw is None:
@@ -597,8 +610,7 @@ class HangarVehicleAppearance(ScriptGameObject):
 
     def __clearSequences(self):
         for animator in self.__sequenceAnimators:
-            animator.stop()
-            animator.setEnabled(False)
+            animator.halt()
 
         self.__sequenceAnimators = []
 

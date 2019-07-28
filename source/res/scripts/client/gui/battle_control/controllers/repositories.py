@@ -4,7 +4,7 @@ from debug_utils import LOG_ERROR, LOG_DEBUG
 from gui.battle_control.arena_info.interfaces import IArenaController
 from gui.battle_control.battle_constants import BATTLE_CTRL_ID, REUSABLE_BATTLE_CTRL_IDS
 from gui.battle_control.battle_constants import getBattleCtrlName
-from gui.battle_control.controllers import arena_border_ctrl
+from gui.battle_control.controllers import arena_border_ctrl, battle_hints_ctrl, event_battle_sound_notifications, event_respawn_ctrl
 from gui.battle_control.controllers import arena_load_ctrl, battle_field_ctrl
 from gui.battle_control.controllers import avatar_stats_ctrl
 from gui.battle_control.controllers import bootcamp_ctrl
@@ -35,6 +35,7 @@ from gui.battle_control.controllers import epic_spectator_ctrl
 from gui.battle_control.controllers import epic_missions_ctrl
 from gui.battle_control.controllers import game_notification_ctrl
 from gui.battle_control.controllers import epic_team_bases_ctrl
+from gui.battle_control.controllers import event_lootsign_ctrl
 
 class BattleSessionSetup(object):
     __slots__ = ('avatar', 'replayCtrl', 'gasAttackMgr', 'sessionProvider')
@@ -226,6 +227,14 @@ class DynamicControllersLocator(_ControllersLocator, IDynamicControllersLocator)
     def gameNotifications(self):
         return self._repository.getController(BATTLE_CTRL_ID.GAME_NOTIFICATIONS)
 
+    @property
+    def battleHints(self):
+        return self._repository.getController(BATTLE_CTRL_ID.BATTLE_HINTS)
+
+    @property
+    def lootSign(self):
+        return self._repository.getController(BATTLE_CTRL_ID.LOOTSIGN)
+
 
 class _EmptyRepository(interfaces.IBattleControllersRepository):
     __slots__ = ()
@@ -368,4 +377,26 @@ class EpicControllersRepository(_ControllersRepository):
         repository.addViewController(game_notification_ctrl.EpicGameNotificationsController(setup), setup)
         repository.addViewController(epic_missions_ctrl.EpicMissionsController(setup), setup)
         repository.addArenaViewController(epic_team_bases_ctrl.createEpicTeamsBasesCtrl(setup), setup)
+        return repository
+
+
+class EventControllersRepository(_ControllersRepository):
+    __slots__ = ()
+
+    @classmethod
+    def create(cls, setup):
+        repository = super(EventControllersRepository, cls).create(setup)
+        arenaVisitor = setup.arenaVisitor
+        if arenaVisitor.hasRespawns():
+            repository.addViewController(event_respawn_ctrl.EventRespawnsController(setup), setup)
+        if arenaVisitor.hasHealthBar():
+            repository.addViewController(team_health_bar_ctrl.TeamHealthBarController(setup), setup)
+        repository.addArenaViewController(team_bases_ctrl.createTeamsBasesCtrl(setup), setup)
+        repository.addArenaController(dyn_squad_functional.DynSquadFunctional(setup), setup)
+        repository.addViewController(debug_ctrl.DebugController(), setup)
+        repository.addArenaViewController(battle_field_ctrl.BattleFieldCtrl(), setup)
+        repository.addViewController(battle_hints_ctrl.createBattleHintsController(), setup)
+        repository.addViewController(epic_spectator_ctrl.SpectatorViewController(setup), setup)
+        repository.addViewController(event_battle_sound_notifications.EventBattleSoundNotifications(), setup)
+        repository.addArenaController(event_lootsign_ctrl.LootSignController(), setup)
         return repository

@@ -3089,6 +3089,7 @@
     <description>	#artefacts:inspire/descr	</description>
     <icon>	inspire 0 0	</icon>
     <soundNotification>	eb_ability_inspire	</soundNotification>
+    <instantAiming>	TARGET	</instantAiming>
     <price>	750	  <gold></gold>
     </price>
     <notInShop>	true	</notInShop>
@@ -3125,6 +3126,7 @@
     <description>	#artefacts:inspire/descr	</description>
     <icon>	inspire 0 0	</icon>
     <soundNotification>	eb_ability_inspire	</soundNotification>
+    <instantAiming>	TARGET	</instantAiming>
     <price>	750	  <gold></gold>
     </price>
     <notInShop>	true	</notInShop>
@@ -3161,6 +3163,7 @@
     <description>	#artefacts:inspire/descr	</description>
     <icon>	inspire 0 0	</icon>
     <soundNotification>	eb_ability_inspire	</soundNotification>
+    <instantAiming>	TARGET	</instantAiming>
     <price>	750	  <gold></gold>
     </price>
     <notInShop>	true	</notInShop>
@@ -3197,6 +3200,7 @@
     <description>	#artefacts:inspire/descr	</description>
     <icon>	inspire 0 0	</icon>
     <soundNotification>	eb_ability_inspire	</soundNotification>
+    <instantAiming>	TARGET	</instantAiming>
     <price>	750	  <gold></gold>
     </price>
     <notInShop>	true	</notInShop>
@@ -3233,6 +3237,7 @@
     <description>	#artefacts:inspire/descr	</description>
     <icon>	inspire 0 0	</icon>
     <soundNotification>	eb_ability_inspire	</soundNotification>
+    <instantAiming>	TARGET	</instantAiming>
     <price>	750	  <gold></gold>
     </price>
     <notInShop>	true	</notInShop>
@@ -3418,4 +3423,1323 @@
       <resupplyShellsFactor>	1.5	</resupplyShellsFactor>
     </script>
   </passive_engineering_level5>
+  <last_stand_event_1>
+    <id>	210	</id>
+    <userString>	#event:ability/last_stand_event/name	</userString>
+    <description>	#event:ability/last_stand_event/descr	</description>
+    <icon>	event/last_stand_event 0 0	</icon>
+    <price>	20000	</price>
+    <notInShop>	true	</notInShop>
+    <tags>	notForSale avatar event_passive_ability	</tags>
+    <type>	battleAbilities	</type>
+    <soundNotification>	hb1_equipment_last_stand_ready	</soundNotification>
+    <activationSoundNotification>	hb1_equipment_last_stand_activated	</activationSoundNotification>
+    <vehicleFilter>
+      <include>
+        <vehicle>
+          <minLevel>	1	</minLevel>
+          <maxLevel>	10	</maxLevel>
+        </vehicle>
+      </include>
+    </vehicleFilter>
+    <script>	EventLastStandEquipment	  <shortDescription>	#event:ability/last_stand_event/shortDescr	</shortDescription>
+      <longDescription>	#event:ability/last_stand_event/longDescr	</longDescription>
+      <shortFilterAlert></shortFilterAlert>
+      <longFilterAlert></longFilterAlert>
+      <destructionDelaySec>	20	</destructionDelaySec>
+      <shellsCount>	99	</shellsCount>
+      <reloadTime>	1.5	</reloadTime>
+      <piercingPower>	1000	</piercingPower>
+    </script>
+  </last_stand_event_1>
+  <arcade_artillery_event_1>
+    <id>	211	</id>
+    <userString>	#event:ability/arcade_artillery_event/name	</userString>
+    <description>	#event:ability/arcade_artillery_event/descr	</description>
+    <icon>	event/arcade_artillery_event 0 0	</icon>
+    <soundNotification>	hb1_equipment_single_target_artillery_ready	</soundNotification>
+    <activationSoundNotification>	hb1_equipment_single_target_artillery_activated	</activationSoundNotification>
+    <activationWWSoundFeedback>	ev_2019_secret_event_gameplay_ability_button	</activationWWSoundFeedback>
+    <targetConfirmWWSoundFeedback>	ev_2019_secret_event_gameplay_ability_button_radio	</targetConfirmWWSoundFeedback>
+    <price>	150	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	notForSale avatar trigger	</tags>
+    <type>	battleAbilities	</type>
+    <vehicleFilter>
+      <include>
+        <vehicle>
+          <minLevel>	1	</minLevel>
+          <maxLevel>	10	</maxLevel>
+        </vehicle>
+      </include>
+    </vehicleFilter>
+    <script>	EventArcadeArtillery	  <shortDescription>	#event:ability/arcade_artillery_event/shortDescr	</shortDescription>
+      <longDescription>	#event:ability/arcade_artillery_event/longDescr	</longDescription>
+      <shortFilterAlert></shortFilterAlert>
+      <longFilterAlert></longFilterAlert>
+      <tooltips>	cooldownTime delay areaRadius shotsNumber duration-artillery	</tooltips>
+      <cooldownTime>	50.0	</cooldownTime>
+      <cooldownFactors></cooldownFactors>
+      <sharedCooldownTime>	0	</sharedCooldownTime>
+      <consumeAmmo>	false	</consumeAmmo>
+      <disableAllyDamage>	false	</disableAllyDamage>
+      <cooldownTimeRespawnFactor>	1.5	</cooldownTimeRespawnFactor>
+      <delay>	2.5	</delay>
+      <duration>	0.1	</duration>
+      <shotsNumber>	1	</shotsNumber>
+      <areaRadius>	15	</areaRadius>
+      <shellCompactDescr>	310026	</shellCompactDescr>
+      <piercingPower>	60 60	</piercingPower>
+      <areaVisual>	content/Interface/TargetPoint/circle_16.visual	</areaVisual>
+      <noOwner>	false	</noOwner>
+      <shotSoundPreDelay>	2	</shotSoundPreDelay>
+      <wwsoundShot>	eb_ability_artillery_firing	</wwsoundShot>
+      <maxApplyRadius>	300	</maxApplyRadius>
+    </script>
+  </arcade_artillery_event_1>
+  <arcade_artillery_event_2>
+    <id>	213	</id>
+    <userString>	#event:ability/arcade_artillery_event/name	</userString>
+    <description>	#event:ability/arcade_artillery_event/descr	</description>
+    <icon>	event/arcade_artillery_event 0 0	</icon>
+    <soundNotification>	hb1_equipment_single_target_artillery_ready	</soundNotification>
+    <activationSoundNotification>	hb1_equipment_single_target_artillery_activated	</activationSoundNotification>
+    <activationWWSoundFeedback>	ev_2019_secret_event_gameplay_ability_button	</activationWWSoundFeedback>
+    <targetConfirmWWSoundFeedback>	ev_2019_secret_event_gameplay_ability_button_radio	</targetConfirmWWSoundFeedback>
+    <price>	150	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	notForSale avatar trigger	</tags>
+    <type>	battleAbilities	</type>
+    <vehicleFilter>
+      <include>
+        <vehicle>
+          <minLevel>	1	</minLevel>
+          <maxLevel>	10	</maxLevel>
+        </vehicle>
+      </include>
+    </vehicleFilter>
+    <script>	EventArcadeArtillery	  <shortDescription>	#event:ability/arcade_artillery_event/shortDescr	</shortDescription>
+      <longDescription>	#event:ability/arcade_artillery_event/longDescr	</longDescription>
+      <shortFilterAlert></shortFilterAlert>
+      <longFilterAlert></longFilterAlert>
+      <tooltips>	cooldownTime delay areaRadius shotsNumber duration-artillery	</tooltips>
+      <cooldownTime>	45.0	</cooldownTime>
+      <cooldownFactors></cooldownFactors>
+      <sharedCooldownTime>	1.5	</sharedCooldownTime>
+      <consumeAmmo>	false	</consumeAmmo>
+      <disableAllyDamage>	false	</disableAllyDamage>
+      <cooldownTimeRespawnFactor>	1	</cooldownTimeRespawnFactor>
+      <delay>	2.5	</delay>
+      <duration>	0.1	</duration>
+      <shotsNumber>	1	</shotsNumber>
+      <areaRadius>	15	</areaRadius>
+      <shellCompactDescr>	310538	</shellCompactDescr>
+      <piercingPower>	60 60	</piercingPower>
+      <areaVisual>	content/Interface/TargetPoint/circle_16.visual	</areaVisual>
+      <noOwner>	false	</noOwner>
+      <shotSoundPreDelay>	2	</shotSoundPreDelay>
+      <wwsoundShot>	eb_ability_artillery_firing	</wwsoundShot>
+      <maxApplyRadius>	300	</maxApplyRadius>
+    </script>
+  </arcade_artillery_event_2>
+  <arcade_artillery_event_3>
+    <id>	214	</id>
+    <userString>	#event:ability/arcade_artillery_event/name	</userString>
+    <description>	#event:ability/arcade_artillery_event/descr	</description>
+    <icon>	event/arcade_artillery_event 0 0	</icon>
+    <soundNotification>	hb1_equipment_single_target_artillery_ready	</soundNotification>
+    <activationSoundNotification>	hb1_equipment_single_target_artillery_activated	</activationSoundNotification>
+    <activationWWSoundFeedback>	ev_2019_secret_event_gameplay_ability_button	</activationWWSoundFeedback>
+    <targetConfirmWWSoundFeedback>	ev_2019_secret_event_gameplay_ability_button_radio	</targetConfirmWWSoundFeedback>
+    <price>	150	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	notForSale avatar trigger	</tags>
+    <type>	battleAbilities	</type>
+    <vehicleFilter>
+      <include>
+        <vehicle>
+          <minLevel>	1	</minLevel>
+          <maxLevel>	10	</maxLevel>
+        </vehicle>
+      </include>
+    </vehicleFilter>
+    <script>	EventArcadeArtillery	  <shortDescription>	#event:ability/arcade_artillery_event/shortDescr	</shortDescription>
+      <longDescription>	#event:ability/arcade_artillery_event/longDescr	</longDescription>
+      <shortFilterAlert></shortFilterAlert>
+      <longFilterAlert></longFilterAlert>
+      <tooltips>	cooldownTime delay areaRadius shotsNumber duration-artillery	</tooltips>
+      <cooldownTime>	40.0	</cooldownTime>
+      <cooldownFactors></cooldownFactors>
+      <sharedCooldownTime>	0	</sharedCooldownTime>
+      <consumeAmmo>	false	</consumeAmmo>
+      <disableAllyDamage>	false	</disableAllyDamage>
+      <cooldownTimeRespawnFactor>	1.5	</cooldownTimeRespawnFactor>
+      <delay>	2.5	</delay>
+      <duration>	0.1	</duration>
+      <shotsNumber>	1	</shotsNumber>
+      <areaRadius>	15	</areaRadius>
+      <shellCompactDescr>	310794	</shellCompactDescr>
+      <piercingPower>	60 60	</piercingPower>
+      <areaVisual>	content/Interface/TargetPoint/circle_16.visual	</areaVisual>
+      <noOwner>	false	</noOwner>
+      <shotSoundPreDelay>	2	</shotSoundPreDelay>
+      <wwsoundShot>	eb_ability_artillery_firing	</wwsoundShot>
+      <maxApplyRadius>	300	</maxApplyRadius>
+    </script>
+  </arcade_artillery_event_3>
+  <arcade_artillery_DOT_event_1>
+    <id>	249	</id>
+    <userString>	#event:ability/arcade_artillery_DOT_event/name	</userString>
+    <description>	#event:ability/arcade_artillery_DOT_event/descr	</description>
+    <icon>	event/arcade_artillery_DOT_event 0 0	</icon>
+    <soundNotification>	hb1_equipment_artillery_bombardment_ready	</soundNotification>
+    <activationSoundNotification>	hb1_equipment_artillery_bombardment_activated	</activationSoundNotification>
+    <activationWWSoundFeedback>	ev_2019_secret_event_gameplay_ability_button	</activationWWSoundFeedback>
+    <targetConfirmWWSoundFeedback>	ev_2019_secret_event_gameplay_ability_button_radio	</targetConfirmWWSoundFeedback>
+    <price>	150	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	notForSale avatar trigger	</tags>
+    <type>	battleAbilities	</type>
+    <vehicleFilter>
+      <include>
+        <vehicle>
+          <minLevel>	1	</minLevel>
+          <maxLevel>	10	</maxLevel>
+        </vehicle>
+      </include>
+    </vehicleFilter>
+    <script>	EventArcadeArtillery	  <shortDescription>	#event:ability/arcade_artillery_DOT_event/shortDescr	</shortDescription>
+      <longDescription>	#event:ability/arcade_artillery_DOT_event/longDescr	</longDescription>
+      <shortFilterAlert></shortFilterAlert>
+      <longFilterAlert></longFilterAlert>
+      <tooltips>	cooldownTime delay areaRadius shotsNumber duration-artillery	</tooltips>
+      <cooldownTime>	70.0	</cooldownTime>
+      <cooldownFactors></cooldownFactors>
+      <sharedCooldownTime>	0	</sharedCooldownTime>
+      <consumeAmmo>	false	</consumeAmmo>
+      <disableAllyDamage>	false	</disableAllyDamage>
+      <cooldownTimeRespawnFactor>	1.5	</cooldownTimeRespawnFactor>
+      <delay>	4.0	</delay>
+      <duration>	10	</duration>
+      <shotsNumber>	30	</shotsNumber>
+      <areaRadius>	25	</areaRadius>
+      <shellCompactDescr>	313354	</shellCompactDescr>
+      <piercingPower>	40 40	</piercingPower>
+      <areaVisual>	content/Interface/TargetPoint/circle_31.visual	</areaVisual>
+      <noOwner>	false	</noOwner>
+      <shotSoundPreDelay>	2	</shotSoundPreDelay>
+      <wwsoundShot>	ev_2019_secret_event_gameplay_ability_atillery_shot	</wwsoundShot>
+      <maxApplyRadius>	300	</maxApplyRadius>
+    </script>
+  </arcade_artillery_DOT_event_1>
+  <arcade_artillery_DOT_event_2>
+    <id>	252	</id>
+    <userString>	#event:ability/arcade_artillery_DOT_event/name	</userString>
+    <description>	#event:ability/arcade_artillery_DOT_event/descr	</description>
+    <icon>	event/arcade_artillery_DOT_event 0 0	</icon>
+    <soundNotification>	hb1_equipment_artillery_bombardment_ready	</soundNotification>
+    <activationSoundNotification>	hb1_equipment_artillery_bombardment_activated	</activationSoundNotification>
+    <activationWWSoundFeedback>	ev_2019_secret_event_gameplay_ability_button	</activationWWSoundFeedback>
+    <targetConfirmWWSoundFeedback>	ev_2019_secret_event_gameplay_ability_button_radio	</targetConfirmWWSoundFeedback>
+    <price>	150	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	notForSale avatar trigger	</tags>
+    <type>	battleAbilities	</type>
+    <vehicleFilter>
+      <include>
+        <vehicle>
+          <minLevel>	1	</minLevel>
+          <maxLevel>	10	</maxLevel>
+        </vehicle>
+      </include>
+    </vehicleFilter>
+    <script>	EventArcadeArtillery	  <shortDescription>	#event:ability/arcade_artillery_DOT_event/shortDescr	</shortDescription>
+      <longDescription>	#event:ability/arcade_artillery_DOT_event/longDescr	</longDescription>
+      <shortFilterAlert></shortFilterAlert>
+      <longFilterAlert></longFilterAlert>
+      <tooltips>	cooldownTime delay areaRadius shotsNumber duration-artillery	</tooltips>
+      <cooldownTime>	60.0	</cooldownTime>
+      <cooldownFactors></cooldownFactors>
+      <sharedCooldownTime>	0	</sharedCooldownTime>
+      <consumeAmmo>	false	</consumeAmmo>
+      <disableAllyDamage>	false	</disableAllyDamage>
+      <cooldownTimeRespawnFactor>	1.5	</cooldownTimeRespawnFactor>
+      <delay>	4.0	</delay>
+      <duration>	10	</duration>
+      <shotsNumber>	30	</shotsNumber>
+      <areaRadius>	25	</areaRadius>
+      <shellCompactDescr>	313610	</shellCompactDescr>
+      <piercingPower>	40 40	</piercingPower>
+      <areaVisual>	content/Interface/TargetPoint/circle_31.visual	</areaVisual>
+      <noOwner>	false	</noOwner>
+      <shotSoundPreDelay>	2	</shotSoundPreDelay>
+      <wwsoundShot>	ev_2019_secret_event_gameplay_ability_atillery_shot	</wwsoundShot>
+      <maxApplyRadius>	300	</maxApplyRadius>
+    </script>
+  </arcade_artillery_DOT_event_2>
+  <arcade_artillery_DOT_event_3>
+    <id>	253	</id>
+    <userString>	#event:ability/arcade_artillery_DOT_event/name	</userString>
+    <description>	#event:ability/arcade_artillery_DOT_event/descr	</description>
+    <icon>	event/arcade_artillery_DOT_event 0 0	</icon>
+    <soundNotification>	hb1_equipment_artillery_bombardment_ready	</soundNotification>
+    <activationSoundNotification>	hb1_equipment_artillery_bombardment_activated	</activationSoundNotification>
+    <activationWWSoundFeedback>	ev_2019_secret_event_gameplay_ability_button	</activationWWSoundFeedback>
+    <targetConfirmWWSoundFeedback>	ev_2019_secret_event_gameplay_ability_button_radio	</targetConfirmWWSoundFeedback>
+    <price>	150	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	notForSale avatar trigger	</tags>
+    <type>	battleAbilities	</type>
+    <vehicleFilter>
+      <include>
+        <vehicle>
+          <minLevel>	1	</minLevel>
+          <maxLevel>	10	</maxLevel>
+        </vehicle>
+      </include>
+    </vehicleFilter>
+    <script>	EventArcadeArtillery	  <shortDescription>	#event:ability/arcade_artillery_DOT_event/shortDescr	</shortDescription>
+      <longDescription>	#event:ability/arcade_artillery_DOT_event/longDescr	</longDescription>
+      <shortFilterAlert></shortFilterAlert>
+      <longFilterAlert></longFilterAlert>
+      <tooltips>	cooldownTime delay areaRadius shotsNumber duration-artillery	</tooltips>
+      <cooldownTime>	50.0	</cooldownTime>
+      <cooldownFactors></cooldownFactors>
+      <sharedCooldownTime>	0	</sharedCooldownTime>
+      <consumeAmmo>	false	</consumeAmmo>
+      <disableAllyDamage>	false	</disableAllyDamage>
+      <cooldownTimeRespawnFactor>	1.5	</cooldownTimeRespawnFactor>
+      <delay>	4.0	</delay>
+      <duration>	10	</duration>
+      <shotsNumber>	30	</shotsNumber>
+      <areaRadius>	25	</areaRadius>
+      <shellCompactDescr>	314122	</shellCompactDescr>
+      <piercingPower>	40 40	</piercingPower>
+      <areaVisual>	content/Interface/TargetPoint/circle_31.visual	</areaVisual>
+      <noOwner>	false	</noOwner>
+      <shotSoundPreDelay>	2	</shotSoundPreDelay>
+      <wwsoundShot>	ev_2019_secret_event_gameplay_ability_atillery_shot	</wwsoundShot>
+      <maxApplyRadius>	300	</maxApplyRadius>
+    </script>
+  </arcade_artillery_DOT_event_3>
+  <arcade_artillery_fire_my_pos_event_2>
+    <id>	220	</id>
+    <userString>	#event:ability/arcade_artillery_fire_my_pos_event/name	</userString>
+    <description>	#event:ability/arcade_artillery_fire_my_pos_event/descr	</description>
+    <icon>	event/arcade_artillery_fire_my_pos_event 0 0	</icon>
+    <soundNotification>	hb1_equipment_fire_on_my_position_ready	</soundNotification>
+    <activationSoundNotification>	hb1_equipment_fire_on_my_position_activated	</activationSoundNotification>
+    <activationWWSoundFeedback>	ev_2019_secret_event_gameplay_ability_button	</activationWWSoundFeedback>
+    <price>	150	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	notForSale avatar trigger	</tags>
+    <type>	battleAbilities	</type>
+    <vehicleFilter>
+      <include>
+        <vehicle>
+          <minLevel>	1	</minLevel>
+          <maxLevel>	10	</maxLevel>
+        </vehicle>
+      </include>
+    </vehicleFilter>
+    <script>	EventArcadeArtillery	  <shortDescription>	#event:ability/arcade_artillery_fire_my_pos_event/shortDescr	</shortDescription>
+      <longDescription>	#event:ability/arcade_artillery_fire_my_pos_event/longDescr	</longDescription>
+      <shortFilterAlert></shortFilterAlert>
+      <longFilterAlert></longFilterAlert>
+      <tooltips>	cooldownTime delay areaRadius shotsNumber duration-artillery	</tooltips>
+      <cooldownTime>	65.0	</cooldownTime>
+      <cooldownFactors></cooldownFactors>
+      <sharedCooldownTime>	0	</sharedCooldownTime>
+      <consumeAmmo>	false	</consumeAmmo>
+      <disableAllyDamage>	false	</disableAllyDamage>
+      <cooldownTimeRespawnFactor>	1.5	</cooldownTimeRespawnFactor>
+      <delay>	4	</delay>
+      <duration>	10	</duration>
+      <shotsNumber>	40	</shotsNumber>
+      <areaRadius>	30	</areaRadius>
+      <shellCompactDescr>	312330	</shellCompactDescr>
+      <piercingPower>	40 40	</piercingPower>
+      <areaVisual>	content/Interface/TargetPoint/circle_50.visual	</areaVisual>
+      <noOwner>	false	</noOwner>
+      <shotSoundPreDelay>	2	</shotSoundPreDelay>
+      <wwsoundShot>	eb_ability_artillery_firing	</wwsoundShot>
+      <maxApplyRadius>	1	</maxApplyRadius>
+      <cameraPivotPosMin>	0 5 3	</cameraPivotPosMin>
+      <cameraPivotPosMax>	0 5 3	</cameraPivotPosMax>
+    </script>
+  </arcade_artillery_fire_my_pos_event_2>
+  <arcade_artillery_fire_my_pos_event_3>
+    <id>	224	</id>
+    <userString>	#event:ability/arcade_artillery_fire_my_pos_event/name	</userString>
+    <description>	#event:ability/arcade_artillery_fire_my_pos_event/descr	</description>
+    <icon>	event/arcade_artillery_fire_my_pos_event 0 0	</icon>
+    <soundNotification>	hb1_equipment_fire_on_my_position_ready	</soundNotification>
+    <activationSoundNotification>	hb1_equipment_fire_on_my_position_activated	</activationSoundNotification>
+    <activationWWSoundFeedback>	ev_2019_secret_event_gameplay_ability_button	</activationWWSoundFeedback>
+    <price>	150	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	notForSale avatar trigger	</tags>
+    <type>	battleAbilities	</type>
+    <vehicleFilter>
+      <include>
+        <vehicle>
+          <minLevel>	1	</minLevel>
+          <maxLevel>	10	</maxLevel>
+        </vehicle>
+      </include>
+    </vehicleFilter>
+    <script>	EventArcadeArtillery	  <shortDescription>	#event:ability/arcade_artillery_fire_my_pos_event/shortDescr	</shortDescription>
+      <longDescription>	#event:ability/arcade_artillery_fire_my_pos_event/longDescr	</longDescription>
+      <shortFilterAlert></shortFilterAlert>
+      <longFilterAlert></longFilterAlert>
+      <tooltips>	cooldownTime delay areaRadius shotsNumber duration-artillery	</tooltips>
+      <cooldownTime>	55.0	</cooldownTime>
+      <cooldownFactors></cooldownFactors>
+      <sharedCooldownTime>	0	</sharedCooldownTime>
+      <consumeAmmo>	false	</consumeAmmo>
+      <disableAllyDamage>	false	</disableAllyDamage>
+      <cooldownTimeRespawnFactor>	1.5	</cooldownTimeRespawnFactor>
+      <delay>	4	</delay>
+      <duration>	10	</duration>
+      <shotsNumber>	40	</shotsNumber>
+      <areaRadius>	30	</areaRadius>
+      <shellCompactDescr>	313098	</shellCompactDescr>
+      <piercingPower>	40 40	</piercingPower>
+      <areaVisual>	content/Interface/TargetPoint/circle_50.visual	</areaVisual>
+      <noOwner>	false	</noOwner>
+      <shotSoundPreDelay>	2	</shotSoundPreDelay>
+      <wwsoundShot>	eb_ability_artillery_firing	</wwsoundShot>
+      <maxApplyRadius>	1	</maxApplyRadius>
+      <cameraPivotPosMin>	0 5 3	</cameraPivotPosMin>
+      <cameraPivotPosMax>	0 5 3	</cameraPivotPosMax>
+    </script>
+  </arcade_artillery_fire_my_pos_event_3>
+  <arcade_bomber_west_event_1>
+    <id>	246	</id>
+    <userString>	#event:ability/arcade_bomber_west_event/name	</userString>
+    <description>	#event:ability/arcade_bomber_west_event/descr	</description>
+    <icon>	event/arcade_bomber_west_event 0 0	</icon>
+    <soundNotification>	hb1_equipment_bomber_ready	</soundNotification>
+    <activationSoundNotification>	hb1_equipment_bomber_activated	</activationSoundNotification>
+    <activationWWSoundFeedback>	ev_2019_secret_event_gameplay_ability_button	</activationWWSoundFeedback>
+    <targetConfirmWWSoundFeedback>	ev_2019_secret_event_gameplay_ability_button_radio	</targetConfirmWWSoundFeedback>
+    <price>	750	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	notForSale avatar trigger	</tags>
+    <type>	battleAbilities	</type>
+    <vehicleFilter>
+      <include>
+        <vehicle>
+          <minLevel>	1	</minLevel>
+          <maxLevel>	10	</maxLevel>
+        </vehicle>
+      </include>
+    </vehicleFilter>
+    <script>	EventArcadeBomber	  <shortDescription>	#event:ability/arcade_bomber_west_event/shortDescr	</shortDescription>
+      <longDescription>	#event:ability/arcade_bomber_west_event/longDescr	</longDescription>
+      <shortFilterAlert></shortFilterAlert>
+      <longFilterAlert></longFilterAlert>
+      <tooltips>	cooldownTime delay areaLength_areaWidth-dropArea bombsNumber shellCompactDescr	</tooltips>
+      <cooldownTime>	60.0	</cooldownTime>
+      <cooldownFactors></cooldownFactors>
+      <sharedCooldownTime>	0	</sharedCooldownTime>
+      <consumeAmmo>	false	</consumeAmmo>
+      <disableAllyDamage>	false	</disableAllyDamage>
+      <cooldownTimeRespawnFactor>	1.5	</cooldownTimeRespawnFactor>
+      <delay>	5	</delay>
+      <speed>	80	</speed>
+      <heights>	60 20	</heights>
+      <areaLength>	20	</areaLength>
+      <areaWidth>	20	</areaWidth>
+      <antepositions>	0	</antepositions>
+      <lateropositions>	0	</lateropositions>
+      <bombingMask>	1	</bombingMask>
+      <waveFraction>	1	</waveFraction>
+      <bombsNumber>	2	</bombsNumber>
+      <shellCompactDescr>	318986	</shellCompactDescr>
+      <tracerKind>	1	</tracerKind>
+      <piercingPower>	40 40	</piercingPower>
+      <gravity>	10000	</gravity>
+      <shootingDistance>	80	</shootingDistance>
+      <modelName>	content/MilitaryEnvironment/mle205_IL2/normal/lod0/mle205_IL2.model	</modelName>
+      <soundEvent>	/plane/bombardment/bomber_04	</soundEvent>
+      <wwsoundEvent>	eb_bomber_engine	</wwsoundEvent>
+      <areaVisual>	content/Interface/TargetPoint/rect_10_10.visual	</areaVisual>
+      <noOwner>	false	</noOwner>
+      <maxApplyRadius>	300	</maxApplyRadius>
+      <sequencePath>	particles/eff_sequence/airstrike_bomber_01.seq	</sequencePath>
+      <sequenceDuration>	16.05	</sequenceDuration>
+    </script>
+  </arcade_bomber_west_event_1>
+  <arcade_bomber_west_event_2>
+    <id>	247	</id>
+    <userString>	#event:ability/arcade_bomber_west_event/name	</userString>
+    <description>	#event:ability/arcade_bomber_west_event/descr	</description>
+    <icon>	event/arcade_bomber_west_event 0 0	</icon>
+    <soundNotification>	hb1_equipment_bomber_ready	</soundNotification>
+    <activationSoundNotification>	hb1_equipment_bomber_activated	</activationSoundNotification>
+    <activationWWSoundFeedback>	ev_2019_secret_event_gameplay_ability_button	</activationWWSoundFeedback>
+    <targetConfirmWWSoundFeedback>	ev_2019_secret_event_gameplay_ability_button_radio	</targetConfirmWWSoundFeedback>
+    <price>	750	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	notForSale avatar trigger	</tags>
+    <type>	battleAbilities	</type>
+    <vehicleFilter>
+      <include>
+        <vehicle>
+          <minLevel>	1	</minLevel>
+          <maxLevel>	10	</maxLevel>
+        </vehicle>
+      </include>
+    </vehicleFilter>
+    <script>	EventArcadeBomber	  <shortDescription>	#event:ability/arcade_bomber_west_event/shortDescr	</shortDescription>
+      <longDescription>	#event:ability/arcade_bomber_west_event/longDescr	</longDescription>
+      <shortFilterAlert></shortFilterAlert>
+      <longFilterAlert></longFilterAlert>
+      <tooltips>	cooldownTime delay areaLength_areaWidth-dropArea bombsNumber shellCompactDescr	</tooltips>
+      <cooldownTime>	55.0	</cooldownTime>
+      <cooldownFactors></cooldownFactors>
+      <sharedCooldownTime>	0	</sharedCooldownTime>
+      <consumeAmmo>	false	</consumeAmmo>
+      <disableAllyDamage>	false	</disableAllyDamage>
+      <cooldownTimeRespawnFactor>	1.5	</cooldownTimeRespawnFactor>
+      <delay>	5	</delay>
+      <speed>	80	</speed>
+      <heights>	60 20	</heights>
+      <areaLength>	20	</areaLength>
+      <areaWidth>	20	</areaWidth>
+      <antepositions>	0	</antepositions>
+      <lateropositions>	0	</lateropositions>
+      <bombingMask>	1	</bombingMask>
+      <waveFraction>	1	</waveFraction>
+      <bombsNumber>	2	</bombsNumber>
+      <shellCompactDescr>	319242	</shellCompactDescr>
+      <tracerKind>	1	</tracerKind>
+      <piercingPower>	40 40	</piercingPower>
+      <gravity>	10000	</gravity>
+      <shootingDistance>	80	</shootingDistance>
+      <modelName>	content/MilitaryEnvironment/mle205_IL2/normal/lod0/mle205_IL2.model	</modelName>
+      <soundEvent>	/plane/bombardment/bomber_04	</soundEvent>
+      <wwsoundEvent>	eb_bomber_engine	</wwsoundEvent>
+      <areaVisual>	content/Interface/TargetPoint/rect_10_10.visual	</areaVisual>
+      <noOwner>	false	</noOwner>
+      <maxApplyRadius>	300	</maxApplyRadius>
+      <sequencePath>	particles/eff_sequence/airstrike_bomber_01.seq	</sequencePath>
+      <sequenceDuration>	16.05	</sequenceDuration>
+    </script>
+  </arcade_bomber_west_event_2>
+  <arcade_bomber_west_event_3>
+    <id>	248	</id>
+    <userString>	#event:ability/arcade_bomber_west_event/name	</userString>
+    <description>	#event:ability/arcade_bomber_west_event/descr	</description>
+    <icon>	event/arcade_bomber_west_event 0 0	</icon>
+    <soundNotification>	hb1_equipment_bomber_ready	</soundNotification>
+    <activationSoundNotification>	hb1_equipment_bomber_activated	</activationSoundNotification>
+    <activationWWSoundFeedback>	ev_2019_secret_event_gameplay_ability_button	</activationWWSoundFeedback>
+    <targetConfirmWWSoundFeedback>	ev_2019_secret_event_gameplay_ability_button_radio	</targetConfirmWWSoundFeedback>
+    <price>	750	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	notForSale avatar trigger	</tags>
+    <type>	battleAbilities	</type>
+    <vehicleFilter>
+      <include>
+        <vehicle>
+          <minLevel>	1	</minLevel>
+          <maxLevel>	10	</maxLevel>
+        </vehicle>
+      </include>
+    </vehicleFilter>
+    <script>	EventArcadeBomber	  <shortDescription>	#event:ability/arcade_bomber_west_event/shortDescr	</shortDescription>
+      <longDescription>	#event:ability/arcade_bomber_west_event/longDescr	</longDescription>
+      <shortFilterAlert></shortFilterAlert>
+      <longFilterAlert></longFilterAlert>
+      <tooltips>	cooldownTime delay areaLength_areaWidth-dropArea bombsNumber shellCompactDescr	</tooltips>
+      <cooldownTime>	50.0	</cooldownTime>
+      <cooldownFactors></cooldownFactors>
+      <sharedCooldownTime>	0	</sharedCooldownTime>
+      <consumeAmmo>	false	</consumeAmmo>
+      <disableAllyDamage>	false	</disableAllyDamage>
+      <cooldownTimeRespawnFactor>	1.5	</cooldownTimeRespawnFactor>
+      <delay>	5	</delay>
+      <speed>	80	</speed>
+      <heights>	60 20	</heights>
+      <areaLength>	20	</areaLength>
+      <areaWidth>	20	</areaWidth>
+      <antepositions>	0	</antepositions>
+      <lateropositions>	0	</lateropositions>
+      <bombingMask>	1	</bombingMask>
+      <waveFraction>	1	</waveFraction>
+      <bombsNumber>	2	</bombsNumber>
+      <shellCompactDescr>	319498	</shellCompactDescr>
+      <tracerKind>	1	</tracerKind>
+      <piercingPower>	40 40	</piercingPower>
+      <gravity>	10000	</gravity>
+      <shootingDistance>	80	</shootingDistance>
+      <modelName>	content/MilitaryEnvironment/mle205_IL2/normal/lod0/mle205_IL2.model	</modelName>
+      <soundEvent>	/plane/bombardment/bomber_04	</soundEvent>
+      <wwsoundEvent>	eb_bomber_engine	</wwsoundEvent>
+      <areaVisual>	content/Interface/TargetPoint/rect_10_10.visual	</areaVisual>
+      <noOwner>	false	</noOwner>
+      <maxApplyRadius>	300	</maxApplyRadius>
+      <sequencePath>	particles/eff_sequence/airstrike_bomber_01.seq	</sequencePath>
+      <sequenceDuration>	16.05	</sequenceDuration>
+    </script>
+  </arcade_bomber_west_event_3>
+  <arcade_bomber_attack_west_event_1>
+    <id>	250	</id>
+    <userString>	#event:ability/arcade_bomber_attack_west_event/name	</userString>
+    <description>	#event:ability/arcade_bomber_attack_west_event/descr	</description>
+    <icon>	event/arcade_bomber_attack_west_event 0 0	</icon>
+    <soundNotification>	hb1_equipment_attack_bomber_ready	</soundNotification>
+    <activationSoundNotification>	hb1_equipment_attack_bomber_activated	</activationSoundNotification>
+    <activationWWSoundFeedback>	ev_2019_secret_event_gameplay_ability_button	</activationWWSoundFeedback>
+    <targetConfirmWWSoundFeedback>	ev_2019_secret_event_gameplay_ability_button_radio	</targetConfirmWWSoundFeedback>
+    <price>	750	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	notForSale avatar trigger	</tags>
+    <type>	battleAbilities	</type>
+    <vehicleFilter>
+      <include>
+        <vehicle>
+          <minLevel>	1	</minLevel>
+          <maxLevel>	10	</maxLevel>
+        </vehicle>
+      </include>
+    </vehicleFilter>
+    <script>	EventArcadeBomber	  <shortDescription>	#event:ability/arcade_bomber_attack_west_event/shortDescr	</shortDescription>
+      <longDescription>	#event:ability/arcade_bomber_attack_west_event/longDescr	</longDescription>
+      <shortFilterAlert></shortFilterAlert>
+      <longFilterAlert></longFilterAlert>
+      <tooltips>	cooldownTime delay areaLength_areaWidth-dropArea bombsNumber shellCompactDescr	</tooltips>
+      <cooldownTime>	70.0	</cooldownTime>
+      <cooldownFactors></cooldownFactors>
+      <sharedCooldownTime>	0	</sharedCooldownTime>
+      <consumeAmmo>	false	</consumeAmmo>
+      <disableAllyDamage>	false	</disableAllyDamage>
+      <cooldownTimeRespawnFactor>	1.5	</cooldownTimeRespawnFactor>
+      <delay>	5.0	</delay>
+      <speed>	80	</speed>
+      <heights>	60 20	</heights>
+      <areaLength>	80	</areaLength>
+      <areaWidth>	35	</areaWidth>
+      <antepositions>	0	</antepositions>
+      <lateropositions>	0	</lateropositions>
+      <bombingMask>	1	</bombingMask>
+      <waveFraction>	1	</waveFraction>
+      <bombsNumber>	40	</bombsNumber>
+      <shellCompactDescr>	320778	</shellCompactDescr>
+      <tracerKind>	1	</tracerKind>
+      <piercingPower>	40 40	</piercingPower>
+      <gravity>	10000	</gravity>
+      <shootingDistance>	80	</shootingDistance>
+      <modelName>	content/MilitaryEnvironment/mle205_IL2/normal/lod0/mle205_IL2.model	</modelName>
+      <soundEvent>	/plane/bombardment/bomber_04	</soundEvent>
+      <wwsoundEvent>	eb_bomber_engine	</wwsoundEvent>
+      <areaVisual>	content/Interface/TargetPoint/rect_32_14.visual	</areaVisual>
+      <noOwner>	false	</noOwner>
+      <maxApplyRadius>	300	</maxApplyRadius>
+      <sequencePath>	particles/eff_sequence/airstrike_plane_path_01.seq	</sequencePath>
+      <sequenceDuration>	16.08	</sequenceDuration>
+    </script>
+  </arcade_bomber_attack_west_event_1>
+  <arcade_bomber_attack_west_event_2>
+    <id>	225	</id>
+    <userString>	#event:ability/arcade_bomber_attack_west_event/name	</userString>
+    <description>	#event:ability/arcade_bomber_attack_west_event/descr	</description>
+    <icon>	event/arcade_bomber_attack_west_event 0 0	</icon>
+    <soundNotification>	hb1_equipment_attack_bomber_ready	</soundNotification>
+    <activationSoundNotification>	hb1_equipment_attack_bomber_activated	</activationSoundNotification>
+    <activationWWSoundFeedback>	ev_2019_secret_event_gameplay_ability_button	</activationWWSoundFeedback>
+    <targetConfirmWWSoundFeedback>	ev_2019_secret_event_gameplay_ability_button_radio	</targetConfirmWWSoundFeedback>
+    <price>	750	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	notForSale avatar trigger	</tags>
+    <type>	battleAbilities	</type>
+    <vehicleFilter>
+      <include>
+        <vehicle>
+          <minLevel>	1	</minLevel>
+          <maxLevel>	10	</maxLevel>
+        </vehicle>
+      </include>
+    </vehicleFilter>
+    <script>	EventArcadeBomber	  <shortDescription>	#event:ability/arcade_bomber_attack_west_event/shortDescr	</shortDescription>
+      <longDescription>	#event:ability/arcade_bomber_attack_west_event/longDescr	</longDescription>
+      <shortFilterAlert></shortFilterAlert>
+      <longFilterAlert></longFilterAlert>
+      <tooltips>	cooldownTime delay areaLength_areaWidth-dropArea bombsNumber shellCompactDescr	</tooltips>
+      <cooldownTime>	65.0	</cooldownTime>
+      <cooldownFactors></cooldownFactors>
+      <sharedCooldownTime>	0	</sharedCooldownTime>
+      <consumeAmmo>	false	</consumeAmmo>
+      <disableAllyDamage>	false	</disableAllyDamage>
+      <cooldownTimeRespawnFactor>	1.5	</cooldownTimeRespawnFactor>
+      <delay>	5.0	</delay>
+      <speed>	80	</speed>
+      <heights>	60 20	</heights>
+      <areaLength>	80	</areaLength>
+      <areaWidth>	35	</areaWidth>
+      <antepositions>	0	</antepositions>
+      <lateropositions>	0	</lateropositions>
+      <bombingMask>	1	</bombingMask>
+      <waveFraction>	1	</waveFraction>
+      <bombsNumber>	40	</bombsNumber>
+      <shellCompactDescr>	321034	</shellCompactDescr>
+      <tracerKind>	1	</tracerKind>
+      <piercingPower>	40 40	</piercingPower>
+      <gravity>	10000	</gravity>
+      <shootingDistance>	80	</shootingDistance>
+      <modelName>	content/MilitaryEnvironment/mle205_IL2/normal/lod0/mle205_IL2.model	</modelName>
+      <soundEvent>	/plane/bombardment/bomber_04	</soundEvent>
+      <wwsoundEvent>	eb_bomber_engine	</wwsoundEvent>
+      <areaVisual>	content/Interface/TargetPoint/rect_32_14.visual	</areaVisual>
+      <noOwner>	false	</noOwner>
+      <maxApplyRadius>	300	</maxApplyRadius>
+      <sequencePath>	particles/eff_sequence/airstrike_plane_path_01.seq	</sequencePath>
+      <sequenceDuration>	16.08	</sequenceDuration>
+    </script>
+  </arcade_bomber_attack_west_event_2>
+  <arcade_bomber_attack_west_event_3>
+    <id>	229	</id>
+    <userString>	#event:ability/arcade_bomber_attack_west_event/name	</userString>
+    <description>	#event:ability/arcade_bomber_attack_west_event/descr	</description>
+    <icon>	event/arcade_bomber_attack_west_event 0 0	</icon>
+    <soundNotification>	hb1_equipment_attack_bomber_ready	</soundNotification>
+    <activationSoundNotification>	hb1_equipment_attack_bomber_activated	</activationSoundNotification>
+    <activationWWSoundFeedback>	ev_2019_secret_event_gameplay_ability_button	</activationWWSoundFeedback>
+    <targetConfirmWWSoundFeedback>	ev_2019_secret_event_gameplay_ability_button_radio	</targetConfirmWWSoundFeedback>
+    <price>	750	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	notForSale avatar trigger	</tags>
+    <type>	battleAbilities	</type>
+    <vehicleFilter>
+      <include>
+        <vehicle>
+          <minLevel>	1	</minLevel>
+          <maxLevel>	10	</maxLevel>
+        </vehicle>
+      </include>
+    </vehicleFilter>
+    <script>	EventArcadeBomber	  <shortDescription>	#event:ability/arcade_bomber_attack_west_event/shortDescr	</shortDescription>
+      <longDescription>	#event:ability/arcade_bomber_attack_west_event/longDescr	</longDescription>
+      <shortFilterAlert></shortFilterAlert>
+      <longFilterAlert></longFilterAlert>
+      <tooltips>	cooldownTime delay areaLength_areaWidth-dropArea bombsNumber shellCompactDescr	</tooltips>
+      <cooldownTime>	60.0	</cooldownTime>
+      <cooldownFactors></cooldownFactors>
+      <sharedCooldownTime>	0	</sharedCooldownTime>
+      <consumeAmmo>	false	</consumeAmmo>
+      <disableAllyDamage>	false	</disableAllyDamage>
+      <cooldownTimeRespawnFactor>	1.5	</cooldownTimeRespawnFactor>
+      <delay>	5.0	</delay>
+      <speed>	80	</speed>
+      <heights>	60 20	</heights>
+      <areaLength>	80	</areaLength>
+      <areaWidth>	35	</areaWidth>
+      <antepositions>	0	</antepositions>
+      <lateropositions>	0	</lateropositions>
+      <bombingMask>	1	</bombingMask>
+      <waveFraction>	1	</waveFraction>
+      <bombsNumber>	40	</bombsNumber>
+      <shellCompactDescr>	321290	</shellCompactDescr>
+      <tracerKind>	1	</tracerKind>
+      <piercingPower>	40 40	</piercingPower>
+      <gravity>	10000	</gravity>
+      <shootingDistance>	80	</shootingDistance>
+      <modelName>	content/MilitaryEnvironment/mle205_IL2/normal/lod0/mle205_IL2.model	</modelName>
+      <soundEvent>	/plane/bombardment/bomber_04	</soundEvent>
+      <wwsoundEvent>	eb_bomber_engine	</wwsoundEvent>
+      <areaVisual>	content/Interface/TargetPoint/rect_32_14.visual	</areaVisual>
+      <noOwner>	false	</noOwner>
+      <maxApplyRadius>	300	</maxApplyRadius>
+      <sequencePath>	particles/eff_sequence/airstrike_plane_path_01.seq	</sequencePath>
+      <sequenceDuration>	16.08	</sequenceDuration>
+    </script>
+  </arcade_bomber_attack_west_event_3>
+  <arcade_bomber_attack_east_event_1>
+    <id>	234	</id>
+    <userString>	#event:ability/arcade_bomber_attack_east_event/name	</userString>
+    <description>	#event:ability/arcade_bomber_attack_east_event/descr	</description>
+    <icon>	event/arcade_bomber_attack_west_event 0 0	</icon>
+    <soundNotification>	hb1_equipment_attack_bomber_ready	</soundNotification>
+    <activationSoundNotification>	hb1_equipment_attack_bomber_activated	</activationSoundNotification>
+    <activationWWSoundFeedback>	ev_2019_secret_event_gameplay_ability_button	</activationWWSoundFeedback>
+    <targetConfirmWWSoundFeedback>	ev_2019_secret_event_gameplay_ability_button_radio	</targetConfirmWWSoundFeedback>
+    <price>	750	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	notForSale avatar trigger	</tags>
+    <type>	battleAbilities	</type>
+    <vehicleFilter>
+      <include>
+        <vehicle>
+          <minLevel>	1	</minLevel>
+          <maxLevel>	10	</maxLevel>
+        </vehicle>
+      </include>
+    </vehicleFilter>
+    <script>	EventArcadeBomber	  <shortDescription>	#event:ability/arcade_bomber_attack_east_event/shortDescr	</shortDescription>
+      <longDescription>	#event:ability/arcade_bomber_attack_east_event/longDescr	</longDescription>
+      <shortFilterAlert></shortFilterAlert>
+      <longFilterAlert></longFilterAlert>
+      <tooltips>	cooldownTime delay areaLength_areaWidth-dropArea bombsNumber shellCompactDescr	</tooltips>
+      <cooldownTime>	70.0	</cooldownTime>
+      <cooldownFactors></cooldownFactors>
+      <sharedCooldownTime>	0	</sharedCooldownTime>
+      <consumeAmmo>	false	</consumeAmmo>
+      <disableAllyDamage>	false	</disableAllyDamage>
+      <cooldownTimeRespawnFactor>	1.5	</cooldownTimeRespawnFactor>
+      <delay>	5.0	</delay>
+      <speed>	80	</speed>
+      <heights>	60 20	</heights>
+      <areaLength>	80	</areaLength>
+      <areaWidth>	35	</areaWidth>
+      <antepositions>	0	</antepositions>
+      <lateropositions>	0	</lateropositions>
+      <bombingMask>	1	</bombingMask>
+      <waveFraction>	1	</waveFraction>
+      <bombsNumber>	40	</bombsNumber>
+      <shellCompactDescr>	320010	</shellCompactDescr>
+      <tracerKind>	1	</tracerKind>
+      <piercingPower>	40 40	</piercingPower>
+      <gravity>	10000	</gravity>
+      <shootingDistance>	80	</shootingDistance>
+      <modelName>	content/MilitaryEnvironment/mle205_IL2/normal/lod0/mle205_IL2.model	</modelName>
+      <soundEvent>	/plane/bombardment/bomber_04	</soundEvent>
+      <wwsoundEvent>	eb_bomber_engine	</wwsoundEvent>
+      <areaVisual>	content/Interface/TargetPoint/rect_32_14.visual	</areaVisual>
+      <noOwner>	false	</noOwner>
+      <maxApplyRadius>	300	</maxApplyRadius>
+      <sequencePath>	particles/eff_sequence/airstrike_attack_il2_01.seq	</sequencePath>
+      <sequenceDuration>	16.08	</sequenceDuration>
+    </script>
+  </arcade_bomber_attack_east_event_1>
+  <arcade_bomber_attack_east_event_2>
+    <id>	235	</id>
+    <userString>	#event:ability/arcade_bomber_attack_east_event/name	</userString>
+    <description>	#event:ability/arcade_bomber_attack_east_event/descr	</description>
+    <icon>	event/arcade_bomber_attack_west_event 0 0	</icon>
+    <soundNotification>	hb1_equipment_attack_bomber_ready	</soundNotification>
+    <activationSoundNotification>	hb1_equipment_attack_bomber_activated	</activationSoundNotification>
+    <activationWWSoundFeedback>	ev_2019_secret_event_gameplay_ability_button	</activationWWSoundFeedback>
+    <targetConfirmWWSoundFeedback>	ev_2019_secret_event_gameplay_ability_button_radio	</targetConfirmWWSoundFeedback>
+    <price>	750	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	notForSale avatar trigger	</tags>
+    <type>	battleAbilities	</type>
+    <vehicleFilter>
+      <include>
+        <vehicle>
+          <minLevel>	1	</minLevel>
+          <maxLevel>	10	</maxLevel>
+        </vehicle>
+      </include>
+    </vehicleFilter>
+    <script>	EventArcadeBomber	  <shortDescription>	#event:ability/arcade_bomber_attack_east_event/shortDescr	</shortDescription>
+      <longDescription>	#event:ability/arcade_bomber_attack_east_event/longDescr	</longDescription>
+      <shortFilterAlert></shortFilterAlert>
+      <longFilterAlert></longFilterAlert>
+      <tooltips>	cooldownTime delay areaLength_areaWidth-dropArea bombsNumber shellCompactDescr	</tooltips>
+      <cooldownTime>	60.0	</cooldownTime>
+      <cooldownFactors></cooldownFactors>
+      <sharedCooldownTime>	0	</sharedCooldownTime>
+      <consumeAmmo>	false	</consumeAmmo>
+      <disableAllyDamage>	false	</disableAllyDamage>
+      <cooldownTimeRespawnFactor>	1.5	</cooldownTimeRespawnFactor>
+      <delay>	5.0	</delay>
+      <speed>	80	</speed>
+      <heights>	60 20	</heights>
+      <areaLength>	80	</areaLength>
+      <areaWidth>	35	</areaWidth>
+      <antepositions>	0	</antepositions>
+      <lateropositions>	0	</lateropositions>
+      <bombingMask>	1	</bombingMask>
+      <waveFraction>	1	</waveFraction>
+      <bombsNumber>	40	</bombsNumber>
+      <shellCompactDescr>	320266	</shellCompactDescr>
+      <tracerKind>	1	</tracerKind>
+      <piercingPower>	40 40	</piercingPower>
+      <gravity>	10000	</gravity>
+      <shootingDistance>	80	</shootingDistance>
+      <modelName>	content/MilitaryEnvironment/mle205_IL2/normal/lod0/mle205_IL2.model	</modelName>
+      <soundEvent>	/plane/bombardment/bomber_04	</soundEvent>
+      <wwsoundEvent>	eb_bomber_engine	</wwsoundEvent>
+      <areaVisual>	content/Interface/TargetPoint/rect_32_14.visual	</areaVisual>
+      <noOwner>	false	</noOwner>
+      <maxApplyRadius>	300	</maxApplyRadius>
+      <sequencePath>	particles/eff_sequence/airstrike_attack_il2_01.seq	</sequencePath>
+      <sequenceDuration>	16.08	</sequenceDuration>
+    </script>
+  </arcade_bomber_attack_east_event_2>
+  <arcade_bomber_attack_east_event_3>
+    <id>	237	</id>
+    <userString>	#event:ability/arcade_bomber_attack_east_event/name	</userString>
+    <description>	#event:ability/arcade_bomber_attack_east_event/descr	</description>
+    <icon>	event/arcade_bomber_attack_west_event 0 0	</icon>
+    <soundNotification>	hb1_equipment_attack_bomber_ready	</soundNotification>
+    <activationSoundNotification>	hb1_equipment_attack_bomber_activated	</activationSoundNotification>
+    <activationWWSoundFeedback>	ev_2019_secret_event_gameplay_ability_button	</activationWWSoundFeedback>
+    <targetConfirmWWSoundFeedback>	ev_2019_secret_event_gameplay_ability_button_radio	</targetConfirmWWSoundFeedback>
+    <price>	750	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	notForSale avatar trigger	</tags>
+    <type>	battleAbilities	</type>
+    <vehicleFilter>
+      <include>
+        <vehicle>
+          <minLevel>	1	</minLevel>
+          <maxLevel>	10	</maxLevel>
+        </vehicle>
+      </include>
+    </vehicleFilter>
+    <script>	EventArcadeBomber	  <shortDescription>	#event:ability/arcade_bomber_attack_east_event/shortDescr	</shortDescription>
+      <longDescription>	#event:ability/arcade_bomber_attack_east_event/longDescr	</longDescription>
+      <shortFilterAlert></shortFilterAlert>
+      <longFilterAlert></longFilterAlert>
+      <tooltips>	cooldownTime delay areaLength_areaWidth-dropArea bombsNumber shellCompactDescr	</tooltips>
+      <cooldownTime>	50.0	</cooldownTime>
+      <cooldownFactors></cooldownFactors>
+      <sharedCooldownTime>	0	</sharedCooldownTime>
+      <consumeAmmo>	false	</consumeAmmo>
+      <disableAllyDamage>	false	</disableAllyDamage>
+      <cooldownTimeRespawnFactor>	1.5	</cooldownTimeRespawnFactor>
+      <delay>	5.0	</delay>
+      <speed>	80	</speed>
+      <heights>	60 20	</heights>
+      <areaLength>	80	</areaLength>
+      <areaWidth>	35	</areaWidth>
+      <antepositions>	0	</antepositions>
+      <lateropositions>	0	</lateropositions>
+      <bombingMask>	1	</bombingMask>
+      <waveFraction>	1	</waveFraction>
+      <bombsNumber>	40	</bombsNumber>
+      <shellCompactDescr>	320522	</shellCompactDescr>
+      <tracerKind>	1	</tracerKind>
+      <piercingPower>	40 40	</piercingPower>
+      <gravity>	10000	</gravity>
+      <shootingDistance>	80	</shootingDistance>
+      <modelName>	content/MilitaryEnvironment/mle205_IL2/normal/lod0/mle205_IL2.model	</modelName>
+      <soundEvent>	/plane/bombardment/bomber_04	</soundEvent>
+      <wwsoundEvent>	eb_bomber_engine	</wwsoundEvent>
+      <areaVisual>	content/Interface/TargetPoint/rect_32_14.visual	</areaVisual>
+      <noOwner>	false	</noOwner>
+      <maxApplyRadius>	300	</maxApplyRadius>
+      <sequencePath>	particles/eff_sequence/airstrike_attack_il2_01.seq	</sequencePath>
+      <sequenceDuration>	16.08	</sequenceDuration>
+    </script>
+  </arcade_bomber_attack_east_event_3>
+  <arcade_minefield_event_1>
+    <id>	238	</id>
+    <userString>	#event:ability/arcade_minefield_event/name	</userString>
+    <description>	#event:ability/arcade_minefield_event/descr	</description>
+    <icon>	event/arcade_minefield_event 0 0	</icon>
+    <soundNotification>	hb1_equipment_minefield_ready	</soundNotification>
+    <activationSoundNotification>	hb1_equipment_minefield_activated	</activationSoundNotification>
+    <activationWWSoundFeedback>	ev_2019_secret_event_gameplay_ability_button	</activationWWSoundFeedback>
+    <targetConfirmWWSoundFeedback>	ev_2019_secret_event_gameplay_ability_button_radio	</targetConfirmWWSoundFeedback>
+    <price>	750	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	notForSale avatar trigger	</tags>
+    <type>	battleAbilities	</type>
+    <vehicleFilter>
+      <include>
+        <vehicle>
+          <minLevel>	1	</minLevel>
+          <maxLevel>	10	</maxLevel>
+        </vehicle>
+      </include>
+    </vehicleFilter>
+    <script>	EventMinefield	  <shortDescription>	#event:ability/arcade_minefield_event/shortDescr	</shortDescription>
+      <longDescription>	#event:ability/arcade_minefield_event/longDescr	</longDescription>
+      <shortFilterAlert></shortFilterAlert>
+      <longFilterAlert></longFilterAlert>
+      <tooltips>	cooldownTime delay areaLength_areaWidth-dropArea bombsNumber shellCompactDescr	</tooltips>
+      <cooldownTime>	90.0	</cooldownTime>
+      <cooldownFactors></cooldownFactors>
+      <sharedCooldownTime>	0	</sharedCooldownTime>
+      <consumeAmmo>	false	</consumeAmmo>
+      <disableAllyDamage>	false	</disableAllyDamage>
+      <cooldownTimeRespawnFactor>	1.5	</cooldownTimeRespawnFactor>
+      <bombsPattern>	10 -20
+				10 -10
+				10   0
+				10  10
+				10  20
+				20 -15
+				20  -5
+				20   5
+				20  15	</bombsPattern>
+      <itemPickup>	bombPickup1	</itemPickup>
+      <noOwner>	false	</noOwner>
+      <areaVisual>	content/Interface/TargetPoint/rect_6_18.visual	</areaVisual>
+      <areaLength>	10	</areaLength>
+      <areaWidth>	35	</areaWidth>
+      <minApplyRadius>	15	</minApplyRadius>
+      <maxApplyRadius>	15	</maxApplyRadius>
+      <cameraPivotPosMin>	0 5 3	</cameraPivotPosMin>
+      <cameraPivotPosMax>	0 5 3	</cameraPivotPosMax>
+    </script>
+  </arcade_minefield_event_1>
+  <arcade_minefield_event_2>
+    <id>	240	</id>
+    <userString>	#event:ability/arcade_minefield_event/name	</userString>
+    <description>	#event:ability/arcade_minefield_event/descr	</description>
+    <icon>	event/arcade_minefield_event 0 0	</icon>
+    <soundNotification>	hb1_equipment_minefield_ready	</soundNotification>
+    <activationSoundNotification>	hb1_equipment_minefield_activated	</activationSoundNotification>
+    <activationWWSoundFeedback>	ev_2019_secret_event_gameplay_ability_button	</activationWWSoundFeedback>
+    <targetConfirmWWSoundFeedback>	ev_2019_secret_event_gameplay_ability_button_radio	</targetConfirmWWSoundFeedback>
+    <price>	750	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	notForSale avatar trigger	</tags>
+    <type>	battleAbilities	</type>
+    <vehicleFilter>
+      <include>
+        <vehicle>
+          <minLevel>	1	</minLevel>
+          <maxLevel>	10	</maxLevel>
+        </vehicle>
+      </include>
+    </vehicleFilter>
+    <script>	EventMinefield	  <shortDescription>	#event:ability/arcade_minefield_event/shortDescr	</shortDescription>
+      <longDescription>	#event:ability/arcade_minefield_event/longDescr	</longDescription>
+      <shortFilterAlert></shortFilterAlert>
+      <longFilterAlert></longFilterAlert>
+      <tooltips>	cooldownTime delay areaLength_areaWidth-dropArea bombsNumber shellCompactDescr	</tooltips>
+      <cooldownTime>	80.0	</cooldownTime>
+      <cooldownFactors></cooldownFactors>
+      <sharedCooldownTime>	0	</sharedCooldownTime>
+      <consumeAmmo>	false	</consumeAmmo>
+      <disableAllyDamage>	false	</disableAllyDamage>
+      <cooldownTimeRespawnFactor>	1.5	</cooldownTimeRespawnFactor>
+      <bombsPattern>	10 -20
+				10 -10
+				10   0
+				10  10
+				10  20
+				20 -15
+				20  -5
+				20   5
+				20  15	</bombsPattern>
+      <itemPickup>	bombPickup2	</itemPickup>
+      <noOwner>	false	</noOwner>
+      <areaVisual>	content/Interface/TargetPoint/rect_6_18.visual	</areaVisual>
+      <areaLength>	10	</areaLength>
+      <areaWidth>	35	</areaWidth>
+      <minApplyRadius>	15	</minApplyRadius>
+      <maxApplyRadius>	15	</maxApplyRadius>
+      <cameraPivotPosMin>	0 5 3	</cameraPivotPosMin>
+      <cameraPivotPosMax>	0 5 3	</cameraPivotPosMax>
+    </script>
+  </arcade_minefield_event_2>
+  <arcade_minefield_event_3>
+    <id>	241	</id>
+    <userString>	#event:ability/arcade_minefield_event/name	</userString>
+    <description>	#event:ability/arcade_minefield_event/descr	</description>
+    <icon>	event/arcade_minefield_event 0 0	</icon>
+    <soundNotification>	hb1_equipment_minefield_ready	</soundNotification>
+    <activationSoundNotification>	hb1_equipment_minefield_activated	</activationSoundNotification>
+    <activationWWSoundFeedback>	ev_2019_secret_event_gameplay_ability_button	</activationWWSoundFeedback>
+    <targetConfirmWWSoundFeedback>	ev_2019_secret_event_gameplay_ability_button_radio	</targetConfirmWWSoundFeedback>
+    <price>	750	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	notForSale avatar trigger	</tags>
+    <type>	battleAbilities	</type>
+    <vehicleFilter>
+      <include>
+        <vehicle>
+          <minLevel>	1	</minLevel>
+          <maxLevel>	10	</maxLevel>
+        </vehicle>
+      </include>
+    </vehicleFilter>
+    <script>	EventMinefield	  <shortDescription>	#event:arcade_minefield_event/shortDescr	</shortDescription>
+      <longDescription>	#event:arcade_minefield_event/longDescr	</longDescription>
+      <shortFilterAlert></shortFilterAlert>
+      <longFilterAlert></longFilterAlert>
+      <tooltips>	cooldownTime delay areaLength_areaWidth-dropArea bombsNumber shellCompactDescr	</tooltips>
+      <cooldownTime>	70.0	</cooldownTime>
+      <cooldownFactors></cooldownFactors>
+      <sharedCooldownTime>	0	</sharedCooldownTime>
+      <consumeAmmo>	false	</consumeAmmo>
+      <disableAllyDamage>	false	</disableAllyDamage>
+      <cooldownTimeRespawnFactor>	1.5	</cooldownTimeRespawnFactor>
+      <bombsPattern>	10 -20
+				10 -10
+				10   0
+				10  10
+				10  20
+				20 -15
+				20  -5
+				20   5
+				20  15	</bombsPattern>
+      <itemPickup>	bombPickup3	</itemPickup>
+      <noOwner>	false	</noOwner>
+      <areaVisual>	content/Interface/TargetPoint/rect_6_18.visual	</areaVisual>
+      <areaLength>	10	</areaLength>
+      <areaWidth>	35	</areaWidth>
+      <minApplyRadius>	15	</minApplyRadius>
+      <maxApplyRadius>	15	</maxApplyRadius>
+      <cameraPivotPosMin>	0 5 3	</cameraPivotPosMin>
+      <cameraPivotPosMax>	0 5 3	</cameraPivotPosMax>
+    </script>
+  </arcade_minefield_event_3>
+  <berserk_event_1>
+    <id>	356	</id>
+    <userString>	#event:ability/berserk_event/name	</userString>
+    <description>	#event:ability/berserk_event/descr	</description>
+    <icon>	event/berserk_event 0 0	</icon>
+    <price>	20000	</price>
+    <notInShop>	true	</notInShop>
+    <tags>	notForSale avatar event_passive_ability	</tags>
+    <type>	battleAbilities	</type>
+    <soundNotification>	hb1_equipment_berserk_ready	</soundNotification>
+    <activationSoundNotification>	hb1_equipment_berserk_activated	</activationSoundNotification>
+    <vehicleFilter>
+      <include>
+        <vehicle>
+          <minLevel>	1	</minLevel>
+          <maxLevel>	10	</maxLevel>
+        </vehicle>
+      </include>
+    </vehicleFilter>
+    <script>	EventBerserkEquipment	  <shortDescription>	#event:ability/berserk_event/shortDescr	</shortDescription>
+      <longDescription>	#event:ability/berserk_event/longDescr	</longDescription>
+      <shortFilterAlert></shortFilterAlert>
+      <longFilterAlert></longFilterAlert>
+      <config>
+        <value>
+          <healthPercentage>	20	</healthPercentage>
+          <reloadModifier>	0.4	</reloadModifier>
+          <aimingModifier>	0.6	</aimingModifier>
+        </value>
+        <value>
+          <healthPercentage>	40	</healthPercentage>
+          <reloadModifier>	0.55	</reloadModifier>
+          <aimingModifier>	0.7	</aimingModifier>
+        </value>
+        <value>
+          <healthPercentage>	60	</healthPercentage>
+          <reloadModifier>	0.7	</reloadModifier>
+          <aimingModifier>	0.8	</aimingModifier>
+        </value>
+        <value>
+          <healthPercentage>	80	</healthPercentage>
+          <reloadModifier>	0.85	</reloadModifier>
+          <aimingModifier>	0.9	</aimingModifier>
+        </value>
+      </config>
+    </script>
+  </berserk_event_1>
+  <event_additional_tank_1>
+    <id>	357	</id>
+    <userString>	#event:ability/event_additional_tank/name	</userString>
+    <description>	#event:ability/event_additional_tank/descr	</description>
+    <icon>	event/event_additional_tank 0 0	</icon>
+    <soundNotification>	hb1_equipment_bomber_ready	</soundNotification>
+    <activationSoundNotification>	hb1_equipment_bomber_activated	</activationSoundNotification>
+    <activationWWSoundFeedback>	ev_2019_secret_event_gameplay_ability_button	</activationWWSoundFeedback>
+    <instantAiming>	TARGET	</instantAiming>
+    <price>	750	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	notForSale avatar trigger	</tags>
+    <type>	battleAbilities	</type>
+    <vehicleFilter>
+      <include>
+        <vehicle>
+          <minLevel>	1	</minLevel>
+          <maxLevel>	10	</maxLevel>
+        </vehicle>
+      </include>
+    </vehicleFilter>
+    <script>	EventBomber	  <shortDescription>	#event:ability/event_additional_tank/shortDescr	</shortDescription>
+      <longDescription>	#event:ability/event_additional_tank/longDescr	</longDescription>
+      <shortFilterAlert></shortFilterAlert>
+      <longFilterAlert></longFilterAlert>
+      <tooltips>	cooldownTime delay areaLength_areaWidth-dropArea bombsNumber shellCompactDescr	</tooltips>
+      <cooldownTime>	5.0	</cooldownTime>
+      <cooldownFactors></cooldownFactors>
+      <sharedCooldownTime>	5.0	</sharedCooldownTime>
+      <consumeAmmo>	false	</consumeAmmo>
+      <disableAllyDamage>	false	</disableAllyDamage>
+      <cooldownTimeRespawnFactor>	0.5	</cooldownTimeRespawnFactor>
+      <delay>	6.0	</delay>
+      <speed>	80	</speed>
+      <heights>	40 20	</heights>
+      <areaLength>	100	</areaLength>
+      <areaWidth>	100	</areaWidth>
+      <antepositions>	0	</antepositions>
+      <lateropositions>	0	</lateropositions>
+      <bombingMask>	1	</bombingMask>
+      <waveFraction>	1	</waveFraction>
+      <bombsNumber>	2	</bombsNumber>
+      <shellCompactDescr>	31770	</shellCompactDescr>
+      <tracerKind>	1	</tracerKind>
+      <piercingPower>	1000 1000	</piercingPower>
+      <gravity>	10000	</gravity>
+      <shootingDistance>	1	</shootingDistance>
+      <modelName>	content/MilitaryEnvironment/mle205_IL2/normal/lod0/mle205_IL2.model	</modelName>
+      <soundEvent>	/plane/bombardment/bomber_04	</soundEvent>
+      <wwsoundEvent>	eb_bomber_engine	</wwsoundEvent>
+      <areaVisual>	content/Interface/TargetPoint/TargetPoint_red.visual	</areaVisual>
+      <noOwner>	false	</noOwner>
+      <sequencePath>	particles/eff_sequence/airstrike_bomber_01.seq	</sequencePath>
+      <sequenceDuration>	16.05	</sequenceDuration>
+      <maxApplyRadius>	200	</maxApplyRadius>
+    </script>
+  </event_additional_tank_1>
+  <recon_event_1>
+    <id>	233	</id>
+    <userString>	#event:ability/recon_event/name	</userString>
+    <description>	#event:ability/recon_event/descr	</description>
+    <icon>	event/recon_event 0 0	</icon>
+    <soundNotification>	hb1_equipment_recon_ready	</soundNotification>
+    <activationSoundNotification>	hb1_equipment_recon_activated	</activationSoundNotification>
+    <activationWWSoundFeedback>	ev_2019_secret_event_gameplay_ability_button	</activationWWSoundFeedback>
+    <instantAiming>	TARGET	</instantAiming>
+    <price>	750	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	notForSale avatar trigger	</tags>
+    <type>	battleAbilities	</type>
+    <vehicleFilter>
+      <include>
+        <vehicle>
+          <minLevel>	1	</minLevel>
+          <maxLevel>	10	</maxLevel>
+        </vehicle>
+      </include>
+    </vehicleFilter>
+    <script>	EventRecon	  <shortDescription>	#artefacts:recon/shortDescr	</shortDescription>
+      <longDescription>	#artefacts:recon/longDescr	</longDescription>
+      <shortFilterAlert></shortFilterAlert>
+      <longFilterAlert></longFilterAlert>
+      <tooltips>	cooldownTime delay #epic_battle:abilityInfo/params/recon/revealedArea/value spottingDuration	</tooltips>
+      <cooldownTime>	80.0	</cooldownTime>
+      <cooldownFactors></cooldownFactors>
+      <sharedCooldownTime>	0	</sharedCooldownTime>
+      <consumeAmmo>	false	</consumeAmmo>
+      <disableAllyDamage>	false	</disableAllyDamage>
+      <cooldownTimeRespawnFactor>	1.5	</cooldownTimeRespawnFactor>
+      <delay>	0.1	</delay>
+      <speed>	45	</speed>
+      <areaRadius>	800	</areaRadius>
+      <scanPointsAmount>	4	</scanPointsAmount>
+      <spottingDuration>	20.0	</spottingDuration>
+      <antepositions>	0	</antepositions>
+      <lateropositions>	0	</lateropositions>
+      <heights>	120 70	</heights>
+      <modelName>	content/MilitaryEnvironment/mle205_IL2/normal/lod0/mle205_IL2.model	</modelName>
+      <soundEvent>	/plane/bombardment/bomber_04	</soundEvent>
+      <wwsoundEvent>	eb_bomber_engine	</wwsoundEvent>
+    </script>
+  </recon_event_1>
+  <nitro_event_1>
+    <id>	1356	</id>
+    <userString>	#event:ability/nitro_event/name	</userString>
+    <description>	#event:ability/nitro_event/descr	</description>
+    <icon>	event/nitro_event 0 0	</icon>
+    <soundNotification>	hb1_equipment_nitro_ready	</soundNotification>
+    <activationWWSoundFeedback>	ev_2019_secret_event_gameplay_ability_button	</activationWWSoundFeedback>
+    <activationSoundNotification>	hb1_equipment_nitro_activated	</activationSoundNotification>
+    <deactivationSoundNotification>	hb1_equipment_nitro_deactivated	</deactivationSoundNotification>
+    <price>	5000	</price>
+    <notInShop>	true	</notInShop>
+    <tags>	event_nitro	</tags>
+    <type>	battleAbilities	</type>
+    <vehicleFilter>
+      <include>
+        <vehicle>
+          <minLevel>	1	</minLevel>
+          <maxLevel>	10	</maxLevel>
+        </vehicle>
+      </include>
+    </vehicleFilter>
+    <script>	EventNitroEquipment	  <shortDescription>	#artefacts:bomber/shortDescr	</shortDescription>
+      <longDescription>	#artefacts:bomber/longDescr	</longDescription>
+      <shortFilterAlert></shortFilterAlert>
+      <longFilterAlert></longFilterAlert>
+      <engineFactor>	2.8	</engineFactor>
+      <speedFactor>	1.8	</speedFactor>
+      <terrainResistance>	2.2	</terrainResistance>
+      <rotationSpeed>	1.0	</rotationSpeed>
+      <durationSeconds>	25	</durationSeconds>
+      <cooldownSeconds>	80	</cooldownSeconds>
+      <engineDamage>	70	</engineDamage>
+    </script>
+  </nitro_event_1>
+  <death_zone_event_1>
+    <id>	1355	</id>
+    <userString>	#artefacts:bomber/name	</userString>
+    <description>	#artefacts:bomber/descr	</description>
+    <icon>	event/arcade_artillery_fire_my_pos_event 0 0	</icon>
+    <soundNotification>	hb1_enemy_death_zone	</soundNotification>
+    <activationSoundNotification>	hb1_equipment_bomber_activated	</activationSoundNotification>
+    <activationWWSoundFeedback>	ev_2019_secret_event_gameplay_ability_button	</activationWWSoundFeedback>
+    <price>	750	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	notForSale avatar trigger	</tags>
+    <type>	battleAbilities	</type>
+    <vehicleFilter>
+      <include>
+        <vehicle>
+          <minLevel>	1	</minLevel>
+          <maxLevel>	10	</maxLevel>
+        </vehicle>
+      </include>
+    </vehicleFilter>
+    <script>	EventDeathZone	  <shortDescription>	#artefacts:bomber/shortDescr	</shortDescription>
+      <longDescription>	#artefacts:bomber/longDescr	</longDescription>
+      <shortFilterAlert></shortFilterAlert>
+      <longFilterAlert></longFilterAlert>
+      <tooltips>	cooldownTime delay areaRadius shotsNumber duration-artillery	</tooltips>
+      <cooldownTime>	5.0	</cooldownTime>
+      <cooldownFactors></cooldownFactors>
+      <sharedCooldownTime>	5.0	</sharedCooldownTime>
+      <consumeAmmo>	false	</consumeAmmo>
+      <disableAllyDamage>	false	</disableAllyDamage>
+      <cooldownTimeRespawnFactor>	0.5	</cooldownTimeRespawnFactor>
+      <delay>	6.5	</delay>
+      <duration>	15	</duration>
+      <shotsNumber>	60	</shotsNumber>
+      <areaRadius>	80	</areaRadius>
+      <shellCompactDescr>	321546	</shellCompactDescr>
+      <piercingPower>	45 45	</piercingPower>
+      <areaVisual>	content/Interface/TargetPoint/TargetPoint_red.visual	</areaVisual>
+      <areaExtra>	0	</areaExtra>
+      <areaDist>	1.5	</areaDist>
+      <noOwner>	true	</noOwner>
+      <shotSoundPreDelay>	2	</shotSoundPreDelay>
+      <wwsoundShot>	ev_2019_secret_event_gameplay_ability_atillery_shot	</wwsoundShot>
+      <sequencePath>	particles/eff_sequence/airstrike_dz_02.seq	</sequencePath>
+      <sequenceDuration>	16.05	</sequenceDuration>
+      <offset>	0 30 0	</offset>
+      <repeat>	7	</repeat>
+      <repeatDelay>	2.5	</repeatDelay>
+      <yprDeviation>	0.3 0.3 0.3	</yprDeviation>
+      <offsetDeviation>	13 7 13	</offsetDeviation>
+      <delayDeviation>	0.25	</delayDeviation>
+    </script>
+  </death_zone_event_1>
 </equipments.xml>

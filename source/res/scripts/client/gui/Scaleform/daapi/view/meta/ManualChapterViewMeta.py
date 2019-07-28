@@ -10,6 +10,18 @@ class ManualChapterViewMeta(View):
     def bootcampButtonClicked(self):
         self._printOverrideError('bootcampButtonClicked')
 
+    def linkClicked(self, link):
+        self._printOverrideError('linkClicked')
+
+    def pageOpened(self, index):
+        self._printOverrideError('pageOpened')
+
+    def pageClosed(self):
+        self._printOverrideError('pageClosed')
+
+    def pageChanged(self):
+        self._printOverrideError('pageChanged')
+
     def as_setInitDataS(self, data):
         return self.flashObject.as_setInitData(data) if self._isDAAPIInited() else None
 

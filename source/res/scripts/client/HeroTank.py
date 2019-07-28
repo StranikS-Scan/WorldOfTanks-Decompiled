@@ -81,10 +81,12 @@ class HeroTank(ClientSelectableCameraVehicle):
     def _onVehicleLoaded(self):
         super(HeroTank, self)._onVehicleLoaded()
         if self.enabled:
-            g_eventBus.handleEvent(events.HangarVehicleEvent(events.HangarVehicleEvent.ON_HERO_TANK_LOADED, ctx={'entity': self}), scope=EVENT_BUS_SCOPE.LOBBY)
+            g_eventBus.handleEvent(events.HangarVehicleEvent(events.HangarVehicleEvent.ON_HERO_TANK_LOADED, ctx={'entity': self,
+             'lobbyType': 'regular'}), scope=EVENT_BUS_SCOPE.LOBBY)
 
     def _onVehicleDestroy(self):
-        g_eventBus.handleEvent(events.HangarVehicleEvent(events.HangarVehicleEvent.ON_HERO_TANK_DESTROY, ctx={'entity': self}), scope=EVENT_BUS_SCOPE.LOBBY)
+        g_eventBus.handleEvent(events.HangarVehicleEvent(events.HangarVehicleEvent.ON_HERO_TANK_DESTROY, ctx={'entity': self,
+         'lobbyType': 'regular'}), scope=EVENT_BUS_SCOPE.LOBBY)
 
     @staticmethod
     def __getVehicleDescriptorByIntCD(vehicleIntCD):

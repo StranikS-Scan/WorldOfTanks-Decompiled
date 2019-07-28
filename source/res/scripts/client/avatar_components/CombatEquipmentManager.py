@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client/avatar_components/CombatEquipmentManager.py
 import functools
 import math
+from collections import namedtuple
 import SoundGroups
 from AvatarInputHandler import mathUtils
 import BigWorld
@@ -10,13 +11,14 @@ from helpers import dependency
 from helpers.CallbackDelayer import CallbackDelayer
 import BombersWing
 import Flock
-from constants import IS_DEVELOPMENT
+from constants import IS_DEVELOPMENT, DEATH_ZONE_EQUIPMENT
 from debug_utils import LOG_DEBUG, LOG_ERROR
 import CombatSelectedArea
 from items import vehicles
 import BattleReplay
 from skeletons.gui.battle_session import IBattleSessionProvider
 from gui.battle_control.battle_constants import VEHICLE_VIEW_STATE
+_EquipmentAdapter = namedtuple('_EquipmentAdapter', ('areaWidth', 'areaLength', 'areaVisual', 'areaColor', 'areaMarker'))
 _ENABLE_DEBUG_DRAW = False
 _ENABLE_DEBUG_LOG = False
 
@@ -81,8 +83,9 @@ class CombatEquipmentManager(object):
         pass
 
     def onBecomeNonPlayer(self):
-        for area in self.__selectedAreas.itervalues():
-            area.destroy()
+        for areas in self.__selectedAreas.itervalues():
+            for area in areas:
+                area.destroy()
 
         for wing in self.__wings.itervalues():
             wing.destroy()
@@ -169,24 +172,39 @@ class CombatEquipmentManager(object):
         SoundGroups.g_instance.playSoundPos(eventName, position)
 
     def __delayedAreaDestroy(self, areaUID):
-        area = self.__selectedAreas.pop(areaUID, None)
-        if area is not None:
+        areas = self.__selectedAreas.pop(areaUID, ())
+        for area in areas:
             area.destroy()
-        return
 
     def __showMarkerCallback(self, eq, pos, direction, time, areaUID):
         timer = round(time - BigWorld.serverTime())
         if timer <= 0.0:
             return
         else:
-            area = self.__selectedAreas.pop(areaUID, None)
-            if area is not None:
+            areas = self.__selectedAreas.pop(areaUID, ())
+            for area in areas:
                 area.destroy()
-            self.__selectedAreas[areaUID] = self.createEquipmentSelectedArea(pos, direction, eq)
-            area = self.__selectedAreas[areaUID]
-            if area is not None:
-                area.setGUIVisible(self.__isGUIVisible)
-            self.__callbackDelayer.delayCallback(timer, functools.partial(self.__delayedAreaDestroy, areaUID))
+
+            areas = []
+            sizes = [(eq.areaWidth, eq.areaLength)]
+            if eq.name == DEATH_ZONE_EQUIPMENT:
+                duration = eq.duration
+                for i in range(eq.areaExtra):
+                    k = (float(i + 1) / (eq.areaExtra + 1)) ** eq.areaDist
+                    sizes.append((eq.areaWidth * k, eq.areaLength * k))
+
+            else:
+                duration = 0
+            for size in sizes:
+                adaptedEq = _EquipmentAdapter(size[0], size[1], eq.areaVisual, None, None)
+                area = self.createEquipmentSelectedArea(pos, direction, adaptedEq)
+                if area is not None:
+                    area.setGUIVisible(self.__isGUIVisible)
+                    areas.append(area)
+
+            if areas:
+                self.__selectedAreas[areaUID] = areas
+                self.__callbackDelayer.delayCallback(timer + duration, functools.partial(self.__delayedAreaDestroy, areaUID))
             ctrl = self.guiSessionProvider.shared.equipments
             if ctrl is not None:
                 ctrl.showMarker(eq, pos, direction, timer)
@@ -194,8 +212,9 @@ class CombatEquipmentManager(object):
 
     def setGUIVisible(self, isVisible):
         self.__isGUIVisible = isVisible
-        for area in self.__selectedAreas.itervalues():
-            area.setGUIVisible(self.__isGUIVisible)
+        for areas in self.__selectedAreas.itervalues():
+            for area in areas:
+                area.setGUIVisible(self.__isGUIVisible)
 
     @staticmethod
     def __calcBombsDistribution(bombsCnt, areaWidth, areaLength):

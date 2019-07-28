@@ -1505,6 +1505,12 @@ def getTypeBigIconPath(vehicleType, isElite=False):
     return RES_ICONS.getVehicleTypeBigIcon(vehicleType, '_elite' if isElite else '')
 
 
+def getEventTypeIconPath(vehicleType, isAlive, isInSquad):
+    return '../maps/icons/event/vehcleIcons/icon%(squad)s%(alive)s_%(type)s.png' % {'squad': 'Squad' if isInSquad else 'Ally',
+     'alive': '' if isAlive else 'Dead',
+     'type': vehicleType}
+
+
 def getUserName(vehicleType, textPrefix=False):
     return _getActualName(vehicleType.userString, vehicleType.tags, textPrefix)
 

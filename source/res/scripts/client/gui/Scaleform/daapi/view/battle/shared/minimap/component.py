@@ -170,6 +170,8 @@ class MinimapComponent(MinimapMeta, IMinimapComponent):
             self.__component.wg_inputKeyMode = InputKeyMode.NO_HANDLE
             self.app.component.addChild(self.__component, self._getFlashName())
             bl, tr = arenaVisitor.type.getBoundingBox()
+            if arenaVisitor.gui.isEventBattle():
+                bl, tr = arenaVisitor.type.getPlayerBoundingBox()
             if arenaVisitor.gui.isBootcampBattle():
                 topRightX = tr[0]
                 topRightY = tr[1]

@@ -133,6 +133,7 @@ def __readGeometryCfg(geometryID, geometryName, section, defaultXml):
         cfg['geometryName'] = geometryName
         cfg['geometry'] = _readString('geometry', section, defaultXml)
         cfg['boundingBox'] = _readBoundingBox(section)
+        cfg['playerBoundingBox'] = _readPlayerBoundingBox(section)
         cfg['spaceBoundingBox'] = __calcSpaceBoundingBox(cfg['boundingBox'])
         cfg['weatherPresets'] = __readWeatherPresets(section)
         cfg['vehicleCamouflageKind'] = __readVehicleCamouflageKind(section)
@@ -286,6 +287,8 @@ def __readCommonCfg(section, defaultXml, raiseIfMissing, geometryCfg):
             cfg['description'] = i18n.makeString(_readString('description', section, defaultXml))
         if raiseIfMissing or __hasKey('minimap', section, defaultXml):
             cfg['minimap'] = _readString('minimap', section, defaultXml)
+        if raiseIfMissing or __hasKey('minimap_arrows_overlay', section, defaultXml):
+            cfg['minimap_arrows_overlay'] = _readString('minimap_arrows_overlay', section, defaultXml)
         if __hasKey('overviewmap', section, defaultXml):
             cfg['overviewmap'] = _readString('overviewmap', section, defaultXml)
         if raiseIfMissing or __hasKey('wwambientSound', section, defaultXml):
@@ -295,6 +298,9 @@ def __readCommonCfg(section, defaultXml, raiseIfMissing, geometryCfg):
             musicSetup = __readWWmusicSection(section, defaultXml)
         if musicSetup is not None:
             cfg['wwmusicSetup'] = musicSetup
+        notificationsRemapping = __readNotificationsRemappingSection(section, defaultXml)
+        if notificationsRemapping is not None:
+            cfg['notificationsRemapping'] = notificationsRemapping
         wwmusicDroneSetup = 'wwmusicDroneSetup'
         if raiseIfMissing or __hasKey(wwmusicDroneSetup, section, defaultXml):
             cfg[wwmusicDroneSetup] = __readWWmusicDroneSection(wwmusicDroneSetup, section, defaultXml)
@@ -325,6 +331,17 @@ def __readWWmusicSection(section, defaultXml):
             wwmusic[name] = value.asString
 
     return wwmusic
+
+
+def __readNotificationsRemappingSection(section, defaultXml):
+    notificationsRemapping = None
+    if __hasKey('notificationsRemapping', section, defaultXml):
+        notificationsRemapping = {}
+        dataSection = section if section.has_key('notificationsRemapping') else defaultXml
+        for _, event in _xml.getChildren(defaultXml, dataSection, 'notificationsRemapping'):
+            notificationsRemapping[event['name'].asString] = event['mod'].asString if event['mod'] else None
+
+    return notificationsRemapping
 
 
 def __readWWmusicDroneSection(wwmusicDroneSetup, section, defaultXml):
@@ -445,6 +462,17 @@ def _readBoundingBox(section):
     if bottomLeft[0] >= upperRight[0] or bottomLeft[1] >= upperRight[1]:
         raise SoftException("wrong 'boundingBox' values")
     return (bottomLeft, upperRight)
+
+
+def _readPlayerBoundingBox(section):
+    if section.has_key('playerBoundingBox'):
+        bottomLeft = section.readVector2('playerBoundingBox/bottomLeft')
+        upperRight = section.readVector2('playerBoundingBox/upperRight')
+        if bottomLeft[0] >= upperRight[0] or bottomLeft[1] >= upperRight[1]:
+            raise SoftException("wrong 'playerBoundingBox' values")
+        return (bottomLeft, upperRight)
+    else:
+        return None
 
 
 def __calcSpaceBoundingBox(arenaBoundingBox):

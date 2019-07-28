@@ -33,7 +33,7 @@ from skeletons.gui.battle_session import IBattleSessionProvider
 from ReplayEvents import g_replayEvents
 _UNKNOWN_RECEIVER_LABEL = 'N/A'
 _UNKNOWN_RECEIVER_ORDER = 100
-_CONSUMERS_LOCK_ENTER = (BATTLE_VIEW_ALIASES.RADIAL_MENU,)
+_CONSUMERS_LOCK_ENTER = (BATTLE_VIEW_ALIASES.RADIAL_MENU, BATTLE_VIEW_ALIASES.RADIAL_MENU_EVENT)
 
 def _getToolTipText(arenaVisitor):
     settings = g_settings.battle

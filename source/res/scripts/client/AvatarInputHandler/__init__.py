@@ -16,6 +16,7 @@ import Math
 import ResMgr
 import RespawnDeathMode
 import epic_battle_death_mode
+import event_battles_death_mode
 import cameras
 import constants
 import control_modes
@@ -65,9 +66,11 @@ _CTRLS_DESC_MAP = {_CTRL_MODE.ARCADE: ('ArcadeControlMode', 'arcadeMode', _CTRL_
  _CTRL_MODE.CAT: ('CatControlMode', None, _CTRL_TYPE.DEVELOPMENT),
  _CTRL_MODE.VIDEO: ('VideoCameraControlMode', 'videoMode', _CTRL_TYPE.OPTIONAL),
  _CTRL_MODE.MAP_CASE: ('MapCaseControlMode', 'strategicMode', _CTRL_TYPE.USUAL),
+ _CTRL_MODE.MAP_CASE_ARCADE: ('ArcadeMapCaseControlMode', 'arcadeMode', _CTRL_TYPE.USUAL),
  _CTRL_MODE.RESPAWN_DEATH: ('RespawnDeathMode', 'postMortemMode', _CTRL_TYPE.USUAL),
  _CTRL_MODE.DEATH_FREE_CAM: ('DeathFreeCamMode', 'epicVideoMode', _CTRL_TYPE.USUAL)}
-_OVERWRITE_CTRLS_DESC_MAP = {constants.ARENA_BONUS_TYPE.EPIC_BATTLE: {_CTRL_MODE.POSTMORTEM: ('DeathTankFollowMode', 'postMortemMode', _CTRL_TYPE.USUAL)}}
+_OVERWRITE_CTRLS_DESC_MAP = {constants.ARENA_BONUS_TYPE.EPIC_BATTLE: {_CTRL_MODE.POSTMORTEM: ('DeathTankFollowMode', 'postMortemMode', _CTRL_TYPE.USUAL)},
+ constants.ARENA_BONUS_TYPE.EVENT_BATTLES: {_CTRL_MODE.POSTMORTEM: ('EventDeathTankFollowMode', 'postMortemMode', _CTRL_TYPE.USUAL)}}
 _DYNAMIC_CAMERAS = (DynamicCameras.ArcadeCamera.ArcadeCamera,
  DynamicCameras.SniperCamera.SniperCamera,
  DynamicCameras.StrategicCamera.StrategicCamera,
@@ -735,7 +738,8 @@ class AvatarInputHandler(CallbackDelayer, ScriptGameObject):
         modules = (control_modes,
          MapCaseMode,
          RespawnDeathMode,
-         epic_battle_death_mode)
+         epic_battle_death_mode,
+         event_battles_death_mode)
         bonusType = BigWorld.player().arenaBonusType
         bonusTypeCtrlsMap = _OVERWRITE_CTRLS_DESC_MAP.get(bonusType, {})
         for name, desc in _CTRLS_DESC_MAP.items():

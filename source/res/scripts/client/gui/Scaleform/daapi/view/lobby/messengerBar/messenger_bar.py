@@ -1,6 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/messengerBar/messenger_bar.py
-from constants import PREBATTLE_TYPE
+from constants import PREBATTLE_TYPE, QUEUE_TYPE
 from gui import makeHtmlString
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.referral_program.referral_program_helpers import isReferralProgramEnabled
@@ -164,7 +164,8 @@ class MessengerBar(MessengerBarMeta, IGlobalListener):
 
     def __handleFightButtonUpdated(self, event):
         state = self.prbDispatcher.getFunctionalState()
-        self.as_setReferralButtonEnabledS(not state.isNavigationDisabled())
+        isInEvent = self.prbEntity.getQueueType() == QUEUE_TYPE.EVENT_BATTLES
+        self.as_setReferralButtonEnabledS(not state.isNavigationDisabled() and not isInEvent)
 
     def __manageWindow(self, eventType):
         manager = self.app.containerManager

@@ -208,16 +208,22 @@ class SharedPage(BattlePageMeta):
         hintPanel = self.getComponent(_ALIASES.HINT_PANEL)
         if hintPanel and hintPanel.getActiveHint():
             self._blToggling.add(_ALIASES.HINT_PANEL)
+        self._showLoadingComponent()
+
+    def _showLoadingComponent(self):
         self._setComponentsVisibility(visible={_ALIASES.BATTLE_LOADING}, hidden=self._blToggling)
 
     def _onBattleLoadingFinish(self):
         self._isBattleLoading = False
-        self._setComponentsVisibility(visible=self._blToggling, hidden={_ALIASES.BATTLE_LOADING})
+        self._hideLoadingComponent()
         self._blToggling.clear()
         for component in self._external:
             component.active(True)
 
         self.sessionProvider.shared.hitDirection.setVisible(True)
+
+    def _hideLoadingComponent(self):
+        self._setComponentsVisibility(visible=self._blToggling, hidden={_ALIASES.BATTLE_LOADING})
 
     def _changeCtrlMode(self, ctrlMode):
         if ctrlMode == ctrlMode == aih_constants.CTRL_MODE_NAME.VIDEO:

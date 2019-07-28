@@ -134,6 +134,16 @@ class ARENAS(object):
     C_95_LOST_CITY_CTF_DESCRIPTION = '#arenas:95_lost_city_ctf/description'
     C_83_KHARKIV_NAME = '#arenas:83_kharkiv/name'
     C_83_KHARKIV_DESCRIPTION = '#arenas:83_kharkiv/description'
+    C_05_PROHOROVKA_SE_NAME = '#arenas:05_prohorovka_se/name'
+    C_05_PROHOROVKA_SE_DESCRIPTION = '#arenas:05_prohorovka_se/description'
+    C_28_DESERT_SE_NAME = '#arenas:28_desert_se/name'
+    C_28_DESERT_SE_DESCRIPTION = '#arenas:28_desert_se/description'
+    C_36_FISHING_BAY_SE_NAME = '#arenas:36_fishing_bay_se/name'
+    C_36_FISHING_BAY_SE_DESCRIPTION = '#arenas:36_fishing_bay_se/description'
+    C_99_POLAND_SE_NAME = '#arenas:99_poland_se/name'
+    C_99_POLAND_SE_DESCRIPTION = '#arenas:99_poland_se/description'
+    C_06_ENSK_SE_NAME = '#arenas:06_ensk_se/name'
+    C_06_ENSK_SE_DESCRIPTION = '#arenas:06_ensk_se/description'
     ALL_ENUM = (TYPE_CTF_NAME,
      TYPE_CTF_DESCRIPTION,
      TYPE_DOMINATION_NAME,
@@ -264,7 +274,17 @@ class ARENAS(object):
      C_95_LOST_CITY_CTF_NAME,
      C_95_LOST_CITY_CTF_DESCRIPTION,
      C_83_KHARKIV_NAME,
-     C_83_KHARKIV_DESCRIPTION)
+     C_83_KHARKIV_DESCRIPTION,
+     C_05_PROHOROVKA_SE_NAME,
+     C_05_PROHOROVKA_SE_DESCRIPTION,
+     C_28_DESERT_SE_NAME,
+     C_28_DESERT_SE_DESCRIPTION,
+     C_36_FISHING_BAY_SE_NAME,
+     C_36_FISHING_BAY_SE_DESCRIPTION,
+     C_99_POLAND_SE_NAME,
+     C_99_POLAND_SE_DESCRIPTION,
+     C_06_ENSK_SE_NAME,
+     C_06_ENSK_SE_DESCRIPTION)
 
     @classmethod
     def all(cls, key0):

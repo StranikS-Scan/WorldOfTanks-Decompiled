@@ -76,6 +76,7 @@ class BattleResultsWindow(BattleResultsMeta):
         self.__battleResults.applyAdditionalBonus(self.__arenaUniqueID)
 
     def onShowDetailsPremium(self):
+        event_dispatcher.switchOutEventMode()
         showTankPremiumAboutPage()
 
     def _populate(self):

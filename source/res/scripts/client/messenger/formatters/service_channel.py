@@ -33,6 +33,7 @@ from gui.server_events.awards_formatters import CompletionTokensBonusFormatter
 from gui.server_events.bonuses import VehiclesBonus, DEFAULT_CREW_LVL
 from gui.server_events.recruit_helper import getSourceIdFromQuest
 from gui.server_events.finders import PERSONAL_MISSION_TOKEN
+from gui.server_events.formatters import parseComplexToken
 from gui.shared import formatters as shared_fmts
 from gui.shared.formatters import text_styles
 from gui.shared.formatters.currency import getBWFormatter, getStyle, applyAll
@@ -59,11 +60,16 @@ from messenger.ext import passCensor
 from messenger.formatters import TimeFormatter, NCContextItemFormatter
 from shared_utils import BoundMethodWeakref, findFirst, first
 from skeletons.gui.game_control import IRankedBattlesController
+from skeletons.gui.game_event_controller import IGameEventController
 from skeletons.gui.goodies import IGoodiesCache
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
 from gui.impl.lobby.loot_box.loot_box_helper import getMergedLootBoxBonuses
+from gui.Scaleform.locale.BADGE import BADGE
+from gui.Scaleform.locale.EVENT import EVENT
+from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
+from gui.Scaleform.locale.MESSENGER import MESSENGER
 _logger = logging.getLogger(__name__)
 _EOL = '\n'
 _DEFAULT_MESSAGE = 'defaultMessage'
@@ -322,6 +328,9 @@ class BattleResultsFormatter(WaitItemsSyncFormatter):
     __battleResultKeys = {-1: 'battleDefeatResult',
      0: 'battleDrawGameResult',
      1: 'battleVictoryResult'}
+    __eventBattleResultKeys = {-1: 'eventBattleDefeatResult',
+     0: 'battleDrawGameResult',
+     1: 'eventBattleVictoryResult'}
     __goldTemplateKey = 'battleResultGold'
     __questsTemplateKey = 'battleQuests'
 
@@ -375,7 +384,18 @@ class BattleResultsFormatter(WaitItemsSyncFormatter):
                         winnerIfDraw = battleResults.get('winnerIfDraw')
                         if winnerIfDraw:
                             battleResKey = 1 if winnerIfDraw == team else -1
-                templateName = self.__battleResultKeys[battleResKey]
+                if guiType == ARENA_GUI_TYPE.EVENT_BATTLES:
+                    gameEventController = dependency.instance(IGameEventController)
+                    generalID = battleResults.get('generalID')
+                    general = gameEventController.getGeneral(generalID)
+                    frontID = general.getFrontID() if general else None
+                    ctx['frontName'] = i18n.makeString(EVENT.getFrontName(frontID))
+                    ctx['generalName'] = i18n.makeString(EVENT.getGeneralProgressName(generalID))
+                    ctx['frontPoints'] = battleResults.get('eventPoints', 0)
+                    ctx['generalPoints'] = battleResults.get('generalPoints', 0)
+                    templateName = self.__eventBattleResultKeys[battleResKey]
+                else:
+                    templateName = self.__battleResultKeys[battleResKey]
                 bgIconSource = None
                 arenaUniqueID = battleResults.get('arenaUniqueID', 0)
                 formatted = g_settings.msgTemplates.format(templateName, ctx=ctx, data={'timestamp': arenaCreateTime,
@@ -2694,6 +2714,14 @@ class PrbVehicleMaxSpgKickFormatter(ServiceChannelFormatter):
         return [_MessageData(formatted, self._getGuiSettings(message, 'prbVehicleMaxSpgKick'))]
 
 
+class PrbEventWrongFrontFormatter(ServiceChannelFormatter):
+    __itemsCache = dependency.descriptor(IItemsCache)
+
+    def format(self, message, *args):
+        formatted = g_settings.msgTemplates.format('prbWrongFrontKick', ctx={})
+        return [_MessageData(formatted, self._getGuiSettings(message, 'prbWrongFrontKick'))]
+
+
 class RotationGroupLockFormatter(ServiceChannelFormatter):
 
     def format(self, message, *args):
@@ -3049,3 +3077,78 @@ class BlackMapRemovedFormatter(ServiceChannelFormatter):
             return [_MessageData(formatted, guiSettings)]
         else:
             return [_MessageData(None, None)]
+
+
+class EventFrontRewardFormatter(TokenQuestsFormatter):
+
+    @async
+    @process
+    def format(self, message, callback):
+        isSynced = yield self._waitForSyncItems()
+        formatted, settings = (None, None)
+        data = message.data or {}
+        if isSynced:
+            completedQuestIDs = data.get('completedQuestIDs', set())
+            completedQuestIDs.update(data.get('rewardsGottenQuestIDs', set()))
+            settings = self._getGuiSettings(message, self._getTemplateName(completedQuestIDs))
+            achieves = self.formatQuestAchieves(data, asBattleFormatter=False)
+            formatted = g_settings.msgTemplates.format(self._getTemplateName(completedQuestIDs), {'achieves': achieves})
+        callback([_MessageData(formatted, settings)])
+        return None
+
+    def _getTemplateName(self, completedQuestIDs=None):
+        pass
+
+    @classmethod
+    def formatQuestAchieves(cls, data, asBattleFormatter, processCustomizations=True):
+        res = super(EventFrontRewardFormatter, cls).formatQuestAchieves(data, asBattleFormatter, processCustomizations)
+        if res is None:
+            res = ''
+        tokens = []
+        for key, value in data.get('tokens', {}).iteritems():
+            complexToken = parseComplexToken(key)
+            if complexToken.styleID:
+                tokens.append({'name': TOOLTIPS.getBonusesTokenHeader(complexToken.styleID),
+                 'count': value['count']})
+
+        if tokens:
+            tokensStr = ''
+            for token in tokens:
+                tokensStr += ', ' + i18n.makeString(MESSENGER.SERVICECHANNELMESSAGES_BATTLERESULTS_QUESTS_ITEMS_NAME, name=i18n.makeString(token['name']), count=token['count'])
+
+            res += g_settings.htmlTemplates.format('eventRerawdTokensReceived', ctx={'text': tokensStr})
+        badges = []
+        for _, records in data.get('dossier', {}).iteritems():
+            for recordName in records:
+                block, name = recordName
+                if block == BADGES_BLOCK:
+                    badges.append(name)
+
+        if badges:
+            badgesStr = ', '.join([ i18n.makeString(BADGE.badgeName(badgeID)) for badgeID in badges ])
+            res += '<br/>' + g_settings.htmlTemplates.format('badgeAchievement', {'badges': badgesStr})
+        return res
+
+
+class EventFrontLevelReachedFormatter(EventFrontRewardFormatter):
+
+    def _getTemplateName(self, completedQuestIDs=None):
+        pass
+
+
+class EventGeneralLevelReachedFormatter(EventFrontRewardFormatter):
+
+    def _getTemplateName(self, completedQuestIDs=None):
+        pass
+
+
+class EventGeneralRewardFormatter(EventFrontRewardFormatter):
+
+    def _getTemplateName(self, completedQuestIDs=None):
+        pass
+
+
+class EventGeneralBuyRewardFormatter(EventFrontRewardFormatter):
+
+    def _getTemplateName(self, completedQuestIDs=None):
+        pass

@@ -6,3 +6,6 @@ class StrongholdBattlesListViewMeta(BaseRallyListView):
 
     def onFocusChange(self, hasFocus):
         self._printOverrideError('onFocusChange')
+
+    def updateBrowser(self):
+        self._printOverrideError('updateBrowser')

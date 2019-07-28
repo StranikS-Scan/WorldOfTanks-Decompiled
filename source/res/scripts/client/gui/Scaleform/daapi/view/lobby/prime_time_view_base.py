@@ -25,8 +25,8 @@ from skeletons.connection_mgr import IConnectionManager
 from skeletons.gui.game_control import IReloginController
 _PING_MAX_VALUE = 999
 
-def _makeServerString(serverInfo):
-    server = text_styles.neutral(text_styles.concatStylesToSingleLine(serverInfo.getName(), ' (', text_styles.neutral(serverInfo.getPingValue()), makePingStatusIcon(serverInfo.getPingStatus()), ')'))
+def _makeServerString(serverInfo, isServerNameShort=False):
+    server = text_styles.neutral(text_styles.concatStylesToSingleLine(serverInfo.getShortName() if isServerNameShort else serverInfo.getName(), ' (', text_styles.neutral(serverInfo.getPingValue()), makePingStatusIcon(serverInfo.getPingStatus()), ')'))
     return backport.text(R.strings.menu.primeTime.server(), server=server)
 
 
@@ -39,7 +39,7 @@ class ServerListItemPresenter(object):
         self.__name = name
         self.__csisStatus = csisStatus
         self.__peripheryID = peripheryID
-        self._shortName = shortName
+        self.__shortName = shortName
         self.__invalidationTime = 0
         self.__primeTimeStatus = None
         self.__timeLeft = None
@@ -57,7 +57,7 @@ class ServerListItemPresenter(object):
          'data': self.__hostName,
          'enabled': self.isEnabled(),
          'timeLeft': self.getTimeLeft(),
-         'shortname': self._shortName,
+         'shortname': self.__shortName,
          'pingValue': self.__pingValue,
          'pingStatus': self.__pingStatus,
          'tooltip': self._buildTooltip(self.__peripheryID)}
@@ -80,6 +80,9 @@ class ServerListItemPresenter(object):
 
     def getName(self):
         return self.__name
+
+    def getShortName(self):
+        return self.__shortName
 
     def getPingStatus(self):
         return self.__pingStatus
@@ -183,8 +186,8 @@ class PrimeTimeViewBase(LobbySubView, PrimeTimeMeta, Notifiable, IPreQueueListen
         return backport.image(icon)
 
     @classmethod
-    def _getServerText(cls, serverList, serverInfo):
-        return _makeServerString(serverInfo) if len(serverList) == 1 else backport.text(R.strings.menu.primeTime.servers())
+    def _getServerText(cls, serverList, serverInfo, isServerNameShort=False):
+        return _makeServerString(serverInfo, isServerNameShort) if len(serverList) == 1 else backport.text(R.strings.menu.primeTime.servers())
 
     def _getController(self):
         raise NotImplementedError

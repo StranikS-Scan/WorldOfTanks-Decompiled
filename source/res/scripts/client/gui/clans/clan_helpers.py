@@ -757,9 +757,9 @@ def isClansTabReplaceStrongholds():
     return False
 
 
-def getStrongholdUrl(urlName):
+def getStrongholdUrl(urlName=None):
     try:
-        return _getWgshHost() + GUI_SETTINGS.stronghold.get(urlName)
+        return _getWgshHost() + GUI_SETTINGS.stronghold.get(urlName or 'tabUrl')
     except (AttributeError, TypeError):
         LOG_CURRENT_EXCEPTION()
         return None
@@ -769,6 +769,14 @@ def getStrongholdUrl(urlName):
 
 def getStrongholdClanCardUrl(clanDBID=''):
     return getStrongholdUrl('clanCardUrl') + str(clanDBID)
+
+
+def getStrongholdChangeModeUrl():
+    return getStrongholdUrl('changeModeUrl')
+
+
+def getStrongholdBattlesListUrl():
+    return getStrongholdUrl('battlesListUrl')
 
 
 @dependency.replace_none_kwargs(lobbyContext=ILobbyContext)

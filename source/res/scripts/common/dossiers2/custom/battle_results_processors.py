@@ -16,7 +16,7 @@ _saveRecordsInAccountDescr = {BONUS_CAPS.DOSSIER_ACHIEVEMENTS_15X15: [{'block': 
 
 def updateVehicleDossier(dossierDescr, battleResults, dossierXP, vehTypeCompDescr, avatarResults):
     __updateDossierCommonPart(DOSSIER_TYPE.VEHICLE, dossierDescr, battleResults, dossierXP, avatarResults)
-    __updateVehicleDossierImpl(vehTypeCompDescr, dossierDescr, battleResults)
+    __updateVehicleDossierImpl(vehTypeCompDescr, dossierDescr, battleResults, dossierXP)
 
 
 def getMaxVehResults(results):
@@ -402,11 +402,13 @@ def __updateMarkOfMastery(dossierDescr, results):
         achievements['markOfMastery'] = results['markOfMastery']
 
 
-def __updateVehicleDossierImpl(vehTypeCompDescr, dossierDescr, results):
+def __updateVehicleDossierImpl(vehTypeCompDescr, dossierDescr, results, dossierXP):
     bonusType = results['bonusType']
     if BONUS_CAPS.checkAny(bonusType, BONUS_CAPS.DOSSIER_ACHIEVEMENTS_7X7):
         _updatePerBattleSeries(dossierDescr['achievements7x7'], 'tacticalBreakthroughSeries', results['winnerTeam'] == results['team'])
         return
+    if BONUS_CAPS.checkAny(bonusType, BONUS_CAPS.DOSSIER_MAXRANKED):
+        __updateMaxValues(dossierDescr.expand('maxRanked'), results, dossierXP)
     __updateMarksOnGun(dossierDescr, results)
     __updateMarkOfMastery(dossierDescr, results)
     if not BONUS_CAPS.checkAny(bonusType, BONUS_CAPS.DOSSIER_ACHIEVEMENTS_15X15):

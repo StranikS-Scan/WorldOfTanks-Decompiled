@@ -198,7 +198,7 @@ class PurchaseWindow(CustomizationBuyWindowMeta):
         bigTitleTemplate = text_styles.grandTitle(titleTemplate)
         for item in self.__purchaseItems:
             if item.areaID == Area.HULL and item.item.itemTypeID == GUI_ITEM_TYPE.CAMOUFLAGE and item.selected:
-                seasonBonusText[item.item.season] = self.__getCamoBonus(item.item)
+                seasonBonusText[item.group] = self.__getCamoBonus(item.item)
 
         titleText = text_styles.promoTitle(bigTitleTemplate)
         titleTextSmall = text_styles.promoTitle(titleTemplate)

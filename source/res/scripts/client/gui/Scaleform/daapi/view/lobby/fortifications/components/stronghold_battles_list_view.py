@@ -7,7 +7,7 @@ from skeletons.gui.game_control import IBrowserController
 from debug_utils import LOG_ERROR
 from gui.shared import events
 from gui.shared.event_bus import EVENT_BUS_SCOPE
-from gui.clans.clan_helpers import getStrongholdUrl
+from gui.clans.clan_helpers import getStrongholdBattlesListUrl
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.framework import ViewTypes
 from gui.Scaleform.locale.FORTIFICATIONS import FORTIFICATIONS
@@ -33,6 +33,11 @@ class StrongholdBattlesListView(StrongholdBattlesListViewMeta):
 
     def viewSize(self, width, height):
         self.__loadBrowser(width, height)
+
+    def updateBrowser(self):
+        if self.__browser is not None:
+            self.__browser.refresh()
+        return
 
     def onFocusChange(self, hasFocus):
         self.__hasFocus = hasFocus
@@ -63,7 +68,7 @@ class StrongholdBattlesListView(StrongholdBattlesListViewMeta):
 
     @process
     def __loadBrowser(self, width, height):
-        battlesListUrl = getStrongholdUrl('battlesListUrl')
+        battlesListUrl = getStrongholdBattlesListUrl()
         if battlesListUrl is not None:
             self.__browserId = yield self.browserCtrl.load(url=battlesListUrl, useBrowserWindow=False, showBrowserCallback=self.__showBrowser, browserSize=(width, height))
         self.__browser = self.browserCtrl.getBrowser(self.__browserId)

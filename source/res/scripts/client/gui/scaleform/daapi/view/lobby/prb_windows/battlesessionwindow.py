@@ -66,9 +66,9 @@ class BattleSessionWindow(BattleSessionWindowMeta):
 
     def onPlayerStateChanged(self, entity, roster, playerInfo):
         super(BattleSessionWindow, self).onPlayerStateChanged(entity, roster, playerInfo)
-        self.as_setInfoS(self.__isTurnamentBattle, self.__battlesWinsString, self.__arenaName, self.__firstTeam, self.__secondTeam, self.prbEntity.getProps().getBattlesScore(), self.__eventName, self.__sessionName)
         rosters = entity.getRosters()
         self._setRosterList(rosters)
+        self.as_setInfoS(self.__isTurnamentBattle, self.__battlesWinsString, self.__arenaName, self.__firstTeam, self.__secondTeam, self.prbEntity.getProps().getBattlesScore(), self.__eventName, self.__sessionName)
         self.__updateCommonRequirements(entity.getTeamLimits(), rosters)
 
     def onSettingUpdated(self, entity, settingName, settingValue):

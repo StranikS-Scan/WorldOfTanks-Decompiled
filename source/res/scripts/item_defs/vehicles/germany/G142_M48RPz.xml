@@ -520,8 +520,8 @@
       <traces>
         <lodDist>	MEDIUM	</lodDist>
         <bufferPrefs>	mediumTank	</bufferPrefs>
-        <textureSet>	usa_a23	</textureSet>
-        <size>	0.5 1	</size>
+        <textureSet>	t97	</textureSet>
+        <size>	0.8 1	</size>
       </traces>
       <tracks>
         <lodDist>	MEDIUM_TRACK	</lodDist>
@@ -641,6 +641,69 @@
         <node>
           <isLeft>	true	</isLeft>
           <name>	Track_VD_L0	</name>
+          <forwardElastK>	0.441402	</forwardElastK>
+          <backwardElastK>	0.871032	</backwardElastK>
+          <offset>	-0.0187075	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_R0	</name>
+          <forwardElastK>	0.418386	</forwardElastK>
+          <backwardElastK>	0.897884	</backwardElastK>
+          <offset>	-0.0187075	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R1	</name>
+          <forwardElastK>	0.410714	</forwardElastK>
+          <backwardElastK>	0.78664	</backwardElastK>
+          <offset>	-0.002	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_R2	</name>
+          <forwardElastK>	0.43373	</forwardElastK>
+          <backwardElastK>	0.801984	</backwardElastK>
+          <offset>	-0.005	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R3	</name>
+          <forwardElastK>	0.43373	</forwardElastK>
+          <backwardElastK>	0.836508	</backwardElastK>
+          <offset>	-0.006	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L0	</name>
+          <forwardElastK>	0.418386	</forwardElastK>
+          <backwardElastK>	0.897884	</backwardElastK>
+          <offset>	-0.0187075	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L1	</name>
+          <forwardElastK>	0.43373	</forwardElastK>
+          <backwardElastK>	0.778968	</backwardElastK>
+          <offset>	-0.002	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L2	</name>
+          <forwardElastK>	0.437566	</forwardElastK>
+          <backwardElastK>	0.782804	</backwardElastK>
+          <offset>	-0.005	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L3	</name>
+          <forwardElastK>	0.43373	</forwardElastK>
+          <backwardElastK>	0.874868	</backwardElastK>
+          <offset>	-0.006	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L0	</name>
           <forwardElastK>	0.6	</forwardElastK>
           <backwardElastK>	1.4	</backwardElastK>
           <offset>	-0.0884354	</offset>
@@ -665,62 +728,6 @@
           <forwardElastK>	2	</forwardElastK>
           <backwardElastK>	0.6	</backwardElastK>
           <offset>	-0.210884	</offset>
-        </node>
-        <node>
-          <isLeft>	true	</isLeft>
-          <name>	Track_VT_L0	</name>
-          <forwardElastK>	0.9	</forwardElastK>
-          <backwardElastK>	1.4	</backwardElastK>
-          <offset>	-0.0187075	</offset>
-        </node>
-        <node>
-          <isLeft>	true	</isLeft>
-          <name>	Track_VT_L1	</name>
-          <forwardElastK>	0.6	</forwardElastK>
-          <backwardElastK>	1	</backwardElastK>
-          <offset>	-0.002	</offset>
-        </node>
-        <node>
-          <isLeft>	true	</isLeft>
-          <name>	Track_VT_L2	</name>
-          <forwardElastK>	0.55	</forwardElastK>
-          <backwardElastK>	1	</backwardElastK>
-          <offset>	-0.005	</offset>
-        </node>
-        <node>
-          <isLeft>	true	</isLeft>
-          <name>	Track_VT_L3	</name>
-          <forwardElastK>	0.5	</forwardElastK>
-          <backwardElastK>	1.8	</backwardElastK>
-          <offset>	-0.006	</offset>
-        </node>
-        <node>
-          <isLeft>	false	</isLeft>
-          <name>	Track_VT_R0	</name>
-          <forwardElastK>	0.9	</forwardElastK>
-          <backwardElastK>	1.4	</backwardElastK>
-          <offset>	-0.0187075	</offset>
-        </node>
-        <node>
-          <isLeft>	false	</isLeft>
-          <name>	Track_VT_R1	</name>
-          <forwardElastK>	0.6	</forwardElastK>
-          <backwardElastK>	1	</backwardElastK>
-          <offset>	-0.002	</offset>
-        </node>
-        <node>
-          <isLeft>	false	</isLeft>
-          <name>	Track_VT_R2	</name>
-          <forwardElastK>	0.55	</forwardElastK>
-          <backwardElastK>	1	</backwardElastK>
-          <offset>	-0.005	</offset>
-        </node>
-        <node>
-          <isLeft>	false	</isLeft>
-          <name>	Track_VT_R3	</name>
-          <forwardElastK>	0.5	</forwardElastK>
-          <backwardElastK>	1.8	</backwardElastK>
-          <offset>	-0.006	</offset>
         </node>
       </trackNodes>
       <groundNodes>

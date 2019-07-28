@@ -8,6 +8,7 @@ from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.store.browser.ingameshop_helpers import shouldOpenNewStorage
 from gui.Scaleform.genConsts.STORAGE_CONSTANTS import STORAGE_CONSTANTS
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
+from gui.clans.clan_helpers import getStrongholdClanCardUrl
 from gui.clans.settings import getClanRoleName
 from gui.goodies.goodie_items import MAX_ACTIVE_BOOSTERS_COUNT
 from gui.impl import backport
@@ -185,7 +186,7 @@ class PremDashboardHeader(ViewImpl):
 
     @staticmethod
     def __onClanReserveClick(item):
-        showStrongholds()
+        showStrongholds(getStrongholdClanCardUrl())
 
     @staticmethod
     def __makeReserveModel(reserves, idx):

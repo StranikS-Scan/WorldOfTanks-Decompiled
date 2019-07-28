@@ -138,6 +138,26 @@ class C11nHangarCameraManager(TimeDeltaMeter):
             self.enableMovementByMouse()
             return
 
+    def __getCameraYawPitch(self, up, normal):
+        if not up.dot(_WORLD_UP) > 0.99:
+            if up.dot(_WORLD_UP) > 0:
+                direction = up * _WORLD_UP
+                direction = up * direction if normal.dot(_WORLD_UP) > 0 else direction * up
+                direction.normalise()
+                yaw = up.yaw if direction.dot((0, -1, 0)) > 0.99 else direction.yaw
+                pitch = -direction.pitch
+            else:
+                direction = _WORLD_UP * up
+                direction = up * direction if normal.dot(_WORLD_UP) > 0 else direction * up
+                direction.normalise()
+                yaw = up.yaw if direction.dot((0, 1, 0)) > 0.99 else direction.yaw
+                pitch = direction.pitch
+        else:
+            direction = -normal
+            yaw = direction.yaw
+            pitch = -direction.pitch
+        return (yaw, pitch)
+
     def locateCameraOnDecal(self, location, width, anchorId, relativeSize=0.5, forceRotate=False):
         if self.__hangarCamera is None:
             return False
@@ -151,15 +171,8 @@ class C11nHangarCameraManager(TimeDeltaMeter):
             dist = halfF / math.tan(BigWorld.projection().fov * 0.5)
             distConstraints = self.__getDistConstraints(location.position)
             constraints = [hangarCfg['cam_pitch_constr'], hangarCfg['cam_yaw_constr'], distConstraints]
-            if not location.up.dot(_WORLD_UP) > 0.99:
-                direction = location.up * _WORLD_UP
-                direction = location.up * direction if location.normal.dot(_WORLD_UP) > 0 else direction * location.up
-                direction.normalise()
-                yaw = location.up.yaw if direction.dot((0, -1, 0)) > 0.99 else direction.yaw
-            else:
-                direction = -location.normal
-                yaw = direction.yaw
-            self._setCameraLocation(targetPos=location.position, pivotPos=Math.Vector3(0, 0, 0), yaw=yaw, pitch=-direction.pitch, dist=dist, camConstraints=constraints, forceRotate=forceRotate)
+            yaw, pitch = self.__getCameraYawPitch(location.up, location.normal)
+            self._setCameraLocation(targetPos=location.position, pivotPos=Math.Vector3(0, 0, 0), yaw=yaw, pitch=pitch, dist=dist, camConstraints=constraints, forceRotate=forceRotate)
             self.__currentMode = C11nCameraModes.EMBLEM
             return True
 
@@ -170,15 +183,7 @@ class C11nHangarCameraManager(TimeDeltaMeter):
             self.__savePitch()
             self.__rotateTurret(anchorId)
             if normal is not None:
-                if not up.dot(_WORLD_UP) > 0.99:
-                    direction = up * _WORLD_UP
-                    direction = up * direction if normal.dot(_WORLD_UP) > 0 else direction * up
-                    direction.normalise()
-                    yaw = up.yaw if direction.dot((0, -1, 0)) > 0.99 else direction.yaw
-                else:
-                    direction = -normal
-                    yaw = direction.yaw
-                pitch = -direction.pitch
+                yaw, pitch = self.__getCameraYawPitch(up, normal)
             else:
                 yaw = None
                 pitch = None

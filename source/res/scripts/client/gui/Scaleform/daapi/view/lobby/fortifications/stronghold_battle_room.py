@@ -20,7 +20,7 @@ from gui.Scaleform.framework.managers.containers import POP_UP_CRITERIA
 from gui.Scaleform.genConsts.FORTIFICATION_ALIASES import FORTIFICATION_ALIASES
 from gui.Scaleform.locale.FORTIFICATIONS import FORTIFICATIONS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
-from gui.clans.clan_helpers import getStrongholdUrl
+from gui.clans.clan_helpers import getStrongholdChangeModeUrl
 from gui.impl import backport
 from gui.prb_control import settings
 from gui.prb_control.entities.base.unit.listener import IStrongholdListener
@@ -158,7 +158,7 @@ class StrongholdBattleRoom(FortClanBattleRoomMeta, IUnitListener, IStrongholdLis
 
     @process
     def openConfigureWindow(self):
-        url = getStrongholdUrl('changeModeUrl')
+        url = getStrongholdChangeModeUrl()
         title = i18n.makeString(TOOLTIPS.CYBERSPORT_MODECHANGEFROZEN_HEADER)
         windowSize = GUI_SETTINGS.lookup('StrongholdsPopupWebWindowSize')
         browserSize = (windowSize.get('width', 800), windowSize.get('height', 600))

@@ -276,8 +276,8 @@ class CustomizationCartView(ViewImpl):
 
         else:
             for item in self.__purchaseItems:
-                if item.areaID == Area.HULL and item.item.itemTypeID == GUI_ITEM_TYPE.CAMOUFLAGE and item.item.season in SEASON_TYPE_TO_NAME:
-                    seasonModel = seasonsMap[SEASON_TYPE_TO_NAME.get(item.item.season)]
+                if item.areaID == Area.HULL and item.item.itemTypeID == GUI_ITEM_TYPE.CAMOUFLAGE and item.group in SEASON_TYPE_TO_NAME:
+                    seasonModel = seasonsMap[SEASON_TYPE_TO_NAME.get(item.group)]
                     bonusValue = self.__getCamoBonusValue(item.item) if item.selected else ''
                     seasonModel.setBonusValue(bonusValue)
                     seasonModel.setBonusType(GUI_ITEM_TYPE_NAMES[GUI_ITEM_TYPE.CAMOUFLAGE] if bonusValue else '')

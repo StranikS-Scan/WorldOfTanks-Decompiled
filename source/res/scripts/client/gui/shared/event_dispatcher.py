@@ -262,8 +262,8 @@ def showBadges(backViewName=''):
     return
 
 
-def showStrongholds():
-    g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.LOBBY_STRONGHOLD), scope=EVENT_BUS_SCOPE.LOBBY)
+def showStrongholds(url=None):
+    g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.LOBBY_STRONGHOLD, ctx={'url': url}), scope=EVENT_BUS_SCOPE.LOBBY)
 
 
 def openManualPage(chapterIndex):

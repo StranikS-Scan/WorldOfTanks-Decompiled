@@ -622,9 +622,10 @@ class VehicleDescriptor(object):
         type = self.type
         cost = itemPrices[type.compactDescr]
         for idx in xrange(len(self.turrets)):
-            turretDescr, gunDescr = self.turrets[idx]
-            cost = _summPriceDiff(cost, itemPrices[turretDescr.compactDescr], itemPrices[type.turrets[idx][0].compactDescr])
-            cost = _summPriceDiff(cost, itemPrices[gunDescr.compactDescr], itemPrices[turretDescr.guns[0].compactDescr])
+            currentTurret, currentGun = self.turrets[idx]
+            defaultTurret = type.turrets[idx][0]
+            cost = _summPriceDiff(cost, itemPrices[currentTurret.compactDescr], itemPrices[defaultTurret.compactDescr])
+            cost = _summPriceDiff(cost, itemPrices[currentGun.compactDescr], itemPrices[defaultTurret.guns[0].compactDescr])
 
         cost = _summPriceDiff(cost, itemPrices[self.chassis.compactDescr], itemPrices[type.chassis[0].compactDescr])
         cost = _summPriceDiff(cost, itemPrices[self.engine.compactDescr], itemPrices[type.engines[0].compactDescr])
@@ -661,7 +662,7 @@ class VehicleDescriptor(object):
             instComps.append(turretDescr.compactDescr)
             defComps.append(turrets[0].compactDescr)
             instComps.append(gunDescr.compactDescr)
-            defComps.append(turretDescr.guns[0].compactDescr)
+            defComps.append(turrets[0].guns[0].compactDescr)
 
         optDevices = []
         for device in self.optionalDevices:

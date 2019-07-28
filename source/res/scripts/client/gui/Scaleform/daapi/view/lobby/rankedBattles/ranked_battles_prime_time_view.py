@@ -55,7 +55,7 @@ class RankedBattlesPrimeTimeView(RankedPrimeTimeMeta):
             serverInfo = serverList[0]
         return {'warningIconSrc': self._getWarningIcon(),
          'status': self.__getStatusTitle(),
-         'serversText': text_styles.expText(self._getServerText(serverList, serverInfo)),
+         'serversText': text_styles.expText(self._getServerText(serverList, serverInfo, True)),
          'serversDDEnabled': not isSingleServer,
          'serverDDVisible': not isSingleServer,
          'timeText': text_styles.expText(self.__getTimeText(serverInfo))}
@@ -81,7 +81,7 @@ class RankedBattlesPrimeTimeView(RankedPrimeTimeMeta):
         if not self._hasAvailableServers():
             status = backport.text(R.strings.ranked_battles.primeTime.status.allServersDisabled())
         else:
-            currServerName = self._connectionMgr.serverUserName
+            currServerName = self._connectionMgr.serverUserNameShort
             primeTime = self.__rankedController.getPrimeTimes().get(self._connectionMgr.peripheryID)
             if primeTime:
                 currTime = time_utils.getCurrentLocalServerTimestamp()
@@ -98,7 +98,7 @@ class RankedBattlesPrimeTimeView(RankedPrimeTimeMeta):
         if serverInfo:
             timeLeft = serverInfo.getTimeLeft()
             isAvailable = serverInfo.isAvailable()
-            serverName = serverInfo.getName()
+            serverName = serverInfo.getShortName()
         else:
             _, timeLeft, isAvailable = controller.getPrimeTimeStatus()
             serverName = ''

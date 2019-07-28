@@ -599,8 +599,8 @@ class _HangarLogicProvider(PopoverLogicProvider):
         isInstalled = vehicleModule.isInstalled(self._vehicle)
         isBought = inInventory or isInstalled
         isEnoughMoney, purchaseReason = vehicleModule.mayPurchase(stats['money'])
-        if vehicleModule.itemTypeID == GUI_ITEM_TYPE.OPTIONALDEVICE and not isInstalled and vehicleModule.hasSimilarDevicesInstalled(self._vehicle) and isEnoughMoney:
-            isFit, reason = False, GUI_ITEM_ECONOMY_CODE.ITEM_IS_DUPLICATED
+        if vehicleModule.itemTypeID == GUI_ITEM_TYPE.OPTIONALDEVICE and not isInstalled and vehicleModule.hasSimilarDevicesInstalled(self._vehicle):
+            isFit, reason = False, purchaseReason
         elif isBought:
             isFit, reason = vehicleModule.mayInstall(self._vehicle, self._slotIndex)
             if reason == 'already installed' or isFit:

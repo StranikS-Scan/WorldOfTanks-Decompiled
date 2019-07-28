@@ -40,6 +40,7 @@ class EquipmentSound(object):
      1019: 'battle_equipment_1019',
      763: 'battle_equipment_763',
      1531: 'battle_equipment_1531',
+     46331: 'battle_equipment_1531',
      1275: 'battle_equipment_1275'}
 
     @staticmethod

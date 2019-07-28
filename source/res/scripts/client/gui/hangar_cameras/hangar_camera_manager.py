@@ -173,56 +173,59 @@ class HangarCameraManager(object):
             g_eventBus.removeListener(CameraRelatedEvents.LOBBY_VIEW_MOUSE_MOVE, self.__handleLobbyViewMouseEvent)
 
     def setCameraLocation(self, targetPos=None, pivotPos=None, yaw=None, pitch=None, dist=None, camConstraints=None, ignoreConstraints=False, movementMode=FAST_CAMERA_MOVEMENT_MODE):
-        from gui.ClientHangarSpace import hangarCFG
-        cfg = hangarCFG()
-        sourceMat = Math.Matrix(self.__cam.source)
-        yawS = sourceMat.yaw if yaw is None else yaw
-        pitchS = sourceMat.pitch if pitch is None else pitch
-        if dist is None:
-            dist = self.__cam.pivotMaxDist
-        if movementMode != IMMEDIATE_CAMERA_MOVEMENT_MODE:
-            self.__cam.movementMode = movementMode
-        if camConstraints is None or camConstraints[0] is None:
-            self.__camConstraints[0] = cfg['cam_pitch_constr']
+        if self.__cam is None:
+            return
         else:
-            self.__camConstraints[0] = camConstraints[0]
-        if camConstraints is None or camConstraints[1] is None:
-            self.__camConstraints[1] = cfg['cam_yaw_constr']
-        else:
-            self.__camConstraints[1] = camConstraints[1]
-        if camConstraints is None or camConstraints[2] is None:
-            self.__updateCameraDistanceLimits()
-        else:
-            self.__camConstraints[2] = camConstraints[2]
-        if not ignoreConstraints:
-            if yaw is not None:
-                camYawConstr = self.__camConstraints[1]
-                startYaw, endYaw = camYawConstr
-                self.__yawCameraFilter.setConstraints(math.radians(startYaw), math.radians(endYaw))
-                self.__yawCameraFilter.setYawLimits(camYawConstr)
-                yawS = self.__yawCameraFilter.toLimit(yawS)
-            if pitch is not None:
-                camPitchConstr = self.__camConstraints[0]
-                startPitch, endPitch = (math.radians(pc) for pc in camPitchConstr)
-                pitchS = math_utils.clamp(startPitch, endPitch, pitchS)
-            minDist, maxDist = self.__camConstraints[2]
-            dist = math_utils.clamp(minDist, maxDist, dist)
-        if yaw is not None or pitch is not None:
-            mat = Math.Matrix()
-            pitchS = math_utils.clamp(-math.pi / 2 * 0.99, math.pi / 2 * 0.99, pitchS)
-            mat.setRotateYPR((yawS, pitchS, 0.0))
-            self.__cam.source = mat
-        if targetPos is not None:
-            targetMat = self.__cam.target
-            targetMat.setTranslate(targetPos)
-            self.__cam.target = targetMat
-            self.__cam.target.setTranslate(targetPos)
-        if pivotPos is not None:
-            self.__cam.pivotPosition = pivotPos
-        self.__cam.pivotMaxDist = dist
-        if movementMode == IMMEDIATE_CAMERA_MOVEMENT_MODE:
-            self.__cam.forceUpdate()
-        return
+            from gui.ClientHangarSpace import hangarCFG
+            cfg = hangarCFG()
+            sourceMat = Math.Matrix(self.__cam.source)
+            yawS = sourceMat.yaw if yaw is None else yaw
+            pitchS = sourceMat.pitch if pitch is None else pitch
+            if dist is None:
+                dist = self.__cam.pivotMaxDist
+            if movementMode != IMMEDIATE_CAMERA_MOVEMENT_MODE:
+                self.__cam.movementMode = movementMode
+            if camConstraints is None or camConstraints[0] is None:
+                self.__camConstraints[0] = cfg['cam_pitch_constr']
+            else:
+                self.__camConstraints[0] = camConstraints[0]
+            if camConstraints is None or camConstraints[1] is None:
+                self.__camConstraints[1] = cfg['cam_yaw_constr']
+            else:
+                self.__camConstraints[1] = camConstraints[1]
+            if camConstraints is None or camConstraints[2] is None:
+                self.__updateCameraDistanceLimits()
+            else:
+                self.__camConstraints[2] = camConstraints[2]
+            if not ignoreConstraints:
+                if yaw is not None:
+                    camYawConstr = self.__camConstraints[1]
+                    startYaw, endYaw = camYawConstr
+                    self.__yawCameraFilter.setConstraints(math.radians(startYaw), math.radians(endYaw))
+                    self.__yawCameraFilter.setYawLimits(camYawConstr)
+                    yawS = self.__yawCameraFilter.toLimit(yawS)
+                if pitch is not None:
+                    camPitchConstr = self.__camConstraints[0]
+                    startPitch, endPitch = (math.radians(pc) for pc in camPitchConstr)
+                    pitchS = math_utils.clamp(startPitch, endPitch, pitchS)
+                minDist, maxDist = self.__camConstraints[2]
+                dist = math_utils.clamp(minDist, maxDist, dist)
+            if yaw is not None or pitch is not None:
+                mat = Math.Matrix()
+                pitchS = math_utils.clamp(-math.pi / 2 * 0.99, math.pi / 2 * 0.99, pitchS)
+                mat.setRotateYPR((yawS, pitchS, 0.0))
+                self.__cam.source = mat
+            if targetPos is not None:
+                targetMat = self.__cam.target
+                targetMat.setTranslate(targetPos)
+                self.__cam.target = targetMat
+                self.__cam.target.setTranslate(targetPos)
+            if pivotPos is not None:
+                self.__cam.pivotPosition = pivotPos
+            self.__cam.pivotMaxDist = dist
+            if movementMode == IMMEDIATE_CAMERA_MOVEMENT_MODE:
+                self.__cam.forceUpdate()
+            return
 
     def getCurrentEntityId(self):
         return self.__currentEntityId

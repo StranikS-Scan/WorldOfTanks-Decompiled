@@ -565,7 +565,7 @@ def __assemblePhysicalTracks(resourceRefs, trackPairsCount, appearance, tracks, 
     allTracks = []
     for i in xrange(trackPairsCount):
         name = 'left{0}PhysicalTrack'.format(i)
-        track = resourceRefs[name] if resourceRefs.has_key(name) else None
+        track = resourceRefs[name].constructComponent() if resourceRefs.has_key(name) else None
         if track is not None:
             track.init(appearance.compoundModel, appearance.wheelsAnimator, appearance.collisionObstaclesCollector, appearance.tessellationCollisionSensor, instantWarmup)
             if track.inited:
@@ -580,7 +580,7 @@ def __assemblePhysicalTracks(resourceRefs, trackPairsCount, appearance, tracks, 
     allTracks = []
     for i in xrange(trackPairsCount):
         name = 'right{0}PhysicalTrack'.format(i)
-        track = resourceRefs[name] if resourceRefs.has_key(name) else None
+        track = resourceRefs[name].constructComponent() if resourceRefs.has_key(name) else None
         if track is not None:
             track.init(appearance.compoundModel, appearance.wheelsAnimator, appearance.collisionObstaclesCollector, appearance.tessellationCollisionSensor, instantWarmup)
             if track.inited:

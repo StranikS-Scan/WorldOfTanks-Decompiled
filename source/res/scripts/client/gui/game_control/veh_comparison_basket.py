@@ -164,6 +164,7 @@ class _VehCmpCache(FileLocalCache):
 
 
 class _VehCompareData(object):
+    itemsCache = dependency.descriptor(IItemsCache)
 
     def __init__(self, vehicleIntCD, vehicleStrCD, vehStockStrCD, isFromCache=False):
         super(_VehCompareData, self).__init__()
@@ -256,7 +257,9 @@ class _VehCompareData(object):
         return _NO_CREW_SKILLS.copy()
 
     def getStockEquipment(self):
-        return _NO_EQUIPMENT_LAYOUT[:]
+        equipmentIDs = _NO_EQUIPMENT_LAYOUT[:]
+        self.__addBuiltInEquipment(equipmentIDs)
+        return equipmentIDs
 
     def getConfigurationType(self):
         cType = CONFIGURATION_TYPES.CUSTOM
@@ -267,7 +270,7 @@ class _VehCompareData(object):
         if self.__strCD == self.__invVehStrCD:
             if self.__equipment == self.__invEquipment and self.__crewLvl == self.__inventoryCrewLvl and self.__crewSkills == self.__inventoryCrewSkills:
                 cType = CONFIGURATION_TYPES.CURRENT
-        elif self.__strCD == self.__stockVehStrCD and self.__equipment == _NO_EQUIPMENT_LAYOUT and self.__crewLvl == self.getStockCrewLvl():
+        elif self.__strCD == self.__stockVehStrCD and self.getEquipment() == self.getStockEquipment() and self.__crewLvl == self.getStockCrewLvl():
             if self.__crewSkills == self.getStockCrewSkills():
                 cType = CONFIGURATION_TYPES.BASIC
         return cType
@@ -285,7 +288,9 @@ class _VehCompareData(object):
         return (self.__crewLvl, self.__crewSkills.copy())
 
     def getEquipment(self):
-        return self.__equipment[:]
+        equipmentIDs = self.__equipment[:]
+        self.__addBuiltInEquipment(equipmentIDs)
+        return equipmentIDs
 
     def isFromCache(self):
         return self.__isFromCache
@@ -315,6 +320,13 @@ class _VehCompareData(object):
         dataClone.setInvHasCamouflage(self.__invHasCamouflage)
         dataClone.setSelectedShellIndex(self.getSelectedShellIndex())
         return dataClone
+
+    def __addBuiltInEquipment(self, equipmentIDs):
+        if not self.__isInInventory:
+            vehicle = self.itemsCache.items.getItemByCD(self.getVehicleCD())
+            builtInEquipmentIDs = vehicle.getBuiltInEquipmentIDs()
+            for slotId, eqID in enumerate(builtInEquipmentIDs):
+                equipmentIDs[slotId] = eqID
 
 
 class VehComparisonBasket(IVehicleComparisonBasket):

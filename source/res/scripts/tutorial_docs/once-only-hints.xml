@@ -298,5 +298,14 @@
       <update-runtime>	True	</update-runtime>
       <ignore-outside-click>	True	</ignore-outside-click>
     </hint>
+    <hint>	FestivalScreenBuyRandomItemHint	  <item-id>	FestivalScreenBuyRandomItem	</item-id>
+      <text>	_(#tutorial:festival/buyRandomItem)	</text>
+      <arrow>
+        <direction>	T	</direction>
+        <loop>	True	</loop>
+      </arrow>
+      <update-runtime>	True	</update-runtime>
+      <ignore-outside-click>	True	</ignore-outside-click>
+    </hint>
   </hints>
 </once-only-hints.xml>

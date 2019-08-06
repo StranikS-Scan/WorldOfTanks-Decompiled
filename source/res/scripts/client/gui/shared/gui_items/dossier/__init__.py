@@ -4,6 +4,8 @@ import math
 import cPickle
 import dossiers2
 from constants import DOSSIER_TYPE
+from festivity.festival.constants import FestSyncDataKeys
+from festivity.festival.player_card import PlayerCard
 from gui.Scaleform.locale.MENU import MENU
 from gui.impl import backport
 from helpers import dependency
@@ -89,9 +91,10 @@ class VehicleDossier(_Dossier, stats.VehicleDossierStats):
 class AccountDossier(_Dossier, stats.AccountDossierStats):
     itemsCache = dependency.descriptor(IItemsCache)
 
-    def __init__(self, dossier, playerDBID=None, rated7x7Seasons=None):
+    def __init__(self, dossier, playerDBID=None, rated7x7Seasons=None, festivalInfo=None):
         super(AccountDossier, self).__init__(dossier, DOSSIER_TYPE.ACCOUNT, playerDBID)
         self._rated7x7Seasons = rated7x7Seasons or {}
+        self._festivalInfo = festivalInfo
 
     def getGlobalRating(self):
         return self.itemsCache.items.stats.globalRating
@@ -100,11 +103,12 @@ class AccountDossier(_Dossier, stats.AccountDossierStats):
         return (AccountDossier,
          self._dossier.makeCompDescr(),
          self._playerDBID,
-         self._rated7x7Seasons)
+         self._rated7x7Seasons,
+         self._festivalInfo)
 
     @staticmethod
-    def unpack(dossierCD, playerDBID, seasons):
-        return AccountDossier(dossiers2.getAccountDossierDescr(dossierCD), playerDBID, seasons)
+    def unpack(dossierCD, playerDBID, seasons, festivalInfo):
+        return AccountDossier(dossiers2.getAccountDossierDescr(dossierCD), playerDBID, seasons, festivalInfo)
 
     def getRated7x7SeasonDossier(self, seasonID):
         return self._makeSeasonDossier(self._rated7x7Seasons.get(seasonID) or dossiers2.getRated7x7DossierDescr())
@@ -115,6 +119,12 @@ class AccountDossier(_Dossier, stats.AccountDossierStats):
             result[sID] = self._makeSeasonDossier(d)
 
         return result
+
+    def getFestivalInfo(self):
+        return self._festivalInfo
+
+    def getFestivalPlayerCard(self):
+        return PlayerCard(self._festivalInfo[FestSyncDataKeys.PLAYER_CARD]) if FestSyncDataKeys.PLAYER_CARD in self._festivalInfo else None
 
     def _makeSeasonDossier(self, dossierDescr):
         return ClubMemberDossier(dossierDescr, -1, self._playerDBID)

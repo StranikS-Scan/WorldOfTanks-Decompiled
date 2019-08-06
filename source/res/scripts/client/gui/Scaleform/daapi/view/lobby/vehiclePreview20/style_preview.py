@@ -30,6 +30,7 @@ class VehicleStylePreview(LobbySelectableView, VehicleBasePreviewMeta):
         self.__style = ctx['style']
         self.__styleDescr = ctx.get('styleDescr')
         self.__backCallback = ctx.get('backCallback', event_dispatcher.showHangar)
+        self.__backBtnDescrLabel = ctx.get('backBtnDescrLabel', backport.text(R.strings.vehicle_preview.header.backBtn.descrLabel.personalAwards()))
 
     def closeView(self):
         event_dispatcher.showHangar()
@@ -46,7 +47,7 @@ class VehicleStylePreview(LobbySelectableView, VehicleBasePreviewMeta):
         self.addListener(CameraRelatedEvents.VEHICLE_LOADING, self.__onVehicleLoading, EVENT_BUS_SCOPE.DEFAULT)
         self.as_setDataS({'closeBtnLabel': backport.text(R.strings.vehicle_preview.header.closeBtn.label()),
          'backBtnLabel': backport.text(R.strings.vehicle_preview.header.backBtn.label()),
-         'backBtnDescrLabel': backport.text(R.strings.vehicle_preview.header.backBtn.descrLabel.personalAwards()),
+         'backBtnDescrLabel': self.__backBtnDescrLabel,
          'showCloseBtn': _SHOW_CLOSE_BTN,
          'showBackButton': _SHOW_BACK_BTN})
         self.as_setAdditionalInfoS({'objectSubtitle': text_styles.main(STYLE_GROUP_ID_TO_FULL_GROUP_NAME_MAP[self.__style.groupID]),

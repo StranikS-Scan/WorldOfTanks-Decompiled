@@ -1,6 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/missions/regular/group_packers.py
+import locale
 import logging
+import time
 import weakref
 from collections import namedtuple, defaultdict, OrderedDict
 from CurrentVehicle import g_currentVehicle
@@ -30,7 +32,7 @@ from gui.server_events.events_helpers import missionsSortFunc
 from gui.server_events.formatters import DECORATION_SIZES
 from gui.shared.formatters import text_styles
 from gui.shared.formatters.icons import makeImageTag
-from helpers import dependency, time_utils
+from helpers import dependency, time_utils, getLanguageCode
 from helpers.i18n import makeString as _ms
 from skeletons.gui.linkedset import ILinkedSetController
 from skeletons.gui.lobby_context import ILobbyContext
@@ -865,4 +867,10 @@ class _PremiumGroupedQuestsBlockInfo(_GroupedQuestsBlockInfo):
         timeLeft = time_utils.ONE_DAY - time_utils.getServerRegionalTimeCurrentDay()
         if timeLeft >= 0:
             timeFmt = backport.text(R.strings.quests.details.conditions.postBattle.deltaDailyReset.timeFmt())
-            return time_utils.timestampToFmtStr(timeLeft, timeFmt)
+            parts = time_utils.getTimeStructInUTC(timeLeft)
+            try:
+                return time.strftime(timeFmt, parts)
+            except ValueError:
+                _logger.error('Current time locale: %r', locale.getlocale(locale.LC_TIME))
+                _logger.error('Selected language: %r', getLanguageCode())
+                _logger.exception('Invalid formatting string %r to delta of time %r', timeFmt, parts)

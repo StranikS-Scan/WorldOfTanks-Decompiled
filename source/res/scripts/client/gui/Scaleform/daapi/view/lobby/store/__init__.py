@@ -40,7 +40,6 @@ class StorePackageBusinessHandler(PackageBusinessHandler):
         listeners = ((VIEW_ALIAS.LOBBY_INVENTORY, self.loadViewByCtxEvent),
          (VIEW_ALIAS.LOBBY_STORE, self.loadViewByCtxEvent),
          (VIEW_ALIAS.OVERLAY_WEB_STORE, self.loadViewByCtxEvent),
-         (VIEW_ALIAS.OVERLAY_BROWSER_VIEW, self.loadViewByCtxEvent),
          (VIEW_ALIAS.LOBBY_STORE_OLD, self.loadViewByCtxEvent),
          (VIEW_ALIAS.LOBBY_STORAGE_OLD, self.loadViewByCtxEvent),
          (VIEW_ALIAS.OVERLAY_PREM_CONTENT_VIEW, self.loadViewByCtxEvent))

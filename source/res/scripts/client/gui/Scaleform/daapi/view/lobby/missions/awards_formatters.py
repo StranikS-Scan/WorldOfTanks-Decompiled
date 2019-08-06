@@ -85,6 +85,22 @@ class RawLabelBonusComposer(QuestsBonusComposer):
         return res
 
 
+class AdaptiveSizeCurtailingAwardsComposer(CurtailingAwardsComposer):
+
+    def _packBonus(self, bonus, size=AWARDS_SIZES.SMALL):
+        packBonus = super(AdaptiveSizeCurtailingAwardsComposer, self)._packBonus(bonus, AWARDS_SIZES.SMALL)
+        packBonus['imgSource'] = bonus.images
+        packBonus['userName'] = bonus.userName
+        packBonus['bonusName'] = bonus.bonusName
+        return packBonus
+
+    def _packMergedBonuses(self, mergedBonuses, size=AWARDS_SIZES.SMALL):
+        mergedBonus = super(AdaptiveSizeCurtailingAwardsComposer, self)._packMergedBonuses(mergedBonuses, size)
+        mergedBonus['imgSource'] = {AWARDS_SIZES.SMALL: RES_ICONS.getBonusIcon(AWARDS_SIZES.SMALL, 'default'),
+         AWARDS_SIZES.BIG: RES_ICONS.getBonusIcon(AWARDS_SIZES.BIG, 'default')}
+        return mergedBonus
+
+
 class AwardsWindowComposer(CurtailingAwardsComposer):
 
     @classmethod
@@ -183,6 +199,10 @@ class LootBoxBonusComposer(BonusNameQuestsBonusComposer):
             else:
                 preformattedBonuses.extend(alwaysPreformatedBonuses)
         return self._packBonuses(preformattedBonuses, size)
+
+
+class NewStyleBonusComposer(LootBoxBonusComposer):
+    pass
 
 
 def _getBonusesWithModifyTokens(bonuses, freeTokenName, addTokensCount, hasPawned):

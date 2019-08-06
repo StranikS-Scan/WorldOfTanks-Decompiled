@@ -156,7 +156,6 @@ class MissionsMarathonView(MissionsMarathonViewMeta):
 
     def _populate(self):
         super(MissionsMarathonView, self)._populate()
-        self._marathonEvent.showRewardVideo()
         Waiting.hide('loadPage')
         self.__loadBrowserCallbackID = BigWorld.callback(0.01, self.__loadBrowser)
 

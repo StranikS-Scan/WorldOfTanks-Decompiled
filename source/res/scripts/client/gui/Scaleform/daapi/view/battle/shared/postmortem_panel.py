@@ -254,24 +254,35 @@ class PostmortemPanel(_SummaryPostmortemPanel):
             deathInfo = self.getDeathInfo()
             if deathInfo:
                 killerVehID = deathInfo['killerVehicle']
-                battleCtx = self.sessionProvider.getCtx()
-                if killerVehID and not battleCtx.isCurrentPlayer(killerVehID) and battleCtx.getArenaDP().getVehicleInfo(killerVehID).vehicleType.compactDescr:
-                    showVehicle = True
-                    vInfoVO = battleCtx.getArenaDP().getVehicleInfo(killerVehID)
-                    vTypeInfoVO = vInfoVO.vehicleType
-                    vehLvl = int2roman(vTypeInfoVO.level)
-                    vehImg = _VEHICLE_SMALL_ICON_RES_PATH.format(vTypeInfoVO.iconName)
-                    vehClass = Vehicle.getTypeBigIconPath(vTypeInfoVO.classTag)
-                    vehName = vTypeInfoVO.shortNameWithPrefix
-                else:
-                    showVehicle = False
-                    vehLvl = vehImg = vehClass = vehName = None
+                showVehicle, vehLvl, vehImg, vehClass, vehName = self._getVehicleData(killerVehID)
                 reason = self.__makeReasonInfo(deathInfo)
                 self.as_setDeadReasonInfoS(reason, showVehicle, vehLvl, vehImg, vehClass, vehName)
                 self._deathAlreadySet = True
             else:
                 self.as_setDeadReasonInfoS('', False, None, None, None, None)
         return
+
+    def _nickNameFormatter(self, nickName):
+        return nickName
+
+    def _getVehicleData(self, killerVehID):
+        battleCtx = self.sessionProvider.getCtx()
+        if killerVehID and not battleCtx.isCurrentPlayer(killerVehID) and battleCtx.getArenaDP().getVehicleInfo(killerVehID).vehicleType.compactDescr:
+            showVehicle = True
+            vInfoVO = battleCtx.getArenaDP().getVehicleInfo(killerVehID)
+            vTypeInfoVO = vInfoVO.vehicleType
+            vehLvl = int2roman(vTypeInfoVO.level)
+            vehImg = _VEHICLE_SMALL_ICON_RES_PATH.format(vTypeInfoVO.iconName)
+            vehClass = Vehicle.getTypeBigIconPath(vTypeInfoVO.classTag)
+            vehName = vTypeInfoVO.shortNameWithPrefix
+        else:
+            showVehicle = False
+            vehLvl = vehImg = vehClass = vehName = None
+        return (showVehicle,
+         vehLvl,
+         vehImg,
+         vehClass,
+         vehName)
 
     def __makeReasonInfo(self, deathInfo):
         colors = deathInfo['colors']
@@ -291,7 +302,8 @@ class PostmortemPanel(_SummaryPostmortemPanel):
             prefixIcon = ''
             if prefixBadgeID > 0:
                 prefixIcon = icons.makeImageTag(settings.getBadgeIconPath(settings.BADGES_ICONS.X24, prefixBadgeID), 24, 24, -5, 0)
-            names['killer'] = '{0}{1}'.format(prefixIcon, context.getPlayerFullName(entityID, showVehShortName=False))
+            playerNickname = self._nickNameFormatter(context.getPlayerFullName(entityID, showVehShortName=False))
+            names['killer'] = '{0}{1}'.format(prefixIcon, playerNickname)
         device = deathInfo['device']
         if device:
             names['device'] = device

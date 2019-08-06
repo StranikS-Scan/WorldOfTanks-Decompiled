@@ -73,6 +73,7 @@ class ServerSettingsManager(object):
     BATTLE_EVENTS = settings_constants.BATTLE_EVENTS
     BATTLE_BORDER_MAP = settings_constants.BATTLE_BORDER_MAP
     QUESTS_PROGRESS = settings_constants.QUESTS_PROGRESS
+    FESTIVAL_SETTINGS = settings_constants.FestivalSettings
     SECTIONS = {SETTINGS_SECTIONS.GAME: Section(masks={GAME.ENABLE_OL_FILTER: 0,
                               GAME.ENABLE_SPAM_FILTER: 1,
                               GAME.INVITES_FROM_FRIENDS: 2,
@@ -286,7 +287,9 @@ class ServerSettingsManager(object):
                                          OnceOnlyHints.SESSION_STATS_OPEN_BTN_HINT: 18,
                                          OnceOnlyHints.BATTLE_SESSION_UP_BUTTON_TOURNAMENT_HINT: 19,
                                          OnceOnlyHints.CREW_OPERATION_BTN_HINT: 20,
-                                         OnceOnlyHints.SOUND_BUTTONEX_HINT: 21}, offsets={}),
+                                         OnceOnlyHints.SOUND_BUTTONEX_HINT: 21,
+                                         FESTIVAL_SETTINGS.BUY_RANDOM_HINT: 22,
+                                         FESTIVAL_SETTINGS.FIRST_ENTRY: 23}, offsets={}),
      SETTINGS_SECTIONS.DAMAGE_INDICATOR: Section(masks={DAMAGE_INDICATOR.TYPE: 0,
                                           DAMAGE_INDICATOR.PRESETS: 1,
                                           DAMAGE_INDICATOR.DAMAGE_VALUE: 2,

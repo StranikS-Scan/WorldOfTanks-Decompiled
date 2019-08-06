@@ -1,8 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/marathon/marathon_reward_view.py
 import logging
-from account_helpers import AccountSettings
-from account_helpers.AccountSettings import MARATHON_REWARD_WAS_SHOWN
 from frameworks.wulf import ViewFlags
 from frameworks.wulf import WindowFlags
 from gui.impl.gen import R
@@ -52,7 +50,6 @@ class MarathonRewardView(ViewImpl):
         self.viewModel.onCloseBtnClick -= self.__onCloseWindow
         self.viewModel.onVideoStarted -= self.__onVideoStarted
         self.viewModel.onVideoStopped -= self.__onVideoStopped
-        AccountSettings.setFilter(MARATHON_REWARD_WAS_SHOWN, True)
 
     def __onGoToVehicle(self, _=None):
         self.destroyWindow()

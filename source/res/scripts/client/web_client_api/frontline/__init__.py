@@ -1,10 +1,15 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/web_client_api/frontline/__init__.py
+from festivity.festival.constants import FEST_FRONTLINE_ID
+from festivity.festival.item_info import FestivalItemInfo
 from gui.Scaleform.daapi.view.lobby.epicBattle.epic_helpers import triggerPrestige, checkIfVehicleIsHidden
 from gui.Scaleform.daapi.view.lobby.epicBattle.epic_helpers import checkEpicRewardVehAlreadyBought
 from gui.Scaleform.daapi.view.lobby.epicBattle.epic_helpers import getAwardsForLevel, getAwardsForPrestige
 from gui.Scaleform.daapi.view.lobby.epicBattle.epic_helpers import getFrontLineSkills, getEpicGamePlayerPrestigePoints
+from gui.impl.lobby.festival.festival_helper import FestivalViews
+from gui.shared.event_dispatcher import showFestivalMainView, showHangar
 from helpers import dependency
+from skeletons.festival import IFestivalController
 from skeletons.gui.game_control import IEpicBattleMetaGameController
 from skeletons.gui.server_events import IEventsCache
 from web_client_api import w2c, w2capi, W2CSchema, Field
@@ -24,12 +29,14 @@ class FrontLineWebApi(W2CSchema):
     _frontLineCtrl = dependency.descriptor(IEpicBattleMetaGameController)
     _eventsCache = dependency.descriptor(IEventsCache)
     _itemsCache = dependency.descriptor(IItemsCache)
+    __festController = dependency.descriptor(IFestivalController)
 
     @w2c(W2CSchema, name='get_metascreen_data')
     def handleGetMetaScreenData(self, _):
         prestige, level, exp = self._frontLineCtrl.getPlayerLevelInfo()
         nextLevelExp = self._frontLineCtrl.getPointsProgressForLevel(level)
         maxPrestige = self._frontLineCtrl.getMaxPlayerPrestigeLevel()
+        festivalAwarded = FestivalItemInfo(FEST_FRONTLINE_ID).isInInventory()
         data = {'lvl': level if prestige < maxPrestige else '',
          'max_lvl': self._frontLineCtrl.getMaxPlayerLevel(),
          'prestige': prestige,
@@ -38,7 +45,9 @@ class FrontLineWebApi(W2CSchema):
          'exp': exp,
          'exp_for_lvl': nextLevelExp,
          'rewards_for_lvl': getAwardsForLevel(level + 1),
-         'rewards_for_prestige': getAwardsForPrestige(prestige + 1)}
+         'rewards_for_prestige': getAwardsForPrestige(prestige + 1),
+         'festivalEnabled': self.__festController.isEnabled(),
+         'festivalAwarded': festivalAwarded}
         return data
 
     @w2c(W2CSchema, name='get_calendar_info')
@@ -111,3 +120,8 @@ class FrontLineWebApi(W2CSchema):
     @w2c(W2CSchema, name='get_player_discount')
     def handleGetPlayerDiscount(self, _):
         return self._frontLineCtrl.getStoredEpicDiscount()
+
+    @w2c(W2CSchema, name='open_festival_info')
+    def handleOpenFestivalInfo(self, _):
+        showHangar()
+        showFestivalMainView(FestivalViews.INFO)

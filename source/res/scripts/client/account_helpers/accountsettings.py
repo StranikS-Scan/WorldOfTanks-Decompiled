@@ -29,6 +29,7 @@ KEY_SETTINGS = 'settings'
 KEY_FAVORITES = 'favorites'
 KEY_COUNTERS = 'counters'
 KEY_NOTIFICATIONS = 'notifications'
+KEY_UI_FLAGS = 'ui_flags'
 CAROUSEL_FILTER_1 = 'CAROUSEL_FILTER_1'
 CAROUSEL_FILTER_2 = 'CAROUSEL_FILTER_2'
 CAROUSEL_FILTER_CLIENT_1 = 'CAROUSEL_FILTER_CLIENT_1'
@@ -54,7 +55,6 @@ PROMO = 'PROMO'
 AWARDS = 'awards'
 CONTACTS = 'CONTACTS'
 FALLOUT_VEHICLES = 'FALLOUT_VEHICLES'
-MARATHON_REWARD_WAS_SHOWN = 'marathonRewardWasShown'
 GOLD_FISH_LAST_SHOW_TIME = 'goldFishWindowShowCooldown'
 BOOSTERS_FILTER = 'boostersFilter'
 LAST_PROMO_PATCH_VERSION = 'lastPromoPatchVersion'
@@ -76,6 +76,9 @@ ELEN_NOTIFICATIONS = 'elenNotifications'
 RECRUIT_NOTIFICATIONS = 'recruitNotifications'
 SPEAKERS_DEVICE = 'speakersDevice'
 SESSION_STATS_PREV_BATTLE_COUNT = 'sessionStatsPrevBattleCnt'
+FESTIVAL_SHOP_VISITED = 'festivalShopVisited'
+FESTIVAL_REWARDS_VISITED = 'festivalRewardsVisited'
+FESTIVAL_INFO_VISITED = 'festivalInfoVisited'
 DEFAULT_QUEUE = 'defaultQueue'
 STORE_TAB = 'store_tab'
 STATS_REGULAR_SORTING = 'statsSorting'
@@ -118,6 +121,9 @@ RANKED_STYLED_VEHICLES_POOL = 'rankedStyledVehiclesPool'
 RANKED_WEB_LEAGUE = 'rankedWebLeague'
 RANKED_WEB_LEAGUE_UPDATE = 'rankedWebLeagueUpdate'
 RANKED_AWARDS_BUBBLE_YEAR_REACHED = 'rankedAwardsBubbleYearReached'
+PLAYER_CARD_ANIMATION_VISIBLE = 'playerCardAnimationVisible'
+MARATHON_REWARD_WAS_SHOWN_PREFIX = 'marathonRewardScreenWasShown'
+MARATHON_VIDEO_WAS_SHOWN_PREFIX = 'marathonRewardVideoWasShown'
 KNOWN_SELECTOR_BATTLES = 'knownSelectorBattles'
 DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                'shop_current': (-1, STORE_CONSTANTS.VEHICLE, False),
@@ -303,7 +309,6 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                                     'lastShownEpicWelcomeScreen': 0},
                EULA_VERSION: {'version': 0},
                LINKEDSET_QUESTS: {'shown': 0},
-               MARATHON_REWARD_WAS_SHOWN: False,
                FORT_MEMBER_TUTORIAL: {'wasShown': False},
                IGR_PROMO: {'wasShown': False},
                CONTACTS: {'showOfflineUsers': True,
@@ -559,7 +564,8 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                 RANKED_STYLED_VEHICLES_POOL: [],
                 RANKED_WEB_LEAGUE: None,
                 RANKED_WEB_LEAGUE_UPDATE: None,
-                RANKED_AWARDS_BUBBLE_YEAR_REACHED: False},
+                RANKED_AWARDS_BUBBLE_YEAR_REACHED: False,
+                PLAYER_CARD_ANIMATION_VISIBLE: True},
  KEY_COUNTERS: {NEW_HOF_COUNTER: {PROFILE_CONSTANTS.HOF_ACHIEVEMENTS_BUTTON: True,
                                   PROFILE_CONSTANTS.HOF_VEHICLES_BUTTON: True,
                                   PROFILE_CONSTANTS.HOF_VIEW_RATING_BUTTON: True},
@@ -571,7 +577,10 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                                           MISSIONS_CONSTANTS.ELEN_EVENT_FINISHED_NOTIFICATION: set(),
                                           MISSIONS_CONSTANTS.ELEN_EVENT_TAB_VISITED: set()},
                      RECRUIT_NOTIFICATIONS: set(),
-                     PROGRESSIVE_REWARD_VISITED: False},
+                     PROGRESSIVE_REWARD_VISITED: False,
+                     FESTIVAL_SHOP_VISITED: False,
+                     FESTIVAL_REWARDS_VISITED: False,
+                     FESTIVAL_INFO_VISITED: False},
  KEY_SESSION_SETTINGS: {STORAGE_VEHICLES_CAROUSEL_FILTER_1: {'ussr': False,
                                                              'germany': False,
                                                              'usa': False,
@@ -615,7 +624,8 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                                             'vehicleCD': None},
                         'storage_reserves': {'filterMask': 0},
                         LAST_STORAGE_VISITED_TIMESTAMP: -1,
-                        SESSION_STATS_PREV_BATTLE_COUNT: 0}}
+                        SESSION_STATS_PREV_BATTLE_COUNT: 0},
+ KEY_UI_FLAGS: {}}
 
 def _filterAccountSection(dataSec):
     for key, section in dataSec.items()[:]:
@@ -1163,31 +1173,36 @@ class AccountSettings(object):
         _recursiveStep(defaultDict, savedDict, finalDict)
         return finalDict
 
-    @staticmethod
-    def __getValue(name, setting):
-        if DEFAULT_VALUES[setting].has_key(name):
-            fds = AccountSettings.__readSection(AccountSettings.__readUserSection(), setting)
-            try:
-                if fds.has_key(name):
-                    return pickle.loads(base64.b64decode(fds.readString(name)))
-            except Exception:
-                if constants.IS_DEVELOPMENT:
-                    LOG_CURRENT_EXCEPTION()
+    @classmethod
+    def getUIFlag(cls, name):
+        return cls.__getValue(name, KEY_UI_FLAGS, force=True)
 
-            return copy.deepcopy(DEFAULT_VALUES[setting][name])
-        else:
-            return None
+    @classmethod
+    def setUIFlag(cls, name, value):
+        return cls.__setValue(name, value, KEY_UI_FLAGS, force=True)
 
     @staticmethod
-    def __setValue(name, value, setting):
-        if name not in DEFAULT_VALUES[setting]:
+    def __getValue(name, setting, force=False):
+        fds = AccountSettings.__readSection(AccountSettings.__readUserSection(), setting)
+        try:
+            if fds.has_key(name):
+                return pickle.loads(base64.b64decode(fds.readString(name)))
+        except Exception:
+            if constants.IS_DEVELOPMENT:
+                LOG_CURRENT_EXCEPTION()
+
+        return copy.deepcopy(DEFAULT_VALUES[setting][name]) if name in DEFAULT_VALUES[setting] else None
+
+    @staticmethod
+    def __setValue(name, value, setting, force=False):
+        if name not in DEFAULT_VALUES[setting] and not force:
             raise SoftException('Default value "{}" is not found in "{}"'.format(name, type))
-        if AccountSettings.__getValue(name, setting) != value:
+        if AccountSettings.__getValue(name, setting, force) != value:
             fds = AccountSettings.__readSection(AccountSettings.__readUserSection(), setting)
-            if DEFAULT_VALUES[setting][name] != value:
-                fds.write(name, base64.b64encode(pickle.dumps(value)))
-            else:
+            if name in DEFAULT_VALUES[setting] and DEFAULT_VALUES[setting][name] == value:
                 fds.deleteSection(name)
+            else:
+                fds.write(name, base64.b64encode(pickle.dumps(value)))
             AccountSettings.onSettingsChanging(name, value)
 
     @staticmethod

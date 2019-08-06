@@ -1094,6 +1094,9 @@ class SYSTEM_MESSAGES(object):
     CREWBOOKS_BUY_SUCCESS = '#system_messages:crewBooks_buy/success'
     CREWBOOKS_BUY_SERVER_ERROR = '#system_messages:crewBooks_buy/server_error'
     CREWBOOKS_SELL_SERVER_ERROR = '#system_messages:crewBooks_sell/server_error'
+    FESTIVAL_BUYITEM_SERVER_ERROR = '#system_messages:festival/buyItem/server_error'
+    FESTIVAL_SETITEM_SERVER_ERROR = '#system_messages:festival/setItem/server_error'
+    FESTIVAL_BUYPACKAGE_SERVER_ERROR = '#system_messages:festival/buyPackage/server_error'
     UNIT_NOTIFICATION_DIVISIONTYPE_ENUM = (UNIT_NOTIFICATION_DIVISIONTYPE_MIDDLE, UNIT_NOTIFICATION_DIVISIONTYPE_CHAMPION, UNIT_NOTIFICATION_DIVISIONTYPE_ABSOLUTE)
     UNIT_ERRORS_ENUM = (UNIT_ERRORS_ALREADY_JOINED_UNIT,
      UNIT_ERRORS_CANT_CHANGE_DIVISION,
@@ -2294,7 +2297,10 @@ class SYSTEM_MESSAGES(object):
      CREWBOOKS_FAILED,
      CREWBOOKS_BUY_SUCCESS,
      CREWBOOKS_BUY_SERVER_ERROR,
-     CREWBOOKS_SELL_SERVER_ERROR)
+     CREWBOOKS_SELL_SERVER_ERROR,
+     FESTIVAL_BUYITEM_SERVER_ERROR,
+     FESTIVAL_SETITEM_SERVER_ERROR,
+     FESTIVAL_BUYPACKAGE_SERVER_ERROR)
 
     @classmethod
     def unit_notification_divisiontype(cls, key0):

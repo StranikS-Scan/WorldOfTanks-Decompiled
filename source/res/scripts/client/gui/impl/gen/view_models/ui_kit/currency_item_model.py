@@ -17,7 +17,14 @@ class CurrencyItemModel(ViewModel):
     def setCurrency(self, value):
         self._setString(1, value)
 
+    def getIsEnough(self):
+        return self._getBool(2)
+
+    def setIsEnough(self, value):
+        self._setBool(2, value)
+
     def _initialize(self):
         super(CurrencyItemModel, self)._initialize()
         self._addStringProperty('value', '--')
         self._addStringProperty('currency', '')
+        self._addBoolProperty('isEnough', True)

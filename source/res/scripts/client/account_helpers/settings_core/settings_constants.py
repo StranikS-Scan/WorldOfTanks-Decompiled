@@ -308,3 +308,8 @@ class OnceOnlyHints(CONST_CONTAINER):
     BATTLE_SESSION_UP_BUTTON_TOURNAMENT_HINT = 'BattleSessionUpButtonTournamentHint'
     CREW_OPERATION_BTN_HINT = 'CrewOperationBtnHint'
     SOUND_BUTTONEX_HINT = 'SoundButtonExHint'
+
+
+class FestivalSettings(CONST_CONTAINER):
+    FIRST_ENTRY = 'FestivalFirstEntry'
+    BUY_RANDOM_HINT = 'FestivalScreenBuyRandomItemHint'

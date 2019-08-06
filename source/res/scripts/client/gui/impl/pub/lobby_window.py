@@ -10,7 +10,7 @@ class LobbyWindow(Window):
     __slots__ = ()
     __appLoader = dependency.descriptor(IAppLoader)
 
-    def __init__(self, wndFlags, decorator, content=None, parent=None):
+    def __init__(self, wndFlags, decorator=None, content=None, parent=None):
         if parent is None:
             app = self.__appLoader.getApp()
             view = app.containerManager.getViewByKey(ViewKey(VIEW_ALIAS.LOBBY))

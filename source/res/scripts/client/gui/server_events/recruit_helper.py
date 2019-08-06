@@ -1,13 +1,16 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/server_events/recruit_helper.py
 from constants import ENDLESS_TOKEN_TIME
+from gui.Scaleform.locale.ITEM_TYPES import ITEM_TYPES
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.impl import backport
 from items.tankmen import TankmanDescr
 from nations import NONE_INDEX, NAMES as NationNames
 from items import tankmen
 from items.components.component_constants import EMPTY_STRING
+from items.components import skills_constants
 from helpers import dependency
+from shared_utils import first
 from skeletons.gui.server_events import IEventsCache
 from gui.shared.gui_items import Tankman
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
@@ -15,6 +18,7 @@ from gui.Scaleform.locale.PERSONAL_MISSIONS import PERSONAL_MISSIONS
 from gui.Scaleform.locale.QUESTS import QUESTS
 from helpers.i18n import makeString as _ms
 from account_helpers.AccountSettings import AccountSettings, RECRUIT_NOTIFICATIONS
+from soft_exception import SoftException
 from .events_helpers import getTankmanRewardQuests
 
 class RecruitSourceID(object):
@@ -24,13 +28,16 @@ class RecruitSourceID(object):
     TWITCH_2 = 'twitch2'
     TWITCH_3 = 'twitch3'
     TWITCH_4 = 'twitch4'
+    TWITCH_5 = 'twitch5'
     BUFFON = 'buffon'
     LOOTBOX = 'lootbox'
+    CZECH_WOMAN = 'czech_woman'
     EVENTS = (TWITCH_0,
      TWITCH_1,
      TWITCH_2,
      TWITCH_3,
-     TWITCH_4)
+     TWITCH_4,
+     TWITCH_5)
 
 
 _NEW_SKILL = 'new_skill'
@@ -140,8 +147,9 @@ class _QuestRecruitInfo(_BaseRecruitInfo):
 
 class _TokenRecruitInfo(_BaseRecruitInfo):
     __slots__ = ('__isPremium', '__group')
+    _eventsCache = dependency.descriptor(IEventsCache)
 
-    def __init__(self, tokenName, expiryTime, nations, isPremium, group, freeSkills, skills, freeXP, lastSkillLevel, roleLevel, sourceID):
+    def __init__(self, tokenName, expiryTime, nations, isPremium, group, freeSkills, skills, freeXP, lastSkillLevel, roleLevel, sourceID, roles):
         self.__group = group
         self.__isPremium = isPremium
         learntSkills = freeSkills + skills
@@ -149,8 +157,14 @@ class _TokenRecruitInfo(_BaseRecruitInfo):
         needXP = sum((TankmanDescr.levelUpXpCost(level, len(skills) + 1) for level in xrange(0, tankmen.MAX_SKILL_LEVEL)))
         hasNewSkill = freeXP >= needXP
         nation = nations[0] if nations else NONE_INDEX
-        roles, firstName, lastName, icon, isFemale = self.__parseTankmanData(nation)
-        super(_TokenRecruitInfo, self).__init__(tokenName, expiryTime, nationNames, learntSkills, freeXP, roleLevel, lastSkillLevel, firstName, lastName, roles, icon, sourceID, isFemale, hasNewSkill)
+        allowedRoles, firstName, lastName, icon, isFemale = self.__parseTankmanData(nation)
+        if roles:
+            for role in roles:
+                if skills_constants.SKILL_NAMES[role] not in allowedRoles:
+                    raise SoftException('Requested role (%s) is not in the list of allowed roles (%s)' % (skills_constants.SKILL_NAMES[role], ', '.join(map(str, allowedRoles))))
+
+            allowedRoles = [ skills_constants.SKILL_NAMES[role] for role in roles ]
+        super(_TokenRecruitInfo, self).__init__(tokenName, expiryTime, nationNames, learntSkills, freeXP, roleLevel, lastSkillLevel, firstName, lastName, allowedRoles, icon, sourceID, isFemale, hasNewSkill)
 
     def getLabel(self):
         label = TOOLTIPS.getNotRecruitedTankmanEventLabel(self._sourceID)
@@ -158,6 +172,7 @@ class _TokenRecruitInfo(_BaseRecruitInfo):
 
     def getDescription(self):
         description = TOOLTIPS.getNotRecruitedTankmanEventDesc(self._sourceID)
+        description = self.__getCustomDescription(description)
         return description if description is not None else TOOLTIPS.getNotRecruitedTankmanEventDesc(_TANKMAN_NAME)
 
     def getFullUserNameByNation(self, nationID):
@@ -166,6 +181,19 @@ class _TokenRecruitInfo(_BaseRecruitInfo):
 
     def getGroupName(self):
         return self.__group
+
+    def __getFirstQuestNumber(self, quests):
+        questNumbers = [ int(filter(str.isdigit, q.getID())) for q in quests ]
+        return first(questNumbers)
+
+    def __getCustomDescription(self, description):
+        if self._sourceID == RecruitSourceID.CZECH_WOMAN:
+            questNumber = self.__getFirstQuestNumber(self._eventsCache.getQuestsByTokenBonus(self.getRecruitID()))
+            roles = self.getRoles()
+            role = first(roles)
+            description = _ms(description, questNumber=questNumber, role=_ms(ITEM_TYPES.tankman_roles(role)))
+            return description
+        return description
 
     def __parseTankmanData(self, nationID):
         config = tankmen.getNationGroups(nationID, self.__isPremium)

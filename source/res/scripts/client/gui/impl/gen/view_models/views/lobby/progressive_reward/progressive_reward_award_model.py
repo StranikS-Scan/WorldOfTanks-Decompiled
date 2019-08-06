@@ -54,6 +54,18 @@ class ProgressiveRewardAwardModel(ViewModel):
     def setInitialCongratsType(self, value):
         self._setString(7, value)
 
+    def getFestivalElementsCount(self):
+        return self._getNumber(8)
+
+    def setFestivalElementsCount(self, value):
+        self._setNumber(8, value)
+
+    def getRibbonHaveBigAward(self):
+        return self._getBool(9)
+
+    def setRibbonHaveBigAward(self, value):
+        self._setBool(9, value)
+
     def _initialize(self):
         super(ProgressiveRewardAwardModel, self)._initialize()
         self._addStringProperty('awardType', '')
@@ -64,6 +76,8 @@ class ProgressiveRewardAwardModel(ViewModel):
         self._addArrayProperty('rewards', Array())
         self._addStringProperty('specialRewardType', '')
         self._addStringProperty('initialCongratsType', '')
+        self._addNumberProperty('festivalElementsCount', 0)
+        self._addBoolProperty('ribbonHaveBigAward', False)
         self.onCloseAction = self._addCommand('onCloseAction')
         self.onSpecialActionBtnClick = self._addCommand('onSpecialActionBtnClick')
         self.onDestroyEvent = self._addCommand('onDestroyEvent')

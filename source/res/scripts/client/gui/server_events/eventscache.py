@@ -286,6 +286,12 @@ class EventsCache(IEventsCache):
         battles = self.__getEventBattles()
         return EventBattles(battles.get('vehicleTags', set()), battles.get('vehicles', []), bool(battles.get('enabled', 0)), battles.get('arenaTypeID')) if battles else EventBattles(set(), [], 0, None)
 
+    def getQuestByID(self, qID):
+        questsData = self.__getQuestsData()
+        questsData.update(self.__getPersonalQuestsData())
+        questsData.update(self.__getPersonalMissionsHiddenQuests())
+        return self._makeQuest(qID, questsData[qID]) if qID in questsData else None
+
     def isEventEnabled(self):
         return len(self.__getEventBattles()) > 0 and len(self.getEventVehicles()) > 0
 

@@ -45,6 +45,10 @@ class IItemsRequester(requesters.IRequester):
         raise NotImplementedError
 
     @property
+    def festivity(self):
+        raise NotImplementedError
+
+    @property
     def tokens(self):
         raise NotImplementedError
 

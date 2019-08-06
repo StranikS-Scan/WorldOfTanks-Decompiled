@@ -7,22 +7,22 @@ class TextButtonModel(ButtonCommonModel):
     __slots__ = ()
 
     def getLabelAdditional(self):
-        return self._getResource(5)
+        return self._getResource(6)
 
     def setLabelAdditional(self, value):
-        self._setResource(5, value)
+        self._setResource(6, value)
 
     def getLabelAdditionalString(self):
-        return self._getString(6)
+        return self._getString(7)
 
     def setLabelAdditionalString(self, value):
-        self._setString(6, value)
+        self._setString(7, value)
 
     def getImage(self):
-        return self._getResource(7)
+        return self._getResource(8)
 
     def setImage(self, value):
-        self._setResource(7, value)
+        self._setResource(8, value)
 
     def _initialize(self):
         super(TextButtonModel, self)._initialize()

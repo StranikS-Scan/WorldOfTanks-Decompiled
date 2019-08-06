@@ -42,9 +42,10 @@ def packBlockDataItem(linkage, data, padding=None, blockWidth=0):
     return data
 
 
-def packTextBlockData(text, useHtml=True, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_TEXT_BLOCK_LINKAGE, padding=None):
+def packTextBlockData(text, useHtml=True, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_TEXT_BLOCK_LINKAGE, padding=None, cutWidth=False):
     return packBlockDataItem(linkage, {'text': text,
-     'useHtml': useHtml}, padding)
+     'useHtml': useHtml,
+     'cutByTextWidth': cutWidth}, padding)
 
 
 def packTextWithBgBlockData(text, useHtml=True, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_TEXT_WITH_BG_BLOCK_LINKAGE, padding=None, bgColor=-1, align=BLOCKS_TOOLTIP_TYPES.ALIGN_LEFT):

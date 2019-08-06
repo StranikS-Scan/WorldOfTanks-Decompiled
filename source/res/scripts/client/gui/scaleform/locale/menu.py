@@ -1910,6 +1910,7 @@ class MENU(object):
     TIMELEFT_FULL_LESSMIN = '#menu:timeLeft/full/lessMin'
     PRIMETIME_SERVERS = '#menu:primeTime/servers'
     PRIMETIME_SERVER = '#menu:primeTime/server'
+    COUNTER_NEWCOUNTER = '#menu:counter/newCounter'
     BOOSTER_USERNAME_BOOSTER_FL_XP = '#menu:booster/userName/booster_fl_xp'
     BOOSTER_INFLUENCE_BOOSTER_FL_XP = '#menu:booster/influence/booster_fl_xp'
     BOOSTER_DESCRIPTION_BOOSTER_FL_XP = '#menu:booster/description/booster_fl_xp'

@@ -6,6 +6,7 @@ class QUESTS(object):
     BONUSES_COMPENSATION = '#quests:bonuses/compensation'
     MISSIONS_TAB_KURSK = '#quests:missions/tab/kursk'
     MISSIONS_TAB_MARATHONS = '#quests:missions/tab/marathons'
+    MISSIONS_TAB_FESTIVALMARATHON = '#quests:missions/tab/festivalMarathon'
     MISSIONS_TAB_EVENTBOARDS = '#quests:missions/tab/eventBoards'
     MISSIONS_TAB_CATEGORIES = '#quests:missions/tab/categories'
     MISSIONS_TAB_CURRENTVEHICLE = '#quests:missions/tab/currentVehicle'
@@ -996,10 +997,13 @@ class QUESTS(object):
     MISSIONS_AWARDS_MERGED = '#quests:missions/awards/merged'
     MISSIONS_TAB_LABEL_KURSK = '#quests:missions/tab/label/kursk'
     MISSIONS_TAB_LABEL_MARATHONS = '#quests:missions/tab/label/marathons'
+    MISSIONS_TAB_LABEL_FESTIVALMARATHON = '#quests:missions/tab/label/festivalMarathon'
     MISSIONS_TAB_KURSK_HEADER = '#quests:missions/tab/kursk/header'
     MISSIONS_TAB_KURSK_BODY = '#quests:missions/tab/kursk/body'
     MISSIONS_TAB_MARATHONS_HEADER = '#quests:missions/tab/marathons/header'
     MISSIONS_TAB_MARATHONS_BODY = '#quests:missions/tab/marathons/body'
+    MISSIONS_TAB_FESTIVALMARATHON_HEADER = '#quests:missions/tab/festivalMarathon/header'
+    MISSIONS_TAB_FESTIVALMARATHON_BODY = '#quests:missions/tab/festivalMarathon/body'
     MISSIONS_TAB_MISSIONS_HEADER = '#quests:missions/tab/missions/header'
     MISSIONS_TAB_MISSIONS_BODY = '#quests:missions/tab/missions/body'
     MISSIONS_TAB_LABEL_MISSIONS = '#quests:missions/tab/label/missions'
@@ -1201,6 +1205,7 @@ class QUESTS(object):
     BONUSNAME_COMPLETIONTOKENS_7_4 = '#quests:bonusName/completionTokens_7_4'
     BONUSNAME_PROJECTIONDECAL = '#quests:bonusName/projectionDecal'
     BONUSNAME_PERSONALNUMBER = '#quests:bonusName/personalNumber'
+    BONUSNAME_FESTIVALTICKETS = '#quests:bonusName/festivalTickets'
     ACTION_AUTO_CALENDAR = '#quests:action/auto/calendar'
     ACTION_FULL_CALENDAR = '#quests:action/full/calendar'
     ACTION_HERO_FULL_CALENDAR = '#quests:action/hero/full/calendar'
@@ -1633,7 +1638,8 @@ class QUESTS(object):
      BONUSNAME_COMPLETIONTOKENS_7_3,
      BONUSNAME_COMPLETIONTOKENS_7_4,
      BONUSNAME_PROJECTIONDECAL,
-     BONUSNAME_PERSONALNUMBER)
+     BONUSNAME_PERSONALNUMBER,
+     BONUSNAME_FESTIVALTICKETS)
     ACTION_ENUM = (ACTION_AUTO_CALENDAR,
      ACTION_FULL_CALENDAR,
      ACTION_HERO_FULL_CALENDAR,

@@ -4,6 +4,7 @@ import logging
 from collections import namedtuple
 from math import ceil
 from constants import LOOTBOX_TOKEN_PREFIX, PREMIUM_ENTITLEMENTS
+from festivity.festival.item_info import FestivalItemInfo
 from gui.Scaleform.genConsts.SLOT_HIGHLIGHT_TYPES import SLOT_HIGHLIGHT_TYPES
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.Scaleform.locale.QUESTS import QUESTS
@@ -13,6 +14,7 @@ from gui.Scaleform.settings import ICONS_SIZES
 from gui.impl import backport
 from gui.impl.gen import R
 from gui.ranked_battles.constants import YEAR_POINTS_TOKEN
+from bonus_constants import BonusName
 from gui.server_events.formatters import parseComplexToken, TOKEN_SIZES
 from gui.server_events.recruit_helper import getRecruitInfo
 from gui.shared.formatters import text_styles
@@ -136,6 +138,8 @@ def getDefaultFormattersMap():
      'finalBlueprints': BlueprintBonusFormatter(),
      'crewSkins': CrewSkinsBonusFormatter(),
      'crewBooks': CrewBooksBonusFormatter(),
+     BonusName.FESTIVAL_TICKETS: simpleBonusFormatter,
+     BonusName.FESTIVAL_ITEMS: FestivalItemsFormatter(),
      'slots': countableIntegralBonusFormatter,
      'berths': countableIntegralBonusFormatter}
 
@@ -180,6 +184,12 @@ def getLootboxesFormatterMap():
     return mapping
 
 
+def getPostBattleFormatterMap():
+    mapping = getLootboxesFormatterMap()
+    mapping.update({'blueprints': BlueprintPostBattleBonusFormatter()})
+    return mapping
+
+
 def getRankedFormatterMap():
     tokenBonusFormatter = RankedPointFormatter()
     mapping = getDefaultFormattersMap()
@@ -210,6 +220,10 @@ def getPackRentVehiclesAwardPacker():
 
 def getLootboxesAwardsPacker():
     return AwardsPacker(getLootboxesFormatterMap())
+
+
+def getPostBattleAwardsPacker():
+    return AwardsPacker(getPostBattleFormatterMap())
 
 
 def getRankedAwardsPacker():
@@ -314,8 +328,10 @@ class QuestsBonusComposer(object):
     def getPreformattedBonuses(self, bonuses):
         return self.__bonusFormatter.format(bonuses)
 
-    def getFormattedBonuses(self, bonuses, size=AWARDS_SIZES.SMALL):
+    def getFormattedBonuses(self, bonuses, size=AWARDS_SIZES.SMALL, compareMethod=None):
         preformattedBonuses = self.getPreformattedBonuses(bonuses)
+        if compareMethod is not None:
+            preformattedBonuses.sort(cmp=compareMethod)
         return self._packBonuses(preformattedBonuses, size)
 
     def _packBonuses(self, preformattedBonuses, size):
@@ -392,7 +408,8 @@ class SimpleBonusFormatter(AwardFormatter):
     def _getImages(cls, bonus):
         result = {}
         for size in AWARDS_SIZES.ALL():
-            result[size] = AWARD_IMAGES.get(size, {}).get(bonus.getName())
+            image = AWARD_IMAGES.get(size, {}).get(bonus.getName())
+            result[size] = image or RES_ICONS.getBonusIcon(size, bonus.getName())
 
         return result
 
@@ -1144,14 +1161,20 @@ class EpicDossierBonusFormatter(DossierBonusFormatter):
 class BlueprintBonusFormatter(SimpleBonusFormatter):
 
     def _format(self, bonuses):
-        return [PreformattedBonus(bonusName=bonuses.getBlueprintName(), label=bonuses.formatBlueprintValue(), userName='', labelFormatter=self._getLabelFormatter(bonuses), images=self.__getIcons(bonuses.getImage()), tooltip=bonuses.getTooltip(), align=LABEL_ALIGN.CENTER, isCompensation=self._isCompensation(bonuses), specialArgs=[bonuses.getBlueprintSpecialArgs()], isSpecial=True, specialAlias=bonuses.getBlueprintSpecialAlias())] * bonuses.getCount()
+        return [PreformattedBonus(bonusName=bonuses.getBlueprintName(), label=bonuses.formatBlueprintValue(), userName='', labelFormatter=self._getLabelFormatter(bonuses), images=self._getIcons(bonuses.getImage()), tooltip=bonuses.getTooltip(), align=LABEL_ALIGN.CENTER, isCompensation=self._isCompensation(bonuses), specialArgs=[bonuses.getBlueprintSpecialArgs()], isSpecial=True, specialAlias=bonuses.getBlueprintSpecialAlias())] * bonuses.getCount()
 
-    def __getIcons(self, iconPath):
+    def _getIcons(self, iconPath):
         res = {}
         for size in AWARDS_SIZES.ALL():
             res[size] = iconPath
 
         return res
+
+
+class BlueprintPostBattleBonusFormatter(BlueprintBonusFormatter):
+
+    def _format(self, bonuses):
+        return [PreformattedBonus(bonusName=bonuses.getBlueprintName(), label=formatCountLabel(bonuses.getCount()), userName='', labelFormatter=self._getLabelFormatter(bonuses), images=self._getIcons(bonuses.getImage()), tooltip=bonuses.getTooltip(), align=LABEL_ALIGN.RIGHT, isCompensation=self._isCompensation(bonuses), specialArgs=[bonuses.getBlueprintSpecialArgs()], isSpecial=True, specialAlias=bonuses.getBlueprintSpecialAlias())]
 
 
 class CrewSkinsBonusFormatter(SimpleBonusFormatter):
@@ -1192,7 +1215,7 @@ class CrewSkinsBonusFormatter(SimpleBonusFormatter):
             sizePath = R.images.gui.maps.icons.quests.bonuses.dyn(size, None)
             if sizePath is not None:
                 img = sizePath.dyn(item.itemTypeName + str(rarity))
-                if img is not None:
+                if img is not None and img.exists():
                     result[size] = backport.image(img())
 
         return result
@@ -1223,7 +1246,7 @@ class CrewBooksBonusFormatter(SimpleBonusFormatter):
             sizePath = R.images.gui.maps.icons.crewBooks.books.dyn(size, None)
             if sizePath is not None:
                 img = sizePath.dyn(item.getBonusIconName())
-                if img is not None:
+                if img is not None and img.exists():
                     result[size] = backport.image(img())
 
         return result
@@ -1243,3 +1266,29 @@ class CrewSkinsCompensationFormatter(CrewSkinsBonusFormatter):
         defaultStr = text_styles.stats(backport.text(R.strings.item_types.crewSkins.itemType.dyn(Rarity.STRINGS[item.getRarity()])()))
         formattedStr = formatCountLabel(count=compensatedNumber, defaultStr=defaultStr)
         return formattedStr
+
+
+class FestivalItemsFormatter(SimpleBonusFormatter):
+
+    def _format(self, bonus):
+        result = []
+        for itemID, count in bonus.getValue().iteritems():
+            result.append(self.__itemFormat(bonus, itemID, count))
+
+        return result
+
+    def __itemFormat(self, bonus, itemID, count):
+        festItem = FestivalItemInfo(itemID)
+        return PreformattedBonus(isSpecial=True, bonusName=bonus.getName(), images=self._getImages(festItem), label='', userName=self._getUserName(festItem), specialArgs=[itemID, count, False], specialAlias=TOOLTIPS_CONSTANTS.FESTIVAL_ITEM)
+
+    @classmethod
+    def _getImages(cls, festItem):
+        result = {}
+        for size in AWARDS_SIZES.ALL():
+            result[size] = backport.image(R.images.gui.maps.icons.festival.bonuses.dyn(size).dyn(festItem.getType())())
+
+        return result
+
+    @classmethod
+    def _getUserName(cls, festItem):
+        return backport.text(festItem.getNameResID())

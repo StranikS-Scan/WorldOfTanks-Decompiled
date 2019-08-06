@@ -459,7 +459,9 @@ class Source(object):
          'vehicleChoice',
          'crewSkin',
          'blueprint',
-         'blueprintAny'}
+         'blueprintAny',
+         'festivalTickets',
+         'festivalItem'}
         if eventType in (EVENT_TYPE.BATTLE_QUEST, EVENT_TYPE.PERSONAL_QUEST, EVENT_TYPE.NT_QUEST):
             bonusTypes.update(('xp', 'tankmenXP', 'xpFactor', 'creditsFactor', 'freeXPFactor', 'tankmenXPFactor'))
         if eventType in (EVENT_TYPE.NT_QUEST,):

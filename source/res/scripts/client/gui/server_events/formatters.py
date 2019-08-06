@@ -9,6 +9,7 @@ from gui import makeHtmlString
 from gui.Scaleform.locale.QUESTS import QUESTS
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.impl import backport
+from gui.Scaleform.genConsts.QUEST_AWARD_BLOCK_ALIASES import QUEST_AWARD_BLOCK_ALIASES
 from gui.shared.formatters import text_styles, icons as gui_icons
 from gui.shared.money import Currency
 from helpers import i18n
@@ -254,6 +255,16 @@ def packSimpleBonusesBlock(bonusesList, endlineSymbol=''):
      'separator': ', ',
      'ellipsis': '..',
      'endline': endlineSymbol}
+    return UiElement(data)
+
+
+def packNewStyleBonusesBlock(bonusesList, endlineSymbol=''):
+    data = {'linkage': QUEST_AWARD_BLOCK_ALIASES.QUEST_BIG_ICON_AWARD_BLOCK,
+     'items': bonusesList,
+     'separator': ', ',
+     'ellipsis': '..',
+     'endline': endlineSymbol,
+     'showInNewLine': False}
     return UiElement(data)
 
 

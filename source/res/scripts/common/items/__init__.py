@@ -146,6 +146,8 @@ def init(preloadEverything, pricesToCollect=None):
     avatars.init()
     from items import tankmen
     tankmen.init(preloadEverything, pricesToCollect)
+    from items import festival
+    festival.init()
     return
 
 

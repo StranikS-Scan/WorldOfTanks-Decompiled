@@ -12,6 +12,11 @@ from helpers import dependency
 from account_helpers.AccountSettings import AccountSettings
 from skeletons.gui.shared import IItemsCache
 _ALL_NATIONS = -1
+_EXCLUDED_VEHICLE_CRITERIA = (~REQ_CRITERIA.IN_OWNERSHIP,
+ ~REQ_CRITERIA.VEHICLE.IS_PREMIUM_IGR,
+ ~REQ_CRITERIA.VEHICLE.PREMIUM,
+ ~REQ_CRITERIA.VEHICLE.EVENT,
+ ~REQ_CRITERIA.VEHICLE.SECRET)
 
 class LinkedSetVehicleListPopup(VehicleListPopupMeta):
     itemsCache = dependency.descriptor(IItemsCache)
@@ -68,7 +73,10 @@ class LinkedSetVehicleListPopup(VehicleListPopupMeta):
         AccountSettings.setFilter(self.__section, self.__filters)
 
     def __getVehicles(self, nation=_ALL_NATIONS, vehicleType='none'):
-        criteria = ~REQ_CRITERIA.IN_OWNERSHIP | ~REQ_CRITERIA.VEHICLE.IS_PREMIUM_IGR | REQ_CRITERIA.VEHICLE.LEVELS(self.__levelsRange) | ~REQ_CRITERIA.VEHICLE.PREMIUM
+        criteria = REQ_CRITERIA.VEHICLE.LEVELS(self.__levelsRange)
+        for crit in _EXCLUDED_VEHICLE_CRITERIA:
+            criteria |= crit
+
         if nation != _ALL_NATIONS:
             criteria |= REQ_CRITERIA.NATIONS([self.__filters['nation']])
         if vehicleType != 'none':

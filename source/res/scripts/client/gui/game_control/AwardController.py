@@ -38,7 +38,7 @@ from gui.server_events import events_dispatcher as quests_events, recruit_helper
 from gui.server_events.events_dispatcher import showLootboxesAward, showPiggyBankRewardWindow
 from gui.server_events.finders import PM_FINAL_TOKEN_QUEST_IDS_BY_OPERATION_ID, getBranchByOperationId, CHAMPION_BADGES_BY_BRANCH, CHAMPION_BADGE_AT_OPERATION_ID
 from gui.shared import EVENT_BUS_SCOPE, g_eventBus, events
-from gui.shared.event_dispatcher import showProgressiveRewardAwardWindow
+from gui.shared.event_dispatcher import showProgressiveRewardAwardWindow, showFestivalAwardWindow
 from gui.shared.events import PersonalMissionsEvent
 from gui.shared.gui_items.dossier.factories import getAchievementFactory
 from gui.shared.utils import isPopupsWindowsOpenDisabled
@@ -47,12 +47,13 @@ from gui.shared.utils.requesters import REQ_CRITERIA
 from gui.sounds.sound_constants import SPEAKERS_CONFIG
 from helpers import dependency
 from helpers import i18n
-from items import ITEM_TYPE_INDICES, getTypeOfCompactDescr, vehicles as vehicles_core
+from items import ITEM_TYPE_INDICES, getTypeOfCompactDescr, vehicles as vehicles_core, festival
 from items.components.crew_books_constants import CREW_BOOK_DISPLAYED_AWARDS_COUNT
 from messenger.formatters import TimeFormatter
 from messenger.formatters.service_channel import TelecomReceivedInvoiceFormatter
 from messenger.proto.events import g_messengerEvents
 from skeletons.account_helpers.settings_core import ISettingsCore
+from skeletons.festival import IFestivalController
 from skeletons.gui.app_loader import IAppLoader
 from skeletons.gui.game_control import IAwardController, IRankedBattlesController, IBootcampController
 from skeletons.gui.goodies import IGoodiesCache
@@ -102,7 +103,8 @@ class AwardController(IAwardController, IGlobalListener):
          EliteWindowHandler(self),
          LootBoxByInvoiceHandler(self),
          ProgressiveRewardHandler(self),
-         PiggyBankOpenHandler(self)]
+         PiggyBankOpenHandler(self),
+         FestivalAwardHandler(self)]
         super(AwardController, self).__init__()
         self.__delayedHandlers = []
         self.__isLobbyLoaded = False
@@ -1105,3 +1107,33 @@ def _getBlueprintActualBonus(data, quest):
         actualQuest.getData()['bonus'].update({'blueprints': blueprintActualBonus})
         return actualQuest
     return quest
+
+
+class FestivalAwardHandler(ServiceChannelHandler):
+    __festController = dependency.descriptor(IFestivalController)
+
+    def __init__(self, awardCtrl):
+        super(FestivalAwardHandler, self).__init__(SYS_MESSAGE_TYPE.tokenQuests.index(), awardCtrl)
+
+    def _showAward(self, ctx):
+        _, message = ctx
+        completedQuestUniqueIDs = message.data.get('completedQuestIDs', set())
+        festRewardsTokenIDs = {}
+        for descriptor in festival.g_cache.getProgressRewards():
+            if descriptor.getShowRewards():
+                festRewardsTokenIDs.update({descriptor.getTokenID(): descriptor.getReachValue()})
+
+        allQuests = self.eventsCache.getAllQuests()
+        for uniqueQuestID in completedQuestUniqueIDs:
+            if uniqueQuestID not in festRewardsTokenIDs:
+                continue
+            bonus = allQuests[uniqueQuestID].getData().get('bonus', {})
+            formattedBonuses, specialRewardType = getProgressiveRewardBonuses(bonus)
+            reachValue = festRewardsTokenIDs[uniqueQuestID]
+            self._showCompletedCollection(reachValue)
+            if formattedBonuses:
+                showFestivalAwardWindow(formattedBonuses, specialRewardType, reachValue)
+
+    def _showCompletedCollection(self, reachValue):
+        if reachValue == self.__festController.getTotalItemsCount():
+            SystemMessages.pushMessage('', type=SystemMessages.SM_TYPE.FestivalCollectionCompleted)

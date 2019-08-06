@@ -9,6 +9,10 @@ class LootCongratsTypes(ViewModel):
     INIT_CONGRAT_TYPE_USUAL = 'UsualCongrats'
     INIT_CONGRAT_TYPE_PROGRESSIVE_REWARDS = 'ProgressiveRewardCongrats'
     INIT_CONGRAT_TYPE_CREW_BOOKS = 'CrewBookCongrats'
+    INIT_CONGRAT_TYPE_FESTIVAL_AWARD = 'FestivalAwardsCongrats'
+    CONGRAT_TYPE_CREWSKINS = 'CrewskinsCongrats'
+    CONGRAT_FESTIVAL_DOGTAG_PART = 'FestivalDogtagPartCongrats'
+    CONGRAT_UNIQUE_STYLE = 'UniqueStyleCongrats'
 
     def _initialize(self):
         super(LootCongratsTypes, self)._initialize()

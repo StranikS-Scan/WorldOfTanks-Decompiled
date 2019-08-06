@@ -2,9 +2,11 @@
 # Embedded file name: scripts/client/gui/shared/gui_items/processors/plugins.py
 import logging
 from collections import namedtuple
-from adisp import process, async
+import adisp
+import async
 from account_helpers import isLongDisconnectedFromCenter
 from account_helpers.AccountSettings import AccountSettings
+from gui.Scaleform.Waiting import Waiting
 from items import tankmen
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.daapi.view.dialogs.missions_dialogs_meta import UseAwardSheetDialogMeta
@@ -68,13 +70,13 @@ class AsyncValidator(ProcessorPlugin):
     def __init__(self, isEnabled=True):
         super(AsyncValidator, self).__init__(self.TYPE.VALIDATOR, True, isEnabled=isEnabled)
 
-    @async
-    @process
+    @adisp.async
+    @adisp.process
     def validate(self, callback):
         result = yield self._validate()
         callback(result)
 
-    @async
+    @adisp.async
     def _validate(self, callback):
         callback(makeSuccess())
 
@@ -84,13 +86,13 @@ class AsyncConfirmator(ProcessorPlugin):
     def __init__(self, isEnabled=True):
         super(AsyncConfirmator, self).__init__(self.TYPE.CONFIRMATOR, True, isEnabled=isEnabled)
 
-    @async
-    @process
+    @adisp.async
+    @adisp.process
     def confirm(self, callback):
         result = yield self._confirm()
         callback(result)
 
-    @async
+    @adisp.async
     def _confirm(self, callback):
         callback(makeSuccess())
 
@@ -388,7 +390,7 @@ class DialogAbstractConfirmator(AsyncConfirmator):
     def _makeMeta(self):
         raise NotImplementedError
 
-    @async
+    @adisp.async
     def _showDialog(self, callback):
         callback(None)
         return
@@ -396,8 +398,8 @@ class DialogAbstractConfirmator(AsyncConfirmator):
     def _activeHandler(self):
         return self.activeHandler()
 
-    @async
-    @process
+    @adisp.async
+    @adisp.process
     def _confirm(self, callback):
         yield lambda callback: callback(None)
         if self._activeHandler():
@@ -448,8 +450,8 @@ class TankmanOperationConfirmator(I18nMessageAbstractConfirmator):
         self.__previousPrice, _ = restore_contoller.getTankmenRestoreInfo(tankman)
         return
 
-    @async
-    @process
+    @adisp.async
+    @adisp.process
     def _confirm(self, callback):
         if self._activeHandler():
             isOk = yield DialogsInterface.showDialog(meta=self._makeMeta())
@@ -650,8 +652,8 @@ class CheckBoxConfirmator(DialogAbstractConfirmator):
     def _activeHandler(self):
         return self._getSetting().get(self.settingFieldName)
 
-    @async
-    @process
+    @adisp.async
+    @adisp.process
     def _confirm(self, callback):
         yield lambda callback: callback(None)
         if self._activeHandler():
@@ -830,3 +832,35 @@ class BadgesValidator(SyncValidator):
                 return makeError('NOT_UNLOCKED_BADGE')
 
         return makeSuccess()
+
+
+class AsyncDialogConfirmator(AsyncConfirmator):
+
+    def __init__(self, dialogMethod, *args, **kwargs):
+        super(AsyncDialogConfirmator, self).__init__()
+        self.__dialogMethod = dialogMethod
+        self.__dialogArgs = args
+        self.__dialogKwargs = kwargs
+        self.__dialogResult = None
+        return
+
+    def getResult(self):
+        return self.__dialogResult
+
+    @adisp.async
+    def _confirm(self, callback):
+        self._makeConfirm(callback)
+
+    @async.async
+    def _makeConfirm(self, callback):
+        Waiting.suspend()
+        self.__dialogResult = yield async.await(self.__dialogMethod(*self.__dialogArgs, **self.__dialogKwargs))
+        Waiting.resume()
+        if isinstance(self.__dialogResult, tuple):
+            result, _ = self.__dialogResult
+        else:
+            result = self.__dialogResult
+        if result:
+            callback(makeSuccess())
+            return
+        callback(makeError())

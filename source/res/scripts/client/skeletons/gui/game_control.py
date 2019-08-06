@@ -755,7 +755,7 @@ class IMarathonEventsController(IGameController):
     def getPrimaryMarathon(self):
         raise NotImplementedError
 
-    def getFirstAvailableMarathon(self):
+    def getFirstEnabledMarathon(self):
         raise NotImplementedError
 
     def getPrefix(self, eventID):
@@ -771,6 +771,9 @@ class IMarathonEventsController(IGameController):
         raise NotImplementedError
 
     def isAnyActive(self):
+        raise NotImplementedError
+
+    def doesShowAnyMissionsTab(self):
         raise NotImplementedError
 
 

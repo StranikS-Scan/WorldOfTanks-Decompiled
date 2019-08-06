@@ -145,6 +145,9 @@ class EpicBattlePage(EpicBattlePageMeta, BattleGUIKeyHandler):
         self.__activeState = PageStates.NONE
         return
 
+    def _definePostmortemPanel(self):
+        self.as_useEventPostmortemPanelS(False)
+
     def _invalidateState(self):
         targetState = PageStates.NONE
         if self.__topState != PageStates.NONE:

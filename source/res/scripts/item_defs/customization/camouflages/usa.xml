@@ -4753,6 +4753,143 @@
   </itemGroup>
   <itemGroup>
     <userString>	#vehicle_customization:camouflage/opaque	</userString>
+    <season>	all	</season>
+    <historical>	true	</historical>
+    <priceGroup>	camouflages 50g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <nations>	usa	</nations>
+      </include>
+      <exclude>
+        <vehicles>	usa:A63_M46_Patton_KR usa:A117_T26E5_Patriot usa:A13_T34_hvy_BF usa:A115_Chrysler_K_GF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <camouflage>
+      <id>	669	</id>
+      <texture>	vehicles/russian/Camouflage/tunisia_dazzle.dds	</texture>
+      <description>	#vehicle_customization:camouflage/tunisia_dazzle/description	</description>
+      <scales>	1.3 1 0.7	</scales>
+      <userString>	#vehicle_customization:camouflage/tunisia_dazzle/label	</userString>
+      <tags>	rare	</tags>
+      <requiredToken>	token:t28htc:camouflage	</requiredToken>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <palettes>
+        <palette>
+          <c0>	85 89 62 255	</c0>
+          <c1>	140 137 133 255	</c1>
+          <c2>	0 0 255 0	</c2>
+          <c3>	96 85 87 0	</c3>
+        </palette>
+      </palettes>
+      <rotation>
+        <HULL>	0.448724	</HULL>
+        <TURRET>	0.448724	</TURRET>
+        <GUN>	0.448724	</GUN>
+      </rotation>
+      <tiling>
+        <usa:A01_T1_Cunningham>	2.75 2.75 0.31 0.51	</usa:A01_T1_Cunningham>
+        <usa:A02_M2_lt>	3.08 3.08 3.35 3.66	</usa:A02_M2_lt>
+        <usa:A03_M3_Stuart>	3 3 0.67 0.54	</usa:A03_M3_Stuart>
+        <usa:A04_M3_Grant>	3.8 3.8 0.51 0.57	</usa:A04_M3_Grant>
+        <usa:A05_M4_Sherman>	4.7 4.7 0.29 3.55	</usa:A05_M4_Sherman>
+        <usa:A06_M4A3E8_Sherman>	4.15 4.15 2.8 4.58	</usa:A06_M4A3E8_Sherman>
+        <usa:A07_T20>	4 4 6.28 5.74	</usa:A07_T20>
+        <usa:A09_T1_hvy>	3.65 3.65 1.84 1.99	</usa:A09_T1_hvy>
+        <usa:A100_T49>	1.5 1.5 6.4 2.95	</usa:A100_T49>
+        <usa:A01_T1_Cunningham0>	2.8 2.8 2.4 0.44	</usa:A01_T1_Cunningham0>
+        <usa:A01_T1_Cunningham1>	1.8 1.8 2.1 0.22	</usa:A01_T1_Cunningham1>
+        <usa:A01_T1_Cunningham2>	2.5 2.5 1.7 -0.06	</usa:A01_T1_Cunningham2>
+        <usa:A01_T1_Cunningham3>	2.18 2.18 2.69 1.17	</usa:A01_T1_Cunningham3>
+        <usa:A01_T1_Cunningham4>	3.4 3.4 5.03 7.11	</usa:A01_T1_Cunningham4>
+        <usa:A01_T1_Cunningham5>	3 3 1.37 0.17	</usa:A01_T1_Cunningham5>
+        <usa:A01_T1_Cunningham6>	2.4 2.4 0.68 1.56	</usa:A01_T1_Cunningham6>
+        <usa:A01_T1_Cunningham7>	1.47 1.47 0.21 2.25	</usa:A01_T1_Cunningham7>
+        <usa:A01_T1_Cunningham8>	3 3 2.49 1.17	</usa:A01_T1_Cunningham8>
+        <usa:A01_T1_Cunningham9>	2.02 2.02 0.000000 0.19	</usa:A01_T1_Cunningham9>
+        <usa:A02_M2_lt0>	3.4 3.4 1.36 2.07	</usa:A02_M2_lt0>
+        <usa:A02_M2_lt1>	0.8 0.8 5.11 2.1	</usa:A02_M2_lt1>
+        <usa:A02_M2_lt2>	0.8 0.8 5.11 2.1	</usa:A02_M2_lt2>
+        <usa:A02_M2_lt3>	1.55 1.55 1 1.44	</usa:A02_M2_lt3>
+        <usa:A02_M2_lt4>	1.51 1.51 0.2 0.92	</usa:A02_M2_lt4>
+        <usa:A02_M2_lt5>	1.8 1.8 6.12 0.38	</usa:A02_M2_lt5>
+        <usa:A02_M2_lt6>	1.25 1.25 2.02 5.99	</usa:A02_M2_lt6>
+        <usa:A02_M2_lt7>	2.51 2.51 -0.6 0.28	</usa:A02_M2_lt7>
+        <usa:A02_M2_lt8>	1.3 1.3 5.65 1.46	</usa:A02_M2_lt8>
+        <usa:A02_M2_lt9>	4.08 4.08 0.69 0.21	</usa:A02_M2_lt9>
+        <usa:A03_M3_Stuart0>	1.7 1.7 0.34 0.98	</usa:A03_M3_Stuart0>
+        <usa:A03_M3_Stuart1>	1.2 1.2 4.66 1.37	</usa:A03_M3_Stuart1>
+        <usa:A03_M3_Stuart2>	3.4 3.4 1.75 0.72	</usa:A03_M3_Stuart2>
+        <usa:A03_M3_Stuart3>	2.4 2.4 0.47 0.48	</usa:A03_M3_Stuart3>
+        <usa:A03_M3_Stuart4>	4 4 2.13 1.36	</usa:A03_M3_Stuart4>
+        <usa:A03_M3_Stuart5>	1.7 1.7 0.34 0.98	</usa:A03_M3_Stuart5>
+        <usa:A03_M3_Stuart7>	2.4 2.4 0.4 2.31	</usa:A03_M3_Stuart7>
+        <usa:A03_M3_Stuart8>	3 3 1.82 3.11	</usa:A03_M3_Stuart8>
+        <usa:A03_M3_Stuart9>	3 3 3.62 4.22	</usa:A03_M3_Stuart9>
+        <usa:A04_M3_Grant0>	3 3 3.62 4.22	</usa:A04_M3_Grant0>
+        <usa:A04_M3_Grant1>	3 3 3.62 4.22	</usa:A04_M3_Grant1>
+        <usa:A04_M3_Grant2>	2.15 2.15 2.33 3.35	</usa:A04_M3_Grant2>
+        <usa:A04_M3_Grant3>	3 3 6.36 3.78	</usa:A04_M3_Grant3>
+        <usa:A04_M3_Grant4>	1.6 1.6 2.84 3.11	</usa:A04_M3_Grant4>
+        <usa:A04_M3_Grant5>	3.5 3.5 2.19 0.93	</usa:A04_M3_Grant5>
+        <usa:A04_M3_Grant6>	3 3 1.36 1.51	</usa:A04_M3_Grant6>
+        <usa:A04_M3_Grant7>	2.4 2.4 2.85 0.99	</usa:A04_M3_Grant7>
+        <usa:A04_M3_Grant8>	2.93 2.93 4.64 5.07	</usa:A04_M3_Grant8>
+        <usa:A04_M3_Grant9>	2.3 2.3 3.8 5.34	</usa:A04_M3_Grant9>
+        <usa:A05_M4_Sherman0>	2.4 2.4 8.62 4.51	</usa:A05_M4_Sherman0>
+        <usa:A05_M4_Sherman1>	3.3 3.3 5.41 2.18	</usa:A05_M4_Sherman1>
+        <usa:A05_M4_Sherman2>	2.2 2.2 5.34 2.1	</usa:A05_M4_Sherman2>
+        <usa:A05_M4_Sherman3>	2.8 2.8 7.72 1.71	</usa:A05_M4_Sherman3>
+        <usa:A05_M4_Sherman4>	2.76 2.76 5.69 1.39	</usa:A05_M4_Sherman4>
+        <usa:A05_M4_Sherman5>	2.2 2.2 1.25 0.98	</usa:A05_M4_Sherman5>
+        <usa:A05_M4_Sherman6>	2.5 2.5 1.31 2.93	</usa:A05_M4_Sherman6>
+        <usa:A05_M4_Sherman7>	1.5 1.5 2.12 0.68	</usa:A05_M4_Sherman7>
+        <usa:A05_M4_Sherman8>	3.17 3.17 4.92 4.77	</usa:A05_M4_Sherman8>
+        <usa:A05_M4_Sherman9>	2.15 2.15 7.73 5.95	</usa:A05_M4_Sherman9>
+        <usa:A06_M4A3E8_Sherman0>	3.5 3.5 2.56 1.06	</usa:A06_M4A3E8_Sherman0>
+        <usa:A06_M4A3E8_Sherman1>	1.08 1.08 3.92 7.2	</usa:A06_M4A3E8_Sherman1>
+        <usa:A06_M4A3E8_Sherman2>	1.7 1.7 5.96 6.53	</usa:A06_M4A3E8_Sherman2>
+        <usa:A06_M4A3E8_Sherman3>	1.3 1.3 0.62 2.35	</usa:A06_M4A3E8_Sherman3>
+        <usa:A06_M4A3E8_Sherman4>	3.45 3.45 2.44 2.79	</usa:A06_M4A3E8_Sherman4>
+        <usa:A06_M4A3E8_Sherman5>	2 2 6.08 5.48	</usa:A06_M4A3E8_Sherman5>
+        <usa:A06_M4A3E8_Sherman6>	1.52 1.52 4.19 2.19	</usa:A06_M4A3E8_Sherman6>
+        <usa:A06_M4A3E8_Sherman7>	3.3 3.3 2.61 0.44	</usa:A06_M4A3E8_Sherman7>
+        <usa:A06_M4A3E8_Sherman8>	3.4 3.4 3.73 2.71	</usa:A06_M4A3E8_Sherman8>
+        <usa:A06_M4A3E8_Sherman9>	2.6 2.6 3.87 6.48	</usa:A06_M4A3E8_Sherman9>
+        <usa:A07_T200>	3.74 3.74 2.96 1.15	</usa:A07_T200>
+        <usa:A07_T201>	2.6 2.6 6.35 6.16	</usa:A07_T201>
+        <usa:A07_T202>	3.1 3.1 1.06 3.52	</usa:A07_T202>
+        <usa:A07_T203>	1.46 1.46 5.68 0.5	</usa:A07_T203>
+        <usa:A07_T204>	1.46 1.46 5.68 0.5	</usa:A07_T204>
+        <usa:A07_T205>	3.25 3.25 3.05 2.49	</usa:A07_T205>
+        <usa:A07_T206>	3.1 3.1 0.91 1.21	</usa:A07_T206>
+        <usa:A07_T207>	3 3 3.5 3.55	</usa:A07_T207>
+        <usa:A07_T208>	5.7 5.7 0.42 3.22	</usa:A07_T208>
+        <usa:A07_T209>	4.5 4.5 1.29 3.67	</usa:A07_T209>
+        <usa:A09_T1_hvy0>	1.5 1.5 4.47 3.01	</usa:A09_T1_hvy0>
+        <usa:A09_T1_hvy1>	1.26 1.26 2.75 3.04	</usa:A09_T1_hvy1>
+        <usa:A09_T1_hvy2>	0.96 0.96 5.81 3.58	</usa:A09_T1_hvy2>
+        <usa:A09_T1_hvy3>	2.6 2.6 5.7 0.48	</usa:A09_T1_hvy3>
+        <usa:A09_T1_hvy4>	3 3 2.01 8.3	</usa:A09_T1_hvy4>
+        <usa:A09_T1_hvy5>	3 3 2.01 8.3	</usa:A09_T1_hvy5>
+        <usa:A09_T1_hvy6>	2.4 2.4 0.4 2.31	</usa:A09_T1_hvy6>
+        <usa:A09_T1_hvy7>	1.7 1.7 1.63 1.74	</usa:A09_T1_hvy7>
+        <usa:A09_T1_hvy8>	3.45 3.45 1.6 0.77	</usa:A09_T1_hvy8>
+        <usa:A09_T1_hvy9>	2 2 10.59 2.74	</usa:A09_T1_hvy9>
+        <usa:A100_T490>	3.5 3.5 1.36 6.52	</usa:A100_T490>
+        <usa:A100_T491>	3.4 3.4 1.15 1.84	</usa:A100_T491>
+        <usa:A100_T492>	4 4 2.13 1.36	</usa:A100_T492>
+        <usa:A100_T493>	3.3 3.3 5.93 1.71	</usa:A100_T493>
+        <usa:A100_T494>	2.6 2.6 1.19 0.34	</usa:A100_T494>
+        <usa:A100_T495>	2 2 1.97 0.99	</usa:A100_T495>
+        <usa:A100_T496>	3.2 3.2 0.67 0.67	</usa:A100_T496>
+        <usa:A100_T497>	2 2 2.68 0.6	</usa:A100_T497>
+        <usa:A100_T498>	3 3 0.38 0.68	</usa:A100_T498>
+        <usa:A100_T499>	1.6 1.6 2.76 0.37	</usa:A100_T499>
+      </tiling>
+    </camouflage>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:camouflage/opaque	</userString>
     <season>	summer	</season>
     <historical>	true	</historical>
     <priceGroup>	camouflages 50g notInShop	</priceGroup>

@@ -5,7 +5,7 @@ import items
 import calendar
 from account_shared import validateCustomizationItem
 from invoices_helpers import checkAccountDossierOperation
-from items import vehicles, tankmen
+from items import vehicles, tankmen, festival
 from items.components.c11n_constants import SeasonType
 from items.components.crew_skins_constants import NO_CREW_SKIN_ID
 from constants import DOSSIER_TYPE, IS_DEVELOPMENT, SEASON_TYPE_BY_NAME, EVENT_TYPE
@@ -297,6 +297,8 @@ def __readBonus_crewSkin(bonus, _name, section, eventType):
 
 def __readBonus_tokens(bonus, _name, section, eventType):
     id = section['id'].asString
+    if id.startswith(tankmen.RECRUIT_TMAN_TOKEN_PREFIX) and tankmen.getRecruitInfoFromToken(id) is None:
+        raise SoftException('Invalid tankman token format: {}'.format(id))
     token = bonus.setdefault('tokens', {})[id] = {}
     expires = token.setdefault('expires', {})
     __readBonus_expires(id, expires, section)
@@ -305,6 +307,7 @@ def __readBonus_tokens(bonus, _name, section, eventType):
     token['count'] = 1
     if section.has_key('count'):
         token['count'] = section['count'].asInt
+    return
 
 
 def __readBonus_goodies(bonus, _name, section, eventType):
@@ -391,6 +394,18 @@ def __readBonus_vehicleChoice(bonus, _name, section, eventType):
                 extra.setdefault('levels', set()).add(int(level))
 
     bonus['demandedVehicles'] = extra
+
+
+def __readBonus_festivalItem(bonus, _name, section, eventType):
+    if section.has_key('id'):
+        itemID = section['id'].asInt
+        if itemID not in festival.g_cache.getCollection():
+            raise SoftException('Unknown festival item ID: %d' % itemID)
+        count = 1
+        if section.has_key('count'):
+            count = section['count'].asInt
+        festivalItems = bonus.setdefault('festivalItems', {})
+        festivalItems[itemID] = festivalItems.get(itemID, 0) + count
 
 
 def __readMetaSection(bonus, _name, section, eventType):
@@ -531,7 +546,9 @@ __BONUS_READERS = {'meta': __readMetaSection,
  'crewSkin': __readBonus_crewSkin,
  'vehicleChoice': __readBonus_vehicleChoice,
  'blueprint': __readBonus_blueprint,
- 'blueprintAny': __readBonus_blueprintAny}
+ 'blueprintAny': __readBonus_blueprintAny,
+ 'festivalTickets': __readBonus_int,
+ 'festivalItem': __readBonus_festivalItem}
 __PROBABILITY_READERS = {'optional': __readBonus_optional,
  'oneof': __readBonus_oneof,
  'group': __readBonus_group}

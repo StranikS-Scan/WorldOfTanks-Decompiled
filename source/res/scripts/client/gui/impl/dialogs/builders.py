@@ -19,7 +19,7 @@ def _makeMessageArgs(args=None, fmtArgs=None, namedFmtArgs=None):
 
 
 class SimpleDialogBuilder(object):
-    __slots__ = ('__message', '__title', '__messageArgs', '__titleArgs', '__buttons', '__icon', '__backImg', '__showBalance', '__preset', '__layer')
+    __slots__ = ('__message', '__title', '__messageArgs', '__titleArgs', '__buttons', '__icon', '__backImg', '__showBalance', '__preset', '__layer', '__enableBlur', '__enableBlur3dScene')
 
     def __init__(self):
         super(SimpleDialogBuilder, self).__init__()
@@ -33,16 +33,15 @@ class SimpleDialogBuilder(object):
         self.__showBalance = False
         self.__preset = DialogPresets.DEFAULT
         self.__layer = DialogLayer.TOP_WINDOW
+        self.__enableBlur = True
+        self.__enableBlur3dScene = True
 
     def build(self, parent):
-        if self.__message == R.invalid():
-            _logger.error("Dialog message can't be empty")
-            return
-        elif not self.__buttons:
+        if not self.__buttons:
             _logger.error("Dialog buttons can't be empty")
             return
         else:
-            dialog = SimpleDialogWindow(parent=parent.getParentWindow(), preset=self.__preset, balanceContent=CommonBalanceContent() if self.__showBalance else None, layer=self.__layer)
+            dialog = SimpleDialogWindow(parent=parent.getParentWindow(), preset=self.__preset, balanceContent=CommonBalanceContent() if self.__showBalance else None, layer=self.__layer, enableBlur=self.__enableBlur, enableBlur3dScene=self.__enableBlur3dScene)
             for btn in self.__buttons:
                 dialog.addButton(btn.name, btn.label, btn.isFocused, soundDown=btn.soundDown)
 
@@ -96,11 +95,16 @@ class SimpleDialogBuilder(object):
         self.__showBalance = showBalance
         return self
 
+    def setBlur(self, enableBlur=True, enableBlur3dScene=True):
+        self.__enableBlur = enableBlur
+        self.__enableBlur3dScene = enableBlur3dScene
+        return self
+
 
 class ResSimpleDialogBuilder(SimpleDialogBuilder):
 
     def setMessagesAndButtons(self, message, buttons=R.strings.dialogs.common, focused=DialogButtons.SUBMIT, btnDownSounds=None):
-        self.setMessage(message.dyn('message')())
+        self.setMessage(message.dyn('message', R.invalid)())
         self.setTitle(message.dyn('title')())
         for _id in DialogButtons.ALL:
             button = message.dyn(_id) or buttons.dyn(_id)

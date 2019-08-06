@@ -61,6 +61,7 @@ class TOOLTIP_TYPE(CONST_CONTAINER):
     FRONTLINE = 'frontlineInfo'
     SQUAD_BONUS = 'squadBonus'
     SESSION_STATS = 'sessionStats'
+    FESTIVAL_ITEMS = 'festivalItemsInfo'
 
 
 class TOOLTIP_COMPONENT(CONST_CONTAINER):
@@ -89,6 +90,7 @@ class TOOLTIP_COMPONENT(CONST_CONTAINER):
     BLUEPRINT = 'blueprints'
     SESSION_STATS = 'sessionStats'
     CREW_BOOK = 'crewBook'
+    FESTIVAL = 'festival'
 
 
 class ACTION_TOOLTIPS_TYPE(CONST_CONTAINER):

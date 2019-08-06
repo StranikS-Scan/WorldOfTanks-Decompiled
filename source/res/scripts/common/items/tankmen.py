@@ -849,7 +849,7 @@ _g_totalFirstSkillXpCost = _calcFirstSkillXpCost()
 
 def getRecruitInfoFromToken(tokenName):
     parts = tokenName.split(':')
-    if len(parts) != 10:
+    if len(parts) != 11:
         return None
     elif parts[0] != RECRUIT_TMAN_TOKEN_PREFIX:
         return None
@@ -863,7 +863,8 @@ def getRecruitInfoFromToken(tokenName):
              'freeXP': 0,
              'lastSkillLevel': MAX_SKILL_LEVEL,
              'roleLevel': MAX_SKILL_LEVEL,
-             'sourceID': ''}
+             'sourceID': '',
+             'roles': []}
             if parts[1] == '':
                 result['nations'] = nations.INDICES.values()
             else:
@@ -925,13 +926,22 @@ def getRecruitInfoFromToken(tokenName):
             if sourceID == '':
                 return None
             result['sourceID'] = sourceID
+            if parts[10] != '':
+                roles = parts[10].split('!')
+                if len(roles) != len(set(roles)):
+                    return None
+                for role in roles:
+                    if role not in skills_constants.ROLES:
+                        return None
+                    result['roles'].append(SKILL_INDICES[role])
+
         except ValueError:
             return None
 
         return result
 
 
-def generateRecruitToken(group, sourceID, nationList=(), isPremium=True, freeXP=0, skills=(), lastSkillLevel=MAX_SKILL_LEVEL, freeSkills=(), roleLevel=MAX_SKILL_LEVEL):
+def generateRecruitToken(group, sourceID, nationList=(), isPremium=True, freeXP=0, skills=(), lastSkillLevel=MAX_SKILL_LEVEL, freeSkills=(), roleLevel=MAX_SKILL_LEVEL, roles=[]):
     tokenParts = [RECRUIT_TMAN_TOKEN_PREFIX]
     selectedNations = set()
     if len(nationList) == 0:
@@ -981,6 +991,13 @@ def generateRecruitToken(group, sourceID, nationList=(), isPremium=True, freeXP=
             return None
         tokenParts.append('' if roleLevel == MAX_SKILL_LEVEL else str(roleLevel))
         tokenParts.append(sourceID)
+        selectedRecruitRoles = set()
+        for recruitRole in roles:
+            if recruitRole not in skills_constants.SKILL_NAMES:
+                return None
+            selectedRecruitRoles.add(recruitRole)
+
+        tokenParts.append('!'.join(selectedRecruitRoles))
         return ':'.join(tokenParts)
 
 

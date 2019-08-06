@@ -1,10 +1,10 @@
 ﻿# WorldOfTanks-Decompiled
 Unpacked and decompiled files of **WorldOfTanks**.
 
-Each client has its own [**branch**](https://github.com/StranikS-Scan/WorldOfTanks-Decompiled/branches/active). In the master-branch is the latest release version of the client. The branches of test clients are not released to master-branch until the time will not come first release. Micropatches that are released after the first release of the client are added only to its branch, in the master-branch is not added. This allows you to easily track all the stages of the release of the game's customers.
+Each client has its own [**branch**](https://github.com/StranikS-Scan/WorldOfTanks-Decompiled/branches/all). In the default-branch is the latest version of the client. Micropatches that are released after the first release of the client are added only to branch of released client. This allows you to easily track all the stages of the release of the game.
 
 ### Consist
-* Python **pyc**-files since client version **0.9.2**
+* Python **py**-files since client version **0.9.2**
 * Game **xml**-files since version **0.9.12**
 
 ### Soft
@@ -14,7 +14,7 @@ Using **[PjOrion](https://koreanrandom.com/forum/topic/15280-)**:
 
 ### Using ###
 1. Download commit to PC
-2. Run **"Zip-Unpacker.exe"** to restore the original files from the **zip-archive** with the correct letters case in the file names
+2. Run once **"Zip-Unpacker.exe"** to restore the original files from the **zip-archive** with the correct letters case in the file names and symbols codes in texts
 
 ### Auto decompilation algorithm (recommendations)
 1. Replace old files with new files in the folder **"source"**: paths.xml, version.xml
@@ -27,16 +27,16 @@ Using **[PjOrion](https://koreanrandom.com/forum/topic/15280-)**:
 3. Copy all **xml**-files from game folder **"res"** to the directory **"source\res"**
 4. Extract the contents of the archive **"res\packages\scripts.pkg"** to the directory **"source\res"**
 5. Decode all **xml**-files using **[PjOrion](https://koreanrandom.com/forum/topic/15280-)**: **"WOT-Client"** -> **"Unpack XML"** -> **"Unpack folder..."** select **"source"**
-6. Decompile all **pyc**-files using **"Uncompile6"** in PjOrion: **"Decompile"** -> **"Decompile pyc-folder..."** select **"source"**
+6. Decompile all **pyc**-files using **"Uncompile6"** in **[PjOrion](https://koreanrandom.com/forum/topic/15280-)**: **"Decompile"** -> **"Decompile pyc-folder..."** select **"source"**
 7. Find and delete all **pyc**-files
 
 ### Pull requesting to the repository (recommendations)
-1. You need to clone the master-branch if you adding a new client or branch with the exist client otherwise
+1. You must clone the commit from the repository from which you want to continue the existing branch or start a new branch
 2. If you adding a new client, then create a new branch with the name as client main version **"X.X.X"** (do not use **"CT"** or **"ST"** unless it's a not separate special branch)
 3. Clean the existing **"source"** directory and put new files there using the algorithm above
 4. Change the name of the archive to the current one in the file **"Zip-Packer.arg"**
 5. Create an **zip**-archive by running the console program **Zip-Packer.exe** (required **7z.exe** on your PC)
-6. Clean the existing **"zip"** directory and move to it the new archive
+6. Delete the old **"zip"** archive in the **"zip"** directory
 7. Create a commit, named as **"X.X.X: Added/Updated/Release/... #YYY"** or **"X.X.X_CT:..."**
 8. Offer a **"Pull request"** in the right branch
 

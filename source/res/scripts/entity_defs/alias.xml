@@ -713,6 +713,10 @@
       <premMask>
         <Type>	INT8	</Type>
       </premMask>
+      <playerCard>
+        <Type>	ARRAY	  <of>	INT32	</of>
+        </Type>
+      </playerCard>
     </Properties>
   </ARENA_ADDPLAYER_INFO>
   <AVATAR_VEHICLE_ROSTER>	FIXED_DICT	  <Properties>

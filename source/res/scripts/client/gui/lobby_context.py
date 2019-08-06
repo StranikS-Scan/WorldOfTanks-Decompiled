@@ -4,6 +4,7 @@ from Event import Event, EventManager
 import BigWorld
 from adisp import async, process
 from constants import CURRENT_REALM
+from gui.lobby_ctx_listener import LobbyContextChangeListener
 from helpers import dependency
 from helpers.server_settings import ServerSettings
 from account_helpers import isRoamingEnabled
@@ -28,6 +29,7 @@ class LobbyContext(ILobbyContext):
         self.__clientArenaIDGenerator = Int32IDGenerator()
         self.__headerNavigationConfirmators = set()
         self.__fightButtonConfirmators = set()
+        self.__changeListener = LobbyContextChangeListener(self)
         self.__em = EventManager()
         self.onServerSettingsChanged = Event(self.__em)
         return
@@ -82,9 +84,11 @@ class LobbyContext(ILobbyContext):
         if self.__serverSettings:
             if 'serverSettings' in diff:
                 self.__notifyToUpdate(diff['serverSettings'])
+                self.__changeListener.update(diff['serverSettings'])
                 self.__serverSettings.update(diff['serverSettings'])
             elif ('serverSettings', '_r') in diff:
                 self.__notifyToUpdate(diff[('serverSettings', '_r')])
+                self.__changeListener.update(diff[('serverSettings', '_r')])
                 self.__serverSettings.set(diff[('serverSettings', '_r')])
 
     def updateGuiCtx(self, ctx):

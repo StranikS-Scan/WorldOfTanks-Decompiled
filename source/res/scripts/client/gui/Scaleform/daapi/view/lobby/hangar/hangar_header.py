@@ -13,7 +13,7 @@ from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
-from gui.marathon.marathon_constants import DEFAULT_MARATHON_PREFIX
+from gui.marathon.marathon_event_controller import DEFAULT_MARATHON_PREFIX
 from gui.server_events import finders
 from gui.server_events.events_dispatcher import showMissionsForCurrentVehicle, showPersonalMission, showMissionsElen, showMissionsMarathon, showPersonalMissionOperationsPage, showPersonalMissionsOperationsMap
 from gui.shared.formatters import text_styles, icons

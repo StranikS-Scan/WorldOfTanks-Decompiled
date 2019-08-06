@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/marathon/web_handlers.py
+from gui.server_events.events_dispatcher import showMissionsMarathon
 from web_client_api import webApiCollection, w2capi
 from web_client_api.marathon import MarathonWebApi
 from web_client_api.request.access_token import AccessTokenWebApiMixin
@@ -18,7 +19,9 @@ class _RequestWebApi(AccessTokenWebApiMixin, WgniTokenWebApiMixin, SpaIdWebApiMi
 
 @w2capi(name='open_tab', key='tab_id')
 class _OpenTabWebApi(HangarTabWebApiMixin, ProfileTabWebApiMixin, VehiclePreviewWebApiMixin):
-    pass
+
+    def _getVehicleStylePreviewCallback(self):
+        return showMissionsMarathon
 
 
 def createMarathonWebHandlers():

@@ -421,6 +421,11 @@ def _migrateTo46(core, data, initialized):
     data['gameExtData'][GAME.ENABLE_SPEEDOMETER] = True
 
 
+def _migrateTo47(core, data, initialized):
+    data['delete'].extend((92,))
+    data['delete'].extend((93,))
+
+
 _versions = ((1,
   _initializeDefaultSettings,
   True,
@@ -599,6 +604,10 @@ _versions = ((1,
   False),
  (46,
   _migrateTo46,
+  False,
+  False),
+ (47,
+  _migrateTo47,
   False,
   False))
 

@@ -1231,6 +1231,44 @@
     <type>	INSCRIPTION	</type>
   </itemGroup>
   <itemGroup>
+    <userString>	#vehicle_customization:inscription/historical	</userString>
+    <season>	ALL	</season>
+    <historical>	true	</historical>
+    <priceGroup>	inscriptions 50g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <nations>	uk	</nations>
+      </include>
+    </vehicleFilter>
+    <decal>
+      <id>	722	</id>
+      <texture>	gui/maps/vehicles/decals/inscriptions/special/inscription_256.dds	</texture>
+      <userString>	#vehicle_customization:inscription/historical/inscription_256	</userString>
+      <mirror>	false	</mirror>
+    </decal>
+    <name>	desert_rats	</name>
+    <type>	INSCRIPTION	</type>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:inscription/historical	</userString>
+    <season>	ALL	</season>
+    <historical>	true	</historical>
+    <priceGroup>	inscriptions 50g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <nations>	usa	</nations>
+      </include>
+    </vehicleFilter>
+    <decal>
+      <id>	724	</id>
+      <texture>	gui/maps/vehicles/decals/inscriptions/special/inscription_257.dds	</texture>
+      <userString>	#vehicle_customization:inscription/historical/inscription_257	</userString>
+      <mirror>	false	</mirror>
+    </decal>
+    <name>	tunisia_dazzle	</name>
+    <type>	INSCRIPTION	</type>
+  </itemGroup>
+  <itemGroup>
     <userString>	#vehicle_customization:inscription/special	</userString>
     <season>	ALL	</season>
     <historical>	false	</historical>
@@ -1379,6 +1417,59 @@
       <mirror>	false	</mirror>
     </decal>
     <name>	wg_fest_2019	</name>
+    <type>	INSCRIPTION	</type>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:inscription/historical	</userString>
+    <season>	ALL	</season>
+    <historical>	true	</historical>
+    <priceGroup>	inscriptions 50g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <nations>	ussr	</nations>
+      </include>
+    </vehicleFilter>
+    <decal>
+      <id>	719	</id>
+      <texture>	gui/maps/vehicles/decals/inscriptions/special/inscription_255.dds	</texture>
+      <userString>	#vehicle_customization:inscription/historical/inscription_255	</userString>
+      <mirror>	false	</mirror>
+    </decal>
+    <name>	strong	</name>
+    <type>	INSCRIPTION	</type>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:inscription/special	</userString>
+    <season>	ALL	</season>
+    <historical>	false	</historical>
+    <priceGroup>	inscriptions 50g notInShop	</priceGroup>
+    <decal>
+      <id>	12	</id>
+      <texture>	gui/maps/vehicles/decals/inscriptions/special/inscription_264.dds	</texture>
+      <userString>	#vehicle_customization:inscription/special/inscription_264	</userString>
+      <mirror>	false	</mirror>
+    </decal>
+    <name>	WoT Fest 2019	</name>
+    <type>	INSCRIPTION	</type>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:inscription/special	</userString>
+    <season>	ALL	</season>
+    <historical>	false	</historical>
+    <priceGroup>	inscriptions 50g notInShop	</priceGroup>
+    <decal>
+      <id>	13	</id>
+      <texture>	gui/maps/vehicles/decals/inscriptions/special/inscription_265.dds	</texture>
+      <userString>	#vehicle_customization:inscription/special/inscription_265	</userString>
+      <mirror>	false	</mirror>
+    </decal>
+    <decal>
+      <id>	17	</id>
+      <texture>	gui/maps/vehicles/decals/inscriptions/special/inscription_267.dds	</texture>
+      <userString>	#vehicle_customization:inscription/special/inscription_267	</userString>
+      <mirror>	false	</mirror>
+    </decal>
+    <name>	WoT Fest 2019	</name>
     <type>	INSCRIPTION	</type>
   </itemGroup>
 </inscriptions_special.xml>

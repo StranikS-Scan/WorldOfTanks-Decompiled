@@ -1,8 +1,13 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/server_events/awards_formatters.py
+from gui.Scaleform.daapi.view.lobby.missions.awards_formatters import NewStyleBonusComposer
+from gui.impl.auxiliary.rewards_helper import NEW_STYLE_FORMATTED_BONUSES
 from gui.server_events import formatters
-from gui.server_events.awards_formatters import AWARDS_SIZES, AwardsPacker, QuestsBonusComposer
+from gui.server_events.awards_formatters import AWARDS_SIZES, AwardsPacker, QuestsBonusComposer, getPostBattleAwardsPacker
 SIMPLE_BONUSES_MAX_ITEMS = 5
+_DISPLAYED_AWARDS_COUNT = 2
+_END_LINE_SEPARATOR = ','
+_EMPTY_STRING = ''
 
 class OldStyleBonusFormatter(object):
 
@@ -76,7 +81,26 @@ class SimpleBonusFormatter(OldStyleBonusFormatter):
         simpleBonusesList = super(SimpleBonusFormatter, self).extractFormattedBonuses()
         result = []
         if simpleBonusesList:
-            result.append(formatters.packSimpleBonusesBlock(simpleBonusesList, ',' if addLineSeparator else ''))
+            result.append(formatters.packSimpleBonusesBlock(simpleBonusesList, endlineSymbol=_END_LINE_SEPARATOR if addLineSeparator else _EMPTY_STRING))
+        return result
+
+
+class NewStyleBonusFormatter(OldStyleBonusFormatter):
+
+    def __init__(self):
+        super(NewStyleBonusFormatter, self).__init__()
+        self.__formatter = NewStyleBonusComposer(_DISPLAYED_AWARDS_COUNT, getPostBattleAwardsPacker())
+
+    def accumulateBonuses(self, bonus, event=None):
+        formattedBonuses = self.__formatter.getVisibleFormattedBonuses([], [bonus], 'big')
+        if formattedBonuses:
+            self._result.extend(formattedBonuses)
+
+    def extractFormattedBonuses(self, addLineSeparator=False):
+        simpleBonusesList = super(NewStyleBonusFormatter, self).extractFormattedBonuses()
+        result = []
+        if simpleBonusesList:
+            result.append(formatters.packNewStyleBonusesBlock(simpleBonusesList, endlineSymbol=_END_LINE_SEPARATOR if addLineSeparator else _EMPTY_STRING))
         return result
 
 
@@ -91,6 +115,7 @@ class OldStyleAwardsPacker(AwardsPacker):
     def __init__(self, event):
         super(OldStyleAwardsPacker, self).__init__(getFormattersMap(event))
         self.__defaultFormatter = SimpleBonusFormatter()
+        self.__newStyleFormatter = NewStyleBonusFormatter()
 
     def format(self, bonuses, event=None):
         formattedBonuses = []
@@ -103,7 +128,7 @@ class OldStyleAwardsPacker(AwardsPacker):
                 if b.getName() == 'customizations':
                     isCustomizationBonusExist = True
 
-        fmts = [self.__defaultFormatter]
+        fmts = [self.__defaultFormatter, self.__newStyleFormatter]
         fmts.extend(sorted(self.getFormatters().itervalues(), key=lambda f: f.getOrder()))
         for formatter in fmts:
             formattedBonuses.extend(formatter.extractFormattedBonuses(isCustomizationBonusExist))
@@ -111,7 +136,7 @@ class OldStyleAwardsPacker(AwardsPacker):
         return formattedBonuses
 
     def _getBonusFormatter(self, bonusName):
-        return self.getFormatters().get(bonusName, self.__defaultFormatter)
+        return self.__newStyleFormatter if bonusName in NEW_STYLE_FORMATTED_BONUSES else self.getFormatters().get(bonusName, self.__defaultFormatter)
 
 
 class OldStyleBonusesFormatter(QuestsBonusComposer):

@@ -793,6 +793,9 @@ class ServerSettings(object):
     def getProgressiveRewardConfig(self):
         return self.__progressiveReward
 
+    def getFestivalConfig(self):
+        return self.__getGlobalSetting('festival_config', {})
+
     def __getGlobalSetting(self, settingsName, default=None):
         return self.__serverSettings.get(settingsName, default)
 

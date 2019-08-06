@@ -1,14 +1,12 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/marathon/marathon_constants.py
-from collections import namedtuple
 from shared_utils import CONST_CONTAINER
-MarathonData = namedtuple('MarathonData', 'prefix tokenPrefix url label tabTooltip tabTooltipDisabled\n                          vehiclePrefix vehicleID showRewardVideo suspend completedTokenPostfix awardTokens\n                          questsInChain minVehicleLevel showInPostBattle tooltipHeaderType showFlagTooltipBottom\n                          showFlagIcons tooltips icons quests')
-TooltipsData = namedtuple('TooltipsData', 'header body bodyExtra errorBattleType errorVehType extraStateSteps extraStateDiscount\n                          extraStateCompleted stateStart stateEnd stateProgress daysShort hoursShort')
-IconsData = namedtuple('IconsData', 'tooltipHeader libraryOkIcon mainHangarFlag okIcon timeIcon alertIcon iconFlag saleIcon\n                       mapFlagHeaderIcon')
-QuestsData = namedtuple('QuestsData', 'titleSetProgress autoSetAnnounce autoSetProgress autoSetFinished announceTime timeFinish')
-COUNTDOWN_TOOLTIP_HEADER = 'countdown'
-PROGRESS_TOOLTIP_HEADER = 'progress'
-TEXT_TOOLTIP_HEADER = 'simple_text'
+
+class MARATHON_FLAG_TOOLTIP_HEADERS(CONST_CONTAINER):
+    COUNTDOWN = 'countdown'
+    PROGRESS = 'progress'
+    TEXT = 'simple_text'
+
 
 class MARATHON_STATE(CONST_CONTAINER):
     NOT_STARTED = 0
@@ -27,6 +25,4 @@ class MARATHON_WARNING(CONST_CONTAINER):
     NONE = ''
 
 
-MARATHONS_DATA = tuple()
-DEFAULT_MARATHON_PREFIX = MARATHONS_DATA[0].prefix if any(MARATHONS_DATA) else None
 ZERO_TIME = 0.0

@@ -2,42 +2,48 @@
 # Embedded file name: scripts/client/gui/impl/gen/view_models/ui_kit/button_common_model.py
 from gui.impl.gen import R
 from frameworks.wulf import ViewModel
+from gui.impl.gen.view_models.ui_kit.counter_model import CounterModel
 
 class ButtonCommonModel(ViewModel):
     __slots__ = ('onClicked', 'onSelected')
 
+    @property
+    def Counter(self):
+        return self._getViewModel(0)
+
     def getLabel(self):
-        return self._getResource(0)
+        return self._getResource(1)
 
     def setLabel(self, value):
-        self._setResource(0, value)
+        self._setResource(1, value)
 
     def getLabelString(self):
-        return self._getString(1)
+        return self._getString(2)
 
     def setLabelString(self, value):
-        self._setString(1, value)
+        self._setString(2, value)
 
     def getIsEnabled(self):
-        return self._getBool(2)
-
-    def setIsEnabled(self, value):
-        self._setBool(2, value)
-
-    def getIsSelected(self):
         return self._getBool(3)
 
-    def setIsSelected(self, value):
+    def setIsEnabled(self, value):
         self._setBool(3, value)
 
-    def getIsVisible(self):
+    def getIsSelected(self):
         return self._getBool(4)
 
-    def setIsVisible(self, value):
+    def setIsSelected(self, value):
         self._setBool(4, value)
+
+    def getIsVisible(self):
+        return self._getBool(5)
+
+    def setIsVisible(self, value):
+        self._setBool(5, value)
 
     def _initialize(self):
         super(ButtonCommonModel, self)._initialize()
+        self._addViewModelProperty('Counter', CounterModel())
         self._addResourceProperty('label', R.invalid())
         self._addStringProperty('labelString', '')
         self._addBoolProperty('isEnabled', True)

@@ -29,6 +29,7 @@ from skeletons.gui.game_control import IRankedBattlesController
 from skeletons.gui.goodies import IGoodiesCache
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
+from festivity.festival.item_info import FestivalItemInfo
 
 def _getCmpVehicle():
     return cmp_helpers.getCmpConfiguratorMainView().getCurrentVehicle()
@@ -1039,3 +1040,12 @@ class Shop20BattleBoosterContext(AwardBattleBoosterContext):
         value.inventoryCount = True
         value.vehiclesCount = True
         return value
+
+
+class FestivalItemContext(ToolTipContext):
+
+    def __init__(self, fieldsToExclude=None):
+        super(FestivalItemContext, self).__init__(TOOLTIP_COMPONENT.FESTIVAL, fieldsToExclude)
+
+    def getFestivalItemData(self, festivalItemID):
+        return FestivalItemInfo(festivalItemID)

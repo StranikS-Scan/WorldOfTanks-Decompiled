@@ -242,6 +242,7 @@ class REQ_CRITERIA(object):
         CAN_TRADE_OFF = RequestCriteria(PredicateCondition(lambda item: item.canTradeOff))
         CAN_SELL = RequestCriteria(PredicateCondition(lambda item: item.canSell))
         CAN_NOT_BE_SOLD = RequestCriteria(PredicateCondition(lambda item: item.canNotBeSold))
+        SECRET = RequestCriteria(PredicateCondition(lambda item: item.isSecret))
         NAME_VEHICLE = staticmethod(lambda nameVehicle: RequestCriteria(PredicateCondition(lambda item: nameVehicle in item.searchableUserName)))
         NAME_VEHICLE_WITH_SHORT = staticmethod(lambda nameVehicle: RequestCriteria(PredicateCondition(lambda item: nameVehicle in item.searchableShortUserName or nameVehicle in item.searchableUserName)))
         DISCOUNT_RENT_OR_BUY = RequestCriteria(PredicateCondition(lambda item: (item.buyPrices.itemPrice.isActionPrice() or item.getRentPackageActionPrc() != 0) and not item.isRestoreAvailable()))
@@ -447,11 +448,13 @@ class ItemsRequester(IItemsRequester):
         clanInfo = yield dr.getClanInfo()
         seasons = yield dr.getRated7x7Seasons()
         ranked = yield dr.getRankedInfo()
+        festival = yield dr.getFestivalInfo()
         container = self.__itemsCache[GUI_ITEM_TYPE.ACCOUNT_DOSSIER]
         container[databaseID] = (userAccDossier,
          clanInfo,
          seasons,
-         ranked)
+         ranked,
+         festival)
         callback((userAccDossier, clanInfo, dr.isHidden))
 
     def unloadUserDossier(self, databaseID):
@@ -744,18 +747,18 @@ class ItemsRequester(IItemsRequester):
             dossierDescr = self.__getAccountDossierDescr()
             return self.itemsFactory.createAccountDossier(dossierDescr)
         container = self.__itemsCache[GUI_ITEM_TYPE.ACCOUNT_DOSSIER]
-        dossier, _, _, _ = container.get(int(databaseID))
+        dossier, _, _, _, festival = container.get(int(databaseID))
         if dossier is None:
             LOG_WARNING('Trying to get empty user dossier', databaseID)
             return
         else:
-            return self.itemsFactory.createAccountDossier(dossier, databaseID)
+            return self.itemsFactory.createAccountDossier(dossier, databaseID, festivalInfo=festival)
 
     def getClanInfo(self, databaseID=None):
         if databaseID is None:
             return (self.__stats.clanDBID, self.__stats.clanInfo)
         container = self.__itemsCache[GUI_ITEM_TYPE.ACCOUNT_DOSSIER]
-        _, clanInfo, _, _ = container.get(int(databaseID))
+        _, clanInfo, _, _, _ = container.get(int(databaseID))
         if clanInfo is None:
             LOG_WARNING('Trying to get empty user clan info', databaseID)
             return

@@ -887,7 +887,7 @@ class MarathonEventActionInfo(ActionInfo):
         pass
 
     def isDiscountVisible(self):
-        return self._marathonEvent and not self._marathonEvent.isVehicleObtained()
+        return self._marathonEvent and not self._marathonEvent.isRewardObtained()
 
     def _getActiveDateTimeString(self):
         name = self.discount.getParamName()

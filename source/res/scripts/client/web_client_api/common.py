@@ -66,6 +66,7 @@ class ItemPackType(CONST_CONTAINER):
     CUSTOM_REFERRAL_CREW = 'custom/crew'
     CUSTOM_REWARD_POINT = 'custom/prestige_point'
     CUSTOM_SUPPLY_POINT = 'custom/supply_point'
+    CUSTOM_FESTIVAL_TICKETS = 'custom/festivalTickets'
     TOKEN = 'token'
     PAINT_ALL = 'paint/all'
     PAINT_SUMMER = 'paint/summer'
@@ -87,6 +88,7 @@ class ItemPackType(CONST_CONTAINER):
     PLAYER_BADGE = 'playerBadges'
     SINGLE_ACHIEVEMENTS = 'singleAchievements'
     FRONTLINE_TOKEN = 'frontline_token'
+    FESTIVAL_ITEM = 'festivalItem'
 
 
 class ItemPackTypeGroup(CONST_CONTAINER):

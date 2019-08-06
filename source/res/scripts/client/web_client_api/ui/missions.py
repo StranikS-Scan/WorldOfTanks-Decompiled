@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/web_client_api/ui/missions.py
 from helpers import dependency
-from gui.marathon.marathon_constants import MARATHONS_DATA
+from gui.marathon.marathon_event_controller import MARATHON_EVENTS
 from personal_missions import PM_BRANCH
 from skeletons.gui.event_boards_controllers import IEventBoardController
 from skeletons.gui.game_control import IMarathonEventsController
@@ -15,7 +15,7 @@ class _PersonalMissionsSchema(W2CSchema):
 
 
 class _MarathonMissionsSchema(W2CSchema):
-    prefix = Field(required=True, type=basestring, validator=lambda v, _: v in {m.prefix for m in MARATHONS_DATA})
+    prefix = Field(required=True, type=basestring, validator=lambda v, _: v in {m.prefix for m in MARATHON_EVENTS})
 
 
 class MissionsWebApiMixin(object):

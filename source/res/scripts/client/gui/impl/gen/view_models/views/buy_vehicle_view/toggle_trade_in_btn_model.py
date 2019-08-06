@@ -6,10 +6,10 @@ class ToggleTradeInBtnModel(ButtonIconTextModel):
     __slots__ = ()
 
     def getIsRent(self):
-        return self._getBool(6)
+        return self._getBool(7)
 
     def setIsRent(self, value):
-        self._setBool(6, value)
+        self._setBool(7, value)
 
     def _initialize(self):
         super(ToggleTradeInBtnModel, self)._initialize()

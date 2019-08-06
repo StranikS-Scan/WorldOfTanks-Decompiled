@@ -15,6 +15,8 @@ from adisp import async, process
 from chat_shared import decompressSysMessage, SYS_MESSAGE_TYPE, MapRemovedFromBLReason
 from constants import INVOICE_ASSET, AUTO_MAINTENANCE_TYPE, AUTO_MAINTENANCE_RESULT, PREBATTLE_TYPE, FINISH_REASON, KICK_REASON_NAMES, KICK_REASON, NC_MESSAGE_TYPE, NC_MESSAGE_PRIORITY, SYS_MESSAGE_CLAN_EVENT, SYS_MESSAGE_CLAN_EVENT_NAMES, ARENA_GUI_TYPE, SYS_MESSAGE_FORT_EVENT_NAMES, PREMIUM_ENTITLEMENTS, PREMIUM_TYPE
 from blueprints.BlueprintTypes import BlueprintTypes
+from bonus_constants import BonusName
+from festivity.festival.item_info import FestivalItemInfo
 from nations import NAMES
 from dossiers2.custom.records import DB_ID_TO_RECORD
 from dossiers2.ui.achievements import ACHIEVEMENT_BLOCK, BADGES_BLOCK
@@ -926,6 +928,24 @@ class InvoiceReceivedFormatter(WaitItemsSyncFormatter):
             result.append(g_settings.htmlTemplates.format('discountsInvoiceReceived', ctx={'discounts': ', '.join(discountsStrings)}))
         return '; '.join(result)
 
+    @classmethod
+    def getFestivalItemsString(cls, data):
+        accrued = []
+        debited = []
+        result = []
+        festivalItems = sorted((FestivalItemInfo(itemID) for itemID in data))
+        for festItem in festivalItems:
+            itemName = backport.text(R.strings.festival.festivalItem.fullName(), backport.text(festItem.getTypeResID()), backport.text(festItem.getNameResID()))
+            if data[festItem.getID()] > 0:
+                accrued.append(itemName)
+            debited.append(itemName)
+
+        if accrued:
+            result.append(g_settings.htmlTemplates.format('festivalItemsAccrued', {'festItems': ', '.join(accrued)}))
+        if debited:
+            result.append(g_settings.htmlTemplates.format('festivalItemsDebited', {'festItems': ', '.join(debited)}))
+        return '<br/>'.join(result)
+
     def _composeOperations(self, data):
         dataEx = data.get('data', {})
         if not dataEx:
@@ -997,6 +1017,12 @@ class InvoiceReceivedFormatter(WaitItemsSyncFormatter):
             tokensStr = self.__getTokensString(dataEx.get('tokens', {}))
             if tokensStr:
                 operations.append(tokensStr)
+            festTickets = dataEx.get(BonusName.FESTIVAL_TICKETS, 0)
+            if festTickets:
+                operations.append(self.__getFestivalTickets(festTickets))
+            festItemsStr = self.getFestivalItemsString(dataEx.get(BonusName.FESTIVAL_ITEMS, {}))
+            if festItemsStr:
+                operations.append(festItemsStr)
             return operations
 
     def _formatData(self, assetType, data):
@@ -1218,6 +1244,14 @@ class InvoiceReceivedFormatter(WaitItemsSyncFormatter):
         else:
             template = 'slotsDebitedInvoiceReceived'
         return g_settings.htmlTemplates.format(template, {'amount': backport.getIntegralFormat(abs(slots))})
+
+    @classmethod
+    def __getFestivalTickets(cls, tickets):
+        if tickets > 0:
+            template = 'festivalTicketsAccruedInvoiceReceived'
+        else:
+            template = 'festivalTicketsDebitedInvoiceReceived'
+        return g_settings.htmlTemplates.format(template, {'amount': backport.getIntegralFormat(abs(tickets))})
 
     @classmethod
     def __getTankPremiumString(cls, expireTime):
@@ -2057,6 +2091,12 @@ class TokenQuestsFormatter(WaitItemsSyncFormatter):
             badgesNames = cls.__extractBadges(data)
             if badgesNames:
                 result.append(cls.__makeQuestsAchieve('badgeAchievement', badges=', '.join(badgesNames)))
+        tickets = data.get(BonusName.FESTIVAL_TICKETS, 0)
+        if tickets:
+            result.append(cls.__makeQuestsAchieve('battleQuestsFestivalTickets', count=tickets))
+        festItemsStr = InvoiceReceivedFormatter.getFestivalItemsString(data.get(BonusName.FESTIVAL_ITEMS, {}))
+        if festItemsStr:
+            result.append(festItemsStr)
         return '<br/>'.join(result) if result else None
 
     @classmethod

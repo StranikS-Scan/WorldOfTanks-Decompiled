@@ -13,6 +13,8 @@ from gui.Scaleform.locale.VEHICLE_PREVIEW import VEHICLE_PREVIEW
 from gui.impl import backport
 from gui.impl.gen import R
 from gui.shared import event_dispatcher
+from gui.shared.event_dispatcher import showStylePreview, showHangar
+from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.money import Money, MONEY_UNDEFINED, Currency
 from helpers import dependency
 from helpers.i18n import makeString as _ms
@@ -20,6 +22,7 @@ from helpers.time_utils import getCurrentLocalServerTimestamp, getTimeStructInLo
 from helpers.time_utils import getTimestampFromISO, getDateTimeInUTC, utcToLocalDatetime, getDateTimeInLocal
 from items import ITEM_TYPES
 from shared_utils import first
+from skeletons.gui.customization import ICustomizationService
 from skeletons.gui.game_control import IVehicleComparisonBasket, IEpicBattleMetaGameController
 from skeletons.gui.shared import IItemsCache
 from web_client_api import W2CSchema, Field, w2c
@@ -277,6 +280,12 @@ class _VehiclePackPreviewSchema(W2CSchema):
     buy_params = Field(required=False, type=dict)
 
 
+class _VehicleStylePreviewSchema(W2CSchema):
+    vehicle_cd = Field(required=True, type=int)
+    style_id = Field(required=True, type=int)
+    back_btn_descr = Field(required=True, type=basestring)
+
+
 class VehicleSellWebApiMixin(object):
     itemsCache = dependency.descriptor(IItemsCache)
 
@@ -355,6 +364,15 @@ class VehiclePreviewWebApiMixin(object):
         else:
             _pushInvalidPreviewMessage()
         return
+
+    @w2c(_VehicleStylePreviewSchema, 'vehicle_style_preview')
+    def openVehicleStylePreview(self, cmd):
+        c11n = dependency.instance(ICustomizationService)
+        style = c11n.getItemByID(GUI_ITEM_TYPE.STYLE, cmd.style_id)
+        showStylePreview(cmd.vehicle_cd, style, style.getDescription(), self._getVehicleStylePreviewCallback(), backBtnDescrLabel=backport.text(R.strings.vehicle_preview.header.backBtn.descrLabel.dyn(cmd.back_btn_descr)()))
+
+    def _getVehicleStylePreviewCallback(self):
+        return showHangar
 
     def _getVehiclePreviewReturnCallback(self, cmd):
         return None

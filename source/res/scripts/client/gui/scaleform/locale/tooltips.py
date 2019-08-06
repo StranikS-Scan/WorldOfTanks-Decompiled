@@ -1757,6 +1757,8 @@ class TOOLTIPS(object):
     AWARDITEM_COMPLETIONTOKENS_7_3_BODY = '#tooltips:awardItem/completionTokens_7_3/body'
     AWARDITEM_COMPLETIONTOKENS_7_4_HEADER = '#tooltips:awardItem/completionTokens_7_4/header'
     AWARDITEM_COMPLETIONTOKENS_7_4_BODY = '#tooltips:awardItem/completionTokens_7_4/body'
+    AWARDITEM_FESTIVALTICKETS_HEADER = '#tooltips:awardItem/festivalTickets/header'
+    AWARDITEM_FESTIVALTICKETS_BODY = '#tooltips:awardItem/festivalTickets/body'
     AWARDITEM_TANKMEN_BODY = '#tooltips:awardItem/tankmen/body'
     AWARDITEM_TANKWOMEN_HEADER = '#tooltips:awardItem/tankwomen/header'
     AWARDITEM_TANKWOMEN_BODY = '#tooltips:awardItem/tankwomen/body'
@@ -2618,6 +2620,14 @@ class TOOLTIPS(object):
     MARATHON_OFF_BODY = '#tooltips:marathon/off/body'
     MARATHON_ERROR_BATTLE_TYPE = '#tooltips:marathon/error/battle_type'
     MARATHON_ERROR_VEH_TYPE = '#tooltips:marathon/error/veh_type'
+    FESTIVALMARATHON_HEADER = '#tooltips:festivalMarathon/header'
+    FESTIVALMARATHON_BODY = '#tooltips:festivalMarathon/body'
+    FESTIVALMARATHON_BODY_LEVELS = '#tooltips:festivalMarathon/body/levels'
+    FESTIVALMARATHON_BODY_VEHICLE = '#tooltips:festivalMarathon/body/vehicle'
+    FESTIVALMARATHON_BODY_STYLE = '#tooltips:festivalMarathon/body/style'
+    FESTIVALMARATHON_EXTRA_STATE_STEPS = '#tooltips:festivalMarathon/extra_state/steps'
+    FESTIVALMARATHON_EXTRA_STATE_COMPLETED = '#tooltips:festivalMarathon/extra_state/completed'
+    FESTIVALMARATHON_ERROR_VEH_TYPE = '#tooltips:festivalMarathon/error/veh_type'
     XPEXCHANGEWINDOW_GOLD_GOLDAFTEREXCHANGE_HEADER = '#tooltips:xpExchangewindow/gold/goldAfterExchange/header'
     XPEXCHANGEWINDOW_GOLD_GOLDAFTEREXCHANGE_BODY = '#tooltips:xpExchangewindow/gold/goldAfterExchange/body'
     STORAGE_FILTER_NORESULTSBTN_HEADER = '#tooltips:storage/filter/noResultsBtn/header'
@@ -2659,6 +2669,8 @@ class TOOLTIPS(object):
     NOTRECRUITEDTANKMAN_BUFFON_DESC = '#tooltips:notrecruitedtankman/buffon/desc'
     NOTRECRUITEDTANKMAN_TANKWOMAN_LABEL = '#tooltips:notrecruitedtankman/tankwoman/label'
     NOTRECRUITEDTANKMAN_TANKWOMAN_DESC = '#tooltips:notrecruitedtankman/tankwoman/desc'
+    NOTRECRUITEDTANKMAN_CZECH_WOMAN_LABEL = '#tooltips:notrecruitedtankman/czech_woman/label'
+    NOTRECRUITEDTANKMAN_CZECH_WOMAN_DESC = '#tooltips:notrecruitedtankman/czech_woman/desc'
     NOTRECRUITEDTANKMAN_TANKMAN_LABEL = '#tooltips:notrecruitedtankman/tankman/label'
     NOTRECRUITEDTANKMAN_TANKMAN_DESC = '#tooltips:notrecruitedtankman/tankman/desc'
     NOTRECRUITEDTANKMAN_TWITCH1_LABEL = '#tooltips:notrecruitedtankman/twitch1/label'
@@ -2667,6 +2679,8 @@ class TOOLTIPS(object):
     NOTRECRUITEDTANKMAN_TWITCH3_DESC = '#tooltips:notrecruitedtankman/twitch3/desc'
     NOTRECRUITEDTANKMAN_TWITCH4_LABEL = '#tooltips:notrecruitedtankman/twitch4/label'
     NOTRECRUITEDTANKMAN_TWITCH4_DESC = '#tooltips:notrecruitedtankman/twitch4/desc'
+    NOTRECRUITEDTANKMAN_TWITCH5_LABEL = '#tooltips:notrecruitedtankman/twitch5/label'
+    NOTRECRUITEDTANKMAN_TWITCH5_DESC = '#tooltips:notrecruitedtankman/twitch5/desc'
     NOTRECRUITEDTANKMAN_NY19MEN_LABEL = '#tooltips:notrecruitedtankman/ny19men/label'
     NOTRECRUITEDTANKMAN_NY19MEN_DESC = '#tooltips:notrecruitedtankman/ny19men/desc'
     NOTRECRUITEDTANKMAN_NY19WOMAN_LABEL = '#tooltips:notrecruitedtankman/ny19woman/label'
@@ -2731,6 +2745,8 @@ class TOOLTIPS(object):
     CREWBOOKS_SCREEN_INVALIDITEM_TITLE = '#tooltips:crewBooks/screen/invalidItem/title'
     CREWBOOKS_SCREEN_INVALIDPRICE_TITLE = '#tooltips:crewBooks/screen/invalidPrice/title'
     CREWBOOKS_TANKMAN_SKILL_LOWGAINEDXP = '#tooltips:crewBooks/tankman/skill/lowGainedXp'
+    EVENTPOSTMORTEMPANEL_GODTAG_ANIMENABLED = '#tooltips:eventPostmortemPanel/godtag/animEnabled'
+    EVENTPOSTMORTEMPANEL_GODTAG_ANIMDISABLED = '#tooltips:eventPostmortemPanel/godtag/animDisabled'
     ELEN_SUMMARY_RANK_ENUM = (ELEN_SUMMARY_RANK_1,
      ELEN_SUMMARY_RANK_2,
      ELEN_SUMMARY_RANK_3,
@@ -2916,6 +2932,7 @@ class TOOLTIPS(object):
      AWARDITEM_COMPLETIONTOKENS_7_2_HEADER,
      AWARDITEM_COMPLETIONTOKENS_7_3_HEADER,
      AWARDITEM_COMPLETIONTOKENS_7_4_HEADER,
+     AWARDITEM_FESTIVALTICKETS_HEADER,
      AWARDITEM_TANKWOMEN_HEADER,
      AWARDITEM_TANKMAN_HEADER,
      AWARDITEM_ONEOF_HEADER,
@@ -2971,6 +2988,7 @@ class TOOLTIPS(object):
      AWARDITEM_COMPLETIONTOKENS_7_2_BODY,
      AWARDITEM_COMPLETIONTOKENS_7_3_BODY,
      AWARDITEM_COMPLETIONTOKENS_7_4_BODY,
+     AWARDITEM_FESTIVALTICKETS_BODY,
      AWARDITEM_TANKMEN_BODY,
      AWARDITEM_TANKWOMEN_BODY,
      AWARDITEM_TANKMAN_BODY,
@@ -3238,19 +3256,23 @@ class TOOLTIPS(object):
     NOTRECRUITEDTANKMAN_ALL_LABEL_ENUM = (NOTRECRUITEDTANKMAN_BASE_LABEL,
      NOTRECRUITEDTANKMAN_BUFFON_LABEL,
      NOTRECRUITEDTANKMAN_TANKWOMAN_LABEL,
+     NOTRECRUITEDTANKMAN_CZECH_WOMAN_LABEL,
      NOTRECRUITEDTANKMAN_TANKMAN_LABEL,
      NOTRECRUITEDTANKMAN_TWITCH1_LABEL,
      NOTRECRUITEDTANKMAN_TWITCH3_LABEL,
      NOTRECRUITEDTANKMAN_TWITCH4_LABEL,
+     NOTRECRUITEDTANKMAN_TWITCH5_LABEL,
      NOTRECRUITEDTANKMAN_NY19MEN_LABEL,
      NOTRECRUITEDTANKMAN_NY19WOMAN_LABEL)
     NOTRECRUITEDTANKMAN_ALL_DESC_ENUM = (NOTRECRUITEDTANKMAN_BASE_DESC,
      NOTRECRUITEDTANKMAN_BUFFON_DESC,
      NOTRECRUITEDTANKMAN_TANKWOMAN_DESC,
+     NOTRECRUITEDTANKMAN_CZECH_WOMAN_DESC,
      NOTRECRUITEDTANKMAN_TANKMAN_DESC,
      NOTRECRUITEDTANKMAN_TWITCH1_DESC,
      NOTRECRUITEDTANKMAN_TWITCH3_DESC,
      NOTRECRUITEDTANKMAN_TWITCH4_DESC,
+     NOTRECRUITEDTANKMAN_TWITCH5_DESC,
      NOTRECRUITEDTANKMAN_NY19MEN_DESC,
      NOTRECRUITEDTANKMAN_NY19WOMAN_DESC)
     QUESTS_AWARDS_VEHICLERENT_RENTLEFT_ENUM = (QUESTS_AWARDS_VEHICLERENT_RENTLEFT_RENTDAYS, QUESTS_AWARDS_VEHICLERENT_RENTLEFT_RENTBATTLES, QUESTS_AWARDS_VEHICLERENT_RENTLEFT_RENTWINS)

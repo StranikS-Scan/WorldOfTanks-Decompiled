@@ -12,11 +12,12 @@ from gui.Scaleform.genConsts.RANKEDBATTLES_ALIASES import RANKEDBATTLES_ALIASES
 from gui.Scaleform.genConsts.BARRACKS_CONSTANTS import BARRACKS_CONSTANTS
 from gui.battle_results import RequestResultsContext
 from gui.clans.clan_helpers import showAcceptClanInviteDialog
+from gui.impl.lobby.festival.festival_helper import FestivalViews
 from gui.prb_control import prbInvitesProperty, prbDispatcherProperty
 from gui.ranked_battles import ranked_helpers
 from gui.server_events.events_dispatcher import showPersonalMission
 from gui.shared import g_eventBus, events, actions, EVENT_BUS_SCOPE, event_dispatcher as shared_events
-from gui.shared.event_dispatcher import showProgressiveRewardWindow
+from gui.shared.event_dispatcher import showProgressiveRewardWindow, showFestivalMainView
 from gui.shared.utils import decorators
 from gui.wgcg.clan import contexts as clan_ctxs
 from gui.wgnc import g_wgncProvider
@@ -682,6 +683,20 @@ class _OpenProgressiveRewardView(_NavigationDisabledActionHandler):
         showProgressiveRewardWindow()
 
 
+class _OpenFestivalShopView(_NavigationDisabledActionHandler):
+
+    @classmethod
+    def getNotType(cls):
+        return NOTIFICATION_TYPE.MESSAGE
+
+    @classmethod
+    def getActions(cls):
+        pass
+
+    def doAction(self, model, entityID, action):
+        showFestivalMainView(FestivalViews.SHOP)
+
+
 _AVAILABLE_HANDLERS = (ShowBattleResultsHandler,
  ShowTutorialBattleHistoryHandler,
  ShowFortBattleResultsHandler,
@@ -710,7 +725,8 @@ _AVAILABLE_HANDLERS = (ShowBattleResultsHandler,
  _OpenLootBoxesHandler,
  _LootBoxesAutoOpenHandler,
  _OpenProgressiveRewardView,
- ProlongStyleRent)
+ ProlongStyleRent,
+ _OpenFestivalShopView)
 
 class NotificationsActionsHandlers(object):
     __slots__ = ('__single', '__multi')

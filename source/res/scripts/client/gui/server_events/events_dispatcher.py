@@ -5,7 +5,7 @@ from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.missions.missions_helper import getMissionInfoData
 from gui.Scaleform.genConsts.PERSONAL_MISSIONS_ALIASES import PERSONAL_MISSIONS_ALIASES
 from gui.Scaleform.genConsts.QUESTS_ALIASES import QUESTS_ALIASES
-from gui.marathon.marathon_constants import DEFAULT_MARATHON_PREFIX
+from gui.marathon.marathon_event_controller import DEFAULT_MARATHON_PREFIX
 from gui.server_events import awards, events_helpers, recruit_helper, anniversary_helper
 from gui.server_events.events_helpers import getLootboxesFromBonuses
 from gui.shared import g_eventBus, events, event_dispatcher as shared_events, EVENT_BUS_SCOPE
@@ -22,6 +22,7 @@ _EVENTS_REWARD_WINDOW = {recruit_helper.RecruitSourceID.TWITCH_0: TwitchRewardWi
  recruit_helper.RecruitSourceID.TWITCH_2: TwitchRewardWindow,
  recruit_helper.RecruitSourceID.TWITCH_3: TwitchRewardWindow,
  recruit_helper.RecruitSourceID.TWITCH_4: TwitchRewardWindow,
+ recruit_helper.RecruitSourceID.TWITCH_5: TwitchRewardWindow,
  anniversary_helper.ANNIVERSARY_EVENT_PREFIX: GiveAwayRewardWindow}
 _PIGGY_BANK_EVENT_NAME = 'piggyBank'
 

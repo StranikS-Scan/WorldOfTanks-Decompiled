@@ -213,9 +213,9 @@ class VehicleTypeInfoVO(object):
 
 
 class VehicleArenaInfoVO(object):
-    __slots__ = ('vehicleID', 'team', 'player', 'playerStatus', 'vehicleType', 'vehicleStatus', 'prebattleID', 'events', 'squadIndex', 'invitationDeliveryStatus', 'ranked', 'gameModeSpecific')
+    __slots__ = ('vehicleID', 'team', 'player', 'playerStatus', 'vehicleType', 'vehicleStatus', 'prebattleID', 'events', 'squadIndex', 'invitationDeliveryStatus', 'ranked', 'gameModeSpecific', 'playerCard')
 
-    def __init__(self, vehicleID, team=0, isAlive=None, isAvatarReady=None, isTeamKiller=None, prebattleID=None, events=None, forbidInBattleInvitations=False, ranked=None, **kwargs):
+    def __init__(self, vehicleID, team=0, isAlive=None, isAvatarReady=None, isTeamKiller=None, prebattleID=None, events=None, forbidInBattleInvitations=False, ranked=None, playerCard=None, **kwargs):
         super(VehicleArenaInfoVO, self).__init__()
         self.vehicleID = vehicleID
         self.team = team
@@ -228,6 +228,7 @@ class VehicleArenaInfoVO(object):
         self.events = events or {}
         self.squadIndex = 0
         self.ranked = PlayerRankedInfoVO(*ranked) if ranked is not None else PlayerRankedInfoVO()
+        self.playerCard = playerCard
         arena = avatar_getter.getArena()
         guiType = None if not arena else arena.guiType
         self.gameModeSpecific = GameModeDataVO(guiType, True)
@@ -293,6 +294,12 @@ class VehicleArenaInfoVO(object):
             invalidate = _INVALIDATE_OP.addIfNot(invalidate, _INVALIDATE_OP.VEHICLE_INFO)
         return invalidate
 
+    def updatePlayerCard(self, invalidate=_INVALIDATE_OP.NONE, playerCard=None, **_):
+        if playerCard is not None:
+            self.playerCard = playerCard
+            invalidate = _INVALIDATE_OP.addIfNot(invalidate, _INVALIDATE_OP.VEHICLE_INFO)
+        return invalidate
+
     def updateGameModeSpecificStats(self, *args):
         return self.gameModeSpecific.update(*args)
 
@@ -308,6 +315,7 @@ class VehicleArenaInfoVO(object):
         invalidate = self.updatePlayerStatus(invalidate=invalidate, **kwargs)
         invalidate = self.updateInvitationStatus(invalidate=invalidate, **kwargs)
         invalidate = self.updateRanked(invalidate=invalidate, **kwargs)
+        invalidate = self.updatePlayerCard(invalidate=invalidate, **kwargs)
         return invalidate
 
     def getSquadID(self):

@@ -59,3 +59,4 @@ class BATTLE_VIEW_ALIASES(object):
     QUEST_PROGRESS_TOP_VIEW = 'questProgressTopView'
     HINT_PANEL = 'battleHintPanel'
     HELP_DETAILED = 'helpDetailed'
+    EVENT_POSTMORTEM_PANEL = 'eventPostmortemPanel'

@@ -7,10 +7,10 @@ class ButtonIconTextModel(ButtonCommonModel):
     __slots__ = ()
 
     def getIcon(self):
-        return self._getResource(5)
+        return self._getResource(6)
 
     def setIcon(self, value):
-        self._setResource(5, value)
+        self._setResource(6, value)
 
     def _initialize(self):
         super(ButtonIconTextModel, self)._initialize()

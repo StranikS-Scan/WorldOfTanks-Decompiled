@@ -25,6 +25,7 @@ from gui.Scaleform.genConsts.PERSONAL_MISSIONS_ALIASES import PERSONAL_MISSIONS_
 from gui.Scaleform.genConsts.RANKEDBATTLES_ALIASES import RANKEDBATTLES_ALIASES
 from gui.impl import backport
 from gui.game_control.links import URLMacros
+from gui.impl.lobby.festival.festival_helper import FestivalViews
 from gui.ingame_shop import generateShopRentRenewProductID, showBuyGoldForRentWebOverlay
 from gui.ingame_shop import getShopProductInfo
 from gui.ingame_shop import makeBuyParamsByProductInfo
@@ -584,16 +585,25 @@ def showTankPremiumAboutPage():
     url = GUI_SETTINGS.premiumInfo.get('baseURL')
     if url is None:
         _logger.error('premiumInfo.baseURL is missed')
-    showBrowserOverlayView(url)
+    showBrowserOverlayView(url, alias=VIEW_ALIAS.OVERLAY_PREM_CONTENT_VIEW)
+    return
+
+
+def showFestivalInfoPage():
+    url = GUI_SETTINGS.festivalInfo.get('baseURL')
+    if url is None:
+        _logger.error('festivalInfo.baseURL is missed')
+    showBrowserOverlayView(url, alias=VIEW_ALIAS.OVERLAY_PREM_CONTENT_VIEW)
     return
 
 
 @process
-def showBrowserOverlayView(url, params=None):
+def showBrowserOverlayView(url, alias=VIEW_ALIAS.BROWSER_LOBBY_TOP_SUB, params=None, callbackOnLoad=None):
     if url:
         url = yield URLMacros().parse(url, params=params)
-        g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.OVERLAY_PREM_CONTENT_VIEW, ctx={'url': url,
-         'allowRightClick': False}), EVENT_BUS_SCOPE.LOBBY)
+        g_eventBus.handleEvent(events.LoadViewEvent(alias, ctx={'url': url,
+         'allowRightClick': False,
+         'callbackOnLoad': callbackOnLoad}), EVENT_BUS_SCOPE.LOBBY)
 
 
 def showProgressiveRewardWindow():
@@ -617,8 +627,27 @@ def showProgressiveRewardAwardWindow(bonuses, specialRewardType, currentStep):
     window.load()
 
 
-def showStylePreview(vehCD, style, styleDescr, backCallback):
+def showFestivalAwardWindow(bonuses, specialRewardType, reachValue):
+    from gui.impl.lobby.progressive_reward.progressive_reward_award_view import FestivalAwardWindow
+    window = FestivalAwardWindow(bonuses, specialRewardType, reachValue)
+    window.load()
+
+
+def showStylePreview(vehCD, style, styleDescr, backCallback, backBtnDescrLabel=''):
     g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.STYLE_PREVIEW, ctx={'itemCD': vehCD,
      'style': style,
      'styleDescr': styleDescr,
-     'backCallback': backCallback}), scope=EVENT_BUS_SCOPE.LOBBY)
+     'backCallback': backCallback,
+     'backBtnDescrLabel': backBtnDescrLabel}), scope=EVENT_BUS_SCOPE.LOBBY)
+
+
+def showFestivalMainView(viewName=FestivalViews.CARD):
+    from gui.impl.lobby.festival.festival_main_view import FestivalMainView
+    uiLoader = dependency.instance(IGuiLoader)
+    contentResId = R.views.lobby.festival.festival_main_view.FestivalMainView()
+    festivalView = uiLoader.windowsManager.getViewByLayoutID(contentResId)
+    if festivalView is not None:
+        festivalView.switchContent(viewName)
+    else:
+        g_eventBus.handleEvent(events.LoadUnboundViewEvent(contentResId, FestivalMainView, ScopeTemplates.LOBBY_SUB_SCOPE, viewName=viewName), scope=EVENT_BUS_SCOPE.LOBBY)
+    return

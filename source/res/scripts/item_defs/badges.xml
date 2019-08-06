@@ -2010,10 +2010,28 @@
       </value>
     </badge>
     <badge>
-      <name>	supertester_veteran	</name>
+      <name>	se1_2019	</name>
       <type>	dict	</type>
       <value>
         <item>	76	  <name>	id	</name>
+          <type>	int	</type>
+        </item>
+        <item>	5.04	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	gold	  <name>	highlight	</name>
+          <type>	string	</type>
+        </item>
+        <item>	False	  <name>	achievable	</name>
+          <type>	bool	</type>
+        </item>
+      </value>
+    </badge>
+    <badge>
+      <name>	supertester_veteran	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	77	  <name>	id	</name>
           <type>	int	</type>
         </item>
         <item>	10.01	  <name>	weight	</name>
@@ -2037,6 +2055,21 @@
               </value>
             </item>
           </value>
+        </item>
+      </value>
+    </badge>
+    <badge>
+      <name>	Fest19Collection	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	78	  <name>	id	</name>
+          <type>	int	</type>
+        </item>
+        <item>	5.1	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	False	  <name>	achievable	</name>
+          <type>	bool	</type>
         </item>
       </value>
     </badge>

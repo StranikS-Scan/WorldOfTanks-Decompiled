@@ -10,6 +10,8 @@ class DialogPresets(ViewModel):
     INFO = 'info'
     BLUEPRINTS_CONVERSION = 'blueprintsConversion'
     MAPS_BLACKLIST = 'mapsBlacklist'
+    FESTIVAL_RANDOM_GENERATOR = 'festivalRandomGenerator'
+    FESTIVAL_RANDOM_CONGRAT = 'festivalRandomCongrats'
     DEFAULT = 'default'
 
     def _initialize(self):

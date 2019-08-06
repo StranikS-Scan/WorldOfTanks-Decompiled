@@ -132,6 +132,12 @@ def __mergeBlueprints(total, key, value, isLeaf=False, count=1, *args):
         totalBlueprints[fragmentCD] += count * fragmentData
 
 
+def __mergeFestivalItems(total, key, value, isLeaf=False, count=1, *args):
+    result = total.setdefault(key, {})
+    for itemID, itemCount in value.iteritems():
+        result[itemID] = result.get(itemID, 0) + count * itemCount
+
+
 BONUS_MERGERS = {'credits': __mergeValue,
  'gold': __mergeValue,
  'xp': __mergeValue,
@@ -158,7 +164,9 @@ BONUS_MERGERS = {'credits': __mergeValue,
  'customizations': __mergeCustomizations,
  'crewSkins': __mergeCrewSkins,
  'blueprintsAny': __mergeItems,
- 'blueprints': __mergeBlueprints}
+ 'blueprints': __mergeBlueprints,
+ 'festivalTickets': __mergeValue,
+ 'festivalItems': __mergeFestivalItems}
 ITEM_INVENTORY_CHECKERS = {'vehicles': lambda account, key: account._inventory.getVehicleInvID(key) != 0,
  'customizations': lambda account, key: account._customizations20.getItems((key,), 0)[key] > 0,
  'tokens': lambda account, key: account._quests.hasToken(key)}

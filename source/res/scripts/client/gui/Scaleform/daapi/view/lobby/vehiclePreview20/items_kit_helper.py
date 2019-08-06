@@ -249,6 +249,8 @@ def getItemTitle(rawItem, item, forBox=False):
         title = _ms(TOOLTIPS.CUSTOMCREW_REFERRAL_HEADER, vehicle=vehicle.userName)
     elif rawItem.type in ItemPackTypeGroup.CREW:
         title = _ms(TOOLTIPS.CREW_HEADER)
+    elif rawItem.type in ItemPackType.CUSTOM_FESTIVAL_TICKETS:
+        title = backport.text(R.strings.tooltips.awardItem.festivalTickets.header())
     else:
         title = rawItem.title or ''
     return title
@@ -282,6 +284,8 @@ def getItemDescription(rawItem, item):
             description = _ms(TOOLTIPS.CREW_BODY, value={ItemPackType.CREW_50: CrewTypes.SKILL_50,
              ItemPackType.CREW_75: CrewTypes.SKILL_75,
              ItemPackType.CREW_100: CrewTypes.SKILL_100}.get(rawItem.type))
+    elif rawItem.type in ItemPackType.CUSTOM_FESTIVAL_TICKETS:
+        description = backport.text(R.strings.tooltips.awardItem.festivalTickets.body())
     else:
         description = rawItem.description or ''
     return description

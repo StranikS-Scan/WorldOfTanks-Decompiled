@@ -4,7 +4,6 @@ import re
 import calendar
 import datetime
 import time
-import locale
 import BigWorld
 from debug_utils import LOG_CURRENT_EXCEPTION
 from helpers.i18n import makeString as _ms
@@ -264,17 +263,6 @@ def getTimeLeftFormat(timeLeft, useMinutes=True, useHours=False):
         templateParts.insert(0, '%H')
     template = ':'.join(templateParts)
     return time.strftime(template, time.gmtime(timeLeft))
-
-
-def timestampToFmtStr(tstamp, fmtstr):
-    fmtstr = fmtstr.decode('utf8')
-    encoding = locale.getlocale(locale.LC_TIME)[1]
-    if encoding is None:
-        encoding = locale.getdefaultlocale(locale.LC_TIME)[1]
-    nativeFmtStr = fmtstr.encode(encoding)
-    struct = getTimeStructInUTC(tstamp)
-    nativeOutput = time.strftime(nativeFmtStr, struct)
-    return nativeOutput.decode(encoding).encode('utf8')
 
 
 def timestampToISO(timestamp):
